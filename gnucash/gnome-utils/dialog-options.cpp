@@ -878,12 +878,11 @@ create_option_widget<GncOptionUIType::BOOLEAN> (GncOption& option,
 
     auto ui_item{std::make_unique<GncGtkBooleanUIItem>(widget)};
 
-    g_signal_connect(G_OBJECT(widget), "toggled",
-                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
-
     option.set_ui_item(std::move(ui_item));
     option.set_ui_item_from_option();
 
+    g_signal_connect(G_OBJECT(widget), "toggled",
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
     gtk_box_pack_start(GTK_BOX(*enclosing), widget, FALSE, FALSE, 0);
     gtk_widget_show_all(*enclosing);
 
@@ -924,11 +923,11 @@ create_option_widget<GncOptionUIType::STRING> (GncOption& option,
         gtk_entry_set_alignment (GTK_ENTRY(widget), 1.0);
     auto ui_item{std::make_unique<GncGtkStringUIItem>(widget)};
 
-    g_signal_connect(G_OBJECT(widget), "changed",
-                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
     option.set_ui_item(std::move(ui_item));
     option.set_ui_item_from_option();
 
+    g_signal_connect(G_OBJECT(widget), "changed",
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
     gtk_box_pack_start(GTK_BOX(*enclosing), widget, TRUE, TRUE, 0);
     gtk_widget_show_all(*enclosing);
     return widget;
@@ -979,11 +978,11 @@ create_option_widget<GncOptionUIType::TEXT> (GncOption& option, GtkGrid *page_bo
 
     auto ui_item{std::make_unique<GncGtkTextUIItem>(widget)};
     auto text_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(widget));
-    g_signal_connect(G_OBJECT(text_buffer), "changed",
-                     G_CALLBACK(gnc_option_changed_option_cb), &option);
     option.set_ui_item(std::move(ui_item));
     option.set_ui_item_from_option();
 
+    g_signal_connect(G_OBJECT(text_buffer), "changed",
+                     G_CALLBACK(gnc_option_changed_option_cb), &option);
     gtk_container_add (GTK_CONTAINER (scroll), widget);
     gtk_box_pack_start(GTK_BOX(*enclosing), frame, TRUE, TRUE, 0);
     gtk_widget_show_all(*enclosing);
@@ -1020,11 +1019,11 @@ create_option_widget<GncOptionUIType::CURRENCY> (GncOption& option, GtkGrid *pag
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
     auto widget = gnc_currency_edit_new();
     auto ui_item{std::make_unique<GncGtkCurrencyUIItem>(widget)};
-    g_signal_connect(G_OBJECT(widget), "changed",
-                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
     option.set_ui_item(std::move(ui_item));
     option.set_ui_item_from_option();
 
+    g_signal_connect(G_OBJECT(widget), "changed",
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
     gtk_box_pack_start(GTK_BOX(*enclosing), widget, FALSE, FALSE, 0);
     gtk_widget_show_all(*enclosing);
     return widget;
@@ -1065,8 +1064,6 @@ create_option_widget<GncOptionUIType::COMMODITY> (GncOption& option, GtkGrid *pa
 
     auto ui_item{std::make_unique<GncGtkCommodityUIItem>(widget)};
 
-    g_signal_connect(G_OBJECT(widget), "changed",
-                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
     option.set_ui_item(std::move(ui_item));
     option.set_ui_item_from_option();
 
@@ -1106,9 +1103,6 @@ create_multichoice_widget(GncOption& option)
                                    renderer, "text", 0);
     g_object_unref(store);
 
-    g_signal_connect(G_OBJECT(widget), "changed",
-                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
-
     return widget;
 }
 
@@ -1144,6 +1138,9 @@ create_option_widget<GncOptionUIType::MULTICHOICE> (GncOption& option, GtkGrid *
     option.set_ui_item(std::move(ui_item));
     option.set_ui_item_from_option();
 
+    g_signal_connect(G_OBJECT(widget), "changed",
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
+
     gtk_box_pack_start(GTK_BOX(*enclosing), widget, FALSE, FALSE, 0);
     gtk_widget_show_all(*enclosing);
     return widget;
@@ -1162,6 +1159,7 @@ public:
     // Get the widget that gets put on the page
     virtual GtkWidget* get_widget() = 0;
     virtual void toggle_relative(bool) {} //BothDateEntry only
+    virtual void block_signals(bool) = 0;
 };
 
 
@@ -1176,16 +1174,29 @@ public:
     void set_option_from_entry(GncOption& option) override;
     GtkWidget* get_entry() override { return GTK_WIDGET(m_entry); }
     GtkWidget* get_widget() override { return GTK_WIDGET(m_entry); }
+    void block_signals(bool) override;
 private:
     GNCDateEdit* m_entry;
+    unsigned long m_handler_id;
 };
 
 AbsoluteDateEntry::AbsoluteDateEntry(GncOption& option) :
     m_entry{GNC_DATE_EDIT(gnc_date_edit_new(time(NULL), FALSE, FALSE))}
 {
     auto entry = GNC_DATE_EDIT(m_entry)->date_entry;
-    g_signal_connect(G_OBJECT(entry), "changed",
-                     G_CALLBACK(gnc_option_changed_option_cb), &option);
+    m_handler_id = g_signal_connect(G_OBJECT(entry), "changed",
+                                    G_CALLBACK(gnc_option_changed_option_cb),
+                                    &option);
+}
+
+void
+AbsoluteDateEntry::block_signals(bool block)
+{
+    auto entry{G_OBJECT(GNC_DATE_EDIT(m_entry)->date_entry)};
+    if (block)
+        g_signal_handler_block(entry, m_handler_id);
+    else
+        g_signal_handler_unblock(entry, m_handler_id);
 }
 
 void
@@ -1209,8 +1220,10 @@ public:
     void set_option_from_entry(GncOption& option) override;
     GtkWidget* get_widget() override { return m_entry; }
     GtkWidget* get_entry() override { return m_entry; }
+    void block_signals(bool) override;
 private:
     GtkWidget* m_entry;
+    unsigned long m_handler_id;
 };
 
 
@@ -1238,8 +1251,9 @@ RelativeDateEntry::RelativeDateEntry(GncOption& option)
 
     g_object_unref(store);
 
-    g_signal_connect(G_OBJECT(m_entry), "changed",
-                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
+    m_handler_id = g_signal_connect(G_OBJECT(m_entry), "changed",
+                                    G_CALLBACK(gnc_option_changed_widget_cb),
+                                    &option);
 }
 
 void
@@ -1252,6 +1266,16 @@ void
 RelativeDateEntry::set_option_from_entry(GncOption& option)
 {
     option.set_value<size_t>(gtk_combo_box_get_active(GTK_COMBO_BOX(m_entry)));
+}
+
+void
+RelativeDateEntry::block_signals(bool block)
+{
+    auto entry{G_OBJECT(GNC_DATE_EDIT(m_entry)->date_entry)};
+    if (block)
+        g_signal_handler_block(m_entry, m_handler_id);
+    else
+        g_signal_handler_unblock(m_entry, m_handler_id);
 }
 
 using AbsoluteDateEntryPtr = std::unique_ptr<AbsoluteDateEntry>;
@@ -1267,6 +1291,7 @@ public:
     GtkWidget* get_widget() override { return m_widget; }
     GtkWidget* get_entry() override;
     void toggle_relative(bool use_absolute) override;
+    void block_signals(bool) override;
 private:
     GtkWidget* m_widget;
     GtkWidget* m_abs_button;
@@ -1274,6 +1299,8 @@ private:
     GtkWidget* m_rel_button;
     RelativeDateEntryPtr m_rel_entry;
     bool m_use_absolute = true;
+    unsigned long m_abs_hdlr;
+    unsigned long m_rel_hdlr;
 };
 
 static void date_set_absolute_cb(GtkWidget *widget, gpointer data1);
@@ -1288,10 +1315,10 @@ BothDateEntry::BothDateEntry(GncOption& option) :
     m_rel_entry{std::make_unique<RelativeDateEntry>(option)}
 {
     gtk_box_set_homogeneous (GTK_BOX(m_widget), FALSE);
-    g_signal_connect(G_OBJECT(m_abs_button), "toggled",
-                     G_CALLBACK(date_set_absolute_cb), &option);
-    g_signal_connect(G_OBJECT(m_rel_button), "toggled",
-                     G_CALLBACK(date_set_relative_cb), &option);
+    m_abs_hdlr = g_signal_connect(G_OBJECT(m_abs_button), "toggled",
+                                  G_CALLBACK(date_set_absolute_cb), &option);
+    m_rel_hdlr = g_signal_connect(G_OBJECT(m_rel_button), "toggled",
+                                  G_CALLBACK(date_set_relative_cb), &option);
 
     gtk_box_pack_start(GTK_BOX(m_widget),
                        m_abs_button, FALSE, FALSE, 0);
@@ -1319,10 +1346,16 @@ BothDateEntry::toggle_relative(bool use_absolute)
 void
 BothDateEntry::set_entry_from_option(GncOption& option)
 {
+    m_use_absolute =
+        option.get_value<RelativeDatePeriod>() == RelativeDatePeriod::ABSOLUTE;
     if (m_use_absolute)
         m_abs_entry->set_entry_from_option(option);
     else
         m_rel_entry->set_entry_from_option(option);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_rel_button),
+                                 !m_use_absolute);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_abs_button),
+                                 m_use_absolute);
 }
 
 void
@@ -1334,6 +1367,22 @@ BothDateEntry::set_option_from_entry(GncOption& option)
         m_rel_entry->set_option_from_entry(option);
 }
 
+void
+BothDateEntry::block_signals(bool block)
+{
+    if (block)
+    {
+        g_signal_handler_block(m_abs_button, m_abs_hdlr);
+        g_signal_handler_block(m_rel_button, m_rel_hdlr);
+    }
+    else
+    {
+        g_signal_handler_unblock(m_abs_button, m_abs_hdlr);
+        g_signal_handler_unblock(m_rel_button, m_rel_hdlr);
+    }
+    m_abs_entry->block_signals(block);
+    m_rel_entry->block_signals(block);
+}
 
 class GncOptionDateUIItem : public GncOptionGtkUIItem
 {
@@ -1412,7 +1461,6 @@ create_date_option_widget(GncOption& option, GtkGrid *page_box,
             break;
     }
 
-    option.set_ui_item_from_option();
     auto widget{option_get_gtk_widget(&option)};
     if (type == GncOptionUIType::DATE_RELATIVE)
     {
@@ -1440,6 +1488,14 @@ create_date_option_widget(GncOption& option, GtkGrid *page_box,
     *packed = TRUE;
 
     gtk_widget_set_tooltip_text (eventbox, documentation);
+
+    auto ui_item{dynamic_cast<GncOptionDateUIItem*>(option.get_ui_item())};
+    if (auto date_ui{ui_item ? ui_item->get_entry() : nullptr})
+    {
+        date_ui->block_signals(true);
+        date_ui->set_entry_from_option(option);
+        date_ui->block_signals(false);
+    }
 
     gtk_widget_show_all(*enclosing);
     return widget;
@@ -1660,6 +1716,9 @@ create_account_widget(GncOption& option, char *name)
     gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_SPREAD);
     gtk_box_pack_start(GTK_BOX(vbox), bbox, FALSE, FALSE, 10);
 
+    option.set_ui_item(std::make_unique<GncGtkAccountListUIItem>(tree));
+    option.set_ui_item_from_option();
+
     if (multiple_selection)
     {
         button = gtk_button_new_with_label(_("Select All"));
@@ -1709,9 +1768,6 @@ create_account_widget(GncOption& option, char *name)
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), FALSE);
     g_signal_connect(G_OBJECT(button), "toggled",
                      G_CALLBACK(show_hidden_toggled_cb), &option);
-
-    option.set_ui_item(std::make_unique<GncGtkAccountListUIItem>(tree));
-    option.set_ui_item_from_option();
 
     gtk_container_add(GTK_CONTAINER(scroll_win), tree);
     return frame;
@@ -2275,6 +2331,10 @@ create_option_widget<GncOptionUIType::PIXMAP> (GncOption& option,
                  "width-chars", 30,
                  "preview-widget", gtk_image_new(),
                  (char *)NULL);
+
+    option.set_ui_item(std::make_unique<GncGtkPixmapUIItem>(widget));
+    option.set_ui_item_from_option();
+
     g_signal_connect(G_OBJECT (widget), "selection-changed",
                      G_CALLBACK(gnc_option_changed_widget_cb), &option);
     g_signal_connect(G_OBJECT (widget), "selection-changed",
@@ -2283,9 +2343,6 @@ create_option_widget<GncOptionUIType::PIXMAP> (GncOption& option,
                      G_CALLBACK(update_preview_cb), &option);
     g_signal_connect_swapped(G_OBJECT (button), "clicked",
                              G_CALLBACK(gtk_file_chooser_unselect_all), widget);
-
-    option.set_ui_item(std::make_unique<GncGtkPixmapUIItem>(widget));
-    option.set_ui_item_from_option();
 
     gtk_box_pack_start(GTK_BOX(*enclosing), widget, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(*enclosing), button, FALSE, FALSE, 0);
@@ -2377,6 +2434,9 @@ create_radiobutton_widget(char *name, GncOption& option)
     gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
     gtk_container_add (GTK_CONTAINER (frame), box);
 
+    option.set_ui_item(std::make_unique<GncGtkPixmapUIItem>(frame));
+    option.set_ui_item_from_option();
+
     /* Iterate over the options and create a radio button for each one */
     for (decltype(num_values) i = 0; i < num_values; i++)
     {
@@ -2409,9 +2469,6 @@ create_option_widget<GncOptionUIType::RADIOBUTTON> (GncOption& option, GtkGrid *
     align_label (name_label);
 
     auto widget = create_radiobutton_widget(NULL, option);
-
-    option.set_ui_item(std::make_unique<GncGtkPixmapUIItem>(widget));
-    option.set_ui_item_from_option();
 
     gtk_box_pack_start(GTK_BOX(*enclosing), widget, FALSE, FALSE, 0);
     gtk_widget_show_all(*enclosing);
@@ -2566,9 +2623,6 @@ create_option_widget<GncOptionUIType::PLOT_SIZE> (GncOption& option,
 
     auto value_px = create_range_spinner(option);
 
-    g_signal_connect(G_OBJECT(value_px), "changed",
-                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
-
     adj_percent = GTK_ADJUSTMENT(gtk_adjustment_new(1, 10, 100, 1, 5.0, 0));
     value_percent = gtk_spin_button_new(adj_percent, 1, 0);
     gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(value_percent), TRUE);
@@ -2576,18 +2630,12 @@ create_option_widget<GncOptionUIType::PLOT_SIZE> (GncOption& option,
     gtk_entry_set_width_chars(GTK_ENTRY(value_percent), 3);
     gtk_widget_set_sensitive(value_percent, FALSE);
 
-    g_signal_connect(G_OBJECT(value_percent), "changed",
-                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
 
     px_butt = gtk_radio_button_new_with_label(NULL, _("Pixels"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(px_butt), TRUE);
 
-    g_signal_connect(G_OBJECT(px_butt), "toggled",
-                         G_CALLBACK(gnc_rd_option_px_set_cb), &option);
 
     p_butt = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(px_butt), _("Percent"));
-    g_signal_connect(G_OBJECT(p_butt), "toggled",
-                         G_CALLBACK(gnc_rd_option_p_set_cb), &option);
 
     gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(px_butt), FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(value_px), FALSE, FALSE, 0);
@@ -2597,6 +2645,15 @@ create_option_widget<GncOptionUIType::PLOT_SIZE> (GncOption& option,
 
     option.set_ui_item(std::make_unique<GncGtkPlotSizeUIItem>(static_cast<GtkWidget*>(hbox)));
     option.set_ui_item_from_option();
+
+    g_signal_connect(G_OBJECT(value_px), "changed",
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
+    g_signal_connect(G_OBJECT(value_percent), "changed",
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
+    g_signal_connect(G_OBJECT(px_butt), "toggled",
+                         G_CALLBACK(gnc_rd_option_px_set_cb), &option);
+    g_signal_connect(G_OBJECT(p_butt), "toggled",
+                         G_CALLBACK(gnc_rd_option_p_set_cb), &option);
 
     gtk_container_add(GTK_CONTAINER(*enclosing), hbox);
     gtk_widget_show_all(*enclosing);
