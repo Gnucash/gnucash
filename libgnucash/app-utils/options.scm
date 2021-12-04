@@ -466,16 +466,14 @@ the option '~a'."))
          sort-tag
          documentation-string)
 
+  (define (convert-to-guid item)
+    (if (string? item) item (gncBudgetGetGUID item)))
+
+  (define (convert-to-budget item)
+    (if (string? item) (gnc-budget-lookup item (gnc-get-current-book)) item))
+
   (let* ((initial-budget (gnc-budget-get-default (gnc-get-current-book)))
-	 (selection-budget initial-budget)
-         )
-
-
-    (define (convert-to-guid item)
-      (if (string? item) item (gncBudgetGetGUID item)))
-
-    (define (convert-to-budget item)
-      (if (string? item) (gnc-budget-lookup item (gnc-get-current-book)) item))
+	 (selection-budget (convert-to-guid initial-budget)))
 
     (gnc:make-option
      section 
