@@ -211,7 +211,6 @@ dialog_changed_internal (GtkWidget *widget, bool sensitive)
         return;
     g_assert(toplevel && GTK_IS_WINDOW(toplevel));
 
-    /* Can't static cast, no inheritance relationship. */
     auto option_win =
         static_cast<GncOptionsDialog*>(g_object_get_data(G_OBJECT(toplevel),
                                                      "optionwin"));
@@ -480,21 +479,6 @@ GncOptionsDialog::build_contents(GncOptionDB  *odb, bool show_dialog)
             auto page = dialog_append_page(this, section);
             if (default_section && section.get() == default_section)
                 default_page = page;
-        });
-
-    /* call each option widget changed callbacks once at this point, now that
-     * all options widgets exist.
-     *
-     * Note that this may be superfluous as each create_option_widget
-     * specialization calls option.set_ui_item_from_option after creating the UI
-     * item.
-     */
-    odb->foreach_section(
-        [](GncOptionSectionPtr& section) {
-            section->foreach_option(
-                [](GncOption& option) {
-                    option.set_ui_item_from_option();
-                });
         });
 
     gtk_notebook_popup_enable(GTK_NOTEBOOK(m_notebook));
