@@ -508,21 +508,20 @@ the option '~a'."))
 	"(lambda (option) "
 	"(if option ((gnc:option-setter option) "
 	"(gnc-budget-lookup "
-	(gnc:value->string (gncBudgetGetGUID selection-budget))
+	(gnc:value->string selection-budget)
 	" (gnc-get-current-book)))))"))
 
      ;; scm->kvp -- commit the change
      ;; b -- book;  p -- key-path
      (lambda (b p) 
-       (qof-book-set-option 
-	b (gncBudgetGetGUID selection-budget) p))
+       (qof-book-set-option b selection-budget p))
 
      ;; kvp->scm -- get the stored value
      (lambda (b p)
        (let ((v (qof-book-get-option b p)))
          (if (and v (string? v))
-	     (begin 
-	       (set! selection-budget (gnc-budget-lookup v (gnc-get-current-book)))))))
+	     (set! selection-budget (convert-to-guid
+                                     (gnc-budget-lookup v (gnc-get-current-book)))))))
 
      ;; value-validator -- returns (#t value) or (#f "failure message")
      ;; As no user-generated input, this legacy hard-wire is probably ok
