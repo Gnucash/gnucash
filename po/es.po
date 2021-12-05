@@ -9,6 +9,7 @@
 # Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>, 2021.
 # Guille <willelopz+weblate@gmail.com>, 2021.
 # Adolfo Jayme Barrientos <fitojb@ubuntu.com>, 2021.
+# Francisco Serrador <fserrador@gmail.com>, 2021.
 #
 #
 # ###############################################################################
@@ -21,21 +22,21 @@
 # Account _Hierarchy 	 Plan de Cuentas
 # Account Tree:		 Plan Contable
 # Balance Sheet 	 Hoja de Balance
-#  reconciled balance	 Balance conciliado
+# reconciled balance	 Balance conciliado
 # Bill 			 [Minuta], Factura
 # Billing 		 Abonando, efectivo
 # Book |
-#  | Libro General:	 → General Ledge
-#  | Libro Diario:	 → Transaction Journal
-#  | Libro Básico:	 → Basic Ledge
-#  | EntryLedge:	 → (Asiento), Entrada
+# | Libro General:	 → General Ledge
+# | Libro Diario:	 → Transaction Journal
+# | Libro Básico:	 → Basic Ledge
+# | EntryLedge:	 → (Asiento), Entrada
 # Business		 → Negocio, Empresa
 # Business options	 → Opciones negociadas
 # Company		 → Empresa, Sociedad (Limitada/Anónima)
 # Chart → Gráfico
-#  | Barchart		 → Barra
-#  | Linechart		 → Línea
-#  | Piechart		 → Porción
+# | Barchart		 → Barra
+# | Linechart		 → Línea
+# | Piechart		 → Porción
 # Check printing	 → Escritura comprobación
 # Equity		 → Patrimonio, Acciones (de bolsa)
 # Expense		 → Gasto
@@ -59,9 +60,9 @@
 # Record		 → Registrar
 # Revenue		 → Beneficios
 # Scheduled Transaction
-#   			 → Transacción Planificada.
-#   			 → //Calendario Transaccional.
-#   			 → //Registro Transaccional.
+# → Transacción Planificada.
+# → //Calendario Transaccional.
+# → //Registro Transaccional.
 # Security		 → Garantía
 # Skip Errors	 → Descartar errores
 # Statement	 → Declaración
@@ -78,8 +79,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-11-21 20:50+0100\n"
-"Last-Translator: Javier F. Serrador <fserrador@gmail.com>\n"
+"PO-Revision-Date: 2021-12-05 00:53+0000\n"
+"Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -87,11 +88,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Weblate 4.10-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\">;</"
-"span>;<span size=\"larger\" weight=\"bold\">\n"
+"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\""
+">;</span>;<span size=\"larger\" weight=\"bold\">\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -2180,7 +2181,7 @@ msgstr "Descripción, Anotaciones o Memorandum"
 #: gnucash/report/trep-engine.scm:1066 gnucash/report/trep-engine.scm:1187
 #: gnucash/report/trep-engine.scm:1188
 msgid "Memo"
-msgstr "Memorandum"
+msgstr "Memorandum, resumen"
 
 #: gnucash/gnome/dialog-find-transactions2.c:155
 #: gnucash/gnome/dialog-find-transactions.c:155
@@ -3278,7 +3279,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:246
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:252
 msgid "Scheduled Transactions"
-msgstr "Asientos Planificados"
+msgstr "Transacciones planificadas"
 
 #: gnucash/gnome/dialog-sx-editor.c:615
 msgid ""
@@ -5956,10 +5957,8 @@ msgid "A reversing entry has already been created for this transaction."
 msgstr "Ya ha sido creado un apunte de reversión para este asiento."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4088
-#, fuzzy
-#| msgid "Cut the current transaction?"
 msgid "Jump to the transaction?"
-msgstr "¿Quiere cortar el asiento actual?"
+msgstr "¿Ir al asiento?"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4095
 msgid "Reverse Transaction"
@@ -10430,11 +10429,10 @@ msgstr ""
 "Ejecute instrucciones relacionadas con los boletines. Las siguientes "
 "instrucciones están admitidas.\n"
 "\n"
-"list:\t- enumera los informes disponibles.\n"
-"show: \t- describe las opciones modificadas en el informe. Un fichero de "
-"datos puede ser especificado\n"
-"                \t para describir algunas opciones guardadas.\n"
-"run: \t- ejecuta el informe sobre el archivo GnuCash proporcionado.\n"
+"  list:\t- enumera los informes disponibles.\n"
+"  show: \t- describe las opciones modificadas en el informe. Un fichero de "
+"datos puede ser especificado para describir algunas opciones guardadas.\n"
+"  run: \t- ejecuta el informe sobre el archivo GnuCash proporcionado.\n"
 
 #: gnucash/gnucash-cli.cpp:113
 msgid "Name of the report to run\n"
@@ -10467,7 +10465,7 @@ msgstr "Instrucción de informe desconocido '{1}'"
 
 #: gnucash/gnucash-cli.cpp:191
 msgid "Missing command or option"
-msgstr "Falta un comando u opción"
+msgstr "Falta un mandato u opción"
 
 #: gnucash/gnucash-commands.cpp:92
 msgid "No quotes retrieved. Finance::Quote isn't installed properly."
@@ -17735,7 +17733,7 @@ msgstr "Nivel de zoom predeterminado"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3344
 msgid "Reports"
-msgstr "Boletines"
+msgstr "Informes"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3363
 msgid "<b>Window Geometry</b>"
@@ -21937,16 +21935,14 @@ msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "¡Nuevo, DESCUADRADO (se necesita cuenta para transferir %s)!"
 
 #: gnucash/import-export/import-main-matcher.c:1581
-#, fuzzy, c-format
-#| msgid "Reconcile (manual) match"
+#, c-format
 msgid "Reconcile (manual) match to %s"
-msgstr "Conciliar cotejo (manual)"
+msgstr "Conciliar cotejo (manual) a %s"
 
 #: gnucash/import-export/import-main-matcher.c:1586
-#, fuzzy, c-format
-#| msgid "Reconcile (auto) match"
+#, c-format
 msgid "Reconcile (auto) match to %s"
-msgstr "Conciliar cotejo (automático)"
+msgstr "Conciliar cotejo (automático) a %s"
 
 #: gnucash/import-export/import-main-matcher.c:1595
 #: gnucash/import-export/import-main-matcher.c:1625
@@ -21954,16 +21950,14 @@ msgid "Match missing!"
 msgstr "¡No hay cotejo!"
 
 #: gnucash/import-export/import-main-matcher.c:1611
-#, fuzzy, c-format
-#| msgid "Update and reconcile (manual) match"
+#, c-format
 msgid "Update and reconcile (manual) match to %s"
-msgstr "Actualizar y conciliar cotejo (manual)"
+msgstr "Actualizar y conciliar cotejo (manual) a %s"
 
 #: gnucash/import-export/import-main-matcher.c:1616
-#, fuzzy, c-format
-#| msgid "Update and reconcile (auto) match"
+#, c-format
 msgid "Update and reconcile (auto) match to %s"
-msgstr "Actualizar y conciliar cotejo (automático)"
+msgstr "Actualizar y conciliar cotejo (automático) a %s"
 
 #: gnucash/import-export/import-main-matcher.c:1633
 msgid "Do not import (no action selected)"
@@ -22065,16 +22059,13 @@ msgid "Unknown OFX investment account"
 msgstr "Cuenta OFX de inversión desconocida"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1216
-#, fuzzy, c-format
-#| msgid ""
-#| "OFX file '%s', imported transactions for account '%s'\n"
-#| "%d transactions processed, no transactions to match"
+#, c-format
 msgid ""
 "While importing transactions from OFX file '%s' into account '%s', found %d "
 "previously imported transactions, no new transactions."
 msgstr ""
-"El fichero «%s» de OFX, ha importado asientos para la cuenta «%s»\n"
-"%d asientos procesadas, no hay asientos a cotejar"
+"Mientras importa asientos desde fichero «%s» OFX a la cuenta «%s», se ha "
+"encontrado %d asiento previamente importado, ningún asiento nuevo."
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1319
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
@@ -22909,10 +22900,8 @@ msgid "Unknown EntryLedger Type"
 msgstr "Tipo de Libro Presupuestario Desconocido"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-#, fuzzy
-#| msgid "The subtotal value of this entry "
 msgid "The subtotal value of this entry"
-msgstr "El valor del sub-total de este apunte "
+msgstr "El valor del sub-total de este apunte"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
 msgid "The total tax of this entry "
@@ -29440,20 +29429,15 @@ msgstr ""
 "filtro."
 
 #: gnucash/report/trep-engine.scm:587
-#, fuzzy
-#| msgid ""
-#| "By default the transaction filter will search substring only. Set this to "
-#| "true to enable full POSIX regular expressions capabilities. '#work|"
-#| "#family' will match both tags within description, notes or memo. "
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
 "will match both tags within description, notes or memo."
 msgstr ""
 "Por defecto el filtro de asiento buscará únicamente subcadenas. Fije esto a "
-"verdadero para habilitar capacidades de expresión regular POSIX. '#trabajo|"
-"#familia' coincidirá con ambas etiquetas dentro de descripción, anotaciones "
-"o memorandum. "
+"verdadero para habilitar capacidades de expresión regular POSIX. '#trabajo|#"
+"familia' coincidirá con ambas etiquetas dentro de descripción, anotaciones o "
+"memorándum."
 
 #: gnucash/report/trep-engine.scm:596
 msgid "If this option is selected, transactions matching filter are excluded."
@@ -30491,7 +30475,7 @@ msgstr ""
 
 #: libgnucash/engine/Account.cpp:4443
 msgid "Credit Card"
-msgstr "Tarjeta de crédito"
+msgstr "Tarjeta Crediticia"
 
 #: libgnucash/engine/Account.cpp:4445
 msgid "Stock"
