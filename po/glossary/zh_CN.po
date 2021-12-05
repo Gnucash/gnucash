@@ -9,10 +9,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2021-12-05 20:01+0000\n"
+"PO-Revision-Date: 2021-12-05 20:45+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/glossary/zh_Hans/>\n"
@@ -1075,3 +1075,9 @@ msgstr "撤回（在对账对话框）"
 
 #~ msgid "Customers Overview"
 #~ msgstr "客户概况"
+
+msgid "stock"
+msgstr ""
+
+msgid "due"
+msgstr ""
