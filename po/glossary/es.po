@@ -897,11 +897,9 @@ msgstr "cargo"
 #~ msgid "Term"
 #~ msgstr "Condiciones (Términos) (de pago)"
 
-#~ msgid "due"
-#~ msgstr "vencimiento"
+msgid "due"
+msgstr "vencimiento"
 
 msgid "stock"
 msgstr ""
 
-msgid "due"
-msgstr ""
