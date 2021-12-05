@@ -5,10 +5,10 @@
 # Marco Zietzling <marco.zietzling@gmail.com>, 2020, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 1.7\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-10 08:00+0100\n"
+"Project-Id-Version: GnuCash 4.8\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2021-12-05 15:56+0100\n"
 "PO-Revision-Date: 2021-12-04 22:44+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: German (Switzerland) <https://hosted.weblate.org/projects/"
@@ -758,6 +758,16 @@ msgstr "Quelle"
 msgid "split"
 msgstr "Buchungsteil (bis gnucash 1.8.7: Buchung)"
 
+#. "Alias of 'shares'"
+msgid "stocks"
+msgstr ""
+
+#. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
+#, fuzzy
+#| msgid "split"
+msgid "stock split"
+msgstr "Buchungsteil (bis gnucash 1.8.7: Buchung)"
+
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
 msgstr "Stilvorlage"
@@ -876,6 +886,3 @@ msgstr "Belastung"
 #, fuzzy
 #~ msgid "invoice owner"
 #~ msgstr "Rechnung (Rechnungsausgang, Versandte Rechnung)"
-
-msgid "stock"
-msgstr ""

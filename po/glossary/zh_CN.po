@@ -8,10 +8,10 @@
 # 峡州仙士 <c@cjh0613.com>, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash-glossary\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-10 08:00+0100\n"
+"Project-Id-Version: GnuCash 4.8\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2021-12-05 15:56+0100\n"
 "PO-Revision-Date: 2021-12-04 22:44+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -895,6 +895,17 @@ msgstr "来源"
 msgid "split"
 msgstr "子交易"
 
+#. "Alias of 'shares'"
+msgid "stocks"
+msgstr ""
+
+# 一个交易被分割成两个或多个部分的中的一个。
+#. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
+#, fuzzy
+#| msgid "split"
+msgid "stock split"
+msgstr "子交易"
+
 # 这个设定报表的特定设计或外观。
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
@@ -1037,23 +1048,20 @@ msgstr "撤回（在对账对话框）"
 #~ msgid "invoice owner"
 #~ msgstr "发票"
 
-msgid "Open SubAccount"
-msgstr "打开子科目"
+#~ msgid "Open SubAccount"
+#~ msgstr "打开子科目"
 
-msgid "Find Account"
-msgstr "查找科目"
+#~ msgid "Find Account"
+#~ msgstr "查找科目"
 
-msgid "Invoices Due Reminder"
-msgstr "应收到期提醒"
+#~ msgid "Invoices Due Reminder"
+#~ msgstr "应收到期提醒"
 
-msgid "Employees Overview"
-msgstr "员工概况"
+#~ msgid "Employees Overview"
+#~ msgstr "员工概况"
 
-msgid "Vendors Overview"
-msgstr "供应商概况"
+#~ msgid "Vendors Overview"
+#~ msgstr "供应商概况"
 
-msgid "Customers Overview"
-msgstr "客户概况"
-
-msgid "stock"
-msgstr ""
+#~ msgid "Customers Overview"
+#~ msgstr "客户概况"

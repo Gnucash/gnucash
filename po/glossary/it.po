@@ -17,10 +17,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash-glossary 4.3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-10 08:00+0100\n"
+"Project-Id-Version: GnuCash 4.8\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2021-12-05 15:56+0100\n"
 "PO-Revision-Date: 2021-12-04 22:44+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/glossary/"
@@ -756,6 +756,16 @@ msgstr "sorgente, fonte"
 msgid "split"
 msgstr "suddivisione"
 
+#. "Alias of 'shares'"
+msgid "stocks"
+msgstr ""
+
+#. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
+#, fuzzy
+#| msgid "split"
+msgid "stock split"
+msgstr "suddivisione"
+
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
 msgstr "foglio di stile"
@@ -867,6 +877,3 @@ msgstr "nota spese, buono"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "prelievo (in una finestra di riconciliazione)"
-
-msgid "stock"
-msgstr ""

@@ -3,10 +3,10 @@
 # Milo Ivir <mail@milotype.de>, 2019., 2020, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash Glossary\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-10 08:00+0100\n"
+"Project-Id-Version: GnuCash 4.8\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2021-12-05 15:56+0100\n"
 "PO-Revision-Date: 2021-12-04 22:44+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/"
@@ -741,6 +741,16 @@ msgstr "izvor"
 msgid "split"
 msgstr "stavka"
 
+#. "Alias of 'shares'"
+msgid "stocks"
+msgstr ""
+
+#. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
+#, fuzzy
+#| msgid "split"
+msgid "stock split"
+msgstr "stavka"
+
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
 msgstr "stilski predložak"
@@ -852,6 +862,3 @@ msgstr "vaučer"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "isplata (u dijalogu za usklađivanje)"
-
-msgid "stock"
-msgstr ""
