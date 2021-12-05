@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash-glossary 2.2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-10 08:00+0100\n"
+"Project-Id-Version: GnuCash 4.8\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2021-12-05 20:11+0100\n"
 "PO-Revision-Date: 2021-12-05 15:43+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/gnucash/glossary/"
@@ -209,6 +209,12 @@ msgstr ""
 msgid "amount"
 msgstr "import"
 
+#. "The amount finally to pay, respecting discounts, billing terms…"
+#, fuzzy
+#| msgid "amount"
+msgid "amount due"
+msgstr "import"
+
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
 msgstr "promig"
@@ -394,6 +400,10 @@ msgstr "entrada doble"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
+msgstr ""
+
+#. "The last day to pay an invoice in time."
+msgid "due date"
 msgstr ""
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
@@ -764,6 +774,16 @@ msgstr "font"
 msgid "split"
 msgstr "desglossament"
 
+#. "Alias of 'shares'"
+msgid "stocks"
+msgstr ""
+
+#. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
+#, fuzzy
+#| msgid "split"
+msgid "stock split"
+msgstr "desglossament"
+
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
 msgstr "full d'estil"
@@ -883,9 +903,3 @@ msgstr "càrrec"
 #, fuzzy
 #~ msgid "invoice owner"
 #~ msgstr "factura"
-
-msgid "stock"
-msgstr ""
-
-msgid "due"
-msgstr ""

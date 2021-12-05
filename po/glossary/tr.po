@@ -10,10 +10,10 @@
 # Tur <tur+translate@simplelogin.fr>, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash VERSION\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-02-09 01:51+0100\n"
+"Project-Id-Version: GnuCash 4.8\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2021-12-05 20:11+0100\n"
 "PO-Revision-Date: 2021-12-05 15:44+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/glossary/"
@@ -211,6 +211,12 @@ msgstr ""
 msgid "amount"
 msgstr "miktar"
 
+#. "The amount finally to pay, respecting discounts, billing terms…"
+#, fuzzy
+#| msgid "amount"
+msgid "amount due"
+msgstr "miktar"
+
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
 msgstr ""
@@ -389,6 +395,10 @@ msgstr ""
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
+msgstr ""
+
+#. "The last day to pay an invoice in time."
+msgid "due date"
 msgstr ""
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
@@ -747,6 +757,14 @@ msgstr ""
 msgid "split"
 msgstr ""
 
+#. "Alias of 'shares'"
+msgid "stocks"
+msgstr ""
+
+#. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
+msgid "stock split"
+msgstr ""
+
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
 msgstr ""
@@ -858,9 +876,3 @@ msgstr "makbuz"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "çek"
-
-msgid "stock"
-msgstr ""
-
-msgid "due"
-msgstr ""
