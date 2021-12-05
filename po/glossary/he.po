@@ -2,7 +2,7 @@
 # Copyright (C) 2008 Free Software Foundation, Inc.
 # Ori Hoch <ori@uumpa.com>, 2008
 # http://www.uumpa.com/gnucash-he/
-# Yaron Shahrabani <sh.yaron@gmail.com>, 2020.
+# Yaron Shahrabani <sh.yaron@gmail.com>, 2020, 2021.
 # Avi Markovitz <avi.markovitz@gmail.com>, 2021.
 msgid ""
 msgstr ""
@@ -10,8 +10,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2021-12-05 19:26+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2021-12-05 20:01+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/glossary/"
 "he/>\n"
 "Language: he\n"
@@ -754,13 +754,11 @@ msgstr "פיצול"
 
 #. "Alias of 'shares'"
 msgid "stocks"
-msgstr ""
+msgstr "מניות"
 
 #. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
-#, fuzzy
-#| msgid "split"
 msgid "stock split"
-msgstr "פיצול"
+msgstr "פיצול מניות"
 
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
@@ -882,7 +880,7 @@ msgstr "משיכה (בתיבת דו שיח התאמות)"
 #~ msgstr "חַלּוֹן־מִבְזָקִים"
 
 msgid "stock"
-msgstr ""
+msgstr "מניה"
 
 msgid "due"
 msgstr ""
