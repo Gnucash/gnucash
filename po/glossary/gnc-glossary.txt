@@ -178,8 +178,6 @@
 "shares"	"Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
 "source"	"(often: of a quote) A place from which something comes or is obtained."
 "split"	"One of the two or several parts a transaction is divided into"
-"stocks"	"Alias of 'shares'"
-"stock split"	"Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
 "style sheet"	"This sets the particular design or shape of a report."
 "subtotal"	"The total of a set of figures that are part of a larger group of figures"
 "tax code"	"On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
