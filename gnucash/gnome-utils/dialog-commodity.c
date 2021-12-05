@@ -569,33 +569,7 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
     gtk_list_store_clear(GTK_LIST_STORE(model));
 
     /* fetch a list of the namespaces */
-    switch (mode)
-    {
-    case DIAG_COMM_ALL:
-        namespaces =
-            gnc_commodity_table_get_namespaces (gnc_get_current_commodities());
-        break;
-
-    case DIAG_COMM_NON_CURRENCY:
-    case DIAG_COMM_NON_CURRENCY_SELECT:
-        namespaces =
-            gnc_commodity_table_get_namespaces (gnc_get_current_commodities());
-        node = g_list_find_custom (namespaces, GNC_COMMODITY_NS_CURRENCY, collate);
-        if (node)
-        {
-            namespaces = g_list_remove_link (namespaces, node);
-            g_list_free_1 (node);
-        }
-
-        if (gnc_commodity_namespace_is_iso (init_string))
-            init_string = NULL;
-        break;
-
-    case DIAG_COMM_CURRENCY:
-    default:
-        namespaces = g_list_prepend (NULL, GNC_COMMODITY_NS_CURRENCY);
-        break;
-    }
+    namespaces = gnc_commodity_table_get_namespaces (gnc_get_current_commodities());
 
     /* First insert "Currencies" entry if requested */
     if (mode == DIAG_COMM_CURRENCY || mode == DIAG_COMM_ALL)
