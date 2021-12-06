@@ -593,7 +593,8 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
 
     case DIAG_COMM_CURRENCY:
     default:
-        namespaces = g_list_prepend (NULL, GNC_COMMODITY_NS_CURRENCY);
+        namespaces = g_list_prepend (NULL,       GNC_COMMODITY_NS_CURRENCY);
+	namespaces = g_list_append  (namespaces, GNC_COMMODITY_NS_CRYPTO_CURRENCY);
         break;
     }
 
