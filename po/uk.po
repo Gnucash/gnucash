@@ -8,11 +8,11 @@
 # Maksym Kobieliev <maximaximums@gmail.com>, 2013.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.9-pre1\n"
+"Project-Id-Version: gnucash 4.9-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-09-13 19:25+0300\n"
+"POT-Creation-Date: 2021-12-04 14:00-0800\n"
+"PO-Revision-Date: 2021-12-06 19:40+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -4366,6 +4366,10 @@ msgid ""
 "\n"
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
+"У рахунка «%s» декілька підлеглих рахунків.\n"
+"\n"
+"Виконайте пересування підлеглих рахунків або вилучіть їх до того, як "
+"вилучатимете цей рахунок."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1729
 #, c-format
@@ -5892,10 +5896,8 @@ msgid "A reversing entry has already been created for this transaction."
 msgstr "Для цієї транзакції вже було створено реверсивний запис."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4088
-#, fuzzy
-#| msgid "Cut the current transaction?"
 msgid "Jump to the transaction?"
-msgstr "Вирізати поточну транзакцію?"
+msgstr "Перейти до транзакції?"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4095
 msgid "Reverse Transaction"
@@ -10366,11 +10368,11 @@ msgstr "Найсвіжішу стабільну версію можна знай
 #. Translators: Guile is the programming language of the reports
 #: gnucash/gnucash-core-app.cpp:103
 msgid "Loading system wide Guile extensions…"
-msgstr ""
+msgstr "Завантажуємо загальносистемні розширення Guile…"
 
 #: gnucash/gnucash-core-app.cpp:115
 msgid "Loading user specific Guile extensions…"
-msgstr ""
+msgstr "Завантажуємо специфічні для користувача розширення Guile…"
 
 #: gnucash/gnucash-core-app.cpp:224
 msgid "- GnuCash, accounting for personal and small business finance"
@@ -12721,41 +12723,28 @@ msgstr ""
 "узгодженого значення у реєстрі і може ускладнити подальші узгодження."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:69
-#, fuzzy
-#| msgid "Remove a split from a transaction"
 msgid "Cut a split from a transaction"
-msgstr "Вилучити дроблення з транзакції"
+msgstr "Вирізати дроблення з транзакції"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:70
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to remove a split from a "
-#| "transaction."
 msgid ""
 "This dialog is presented before allowing you to cut a split from a "
 "transaction."
 msgstr ""
-"Це вікно буде показано, перш ніж програма дозволить вам вилучити дроблення з "
+"Це вікно буде показано, перш ніж програма дозволить вам вирізати дроблення з "
 "транзакції."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:74
-#, fuzzy
-#| msgid "Remove a reconciled split from a transaction"
 msgid "Cut a reconciled split from a transaction"
-msgstr "Вилучити узгоджене дроблення з транзакції"
+msgstr "Вирізати узгоджене дроблення з транзакції"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:75
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to remove a reconciled split "
-#| "from a transaction. Doing so will throw off the reconciled value of the "
-#| "register and can make it hard to perform future reconciliations."
 msgid ""
 "This dialog is presented before allowing you to cut a reconciled split from "
 "a transaction. Doing so will throw off the reconciled value of the register "
 "and can make it hard to perform future reconciliations."
 msgstr ""
-"Це діалогове вікно буде показано, перш ніж програма дозволить вам вилучити "
+"Це діалогове вікно буде показано, перш ніж програма дозволить вам вирізати "
 "узгоджену частину із запису транзакції. Виконання такої дії призве до "
 "відкидання узгодженого значення у реєстрі і може ускладнити подальші "
 "узгодження."
@@ -12821,37 +12810,25 @@ msgstr ""
 "реєстрі і може ускладнити подальші узгодження."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:99
-#, fuzzy
-#| msgid "_Cut Transaction"
 msgid "Cut a transaction"
-msgstr "Ви_різати транзакцію"
+msgstr "Вирізати транзакцію"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:100
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to delete a transaction."
 msgid "This dialog is presented before allowing you to cut a transaction."
 msgstr ""
-"Це попередження з'являється перед тим, як дозволити Вам вилучити транзакцію."
+"Це попередження з'являється перед тим, як дозволити вам вирізати транзакцію."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
-#, fuzzy
-#| msgid "Delete a transaction with reconciled splits"
 msgid "Cut a transaction with reconciled splits"
-msgstr "Вилучити транзакцію із узгодженими частинами"
+msgstr "Вирізати транзакцію із узгодженими частинами"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:105
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to delete a transaction that "
-#| "contains reconciled splits. Doing so will throw off the reconciled value "
-#| "of the register and can make it hard to perform future reconciliations."
 msgid ""
 "This dialog is presented before allowing you to cut a transaction that "
 "contains reconciled splits. Doing so will throw off the reconciled value of "
 "the register and can make it hard to perform future reconciliations."
 msgstr ""
-"Це діалогове вікно буде показано, перш ніж програма дозволить вам вилучити "
+"Це діалогове вікно буде показано, перш ніж програма дозволить вам вирізати "
 "запис транзакції, у якому містяться узгоджені частини. Виконання такої дії "
 "призве до відкидання узгодженого значення у реєстрі і може ускладнити "
 "подальші узгодження."
@@ -16492,16 +16469,12 @@ msgid "Show _Memo column"
 msgstr "Показувати стовпчик _нотатки"
 
 #: gnucash/gtkbuilder/dialog-import.glade:963
-#, fuzzy
-#| msgid "Show _matched information"
 msgid "Show matched _information"
 msgstr "Показувати _відповідну інформацію"
 
 #: gnucash/gtkbuilder/dialog-import.glade:978
-#, fuzzy
-#| msgid "Spend"
 msgid "A_ppend"
-msgstr "Використати"
+msgstr "_Додати"
 
 #: gnucash/gtkbuilder/dialog-import.glade:982
 msgid ""
@@ -16509,12 +16482,12 @@ msgid ""
 "Description and Notes to the matched Description and Notes instead of "
 "replacing them."
 msgstr ""
+"При оновленні і очищенні відповідної транзакції описувати імпортований опис "
+"і нотатки до відповідного опису і нотаток, а не замінювати їх."
 
 #: gnucash/gtkbuilder/dialog-import.glade:994
-#, fuzzy
-#| msgid "Reconcile after match"
 msgid "_Reconcile after match"
-msgstr "Узгодити після встановлення відповідності"
+msgstr "_Узгодити після встановлення відповідності"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1017
 msgid "Generic import transaction matcher"
@@ -20097,16 +20070,12 @@ msgid "Originator BIC (Bank Code)"
 msgstr "BIC (банківський код) відправника"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:409
-#, fuzzy
-#| msgid "Enter a SEPA Online Transfer"
 msgid "Enter a SEPA Internal Transfer"
-msgstr "Введіть інтернет-переказ SEPA"
+msgstr "Введіть внутрішній переказ SEPA"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:430
-#, fuzzy
-#| msgid "Tax Accounts"
 msgid "Target Accounts"
-msgstr "Податкові рахунки"
+msgstr "Рахунки призначення"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:441
 msgid "Enter a SEPA Online Direct Debit Note"
@@ -20276,10 +20245,8 @@ msgstr ""
 "вікно переказів. Хочете попри це зберегти зміни?"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:125
-#, fuzzy
-#| msgid "No valid account found"
 msgid "No reference accounts found."
-msgstr "Не знайдено коректного рахунка"
+msgstr "Не знайдено рахунків посилання."
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:206
 msgid ""
@@ -20315,10 +20282,8 @@ msgid "Online Banking European (SEPA) Transfer"
 msgstr "Банківський європейський інтернет-переказ (SEPA)"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:248
-#, fuzzy
-#| msgid "Online Banking European (SEPA) Transfer"
 msgid "Online Banking European (SEPA) Internal Transfer"
-msgstr "Банківський європейський інтернет-переказ (SEPA)"
+msgstr "Банківський європейський внутрішній інтернет-переказ (SEPA)"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:254
 msgid "Online Banking European (SEPA) Debit Note"
@@ -20577,21 +20542,15 @@ msgstr ""
 "Запустити нову міжнародну європейську (SEPA) транзакцію інтернет-банкінгу"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:120
-#, fuzzy
-#| msgid "Issue _SEPA Transaction..."
 msgid "Issue SEPA I_nternal Transaction..."
-msgstr "_Запустити транзакцію SEPA…"
+msgstr "Запустити в_нутрішню транзакцію SEPA…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:121
-#, fuzzy
-#| msgid ""
-#| "Issue a new international European (SEPA) transaction online through "
-#| "Online Banking"
 msgid ""
 "Issue a new internal European (SEPA) transaction online through Online "
 "Banking"
 msgstr ""
-"Запустити нову міжнародну європейську (SEPA) транзакцію інтернет-банкінгу"
+"Запустити нову внутрішню європейську (SEPA) транзакцію інтернет-банкінгу"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:125
 msgid "_Internal Transaction..."
@@ -21932,16 +21891,14 @@ msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "Новий, НЕЗБАЛАНСОВАНИЙ (потрібен рахунок для трансферу %s)!"
 
 #: gnucash/import-export/import-main-matcher.c:1616
-#, fuzzy, c-format
-#| msgid "Reconcile (manual) match"
+#, c-format
 msgid "Reconcile (manual) match to %s"
-msgstr "Узгодити (вручну) відповідність"
+msgstr "Узгодити (вручну) відповідність до %s"
 
 #: gnucash/import-export/import-main-matcher.c:1621
-#, fuzzy, c-format
-#| msgid "Reconcile (auto) match"
+#, c-format
 msgid "Reconcile (auto) match to %s"
-msgstr "Узгодити (автоматично) відповідність"
+msgstr "Узгодити (автоматично) відповідність до %s"
 
 #: gnucash/import-export/import-main-matcher.c:1630
 #: gnucash/import-export/import-main-matcher.c:1660
@@ -21949,16 +21906,14 @@ msgid "Match missing!"
 msgstr "Немає відповідності!"
 
 #: gnucash/import-export/import-main-matcher.c:1646
-#, fuzzy, c-format
-#| msgid "Update and reconcile (manual) match"
+#, c-format
 msgid "Update and reconcile (manual) match to %s"
-msgstr "Оновити і узгодити (вручну) відповідність"
+msgstr "Оновити і узгодити (вручну) відповідність до %s"
 
 #: gnucash/import-export/import-main-matcher.c:1651
-#, fuzzy, c-format
-#| msgid "Update and reconcile (auto) match"
+#, c-format
 msgid "Update and reconcile (auto) match to %s"
-msgstr "Оновити і узгодити (автоматично) відповідність"
+msgstr "Оновити і узгодити (автоматично) відповідність до %s"
 
 #: gnucash/import-export/import-main-matcher.c:1668
 msgid "Do not import (no action selected)"
@@ -22060,16 +22015,13 @@ msgid "Unknown OFX investment account"
 msgstr "Невідомий інвестиційний рахунок OFX"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1276
-#, fuzzy, c-format
-#| msgid ""
-#| "OFX file '%s' imported, %d transactions processed, no transactions to "
-#| "match"
+#, c-format
 msgid ""
 "While importing transactions from OFX file '%s' found %d previously imported "
 "transactions, no new transactions."
 msgstr ""
-"Файл OFX «%s» імпортовано, оброблено %d операцій, відповідників операцій не "
-"виявлено"
+"Під час імпортування транзакцій з файла OFX «%s» знайдено %d раніше "
+"імпортованих транзакцій. Нових транзакцій не знайдено."
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1378
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
@@ -29177,10 +29129,8 @@ msgid "Add indenting columns"
 msgstr "Додати стовпчики відступів"
 
 #: gnucash/report/trep-engine.scm:97
-#, fuzzy
-#| msgid "Sa_ve Filter"
 msgid "Date Filter"
-msgstr "З_берегти фільтр"
+msgstr "Фільтр за датою"
 
 #: gnucash/report/trep-engine.scm:98
 msgid "Table for Exporting"
@@ -29304,7 +29254,7 @@ msgstr "Кредитні рахунки"
 
 #: gnucash/report/trep-engine.scm:518
 msgid "Specify date to filter by..."
-msgstr ""
+msgstr "Вкажіть дату для фільтрування…"
 
 #: gnucash/report/trep-engine.scm:527
 msgid "Convert all transactions into a common currency."
@@ -30663,6 +30613,16 @@ msgstr "Немає довідки."
 #~ msgstr ""
 #~ "Встановити префікс для схем gsettings у записах gsettings. Може бути "
 #~ "корисним мати різні ієрархії параметрів під час діагностики помилок."
+
+#~ msgid "Select security/currency "
+#~ msgstr "Виберіть цінний папір/валюту"
+
+#~ msgid ""
+#~ "OFX file '%s' imported, %d transactions processed, no transactions to "
+#~ "match"
+#~ msgstr ""
+#~ "Файл OFX «%s» імпортовано, оброблено %d операцій, відповідників операцій "
+#~ "не виявлено"
 
 #~ msgid "Set 'Re_view Created Transactions' as default"
 #~ msgstr "Типово встановити «Перевіряти створені _транзакції»"
