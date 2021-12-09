@@ -4011,15 +4011,14 @@ as well, use gnc_account_and_descendants_empty.");
 gboolean gnc_account_and_descendants_empty (Account *acc)
 {
     g_return_val_if_fail (GNC_IS_ACCOUNT (acc), FALSE);
-    if (xaccAccountGetSplitList (acc)) return FALSE;
-    auto empty = TRUE;
-    auto *children = gnc_account_get_children (acc);
-    for (auto *n = children; n && empty; n = n->next)
+    auto priv = GET_PRIVATE (acc);
+    if (priv->splits != nullptr) return FALSE;
+    for (auto *n = priv->children; n; n = n->next)
     {
-        empty = gnc_account_and_descendants_empty ((Account*)n->data);
+	if (!gnc_account_and_descendants_empty (static_cast<Account*>(n->data)))
+	    return FALSE;
     }
-    g_list_free (children);
-    return empty;
+    return TRUE;
 }
 
 LotList *
