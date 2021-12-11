@@ -166,10 +166,12 @@ fcb_clicked_cb (GtkButton *button, GtkWidget *ok_button)
 
     if (uri && *uri)
     {
-        gchar *full_filename = gnc_uri_get_path (uri);
+        gchar *scheme = gnc_uri_get_scheme (uri);
+        gchar *full_filename = gnc_doclink_get_unescape_uri (path_head, uri, scheme);
         gchar *path = g_path_get_dirname (full_filename);
         gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(native), path);
         g_free (full_filename);
+        g_free (scheme);
         g_free (path);
     }
     else if (path_head)
