@@ -230,6 +230,18 @@ struct is_QofInstanceValue
 template <typename T> inline constexpr bool
 is_QofInstanceValue_v = is_QofInstanceValue<T>::value;
 
+template <typename T>
+struct is_QofQueryValue
+{
+    static constexpr bool value =
+         (std::is_same_v<std::decay_t<T>, GncOptionValue<const QofQuery*>> ||
+          std::is_same_v<std::decay_t<T>,
+          GncOptionValidatedValue<const QofQuery*>>);
+};
+
+template <typename T> inline constexpr bool
+is_QofQueryValue_v = is_QofQueryValue<T>::value;
+
 /* These will work when m_value is a built-in class; GnuCash class and container
  * values will need specialization unless they happen to define operators << and
  * >>.
