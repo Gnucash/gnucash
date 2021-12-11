@@ -435,8 +435,9 @@ GncOptionValue<ValueType>::reset_default_value()
 template <typename ValueType> std::string
 GncOptionValue<ValueType>::serialize() const noexcept
 {
+    static const std::string no_value{"No Value"};
     if constexpr(std::is_same_v<ValueType, const QofInstance*>)
-        return qof_instance_to_string(m_value);
+        return m_value ? qof_instance_to_string(m_value) : no_value;
     else if constexpr(is_same_decayed_v<ValueType, std::string>)
         return m_value;
     else if constexpr(is_same_decayed_v<ValueType, bool>)
@@ -500,8 +501,9 @@ GncOptionValue<SCM>::reset_default_value()
 template <typename ValueType> std::string
 GncOptionValidatedValue<ValueType>::serialize() const noexcept
 {
+    static const std::string no_value{"No Value"};
     if constexpr(std::is_same_v<ValueType, const QofInstance*>)
-        return qof_instance_to_string(m_value);
+        return m_value ? qof_instance_to_string(m_value) : no_value;
     else if constexpr(is_same_decayed_v<ValueType, std::string>)
         return m_value;
     else if constexpr(is_same_decayed_v<ValueType, bool>)
@@ -535,8 +537,11 @@ GncOptionValidatedValue<ValueType>::deserialize(const std::string& str) noexcept
 std::string
 GncOptionAccountListValue::serialize() const noexcept
 {
+    static const std::string no_value{"No Value"};
     std::string retval;
     bool first = true;
+    if (m_value.empty())
+        return no_value;
     for (auto val : m_value)
     {
         if (!first)
@@ -571,7 +576,8 @@ GncOptionAccountListValue::deserialize(const std::string& str) noexcept
 std::string
 GncOptionAccountSelValue::serialize() const noexcept
 {
-    return qof_instance_to_string(QOF_INSTANCE(m_value));
+    static const std::string no_value{"No Value"};
+    return m_value ?qof_instance_to_string(QOF_INSTANCE(m_value)) : no_value;
 }
 
 bool
@@ -584,8 +590,11 @@ GncOptionAccountSelValue::deserialize(const std::string& str) noexcept
 std::string
 GncOptionMultichoiceValue::serialize() const noexcept
 {
+    static const std::string no_value{"No Value"};
     std::string retval;
     bool first = true;
+    if (m_value.empty())
+        return no_value;
     for (auto index : m_value)
     {
         if (!first)
