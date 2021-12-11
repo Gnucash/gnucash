@@ -2118,6 +2118,7 @@ gnc_tree_view_add_numeric_column (GncTreeView *view,
 {
     GtkTreeViewColumn *column;
     GtkCellRenderer *renderer;
+    gfloat alignment = 1.0;
 
     column = gnc_tree_view_add_text_column (view, column_title, pref_name,
                                             NULL, sizing_text, model_data_column,
@@ -2126,9 +2127,12 @@ gnc_tree_view_add_numeric_column (GncTreeView *view,
 
     renderer = gnc_tree_view_column_get_renderer (column);
 
-    /* Right align the column title and data */
-    g_object_set (G_OBJECT(column), "alignment",   1.0, NULL);
-    g_object_set (G_OBJECT(renderer), "xalign",   1.0, NULL);
+    /* Right align the column title and data for both ltr and rtl */
+    if (gtk_widget_get_direction (GTK_WIDGET(view)) == GTK_TEXT_DIR_RTL)
+        alignment = 0.0;
+
+    g_object_set (G_OBJECT(column), "alignment", alignment, NULL);
+    g_object_set (G_OBJECT(renderer), "xalign", alignment, NULL);
 
     /* Change the text color */
     if (model_color_column != GNC_TREE_VIEW_COLUMN_COLOR_NONE)
