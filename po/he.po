@@ -12353,11 +12353,11 @@ msgstr "_גזירת תנועה"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:100
 msgid "This dialog is presented before allowing you to cut a transaction."
-msgstr "תיבת דו־שיח זה מוצג לפני אפשור גזירת תנועה."
+msgstr "חלון דו־שיח זה מוצג לפני שתתאפשר גזירת תנועה."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
 msgid "Cut a transaction with reconciled splits"
-msgstr "גזירת תנועה עם פיצולים מותאמים"
+msgstr "גזירת תנועה יחד עם פיצולים מותאמים"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:105
 msgid ""
@@ -21183,7 +21183,7 @@ msgstr ""
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1378
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
-msgstr "פתיחת קובץ אופן/קוויקן פיננשיאל אקסצ׳יינג׳ (‎*.ofx,‏ ‎*.qfx)"
+msgstr "קובץ אופן/קוויקן פיננשיאל אקסצ׳יינג׳ (‎*.ofx,‏ ‎*.qfx)"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1383
 msgid "Select one or multiple OFX/QFX file(s) to process"
@@ -28273,7 +28273,7 @@ msgstr "המרת כל התנועות למטבע משותף."
 
 #: gnucash/report/trep-engine.scm:550
 msgid "Formats the table suitable for cut & paste exporting with extra cells."
-msgstr "תבנות הטבלה ‮כך שתאפשר יצוא בעזרת גזירה והדבקה עם תאים נוספים."
+msgstr "תבנות הטבלה ‮כך שתאפשר יצוא באמצעות גזירה והדבקה יחד עם תאים נוספים."
 
 #: gnucash/report/trep-engine.scm:561
 msgid "If no transactions matched"
