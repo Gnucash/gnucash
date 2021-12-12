@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2021-12-05 20:01+0000\n"
+"PO-Revision-Date: 2021-12-05 20:45+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "glossary/nb_NO/>\n"
@@ -888,3 +888,9 @@ msgstr "uttak"
 
 #~ msgid "Term"
 #~ msgstr "Definisjon"
+
+msgid "stock"
+msgstr ""
+
+msgid "due"
+msgstr ""
