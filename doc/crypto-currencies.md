@@ -22,6 +22,7 @@ crypto-currencies |暗号資産
 virtual-currencies|仮想通貨
 
 ## Pull Requests related to this
+* [#1215](https://github.com/Gnucash/gnucash/pull/1215)
 * [#1213](https://github.com/Gnucash/gnucash/pull/1213) (Closed)
 * [#1209](https://github.com/Gnucash/gnucash/pull/1209)
 
