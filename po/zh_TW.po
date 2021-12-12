@@ -8,11 +8,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-10-23 12:39+0000\n"
-"Last-Translator: cjh <cjh@cjh0613.com>\n"
+"PO-Revision-Date: 2021-12-10 09:52+0000\n"
+"Last-Translator: Brian Hsu <brianhsu.hsu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -74,7 +74,7 @@ msgstr "土耳其文"
 #: borrowed/goffice/go-charmap-sel.c:81
 #: gnucash/gnome-utils/assistant-xml-encoding.c:224
 msgid "Unicode"
-msgstr "Unicode"
+msgstr "統一碼 (Unicode)"
 
 #: borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
@@ -262,19 +262,19 @@ msgstr "果魯穆奇文字 (MacGurmukhi)"
 
 #: borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr "希伯來文[左至右] (IBM-862)"
+msgstr "希伯來文 (IBM-862)"
 
 #: borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr "希伯來文[左至右] (ISO-8859-8-E)"
+msgstr "希伯來文 (ISO-8859-8-E)"
 
 #: borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr "希伯來文[左至右] (ISO-8859-8-I)"
+msgstr "希伯來文 (ISO-8859-8-I)"
 
 #: borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr "希伯來文[左至右] (MacHebrew)"
+msgstr "希伯來文 (MacHebrew)"
 
 #: borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
@@ -398,7 +398,7 @@ msgstr "越南文 (Windows-1258)"
 
 #: borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr "希伯來文 (ISO-8859-8)"
+msgstr "視覺順序希伯來文 (ISO-8859-8)"
 
 #: borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
@@ -438,7 +438,7 @@ msgstr "選單"
 
 #: borrowed/goffice/go-optionmenu.c:339
 msgid "The menu of options"
-msgstr "選單選項"
+msgstr "選項選單"
 
 #: doc/tip_of_the_day.list.c:1
 msgid ""
@@ -453,8 +453,8 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
-"郵件論壇是 GnuCash 社群偏好的溝通方式，包括新版本的公告，使用者群組等等。詳情"
-"請見 https://wiki.gnucash.org/wiki/Mailing_Lists"
+"郵件論壇是 GnuCash 社群偏好的溝通方式，包括新版本的公告，使用者群組等等。詳情請見 https://wiki.gnucash.org/wiki/"
+"Mailing_Lists"
 
 #: doc/tip_of_the_day.list.c:9
 msgid ""
@@ -462,8 +462,8 @@ msgid ""
 "lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome."
 "org"
 msgstr ""
-"連絡 GnuCash 開發者很容易。不但有許多通信論壇，還可以在 IRC 跟他們聊天！想加"
-"入他們就在 irc.gnome.org 的 #gnucash"
+"連絡 GnuCash 開發者很容易。不但有許多通信論壇，還可以在 IRC 跟他們聊天！可以透過 irc.gnome.org 的 #gnucash "
+"頻道加入他們。"
 
 #: doc/tip_of_the_day.list.c:13
 msgid ""
@@ -472,9 +472,8 @@ msgid ""
 "on the sub-menu Import and click on QIF or OFX file, respectively. Then, "
 "follow the instructions provided."
 msgstr ""
-"您可以簡單地匯入您現有來自 Quicken、 MS Money、或其他匯出 QIF 檔案或 OFX 檔案"
-"的程式的財務資料。點選「檔案」選單的「匯入」功能，選擇 QIF 或 OFX 格式，接下"
-"來依照指示進行即可。"
+"您可以簡單地匯入您現有的，來自 Quicken、 MS Money 或其他可以匯出 QIF / OFX "
+"檔案的程式的財務資料。點選「檔案」選單的「匯入」功能，選擇 QIF 或 OFX 格式，接下來依照指示進行即可。"
 
 #: doc/tip_of_the_day.list.c:18
 msgid ""
@@ -483,17 +482,15 @@ msgid ""
 "For more information on income and expense accounts, please see the GnuCash "
 "online manual."
 msgstr ""
-"如果您熟悉其他像 Quicken 這類財務程式，注意 GnuCash 使用科目而非分類來追蹤收"
-"入與支出。需要更多關於收入與支出科目的資訊，請查閱 GnuCash 線上手冊。"
+"如果您熟悉其他像 Quicken 這類財務程式，請注意 GnuCash 使用科目而非分類來追蹤收入與支出。需要更多關於收入與支出科目的資訊，請查閱 "
+"GnuCash 線上手冊。"
 
 #: doc/tip_of_the_day.list.c:23
 msgid ""
 "It is possible to change which columns display in the Chart of Accounts. "
 "Just locate the triangle at the far right of the column headings, and click "
 "it to see the different columns available."
-msgstr ""
-"您可以更改科目體系裡所顯示的欄位。找到欄位名稱那行最右邊的箭頭，點選後可以看"
-"到可以選擇的欄位。"
+msgstr "您可以更改科目體系裡所顯示的欄位。找到欄位名稱那行最右邊的箭頭，點選後可以看到可以選擇的欄位。"
 
 #: doc/tip_of_the_day.list.c:27
 msgid ""
@@ -502,8 +499,8 @@ msgid ""
 "register, clicking the right mouse button brings up the transaction menu "
 "options."
 msgstr ""
-"在主視窗中的科目頁籤裡點選滑鼠右鍵 (Mac OS X 中按著 Contrl 並點擊滑鼠) 會出現"
-"科目選單選項。在每個登記簿中點選滑鼠右鍵則會出現交易選單選項。"
+"在主視窗中的科目頁籤裡點選滑鼠右鍵（Mac OS X 中按著 Control "
+"並點擊滑鼠）會出現科目選單選項。在每個登記簿中點選滑鼠右鍵則會出現交易選單選項。"
 
 #: doc/tip_of_the_day.list.c:32
 msgid ""
@@ -512,9 +509,8 @@ msgid ""
 "more information on choosing an account type or setting up a chart of "
 "accounts, please see the GnuCash online manual."
 msgstr ""
-"點選主視窗工具列的新增按鈕以建立新科目。這樣會出現可以讓您輸入科目詳細資料的"
-"對話盒。需要更多關於選擇科目類型或建立會計科目表的資訊，請查閱 GnuCash 線上手"
-"冊。"
+"點選主視窗工具列的新增按鈕以建立新科目。這樣會出現可以讓您輸入科目詳細資訊的對話盒。需要更多關於選擇科目類型或建立會計科目體系的資訊，請查閱 "
+"GnuCash 線上手冊。"
 
 #: doc/tip_of_the_day.list.c:38
 msgid ""
@@ -2428,7 +2424,7 @@ msgstr "是否過帳？"
 #: gnucash/gtkbuilder/dialog-order.glade:551
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:143
 msgid "Date Opened"
-msgstr "開發票的日期"
+msgstr "開立日期"
 
 #: gnucash/gnome/dialog-invoice.c:3397
 #: gnucash/gtkbuilder/dialog-invoice.glade:41
@@ -4211,8 +4207,9 @@ msgid ""
 "\n"
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
-"\"%s\"有一個或多個子科目。\n"
-"删除該科目前請先删除所有的子科目。"
+"「%s」有一個或多個子科目。\n"
+"\n"
+"删除該科目前請先删除所有的子科目或將其移至別處。"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1729
 #, c-format
@@ -5708,10 +5705,8 @@ msgid "A reversing entry has already been created for this transaction."
 msgstr "此交易已經建立過反向交易。"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4088
-#, fuzzy
-#| msgid "Cut the current transaction?"
 msgid "Jump to the transaction?"
-msgstr "剪下目前的交易？"
+msgstr "跳轉至交易？"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4095
 msgid "Reverse Transaction"
@@ -10001,11 +9996,11 @@ msgstr "要找到最新的穩定版本，請參考 {1}"
 #. Translators: Guile is the programming language of the reports
 #: gnucash/gnucash-core-app.cpp:103
 msgid "Loading system wide Guile extensions…"
-msgstr "載入系統範圍的Guile擴展…"
+msgstr "載入系統範圍的 Guile 擴充套件…"
 
 #: gnucash/gnucash-core-app.cpp:115
 msgid "Loading user specific Guile extensions…"
-msgstr "載入使用者特定的 Guile 擴展…"
+msgstr "載入使用者特定的 Guile 擴充套件…"
 
 #: gnucash/gnucash-core-app.cpp:224
 msgid "- GnuCash, accounting for personal and small business finance"
@@ -12129,40 +12124,25 @@ msgstr ""
 "的金額，並且使得未來對帳時有困難。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:69
-#, fuzzy
-#| msgid "Remove a split from a transaction"
 msgid "Cut a split from a transaction"
-msgstr "刪除交易中的一個分割"
+msgstr "從交易中剪下分割"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:70
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to remove a split from a "
-#| "transaction."
 msgid ""
 "This dialog is presented before allowing you to cut a split from a "
 "transaction."
-msgstr "這個對話盒會在允許您將分割從交易中移除前顯示。"
+msgstr "這個對話盒會在允許您將分割從交易中剪下前顯示。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:74
-#, fuzzy
-#| msgid "Remove a reconciled split from a transaction"
 msgid "Cut a reconciled split from a transaction"
-msgstr "刪除交易中一個已對帳的分割"
+msgstr "剪下交易中一個已對帳的分割"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:75
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to remove a reconciled split "
-#| "from a transaction. Doing so will throw off the reconciled value of the "
-#| "register and can make it hard to perform future reconciliations."
 msgid ""
 "This dialog is presented before allowing you to cut a reconciled split from "
 "a transaction. Doing so will throw off the reconciled value of the register "
 "and can make it hard to perform future reconciliations."
-msgstr ""
-"這個對話盒會在允許您將已對帳的分割從交易中移除前顯示。這麼做會丟棄登記簿中已"
-"對帳的金額，並且使得未來對帳時有困難。"
+msgstr "這個對話盒會在允許您將已對帳的分割從交易中剪下前顯示。這麼做會丟棄登記簿中已對帳的金額，並且使得未來對帳時有困難。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:79
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:192
@@ -12218,37 +12198,23 @@ msgstr ""
 "這個對話盒會在允許您將所有分割（且含有某些已對帳的分割）從交易中移除前顯示。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:99
-#, fuzzy
-#| msgid "_Cut Transaction"
 msgid "Cut a transaction"
-msgstr "剪下交易(_C)"
+msgstr "剪下交易"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:100
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to delete a transaction."
 msgid "This dialog is presented before allowing you to cut a transaction."
-msgstr "此對話盒會在允許您刪除交易前顯示。"
+msgstr "此對話盒會在允許您剪下交易前顯示。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
-#, fuzzy
-#| msgid "Delete a transaction with reconciled splits"
 msgid "Cut a transaction with reconciled splits"
-msgstr "刪除含有已對帳分割的交易"
+msgstr "剪下含有已對帳分割的交易"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:105
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to delete a transaction that "
-#| "contains reconciled splits. Doing so will throw off the reconciled value "
-#| "of the register and can make it hard to perform future reconciliations."
 msgid ""
 "This dialog is presented before allowing you to cut a transaction that "
 "contains reconciled splits. Doing so will throw off the reconciled value of "
 "the register and can make it hard to perform future reconciliations."
-msgstr ""
-"這個對話盒會在允許您刪除含有已對帳分割的交易前顯示。這麼做會丟棄登記簿中的已"
-"對帳金額並且使得未來執行對帳時變得困難。"
+msgstr "這個對話盒會在允許您剪下含有已對帳分割的交易前顯示。這麼做會丟棄登記簿中的已對帳金額並且使得未來執行對帳時變得困難。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:109
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:212
@@ -15684,30 +15650,24 @@ msgid "Show _Memo column"
 msgstr "顯示備忘錄欄位(_M)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:963
-#, fuzzy
-#| msgid "Show _matched information"
 msgid "Show matched _information"
-msgstr "顯示配對資訊(_M)"
+msgstr "顯示配對資訊(_I)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:978
-#, fuzzy
-#| msgid "Spend"
 msgid "A_ppend"
-msgstr "開銷"
+msgstr "添加(_P)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:982
 msgid ""
 "When Updating and Clearing a matched transaction, append the imported "
 "Description and Notes to the matched Description and Notes instead of "
 "replacing them."
-msgstr ""
+msgstr "更新和清除已配對的交易時，將匯入的描述、筆記附加到配對到的交易的描述、筆記欄位，而非取代它們。"
 
 # src/gnome/glade-gnc-dialogs.c:1476
 #: gnucash/gtkbuilder/dialog-import.glade:994
-#, fuzzy
-#| msgid "Reconcile after match"
 msgid "_Reconcile after match"
-msgstr "配對後對帳"
+msgstr "配對後對帳(_R)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1017
 msgid "Generic import transaction matcher"
@@ -17473,16 +17433,10 @@ msgid "R_emind in advance"
 msgstr "幾天前提醒(_E)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:724
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "Re_view created transactions"
-msgstr "核對已建立的交易(_R)"
+msgstr "核對已建立的交易(_V)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:728
-#, fuzzy
-#| msgid ""
-#| "Set \"Review Created Transactions\" as the default for the \"since last "
-#| "run\" dialog."
 msgid ""
 "Set 'Review created transactions' as the default in the \"since last run\" "
 "dialog."
@@ -18698,31 +18652,6 @@ msgstr "這個精靈將會協助您設定您的網路銀行連線。"
 
 #. See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:47
-#, fuzzy
-#| msgid ""
-#| "The requirements for Online Banking vary between the different supported "
-#| "AqBanking backends, but usually you will need:\n"
-#| "* Your bank needs to grant you online access. See on their website or ask "
-#| "their customer service for how to obtain it.\n"
-#| "They should also tell you:\n"
-#| "* Your user ID that identifies you to their server, often your base "
-#| "account number;\n"
-#| "* The URL of their Online Banking server;\n"
-#| "* In some cases the routing number of your bank's branch is useful in "
-#| "this assistant;\n"
-#| "* Authentication methods vary by backend and choosen method:\n"
-#| " * FinTS PIN/TAN: Some methods require a specific gadget like a card "
-#| "reader or a mobile;\n"
-#| " * FinTS HBCI: You have to exchange the public parts of asymmetric keys "
-#| "with your bank (\"Ini-Letter\").\n"
-#| " * PayPal: registered email address, password, API signature;\n"
-#| "\n"
-#| "See https://wiki.gnucash.org/wiki/AqBanking for more details.\n"
-#| "\n"
-#| "Note: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented "
-#| "Online Banking server. You should not rely on time-critical transfers "
-#| "through Online Banking, because sometimes the bank does not give you "
-#| "correct feedback when a transfer is rejected."
 msgid ""
 "The requirements for Online Banking vary between the different supported "
 "AqBanking backends, but usually you will need:\n"
@@ -18761,8 +18690,7 @@ msgstr ""
 "\n"
 "詳細資訊請見 https://wiki.gnucash.org/wiki/AqBanking。\n"
 "\n"
-"註：不保證任何事情。有些銀行的線上銀行伺服器實作得很爛。您不應該依賴網路銀行"
-"進行時間緊迫的轉帳，因為有時這些銀行在轉帳被拒絕時不會給您正確的回應。"
+"註：不保證任何事情。有些銀行的線上銀行伺服器實作得很爛。您不應該依賴網路銀行進行時間緊迫的轉帳，因為有時這些銀行在轉帳被拒絕時不會給您正確的回應。"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:71
 msgid "Initial Online Banking Setup"
@@ -19176,16 +19104,12 @@ msgid "Originator BIC (Bank Code)"
 msgstr "發送者銀行代碼 (BIC)"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:409
-#, fuzzy
-#| msgid "Enter a SEPA Online Transfer"
 msgid "Enter a SEPA Internal Transfer"
-msgstr "輸入 SEPA 線上交易"
+msgstr "輸入 SEPA 內部轉帳"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:430
-#, fuzzy
-#| msgid "Tax Accounts"
 msgid "Target Accounts"
-msgstr "稅務科目"
+msgstr "目標帳戶"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:441
 msgid "Enter a SEPA Online Direct Debit Note"
@@ -19340,10 +19264,8 @@ msgstr ""
 "您變更了線上轉帳的範本列表，但您取消了轉帳對話盒。您仍然要儲存這些變更嗎？"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:125
-#, fuzzy
-#| msgid "No valid account found"
 msgid "No reference accounts found."
-msgstr "找不到有效的科目"
+msgstr "找不到參考帳號。"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:206
 msgid ""
@@ -19373,17 +19295,15 @@ msgstr "網路銀行行內轉帳"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:242
 msgid "Online Banking European (SEPA) Transfer"
-msgstr "網路銀行歐洲 (SEPA) 轉帳"
+msgstr "網路銀行單一歐元區 (SEPA) 轉帳"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:248
-#, fuzzy
-#| msgid "Online Banking European (SEPA) Transfer"
 msgid "Online Banking European (SEPA) Internal Transfer"
-msgstr "網路銀行歐洲 (SEPA) 轉帳"
+msgstr "歐洲網路銀行單一歐元區 (SEPA) 內部轉帳"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:254
 msgid "Online Banking European (SEPA) Debit Note"
-msgstr "網路銀行歐洲 (SEPA) 直接債務備註"
+msgstr "網路銀行單一歐元區 (SEPA) 直接債務備註"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:260
 msgid "Online Banking Transaction"
@@ -19613,23 +19533,17 @@ msgstr "發布 SEPA 交易(_S)..."
 msgid ""
 "Issue a new international European (SEPA) transaction online through Online "
 "Banking"
-msgstr "透過網路銀行在線上發布新歐洲 (SEPA) 交易"
+msgstr "透過網路銀行在網路上發起新的單一歐元區 (SEPA) 國際交易"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:120
-#, fuzzy
-#| msgid "Issue _SEPA Transaction..."
 msgid "Issue SEPA I_nternal Transaction..."
-msgstr "發布 SEPA 交易(_S)..."
+msgstr "發布 SEPA 內部交易(_I)..."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:121
-#, fuzzy
-#| msgid ""
-#| "Issue a new international European (SEPA) transaction online through "
-#| "Online Banking"
 msgid ""
 "Issue a new internal European (SEPA) transaction online through Online "
 "Banking"
-msgstr "透過網路銀行在線上發布新歐洲 (SEPA) 交易"
+msgstr "透過網路銀行在網路上發起新的單一歐元區 (SEPA) 內部交易"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:125
 msgid "_Internal Transaction..."
@@ -19647,7 +19561,7 @@ msgstr "發動 SEPA 直接債務備註 (_D)..."
 msgid ""
 "Issue a new international European (SEPA) direct debit note online through "
 "Online Banking"
-msgstr "透過網路銀行在線上發布新的歐洲 (SEPA) 直接債務備註"
+msgstr "透過網路銀行在線上發布新的單一歐元區 (SEPA) 直接債務備註"
 
 #. Translators: Message types MTxxxx are exchange formats used by the SWIFT network
 #. https://en.wikipedia.org/wiki/Society_for_Worldwide_Interbank_Financial_Telecommunication
@@ -20870,17 +20784,15 @@ msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "新的，未結算（需要 acct 才能轉換 %s）！"
 
 #: gnucash/import-export/import-main-matcher.c:1616
-#, fuzzy, c-format
-#| msgid "Reconcile (manual) match"
+#, c-format
 msgid "Reconcile (manual) match to %s"
-msgstr "對帳（手動）吻合"
+msgstr "對帳（手動）至 %s"
 
 # src/gnome/glade-gnc-dialogs.c:1476
 #: gnucash/import-export/import-main-matcher.c:1621
-#, fuzzy, c-format
-#| msgid "Reconcile (auto) match"
+#, c-format
 msgid "Reconcile (auto) match to %s"
-msgstr "對帳（自動）吻合"
+msgstr "對帳（自動）至 %s"
 
 #: gnucash/import-export/import-main-matcher.c:1630
 #: gnucash/import-export/import-main-matcher.c:1660
@@ -20888,17 +20800,15 @@ msgid "Match missing!"
 msgstr "找不到吻合的項目！"
 
 #: gnucash/import-export/import-main-matcher.c:1646
-#, fuzzy, c-format
-#| msgid "Update and reconcile (manual) match"
+#, c-format
 msgid "Update and reconcile (manual) match to %s"
-msgstr "更新且對帳（手動）吻合"
+msgstr "更新且對帳（手動）至 %s"
 
 # src/gnome/glade-gnc-dialogs.c:1476
 #: gnucash/import-export/import-main-matcher.c:1651
-#, fuzzy, c-format
-#| msgid "Update and reconcile (auto) match"
+#, c-format
 msgid "Update and reconcile (auto) match to %s"
-msgstr "更新且對帳（自動）吻合"
+msgstr "更新且對帳（自動）至 %s"
 
 #: gnucash/import-export/import-main-matcher.c:1668
 msgid "Do not import (no action selected)"
@@ -20996,15 +20906,11 @@ msgid "Unknown OFX investment account"
 msgstr "未知的 OFX 投資科目"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1276
-#, fuzzy, c-format
-#| msgid ""
-#| "While importing transactions from OFX file '%s' into account '%s', found "
-#| "%d previously imported transactions, no new transactions."
+#, c-format
 msgid ""
 "While importing transactions from OFX file '%s' found %d previously imported "
 "transactions, no new transactions."
-msgstr ""
-"將OFX檔案「%s」中的交易導入帳戶「%s」時，發現了%d個以前導入的交易，無新交易。"
+msgstr "從 OFX 檔案「%s」匯入交易時，發現了 %d 個以前匯入的交易，無新交易。"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1378
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
@@ -25532,16 +25438,12 @@ msgid "Withdrawals"
 msgstr "提款"
 
 #: gnucash/report/reports/standard/equity-statement.scm:474
-#, fuzzy
-#| msgid "Unrealized Gains"
 msgid "Unrealized Gains for Period"
-msgstr "未實現獲利(虧損)"
+msgstr "期間內未實現獲利"
 
 #: gnucash/report/reports/standard/equity-statement.scm:475
-#, fuzzy
-#| msgid "Unrealized Losses"
 msgid "Unrealized Losses for Period"
-msgstr "未實現虧損"
+msgstr "期間內未實現虧損"
 
 #: gnucash/report/reports/standard/equity-statement.scm:481
 msgid "Increase in capital"
@@ -27930,10 +27832,8 @@ msgid "Add indenting columns"
 msgstr "加入縮排"
 
 #: gnucash/report/trep-engine.scm:97
-#, fuzzy
-#| msgid "Sa_ve Filter"
 msgid "Date Filter"
-msgstr "儲存過濾器(_V)"
+msgstr "過濾日期依："
 
 #: gnucash/report/trep-engine.scm:98
 msgid "Table for Exporting"
@@ -28055,7 +27955,7 @@ msgstr "貸方科目"
 
 #: gnucash/report/trep-engine.scm:518
 msgid "Specify date to filter by..."
-msgstr ""
+msgstr "指定過濾日期的方式..."
 
 #: gnucash/report/trep-engine.scm:527
 msgid "Convert all transactions into a common currency."

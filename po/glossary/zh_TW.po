@@ -10,8 +10,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2021-12-05 20:45+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2021-12-07 07:51+0000\n"
+"Last-Translator: Brian Hsu <brianhsu.hsu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "gnucash/glossary/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -206,10 +206,8 @@ msgid "amount"
 msgstr "總額"
 
 #. "The amount finally to pay, respecting discounts, billing terms…"
-#, fuzzy
-#| msgid "amount"
 msgid "amount due"
-msgstr "總額"
+msgstr "應付總額"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
@@ -393,7 +391,7 @@ msgstr "文件連結"
 
 #. "The last day to pay an invoice in time."
 msgid "due date"
-msgstr ""
+msgstr "到期日"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
@@ -753,13 +751,11 @@ msgstr "分割"
 
 #. "Alias of 'shares'"
 msgid "stocks"
-msgstr ""
+msgstr "股份"
 
 #. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
-#, fuzzy
-#| msgid "split"
 msgid "stock split"
-msgstr "分割"
+msgstr "股票除權"
 
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
@@ -878,7 +874,7 @@ msgstr "提出(在對帳對話盒)"
 #~ msgstr "發票"
 
 msgid "stock"
-msgstr ""
+msgstr "股票"
 
 msgid "due"
-msgstr ""
+msgstr "到期"
