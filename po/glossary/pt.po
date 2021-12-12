@@ -9,8 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2021-12-05 20:45+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2021-12-11 08:52+0000\n"
+"Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "glossary/pt/>\n"
 "Language: pt\n"
@@ -205,10 +205,8 @@ msgid "amount"
 msgstr "montante"
 
 #. "The amount finally to pay, respecting discounts, billing terms…"
-#, fuzzy
-#| msgid "amount"
 msgid "amount due"
-msgstr "montante"
+msgstr "montante devido"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
@@ -392,7 +390,7 @@ msgstr "ligação do documento"
 
 #. "The last day to pay an invoice in time."
 msgid "due date"
-msgstr ""
+msgstr "data limite"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
@@ -752,13 +750,11 @@ msgstr "parcela"
 
 #. "Alias of 'shares'"
 msgid "stocks"
-msgstr ""
+msgstr "acções"
 
 #. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
-#, fuzzy
-#| msgid "split"
 msgid "stock split"
-msgstr "parcela"
+msgstr "desdobramento de acções"
 
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
@@ -907,7 +903,7 @@ msgstr "levantamento (no diálogo de reconciliação)"
 #~ msgstr "campo de declaração"
 
 msgid "stock"
-msgstr ""
+msgstr "acção"
 
 msgid "due"
-msgstr ""
+msgstr "devido"
