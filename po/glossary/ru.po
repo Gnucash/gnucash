@@ -4,14 +4,15 @@
 # Sergey Belyashov <Sergey.Belyashov@gmail.com>, 2008.
 # Val Saven <val.saven@gmail.com>, 2021.
 # TwoEightNine <twoeightnine@list.ru>, 2021.
+# Даниил Морозюк <morozdan2003@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2021-12-05 20:45+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2021-12-09 16:52+0000\n"
+"Last-Translator: Даниил Морозюк <morozdan2003@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/glossary/"
 "ru/>\n"
 "Language: ru\n"
@@ -412,7 +413,7 @@ msgstr ""
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
-msgstr ""
+msgstr "электронная почта"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
