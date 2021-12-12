@@ -5,10 +5,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-10-20 13:58+0000\n"
+"PO-Revision-Date: 2021-12-11 18:53+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -12560,42 +12560,28 @@ msgstr ""
 "registru i može otežati buduća usklađivanja."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:69
-#, fuzzy
-#| msgid "Remove a split from a transaction"
 msgid "Cut a split from a transaction"
-msgstr "Ukloni stavku iz transakcije"
+msgstr "Izreži stavku iz transakcije"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:70
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to remove a split from a "
-#| "transaction."
 msgid ""
 "This dialog is presented before allowing you to cut a split from a "
 "transaction."
 msgstr ""
-"Ovaj se prodijalogzor prikazuje prije dozvole za uklanjanje stavke iz "
-"transakcije."
+"Ovaj se dijalog prikazuje prije dozvole za izrezivanje stavke iz transakcije."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:74
-#, fuzzy
-#| msgid "Remove a reconciled split from a transaction"
 msgid "Cut a reconciled split from a transaction"
-msgstr "Ukloni usklađenu stavku iz transakcije"
+msgstr "Izreži usklađenu stavku iz transakcije"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:75
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to remove a reconciled split "
-#| "from a transaction. Doing so will throw off the reconciled value of the "
-#| "register and can make it hard to perform future reconciliations."
 msgid ""
 "This dialog is presented before allowing you to cut a reconciled split from "
 "a transaction. Doing so will throw off the reconciled value of the register "
 "and can make it hard to perform future reconciliations."
 msgstr ""
-"Ovaj se dijalog prikazuje prije mogućnosti za uklanjanje usklađene stavke iz "
-"transakcije. Ovime se odbacuje usklađena vrijednost u registru i može "
+"Ovaj se dijalog prikazuje prije mogućnosti za izrezivanje usklađene stavke "
+"iz transakcije. Ovime se odbacuje usklađena vrijednost u registru i može "
 "otežati buduća usklađivanja."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:79
@@ -12657,36 +12643,24 @@ msgstr ""
 "usklađena vrijednost u registru i može otežati buduća usklađivanja."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:99
-#, fuzzy
-#| msgid "_Cut Transaction"
 msgid "Cut a transaction"
-msgstr "_Izreži transakciju"
+msgstr "Izreži transakciju"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:100
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to delete a transaction."
 msgid "This dialog is presented before allowing you to cut a transaction."
-msgstr "Ovaj se dijalog prikazuje prije dozvole za brisanje transakcije."
+msgstr "Ovaj se dijalog prikazuje prije dozvole za izrezivanje transakcije."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
-#, fuzzy
-#| msgid "Delete a transaction with reconciled splits"
 msgid "Cut a transaction with reconciled splits"
-msgstr "Izbriši transakciju s usklađenim stavkama"
+msgstr "Izreži transakciju s usklađenim stavkama"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:105
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to delete a transaction that "
-#| "contains reconciled splits. Doing so will throw off the reconciled value "
-#| "of the register and can make it hard to perform future reconciliations."
 msgid ""
 "This dialog is presented before allowing you to cut a transaction that "
 "contains reconciled splits. Doing so will throw off the reconciled value of "
 "the register and can make it hard to perform future reconciliations."
 msgstr ""
-"Ovaj se dijalog prikazuje prije dozvole za brisanje transakcije koja "
+"Ovaj se dijalog prikazuje prije dozvole za izrezivanje transakcije koja "
 "sadržava usklađene stavke. Ovime se odbacuje usklađena vrijednost u registru "
 "i može otežati buduća usklađivanja."
 
@@ -16273,16 +16247,12 @@ msgid "Show _Memo column"
 msgstr "Prikaži stupac _bilježaka"
 
 #: gnucash/gtkbuilder/dialog-import.glade:963
-#, fuzzy
-#| msgid "Show _matched information"
 msgid "Show matched _information"
-msgstr "Prikaži poklopljene infor_macije"
+msgstr "Prikaži poklopljene _informacije"
 
 #: gnucash/gtkbuilder/dialog-import.glade:978
-#, fuzzy
-#| msgid "Spend"
 msgid "A_ppend"
-msgstr "Potroši"
+msgstr "_Dodaj"
 
 #: gnucash/gtkbuilder/dialog-import.glade:982
 msgid ""
@@ -16292,10 +16262,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-import.glade:994
-#, fuzzy
-#| msgid "Reconcile after match"
 msgid "_Reconcile after match"
-msgstr "Uskladi nakon poklapanja"
+msgstr "_Uskladi nakon poklapanja"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1017
 msgid "Generic import transaction matcher"
@@ -19848,16 +19816,12 @@ msgid "Originator BIC (Bank Code)"
 msgstr "BIC platitelja (šifra banke)"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:409
-#, fuzzy
-#| msgid "Enter a SEPA Online Transfer"
 msgid "Enter a SEPA Internal Transfer"
-msgstr "Upiši internetski SEPA prijenos"
+msgstr "Upiši interni SEPA prijenos"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:430
-#, fuzzy
-#| msgid "Tax Accounts"
 msgid "Target Accounts"
-msgstr "Konta poreza"
+msgstr "Konta cilja"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:441
 msgid "Enter a SEPA Online Direct Debit Note"
@@ -20025,10 +19989,8 @@ msgstr ""
 "dijalog prijenosa. Želiš li svejedno spremiti promjene?"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:125
-#, fuzzy
-#| msgid "No valid account found"
 msgid "No reference accounts found."
-msgstr "Nije nađen valjani račun"
+msgstr "Nisu pronađeni referentni računi."
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:206
 msgid ""
@@ -20063,10 +20025,8 @@ msgid "Online Banking European (SEPA) Transfer"
 msgstr "Internet bankarstvo – SEPA prijenos"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:248
-#, fuzzy
-#| msgid "Online Banking European (SEPA) Transfer"
 msgid "Online Banking European (SEPA) Internal Transfer"
-msgstr "Internet bankarstvo – SEPA prijenos"
+msgstr "Internet bankarstvo – europski interni SEPA prijenos"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:254
 msgid "Online Banking European (SEPA) Debit Note"
@@ -20313,20 +20273,14 @@ msgid ""
 msgstr "Izdaj novu međunarodnu SEPA transakciju, putem internet bankarstva"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:120
-#, fuzzy
-#| msgid "Issue _SEPA Transaction..."
 msgid "Issue SEPA I_nternal Transaction..."
-msgstr "Izdaj _SEPA transakciju …"
+msgstr "Izdaj i_nternu SEPA transakciju …"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:121
-#, fuzzy
-#| msgid ""
-#| "Issue a new international European (SEPA) transaction online through "
-#| "Online Banking"
 msgid ""
 "Issue a new internal European (SEPA) transaction online through Online "
 "Banking"
-msgstr "Izdaj novu međunarodnu SEPA transakciju, putem internet bankarstva"
+msgstr "Izdaj novu internu europsku SEPA transakciju, putem internet bankarstva"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:125
 msgid "_Internal Transaction..."
@@ -21748,16 +21702,13 @@ msgid "Unknown OFX investment account"
 msgstr "Nepoznat OFX konto ulaganja"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1276
-#, fuzzy, c-format
-#| msgid ""
-#| "While importing transactions from OFX file '%s' into account '%s', found "
-#| "%d previously imported transactions, no new transactions."
+#, c-format
 msgid ""
 "While importing transactions from OFX file '%s' found %d previously imported "
 "transactions, no new transactions."
 msgstr ""
-"Prilikom uvoza transakcija iz OFX datoteke „%s”u račun „%s”, pronađeno je %d "
-"prethodno uvezenih transakcija, nema novih transakcija."
+"Prilikom uvoza transakcija iz OFX datoteke „%s” pronađeno je %d prethodno "
+"uvezenih transakcija, nema novih transakcija."
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1378
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
@@ -28845,10 +28796,8 @@ msgid "Add indenting columns"
 msgstr "Dodaj uvučene stupce"
 
 #: gnucash/report/trep-engine.scm:97
-#, fuzzy
-#| msgid "Sa_ve Filter"
 msgid "Date Filter"
-msgstr "_Spremi filtar"
+msgstr "Filtar datuma"
 
 #: gnucash/report/trep-engine.scm:98
 msgid "Table for Exporting"
@@ -28972,7 +28921,7 @@ msgstr "Konta potraživanja"
 
 #: gnucash/report/trep-engine.scm:518
 msgid "Specify date to filter by..."
-msgstr ""
+msgstr "Navedi datum za filtriranje …"
 
 #: gnucash/report/trep-engine.scm:527
 msgid "Convert all transactions into a common currency."
