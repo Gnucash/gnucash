@@ -8,11 +8,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-12-10 09:52+0000\n"
-"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
+"PO-Revision-Date: 2021-12-11 15:53+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -15852,7 +15852,7 @@ msgstr "הצגת _מידע התאמה"
 
 #: gnucash/gtkbuilder/dialog-import.glade:978
 msgid "A_ppend"
-msgstr "צרוף"
+msgstr "_צרוף"
 
 #: gnucash/gtkbuilder/dialog-import.glade:982
 msgid ""
@@ -19788,7 +19788,7 @@ msgstr "יצירת תנועה, בינלאומית אירופאית (SEPA) באמ
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:120
 msgid "Issue SEPA I_nternal Transaction..."
-msgstr "הפקת תנועת SEPA פנימית..."
+msgstr "הפקת תנועת SEPA _פנימית…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:121
 msgid ""
@@ -21178,12 +21178,12 @@ msgid ""
 "While importing transactions from OFX file '%s' found %d previously imported "
 "transactions, no new transactions."
 msgstr ""
-"במהלך ייבוא התנועות מקובץ ה־OFX ‏'%s' נמצאו %d תנועות ש ייובאו כבר בעבר, אין "
+"במהלך ייבוא התנועות מקובץ ה־OFX ‏'%s' נמצאו %d תנועות שכבר ייובאו בעבר, אין "
 "תנועות חדשות."
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1378
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
-msgstr "פתיחת קובץ קוויקן פיננשיאל אקסצ'נג' (*.ofx, *.qfx)"
+msgstr "פתיחת קובץ אופן/קוויקן פיננשיאל אקסצ׳יינג׳ (‎*.ofx,‏ ‎*.qfx)"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1383
 msgid "Select one or multiple OFX/QFX file(s) to process"
@@ -28265,7 +28265,7 @@ msgstr "חשבונות זכות"
 
 #: gnucash/report/trep-engine.scm:518
 msgid "Specify date to filter by..."
-msgstr "הגדרת תאריך לצורך סינון..."
+msgstr "הגדרת תאריך לצורך סינון…"
 
 #: gnucash/report/trep-engine.scm:527
 msgid "Convert all transactions into a common currency."
