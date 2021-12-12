@@ -109,7 +109,10 @@ Note: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented Online Ban
           <object class="GtkLabel" id="wizard_label">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">The Setup of your Online Banking connection is handled by the external program "AqBanking Setup Wizard".
+            <property name="label" translatable="yes">The Setup of your Online Banking connection is handled by the external program "AqBanking Setup Wizard". That means:
+* It ignores GnuCash's preferences like "Close log window when finished".
+* To report issues read https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports.
+
 You have to set up at least one connection before you can continue.
 
 Please press the button below to start it.</property>
