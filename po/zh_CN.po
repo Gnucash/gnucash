@@ -22,11 +22,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-11-16 06:41+0000\n"
-"Last-Translator: cjh <cjh@cjh0613.com>\n"
+"PO-Revision-Date: 2021-12-07 07:51+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.9.1-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -12043,40 +12043,25 @@ msgstr ""
 "值，并且会令将来的对账更加困难。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:69
-#, fuzzy
-#| msgid "Remove a split from a transaction"
 msgid "Cut a split from a transaction"
-msgstr "从交易事项中删除分录"
+msgstr "从交易事项中剪切分录"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:70
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to remove a split from a "
-#| "transaction."
 msgid ""
 "This dialog is presented before allowing you to cut a split from a "
 "transaction."
-msgstr "在允许您删除交易事项中一个分录时将显示此对话框。"
+msgstr "这个对话框在允许您从交易中剪切分录之前出现。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:74
-#, fuzzy
-#| msgid "Remove a reconciled split from a transaction"
 msgid "Cut a reconciled split from a transaction"
-msgstr "从交易事项中删除一个已对账的分录"
+msgstr "从交易事项中剪切一个已对账的分录"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:75
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to remove a reconciled split "
-#| "from a transaction. Doing so will throw off the reconciled value of the "
-#| "register and can make it hard to perform future reconciliations."
 msgid ""
 "This dialog is presented before allowing you to cut a reconciled split from "
 "a transaction. Doing so will throw off the reconciled value of the register "
 "and can make it hard to perform future reconciliations."
-msgstr ""
-"在允许您删除交易事项中的一个已对账的分录时将显示此对话框。这么做会抛弃账簿中"
-"已对账的数值，并且会令将来的对账更加困难。"
+msgstr "在允许您剪切交易事项中的一个已对账的分录时将显示此对话框。这么做会抛弃账簿中已对账的数值，并且会令将来的对账更加困难。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:79
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:192
@@ -12131,37 +12116,23 @@ msgstr ""
 "做会抛弃账簿中已对账的数值，并且会令将来的对账更加困难。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:99
-#, fuzzy
-#| msgid "_Cut Transaction"
 msgid "Cut a transaction"
-msgstr "剪切交易(_C)"
+msgstr "剪切交易"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:100
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to delete a transaction."
 msgid "This dialog is presented before allowing you to cut a transaction."
-msgstr "删除一笔交易前会显示此对话框。"
+msgstr "剪切一笔交易前会显示此对话框。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
-#, fuzzy
-#| msgid "Delete a transaction with reconciled splits"
 msgid "Cut a transaction with reconciled splits"
-msgstr "删除包含整理拆分的事务"
+msgstr "剪切包含整理拆分的事务"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:105
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to delete a transaction that "
-#| "contains reconciled splits. Doing so will throw off the reconciled value "
-#| "of the register and can make it hard to perform future reconciliations."
 msgid ""
 "This dialog is presented before allowing you to cut a transaction that "
 "contains reconciled splits. Doing so will throw off the reconciled value of "
 "the register and can make it hard to perform future reconciliations."
-msgstr ""
-"在允许您删除一笔包含已对账分录的交易事项前会显示该对话框。这么做将抛弃账簿中"
-"的已对账的数值，并且会令将来的对账更加困难。"
+msgstr "在允许您剪切一笔包含已对账分录的交易事项前会显示该对话框。这么做将抛弃账簿中的已对账的数值，并且会令将来的对账更加困难。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:109
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:212
@@ -15569,16 +15540,12 @@ msgid "Show _Memo column"
 msgstr "显示备注列(_M)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:963
-#, fuzzy
-#| msgid "Show _matched information"
 msgid "Show matched _information"
-msgstr "显示匹配信息(_M)"
+msgstr "显示匹配信息(_I)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:978
-#, fuzzy
-#| msgid "Spend"
 msgid "A_ppend"
-msgstr "花费"
+msgstr "附加(_P)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:982
 msgid ""
@@ -15586,12 +15553,11 @@ msgid ""
 "Description and Notes to the matched Description and Notes instead of "
 "replacing them."
 msgstr ""
+"更新和清除匹配的交易时，将导入的 Description 和 Notes 追加到匹配的 Description 和 Notes 中，而不是替换它们。"
 
 #: gnucash/gtkbuilder/dialog-import.glade:994
-#, fuzzy
-#| msgid "Reconcile after match"
 msgid "_Reconcile after match"
-msgstr "对账(自动)匹配"
+msgstr "匹配后对账(_R)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1017
 msgid "Generic import transaction matcher"
@@ -19007,16 +18973,12 @@ msgid "Originator BIC (Bank Code)"
 msgstr "发讯者姓名"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:409
-#, fuzzy
-#| msgid "Enter a SEPA Online Transfer"
 msgid "Enter a SEPA Internal Transfer"
-msgstr "输入SEPA网上转账"
+msgstr "输入 SEPA 内部转账"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:430
-#, fuzzy
-#| msgid "Tax Accounts"
 msgid "Target Accounts"
-msgstr "一个会计科目"
+msgstr "目标账户"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:441
 msgid "Enter a SEPA Online Direct Debit Note"
@@ -19174,10 +19136,8 @@ msgstr ""
 "么？"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:125
-#, fuzzy
-#| msgid "No valid account found"
 msgid "No reference accounts found."
-msgstr "没有有效的科目"
+msgstr "未找到参考账户。"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:206
 msgid ""
@@ -19210,10 +19170,8 @@ msgid "Online Banking European (SEPA) Transfer"
 msgstr "网上银行银行内部转账"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:248
-#, fuzzy
-#| msgid "Online Banking European (SEPA) Transfer"
 msgid "Online Banking European (SEPA) Internal Transfer"
-msgstr "网上银行银行内部转账"
+msgstr "单一欧元支付区 (SEPA) 内部转账"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:254
 msgid "Online Banking European (SEPA) Debit Note"
@@ -19446,20 +19404,14 @@ msgid ""
 msgstr "通过网上银行发起一个新的银行内部交易事项"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:120
-#, fuzzy
-#| msgid "Issue _SEPA Transaction..."
 msgid "Issue SEPA I_nternal Transaction..."
-msgstr "发起SEPA交易(_S)..."
+msgstr "发起SEPA内部交易(_N)..."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:121
-#, fuzzy
-#| msgid ""
-#| "Issue a new international European (SEPA) transaction online through "
-#| "Online Banking"
 msgid ""
 "Issue a new internal European (SEPA) transaction online through Online "
 "Banking"
-msgstr "通过网上银行发起一个新的银行内部交易事项"
+msgstr "通过网上银行发起一个新的 SEPA 交易"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:125
 msgid "_Internal Transaction..."
@@ -20820,15 +20772,11 @@ msgid "Unknown OFX investment account"
 msgstr "未知的 OFX 投资科目"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1276
-#, fuzzy, c-format
-#| msgid ""
-#| "While importing transactions from OFX file '%s' into account '%s', found "
-#| "%d previously imported transactions, no new transactions."
+#, c-format
 msgid ""
 "While importing transactions from OFX file '%s' found %d previously imported "
 "transactions, no new transactions."
-msgstr ""
-"将 OFX 文件“%s”中的交易导入账户“%s”时，发现了 %d 个以前导入的交易，无新交易。"
+msgstr "从 OFX 文件“%s”导入交易时，发现了 %d 个以前导入的交易，无新交易。"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1378
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
@@ -27738,10 +27686,8 @@ msgid "Add indenting columns"
 msgstr "添加缩进列"
 
 #: gnucash/report/trep-engine.scm:97
-#, fuzzy
-#| msgid "Sa_ve Filter"
 msgid "Date Filter"
-msgstr "保存筛选(_V)"
+msgstr "日期筛选器"
 
 #: gnucash/report/trep-engine.scm:98
 msgid "Table for Exporting"
@@ -27863,7 +27809,7 @@ msgstr "信用科目"
 
 #: gnucash/report/trep-engine.scm:518
 msgid "Specify date to filter by..."
-msgstr ""
+msgstr "指定筛选日期的依据…"
 
 #: gnucash/report/trep-engine.scm:527
 msgid "Convert all transactions into a common currency."

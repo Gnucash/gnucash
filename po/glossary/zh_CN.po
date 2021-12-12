@@ -6,14 +6,15 @@
 # TianXing Yi <duguqiubailee@gmail.com>, 2021.
 # TianXing_Yi <duguqiubailee@gmail.com>, 2021.
 # 峡州仙士 <c@cjh0613.com>, 2021.
+# Eric <spice2wolf@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2021-12-05 20:45+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2021-12-06 00:53+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/glossary/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -232,10 +233,8 @@ msgid "amount"
 msgstr "金额"
 
 #. "The amount finally to pay, respecting discounts, billing terms…"
-#, fuzzy
-#| msgid "amount"
 msgid "amount due"
-msgstr "金额"
+msgstr "应付金额"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
@@ -464,7 +463,7 @@ msgstr "文件链接"
 
 #. "The last day to pay an invoice in time."
 msgid "due date"
-msgstr ""
+msgstr "到期日"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
@@ -907,14 +906,12 @@ msgstr "子交易"
 
 #. "Alias of 'shares'"
 msgid "stocks"
-msgstr ""
+msgstr "股票"
 
 # 一个交易被分割成两个或多个部分的中的一个。
 #. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
-#, fuzzy
-#| msgid "split"
 msgid "stock split"
-msgstr "子交易"
+msgstr "股票分割"
 
 # 这个设定报表的特定设计或外观。
 #. "This sets the particular design or shape of a report."
@@ -1077,7 +1074,7 @@ msgstr "撤回（在对账对话框）"
 #~ msgstr "客户概况"
 
 msgid "stock"
-msgstr ""
+msgstr "股票"
 
 msgid "due"
-msgstr ""
+msgstr "到期"
