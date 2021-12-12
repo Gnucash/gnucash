@@ -29,10 +29,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-11-23 02:09+0000\n"
+"PO-Revision-Date: 2021-12-10 07:51+0000\n"
 "Last-Translator: Maxime Leroy <lisacintosh@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
@@ -13915,45 +13915,32 @@ msgstr ""
 
 # messages-i18n.c:82
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:69
-#, fuzzy
-#| msgid "Remove a split from a transaction"
 msgid "Cut a split from a transaction"
-msgstr "Supprimer une répartition d'une transaction"
+msgstr "Couper une répartition d'une transaction"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:70
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to remove a split from a "
-#| "transaction."
 msgid ""
 "This dialog is presented before allowing you to cut a split from a "
 "transaction."
 msgstr ""
-"Cette boîte de dialogue est présentée avant de vous autoriser à supprimer "
-"une partie d'une transaction répartie."
+"Cette boîte de dialogue est présentée avant de vous autoriser à couper une "
+"répartition d'une transaction."
 
 # messages-i18n.c:82
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:74
-#, fuzzy
-#| msgid "Remove a reconciled split from a transaction"
 msgid "Cut a reconciled split from a transaction"
-msgstr "Supprimer une répartition d'une transaction rapprochée"
+msgstr "Couper une répartition d'une transaction rapprochée"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:75
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to remove a reconciled split "
-#| "from a transaction. Doing so will throw off the reconciled value of the "
-#| "register and can make it hard to perform future reconciliations."
 msgid ""
 "This dialog is presented before allowing you to cut a reconciled split from "
 "a transaction. Doing so will throw off the reconciled value of the register "
 "and can make it hard to perform future reconciliations."
 msgstr ""
-"Cette boîte de dialogue est présentée avant de vous autoriser à effacer une "
-"répartition d'une transaction déjà rapprochée. Le faire malgré tout va "
-"effacer la valeur rapprochée du registre et peut conduire à des difficultés "
-"lors d'un futur rapprochement."
+"Cette boîte de dialogue est présentée avant de vous autoriser à couper une "
+"répartition d'une transaction déjà rapprochée. Procéder ainsi va effacer la "
+"valeur rapprochée du registre et peut ainsi amener à certaines difficultés "
+"lors de futurs rapprochements."
 
 # messages-i18n.c:82
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:79
@@ -14020,41 +14007,29 @@ msgstr ""
 
 # messages-i18n.c:346
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:99
-#, fuzzy
-#| msgid "_Cut Transaction"
 msgid "Cut a transaction"
-msgstr "_Couper la transaction"
+msgstr "Couper la transaction"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:100
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to delete a transaction."
 msgid "This dialog is presented before allowing you to cut a transaction."
 msgstr ""
-"Cette boîte de dialogue est présentée avant de vous autoriser à supprimer "
-"une transaction."
+"Cette boîte de dialogue est présentée avant de vous autoriser à couper une "
+"transaction."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
-#, fuzzy
-#| msgid "Delete a transaction with reconciled splits"
 msgid "Cut a transaction with reconciled splits"
-msgstr "Supprimer une transaction avec des répartitions rapprochées"
+msgstr "Couper une transaction avec des répartitions rapprochées"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:105
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to delete a transaction that "
-#| "contains reconciled splits. Doing so will throw off the reconciled value "
-#| "of the register and can make it hard to perform future reconciliations."
 msgid ""
 "This dialog is presented before allowing you to cut a transaction that "
 "contains reconciled splits. Doing so will throw off the reconciled value of "
 "the register and can make it hard to perform future reconciliations."
 msgstr ""
-"Cette boîte de dialogue est présentée avant de vous autoriser à supprimer "
-"une transaction qui contient des répartitions rapprochées. La suppression va "
-"effacer la valeur rapprochée du registre et cela peut conduire à des "
-"difficultés lors d'un futur rapprochement."
+"Cette boîte de dialogue est présentée avant de vous autoriser à couper une "
+"transaction qui contient des répartitions rapprochées. Procéder ainsi va "
+"effacer la valeur rapprochée du registre et peut ainsi amener à certaines "
+"difficultés lors de futurs rapprochements."
 
 # messages-i18n.c:176
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:109
@@ -18011,17 +17986,13 @@ msgstr "Afficher la colonne _mémo"
 
 # messages-i18n.c:231
 #: gnucash/gtkbuilder/dialog-import.glade:963
-#, fuzzy
-#| msgid "Show _matched information"
 msgid "Show matched _information"
-msgstr "Afficher les infor_mations correspondantes"
+msgstr "Afficher les _informations correspondantes"
 
 # messages-i18n.c:335
 #: gnucash/gtkbuilder/dialog-import.glade:978
-#, fuzzy
-#| msgid "Spend"
 msgid "A_ppend"
-msgstr "Dépenser"
+msgstr "A_jouter"
 
 #: gnucash/gtkbuilder/dialog-import.glade:982
 msgid ""
@@ -18029,13 +18000,14 @@ msgid ""
 "Description and Notes to the matched Description and Notes instead of "
 "replacing them."
 msgstr ""
+"Lors de la mise à jour ou le pointage d'une transaction correspondante, "
+"ajouter la description et les notes importées à la description et aux notes "
+"correspondantes plutôt que de les remplacer."
 
 # messages-i18n.c:322
 #: gnucash/gtkbuilder/dialog-import.glade:994
-#, fuzzy
-#| msgid "Reconcile after match"
 msgid "_Reconcile after match"
-msgstr "Rapprocher l'homologue"
+msgstr "_Rapprocher l'homologue"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1017
 msgid "Generic import transaction matcher"
@@ -21946,17 +21918,13 @@ msgstr "BIC du compte débité (code d’identification de la banque)"
 
 # messages-i18n.c:57
 #: gnucash/import-export/aqb/dialog-ab-trans.c:409
-#, fuzzy
-#| msgid "Enter a SEPA Online Transfer"
 msgid "Enter a SEPA Internal Transfer"
-msgstr "Saisir un virement en ligne SEPA"
+msgstr "Saisir un virement interne SEPA"
 
 # messages-i18n.c:242 po/guile_strings.txt:50
 #: gnucash/import-export/aqb/dialog-ab-trans.c:430
-#, fuzzy
-#| msgid "Tax Accounts"
 msgid "Target Accounts"
-msgstr "Montant brut de taxe"
+msgstr "Comptes cibles"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:441
 msgid "Enter a SEPA Online Direct Debit Note"
@@ -22143,10 +22111,8 @@ msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:125
-#, fuzzy
-#| msgid "No valid account found"
 msgid "No reference accounts found."
-msgstr "Aucun compte valide trouvé"
+msgstr "Aucun compte de référence trouvé."
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:206
 msgid ""
@@ -22182,10 +22148,8 @@ msgid "Online Banking European (SEPA) Transfer"
 msgstr "Virement bancaire européen en ligne (SEPA)"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:248
-#, fuzzy
-#| msgid "Online Banking European (SEPA) Transfer"
 msgid "Online Banking European (SEPA) Internal Transfer"
-msgstr "Virement bancaire européen en ligne (SEPA)"
+msgstr "Virement bancaire européen en ligne (SEPA) interne"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:254
 msgid "Online Banking European (SEPA) Debit Note"
@@ -22452,23 +22416,17 @@ msgstr ""
 
 # messages-i18n.c:346
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:120
-#, fuzzy
-#| msgid "Issue _SEPA Transaction..."
 msgid "Issue SEPA I_nternal Transaction..."
-msgstr "Créer une transaction _SEPA..."
+msgstr "Créer une transaction SEPA i_nterne..."
 
 # messages-i18n.c:113
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:121
-#, fuzzy
-#| msgid ""
-#| "Issue a new international European (SEPA) transaction online through "
-#| "Online Banking"
 msgid ""
 "Issue a new internal European (SEPA) transaction online through Online "
 "Banking"
 msgstr ""
-"Crée une nouvelle transaction internationale européenne (SEPA) par la banque "
-"en ligne"
+"Crée une nouvelle transaction interne européenne (SEPA) par la banque en "
+"ligne"
 
 # messages-i18n.c:176
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:125
@@ -24019,17 +23977,14 @@ msgid "Unknown OFX investment account"
 msgstr "Compte d'investissement OFX inconnu"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1276
-#, fuzzy, c-format
-#| msgid ""
-#| "While importing transactions from OFX file '%s' into account '%s', found "
-#| "%d previously imported transactions, no new transactions."
+#, c-format
 msgid ""
 "While importing transactions from OFX file '%s' found %d previously imported "
 "transactions, no new transactions."
 msgstr ""
-"Durant l'importation des transactions depuis le fichier OFX '%s' dans le "
-"compte '%s', %d transactions déjà importées ont été trouvées, mais aucune "
-"nouvelle transaction."
+"Durant l'importation des transactions depuis le fichier OFX '%s', %d "
+"transactions déjà importées ont été trouvées, mais aucune nouvelle "
+"transaction."
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1378
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
@@ -31977,10 +31932,8 @@ msgid "Add indenting columns"
 msgstr "Ajouter des colonnes d'indentation"
 
 #: gnucash/report/trep-engine.scm:97
-#, fuzzy
-#| msgid "Sa_ve Filter"
 msgid "Date Filter"
-msgstr "En_registrer le filtre"
+msgstr "Filtre de date"
 
 #: gnucash/report/trep-engine.scm:98
 msgid "Table for Exporting"
@@ -32126,7 +32079,7 @@ msgstr "Comptes de crédit"
 
 #: gnucash/report/trep-engine.scm:518
 msgid "Specify date to filter by..."
-msgstr ""
+msgstr "Spécifier la date pour filtrer par..."
 
 #: gnucash/report/trep-engine.scm:527
 msgid "Convert all transactions into a common currency."
