@@ -15,8 +15,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2021-12-05 20:45+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2021-12-05 22:53+0000\n"
+"Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/glossary/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -211,10 +211,8 @@ msgid "amount"
 msgstr "quantia"
 
 #. "The amount finally to pay, respecting discounts, billing terms…"
-#, fuzzy
-#| msgid "amount"
 msgid "amount due"
-msgstr "quantia"
+msgstr "quantia devida"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
@@ -398,7 +396,7 @@ msgstr "vínculo do documento"
 
 #. "The last day to pay an invoice in time."
 msgid "due date"
-msgstr ""
+msgstr "data do vencimento"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
@@ -758,13 +756,11 @@ msgstr "divisão"
 
 #. "Alias of 'shares'"
 msgid "stocks"
-msgstr ""
+msgstr "ações"
 
 #. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
-#, fuzzy
-#| msgid "split"
 msgid "stock split"
-msgstr "divisão"
+msgstr "desdobramento das ações"
 
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
@@ -891,7 +887,7 @@ msgstr "saque"
 #~ msgstr "Prazo"
 
 msgid "stock"
-msgstr ""
+msgstr "estoque"
 
 msgid "due"
-msgstr ""
+msgstr "devido"

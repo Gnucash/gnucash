@@ -15,10 +15,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-10-18 10:35+0000\n"
+"PO-Revision-Date: 2021-12-07 15:53+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -12683,42 +12683,29 @@ msgstr ""
 "reconciliações."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:69
-#, fuzzy
-#| msgid "Remove a split from a transaction"
 msgid "Cut a split from a transaction"
-msgstr "Remova um desdobramento de uma transação"
+msgstr "Faça o corte do desdobramento de uma transação"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:70
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to remove a split from a "
-#| "transaction."
 msgid ""
 "This dialog is presented before allowing you to cut a split from a "
 "transaction."
 msgstr ""
-"Este diálogo é apresentado antes de permitir que você remova um "
+"Este diálogo é apresentado antes de permitir que você faça o corte do "
 "desdobramento de uma transação."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:74
-#, fuzzy
-#| msgid "Remove a reconciled split from a transaction"
 msgid "Cut a reconciled split from a transaction"
-msgstr "Remova um desdobramento reconciliado de uma transação"
+msgstr "Faça o corte do desdobramento reconciliado de uma transação"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:75
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to remove a reconciled split "
-#| "from a transaction. Doing so will throw off the reconciled value of the "
-#| "register and can make it hard to perform future reconciliations."
 msgid ""
 "This dialog is presented before allowing you to cut a reconciled split from "
 "a transaction. Doing so will throw off the reconciled value of the register "
 "and can make it hard to perform future reconciliations."
 msgstr ""
-"Esta caixa de diálogo é apresentada antes de permitir que você remova um "
-"desdobramento reconciliado de uma transação. Isso prejudicará o valor "
+"Esta caixa de diálogo é apresentada antes de permitir que você faça o corte "
+"do desdobramento reconciliado de uma transação. Isso prejudicará o valor "
 "reconciliado do cadastro e poderá dificultar a realização de futuras "
 "reconciliações."
 
@@ -12783,38 +12770,27 @@ msgstr ""
 "dificultar a realização de futuras reconciliações."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:99
-#, fuzzy
-#| msgid "_Cut Transaction"
 msgid "Cut a transaction"
-msgstr "Re_corte a Transação"
+msgstr "Corte uma Transação"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:100
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to delete a transaction."
 msgid "This dialog is presented before allowing you to cut a transaction."
 msgstr ""
-"Este diálogo é apresentado antes de permitir que você exclua uma transação."
+"Este diálogo é apresentado antes de permitir que você faça o corte de uma "
+"transação."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
-#, fuzzy
-#| msgid "Delete a transaction with reconciled splits"
 msgid "Cut a transaction with reconciled splits"
-msgstr "Exclua uma transação com desdobramentos reconciliados"
+msgstr "Faça o corte de uma transação com desdobramentos reconciliados"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:105
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to delete a transaction that "
-#| "contains reconciled splits. Doing so will throw off the reconciled value "
-#| "of the register and can make it hard to perform future reconciliations."
 msgid ""
 "This dialog is presented before allowing you to cut a transaction that "
 "contains reconciled splits. Doing so will throw off the reconciled value of "
 "the register and can make it hard to perform future reconciliations."
 msgstr ""
-"Este diálogo é apresentado antes de permitir que você exclua uma transação "
-"que possua desdobramentos reconciliados. Isso prejudicará o valor "
+"Este diálogo é apresentado antes de permitir que você faça o corte de uma "
+"transação que possua desdobramentos reconciliados. Isso prejudicará o valor "
 "reconciliado do cadastro e poderá dificultar a realização de futuras "
 "reconciliações."
 
@@ -16459,16 +16435,12 @@ msgid "Show _Memo column"
 msgstr "Mostre a coluna _memo"
 
 #: gnucash/gtkbuilder/dialog-import.glade:963
-#, fuzzy
-#| msgid "Show _matched information"
 msgid "Show matched _information"
 msgstr "Mostre as _informações coincidentes"
 
 #: gnucash/gtkbuilder/dialog-import.glade:978
-#, fuzzy
-#| msgid "Spend"
 msgid "A_ppend"
-msgstr "Gastar"
+msgstr "A_crescenta"
 
 #: gnucash/gtkbuilder/dialog-import.glade:982
 msgid ""
@@ -16476,12 +16448,12 @@ msgid ""
 "Description and Notes to the matched Description and Notes instead of "
 "replacing them."
 msgstr ""
+"Ao atualizar e compensar uma transação combinada, anexe a descrição e as "
+"notas importadas à descrição e às notas combinadas em vez de substituí-las."
 
 #: gnucash/gtkbuilder/dialog-import.glade:994
-#, fuzzy
-#| msgid "Reconcile after match"
 msgid "_Reconcile after match"
-msgstr "Reconcilie depois que coincidir"
+msgstr "_Reconcilie depois que coincidir"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1017
 msgid "Generic import transaction matcher"
@@ -20053,16 +20025,12 @@ msgid "Originator BIC (Bank Code)"
 msgstr "Originador BIC (código do banco)"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:409
-#, fuzzy
-#| msgid "Enter a SEPA Online Transfer"
 msgid "Enter a SEPA Internal Transfer"
-msgstr "Insira uma transferência online SEPA"
+msgstr "Insira uma transferência interna SEPA"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:430
-#, fuzzy
-#| msgid "Tax Accounts"
 msgid "Target Accounts"
-msgstr "Contas fiscais"
+msgstr "Contas alvo"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:441
 msgid "Enter a SEPA Online Direct Debit Note"
@@ -20235,10 +20203,8 @@ msgstr ""
 "alterações?"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:125
-#, fuzzy
-#| msgid "No valid account found"
 msgid "No reference accounts found."
-msgstr "Nenhuma conta válida foi encontrada"
+msgstr "Nenhuma conta de referência foi encontrada."
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:206
 msgid ""
@@ -20273,10 +20239,8 @@ msgid "Online Banking European (SEPA) Transfer"
 msgstr "Transferência on-line de Banco on-line Europeu (SEPA)"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:248
-#, fuzzy
-#| msgid "Online Banking European (SEPA) Transfer"
 msgid "Online Banking European (SEPA) Internal Transfer"
-msgstr "Transferência on-line de Banco on-line Europeu (SEPA)"
+msgstr "Transferência interna do Banco on-line Europeu (SEPA)"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:254
 msgid "Online Banking European (SEPA) Debit Note"
@@ -20523,22 +20487,16 @@ msgstr ""
 "via Internet"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:120
-#, fuzzy
-#| msgid "Issue _SEPA Transaction..."
 msgid "Issue SEPA I_nternal Transaction..."
-msgstr "Emita a transação _SEPA..."
+msgstr "Emita uma transação i_nterna SEPA..."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:121
-#, fuzzy
-#| msgid ""
-#| "Issue a new international European (SEPA) transaction online through "
-#| "Online Banking"
 msgid ""
 "Issue a new internal European (SEPA) transaction online through Online "
 "Banking"
 msgstr ""
-"Emita uma nova transação internacional europeia (SEPA) on-line pelo banco "
-"via Internet"
+"Emita uma nova transação interna europeia (SEPA) on-line pelo banco via "
+"Internet"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:125
 msgid "_Internal Transaction..."
@@ -21989,17 +21947,13 @@ msgid "Unknown OFX investment account"
 msgstr "Conta OFX de investimento desconhecida"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1276
-#, fuzzy, c-format
-#| msgid ""
-#| "While importing transactions from OFX file '%s' into account '%s', found "
-#| "%d previously imported transactions, no new transactions."
+#, c-format
 msgid ""
 "While importing transactions from OFX file '%s' found %d previously imported "
 "transactions, no new transactions."
 msgstr ""
-"Enquanto as transações importadas do arquivo OFX '%s' para a conta '%s', "
-"encontrou %d transações que foram processadas anteriormente, nenhuma nova "
-"transação."
+"Enquanto as transações importadas do arquivo OFX '%s', foram encontradas %d "
+"transações que foram processadas anteriormente, nenhuma nova transação."
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1378
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
@@ -29181,10 +29135,8 @@ msgid "Add indenting columns"
 msgstr "Adicione as colunas de recuo"
 
 #: gnucash/report/trep-engine.scm:97
-#, fuzzy
-#| msgid "Sa_ve Filter"
 msgid "Date Filter"
-msgstr "Sal_ve o filtro"
+msgstr "Filtro de data"
 
 #: gnucash/report/trep-engine.scm:98
 msgid "Table for Exporting"
@@ -29308,7 +29260,7 @@ msgstr "Contas de crédito"
 
 #: gnucash/report/trep-engine.scm:518
 msgid "Specify date to filter by..."
-msgstr ""
+msgstr "Determine uma data para filtrar por..."
 
 #: gnucash/report/trep-engine.scm:527
 msgid "Convert all transactions into a common currency."
