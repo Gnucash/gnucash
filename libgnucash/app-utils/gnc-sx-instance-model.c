@@ -1049,7 +1049,7 @@ _get_sx_formula_value(const SchedXaction* sx,
 	!gnc_numeric_zero_p(*numeric_val))
     {
         /* If there are no variables to parse and we had a valid numeric stored
-         * then we can skip parsing the formual, which might save some
+         * then we can skip parsing the formula, which might save some
          * localization problems with separators. */
 	numeric->num = numeric_val->num;
 	numeric->denom = numeric_val->denom;

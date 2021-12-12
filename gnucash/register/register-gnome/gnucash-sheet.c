@@ -1530,7 +1530,7 @@ gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
     gnucash_sheet_cursor_move (sheet, new_virt_loc);
 
-    // if clicked in ocument link cell, run call back
+    // if clicked in document link cell, run call back
     if (g_strcmp0 (gnc_table_get_cell_name (table, new_virt_loc), DOCLINK_CELL) == 0)
     {
         if (sheet->open_doclink_cb)
