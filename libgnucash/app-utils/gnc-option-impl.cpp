@@ -334,9 +334,6 @@ qof_instance_from_guid(GncGUID* guid, GncOptionUIType type)
         case GncOptionUIType::TAX_TABLE:
             qof_type = "gncTaxtable";
             break;
-        case GncOptionUIType::QUERY:
-            qof_type = "gncQuery";
-            break;
         case GncOptionUIType::ACCOUNT_LIST:
         case GncOptionUIType::ACCOUNT_SEL:
         default:
@@ -432,6 +429,11 @@ GncOptionValue<ValueType>::reset_default_value()
     m_value = m_default_value;
 }
 
+/* Missing on purpose: QofQuery because for current usage it's serialized with
+ * gnc_query2scm. The future is to replace QofQuery with SQL queries so there's
+ * not much point to spending the time to create a std::string serialization for
+ * them.
+ */
 template <typename ValueType> std::string
 GncOptionValue<ValueType>::serialize() const noexcept
 {

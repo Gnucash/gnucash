@@ -274,7 +274,7 @@
 (define-public (gnc:make-query-option section name default)
   (issue-deprecation-warning "gnc:make-query-option is deprecated. Make and register the option in one command with gnc-register-query-option.")
   (let ((defv (if (list? default) default (gnc-query2scm default))))
-    (gnc-make-SCM-option section name "" "query" defv (GncOptionUIType-INTERNAL))))
+    (gnc-make-query-option section name "" "query" defv (GncOptionUIType-INTERNAL))))
 (define-public (gnc:make-internal-option section name default)
   (issue-deprecation-warning "gnc:make-internal-option is deprecated. Make and register the option in one command with gnc-register-internal-option.")
   (let ((type (GncOptionUIType-INTERNAL))

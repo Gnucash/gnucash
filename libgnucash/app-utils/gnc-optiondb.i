@@ -219,16 +219,15 @@ scm_from_value<const Account*>(const Account* value)
 }
 
 template <> inline SCM
-scm_from_value<const QofQuery*>(const QofQuery* value)
+scm_from_value<QofQuery*>(QofQuery* value)
 {
-    auto ptr{static_cast<void*>(const_cast<QofQuery*>(value))};
-    return SWIG_NewPointerObj(ptr, SWIGTYPE_p__QofQuery, FALSE);
+    return gnc_query2scm(value);
 }
 
 template <> inline SCM
-scm_from_value<QofQuery*>(QofQuery* value)
+scm_from_value<const QofQuery*>(const QofQuery* value)
 {
-    return scm_from_value<const QofQuery*>(value);
+    return scm_from_value<QofQuery*>(const_cast<QofQuery*>(value));
 }
 
 template <> inline SCM
@@ -1014,18 +1013,18 @@ inline SCM return_scm_value(ValueType value)
                 static const auto no_value{scm_from_utf8_string("No Value")};
                 if constexpr (is_same_decayed_v<decltype(option),
                               GncOptionAccountListValue>)
-        {
+                {
                     static const SCM list_format_str{scm_from_utf8_string("'~s")};
                     auto acct_list{option.get_value()};
                     if (acct_list.empty())
                         return no_value;
                     SCM guid_list{scm_c_eval_string("'()")};//Empty list
                     for(auto acct : acct_list)
-        {
+                    {
                         auto acct_str{qof_instance_to_string(QOF_INSTANCE(acct))};
                         auto acct_scm{scm_from_utf8_string(acct_str.c_str())};
                         guid_list = scm_cons(acct_scm, guid_list);
-        }
+                    }
                     return scm_simple_format(SCM_BOOL_F, list_format_str, scm_list_1(guid_list));
 
                 }
@@ -1037,13 +1036,13 @@ inline SCM return_scm_value(ValueType value)
                         return no_value;
                     auto value{scm_list_1(scm_from_utf8_string(serial.c_str()))};
                     if (uitype == GncOptionUIType::CURRENCY)
-        {
-            const SCM quoted_format_str{scm_from_utf8_string("\"~a\"")};
-            return scm_simple_format(SCM_BOOL_F, quoted_format_str, value);
-        }
-        else if (uitype == GncOptionUIType::COMMODITY)
-        {
-            const SCM commodity_fmt{scm_from_utf8_string("\"~a\" \"~a\"")};
+                    {
+                        const SCM quoted_format_str{scm_from_utf8_string("\"~a\"")};
+                        return scm_simple_format(SCM_BOOL_F, quoted_format_str, value);
+                    }
+                    else if (uitype == GncOptionUIType::COMMODITY)
+                    {
+                        const SCM commodity_fmt{scm_from_utf8_string("\"~a\" \"~a\"")};
                         auto comm{GNC_COMMODITY(option.get_value())};
                         auto name_space{gnc_commodity_get_namespace(comm)};
                         auto mnemonic{gnc_commodity_get_mnemonic(comm)};
@@ -1052,20 +1051,20 @@ inline SCM return_scm_value(ValueType value)
                         return scm_simple_format(SCM_BOOL_F, commodity_fmt, commodity_val);
                     }
                     else
-            {
+                    {
                         return scm_simple_format(SCM_BOOL_F, plain_format_str, value);
-            }
-        }
+                    }
+                }
                 if constexpr (is_same_decayed_v<decltype(option),
                               GncOptionDateValue>)
-        {
+                {
                     auto serial{option.serialize()};
                     if (serial.empty())
                         return no_value;
                     auto value{scm_list_1(scm_from_utf8_string(serial.c_str()))};
-            const SCM date_fmt{scm_from_utf8_string("'~a")};
-            return scm_simple_format(SCM_BOOL_F, date_fmt, value);
-        }
+                    const SCM date_fmt{scm_from_utf8_string("'~a")};
+                    return scm_simple_format(SCM_BOOL_F, date_fmt, value);
+                }
 
                 if constexpr (is_same_decayed_v<decltype(option),
                               GncOptionValue<const GncOwner*>>)
@@ -1084,14 +1083,14 @@ inline SCM return_scm_value(ValueType value)
                               GncOptionRangeValue<int>>  ||
                               is_same_decayed_v<decltype(option),
                               GncOptionRangeValue<double>>)
-        {
+                {
                     auto serial{option.serialize()};
                     if (serial.empty())
-            {
+                    {
                         return no_value;
-            }
-            else
-            {
+                    }
+                    else
+                    {
                         auto scm_str{scm_list_1(scm_from_utf8_string(serial.c_str()))};
                         return scm_simple_format(SCM_BOOL_F, ticked_format_str, scm_str);
                     }
@@ -1100,7 +1099,7 @@ inline SCM return_scm_value(ValueType value)
                 if (serial.empty())
                 {
                     return no_value;
-            }
+                }
                 else if ($self->get_ui_type() == GncOptionUIType::COLOR)
                 {
                     auto red{static_cast<double>(std::stoi(serial.substr(0, 2),
@@ -1124,7 +1123,7 @@ inline SCM return_scm_value(ValueType value)
                 {
                     auto scm_str{scm_list_1(scm_from_utf8_string(serial.c_str()))};
                     return scm_simple_format(SCM_BOOL_F, plain_format_str, scm_str);
-        }
+                }
             }, swig_get_option($self));
     }
 
@@ -1171,6 +1170,20 @@ inline SCM return_scm_value(ValueType value)
                         else
                         {
                             auto val{scm_to_value<const QofInstance*>(new_value)};
+                            option.set_value(val);
+                        }
+                        return;
+                    }
+                    if constexpr (is_QofQueryValue_v<decltype(option)>)
+                    {
+                        if (scm_is_pair(new_value))
+                        {
+                            auto val{gnc_scm2query(new_value)};
+                            option.set_value(val);
+                        }
+                        else
+                        {
+                            auto val{scm_to_value<const QofQuery*>(new_value)};
                             option.set_value(val);
                         }
                         return;
