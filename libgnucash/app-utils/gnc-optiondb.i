@@ -1006,36 +1006,37 @@ inline SCM return_scm_value(ValueType value)
 
     SCM save_scm_value()
     {
-        const SCM plain_format_str{scm_from_utf8_string("~s")};
-        const SCM ticked_format_str{scm_from_utf8_string("'~a")};
+        static const SCM plain_format_str{scm_from_utf8_string("~s")};
+        static const SCM ticked_format_str{scm_from_utf8_string("'~a")};
 //scm_simple_format needs a scheme list of arguments to match the format
 //placeholders.
-        auto serial{$self->serialize()};
-        SCM value = serial.empty() ? SCM_BOOL_F :
-            scm_list_1(scm_from_utf8_string(serial.c_str()));
-        auto uitype{$self->get_ui_type()};
-        if (uitype == GncOptionUIType::STRING ||
-            uitype == GncOptionUIType::TEXT ||
-            uitype == GncOptionUIType::FONT ||
-            uitype == GncOptionUIType::BOOLEAN ||
-            uitype == GncOptionUIType::PIXMAP
-            )
+        return std::visit([$self] (auto &option) -> SCM {
+                static const auto no_value{scm_from_utf8_string("No Value")};
+                if constexpr (is_same_decayed_v<decltype(option),
+                              GncOptionAccountListValue>)
         {
-            return scm_simple_format(SCM_BOOL_F, plain_format_str, value);
-        }
-        else if (uitype == GncOptionUIType::ACCOUNT_LIST ||
-                 uitype == GncOptionUIType::ACCOUNT_SEL ||
-                 uitype == GncOptionUIType::INVOICE ||
-                 uitype == GncOptionUIType::TAX_TABLE ||
-                 uitype == GncOptionUIType::OWNER)
+                    static const SCM list_format_str{scm_from_utf8_string("'~s")};
+                    auto acct_list{option.get_value()};
+                    if (acct_list.empty())
+                        return no_value;
+                    SCM guid_list{scm_c_eval_string("'()")};//Empty list
+                    for(auto acct : acct_list)
         {
-            if (value && scm_is_true(value))
-                return scm_simple_format(SCM_BOOL_F, plain_format_str, value);
-            else
-                return scm_simple_format(SCM_BOOL_F, plain_format_str,
-                                         scm_list_1(SCM_BOOL_F));
+                        auto acct_str{qof_instance_to_string(QOF_INSTANCE(acct))};
+                        auto acct_scm{scm_from_utf8_string(acct_str.c_str())};
+                        guid_list = scm_cons(acct_scm, guid_list);
         }
-        else if (uitype == GncOptionUIType::CURRENCY)
+                    return scm_simple_format(SCM_BOOL_F, list_format_str, scm_list_1(guid_list));
+
+                }
+                if constexpr (is_QofInstanceValue_v<decltype(option)>)
+                {
+                    auto uitype{$self->get_ui_type()};
+                    auto serial{option.serialize()};
+                    if (serial.empty())
+                        return no_value;
+                    auto value{scm_list_1(scm_from_utf8_string(serial.c_str()))};
+                    if (uitype == GncOptionUIType::CURRENCY)
         {
             const SCM quoted_format_str{scm_from_utf8_string("\"~a\"")};
             return scm_simple_format(SCM_BOOL_F, quoted_format_str, value);
@@ -1043,39 +1044,88 @@ inline SCM return_scm_value(ValueType value)
         else if (uitype == GncOptionUIType::COMMODITY)
         {
             const SCM commodity_fmt{scm_from_utf8_string("\"~a\" \"~a\"")};
-            auto sep{serial.find(':')};
-            if (sep == std::string::npos)
-                sep = serial.find(' ');
-            if (sep == std::string::npos)
+                        auto comm{GNC_COMMODITY(option.get_value())};
+                        auto name_space{gnc_commodity_get_namespace(comm)};
+                        auto mnemonic{gnc_commodity_get_mnemonic(comm)};
+                        auto commodity_val{scm_list_2(scm_from_utf8_string(name_space),
+                                                      scm_from_utf8_string(mnemonic))};
+                        return scm_simple_format(SCM_BOOL_F, commodity_fmt, commodity_val);
+                    }
+                    else
             {
-                const SCM quoted_format_str{scm_from_utf8_string("\"~a\"")};
-                return scm_simple_format(SCM_BOOL_F, quoted_format_str, value);
+                        return scm_simple_format(SCM_BOOL_F, plain_format_str, value);
             }
-            auto name_space{serial.substr(0, sep)};
-            auto symbol{serial.substr(sep + 1, std::string::npos)};
-            auto commodity_val{scm_list_2(scm_from_utf8_string(name_space.c_str()),
-                                          scm_from_utf8_string(symbol.c_str()))};
-            return scm_simple_format(SCM_BOOL_F, commodity_fmt, commodity_val);
         }
-        else if (uitype == GncOptionUIType::DATE_ABSOLUTE ||
-                 uitype == GncOptionUIType::DATE_RELATIVE ||
-                 uitype == GncOptionUIType::DATE_BOTH)
+                if constexpr (is_same_decayed_v<decltype(option),
+                              GncOptionDateValue>)
         {
+                    auto serial{option.serialize()};
+                    if (serial.empty())
+                        return no_value;
+                    auto value{scm_list_1(scm_from_utf8_string(serial.c_str()))};
             const SCM date_fmt{scm_from_utf8_string("'~a")};
             return scm_simple_format(SCM_BOOL_F, date_fmt, value);
         }
-        else
+
+                if constexpr (is_same_decayed_v<decltype(option),
+                              GncOptionValue<const GncOwner*>>)
+                {
+                    return scm_from_utf8_string("Not Yet Implemented");
+                }
+                if constexpr (is_QofQueryValue_v<decltype(option)>)
+                {
+                    QofQuery* value{const_cast<QofQuery*>(option.get_value())};
+                    return scm_simple_format(SCM_BOOL_F, ticked_format_str,
+                                             scm_list_1(gnc_query2scm(value)));
+                }
+                if constexpr (is_same_decayed_v<decltype(option),
+                              GncOptionMultichoiceValue> ||
+                              is_same_decayed_v<decltype(option),
+                              GncOptionRangeValue<int>>  ||
+                              is_same_decayed_v<decltype(option),
+                              GncOptionRangeValue<double>>)
         {
-            if (value && scm_is_true(value))
+                    auto serial{option.serialize()};
+                    if (serial.empty())
             {
-                return scm_simple_format(SCM_BOOL_F, ticked_format_str, value);
+                        return no_value;
             }
             else
             {
-                return scm_simple_format(SCM_BOOL_F, plain_format_str,
-                                         scm_list_1(SCM_BOOL_F));
+                        auto scm_str{scm_list_1(scm_from_utf8_string(serial.c_str()))};
+                        return scm_simple_format(SCM_BOOL_F, ticked_format_str, scm_str);
+                    }
+                }
+                auto serial{option.serialize()};
+                if (serial.empty())
+                {
+                    return no_value;
             }
+                else if ($self->get_ui_type() == GncOptionUIType::COLOR)
+                {
+                    auto red{static_cast<double>(std::stoi(serial.substr(0, 2),
+                                                           nullptr, 16))};
+                    auto blue{static_cast<double>(std::stoi(serial.substr(2, 2),
+                                                            nullptr, 16))};
+                    auto green{static_cast<double>(std::stoi(serial.substr(4, 2),
+                                                             nullptr, 16))};
+                    auto alpha{serial.length() > 7 ?
+                            static_cast<double>(std::stoi(serial.substr(6, 2),
+                                                          nullptr, 16)) :
+                            255.0};
+                    std::ostringstream outs;
+                    outs << "(" << std::fixed << std::setprecision(1) << red <<
+                        " " << blue << " " << green << " " << alpha << ")";
+                    auto scm_out{scm_list_1(scm_from_utf8_string(outs.str().c_str()))};
+                    return scm_simple_format(SCM_BOOL_F, ticked_format_str,
+                                             scm_out);
+                }
+                else
+                {
+                    auto scm_str{scm_list_1(scm_from_utf8_string(serial.c_str()))};
+                    return scm_simple_format(SCM_BOOL_F, plain_format_str, scm_str);
         }
+            }, swig_get_option($self));
     }
 
     void set_value_from_scm(SCM new_value)
