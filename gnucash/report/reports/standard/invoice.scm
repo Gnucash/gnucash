@@ -287,8 +287,6 @@ for styling the invoice. Please see the exported report for the CSS class names.
     (N_ "Display") (N_ "Use Detailed Tax Summary")
     "o" (N_ "Display all tax categories separately (one per line) instead of one single tax line.?") #f))
 
-  (gnc:register-inv-option (gnc:make-internal-option "Display" "Totals" #t))
-
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display") (N_ "References")
