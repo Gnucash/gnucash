@@ -457,7 +457,7 @@ GncOptionValue<ValueType>::serialize() const noexcept
     else if constexpr(std::is_arithmetic_v<ValueType>)
         return std::to_string(m_value);
     else
-        return "";
+        return "Serialization not implemented";
 }
 
 template <typename ValueType> bool

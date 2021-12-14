@@ -32,13 +32,23 @@
   (test-begin "test-gnc-option-scheme-io")
   (test-gnc-string-option-to-scheme)
   (test-gnc-text-option-to-scheme)
-  (test-gnc-pixmap-option-to-scheme)
+  (test-gnc-font-option-to-scheme)
   (test-gnc-currency-option-to-scheme)
   (test-gnc-budget-option-to-scheme)
-  (test-gnc-font-option-to-scheme)
   (test-gnc-commodity-option-to-scheme)
+  (test-gnc-bool-option-to-scheme)
+  (test-gnc-pixmap-option-to-scheme)
   (test-gnc-date-option-to-scheme)
+  (test-gnc-account-options-to-scheme)
   (test-gnc-multichoice-option-to-scheme)
+  (test-gnc-list-option-to-scheme)
+  (test-gnc-number-range-option-to-scheme)
+  (test-gnc-number-plot-size-option-to-scheme)
+  (test-gnc-query-option-to-scheme)
+  (test-gnc-color-option-to-scheme)
+  (test-gnc-invoice-option-to-scheme)
+  (test-gnc-owner-option-to-scheme)
+  (test-gnc-internal-option-to-scheme)
   (test-end "test-gnc-option-scheme-io"))
 
 (define test-unchanged-section-output-template
@@ -82,7 +92,8 @@
 " value))
 
 (define (test-commodity-output-template value)
-  (format #f "
+  (let ((value-parts (string-split value #\:)))
+    (format #f "
 ; Section: foo
 
 (let ((option (gnc:lookup-option options
@@ -90,7 +101,7 @@
                                  \"bar\")))
   ((lambda (o) (if o (gnc:option-set-value o \"~a\" \"~a\"))) option))
 
-" (string-split value #\:)))
+" (car value-parts) (cadr value-parts))))
 
 (define (test-budget-output-template value)
   (format #f "
@@ -105,25 +116,31 @@
           (gncBudgetGetGUID value)))
 
 
-(define (test-option-scheme-output make-option-func test-template default value)
+(define (test-option-scheme-output name make-option-func get-value-func test-template default value)
   (let ((odb (gnc:new-options))
         (option (make-option-func "foo" "bar" "baz" "Test Option" default)))
     (gnc:register-option odb option)
-    (test-equal test-unchanged-section-output-template
+    (test-equal (string-append name " unchanged")
+                test-unchanged-section-output-template
                 (gnc:generate-restore-forms odb "options"))
     (gnc:option-set-value (gnc:lookup-option odb "foo" "bar") value)
-    (test-equal (test-template (GncOption-serialize (gnc:lookup-option odb "foo" "bar")))
+    (test-equal (string-append name " value")
+                (test-template (get-value-func (gnc:lookup-option odb "foo" "bar")))
                 (gnc:generate-restore-forms odb "options"))))
 
 (define (test-gnc-string-option-to-scheme)
   (test-begin "test-gnc-string-option-to-scheme")
-  (test-option-scheme-output gnc:make-string-option test-string-output-template
+  (test-option-scheme-output "string"
+                             gnc:make-string-option GncOption-get-scm-value
+                             test-string-output-template
                              "waldo" "pepper")
   (test-end "test-gnc-string-option-to-scheme"))
 
 (define (test-gnc-text-option-to-scheme)
   (test-begin "test-gnc-text-option-to-scheme")
-  (test-option-scheme-output gnc:make-string-option test-string-output-template
+  (test-option-scheme-output "text"
+                             gnc:make-string-option GncOption-get-scm-value
+                             test-string-output-template
                              ""
 "Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium
 doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore
@@ -132,7 +149,9 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
 
 (define (test-gnc-font-option-to-scheme)
   (test-begin "test-gnc-font-option-to-scheme")
-  (test-option-scheme-output gnc:make-font-option test-string-output-template
+  (test-option-scheme-output "font"
+                             gnc:make-font-option GncOption-get-scm-value
+                             test-string-output-template
                              "URW Bookman L Bold Italic 12"
                              "Helvetica 12")
   (test-end "test-gnc-font-option-to-scheme"))
@@ -147,8 +166,10 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
           (EUR (gnc-commodity-new book "European Union Euro" "CURRENCY" "EUR" "" 100)))
       (gnc-commodity-table-insert table USD)
       (gnc-commodity-table-insert table EUR)
-      (test-option-scheme-output gnc:make-currency-option test-currency-output-template
-                               USD EUR)
+      (test-option-scheme-output "currency"
+                                 gnc:make-currency-option GncOption-serialize
+                                 test-currency-output-template
+                                 USD EUR)
 ;; Garbage collection has already eaten USD and EUR.
       (test-book-clear-data book "gnc-commodity-table")
       (gnc-commodity-table-destroy table)
@@ -157,8 +178,7 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
 
 (define (test-gnc-budget-option-to-scheme)
  (test-begin "test-gnc-budget-option-to-scheme")
-  (let* ((session (gnc-get-current-session))
-        (book (gnc-get-current-book))
+  (let* ((book (gnc-get-current-book))
         (budget2 (gnc-budget-new book))
         (budget1 (gnc-budget-new book))
         (guid1 (gncBudgetGetGUID budget1))
@@ -171,32 +191,43 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
     (let ((odb (gnc:new-options))
           (option (gnc:make-budget-option "foo" "bar" "baz" "Test Option")))
     (gnc:register-option odb option)
-    (test-equal test-unchanged-section-output-template
+    (test-equal "budget unchanged"
+                test-unchanged-section-output-template
                 (gnc:generate-restore-forms odb "options"))
     (gnc:option-set-value (gnc:lookup-option odb "foo" "bar") budget2)
-    (test-equal (gnc-budget-get-default book) budget1)
-    (test-equal (test-budget-output-template budget2)
+    (test-equal "default budget value" (gnc-budget-get-default book) budget1)
+    (test-equal "budget restore form" (test-budget-output-template budget2)
                 (gnc:generate-restore-forms odb "options")))
     (gnc-clear-current-session))
   (test-end "test-gnc-budget-option-to-scheme"))
 
 (define (test-gnc-commodity-option-to-scheme)
   (test-begin "test-gnc-commodity-option-to-scheme")
-  (let* ((book (gnc-option-test-book-new))
+  (let* ((session (gnc-get-current-session))
+         (book (gnc-get-current-book))
+         (comm-tbl (gnc-commodity-table-get-table book))
          (AAPL (gnc-commodity-new book "Apple" "NASDAQ" "AAPL" "" 1))
          (FMAGX (gnc-commodity-new book "Fidelity Magellan Fund" "FUND" "FMAGX" "" 1000)))
-  (test-option-scheme-output gnc:make-commodity-option test-currency-output-template
-                             AAPL FMAGX))
+    (test-option-scheme-output "commodity"
+                               gnc:make-commodity-option GncOption-serialize
+                               test-commodity-output-template
+                               AAPL FMAGX))
   (test-end "test-gnc-commodity-option-to-scheme"))
 
 (define (test-gnc-bool-option-to-scheme)
   (test-begin "test-gnc-bool-option-to-scheme")
-  (test-option-scheme-output gnc:make-simple-boolean-option test-string-output-template #f #t)
+  (test-option-scheme-output "bool"
+                             gnc:make-simple-boolean-option
+                             GncOption-get-scm-value
+                             test-string-output-template #f #t)
   (test-end "test-gnc-bool-option-to-scheme"))
 
 (define (test-gnc-pixmap-option-to-scheme)
   (test-begin "test-gnc-pixmap-option-to-scheme")
-  (test-option-scheme-output gnc:make-pixmap-option test-string-output-template "" "~/mybusiness/mylogo.png")
+  (test-option-scheme-output "pixmap"
+                             gnc:make-pixmap-option GncOption-get-scm-value
+                             test-string-output-template
+                             "" "~/mybusiness/mylogo.png")
   (test-end "test-gnc-pixmap-option-to-scheme"))
 
 (define (test-gnc-date-option-to-scheme)
@@ -252,48 +283,61 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
 ;; Destroying the book destroys the account tree too
     (gnc-option-test-book-destroy book))
 
-  (define (test-gnc-account-list-option-to-scheme)
+  (define (test-gnc-account-list-option-to-scheme book)
+    (define (test-account-list-output-template value)
+        (format #f "
+; Section: foo
+
+(let ((option (gnc:lookup-option options
+                                 \"foo\"
+                                 \"bar\")))
+  ((lambda (o) (if o (gnc:option-set-value o '~s))) option))
+
+" (reverse (string-split value #\ ))))
+
     (test-begin "test-gnc-account-list-option-to-scheme")
     (let ((odb (gnc:new-options))
           (acctlist (gnc-account-list-from-types book
                                                  (list ACCT-TYPE-STOCK))))
-      (gnc-register-option odb
+      (gnc:register-option odb
                            (gnc:make-account-list-option
-                            "foo" "bar" "a" "baz" acctlist
+                            "foo" "bar" "a" "baz" (lambda () acctlist)
                             (lambda (ac)
                               (let ((type (xaccAccountGetAccountType ac)))
                                 (or (eq type ACCT-TYPE-STOCK)
                                     (eq type ACCT-TYPE-BANK)))) #t))
-      (test-equal test-unchanged-section-output-template
+      (test-equal "account list unchanged"
+                  test-unchanged-section-output-template
                   (gnc:generate-restore-forms odb "options"))
       (let ((option (gnc:lookup-option odb "foo" "bar"))
-            (test-template test-literal-output-template)
+            (test-template test-account-list-output-template)
             (new-acclist (gnc-account-list-from-types book (list ACCT-TYPE-BANK))))
-        (gnc-option-set-value option new-acclist)
-        (test-equal (test-template (GncOption-serialize option))
+        (gnc:option-set-value option new-acclist)
+        (test-equal "account list form"
+                    (test-template (GncOption-serialize option))
                     (gnc:generate-restore-forms odb "options"))
         ))
     (test-end  "test-gnc-account-list-option-to-scheme"))
 
-  (define (test-gnc-account-sel-option-to-scheme)
+  (define (test-gnc-account-sel-option-to-scheme book)
     (test-begin "test-gnc-account-sel-option-to-scheme")
     (let ((odb (gnc:new-options))
-          (acctlist (gnc-account-list-from-types book
-                                                 (list ACCT-TYPE-STOCK))))
-      (gnc-register-option odb
-                           (gnc:make-account-list-option
-                            "foo" "bar" "a" "baz" acctlist
+          (bank (gnc-account-lookup-by-name(gnc-book-get-root-account book)
+                                                "Bank")))
+      (gnc:register-option odb
+                           (gnc:make-account-sel-option
+                            "foo" "bar" "a" "baz" (lambda () '())
                             (lambda (ac)
                               (let ((type (xaccAccountGetAccountType ac)))
                                 (or (eq type ACCT-TYPE-STOCK)
-                                    (eq type ACCT-TYPE-BANK)))) #t))
-      (test-equal test-unchanged-section-output-template
+                                    (eq type ACCT-TYPE-BANK))))))
+      (test-equal "account sel unchanged" test-unchanged-section-output-template
                   (gnc:generate-restore-forms odb "options"))
       (let ((option (gnc:lookup-option odb "foo" "bar"))
-            (test-template test-literal-output-template)
-            (new-acclist (gnc-account-list-from-types book (list ACCT-TYPE-BANK))))
-        (gnc-option-set-value option new-acclist)
-        (test-equal (test-template (GncOption-serialize option))
+            (test-template test-string-output-template))
+        (gnc:option-set-value option bank)
+        (test-equal "account sel form"
+                    (test-template (GncOption-serialize option))
                     (gnc:generate-restore-forms odb "options"))
         ))
     (test-end  "test-gnc-account-sel-option-to-scheme"))
@@ -302,8 +346,8 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
          (root-account (gnc-account-create-root book)))
     (test-group-with-cleanup "test-gnc-account-options-to-schemes"
                              (make-account-tree book root-account)
-                             (test-gnc-account-list-option-to-scheme)
-                             (test-gnc-account-sel-option-to-scheme)
+                             (test-gnc-account-list-option-to-scheme book)
+                             (test-gnc-account-sel-option-to-scheme book)
                              (cleanup book root-account))))
 
 
@@ -319,11 +363,11 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
           (list (vector 'all "All")
           (vector 1 "1") (vector 2 "2") (vector 3 "3")
           (vector 4 "4") (vector 5 "5") (vector 6 "6"))))
-    (test-equal test-unchanged-section-output-template
+    (test-equal "multichoice unchanged" test-unchanged-section-output-template
                 (gnc:generate-restore-forms odb "options"))
     (let ((option (gnc:lookup-option odb "foo" "bar")))
       (gnc:option-set-value option value)
-      (test-equal (test-template (GncOption-serialize option))
+      (test-equal "multichoice form" (test-template (GncOption-serialize option))
                   (gnc:generate-restore-forms odb "options"))))
   (test-end "test-gnc-multichoice-option-to-scheme"))
 
@@ -333,15 +377,15 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
           (choices (list (vector 'good "The Good")
                          (vector 'bad  "The Bad")
                          (vector 'ugly "The Ugly"))))
-      (gnc-register-option odb
+      (gnc:register-option odb
                            (gnc:make-list-option
                             "foo" "bar" "a" "baz" '(bad) choices))
-      (test-equal test-unchanged-section-output-template
+      (test-equal "list unchanged" test-unchanged-section-output-template
                   (gnc:generate-restore-forms odb "options"))
       (let ((option (gnc:lookup-option odb "foo" "bar"))
             (test-template test-literal-output-template))
-        (gnc-option-set-value option '(ugly))
-        (test-equal (test-template (GncOption-serialize option))
+        (gnc:option-set-value option '(ugly))
+        (test-equal "list form" (test-template (GncOption-serialize option))
                     (gnc:generate-restore-forms odb "options"))
         ))
     (test-end  "test-gnc-list-option-to-scheme"))
@@ -353,16 +397,17 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
           (max-value 100.0)
           (dec-places 2.0)
           (step 0.10))
-      (gnc-register-option odb
+      (gnc:register-option odb
                            (gnc:make-number-range-option
                             "foo" "bar" "a" "baz" 49.0 min-value
                             max-value dec-places step))
-      (test-equal test-unchanged-section-output-template
+      (test-equal "number-range unchanged" test-unchanged-section-output-template
                   (gnc:generate-restore-forms odb "options"))
       (let ((option (gnc:lookup-option odb "foo" "bar"))
             (test-template test-literal-output-template))
-        (gnc-option-set-value option 42.0)
-        (test-equal (test-template (GncOption-serialize option))
+        (gnc:option-set-value option 42.0)
+        (test-equal "number-range form"
+                    (test-template (GncOption-serialize option))
                     (gnc:generate-restore-forms odb "options"))
         ))
     (test-end  "test-gnc-number-range-option-to-scheme"))
@@ -370,26 +415,45 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
 (define (test-gnc-number-plot-size-option-to-scheme)
     (test-begin "test-gnc-number-plot-size-option-to-scheme")
     (let ((odb (gnc:new-options))
-          (min-value 100)
-          (max-value 10000)
+          (min-value 10)
+          (max-value 100)
           (dec-places 0)
           (step 5))
-      (gnc-register-option odb
+      (gnc:register-option odb
                            (gnc:make-number-plot-size-option
-                            "foo" "bar" "a" "baz" 490 min-value
+                            "foo" "bar" "a" "baz" 49 min-value
                             max-value dec-places step))
-      (test-equal test-unchanged-section-output-template
+      (test-equal "number-plot unchanged" test-unchanged-section-output-template
                   (gnc:generate-restore-forms odb "options"))
       (let ((option (gnc:lookup-option odb "foo" "bar"))
             (test-template test-literal-output-template))
-        (gnc-option-set-value option 420)
-        (test-equal (test-template (GncOption-serialize option))
+        (gnc:option-set-value option 42)
+        (test-equal "number-plot form"
+                    (test-template (GncOption-serialize option))
                     (gnc:generate-restore-forms odb "options"))
         ))
     (test-end  "test-gnc-number-plot-size-option-to-scheme"))
 
 (define (test-gnc-query-option-to-scheme)
-  (test-begin "test-gnc-number-plot-size-option-to-scheme")
+  (define query-unchanged-section-output-template
+    "
+; Section: __reg
+
+"
+    )
+
+  (define (query-literal-output-template value)
+    (format #f "
+; Section: __reg
+
+(let ((option (gnc:lookup-option options
+                                 \"__reg\"
+                                 \"query\")))
+  ((lambda (o) (if o (gnc:option-set-value o '~a))) option))
+
+" value))
+ 
+  (test-begin "test-gnc-query-option-to-scheme")
   (let ((odb (gnc:new-options))
         (query-scm '(query-v2
                      (terms (((("book" "guid") #f guid 3 1 ("3a5a4bc736d84b879b776ea8caadd3b2"))
@@ -399,56 +463,127 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
                      (secondary-sort #f)
                      (tertiary-sort #f)
                      (max-results -1))))
-    (gnc-register-option odb
+    (gnc:register-option odb
                          (gnc:make-query-option "__reg" "query" '()))
-      (test-equal test-unchanged-section-output-template
+      (test-equal "query unchanged" query-unchanged-section-output-template
                   (gnc:generate-restore-forms odb "options"))
       (let ((option (gnc:lookup-option odb "__reg" "query"))
-            (test-template test-literal-output-template))
-        (gnc-option-set-value option (gnc-scm2query query-scm))
-        (test-equal (test-template (GncOption-serialize option))
+            (test-template query-literal-output-template))
+        (gnc:option-set-value option (gnc-scm2query query-scm))
+        (test-equal  "query form" (test-template (GncOption-get-scm-value option))
                     (gnc:generate-restore-forms odb "options"))
         ))
-  (test-end "test-gnc-number-plot-size-option-to-scheme"))
+  (test-end "test-gnc-query-option-to-scheme"))
 
 (define (test-gnc-color-option-to-scheme)
+  (define (test-color-output-template value)
+    (let* ((len (string-length value))
+           (red (string->number (substring/shared value 0 2) 16))
+           (blue (string->number (substring/shared value 2 4) 16))
+           (green (string->number (substring/shared value 4 6) 16))
+           (alpha (if (> len 7)
+                      (string->number (substring/shared value 6 8) 16)
+                      #xff)))
+    (format #f "
+; Section: foo
+
+(let ((option (gnc:lookup-option options
+                                 \"foo\"
+                                 \"bar\")))
+  ((lambda (o) (if o (gnc:option-set-value o '(~f ~f ~f ~f)))) option))
+
+" red blue green alpha)))
     (test-begin "test-gnc-coloroption-to-scheme")
     (let ((odb (gnc:new-options))
-          (default-color (list #xb2 #x22 $x22 #xff))
+          (default-color (list #xb2 #x22 #x22 #xff))
           (new-color (list #x00 #xca #x3b #xff)))
-      (test-option-scheme-output gnc:make-color-option
-                                 test-literal-output-template
-                                 default-color new-color))
+      (gnc:register-option odb
+                           (gnc:make-color-option
+                            "foo" "bar" "a" "baz" default-color #f #t))
+      (test-equal "color unchanged" test-unchanged-section-output-template
+                  (gnc:generate-restore-forms odb "options"))
+      (let ((option (gnc:lookup-option odb "foo" "bar"))
+            (test-template test-color-output-template))
+        (gnc:option-set-value option new-color)
+        (test-equal "color form"
+                    (test-template (GncOption-serialize option))
+                    (gnc:generate-restore-forms odb "options"))
+        ))
     (test-end  "test-gnc-color-option-to-scheme"))
 
 (define (test-gnc-invoice-option-to-scheme)
-    (test-begin "test-gnc-invoice-option-to-scheme")
-    (let ((odb (gnc:new-options))
-          (invoice '"13b305236443451a86c5366b7f890ecb"))
-      (test-option-scheme-output gnc:make-color-option
-                                 test-literal-output-template
-                                 (lambda () '()) invoice))
+  (test-begin "test-gnc-invoice-option-to-scheme")
+  (let ((odb (gnc:new-options)))
+       (gnc:register-option odb
+                           (gnc:make-invoice-option "foo" "bar" "a" "baz"
+                                                  (lambda () '()) (lambda () #t)))
+      (test-equal "invoice unchanged" test-unchanged-section-output-template
+                  (gnc:generate-restore-forms odb "options"))
+      (let* ((book (gnc-get-current-book))
+            (inv (gncInvoiceCreate book))
+            (option (gnc:lookup-option odb "foo" "bar"))
+            (test-template test-string-output-template))
+        (gnc:option-set-value option inv)
+        (test-equal "invoice form" (test-template (GncOption-serialize option))
+                    (gnc:generate-restore-forms odb "options"))
+        ))
     (test-end  "test-gnc-invoice-option-to-scheme"))
 
 (define (test-gnc-owner-option-to-scheme)
-    (test-begin "test-owner-option-to-scheme")
+  (test-begin "test-owner-option-to-scheme")
     (let ((odb (gnc:new-options)))
-      (gnc-register-option odb
+      (gnc:register-option odb
                            (gnc:make-owner-option "foo" "bar" "a" "baz"
-                                                  (lambda () '()) #f
-                                                  'GNC-OWNER-CUSTOMER))
-      (test-equal test-unchanged-section-output-template
+                                                  (lambda () '()) (lambda () #t)
+                                                  GNC-OWNER-CUSTOMER))
+      (test-equal "owner unchanged" test-unchanged-section-output-template
                   (gnc:generate-restore-forms odb "options"))
-      (let ((option (gnc:lookup-option odb "foo" "bar"))
-            (test-template test-literal-output-template))
-        (gnc-option-set-value option '"13b305236443451a86c5366b7f890ecb")
-        (test-equal (test-template (GncOption-serialize option))
+      (let* ((option (gnc:lookup-option odb "foo" "bar"))
+            (test-template test-literal-output-template)
+            (book (gnc-get-current-book))
+            (owner (gncOwnerNew)))
+        (gncOwnerInitCustomer owner (gncCustomerCreate book))
+        (gnc:option-set-value option owner)
+        (test-equal "owner form"
+                    (test-template (cons (gncOwnerGetType owner)
+                                         (gncOwnerReturnGUID owner)))
                     (gnc:generate-restore-forms odb "options"))
         ))
     (test-end  "test-gnc-owner-option-to-scheme"))
 
+(define (test-gnc-internal-option-to-scheme)
+  (define (test-output-template name value)
+    (format #f "
+(let ((option (gnc:lookup-option options
+                                 \"__reg\"
+                                 ~s)))
+  ((lambda (o) (if o (gnc:option-set-value o ~s))) option))
+" name value))
+  (test-begin "test-gnc-internal-option-to-scheme")
+  (let ((odb (gnc:new-options))
+        (option-b (gnc:make-internal-option "__reg" "bar" #f))
+        (option-s (gnc:make-internal-option "__reg" "baz" "waldo")))
+    (gnc:register-option odb option-b)
+    (gnc:register-option odb option-s)
+    (test-equal "Internal unchanged" "
+; Section: __reg
+
+"
+                (gnc:generate-restore-forms odb "options"))
+    (gnc:option-set-value (gnc:lookup-option odb "__reg" "bar") #t)
+    (gnc:option-set-value (gnc:lookup-option odb "__reg" "baz") "pepper")
+    (test-equal "internal form" (format #f "
+; Section: __reg
+~a~a
+"
+                                        (test-output-template "bar" #t)
+                                        (test-output-template "baz" "pepper"))
+                (gnc:generate-restore-forms odb "options"))
+                )
+  (test-end "test-gnc-internal-option-to-scheme"))
+
 ;; The following are saved only to KVP, no Scheme generator needed:
 ;;(define (test-gnc-dateformat-option-to-scheme)
-;;(define (test-gnc-taxtable-option-to-scheme) 
+;;(define (test-gnc-taxtable-option-to-scheme)
 ;;(define (test-gnc-counter-option-to-scheme)
 ;;(define (test-gnc-counter-format-option-to-scheme)
