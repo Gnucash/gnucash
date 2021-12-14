@@ -280,7 +280,13 @@
   (let ((type (GncOptionUIType-INTERNAL))
         (key "_")
         (desc "internal"))
-    (gnc-make-SCM-option section name key desc default type)))
+    (cond
+     ((boolean? default) (gnc-make-bool-option section name key desc default
+                                               (GncOptionUIType-INTERNAL)))
+     ((string? default) (gnc-make-string-option section name key desc default
+                                                (GncOptionUIType-INTERNAL)))
+     (else
+       (gnc-make-SCM-option section name key desc default type)))))
 (define-public (gnc:make-owner-option section name key docstring getter validator owner-type)
   (issue-deprecation-warning "gnc:make-owner-option is deprecated. Make and register the option in one command with gnc-register-owner-option.")
   (let* ((ui-type (cond
