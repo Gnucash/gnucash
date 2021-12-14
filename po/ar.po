@@ -10378,7 +10378,6 @@ msgstr "أرسل الأخطاء وغيرها من المشاكل لgnucash-devel
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:84
-#, fuzzy
 msgid "You can also lookup and file bug reports at {1}"
 msgstr "يمكنك أيضا بحث وتقديم التقارير الأخطاء في {1}"
 
