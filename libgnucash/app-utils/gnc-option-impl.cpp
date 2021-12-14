@@ -27,7 +27,7 @@
 #include <guid.hpp>
 #include <cassert>
 #include <charconv>
-
+#include <sstream>
 extern "C"
 {
 #include "gnc-accounting-period.h"
@@ -440,6 +440,16 @@ GncOptionValue<ValueType>::serialize() const noexcept
     static const std::string no_value{"No Value"};
     if constexpr(std::is_same_v<ValueType, const QofInstance*>)
         return m_value ? qof_instance_to_string(m_value) : no_value;
+    if constexpr(std::is_same_v<ValueType, const GncOwner*>)
+    {
+        if (!m_value)
+            return no_value;
+        auto guid{qof_instance_to_string(qofOwnerGetOwner(m_value))};
+        auto type{qofOwnerGetType(m_value)};
+        std::ostringstream ostr{};
+        ostr << type << " " << guid;
+        return ostr.str();
+    }
     else if constexpr(is_same_decayed_v<ValueType, std::string>)
         return m_value;
     else if constexpr(is_same_decayed_v<ValueType, bool>)
@@ -455,6 +465,14 @@ GncOptionValue<ValueType>::deserialize(const std::string& str) noexcept
 {
     if constexpr(std::is_same_v<ValueType, const QofInstance*>)
         set_value(qof_instance_from_string(str, get_ui_type()));
+    if constexpr(std::is_same_v<ValueType, const GncOwner*>)
+    {
+        std::istringstream istr{str};
+        std::string type, guid;
+        istr >> type >> guid;
+        auto inst{qof_instance_from_string(guid, get_ui_type())};
+        qofOwnerSetEntity(const_cast<GncOwner*>(m_value), inst);
+    }
     else if constexpr(is_same_decayed_v<ValueType, std::string>)
         set_value(str);
     else if constexpr(is_same_decayed_v<ValueType, bool>)

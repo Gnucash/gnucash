@@ -1069,7 +1069,11 @@ inline SCM return_scm_value(ValueType value)
                 if constexpr (is_same_decayed_v<decltype(option),
                               GncOptionValue<const GncOwner*>>)
                 {
-                    return scm_from_utf8_string("Not Yet Implemented");
+                    auto value{option.get_value()};
+                    auto guid{scm_from_utf8_string(qof_instance_to_string(qofOwnerGetOwner(value)).c_str())};
+                    auto type{scm_from_long(gncOwnerGetType(value))};
+                    return scm_simple_format(SCM_BOOL_F, ticked_format_str,
+                                             scm_list_1(scm_cons(type, guid)));
                 }
                 if constexpr (is_QofQueryValue_v<decltype(option)>)
                 {
