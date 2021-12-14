@@ -1,7 +1,28 @@
 /*
- * Temporary swig interface file while developing C++ options.
+ * gnc-optiondb.i -- Swig Guile interface for the options system.
  *
- * unique_ptr SWIG wrapper from https://stackoverflow.com/questions/27693812/how-to-handle-unique-ptrs-with-swig
+ * Copyright 2021 John Ralls <jralls@ceridwen.us>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, contact:
+ *
+ * Free Software Foundation           Voice:  +1-617-542-5942
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
+ */
+
+/* unique_ptr SWIG wrapper from
+ * https://stackoverflow.com/questions/27693812/how-to-handle-unique-ptrs-with-swig
  */
 #if defined(SWIGGUILE)
 
