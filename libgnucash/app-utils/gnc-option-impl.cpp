@@ -26,7 +26,6 @@
 #include <gnc-datetime.hpp>
 #include <guid.hpp>
 #include <cassert>
-#include <charconv>
 #include <sstream>
 extern "C"
 {
@@ -697,7 +696,8 @@ GncOptionDateValue::deserialize(const std::string& str) noexcept
     auto period_str{str.substr(date_value_pos)};
     if (type_str == "absolute")
     {
-        set_value(std::stoll(period_str));
+        // Need a cast to disambiguate from time64.
+        set_value(static_cast<size_t>(std::stoll(period_str)));
         return true;
     }
     else if (type_str == "relative ")
