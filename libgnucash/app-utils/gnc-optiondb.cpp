@@ -1259,7 +1259,6 @@ SCM
 gnc_option_db_lookup_scm_value(GncOptionDB* odb, const char* section,
                                const char* name)
 {
-    std::cerr << "Use gnc_option_db_lookup_value." << std::endl;
     return SCM_BOOL_F;
 }
 
