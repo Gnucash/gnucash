@@ -2724,7 +2724,7 @@ gtv_sr_titles (GncTreeViewSplitReg *view, RowDepth depth)
                 else if (depth == TRANS2)
                     gtk_tree_view_column_set_title (tvc, _("Date Entered"));
                 else if (depth == SPLIT3)
-                    gtk_tree_view_column_set_title (tvc, _("Date Reconciled"));
+                    gtk_tree_view_column_set_title (tvc, _("Reconciled Date"));
                 else
                     gtk_tree_view_column_set_title (tvc, _("Date Posted / Entered / Reconciled"));
                 break;
