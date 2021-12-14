@@ -306,25 +306,6 @@ static inline std::string make_commodity_str(gnc_commodity* com)
     return com_str;
 }
 
-static inline std::string make_currency_SCM_str(gnc_commodity* cur)
-{
-    std::string cur_str{gnc_commodity_get_mnemonic(cur)};
-    cur_str.insert(0, "\"");
-    cur_str += "\"";
-    return cur_str;
-}
-
-static inline std::string make_commodity_SCM_str(gnc_commodity* com)
-{
-    std::string com_str{commodity_scm_intro};
-    com_str += "\"";
-    com_str += gnc_commodity_get_namespace(com);
-    com_str += "\" \"";
-    com_str += gnc_commodity_get_mnemonic(com);
-    com_str += "\")";
-    return com_str;
-}
-
 TEST_F(GncOptionCommodityTest, test_currency_out)
 {
     auto option = make_currency_option("foo", "bar", "baz", "Phony Option",
@@ -739,28 +720,6 @@ TEST_F(GncOptionAccountTest, test_account_list_in)
         });
     EXPECT_EQ(acclist[1], sel_option.get_value<GncOptionAccountList>()[0]);
 }
-
-static inline std::string
-make_account_list_SCM_str(const GncOptionAccountList& acclist)
-{
-    std::string retval{"'("};
-    bool first = true;
-    for (auto acc : acclist)
-    {
-        if (first)
-        {
-            first = false;
-            retval += '"';
-        }
-        else
-            retval += " \"";
-        retval += gnc::GUID{*qof_instance_get_guid(acc)}.to_string();
-        retval += '"';
-    }
-    retval += ')';
-    return retval;
-}
-
 
 using KT = GncOptionMultichoiceKeyType;
 class GncOptionMultichoiceTest : public ::testing::Test

@@ -56,7 +56,6 @@ extern "C"
 #include "gnc-option-uitype.hpp"
 
 
-static const char* commodity_scm_intro{"'(commodity-scm "};
 #ifndef SWIG
 size_t constexpr classifier_size_max{50};
 size_t constexpr sort_tag_size_max{10};
