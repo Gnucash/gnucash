@@ -178,12 +178,6 @@
   (with-output-to-string generate-forms))
 
 
-;; FIXME: Fake callback functions for boolean-complex and multichoice-callback
-
-(define-public (gnc:options-register-callback section name callback options) (options 'register-callback) 1)
-(define-public (gnc:options-register-c-callback section name callback data options) (options 'register-c-callback) 1)
-(define-public (gnc:options-unregister-callback-id id) 0 (options 'unregister-callback-id))
-
 ;; The following implement the old API that separated creation from registration.
 (define-public (gnc:register-option optdb opt)
   (issue-deprecation-warning "gnc:register-option is deprecated. Use gnc-register-foo-option instead.")

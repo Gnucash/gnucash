@@ -375,14 +375,7 @@ not found.")))
     (let ((options (if (null? rest)
                        (gnc:report-template-new-options template)
                        (car rest))))
-      (gnc:report-set-options! r options)
-      (gnc:options-register-callback
-       #f #f
-       (lambda ()
-         (gnc:report-set-dirty?! r #t)
-         (let ((cb (gnc:report-template-options-changed-cb template)))
-           (if cb (cb r))))
-       options))
+      (gnc:report-set-options! r options))
     (gnc:report-set-id! r (gnc-report-add r))
     (gnc:report-id r)))
 
