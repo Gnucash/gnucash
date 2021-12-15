@@ -79,11 +79,19 @@ struct gncp_column_view_edit
     GtkWidget *size_button;
 };
 
+/* Even though these aren't external nor used outside this file they must be
+ * declared this way to ensure that they're in the library's symbol table and
+ * aren't mangled. That's so that dlsym is able to find them when GtkBuilder
+ * needs to connect the signals to them.
+ */
+extern "C"
+{
 void gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data);
 void gnc_column_view_edit_remove_cb(GtkButton * button, gpointer user_data);
 void gnc_edit_column_view_move_up_cb(GtkButton * button, gpointer user_data);
 void gnc_edit_column_view_move_down_cb(GtkButton * button, gpointer user_data);
 void gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data);
+}
 
 static void
 gnc_column_view_set_option(GncOptionDB* odb, const char* section,

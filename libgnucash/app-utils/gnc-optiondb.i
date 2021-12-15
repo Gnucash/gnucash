@@ -1039,7 +1039,7 @@ inline SCM return_scm_value(ValueType value)
                     auto acct_list{option.get_value()};
                     if (acct_list.empty())
                         return no_value;
-                    SCM guid_list{scm_c_eval_string("'()")};//Empty list
+                    SCM guid_list{SCM_EOL};
                     for(auto acct : acct_list)
                     {
                         auto acct_str{qof_instance_to_string(QOF_INSTANCE(acct))};
@@ -1125,6 +1125,13 @@ inline SCM return_scm_value(ValueType value)
                 {
                     auto scm_val{scm_list_1(return_scm_value(option.get_value()))};
                     return scm_simple_format(SCM_BOOL_F, plain_format_str,
+                                             scm_val);
+                }
+                if constexpr (is_same_decayed_v<decltype(option),
+                              GncOptionValue<SCM>>)
+                {
+                    auto scm_val{scm_list_1(return_scm_value(option.get_value()))};
+                    return scm_simple_format(SCM_BOOL_F, ticked_format_str,
                                              scm_val);
                 }
                 auto serial{option.serialize()};

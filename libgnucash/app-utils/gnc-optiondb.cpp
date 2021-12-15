@@ -1259,13 +1259,16 @@ SCM
 gnc_option_db_lookup_scm_value(GncOptionDB* odb, const char* section,
                                const char* name)
 {
-    return SCM_BOOL_F;
+    auto option{odb->find_option(section, name)};
+    return option->get_value<SCM>();
 }
 
 void
-gnc_option_db_set_scm_value(GncOptionDB*, const char*, const char*, SCM)
+gnc_option_db_set_scm_value(GncOptionDB* odb, const char* section,
+                            const char* name, SCM value)
 {
-    std::cerr << "Use gnc_set_option." << std::endl;
+    auto option{odb->find_option(section, name)};
+    option->set_value(value);
 }
 
 // Force creation of templates
