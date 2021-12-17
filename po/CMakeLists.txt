@@ -2,9 +2,9 @@ add_subdirectory(glossary)
 
 # Set of available languages:
 # * managed at the Translation Project (TP):
-set (TP_LINGUAS ca cs da eu fa pt ro rw sk sr sv uk)
-# * already marked as external at TP or they have no language team:
-set (GC_LINGUAS ar as az bg brx de doi el en_GB es es_NI et fi fr gu he hi hr hu id it ja kn ko kok kok@latin ks lt lv mai mni mni@bengali mr nb ne nl pl pt_BR ru ta te tr ur vi zh_CN zh_TW)
+set (TP_LINGUAS ca cs da eu fa ro rw sk sr sv uk)
+# * already marked as external at TP or they have no TP language team:
+set (GC_LINGUAS ar as az bg brx de doi el en_GB es es_NI et fi fr gu he hi hr hu id it ja kn ko kok kok@latin ks lt lv mai mni mni@bengali mr nb ne nl pl pt pt_BR ru ta te tr ur vi zh_CN zh_TW)
 # * New or unmarked: The release manager should announce them to TP 
 # and when listed there move in the respective group above.
 set (NEW_LINGUAS)
