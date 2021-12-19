@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-12-17 13:53+0000\n"
+"PO-Revision-Date: 2021-12-19 13:53+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -522,8 +522,8 @@ msgid ""
 msgstr ""
 "Crie novas contas clicando no botão Nova na barra de ferramentas principal. "
 "Isto abre um diálogo onde pode inserir detalhes da conta. Para mais "
-"informação sobre escolher tipos de conta ou definir um plano de contas, por "
-"favor consulte o manual em linha do GnuCash."
+"informação sobre como escolher tipos de conta ou definir um plano de contas, "
+"por favor consulte o manual em linha do GnuCash."
 
 #: doc/tip_of_the_day.list.c:38
 msgid ""
@@ -11405,7 +11405,7 @@ msgid ""
 "To retrieve online quotes from Alphavantage, this key needs to be set. A key "
 "can be retrieved from the Alpha Vantage website."
 msgstr ""
-"Para obter cotações em linha de Alphavantage, tem de definir esta chave. "
+"Para obter cotações em linha de Alpha Vantage, tem de definir esta chave. "
 "Pode obter uma chave na página web da Alpha Vantage."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:10
@@ -20010,8 +20010,8 @@ msgid ""
 "The Online Banking import returned no transactions for the selected time "
 "period."
 msgstr ""
-"A importação do Online Banking não devolveu transacções para o intervalo de "
-"tempo seleccionado."
+"A importação do Online Banking não devolveu transacções para o período "
+"seleccionado."
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:61
 msgid ""
@@ -22759,7 +22759,7 @@ msgstr "Ref"
 
 #: gnucash/register/ledger-core/split-register-model.c:270
 msgid "T-Ref"
-msgstr "T-Ref"
+msgstr "Ref.-T"
 
 #: gnucash/register/ledger-core/split-register-model.c:279
 #: gnucash/report/reports/standard/register.scm:134
