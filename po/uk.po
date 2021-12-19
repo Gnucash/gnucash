@@ -9,20 +9,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-04 14:00-0800\n"
-"PO-Revision-Date: 2021-12-06 19:40+0200\n"
+"PO-Revision-Date: 2021-12-19 19:53+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/gnucash/"
+"gnucash/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Bugs: Report translation errors to the Language-Team address.\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Weblate 4.10\n"
+"X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Project-Style: default\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -597,7 +598,7 @@ msgstr ""
 "Введіть перші літери назви наявного рахунка у стовпчику реєстру переказів, і "
 "GnuCash доповнить назву на основі списку ваших рахунків. Щоб вказати "
 "субрахунок, введіть перші літери назви батьківського рахунка, далі «:» і "
-"перші літери субрахунка (наприклад, П:Г для субрахунка «Прибутки:Готівка».)"
+"перші літери субрахунка (наприклад, П:Г для субрахунка «Прибутки:Готівка»)."
 
 #: doc/tip_of_the_day.list.c:65
 msgid ""
@@ -668,7 +669,7 @@ msgid ""
 msgstr ""
 "Можна об'єднати декілька звітів в одному вікні, і бачити всю фінансову "
 "інформацію, яка Вам потрібна, одним поглядом. Щоб зробити це, оберіть "
-"Приклади і користувацькі → «Звіт у декілька колонок». "
+"Приклади і користувацькі → «Звіт у декілька колонок»."
 
 #: doc/tip_of_the_day.list.c:95
 msgid ""
@@ -1252,8 +1253,8 @@ msgid ""
 "You must provide a unique name for this Billing Term. Your choice \"%s\" is "
 "already in use."
 msgstr ""
-"Потрібно вказати унікальну назву для цих умов платежу.\n"
-"Ваш вибір «%s» вже використовується."
+"Потрібно вказати унікальну назву для цих умов платежу. Ваш вибір «%s» вже "
+"використовується."
 
 #: gnucash/gnome/dialog-billterms.c:531
 #: gnucash/gnome-utils/gnc-date-delta.c:222
@@ -1466,9 +1467,7 @@ msgstr "Процент знижки має бути від 0 до 100, або з
 
 #: gnucash/gnome/dialog-customer.c:352
 msgid "Credit must be a positive amount or you must leave it blank."
-msgstr ""
-"Кредит має бути додатнім числом,\n"
-"або треба залишити це поле порожнім."
+msgstr "Кредит має бути додатнім числом, або треба залишити це поле порожнім."
 
 #: gnucash/gnome/dialog-customer.c:429 gnucash/gnome/dialog-employee.c:301
 #: gnucash/gnome/dialog-job.c:251 gnucash/gnome/dialog-vendor.c:287
@@ -2411,7 +2410,7 @@ msgstr "Інформація щодо рахунку"
 #: gnucash/gnome/dialog-invoice.c:2635 gnucash/gnome/dialog-invoice.c:2861
 #: gnucash/gnome/dialog-invoice.c:3431
 msgid "Bill ID"
-msgstr "Ідентифікатор платежу!"
+msgstr "Ідентифікатор платежу"
 
 #: gnucash/gnome/dialog-invoice.c:2639 gnucash/gnome/dialog-invoice.c:2865
 msgid "Voucher Information"
@@ -2893,7 +2892,7 @@ msgid ""
 "\" before you continue to process this payment. Perhaps you want to create "
 "an Invoice or Bill first?"
 msgstr ""
-"У вас немає коректного рахунку «Надсилати до».  Створіть рахунок цього типу "
+"У вас немає коректного рахунку «Надсилати до». Створіть рахунок цього типу "
 "«%s» перед продовженням обробки цього платежу. Можливо, спочатку ви хочете "
 "створити рахунок-фактуру або рахунок?"
 
@@ -2911,8 +2910,8 @@ msgid ""
 "\n"
 msgstr ""
 "Хоча ця транзакцій складається з декількох частин, які можна\n"
-"розглядати як «дроблення сплати», gnucash відомий спосіб обробки\n"
-"лише однієї частини.\n"
+"розглядати як «дроблення сплати», gnucash відомий спосіб обробки лише однієї "
+"частини.\n"
 "Будь ласка, виберіть одну частину. Інші частини буде проігноровано.\n"
 "\n"
 
@@ -3163,8 +3162,8 @@ msgid ""
 "A Scheduled Transaction with the name \"%s\" already exists. Are you sure "
 "you want to name this one the same?"
 msgstr ""
-"Запланована транзакція з назвою «%s» вже існує.\n"
-"Ви дійсно хочете використовувати цю назву ще раз?"
+"Запланована транзакція з назвою «%s» вже існує. Ви дійсно хочете "
+"використовувати цю назву ще раз?"
 
 #: gnucash/gnome/dialog-sx-editor2.c:767
 msgid "Scheduled Transactions with variables cannot be automatically created."
@@ -3200,8 +3199,7 @@ msgid ""
 "You have attempted to create a Scheduled Transaction which will never run. "
 "Do you really want to do this?"
 msgstr ""
-"Ви намагаєтесь створити заплановану транзакцію, яка ніколи не буде "
-"виконана.\n"
+"Ви намагаєтесь створити заплановану транзакцію, яка ніколи не буде виконана. "
 "Ви дійсно хочете це зробити?"
 
 #: gnucash/gnome/dialog-sx-editor2.c:1301
@@ -3277,9 +3275,8 @@ msgid ""
 "Cannot create a Scheduled Transaction from a Transaction currently being "
 "edited. Please Enter the Transaction before Scheduling."
 msgstr ""
-"Не вдалося створити заплановану транзакцію із транзакції,\n"
-" яка наразі редагується. Будь ласка, введіть транзакцію\n"
-" перед плануванням."
+"Не вдалося створити заплановану транзакцію із транзакції, яка наразі "
+"редагується. Будь ласка, введіть транзакцію перед плануванням."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:402
 msgid "Ignored"
@@ -3359,7 +3356,7 @@ msgstr "Останній коректний рік: "
 
 #: gnucash/gnome/dialog-tax-info.c:288
 msgid "Form Line Data: "
-msgstr "Рядкові дані форми:"
+msgstr "Рядкові дані форми: "
 
 #. Translators: Tax Code
 #: gnucash/gnome/dialog-tax-info.c:290
@@ -3548,7 +3545,7 @@ msgstr "Перезавантажити поточну базу даних, ск�
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:137
 msgid "Export _Accounts"
-msgstr "Експортувати _рахунки…"
+msgstr "Експортувати _рахунки"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:138
 msgid "Export the account hierarchy to a new GnuCash datafile"
@@ -3606,7 +3603,7 @@ msgstr "З моменту _останнього запуску…"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:172
 msgid "Create Scheduled Transactions since the last time run"
-msgstr "Створити заплановані транзакції з моменту останнього запуску."
+msgstr "Створити заплановані транзакції з моменту останнього запуску"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:176
 msgid "_Mortgage & Loan Repayment..."
@@ -4226,7 +4223,7 @@ msgid ""
 "account and its subaccounts"
 msgstr ""
 "Перевірити та відновити незбалансовані транзакції у встановлені частини у "
-"цьому рахунку та його субрахунках."
+"цьому рахунку та його субрахунках"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:338
 msgid "Check & Repair A_ll"
@@ -4357,7 +4354,7 @@ msgstr ""
 "який ви хочете вилучити.\n"
 "Перш ніж ви зможете його вилучити, вам слід або вилучити ці об'єкти, або "
 "якось змінити їх так, щоб вони використовували\n"
-"інший рахунок."
+"інший рахунок"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1661
 #, c-format
@@ -4832,7 +4829,7 @@ msgstr "Зробити друкований рахунок-фактуру"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:374
 msgid "Edit this invoice"
-msgstr "Редагувати рахунок-фактуру…"
+msgstr "Редагувати рахунок-фактуру"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:375
 msgid "Create a new invoice as a duplicate of the current one"
@@ -4852,7 +4849,7 @@ msgstr "Створити новий рахунок-фактуру для тог�
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:379
 msgid "Move to the blank entry at the bottom of the invoice"
-msgstr "Перейти на чистий запис внизу рахунку-фактури "
+msgstr "Перейти на чистий запис внизу рахунку-фактури"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:380
 msgid "Enter a payment for the owner of this invoice"
@@ -5335,7 +5332,7 @@ msgstr "_Копіювати"
 #: gnucash/gnome/gnc-plugin-page-report.c:1222
 #: gnucash/gnome-utils/gnc-main-window.c:326
 msgid "Copy the current selection to clipboard"
-msgstr "Копіювати виділеного фрагмента до буфера обміну."
+msgstr "Копіювати виділеного фрагмента до буфера обміну"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:241
 #: gnucash/gnome/gnc-plugin-page-register.c:350
@@ -6168,7 +6165,7 @@ msgstr "_Створити"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:140
 msgid "Create a new scheduled transaction"
-msgstr "Створити нову заплановану транзакцію."
+msgstr "Створити нову заплановану транзакцію"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:145
 msgid "_New 2"
@@ -6761,7 +6758,7 @@ msgstr "Платіж від"
 #: gnucash/gnome/window-reconcile2.c:455 gnucash/gnome/window-reconcile2.c:465
 #: gnucash/gnome/window-reconcile.c:516 gnucash/gnome/window-reconcile.c:526
 msgid "Reconcile Account"
-msgstr "Рахунок узгодження:"
+msgstr "Рахунок узгодження"
 
 #: gnucash/gnome/window-reconcile2.c:470 gnucash/gnome/window-reconcile.c:531
 #: gnucash/gtkbuilder/assistant-loan.glade:829
@@ -6812,8 +6809,8 @@ msgid ""
 "You have made changes to this reconcile window. Are you sure you want to "
 "cancel?"
 msgstr ""
-"Ви внесли деякі зміни у цьому вікні узгодження.\n"
-"Ви справді хочете завершити узгодження?"
+"Ви внесли деякі зміни у цьому вікні узгодження. Ви справді хочете завершити "
+"узгодження?"
 
 #: gnucash/gnome/window-reconcile2.c:2031 gnucash/gnome/window-reconcile.c:2278
 msgid "The account is not balanced. Are you sure you want to finish?"
@@ -6992,13 +6989,13 @@ msgid ""
 msgstr ""
 "У записах рахунка містяться дроблення, дата узгодження яких є майбутньою "
 "щодо дати виписки узгодження. Ці дроблення ускладнюють узгодження. Якщо у "
-"вас виникнуть проблеми, ви можете скористатися  пошуком транзакцій для "
-"пошуку цих помилкових транзакцій, скасовування стану узгодження і повторного "
+"вас виникнуть проблеми, ви можете скористатися пошуком транзакцій для пошуку "
+"цих помилкових транзакцій, скасовування стану узгодження і повторного "
 "узгодження записів."
 
 #: gnucash/gnome/window-report.c:112
 msgid "Set the report options you want using this dialog."
-msgstr "Встановіть бажані параметри звіту, використовуючи цей діалог"
+msgstr "Встановіть бажані параметри звіту, використовуючи цей діалог."
 
 #: gnucash/gnome/window-report.c:229
 msgid "There are no options for this report."
@@ -7057,7 +7054,7 @@ msgstr "відповідають будь-якому критерію"
 
 #: gnucash/gnome-search/search-account.c:151
 msgid "You have not selected any accounts"
-msgstr "Ви не вибрали жодного рахунку."
+msgstr "Ви не вибрали жодного рахунку"
 
 #: gnucash/gnome-search/search-account.c:172
 msgid "matches all accounts"
@@ -7560,7 +7557,7 @@ msgid ""
 "Commodity: "
 msgstr ""
 "\n"
-"Товар:"
+"Товар: "
 
 #. Translators: Replace here and later CUSIP by the name of your local
 #. National Securities Identifying Number
@@ -7668,8 +7665,7 @@ msgid ""
 "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and \"Type"
 "\" for the commodity."
 msgstr ""
-"Треба заповнити поля товару «Повна назва», «Символ/скорочення»,\n"
-"та «Тип»."
+"Треба заповнити поля товару «Повна назва», «Символ/скорочення» та «Тип»."
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:237
 msgid "Path head for files is,"
@@ -7773,10 +7769,9 @@ msgid ""
 "default gain/loss account."
 msgstr ""
 "Для вказаної валюти книги немає рахунків прибутків і\n"
-"витрат; вам слід повернутися до цього вікна\n"
-"(за допомогою пункту «Файл → Властивості») після\n"
-"налаштовування рахунку, щоб вибрати типовий рахунок\n"
-"надходжень/витрат."
+"витрат; вам слід повернутися до цього вікна (за допомогою\n"
+"пункту «Файл → Властивості») після налаштовування рахунку,\n"
+"щоб вибрати типовий рахунок надходжень/витрат."
 
 #: gnucash/gnome-utils/dialog-options.c:869
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:299
@@ -7816,7 +7811,7 @@ msgstr "Очистити все"
 
 #: gnucash/gnome-utils/dialog-options.c:1501
 msgid "Clear the selection and unselect all accounts."
-msgstr "Очистити вибраний рахунок та усі його субрахунки"
+msgstr "Очистити вибраний рахунок та усі його субрахунки."
 
 #: gnucash/gnome-utils/dialog-options.c:1506
 msgid "Select Children"
@@ -7927,8 +7922,8 @@ msgid ""
 "You must provide a unique name for this Tax Table. Your choice \"%s\" is "
 "already in use."
 msgstr ""
-"Ви повинні вказати унікальну назву для цієї таблиці податків.\n"
-"Обрана вами назва «%s» вже використовується."
+"Ви повинні вказати унікальну назву для цієї таблиці податків. Обрана вами "
+"назва «%s» вже використовується."
 
 #: gnucash/gnome-utils/dialog-tax-table.c:190
 msgid "Percentage amount must be between -100 and 100."
@@ -7966,8 +7961,8 @@ msgid ""
 "You cannot remove the last entry from the tax table. Try deleting the tax "
 "table if you want to do that."
 msgstr ""
-"Ви не можете вилучити останній запис у таблиці податків.\n"
-"Спробуйте вилучити саму таблицю податків, якщо вам це потрібно."
+"Ви не можете вилучити останній запис у таблиці податків. Спробуйте вилучити "
+"саму таблицю податків, якщо вам це потрібно."
 
 #: gnucash/gnome-utils/dialog-tax-table.c:784
 msgid "Are you sure you want to delete this entry?"
@@ -8000,9 +7995,8 @@ msgid ""
 "You must specify an account to transfer from, or to, or both, for this "
 "transaction. Otherwise, it will not be recorded."
 msgstr ""
-"Треба вказати рахунок, з якого чи на\n"
-"який відбувається передача або обидва рахунки для\n"
-"цієї транзакції. Інакше вона не буде записана."
+"Треба вказати рахунок, з якого чи на який відбувається передача або обидва "
+"рахунки для цієї транзакції. Інакше вона не буде записана."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1441
 msgid "You can't transfer from and to the same account!"
@@ -8108,7 +8102,7 @@ msgstr "Помилка під час обробки «%s» у позиції %d"
 #: gnucash/gnome-utils/gnc-amount-edit.c:417
 #, c-format
 msgid "An error occurred while processing '%s'"
-msgstr "Помилка під час обробки «%s»."
+msgstr "Помилка під час обробки «%s»"
 
 #: gnucash/gnome-utils/gnc-autoclear.c:100
 msgid "Account is already at Auto-Clear Balance."
@@ -8337,12 +8331,12 @@ msgstr "Не знайдено відповідний механізм для %s.
 #: gnucash/gnome-utils/gnc-file.c:285
 #, c-format
 msgid "The URL %s is not supported by this version of GnuCash."
-msgstr "Посилання URL %s не підтримується цією версією GnuCash. "
+msgstr "Посилання URL %s не підтримується цією версією GnuCash."
 
 #: gnucash/gnome-utils/gnc-file.c:290
 #, c-format
 msgid "Can't parse the URL %s."
-msgstr "Не вдалося обробити URL %s"
+msgstr "Не вдалося обробити URL %s."
 
 #: gnucash/gnome-utils/gnc-file.c:295
 #, c-format
@@ -8846,7 +8840,7 @@ msgstr "Перей_менувати сторінку"
 
 #: gnucash/gnome-utils/gnc-main-window.c:366
 msgid "Rename this page."
-msgstr "Перейменувати сторінку"
+msgstr "Перейменувати сторінку."
 
 #: gnucash/gnome-utils/gnc-main-window.c:373
 msgid "_New Window"
@@ -8854,7 +8848,7 @@ msgstr "_Створити вікно"
 
 #: gnucash/gnome-utils/gnc-main-window.c:374
 msgid "Open a new top-level GnuCash window."
-msgstr "Відкрити нове вікно GnuCash для поточного вигляду"
+msgstr "Відкрити нове вікно GnuCash для поточного вигляду."
 
 #: gnucash/gnome-utils/gnc-main-window.c:378
 msgid "New Window with _Page"
@@ -9459,7 +9453,7 @@ msgstr "В ефірі"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2864
 #: gnucash/register/ledger-core/split-register.c:2559
 msgid "AutoDep"
-msgstr "Автодеп."
+msgstr "Автодеп"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2865
 #: gnucash/register/ledger-core/split-register.c:2560
@@ -9594,7 +9588,7 @@ msgstr "STCG"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2945
 #: gnucash/register/ledger-core/split-register.c:2640
 msgid "Dist"
-msgstr "Dist"
+msgstr "Розп"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:45
 #: gnucash/import-export/import-main-matcher.c:1447
@@ -10017,7 +10011,7 @@ msgstr "Посилання/Дія"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2770
 msgid "T-Number"
-msgstr "Номер пров."
+msgstr "Номер пров"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2776
 msgid "Number / Action"
@@ -11360,7 +11354,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:10
 msgid "Prompt for interest charges"
-msgstr "Ввести процент витрат…"
+msgstr "Запит щодо відсоткових виплат"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:11
 #: gnucash/gtkbuilder/dialog-account.glade:1484
@@ -11474,7 +11468,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:40
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:41
 msgid "How many days in advance to notify the user."
-msgstr "За скільки днів попереджувати користувача"
+msgstr "За скільки днів попереджувати користувача."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:52
 msgid "Set the \"notify\" flag by default"
@@ -11570,8 +11564,8 @@ msgid ""
 "\", \"dash\" and \"period\"."
 msgstr ""
 "Цей параметр визначає символ, який буде використовуватись між компонентами "
-"назви рахунку.  Можливими значеннями є будь-які одинарні символи Unicode, "
-"які не є літерами латинської абетки або цифрами, а також будь-який з таких "
+"назви рахунку. Можливими значеннями є будь-які одинарні символи Unicode, які "
+"не є літерами латинської абетки або цифрами, а також будь-який з таких "
 "рядків: «colon», «slash», «backslash», «dash» та «period»."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:25
@@ -11714,11 +11708,11 @@ msgid ""
 "days'"
 msgstr ""
 "Цей параметр визначає дії із застарілими файлами журналів або резервних "
-"копій. «forever» означає «зберігати усі застарілі файли». «never» означає "
-"«не зберігати жодних застарілих файлів журналів або резервних копій». "
-"Кожного разу, коли ви зберігатимете дані, застарілі версії файлів "
-"вилучатимуться. «days» означає «зберігати застарілі файли вказану кількість "
-"днів». Кількість днів можна визначити за допомогою ключа «retain-days»."
+"копій. «forever» означає «зберігати усі застарілі файли». «never» означає «"
+"не зберігати жодних застарілих файлів журналів або резервних копій». Кожного "
+"разу, коли ви зберігатимете дані, застарілі версії файлів вилучатимуться. "
+"«days» означає «зберігати застарілі файли вказану кількість днів». Кількість "
+"днів можна визначити за допомогою ключа «retain-days»"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:80
 #: gnucash/gtkbuilder/dialog-preferences.glade:1757
@@ -12092,7 +12086,7 @@ msgid ""
 "on registers/reports"
 msgstr ""
 "Встановити параметр книги для нових книг так, щоб використовувався поділ за "
-"полем «action» для поля «Num» у бухгалтерських книгах або звітах."
+"полем «action» для поля «Num» у бухгалтерських книгах або звітах"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:231
 #: gnucash/gtkbuilder/dialog-preferences.glade:1441
@@ -14538,9 +14532,9 @@ msgstr ""
 "\n"
 "На наступній сторінці вам буде показано текст, який було виявлено у полях "
 "платника і примітки транзакцій і який не вдалося пов'язати із рахунком або "
-"категорією QIF. Типово, такі транзакції буде пов'язано у GnuCash з рахунком "
-"«Не вказано». Якщо ви виберете інший рахунок, його буде збережено для усіх "
-"наступних файлів QIF. "
+"категорією QIF. Типово, такі транзакції буде пов'язано у GnuCash з рахунком «"
+"Не вказано». Якщо ви виберете інший рахунок, його буде збережено для усіх "
+"наступних файлів QIF."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:815
 msgid "Payees and memos"
@@ -15427,7 +15421,7 @@ msgstr "Відкрити імпортовані документи у вклад
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:392
 msgid "Open not yet posted documents in tabs "
-msgstr "Відкрити ще не введені документи у вкладках"
+msgstr "Відкрити ще не введені документи у вкладках "
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:410
 msgid "Don't open imported documents in tabs"
@@ -16560,7 +16554,7 @@ msgid ""
 "The job ID number. If left blank a reasonable number will be chosen for you"
 msgstr ""
 "Ідентифікатор роботи. Якщо залишено незаповненим, відповідне число буде "
-"вибрано за вас."
+"вибрано за вас"
 
 #: gnucash/gtkbuilder/dialog-job.glade:163
 msgid "Job Information"
@@ -16774,7 +16768,7 @@ msgstr ""
 "\n"
 "Якщо вами вибрано рахунок-фактуру, GnuCash запропонує суму, яку слід "
 "додатково сплатити за нею. Ви можете змінити цю суму для створення запису "
-"часткової сплати або або запису переплати.\n"
+"часткової сплати або запису переплати.\n"
 "\n"
 "У випадках переплати та випадках, коли не вибрано рахунку-фактури, GnuCash "
 "автоматично пов'яже переплачену суму із першим несплаченим рахунком-фактурою "
@@ -17000,7 +16994,7 @@ msgid ""
 "the following strings: \"colon\" \"slash\", \"backslash\", \"dash\" and "
 "\"period\"."
 msgstr ""
-"Символ, який буде використовуватись між компонентами назви рахунку.  "
+"Символ, який буде використовуватись між компонентами назви рахунку. "
 "Допустимим значенням є один будь-який символ, який не є цифрою або літерою, "
 "або один з таких рядків: «colon», «slash», «backslash», «dash» та «period»."
 
@@ -17451,7 +17445,7 @@ msgid ""
 "card payment."
 msgstr ""
 "Після узгодження наявності грошей на кредитній карті, просити користувача "
-"ввести платіж через кредитну картку"
+"ввести платіж через кредитну картку."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2620
 msgid "Always reconcile to t_oday"
@@ -17712,7 +17706,7 @@ msgid ""
 "Show a close button on each notebook tab. These function identically to the "
 "'Close' menu item."
 msgstr ""
-"Показувати кнопку закривання на кожній вкладці.  Ця функція ідентична до "
+"Показувати кнопку закривання на кожній вкладці. Ця функція ідентична до "
 "пункту меню «Закрити»."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3621
@@ -17904,7 +17898,7 @@ msgstr "База даних цін"
 
 #: gnucash/gtkbuilder/dialog-price.glade:842
 msgid "Add a new price."
-msgstr "Додати нову ціну"
+msgstr "Додати нову ціну."
 
 #: gnucash/gtkbuilder/dialog-price.glade:860
 msgid "Remove the current price."
@@ -18332,7 +18326,7 @@ msgstr "_Попереджувати перед створенням транза
 #: gnucash/gtkbuilder/dialog-sx.glade:679
 msgid "Set the 'notify' flag on newly created scheduled transactions."
 msgstr ""
-"Встановити ознаку 'сповіщати'  для щойно створених запланованих транзакцій."
+"Встановити ознаку «сповіщати» для щойно створених запланованих транзакцій."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:698
 msgid "Crea_te in advance"
@@ -19362,7 +19356,7 @@ msgstr "Впорядковувати за сумою."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:962
 msgid "Sort by memo."
-msgstr "Впорядковувати за нотатками"
+msgstr "Впорядковувати за нотатками."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:981
 msgid "Sort by description."
@@ -20234,7 +20228,7 @@ msgstr ""
 msgid ""
 "The Online Banking import returned no transactions for the selected time "
 "period."
-msgstr "Імпорт з клієнт-банку не містить транзакцій за обраний період часу"
+msgstr "Імпорт з клієнт-банку не містить транзакцій за обраний період часу."
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:61
 msgid ""
@@ -20604,7 +20598,7 @@ msgstr "Імпортувати _DTAUS"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:154
 msgid "Import a traditional german DTAUS file into GnuCash."
-msgstr "Імпортувати традиційний німецький файл DTAUS у GnuCash"
+msgstr "Імпортувати традиційний німецький файл DTAUS у GnuCash."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:166
 msgid "Import DTAUS and _send..."
@@ -20615,7 +20609,7 @@ msgid ""
 "Import a DTAUS file into GnuCash and transmit its orders by Online Banking."
 msgstr ""
 "Імпортувати файл DTAUS до GnuCash і передати його накази за допомогою "
-"інтернет-банкінгу"
+"інтернет-банкінгу."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:177
 msgid "Show _log window"
@@ -20860,7 +20854,7 @@ msgstr "Спосіб-знижки"
 #: gnucash/report/reports/standard/invoice.scm:100
 #: gnucash/report/reports/standard/invoice.scm:229
 msgid "Taxable"
-msgstr "Обкладається податком?"
+msgstr "Обкладається податком"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:158
 msgid "Taxincluded"
@@ -22045,7 +22039,7 @@ msgstr "Назва рахунку GnuCash"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:861
 msgid "Enter a name or short description, such as \"Red Hat Stock\"."
-msgstr "Введіть назву або короткий опис, наприклад «Акції Red Hat»"
+msgstr "Введіть назву або короткий опис, наприклад «Акції Red Hat»."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:863
 msgid ""
@@ -22167,7 +22161,7 @@ msgstr "Виберіть валюту файла QIF"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:2866
 msgid "You must enter an existing national currency or enter a different type."
-msgstr "Потрібно вказати існуючу національну валюту або обрати інший тип"
+msgstr "Потрібно вказати наявну національну валюту або обрати інший тип."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3084
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3088
@@ -22545,15 +22539,15 @@ msgstr "Матеріал"
 #: gnucash/register/ledger-core/gncEntryLedger.c:915
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:875
 msgid "Save the current entry?"
-msgstr "Зберегти поточний запис"
+msgstr "Зберегти поточний запис?"
 
 #: gnucash/register/ledger-core/gncEntryLedger.c:917
 msgid ""
 "The current transaction has been changed. Would you like to record the "
 "changes before duplicating this entry, or cancel the duplication?"
 msgstr ""
-"Поточна транзакція була змінена.\n"
-"Записати зміни перед створенням її копії, або не створювати копію?"
+"Поточна транзакція була змінена. Записати зміни перед створенням її копії, "
+"або не створювати копію?"
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:157
 msgid ""
@@ -22858,7 +22852,7 @@ msgstr "Проміжний підсумок цієї позиції"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
 msgid "The total tax of this entry "
-msgstr "Сумарний податок для цього запису"
+msgstr "Сумарний податок для цього запису "
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:783
 msgid "Is this entry billable to a customer or job?"
@@ -23040,7 +23034,7 @@ msgstr "Інш. вал."
 #: gnucash/register/ledger-core/split-register-model.c:463
 #, c-format
 msgid "Tot %s"
-msgstr " %s"
+msgstr "Заг. %s"
 
 #: gnucash/register/ledger-core/split-register-model.c:445
 msgid "Tot Credit"
@@ -23124,8 +23118,8 @@ msgstr ""
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
 msgstr ""
-"Ця транзакція розділена на кілька частин. Натисніть кнопку `Показати "
-"частини`, щоб побачити усі частини транзакції."
+"Ця транзакція розділена на кілька частин. Натисніть кнопку «Показати частини»"
+", щоб побачити усі частини транзакції"
 
 #: gnucash/register/ledger-core/split-register-model.c:1578
 msgid ""
@@ -23383,7 +23377,7 @@ msgstr "Усі"
 
 #: gnucash/report/options-utilities.scm:100
 msgid "Show accounts to this depth, overriding any other option."
-msgstr "Показувати рахунки до цього рівня, незважаючи на інші параметри"
+msgstr "Показувати рахунки до цього рівня, незважаючи на інші параметри."
 
 #: gnucash/report/options-utilities.scm:108
 msgid ""
@@ -23400,7 +23394,7 @@ msgstr ""
 #: gnucash/report/reports/standard/budget-income-statement.scm:76
 #: gnucash/report/reports/standard/income-statement.scm:63
 msgid "Report on these accounts, if display depth allows."
-msgstr "Зробити звіт про транзакції для цих рахунків"
+msgstr "Зробити звіт про транзакції для цих рахунків."
 
 #: gnucash/report/options-utilities.scm:133
 msgid "Select the currency to display the values of this report in."
@@ -23606,7 +23600,7 @@ msgstr "Відображення"
 
 #: gnucash/report/report-core.scm:162
 msgid "Report name"
-msgstr "Назва звіту "
+msgstr "Назва звіту"
 
 #: gnucash/report/report-core.scm:163
 msgid "Stylesheet"
@@ -24131,7 +24125,7 @@ msgstr "Параметр з множиною вибору"
 
 #: gnucash/report/reports/example/hello-world.scm:68
 msgid "This is a multi choice option."
-msgstr "Цей параметр з множиною вибору"
+msgstr "Цей параметр з множиною вибору."
 
 #: gnucash/report/reports/example/hello-world.scm:69
 msgid "First Option"
@@ -24210,7 +24204,7 @@ msgstr "Це параметр кольору."
 #: gnucash/report/reports/example/hello-world.scm:170
 #: gnucash/report/reports/example/hello-world.scm:192
 msgid "Hello Again"
-msgstr "Знову привіт!"
+msgstr "Знову привіт"
 
 #: gnucash/report/reports/example/hello-world.scm:157
 msgid "An account list option"
@@ -24300,7 +24294,7 @@ msgid ""
 "&gt;."
 msgstr ""
 "Щоб дізнатись подробиці про участь у цьому списку, дивіться &lt;https://www."
-"gnucash.org/&gt;. "
+"gnucash.org/&gt;."
 
 #: gnucash/report/reports/example/hello-world.scm:328
 msgid ""
@@ -24571,7 +24565,7 @@ msgstr "Звіт про заплановані податки та експор�
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:211
 msgid "$0.00 valued Tax codes won't be printed."
-msgstr "Податкові коди  з нульовими значеннями не будуть надруковані."
+msgstr "Податкові коди з нульовими значеннями не будуть надруковані."
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:215
 msgid "Do not print full account names"
@@ -26465,7 +26459,7 @@ msgstr "Активи у часі"
 
 #: gnucash/report/reports/standard/category-barchart.scm:66
 msgid "Liabilities Over Time"
-msgstr "Зобов'язання у часі:"
+msgstr "Зобов'язання у часі"
 
 #: gnucash/report/reports/standard/category-barchart.scm:78
 msgid "Show long account names"
@@ -26933,8 +26927,7 @@ msgstr "Сплачуваний податок"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:118
 msgid "Display the tax payable (tax on sales - tax on purchases)"
-msgstr ""
-"Показувати сплачуваний податок (податок на продаж -  податок на купівлю)"
+msgstr "Показувати сплачуваний податок (податок на продаж — податок на купівлю)"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:137
 msgid "Purchases"
@@ -27246,7 +27239,7 @@ msgstr "Рядок з контактом компанії"
 
 #: gnucash/report/reports/standard/invoice.scm:276
 msgid "The phrase used to introduce the company contact."
-msgstr "Фраза, що використовується для представлення контакту компанії/"
+msgstr "Фраза, що використовується для представлення контакту компанії."
 
 #: gnucash/report/reports/standard/invoice.scm:277
 msgid "Please direct all enquiries to"
@@ -28044,7 +28037,7 @@ msgid ""
 "should either be in your .gnucash directory, or else in its proper place "
 "within the GnuCash installation directories."
 msgstr ""
-"Назва файла CSS стилів, що буде використовуватися з цим звітом. Цей файл  "
+"Назва файла CSS стилів, що буде використовуватися з цим звітом. Цей файл "
 "повинен міститися у вашій теці .gnucash, або — в іншому випадку — у "
 "відповідному місці серед тек встановлення GnuCash."
 
@@ -28653,7 +28646,7 @@ msgstr ""
 
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:193
 msgid "Website"
-msgstr "Веб-сайт:"
+msgstr "Вебсайт"
 
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:229
 msgid "Invoice Date"
@@ -29391,7 +29384,7 @@ msgstr "Показувати лише проміжні підсумки, при�
 
 #: gnucash/report/trep-engine.scm:813
 msgid "Subtotal according to the primary key?"
-msgstr "Проміжний підсумок відповідно до головного ключа? "
+msgstr "Проміжний підсумок відповідно до головного ключа?"
 
 #: gnucash/report/trep-engine.scm:822 gnucash/report/trep-engine.scm:861
 msgid "Do a date subtotal."
