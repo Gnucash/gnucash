@@ -10,23 +10,23 @@
 # Jonas Norling <norling@lysator.liu.se>, 2004, 2006.
 # Erik Johansson <erik@ejohansson.se>, 2014, 2016.
 # Arve Eriksson <031299870@telia.com>, 2021.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-10-17 13:14+0200\n"
+"PO-Revision-Date: 2021-12-20 05:52+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
-"Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.10\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Gtranslator 3.36.0\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -428,7 +428,7 @@ msgstr "Västerländsk (Windows-1252)"
 
 #: borrowed/goffice/go-charmap-sel.c:441
 msgid "Locale: "
-msgstr "Lokal:"
+msgstr "Lokal: "
 
 #: borrowed/goffice/go-charmap-sel.c:476
 msgid "Conversion Direction"
@@ -564,8 +564,8 @@ msgid ""
 "'+', '-','*', or '/'. Type the second value and press Enter to record the "
 "calculated amount."
 msgstr ""
-"När du skriver in belopp i registret, kan du använda GnuCash-kalkylatorn "
-"för  att addera, subtrahera, multiplicera och dividera. Skriva bara första "
+"När du skriver in belopp i registret, kan du använda GnuCash-kalkylatorn för "
+"att addera, subtrahera, multiplicera och dividera. Skriva bara första "
 "värdet, sen +, -, * eller /. Skriv in det andra värdet och tryck \"Enter\" "
 "för att spara det kalkylerade värdet."
 
@@ -1703,7 +1703,7 @@ msgstr "Totalt antal poster"
 
 #: gnucash/gnome/dialog-doclink.c:650
 msgid "Business item can not be modified."
-msgstr "Affärsobjektet kan inte ändras"
+msgstr "Affärsobjektet kan inte ändras."
 
 #: gnucash/gnome/dialog-doclink.c:659 gnucash/gnome/dialog-doclink.c:760
 #: gnucash/gnome/gnc-plugin-page-invoice.c:382
@@ -2382,7 +2382,7 @@ msgstr "Visa traktamente"
 
 #: gnucash/gnome/dialog-invoice.c:2519
 msgid "Open Linked Document:"
-msgstr "Öppna länkat dokument"
+msgstr "Öppna länkat dokument:"
 
 #: gnucash/gnome/dialog-invoice.c:2633 gnucash/gnome/dialog-invoice.c:2858
 msgid "Bill Information"
@@ -3027,7 +3027,7 @@ msgstr "användare"
 #: gnucash/gtkbuilder/dialog-print-check.glade:293
 #: gnucash/gtkbuilder/gnc-date-format.glade:30
 msgid "Custom"
-msgstr "Anpassad"
+msgstr "Anpassat"
 
 #: gnucash/gnome/dialog-print-check.c:2603
 #: gnucash/gtkbuilder/dialog-preferences.glade:3533
@@ -3155,7 +3155,6 @@ msgstr ""
 "automatiskt."
 
 #: gnucash/gnome/dialog-sx-editor2.c:792 gnucash/gnome/dialog-sx-editor.c:542
-#, fuzzy
 msgid "Please provide a valid end selection."
 msgstr "Ange ett giltigt val för avslut."
 
@@ -3329,9 +3328,8 @@ msgid "Last Valid Year: "
 msgstr "Senast giltiga år: "
 
 #: gnucash/gnome/dialog-tax-info.c:288
-#, fuzzy
 msgid "Form Line Data: "
-msgstr "Data för formulärrad:"
+msgstr "Data för formulärrad: "
 
 #. Translators: Tax Code
 #: gnucash/gnome/dialog-tax-info.c:290
@@ -3613,7 +3611,7 @@ msgstr "_Värdepappersredigerare"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:197
 msgid "View and edit the commodities for stocks and mutual funds"
-msgstr "Visa och redigera varor för aktier och investeringsfonder."
+msgstr "Visa och redigera varor för aktier och investeringsfonder"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:201
 msgid "_Loan Repayment Calculator"
@@ -3893,22 +3891,18 @@ msgid "Open the Find Expense Voucher dialog"
 msgstr "Öppna dialogrutan Sök traktamente"
 
 #: gnucash/gnome/gnc-plugin-business.c:278
-#, fuzzy
 msgid "Business Linked Documents"
 msgstr "Länkade dokument för verksamhet"
 
 #: gnucash/gnome/gnc-plugin-business.c:279
-#, fuzzy
 msgid "View all Linked Business Documents"
 msgstr "Visa alla länkade dokument för verksamhet"
 
 #: gnucash/gnome/gnc-plugin-business.c:283
-#, fuzzy
 msgid "Sales _Tax Table"
 msgstr "Försäljningsska_ttetabell"
 
 #: gnucash/gnome/gnc-plugin-business.c:284
-#, fuzzy
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
 msgstr "Visa och redigera listan med försäljningsskattetabeller (MOMS/VAT)"
 
@@ -3978,7 +3972,7 @@ msgstr "Skapa ett nytt konto"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:204
 msgid "New Account _Hierarchy..."
-msgstr "Ny konto_hierarki"
+msgstr "Ny konto_hierarki..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:205
 msgid "Extend the current book by merging with new account type categories"
@@ -3998,14 +3992,12 @@ msgid "Open the selected account"
 msgstr "Öppna det valda kontot"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:215
-#, fuzzy
 msgid "Open _Old Style Register Account"
-msgstr "Öppna _föråldrat registerkonto"
+msgstr "Öppna k_onto med gammalt register"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:216
-#, fuzzy
 msgid "Open the old style register selected account"
-msgstr "Öppna ett föråldrat registerkonto"
+msgstr "Öppna ett konto med gammalt register"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:229
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:240
@@ -4020,14 +4012,12 @@ msgid "Open the selected account and all its subaccounts"
 msgstr "Öppna det valda kontot och alla dess underkonton"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:234
-#, fuzzy
 msgid "Open Old St_yle Subaccounts"
-msgstr "Öppna för_åldrade underkonton"
+msgstr "Öppna ga_mla underkonton"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:235
-#, fuzzy
 msgid "Open the old style register selected account and all its subaccounts"
-msgstr "Öppna ett föråldrat registerkonto och alla dess underkonton"
+msgstr "Öppna det valda kontot med gammalt register och alla dess underkonton"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:248
 #: gnucash/gnome/gnc-plugin-page-register2.c:245
@@ -4333,6 +4323,9 @@ msgid ""
 "\n"
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
+"Kontot \"%s\" har fler än ett underkonto.\n"
+"\n"
+"Flytta underkontona eller ta bort dem innan du försöker ta bort detta konto."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1729
 #, c-format
@@ -5558,7 +5551,6 @@ msgstr ""
 "det gamla registret."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:755
-#, fuzzy
 msgid "General Journal2"
 msgstr "Allmän journal2"
 
@@ -5858,10 +5850,8 @@ msgid "A reversing entry has already been created for this transaction."
 msgstr "En omvänd post har redan skapats för den här transaktionen."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4088
-#, fuzzy
-#| msgid "Cut the current transaction?"
 msgid "Jump to the transaction?"
-msgstr "Ta bort aktuell transaktion?"
+msgstr "Hoppa till transaktion?"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4095
 msgid "Reverse Transaction"
@@ -6186,22 +6176,18 @@ msgstr "Öppna ett fönster för allmän journal"
 
 #: gnucash/gnome/gnc-plugin-register2.c:66
 #: gnucash/gnome/gnc-plugin-register2.c:67
-#, fuzzy
 msgid "Register2 Open GL Account"
-msgstr "Registrera2 Open GL-konto"
+msgstr "Register2 Open GL-konto"
 
 #: gnucash/gnome/gnc-plugin-register.c:54
-#, fuzzy
 msgid "Old St_yle General Journal"
-msgstr "För_åldrad allmän journal"
+msgstr "Ga_mmal allmän journal"
 
 #: gnucash/gnome/gnc-plugin-register.c:55
-#, fuzzy
 msgid "Open an old style general journal window"
-msgstr "Öppna ett fönster för en föråldrad allmän journal"
+msgstr "Öppna ett fönster för en gammal allmän journal"
 
 #: gnucash/gnome/gnc-plugin-register.c:59
-#, fuzzy
 msgid "Open general journal window"
 msgstr "Öppna fönster för allmän journal"
 
@@ -7521,7 +7507,7 @@ msgid ""
 "Exchange code (ISIN, CUSIP or similar): "
 msgstr ""
 "\n"
-"Handelskod (LEI, NID eller liknande):"
+"Handelskod (LEI, NID eller liknande): "
 
 #: gnucash/gnome-utils/dialog-commodity.c:176
 msgid ""
@@ -7529,7 +7515,7 @@ msgid ""
 "Mnemonic (Ticker symbol or similar): "
 msgstr ""
 "\n"
-"Mnemonisk (tickersymbol eller liknande):"
+"Mnemonisk (tickersymbol eller liknande): "
 
 #: gnucash/gnome-utils/dialog-commodity.c:275
 #: gnucash/gtkbuilder/dialog-commodity.glade:640
@@ -7619,7 +7605,6 @@ msgstr ""
 "\"Typ\" för produkten."
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:237
-#, fuzzy
 msgid "Path head for files is,"
 msgstr "Sökvägshuvudet för filer är,"
 
@@ -7628,7 +7613,7 @@ msgid "Path head does not exist,"
 msgstr "Sökvägshuvud finns inte,"
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:242
-#, fuzzy, c-format
+#, c-format
 msgid "Path head not set, using '%s' for relative paths"
 msgstr "Sökvägshuvud inte angivet, använder '%s' för relativa sökvägar"
 
@@ -7664,7 +7649,7 @@ msgstr "Spara Som..."
 #: gnucash/gnome-utils/dialog-file-access.c:320
 #: gnucash/gtkbuilder/dialog-file-access.glade:40
 msgid "_Save As"
-msgstr "_Spara som..."
+msgstr "_Spara som"
 
 #: gnucash/gnome-utils/dialog-options.c:225
 #: gnucash/gnome-utils/gnc-main-window.c:307
@@ -8760,7 +8745,7 @@ msgstr "Döp o_m sida"
 
 #: gnucash/gnome-utils/gnc-main-window.c:366
 msgid "Rename this page."
-msgstr "Döp om den här sidan"
+msgstr "Döp om den här sidan."
 
 #: gnucash/gnome-utils/gnc-main-window.c:373
 msgid "_New Window"
@@ -8967,12 +8952,12 @@ msgstr "Bokföring för privat bruk och småföretag."
 msgid "translator-credits"
 msgstr ""
 "Översättning av\n"
-"Dennis Björklund <dennisb@cs.chalmers.se>, 2000.\n"
-"Martin Norbäck <d95mback@dtek.chalmers.se>, 2001.\n"
-"Christian Rose <menthos@menthos.com>, 2001, 2002.\n"
-"Jonas Norling <norling@lysator.liu.se>, 2004, 2006.\n"
-"Erik Johansson <erik@ejohansson.se>, 2014, 2016.\n"
-"Arve Eriksson <031299870@telia.com>, 2021."
+"Dennis Björklund <dennisb@cs.chalmers.se>, 2000\n"
+"Martin Norbäck <d95mback@dtek.chalmers.se>, 2001\n"
+"Christian Rose <menthos@menthos.com>, 2001, 2002\n"
+"Jonas Norling <norling@lysator.liu.se>, 2004, 2006\n"
+"Erik Johansson <erik@ejohansson.se>, 2014, 2016\n"
+"Arve Eriksson <031299870@telia.com>, 2021"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4741
 msgid "Visit the GnuCash website."
@@ -9256,7 +9241,6 @@ msgid "The account %s does not exist. Would you like to create it?"
 msgstr "Kontot %s finns inte. Vill du skapa det?"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:2121
-#, fuzzy
 msgid "You can not paste from the general journal to a register."
 msgstr "Du kan inte klistra in från den allmänna journalen till ett register."
 
@@ -9790,12 +9774,12 @@ msgstr "Tidszon"
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:353
 #: gnucash/gtkbuilder/dialog-customer.glade:132
 msgid "Customer Number"
-msgstr "Kundnummer:"
+msgstr "Kundnummer"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:361
 #: gnucash/gtkbuilder/dialog-vendor.glade:133
 msgid "Vendor Number"
-msgstr "Leverantörsnummer:"
+msgstr "Leverantörsnummer"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:365
 #: gnucash/gtkbuilder/dialog-employee.glade:108
@@ -10283,11 +10267,11 @@ msgstr "För att hitta den senaste stabila versionen, se {1}"
 #. Translators: Guile is the programming language of the reports
 #: gnucash/gnucash-core-app.cpp:103
 msgid "Loading system wide Guile extensions…"
-msgstr ""
+msgstr "Läser in systemets Guile-utökningar…"
 
 #: gnucash/gnucash-core-app.cpp:115
 msgid "Loading user specific Guile extensions…"
-msgstr ""
+msgstr "Läser in användarspecifika Guile-utökningar…"
 
 #: gnucash/gnucash-core-app.cpp:224
 msgid "- GnuCash, accounting for personal and small business finance"
@@ -10430,7 +10414,7 @@ msgid ""
 msgstr ""
 "Fel: kunde inte initiera grafiskt användargränssnitt och alternativ add-"
 "price-quotes angavs inte.\n"
-"       Behöver du kanske ställa in miljövariabeln $DISPLAY?"
+"Behöver du kanske ställa in miljövariabeln $DISPLAY?"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:17
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:32
@@ -10547,8 +10531,7 @@ msgid ""
 "Otherwise all items in the current class will be searched."
 msgstr ""
 "Om det är aktivt kommer endast 'aktiva' objekt i nuvarande klass att sökas "
-"igenom.\n"
-"Annars kommer alla objekt i nuvarande klass att sökas igenom."
+"igenom. Annars kommer alla objekt i nuvarande klass att sökas igenom."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:107
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:149
@@ -11820,7 +11803,6 @@ msgid "Date format choice"
 msgstr "Val för datumformat"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:161
-#, fuzzy
 msgid ""
 "This setting chooses the way dates are displayed in GnuCash. Possible values "
 "for this setting are \"locale\" to use the system locale setting, \"ce\" for "
@@ -11828,9 +11810,9 @@ msgid ""
 "for United Kingdom style dates, and \"us\" for United States style dates."
 msgstr ""
 "Inställningen väljer hur datum visas i GnuCash. Möjliga värden för "
-"inställningen är \"lokal\" för att använda systemets lokalinställning, \"ce"
-"\" för kontinentaleuropeisk stil, \"iso\" för ISO 8601-standard, \"uk\" för "
-"brittisk stil, och \"us\" för amerikansk stil."
+"inställningen är \"Lokal\" för att använda systemets lokalinställning, "
+"\"Europa\" för kontinentaleuropeisk stil, \"ISO\" för ISO 8601-standard, "
+"\"Storbritannien\" för brittisk stil, och \"USA\" för amerikansk stil."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:165
 #: gnucash/gtkbuilder/dialog-preferences.glade:1122
@@ -12346,10 +12328,10 @@ msgid ""
 msgstr ""
 "Inställningen väljer filnamn för PDF-export. Detta är en sprintf(3)-sträng "
 "med tre argument: \"%1$s\" är rapportens namn; t.ex. \"Faktura\". \"%2$s\" "
-"är rapportens nummer, vilket för en fakturarapport är fakturanumret. \"%3$s"
-"\" är rapportens datum, formaterat enligt inställningen filnamnsdatumformat. "
-"(Obs: Tecken som inte tillåts i filnamn, som '/', kommer att ersättas med "
-"understreck ('_') i resulterande filnamn.)"
+"är rapportens nummer, vilket för en fakturarapport är fakturanumret. \"%3$s\""
+" är rapportens datum, formaterat enligt inställningen filnamnsdatumformat. "
+"Obs: Tecken som inte tillåts i filnamn, som '/', kommer att ersättas med "
+"understreck ('_') i resulterande filnamn."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:384
 msgid "PDF export file name date format choice"
@@ -12595,43 +12577,30 @@ msgstr ""
 "och kan leda till problem vid framtida avstämningar."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:69
-#, fuzzy
-#| msgid "Remove a split from a transaction"
 msgid "Cut a split from a transaction"
 msgstr "Ta bort en del från en transaktion"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:70
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to remove a split from a "
-#| "transaction."
 msgid ""
 "This dialog is presented before allowing you to cut a split from a "
 "transaction."
 msgstr ""
-"Den här dialogrutan visas innan du tillåts att ta bort en delning från en "
+"Den här dialogrutan visas innan du tillåts att ta bort en del från en "
 "transaktion."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:74
-#, fuzzy
-#| msgid "Remove a reconciled split from a transaction"
 msgid "Cut a reconciled split from a transaction"
 msgstr "Ta bort en avstämd del från en transaktion"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:75
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to remove a reconciled split "
-#| "from a transaction. Doing so will throw off the reconciled value of the "
-#| "register and can make it hard to perform future reconciliations."
 msgid ""
 "This dialog is presented before allowing you to cut a reconciled split from "
 "a transaction. Doing so will throw off the reconciled value of the register "
 "and can make it hard to perform future reconciliations."
 msgstr ""
-"Den här dialogrutan visas innan du tillåts att ta bort en avstämd delning "
-"från en transaktion. Att göra det skulle ändra det avstämda värdet för "
-"registret och kan leda till problem vid framtida avstämningar."
+"Den här dialogrutan visas innan du tillåts att ta bort en avstämd del från "
+"en transaktion. Att göra det skulle ändra det avstämda värdet för registret "
+"och kan leda till problem vid framtida avstämningar."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:79
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:192
@@ -12693,37 +12662,25 @@ msgstr ""
 "avstämningar."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:99
-#, fuzzy
-#| msgid "_Cut Transaction"
 msgid "Cut a transaction"
 msgstr "Ta _bort transaktion"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:100
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to delete a transaction."
 msgid "This dialog is presented before allowing you to cut a transaction."
 msgstr "Den här dialogrutan visas innan du tillåts att ta bort en transaktion."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
-#, fuzzy
-#| msgid "Delete a transaction with reconciled splits"
 msgid "Cut a transaction with reconciled splits"
 msgstr "Ta bort en transaktion med avstämda delar"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:105
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to delete a transaction that "
-#| "contains reconciled splits. Doing so will throw off the reconciled value "
-#| "of the register and can make it hard to perform future reconciliations."
 msgid ""
 "This dialog is presented before allowing you to cut a transaction that "
 "contains reconciled splits. Doing so will throw off the reconciled value of "
 "the register and can make it hard to perform future reconciliations."
 msgstr ""
 "Den här dialogrutan visas innan du tillåts att radera en transaktion som "
-"innehåller avstämda delningar. Det skulle ändra det avstämda värdet för "
+"innehåller avstämda delar. Det skulle ändra det avstämda värdet för "
 "registret och leda till problem vid framtida avstämningar."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:109
@@ -13026,7 +12983,6 @@ msgid "Choose File to Import"
 msgstr "Välj en fil att importera"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:111
-#, fuzzy
 msgid "Number of rows for the Header"
 msgstr "Antal rader för rubriken"
 
@@ -14035,7 +13991,7 @@ msgstr "... använda ett depositionskonto för betalningar?"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:504
 msgid "Escrow Account"
-msgstr "Depositionskonto:"
+msgstr "Depositionskonto"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:540
 msgid "Loan Repayment Options"
@@ -15121,7 +15077,6 @@ msgstr "_Skatterelaterad"
 
 #. Translators: use the same words here as in 'Ta_x Report Options'.
 #: gnucash/gtkbuilder/dialog-account.glade:1501
-#, fuzzy
 msgid ""
 "Use Edit->Tax Report Options to set the tax-related flag and assign a tax "
 "code to this account."
@@ -15297,7 +15252,7 @@ msgstr "Öppna importerade dokument i flikar"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:392
 msgid "Open not yet posted documents in tabs "
-msgstr "Öppna ej ännu registrerade dokument i flikar"
+msgstr "Öppna ej ännu registrerade dokument i flikar "
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:410
 msgid "Don't open imported documents in tabs"
@@ -15350,7 +15305,6 @@ msgid "Discount Day"
 msgstr "Rabattdag"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:249
-#, fuzzy
 msgid "Cutoff Day"
 msgstr "Sista bankdag"
 
@@ -15510,11 +15464,6 @@ msgstr ""
 "\"Handelsbanken A\"."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:147
-#, fuzzy
-#| msgid ""
-#| "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
-#| "retrieving quotes online, this field must exactly match the ticker symbol "
-#| "used by the quote source (including case). "
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
@@ -15639,7 +15588,7 @@ msgid ""
 "you"
 msgstr ""
 "Kundens identifikationsnummer. Om fältet lämnas tomt kommer ett rimligt "
-"värde att väljas automatiskt."
+"värde att väljas automatiskt"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:256
 #: gnucash/gtkbuilder/dialog-customer.glade:786
@@ -16344,16 +16293,12 @@ msgid "Show _Memo column"
 msgstr "Visa _Minnesanteckningskolumn"
 
 #: gnucash/gtkbuilder/dialog-import.glade:963
-#, fuzzy
-#| msgid "Show _matched information"
 msgid "Show matched _information"
-msgstr "Visa _matchningsinformation"
+msgstr "Visa matchnings_information"
 
 #: gnucash/gtkbuilder/dialog-import.glade:978
-#, fuzzy
-#| msgid "Spend"
 msgid "A_ppend"
-msgstr "Spendera"
+msgstr "Lä_gg till"
 
 #: gnucash/gtkbuilder/dialog-import.glade:982
 msgid ""
@@ -16361,12 +16306,13 @@ msgid ""
 "Description and Notes to the matched Description and Notes instead of "
 "replacing them."
 msgstr ""
+"När en matchad transaktion uppdateras och clearas, lägg till den importerade "
+"beskrivningen och minnesanteckningen till matchad beskrivning och "
+"minnesanteckning istället för att ersätta dem."
 
 #: gnucash/gtkbuilder/dialog-import.glade:994
-#, fuzzy
-#| msgid "Reconcile after match"
 msgid "_Reconcile after match"
-msgstr "Stäm av efter matchning"
+msgstr "St_äm av efter matchning"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1017
 msgid "Generic import transaction matcher"
@@ -16395,7 +16341,6 @@ msgid "Default Chargeback Project"
 msgstr "Förvalt chargeback-projekt"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:562
-#, fuzzy
 msgid "Additional to Card"
 msgstr "Extra till kort"
 
@@ -16807,7 +16752,7 @@ msgstr "Använd _bokföringstermer i rubriker"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:613
 msgid "Use only 'debit' and 'credit' instead of informal synonyms."
-msgstr "Använd bara 'debet' och 'kredit' istället för informella synonymer"
+msgstr "Använd bara 'debet' och 'kredit' istället för informella synonymer."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:628
 msgid "<b>Labels</b>"
@@ -17196,15 +17141,13 @@ msgstr ""
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2291
-#, fuzzy
 msgid "Likely match _day threshold"
-msgstr "_Dagströskel för sannolik matchning"
+msgstr "_Dagtröskel för sannolik matchning"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2304
-#, fuzzy
 msgid "_Unlikely match day threshold"
-msgstr "Dagströskel för _osannolik matchning"
+msgstr "Dagtröskel för _osannolik matchning"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2318
 msgid ""
@@ -17670,7 +17613,6 @@ msgid "Last of _Quarter"
 msgstr "Sista i _kvartal"
 
 #: gnucash/gtkbuilder/dialog-price.glade:503
-#, fuzzy
 msgid ""
 "Keep the last price of each fiscal quarter if present before date. The "
 "fiscal quarter is derived from the accounting period end date."
@@ -17834,7 +17776,6 @@ msgid "Deluxe(tm) Personal Checks US-Letter"
 msgstr "Deluxe(tm) Personal Checks US-Letter"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:290
-#, fuzzy
 msgid "Quicken(tm) Wallet Checks w/ side stub"
 msgstr "Quicken(tm) plånbokscheckar m sido-stub"
 
@@ -18191,8 +18132,6 @@ msgid "Create the transaction this many days before its effective date."
 msgstr "Skapa transaktionen så här många dagar före dess egentliga datum."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-#, fuzzy
-#| msgid "_Notify before transactions are created "
 msgid "_Notify before transactions are created"
 msgstr "Avisera i_nnan transaktioner skapas"
 
@@ -18209,16 +18148,10 @@ msgid "R_emind in advance"
 msgstr "P_åminn i förväg"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:724
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "Re_view created transactions"
 msgstr "G_ranska skapade transaktioner"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:728
-#, fuzzy
-#| msgid ""
-#| "Set \"Review Created Transactions\" as the default for the \"since last "
-#| "run\" dialog."
 msgid ""
 "Set 'Review created transactions' as the default in the \"since last run\" "
 "dialog."
@@ -18859,7 +18792,7 @@ msgstr "4:e lör"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:406
 msgid "4th Sun"
-msgstr "4:e sön "
+msgstr "4:e sön"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:648
 msgid "Not scheduled"
@@ -19207,7 +19140,6 @@ msgid "S_tatement Date"
 msgstr "Kon_toutdragsdatum"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:905
-#, fuzzy
 msgid ""
 "Sort by the statement date (and group by cleared, unreconciled, reconciled)."
 msgstr ""
@@ -19462,31 +19394,6 @@ msgstr ""
 
 #. See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:47
-#, fuzzy
-#| msgid ""
-#| "The requirements for Online Banking vary between the different supported "
-#| "AqBanking backends, but usually you will need:\n"
-#| "* Your bank needs to grant you online access. See on their website or ask "
-#| "their customer service for how to obtain it.\n"
-#| "They should also tell you:\n"
-#| "* Your user ID that identifies you to their server, often your base "
-#| "account number;\n"
-#| "* The URL of their Online Banking server;\n"
-#| "* In some cases the routing number of your bank's branch is useful in "
-#| "this assistant;\n"
-#| "* Authentication methods vary by backend and choosen method:\n"
-#| " * FinTS PIN/TAN: Some methods require a specific gadget like a card "
-#| "reader or a mobile;\n"
-#| " * FinTS HBCI: You have to exchange the public parts of asymmetric keys "
-#| "with your bank (\"Ini-Letter\").\n"
-#| " * PayPal: registered email address, password, API signature;\n"
-#| "\n"
-#| "See https://wiki.gnucash.org/wiki/AqBanking for more details.\n"
-#| "\n"
-#| "Note: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented "
-#| "Online Banking server. You should not rely on time-critical transfers "
-#| "through Online Banking, because sometimes the bank does not give you "
-#| "correct feedback when a transfer is rejected."
 msgid ""
 "The requirements for Online Banking vary between the different supported "
 "AqBanking backends, but usually you will need:\n"
@@ -19535,7 +19442,6 @@ msgstr ""
 "en överföring nekas."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:71
-#, fuzzy
 msgid "Initial Online Banking Setup"
 msgstr "Inledande online-bankinställning"
 
@@ -19955,16 +19861,12 @@ msgid "Originator BIC (Bank Code)"
 msgstr "Betalarens BIC (Bankkod)"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:409
-#, fuzzy
-#| msgid "Enter a SEPA Online Transfer"
 msgid "Enter a SEPA Internal Transfer"
-msgstr "Ange en SEPA online-överföring"
+msgstr "Ange en SEPA intern överföring"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:430
-#, fuzzy
-#| msgid "Tax Accounts"
 msgid "Target Accounts"
-msgstr "Skattekonton"
+msgstr "Destinationskonton"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:441
 msgid "Enter a SEPA Online Direct Debit Note"
@@ -20134,10 +20036,8 @@ msgstr ""
 "överföringsdialogen. Vill du ändå spara ändringarna?"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:125
-#, fuzzy
-#| msgid "No valid account found"
 msgid "No reference accounts found."
-msgstr "Inget giltigt konto hittades"
+msgstr "Inga referenskonton hittades."
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:206
 msgid ""
@@ -20172,10 +20072,8 @@ msgid "Online Banking European (SEPA) Transfer"
 msgstr "Online-bank europeisk överföring (SEPA)"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:248
-#, fuzzy
-#| msgid "Online Banking European (SEPA) Transfer"
 msgid "Online Banking European (SEPA) Internal Transfer"
-msgstr "Online-bank europeisk överföring (SEPA)"
+msgstr "Online-bank europeisk intern överföring (SEPA)"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:254
 msgid "Online Banking European (SEPA) Debit Note"
@@ -20424,22 +20322,14 @@ msgstr ""
 "bank"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:120
-#, fuzzy
-#| msgid "Issue _SEPA Transaction..."
 msgid "Issue SEPA I_nternal Transaction..."
-msgstr "Skicka _SEPA-transaktion..."
+msgstr "Skicka SEPA i_ntern transaktion..."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:121
-#, fuzzy
-#| msgid ""
-#| "Issue a new international European (SEPA) transaction online through "
-#| "Online Banking"
 msgid ""
 "Issue a new internal European (SEPA) transaction online through Online "
 "Banking"
-msgstr ""
-"Skicka en ny internationell europeisk transaktion (SEPA) online via online-"
-"bank"
+msgstr "Skicka en ny intern europeisk (SEPA) transaktion online via online-bank"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:125
 msgid "_Internal Transaction..."
@@ -21740,16 +21630,14 @@ msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "Ny, OBALANSERAD (behöver konto för överföring %s)!"
 
 #: gnucash/import-export/import-main-matcher.c:1616
-#, fuzzy, c-format
-#| msgid "Reconcile (manual) match"
+#, c-format
 msgid "Reconcile (manual) match to %s"
-msgstr "Stäm av (manuell) matchning"
+msgstr "Stäm av (manuell) matchning till %s"
 
 #: gnucash/import-export/import-main-matcher.c:1621
-#, fuzzy, c-format
-#| msgid "Reconcile (auto) match"
+#, c-format
 msgid "Reconcile (auto) match to %s"
-msgstr "Stäm av (automatisk) matchning"
+msgstr "Stäm av (automatisk) matchning till %s"
 
 #: gnucash/import-export/import-main-matcher.c:1630
 #: gnucash/import-export/import-main-matcher.c:1660
@@ -21757,16 +21645,14 @@ msgid "Match missing!"
 msgstr "Matchning saknas!"
 
 #: gnucash/import-export/import-main-matcher.c:1646
-#, fuzzy, c-format
-#| msgid "Update and reconcile (manual) match"
+#, c-format
 msgid "Update and reconcile (manual) match to %s"
-msgstr "Uppdatera och stäm av (manuell) matchning"
+msgstr "Uppdatera och stäm av (manuell) matchning till %s"
 
 #: gnucash/import-export/import-main-matcher.c:1651
-#, fuzzy, c-format
-#| msgid "Update and reconcile (auto) match"
+#, c-format
 msgid "Update and reconcile (auto) match to %s"
-msgstr "Uppdatera och stäm av (automatisk) matchning"
+msgstr "Uppdatera och stäm av (automatisk) matchning till %s"
 
 #: gnucash/import-export/import-main-matcher.c:1668
 msgid "Do not import (no action selected)"
@@ -21871,6 +21757,8 @@ msgid ""
 "While importing transactions from OFX file '%s' found %d previously imported "
 "transactions, no new transactions."
 msgstr ""
+"Vid transaktionsimport från OFX-fil '%s' hittades %d tidigare importerade "
+"transaktioner, inga nya transaktioner."
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1378
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
@@ -22127,7 +22015,7 @@ msgstr "Realisationsvinster (kort)"
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:189
 #: libgnucash/app-utils/gnc-ui-util.c:953
 msgid "Retained Earnings"
-msgstr "Balanserade vinster"
+msgstr "Balanserade vinstmedel"
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:118
 msgid "Commissions"
@@ -22698,14 +22586,12 @@ msgid "Unknown EntryLedger Type"
 msgstr "Okänd EntryLedger-typ"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-#, fuzzy
-#| msgid "The subtotal value of this entry "
 msgid "The subtotal value of this entry"
-msgstr "Delsumman för denna post "
+msgstr "Delsumman för denna post"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
 msgid "The total tax of this entry "
-msgstr "Postens totala skatt"
+msgstr "Postens totala skatt "
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:783
 msgid "Is this entry billable to a customer or job?"
@@ -22913,55 +22799,49 @@ msgid "Scheduled"
 msgstr "Schemalagd"
 
 #: gnucash/register/ledger-core/split-register-model.c:1067
-#, fuzzy
 msgid ""
 "Enter a reference, such as an invoice or check number, common to all entry "
 "lines (splits)"
 msgstr ""
 "Mata in en referens, t.ex. faktura- eller checknummer, gemensamt för alla "
-"rader i posten (delningar)"
+"rader i posten (delar)"
 
 #: gnucash/register/ledger-core/split-register-model.c:1069
-#, fuzzy
 msgid ""
 "Enter a reference, such as an invoice or check number, unique to each entry "
 "line (split)"
 msgstr ""
 "Mata in en referens, t.ex. faktura- eller checknummer, unikt för varje rad i "
-"posten (delning)"
+"posten (del)"
 
 #: gnucash/register/ledger-core/split-register-model.c:1074
-#, fuzzy
 msgid ""
 "Enter a reference, such as a check number, common to all entry lines (splits)"
 msgstr ""
 "Mata in en referens, t.ex. faktura- eller checknummer, gemensamt för alla "
-"rader i posten (delningar)"
+"rader i posten (delar)"
 
 #: gnucash/register/ledger-core/split-register-model.c:1076
-#, fuzzy
 msgid ""
 "Enter a reference, such as a check number, unique to each entry line (split)"
 msgstr ""
 "Mata in en referens, t.ex. faktura- eller checknummer, unikt för varje rad i "
-"posten (delning)"
+"posten (del)"
 
 #: gnucash/register/ledger-core/split-register-model.c:1097
-#, fuzzy
 msgid ""
 "Enter a transaction reference, such as an invoice or check number, common to "
 "all entry lines (splits)"
 msgstr ""
 "Mata in en transaktionsreferens, t.ex. faktura- eller checknummer, gemensamt "
-"för alla rader i posten (delningar)"
+"för alla rader i posten (delar)"
 
 #: gnucash/register/ledger-core/split-register-model.c:1101
-#, fuzzy
 msgid ""
 "Enter a transaction reference that will be common to all entry lines (splits)"
 msgstr ""
 "Mata in en transaktionsreferens som kommer att vara gemensam för alla rader "
-"i posten (delningar)"
+"i posten (delar)"
 
 #: gnucash/register/ledger-core/split-register-model.c:1306
 msgid "Enter an action type, or choose one from the list"
@@ -23095,7 +22975,6 @@ msgid "Display negative values in red."
 msgstr "Visa negativa belopp i rött."
 
 #: gnucash/report/html-fonts.scm:126
-#, fuzzy
 msgid "Number header"
 msgstr "Rubrik för nummer"
 
@@ -23272,7 +23151,6 @@ msgid "Weighted average of all transactions in the past"
 msgstr "Viktat genomsnitt av alla transaktioner i det förflutna"
 
 #: gnucash/report/options-utilities.scm:146
-#, fuzzy
 msgid "Last up through report date"
 msgstr "Sista upp till och med rapportdatum"
 
@@ -23593,7 +23471,7 @@ msgid "Address Email"
 msgstr "Adress e-post"
 
 #: gnucash/report/reports/aging.scm:205
-#, fuzzy, scheme-format
+#, scheme-format
 msgid ""
 "Transactions relating to '~a' contain more than one currency. This report is "
 "not designed to cope with this possibility."
@@ -23618,9 +23496,8 @@ msgstr "Total skuld eller fordring till företaget"
 
 #: gnucash/report/reports/aging.scm:350
 #: gnucash/report/reports/standard/new-aging.scm:97
-#, fuzzy
 msgid "Bracket Total Owed"
-msgstr "Parentes summa skuld"
+msgstr "Total skuld"
 
 #: gnucash/report/reports/aging.scm:357
 #: gnucash/report/reports/standard/new-aging.scm:101
@@ -24105,8 +23982,8 @@ msgid ""
 "This is for testing. Your reports probably shouldn't have an option like "
 "this."
 msgstr ""
-"Detta är bara för testning. Dina rapporter ska troligen inte\n"
-"ha ett sånt här alternativ."
+"Detta är bara för testning. Dina rapporter ska troligen inte ha ett sånt här "
+"alternativ."
 
 #: gnucash/report/reports/example/hello-world.scm:192
 msgid "This is a Radio Button option."
@@ -24262,7 +24139,6 @@ msgid "Bar, stacked:"
 msgstr "Stapel, staplat:"
 
 #: gnucash/report/reports/example/sample-graphs.scm:157
-#, fuzzy
 msgid "Scatter:"
 msgstr "Spridning:"
 
@@ -24412,7 +24288,6 @@ msgid "This page shows your Taxable Income and Deductible Expenses."
 msgstr "Denna sida visar din taxerbara inkomst och avdragsgilla utgifter."
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:119
-#, fuzzy
 msgid "Tax Schedule Report/TXF Export"
 msgstr "Skattschemarapport/TXF-export"
 
@@ -24749,12 +24624,10 @@ msgstr ""
 "djupgränsen."
 
 #: gnucash/report/reports/standard/account-summary.scm:97
-#, fuzzy
 msgid "Raise accounts deeper than the depth limit to the depth limit."
 msgstr "Ta fram konton djupare än djupgränsen till djupgränsen."
 
 #: gnucash/report/reports/standard/account-summary.scm:98
-#, fuzzy
 msgid "Omit any accounts deeper than the depth limit."
 msgstr "Undanta alla konton djupare än djupgränsen."
 
@@ -24827,7 +24700,6 @@ msgstr "Visa regler i bokföringsstil"
 #: gnucash/report/reports/standard/budget-income-statement.scm:96
 #: gnucash/report/reports/standard/equity-statement.scm:75
 #: gnucash/report/reports/standard/income-statement.scm:83
-#, fuzzy
 msgid "Use rules beneath columns of added numbers like accountants do."
 msgstr "Använd regler under kolumner av adderade nummer som revisorer gör."
 
@@ -25110,7 +24982,6 @@ msgid "Total Gain"
 msgstr "Total vinst"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1068
-#, fuzzy
 msgid "Rate of Gain"
 msgstr "Vinstandel"
 
@@ -25182,17 +25053,14 @@ msgstr "Reservbeloppet är satt till det minsta önskade saldot"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:59
 #: gnucash/report/reports/standard/balance-forecast.scm:60
-#, fuzzy
 msgid "Show target line"
 msgstr "Visa rad för riktbelopp"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:62
-#, fuzzy
 msgid "Target amount above reserve"
 msgstr "Riktbelopp över reserv"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:63
-#, fuzzy
 msgid ""
 "The target is used to plan for a future large purchase, which will be added "
 "as a line above the reserve amount."
@@ -25213,7 +25081,6 @@ msgstr ""
 "minsta saldo inklusive schemalagda transaktioner."
 
 #: gnucash/report/reports/standard/balance-forecast.scm:256
-#, fuzzy
 msgid "Target"
 msgstr "Riktbelopp"
 
@@ -25423,7 +25290,6 @@ msgid "Font family"
 msgstr "Teckensnittsfamilj"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:166
-#, fuzzy
 msgid "Font definition in CSS font-family format."
 msgstr "Teckensnittsdefinition i CSS font-family-format."
 
@@ -25432,10 +25298,8 @@ msgid "Font size"
 msgstr "Teckenstorlek"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:168
-#, fuzzy
 msgid "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\")."
-msgstr ""
-"Teckenstorlek i CSS font-size-format (t.ex. \"medium\" eller \"10pt\")."
+msgstr "Teckenstorlek i CSS font-size-format (t.ex. \"medium\" eller \"10pt\")."
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:169
 #: gnucash/report/reports/standard/receipt.scm:44
@@ -25485,15 +25349,15 @@ msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:218
 msgid "Adjust the layout to fit the width of the screen or page"
-msgstr "Justera layouten till att passa skärmens eller sidans bredd."
+msgstr "Justera layouten till att passa skärmens eller sidans bredd"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:219
 msgid "Display liabilities and equity below assets"
-msgstr "Visa skulder och kapital nedanför tillgångar."
+msgstr "Visa skulder och kapital nedanför tillgångar"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:220
 msgid "Display assets on the left, liabilities and equity on the right"
-msgstr "Visa tillgångar till vänster, skulder och kapital till höger."
+msgstr "Visa tillgångar till vänster, skulder och kapital till höger"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:224
 msgid "Sign: -$10.00"
@@ -25723,12 +25587,10 @@ msgid "Net Income"
 msgstr "Nettoinkomst"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1287
-#, fuzzy
 msgid "Balance Sheet (Multicolumn)"
 msgstr "Balansräkning (Multikolumn)"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1288
-#, fuzzy
 msgid "Income Statement (Multicolumn)"
 msgstr "Inkomstutdrag (Multikolumn)"
 
@@ -26128,7 +25990,6 @@ msgid "Show Column with Totals"
 msgstr "Visa kolumn med summor"
 
 #: gnucash/report/reports/standard/budget.scm:60
-#, fuzzy
 msgid "Display a column with the row totals."
 msgstr "Visa en kolumn med summerade rader."
 
@@ -26297,22 +26158,18 @@ msgid "Liability Chart"
 msgstr "Skulddiagram"
 
 #: gnucash/report/reports/standard/category-barchart.scm:49
-#, fuzzy
 msgid "Shows a chart with the Income per interval developing over time"
 msgstr "Visar ett diagram med inkomst per intervall över tid"
 
 #: gnucash/report/reports/standard/category-barchart.scm:52
-#, fuzzy
 msgid "Shows a chart with the Expenses per interval developing over time"
 msgstr "Visar ett diagram med utgifter per intervall över tid"
 
 #: gnucash/report/reports/standard/category-barchart.scm:55
-#, fuzzy
 msgid "Shows a chart with the Assets developing over time"
 msgstr "Visar ett diagram med tillgångar över tid"
 
 #: gnucash/report/reports/standard/category-barchart.scm:57
-#, fuzzy
 msgid "Shows a chart with the Liabilities developing over time"
 msgstr "Visar ett diagram med skulder över tid"
 
@@ -26543,16 +26400,12 @@ msgid "Withdrawals"
 msgstr "Uttag"
 
 #: gnucash/report/reports/standard/equity-statement.scm:474
-#, fuzzy
-#| msgid "Unrealized Gains"
 msgid "Unrealized Gains for Period"
-msgstr "Orealiserade vinster"
+msgstr "Orealiserade vinster för period"
 
 #: gnucash/report/reports/standard/equity-statement.scm:475
-#, fuzzy
-#| msgid "Unrealized Losses"
 msgid "Unrealized Losses for Period"
-msgstr "Orealiserade förluster"
+msgstr "Orealiserade förluster för period"
 
 #: gnucash/report/reports/standard/equity-statement.scm:481
 msgid "Increase in capital"
@@ -26689,18 +26542,15 @@ msgid "Secondary Sort Order"
 msgstr "Sekundär sorteringsordning"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:39
-#, fuzzy
 msgid "Income and GST Statement"
-msgstr "Inkomst- och MOMS-utdrag"
+msgstr "Inkomst- och GST-utdrag"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:41
 #: gnucash/report/trep-engine.scm:109
-#, fuzzy
 msgid "Filter"
 msgstr "Filter"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:48
-#, fuzzy
 msgid ""
 "This report is useful to calculate periodic business tax payable/receivable "
 "from authorities. From 'Edit report options', choose your business sales and "
@@ -26716,7 +26566,6 @@ msgstr ""
 "Fordringar 1100 kr, Skuld:GST på försäljning -100 kr."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:56
-#, fuzzy
 msgid ""
 "These tax accounts can either be populated using the standard register, or "
 "from Business Invoices and Bills which will require Tax Tables to be set up "
@@ -26727,7 +26576,6 @@ msgstr ""
 "konfigurerade. Se dokumentationen."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:60
-#, fuzzy
 msgid ""
 "From the Report Options, you will need to select the accounts which will "
 "hold the GST/VAT taxes collected or paid. These accounts must contain splits "
@@ -26736,15 +26584,14 @@ msgid ""
 "ASSET for taxes paid on expenses, and type LIABILITY for taxes collected on "
 "sales."
 msgstr ""
-"Från Rapportalternativen behöver du välja vilka konton som ska innehålla GST/"
-"MOMS-skatter, insamlade eller inbetalda. Dessa konton måste innehålla "
+"Från Rapportalternativen behöver du välja vilka konton som ska innehålla "
+"GST-/MOMS-skatter, insamlade eller inbetalda. Dessa konton måste innehålla "
 "delningar som dokumenterar pengarna som skickas i helhet eller begärs från "
-"skattemyndigheter under periodiska GST/MOMS-deklarationer. Dessa konton "
+"skattemyndigheter under periodiska GST-/MOMS-deklarationer. Dessa konton "
 "måste vara av typen TILLGÅNG för skatter betalade för utgifter, och typen "
 "SKULD för skatter som tas ut på försäljning."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:66
-#, fuzzy
 msgid ""
 "Note the UK variant may specify EU VAT accounts may be tagged with *EUVAT* "
 "in the VAT account description. EU Goods sales and purchase accounts may be "
@@ -26802,12 +26649,10 @@ msgstr "Visar nettosaldot (försäljning utan skatter - inköp utan skatter)"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:117
 #: gnucash/report/reports/standard/income-gst-statement.scm:367
-#, fuzzy
 msgid "Tax payable"
 msgstr "Skatt att betala"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:118
-#, fuzzy
 msgid "Display the tax payable (tax on sales - tax on purchases)"
 msgstr "Visar skattebelopp att betala (skatt på försäljning - skatt på inköp)"
 
@@ -26820,7 +26665,6 @@ msgid "Tax Accounts"
 msgstr "Skattekonton"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:147
-#, fuzzy
 msgid ""
 "Please find and select the accounts which will hold the tax collected or "
 "paid. These accounts must contain splits which document the monies which are "
@@ -26854,7 +26698,6 @@ msgstr ""
 "och skattekonton."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:165
-#, fuzzy
 msgid ""
 "UK VAT Return. Specify sales, purchase and tax accounts. EU rules may be "
 "used. Denote EU VAT accounts *EUVAT* in account description, and denote EU "
@@ -26862,8 +26705,8 @@ msgid ""
 msgstr ""
 "Brittisk VAT-deklaration. Specificera försäljnings-, inköps- och "
 "skattekonton. EU-regler kan användas. Märk EU VAT-konton *EUVAT* i kontots "
-"beskrivning, och märk EU (varu-) försäljnings- och inköpskonton med "
-"*EUGOODS* i kontots beskrivning."
+"beskrivning, och märk EU (varu-) försäljnings- och inköpskonton med *EUGOODS*"
+" i kontots beskrivning."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:172
 msgid "Australia BAS"
@@ -26905,7 +26748,6 @@ msgid "Label the trading accounts section"
 msgstr "Märk avsnitt för handelskonton"
 
 #: gnucash/report/reports/standard/income-statement.scm:96
-#, fuzzy
 msgid "Whether or not to include a label for the trading accounts section."
 msgstr "Huruvida en etikett ska användas för avsnittet för handelskonton."
 
@@ -26935,7 +26777,7 @@ msgstr "Inkomstutdrag"
 
 #: gnucash/report/reports/standard/income-statement.scm:572
 msgid "Profit & Loss"
-msgstr "Förtjänst & förlust"
+msgstr "Vinst & förlust"
 
 #: gnucash/report/reports/standard/invoice.scm:102
 #: gnucash/report/reports/standard/invoice.scm:234
@@ -27490,7 +27332,7 @@ msgid "Please note some transactions were not processed"
 msgstr "Observera att vissa transaktioner inte behandlades"
 
 #: gnucash/report/reports/standard/new-aging.scm:362
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Invalid Txn Type ~a"
 msgstr "Ogiltig txn-typ ~a"
 
@@ -27585,9 +27427,8 @@ msgstr "Länkade detaljer"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:497
 #: gnucash/report/reports/standard/owner-report.scm:463
-#, fuzzy
 msgid "Period Totals"
-msgstr "Periodiska summor"
+msgstr "Periodsummor"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:510
 msgid ""
@@ -27744,7 +27585,6 @@ msgid "Actual Transactions"
 msgstr "Faktiska transaktioner"
 
 #: gnucash/report/reports/standard/price-scatter.scm:88
-#, fuzzy
 msgid "Plot commodity per currency rather than currency per commodity."
 msgstr "Plotta produkt per valuta istället för valuta per produkt."
 
@@ -28020,7 +27860,6 @@ msgid "Lot"
 msgstr "Parti"
 
 #: gnucash/report/reports/standard/register.scm:160
-#, fuzzy
 msgid "Debit Value"
 msgstr "Debetvärde"
 
@@ -28263,7 +28102,6 @@ msgstr ""
 "på samma sätt."
 
 #: gnucash/report/reports/standard/taxinvoice.scm:158
-#, fuzzy
 msgid "Border-collapse?"
 msgstr "Fäll ihop ram?"
 
@@ -28305,19 +28143,16 @@ msgid "Unit"
 msgstr "Enhet"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:303
-#, fuzzy
 msgid "GST Rate"
-msgstr "MOMS-sats"
+msgstr "GST-sats"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:304
-#, fuzzy
 msgid "GST Amount"
-msgstr "MOMS-belopp"
+msgstr "GST-belopp"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:305
-#, fuzzy
 msgid "Amount Due (inc GST)"
-msgstr "Belopp att betala (inkl MOMS)"
+msgstr "Belopp att betala (inkl GST)"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:306
 msgid "Invoice #: "
@@ -28384,7 +28219,6 @@ msgstr ""
 "inventariekonton här."
 
 #: gnucash/report/reports/standard/trial-balance.scm:87
-#, fuzzy
 msgid "Income summary accounts"
 msgstr "Inkomstsummeringskonton"
 
@@ -28399,32 +28233,26 @@ msgstr ""
 "merchandising-företag."
 
 #: gnucash/report/reports/standard/trial-balance.scm:92
-#, fuzzy
 msgid "Adjusting Entries pattern"
 msgstr "Justerande postmönster"
 
 #: gnucash/report/reports/standard/trial-balance.scm:94
-#, fuzzy
 msgid "Any text in the Description column which identifies adjusting entries."
 msgstr "Text i beskrivningskolumnen som identifierar justerande poster."
 
 #: gnucash/report/reports/standard/trial-balance.scm:96
-#, fuzzy
 msgid "Adjusting Entries pattern is case-sensitive"
 msgstr "Justerande postmönster är skiftlägeskänsligt"
 
 #: gnucash/report/reports/standard/trial-balance.scm:98
-#, fuzzy
 msgid "Causes the Adjusting Entries Pattern match to be case-sensitive."
 msgstr "Gör att Justerande postmönstermatching blir skiftlägeskänsligt."
 
 #: gnucash/report/reports/standard/trial-balance.scm:100
-#, fuzzy
 msgid "Adjusting Entries Pattern is regular expression"
 msgstr "Justerande postmönster är ett regeluttryck"
 
 #: gnucash/report/reports/standard/trial-balance.scm:102
-#, fuzzy
 msgid ""
 "Causes the Adjusting Entries Pattern to be treated as a regular expression."
 msgstr "Gör att Justerande postmönster behandlas som ett regeluttryck."
@@ -28438,7 +28266,6 @@ msgid "No adjusting/closing entries"
 msgstr "Inga justerande/avslutande poster"
 
 #: gnucash/report/reports/standard/trial-balance.scm:205
-#, fuzzy
 msgid "Full end-of-period work sheet"
 msgstr "Fullständigt kalkylark för periodslut"
 
@@ -28967,15 +28794,14 @@ msgstr "Som standard kommer GnuCash-versionen att visas innan rapportdatan."
 #: gnucash/report/stylesheets/head-or-tail.scm:536
 #: gnucash/report/stylesheets/head-or-tail.scm:543
 msgid "Report Creation Date: "
-msgstr "Rapportens skapelsedatum:"
+msgstr "Rapportens skapelsedatum: "
 
 #: gnucash/report/stylesheets/head-or-tail.scm:551
 msgid "GnuCash "
-msgstr "GnuCash"
+msgstr "GnuCash "
 
 #: gnucash/report/stylesheets/head-or-tail.scm:566
 #: gnucash/report/stylesheets/head-or-tail.scm:570
-#, fuzzy
 msgid "Head or Tail"
 msgstr "Ledande eller följande"
 
@@ -29020,10 +28846,8 @@ msgid "Add indenting columns"
 msgstr "Lägg till indragskolumner"
 
 #: gnucash/report/trep-engine.scm:97
-#, fuzzy
-#| msgid "Sa_ve Filter"
 msgid "Date Filter"
-msgstr "Spa_ra filter"
+msgstr "Datumfilter"
 
 #: gnucash/report/trep-engine.scm:98
 msgid "Table for Exporting"
@@ -29083,7 +28907,7 @@ msgstr "Använd ingen filtrering"
 
 #: gnucash/report/trep-engine.scm:343
 msgid "Include Transactions to/from Filter Accounts"
-msgstr "Inkludera transaktioner till/från filterkonton."
+msgstr "Inkludera transaktioner till/från filterkonton"
 
 #: gnucash/report/trep-engine.scm:346
 msgid "Exclude Transactions to/from Filter Accounts"
@@ -29135,7 +28959,7 @@ msgstr "Använd global inställning"
 
 #: gnucash/report/trep-engine.scm:412
 msgid "Don't change any displayed amounts"
-msgstr "Ändra inga visade belopp."
+msgstr "Ändra inga visade belopp"
 
 #: gnucash/report/trep-engine.scm:415
 msgid "Income and Expense"
@@ -29147,7 +28971,7 @@ msgstr "Kreditkonton"
 
 #: gnucash/report/trep-engine.scm:518
 msgid "Specify date to filter by..."
-msgstr ""
+msgstr "Ange datum att filtrera efter..."
 
 #: gnucash/report/trep-engine.scm:527
 msgid "Convert all transactions into a common currency."
@@ -29183,7 +29007,7 @@ msgstr ""
 "true för att aktivera fullständig funktionalitet för POSIX-regeluttryck. "
 "\"Bil|Flyg\" kommer att matcha både Utgifter:Bil och Utgifter:Flyg. Använd "
 "en punkt (.) för att matcha ett enstaka tecken t.ex. \"20../.\" kommer att "
-"matcha \"Resa 2017/1 London\"."
+"matcha \"Resa 2017/1 London\". "
 
 #: gnucash/report/trep-engine.scm:588
 msgid ""
@@ -29199,7 +29023,6 @@ msgstr ""
 "avaktivera filtret."
 
 #: gnucash/report/trep-engine.scm:597
-#, fuzzy
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
@@ -29208,7 +29031,7 @@ msgstr ""
 "Som standard kommer transaktionsfiltret endast att söka på substrängar. Sätt "
 "detta till true för att aktivera fullständig funktionalitet för POSIX-"
 "regeluttryck. \"#arbete|#familj\" kommer att matcha båda taggar i "
-"beskrivning, anteckningar eller minnesanteckning. "
+"beskrivning, anteckningar eller minnesanteckning."
 
 #: gnucash/report/trep-engine.scm:606
 msgid "If this option is selected, transactions matching filter are excluded."
@@ -29329,7 +29152,6 @@ msgid "Display the transaction linked document"
 msgstr "Visa transaktionens länkade dokument"
 
 #: gnucash/report/trep-engine.scm:942
-#, fuzzy
 msgid "Display a subtotal summary table."
 msgstr "Visa en sammanfattningstabell för delsummor."
 
@@ -29350,7 +29172,6 @@ msgstr ""
 "värdet på denna parameter.)"
 
 #: gnucash/report/trep-engine.scm:986
-#, fuzzy
 msgid "Amount of detail to display per transaction."
 msgstr "Detaljrikedom att visa per transaktion."
 
@@ -29994,7 +29815,7 @@ msgid "Error %d in SX [%s] final gnc_numeric value, using 0 instead."
 msgstr "Fel %d i SX [%s] sista gnc_numeric-värde, använder 0 istället."
 
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1799
-#, fuzzy, c-format
+#, c-format
 msgid "No exchange rate available in SX [%s] for %s -> %s, value is zero."
 msgstr "Ingen växelkurs tillgänglig i SX [%s] för %s -> %s, värdet är noll."
 
@@ -30012,7 +29833,6 @@ msgid "Tax-related but has no tax code"
 msgstr "Skatterelaterat men saknar skattekod"
 
 #: libgnucash/app-utils/gnc-ui-util.c:647
-#, fuzzy
 msgid "Tax entity type not specified"
 msgstr "Typ av skattepart inte specificerad"
 
@@ -30140,7 +29960,6 @@ msgid "Renamed to:"
 msgstr "Omdöpt till:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:673
-#, fuzzy
 msgid "Notice"
 msgstr "Observandum"
 
@@ -30299,7 +30118,6 @@ msgid "Value appears to contain a year while the selected format forbids this."
 msgstr "Värdet verkar innehålla ett år medan valt format förbjuder detta."
 
 #: libgnucash/engine/gnc-features.c:120
-#, fuzzy
 msgid ""
 "This Dataset contains features not supported by this version of GnuCash. You "
 "must use a newer version of GnuCash in order to support the following "
@@ -30310,7 +30128,6 @@ msgstr ""
 "följande funktioner:"
 
 #: libgnucash/engine/gncInvoice.c:1724
-#, fuzzy
 msgid "Extra to Charge Card"
 msgstr "Extra till betalkort"
 
@@ -30328,7 +30145,7 @@ msgstr " (avslutad)"
 
 #: libgnucash/engine/gncOwner.c:1015
 msgid "Offset between documents: "
-msgstr "Förskjutning mellan dokument:"
+msgstr "Förskjutning mellan dokument: "
 
 #: libgnucash/engine/gncOwner.c:1127
 msgid "Lot Link"
@@ -30425,12 +30242,11 @@ msgstr "%s %s"
 
 #. Translators: %d is the number of Recurrences in the list.
 #: libgnucash/engine/Recurrence.c:727
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown, %d-size list."
-msgstr "Okänd lista, storlek %d."
+msgstr "Okänd, lista med %d poster."
 
 #: libgnucash/engine/ScrubBusiness.c:549
-#, fuzzy
 msgid ""
 "Please delete this transaction. Explanation at https://wiki.gnucash.org/wiki/"
 "Business_Features_Issues#Double_posting"
@@ -30439,14 +30255,13 @@ msgstr ""
 "wiki/Business_Features_Issues#Double_posting"
 
 #: libgnucash/engine/ScrubBusiness.c:565
-#, fuzzy
 msgid ""
 "Please delete this transaction. Explanation at https://wiki.gnucash.org/wiki/"
 "Business_Features_Issues#I_can.27t_delete_a_transaction_of_type_.22I.22_from_the_AR.2FAP_account"
 msgstr ""
 "Var god radera denna transaktion. Förklaring på https://wiki.gnucash.org/"
-"wiki/"
-"Business_Features_Issues#I_can.27t_delete_a_transaction_of_type_.22I.22_from_the_AR.2FAP_account"
+"wiki/Business_Features_Issues#I_can.27t_delete_a_transaction_of_type_.22I."
+"22_from_the_AR.2FAP_account"
 
 #: libgnucash/engine/ScrubBusiness.c:617
 #, c-format
