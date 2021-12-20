@@ -9,10 +9,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-09-16 13:35+0000\n"
+"PO-Revision-Date: 2021-12-20 22:52+0000\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fi/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.10\n"
 "X-Poedit-Bookmarks: -1,-1,2060,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -2863,7 +2863,7 @@ msgstr ""
 #: gnucash/gnome/dialog-print-check.c:826
 #, c-format
 msgid "Cannot open file %s"
-msgstr ""
+msgstr "Ei voi avata tiedostoa %s"
 
 #: gnucash/gnome/dialog-print-check.c:1514
 msgid "There is a duplicate check format file."
@@ -2944,11 +2944,11 @@ msgstr "Sarakkeita"
 #: gnucash/gnome/dialog-report-style-sheet.c:172
 #, c-format
 msgid "HTML Style Sheet Properties: %s"
-msgstr ""
+msgstr "HTML-tyylitiedoston ominaisuudet: %s"
 
 #: gnucash/gnome/dialog-report-style-sheet.c:269
 msgid "You must provide a name for the new style sheet."
-msgstr ""
+msgstr "Anna nimi uudelle tyylitiedostolle."
 
 #: gnucash/gnome/dialog-report-style-sheet.c:520
 msgid "Style Sheet Name"
@@ -3133,7 +3133,7 @@ msgstr ""
 #: gnucash/gnome/dialog-sx-since-last-run.c:406
 #: gnucash/gnome/gnc-plugin-budget.c:168
 msgid "Created"
-msgstr ""
+msgstr "Luotu"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:469
 #: gnucash/gtkbuilder/dialog-preferences.glade:1733
@@ -3144,7 +3144,7 @@ msgstr "Ei koskaan"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:539
 msgid "(Need Value)"
-msgstr ""
+msgstr "(Tarvitsee arvon)"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:819
 msgid "Invalid Transactions"
@@ -3170,7 +3170,7 @@ msgstr "Tosite"
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:666
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:508
 msgid "Status"
-msgstr ""
+msgstr "Tila"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1108
 msgid "Created Transactions"
@@ -3191,7 +3191,7 @@ msgstr "Koodi"
 
 #: gnucash/gnome/dialog-tax-info.c:365
 msgid "now"
-msgstr ""
+msgstr "nyt"
 
 #: gnucash/gnome/dialog-tax-info.c:1184
 #: gnucash/gtkbuilder/dialog-tax-info.glade:89
