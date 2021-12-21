@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-12-19 13:53+0000\n"
+"PO-Revision-Date: 2021-12-21 15:52+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -17160,8 +17160,7 @@ msgstr "Imprimir formato da _data"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2416
 msgid "Below the actual date, print the format of that date in 8 point type."
-msgstr ""
-"Abaixo da data actual, imprimir o formato da data num tipo de 8 pontos."
+msgstr "Abaixo da data actual, imprimir o formato da data num tipo de 8 pontos."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2428
 msgid "Print _blocking chars"
