@@ -870,16 +870,6 @@ msgstr "שובר"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "משיכה (בתיבת דו שיח התאמות)"
 
-#, fuzzy
-#~ msgid "invoice owner"
-#~ msgstr "קבלה"
-
-#~ msgid "ticker"
-#~ msgstr "חַלּוֹן־מִבְזָקִים"
-
-#~ msgid "stock"
-#~ msgstr "מניה"
-
 msgid "stock"
 msgstr "מניות"
 
