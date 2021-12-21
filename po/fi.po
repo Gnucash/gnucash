@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-12-20 22:52+0000\n"
+"PO-Revision-Date: 2021-12-21 08:52+0000\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fi/>\n"
@@ -7506,7 +7506,7 @@ msgstr "Näytä piilotetut tilit"
 
 #: gnucash/gnome-utils/dialog-options.c:1535
 msgid "Show accounts that have been marked hidden."
-msgstr ""
+msgstr "Näytä tilit, jotka on merkitty piilotetuiksi."
 
 #: gnucash/gnome-utils/dialog-options.c:1638
 msgid "Select all entries."
@@ -8582,7 +8582,7 @@ msgstr "Tietokannan tallennus epäonnistui."
 
 #: gnucash/gnome-utils/gnc-main-window.c:2979
 msgid "Unable to save to database: Book is marked read-only."
-msgstr ""
+msgstr "Tietokantaa ei voi tallentaa: kirja on merkitty vain luku -muotoon."
 
 #: gnucash/gnome-utils/gnc-main-window.c:4324
 #: gnucash/gtkbuilder/assistant-qif-import.glade:975
@@ -15962,7 +15962,7 @@ msgstr ""
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2198
 msgid "Commercial ATM _fees threshold"
-msgstr ""
+msgstr "Kaupallisten pankkiautomaattien _kustannusten raja"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2212
@@ -15972,12 +15972,12 @@ msgstr ""
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2226
 msgid "Auto-_add threshold"
-msgstr "Lisää _raja automaattisest"
+msgstr "Lisää _raja automaattisesti"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2240
 msgid "Match _display threshold"
-msgstr "Näytä"
+msgstr "Täsmää _näytön rajaan"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2251
