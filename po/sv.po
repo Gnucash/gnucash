@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-12-20 05:52+0000\n"
+"PO-Revision-Date: 2021-12-22 04:51+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sv/>\n"
@@ -28200,7 +28200,6 @@ msgid "Kind of trial balance to generate."
 msgstr "Typ av råsaldo att generera."
 
 #: gnucash/report/reports/standard/trial-balance.scm:83
-#, fuzzy
 msgid "Merchandising"
 msgstr "Merchandising"
 
@@ -28209,14 +28208,13 @@ msgid "Gross adjustment accounts."
 msgstr "Bruttojusteringskonton."
 
 #: gnucash/report/reports/standard/trial-balance.scm:86
-#, fuzzy
 msgid ""
 "Do not net, but show gross debit/credit adjustments to these accounts. "
 "Merchandising businesses will normally select their inventory accounts here."
 msgstr ""
 "Utför inte netto, men visa bruttodebet-/-kreditjusteringar till dessa "
-"konton. Merchandising-företag kommer i normala fall välja sina "
-"inventariekonton här."
+"konton. Merchandising-företag kommer i normala fall välja sina lagerkonton "
+"här."
 
 #: gnucash/report/reports/standard/trial-balance.scm:87
 msgid "Income summary accounts"
@@ -28336,9 +28334,8 @@ msgid "Imbalance Amount"
 msgstr "Obalanserat belopp"
 
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:267
-#, fuzzy
 msgid "<strong>Exchange Rates</strong> used for this report"
-msgstr "<strong>Börskurser</strong> som används i rapporten"
+msgstr "<strong>Växelkurser</strong> som används i rapporten"
 
 #: gnucash/report/reports/support/receipt.eguile.scm:124
 msgid "Invoice No."
