@@ -425,12 +425,12 @@
 (define (gnc:html-js-include file)
   (format #f
           "<script language=\"javascript\" type=\"text/javascript\" src=~s></script>\n"
-          (make-uri (gnc-path-find-localized-html-file file))))
+          (make-uri (gnc-resolve-file-path file))))
 
 (define (gnc:html-css-include file)
   (format #f
-          "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///~a\" />\n"
-          (gnc-path-find-localized-html-file file)))
+          "<link rel=\"stylesheet\" type=\"text/css\" href=~s />\n"
+          (make-uri (gnc-resolve-file-path file))))
 
 
 
