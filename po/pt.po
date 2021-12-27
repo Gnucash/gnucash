@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-12-21 15:52+0000\n"
+"PO-Revision-Date: 2021-12-27 10:51+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10\n"
+"X-Generator: Weblate 4.10.1\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -1447,7 +1447,7 @@ msgstr ""
 #: gnucash/gnome/dialog-customer.c:341
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
 msgstr ""
-"A percentagem de desconto tem de ser entre 0 e 100, ou ficar em branco."
+"A percentagem de desconto tem de estar entre 0 e 100, ou ficar em branco."
 
 #: gnucash/gnome/dialog-customer.c:352
 msgid "Credit must be a positive amount or you must leave it blank."
@@ -2268,7 +2268,7 @@ msgstr "A factura tem de ter pelo menos uma entrada."
 
 #: gnucash/gnome/dialog-invoice.c:986
 msgid "Do you really want to post the invoice?"
-msgstr "Tem a certeza que quer emitir a factura?"
+msgstr "Deseja realmente emitir o documento?"
 
 #: gnucash/gnome/dialog-invoice.c:1004
 msgid ""
@@ -3896,7 +3896,7 @@ msgstr "Ver todos os documentos de negócios ligados"
 
 #: gnucash/gnome/gnc-plugin-business.c:283
 msgid "Sales _Tax Table"
-msgstr "_Tabela de imposto de vendas"
+msgstr "_Tabela de impostos sobre vendas"
 
 #: gnucash/gnome/gnc-plugin-business.c:284
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
@@ -4649,7 +4649,7 @@ msgstr "Nova _factura"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:302
 msgid "_Pay Invoice"
-msgstr "_Pagar factura"
+msgstr "_Receber factura"
 
 #. Translators: This is a menu item that opens a dialog for linking an
 #. external file or URL with the bill, invoice, transaction, or voucher or
@@ -4695,7 +4695,7 @@ msgstr "_Duplicar factura"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:320
 msgid "_Post Bill"
-msgstr "_Emitir factura"
+msgstr "_Emitir pagamento"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:321
 msgid "_Unpost Bill"
@@ -15258,7 +15258,7 @@ msgstr "Dias de desconto"
 #: gnucash/gtkbuilder/dialog-billterms.glade:98
 #: gnucash/gtkbuilder/dialog-billterms.glade:236
 msgid "Discount %"
-msgstr "Desconto em %"
+msgstr "% de desconto"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:112
 msgid "The percentage discount applied for early payment."
@@ -15303,7 +15303,7 @@ msgstr "A percentagem de desconto aplicada em caso de pagamento antecipado."
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:307
 msgid "The last day of the month for the early payment discount."
-msgstr "O último dia do mês para desconto de pagamento antecipado."
+msgstr "O último dia do mês para desconto por pagamento antecipado."
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:329
 msgid "The day of the month bills are due"
@@ -20603,11 +20603,11 @@ msgstr "Quantidade"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:154
 msgid "Disc-type"
-msgstr "Tipo-desconto"
+msgstr "Tipo de desconto"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:155
 msgid "Disc-how"
-msgstr "Desconto-como"
+msgstr "Desconto como"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:157
 #: gnucash/report/reports/standard/invoice.scm:100
@@ -29266,7 +29266,7 @@ msgstr "Morada da empresa"
 
 #: libgnucash/app-utils/business-options.scm:70
 msgid "Company ID"
-msgstr "ID da empresa"
+msgstr "NIF da empresa"
 
 #: libgnucash/app-utils/business-options.scm:71
 msgid "Company Phone Number"
