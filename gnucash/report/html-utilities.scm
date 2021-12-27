@@ -413,11 +413,14 @@
    (string->char-set ":/?#[]@")         ;gen-delims
    (string->char-set "-._~")))
 
+;;path must be absolute. On Windows an absolute path begins with a
+;;drive letter followed by a colon.
 (define (make-uri path)
-  (string-append
-   "file://"
-   (uri-encode (gnc:substring-replace path "\\" "/")
+  (let ((uri-path (uri-encode (gnc:substring-replace path "\\" "/")
                #:unescaped-chars unreserved-chars-rfc3986)))
+  (string-append
+   (if (char=? (string-ref uri-path 0) #\/) "file://" "file:///")
+   uri-path)))
 
 (define (gnc:html-js-include file)
   (format #f

@@ -25,7 +25,7 @@
   (test-begin "test-html-includes")
 
   (test-equal "windows path into rfc3986 uri"
-    "file://C:/Program%20Files%20%28x86%29/gnucash/share/gnucash/chartjs/Chart.bundle.min.js"
+    "file:///C:/Program%20Files%20%28x86%29/gnucash/share/gnucash/chartjs/Chart.bundle.min.js"
     (make-uri "C:\\Program Files (x86)\\gnucash/share\\gnucash\\chartjs/Chart.bundle.min.js"))
 
   (test-end "test-html-includes"))
