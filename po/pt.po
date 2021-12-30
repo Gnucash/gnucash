@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-12-28 10:53+0000\n"
+"PO-Revision-Date: 2021-12-30 17:52+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -2610,7 +2610,7 @@ msgstr[1] "São devidos os seguintes %d documentos de cliente:"
 
 #: gnucash/gnome/dialog-invoice.c:3732
 msgid "Due Invoices Reminder"
-msgstr "Lembrete de facturas devidas"
+msgstr "Aviso de facturas devidas"
 
 #: gnucash/gnome/dialog-job.c:139
 msgid "The Job must be given a name."
@@ -3920,11 +3920,11 @@ msgstr "Abrir o diálogo Lembrete de pagamentos devidos"
 
 #: gnucash/gnome/gnc-plugin-business.c:298
 msgid "Invoices _Due Reminder"
-msgstr "Lembrete de facturas _devidas"
+msgstr "Aviso de facturas _devidas"
 
 #: gnucash/gnome/gnc-plugin-business.c:299
 msgid "Open the Invoices Due Reminder dialog"
-msgstr "Abrir o diálogo Lembrete de facturas devidas"
+msgstr "Abrir o diálogo Aviso de facturas devidas"
 
 #: gnucash/gnome/gnc-plugin-business.c:302
 msgid "E_xport"
@@ -10561,7 +10561,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:117
 msgid "Show invoices due reminder at startup"
-msgstr "Mostrar lembrete de facturas devidas no arranque"
+msgstr "Mostrar aviso de facturas devidas no arranque"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:118
 msgid ""
@@ -19346,7 +19346,7 @@ msgstr "Código do banco %s (%s), conta %s (%s)"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.c:858
 msgid "Online Banking Account Name"
-msgstr "Nome de conta do Online Banking"
+msgstr "Nome de conta da banca em linha"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.c:863
 msgid "GnuCash Account Name"
@@ -19366,9 +19366,7 @@ msgstr "Assistente inicial do AqBanking"
 msgid ""
 "This assistant helps you setting up your Online Banking connection with your "
 "bank."
-msgstr ""
-"Este assistente ajuda a configurar a sua ligação Online Banking com o seu "
-"banco."
+msgstr "Este assistente ajuda a configurar a ligação à banca em linha."
 
 #. See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:47
@@ -19397,14 +19395,14 @@ msgid ""
 "Online Banking, because sometimes the bank does not give you correct "
 "feedback when a transfer is rejected."
 msgstr ""
-"Os requisitos para Online Banking variam entre os diferentes motores "
+"Os requisitos para a banca em linha variam entre os diferentes motores "
 "AqBanking suportados, mas normalmente será necessário:\n"
 "* acesso em linha concedido pelo seu banco. Veja no sítio web deles ou "
 "pergunte ao apoio ao cliente como o obter.\n"
 "Devem também dizer-lhe:\n"
 "* a sua ID de utilizador, que o identifica no servidor deles, muitas vezes o "
 "número da sua conta base;\n"
-"* o URL do servidor do seu Online Banking;\n"
+"* o URL do servidor da sua banca em linha;\n"
 "* nalguns casos, o número de encaminhamento da agência do seu banco é útil "
 "neste assistente;\n"
 "* os métodos de autenticação variam consoante o motor e o método escolhido:\n"
@@ -19418,12 +19416,12 @@ msgstr ""
 "\n"
 "Nota: SEM GARANTIAS PARA NADA. Alguns bancos gerem um servidor bancário em "
 "rede mal implementado. Não se deve confiar em transferências críticas com "
-"prazo através do Online Banking, porque por vezes o banco não lhe dá uma "
+"prazo através da banca em linha, porque por vezes o banco não lhe dá uma "
 "resposta correcta quando uma transferência é rejeitada."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:71
 msgid "Initial Online Banking Setup"
-msgstr "Configuração inicial do Online Banking"
+msgstr "Configuração inicial da banca em linha"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:90
 msgid ""
@@ -19433,8 +19431,8 @@ msgid ""
 "\n"
 "Please press the button below to start it."
 msgstr ""
-"A configuração da sua ligação Online Banking é gerida pelo programa externo "
-"\"Assistente de configuração do AqBanking\".\n"
+"A configuração da sua ligação à banca em linha é gerida pelo programa "
+"externo \"Assistente de configuração do AqBanking\".\n"
 "Tem de configurar pelo menos uma ligação antes de continuar.\n"
 "\n"
 "Por favor, clique no botão abaixo para iniciar esse programa."
@@ -19445,7 +19443,7 @@ msgstr "_Iniciar o assistente de configuração do AqBanking"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:121
 msgid "Start Online Banking Wizard"
-msgstr "Iniciar o assistente do Online Banking"
+msgstr "Iniciar o assistente da banca em linha"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:139
 msgid ""
@@ -19453,7 +19451,7 @@ msgid ""
 "match it to a GnuCash account or select incorrect matches and click \"Delete "
 "selected matches\". Click \"Next\" when all desired accounts are matching."
 msgstr ""
-"Faça duplo clique num nome de conta do Online Banking se a quiser fazer "
+"Faça duplo clique num nome de conta da banca em linha se a quiser fazer "
 "corresponder a uma conta do GnuCash ou seleccione as entradas incorrectas e "
 "clique em \"Eliminar entradas seleccionadas\". Clique em Avançar quando "
 "todas as contas desejadas estejam correspondidas."
@@ -19464,7 +19462,7 @@ msgstr "Eliminar entra_das seleccionadas"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:200
 msgid "Match Online accounts with GnuCash accounts"
-msgstr "Comparar contas Online Banking com contas GnuCash"
+msgstr "Comparar contas da banca em linha com contas GnuCash"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:215
 msgid ""
@@ -19476,8 +19474,8 @@ msgid ""
 "\n"
 "Press \"Apply\" now."
 msgstr ""
-"A configuração da correspondência entre contas do Online Banking e contas do "
-"GnuCash está terminada. Já pode invocar acções do Online Banking nessas "
+"A configuração da correspondência entre contas da banca em linha e contas do "
+"GnuCash está terminada. Já pode invocar acções da banca em linha nessas "
 "contas.\n"
 "\n"
 "Se quiser adicionar outro banco, utilizador ou conta, pode recomeçar este "
@@ -19487,11 +19485,11 @@ msgstr ""
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:231
 msgid "Online Banking Setup Finished"
-msgstr "Configuração do Online Banking terminada"
+msgstr "Configuração da banca em linha terminada"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:8
 msgid "Online Banking Connection Window"
-msgstr "Janela de ligação do Online Banking"
+msgstr "Janela de ligação da banca em linha"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:26
 msgid "_Abort"
@@ -19784,7 +19782,7 @@ msgstr "Mensagens de depuração _verbosas"
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:31
 msgid "Enables verbose debug messages for HBCI/AqBanking Online Banking."
 msgstr ""
-"Activa mensagens verbosas de depuração para Online Banking HBCI/AqBanking."
+"Activa mensagens verbosas de depuração para a banca em linha HBCI/AqBanking."
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:87
 msgid "Use Non-SWIFT _transaction text"
@@ -20009,7 +20007,7 @@ msgid ""
 "The Online Banking import returned no transactions for the selected time "
 "period."
 msgstr ""
-"A importação do Online Banking não devolveu transacções para o período "
+"A importação da banca em linha não devolveu transacções para o período "
 "seleccionado."
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:61
@@ -20039,34 +20037,34 @@ msgstr ""
 "executá-lo.\n"
 "\n"
 "Muito provavelmente o banco não suporta o trabalho escolhido ou a sua conta "
-"do Online Banking não tem permissão para executar este trabalho. Poderão "
+"da banca em linha não tem permissão para executar este trabalho. Poderão "
 "aparecer mais mensagens de erro no seu diário do terminal.\n"
 "\n"
 "Quer inserir o trabalho novamente?"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:232
 msgid "Online Banking Direct Debit Note"
-msgstr "Nota de débito directo do Online Banking"
+msgstr "Nota de débito directo da banca em linha"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:237
 msgid "Online Banking Bank-Internal Transfer"
-msgstr "Transferência bancária interna do Online Banking"
+msgstr "Transferência bancária interna da banca em linha"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:242
 msgid "Online Banking European (SEPA) Transfer"
-msgstr "Transferência europeia do Online Banking (SEPA)"
+msgstr "Transferência europeia da banca em linha (SEPA)"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:248
 msgid "Online Banking European (SEPA) Internal Transfer"
-msgstr "Transferência europeia do Online Banking (SEPA) interna"
+msgstr "Transferência europeia da banca em linha (SEPA) interna"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:254
 msgid "Online Banking European (SEPA) Debit Note"
-msgstr "Nota de débito europeia do Online Banking (SEPA)"
+msgstr "Nota de débito europeia da banca em linha (SEPA)"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:260
 msgid "Online Banking Transaction"
-msgstr "Transacção do Online Banking"
+msgstr "Transacção da banca em linha"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:331
 msgid ""
@@ -20105,7 +20103,7 @@ msgstr ""
 "executá-lo.\n"
 "\n"
 "Muito provavelmente o banco não suporta o trabalho escolhido ou a sua conta "
-"do Online Banking não tem permissão para executar este trabalho. Poderão "
+"da banca em linha não tem permissão para executar este trabalho. Poderão "
 "aparecer mais mensagens de erro no seu diário do terminal.\n"
 "\n"
 "Quer inserir o trabalho novamente?"
@@ -20123,8 +20121,8 @@ msgid ""
 "No Online Banking account found for this gnucash account. These transactions "
 "will not be executed by Online Banking."
 msgstr ""
-"Nenhuma conta do Online Banking encontrada para esta conta do GnuCash. Estas "
-"transacções não serão executadas pelo Online Banking."
+"Nenhuma conta da banca em linha encontrada para esta conta do GnuCash. Estas "
+"transacções não serão executadas pela banca em linha."
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1044
 msgid ""
@@ -20151,12 +20149,12 @@ msgid ""
 "(AqBanking or HBCI) Setup. After that, try again to download the Online "
 "Banking Balance."
 msgstr ""
-"O saldo transferido do Online Banking é zero.\n"
+"O saldo transferido da banca em linha é zero.\n"
 "\n"
 "Ou este é o saldo correcto ou o seu banco não suporta transferências de "
-"saldo nesta versão do Online Banking. Neste último caso, deve escolher uma "
-"versão diferente na configuração do Online Banking (AqBanking ou HBCI). A "
-"seguir, tente transferir o saldo do Online Banking novamente."
+"saldo nesta versão da banca em linha. Neste último caso, deve escolher uma "
+"versão diferente na configuração da banca em linha (AqBanking ou HBCI). A "
+"seguir, tente transferir o saldo da banca em linha novamente."
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1162
 #, c-format
@@ -20164,7 +20162,7 @@ msgid ""
 "Result of Online Banking job:\n"
 "Account booked balance is %s"
 msgstr ""
-"Resultado do trabalho do Online Banking:\n"
+"Resultado do trabalho da banca em linha:\n"
 "o saldo da conta é %s"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1168
@@ -20257,7 +20255,7 @@ msgstr ""
 msgid ""
 "The Online Banking job is still running; are you sure you want to cancel?"
 msgstr ""
-"O trabalho do Online Banking ainda está em execução. Tem a certeza que quer "
+"O trabalho da banca em linha ainda está em execução. Tem a certeza que quer "
 "cancelar?"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:93
@@ -20266,14 +20264,14 @@ msgstr "Acções em _linha"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:97
 msgid "_Online Banking Setup..."
-msgstr "Configuração do _Online Banking..."
+msgstr "C_onfiguração da banca em linha..."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:98
 msgid ""
 "Initial setup of Online Banking access (HBCI, or OFX DirectConnect, using "
 "AqBanking)"
 msgstr ""
-"Configuração inicial do acesso Online Banking (HBCI, ou OFX DirectConnect, "
+"Configuração inicial do acesso à banca em linha (HBCI, ou OFX DirectConnect, "
 "usando o AqBanking)"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:102
@@ -20282,7 +20280,7 @@ msgstr "Obter _saldo"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:103
 msgid "Get the account balance online through Online Banking"
-msgstr "Obter o saldo da conta em linha com o Online Banking"
+msgstr "Obter o saldo da conta em linha com a banca em linha"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:107
 msgid "Get _Transactions..."
@@ -20290,7 +20288,7 @@ msgstr "Obter _transacções..."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:108
 msgid "Get the transactions online through Online Banking"
-msgstr "Obter as transacções em linha com o Online Banking"
+msgstr "Obter as transacções em linha com a banca em linha"
 
 #. Translators: https://en.wikipedia.org/wiki/Single_Euro_Payments_Area
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:114
@@ -20302,8 +20300,8 @@ msgid ""
 "Issue a new international European (SEPA) transaction online through Online "
 "Banking"
 msgstr ""
-"Emitir uma nova transacção internacional europeia (SEPA) em linha com o "
-"Online Banking"
+"Emitir uma nova transacção internacional europeia (SEPA) em linha com a "
+"banca em linha"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:120
 msgid "Issue SEPA I_nternal Transaction..."
@@ -20314,8 +20312,8 @@ msgid ""
 "Issue a new internal European (SEPA) transaction online through Online "
 "Banking"
 msgstr ""
-"Emitir uma nova transacção interna europeia (SEPA) em linha com o Online "
-"Banking"
+"Emitir uma nova transacção interna europeia (SEPA) em linha com a banca em "
+"linha"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:125
 msgid "_Internal Transaction..."
@@ -20323,7 +20321,7 @@ msgstr "Transacção _interna..."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:126
 msgid "Issue a new bank-internal transaction online through Online Banking"
-msgstr "Emitir uma nova transacção interna em linha com o Online Banking"
+msgstr "Emitir uma nova transacção interna em linha com a banca em linha"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:130
 msgid "Issue SEPA Direct _Debit..."
@@ -20334,8 +20332,8 @@ msgid ""
 "Issue a new international European (SEPA) direct debit note online through "
 "Online Banking"
 msgstr ""
-"Emitir um novo débito directo internacional europeu (SEPA) em linha com o "
-"Online Banking"
+"Emitir um novo débito directo internacional europeu (SEPA) em linha com a "
+"banca em linha"
 
 #. Translators: Message types MTxxxx are exchange formats used by the SWIFT network
 #. https://en.wikipedia.org/wiki/Society_for_Worldwide_Interbank_Financial_Telecommunication
@@ -20378,8 +20376,8 @@ msgstr "Importar DTAUS e _enviar..."
 msgid ""
 "Import a DTAUS file into GnuCash and transmit its orders by Online Banking."
 msgstr ""
-"Importar um ficheiro DTAUS para o GnuCash e enviar as suas ordens com o "
-"Online Banking."
+"Importar um ficheiro DTAUS para o GnuCash e enviar as suas ordens com a "
+"banca em linha."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:177
 msgid "Show _log window"
