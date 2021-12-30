@@ -35,7 +35,6 @@
 (use-modules (gnucash report html-text))
 (use-modules (gnucash report html-table))
 (use-modules (ice-9 match))
-(use-modules (sxml simple))
 (use-modules (web uri))
 
 (export gnc:html-make-empty-cell)
