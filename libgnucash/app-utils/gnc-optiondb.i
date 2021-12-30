@@ -140,9 +140,10 @@ SCM scm_init_sw_gnc_optiondb_module(void);
                 $descriptor(_gncJob*), $descriptor(_gncVendor*)
                 };
         void* ptr{};
+        SCM instance{$input};
         auto pos = std::find_if(types.begin(), types.end(),
-                                [&$input, &ptr](auto type){
-                                    SWIG_ConvertPtr($input, &ptr, type, 0);
+                                [&instance, &ptr](auto type){
+                                    SWIG_ConvertPtr(instance, &ptr, type, 0);
                                     return ptr != nullptr; });
         if (pos == types.end())
             $1 = nullptr;
@@ -990,7 +991,6 @@ inline SCM return_scm_value(ValueType value)
 %template(gnc_make_string_option) gnc_make_option<std::string>;
 %template(gnc_make_bool_option) gnc_make_option<bool>;
 %template(gnc_make_int64_option) gnc_make_option<int64_t>;
-%template(gnc_make_qofinstance_option) gnc_make_option<const QofInstance*>;
 %template(gnc_make_query_option) gnc_make_option<const QofQuery*>;
 %template(gnc_make_owner_option) gnc_make_option<const GncOwner*>;
 
@@ -1384,6 +1384,26 @@ inline SCM return_scm_value(ValueType value)
     }
 
     static GncOption*
+    gnc_make_qofinstance_option(const char* section,
+                                const char* name, const char* key,
+                                const char* doc_string,
+                                const QofInstance* value,
+                                GncOptionUIType ui_type)
+    {
+        try {
+            return new GncOption(GncOptionQofInstanceValue{section, name, key,
+                                                           doc_string,
+                                                           value, ui_type});
+        }
+        catch (const std::exception& err)
+        {
+            std::cerr << "Make QofInstance option threw unexpected exception"
+            << err.what() << ", option not created." << std::endl;
+            return nullptr;
+        }
+    }
+
+    static GncOption*
     gnc_make_account_list_option(const char* section,
                                  const char* name, const char* key,
                                  const char* doc_string,
@@ -1569,7 +1589,7 @@ inline SCM return_scm_value(ValueType value)
                               const char* key, const char* doc_string,
                               gnc_commodity *value)
     {
-        return new GncOption{GncOptionValue<const QofInstance*>{
+        return new GncOption{GncOptionQofInstanceValue{
                 section, name, key, doc_string, (const QofInstance*)value,
                     GncOptionUIType::COMMODITY}};
     }

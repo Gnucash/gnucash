@@ -630,8 +630,9 @@ gnc_register_budget_option(GncOptionDB* db, const char* section,
                            const char* name, const char* key,
                            const char* doc_string, GncBudget *value)
 {
-    GncOption option{section, name, key, doc_string, (const QofInstance*)value,
-            GncOptionUIType::BUDGET};
+    GncOption option{GncOptionQofInstanceValue{section, name, key, doc_string,
+                                               (const QofInstance*)value,
+                                               GncOptionUIType::BUDGET}};
     db->register_option(section, std::move(option));
 }
 
@@ -650,8 +651,9 @@ gnc_register_commodity_option(GncOptionDB* db, const char* section,
                               const char* name, const char* key,
                               const char* doc_string, gnc_commodity *value)
 {
-    GncOption option{section, name, key, doc_string, (const QofInstance*)value,
-            GncOptionUIType::COMMODITY};
+    GncOption option{GncOptionQofInstanceValue{section, name, key, doc_string,
+                                               (const QofInstance*)value,
+                                               GncOptionUIType::COMMODITY}};
     db->register_option(section, std::move(option));
 }
 
@@ -862,8 +864,9 @@ gnc_register_invoice_option(GncOptionDB* db, const char* section,
                             const char* name, const char* key,
                             const char* doc_string, GncInvoice* value)
 {
-    GncOption option{section, name, key, doc_string, (const QofInstance*)value,
-            GncOptionUIType::INVOICE};
+    GncOption option{GncOptionQofInstanceValue{section, name, key, doc_string,
+                                               (const QofInstance*)value,
+                                               GncOptionUIType::INVOICE}};
     db->register_option(section, std::move(option));
 }
 
@@ -872,8 +875,9 @@ gnc_register_taxtable_option(GncOptionDB* db, const char* section,
                              const char* name, const char* key,
                              const char* doc_string, GncTaxTable* value)
 {
-    GncOption option{section, name, key, doc_string, (const QofInstance*)value,
-            GncOptionUIType::TAX_TABLE};
+    GncOption option{GncOptionQofInstanceValue{section, name, key, doc_string,
+                                               (const QofInstance*)value,
+                                               GncOptionUIType::TAX_TABLE}};
     db->register_option(section, std::move(option));
 }
 

@@ -35,7 +35,7 @@ extern "C"
 
 template <typename ValueType,
           typename std::enable_if_t<!is_OptionClassifier_v<ValueType>,
-                               int>>
+                                    int>>
 GncOption::GncOption(const char* section, const char* name,
                      const char* key, const char* doc_string,
                      ValueType value, GncOptionUIType ui_type) :
@@ -343,7 +343,7 @@ GncOption::permissible_value_index(const char* value) const
                                             GncOptionDateValue>)
                 return option.permissible_value_index(value);
             else
-                return size_t_max;;
+                return size_t_max;
         }, *m_option);
 }
 
@@ -463,8 +463,6 @@ template GncOption::GncOption(const char*, const char*, const char*,
 template GncOption::GncOption(const char*, const char*, const char*,
                               const char*, std::string, GncOptionUIType);
 template GncOption::GncOption(const char*, const char*, const char*,
-                              const char*, const QofInstance*, GncOptionUIType);
-template GncOption::GncOption(const char*, const char*, const char*,
                               const char*, SCM, GncOptionUIType);
 template GncOption::GncOption(const char*, const char*, const char*,
                               const char*, const QofQuery*, GncOptionUIType);
@@ -553,9 +551,4 @@ template GncOption* gnc_make_option<bool>(const char*, const char*, const char*,
 template GncOption* gnc_make_option<int64_t>(const char*, const char*,
                                              const char*, const char*, int64_t,
                                              GncOptionUIType);
-template GncOption* gnc_make_option<const QofInstance*>(const char*,
-                                                        const char*,
-                                                        const char*,
-                                                        const char*,
-                                                        const QofInstance*,
-                                                        GncOptionUIType);
+

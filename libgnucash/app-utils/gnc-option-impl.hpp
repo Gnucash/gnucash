@@ -141,6 +141,37 @@ private:
     ValueType m_default_value;
 };
 
+using GncItem = std::pair<QofIdTypeConst, GncGUID>;
+
+class GncOptionQofInstanceValue: public OptionClassifier {
+public:
+    GncOptionQofInstanceValue(
+        const char* section, const char* name,
+        const char* key, const char* doc_string,
+        const QofInstance* value,
+        GncOptionUIType ui_type = GncOptionUIType::INTERNAL);
+    GncOptionQofInstanceValue(const GncOptionQofInstanceValue& from);
+    GncOptionQofInstanceValue(GncOptionQofInstanceValue&&) = default;
+    GncOptionQofInstanceValue& operator=(GncOptionQofInstanceValue&&) = default;
+    ~GncOptionQofInstanceValue() = default;
+    const QofInstance* get_value() const;
+    const QofInstance* get_default_value() const;
+    GncItem get_item() const { return m_value; }
+    GncItem get_default_item() const { return m_default_value; }
+    void set_value(const QofInstance* new_value);
+    void set_default_value(const QofInstance* new_value);
+    void reset_default_value();
+    bool is_changed() const noexcept;
+    GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
+    void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
+    std::string serialize() const noexcept;
+    bool deserialize(const std::string& str) noexcept;
+private:
+    GncOptionUIType m_ui_type;
+    GncItem m_value;
+    GncItem m_default_value;
+};
+
 /** class GncOptionValidatedValue
  *  Validated values have an additional member function, provided as a
  *  constructor argument, that checks value parameters for some property before
@@ -221,7 +252,7 @@ template <typename T>
 struct is_QofInstanceValue
 {
     static constexpr bool value =
-         (std::is_same_v<std::decay_t<T>, GncOptionValue<const QofInstance*>> ||
+         (std::is_same_v<std::decay_t<T>, GncOptionQofInstanceValue> ||
           std::is_same_v<std::decay_t<T>,
           GncOptionValidatedValue<const QofInstance*>>);
 };
@@ -276,7 +307,7 @@ operator<< (std::ostream& oss, const OptType& opt)
     if (auto type = opt.get_ui_type(); type == GncOptionUIType::COMMODITY ||
         type == GncOptionUIType::CURRENCY)
     {
-        if (auto type = opt.get_ui_type(); type == GncOptionUIType::COMMODITY)
+        if (type == GncOptionUIType::COMMODITY)
         {
             oss << gnc_commodity_get_namespace(GNC_COMMODITY(value)) << " ";
         }

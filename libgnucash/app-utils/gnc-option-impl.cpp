@@ -38,6 +38,168 @@ static const QofLogModule log_module{"gnc.options"};
 const std::string GncOptionMultichoiceValue::c_empty_string{""};
 const std::string GncOptionMultichoiceValue::c_list_string{"multiple values"};
 
+using GncItem = std::pair<QofIdTypeConst, GncGUID>;
+
+static GncItem
+make_gnc_item(const QofInstance* inst)
+{
+    if (!inst)
+        return std::make_pair<QofIdTypeConst, GncGUID>("", guid_new_return());
+    auto type{qof_collection_get_type(qof_instance_get_collection(inst))};
+    auto guid{qof_instance_get_guid(inst)};
+    return std::make_pair(std::move(type), std::move(*const_cast<GncGUID*>(guid)));
+}
+
+static const QofInstance*
+qof_instance_from_gnc_item(const GncItem& item)
+{
+    auto [type, guid] = item;
+    auto book{gnc_get_current_book()};
+    auto coll{qof_book_get_collection(book, type)};
+    return static_cast<QofInstance*>(qof_collection_lookup_entity(coll, &guid));
+}
+
+static bool
+operator!=(const GncItem& left, const GncItem& right)
+{
+    auto [ltype, lguid]{left};
+    auto [rtype, rguid]{right};
+    return strcmp(rtype, ltype) && !guid_equal(&rguid, &lguid);
+}
+
+GncOptionQofInstanceValue::GncOptionQofInstanceValue(
+    const char* section, const char* name,
+    const char* key, const char* doc_string,
+    const QofInstance* value, GncOptionUIType ui_type) :
+    OptionClassifier{section, name, key, doc_string},
+    m_ui_type(ui_type), m_value{},
+    m_default_value{} {
+    m_value = make_gnc_item(value);
+    m_default_value = make_gnc_item(value);
+}
+
+GncOptionQofInstanceValue::GncOptionQofInstanceValue(const GncOptionQofInstanceValue& from) :
+    OptionClassifier{from.m_section, from.m_name, from.m_sort_tag,
+                     from.m_doc_string},
+    m_ui_type(from.get_ui_type()), m_value{from.get_item()},
+    m_default_value{from.get_default_item()}
+{
+}
+void
+GncOptionQofInstanceValue::set_value(const QofInstance* new_value)
+{
+    m_value = make_gnc_item(new_value);
+}
+
+void
+GncOptionQofInstanceValue::set_default_value(const QofInstance *new_value)
+{
+    m_value = m_default_value = make_gnc_item(new_value);
+
+}
+
+const QofInstance*
+GncOptionQofInstanceValue::get_value() const
+{
+    return qof_instance_from_gnc_item(m_value);
+}
+
+const QofInstance*
+GncOptionQofInstanceValue::get_default_value() const
+{
+    return qof_instance_from_gnc_item(m_default_value);
+}
+
+void
+GncOptionQofInstanceValue::reset_default_value()
+{
+    m_value = m_default_value;
+}
+
+bool
+GncOptionQofInstanceValue::is_changed() const noexcept
+{
+    return m_value != m_default_value;
+}
+
+bool
+GncOptionQofInstanceValue::deserialize(const std::string& str) noexcept
+{
+    QofInstance* inst{};
+    // Commodities are often serialized as Namespace::Mnemonic or just Mnemonic
+    if (m_ui_type == GncOptionUIType::CURRENCY ||
+        m_ui_type == GncOptionUIType::COMMODITY)
+    {
+        auto book{gnc_get_current_book()};
+        auto table = gnc_commodity_table_get_table(book);
+        auto sep{str.find(":")};
+        if (sep != std::string::npos)
+        {
+            auto name_space{str.substr(0, sep)};
+            auto mnemonic{str.substr(sep + 1, -1)};
+            inst = QOF_INSTANCE(gnc_commodity_table_lookup(table,
+                                                              name_space.c_str(),
+                                                              mnemonic.c_str()));
+        }
+        if (!inst && m_ui_type == GncOptionUIType::CURRENCY)
+            inst = QOF_INSTANCE(gnc_commodity_table_lookup(table,
+                                                             "CURRENCY",
+                                                             str.c_str()));
+        if (inst)
+        {
+            m_value = make_gnc_item(inst);
+            return true;
+        }
+    }
+
+    if (!inst)
+    {
+        try {
+            auto guid{static_cast<GncGUID>(gnc::GUID::from_string(str))};
+            inst = qof_instance_from_guid(&guid, m_ui_type);
+            if (inst)
+            {
+                auto coll{qof_instance_get_collection(inst)};
+                m_value = std::make_pair(qof_collection_get_type(coll), guid);
+                return true;
+            }
+        }
+        catch (const gnc::guid_syntax_exception& err)
+        {
+            PWARN("Failed to convert %s to a GUID", str.c_str());
+        }
+    }
+    return false;
+}
+
+std::string
+GncOptionQofInstanceValue::serialize() const noexcept
+{
+    auto inst{get_value()};
+    std::string retval;
+    if (GNC_IS_COMMODITY(inst))
+    {
+        auto commodity{GNC_COMMODITY(inst)};
+        if (!gnc_commodity_is_currency(commodity))
+        {
+            auto name_space{gnc_commodity_get_namespace(GNC_COMMODITY(inst))};
+            if (name_space && *name_space != '\0')
+            {
+                retval = name_space;
+                retval += ":";
+            }
+        }
+        retval += gnc_commodity_get_mnemonic(GNC_COMMODITY(inst));
+        return retval;
+    }
+    else
+    {
+        gnc::GUID guid{m_value.second};
+        retval = guid.to_string();
+    }
+    return retval;
+}
+
 bool
 GncOptionAccountListValue::validate(const GncOptionAccountList& values) const
 {
@@ -536,9 +698,7 @@ GncOptionValidatedValue<ValueType>::serialize() const noexcept
 template <typename ValueType> bool
 GncOptionValidatedValue<ValueType>::deserialize(const std::string& str) noexcept
 {
-    if constexpr(std::is_same_v<ValueType, const QofInstance*>)
-        set_value(qof_instance_from_string(str, get_ui_type()));
-    else if constexpr(is_same_decayed_v<ValueType, std::string>)
+    if constexpr(is_same_decayed_v<ValueType, std::string>)
         set_value(str);
     else if constexpr(is_same_decayed_v<ValueType, bool>)
         set_value(str == "True");
@@ -728,7 +888,6 @@ template GncOptionValue<double>::GncOptionValue(const GncOptionValue<double>&);
 template GncOptionValue<char*>::GncOptionValue(const GncOptionValue<char*>&);
 template GncOptionValue<const char*>::GncOptionValue(const GncOptionValue<const char*>&);
 template GncOptionValue<std::string>::GncOptionValue(const GncOptionValue<std::string>&);
-template GncOptionValue<const QofInstance*>::GncOptionValue(const GncOptionValue<const QofInstance*>&);
 template GncOptionValue<const QofQuery*>::GncOptionValue(const GncOptionValue<const QofQuery*>&);
 template GncOptionValue<const GncOwner*>::GncOptionValue(const GncOptionValue<const GncOwner*>&);
 template GncOptionValue<RelativeDatePeriod>::GncOptionValue(const GncOptionValue<RelativeDatePeriod>&);
@@ -743,7 +902,6 @@ template void GncOptionValue<double>::set_value(double);
 template void GncOptionValue<char*>::set_value(char*);
 template void GncOptionValue<const char*>::set_value(const char*);
 template void GncOptionValue<std::string>::set_value(std::string);
-template void GncOptionValue<const QofInstance*>::set_value(const QofInstance*);
 template void GncOptionValue<const QofQuery*>::set_value(const QofQuery*);
 template void GncOptionValue<const GncOwner*>::set_value(const GncOwner*);
 template void GncOptionValue<RelativeDatePeriod>::set_value(RelativeDatePeriod);
@@ -757,7 +915,6 @@ template void GncOptionValue<double>::set_default_value(double);
 template void GncOptionValue<char*>::set_default_value(char*);
 template void GncOptionValue<const char*>::set_default_value(const char*);
 template void GncOptionValue<std::string>::set_default_value(std::string);
-template void GncOptionValue<const QofInstance*>::set_default_value(const QofInstance*);
 template void GncOptionValue<const QofQuery*>::set_default_value(const QofQuery*);
 template void GncOptionValue<const GncOwner*>::set_default_value(const GncOwner*);
 template void GncOptionValue<RelativeDatePeriod>::set_default_value(RelativeDatePeriod);
@@ -771,7 +928,6 @@ template void GncOptionValue<double>::reset_default_value();
 template void GncOptionValue<char*>::reset_default_value();
 template void GncOptionValue<const char*>::reset_default_value();
 template void GncOptionValue<std::string>::reset_default_value();
-template void GncOptionValue<const QofInstance*>::reset_default_value();
 template void GncOptionValue<const QofQuery*>::reset_default_value();
 template void GncOptionValue<const GncOwner*>::reset_default_value();
 template void GncOptionValue<RelativeDatePeriod>::reset_default_value();
@@ -785,7 +941,6 @@ template std::string GncOptionValue<double>::serialize() const noexcept;
 template std::string GncOptionValue<char*>::serialize() const noexcept;
 template std::string GncOptionValue<const char*>::serialize() const noexcept;
 template std::string GncOptionValue<std::string>::serialize() const noexcept;
-template std::string GncOptionValue<const QofInstance*>::serialize() const noexcept;
 template std::string GncOptionValue<const QofQuery*>::serialize() const noexcept;
 template std::string GncOptionValue<const GncOwner*>::serialize() const noexcept;
 template std::string GncOptionValue<SCM>::serialize() const noexcept;
@@ -808,7 +963,6 @@ template bool GncOptionValue<double>::deserialize(const std::string&) noexcept;
 template bool GncOptionValue<char*>::deserialize(const std::string&) noexcept;
 template bool GncOptionValue<const char*>::deserialize(const std::string&) noexcept;
 template bool GncOptionValue<std::string>::deserialize(const std::string&) noexcept;
-template bool GncOptionValue<const QofInstance*>::deserialize(const std::string&) noexcept;
 template bool GncOptionValue<const QofQuery*>::deserialize(const std::string&) noexcept;
 template bool GncOptionValue<const GncOwner*>::deserialize(const std::string&) noexcept;
 template bool GncOptionValue<SCM>::deserialize(const std::string&) noexcept;

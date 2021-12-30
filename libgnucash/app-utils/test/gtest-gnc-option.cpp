@@ -154,8 +154,9 @@ TEST_F(GncOptionTest, test_budget_ctor)
 {
     auto budget = gnc_budget_new(m_book);
     EXPECT_NO_THROW({
-            GncOption option("foo", "bar", "baz", "Phony Option",
-                             (const QofInstance*)budget);
+            GncOption option(GncOptionQofInstanceValue{"foo", "bar", "baz",
+                                                       "Phony Option",
+                                                       (const QofInstance*)budget});
         });
     gnc_budget_destroy(budget);
 }
@@ -163,7 +164,7 @@ TEST_F(GncOptionTest, test_budget_ctor)
 TEST_F(GncOptionTest, test_budget_out)
 {
     auto budget = gnc_budget_new(m_book);
-    GncOption option{"foo", "bar", "baz", "Phony Option", (const QofInstance*)budget};
+    GncOption option{GncOptionQofInstanceValue{"foo", "bar", "baz", "Phony Option", (const QofInstance*)budget}};
 
     auto budget_guid{gnc::GUID{*qof_instance_get_guid(QOF_INSTANCE(budget))}.to_string()};
     std::ostringstream oss;
@@ -177,7 +178,7 @@ TEST_F(GncOptionTest, test_budget_in)
     auto budget = gnc_budget_new(m_book);
     auto budget_guid{gnc::GUID{*qof_instance_get_guid(QOF_INSTANCE(budget))}.to_string()};
     std::istringstream iss{budget_guid};
-    GncOption option{GncOptionValue<const QofInstance*>{"foo", "bar", "baz", "Phony Option", nullptr, GncOptionUIType::BUDGET}};
+    GncOption option{GncOptionQofInstanceValue{"foo", "bar", "baz", "Phony Option", nullptr, GncOptionUIType::BUDGET}};
     iss >> option;
     EXPECT_EQ(QOF_INSTANCE(budget), option.get_value<const QofInstance*>());
     gnc_budget_destroy(budget);
@@ -188,9 +189,10 @@ TEST_F(GncOptionTest, test_commodity_ctor)
     auto hpe = gnc_commodity_new(m_book, "Hewlett Packard Enterprise, Inc.",
                                     "NYSE", "HPE", NULL, 1);
     EXPECT_NO_THROW({
-            GncOption option("foo", "bar", "baz", "Phony Option",
-                             (const QofInstance*)hpe);
-        });
+            GncOption option(GncOptionQofInstanceValue{"foo", "bar", "baz",
+                                                       "Phony Option",
+                                                       (const QofInstance*)hpe});
+    });
     gnc_commodity_destroy(hpe);
 }
 
@@ -319,8 +321,8 @@ TEST_F(GncOptionCommodityTest, test_currency_out)
 
 TEST_F(GncOptionCommodityTest, test_commodity_out)
 {
-    GncOption option{"foo", "bar", "baz", "Phony Option", (const QofInstance*)m_hpe,
-                     GncOptionUIType::COMMODITY};
+    GncOption option{GncOptionQofInstanceValue{"foo", "bar", "baz", "Phony Option", (const QofInstance*)m_hpe,
+                     GncOptionUIType::COMMODITY}};
     std::string hpe_str{make_commodity_str(m_hpe)};
     std::ostringstream oss;
     oss << option;
@@ -348,8 +350,8 @@ TEST_F(GncOptionCommodityTest, test_currency_in)
 
 TEST_F(GncOptionCommodityTest, test_commodity_in)
 {
-    GncOption option{"foo", "bar", "baz", "Phony Option", (const QofInstance*)m_aapl,
-                     GncOptionUIType::COMMODITY};
+    GncOption option{GncOptionQofInstanceValue{"foo", "bar", "baz", "Phony Option", (const QofInstance*)m_aapl,
+                     GncOptionUIType::COMMODITY}};
 
     std::string hpe_str{make_commodity_str(m_hpe)};
     std::istringstream iss{hpe_str};
