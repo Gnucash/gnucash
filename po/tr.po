@@ -7,14 +7,15 @@
 # Oğuz Ersen <oguzersen@protonmail.com>, 2021.
 # Ömer Faruk Çakmak <omerfarukckmk@protonmail.com>, 2021.
 # udo pton <udopton@gmail.com>, 2021.
+# Bora <boratici@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-05-06 13:32+0000\n"
-"Last-Translator: udo pton <udopton@gmail.com>\n"
+"PO-Revision-Date: 2021-12-30 17:52+0000\n"
+"Last-Translator: Bora <boratici@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "tr/>\n"
 "Language: tr\n"
@@ -22,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.10.1\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-POOTLE-MTIME: 1497808015.000000\n"
 
@@ -1436,6 +1437,8 @@ msgid ""
 "The Company Name field cannot be left blank, please enter a company name or "
 "a person's name."
 msgstr ""
+"Şirket Adı alanı boş bırakılamaz, lütfen bir şirket adı veya bir kişi adı "
+"girin."
 
 #: gnucash/gnome/dialog-customer.c:341
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
