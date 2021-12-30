@@ -35,6 +35,7 @@
 (use-modules (gnucash report html-text))
 (use-modules (gnucash report html-table))
 (use-modules (ice-9 match))
+(use-modules (web uri))
 
 (export gnc:html-make-empty-cell)
 (export gnc:html-make-empty-cells)
@@ -405,15 +406,30 @@
     (G_ "No data")
     (G_ "The selected accounts contain no data/transactions (or only zeroes) for the selected time period")))
 
+(define unreserved-chars-rfc3986
+  (char-set-union
+   (string->char-set "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+   (string->char-set ":/?#[]@")         ;gen-delims
+   (string->char-set "-._~")))
+
+;;path must be absolute. On Windows an absolute path begins with a
+;;drive letter followed by a colon.
+(define (make-uri path)
+  (let ((uri-path (uri-encode (gnc:substring-replace path "\\" "/")
+               #:unescaped-chars unreserved-chars-rfc3986)))
+  (string-append
+   (if (char=? (string-ref uri-path 0) #\/) "file://" "file:///")
+   uri-path)))
+
 (define (gnc:html-js-include file)
   (format #f
-          "<script language=\"javascript\" type=\"text/javascript\" src=\"file:///~a\"></script>\n"
-          (gnc-path-find-localized-html-file file)))
+          "<script language=\"javascript\" type=\"text/javascript\" src=~s></script>\n"
+          (make-uri (gnc-resolve-file-path file))))
 
 (define (gnc:html-css-include file)
   (format #f
-          "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///~a\" />\n"
-          (gnc-path-find-localized-html-file file)))
+          "<link rel=\"stylesheet\" type=\"text/css\" href=~s />\n"
+          (make-uri (gnc-resolve-file-path file))))
 
 
 

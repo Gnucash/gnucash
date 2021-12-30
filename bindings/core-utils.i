@@ -69,14 +69,14 @@ gchar * gnc_path_get_localedir(void);
 %newobject gnc_path_get_stdreportsdir;
 gchar * gnc_path_get_stdreportsdir(void);
 
-%newobject gnc_path_find_localized_html_file;
-gchar * gnc_path_find_localized_html_file(const gchar *);
-
 %newobject gnc_build_userdata_path;
 gchar * gnc_build_userdata_path(const gchar *);
 
 %newobject gnc_file_path_absolute;
 gchar *gnc_file_path_absolute (const gchar *, const gchar *);
+
+%newobject gnc_resolve_file_path;
+gchar *gnc_resolve_file_path (const gchar *);
 
 %newobject gnc_build_scm_path;
 gchar * gnc_build_scm_path(const gchar *);
