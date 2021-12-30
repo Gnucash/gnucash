@@ -2286,13 +2286,14 @@ recnFinishCB (GtkAction *action, RecnWindow *recnData)
     gnc_suspend_gui_refresh ();
 
     recnData->delete_refresh = TRUE;
+    account = recn_get_account (recnData);
 
+    xaccAccountBeginEdit (account);
     gnc_reconcile_view_commit(GNC_RECONCILE_VIEW(recnData->credit), date);
     gnc_reconcile_view_commit(GNC_RECONCILE_VIEW(recnData->debit), date);
+    xaccAccountCommitEdit (account);
 
     auto_payment = gnc_prefs_get_bool(GNC_PREFS_GROUP_RECONCILE, GNC_PREF_AUTO_CC_PAYMENT);
-
-    account = recn_get_account (recnData);
 
     xaccAccountClearReconcilePostpone (account);
     xaccAccountSetReconcileLastDate (account, date);
@@ -2341,11 +2342,12 @@ recnPostponeCB (GtkAction *action, gpointer data)
     gnc_suspend_gui_refresh ();
 
     recnData->delete_refresh = TRUE;
+    account = recn_get_account (recnData);
 
+    xaccAccountBeginEdit (account);
     gnc_reconcile_view_postpone (GNC_RECONCILE_VIEW(recnData->credit));
     gnc_reconcile_view_postpone (GNC_RECONCILE_VIEW(recnData->debit));
-
-    account = recn_get_account (recnData);
+    xaccAccountCommitEdit (account);
 
     xaccAccountSetReconcilePostponeDate (account, recnData->statement_date);
     xaccAccountSetReconcilePostponeBalance (account, recnData->new_ending);
