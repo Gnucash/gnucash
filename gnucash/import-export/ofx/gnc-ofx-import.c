@@ -873,6 +873,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
 
                     // Set split memo from ofx transaction name or memo
                     gnc_ofx_set_split_memo(&data, split);
+                    if (data.fi_id_valid)
+                        gnc_import_set_split_online_id (split, sanitize_string (data.fi_id));
                 }
                 if (income_account != NULL &&
                         data.invtransactiontype == OFX_INCOME)
@@ -889,6 +891,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
 
                     // Set split memo from ofx transaction name or memo
                     gnc_ofx_set_split_memo(&data, split);
+                    if (data.fi_id_valid)
+                        gnc_import_set_split_online_id (split, sanitize_string (data.fi_id));
                 }
             }
 
@@ -907,6 +911,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
 
                 // Set split memo from ofx transaction name or memo
                 gnc_ofx_set_split_memo(&data, split);
+                if (data.fi_id_valid)
+                    gnc_import_set_split_online_id (split, sanitize_string (data.fi_id));
             }
         }
 
