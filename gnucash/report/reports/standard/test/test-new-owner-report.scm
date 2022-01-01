@@ -163,7 +163,7 @@
                      (cons 'absolute (gnc-dmy2time64 1 1 1980)))
         (set-option! options "General" "To"
                      (cons 'absolute (gnc-dmy2time64 1 7 1981)))
-        (set-option! options "Display Columns" "Links" 'detailed)
+        (set-option! options "Display Columns" "Transaction Links" 'detailed)
         options))
 
     ;; inv $6.75
