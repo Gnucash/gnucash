@@ -672,28 +672,23 @@
 
 (define (gnc:register-report-create-internal invoice? query journal? ledger-type?
                                              double? title debit-string credit-string)
-  (let* ((options (gnc:make-report-options register-report-guid))
-         (query-op (gnc:lookup-option options "__reg" "query"))
-         (journal-op (gnc:lookup-option options "__reg" "journal"))
-         (ledger-type-op (gnc:lookup-option options "__reg" "ledger-type"))
-         (double-op (gnc:lookup-option options "__reg" "double"))
-         (title-op (gnc:lookup-option options "General" "Title"))
-         (debit-op (gnc:lookup-option options "__reg" "debit-string"))
-         (credit-op (gnc:lookup-option options "__reg" "credit-string"))
-         (account-op (gnc:lookup-option options "Display" "Account")))
+  (define options (gnc:make-report-options register-report-guid))
+  (define (set-option section name val)
+    (gnc:option-set-value (gnc:lookup-option options section name) val))
 
-    (if invoice?
-        (begin
-          (set! journal? #f)
-          (gnc:option-set-value account-op #f)))
+  (when invoice?
+    (issue-deprecation-warning "gnc:register-report-create-internal: invoice \
+option is obsolete")
+    (set! journal? #f)
+    (set-option "Display" "Account" #f))
 
-    (gnc:option-set-value query-op query)
-    (gnc:option-set-value journal-op journal?)
-    (gnc:option-set-value ledger-type-op ledger-type?)
-    (gnc:option-set-value double-op double?)
-    (gnc:option-set-value title-op title)
-    (gnc:option-set-value debit-op debit-string)
-    (gnc:option-set-value credit-op credit-string)
-    (gnc:make-report register-report-guid options)))
+  (set-option "General" "Title" title)
+  (set-option "__reg" "query" query)
+  (set-option "__reg" "journal" journal?)
+  (set-option "__reg" "ledger-type" ledger-type?)
+  (set-option "__reg" "double" double?)
+  (set-option "__reg" "debit-string" debit-string)
+  (set-option "__reg" "credit-string" credit-string)
+  (gnc:make-report register-report-guid options))
 
 (export gnc:register-report-create-internal)
