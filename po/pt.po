@@ -2,14 +2,14 @@
 # Copyright (C) 2020
 # This file is distributed under the same license as the Gnucash package.
 # Pedro Albuquerque <pmra@protonmail.com>, 2015-2021.
-# Pedro Albuquerque <pmra@gmx.com>, 2021.
+# Pedro Albuquerque <pmra@gmx.com>, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-12-30 17:52+0000\n"
+"PO-Revision-Date: 2022-01-01 11:54+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -5734,7 +5734,7 @@ msgstr "Ir para factura"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:318
 msgid "Add, change, or unlink the document linked with the current transaction"
-msgstr "Adicioanr, alterar ou desligar o documento ligado à transacção actual"
+msgstr "Adicionar, alterar ou desligar o documento ligado à transacção actual"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:319
 msgid "Open the linked document for the current transaction"
