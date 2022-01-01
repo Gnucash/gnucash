@@ -6,23 +6,25 @@
 # Andrei Cipu <andrei@cipu.ro>, 2008.
 # Nicolae Turcan <nicturcan@gmail.com>, 2008.
 # Daniel Șerbănescu <daniel@serbanescu.dk>, 2020.
+# Dan Purice <dan.purice@outlook.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2020-07-01 19:19+0200\n"
-"Last-Translator: Daniel Șerbănescu <daniel@serbanescu.dk>\n"
-"Language-Team: Romanian <translation-team-ro@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2021-12-31 14:52+0000\n"
+"Last-Translator: Dan Purice <dan.purice@outlook.com>\n"
+"Language-Team: Romanian <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+"X-Generator: Weblate 4.10.1\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
-"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?"
-"2:1));\n"
-"X-Generator: Poedit 2.3.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -49,12 +51,11 @@ msgstr "Chineză"
 #: borrowed/goffice/go-charmap-sel.c:74
 #: gnucash/gnome-utils/assistant-xml-encoding.c:242
 msgid "Cyrillic"
-msgstr "Cyrillic"
+msgstr "Chirilică"
 
 #: borrowed/goffice/go-charmap-sel.c:75
-#, fuzzy
 msgid "Greek"
-msgstr "Verde"
+msgstr "Greacă"
 
 #: borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
@@ -86,9 +87,8 @@ msgid "Vietnamese"
 msgstr "Vietnameză"
 
 #: borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "Registru"
+msgstr "Occidentală"
 
 #: borrowed/goffice/go-charmap-sel.c:84
 #: gnucash/gtkbuilder/assistant-loan.glade:969
@@ -278,55 +278,56 @@ msgstr "Ebraică (IBM-862)"
 
 #: borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr ""
+msgstr "Ebraică (ISO-8859-8-E)"
 
 #: borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr ""
+msgstr "Ebraică (ISO-8859-8-I)"
 
 #: borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr ""
+msgstr "Ebraică (MacHebrew)"
 
 #: borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr ""
+msgstr "Ebraică (Windows-1255)"
 
 #: borrowed/goffice/go-charmap-sel.c:182
+#, fuzzy
 msgid "Hindi (MacDevanagari)"
-msgstr ""
+msgstr "Hindi (MacDevanagari)"
 
 #: borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
-msgstr ""
+msgstr "Islandeză (MacIcelandic)"
 
 #: borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
-msgstr ""
+msgstr "Japoneză (EUC-JP)"
 
 #: borrowed/goffice/go-charmap-sel.c:187
 msgid "Japanese (ISO-2022-JP)"
-msgstr ""
+msgstr "Japoneză (ISO-2022-JP)"
 
 #: borrowed/goffice/go-charmap-sel.c:189
 msgid "Japanese (Shift_JIS)"
-msgstr ""
+msgstr "Japoneză (Shift_JIS)"
 
 #: borrowed/goffice/go-charmap-sel.c:190
 msgid "Korean (EUC-KR)"
-msgstr ""
+msgstr "Koreană (EUC-KR)"
 
 #: borrowed/goffice/go-charmap-sel.c:191
 msgid "Korean (ISO-2022-KR)"
-msgstr ""
+msgstr "Koreană (ISO-2022-KR)"
 
 #: borrowed/goffice/go-charmap-sel.c:192
 msgid "Korean (JOHAB)"
-msgstr ""
+msgstr "Koreană (JOHAB)"
 
 #: borrowed/goffice/go-charmap-sel.c:193
 msgid "Korean (UHC)"
-msgstr ""
+msgstr "Koreană (UHC)"
 
 #: borrowed/goffice/go-charmap-sel.c:194
 #, fuzzy
@@ -335,35 +336,35 @@ msgstr "ISO-8859-10 (Nordic)"
 
 #: borrowed/goffice/go-charmap-sel.c:195
 msgid "Romanian (MacRomanian)"
-msgstr ""
+msgstr "Română (MacRomanian)"
 
 #: borrowed/goffice/go-charmap-sel.c:197
 msgid "Romanian (ISO-8859-16)"
-msgstr ""
+msgstr "Română (ISO-8859-16)"
 
 #: borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
-msgstr ""
+msgstr "Sud-europeană (ISO-8859-3)"
 
 #: borrowed/goffice/go-charmap-sel.c:201
 msgid "Thai (TIS-620)"
-msgstr ""
+msgstr "Thailandeză (TIS-620)"
 
 #: borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
-msgstr ""
+msgstr "Turcă (IBM-857)"
 
 #: borrowed/goffice/go-charmap-sel.c:203
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "Turcă (ISO-8859-9)"
 
 #: borrowed/goffice/go-charmap-sel.c:204
 msgid "Turkish (MacTurkish)"
-msgstr ""
+msgstr "Turcă (MacTurkish)"
 
 #: borrowed/goffice/go-charmap-sel.c:206
 msgid "Turkish (Windows-1254)"
-msgstr ""
+msgstr "Turcă (Windows-1254)"
 
 #: borrowed/goffice/go-charmap-sel.c:208
 #, fuzzy
@@ -377,19 +378,19 @@ msgstr "Unicode"
 
 #: borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
-msgstr ""
+msgstr "Unicode (UTF-16BE)"
 
 #: borrowed/goffice/go-charmap-sel.c:211
 msgid "Unicode (UTF-16LE)"
-msgstr ""
+msgstr "Unicode (UTF-16LE)"
 
 #: borrowed/goffice/go-charmap-sel.c:212
 msgid "Unicode (UTF-32BE)"
-msgstr ""
+msgstr "Unicode (UTF-32BE)"
 
 #: borrowed/goffice/go-charmap-sel.c:213
 msgid "Unicode (UTF-32LE)"
-msgstr ""
+msgstr "Unicode (UTF-32LE)"
 
 #: borrowed/goffice/go-charmap-sel.c:214
 msgid "User Defined"
@@ -397,43 +398,43 @@ msgstr "Definit de utilizator"
 
 #: borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
-msgstr ""
+msgstr "Vietnameză (TCVN)"
 
 #: borrowed/goffice/go-charmap-sel.c:217
 msgid "Vietnamese (VISCII)"
-msgstr ""
+msgstr "Vietnameză (VISCII)"
 
 #: borrowed/goffice/go-charmap-sel.c:218
 msgid "Vietnamese (VPS)"
-msgstr ""
+msgstr "Vietnameză (VPS)"
 
 #: borrowed/goffice/go-charmap-sel.c:219
 msgid "Vietnamese (Windows-1258)"
-msgstr ""
+msgstr "Vietnameză (Windows-1258)"
 
 #: borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "Ebraică vizuală (ISO-8859-8)"
 
 #: borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
-msgstr ""
+msgstr "Occidentală (IBM-850)"
 
 #: borrowed/goffice/go-charmap-sel.c:224
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "Occidentală (ISO-8859-1)"
 
 #: borrowed/goffice/go-charmap-sel.c:225
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "Occidentală (ISO-8859-15)"
 
 #: borrowed/goffice/go-charmap-sel.c:227
 msgid "Western (MacRoman)"
-msgstr ""
+msgstr "Occidentală (MacRoman)"
 
 #: borrowed/goffice/go-charmap-sel.c:228
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "Occidentală (Windows-1252)"
 
 #: borrowed/goffice/go-charmap-sel.c:441
 #, fuzzy
@@ -935,7 +936,7 @@ msgstr "Plată asigurare"
 #. Translators: PMI stands for Private Mortgage Insurance.
 #: gnucash/gnome/assistant-loan.cpp:131
 msgid "PMI"
-msgstr "PMI"
+msgstr "Asigurare credit ipotecar"
 
 #: gnucash/gnome/assistant-loan.cpp:131
 msgid "PMI Payment"
@@ -1157,7 +1158,7 @@ msgstr "Editează..."
 #: gnucash/report/reports/standard/invoice.scm:774
 #: libgnucash/engine/Account.cpp:175 libgnucash/engine/gncInvoice.c:1110
 msgid "Bill"
-msgstr ""
+msgstr "Factură"
 
 #: gnucash/gnome/business-gnome-utils.c:222 gnucash/gnome/dialog-doclink.c:808
 #: gnucash/gnome/dialog-invoice.c:2640 gnucash/gnome/dialog-invoice.c:2866
@@ -1235,7 +1236,7 @@ msgstr "Tipul entității nu se potrivește %s: %s"
 
 #: gnucash/gnome/dialog-billterms.c:270
 msgid "Discount days cannot be more than due days."
-msgstr ""
+msgstr "Zilele de reduceri nu pot fi mai multe decât numărul zilelor scadente."
 
 #: gnucash/gnome/dialog-billterms.c:324
 msgid "You must provide a name for this Billing Term."
@@ -6170,7 +6171,7 @@ msgstr "Exportă"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.c:1140
 msgid "Save Config"
-msgstr ""
+msgstr "Salvați configurația"
 
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As..."
 #. to be used as toolbar button label.
@@ -6181,7 +6182,7 @@ msgstr "S_alvează ca..."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1144
 msgid "Make Pdf"
-msgstr ""
+msgstr "Faceți PDF"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1196
 #, fuzzy, c-format
@@ -7743,10 +7744,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome-utils/dialog-account.c:1329
-#, fuzzy
-#| msgid "Cancel the current entry"
 msgid "Cannot change currency"
-msgstr "Renunță la intrarea curentă"
+msgstr "Nu se poate schimba moneda"
 
 #: gnucash/gnome-utils/dialog-account.c:1418
 #, fuzzy
@@ -10268,9 +10267,8 @@ msgstr "Dezechilibru"
 #. Translators: currently max 34 (ASCII) chars (= 17 or 8 UTF-8 chars depending on the block)
 #. See "MAX_DATE_LENGTH" in https://code.gnucash.org/docs/MAINT/group__Date.html
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:1490
-#, fuzzy
 msgid " Scheduled "
-msgstr "Automat"
+msgstr " Programat "
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2317
 #: gnucash/register/ledger-core/split-register-control.c:1526
@@ -11667,6 +11665,9 @@ msgid ""
 "is encountered during import. Otherwise the user will be asked what to do "
 "with each unknown commodity."
 msgstr ""
+"Permite crearea automată de noi mărfuri dacă se întâlnește orice marfă "
+"necunoscută în timpul importului. În caz contrar, utilizatorul va fi "
+"întrebat ce să facă cu fiecare marfă necunoscută."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:68
 #, fuzzy
@@ -13427,9 +13428,8 @@ msgid "Summary Page"
 msgstr "Bară de su_mar"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:13
-#, fuzzy
 msgid "CSV Import Assistant"
-msgstr "Druidul GnuCash pentru importul fișierului de date"
+msgstr "Asistent de import CSV"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:42
@@ -13450,16 +13450,16 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:63
-#, fuzzy
 msgid "Import Account Assistant"
-msgstr "Raport conturi"
+msgstr "Asistent de import pentru cont"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:78
-#, fuzzy
 msgid ""
 "\n"
 "Enter file name and location for the Import...\n"
-msgstr "Nu există opțiuni pentru acest raport."
+msgstr ""
+"\n"
+"Introduceți numele și locația fișierului pentru Import...\n"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:91
 #, fuzzy
@@ -13482,21 +13482,16 @@ msgid "Semicolon Separated"
 msgstr "Dată de început"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:188
-#, fuzzy
 msgid "Custom regular Expression"
-msgstr ""
-"Eroare în expresia regulată '%s':\n"
-"%s"
+msgstr "RegEx personalizat"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:204
-#, fuzzy
 msgid "Colon Separated"
-msgstr "Dată de început"
+msgstr "Separat de două puncte"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:230
-#, fuzzy
 msgid "Select Separator Type"
-msgstr "Selectează tipul reducerii"
+msgstr "Alegeți tipul de separator"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:268
 msgid "Preview"
@@ -13504,7 +13499,7 @@ msgstr "Previzualizare"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:281
 msgid "Import Account Preview, first 10 rows only"
-msgstr ""
+msgstr "Previzualizare a importului de conturi, numai primele 10 rânduri"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:290
 #: gnucash/gtkbuilder/assistant-csv-export.glade:728
@@ -13515,21 +13510,18 @@ msgid ""
 msgstr "Apasă Aplică pentru a crea aceste tranzacții."
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:296
-#, fuzzy
 msgid "Import Accounts Now"
-msgstr "Raport conturi"
+msgstr "Importă conturile acum"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:346
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1069
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1156
-#, fuzzy
 msgid "Import Summary"
-msgstr "Rezumatul conturilor"
+msgstr "Rezumatul operațiunii de importare"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:8
-#, fuzzy
 msgid "CSV Export Assistant"
-msgstr "Druid pentru ipotecă/împrumut dat"
+msgstr "Asistent de export CSV"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:34
 msgid ""
@@ -13538,9 +13530,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:73
-#, fuzzy
 msgid "Use Quotes"
-msgstr "Obține cotațiile"
+msgstr "Folosiți ghilimele"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:88
 #, fuzzy
@@ -13551,26 +13542,25 @@ msgstr "Exemplu de date:"
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:322
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:314
 msgid "Comma (,)"
-msgstr ""
+msgstr "Virgulă (,)"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:151
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:339
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:331
 msgid "Colon (:)"
-msgstr ""
+msgstr "Două puncte (:)"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:168
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:355
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:347
 msgid "Semicolon (;)"
-msgstr ""
+msgstr "Punct și virgulă (;)"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:221
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:232
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:221
-#, fuzzy
 msgid "Separators"
-msgstr "caractere"
+msgstr "Separatoare"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:237
 #, fuzzy
@@ -13580,6 +13570,8 @@ msgstr "Alege formatul pentru export"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:252
 msgid "Select the accounts to be exported and date range if required."
 msgstr ""
+"Selectați conturile de exportat și intervalul calendaristic, dacă este "
+"necesar."
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:327
 #: gnucash/gtkbuilder/dialog-tax-info.glade:372
@@ -13746,9 +13738,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:84
-#, fuzzy
 msgid "Price Import Assistant"
-msgstr "Druidul GnuCash pentru importul fișierului de date"
+msgstr "Asistent pentru importul prețurilor"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:99
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:89
@@ -16607,10 +16598,8 @@ msgid "All _accounts"
 msgstr "Toate conturile"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:165
-#, fuzzy
-#| msgid " Search "
 msgid "Search scope"
-msgstr " Caută "
+msgstr "Sfera de căutare"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:191
 msgid "Account Full Name"
@@ -22083,10 +22072,8 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:519
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:574
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:582
-#, fuzzy
-#| msgid " could not be understood.\n"
 msgid "Column '{1}' could not be understood.\n"
-msgstr " nu a putut fi înțeles.\n"
+msgstr "Coloana '{1}' nu a putut fi înțeleasă.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:280
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:327
@@ -23087,10 +23074,9 @@ msgid "Have a nice day!"
 msgstr "O zi plăcută!"
 
 #: gnucash/python/init.py:118
-#, fuzzy, python-format
-#| msgid "Welcome to GnuCash ~a !"
+#, python-format
 msgid "Welcome to GnuCash %s Shell"
-msgstr "Bine ați venit la GnuCash ~a !"
+msgstr "Bun venit la GnuCash %s Shell"
 
 #: gnucash/register/ledger-core/gncEntryLedger.c:250
 msgid "Hours"
@@ -26664,10 +26650,8 @@ msgid "Barchart"
 msgstr "Diagramă cu bare pentru active"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1188
-#, fuzzy
-#| msgid "%s to %s"
 msgid " to "
-msgstr "%s la %s"
+msgstr " la "
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1251
 #: gnucash/report/reports/standard/trial-balance.scm:855
@@ -27505,9 +27489,8 @@ msgid "No valid customer found."
 msgstr "Niciun cont selectat"
 
 #: gnucash/report/reports/standard/customer-summary.scm:299
-#, fuzzy
 msgid "Markup"
-msgstr "Marcator"
+msgstr "Marja de profit"
 
 #: gnucash/report/reports/standard/customer-summary.scm:378
 #, fuzzy
@@ -29447,9 +29430,8 @@ msgid "CSS color."
 msgstr "Culori"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:192
-#, fuzzy
 msgid "Invoice number: "
-msgstr "Numărul facturii"
+msgstr "Numărul facturii: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:194
 msgid "To: "
