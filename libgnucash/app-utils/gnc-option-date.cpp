@@ -434,13 +434,23 @@ normalize_reldate_tm(struct tm& now)
 {
     auto factor{abs(now.tm_mon) / 12};
     now.tm_mon /= factor > 0 ? factor : 1;
-    now.tm_year += now.tm_mon < 0 ? -factor : factor;
+    now.tm_year += now.tm_mon < 0 ? -factor: factor;
+
+    auto days = [](auto month, int year)
+    {
+        auto mon{month % 12 + (month < 0 ? 12 : 0)};
+        auto num_days{days_in_month[mon]};
+        //Leap year check.
+        if (mon == 1 && year % 4 == 0 && !(year % 100 == 0 && (year + 1900) % 400 != 0))
+            ++num_days;
+        return num_days;
+    };
 
     while (now.tm_mday < 1)
-        now.tm_mday += days_in_month[--now.tm_mon];
+        now.tm_mday += days(--now.tm_mon, now.tm_year);
 
-    while (now.tm_mday > days_in_month[now.tm_mon])
-        now.tm_mday -= days_in_month[now.tm_mon++];
+    while (now.tm_mday > days(now.tm_mon, now.tm_year))
+        now.tm_mday -= days(now.tm_mon++, now.tm_year);
 
     while (now.tm_mon < 0)
     {
