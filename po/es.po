@@ -79,7 +79,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-02 14:54+0000\n"
+"PO-Revision-Date: 2022-01-02 22:54+0000\n"
 "Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -586,7 +586,7 @@ msgstr ""
 "Pulse el botón secundario del ratón (Pulsar Ctrl en Mac OS X) en la lengüeta "
 "de Cuentas de la ventana principal para traer las opciones del menú de la "
 "cuenta. Dentro de cada registro, pulsando botón secundario del ratón "
-"selecciona las opciones del menú de asiento."
+"selecciona las opciones del menú de transacción."
 
 #: doc/tip_of_the_day.list.c:32
 msgid ""
@@ -610,12 +610,12 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgstr ""
-"Toda transacción tiene un campo \"Anotaciones\" donde puedes añadir "
+"Cada transacción tiene un campo \"Anotaciones\" donde puedes poner "
 "información útil.\n"
 "\n"
 "Para hacerlo visible\n"
-"seleccione \"Vista\" en la barra de menú y marque \"Línea Doble\" o\n"
-"marque \"Modo de doble línea\" en Preferencias:Registro predeterminados."
+"seleccione «Vista» en la barra de menú y marque «Doble línea» o\n"
+"marque «Modo de doble línea» en predeterminaciones de Preferencias:Registro."
 
 #: doc/tip_of_the_day.list.c:44
 msgid ""
@@ -624,10 +624,10 @@ msgid ""
 "View menu, you can choose the register style Auto-Split Ledger or "
 "Transaction Journal."
 msgstr ""
-"Para introducir asientos con multidesglose como una nómina con múltiples "
-"deducciones, pulse el botón «Desglosar» en la barra de herramientas. "
-"Alternativamente, en el menú «Vista», puede elegir el estilo del registro "
-"Autodesglose del «Libro Mayor» o «Libro Diario»."
+"Para introducir transacciones con multidesglose como una nómina con "
+"múltiples deducciones, pulse el botón «Desglosar» en la barra de "
+"herramientas. Alternativamente, en el menú «Vista», puede elegir el estilo "
+"del registro Autodesglose del «Libro Mayor» o «Libro Diario»."
 
 #: doc/tip_of_the_day.list.c:49
 msgid ""
@@ -648,10 +648,10 @@ msgid ""
 "GnuCash will automatically complete the remainder of the transaction as it "
 "was last entered."
 msgstr ""
-"El llenado rápido ayuda la introducción de los asientos habituales. Cuando "
-"teclee las primeras letras de la descripción de un asiento habitual, "
-"entonces pulse la tecla Tabulador, GnuCash completará automáticamente el "
-"resto del asiento como se introdujo la última vez."
+"El llenado rápido ayuda la introducción de las transacciones habituales. "
+"Cuando teclee las primeras letras de la descripción de una transacción "
+"habitual, entonces pulse la tecla Tabulador, GnuCash completará "
+"automáticamente el resto del transacción como se introdujo la última vez."
 
 #: doc/tip_of_the_day.list.c:59
 msgid ""
@@ -673,9 +673,9 @@ msgid ""
 "Accounts tab in the main window, highlight the parent account and select "
 "Edit->Open Subaccounts from the menu."
 msgstr ""
-"¿Quiere ver todas sus asientos de subcuentas en un solo registro? Desde las "
-"lengüetas de Cuentas dentro de la ventana principal, resalte la cuenta "
-"precedente y seleccione Editar→“Abrir subcuentas” desde el menú."
+"¿Quiere ver todas sus transacciones de subcuentas en un solo registro? Desde "
+"las lengüetas de Cuentas dentro de la ventana principal, resalte la cuenta "
+"precedente y seleccione Editar->“Abrir subcuentas” desde el menú."
 
 #: doc/tip_of_the_day.list.c:69
 msgid ""
@@ -702,8 +702,8 @@ msgid ""
 "and withdrawals."
 msgstr ""
 "En la ventana de conciliación, puede pulsar la barra de espacio para marcar "
-"los asientos conciliadas. Puede también pulsar «Tabular» y «Mayús+Tabular» "
-"para moverse entre depósitos y retiradas de fondos."
+"las transacciones conciliadas. Puede también pulsar «Tabular» y "
+"«Mayús+Tabular» para moverse entre depósitos y retiradas de fondos."
 
 #: doc/tip_of_the_day.list.c:80
 msgid ""
@@ -771,16 +771,16 @@ msgid ""
 "To schedule a transaction every year you can choose the monthly basic "
 "frequency and then set 'Every 12 months'."
 msgstr ""
-"El editor de asientos planificados viene con un configurador de frecuencia "
-"muy flexible. Las frecuencias básicas para programar un asiento incluye "
-"diariamente, semanalmente y mensualmente. Pero más señales avanzadas pueden "
-"configurarse también. Algunos ejemplos:\n"
+"El editor de transacciones planificadas viene con un configurador de "
+"frecuencia muy flexible. Las frecuencias básicas para programar una "
+"transacción incluye diariamente, semanalmente y mensualmente. Pero más "
+"señales avanzadas pueden configurarse también. Algunos ejemplos:\n"
 "\n"
-"Para programar un asiento cada tres semanas, puede seleccionar la frecuencia "
-"básica semanal y entonces establecer 'Cada 3 semanas'.\n"
+"Para programar una transacción cada tres semanas, puede seleccionar la "
+"frecuencia básica semanal y entonces fijar 'Cada 3 semanas'.\n"
 "\n"
-"Para programar un asiento cada año puede elegir entre la frecuencia mensual "
-"básica y después establecer 'Cada 12 meses'."
+"Para programar una transacción cada año puede elegir entre la frecuencia "
+"mensual básica y después fijar 'Cada 12 meses'."
 
 #: doc/tip_of_the_day.list.c:111
 msgid ""
@@ -788,9 +788,9 @@ msgid ""
 "after midnight, to get the new date as default for new transactions. It is "
 "not necessary to restart GnuCash."
 msgstr ""
-"Si trabaja por la noche, debe cerrar y reabrir su registro de trabajo "
-"después de la media noche, para obtener la fecha nueva por defecto para los "
-"asientos nuevas. No es necesario reiniciar GnuCash."
+"Si trabaja por la noche, debe cerrar y reabrir su registro de trabajo tras "
+"la media noche, para obtener la fecha nueva por defecto para las "
+"transacciones nuevas. No es necesario reiniciar GnuCash."
 
 #: doc/tip_of_the_day.list.c:115
 msgid ""
@@ -798,7 +798,7 @@ msgid ""
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
-"Para buscar a través de todos sus asientos, inicie una búsqueda "
+"Para buscar a través de todas sus transacciones, inicie una búsqueda "
 "(Editar→Buscar…) desde la página de jerarquía de cuentas principales. Para "
 "limitar su selección de búsqueda a solo una cuenta, inicie la búsqueda desde "
 "esos registros de cuentas."
@@ -845,11 +845,11 @@ msgid_plural ""
 "The earliest transaction date found in this book is %s. Based on the "
 "selection made above, this book will be split into %d books."
 msgstr[0] ""
-"La fecha de asiento más cercana encontrada en este libro es %s. Basado en la "
-"selección hecha encima, este libro será desglosado en %d libro."
+"La fecha de transacción más cercana encontrada en este libro es %s. Basado "
+"en la selección hecha encima, este libro será desglosado en %d libro."
 msgstr[1] ""
-"La fecha de asiento más cercana encontrada en este libro es %s. Basado en la "
-"selección hecha encima, este libro será desglosado en %d libros."
+"La fecha de transacción más cercana encontrada en este libro es %s. Basado "
+"en la selección hecha encima, este libro será desglosado en %d libros."
 
 #. Translators: Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gnome/assistant-acct-period.c:371
@@ -862,9 +862,9 @@ msgid ""
 "Amend the Title and Notes or Click on \"Next\" to proceed.\n"
 "Click on \"Back\" to adjust the dates or \"Cancel\"."
 msgstr ""
-"Ha solicitado que se cree un libro. Este libro contendrá todas los asientos "
-"hasta la medianoche de %s (un total de %d asientos repartidas entre %d "
-"cuentas).\n"
+"Ha solicitado que se cree un libro. Este libro contendrá todas las "
+"transacciones hasta la medianoche de %s (un total de %d transacciones "
+"repartidas entre %d cuentas).\n"
 "\n"
 "Adjunte el Título y Anotaciones o pulse «Siguiente» para proceder.\n"
 "Pulse «Anterior» para ajustar las fechas o «Cancelar»."
@@ -1199,11 +1199,11 @@ msgstr "Símbolo"
 #: gnucash/report/trep-engine.scm:938 gnucash/report/trep-engine.scm:1059
 #: gnucash/report/trep-engine.scm:1229
 msgid "Shares"
-msgstr "Accións"
+msgstr "Acciones"
 
 #: gnucash/gnome/assistant-stock-split.c:787
 msgid "You don't have any stock accounts with balances!"
-msgstr "¡No tiene ninguna cuenta de reserva con balances!"
+msgstr "¡No tiene ninguna cuenta de provisión con balances!"
 
 #: gnucash/gnome/business-gnome-utils.c:73
 #: gnucash/gnome/business-gnome-utils.c:260 gnucash/gnome/dialog-invoice.c:1511
@@ -1360,14 +1360,16 @@ msgstr "¿Confirma que quiere borrar «%s»?"
 msgid ""
 "This transaction needs to be assigned to a Customer. Please choose the "
 "Customer below."
-msgstr "Este asiento requiere asignarse a un Cliente. Elija el Cliente debajo."
+msgstr ""
+"Esta transacción requiere asignarse a un Cliente. Elija el Cliente debajo."
 
 #: gnucash/gnome/dialog-choose-owner.c:85
 msgid ""
 "This transaction needs to be assigned to a Vendor. Please choose the Vendor "
 "below."
 msgstr ""
-"Este asiento requiere asignarse a un Proveedor. Elija el Proveedor debajo."
+"Esta transacción requiere asignarse a un Proveedor. Elija el Proveedor "
+"debajo."
 
 #: gnucash/gnome/dialog-commodities.c:183
 msgid ""
@@ -2133,7 +2135,7 @@ msgstr "Función"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:623
 #: gnucash/report/trep-engine.scm:247
 msgid "Transaction Number"
-msgstr "Número Asiento"
+msgstr "Número Transaccional"
 
 #: gnucash/gnome/dialog-find-transactions2.c:137
 #: gnucash/gnome/dialog-find-transactions2.c:172
@@ -2220,7 +2222,7 @@ msgstr "Anotaciones"
 #: gnucash/gnome/dialog-find-transactions.c:229
 #: gnucash/gnome-search/dialog-search.c:1485
 msgid "Find Transaction"
-msgstr "Buscar Asiento"
+msgstr "Buscar Transacción"
 
 #: gnucash/gnome/dialog-find-transactions.c:129
 #: gnucash/report/reports/standard/general-ledger.scm:67
@@ -2958,7 +2960,7 @@ msgid ""
 "The selected transaction doesn't have splits that can be assigned as a "
 "payment"
 msgstr ""
-"El asiento seleccionado no tiene desgloses que pueda ser asignada a una "
+"La transacción seleccionada no tiene desgloses que pueda ser asignados a una "
 "liquidación"
 
 #: gnucash/gnome/dialog-payment.c:1636
@@ -2968,7 +2970,8 @@ msgid ""
 "Please select one, the others will be ignored.\n"
 "\n"
 msgstr ""
-"Mientras este asiento tiene múltiples desgloses que puedan ser considerado\n"
+"Mientras esta transacción tiene múltiples desgloses que puedan ser "
+"considerado\n"
 "como 'el desglose de liquidación', gnucash solo sabe como manipular una.\n"
 "Por favor seleccione uno, los otros serán descartados.\n"
 "\n"
@@ -2999,9 +3002,9 @@ msgid ""
 "%s\n"
 "Do you wish to continue and ignore these splits?"
 msgstr ""
-"El asiento tiene al menos un desglose dentro de una cuenta de negocio que no "
-"es parte de un asiento de negocio.\n"
-"Si continua con estos desgloses serán descartado:\n"
+"La transacción tiene al menos un desglose dentro de una cuenta de negocio "
+"que no es parte de una transacción negociada.\n"
+"Si continua estos desgloses serán descartados:\n"
 "\n"
 "%s\n"
 "¿Quiere continuar y descartar estos desgloses?"
@@ -3171,7 +3174,7 @@ msgstr "_Editar"
 #: gnucash/gnome/dialog-sx-editor2.c:166 gnucash/gnome/dialog-sx-editor.c:168
 #: gnucash/gnome/window-reconcile2.c:2128 gnucash/gnome/window-reconcile.c:2375
 msgid "_Transaction"
-msgstr "_Asiento"
+msgstr "_Transacción"
 
 #: gnucash/gnome/dialog-sx-editor2.c:167 gnucash/gnome/dialog-sx-editor.c:169
 #: gnucash/gnome-utils/gnc-main-window.c:276
@@ -3186,7 +3189,8 @@ msgstr "_Funciones"
 #: gnucash/gnome/dialog-sx-editor2.c:200 gnucash/gnome/dialog-sx-editor.c:202
 msgid ""
 "This Scheduled Transaction has changed; are you sure you want to cancel?"
-msgstr "Este Asiento Planificado ha modificado, ¿seguro que quiere cancelarlo?"
+msgstr ""
+"Esta Transacción Planificada ha modificado, ¿seguro que quiere cancelarlo?"
 
 #: gnucash/gnome/dialog-sx-editor2.c:636
 #, c-format
@@ -3204,12 +3208,12 @@ msgid ""
 "The Scheduled Transaction Editor cannot automatically balance this "
 "transaction. Should it still be entered?"
 msgstr ""
-"El Editor de Asiento Planificado automáticamente no puede cuadrar este "
-"asiento. ¿Debería aún ser introducido?"
+"El Editor de Transacción Planificada no puede auto cuadrar esta transacción ¿"
+"Debería aún ser introducido?"
 
 #: gnucash/gnome/dialog-sx-editor2.c:712 gnucash/gnome/dialog-sx-editor.c:492
 msgid "Please name the Scheduled Transaction."
-msgstr "Nombre el Asiento Planificado."
+msgstr "Nombre la Transacción Planificada."
 
 #: gnucash/gnome/dialog-sx-editor2.c:739 gnucash/gnome/dialog-sx-editor.c:518
 #, c-format
@@ -3217,20 +3221,21 @@ msgid ""
 "A Scheduled Transaction with the name \"%s\" already exists. Are you sure "
 "you want to name this one the same?"
 msgstr ""
-"Ya existe un Asiento Planificado con el nombre «%s». ¿Seguro que quiere "
-"ponerle a éste el mismo nombre?"
+"Ya existe una Transacción Planificada con el nombre «%s». ¿Seguro que quiere "
+"ponerle a ésta el mismo nombre?"
 
 #: gnucash/gnome/dialog-sx-editor2.c:767
 msgid "Scheduled Transactions with variables cannot be automatically created."
-msgstr "Asientos Planificados con variables no pueden crearse automáticamente."
+msgstr ""
+"Transacciones Planificadas con variables no pueden crearse automáticamente."
 
 #: gnucash/gnome/dialog-sx-editor2.c:777 gnucash/gnome/dialog-sx-editor.c:627
 msgid ""
 "Scheduled Transactions without a template transaction cannot be "
 "automatically created."
 msgstr ""
-"No se pudieron crear Asientos Planificados sin una plantilla de asiento "
-"automáticamente."
+"Las Transacciones Planificadas sin una plantilla de transacción no puede ser "
+"automáticamente creada."
 
 #: gnucash/gnome/dialog-sx-editor2.c:792 gnucash/gnome/dialog-sx-editor.c:542
 msgid "Please provide a valid end selection."
@@ -3254,8 +3259,8 @@ msgid ""
 "You have attempted to create a Scheduled Transaction which will never run. "
 "Do you really want to do this?"
 msgstr ""
-"Ha intentado crear un Asiento Planificado que no se ejecutará nunca. "
-"¿Realmente quiere hacerlo?"
+"Ha intentado crear una Transacción Planificada que no se ejecutará nunca. ¿"
+"Realmente quiere hacerlo?"
 
 #: gnucash/gnome/dialog-sx-editor2.c:1301
 msgid ""
@@ -3274,8 +3279,8 @@ msgid ""
 "The current template transaction has been changed. Would you like to record "
 "the changes?"
 msgstr ""
-"La actual plantilla de asiento ha sido modificada. ¿Le gustaría registrar "
-"los cambios?"
+"La actual plantilla de transacción ha sido modificada. ¿Le gustaría "
+"registrar los cambios?"
 
 #: gnucash/gnome/dialog-sx-editor2.c:1782 gnucash/gnome/dialog-sx-editor.c:1844
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:246
@@ -3288,8 +3293,8 @@ msgid ""
 "Scheduled Transactions with variables or involving more than one commodity "
 "cannot be automatically created."
 msgstr ""
-"Asientos Planificados con variables o incluyendo más de una materia prima no "
-"puede ser creada automáticamente."
+"Transacciones Planificadas con variables o incluyendo más de una mercancía "
+"no puede ser creada automáticamente."
 
 #: gnucash/gnome/dialog-sx-editor.c:675
 #, c-format
@@ -3326,7 +3331,7 @@ msgid ""
 "The Scheduled Transaction is unbalanced. You are strongly encouraged to "
 "correct this situation."
 msgstr ""
-"El Asiento Planificado no cuadra. Es muy recomendable que corrija esta "
+"La Transacción Planificada no cuadra. Es muy recomendable que corrija esta "
 "situación."
 
 #: gnucash/gnome/dialog-sx-from-trans.c:789
@@ -3334,8 +3339,8 @@ msgid ""
 "Cannot create a Scheduled Transaction from a Transaction currently being "
 "edited. Please Enter the Transaction before Scheduling."
 msgstr ""
-"No es posible crear un Asiento Planificado a partir de un Asiento que se "
-"está editando. Introduzca la Asiento antes de la Planificación."
+"No es posible crear un Transacción Planificada a partir de una Transacción "
+"que se está editando. Introduzca la Transacción antes de la Planificación."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:402
 msgid "Ignored"
@@ -3371,7 +3376,7 @@ msgstr "(Requiere Valor)"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:819
 msgid "Invalid Transactions"
-msgstr "Asientos Inválidos"
+msgstr "Transacciones Inválidas"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:866
 #, c-format
@@ -3382,16 +3387,16 @@ msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transactions automatically created)"
 msgstr[0] ""
-"No hay ningún Asiento Planificado para ser introducido en este tiempo. (Un "
-"asiento creado automáticamente)"
+"No hay ninguna Transacción Planificada para ser introducida en este tiempo. ("
+"Una transacción creada automáticamente)"
 msgstr[1] ""
-"No hay ningún Asiento Planificado para ser introducido en este tiempo. (%d "
-"asientos creados automáticamente)"
+"No hay ninguna Transacción Planificada para ser introducida en este tiempo. ("
+"%d transacciones creadas automáticamente)"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:998
 #: gnucash/gnome-search/dialog-search.c:1104
 msgid "Transaction"
-msgstr "Asiento"
+msgstr "Transacción"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1014
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:666
@@ -3401,7 +3406,7 @@ msgstr "Estado"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1108
 msgid "Created Transactions"
-msgstr "Asientos Creados"
+msgstr "Transacciones Creadas"
 
 #: gnucash/gnome/dialog-tax-info.c:287
 msgid "Last Valid Year: "
@@ -3616,7 +3621,7 @@ msgstr "_Buscar…"
 #: gnucash/gnome/gnc-plugin-page-register2.c:256
 #: gnucash/gnome/gnc-plugin-page-register.c:365
 msgid "Find transactions with a search"
-msgstr "Encuentra asientos con una búsqueda"
+msgstr "Encuentra transacciones con una búsqueda"
 
 #. Translators: remember to reuse this
 #. translation in dialog-account.glade
@@ -3642,15 +3647,15 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:164
 msgid "_Scheduled Transactions"
-msgstr "Asientos _Planificados"
+msgstr "Transacciones _Planificadas"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:166
 msgid "_Scheduled Transaction Editor"
-msgstr "Editor de _asiento planificado"
+msgstr "Editor de _transacción planificada"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:167
 msgid "The list of Scheduled Transactions"
-msgstr "El listado de Asientos Planificados"
+msgstr "El listado de Transacciones Planificadas"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:171
 msgid "Since _Last Run..."
@@ -3658,7 +3663,7 @@ msgstr "Desde la ú_ltima ejecución…"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:172
 msgid "Create Scheduled Transactions since the last time run"
-msgstr "Crea un Asiento Planificado desde la última vez ejecutada"
+msgstr "Crea una Transacción Planificada desde la última vez ejecutada"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:176
 msgid "_Mortgage & Loan Repayment..."
@@ -3666,7 +3671,7 @@ msgstr "_Devolución de hipotecas y préstamos…"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:177
 msgid "Setup scheduled transactions for repayment of a loan"
-msgstr "Configure un asiento planificado para la devolución de un préstamo"
+msgstr "Configure una transacción planificada para la devolución de un préstamo"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:180
 #: gnucash/report/report-core.scm:153
@@ -3723,11 +3728,11 @@ msgstr "Ver y Eliminar información Bayesiana y No Bayesiana"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:216
 msgid "_Transaction Linked Documents"
-msgstr "_Documentos asociados a asiento"
+msgstr "_Documentos asociados a transacción"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:217
 msgid "View all Transaction Linked Documents"
-msgstr "Ver todos los Documentos Asociados a Asientos"
+msgstr "Ver todos los Documentos Asociados a Transacción"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:224
 msgid "_Tips Of The Day"
@@ -3739,7 +3744,8 @@ msgstr "Vea los Consejos del Día"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:545
 msgid "There are no Scheduled Transactions to be entered at this time."
-msgstr "No hay Asientos Planificados para ser registradas en este momento."
+msgstr ""
+"No hay Transacciones Planificadas para ser introducidas en este momento."
 
 #. Translators: %d is the number of transactions. This is a
 #. ngettext(3) message.
@@ -3752,11 +3758,11 @@ msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transactions automatically created)"
 msgstr[0] ""
-"No hay ningún Asiento Planificado para ser registrada en este momento. (Un "
-"asiento creada automáticamente)"
+"No hay ninguna Transacción Planificada para ser registrada en este momento. ("
+"Una transacción creada automáticamente)"
 msgstr[1] ""
-"No hay ningún Asiento Planificado para ser registrada en este momento. (%d "
-"asientos creados automáticamente)"
+"No hay ninguna Transacción Planificada para ser registrada en este momento. ("
+"%d transacciones creadas automáticamente)"
 
 # Menú
 #: gnucash/gnome/gnc-plugin-budget.c:63
@@ -4038,7 +4044,7 @@ msgstr "Asignar como liquidación…"
 
 #: gnucash/gnome/gnc-plugin-business.c:327
 msgid "Assign the selected transaction as payment"
-msgstr "Asigna el asiento seleccionado como liquidación"
+msgstr "Asigna la transacción seleccionada como liquidación"
 
 #: gnucash/gnome/gnc-plugin-business.c:331
 msgid "Edit payment..."
@@ -4046,7 +4052,7 @@ msgstr "Editar liquidación…"
 
 #: gnucash/gnome/gnc-plugin-business.c:332
 msgid "Edit the payment this transaction is a part of"
-msgstr "Edita la liquidación de este asiento es una parte de"
+msgstr "Edita la liquidación de esta transacción es una parte de"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:199
 #: gnucash/gnome/gnc-plugin-page-invoice.c:113
@@ -4213,7 +4219,7 @@ msgstr "_Auto-puntear…"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:308
 msgid "Automatically clear individual transactions, given a cleared amount"
 msgstr ""
-"Puntea automáticamente asientos individuales, entregando una cantidad "
+"Puntea automáticamente transacciones individuales, entregando una cantidad "
 "punteada"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:312
@@ -4264,7 +4270,7 @@ msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
 msgstr ""
-"Comprobar y reparar asientos descuadradas y desgloses huérfanos en esta "
+"Comprobar y reparar transacciones descuadradas y desgloses huérfanos en esta "
 "cuenta"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:332
@@ -4276,7 +4282,7 @@ msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account and its subaccounts"
 msgstr ""
-"Comprobar y reparar asientos descuadradas y desgloses huérfanos en esta "
+"Comprobar y reparar transacciones descuadradas y desgloses huérfanos en esta "
 "cuenta y sus subcuentas"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:338
@@ -4288,8 +4294,8 @@ msgid ""
 "Check for and repair unbalanced transactions and orphan splits in all "
 "accounts"
 msgstr ""
-"Comprobar y reparar asientos descuadradas y desgloses huérfanos en todas las "
-"cuentas"
+"Comprobar y reparar transacciones descuadradas y desgloses huérfanos en "
+"todas las cuentas"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:343
 #: gnucash/gnome/gnc-plugin-register2.c:64
@@ -4375,7 +4381,7 @@ msgid ""
 "Are you sure you want to do this?"
 msgstr ""
 "La cuenta %s no usa la misma moneda que la cuenta desde la que está moviendo "
-"el asiento.\n"
+"la transacciones.\n"
 "¿Seguro que quiere hacer esto?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1438
@@ -4430,12 +4436,12 @@ msgstr "La cuenta %s se eliminará."
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1738
 #, c-format
 msgid "All transactions in this account will be moved to the account %s."
-msgstr "Todos los asientos en esta cuenta serán movidos a la cuenta %s."
+msgstr "Todas las transacciones en esta cuenta serán movidos a la cuenta %s."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1745
 #, c-format
 msgid "All transactions in this account will be deleted."
-msgstr "Todos los asientos en esta cuenta serán borrados."
+msgstr "Todas las transacciones en esta cuenta serán borradas."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1754
 #, c-format
@@ -4450,12 +4456,12 @@ msgstr "Sus subcuentas serán eliminadas."
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1764
 #, c-format
 msgid "All sub-account transactions will be moved to the account %s."
-msgstr "Todos los asientos de las subcuentas se moverán a la cuenta %s."
+msgstr "Todas las transacciones de las subcuentas se moverán a la cuenta %s."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1771
 #, c-format
 msgid "All sub-account transactions will be deleted."
-msgstr "Todos los asientos de las subcuentas serán eliminadas."
+msgstr "Todas las transacciones de las sub-cuentas serán borradas."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1777
 msgid "Are you sure you want to do this?"
@@ -4498,7 +4504,7 @@ msgid ""
 "Estimate a budget value for the selected accounts from past transactions."
 msgstr ""
 "Estimar la cantidad a presupuestar para las cuentas seleccionadas a partir "
-"de asientos anteriores."
+"de transacciones anteriores."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:175
 msgid "_All Periods..."
@@ -5265,29 +5271,29 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register2.c:194
 #: gnucash/gnome/gnc-plugin-page-register.c:292
 msgid "Cu_t Transaction"
-msgstr "Cor_tar asiento"
+msgstr "Cor_tar transacción"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:195
 #: gnucash/gnome/gnc-plugin-page-register.c:293
 msgid "_Copy Transaction"
-msgstr "_Copiar asiento"
+msgstr "_Copiar transacción"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:196
 #: gnucash/gnome/gnc-plugin-page-register.c:294
 msgid "_Paste Transaction"
-msgstr "_Pegar asiento"
+msgstr "_Pegar transacción"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:197
 #: gnucash/gnome/gnc-plugin-page-register.c:295
 msgid "Dup_licate Transaction"
-msgstr "Dup_licar asiento"
+msgstr "Dup_licar transacción"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:198
 #: gnucash/gnome/gnc-plugin-page-register.c:296
 #: gnucash/gnome/gnc-split-reg.c:1544
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1064
 msgid "_Delete Transaction"
-msgstr "_Borrar asiento"
+msgstr "_Borrar transacción"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:199
 #: gnucash/gnome/gnc-plugin-page-register.c:308
@@ -5319,27 +5325,27 @@ msgstr "_Borrar desglose"
 #: gnucash/gnome/gnc-plugin-page-register2.c:204
 #: gnucash/gnome/gnc-plugin-page-register.c:313
 msgid "Cut the selected transaction into clipboard"
-msgstr "Corta el asiento seleccionado al portapapeles"
+msgstr "Corta la transacción seleccionada al portapapeles"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:205
 #: gnucash/gnome/gnc-plugin-page-register.c:314
 msgid "Copy the selected transaction into clipboard"
-msgstr "Copia el asiento seleccionado al portapapeles"
+msgstr "Copia la transacción seleccionada al portapapeles"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:206
 #: gnucash/gnome/gnc-plugin-page-register.c:315
 msgid "Paste the transaction from the clipboard"
-msgstr "Pega el asiento desde el portapapeles"
+msgstr "Pega la transacción desde el portapapeles"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:207
 #: gnucash/gnome/gnc-plugin-page-register.c:316
 msgid "Make a copy of the current transaction"
-msgstr "Crea una copia del asiento efectivo"
+msgstr "Crea una copia de la transacción efectiva"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:208
 #: gnucash/gnome/gnc-plugin-page-register.c:317
 msgid "Delete the current transaction"
-msgstr "Borra el asiento efectivo"
+msgstr "Borra la transacción efectiva"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:209
 #: gnucash/gnome/gnc-plugin-page-register.c:321
@@ -5413,59 +5419,59 @@ msgstr "_Quitar todos los desgloses"
 #: gnucash/gnome/gnc-plugin-page-register2.c:301
 #: gnucash/gnome/gnc-plugin-page-register.c:410
 msgid "Remove all splits in the current transaction"
-msgstr "Quita todos los desgloses dentro del asiento efectivo"
+msgstr "Quita todos los desgloses dentro de la transacción efectiva"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:305
 #: gnucash/gnome/gnc-plugin-page-register.c:414
 msgid "_Enter Transaction"
-msgstr "_Introducir asiento"
+msgstr "_Introducir transacción"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:306
 #: gnucash/gnome/gnc-plugin-page-register.c:415
 msgid "Record the current transaction"
-msgstr "Registra el asiento efectivo"
+msgstr "Registra la transacción efectiva"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:310
 #: gnucash/gnome/gnc-plugin-page-register.c:419
 msgid "Ca_ncel Transaction"
-msgstr "Ca_ncelar asiento"
+msgstr "Ca_ncelar transacción"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:311
 #: gnucash/gnome/gnc-plugin-page-register.c:420
 msgid "Cancel the current transaction"
-msgstr "Cancela el asiento efectivo"
+msgstr "Cancela la transacción efectiva"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:315
 #: gnucash/gnome/gnc-plugin-page-register.c:424
 msgid "_Void Transaction"
-msgstr "Asiento _Vacío"
+msgstr "Transacción _Anulada"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:319
 #: gnucash/gnome/gnc-plugin-page-register.c:428
 msgid "_Unvoid Transaction"
-msgstr "Asiento _no vacío"
+msgstr "Transacción _desanulada"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:323
 #: gnucash/gnome/gnc-plugin-page-register.c:432
 msgid "Add _Reversing Transaction"
-msgstr "Agregar asiento de _reversión"
+msgstr "Agregar transacción de _reversión"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:327
 msgid "Move Transaction _Up"
-msgstr "_Subir asiento"
+msgstr "_Subir transacción"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:328
 msgid ""
 "Move the current transaction one row upwards. Only available if the date and "
 "number of both rows are identical and the register window is sorted by date."
 msgstr ""
-"Mueve el asiento efectivo una fila superior. Solamente disponible si la "
+"Mueve la transacción efectiva una fila superior. Solamente disponible si la "
 "fecha y número de ambas filas son idénticas y la ventana del registro está "
 "ordenada por fecha."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:332
 msgid "Move Transaction Do_wn"
-msgstr "_Bajar asiento"
+msgstr "_Bajar transacción"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:333
 msgid ""
@@ -5473,9 +5479,9 @@ msgid ""
 "and number of both rows are identical and the register window is sorted by "
 "date."
 msgstr ""
-"Baja el asiento efectivo una fila. Solamente disponible si la fecha y número "
-"de ambas filas son idénticas y la ventana del registro está ordenada por "
-"fecha."
+"Baja la transacción efectiva una fila. Solamente disponible si la fecha y "
+"número de ambas filas son idénticas y la ventana del registro está ordenada "
+"por fecha."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:363
 #: gnucash/gnome/gnc-plugin-page-register.c:481
@@ -5483,18 +5489,18 @@ msgid ""
 "Automatically clear individual transactions, so as to reach a certain "
 "cleared amount"
 msgstr ""
-"Puntea automáticamente asientos individuales, tal como alcanzar una cierta "
-"cantidad punteada"
+"Puntea automáticamente transacciones individuales, tal como alcanzar una "
+"cierta cantidad punteada"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:377
 #: gnucash/gnome/gnc-plugin-page-register.c:495
 msgid "_Blank Transaction"
-msgstr "Asiento En Blanco"
+msgstr "Transacciónes En _Blanco"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:378
 #: gnucash/gnome/gnc-plugin-page-register.c:496
 msgid "Move to the blank transaction at the bottom of the register"
-msgstr "Ir al asiento en blanco al suelo del registro"
+msgstr "Ir a transacción en blanco al suelo del registro"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:382
 #: gnucash/gnome/gnc-plugin-page-register.c:505
@@ -5504,7 +5510,7 @@ msgstr "Editar tipo de _cambio"
 #: gnucash/gnome/gnc-plugin-page-register2.c:383
 #: gnucash/gnome/gnc-plugin-page-register.c:506
 msgid "Edit the exchange rate for the current transaction"
-msgstr "Edita el tipo de cambio para el asiento efectivo"
+msgstr "Edita el tipo de cambio para la transacción efectiva"
 
 #. Translators: This is a menu item that will open a register tab for the
 #. account of the first other account in the current transaction's split list
@@ -5519,8 +5525,8 @@ msgstr "_Ir a la otra cuenta"
 msgid ""
 "Open a new register tab for the other account with focus on this transaction."
 msgstr ""
-"Abre un boletín de registro nuevo para la otra cuenta con foco en este "
-"asiento."
+"Abre un boletín de registro nuevo para la otra cuenta con foco en esta "
+"transacción."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:392
 #: gnucash/gnome/gnc-plugin-page-register.c:518
@@ -5531,18 +5537,19 @@ msgstr "_Programar…"
 #: gnucash/gnome/gnc-plugin-page-register.c:519
 msgid ""
 "Create a Scheduled Transaction with the current transaction as a template"
-msgstr "Crea un Asiento Planificado con el asiento efectivo como plantilla"
+msgstr ""
+"Crea una Transacción Planificada con la transacción efectiva como plantilla"
 
 #. Translators: The following 2 are Scrub actions in register view
 #: gnucash/gnome/gnc-plugin-page-register2.c:397
 #: gnucash/gnome/gnc-plugin-page-register.c:525
 msgid "_All transactions"
-msgstr "_Todos los asientos"
+msgstr "_Todas las transacciones"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:401
 #: gnucash/gnome/gnc-plugin-page-register.c:529
 msgid "_This transaction"
-msgstr "_Este asiento"
+msgstr "_Esta transacción"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:408
 #: gnucash/gnome/gnc-plugin-page-register.c:536
@@ -5557,12 +5564,12 @@ msgstr "Abre un boletín de registro para esta Cuenta"
 #: gnucash/gnome/gnc-plugin-page-register2.c:413
 #: gnucash/gnome/gnc-plugin-page-register.c:541
 msgid "Account Report - Single Transaction"
-msgstr "Boletín de Cuenta - Asiento Único"
+msgstr "Boletín de Cuenta - Transacción Única"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:414
 #: gnucash/gnome/gnc-plugin-page-register.c:542
 msgid "Open a register report for the selected Transaction"
-msgstr "Abre un boletín de registro para el Asiento seleccionada"
+msgstr "Abre un boletín de registro para la Transacción seleccionada"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:424
 #: gnucash/gnome/gnc-plugin-page-register.c:553
@@ -5576,7 +5583,7 @@ msgid ""
 "each transaction."
 msgstr ""
 "Muestra una línea adicional con \"Operación\", \"Notas\" y \"Documento "
-"asociado\" para cada asiento."
+"Asociado\" para cada transacción."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:430
 msgid "Show _Extra Dates"
@@ -5589,12 +5596,12 @@ msgstr "Muestra fechas de entradas y conciliación"
 #: gnucash/gnome/gnc-plugin-page-register2.c:436
 #: gnucash/gnome/gnc-plugin-page-register.c:559
 msgid "S_plit Transaction"
-msgstr "Asiento Múlti_ple"
+msgstr "Transacción Múlti_ple"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:437
 #: gnucash/gnome/gnc-plugin-page-register.c:560
 msgid "Show all splits in the current transaction"
-msgstr "Muestra todos los desgloses dentro del asiento efectivo"
+msgstr "Muestra todos los desgloses dentro de la transacción efectiva"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:448
 #: gnucash/gnome/gnc-plugin-page-register.c:571
@@ -5604,7 +5611,7 @@ msgstr "Libro _Básico"
 #: gnucash/gnome/gnc-plugin-page-register2.c:449
 #: gnucash/gnome/gnc-plugin-page-register.c:572
 msgid "Show transactions on one or two lines"
-msgstr "Muestra los asientos en una o dos líneas"
+msgstr "Muestra las transacciones en una o dos líneas"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:453
 #: gnucash/gnome/gnc-plugin-page-register.c:576
@@ -5615,7 +5622,9 @@ msgstr "_Libro General Auto-Desglosado"
 #: gnucash/gnome/gnc-plugin-page-register.c:577
 msgid ""
 "Show transactions on one or two lines and expand the current transaction"
-msgstr "Muestra los asientos en una o dos líneas y expande el asiento efectivo"
+msgstr ""
+"Muestra las transacciones en una o dos líneas y expande la transacción "
+"efectiva"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:458
 #: gnucash/gnome/gnc-plugin-page-register.c:581
@@ -5626,7 +5635,7 @@ msgstr "Libro _Diario"
 #: gnucash/gnome/gnc-plugin-page-register2.c:459
 #: gnucash/gnome/gnc-plugin-page-register.c:582
 msgid "Show expanded transactions with all splits"
-msgstr "Muestra asientos expandidas con todos los desgloses"
+msgstr "Muestra transacciones expandidas con todos los desgloses"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:502
 #: gnucash/gnome/gnc-plugin-page-register.c:625
@@ -5677,19 +5686,19 @@ msgid ""
 "the changes to this transaction, discard the transaction, or cancel the "
 "operation?"
 msgstr ""
-"Este registro tiene modificaciones pendientes a un asiento. ¿Quiere guardar "
-"las modificaciones a este asiento, descartar el asiento, o cancelar la "
-"operación?"
+"Este registro tiene modificaciones pendientes a una transacción ¿Quiere "
+"guardar las modificaciones a esta transacción, descartar la transacción, o "
+"cancelar la operación?"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1627
 #: gnucash/gnome/gnc-plugin-page-register.c:2011
 msgid "_Discard Transaction"
-msgstr "_Descartar asiento"
+msgstr "_Descartar transacción"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1631
 #: gnucash/gnome/gnc-plugin-page-register.c:2015
 msgid "_Save Transaction"
-msgstr "_Guardar asiento"
+msgstr "_Guardar transacción"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1660
 #: gnucash/gnome/gnc-plugin-page-register2.c:1695
@@ -5826,7 +5835,8 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register.c:3991
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr ""
-"No se puede poner un asiento vacío con desgloses conciliados o punteados."
+"No se puede poner una transacción vacía con desgloses conciliados o "
+"punteados."
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register2.c:3040
@@ -5846,11 +5856,11 @@ msgstr "Ir a la factura"
 #: gnucash/gnome/gnc-plugin-page-register.c:318
 msgid "Add, change, or unlink the document linked with the current transaction"
 msgstr ""
-"Agrega, cambia, o desenlaza el documento enlazado con el asiento efectivo"
+"Agrega, cambia, o desenlaza el documento enlazado con la transacción efectiva"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:319
 msgid "Open the linked document for the current transaction"
-msgstr "Abre el documento enlazado para el asiento efectivo"
+msgstr "Abre el documento enlazado para la transacción efectiva"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:320
 msgid "Jump to the linked bill, invoice, or voucher"
@@ -5943,34 +5953,34 @@ msgstr "Mostrar:"
 #: gnucash/gnome/gnc-plugin-page-register.c:3580
 #: gnucash/report/reports/standard/transaction.scm:33
 msgid "Transaction Report"
-msgstr "Boletín Asiento"
+msgstr "Boletín Transacción"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3998
 #: gnucash/gnome/gnc-split-reg.c:1160
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:68
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
-msgstr "Este asiento está marcada como sólo lectura con el comentario: «%s»"
+msgstr "Esta transacción está marcada como sólo lectura con el comentario: «%s»"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4087
 #: gnucash/gnome/gnc-split-reg.c:1131
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1121
 msgid "A reversing entry has already been created for this transaction."
-msgstr "Ya ha sido creado un apunte de reversión para este asiento."
+msgstr "Ya ha sido creada un asiento de reversión para esta transacción."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4088
 msgid "Jump to the transaction?"
-msgstr "¿Ir al asiento?"
+msgstr "¿Ir a la transacción?"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4095
 msgid "Reverse Transaction"
-msgstr "Asiento Revertido"
+msgstr "Transacción Revertida"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4096
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:73
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:624
 msgid "New Transaction Information"
-msgstr "Crear Información Asiento"
+msgstr "Crear Información Transacción"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:4185
@@ -5989,7 +5999,8 @@ msgstr "%s %s de %s, contabilizado el %s, monto %s"
 #: gnucash/gnome/gnc-plugin-page-register.c:4781
 msgid "Several documents are linked with this transaction. Please choose one:"
 msgstr ""
-"Varios documentos están conectados con este asiento. Por favor, escoja uno:"
+"Varios documentos están conectados con esta transacción. Por favor, escoja "
+"uno:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4782
 #: gnucash/gnome-search/dialog-search.c:323
@@ -6025,7 +6036,7 @@ msgstr "Exportar"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.c:1140
 msgid "Save Config"
-msgstr "Guardar configuración"
+msgstr "Guardar Configuración"
 
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As..."
 #. to be used as toolbar button label.
@@ -6231,7 +6242,7 @@ msgstr "_Crear"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:140
 msgid "Create a new scheduled transaction"
-msgstr "Crea un asiento planificado nuevo"
+msgstr "Crea una transacción planificada nueva"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:145
 msgid "_New 2"
@@ -6239,11 +6250,11 @@ msgstr "_Crear"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:146
 msgid "Create a new scheduled transaction 2"
-msgstr "Crea un asiento planificado nuevo"
+msgstr "Crea una transacción planificada nueva"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:152
 msgid "Edit the selected scheduled transaction"
-msgstr "Edita el asiento planificado seleccionado"
+msgstr "Edita la transacción planificada seleccionada"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:157
 msgid "_Edit 2"
@@ -6251,28 +6262,28 @@ msgstr "_Editar"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:158
 msgid "Edit the selected scheduled transaction 2"
-msgstr "Edita el asiento planificado seleccionado"
+msgstr "Edita la transacción planificada seleccionada"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:164
 msgid "Delete the selected scheduled transaction"
-msgstr "Borra el asiento planificado seleccionado"
+msgstr "Borra la transacción planificada seleccionada"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:441
 #: gnucash/gtkbuilder/dialog-account.glade:554
 msgid "Transactions"
-msgstr "Asientos"
+msgstr "Transacciones"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:507
 msgid "Upcoming Transactions"
-msgstr "Asientos Cercanos"
+msgstr "Transacciones Aproximándose"
 
 #. Translators: This is a ngettext(3) message, %d is the number of scheduled transactions deleted
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:871
 #, c-format
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete %d scheduled transactions?"
-msgstr[0] "¿Seguro que quiere borrar este asiento planificado?"
-msgstr[1] "¿Seguro que quiere borrar estas %d asiento planificado?"
+msgstr[0] "¿Seguro que desea borrar esta transacción planificada?"
+msgstr[1] "¿Seguro que desea borrar estas %d transacciones planificadas?"
 
 #: gnucash/gnome/gnc-plugin-register2.c:57
 #: gnucash/gnome/gnc-plugin-register.c:58
@@ -6390,8 +6401,9 @@ msgid ""
 "register, please open the account options and turn off the placeholder "
 "checkbox."
 msgstr ""
-"Esta cuenta no se puede editar. Si quiere editar asientos en esta cuenta, "
-"abra las opciones de cuenta y desmarque la casilla de selección «Contenedor»."
+"Esta cuenta no se puede editar. Si quiere editar transacciones en esta "
+"cuenta, abra las opciones de cuenta y desmarque la casilla de selección "
+"«Contenedor»."
 
 #: gnucash/gnome/gnc-split-reg2.c:1010
 msgid ""
@@ -6439,7 +6451,7 @@ msgstr "Filtrado"
 #: gnucash/gnome/gnc-split-reg.c:913
 #, c-format
 msgid "Cut the split '%s' from the transaction '%s'?"
-msgstr "¿Corto el desglose «%s» desde el asiento «%s»?"
+msgstr "¿Corto el desglose «%s» desde la transacción «%s»?"
 
 #: gnucash/gnome/gnc-split-reg.c:914
 msgid ""
@@ -6460,10 +6472,11 @@ msgid ""
 "from this window, or you may navigate to a register that shows another side "
 "of this same transaction and remove the split from that register."
 msgstr ""
-"Esto es el anclaje del desglose de este asiento al registro. Tal vez no "
-"puede eliminarlo desde esta ventana del registro. Puede eliminar el asiento "
-"completa desde esta ventana, o puede ir a un registro que muestre otra parte "
-"de esta misma asiento y eliminar el desglose desde ese registro."
+"Esto es el anclaje del desglose de esta transacción al registro. Tal vez no "
+"puede eliminarlo desde esta ventana del registro. Puede eliminar la "
+"transacción completa desde esta ventana, o puede ir a un registro que "
+"muestre otra parte de esta misma transacción y eliminar el desglose desde "
+"ese registro."
 
 #: gnucash/gnome/gnc-split-reg.c:948 gnucash/gnome/gnc-split-reg.c:1476
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:996
@@ -6481,24 +6494,24 @@ msgstr "_Cortar desglose"
 
 #: gnucash/gnome/gnc-split-reg.c:990
 msgid "Cut the current transaction?"
-msgstr "¿Quiere cortar el asiento actual?"
+msgstr "¿Quiere cortar la transacción actual?"
 
 #: gnucash/gnome/gnc-split-reg.c:991
 msgid ""
 "You would be removing a transaction with reconciled splits! This is not a "
 "good idea as it will cause your reconciled balance to be off."
 msgstr ""
-"¡Estaría eliminando un asiento con desgloses conciliados! Esto no es una "
-"buena idea, ya que causaría que su balance de conciliación se descuadre."
+"¡Estaría eliminando una transacción con desgloses conciliados! Esto no es "
+"una buena idea, ya que causaría que su balance de conciliación se descuadre."
 
 #: gnucash/gnome/gnc-split-reg.c:1014
 msgid "_Cut Transaction"
-msgstr "_Cortar asiento"
+msgstr "_Cortar transacción"
 
 #: gnucash/gnome/gnc-split-reg.c:1158
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:66
 msgid "Cannot modify or delete this transaction."
-msgstr "No puede modificar o borrar este asiento."
+msgstr "No puede modificar o borrar esta transacción."
 
 #: gnucash/gnome/gnc-split-reg.c:1172
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:83
@@ -6506,14 +6519,14 @@ msgid ""
 "The date of this transaction is older than the \"Read-Only Threshold\" set "
 "for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
-"La fecha de este asiento es anterior que la especificación del “Umbral de "
-"Solo Lectura” establecido para este libro. Este parámetro puede cambiarse en "
-"Archivo→Propiedades→Cuentas."
+"La fecha de esta transacción es anterior que la especificación del “Umbral "
+"de Solo Lectura” fijado para este libro. Este parámetro puede cambiarse en "
+"Archivo->Propiedades->Cuentas."
 
 #: gnucash/gnome/gnc-split-reg.c:1208
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:840
 msgid "Remove the splits from this transaction?"
-msgstr "¿Quiere quitar los desgloses de este asiento?"
+msgstr "¿Quiere quitar los desgloses de esta transacción?"
 
 #: gnucash/gnome/gnc-split-reg.c:1209
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:841
@@ -6521,8 +6534,8 @@ msgid ""
 "This transaction contains reconciled splits. Modifying it is not a good idea "
 "because that will cause your reconciled balance to be off."
 msgstr ""
-"Este asiento contiene desgloses conciliados. Modificándolo no es una buena "
-"idea puesto que haría que su saldo conciliado se perdiera."
+"Esta transacción contiene desgloses conciliados. Modificándolo no es una "
+"buena idea puesto que haría que su saldo conciliado se perdiera."
 
 #. Translators: This is the confirmation button in a warning dialog
 #: gnucash/gnome/gnc-split-reg.c:1238
@@ -6532,13 +6545,13 @@ msgstr "_Quitar desgloses"
 
 #: gnucash/gnome/gnc-split-reg.c:1299
 msgid "Change a Transaction Linked Document"
-msgstr "Cambiar un Documento Asociado al Asiento"
+msgstr "Cambiar un Documento Asociado al Transacción"
 
 #: gnucash/gnome/gnc-split-reg.c:1440
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:963
 #, c-format
 msgid "Delete the split '%s' from the transaction '%s'?"
-msgstr "¿Borro el desglose «%s» desde el asiento «%s»?"
+msgstr "¿Borro el desglose «%s» desde la transacción «%s»?"
 
 #: gnucash/gnome/gnc-split-reg.c:1441
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:964
@@ -6562,15 +6575,15 @@ msgid ""
 "from this window, or you may navigate to a register that shows another side "
 "of this same transaction and delete the split from that register."
 msgstr ""
-"Esta es el anclaje del desglose de este asiento al registro. Tal vez no "
+"Esta es el anclaje del desglose de esta transacción al registro. Tal vez no "
 "puede borrarla desde esta ventana del registro. Puede borrar el asiento "
 "completa desde esta ventana, o puede modificar a otro registro que muestre "
-"otra parte de esta misma asiento y borrar el desglose desde ese registro."
+"otra parte de esta misma transacción y borrar el desglose desde ese registro."
 
 #: gnucash/gnome/gnc-split-reg.c:1520
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1040
 msgid "Delete the current transaction?"
-msgstr "¿Borro el asiento efectivo?"
+msgstr "¿Borro la transacción efectiva?"
 
 #: gnucash/gnome/gnc-split-reg.c:1521
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1041
@@ -6578,8 +6591,8 @@ msgid ""
 "You would be deleting a transaction with reconciled splits! This is not a "
 "good idea as it will cause your reconciled balance to be off."
 msgstr ""
-"¡Estaría borrando un asiento con desgloses conciliados! Esto no es una buena "
-"idea, puesto que haría que su saldo conciliado se descuadre."
+"¡Estaría borrando una transacción con desgloses conciliados! Esto no es una "
+"buena idea, puesto que haría que su saldo conciliado se descuadre."
 
 #: gnucash/gnome/gnc-split-reg.c:1716
 #, c-format
@@ -6608,9 +6621,9 @@ msgid ""
 "have mismatched commodities or currencies.\n"
 "You need to open each account individually to edit transactions."
 msgstr ""
-"Las asientos de esta cuenta no pueden ser editadas porque sus subcuentas "
-"tienen materias primas o monedas no coincidentes.\n"
-"Es necesario abrir cada cuenta individualmente para editar los asientos."
+"Las transacciones de esta cuenta no pueden ser editadas porque sus "
+"subcuentas tienen materias primas o monedas no coincidentes.\n"
+"Es necesario abrir cada cuenta individualmente para editar las transacciones."
 
 #: gnucash/gnome/gnc-split-reg.c:2524
 msgid ""
@@ -6618,9 +6631,9 @@ msgid ""
 "If you want to edit transactions in this register, please open the account "
 "options and turn off the placeholder checkbox."
 msgstr ""
-"Este asiento de esta cuanta tal vez no está editada.\n"
-"Si quiere editar asientos en este registro, abra las opciones de la cuenta y "
-"desmarque la casilla del contenedor."
+"Esta transacción de esta cuanta tal vez no está editada.\n"
+"Si quiere editar transacciones en este registro, abra las opciones de la "
+"cuenta y desmarque la casilla del contenedor."
 
 #: gnucash/gnome/gnc-split-reg.c:2531
 msgid ""
@@ -6629,10 +6642,10 @@ msgid ""
 "account options and turn off the placeholder checkbox.\n"
 "You may also open an individual account instead of a set of accounts."
 msgstr ""
-"Las asientos dentro de una de las sub-cuentas seleccionada tal vez no está "
-"editada.\n"
-"Si quiere editar los asientos en este registro, abra las opciones de la sub-"
-"cuenta y desmarque la casilla del contenedor.\n"
+"Las transacciones dentro de una de las sub-cuentas seleccionada tal vez no "
+"está editada.\n"
+"Si quiere editar las transacciones en este registro, abra las opciones de la "
+"sub-cuenta y desmarque la casilla del contenedor.\n"
 "También puede abrir una cuenta individual en vez de un conjunto de cuentas."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:5
@@ -6693,7 +6706,7 @@ msgstr "Crea boletines precisos y gráficas desde sus datos financieros"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:21
 msgid "Set up scheduled transactions to avoid repeated data entry"
-msgstr "Fije asientos planificados para evitar datos de apunte repetido"
+msgstr "Fije transacciones planificadas para evitar datos de asiento repetido"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:22
 msgid ""
@@ -6701,7 +6714,7 @@ msgid ""
 "including Transaction Matching"
 msgstr ""
 "Cambio por CSV/FinTS (formato HBCI) o importaciones de datos SWIFT-MT9xx/QIF/"
-"OFX incluyendo Asientos Cotejados"
+"OFX incluyendo Transacciones Cotejadas"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:23
 msgid "Perform financial calculations, such as a loan repayment"
@@ -6779,7 +6792,7 @@ msgstr "Entidad no encontrada: %s"
 #: gnucash/gnome/top-level.c:167
 #, c-format
 msgid "Transaction with no Accounts: %s"
-msgstr "Asiento sin ninguna Cuenta: %s"
+msgstr "Transacción sin ninguna Cuenta: %s"
 
 #: gnucash/gnome/top-level.c:210
 #, c-format
@@ -6853,7 +6866,7 @@ msgstr "Negocios"
 
 #: gnucash/gnome/window-autoclear.c:115
 msgid "Cleared Transactions"
-msgstr "Asientos Punteados"
+msgstr "Transacciones Punteadas"
 
 #: gnucash/gnome/window-reconcile2.c:428 gnucash/gnome/window-reconcile.c:489
 msgid "Interest Payment"
@@ -6904,7 +6917,7 @@ msgstr "Introducir _intereses cargados…"
 
 #: gnucash/gnome/window-reconcile2.c:1225 gnucash/gnome/window-reconcile.c:1378
 msgid "Are you sure you want to delete the selected transaction?"
-msgstr "¿Confirma que quiere borrar el asiento seleccionado?"
+msgstr "¿Confirma que quiere borrar la transacción seleccionada?"
 
 #: gnucash/gnome/window-reconcile2.c:1794 gnucash/gnome/window-reconcile.c:2010
 #: gnucash/gtkbuilder/window-reconcile.glade:106
@@ -7039,11 +7052,11 @@ msgstr "Agrega un apunte de balance nuevo a la cuenta"
 
 #: gnucash/gnome/window-reconcile2.c:2188 gnucash/gnome/window-reconcile.c:2435
 msgid "Edit the current transaction"
-msgstr "Edita el asiento efectivo"
+msgstr "Edita la transacción efectiva"
 
 #: gnucash/gnome/window-reconcile2.c:2193 gnucash/gnome/window-reconcile.c:2440
 msgid "Delete the selected transaction"
-msgstr "Borra el asiento seleccionado"
+msgstr "Borra la transacción seleccionada"
 
 #: gnucash/gnome/window-reconcile2.c:2197 gnucash/gnome/window-reconcile.c:2444
 msgid "_Reconcile Selection"
@@ -7051,7 +7064,7 @@ msgstr "_Conciliar selección"
 
 #: gnucash/gnome/window-reconcile2.c:2198 gnucash/gnome/window-reconcile.c:2445
 msgid "Reconcile the selected transactions"
-msgstr "Concilia los asientos seleccionados"
+msgstr "Concilia las transacciones seleccionadas"
 
 #: gnucash/gnome/window-reconcile2.c:2202 gnucash/gnome/window-reconcile.c:2449
 msgid "_Unreconcile Selection"
@@ -7059,7 +7072,7 @@ msgstr "_Selección No Conciliada"
 
 #: gnucash/gnome/window-reconcile2.c:2203 gnucash/gnome/window-reconcile.c:2450
 msgid "Unreconcile the selected transactions"
-msgstr "No conciliar los asientos seleccionadas"
+msgstr "No conciliar las transacciones seleccionadas"
 
 #: gnucash/gnome/window-reconcile2.c:2211 gnucash/gnome/window-reconcile.c:2458
 msgid "Open the GnuCash help window"
@@ -7106,9 +7119,9 @@ msgid ""
 "the case, you may use Find Transactions to find them, unreconcile, and re-"
 "reconcile."
 msgstr ""
-"Esta cuenta contiene desgloses cuya fecha de conciliación es posterior a la "
-"fecha del extracto. Estos desgloses pueden hacer la conciliación difícil. Si "
-"éste es el caso, se puede usar la Búsqueda de Asientos para encontrarlos, "
+"Esta cuenta contiene desgloses cuya Fecha Conciliada es posterior a la Fecha "
+"del Extracto. Estos desgloses pueden hacer la conciliación difícil. Si éste "
+"es el caso, se puede usar la Búsqueda de Transacciones para encontrarlos, "
 "des-conciliarlos y re-conciliarlos."
 
 #: gnucash/gnome/window-report.c:112
@@ -7142,7 +7155,7 @@ msgstr "Crear Operación"
 
 #: gnucash/gnome-search/dialog-search.c:1106
 msgid "New Transaction"
-msgstr "Crear Asiento"
+msgstr "Crear Transacción"
 
 #: gnucash/gnome-search/dialog-search.c:1110
 msgid "New Split"
@@ -7596,14 +7609,14 @@ msgstr "Ya existe una cuenta con saldos iniciales para la moneda deseada."
 
 #: gnucash/gnome-utils/dialog-account.c:1329
 msgid "Cannot change currency"
-msgstr "No se puede cambiar la divisa"
+msgstr "No se puede cambiar la moneda"
 
 #: gnucash/gnome-utils/dialog-account.c:1418
 msgid ""
 "This Account contains Transactions.\n"
 "Changing this option is not possible."
 msgstr ""
-"Esta Cuenta contiene Asientos.\n"
+"Esta Cuenta contiene Transacciones.\n"
 "Cambiando esta opción no es posible."
 
 #: gnucash/gnome-utils/dialog-account.c:1610
@@ -7902,8 +7915,8 @@ msgid ""
 "The account %s is a placeholder account and does not allow transactions. "
 "Please choose a different account."
 msgstr ""
-"La cuenta %s es un marcador de cuenta y no permite asientos. Por favor, "
-"seleccione otra cuenta."
+"La cuenta %s es un marcador de cuenta y no permite transacciones. Por favor, "
+"elija otra cuenta."
 
 #: gnucash/gnome-utils/dialog-options.c:1278
 msgid "Book currency"
@@ -8117,7 +8130,7 @@ msgid ""
 "transaction. Otherwise, it will not be recorded."
 msgstr ""
 "Debe especificar una cuenta desde la que transferir, a la que transferir, o "
-"ambas, para este asiento. De otro modo, no será registrado."
+"ambas, para esta transacción. De otro modo, no será registrado."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1441
 msgid "You can't transfer from and to the same account!"
@@ -8129,7 +8142,7 @@ msgstr "¡No puede transferir con origen y destino a la misma cuenta!"
 #: gnucash/register/ledger-core/split-register.c:1981
 #, c-format
 msgid "The account %s does not allow transactions."
-msgstr "La cuenta %s no permite asientos."
+msgstr "La cuenta %s no permite transacciones."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1468
 msgid ""
@@ -9193,7 +9206,7 @@ msgstr "Contabilidad financiara personal y pequeños negocios."
 #: gnucash/gnome-utils/gnc-main-window.c:4738
 msgid "translator-credits"
 msgstr ""
-"Francisco Javier Serrador <serrador@tecknolabs.com> 7-ene-2019\n"
+"Francisco Javier Serrador <serrador@tecknolabs.com> 7-ene-2022\n"
 "Eneko Lacunza <enlar@enlar.net>"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4741
@@ -9287,20 +9300,20 @@ msgid ""
 "You can not change this transaction, the Book or Register is set to Read "
 "Only."
 msgstr ""
-"No puede modificar este asiento, el Libro o Registro está establecido a Solo "
-"Lectura."
+"No puede modificar esta transacción, el Libro o Registro está establecido a "
+"Solo Lectura."
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:131
 msgid "Save Transaction before proceeding?"
-msgstr "¿Guardar Asientos antes de procesar?"
+msgstr "¿Guardar Transacción antes de procesar?"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:133
 msgid ""
 "The current transaction has been changed. Would you like to record the "
 "changes before proceeding, or cancel?"
 msgstr ""
-"El asiento efectivo ha sido modificada. ¿Quiere registrar los cambios antes "
-"de proceder, o cancelar?"
+"La transacción efectiva ha sido modificada. ¿Quiere registrar los cambios "
+"antes de proceder, o cancelar?"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:149
 #: gnucash/register/ledger-core/gncEntryLedger.c:932
@@ -9311,17 +9324,17 @@ msgstr "_Registrar"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:185
 msgid "This transaction is being edited in a different register."
-msgstr "Este asiento está siendo editada en un registro diferente."
+msgstr "Esta transacción está siendo editada en un registro diferente."
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:205
 #: gnucash/register/ledger-core/split-register-control.c:59
 msgid "Rebalance Transaction"
-msgstr "Cuadrar Asiento"
+msgstr "Cuadrar Transacción"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:206
 #: gnucash/register/ledger-core/split-register-control.c:60
 msgid "The current transaction is not balanced."
-msgstr "El asiento efectivo no está cuadrada."
+msgstr "La transacción actual no está cuadrada."
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:287
 #: gnucash/register/ledger-core/split-register-control.c:138
@@ -9360,7 +9373,7 @@ msgstr "Este registro no respalda la edición de los tipos de cambios."
 #: gnucash/register/ledger-core/split-register-control.c:1441
 msgid ""
 "You need to expand the transaction in order to modify its exchange rates."
-msgstr "Debe desglosar la Asiento para poder modificar sus tipos de cambio."
+msgstr "Debe desglosar la Transacción para poder modificar sus tipos de cambio."
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:461
 #: gnucash/register/ledger-core/split-register-control.c:1413
@@ -9378,7 +9391,7 @@ msgid ""
 "This is the split anchoring this transaction to the register. You can not "
 "duplicate it from this register window."
 msgstr ""
-"Esto es el anclaje del desglose de este asiento al registro. Tal vez no "
+"Esto es el anclaje del desglose de esta transacción al registro. Tal vez no "
 "puede duplicarlo desde esta ventana del registro."
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1357
@@ -9386,7 +9399,7 @@ msgstr ""
 #: gnucash/register/ledger-core/split-register.c:626
 #: gnucash/register/register-gnome/datecell-gnome.c:108
 msgid "Cannot store a transaction at this date"
-msgstr "No se puede almacenar un asiento en esta fecha"
+msgstr "No se puede almacenar una transacción en esta fecha"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1359
 #: gnucash/register/ledger-core/split-register.c:628
@@ -9395,23 +9408,23 @@ msgid ""
 "Threshold\" set for this book. This setting can be changed in File-"
 ">Properties->Accounts."
 msgstr ""
-"La fecha introducida del asiento duplicada es más antigua que el «Límite de "
-"Solo Lectura» establecido para este libro. Este parámetro puede cambiarse en "
-"Archivo→Propiedades→Cuentas."
+"La fecha introducida de la transacción duplicada es más antigua que el «"
+"Límite de Solo Lectura» fijo para este libro. Este parámetro puede cambiarse "
+"en Archivo->Propiedades->Cuentas."
 
 #. Translators: This message will be presented when a user
 #. attempts to record a transaction without splits
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1723
 msgid "Not enough information for Blank Transaction?"
-msgstr "¿Sin información suficiente para Asiento En Blanco?"
+msgstr "¿Sin información suficiente para Transacción En Blanco?"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1725
 msgid ""
 "The blank transaction does not have enough information to save it. Would you "
 "like to return to the transaction to update, or cancel the save?"
 msgstr ""
-"El asiento en blanco no tiene suficiente información para guardarla. ¿Quiere "
-"volver al asiento para actualizar o cancelar el guardado?"
+"La transacción en blanco no tiene suficiente información para guardarla. ¿"
+"Quiere volver a la transacción para actualizar, o cancelar el guardado?"
 
 #. Translators: Return to the transaction to update
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1737
@@ -9743,11 +9756,11 @@ msgstr "Dist"
 #: gnucash/report/reports/standard/register.scm:218
 #: libgnucash/engine/Split.c:1610 libgnucash/engine/Split.c:1627
 msgid "-- Split Transaction --"
-msgstr "-- Asiento Desglosado --"
+msgstr "-- Transacción Desglosada --"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:46
 msgid "-- Stock Split --"
-msgstr "-- Desglosar Acción --"
+msgstr "-- Desglosar Mercancía --"
 
 #. Translators: This is a date format, see i.e.
 #. https://www.gnu.org/software/libc/manual/html_node/Formatting-Calendar-Time.html
@@ -9763,9 +9776,9 @@ msgid ""
 "Threshold\" set for this book. This setting can be changed in File-"
 ">Properties->Accounts."
 msgstr ""
-"La fecha introducida del asiento nuevo es más antigua que el \"Límite de "
-"Solo Lectura\" establecido para este libro. Este parámetro puede cambiarse "
-"en Archivo->Propiedades->Cuentas."
+"La fecha introducida de transacción nuevo es más antigua que el \"Umbral de "
+"Solo Lectura\" fijado para este libro. Este parámetro puede cambiarse en "
+"Archivo->Propiedades->Cuentas."
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:861
 msgid ""
@@ -9773,12 +9786,12 @@ msgid ""
 "is a new transaction."
 msgstr ""
 "Tipo de Cambio Cancelado, empleando tipo existente o predeterminado 1 a 1 si "
-"esto es un asiento nuevo."
+"esto es una transacción nueva."
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1122
 #: gnucash/register/ledger-core/split-register.c:2086
 msgid "Recalculate Transaction"
-msgstr "Recalcular Asiento"
+msgstr "Recalcular Transacción"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1123
 #: gnucash/register/ledger-core/split-register.c:2087
@@ -9786,8 +9799,8 @@ msgid ""
 "The values entered for this transaction are inconsistent. Which value would "
 "you like to have recalculated?"
 msgstr ""
-"Los valores introducidos para este asiento son inconsistentes. ¿Qué valor "
-"quiere que sea recalculado?"
+"Los valores introducidos para esta transacción son inconsistentes. ¿Qué "
+"valor quiere que sea recalculado?"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1130
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1132
@@ -9795,7 +9808,7 @@ msgstr ""
 #: gnucash/register/ledger-core/split-register.c:2093
 #: gnucash/register/ledger-core/split-register.c:2096
 msgid "_Shares"
-msgstr "_Accións"
+msgstr "_Acciones"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1130
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1137
@@ -9942,7 +9955,7 @@ msgstr "Balance (%s)"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:1826
 #, c-format
 msgid "Cleared (%s)"
-msgstr "Desmarcado (%s)"
+msgstr "Vaciado (%s)"
 
 #. Translators: %s is a currency mnemonic.
 #: gnucash/gnome-utils/gnc-tree-view-account.c:1829
@@ -10112,14 +10125,14 @@ msgstr " Planificado "
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2317
 #: gnucash/register/ledger-core/split-register-control.c:1526
 msgid "Save the changed transaction?"
-msgstr "¿Guardar el asiento modificada?"
+msgstr "¿Guardo la transacción modificada?"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2319
 msgid ""
 "The current transaction has changed. Would you like to record the changes, "
 "or discard the changes?"
 msgstr ""
-"El asiento efectivo ha sido modificada. ¿Quiere registrar los cambios, o "
+"La transacción efectiva ha sido modificada. ¿Quiere registrar los cambios, o "
 "descartarlos?"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2357
@@ -10262,17 +10275,17 @@ msgstr "Introducir Fecha de Vencimiento"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3177
 msgid "Enter the transaction reference, such as the invoice or check number"
 msgstr ""
-"Introduzca la referencia de asiento, tal como la factura o el número "
+"Introduzca la referencia de transacción, tal como la factura o el número "
 "comprobante"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3179
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3186
 msgid "Enter the type of transaction, or choose one from the list"
-msgstr "Introduzca el tipo de asiento, o escoja uno desde el listado"
+msgstr "Introduzca el tipo de transacción, o escoja uno desde el listado"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3184
 msgid "Enter the transaction number, such as the check number"
-msgstr "Introduzca el número de asiento, como el número de comprobación"
+msgstr "Introduzca el número de transacción, como el número de comprobación"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3196
 #: gnucash/register/ledger-core/split-register-model.c:1137
@@ -10284,7 +10297,7 @@ msgstr "Introduzca el nombre del Cliente"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3216
 #: gnucash/register/ledger-core/split-register-model.c:1174
 msgid "Enter notes for the transaction"
-msgstr "Introduzca anotaciones para el asiento"
+msgstr "Introduzca anotaciones para la transacción"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3200
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3209
@@ -10301,7 +10314,7 @@ msgstr "Introduzca el nombre del Proveedor"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3214
 #: gnucash/register/ledger-core/split-register-model.c:1143
 msgid "Enter a description of the transaction"
-msgstr "Introduzca una descripción del asiento"
+msgstr "Introduzca una descripción de la transacción"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3228
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3232
@@ -10315,7 +10328,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3230
 #: gnucash/register/ledger-core/split-register-model.c:1207
 msgid "Reason the transaction was voided"
-msgstr "Razón por la que el asiento se ha anulado"
+msgstr "Razón por la que la transacción se ha anulado"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3242
 msgid "Enter the reconcile type"
@@ -10323,7 +10336,7 @@ msgstr "Introduzca el tipo de conciliación"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3252
 msgid "Enter the type of transaction"
-msgstr "Introduzca el tipo de asiento"
+msgstr "Introduzca el tipo de transacción"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3262
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3282
@@ -10338,7 +10351,7 @@ msgstr "Introduzca el número de acciones compradas o vendidas"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3294
 msgid "* Indicates the transaction Commodity."
-msgstr "* Indica el asiento Mercantil."
+msgstr "* Indica la transacción Mercantil."
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3304
 msgid "Enter the rate"
@@ -10352,12 +10365,12 @@ msgstr "Introduzca el precio efectivo mercantil"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3324
 #: gnucash/register/ledger-core/split-register-model.c:2381
 msgid "Enter credit formula for real transaction"
-msgstr "Introduzca cálculo crediticio para asiento real"
+msgstr "Introduzca cálculo crediticio para transacción real"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3334
 #: gnucash/register/ledger-core/split-register-model.c:2347
 msgid "Enter debit formula for real transaction"
-msgstr "Introduzca cálculo del débito para asiento real"
+msgstr "Introduzca cálculo del débito para transacción real"
 
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:140
 #: gnucash/gtkbuilder/dialog-sx.glade:1064
@@ -11296,7 +11309,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:5
 msgid "Enable SKIP transaction action"
-msgstr "Habilitar operación DESCARTAR asiento"
+msgstr "Habilitar operación DESCARTAR transacción"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:6
 #: gnucash/gtkbuilder/dialog-preferences.glade:2058
@@ -11305,10 +11318,10 @@ msgid ""
 "whose best match's score is in the yellow zone (above the Auto-ADD threshold "
 "but below the Auto-CLEAR threshold) will be skipped by default."
 msgstr ""
-"Habilita la operación DESCARTAR en el cotejo de asiento. Si está activado, "
-"un Asiento cuya puntuación del mejor cotejo está en la zona amarilla (sobre "
-"el umbral para auto-AGREGAR, pero por debajo del umbral para auto-PURGAR) "
-"será descartado predeterminadamente."
+"Habilita la operación DESCARTAR en el cotejo de transacción. Si está "
+"habilitado, una transacción cuya puntuación del mejor cotejo está en la zona "
+"amarilla (sobre el umbral para auto-AGREGAR, pero por debajo del umbral para "
+"auto-PURGAR) será descartado predeterminadamente."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:10
 msgid "Enable UPDATE match action"
@@ -11323,11 +11336,11 @@ msgid ""
 "transaction will cause the existing transaction to be updated and cleared by "
 "default."
 msgstr ""
-"Habilita la operación ACTUALIZAR Y CONCILIAR en el cotejo del asiento. Si "
-"está habilitada, un asiento cuyo mejor cotejo está por encima del umbral de "
-"Auto-LIQUIDAR y tiene una fecha o cantidad distinta que el cotejo de asiento "
-"existente causará que el asiento existente sea actualizada y liquidado por "
-"defecto."
+"Habilita la operación ACTUALIZAR Y CONCILIAR en el cotejo de la transacción. "
+"Si está habilitada, una transacción cuyo mejor cotejo está por encima del "
+"umbral de Auto-LIQUIDAR y tiene una fecha o cantidad distinta que el cotejo "
+"de transacción existente causará que la transacción existente sea "
+"actualizada y liquidada por defecto."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:15
 msgid "Use bayesian matching"
@@ -11339,9 +11352,9 @@ msgid ""
 "existing transactions. Otherwise a less sophisticated rule-based matching "
 "mechanism will be used."
 msgstr ""
-"Habilita cotejos bayesiano para cotejar asientos importados con asientos "
-"existentes. En otro caso se usará un método de cotejos menos sofisticado "
-"basado en reglas."
+"Habilita cotejos bayesiano para cotejar transacción importada con "
+"transacciones existentes. En otro caso se usará un método de cotejos menos "
+"sofisticado basado en reglas."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:20
 msgid "Minimum score to be displayed"
@@ -11352,36 +11365,36 @@ msgid ""
 "This field specifies the minimum matching score a potential matching "
 "transaction must have to be displayed in the match list."
 msgstr ""
-"Este campo especifica el punto mínimo cotejado como un asiento potencial de "
-"cotejo tiene que ser enseñado en listado de cotejos."
+"Este campo especifica el punto mínimo cotejado como una transacción "
+"potencial de cotejo tiene que ser desplegado en el listado de cotejos."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:25
 msgid "Likely matching transaction within these days"
-msgstr "Como cotejar asientos dentro de estos días"
+msgstr "Como cotejar transacciones dentro de estos días"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:26
 msgid ""
 "This field specifies the maximum number of days a transaction is likely to "
 "be a match in the list."
 msgstr ""
-"Este campo especifica el número máximo de días que un asiento es como ser un "
-"cotejo en el listado."
+"Este campo especifica el número máximo de días que una transacción es como "
+"ser un cotejo en el listado."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:30
 msgid "UnLikely matching a transaction outside of these days"
-msgstr "Cotejando un asiento improbable fuera de estos días"
+msgstr "Cotejando una transacción improbable fuera de estos días"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:31
 msgid ""
 "This field specifies the minimum number of days a transaction is unlikely to "
 "be a match in the list."
 msgstr ""
-"Este campo especifica el número mínimo de días en que un asiento es "
+"Este campo especifica el número mínimo de días en que una transacción es "
 "improbable ser un cotejo en el listado."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:35
 msgid "Add matching transactions below this score"
-msgstr "Agregue asientos cotejados por debajo de esta puntuación"
+msgstr "Agregue transacciones cotejadas por debajo de esta puntuación"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:36
 msgid ""
@@ -11390,14 +11403,15 @@ msgid ""
 "zone (above the display minimum score but below or equal to the Add match "
 "score) will be added to the GnuCash file by default."
 msgstr ""
-"Este campo especifica el umbral por debajo del cual un asiento cotejada será "
-"auto-agregado. Un asiento cuyo mejor cotejo está en la zona roja (superior a "
-"la puntuación mínima representada, pero inferior o igual a la puntuación "
-"Agregar cotejada) será agregado al fichero GnuCash de forma predeterminada."
+"Este campo especifica el umbral por debajo del cual una transacción cotejada "
+"será auto-agregado. Una transacción cuyo mejor cotejo está en la zona roja ("
+"superior a la puntuación mínima representada, pero inferior o igual a la "
+"puntuación Agregar cotejada) será agregado al fichero GnuCash de forma "
+"predeterminada."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:40
 msgid "Clear matching transactions above this score"
-msgstr "Desmarca asientos cotejadas por encima de esta puntuación"
+msgstr "Desmarca transacciones cotejadas por encima de esta puntuación"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:41
 msgid ""
@@ -11406,8 +11420,8 @@ msgid ""
 "green zone (above or equal to this Clear threshold) will be cleared by "
 "default."
 msgstr ""
-"Este campo especifica el umbral por encima del cual un cotejo de asiento "
-"será punteada de forma predeterminada. Un asiento cuya mejor puntuación "
+"Este campo especifica el umbral por encima del cual un cotejo de transacción "
+"será punteada de forma predeterminada. Un transacción cuya mejor puntuación "
 "cotejada está en la zona verde (igual o mayor que este umbral de Punteo) se "
 "purgará de forma predeterminada."
 
@@ -11435,7 +11449,7 @@ msgstr ""
 "Por ejemplo, usted retira 100€ y se le cargan 101,50€ más por las comisiones "
 "interbancarias. Si manualmente introduce 100€, las cantidades no "
 "coincidirán. Debería fijar esto a lo que pueda ser el máximo de esa comisión "
-"en su área (en unidades de su moneda local), tal que el asiento será "
+"en su área (en unidades de su moneda local), tal que la transacción será "
 "reconocida como un cotejo."
 
 #. Preferences->Online Banking:Generic
@@ -11464,8 +11478,8 @@ msgid ""
 "Shows or hides transactions from the match picker which are already of some "
 "reconciled state."
 msgstr ""
-"Muestra u oculta asientos desde el cotejo fijado el cual ya es de algo de "
-"estado conciliado."
+"Muestra u oculta transacciones desde el cotejo fijado el cual ya es de algo "
+"de estado conciliado."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:5
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:10
@@ -11477,7 +11491,7 @@ msgstr "Nombre de cuenta QIF por omisión"
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:16
 msgid "Default status for QIF transaction when not specified in QIF file."
 msgstr ""
-"Estado predeterminado para asientos QIF cuando no se especificaron en el "
+"Estado predeterminado para transacción QIF cuando no se especificaron en el "
 "fichero QIF."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:15
@@ -11486,8 +11500,8 @@ msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as reconciled."
 msgstr ""
-"Cuando el estado no sea especificado en un fichero QIF, los asientos son "
-"marcadas como conciliado."
+"Cuando el estado no sea especificado en un fichero QIF, las transacciones "
+"son marcadas como conciliada."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:32
 msgid "Show documentation"
@@ -11502,7 +11516,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:5
 msgid "Pre-select cleared transactions"
-msgstr "Preseleccionar asientos punteadas"
+msgstr "Preseleccionar transacciones punteadas"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:6
 msgid ""
@@ -11510,9 +11524,9 @@ msgid ""
 "already selected in the reconcile dialog. Otherwise no transactions will be "
 "initially selected."
 msgstr ""
-"Si se activa, todas los asientos marcadas como punteadas en el registro "
+"Si se activa, todas las transacciones marcadas como punteadas en el registro "
 "aparecerán ya seleccionados en el diálogo de conciliación. En otro caso "
-"ninguna asiento se seleccionará inicialmente."
+"ninguna transacción se seleccionará inicialmente."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:10
 msgid "Prompt for interest charges"
@@ -11527,9 +11541,9 @@ msgid ""
 "Liability accounts."
 msgstr ""
 "Antes de conciliar una cuenta que carga o abona intereses, solicitar al "
-"usuario que introduzca un asiento para la comisión de interés o liquidación. "
-"Actualmente solo se habilita para cuentas de Banca, Crédito, Fondo, Activo, "
-"Facturaciones Pendientes, Liquidables y Pasivo."
+"usuario que introduzca una transacción para la comisión de interés o "
+"liquidación. Actualmente solo se habilita para cuentas de Banca, Crédito, "
+"Fondo, Activo, Facturaciones Pendientes, Liquidables y Pasivo."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:15
 msgid "Prompt for credit card payment"
@@ -11567,11 +11581,11 @@ msgid ""
 "the initial opening of the data file when GnuCash starts. If this setting is "
 "active, run the \"since last run\" process, otherwise it is not run."
 msgstr ""
-"Este parámetro controla si el asiento planificado procesándose «desde la "
-"última ejecución» se ejecuta automáticamente cuando el fichero de datos se "
-"abre. Esto incluye la apertura inicial del fichero de datos cuando se inicia "
-"GnuCash. Si esta opción está activa, se ejecuta el proceso «desde última "
-"ejecución», en otro caso no se ejecuta."
+"Este parámetro controla si las transacciones planificadas procesándose «"
+"desde la última ejecución» se ejecuta automáticamente cuando el fichero de "
+"datos se abre. Esto incluye la apertura inicial del fichero de datos cuando "
+"se inicia GnuCash. Si esta opción está activa, se ejecuta el proceso «desde "
+"última ejecución», en otro caso no se ejecuta."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:22
 msgid "Show \"since last run\" notification dialog when a file is opened."
@@ -11587,28 +11601,28 @@ msgid ""
 "opening of the data file when GnuCash starts. If this setting is active, "
 "show the dialog, otherwise it is not shown."
 msgstr ""
-"Este parámetro controla si la notificación-única de asiento planificado del "
-"diálogo \"desde última ejecución\" será mostrada cuando un fichero de datos "
-"está abierto (si el proceso de \"desde última ejecución\" está activado en "
-"un fichero abierto). Esto incluye la apertura inicial del fichero de datos "
-"cuando se inicia GnuCash. Si este parámetro está activo, muestra el diálogo; "
-"en otro caso, no lo muestra."
+"Este parámetro controla si la notificación-única de transacción planificada "
+"del diálogo \"desde última ejecución\" será mostrada cuando un fichero de "
+"datos está abierto (si el proceso de \"desde última ejecución\" está "
+"activado en un fichero abierto). Esto incluye la apertura inicial del "
+"fichero de datos cuando se inicia GnuCash. Si este parámetro está activo, "
+"muestra el diálogo; en otro caso, no lo muestra."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:27
 msgid ""
 "Set \"Review Created Transactions\" as the default for the \"since last run"
 "\" dialog."
 msgstr ""
-"Fija «Revisión de Asientos Creadas» como lo predeterminado para el diálogo "
-"«desde última ejecución»."
+"Fija «Revisión de Transacciones Creadas» como lo predeterminado para el "
+"diálogo «desde última ejecución»."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:28
 msgid ""
 "This setting controls whether as default the \"review created transactions\" "
 "is set for the \"since last run\" dialog."
 msgstr ""
-"Este parámetro controla si la «revisión de asientos creados» por defecto "
-"está fijada para el diálogo «desde última ejecución»."
+"Este parámetro controla si la «revisión de transacciones creadas» por "
+"defecto está fijada para el diálogo «desde última ejecución»."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:35
 msgid "Set the \"auto create\" flag by default"
@@ -11621,10 +11635,10 @@ msgid ""
 "transaction creation, or at any later time by editing the scheduled "
 "transaction."
 msgstr ""
-"Si se activa, cualquier asiento planificado nuevo tendrá el valor "
+"Si se activa, cualquier transacción planificada nueva tendrá el valor "
 "«autocrear» activo por omisión. El usuario puede modificar este valor "
-"durante la creación del asiento, o en cualquier momento editando el asiento "
-"planificado."
+"durante la creación de la transacción o en cualquier momento editando la "
+"transacción planificada."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:40
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:41
@@ -11642,10 +11656,11 @@ msgid ""
 "creation, or at any later time by editing the scheduled transaction. This "
 "setting only has meaning if the create-auto setting is active."
 msgstr ""
-"Si se activa, cualquier asiento programada nueva tendrá el valor «notificar» "
-"activo por omisión. El usuario puede modificar este valor durante la "
-"creación del asiento, o en cualquier momento editando el asiento programada. "
-"Este valor solo tiene significado si el valor autocrear está activo."
+"Si se activa, cualquier transacción planificada nueva tendrá el indicador "
+"«notificar» fijado por omisión. El usuario puede modificar este indicador "
+"durante la creación de la transacción, o en cualquier momento editando la "
+"transacción planificada. Este valor solo tiene significado si el valor "
+"autocrear está activo."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:57
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:58
@@ -11731,13 +11746,13 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:25
 msgid "Transaction Linked Files head path"
-msgstr "Cabecera de ruta de asiento de Ficheros Enlazados"
+msgstr "Cabecera de ruta de transacción de Ficheros Enlazados"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:26
 msgid ""
 "This is the path head for the Transaction Linked Files with relative paths"
 msgstr ""
-"Esta es la cabecera de ruta para Ficheros de Asiento Enlazada con rutas "
+"Esta es la cabecera de ruta para Ficheros de Transacción Enlazada con rutas "
 "relativas"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:30
@@ -12261,13 +12276,13 @@ msgid ""
 "files is set so that the 'Num' cell on registers shows/updates the "
 "transaction 'num' field."
 msgstr ""
-"Si está marcado, la opción predeterminada del libro para filas nuevas está "
-"fijada que la casilla 'Num' en los desgloses muestran/actualizan los campos "
-"de “Operación” de unión y el campo de 'num' de asientos se muestra en la "
-"segunda línea en el modo de línea doble (y no es visible en el modo de línea "
-"simple). En otro caso, la opción del libro predeterminada para ficheros "
-"nuevos se establece para que la casilla 'Num' sobre los registros muestren/"
-"actualicen el campo 'num' transaccional."
+"Si está seleccionado, la opción predeterminada del libro para filas nuevas "
+"está fijada que la casilla 'Num' en los desgloses muestran/actualizan los "
+"campos de “Operación” de unión y el campo de 'num' de transacciones se "
+"muestra en la segunda línea en el modo de línea doble (y no es visible en el "
+"modo de línea simple). En otro caso, la opción del libro predeterminada para "
+"ficheros nuevos se fija para que la casilla 'Num' sobre los registros "
+"muestren/actualicen el campo 'num' transaccional."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:241
 msgid "Color the register using a gnucash specific color theme"
@@ -12310,7 +12325,7 @@ msgid ""
 "Otherwise pressing the enter key will move to the next transaction line."
 msgstr ""
 "Si se activa, pulsando la tecla Entrar moverá al suelo del registro. En otro "
-"caso, pulsando la tecla Entrar moverá a la siguiente línea de asiento."
+"caso, pulsando la tecla Entrar moverá a la siguiente línea de transacción."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:256
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:257
@@ -12320,8 +12335,8 @@ msgstr "Auto-Elevar el listado de cuentas u operaciones durante entrada"
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:261
 msgid "Move to Transfer field when memorised transaction auto filled"
 msgstr ""
-"Ir al campo de Transferencia cuando se auto-completa el memorándum del "
-"asiento"
+"Ir al campo de Transferencia cuando se auto-completa el memorándum de "
+"transacción"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:262
 msgid ""
@@ -12348,7 +12363,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:271
 msgid "Color all lines of a transaction the same"
-msgstr "Rellenar todas las líneas de un asiento con el mismo color"
+msgstr "Rellenar todas las líneas de una transacción con el mismo color"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:272
 msgid ""
@@ -12356,9 +12371,9 @@ msgid ""
 "color for their background. Otherwise the background colors are alternated "
 "on each line."
 msgstr ""
-"Si activa todas las líneas que crean un asiento única emplearán el mismo "
-"color para el fondo. En otro caso los colores del fondo son alternados en "
-"cada línea."
+"Si activa todas las líneas que crean una transacción única emplearán el "
+"mismo color para el fondo. En otro caso los colores del fondo son alternados "
+"en cada línea."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:276
 msgid "Show horizontal borders in a register"
@@ -12391,7 +12406,8 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:286
 msgid "Show future transactions after the blank transaction in a register"
 msgstr ""
-"Mostrar asientos futuras tras el asiento en blanco dentro de un registro"
+"Mostrar transacciones futuras tras la transacción en blanco dentro de un "
+"registro"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:287
 msgid ""
@@ -12400,16 +12416,17 @@ msgid ""
 "bottom of the register after the blank transaction. Otherwise the blank "
 "transaction will be at the bottom of the register after all transactions."
 msgstr ""
-"Muestra asientos futuras tras el asiento en blanco dentro de un registro. Si "
-"activa entonces los asientos con una fecha en el futuro será representada al "
-"suelo del registro tras el asiento en blanco. En otro caso el asiento en "
-"blanco estará al suelo del registro tras todas los asientos."
+"Muestra asientos futuras tras la transacción en blanco dentro de un "
+"registro. Si activa entonces las transacciones con una fecha en el futuro "
+"será representada al suelo del registro tras el asiento en blanco. En otro "
+"caso la transacción en blanco estará al suelo del registro tras todas las "
+"transacciones."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:291
 #: gnucash/gtkbuilder/dialog-preferences.glade:2842
 msgid "Show all transactions on one line or in double line mode on two."
 msgstr ""
-"Muestra todas los asientos en una línea o dos en el modo de doble línea."
+"Muestra todas las transacciones en una línea o dos en el modo de doble línea."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:292
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:297
@@ -12424,10 +12441,10 @@ msgid ""
 msgstr ""
 "Este campo especifica el estilo de vista por omisión al abrir una ventana de "
 "registro nueva. Los valores posibles son «libro», «auto-libro» y «diario». "
-"La opción «libro» indica que cada el asiento debe mostrarse en una o dos "
-"líneas. La opción «auto-libro» hace lo mismo, pero expande además el asiento "
-"efectivo para mostrar todos los desgloses. La opción «diario» muestra todas "
-"los asientos expandidas."
+"La opción «libro» indica que cada transacción debe mostrarse en una o dos "
+"líneas. La opción «auto-libro» hace lo mismo, pero expande además la "
+"transacción efectiva para mostrar todos los desgloses. La opción «diario» "
+"muestra todas las transacciones expandidas."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:296
 #: gnucash/gtkbuilder/dialog-preferences.glade:2861
@@ -12435,14 +12452,14 @@ msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line or in double line mode on two."
 msgstr ""
-"Expanda automáticamente el asiento efectivo para mostrar todos los "
-"desgloses. Todas las demás asientos se muestran en una línea o en modo de "
-"línea doble con dos."
+"Expanda automáticamente la transacción efectiva para mostrar todos los "
+"desgloses. Todas las demás transacciones se muestran en una línea o en modo "
+"de línea doble con dos."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:301
 #: gnucash/gtkbuilder/dialog-preferences.glade:2880
 msgid "All transactions are expanded to show all splits."
-msgstr "Todos los asientos se expanden para mostrar todos los desgloses."
+msgstr "Todas las transacciones se expanden para mostrar todos los desgloses."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:306
 msgid ""
@@ -12450,7 +12467,7 @@ msgid ""
 "each transaction."
 msgstr ""
 "Muestra una segunda línea con «Función», «Anotaciones» y «Documentos "
-"Enlazados» por cada asiento."
+"Enlazados» por cada transacción."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:307
 msgid ""
@@ -12460,10 +12477,10 @@ msgid ""
 "\"View->Double Line\" menu item."
 msgstr ""
 "Muestra una segunda línea con «Función», «Anotaciones» y «Documentos "
-"Enlazados» por cada asiento dentro de un registro. Esto es el parámetro "
+"Enlazados» por cada transacción dentro de un registro. Esto es el parámetro "
 "predeterminado cuando un registro se abre por primera vez. Los parámetros "
-"pueden ser modificados en cualquier tiempo a través del elemento del menú "
-"«Vista → Línea doble»."
+"pueden ser modificados en cualquier tiempo a través del elemento del menú «"
+"Vista -> Línea doble»."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:311
 msgid "Only display leaf account names."
@@ -12491,8 +12508,8 @@ msgid ""
 "Show the date when the transaction was entered below the posted date and "
 "reconciled date on split row."
 msgstr ""
-"Muestra la fecha cuando el asiento fue introducida por debajo de la fecha de "
-"vencimiento y la fecha de conciliación en la fila del desglose."
+"Muestra la fecha cuando la transacción fue introducida por debajo de la "
+"fecha de vencimiento y la fecha de conciliación en la fila del desglose."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:321
 msgid "Show entered and reconciled dates on selection"
@@ -12503,7 +12520,7 @@ msgstr "Muestra fechas introducudas y conciliadas en la selección"
 msgid "Show the entered date and reconciled date on transaction selection."
 msgstr ""
 "Muestra la fecha introducida y la fecha de conciliación en la selección de "
-"asiento."
+"transacción."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:326
 msgid "Show the calendar buttons"
@@ -12524,11 +12541,12 @@ msgid ""
 "This will move the selection to the blank split when the transaction is "
 "expanded."
 msgstr ""
-"Esto moverá la selección al desglose vacío cuando el asiento esté expandida."
+"Esto moverá la selección al desglose vacío cuando la transacción esté "
+"expandida."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:336
 msgid "Number of transactions to show in a register."
-msgstr "Número de asientos que mostrar dentro de un registro."
+msgstr "Número de transacciones que mostrar dentro de un registro."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:337
 #: gnucash/gtkbuilder/dialog-preferences.glade:2911
@@ -12536,8 +12554,8 @@ msgid ""
 "Show this many transactions in a register. A value of zero means show all "
 "transactions."
 msgstr ""
-"Muestra este cantidad de asientos en un registro. Un valor cero indica que "
-"se muestren todas los asientos."
+"Muestra este cantidad de transacciones en un registro. Un valor cero indica "
+"que se muestren todas las transacciones."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:341
 msgid "Number of characters for auto complete."
@@ -12866,7 +12884,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:64
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:187
 msgid "Mark transaction split as unreconciled"
-msgstr "Marcar desglose de asiento como no conciliado"
+msgstr "Marcar desglose de transacción como no conciliado"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:65
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:188
@@ -12875,9 +12893,9 @@ msgid ""
 "unreconciled. Doing so will throw off the reconciled value of the register "
 "and can make it hard to perform future reconciliations."
 msgstr ""
-"Este diálogo se presenta antes de permitirle marcar un desglose de asiento "
-"como no conciliado. Hacerlo puede retirar la cantidad conciliada del "
-"registro y hacer más difícil conciliar en el futuro."
+"Este diálogo se presenta antes de permitirle marcar un desglose de "
+"transacción como no conciliado. Hacerlo puede retirar la cantidad conciliada "
+"del registro y hacer más difícil conciliar en el futuro."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:69
 msgid "Cut a split from a transaction"
@@ -12908,7 +12926,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:79
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:192
 msgid "Remove a split from a transaction"
-msgstr "Quita un desglose de un asiento"
+msgstr "Quita un desglose de una transacción"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:80
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:193
@@ -12916,13 +12934,13 @@ msgid ""
 "This dialog is presented before allowing you to remove a split from a "
 "transaction."
 msgstr ""
-"Este diálogo se presenta antes de permitirle retirar un desglose desde un "
-"asiento."
+"Este diálogo se presenta antes de permitirle retirar un desglose desde una "
+"transacción."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:84
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:197
 msgid "Remove a reconciled split from a transaction"
-msgstr "Quita un desglose conciliado desde un asiento"
+msgstr "Quita un desglose conciliado desde una transacción"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:85
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:198
@@ -12932,7 +12950,7 @@ msgid ""
 "register and can make it hard to perform future reconciliations."
 msgstr ""
 "Este diálogo se presenta antes de permitirle retirar un desglose conciliado "
-"desde un asiento. Hacerlo quitará la cantidad conciliada del registro y "
+"desde una transacción. Hacerlo quitará la cantidad conciliada del registro y "
 "puede hacer más difícil conciliar en el futuro."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:89
@@ -12940,7 +12958,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:202
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:207
 msgid "Remove all the splits from a transaction"
-msgstr "Quita todos los desgloses desde un asiento"
+msgstr "Quita todos los desgloses desde una transacción"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:90
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:203
@@ -12949,7 +12967,7 @@ msgid ""
 "transaction."
 msgstr ""
 "Este diálogo se presenta antes de permitirle retirar todas los desgloses "
-"desde un asiento."
+"desde una transacción."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:95
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:208
@@ -12959,8 +12977,8 @@ msgid ""
 "reconciled value of the register and can make it hard to perform future "
 "reconciliations."
 msgstr ""
-"Este diálogo se presenta antes de permitirle retirar todos los desgloses "
-"(incluyendo algunos conciliados) de un asiento. Hacerlo puede retirar la "
+"Este diálogo se presenta antes de permitirle retirar todos los desgloses ("
+"incluyendo algunos conciliados) de una transacción. Hacerlo puede retirar la "
 "cantidad conciliada del registro y hacer más difícil conciliar en el futuro."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:99
@@ -12988,17 +13006,17 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:109
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:212
 msgid "Delete a transaction"
-msgstr "Borra un asiento"
+msgstr "Borra una transacción"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:110
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:213
 msgid "This dialog is presented before allowing you to delete a transaction."
-msgstr "Este diálogo se presenta antes de permitirle borrar un asiento."
+msgstr "Este diálogo se presenta antes de permitirle borrar una transacción."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:114
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:217
 msgid "Delete a transaction with reconciled splits"
-msgstr "Borra un asiento con desgloses conciliados"
+msgstr "Borra una transacción con desgloses conciliados"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:115
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:218
@@ -13007,14 +13025,14 @@ msgid ""
 "contains reconciled splits. Doing so will throw off the reconciled value of "
 "the register and can make it hard to perform future reconciliations."
 msgstr ""
-"Este diálogo se presenta antes de permitirle borrar un asiento que contenga "
-"desgloses conciliados. Hacerlo puede retirar la cantidad conciliada del "
-"registro y puede hacer difícil conciliar en el futuro."
+"Este diálogo se presenta antes de permitirle borrar una transacción que "
+"contenga desgloses conciliados. Hacerlo puede retirar la cantidad conciliada "
+"del registro y puede hacer difícil conciliar en el futuro."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:119
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:222
 msgid "Duplicating a changed transaction"
-msgstr "Duplicando un asiento modificada"
+msgstr "Duplicando una transacción modificada"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:120
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:223
@@ -13022,13 +13040,13 @@ msgid ""
 "This dialog is presented when you attempt to duplicate a modified "
 "transaction. The changed data must be saved or the duplication canceled."
 msgstr ""
-"Este diálogo se presenta al intentar duplicar un asiento modificada. Los "
-"datos modificados deben ser guardados o la duplicación cancelada."
+"Este diálogo se presenta al intentar duplicar una transacción modificada. "
+"Los datos modificados deben ser guardados o la duplicación cancelada."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:124
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:227
 msgid "Commit changes to a transaction"
-msgstr "Efectuar cambios a un asiento"
+msgstr "Efectuar cambios a una transacción"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:125
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:228
@@ -13036,8 +13054,8 @@ msgid ""
 "This dialog is presented when you attempt to move out of a modified "
 "transaction. The changed data must be either saved or discarded."
 msgstr ""
-"Este diálogo se presenta cuando intenta salir de un asiento modificada. Los "
-"datos modificados deben ser guardados o descartados."
+"Este diálogo se presenta cuando intenta salir de una transacción modificada. "
+"Los datos modificados deben ser guardados o descartados."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:5
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:6
@@ -13782,7 +13800,7 @@ msgstr "Importar Precios Ahora"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:28
 msgid "CSV Transaction Import"
-msgstr "Importación de Asiento CSV"
+msgstr "Importación de Transacción CSV"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:56
 msgid ""
@@ -13841,7 +13859,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:74
 msgid "Transaction Import Assistant"
-msgstr "Asistente de Importación de Asiento"
+msgstr "Asistente de Importación de Transacción"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:530
 msgid "Multi-split"
@@ -16185,7 +16203,7 @@ msgstr "<b>Fichero</b>"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:170
 msgid "Host"
-msgstr "Servidor"
+msgstr "Hospedaje"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:183
 msgid "Database"
@@ -16207,7 +16225,7 @@ msgstr "Anual"
 #: gnucash/gtkbuilder/dialog-fincalc.glade:15
 #: gnucash/gtkbuilder/dialog-fincalc.glade:56
 msgid "Semi-annual"
-msgstr "Semi-anual"
+msgstr "Semestral"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:18
 #: gnucash/gtkbuilder/dialog-fincalc.glade:59
@@ -17165,8 +17183,8 @@ msgid ""
 msgstr ""
 "El carácter que se usará entre los componentes del nombre de una cuenta. Es "
 "válido cualquier carácter excepto letras, números y cualquiera de las "
-"siguientes cadenas: «dos puntos» «barra izquierda», «barra derecha» y "
-"«guión»."
+"siguientes cadenas: «dos puntos» «barra izquierda», «barra derecha», «guión» "
+"y «punto»."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:914
 #: gnucash/gtkbuilder/dialog-preferences.glade:3251
@@ -17431,12 +17449,12 @@ msgid ""
 msgstr ""
 "En algunos lugares como hipermercados se instalan cajeros comerciales (que "
 "no son de ninguna entidad financiera). Estos cajeros añaden sus comisiones "
-"directamente a la cantidad en vez de mostrarlo como un asiento separada o en "
-"sus comisiones mensuales de banca. Por ejemplo, usted retira 100€ y se le "
-"cargan 101,50€ más por gastos interbancarios. Si introduce manualmente 100€, "
-"las cantidades no cotejarán. Debería configurar esto para cualquier cosa sea "
-"el máximo cono comisión dentro de su área (en unidades de su moneda local), "
-"de forma que el el asiento sea reconocida cono un cotejo."
+"directamente a la cantidad en vez de mostrarlo como una transacción separada "
+"o en sus comisiones mensuales de banca. Por ejemplo, usted retira 100€ y se "
+"le cargan 101,50€ más por gastos interbancarios. Si introduce manualmente "
+"100€, las cantidades no cotejarán. Debería configurar esto para cualquier "
+"cosa sea el máximo como comisión dentro de su área (en unidades de su moneda "
+"local), de forma que el la transacción sea reconocida cono un cotejo."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2133
 msgid ""
@@ -18167,10 +18185,9 @@ msgid ""
 "to print an address on the check."
 msgstr ""
 "Compruebe que el formato debe\n"
-"tener un elemento de dirección\n"
-"DIRECCIÓN definida con el fin de\n"
-"para escribir una dirección en\n"
-"la comprobación."
+"tener un elemento de DIRECCIÓN\n"
+"definida con el fin de escribir una\n"
+"dirección en la comprobación."
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:535
 #: gnucash/gtkbuilder/dialog-print-check.glade:1084
@@ -20515,7 +20532,7 @@ msgid ""
 "The bank has sent transaction information in its response.\n"
 "Do you want to import it?"
 msgstr ""
-"El banco ha enviado una información de asiento dentro de su resultado.\n"
+"El banco ha enviado una información de transacción dentro de su resultado.\n"
 "¿Desea importarla?"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:944
@@ -21049,7 +21066,7 @@ msgstr "Acum-desgl"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:198
 msgid "Import Bills or Invoices from csv"
-msgstr "Importar Minutas o Facturas desde csv"
+msgstr "Importar Minutas o Facturas desde CSV"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:226
 #, c-format
@@ -21334,7 +21351,6 @@ msgstr ""
 "Si esta es su importación inicial en un fichero nuevo, primero verá un "
 "diálogo para configurar las opciones del libro, ya que éstos pueden afectar "
 "cómo los datos importados son convertidos a asientos de GnuCash.\n"
-"\n"
 "Nota: Tras importar, quizá necesita emplear una opción del menú 'Ver/Filtrar "
 "por / Otra' y seleccionar para mostrar Cuentas no utilizadas.\n"
 
@@ -21968,7 +21984,7 @@ msgid ""
 "overwritten."
 msgstr ""
 "Seleccione una materia prima para cotejar con el siguiente código de cambio "
-"específico. Tenga en cuenta el el código de cambio de la materia prima que "
+"específico. Tenga en cuenta el código de cambio de la materia prima que "
 "elija se sobrescribirá."
 
 #: gnucash/import-export/import-format-dialog.c:78
@@ -22175,8 +22191,8 @@ msgid ""
 "While importing transactions from OFX file '%s' found %d previously imported "
 "transactions, no new transactions."
 msgstr ""
-"Mientras importa asientos desde fichero «%s» OFX a la cuenta «%s», se ha "
-"encontrado %d transacción previamente importada, ninguna transacción creada."
+"Mientras importa transacciones desde fichero «%s» OFX encontrado «%d» "
+"transacciones previamente importada, ninguna transacción creada."
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1378
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
@@ -22704,8 +22720,8 @@ msgid ""
 "The current transaction has been changed. Would you like to record the "
 "changes before duplicating this entry, or cancel the duplication?"
 msgstr ""
-"El asiento efectivo ha sido modificado. ¿Quiere registrar los cambios antes "
-"de duplicar este apunte, o cancelar la duplicación?"
+"La transacción efectiva ha sido modificada. ¿Quiere registrar los cambios "
+"antes de duplicar este asiento, o cancelar la duplicación?"
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:157
 msgid ""
@@ -22734,8 +22750,8 @@ msgid ""
 "existing order. Would you like to record the change and effectively change "
 "your order?"
 msgstr ""
-"El apunte efectivo ha sido modificado. Sin embargo, este apunte forma parte "
-"de una operación existente. ¿Quiere registrar el cambio y por tanto "
+"El asiento efectivo ha sido modificado. Sin embargo, este asiento forma "
+"parte de una operación existente. ¿Quiere registrar el cambio y por tanto "
 "modificar la operación?"
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:895
@@ -22744,7 +22760,7 @@ msgstr "_No registrar"
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:982
 msgid "The current entry has been changed. Would you like to save it?"
-msgstr "El apunte efectivo ha sido modificado. ¿Quiere guardarlo?"
+msgstr "El asiento efectivo ha sido modificado. ¿Quiere guardarlo?"
 
 # Casilla, Caja, X→ J
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:77
@@ -23043,8 +23059,8 @@ msgid ""
 "The current transaction has been changed. Would you like to record the "
 "changes before duplicating the transaction, or cancel the duplication?"
 msgstr ""
-"El asiento efectivo ha sido modificada. ¿Quiere registrar los cambios antes "
-"de duplicar el asiento, o cancelar la duplicación?"
+"La transacción efectiva ha sido modificada. ¿Quiere registrar los cambios "
+"antes de duplicar la transacción o cancelar la duplicación?"
 
 #: gnucash/register/ledger-core/split-register.c:947
 msgid ""
@@ -23090,9 +23106,9 @@ msgid ""
 "changes before moving to a new transaction, discard the changes, or return "
 "to the changed transaction?"
 msgstr ""
-"El asiento efectivo ha sido modificada. ¿Quisiera registrar los cambios "
-"antes de moverse a un asiento nuevo, descartar los cambios, o volver al "
-"asiento modificada?"
+"La transacción efectiva ha sido modificada. ¿Quisiera registrar los cambios "
+"antes de moverse a un a transacción nueva, descartar los cambios, o volver a "
+"la transacción modificada?"
 
 #. Translators: The 'sample:' items are
 #. strings which are not displayed, but only
@@ -23125,7 +23141,7 @@ msgstr "Descripción de un asiento"
 #: gnucash/report/trep-engine.scm:1247 gnucash/report/trep-engine.scm:1248
 msgctxt "Column header for 'Document Link'"
 msgid "L"
-msgstr "L"
+msgstr "E"
 
 #: gnucash/register/ledger-core/split-register-layout.c:711
 #: gnucash/register/ledger-core/split-register-layout.c:751
@@ -25867,8 +25883,7 @@ msgstr ""
 "AVISO: las conversiones de monedas extranjeras, y ganancias no\n"
 "realizadas de cálculo no son correctas confirmadas. Este boletín\n"
 "tal vez es modificado sin notificar. Boletines de gazapos son bien-\n"
-"venidos en:\n"
-"https://bugs.gnucash.org/"
+"venidos en https://bugs.gnucash.org/"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:62
 msgid "Period duration"
@@ -27049,7 +27064,7 @@ msgstr ""
 "Este boletín es útil para calcular imposiciones periódicas de negocios "
 "futuras de liquidaciones / recibos desde autoridades. Desde «Opciones de "
 "edición de boletín», elija sus cuentas de negocios para cuentas de ventas y "
-"compras.  Cada asiento puede contener, en adición a las cuentas abonables/"
+"compras. Cada transacción puede contener, en adición a las cuentas abonables/"
 "ingresables o cuentas bancarias, un desglose a una cuenta imponible, p. e. "
 "Ingreso:Venta -1000€, Pasivo:TIV en Ventas -100€."
 
