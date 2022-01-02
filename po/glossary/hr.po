@@ -1,14 +1,14 @@
 # Croatian translation of GNUCash glossary.
 # Copyright (C) 2019 Free Software Foundation, Inc.
-# Milo Ivir <mail@milotype.de>, 2019., 2020, 2021.
+# Milo Ivir <mail@milotype.de>, 2019., 2020, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-01-02 14:54+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2022-01-02 22:54+0000\n"
+"Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/hr/>\n"
 "Language: hr\n"
@@ -876,4 +876,4 @@ msgid "due"
 msgstr "rok"
 
 msgid "Online"
-msgstr ""
+msgstr "Internet"
