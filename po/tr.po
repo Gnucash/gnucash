@@ -7,14 +7,14 @@
 # Oğuz Ersen <oguzersen@protonmail.com>, 2021.
 # Ömer Faruk Çakmak <omerfarukckmk@protonmail.com>, 2021.
 # udo pton <udopton@gmail.com>, 2021.
-# Bora <boratici@gmail.com>, 2021.
+# Bora <boratici@gmail.com>, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-12-30 17:52+0000\n"
+"PO-Revision-Date: 2022-01-02 14:44+0000\n"
 "Last-Translator: Bora <boratici@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "tr/>\n"
@@ -17029,7 +17029,7 @@ msgstr "Hep"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1808
 msgid "Time to _wait for answer"
-msgstr "Cevap için beklenecek süre"
+msgstr "Ce_vap için bekleme süresi"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1845
 msgid "seconds"
