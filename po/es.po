@@ -79,7 +79,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-02 22:54+0000\n"
+"PO-Revision-Date: 2022-01-02 23:54+0000\n"
 "Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -13881,17 +13881,17 @@ msgid ""
 "will consider this line part of the same transaction."
 msgstr ""
 "Normalmente el importador asumirá cada línea dentro del fichero de entrada "
-"corresponderá a un asiento. Cada línea puede tener información para un "
+"corresponderá a una transacción. Cada línea puede tener información para un "
 "asiento y una o dos desgloses.\n"
 "\n"
 "Cuando está activado el Multi-desglose el importador asumirá múltiples "
-"líneas consecutivas juntas mantiene la información para un asiento. Cada "
-"línea proporciona información para exactamente un desglose. La primera línea "
-"debería proporcionar también la información para el asiento.\n"
-"Para saber cuáles líneas pertenecen a la misma asiento, el importador "
+"líneas consecutivas juntas mantiene la información para una transacción. "
+"Cada línea proporciona información para exactamente un desglose. La primera "
+"línea debería proporcionar también la información para la transacción.\n"
+"Para saber cuáles líneas pertenecen a la misma transacción, el importador "
 "comparará el asiento provisto dentro de cada línea. Si esa información está "
-"vacía o la misma como la primera línea de asiento el importador considerará "
-"esta parte de línea del mismo asiento."
+"vacía o la misma como la primera línea de transacción el importador "
+"considerará esta parte de línea de la misma transacción."
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:767
 msgid ""
@@ -13969,7 +13969,8 @@ msgstr ""
 "Si una de esas <i>comprobaciones falla</i> automáticamente será redirigido a "
 "la página anterior para intentar y corregir.\n"
 "\n"
-"En la siguiente página será capaz de asociar cada asiento a una categoría.\n"
+"En la siguiente página será capaz de asociar cada transacción a una "
+"categoría.\n"
 "\n"
 "Si ésta es su <i>importación inicial dentro de un fichero nuevo</i>, primero "
 "verá un diálogo para configurar opciones del libro, por lo que estas pueden "
@@ -13978,7 +13979,7 @@ msgstr ""
 "\n"
 "Si este es la <i>importación por primera vez</i>, encontrará que todas las "
 "líneas tal vez requieran ser asociadas. En las importaciones subsiguientes, "
-"el importador intentará asociar los asientos basadas en las anteriores "
+"el importador intentará asociar las transacciones basadas en las anteriores "
 "importaciones.\n"
 "\n"
 "La confianza de una asociación correcta será desplegada como una barra "
@@ -13992,7 +13993,7 @@ msgstr "Información Transaccional"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1129
 msgid "Match Transactions"
-msgstr "Cotejar Asientos"
+msgstr "Cotejar Transacciones"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:30
 msgid ""
@@ -14222,10 +14223,10 @@ msgstr ""
 "Esto es un método de creación paso a paso para una opción de devolución de "
 "préstamo con GnuCash. Este asistente puede introducir los parámetros de sus "
 "préstamos y amortización. Utilizando esa información, se crearán las "
-"Asientos Planificados apropiadas.\n"
+"Transacciones Planificadas apropiadas.\n"
 "\n"
 "Si comete un error o si más tarde desea hacer cambios, puede editar las "
-"Asientos Planificados creadas directamente."
+"Transacciones Planificadas creadas directamente."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:120
 msgid "Loan / Mortgage Repayment Setup"
@@ -14277,7 +14278,7 @@ msgid ""
 "remaining principle and the duration of the scheduled transaction."
 msgstr ""
 "Introduzca el número de meses pendientes de una liquidación. Esto determina "
-"ambos los principales restantes y la duración del asiento programada."
+"ambos los principales restantes y la duración de transacción planificada."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:296
 msgid "Months Remaining"
@@ -14376,7 +14377,7 @@ msgstr "Emplee Cuenta Avalista"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:945
 msgid "Part of Payment Transaction"
-msgstr "Parte de Asiento para Liquidación"
+msgstr "Parte de Transacción para Liquidación"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1008
 msgid "Payment Frequency"
@@ -14661,8 +14662,8 @@ msgid ""
 "safely within GnuCash."
 msgstr ""
 "GnuCash usa cuentas de Ingresos y Gastos separadas mejor que categorías para "
-"clasificar sus asientos. Cada una de las categoría dentro de su fichero QIF "
-"será convertida a una cuenta GnuCash.\n"
+"clasificar sus transacciones. Cada una de las categoría dentro de su fichero "
+"QIF será convertida a una cuenta GnuCash.\n"
 "\n"
 "En la siguiente página, tendrá una oportunidad para mirar en los cotejos "
 "sugeridos entre categorías QIF y las cuentas GnuCash. Puede modificar las "
@@ -14696,9 +14697,10 @@ msgstr ""
 "asignadas correctamente a cuentas GnuCash.\n"
 "\n"
 "En la próxima página, verá el texto que aparece en los campos «Portador» y "
-"«Memorandum» de los asientos sin ninguna Categoría o Cuenta QIF. Por omisión "
-"esas asientos son asignadas a la cuenta «No Especificado» en GnuCash. Si "
-"selecciona una cuenta diferente, será recordada para futuros ficheros QIF."
+"«Memorandum» de las transacciones sin ninguna Categoría o Cuenta QIF. Por "
+"omisión esas transacciones son asignadas a la cuenta «No Especificado» en "
+"GnuCash. Si selecciona una cuenta diferente, será recordada para futuros "
+"ficheros QIF."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:815
 msgid "Payees and memos"
@@ -14719,7 +14721,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:947
 msgid "_Select the currency to use for all imported transactions:"
-msgstr "_Seleccionar la moneda a utilizarla en todas los asientos importadas:"
+msgstr ""
+"_Seleccionar la moneda a utilizarla en todas las transacciones importadas:"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:990
 msgid ""
@@ -14731,10 +14734,10 @@ msgid ""
 msgstr ""
 "Desde que se está creando un fichero nuevo, lo siguiente que habrá que hacer "
 "es ver un diálogo para configurar opciones del libro. Estas pueden afectar "
-"cómo se importan los asientos de GnuCash. Si vuelve a esta página sin "
+"cómo se importan las transacciones de GnuCash. Si vuelve a esta página sin "
 "cancelar e iniciando otra, el diálogo para ajustar las opciones de ejercicio "
 "no serán mostradas por segunda vez cuando avance. Puede accederlo "
-"directamente desde el menú a través de Archivo→Propiedades."
+"directamente desde el menú a través de Archivo->Propiedades."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1001
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:2642
@@ -14818,13 +14821,13 @@ msgid ""
 msgstr ""
 "\n"
 "Si está importando un fichero QIF desde un banco u otra institución "
-"financiera, algunas de los asientos pueden existir ya en su cuenta de "
+"financiera, algunas de las transacciones pueden existir ya en su cuenta de "
 "GnuCash. Para evitar la duplicación, GnuCash ha intentado identificar las "
 "coincidencias y necesita su ayuda para revisarlas.\n"
 "\n"
-"En la página siguiente se le mostrará un listado de asientos importadas. A "
-"medida que seleccione cada una, se mostrará un listado de las posibles "
-"coincidencias. Si encuentra una coincidencia correcta, márquela. Su "
+"En la página siguiente se le mostrará un listado de transacciones "
+"importadas. A medida que seleccione cada una, se mostrará un listado de las "
+"posibles coincidencias. Si encuentra una coincidencia correcta, márquela. Su "
 "selección será confirmada a través de una casilla de marcación en la columna "
 "«¿Coincide?».\n"
 "\n"
@@ -14832,15 +14835,15 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1259
 msgid "Match existing transactions"
-msgstr "Cotejar asientos existentes"
+msgstr "Cotejar transacciones existentes"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1302
 msgid "_Imported transactions needing review"
-msgstr "Asientos _importados necesitando revisión"
+msgstr "Transacciones _importadas necesitando revisión"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1341
 msgid "_Possible matches for the selected transaction"
-msgstr "_Posible cotejo para el asiento seleccionado"
+msgstr "_Posible cotejo para la transacción seleccionada"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1362
 msgid "Select possible duplicates"
@@ -14913,7 +14916,7 @@ msgstr ""
 "Introduzca la fecha y el número de acciones que ha ganado o perdido por el "
 "desglose de acciones. Para fusiones (desglose negativo), utilice un valor "
 "negativo para la distribución de mercado. También puede introducir una "
-"descripción del asiento o aceptar el valor por omisión."
+"descripción de la transación o aceptar el valor por omisión."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:151
 msgid "Desc_ription"
@@ -15263,32 +15266,33 @@ msgstr "M_over a"
 #: gnucash/gtkbuilder/dialog-account.glade:590
 #: gnucash/gtkbuilder/dialog-account.glade:708
 msgid "Delete all _transactions"
-msgstr "Borrar todos los _asientos"
+msgstr "Borrar todas las _transacciones"
 
 #: gnucash/gtkbuilder/dialog-account.glade:611
 msgid ""
 "This account contains transactions. What would you like to do with these "
 "transactions?"
 msgstr ""
-"Esta cuenta contiene asientos. ¿Qué quisiera hacer para hacer con estas "
-"asientos?"
+"Esta cuenta contiene transacciones. ¿Qué quisiera hacer para hacer con estas "
+"transacciones?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:625
 msgid "This account contains read-only transactions which may not be deleted."
 msgstr ""
-"Esta cuenta contiene asientos de sólo lectura que no pueden ser borrados."
+"Esta cuenta contiene transacciones de sólo lectura que no pueden ser "
+"borrados."
 
 #: gnucash/gtkbuilder/dialog-account.glade:674
 msgid "<b>Sub-account Transactions</b>"
-msgstr "<b>Asientos por Subcuentas</b>"
+msgstr "<b>Transacciones por Subcuentas</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:729
 msgid ""
 "You've said to delete the subaccount and it contains transactions. What "
 "would you like to do with these transactions?"
 msgstr ""
-"Ha dicho que borre la subcuenta y ésta contiene asientos. ¿Qué quiere hacer "
-"con esas asientos?"
+"Ha dicho que borre la subcuenta y ésta contiene transacciones. ¿Qué quiere "
+"hacer con esas transacciones?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:743
 msgid ""
@@ -15327,7 +15331,7 @@ msgstr "Mostrar cuentas _no utilizadas"
 
 #: gnucash/gtkbuilder/dialog-account.glade:992
 msgid "Show accounts which do not have any transactions."
-msgstr "Mostrar cuentas las cuales no tenga ninguna asiento."
+msgstr "Mostrar cuentas las cuales no tenga ninguna transacción."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1006
 msgid "Show _zero total accounts"
@@ -15387,9 +15391,9 @@ msgid ""
 "Transactions may not be posted to this account, only to sub-accounts of this "
 "account."
 msgstr ""
-"Esta cuenta está únicamente como marcador en el plan de cuentas. Asientos "
-"pueden no ser contabilizadas para esta cuenta, sólo a subcuentas de esta "
-"cuenta."
+"Esta cuenta está únicamente como marcador en el plan de cuentas. "
+"Transacciones pueden no ser contabilizadas para esta cuenta, sólo a "
+"subcuentas de esta cuenta."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1464
 msgid "H_idden"
@@ -15436,8 +15440,9 @@ msgid ""
 "This account holds opening balance transactions. Only one account per "
 "commodity can hold opening balance transactions."
 msgstr ""
-"Esta cuenta contiene los asientos de los saldo de apertura. Únicamente una "
-"cuenta por materia prima puede contener asientos de saldo de apertura."
+"Esta cuenta contiene las transacciones de los saldo de apertura. Únicamente "
+"una cuenta por materia prima puede contener transacciones de saldo de "
+"apertura."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1564
 msgid "<b>Acco_unt Type</b>"
@@ -15504,8 +15509,8 @@ msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as cleared."
 msgstr ""
-"Cuando el estado no está especificado dentro de un fichero QIF, los asientos "
-"están marcadas como punteado."
+"Cuando el estado no está especificado dentro de un fichero QIF, las "
+"transacciones están marcadas como punteado."
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:90
 msgid "_Not cleared"
@@ -15516,14 +15521,14 @@ msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as not cleared."
 msgstr ""
-"Cuando el estado no sea especificado en un fichero QIF, los asientos se "
-"marcan como no punteado."
+"Cuando el estado no sea especificado en un fichero QIF, las transacciones se "
+"marcan como no punteadas."
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:112
 msgid ""
 "Default transaction status (overridden by the status given by the QIF file)"
 msgstr ""
-"Estado de asiento predeterminada (invalidado por el estado dado por el "
+"Estado de transacción predeterminada (invalidado por el estado dado por el "
 "fichero QIF)"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:143
@@ -15537,7 +15542,7 @@ msgstr "_Seleccionar o añadir una cuenta:"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:7
 msgid "Import transactions from text file"
-msgstr "Importar asientos desde el fichero de texto"
+msgstr "Importar transacciones desde el fichero de texto"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:123
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:126
@@ -16151,7 +16156,7 @@ msgid ""
 "link."
 msgstr ""
 "Pulsación doble sobre el apunte en la columna Descripción para ir a la "
-"Asiento.\n"
+"Transacción.\n"
 "Pulsación doble sobre el apunte en la columna Enlace para abrir el Documento "
 "Enlazado.\n"
 "Pulsación doble sobre el apunte en la columna Disponible para modificar el "
@@ -16496,7 +16501,7 @@ msgstr "Formato"
 
 #: gnucash/gtkbuilder/dialog-import.glade:302
 msgid "Select matching existing transaction"
-msgstr "Seleccionar cotejo de asientos existente"
+msgstr "Seleccionar cotejo de transacción existente"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:319
@@ -16506,12 +16511,12 @@ msgstr "Mostrar Conciliado"
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:379
 msgid "Imported transaction's first split"
-msgstr "Primer desglose del asiento importado"
+msgstr "Primer desglose de transacción importado"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:414
 msgid "Potential splits matching the selected transaction"
-msgstr "Desgloses que podrían cotejar con el asiento seleccionado"
+msgstr "Desgloses que podrían cotejar con la transacción seleccionada"
 
 #: gnucash/gtkbuilder/dialog-import.glade:463
 msgid ""
@@ -16520,45 +16525,46 @@ msgid ""
 "rows and then Right Click to select a transfer account. Only rows with \"A\" "
 "checked can be added to a selection."
 msgstr ""
-"Tal vez puedan ser seleccionadas múltiples filas de asiento de cuenta "
-"asignadas a todas las filas seleccionadas. Utilice la Pulsación+Ctrl Izq. o "
-"Mayús+Pulsación para seleccionar múltiples filas y después Pulsación Derecha "
-"para seleccionar una cuanta de transferencia. Solamente filas con \"A\" "
-"marcadas pueden ser agregadas a una selección."
+"Tal vez puedan ser seleccionadas múltiples filas de transacción y una cuenta "
+"de transferencia asignada a todas las filas seleccionadas. Utilice la "
+"Pulsación+Ctrl Izq. o Mayús+Pulsación para seleccionar múltiples filas y "
+"después Pulsación Derecha para seleccionar una cuenta de transferencia. "
+"Solamente filas con \"A\" marcadas pueden ser agregadas a una selección."
 
 #: gnucash/gtkbuilder/dialog-import.glade:466
 msgid ""
 "This transaction probably requires your intervention or it will be imported "
 "unbalanced."
 msgstr ""
-"Este asiento probablemente requiere de su intervención, de lo contrario se "
-"importará descuadrado."
+"Esta transacción probablemente requiere de su intervención, de lo contrario "
+"se importará descuadrado."
 
 #: gnucash/gtkbuilder/dialog-import.glade:469
 msgid ""
 "This transaction will be imported balanced (you may still want to double "
 "check the match or destination account)."
 msgstr ""
-"Este asiento será importada correctamente cuadrado (puede querer comprobar "
-"el cotejo o la cuenta destino)."
+"Esta transacción será importada correctamente cuadrado (puede querer "
+"comprobar el cotejo o la cuenta destino)."
 
 #: gnucash/gtkbuilder/dialog-import.glade:472
 msgid "This transaction requires your intervention or it will NOT be imported."
 msgstr ""
-"Este asiento requiere de su intervención, de lo contrario NO se importará."
+"Esta transacción requiere de su intervención, de lo contrario NO se "
+"importará."
 
 #: gnucash/gtkbuilder/dialog-import.glade:475
 msgid ""
 "Double click on the transaction to either change the matching transaction in "
 "GnuCash or the destination account of the auto-balance split (if required)."
 msgstr ""
-"Pulsación doble en el asiento para o bien modificar el asiento cotejada en "
-"GnuCash o bien la cuenta de destino auto-balance del desglose (si se "
+"Pulsación doble en la transacción para o bien modificar el asiento cotejada "
+"en GnuCash o bien la cuenta de destino auto-balance del desglose (si se "
 "requiere)."
 
 #: gnucash/gtkbuilder/dialog-import.glade:480
 msgid "Transaction List Help"
-msgstr "Ayuda de listado Asiento"
+msgstr "Ayuda de listado Transacción"
 
 #: gnucash/gtkbuilder/dialog-import.glade:529
 #: gnucash/report/stylesheets/footer.scm:117
@@ -16602,22 +16608,23 @@ msgstr "«C»"
 
 #: gnucash/gtkbuilder/dialog-import.glade:690
 msgid "Select \"A\" to add the transaction as new."
-msgstr "Seleccione «A» para añadir el asiento como nueva."
+msgstr "Seleccione «A» para añadir la transacción como nueva."
 
 #: gnucash/gtkbuilder/dialog-import.glade:702
 msgid ""
 "Select \"U+C\" to update a matching transaction and mark it as cleared (c)."
 msgstr ""
-"Seleccione «A+C» para actualizar un asiento cotejada y márquela como "
+"Seleccione «A+C» para actualizar una transacción cotejada y márquela como "
 "conciliada (c)."
 
 #: gnucash/gtkbuilder/dialog-import.glade:714
 msgid "Select \"C\" to mark a matching transaction as cleared (c)."
-msgstr "Seleccione «C» para marcar como conciliada (c) un asiento coincidente."
+msgstr ""
+"Seleccione «C» para marcar como conciliada (c) una transacción coincidente."
 
 #: gnucash/gtkbuilder/dialog-import.glade:726
 msgid "Select neither to skip the transaction (it won't be imported at all)."
-msgstr "No seleccione ninguno para omitirse el asiento (no se importará)."
+msgstr "No seleccione ninguno para omitirse la transacción (no se importará)."
 
 #: gnucash/gtkbuilder/dialog-import.glade:737
 msgid "(none)"
@@ -16639,8 +16646,8 @@ msgstr "Verde"
 msgid ""
 "List of downloaded transactions (source split and matched information shown)"
 msgstr ""
-"Listado de asientos descargados (se muestran partida de origen e información "
-"coincidente)"
+"Listado de transacciones descargadas (se muestran partida de origen e "
+"información coincidente)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:931
 msgid "Show _Account column"
@@ -16674,7 +16681,7 @@ msgstr "Concilia_r tras cotejar"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1017
 msgid "Generic import transaction matcher"
-msgstr "Cotejo de asientos de importados genérico"
+msgstr "Cotejo de transacción de importados genérico"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:119
 msgid "Posted Account"
@@ -16719,7 +16726,7 @@ msgid ""
 "Unposting this Invoice will delete the posted transaction.\n"
 "Are you sure you want to unpost it?"
 msgstr ""
-"Descontabilizar esta Factura eliminará el asiento contabilizada.\n"
+"Descontabilizar esta Factura eliminará la transacción contabilizada.\n"
 "¿Seguro que lo quiere descontabilizar?"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:1292
@@ -16977,7 +16984,7 @@ msgstr "(EUR)"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:655
 msgid "Transaction Details"
-msgstr "Detalles de Asiento"
+msgstr "Detalles de Transacción"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:691
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:78
@@ -17429,7 +17436,7 @@ msgstr "<b>Ficheros Enlazados</b>"
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2052
 msgid "Enable skip transaction action"
-msgstr "Habilitar operación omitir asiento"
+msgstr "Habilitar operación omitir transacción"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2071
@@ -17461,8 +17468,8 @@ msgid ""
 "A transaction whose best match's score is in the green zone (above or equal "
 "to the Auto-CLEAR threshold) will be CLEARed by default."
 msgstr ""
-"Un asiento cuyo mejor puntuación del cotejo está en la zona verde (superior "
-"o igual al límite de Auto-PUNTEAR) por omisión será PUNTEAdo."
+"Una transacción cuyo mejor puntuación del cotejo está en la zona verde ("
+"superior o igual al límite de Auto-PUNTEAR) por omisión será PUNTEAdo."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2155
 msgid ""
@@ -17470,9 +17477,9 @@ msgid ""
 "threshold but below or equal to the Auto-ADD threshold) will be ADDed by "
 "default."
 msgstr ""
-"Un asiento cuyo mejor puntuación del cotejo está en la zona roja (superior "
-"al umbral mostrado, pero inferior o igual al umbral para Auto-AÑADIRLO) por "
-"omisión será AÑADIDO."
+"Una transacción cuyo mejor puntuación del cotejo está en la zona roja ("
+"superior al umbral mostrado, pero inferior o igual al umbral para Auto-"
+"AÑADIRLO) por omisión será AÑADIDO."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2177
 msgid ""
@@ -17510,7 +17517,7 @@ msgstr "Emplee cotejos _bayesianos"
 msgid ""
 "Use bayesian algorithms to match new transactions with existing accounts."
 msgstr ""
-"Emplee algoritmos bayesianos para cotejar los asientos nuevas con las "
+"Emplee algoritmos bayesianos para cotejar las transacciones nuevas con las "
 "cuentas existentes."
 
 #. Preferences->Online Banking:Generic
@@ -17528,16 +17535,16 @@ msgid ""
 "A transaction whose date is within the threshold is likely to be a match. "
 "Default is 4 days."
 msgstr ""
-"Un asiento cuya fecha está escrita dentro del umbral es similar a ser un "
-"cotejo. Predefinido son 4 días."
+"Una transacción cuya fecha está escrita dentro del umbral es similar a ser "
+"un cotejo. Predefinido son 4 días."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2340
 msgid ""
 "A transaction whose date is outside the threshold is unlikely to be a match. "
 "Default is 14 days."
 msgstr ""
-"Un asiento cuya fecha está fuera del umbral es distinto a ser un cotejo. Por "
-"defecto es de 14 días."
+"Una transacción cuya fecha está fuera del umbral es distinto a ser un "
+"cotejo. Por defecto es de 14 días."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2385
 msgid "<b>Checks</b>"
@@ -17576,7 +17583,7 @@ msgstr "Escribiendo"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2507
 msgid "'_Enter' moves to blank transaction"
-msgstr "«_Introducir» mueve al asiento en blanco"
+msgstr "«_Introducir» mueve a la transacción en blanco"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2513
 msgid ""
@@ -17584,8 +17591,8 @@ msgid ""
 "transaction in the register. If clear, pressing the 'Enter' key will move "
 "down one row."
 msgstr ""
-"Si está marcado, pulsando la tecla «Entrar» le llevará a la ubicación del "
-"asiento en blanco dentro del registro. Si está vacío, pulsando la tecla "
+"Si está marcado, pulsando la tecla «Entrar» le llevará a la ubicación le la "
+"transacción en blanco dentro del registro. Si está vacío, pulsando la tecla "
 "«Introducir» le bajará una fila."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2525
@@ -17599,11 +17606,12 @@ msgstr "Auto-Elevar el listado de cuentas u operaciones durante entrada."
 #: gnucash/gtkbuilder/dialog-preferences.glade:2543
 msgid "Tab order in_cludes Transfer on Memorised Transactions"
 msgstr ""
-"Lengüeta de Operación _incluye Transferencia sobre Asientos Registradas"
+"Lengüeta de Operación _incluye Transferencia sobre Transacciones Registradas"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2549
 msgid "Move to Transfer field when memorised transaction auto filled."
-msgstr "Ir al campo Transferir cuando el asiento memorizada sea autorellenada."
+msgstr ""
+"Ir al campo Transferir cuando la transacción memorizada sea autorellenada."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2574
 msgid "<b>Reconciling</b>"
@@ -17611,12 +17619,12 @@ msgstr "<b>Conciliando…</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2584
 msgid "Check cleared _transactions"
-msgstr "Marcar _asientos punteadas"
+msgstr "Marcar _transacciones punteadas"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2590
 msgid "Pre-check cleared transactions when creating a reconcile dialog."
 msgstr ""
-"Pre-comprobar asientos punteadas cuando cree un diálogo de conciliación."
+"Pre-comprobar transacciones punteadas cuando cree un diálogo de conciliación."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2602
 msgid "Automatic credit card _payment"
@@ -17661,15 +17669,15 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2679
 msgid "Double _mode colors alternate with transactions"
-msgstr "Colores del _modo doble alternan con asientos"
+msgstr "Colores del _modo doble alternan con transacciones"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2685
 msgid ""
 "Alternate the primary and secondary colors by transaction instead of by "
 "alternating by row."
 msgstr ""
-"Alternar color principal y secundario en cada asiento, en vez de alternarlo "
-"por fila."
+"Alternar color principal y secundario en cada transacción, en vez de "
+"alternarlo por fila."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2697
 msgid "Draw hori_zontal lines between rows"
@@ -17701,7 +17709,7 @@ msgstr "Diseño"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2758
 msgid "_Future transactions after blank transaction"
-msgstr "_Asientos futuros tras asiento en blanco"
+msgstr "_Transacciones futuras tras transacción en blanco"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2764
 msgid ""
@@ -17709,9 +17717,10 @@ msgid ""
 "bottom of the register after the blank transaction. If clear, the blank "
 "transaction will be at the bottom of the register after all transactions."
 msgstr ""
-"Si está marcado, asientos con una fecha en el futuro serán representadas al "
-"suelo del registro tras el asiento en blanco. Si está vacío, el asiento en "
-"blanco estará al fondo del registro después de todas los asientos."
+"Si está marcado, transacciones con una fecha en el futuro serán "
+"representadas al suelo del registro tras la transacción en blanco. Si está "
+"vacío, la transacción en blanco estará al fondo del registro tras todas las "
+"transacciones."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2803
 msgid "<b>Default Style</b>"
@@ -17731,7 +17740,7 @@ msgstr "_Libro general auto-desglosado"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2896
 msgid "Number of _transactions"
-msgstr "Número de _asientos"
+msgstr "Número de _transacciones"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2929
 msgid "_Double line mode"
@@ -17742,8 +17751,8 @@ msgid ""
 "Show two lines of information for each transaction instead of one. Does not "
 "affect expanded transactions."
 msgstr ""
-"Muestra dos líneas de información para cada asiento en vez de una. No afecta "
-"a los asientos expandidos."
+"Muestra dos líneas de información para cada transacción en vez de una. No "
+"afecta a las transacciones expandidas."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2947
 msgid "Register opens in a new _window"
@@ -18074,7 +18083,7 @@ msgstr ""
 "Si está activado, incluye precios añadidos por aplicación.\n"
 "\n"
 "Estos precios fueron añadidos tal que siempre hay un precio «cercanos en "
-"tiempo» para cada asiento multicolumna tal que la página de Cuentas y "
+"tiempo» para cada transacción multicolumna tal que la página de Cuentas y "
 "boletines son capaces de informar correctamente valores tal que quitándolos "
 "puede hacer esto menos fiable."
 
@@ -19344,7 +19353,7 @@ msgid ""
 "transactions."
 msgstr ""
 "GnuCash estimará los valores a presupuestar para las cuentas seleccionadas "
-"desde asientos anteriores."
+"desde transaciones anteriores."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:389
 msgid "Use Average"
@@ -19413,7 +19422,7 @@ msgstr "Agregar nota"
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:13
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:565
 msgid "Duplicate Transaction"
-msgstr "Duplicar Asiento"
+msgstr "Duplicar Transacción"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:110
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:663
@@ -19423,7 +19432,7 @@ msgstr "_Número"
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:148
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:691
 msgid "_Transaction Number"
-msgstr "Número _asiento"
+msgstr "Número _transacción"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:163
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:721
@@ -19481,12 +19490,12 @@ msgstr "Guardar _filtro"
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:723
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1113
 msgid "Void Transaction"
-msgstr "Asiento Vacío"
+msgstr "Transacción Vacía"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:787
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1177
 msgid "Reason for voiding transaction"
-msgstr "Razón para invalidando asiento"
+msgstr "Razón para invalidando transacción"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:100
 msgid "Show _number of days"
@@ -19655,8 +19664,8 @@ msgid ""
 "be the current balance given by your bank online."
 msgstr ""
 "Utilice este diálogo si quiere que GnuCash busque automáticamente cuales "
-"asientos están punteadas, dando un balance final. Por ejemplo, digamos que "
-"el balance puede ser el actual dado por su conexión bancaria."
+"transacciones están punteadas, dando un balance final. Por ejemplo, digamos "
+"que el balance puede ser el actual dado por su conexión bancaria."
 
 #: gnucash/gtkbuilder/window-autoclear.glade:101
 msgid "Caution!"
@@ -19930,11 +19939,11 @@ msgstr "Cerrar al _finalizar"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:289
 msgid "Get Transactions Online"
-msgstr "Obtener Conexión de Asientos"
+msgstr "Obtener Conexión de Transacciones"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:351
 msgid "Date range of transactions to retrieve:"
-msgstr "Rango de fechas de asientos a obtener:"
+msgstr "Rango de fechas de transacciones a obtener:"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:371
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:147
@@ -20051,7 +20060,7 @@ msgstr "Introducir un nombre único para la plantilla nueva."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:995
 msgid "Online Transaction"
-msgstr "Conexión de Asiento"
+msgstr "Conexión de Transacción"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1010
 msgid "Execute _later (unimpl.)"
@@ -20063,11 +20072,11 @@ msgstr "Ejecutar _ahora"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1047
 msgid "Execute this online transaction now"
-msgstr "Ejecuta esta conexión de asiento ahora"
+msgstr "Ejecuta esta conexión de transacción ahora"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1074
 msgid "Enter an Online Transaction"
-msgstr "Introduzca una Conexión de Asiento"
+msgstr "Introduzca una Conexión de Transacción"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1110
 msgid "Recipient Account _Number"
@@ -20117,7 +20126,8 @@ msgstr "_Agregar moneda"
 #: gnucash/import-export/aqb/dialog-ab.glade:1500
 msgid "Add the current online transaction as a new transaction template"
 msgstr ""
-"Agrega la conexión actual de asiento como una plantilla nueva de asiento"
+"Agrega la conexión actual de transacción como una plantilla nueva de "
+"transacción"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1512
 msgid "_Up"
@@ -20125,7 +20135,7 @@ msgstr "_Subir"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1518
 msgid "Move the selected transaction template one row up"
-msgstr "Mueve la plantilla de asiento seleccionado una fila arriba"
+msgstr "Sube la plantilla de transacción seleccionado una fila"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1530
 msgid "_Down"
@@ -20133,7 +20143,7 @@ msgstr "_Bajar"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1536
 msgid "Move the selected transaction template one row down"
-msgstr "Mueve la plantilla de asiento seleccionado una fila abajo"
+msgstr "Baja la plantilla de transacción seleccionada una fila"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1548
 msgid "_Sort"
