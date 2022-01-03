@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-01 11:54+0000\n"
+"PO-Revision-Date: 2022-01-03 08:54+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -10747,15 +10747,15 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:35
 msgid "Position of payee name"
-msgstr "Posição do nome do beneficiário"
+msgstr "Posição do nome do sacador"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:36
 msgid ""
 "This value contains the X,Y coordinates for the start of the payee line on "
 "the check."
 msgstr ""
-"Este valor contém as coordenadas xy para o início da linha de beneficiário "
-"no cheque."
+"Este valor contém as coordenadas xy para o início da linha de sacador no "
+"cheque."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:40
 msgid "Position of date line"
@@ -10801,7 +10801,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:55
 msgid "Position of payee address"
-msgstr "Posição da morada do beneficiário"
+msgstr "Posição da morada do sacador"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:56
 msgid ""
@@ -10810,8 +10810,8 @@ msgid ""
 "specified check position."
 msgstr ""
 "Este valor contém as coordenadas xy para o início da linha de morada do "
-"beneficiário no cheque. As coordenadas são a partir do canto inferior "
-"esquerdo da posição especificada no cheque."
+"sacador no cheque. As coordenadas são a partir do canto inferior esquerdo da "
+"posição especificada no cheque."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:60
 msgid "Position of notes line"
@@ -13441,7 +13441,7 @@ msgstr "Saltar erros"
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1010
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:945
 msgid "Import Preview"
-msgstr "Antever impressão"
+msgstr "Antever importação"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1026
 msgid ""
@@ -13453,7 +13453,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1041
 msgid "Import Prices Now"
-msgstr "Importar preços agora"
+msgstr "Importar cotações agora"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:28
 msgid "CSV Transaction Import"
@@ -14152,7 +14152,7 @@ msgstr "_Seleccione..."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:137
 msgid "Select a QIF file to load"
-msgstr "Seleccione um ficheiro QIF a carregar"
+msgstr "Seleccionar um ficheiro QIF a carregar"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:213
 msgid "_Start"
@@ -14490,7 +14490,7 @@ msgstr "Correspondências _possíveis para a transacção seleccionada"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1362
 msgid "Select possible duplicates"
-msgstr "Seleccione possíveis duplicados"
+msgstr "Seleccionar possíveis duplicados"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1370
 msgid ""
@@ -20190,7 +20190,7 @@ msgstr "Assunto:"
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:96
 msgid "Select a file to import"
-msgstr "Seleccione um ficheiro para importar"
+msgstr "Seleccionar um ficheiro a importar"
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:140
 msgid "Import module for DTAUS import not found."
@@ -20785,8 +20785,8 @@ msgid ""
 "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to "
 "abort the export.\n"
 msgstr ""
-"Quando clica em \"Aplicar\", as transacções serão exportadas para o ficheiro "
-"\"%s\" e o número de contas exportadas é %u.\n"
+"Quando clicar em \"Aplicar\", as transacções serão exportadas para o "
+"ficheiro \"%s\" e o número de contas exportadas é %u.\n"
 "\n"
 "Também pode verificar as suas selecções clicando em \"Recuar\" ou abortar a "
 "exportação clicando em \"Cancelar\".\n"
@@ -20801,8 +20801,8 @@ msgid ""
 "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to "
 "abort the export.\n"
 msgstr ""
-"Quando clica em \"Aplicar\", as transacções serão exportadas para o ficheiro "
-"\"%s\".\n"
+"Quando clicar em \"Aplicar\", as transacções serão exportadas para o "
+"ficheiro \"%s\".\n"
 "\n"
 "Também pode verificar as suas selecções clicando em \"Recuar\" ou abortar a "
 "exportação clicando em \"Cancelar\".\n"
@@ -21439,11 +21439,11 @@ msgstr "Importar transacções de um ficheiro CSV"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:60
 msgid "Import _Prices from a CSV file..."
-msgstr "Importar _preços de um ficheiro CSV..."
+msgstr "Im_portar cotações de um ficheiro CSV..."
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:61
 msgid "Import Prices from a CSV file"
-msgstr "Importar preços de um ficheiro CSV"
+msgstr "Importar cotações de um ficheiro CSV"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:139
 msgid "Shipping Name"
