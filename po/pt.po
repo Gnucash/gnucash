@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-03 08:54+0000\n"
+"PO-Revision-Date: 2022-01-03 11:53+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -5332,12 +5332,12 @@ msgstr "Cancelar a transacção actual"
 #: gnucash/gnome/gnc-plugin-page-register2.c:315
 #: gnucash/gnome/gnc-plugin-page-register.c:424
 msgid "_Void Transaction"
-msgstr "_Esvaziar transacção"
+msgstr "An_ular transacção"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:319
 #: gnucash/gnome/gnc-plugin-page-register.c:428
 msgid "_Unvoid Transaction"
-msgstr "_Desfazer esvaziar da transacção"
+msgstr "Resta_urar transacção"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:323
 #: gnucash/gnome/gnc-plugin-page-register.c:432
@@ -5715,7 +5715,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register.c:3991
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr ""
-"Não pode esvaziar uma transacção com parcelas recociliadas ou confirmadas."
+"Não pode anular uma transacção com parcelas reconciliadas ou confirmadas."
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register2.c:3040
@@ -5815,7 +5815,7 @@ msgstr "Suspensa"
 #: gnucash/gnome-search/search-reconciled.c:233
 #: gnucash/report/trep-engine.scm:151
 msgid "Voided"
-msgstr "Esvaziada"
+msgstr "Anulada"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3455
 #: gnucash/gnome/gnc-plugin-page-register.c:3457
@@ -9936,11 +9936,11 @@ msgstr "Descrição/Notas/Memorando"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:625
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
 msgid "Void Reason"
-msgstr "Motivo para esvaziar"
+msgstr "Motivo para anular"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2855
 msgid "Accounts / Void Reason"
-msgstr "Contas/Motivo para esvaziar"
+msgstr "Contas/Motivo para anular"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2865
 msgid "R"
@@ -10064,7 +10064,7 @@ msgstr "Insira a conta de onde transferir ou seleccione uma da lista"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3230
 #: gnucash/register/ledger-core/split-register-model.c:1207
 msgid "Reason the transaction was voided"
-msgstr "Motivo porque a transacção foi esvaziada"
+msgstr "Motivo porque a transacção foi anulada"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3242
 msgid "Enter the reconcile type"
@@ -14474,7 +14474,7 @@ msgstr ""
 "correspondências. Se encontrar uma que seja correcta, clique-a. A sua "
 "selecção será confirmada por uma marca na coluna Corresponde?.\n"
 "\n"
-"Clique em Avançar para rever possíveis correspondências."
+"Clique em Seguinte para rever possíveis correspondências."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1259
 msgid "Match existing transactions"
@@ -19057,7 +19057,7 @@ msgstr "C_onfirmada"
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:592
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:434
 msgid "_Voided"
-msgstr "_Esvaziada"
+msgstr "An_ulada"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:608
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:450
@@ -19073,12 +19073,12 @@ msgstr "Gra_var filtro"
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:723
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1113
 msgid "Void Transaction"
-msgstr "Esvaziar transacção"
+msgstr "Anular transacção"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:787
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1177
 msgid "Reason for voiding transaction"
-msgstr "Motivo para esvaziar a transacção"
+msgstr "Motivo para anular a transacção"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:100
 msgid "Show _number of days"
@@ -28917,7 +28917,7 @@ msgstr "Estado de reconciliação"
 
 #: gnucash/report/trep-engine.scm:121
 msgid "Void Transactions"
-msgstr "Transacções esvaziadas"
+msgstr "Transacções anuladas"
 
 #: gnucash/report/trep-engine.scm:122
 msgid "Closing transactions"
@@ -28949,15 +28949,15 @@ msgstr "Excluir transacções de/para contas filtradas"
 
 #: gnucash/report/trep-engine.scm:352
 msgid "Non-void only"
-msgstr "Só não vazias"
+msgstr "Só não anuladas"
 
 #: gnucash/report/trep-engine.scm:356
 msgid "Void only"
-msgstr "Só vazias"
+msgstr "Só anuladas"
 
 #: gnucash/report/trep-engine.scm:360
 msgid "Both (and include void transactions in totals)"
-msgstr "Ambas (e incluir transacções vazias nos totais)"
+msgstr "Ambas (e incluir transacções anuladas nos totais)"
 
 #: gnucash/report/trep-engine.scm:365
 msgid "Exclude closing transactions"
@@ -29088,7 +29088,7 @@ msgstr "Filtrar por estado de reconciliação."
 
 #: gnucash/report/trep-engine.scm:626
 msgid "How to handle void transactions."
-msgstr "Como gerir transacções esvaziadas."
+msgstr "Como gerir transacções anuladas."
 
 #: gnucash/report/trep-engine.scm:633
 msgid ""
@@ -30334,11 +30334,11 @@ msgstr "Parcela"
 
 #: libgnucash/engine/Transaction.c:2778
 msgid "Voided transaction"
-msgstr "Transacção esvaziada"
+msgstr "Transacção anulada"
 
 #: libgnucash/engine/Transaction.c:2794
 msgid "Transaction Voided"
-msgstr "Transacção esvaziada"
+msgstr "Transacção anulada"
 
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
