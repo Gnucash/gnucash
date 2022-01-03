@@ -127,47 +127,18 @@ GncOptionQofInstanceValue::deserialize(const std::string& str) noexcept
 {
     QofInstance* inst{};
     // Commodities are often serialized as Namespace::Mnemonic or just Mnemonic
-    if (m_ui_type == GncOptionUIType::CURRENCY ||
-        m_ui_type == GncOptionUIType::COMMODITY)
-    {
-        auto book{gnc_get_current_book()};
-        auto table = gnc_commodity_table_get_table(book);
-        auto sep{str.find(":")};
-        if (sep != std::string::npos)
-        {
-            auto name_space{str.substr(0, sep)};
-            auto mnemonic{str.substr(sep + 1, -1)};
-            inst = QOF_INSTANCE(gnc_commodity_table_lookup(table,
-                                                              name_space.c_str(),
-                                                              mnemonic.c_str()));
-        }
-        if (!inst && m_ui_type == GncOptionUIType::CURRENCY)
-            inst = QOF_INSTANCE(gnc_commodity_table_lookup(table,
-                                                             "CURRENCY",
-                                                             str.c_str()));
+    try {
+        auto guid{static_cast<GncGUID>(gnc::GUID::from_string(str))};
+        inst = qof_instance_from_guid(&guid, m_ui_type);
         if (inst)
         {
             m_value = make_gnc_item(inst);
             return true;
         }
     }
-
-    if (!inst)
+    catch (const gnc::guid_syntax_exception& err)
     {
-        try {
-            auto guid{static_cast<GncGUID>(gnc::GUID::from_string(str))};
-            inst = qof_instance_from_guid(&guid, m_ui_type);
-            if (inst)
-            {
-                auto coll{qof_instance_get_collection(inst)};
-                m_value = std::make_pair(qof_collection_get_type(coll), guid);
-                return true;
-            }
-        }
-        catch (const gnc::guid_syntax_exception& err)
-        {
-            PWARN("Failed to convert %s to a GUID", str.c_str());
-        }
+        PWARN("Failed to convert %s to a GUID", str.c_str());
     }
     return false;
 }
@@ -198,6 +169,103 @@ GncOptionQofInstanceValue::serialize() const noexcept
         retval = guid.to_string();
     }
     return retval;
+}
+
+static gnc_commodity*
+gnc_commodity_from_namespace_and_mnemonic(std::string_view name_space,
+                                          std::string_view mnemonic)
+{
+    auto book{gnc_get_current_book()};
+    auto table = gnc_commodity_table_get_table(book);
+    return gnc_commodity_table_lookup(table, name_space.data(),
+                                      mnemonic.data());
+}
+
+gnc_commodity*
+GncOptionCommodityValue::get_value() const
+{
+    return gnc_commodity_from_namespace_and_mnemonic(m_namespace, m_mnemonic);
+}
+
+gnc_commodity*
+GncOptionCommodityValue::get_default_value() const
+{
+    return gnc_commodity_from_namespace_and_mnemonic(m_default_namespace,
+                                                     m_default_mnemonic);
+}
+
+void
+GncOptionCommodityValue::set_value(gnc_commodity* value)
+{
+    if (!validate(value))
+        throw std::invalid_argument("Value not a currency when required or not a commodity. Value not set.");
+    m_mnemonic = gnc_commodity_get_mnemonic(value);
+    m_namespace = gnc_commodity_get_namespace(value);
+}
+
+void
+GncOptionCommodityValue::set_default_value(gnc_commodity* value)
+{
+    if (!validate(value))
+        throw std::invalid_argument("Value not a currency when required or not a commodity. Value not set.");
+    m_mnemonic = m_default_mnemonic = gnc_commodity_get_mnemonic(value);
+    m_namespace = m_default_namespace = gnc_commodity_get_namespace(value);
+}
+
+void
+GncOptionCommodityValue::reset_default_value()
+{
+    m_mnemonic = m_default_mnemonic;
+    m_namespace = m_default_namespace;
+}
+
+bool
+GncOptionCommodityValue::is_changed() const noexcept
+{
+    return m_namespace == m_default_namespace && m_mnemonic == m_default_mnemonic;
+}
+
+bool
+GncOptionCommodityValue::validate(gnc_commodity* comm) const noexcept
+{
+    if (!GNC_IS_COMMODITY(comm))
+        return false;
+    if (m_is_currency && !gnc_commodity_is_currency(comm))
+        return false;
+    return true;
+}
+
+std::string
+GncOptionCommodityValue::serialize() const noexcept
+{
+    if (m_is_currency)
+        return m_mnemonic;
+    else
+        return m_namespace + ":" + m_mnemonic;
+}
+
+bool
+GncOptionCommodityValue::deserialize(const std::string& str) noexcept
+{
+   auto sep{str.find(":")};
+    gnc_commodity* comm{};
+    std::string mnemonic, name_space;
+    if (sep != std::string::npos)
+    {
+        name_space = str.substr(0, sep);
+        mnemonic = str.substr(sep + 1, -1);
+    }
+    else
+    {
+        name_space = "CURRENCY";
+        mnemonic = str;
+    }
+    comm = gnc_commodity_from_namespace_and_mnemonic(name_space, mnemonic);
+    if (!validate(comm))
+        return false;
+    m_namespace = std::move(name_space);
+    m_mnemonic = std::move(mnemonic);
+    return true;
 }
 
 bool
@@ -470,10 +538,6 @@ qof_instance_from_guid(GncGUID* guid, GncOptionUIType type)
     QofIdType qof_type;
     switch(type)
     {
-        case GncOptionUIType::CURRENCY:
-        case GncOptionUIType::COMMODITY:
-            qof_type = "Commodity";
-            break;
         case GncOptionUIType::BUDGET:
             qof_type = "Budget";
             break;
@@ -510,37 +574,13 @@ QofInstance*
 qof_instance_from_string(const std::string& str, GncOptionUIType type)
 {
     QofInstance* retval{nullptr};
-    // Commodities are often serialized as Namespace::Mnemonic or just Mnemonic
-    if (type == GncOptionUIType::CURRENCY ||
-        type == GncOptionUIType::COMMODITY)
-    {
-        auto book{gnc_get_current_book()};
-        auto table = gnc_commodity_table_get_table(book);
-        auto sep{str.find(":")};
-        if (sep != std::string::npos)
-        {
-            auto name_space{str.substr(0, sep)};
-            auto mnemonic{str.substr(sep + 1, -1)};
-            retval = QOF_INSTANCE(gnc_commodity_table_lookup(table,
-                                                             name_space.c_str(),
-                                                             mnemonic.c_str()));
-        }
-        if (!retval && type == GncOptionUIType::CURRENCY)
-            retval = QOF_INSTANCE(gnc_commodity_table_lookup(table,
-                                                             "CURRENCY",
-                                                             str.c_str()));
+    try {
+        auto guid{static_cast<GncGUID>(gnc::GUID::from_string(str))};
+        retval = qof_instance_from_guid(&guid, type);
     }
-
-    if (!retval)
+    catch (const gnc::guid_syntax_exception& err)
     {
-        try {
-            auto guid{static_cast<GncGUID>(gnc::GUID::from_string(str))};
-            retval = qof_instance_from_guid(&guid, type);
-        }
-        catch (const gnc::guid_syntax_exception& err)
-        {
-            PWARN("Failed to convert %s to a GUID", str.c_str());
-        }
+        PWARN("Failed to convert %s to a GUID", str.c_str());
     }
     return retval;
 }
@@ -549,26 +589,8 @@ std::string
 qof_instance_to_string(const QofInstance* inst)
 {
     std::string retval;
-    if (GNC_IS_COMMODITY(inst))
-    {
-        auto commodity{GNC_COMMODITY(inst)};
-        if (!gnc_commodity_is_currency(commodity))
-        {
-            auto name_space{gnc_commodity_get_namespace(GNC_COMMODITY(inst))};
-            if (name_space && *name_space != '\0')
-            {
-                retval = name_space;
-                retval += ":";
-            }
-        }
-        retval += gnc_commodity_get_mnemonic(GNC_COMMODITY(inst));
-        return retval;
-    }
-    else
-    {
-        gnc::GUID guid{*qof_instance_get_guid(inst)};
-        retval = guid.to_string();
-    }
+    gnc::GUID guid{*qof_instance_get_guid(inst)};
+    retval = guid.to_string();
     return retval;
 }
 
@@ -678,41 +700,6 @@ GncOptionValue<SCM>::reset_default_value()
     m_value = m_default_value;
     scm_gc_protect_object(m_value);
 }
-
-template <typename ValueType> std::string
-GncOptionValidatedValue<ValueType>::serialize() const noexcept
-{
-    static const std::string no_value{"No Value"};
-    if constexpr(std::is_same_v<ValueType, const QofInstance*>)
-        return m_value ? qof_instance_to_string(m_value) : no_value;
-    else if constexpr(is_same_decayed_v<ValueType, std::string>)
-        return m_value;
-    else if constexpr(is_same_decayed_v<ValueType, bool>)
-        return m_value ? "True" : "False";
-    else if constexpr(std::is_arithmetic_v<ValueType>)
-        return std::to_string(m_value);
-    else
-        return "Invalid Value Type";
-}
-
-template <typename ValueType> bool
-GncOptionValidatedValue<ValueType>::deserialize(const std::string& str) noexcept
-{
-    if constexpr(is_same_decayed_v<ValueType, std::string>)
-        set_value(str);
-    else if constexpr(is_same_decayed_v<ValueType, bool>)
-        set_value(str == "True");
-    else if constexpr(is_same_decayed_v<ValueType, int>)
-        set_value(stoi(str));
-    else if constexpr(is_same_decayed_v<ValueType, int64_t>)
-        set_value(stoll(str));
-    else if constexpr(is_same_decayed_v<ValueType, double>)
-        set_value(stod(str));
-    else
-        return false;
-    return true;
-}
-
 std::string
 GncOptionAccountListValue::serialize() const noexcept
 {
@@ -881,6 +868,16 @@ GncOptionDateValue::deserialize(const std::string& str) noexcept
     }
 }
 
+std::istream&
+operator>> (std::istream& iss, GncOptionCommodityValue& opt)
+{
+    std::string instr;
+    iss >> instr;
+    if (!opt.deserialize(instr))
+        throw std::invalid_argument("Invalid commodity string in stream.");
+    return iss;
+}
+
 template GncOptionValue<bool>::GncOptionValue(const GncOptionValue<bool>&);
 template GncOptionValue<int>::GncOptionValue(const GncOptionValue<int>&);
 template GncOptionValue<int64_t>::GncOptionValue(const GncOptionValue<int64_t>&);
@@ -944,16 +941,6 @@ template std::string GncOptionValue<std::string>::serialize() const noexcept;
 template std::string GncOptionValue<const QofQuery*>::serialize() const noexcept;
 template std::string GncOptionValue<const GncOwner*>::serialize() const noexcept;
 template std::string GncOptionValue<SCM>::serialize() const noexcept;
-template std::string GncOptionValidatedValue<bool>::serialize() const noexcept;
-template std::string GncOptionValidatedValue<int>::serialize() const noexcept;
-template std::string GncOptionValidatedValue<int64_t>::serialize() const noexcept;
-template std::string GncOptionValidatedValue<double>::serialize() const noexcept;
-template std::string GncOptionValidatedValue<char*>::serialize() const noexcept;
-template std::string GncOptionValidatedValue<const char*>::serialize() const noexcept;
-template std::string GncOptionValidatedValue<std::string>::serialize() const noexcept;
-template std::string GncOptionValidatedValue<const QofInstance*>::serialize() const noexcept;
-template std::string GncOptionValidatedValue<const QofQuery*>::serialize() const noexcept;
-template std::string GncOptionValidatedValue<const GncOwner*>::serialize() const noexcept;
 template std::string GncOptionRangeValue<int>::serialize() const noexcept;
 template std::string GncOptionRangeValue<double>::serialize() const noexcept;
 template bool GncOptionValue<bool>::deserialize(const std::string&) noexcept;
@@ -966,15 +953,5 @@ template bool GncOptionValue<std::string>::deserialize(const std::string&) noexc
 template bool GncOptionValue<const QofQuery*>::deserialize(const std::string&) noexcept;
 template bool GncOptionValue<const GncOwner*>::deserialize(const std::string&) noexcept;
 template bool GncOptionValue<SCM>::deserialize(const std::string&) noexcept;
-template bool GncOptionValidatedValue<bool>::deserialize(const std::string&) noexcept;
-template bool GncOptionValidatedValue<int>::deserialize(const std::string&) noexcept;
-template bool GncOptionValidatedValue<int64_t>::deserialize(const std::string&) noexcept;
-template bool GncOptionValidatedValue<double>::deserialize(const std::string&) noexcept;
-template bool GncOptionValidatedValue<char*>::deserialize(const std::string&) noexcept;
-template bool GncOptionValidatedValue<const char*>::deserialize(const std::string&) noexcept;
-template bool GncOptionValidatedValue<std::string>::deserialize(const std::string&) noexcept;
-template bool GncOptionValidatedValue<const QofInstance*>::deserialize(const std::string&) noexcept;
-template bool GncOptionValidatedValue<const QofQuery*>::deserialize(const std::string&) noexcept;
-template bool GncOptionValidatedValue<const GncOwner*>::deserialize(const std::string&) noexcept;
 template bool GncOptionRangeValue<int>::deserialize(const std::string&) noexcept;
 template bool GncOptionRangeValue<double>::deserialize(const std::string&) noexcept;

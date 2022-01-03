@@ -60,7 +60,7 @@ class GncOptionAccountListValue;
 class GncOptionAccountSelValue;
 class GncOptionMultichoiceValue;
 template <typename ValueType> class GncOptionRangeValue;
-template <typename ValueType> class GncOptionValidatedValue;
+class GncOptionCommodityValue;
 class GncOptionDateValue;
 
 template <typename T>
@@ -107,8 +107,7 @@ using GncOptionVariant = std::variant<GncOptionValue<std::string>,
                                       GncOptionMultichoiceValue,
                                       GncOptionRangeValue<int>,
                                       GncOptionRangeValue<double>,
-                                      GncOptionValidatedValue<const QofInstance*>,
-                                      GncOptionValidatedValue<const QofQuery*>,
+                                      GncOptionCommodityValue,
                                       GncOptionDateValue>;
 
 using GncOptionVariantPtr = std::unique_ptr<GncOptionVariant>;

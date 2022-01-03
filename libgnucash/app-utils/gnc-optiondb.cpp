@@ -444,8 +444,6 @@ is_qofinstance_ui_type(GncOptionUIType type)
 {
     switch (type)
     {
-        case GncOptionUIType::CURRENCY:
-        case GncOptionUIType::COMMODITY:
         case GncOptionUIType::ACCOUNT_SEL:
         case GncOptionUIType::BUDGET:
         case GncOptionUIType::OWNER:
@@ -651,8 +649,8 @@ gnc_register_commodity_option(GncOptionDB* db, const char* section,
                               const char* name, const char* key,
                               const char* doc_string, gnc_commodity *value)
 {
-    GncOption option{GncOptionQofInstanceValue{section, name, key, doc_string,
-                                               (const QofInstance*)value,
+    GncOption option{GncOptionCommodityValue{section, name, key, doc_string,
+                                               value,
                                                GncOptionUIType::COMMODITY}};
     db->register_option(section, std::move(option));
 }
@@ -917,14 +915,8 @@ gnc_register_currency_option(GncOptionDB* db, const char* section,
                              const char* name, const char* key,
                              const char* doc_string, gnc_commodity *value)
 {
-    GncOption option{GncOptionValidatedValue<const QofInstance*>{
-        section, name, key, doc_string, (const QofInstance*)value,
-        [](const QofInstance* new_value) -> bool
-            {
-                return GNC_IS_COMMODITY (new_value) &&
-                    gnc_commodity_is_currency(GNC_COMMODITY(new_value));
-            },
-            GncOptionUIType::CURRENCY
+    GncOption option{GncOptionCommodityValue{
+        section, name, key, doc_string, value,GncOptionUIType::CURRENCY
         }};
     db->register_option(section, std::move(option));
 }

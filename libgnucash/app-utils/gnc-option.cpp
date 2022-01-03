@@ -302,15 +302,15 @@ GncOption::validate(ValueType value) const
     return std::visit(
         [value] (const auto& option) -> bool {
             if constexpr ((is_same_decayed_v<decltype(option),
-                           GncOptionMultichoiceValue> &&
-                           is_same_decayed_v<ValueType,
-                           std::string>) ||
+                                             GncOptionMultichoiceValue> &&
+                           is_same_decayed_v<ValueType, std::string>) ||
                           (is_same_decayed_v<decltype(option),
-                           GncOptionMultichoiceValue> &&
+                                             GncOptionMultichoiceValue> &&
                            is_same_decayed_v<ValueType,
-                           GncMultichoiceOptionIndexVec>) ||
-                          is_same_decayed_v<decltype(option),
-                          GncOptionValidatedValue<ValueType>>)
+                                             GncMultichoiceOptionIndexVec>) ||
+                          (is_same_decayed_v<decltype(option),
+                                             GncOptionCommodityValue> &&
+                           is_same_decayed_v<ValueType, gnc_commodity*>))
                 return option.validate(value);
             else
                 return false;
@@ -448,8 +448,6 @@ gnc_make_SCM_option(const char* section, const char* name,
  */
 
 
-template class GncOptionValidatedValue<const QofInstance*>;
-
 template GncOption::GncOption(const char*, const char*, const char*,
                               const char*, bool, GncOptionUIType);
 //template GncOption::GncOption(const char*, const char*, const char*,
@@ -477,6 +475,7 @@ template size_t GncOption::get_value<size_t>() const;
 template const char* GncOption::get_value<const char*>() const;
 template std::string GncOption::get_value<std::string>() const;
 template const QofInstance* GncOption::get_value<const QofInstance*>() const;
+template gnc_commodity* GncOption::get_value<gnc_commodity*>() const;
 template const Account* GncOption::get_value<const Account*>() const;
 template RelativeDatePeriod GncOption::get_value<RelativeDatePeriod>() const;
 template GncOptionAccountList GncOption::get_value<GncOptionAccountList>() const;
@@ -490,6 +489,7 @@ template double GncOption::get_default_value<double>() const;
 template const char* GncOption::get_default_value<const char*>() const;
 template std::string GncOption::get_default_value<std::string>() const;
 template const QofInstance* GncOption::get_default_value<const QofInstance*>() const;
+template gnc_commodity* GncOption::get_default_value<gnc_commodity*>() const;
 template const Account* GncOption::get_default_value<const Account*>() const;
 template RelativeDatePeriod GncOption::get_default_value<RelativeDatePeriod>() const;
 template GncOptionAccountList GncOption::get_default_value<GncOptionAccountList>() const;
@@ -504,6 +504,7 @@ template void GncOption::set_value(char*);
 template void GncOption::set_value(const char*);
 template void GncOption::set_value(std::string);
 template void GncOption::set_value(const QofInstance*);
+template void GncOption::set_value(gnc_commodity*);
 template void GncOption::set_value(const Account*);
 template void GncOption::set_value(RelativeDatePeriod);
 template void GncOption::set_value(size_t);
@@ -535,6 +536,7 @@ template bool GncOption::validate(double) const;
 template bool GncOption::validate(const char*) const;
 template bool GncOption::validate(std::string) const;
 template bool GncOption::validate(const QofInstance*) const;
+template bool GncOption::validate(gnc_commodity*) const;
 template bool GncOption::validate(const Account*) const;
 template bool GncOption::validate(const QofQuery*) const;
 template bool GncOption::validate(RelativeDatePeriod) const;

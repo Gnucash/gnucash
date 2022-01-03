@@ -172,75 +172,54 @@ private:
     GncItem m_default_value;
 };
 
-/** class GncOptionValidatedValue
- *  Validated values have an additional member function, provided as a
- *  constructor argument, that checks value parameters for some property before
- *  setting the object's value member. If the function returns false a
- *  std::invalid_argument exception is thrown.
+/** class GncOptionCommodityValue
+ * Commodities are stored with their namespace and mnemonic instead of their gncGIUD
+ * so that they can be correctly retrieved even if they're deleted and recreated.
+ * Additionally if GncOptionCommodityValue is created with GncOptionUIType::CURRENCY
+ * it will throw std::invalid_argument if one attempts to set a value that isn't a
+ * currency.
  */
-template <typename ValueType>
-class GncOptionValidatedValue : public OptionClassifier
+
+class GncOptionCommodityValue : public OptionClassifier
 {
 public:
-    GncOptionValidatedValue<ValueType>() = delete;
-    GncOptionValidatedValue<ValueType>(const char* section, const char* name,
+    GncOptionCommodityValue() = delete;
+    GncOptionCommodityValue(const char* section, const char* name,
                                        const char* key, const char* doc_string,
-                                       ValueType value,
-                                       std::function<bool(ValueType)>validator,
-                                       GncOptionUIType ui_type = GncOptionUIType::INTERNAL
-        ) :
+                                       gnc_commodity* value,
+                                       GncOptionUIType ui_type = GncOptionUIType::COMMODITY) :
         OptionClassifier{section, name, key, doc_string},
-        m_ui_type{ui_type}, m_value{value}, m_default_value{value},
-        m_validator{validator}
-        {
-            if (!this->validate(value))
-            throw std::invalid_argument("Attempt to create GncValidatedOption with bad value.");
-        }
-    GncOptionValidatedValue<ValueType>(const char* section, const char* name,
-                                       const char* key, const char* doc_string,
-                                       ValueType value,
-                                       std::function<bool(ValueType)>validator,
-                                       ValueType val_data) :
-        OptionClassifier{section, name, key, doc_string},
-        m_ui_type{GncOptionUIType::INTERNAL}, m_value{value},
-        m_default_value{value}, m_validator{validator}, m_validation_data{val_data}
+        m_ui_type{ui_type}, m_is_currency{ui_type == GncOptionUIType::CURRENCY},
+        m_namespace{gnc_commodity_get_namespace(value)},
+        m_mnemonic{gnc_commodity_get_mnemonic(value)},
+        m_default_namespace{gnc_commodity_get_namespace(value)},
+        m_default_mnemonic{gnc_commodity_get_mnemonic(value)}
     {
-            if (!this->validate(value))
-            throw std::invalid_argument("Attempt to create GncValidatedOption with bad value.");
+       if (!validate(value))
+            throw std::invalid_argument("Attempt to create GncOptionCommodityValue with currency UIType and non-currency value.");
     }
-    GncOptionValidatedValue<ValueType>(const GncOptionValidatedValue<ValueType>&) = default;
-    GncOptionValidatedValue<ValueType>(GncOptionValidatedValue<ValueType>&&) = default;
-    GncOptionValidatedValue<ValueType>& operator=(const GncOptionValidatedValue<ValueType>&) = default;
-    GncOptionValidatedValue<ValueType>& operator=(GncOptionValidatedValue<ValueType>&&) = default;
-    ValueType get_value() const { return m_value; }
-    ValueType get_default_value() const { return m_default_value; }
-    bool validate(ValueType value) const { return m_validator(value); }
-    void set_value(ValueType value)
-    {
-        if (this->validate(value))
-            m_value = value;
-        else
-            throw std::invalid_argument("Validation failed, value not set.");
-    }
-    void set_default_value(ValueType value)
-    {
-        if (this->validate(value))
-            m_value = m_default_value = value;
-        else
-            throw std::invalid_argument("Validation failed, value not set.");
-    }
-    void reset_default_value() { m_value = m_default_value; }
-    bool is_changed() const noexcept { return m_value != m_default_value; }
+    GncOptionCommodityValue(const GncOptionCommodityValue&) = default;
+    GncOptionCommodityValue(GncOptionCommodityValue&&) = default;
+    GncOptionCommodityValue& operator=(const GncOptionCommodityValue&) = default;
+    GncOptionCommodityValue& operator=(GncOptionCommodityValue&&) = default;
+    gnc_commodity* get_value() const;
+    gnc_commodity* get_default_value() const;
+    bool validate(gnc_commodity*) const noexcept;
+    void set_value(gnc_commodity* value);
+    void set_default_value(gnc_commodity* value);
+    void reset_default_value();
+    bool is_changed() const noexcept;
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
     std::string serialize() const noexcept;
     bool deserialize(const std::string& str) noexcept;
 private:
     GncOptionUIType m_ui_type;
-    ValueType m_value;
-    ValueType m_default_value;
-    std::function<bool(ValueType)> m_validator;                         //11
-    ValueType m_validation_data;
+    bool m_is_currency;
+    std::string m_namespace;
+    std::string m_mnemonic;
+    std::string m_default_namespace;
+    std::string m_default_mnemonic;
 };
 
 QofInstance* qof_instance_from_string(const std::string& str,
@@ -252,9 +231,7 @@ template <typename T>
 struct is_QofInstanceValue
 {
     static constexpr bool value =
-         (std::is_same_v<std::decay_t<T>, GncOptionQofInstanceValue> ||
-          std::is_same_v<std::decay_t<T>,
-          GncOptionValidatedValue<const QofInstance*>>);
+        std::is_same_v<std::decay_t<T>, GncOptionQofInstanceValue>;
 };
 
 template <typename T> inline constexpr bool
@@ -264,9 +241,7 @@ template <typename T>
 struct is_QofQueryValue
 {
     static constexpr bool value =
-         (std::is_same_v<std::decay_t<T>, GncOptionValue<const QofQuery*>> ||
-          std::is_same_v<std::decay_t<T>,
-          GncOptionValidatedValue<const QofQuery*>>);
+         std::is_same_v<std::decay_t<T>, GncOptionValue<const QofQuery*>>;
 };
 
 template <typename T> inline constexpr bool
@@ -298,25 +273,20 @@ operator<< <GncOptionValue<bool>>(std::ostream& oss,
     return oss;
 }
 
+inline std::ostream&
+operator<< (std::ostream& oss, const GncOptionCommodityValue& opt)
+{
+    oss << opt.serialize();
+    return oss;
+}
+
 template<class OptType,
          typename std::enable_if_t<is_QofInstanceValue_v<OptType>, int> = 0>
 inline std::ostream&
 operator<< (std::ostream& oss, const OptType& opt)
 {
     auto value = opt.get_value();
-    if (auto type = opt.get_ui_type(); type == GncOptionUIType::COMMODITY ||
-        type == GncOptionUIType::CURRENCY)
-    {
-        if (type == GncOptionUIType::COMMODITY)
-        {
-            oss << gnc_commodity_get_namespace(GNC_COMMODITY(value)) << " ";
-        }
-        oss << gnc_commodity_get_mnemonic(GNC_COMMODITY(value));
-    }
-    else
-    {
-        oss << qof_instance_to_string(value);
-    }
+    oss << qof_instance_to_string(value);
     return oss;
 }
 
@@ -339,35 +309,15 @@ std::istream& operator>>(std::istream& iss, OptType& opt)
     }
 }
 
+std::istream& operator>> (std::istream& iss, GncOptionCommodityValue& opt);
+
 template<class OptType,
          typename std::enable_if_t<is_QofInstanceValue_v<OptType>, int> = 0>
 std::istream&
 operator>> (std::istream& iss, OptType& opt)
 {
     std::string instr;
-    auto type = opt.get_ui_type();
-    if (type == GncOptionUIType::COMMODITY || type == GncOptionUIType::CURRENCY)
-    {
-        std::string name_space, mnemonic;
-        if (type == GncOptionUIType::COMMODITY)
-            iss >> name_space;
-        else
-            name_space = GNC_COMMODITY_NS_CURRENCY;
-        if (name_space.find(":") == std::string::npos)
-        {
-            iss >> mnemonic;
-            instr = name_space + ":";
-            instr += mnemonic;
-        }
-        else
-        {
-            instr = name_space;
-        }
-     }
-    else
-    {
-        iss >> instr;
-    }
+    iss >> instr;
     opt.set_value(qof_instance_from_string(instr, opt.get_ui_type()));
     return iss;
 }

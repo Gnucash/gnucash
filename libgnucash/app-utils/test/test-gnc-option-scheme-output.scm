@@ -87,19 +87,19 @@
 (let ((option (gnc:lookup-option options
                                  \"foo\"
                                  \"bar\")))
-  ((lambda (o) (if o (gnc:option-set-value o \"~a\"))) option))
+  ((lambda (o) (if o (gnc:option-set-value o ~s))) option))
 
 " value))
 
 (define (test-commodity-output-template value)
   (let ((value-parts (string-split value #\:)))
-    (format #f "
+       (format #f "
 ; Section: foo
 
 (let ((option (gnc:lookup-option options
                                  \"foo\"
                                  \"bar\")))
-  ((lambda (o) (if o (gnc:option-set-value o \"~a\" \"~a\"))) option))
+  ((lambda (o) (if o (gnc:option-set-value o ~s ~s))) option))
 
 " (car value-parts) (cadr value-parts))))
 
@@ -208,6 +208,8 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
          (comm-tbl (gnc-commodity-table-get-table book))
          (AAPL (gnc-commodity-new book "Apple" "NASDAQ" "AAPL" "" 1))
          (FMAGX (gnc-commodity-new book "Fidelity Magellan Fund" "FUND" "FMAGX" "" 1000)))
+         (gnc-commodity-table-insert comm-tbl AAPL)
+         (gnc-commodity-table-insert comm-tbl FMAGX)
     (test-option-scheme-output "commodity"
                                gnc:make-commodity-option GncOption-serialize
                                test-commodity-output-template
