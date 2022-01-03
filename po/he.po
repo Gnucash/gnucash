@@ -4,15 +4,15 @@
 # Avi Markovitz <avi.markovitz@gmail.com, 2019 - 2020
 # Ori Hoch <ori@uumpa.com>, 2008 http://www.uumpa.com/gnucash-he/
 # Yaron Shahrabani <sh.yaron@gmail.com>, 2020, 2021.
-# Avi Markovitz <avi.markovitz@gmail.com>, 2020, 2021.
+# Avi Markovitz <avi.markovitz@gmail.com>, 2020, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-12-11 15:53+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"PO-Revision-Date: 2022-01-03 11:53+0000\n"
+"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.10.1\n"
 "X-Poedit-Basepath: .\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -5984,7 +5984,7 @@ msgstr "חשבונית להדפסה"
 #: gnucash/report/reports/standard/taxinvoice.scm:301
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:423
 msgid "Tax Invoice"
-msgstr "הכנסות מס"
+msgstr "חשבונית מס"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1853
 #: gnucash/gtkbuilder/business-prefs.glade:32
@@ -13358,7 +13358,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:169
 msgid "<b>Categories</b>"
-msgstr "<b>קטגוריות</b>"
+msgstr "<b>סוגי־אב</b>"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:280
 #: gnucash/gtkbuilder/dialog-account.glade:908
@@ -13947,13 +13947,13 @@ msgid ""
 "If you change your mind later, you can reorganize the account structure "
 "safely within GnuCash."
 msgstr ""
-"גנוקאש משתמש בחשבונות נפרדים של הכנסות והוצאות במקום בקטגוריות כדי לסווג את "
+"גנוקאש משתמשת בחשבונות הכנסות והוצאות נפרדים, זאת במקום שימוש בסוגי־אב לסווג "
 "תנועות. כל אחד מסוגי־האב בקובץ ה־QIF יומר לחשבון גנוקאש.\n"
 "\n"
-"בעמוד הבא, יתאפשר לבדוק את ההתאמות המוצעות בין קטגוריות QIF וחשבונות גנוקאש. "
-"ניתן לשנות את ההתאמות על־ידי הקשה כפולה על הקו המכיל את שם הקטגוריה.\n"
+"בעמוד הבא, יתאפשר לבדוק את ההתאמות המוצעות בין סוגי־אב QIF וחשבונות גנוקאש. "
+"ניתן לשנות את ההתאמות על־ידי הקשה כפולה על השורה המכילה את שם סוג־האב.\n"
 "\n"
-"מאוחר יותר, ניתן יהיה לארגן בבטחה את מבנה תרשים החשבונות בתוך גנוקאש."
+"מאוחר יותר, ניתן יהיה לארגן בבטחה את מבנה תרשים החשבונות בגנוקאש."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:685
 msgid "Income and Expense categories"
@@ -23646,7 +23646,7 @@ msgstr "דוח מס ויצוא ל XML"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:847
 msgid "Taxable Income / Deductible Expenses / Export to .XML file"
-msgstr "הכנסות ברות מיסוי / הוצאות מוכרות למס / דיווחל לקובץ.XML"
+msgstr "הכנסות ברות מיסוי / הוצאות מוכרות למס / ייצוא לקובץ XML."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:851
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:859
@@ -23655,7 +23655,7 @@ msgstr "הכנסות ברות מיסוי / הוצאות מוכרות למס"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:852
 msgid "This report shows your Taxable Income and Deductible Expenses."
-msgstr "דוח זה מציג את ההכנסות החייבות והוצאות מוכרות למס."
+msgstr "דוח זה מציג הכנסות חייבות והוצאות מוכרות למס."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:856
 msgid "XML"
@@ -23663,7 +23663,7 @@ msgstr "XML"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:860
 msgid "This page shows your Taxable Income and Deductible Expenses."
-msgstr "העמוד מציג את ההכנסות החייבות במס והוצאות מוכרות."
+msgstr "העמוד מציג הכנסות חייבות במס והוצאות מוכרות."
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:119
 msgid "Tax Schedule Report/TXF Export"
@@ -25881,7 +25881,7 @@ msgstr "סדר מיון משני"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:39
 msgid "Income and GST Statement"
-msgstr "תדפיס הכנסות ומס טובין ושרותים"
+msgstr "תדפיס הכנסות ומס על טובין ושרותים"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:41
 #: gnucash/report/trep-engine.scm:109
@@ -25980,7 +25980,7 @@ msgstr "יתרה נטו"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:115
 msgid "Display the net balance (sales without tax - purchases without tax)"
-msgstr "הצגת יתרות נטו (הכנסות בניכוי מס פחות רכישות בניכוי מס)"
+msgstr "הצגת יתרות נטו (הכנסות בניכוי מס, פחות רכישות בניכוי מס)"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:117
 #: gnucash/report/reports/standard/income-gst-statement.scm:367
