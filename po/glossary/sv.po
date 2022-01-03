@@ -3,7 +3,7 @@
 # Christian Rose <menthos@menthos.com>, 2001, 2002, 2003.
 # Jonas Norling <norling@lysator.liu.se>, 2006.
 # Kristoffer Grundström <swedishsailfishosuser@tutanota.com>, 2021.
-# Arve Eriksson <031299870@telia.com>, 2021.
+# Arve Eriksson <031299870@telia.com>, 2021, 2022.
 #
 # $Id$
 #
@@ -13,8 +13,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-01-02 22:54+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2022-01-03 03:41+0000\n"
+"Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "sv/>\n"
 "Language: sv\n"
@@ -892,7 +892,7 @@ msgid "due"
 msgstr "förfaller"
 
 msgid "Online"
-msgstr ""
+msgstr "Uppkopplad"
 
 msgid "Direct Debit"
-msgstr ""
+msgstr "Direktbetalning"
