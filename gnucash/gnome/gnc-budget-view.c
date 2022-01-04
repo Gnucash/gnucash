@@ -1077,7 +1077,8 @@ gbv_get_accumulated_budget_amount (GncBudget *budget, Account *account, guint pe
     else
         info.total = gnc_budget_get_account_period_value (budget, account, period_num);
 
-    info.total = gnc_numeric_neg (info.total);
+    if (gnc_reverse_balance (account))
+        info.total = gnc_numeric_neg (info.total);
 
     return info.total;
 }
@@ -1140,7 +1141,8 @@ budget_col_source (Account *account, GtkTreeViewColumn *col,
             strcpy (amtbuff, "error");
         else
         {
-            numeric = gnc_numeric_neg (numeric);
+            if (gnc_reverse_balance (account))
+                numeric = gnc_numeric_neg (numeric);
 
             xaccSPrintAmount (amtbuff, numeric,
                               gnc_account_print_info (account, FALSE));
@@ -1190,7 +1192,8 @@ bgv_get_total_for_account (Account *account, GncBudget *budget, gnc_commodity *n
             {
                 numeric = gbv_get_accumulated_budget_amount (budget, account, period_num);
 
-                numeric = gnc_numeric_neg (numeric);
+                if (gnc_reverse_balance (account))
+                    numeric = gnc_numeric_neg (numeric);
 
                 if (new_currency)
                 {
@@ -1217,7 +1220,8 @@ bgv_get_total_for_account (Account *account, GncBudget *budget, gnc_commodity *n
         }
     }
 
-    total = gnc_numeric_neg (total);
+    if (gnc_reverse_balance (account))
+        total = gnc_numeric_neg (total);
 
     return total;
 }
@@ -1280,7 +1284,8 @@ budget_col_edited (Account *account, GtkTreeViewColumn *col,
         gnc_budget_unset_account_period_value (priv->budget, account, period_num);
     else
     {
-        numeric = gnc_numeric_neg (numeric);
+        if (gnc_reverse_balance (account))
+            numeric = gnc_numeric_neg (numeric);
         gnc_budget_set_account_period_value (priv->budget, account, period_num,
                                              numeric);
     }
