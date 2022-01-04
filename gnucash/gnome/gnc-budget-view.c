@@ -1311,12 +1311,10 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
     GncBudgetView *budget_view;
     GncBudgetViewPrivate *priv;
     gint row_type;
-    Account *account; // used to make things easier in the adding up processes
+    GList *top_level_accounts;
     gint period_num;
     gnc_numeric value; // used to assist in adding and subtracting
     gchar amtbuff[100]; //FIXME: overkill, where's the #define?
-    gint i;
-    gint num_top_accounts;
     gboolean neg;
     GNCPriceDB *pdb;
     gnc_commodity *total_currency, *currency;
@@ -1330,15 +1328,15 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
 
     pdb = gnc_pricedb_get_db (gnc_get_current_book ());
     total_currency = gnc_default_currency ();
-    num_top_accounts = gnc_account_n_children (priv->rootAcct);
+    top_level_accounts = gnc_account_get_children (priv->rootAcct);
 
     // step through each child account of the root, find the total income, expenses, liabilities, and assets.
 
-    for (i = 0; i < num_top_accounts; ++i)
+    for (GList *node = top_level_accounts; node; node = g_list_next (node))
     {
+        Account *account = node->data;
         GNCAccountType acctype;
 
-        account  = gnc_account_nth_child (priv->rootAcct, i);
         currency = gnc_account_get_currency_or_parent (account);
         acctype = xaccAccountGetType (account);
 
@@ -1436,6 +1434,8 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
         g_object_set (cell, "foreground", NULL, NULL);
 
     g_object_set (G_OBJECT(cell), "text", amtbuff, "xalign", 1.0, NULL);
+
+    g_list_free (top_level_accounts);
 }
 
 /**
