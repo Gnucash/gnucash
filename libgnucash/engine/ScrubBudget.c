@@ -113,7 +113,7 @@ heuristics_on_budget (GncBudget * budget, Account *root)
 
     result =
         heuristics.expense < 0 ? HEURISTICS_INC_EXP :
-        heuristics.liability > 0 ? HEURISTICS_NONE :
+        heuristics.income < 0 ? HEURISTICS_NONE :
         HEURISTICS_CREDIT_ACC;
 
     LEAVE ("heuristics_on_budget %s: A(%d) L(%d) Inc(%d) Exp(%d) Eq(%d) = %d",
