@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-03 11:53+0000\n"
+"PO-Revision-Date: 2022-01-04 07:55+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -13286,8 +13286,8 @@ msgstr ""
 "Elimina as definições gravadas sob o nome inserido no campo de texto "
 "adjacente.\n"
 "Há dois nomes reservados que nunca podem ser eliminados:\n"
-"- No settings\n"
-"- formato de exportação predefinido do Gnucash"
+"- Sem definições\n"
+"- Formato de exportação predefinido do Gnucash"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:173
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:164
@@ -13303,8 +13303,8 @@ msgstr ""
 "Grava as definições sob o nome inserido no campo de texto adjacente.\n"
 "Há dois nomes reservados que nunca podem ser usados para gravar definições "
 "personalizadas:\n"
-"- No settings\n"
-"- formato de exportação predefinido do Gnucash"
+"- Sem definições\n"
+"- Formato de exportação predefinido do Gnucash"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:201
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:191
