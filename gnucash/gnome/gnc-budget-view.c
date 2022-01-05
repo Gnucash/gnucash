@@ -1100,7 +1100,7 @@ budget_col_source (Account *account, GtkTreeViewColumn *col,
     guint period_num;
     gnc_numeric numeric;
     gchar amtbuff[100]; //FIXME: overkill, where's the #define?
-    const gchar *note;
+    gchar *note;
 
     budget_view = GNC_BUDGET_VIEW(g_object_get_data (G_OBJECT(col), "budget_view"));
     period_num = GPOINTER_TO_UINT(g_object_get_data (G_OBJECT(col), "period_num"));
@@ -1160,6 +1160,7 @@ budget_col_source (Account *account, GtkTreeViewColumn *col,
 
     note = gnc_budget_get_account_period_note (priv->budget, account, period_num);
     g_object_set (cell, "flagged", note != NULL, NULL);
+    g_free (note);
 
     return g_strdup (amtbuff);
 }
