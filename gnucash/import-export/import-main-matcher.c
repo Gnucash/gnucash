@@ -456,6 +456,11 @@ gnc_gen_trans_list_show_all (GNCImportMainMatcher *info)
     // Set initial state of Append checkbox to same as last import for this account.
     // Get the import account from the first split in first transaction.
     temp_trans_list = info->temp_trans_list;
+    if (!temp_trans_list)
+    {
+        gnc_info_dialog (GTK_WINDOW (info->main_widget), _("While importing transactions found no new transactions."));
+        return;
+    }
     trans_info = temp_trans_list->data;
     first_split = gnc_import_TransInfo_get_fsplit (trans_info);
     account = xaccSplitGetAccount(first_split);
