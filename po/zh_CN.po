@@ -18,14 +18,14 @@
 # cjh <cjh@cjh0613.com>, 2021.
 # Eric <spice2wolf@gmail.com>, 2021.
 # J0kWang <lianjiefly@gmail.com>, 2021.
-# YTX <ytx.cash@gmail.com>, 2021.
+# YTX <ytx.cash@gmail.com>, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-12-19 08:53+0000\n"
+"PO-Revision-Date: 2022-01-05 02:55+0000\n"
 "Last-Translator: YTX <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.10\n"
+"X-Generator: Weblate 4.10.1\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -12612,7 +12612,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:720
 msgid "Choose File Name for Export"
-msgstr "选择一个要导入的文件"
+msgstr "文件名"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:734
 msgid "Export Now..."
