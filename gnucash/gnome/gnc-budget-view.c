@@ -1052,6 +1052,10 @@ budget_accum_helper (Account *account, gpointer data)
         numeric = gnc_pricedb_convert_balance_nearest_price_t64 (
                     info->pdb, numeric, currency, info->total_currency,
                     gnc_budget_get_period_start_date (info->budget, info->period_num));
+
+        if (gnc_reverse_budget_balance (account, TRUE))
+            numeric = gnc_numeric_neg (numeric);
+
         info->total = gnc_numeric_add (info->total, numeric, GNC_DENOM_AUTO,
                                        GNC_HOW_DENOM_LCD);
     }
