@@ -11,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-03 19:55+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"PO-Revision-Date: 2022-01-05 11:53+0000\n"
+"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -2562,7 +2562,7 @@ msgstr[1] "%d מסמכי הספק הבאים הגיעו לפרעון:"
 
 #: gnucash/gnome/dialog-invoice.c:3721
 msgid "Due Bills Reminder"
-msgstr "תזכורת תשלום חיובים"
+msgstr "תזכורת לתשלום חיובים שמועד פרעונם חל"
 
 #. Translators: %d is the number of invoices/credit notes due. This is a
 #. ngettext(3) message.
@@ -3843,11 +3843,11 @@ msgstr "הצגת ועריכת את רשימת תנאי התשלום"
 
 #: gnucash/gnome/gnc-plugin-business.c:293
 msgid "Bills _Due Reminder"
-msgstr "_תזכורת תשלום חיובים"
+msgstr "_תזכורת לתשלום חיובים שמועד פרעונם חל"
 
 #: gnucash/gnome/gnc-plugin-business.c:294
 msgid "Open the Bills Due Reminder dialog"
-msgstr "פתיחת דו־שיח תזכורת חיובים לתשלום"
+msgstr "פתיחת דו־שיח תזכורת לתשלום חיובים שמועד פרעונם חל"
 
 #: gnucash/gnome/gnc-plugin-business.c:298
 msgid "Invoices _Due Reminder"
@@ -10382,9 +10382,10 @@ msgid ""
 "definition of \"soon\" is controlled by the \"Days in Advance\" setting. "
 "Otherwise GnuCash does not check for due invoices."
 msgstr ""
-"אם האפשרות הופעלה, באתחול גנוקאש יבדוק אם ישנן חשבוניות לתשלום במועד קרוב. "
-"אם כן, תוצג למשתמש תיבת דו־שיח של תזכורת. ההגדרה של 'בקרוב' נשלטת על־ידי "
-"ההגדרה 'ימים מראש'. אחרת, גנוקאש לא יבודק המצאות חשבוניות לתשלום."
+"אם האפשרות הופעלה, גנוקאש תבדוק באתחול אם קימים חיובים לתשלום שמועד פרעונם "
+"יחול בקרוב. אם כן, תוצג למשתמש תיבת דו־שיח 'תזכורת'. ניתן לשלוט "
+"בהגדרת'בקרוב' על־ידי הערך 'ימים מראש'. אחרת, גנוקאש לא תבודק המצאות חשבוניות "
+"לתשלום."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:122
 msgid "Show invoices due within this many days"
@@ -10462,7 +10463,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:159
 msgid "Show bills due reminder at startup"
-msgstr "הצגת תזכורת חיובים לתשלום עם האתחול"
+msgstr "הצגת תזכורת עם האתחול, לתשלום חיובים שמועד פרעונם חל"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:160
 msgid ""
@@ -10471,9 +10472,10 @@ msgid ""
 "definition of \"soon\" is controlled by the \"Days in Advance\" setting. "
 "Otherwise GnuCash does not check for due bills."
 msgstr ""
-"אם האפשרות הופעלה, גנוקאש יבדוק בזמן האתחול האם קיימים חיובים למועד תשלום "
-"קרוב. אם כן, תוצג תיבת דו־שיח לתזכורת. ההגדרה 'קרוב' נשלטת על־ידי הערך בשדה "
-"'ימים מראש'. אחרת גנוקאש לא יבודק אם החיובים האמורים."
+"אם האפשרות הופעלה, גנוקאש תבדוק באתחול אם קימים חיובים לתשלום שמועד פרעונם "
+"יחול בקרוב. אם כן, תוצג למשתמש תיבת דו־שיח 'תזכורת'. ניתן לשלוט "
+"בהגדרת'בקרוב' על־ידי הערך 'ימים מראש'. אחרת, גנוקאש לא תבודק המצאות חיובים "
+"לתשלום."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:164
 msgid "Show bills due within this many days"
