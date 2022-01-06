@@ -166,10 +166,12 @@ fcb_clicked_cb (GtkButton *button, GtkWidget *ok_button)
 
     if (uri && *uri)
     {
-        gchar *full_filename = gnc_uri_get_path (uri);
+        gchar *scheme = gnc_uri_get_scheme (uri);
+        gchar *full_filename = gnc_doclink_get_unescape_uri (path_head, uri, scheme);
         gchar *path = g_path_get_dirname (full_filename);
         gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(native), path);
         g_free (full_filename);
+        g_free (scheme);
         g_free (path);
     }
     else if (path_head)
@@ -183,13 +185,15 @@ fcb_clicked_cb (GtkButton *button, GtkWidget *ok_button)
         if (uri && *uri)
         {
             gchar *filename = g_path_get_basename (uri);
-            gtk_label_set_text (GTK_LABEL(label), filename);
+            gchar *unescape_filename = g_uri_unescape_string (filename, NULL);
+            gtk_label_set_text (GTK_LABEL(label), unescape_filename);
 
             DEBUG("Native file uri is '%s'", uri);
 
             g_object_set_data_full (G_OBJECT(button), "uri", g_strdup (uri), g_free);
             g_free (uri);
             g_free (filename);
+            g_free (unescape_filename);
         }
         file_ok_cb (button, ok_button);
     }
@@ -382,7 +386,9 @@ gnc_doclink_get_uri_dialog (GtkWindow *parent, const gchar *title,
 
             if (filename)
             {
-                gtk_label_set_text (GTK_LABEL(fcb_label), filename);
+                gchar *unescape_filename = g_uri_unescape_string (filename, NULL);
+                gtk_label_set_text (GTK_LABEL(fcb_label), unescape_filename);
+                g_free (unescape_filename);
                 g_free (filename);
             }
             setup_file_dialog (builder, path_head, uri, scheme);

@@ -298,6 +298,21 @@ filter_button_cb (GtkButton *button, FindAccountDialog *facc_dialog)
 }
 
 static void
+filter_active_cb (GtkEntry *entry, FindAccountDialog *facc_dialog)
+{
+    get_account_info (facc_dialog, FALSE);
+
+    if (facc_dialog->saved_filter_text)
+        g_free (facc_dialog->saved_filter_text);
+
+    // save the filter in case of an account event
+    facc_dialog->saved_filter_text = g_strdup (gtk_entry_get_text
+                                     (GTK_ENTRY(facc_dialog->filter_text_entry)));
+
+    gtk_editable_select_region (GTK_EDITABLE(facc_dialog->filter_text_entry), 0, -1);
+}
+
+static void
 gnc_find_account_event_handler (QofInstance *entity,
                                 QofEventId event_type,
                                 FindAccountDialog *facc_dialog,
@@ -375,6 +390,8 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
     facc_dialog->filter_button = GTK_WIDGET(gtk_builder_get_object (builder, "filter-button"));
     g_signal_connect (facc_dialog->filter_button, "clicked",
                       G_CALLBACK(filter_button_cb), (gpointer)facc_dialog);
+    g_signal_connect (facc_dialog->filter_text_entry, "activate",
+                      G_CALLBACK(filter_active_cb), (gpointer)facc_dialog);
 
     button = GTK_WIDGET(gtk_builder_get_object (builder, "jumpto_button"));
     g_signal_connect(button, "clicked", G_CALLBACK(gnc_find_account_dialog_jump_button_cb), facc_dialog);

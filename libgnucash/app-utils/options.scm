@@ -466,9 +466,14 @@ the option '~a'."))
          sort-tag
          documentation-string)
 
+  (define (convert-to-guid item)
+    (if (string? item) item (gncBudgetGetGUID item)))
+
+  (define (convert-to-budget item)
+    (if (string? item) (gnc-budget-lookup item (gnc-get-current-book)) item))
+
   (let* ((initial-budget (gnc-budget-get-default (gnc-get-current-book)))
-	 (selection-budget initial-budget)
-         )
+	 (selection-budget (convert-to-guid initial-budget)))
 
     (gnc:make-option
      section 
@@ -478,12 +483,12 @@ the option '~a'."))
      documentation-string
 
      ;; getter -- Return a budget pointer
-     (lambda () 
-       selection-budget)
+     (lambda ()
+       (convert-to-budget selection-budget))
 
      ;; setter -- takes a budget
      (lambda (x)
-       (set! selection-budget x))
+       (set! selection-budget (convert-to-guid x)))
 
      ;; default-getter
      ;; Default now is #f so saving is independent of book-level default
@@ -503,21 +508,20 @@ the option '~a'."))
 	"(lambda (option) "
 	"(if option ((gnc:option-setter option) "
 	"(gnc-budget-lookup "
-	(gnc:value->string (gncBudgetGetGUID selection-budget))
+	(gnc:value->string selection-budget)
 	" (gnc-get-current-book)))))"))
 
      ;; scm->kvp -- commit the change
      ;; b -- book;  p -- key-path
      (lambda (b p) 
-       (qof-book-set-option 
-	b (gncBudgetGetGUID selection-budget) p))
+       (qof-book-set-option b selection-budget p))
 
      ;; kvp->scm -- get the stored value
      (lambda (b p)
        (let ((v (qof-book-get-option b p)))
          (if (and v (string? v))
-	     (begin 
-	       (set! selection-budget (gnc-budget-lookup v (gnc-get-current-book)))))))
+	     (set! selection-budget (convert-to-guid
+                                     (gnc-budget-lookup v (gnc-get-current-book)))))))
 
      ;; value-validator -- returns (#t value) or (#f "failure message")
      ;; As no user-generated input, this legacy hard-wire is probably ok

@@ -2,15 +2,15 @@
 # Copyright (C) 2008 Free Software Foundation, Inc.
 # Ori Hoch <ori@uumpa.com>, 2008
 # http://www.uumpa.com/gnucash-he/
-# Yaron Shahrabani <sh.yaron@gmail.com>, 2020.
-# Avi Markovitz <avi.markovitz@gmail.com>, 2021.
+# Yaron Shahrabani <sh.yaron@gmail.com>, 2020, 2021.
+# Avi Markovitz <avi.markovitz@gmail.com>, 2021, 2022.
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 3.6\n"
+"Project-Id-Version: GnuCash 4.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-08-22 08:35+0000\n"
+"POT-Creation-Date: 2021-12-05 20:11+0100\n"
+"PO-Revision-Date: 2022-01-03 08:54+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/glossary/"
 "he/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -206,6 +206,10 @@ msgstr "גיול"
 msgid "amount"
 msgstr "סכום"
 
+#. "The amount finally to pay, respecting discounts, billing terms…"
+msgid "amount due"
+msgstr "סכום מגיע"
+
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
 msgstr "ממוצע"
@@ -385,6 +389,10 @@ msgstr "הכנסה כפולה"
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
 msgstr "קישור למסמך"
+
+#. "The last day to pay an invoice in time."
+msgid "due date"
+msgstr "תאריך פרעון"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
@@ -742,6 +750,14 @@ msgstr "מקור"
 msgid "split"
 msgstr "פיצול"
 
+#. "Alias of 'shares'"
+msgid "stocks"
+msgstr "מניות"
+
+#. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
+msgid "stock split"
+msgstr "פיצול מניות"
+
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
 msgstr "גיליון סגנון"
@@ -854,9 +870,14 @@ msgstr "שובר"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "משיכה (בתיבת דו שיח התאמות)"
 
-#, fuzzy
-#~ msgid "invoice owner"
-#~ msgstr "קבלה"
+msgid "stock"
+msgstr "מניות"
 
-msgid "ticker"
-msgstr "חַלּוֹן־מִבְזָקִים"
+msgid "due"
+msgstr "חל"
+
+msgid "Online"
+msgstr "מקוון"
+
+msgid "Direct Debit"
+msgstr "דירקט דביט"

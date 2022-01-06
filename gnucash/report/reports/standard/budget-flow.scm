@@ -272,12 +272,6 @@
                                       optname-report-currency))
          (price-source (get-option gnc:pagename-general
                                    optname-price-source))
-
-         ;; calculate the exchange rates
-         (exchange-fn (gnc:case-exchange-fn
-                       price-source report-currency
-                       (gnc-budget-get-period-end-date budget period)))
-
          ;; The HTML document
          (doc (gnc:make-html-document)))
 
@@ -296,6 +290,10 @@
 
      (else
       (let* ((html-table (gnc:make-html-table))
+             ;; calculate the exchange rates
+             (exchange-fn (gnc:case-exchange-fn
+                           price-source report-currency
+                           (gnc-budget-get-period-end-date budget period)))
              (report-name (get-option gnc:pagename-general gnc:optname-reportname))
              ;; decompose the account list
              (split-up-accounts (gnc:decompose-accountlist accounts))

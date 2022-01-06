@@ -84,14 +84,11 @@ balance at a given time"))
 ;; The option-generator. The only dependence on the type of piechart
 ;; is the list of account types that the account selection option
 ;; accepts.
-(define (options-generator account-types reverse-balance? do-intervals? depth-based?)
+(define (options-generator account-types do-intervals? depth-based?)
   (let* ((options (gnc:new-options)) 
          (add-option 
           (lambda (new-option)
             (gnc:register-option options new-option))))
-
-    (add-option
-     (gnc:make-internal-option "__report" "reverse-balance?" reverse-balance?))
 
     (if do-intervals?
         (gnc:options-add-date-interval!
@@ -305,7 +302,7 @@ balance at a given time"))
 ;; account-types to work on and whether this report works on
 ;; intervals as arguments.
 (define (piechart-renderer report-obj reportname report-guid
-                           account-types do-intervals? depth-based?
+                           account-types do-intervals? depth-based? reverse-balance?
                            display-name sort-comparator get-data)
 
   ;; This is a helper function for looking up option values.
@@ -350,7 +347,6 @@ balance at a given time"))
         (height (get-option gnc:pagename-display optname-plot-height))
         (width (get-option gnc:pagename-display optname-plot-width))
 	(sort-method (get-option gnc:pagename-display optname-sort-method))
-	(reverse-balance? (get-option "__report" "reverse-balance?"))
 
         (document (gnc:make-html-document))
         (chart (gnc:make-html-chart))
@@ -451,7 +447,7 @@ balance at a given time"))
 
       (define (fix-signs combined)
         (map (lambda (pair)
-               (if (reverse-balance? (cadr pair))
+               (if reverse-balance?
                    (cons (- (car pair)) (cdr pair))
                    pair))
 	     combined))
@@ -595,8 +591,8 @@ balance at a given time"))
       document)))
 
 (define (build-report!
-          name acct-types income-expense? depth-based? menuname menutip
-          reverse-balance? uuid)
+         name acct-types income-expense? depth-based? reverse-balance?
+         menuname menutip uuid)
   (gnc:define-report
     'version 1
     'name name
@@ -607,12 +603,12 @@ balance at a given time"))
     'menu-name menuname
     'menu-tip menutip
     'options-generator (lambda () (options-generator acct-types
-                                                     reverse-balance?
                                                      income-expense?
                                                      depth-based?))
     'renderer (lambda (report-obj)
                 (piechart-renderer report-obj name uuid
                                    acct-types income-expense? depth-based?
+                                   reverse-balance?
                                    (if depth-based?
                                        display-name-accounts
                                        display-name-security)
@@ -626,17 +622,15 @@ balance at a given time"))
 (build-report!
   reportname-income
   (list ACCT-TYPE-INCOME)
-  #t #t
+  #t #t #t
   menuname-income menutip-income
-  (lambda (x) #t)
   "e1bd09b8a1dd49dd85760db9d82b045c")
 
 (build-report!
   reportname-expense
   (list ACCT-TYPE-EXPENSE)
-  #t #t
+  #t #t #f
   menuname-expense menutip-expense
-  (lambda (x) #f)
   "9bf1892805cb4336be6320fe48ce5446")
 
 (build-report!
@@ -645,9 +639,8 @@ balance at a given time"))
         ACCT-TYPE-SAVINGS ACCT-TYPE-MONEYMRKT
         ACCT-TYPE-RECEIVABLE ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
         ACCT-TYPE-CURRENCY)
-  #f #t
+  #f #t #f
   menuname-assets menutip-assets
-  (lambda (x) #f)
   "5c7fd8a1fe9a4cd38884ff54214aa88a")
 
 (build-report!
@@ -656,16 +649,14 @@ balance at a given time"))
         ACCT-TYPE-SAVINGS ACCT-TYPE-MONEYMRKT
         ACCT-TYPE-RECEIVABLE ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
         ACCT-TYPE-CURRENCY)
-  #f #f
+  #f #f #f
   menuname-securities menutip-securities
-  (lambda (x) #f)
   "e9418ff64f2c11e5b61d1c7508d793ed")
 
 (build-report!
   reportname-liabilities
   (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE ACCT-TYPE-CREDIT
         ACCT-TYPE-CREDITLINE)
-  #f #t
+  #f #t #t
   menuname-liabilities menutip-liabilities
-  (lambda (x) #t)
   "3fe6dce77da24c66bdc8f8efdea7f9ac")

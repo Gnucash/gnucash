@@ -30,7 +30,7 @@ set(gschema_preftrans_files ${local_preftrans_files} CACHE INTERNAL "files descr
 # following GSettings schema changes between gnucash releases
 add_custom_command(
     OUTPUT ${DATADIR_BUILD}/${PROJECT_NAME}/pref_transformations.xml
-    COMMAND cat ${gschema_preftrans_files} > ${DATADIR_BUILD}/${PROJECT_NAME}/pref_transformations.xml
+    COMMAND env cat ${gschema_preftrans_files} > ${DATADIR_BUILD}/${PROJECT_NAME}/pref_transformations.xml
     DEPENDS ${gschema_preftrans_files}
 )
 

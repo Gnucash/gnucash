@@ -1,5 +1,116 @@
 Version history:
 ------- -------
+4.9 - 19 December 2021
+The tenth release of the 4.x Stable Series
+Between 4.8 and 4.9, the following bugfixes were accomplished:
+
+    Bug 797502 - (RTL) - Right edge of the reports are locked while scrolling down
+
+    Running gnucash in Hebrew, the right edge of the reports are locked while scrolling down and do not scroll with the rest of the report.
+    Bug 797618 - Spanish translation of Shares and Stock
+    Bug 797678 - OFX importer should supplement, not replace, existing Notes (and Description and Memo) fields
+
+    Add an "Append" checkbox to the bottom of the "Generic import transaction matcher" window to the left of the "Reconcile after match" checkbox. When ticked, this causes the imported Description/Notes to be appended to the matched transaction Description/Notes respectively. The selected ticked/unticked state of the "Append" checkbox is saved in a key value pair for the import account, so the next import for that account will automatically default it to the saved state. As these mods are limited to the code for the matcher window, this should work for all the imports that use it - ie ofx & csv file imports (both tested) & aqbanking (cannot test).
+    Bug 797772 - Allow reconciliation report to double filter by both posting and reconciliation date
+    Bug 798222 - Account search dialog: Pushing enter does nothing
+    Bug 798266 - Dropdown picker menu for category does not appear
+    Bug 798313 - "File/Import/Import Transactions From CSV" crashes Gnucash.
+    Bug 798320 - Error message indicating a crash of GNUcash when closing application - MacOS 10.15.7 (19H1419)
+    Bug 798325 - New Currency for Venezuela (VED)
+    Bug 798327 - Ofx import stops too early for multi-account OFX and one account has no new transactions
+    Bug 798335 - No longer possible to change trading account
+
+    Strip trading splits only if "Use Trading Accounts" is enabled for the book so that users who want to manage trading accounts by hand may do so.
+    Bug 798341 - Right align in Hebrew - Account screen
+    Bug 798346 - crashes when running check & repair
+    Bug 798352 - Decimal Precision when Entering Mutual Fund Transaction
+
+    Let xaccParseAmount parse up to 12 decimal places instead of 8.
+    Bug 798382 - Typo corrections in comments
+
+The following fixes and improvements were not associated with bug reports:
+
+    More memory leak plugging and GList efficiency improvements.
+    Fix build with cmake older than 3.18
+      3.18 introduced 'cmake -E cat', but we still have to support versions
+      starting from 3.14.
+    [account-piecharts] don't use gnc:make-internal-option
+    Several improvements to the experimental IFRS cost-basis report.
+    Fix two minor issues with displaying links in the Document Link dialog.
+    Fix obsolete links to bugzilla.gnome.org in translations.
+    L18N: Fix glossary/es.po:906: duplicate message definition...
+
+    901: ...this is the location of the first definition
+    [budget-flow] delay creating exchange-fn until a valid budget exists
+
+    because it needs budget period end-date.
+    [options.scm] Addon previous commit... need to initialize with guid
+    [options.scm] gnc:make-budget-option stores guid instead of object
+
+    because object may become stale if UI is used to delete it, leading to stale pointer and segfault. storing guid is safer, and will return null if budget is deleted.
+    Support SEPA internal transfer
+    Fix issue with failure to run reconciliation with all accounts present in a multi-account OFX file. Do that by saving a GList of statements, rather than a pointer to a single one. Also freeing of info happens during the call to process_next_file.
+    Import of OFX files with many securities opens too many matching dialogs Because ofx import is currently split per target account, and since each security has its own accounts, importing such OFX is a tedious process. The fix is to only split the transactions if we identify a potential transfer, currently based on amount, date and accounts. To do that, we insert transactions one by one into a list, making sure we have not already inserted one that has the same date, and the same absolute amount. If we have, we keep this potential transfer for a second phase. A naive approach would loop through added transactions for each new transaction by that ends up being O(N^2), which matters if we have many transactions. Instead, I'm using a hash to make this O(N log N).
+    [date-utilities.scm] remove unused date selectors code & string
+    Adjust GNC_DEFINE_TYPE_EXTENDED_END
+      To match new signature of g_once_init_enter and g_once_init_leave.
+    glib headers should not be included with 'extern "C"'.
+    Add explanatory note for gnc_add_scheme_deprecated_module test code
+
+    [test-engine-extras] don't create splits of opposing amt/value signs
+      Splits' value and amount should never be of opposite signs. Fix
+      test book which had created this incorrect value/amount
+      pair. Strengthen env-create-multisplit-transaction to disallow
+      test book errors.
+    [trep-engine] new option "Date Filter" to specify dates to filter by
+    [dialog-sx-since-last-run] don't allocate repeatedly to combine strings
+    [test-transaction] "Report Currency" renamed to "Report's currency"
+    Separate the warnings for "cut split/transaction" and
+      "delete split/transaction"
+    [gnc-autoclear] Move autoclear algorithm into gnome-utils
+    GSettings - fix GObject warning when old prefs-version is unset
+      This will happen when current master (future 5.0) has been run
+      at least once.
+    [utest-gnc-pricedb] add tests for gnc_price_list_equal
+    [reconcile-view][bug] dr/cr query tests amount instead of value
+      Because split->amount and split->value are generally of equal
+      sign, EXCEPT in stock transactions whereby split->value can be
+      zero and split->amount is non-zero. e.g. a stock split
+      transaction. Querying the split amount instead will allow stock
+      accounts with stock splits to be reconciled.
+    [split-register-model.c] Hide price==1 for zero-amount splits
+      mainly of interest in zero-amount zero-value splits in the stock
+      register eg dividend splits.
+    [core-utils] introduce gnc:format
+    (gnc:format str [binding value]...) str will contain ${binding} which will
+      be replaced to value.
+    [test-core-utils] uses srfi-64
+    [import-main-matcher] show destination acct for auto-match
+    GSettings - add 'deprecate' and 'obsolete' conversions for user preferences
+      'deprecate' is technically a noop. It serves to remind
+      maintainers the 'deprecated' preference is to be obsoleted in
+      the next major release. 'obsolete' goes one step further in that
+      it will cause gnucash to reset the preference, effectively
+      clearing the value stored in the preferences backend. This is
+      the final phase of a preference. Following this it will be
+      completely removed from the GSettings schema in the next major
+      release. Notes * 'deprecate' and 'migrate' are related. Both are
+      a reminder the preference is to be obsoleted in the next major
+      release. 'deprecate' does only that though while 'migrate' will
+      also trigger a copy of the old value to a new location in the
+      databse. * This commit readds a couple of preferences that had
+      been removed in the past to be able to properly obsolete them
+      (and to test the obsoleting code)
+
+New API
+
+None
+Deprecations
+
+None
+
+New and Updated Translations: Chinese (Simplified), Chinese (Traditional), Croatian, French, German, Hebrew, Italian, Norwegian Bokmål, Portuguese, Portuguese (Brazil), Spanish, Ukranian. 
+
 4.8  - 28 September 2021
 The ninth release of the 4.x stable series.
 

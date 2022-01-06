@@ -177,7 +177,7 @@
       "body, p, table, tr, td { vertical-align: top; " text-cell-info " }\n"
       "tr.alternate-row { background: " alternate-row-color " }\n"
       "tr { page-break-inside: avoid !important;}\n"
-      "html, body { height: 100vh; margin: 0; }\n"
+      "html, body { height: 100vh; margin-top: 0px; margin-bottom: 0px; margin-left: 8px; margin-right: 8px; }\n"
       "td, th { border-color: grey }\n"
       "th.column-heading-left { text-align: left; " number-header-info " }\n"
       "th.column-heading-center { text-align: center; " number-header-info " }\n"

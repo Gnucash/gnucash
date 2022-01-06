@@ -2044,6 +2044,14 @@ multiplier (int num_decimals)
 {
     switch (num_decimals)
     {
+    case 12:
+        return 1000000000000;
+    case 11:
+        return 100000000000;
+    case 10:
+        return 10000000000;
+    case 9:
+        return 1000000000;
     case 8:
         return 100000000;
     case 7:
@@ -2060,6 +2068,8 @@ multiplier (int num_decimals)
         return 100;
     case 1:
         return 10;
+    case 0:
+         return 1;
     default:
         PERR("bad fraction length");
         g_assert_not_reached();
@@ -2357,10 +2367,10 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
 
         len = strlen(out_str);
 
-        if (len > 8)
+        if (len > 12)
         {
-            out_str[8] = '\0';
-            len = 8;
+            out_str[12] = '\0';
+            len = 12;
         }
 
         if (sscanf (out_str, QOF_SCANF_LLD, &fraction) < 1)
@@ -2375,7 +2385,7 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
     }
     else if (monetary && auto_decimal_enabled && !got_decimal)
     {
-        if ((auto_decimal_places > 0) && (auto_decimal_places < 9))
+        if ((auto_decimal_places > 0) && (auto_decimal_places <= 12))
         {
             denom = multiplier(auto_decimal_places);
 

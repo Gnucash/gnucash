@@ -9,6 +9,7 @@ bindings/guile/gnc-engine-guile.c
 bindings/guile/gnc-guile-bindings.c
 bindings/guile/gnc-guile-utils.c
 bindings/guile/gnc-kvp-guile.cpp
+bindings/guile/gnc-module.scm
 bindings/guile/gnc-numeric.scm
 bindings/guile/utilities.scm
 bindings/python/app_utils.py
@@ -442,9 +443,13 @@ gnucash/report/eguile-utilities.scm
 gnucash/report/gnc-report.c
 gnucash/report/html-acct-table.scm
 gnucash/report/html-anytag.scm
+gnucash/report/html-barchart.scm
 gnucash/report/html-chart.scm
 gnucash/report/html-document.scm
 gnucash/report/html-fonts.scm
+gnucash/report/html-linechart.scm
+gnucash/report/html-piechart.scm
+gnucash/report/html-scatter.scm
 gnucash/report/html-style-info.scm
 gnucash/report/html-style-sheet.scm
 gnucash/report/html-table.scm
@@ -453,6 +458,7 @@ gnucash/report/html-utilities.scm
 gnucash/report/options-utilities.scm
 gnucash/report/report-core.scm
 gnucash/report/report-register-hooks.scm
+gnucash/report/reports/aging.scm
 gnucash/report/reports/cash-flow-calc.scm
 gnucash/report/reports/example/average-balance.scm
 gnucash/report/reports/example/daily-reports.scm
@@ -486,13 +492,17 @@ gnucash/report/reports/standard/ifrs-cost-basis.scm
 gnucash/report/reports/standard/income-gst-statement.scm
 gnucash/report/reports/standard/income-statement.scm
 gnucash/report/reports/standard/invoice.scm
+gnucash/report/reports/standard/job-report.scm
 gnucash/report/reports/standard/lot-viewer.scm
 gnucash/report/reports/standard/net-charts.scm
 gnucash/report/reports/standard/new-aging.scm
 gnucash/report/reports/standard/new-owner-report.scm
+gnucash/report/reports/standard/owner-report.scm
+gnucash/report/reports/standard/payables.scm
 gnucash/report/reports/standard/portfolio.scm
 gnucash/report/reports/standard/price-scatter.scm
 gnucash/report/reports/standard/receipt.scm
+gnucash/report/reports/standard/receivables.scm
 gnucash/report/reports/standard/reconcile-report.scm
 gnucash/report/reports/standard/register.scm
 gnucash/report/reports/standard/taxinvoice.scm

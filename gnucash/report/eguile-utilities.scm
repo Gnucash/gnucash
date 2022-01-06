@@ -41,6 +41,40 @@
 (define-public fmtnumeric
   (compose fmtnumber exact->inexact))
 
+(define-public (gnc-monetary-neg? monetary)
+  ;; return true if the monetary value is negative
+  (issue-deprecation-warning "gnc-monetary-neg? is deprecated")
+  (negative? (gnc:gnc-monetary-amount monetary)))
+
+;; 'Safe' versions of cdr and cadr that don't crash
+;; if the list is empty  (is there a better way?)
+(define-public safe-cdr
+  ;; deprecate
+  (match-lambda
+    ((_ . x) x)
+    (_ '())))
+
+(define-public safe-cadr
+  ;; deprecate
+  (match-lambda
+    ((_ x . y) x)
+    (_ '())))
+
+; deprecated - use find-stylesheet or find-template instead
+(define-public (find-file fname)
+  ;; Find the file 'fname', and return its full path.
+  ;; First look in the user's .config/gnucash directory.
+  ;; Then look in Gnucash's standard report directory.
+  ;; If no file is found, returns just 'fname' for use in error messages.
+  (let* ((stylesheetpath (find-stylesheet fname))
+         (templatepath  (find-template fname)))
+    ; make sure there's a trailing delimiter
+      (issue-deprecation-warning "find-file is deprecated in 4.x. Please use find-stylesheet or find-template instead.")
+      (cond
+       ((access? stylesheetpath R_OK) stylesheetpath)
+       ((access? templatepath R_OK) templatepath)
+       (else fname))))
+
 (define (find-internal ftype fname)
   ;; Find the file fname', and return its full path.
   ;; First look in the user's .config/gnucash directory.
@@ -67,3 +101,26 @@
   ;; If no file is found, returns just 'fname' for use in error messages.
   (find-internal "templates" fname))
 
+;; Define syntax for more readable for loops (the built-in for-each
+;; requires an explicit lambda and has the list expression all the way
+;; at the end).  Note: deprecated in 4.x, removal in 5.x. this syntax
+;; is pythonic rather than lispy, is not recognized by code
+;; highlighters, and is not necessary to seasoned schemers.
+(export for)
+(define-syntax for
+  (syntax-rules (for in do)
+    ;; Multiple variables and equal number of lists (in
+    ;; parenthesis). e.g.:
+    ;;   (for (a b) in (lsta lstb) do (display (+ a b)))
+    ;; Note that this template must be defined before the
+    ;; next one, since the template are evaluated in-order.
+    ((for (<var> ...) in (<list> ...) do <expr> ...)
+     (begin
+       (issue-deprecation-warning "for loops are deprecated. use for-each instead.")
+       (for-each (lambda (<var> ...) <expr> ...) <list> ...)))
+
+    ;; Single variable and list. e.g.: (for a in lst do (display a))
+    ((for <var> in <list> do <expr> ...)
+     (begin
+       (issue-deprecation-warning "for loops are deprecated. use for-each instead.")
+       (for-each (lambda (<var>) <expr> ...) <list>)))))

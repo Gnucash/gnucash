@@ -38,3 +38,14 @@
 (export gnc:get-debit-string)
 (export gnc:get-credit-string)
 (export gnc:config-file-format-version)
+
+;; Symbols deprecated in 4.x, to remove for 5.x
+(define (gnc:get-debit-string acct-type)
+    (issue-deprecation-warning "gnc:get-debit-string is deprecated in 4.x. Please use (gnucash engine)'s gnc-account-get-debit-string instead.")
+    (gnc-account-get-debit-string acct-type))
+(define (gnc:get-credit-string acct-type)
+    (issue-deprecation-warning "gnc:get-credit-string is deprecated in 4.x. Please use (gnucash engine)'s gnc-account-get-credit-string instead.")
+    (gnc-account-get-debit-string acct-type))
+(define (gnc:config-file-format-version version)
+    (issue-deprecation-warning "gnc:config-file-format-version is deprecated in 4.x and will be removed from a future version.")
+    #t)

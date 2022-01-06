@@ -1050,6 +1050,18 @@ gboolean xaccAccountIsEquityType(GNCAccountType t);
  */
 SplitList* xaccAccountGetSplitList (const Account *account);
 
+
+/** The xaccAccountCountSplits() routine returns the number of all
+ *    the splits in the account. xaccAccountCountSplits is O(N). if
+ *    testing for emptiness, use xaccAccountGetSplitList != NULL.
+
+ * @param acc the account for which to count the splits
+ *
+ * @param include_children also count splits in descendants (TRUE) or
+ *        for this account only (FALSE).
+ */
+gint64 xaccAccountCountSplits (const Account *acc, gboolean include_children);
+
 /** The xaccAccountMoveAllSplits() routine reassigns each of the splits
  *  in accfrom to accto. */
 void xaccAccountMoveAllSplits (Account *accfrom, Account *accto);
@@ -1204,6 +1216,30 @@ gboolean xaccAccountGetPlaceholder (const Account *account);
  *
  *  @param val The new state for the account's "placeholder" flag. */
 void xaccAccountSetPlaceholder (Account *account, gboolean val);
+
+/** @name Account Append Text flag
+ @{
+*/
+
+/** Get the "import-append-text" flag for an account.  This is the saved
+ *  state of the Append checkbox in the "Generic import transaction matcher"
+ *  used to set the initial state of the Append checkbox next time this
+ *  account is imported.
+ *
+ *  @param account The account whose flag should be retrieved.
+ *
+ *  @return The current state of the account's "import-append-text" flag. */
+gboolean xaccAccountGetAppendText (const Account *account);
+
+/** Set the "import-append-text" flag for an account.  This is the saved
+ *  state of the Append checkbox in the "Generic import transaction matcher"
+ *  used to set the initial state of the Append checkbox next time this
+ *  account is imported.
+ *
+ *  @param account The account whose flag should be retrieved.
+ *
+ *  @param val The new state for the account's "import-append-text" flag. */
+void xaccAccountSetAppendText (Account *account, gboolean val);
 
 /** Get the "opening-balance" flag for an account.  If this flag is set
  *  then the account is used for opening balance transactions.

@@ -38,7 +38,10 @@
 
 html, body {
     height: 100vh;
-    margin: 0;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 8px;
+    margin-right: 8px;
     font-family: \"Noto Sans\", Sans-Serif;
     font-size: 10pt;
 }

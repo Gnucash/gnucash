@@ -361,7 +361,7 @@ void gnc_main_window_restore_all_windows(const GKeyFile *keyfile);
  *  used on report pages to delay the creation of the report till the
  *  page is focused.
  *
- *  @param window When window whose pages should be checked.
+ *  @param window The window whose pages should be checked.
  *
  *  @return TRUE if pages are being restored
  */
@@ -383,7 +383,7 @@ void gnc_main_window_restore_default_state(GncMainWindow *window);
  *  If any page returns a failure indication, then the function stops
  *  walking pages and immediately returns a failure.
  *
- *  @param window When window whose pages should be checked.
+ *  @param window The window whose pages should be checked.
  *
  *  @return FALSE if any page could not or would not comply, which
  *  should cancel the pending operation.  TRUE otherwise */
@@ -412,7 +412,7 @@ void gnc_main_window_all_action_set_sensitive (const gchar *action_name, gboolea
 
 /** Find action in main window.
  *
- *  @param window When window which should be checked for the action.
+ *  @param window The window which should be checked for the action.
  *
  *  @param name The name of the command to be retrieved.
  *

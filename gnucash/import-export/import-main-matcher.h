@@ -112,7 +112,7 @@ GNCImportMainMatcher * gnc_gen_trans_assist_new (GtkWidget *parent,
 /**  This starts the import process for transaction from an assistant.
  *   assistant button callback.
  *
- * @param info. A pointer to a the GNCImportMainMatcher structure.
+ * @param info. A pointer to the GNCImportMainMatcher structure
 */
 void gnc_gen_trans_assist_start (GNCImportMainMatcher *info);
 
@@ -177,31 +177,38 @@ void gnc_gen_trans_list_add_trans_with_ref_id (GNCImportMainMatcher *gui,
 /** Run this dialog and return only after the user pressed Ok, Cancel,
   or closed the window. This means that all actual importing will
   have been finished upon returning.
- * @param info A pointer to a the GNCImportMainMatcher structure.
+ * @param info A pointer to the GNCImportMainMatcher structure.
  * @return The boolean return value of the dialog run.
 */
 gboolean gnc_gen_trans_list_run (GNCImportMainMatcher *info);
 
 
 /** Returns the widget of this dialog.
- * @param info A pointer to a the GNCImportMainMatcher structure.
+ * @param info A pointer to the GNCImportMainMatcher structure.
  * @return A GtkWidget pointer to the dialog's widget.
  */
 GtkWidget *gnc_gen_trans_list_widget (GNCImportMainMatcher *info);
 
+/** Returns the append_text widget of this dialog.
+ * @param info A pointer to the GNCImportMainMatcher structure.
+ * @return A GtkWidget pointer to the append_text widget.
+ */
+GtkWidget *
+gnc_gen_trans_list_append_text_widget (GNCImportMainMatcher *info);
+
 /** Checks whether there are no transactions to match.
- * @param info A pointer to a the GNCImportMainMatcher structure.
+ * @param info A pointer to the GNCImportMainMatcher structure.
  * @return A boolean indicating whether the transaction list is empty.
  */
 gboolean gnc_gen_trans_list_empty (GNCImportMainMatcher *info);
 
 /** Shows widgets.
- * @param info A pointer to a the GNCImportMainMatcher structure.
+ * @param info A pointer to the GNCImportMainMatcher structure.
  */
 void gnc_gen_trans_list_show_all (GNCImportMainMatcher *info);
 
 /** Show and set the reconcile after close check button.
- * @param info A pointer to a the GNCImportMainMatcher structure.
+ * @param info A pointer to the GNCImportMainMatcher structure.
  * @param reconcile_after_close A gboolean that shows or hides the button.
  * @param active A gboolean to set or clear the check button.
  */
@@ -209,7 +216,7 @@ void gnc_gen_trans_list_show_reconcile_after_close_button (GNCImportMainMatcher 
                                                            gboolean reconcile_after_close,
                                                            gboolean active);
 /** Returns the reconcile after close check button.
- * @param info A pointer to a the GNCImportMainMatcher structure.
+ * @param info A pointer to the GNCImportMainMatcher structure.
  * @return The check button.
  */
 GtkWidget* gnc_gen_trans_list_get_reconcile_after_close_button (GNCImportMainMatcher *info);

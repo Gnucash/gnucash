@@ -4,14 +4,15 @@
 # Sergey Belyashov <Sergey.Belyashov@gmail.com>, 2008.
 # Val Saven <val.saven@gmail.com>, 2021.
 # TwoEightNine <twoeightnine@list.ru>, 2021.
+# Даниил Морозюк <morozdan2003@gmail.com>, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: ru\n"
+"Project-Id-Version: GnuCash 4.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-04-21 19:29+0000\n"
-"Last-Translator: TwoEightNine <twoeightnine@list.ru>\n"
+"POT-Creation-Date: 2021-12-05 20:11+0100\n"
+"PO-Revision-Date: 2022-01-02 22:54+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/glossary/"
 "ru/>\n"
 "Language: ru\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -208,6 +209,12 @@ msgstr ""
 
 #. "A sum of money"
 msgid "amount"
+msgstr "сумма"
+
+#. "The amount finally to pay, respecting discounts, billing terms…"
+#, fuzzy
+#| msgid "amount"
+msgid "amount due"
 msgstr "сумма"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
@@ -400,9 +407,13 @@ msgstr "двойная бухгалтерия"
 msgid "document link"
 msgstr ""
 
+#. "The last day to pay an invoice in time."
+msgid "due date"
+msgstr ""
+
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
-msgstr ""
+msgstr "электронная почта"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
@@ -770,6 +781,16 @@ msgstr "источник"
 msgid "split"
 msgstr "часть"
 
+#. "Alias of 'shares'"
+msgid "stocks"
+msgstr ""
+
+#. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
+#, fuzzy
+#| msgid "split"
+msgid "stock split"
+msgstr "часть"
+
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
 msgstr "стиль оформления"
@@ -893,3 +914,15 @@ msgstr "снятие"
 
 #~ msgid "Term"
 #~ msgstr "Термин"
+
+msgid "stock"
+msgstr ""
+
+msgid "due"
+msgstr ""
+
+msgid "Online"
+msgstr ""
+
+msgid "Direct Debit"
+msgstr ""

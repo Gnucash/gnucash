@@ -297,7 +297,7 @@
  *         to the parser. The calling function(s) should never rely on
  *         manipulating any information inside this structure
  *         directly, since it may and could change in the future.  --
- *         The first parameter is a pointer to a the first element in
+ *         The first parameter is a pointer to the first element in
  *         a linked list of "pre-defined" variables the caller wishes
  *         to use with subsequent calls to the parser.  -- The second
  *         parameter is the radix character to use in numeric strings

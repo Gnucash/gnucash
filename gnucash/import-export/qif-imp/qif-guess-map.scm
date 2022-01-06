@@ -102,27 +102,10 @@
   ;; GnuCash account. Each member of the list is itself a list with
   ;; the form: (shortname fullname Account*)
   (define (extract-all-account-info an-account root-name)
-    (if (null? an-account)
-        '()
-        (let ((children-list (gnc-account-get-children-sorted an-account))
-              (names '()))
-
-          ;; Recursively walk the account tree.
-          (for-each
-           (lambda (child-acct)
-             (let* ((name (xaccAccountGetName child-acct))
-                    (fullname
-                     (if (string? root-name)
-                         (string-append root-name
-                                        (gnc-get-account-separator-string)
-                                        name)
-                         name)))
-               (set! names
-                     (append (cons (list name fullname child-acct)
-                                   (extract-all-account-info child-acct fullname))
-                             names))))
-           children-list)
-          names)))
+    (map
+     (lambda (acct)
+       (list (xaccAccountGetName acct) (gnc-account-get-full-name acct) acct))
+     (gnc-account-get-descendants-sorted an-account)))
 
   (define (safe-read)
     (false-if-exception

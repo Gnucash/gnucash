@@ -208,7 +208,7 @@ gboolean gnc_html_export_to_file( GncHtml* html, const gchar* filename );
  * Prints the report.
  *
  * @param html GncHtml object
- * @param jobname A jobname fo identifying the print job or to provide
+ * @param jobname A jobname for identifying the print job or to provide
  *                an output filename.
  * @param export_pdf If TRUE write a PDF file using the jobname for a
  *                   filename; otherwise put up a print dialog.

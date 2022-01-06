@@ -65,6 +65,7 @@ static const std::string KEY_INCLUDE_CHILDREN("include-children");
 static const std::string KEY_POSTPONE("postpone");
 static const std::string KEY_LOT_MGMT("lot-mgmt");
 static const std::string KEY_ONLINE_ID("online_id");
+static const std::string KEY_IMP_APPEND_TEXT("import-append-text");
 static const std::string AB_KEY("hbci");
 static const std::string AB_ACCOUNT_ID("account-id");
 static const std::string AB_ACCOUNT_UID("account-uid");
@@ -116,6 +117,7 @@ enum
 
     PROP_LOT_NEXT_ID,                   /* KVP */
     PROP_ONLINE_ACCOUNT,                /* KVP */
+    PROP_IMP_APPEND_TEXT,               /* KVP */
     PROP_IS_OPENING_BALANCE,            /* KVP */
     PROP_OFX_INCOME_ACCOUNT,            /* KVP */
     PROP_AB_ACCOUNT_ID,                 /* KVP */
@@ -484,6 +486,9 @@ gnc_account_get_property (GObject         *object,
     case PROP_ONLINE_ACCOUNT:
         qof_instance_get_path_kvp (QOF_INSTANCE (account), value, {KEY_ONLINE_ID});
         break;
+    case PROP_IMP_APPEND_TEXT:
+        g_value_set_boolean(value, xaccAccountGetAppendText(account));
+        break;
     case PROP_OFX_INCOME_ACCOUNT:
         qof_instance_get_path_kvp (QOF_INSTANCE (account), value, {KEY_ASSOC_INCOME_ACCOUNT});
         break;
@@ -612,6 +617,9 @@ gnc_account_set_property (GObject         *object,
         break;
     case PROP_ONLINE_ACCOUNT:
         qof_instance_set_path_kvp (QOF_INSTANCE (account), value, {KEY_ONLINE_ID});
+        break;
+    case PROP_IMP_APPEND_TEXT:
+        xaccAccountSetAppendText(account, g_value_get_boolean(value));
         break;
     case PROP_OFX_INCOME_ACCOUNT:
         qof_instance_set_path_kvp (QOF_INSTANCE (account), value, {KEY_ASSOC_INCOME_ACCOUNT});
@@ -1061,6 +1069,16 @@ gnc_account_class_init (AccountClass *klass)
                           "account for OFX import",
                           NULL,
                           static_cast<GParamFlags>(G_PARAM_READWRITE)));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_IMP_APPEND_TEXT,
+     g_param_spec_boolean ("import-append-text",
+                           "Import Append Text",
+                           "Saved state of Append checkbox for setting initial "
+                           "value next time this account is imported.",
+                           FALSE,
+                           static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
      g_object_class_install_property(
        gobject_class,
@@ -3968,19 +3986,39 @@ xaccAccountGetSplitList (const Account *acc)
     return GET_PRIVATE(acc)->splits;
 }
 
+gint64
+xaccAccountCountSplits (const Account *acc, gboolean include_children)
+{
+    gint64 nr, i;
+
+    PWARN ("xaccAccountCountSplits is deprecated and will be removed \
+in GnuCash 5.0. If testing for an empty account, use \
+xaccAccountGetSplitList(account) == NULL instead. To test descendants \
+as well, use gnc_account_and_descendants_empty.");
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), 0);
+
+    nr = g_list_length(xaccAccountGetSplitList(acc));
+    if (include_children && (gnc_account_n_children(acc) != 0))
+    {
+        for (i=0; i < gnc_account_n_children(acc); i++)
+        {
+            nr += xaccAccountCountSplits(gnc_account_nth_child(acc, i), TRUE);
+        }
+    }
+    return nr;
+}
 
 gboolean gnc_account_and_descendants_empty (Account *acc)
 {
     g_return_val_if_fail (GNC_IS_ACCOUNT (acc), FALSE);
-    if (xaccAccountGetSplitList (acc)) return FALSE;
-    auto empty = TRUE;
-    auto *children = gnc_account_get_children (acc);
-    for (auto *n = children; n && empty; n = n->next)
+    auto priv = GET_PRIVATE (acc);
+    if (priv->splits != nullptr) return FALSE;
+    for (auto *n = priv->children; n; n = n->next)
     {
-        empty = gnc_account_and_descendants_empty ((Account*)n->data);
+	if (!gnc_account_and_descendants_empty (static_cast<Account*>(n->data)))
+	    return FALSE;
     }
-    g_list_free (children);
-    return empty;
+    return TRUE;
 }
 
 LotList *
@@ -4205,6 +4243,18 @@ void
 xaccAccountSetPlaceholder (Account *acc, gboolean val)
 {
     set_boolean_key(acc, {"placeholder"}, val);
+}
+
+gboolean
+xaccAccountGetAppendText (const Account *acc)
+{
+    return boolean_from_key(acc, {"import-append-text"});
+}
+
+void
+xaccAccountSetAppendText (Account *acc, gboolean val)
+{
+    set_boolean_key(acc, {"import-append-text"}, val);
 }
 
 gboolean

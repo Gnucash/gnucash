@@ -5,12 +5,12 @@
 # Henio Szewczyk <henryk.szewczyk09@gmail.com>, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 2.2.x\n"
+"Project-Id-Version: GnuCash 4.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-06-02 22:33+0000\n"
-"Last-Translator: Henio Szewczyk <henryk.szewczyk09@gmail.com>\n"
+"POT-Creation-Date: 2021-12-05 20:11+0100\n"
+"PO-Revision-Date: 2022-01-02 22:54+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "pl/>\n"
 "Language: pl\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -206,6 +206,12 @@ msgstr "starzenie się"
 msgid "amount"
 msgstr "kwota"
 
+#. "The amount finally to pay, respecting discounts, billing terms…"
+#, fuzzy
+#| msgid "amount"
+msgid "amount due"
+msgstr "kwota"
+
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
 msgstr "średnia"
@@ -385,6 +391,10 @@ msgstr "podwójny zapis"
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
 msgstr "link do dokumentu"
+
+#. "The last day to pay an invoice in time."
+msgid "due date"
+msgstr ""
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
@@ -742,6 +752,16 @@ msgstr "źródło"
 msgid "split"
 msgstr "podział"
 
+#. "Alias of 'shares'"
+msgid "stocks"
+msgstr ""
+
+#. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
+#, fuzzy
+#| msgid "split"
+msgid "stock split"
+msgstr "podział"
+
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
 msgstr "arkusz stylów"
@@ -860,3 +880,15 @@ msgstr "obciążenie"
 
 #~ msgid "Term"
 #~ msgstr "Termin"
+
+msgid "stock"
+msgstr ""
+
+msgid "due"
+msgstr ""
+
+msgid "Online"
+msgstr ""
+
+msgid "Direct Debit"
+msgstr ""

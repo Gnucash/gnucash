@@ -924,6 +924,7 @@ be excluded from periodic reporting.")
      (list
       (list (N_ "Date")                         "a"  (G_ "Display the date?") #t)
       (list (N_ "Reconciled Date")              "a2" (G_ "Display the reconciled date?") #f)
+      (list (N_ "Date Entered")                 "a3" (G_ "Display the entered date?") #f)
       (if BOOK-SPLIT-ACTION
           (list (N_ "Num/Action")               "b"  (G_ "Display the check number?") #t)
           (list (N_ "Num")                      "b"  (G_ "Display the check number?") #t))
@@ -1048,6 +1049,7 @@ be excluded from periodic reporting.")
     (define amount-setting (opt-val gnc:pagename-display (N_ "Amount")))
     (list (cons 'date (opt-val gnc:pagename-display (N_ "Date")))
           (cons 'reconciled-date (opt-val gnc:pagename-display (N_ "Reconciled Date")))
+          (cons 'entered (opt-val gnc:pagename-display (N_ "Date Entered")))
           (cons 'num (if BOOK-SPLIT-ACTION
                          (opt-val gnc:pagename-display (N_ "Num/Action"))
                          (opt-val gnc:pagename-display (N_ "Num"))))
@@ -1149,6 +1151,15 @@ be excluded from periodic reporting.")
                                        (qof-print-date
                                         (xaccTransGetDate
                                          (xaccSplitGetParent split))))))))
+
+               (add-if (column-uses? 'entered)
+                       (vector (G_ "Date Entered")
+                               (lambda (split transaction-row?)
+                                 (and transaction-row?
+                                      (gnc:make-html-table-cell/markup
+                                       "date-cell" (qof-print-date
+                                                    (xaccTransRetDateEntered
+                                                     (xaccSplitGetParent split))))))))
 
                (add-if (column-uses? 'reconciled-date)
                        (vector (G_ "Reconciled Date")
@@ -1934,7 +1945,7 @@ be excluded from periodic reporting.")
           report-obj #:key custom-calculated-cells empty-report-message
           custom-split-filter split->date split->date-include-false?
           custom-source-accounts
-          export-type)
+          export-type filename)
   ;; the trep-renderer is a define* function which, at minimum, takes
   ;; the report object
   ;;
@@ -1966,6 +1977,11 @@ be excluded from periodic reporting.")
         (((? same-split?) . rest) (lp rest))
         (((? from-account?) . _) #t)
         ((_ . rest) (lp rest)))))
+
+  (when filename
+    (issue-deprecation-warning "trep-renderer filename is obsolete, and not \
+supported for exports. please set html-document export-string instead. this \
+warning will be removed in GnuCash 5.0"))
 
   (gnc:report-starting (opt-val gnc:pagename-general gnc:optname-reportname))
 

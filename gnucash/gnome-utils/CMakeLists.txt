@@ -139,6 +139,7 @@ set (gnome_utils_HEADERS
   dialog-utils.h
   gnc-account-sel.h
   gnc-amount-edit.h
+  gnc-autoclear.h
   gnc-cell-renderer-date.h
   gnc-cell-renderer-popup.h
   gnc-cell-renderer-popup-entry.h

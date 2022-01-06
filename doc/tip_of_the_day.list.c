@@ -1,3 +1,5 @@
+/* Sort order: Imagine a first time user. When is your tip useful? */
+
  N_( "The GnuCash online manual has lots of helpful information. \
 You can access the manual under the Help menu.")
 
@@ -14,6 +16,10 @@ Join them on #gnucash at irc.gnome.org")
 MS Money or other programs that export QIF files or OFX files. In the \
 File menu, click on the sub-menu Import and click on QIF or OFX file, \
 respectively. Then, follow the instructions provided.")
+
+ N_( "If you want to know in which directories your recent GnuCash files \
+are stored, hover over one of the entries in the history menu\n(File[->\
+Most Recently Used-List]).\nThe full path is displayed in the status bar.")
 
  N_( "If you are familiar with other financial programs such as Quicken, \
 note that GnuCash uses accounts instead of categories to track \

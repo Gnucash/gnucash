@@ -150,8 +150,13 @@
   (test-begin "test-make-report")
   (test-assert "gnc:make-report succeeds"
     (gnc:make-report test4-guid))
-  (test-equal "gnc:restore-report-by-guid-with-custom-template"
+  (test-equal "gnc:restore-report-by-guid"
     1
+    (gnc:restore-report-by-guid 1 test4-guid test4-name "options"))
+  (test-assert "gnc:restore-report-by-guid, no options"
+    (not (gnc:restore-report-by-guid 1 test4-guid test4-name #f)))
+  (test-equal "gnc:restore-report-by-guid-with-custom-template"
+    2
     (gnc:restore-report-by-guid-with-custom-template
      "id" test4-guid test4-name "custom-template-id" "options"))
   (test-assert "gnc:restore-report-by-guid-with-custom-template, no options"

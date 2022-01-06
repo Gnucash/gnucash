@@ -910,10 +910,22 @@ popup_get_height (G_GNUC_UNUSED GtkWidget* widget,
 {
     PopBox* box = user_data;
     GtkScrolledWindow* scrollwin = GNC_ITEM_LIST(widget)->scrollwin;
+    GtkWidget *hsbar = gtk_scrolled_window_get_hscrollbar (scrollwin);
+    GtkStyleContext *context = gtk_widget_get_style_context (hsbar);
+    /* Note: gtk_scrolled_window_get_overlay_scrolling (scrollwin) always returns
+       TRUE so look for style class "overlay-indicator" on the scrollbar. */
+    gboolean overlay = gtk_style_context_has_class (context, "overlay-indicator");
     int count, height;
 
     count = gnc_item_list_num_entries (box->item_list);
     height = count * (gnc_item_list_get_cell_height (box->item_list) + 2);
+
+    if (!overlay)
+    {
+        gint minh, nath;
+        gtk_widget_get_preferred_height (hsbar, &minh, &nath);
+        height = height + minh;
+    }
 
     if (height < space_available)
     {
