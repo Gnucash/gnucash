@@ -458,7 +458,7 @@ gnc_gen_trans_list_show_all (GNCImportMainMatcher *info)
     temp_trans_list = info->temp_trans_list;
     if (!temp_trans_list)
     {
-        gnc_info_dialog (GTK_WINDOW (info->main_widget), _("While importing transactions found no new transactions."));
+        gnc_info_dialog (GTK_WINDOW (info->main_widget), _("No new transactions were found in this import."));
         return;
     }
     trans_info = temp_trans_list->data;
@@ -1898,7 +1898,7 @@ static void
 match_helper (Split* data, match_struct* s)
 {
     split_find_match (s->transaction_info, data,
-                      s->display_threshold, 
+                      s->display_threshold,
                       s->date_threshold,
                       s->date_not_threshold,
                       s->fuzzy_amount);
