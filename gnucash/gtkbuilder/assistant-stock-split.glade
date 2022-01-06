@@ -1,55 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkAssistant" id="stock_split_assistant">
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="halign">start</property>
-    <property name="border_width">12</property>
+    <property name="border-width">12</property>
     <property name="title" translatable="yes">Stock Split Assistant</property>
-    <property name="window_position">center</property>
-    <property name="default_width">500</property>
+    <property name="window-position">center</property>
+    <property name="default-width">500</property>
     <signal name="cancel" handler="gnc_stock_split_assistant_cancel" swapped="no"/>
     <signal name="close" handler="gnc_stock_split_assistant_finish" swapped="no"/>
     <signal name="prepare" handler="gnc_stock_split_assistant_prepare" swapped="no"/>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkLabel" id="intro_page_label">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="valign">start</property>
-        <property name="margin_start">12</property>
-        <property name="margin_end">12</property>
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
         <property name="label" translatable="yes">This assistant will help you record a stock split or stock merger.
 </property>
         <property name="wrap">True</property>
       </object>
       <packing>
-        <property name="page_type">intro</property>
+        <property name="page-type">intro</property>
         <property name="title" translatable="yes">Stock Split Assistant</property>
-        <property name="has_padding">False</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
       <object class="GtkBox" id="stock_account_page">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_start">12</property>
-        <property name="border_width">6</property>
+        <property name="can-focus">False</property>
+        <property name="margin-start">12</property>
+        <property name="border-width">6</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkLabel" id="stock_account_label">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_bottom">6</property>
+            <property name="can-focus">False</property>
+            <property name="margin-bottom">6</property>
             <property name="label" translatable="yes">Select the account for which you want to record a stock split or merger.</property>
             <property name="justify">center</property>
           </object>
@@ -62,11 +53,11 @@
         <child>
           <object class="GtkScrolledWindow" id="stock_account_scrolled">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
             <child>
               <object class="GtkTreeView" id="account_view">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <child internal-child="selection">
@@ -84,20 +75,20 @@
       </object>
       <packing>
         <property name="title" translatable="yes">Stock Split Account</property>
-        <property name="has_padding">False</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
       <object class="GtkBox" id="stock_details_page">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="border_width">6</property>
+        <property name="can-focus">False</property>
+        <property name="border-width">6</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkLabel" id="stock_detail_label">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_bottom">6</property>
+            <property name="can-focus">False</property>
+            <property name="margin-bottom">6</property>
             <property name="label" translatable="yes">Enter the date and the number of shares you gained or lost from the stock split or merger. For stock mergers (negative splits) use a negative value for the share distribution. You can also enter a description of the transaction, or accept the default one.</property>
             <property name="justify">center</property>
             <property name="wrap">True</property>
@@ -109,120 +100,121 @@
           </packing>
         </child>
         <child>
+          <!-- n-columns=2 n-rows=7 -->
           <object class="GtkGrid" id="stock_details_table">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="border_width">6</property>
-            <property name="row_spacing">3</property>
-            <property name="column_spacing">6</property>
+            <property name="can-focus">False</property>
+            <property name="border-width">6</property>
+            <property name="row-spacing">3</property>
+            <property name="column-spacing">6</property>
             <child>
               <object class="GtkLabel" id="date_label">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">end</property>
                 <property name="label" translatable="yes">_Date</property>
-                <property name="use_underline">True</property>
+                <property name="use-underline">True</property>
                 <property name="justify">center</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="distribution_label">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">end</property>
                 <property name="label" translatable="yes">_Shares</property>
-                <property name="use_underline">True</property>
+                <property name="use-underline">True</property>
                 <property name="justify">center</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="description_label">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">end</property>
                 <property name="label" translatable="yes">Desc_ription</property>
-                <property name="use_underline">True</property>
+                <property name="use-underline">True</property>
                 <property name="justify">center</property>
-                <property name="mnemonic_widget">description_entry</property>
+                <property name="mnemonic-widget">description_entry</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
               </packing>
             </child>
             <child>
               <object class="GtkEntry" id="description_entry">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="invisible_char">●</property>
+                <property name="can-focus">True</property>
+                <property name="invisible-char">●</property>
                 <property name="text" translatable="yes">Stock Split</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">2</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
               </packing>
             </child>
             <child>
               <object class="GtkSeparator" id="hseparator1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
                 <property name="width">2</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="text_label">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_bottom">6</property>
+                <property name="can-focus">False</property>
+                <property name="margin-bottom">6</property>
                 <property name="label" translatable="yes">If you want to record a stock price for the split, enter it below. You may safely leave it blank.</property>
-                <property name="use_underline">True</property>
+                <property name="use-underline">True</property>
                 <property name="justify">center</property>
                 <property name="wrap">True</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">4</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">4</property>
                 <property name="width">2</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="price_label">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">end</property>
                 <property name="label" translatable="yes">New _Price</property>
-                <property name="use_underline">True</property>
+                <property name="use-underline">True</property>
                 <property name="justify">center</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">5</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">5</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="currency_label">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">end</property>
                 <property name="label" translatable="yes">Currenc_y</property>
-                <property name="use_underline">True</property>
+                <property name="use-underline">True</property>
                 <property name="justify">center</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">6</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">6</property>
               </packing>
             </child>
             <child>
@@ -247,21 +239,21 @@
       </object>
       <packing>
         <property name="title" translatable="yes">Stock Split Details</property>
-        <property name="has_padding">False</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
       <object class="GtkBox" id="stock_cash_page">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="border_width">6</property>
+        <property name="can-focus">False</property>
+        <property name="border-width">6</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
           <object class="GtkLabel" id="stock_cash_label">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_bottom">6</property>
+            <property name="can-focus">False</property>
+            <property name="margin-bottom">6</property>
             <property name="label" translatable="yes">If you received a cash disbursement as a result of the stock split, enter the details of that payment here. Otherwise, just click "Next".</property>
             <property name="justify">center</property>
             <property name="wrap">True</property>
@@ -273,62 +265,63 @@
           </packing>
         </child>
         <child>
+          <!-- n-columns=2 n-rows=2 -->
           <object class="GtkGrid" id="cash_table">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="row_spacing">3</property>
-            <property name="column_spacing">6</property>
+            <property name="can-focus">False</property>
+            <property name="row-spacing">3</property>
+            <property name="column-spacing">6</property>
             <child>
               <object class="GtkLabel" id="cash_label">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">end</property>
                 <property name="label" translatable="yes">_Amount</property>
-                <property name="use_underline">True</property>
+                <property name="use-underline">True</property>
                 <property name="justify">center</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="memo_label">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">end</property>
                 <property name="label" translatable="yes">_Memo</property>
-                <property name="use_underline">True</property>
+                <property name="use-underline">True</property>
                 <property name="justify">center</property>
-                <property name="mnemonic_widget">memo_entry</property>
+                <property name="mnemonic-widget">memo_entry</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkEntry" id="memo_entry">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="invisible_char">●</property>
+                <property name="invisible-char">●</property>
                 <property name="text" translatable="yes" comments="Default memo text for the remains of a stock split">Cash in lieu</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkBox" id="cash_box">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
           </object>
@@ -339,62 +332,63 @@
           </packing>
         </child>
         <child>
+          <!-- n-columns=2 n-rows=2 -->
           <object class="GtkGrid" id="cash_table2">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="row_spacing">3</property>
-            <property name="column_spacing">6</property>
-            <property name="column_homogeneous">True</property>
+            <property name="can-focus">False</property>
+            <property name="row-spacing">3</property>
+            <property name="column-spacing">6</property>
+            <property name="column-homogeneous">True</property>
             <child>
               <object class="GtkLabel" id="income_label">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;_Income Account&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
-                <property name="use_underline">True</property>
+                <property name="use-markup">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="asset_label">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;A_sset Account&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
-                <property name="use_underline">True</property>
+                <property name="use-markup">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkScrolledWindow" id="income_scroll">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="border_width">3</property>
+                <property name="border-width">3</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkScrolledWindow" id="asset_scroll">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="border_width">3</property>
+                <property name="border-width">3</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
           </object>
@@ -407,37 +401,31 @@
       </object>
       <packing>
         <property name="title" translatable="yes" comments="Dialog title for the remains of a stock split">Cash In Lieu</property>
-        <property name="has_padding">False</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="finish_page_label">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_start">12</property>
-        <property name="margin_end">12</property>
+        <property name="can-focus">False</property>
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
         <property name="label" translatable="yes">If you are finished creating the stock split or merger, press "Apply". You may also press "Back" to review your choices, or "Cancel" to quit without making any changes.</property>
         <property name="wrap">True</property>
       </object>
       <packing>
-        <property name="page_type">confirm</property>
+        <property name="page-type">confirm</property>
         <property name="title" translatable="yes">Stock Split Finish</property>
-        <property name="has_padding">False</property>
+        <property name="has-padding">False</property>
       </packing>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
     </child>
     <child internal-child="action_area">
       <object class="GtkBox">
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
       </object>
+      <packing>
+        <property name="has-padding">False</property>
+      </packing>
     </child>
   </object>
 </interface>
