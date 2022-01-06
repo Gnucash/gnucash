@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
     <property name="upper">100</property>
     <property name="value">1</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment2">
     <property name="lower">1</property>
     <property name="upper">100</property>
     <property name="value">1</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment3">
     <property name="lower">1</property>
     <property name="upper">100</property>
     <property name="value">1</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment4">
     <property name="lower">1</property>
     <property name="upper">731</property>
     <property name="value">1</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkListStore" id="liststore1">
     <columns>
@@ -567,52 +567,53 @@
     </data>
   </object>
   <object class="GtkWindow" id="gnc_frequency_window">
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="title">This window should never be realized.</property>
     <child>
       <object class="GtkEventBox" id="eventbox">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <child>
           <object class="GtkBox" id="gncfreq_vbox">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
             <child>
+              <!-- n-columns=3 n-rows=1 -->
               <object class="GtkGrid" id="gncfreq_table">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_start">6</property>
-                <property name="margin_end">6</property>
-                <property name="column_spacing">6</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">6</property>
+                <property name="margin-end">6</property>
+                <property name="column-spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="freq_label">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Frequency</property>
                     <property name="justify">right</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="startdate_label">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Start Date</property>
                     <property name="justify">center</property>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkComboBox" id="freq_combobox">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="model">liststore2</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext2"/>
@@ -622,8 +623,8 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
               </object>
@@ -637,14 +638,14 @@
             <child>
               <object class="GtkNotebook" id="gncfreq_nb">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="border_width">5</property>
-                <property name="show_tabs">False</property>
+                <property name="can-focus">False</property>
+                <property name="border-width">5</property>
+                <property name="show-tabs">False</property>
                 <property name="scrollable">True</property>
                 <child>
                   <object class="GtkLabel" id="label847767">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Not scheduled</property>
                     <property name="justify">center</property>
                   </object>
@@ -652,23 +653,23 @@
                 <child type="tab">
                   <object class="GtkLabel" id="label847753">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes">None</property>
                     <property name="justify">center</property>
                   </object>
                   <packing>
-                    <property name="tab_fill">False</property>
+                    <property name="tab-fill">False</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox" id="hbox114">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkLabel" id="label847776">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="label" translatable="yes">Select occurrence date above.</property>
                         <property name="justify">center</property>
                       </object>
@@ -681,31 +682,31 @@
                   </object>
                   <packing>
                     <property name="position">1</property>
-                    <property name="tab_fill">False</property>
+                    <property name="tab-fill">False</property>
                   </packing>
                 </child>
                 <child type="tab">
                   <object class="GtkLabel" id="label847735">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Once</property>
                     <property name="justify">center</property>
                   </object>
                   <packing>
                     <property name="position">1</property>
-                    <property name="tab_fill">False</property>
+                    <property name="tab-fill">False</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox" id="hbox115">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="valign">start</property>
-                    <property name="border_width">5</property>
+                    <property name="border-width">5</property>
                     <child>
                       <object class="GtkLabel" id="label847746">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="Daily">Every</property>
                         <property name="justify">right</property>
                       </object>
@@ -718,12 +719,12 @@
                     <child>
                       <object class="GtkSpinButton" id="daily_spin">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="primary_icon_activatable">False</property>
-                        <property name="secondary_icon_activatable">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="primary-icon-activatable">False</property>
+                        <property name="secondary-icon-activatable">False</property>
                         <property name="adjustment">adjustment4</property>
-                        <property name="climb_rate">1</property>
-                        <property name="snap_to_ticks">True</property>
+                        <property name="climb-rate">1</property>
+                        <property name="snap-to-ticks">True</property>
                         <property name="numeric">True</property>
                       </object>
                       <packing>
@@ -736,7 +737,7 @@
                     <child>
                       <object class="GtkLabel" id="label847747">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="Daily">days.</property>
                         <property name="justify">center</property>
                       </object>
@@ -749,40 +750,40 @@
                   </object>
                   <packing>
                     <property name="position">2</property>
-                    <property name="tab_fill">False</property>
+                    <property name="tab-fill">False</property>
                   </packing>
                 </child>
                 <child type="tab">
                   <object class="GtkLabel" id="label847736">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Daily</property>
                     <property name="justify">center</property>
                   </object>
                   <packing>
                     <property name="position">2</property>
-                    <property name="tab_fill">False</property>
+                    <property name="tab-fill">False</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox" id="hbox113">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="valign">start</property>
                     <child>
                       <object class="GtkBox" id="vbox1">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkBox" id="hbox110">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="border_width">5</property>
+                            <property name="can-focus">False</property>
+                            <property name="border-width">5</property>
                             <child>
                               <object class="GtkLabel" id="label847748">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="label" translatable="yes" context="Weekly">Every</property>
                                 <property name="justify">right</property>
                               </object>
@@ -795,12 +796,12 @@
                             <child>
                               <object class="GtkSpinButton" id="weekly_spin">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="invisible_char">●</property>
-                                <property name="primary_icon_activatable">False</property>
-                                <property name="secondary_icon_activatable">False</property>
+                                <property name="can-focus">True</property>
+                                <property name="invisible-char">●</property>
+                                <property name="primary-icon-activatable">False</property>
+                                <property name="secondary-icon-activatable">False</property>
                                 <property name="adjustment">adjustment3</property>
-                                <property name="climb_rate">1</property>
+                                <property name="climb-rate">1</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -812,7 +813,7 @@
                             <child>
                               <object class="GtkLabel" id="label847749">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes" context="Weekly">weeks.</property>
                                 <property name="justify">fill</property>
@@ -833,122 +834,123 @@
                         <child>
                           <object class="GtkFrame" id="frame1">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="border_width">5</property>
-                            <property name="label_xalign">0.5</property>
-                            <property name="shadow_type">in</property>
+                            <property name="can-focus">False</property>
+                            <property name="border-width">5</property>
+                            <property name="label-xalign">0.5</property>
+                            <property name="shadow-type">in</property>
                             <child>
+                              <!-- n-columns=3 n-rows=3 -->
                               <object class="GtkGrid" id="table2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="margin_start">6</property>
-                                <property name="margin_end">6</property>
-                                <property name="border_width">2</property>
-                                <property name="column_spacing">6</property>
+                                <property name="margin-start">6</property>
+                                <property name="margin-end">6</property>
+                                <property name="border-width">2</property>
+                                <property name="column-spacing">6</property>
                                 <child>
                                   <object class="GtkCheckButton" id="wd_check_sat">
                                     <property name="label" translatable="yes">Saturday</property>
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="receives-default">False</property>
                                     <property name="halign">start</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="draw_indicator">True</property>
+                                    <property name="use-underline">True</property>
+                                    <property name="draw-indicator">True</property>
                                   </object>
                                   <packing>
-                                    <property name="left_attach">2</property>
-                                    <property name="top_attach">0</property>
+                                    <property name="left-attach">2</property>
+                                    <property name="top-attach">0</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="wd_check_fri">
                                     <property name="label" translatable="yes">Friday</property>
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="receives-default">False</property>
                                     <property name="halign">start</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="draw_indicator">True</property>
+                                    <property name="use-underline">True</property>
+                                    <property name="draw-indicator">True</property>
                                   </object>
                                   <packing>
-                                    <property name="left_attach">1</property>
-                                    <property name="top_attach">2</property>
+                                    <property name="left-attach">1</property>
+                                    <property name="top-attach">2</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="wd_check_wed">
                                     <property name="label" translatable="yes">Wednesday</property>
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="receives-default">False</property>
                                     <property name="halign">start</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="draw_indicator">True</property>
+                                    <property name="use-underline">True</property>
+                                    <property name="draw-indicator">True</property>
                                   </object>
                                   <packing>
-                                    <property name="left_attach">1</property>
-                                    <property name="top_attach">0</property>
+                                    <property name="left-attach">1</property>
+                                    <property name="top-attach">0</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="wd_check_thu">
                                     <property name="label" translatable="yes">Thursday</property>
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="receives-default">False</property>
                                     <property name="halign">start</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="draw_indicator">True</property>
+                                    <property name="use-underline">True</property>
+                                    <property name="draw-indicator">True</property>
                                   </object>
                                   <packing>
-                                    <property name="left_attach">1</property>
-                                    <property name="top_attach">1</property>
+                                    <property name="left-attach">1</property>
+                                    <property name="top-attach">1</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="wd_check_sun">
                                     <property name="label" translatable="yes">Sunday</property>
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="receives-default">False</property>
                                     <property name="halign">start</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="draw_indicator">True</property>
+                                    <property name="use-underline">True</property>
+                                    <property name="draw-indicator">True</property>
                                   </object>
                                   <packing>
-                                    <property name="left_attach">0</property>
-                                    <property name="top_attach">0</property>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">0</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="wd_check_mon">
                                     <property name="label" translatable="yes">Monday</property>
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="receives-default">False</property>
                                     <property name="halign">start</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="draw_indicator">True</property>
+                                    <property name="use-underline">True</property>
+                                    <property name="draw-indicator">True</property>
                                   </object>
                                   <packing>
-                                    <property name="left_attach">0</property>
-                                    <property name="top_attach">1</property>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">1</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="wd_check_tue">
                                     <property name="label" translatable="yes">Tuesday</property>
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="receives-default">False</property>
                                     <property name="halign">start</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="draw_indicator">True</property>
+                                    <property name="use-underline">True</property>
+                                    <property name="draw-indicator">True</property>
                                   </object>
                                   <packing>
-                                    <property name="left_attach">0</property>
-                                    <property name="top_attach">2</property>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">2</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -962,7 +964,7 @@
                             <child type="label">
                               <object class="GtkLabel" id="label1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="label" translatable="yes">Days</property>
                               </object>
                             </child>
@@ -983,41 +985,41 @@
                   </object>
                   <packing>
                     <property name="position">3</property>
-                    <property name="tab_fill">False</property>
+                    <property name="tab-fill">False</property>
                   </packing>
                 </child>
                 <child type="tab">
                   <object class="GtkLabel" id="label847738">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Weekly</property>
                     <property name="justify">center</property>
                   </object>
                   <packing>
                     <property name="position">3</property>
-                    <property name="tab_fill">False</property>
+                    <property name="tab-fill">False</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox" id="hbox112">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="valign">start</property>
                     <child>
                       <object class="GtkBox" id="vbox119">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="border_width">5</property>
+                        <property name="can-focus">False</property>
+                        <property name="border-width">5</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkBox" id="hbox126">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <child>
                               <object class="GtkLabel" id="label847757">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="label" translatable="yes" context="Semimonthly">Every</property>
                                 <property name="justify">right</property>
                               </object>
@@ -1030,12 +1032,12 @@
                             <child>
                               <object class="GtkSpinButton" id="semimonthly_spin">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="primary_icon_activatable">False</property>
-                                <property name="secondary_icon_activatable">False</property>
+                                <property name="can-focus">True</property>
+                                <property name="primary-icon-activatable">False</property>
+                                <property name="secondary-icon-activatable">False</property>
                                 <property name="adjustment">adjustment2</property>
-                                <property name="climb_rate">1</property>
-                                <property name="snap_to_ticks">True</property>
+                                <property name="climb-rate">1</property>
+                                <property name="snap-to-ticks">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -1047,7 +1049,7 @@
                             <child>
                               <object class="GtkLabel" id="label847758">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="label" translatable="yes" context="Semimonthly">months.</property>
                               </object>
                               <packing>
@@ -1066,12 +1068,12 @@
                         <child>
                           <object class="GtkBox" id="hbox127">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkLabel" id="label847759">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">First on the</property>
                                 <property name="justify">right</property>
@@ -1085,7 +1087,7 @@
                             <child>
                               <object class="GtkComboBox" id="semimonthly_first">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="model">liststore1</property>
                                 <child>
@@ -1104,7 +1106,7 @@
                             <child>
                               <object class="GtkLabel" id="label847751">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">except on weekends</property>
                                 <property name="justify">right</property>
@@ -1118,7 +1120,7 @@
                             <child>
                               <object class="GtkComboBox" id="semimonthly_first_weekend">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="model">liststore7</property>
                                 <child>
                                   <object class="GtkCellRendererText" id="cellrenderertext7"/>
@@ -1143,12 +1145,12 @@
                         <child>
                           <object class="GtkBox" id="hbox128">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkLabel" id="label847760">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">then on the</property>
                                 <property name="justify">right</property>
@@ -1162,7 +1164,7 @@
                             <child>
                               <object class="GtkComboBox" id="semimonthly_second">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="model">liststore6</property>
                                 <child>
@@ -1181,7 +1183,7 @@
                             <child>
                               <object class="GtkLabel" id="label847752">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">except on weekends</property>
                                 <property name="justify">right</property>
@@ -1195,7 +1197,7 @@
                             <child>
                               <object class="GtkComboBox" id="semimonthly_second_weekend">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="model">liststore5</property>
                                 <child>
                                   <object class="GtkCellRendererText" id="cellrenderertext5"/>
@@ -1227,41 +1229,41 @@
                   </object>
                   <packing>
                     <property name="position">4</property>
-                    <property name="tab_fill">False</property>
+                    <property name="tab-fill">False</property>
                   </packing>
                 </child>
                 <child type="tab">
                   <object class="GtkLabel" id="label847740">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Semi-Monthly</property>
                     <property name="justify">center</property>
                   </object>
                   <packing>
                     <property name="position">4</property>
-                    <property name="tab_fill">False</property>
+                    <property name="tab-fill">False</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox" id="hbox1">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="valign">start</property>
                     <child>
                       <object class="GtkBox" id="vbox118">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="border_width">5</property>
+                        <property name="can-focus">False</property>
+                        <property name="border-width">5</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkBox" id="hbox124">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <child>
                               <object class="GtkLabel" id="label847754">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="label" translatable="yes" context="Monthly">Every</property>
                                 <property name="justify">center</property>
                               </object>
@@ -1274,12 +1276,12 @@
                             <child>
                               <object class="GtkSpinButton" id="monthly_spin">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="primary_icon_activatable">False</property>
-                                <property name="secondary_icon_activatable">False</property>
+                                <property name="can-focus">True</property>
+                                <property name="primary-icon-activatable">False</property>
+                                <property name="secondary-icon-activatable">False</property>
                                 <property name="adjustment">adjustment1</property>
-                                <property name="climb_rate">1</property>
-                                <property name="snap_to_ticks">True</property>
+                                <property name="climb-rate">1</property>
+                                <property name="snap-to-ticks">True</property>
                                 <property name="numeric">True</property>
                                 <property name="wrap">True</property>
                               </object>
@@ -1293,7 +1295,7 @@
                             <child>
                               <object class="GtkLabel" id="label847755">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="label" translatable="yes" context="Monthly">months.</property>
                                 <property name="justify">center</property>
                               </object>
@@ -1313,12 +1315,12 @@
                         <child>
                           <object class="GtkBox" id="hbox125">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkLabel" id="label847756">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">On the</property>
                                 <property name="justify">right</property>
@@ -1332,7 +1334,7 @@
                             <child>
                               <object class="GtkComboBox" id="monthly_day">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="model">liststore4</property>
                                 <child>
@@ -1351,7 +1353,7 @@
                             <child>
                               <object class="GtkLabel" id="label847750">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">except on weekends</property>
                                 <property name="justify">right</property>
@@ -1365,7 +1367,7 @@
                             <child>
                               <object class="GtkComboBox" id="monthly_weekend">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="model">liststore3</property>
                                 <child>
@@ -1398,19 +1400,19 @@
                   </object>
                   <packing>
                     <property name="position">5</property>
-                    <property name="tab_fill">False</property>
+                    <property name="tab-fill">False</property>
                   </packing>
                 </child>
                 <child type="tab">
                   <object class="GtkLabel" id="label847741">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Monthly</property>
                     <property name="justify">center</property>
                   </object>
                   <packing>
                     <property name="position">5</property>
-                    <property name="tab_fill">False</property>
+                    <property name="tab-fill">False</property>
                   </packing>
                 </child>
               </object>
@@ -1423,9 +1425,6 @@
           </object>
         </child>
       </object>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
     </child>
   </object>
 </interface>

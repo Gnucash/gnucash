@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkListStore" id="format-liststore">
@@ -35,73 +35,74 @@
     </data>
   </object>
   <object class="GtkWindow" id="gnc_date_format_window">
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="title" translatable="yes">Date Format</property>
     <property name="resizable">False</property>
     <child>
+      <!-- n-columns=3 n-rows=5 -->
       <object class="GtkGrid" id="date_format_table">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="row_spacing">3</property>
-        <property name="column_spacing">6</property>
+        <property name="can-focus">False</property>
+        <property name="row-spacing">3</property>
+        <property name="column-spacing">6</property>
         <child>
           <object class="GtkLabel" id="sample_label">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="margin_top">3</property>
+            <property name="margin-top">3</property>
             <property name="label">December 31, 2000</property>
           </object>
           <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">4</property>
+            <property name="left-attach">2</property>
+            <property name="top-attach">4</property>
           </packing>
         </child>
         <child>
           <object class="GtkEntry" id="format_entry">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="invisible_char">●</property>
+            <property name="can-focus">True</property>
+            <property name="invisible-char">●</property>
             <property name="text" translatable="yes">%Y-%m-%d</property>
-            <property name="primary_icon_activatable">False</property>
-            <property name="secondary_icon_activatable">False</property>
+            <property name="primary-icon-activatable">False</property>
+            <property name="secondary-icon-activatable">False</property>
             <signal name="changed" handler="gnc_ui_date_format_changed_cb" swapped="no"/>
           </object>
           <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">3</property>
+            <property name="left-attach">2</property>
+            <property name="top-attach">3</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="years_button">
             <property name="label" translatable="yes">Include Century</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
             <property name="halign">start</property>
-            <property name="use_underline">True</property>
+            <property name="use-underline">True</property>
             <property name="active">True</property>
-            <property name="draw_indicator">True</property>
+            <property name="draw-indicator">True</property>
             <signal name="toggled" handler="gnc_ui_date_format_changed_cb" swapped="no"/>
           </object>
           <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">2</property>
+            <property name="left-attach">2</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox" id="months_hbox">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <child>
               <object class="GtkRadioButton" id="month_number_button">
                 <property name="label" translatable="yes">Number</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
                 <property name="active">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="draw-indicator">True</property>
                 <signal name="toggled" handler="gnc_ui_date_format_changed_cb" swapped="no"/>
               </object>
               <packing>
@@ -114,10 +115,10 @@
               <object class="GtkRadioButton" id="month_abbrev_button">
                 <property name="label" translatable="yes">Abbreviation</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <property name="group">month_number_button</property>
                 <signal name="toggled" handler="gnc_ui_date_format_changed_cb" swapped="no"/>
               </object>
@@ -131,10 +132,10 @@
               <object class="GtkRadioButton" id="month_name_button">
                 <property name="label" translatable="yes">Name</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <property name="group">month_number_button</property>
                 <signal name="toggled" handler="gnc_ui_date_format_changed_cb" swapped="no"/>
               </object>
@@ -146,81 +147,81 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">2</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="justify">center</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">4</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">4</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="months_label">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes">Months</property>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="years_label">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes">Years</property>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">2</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="format_label">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes">Format</property>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">3</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">3</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="margin_top">3</property>
+            <property name="margin-top">3</property>
             <property name="label" translatable="yes">Sample</property>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">4</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">4</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox" id="label_box">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">end</property>
-            <property name="margin_end">6</property>
+            <property name="margin-end">6</property>
             <property name="spacing">8</property>
             <child>
               <object class="GtkLabel" id="widget_label">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="label" translatable="yes">Date format</property>
               </object>
@@ -232,14 +233,14 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkComboBox" id="format_combobox">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="model">format-liststore</property>
             <signal name="changed" handler="gnc_ui_date_format_changed_cb" swapped="no"/>
             <child>
@@ -250,8 +251,8 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
             <property name="width">2</property>
           </packing>
         </child>
@@ -265,9 +266,6 @@
           <placeholder/>
         </child>
       </object>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
     </child>
   </object>
 </interface>
