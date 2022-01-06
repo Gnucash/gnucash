@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkDialog" id="totd_dialog">
-    <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">6</property>
     <property name="title" translatable="yes">GnuCash Tip Of The Day</property>
-    <property name="default_width">400</property>
-    <property name="default_height">300</property>
-    <property name="type_hint">dialog</property>
+    <property name="default-width">400</property>
+    <property name="default-height">300</property>
+    <property name="type-hint">dialog</property>
     <signal name="response" handler="gnc_totd_dialog_response_cb" swapped="no"/>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox3">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area3">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="back-button">
                 <property name="label" translatable="yes">_Previous</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -40,10 +40,10 @@
               <object class="GtkButton" id="forward-button">
                 <property name="label" translatable="yes">_Next</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -55,10 +55,10 @@
               <object class="GtkButton" id="close-button">
                 <property name="label" translatable="yes">_Close</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -70,31 +70,31 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox" id="totd_vbox">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="border_width">12</property>
+            <property name="can-focus">False</property>
+            <property name="border-width">12</property>
             <property name="orientation">vertical</property>
             <property name="spacing">18</property>
             <child>
               <object class="GtkBox" id="vbox2">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="halign">start</property>
                     <property name="label" translatable="yes">&lt;b&gt;Tip of the Day&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
-                    <property name="use_underline">True</property>
+                    <property name="use-markup">True</property>
+                    <property name="use-underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -105,20 +105,20 @@
                 <child>
                   <object class="GtkBox" id="hbox3">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <child>
                       <object class="GtkTextView" id="tip_textview">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="margin_start">3</property>
-                        <property name="margin_end">3</property>
-                        <property name="border_width">6</property>
+                        <property name="can-focus">True</property>
+                        <property name="margin-start">3</property>
+                        <property name="margin-end">3</property>
+                        <property name="border-width">6</property>
                         <property name="editable">False</property>
-                        <property name="wrap_mode">word</property>
-                        <property name="left_margin">5</property>
-                        <property name="right_margin">5</property>
-                        <property name="cursor_visible">False</property>
-                        <property name="accepts_tab">False</property>
+                        <property name="wrap-mode">word</property>
+                        <property name="left-margin">5</property>
+                        <property name="right-margin">5</property>
+                        <property name="cursor-visible">False</property>
+                        <property name="accepts-tab">False</property>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -144,11 +144,11 @@
               <object class="GtkCheckButton" id="show_checkbutton">
                 <property name="label" translatable="yes">_Show tips at startup</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
                 <property name="halign">start</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <signal name="toggled" handler="gnc_totd_dialog_startup_toggled_cb" swapped="no"/>
               </object>
               <packing>
@@ -171,8 +171,5 @@
       <action-widget response="1">forward-button</action-widget>
       <action-widget response="-7">close-button</action-widget>
     </action-widgets>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
   </object>
 </interface>

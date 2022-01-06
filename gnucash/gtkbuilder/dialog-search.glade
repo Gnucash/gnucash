@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkDialog" id="search_dialog">
-    <property name="can_focus">False</property>
-    <property name="type_hint">dialog</property>
+    <property name="can-focus">False</property>
+    <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox3">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">8</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area3">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="help_button">
                 <property name="label" translatable="yes">_Help</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -36,10 +36,10 @@
               <object class="GtkButton" id="new_item_button">
                 <property name="label" translatable="yes">_New item...</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -51,10 +51,10 @@
               <object class="GtkButton" id="close_button">
                 <property name="label" translatable="yes">_Close</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -66,10 +66,10 @@
               <object class="GtkButton" id="cancel_button">
                 <property name="label" translatable="yes">_Cancel</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -81,11 +81,11 @@
               <object class="GtkButton" id="find_button">
                 <property name="label" translatable="yes">_Find</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="has-default">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -97,27 +97,27 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox" id="vbox89">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkBox" id="search_hbox">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkBox" id="hbox72">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <child>
                       <object class="GtkLabel" id="type_label">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="label">()</property>
                         <property name="justify">center</property>
                       </object>
@@ -130,7 +130,7 @@
                     <child>
                       <object class="GtkLabel" id="label844">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="label" translatable="yes"> Search </property>
                         <property name="justify">center</property>
                       </object>
@@ -157,24 +157,24 @@
             <child>
               <object class="GtkFrame" id="search_frame">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="border_width">6</property>
-                <property name="label_xalign">0</property>
+                <property name="can-focus">False</property>
+                <property name="border-width">6</property>
+                <property name="label-xalign">0</property>
                 <child>
                   <object class="GtkBox" id="vbox88">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="border_width">3</property>
+                    <property name="can-focus">False</property>
+                    <property name="border-width">3</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkBox" id="hbox73">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="border_width">3</property>
+                        <property name="can-focus">False</property>
+                        <property name="border-width">3</property>
                         <child>
                           <object class="GtkBox" id="add_button_box">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <child>
                               <placeholder/>
                             </child>
@@ -188,7 +188,7 @@
                         <child>
                           <object class="GtkBox" id="type_menu_box">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <child>
                               <placeholder/>
                             </child>
@@ -196,21 +196,21 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="pack_type">end</property>
+                            <property name="pack-type">end</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="label846">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="label" translatable="yes">Search for items where</property>
                             <property name="justify">right</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="pack_type">end</property>
+                            <property name="pack-type">end</property>
                             <property name="position">2</property>
                           </packing>
                         </child>
@@ -224,9 +224,9 @@
                     <child>
                       <object class="GtkLabel" id="match_all_label">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="label" translatable="yes">&lt;b&gt;Match all entries&lt;/b&gt;</property>
-                        <property name="use_markup">True</property>
+                        <property name="use-markup">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -238,37 +238,20 @@
                     <child>
                       <object class="GtkScrolledWindow" id="criteria_scroll_window">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hscrollbar_policy">never</property>
-                        <property name="shadow_type">etched-in</property>
+                        <property name="can-focus">True</property>
+                        <property name="hscrollbar-policy">never</property>
+                        <property name="shadow-type">etched-in</property>
                         <child>
                           <object class="GtkViewport" id="criteria_viewport">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="shadow_type">etched-in</property>
+                            <property name="can-focus">False</property>
+                            <property name="shadow-type">etched-in</property>
                             <child>
+                              <!-- n-columns=3 n-rows=1 -->
                               <object class="GtkGrid" id="criteria_table">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="border_width">3</property>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
+                                <property name="can-focus">False</property>
+                                <property name="border-width">3</property>
                                 <child>
                                   <placeholder/>
                                 </child>
@@ -294,7 +277,7 @@
                 <child type="label">
                   <object class="GtkLabel" id="label845">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Search Criteria</property>
                   </object>
                 </child>
@@ -308,34 +291,34 @@
             <child>
               <object class="GtkBox" id="result_hbox">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="border_width">6</property>
+                <property name="can-focus">False</property>
+                <property name="border-width">6</property>
                 <child>
                   <object class="GtkBox" id="hboxXXX">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="valign">start</property>
                     <child>
                       <object class="GtkFrame" id="frame12">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label_xalign">0</property>
+                        <property name="can-focus">False</property>
+                        <property name="label-xalign">0</property>
                         <child>
                           <object class="GtkBox" id="vbox24">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="border_width">3</property>
+                            <property name="can-focus">False</property>
+                            <property name="border-width">3</property>
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkRadioButton" id="new_search_radiobutton">
                                 <property name="label" translatable="yes">New search</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">False</property>
                                 <property name="halign">start</property>
-                                <property name="use_underline">True</property>
+                                <property name="use-underline">True</property>
                                 <property name="active">True</property>
-                                <property name="draw_indicator">True</property>
+                                <property name="draw-indicator">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -347,11 +330,11 @@
                               <object class="GtkRadioButton" id="narrow_search_radiobutton">
                                 <property name="label" translatable="yes">Refine current search</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">False</property>
                                 <property name="halign">start</property>
-                                <property name="use_underline">True</property>
-                                <property name="draw_indicator">True</property>
+                                <property name="use-underline">True</property>
+                                <property name="draw-indicator">True</property>
                                 <property name="group">new_search_radiobutton</property>
                               </object>
                               <packing>
@@ -364,11 +347,11 @@
                               <object class="GtkRadioButton" id="add_search_radiobutton">
                                 <property name="label" translatable="yes">Add results to current search</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">False</property>
                                 <property name="halign">start</property>
-                                <property name="use_underline">True</property>
-                                <property name="draw_indicator">True</property>
+                                <property name="use-underline">True</property>
+                                <property name="draw-indicator">True</property>
                                 <property name="group">new_search_radiobutton</property>
                               </object>
                               <packing>
@@ -381,11 +364,11 @@
                               <object class="GtkRadioButton" id="delete_search_radiobutton">
                                 <property name="label" translatable="yes">Delete results from current search</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">False</property>
                                 <property name="halign">start</property>
-                                <property name="use_underline">True</property>
-                                <property name="draw_indicator">True</property>
+                                <property name="use-underline">True</property>
+                                <property name="draw-indicator">True</property>
                                 <property name="group">new_search_radiobutton</property>
                               </object>
                               <packing>
@@ -397,7 +380,7 @@
                             <child>
                               <object class="GtkSeparator" id="hseparator1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -409,15 +392,15 @@
                               <object class="GtkCheckButton" id="active_only_check">
                                 <property name="label" translatable="yes">Search only active data</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="has_tooltip">True</property>
-                                <property name="tooltip_markup">Choose whether to search all your data or only that marked as &amp;quot;active&amp;quot;.</property>
-                                <property name="tooltip_text" translatable="yes">Choose whether to search all your data or only that marked as "active".</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">False</property>
+                                <property name="has-tooltip">True</property>
+                                <property name="tooltip-markup">Choose whether to search all your data or only that marked as &amp;quot;active&amp;quot;.</property>
+                                <property name="tooltip-text" translatable="yes">Choose whether to search all your data or only that marked as "active".</property>
                                 <property name="halign">start</property>
-                                <property name="use_underline">True</property>
+                                <property name="use-underline">True</property>
                                 <property name="active">True</property>
-                                <property name="draw_indicator">True</property>
+                                <property name="draw-indicator">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -430,7 +413,7 @@
                         <child type="label">
                           <object class="GtkLabel" id="label847">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="label" translatable="yes">Type of search</property>
                           </object>
                         </child>
@@ -471,8 +454,5 @@
       <action-widget response="-6">cancel_button</action-widget>
       <action-widget response="0">find_button</action-widget>
     </action-widgets>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
   </object>
 </interface>
