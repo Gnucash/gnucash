@@ -863,51 +863,40 @@ static void
 gbv_treeview_resized_cb (GtkWidget *widget, GtkAllocation *allocation,
                          GncBudgetView *budget_view)
 {
-    GncBudgetViewPrivate* priv;
-    gint ncols;
-    gint i;
-    gint j;
-    GList *columns;
+    GncBudgetViewPrivate* priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
+    GList *columns = gtk_tree_view_get_columns (GTK_TREE_VIEW(priv->tree_view));
+    GList *total_columns = gtk_tree_view_get_columns (GTK_TREE_VIEW (priv->totals_tree_view));
 
     ENTER("");
-    priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
 
-    /* There's no easy way to get this number. */
-    columns = gtk_tree_view_get_columns (GTK_TREE_VIEW(priv->tree_view));
-    ncols = g_list_length (columns);
-    g_list_free (columns);
-    /* i is the column we are examining
-     * j is the corresponding column in totals_tree_view */
-    for (i = 0, j = 0; i < ncols; ++i)
+    for (GList *node = columns, *total_node = total_columns;
+         node; node = g_list_next (node))
     {
-        gint col_width;
-        const gchar *name;
-        GtkTreeViewColumn *tree_view_col;
-        GtkTreeViewColumn *totals_view_col;
-
-        tree_view_col = gtk_tree_view_get_column (priv->tree_view, i);
-
-        name = g_object_get_data (G_OBJECT(tree_view_col), PREF_NAME);
+        GtkTreeViewColumn *tree_view_col = node->data;
+        const gchar *name = g_object_get_data (G_OBJECT(tree_view_col), PREF_NAME);
 
         // if we do not show account code, step over the equivalent totals column
         if ((g_strcmp0 (name, "account-code") == 0) && (!priv->show_account_code))
-           j++;
+            total_node = g_list_next (total_node);
 
-        // if we do not show account description, step over the equivalent totals column
+        // if we do not show account description, step over the
+        // equivalent totals column
         if ((g_strcmp0 (name, "description") == 0) && (!priv->show_account_desc))
-           j++;
+            total_node = g_list_next (total_node);
 
         if (gtk_tree_view_column_get_visible (tree_view_col))
         {
-            col_width = gtk_tree_view_column_get_width (tree_view_col);
-            totals_view_col = gtk_tree_view_get_column (priv->totals_tree_view, j);
+            gint col_width = gtk_tree_view_column_get_width (tree_view_col);
+            GtkTreeViewColumn *totals_view_col = total_node->data;
             if (GTK_IS_TREE_VIEW_COLUMN(totals_view_col))
                 gtk_tree_view_column_set_fixed_width (totals_view_col, col_width);
-            j++;
+            total_node = g_list_next (total_node);
         }
     }
     // make sure the account column is the expand column
     gnc_tree_view_expand_columns (GNC_TREE_VIEW(priv->tree_view), "name", NULL);
+    g_list_free (columns);
+    g_list_free (total_columns);
     LEAVE("");
 }
 
@@ -1450,26 +1439,18 @@ gbv_refresh_col_titles (GncBudgetView *budget_view)
     GncBudgetViewPrivate *priv;
     const Recurrence *r;
     GDate date, nextdate;
-    GtkTreeViewColumn *col;
-    guint titlelen;
-    gint num_periods_visible;
     gchar title[MAX_DATE_LENGTH + 1];
-    GList *col_list;
-    gint i;
 
     g_return_if_fail (budget_view != NULL);
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
 
-    col_list = priv->period_col_list;
-    num_periods_visible = g_list_length (col_list);
-
     /* Show the dates in column titles */
     r = gnc_budget_get_recurrence (priv->budget);
     date = r->start;
-    for (i = 0; i < num_periods_visible; i++)
+    for (GList *node = priv->period_col_list; node; node = g_list_next (node))
     {
-        col = GTK_TREE_VIEW_COLUMN(g_list_nth_data (col_list, i));
-        titlelen = qof_print_gdate (title, MAX_DATE_LENGTH, &date);
+        GtkTreeViewColumn *col = GTK_TREE_VIEW_COLUMN (node->data);
+        guint titlelen = qof_print_gdate (title, MAX_DATE_LENGTH, &date);
 
         if (titlelen > 0)
             gtk_tree_view_column_set_title (col, title);
