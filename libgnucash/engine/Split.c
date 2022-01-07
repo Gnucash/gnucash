@@ -1196,6 +1196,10 @@ void
 xaccSplitSetSharePrice (Split *s, gnc_numeric price)
 {
     if (!s) return;
+
+    if (gnc_numeric_zero_p (price))
+        return;
+
     ENTER (" ");
     xaccTransBeginEdit (s->parent);
 
@@ -1927,22 +1931,18 @@ gnc_numeric
 xaccSplitGetSharePrice (const Split * split)
 {
     gnc_numeric amt, val, price;
-    if (!split) return gnc_numeric_create(1, 1);
+    if (!split) return gnc_numeric_create(0, 1);
 
 
-    /* if amount == 0 and value == 0, then return 1.
-     * if amount == 0 and value != 0 then return 0.
+    /* if amount == 0, return 0
      * otherwise return value/amount
      */
 
     amt = xaccSplitGetAmount(split);
     val = xaccSplitGetValue(split);
     if (gnc_numeric_zero_p(amt))
-    {
-        if (gnc_numeric_zero_p(val))
-            return gnc_numeric_create(1, 1);
         return gnc_numeric_create(0, 1);
-    }
+
     price = gnc_numeric_div(val, amt,
                             GNC_DENOM_AUTO,
                             GNC_HOW_RND_ROUND_HALF_UP);
