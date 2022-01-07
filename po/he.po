@@ -11,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-05 11:53+0000\n"
-"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
+"PO-Revision-Date: 2022-01-07 11:54+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -23643,7 +23643,7 @@ msgstr "דוח מס ויצוא ל XML"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:847
 msgid "Taxable Income / Deductible Expenses / Export to .XML file"
-msgstr "הכנסות ברות מיסוי / הוצאות מוכרות למס / ייצוא לקובץ XML."
+msgstr "הכנסות ברות מיסוי / הוצאות מוכרות למס / ייצוא לקובץ ‎.XML"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:851
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:859
