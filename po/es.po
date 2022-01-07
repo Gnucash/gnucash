@@ -79,7 +79,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-02 23:54+0000\n"
+"PO-Revision-Date: 2022-01-07 20:57+0000\n"
 "Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -4663,7 +4663,7 @@ msgstr "Mueve el apunte efectivo una fila por debajo"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:238
 msgid "_Company Report"
-msgstr "Boletín de _Sociedad"
+msgstr "Boletín _Societario"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:247
 msgid "_Standard"
@@ -6036,7 +6036,7 @@ msgstr "Exportar"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.c:1140
 msgid "Save Config"
-msgstr "Guardar Configuración"
+msgstr "Guardar Config"
 
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As..."
 #. to be used as toolbar button label.
@@ -9206,8 +9206,14 @@ msgstr "Contabilidad financiara personal y pequeños negocios."
 #: gnucash/gnome-utils/gnc-main-window.c:4738
 msgid "translator-credits"
 msgstr ""
-"Francisco Javier Serrador <serrador@tecknolabs.com> 7-ene-2022\n"
-"Eneko Lacunza <enlar@enlar.net>"
+"Francisco Javier Serrador 2018 - 2022\n"
+"Adolfo Jayme Barrientos, 2021\n"
+"Carlos Manrique Enguita, 2021\n"
+"Eneko Lacunza 2003 - 2008\n"
+"Guille, 2021\n"
+"Jaime Marquínez Ferrándiz\n"
+"Juan Manuel García Molina, 2000\n"
+"Raúl Miró, 2001"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4741
 msgid "Visit the GnuCash website."
@@ -17839,7 +17845,7 @@ msgstr "Nivel de zoom predeterminado"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3344
 msgid "Reports"
-msgstr "Informes"
+msgstr "Boletines"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3363
 msgid "<b>Window Geometry</b>"
@@ -18193,10 +18199,9 @@ msgid ""
 "ADDRESS item defined in order\n"
 "to print an address on the check."
 msgstr ""
-"Compruebe que el formato debe\n"
-"tener un elemento de DIRECCIÓN\n"
-"definida con el fin de escribir una\n"
-"dirección en la comprobación."
+"Compruebe que el formato debe tener un\n"
+"elemento de DIRECCIÓN definida con el fin\n"
+"de escribir una dirección en la comprobación."
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:535
 #: gnucash/gtkbuilder/dialog-print-check.glade:1084
@@ -21076,7 +21081,7 @@ msgstr "Acum-desgl"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:198
 msgid "Import Bills or Invoices from csv"
-msgstr "Importar Minutas o Facturas desde CSV"
+msgstr "Importar Ticket o Facturas desde CSV"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:226
 #, c-format
@@ -26813,7 +26818,7 @@ msgstr "Nombre del cliente"
 #: gnucash/report/reports/standard/customer-summary.scm:118
 msgid "Markup (which is profit amount divided by sales)"
 msgstr ""
-"Marcado (el cual es la cantidad de beneficio dividida entre las ventas)"
+"Resultado (el cual es la cantidad de beneficio dividida entre las ventas)"
 
 #: gnucash/report/reports/standard/customer-summary.scm:119
 #: gnucash/report/reports/standard/customer-summary.scm:300
@@ -26832,7 +26837,7 @@ msgstr "No se ha encontrado ningún cliente válido."
 
 #: gnucash/report/reports/standard/customer-summary.scm:299
 msgid "Markup"
-msgstr "Marcar"
+msgstr "Resultado"
 
 #: gnucash/report/reports/standard/customer-summary.scm:378
 msgid "No Customer"
@@ -28656,7 +28661,7 @@ msgstr "Su ref: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:198
 msgid "Job number: "
-msgstr "Núm. de ejercicio: "
+msgstr "N.º de ejercicio: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:200
 msgid "Job name: "
@@ -28690,7 +28695,7 @@ msgstr "Cantidad Vencida (inc TIV)"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:306
 msgid "Invoice #: "
-msgstr "Factura #: "
+msgstr "N.º Factura: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:307
 msgid "Reference: "

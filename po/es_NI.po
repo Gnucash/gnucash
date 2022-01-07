@@ -1,18 +1,20 @@
+# Francisco Serrador <fserrador@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2001-10-22 14:04-0600\n"
-"Last-Translator: Georg Lehner <Jorge.Lehner@gmx.net>, Juan Manuel García "
-"Molina <juanmagm@mail.com>\n"
-"Language-Team: Spanish es@li.org\"\n"
+"PO-Revision-Date: 2022-01-07 20:57+0000\n"
+"Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
+"Language-Team: Spanish (Nicaragua) <https://hosted.weblate.org/projects/"
+"gnucash/gnucash/es_NI/>\n"
 "Language: es_NI\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -7914,11 +7916,12 @@ msgid "Please select an Equity account to hold the total Period Expense."
 msgstr ""
 
 #: gnucash/gnome-utils/dialog-commodity.c:160
-#, fuzzy
 msgid ""
 "\n"
 "Please select a commodity to match"
-msgstr "Debe especificar el archivo a cargar.\n"
+msgstr ""
+"\n"
+"Debe especificar el archivo a cargar."
 
 #: gnucash/gnome-utils/dialog-commodity.c:167
 #, fuzzy
