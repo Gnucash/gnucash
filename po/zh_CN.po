@@ -19,14 +19,15 @@
 # Eric <spice2wolf@gmail.com>, 2021.
 # J0kWang <lianjiefly@gmail.com>, 2021.
 # YTX <ytx.cash@gmail.com>, 2021, 2022.
+# 李元基 <lovedebushiu@qq.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-05 02:55+0000\n"
-"Last-Translator: YTX <ytx.cash@gmail.com>\n"
+"PO-Revision-Date: 2022-01-07 11:54+0000\n"
+"Last-Translator: 李元基 <lovedebushiu@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -12600,7 +12601,7 @@ msgstr "今天(_T)"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:693
 msgid "Account Selection"
-msgstr "科目删除"
+msgstr "科目选择"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:707
 msgid ""
