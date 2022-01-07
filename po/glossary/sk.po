@@ -4,14 +4,15 @@
 # Zdenko Podobný <zdpo@mailbox.sk>, 2001, 2002, 2003, 2008.
 # Juraj Korec <euro777@gmail.com>, 2008.
 # Zdenko Podobny <zdenop@gmail.com>, 2008.
+# Dullus <dullus@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-01-02 22:54+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2022-01-07 11:54+0000\n"
+"Last-Translator: Dullus <dullus@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/gnucash/glossary/"
 "sk/>\n"
 "Language: sk\n"
@@ -46,18 +47,16 @@ msgid "account name"
 msgstr "názov účtu"
 
 #. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
-#, fuzzy
 msgid "account type: Active"
-msgstr "account type: Aktíva"
+msgstr "account type: Aktívny"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 msgid "account type: Asset"
 msgstr "account type: Aktíva"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
-#, fuzzy
 msgid "account type: Assets & Liabilities"
-msgstr "account type: Záväzky"
+msgstr "account type: Aktíva a  záväzky"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
@@ -92,14 +91,12 @@ msgid "account type: Mutual fund"
 msgstr "account type: Podielový fond"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
-#, fuzzy
 msgid "account type: Passive"
-msgstr "account type: Aktíva"
+msgstr "account type: Pasívny"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
-#, fuzzy
 msgid "account type: Profit & Loss"
-msgstr "account type: Aktíva"
+msgstr "account type: Zisky a straty"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
@@ -110,9 +107,8 @@ msgid "account type: Stock"
 msgstr "account type: Akcie"
 
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
-#, fuzzy
 msgid "account type: trading"
-msgstr "account type: sporiaci účet"
+msgstr "account type: obchodný účet"
 
 #. "-"
 msgid "account: parent account"
