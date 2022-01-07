@@ -7,14 +7,15 @@
 # TianXing_Yi <duguqiubailee@gmail.com>, 2021.
 # 峡州仙士 <c@cjh0613.com>, 2021.
 # Eric <spice2wolf@gmail.com>, 2021.
+# Eric <alchemillatruth@purelymail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-01-02 22:54+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2022-01-07 13:54+0000\n"
+"Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/glossary/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -1080,7 +1081,7 @@ msgid "due"
 msgstr "到期"
 
 msgid "Online"
-msgstr ""
+msgstr "在线"
 
 msgid "Direct Debit"
-msgstr ""
+msgstr "直接借记"

@@ -20,14 +20,15 @@
 # J0kWang <lianjiefly@gmail.com>, 2021.
 # YTX <ytx.cash@gmail.com>, 2021, 2022.
 # 李元基 <lovedebushiu@qq.com>, 2022.
+# Eric <alchemillatruth@purelymail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-07 11:54+0000\n"
-"Last-Translator: 李元基 <lovedebushiu@qq.com>\n"
+"PO-Revision-Date: 2022-01-07 13:54+0000\n"
+"Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -9049,7 +9050,7 @@ msgstr "电话"
 #: gnucash/register/ledger-core/split-register.c:2557
 #: gnucash/register/ledger-core/split-register.c:2583
 msgid "Online"
-msgstr "网上"
+msgstr "在线"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2864
 #: gnucash/register/ledger-core/split-register.c:2559
