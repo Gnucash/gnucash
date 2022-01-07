@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-04 07:55+0000\n"
+"PO-Revision-Date: 2022-01-07 11:54+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -3627,7 +3627,7 @@ msgstr "Fechar o livro no final do período"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:211
 msgid "_Import Map Editor"
-msgstr "_Importar editor de mapa"
+msgstr "Editor do mapa de _importação"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:212
 msgid "View and Delete Bayesian and non-Bayesian information"
@@ -13066,7 +13066,7 @@ msgstr "Separadores"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:237
 msgid "Choose Export Settings"
-msgstr "Escolha as definições de exportação"
+msgstr "Escolher as definições de exportação"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:252
 msgid "Select the accounts to be exported and date range if required."
@@ -13160,7 +13160,7 @@ msgstr "_Hoje"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:693
 msgid "Account Selection"
-msgstr "Selecção de contas"
+msgstr "Seleccionar contas"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:707
 msgid ""
@@ -13172,7 +13172,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:720
 msgid "Choose File Name for Export"
-msgstr "Escolha o nome do ficheiro a exportar"
+msgstr "Escolher o nome do ficheiro a exportar"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:734
 msgid "Export Now..."
@@ -13184,7 +13184,7 @@ msgstr "Resumo"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:747
 msgid "Export Summary"
-msgstr "Exportar resumo"
+msgstr "Resumo da exportação"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:38
 msgid "CSV Price Import"
@@ -13769,7 +13769,7 @@ msgstr ""
 "clique no nome da conta e altere-o.\n"
 "\n"
 "Algumas contas estão marcadas como \"Marcador de posição\". Estas contas são "
-"usadas para criar uma hierarquia de contas e, normalmente, não tem "
+"usadas para criar uma hierarquia de contas e, normalmente, não têm "
 "transacções ou saldo inicial. Se quiser que uma conta seja um marcador de "
 "posição, marque a caixa respectiva para essa conta.\n"
 "\n"
@@ -16036,7 +16036,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:35
 msgid "Import Map Editor"
-msgstr "Importar editor de mapa"
+msgstr "Editor do mapa de importação"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:52
 msgid "_Remove Invalid Mappings"
@@ -16052,7 +16052,7 @@ msgstr "Não-bayesiana"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:193
 msgid "Source Account Name"
-msgstr "Nome de conta fonte"
+msgstr "Conta fonte"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:205
 msgid "Based On"
@@ -16060,23 +16060,23 @@ msgstr "Baseado em"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:219
 msgid "Match String"
-msgstr "Comparar cadeia"
+msgstr "Cadeia comparada"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:233
 msgid "Mapped to Account Name"
-msgstr "Mapeado para nome de conta"
+msgstr "Conta mapeada"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:247
 msgid "Count of Match String Usage"
-msgstr "Total de uso de comparação"
+msgstr "Total de usos da comparação"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:290
 msgid ""
 "Filter will be applied to 'Match String' and 'Mapped to Account Name' "
 "fields, case sensitive."
 msgstr ""
-"Filtro sensível a maiúsculas aplicado aos campos \"Comparar cadeia\" e "
-"\"Mapeado para nome de conta\"."
+"Filtro sensível a maiúsculas aplicado aos campos \"Cadeia comparada\" e "
+"\"Conta mapeada\"."
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:335
 msgid "_Filter"
@@ -16094,7 +16094,7 @@ msgstr "Col_apsar tudo"
 msgid ""
 "Multiple rows can be selected and then deleted by pressing the delete button."
 msgstr ""
-"Pode seleccionar múltiplas linhas e depois eliminá-las premindo Delete."
+"Pode seleccionar múltiplas linhas e depois eliminá-las premindo Eliminar."
 
 #: gnucash/gtkbuilder/dialog-import.glade:86
 msgid "Please select or create an appropriate GnuCash account for:"
@@ -21654,7 +21654,7 @@ msgstr "Não importar (sem acção seleccionada)"
 
 #: gnucash/import-export/import-match-picker.c:423
 msgid "Confidence"
-msgstr "Confidência"
+msgstr "Confiança"
 
 #: gnucash/import-export/import-match-picker.c:438
 msgid "Pending Action"
@@ -23121,7 +23121,7 @@ msgstr "Mostrar contas até este nível, ignorando qualquer outra opção."
 msgid ""
 "Override account-selection and show sub-accounts of all selected accounts?"
 msgstr ""
-"Ignorar selecção de contas e mostrar sub-contas de todas as contas "
+"Ignorar a selecção de contas e mostrar sub-contas de todas as contas "
 "seleccionadas?"
 
 #: gnucash/report/options-utilities.scm:121
