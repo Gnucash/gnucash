@@ -18,7 +18,7 @@
 # K. Herbert <herbert.ka@mailo.com>, 2020.
 # Milo Ivir <mail@milotype.de>, 2020.
 # Alois Spitzbart <spitz234@hotmail.com>, 2020, 2021.
-# Christian Wehling <christian.wehling@web.de>, 2020, 2021.
+# Christian Wehling <christian.wehling@web.de>, 2020, 2021, 2022.
 # Marco Zietzling <marco.zietzling@gmail.com>, 2020, 2021.
 # Christian Stimming <christian@cstimming.de>, 2021.
 # Julian Heinzel <jeinzi@gmx.de>, 2021.
@@ -36,8 +36,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-12-07 10:52+0000\n"
-"Last-Translator: Stefan Bayer <stefan.bayer@stefanbayer.net>\n"
+"PO-Revision-Date: 2022-01-08 12:55+0000\n"
+"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -45,7 +45,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -12816,42 +12816,30 @@ msgstr ""
 "Saldo des Kontos verändern."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:69
-#, fuzzy
-#| msgid "Remove a split from a transaction"
 msgid "Cut a split from a transaction"
-msgstr "Buchungsteil von einer Buchung entfernen"
+msgstr "Buchungsteil aus einer Buchung entfernen"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:70
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to remove a split from a "
-#| "transaction."
 msgid ""
 "This dialog is presented before allowing you to cut a split from a "
 "transaction."
 msgstr ""
-"Diese Rückfrage kommt vor dem Löschen von Buchungsteilen einer Buchung."
+"Diese Rückfrage wird vor dem Entfernen von Buchungsteilen aus einer Buchung "
+"angezeigt."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:74
-#, fuzzy
-#| msgid "Remove a reconciled split from a transaction"
 msgid "Cut a reconciled split from a transaction"
-msgstr "Abgeglichenen Buchungsteil von einer Buchung entfernen"
+msgstr "Abgeglichenen Buchungsteil aus einer Buchung entfernen"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:75
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to remove a reconciled split "
-#| "from a transaction. Doing so will throw off the reconciled value of the "
-#| "register and can make it hard to perform future reconciliations."
 msgid ""
 "This dialog is presented before allowing you to cut a reconciled split from "
 "a transaction. Doing so will throw off the reconciled value of the register "
 "and can make it hard to perform future reconciliations."
 msgstr ""
-"Diese Rückfrage kommt vor dem Löschen eines abgeglichenen Buchungsteils aus "
-"einer Buchung. Löschen jenes Buchungsteils wird den abgeglichenen Wert im "
-"Konto verändern und kann daher zukünftiges Abgleichen erschweren."
+"Diese Rückfrage kommt vor dem Entfernen eines abgeglichenen Buchungsteils "
+"aus einer Buchung. Dies wird den abgeglichenen Wert im Konto verändern und "
+"kann daher zukünftiges Abgleichen erschweren."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:79
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:192
@@ -16619,8 +16607,6 @@ msgid "Show _Memo column"
 msgstr "_Buchungstextspalte anzeigen"
 
 #: gnucash/gtkbuilder/dialog-import.glade:963
-#, fuzzy
-#| msgid "Show _matched information"
 msgid "Show matched _information"
 msgstr "_Zuordnung-Zeile anzeigen"
 
@@ -20597,7 +20583,7 @@ msgstr "Konto jetzt abgleichen?"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1285
 msgid "The bank has sent a message in its response."
-msgstr "Die Bank hat eine Nachricht in ihrer Antwort mitgeschickt"
+msgstr "Die Bank hat eine Nachricht in ihrer Antwort mitgeschickt."
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1286
 msgid "Subject:"
@@ -20690,7 +20676,7 @@ msgstr "Einrichtung des Online Banking Zugangs: HBCI oder OFX DirectConnect"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:102
 msgid "Get _Balance"
-msgstr "_Saldenabfrage..."
+msgstr "_Saldenabfrage"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:103
 msgid "Get the account balance online through Online Banking"
@@ -20716,10 +20702,8 @@ msgid ""
 msgstr "Neue SEPA-Überweisung mit HBCI/Onlinebanking online absenden"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:120
-#, fuzzy
-#| msgid "Issue _SEPA Transaction..."
 msgid "Issue SEPA I_nternal Transaction..."
-msgstr "SEPA _Einzelüberweisung..."
+msgstr "SEPA Interne Um_buchung..."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:121
 msgid ""
