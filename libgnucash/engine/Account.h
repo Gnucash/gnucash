@@ -1050,18 +1050,6 @@ gboolean xaccAccountIsEquityType(GNCAccountType t);
  */
 SplitList* xaccAccountGetSplitList (const Account *account);
 
-
-/** The xaccAccountCountSplits() routine returns the number of all
- *    the splits in the account. xaccAccountCountSplits is O(N). if
- *    testing for emptiness, use xaccAccountGetSplitList != NULL.
-
- * @param acc the account for which to count the splits
- *
- * @param include_children also count splits in descendants (TRUE) or
- *        for this account only (FALSE).
- */
-gint64 xaccAccountCountSplits (const Account *acc, gboolean include_children);
-
 /** The xaccAccountMoveAllSplits() routine reassigns each of the splits
  *  in accfrom to accto. */
 void xaccAccountMoveAllSplits (Account *accfrom, Account *accto);

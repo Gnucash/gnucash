@@ -38,11 +38,9 @@
 void gnc_report_init (void);
 
 
-gboolean gnc_run_report (gint report_id, char ** data);
 gboolean gnc_run_report_with_error_handling (gint report_id,
                                              gchar **data,
                                              gchar **errmsg);
-gboolean gnc_run_report_id_string (const char * id_string, char **data);
 gboolean gnc_run_report_id_string_with_error_handling (const char * id_string,
                                                        char **data,
                                                        gchar **errmsg);

@@ -31,7 +31,6 @@ set(bindings_test_SCHEME
 #list(APPEND engine_test_SCHEME  test-scm-query-import.scm) Fails
 
 set(GUILE_DEPENDS
-    scm-gnc-module
     scm-app-utils
     scm-core-utils
     scm-engine)
@@ -40,12 +39,6 @@ gnc_add_scheme_test_targets(scm-test-engine-extras
     SOURCES "test-engine-extras.scm"
     OUTPUT_DIR "tests"
     DEPENDS "${GUILE_DEPENDS}")
-
-# Module interfaces deprecated in 4.x, will be removed for 5.x
-gnc_add_scheme_deprecated_module (
-    OLD_MODULE "gnucash engine test test-extras"
-    NEW_MODULE "tests test-engine-extras"
-    DEPENDS "scm-test-engine-extras")
 
 gnc_add_scheme_test_targets(scm-test-engine
     SOURCES "${bindings_test_SCHEME}"
@@ -69,12 +62,6 @@ if (HAVE_SRFI64)
         OUTPUT_DIR "tests"
         DEPENDS "${GUILE_DEPENDS};scm-test-engine-extras;scm-srfi64-extras")
 
-    # Module interfaces deprecated in 4.x, will be removed for 5.x
-    gnc_add_scheme_deprecated_module (
-        OLD_MODULE "gnucash engine test srfi64-extras"
-        NEW_MODULE "tests srfi64-extras"
-        DEPENDS "scm-srfi64-extras")
-
     gnc_add_scheme_test_targets (scm-test-with-srfi64
         SOURCES "${scm_tests_with_srfi64_SOURCES}"
         OUTPUT_DIR "tests"
@@ -91,7 +78,6 @@ set(test_scm_SCHEME
 )
 
 set(GUILE_DEPENDS
-    scm-gnc-module
     scm-app-utils
     scm-engine
     scm-srfi64-extras
@@ -130,6 +116,7 @@ set(test_guile_DIST
 )
 
 # Define two imaginary deprecated guile modules to test the compat file generation code
+# See commit bbcffa3ec for old code using this function.
 gnc_add_scheme_deprecated_module (OLD_MODULE "gnucash deprecated-module")
 gnc_add_scheme_deprecated_module (
     OLD_MODULE "gnucash superseded-module"

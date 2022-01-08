@@ -11,10 +11,4 @@
 (define (test-engine)
   (test-begin "testing function availability")
 
-  (test-assert "testing gnc-pricedb-lookup-latest-before-t64"
-    (gnc-pricedb-lookup-latest-before-t64 '() '() '() 0))
-
-  (test-assert "testing gnc-pricedb-lookup-latest-before-any-currency-t64"
-    (gnc-pricedb-lookup-latest-before-any-currency-t64 '() '() 0))
-
   (test-end "testing deprecated functions"))

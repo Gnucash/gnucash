@@ -241,11 +241,6 @@
       <summary>Color the register using a gnucash specific color theme</summary>
       <description>When enabled the register will use a GnuCash specific color theme (green/yellow). Otherwise it will use the system color theme. Regardless of this setting the user can always override the color theme via a gnucash specific css file to be stored in the gnucash used config directory. More information can be found in the gnucash FAQ.</description>
     </key>
-    <key name="use-theme-colors" type="b">
-      <default>false</default>
-      <summary>Superseded by "use-gnucash-color-theme"</summary>
-      <description>This option is temporarily kept around for backwards compatibility. It will be removed in a future version.</description>
-    </key>
     <key name="enter-moves-to-end" type="b">
       <default>false</default>
       <summary>"Enter" key moves to bottom of register</summary>
