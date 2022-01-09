@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-07 11:54+0000\n"
+"PO-Revision-Date: 2022-01-09 17:56+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -13270,7 +13270,7 @@ msgstr ""
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:112
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:102
 msgid "Select File for Import"
-msgstr "Seleccione o ficheiro a importar"
+msgstr "Seleccionar o ficheiro a importar"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:147
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:138
@@ -14122,7 +14122,7 @@ msgstr ""
 "O processo de importação tem vários passos. As suas contas GnuCash não serão "
 "alteradas até que clique em \"Aplicar\", no final do processo.\n"
 "\n"
-"Clique em \"Avançar\" para começar a carregar os seus dados QIF ou em "
+"Clique em \"Seguinte\" para começar a carregar os seus dados QIF ou em "
 "\"Cancelar\" para abortar o processo."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:63
@@ -14193,7 +14193,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:345
 msgid "Set a date format for this QIF file"
-msgstr "Defina um formato de data para este ficheiro QIF"
+msgstr "Definir um formato de data para este ficheiro QIF"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:359
 msgid ""
@@ -14217,7 +14217,7 @@ msgstr "Nome de conta"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:429
 msgid "Set the default QIF account name"
-msgstr "Insira o nome predefinido da conta QIF"
+msgstr "Inserir o nome predefinido da conta QIF"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-qif-import.glade:468
@@ -14231,7 +14231,7 @@ msgstr ""
 "Clique em \"Carregar outro ficheiro\" se tem mais dados a importar nesta "
 "altura. Faça-o se gravou as suas contas em diferentes ficheiros QIF.\n"
 "\n"
-"Clique em \"Avançar\" para terminar o carregamento de ficheiros e passar ao "
+"Clique em \"Seguinte\" para terminar o carregamento de ficheiros e passar ao "
 "passo seguinte do processo de importação QIF."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:487
@@ -14244,7 +14244,7 @@ msgstr "_Carregar outro ficheiro"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:524
 msgid "QIF files you have loaded"
-msgstr "Ficheiros QIF que carregou"
+msgstr "Ficheiros QIF carregados"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:539
 msgid ""
@@ -14387,7 +14387,7 @@ msgstr ""
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1001
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:2642
 msgid "Choose the QIF file currency and select Book Options"
-msgstr "Escolha a moeda do ficheiro QIF e seleccione as opções do livro"
+msgstr "Escolher a moeda do ficheiro QIF e as opções do livro"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1022
 msgid ""
