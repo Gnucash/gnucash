@@ -32,13 +32,13 @@
   xmlns:tte="http://www.gnucash.org/XML/tte"
   xmlns:vendor="http://www.gnucash.org/XML/vendor">
     <gnc-act:title>
-      A Simple Checkbook
+      Um simples livro de cheques
     </gnc-act:title>
     <gnc-act:short-description>
-     The minimal set of accounts to use GnuCash.
+     O conjunto mínimo de contas a utilizar no GnuCash.
     </gnc-act:short-description>
     <gnc-act:long-description>
-     Use this if you just want to balance your checkbook.  Later on, you can start tracking income and expenses in more detail if you feel the need.
+     Utilize esta árvore se só pretende controlar o seu livro de cheques. Mais tarde, pode começar a acompanhar receitas e despesas em mais detalhe, se achar necessário.
     </gnc-act:long-description>
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -47,7 +47,7 @@
   <act:commodity-scu>0</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Assets</act:name>
+  <act:name>Activos</act:name>
   <act:id type="new">bde24bbbe01829aff3dac8d038e174cc</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -55,7 +55,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Assets</act:description>
+  <act:description>Activos</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   <act:slots>
     <slot>
@@ -65,7 +65,7 @@
   </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Current Assets</act:name>
+  <act:name>Activos actuais</act:name>
   <act:id type="new">d90864ec1d660176244b05a0e43e621a</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -73,7 +73,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Current Assets</act:description>
+  <act:description>Activos actuais</act:description>
   <act:parent type="new">bde24bbbe01829aff3dac8d038e174cc</act:parent>
   <act:slots>
     <slot>
@@ -83,7 +83,7 @@
   </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Checking Account</act:name>
+  <act:name>Conta corrente</act:name>
   <act:id type="new">ab2dc28552256b8d1ef4fdea4ba45717</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
@@ -91,11 +91,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Checking Account</act:description>
+  <act:description>Conta corrente</act:description>
   <act:parent type="new">d90864ec1d660176244b05a0e43e621a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Income</act:name>
+  <act:name>Receitas</act:name>
   <act:id type="new">e96c0691c219f5f55590e20fb9a3309b</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -103,11 +103,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Income</act:description>
+  <act:description>Receitas</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Expenses</act:name>
+  <act:name>Despesas</act:name>
   <act:id type="new">3b95fbbcc06ef20d61aa082b84938287</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -115,11 +115,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Expenses</act:description>
+  <act:description>Despesas</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Equity</act:name>
+  <act:name>Capital próprio</act:name>
   <act:id type="new">b8b72887da1adf889f171923d23efbdd</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
@@ -127,7 +127,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Equity</act:description>
+  <act:description>Capital próprio</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   <act:slots>
     <slot>
@@ -137,7 +137,7 @@
   </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Opening Balances</act:name>
+  <act:name>Saldos iniciais</act:name>
   <act:id type="new">bdb4dd9be2b98f03a0b400036452232c</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
@@ -145,7 +145,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Opening Balances</act:description>
+  <act:description>Saldos iniciais</act:description>
   <act:parent type="new">b8b72887da1adf889f171923d23efbdd</act:parent>
   <act:slots>
     <slot>
