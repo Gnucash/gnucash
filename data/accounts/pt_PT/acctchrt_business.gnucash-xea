@@ -68,7 +68,7 @@
   </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>CActivos actuais</act:name>
+  <act:name>Activos actuais</act:name>
   <act:id type="new">f8532a8cdc024e0178fe20a1482e3192</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
