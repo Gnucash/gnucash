@@ -6,14 +6,15 @@
 # Tuomo Kohvakka <tuomo.kohvakka@iki.fi>, 2008.
 # Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>, 2021.
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2021.
+# Sampo Harjula <sahtor.weblate@sahtor.net>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-12-21 08:52+0000\n"
-"Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
+"PO-Revision-Date: 2022-01-09 19:54+0000\n"
+"Last-Translator: Sampo Harjula <sahtor.weblate@sahtor.net>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fi/>\n"
 "Language: fi\n"
@@ -21,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10\n"
+"X-Generator: Weblate 4.10.1\n"
 "X-Poedit-Bookmarks: -1,-1,2060,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -9023,7 +9024,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2867
 #: gnucash/register/ledger-core/split-register.c:2562
 msgid "Direct Debit"
-msgstr "Suoraveloitus"
+msgstr "Tilisiirto"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2873
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2877
