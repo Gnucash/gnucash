@@ -33,13 +33,13 @@
   xmlns:vendor="http://www.gnucash.org/XML/vendor">
 
 <gnc-act:title>
-  Business Accounts
+  Contas empresariais
 </gnc-act:title>
 <gnc-act:short-description>
-  Full chart of accounts for a business.
+  Plano de contas completo para empresas.
 </gnc-act:short-description>
 <gnc-act:long-description>
-  Users running a business want to select this instead of other choices.  This includes all the accounts you need to run most businesses, including Payables, Receivables, Income, and Expenses.
+  Os utilizadores que gerem uma empresa devem seleccionar esta em vez de outras escolhas. Isto inclui todas as contas necessárias para gerir a maioria dos negócios, incluindo Contas a pagar, Contas a receber, Receitas e Despesas.
 </gnc-act:long-description>
 <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
 
@@ -50,7 +50,7 @@
   <act:commodity-scu>0</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Assets</act:name>
+  <act:name>Activos</act:name>
   <act:id type="new">4f40ddce996f8f74b4e99f52e275ba14</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -58,7 +58,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Assets</act:description>
+  <act:description>Activos</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   <act:slots>
     <slot>
@@ -68,7 +68,7 @@
   </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Current Assets</act:name>
+  <act:name>CActivos actuais</act:name>
   <act:id type="new">f8532a8cdc024e0178fe20a1482e3192</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -76,7 +76,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Current Assets</act:description>
+  <act:description>Activos actuais</act:description>
   <act:parent type="new">4f40ddce996f8f74b4e99f52e275ba14</act:parent>
   <act:slots>
     <slot>
@@ -86,7 +86,7 @@
   </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Checking Account</act:name>
+  <act:name>Conta à ordem</act:name>
   <act:id type="new">8048bd85020e9ecf57b7cb300f4fa7e2</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
@@ -94,7 +94,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Checking Account</act:description>
+  <act:description>Conta à ordem</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -108,7 +108,7 @@
   <act:parent type="new">f8532a8cdc024e0178fe20a1482e3192</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Savings Account</act:name>
+  <act:name>Conta Poupança</act:name>
   <act:id type="new">f52774d7ec67a0c59c425a5c041dcc46</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
@@ -116,7 +116,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Savings Account</act:description>
+  <act:description>Conta Poupança</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -134,7 +134,7 @@
   <act:parent type="new">f8532a8cdc024e0178fe20a1482e3192</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Petty Cash</act:name>
+  <act:name>Dinheiro</act:name>
   <act:id type="new">c292f69c18e01e1b607e37b3188c7acc</act:id>
   <act:type>CASH</act:type>
   <act:commodity>
@@ -142,7 +142,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Petty Cash</act:description>
+  <act:description>Dinheiro</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -156,7 +156,7 @@
   <act:parent type="new">f8532a8cdc024e0178fe20a1482e3192</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Accounts Receivable</act:name>
+  <act:name>Contas A/Receber</act:name>
   <act:id type="new">0dd8987a2e860fa231a2a76e75cd5ad1</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
@@ -164,7 +164,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Accounts Receivable</act:description>
+  <act:description>Contas A/Receber</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -178,7 +178,7 @@
   <act:parent type="new">4f40ddce996f8f74b4e99f52e275ba14</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Liabilities</act:name>
+  <act:name>Passivo</act:name>
   <act:id type="new">b83e860994b160b59dd463cf23636900</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -186,7 +186,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Liabilities</act:description>
+  <act:description>Passivo</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   <act:slots>
     <slot>
@@ -196,7 +196,7 @@
   </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Credit Card</act:name>
+  <act:name>Cartão de crédito</act:name>
   <act:id type="new">b9718397ec0aec2d515b09af8b76b59c</act:id>
   <act:type>CREDIT</act:type>
   <act:commodity>
@@ -204,7 +204,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Credit Card</act:description>
+  <act:description>Cartão de crédito</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -218,7 +218,7 @@
   <act:parent type="new">b83e860994b160b59dd463cf23636900</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Accounts Payable</act:name>
+  <act:name>Contas A/Pagar</act:name>
   <act:id type="new">5c0cd58e416a5c3d26b5f4865c77b8b9</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
@@ -226,7 +226,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Accounts Payable</act:description>
+  <act:description>Contas A/Pagar</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -240,7 +240,7 @@
   <act:parent type="new">b83e860994b160b59dd463cf23636900</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Income</act:name>
+  <act:name>Receita</act:name>
   <act:id type="new">f7a2e8717ea0a2e1801740d2a69b947e</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -248,7 +248,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Income</act:description>
+  <act:description>Receita</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   <act:slots>
     <slot>
@@ -258,7 +258,7 @@
   </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Interest Income</act:name>
+  <act:name>Receita de juros</act:name>
   <act:id type="new">77e298a57faf85cacd4a881ade89808c</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -266,11 +266,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Interest Income</act:description>
+  <act:description>Receita de juros</act:description>
   <act:parent type="new">f7a2e8717ea0a2e1801740d2a69b947e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Other Income</act:name>
+  <act:name>Outras receitas</act:name>
   <act:id type="new">ba71604fe085423c6e8cb7fd1b7c6f54</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -278,11 +278,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Other Income</act:description>
+  <act:description>Outras receitas</act:description>
   <act:parent type="new">f7a2e8717ea0a2e1801740d2a69b947e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Reimbursed Expenses</act:name>
+  <act:name>Despesas reembolsadas</act:name>
   <act:id type="new">eb35aec1095d23f511f0fb9f485808ea</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -290,7 +290,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Reimbursed Expenses</act:description>
+  <act:description>Despesas reembolsadas</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -304,7 +304,7 @@
   <act:parent type="new">f7a2e8717ea0a2e1801740d2a69b947e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Sales</act:name>
+  <act:name>Vendas</act:name>
   <act:id type="new">417141d0cd268c6a6ddd8ffe8c7ffbd3</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -312,7 +312,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Sales</act:description>
+  <act:description>Vendas</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -326,7 +326,7 @@
   <act:parent type="new">f7a2e8717ea0a2e1801740d2a69b947e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Expenses</act:name>
+  <act:name>Despesas</act:name>
   <act:id type="new">1eca26f16967a1627df155e49b44a609</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -334,7 +334,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Expenses</act:description>
+  <act:description>Despesas</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   <act:slots>
     <slot>
@@ -344,7 +344,7 @@
   </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Adjustment</act:name>
+  <act:name>Ajuste</act:name>
   <act:id type="new">449348af19db1039e6c7d94a16a0acb0</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -352,11 +352,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Adjustment</act:description>
+  <act:description>Ajuste</act:description>
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Auto</act:name>
+  <act:name>Automóvel</act:name>
   <act:id type="new">63a1cc17910a125405c1ec2aee831839</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -364,11 +364,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Auto</act:description>
+  <act:description>Automóvel</act:description>
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Fees</act:name>
+  <act:name>Taxas</act:name>
   <act:id type="new">acd4d91784ebf99df24df143c5abd40d</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -376,11 +376,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Fees</act:description>
+  <act:description>Taxas</act:description>
   <act:parent type="new">63a1cc17910a125405c1ec2aee831839</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Fuel</act:name>
+  <act:name>Combustível</act:name>
   <act:id type="new">193f61c6db492e1ab56b2db714e2b574</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -388,7 +388,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Gas, diesel, LPG …</act:description>
+  <act:description>Gasolina, Diesel, GPL,…</act:description>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -398,7 +398,7 @@
   <act:parent type="new">63a1cc17910a125405c1ec2aee831839</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Parking</act:name>
+  <act:name>Estacionamento</act:name>
   <act:id type="new">4fd0ae3399a3886c2098184c1b8afaac</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -406,11 +406,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Parking</act:description>
+  <act:description>Estacionamento</act:description>
   <act:parent type="new">63a1cc17910a125405c1ec2aee831839</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Repair and Maintenance</act:name>
+  <act:name>Reparações e manutenção</act:name>
   <act:id type="new">280f5d3834093afe91cd6cb0a38859f1</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -418,11 +418,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Repair and Maintenance</act:description>
+  <act:description>Reparações e manutenção</act:description>
   <act:parent type="new">63a1cc17910a125405c1ec2aee831839</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Bank Service Charge</act:name>
+  <act:name>Taxas e comissões bancárias</act:name>
   <act:id type="new">fa2ecbabb5148039e3b57bfd81860ab7</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -430,11 +430,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Bank Service Charge</act:description>
+  <act:description>Taxas e comissões bancárias</act:description>
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Books</act:name>
+  <act:name>Livros</act:name>
   <act:id type="new">f7f99917ec28fa9ea35159932d94cfd7</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -442,11 +442,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Books</act:description>
+  <act:description>Livros</act:description>
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Cash Discounts</act:name>
+  <act:name>Descontos em dinheiro</act:name>
   <act:id type="new">9ea3de1d573f7e8870da901c69aae16d</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -454,7 +454,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Cash Discounts</act:description>
+  <act:description>Descontos em dinheiro</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -468,7 +468,7 @@
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Charity</act:name>
+  <act:name>Caridade</act:name>
   <act:id type="new">bf4c7466be71d858509cbb3d943dea8f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -476,11 +476,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Charity</act:description>
+  <act:description>Caridade</act:description>
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Depreciation</act:name>
+  <act:name>Depreciação</act:name>
   <act:id type="new">f7d4a3a1b78da69ff2b13e58069faf37</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -488,7 +488,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Depreciation</act:description>
+  <act:description>Depreciação</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -502,7 +502,7 @@
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Dining</act:name>
+  <act:name>Restaurantes e cafetarias</act:name>
   <act:id type="new">6fbc4c042f0c99197a18bff34b6f46f6</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -510,11 +510,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Dining</act:description>
+  <act:description>Restaurantes e cafetarias</act:description>
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Dues and Subscriptions</act:name>
+  <act:name>Devidas e subscrições</act:name>
   <act:id type="new">612281a39aa174553c625d641e66c1da</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -522,7 +522,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Dues and Subscriptions</act:description>
+  <act:description>Devidas e subscrições</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -536,7 +536,7 @@
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Education</act:name>
+  <act:name>Educação</act:name>
   <act:id type="new">2111b519274e18f8b2083f07b39b53d9</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -544,11 +544,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Education</act:description>
+  <act:description>Educação</act:description>
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Equipment Rental</act:name>
+  <act:name>Aluguer de equipamento</act:name>
   <act:id type="new">c8e75ad8eb7085ac73b3b626d02a3c44</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -556,7 +556,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Equipment Rental</act:description>
+  <act:description>Aluguer de equipamento</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -570,7 +570,7 @@
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Insurance</act:name>
+  <act:name>Seguros</act:name>
   <act:id type="new">0ff061c9c27535d3b8629a333b02a7a0</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -578,11 +578,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Insurance</act:description>
+  <act:description>Seguros</act:description>
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Disability Insurance</act:name>
+  <act:name>Seguro de invalidez</act:name>
   <act:id type="new">793001c2cac93c78d7b0e09b8d06e288</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -590,7 +590,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Disability Insurance</act:description>
+  <act:description>Seguro de invalidez</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -604,7 +604,7 @@
   <act:parent type="new">0ff061c9c27535d3b8629a333b02a7a0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Liability Insurance</act:name>
+  <act:name>Seguro automóvel</act:name>
   <act:id type="new">3d2a415bd4b7571c77d6f4393633b0c8</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -612,7 +612,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Liability Insurance</act:description>
+  <act:description>Seguro automóvel</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -626,7 +626,7 @@
   <act:parent type="new">0ff061c9c27535d3b8629a333b02a7a0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Workers Comp</act:name>
+  <act:name>Seguro de acidentes de trabalho</act:name>
   <act:id type="new">82039e73ec25135aec45956bf44ebc0e</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -634,7 +634,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Workers Comp</act:description>
+  <act:description>Seguro de acidentes de trabalho</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -648,7 +648,7 @@
   <act:parent type="new">0ff061c9c27535d3b8629a333b02a7a0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Licenses and Permits</act:name>
+  <act:name>Licenças</act:name>
   <act:id type="new">f644476f4343a75b933c870b42a173c0</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -656,7 +656,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Licenses and Permits</act:description>
+  <act:description>Licenças</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -670,7 +670,7 @@
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Miscellaneous</act:name>
+  <act:name>Diversas</act:name>
   <act:id type="new">a852eae755fac5678744699065345a58</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -678,11 +678,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Miscellaneous</act:description>
+  <act:description>Diversas</act:description>
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Office Supplies</act:name>
+  <act:name>Material de escritório</act:name>
   <act:id type="new">62ea56cdde93f5c1de58386050ad7cb4</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -690,7 +690,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Office Supplies</act:description>
+  <act:description>Material de escritório</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -704,7 +704,7 @@
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Outside Services</act:name>
+  <act:name>Serviços externos</act:name>
   <act:id type="new">4f5265128a7a8d56820db2698cd1dadf</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -712,7 +712,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Outside Services</act:description>
+  <act:description>Serviços externos</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -726,7 +726,7 @@
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Payroll Expenses</act:name>
+  <act:name>Despesas com salários</act:name>
   <act:id type="new">52c59dac947098d11ca9a43d75714e9a</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -734,7 +734,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Payroll Expenses</act:description>
+  <act:description>Despesas com salários</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -748,7 +748,7 @@
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Postage and Delivery</act:name>
+  <act:name>Correios e entregas</act:name>
   <act:id type="new">d4340e561ccc64867a80ccefa6cc3c7b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -756,7 +756,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Postage and Delivery</act:description>
+  <act:description>Correios e entregas</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -770,7 +770,7 @@
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Printing and Reproduction</act:name>
+  <act:name>Impressão e reprografia</act:name>
   <act:id type="new">cce243036ee8c7e8036248a60b0b6eac</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -778,7 +778,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Printing and Reproduction</act:description>
+  <act:description>Impressão e reprografia</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -792,7 +792,7 @@
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Professional Fees</act:name>
+  <act:name>Taxas profissionais</act:name>
   <act:id type="new">fbc12ded14b9dbc5119f2bdb288229eb</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -800,7 +800,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Professional Fees</act:description>
+  <act:description>Taxas profissionais</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -814,7 +814,7 @@
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Accounting</act:name>
+  <act:name>Contabilidade</act:name>
   <act:id type="new">f2fdacb032cbda092220d6b9bf78cdef</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -822,7 +822,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Accounting</act:description>
+  <act:description>Contabilidade</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -836,7 +836,7 @@
   <act:parent type="new">fbc12ded14b9dbc5119f2bdb288229eb</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Legal Fees</act:name>
+  <act:name>Taxas legais</act:name>
   <act:id type="new">ef0c1ba6fc2b99a3256091255982773c</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -844,7 +844,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Legal Fees</act:description>
+  <act:description>Taxas legais</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -858,7 +858,7 @@
   <act:parent type="new">fbc12ded14b9dbc5119f2bdb288229eb</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Rent</act:name>
+  <act:name>Renda</act:name>
   <act:id type="new">28fd22eec8e1c7185493720b7f3d6cd0</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -866,7 +866,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Rent</act:description>
+  <act:description>Renda</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -880,7 +880,7 @@
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Repairs</act:name>
+  <act:name>Reparações</act:name>
   <act:id type="new">f2145496f238b9002344ca78216bc91c</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -888,7 +888,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Repairs</act:description>
+  <act:description>Reparações</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -902,7 +902,7 @@
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Building Repairs</act:name>
+  <act:name>Reparações em edifícios</act:name>
   <act:id type="new">861eaeafb9e9bf855943a8afb753fcc6</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -910,7 +910,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Building Repairs</act:description>
+  <act:description>Reparações em edifícios</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -924,7 +924,7 @@
   <act:parent type="new">f2145496f238b9002344ca78216bc91c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Computer Repairs</act:name>
+  <act:name>Reparações em computadores</act:name>
   <act:id type="new">2dc1fc6c60662751a6eae28e0a81bb22</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -932,7 +932,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Computer Repairs</act:description>
+  <act:description>Reparações em computadores</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -946,7 +946,7 @@
   <act:parent type="new">f2145496f238b9002344ca78216bc91c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Equipment Repairs</act:name>
+  <act:name>Reparações em equipamento</act:name>
   <act:id type="new">b340710eb5dc97bc4c23201beffae5f2</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -954,7 +954,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Equipment Repairs</act:description>
+  <act:description>Reparações em equipamento</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -968,7 +968,7 @@
   <act:parent type="new">f2145496f238b9002344ca78216bc91c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Janitorial Expenses</act:name>
+  <act:name>Despesas de limpezas</act:name>
   <act:id type="new">7943d40413854ff4237d88631cdcb4ef</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -976,7 +976,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Janitorial Expenses</act:description>
+  <act:description>Despesas de limpezas</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -990,7 +990,7 @@
   <act:parent type="new">f2145496f238b9002344ca78216bc91c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Taxes</act:name>
+  <act:name>Impostos</act:name>
   <act:id type="new">30bdea8690c89621731f925c8b3c766a</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -998,11 +998,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Taxes</act:description>
+  <act:description>Impostos</act:description>
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Emp-FICA</act:name>
+  <act:name>SS - Empregado</act:name>
   <act:id type="new">e3dc372ffb7a2fc5c3c7f0c1450206b2</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -1010,7 +1010,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Employer SS/Med</act:description>
+  <act:description>Segurança social do empregado</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -1024,7 +1024,7 @@
   <act:parent type="new">30bdea8690c89621731f925c8b3c766a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>FICA</act:name>
+  <act:name>SS</act:name>
   <act:id type="new">acb82f26123c80767738a211dd63b7a4</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -1032,7 +1032,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>SS/Med</act:description>
+  <act:description>Segurança social</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -1046,7 +1046,7 @@
   <act:parent type="new">30bdea8690c89621731f925c8b3c766a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>FUTA</act:name>
+  <act:name>IRS</act:name>
   <act:id type="new">92748ccfdd7f8b0603980d8e3849ee30</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -1054,7 +1054,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>FUTA</act:description>
+  <act:description>IRS</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -1068,7 +1068,7 @@
   <act:parent type="new">30bdea8690c89621731f925c8b3c766a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Federal</act:name>
+  <act:name>IUC</act:name>
   <act:id type="new">cab57e6c35ec19c6b18b4d554fe4857b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -1076,7 +1076,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Federal</act:description>
+  <act:description>IUC</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -1090,7 +1090,7 @@
   <act:parent type="new">30bdea8690c89621731f925c8b3c766a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Local</act:name>
+  <act:name>IMI</act:name>
   <act:id type="new">821b7c3e3d6d6f8cb9b9762de573b878</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -1098,7 +1098,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Local</act:description>
+  <act:description>IMI</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -1112,7 +1112,7 @@
   <act:parent type="new">30bdea8690c89621731f925c8b3c766a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Other Tax</act:name>
+  <act:name>IVA</act:name>
   <act:id type="new">7620db1268874ab746b53bd42280ef90</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -1120,11 +1120,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Other Tax</act:description>
+  <act:description>IVA</act:description>
   <act:parent type="new">30bdea8690c89621731f925c8b3c766a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Property</act:name>
+  <act:name>Outros impostos</act:name>
   <act:id type="new">4708c984cf3b2bf64e5b1c313dfeca52</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -1132,7 +1132,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Property</act:description>
+  <act:description>Outros impostos</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -1146,19 +1146,7 @@
   <act:parent type="new">30bdea8690c89621731f925c8b3c766a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>State/Province</act:name>
-  <act:id type="new">03ed8cb60b8b12420e49350d93886132</act:id>
-  <act:type>EXPENSE</act:type>
-  <act:commodity>
-    <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
-  </act:commodity>
-  <act:commodity-scu>100</act:commodity-scu>
-  <act:description>State/Province</act:description>
-  <act:parent type="new">30bdea8690c89621731f925c8b3c766a</act:parent>
-</gnc:account>
-<gnc:account version="2.0.0">
-  <act:name>Travel and Entertainment</act:name>
+  <act:name>Viagens e entretenimento</act:name>
   <act:id type="new">22c71db3296e8e0d8fe4572bf8f63cb8</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -1166,7 +1154,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Travel and Entertainment</act:description>
+  <act:description>Viagens e entretenimento</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -1180,7 +1168,7 @@
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Entertainment</act:name>
+  <act:name>Entretenimento</act:name>
   <act:id type="new">f959d8df29a540e09d9fd8252dd5a03d</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -1188,7 +1176,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Entertainment</act:description>
+  <act:description>Entretenimento</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -1202,7 +1190,7 @@
   <act:parent type="new">22c71db3296e8e0d8fe4572bf8f63cb8</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Meals</act:name>
+  <act:name>Refeições</act:name>
   <act:id type="new">b50b84a7f3285f63e00f662bc0281a43</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -1210,7 +1198,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Meals</act:description>
+  <act:description>Refeições</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -1224,7 +1212,7 @@
   <act:parent type="new">22c71db3296e8e0d8fe4572bf8f63cb8</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Travel</act:name>
+  <act:name>Viagens</act:name>
   <act:id type="new">24ea69f91cb658f3d72c31483917f844</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -1232,7 +1220,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Travel</act:description>
+  <act:description>Viagens</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -1246,7 +1234,7 @@
   <act:parent type="new">22c71db3296e8e0d8fe4572bf8f63cb8</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Utilities</act:name>
+  <act:name>Serviços</act:name>
   <act:id type="new">b615fad5f752ab26809e3f1c0e788dd1</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -1254,11 +1242,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Utilities</act:description>
+  <act:description>Serviços</act:description>
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Cable</act:name>
+  <act:name>Pacote TV</act:name>
   <act:id type="new">6e3824bff6b9cf23a6d36a63ac5328b2</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -1266,7 +1254,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Cable</act:description>
+  <act:description>Pacote TV</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -1280,7 +1268,7 @@
   <act:parent type="new">b615fad5f752ab26809e3f1c0e788dd1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Cell Phone</act:name>
+  <act:name>Telemóvel</act:name>
   <act:id type="new">57e08a9bd565efd6eff07fd11fb5b6b9</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -1288,7 +1276,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Cell Phone</act:description>
+  <act:description>Telemóvel</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -1302,7 +1290,7 @@
   <act:parent type="new">b615fad5f752ab26809e3f1c0e788dd1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Electric</act:name>
+  <act:name>Electricidade</act:name>
   <act:id type="new">e5378ddb536611d96ea62c9b4623f3ef</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -1310,11 +1298,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Electric</act:description>
+  <act:description>Electricidade</act:description>
   <act:parent type="new">b615fad5f752ab26809e3f1c0e788dd1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Garbage collection</act:name>
+  <act:name>Saneamento</act:name>
   <act:id type="new">bbf9f26770d63a891f95a342925d8185</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -1322,11 +1310,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Garbage collection</act:description>
+  <act:description>Saneamento</act:description>
   <act:parent type="new">b615fad5f752ab26809e3f1c0e788dd1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Gas</act:name>
+  <act:name>Gás</act:name>
   <act:id type="new">52df875a1c9753d1ac9c892a749dcd4e</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -1334,7 +1322,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Gas</act:description>
+  <act:description>Gás</act:description>
   <act:parent type="new">b615fad5f752ab26809e3f1c0e788dd1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -1360,7 +1348,7 @@
   <act:parent type="new">b615fad5f752ab26809e3f1c0e788dd1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Phone</act:name>
+  <act:name>Telefone</act:name>
   <act:id type="new">f3c66e8b8f0448c3864c2cc0b49d9832</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -1368,7 +1356,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Phone</act:description>
+  <act:description>Telefone</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -1382,7 +1370,7 @@
   <act:parent type="new">b615fad5f752ab26809e3f1c0e788dd1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Water</act:name>
+  <act:name>Água</act:name>
   <act:id type="new">7e31406974a0f966667e073cdf53c53c</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -1390,11 +1378,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Water</act:description>
+  <act:description>Água</act:description>
   <act:parent type="new">b615fad5f752ab26809e3f1c0e788dd1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Equity</act:name>
+  <act:name>Capital próprio</act:name>
   <act:id type="new">87e02e757b32b3059652cfe09fe9ae00</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
@@ -1402,7 +1390,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Equity</act:description>
+  <act:description>Capital próprio</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   <act:slots>
     <slot>
@@ -1412,7 +1400,7 @@
   </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Opening Balances</act:name>
+  <act:name>Saldos iniciais</act:name>
   <act:id type="new">a19c505d4b414bf3f5b574104959f534</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
@@ -1420,7 +1408,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Opening Balances</act:description>
+  <act:description>Saldos iniciais</act:description>
   <act:parent type="new">87e02e757b32b3059652cfe09fe9ae00</act:parent>
   <act:slots>
     <slot>
@@ -1430,7 +1418,7 @@
   </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Retained Earnings</act:name>
+  <act:name>Ganhos retidos</act:name>
   <act:id type="new">1b44c21b9b8a7c6181d85f5551cca79d</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
@@ -1438,7 +1426,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Retained Earnings</act:description>
+  <act:description>Ganhos retidos</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
