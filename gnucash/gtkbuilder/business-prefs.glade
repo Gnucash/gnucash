@@ -34,6 +34,9 @@
       <row>
         <col id="0" translatable="yes">Fancy Invoice</col>
       </row>
+      <row>
+        <col id="0" translatable="yes">Ask for a saved report</col>
+      </row>
     </data>
   </object>
   <object class="GtkWindow" id="preferences_window">

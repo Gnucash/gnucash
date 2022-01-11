@@ -1120,13 +1120,15 @@ static const char* invoice_printreport_values[] =
     "0769e242be474010b4acf264a5512e6e", // "Tax Invoice"
     "67112f318bef4fc496bdc27d106bbda4", // "Easy Invoice"
     "3ce293441e894423a2425d7a22dd1ac6", // "Fancy Invoice"
+    "",                                 // "Ask for a saved report"
     NULL
 };
+#define INVOICE_PRINTREPORT_VALUES_SIZE 5
 
 const char *gnc_plugin_business_get_invoice_printreport(void)
 {
     int value = gnc_prefs_get_int (GNC_PREFS_GROUP_INVOICE, GNC_PREF_INV_PRINT_RPT);
-    if (value >= 0 && value < 4)
+    if (value >= 0 && value < INVOICE_PRINTREPORT_VALUES_SIZE)
         return invoice_printreport_values[value];
     else
         return NULL;

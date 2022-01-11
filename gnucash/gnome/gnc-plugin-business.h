@@ -64,6 +64,12 @@ void gnc_invoice_remind_bills_due (GtkWindow *parent);
 void gnc_invoice_remind_invoices_due (GtkWindow *parent);
 void gnc_invoice_remind_bills_due_cb (void);
 void gnc_invoice_remind_invoices_due_cb (void);
+
+/**
+ * Get the GUID of the chosen print report in the preferences. Returns NULL if
+ * setting is not set and returns an empty string if the user chose to get asked
+ * each time for a saved report to use.
+ */
 const char *gnc_plugin_business_get_invoice_printreport(void);
 
 

@@ -34,6 +34,7 @@ typedef struct _invoice_window InvoiceWindow;
 #include "gncOwner.h"
 #include "dialog-search.h"
 #include "dialog-query-view.h"
+#include "gnc-main-window.h"
 
 typedef enum
 {
@@ -92,7 +93,6 @@ void gnc_invoice_update_doclink_for_window (GncInvoice *invoice,
 GncInvoiceType gnc_invoice_get_type_from_window(InvoiceWindow *iw);
 
 #ifdef __GNC_PLUGIN_PAGE_H
-#include "gnc-main-window.h"
 GncPluginPage *gnc_invoice_recreate_page (GncMainWindow *window, GKeyFile *key_file, const gchar *group_name);
 void gnc_invoice_save_page (InvoiceWindow *iw, GKeyFile *key_file, const gchar *group_name);
 #endif
@@ -106,6 +106,7 @@ GtkWidget *gnc_invoice_get_notes(InvoiceWindow *iw);
 void gnc_invoice_window_destroy_cb (GtkWidget *widget, gpointer data);
 
 void gnc_invoice_window_new_invoice_cb (GtkWindow* parent, gpointer data);
+void gnc_invoice_window_print_invoice_report_cb(GncMainWindow *parent, const char* reportname, gpointer data);
 void gnc_invoice_window_printCB (GtkWindow* parent, gpointer data);
 void gnc_invoice_window_cut_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_copy_cb (GtkWidget *widget, gpointer data);

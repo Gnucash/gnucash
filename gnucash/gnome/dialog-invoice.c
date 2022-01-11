@@ -45,6 +45,7 @@
 #include "gnucash-register.h"
 #include "window-report.h"
 #include "dialog-search.h"
+#include "dialog-custom-report.h"
 #include "search-param.h"
 #include "gnc-session.h"
 #include "gncOwner.h"
@@ -790,12 +791,11 @@ gnc_invoice_window_blankCB (GtkWidget *widget, gpointer data)
 }
 
 static GncPluginPage *
-gnc_invoice_window_print_invoice(GtkWindow *parent, GncInvoice *invoice)
+gnc_invoice_window_print_invoice_report(GncMainWindow *parent, GncInvoice *invoice, const char* reportname)
 {
     SCM func, arg, arg2;
     SCM args = SCM_EOL;
     int report_id;
-    const char *reportname = gnc_plugin_business_get_invoice_printreport();
     GncPluginPage *reportPage = NULL;
 
     g_return_val_if_fail (invoice, NULL);
@@ -819,7 +819,7 @@ gnc_invoice_window_print_invoice(GtkWindow *parent, GncInvoice *invoice)
     if (report_id >= 0)
     {
         reportPage = gnc_plugin_page_report_new (report_id);
-        gnc_main_window_open_page (GNC_MAIN_WINDOW (parent), reportPage);
+        gnc_main_window_open_page (parent, reportPage);
     }
 
     return reportPage;
@@ -829,6 +829,22 @@ static gboolean
 equal_fn (gpointer find_data, gpointer elt_data)
 {
     return (find_data && (find_data == elt_data));
+}
+
+struct print_invoice_data
+{
+    GncInvoice *invoice;
+    InvoiceWindow *iw;
+};
+
+void
+gnc_invoice_window_print_invoice_report_cb(GncMainWindow *parent, const char* reportname, gpointer data)
+{
+    struct print_invoice_data *pid = (struct print_invoice_data *) data;
+    pid->iw->reportPage = gnc_invoice_window_print_invoice_report
+      (parent, pid->invoice, reportname);
+    gnc_main_window_open_page (parent, pid->iw->reportPage);
+    g_free(pid);
 }
 
 /* From the invoice editor, open the invoice report. This will reuse the
@@ -841,15 +857,27 @@ void
 gnc_invoice_window_printCB (GtkWindow* parent, gpointer data)
 {
     InvoiceWindow *iw = data;
+    const char *reportname;
 
     if (gnc_find_first_gui_component (WINDOW_REPORT_CM_CLASS, equal_fn,
-                                      iw->reportPage))
+                                      iw->reportPage)) {
         gnc_plugin_page_report_reload (GNC_PLUGIN_PAGE_REPORT (iw->reportPage));
-    else
-        iw->reportPage = gnc_invoice_window_print_invoice
-            (parent, iw_get_invoice (iw));
+        gnc_main_window_open_page (GNC_MAIN_WINDOW (iw->dialog), iw->reportPage);
+    } else {
+        reportname = gnc_plugin_business_get_invoice_printreport();
 
-    gnc_main_window_open_page (GNC_MAIN_WINDOW (iw->dialog), iw->reportPage);
+        if (reportname && *reportname) {
+            iw->reportPage = gnc_invoice_window_print_invoice_report
+                (GNC_MAIN_WINDOW (parent), iw_get_invoice (iw), reportname);
+            gnc_main_window_open_page (GNC_MAIN_WINDOW (iw->dialog), iw->reportPage);
+        } else {
+            struct print_invoice_data *pid = g_new0(struct print_invoice_data, 1);
+            pid->invoice = iw_get_invoice (iw);
+            pid->iw = iw;
+            gnc_ui_custom_report_select
+                (GNC_MAIN_WINDOW (parent), gnc_invoice_window_print_invoice_report_cb, pid);
+        }
+    }
 }
 
 static gboolean
@@ -3107,6 +3135,8 @@ struct multi_edit_invoice_data
 {
     gpointer user_data;
     GtkWindow *parent;
+    const char *reportname;
+    GList *invoice_list;
 };
 
 static void
@@ -3123,6 +3153,9 @@ multi_edit_invoice_cb (GtkWindow *dialog, GList *invoice_list, gpointer user_dat
 
     meid.user_data = user_data;
     meid.parent = dialog;
+    meid.reportname = NULL;
+    meid.invoice_list = NULL;
+
     g_list_foreach (invoice_list, multi_edit_invoice_one, &meid);
 }
 
@@ -3270,30 +3303,56 @@ multi_post_invoice_cb (GtkWindow *dialog, GList *invoice_list, gpointer user_dat
     gnc_resume_gui_refresh ();
 }
 
-static void print_one_invoice_cb(GtkWindow *dialog, gpointer data, gpointer user_data)
+static void print_one_invoice_cb(GncMainWindow *dialog, const char *reportname, gpointer data, gpointer user_data)
 {
     GncInvoice *invoice = data;
-    gnc_invoice_window_print_invoice (dialog, invoice);
+    gnc_invoice_window_print_invoice_report (dialog, invoice, reportname);
 }
 
 static void
 multi_print_invoice_one (gpointer data, gpointer user_data)
 {
     struct multi_edit_invoice_data *meid = user_data;
-    print_one_invoice_cb (gnc_ui_get_main_window (GTK_WIDGET(meid->parent)), data, meid->user_data);
+    print_one_invoice_cb (GNC_MAIN_WINDOW (gnc_ui_get_main_window (GTK_WIDGET(meid->parent))), meid->reportname, data, meid->user_data);
+}
+
+static void
+multi_print_invoice_all (GncMainWindow *window, const char *reportname, gpointer user_data)
+{
+    struct multi_edit_invoice_data *meid = user_data;
+    g_list_foreach (meid->invoice_list, multi_print_invoice_one, user_data);
+    g_free(meid);
 }
 
 static void
 multi_print_invoice_cb (GtkWindow *dialog, GList *invoice_list, gpointer user_data)
 {
-    struct multi_edit_invoice_data meid;
+    const char *reportname;
 
     if (!gnc_list_length_cmp (invoice_list, 0))
         return;
 
-    meid.user_data = user_data;
-    meid.parent = dialog;
-    g_list_foreach (invoice_list, multi_print_invoice_one, &meid);
+    reportname = gnc_plugin_business_get_invoice_printreport();
+
+    if (reportname && *reportname) {
+        struct multi_edit_invoice_data meid;
+
+        meid.user_data = user_data;
+        meid.parent = dialog;
+        meid.reportname = reportname;
+        meid.invoice_list = NULL;
+
+        g_list_foreach (invoice_list, multi_print_invoice_one, &meid);
+    } else {
+        struct multi_edit_invoice_data *meid = g_new0(struct multi_edit_invoice_data, 1);
+
+        meid->user_data = user_data;
+        meid->parent = dialog;
+        meid->reportname = NULL;
+        meid->invoice_list = invoice_list;
+
+        gnc_ui_custom_report_select(GNC_MAIN_WINDOW (gnc_ui_get_main_window (GTK_WIDGET(meid->parent))), multi_print_invoice_all, meid);
+    }
 }
 
 static gpointer
