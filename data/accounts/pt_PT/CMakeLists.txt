@@ -1,7 +1,9 @@
 set(account_DATA
   acctchrt_brokerage.gnucash-xea
+  acctchrt_business.gnucash-xea
   acctchrt_carloan.gnucash-xea
   acctchrt_cdmoneymkt.gnucash-xea
+  acctchrt_checkbook.gnucash-xea
   acctchrt_childcare.gnucash-xea
   acctchrt_common.gnucash-xea
   acctchrt_eduloan.gnucash-xea
