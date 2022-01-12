@@ -69,6 +69,8 @@ typedef struct GncBudgetPrivate
     /* Recurrence (period info) for the budget */
     Recurrence recurrence;
 
+    GHashTable *acct_hash;
+
     /* Number of periods */
     guint  num_periods;
 } GncBudgetPrivate;
@@ -84,6 +86,24 @@ struct _GncBudgetClass
 /* GObject Initialization */
 G_DEFINE_TYPE_WITH_PRIVATE(GncBudget, gnc_budget, QOF_TYPE_INSTANCE)
 
+typedef struct PeriodData
+{
+    gchar *note;
+    gboolean value_is_set;
+    gnc_numeric value;
+} PeriodData;
+
+static void acct_array_free (GArray *acct_array, gpointer user_data)
+{
+    for (guint i = 0; i < acct_array->len; i++)
+    {
+        PeriodData *perioddata = &g_array_index (acct_array, PeriodData, i);
+        if (perioddata->note)
+            g_free (perioddata->note);
+    }
+    g_array_free (acct_array, FALSE);
+}
+
 static void
 gnc_budget_init(GncBudget* budget)
 {
@@ -93,6 +113,9 @@ gnc_budget_init(GncBudget* budget)
     priv = GET_PRIVATE(budget);
     priv->name = CACHE_INSERT(_("Unnamed Budget"));
     priv->description = CACHE_INSERT("");
+
+    priv->acct_hash = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL,
+                                             (GDestroyNotify) acct_array_free);
 
     priv->num_periods = 12;
     date = gnc_g_date_new_today ();
@@ -262,6 +285,8 @@ gnc_budget_free(QofInstance *inst)
 
     CACHE_REMOVE(priv->name);
     CACHE_REMOVE(priv->description);
+
+    g_hash_table_destroy (priv->acct_hash);
 
     /* qof_instance_release (&budget->inst); */
     g_object_unref(budget);
@@ -446,6 +471,13 @@ gnc_budget_get_guid(const GncBudget* budget)
     return qof_instance_get_guid(QOF_INSTANCE(budget));
 }
 
+static void
+set_num_periods (GArray *perioddata, gpointer user_data)
+{
+    gint num_periods = GPOINTER_TO_INT (user_data);
+    g_array_set_size (perioddata, num_periods);
+}
+
 void
 gnc_budget_set_num_periods(GncBudget* budget, guint num_periods)
 {
@@ -460,6 +492,9 @@ gnc_budget_set_num_periods(GncBudget* budget, guint num_periods)
     priv->num_periods = num_periods;
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
+
+    g_hash_table_foreach (priv->acct_hash, (GHFunc) set_num_periods,
+                          GUINT_TO_POINTER (num_periods));
 
     qof_event_gen( &budget->inst, QOF_EVENT_MODIFY, NULL);
 }
@@ -481,17 +516,27 @@ make_period_path (const Account *account, guint period_num, char *path1, char *p
     g_sprintf (path2, "%d", period_num);
 }
 
+static GArray* get_acct_array (const GncBudget *budget, const Account *account);
+
+
 /* period_num is zero-based */
 /* What happens when account is deleted, after we have an entry for it? */
 void
 gnc_budget_unset_account_period_value(GncBudget *budget, const Account *account,
                                       guint period_num)
 {
+    GArray *acct_array;
     gchar path_part_one [GUID_ENCODING_LENGTH + 1];
     gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
+    PeriodData *perioddata;
 
     g_return_if_fail (budget != NULL);
     g_return_if_fail (account != NULL);
+
+    acct_array = get_acct_array (budget, account);
+    perioddata = &g_array_index (acct_array, PeriodData, period_num);
+    perioddata->value_is_set = FALSE;
+
     make_period_path (account, period_num, path_part_one, path_part_two);
 
     gnc_budget_begin_edit(budget);
@@ -511,6 +556,8 @@ gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
 {
     gchar path_part_one [GUID_ENCODING_LENGTH + 1];
     gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
+    GArray *acct_array;
+    PeriodData *perioddata;
 
     /* Watch out for an off-by-one error here:
      * period_num starts from 0 while num_periods starts from 1 */
@@ -523,11 +570,17 @@ gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
     g_return_if_fail (budget != NULL);
     g_return_if_fail (account != NULL);
 
+    acct_array = get_acct_array (budget, account);
+    perioddata = &g_array_index (acct_array, PeriodData, period_num);
+
     make_period_path (account, period_num, path_part_one, path_part_two);
 
     gnc_budget_begin_edit(budget);
     if (gnc_numeric_check(val))
+    {
         qof_instance_set_kvp (QOF_INSTANCE (budget), NULL, 2, path_part_one, path_part_two);
+        perioddata->value_is_set = FALSE;
+    }
     else
     {
         GValue v = G_VALUE_INIT;
@@ -535,6 +588,8 @@ gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
         g_value_set_boxed (&v, &val);
         qof_instance_set_kvp (QOF_INSTANCE (budget), &v, 2, path_part_one, path_part_two);
         g_value_unset (&v);
+        perioddata->value_is_set = TRUE;
+        perioddata->value = val;
     }
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
@@ -546,10 +601,10 @@ gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
 /* We don't need these here, but maybe they're useful somewhere else?
    Maybe this should move to Account.h */
 
-gboolean
-gnc_budget_is_account_period_value_set(const GncBudget *budget,
-                                       const Account *account,
-                                       guint period_num)
+static gboolean
+is_account_period_value_set (const GncBudget *budget,
+                             const Account *account,
+                             guint period_num)
 {
     GValue v = G_VALUE_INIT;
     gchar path_part_one [GUID_ENCODING_LENGTH + 1];
@@ -567,10 +622,20 @@ gnc_budget_is_account_period_value_set(const GncBudget *budget,
     return (ptr != NULL);
 }
 
-gnc_numeric
-gnc_budget_get_account_period_value(const GncBudget *budget,
-                                    const Account *account,
-                                    guint period_num)
+gboolean
+gnc_budget_is_account_period_value_set (const GncBudget *budget,
+                                        const Account *account,
+                                        guint period_num)
+{
+    GArray *array = get_acct_array (budget, account);
+    PeriodData *data = (PeriodData*) &g_array_index (array, PeriodData, period_num);
+    return data->value_is_set;
+}
+
+static gnc_numeric
+get_account_period_value (const GncBudget *budget,
+                          const Account *account,
+                          guint period_num)
 {
     gnc_numeric *numeric = NULL;
     gnc_numeric retval;
@@ -591,6 +656,15 @@ gnc_budget_get_account_period_value(const GncBudget *budget,
     return retval;
 }
 
+gnc_numeric
+gnc_budget_get_account_period_value (const GncBudget *budget,
+                                     const Account *account,
+                                     guint period_num)
+{
+    GArray *array = get_acct_array (budget, account);
+    PeriodData *data = (PeriodData*) &g_array_index (array, PeriodData, period_num);
+    return data->value_is_set ? data->value : gnc_numeric_zero ();
+}
 
 void
 gnc_budget_set_account_period_note(GncBudget *budget, const Account *account,
@@ -598,6 +672,8 @@ gnc_budget_set_account_period_note(GncBudget *budget, const Account *account,
 {
     gchar path_part_one [GUID_ENCODING_LENGTH + 1];
     gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
+    GArray *acct_array;
+    PeriodData *perioddata;
 
     /* Watch out for an off-by-one error here:
      * period_num starts from 0 while num_periods starts from 1 */
@@ -610,9 +686,15 @@ gnc_budget_set_account_period_note(GncBudget *budget, const Account *account,
     g_return_if_fail (budget != NULL);
     g_return_if_fail (account != NULL);
 
+    acct_array = get_acct_array (budget, account);
+    perioddata = &g_array_index (acct_array, PeriodData, period_num);
+
     make_period_path (account, period_num, path_part_one, path_part_two);
 
     gnc_budget_begin_edit(budget);
+    if (perioddata->note)
+        g_free (perioddata->note);
+    perioddata->note = g_strdup (note);
     if (note == NULL)
         qof_instance_set_kvp (QOF_INSTANCE (budget), NULL, 3, GNC_BUDGET_NOTES_PATH, path_part_one, path_part_two);
     else
@@ -631,9 +713,9 @@ gnc_budget_set_account_period_note(GncBudget *budget, const Account *account,
 
 }
 
-gchar *
-gnc_budget_get_account_period_note(const GncBudget *budget,
-                                   const Account *account, guint period_num)
+static gchar *
+get_account_period_note (const GncBudget *budget,
+                         const Account *account, guint period_num)
 {
     gchar path_part_one [GUID_ENCODING_LENGTH + 1];
     gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
@@ -648,6 +730,16 @@ gnc_budget_get_account_period_note(const GncBudget *budget,
     retval = G_VALUE_HOLDS_STRING (&v) ? g_value_dup_string(&v) : NULL;
     g_value_unset (&v);
     return retval;
+}
+
+
+gchar *
+gnc_budget_get_account_period_note (const GncBudget *budget,
+                                    const Account *account, guint period_num)
+{
+    GArray *array = get_acct_array (budget, account);
+    PeriodData *data = (PeriodData*) &g_array_index (array, PeriodData, period_num);
+    return g_strdup (data->note);
 }
 
 time64
@@ -672,6 +764,33 @@ gnc_budget_get_account_period_actual_value(
     g_return_val_if_fail(GNC_IS_BUDGET(budget) && acc, gnc_numeric_zero());
     return recurrenceGetAccountPeriodValue(&GET_PRIVATE(budget)->recurrence,
                                            acc, period_num);
+}
+
+static GArray*
+get_acct_array (const GncBudget *budget, const Account *account)
+{
+    GncBudgetPrivate *priv = GET_PRIVATE (budget);
+    GArray *array;
+
+    if (!g_hash_table_lookup_extended (priv->acct_hash, account, NULL,
+                                       (gpointer) &array))
+    {
+        array = g_array_sized_new (FALSE, TRUE, sizeof (PeriodData),
+                                   priv->num_periods);
+        g_hash_table_insert (priv->acct_hash, (gpointer)account, array);
+
+        for (guint i = 0; i < priv->num_periods; i++)
+        {
+            PeriodData *data = (PeriodData*) &g_array_index (array, PeriodData, i);
+            data->note = get_account_period_note (budget, account, i);
+            data->value_is_set = is_account_period_value_set (budget, account, i);
+
+            if (data->value_is_set)
+                data->value = get_account_period_value (budget, account, i);
+        }
+    }
+
+    return array;
 }
 
 GncBudget*
