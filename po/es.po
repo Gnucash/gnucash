@@ -79,7 +79,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-10 20:56+0000\n"
+"PO-Revision-Date: 2022-01-12 22:18+0000\n"
 "Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -4663,7 +4663,7 @@ msgstr "Mueve el apunte efectivo una fila por debajo"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:238
 msgid "_Company Report"
-msgstr "Boletín _Societario"
+msgstr "Boletín _societario"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:247
 msgid "_Standard"
@@ -6035,7 +6035,7 @@ msgstr "Exportar"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.c:1140
 msgid "Save Config"
-msgstr "Guardar Config"
+msgstr "Guardar Configuración"
 
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As..."
 #. to be used as toolbar button label.
@@ -26812,7 +26812,8 @@ msgstr "Nombre del cliente"
 #: gnucash/report/reports/standard/customer-summary.scm:118
 msgid "Markup (which is profit amount divided by sales)"
 msgstr ""
-"Resultado (el cual es la cantidad de beneficio dividida entre las ventas)"
+"Margen beneficiario (el cual es la cantidad de beneficio dividida entre las "
+"ventas)"
 
 #: gnucash/report/reports/standard/customer-summary.scm:119
 #: gnucash/report/reports/standard/customer-summary.scm:300
@@ -26831,7 +26832,7 @@ msgstr "No se ha encontrado ningún cliente válido."
 
 #: gnucash/report/reports/standard/customer-summary.scm:299
 msgid "Markup"
-msgstr "Resultado"
+msgstr "Margen beneficiario"
 
 #: gnucash/report/reports/standard/customer-summary.scm:378
 msgid "No Customer"
