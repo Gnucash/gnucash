@@ -79,7 +79,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-09 13:54+0000\n"
+"PO-Revision-Date: 2022-01-10 20:56+0000\n"
 "Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -1025,7 +1025,7 @@ msgstr "Liquidaciones Varias"
 #: gnucash/gnome/assistant-loan.cpp:770
 #, c-format
 msgid "... pay \"%s\"?"
-msgstr "… liquidar «%s»?"
+msgstr "... liquidar «%s»?"
 
 #: gnucash/gnome/assistant-loan.cpp:782
 msgid "via Escrow account?"
@@ -1210,12 +1210,12 @@ msgstr "¡No tiene ninguna cuenta de provisión con balances!"
 #: gnucash/gnome/dialog-invoice.c:1589
 #: gnucash/gnome-utils/gnc-general-select.c:220
 msgid "Select..."
-msgstr "Seleccionar…"
+msgstr "Seleccionar..."
 
 #: gnucash/gnome/business-gnome-utils.c:77
 #: gnucash/gnome-utils/gnc-general-select.c:222
 msgid "Edit..."
-msgstr "Editar…"
+msgstr "Editar..."
 
 #: gnucash/gnome/business-gnome-utils.c:219 gnucash/gnome/dialog-doclink.c:804
 #: gnucash/gnome/dialog-invoice.c:2634 gnucash/gnome/dialog-invoice.c:2859
