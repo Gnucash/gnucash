@@ -11,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-07 11:54+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"PO-Revision-Date: 2022-01-12 07:55+0000\n"
+"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -3291,8 +3291,8 @@ msgid ""
 "CAUTION: If you set TXF categories, and later change 'Type', you will need "
 "to manually reset those categories one at a time"
 msgstr ""
-"זהירות: אם יוגדר סוג־אב TXF ולאחר מכן ישתנה ה'סוג ', נדרש יהיה לאפס באופן "
-"ידני סוגי־אב אלה אחת בכל פעם"
+"זהירות: אם הוגדר סוג־אב TXF ולאחר מכן ישתנה ה'סוג ', יידרש לאפס באופן ידני "
+"סוגי־אב אלה, אחד בכל פעם"
 
 #: gnucash/gnome/dialog-tax-info.c:1392
 msgid "Form"
@@ -3487,7 +3487,7 @@ msgstr "אפ_שרויות דוח מס"
 #: gnucash/gnome/gnc-plugin-page-register2.c:268
 #: gnucash/gnome/gnc-plugin-page-register.c:377
 msgid "Setup relevant accounts for tax reports, e.g. US income tax"
-msgstr "הגדרת חשבונות רלוונטיים עבור דוחות מס, לדוגמה מס הכנסה של ארה'ב"
+msgstr "הגדרת חשבונות רלוונטיים לדוחות מס, לדוגמה, מס הכנסה ארה'ב"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:164
 msgid "_Scheduled Transactions"
@@ -9589,7 +9589,7 @@ msgstr "אזור זמן"
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:353
 #: gnucash/gtkbuilder/dialog-customer.glade:132
 msgid "Customer Number"
-msgstr "מספר לקוח"
+msgstr "מזהה לקוח"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:361
 #: gnucash/gtkbuilder/dialog-vendor.glade:133
@@ -15162,7 +15162,9 @@ msgstr "בחירת מידע משתמש כאן..."
 msgid ""
 "The customer ID number. If left blank a reasonable number will be chosen for "
 "you"
-msgstr "מזהה הלקוח. אם ריק המספר ייקבע באופן אוטומטי"
+msgstr ""
+"מזהה הלקוח. אם השדה יותר ריק, מספר זיהוי ספק סביר ייקבע על ידי המערכת באופן "
+"אוטומטי"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:256
 #: gnucash/gtkbuilder/dialog-customer.glade:786
