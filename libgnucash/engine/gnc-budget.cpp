@@ -33,6 +33,7 @@
 
 #include "Account.h"
 
+#include "guid.hpp"
 #include "gnc-budget.h"
 #include "gnc-commodity.h"
 
@@ -196,7 +197,7 @@ gnc_budget_set_property( GObject* object,
         gnc_budget_set_num_periods(budget, g_value_get_uint(value));
         break;
     case PROP_RECURRENCE:
-        gnc_budget_set_recurrence(budget, g_value_get_pointer(value));
+        gnc_budget_set_recurrence (budget, static_cast<Recurrence*>(g_value_get_pointer(value)));
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -311,12 +312,11 @@ gnc_budget_commit_edit(GncBudget *bgt)
 GncBudget*
 gnc_budget_new(QofBook *book)
 {
-    GncBudget* budget;
-
     g_return_val_if_fail(book, NULL);
 
     ENTER(" ");
-    budget = g_object_new(GNC_TYPE_BUDGET, NULL);
+
+    auto budget { static_cast<GncBudget*>(g_object_new(GNC_TYPE_BUDGET, nullptr)) };
     qof_instance_init_data (&budget->inst, GNC_ID_BUDGET, book);
 
     qof_event_gen( &budget->inst, QOF_EVENT_CREATE , NULL);
@@ -773,7 +773,7 @@ get_acct_array (const GncBudget *budget, const Account *account)
     GArray *array;
 
     if (!g_hash_table_lookup_extended (priv->acct_hash, account, NULL,
-                                       (gpointer) &array))
+                                       (gpointer*)(&array)))
     {
         array = g_array_sized_new (FALSE, TRUE, sizeof (PeriodData),
                                    priv->num_periods);
@@ -879,7 +879,7 @@ static QofObject budget_object_def =
     DI(.interface_version = ) QOF_OBJECT_VERSION,
     DI(.e_type            = ) GNC_ID_BUDGET,
     DI(.type_label        = ) "Budget",
-    DI(.create            = ) (gpointer)gnc_budget_new,
+    DI(.create            = ) (void*(*)(QofBook*)) gnc_budget_new,
     DI(.book_begin        = ) NULL,
     DI(.book_end          = ) gnc_budget_book_end,
     DI(.is_dirty          = ) qof_collection_is_dirty,

@@ -139,7 +139,7 @@ set (engine_SOURCES
   cap-gains.c
   cashobjects.c
   gnc-aqbanking-templates.cpp
-  gnc-budget.c
+  gnc-budget.cpp
   gnc-commodity.c
   gnc-date.cpp
   gnc-datetime.cpp

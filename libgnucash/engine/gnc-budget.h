@@ -64,6 +64,11 @@
 #ifndef __GNC_BUDGET_H__
 #define __GNC_BUDGET_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <glib.h>
 
 /** The budget data.*/
@@ -170,6 +175,11 @@ GncBudget* gnc_budget_get_default(QofBook *book);
 /*@ dependent @*/
 GncBudget* gnc_budget_lookup (const GncGUID *guid, const QofBook *book);
 #define  gnc_budget_lookup_direct(g,b) gnc_budget_lookup(&(g),(b))
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif // __BUDGET_H__
 
