@@ -3,14 +3,15 @@
 # Duarte Loreto <happyguy_pt@hotmail.com>, 2001
 # Tiago Neiva <tneiva@gmail.com>, 2018.
 # Pedro Albuquerque <pmra@gmx.com>, 2021.
+# Hugo Carvalho <hugokarvalho@hotmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-01-02 22:54+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2022-01-13 12:54+0000\n"
+"Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "glossary/pt/>\n"
 "Language: pt\n"
@@ -909,7 +910,7 @@ msgid "due"
 msgstr "devido"
 
 msgid "Online"
-msgstr ""
+msgstr "Online"
 
 msgid "Direct Debit"
-msgstr ""
+msgstr "Débito direto"
