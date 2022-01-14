@@ -11,8 +11,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
 "PO-Revision-Date: 2022-01-07 13:54+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
@@ -1047,32 +1047,6 @@ msgstr "凭证"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "撤回（在对账对话框）"
-
-# 一个销售的物品或提供的服务含收费价格的列表。
-# 见：账单
-# 在 GnuCash 中，“发票”是我们发出(给客户)的声明，而“账单”是我们(从厂商)收到的声明。
-# Post Invoice，应该翻译为“入账”。
-#, fuzzy
-#~ msgid "invoice owner"
-#~ msgstr "发票"
-
-#~ msgid "Open SubAccount"
-#~ msgstr "打开子科目"
-
-#~ msgid "Find Account"
-#~ msgstr "查找科目"
-
-#~ msgid "Invoices Due Reminder"
-#~ msgstr "应收到期提醒"
-
-#~ msgid "Employees Overview"
-#~ msgstr "员工概况"
-
-#~ msgid "Vendors Overview"
-#~ msgstr "供应商概况"
-
-#~ msgid "Customers Overview"
-#~ msgstr "客户概况"
 
 msgid "stock"
 msgstr "股票"

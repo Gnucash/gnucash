@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
 "PO-Revision-Date: 2022-01-13 12:54+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
@@ -868,40 +868,6 @@ msgstr "vale"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "levantamento (no diálogo de reconciliação)"
-
-#, fuzzy
-#~ msgid "invoice owner"
-#~ msgstr "fatura"
-
-#~ msgid ""
-#~ "account type: trading This account type (new in gnucash-2.4.0) is used "
-#~ "when exchanging or trading amounts from one currency into another"
-#~ msgstr "tipo de conta: câmbios"
-
-#~ msgid "bill owner see invoice owner"
-#~ msgstr "fornecedor"
-
-#~ msgid ""
-#~ "invoice ownerThe customer (or vendor) to which this invoice is sent to."
-#~ msgstr "entidade faturada"
-
-#~ msgid ""
-#~ "markup1. Some text annotation, but this meaning isn't used inside "
-#~ "gnucash. 2. In the Customer summary report: The ratio of profit vs. "
-#~ "sales, i.e. the profit amount divided by the sales amount, shown in "
-#~ "percent."
-#~ msgstr "margem de lucro"
-
-#~ msgid ""
-#~ "sales(In the customer summary report) The total amount of money received "
-#~ "because something was sold."
-#~ msgstr "vendas"
-
-#~ msgid ""
-#~ "tax codeOn the goverment's tax forms, the tax code identifies the given "
-#~ "line or place on the form where certain amounts must be specified "
-#~ "according to the current country's legislation"
-#~ msgstr "campo de declaração"
 
 msgid "stock"
 msgstr "acção"

@@ -875,24 +875,6 @@ msgstr "comprobante"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "cargo"
 
-#~ msgctxt "1"
-#~ msgid "bill"
-#~ msgstr "vale"
-
-#~ msgctxt "1"
-#~ msgid "financial calculator: interest rate"
-#~ msgstr "calculadora financiera: tasa de interés"
-
-#, fuzzy
-#~ msgid "invoice owner"
-#~ msgstr "factura"
-
-#~ msgid "Term"
-#~ msgstr "Condiciones (Términos) (de pago)"
-
-#~ msgid "due"
-#~ msgstr "vencimiento"
-
 msgid "stock"
 msgstr "provisión"
 

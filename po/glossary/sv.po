@@ -10,8 +10,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
 "PO-Revision-Date: 2022-01-03 03:41+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
@@ -877,13 +877,6 @@ msgstr "traktamente"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "uttag (i avstämningsdialogen)"
-
-#, fuzzy
-#~ msgid "invoice owner"
-#~ msgstr "faktura"
-
-#~ msgid "Term"
-#~ msgstr "Term"
 
 msgid "stock"
 msgstr "aktie"

@@ -13,8 +13,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
 "PO-Revision-Date: 2022-01-02 22:54+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
@@ -880,54 +880,6 @@ msgstr "bon (commande), pièce justificative"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "retrait (dans le dialogue de rapprochement)"
-
-#~ msgid "invoice owner"
-#~ msgstr "destinataire de la facture"
-
-#~ msgid "enter"
-#~ msgstr "saisir, saisie"
-
-#~ msgid "currencies"
-#~ msgstr "devises"
-
-#~ msgid "threshold"
-#~ msgstr "seuil"
-
-#~ msgid "quotes"
-#~ msgstr "cotations"
-
-#~ msgid "range"
-#~ msgstr "période"
-
-#~ msgid "tax accounts"
-#~ msgstr "comptes avec TVA"
-
-#~ msgid "case insensitive"
-#~ msgstr "insensible à la casse"
-
-#~ msgid "parsing"
-#~ msgstr "interprétation"
-
-#~ msgid "statement"
-#~ msgstr "déclaration"
-
-#~ msgid "parsed"
-#~ msgstr "interprété"
-
-#~ msgid "accounting"
-#~ msgstr "comptable"
-
-#~ msgid "quarter"
-#~ msgstr "trimestre"
-
-#~ msgid "settings"
-#~ msgstr "préférences"
-
-#~ msgid "loans"
-#~ msgstr "prêts"
-
-#~ msgid "reconcile"
-#~ msgstr "rapprochement"
 
 msgid "stock"
 msgstr ""

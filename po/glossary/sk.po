@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
 "PO-Revision-Date: 2022-01-07 11:54+0000\n"
 "Last-Translator: Dullus <dullus@gmail.com>\n"
@@ -893,10 +893,6 @@ msgstr "náhrada hotovostných výdajov"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "výber (v dialógu vysporiadania)"
-
-#, fuzzy
-#~ msgid "invoice owner"
-#~ msgstr "faktúra"
 
 msgid "stock"
 msgstr ""

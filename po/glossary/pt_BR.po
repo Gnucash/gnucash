@@ -12,8 +12,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
 "PO-Revision-Date: 2022-01-02 22:54+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
@@ -873,18 +873,6 @@ msgstr "comprovante"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "saque"
-
-#, fuzzy
-#~ msgid "invoice owner"
-#~ msgstr "fatura"
-
-#~ msgid "transfer, to"
-#~ msgstr "transferir"
-
-# term=prazo for "term to pay a bill"
-# term=termo for "terms of payment"
-#~ msgid "Term"
-#~ msgstr "Prazo"
 
 msgid "stock"
 msgstr "estoque"
