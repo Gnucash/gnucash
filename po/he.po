@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-12 07:55+0000\n"
+"PO-Revision-Date: 2022-01-14 10:53+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -3476,7 +3476,7 @@ msgstr "מציאת תנועות באמצעות חיפוש"
 #: gnucash/gnome/gnc-plugin-page-register2.c:263
 #: gnucash/gnome/gnc-plugin-page-register.c:372
 msgid "Ta_x Report Options"
-msgstr "אפ_שרויות דוח מס"
+msgstr "אפ_שרויות מיסוי"
 
 #. Translators: currently implemented are
 #. US: income tax and
@@ -3487,7 +3487,7 @@ msgstr "אפ_שרויות דוח מס"
 #: gnucash/gnome/gnc-plugin-page-register2.c:268
 #: gnucash/gnome/gnc-plugin-page-register.c:377
 msgid "Setup relevant accounts for tax reports, e.g. US income tax"
-msgstr "הגדרת חשבונות רלוונטיים לדוחות מס, לדוגמה, מס הכנסה ארה'ב"
+msgstr "הגדרת חשבונות לענין דוחי מס, לדוגמה, מס הכנסה ארה'ב"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:164
 msgid "_Scheduled Transactions"
@@ -5960,7 +5960,7 @@ msgid ""
 "This report must be upgraded to return a document object with export-string "
 "or export-error."
 msgstr ""
-"חובה לשדרג דוח זה על מנת להחזיר פריט מסמך עם export-string או export-error."
+"חובה לשדרג דוח זה על מנת להחזיר פריט מסמך עם, export-string או, export-error."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1765
 #, c-format
@@ -10014,12 +10014,12 @@ msgid ""
 "be specified to describe some saved options.\n"
 "  run: \tRun the named report in the given GnuCash datafile.\n"
 msgstr ""
-"הפעלת פקודות לדוחות. הפקודות הבאות נתמכות.\n"
+"הפעלת פקודות לענין דוחות. הפקודות הבאות נתמכות.\n"
 "\n"
 "רשימה: \tרשימת דוחות זמינים.\n"
 "הצגה: \tתיאור השינויים שנעשו בדוח האמור. ניתן להגדיר קובץ נתונים לתאור מספר "
 "אפשרויות שנשמרו.\n"
-"הרצה: \tהרצת הדוח האמור בקובץ נתוני גנוקאש הנתון.\n"
+"הרצה: \tהרצת הדוח האמור מקובץ נתוני גנוקאש הנתון.\n"
 
 #: gnucash/gnucash-cli.cpp:113
 msgid "Name of the report to run\n"
@@ -12015,8 +12015,8 @@ msgid ""
 "allows you to scale reports up by the set factor. For example setting this "
 "to 2.0 will display reports at twice their typical size."
 msgstr ""
-"דוחות במסכים בעלי רזולוציה גבוהה נוטים להיות קשים לקריאה. אפשרות זו מאפשרת "
-"לשנות את קנה המידה של הדוחות על פי המקדם שניקבע. לדוגמה, שינוי הגדרה זו ל־"
+"דוחות במסכים בעלי הפרדה גבוהה נוטים להיות קשים לקריאה. אפשרות זו מאפשרת "
+"לשנות את קנה המידה של הדוחות על פי המקדם שנקבע. לדוגמה, שינוי הגדרה זו ל־"
 "2.0, תציג דוחות בגודל כפול מהגודל האופייני להם."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:379
@@ -12034,11 +12034,11 @@ msgid ""
 "in filenames, such as '/', will be replaced with underscores '_' in the "
 "resulting file name."
 msgstr ""
-"הגדרה זו קובעת את שם קובץ ה PDF שייוצא. זוהי מחרוזת מסוג sprintf(3) בעלת "
-"שלושה משתנים: '%1$s' הוא שם הדוח, כגון 'חשבונית'. '%2$s' הוא מספר הדוח, "
-"שעבור דוח חשבוניות הוא מספר החשבונית. '%3$s' הוא התאריך הדוח, המעוצב לפי "
-"הגדרת מבנה־קובץ־תאריך. הערה: תווים לא מותרים בשמות קבצים, כגון '/', יוחלפו "
-"במקפים תחתונים ' _ ' בשם הקובץ שיוצר."
+"הגדרה זו קובעת את שם קובץ ה־PDF ליצוא. זוהי מחרוזת מסוג sprintf(3) בעלת "
+"שלושה משתנים: '%1$s' הוא שם הדוח, כגון 'חשבונית'. '%2$s' הוא מספר הדוח. בדוח "
+"חשבוניות, זהו מספר החשבונית. '%3$s' הוא התאריך הדוח, המעוצב לפי הגדרת מבנה-"
+"שם קובץ-תאריך. הערה: תווים אסורים בשמות קבצים, כגון '/', יוחלפו בשם הקובץ "
+"שיווצר, במקפים תחתונים '_'."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:384
 msgid "PDF export file name date format choice"
@@ -14669,7 +14669,7 @@ msgid ""
 "code to this account."
 msgstr ""
 "תיבת בר מיסוי תהיה פעילה אם הוגדרו קוד מיסוי לחשבונות אלו בתפריט 'עריכה "
-"&larr; אפשרויות דוח מס'."
+"&larr; אפשרויות מיסוי'."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1513
 msgid "Opening balance"
@@ -15272,8 +15272,8 @@ msgid ""
 "Configuration\" from\n"
 "the Reports menu or tool bar."
 msgstr ""
-"תצורות דוח שמורים נוצרת על־ידי פתיחת דוח מתפריט הדוחות תחילה,\n"
-"שינוי אפשרויות הדוח ואז בחרה ב 'שמירת תצורת דוח' מתפריט\n"
+"תצורות דוחות שמורים נעשית תחילה על־ידי פתיחת דוח מתפריט הדוחות,\n"
+"שינוי אפשרויות הדוח ולסיום, בחירה ב'שמירת תצורת דוח' מתפריט\n"
 "דוחות או מסרגל הכלים."
 
 #: gnucash/gtkbuilder/dialog-date-close.glade:7
@@ -22424,7 +22424,7 @@ msgstr "מנוטרל"
 
 #: gnucash/report/html-utilities.scm:390
 msgid "This report requires you to specify certain report options."
-msgstr "דוח זה מחייב מספר הגדרות באפשרויות דוח."
+msgstr "נדרשות לדוח זה, הגדרות מסוימות באפשרויות דוח."
 
 #: gnucash/report/html-utilities.scm:397
 msgid "No accounts selected"
@@ -23531,7 +23531,7 @@ msgstr "לגנוקאש ~a הרבה תכונות מעניינות. להלן חל�
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:79
 msgid "Tax Report / TXF Export"
-msgstr "דוח מס / יצוא ל TXF"
+msgstr "דוח מס / יצוא ל־TXF"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:151
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:181
@@ -23641,7 +23641,7 @@ msgstr "תקופת מ ~a ל ~a"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:845
 msgid "Tax Report & XML Export"
-msgstr "דוח מס ויצוא ל XML"
+msgstr "דוח מס ויצוא ל־XML"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:847
 msgid "Taxable Income / Deductible Expenses / Export to .XML file"
@@ -23654,7 +23654,7 @@ msgstr "הכנסות ברות מיסוי / הוצאות מוכרות למס"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:852
 msgid "This report shows your Taxable Income and Deductible Expenses."
-msgstr "דוח זה מציג הכנסות חייבות והוצאות מוכרות למס."
+msgstr "דוח זה מציג הכנסות חייבות והוצאות מוכרות לצרכי מס."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:856
 msgid "XML"
@@ -23666,7 +23666,7 @@ msgstr "העמוד מציג הכנסות חייבות במס והוצאות מו
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:119
 msgid "Tax Schedule Report/TXF Export"
-msgstr "דוח תוכנית מס/יצוא TXF"
+msgstr "דוח זמנן מס/יצוא TXF"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:211
 msgid "$0.00 valued Tax codes won't be printed."
@@ -23747,7 +23747,7 @@ msgstr "קרוב ביותר לתאריך דיווח"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3326
 msgid "Tax Schedule Report & TXF Export"
-msgstr "דוח תוכנית מס ויצוא TXF"
+msgstr "דוח זמנן מס ויצוא TXF"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3328
 msgid ""
@@ -25895,11 +25895,11 @@ msgid ""
 "liability, A/Payable or A/Receivable accounts, a split to a tax account, e."
 "g. Income:Sales -$1000, A/Receivable $1100, Liability:GST on Sales -$100."
 msgstr ""
-"דוח זה משמש לחישוב מס עסקים תקופתי לשלם/לקבל מהרשויות. מתפריט 'עריכת "
-"אפשרויות דוח', יש לבחור בחשבונות הכנסות והוצאות עסקיות. כל תנועה עשויה "
-"להכיל, בנוסף לחשבונות הזכאים/חייבים או חשבון בנק, גם פיצול לחשבונות מס, כגון "
-"הכנסות: מכירות ₪1,000-, התחייבויות: GST על מכירות ₪100-, רכוש שוטף: בנק "
-"₪1,100."
+"דוח זה משמש לחישוב מס ערך מוסף תקופתי, לתשלום/להחזר, מהרשויות. מתפריט 'עריכת "
+"אפשרויות דוח', נא לבחור בחשבונות מכירה וקניה עסקיים. כל תנועה עשויה להכיל, "
+"בנוסף לחשבונות: נכסים, התחיבויות, זכאים/חייבים, או חשבון מזומים/בנק, גם "
+"פיצול לחשבונות מס, כגון הכנסות: מכירות 1,000-₪, התחייבויות: GST על מכירות "
+"1,00-₪, רכוש שוטף: בנק ₪1,100."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:56
 msgid ""
@@ -25919,11 +25919,11 @@ msgid ""
 "ASSET for taxes paid on expenses, and type LIABILITY for taxes collected on "
 "sales."
 msgstr ""
-"מתוך 'אפשרויות דוח', יש לבחור את החשבונות שיאכלסו את מיסי השירותים "
-"ומצרים/מעמ שנצברו או שולמו. חשבונות אלה חייבים להכיל פיצולים לתיעוד הכספים "
-"המשולמים או נדרשים מרשויות המס במהלך הדיווחים התקופתיים. חשבונות אלה חייבים "
-"להיות מוגדרים מסוג נכס עבור מיסים ששולמו והוצאות, ומסוג חבות עבור מיסים "
-"הנצברים ממכירות."
+"מתפריט 'אפשרויות דוח', נא לבחור את החשבונות שיצברו את מיסי השירותים ומצרים/"
+"מע\"מ שנגבו או שולמו. חשבונות אלה חייבים להכיל פיצולים לתיעוד הכספים, "
+"שישולמו או יידרשו להחזר, מרשויות המס, במהלך הדיווח התקופתי. חשבונות אלה "
+"חייבים להיות מסוג 'נכסים', בגין מיסים ששולמו על 'הוצאות', ומסוג 'התחיבויות' "
+"בגין מיסים שנצברו מהמכירות."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:66
 msgid ""
@@ -28547,7 +28547,7 @@ msgstr "מונים"
 
 #: libgnucash/app-utils/business-prefs.scm:40
 msgid "Customer number format"
-msgstr "מבנה מספר לקוח"
+msgstr "מבנה מזהה לקוח"
 
 #: libgnucash/app-utils/business-prefs.scm:41
 msgid "Customer number"
@@ -28557,13 +28557,13 @@ msgstr "מספר לקוח"
 msgid ""
 "The format string to use for generating customer numbers. This is a printf-"
 "style format string."
-msgstr "מבנה המחרוזת שתשמש ליצירת מספרי לקוח. זוהי מבנה מחרוזת בסגנון printf."
+msgstr "מחרוזת תיבנות לחילול מזהה לקוח. זוהי מחרוזת תבנות בסגנון printf."
 
 #: libgnucash/app-utils/business-prefs.scm:43
 msgid ""
 "The previous customer number generated. This number will be incremented to "
 "generate the next customer number."
-msgstr "מספר הלקוח הקודם שנוצר. מספר זה יגדל ב 1 לחילול מספר הלקוח הבא."
+msgstr "מזהה הלקוח הקודם שחולל. מספר זה יגדל ב־,1 לחילול מזהה הלקוח הבא."
 
 #: libgnucash/app-utils/business-prefs.scm:44
 msgid "Employee number format"
