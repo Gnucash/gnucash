@@ -23694,7 +23694,7 @@ msgstr "Opmaaksjabloon"
 
 #: gnucash/report/report-core.scm:165
 msgid "Invoice Number"
-msgstr "Verkoopfactuurnummer"
+msgstr "Factuurnummer"
 
 #: gnucash/report/report-core.scm:211
 msgid ""
