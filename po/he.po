@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-14 14:25+0000\n"
+"PO-Revision-Date: 2022-01-16 15:44+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -454,8 +454,8 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
-"רשימות דיוור הן דרכי התקשורת המועדפת בקהילות גנוקאש. להכרזות על גרסאות "
-"חדשות, קבוצות וכדומה, עיינו בטבלה שבכתובת https://wiki.gnucash.org/wiki/"
+"רשימות דיוור הן דרכי התקשורת המועדפת בקהילות גנוקאש. הכרזות על גרסאות חדשות, "
+"קבוצות וכדומה, ניתן לעיין בטבלה בכתובת https://wiki.gnucash.org/wiki/"
 "Mailing_Lists"
 
 #: doc/tip_of_the_day.list.c:9
@@ -465,7 +465,8 @@ msgid ""
 "org"
 msgstr ""
 "קל ליצור קשר עם מפתחי גנוקאש. בנוסף למספר לא מועט של רשימות דיוור, ניתן "
-"לצ'וטט איתם באופן מקוון באמצעות IRC! הצטרפו אליהם ב־#gnucash ב־irc.gnome.org"
+"'לצ'וטט' איתם באופן מקוון באמצעות IRC! הצטרפו אליהם ב־#gnucash ב־irc.gnome."
+"org"
 
 #: doc/tip_of_the_day.list.c:13
 msgid ""
@@ -486,9 +487,10 @@ msgid ""
 "For more information on income and expense accounts, please see the GnuCash "
 "online manual."
 msgstr ""
-"במידה שתוכניות פיננסיות אחרות כגון קוויקן מוכרות לכם, שימו לב שגנוקאש משתמשת "
-"בחשבונות במקום סוגי־אב על מנת לעקוב אחר הכנסות והוצאות. לקבלת מידע נוסף "
-"אודות חשבונות הכנסה והוצאות, נא לעיין במדריך המקוון של גנוקאש."
+"במידה וקיימת הכרות מוקדמת עם תכנות חשבונאיות אחרות, כגון קוויקן, נא לשים לב "
+"שגנוקאש משתמשת ב'חשבונות' במקום 'סוגי־אב' על מנת לעקוב אחר הכנסות והוצאות. "
+"לקבלת מידע נוסף אודות חשבונות הכנסה והוצאות, נא לעיין במדריך המקוון של "
+"גנוקאש."
 
 #: doc/tip_of_the_day.list.c:23
 msgid ""
@@ -519,7 +521,7 @@ msgid ""
 "accounts, please see the GnuCash online manual."
 msgstr ""
 "ליצירת חשבונות חדשים יש להקיש על לחצן 'חדש' בסרגל הכלים בחלון הראשי. בתיבת "
-"דו־השיח שתוצג ניתן להזין את פרטי החשבון. למידע נוסף אודות בחירת סוג חשבון או "
+"דו־השיח שתוצג ניתן להזין את פרטי החשבון. למידע נוסף על בחירת סוג־חשבון או "
 "הגדרת תרשים חשבונות, נא לעיין במדריך המקוון של גנוקאש."
 
 #: doc/tip_of_the_day.list.c:38
@@ -556,9 +558,10 @@ msgid ""
 "'+', '-','*', or '/'. Type the second value and press Enter to record the "
 "calculated amount."
 msgstr ""
-"בעת הזנת סכומים ליומן, ניתן להשתמש במחשבון גנוקאש כדי לחבר, לחסר, להכפיל "
-"ולחלק. כל שנדרש הוא להקליד את הערך הראשון, ולאחר מכן להקליד סימן '+', '-', "
-"'*', או '/'. להקליד את הערך השני ולחץ על 'אנטר' כדי לרשום את הסכום המחושב."
+"בעת הזנת סכומים לפקודת ־יומן, ניתן להשתמש במחשבון גנוקאש המובנה כדי: לחבר, "
+"לחסר, להכפיל ולחלק. כל שנדרש הוא להקליד את הערך הראשון, לאחר מכן להקליד סימן "
+"'+', '-', '*', או '/'. לאחר מכן, להקליד את הערך השני ולחץ על 'אנטר' כדי "
+"לרשום בפקודת־היומן את התוצאה המחושבת."
 
 #: doc/tip_of_the_day.list.c:54
 msgid ""
@@ -579,10 +582,10 @@ msgid ""
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
 "Assets:Cash)."
 msgstr ""
-"הקלדת האות הראשונה של שם חשבון קיים בעמודה ביומן ההעברות, וגנוקאש תשלים את "
-"השם מרשימת החשבונות הקיימים. לחשבונות משנה, יש להקליד את האות הראשונה של "
-"חשבון האב, ואחריו ':' ואת האות הראשונה של חשבון המשנה (לדוגמה, ר:מ עבור "
-"רכוש: מזומנים)."
+"ניתן להקליד את האות או האותיות הראשונות של שם חשבון קיים, בעמודה ביומן "
+"התנועות, וגנוקאש תשלים את השם מרשימת החשבונות הקיימים. לחשבונות משנה, יש "
+"להקליד את האות הראשונה של חשבון האב, ואחריו ':' ואת האות הראשונה של חשבון "
+"המשנה (לדוגמה, ר:מ עבור 'רכוש שוטף: מזומנים')."
 
 #: doc/tip_of_the_day.list.c:65
 msgid ""
@@ -699,7 +702,7 @@ msgid ""
 "after midnight, to get the new date as default for new transactions. It is "
 "not necessary to restart GnuCash."
 msgstr ""
-"אם עובדים בלילה, לאחר חצות, יש לסגור ולפתוח מחדש את יומני העבודה לעדכון "
+"כאשר עובדים בלילה, לאחר חצות, יש לסגור ולפתוח מחדש את יומני העבודה לעדכון "
 "תאריך ברירת המחדל לתנועות החדשות. אין צורך להפעיל מחדש את גנוקאש."
 
 #: doc/tip_of_the_day.list.c:115
@@ -708,9 +711,9 @@ msgid ""
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
-"לחיפוש בכל התנועות, יש לבצע חיפוש ('עריכה &larr; חיפוש...') מעמוד תרשים "
-"החשבונות הראשי. להגבלת החיפוש לחשבון יחיד, יש להפעיל את החיפוש מהיומן של "
-"אותו חשבון."
+"על מנת לחפש בכל התנועות, יש לבצע חיפוש ('עריכה &larr; חיפוש...') מעמוד תרשים "
+"החשבונות הראשי. להגבלת החיפוש לחשבון יחיד, יש להפעיל את החיפוש מיומן התנועות "
+"של אותו חשבון."
 
 #: doc/tip_of_the_day.list.c:119
 msgid ""
@@ -1518,11 +1521,11 @@ msgstr "האם למחוק את %s?"
 
 #: gnucash/gnome/dialog-custom-report.c:436
 msgid "You must select a report configuration to load."
-msgstr "נא לבחור תצורת דוח לטעינה."
+msgstr "נדרש לבחור תצורת דוח לטעינה."
 
 #: gnucash/gnome/dialog-custom-report.c:451
 msgid "You must select a report configuration to delete."
-msgstr "נא לבחור תצורת דוח למחיקה."
+msgstr "נדרש לבחור תצורת דוח למחיקה."
 
 #: gnucash/gnome/dialog-custom-report.c:465
 msgid "Unable to change report configuration name."
@@ -1532,7 +1535,7 @@ msgstr "לא ניתן לשנות שם תצורת דוח."
 msgid ""
 "A saved report configuration with this name already exists, please choose "
 "another name."
-msgstr "תצורת דוח שמור עם שם זהה קיים כבר, נא לבחור שם אחר."
+msgstr "תצורת דוח שמורה בשם זהה קיימת כבר, נא לבחור שם אחר."
 
 #: gnucash/gnome/dialog-custom-report.c:503
 msgid "Load report configuration"
@@ -1678,7 +1681,7 @@ msgstr "לא ניתן לערוך פריט עיסקי."
 #: gnucash/gnome/gnc-plugin-page-invoice.c:1361
 #: gnucash/gnome/gnc-plugin-page-register.c:631
 msgid "Manage Document Link"
-msgstr "ניהול מסמכים מקושרים"
+msgstr "ניהול צרופות"
 
 #: gnucash/gnome/dialog-doclink.c:754
 msgid "Transaction can not be modified."
@@ -2845,7 +2848,7 @@ msgid ""
 "\n"
 msgstr ""
 "בעוד שלתנועה זו יש מספר פיצולים שנחשבים\n"
-"כ 'פיצולי תשלום', גנוקאש יודעת להתמודד רק עם אחד.\n"
+"כ 'פיצולי תשלום', גנוקאש יודעת להתמודד רק עם פיצול אחד.\n"
 "נא לבחור פיצול אחד, גנוקאש תתעלם מהאחרים.\n"
 "\n"
 
@@ -3455,7 +3458,7 @@ msgstr "יצוא _חשבונות"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:138
 msgid "Export the account hierarchy to a new GnuCash datafile"
-msgstr "יצוא תרשים החשבונות לקובץ נתונים גנוקאש חדש"
+msgstr "ייצוא תרשים החשבונות לקובץ נתונים גנוקאש חדש"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:145
 #: gnucash/gnome/gnc-plugin-page-register2.c:255
@@ -4580,7 +4583,7 @@ msgstr "_תשלום חשבון"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:366
 #: gnucash/gnome/gnc-plugin-page-register.c:300
 msgid "_Manage Document Link..."
-msgstr "_ניהול מסמכים מקושרים…"
+msgstr "_ניהול צרופות…"
 
 #. Translators: This is a menu item that opens an external file or URI that may
 #. be linked to the current bill, invoice, transaction, or voucher using
@@ -4893,7 +4896,7 @@ msgstr "פתיחת חלון דוח ספק עבור נמען הודעת זיכו�
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:445
 msgid "Manage Document Link..."
-msgstr "ניהול מסמכים מקושרים…"
+msgstr "ניהול צרופות…"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:452
 #: gnucash/gnome/gnc-plugin-page-register2.c:498
@@ -6423,7 +6426,7 @@ msgstr "ניהול הכספים, החשבונות וההשקעות"
 #: gnucash/gnome/gnucash.appdata.xml.in.in:8
 msgid ""
 "GnuCash is a program for personal and small-business financial-accounting."
-msgstr "גנוקאש היא תוכנת הנהלת חשבונות לפרטיים ולעסקים קטנים."
+msgstr "גנוקאש היא תוכנת הנהלת חשבונות לשימוש איש ולעסקים קטנים."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:11
 msgid ""
@@ -6434,13 +6437,13 @@ msgid ""
 "accurate reports."
 msgstr ""
 "מיועדת להיות קלה לשימוש, אך עצמתית וגמישה, גנוקאש מאפשרת לעקוב אחר חשבונות "
-"בנק, מניות, הכנסות והוצאות. מהירה ואינטואיטיבית לשימוש בדומה לרישום בפנקס "
-"המחאות, היא מבוססת על עקרונות חשבונאיים מקצועיים כמו מערכת חשבונאות כפולה "
-"כדי להבטיח ספרים מאוזנים ודוחות מדויקים."
+"בנק, ניירות־ערך, הכנסות והוצאות. היא מהירה ואינטואיטיבית לשימוש, בדומה "
+"לרישום בפנקס המחאות. היא מבוססת על עקרונות חשבונאיים מקצועיים כמו מערכת "
+"חשבונאות כפולה כדי להבטיח ספרים מאוזנים ודוחות מדויקים."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:15
 msgid "With GnuCash you can (but are not limited to):"
-msgstr "עם גנוקאש ניתן (אך לא מוגבל ל):"
+msgstr "עם גנוקאש ניתן גם (אך לא רק):"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:17
 msgid "Keep track of your day to day personal income and expenses"
@@ -6498,11 +6501,11 @@ msgstr "הצגת דוח ~a"
 #: gnucash/gnome/report-menus.scm:90
 #: gnucash/gtkbuilder/dialog-custom-report.glade:8
 msgid "Saved Report Configurations"
-msgstr "תצורת דוחות שמורים"
+msgstr "תצורות דוחות שנשמרו"
 
 #: gnucash/gnome/report-menus.scm:92
 msgid "Manage and run saved report configurations"
-msgstr "ניהול והפקת תצורת דוחות שמורים"
+msgstr "ניהול והפקת תצורות דוחות שמורים"
 
 #: gnucash/gnome/report-menus.scm:116
 #: gnucash/report/reports/standard/dashboard.scm:52
@@ -6771,7 +6774,7 @@ msgstr "ביטול התאמת התנועות שנבחרו"
 
 #: gnucash/gnome/window-reconcile2.c:2211 gnucash/gnome/window-reconcile.c:2458
 msgid "Open the GnuCash help window"
-msgstr "פתיחת חלון עזרה גנוקאש"
+msgstr "פתיחת חלון עזרת גנוקאש"
 
 #. Translators: %d is the number of days in the future
 #: gnucash/gnome/window-reconcile.c:388
@@ -7064,19 +7067,19 @@ msgid ""
 "file.\n"
 msgstr ""
 "\n"
-"קובץ הטעינה הוא מגרסה ישנה יותר של גנוקאש. מבנה הקובץ בגרסאות ישנות חסרה את "
+"קובץ הטעינה הוא מגרסת גנוקאש ישנה יותר. מבנה הקובץ בגרסאות ישנות, חסר את "
 "פירוט קידוד התווים שבשימוש. כלומר, המלל שבקובץ הנתונים ניתן לקריאה במספר "
 "דרכים ובמעורפל. לא ניתן לפתור עמימות זו באופן אוטומטי, אך בגרסת גנוקאש 2.0.0 "
-"החדשה, מבנה הקובץ כוללת את כל המפרטים הדרושים, כך שלא יהיה צורך לעבור את "
-"השלב הזה שוב.\n"
+"החדשה, מבנה הקובץ כולל את כל המפרטים הדרושים, כך שלא יהיה צורך לעבור שלב זה "
+"שוב.\n"
 "\n"
 "גנוקאש תנסה לנחש את קידוד התווים הנכון עבור קובץ הנתונים לטעינה. בעמוד הבא "
-"גנוקאש תציג את המלל שהתקבל בעת ניסיון הניחוש. נדרש לבדוק האם המילים בעלות "
-"משמעות וכצפוי. אם הכל נראה תקין, ניתן פשוט להקיש על לחצן 'הבא'. אם המילים "
-"מכילות תווים לא צפוים, יש לבחור קידוד תווים שונה לקבלת תוצאות שונות. יתכן "
-"וידרש לערוך את רשימת קידוד התווים על־ידי הקשה על המקש המתאים.\n"
+"גנוקאש תציג את המלל שהתקבל בעת ניסיון הניחוש. נדרש לבדוק האם המילים אכן "
+"בעלות משמעות כצפוי. אם הכל נראה תקין, ניתן פשוט להקיש על לחצן 'הבא'. אם "
+"המילים מכילות תווים בלתי צפוים, יש לבחור קידוד תווים שונה, לקבלת תוצאות "
+"שונות. יתכן ותידרש עריכת רשימת קידוד התווים על־ידי הקשה על המקש המתאים.\n"
 "\n"
-"נא להקיש על לחצן 'הבא' כעת על מנת לבחור את קידוד התווים הנכון עבור קובץ "
+"נא להקיש על לחצן 'הבא' כעת על מנת לבחור את קידוד התווים המתאים עבור קובץ "
 "הנתונים.\n"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:198
@@ -8134,9 +8137,8 @@ msgid ""
 "another user, in which case you should not open the database. Do you want to "
 "proceed with opening the database?"
 msgstr ""
-"לגנוקאש לא היתה אפשרות לנעות את %s. מסד נתונים זה עשוי להיות בשימוש על־ידי "
-"משתמש אחר, ובמקרה זה אסור לפתוח את מסד הנתונים. האם להמשיך בפתיחת מסד "
-"הנתונים?"
+"לגנוקאש לא התאפשר לנעול את %s. מסד נתונים זה עשוי להיות בשימוש על־ידי משתמש "
+"אחר, במקרה זה אין לפתוח את מסד הנתונים. האם להמשיך בפתיחת מסד הנתונים?"
 
 #: gnucash/gnome-utils/gnc-file.c:336
 #, c-format
@@ -8145,9 +8147,8 @@ msgid ""
 "another user, in which case you should not import the database. Do you want "
 "to proceed with importing the database?"
 msgstr ""
-"לגנוקאש לא היתה אפשרות לנעול את %s. מסד נתונים זה עשוי להיות בשימוש על־ידי "
-"משתמש אחר, ובמקרה זה לא צריך לייבא את מסד הנתונים. האם להמשיך בייבוא מסד "
-"הנתונים?"
+"לגנוקאש לא התאפשר לנעול את %s. מסד נתונים זה עשוי להיות בשימוש על־ידי משתמש "
+"אחר, ובמקרה זה אין לייבא את מסד הנתונים. האם להמשיך בייבוא מסד הנתונים?"
 
 #: gnucash/gnome-utils/gnc-file.c:344
 #, c-format
@@ -8167,9 +8168,8 @@ msgid ""
 "another user, in which case you should not export the database. Do you want "
 "to proceed with exporting the database?"
 msgstr ""
-"לגנוקאש לא היתה אפשרות לנעול את %s. מסד נתונים זה עשוי להיות בשימוש על־ידי "
-"משתמש אחר, ובמקרה זה לא צריך לייצא את מסד הנתונים. האם להמשיך בייצוא מסד "
-"הנתונים?"
+"לגנוקאש לא התאפשר לנעול את %s. מסד נתונים זה עשוי להיות בשימוש על־ידי משתמש "
+"אחר, ובמקרה זה אין לייצא את מסד הנתונים. האם להמשיך בייצוא מסד הנתונים?"
 
 #: gnucash/gnome-utils/gnc-file.c:377
 #, c-format
@@ -8178,9 +8178,8 @@ msgid ""
 "system, you may not have write permission for the directory or your anti-"
 "virus software is preventing this action."
 msgstr ""
-"לגנוקאש לא היתה אפשרות לכתוב ל־%s. מסד נתונים זה עשוי להיות במערכת קבצים "
-"לקריאה בלבד, ייתכן שאין הרשאת כתיבה עבור הספריה או שתוכנת האנטי־וירוס מונעת "
-"פעולה זו."
+"לגנוקאש לא התאפשר לכתוב ל־%s. מסד נתונים זה עשוי להיות במערכת קבצים לקריאה "
+"בלבד, ייתכן שחסרה הרשאת כתיבה לספריה, או, תוכנת האנטי־וירוס מונעת פעולה זו."
 
 #: gnucash/gnome-utils/gnc-file.c:385
 #, c-format
@@ -8284,7 +8283,7 @@ msgid ""
 "This database is from an older version of GnuCash. Select OK to upgrade it "
 "to the current version, Cancel to mark it read-only."
 msgstr ""
-"מסד הנתונים הוא מגרסה ישנה יותר של גנוקאש. נא לבחור ב 'אישור' לשדרג לגרסה "
+"מסד הנתונים הוא מגרסה ישנה יותר של גנוקאש. נא לבחור ב 'אישור' לשדרוג לגרסה "
 "הנוכחית, או 'ביטול' כדי לסמנו לקריאה בלבד."
 
 #: gnucash/gnome-utils/gnc-file.c:496
@@ -8316,9 +8315,9 @@ msgid ""
 "gnucash.org/show_bug.cgi?id=611936 for more information."
 msgstr ""
 "הספריה 'libdbi' המותקנת במערכת אינה מאחסנת כראוי מספרים גדולים. פירוש הדבר "
-"שגנוקאש לא יכול להשתמש כראוי במסדי נתונים של SQL. גנוקאש לא יפתח או ישמור "
-"למסדי נתונים SQL עד להתקנת גרסה שונה של 'libdbi'. אנא ראו https://bugs."
-"gnucash.org/show_bug.cgi?id=611936 לקבלת מידע נוסף."
+"שגנוקאש לא תוכל להשתמש כראוי במסד נתוני SQL. גנוקאש לא תפתח או תשמור למסד "
+"נתוני SQL, עד להתקנת גרסה שונה של 'libdbi'. נא ראו https://bugs.gnucash.org/"
+"show_bug.cgi?id=611936 לקבלת מידע נוסף."
 
 #: gnucash/gnome-utils/gnc-file.c:527
 msgid ""
@@ -8327,9 +8326,9 @@ msgid ""
 "your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?"
 "id=645216 for more information."
 msgstr ""
-"גנוקאש לא יכולה להשלים בדיקה מהותית להמצאות תקל בספריה 'libdbi'. יתכן שנגרם "
-"עקב תצורת הרשאות שגויה במסד הנתונים SQL. נא ראו https://bugs.gnucash.org/"
-"show_bug.cgi?id=645216 למידע נוסף."
+"גנוקאש לא יכולה להשלים בדיקה מהותית להמצאות תקל בספריה 'libdbi'. יתכן שהדבר "
+"נגרם כתוצאה מתצורת הרשאות שגויה במסד נתונים SQL. נא ראו https://bugs.gnucash."
+"org/show_bug.cgi?id=645216 למידע נוסף."
 
 #: gnucash/gnome-utils/gnc-file.c:537
 msgid ""
@@ -8368,7 +8367,7 @@ msgstr "להמשיך _ללא שמירה"
 #: gnucash/gnome-utils/gnc-file.c:822
 #, c-format
 msgid "GnuCash could not obtain the lock for %s."
-msgstr "לגנוקאש לא היתה אפשרות לנעול את %s."
+msgstr "לגנוקאש לא התאפשר לנעול את %s."
 
 #: gnucash/gnome-utils/gnc-file.c:824
 msgid ""
@@ -8457,7 +8456,7 @@ msgstr "מצג..."
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:70
 msgid "GnuCash could not find the files of the help documentation."
-msgstr "גנוקאש לא מצא את קובצי תיעוד העזרה."
+msgstr "גנוקאש לא מצאה את קובצי תיעוד העזרה."
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:72
 msgid ""
@@ -8553,7 +8552,7 @@ msgstr "הע_דפות"
 
 #: gnucash/gnome-utils/gnc-main-window.c:336
 msgid "Edit the global preferences of GnuCash"
-msgstr "עריכת המאפיינים הגלובליים של גנוקאש"
+msgstr "עריכת המאפיינים הכלליים של גנוקאש"
 
 #: gnucash/gnome-utils/gnc-main-window.c:344
 msgid "Select sorting criteria for this page view"
@@ -8617,7 +8616,7 @@ msgstr "_אודות"
 
 #: gnucash/gnome-utils/gnc-main-window.c:397
 msgid "About GnuCash"
-msgstr "אודות גנוקאש"
+msgstr "על אודות גנוקאש"
 
 #: gnucash/gnome-utils/gnc-main-window.c:409
 msgid "_Toolbar"
@@ -10312,8 +10311,8 @@ msgid ""
 "closed. The numbers are the X and Y coordinates of the top left corner of "
 "the window followed by the width and height of the window."
 msgstr ""
-"הגדרה זו מתארת את מיקום החלון כשנסגר בפעם האחרונה. המספרים הם ערכי צירי ה־X "
-"וה־Y של הפינה השמאלית של החלון ובהמשך רוחב החלון וגובהו."
+"הגדרה זו קובעת את מיקום החלון שנסגר בפעם האחרונה. המספרים הם ערכי צירי ה־X ו־"
+"Y של הפינה השמאלית העליונה של החלון, ובהמשך רוחב החלון וגובהו."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:24
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:39
@@ -15272,9 +15271,9 @@ msgid ""
 "Configuration\" from\n"
 "the Reports menu or tool bar."
 msgstr ""
-"תצורות דוחות שמורים נעשית תחילה על־ידי פתיחת דוח מתפריט הדוחות,\n"
-"שינוי אפשרויות הדוח ולסיום, בחירה ב'שמירת תצורת דוח' מתפריט\n"
-"דוחות או מסרגל הכלים."
+"לתצור דוחות שמורים, תחילה יש לפתוח דוח מתפריט הדוחות,\n"
+"לשנות את אפשרויות הדוח. לסיום, בחירה ב'שמירת תצורת דוח' מתפריט\n"
+"הדוחות או מסרגל הכלים."
 
 #: gnucash/gtkbuilder/dialog-date-close.glade:7
 #: gnucash/gtkbuilder/dialog-date-close.glade:263
@@ -28177,7 +28176,7 @@ msgstr "מצב התאמה"
 
 #: gnucash/report/trep-engine.scm:121
 msgid "Void Transactions"
-msgstr "תנועות בטלות"
+msgstr "תנועות שבוטלו"
 
 #: gnucash/report/trep-engine.scm:122
 msgid "Closing transactions"
