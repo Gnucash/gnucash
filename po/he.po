@@ -431,7 +431,7 @@ msgstr "כיוון המרה"
 
 #: borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr "הערך קובע את בדיקת ה־iconv תתבצע."
+msgstr "הערך קובע איזו בדיקת iconv תתבצע."
 
 #: borrowed/goffice/go-optionmenu.c:339
 msgid "Menu"
@@ -10312,8 +10312,8 @@ msgid ""
 "closed. The numbers are the X and Y coordinates of the top left corner of "
 "the window followed by the width and height of the window."
 msgstr ""
-"הגדרה זו קובעת את מיקום החלון שנסגר לאחרונה. המספרים הם ערכי צירי ה־X ו־Y של "
-"הפינה השמאלית של החלון ובהמשך רוחב וגובה החלון."
+"הגדרה זו מתארת את מיקום החלון כשנסגר בפעם האחרונה. המספרים הם ערכי צירי ה־X "
+"וה־Y של הפינה השמאלית של החלון ובהמשך רוחב החלון וגובהו."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:24
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:39
@@ -13819,18 +13819,18 @@ msgid ""
 "software are likely to be in \"d-m-y\" or day-month-year format, where US "
 "QIF files are likely to be \"m-d-y\" or month-day-year.\n"
 msgstr ""
-"מבנה הקובץ QIF לא מגדירה באיזה סדר מודפסים רכיבי ה: יום, חודש ושנה של תאריך. "
-"לרוב, ניתן לקבוע אוטומטית איזה מבנה נמצאת בשימוש בקובץ מסוים. יחד עם זאת, "
-"בקובץ שיובא זה עתה קיימות יותר ממבנה אפשרית אחת שמתאימה לנתונים.\n"
+"מבנה הקובץ QIF לא מגדיר באיזה סדר מודפסים רכיבי היום, החודש והשנה של תאריך. "
+"לרוב, ניתן לקבוע אוטומטית איזה מבנה נמצא בשימוש בקובץ מסוים. יחד עם זאת, "
+"בקובץ שיובא זה עתה קיים יותר ממבנה אפשרי אחד שמתאים לנתונים.\n"
 "\n"
 "נא לבחור מבנה תאריך לקובץ. קובצי QIF שנוצרו על־ידי תוכנה אירופאית עשויים "
-"להיות בפורמט 'd-m-y' או יום-חודש-שנה, כאשר קובצי ה־QIF הם מארה\"ב ככל הנראה "
-"המבנה תהיה במבנה 'm-d-y' או חודש-יום-שנה.\n"
+"להיות בתבנית ‚d-m-y’ או יום-חודש-שנה, בעוד בקובצי QIF מארה״ב ככל הנראה המבנה "
+"יהיה ‚m-d-y’ או חודש-יום-שנה.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:332
 #: gnucash/gtkbuilder/assistant-qif-import.glade:417
 msgid "Click \"Back\" to cancel the loading of this file and choose another."
-msgstr "הקשה על 'הקודם' לביטול טעינת הקובץ ולבחור באפשרות אחרת."
+msgstr "לחיצה על „חזרה” תבטל את טעינת הקובץ ותבחר באפשרות אחרת."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:345
 msgid "Set a date format for this QIF file"
@@ -13848,7 +13848,7 @@ msgstr ""
 "נראה שקובץ ה־QIF שנטען מכיל תנועות בחשבון אחד בלבד, אך הקובץ אינו מכיל את שם "
 "החשבון.\n"
 "\n"
-"נא להזין את שם החשבון. אם הקובץ יוצא מתכנת חשבונאות אחרת, יש להשתמש באותו שם "
+"נא למלא את שם החשבון. אם הקובץ יוצא מתוכנת חשבונאות אחרת, יש להשתמש באותו שם "
 "חשבון ששימש באותה התוכנה.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:380
