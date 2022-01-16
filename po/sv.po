@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-03 03:41+0000\n"
+"PO-Revision-Date: 2022-01-14 17:54+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sv/>\n"
@@ -1506,7 +1506,7 @@ msgstr "Fakturakontakt"
 
 #: gnucash/gnome/dialog-customer.c:924
 msgid "Customer ID"
-msgstr "Kundnummer"
+msgstr "Kund ID"
 
 #: gnucash/gnome/dialog-customer.c:926 gnucash/gnome/dialog-invoice.c:3393
 #: gnucash/gnome/dialog-invoice.c:3427 gnucash/gnome/dialog-vendor.c:720
@@ -2391,7 +2391,7 @@ msgstr "Räkningsinformation"
 #: gnucash/gnome/dialog-invoice.c:2635 gnucash/gnome/dialog-invoice.c:2861
 #: gnucash/gnome/dialog-invoice.c:3431
 msgid "Bill ID"
-msgstr "Räkningsnummer"
+msgstr "Räknings-ID"
 
 #: gnucash/gnome/dialog-invoice.c:2639 gnucash/gnome/dialog-invoice.c:2865
 msgid "Voucher Information"
@@ -2494,7 +2494,7 @@ msgstr "Öppningsdatum"
 #: gnucash/gtkbuilder/dialog-invoice.glade:41
 #: gnucash/gtkbuilder/dialog-invoice.glade:749
 msgid "Invoice ID"
-msgstr "Fakturanummer"
+msgstr "Faktura-ID"
 
 #: gnucash/gnome/dialog-invoice.c:3403
 msgid "Bill Owner"
@@ -2772,7 +2772,7 @@ msgstr "Ägarnamn"
 #: gnucash/gnome/dialog-order.c:880 gnucash/gtkbuilder/dialog-order.glade:122
 #: gnucash/gtkbuilder/dialog-order.glade:520
 msgid "Order ID"
-msgstr "Ordernummer"
+msgstr "Order-ID"
 
 #: gnucash/gnome/dialog-order.c:950
 msgid "Find Order"
