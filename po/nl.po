@@ -27114,7 +27114,7 @@ msgstr "Winst- en verliesrekening"
 #: gnucash/report/reports/standard/taxinvoice.scm:108
 #: gnucash/report/reports/standard/taxinvoice.scm:181
 msgid "Tax Amount"
-msgstr "Belastingbedrag"
+msgstr "BTW"
 
 #: gnucash/report/reports/standard/invoice.scm:112
 msgid "Client or vendor name, address and ID"
@@ -28067,7 +28067,7 @@ msgstr "Kortingsbedrag"
 #: gnucash/report/reports/standard/taxinvoice.scm:107
 #: gnucash/report/reports/standard/taxinvoice.scm:179
 msgid "Tax Rate"
-msgstr "Belastingtarief"
+msgstr "BTW%"
 
 #: gnucash/report/reports/standard/receipt.scm:61
 #: gnucash/report/reports/standard/receipt.scm:134
@@ -28307,7 +28307,7 @@ msgstr "kolom: Datum"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:75
 msgid "column: Tax Rate"
-msgstr "kolom: Belastingtarief"
+msgstr "kolom: BTW"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:76
 msgid "column: Units"
