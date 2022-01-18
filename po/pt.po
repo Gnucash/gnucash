@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-18 03:59+0000\n"
+"PO-Revision-Date: 2022-01-18 05:45+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -6331,7 +6331,7 @@ msgid ""
 "cause your reconciled balance to be off."
 msgstr ""
 "Estaria a eliminar uma parcela reconciliada! Isso não é boa ideia, visto que "
-"fará com que o balanço fique errado."
+"fará com que o saldo recociliado fique errado."
 
 #: gnucash/gnome/gnc-split-reg.c:917
 msgid "You cannot cut this split."
@@ -6373,7 +6373,7 @@ msgid ""
 "good idea as it will cause your reconciled balance to be off."
 msgstr ""
 "Estaria a eliminar uma transacção com parcelas reconciliadas! Isso não é boa "
-"ideia, visto que fará com que o balanço fique errado."
+"ideia, visto que fará com que o saldo reconciliado fique errado."
 
 #: gnucash/gnome/gnc-split-reg.c:1014
 msgid "_Cut Transaction"
@@ -6405,7 +6405,7 @@ msgid ""
 "because that will cause your reconciled balance to be off."
 msgstr ""
 "Esta transacção contém parcelas reconciliadas! Modificá-la não é boa ideia, "
-"visto que fará com que o balanço fique errado."
+"visto que fará com que o saldo reconciliado fique errado."
 
 #. Translators: This is the confirmation button in a warning dialog
 #: gnucash/gnome/gnc-split-reg.c:1238
@@ -6430,7 +6430,7 @@ msgid ""
 "cause your reconciled balance to be off."
 msgstr ""
 "Estaria a eliminar uma parcela reconciliada! Isso não é boa ideia, visto que "
-"isso fará com que o balanço fique errado."
+"isso fará com que o saldo reconciliado fique errado."
 
 #: gnucash/gnome/gnc-split-reg.c:1444
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:967
@@ -6462,7 +6462,7 @@ msgid ""
 "good idea as it will cause your reconciled balance to be off."
 msgstr ""
 "Estaria a eliminar uma transacção com parcelas reconciliadas! Isso não é boa "
-"ideia, visto que fará com que o balanço fique errado."
+"ideia, visto que fará com que o saldo reconciliado fique errado."
 
 #: gnucash/gnome/gnc-split-reg.c:1716
 #, c-format
@@ -6542,11 +6542,11 @@ msgid ""
 "principles like double-entry accounting to ensure balanced books and "
 "accurate reports."
 msgstr ""
-"Desenhado para ser fácil de usar mas também poderoso e flexível, o GnuCash "
-"permite-lhe controlar contas bancárias, acções, receitas e despesas. Tão "
-"fácil e intuitivo de usar como uma folha de livro de cheques, é baseado em "
-"princípios contabilísticos profissionais, tais como a contabilidade de dupla "
-"entrada, para garantir livros saldados e relatórios precisos."
+"Desenhado para ser fácil de usar mas poderoso e flexível, o GnuCash permite "
+"controlar contas bancárias, acções, receitas e despesas. Tão fácil e "
+"intuitivo de usar como um livro de cheques, é baseado em princípios "
+"contabilísticos profissionais, como a contabilidade de dupla entrada, para "
+"garantir livros saldados e relatórios precisos."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:15
 msgid "With GnuCash you can (but are not limited to):"
@@ -6586,7 +6586,7 @@ msgstr "Realizar cálculos financeiros, tais como o pagamento de um empréstimo"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:33
 msgid "GnuCash Project"
-msgstr "Projecto do GnuCash"
+msgstr "Projecto GnuCash"
 
 #: gnucash/gnome/gnucash.desktop.in.in:7
 msgid "Finance Management"
@@ -6846,7 +6846,7 @@ msgstr "Editar a conta principal deste diário"
 #: gnucash/gnome/window-reconcile2.c:2173 gnucash/gnome/window-reconcile.c:2420
 #: gnucash/gnome-utils/gnc-main-window.c:358
 msgid "_Check & Repair"
-msgstr "Verificar & _Corrigir"
+msgstr "Verificar e _corrigir"
 
 #: gnucash/gnome/window-reconcile2.c:2182 gnucash/gnome/window-reconcile.c:2429
 #: gnucash/gtkbuilder/dialog-account.glade:1753
@@ -6875,7 +6875,7 @@ msgstr "Reconciliar as transacções seleccionadas"
 
 #: gnucash/gnome/window-reconcile2.c:2202 gnucash/gnome/window-reconcile.c:2449
 msgid "_Unreconcile Selection"
-msgstr "Selecção _não reconciliada"
+msgstr "_Desconciliar selecção"
 
 #: gnucash/gnome/window-reconcile2.c:2203 gnucash/gnome/window-reconcile.c:2450
 msgid "Unreconcile the selected transactions"
@@ -6890,8 +6890,8 @@ msgstr "Abre a janela de ajuda do GnuCash"
 #, c-format
 msgid "Statement Date is %d day after today."
 msgid_plural "Statement Date is %d days after today."
-msgstr[0] "A data do extracto é %d dia depois de hoje."
-msgstr[1] "A data do extracto é %d dias depois de hoje."
+msgstr[0] "A data do extracto é %d dia no futuro."
+msgstr[1] "A data do extracto é %d dias no futuro."
 
 #. Translators: %d is the number of days in the future
 #: gnucash/gnome/window-reconcile.c:395
@@ -6915,7 +6915,7 @@ msgid ""
 "date. Reconciliation may be difficult."
 msgstr ""
 "AVISO! A conta contém parcelas cuja data de reconciliação é posterior à data "
-"do extrato. A reconciliação pode ser difícil."
+"do extracto. A reconciliação pode ser difícil."
 
 #: gnucash/gnome/window-reconcile.c:1904
 msgid ""
@@ -6925,8 +6925,8 @@ msgid ""
 "reconcile."
 msgstr ""
 "A conta contém parcelas cuja data de reconciliação é posterior à data do "
-"extrato. Estas parcelas podem dificultar a reconciliação. Se for o caso, "
-"utilize Localizar transacções para as encontrar, corrigir e voltar a "
+"extracto. Estas parcelas podem dificultar a reconciliação. Se for o caso, "
+"utilize Localizar transacções para as encontrar, desconciliar e voltar a "
 "reconciliar."
 
 #: gnucash/gnome/window-report.c:112
@@ -7002,7 +7002,7 @@ msgstr "igual a qualquer conta"
 
 #: gnucash/gnome-search/search-account.c:178
 msgid "matches no accounts"
-msgstr "igual a nenhuma conta"
+msgstr "diferente de todas as contas"
 
 #: gnucash/gnome-search/search-account.c:195
 #: gnucash/report/reports/standard/cash-flow.scm:256
@@ -7084,27 +7084,27 @@ msgstr "é maior ou igual a"
 
 #: gnucash/gnome-search/search-numeric.c:217
 msgid "less than"
-msgstr "menores que"
+msgstr "menor que"
 
 #: gnucash/gnome-search/search-numeric.c:220
 msgid "less than or equal to"
-msgstr "menores ou iguais a"
+msgstr "menor ou igual a"
 
 #: gnucash/gnome-search/search-numeric.c:224
 msgid "equal to"
-msgstr "iguais a"
+msgstr "igual a"
 
 #: gnucash/gnome-search/search-numeric.c:227
 msgid "not equal to"
-msgstr "diferentes de"
+msgstr "diferente de"
 
 #: gnucash/gnome-search/search-numeric.c:230
 msgid "greater than"
-msgstr "maiores que"
+msgstr "maior que"
 
 #: gnucash/gnome-search/search-numeric.c:233
 msgid "greater than or equal to"
-msgstr "maiores ou iguais a"
+msgstr "maior ou igual a"
 
 #: gnucash/gnome-search/search-numeric.c:250
 msgid "has credits or debits"
@@ -7124,7 +7124,7 @@ msgstr "Não confirmada"
 
 #: gnucash/gnome-search/search-string.c:169
 msgid "You need to enter some search text."
-msgstr "Tem de indicar um texto de procura."
+msgstr "Tem de inserir um texto a procurar."
 
 #: gnucash/gnome-search/search-string.c:198
 #: gnucash/import-export/bi-import/dialog-bi-import.c:136
@@ -7144,11 +7144,11 @@ msgstr "contém"
 
 #: gnucash/gnome-search/search-string.c:244
 msgid "matches regex"
-msgstr "satisfaz expreg"
+msgstr "satisfaz a expressão regular"
 
 #: gnucash/gnome-search/search-string.c:246
 msgid "does not match regex"
-msgstr "não satisfaz expreg"
+msgstr "não satisfaz a expressão regular"
 
 #: gnucash/gnome-search/search-string.c:322
 msgid "Match case"
@@ -7314,7 +7314,7 @@ msgstr "ISO-8859-1 KOI8-U"
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1089
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1109
 msgid "The file could not be reopened."
-msgstr "O ficheiro não pode ser reaberto."
+msgstr "O ficheiro não pôde ser reaberto."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1094
 msgid "Reading file..."
@@ -7345,7 +7345,7 @@ msgstr "Esta é uma codificação inválida."
 
 #: gnucash/gnome-utils/dialog-account.c:531
 msgid "Could not create opening balance."
-msgstr "Impossível criar saldo inicial."
+msgstr "Impossível criar o saldo inicial."
 
 #: gnucash/gnome-utils/dialog-account.c:739
 msgid "Give the children the same type?"
@@ -7362,11 +7362,11 @@ msgstr ""
 
 #: gnucash/gnome-utils/dialog-account.c:761
 msgid "_Show children accounts"
-msgstr "_Mostrar contas filho"
+msgstr "_Mostrar contas-filho"
 
 #: gnucash/gnome-utils/dialog-account.c:831
 msgid "The account must be given a name."
-msgstr "Tem de ser dado um nome à conta."
+msgstr "A conta tem de ter um nome."
 
 #: gnucash/gnome-utils/dialog-account.c:857
 msgid "There is already an account with that name."
@@ -7450,16 +7450,14 @@ msgstr ""
 msgid ""
 "Set the account color for account '%s' including all sub-accounts to the "
 "selected color"
-msgstr ""
-"Definir a cor da conta para \"%s\" incluindo todas as sub-contas para a cor "
-"seleccionada"
+msgstr "Definir a cor da conta \"%s\" e todas as suas sub-contas"
 
 #: gnucash/gnome-utils/dialog-account.c:2320
 #, c-format
 msgid ""
 "Set the account placeholder value for account '%s' including all sub-accounts"
 msgstr ""
-"Definir o valor do marcador da conta para \"%s\" incluindo todas as sub-"
+"Definir o valor do marcador da conta \"%s\", incluindo todas as suas sub-"
 "contas"
 
 #: gnucash/gnome-utils/dialog-account.c:2334
@@ -7467,7 +7465,7 @@ msgstr ""
 msgid ""
 "Set the account hidden value for account '%s' including all sub-accounts"
 msgstr ""
-"Definir o valor oculto da conta para \"%s\" incluindo todas as sub-contas"
+"Definir o valor oculto da conta \"%s\", incluindo todas as suas sub-contas"
 
 #: gnucash/gnome-utils/dialog-book-close.c:294
 msgid "Please select an Equity account to hold the total Period Income."
@@ -7608,7 +7606,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:237
 msgid "Path head for files is,"
-msgstr "Caminho para os ficheiros é,"
+msgstr "O caminho para os ficheiros é,"
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:239
 msgid "Path head does not exist,"
@@ -7709,8 +7707,8 @@ msgid ""
 msgstr ""
 "Não há contas de receita ou despesa da moeda especificada;\n"
 "terá de voltar a este diálogo (via Ficheiro->Propriedades)\n"
-"após a definição das contas, se quiser definir uma conta\n"
-"predefinida de ganhos/perdas."
+"após a definição das contas, se quiser predefinir uma conta\n"
+"de ganhos/perdas."
 
 #: gnucash/gnome-utils/dialog-options.c:869
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:299
@@ -7750,7 +7748,7 @@ msgstr "Limpar tudo"
 
 #: gnucash/gnome-utils/dialog-options.c:1501
 msgid "Clear the selection and unselect all accounts."
-msgstr "Limpar a selecção e remover a selecção de todas as contas."
+msgstr "Limpar a selecção e removê-la de todas as contas."
 
 #: gnucash/gnome-utils/dialog-options.c:1506
 msgid "Select Children"
@@ -7767,7 +7765,7 @@ msgstr "Seleccionar predefinição"
 
 #: gnucash/gnome-utils/dialog-options.c:1516
 msgid "Select the default account selection."
-msgstr "Seleccionar a selecção predefinida de contas."
+msgstr "Utilizar a selecção predefinida de contas."
 
 #: gnucash/gnome-utils/dialog-options.c:1533
 msgid "Show Hidden Accounts"
@@ -7783,11 +7781,11 @@ msgstr "Seleccionar todas as entradas."
 
 #: gnucash/gnome-utils/dialog-options.c:1645
 msgid "Clear the selection and unselect all entries."
-msgstr "Limpar a selecção e remover a selecção de todas as entradas."
+msgstr "Limpar a selecção e removê-la de todas as entradas."
 
 #: gnucash/gnome-utils/dialog-options.c:1652
 msgid "Select the default selection."
-msgstr "Seleccionar a selecção predefinida."
+msgstr "Utilizar a selecção predefinida."
 
 #: gnucash/gnome-utils/dialog-options.c:1846
 msgid "Reset defaults"
@@ -16353,12 +16351,12 @@ msgstr "Diálogo Tarefa"
 msgid ""
 "The job ID number. If left blank a reasonable number will be chosen for you"
 msgstr ""
-"O número que identifica a tarefa. Se for deixado em branco, um número "
-"aceitável será gerado"
+"O número que identifica a tarefa. Se deixar em branco, será gerado um número "
+"aceitável"
 
 #: gnucash/gtkbuilder/dialog-job.glade:163
 msgid "Job Information"
-msgstr "Informação de tarefa"
+msgstr "Informação da tarefa"
 
 #: gnucash/gtkbuilder/dialog-job.glade:271
 msgid "Owner Information"
@@ -19929,8 +19927,8 @@ msgid ""
 msgstr ""
 "O montante é zero ou o campo Montante não pôde ser interpretado "
 "correctamente. Pode ter confundido a vírgula decimal com o ponto, comparando "
-"com as suas definições regionais. Isto não resulta num trabalho de "
-"transferência em linha válido."
+"com as suas definições regionais. Isto não resulta numa tarefa de "
+"transferência em linha válida."
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:681
 msgid ""
@@ -19968,7 +19966,7 @@ msgid ""
 "\n"
 "Status: %s"
 msgstr ""
-"Erro ao executar o trabalho.\n"
+"Erro ao executar a tarefa.\n"
 "\n"
 "Estado: %s"
 
@@ -19980,7 +19978,7 @@ msgid ""
 "\n"
 "Status: %s - %s"
 msgstr ""
-"Erro ao executar o trabalho.\n"
+"Erro ao executar a tarefa.\n"
 "\n"
 "Estado: %s - %s"
 
@@ -19995,7 +19993,7 @@ msgid ""
 "\n"
 "Status: %s (%d)"
 msgstr ""
-"Erro ao executar o trabalho.\n"
+"Erro ao executar a tarefa.\n"
 "\n"
 "Estado: %s (%d)"
 
@@ -20030,14 +20028,14 @@ msgid ""
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
-"O motor encontrou um erro durante a preparação do trabalho. Não é possível "
-"executá-lo.\n"
+"O motor encontrou um erro durante a preparação da tarefa. Não é possível "
+"executá-la.\n"
 "\n"
-"Muito provavelmente o banco não suporta o trabalho escolhido ou a sua conta "
-"da banca em linha não tem permissão para executar este trabalho. Poderão "
-"aparecer mais mensagens de erro no seu diário do terminal.\n"
+"Muito provavelmente o banco não suporta a tarefa escolhida ou a sua conta da "
+"banca em linha não tem permissão para executar esta tarefa. Poderão aparecer "
+"mais mensagens de erro no seu diário do terminal.\n"
 "\n"
-"Quer inserir o trabalho novamente?"
+"Quer inserir a tarefa novamente?"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:232
 msgid "Online Banking Direct Debit Note"
@@ -20070,10 +20068,10 @@ msgid ""
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
-"Ocorreu um erro ao executar o trabalho. Por favor, veja na janela de diário "
-"a mensagem de erro exacta.\n"
+"Ocorreu um erro ao executar a tarefa. Por favor, veja na janela de diário a "
+"mensagem de erro exacta.\n"
 "\n"
-"Quer inserir o trabalho novamente?"
+"Quer inserir a tarefa novamente?"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:496
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:127
@@ -20096,14 +20094,14 @@ msgid ""
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
-"O motor encontrou um erro durante a preparação do trabalho. Não é possível "
-"executá-lo.\n"
+"O motor encontrou um erro durante a preparação da tarefa. Não é possível "
+"executá-la.\n"
 "\n"
-"Muito provavelmente o banco não suporta o trabalho escolhido ou a sua conta "
-"da banca em linha não tem permissão para executar este trabalho. Poderão "
-"aparecer mais mensagens de erro no seu diário do terminal.\n"
+"Muito provavelmente o banco não suporta a tarefa escolhida ou a sua conta da "
+"banca em linha não tem permissão para executar esta tarefa. Poderão aparecer "
+"mais mensagens de erro no seu diário do terminal.\n"
 "\n"
-"Quer inserir o trabalho novamente?"
+"Quer inserir a tarefa novamente?"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:917
 msgid ""
@@ -20159,7 +20157,7 @@ msgid ""
 "Result of Online Banking job:\n"
 "Account booked balance is %s"
 msgstr ""
-"Resultado do trabalho da banca em linha:\n"
+"Resultado da tarefa da banca em linha:\n"
 "o saldo da conta é %s"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1168
@@ -20196,12 +20194,12 @@ msgstr "Módulo para importação DTAUS não encontrado."
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:295
 #, c-format
 msgid "Job %d status %d - %s\n"
-msgstr "Estado do trabalho %d %d - %s\n"
+msgstr "Estado da tarefa %d %d - %s\n"
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:297
 #, c-format
 msgid "Job %d status %d - %s: %s\n"
-msgstr "Estado do trabalho %d %d - %s: %s \n"
+msgstr "Estado da tarefa %d %d - %s: %s\n"
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:317
 msgid "...\n"
@@ -20215,14 +20213,14 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Ocorreu um erro ao executar os trabalhos: %d de %d falharam. Por favor, veja "
+"Ocorreu um erro ao executar as tarefas: %d de %d falharam. Por favor, veja "
 "na janela de diário ou em gnucash.trace a mensagem de erro exacta.\n"
 "\n"
 "%s"
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:348
 msgid "No jobs to be sent."
-msgstr "Sem trabalhos a enviar."
+msgstr "Sem tarefas a enviar."
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:354
 #, c-format
@@ -20233,10 +20231,10 @@ msgid_plural ""
 "All %d jobs were executed successfully, but as a precaution please check the "
 "log window for potential errors."
 msgstr[0] ""
-"O trabalho foi executado com sucesso mas, como precaução, procure na janela "
-"de diário possíveis erros."
+"A tarefa foi executada com sucesso mas, como precaução, procure na janela de "
+"diário possíveis erros."
 msgstr[1] ""
-"Todos os %d trabalhos foram executados com sucesso mas, como precaução, "
+"Todas as %d tarefas foram executadas com sucesso mas, como precaução, "
 "procure na janela de diário possíveis erros."
 
 #: gnucash/import-export/aqb/gnc-gwen-gui.c:1113
@@ -20252,8 +20250,7 @@ msgstr ""
 msgid ""
 "The Online Banking job is still running; are you sure you want to cancel?"
 msgstr ""
-"O trabalho da banca em linha ainda está em execução. Deseja realmente "
-"cancelar?"
+"A tarefa da banca em linha ainda está em execução. Deseja realmente cancelar?"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:93
 msgid "_Online Actions"
@@ -27057,11 +27054,11 @@ msgstr "Mostrar os pagamentos aplicados a esta factura?"
 
 #: gnucash/report/reports/standard/invoice.scm:324
 msgid "Job Details"
-msgstr "Detalhes do trabalho"
+msgstr "Detalhes da tarefa"
 
 #: gnucash/report/reports/standard/invoice.scm:325
 msgid "Display the job name for this invoice?"
-msgstr "Mostrar o nome do trabalho desta factura?"
+msgstr "Mostrar o nome da tarefa para esta factura?"
 
 #: gnucash/report/reports/standard/invoice.scm:330
 msgid "Extra notes to put on the invoice."
@@ -27185,7 +27182,7 @@ msgstr "Total devido"
 
 #: gnucash/report/reports/standard/job-report.scm:352
 msgid "The job for this report."
-msgstr "O trabalho para este relatório."
+msgstr "A tarefa para este relatório."
 
 #: gnucash/report/reports/standard/job-report.scm:360
 #: gnucash/report/reports/standard/owner-report.scm:543
@@ -27227,7 +27224,7 @@ msgstr "Mostrar o montante da transacção?"
 #: gnucash/report/reports/standard/job-report.scm:508
 #: gnucash/report/reports/standard/new-owner-report.scm:1215
 msgid "Job Report"
-msgstr "Relatório de trabalho"
+msgstr "Relatório de tarefa"
 
 #: gnucash/report/reports/standard/job-report.scm:580
 #: gnucash/report/reports/standard/new-owner-report.scm:90
@@ -28020,19 +28017,19 @@ msgstr "Texto da referência"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:84
 msgid "Job Name text"
-msgstr "Texto do nome do trabalho"
+msgstr "Texto do nome da tarefa"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:85
 msgid "Job Number text"
-msgstr "Texto do número do trabalho"
+msgstr "Texto do número da tarefa"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:86
 msgid "Show Job name"
-msgstr "Mostrar nome do trabalho"
+msgstr "Mostrar nome da tarefa"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:87
 msgid "Show Job number"
-msgstr "Mostrar número do trabalho"
+msgstr "Mostrar número da tarefa"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:88
 msgid "Show net price"
