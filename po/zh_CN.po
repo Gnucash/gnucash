@@ -27,7 +27,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-18 03:59+0000\n"
+"PO-Revision-Date: 2022-01-18 06:54+0000\n"
 "Last-Translator: YTX <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -3833,7 +3833,7 @@ msgstr "新建一个科目"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:204
 msgid "New Account _Hierarchy..."
-msgstr "新建科目树(_H)..."
+msgstr "新建层级科目(_H)..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:205
 msgid "Extend the current book by merging with new account type categories"
@@ -7226,19 +7226,19 @@ msgstr "重新编码 %s 的子科目，以替换原有编码。"
 msgid ""
 "Set the account color for account '%s' including all sub-accounts to the "
 "selected color"
-msgstr "将科目'%s'及其子科目颜色设为所选"
+msgstr "将\"%s\"及其子科目颜色设为所选"
 
 #: gnucash/gnome-utils/dialog-account.c:2320
 #, c-format
 msgid ""
 "Set the account placeholder value for account '%s' including all sub-accounts"
-msgstr "将科目'%s'及其子科目设为占位符"
+msgstr "将\"%s\"及其子科目设为占位符"
 
 #: gnucash/gnome-utils/dialog-account.c:2334
 #, c-format
 msgid ""
 "Set the account hidden value for account '%s' including all sub-accounts"
-msgstr "将科目'%s'及其子科目设为隐藏"
+msgstr "将\"%s\"及其子科目设为隐藏"
 
 #: gnucash/gnome-utils/dialog-book-close.c:294
 msgid "Please select an Equity account to hold the total Period Income."
@@ -12387,17 +12387,15 @@ msgstr ""
 "\n"
 "从 CSV 文件导入科目。\n"
 "\n"
-"属于固定格式导入，此文件必须与导出格式相同，即\"导出 -> 科目「CSV 文"
-"件」\"。\n"
+"固定格式导入，此文件必须与导出格式相同，即\"导出 -> 科目.csv\"。\n"
 "\n"
-"若科目不存在，根据完整的科目名称，只要指定的币种/证券存在，就会添加缺失的科"
-"目；若科目存在，将更新这四个字段：编码、描述、说明和颜色。\n"
+"若科目不存在，根据完整的科目名称，只要指定的币种/证券存在，就会添加缺失的科目；若科目存在，将更新：编码、描述、说明和颜色。\n"
 "\n"
 "\"下一步 \"继续，或\"取消 \"中止。\n"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:63
 msgid "Import Account Assistant"
-msgstr "导入科目"
+msgstr "导入"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:78
 msgid ""
@@ -12409,7 +12407,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:91
 msgid "Choose File to Import"
-msgstr "选择文件"
+msgstr "文件"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:111
 msgid "Number of rows for the Header"
@@ -12441,7 +12439,7 @@ msgstr "预览"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:281
 msgid "Import Account Preview, first 10 rows only"
-msgstr "预览科目（仅前 10 行）"
+msgstr "预览（仅前 10 行）"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:290
 #: gnucash/gtkbuilder/assistant-csv-export.glade:728
@@ -12454,13 +12452,13 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:296
 msgid "Import Accounts Now"
-msgstr "立即导入"
+msgstr "导入"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:346
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1069
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1156
 msgid "Import Summary"
-msgstr "导入汇总"
+msgstr "汇总"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:8
 msgid "CSV Export Assistant"
@@ -12512,7 +12510,7 @@ msgstr "格式"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:252
 msgid "Select the accounts to be exported and date range if required."
-msgstr "请选择要导出的帐户。如有必要，请选择日期范围。"
+msgstr "选择要导出的科目，如有必要，请设置日期范围。"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:327
 #: gnucash/gtkbuilder/dialog-tax-info.glade:372
@@ -12698,12 +12696,12 @@ msgid ""
 "Select location and file name for the Import, then click \"OK\"...\n"
 msgstr ""
 "\n"
-"选择导入的位置和文件名，然后按“确定”...\n"
+"文件位置和名称，然后“确定”...\n"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:112
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:102
 msgid "Select File for Import"
-msgstr "选择要导入的文件"
+msgstr "文件"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:147
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:138
@@ -12740,7 +12738,7 @@ msgstr ""
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:201
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:191
 msgid "<b>Load and Save Settings</b>"
-msgstr "<b>加载并保存设置</b>"
+msgstr "<b>设置</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:249
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:238
@@ -12750,12 +12748,12 @@ msgstr "固定宽度"
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:290
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:282
 msgid "Space"
-msgstr "空位"
+msgstr "空格"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:306
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:298
 msgid "Tab"
-msgstr "制表"
+msgstr "制表符"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:371
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:363
@@ -12785,7 +12783,7 @@ msgstr "通常，您不会覆盖价格，但您可以将其更改为更改。此
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:563
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:564
 msgid "<b>File Format</b>"
-msgstr "<b>文件格式</b>"
+msgstr "<b>格式</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:592
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:599
@@ -12797,7 +12795,7 @@ msgstr "日期格式"
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:604
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:611
 msgid "Currency Format"
-msgstr "货币信息"
+msgstr "货币格式"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:616
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:623
@@ -12807,17 +12805,17 @@ msgstr "编码"
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:628
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:635
 msgid "Leading Lines to Skip"
-msgstr "在开始时跳过的行数"
+msgstr "跳过首行"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:640
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:647
 msgid "Trailing Lines to Skip"
-msgstr "最后跳过的行数"
+msgstr "忽略尾行"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:719
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:785
 msgid "Skip alternate lines"
-msgstr "每次都跳过"
+msgstr "跳过备用行"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:731
 msgid ""
@@ -12839,7 +12837,7 @@ msgstr ""
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:793
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:805
 msgid "<b>Miscellaneous</b>"
-msgstr "<b>账单</b>"
+msgstr "<b>其他</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:853
 msgid "<b>Commodity From</b>"
@@ -12863,7 +12861,7 @@ msgstr "错误"
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1010
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:945
 msgid "Import Preview"
-msgstr "导入预览"
+msgstr "预览"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1026
 msgid ""
@@ -13051,7 +13049,7 @@ msgstr "交易信息"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1129
 msgid "Match Transactions"
-msgstr "匹配交易事项"
+msgstr "匹配交易"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:30
 msgid ""
@@ -14191,7 +14189,7 @@ msgstr "默认"
 msgid ""
 "If any account has an existing color it will not be replaced unless the "
 "following is ticked."
-msgstr "是否替换科目现有颜色。"
+msgstr "是否替换现有颜色。"
 
 #: gnucash/gtkbuilder/dialog-account.glade:232
 msgid "Replace any existing account colors"
@@ -15314,8 +15312,8 @@ msgid ""
 "Tree,\n"
 "if account should not be shown, this will be temporarily overridden."
 msgstr ""
-"选择科目，双击跳转至科目树相应位置。\n"
-"隐藏科目也会出现。"
+"双击目标科目，跳转至相应位置。\n"
+"搜索包含隐藏科目。"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:35
 msgid "Import Map Editor"
@@ -17198,7 +17196,7 @@ msgstr "类型"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:8
 msgid "Account Deletion"
-msgstr "科目删除"
+msgstr "科目"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:55
 msgid ""
@@ -19808,17 +19806,16 @@ msgid ""
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
 msgstr ""
-"这个助手将帮助你把交易记录导出到下面指定的分离器的文件中。\n"
+"此向导将交易导至 CSV 文件。\n"
 "\n"
 "%s\n"
 "\n"
-"虽然一个交易可能在几个选定的账户中都有分叉，但它只会被导出一次。它将出现在第"
-"一个处理的账户下，它有一个分叉。\n"
+"分录，只会被导出一次。\n"
 "\n"
-"价格/费率的输出格式由以下偏好控制\n"
-"\"数字、日期、时间\"->\"强制价格显示为小数\"。\n"
+"价格/汇率的格式设置在首先项\n"
+"\"数值、日期、时间\"->\"强制汇率显示小数\"。\n"
 "\n"
-"选择你需要的文件设置，然后点击 \"下一步 \"继续，或点击 \"取消 \"中止输出。\n"
+"\"下一步\"继续，或\"取消 \"中止。\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:99
 msgid ""
@@ -19830,9 +19827,7 @@ msgstr "每笔交易将有多行，每行代表一个分录。"
 msgid ""
 "There will be one row for each transaction, equivalent to a single row in a "
 "register in 'Basic Ledger' mode. As such some transfer detail could be lost."
-msgstr ""
-"每笔交易将有一行，相当于 \"基本分类账 \"模式下寄存器中的一行。因此，一些转账"
-"细节可能会丢失。"
+msgstr "一笔交易一行，相当于\"基本模式 \"、标签页中的一行，因此，可能会丢失一些转账细节。"
 
 #. Translators: %s is the file name.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:109
@@ -19858,9 +19853,9 @@ msgid ""
 "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to "
 "abort the export.\n"
 msgstr ""
-"当你点击 \"应用 \"时，交易将被导出到文件'%s'，导出的账户数将是%u。\n"
+"\"应用\"，交易将被导出至文件：'%s'，覆盖 %u 个科目。\n"
 "\n"
-"你也可以通过点击 \"返回 \"或 \"取消 \"来验证你的选择，中止导出。\n"
+"亦可\"返回\"、重新设置，或取消\"。\n"
 
 #. Translators: %s is the file name.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:120
@@ -20252,7 +20247,7 @@ msgstr "没有人可以进口。减少跳过的行数。"
 msgid ""
 "Not all fields could be parsed. Please correct the issues reported for each "
 "line or adjust the lines to skip."
-msgstr "无法解析一些列。正确或调整线路以跳过每行中显示的问题。"
+msgstr "无法解析所有字段，请调整有问题的行或跳过。"
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:580
 msgid ""
@@ -20446,11 +20441,11 @@ msgstr "资金目的地拆分已经匹配，但这不是资金目的地融合日
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:49
 msgid "No Settings"
-msgstr "没有设置"
+msgstr "无"
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:50
 msgid "GnuCash Export Format"
-msgstr "GnuCash导出格式"
+msgstr "GnuCash 导出格式"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:50
 msgid "Import _Accounts from CSV..."
