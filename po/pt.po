@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-16 09:51+0000\n"
+"PO-Revision-Date: 2022-01-18 03:59+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.11-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -4729,7 +4729,7 @@ msgstr "_Duplicar vale"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:341
 msgid "_Post Voucher"
-msgstr "_Lançar vale"
+msgstr "Emitir _vale"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:342
 msgid "_Unpost Voucher"
@@ -4765,7 +4765,7 @@ msgstr "_Duplicar nota de crédito"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:362
 msgid "_Post Credit Note"
-msgstr "_Lançar nota de crédito"
+msgstr "_Emitir nota de crédito"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:363
 msgid "_Unpost Credit Note"
@@ -4868,7 +4868,7 @@ msgstr "Ir para a transacção em branco no final da factura"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:401
 msgid "Enter a payment for the owner of this bill"
-msgstr "Registar um pagamento para o titular desta factura"
+msgstr "Inserir um pagamento para o titular desta factura"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:402
 msgid "Open a vendor report window for the owner of this bill"
@@ -4886,20 +4886,20 @@ msgid ""
 "Reset default layout for all vendor bills and credit notes back to built-in "
 "defaults and update the current page accordingly"
 msgstr ""
-"Repor disposição interna predefinida para todas as facturas e notas de "
-"crédito de fornecedor e actualizar a página actual"
+"Repor disposição predefinida para todas as facturas e notas de crédito de "
+"fornecedor e actualizar a página actual"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:415
 msgid "Make a printable voucher"
-msgstr "Criar uma factura imprimível"
+msgstr "Criar um vale imprimível"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:416
 msgid "Edit this voucher"
-msgstr "Editar esta factura"
+msgstr "Editar este vale"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:417
 msgid "Create a new voucher as a duplicate of the current one"
-msgstr "Criar uma nova factura como duplicado da actual"
+msgstr "Criar um novo vale como duplicado do actual"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:418
 msgid "Post this voucher to your Chart of Accounts"
@@ -4929,7 +4929,7 @@ msgstr "Abrir uma janela de relatório de empregados para o titular deste vale"
 msgid ""
 "Use the current layout as default for all employee vouchers and credit notes"
 msgstr ""
-"Usar a disposição actual como predefinição para todas os vales e notas de "
+"Usar a disposição actual como predefinição para todos os vales e notas de "
 "crédito de empregado"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:431
@@ -4937,8 +4937,8 @@ msgid ""
 "Reset default layout for all employee vouchers and credit notes back to "
 "built-in defaults and update the current page accordingly"
 msgstr ""
-"Repor disposição interna predefinida para todas os vales e notas de crédito "
-"de empregado e actualizar a página actual"
+"Repor disposição predefinida para todos os vales e notas de crédito de "
+"empregado e actualizar a página actual"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:436
 msgid "Make a printable credit note"
@@ -5079,7 +5079,7 @@ msgstr "Listagem de fornecedores"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:212
 msgid "Show vendor aging overview for all vendors"
-msgstr "Mostrar visão geral de idade de fornecedor para todos"
+msgstr "Mostrar visão geral para todos os fornecedores"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:216
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:295
@@ -5089,7 +5089,7 @@ msgstr "Listagem de clientes"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:217
 msgid "Show customer aging overview for all customers"
-msgstr "Mostrar visão geral de idade de cliente para todos"
+msgstr "Mostrar visão geral para todos os clientes"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:221
 #: gnucash/report/reports/standard/job-report.scm:511
@@ -5246,7 +5246,7 @@ msgstr "Copiar a parcela seleccionada para a área de transferência"
 #: gnucash/gnome/gnc-plugin-page-register2.c:211
 #: gnucash/gnome/gnc-plugin-page-register.c:323
 msgid "Paste the split from the clipboard"
-msgstr "Colar a parcela seleccionada da área de transferência"
+msgstr "Colar a parcela da área de transferência"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:212
 #: gnucash/gnome/gnc-plugin-page-register.c:324
@@ -5261,7 +5261,7 @@ msgstr "Eliminar a parcela actual"
 #: gnucash/gnome/gnc-plugin-page-register2.c:223
 #: gnucash/gnome/gnc-plugin-page-register.c:332
 msgid "_Print Checks..."
-msgstr "_Imprimir cheques..."
+msgstr "Im_primir cheques..."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:230
 #: gnucash/gnome/gnc-plugin-page-register.c:339
@@ -5421,18 +5421,18 @@ msgstr "Agen_dar..."
 #: gnucash/gnome/gnc-plugin-page-register.c:519
 msgid ""
 "Create a Scheduled Transaction with the current transaction as a template"
-msgstr "Criar uma transaçcão agendada usando a transacção actual como modelo"
+msgstr "Criar uma transacção agendada usando a transacção actual como modelo"
 
 #. Translators: The following 2 are Scrub actions in register view
 #: gnucash/gnome/gnc-plugin-page-register2.c:397
 #: gnucash/gnome/gnc-plugin-page-register.c:525
 msgid "_All transactions"
-msgstr "_Todas as transacções"
+msgstr "Tod_as as transacções"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:401
 #: gnucash/gnome/gnc-plugin-page-register.c:529
 msgid "_This transaction"
-msgstr "_Esta transacção"
+msgstr "Esta _transacção"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:408
 #: gnucash/gnome/gnc-plugin-page-register.c:536
@@ -5442,7 +5442,7 @@ msgstr "Relatório de conta"
 #: gnucash/gnome/gnc-plugin-page-register2.c:409
 #: gnucash/gnome/gnc-plugin-page-register.c:537
 msgid "Open a register report for this Account"
-msgstr "Abrir um relatório de registo para esta conta"
+msgstr "Abrir um relatório de diário para esta conta"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:413
 #: gnucash/gnome/gnc-plugin-page-register.c:541
@@ -5607,7 +5607,7 @@ msgstr "Diário geral"
 #: gnucash/gnome/gnc-plugin-page-register.c:2071
 #: gnucash/gnome/gnc-plugin-page-register.c:3566
 msgid "Portfolio"
-msgstr "Portfólio"
+msgstr "Portefólio"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1685
 #: gnucash/gnome/gnc-plugin-page-register2.c:2428
@@ -5623,7 +5623,7 @@ msgstr "Relatório do diário geral"
 #: gnucash/gnome/gnc-plugin-page-register2.c:2424
 #: gnucash/gnome/gnc-plugin-page-register.c:3568
 msgid "Portfolio Report"
-msgstr "Relatório de Portfólio"
+msgstr "Relatório de portefólio"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2430
 #: gnucash/gnome/gnc-plugin-page-register.c:3574
@@ -5641,7 +5641,7 @@ msgstr "Diário"
 #: gnucash/gnome/gnc-plugin-page-register2.c:2436
 #: gnucash/report/reports/standard/register.scm:349
 msgid "Register Report"
-msgstr "Relatório de registo"
+msgstr "Relatório de diário"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2452
 #: gnucash/gnome/gnc-plugin-page-register.c:3596
@@ -5699,7 +5699,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register2.c:2665
 #: gnucash/gnome/gnc-plugin-page-register.c:3774
 msgid "_Print checks"
-msgstr "_Imprimir cheques"
+msgstr "Im_primir cheques"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2685
 #: gnucash/gnome/gnc-plugin-page-register.c:3794
@@ -5807,7 +5807,7 @@ msgstr "Reconciliada"
 #: gnucash/gnome-search/search-reconciled.c:230
 #: gnucash/report/trep-engine.scm:150
 msgid "Frozen"
-msgstr "Suspensa"
+msgstr "Congelada"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3451
 #: gnucash/gnome-search/search-reconciled.c:233
@@ -5870,7 +5870,7 @@ msgstr "Ordenar %s por..."
 #: gnucash/gnome/gnc-plugin-page-register.c:4771
 #, c-format
 msgid "%s %s from %s, posted %s, amount %s"
-msgstr "%s %s de %s, publicada a %s, quantia %s"
+msgstr "%s %s de %s, publicada a %s, com o montante de %s"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4781
 msgid "Several documents are linked with this transaction. Please choose one:"
@@ -6171,7 +6171,7 @@ msgstr "Abrir uma janela do razão geral"
 #: gnucash/gnome/gnc-plugin-register2.c:66
 #: gnucash/gnome/gnc-plugin-register2.c:67
 msgid "Register2 Open GL Account"
-msgstr "Diário2 abrir conta GL"
+msgstr "Conta Diário2 Open GL"
 
 #: gnucash/gnome/gnc-plugin-register.c:54
 msgid "Old St_yle General Journal"
@@ -6248,7 +6248,7 @@ msgstr "Valor actual:"
 
 #: gnucash/gnome/gnc-split-reg2.c:886
 msgid "Account Payable / Receivable Register"
-msgstr "A pagar/A receber"
+msgstr "Conta A pagar/A receber"
 
 #: gnucash/gnome/gnc-split-reg2.c:888
 msgid ""
