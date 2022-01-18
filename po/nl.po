@@ -2512,7 +2512,7 @@ msgstr "Geboekt?"
 #: gnucash/gtkbuilder/dialog-order.glade:551
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:143
 msgid "Date Opened"
-msgstr "Documentdatum"
+msgstr "Datum Geopend"
 
 #: gnucash/gnome/dialog-invoice.c:3397
 #: gnucash/gtkbuilder/dialog-invoice.glade:41
@@ -4359,6 +4359,10 @@ msgid ""
 "\n"
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
+"De rekening \"%s\" heeft meer dan één subrekening.\n"
+"\n"
+"Verplaats de subaccounts of verwijder ze voordat u probeert deze account te "
+"verwijderen."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1729
 #, c-format
@@ -5906,10 +5910,8 @@ msgid "A reversing entry has already been created for this transaction."
 msgstr "Deze boeking is al tegengeboekt."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4088
-#, fuzzy
-#| msgid "Cut the current transaction?"
 msgid "Jump to the transaction?"
-msgstr "De huidige boeking knippen?"
+msgstr "Naar de transactie springen?"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4095
 msgid "Reverse Transaction"
@@ -9465,7 +9467,7 @@ msgstr "Spoedoverboeking"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2867
 #: gnucash/register/ledger-core/split-register.c:2562
 msgid "Direct Debit"
-msgstr "Eenmalige machtiging"
+msgstr "Automatische incasso"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2873
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2877
@@ -10366,11 +10368,11 @@ msgstr "Ga naar {1} voor de laatste stabiele versie"
 #. Translators: Guile is the programming language of the reports
 #: gnucash/gnucash-core-app.cpp:103
 msgid "Loading system wide Guile extensions…"
-msgstr ""
+msgstr "Systeembrede Guile-extensies laden…"
 
 #: gnucash/gnucash-core-app.cpp:115
 msgid "Loading user specific Guile extensions…"
-msgstr ""
+msgstr "Gebruikersspecifieke Guile-extensies laden…"
 
 #: gnucash/gnucash-core-app.cpp:224
 msgid "- GnuCash, accounting for personal and small business finance"
@@ -12719,43 +12721,30 @@ msgstr ""
 "grootboekkaart verstoord en worden toekomstige afstemmingen bemoeilijkt."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:69
-#, fuzzy
-#| msgid "Remove a split from a transaction"
 msgid "Cut a split from a transaction"
-msgstr "Een boekregel uit een boeking verwijderen"
+msgstr "Een boekregel uit een boeking knippen"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:70
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to remove a split from a "
-#| "transaction."
 msgid ""
 "This dialog is presented before allowing you to cut a split from a "
 "transaction."
 msgstr ""
 "Dit venster wordt getoond voordat u wordt toegestaan om een boekregel uit "
-"een boeking te verwijderen."
+"een boeking te knippen."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:74
-#, fuzzy
-#| msgid "Remove a reconciled split from a transaction"
 msgid "Cut a reconciled split from a transaction"
-msgstr "Een afgestemde boekregel uit een boeking verwijderen"
+msgstr "Een afgestemde boekregel uit een boeking knippen"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:75
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to remove a reconciled split "
-#| "from a transaction. Doing so will throw off the reconciled value of the "
-#| "register and can make it hard to perform future reconciliations."
 msgid ""
 "This dialog is presented before allowing you to cut a reconciled split from "
 "a transaction. Doing so will throw off the reconciled value of the register "
 "and can make it hard to perform future reconciliations."
 msgstr ""
 "Dit venster wordt getoond voordat u wordt toegestaan een afgestemde "
-"boekregel uit een boeking te verwijderen. Hierdoor wordt de afgestemde "
-"waarde van de grootboekkaart verstoord en worden toekomstige afstemmingen "
+"boekregel uit een boeking te knippen. Hierdoor wordt de afgestemde waarde "
+"van de grootboekkaart verstoord en worden toekomstige afstemmingen "
 "bemoeilijkt."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:79
@@ -12819,41 +12808,27 @@ msgstr ""
 "worden toekomstige afstemmingen bemoeilijkt."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:99
-#, fuzzy
-#| msgid "_Cut Transaction"
 msgid "Cut a transaction"
-msgstr "Boeking k_nippen"
+msgstr "Boeking knippen"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:100
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to delete a transaction."
 msgid "This dialog is presented before allowing you to cut a transaction."
 msgstr ""
-"Dit venster wordt getoond voordat u wordt toegestaan een boeking te "
-"verwijderen."
+"Dit venster wordt getoond voordat u wordt toegestaan een boeking te knippen."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
-#, fuzzy
-#| msgid "Delete a transaction with reconciled splits"
 msgid "Cut a transaction with reconciled splits"
-msgstr "Een boeking met afgestemde boekregels verwijderen"
+msgstr "Een boeking met afgestemde boekregels knippen"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:105
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to delete a transaction that "
-#| "contains reconciled splits. Doing so will throw off the reconciled value "
-#| "of the register and can make it hard to perform future reconciliations."
 msgid ""
 "This dialog is presented before allowing you to cut a transaction that "
 "contains reconciled splits. Doing so will throw off the reconciled value of "
 "the register and can make it hard to perform future reconciliations."
 msgstr ""
-"Dit venster wordt getoond voordat u wordt toegestaan een boeking te "
-"verwijderen met afgestemde boekregels. Hierdoor wordt de afgestemde waarde "
-"van de grootboekkaart verstoord en worden toekomstige afstemmingen "
-"bemoeilijkt."
+"Dit venster wordt getoond voordat u wordt toegestaan een boeking te knippen "
+"met afgestemde boekregels. Hierdoor wordt de afgestemde waarde van de "
+"grootboekkaart verstoord en worden toekomstige afstemmingen bemoeilijkt."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:109
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:212
@@ -16500,16 +16475,12 @@ msgid "Show _Memo column"
 msgstr "_Memokolom weergeven"
 
 #: gnucash/gtkbuilder/dialog-import.glade:963
-#, fuzzy
-#| msgid "Show _matched information"
 msgid "Show matched _information"
-msgstr "_Overeenstemmende informatie weergeven"
+msgstr "Overeenstemmende _informatie weergeven"
 
 #: gnucash/gtkbuilder/dialog-import.glade:978
-#, fuzzy
-#| msgid "Spend"
 msgid "A_ppend"
-msgstr "Uitgeven"
+msgstr "T_oevoegen"
 
 #: gnucash/gtkbuilder/dialog-import.glade:982
 msgid ""
@@ -16517,12 +16488,13 @@ msgid ""
 "Description and Notes to the matched Description and Notes instead of "
 "replacing them."
 msgstr ""
+"Wanneer u een overeenkomende transactie bijwerkt en vereffent, voegt u de "
+"geïmporteerde beschrijving en opmerkingen toe aan de overeenkomende "
+"beschrijving en notities in plaats van deze te vervangen."
 
 #: gnucash/gtkbuilder/dialog-import.glade:994
-#, fuzzy
-#| msgid "Reconcile after match"
 msgid "_Reconcile after match"
-msgstr "Afstemmen bij overeenkomst"
+msgstr "_Afstemmen bij overeenkomst"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1017
 msgid "Generic import transaction matcher"
@@ -18379,16 +18351,10 @@ msgid "R_emind in advance"
 msgstr "Vooraf _herinneren"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:724
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "Re_view created transactions"
-msgstr "Aangemaakte transacties _beoordelen"
+msgstr "Aangemaakte transacties be_oordelen"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:728
-#, fuzzy
-#| msgid ""
-#| "Set \"Review Created Transactions\" as the default for the \"since last "
-#| "run\" dialog."
 msgid ""
 "Set 'Review created transactions' as the default in the \"since last run\" "
 "dialog."
@@ -19636,31 +19602,6 @@ msgstr ""
 
 #. See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:47
-#, fuzzy
-#| msgid ""
-#| "The requirements for Online Banking vary between the different supported "
-#| "AqBanking backends, but usually you will need:\n"
-#| "* Your bank needs to grant you online access. See on their website or ask "
-#| "their customer service for how to obtain it.\n"
-#| "They should also tell you:\n"
-#| "* Your user ID that identifies you to their server, often your base "
-#| "account number;\n"
-#| "* The URL of their Online Banking server;\n"
-#| "* In some cases the routing number of your bank's branch is useful in "
-#| "this assistant;\n"
-#| "* Authentication methods vary by backend and choosen method:\n"
-#| " * FinTS PIN/TAN: Some methods require a specific gadget like a card "
-#| "reader or a mobile;\n"
-#| " * FinTS HBCI: You have to exchange the public parts of asymmetric keys "
-#| "with your bank (\"Ini-Letter\").\n"
-#| " * PayPal: registered email address, password, API signature;\n"
-#| "\n"
-#| "See https://wiki.gnucash.org/wiki/AqBanking for more details.\n"
-#| "\n"
-#| "Note: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented "
-#| "Online Banking server. You should not rely on time-critical transfers "
-#| "through Online Banking, because sometimes the bank does not give you "
-#| "correct feedback when a transfer is rejected."
 msgid ""
 "The requirements for Online Banking vary between the different supported "
 "AqBanking backends, but usually you will need:\n"
@@ -20139,16 +20080,12 @@ msgid "Originator BIC (Bank Code)"
 msgstr "BIC (bankcode) verzender"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:409
-#, fuzzy
-#| msgid "Enter a SEPA Online Transfer"
 msgid "Enter a SEPA Internal Transfer"
-msgstr "Een online SEPA-transactie invoeren"
+msgstr "Een interne SEPA-transactie invoeren"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:430
-#, fuzzy
-#| msgid "Tax Accounts"
 msgid "Target Accounts"
-msgstr "Btw rekeningen"
+msgstr "Doelrekeningen"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:441
 msgid "Enter a SEPA Online Direct Debit Note"
@@ -20320,10 +20257,8 @@ msgstr ""
 "afgebroken. Wilt u de wijzigingen toch opslaan?"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:125
-#, fuzzy
-#| msgid "No valid account found"
 msgid "No reference accounts found."
-msgstr "Geen geldige rekening gevonden"
+msgstr "Geen referentierekeningen gevonden."
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:206
 msgid ""
@@ -20359,10 +20294,8 @@ msgid "Online Banking European (SEPA) Transfer"
 msgstr "Online bankieren - SEPA overboeking"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:248
-#, fuzzy
-#| msgid "Online Banking European (SEPA) Transfer"
 msgid "Online Banking European (SEPA) Internal Transfer"
-msgstr "Online bankieren - SEPA overboeking"
+msgstr "Online bankieren - interne SEPA overboeking"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:254
 msgid "Online Banking European (SEPA) Debit Note"
@@ -20614,20 +20547,15 @@ msgid ""
 msgstr "Een nieuwe SEPA-transactieopdracht via Online bankieren doorgeven"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:120
-#, fuzzy
-#| msgid "Issue _SEPA Transaction..."
 msgid "Issue SEPA I_nternal Transaction..."
-msgstr "_SEPA-transactie doorgeven..."
+msgstr "I_nterne SEPA-transactie doorgeven..."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:121
-#, fuzzy
-#| msgid ""
-#| "Issue a new international European (SEPA) transaction online through "
-#| "Online Banking"
 msgid ""
 "Issue a new internal European (SEPA) transaction online through Online "
 "Banking"
-msgstr "Een nieuwe SEPA-transactieopdracht via Online bankieren doorgeven"
+msgstr ""
+"Een nieuwe interne SEPA-transactieopdracht via Online bankieren doorgeven"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:125
 msgid "_Internal Transaction..."
@@ -21956,16 +21884,14 @@ msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "Nieuw, NIET IN BALANS (nog %s ongeboekt)!"
 
 #: gnucash/import-export/import-main-matcher.c:1616
-#, fuzzy, c-format
-#| msgid "Reconcile (manual) match"
+#, c-format
 msgid "Reconcile (manual) match to %s"
-msgstr "Afstemmen (handmatige) overeenkomst"
+msgstr "(Handmatig) overeenstemmen met %s"
 
 #: gnucash/import-export/import-main-matcher.c:1621
-#, fuzzy, c-format
-#| msgid "Reconcile (auto) match"
+#, c-format
 msgid "Reconcile (auto) match to %s"
-msgstr "Afstemmen (automatische) overeenkomst"
+msgstr "(Automatisch) overeenstemmen met %s"
 
 #: gnucash/import-export/import-main-matcher.c:1630
 #: gnucash/import-export/import-main-matcher.c:1660
@@ -21973,16 +21899,14 @@ msgid "Match missing!"
 msgstr "Geen overeenkomst!"
 
 #: gnucash/import-export/import-main-matcher.c:1646
-#, fuzzy, c-format
-#| msgid "Update and reconcile (manual) match"
+#, c-format
 msgid "Update and reconcile (manual) match to %s"
-msgstr "Bijwerken en afstemmen (handmatige) overeenkomst"
+msgstr "Update en afstemming (handmatig) match met %s"
 
 #: gnucash/import-export/import-main-matcher.c:1651
-#, fuzzy, c-format
-#| msgid "Update and reconcile (auto) match"
+#, c-format
 msgid "Update and reconcile (auto) match to %s"
-msgstr "Bijwerken en afstemmen (automatische) overeenkomst"
+msgstr "Bijwerken en afstemmen (automatische) overeenkomst met %s"
 
 #: gnucash/import-export/import-main-matcher.c:1668
 msgid "Do not import (no action selected)"
@@ -22084,16 +22008,13 @@ msgid "Unknown OFX investment account"
 msgstr "Onbekend OFX beleggingsrekening"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1276
-#, fuzzy, c-format
-#| msgid ""
-#| "OFX file '%s' imported, %d transactions processed, no transactions to "
-#| "match"
+#, c-format
 msgid ""
 "While importing transactions from OFX file '%s' found %d previously imported "
 "transactions, no new transactions."
 msgstr ""
-"OFx bestand '%s' werd geïmporteerd, %d boekingen werden verwerkt, geen "
-"boekingen om te koppelen"
+"Bij het importeren van transacties uit OFX-bestand '%s' zijn %d eerder "
+"geïmporteerde transacties gevonden, geen nieuwe transacties."
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1378
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
@@ -26802,16 +26723,12 @@ msgid "Withdrawals"
 msgstr "Opnames"
 
 #: gnucash/report/reports/standard/equity-statement.scm:474
-#, fuzzy
-#| msgid "Unrealized Gains"
 msgid "Unrealized Gains for Period"
-msgstr "Niet gerealiseerde winsten"
+msgstr "Niet-gerealiseerde winsten over periode"
 
 #: gnucash/report/reports/standard/equity-statement.scm:475
-#, fuzzy
-#| msgid "Unrealized Losses"
 msgid "Unrealized Losses for Period"
-msgstr "Niet-gerealiseerde verliezen"
+msgstr "Niet-gerealiseerde verliezen over periode"
 
 #: gnucash/report/reports/standard/equity-statement.scm:481
 msgid "Increase in capital"
@@ -27850,6 +27767,8 @@ msgstr "Periodetotalen"
 msgid ""
 "* Amounts denoted thus are derived from, and do not match the transaction."
 msgstr ""
+"* Bedragen die aldus worden aangeduid, zijn afgeleid van de transactie en "
+"komen (mogelijk) niet overeen met de transactie."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:868
 #: gnucash/report/reports/standard/owner-report.scm:535
@@ -29282,10 +29201,8 @@ msgid "Add indenting columns"
 msgstr "Kolommen voor inspringen toevoegen"
 
 #: gnucash/report/trep-engine.scm:97
-#, fuzzy
-#| msgid "Sa_ve Filter"
 msgid "Date Filter"
-msgstr "Filter op_slaan"
+msgstr "Datumfilter"
 
 #: gnucash/report/trep-engine.scm:98
 msgid "Table for Exporting"
@@ -29409,7 +29326,7 @@ msgstr "Creditrekeningen"
 
 #: gnucash/report/trep-engine.scm:518
 msgid "Specify date to filter by..."
-msgstr ""
+msgstr "Geef een datum op om op te filteren..."
 
 #: gnucash/report/trep-engine.scm:527
 msgid "Convert all transactions into a common currency."
@@ -30745,12 +30662,10 @@ msgid "No help available."
 msgstr "Geen hulp beschikbaar."
 
 #, fuzzy
-#~| msgid "Load report configuration"
 #~ msgid "Loading system scm configuration..."
 #~ msgstr "Rapportconfiguratie laden"
 
 #, fuzzy
-#~| msgid "Load report configuration"
 #~ msgid "Loading user scm configuration..."
 #~ msgstr "Rapportconfiguratie laden"
 

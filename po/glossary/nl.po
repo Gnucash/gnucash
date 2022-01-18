@@ -3,14 +3,15 @@
 # Bernard Meens <meensb@xs4all.nl>, 2006.
 # Geert Janssens <geert@kobaltwit.be>, 2020, 2021.
 # eol <joshua.de.clercq@gmail.com>, 2021.
+# Jaimie85 <alsemgeest@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-01-02 22:54+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2022-01-17 13:55+0000\n"
+"Last-Translator: Jaimie85 <alsemgeest@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/glossary/"
 "nl/>\n"
 "Language: nl\n"
@@ -205,10 +206,8 @@ msgid "amount"
 msgstr "bedrag"
 
 #. "The amount finally to pay, respecting discounts, billing terms…"
-#, fuzzy
-#| msgid "amount"
 msgid "amount due"
-msgstr "bedrag"
+msgstr "verschuldigd bedrag"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
@@ -392,7 +391,7 @@ msgstr "document link"
 
 #. "The last day to pay an invoice in time."
 msgid "due date"
-msgstr ""
+msgstr "vervaldatum"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
@@ -752,13 +751,11 @@ msgstr "boekregel"
 
 #. "Alias of 'shares'"
 msgid "stocks"
-msgstr ""
+msgstr "aandelen"
 
 #. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
-#, fuzzy
-#| msgid "split"
 msgid "stock split"
-msgstr "boekregel"
+msgstr "aandelensplitsing"
 
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
@@ -873,13 +870,13 @@ msgid "withdraw (in the reconcile dialog)"
 msgstr "opname"
 
 msgid "stock"
-msgstr ""
+msgstr "aandeel"
 
 msgid "due"
-msgstr ""
+msgstr "verschuldigd"
 
 msgid "Online"
-msgstr ""
+msgstr "Online"
 
 msgid "Direct Debit"
-msgstr ""
+msgstr "Automatische incasso"
