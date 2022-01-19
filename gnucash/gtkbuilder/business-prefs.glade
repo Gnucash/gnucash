@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkAdjustment" id="cust_days_in_adj">
     <property name="lower">1</property>
     <property name="upper">180</property>
     <property name="value">7</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="days_in_adj">
     <property name="lower">1</property>
     <property name="upper">180</property>
     <property name="value">7</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkListStore" id="liststore_printinvoice">
     <columns>
@@ -38,19 +38,20 @@
   </object>
   <object class="GtkWindow" id="preferences_window">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="title" translatable="yes">Preferences</property>
     <child>
+      <!-- n-columns=3 n-rows=15 -->
       <object class="GtkGrid" id="business_prefs">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="border_width">6</property>
-        <property name="row_spacing">3</property>
-        <property name="column_spacing">6</property>
+        <property name="can-focus">False</property>
+        <property name="border-width">6</property>
+        <property name="row-spacing">3</property>
+        <property name="column-spacing">6</property>
         <child>
           <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes">General</property>
             <attributes>
@@ -58,266 +59,265 @@
             </attributes>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.business.invoice/enable-toolbuttons">
             <property name="label" translatable="yes">Enable extra _buttons</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="has_tooltip">True</property>
-            <property name="tooltip_markup">If active, extra toolbar buttons for common business functions are shown as well. Otherwise they are not shown.</property>
-            <property name="tooltip_text" translatable="yes">If active, extra toolbar buttons for common business functions are shown as well. Otherwise they are not shown.</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="has-tooltip">True</property>
+            <property name="tooltip-markup">If active, extra toolbar buttons for common business functions are shown as well. Otherwise they are not shown.</property>
+            <property name="tooltip-text" translatable="yes">If active, extra toolbar buttons for common business functions are shown as well. Otherwise they are not shown.</property>
             <property name="halign">start</property>
-            <property name="use_underline">True</property>
-            <property name="draw_indicator">True</property>
+            <property name="use-underline">True</property>
+            <property name="draw-indicator">True</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.business.invoice/use-new-window">
             <property name="label" translatable="yes">_Open in new window</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="has_tooltip">True</property>
-            <property name="tooltip_markup">If checked, each invoice will be opened in its own top level window. If clear, the invoice will be opened in the current window.</property>
-            <property name="tooltip_text" translatable="yes">If checked, each invoice will be opened in its own top level window. If clear, the invoice will be opened in the current window.</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="has-tooltip">True</property>
+            <property name="tooltip-markup">If checked, each invoice will be opened in its own top level window. If clear, the invoice will be opened in the current window.</property>
+            <property name="tooltip-text" translatable="yes">If checked, each invoice will be opened in its own top level window. If clear, the invoice will be opened in the current window.</property>
             <property name="halign">start</property>
-            <property name="use_underline">True</property>
-            <property name="draw_indicator">True</property>
+            <property name="use-underline">True</property>
+            <property name="draw-indicator">True</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">2</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.business.invoice/accumulate-splits">
             <property name="label" translatable="yes">_Accumulate splits on post</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="has_tooltip">True</property>
-            <property name="tooltip_markup">Whether multiple entries in an invoice which transfer to the same account should be accumulated into a single split by default. This setting can be changed in the Post dialog.</property>
-            <property name="tooltip_text" translatable="yes">Whether multiple entries in an invoice which transfer to the same account should be accumulated into a single split by default. This setting can be changed in the Post dialog.</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="has-tooltip">True</property>
+            <property name="tooltip-markup">Whether multiple entries in an invoice which transfer to the same account should be accumulated into a single split by default. This setting can be changed in the Post dialog.</property>
+            <property name="tooltip-text" translatable="yes">Whether multiple entries in an invoice which transfer to the same account should be accumulated into a single split by default. This setting can be changed in the Post dialog.</property>
             <property name="halign">start</property>
-            <property name="use_underline">True</property>
-            <property name="draw_indicator">True</property>
+            <property name="use-underline">True</property>
+            <property name="draw-indicator">True</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">3</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">3</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">4</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">4</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes">&lt;b&gt;Invoices&lt;/b&gt;</property>
-            <property name="use_markup">True</property>
+            <property name="use-markup">True</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">5</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">5</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.business.invoice/notify-when-due">
             <property name="label" translatable="yes">Not_ify when due</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="has_tooltip">True</property>
-            <property name="tooltip_markup">Whether to display the list of Bills Due at startup.</property>
-            <property name="tooltip_text" translatable="yes">Whether to display the list of Bills Due at startup.</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="has-tooltip">True</property>
+            <property name="tooltip-markup">Whether to display the list of Bills Due at startup.</property>
+            <property name="tooltip-text" translatable="yes">Whether to display the list of Bills Due at startup.</property>
             <property name="halign">start</property>
-            <property name="use_underline">True</property>
-            <property name="draw_indicator">True</property>
+            <property name="use-underline">True</property>
+            <property name="draw-indicator">True</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">6</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">6</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes">Report for printing</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">7</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">7</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.business.invoice/tax-included">
             <property name="label" translatable="yes">_Tax included</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="has_tooltip">True</property>
-            <property name="tooltip_markup">Whether tax is included by default in entries on Bills. This setting is inherited by new customers and vendors.</property>
-            <property name="tooltip_text" translatable="yes">Whether tax is included by default in entries on Bills. This setting is inherited by new customers and vendors.</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="has-tooltip">True</property>
+            <property name="tooltip-markup">Whether tax is included by default in entries on Bills. This setting is inherited by new customers and vendors.</property>
+            <property name="tooltip-text" translatable="yes">Whether tax is included by default in entries on Bills. This setting is inherited by new customers and vendors.</property>
             <property name="halign">start</property>
-            <property name="use_underline">True</property>
-            <property name="draw_indicator">True</property>
+            <property name="use-underline">True</property>
+            <property name="draw-indicator">True</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">8</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">8</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.business.invoice/auto-pay">
             <property name="label" translatable="yes" comments="See the tooltip &quot;At post time...&quot; for details.">_Process payments on posting</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="has_tooltip">True</property>
-            <property name="tooltip_markup">At post time, automatically attempt to pay customer documents with outstanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same customer. Counter documents are documents with opposite sign. For example for an invoice, customer credit notes and negative invoices are considered counter documents.</property>
-            <property name="tooltip_text" translatable="yes">At post time, automatically attempt to pay customer documents with outstanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same customer. Counter documents are documents with opposite sign. For example for an invoice, customer credit notes and negative invoices are considered counter documents.</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="has-tooltip">True</property>
+            <property name="tooltip-markup">At post time, automatically attempt to pay customer documents with outstanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same customer. Counter documents are documents with opposite sign. For example for an invoice, customer credit notes and negative invoices are considered counter documents.</property>
+            <property name="tooltip-text" translatable="yes">At post time, automatically attempt to pay customer documents with outstanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same customer. Counter documents are documents with opposite sign. For example for an invoice, customer credit notes and negative invoices are considered counter documents.</property>
             <property name="halign">start</property>
-            <property name="use_underline">True</property>
-            <property name="draw_indicator">True</property>
+            <property name="use-underline">True</property>
+            <property name="draw-indicator">True</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">9</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">9</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">10</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">10</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes">&lt;b&gt;Bills&lt;/b&gt;</property>
-            <property name="use_markup">True</property>
+            <property name="use-markup">True</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">11</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">11</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.business.bill/notify-when-due">
             <property name="label" translatable="yes">_Notify when due</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="has_tooltip">True</property>
-            <property name="tooltip_markup">Whether to display the list of Bills Due at startup.</property>
-            <property name="tooltip_text" translatable="yes">Whether to display the list of Bills Due at startup.</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="has-tooltip">True</property>
+            <property name="tooltip-markup">Whether to display the list of Bills Due at startup.</property>
+            <property name="tooltip-text" translatable="yes">Whether to display the list of Bills Due at startup.</property>
             <property name="halign">start</property>
-            <property name="use_underline">True</property>
-            <property name="draw_indicator">True</property>
+            <property name="use-underline">True</property>
+            <property name="draw-indicator">True</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">12</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">12</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.business.bill/tax-included">
             <property name="label" translatable="yes">Ta_x included</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="has_tooltip">True</property>
-            <property name="tooltip_markup">Whether tax is included by default in entries on Invoices. This setting is inherited by new customers and vendors.</property>
-            <property name="tooltip_text" translatable="yes">Whether tax is included by default in entries on Invoices. This setting is inherited by new customers and vendors.</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="has-tooltip">True</property>
+            <property name="tooltip-markup">Whether tax is included by default in entries on Invoices. This setting is inherited by new customers and vendors.</property>
+            <property name="tooltip-text" translatable="yes">Whether tax is included by default in entries on Invoices. This setting is inherited by new customers and vendors.</property>
             <property name="halign">start</property>
-            <property name="use_underline">True</property>
-            <property name="draw_indicator">True</property>
+            <property name="use-underline">True</property>
+            <property name="draw-indicator">True</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">13</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">13</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.business.bill/auto-pay">
             <property name="label" translatable="yes" comments="See the tooltip &quot;At post time...&quot; for details.">Pro_cess payments on posting</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="has_tooltip">True</property>
-            <property name="tooltip_markup">At post time, automatically attempt to pay vendor documents with outstanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same vendor. Counter documents are documents with opposite sign. For example for a bill, vendor credit notes and negative bills are considered counter documents.</property>
-            <property name="tooltip_text" translatable="yes">At post time, automatically attempt to pay vendor documents with outstanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same vendor. Counter documents are documents with opposite sign. For example for a bill, vendor credit notes and negative bills are considered counter documents.</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="has-tooltip">True</property>
+            <property name="tooltip-markup">At post time, automatically attempt to pay vendor documents with outstanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same vendor. Counter documents are documents with opposite sign. For example for a bill, vendor credit notes and negative bills are considered counter documents.</property>
+            <property name="tooltip-text" translatable="yes">At post time, automatically attempt to pay vendor documents with outstanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same vendor. Counter documents are documents with opposite sign. For example for a bill, vendor credit notes and negative bills are considered counter documents.</property>
             <property name="halign">start</property>
-            <property name="use_underline">True</property>
-            <property name="draw_indicator">True</property>
+            <property name="use-underline">True</property>
+            <property name="draw-indicator">True</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">14</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">14</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes">Days in ad_vance</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">pref/dialogs.business.bill/days-in-advance</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">pref/dialogs.business.bill/days-in-advance</property>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">12</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">12</property>
           </packing>
         </child>
         <child>
           <object class="GtkSpinButton" id="pref/dialogs.business.bill/days-in-advance">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="has_tooltip">True</property>
-            <property name="tooltip_markup">How many days in the future to warn about Bills coming due.</property>
-            <property name="tooltip_text" translatable="yes">How many days in the future to warn about Bills coming due.</property>
+            <property name="can-focus">True</property>
+            <property name="has-tooltip">True</property>
+            <property name="tooltip-markup">How many days in the future to warn about Bills coming due.</property>
+            <property name="tooltip-text" translatable="yes">How many days in the future to warn about Bills coming due.</property>
             <property name="adjustment">days_in_adj</property>
-            <property name="climb_rate">1</property>
+            <property name="climb-rate">1</property>
           </object>
           <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">12</property>
-            <property name="width">2</property>
+            <property name="left-attach">2</property>
+            <property name="top-attach">12</property>
           </packing>
         </child>
         <child>
           <object class="GtkComboBox" id="pref/dialogs.business.invoice/invoice-printreport">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="has_tooltip">True</property>
-            <property name="tooltip_markup">The invoice report to be used for printing.</property>
-            <property name="tooltip_text" translatable="yes">The invoice report to be used for printing.</property>
+            <property name="can-focus">False</property>
+            <property name="has-tooltip">True</property>
+            <property name="tooltip-markup">The invoice report to be used for printing.</property>
+            <property name="tooltip-text" translatable="yes">The invoice report to be used for printing.</property>
             <property name="model">liststore_printinvoice</property>
             <child>
               <object class="GtkCellRendererText" id="cellrenderertext2"/>
@@ -327,74 +327,37 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">7</property>
-            <property name="width">3</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">7</property>
+            <property name="width">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkSpinButton" id="pref/dialogs.business.invoice/days-in-advance">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="has_tooltip">True</property>
-            <property name="tooltip_markup">How many days in the future to warn about Invoices coming due.</property>
-            <property name="tooltip_text" translatable="yes">How many days in the future to warn about Invoices coming due.</property>
+            <property name="can-focus">True</property>
+            <property name="has-tooltip">True</property>
+            <property name="tooltip-markup">How many days in the future to warn about Invoices coming due.</property>
+            <property name="tooltip-text" translatable="yes">How many days in the future to warn about Invoices coming due.</property>
             <property name="adjustment">cust_days_in_adj</property>
           </object>
           <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">6</property>
-            <property name="width">2</property>
+            <property name="left-attach">2</property>
+            <property name="top-attach">6</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes">_Days in advance</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">pref/dialogs.business.invoice/days-in-advance</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">pref/dialogs.business.invoice/days-in-advance</property>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">6</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">6</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
         </child>
         <child>
           <placeholder/>
@@ -469,9 +432,6 @@
           <placeholder/>
         </child>
       </object>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
     </child>
   </object>
 </interface>

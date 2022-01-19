@@ -1,43 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkAssistant" id="account_period_assistant">
-    <property name="can_focus">False</property>
-    <property name="border_width">12</property>
-    <property name="default_width">500</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">12</property>
+    <property name="default-width">500</property>
     <signal name="apply" handler="ap_assistant_finish" swapped="no"/>
     <signal name="cancel" handler="ap_assistant_cancel" swapped="no"/>
     <signal name="close" handler="ap_assistant_close" swapped="no"/>
     <signal name="prepare" handler="ap_assistant_prepare" swapped="no"/>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkLabel" id="start_page">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes">This assistant will help you setup and use accounting periods.
 
 Danger: this feature does not work correctly at this time; it is still under development. It will probably damage your data in such a way that it cannot be repaired!</property>
         <property name="wrap">True</property>
       </object>
       <packing>
-        <property name="page_type">intro</property>
+        <property name="page-type">intro</property>
         <property name="title" translatable="yes">Setup Account Period</property>
         <property name="complete">True</property>
-        <property name="has_padding">False</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
       <object class="GtkBox" id="menu_page">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkLabel" id="menu_label">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes">
 Select an accounting period and the closing date which must not be in the future and is greater than the closing date of the previous book.
 
@@ -54,8 +51,8 @@ Books will be closed at midnight on the selected date.</property>
         <child>
           <object class="GtkBox" id="period_hbox">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="border_width">12</property>
+            <property name="can-focus">False</property>
+            <property name="border-width">12</property>
             <child>
               <placeholder/>
             </child>
@@ -69,7 +66,7 @@ Books will be closed at midnight on the selected date.</property>
         <child>
           <object class="GtkLabel" id="remarks_label">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label">xxx</property>
             <property name="justify">center</property>
             <property name="wrap">True</property>
@@ -83,18 +80,18 @@ Books will be closed at midnight on the selected date.</property>
       </object>
       <packing>
         <property name="title" translatable="yes">Book Closing Dates</property>
-        <property name="has_padding">False</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
       <object class="GtkBox" id="book_page">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkLabel" id="book_label">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label">xxx</property>
             <property name="justify">center</property>
             <property name="wrap">True</property>
@@ -108,7 +105,7 @@ Books will be closed at midnight on the selected date.</property>
         <child>
           <object class="GtkLabel" id="results_label">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label">xxx</property>
             <property name="justify">center</property>
             <property name="wrap">True</property>
@@ -120,87 +117,73 @@ Books will be closed at midnight on the selected date.</property>
           </packing>
         </child>
         <child>
+          <!-- n-columns=2 n-rows=2 -->
           <object class="GtkGrid" id="book_table">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="border_width">12</property>
-            <property name="column_spacing">6</property>
+            <property name="can-focus">False</property>
+            <property name="border-width">12</property>
+            <property name="column-spacing">6</property>
             <child>
               <object class="GtkLabel" id="book_title">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">end</property>
                 <property name="hexpand">False</property>
                 <property name="label" translatable="yes">Title</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="book_notes">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">end</property>
                 <property name="label" translatable="yes">Notes</property>
                 <property name="wrap">True</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkScrolledWindow" id="scrolledwindow1">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <child>
                   <object class="GtkTextView" id="book_notes_view">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="margin_start">3</property>
-                    <property name="margin_end">3</property>
-                    <property name="wrap_mode">word</property>
-                    <property name="accepts_tab">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="margin-start">3</property>
+                    <property name="margin-end">3</property>
+                    <property name="wrap-mode">word</property>
+                    <property name="accepts-tab">False</property>
                   </object>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkEntry" id="book_title_entry">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="invisible_char">●</property>
-                <property name="primary_icon_activatable">False</property>
-                <property name="secondary_icon_activatable">False</property>
+                <property name="invisible-char">●</property>
+                <property name="primary-icon-activatable">False</property>
+                <property name="secondary-icon-activatable">False</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
           <packing>
@@ -212,32 +195,32 @@ Books will be closed at midnight on the selected date.</property>
       </object>
       <packing>
         <property name="title" translatable="yes">Close Book</property>
-        <property name="has_padding">False</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="finish_page">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label">xxx</property>
         <property name="justify">center</property>
         <property name="wrap">True</property>
       </object>
       <packing>
-        <property name="page_type">confirm</property>
+        <property name="page-type">confirm</property>
         <property name="title" translatable="yes">Account Period Finish</property>
-        <property name="has_padding">False</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
       <object class="GtkBox" id="summary_page">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkLabel" id="summary_label">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label">xxx</property>
             <property name="justify">center</property>
             <property name="wrap">True</property>
@@ -251,7 +234,7 @@ Books will be closed at midnight on the selected date.</property>
         <child>
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes">Press 'Close' to Exit.</property>
           </object>
           <packing>
@@ -262,15 +245,15 @@ Books will be closed at midnight on the selected date.</property>
         </child>
       </object>
       <packing>
-        <property name="page_type">summary</property>
+        <property name="page-type">summary</property>
         <property name="title" translatable="yes">Summary Page</property>
         <property name="complete">True</property>
-        <property name="has_padding">False</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child internal-child="action_area">
       <object class="GtkBox">
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
       </object>
     </child>
   </object>

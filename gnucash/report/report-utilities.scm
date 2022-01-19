@@ -872,14 +872,12 @@
 ;;
 ;; Returns a gnc-numeric value
 (define (gnc:budget-account-get-rolledup-net budget account start-period end-period)
-  (let* ((start (or start-period 0))
-         (end (or end-period (gnc-budget-get-num-periods budget)))
-         (numperiods (- end start -1)))
-  (apply +
-         (map
-          (lambda (period)
-            (gnc:get-account-period-rolledup-budget-value budget account period))
-          (iota numperiods start 1)))))
+  (define end (or end-period (1- (gnc-budget-get-num-periods budget))))
+  (let lp ((period (or start-period 0)) (sum 0))
+    (cond
+     ((> period end) sum)
+     (else (lp (1+ period) (+ sum (gnc:get-account-period-rolledup-budget-value
+                                   budget account period)))))))
 
 ;; ***************************************************************************
 ;; The following 3 functions belong together

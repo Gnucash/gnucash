@@ -78,7 +78,7 @@
               </packing>
             </child>
             <child>
-              <!-- n-columns=3 n-rows=4 -->
+              <!-- n-columns=2 n-rows=4 -->
               <object class="GtkGrid" id="table1">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -195,18 +195,6 @@
                     <property name="left-attach">1</property>
                     <property name="top-attach">1</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
                 <child>
                   <placeholder/>

@@ -4,14 +4,15 @@
 # Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>, 2021.
 # Metroseksuaali <timmy.kinnunen@elisanet.fi>, 2021.
 # Kaantaja <ufdbvgoljrjkrkyyub@ianvvn.com>, 2021.
+# Sampo Harjula <sahtor.weblate@sahtor.net>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-01-02 22:54+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2022-01-09 19:54+0000\n"
+"Last-Translator: Sampo Harjula <sahtor.weblate@sahtor.net>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "fi/>\n"
 "Language: fi\n"
@@ -393,7 +394,7 @@ msgstr "liittyvä asiakirja"
 
 #. "The last day to pay an invoice in time."
 msgid "due date"
-msgstr ""
+msgstr "Eräpäivä"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
@@ -754,13 +755,11 @@ msgstr "rivi"
 
 #. "Alias of 'shares'"
 msgid "stocks"
-msgstr ""
+msgstr "osakkeet"
 
 #. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
-#, fuzzy
-#| msgid "split"
 msgid "stock split"
-msgstr "rivi"
+msgstr "osakkeen jako osiin"
 
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
@@ -876,7 +875,7 @@ msgid "withdraw (in the reconcile dialog)"
 msgstr "nosto"
 
 msgid "stock"
-msgstr ""
+msgstr "osake"
 
 msgid "due"
 msgstr ""
@@ -885,4 +884,4 @@ msgid "Online"
 msgstr ""
 
 msgid "Direct Debit"
-msgstr ""
+msgstr "Tilisiirto"

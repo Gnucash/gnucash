@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkDialog" id="bi_import_dialog">
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="title" translatable="yes">Import transactions from text file</property>
-    <property name="type_hint">dialog</property>
+    <property name="type-hint">dialog</property>
     <signal name="destroy" handler="gnc_bi_import_gui_destroy_cb" swapped="no"/>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox3">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">8</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area3">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="helpbutton">
                 <property name="label" translatable="yes">_Help</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
                 <signal name="clicked" handler="gnc_bi_import_gui_help_cb" swapped="no"/>
               </object>
               <packing>
@@ -38,9 +38,9 @@
               <object class="GtkButton" id="cancelbutton">
                 <property name="label" translatable="yes">_Cancel</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
                 <signal name="clicked" handler="gnc_bi_import_gui_cancel_cb" swapped="no"/>
               </object>
               <packing>
@@ -53,9 +53,9 @@
               <object class="GtkButton" id="okbutton">
                 <property name="label" translatable="yes">_OK</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
                 <signal name="clicked" handler="gnc_bi_import_gui_ok_cb" swapped="no"/>
               </object>
               <packing>
@@ -68,28 +68,28 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">5</property>
           </packing>
         </child>
         <child>
           <object class="GtkFrame" id="frame1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="border_width">3</property>
-            <property name="label_xalign">0</property>
+            <property name="can-focus">False</property>
+            <property name="border-width">3</property>
+            <property name="label-xalign">0</property>
             <child>
               <object class="GtkBox" id="hbox1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="border_width">3</property>
+                <property name="can-focus">False</property>
+                <property name="border-width">3</property>
                 <child>
                   <object class="GtkEntry" id="entryFilename">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="invisible_char">●</property>
-                    <property name="primary_icon_activatable">False</property>
-                    <property name="secondary_icon_activatable">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="invisible-char">●</property>
+                    <property name="primary-icon-activatable">False</property>
+                    <property name="secondary-icon-activatable">False</property>
                     <signal name="changed" handler="gnc_bi_import_gui_filenameChanged_cb" swapped="no"/>
                   </object>
                   <packing>
@@ -102,15 +102,15 @@
                   <object class="GtkButton" id="buttonOpen">
                     <property name="label" translatable="yes">_Open</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
                     <signal name="clicked" handler="gnc_bi_import_gui_buttonOpen_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
-                    <property name="pack_type">end</property>
+                    <property name="pack-type">end</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -119,9 +119,9 @@
             <child type="label">
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">1. Choose the file to import</property>
-                <property name="use_markup">True</property>
+                <property name="use-markup">True</property>
               </object>
             </child>
           </object>
@@ -134,26 +134,26 @@
         <child>
           <object class="GtkFrame" id="frame4">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label_xalign">0</property>
+            <property name="can-focus">False</property>
+            <property name="label-xalign">0</property>
             <child>
               <object class="GtkBox" id="vbox2">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="border_width">3</property>
+                <property name="can-focus">False</property>
+                <property name="border-width">3</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkRadioButton" id="radiobuttonBill">
                     <property name="label" translatable="yes">Bill</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Import bill CSV data</property>
-                    <property name="tooltip_text" translatable="yes">Import bill CSV data</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="has-tooltip">True</property>
+                    <property name="tooltip-markup">Import bill CSV data</property>
+                    <property name="tooltip-text" translatable="yes">Import bill CSV data</property>
                     <property name="halign">start</property>
                     <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="draw-indicator">True</property>
                     <signal name="toggled" handler="gnc_import_gui_type_cb" swapped="no"/>
                   </object>
                   <packing>
@@ -166,13 +166,13 @@
                   <object class="GtkRadioButton" id="radiobuttonInvoice">
                     <property name="label" translatable="yes">Invoice</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Import invoice CSV data</property>
-                    <property name="tooltip_text" translatable="yes">Import invoice CSV data</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="has-tooltip">True</property>
+                    <property name="tooltip-markup">Import invoice CSV data</property>
+                    <property name="tooltip-text" translatable="yes">Import invoice CSV data</property>
                     <property name="halign">start</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="draw-indicator">True</property>
                     <property name="group">radiobuttonBill</property>
                     <signal name="toggled" handler="gnc_import_gui_type_cb" swapped="no"/>
                   </object>
@@ -187,9 +187,9 @@
             <child type="label">
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">2. Select import type</property>
-                <property name="use_markup">True</property>
+                <property name="use-markup">True</property>
               </object>
             </child>
           </object>
@@ -202,25 +202,25 @@
         <child>
           <object class="GtkFrame" id="frame2">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="border_width">3</property>
-            <property name="label_xalign">0</property>
+            <property name="can-focus">False</property>
+            <property name="border-width">3</property>
+            <property name="label-xalign">0</property>
             <child>
               <object class="GtkBox" id="vbox1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="border_width">3</property>
+                <property name="can-focus">False</property>
+                <property name="border-width">3</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkRadioButton" id="radiobutton1">
                     <property name="label" translatable="yes">Semicolon separated</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
                     <property name="halign">start</property>
-                    <property name="use_underline">True</property>
+                    <property name="use-underline">True</property>
                     <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="draw-indicator">True</property>
                     <signal name="toggled" handler="gnc_bi_import_gui_option1_cb" swapped="no"/>
                   </object>
                   <packing>
@@ -233,11 +233,11 @@
                   <object class="GtkRadioButton" id="radiobutton2">
                     <property name="label" translatable="yes">Comma separated</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
                     <property name="halign">start</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
                     <property name="group">radiobutton1</property>
                     <signal name="toggled" handler="gnc_bi_import_gui_option2_cb" swapped="no"/>
                   </object>
@@ -251,11 +251,11 @@
                   <object class="GtkRadioButton" id="radiobutton3">
                     <property name="label" translatable="yes">Semicolon separated with quotes</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
                     <property name="halign">start</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
                     <property name="group">radiobutton1</property>
                     <signal name="toggled" handler="gnc_bi_import_gui_option3_cb" swapped="no"/>
                   </object>
@@ -269,11 +269,11 @@
                   <object class="GtkRadioButton" id="radiobutton4">
                     <property name="label" translatable="yes">Comma separated with quotes</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
                     <property name="halign">start</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
                     <property name="group">radiobutton1</property>
                     <signal name="toggled" handler="gnc_bi_import_gui_option4_cb" swapped="no"/>
                   </object>
@@ -287,11 +287,11 @@
                   <object class="GtkRadioButton" id="radiobutton5">
                     <property name="label" translatable="yes">Custom regular expression</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
                     <property name="halign">start</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
                     <property name="group">radiobutton1</property>
                     <signal name="clicked" handler="gnc_bi_import_gui_option5_cb" swapped="no"/>
                   </object>
@@ -306,9 +306,9 @@
             <child type="label">
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">3. Select import options</property>
-                <property name="use_markup">True</property>
+                <property name="use-markup">True</property>
               </object>
             </child>
           </object>
@@ -321,20 +321,20 @@
         <child>
           <object class="GtkFrame" id="frame3">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="border_width">3</property>
-            <property name="label_xalign">0</property>
+            <property name="can-focus">False</property>
+            <property name="border-width">3</property>
+            <property name="label-xalign">0</property>
             <child>
               <object class="GtkScrolledWindow" id="scrolledwindow2">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="vexpand">True</property>
-                <property name="border_width">3</property>
-                <property name="shadow_type">in</property>
+                <property name="border-width">3</property>
+                <property name="shadow-type">in</property>
                 <child>
                   <object class="GtkTreeView" id="treeview1">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="treeview-selection1"/>
                     </child>
@@ -345,9 +345,9 @@
             <child type="label">
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">4. Preview</property>
-                <property name="use_markup">True</property>
+                <property name="use-markup">True</property>
               </object>
             </child>
           </object>
@@ -360,25 +360,25 @@
         <child>
           <object class="GtkFrame" id="frame5">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="border_width">3</property>
-            <property name="label_xalign">0</property>
+            <property name="can-focus">False</property>
+            <property name="border-width">3</property>
+            <property name="label-xalign">0</property>
             <child>
               <object class="GtkBox" id="vbox5">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="border_width">3</property>
+                <property name="can-focus">False</property>
+                <property name="border-width">3</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkRadioButton" id="radiobuttonOpenAll">
                     <property name="label" translatable="yes">Open imported documents in tabs</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
                     <property name="halign">start</property>
-                    <property name="use_underline">True</property>
+                    <property name="use-underline">True</property>
                     <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="draw-indicator">True</property>
                     <signal name="toggled" handler="gnc_bi_import_gui_open_mode_cb" swapped="no"/>
                   </object>
                   <packing>
@@ -391,11 +391,11 @@
                   <object class="GtkRadioButton" id="radiobuttonOpenNotPosted">
                     <property name="label" translatable="yes">Open not yet posted documents in tabs </property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
                     <property name="halign">start</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
                     <property name="group">radiobuttonOpenAll</property>
                     <signal name="toggled" handler="gnc_bi_import_gui_open_mode_cb" swapped="no"/>
                   </object>
@@ -409,11 +409,11 @@
                   <object class="GtkRadioButton" id="radiobuttonOpenNone">
                     <property name="label" translatable="yes">Don't open imported documents in tabs</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
                     <property name="halign">start</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
                     <property name="group">radiobuttonOpenAll</property>
                     <signal name="toggled" handler="gnc_bi_import_gui_open_mode_cb" swapped="no"/>
                   </object>
@@ -428,9 +428,9 @@
             <child type="label">
               <object class="GtkLabel" id="label5">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">5. Afterwards</property>
-                <property name="use_markup">True</property>
+                <property name="use-markup">True</property>
               </object>
             </child>
           </object>
@@ -447,8 +447,5 @@
       <action-widget response="-6">cancelbutton</action-widget>
       <action-widget response="-5">okbutton</action-widget>
     </action-widgets>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
   </object>
 </interface>

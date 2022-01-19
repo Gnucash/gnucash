@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkAdjustment" id="days_adjustment">
     <property name="upper">1100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkDialog" id="filter_by_dialog">
-    <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">6</property>
     <property name="title" translatable="yes" comments="Filter register by... Dialog">Filter register by...</property>
     <property name="resizable">False</property>
-    <property name="destroy_with_parent">True</property>
-    <property name="type_hint">dialog</property>
+    <property name="destroy-with-parent">True</property>
+    <property name="type-hint">dialog</property>
     <signal name="response" handler="gnc_plugin_page_register_filter_response_cb" swapped="no"/>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox19">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area21">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="cancelbutton4">
                 <property name="label" translatable="yes">_Cancel</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -45,11 +45,11 @@
               <object class="GtkButton" id="okbutton4">
                 <property name="label" translatable="yes">_OK</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="has-default">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -61,29 +61,29 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkNotebook" id="notebook1">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
             <child>
               <object class="GtkBox" id="vbox103">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="border_width">12</property>
+                <property name="can-focus">False</property>
+                <property name="border-width">12</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkRadioButton" id="filter_show_all">
                     <property name="label" translatable="yes" comments="Filter By Dialog, Date Tab">Show _All</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
                     <property name="halign">start</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -94,16 +94,16 @@
                 <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <child>
                       <object class="GtkRadioButton" id="filter_show_days">
                         <property name="label" translatable="yes">Show _number of days</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
                         <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="draw-indicator">True</property>
                         <property name="group">filter_show_all</property>
                         <signal name="toggled" handler="gnc_plugin_page_register_filter_select_range_cb" swapped="no"/>
                       </object>
@@ -116,8 +116,8 @@
                     <child>
                       <object class="GtkSpinButton" id="filter_show_num_days">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="tooltip_text" translatable="yes">Valid range is 0 to 1100 days
+                        <property name="can-focus">True</property>
+                        <property name="tooltip-text" translatable="yes">Valid range is 0 to 1100 days
 If 0, all previous days included</property>
                         <property name="adjustment">days_adjustment</property>
                         <property name="numeric">True</property>
@@ -140,11 +140,11 @@ If 0, all previous days included</property>
                   <object class="GtkRadioButton" id="filter_show_range">
                     <property name="label" translatable="yes">Select _Range</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
                     <property name="halign">start</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
                     <property name="group">filter_show_all</property>
                     <signal name="toggled" handler="gnc_plugin_page_register_filter_select_range_cb" swapped="no"/>
                   </object>
@@ -155,169 +155,171 @@ If 0, all previous days included</property>
                   </packing>
                 </child>
                 <child>
+                  <!-- n-columns=3 n-rows=7 -->
                   <object class="GtkGrid" id="select_range_table">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_top">12</property>
-                    <property name="column_spacing">6</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-top">12</property>
+                    <property name="row-spacing">3</property>
+                    <property name="column-spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="label847682">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="halign">end</property>
                         <property name="label" translatable="yes" comments="Filter By Dialog, Date Tab, Start section">Start</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="start_date_earliest">
                         <property name="label" translatable="yes">_Earliest</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
                         <property name="halign">start</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <signal name="clicked" handler="gnc_plugin_page_register_filter_start_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="end_date_choose">
                         <property name="label" translatable="yes">Choo_se Date</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
                         <property name="halign">start</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <signal name="clicked" handler="gnc_plugin_page_register_filter_end_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">6</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">6</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="end_date_today">
                         <property name="label" translatable="yes">Toda_y</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
                         <property name="halign">start</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <property name="group">end_date_choose</property>
                         <signal name="clicked" handler="gnc_plugin_page_register_filter_end_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">5</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">5</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="end_date_latest">
                         <property name="label" translatable="yes">_Latest</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
                         <property name="halign">start</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <property name="group">end_date_choose</property>
                         <signal name="clicked" handler="gnc_plugin_page_register_filter_end_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">4</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">4</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="label847683">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">3</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">3</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="label847684">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="halign">end</property>
                         <property name="label" translatable="yes" comments="Filter By Dialog, Date Tab, End section">End</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">4</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">4</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="start_date_choose">
                         <property name="label" translatable="yes">C_hoose Date</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
                         <property name="halign">start</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <property name="group">start_date_earliest</property>
                         <signal name="clicked" handler="gnc_plugin_page_register_filter_start_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">2</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">2</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="start_date_today">
                         <property name="label" translatable="yes">_Today</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
                         <property name="halign">start</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <property name="group">start_date_earliest</property>
                         <signal name="clicked" handler="gnc_plugin_page_register_filter_start_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkBox" id="start_date_hbox">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <child>
                           <placeholder/>
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">2</property>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">2</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkBox" id="end_date_hbox">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <child>
                           <placeholder/>
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">6</property>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">6</property>
                       </packing>
                     </child>
                     <child>
@@ -362,131 +364,133 @@ If 0, all previous days included</property>
             <child type="tab">
               <object class="GtkLabel" id="label847678">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">Date</property>
-                <property name="use_underline">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
-                <property name="tab_fill">False</property>
+                <property name="tab-fill">False</property>
               </packing>
             </child>
             <child>
               <object class="GtkBox" id="vbox104">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
+                  <!-- n-columns=1 n-rows=7 -->
                   <object class="GtkGrid" id="table1">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="border_width">12</property>
-                    <property name="column_spacing">6</property>
+                    <property name="can-focus">False</property>
+                    <property name="border-width">12</property>
+                    <property name="row-spacing">3</property>
+                    <property name="column-spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="filter_status_unreconciled">
                         <property name="label" translatable="yes" comments="Filter By Dialog, State Tab">_Unreconciled</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
                         <property name="halign">start</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <signal name="toggled" handler="gnc_plugin_page_register_filter_status_one_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="filter_status_reconciled">
                         <property name="label" translatable="yes">_Reconciled</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
                         <property name="halign">start</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <signal name="toggled" handler="gnc_plugin_page_register_filter_status_one_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="filter_status_cleared">
                         <property name="label" translatable="yes">C_leared</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
                         <property name="halign">start</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <signal name="toggled" handler="gnc_plugin_page_register_filter_status_one_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="filter_status_voided">
                         <property name="label" translatable="yes">_Voided</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
                         <property name="halign">start</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <signal name="toggled" handler="gnc_plugin_page_register_filter_status_one_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">3</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">3</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="filter_status_frozen">
                         <property name="label" translatable="yes">_Frozen</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
                         <property name="halign">start</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <signal name="toggled" handler="gnc_plugin_page_register_filter_status_one_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">4</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">4</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkButton" id="button84">
                         <property name="label" translatable="yes">Select _All</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
                         <property name="halign">center</property>
-                        <property name="use_underline">True</property>
+                        <property name="use-underline">True</property>
                         <signal name="clicked" handler="gnc_plugin_page_register_filter_status_all_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">6</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">6</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkSeparator" id="hseparator1">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="margin_top">5</property>
-                        <property name="margin_bottom">5</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-top">5</property>
+                        <property name="margin-bottom">5</property>
                         <property name="hexpand">True</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">5</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">5</property>
                       </packing>
                     </child>
                   </object>
@@ -504,13 +508,13 @@ If 0, all previous days included</property>
             <child type="tab">
               <object class="GtkLabel" id="label847679">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">Status</property>
-                <property name="use_underline">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="position">1</property>
-                <property name="tab_fill">False</property>
+                <property name="tab-fill">False</property>
               </packing>
             </child>
           </object>
@@ -523,22 +527,22 @@ If 0, all previous days included</property>
         <child>
           <object class="GtkBox" id="hbox1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <child>
               <object class="GtkCheckButton" id="filter_save">
                 <property name="label" translatable="yes" comments="Filter By Dialog, below tabs">Sa_ve Filter</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <signal name="toggled" handler="gnc_plugin_page_register_filter_save_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="padding">6</property>
-                <property name="pack_type">end</property>
+                <property name="pack-type">end</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -555,36 +559,33 @@ If 0, all previous days included</property>
       <action-widget response="-6">cancelbutton4</action-widget>
       <action-widget response="-5">okbutton4</action-widget>
     </action-widgets>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
   </object>
   <object class="GtkDialog" id="duplicate_transaction_dialog">
-    <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">6</property>
     <property name="title" translatable="yes" comments="Duplicate Transaction Dialog">Duplicate Transaction</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
-    <property name="type_hint">dialog</property>
+    <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox15">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area15">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="button76">
                 <property name="label" translatable="yes">_Cancel</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -596,11 +597,11 @@ If 0, all previous days included</property>
               <object class="GtkButton" id="button77">
                 <property name="label" translatable="yes">_OK</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="has-default">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -612,14 +613,14 @@ If 0, all previous days included</property>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="duplicate_title_label">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes">New Transaction Information</property>
             <attributes>
@@ -633,116 +634,117 @@ If 0, all previous days included</property>
           </packing>
         </child>
         <child>
+          <!-- n-columns=2 n-rows=4 -->
           <object class="GtkGrid" id="duplicate_table">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_start">6</property>
-            <property name="margin_end">6</property>
-            <property name="border_width">6</property>
-            <property name="row_spacing">3</property>
-            <property name="column_spacing">6</property>
+            <property name="can-focus">False</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
+            <property name="border-width">6</property>
+            <property name="row-spacing">3</property>
+            <property name="column-spacing">6</property>
             <child>
               <object class="GtkLabel" id="date_label">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">end</property>
                 <property name="label" translatable="yes">_Date</property>
-                <property name="use_underline">True</property>
+                <property name="use-underline">True</property>
                 <property name="justify">center</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="num_label">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">end</property>
                 <property name="label" translatable="yes">_Number</property>
-                <property name="use_underline">True</property>
+                <property name="use-underline">True</property>
                 <property name="justify">center</property>
-                <property name="mnemonic_widget">num_entry</property>
+                <property name="mnemonic-widget">num_entry</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkBox" id="date_hbox">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <child>
                   <placeholder/>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="tnum_label">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">end</property>
                 <property name="label" translatable="yes">_Transaction Number</property>
-                <property name="use_underline">True</property>
+                <property name="use-underline">True</property>
                 <property name="justify">center</property>
-                <property name="mnemonic_widget">tnum_entry</property>
+                <property name="mnemonic-widget">tnum_entry</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
               </packing>
             </child>
             <child>
               <object class="GtkCheckButton" id="link_check_button">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
                 <property name="halign">start</property>
-                <property name="image_position">top</property>
+                <property name="image-position">top</property>
                 <property name="active">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="draw-indicator">True</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">3</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">3</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="link_label">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">end</property>
                 <property name="label" translatable="yes">Keep Linked Document Entry</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
               </packing>
             </child>
             <child>
               <object class="GtkEntry" id="num_entry">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkEntry" id="tnum_entry">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">2</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
               </packing>
             </child>
           </object>
@@ -758,40 +760,37 @@ If 0, all previous days included</property>
       <action-widget response="-6">button76</action-widget>
       <action-widget response="-5">button77</action-widget>
     </action-widgets>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
   </object>
   <object class="GtkEntryBuffer" id="entrybuffer1">
     <property name="text">0</property>
   </object>
   <object class="GtkDialog" id="sort_by_dialog">
-    <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">6</property>
     <property name="title" translatable="yes" comments="Sort register by Dialog">Sort register by...</property>
     <property name="resizable">False</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="type_hint">dialog</property>
+    <property name="window-position">center-on-parent</property>
+    <property name="type-hint">dialog</property>
     <signal name="response" handler="gnc_plugin_page_register_sort_response_cb" swapped="no"/>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox17">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area19">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="cancelbutton2">
                 <property name="label" translatable="yes">_Cancel</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -803,11 +802,11 @@ If 0, all previous days included</property>
               <object class="GtkButton" id="okbutton2">
                 <property name="label" translatable="yes">_OK</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="has-default">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -819,26 +818,26 @@ If 0, all previous days included</property>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox" id="vbox101">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="border_width">12</property>
+            <property name="can-focus">False</property>
+            <property name="border-width">12</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkRadioButton" id="BY_STANDARD">
                 <property name="label" translatable="yes">_Standard Order</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Keep normal account order.</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="tooltip-text" translatable="yes">Keep normal account order.</property>
                 <property name="halign">start</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
               </object>
               <packing>
@@ -850,7 +849,7 @@ If 0, all previous days included</property>
             <child>
               <object class="GtkSeparator" id="hseparator2">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -862,12 +861,12 @@ If 0, all previous days included</property>
               <object class="GtkRadioButton" id="BY_DATE">
                 <property name="label" translatable="yes">_Date</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Sort by date.</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="tooltip-text" translatable="yes">Sort by date.</property>
                 <property name="halign">start</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <property name="group">BY_STANDARD</property>
                 <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
               </object>
@@ -881,12 +880,12 @@ If 0, all previous days included</property>
               <object class="GtkRadioButton" id="BY_DATE_ENTERED">
                 <property name="label" translatable="yes">Date of _Entry</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Sort by the date of entry.</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="tooltip-text" translatable="yes">Sort by the date of entry.</property>
                 <property name="halign">start</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <property name="group">BY_STANDARD</property>
                 <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
               </object>
@@ -900,12 +899,12 @@ If 0, all previous days included</property>
               <object class="GtkRadioButton" id="BY_DATE_RECONCILED">
                 <property name="label" translatable="yes">S_tatement Date</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Sort by the statement date (and group by cleared, unreconciled, reconciled).</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="tooltip-text" translatable="yes">Sort by the statement date (and group by cleared, unreconciled, reconciled).</property>
                 <property name="halign">start</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <property name="group">BY_STANDARD</property>
                 <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
               </object>
@@ -919,12 +918,12 @@ If 0, all previous days included</property>
               <object class="GtkRadioButton" id="BY_NUM">
                 <property name="label" translatable="yes">Num_ber</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Sort by number.</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="tooltip-text" translatable="yes">Sort by number.</property>
                 <property name="halign">start</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <property name="group">BY_STANDARD</property>
                 <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
               </object>
@@ -938,12 +937,12 @@ If 0, all previous days included</property>
               <object class="GtkRadioButton" id="BY_AMOUNT">
                 <property name="label" translatable="yes">Amo_unt</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Sort by amount.</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="tooltip-text" translatable="yes">Sort by amount.</property>
                 <property name="halign">start</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <property name="group">BY_STANDARD</property>
                 <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
               </object>
@@ -957,12 +956,12 @@ If 0, all previous days included</property>
               <object class="GtkRadioButton" id="BY_MEMO">
                 <property name="label" translatable="yes">_Memo</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Sort by memo.</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="tooltip-text" translatable="yes">Sort by memo.</property>
                 <property name="halign">start</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <property name="group">BY_STANDARD</property>
                 <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
               </object>
@@ -976,12 +975,12 @@ If 0, all previous days included</property>
               <object class="GtkRadioButton" id="BY_DESC">
                 <property name="label" translatable="yes">Descri_ption</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Sort by description.</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="tooltip-text" translatable="yes">Sort by description.</property>
                 <property name="halign">start</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <property name="group">BY_STANDARD</property>
                 <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
               </object>
@@ -995,12 +994,12 @@ If 0, all previous days included</property>
               <object class="GtkRadioButton" id="BY_ACTION">
                 <property name="label" translatable="yes">_Action</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Sort by action field.</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="tooltip-text" translatable="yes">Sort by action field.</property>
                 <property name="halign">start</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <property name="group">BY_STANDARD</property>
                 <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
               </object>
@@ -1014,12 +1013,12 @@ If 0, all previous days included</property>
               <object class="GtkRadioButton" id="BY_NOTES">
                 <property name="label" translatable="yes">_Notes</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Sort by notes field.</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="tooltip-text" translatable="yes">Sort by notes field.</property>
                 <property name="halign">start</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <property name="group">BY_STANDARD</property>
                 <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
               </object>
@@ -1032,7 +1031,7 @@ If 0, all previous days included</property>
             <child>
               <object class="GtkSeparator" id="hseparator3">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1043,25 +1042,25 @@ If 0, all previous days included</property>
             <child>
               <object class="GtkBox" id="hbox2">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_top">6</property>
+                <property name="can-focus">False</property>
+                <property name="margin-top">6</property>
                 <child>
                   <object class="GtkCheckButton" id="sort_save">
                     <property name="label" translatable="yes">Sa_ve Sort Order</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Save the sort order for this register.</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="tooltip-text" translatable="yes">Save the sort order for this register.</property>
                     <property name="halign">start</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
                     <signal name="toggled" handler="gnc_plugin_page_register_sort_order_save_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="padding">6</property>
-                    <property name="pack_type">end</property>
+                    <property name="pack-type">end</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -1069,12 +1068,12 @@ If 0, all previous days included</property>
                   <object class="GtkCheckButton" id="sort_reverse">
                     <property name="label" translatable="yes">_Reverse Order</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Sort in descending order.</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="tooltip-text" translatable="yes">Sort in descending order.</property>
                     <property name="halign">start</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
                     <signal name="toggled" handler="gnc_plugin_page_register_sort_order_reverse_cb" swapped="no"/>
                   </object>
                   <packing>
@@ -1103,36 +1102,33 @@ If 0, all previous days included</property>
       <action-widget response="-6">cancelbutton2</action-widget>
       <action-widget response="-5">okbutton2</action-widget>
     </action-widgets>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
   </object>
   <object class="GtkDialog" id="void_transaction_dialog">
-    <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">6</property>
     <property name="title" translatable="yes">Void Transaction</property>
     <property name="modal">True</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="type_hint">dialog</property>
+    <property name="window-position">center-on-parent</property>
+    <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox16">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area18">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="cancelbutton1">
                 <property name="label" translatable="yes">_Cancel</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1144,11 +1140,11 @@ If 0, all previous days included</property>
               <object class="GtkButton" id="okbutton1">
                 <property name="label" translatable="yes">_OK</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="has-default">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1160,19 +1156,19 @@ If 0, all previous days included</property>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox" id="vbox100">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkLabel" id="label847671">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="label" translatable="yes">Reason for voiding transaction</property>
                 <property name="justify">center</property>
@@ -1186,11 +1182,11 @@ If 0, all previous days included</property>
             <child>
               <object class="GtkEntry" id="reason">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="has_focus">True</property>
-                <property name="activates_default">True</property>
-                <property name="primary_icon_activatable">False</property>
-                <property name="secondary_icon_activatable">False</property>
+                <property name="can-focus">True</property>
+                <property name="has-focus">True</property>
+                <property name="activates-default">True</property>
+                <property name="primary-icon-activatable">False</property>
+                <property name="secondary-icon-activatable">False</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1211,8 +1207,5 @@ If 0, all previous days included</property>
       <action-widget response="-6">cancelbutton1</action-widget>
       <action-widget response="-5">okbutton1</action-widget>
     </action-widgets>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
   </object>
 </interface>

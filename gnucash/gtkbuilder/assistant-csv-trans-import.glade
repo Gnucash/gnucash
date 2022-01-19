@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkListStore" id="account_match_store">
@@ -14,45 +14,33 @@
   </object>
   <object class="GtkAdjustment" id="end_row_adj">
     <property name="upper">1000</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="start_row_adj">
     <property name="upper">1000</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAssistant" id="csv_transaction_assistant">
-    <property name="can_focus">False</property>
-    <property name="border_width">12</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">12</property>
     <property name="title" translatable="yes">CSV Transaction Import</property>
-    <property name="default_width">400</property>
-    <property name="default_height">500</property>
+    <property name="default-width">400</property>
+    <property name="default-height">500</property>
     <signal name="apply" handler="csv_tximp_assist_finish_cb" swapped="no"/>
     <signal name="cancel" handler="csv_tximp_assist_close_cb" swapped="no"/>
     <signal name="close" handler="csv_tximp_assist_close_cb" swapped="no"/>
     <signal name="destroy" handler="csv_tximp_assist_close_cb" swapped="no"/>
     <signal name="prepare" handler="csv_tximp_assist_prepare_cb" swapped="no"/>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkLabel" id="start_page">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="valign">start</property>
-        <property name="margin_start">12</property>
-        <property name="margin_end">12</property>
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
         <property name="label" translatable="yes">This assistant will help you import a delimited file containing a list of transactions. It supports both token separated files (such as comma separated or semi-colon separated) and fixed width data.
 
 For a successful import three columns have to be available in the import data:
@@ -70,22 +58,22 @@ Lastly, for repeated imports the preview page has buttons to Load and Save the s
         <property name="wrap">True</property>
       </object>
       <packing>
-        <property name="page_type">intro</property>
+        <property name="page-type">intro</property>
         <property name="title" translatable="yes">Transaction Import Assistant</property>
         <property name="complete">True</property>
-        <property name="has_padding">False</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
       <object class="GtkBox" id="file_page">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="border_width">12</property>
+        <property name="can-focus">False</property>
+        <property name="border-width">12</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkLabel" id="label7">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes">
 Select location and file name for the Import, then click "OK"...
 </property>
@@ -100,42 +88,46 @@ Select location and file name for the Import, then click "OK"...
       </object>
       <packing>
         <property name="title" translatable="yes">Select File for Import</property>
-        <property name="has_padding">False</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
       <object class="GtkBox" id="preview_page">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-        <property name="border_width">12</property>
+        <property name="border-width">12</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child>
+          <!-- n-columns=2 n-rows=2 -->
           <object class="GtkGrid" id="table1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="margin_bottom">6</property>
-            <property name="row_spacing">5</property>
-            <property name="column_spacing">5</property>
+            <property name="margin-bottom">6</property>
+            <property name="row-spacing">5</property>
+            <property name="column-spacing">5</property>
             <child>
               <object class="GtkFrame" id="frame6">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label_xalign">0</property>
-                <property name="shadow_type">in</property>
+                <property name="can-focus">False</property>
+                <property name="label-xalign">0</property>
+                <property name="shadow-type">in</property>
                 <child>
                   <object class="GtkBox" id="combo_hbox">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="border_width">3</property>
+                    <property name="can-focus">False</property>
+                    <property name="border-width">3</property>
+                    <child>
+                      <placeholder/>
+                    </child>
                     <child>
                       <object class="GtkButton" id="delete_settings">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Delete Settings
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes">Delete Settings
 Deletes the settings saved under the name as entered in the adjacent text field.
 There are two reserved names which can never be deleted:
 - No settings
@@ -144,24 +136,24 @@ There are two reserved names which can never be deleted:
                         <child>
                           <object class="GtkImage" id="image2">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="icon_name">edit-delete</property>
+                            <property name="can-focus">False</property>
+                            <property name="icon-name">edit-delete</property>
                           </object>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
-                        <property name="pack_type">end</property>
+                        <property name="pack-type">end</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkButton" id="save_settings">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Save Settings
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes">Save Settings
 Saves current settings under the name as entered in the adjacent text field.
 There are two reserved names which can't be used to save custom settings:
 - No settings
@@ -170,15 +162,15 @@ There are two reserved names which can't be used to save custom settings:
                         <child>
                           <object class="GtkImage" id="image1">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="icon_name">document-save</property>
+                            <property name="can-focus">False</property>
+                            <property name="icon-name">document-save</property>
                           </object>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
-                        <property name="pack_type">end</property>
+                        <property name="pack-type">end</property>
                         <property name="position">2</property>
                       </packing>
                     </child>
@@ -187,82 +179,80 @@ There are two reserved names which can't be used to save custom settings:
                 <child type="label">
                   <object class="GtkLabel" id="label12">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes">&lt;b&gt;Load and Save Settings&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
-                    <property name="track_visited_links">False</property>
+                    <property name="use-markup">True</property>
+                    <property name="track-visited-links">False</property>
                   </object>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkFrame" id="frame10">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label_xalign">0</property>
+                <property name="label-xalign">0</property>
                 <child>
                   <object class="GtkBox" id="vbox1">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_start">6</property>
-                    <property name="margin_end">6</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-end">6</property>
                     <property name="orientation">vertical</property>
                     <child>
+                      <!-- n-columns=2 n-rows=2 -->
                       <object class="GtkGrid" id="table4">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <child>
                           <object class="GtkRadioButton" id="csv_button">
                             <property name="label" translatable="yes">Separators</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="halign">start</property>
                             <property name="active">True</property>
-                            <property name="draw_indicator">True</property>
+                            <property name="draw-indicator">True</property>
                             <signal name="toggled" handler="csv_tximp_preview_sep_fixed_sel_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="fixed_button">
                             <property name="label" translatable="yes">Fixed-Width</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="halign">start</property>
-                            <property name="draw_indicator">True</property>
+                            <property name="draw-indicator">True</property>
                             <property name="group">csv_button</property>
                           </object>
                           <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkSeparator" id="hseparator1">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="hexpand">True</property>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                            <property name="width">3</property>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">1</property>
+                            <property name="width">2</property>
                           </packing>
-                        </child>
-                        <child>
-                          <placeholder/>
                         </child>
                       </object>
                       <packing>
@@ -272,141 +262,140 @@ There are two reserved names which can't be used to save custom settings:
                       </packing>
                     </child>
                     <child>
+                      <!-- n-columns=3 n-rows=3 -->
                       <object class="GtkGrid" id="separator_table">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="column_spacing">3</property>
+                        <property name="column-spacing">3</property>
                         <child>
                           <object class="GtkCheckButton" id="space_cbutton">
                             <property name="label" translatable="yes">Space</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="halign">start</property>
-                            <property name="draw_indicator">True</property>
+                            <property name="draw-indicator">True</property>
                             <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="tab_cbutton">
                             <property name="label" translatable="yes">Tab</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="halign">start</property>
-                            <property name="draw_indicator">True</property>
+                            <property name="draw-indicator">True</property>
                             <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="comma_cbutton">
                             <property name="label" translatable="yes">Comma (,)</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="halign">start</property>
                             <property name="active">True</property>
-                            <property name="draw_indicator">True</property>
+                            <property name="draw-indicator">True</property>
                             <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="left_attach">2</property>
-                            <property name="top_attach">0</property>
+                            <property name="left-attach">2</property>
+                            <property name="top-attach">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="colon_cbutton">
                             <property name="label" translatable="yes">Colon (:)</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="halign">start</property>
-                            <property name="draw_indicator">True</property>
+                            <property name="draw-indicator">True</property>
                             <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">1</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="semicolon_cbutton">
                             <property name="label" translatable="yes">Semicolon (;)</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="halign">start</property>
-                            <property name="draw_indicator">True</property>
+                            <property name="draw-indicator">True</property>
                             <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">1</property>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">1</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="hyphen_cbutton">
                             <property name="label" translatable="yes">Hyphen (-)</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="halign">start</property>
-                            <property name="draw_indicator">True</property>
+                            <property name="draw-indicator">True</property>
                             <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="left_attach">2</property>
-                            <property name="top_attach">1</property>
+                            <property name="left-attach">2</property>
+                            <property name="top-attach">1</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="custom_cbutton">
                             <property name="label" translatable="yes">Custom</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="halign">start</property>
-                            <property name="draw_indicator">True</property>
+                            <property name="draw-indicator">True</property>
                             <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">2</property>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">2</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkEntry" id="custom_entry">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can-focus">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="invisible_char">●</property>
-                            <property name="primary_icon_activatable">False</property>
-                            <property name="secondary_icon_activatable">False</property>
+                            <property name="invisible-char">●</property>
+                            <property name="primary-icon-activatable">False</property>
+                            <property name="secondary-icon-activatable">False</property>
                             <signal name="changed" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">2</property>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">2</property>
+                            <property name="width">2</property>
                           </packing>
-                        </child>
-                        <child>
-                          <placeholder/>
                         </child>
                       </object>
                       <packing>
@@ -417,16 +406,16 @@ There are two reserved names which can't be used to save custom settings:
                     </child>
                     <child>
                       <object class="GtkBox" id="fw_instructions_hbox">
-                        <property name="can_focus">False</property>
-                        <property name="no_show_all">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="no-show-all">True</property>
                         <child>
                           <object class="GtkImage" id="instructions_image1">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="halign">start</property>
                             <property name="valign">start</property>
-                            <property name="icon_name">dialog-information</property>
+                            <property name="icon-name">dialog-information</property>
                             <property name="icon_size">3</property>
                           </object>
                           <packing>
@@ -437,60 +426,61 @@ There are two reserved names which can't be used to save custom settings:
                           </packing>
                         </child>
                         <child>
+                          <!-- n-columns=2 n-rows=2 -->
                           <object class="GtkGrid" id="table2">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="column_spacing">5</property>
+                            <property name="can-focus">False</property>
+                            <property name="column-spacing">5</property>
                             <child>
                               <object class="GtkLabel" id="label2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="label">•</property>
                                 <property name="wrap">True</property>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">0</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkLabel" id="label3">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">Double-click anywhere on the table below to insert a column break</property>
                                 <property name="wrap">True</property>
                                 <property name="xalign">0</property>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">0</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkLabel" id="label4">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="label">•</property>
                                 <property name="wrap">True</property>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">1</property>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">1</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkLabel" id="label5">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">Right-click anywhere in a column to modify it (widen, narrow, merge)</property>
                                 <property name="wrap">True</property>
                                 <property name="xalign">0</property>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">1</property>
                               </packing>
                             </child>
                           </object>
@@ -508,44 +498,41 @@ There are two reserved names which can't be used to save custom settings:
                       </packing>
                     </child>
                     <child>
+                      <!-- n-columns=1 n-rows=2 -->
                       <object class="GtkGrid" id="table5">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <child>
                           <object class="GtkSeparator" id="hseparator4">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="margin_top">3</property>
-                            <property name="margin_bottom">3</property>
+                            <property name="can-focus">False</property>
+                            <property name="margin-top">3</property>
+                            <property name="margin-bottom">3</property>
                             <property name="hexpand">True</property>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                            <property name="width">2</property>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="multi_split_button">
                             <property name="label" translatable="yes">Multi-split</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="tooltip_text" translatable="yes">Normally the importer will assume each line in the input file will correspond to one transaction. Each line can have information for one transaction and one or two splits.
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="tooltip-text" translatable="yes">Normally the importer will assume each line in the input file will correspond to one transaction. Each line can have information for one transaction and one or two splits.
 
 When Multi-split is enabled the importer will assume multiple consecutive lines together hold the information for one transaction. Each line provides information for exactly one split. The first line should also provide the information for the transaction.
 To know which lines belong to the same transaction, the importer will compare the provided transaction information in each line. If that information is empty or the same as the first transaction line the importer will consider this line part of the same transaction.</property>
                             <property name="halign">start</property>
-                            <property name="draw_indicator">True</property>
+                            <property name="draw-indicator">True</property>
                             <signal name="toggled" handler="csv_tximp_preview_multisplit_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">1</property>
                           </packing>
-                        </child>
-                        <child>
-                          <placeholder/>
                         </child>
                       </object>
                       <packing>
@@ -559,110 +546,111 @@ To know which lines belong to the same transaction, the importer will compare th
                 <child type="label">
                   <object class="GtkLabel" id="label19">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="label" translatable="yes">&lt;b&gt;File Format&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="use-markup">True</property>
                   </object>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkFrame" id="frame8">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label_xalign">0</property>
+                <property name="can-focus">False</property>
+                <property name="label-xalign">0</property>
                 <child>
                   <object class="GtkBox" id="vbox6">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="orientation">vertical</property>
                     <child>
+                      <!-- n-columns=2 n-rows=7 -->
                       <object class="GtkGrid" id="table3">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="margin_start">6</property>
-                        <property name="margin_end">6</property>
-                        <property name="margin_bottom">3</property>
-                        <property name="row_spacing">6</property>
-                        <property name="column_spacing">6</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-end">6</property>
+                        <property name="margin-bottom">3</property>
+                        <property name="row-spacing">6</property>
+                        <property name="column-spacing">6</property>
                         <child>
                           <object class="GtkLabel" id="label20">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="halign">end</property>
                             <property name="label" translatable="yes">Date Format</property>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">1</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="label21">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="halign">end</property>
                             <property name="label" translatable="yes">Currency Format</property>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">2</property>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">2</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="label16">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="halign">end</property>
                             <property name="label" translatable="yes">Encoding</property>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="label17">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="halign">end</property>
                             <property name="label" translatable="yes">Leading Lines to Skip</property>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">4</property>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">4</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="label18">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="halign">end</property>
                             <property name="label" translatable="yes">Trailing Lines to Skip</property>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">5</property>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">5</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkBox" id="hbox2">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <child>
                               <object class="GtkSpinButton" id="start_row">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
+                                <property name="can-focus">True</property>
                                 <property name="halign">start</property>
-                                <property name="invisible_char">●</property>
-                                <property name="primary_icon_activatable">False</property>
-                                <property name="secondary_icon_activatable">False</property>
+                                <property name="invisible-char">●</property>
+                                <property name="primary-icon-activatable">False</property>
+                                <property name="secondary-icon-activatable">False</property>
                                 <property name="adjustment">start_row_adj</property>
                                 <property name="numeric">True</property>
                                 <signal name="value-changed" handler="csv_tximp_preview_srow_cb" swapped="no"/>
@@ -675,22 +663,22 @@ To know which lines belong to the same transaction, the importer will compare th
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">4</property>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">4</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkBox" id="hbox3">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <child>
                               <object class="GtkSpinButton" id="end_row">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
+                                <property name="can-focus">True</property>
                                 <property name="halign">start</property>
-                                <property name="invisible_char">●</property>
-                                <property name="primary_icon_activatable">False</property>
-                                <property name="secondary_icon_activatable">False</property>
+                                <property name="invisible-char">●</property>
+                                <property name="primary-icon-activatable">False</property>
+                                <property name="secondary-icon-activatable">False</property>
                                 <property name="adjustment">end_row_adj</property>
                                 <property name="numeric">True</property>
                                 <signal name="value-changed" handler="csv_tximp_preview_erow_cb" swapped="no"/>
@@ -703,90 +691,81 @@ To know which lines belong to the same transaction, the importer will compare th
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">5</property>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">5</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkSeparator" id="hseparator2">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="margin_start">3</property>
-                            <property name="margin_end">3</property>
+                            <property name="can-focus">False</property>
+                            <property name="margin-start">3</property>
+                            <property name="margin-end">3</property>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">3</property>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">3</property>
                             <property name="width">2</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkBox" id="date_format_container">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child>
-                              <placeholder/>
-                            </child>
+                            <property name="can-focus">False</property>
                           </object>
                           <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">1</property>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">1</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkBox" id="encoding_container">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child>
-                              <placeholder/>
-                            </child>
+                            <property name="can-focus">False</property>
                           </object>
                           <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkBox" id="currency_format_container">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child>
-                              <placeholder/>
-                            </child>
+                            <property name="can-focus">False</property>
                           </object>
                           <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">2</property>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">2</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="skip_rows">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="tooltip_text" translatable="yes">Starting from the first line that is actually imported every second line will be skipped. This option will take the leading lines to skip into account as well.
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="tooltip-text" translatable="yes">Starting from the first line that is actually imported every second line will be skipped. This option will take the leading lines to skip into account as well.
 For example
 * if 'Leading Lines to Skip' is set to 3, the first line to import will be line 4. Lines 5, 7, 9,... will be skipped.
 * if 'Leading Lines to Skip' is set to 4, the first line to import will be line 5. Lines 6, 8, 10,... will be skipped.</property>
                             <property name="halign">start</property>
-                            <property name="draw_indicator">True</property>
+                            <property name="draw-indicator">True</property>
                             <signal name="toggled" handler="csv_tximp_preview_skiprows_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">6</property>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">6</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="skip_rows_label">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="halign">end</property>
                             <property name="label" translatable="yes">Skip alternate lines</property>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">6</property>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">6</property>
                           </packing>
                         </child>
                       </object>
@@ -801,43 +780,46 @@ For example
                 <child type="label">
                   <object class="GtkLabel" id="label13">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes">&lt;b&gt;Miscellaneous&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="use-markup">True</property>
                   </object>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkFrame" id="frame1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label_xalign">0</property>
-                <property name="shadow_type">none</property>
+                <property name="can-focus">False</property>
+                <property name="label-xalign">0</property>
+                <property name="shadow-type">none</property>
                 <child>
                   <object class="GtkBox" id="account_hbox">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_bottom">3</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-bottom">3</property>
                     <property name="hexpand">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                 </child>
                 <child type="label">
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes">&lt;b&gt;Account&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="use-markup">True</property>
                   </object>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
           </object>
@@ -850,13 +832,13 @@ For example
         <child>
           <object class="GtkScrolledWindow" id="scrolledwindow2">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
             <child>
               <object class="GtkTreeView" id="treeview">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="enable_grid_lines">both</property>
+                <property name="enable-grid-lines">both</property>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="treeview-selection2"/>
                 </child>
@@ -872,16 +854,16 @@ For example
         <child>
           <object class="GtkBox" id="hbox13">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <child>
               <object class="GtkImage" id="instructions_image">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="halign">start</property>
                 <property name="valign">start</property>
-                <property name="icon_name">dialog-information</property>
+                <property name="icon-name">dialog-information</property>
                 <property name="icon_size">3</property>
               </object>
               <packing>
@@ -894,7 +876,7 @@ For example
             <child>
               <object class="GtkLabel" id="instructions_label">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="halign">start</property>
                 <property name="label" translatable="yes">Select the type of each column to import.</property>
@@ -916,20 +898,20 @@ For example
         <child>
           <object class="GtkBox" id="hbox14">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <child>
               <object class="GtkCheckButton" id="skip_errors_button">
                 <property name="label" translatable="yes">Skip Errors</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="image_position">right</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="image-position">right</property>
+                <property name="draw-indicator">True</property>
                 <signal name="toggled" handler="csv_tximp_preview_skiperrors_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="pack_type">end</property>
+                <property name="pack-type">end</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -944,19 +926,19 @@ For example
       <packing>
         <property name="title" translatable="yes">Import Preview</property>
         <property name="complete">True</property>
-        <property name="has_padding">False</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
       <object class="GtkBox" id="account_match_page">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="border_width">12</property>
+        <property name="can-focus">False</property>
+        <property name="border-width">12</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkLabel" id="label7609">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes">Select a row to change the mappings</property>
           </object>
           <packing>
@@ -969,16 +951,15 @@ For example
         <child>
           <object class="GtkScrolledWindow" id="account_match_swindow">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="shadow_type">in</property>
+            <property name="can-focus">True</property>
+            <property name="shadow-type">in</property>
             <child>
               <object class="GtkTreeView" id="account_match_view">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="model">account_match_store</property>
-                <property name="rules_hint">True</property>
-                <property name="enable_search">False</property>
-                <property name="enable_tree_lines">True</property>
+                <property name="enable-search">False</property>
+                <property name="enable-tree-lines">True</property>
                 <signal name="button-press-event" handler="csv_tximp_acct_match_view_clicked_cb" swapped="no"/>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="treeview-selection3"/>
@@ -1020,11 +1001,11 @@ For example
         <child>
           <object class="GtkBox" id="hbox7609">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <child>
               <object class="GtkLabel" id="account_match_label">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">Error text.</property>
               </object>
               <packing>
@@ -1037,15 +1018,15 @@ For example
               <object class="GtkButton" id="account_match_change">
                 <property name="label" translatable="yes">Change GnuCash _Account...</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
                 <signal name="clicked" handler="csv_tximp_acct_match_button_clicked_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="pack_type">end</property>
+                <property name="pack-type">end</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -1059,21 +1040,21 @@ For example
       </object>
       <packing>
         <property name="title" translatable="yes">Match Import and GnuCash accounts</property>
-        <property name="has_padding">False</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
       <object class="GtkBox" id="doc_page">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="valign">start</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkLabel" id="label8">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_start">12</property>
-            <property name="margin_end">12</property>
+            <property name="can-focus">False</property>
+            <property name="margin-start">12</property>
+            <property name="margin-end">12</property>
             <property name="label" translatable="yes">If you click "Next" Gnucash will perform a number of checks.
 
 If one of those &lt;i&gt;checks fails&lt;/i&gt; you'll be automatically redirected to the preview page to try and correct.
@@ -1087,7 +1068,7 @@ If this is the &lt;i&gt;first time importing&lt;/i&gt;, you will find that all l
 The confidence of a correct association is displayed as a colored bar.
 
 More information can be displayed by using the help button.</property>
-            <property name="use_markup">True</property>
+            <property name="use-markup">True</property>
             <property name="wrap">True</property>
           </object>
           <packing>
@@ -1098,50 +1079,50 @@ More information can be displayed by using the help button.</property>
         </child>
       </object>
       <packing>
-        <property name="page_type">progress</property>
+        <property name="page-type">progress</property>
         <property name="title" translatable="yes">Transaction Information</property>
         <property name="complete">True</property>
-        <property name="has_padding">False</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
       <object class="GtkBox" id="match_page">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="border_width">12</property>
+        <property name="can-focus">False</property>
+        <property name="border-width">12</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkLabel" id="match_label">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label">label</property>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
       </object>
       <packing>
-        <property name="page_type">confirm</property>
+        <property name="page-type">confirm</property>
         <property name="title" translatable="yes">Match Transactions</property>
-        <property name="has_padding">False</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
       <object class="GtkBox" id="summary_page">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="border_width">12</property>
+        <property name="can-focus">False</property>
+        <property name="border-width">12</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkLabel" id="summary_label">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label">label</property>
-            <property name="use_markup">True</property>
+            <property name="use-markup">True</property>
             <property name="wrap">True</property>
           </object>
           <packing>
@@ -1152,27 +1133,15 @@ More information can be displayed by using the help button.</property>
         </child>
       </object>
       <packing>
-        <property name="page_type">summary</property>
+        <property name="page-type">summary</property>
         <property name="title" translatable="yes">Import Summary</property>
         <property name="complete">True</property>
-        <property name="has_padding">False</property>
+        <property name="has-padding">False</property>
       </packing>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
     </child>
     <child internal-child="action_area">
       <object class="GtkBox">
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
       </object>
     </child>
   </object>

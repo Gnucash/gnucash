@@ -16,8 +16,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-01-02 23:54+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2022-01-13 15:45+0000\n"
+"Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "es/>\n"
 "Language: es\n"
@@ -137,15 +137,15 @@ msgstr "cajero automático"
 
 #. "Transaction was an auto deposit"
 msgid "action: autoDep"
-msgstr "acción: autoDep"
+msgstr "autoDep"
 
 #. "-"
 msgid "action: buy"
-msgstr "compra"
+msgstr "comprar"
 
 #. "-"
 msgid "action: deposit"
-msgstr "depósito"
+msgstr "depositar"
 
 #. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
 msgid "action: direct debit"
@@ -173,7 +173,7 @@ msgstr "préstamo"
 
 #. "see: payment 1."
 msgid "action: payment"
-msgstr "liquidación"
+msgstr "liquidar"
 
 #. "Point of sale"
 msgid "action: POS"
@@ -181,7 +181,7 @@ msgstr "PdV"
 
 #. "-"
 msgid "action: rebate"
-msgstr "descuento, rebaja; reembolso, devolución"
+msgstr "descontar, rebajar; reembolsar, devolver"
 
 #. "-"
 msgid "action: sell"
@@ -281,7 +281,7 @@ msgstr "ganancias de capital"
 
 #. "Distinguishing the uppercase and lowercase letters"
 msgid "case sensitive"
-msgstr "distinguir mayúsculas"
+msgstr "distinguir MAYÚS/minús"
 
 #. "Money in coins or notes"
 msgid "cash"
@@ -309,11 +309,11 @@ msgstr "índice de valores"
 
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
 msgid "commodity option: fraction"
-msgstr "opción de valor: fracción"
+msgstr "fracción"
 
 #. "e.g. USD, DEM"
 msgid "commodity option: Symbol"
-msgstr "opción de valor: Símbolo"
+msgstr "Símbolo"
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
 msgid "compound interests"
@@ -321,7 +321,7 @@ msgstr "interés compuesto"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
-msgstr "Haber (columna en el libro)"
+msgstr "Haber (columna en el registro)"
 
 #. "-"
 msgid "Credit Card"
@@ -329,7 +329,7 @@ msgstr "Tarjeta Crediticia"
 
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
-msgstr "transferencia (bancaria)"
+msgstr "transferencia haber"
 
 #. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
 msgid "credit note"
@@ -501,7 +501,7 @@ msgstr "pérdida"
 
 #. "name of an automatically created account"
 msgid "Lost Accounts"
-msgstr "Cuentas de Perdidas"
+msgstr "Cuentas de Pérdidas"
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
 msgid "Lot"
@@ -521,11 +521,11 @@ msgstr "resultado"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
-msgstr "modo MDI"
+msgstr "Modo MDI"
 
 #. "One textfield per split that should help you remember what this split was about."
 msgid "Memo"
-msgstr "Memorandum, resumen"
+msgstr "Memorándum, resumen"
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
@@ -605,7 +605,7 @@ msgstr "beneficiario"
 
 #. "A person who pays or who has to pay for sth"
 msgid "payer"
-msgstr "pagador"
+msgstr "pagadero"
 
 #. "1. The action of paying sb/sth or of being paid. 2. A sum of money paid."
 msgid "payment"
@@ -875,24 +875,6 @@ msgstr "comprobante"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "cargo"
 
-#~ msgctxt "1"
-#~ msgid "bill"
-#~ msgstr "vale"
-
-#~ msgctxt "1"
-#~ msgid "financial calculator: interest rate"
-#~ msgstr "calculadora financiera: tasa de interés"
-
-#, fuzzy
-#~ msgid "invoice owner"
-#~ msgstr "factura"
-
-#~ msgid "Term"
-#~ msgstr "Condiciones (Términos) (de pago)"
-
-#~ msgid "due"
-#~ msgstr "vencimiento"
-
 msgid "stock"
 msgstr "provisión"
 
@@ -913,7 +895,7 @@ msgid "invoice"
 msgstr "factura"
 
 msgid "log"
-msgstr "bitácura"
+msgstr "bitácora"
 
 msgid "Void"
 msgstr "Anulada"

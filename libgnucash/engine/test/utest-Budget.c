@@ -70,6 +70,42 @@ test_gnc_set_budget_num_periods()
     qof_book_destroy(book);
 }
 
+/* the following test checks whether period values are retained when
+   the budget num_periods is reduced, then increased again */
+static void
+test_gnc_set_budget_num_periods_data_retention ()
+{
+    QofBook *book = qof_book_new();
+    GncBudget* budget = gnc_budget_new(book);
+    Account *acc = gnc_account_create_root(book);
+    gchar *note;
+
+    /* initially has 20 periods */
+    gnc_budget_set_num_periods(budget, 20);
+
+    /* create value at period 16 */
+    gnc_budget_set_account_period_value(budget, acc, 15, gnc_numeric_create(100,1));
+    g_assert (gnc_budget_is_account_period_value_set(budget, acc, 15));
+
+    /* create note at period 12 */
+    gnc_budget_set_account_period_note(budget, acc, 11, "undefined");
+    g_assert_cmpstr (gnc_budget_get_account_period_note (budget, acc, 11), ==,
+                     "undefined");
+
+    /* reduce, and increase */
+    gnc_budget_set_num_periods(budget, 10);
+    gnc_budget_set_num_periods(budget, 20);
+
+    /* value and note are retained */
+    g_assert (gnc_budget_is_account_period_value_set(budget, acc, 15));
+    note = gnc_budget_get_account_period_note (budget, acc, 11);
+    g_assert_cmpstr (note, ==, "undefined");
+    g_free (note);
+
+    gnc_budget_destroy(budget);
+    qof_book_destroy(book);
+}
+
 static void
 test_gnc_set_budget_recurrence()
 {
@@ -163,6 +199,7 @@ test_suite_budget(void)
     GNC_TEST_ADD_FUNC(suitename, "gnc_budget_set_name()", test_gnc_set_budget_name);
     GNC_TEST_ADD_FUNC(suitename, "gnc_budget_set_description()", test_gnc_set_budget_description);
     GNC_TEST_ADD_FUNC(suitename, "gnc_budget_set_num_periods()", test_gnc_set_budget_num_periods);
+    GNC_TEST_ADD_FUNC(suitename, "gnc_budget_set_num_periods_data_retention()", test_gnc_set_budget_num_periods_data_retention);
     GNC_TEST_ADD_FUNC(suitename, "gnc_budget_set_recurrence()", test_gnc_set_budget_recurrence);
     GNC_TEST_ADD_FUNC(suitename, "gnc_budget_set_account_period_value()", test_gnc_set_budget_account_period_value);
 

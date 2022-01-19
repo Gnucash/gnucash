@@ -1065,7 +1065,9 @@ gnc_plugin_page_budget_cmd_estimate_budget (GtkAction *action,
 
         priv->useAvg = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(avg));
 
+        gnc_budget_begin_edit (priv->budget);
         gtk_tree_selection_selected_foreach (sel, estimate_budget_helper, page);
+        gnc_budget_commit_edit (priv->budget);
         break;
     default:
         break;
@@ -1193,8 +1195,12 @@ gnc_plugin_page_budget_cmd_allperiods_budget (GtkAction *action,
 
         if (xaccParseAmount (txt, TRUE, &priv->allValue, NULL) ||
             priv->action == UNSET)
+        {
+            gnc_budget_begin_edit (priv->budget);
             gtk_tree_selection_selected_foreach (sel, allperiods_budget_helper,
                                                  page);
+            gnc_budget_commit_edit (priv->budget);
+        }
         break;
     default:
         break;

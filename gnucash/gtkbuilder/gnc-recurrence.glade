@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkListStore" id="GCB_PeriodType_liststore">
@@ -26,27 +26,27 @@
     <property name="lower">1</property>
     <property name="upper">250</property>
     <property name="value">1</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkWindow" id="gnc_recurrence_entry_window">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <child>
       <object class="GtkBox" id="RecurrenceEntryVBox">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="hexpand">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">3</property>
         <child>
           <object class="GtkBox" id="hbox218">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <child>
               <object class="GtkLabel" id="label90">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">Every </property>
               </object>
               <packing>
@@ -58,12 +58,12 @@
             <child>
               <object class="GtkSpinButton" id="GSB_Mult">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="tooltip_text" translatable="yes">Number of calendar units in the recurrence: E.g. Biweekly = every 2 weeks; Quarterly = every 3 months</property>
-                <property name="primary_icon_activatable">False</property>
-                <property name="secondary_icon_activatable">False</property>
+                <property name="can-focus">True</property>
+                <property name="tooltip-text" translatable="yes">Number of calendar units in the recurrence: E.g. Biweekly = every 2 weeks; Quarterly = every 3 months</property>
+                <property name="primary-icon-activatable">False</property>
+                <property name="secondary-icon-activatable">False</property>
                 <property name="adjustment">GSB_Mult_Adj</property>
-                <property name="climb_rate">1</property>
+                <property name="climb-rate">1</property>
                 <property name="numeric">True</property>
               </object>
               <packing>
@@ -75,7 +75,7 @@
             <child>
               <object class="GtkComboBox" id="GCB_PeriodType">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="model">GCB_PeriodType_liststore</property>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext1"/>
@@ -100,12 +100,12 @@
         <child>
           <object class="GtkBox" id="hbox219">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkLabel" id="label89">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">beginning on</property>
               </object>
               <packing>
@@ -117,7 +117,7 @@
             <child>
               <object class="GtkBox" id="Startdate_hbox">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <child>
                   <placeholder/>
                 </child>
@@ -138,16 +138,16 @@
         <child>
           <object class="GtkBox" id="hbox220">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <child>
               <object class="GtkCheckButton" id="GCB_EndOfMonth">
                 <property name="label" translatable="yes">last of month</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Always use the last day (or day of week) in the month?</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="tooltip-text" translatable="yes">Always use the last day (or day of week) in the month?</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -159,11 +159,11 @@
               <object class="GtkCheckButton" id="GCB_NthWeekday">
                 <property name="label" translatable="yes">same week &amp; day</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Match the "day of week" and "week of month"? (for example, the "second Tuesday" of every month)</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="tooltip-text" translatable="yes">Match the "day of week" and "week of month"? (for example, the "second Tuesday" of every month)</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -179,9 +179,6 @@
           </packing>
         </child>
       </object>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
     </child>
   </object>
 </interface>

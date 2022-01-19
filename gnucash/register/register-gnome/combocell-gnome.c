@@ -929,12 +929,18 @@ popup_get_height (G_GNUC_UNUSED GtkWidget* widget,
 
     if (height < space_available)
     {
-        gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrollwin),
-                                        GTK_POLICY_AUTOMATIC, GTK_POLICY_NEVER);
         // if the list is empty height would be 0 so return 1 instead to
         // satisfy the check_popup_height_is_true function
-        return height ? height : 1;
+        gint ret_height = height ? height : 1;
+
+        gtk_widget_set_size_request (GTK_WIDGET(scrollwin), -1, ret_height);
+        gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrollwin),
+                                        GTK_POLICY_AUTOMATIC, GTK_POLICY_NEVER);
+        return ret_height;
     }
+    else
+        gtk_widget_set_size_request (GTK_WIDGET(scrollwin), -1, -1);
+
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrollwin),
                                     GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     return space_available;

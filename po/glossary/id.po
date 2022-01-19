@@ -5,14 +5,15 @@
 # Triyan W. Nugroho <triyan.wn@gmail.com>, 2020.
 # Ferdinand Tampubolon <dnandz@gmail.com>, 2021.
 # Reza Almanda <rezaalmanda27@gmail.com>, 2021.
+# Syahmin Sukhairi <syahmin@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-01-02 22:54+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2022-01-07 05:54+0000\n"
+"Last-Translator: Syahmin Sukhairi <syahmin@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/id/>\n"
 "Language: id\n"
@@ -754,13 +755,11 @@ msgstr "Terbagi"
 
 #. "Alias of 'shares'"
 msgid "stocks"
-msgstr ""
+msgstr "saham"
 
 #. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
-#, fuzzy
-#| msgid "split"
 msgid "stock split"
-msgstr "Terbagi"
+msgstr "pemecahan saham"
 
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
@@ -875,13 +874,13 @@ msgid "withdraw (in the reconcile dialog)"
 msgstr "penarikan( dalam rekonsiliasi dialog)"
 
 msgid "stock"
-msgstr ""
+msgstr "saham"
 
 msgid "due"
 msgstr ""
 
 msgid "Online"
-msgstr ""
+msgstr "Daring"
 
 msgid "Direct Debit"
 msgstr ""

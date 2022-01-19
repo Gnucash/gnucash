@@ -124,12 +124,12 @@
               </packing>
             </child>
             <child>
-              <!-- n-columns=3 n-rows=3 -->
+              <!-- n-columns=2 n-rows=2 -->
               <object class="GtkGrid" id="table1">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="border-width">6</property>
-                <property name="row-spacing">6</property>
+                <property name="row-spacing">3</property>
                 <property name="column-spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="end_label">
@@ -149,6 +149,9 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -165,21 +168,6 @@
                     <property name="top-attach">1</property>
                     <property name="width">2</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
               </object>
               <packing>

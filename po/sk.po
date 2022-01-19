@@ -4,22 +4,24 @@
 # Zdenko Podobny <zdpo@mailbox.sk>, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008.
 # Juraj Korec <euro777@gmail.com>, 2008.
 # Zdenko Podobny <zdenop@gmail.com>, 2009, 2010, 2011, 2018
+# Dullus <dullus@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2018-04-02 13:29+0100\n"
-"Last-Translator: Zdenko Podobný <zdenop@gmail.com>\n"
-"Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
+"PO-Revision-Date: 2022-01-07 11:54+0000\n"
+"Last-Translator: Dullus <dullus@gmail.com>\n"
+"Language-Team: Slovak <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Bugs: Report translation errors to the Language-Team address.\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 1.0\n"
+"X-Generator: Weblate 4.10.1\n"
+"X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-Language: Slovak\n"
 "X-Poedit-Country: SLOVAKIA\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -2246,24 +2248,22 @@ msgstr "Celkom účtované:"
 #: gnucash/gtkbuilder/dialog-invoice.glade:857
 #: gnucash/report/reports/standard/invoice.scm:780
 #: libgnucash/engine/gncInvoice.c:1116
-#, fuzzy
 msgid "Credit Note"
-msgstr "Kreditný účet"
+msgstr "Poznámka k vkladu"
 
 #: gnucash/gnome/dialog-invoice.c:2098
 msgid "PAID"
-msgstr ""
+msgstr "ZAPLATENÉ"
 
 #: gnucash/gnome/dialog-invoice.c:2100
 #: gnucash/report/reports/standard/new-owner-report.scm:575
 msgid "UNPAID"
-msgstr ""
+msgstr "NEZAPLATENÉ"
 
 #: gnucash/gnome/dialog-invoice.c:2148 gnucash/gnome/dialog-invoice.c:2167
 #: gnucash/gnome/dialog-invoice.c:2186
-#, fuzzy
 msgid "New Credit Note"
-msgstr "Kreditný účet"
+msgstr "Nová poznámka k vkladu"
 
 #: gnucash/gnome/dialog-invoice.c:2149
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:292
@@ -2274,9 +2274,8 @@ msgstr "Nová faktúra"
 
 #: gnucash/gnome/dialog-invoice.c:2154 gnucash/gnome/dialog-invoice.c:2173
 #: gnucash/gnome/dialog-invoice.c:2192
-#, fuzzy
 msgid "Edit Credit Note"
-msgstr "Upraviť nastavenie výkazu"
+msgstr "Upraviť poznámku k vkladu"
 
 #: gnucash/gnome/dialog-invoice.c:2155
 msgid "Edit Invoice"
@@ -2284,9 +2283,8 @@ msgstr "Upraviť faktúru"
 
 #: gnucash/gnome/dialog-invoice.c:2158 gnucash/gnome/dialog-invoice.c:2177
 #: gnucash/gnome/dialog-invoice.c:2196
-#, fuzzy
 msgid "View Credit Note"
-msgstr "Zobraziť/Upraviť úlohu"
+msgstr "Zobraziť poznámku k vkladu"
 
 #: gnucash/gnome/dialog-invoice.c:2159
 msgid "View Invoice"
@@ -2320,24 +2318,21 @@ msgid "View Expense Voucher"
 msgstr "Zobraziť potvrdenie o výdavku"
 
 #: gnucash/gnome/dialog-invoice.c:2519
-#, fuzzy
 msgid "Open Linked Document:"
-msgstr "Nový účet"
+msgstr "Otvor previazaný dokument:"
 
 #: gnucash/gnome/dialog-invoice.c:2633 gnucash/gnome/dialog-invoice.c:2858
-#, fuzzy
 msgid "Bill Information"
-msgstr "Zúčtovacia informácia"
+msgstr "Fakturačné informácie"
 
 #: gnucash/gnome/dialog-invoice.c:2635 gnucash/gnome/dialog-invoice.c:2861
 #: gnucash/gnome/dialog-invoice.c:3431
 msgid "Bill ID"
-msgstr "ID účtu"
+msgstr "ID faktúry"
 
 #: gnucash/gnome/dialog-invoice.c:2639 gnucash/gnome/dialog-invoice.c:2865
-#, fuzzy
 msgid "Voucher Information"
-msgstr "Fakturačné informácie"
+msgstr "Informácie k potvrdenke"
 
 #: gnucash/gnome/dialog-invoice.c:2641 gnucash/gnome/dialog-invoice.c:2868
 #: gnucash/gnome/dialog-invoice.c:3465
@@ -2345,20 +2340,20 @@ msgid "Voucher ID"
 msgstr "ID potvrdenky"
 
 #: gnucash/gnome/dialog-invoice.c:3198
-#, fuzzy
 msgid "Date of duplicated entries"
-msgstr "Dup_likovať položku"
+msgstr "Dátum duplicitných položiek"
 
 #: gnucash/gnome/dialog-invoice.c:3253
 msgid ""
 "One or more selected invoices have already been posted.\n"
 "Re-check your selection."
 msgstr ""
+"Jedna alebo viac vybraných faktúr už bolo poslaných.\n"
+"Skontrolujte váš výber."
 
 #: gnucash/gnome/dialog-invoice.c:3257
-#, fuzzy
 msgid "Do you really want to post these invoices?"
-msgstr "Skutočne chcete vystaviť faktúru?"
+msgstr "Skutočne chcete odoslať tieto faktúry?"
 
 #: gnucash/gnome/dialog-invoice.c:3335 gnucash/gnome/dialog-invoice.c:3616
 msgid "View/Edit Invoice"
@@ -2380,13 +2375,12 @@ msgstr "Vystaviť"
 
 #: gnucash/gnome/dialog-invoice.c:3339 gnucash/gnome/dialog-invoice.c:3348
 #: gnucash/gnome/dialog-invoice.c:3359
-#, fuzzy
 msgid "Printable Report"
-msgstr "Jednoduchý výkaz"
+msgstr "Tlačiteľný výkaz"
 
 #: gnucash/gnome/dialog-invoice.c:3344 gnucash/gnome/dialog-invoice.c:3610
 msgid "View/Edit Bill"
-msgstr "Zobraziť/Upraviť účet"
+msgstr "Zobraziť/Upraviť faktúru"
 
 #. Translators: The terms 'Voucher' and 'Expense Voucher' are used
 #. interchangeably in gnucash and mean the same thing.
@@ -3891,24 +3885,20 @@ msgid "Initialize Test Data"
 msgstr "Inicializovať testovacie dáta"
 
 #: gnucash/gnome/gnc-plugin-business.c:326
-#, fuzzy
 msgid "Assign as payment..."
-msgstr "S_pracovať platbu..."
+msgstr "S_pracovať ako platbu..."
 
 #: gnucash/gnome/gnc-plugin-business.c:327
-#, fuzzy
 msgid "Assign the selected transaction as payment"
-msgstr "Vystrihne zvolenú transakciu"
+msgstr "Nastav zvolenú transakciu ako platbu"
 
 #: gnucash/gnome/gnc-plugin-business.c:331
-#, fuzzy
 msgid "Edit payment..."
-msgstr "Periodická platba"
+msgstr "Upraviť platbu..."
 
 #: gnucash/gnome/gnc-plugin-business.c:332
-#, fuzzy
 msgid "Edit the payment this transaction is a part of"
-msgstr "Upraví aktuálnu transakciu"
+msgstr "Upraviť platbu aktuálnej transakcie"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:199
 #: gnucash/gnome/gnc-plugin-page-invoice.c:113
@@ -3927,6 +3917,7 @@ msgstr "Nová účtovná _hierarchia..."
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:205
 msgid "Extend the current book by merging with new account type categories"
 msgstr ""
+"Rozšíriť aktuálnu účtovnú knihu zlúčením s novými kategóriami typov účtov"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:210
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:221
@@ -3939,17 +3930,15 @@ msgstr "Otvoriť účet"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:222
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:346
 msgid "Open the selected account"
-msgstr "Otvorí zvolený účet"
+msgstr "Otvoriť zvolený účet"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:215
-#, fuzzy
 msgid "Open _Old Style Register Account"
-msgstr "Otvorí zvolený účet"
+msgstr "Otvorť účet starým pokladničným spôsobom"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:216
-#, fuzzy
 msgid "Open the old style register selected account"
-msgstr "Otvorí zvolený účet"
+msgstr "Otvorť zvolený starý pokladničný účet"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:229
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:240
@@ -3968,9 +3957,8 @@ msgid "Open Old St_yle Subaccounts"
 msgstr "Otvoriť podúčty v starom š_týle"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:235
-#, fuzzy
 msgid "Open the old style register selected account and all its subaccounts"
-msgstr "Otvorí zvolený účet a všetky jeho podúčty"
+msgstr "Otvorť zvolený starý pokladničný účet a všetky jeho podúčty"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:248
 #: gnucash/gnome/gnc-plugin-page-register2.c:245
@@ -3993,30 +3981,26 @@ msgid "Delete selected account"
 msgstr "Odstráni zvolený účet"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:258
-#, fuzzy
 msgid "_Cascade Account Properties..."
-msgstr "_Farba účtu:"
+msgstr "Kaskádové vlastnosti účtu..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:259
-#, fuzzy
 msgid "Cascade selected properties for account"
-msgstr "Prosím, vyberte si platný účet úveru."
+msgstr "Kaskáda zvolených vlastností účtu"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:263
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:268
 #: gnucash/gnome/gnc-plugin-page-register2.c:250
 #: gnucash/gnome/gnc-plugin-page-register.c:359
-#, fuzzy
 msgid "F_ind Account"
-msgstr "Účet"
+msgstr "Nájdi účet"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:264
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:269
 #: gnucash/gnome/gnc-plugin-page-register2.c:251
 #: gnucash/gnome/gnc-plugin-page-register.c:360
-#, fuzzy
 msgid "Find an account"
-msgstr "Účet"
+msgstr "Nájdi účet"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:273
 msgid "_Renumber Subaccounts..."
@@ -4073,9 +4057,8 @@ msgstr "Vysporiadať zvolený účet"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:307
 #: gnucash/gnome/gnc-plugin-page-register2.c:362
 #: gnucash/gnome/gnc-plugin-page-register.c:480
-#, fuzzy
 msgid "_Auto-clear..."
-msgstr "Vyčistiť zoznam"
+msgstr "Automatické vyčistenie..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:308
 msgid "Automatically clear individual transactions, given a cleared amount"
@@ -4110,15 +4093,14 @@ msgstr "Zaznamenať akciové rozdelenie alebo splynutie"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:322
 #: gnucash/gnome/gnc-plugin-page-register2.c:372
 #: gnucash/gnome/gnc-plugin-page-register.c:490
-#, fuzzy
 msgid "View _Lots..."
-msgstr "Odstrániť zobrazenie"
+msgstr "Zobraz poplatky..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:323
 #: gnucash/gnome/gnc-plugin-page-register2.c:373
 #: gnucash/gnome/gnc-plugin-page-register.c:491
 msgid "Bring up the lot viewer/editor window"
-msgstr ""
+msgstr "Otvor okno editora poplatkov"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:327
 msgid "Check & Repair A_ccount"
@@ -4159,14 +4141,12 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:343
 #: gnucash/gnome/gnc-plugin-register2.c:64
-#, fuzzy
 msgid "_Register2"
-msgstr "Register"
+msgstr "Register2"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:406
-#, fuzzy
 msgid "Open2"
-msgstr "Otvoriť"
+msgstr "Otvoriť2"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:408
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:285
@@ -4196,7 +4176,7 @@ msgstr "Odstrániť"
 #: gnucash/gnome/gnc-plugin-page-register.c:1962
 #: gnucash/gnome/gnc-plugin-page-register.c:5088
 msgid "'Check & Repair' is currently running, do you want to abort it?"
-msgstr ""
+msgstr "'Kontroly a opravy' práve bežia, chcete ich ukončiť?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:521
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:527
@@ -4243,13 +4223,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1438
-#, fuzzy
 msgid "_Pick another account"
-msgstr "_Vyberte prevodový účet"
+msgstr "Vyberte iný účet"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1439
 msgid "_Do it anyway"
-msgstr ""
+msgstr "Sprav to aj tak"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1522
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1658
@@ -4287,17 +4266,17 @@ msgstr "Účet %s bude odstránený."
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1738
 #, c-format
 msgid "All transactions in this account will be moved to the account %s."
-msgstr ""
+msgstr "Všetky transakčne položky z tohto účtu budú presunuté do účtu %s."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1745
 #, c-format
 msgid "All transactions in this account will be deleted."
-msgstr ""
+msgstr "Všetky transakcie v tomto účte budú odstránené."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1754
-#, fuzzy, c-format
+#, c-format
 msgid "Its sub-account will be moved to the account %s."
-msgstr "Vrátane podúčtov všetkých zvolených účtov"
+msgstr "Jeho podúčty budú presunuté do účtu %s."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1760
 #, fuzzy, c-format
@@ -4342,9 +4321,8 @@ msgid "Select this or another budget and delete it."
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:164
-#, fuzzy
 msgid "Budget _Options..."
-msgstr "Nastavenia rozpočtu"
+msgstr "Nastavenia rozp_očtu..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:165
 #, fuzzy
@@ -4374,9 +4352,8 @@ msgid "Edit budget for all periods for the selected accounts."
 msgstr "Upraví zvolený účet"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:181
-#, fuzzy
 msgid "Edit Note"
-msgstr "Kreditný účet"
+msgstr "Upraviť poznámku"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:183
 #, fuzzy
@@ -4412,14 +4389,12 @@ msgid "Estimate"
 msgstr "Odhad"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:224
-#, fuzzy
 msgid "All Periods"
-msgstr "Obdobie"
+msgstr "Všetky obdobia"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:225
-#, fuzzy
 msgid "Note"
-msgstr "Poznámky"
+msgstr "Poznámka"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:226
 #, fuzzy
@@ -4453,14 +4428,12 @@ msgid "You must select at least one account to estimate."
 msgstr "Musíte vybrať aspoň jeden účet pre odhad."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:1154
-#, fuzzy
 msgid "You must select at least one account to edit."
-msgstr "Musíte vybrať aspoň jeden účet pre odhad."
+msgstr "Musíte vybrať aspoň jeden účet pre úpravu."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:1252
-#, fuzzy
 msgid "You must select one budget cell to edit."
-msgstr "Musíte vybrať aspoň jeden účet pre odhad."
+msgstr "Musíte vybrať aspoň jednu položku rozpočtu pre úpravu."
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:109
 msgid "Sort _Order"
@@ -4515,24 +4488,20 @@ msgid "Make a copy of the current entry"
 msgstr "Vytvorí kópiu aktuálnej položky"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:204
-#, fuzzy
 msgid "Move Entry _Up"
-msgstr "Presunúť _ hore"
+msgstr "Pres_unúť hore"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:205
-#, fuzzy
 msgid "Move the current entry one row upwards"
-msgstr "Uložiť aktuálnu položku?"
+msgstr "Posunúť aktuálnu položku o riadok nahor"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:209
-#, fuzzy
 msgid "Move Entry Do_wn"
-msgstr "Presunúť do_le"
+msgstr "Presunúť dole"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:210
-#, fuzzy
 msgid "Move the current entry one row downwards"
-msgstr "Uložiť aktuálnu položku?"
+msgstr "Posunúť aktuálnu položku o riadok nadol"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:238
 msgid "_Company Report"
@@ -4662,19 +4631,16 @@ msgid "_Reset Default Layout for Customer Documents"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:317
-#, fuzzy
 msgid "_Print Bill"
-msgstr "Tlač"
+msgstr "Tlač potvrdenie"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:318
-#, fuzzy
 msgid "_Edit Bill"
-msgstr "Upraviť faktúru"
+msgstr "Upraviť potvrdenie"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:319
-#, fuzzy
 msgid "_Duplicate Bill"
-msgstr "Duplikovať"
+msgstr "Duplikovať potvrdenie"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:320
 #, fuzzy
@@ -9203,7 +9169,7 @@ msgstr "Rozdeliť spojnice"
 #: gnucash/register/ledger-core/split-register.c:1982
 #, c-format
 msgid "The account %s does not exist. Would you like to create it?"
-msgstr ""
+msgstr "Účet %s neexistuje. Chcete ho vytvoriť?"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:2121
 msgid "You can not paste from the general journal to a register."
@@ -9241,7 +9207,7 @@ msgstr "Vklad cez bankomat"
 #: gnucash/register/ledger-core/split-register.c:2547
 #: gnucash/register/ledger-core/split-register.c:2578
 msgid "ATM Draw"
-msgstr ""
+msgstr "Výber cez bankomat"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2853
 #: gnucash/register/ledger-core/split-register.c:2548

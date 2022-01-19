@@ -324,7 +324,12 @@ gnc_query_view_init_view (GNCQueryView *qview)
         if (((GNCSearchParam *) param)->justify == GTK_JUSTIFY_CENTER)
             algn = 0.5;
         else if (((GNCSearchParam *) param)->justify == GTK_JUSTIFY_RIGHT)
-            algn = 1.0;
+        {
+            /* GTK_JUSTIFY_RIGHT is only used for monetary values so right align
+             * the column title and data for both ltr and rtl */
+            if (gtk_widget_get_direction (GTK_WIDGET(view)) != GTK_TEXT_DIR_RTL)
+                algn = 1.0;
+        }
 
         /* Set the column title alignment to that of the column */
         gtk_tree_view_column_set_alignment (col, algn);

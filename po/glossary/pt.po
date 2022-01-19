@@ -2,15 +2,16 @@
 # Copyright (C) 2001 Free Software Foundation, Inc.
 # Duarte Loreto <happyguy_pt@hotmail.com>, 2001
 # Tiago Neiva <tneiva@gmail.com>, 2018.
-# Pedro Albuquerque <pmra@gmx.com>, 2021.
+# Pedro Albuquerque <pmra@gmx.com>, 2021, 2022.
+# Hugo Carvalho <hugokarvalho@hotmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-01-02 22:54+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2022-01-18 06:54+0000\n"
+"Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "glossary/pt/>\n"
 "Language: pt\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.11-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -470,7 +471,7 @@ msgstr "factura"
 
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
-msgstr "obra"
+msgstr "tarefa"
 
 #. "A book in which a bank, business firm, etc. records its financial accounts"
 msgid "ledger"
@@ -868,40 +869,6 @@ msgstr "vale"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "levantamento (no diálogo de reconciliação)"
 
-#, fuzzy
-#~ msgid "invoice owner"
-#~ msgstr "fatura"
-
-#~ msgid ""
-#~ "account type: trading This account type (new in gnucash-2.4.0) is used "
-#~ "when exchanging or trading amounts from one currency into another"
-#~ msgstr "tipo de conta: câmbios"
-
-#~ msgid "bill owner see invoice owner"
-#~ msgstr "fornecedor"
-
-#~ msgid ""
-#~ "invoice ownerThe customer (or vendor) to which this invoice is sent to."
-#~ msgstr "entidade faturada"
-
-#~ msgid ""
-#~ "markup1. Some text annotation, but this meaning isn't used inside "
-#~ "gnucash. 2. In the Customer summary report: The ratio of profit vs. "
-#~ "sales, i.e. the profit amount divided by the sales amount, shown in "
-#~ "percent."
-#~ msgstr "margem de lucro"
-
-#~ msgid ""
-#~ "sales(In the customer summary report) The total amount of money received "
-#~ "because something was sold."
-#~ msgstr "vendas"
-
-#~ msgid ""
-#~ "tax codeOn the goverment's tax forms, the tax code identifies the given "
-#~ "line or place on the form where certain amounts must be specified "
-#~ "according to the current country's legislation"
-#~ msgstr "campo de declaração"
-
 msgid "stock"
 msgstr "acção"
 
@@ -909,7 +876,7 @@ msgid "due"
 msgstr "devido"
 
 msgid "Online"
-msgstr ""
+msgstr "Online"
 
 msgid "Direct Debit"
-msgstr ""
+msgstr "Débito direto"
