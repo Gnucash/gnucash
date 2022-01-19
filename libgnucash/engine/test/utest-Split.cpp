@@ -1669,7 +1669,7 @@ static void
 test_xaccSplitGetSharePrice (Fixture *fixture, gconstpointer pData)
 {
     gnc_numeric result, quotient;
-    gnc_numeric expected = gnc_numeric_create (1, 1);
+    gnc_numeric expected = gnc_numeric_create (0, 1);
     Split *split = fixture->split;
     /* Warning: this is a define in Split.c */
     char *logdomain = "gnc.engine";
@@ -1699,7 +1699,7 @@ test_xaccSplitGetSharePrice (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (check.hits, ==, 0);
 
     split->value = gnc_numeric_zero ();
-    expected = gnc_numeric_create (1, 1);
+    expected = gnc_numeric_create (0, 1);
     result = xaccSplitGetSharePrice (split);
     g_assert (gnc_numeric_equal (result, expected));
     g_assert_cmpint (check.hits, ==, 0);
