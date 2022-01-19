@@ -255,9 +255,6 @@ Books will be closed at midnight on the selected date.</property>
       <object class="GtkBox">
         <property name="can-focus">False</property>
       </object>
-      <packing>
-        <property name="has-padding">False</property>
-      </packing>
     </child>
   </object>
 </interface>

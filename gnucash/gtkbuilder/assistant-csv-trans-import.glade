@@ -1143,9 +1143,6 @@ More information can be displayed by using the help button.</property>
       <object class="GtkBox">
         <property name="can-focus">False</property>
       </object>
-      <packing>
-        <property name="has-padding">False</property>
-      </packing>
     </child>
   </object>
 </interface>

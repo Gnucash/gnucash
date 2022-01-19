@@ -155,9 +155,6 @@
       <object class="GtkBox">
         <property name="can-focus">False</property>
       </object>
-      <packing>
-        <property name="has-padding">False</property>
-      </packing>
     </child>
   </object>
   <object class="GtkDialog" id="encodings_dialog">
