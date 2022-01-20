@@ -71,6 +71,7 @@ struct PeriodData
 
 using PeriodDataVec = std::vector<PeriodData>;
 using AcctMap = std::unordered_map<const Account*, PeriodDataVec>;
+using StringVec = std::vector<std::string>;
 
 typedef struct GncBudgetPrivate
 {
@@ -583,30 +584,6 @@ gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
 
 }
 
-/* We don't need these here, but maybe they're useful somewhere else?
-   Maybe this should move to Account.h */
-
-static gboolean
-is_account_period_value_set (const GncBudget *budget,
-                             const Account *account,
-                             guint period_num)
-{
-    GValue v = G_VALUE_INIT;
-    gchar path_part_one [GUID_ENCODING_LENGTH + 1];
-    gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
-    gconstpointer ptr = NULL;
-
-    g_return_val_if_fail(GNC_IS_BUDGET(budget), FALSE);
-    g_return_val_if_fail(account, FALSE);
-
-    make_period_path (account, period_num, path_part_one, path_part_two);
-    qof_instance_get_kvp (QOF_INSTANCE (budget), &v, 2, path_part_one, path_part_two);
-    if (G_VALUE_HOLDS_BOXED (&v))
-        ptr = g_value_get_boxed (&v);
-    g_value_unset (&v);
-    return (ptr != NULL);
-}
-
 gboolean
 gnc_budget_is_account_period_value_set (const GncBudget *budget,
                                         const Account *account,
@@ -614,30 +591,6 @@ gnc_budget_is_account_period_value_set (const GncBudget *budget,
 {
     g_return_val_if_fail (period_num < GET_PRIVATE(budget)->num_periods, false);
     return get_perioddata (budget, account, period_num).value_is_set;
-}
-
-static gnc_numeric
-get_account_period_value (const GncBudget *budget,
-                          const Account *account,
-                          guint period_num)
-{
-    gnc_numeric *numeric = NULL;
-    gnc_numeric retval;
-    gchar path_part_one [GUID_ENCODING_LENGTH + 1];
-    gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
-    GValue v = G_VALUE_INIT;
-
-    g_return_val_if_fail(GNC_IS_BUDGET(budget), gnc_numeric_zero());
-    g_return_val_if_fail(account, gnc_numeric_zero());
-
-    make_period_path (account, period_num, path_part_one, path_part_two);
-    qof_instance_get_kvp (QOF_INSTANCE (budget), &v, 2, path_part_one, path_part_two);
-    if (G_VALUE_HOLDS_BOXED (&v))
-        numeric = (gnc_numeric*)g_value_get_boxed (&v);
-
-    retval = numeric ? *numeric : gnc_numeric_zero ();
-    g_value_unset (&v);
-    return retval;
 }
 
 gnc_numeric
@@ -699,27 +652,6 @@ gnc_budget_set_account_period_note(GncBudget *budget, const Account *account,
 
 }
 
-static std::string
-get_account_period_note (const GncBudget *budget,
-                         const Account *account, guint period_num)
-{
-    gchar path_part_one [GUID_ENCODING_LENGTH + 1];
-    gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
-    GValue v = G_VALUE_INIT;
-    std::string retval;
-
-    g_return_val_if_fail (GNC_IS_BUDGET(budget), "");
-    g_return_val_if_fail (account, "");
-
-    make_period_path (account, period_num, path_part_one, path_part_two);
-    qof_instance_get_kvp (QOF_INSTANCE (budget), &v, 3, GNC_BUDGET_NOTES_PATH, path_part_one, path_part_two);
-    if (G_VALUE_HOLDS_STRING (&v))
-        retval = g_value_get_string(&v);
-    g_value_unset (&v);
-    return retval;
-}
-
-
 gchar *
 gnc_budget_get_account_period_note (const GncBudget *budget,
                                     const Account *account, guint period_num)
@@ -766,16 +698,28 @@ get_perioddata (const GncBudget *budget, const Account *account, guint period_nu
 
     if (map_iter == map->end ())
     {
+        auto budget_kvp { QOF_INSTANCE (budget)->kvp_data };
+        std::string acct_guid { guid_to_string (xaccAccountGetGUID (account)) };
+
         PeriodDataVec vec {};
         vec.reserve (priv->num_periods);
 
         for (guint i = 0; i < priv->num_periods; i++)
         {
-            PeriodData data {};
-            data.note = get_account_period_note (budget, account, i);
-            data.value_is_set = is_account_period_value_set (budget, account, i);
-            if (data.value_is_set)
-                data.value = get_account_period_value (budget, account, i);
+            std::string period_str { std::to_string (i) };
+            std::string note;
+            StringVec path1 { acct_guid, period_str };
+            StringVec path2 { GNC_BUDGET_NOTES_PATH, acct_guid, period_str };
+            auto kval1 { budget_kvp->get_slot (path1) };
+            auto kval2 { budget_kvp->get_slot (path2) };
+
+            auto is_set = kval1 && kval1->get_type() == KvpValue::Type::NUMERIC;
+            auto num = is_set ? kval1->get<gnc_numeric>() : gnc_numeric_zero ();
+
+            if (kval2 && kval2->get_type() == KvpValue::Type::STRING)
+                note = kval2->get<const char*>();
+
+            PeriodData data { std::move (note), is_set, num };
             vec.push_back (std::move(data));
         }
         map_iter = map->insert_or_assign(account, std::move(vec)).first;
