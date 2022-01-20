@@ -496,16 +496,6 @@ gnc_budget_get_num_periods(const GncBudget* budget)
     return GET_PRIVATE(budget)->num_periods;
 }
 
-static inline void
-make_period_path (const Account *account, guint period_num, char *path1, char *path2)
-{
-    const GncGUID *guid;
-    gchar *bufend;
-    guid = xaccAccountGetGUID (account);
-    guid_to_string_buff (guid, path1);
-    g_sprintf (path2, "%d", period_num);
-}
-
 static inline StringVec
 make_period_data_path (const Account *account, guint period_num)
 {
@@ -532,9 +522,6 @@ void
 gnc_budget_unset_account_period_value(GncBudget *budget, const Account *account,
                                       guint period_num)
 {
-    gchar path_part_one [GUID_ENCODING_LENGTH + 1];
-    gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
-
     g_return_if_fail (budget != NULL);
     g_return_if_fail (account != NULL);
     g_return_if_fail (period_num < GET_PRIVATE(budget)->num_periods);
@@ -542,10 +529,10 @@ gnc_budget_unset_account_period_value(GncBudget *budget, const Account *account,
     auto& data = get_perioddata (budget, account, period_num);
     data.value_is_set = false;
 
-    make_period_path (account, period_num, path_part_one, path_part_two);
-
     gnc_budget_begin_edit(budget);
-    qof_instance_set_kvp (QOF_INSTANCE (budget), NULL, 2, path_part_one, path_part_two);
+    auto path = make_period_data_path (account, period_num);
+    auto budget_kvp { QOF_INSTANCE (budget)->kvp_data };
+    delete budget_kvp->set_path (path, nullptr);
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
 
@@ -559,9 +546,6 @@ void
 gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
                                     guint period_num, gnc_numeric val)
 {
-    gchar path_part_one [GUID_ENCODING_LENGTH + 1];
-    gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
-
     /* Watch out for an off-by-one error here:
      * period_num starts from 0 while num_periods starts from 1 */
     if (period_num >= GET_PRIVATE(budget)->num_periods)
@@ -574,22 +558,19 @@ gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
     g_return_if_fail (account != NULL);
 
     auto& perioddata = get_perioddata (budget, account, period_num);
-
-    make_period_path (account, period_num, path_part_one, path_part_two);
+    auto budget_kvp { QOF_INSTANCE (budget)->kvp_data };
+    auto path = make_period_data_path (account, period_num);
 
     gnc_budget_begin_edit(budget);
     if (gnc_numeric_check(val))
     {
-        qof_instance_set_kvp (QOF_INSTANCE (budget), NULL, 2, path_part_one, path_part_two);
+        delete budget_kvp->set_path (path, nullptr);
         perioddata.value_is_set = false;
     }
     else
     {
-        GValue v = G_VALUE_INIT;
-        g_value_init (&v, GNC_TYPE_NUMERIC);
-        g_value_set_boxed (&v, &val);
-        qof_instance_set_kvp (QOF_INSTANCE (budget), &v, 2, path_part_one, path_part_two);
-        g_value_unset (&v);
+        KvpValue* v = new KvpValue (val);
+        delete budget_kvp->set_path (path, v);
         perioddata.value_is_set = true;
         perioddata.value = val;
     }
@@ -627,9 +608,6 @@ void
 gnc_budget_set_account_period_note(GncBudget *budget, const Account *account,
                                     guint period_num, const gchar *note)
 {
-    gchar path_part_one [GUID_ENCODING_LENGTH + 1];
-    gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
-
     /* Watch out for an off-by-one error here:
      * period_num starts from 0 while num_periods starts from 1 */
     if (period_num >= GET_PRIVATE(budget)->num_periods)
@@ -642,23 +620,20 @@ gnc_budget_set_account_period_note(GncBudget *budget, const Account *account,
     g_return_if_fail (account != NULL);
 
     auto& perioddata = get_perioddata (budget, account, period_num);
-
-    make_period_path (account, period_num, path_part_one, path_part_two);
+    auto budget_kvp { QOF_INSTANCE (budget)->kvp_data };
+    auto path = make_period_note_path (account, period_num);
 
     gnc_budget_begin_edit(budget);
     if (note == NULL)
     {
-        qof_instance_set_kvp (QOF_INSTANCE (budget), NULL, 3, GNC_BUDGET_NOTES_PATH, path_part_one, path_part_two);
+        delete budget_kvp->set_path (path, nullptr);
         perioddata.note.clear ();
     }
     else
     {
-        GValue v = G_VALUE_INIT;
-        g_value_init (&v, G_TYPE_STRING);
-        g_value_set_string (&v, note);
+        KvpValue* v = new KvpValue (g_strdup (note));
 
-        qof_instance_set_kvp (QOF_INSTANCE (budget), &v, 3, GNC_BUDGET_NOTES_PATH, path_part_one, path_part_two);
-        g_value_unset (&v);
+        delete budget_kvp->set_path (path, v);
         perioddata.note = note;
     }
     qof_instance_set_dirty(&budget->inst);
