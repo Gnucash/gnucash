@@ -506,6 +506,22 @@ make_period_path (const Account *account, guint period_num, char *path1, char *p
     g_sprintf (path2, "%d", period_num);
 }
 
+static inline StringVec
+make_period_data_path (const Account *account, guint period_num)
+{
+    gnc::GUID acct_guid {*(xaccAccountGetGUID (account))};
+    return { acct_guid.to_string(), std::to_string (period_num) };
+}
+
+static inline StringVec
+make_period_note_path (const Account *account, guint period_num)
+{
+    StringVec path { GNC_BUDGET_NOTES_PATH };
+    StringVec data_path { make_period_data_path (account, period_num) };
+    std::move (data_path.begin(), data_path.end(), std::back_inserter (path));
+    return path;
+}
+
 static PeriodData& get_perioddata (const GncBudget *budget,
                                    const Account *account,
                                    guint period_num);
@@ -699,19 +715,15 @@ get_perioddata (const GncBudget *budget, const Account *account, guint period_nu
     if (map_iter == map->end ())
     {
         auto budget_kvp { QOF_INSTANCE (budget)->kvp_data };
-        std::string acct_guid { guid_to_string (xaccAccountGetGUID (account)) };
 
         PeriodDataVec vec {};
         vec.reserve (priv->num_periods);
 
         for (guint i = 0; i < priv->num_periods; i++)
         {
-            std::string period_str { std::to_string (i) };
             std::string note;
-            StringVec path1 { acct_guid, period_str };
-            StringVec path2 { GNC_BUDGET_NOTES_PATH, acct_guid, period_str };
-            auto kval1 { budget_kvp->get_slot (path1) };
-            auto kval2 { budget_kvp->get_slot (path2) };
+            auto kval1 { budget_kvp->get_slot (make_period_data_path (account, i)) };
+            auto kval2 { budget_kvp->get_slot (make_period_note_path (account, i)) };
 
             auto is_set = kval1 && kval1->get_type() == KvpValue::Type::NUMERIC;
             auto num = is_set ? kval1->get<gnc_numeric>() : gnc_numeric_zero ();
