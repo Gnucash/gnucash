@@ -11,14 +11,14 @@
 # LL Magical <lolayami2004@gmail.com>, 2020.
 # Fábio Rodrigues Ribeiro <farribeiro@gmail.com>, 2021.
 # José Lemos Neto <lemosjosex@protonmail.com>, 2021.
-# Wellington Terumi Uemura <wellingtonuemura@gmail.com>, 2021.
+# Wellington Terumi Uemura <wellingtonuemura@gmail.com>, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-12-07 15:53+0000\n"
+"PO-Revision-Date: 2022-01-21 09:52+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.11-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -101,7 +101,7 @@ msgstr "Outro"
 
 #: borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr "Arábico (IBM 864)"
+msgstr "Arábico (IBM-864)"
 
 #: borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
@@ -269,23 +269,23 @@ msgstr "Gurmukhi (MacGurmukhi)"
 
 #: borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr "Hebráico (IBM-862)"
+msgstr "Hebraico (IBM-862)"
 
 #: borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr "Hebráico (ISO-8859-8-E)"
+msgstr "Hebraico (ISO-8859-8-E)"
 
 #: borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr "Hebráico (ISO-8859-8-I)"
+msgstr "Hebraico (ISO-8859-8-I)"
 
 #: borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr "Hebráico (MacHebrew)"
+msgstr "Hebraico (MacHebrew)"
 
 #: borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr "Hebráico (Windows-1255)"
+msgstr "Hebraico (Windows-1255)"
 
 #: borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
@@ -389,23 +389,23 @@ msgstr "Definido pelo usuário"
 
 #: borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
-msgstr "Vietinamita (TCVN)"
+msgstr "Vietnamita (TCVN)"
 
 #: borrowed/goffice/go-charmap-sel.c:217
 msgid "Vietnamese (VISCII)"
-msgstr "Vietinamita (VISCII)"
+msgstr "Vietnamita (VISCII)"
 
 #: borrowed/goffice/go-charmap-sel.c:218
 msgid "Vietnamese (VPS)"
-msgstr "Vietinamita (VPS)"
+msgstr "Vietnamita (VPS)"
 
 #: borrowed/goffice/go-charmap-sel.c:219
 msgid "Vietnamese (Windows-1258)"
-msgstr "Vietinamita (Windows-1258)"
+msgstr "Vietnamita (Windows-1258)"
 
 #: borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr "Hebráico Visual (ISO-8859-8)"
+msgstr "Hebraico Visual (ISO-8859-8)"
 
 #: borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
@@ -445,7 +445,7 @@ msgstr "Menu"
 
 #: borrowed/goffice/go-optionmenu.c:339
 msgid "The menu of options"
-msgstr "O menu das opções"
+msgstr "O menu de opções"
 
 #: doc/tip_of_the_day.list.c:1
 msgid ""
@@ -483,10 +483,10 @@ msgid ""
 "on the sub-menu Import and click on QIF or OFX file, respectively. Then, "
 "follow the instructions provided."
 msgstr ""
-"Você pode facilmente importar os seus dados financeiros já existentes do "
+"Você pode importar facilmente os seus dados financeiros já existentes do "
 "Quicken, MS Money ou dos outros programas que exportem arquivos QIF ou OFX. "
 "No menu Arquivo, clique no submenu Importar e clique respectivamente no "
-"arquivo QIF ou OFX. Em seguida, siga todas as instruções fornecidas."
+"arquivo QIF ou OFX. Em seguida, siga as instruções apresentadas."
 
 #: doc/tip_of_the_day.list.c:18
 msgid ""
@@ -506,9 +506,9 @@ msgid ""
 "Just locate the triangle at the far right of the column headings, and click "
 "it to see the different columns available."
 msgstr ""
-"É possível alterar quais as colunas são exibidas no Plano das Contas. Basta "
+"É possível alterar as colunas que são exibidas no Plano das Contas. Basta "
 "localizar o triângulo na extremidade direita dos títulos das colunas e "
-"clicar nele para ver quais das diferentes colunas estão disponíveis."
+"clicar nele para ver as várias colunas que estão disponíveis."
 
 #: doc/tip_of_the_day.list.c:27
 msgid ""
@@ -519,7 +519,7 @@ msgid ""
 msgstr ""
 "Clique com o botão direito do mouse (Ctrl + clique no Mac OS X) na guia "
 "Contas da janela principal para abrir as opções do menu da conta. Dentro de "
-"cada cadastro, ao clicar com o botão direito do mouse é aberto as opções do "
+"cada cadastro, clicando com o botão direito do mouse abrem-se as opções do "
 "menu de transação."
 
 #: doc/tip_of_the_day.list.c:32
@@ -9411,7 +9411,7 @@ msgstr "Telefone"
 #: gnucash/register/ledger-core/split-register.c:2557
 #: gnucash/register/ledger-core/split-register.c:2583
 msgid "Online"
-msgstr "On-line"
+msgstr "Online"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2864
 #: gnucash/register/ledger-core/split-register.c:2559
@@ -17703,11 +17703,11 @@ msgstr "Cotações Online"
 
 #: gnucash/gtkbuilder/dialog-price.glade:12
 msgid "Bid"
-msgstr "Licitação"
+msgstr "Oferta de compra"
 
 #: gnucash/gtkbuilder/dialog-price.glade:15
 msgid "Ask"
-msgstr "Pergunte"
+msgstr "Oferta de venda"
 
 #: gnucash/gtkbuilder/dialog-price.glade:18
 msgid "Last"
@@ -25334,17 +25334,17 @@ msgstr "Reserva"
 #: gnucash/report/reports/standard/balance-sheet.scm:71
 #: gnucash/report/reports/standard/trial-balance.scm:568
 msgid "Balance Sheet"
-msgstr "Folha do saldo"
+msgstr "Folha de Balanço"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:81
 #: gnucash/report/reports/standard/balsheet-eg.scm:143
 msgid "Balance Sheet Date"
-msgstr "Data da folha do saldo"
+msgstr "Data da folha de balanço"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:82
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:48
 msgid "Single column Balance Sheet"
-msgstr "Folha do saldo numa única coluna"
+msgstr "Folha de balanço em coluna única"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:84
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:50
@@ -25497,7 +25497,7 @@ msgstr "Passivos & Patrimônio Líquido"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:136
 msgid "Balance Sheet (eguile)"
-msgstr "Folha do saldo (eguile)"
+msgstr "Folha de balanço (eguile)"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:144
 msgid "Report format"
@@ -25842,7 +25842,7 @@ msgstr "Declaração de renda (várias colunas)"
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:38
 msgid "Budget Balance Sheet"
-msgstr "Folha do saldo orçamentário"
+msgstr "Folha de balanço do orçamento"
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:97
 msgid "Include new/existing totals"
