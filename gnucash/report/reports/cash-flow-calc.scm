@@ -65,7 +65,7 @@
                 ((null? s-account)
                  (format #t "WARNING: s-account is NULL for split: ~a\n"
                          (gncSplitGetGUID s)))
-                ((or (and (not include-trading-accounts)
+                ((or (and include-trading-accounts
                           (eqv? (xaccAccountGetType s-account)
                                 ACCT-TYPE-TRADING))
                      (member s-account accounts)
