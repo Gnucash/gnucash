@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-22 10:43+0000\n"
+"PO-Revision-Date: 2022-01-24 11:34+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -19159,7 +19159,7 @@ msgstr "_Reverter ordem"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1074
 msgid "Sort in descending order."
-msgstr "Ordenar descendentemente."
+msgstr "Ordem descendente."
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:12
 msgid "day(s)"
@@ -19246,7 +19246,7 @@ msgid ""
 "manually."
 msgstr ""
 "Esta ferramenta pode ser lenta ou mesmo abortar, se o número de parcelas não "
-"confirmadas seja superior a 20. Nesse caso, por favor, confirme algumas "
+"confirmadas for superior a 20. Nesse caso, por favor, confirme algumas "
 "manualmente."
 
 #: gnucash/gtkbuilder/window-autoclear.glade:139
@@ -19265,7 +19265,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/window-reconcile.glade:71
 msgid "<b>Reconcile Information</b>"
-msgstr "<b>Reconciliar informação</b>"
+msgstr "<b>Informação de reconciliação</b>"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:93
 msgid "Statement _Date"
@@ -19627,7 +19627,7 @@ msgstr "Transacção em linha"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1010
 msgid "Execute _later (unimpl.)"
-msgstr "Executar o mais recente (não imp_lem.)"
+msgstr "Executar mais tarde (não imp_lementado)"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1039
 msgid "Execute _Now"
@@ -19712,7 +19712,7 @@ msgstr "_Ordenar"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1554
 msgid "Sort the list of transaction templates alphabetically"
-msgstr "Ordenar a lista de modelos de transacções alfabeticamente"
+msgstr "Ordenar a lista de modelos de transacção alfabeticamente"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1566
 msgid "D_elete"
