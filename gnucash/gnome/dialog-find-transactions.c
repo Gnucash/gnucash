@@ -193,35 +193,7 @@ gnc_ui_find_transactions_dialog_create(GtkWindow *parent, GNCLedgerDisplay * ori
     {
         start_q = qof_query_create ();
         qof_query_set_book (start_q, gnc_get_current_book ());
-
-        /* In lieu of not "mis-using" some portion of the infrastructure by writing
-         * a bunch of new code, we just filter out the accounts of the template
-         * transactions.  While these are in a separate Account trees just for this
-         * reason, the query engine makes no distinction between Account trees.
-         * See Gnome Bug 86302.
-         * 	-- jsled
-         *
-         * copied from gnc-ledger-display.c:gnc_ledger_display_gl()  -- warlord
-         *
-         * <jsled> Alternatively, you could look for a GNC_SX_ACCOUNT [SchedAction.h]
-         * key in the KVP frame of the split.
-         */
-        {
-            Account *tRoot;
-            GList *al;
-
-            tRoot = gnc_book_get_template_root( gnc_get_current_book() );
-            al = gnc_account_get_descendants( tRoot );
-
-            if (g_list_length(al) != 0)
-                xaccQueryAddAccountMatch( start_q, al, QOF_GUID_MATCH_NONE, QOF_QUERY_AND );
-
-            g_list_free (al);
-            al = NULL;
-            tRoot = NULL;
-        }
-
-        ftd->q = start_q;		/* save this to destroy it later */
+        ftd->q = start_q; // save this to destroy it later
     }
 
     ftd->parent = parent;

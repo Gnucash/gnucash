@@ -167,6 +167,23 @@ gnc_ledger_display_get_query (GNCLedgerDisplay* ld)
     return ld->query;
 }
 
+static void
+exclude_template_accounts (Query* q)
+{
+    Account* tRoot;
+    GList* al;
+
+    tRoot = gnc_book_get_template_root (gnc_get_current_book());
+    al = gnc_account_get_descendants (tRoot);
+
+    if (gnc_list_length_cmp (al, 0))
+        xaccQueryAddAccountMatch (q, al, QOF_GUID_MATCH_NONE, QOF_QUERY_AND);
+
+    g_list_free (al);
+    al = NULL;
+    tRoot = NULL;
+}
+
 static gboolean
 find_by_leader (gpointer find_data, gpointer user_data)
 {
@@ -423,20 +440,8 @@ gnc_ledger_display_gl (void)
      * reason, the query engine makes no distinction between Account trees.
      * See Gnome Bug 86302.
      *         -- jsled */
-    {
-        Account* tRoot;
-        GList* al;
-
-        tRoot = gnc_book_get_template_root (gnc_get_current_book());
-        al = gnc_account_get_descendants (tRoot);
-
-        if (gnc_list_length_cmp (al, 0))
-            xaccQueryAddAccountMatch (query, al, QOF_GUID_MATCH_NONE, QOF_QUERY_AND);
-
-        g_list_free (al);
-        al = NULL;
-        tRoot = NULL;
-    }
+    // Exclude any template accounts for search register and gl
+     exclude_template_accounts (query);
 
     gnc_tm_get_today_start (&tm);
     tm.tm_mon--; /* Default the register to the last month's worth of transactions. */
@@ -603,6 +608,10 @@ refresh_handler (GHashTable* changes, gpointer user_data)
 
         g_list_free (accounts);
     }
+
+    // Exclude any template accounts for search register and gl
+    if (!ld->reg->is_template && (ld->reg->type == SEARCH_LEDGER || ld->ld_type == LD_GL))
+        exclude_template_accounts (ld->query);
 
     /* Its not clear if we should re-run the query, or if we should
      * just use qof_query_last_run().  Its possible that the dates
@@ -894,6 +903,10 @@ gnc_ledger_display_refresh (GNCLedgerDisplay* ld)
         LEAVE ("already loading");
         return;
     }
+
+    // Exclude any template accounts for search register and gl
+    if (!ld->reg->is_template && (ld->reg->type == SEARCH_LEDGER || ld->ld_type == LD_GL))
+        exclude_template_accounts (ld->query);
 
     gnc_ledger_display_refresh_internal (ld, qof_query_run (ld->query));
     LEAVE (" ");
