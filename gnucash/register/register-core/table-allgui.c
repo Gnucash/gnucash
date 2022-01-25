@@ -1089,6 +1089,8 @@ gnc_table_enter_update (Table *table,
     io_flags = gnc_table_get_io_flags (table, virt_loc);
     if (io_flags == XACC_CELL_ALLOW_READ_ONLY)
     {
+        if (table->gui_handlers.redraw_help)
+            table->gui_handlers.redraw_help (table);
         LEAVE("read only cell");
         return FALSE;
     }
