@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-24 11:34+0000\n"
+"PO-Revision-Date: 2022-01-27 11:54+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -20099,7 +20099,7 @@ msgid ""
 "Do you want to import it?"
 msgstr ""
 "O banco enviou informação da transacção na resposta.\n"
-"Quer importá-la?"
+"Deseja importá-la?"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:944
 msgid ""
@@ -20115,7 +20115,7 @@ msgid ""
 "Do you want to import it?"
 msgstr ""
 "O banco enviou informação de saldo na resposta.\n"
-"Quer importá-la?"
+"Deseja importá-la?"
 
 #. Translators: Strings from this file are needed only in
 #. countries that have one of aqbanking's Online Banking
@@ -20234,7 +20234,7 @@ msgid ""
 "long. Do you want to try again?"
 msgstr ""
 "O PIN tem de ter pelo menos %d caracteres.\n"
-"Quer tentar de novo?"
+"Deseja tentar de novo?"
 
 #: gnucash/import-export/aqb/gnc-gwen-gui.c:1676
 msgid ""
@@ -20426,8 +20426,8 @@ msgid ""
 "which you can choose one here."
 msgstr ""
 "Esta definição especifica o formato dos dados ao importar ficheiros SWIFT "
-"MT940. A biblioteca AqBanking oferece vários formatos de importação "
-"(chamados \"perfis\"), dos quais pode escolher um aqui."
+"MT940. A biblioteca AqBanking oferece vários formatos de importação ("
+"chamados \"perfis\"), dos quais pode escolher um aqui."
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:50
 msgid "SWIFT MT942 import data format"
@@ -20440,8 +20440,8 @@ msgid ""
 "which you can choose one here."
 msgstr ""
 "Esta definição especifica o formato dos dados ao importar ficheiros SWIFT "
-"MT942. A biblioteca AqBanking oferece vários formatos de importação "
-"(chamados \"perfis\"), dos quais pode escolher um aqui."
+"MT942. A biblioteca AqBanking oferece vários formatos de importação ("
+"chamados \"perfis\"), dos quais pode escolher um aqui."
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:297
 #, c-format
@@ -20451,13 +20451,12 @@ msgstr "Validação...\n"
 #: gnucash/import-export/bi-import/dialog-bi-import.c:327
 #, c-format
 msgid "Row %d: no invoice ID in first row of import file.\n"
-msgstr ""
-"Linha %d: sem ID de factura na primeira linha do ficheiro a importar.\n"
+msgstr "Linha %d: sem ID de factura na primeira linha do ficheiro a importar.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:335
 #, c-format
 msgid "Row %d, invoice %s/%u: owner not set.\n"
-msgstr "Linha %d, factura %s/%u: dono não definido.\n"
+msgstr "Linha %d, factura %s/%u: titular não definido.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:347
 #, c-format
@@ -20472,7 +20471,7 @@ msgstr "Linha %d, factura %s/%u: o cliente %s não existe.\n"
 #: gnucash/import-export/bi-import/dialog-bi-import.c:372
 #, c-format
 msgid "Row %d, invoice %s/%u: %s is not a valid posting date.\n"
-msgstr "Linha %d, factura %s/%u: %s não é uma data de lançamento válida.\n"
+msgstr "Linha %d, factura %s/%u: %s não é uma data de emissão válida.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:380
 #, c-format
@@ -20483,17 +20482,17 @@ msgstr "Linha %d, factura %s/%u: %s não é uma data de vencimento válida.\n"
 #: gnucash/import-export/bi-import/dialog-bi-import.c:475
 #, c-format
 msgid "Row %d, invoice %s/%u: account %s does not exist.\n"
-msgstr "Linha %d, factura %s/%u: conta %s não existe.\n"
+msgstr "Linha %d, factura %s/%u: a conta %s não existe.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:416
 #, c-format
 msgid "Row %d, invoice %s/%u: account %s is not of type Accounts Payable.\n"
-msgstr "Linha %d, factura %s/%u: conta %s não é do tipo Contas a pagar.\n"
+msgstr "Linha %d, factura %s/%u: conta %s não é do tipo A/Pagar.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:426
 #, c-format
 msgid "Row %d, invoice %s/%u: account %s is not of type Accounts Receivable.\n"
-msgstr "Linha %d, factura %s/%u: conta %s não é do tipo Contas a receber.\n"
+msgstr "Linha %d, factura %s/%u: conta %s não é do tipo A/Receber.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:464
 #, c-format
@@ -20531,7 +20530,7 @@ msgstr "Deseja realmente actualizar facturas existentes?"
 #: gnucash/import-export/bi-import/dialog-bi-import.c:739
 #, c-format
 msgid "Invoice %s not updated because it already exists.\n"
-msgstr "Factura %s não emitida porque já existe.\n"
+msgstr "Factura %s não actualizada porque já existe.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:754
 #, c-format
@@ -20556,7 +20555,7 @@ msgstr "Factura %s não emitida porque as moedas não correspondem.\n"
 #: gnucash/import-export/bi-import/dialog-bi-import.c:896
 #, c-format
 msgid "Invoice %s NOT posted because it requires currency conversion.\n"
-msgstr "Factura %s não lançada porque requer conversão de moedas.\n"
+msgstr "Factura %s não emitida porque requer conversão de moedas.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:920
 #, c-format
@@ -20570,11 +20569,11 @@ msgstr "ID"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:144
 msgid "Owner-ID"
-msgstr "ID-Titular"
+msgstr "ID do titular"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:145
 msgid "Billing-ID"
-msgstr "ID-Factura"
+msgstr "ID de factura"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:152
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:92
@@ -20603,19 +20602,19 @@ msgstr "Imposto incluído"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:159
 msgid "Tax-table"
-msgstr "Tab-imposto"
+msgstr "Tabela de imposto"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:163
 msgid "Account-posted"
-msgstr "Conta-emitida"
+msgstr "Conta emitida"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:164
 msgid "Memo-posted"
-msgstr "Nota-emitida"
+msgstr "Nota emitida"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:165
 msgid "Accu-splits"
-msgstr "Prec-parcelas"
+msgstr "Parcelas acumuladas"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:198
 msgid "Import Bills or Invoices from csv"
@@ -20819,7 +20818,7 @@ msgstr "Valor com símbolo"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:617
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:628
 msgid "Amount Num."
-msgstr "Valor núm."
+msgstr "Montante n.º"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:617
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:629
