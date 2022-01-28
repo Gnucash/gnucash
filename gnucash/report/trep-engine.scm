@@ -922,9 +922,9 @@ be excluded from periodic reporting.")
      ;; One list per option here with: option-name, sort-tag,
      ;; help-string, default-value
      (list
-      (list (N_ "Date")                         "a"  (G_ "Display the date?") #t)
-      (list (N_ "Reconciled Date")              "a2" (G_ "Display the reconciled date?") #f)
-      (list (N_ "Date Entered")                 "a3" (G_ "Display the entered date?") #f)
+      (list (N_ "Date Posted")                  "a"  (G_ "Display the transaction date?") #t)
+      (list (N_ "Date Reconciled")              "a2" (G_ "Display the date the transaction was reconciled?") #f)
+      (list (N_ "Date Entered")                 "a3" (G_ "Display the date the transaction was entered?") #f)
       (if BOOK-SPLIT-ACTION
           (list (N_ "Num/Action")               "b"  (G_ "Display the check number?") #t)
           (list (N_ "Num")                      "b"  (G_ "Display the check number?") #t))
@@ -937,10 +937,10 @@ be excluded from periodic reporting.")
       (list (N_ "Use Full Other Account Name")  "i"  (G_ "Display the full account name?") #f)
       (list (N_ "Other Account Code")           "j"  (G_ "Display the other account code?") #f)
       (list (N_ "Shares")                       "k"  (G_ "Display the number of shares?") #f)
-      (list (N_ "Link")                         "l5" (G_ "Display the transaction linked document") #f)
+      (list (N_ "Link")                         "l5" (G_ "Display the transaction linked document?") #f)
       (list (N_ "Price")                        "l"  (G_ "Display the shares price?") #f)
       ;; note the "Amount" multichoice option in between here
-      (list optname-grid                        "m5" (G_ "Display a subtotal summary table.") #f)
+      (list optname-grid                        "m5" (G_ "Display a subtotal summary table?") #f)
       (list (N_ "Running Balance")              "n"  (G_ "Display a running balance?") #f)
       (list (N_ "Totals")                       "o"  (G_ "Display the totals?") #t)))
 
@@ -1047,8 +1047,8 @@ be excluded from periodic reporting.")
     (define detail-is-single?
       (eq? (opt-val gnc:pagename-display optname-detail-level) 'single))
     (define amount-setting (opt-val gnc:pagename-display (N_ "Amount")))
-    (list (cons 'date (opt-val gnc:pagename-display (N_ "Date")))
-          (cons 'reconciled-date (opt-val gnc:pagename-display (N_ "Reconciled Date")))
+    (list (cons 'date (opt-val gnc:pagename-display (N_ "Date Posted")))
+          (cons 'reconciled-date (opt-val gnc:pagename-display (N_ "Date Reconciled")))
           (cons 'entered (opt-val gnc:pagename-display (N_ "Date Entered")))
           (cons 'num (if BOOK-SPLIT-ACTION
                          (opt-val gnc:pagename-display (N_ "Num/Action"))
