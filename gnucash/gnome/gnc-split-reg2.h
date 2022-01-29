@@ -31,7 +31,6 @@
 #define GNC_SPLIT_REG2_H
 
 #include "gnc-ledger-display2.h"
-#include "gnc-split-reg.h"
 #include "gnc-tree-view-split-reg.h"
 /** @ingroup Register
  * @addtogroup Register2
@@ -84,8 +83,29 @@ struct _GNCSplitReg2Class
     void (*help_changed) (GNCSplitReg2 *w, gpointer user_data);
 };
 
-/*FIXME Note sure about this == Coming from original gnc-split-reg.h */
-typedef GNC_SPLIT_REG_ITEM GNC_SPLIT_REG2_ITEM;
+/* Something somewhere sets these to silly values and causes problems */
+#undef DELETE
+#undef DUPLICATE
+typedef enum
+{
+    ENTER,
+    CANCEL,
+    DELETE,
+    REINIT,
+    DUPLICATE,
+    SCHEDULE,
+    SPLIT,
+    BLANK,
+    JUMP,
+    CUT,
+    CUT_TXN,
+    COPY,
+    COPY_TXN,
+    PASTE,
+    PASTE_TXN,
+    SORT_ORDER_SUBMENU,
+    STYLE_SUBMENU,
+} GNC_SPLIT_REG2_ITEM;
 
 /**
  * GTK-related; gets an identifier for the class of GNCSplitRegs.

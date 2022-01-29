@@ -26,6 +26,8 @@
 
 #include <config.h>
 
+#ifdef REGISTER2_ENABLED
+
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <string.h>
@@ -3295,3 +3297,5 @@ gnc_tree_model_split_reg_get_parent (GncTreeModelSplitReg *model)
 
     return parent;
 }
+
+#endif

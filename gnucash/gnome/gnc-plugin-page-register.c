@@ -42,9 +42,11 @@
 #include "guile-mappings.h"
 
 #include "gnc-plugin-page-register.h"
+#ifdef REGISTER2_ENABLED   
 /*################## Added for Reg2 #################*/
 #include "gnc-plugin-page-register2.h"
 /*################## Added for Reg2 #################*/
+#endif
 #include "gnc-plugin-register.h"
 #include "gnc-plugin-menu-additions.h"
 #include "gnc-plugin-page-report.h"
@@ -802,14 +804,17 @@ gnc_plugin_page_register_new (Account* account, gboolean subaccounts)
     gnc_commodity* com0;
     gnc_commodity* com1;
 
+#ifdef REGISTER2_ENABLED   
     /*################## Added for Reg2 #################*/
     const GList* item;
     GncPluginPageRegister2*  new_register_page;
     /*################## Added for Reg2 #################*/
+#endif
 
     ENTER ("account=%p, subaccounts=%s", account,
            subaccounts ? "TRUE" : "FALSE");
 
+#ifdef REGISTER2_ENABLED   
     /*################## Added for Reg2 #################*/
     // We test for the new register being open here, ie matching account guids
     item = gnc_gobject_tracking_get_list (GNC_PLUGIN_PAGE_REGISTER2_NAME);
@@ -830,6 +835,7 @@ gnc_plugin_page_register_new (Account* account, gboolean subaccounts)
         }
     }
     /*################## Added for Reg2 #################*/
+#endif
     com0 = gnc_account_get_currency_or_parent (account);
     com1 = gnc_account_foreach_descendant_until (account,
                                                  gnc_plug_page_register_check_commodity, com0);

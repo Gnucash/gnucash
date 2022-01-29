@@ -38,7 +38,9 @@
 #include <glib/gi18n.h>
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-plugin-page-register.h"
+#ifdef REGISTER2_ENABLED
 #include "gnc-plugin-page-register2.h"
+#endif
 
 #include "Scrub.h"
 #include "Scrub3.h"
@@ -173,9 +175,11 @@ static void gnc_plugin_page_account_tree_cmd_scrub_sub (GtkAction *action, GncPl
 static void gnc_plugin_page_account_tree_cmd_scrub_all (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_cascade_account_properties (GtkAction *action, GncPluginPageAccountTree *page);
 
+#ifdef REGISTER2_ENABLED
 /* Command callback for new Register Test */
 static void gnc_plugin_page_account_tree_cmd_open2_account (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_open2_subaccounts (GtkAction *action, GncPluginPageAccountTree *page);
+#endif
 /* Account Deletion Actions. */
 static int confirm_delete_account (GtkAction *action,
                                    GncPluginPageAccountTree *page, Account* ta,
@@ -341,6 +345,7 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
     },
     /* Extensions Menu */
     { "Register2TestAction", NULL, N_("_Register2"), NULL, NULL, NULL },
+#ifdef REGISTER2_ENABLED
     {
         "Register2TestAccountAction", GNC_ICON_OPEN_ACCOUNT, N_("Open _Account"), NULL,
         N_("Open the selected account"),
@@ -351,6 +356,7 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
         N_("Open the selected account and all its subaccounts"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_open2_subaccounts)
     },
+#endif
 };
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_page_account_tree_n_actions = G_N_ELEMENTS (gnc_plugin_page_account_tree_actions);
@@ -1053,6 +1059,7 @@ gppat_open_account_common (GncPluginPageAccountTree *page,
     gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
 }
 
+#ifdef REGISTER2_ENABLED
 /*################## Added for Reg2 #################*/
 /*        New Register Common                        */
 static void
@@ -1071,6 +1078,7 @@ gppat_open2_account_common (GncPluginPageAccountTree *page,
     gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
 }
 /*################## Added for Reg2 #################*/
+#endif
 
 static void
 gnc_plugin_page_account_tree_double_click_cb (GtkTreeView *treeview,
@@ -1205,6 +1213,7 @@ gnc_plugin_page_account_tree_cmd_open_subaccounts (GtkAction *action,
 }
 
 
+#ifdef REGISTER2_ENABLED
 /*################## Added for Reg2 #################*/
 /* Register Firing - Single Account to start with    */
 static void
@@ -1229,6 +1238,7 @@ gnc_plugin_page_account_tree_cmd_open2_subaccounts (GtkAction *action,
     gppat_open2_account_common (page, account, TRUE);
 }
 /*################## Added for Reg2 #################*/
+#endif
 
 static void
 gnc_plugin_page_account_tree_cmd_edit_account (GtkAction *action, GncPluginPageAccountTree *page)

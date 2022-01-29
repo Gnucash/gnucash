@@ -26,6 +26,8 @@
 
 #include <config.h>
 
+#ifdef REGISTER2_ENABLED
+
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
@@ -6338,3 +6340,4 @@ gboolean gnc_tree_view_split_reg_call_uiupdate_cb(GncTreeViewSplitReg *view)
     return FALSE;
 }
 
+#endif

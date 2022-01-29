@@ -30,6 +30,8 @@
 
 #include <config.h>
 
+#ifdef REGISTER2_ENABLED
+
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #ifdef __G_IR_SCANNER__
@@ -2215,3 +2217,5 @@ static GtkActionEntry recnWindow2_actions [] =
 
 /** The number of actions provided by the main window. */
 static guint recnWindow2_n_actions = G_N_ELEMENTS (recnWindow2_actions);
+
+#endif

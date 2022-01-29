@@ -48,10 +48,12 @@
 #include "qof.h"
 #include "gnc-ledger-display.h"
 #include "gnc-plugin-page-register.h"
+#ifdef REGISTER2_ENABLED
 /*################## Added for Reg2 #################*/
 #include "gnc-ledger-display2.h"
 #include "gnc-plugin-page-register2.h"
 /*################## Added for Reg2 #################*/
+#endif
 #include "gnc-main-window.h"
 #include "gnc-component-manager.h"
 #include "gnc-gui-query.h"

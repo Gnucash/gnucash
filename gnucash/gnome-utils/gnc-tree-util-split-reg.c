@@ -26,6 +26,8 @@
 
 #include <config.h>
 
+#ifdef REGISTER2_ENABLED
+
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
@@ -1348,3 +1350,5 @@ gnc_tree_util_get_rate_for (GncTreeViewSplitReg *view, Transaction *trans, Split
 
 
 /*****************************************************************************/
+
+#endif

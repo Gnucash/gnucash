@@ -34,6 +34,8 @@
 
 #include <config.h>
 
+#ifdef REGISTER2_ENABLED
+
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <locale.h>
@@ -55,7 +57,7 @@
 #include "gnc-frequency.h"
 #include "gnc-gui-query.h"
 #include "gnc-hooks.h"
-#include "gnc-ledger-display.h"
+#include "gnc-ledger-display2.h"
 #include "gnc-plugin-page.h"
 #include "gnc-plugin-page-register2.h"
 #include "gnc-prefs.h"
@@ -1781,3 +1783,5 @@ gnc_ui_sx_initialize2 (void) //FIXME need to remove the 2 when live
                               "create_days_adj,remind_days_adj,sx_prefs",
                               _("Scheduled Transactions"));
 }
+
+#endif

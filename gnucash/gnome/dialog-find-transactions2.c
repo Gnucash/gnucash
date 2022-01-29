@@ -22,6 +22,8 @@
 
 #include <config.h>
 
+#ifdef REGISTER2_ENABLED
+
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <stdio.h>
@@ -239,3 +241,5 @@ gnc_ui_find_transactions_dialog_create2 (GNCLedgerDisplay2 * orig_ledg)
 
     return ftd->sw;
 }
+
+#endif

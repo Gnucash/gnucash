@@ -28,6 +28,8 @@
 
 #include <config.h>
 
+#ifdef REGISTER2_ENABLED
+
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <glib/gi18n.h>
@@ -1138,3 +1140,5 @@ gnc_split_reg2_set_moved_cb (GNCSplitReg2 *gsr, GFunc cb, gpointer cb_data ) //t
 {
     gnc_tree_view_split_reg_set_uiupdate_cb (gnc_ledger_display2_get_split_view_register (gsr->ledger), cb, cb_data);
 }
+
+#endif

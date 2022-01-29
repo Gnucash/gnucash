@@ -31,8 +31,6 @@
 #include "Account.h"
 #include "Query.h"
 
-#include "split-register.h"
-
 #include "SchedXaction.h"
 #include "Transaction.h"
 #include "gnc-tree-model-split-reg.h"

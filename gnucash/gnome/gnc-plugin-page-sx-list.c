@@ -52,9 +52,11 @@
 #include "Split.h"
 #include "Transaction.h"
 #include "dialog-sx-editor.h"
+#ifdef REGISTER2_ENABLED
 /*################## Added for Reg2 #################*/
 #include "dialog-sx-editor2.h"
 /*################## Added for Reg2 #################*/
+#endif
 #include "dialog-utils.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
