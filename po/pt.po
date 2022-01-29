@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-27 11:54+0000\n"
+"PO-Revision-Date: 2022-01-29 07:53+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -20818,7 +20818,7 @@ msgstr "Valor com símbolo"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:617
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:628
 msgid "Amount Num."
-msgstr "Montante n.º"
+msgstr "Montante nº."
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:617
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:629
@@ -20903,8 +20903,8 @@ msgstr ""
 "Se esta for a sua importação inicial para um novo ficheiro, verá primeiro um "
 "diálogo com as opções do livro, dado que estas podem afectar a forma como os "
 "dados são convertidos para transacções do GnuCash.\n"
-"<b>Nota</b>: após importar, pode ter de usar Ver->Filtrar por->Outros e "
-"escolher mostrar contas não usadas.\n"
+"<b>Nota</b>: após importar, pode ter de usar <i>Ver -> Filtrar por -> "
+"Outros</i> e escolher mostrar contas não usadas.\n"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:528
 #, c-format
@@ -20954,7 +20954,7 @@ msgstr "O nome das definições já existe, sobrescrever?"
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:955
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:920
 msgid "The settings have been saved."
-msgstr "As gravações foram gravadas."
+msgstr "As definições foram gravadas."
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:980
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:945
@@ -21092,8 +21092,7 @@ msgstr ""
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2069
 msgid "Double click on rows to change, then click on Apply to Import"
 msgstr ""
-"Faça duplo clique nas linhas a alterar e depois clique em Aplicar para "
-"importar"
+"Faça duplo clique nas linhas a alterar e clique em Aplicar para importar"
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2124
@@ -21184,8 +21183,8 @@ msgid ""
 "No lines are selected for importing. Please reduce the number of lines to "
 "skip."
 msgstr ""
-"Sem linhas seleccionadas para importar. Poir favor, reduza o número de "
-"linhas a saltar."
+"Sem linhas seleccionadas para importar. Por favor, reduza o número de linhas "
+"a saltar."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:529
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:551
@@ -21202,7 +21201,7 @@ msgid ""
 "This should never happen. Please report this as a bug."
 msgstr ""
 "Sem coluna \"Para moeda\" seleccionada nem moeda especificada.\n"
-"Isto nunca deve acontecer. Por favor, reporte como um erro."
+"Isto nunca deve acontecer. Por favor, relate como um erro."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:597
 msgid ""
@@ -21210,8 +21209,8 @@ msgid ""
 "From specified either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
-"Sem coluna \"De espaço de nome/De símbolo\" seleccionada nem \"De mercadoria"
-"\" especificada.\n"
+"Sem coluna \"De espaço de nome/De símbolo\" seleccionada nem \"De "
+"mercadoria\" especificada.\n"
 "Isto nunca deve acontecer. Por favor, relate como um erro."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:480
@@ -21247,7 +21246,7 @@ msgid ""
 "This should never happen. Please report this as a bug."
 msgstr ""
 "Sem coluna de conta seleccionada nem conta predefinida especificada.\n"
-"Isto nunca deve acontecer. Por favor, reporte como erro."
+"Isto nunca deve acontecer. Por favor, relate como erro."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:55
 msgid "From Symbol"
@@ -21270,8 +21269,7 @@ msgstr "O valor não parece conter um número válido."
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:140
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:145
 msgid "Value can't be parsed into a number using the selected currency format."
-msgstr ""
-"O valor não pode ser convertido num número usando a moeda seleccionada."
+msgstr "O valor não pode ser convertido num número usando a moeda seleccionada."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:125
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:202
@@ -21296,7 +21294,7 @@ msgstr "\"De espaço de nome\" não pode estar vazio."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:223
 msgid "'Currency To' can not be the same as 'Commodity From'."
-msgstr "\"Para moeda\" não pode ser o mesmo de \"De mercadoria\"."
+msgstr "\"Para moeda\" não pode ser o mesmo que \"De mercadoria\"."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:225
 msgid "Value parsed into an invalid currency for a currency column type."
@@ -21685,7 +21683,7 @@ msgstr "_Reproduzir ficheiro .log do GnuCash..."
 #: gnucash/import-export/log-replay/gnc-plugin-log-replay.c:49
 msgid "Replay a GnuCash log file after a crash. This cannot be undone."
 msgstr ""
-"Reproduzir ficheiro .log do GnuCash após uma avaria. Isto não pode ser "
+"Reproduzir o ficheiro .log do GnuCash após uma avaria. Isto não pode ser "
 "desfeito."
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:661
@@ -21769,7 +21767,7 @@ msgid ""
 "If there isn't one, or you don't know it, create your own."
 msgstr ""
 "Insira o símbolo de mercado ou outra abreviatura bem conhecida, tal como "
-"\"ARH\". Se não houver uma ou não a conhecer, crie a sua própria."
+"\"RHT\". Se não houver uma ou não a conhecer, crie a sua própria."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:866
 msgid ""
@@ -21778,8 +21776,8 @@ msgid ""
 "or an appropriate investment type, you can enter a new one."
 msgstr ""
 "Seleccione o câmbio no qual o símbolo é negociado ou seleccione o tipo de "
-"investimento (tal como FUNDO para fundos mútuos). Se não vê o seu câmbio ou "
-"um tipo de investimento apropriado, pode criar um novo."
+"investimento (tal como FUNDO para fundos mutualistas). Se não vê o seu "
+"câmbio ou um tipo de investimento apropriado, pode criar um novo."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:906
 msgid "_Name or description"
@@ -21791,7 +21789,7 @@ msgstr "_Símbolo de mercado ou outra abreviatura"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:964
 msgid "_Exchange or abbreviation type"
-msgstr "_Câmbio ou tipo de abreviatura"
+msgstr "Tipo de _câmbio ou abreviatura"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1176
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3315
@@ -21814,8 +21812,7 @@ msgstr ""
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1594
 msgid "That QIF file is already loaded. Please select another file."
-msgstr ""
-"Esse ficheiro QIF já está carregado. Por favor, seleccione outro ficheiro."
+msgstr "Este ficheiro QIF já está carregado. Por favor, seleccione outro."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1662
 msgid "Select QIF File"
@@ -21970,7 +21967,7 @@ msgstr "Dividendos"
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:86
 msgid "Cap Return"
-msgstr "Retorno capital"
+msgstr "Retorno de capital"
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:92
 msgid "Cap. gain (long)"
@@ -22190,7 +22187,7 @@ msgid ""
 "Run 'gnc-fq-update' as root to install them."
 msgstr ""
 "Tem algumas bibliotecas Perl em falta.\n"
-"Execute \"gnc-fq-update\" como root para as instalar."
+"Execute \"gnc-fq-update\" como administrador para as instalar."
 
 #: gnucash/price-quotes.scm:461
 #, scheme-format
@@ -22242,7 +22239,7 @@ msgstr "Tenha um bom dia!"
 #: gnucash/python/init.py:118
 #, python-format
 msgid "Welcome to GnuCash %s Shell"
-msgstr "Boas vindas ao GnuCash %s Shell"
+msgstr "Boas vindas à consola do GnuCash %s"
 
 #: gnucash/register/ledger-core/gncEntryLedger.c:250
 msgid "Hours"
@@ -22279,11 +22276,11 @@ msgstr ""
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:184
 msgid "This account should usually be of type income."
-msgstr "Esta conta deveria ser de tipo Receitas."
+msgstr "Esta conta deveria ser de tipo Receita."
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:192
 msgid "This account should usually be of type expense or asset."
-msgstr "Esta conta deveria ser de tipo Despesas ou Activos."
+msgstr "Esta conta deveria ser de tipo Despesa ou Activo."
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:760
 #, c-format
@@ -22421,11 +22418,11 @@ msgstr "Dinheiro"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:47
 msgid "Income Account"
-msgstr "Conta de receitas"
+msgstr "Conta de receita"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:52
 msgid "Expense Account"
-msgstr "Conta de despesas"
+msgstr "Conta de despesa"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:77
 msgid "Discount Type"
@@ -22710,7 +22707,7 @@ msgstr "T"
 #: gnucash/register/ledger-core/split-register-layout.c:825
 msgctxt "sample"
 msgid "Notes field sample text string"
-msgstr "Texto exemplo de campo de notas"
+msgstr "Texto exemplo do campo de notas"
 
 #: gnucash/register/ledger-core/split-register-layout.c:833
 msgctxt "sample"
@@ -22742,7 +22739,7 @@ msgstr "Ref.-T"
 #: gnucash/register/ledger-core/split-register-model.c:279
 #: gnucash/report/reports/standard/register.scm:134
 msgid "T-Num"
-msgstr "Núm-T"
+msgstr "Nº. T"
 
 #: gnucash/register/ledger-core/split-register-model.c:405
 msgid "Exch. Rate"
@@ -22792,7 +22789,7 @@ msgid ""
 "Enter a reference, such as an invoice or check number, unique to each entry "
 "line (split)"
 msgstr ""
-"Insira uma referência, tal como uma factura ou número de cheque, exclusivo "
+"Insira uma referência, tal como uma factura ou número de cheque, exclusiva "
 "para cada linha da entrada (parcela)"
 
 #: gnucash/register/ledger-core/split-register-model.c:1074
@@ -22806,7 +22803,7 @@ msgstr ""
 msgid ""
 "Enter a reference, such as a check number, unique to each entry line (split)"
 msgstr ""
-"Insira uma referência, tal como um número de cheque, exclusivo para cada "
+"Insira uma referência, tal como um número de cheque, exclusiva para cada "
 "linha da entrada (parcela)"
 
 #: gnucash/register/ledger-core/split-register-model.c:1097
@@ -22840,15 +22837,14 @@ msgstr ""
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
 msgstr ""
-"Esta transacção tem múltiplas parcelas; clique no botão Parcelas para as ver "
-"todas"
+"Esta transacção tem múltiplas parcelas; clique em Parcelas para as ver todas"
 
 #: gnucash/register/ledger-core/split-register-model.c:1578
 msgid ""
 "This transaction is a stock split; press the Split button to see details"
 msgstr ""
-"Esta transacção é uma parcela de acções; clique no botão Parcelas para ver "
-"os detalhes"
+"Esta transacção é uma parcela de acções; clique em Parcelas para ver os "
+"detalhes"
 
 #: gnucash/register/ledger-core/split-register-model.c:2097
 #, c-format
@@ -22888,9 +22884,9 @@ msgid ""
 "continue editing this split it will be unreconciled. This might make future "
 "reconciliation difficult! Continue with this change?"
 msgstr ""
-"Está prestes a alterar um campo protegido de uma parcela reconciliada Se "
-"continuar a editar a parcela, ficará não reconciliada. Fazê-lo poderá tornar "
-"reconciliações futuras difíceis! Continuar com a alteração?"
+"Vai alterar um campo protegido de uma parcela reconciliada Se continuar, a "
+"parcela ficará não reconciliada. Fazê-lo poderá tornar reconciliações "
+"futuras difíceis! Deseja continuar com a alteração?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2249
 msgid "Chan_ge Transaction"
@@ -22973,7 +22969,7 @@ msgstr "Informação de letra para células de texto regulares."
 
 #: gnucash/report/html-fonts.scm:136
 msgid "Total number cell"
-msgstr "Células de totais"
+msgstr "Célula de totais"
 
 #: gnucash/report/html-fonts.scm:137
 msgid "Font info for number cells containing a total."
@@ -23013,7 +23009,7 @@ msgstr "Não existem orçamentos. Tem de criar pelo menos um."
 #: gnucash/report/reports/standard/balsheet-pnl.scm:154
 #: gnucash/report/reports/standard/new-owner-report.scm:942
 msgid "Disabled"
-msgstr "Inactivo"
+msgstr "Desactivado"
 
 #: gnucash/report/html-utilities.scm:390
 msgid "This report requires you to specify certain report options."
@@ -23021,7 +23017,7 @@ msgstr "Este relatório requer que especifique determinadas opções."
 
 #: gnucash/report/html-utilities.scm:397
 msgid "No accounts selected"
-msgstr "Sem contas seleccionadas"
+msgstr "Nenhuma conta seleccionada"
 
 #: gnucash/report/html-utilities.scm:398
 msgid "This report requires accounts to be selected in the report options."
@@ -23113,11 +23109,11 @@ msgstr ""
 #: gnucash/report/reports/standard/budget-income-statement.scm:76
 #: gnucash/report/reports/standard/income-statement.scm:63
 msgid "Report on these accounts, if display depth allows."
-msgstr "Reportar estas contas, se a profundidade de exibição o permitir."
+msgstr "Reportar estas contas, se a profundidade o permitir."
 
 #: gnucash/report/options-utilities.scm:133
 msgid "Select the currency to display the values of this report in."
-msgstr "Seleccionar a moeda em que mostrar os valores deste relatório."
+msgstr "Seleccionar a moeda a usar para os valores deste relatório."
 
 #: gnucash/report/options-utilities.scm:143
 #: gnucash/report/reports/standard/advanced-portfolio.scm:81
@@ -23127,11 +23123,11 @@ msgstr "A origem da informação de cotações."
 
 #: gnucash/report/options-utilities.scm:144
 msgid "Average cost of purchases weighted by volume"
-msgstr "Custo médio das compras, pesado por volume"
+msgstr "Custo médio das compras, ponderado por volume"
 
 #: gnucash/report/options-utilities.scm:145
 msgid "Weighted average of all transactions in the past"
-msgstr "A média ponderada de todas as passadas transacções"
+msgstr "A média ponderada de todas as transacções passadas"
 
 #: gnucash/report/options-utilities.scm:146
 msgid "Last up through report date"
@@ -23333,9 +23329,9 @@ msgid ""
 "report system, especially your saved reports, for a report with this report-"
 "guid: "
 msgstr ""
-"Um dos seus relatórios tem uma guid que é um duplicado. Por favor, procure "
-"no sistema de relatórios, especialmente nos relatórios que gravou, um que "
-"tenha esta guid: "
+"Um dos seus relatórios tem uma identidade duplicada. Por favor, procure no "
+"sistema de relatórios, especialmente nos relatórios gravados, um que tenha "
+"esta identidade: "
 
 #: gnucash/report/report-core.scm:212
 msgid "Wrong report definition: "
@@ -23441,12 +23437,12 @@ msgstr "Fonte de endereço"
 #: gnucash/report/reports/aging.scm:53
 #: gnucash/report/reports/standard/new-aging.scm:56
 msgid "Address Phone"
-msgstr "Telef. de endereço"
+msgstr "Telefone"
 
 #: gnucash/report/reports/aging.scm:54
 #: gnucash/report/reports/standard/new-aging.scm:57
 msgid "Address Fax"
-msgstr "Fax de endereço"
+msgstr "Fax"
 
 #: gnucash/report/reports/aging.scm:55
 #: gnucash/report/reports/standard/new-aging.scm:58
@@ -23480,7 +23476,7 @@ msgstr "Montante total devido à/da empresa"
 #: gnucash/report/reports/aging.scm:350
 #: gnucash/report/reports/standard/new-aging.scm:97
 msgid "Bracket Total Owed"
-msgstr "Suporte total devido"
+msgstr "Total devido"
 
 #: gnucash/report/reports/aging.scm:357
 #: gnucash/report/reports/standard/new-aging.scm:101
@@ -23716,7 +23712,7 @@ msgstr "O tipo de gráfico a gerar."
 #: gnucash/report/reports/example/average-balance.scm:149
 #: gnucash/report/trep-engine.scm:1917 libgnucash/engine/policy.c:58
 msgid "Average"
-msgstr "Médio"
+msgstr "Média"
 
 #: gnucash/report/reports/example/average-balance.scm:130
 #: gnucash/report/reports/example/average-balance.scm:151
@@ -23793,7 +23789,7 @@ msgstr "Mostrar totais"
 #: gnucash/report/reports/standard/category-barchart.scm:130
 #: gnucash/report/reports/standard/net-charts.scm:92
 msgid "Report on these accounts, if chosen account level allows."
-msgstr "Reportar estas contas, se o nível de contas escolhido o permitir."
+msgstr "Relatar estas contas, se o nível de contas escolhido o permitir."
 
 #: gnucash/report/reports/example/daily-reports.scm:109
 #: gnucash/report/reports/standard/account-piecharts.scm:156
