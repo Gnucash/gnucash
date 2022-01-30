@@ -8324,7 +8324,7 @@ msgid ""
 "your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?"
 "id=645216 for more information."
 msgstr ""
-"גנוקאש לא יכולה להשלים בדיקה מהותית לאיתור תקלות בספריה „libdbi”. יתכן שהדבר "
+"גנוקאש לא יכולה להשלים בדיקה מהותית לאיתור תקל בספרית 'libdbi'. יתכן שהדבר "
 "נגרם כתוצאה מתצורת הרשאות שגויה במסד נתוני SQL. למידע נוסף, ניתן לעיין ב־"
 "https://bugs.gnucash.org/show_bug.cgi?id=645216."
 
@@ -8598,7 +8598,7 @@ msgstr "מדריך שימוש ומדריך _מושגים"
 
 #: gnucash/gnome-utils/gnc-main-window.c:387
 msgid "Open the GnuCash Tutorial"
-msgstr "פתיחת מדריך למשתמש גנוקאש"
+msgstr "פתיחת מדריך־משתמש גנוקאש"
 
 #: gnucash/gnome-utils/gnc-main-window.c:391
 msgid "_Contents"
