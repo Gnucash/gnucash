@@ -79,7 +79,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-17 18:55+0000\n"
+"PO-Revision-Date: 2022-01-30 16:53+0000\n"
 "Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -21078,7 +21078,7 @@ msgstr "Acum-desgl"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:198
 msgid "Import Bills or Invoices from csv"
-msgstr "Importar Cargo o Facturas desde CSV"
+msgstr "Importar Cargos o Facturas desde CSV"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:226
 #, c-format
@@ -29825,7 +29825,7 @@ msgstr "Formato de número del cliente"
 
 #: libgnucash/app-utils/business-prefs.scm:41
 msgid "Customer number"
-msgstr "Número del cliente"
+msgstr "ID Cliente"
 
 #: libgnucash/app-utils/business-prefs.scm:42
 msgid ""
