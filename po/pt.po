@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-29 07:53+0000\n"
+"PO-Revision-Date: 2022-01-31 07:04+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -23986,7 +23986,7 @@ msgid ""
 "scm/report directory for details on writing your own reports, or extending "
 "existing reports."
 msgstr ""
-"Este é um relatório exemplo do GnuCash. Veja o código origem guile (esquema) "
+"Este é um relatório exemplo do GnuCash. Veja o código-fonte guile (scheme) "
 "na pasta scm/report para detalhes sobre como escrever os seus próprios "
 "relatórios ou alterar os existentes."
 
@@ -23997,15 +23997,15 @@ msgid ""
 "report, consult the mailing list ~a."
 msgstr ""
 "Para ajuda sobre como escrever relatórios ou contribuir com novos e muito "
-"fixes relatórios, consulte a lista de correio ~a."
+"bonitos relatórios, consulte a lista de correio ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:327
 msgid ""
 "For details on subscribing to that list, see &lt;https://www.gnucash.org/"
 "&gt;."
 msgstr ""
-"Para detalhes sobre como subscrever esta lista, veja &lt;http://www.gnucash."
-"org/&gt;."
+"Para detalhes sobre como subscrever a lista, veja &lt;http://www.gnucash.org/"
+"&gt;."
 
 #: gnucash/report/reports/example/hello-world.scm:328
 msgid ""
@@ -24129,8 +24129,7 @@ msgstr "Boas vindas ao GnuCash ~a!"
 #: gnucash/report/reports/example/welcome-to-gnucash.scm:44
 #, scheme-format
 msgid "GnuCash ~a has lots of nice features. Here are a few."
-msgstr ""
-"O GnuCash ~a tem muitas funcionalidades agradáveis. Aqui estão algumas."
+msgstr "O GnuCash ~a tem muitas funcionalidades agradáveis. Aqui estão algumas."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:79
 msgid "Tax Report / TXF Export"
@@ -24154,12 +24153,12 @@ msgstr "Usar De - Para"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
 msgid "1st Est Tax Quarter (Jan 1 - Mar 31)"
-msgstr "1º período EUA impostos (1 Jan - 31 Mar)"
+msgstr "1º trimestre EUA (1 Jan - 31 Mar)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
 msgid "2nd Est Tax Quarter (Apr 1 - May 31)"
-msgstr "2º trimestre EUA impostos (1 Abr - 31 Mai)"
+msgstr "2º trimestre EUA (1 Abr - 31 Mai)"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
@@ -24167,12 +24166,12 @@ msgstr "2º trimestre EUA impostos (1 Abr - 31 Mai)"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:190
 msgid "3rd Est Tax Quarter (Jun 1 - Aug 31)"
-msgstr "3º período EUA impostos (1 Jun - 31 Ago)"
+msgstr "3º trimestre EUA (1 Jun - 31 Ago)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
 msgid "4th Est Tax Quarter (Sep 1 - Dec 31)"
-msgstr "4º período EUA impostos (1 Set - 31 Dez)"
+msgstr "4º trimestre EUA (1 Set - 31 Dez)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:192
@@ -24182,12 +24181,12 @@ msgstr "Último ano"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:160
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:193
 msgid "Last Yr 1st Est Tax Qtr (Jan 1 - Mar 31)"
-msgstr "1º per. EUA imp. últ. ano (1 Jan - 31 Mar)"
+msgstr "1º trim. EUA últ. ano (1 Jan - 31 Mar)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:161
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:194
 msgid "Last Yr 2nd Est Tax Qtr (Apr 1 - May 31)"
-msgstr "2º per. EUA imp. últ. ano (1 Abr - 31 Mai)"
+msgstr "2º trim. EUA últ. ano (1 Abr - 31 Mai)"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
@@ -24195,12 +24194,12 @@ msgstr "2º per. EUA imp. últ. ano (1 Abr - 31 Mai)"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:162
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:198
 msgid "Last Yr 3rd Est Tax Qtr (Jun 1 - Aug 31)"
-msgstr "3º per. EUA imp. últ. ano (1 Jun - 31 Ago)"
+msgstr "3º trim. EUA últ. ano (1 Jun - 31 Ago)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:163
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:199
 msgid "Last Yr 4th Est Tax Qtr (Sep 1 - Dec 31)"
-msgstr "4º per. EUA imp. últ. ano (1 Set - 31 Dez)"
+msgstr "4º trim. EUA últ. ano (1 Set - 31 Dez)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:167
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:203
@@ -24210,16 +24209,16 @@ msgstr "Seleccionar contas (nenhuma = todas)"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:168
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:204
 msgid "Select accounts."
-msgstr "Seleccione as contas."
+msgstr "Seleccionar contas."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:174
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:210
 msgid "Suppress $0.00 values"
-msgstr "Suprimir valores 0,00€"
+msgstr "Suprimir valores nulos"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:175
 msgid "$0.00 valued Accounts won't be printed."
-msgstr "Contas com valor 0,00€ não serão imprimidas."
+msgstr "Contas com valor 0,00 € não serão imprimidas."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:179
 msgid "Print Full account names"
@@ -24234,8 +24233,8 @@ msgid ""
 "WARNING: There are duplicate TXF codes assigned to some accounts. Only TXF "
 "codes with payer sources may be repeated."
 msgstr ""
-"AVISO: há códigos de modelo de imposto atribuídos a algumas contas. Só podem "
-"ser repetidos códigos de modelo com origens de pagador."
+"AVISO: há códigos de imposto atribuídos a algumas contas. Só podem ser "
+"repetidos códigos com origens de pagador."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:808
 #, scheme-format
@@ -24290,11 +24289,11 @@ msgstr "Imprimir todas as contas Transferir De/Para"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:221
 msgid "Print all split details for multi-split transactions."
-msgstr "Imprimir todos os detalhes das parcelas quando as houver."
+msgstr "Imprimir todos os detalhes das parcelas, quando as houver."
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:225
 msgid "Print TXF export parameters"
-msgstr "Imprimir parâmetros de exportação par Mod. IRS"
+msgstr "Imprimir parâmetros de exportação para Mod. IRS"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:226
 msgid "Show TXF export parameters for each TXF code/account on report."
@@ -24304,19 +24303,19 @@ msgstr ""
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:231
 msgid "Do not print T-Num:Memo data"
-msgstr "Não imprimir Num-T:Memorandos"
+msgstr "Não imprimir Nº. T:Memorando"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:232
 msgid "Do not print T-Num:Memo data for transactions."
-msgstr "Não imprimir Num-T:Memorandos para transacções."
+msgstr "Não imprimir Nº. T:Memorando para transacções."
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:235
 msgid "Do not print Action:Memo data"
-msgstr "Não imprimir Acção:Memorandos"
+msgstr "Não imprimir Acção:Memorando"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:236
 msgid "Do not print Action:Memo data for transactions."
-msgstr "Não imprimir Acção:Memorandos para transacções."
+msgstr "Não imprimir Acção:Memorando para transacções."
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:240
 msgid "Do not print transaction detail"
@@ -24373,14 +24372,14 @@ msgid ""
 "This report shows transaction detail for your accounts related to Income "
 "Taxes."
 msgstr ""
-"Este relatório mostra detalhes de transacções para as suas contas "
-"relacionadas com impostos sobre o rendimento."
+"Este relatório mostra detalhes de transacção para contas de receitas "
+"colectáveis."
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3341
 msgid "This page shows transaction detail for relevant Income Tax accounts."
 msgstr ""
-"Esta página mostra detalhes de transacções para contas relevantes de imposto "
-"sobre o rendimento."
+"Esta página mostra detalhes de transacções para receitas colectáveis "
+"relevantes."
 
 #: gnucash/report/reports/standard/account-piecharts.scm:36
 msgid "Income Piechart"
@@ -24396,7 +24395,7 @@ msgstr "Gráfico circular do activo"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:39
 msgid "Security Piechart"
-msgstr "Gráfico circular do activo"
+msgstr "Gráfico circular de mercadorias"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:40
 msgid "Liability Piechart"
@@ -24404,26 +24403,24 @@ msgstr "Gráfico circular do passivo"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:45
 msgid "Shows a piechart with the Income per given time interval"
-msgstr ""
-"Mostra um gráfico circular com a receita por um dado intervalo de tempo"
+msgstr "Mostra um gráfico circular com a receita por um dado período"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:47
 msgid "Shows a piechart with the Expenses per given time interval"
-msgstr ""
-"Mostra um gráfico circular com a despesa por um dado intervalo de tempo"
+msgstr "Mostra um gráfico circular com a despesa por um dado período"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:49
 msgid "Shows a piechart with the Assets balance at a given time"
-msgstr "Mostra um gráfico circular com o saldo dos activos num dado tempo"
+msgstr "Mostra um gráfico circular com o saldo dos activos a dada data"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:51
 msgid "Shows a piechart with distribution of assets over securities"
 msgstr ""
-"Mostra um gráfico circular com a distribuição de activos sobre seguranças"
+"Mostra um gráfico circular com a distribuição de activos sobre mercadorias"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:53
 msgid "Shows a piechart with the Liabilities balance at a given time"
-msgstr "Mostra um gráfico circular com o saldo do passivo num dado tempo"
+msgstr "Mostra um gráfico circular com o saldo do passivo a dada data"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:59
 #: gnucash/report/reports/standard/customer-summary.scm:48
@@ -24483,13 +24480,13 @@ msgid ""
 "Select whether the amounts should be shown over the full time period or "
 "rather as the average e.g. per month."
 msgstr ""
-"Seleccione se os montantes devem ser mostrados ao longo de todo o período de "
-"tempo ou como uma média, por exemplo, por mês."
+"Seleccione se os montantes devem ser mostrados ao longo de todo o período ou "
+"como média, e.g., por mês."
 
 #: gnucash/report/reports/standard/account-piecharts.scm:117
 #: gnucash/report/reports/standard/category-barchart.scm:119
 msgid "No Averaging"
-msgstr "Sem médias"
+msgstr "Sem média"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:141
 #: gnucash/report/reports/standard/account-summary.scm:90
@@ -24512,7 +24509,7 @@ msgstr "Mostrar o nome completo da conta na legenda?"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:150
 msgid "Show the full security name in the legend?"
-msgstr "Mostrar o nome completo da garantia na legenda?"
+msgstr "Mostrar o nome completo da mercadoria na legenda?"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:162
 msgid "Show the percentage in legend?"
@@ -24663,7 +24660,7 @@ msgstr "Incluir contas com saldos totais zero (recursivo) neste relatório."
 #: gnucash/report/reports/standard/budget-income-statement.scm:90
 #: gnucash/report/reports/standard/income-statement.scm:77
 msgid "Omit zero balance figures"
-msgstr "Omitir números de saldo zero"
+msgstr "Omitir saldos zero"
 
 #: gnucash/report/reports/standard/account-summary.scm:108
 #: gnucash/report/reports/standard/balance-sheet.scm:104
@@ -24672,8 +24669,7 @@ msgstr "Omitir números de saldo zero"
 #: gnucash/report/reports/standard/budget-income-statement.scm:92
 #: gnucash/report/reports/standard/income-statement.scm:79
 msgid "Show blank space in place of any zero balances which would be shown."
-msgstr ""
-"Mostrar espaços em branco em vez de saldos zero que deveriam ser mostrados."
+msgstr "Mostrar espaços em vez de saldos zero que deveriam ser mostrados."
 
 #: gnucash/report/reports/standard/account-summary.scm:110
 #: gnucash/report/reports/standard/balance-sheet.scm:106
@@ -24715,19 +24711,19 @@ msgstr "Mostrar contas como hiperligações"
 #: gnucash/report/reports/standard/income-statement.scm:86
 #: gnucash/report/reports/standard/trial-balance.scm:126
 msgid "Shows each account in the table as a hyperlink to its register window."
-msgstr "Mostra cada conta na tabela como uma hiperligação ao seu diário."
+msgstr "Mostrar cada conta na tabela como uma hiperligação ao seu diário."
 
 #: gnucash/report/reports/standard/account-summary.scm:119
 msgid "Show an account's balance."
-msgstr "Mostrar o saldo de uma conta."
+msgstr "Mostrar o saldo da conta."
 
 #: gnucash/report/reports/standard/account-summary.scm:121
 msgid "Show an account's account code."
-msgstr "Mostrar o código de uma conta."
+msgstr "Mostrar o código da conta."
 
 #: gnucash/report/reports/standard/account-summary.scm:123
 msgid "Show an account's account type."
-msgstr "Mostrar o tipo de uma conta."
+msgstr "Mostrar o tipo da conta."
 
 #: gnucash/report/reports/standard/account-summary.scm:124
 msgid "Account Description"
@@ -24735,7 +24731,7 @@ msgstr "Descrição da conta"
 
 #: gnucash/report/reports/standard/account-summary.scm:125
 msgid "Show an account's description."
-msgstr "Mostrar a descrição de uma conta."
+msgstr "Mostrar a descrição da conta."
 
 #: gnucash/report/reports/standard/account-summary.scm:126
 msgid "Account Notes"
@@ -24743,7 +24739,7 @@ msgstr "Notas da conta"
 
 #: gnucash/report/reports/standard/account-summary.scm:127
 msgid "Show an account's notes."
-msgstr "Mostrar as notas de uma conta."
+msgstr "Mostrar as notas da conta."
 
 #: gnucash/report/reports/standard/account-summary.scm:129
 #: gnucash/report/reports/standard/balance-sheet.scm:135
@@ -24830,7 +24826,7 @@ msgstr "Título da conta"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:38
 msgid "Advanced Portfolio"
-msgstr "Portfólio avançado"
+msgstr "Portefólio avançado"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:41
 #: gnucash/report/reports/standard/portfolio.scm:36
@@ -24844,7 +24840,7 @@ msgstr "Incluir contas sem acções"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:43
 msgid "Show ticker symbols"
-msgstr "Mostrar símbolos de negociação"
+msgstr "Mostrar códigos das acções"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:44
 msgid "Show listings"
@@ -24893,7 +24889,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:102
 msgid "How to report commissions and other brokerage fees."
-msgstr "Como reportar comissões e outras taxas de corretagem."
+msgstr "Como relatar comissões e outras taxas de corretagem."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:103
 msgid "Include in basis"
@@ -24909,7 +24905,7 @@ msgstr "Omitir do relatório"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:111
 msgid "Display the ticker symbols."
-msgstr "Mostrar os símbolos de negociação."
+msgstr "Mostrar os códigos das acções."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:118
 msgid "Display exchange listings."
@@ -24917,7 +24913,7 @@ msgstr "Mostrar listagens de câmbio."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:125
 msgid "Display numbers of shares in accounts."
-msgstr "Mostrar números de acções nas contas."
+msgstr "Mostrar número de acções nas contas."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:131
 #: gnucash/report/reports/standard/portfolio.scm:63
