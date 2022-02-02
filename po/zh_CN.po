@@ -27,7 +27,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-18 06:54+0000\n"
+"PO-Revision-Date: 2022-02-02 11:54+0000\n"
 "Last-Translator: YTX <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -1648,7 +1648,7 @@ msgstr "未定义"
 #. transaction that have files or URIs linked with them.
 #: gnucash/gnome/dialog-doclink.c:1074
 msgid "Transaction Document Links"
-msgstr "交易关联的凭证"
+msgstr "交易原始凭证"
 
 #: gnucash/gnome/dialog-doclink.c:1077
 #: gnucash/gnome/dialog-find-transactions2.c:157
@@ -1705,7 +1705,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-doclink.c:1097
 msgid "Business Document Links"
-msgstr "商业关联的凭证"
+msgstr "商业原始凭证"
 
 #: gnucash/gnome/dialog-employee.c:213
 msgid "You must enter a Payment-Address Name."
@@ -3507,11 +3507,11 @@ msgstr "查看和删除贝叶斯和非贝叶斯的信息"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:216
 msgid "_Transaction Linked Documents"
-msgstr "交易关联的凭证(_T)"
+msgstr "交易原始凭证(_T)"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:217
 msgid "View all Transaction Linked Documents"
-msgstr "查看所有交易关联的凭证"
+msgstr "查看所有交易原始凭证"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:224
 msgid "_Tips Of The Day"
@@ -3753,11 +3753,11 @@ msgstr "打开查找报销对话框"
 
 #: gnucash/gnome/gnc-plugin-business.c:278
 msgid "Business Linked Documents"
-msgstr "商业关联的凭证"
+msgstr "商业原始凭证"
 
 #: gnucash/gnome/gnc-plugin-business.c:279
 msgid "View all Linked Business Documents"
-msgstr "查看所有商业关联的凭证"
+msgstr "查看所有商业原始凭证"
 
 #: gnucash/gnome/gnc-plugin-business.c:283
 msgid "Sales _Tax Table"
@@ -5566,7 +5566,7 @@ msgstr "编辑当前交易事项的汇率"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:319
 msgid "Open the linked document for the current transaction"
-msgstr "打开当前交易关联的凭证"
+msgstr "打开当前交易原始凭证"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:320
 msgid "Jump to the linked bill, invoice, or voucher"
@@ -27966,7 +27966,7 @@ msgstr "显示其它科目编码？"
 
 #: gnucash/report/trep-engine.scm:939
 msgid "Display the transaction linked document"
-msgstr "显示交易关联的凭证"
+msgstr "显示交易原始凭证"
 
 #: gnucash/report/trep-engine.scm:942
 msgid "Display a subtotal summary table."
