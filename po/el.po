@@ -34,14 +34,15 @@
 # Ζωή Καίσα <kaisazoe@gmail.com>, 2021.
 # Katerina <katerina.gakou@hotmail.com>, 2021.
 # Eugenia Russell <eugenia.russell2019@gmail.com>, 2021.
+# Gregory-K <lifeturn@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-05-24 23:33+0000\n"
-"Last-Translator: Eugenia Russell <eugenia.russell2019@gmail.com>\n"
+"PO-Revision-Date: 2022-02-03 11:54+0000\n"
+"Last-Translator: Gregory-K <lifeturn@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/gnucash/el/"
 ">\n"
 "Language: el\n"
@@ -49,7 +50,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.11-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -505,6 +506,10 @@ msgid ""
 "on the sub-menu Import and click on QIF or OFX file, respectively. Then, "
 "follow the instructions provided."
 msgstr ""
+"Μπορείτε εύκολα να εισαγάγετε τα υπάρχοντα οικονομικά δεδομένα σας από το "
+"Quicken, το MS Money ή άλλα προγράμματα που εξάγουν αρχεία QIF ή αρχεία OFX. "
+"Στο μενού Αρχείο, κάντε κλικ στο υπομενού Εισαγωγή και κάντε κλικ στο αρχείο "
+"QIF ή OFX, αντίστοιχα. Στη συνέχεια, ακολουθήστε τις οδηγίες που παρέχονται."
 
 #: doc/tip_of_the_day.list.c:18
 msgid ""
@@ -536,6 +541,10 @@ msgid ""
 "register, clicking the right mouse button brings up the transaction menu "
 "options."
 msgstr ""
+"Κάντε κλικ στο δεξί κουμπί του ποντικιού (control-κλικ στο Mac OS X) στην "
+"καρτέλα Λογαριασμοί του κύριου παραθύρου για να εμφανιστούν οι επιλογές του "
+"μενού του λογαριασμού. Μέσα σε κάθε εγγραφή, κάνοντας δεξί κλικ εμφανίζονται "
+"οι επιλογές του μενού συναλλαγών."
 
 #: doc/tip_of_the_day.list.c:32
 msgid ""
@@ -9462,7 +9471,7 @@ msgstr "Τηλέφωνο"
 #: gnucash/register/ledger-core/split-register.c:2557
 #: gnucash/register/ledger-core/split-register.c:2583
 msgid "Online"
-msgstr "Online"
+msgstr "Σε σύνδεση"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2864
 #: gnucash/register/ledger-core/split-register.c:2559
@@ -9477,7 +9486,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2867
 #: gnucash/register/ledger-core/split-register.c:2562
 msgid "Direct Debit"
-msgstr ""
+msgstr "Άμεση Ανάληψη"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2873
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2877
