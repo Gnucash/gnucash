@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-31 07:04+0000\n"
+"PO-Revision-Date: 2022-02-03 08:10+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -24927,7 +24927,7 @@ msgstr "Mostrar cotações de acções."
 #: gnucash/report/reports/standard/advanced-portfolio.scm:146
 #: gnucash/report/reports/standard/portfolio.scm:71
 msgid "Stock Accounts to report on."
-msgstr "Contas de acções para reportar."
+msgstr "Contas de acções para o relatório."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:158
 #: gnucash/report/reports/standard/portfolio.scm:83
@@ -25099,8 +25099,8 @@ msgid ""
 "Print liability/equity section in the same column under the assets section "
 "as opposed to a second column right of the assets section."
 msgstr ""
-"Imprimir secção Passivo/Capital próprio na mesma coluna sob a secção "
-"Activos, por oposição a uma segunda coluna à direita da secção Activos."
+"Imprimir secção Passivo/Capital próprio na mesma coluna sob a secção de "
+"activos, por oposição a uma segunda coluna à direita da secção Activo."
 
 #: gnucash/report/reports/standard/balance-sheet.scm:92
 #: gnucash/report/reports/standard/balsheet-eg.scm:150
@@ -25124,12 +25124,12 @@ msgstr ""
 #: gnucash/report/reports/standard/balance-sheet.scm:113
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:79
 msgid "Label the assets section"
-msgstr "Rotular a secção Activos"
+msgstr "Rotular a secção Activo"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:115
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:81
 msgid "Whether or not to include a label for the assets section."
-msgstr "Se deve ou não incluir um rótulo para a secção Activos."
+msgstr "Se deve ou não incluir um rótulo para a secção Activo."
 
 #: gnucash/report/reports/standard/balance-sheet.scm:116
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:82
@@ -25150,8 +25150,8 @@ msgid ""
 "Report section order is assets/liabilities/equity (rather than assets/equity/"
 "liabilities)."
 msgstr ""
-"Ordem das secções do relatório é activos/passivo/capital próprio (em vez de "
-"activos/capital próprio/passivo)."
+"Ordem das secções do relatório é activo/passivo/capital próprio (em vez de "
+"activo/capital próprio/passivo)."
 
 #: gnucash/report/reports/standard/balance-sheet.scm:122
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:85
@@ -25289,7 +25289,7 @@ msgstr "Tamanho da letra"
 #: gnucash/report/reports/standard/balsheet-eg.scm:168
 msgid "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\")."
 msgstr ""
-"Tamanho da letra em formato CSS font-size (ex.: \"medium\" ou \"10pt\")."
+"Tamanho da letra em formato CSS font-size (e.g.: \"medium\" ou \"10pt\")."
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:169
 #: gnucash/report/reports/standard/receipt.scm:44
@@ -25353,7 +25353,7 @@ msgstr "Sinal: -$10.00"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:225
 msgid "Brackets: ($10.00)"
-msgstr "Parênteses: (10.000 €)"
+msgstr "Parênteses: (10.00 €)"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:244
 msgid ""
@@ -25386,7 +25386,7 @@ msgid ""
 "https://bugs.gnucash.org/"
 msgstr ""
 "AVISO: conversões de moeda estrangeira e cálculos de ganhos não\n"
-"realizados não estão confirmados. O relatório pode se modificado\n"
+"realizados não estão confirmados. O relatório pode ser modificado\n"
 "sem aviso. Relatórios de erro são bem vindos em\n"
 "https://bugs.gnucash.org/"
 
@@ -25409,7 +25409,7 @@ msgstr "Activar colunas duplas"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:69
 msgid "Selecting this option will enable double-column reporting."
-msgstr "Marcar esta opção activa o relato em coluna dupla."
+msgstr "Marcar esta opção activa o relatório em coluna dupla."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:72
 msgid "Disable amount indenting"
@@ -25420,7 +25420,7 @@ msgid ""
 "Selecting this option will disable amount indenting, and condense amounts "
 "into a single column."
 msgstr ""
-"Marcar esta opção desactiva a indentação nas quantias e condesa-as numa "
+"Marcar esta opção desactiva a indentação nas quantias e condensa-as numa "
 "única coluna."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:75
