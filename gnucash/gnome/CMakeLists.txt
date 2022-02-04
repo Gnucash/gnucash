@@ -17,7 +17,6 @@ set (gnc_gnome_noinst_HEADERS
   dialog-fincalc.h
   dialog-find-account.h
   dialog-find-transactions.h
-  dialog-find-transactions2.h
   dialog-imap-editor.h
   dialog-invoice.h
   dialog-job.h
@@ -30,7 +29,6 @@ set (gnc_gnome_noinst_HEADERS
   dialog-report-column-view.h
   dialog-report-style-sheet.h
   dialog-sx-editor.h
-  dialog-sx-editor2.h
   dialog-sx-from-trans.h
   dialog-sx-since-last-run.h
   dialog-vendor.h
@@ -40,23 +38,19 @@ set (gnc_gnome_noinst_HEADERS
   gnc-plugin-budget.h
   gnc-plugin-business.h
   gnc-plugin-register.h
-  gnc-plugin-register2.h
   gnc-plugin-report-system.h
   gnc-plugin-page-account-tree.h
   gnc-plugin-page-budget.h
   gnc-plugin-page-invoice.h
   gnc-plugin-page-owner-tree.h
   gnc-plugin-page-register.h
-  gnc-plugin-page-register2.h
   gnc-plugin-page-report.h
   gnc-plugin-page-sx-list.h
   gnc-split-reg.h
-  gnc-split-reg2.h
   reconcile-view.h
   search-owner.h
   top-level.h
   window-reconcile.h
-  window-reconcile2.h
   window-report.h
   window-autoclear.h
 )
@@ -86,7 +80,6 @@ set (gnc_gnome_SOURCES
   dialog-fincalc.c
   dialog-find-account.c
   dialog-find-transactions.c
-  dialog-find-transactions2.c
   dialog-imap-editor.c
   dialog-invoice.c
   dialog-job.c
@@ -101,7 +94,6 @@ set (gnc_gnome_SOURCES
   dialog-report-column-view.c
   dialog-report-style-sheet.c
   dialog-sx-editor.c
-  dialog-sx-editor2.c
   dialog-sx-from-trans.c
   dialog-sx-since-last-run.c
   dialog-tax-info.c
@@ -112,23 +104,19 @@ set (gnc_gnome_SOURCES
   gnc-plugin-budget.c
   gnc-plugin-business.c
   gnc-plugin-register.c
-  gnc-plugin-register2.c
   gnc-plugin-report-system.c
   gnc-plugin-page-account-tree.c
   gnc-plugin-page-budget.c
   gnc-plugin-page-invoice.c
   gnc-plugin-page-owner-tree.c
   gnc-plugin-page-register.c
-  gnc-plugin-page-register2.c
   gnc-plugin-page-report.c
   gnc-plugin-page-sx-list.c
   gnc-split-reg.c
-  gnc-split-reg2.c
   reconcile-view.c
   search-owner.c
   top-level.c
   window-reconcile.c
-  window-reconcile2.c
   window-report.c
   window-autoclear.c
 )

@@ -52,11 +52,6 @@
 #include "Split.h"
 #include "Transaction.h"
 #include "dialog-sx-editor.h"
-#ifdef REGISTER2_ENABLED
-/*################## Added for Reg2 #################*/
-#include "dialog-sx-editor2.h"
-/*################## Added for Reg2 #################*/
-#endif
 #include "dialog-utils.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
@@ -124,12 +119,6 @@ static void gppsl_row_activated_cb (GtkTreeView *tree_view, GtkTreePath *path, G
 
 static void gnc_plugin_page_sx_list_cmd_new (GtkAction *action, GncPluginPageSxList *page);
 static void gnc_plugin_page_sx_list_cmd_edit (GtkAction *action, GncPluginPageSxList *page);
-#ifdef REGISTER2_ENABLED
-/*################## Added for Reg2 #################*/
-static void gnc_plugin_page_sx_list_cmd_new2 (GtkAction *action, GncPluginPageSxList *page);
-static void gnc_plugin_page_sx_list_cmd_edit2 (GtkAction *action, GncPluginPageSxList *page);
-/*################## Added for Reg2 #################*/
-#endif
 static void gnc_plugin_page_sx_list_cmd_delete (GtkAction *action, GncPluginPageSxList *page);
 static void gnc_plugin_page_sx_list_cmd_refresh (GtkAction *action, GncPluginPageSxList *page);
 
@@ -141,26 +130,10 @@ static GtkActionEntry gnc_plugin_page_sx_list_actions [] =
         "SxListNewAction", GNC_ICON_NEW_ACCOUNT, N_("_New"), NULL,
         N_("Create a new scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_new)
     },
-#ifdef REGISTER2_ENABLED
-/*################## Added for Reg2 #################*/
-    {
-        "SxListNewAction2", GNC_ICON_NEW_ACCOUNT, N_("_New 2"), NULL,
-        N_("Create a new scheduled transaction 2"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_new2)
-    },
-/*################## Added for Reg2 #################*/
-#endif
     {
         "SxListEditAction", GNC_ICON_EDIT_ACCOUNT, N_("_Edit"), NULL,
         N_("Edit the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_edit)
     },
-#ifdef REGISTER2_ENABLED
-/*################## Added for Reg2 #################*/
-    {
-        "SxListEditAction2", GNC_ICON_EDIT_ACCOUNT, N_("_Edit 2"), NULL,
-        N_("Edit the selected scheduled transaction 2"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_edit2)
-    },
-/*################## Added for Reg2 #################*/
-#endif
     {
         "SxListDeleteAction", GNC_ICON_DELETE_ACCOUNT, N_("_Delete"), NULL,
         N_("Delete the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_delete)
@@ -243,19 +216,11 @@ gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page)
 
     /* Init parent declared variables */
     parent = GNC_PLUGIN_PAGE(plugin_page);
-#ifdef REGISTER2_ENABLED
-    g_object_set(G_OBJECT(plugin_page),
-                 "page-name",      _("Scheduled Transactions"),
-                 "page-uri",       "default:",
-                 "ui-description", "gnc-plugin-page-sx-list2-ui.xml",
-                 NULL);
-#else
     g_object_set(G_OBJECT(plugin_page),
                  "page-name",      _("Scheduled Transactions"),
                  "page-uri",       "default:",
                  "ui-description", "gnc-plugin-page-sx-list-ui.xml",
                  NULL);
-#endif
 
     gnc_plugin_page_add_book (parent, gnc_get_current_book());
     action_group =
@@ -684,33 +649,6 @@ gnc_plugin_page_sx_list_cmd_new (GtkAction *action, GncPluginPageSxList *page)
     gppsl_update_selected_list (page, TRUE, new_sx);
 }
 
-#ifdef REGISTER2_ENABLED
-/*################## Added for Reg2 #################*/
-static void
-gnc_plugin_page_sx_list_cmd_new2 (GtkAction *action, GncPluginPageSxList *page)
-{
-    GtkWindow *window = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page)));
-    SchedXaction *new_sx;
-    gboolean new_sx_flag = TRUE;
-
-    new_sx = xaccSchedXactionMalloc (gnc_get_current_book());
-    {
-        GDate now;
-        Recurrence *r = g_new0 (Recurrence, 1);
-        GList *schedule;
-
-        g_date_clear (&now, 1);
-        gnc_gdate_set_today (&now);
-        recurrenceSet (r, 1, PERIOD_MONTH, &now, WEEKEND_ADJ_NONE);
-        schedule = gnc_sx_get_schedule (new_sx);
-        schedule = g_list_append (schedule, r);
-        gnc_sx_set_schedule (new_sx, schedule);
-    }
-    gnc_ui_scheduled_xaction_editor_dialog_create2 (window, new_sx, new_sx_flag);
-}
-/*################## Added for Reg2 #################*/
-#endif
-
 static void
 gnc_plugin_page_sx_list_cmd_refresh (GtkAction *action, GncPluginPageSxList *page)
 {
@@ -728,17 +666,6 @@ _edit_sx(gpointer data, gpointer user_data)
     gnc_ui_scheduled_xaction_editor_dialog_create (GTK_WINDOW(user_data),
         (SchedXaction*)data, FALSE);
 }
-
-#ifdef REGISTER2_ENABLED
-/*################## Added for Reg2 #################*/
-static void
-_edit_sx2 (gpointer data, gpointer user_data)
-{
-    gnc_ui_scheduled_xaction_editor_dialog_create2 (GTK_WINDOW(user_data),
-        (SchedXaction*)data, FALSE);
-}
-/*################## Added for Reg2 #################*/
-#endif
 
 static SchedXaction*
 _argument_reorder_fn (GtkTreePath* list_path_data, GncTreeViewSxList* user_tree_view)
@@ -780,36 +707,6 @@ gnc_plugin_page_sx_list_cmd_edit (GtkAction *action, GncPluginPageSxList *page)
     g_list_foreach (selected_paths, (GFunc)gtk_tree_path_free, NULL);
     g_list_free (selected_paths);
 }
-
-#ifdef REGISTER2_ENABLED
-/*################## Added for Reg2 #################*/
-static void
-gnc_plugin_page_sx_list_cmd_edit2 (GtkAction *action, GncPluginPageSxList *page)
-{
-    GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
-    GtkWindow *window = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page)));
-    GtkTreeSelection *selection;
-    GList *selected_paths, *to_edit;
-    GtkTreeModel *model;
-
-    selection = gtk_tree_view_get_selection (priv->tree_view);
-    selected_paths = gtk_tree_selection_get_selected_rows (selection, &model);
-    if (!gnc_list_length_cmp (selected_paths, 0))
-    {
-        g_warning ("no selection edit.");
-        return;
-    }
-
-    to_edit = gnc_g_list_map (selected_paths,
-                             (GncGMapFunc)_argument_reorder_fn,
-                              priv->tree_view);
-    g_list_foreach (to_edit, (GFunc)_edit_sx2, window);
-    g_list_free (to_edit);
-    g_list_foreach (selected_paths, (GFunc)gtk_tree_path_free, NULL);
-    g_list_free (selected_paths);
-}
-/*################## Added for Reg2 #################*/
-#endif
 
 static void
 gppsl_row_activated_cb (GtkTreeView *tree_view,

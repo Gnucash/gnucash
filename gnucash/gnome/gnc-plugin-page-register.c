@@ -42,11 +42,6 @@
 #include "guile-mappings.h"
 
 #include "gnc-plugin-page-register.h"
-#ifdef REGISTER2_ENABLED   
-/*################## Added for Reg2 #################*/
-#include "gnc-plugin-page-register2.h"
-/*################## Added for Reg2 #################*/
-#endif
 #include "gnc-plugin-register.h"
 #include "gnc-plugin-menu-additions.h"
 #include "gnc-plugin-page-report.h"
@@ -804,38 +799,9 @@ gnc_plugin_page_register_new (Account* account, gboolean subaccounts)
     gnc_commodity* com0;
     gnc_commodity* com1;
 
-#ifdef REGISTER2_ENABLED   
-    /*################## Added for Reg2 #################*/
-    const GList* item;
-    GncPluginPageRegister2*  new_register_page;
-    /*################## Added for Reg2 #################*/
-#endif
-
     ENTER ("account=%p, subaccounts=%s", account,
            subaccounts ? "TRUE" : "FALSE");
 
-#ifdef REGISTER2_ENABLED   
-    /*################## Added for Reg2 #################*/
-    // We test for the new register being open here, ie matching account guids
-    item = gnc_gobject_tracking_get_list (GNC_PLUGIN_PAGE_REGISTER2_NAME);
-    for (; item; item = g_list_next (item))
-    {
-        Account* new_account;
-        new_register_page = (GncPluginPageRegister2*)item->data;
-        new_account = gnc_plugin_page_register2_get_account (new_register_page);
-
-        if (guid_equal (xaccAccountGetGUID (account),
-                        xaccAccountGetGUID (new_account)))
-        {
-            GtkWindow* window = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (
-                    new_register_page)));
-            gnc_error_dialog (window, "%s",
-                              _ ("You have tried to open an account in the old register while it is open in the new register."));
-            return NULL;
-        }
-    }
-    /*################## Added for Reg2 #################*/
-#endif
     com0 = gnc_account_get_currency_or_parent (account);
     com1 = gnc_account_foreach_descendant_until (account,
                                                  gnc_plug_page_register_check_commodity, com0);

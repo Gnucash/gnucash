@@ -64,7 +64,6 @@ gnucash/gnome/dialog-doclink.c
 gnucash/gnome/dialog-employee.c
 gnucash/gnome/dialog-fincalc.c
 gnucash/gnome/dialog-find-account.c
-gnucash/gnome/dialog-find-transactions2.c
 gnucash/gnome/dialog-find-transactions.c
 gnucash/gnome/dialog-imap-editor.c
 gnucash/gnome/dialog-invoice.c
@@ -79,7 +78,6 @@ gnucash/gnome/dialog-print-check.c
 gnucash/gnome/dialog-progress.c
 gnucash/gnome/dialog-report-column-view.c
 gnucash/gnome/dialog-report-style-sheet.c
-gnucash/gnome/dialog-sx-editor2.c
 gnucash/gnome/dialog-sx-editor.c
 gnucash/gnome/dialog-sx-from-trans.c
 gnucash/gnome/dialog-sx-since-last-run.c
@@ -94,14 +92,11 @@ gnucash/gnome/gnc-plugin-page-account-tree.c
 gnucash/gnome/gnc-plugin-page-budget.c
 gnucash/gnome/gnc-plugin-page-invoice.c
 gnucash/gnome/gnc-plugin-page-owner-tree.c
-gnucash/gnome/gnc-plugin-page-register2.c
 gnucash/gnome/gnc-plugin-page-register.c
 gnucash/gnome/gnc-plugin-page-report.c
 gnucash/gnome/gnc-plugin-page-sx-list.c
-gnucash/gnome/gnc-plugin-register2.c
 gnucash/gnome/gnc-plugin-register.c
 gnucash/gnome/gnc-plugin-report-system.c
-gnucash/gnome/gnc-split-reg2.c
 gnucash/gnome/gnc-split-reg.c
 gnucash/gnome/gnucash.appdata.xml.in.in
 gnucash/gnome/gnucash.desktop.in.in
@@ -110,7 +105,6 @@ gnucash/gnome/report-menus.scm
 gnucash/gnome/search-owner.c
 gnucash/gnome/top-level.c
 gnucash/gnome/window-autoclear.c
-gnucash/gnome/window-reconcile2.c
 gnucash/gnome/window-reconcile.c
 gnucash/gnome/window-report.c
 gnucash/gnome-search/dialog-search.c
@@ -187,7 +181,6 @@ gnucash/gnome-utils/gnc-recurrence.c
 gnucash/gnome-utils/gnc-splash.c
 gnucash/gnome-utils/gnc-sx-instance-dense-cal-adapter.c
 gnucash/gnome-utils/gnc-sx-list-tree-model-adapter.c
-gnucash/gnome-utils/gnc-tree-control-split-reg.c
 gnucash/gnome-utils/gnc-tree-model-account.c
 gnucash/gnome-utils/gnc-tree-model-account-types.c
 gnucash/gnome-utils/gnc-tree-model-budget.c
@@ -195,14 +188,11 @@ gnucash/gnome-utils/gnc-tree-model.c
 gnucash/gnome-utils/gnc-tree-model-commodity.c
 gnucash/gnome-utils/gnc-tree-model-owner.c
 gnucash/gnome-utils/gnc-tree-model-price.c
-gnucash/gnome-utils/gnc-tree-model-split-reg.c
-gnucash/gnome-utils/gnc-tree-util-split-reg.c
 gnucash/gnome-utils/gnc-tree-view-account.c
 gnucash/gnome-utils/gnc-tree-view.c
 gnucash/gnome-utils/gnc-tree-view-commodity.c
 gnucash/gnome-utils/gnc-tree-view-owner.c
 gnucash/gnome-utils/gnc-tree-view-price.c
-gnucash/gnome-utils/gnc-tree-view-split-reg.c
 gnucash/gnome-utils/gnc-tree-view-sx-list.c
 gnucash/gnome-utils/gnc-window.c
 gnucash/gnome-utils/gnome-utils.scm
@@ -290,7 +280,6 @@ gnucash/gtkbuilder/dialog-vendor.glade
 gnucash/gtkbuilder/gnc-date-format.glade
 gnucash/gtkbuilder/gnc-frequency.glade
 gnucash/gtkbuilder/gnc-plugin-page-budget.glade
-gnucash/gtkbuilder/gnc-plugin-page-register2.glade
 gnucash/gtkbuilder/gnc-plugin-page-register.glade
 gnucash/gtkbuilder/gnc-recurrence.glade
 gnucash/gtkbuilder/gnc-tree-view-owner.glade
@@ -393,7 +382,6 @@ gnucash/register/ledger-core/gncEntryLedgerDisplay.c
 gnucash/register/ledger-core/gncEntryLedgerLayout.c
 gnucash/register/ledger-core/gncEntryLedgerLoad.c
 gnucash/register/ledger-core/gncEntryLedgerModel.c
-gnucash/register/ledger-core/gnc-ledger-display2.c
 gnucash/register/ledger-core/gnc-ledger-display.c
 gnucash/register/ledger-core/split-register.c
 gnucash/register/ledger-core/split-register-control.c

@@ -295,9 +295,6 @@
 /* Name of package containing qt3-wizard. */
 #define QT3_WIZARD_PACKAGE "aqbanking"
 
-/* We are not using Register2 */
-#cmakedefine REGISTER2_ENABLED 1
-
 /* Define to 1 if you have the ANSI C header files. */
 #cmakedefine STDC_HEADERS 1
 

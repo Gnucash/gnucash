@@ -1372,22 +1372,6 @@ gnc_preferences_dialog_create (GtkWindow *parent)
     /* parent */
     gtk_window_set_transient_for (GTK_WINDOW(dialog), GTK_WINDOW(parent));
 
-#ifndef REGISTER2_ENABLED
-    /* Hide preferences that are related to register2 */
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "label14"));
-    gtk_widget_hide (box);
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/general.register/key-length"));
-    gtk_widget_hide (box);
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/general.register/show-extra-dates"));
-    gtk_widget_hide (box);
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/general.register/show-calendar-buttons"));
-    gtk_widget_hide (box);
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/general.register/selection-to-blank-on-expand"));
-    gtk_widget_hide (box);
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/general.register/show-extra-dates-on-selection"));
-    gtk_widget_hide (box);
-#endif
-
     label = GTK_WIDGET(gtk_builder_get_object (builder, "sample_account"));
     g_object_set_data (G_OBJECT(dialog), "sample_account", label);
 

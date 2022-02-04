@@ -31,11 +31,6 @@
 #include "assistant-csv-export.h"
 
 #include "gnc-plugin-page-register.h"
-#ifdef REGISTER2_ENABLED
-/*################## Added for Reg2 #################*/
-#include "gnc-plugin-page-register2.h"
-/*################## Added for Reg2 #################*/
-#endif
 #include "Query.h"
 
 static void gnc_plugin_csv_export_class_init (GncPluginCsvExportClass *klass);
@@ -158,17 +153,6 @@ gnc_plugin_csv_export_register_cmd (GtkAction *action,
         acc = gnc_plugin_page_register_get_account (GNC_PLUGIN_PAGE_REGISTER(page));
         gnc_file_csv_export_register (XML_EXPORT_REGISTER, query, acc);
     }
-
-#ifdef REGISTER2_ENABLED
-/*################## Added for Reg2 #################*/
-    if (GNC_IS_PLUGIN_PAGE_REGISTER2(page))
-    {
-        query = gnc_plugin_page_register2_get_query (page);
-        acc = gnc_plugin_page_register2_get_account (GNC_PLUGIN_PAGE_REGISTER2(page));
-        gnc_file_csv_export_register (XML_EXPORT_REGISTER, query, acc);
-    }
-/*################## Added for Reg2 #################*/
-#endif
 }
 
 /************************************************************

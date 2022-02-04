@@ -56,15 +56,9 @@
 #include "gnc-plugin-basic-commands.h" /* FIXME Remove this line*/
 #include "gnc-plugin-file-history.h" /* FIXME Remove this line*/
 #include "gnc-plugin-register.h" /* FIXME Remove this line*/
-#ifdef REGISTER2_ENABLED
-#include "gnc-plugin-register2.h" /* FIXME Remove this line*/
-#endif
 #include "gnc-plugin-budget.h"
 #include "gnc-plugin-business.h"
 #include "gnc-plugin-page-register.h"
-#ifdef REGISTER2_ENABLED
-#include "gnc-plugin-page-register2.h"
-#endif
 #include "gnc-plugin-manager.h" /* FIXME Remove this line*/
 #include "gnc-html.h"
 #include "gnc-gnome-utils.h"
@@ -438,10 +432,6 @@ gnc_main_gui_init (void)
         gnc_plugin_manager_get (), gnc_plugin_menu_additions_new ());
     gnc_plugin_manager_add_plugin (
         gnc_plugin_manager_get (), gnc_plugin_register_new ());
-#ifdef  REGISTER2_ENABLED
-    gnc_plugin_manager_add_plugin (
-        gnc_plugin_manager_get (), gnc_plugin_register2_new ());
-#endif
     gnc_plugin_manager_add_plugin (
         gnc_plugin_manager_get (), gnc_plugin_business_new ());
     /* I'm not sure why the FIXME note says to remove this.  Maybe

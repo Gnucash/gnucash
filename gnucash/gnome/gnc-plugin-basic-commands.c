@@ -44,9 +44,6 @@
 #include "dialog-file-access.h"
 #include "dialog-fincalc.h"
 #include "dialog-find-transactions.h"
-#ifdef REGISTER2_ENABLED
-#include "dialog-find-transactions2.h"
-#endif
 #include "dialog-imap-editor.h"
 #include "dialog-sx-since-last-run.h"
 #include "dialog-totd.h"

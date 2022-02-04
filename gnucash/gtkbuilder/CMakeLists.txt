@@ -56,7 +56,6 @@ set (gtkbuilder_SOURCES
         gnc-date-format.glade
         gnc-frequency.glade
         gnc-plugin-page-budget.glade
-        gnc-plugin-page-register2.glade
         gnc-plugin-page-register.glade
         gnc-recurrence.glade
         gnc-tree-view-owner.glade

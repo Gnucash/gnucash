@@ -36,11 +36,6 @@
 @define-color default-color currentColor;
 @define-color negative-numbers rgb(75%, 0%, 0%);
 
-/* Register2 grid lines color */
-.gnc-class-register2-grid-lines {
-  border-color: black;
-}
-
 /* Make some labels more important */
 .gnc-class-underline-title {
 font-size: large;
