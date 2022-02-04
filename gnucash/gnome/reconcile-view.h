@@ -67,6 +67,8 @@ struct GNCReconcileView
     GNCReconcileView    *sibling;
     GNCReconcileViewType view_type;
     gboolean             no_toggle;
+
+    GtkTreeRowReference *rowref;
 };
 
 typedef struct

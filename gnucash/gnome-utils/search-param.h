@@ -184,6 +184,9 @@ void gnc_search_param_set_param_fcn (GNCSearchParamSimple *param,
                                      GNCSearchParamFcn fcn,
                                      gpointer arg);
 
+/* check to see if this parameter is a lookup function */
+gboolean gnc_search_param_has_param_fcn (GNCSearchParamSimple *param);
+
 /* Compute the value of this parameter for this object */
 gpointer gnc_search_param_compute_value (GNCSearchParamSimple *param,
                                          gpointer object);

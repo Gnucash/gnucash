@@ -691,6 +691,13 @@ gnc_query_view_set_query_sort (GNCQueryView *qview, gboolean new_column)
 
     g_assert (GNC_IS_SEARCH_PARAM_SIMPLE(param));
 
+    /* If param values are based on a param function, sorting is not possible */
+    if (gnc_search_param_has_param_fcn (param))
+    {
+        gnc_query_view_refresh (qview);
+        return;
+    }
+
     /* If we're asked to invert numerics, and if this is a numeric or
      * debred column, then invert the sort order.
      */

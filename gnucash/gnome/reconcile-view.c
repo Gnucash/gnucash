@@ -315,17 +315,58 @@ gnc_reconcile_view_construct (GNCReconcileView *view, Query *query)
                       G_CALLBACK(gnc_reconcile_view_tooltip_cb), view);
 }
 
+static gint
+sort_date_helper (time64 date_a, time64 date_b)
+{
+    gint ret = 0;
+
+    if (date_a < date_b)
+        ret = -1;
+    else if (date_a > date_b)
+        ret = 1;
+
+    return ret;
+}
+
+static gint
+sort_iter_compare_func (GtkTreeModel *model,
+                        GtkTreeIter  *a,
+                        GtkTreeIter  *b,
+                        gpointer      user_data)
+{
+    gboolean rec_a, rec_b;
+    Split   *split_a, *split_b;
+    time64   date_a, date_b;
+    gint     ret = 0;
+
+    gtk_tree_model_get (model, a, REC_POINTER, &split_a, REC_RECN, &rec_a, -1);
+    gtk_tree_model_get (model, b, REC_POINTER, &split_b, REC_RECN, &rec_b, -1);
+
+    date_a = xaccTransGetDate (xaccSplitGetParent (split_a));
+    date_b = xaccTransGetDate (xaccSplitGetParent (split_b));
+
+    if (rec_a > rec_b)
+        ret = -1;
+    else if (rec_b > rec_a)
+        ret = 1;
+    else ret = sort_date_helper (date_a, date_b);
+
+    return ret;
+}
+
 GtkWidget *
 gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
                         time64 statement_date)
 {
-    GNCReconcileView *view;
-    GtkListStore     *liststore;
-    gboolean          include_children, auto_check;
-    GList            *accounts = NULL;
-    GList            *splits;
-    Query            *query;
-    QofNumericMatch   sign;
+    GNCReconcileView  *view;
+    GtkListStore      *liststore;
+    GtkTreeSortable   *sortable;
+    GtkTreeViewColumn *col;
+    gboolean           include_children, auto_check;
+    GList             *accounts = NULL;
+    GList             *splits;
+    Query             *query;
+    QofNumericMatch    sign;
 
     g_return_val_if_fail (account, NULL);
     g_return_val_if_fail ((type == RECLIST_DEBIT) ||
@@ -391,6 +432,13 @@ gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
                 g_hash_table_insert (view->reconciled, split, split);
         }
     }
+
+    /* set up a separate sort function for the recn column as it is
+     * derived from a search function */
+    sortable = GTK_TREE_SORTABLE(gtk_tree_view_get_model (GTK_TREE_VIEW(view)));
+    col = gtk_tree_view_get_column (GTK_TREE_VIEW(view), REC_RECN -1);
+    gtk_tree_sortable_set_sort_func (sortable, REC_RECN, sort_iter_compare_func,
+                                     GINT_TO_POINTER (REC_RECN), NULL);
 
     /* Free the query -- we don't need it anymore */
     qof_query_destroy (query);
@@ -519,6 +567,28 @@ gnc_reconcile_view_toggle (GNCReconcileView *view, Split *split)
                    reconcile_view_signals[TOGGLE_RECONCILED], 0, split);
 }
 
+static gboolean
+follow_select_tree_path (GNCReconcileView *view)
+{
+    if (view->rowref)
+    {
+        GtkTreePath      *tree_path = gtk_tree_row_reference_get_path (view->rowref);
+        GNCQueryView      qview = view->qview;
+        GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(&qview));
+
+        gtk_tree_selection_unselect_all (selection);
+        gtk_tree_selection_select_path (selection, tree_path);
+
+        gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(&qview),
+                                      tree_path, NULL, FALSE, 0.0, 0.0);
+
+        gtk_tree_path_free (tree_path);
+        gtk_tree_row_reference_free (view->rowref);
+        view->rowref = NULL;
+    }
+    return FALSE;
+}
+
 static void
 gnc_reconcile_view_line_toggled (GNCQueryView *qview,
                                  gpointer item,
@@ -528,6 +598,7 @@ gnc_reconcile_view_line_toggled (GNCQueryView *qview,
     GtkTreeModel     *model;
     GtkTreeIter       iter;
     gpointer          entry;
+    GtkTreePath      *tree_path;
 
     g_return_if_fail (user_data);
     g_return_if_fail (GNC_IS_QUERY_VIEW(qview));
@@ -536,10 +607,32 @@ gnc_reconcile_view_line_toggled (GNCQueryView *qview,
 
     model = gtk_tree_view_get_model (GTK_TREE_VIEW(qview));
     gtk_tree_model_iter_nth_child (model, &iter, NULL, qview->toggled_row);
-    gtk_list_store_set (GTK_LIST_STORE(model), &iter, qview->toggled_column, GPOINTER_TO_INT(item), -1);
-    gtk_tree_model_get (model, &iter, REC_POINTER, &entry, -1);
 
-    gnc_reconcile_view_toggle (view, entry);
+    tree_path = gtk_tree_model_get_path (model, &iter);
+    view->rowref = gtk_tree_row_reference_new (model, tree_path);
+    gtk_tree_path_free (tree_path);
+
+    gtk_list_store_set (GTK_LIST_STORE(model), &iter, qview->toggled_column,
+                                                      GPOINTER_TO_INT(item), -1);
+
+    tree_path = gtk_tree_row_reference_get_path (view->rowref);
+
+    if (gtk_tree_model_get_iter (model, &iter, tree_path))
+    {
+        gtk_tree_model_get (model, &iter, REC_POINTER, &entry, -1);
+        gnc_reconcile_view_toggle (view, entry);
+    }
+
+    // See if sorting on rec column, -1 to allow for the model pointer column at 0
+    if (qview->sort_column == REC_RECN - 1)
+        g_idle_add ((GSourceFunc)follow_select_tree_path, view);
+    else
+    {
+        gtk_tree_row_reference_free (view->rowref);
+        view->rowref = NULL;
+    }
+
+    gtk_tree_path_free (tree_path);
 }
 
 static void
@@ -586,16 +679,30 @@ gnc_reconcile_view_set_list (GNCReconcileView  *view, gboolean reconcile)
     gboolean           toggled;
     GList             *node;
     GList             *list_of_rows;
+    GList             *rr_list = NULL;
+    GtkTreePath       *last_tree_path = NULL;
 
     model =  gtk_tree_view_get_model (GTK_TREE_VIEW(qview));
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(qview));
     list_of_rows = gtk_tree_selection_get_selected_rows (selection, &model);
 
-    /* We get a list of TreePaths */
+    /* First create a list of Row references */
     for (node = list_of_rows; node; node = node->next)
     {
-        GtkTreeIter iter;
-        if (gtk_tree_model_get_iter(model, &iter, node->data))
+        GtkTreeRowReference *rowref = gtk_tree_row_reference_new (model, node->data);
+        rr_list = g_list_append (rr_list, rowref);
+        gtk_tree_path_free (node->data);
+    }
+
+    for (node = rr_list; node; node = node->next)
+    {
+        GtkTreeIter          iter;
+        GtkTreePath         *path;
+        GtkTreeRowReference *rowref = node->data;
+
+        path = gtk_tree_row_reference_get_path (rowref);
+
+        if (gtk_tree_model_get_iter (model, &iter, path))
         {
             /* now iter is a valid row iterator */
             gtk_tree_model_get (model, &iter, REC_POINTER, &entry,
@@ -603,11 +710,30 @@ gnc_reconcile_view_set_list (GNCReconcileView  *view, gboolean reconcile)
 
             gtk_list_store_set (GTK_LIST_STORE(model), &iter, REC_RECN, reconcile, -1);
 
+            if (last_tree_path)
+                gtk_tree_path_free (last_tree_path);
+            last_tree_path = gtk_tree_row_reference_get_path (rowref);
+
             if (reconcile != toggled)
                 gnc_reconcile_view_toggle (view, entry);
         }
-        gtk_tree_path_free (node->data);
+        gtk_tree_path_free (path);
     }
+
+    if (last_tree_path)
+    {
+        // See if sorting on rec column, -1 to allow for the model pointer column at 0
+        if (qview->sort_column == REC_RECN -1)
+        {
+            gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(qview),
+                                          last_tree_path, NULL, FALSE, 0.0, 0.0);
+        }
+        gtk_tree_path_free (last_tree_path);
+        last_tree_path = NULL;
+    }
+    g_list_foreach (rr_list, (GFunc) gtk_tree_row_reference_free, NULL);
+    g_list_free (rr_list);
+
     // Out of site toggles on selected rows may not appear correctly drawn so
     // queue a draw for the treeview widget
     gtk_widget_queue_draw (GTK_WIDGET(qview));

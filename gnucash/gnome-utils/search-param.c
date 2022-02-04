@@ -538,6 +538,22 @@ gnc_search_param_set_param_fcn (GNCSearchParamSimple *param,
     gnc_search_param_override_param_type (param, param_type);
 }
 
+gboolean
+gnc_search_param_has_param_fcn (GNCSearchParamSimple *param)
+{
+    GNCSearchParamSimplePrivate *priv;
+
+    g_return_val_if_fail (param, FALSE);
+    g_return_val_if_fail (GNC_IS_SEARCH_PARAM_SIMPLE(param), FALSE);
+
+    priv = GNC_SEARCH_PARAM_SIMPLE_GET_PRIVATE(param);
+
+    if (priv->lookup_fcn)
+        return TRUE;
+
+    return FALSE;
+}
+
 /* Compute the value of this parameter for this object */
 gpointer
 gnc_search_param_compute_value (GNCSearchParamSimple *param, gpointer object)
