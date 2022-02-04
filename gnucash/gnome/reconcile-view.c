@@ -876,14 +876,12 @@ gnc_reconcile_view_is_reconciled (gpointer item, gpointer user_data)
  * Args: view - view to refresh                                     *
  * Returns: nothing                                                 *
 \********************************************************************/
-static void
+static gboolean
 grv_refresh_helper (gpointer key, gpointer value, gpointer user_data)
 {
-    GNCReconcileView *view = user_data;
-    GNCQueryView     *qview = GNC_QUERY_VIEW(view);
+    GNCQueryView     *qview = user_data;
 
-    if (!gnc_query_view_item_in_view (qview, key))
-        g_hash_table_remove (view->reconciled, key);
+    return !gnc_query_view_item_in_view (qview, key);
 }
 
 void
@@ -902,7 +900,7 @@ gnc_reconcile_view_refresh (GNCReconcileView *view)
 
     /* Now verify that everything in the reconcile hash is still in qview */
     if (view->reconciled)
-        g_hash_table_foreach (view->reconciled, grv_refresh_helper, view);
+        g_hash_table_foreach_remove (view->reconciled, grv_refresh_helper, qview);
 }
 
 /********************************************************************\
