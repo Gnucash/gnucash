@@ -24,22 +24,22 @@
 #define _GNCSEARCH_PARAM_H
 
 
-#define GNC_TYPE_SEARCH_PARAM	 (gnc_search_param_get_type ())
-#define GNC_SEARCH_PARAM(o)	 (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_SEARCH_PARAM, GNCSearchParam))
+#define GNC_TYPE_SEARCH_PARAM    (gnc_search_param_get_type ())
+#define GNC_SEARCH_PARAM(o)      (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_SEARCH_PARAM, GNCSearchParam))
 #define GNCSEARCH_PARAM_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_SEARCH_PARAM, GNCSearchParamClass)
-#define GNC_IS_SEARCH_PARAM(o)	 (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SEARCH_PARAM))
+#define GNC_IS_SEARCH_PARAM(o)   (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SEARCH_PARAM))
 
-typedef struct _GNCSearchParam	GNCSearchParam;
-typedef struct _GNCSearchParamClass	GNCSearchParamClass;
+typedef struct _GNCSearchParam  GNCSearchParam;
+typedef struct _GNCSearchParamClass GNCSearchParamClass;
 
 struct _GNCSearchParam
 {
     GObject gobject;
 
-    const char *		title;
-    GtkJustification	justify;
-    gboolean		passive;
-    gboolean		non_resizeable;
+    const char *        title;
+    GtkJustification    justify;
+    gboolean            passive;
+    gboolean            non_resizeable;
 };
 
 struct _GNCSearchParamClass
@@ -51,15 +51,15 @@ struct _GNCSearchParamClass
     /* signals */
 };
 
-#define GNC_TYPE_SEARCH_PARAM_SIMPLE	 (gnc_search_param_simple_get_type ())
-#define GNC_SEARCH_PARAM_SIMPLE(o)	 \
+#define GNC_TYPE_SEARCH_PARAM_SIMPLE (gnc_search_param_simple_get_type ())
+#define GNC_SEARCH_PARAM_SIMPLE(o) \
     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_SEARCH_PARAM_SIMPLE, GNCSearchParamSimple))
 #define GNCSEARCH_PARAM_SIMPLE_CLASS(k) \
     (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_SEARCH_PARAM_SIMPLE, GNCSearchParamSimpleClass)
-#define GNC_IS_SEARCH_PARAM_SIMPLE(o)	 (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SEARCH_PARAM_SIMPLE))
+#define GNC_IS_SEARCH_PARAM_SIMPLE(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SEARCH_PARAM_SIMPLE))
 
-typedef struct _GNCSearchParamSimple	GNCSearchParamSimple;
-typedef struct _GNCSearchParamSimpleClass	GNCSearchParamSimpleClass;
+typedef struct _GNCSearchParamSimple      GNCSearchParamSimple;
+typedef struct _GNCSearchParamSimpleClass GNCSearchParamSimpleClass;
 
 struct _GNCSearchParamSimple
 {
@@ -75,15 +75,15 @@ struct _GNCSearchParamSimpleClass
     /* signals */
 };
 
-#define GNC_TYPE_SEARCH_PARAM_COMPOUND	 (gnc_search_param_compound_get_type ())
-#define GNC_SEARCH_PARAM_COMPOUND(o)	 \
+#define GNC_TYPE_SEARCH_PARAM_COMPOUND (gnc_search_param_compound_get_type ())
+#define GNC_SEARCH_PARAM_COMPOUND(o) \
     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_SEARCH_PARAM_COMPOUND, GNCSearchParamCompound))
 #define GNCSEARCH_PARAM_COMPOUND_CLASS(k) \
     (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_SEARCH_PARAM_COMPOUND, GNCSearchParamCompoundClass)
-#define GNC_IS_SEARCH_PARAM_COMPOUND(o)	 (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SEARCH_PARAM_COMPOUND))
+#define GNC_IS_SEARCH_PARAM_COMPOUND(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SEARCH_PARAM_COMPOUND))
 
-typedef struct _GNCSearchParamCompound	GNCSearchParamCompound;
-typedef struct _GNCSearchParamCompoundClass	GNCSearchParamCompoundClass;
+typedef struct _GNCSearchParamCompound      GNCSearchParamCompound;
+typedef struct _GNCSearchParamCompoundClass GNCSearchParamCompoundClass;
 
 struct _GNCSearchParamCompound
 {
@@ -107,40 +107,40 @@ typedef enum
 } GNCSearchParamKind;
 
 /* These are internal functions */
-GType			gnc_search_param_get_type (void);
-GType			gnc_search_param_simple_get_type (void);
-GType			gnc_search_param_compound_get_type (void);
+GType gnc_search_param_get_type (void);
+GType gnc_search_param_simple_get_type (void);
+GType gnc_search_param_compound_get_type (void);
 
 /* Create a new search param */
-GNCSearchParamSimple *	gnc_search_param_simple_new (void);
-GNCSearchParamCompound *	gnc_search_param_compound_new (void);
+GNCSearchParamSimple * gnc_search_param_simple_new (void);
+GNCSearchParamCompound * gnc_search_param_compound_new (void);
 
 /* use the param_path for this parameter.  This will automatically
  * compute the parameter type and the converter functions.
  */
-void			gnc_search_param_set_param_path (GNCSearchParamSimple *param,
-        QofIdTypeConst search_type,
-        GSList *param_path);
+void gnc_search_param_set_param_path (GNCSearchParamSimple *param,
+                                      QofIdTypeConst search_type,
+                                      GSList *param_path);
 
 /* List is property of the caller */
-GList *         gnc_search_param_get_search (GNCSearchParamCompound *param);
-GSList *		gnc_search_param_get_param_path (GNCSearchParamSimple *param);
-QofIdTypeConst		gnc_search_param_get_param_type (GNCSearchParam *param);
-void			gnc_search_param_set_title (GNCSearchParam *param,
-        const char *title);
+GList * gnc_search_param_get_search (GNCSearchParamCompound *param);
+GSList * gnc_search_param_get_param_path (GNCSearchParamSimple *param);
+QofIdTypeConst gnc_search_param_get_param_type (GNCSearchParam *param);
+void gnc_search_param_set_title (GNCSearchParam *param,
+                                 const char *title);
 GNCSearchParamKind gnc_search_param_get_kind (GNCSearchParam *param);
-void			gnc_search_param_set_justify (GNCSearchParam *param,
-        GtkJustification justify);
-void			gnc_search_param_set_passive (GNCSearchParam *param,
-        gboolean value);
-void			gnc_search_param_set_non_resizeable (GNCSearchParam *param,
-        gboolean value);
-gboolean		gnc_search_param_type_match (GNCSearchParam *a,
-        GNCSearchParam *b);
+void gnc_search_param_set_justify (GNCSearchParam *param,
+                                   GtkJustification justify);
+void gnc_search_param_set_passive (GNCSearchParam *param,
+                                   gboolean value);
+void gnc_search_param_set_non_resizeable (GNCSearchParam *param,
+                                          gboolean value);
+gboolean gnc_search_param_type_match (GNCSearchParam *a,
+                                      GNCSearchParam *b);
 
-/* Return the list of QofAccessFunc functions for this parameter.  This list
+/* Return the list of QofAccessFunc functions for this parameter. This list
  * is owned by the param object -- users should not change it */
-GSList *		gnc_search_param_get_converters (GNCSearchParamSimple *param);
+GSList * gnc_search_param_get_converters (GNCSearchParamSimple *param);
 
 /* This will override the automatic param_type logic from "set_param_path()"
  * so that the programmer can force a particular UI to appear for a given
@@ -148,31 +148,29 @@ GSList *		gnc_search_param_get_converters (GNCSearchParamSimple *param);
  * it could result in an invalid Query Term, where the path and the predicate
  * don't match types properly.
  */
-void			gnc_search_param_override_param_type (GNCSearchParamSimple *param,
-        QofIdTypeConst param_type);
-
+void gnc_search_param_override_param_type (GNCSearchParamSimple *param,
+                                           QofIdTypeConst param_type);
 
 /*************************************************************
  * Helper functions ..
  */
 
 /* Create a parameter and prepend it to a GSList */
-GList *			gnc_search_param_prepend (GList *list, char const *title,
-        QofIdTypeConst type_override,
-        QofIdTypeConst search_type,
-        const char *param, ...);
+GList * gnc_search_param_prepend (GList *list, char const *title,
+                                  QofIdTypeConst type_override,
+                                  QofIdTypeConst search_type,
+                                  const char *param, ...);
 
+GList * gnc_search_param_prepend_with_justify (GList *list, char const *title,
+                                               GtkJustification justify,
+                                               QofIdTypeConst type_override,
+                                               QofIdTypeConst search_type,
+                                               const char *param, ...);
 
-GList *			gnc_search_param_prepend_with_justify (GList *list, char const *title,
-        GtkJustification justify,
-        QofIdTypeConst type_override,
-        QofIdTypeConst search_type,
-        const char *param, ...);
-
-GList *         gnc_search_param_prepend_compound (GList *list, char const *title,
-                                   GList *param_list,
-                                   GtkJustification justify,
-                                   GNCSearchParamKind kind);
+GList * gnc_search_param_prepend_compound (GList *list, char const *title,
+                                           GList *param_list,
+                                           GtkJustification justify,
+                                           GNCSearchParamKind kind);
 
 /* set a lookup function for this parameter (in lieu of setting the
  * param path) if you want to specify a direct lookup function when
@@ -181,13 +179,13 @@ GList *         gnc_search_param_prepend_compound (GList *list, char const *titl
  * query-list.
  */
 typedef gpointer (*GNCSearchParamFcn)(gpointer object, gpointer arg);
-void		gnc_search_param_set_param_fcn (GNCSearchParamSimple *param,
-        QofIdTypeConst param_type,
-        GNCSearchParamFcn fcn,
-        gpointer arg);
+void gnc_search_param_set_param_fcn (GNCSearchParamSimple *param,
+                                     QofIdTypeConst param_type,
+                                     GNCSearchParamFcn fcn,
+                                     gpointer arg);
 
 /* Compute the value of this parameter for this object */
-gpointer gnc_search_param_compute_value (GNCSearchParamSimple *param, gpointer object);
-
+gpointer gnc_search_param_compute_value (GNCSearchParamSimple *param,
+                                         gpointer object);
 
 #endif /* _GNCSEARCH_PARAM_H */
