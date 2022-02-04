@@ -200,6 +200,8 @@ gnc_query_view_init (GNCQueryView *qview)
     qview->num_columns = 0;
     qview->column_params = NULL;
 
+    qview->use_scroll_to_selection = FALSE;
+
     qview->sort_column = 0;
     qview->increasing = FALSE;
 
@@ -604,6 +606,57 @@ gnc_query_view_get_selected_entry_list (GNCQueryView *qview)
     return acc_entries.entries;
 }
 
+void
+gnc_query_use_scroll_to_selection (GNCQueryView *qview, gboolean scroll)
+{
+    g_return_if_fail (qview != NULL);
+    g_return_if_fail (GNC_IS_QUERY_VIEW(qview));
+
+    qview->use_scroll_to_selection = scroll;
+}
+
+static void
+scroll_to_selection (GNCQueryView *qview, gboolean override_scroll)
+{
+    GtkTreeSelection  *selection;
+    GList *path_list, *node;
+
+    if (!qview->use_scroll_to_selection && !override_scroll)
+        return;
+
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(qview));
+
+    /* Ensure last selected item, if any, can be seen */
+    path_list = gtk_tree_selection_get_selected_rows (selection, NULL);
+    node = g_list_last (path_list);
+
+    if (node)
+    {
+        GtkTreePath *tree_path = node->data;
+        gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(qview),
+                                      tree_path, NULL, FALSE, 0.0, 0.0);
+    }
+    g_list_free_full (path_list, (GDestroyNotify) gtk_tree_path_free);
+}
+
+void
+gnc_query_scroll_to_selection (GNCQueryView *qview)
+{
+    g_return_if_fail (qview != NULL);
+    g_return_if_fail (GNC_IS_QUERY_VIEW(qview));
+
+    scroll_to_selection (qview, FALSE);
+}
+
+void
+gnc_query_force_scroll_to_selection (GNCQueryView *qview)
+{
+    g_return_if_fail (qview != NULL);
+    g_return_if_fail (GNC_IS_QUERY_VIEW(qview));
+
+    scroll_to_selection (qview, TRUE);
+}
+
 static void
 gnc_query_view_refresh_selected (GNCQueryView *qview, GList *old_entry)
 {
@@ -641,6 +694,7 @@ gnc_query_view_refresh_selected (GNCQueryView *qview, GList *old_entry)
                 valid = gtk_tree_model_iter_next (model, &iter);
             }
         }
+        gnc_query_scroll_to_selection (qview);
     }
 }
 

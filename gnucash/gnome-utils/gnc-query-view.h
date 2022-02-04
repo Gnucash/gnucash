@@ -52,6 +52,7 @@ struct _GNCQueryView
     /* Select information */
     gint        toggled_row;
     gint        toggled_column;
+    gboolean    use_scroll_to_selection;
 
     /* Column information */
     gint        num_columns;
@@ -117,6 +118,12 @@ void gnc_query_view_unselect_all (GNCQueryView *qview);
 gboolean gnc_query_view_item_in_view (GNCQueryView *qview, gpointer item);
 
 void gnc_query_sort_order (GNCQueryView *qview, gint column, GtkSortType order);
+
+void gnc_query_scroll_to_selection (GNCQueryView *qview);
+
+void gnc_query_force_scroll_to_selection (GNCQueryView *qview);
+
+void gnc_query_use_scroll_to_selection (GNCQueryView *qview, gboolean scroll);
 
 #ifdef __cplusplus
 }
