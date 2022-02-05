@@ -890,6 +890,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
  'menu-path (list gnc:menuname-business-reports)
  'options-generator (lambda () (options-generator 'invoice))
  'renderer reg-renderer
+ 'hook 'invoice
  'in-menu? #t)
 
 (gnc:define-report
@@ -899,6 +900,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
  'menu-path (list gnc:menuname-business-reports)
  'options-generator (lambda () (options-generator 'easy-invoice))
  'renderer reg-renderer
+ 'hook 'invoice
  'in-menu? #t)
 
 (gnc:define-report
@@ -908,5 +910,6 @@ for styling the invoice. Please see the exported report for the CSS class names.
  'menu-path (list gnc:menuname-business-reports)
  'options-generator (lambda () (options-generator 'fancy-invoice))
  'renderer reg-renderer
+ 'hook 'invoice
  'in-menu? #t)
 

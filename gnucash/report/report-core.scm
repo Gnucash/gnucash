@@ -31,6 +31,7 @@
 (use-modules (gnucash gnome-utils))
 (use-modules (ice-9 match))
 (use-modules (srfi srfi-1))
+(use-modules (srfi srfi-2))
 (use-modules (srfi srfi-9))
 (use-modules (srfi srfi-26))
 (use-modules (gnucash report report-register-hooks))
@@ -44,6 +45,7 @@
 (export <report>)
 (export gnc:all-report-template-guids)
 (export gnc:custom-report-template-guids)
+(export gnc:custom-report-invoice-template-guids)
 (export gnc:define-report)
 (export gnc:delete-report)
 (export gnc:find-report-template)
@@ -73,6 +75,7 @@
 (export gnc:report-export-thunk)
 (export gnc:report-export-types)
 (export gnc:report-id)
+(export gnc:report-is-invoice-report?)
 (export gnc:report-menu-name)
 (export gnc:report-name)
 (export gnc:report-needs-save?)
@@ -169,7 +172,7 @@
   (make-new-record-template version name report-guid parent-type options-generator
                             options-cleanup-cb options-changed-cb
                             renderer in-menu? menu-path menu-name
-                            menu-tip export-types export-thunk)
+                            menu-tip hook export-types export-thunk)
   report-template?
   (version report-template-version)
   (report-guid report-template-report-guid report-template-set-report-guid!)
@@ -183,11 +186,12 @@
   (menu-path report-template-menu-path)
   (menu-name report-template-menu-name)
   (menu-tip report-template-menu-tip)
+  (hook report-template-hook)
   (export-types report-template-export-types)
   (export-thunk report-template-export-thunk))
 
 (define (make-report-template)
-  (make-new-record-template #f #f #f #f #f #f #f #f #t #f #f #f #f #f))
+  (make-new-record-template #f #f #f #f #f #f #f #f #t #f #f #f #f #f #f))
 (define gnc:report-template-version report-template-version)
 (define gnc:report-template-report-guid report-template-report-guid)
 (define gnc:report-template-set-report-guid! report-template-set-report-guid!)
@@ -203,6 +207,7 @@
 (define gnc:report-template-menu-path report-template-menu-path)
 (define gnc:report-template-menu-name report-template-menu-name)
 (define gnc:report-template-menu-tip report-template-menu-tip)
+(define gnc:report-template-hook report-template-hook)
 (define gnc:report-template-export-types report-template-export-types)
 (define gnc:report-template-export-thunk report-template-export-thunk)
 
@@ -476,6 +481,21 @@ not found.")))
 ;; return a list of the custom report template guids.
 (define (gnc:custom-report-template-guids)
   (map car (gnc:custom-report-templates-list)))
+
+(define (gnc:report-is-invoice-report? guid)
+  (let ((tmpl (gnc:find-report-template guid)))
+    (cond
+     ((not tmpl) #f)
+     ((eq? (gnc:report-template-hook tmpl) 'invoice) #t)
+     (else (and-let* ((type (gnc:report-template-parent-type tmpl))
+                      (template (gnc:find-report-template type)))
+             (eq? (gnc:report-template-hook template) 'invoice))))))
+
+;; return a list of the invoice report template guids.
+(define (gnc:custom-report-invoice-template-guids)
+  (hash-fold
+   (lambda (k v p) (if (gnc:report-is-invoice-report? k) (cons k p) p))
+    '() *gnc:_report-templates_*))
 
 (define (gnc:find-report-template guid)
   (hash-ref *gnc:_report-templates_* guid))

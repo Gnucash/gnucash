@@ -44,6 +44,9 @@
 #include "gnc-prefs.h"
 #include "gnc-main-window.h"
 
+#include "guile-mappings.h"
+#include "gnc-guile-utils.h"
+
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -876,3 +879,206 @@ gnc_get_negative_color (void)
 
     return gdk_rgba_to_string (&color);
 }
+
+/* ================================================================== */
+
+enum
+{
+    COL_INV_NAME = 0,
+    COL_INV_GUID,
+    COL_INV_MISSING,
+    NUM_INV_COLS
+};
+
+enum
+{
+    PRINTABLE_INVOICE_PREF_NUM = 0,
+    TAX_INVOICE_PREF_NUM,
+    EASY_INVOICE_PREF_NUM,
+    FANCY_INVOICE_PREF_NUM,
+};
+
+static const char* invoice_printreport_values[] =
+{
+    /* The list below are the guids of reports that can
+     * be used to print an invoice.
+     *
+     * Important: This list matches the order of existing saved
+     * preference entries.
+     */
+    PRINTABLE_INVOICE_GUID,
+    TAX_INVOICE_GUID,
+    EASY_INVOICE_GUID,
+    FANCY_INVOICE_GUID,
+    NULL
+};
+
+#define GNC_PREFS_GROUP_INVOICE    "dialogs.business.invoice"
+#define GNC_PREF_INV_PRINT_RPT     "invoice-printreport"
+
+const char *
+gnc_get_default_invoice_print_report (void)
+{
+    QofBook *book = gnc_get_current_book ();
+    int old_style_value = gnc_prefs_get_int (GNC_PREFS_GROUP_INVOICE, GNC_PREF_INV_PRINT_RPT);
+    const gchar *default_guid = gncInvoiceGetDefaultReport (book);
+
+    if (default_guid == NULL)
+    {
+        if (old_style_value >= PRINTABLE_INVOICE_PREF_NUM &&
+            old_style_value <= FANCY_INVOICE_PREF_NUM)
+        {
+            const gchar *ret = invoice_printreport_values[old_style_value];
+
+            gncInvoiceSetDefaultReport (book, ret, NULL);
+            return ret;
+        }
+        else
+            return PRINTABLE_INVOICE_GUID;
+    }
+    return default_guid;
+}
+
+static gboolean
+select_default (GtkWidget *combo, const gchar *default_guid)
+{
+    GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX(combo));
+    GtkTreeIter iter;
+    gboolean found = FALSE;
+    gboolean valid_iter = gtk_tree_model_get_iter_first (model, &iter);
+
+    while (valid_iter)
+    {
+        gchar *guid;
+        gtk_tree_model_get (model, &iter, COL_INV_GUID, &guid, -1);
+
+        if (g_strcmp0 (default_guid, guid) == 0)
+        {
+            gtk_combo_box_set_active_iter (GTK_COMBO_BOX(combo), &iter);
+            g_free (guid);
+            found = TRUE;
+            break;
+        }
+        g_free (guid);
+        valid_iter = gtk_tree_model_iter_next (model, &iter);
+    }
+    return found;
+}
+
+/********************************************************************
+ * update_invoice_list
+ *
+ * this procedure does the real work of displaying a sorted list of
+ * available invoice reports
+ ********************************************************************/
+static const gchar *
+update_invoice_list (GtkWidget *combo)
+{
+    SCM get_rpt_guids = scm_c_eval_string ("gnc:custom-report-invoice-template-guids");
+    SCM template_menu_name = scm_c_eval_string ("gnc:report-template-menu-name/report-guid");
+    SCM reportlist;
+    SCM rpt_guids;
+
+    GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX(combo));
+    GtkListStore *store = GTK_LIST_STORE(model);
+    const gchar *default_guid = gnc_get_default_invoice_print_report ();
+    const gchar *default_name = NULL;
+    gboolean have_default = FALSE;
+
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(model),
+                                          COL_INV_NAME, GTK_SORT_ASCENDING);
+
+    reportlist = scm_call_0 (get_rpt_guids);
+    rpt_guids = reportlist;
+
+    gtk_list_store_clear (store);
+
+    if (scm_is_list (rpt_guids))
+    {
+        int i;
+        GtkTreeIter iter;
+
+        for (i = 0; !scm_is_null (rpt_guids); i++)
+        {
+            gchar *guid_str = scm_to_utf8_string (SCM_CAR(rpt_guids));
+            gchar *name = gnc_scm_to_utf8_string (scm_call_2(template_menu_name,
+                                                  SCM_CAR(rpt_guids), SCM_BOOL_F));
+
+            gtk_list_store_append (store, &iter);
+            gtk_list_store_set (store, &iter,
+                                COL_INV_NAME, name,
+                                COL_INV_GUID, guid_str,
+                                COL_INV_MISSING, FALSE,
+                                -1);
+            g_free (name);
+            g_free (guid_str);
+
+            rpt_guids = SCM_CDR(rpt_guids);
+        }
+    }
+
+    have_default = select_default (combo, default_guid);
+
+    if (!have_default)
+    {
+        GtkTreeIter iter;
+        QofBook *book = gnc_get_current_book ();
+        default_name = gncInvoiceGetDefaultReportName (book);
+
+        gtk_list_store_prepend (store, &iter);
+        gtk_list_store_set (store, &iter,
+                            COL_INV_NAME, default_name,
+                            COL_INV_GUID, default_guid,
+                            COL_INV_MISSING, TRUE,
+                            -1);
+
+        gtk_combo_box_set_active_iter (GTK_COMBO_BOX(combo), &iter);
+    }
+    return default_name;
+}
+
+static void
+combo_changed_cb (GtkComboBox *widget, gpointer user_data)
+{
+    GtkTreeIter iter;
+
+    if (gtk_combo_box_get_active_iter (widget, &iter))
+    {
+        QofBook *book = gnc_get_current_book ();
+        GtkTreeModel *model = gtk_combo_box_get_model (widget);
+        gchar *name, *guid;
+        gboolean missing;
+        gtk_tree_model_get (model, &iter, COL_INV_NAME, &name,
+                                          COL_INV_GUID, &guid,
+                                          COL_INV_MISSING, &missing,
+                                          -1);
+        // set visibility of the warning image
+        gtk_widget_set_visible (user_data, missing);
+
+        gncInvoiceSetDefaultReport (book, guid, name);
+
+        gtk_widget_queue_resize (GTK_WIDGET(widget));
+        g_free (name);
+        g_free (guid);
+    }
+}
+
+void
+gnc_default_print_report_list (GtkWidget *combo, GtkWidget *warning)
+{
+    const gchar *default_name = update_invoice_list (combo);
+
+    if (default_name)
+    {
+        /* Translators: %s is the default invoice report name. */
+        gchar *tool_tip = g_strdup_printf (_("'%s' is missing"),
+                                           default_name);
+        gtk_widget_show (warning);
+
+        gtk_widget_set_tooltip_text (warning, tool_tip);
+        g_free (tool_tip);
+    }
+    g_signal_connect (G_OBJECT(combo), "changed",
+                      G_CALLBACK(combo_changed_cb), warning);
+}
+

@@ -265,6 +265,22 @@ GncInvoice * gncInvoiceGetInvoiceFromTxn (const Transaction *txn);
 /** Given a LOT, find and return the Invoice attached to the lot */
 GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot);
 
+/** Save the Invoice Report Guid to be used as the default for printing
+ *  Invoices
+ */
+void gncInvoiceSetDefaultReport (const QofBook *book, const gchar *guid,
+                                 const gchar *name);
+
+/** Get the Guid of the Invoice Report to be used as the default for printing
+ *  Invoices
+ */
+const gchar * gncInvoiceGetDefaultReport (const QofBook *book);
+
+/** Get the Name of the Invoice Report to be used as the default for printing
+ *  Invoices
+ */
+const gchar * gncInvoiceGetDefaultReportName (const QofBook *book);
+
 /** Return a pointer to the instance gncInvoice that is identified
  *  by the guid, and is residing in the book. Returns NULL if the
  *  instance can't be found.

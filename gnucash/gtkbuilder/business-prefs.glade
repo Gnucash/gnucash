@@ -18,23 +18,13 @@
   </object>
   <object class="GtkListStore" id="liststore_printinvoice">
     <columns>
-      <!-- column-name item -->
+      <!-- column-name title -->
       <column type="gchararray"/>
+      <!-- column-name guid -->
+      <column type="gchararray"/>
+      <!-- column-name missing -->
+      <column type="gboolean"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Printable Invoice</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Tax Invoice</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Easy Invoice</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Fancy Invoice</col>
-      </row>
-    </data>
   </object>
   <object class="GtkWindow" id="preferences_window">
     <property name="visible">True</property>
@@ -312,18 +302,42 @@
           </packing>
         </child>
         <child>
-          <object class="GtkComboBox" id="pref/dialogs.business.invoice/invoice-printreport">
+          <object class="GtkBox" id="invoice_report_default_box">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="has-tooltip">True</property>
-            <property name="tooltip-markup">The invoice report to be used for printing.</property>
-            <property name="tooltip-text" translatable="yes">The invoice report to be used for printing.</property>
-            <property name="model">liststore_printinvoice</property>
+            <property name="spacing">6</property>
             <child>
-              <object class="GtkCellRendererText" id="cellrenderertext2"/>
-              <attributes>
-                <attribute name="text">0</attribute>
-              </attributes>
+              <object class="GtkComboBox" id="invoice_report_combo">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="model">liststore_printinvoice</property>
+                <signal name="realize" handler="gnc_default_print_report_list" object="invoice_warning_image" swapped="no"/>
+                <child>
+                  <object class="GtkCellRendererText" id="cell_renderer_text"/>
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                  </attributes>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="invoice_warning_image">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">start</property>
+                <property name="icon-name">dialog-warning</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
             </child>
           </object>
           <packing>
@@ -333,31 +347,10 @@
           </packing>
         </child>
         <child>
-          <object class="GtkSpinButton" id="pref/dialogs.business.invoice/days-in-advance">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="has-tooltip">True</property>
-            <property name="tooltip-markup">How many days in the future to warn about Invoices coming due.</property>
-            <property name="tooltip-text" translatable="yes">How many days in the future to warn about Invoices coming due.</property>
-            <property name="adjustment">cust_days_in_adj</property>
-          </object>
-          <packing>
-            <property name="left-attach">2</property>
-            <property name="top-attach">6</property>
-          </packing>
+          <placeholder/>
         </child>
         <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">_Days in advance</property>
-            <property name="use-underline">True</property>
-            <property name="mnemonic-widget">pref/dialogs.business.invoice/days-in-advance</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">6</property>
-          </packing>
+          <placeholder/>
         </child>
         <child>
           <placeholder/>

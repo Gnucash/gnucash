@@ -88,6 +88,10 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 #define GNC_INVOICE_IS_CN "credit-note"
 #define GNC_INVOICE_DOCLINK "assoc_uri" // this is the old name for the document link, kept for compatibility
 
+#define GNC_INVOICE_DEFAULT_KVP_BASE    "default-invoice"
+#define GNC_INVOICE_DEFAULT_REPORT_GUID "report-guid"
+#define GNC_INVOICE_DEFAULT_REPORT_NAME "report-name"
+
 #define SET_STR(obj, member, str) { \
     if (!g_strcmp0 (member, str)) return; \
     gncInvoiceBeginEdit (obj); \
@@ -2035,6 +2039,87 @@ gboolean gncInvoiceIsPaid (const GncInvoice *invoice)
     return gnc_lot_is_closed (invoice->posted_lot);
 }
 
+static const gchar *
+get_invoice_report_kvp (const QofBook *book, const gchar *key)
+{
+    GValue value_s = G_VALUE_INIT;
+    const gchar *existing = NULL;
+
+    qof_instance_get_kvp (QOF_INSTANCE(book), &value_s, 2,
+                          GNC_INVOICE_DEFAULT_KVP_BASE,
+                          key);
+    if (G_VALUE_HOLDS_STRING (&value_s))
+        existing = g_value_dup_string (&value_s);
+
+    g_value_unset (&value_s);
+    return existing;
+}
+
+static void
+set_invoice_report_kvp (const QofBook *book, const gchar *key,
+                        const gchar *data)
+{
+    GValue value_s = G_VALUE_INIT;
+    const gchar *existing = NULL;
+
+    g_value_init (&value_s, G_TYPE_STRING);
+    g_value_set_string (&value_s, data);
+
+    qof_instance_set_kvp (QOF_INSTANCE(book), &value_s, 2,
+                          GNC_INVOICE_DEFAULT_KVP_BASE,
+                          key);
+
+    g_value_unset (&value_s);
+}
+
+void
+gncInvoiceSetDefaultReport (const QofBook *book, const gchar *guid,
+                            const gchar *name)
+{
+    const gchar *existing_guid = NULL;
+    const gchar *existing_name = NULL;
+    gboolean dirty = FALSE;
+
+    if (!guid)
+        return;
+
+    existing_guid = get_invoice_report_kvp (book,
+                                            GNC_INVOICE_DEFAULT_REPORT_GUID);
+    existing_name = get_invoice_report_kvp (book,
+                                            GNC_INVOICE_DEFAULT_REPORT_NAME);
+
+    if (g_strcmp0 (existing_guid, guid) != 0)
+    {
+        set_invoice_report_kvp (book, GNC_INVOICE_DEFAULT_REPORT_GUID,
+                                guid);
+        dirty = TRUE;
+    }
+
+    if (g_strcmp0 (existing_name, name) != 0)
+    {
+        set_invoice_report_kvp (book, GNC_INVOICE_DEFAULT_REPORT_NAME,
+                                name);
+        dirty = TRUE;
+    }
+    if (dirty)
+        qof_book_mark_session_dirty ((QofBook *)book);
+}
+
+const gchar *
+gncInvoiceGetDefaultReport (const QofBook *book)
+{
+    const gchar *def_guid = get_invoice_report_kvp (book,
+                                                    GNC_INVOICE_DEFAULT_REPORT_GUID);
+    return def_guid;
+}
+
+const gchar *
+gncInvoiceGetDefaultReportName (const QofBook *book)
+{
+    const gchar *def_name = get_invoice_report_kvp (book,
+                                                    GNC_INVOICE_DEFAULT_REPORT_NAME);
+    return def_name;
+}
 /* ================================================================== */
 
 void gncInvoiceBeginEdit (GncInvoice *invoice)

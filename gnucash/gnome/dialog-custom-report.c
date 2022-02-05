@@ -38,6 +38,7 @@
 #include "gnc-guile-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui.h"
+#include "gnc-ui-util.h"
 #include "gnc-report.h"
 #include "gnc-plugin-page-report.h"
 
@@ -471,7 +472,21 @@ custom_report_name_edited_cb(GtkCellRendererText *renderer, gchar *path, gchar *
         return;
 
     if (scm_is_true (scm_call_2 (unique_name_func, guid, new_name_scm)))
+    {
+        const gchar *default_guid = gnc_get_default_invoice_print_report ();
+
         custom_report_edit_report_name (guid, crd, new_text);
+
+        // check to see if default report name has been changed
+        if (g_strcmp0 (default_guid, scm_to_utf8_string (guid)) == 0)
+        {
+            QofBook *book = gnc_get_current_book ();
+            const gchar *default_name = gncInvoiceGetDefaultReportName (book);
+
+            if (g_strcmp0 (default_name, new_text) != 0)
+                gncInvoiceSetDefaultReport (book, default_guid, new_text);
+        }
+    }
     else
         gnc_error_dialog (GTK_WINDOW (crd->dialog), "%s",
                           _("A saved report configuration with this name already exists, please choose another name.") );

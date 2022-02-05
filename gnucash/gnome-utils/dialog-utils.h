@@ -165,4 +165,27 @@ gnc_cost_policy_select_new (void);
  */
 gchar* gnc_get_negative_color (void);
 
+
+#define PRINTABLE_INVOICE_GUID "5123a759ceb9483abf2182d01c140e8d"
+#define TAX_INVOICE_GUID       "0769e242be474010b4acf264a5512e6e"
+#define EASY_INVOICE_GUID      "67112f318bef4fc496bdc27d106bbda4"
+#define FANCY_INVOICE_GUID     "3ce293441e894423a2425d7a22dd1ac6"
+
+/** Retrieve the guid of the Invoice Report used as the default to
+ *  print Invoices
+ *
+ * @return The guid of the saved Invoice Report
+ */
+const char *gnc_get_default_invoice_print_report (void);
+
+/** Call back used in business-prefs.glade to setup the combo used
+ *  for displaying list of Invoice Reports.
+ *
+ *  @param combo The GtkComboBox that presents the list.
+ *
+ *  @param warning The warning image displayed if the default guid is
+ *                 not in the Invoice list.
+ */
+void gnc_default_print_report_list (GtkWidget *combo, GtkWidget *warning);
+
 #endif /* DIALOG_UTILS_H */
