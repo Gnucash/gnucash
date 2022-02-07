@@ -6,7 +6,7 @@
 # Eneko Lacunza <enlar@enlar.net>, 2003, 2004, 2006, 2008.
 # Javier F. Serrador <fserrador@gmail.com>, 2018, 2021.
 # Carlos Manrique Enguita <UO258425@uniovi.es>, 2021.
-# Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>, 2021.
+# Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>, 2021, 2022.
 # Guille <willelopz+weblate@gmail.com>, 2021.
 # Adolfo Jayme Barrientos <fitojb@ubuntu.com>, 2021.
 # Francisco Serrador <fserrador@gmail.com>, 2021, 2022.
@@ -79,8 +79,9 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-02-06 14:55+0000\n"
-"Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
+"PO-Revision-Date: 2022-02-07 19:57+0000\n"
+"Last-Translator: Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>"
+"\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -6364,7 +6365,7 @@ msgstr "Mínimo proyectado:"
 
 #: gnucash/gnome/gnc-split-reg2.c:810 gnucash/gnome/gnc-split-reg.c:2364
 msgid "Shares:"
-msgstr "Accións:"
+msgstr "Acciones:"
 
 #: gnucash/gnome/gnc-split-reg2.c:811 gnucash/gnome/gnc-split-reg.c:2365
 msgid "Current Value:"
