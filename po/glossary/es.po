@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-01-13 15:45+0000\n"
+"PO-Revision-Date: 2022-02-07 00:56+0000\n"
 "Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "es/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.11-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -33,7 +33,7 @@ msgstr "Término"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
-msgstr "“”"
+msgstr "«»"
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -117,7 +117,7 @@ msgstr "comercio"
 
 #. "-"
 msgid "account: parent account"
-msgstr "cuenta: cuenta padre"
+msgstr "cuenta antecesora"
 
 #. "-"
 msgid "account: subaccount"
@@ -125,7 +125,7 @@ msgstr "cuenta: subcuenta"
 
 #. "-"
 msgid "account: top level account"
-msgstr "cuenta: cuenta de nivel superior"
+msgstr "cuenta maestra"
 
 #. "The process of doing something that caused a transaction to happen"
 msgid "Action (register)"
@@ -181,7 +181,7 @@ msgstr "PdV"
 
 #. "-"
 msgid "action: rebate"
-msgstr "descontar, rebajar; reembolsar, devolver"
+msgstr "descuento"
 
 #. "-"
 msgid "action: sell"
@@ -229,7 +229,7 @@ msgstr "saldo anterior"
 
 #. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
 msgid "balance c/f"
-msgstr "balance a cuenta nueva"
+msgstr "saldo anterior"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
@@ -393,7 +393,7 @@ msgstr "asiento doble"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
-msgstr "vínculo al documento"
+msgstr "vínculo documental"
 
 #. "The last day to pay an invoice in time."
 msgid "due date"
@@ -437,11 +437,11 @@ msgstr "tipo de fichero"
 
 #. "-"
 msgid "financial calculator: interest rate"
-msgstr "calculadora financiera: tasa de interés"
+msgstr "tasa de interés"
 
 #. "see: payment"
 msgid "financial calculator: payments"
-msgstr "calculadora financiera: plazos"
+msgstr "plazos"
 
 #. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
 msgid "financial statement"
@@ -525,7 +525,7 @@ msgstr "Modo MDI"
 
 #. "One textfield per split that should help you remember what this split was about."
 msgid "Memo"
-msgstr "Memorándum, resumen"
+msgstr "Memorándum"
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
@@ -637,7 +637,7 @@ msgstr "repartir (share)"
 
 #. "An ask is an offer to sell, and the price you want to sell at."
 msgid "price type: ask"
-msgstr "tipo de precio: venta"
+msgstr "venta"
 
 #. "A bid is an offer to buy, and the price you want to buy at."
 msgid "price type: bid"
@@ -645,7 +645,7 @@ msgstr "oferta"
 
 #. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
 msgid "price: quotes"
-msgstr "precio: cotizaciones"
+msgstr "cotizaciones"
 
 #. "Money gained in business, esp. the difference between the amount earned (sales) and the amount spent (expenses/cost): Profit is sales minus expenses/cost."
 msgid "profit"
@@ -669,7 +669,7 @@ msgstr "conciliar"
 
 #. "-"
 msgid "record keeping"
-msgstr "teneduría de libros?"
+msgstr "conservación de registros"
 
 #. "A list of items; a book containing such a list"
 msgid "register"
@@ -677,7 +677,7 @@ msgstr "registro"
 
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
-msgstr "transacción múltiple"
+msgstr "transacción desglosada"
 
 #. "-"
 msgid "register entry: stock split"
@@ -685,7 +685,7 @@ msgstr "desglose de reserva"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
-msgstr "registro: asiento auto-desglosado"
+msgstr "registro: presupuesto auto-desglosado"
 
 #. "another form of register"
 msgid "register: basic ledger"
@@ -729,7 +729,7 @@ msgstr "guardar"
 
 #. "A transaction or reminder of a transaction that can be automatically executed at a specific time. It can be executed either once, or several times at regular intervals."
 msgid "Scheduled Transaction"
-msgstr "Transacción Programada"
+msgstr "Transacción Planificada"
 
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
 msgid "scrub, to"
@@ -781,19 +781,19 @@ msgstr "informe sobre imposiciones"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
 msgid "tax type: income tax"
-msgstr "tipo impositivo: imposición sobre renta"
+msgstr "imposición sobre renta"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
-msgstr "tipo de impuesto: impuesto sobre ventas"
+msgstr "imposición sobre ventas"
 
 #. "'Goods and Service Tax' is one form of sales tax."
 msgid "tax type: GST"
-msgstr "tipo de impuesto: IVA"
+msgstr "IVA"
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr "tipo de impuesto: IVA"
+msgstr "IVA"
 
 #. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
@@ -817,19 +817,19 @@ msgstr "transacción"
 
 #. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
-msgstr "estado del asiento: limpiado"
+msgstr "purgado"
 
 #. "-"
 msgid "transaction state: frozen"
-msgstr "estado del asiento: congelado"
+msgstr "congelado"
 
 #. "A transaction that was reconciled with the bank's statement."
 msgid "transaction state: reconciled"
-msgstr "estado del asiento: conciliado"
+msgstr "conciliado"
 
 #. "A transaction that is void i.e. not valid (anymore)."
 msgid "transaction state: voided"
-msgstr "estado de asiento: inválido"
+msgstr "invalidado"
 
 #. "1. The action of transferring sth. 2. see: credit transfer"
 msgid "transfer (noun)"
@@ -837,7 +837,7 @@ msgstr "transferencia"
 
 #. "The account where an amount is transferred to"
 msgid "transfer account"
-msgstr "cuenta de la transferencia"
+msgstr "cuenta transferencial"
 
 #. "To move money from one account to another. Will create a transaction."
 msgid "transfer, to (register toolbar)"
@@ -845,11 +845,11 @@ msgstr "transferir"
 
 #. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
 msgid "trial balance (report)"
-msgstr "balance general (informe)"
+msgstr "balance general (boletín)"
 
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
 msgid "type"
-msgstr "tipo"
+msgstr "teclear, tecla"
 
 #. "A fixed amount or number used as a standard of measurement; e.g. millimeters, inch; for absolute positioning in the custom check format."
 msgid "units"
@@ -876,7 +876,7 @@ msgid "withdraw (in the reconcile dialog)"
 msgstr "cargo"
 
 msgid "stock"
-msgstr "provisión"
+msgstr "mercancía"
 
 msgid "due"
 msgstr "vencimiento"

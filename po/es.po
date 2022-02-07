@@ -79,7 +79,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-30 16:53+0000\n"
+"PO-Revision-Date: 2022-02-06 14:55+0000\n"
 "Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -108,7 +108,7 @@ msgstr "Báltico"
 
 #: borrowed/goffice/go-charmap-sel.c:72
 msgid "Central European"
-msgstr "Central Europeo"
+msgstr "Europeo Central"
 
 #: borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
@@ -498,7 +498,7 @@ msgstr "Local: "
 
 #: borrowed/goffice/go-charmap-sel.c:476
 msgid "Conversion Direction"
-msgstr "Conversión de Dirección"
+msgstr "Dirección de Conversión"
 
 #: borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
@@ -527,9 +527,9 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
-"Las listas de correo son el método de comunicación preferido por la "
-"comunidad de GnuCash. Para los anuncios de nuevas versiones, grupos de "
-"usuarios etc, consulta la tabla en https://wiki.gnucash.org/wiki/"
+"Los listados de correo son el método de comunicación preferido por la "
+"comunidad de GnuCash. Para los anuncios de nuevas publicaciones, grupos de "
+"usuarios etc, consulte la tabla en https://wiki.gnucash.org/wiki/"
 "Mailing_Lists"
 
 #: doc/tip_of_the_day.list.c:9
@@ -539,8 +539,8 @@ msgid ""
 "org"
 msgstr ""
 "Es fácil contactar con los desarrolladores de GnuCash. Además de varios "
-"listados de correo, ¡también puedes hablar con ellos en vivo en el IRC! "
-"Únase a ellos en el canal #gnucash de irc.gnome.org"
+"listados de correo, también puede hablar con ellos en vivo en el IRC. Únase "
+"a ellos en el canal #gnucash de irc.gnome.org"
 
 #: doc/tip_of_the_day.list.c:13
 msgid ""
@@ -551,7 +551,7 @@ msgid ""
 msgstr ""
 "Puede importar fácilmente su información financiera existente desde Quicken, "
 "MS Money u otros programas que exporten ficheros QIF o OFX. En el menú "
-"Archivo, pulse en la opción Importar y pulse en QIF o OFx, respectivamente. "
+"Archivo, pulse en la opción Importar y pulse en QIF o OFX, respectivamente. "
 "Después siga las instrucciones mostradas."
 
 #: doc/tip_of_the_day.list.c:18
@@ -562,9 +562,9 @@ msgid ""
 "online manual."
 msgstr ""
 "Si está familiarizado con otros programas financieros como Quicken, tenga en "
-"cuenta que GnuCash usa cuentas en vez de categorías para seguir ingresos y "
-"gastos. Para más información sobre cuentas de ingresos y gastos, consulte el "
-"manual por conexión de GnuCash."
+"cuenta que GnuCash emplea cuentas en vez de categorías para seguir ingresos "
+"y gastos. Para más información sobre cuentas de ingresos y gastos, consulte "
+"el manual por conexión a GnuCash."
 
 #: doc/tip_of_the_day.list.c:23
 msgid ""
@@ -583,7 +583,7 @@ msgid ""
 "register, clicking the right mouse button brings up the transaction menu "
 "options."
 msgstr ""
-"Pulse el botón secundario del ratón (Pulsar Ctrl en Mac OS X) en la lengüeta "
+"Pulse el botón secundario del ratón (Pulse Ctrl en Mac OS X) en la lengüeta "
 "de Cuentas de la ventana principal para traer las opciones del menú de la "
 "cuenta. Dentro de cada registro, pulsando botón secundario del ratón "
 "selecciona las opciones del menú de transacción."
@@ -597,7 +597,7 @@ msgid ""
 msgstr ""
 "Cree cuentas nuevas pulsando el botón Nuevo en la barra de herramientas de "
 "la ventana principal. Esto traerá un diálogo donde podrá introducir los "
-"detalles de la cuenta. Para más información sobre cómo elegir una familia de "
+"detalles de la cuenta. Para más información acerca de cómo elegir un tipo de "
 "cuenta o configurar un árbol de cuentas, consulte el manual por conexión a "
 "GnuCash."
 
@@ -610,7 +610,7 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgstr ""
-"Cada transacción tiene un campo \"Anotaciones\" donde puedes poner "
+"Cada transacción tiene un campo \"Anotaciones\" donde puede poner "
 "información útil.\n"
 "\n"
 "Para hacerlo visible\n"
@@ -624,10 +624,10 @@ msgid ""
 "View menu, you can choose the register style Auto-Split Ledger or "
 "Transaction Journal."
 msgstr ""
-"Para introducir transacciones con multidesglose como una nómina con "
+"Para introducir transacciones con multi-desglose como una nómina con "
 "múltiples deducciones, pulse el botón «Desglosar» en la barra de "
 "herramientas. Alternativamente, en el menú «Vista», puede elegir el estilo "
-"del registro Autodesglose del «Libro Mayor» o «Libro Diario»."
+"del registro Auto-desglose del «Libro Mayor» o «Libro Diario»."
 
 #: doc/tip_of_the_day.list.c:49
 msgid ""
@@ -638,7 +638,7 @@ msgid ""
 msgstr ""
 "Mientras introduce cantidades en el registro, puede usar la calculadora de "
 "GnuCash para sumar, restar, multiplicar y dividir. Simplemente teclee el "
-"primer valor, después seleccione '+', '-', '*' o '/'. Teclee el segundo "
+"primer valor, después seleccione ‘+’, ‘-’, ‘*’ o ‘/’. Teclee el segundo "
 "valor y pulse «Entrar» para registrar la cantidad calculada."
 
 #: doc/tip_of_the_day.list.c:54
@@ -661,10 +661,10 @@ msgid ""
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
 "Assets:Cash)."
 msgstr ""
-"Teclee la(s) primera(s) letra(s) de una cuenta existente en la columna "
-"«Transferir a/desde» y GnuCash completará el nombre desde su listado de "
-"cuentas. Para subcuentas, pulse la(s) primera(s) letra(s) de la cuenta "
-"precedente, seguido de «:» y la(s) primera(s) letra(s) de la subcuenta (p.e. "
+"Teclee la(s) primera(s) letra(s) del nombre de una cuenta existente en la "
+"columna «Transferir», y GnuCash completará el nombre desde su listado de "
+"cuentas. Para subcuentas, teclee la(s) primera(s) letra(s) de la cuenta "
+"antecesora seguida de ‘:’ y la(s) primera(s) letra(s) de la subcuenta (p.e. "
 "A:E para Activos:Efectivo)."
 
 #: doc/tip_of_the_day.list.c:65
@@ -702,7 +702,7 @@ msgid ""
 "and withdrawals."
 msgstr ""
 "En la ventana de conciliación, puede pulsar la barra de espacio para marcar "
-"las transacciones conciliadas. Puede también pulsar «Tabular» y "
+"las transacciones como conciliadas. Puede también pulsar «Tabular» y "
 "«Mayús+Tabular» para moverse entre depósitos y retiradas de fondos."
 
 #: doc/tip_of_the_day.list.c:80
@@ -714,8 +714,8 @@ msgid ""
 msgstr ""
 "Para transferir fondos entre cuentas con diferentes monedas, pulse sobre el "
 "botón «Transferir» en la barra de herramientas del registro, seleccione las "
-"cuentas y se mostrarán las opciones de transferencia de moneda para "
-"introducir el cambio o la cantidad de la otra moneda."
+"cuentas y estarán disponibles las opciones de Transferencia Monetaria para "
+"introducir la cantidad de la otra moneda."
 
 #: doc/tip_of_the_day.list.c:85
 msgid ""
@@ -737,7 +737,7 @@ msgid ""
 msgstr ""
 "Puede empaquetar más de un boletín en una única ventana, suministrando toda "
 "la información financiera que quiera a la vez. Para ello, use el boletín «"
-"Muestra y Adaptación»->«Boletín Multicolumna Personalizado»."
+"Muestra y Adaptación->Boletín Multicolumna Personalizado»."
 
 #: doc/tip_of_the_day.list.c:95
 msgid ""
@@ -754,7 +754,7 @@ msgid ""
 "To raise the accounts menu in the transfer field of a register page, press "
 "the Menu key or the Ctrl-Down key combination."
 msgstr ""
-"Para ampliar el menú de cuentas en el ámbito de la transferencia de una "
+"Para ampliar el menú de cuentas en el campo de la transferencia de una "
 "página de registro, pulse la tecla del Menú o la combinación de teclas Ctrl-"
 "Abajo."
 
@@ -810,7 +810,7 @@ msgid ""
 "new window."
 msgstr ""
 "Para comparar visualmente en pantalla los contenidos de 2 lengüetas, en una "
-"de las tipos, selecciona Ventana->Ventana nueva con Página desde el menú "
+"de las lengüetas, seleccione Ventana->Ventana nueva con Página desde el menú "
 "para duplicar esa lengüeta en una ventana nueva."
 
 #: doc/tip_of_the_day.list.c:123
@@ -845,11 +845,11 @@ msgid_plural ""
 "The earliest transaction date found in this book is %s. Based on the "
 "selection made above, this book will be split into %d books."
 msgstr[0] ""
-"La fecha de transacción más cercana encontrada en este libro es %s. Basado "
-"en la selección hecha encima, este libro será desglosado en %d libro."
+"La fecha transaccional encontrada más cercana dentro de este libro es %s. "
+"Basado en la selección hecha encima, este libro será desglosado en %d libro."
 msgstr[1] ""
-"La fecha de transacción más cercana encontrada en este libro es %s. Basado "
-"en la selección hecha encima, este libro será desglosado en %d libros."
+"La fecha transaccional encontrada más cercana dentro de este libro es %s. "
+"Basado en la selección hecha encima, este libro será desglosado en %d libros."
 
 #. Translators: Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gnome/assistant-acct-period.c:371
@@ -965,7 +965,7 @@ msgstr "Saldo de Apertura"
 # menú
 #: gnucash/gnome/assistant-hierarchy.c:1370
 msgid "Use Existing"
-msgstr "Emplear Existente"
+msgstr "Emplear Existencia"
 
 #: gnucash/gnome/assistant-hierarchy.c:1485
 msgid ""
@@ -973,9 +973,9 @@ msgid ""
 "new accounts. Accounts in other currencies must be\n"
 "added manually."
 msgstr ""
-"Ha seleccionado una moneda del libro y será utilizado para\n"
-"cuentas nuevas. Las cuentas en otras monedas deben ser\n"
-"añadidas manualmente."
+"Ha seleccionado una moneda del libro y será utilizada\n"
+"para las cuentas nuevas. Las cuentas en otras monedas\n"
+"deben ser añadidas manualmente."
 
 #: gnucash/gnome/assistant-hierarchy.c:1495
 msgid "Please choose the currency to use for new accounts."
@@ -1041,7 +1041,7 @@ msgstr "Préstamo"
 #: gnucash/gnome/assistant-loan.cpp:1480
 #, c-format
 msgid "Loan Repayment Option: \"%s\""
-msgstr "Opción de Amortización de Préstamo: «%s»"
+msgstr "Opción de Amortización Prestamentaria: «%s»"
 
 #. Translators: The following symbols will build the *
 #. * header line of exported CSV files:
@@ -1115,7 +1115,7 @@ msgstr "Fecha"
 #: libgnucash/engine/gncOwner.c:847 libgnucash/engine/gncOwner.c:877
 #: libgnucash/engine/gncOwner.c:890
 msgid "Payment"
-msgstr "Liquidación"
+msgstr "Remuneración"
 
 #: gnucash/gnome/assistant-loan.cpp:1894 gnucash/gnome/assistant-loan.cpp:2962
 msgid "Principal"
@@ -1147,7 +1147,7 @@ msgstr "Remuneración Avalista"
 #: gnucash/register/ledger-core/split-register.c:2641
 msgctxt "Action Column"
 msgid "Split"
-msgstr "Desglosar"
+msgstr "Desglose"
 
 #: gnucash/gnome/assistant-stock-split.c:417
 msgid "Error adding price."
@@ -2184,7 +2184,7 @@ msgstr "Descripción, Anotaciones o Memorandum"
 #: gnucash/report/trep-engine.scm:1076 gnucash/report/trep-engine.scm:1197
 #: gnucash/report/trep-engine.scm:1198
 msgid "Memo"
-msgstr "Memorándum, resumen"
+msgstr "Memorándum"
 
 #: gnucash/gnome/dialog-find-transactions2.c:155
 #: gnucash/gnome/dialog-find-transactions.c:155
