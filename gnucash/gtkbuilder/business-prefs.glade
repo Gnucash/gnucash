@@ -16,16 +16,6 @@
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
-  <object class="GtkListStore" id="liststore_printinvoice">
-    <columns>
-      <!-- column-name title -->
-      <column type="gchararray"/>
-      <!-- column-name guid -->
-      <column type="gchararray"/>
-      <!-- column-name missing -->
-      <column type="gboolean"/>
-    </columns>
-  </object>
   <object class="GtkWindow" id="preferences_window">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -306,38 +296,9 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="spacing">6</property>
+            <signal name="realize" handler="gnc_default_print_report_list" swapped="no"/>
             <child>
-              <object class="GtkComboBox" id="invoice_report_combo">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="model">liststore_printinvoice</property>
-                <signal name="realize" handler="gnc_default_print_report_list" object="invoice_warning_image" swapped="no"/>
-                <child>
-                  <object class="GtkCellRendererText" id="cell_renderer_text"/>
-                  <attributes>
-                    <attribute name="text">0</attribute>
-                  </attributes>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkImage" id="invoice_warning_image">
-                <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
-                <property name="halign">start</property>
-                <property name="icon-name">dialog-warning</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
+              <placeholder/>
             </child>
           </object>
           <packing>

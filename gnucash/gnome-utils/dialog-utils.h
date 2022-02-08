@@ -181,11 +181,10 @@ const char *gnc_get_default_invoice_print_report (void);
 /** Call back used in business-prefs.glade to setup the combo used
  *  for displaying list of Invoice Reports.
  *
- *  @param combo The GtkComboBox that presents the list.
+ *  @param combo The GtkBox that will hold the report combo.
  *
- *  @param warning The warning image displayed if the default guid is
- *                 not in the Invoice list.
+ *  @param user_data NULL.
  */
-void gnc_default_print_report_list (GtkWidget *combo, GtkWidget *warning);
+void gnc_default_print_report_list (GtkWidget *widget, gpointer user_data);
 
 #endif /* DIALOG_UTILS_H */
