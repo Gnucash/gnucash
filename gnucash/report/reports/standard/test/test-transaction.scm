@@ -330,6 +330,21 @@
           '("$31.00")
           (get-row-col sxml -1 -1)))
 
+      ;; Filter Account Name Filters
+      (set-option! options "Filter" "Account Name Filter excludes matched strings"
+                   #t)
+      (let ((sxml (options->sxml options "accounts filter exclude expen.es regex")))
+        (test-equal "account name filter to 'expen.es, regex, negated', sum = -$31.00"
+          '("-$31.00")
+          (get-row-col sxml -1 -1)))
+
+      (set-option! options "Filter" "Use regular expressions for account name filter"
+                   #f)
+      (let ((sxml (options->sxml options "accounts filter exclude expen.es")))
+        (test-equal "account name filter to 'expen.es, negated', sum = $0.00"
+          '("$0.00")
+          (get-row-col sxml -1 -1)))
+
       ;; Test Transaction Filters
       (set! options (default-testing-options))
       (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 01 01 1969)))

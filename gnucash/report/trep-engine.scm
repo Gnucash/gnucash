@@ -110,6 +110,8 @@
 (define optname-account-matcher (N_ "Account Name Filter"))
 (define optname-account-matcher-regex
   (N_ "Use regular expressions for account name filter"))
+(define optname-account-matcher-exclude
+  (N_ "Account Name Filter excludes matched strings"))
 (define optname-transaction-matcher (N_ "Transaction Filter"))
 (define optname-transaction-matcher-regex
   (N_ "Use regular expressions for transaction filter"))
@@ -580,6 +582,12 @@ disable the filter.")
 enable full POSIX regular expressions capabilities. 'Car|Flights' will match both \
 Expenses:Car and Expenses:Flights. Use a period (.) to match a single character e.g. \
 '20../.' will match 'Travel 2017/1 London'. ")
+    #f))
+
+  (gnc:register-trep-option
+   (gnc:make-simple-boolean-option
+    pagename-filter optname-account-matcher-exclude "a7"
+    (G_ "If this option is selected, accounts matching filter are excluded.")
     #f))
 
   (gnc:register-trep-option
@@ -1987,6 +1995,7 @@ warning will be removed in GnuCash 5.0"))
 
   (let* ((document (gnc:make-html-document))
          (account-matcher (opt-val pagename-filter optname-account-matcher))
+         (account-matcher-neg (opt-val pagename-filter optname-account-matcher-exclude))
          (account-matcher-regexp
           (and (opt-val pagename-filter optname-account-matcher-regex)
                (if (defined? 'make-regexp)
@@ -1996,14 +2005,16 @@ warning will be removed in GnuCash 5.0"))
                    'no-guile-regex-support)))
          (c_account_0 (or custom-source-accounts
                           (opt-val gnc:pagename-accounts optname-accounts)))
-         (c_account_1 (filter
-                       (lambda (acc)
-                         (if (regexp? account-matcher-regexp)
-                             (regexp-exec account-matcher-regexp
-                                          (gnc-account-get-full-name acc))
-                             (string-contains (gnc-account-get-full-name acc)
-                                              account-matcher)))
-                       c_account_0))
+         (acct? (lambda (acc)
+                  (if (regexp? account-matcher-regexp)
+                      (regexp-exec account-matcher-regexp
+                                   (gnc-account-get-full-name acc))
+                      (string-contains (gnc-account-get-full-name acc)
+                                       account-matcher))))
+         (c_account_1 (if (string-null? account-matcher)
+                          c_account_0
+                          (filter (if account-matcher-neg (negate acct?) acct?)
+                                  c_account_0)))
          (c_account_2 (opt-val gnc:pagename-accounts optname-filterby))
          (filter-mode (opt-val gnc:pagename-accounts optname-filtertype))
          (begindate (gnc:time64-start-day-time
