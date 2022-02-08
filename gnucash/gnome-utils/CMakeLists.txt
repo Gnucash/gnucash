@@ -84,6 +84,7 @@ set (gnome_utils_SOURCES
   gnc-plugin.c
   gnc-period-select.c
   gnc-query-view.c
+  gnc-report-combo.c
   gnc-splash.c
   gnc-sx-instance-dense-cal-adapter.c
   gnc-sx-list-tree-model-adapter.c
@@ -172,6 +173,7 @@ set (gnome_utils_HEADERS
   gnc-plugin-page.h
   gnc-plugin.h
   gnc-period-select.h
+  gnc-report-combo.h
   gnc-query-view.h
   gnc-splash.h
   gnc-sx-instance-dense-cal-adapter.h
