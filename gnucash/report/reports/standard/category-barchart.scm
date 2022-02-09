@@ -34,6 +34,13 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
 
+;; useful functions
+(define divide-number (lambda (x y) (gnc-numeric-div  x  y GNC-DENOM-AUTO (logior (GNC-DENOM-SIGFIGS 6) GNC-RND-ROUND) )))
+(define (l1norm . numbers)
+  (if (null? numbers)
+     0
+     (+ (abs (car numbers)) (apply l1norm (cdr numbers)))))
+
 ;; The option names are defined here to 1. save typing and 2. avoid
 ;; spelling errors. The *reportnames* are defined here (and not only
 ;; once at the very end) because I need them to define the "other"
@@ -175,14 +182,21 @@ developing over time"))
       (N_ "Show table")
       "e" (N_ "Display a table of the selected data.")
       #f))
+      
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display
+      (N_ "Show ratios")
+      "f" (N_ "Display ratios instead of amounts.")
+      #f))
 
     (gnc:options-add-plot-size!
      options gnc:pagename-display
-     optname-plot-width optname-plot-height "f" (cons 'percent 100.0) (cons 'percent 100.0))
+     optname-plot-width optname-plot-height "g" (cons 'percent 100.0) (cons 'percent 100.0))
 
     (gnc:options-add-sort-method!
      options gnc:pagename-display
-     optname-sort-method "g" 'amount)
+     optname-sort-method "h" 'amount)
 
     (gnc:options-set-default-section options gnc:pagename-general)
 
@@ -246,6 +260,7 @@ developing over time"))
          (work-to-do 0)
          (all-data #f)
          (show-table? (get-option gnc:pagename-display (N_ "Show table")))
+         (ratio-chart? (get-option gnc:pagename-display (N_ "Show ratios")))
          (document (gnc:make-html-document))
          (chart (gnc:make-html-chart))
          (topl-accounts (gnc:filter-accountlist-type
@@ -494,7 +509,10 @@ developing over time"))
           (let* ((dates-list (if do-intervals?
                                  (list-head dates-list (1- (length dates-list)))
                                  dates-list))
-                 (date-string-list (map qof-print-date dates-list)))
+                 (date-string-list (map qof-print-date dates-list))
+                 
+                 ; total amount with l1norm, so that assest and debts add up
+                 (grandts (map (lambda (row)  (apply l1norm (map gnc:gnc-monetary-amount row))) (apply zip (map cadr all-data)))))
 
             ;; Set chart title, subtitle etc.
             (gnc:html-chart-set-type!
@@ -514,7 +532,7 @@ developing over time"))
 
             (gnc:html-chart-set-data-labels! chart date-string-list)
             (gnc:html-chart-set-y-axis-label!
-             chart (gnc-commodity-get-mnemonic report-currency))
+             chart (if ratio-chart? "Ratio" (gnc-commodity-get-mnemonic report-currency)))
 
             ;; If we have too many categories, we sum them into a new
             ;; 'other' category and add a link to a new report with just
@@ -552,6 +570,7 @@ developing over time"))
                               (show-fullname? (gnc-account-get-full-name acct))
                               (else (xaccAccountGetName acct))))
                       (amounts (map gnc:gnc-monetary-amount (cadr series)))
+                      (percentage (map (lambda (x grandt)  (divide-number x grandt ) )  amounts grandts)) 
                       (stack (if stacked? "default" (number->string stack)))
                       (fill (eq? chart-type 'barchart))
                       (urls (cond
@@ -578,7 +597,7 @@ developing over time"))
                                           (gnc-account-get-full-name acct)
                                           (xaccAccountGetName acct)))))))))
                  (gnc:html-chart-add-data-series!
-                  chart label amounts color
+                  chart label (if ratio-chart? percentage amounts) color
                   'stack stack 'fill fill 'urls urls)))
              all-data
              (gnc:assign-colors (length all-data))
@@ -589,6 +608,8 @@ developing over time"))
              chart (gnc-commodity-get-mnemonic report-currency))
             (gnc:html-chart-set-currency-symbol!
              chart (gnc-commodity-get-nice-symbol report-currency))
+            (gnc:html-chart-set-format-style!
+             chart (if ratio-chart? "percent" "currency"))
 
             (gnc:report-percent-done 98)
             (gnc:html-document-add-object! document chart)
@@ -600,17 +621,23 @@ developing over time"))
 
                 (define (make-cell contents)
                   (gnc:make-html-table-cell/markup "number-cell" contents))
+                  
+                (define (make-cell-percent contents)
+                  (gnc:make-html-table-cell/markup "number-cell" contents " %"))
 
                 (for-each
                  (lambda (date row)
                    (gnc:html-table-append-row!
                     table
-                    (append (list (make-cell date))
-                            (map make-cell row)
-                            (if cols>1?
-                                (list
-                                 (make-cell (apply gnc:monetary+ row)))
-                                '()))))
+                    ( let ((grandt (apply l1norm (map gnc:gnc-monetary-amount row))))
+                     (append (list (make-cell date))
+                             (if ratio-chart? 
+                                 (map make-cell-percent (map (lambda (x) (* (divide-number  (gnc:gnc-monetary-amount x) grandt) 100)) row))
+                                 (map make-cell row))
+                             (if cols>1?
+                                 (list
+                                  (make-cell (apply gnc:monetary+ row)))
+                                 '())))))
                  date-string-list
                  (apply zip (map cadr all-data)))
 
