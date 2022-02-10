@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-02-09 07:40+0000\n"
+"PO-Revision-Date: 2022-02-10 07:33+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -17743,7 +17743,7 @@ msgstr "Deluxe(tm) Personal Checks US-Letter"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:290
 msgid "Quicken(tm) Wallet Checks w/ side stub"
-msgstr "Quicken(tm) Wallet Checks c/ talão lateral"
+msgstr "Quicken(tm) Wallet Checks com talão lateral"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:347
 msgid "_Print"
@@ -27143,7 +27143,7 @@ msgstr ""
 #: gnucash/report/reports/standard/invoice.scm:787
 #, scheme-format
 msgid "~a #~a"
-msgstr "~a #~a"
+msgstr "~a nº. ~a"
 
 #: gnucash/report/reports/standard/job-report.scm:318
 #: gnucash/report/reports/standard/new-owner-report.scm:522
@@ -27217,7 +27217,7 @@ msgstr "Sem tarefa válida seleccionada."
 #: gnucash/report/reports/standard/job-report.scm:584
 #: gnucash/report/reports/standard/new-owner-report.scm:105
 msgid "No valid vendor selected."
-msgstr "Sem fornencedor válido seleccionado."
+msgstr "Sem fornecedor válido seleccionado."
 
 #: gnucash/report/reports/standard/job-report.scm:586
 #: gnucash/report/reports/standard/new-owner-report.scm:95
@@ -27263,7 +27263,7 @@ msgstr "Mostrar receita e despesa?"
 
 #: gnucash/report/reports/standard/net-charts.scm:117
 msgid "Show the Asset and the Liability bars?"
-msgstr "Mostrar as barras de activos e passivos?"
+msgstr "Mostrar as barras de activo e passivo?"
 
 #: gnucash/report/reports/standard/net-charts.scm:126
 msgid "Show the net profit?"
@@ -27313,14 +27313,13 @@ msgid ""
 "No valid A/Payable or A/Receivable account found. Please ensure valid AP/AR "
 "account exists."
 msgstr ""
-"Nenhuma conta C/Pagável ou C/Cobrável encontrada. Por favor, garanta que "
-"existem contas C/P ou C/C válidas."
+"Nenhuma conta A/Pagar ou A/Receber encontrada. Por favor, garanta que "
+"existem contas A/P ou A/R válidas."
 
 #: gnucash/report/reports/standard/new-aging.scm:64
 msgid ""
 "A/Payable or A/Receivable accounts exist but have no suitable transactions."
-msgstr ""
-"Existem contas C/Cobrável ou C/Pagável, mas não têm transacções adequadas."
+msgstr "Existem contas A/Receber ou A/Pagar, mas não têm transacções adequadas."
 
 #: gnucash/report/reports/standard/new-aging.scm:329
 #: gnucash/report/reports/standard/new-owner-report.scm:538
@@ -27473,7 +27472,7 @@ msgstr "As transacções ligadas estão ocultas."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:938
 msgid "Invoices show if paid, payments show invoice numbers."
-msgstr "Facturas mostram se pago, pagamentos mostram nºs de factura."
+msgstr "Facturas mostram se pago, pagamentos mostram números de factura."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:939
 msgid ""
@@ -27500,8 +27499,7 @@ msgstr "Nenhuma conta válida encontrada"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1069
 msgid "This report requires a valid AP/AR account to be available."
-msgstr ""
-"Este relatório requer que tenha uma conta C/P ou C/C válida disponível."
+msgstr "Este relatório requer que tenha uma conta A/P ou A/R válida disponível."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1092
 msgid "No transactions found."
@@ -27542,7 +27540,7 @@ msgstr "A conta pagável que quer examinar."
 
 #: gnucash/report/reports/standard/portfolio.scm:33
 msgid "Investment Portfolio"
-msgstr "Portfólio de investimentos"
+msgstr "Portefólio de investimentos"
 
 #: gnucash/report/reports/standard/portfolio.scm:256
 #: gnucash/report/reports/standard/receipt.scm:52
@@ -30057,11 +30055,11 @@ msgstr "Fundo de investimento"
 
 #: libgnucash/engine/Account.cpp:4481
 msgid "A/Receivable"
-msgstr "C/Cobrável"
+msgstr "A/Receber"
 
 #: libgnucash/engine/Account.cpp:4482
 msgid "A/Payable"
-msgstr "C/Pagável"
+msgstr "A/Pagar"
 
 #: libgnucash/engine/Account.cpp:4483
 msgid "Root"
