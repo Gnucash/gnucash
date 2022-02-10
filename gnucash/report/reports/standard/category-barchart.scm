@@ -35,11 +35,10 @@
 (use-modules (gnucash report))
 
 ;; useful functions
-(define divide-number (lambda (x y) (gnc-numeric-div  x  y GNC-DENOM-AUTO (logior (GNC-DENOM-SIGFIGS 6) GNC-RND-ROUND) )))
+(define (safe-/ x y)
+  (if (and (zero? x) (zero? y)) 0 (/ x y)))
 (define (l1norm . numbers)
-  (if (null? numbers)
-     0
-     (+ (abs (car numbers)) (apply l1norm (cdr numbers)))))
+  (fold (lambda (a b) (+ (abs a) b)) 0 numbers))
 
 ;; The option names are defined here to 1. save typing and 2. avoid
 ;; spelling errors. The *reportnames* are defined here (and not only
@@ -186,17 +185,17 @@ developing over time"))
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-display
-      (N_ "Show ratios")
-      "f" (N_ "Display ratios instead of amounts.")
+      (N_ "Replace amounts with percentage ratios.")
+      "e1" (N_ "Display percentage contribution of each account to the Gand Total instead of amounts.")
       #f))
 
     (gnc:options-add-plot-size!
      options gnc:pagename-display
-     optname-plot-width optname-plot-height "g" (cons 'percent 100.0) (cons 'percent 100.0))
+     optname-plot-width optname-plot-height "f" (cons 'percent 100.0) (cons 'percent 100.0))
 
     (gnc:options-add-sort-method!
      options gnc:pagename-display
-     optname-sort-method "h" 'amount)
+     optname-sort-method "g" 'amount)
 
     (gnc:options-set-default-section options gnc:pagename-general)
 
@@ -260,7 +259,7 @@ developing over time"))
          (work-to-do 0)
          (all-data #f)
          (show-table? (get-option gnc:pagename-display (N_ "Show table")))
-         (ratio-chart? (get-option gnc:pagename-display (N_ "Show ratios")))
+         (ratio-chart? (get-option gnc:pagename-display (N_ "Replace amounts with percentage ratios.")))
          (document (gnc:make-html-document))
          (chart (gnc:make-html-chart))
          (topl-accounts (gnc:filter-accountlist-type
@@ -570,7 +569,7 @@ developing over time"))
                               (show-fullname? (gnc-account-get-full-name acct))
                               (else (xaccAccountGetName acct))))
                       (amounts (map gnc:gnc-monetary-amount (cadr series)))
-                      (percentage (map (lambda (x grandt)  (divide-number x grandt ) )  amounts grandts)) 
+                      (percentage (map (lambda (x grandt)  (safe-/ x grandt)) amounts grandts))
                       (stack (if stacked? "default" (number->string stack)))
                       (fill (eq? chart-type 'barchart))
                       (urls (cond
@@ -629,10 +628,10 @@ developing over time"))
                  (lambda (date row)
                    (gnc:html-table-append-row!
                     table
-                    ( let ((grandt (apply l1norm (map gnc:gnc-monetary-amount row))))
+                    (let ((grandt (apply l1norm (map gnc:gnc-monetary-amount row))))
                      (append (list (make-cell date))
                              (if ratio-chart? 
-                                 (map make-cell-percent (map (lambda (x) (* (divide-number  (gnc:gnc-monetary-amount x) grandt) 100)) row))
+                                 (map (lambda (x) (make-cell-percent (* (safe-/ (gnc:gnc-monetary-amount x) grandt) 100))) row)
                                  (map make-cell row))
                              (if cols>1?
                                  (list
