@@ -79,6 +79,7 @@
 #include "dialog-doclink-utils.h"
 #include "dialog-transfer.h"
 #include "gnc-uri-utils.h"
+#include "gnc-report-combo.h"
 
 /* Disable -Waddress.  GCC 4.2 warns (and fails to compile with -Werror) when
  * passing the address of a guid on the stack to QOF_BOOK_LOOKUP_ENTITY via
@@ -789,15 +790,135 @@ gnc_invoice_window_blankCB (GtkWidget *widget, gpointer data)
     }
 }
 
+typedef struct dialog_args
+{
+    GtkProgressBar  *pb;
+    GtkWidget       *dialog;
+} dialog_args;
+
+static gboolean
+update_progress_bar (gpointer user_data)
+{
+    dialog_args     *args = user_data;
+    GtkProgressBar  *pb = args->pb;
+    gdouble          frac = gtk_progress_bar_get_fraction (pb);
+
+    frac -= 0.05;
+
+    if (frac < 0.05)
+    {
+        gtk_dialog_response (GTK_DIALOG(args->dialog), GTK_RESPONSE_OK);
+        return FALSE;
+    }
+    gtk_progress_bar_set_fraction (pb, frac);
+    return TRUE;
+}
+
+static void
+combo_popped_cb (GObject    *gobject,
+                 GParamSpec *pspec,
+                 gpointer    user_data)
+{
+    gboolean popup_shown;
+
+    g_object_get (G_OBJECT(gobject), "popup-shown", &popup_shown, NULL);
+
+    if (popup_shown)
+        g_source_remove_by_user_data (user_data);
+}
+
+static gboolean
+dialog_key_press_event_cb (GtkWidget *widget, GdkEventKey *event,
+                           gpointer user_data)
+{
+     g_source_remove_by_user_data (user_data);
+     return FALSE;
+}
+
+static void
+combo_changed_cb (GtkComboBox *widget, gpointer user_data)
+{
+    g_source_remove_by_user_data (user_data);
+}
+
+static const char*
+use_default_report_template_or_change (GtkWindow *parent)
+{
+    QofBook     *book = gnc_get_current_book ();
+    GtkWidget   *combo = gnc_report_combo_new ("gnc:custom-report-invoice-template-guids");
+    GtkBuilder  *builder;
+    GtkWidget   *dialog;
+    GtkWidget   *ok_button;
+    GtkWidget   *report_combo_hbox;
+    GtkWidget   *progress_bar;
+    const gchar *ret_guid = NULL;
+    gint         result;
+    dialog_args *args;
+
+    builder = gtk_builder_new ();
+    gnc_builder_add_from_file (builder, "dialog-invoice.glade", "invoice_print_dialog");
+
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "invoice_print_dialog"));
+
+    gtk_window_set_transient_for (GTK_WINDOW(dialog), parent);
+
+    gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_OK);
+
+    ok_button = GTK_WIDGET(gtk_builder_get_object (builder, "ok_button"));
+    report_combo_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "report_combo_hbox"));
+    progress_bar = GTK_WIDGET(gtk_builder_get_object (builder, "progress_bar"));
+
+    gtk_box_pack_start (GTK_BOX(report_combo_hbox), GTK_WIDGET(combo), TRUE, TRUE, 0);
+
+    gtk_widget_grab_focus (ok_button);
+
+    gnc_report_combo_set_active (GNC_REPORT_COMBO(combo),
+                                 gnc_get_default_invoice_print_report (),
+                                 gncInvoiceGetDefaultReportName (book));
+
+    gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress_bar), 1);
+
+    args = g_malloc (sizeof(dialog_args));
+    args->dialog = dialog;
+    args->pb = GTK_PROGRESS_BAR(progress_bar);
+
+    gtk_widget_show_all (dialog);
+
+    g_object_unref (G_OBJECT(builder));
+
+    g_signal_connect (G_OBJECT(combo), "changed",
+                      G_CALLBACK(combo_changed_cb), args);
+
+    g_signal_connect (G_OBJECT(dialog), "key_press_event",
+                      G_CALLBACK(dialog_key_press_event_cb), args);
+
+    g_signal_connect (G_OBJECT(combo), "notify::popup-shown",
+                      G_CALLBACK (combo_popped_cb), args);
+
+    g_timeout_add (100, update_progress_bar, args);
+
+    result = gtk_dialog_run (GTK_DIALOG(dialog));
+
+    g_source_remove_by_user_data (args);
+
+    if (result == GTK_RESPONSE_OK)
+        ret_guid = gnc_report_combo_get_active_guid (GNC_REPORT_COMBO(combo));
+
+    gtk_widget_destroy (dialog);
+    g_free (args);
+
+    return ret_guid;
+}
+
 static GncPluginPage *
-gnc_invoice_window_print_invoice(GtkWindow *parent, GncInvoice *invoice)
+gnc_invoice_window_print_invoice (GtkWindow *parent, GncInvoice *invoice,
+                                  const gchar *report_guid)
 {
     SCM func, arg, arg2;
     SCM args = SCM_EOL;
     SCM is_invoice_guid;
     SCM scm_guid;
     int report_id;
-    const char *report_guid = gnc_get_default_invoice_print_report ();
     GncPluginPage *reportPage = NULL;
 
     g_return_val_if_fail (invoice, NULL);
@@ -852,9 +973,15 @@ gnc_invoice_window_printCB (GtkWindow* parent, gpointer data)
                                       iw->reportPage))
         gnc_plugin_page_report_reload (GNC_PLUGIN_PAGE_REPORT (iw->reportPage));
     else
-        iw->reportPage = gnc_invoice_window_print_invoice
-            (parent, iw_get_invoice (iw));
+    {
+        const gchar *report_guid = use_default_report_template_or_change (parent);
 
+        if (!report_guid)
+            return;
+
+        iw->reportPage = gnc_invoice_window_print_invoice
+            (parent, iw_get_invoice (iw), report_guid);
+    }
     gnc_main_window_open_page (GNC_MAIN_WINDOW (iw->dialog), iw->reportPage);
 }
 
@@ -3113,6 +3240,7 @@ struct multi_edit_invoice_data
 {
     gpointer user_data;
     GtkWindow *parent;
+    const gchar *report_guid;
 };
 
 static void
@@ -3279,26 +3407,35 @@ multi_post_invoice_cb (GtkWindow *dialog, GList *invoice_list, gpointer user_dat
 static void print_one_invoice_cb(GtkWindow *dialog, gpointer data, gpointer user_data)
 {
     GncInvoice *invoice = data;
-    gnc_invoice_window_print_invoice (dialog, invoice);
+    struct multi_edit_invoice_data *meid = user_data;
+
+    gnc_invoice_window_print_invoice (dialog, invoice, meid->report_guid);
 }
 
 static void
 multi_print_invoice_one (gpointer data, gpointer user_data)
 {
     struct multi_edit_invoice_data *meid = user_data;
-    print_one_invoice_cb (gnc_ui_get_main_window (GTK_WIDGET(meid->parent)), data, meid->user_data);
+    print_one_invoice_cb (gnc_ui_get_main_window (GTK_WIDGET(meid->parent)), data, meid);
 }
 
 static void
 multi_print_invoice_cb (GtkWindow *dialog, GList *invoice_list, gpointer user_data)
 {
+    const gchar *report_guid = NULL;
     struct multi_edit_invoice_data meid;
 
     if (!gnc_list_length_cmp (invoice_list, 0))
         return;
 
+    report_guid = use_default_report_template_or_change (dialog);
+
+    if (!report_guid)
+        return;
+
     meid.user_data = user_data;
     meid.parent = dialog;
+    meid.report_guid = report_guid;
     g_list_foreach (invoice_list, multi_print_invoice_one, &meid);
 }
 
