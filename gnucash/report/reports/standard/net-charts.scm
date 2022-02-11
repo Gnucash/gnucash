@@ -227,9 +227,16 @@
          (chart (gnc:make-html-chart)))
 
     ;; This exchanges the commodity-collector 'c' to one single
-    ;; 'report-currency' according to the exchange-fn. Returns a gnc:monetary
-    (define (collector->monetary c date)
-      (gnc:sum-collector-commodity c report-currency (cut exchange-fn <> <> date)))
+    ;; 'report-currency' according to the exchange-fn. Returns an
+    ;; amount.
+    (define (collector->report-currency-amount c date)
+      (fold
+       (lambda (mon acc)
+         (+ acc (gnc-numeric-convert
+                 (gnc:gnc-monetary-amount (exchange-fn mon report-currency date))
+                 (gnc-commodity-get-fraction report-currency)
+                 GNC-RND-ROUND)))
+       0 (c 'format gnc:make-gnc-monetary #f)))
 
     ;; gets an account alist balances
     ;; output: (list acc bal0 bal1 bal2 ...)
@@ -244,8 +251,8 @@
                #:nosplit->elt (gnc:make-gnc-monetary comm 0)))))
 
     ;; This calculates the balances for all the 'account-balances' for
-    ;; each element of the list 'dates'. Uses the collector->monetary
-    ;; conversion function above. Returns a list of gnc-monetary.
+    ;; each element of the list 'dates'. Uses the collector->report-currency-amount
+    ;; conversion function above. Returns a list of amounts.
     (define (process-datelist account-balances dates left-col?)
 
       (define accountlist
@@ -283,7 +290,7 @@
             (loop (cdr dates)
                   (cdr acct-balances)
                   (cons
-                   (collector->monetary
+                   (collector->report-currency-amount
                     (if inc-exp?
                         (gnc:collector- (car acct-balances) (cadr acct-balances))
                         (car acct-balances))
@@ -312,7 +319,7 @@
             (subtrahend-balances (process-datelist account-balancelist dates-list #f))
             (dummy (gnc:report-percent-done 80))
 
-            (difference-balances (map gnc:monetary+ minuend-balances subtrahend-balances))
+            (difference-balances (map + minuend-balances subtrahend-balances))
 
             (dates-list (if inc-exp?
                             (list-head dates-list (1- (length dates-list)))
@@ -344,7 +351,7 @@
          (gnc:html-chart-add-data-series!
           chart
           (if inc-exp? (G_ "Income") (G_ "Assets"))
-          (map gnc:gnc-monetary-amount minuend-balances)
+          minuend-balances
           "#0074D9"
           'fill (not linechart?)
           'pointRadius markers
@@ -365,7 +372,7 @@
          (gnc:html-chart-add-data-series!
           chart
           (if inc-exp? (G_ "Expense") (G_ "Liabilities"))
-          (map - (map gnc:gnc-monetary-amount subtrahend-balances))
+          (map - subtrahend-balances)
           "#FF4136"
           'fill (not linechart?)
           'pointRadius markers
@@ -387,17 +394,16 @@
          (gnc:html-chart-add-data-series!
           chart
           (if inc-exp? (G_ "Net Profit") (G_ "Net Worth"))
-          (map gnc:gnc-monetary-amount difference-balances)
+          difference-balances
           "#2ECC40"
           'fill (not linechart?)
           'pointRadius markers
           'borderWidth line-width))
 
        ;; Test for all-zero data here.
-       (if (gnc:not-all-zeros (map gnc:gnc-monetary-amount
-                                   (append minuend-balances
-                                           subtrahend-balances
-                                           difference-balances)))
+       (if (gnc:not-all-zeros (append minuend-balances
+                                      subtrahend-balances
+                                      difference-balances))
            (begin
              (gnc:html-document-add-object! document chart)
              (if show-table?
@@ -429,8 +435,10 @@
                        (cons date
                              (map
                               (cut gnc:make-html-table-cell/markup "number-cell" <>)
-                              (append (if show-sep? (list minuend subtrahend) '())
-                                      (if show-net? (list difference) '()))))))
+                              (map
+                               (cut gnc:make-gnc-monetary report-currency <>)
+                               (append (if show-sep? (list minuend subtrahend) '())
+                                       (if show-net? (list difference) '())))))))
                     date-string-list
                     minuend-balances
                     subtrahend-balances
