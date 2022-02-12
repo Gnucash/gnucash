@@ -34,6 +34,12 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
 
+;; useful functions
+(define (safe-/ x y)
+  (if (zero? y) 0 (/ x y)))
+(define (l1norm numbers)
+  (fold (lambda (a b) (+ (abs a) b)) 0 numbers))
+
 ;; The option names are defined here to 1. save typing and 2. avoid
 ;; spelling errors. The *reportnames* are defined here (and not only
 ;; once at the very end) because I need them to define the "other"
@@ -176,6 +182,15 @@ developing over time"))
       "e" (N_ "Display a table of the selected data.")
       #f))
 
+    ;; contributed by https://github.com/exxus
+    ;; https://github.com/Gnucash/gnucash/pull/1272
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display
+      (N_ "Replace amounts with percentage ratios.")
+      "e1" (N_ "Display percentage contribution of each account to the Gand Total instead of amounts.")
+      #f))
+
     (gnc:options-add-plot-size!
      options gnc:pagename-display
      optname-plot-width optname-plot-height "f" (cons 'percent 100.0) (cons 'percent 100.0))
@@ -246,6 +261,7 @@ developing over time"))
          (work-to-do 0)
          (all-data #f)
          (show-table? (get-option gnc:pagename-display (N_ "Show table")))
+         (ratio-chart? (get-option gnc:pagename-display (N_ "Replace amounts with percentage ratios.")))
          (document (gnc:make-html-document))
          (chart (gnc:make-html-chart))
          (topl-accounts (gnc:filter-accountlist-type
@@ -491,7 +507,11 @@ developing over time"))
                                  (list-head dates-list (1- (length dates-list)))
                                  dates-list))
                  (date-string-list (map qof-print-date dates-list))
-                 (list-of-rows (apply zip (map cadr all-data))))
+                 (list-of-rows (apply zip (map cadr all-data)))
+
+                 ;; total amount with l1norm, so that positive and
+                 ;; negative amounts add up
+                 (row-totals (map l1norm list-of-rows)))
 
             ;; Set chart title, subtitle etc.
             (gnc:html-chart-set-type!
@@ -511,7 +531,8 @@ developing over time"))
 
             (gnc:html-chart-set-data-labels! chart date-string-list)
             (gnc:html-chart-set-y-axis-label!
-             chart (gnc-commodity-get-mnemonic report-currency))
+             chart (if ratio-chart? "Ratio"
+                       (gnc-commodity-get-mnemonic report-currency)))
 
             ;; If we have too many categories, we sum them into a new
             ;; 'other' category and add a link to a new report with just
@@ -575,8 +596,8 @@ developing over time"))
                                           (gnc-account-get-full-name acct)
                                           (xaccAccountGetName acct)))))))))
                  (gnc:html-chart-add-data-series!
-                  chart label amounts color
-                  'stack stack 'fill fill 'urls urls)))
+                  chart label (if ratio-chart? (map safe-/ amounts row-totals) amounts)
+                  color 'stack stack 'fill fill 'urls urls)))
              all-data
              (gnc:assign-colors (length all-data))
              (iota (length all-data)))
@@ -586,6 +607,8 @@ developing over time"))
              chart (gnc-commodity-get-mnemonic report-currency))
             (gnc:html-chart-set-currency-symbol!
              chart (gnc-commodity-get-nice-symbol report-currency))
+            (gnc:html-chart-set-format-style!
+             chart (if ratio-chart? "percent" "currency"))
 
             (gnc:report-percent-done 98)
             (gnc:html-document-add-object! document chart)
@@ -598,20 +621,28 @@ developing over time"))
                 (define (make-cell contents)
                   (gnc:make-html-table-cell/markup "number-cell" contents))
 
+                (define (make-cell-percent amt grandt)
+                  (gnc:make-html-table-cell/markup "number-cell" (* (safe-/ amt grandt) 100) " %"))
+
                 (define (make-monetary-cell amount)
                   (make-cell (gnc:make-gnc-monetary report-currency amount)))
 
                 (for-each
-                 (lambda (date row)
+                 (lambda (date row row-total)
                    (gnc:html-table-append-row!
                     table
+
                     (append (list (make-cell date))
-                            (map make-monetary-cell row)
+                            (map (if ratio-chart?
+                                     (cut make-cell-percent <> row-total)
+                                     make-monetary-cell)
+                                 row)
                             (if cols>1?
                                 (list (make-monetary-cell (apply + row)))
                                 '()))))
                  date-string-list
-                 list-of-rows)
+                 list-of-rows
+                 row-totals)
 
                 (gnc:html-table-set-col-headers!
                  table
