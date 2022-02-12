@@ -29,8 +29,9 @@
 #include "Query.h"
 
 #ifdef __cplusplus
-extern "C" {
-#endif				/* __cplusplus */
+extern "C"
+{
+#endif              /* __cplusplus */
 
 #define GNC_TYPE_QUERY_VIEW            (gnc_query_view_get_type ())
 #define GNC_QUERY_VIEW(obj)            G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_QUERY_VIEW, GNCQueryView)
@@ -38,84 +39,91 @@ extern "C" {
 #define GNC_IS_QUERY_VIEW(obj)         G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_QUERY_VIEW)
 #define GNC_IS_QUERY_VIEW_CLASS(klass) G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_QUERY_VIEW)
 
-    typedef struct _GNCQueryView      GNCQueryView;
-    typedef struct _GNCQueryViewClass GNCQueryViewClass;
+typedef struct _GNCQueryView      GNCQueryView;
+typedef struct _GNCQueryViewClass GNCQueryViewClass;
 
-    struct _GNCQueryView
-    {
-        GtkTreeView qview;
+struct _GNCQueryView
+{
+    GtkTreeView qview;
 
-        /* Query information */
-        Query      *query;
+    /* Query information */
+    Query      *query;
 
-        /* Select information */
-        gint        toggled_row;
-        gint        toggled_column;
+    /* Select information */
+    gint        toggled_row;
+    gint        toggled_column;
+    gboolean    use_scroll_to_selection;
 
-        /* Column information */
-        gint        num_columns;
-        GList      *column_params;
+    /* Column information */
+    gint        num_columns;
+    GList      *column_params;
 
-        /* numeric information */
-        gboolean    numeric_abs;
-        gboolean    numeric_inv_sort;
+    /* numeric information */
+    gboolean    numeric_abs;
+    gboolean    numeric_inv_sort;
 
-        /* Sorting info */
-        gint        sort_column;
-        gboolean    increasing;
-    };
+    /* Sorting info */
+    gint        sort_column;
+    gboolean    increasing;
+};
 
-    struct _GNCQueryViewClass
-    {
-        GtkTreeViewClass view_class;
+struct _GNCQueryViewClass
+{
+    GtkTreeViewClass view_class;
 
-        /* This signal is emitted when a toggle happens, the pointer has
-           an integer value for the active setting of the toggle */
-        void (*column_toggled) (GNCQueryView *qview, gpointer item);
+    /* This signal is emitted when a toggle happens, the pointer has
+       an integer value for the active setting of the toggle */
+    void (*column_toggled) (GNCQueryView *qview, gpointer item);
 
-        /* This signal is emitted when a row is selected, the pointer has
-           an integer value for the number of rows selected */
-        void (*row_selected) (GNCQueryView *qview, gpointer item);
+    /* This signal is emitted when a row is selected, the pointer has
+       an integer value for the number of rows selected */
+    void (*row_selected) (GNCQueryView *qview, gpointer item);
 
-        /* This signal is emitted when a row is double clicked, the pointer has
-           a pointer to the entry */
-        void (*double_click_entry) (GNCQueryView *qview, gpointer entry);
-    };
+    /* This signal is emitted when a row is double clicked, the pointer has
+       a pointer to the entry */
+    void (*double_click_entry) (GNCQueryView *qview, gpointer entry);
+};
 
-    /***********************************************************
-     *                public functions                         *
-     ***********************************************************/
+/***********************************************************
+ *                public functions                         *
+ ***********************************************************/
 
-    GType gnc_query_view_get_type (void);
+GType gnc_query_view_get_type (void);
 
-    /* The param_list remains owned by the caller but is used by the
-     * query-view; do not destroy it until you destroy this query-view.
-     * The query will be copied by the query-view so the caller may do
-     * whatever they want.
-     */
-    GtkWidget * gnc_query_view_new (GList *param_list, Query *query);
+/* The param_list remains owned by the caller but is used by the
+ * query-view; do not destroy it until you destroy this query-view.
+ * The query will be copied by the query-view so the caller may do
+ * whatever they want.
+ */
+GtkWidget * gnc_query_view_new (GList *param_list, Query *query);
 
-    void gnc_query_view_construct (GNCQueryView *qview, GList *param_list, Query *query);
+void gnc_query_view_construct (GNCQueryView *qview, GList *param_list, Query *query);
 
-    void gnc_query_view_reset_query (GNCQueryView *view, Query *query);
+void gnc_query_view_reset_query (GNCQueryView *view, Query *query);
 
-    void gnc_query_view_set_numerics (GNCQueryView *qview, gboolean abs, gboolean inv_sort);
+void gnc_query_view_set_numerics (GNCQueryView *qview, gboolean abs, gboolean inv_sort);
 
-    gint gnc_query_view_get_num_entries (GNCQueryView *qview);
+gint gnc_query_view_get_num_entries (GNCQueryView *qview);
 
-    gpointer gnc_query_view_get_selected_entry (GNCQueryView *qview);
+gpointer gnc_query_view_get_selected_entry (GNCQueryView *qview);
 
-    /** Returns a list of selected entries in the query view.
-     *  The returned GList should be freed by the caller */
-    GList * gnc_query_view_get_selected_entry_list (GNCQueryView *qview);
+/** Returns a list of selected entries in the query view.
+ *  The returned GList should be freed by the caller */
+GList * gnc_query_view_get_selected_entry_list (GNCQueryView *qview);
 
-    void gnc_query_view_refresh (GNCQueryView *qview);
+void gnc_query_view_refresh (GNCQueryView *qview);
 
-    void gnc_query_view_unselect_all (GNCQueryView *qview);
+void gnc_query_view_unselect_all (GNCQueryView *qview);
 
-    gboolean gnc_query_view_item_in_view (GNCQueryView *qview, gpointer item);
+gboolean gnc_query_view_item_in_view (GNCQueryView *qview, gpointer item);
 
-    void gnc_query_sort_order (GNCQueryView *qview, gint column, GtkSortType order);
+void gnc_query_sort_order (GNCQueryView *qview, gint column, GtkSortType order);
+
+void gnc_query_scroll_to_selection (GNCQueryView *qview);
+
+void gnc_query_force_scroll_to_selection (GNCQueryView *qview);
+
+void gnc_query_use_scroll_to_selection (GNCQueryView *qview, gboolean scroll);
 
 #ifdef __cplusplus
 }

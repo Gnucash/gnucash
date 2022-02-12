@@ -4,7 +4,7 @@
 # Copyright (C) 1999-2001, 2004 Free Software Foundation, Inc.
 # Copyright (C) 2005-2020 by the GnuCash developers and the translators:
 # Christian Stimming <stimming@tuhh.de>, 2001-2020.
-# Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2007, 2009-2021.
+# Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2007, 2009-2022.
 # Andreas Hentze <pictarus@gmx.de>, 2019
 # Joachim Wetzig <jo.wetzig@web.de>, 2019
 # Dmitriy Mangul <dimang.freetime@gmail.com>, 2017-2018
@@ -36,8 +36,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-08 12:55+0000\n"
-"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
+"PO-Revision-Date: 2022-02-12 12:00+0000\n"
+"Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -2577,7 +2577,7 @@ msgstr "Bemerkungen Auslagenerstattung"
 #: gnucash/report/reports/standard/new-owner-report.scm:228
 #: gnucash/report/reports/standard/owner-report.scm:53
 msgid "Type"
-msgstr "Kontoart"
+msgstr "Typ"
 
 #: gnucash/gnome/dialog-invoice.c:3476
 #: gnucash/register/ledger-core/split-register-model.c:310
@@ -12899,23 +12899,16 @@ msgstr ""
 "Abgleichen erschweren."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:99
-#, fuzzy
-#| msgid "_Cut Transaction"
 msgid "Cut a transaction"
-msgstr "Buchung auss_chneiden"
+msgstr "Buchung ausschneiden"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:100
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to delete a transaction."
 msgid "This dialog is presented before allowing you to cut a transaction."
 msgstr "Diese Rückfrage kommt vor dem Löschen einer Buchung."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
-#, fuzzy
-#| msgid "Delete a transaction with reconciled splits"
 msgid "Cut a transaction with reconciled splits"
-msgstr "Sie können eine Buchung mit abgeglichenen Buchungen nicht löschen."
+msgstr "Eine Buchung mit abgeglichenen Teilen ausschneiden"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:105
 #, fuzzy
@@ -16611,10 +16604,8 @@ msgid "Show matched _information"
 msgstr "_Zuordnung-Zeile anzeigen"
 
 #: gnucash/gtkbuilder/dialog-import.glade:978
-#, fuzzy
-#| msgid "Spend"
 msgid "A_ppend"
-msgstr "Ausgabe"
+msgstr "An_hängen"
 
 #: gnucash/gtkbuilder/dialog-import.glade:982
 msgid ""
@@ -16624,10 +16615,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-import.glade:994
-#, fuzzy
-#| msgid "Reconcile after match"
 msgid "_Reconcile after match"
-msgstr "Abgleichen nach Zuordnung"
+msgstr "_Abgleichen nach Zuordnung"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1017
 msgid "Generic import transaction matcher"
@@ -22175,16 +22164,13 @@ msgid "Unknown OFX investment account"
 msgstr "Unbekanntes OFX Investment-Konto"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1276
-#, fuzzy, c-format
-#| msgid ""
-#| "While importing transactions from OFX file '%s' into account '%s', found "
-#| "%d previously imported transactions, no new transactions."
+#, c-format
 msgid ""
 "While importing transactions from OFX file '%s' found %d previously imported "
 "transactions, no new transactions."
 msgstr ""
-"Beim Importieren von Buchungen aus der OFX-Datei '%s' in das Konto '%s' "
-"wurden %d zuvor importierte Buchungen verarbeitet, keine neuen Buchungen."
+"Beim Buchungimport aus der OFX-Datei »%s« wurden %d bereits importierte "
+"Buchungen gefunden, aber keine neuen."
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1378
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
@@ -29386,10 +29372,8 @@ msgid "Add indenting columns"
 msgstr "Hinzufügen von Einrückungsspalten"
 
 #: gnucash/report/trep-engine.scm:97
-#, fuzzy
-#| msgid "Sa_ve Filter"
 msgid "Date Filter"
-msgstr "Filter _speichern"
+msgstr "Datumsfilter"
 
 #: gnucash/report/trep-engine.scm:98
 msgid "Table for Exporting"

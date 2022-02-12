@@ -367,6 +367,10 @@ gnc_item_list_key_event (GtkWidget* widget, GdkEventKey* event, gpointer data)
     case GDK_KEY_Page_Down:
     case GDK_KEY_Up:
     case GDK_KEY_Down:
+    case GDK_KEY_KP_Up:
+    case GDK_KEY_KP_Down:
+    case GDK_KEY_KP_Page_Up:
+    case GDK_KEY_KP_Page_Down:
         /* These go to the clist */
         return FALSE;
     }

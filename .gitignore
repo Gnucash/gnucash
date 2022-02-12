@@ -17,6 +17,7 @@
 .project
 .scm-links
 .vscode/
+.cache/
 ChangeLog
 Makefile
 Makefile.in
@@ -46,6 +47,7 @@ common/swig-runtime.h
 common/test-core/gnucash/
 common/test-core/test_stuff.py
 common/test-core/unittest_support.py
+compile_commands.json
 data/pixmaps/128x128/
 data/pixmaps/16x16
 data/pixmaps/22x22

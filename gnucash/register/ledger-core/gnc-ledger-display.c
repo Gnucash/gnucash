@@ -70,6 +70,8 @@ struct gnc_ledger_display
     GNCLedgerDisplayDestroy destroy;
     GNCLedgerDisplayGetParent get_parent;
 
+    GHashTable *excluded_template_acc_hash;
+
     gpointer user_data;
 
     gint number_of_subaccounts;
@@ -165,6 +167,38 @@ gnc_ledger_display_get_query (GNCLedgerDisplay* ld)
         return NULL;
 
     return ld->query;
+}
+
+static void
+exclude_template_accounts (Query* q, GHashTable *excluded_template_acc_hash)
+{
+    Account* tRoot;
+    GList* al;
+
+    tRoot = gnc_book_get_template_root (gnc_get_current_book());
+    al = gnc_account_get_descendants (tRoot);
+
+    if (gnc_list_length_cmp (al, 0) && excluded_template_acc_hash)
+    {
+        GList *node, *next;
+
+        for (node = al; node; node = next)
+        {
+            Account *acc = node->data;
+            next = g_list_next (node);
+
+            if (g_hash_table_lookup (excluded_template_acc_hash, acc) != NULL)
+                al = g_list_delete_link (al, node);
+            else
+                g_hash_table_insert (excluded_template_acc_hash, acc, acc);
+        }
+    }
+    if (gnc_list_length_cmp (al, 0))
+        xaccQueryAddAccountMatch (q, al, QOF_GUID_MATCH_NONE, QOF_QUERY_AND);
+
+    g_list_free (al);
+    al = NULL;
+    tRoot = NULL;
 }
 
 static gboolean
@@ -410,6 +444,7 @@ gnc_ledger_display_gl (void)
     time64 start;
     struct tm tm;
     GNCLedgerDisplay* ld;
+    GHashTable *exclude_template_accounts_hash;
 
     ENTER (" ");
 
@@ -417,26 +452,16 @@ gnc_ledger_display_gl (void)
 
     qof_query_set_book (query, gnc_get_current_book());
 
+    exclude_template_accounts_hash = g_hash_table_new (g_direct_hash, g_direct_equal);
+
     /* In lieu of not "mis-using" some portion of the infrastructure by writing
      * a bunch of new code, we just filter out the accounts of the template
      * transactions.  While these are in a separate Account trees just for this
      * reason, the query engine makes no distinction between Account trees.
      * See Gnome Bug 86302.
      *         -- jsled */
-    {
-        Account* tRoot;
-        GList* al;
-
-        tRoot = gnc_book_get_template_root (gnc_get_current_book());
-        al = gnc_account_get_descendants (tRoot);
-
-        if (gnc_list_length_cmp (al, 0))
-            xaccQueryAddAccountMatch (query, al, QOF_GUID_MATCH_NONE, QOF_QUERY_AND);
-
-        g_list_free (al);
-        al = NULL;
-        tRoot = NULL;
-    }
+    // Exclude any template accounts for search register and gl
+     exclude_template_accounts (query, exclude_template_accounts_hash);
 
     gnc_tm_get_today_start (&tm);
     tm.tm_mon--; /* Default the register to the last month's worth of transactions. */
@@ -448,6 +473,8 @@ gnc_ledger_display_gl (void)
 
     ld = gnc_ledger_display_internal (NULL, query, LD_GL, GENERAL_JOURNAL,
                                       REG_STYLE_JOURNAL, FALSE, FALSE, FALSE);
+
+    ld->excluded_template_acc_hash = exclude_template_accounts_hash;
     LEAVE ("%p", ld);
 
     qof_query_destroy (query);
@@ -604,6 +631,10 @@ refresh_handler (GHashTable* changes, gpointer user_data)
         g_list_free (accounts);
     }
 
+    // Exclude any template accounts for search register and gl
+    if (!ld->reg->is_template && (ld->reg->type == SEARCH_LEDGER || ld->ld_type == LD_GL))
+        exclude_template_accounts (ld->query, ld->excluded_template_acc_hash);
+
     /* Its not clear if we should re-run the query, or if we should
      * just use qof_query_last_run().  Its possible that the dates
      * changed, requiring a full new query.  Similar considerations
@@ -633,6 +664,10 @@ close_handler (gpointer user_data)
 
     gnc_split_register_destroy (ld->reg);
     ld->reg = NULL;
+
+    // Destroy the excluded template account hash
+    if (ld->excluded_template_acc_hash)
+        g_hash_table_destroy (ld->excluded_template_acc_hash);
 
     qof_query_destroy (ld->query);
     ld->query = NULL;
@@ -709,6 +744,8 @@ gnc_ledger_display_query (Query* query, SplitRegisterType type,
 
     ld = gnc_ledger_display_internal (NULL, query, LD_GL, type, style,
                                       FALSE, FALSE, FALSE);
+
+    ld->excluded_template_acc_hash = g_hash_table_new (g_direct_hash, g_direct_equal);
     LEAVE ("%p", ld);
     return ld;
 }
@@ -802,6 +839,7 @@ gnc_ledger_display_internal (Account* lead_account, Query* q,
     ld->destroy = NULL;
     ld->get_parent = NULL;
     ld->user_data = NULL;
+    ld->excluded_template_acc_hash = NULL;
 
     limit = gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL_REGISTER,
                                  GNC_PREF_MAX_TRANS);
@@ -894,6 +932,10 @@ gnc_ledger_display_refresh (GNCLedgerDisplay* ld)
         LEAVE ("already loading");
         return;
     }
+
+    // Exclude any template accounts for search register and gl
+    if (!ld->reg->is_template && (ld->reg->type == SEARCH_LEDGER || ld->ld_type == LD_GL))
+        exclude_template_accounts (ld->query, ld->excluded_template_acc_hash);
 
     gnc_ledger_display_refresh_internal (ld, qof_query_run (ld->query));
     LEAVE (" ");

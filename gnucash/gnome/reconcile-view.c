@@ -59,13 +59,25 @@ static guint reconcile_view_signals[LAST_SIGNAL] = {0};
 static void gnc_reconcile_view_init (GNCReconcileView *view);
 static void gnc_reconcile_view_class_init (GNCReconcileViewClass *klass);
 static void gnc_reconcile_view_finalize (GObject *object);
-static gpointer gnc_reconcile_view_is_reconciled (gpointer item, gpointer user_data);
-static void gnc_reconcile_view_line_toggled (GNCQueryView *qview, gpointer item, gpointer user_data);
-static void gnc_reconcile_view_double_click_entry (GNCQueryView *qview, gpointer item, gpointer user_data);
-static void gnc_reconcile_view_row_selected (GNCQueryView *qview, gpointer item, gpointer user_data);
-static gboolean gnc_reconcile_view_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data);
-static gboolean gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y, gboolean keyboard_mode,
-                     GtkTooltip* tooltip, gpointer* user_data);
+static gpointer gnc_reconcile_view_is_reconciled (gpointer item,
+                                                  gpointer user_data);
+static void gnc_reconcile_view_line_toggled (GNCQueryView *qview,
+                                             gpointer item,
+                                             gpointer user_data);
+static void gnc_reconcile_view_double_click_entry (GNCQueryView *qview,
+                                                   gpointer item,
+                                                   gpointer user_data);
+static void gnc_reconcile_view_row_selected (GNCQueryView *qview,
+                                             gpointer item,
+                                             gpointer user_data);
+static gboolean gnc_reconcile_view_key_press_cb (GtkWidget *widget,
+                                                 GdkEventKey *event,
+                                                 gpointer user_data);
+static gboolean gnc_reconcile_view_tooltip_cb (GNCQueryView *qview,
+                                               gint x, gint y,
+                                               gboolean keyboard_mode,
+                                               GtkTooltip* tooltip,
+                                               gpointer* user_data);
 
 GType
 gnc_reconcile_view_get_type (void)
@@ -88,8 +100,9 @@ gnc_reconcile_view_get_type (void)
         };
 
         gnc_reconcile_view_type = g_type_register_static (GNC_TYPE_QUERY_VIEW,
-                                  "GncReconcileView",
-                                  &gnc_reconcile_view_info, 0);
+                                                          "GncReconcileView",
+                                                          &gnc_reconcile_view_info,
+                                                          0);
     }
     return gnc_reconcile_view_type;
 }
@@ -97,13 +110,15 @@ gnc_reconcile_view_get_type (void)
 
 static gboolean
 gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
-    gboolean keyboard_mode, GtkTooltip *tooltip, gpointer *user_data)
+                               gboolean keyboard_mode, GtkTooltip *tooltip,
+                               gpointer *user_data)
 {
     GtkTreeModel* model;
     GtkTreeIter iter;
 
     // If the Description is longer than can be display, show it in a tooltip
-    if (gtk_tree_view_get_tooltip_context (GTK_TREE_VIEW (qview), &x, &y, keyboard_mode, &model, NULL, &iter))
+    if (gtk_tree_view_get_tooltip_context (GTK_TREE_VIEW(qview), &x, &y,
+                                           keyboard_mode, &model, NULL, &iter))
     {
         GtkTreeViewColumn *col;
         GList *cols;
@@ -113,13 +128,14 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
         /* Are we in keyboard tooltip mode, displays tooltip below/above treeview CTRL+F1 */
         if (keyboard_mode == FALSE)
         {
-            if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (qview), x, y, NULL, &col, NULL, NULL) == FALSE)
+            if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW(qview), x, y,
+                                               NULL, &col, NULL, NULL) == FALSE)
                 return FALSE;
         }
         else
-            gtk_tree_view_get_cursor (GTK_TREE_VIEW (qview), NULL, &col);
+            gtk_tree_view_get_cursor (GTK_TREE_VIEW(qview), NULL, &col);
 
-        cols = gtk_tree_view_get_columns (GTK_TREE_VIEW (qview));
+        cols = gtk_tree_view_get_columns (GTK_TREE_VIEW(qview));
         col_width = gtk_tree_view_column_get_width (col);
         col_pos = g_list_index (cols, col);
         g_list_free (cols);
@@ -137,7 +153,7 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
             gint root_x, root_y;
             gint cur_x, cur_y;
 
-            layout = gtk_widget_create_pango_layout (GTK_WIDGET (qview), desc_text);
+            layout = gtk_widget_create_pango_layout (GTK_WIDGET(qview), desc_text);
             pango_layout_get_pixel_size (layout, &text_width, NULL);
             g_object_unref (layout);
 
@@ -156,7 +172,7 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
                 GdkWindow *parent_window;
                 GList *win_list, *node;
 
-                parent_window = gtk_widget_get_parent_window (GTK_WIDGET (qview));
+                parent_window = gtk_widget_get_parent_window (GTK_WIDGET(qview));
 
                 seat = gdk_display_get_default_seat (gdk_window_get_display (parent_window));
                 pointer = gdk_seat_get_pointer (seat);
@@ -173,20 +189,20 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
                 for (node = win_list;  node != NULL;  node = node->next)
                 {
                     if (g_strcmp0 (gtk_widget_get_name (node->data), "gtk-tooltip") == 0)
-                    tip_win = node->data;
+                        tip_win = node->data;
                 }
                 g_list_free (win_list);
 
                 gtk_tooltip_set_text (tooltip, desc_text);
 
-                if (GTK_IS_WINDOW (tip_win))
+                if (GTK_IS_WINDOW(tip_win))
                 {
                     GdkMonitor *mon;
                     GdkRectangle monitor;
                     GtkRequisition requisition;
                     gint x, y;
 
-                    gtk_widget_get_preferred_size (GTK_WIDGET (tip_win), &requisition, NULL);
+                    gtk_widget_get_preferred_size (GTK_WIDGET(tip_win), &requisition, NULL);
 
                     x = root_x + cur_x + 10;
                     y = root_y + cur_y + 10;
@@ -213,38 +229,35 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
     return FALSE;
 }
 
-
 gint
 gnc_reconcile_view_get_column_width (GNCReconcileView *view, gint column)
 {
-    GNCQueryView      *qview = GNC_QUERY_VIEW (view);
+    GNCQueryView      *qview = GNC_QUERY_VIEW(view);
     GtkTreeViewColumn *col;
 
-    //allow for pointer model column at column 0
-    col = gtk_tree_view_get_column (GTK_TREE_VIEW (qview), (column - 1));
+    // allow for pointer model column at column 0
+    col = gtk_tree_view_get_column (GTK_TREE_VIEW(qview), (column - 1));
     return  gtk_tree_view_column_get_width (col);
 }
-
 
 void
 gnc_reconcile_view_add_padding (GNCReconcileView *view, gint column, gint xpadding)
 {
-    GNCQueryView      *qview = GNC_QUERY_VIEW (view);
+    GNCQueryView      *qview = GNC_QUERY_VIEW(view);
     GtkTreeViewColumn *col;
     GList             *renderers;
     GtkCellRenderer   *cr0;
     gint xpad, ypad;
 
-    //allow for pointer model column at column 0
-    col = gtk_tree_view_get_column (GTK_TREE_VIEW (qview), (column - 1));
-    renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (col));
+    // allow for pointer model column at column 0
+    col = gtk_tree_view_get_column (GTK_TREE_VIEW(qview), (column - 1));
+    renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT(col));
     cr0 = g_list_nth_data (renderers, 0);
     g_list_free (renderers);
 
     gtk_cell_renderer_get_padding (cr0, &xpad, &ypad);
     gtk_cell_renderer_set_padding (cr0, xpadding, ypad);
 }
-
 
 /****************************************************************************\
  * gnc_reconcile_view_new                                                   *
@@ -258,7 +271,7 @@ gnc_reconcile_view_add_padding (GNCReconcileView *view, gint column, gint xpaddi
 static void
 gnc_reconcile_view_construct (GNCReconcileView *view, Query *query)
 {
-    GNCQueryView      *qview = GNC_QUERY_VIEW (view);
+    GNCQueryView      *qview = GNC_QUERY_VIEW(view);
     GtkTreeViewColumn *col;
     GtkTreeSelection  *selection;
     GList             *renderers;
@@ -274,46 +287,86 @@ gnc_reconcile_view_construct (GNCReconcileView *view, Query *query)
 
     /* Set the description field to have spare space,
        REC_DESC -1 to allow for the pointer model column at 0 */
-    col = gtk_tree_view_get_column (GTK_TREE_VIEW (qview), (REC_DESC - 1));
+    col = gtk_tree_view_get_column (GTK_TREE_VIEW(qview), (REC_DESC - 1));
     gtk_tree_view_column_set_expand (col, TRUE);
 
     /* Get the renderer of the description column and set ellipsize value */
-    renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (col));
+    renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT(col));
     cr0 = g_list_nth_data (renderers, 0);
     g_list_free (renderers);
     g_object_set (cr0, "ellipsize", PANGO_ELLIPSIZE_END, NULL );
 
-    gtk_widget_set_has_tooltip (GTK_WIDGET (qview), TRUE);
+    gtk_widget_set_has_tooltip (GTK_WIDGET(qview), TRUE);
 
     /* Set the selection method */
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (qview));
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(qview));
     gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 
     /* Now set up the signals for the QueryView */
     g_signal_connect (G_OBJECT (qview), "column_toggled",
                       G_CALLBACK (gnc_reconcile_view_line_toggled), view);
-    g_signal_connect (G_OBJECT (qview), "double_click_entry",
-                      G_CALLBACK (gnc_reconcile_view_double_click_entry), view);
-    g_signal_connect (G_OBJECT (qview), "row_selected",
-                      G_CALLBACK (gnc_reconcile_view_row_selected), view);
-    g_signal_connect (G_OBJECT (qview), "key_press_event",
-                      G_CALLBACK (gnc_reconcile_view_key_press_cb), view);
-    g_signal_connect (G_OBJECT (qview), "query-tooltip",
-                      G_CALLBACK (gnc_reconcile_view_tooltip_cb), view);
+    g_signal_connect (G_OBJECT(qview), "double_click_entry",
+                      G_CALLBACK(gnc_reconcile_view_double_click_entry), view);
+    g_signal_connect (G_OBJECT(qview), "row_selected",
+                      G_CALLBACK(gnc_reconcile_view_row_selected), view);
+    g_signal_connect (G_OBJECT(qview), "key_press_event",
+                      G_CALLBACK(gnc_reconcile_view_key_press_cb), view);
+    g_signal_connect (G_OBJECT(qview), "query-tooltip",
+                      G_CALLBACK(gnc_reconcile_view_tooltip_cb), view);
 }
 
+static gint
+sort_date_helper (time64 date_a, time64 date_b)
+{
+    gint ret = 0;
+
+    if (date_a < date_b)
+        ret = -1;
+    else if (date_a > date_b)
+        ret = 1;
+
+    return ret;
+}
+
+static gint
+sort_iter_compare_func (GtkTreeModel *model,
+                        GtkTreeIter  *a,
+                        GtkTreeIter  *b,
+                        gpointer      user_data)
+{
+    gboolean rec_a, rec_b;
+    Split   *split_a, *split_b;
+    time64   date_a, date_b;
+    gint     ret = 0;
+
+    gtk_tree_model_get (model, a, REC_POINTER, &split_a, REC_RECN, &rec_a, -1);
+    gtk_tree_model_get (model, b, REC_POINTER, &split_b, REC_RECN, &rec_b, -1);
+
+    date_a = xaccTransGetDate (xaccSplitGetParent (split_a));
+    date_b = xaccTransGetDate (xaccSplitGetParent (split_b));
+
+    if (rec_a > rec_b)
+        ret = -1;
+    else if (rec_b > rec_a)
+        ret = 1;
+    else ret = sort_date_helper (date_a, date_b);
+
+    return ret;
+}
 
 GtkWidget *
 gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
-                       time64 statement_date)
+                        time64 statement_date)
 {
-    GNCReconcileView *view;
-    GtkListStore     *liststore;
-    gboolean          include_children, auto_check;
-    GList            *accounts = NULL;
-    GList            *splits;
-    Query            *query;
-    QofNumericMatch   sign;
+    GNCReconcileView  *view;
+    GtkListStore      *liststore;
+    GtkTreeSortable   *sortable;
+    GtkTreeViewColumn *col;
+    gboolean           include_children, auto_check;
+    GList             *accounts = NULL;
+    GList             *splits;
+    Query             *query;
+    QofNumericMatch    sign;
 
     g_return_val_if_fail (account, NULL);
     g_return_val_if_fail ((type == RECLIST_DEBIT) ||
@@ -324,8 +377,10 @@ gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
     /* Create the list store with 6 columns and add to treeview,
        column 0 will be a pointer to the entry */
     liststore = gtk_list_store_new (6, G_TYPE_POINTER, G_TYPE_STRING,
-                G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,  G_TYPE_BOOLEAN );
-    gtk_tree_view_set_model (GTK_TREE_VIEW (view), GTK_TREE_MODEL (liststore));
+                                       G_TYPE_STRING, G_TYPE_STRING,
+                                       G_TYPE_STRING,  G_TYPE_BOOLEAN);
+
+    gtk_tree_view_set_model (GTK_TREE_VIEW(view), GTK_TREE_MODEL(liststore));
     g_object_unref (liststore);
 
     view->account = account;
@@ -346,8 +401,8 @@ gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
 
     g_list_free (accounts);
 
-    sign = (type == RECLIST_CREDIT) ?
-        QOF_NUMERIC_MATCH_CREDIT : QOF_NUMERIC_MATCH_DEBIT;
+    sign = (type == RECLIST_CREDIT) ? QOF_NUMERIC_MATCH_CREDIT :
+                                      QOF_NUMERIC_MATCH_DEBIT;
 
     xaccQueryAddNumericMatch (query, gnc_numeric_zero (), sign, QOF_COMPARE_GTE,
                               QOF_QUERY_AND, SPLIT_AMOUNT, NULL);
@@ -363,7 +418,7 @@ gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
 
     if (auto_check)
     {
-        time64 statement_date_day_end = gnc_time64_get_day_end(statement_date);
+        time64 statement_date_day_end = gnc_time64_get_day_end (statement_date);
         for (splits = qof_query_run (query); splits; splits = splits->next)
         {
             Split *split = splits->data;
@@ -373,32 +428,36 @@ gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
             /* Just an extra verification that our query is correct ;) */
             g_assert (recn == NREC || recn == CREC);
 
-            if (recn == CREC &&
-        gnc_difftime (trans_date, statement_date_day_end) <= 0)
-        g_hash_table_insert (view->reconciled, split, split);
+            if (recn == CREC && gnc_difftime (trans_date, statement_date_day_end) <= 0)
+                g_hash_table_insert (view->reconciled, split, split);
         }
     }
+
+    /* set up a separate sort function for the recn column as it is
+     * derived from a search function */
+    sortable = GTK_TREE_SORTABLE(gtk_tree_view_get_model (GTK_TREE_VIEW(view)));
+    col = gtk_tree_view_get_column (GTK_TREE_VIEW(view), REC_RECN -1);
+    gtk_tree_sortable_set_sort_func (sortable, REC_RECN, sort_iter_compare_func,
+                                     GINT_TO_POINTER (REC_RECN), NULL);
 
     /* Free the query -- we don't need it anymore */
     qof_query_destroy (query);
 
-    return GTK_WIDGET (view);
+    return GTK_WIDGET(view);
 }
-
 
 static void
 gnc_reconcile_view_init (GNCReconcileView *view)
 {
     GNCSearchParamSimple *param;
-    GList          *columns = NULL;
-    gboolean num_action =
-                qof_book_use_split_action_for_num_field(gnc_get_current_book());
+    GList                *columns = NULL;
+    gboolean num_action = qof_book_use_split_action_for_num_field (gnc_get_current_book());
 
     view->reconciled = g_hash_table_new (NULL, NULL);
     view->account = NULL;
     view->sibling = NULL;
 
-    param = gnc_search_param_simple_new();
+    param = gnc_search_param_simple_new ();
     gnc_search_param_set_param_fcn (param, QOF_TYPE_BOOLEAN,
                                     gnc_reconcile_view_is_reconciled, view);
     gnc_search_param_set_title ((GNCSearchParam *) param, C_("Column header for 'Reconciled'", "R"));
@@ -408,69 +467,70 @@ gnc_reconcile_view_init (GNCReconcileView *view)
     columns = g_list_prepend (columns, param);
 
     columns = gnc_search_param_prepend_with_justify (columns, _("Amount"),
-              GTK_JUSTIFY_RIGHT,
-              NULL, GNC_ID_SPLIT,
-              SPLIT_AMOUNT, NULL);
+                                                     GTK_JUSTIFY_RIGHT,
+                                                     NULL, GNC_ID_SPLIT,
+                                                     SPLIT_AMOUNT, NULL);
     columns = gnc_search_param_prepend (columns, _("Description"), NULL,
                                         GNC_ID_SPLIT, SPLIT_TRANS,
                                         TRANS_DESCRIPTION, NULL);
     columns = num_action ?
               gnc_search_param_prepend_with_justify (columns, _("Num"),
-              GTK_JUSTIFY_CENTER,
-              NULL, GNC_ID_SPLIT,
-              SPLIT_ACTION, NULL) :
+                                                     GTK_JUSTIFY_CENTER,
+                                                     NULL, GNC_ID_SPLIT,
+                                                     SPLIT_ACTION, NULL) :
               gnc_search_param_prepend_with_justify (columns, _("Num"),
-              GTK_JUSTIFY_CENTER,
-              NULL, GNC_ID_SPLIT,
-              SPLIT_TRANS, TRANS_NUM, NULL);
-    columns = gnc_search_param_prepend (columns, _("Date"), NULL, GNC_ID_SPLIT,
-                                        SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
+                                                     GTK_JUSTIFY_CENTER,
+                                                     NULL, GNC_ID_SPLIT,
+                                                     SPLIT_TRANS, TRANS_NUM, NULL);
+    columns = gnc_search_param_prepend (columns, _("Date"),
+                                        NULL, GNC_ID_SPLIT,
+                                        SPLIT_TRANS,
+                                        TRANS_DATE_POSTED, NULL);
 
     view->column_list = columns;
 }
-
 
 static void
 gnc_reconcile_view_class_init (GNCReconcileViewClass *klass)
 {
     GObjectClass    *object_class;
 
-    object_class =  G_OBJECT_CLASS (klass);
+    object_class =  G_OBJECT_CLASS(klass);
 
     parent_class = g_type_class_peek_parent (klass);
 
     reconcile_view_signals[TOGGLE_RECONCILED] =
-        g_signal_new("toggle_reconciled",
-                     G_OBJECT_CLASS_TYPE (object_class),
-                     G_SIGNAL_RUN_FIRST,
-                     G_STRUCT_OFFSET (GNCReconcileViewClass,
+        g_signal_new ("toggle_reconciled",
+                      G_OBJECT_CLASS_TYPE(object_class),
+                      G_SIGNAL_RUN_FIRST,
+                      G_STRUCT_OFFSET(GNCReconcileViewClass,
                                       toggle_reconciled),
-                     NULL, NULL,
-                     g_cclosure_marshal_VOID__POINTER,
-                     G_TYPE_NONE, 1,
-                     G_TYPE_POINTER);
+                      NULL, NULL,
+                      g_cclosure_marshal_VOID__POINTER,
+                      G_TYPE_NONE, 1,
+                      G_TYPE_POINTER);
 
     reconcile_view_signals[LINE_SELECTED] =
-        g_signal_new("line_selected",
-                     G_OBJECT_CLASS_TYPE (object_class),
-                     G_SIGNAL_RUN_FIRST,
-                     G_STRUCT_OFFSET (GNCReconcileViewClass,
+        g_signal_new ("line_selected",
+                      G_OBJECT_CLASS_TYPE(object_class),
+                      G_SIGNAL_RUN_FIRST,
+                      G_STRUCT_OFFSET(GNCReconcileViewClass,
                                       line_selected),
-                     NULL, NULL,
-                     g_cclosure_marshal_VOID__POINTER,
-                     G_TYPE_NONE, 1,
-                     G_TYPE_POINTER);
+                      NULL, NULL,
+                      g_cclosure_marshal_VOID__POINTER,
+                      G_TYPE_NONE, 1,
+                      G_TYPE_POINTER);
 
     reconcile_view_signals[DOUBLE_CLICK_SPLIT] =
-        g_signal_new("double_click_split",
-                     G_OBJECT_CLASS_TYPE (object_class),
-                     G_SIGNAL_RUN_FIRST,
-                     G_STRUCT_OFFSET (GNCReconcileViewClass,
+        g_signal_new ("double_click_split",
+                      G_OBJECT_CLASS_TYPE(object_class),
+                      G_SIGNAL_RUN_FIRST,
+                      G_STRUCT_OFFSET(GNCReconcileViewClass,
                                       double_click_split),
-                     NULL, NULL,
-                     g_cclosure_marshal_VOID__POINTER,
-                     G_TYPE_NONE, 1,
-                     G_TYPE_POINTER);
+                      NULL, NULL,
+                      g_cclosure_marshal_VOID__POINTER,
+                      G_TYPE_NONE, 1,
+                      G_TYPE_POINTER);
 
     object_class->finalize = gnc_reconcile_view_finalize;
 
@@ -479,13 +539,12 @@ gnc_reconcile_view_class_init (GNCReconcileViewClass *klass)
     klass->double_click_split = NULL;
 }
 
-
 static void
 gnc_reconcile_view_toggle_split (GNCReconcileView *view, Split *split)
 {
     Split *current;
 
-    g_return_if_fail (GNC_IS_RECONCILE_VIEW (view));
+    g_return_if_fail (GNC_IS_RECONCILE_VIEW(view));
     g_return_if_fail (view->reconciled != NULL);
 
     current = g_hash_table_lookup (view->reconciled, split);
@@ -496,19 +555,39 @@ gnc_reconcile_view_toggle_split (GNCReconcileView *view, Split *split)
         g_hash_table_remove (view->reconciled, split);
 }
 
-
 static void
 gnc_reconcile_view_toggle (GNCReconcileView *view, Split *split)
 {
-    g_return_if_fail (GNC_IS_RECONCILE_VIEW (view));
+    g_return_if_fail (GNC_IS_RECONCILE_VIEW(view));
     g_return_if_fail (view->reconciled != NULL);
 
     gnc_reconcile_view_toggle_split (view, split);
 
-    g_signal_emit (G_OBJECT (view),
+    g_signal_emit (G_OBJECT(view),
                    reconcile_view_signals[TOGGLE_RECONCILED], 0, split);
 }
 
+static gboolean
+follow_select_tree_path (GNCReconcileView *view)
+{
+    if (view->rowref)
+    {
+        GtkTreePath      *tree_path = gtk_tree_row_reference_get_path (view->rowref);
+        GNCQueryView      qview = view->qview;
+        GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(&qview));
+
+        gtk_tree_selection_unselect_all (selection);
+        gtk_tree_selection_select_path (selection, tree_path);
+
+        gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(&qview),
+                                      tree_path, NULL, FALSE, 0.0, 0.0);
+
+        gtk_tree_path_free (tree_path);
+        gtk_tree_row_reference_free (view->rowref);
+        view->rowref = NULL;
+    }
+    return FALSE;
+}
 
 static void
 gnc_reconcile_view_line_toggled (GNCQueryView *qview,
@@ -519,20 +598,42 @@ gnc_reconcile_view_line_toggled (GNCQueryView *qview,
     GtkTreeModel     *model;
     GtkTreeIter       iter;
     gpointer          entry;
+    GtkTreePath      *tree_path;
 
     g_return_if_fail (user_data);
-    g_return_if_fail (GNC_IS_QUERY_VIEW (qview));
+    g_return_if_fail (GNC_IS_QUERY_VIEW(qview));
 
     view = user_data;
 
-    model = gtk_tree_view_get_model (GTK_TREE_VIEW (qview));
+    model = gtk_tree_view_get_model (GTK_TREE_VIEW(qview));
     gtk_tree_model_iter_nth_child (model, &iter, NULL, qview->toggled_row);
-    gtk_list_store_set (GTK_LIST_STORE (model), &iter, qview->toggled_column, GPOINTER_TO_INT(item), -1);
-    gtk_tree_model_get (model, &iter, REC_POINTER, &entry, -1);
 
-    gnc_reconcile_view_toggle (view, entry);
+    tree_path = gtk_tree_model_get_path (model, &iter);
+    view->rowref = gtk_tree_row_reference_new (model, tree_path);
+    gtk_tree_path_free (tree_path);
+
+    gtk_list_store_set (GTK_LIST_STORE(model), &iter, qview->toggled_column,
+                                                      GPOINTER_TO_INT(item), -1);
+
+    tree_path = gtk_tree_row_reference_get_path (view->rowref);
+
+    if (gtk_tree_model_get_iter (model, &iter, tree_path))
+    {
+        gtk_tree_model_get (model, &iter, REC_POINTER, &entry, -1);
+        gnc_reconcile_view_toggle (view, entry);
+    }
+
+    // See if sorting on rec column, -1 to allow for the model pointer column at 0
+    if (qview->sort_column == REC_RECN - 1)
+        g_idle_add ((GSourceFunc)follow_select_tree_path, view);
+    else
+    {
+        gtk_tree_row_reference_free (view->rowref);
+        view->rowref = NULL;
+    }
+
+    gtk_tree_path_free (tree_path);
 }
-
 
 static void
 gnc_reconcile_view_double_click_entry (GNCQueryView *qview,
@@ -540,16 +641,16 @@ gnc_reconcile_view_double_click_entry (GNCQueryView *qview,
                                        gpointer user_data)
 {
     GNCReconcileView *view;
+
     /* item is the entry */
     g_return_if_fail (user_data);
-    g_return_if_fail (GNC_IS_QUERY_VIEW (qview));
+    g_return_if_fail (GNC_IS_QUERY_VIEW(qview));
 
     view = user_data;
 
-    g_signal_emit(G_OBJECT (view),
+    g_signal_emit(G_OBJECT(view),
                   reconcile_view_signals[DOUBLE_CLICK_SPLIT], 0, item);
 }
-
 
 static void
 gnc_reconcile_view_row_selected (GNCQueryView *qview,
@@ -557,19 +658,19 @@ gnc_reconcile_view_row_selected (GNCQueryView *qview,
                                  gpointer user_data)
 {
     GNCReconcileView *view;
+
     /* item is the number of selected entries */
-    g_return_if_fail(user_data);
-    g_return_if_fail(GNC_IS_QUERY_VIEW(qview));
+    g_return_if_fail (user_data);
+    g_return_if_fail (GNC_IS_QUERY_VIEW(qview));
 
     view = user_data;
 
-    g_signal_emit(G_OBJECT(view),
-                  reconcile_view_signals[LINE_SELECTED], 0, item);
+    g_signal_emit (G_OBJECT(view),
+                   reconcile_view_signals[LINE_SELECTED], 0, item);
 }
 
-
 void
-gnc_reconcile_view_set_list ( GNCReconcileView  *view, gboolean reconcile)
+gnc_reconcile_view_set_list (GNCReconcileView  *view, gboolean reconcile)
 {
     GNCQueryView      *qview = GNC_QUERY_VIEW(view);
     GtkTreeSelection  *selection;
@@ -578,34 +679,66 @@ gnc_reconcile_view_set_list ( GNCReconcileView  *view, gboolean reconcile)
     gboolean           toggled;
     GList             *node;
     GList             *list_of_rows;
+    GList             *rr_list = NULL;
+    GtkTreePath       *last_tree_path = NULL;
 
-    model =  gtk_tree_view_get_model (GTK_TREE_VIEW (qview));
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (qview));
+    model =  gtk_tree_view_get_model (GTK_TREE_VIEW(qview));
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(qview));
     list_of_rows = gtk_tree_selection_get_selected_rows (selection, &model);
 
-    /* We get a list of TreePaths */
-    for(node = list_of_rows; node; node = node->next)
+    /* First create a list of Row references */
+    for (node = list_of_rows; node; node = node->next)
     {
-        GtkTreeIter iter;
-        if(gtk_tree_model_get_iter(model, &iter, node->data))
+        GtkTreeRowReference *rowref = gtk_tree_row_reference_new (model, node->data);
+        rr_list = g_list_append (rr_list, rowref);
+        gtk_tree_path_free (node->data);
+    }
+
+    for (node = rr_list; node; node = node->next)
+    {
+        GtkTreeIter          iter;
+        GtkTreePath         *path;
+        GtkTreeRowReference *rowref = node->data;
+
+        path = gtk_tree_row_reference_get_path (rowref);
+
+        if (gtk_tree_model_get_iter (model, &iter, path))
         {
             /* now iter is a valid row iterator */
-            gtk_tree_model_get (model, &iter, REC_POINTER, &entry, -1);
-            gtk_tree_model_get (model, &iter, REC_RECN, &toggled, -1);
+            gtk_tree_model_get (model, &iter, REC_POINTER, &entry,
+                                              REC_RECN, &toggled, -1);
 
-            gtk_list_store_set (GTK_LIST_STORE (model), &iter, REC_RECN, reconcile, -1);
+            gtk_list_store_set (GTK_LIST_STORE(model), &iter, REC_RECN, reconcile, -1);
 
-            if(reconcile != toggled)
+            if (last_tree_path)
+                gtk_tree_path_free (last_tree_path);
+            last_tree_path = gtk_tree_row_reference_get_path (rowref);
+
+            if (reconcile != toggled)
                 gnc_reconcile_view_toggle (view, entry);
         }
-        gtk_tree_path_free(node->data);
+        gtk_tree_path_free (path);
     }
+
+    if (last_tree_path)
+    {
+        // See if sorting on rec column, -1 to allow for the model pointer column at 0
+        if (qview->sort_column == REC_RECN -1)
+        {
+            gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(qview),
+                                          last_tree_path, NULL, FALSE, 0.0, 0.0);
+        }
+        gtk_tree_path_free (last_tree_path);
+        last_tree_path = NULL;
+    }
+    g_list_foreach (rr_list, (GFunc) gtk_tree_row_reference_free, NULL);
+    g_list_free (rr_list);
+
     // Out of site toggles on selected rows may not appear correctly drawn so
     // queue a draw for the treeview widget
     gtk_widget_queue_draw (GTK_WIDGET(qview));
-    g_list_free(list_of_rows);
+    g_list_free (list_of_rows);
 }
-
 
 gint
 gnc_reconcile_view_num_selected (GNCReconcileView  *view )
@@ -613,10 +746,9 @@ gnc_reconcile_view_num_selected (GNCReconcileView  *view )
     GNCQueryView      *qview = GNC_QUERY_VIEW(view);
     GtkTreeSelection  *selection;
 
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (qview));
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(qview));
     return gtk_tree_selection_count_selected_rows (selection);
 }
-
 
 static gboolean
 gnc_reconcile_view_set_toggle (GNCReconcileView  *view)
@@ -630,38 +762,37 @@ gnc_reconcile_view_set_toggle (GNCReconcileView  *view)
     gint               num_toggled = 0;
     gint               num_selected = 0;
 
-    model =  gtk_tree_view_get_model (GTK_TREE_VIEW (qview));
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (qview));
+    model =  gtk_tree_view_get_model (GTK_TREE_VIEW(qview));
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(qview));
     list_of_rows = gtk_tree_selection_get_selected_rows (selection, &model);
     num_selected = gtk_tree_selection_count_selected_rows (selection);
 
     /* We get a list of TreePaths */
-    for(node = list_of_rows; node; node = node->next)
+    for (node = list_of_rows; node; node = node->next)
     {
         GtkTreeIter iter;
         toggled = FALSE;
-        if(gtk_tree_model_get_iter(model, &iter, node->data))
+        if (gtk_tree_model_get_iter (model, &iter, node->data))
         {
             /* now iter is a valid row iterator */
             gtk_tree_model_get (model, &iter, REC_RECN, &toggled, -1);
 
-            if(toggled)
+            if (toggled)
                 num_toggled++;
         }
-        gtk_tree_path_free(node->data);
+        gtk_tree_path_free (node->data);
     }
-    g_list_free(list_of_rows);
+    g_list_free (list_of_rows);
 
-    if(num_toggled == num_selected)
+    if (num_toggled == num_selected)
         return FALSE;
     else
         return TRUE;
 }
 
-
 static gboolean
 gnc_reconcile_view_key_press_cb (GtkWidget *widget, GdkEventKey *event,
-                            gpointer user_data)
+                                 gpointer user_data)
 {
     GNCReconcileView  *view = GNC_RECONCILE_VIEW(user_data);
     gboolean           toggle;
@@ -681,11 +812,10 @@ gnc_reconcile_view_key_press_cb (GtkWidget *widget, GdkEventKey *event,
     }
 }
 
-
 static void
 gnc_reconcile_view_finalize (GObject *object)
 {
-    GNCReconcileView *view = GNC_RECONCILE_VIEW (object);
+    GNCReconcileView *view = GNC_RECONCILE_VIEW(object);
 
     g_list_free (view->column_list);
     if (view->reconciled != NULL)
@@ -693,29 +823,26 @@ gnc_reconcile_view_finalize (GObject *object)
         g_hash_table_destroy (view->reconciled);
         view->reconciled = NULL;
     }
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS(parent_class)->finalize (object);
 }
-
 
 gint
 gnc_reconcile_view_get_num_splits (GNCReconcileView *view)
 {
     g_return_val_if_fail (view != NULL, 0);
-    g_return_val_if_fail (GNC_IS_RECONCILE_VIEW (view), 0);
+    g_return_val_if_fail (GNC_IS_RECONCILE_VIEW(view), 0);
 
-    return gnc_query_view_get_num_entries (GNC_QUERY_VIEW (view));
+    return gnc_query_view_get_num_entries (GNC_QUERY_VIEW(view));
 }
-
 
 Split *
 gnc_reconcile_view_get_current_split (GNCReconcileView *view)
 {
     g_return_val_if_fail (view != NULL, NULL);
-    g_return_val_if_fail (GNC_IS_RECONCILE_VIEW (view), NULL);
+    g_return_val_if_fail (GNC_IS_RECONCILE_VIEW(view), NULL);
 
-    return gnc_query_view_get_selected_entry (GNC_QUERY_VIEW (view));
+    return gnc_query_view_get_selected_entry (GNC_QUERY_VIEW(view));
 }
-
 
 /********************************************************************\
  * gnc_reconcile_view_is_reconciled                                 *
@@ -729,19 +856,18 @@ static gpointer
 gnc_reconcile_view_is_reconciled (gpointer item, gpointer user_data)
 {
     GNCReconcileView *view = user_data;
-    Split *current;
+    Split            *current;
 
     g_return_val_if_fail (item, NULL);
     g_return_val_if_fail (view, NULL);
-    g_return_val_if_fail (GNC_IS_RECONCILE_VIEW (view), NULL);
+    g_return_val_if_fail (GNC_IS_RECONCILE_VIEW(view), NULL);
 
     if (!view->reconciled)
         return NULL;
 
     current = g_hash_table_lookup (view->reconciled, item);
-    return GINT_TO_POINTER (current != NULL);
+    return GINT_TO_POINTER(current != NULL);
 }
-
 
 /********************************************************************\
  * gnc_reconcile_view_refresh                                       *
@@ -750,46 +876,32 @@ gnc_reconcile_view_is_reconciled (gpointer item, gpointer user_data)
  * Args: view - view to refresh                                     *
  * Returns: nothing                                                 *
 \********************************************************************/
-static void
+static gboolean
 grv_refresh_helper (gpointer key, gpointer value, gpointer user_data)
 {
-    GNCReconcileView *view = user_data;
-    GNCQueryView *qview = GNC_QUERY_VIEW (view);
+    GNCQueryView     *qview = user_data;
 
-    if (!gnc_query_view_item_in_view (qview, key))
-        g_hash_table_remove (view->reconciled, key);
+    return !gnc_query_view_item_in_view (qview, key);
 }
 
 void
 gnc_reconcile_view_refresh (GNCReconcileView *view)
 {
-    GNCQueryView *qview;
-    GtkTreeSelection *selection;
-    GList *path_list, *node;
+    GNCQueryView      *qview;
 
     g_return_if_fail (view != NULL);
-    g_return_if_fail (GNC_IS_RECONCILE_VIEW (view));
+    g_return_if_fail (GNC_IS_RECONCILE_VIEW(view));
 
-    qview = GNC_QUERY_VIEW (view);
+    qview = GNC_QUERY_VIEW(view);
     gnc_query_view_refresh (qview);
 
     /* Ensure last selected split, if any, can be seen */
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (qview));
-    path_list = gtk_tree_selection_get_selected_rows (selection, NULL);
-    node = g_list_last (path_list);
-    if (node)
-    {
-        GtkTreePath *tree_path = node->data;
-        gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (qview),
-                                      tree_path, NULL, FALSE, 0.0, 0.0);
-    }
-    g_list_free_full (path_list, (GDestroyNotify) gtk_tree_path_free);
+    gnc_query_force_scroll_to_selection (qview);
 
     /* Now verify that everything in the reconcile hash is still in qview */
     if (view->reconciled)
-        g_hash_table_foreach (view->reconciled, grv_refresh_helper, view);
+        g_hash_table_foreach_remove (view->reconciled, grv_refresh_helper, qview);
 }
-
 
 /********************************************************************\
  * gnc_reconcile_view_reconciled_balance                            *
@@ -801,7 +913,7 @@ gnc_reconcile_view_refresh (GNCReconcileView *view)
 static void
 grv_balance_hash_helper (gpointer key, gpointer value, gpointer user_data)
 {
-    Split *split = key;
+    Split       *split = key;
     gnc_numeric *total = user_data;
 
     *total = gnc_numeric_add_fixed (*total, xaccSplitGetAmount (split));
@@ -813,7 +925,7 @@ gnc_reconcile_view_reconciled_balance (GNCReconcileView *view)
     gnc_numeric total = gnc_numeric_zero ();
 
     g_return_val_if_fail (view != NULL, total);
-    g_return_val_if_fail (GNC_IS_RECONCILE_VIEW (view), total);
+    g_return_val_if_fail (GNC_IS_RECONCILE_VIEW(view), total);
 
     if (view->reconciled == NULL)
         return total;
@@ -822,7 +934,6 @@ gnc_reconcile_view_reconciled_balance (GNCReconcileView *view)
 
     return gnc_numeric_abs (total);
 }
-
 
 /********************************************************************\
  * gnc_reconcile_view_commit                                        *
@@ -837,7 +948,7 @@ gnc_reconcile_view_reconciled_balance (GNCReconcileView *view)
 static void
 grv_commit_hash_helper (gpointer key, gpointer value, gpointer user_data)
 {
-    Split *split = key;
+    Split  *split = key;
     time64 *date = user_data;
 
     xaccSplitSetReconcile (split, YREC);
@@ -848,16 +959,15 @@ void
 gnc_reconcile_view_commit (GNCReconcileView *view, time64 date)
 {
     g_return_if_fail (view != NULL);
-    g_return_if_fail (GNC_IS_RECONCILE_VIEW (view));
+    g_return_if_fail (GNC_IS_RECONCILE_VIEW(view));
 
     if (view->reconciled == NULL)
         return;
 
-    gnc_suspend_gui_refresh();
+    gnc_suspend_gui_refresh ();
     g_hash_table_foreach (view->reconciled, grv_commit_hash_helper, &date);
-    gnc_resume_gui_refresh();
+    gnc_resume_gui_refresh ();
 }
-
 
 /********************************************************************\
  * gnc_reconcile_view_postpone                                      *
@@ -877,17 +987,17 @@ gnc_reconcile_view_postpone (GNCReconcileView *view)
     gpointer      entry = NULL;
 
     g_return_if_fail (view != NULL);
-    g_return_if_fail (GNC_IS_RECONCILE_VIEW (view));
+    g_return_if_fail (GNC_IS_RECONCILE_VIEW(view));
 
     if (view->reconciled == NULL)
         return;
 
-    model = gtk_tree_view_get_model (GTK_TREE_VIEW (GNC_QUERY_VIEW (view)));
+    model = gtk_tree_view_get_model (GTK_TREE_VIEW(GNC_QUERY_VIEW(view)));
     gtk_tree_model_get_iter_first (model, &iter);
 
-    num_splits = gnc_query_view_get_num_entries (GNC_QUERY_VIEW (view));
+    num_splits = gnc_query_view_get_num_entries (GNC_QUERY_VIEW(view));
 
-    gnc_suspend_gui_refresh();
+    gnc_suspend_gui_refresh ();
     for (i = 0; i < num_splits; i++)
     {
         char recn;
@@ -905,9 +1015,8 @@ gnc_reconcile_view_postpone (GNCReconcileView *view)
         }
         gtk_tree_model_iter_next (model, &iter);
     }
-    gnc_resume_gui_refresh();
+    gnc_resume_gui_refresh ();
 }
-
 
 /********************************************************************\
  * gnc_reconcile_view_unselect_all                                  *
@@ -917,14 +1026,13 @@ gnc_reconcile_view_postpone (GNCReconcileView *view)
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-gnc_reconcile_view_unselect_all(GNCReconcileView *view)
+gnc_reconcile_view_unselect_all (GNCReconcileView *view)
 {
     g_return_if_fail (view != NULL);
-    g_return_if_fail (GNC_IS_RECONCILE_VIEW (view));
+    g_return_if_fail (GNC_IS_RECONCILE_VIEW(view));
 
-    gnc_query_view_unselect_all (GNC_QUERY_VIEW (view));
+    gnc_query_view_unselect_all (GNC_QUERY_VIEW(view));
 }
-
 
 /********************************************************************\
  * gnc_reconcile_view_changed                                       *
@@ -937,7 +1045,7 @@ gboolean
 gnc_reconcile_view_changed (GNCReconcileView *view)
 {
     g_return_val_if_fail (view != NULL, FALSE);
-    g_return_val_if_fail (GNC_IS_RECONCILE_VIEW (view), FALSE);
+    g_return_val_if_fail (GNC_IS_RECONCILE_VIEW(view), FALSE);
 
     return g_hash_table_size (view->reconciled) != 0;
 }

@@ -5,14 +5,15 @@
 # giorgos georgopoulakis <huskyaek@gmail.com>, 2021.
 # Katerina <katerina.gakou@hotmail.com>, 2021.
 # Eugenia Russell <eugenia.russell2019@gmail.com>, 2021.
+# Gregory-K <lifeturn@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-01-02 22:54+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2022-02-03 11:54+0000\n"
+"Last-Translator: Gregory-K <lifeturn@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/glossary/"
 "el/>\n"
 "Language: el\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.11-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -209,10 +210,8 @@ msgid "amount"
 msgstr "ποσό"
 
 #. "The amount finally to pay, respecting discounts, billing terms…"
-#, fuzzy
-#| msgid "amount"
 msgid "amount due"
-msgstr "ποσό"
+msgstr "οφειλόμενο ποσό"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
@@ -402,7 +401,7 @@ msgstr "σύνδεσμος προς το αρχείο"
 
 #. "The last day to pay an invoice in time."
 msgid "due date"
-msgstr ""
+msgstr "καταληκτική ημερομηνία"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
@@ -597,7 +596,7 @@ msgstr "παραγγελία"
 
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
-msgstr "ορφανοποιημένο"
+msgstr "χωρίς λογαριασμό"
 
 #. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
 msgid "owner (of bill, invoice or expense voucher)"
@@ -775,17 +774,15 @@ msgstr "Διαίρεση"
 
 #. "Alias of 'shares'"
 msgid "stocks"
-msgstr ""
+msgstr "μετοχές"
 
 #. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
-#, fuzzy
-#| msgid "split"
 msgid "stock split"
-msgstr "Διαίρεση"
+msgstr "διάσπαση μετοχών"
 
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
-msgstr "επίστρωμα ύφους"
+msgstr "στυλ"
 
 #. "The total of a set of figures that are part of a larger group of figures"
 msgid "subtotal"
@@ -849,7 +846,7 @@ msgstr "κατάσταση συναλλαγής: παγωμένη"
 #
 #. "A transaction that was reconciled with the bank's statement."
 msgid "transaction state: reconciled"
-msgstr "κατάσταση συναλλαγής: συμφωνία"
+msgstr "κατάσταση συναλλαγής: συμφωνημένη"
 
 #
 #. "A transaction that is void i.e. not valid (anymore)."
@@ -903,13 +900,13 @@ msgid "withdraw (in the reconcile dialog)"
 msgstr "απόσυρση (στο παράθυρο διαλόγου συμφωνίας)"
 
 msgid "stock"
-msgstr ""
+msgstr "μετοχή"
 
 msgid "due"
-msgstr ""
+msgstr "λήξη"
 
 msgid "Online"
-msgstr ""
+msgstr "Σε σύνδεση"
 
 msgid "Direct Debit"
-msgstr ""
+msgstr "Άμεση Ανάληψη"

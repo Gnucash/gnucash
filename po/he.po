@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-17 10:56+0000\n"
+"PO-Revision-Date: 2022-01-31 12:54+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.11-dev\n"
 "X-Poedit-Basepath: .\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -464,9 +464,8 @@ msgid ""
 "lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome."
 "org"
 msgstr ""
-"קל ליצור קשר עם מפתחי גנוקאש. בנוסף למספר לא מועט של רשימות דיוור, אפשר "
-"לשוחח איתם באופן מקוון באמצעות IRC! ניתן להצטרף אליהם בערוץ gnucash# ב־irc."
-"gnome.org"
+"קל ליצור קשר עם מפתחי גנוקאש. בנוסף למספר לא מועט של רשימות דיוור, ניתן לדבר "
+"איתם באופן מקוון דרך IRC! ההצטרפות היא דרך ‎#gnucash ב־irc.gnome.org"
 
 #: doc/tip_of_the_day.list.c:13
 msgid ""
@@ -3489,7 +3488,7 @@ msgstr "אפ_שרויות מיסוי"
 #: gnucash/gnome/gnc-plugin-page-register2.c:268
 #: gnucash/gnome/gnc-plugin-page-register.c:377
 msgid "Setup relevant accounts for tax reports, e.g. US income tax"
-msgstr "הגדרת חשבונות לענין דוחי מס, לדוגמה, מס הכנסה ארה'ב"
+msgstr "הגדרת חשבונות לעניין דוחות מס, לדוגמה, מס הכנסה ארה״ב"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:164
 msgid "_Scheduled Transactions"
@@ -5864,7 +5863,7 @@ msgstr "שמירת _תצורת דוח"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1240
 msgid "Save Report Configuration As..."
-msgstr "שמירת תצורת דוח בשם..."
+msgstr "שמירת תצורת דוח בשם…"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1244
 msgid "Export _Report"
@@ -8325,9 +8324,9 @@ msgid ""
 "your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?"
 "id=645216 for more information."
 msgstr ""
-"גנוקאש לא יכולה להשלים בדיקה מהותית להמצאות תקל בספריה 'libdbi'. יתכן שהדבר "
-"נגרם כתוצאה מתצורת הרשאות שגויה במסד נתוני SQL. למידע נוסף, ניתן לעיין "
-"ב־ttps://bugs.gnucash.org/show_bug.cgi?id=645216."
+"גנוקאש לא יכולה להשלים בדיקה מהותית לאיתור תקל בספרית 'libdbi'. יתכן שהדבר "
+"נגרם כתוצאה מתצורת הרשאות שגויה במסד נתוני SQL. למידע נוסף, ניתן לעיין ב־"
+"https://bugs.gnucash.org/show_bug.cgi?id=645216."
 
 #: gnucash/gnome-utils/gnc-file.c:537
 msgid ""
@@ -8599,7 +8598,7 @@ msgstr "מדריך שימוש ומדריך _מושגים"
 
 #: gnucash/gnome-utils/gnc-main-window.c:387
 msgid "Open the GnuCash Tutorial"
-msgstr "פתיחת מדריך למשתמש גנוקאש"
+msgstr "פתיחת מדריך־משתמש גנוקאש"
 
 #: gnucash/gnome-utils/gnc-main-window.c:391
 msgid "_Contents"
@@ -10117,7 +10116,7 @@ msgid ""
 "This is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
 msgstr ""
 "אפשור מצב איתור תקלים: מספק מידע מפורט ביומן־הרישום.\n"
-"זהה ל: --log '=info' --log 'qof=info' --log 'gnc=info'"
+"זהה ל: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
 
 #: gnucash/gnucash-core-app.cpp:289
 msgid "Enable extra/development/debugging features."
@@ -23652,7 +23651,7 @@ msgstr "הכנסות ברות מיסוי / הוצאות מוכרות למס"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:852
 msgid "This report shows your Taxable Income and Deductible Expenses."
-msgstr "דוח זה מציג הכנסות חייבות והוצאות מוכרות לצרכי מס."
+msgstr "דוח זה מציג הכנסות חייבות והוצאות מוכרות לצורכי מס."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:856
 msgid "XML"

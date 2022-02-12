@@ -3744,7 +3744,10 @@ gnc_plugin_page_register_cmd_print_check (GtkAction* action,
     else if (ledger_type == LD_GL && reg->type == SEARCH_LEDGER)
     {
         Account* common_acct = NULL;
+
+        /* the following GList* splits must not be freed */
         splits = qof_query_run (gnc_ledger_display_get_query (priv->ledger));
+
         /* Make sure each split is from the same account */
         for (item = splits; item; item = g_list_next (item))
         {
@@ -3786,7 +3789,6 @@ gnc_plugin_page_register_cmd_print_check (GtkAction* action,
             }
         }
         gnc_ui_print_check_dialog_create (window, splits);
-        g_list_free (splits);
     }
     else
     {
