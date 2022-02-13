@@ -189,15 +189,15 @@
                 headingpage2 optname-payment-recd "c" "" 
                 (G_ "Payment received, thank you!")))
   (add-option (gnc:make-string-option	headingpage2	optname-invoice-number-text
-    "d" "" (G_ "Invoice number: ")))
+    "d" "" (G_ "Invoice number:")))
   (add-option (gnc:make-string-option	headingpage2	optname-to-text
-    "e" "" (G_ "To: ")))
+    "e" "" (G_ "To:")))
   (add-option (gnc:make-string-option	headingpage2	optname-ref-text
-    "f" "" (G_ "Your ref: ")))
+    "f" "" (G_ "Your ref:")))
   (add-option (gnc:make-string-option	headingpage2	optname-jobnumber-text
-    "g" "" (G_ "Job number: ")))
+    "g" "" (G_ "Job number:")))
   (add-option (gnc:make-string-option	headingpage2	optname-jobname-text
-    "h" "" (G_ "Job name: ")))
+    "h" "" (G_ "Job name:")))
 
   (add-option (gnc:make-text-option
                 notespage optname-extra-notes "a"
