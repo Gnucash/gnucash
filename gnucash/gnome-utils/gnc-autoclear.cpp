@@ -26,6 +26,7 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
+#include <chrono>
 
 #include <config.h>
 #include <gtk/gtk.h>
@@ -47,9 +48,24 @@ typedef enum
     AUTOCLEAR_NOP,
 } autoclear_error_type;
 
-#define MAX_AUTOCLEAR_SECONDS 10
+class Timer {
+    using Time = std::chrono::high_resolution_clock;
+    using Duration = std::chrono::duration<float>;
+    Time::time_point m_timestamp;
+    Duration duration;
 
-#define MAX_AUTOCLEAR_TICKS CLOCKS_PER_SEC * MAX_AUTOCLEAR_SECONDS
+public:
+    Timer (Duration length) : m_timestamp (Time::now())
+    {
+        duration = length;
+    }
+
+    bool expired () const
+    {
+        return ((Time::now() - m_timestamp) >= duration);
+    }
+};
+
 #define MAX_SACK_SIZE 4000000
 
 using SplitVec = std::vector<Split*>;
@@ -123,11 +139,11 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     SplitVec nc_vector {};
     std::unordered_map<gint64, SplitVec, Hasher, EqualFn> sack;
     guint nc_progress = 0;
-    clock_t start_ticks;
     int commodity_scu;
     gboolean debugging_enabled = qof_log_check (G_LOG_DOMAIN, QOF_LOG_DEBUG);
     GQuark autoclear_quark = g_quark_from_static_string ("autoclear");
     gint64 toclear_normalized;
+    Timer timer { std::chrono::seconds (2) };
 
     g_return_val_if_fail (GNC_IS_ACCOUNT (account), FALSE);
     g_return_val_if_fail (splits != nullptr, FALSE);
@@ -172,7 +188,6 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 
     commodity_scu = gnc_commodity_get_fraction (xaccAccountGetCommodity (account));
     toclear_normalized = normalize_num (toclear_value, commodity_scu);
-    start_ticks = clock ();
 
     sack.reserve (pow (2, count_unique (nc_vector, commodity_scu)) - 1);
 
@@ -220,8 +235,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 
         looping_update_status (label, ++nc_progress, nc_vector.size (), sack.size ());
 
-        if (G_UNLIKELY (((clock () - start_ticks) > MAX_AUTOCLEAR_TICKS) ||
-                        (sack.size () > MAX_SACK_SIZE)))
+        if (G_UNLIKELY (timer.expired () || sack.size () > MAX_SACK_SIZE))
         {
             g_set_error (error, autoclear_quark, AUTOCLEAR_OVERLOAD, "%s",
                          _("Too many uncleared splits"));
