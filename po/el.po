@@ -41,7 +41,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-02-03 11:54+0000\n"
+"PO-Revision-Date: 2022-02-13 17:55+0000\n"
 "Last-Translator: Gregory-K <lifeturn@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/gnucash/el/"
 ">\n"
@@ -9982,9 +9982,8 @@ msgstr "Χωρίς ισοζύγιο"
 #. Translators: currently max 34 (ASCII) chars (= 17 or 8 UTF-8 chars depending on the block)
 #. See "MAX_DATE_LENGTH" in https://code.gnucash.org/docs/MAINT/group__Date.html
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:1490
-#, fuzzy
 msgid " Scheduled "
-msgstr "Προγραμματισμένη"
+msgstr " Προγραμματισμένη "
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2317
 #: gnucash/register/ledger-core/split-register-control.c:1526
@@ -15855,10 +15854,8 @@ msgid "All _accounts"
 msgstr "Όλοι οι λογαριασμοί"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:165
-#, fuzzy
-#| msgid " Search "
 msgid "Search scope"
-msgstr " Αναζήτηση "
+msgstr "Αναζήτηση"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:191
 #, fuzzy
@@ -25484,9 +25481,8 @@ msgid "Barchart"
 msgstr "Ακιδωτό διάγραμμα ενεργητικού"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1188
-#, fuzzy
 msgid " to "
-msgstr "%s ως %s"
+msgstr " ως "
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1251
 #: gnucash/report/reports/standard/trial-balance.scm:855
