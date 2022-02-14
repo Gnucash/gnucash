@@ -1,14 +1,14 @@
 # Croatian translations for GnuCash.
 # Copyright (C) 2019 Free Software Foundation, Inc.
 # This file is distributed under the same license as the GnuCash package.
-# Milo Ivir <mail@milotype.de>, 2019., 2020, 2021.
+# Milo Ivir <mail@milotype.de>, 2019., 2020, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2021-12-18 15:54+0000\n"
+"PO-Revision-Date: 2022-02-13 02:55+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10\n"
+"X-Generator: Weblate 4.11-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -7615,7 +7615,7 @@ msgstr "Početak staze nije postavljen. Za relativne staze se koristi „%s”"
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:426
 msgid "Existing"
-msgstr "Postojeće"
+msgstr "Postojeći"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:148
 msgid "You can type '+' or '-' to increment or decrement the number."
