@@ -4099,7 +4099,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register.c:458
 #: gnucash/gnome-utils/gnc-main-window.c:347
 msgid "_Filter By..."
-msgstr "Φίλτρο κατά..."
+msgstr "_Φίλτρο κατά..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:295
 #: gnucash/gnome/gnc-plugin-page-budget.c:198
@@ -4199,7 +4199,7 @@ msgstr "Έλεγχος και διόρθωση συναλλαγών χωρίς �
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:332
 msgid "Check & Repair Su_baccounts"
-msgstr "Έλεγχος και διόρθωση υπολογαριασμών"
+msgstr "Έλεγχος και διόρθωση _υπολογαριασμών"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:333
 msgid ""
@@ -5464,7 +5464,7 @@ msgstr "_Ακύρωση συναλλαγής"
 #: gnucash/gnome/gnc-plugin-page-register2.c:319
 #: gnucash/gnome/gnc-plugin-page-register.c:428
 msgid "_Unvoid Transaction"
-msgstr "Αναίρεση ακύρωσης συναλλαγής"
+msgstr "_Αναίρεση ακύρωσης συναλλαγής"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:323
 #: gnucash/gnome/gnc-plugin-page-register.c:432
@@ -5627,7 +5627,7 @@ msgstr "Εμφάνιση συναλλαγών σε μια ή δυο γραμμέ
 #: gnucash/gnome/gnc-plugin-page-register2.c:453
 #: gnucash/gnome/gnc-plugin-page-register.c:576
 msgid "_Auto-Split Ledger"
-msgstr "Καθολικό αυτόματης διαίρεσης"
+msgstr "_Καθολικό αυτόματης διαίρεσης"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:454
 #: gnucash/gnome/gnc-plugin-page-register.c:577
@@ -8122,7 +8122,7 @@ msgstr "Ημερολογιακό διάστημα"
 
 #: gnucash/gnome-utils/dialog-utils.c:765
 msgid "Remember and don't _ask me again."
-msgstr "Απομνημόνευση και μη επανάληψη της ερώτησης."
+msgstr "Απομνημόνευση και μη _επανάληψη της ερώτησης."
 
 #: gnucash/gnome-utils/dialog-utils.c:766
 msgid "Don't _tell me again."
@@ -13102,7 +13102,7 @@ msgstr "Ε_πιλογή όλων"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:463
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:141
 msgid "Select _Range"
-msgstr "Ορισμός διαστήματος"
+msgstr "Ορισμός _διαστήματος"
 
 #. Filter By Dialog, Date Tab, Start section
 #: gnucash/gtkbuilder/assistant-csv-export.glade:490
@@ -14434,7 +14434,7 @@ msgstr "Καταβολή μετρητών"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:352
 msgid "<b>_Income Account</b>"
-msgstr "<b>Λογαριασμός εσόδων</b>"
+msgstr "<b>Λογαριασμός ε_σόδων</b>"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:365
 msgid "<b>A_sset Account</b>"
@@ -16267,7 +16267,7 @@ msgstr "<b>_Τίτλος</b>"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:221
 msgid "<b>_Lots in This Account</b>"
-msgstr "<b>Πακέτα σε αυτό το λογαριασμό</b>"
+msgstr "<b>_Πακέτα σε αυτό το λογαριασμό</b>"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:259
 #, fuzzy
@@ -16532,7 +16532,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:442
 msgid "Re_lative"
-msgstr "Σχετική"
+msgstr "Σ_χετική"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:448
 #, fuzzy
@@ -16776,7 +16776,7 @@ msgstr "Διατήρηση αρχείων καταγραφής:"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1531
 msgid "Com_press files"
-msgstr "Συμπίεση αρχείων"
+msgstr "Συμ_πίεση αρχείων"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1537
 msgid "Compress the data file with gzip when saving it to disk."
@@ -16808,7 +16808,7 @@ msgstr "Εμφάνιση οθόνης υποδοχής στην εκκίνηση
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1650
 msgid "Auto-save time _interval"
-msgstr "Χρονικό διάστημα αυτόματης αποθήκευσης"
+msgstr "Χρονικό _διάστημα αυτόματης αποθήκευσης"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1689
 msgid "minutes"
@@ -16816,7 +16816,7 @@ msgstr "λεπτά"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1705
 msgid "Show auto-save confirmation _question"
-msgstr "Εμφάνιση ερώτηση επιβεβαίωσης της αυτόματης αποθήκευσης"
+msgstr "Εμφάνιση _ερώτησης επιβεβαίωσης της αυτόματης αποθήκευσης"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1711
 msgid ""
@@ -17499,7 +17499,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-price.glade:752
 msgid "Before _Date"
-msgstr "Πριν την ημερομηνία"
+msgstr "Πριν την _ημερομηνία"
 
 #: gnucash/gtkbuilder/dialog-price.glade:795
 #: gnucash/report/reports/standard/price-scatter.scm:82
@@ -17955,11 +17955,11 @@ msgstr "Ειδοποίηση σε νέες, αυτόματες Προγραμμ�
 
 #: gnucash/gtkbuilder/dialog-sx.glade:698
 msgid "Crea_te in advance"
-msgstr "Δημιουργία νωρίτερα"
+msgstr "Δη_μιουργία νωρίτερα"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:713
 msgid "R_emind in advance"
-msgstr "Υπόμνηση πριν"
+msgstr "_Υπόμνηση πριν"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:724
 #, fuzzy
@@ -19381,7 +19381,7 @@ msgstr "_Τελευταία ημερομηνία ανάκτησης"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:425
 msgid "E_nter date:"
-msgstr "Ημερομηνία εισαγωγής:"
+msgstr "Ημερομηνία ε_ισαγωγής:"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:475
 #: gnucash/report/reports/aging.scm:37
@@ -23058,7 +23058,7 @@ msgstr "_Ενεργητικό και Παθητικό"
 
 #: gnucash/report/report-core.scm:152
 msgid "_Income & Expense"
-msgstr "_Ε_σοδα και Έξοδα"
+msgstr "_Εσοδα και Έξοδα"
 
 #: gnucash/report/report-core.scm:154
 msgid "_Taxes"
