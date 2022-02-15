@@ -27,7 +27,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-02-14 06:58+0000\n"
+"PO-Revision-Date: 2022-02-15 09:56+0000\n"
 "Last-Translator: YTX <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -2506,11 +2506,11 @@ msgstr "查找发票"
 #, c-format
 msgid "The following vendor document is due:"
 msgid_plural "The following %d vendor documents are due:"
-msgstr[0] "%d 份到期应付"
+msgstr[0] "%d 份逾期应付"
 
 #: gnucash/gnome/dialog-invoice.c:3721
 msgid "Due Bills Reminder"
-msgstr "应付提醒"
+msgstr "逾期应付"
 
 #. Translators: %d is the number of invoices/credit notes due. This is a
 #. ngettext(3) message.
@@ -2518,11 +2518,11 @@ msgstr "应付提醒"
 #, c-format
 msgid "The following customer document is due:"
 msgid_plural "The following %d customer documents are due:"
-msgstr[0] "%d 份到期应收"
+msgstr[0] "%d 份逾期应收"
 
 #: gnucash/gnome/dialog-invoice.c:3732
 msgid "Due Invoices Reminder"
-msgstr "应收提醒"
+msgstr "逾期应收"
 
 #: gnucash/gnome/dialog-job.c:139
 msgid "The Job must be given a name."
@@ -3777,19 +3777,19 @@ msgstr "查看并编辑帐期"
 
 #: gnucash/gnome/gnc-plugin-business.c:293
 msgid "Bills _Due Reminder"
-msgstr "应付提醒(_D)"
+msgstr "逾期应付(_D)"
 
 #: gnucash/gnome/gnc-plugin-business.c:294
 msgid "Open the Bills Due Reminder dialog"
-msgstr "打开到期应付提醒对话框"
+msgstr "打开逾期应付对话框"
 
 #: gnucash/gnome/gnc-plugin-business.c:298
 msgid "Invoices _Due Reminder"
-msgstr "应收提醒(_D)"
+msgstr "逾期应收(_D)"
 
 #: gnucash/gnome/gnc-plugin-business.c:299
 msgid "Open the Invoices Due Reminder dialog"
-msgstr "打开到期应收提醒对话框"
+msgstr "打开逾期应收对话框"
 
 #: gnucash/gnome/gnc-plugin-business.c:302
 msgid "E_xport"
@@ -10236,7 +10236,7 @@ msgstr "客户若有预付款，入账时直接抵扣。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:117
 msgid "Show invoices due reminder at startup"
-msgstr "启动时显示到期应收提醒"
+msgstr "启动时显示逾期应收"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:118
 msgid ""
@@ -10244,9 +10244,7 @@ msgid ""
 "become due soon. If so, it will present the user with a reminder dialog. The "
 "definition of \"soon\" is controlled by the \"Days in Advance\" setting. "
 "Otherwise GnuCash does not check for due invoices."
-msgstr ""
-"选中，程序启动时将检查是否有即将到期的应收；若有，则对话框提醒；“快要到期”的"
-"定义由设置中的“提前天数”控制。否则，程序不会检查到期应收。"
+msgstr "选中，程序启动时将检查是否有即将到期或已逾期的应收，予以显示，“即将到期”由设置中“提前天数”控制；取消选中，程序不会做此检查。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:122
 msgid "Show invoices due within this many days"
@@ -10318,7 +10316,7 @@ msgstr "若在供应商有预付款，入账时亦直接抵扣。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:159
 msgid "Show bills due reminder at startup"
-msgstr "启动时显示到期应付提醒"
+msgstr "启动时显示逾期应付"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:160
 msgid ""
@@ -10326,9 +10324,7 @@ msgid ""
 "become due soon. If so, it will present the user with a reminder dialog. The "
 "definition of \"soon\" is controlled by the \"Days in Advance\" setting. "
 "Otherwise GnuCash does not check for due bills."
-msgstr ""
-"选中，程序启动时将检查是否有即将到期的应付；若有，则对话框提醒；“快要到期”的"
-"定义由设置中的“提前天数”控制。否则，程序不会检查到期应付。"
+msgstr "选中，程序启动时将检查是否有即将到期或已逾期的应付，予以显示，“即将到期”由设置中“提前天数”控制；取消选中，程序不会做此检查。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:164
 msgid "Show bills due within this many days"
@@ -14093,7 +14089,7 @@ msgstr "<b>发票</b>"
 
 #: gnucash/gtkbuilder/business-prefs.glade:144
 msgid "Not_ify when due"
-msgstr "到期提醒(_I)"
+msgstr "逾期提醒(_I)"
 
 #: gnucash/gtkbuilder/business-prefs.glade:150
 #: gnucash/gtkbuilder/business-prefs.glade:239
@@ -14125,7 +14121,7 @@ msgstr "<b>账单</b>"
 
 #: gnucash/gtkbuilder/business-prefs.glade:233
 msgid "_Notify when due"
-msgstr "到期提醒(_N)"
+msgstr "逾期提醒(_N)"
 
 #: gnucash/gtkbuilder/business-prefs.glade:251
 msgid "Ta_x included"
@@ -22101,7 +22097,7 @@ msgstr "选择用来显示这份报表的数值的货币。"
 #: gnucash/report/reports/standard/advanced-portfolio.scm:81
 #: gnucash/report/reports/standard/price-scatter.scm:78
 msgid "The source of price information."
-msgstr "价格信息的来源。"
+msgstr "汇率来源。"
 
 #: gnucash/report/options-utilities.scm:144
 msgid "Average cost of purchases weighted by volume"
@@ -22113,7 +22109,7 @@ msgstr "过去所有交易的加权平均值"
 
 #: gnucash/report/options-utilities.scm:146
 msgid "Last up through report date"
-msgstr "截止报告日期"
+msgstr "最后次报表日期"
 
 #: gnucash/report/options-utilities.scm:147
 msgid "Closest to report date"
@@ -22122,7 +22118,7 @@ msgstr "最接近报表日期"
 #: gnucash/report/options-utilities.scm:148
 #: gnucash/report/reports/standard/advanced-portfolio.scm:82
 msgid "Most recent"
-msgstr "最近"
+msgstr "最新的"
 
 #: gnucash/report/options-utilities.scm:160
 msgid "Width of plot in pixels."
@@ -22391,7 +22387,7 @@ msgstr "币种"
 #: gnucash/report/reports/standard/trial-balance.scm:130
 #: gnucash/report/trep-engine.scm:103
 msgid "Price Source"
-msgstr "价格源"
+msgstr "汇率"
 
 #: gnucash/report/reports/aging.scm:42
 msgid "Show Multi-currency Totals"
@@ -23589,7 +23585,7 @@ msgstr "父科目小计"
 #: gnucash/report/reports/standard/income-statement.scm:74
 #: gnucash/report/reports/standard/trial-balance.scm:121
 msgid "Include accounts with zero total balances"
-msgstr "包含余额为零科目"
+msgstr "显示零余额科目"
 
 #: gnucash/report/reports/standard/account-summary.scm:105
 #: gnucash/report/reports/standard/balance-sheet.scm:101
@@ -23608,7 +23604,7 @@ msgstr "此报表包含合计余额为零（递归）的科目。"
 #: gnucash/report/reports/standard/budget-income-statement.scm:90
 #: gnucash/report/reports/standard/income-statement.scm:77
 msgid "Omit zero balance figures"
-msgstr "余额为零科目不显示零"
+msgstr "零余额科目不显示零"
 
 #: gnucash/report/reports/standard/account-summary.scm:108
 #: gnucash/report/reports/standard/balance-sheet.scm:104
@@ -23646,7 +23642,7 @@ msgstr "像会计师那样在增加的数字列下使用规则。"
 #: gnucash/report/reports/standard/income-statement.scm:85
 #: gnucash/report/reports/standard/trial-balance.scm:125
 msgid "Display accounts as hyperlinks"
-msgstr "以超链接显示科目"
+msgstr "科目显示为超链接"
 
 #: gnucash/report/reports/standard/account-summary.scm:116
 #: gnucash/report/reports/standard/balance-sheet.scm:111
@@ -23657,7 +23653,7 @@ msgstr "以超链接显示科目"
 #: gnucash/report/reports/standard/income-statement.scm:86
 #: gnucash/report/reports/standard/trial-balance.scm:126
 msgid "Shows each account in the table as a hyperlink to its register window."
-msgstr "将表中的每个账户作为超链接显示到其注册窗口。"
+msgstr "表中每个科目作为超链接显示到其窗口。"
 
 #: gnucash/report/reports/standard/account-summary.scm:119
 msgid "Show an account's balance."
@@ -24320,20 +24316,20 @@ msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:62
 msgid "Period duration"
-msgstr "期间开始"
+msgstr "期限"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:63
 msgid "Duration between time periods"
-msgstr "时间间隔之间的持续时间"
+msgstr "时间间隔"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:65
 #: gnucash/report/reports/standard/balsheet-pnl.scm:66
 msgid "Period order is most recent first"
-msgstr "期限顺序为最近的在前"
+msgstr "最近的期间排在前面"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:68
 msgid "Enable dual columns"
-msgstr "个人税种"
+msgstr "启用双列"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:69
 msgid "Selecting this option will enable double-column reporting."
@@ -24361,13 +24357,13 @@ msgstr "为选项添加摘要。"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:78
 msgid "Account full name instead of indenting"
-msgstr "帐户全名而不是缩进"
+msgstr "科目全名，而非缩进"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:79
 msgid ""
 "Selecting this option enables full account name instead, and disables "
 "indenting account names."
-msgstr "选择这个选项，就可以启用完整的账户名，而不可以缩进账户名。"
+msgstr "选择这个选项，就可以启用完整的科目名称，而不是缩进。"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:87
 msgid "Parent account amounts include children"
@@ -24385,19 +24381,19 @@ msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:102
 msgid "Display amounts as hyperlinks"
-msgstr "以超链接显示科目"
+msgstr "金额显示为超链接"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:103
 msgid "Shows each amounts in the table as a hyperlink to a register or report."
-msgstr "将表格中的每个金额作为超链接显示给寄存器或报告。"
+msgstr "表中每个金额作为超链接显示到其窗口。"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:106
 msgid "Label sections"
-msgstr "资产部分标签"
+msgstr "期间标签"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:107
 msgid "Whether or not to include a label for sections."
-msgstr "是否包括章节的标签。"
+msgstr "是否包括期间标签。"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:108
 msgid "Include totals"
@@ -24409,11 +24405,11 @@ msgstr "是否包括一个表明总金额的行。"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:113
 msgid "Enable chart"
-msgstr "行数"
+msgstr "启用图表"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:114
 msgid "Enable link to chart"
-msgstr "启动链接"
+msgstr "启用图表链接"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:116
 #: gnucash/report/trep-engine.scm:104
@@ -24436,7 +24432,7 @@ msgstr "同时显示原始货币金额"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:126
 msgid "If more than 1 period column, include overall period?"
-msgstr "如果超过1个时期的栏目，包括总的时期？"
+msgstr "期间数大于一，显示总期间？"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:127
 msgid ""
@@ -27192,7 +27188,7 @@ msgstr "描述。"
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:424
 msgid ""
 "No invoice has been selected -- please use the Options menu to select one."
-msgstr "没有选中的发票 -- 请使用“选项”菜单进行选择。"
+msgstr "未选择发票，请使用“选项”设置。"
 
 #: gnucash/report/reports/support/receipt.eguile.scm:286
 msgid ""
