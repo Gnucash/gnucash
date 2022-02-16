@@ -27,7 +27,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-02-15 09:56+0000\n"
+"PO-Revision-Date: 2022-02-16 13:57+0000\n"
 "Last-Translator: YTX <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -18663,7 +18663,7 @@ msgstr "要取回的交易事项的日期范围："
 #: gnucash/report/reports/standard/new-owner-report.scm:44
 #: gnucash/report/reports/standard/owner-report.scm:39
 msgid "From"
-msgstr "从"
+msgstr "起期"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:391
 msgid "_Earliest possible date"
@@ -18688,7 +18688,7 @@ msgstr "输入日期(_N)："
 #: gnucash/report/reports/standard/new-owner-report.scm:45
 #: gnucash/report/reports/standard/owner-report.scm:40
 msgid "To"
-msgstr "到"
+msgstr "止期"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:495
 msgid "Ente_r date:"
@@ -21892,7 +21892,7 @@ msgstr "列表"
 #: gnucash/report/eguile.scm:150
 #, scheme-format
 msgid "Template file \"~a\" can not be read"
-msgstr "无法读取模板文件\"~a\""
+msgstr "无法读取模板\"~a\""
 
 #: gnucash/report/html-chart.scm:463
 msgid "Load"
@@ -22602,7 +22602,7 @@ msgstr "包含子科目"
 
 #: gnucash/report/reports/example/average-balance.scm:46
 msgid "Exclude transactions between selected accounts"
-msgstr "排除所选帐户之间的交易"
+msgstr "排除所选科目之间的交易"
 
 #: gnucash/report/reports/example/average-balance.scm:47
 #: gnucash/report/reports/example/daily-reports.scm:62
@@ -22836,7 +22836,7 @@ msgstr "这是一个字符串选项。"
 #: gnucash/report/reports/example/hello-world.scm:301
 #: gnucash/report/reports/example/hello-world.scm:470
 msgid "Hello, World"
-msgstr "您好，世界"
+msgstr "Hello, World"
 
 #: gnucash/report/reports/example/hello-world.scm:92
 msgid "Just a Date Option"
@@ -23693,7 +23693,7 @@ msgstr "显示一个账户的注释。"
 #: gnucash/report/reports/standard/income-statement.scm:107
 #: gnucash/report/reports/standard/trial-balance.scm:128
 msgid "Commodities"
-msgstr "商品"
+msgstr "汇率"
 
 #: gnucash/report/reports/standard/account-summary.scm:132
 #: gnucash/report/reports/standard/balance-sheet.scm:138
@@ -24222,7 +24222,7 @@ msgstr "字体大小，以CSS字体大小格式（如 \"中等 \"或 \"10pt\"）
 #: gnucash/report/reports/standard/receipt.scm:44
 #: gnucash/report/reports/standard/taxinvoice.scm:95
 msgid "Template file"
-msgstr "模板文件"
+msgstr "模板"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:171
 msgid ""
@@ -24237,7 +24237,7 @@ msgstr ""
 #: gnucash/report/reports/standard/receipt.scm:45
 #: gnucash/report/reports/standard/taxinvoice.scm:96
 msgid "CSS stylesheet file"
-msgstr "CSS 样式表文件"
+msgstr "CSS 样式表"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:174
 msgid ""
@@ -25139,7 +25139,7 @@ msgstr "它是一种成本账户，记录扣除从销售中获利的成本。"
 
 #: gnucash/report/reports/standard/customer-summary.scm:63
 msgid "Show Expense Column"
-msgstr "显示支出"
+msgstr "显示支出列"
 
 #: gnucash/report/reports/standard/customer-summary.scm:64
 msgid "Show the column with the expenses per customer."
@@ -25155,7 +25155,7 @@ msgstr "显示您自己公司的地址和打印日期。"
 
 #: gnucash/report/reports/standard/customer-summary.scm:70
 msgid "Show Lines with All Zeros"
-msgstr "显示全部为零的客户"
+msgstr "显示零额客户"
 
 #: gnucash/report/reports/standard/customer-summary.scm:71
 msgid ""
@@ -25189,13 +25189,13 @@ msgstr "客户名称"
 
 #: gnucash/report/reports/standard/customer-summary.scm:118
 msgid "Markup (which is profit amount divided by sales)"
-msgstr "加成 (即利润额除以销售额）"
+msgstr "利润率 (即利润额除以销售额）"
 
 #: gnucash/report/reports/standard/customer-summary.scm:119
 #: gnucash/report/reports/standard/customer-summary.scm:300
 #: gnucash/report/reports/standard/income-gst-statement.scm:127
 msgid "Sales"
-msgstr "销售"
+msgstr "销售额"
 
 #: gnucash/report/reports/standard/customer-summary.scm:270
 #, scheme-format
@@ -26181,12 +26181,12 @@ msgstr "收入和支出折线图"
 msgid ""
 "No valid A/Payable or A/Receivable account found. Please ensure valid AP/AR "
 "account exists."
-msgstr "没有有效的应付帐户或应收账款账户。准备有效的账款或应收账款账户。"
+msgstr "尚未设置类型为“应收帐款”或“应付帐款”的科目，请先添加。"
 
 #: gnucash/report/reports/standard/new-aging.scm:64
 msgid ""
 "A/Payable or A/Receivable accounts exist but have no suitable transactions."
-msgstr "存在 A/应付或 A/应收账款，但没有合适的交易。"
+msgstr "存在应收或应付科目，但无交易。"
 
 #: gnucash/report/reports/standard/new-aging.scm:329
 #: gnucash/report/reports/standard/new-owner-report.scm:538
@@ -26539,7 +26539,7 @@ msgstr "文本字体"
 
 #: gnucash/report/reports/standard/receipt.scm:48
 msgid "Header logo filename"
-msgstr "页眉徽标文件名"
+msgstr "页眉徽标文件"
 
 #: gnucash/report/reports/standard/receipt.scm:49
 msgid "Header logo width"
@@ -26547,7 +26547,7 @@ msgstr "徽标宽度"
 
 #: gnucash/report/reports/standard/receipt.scm:50
 msgid "Footer logo filename"
-msgstr "页脚徽标文件名"
+msgstr "页脚徽标文件"
 
 #: gnucash/report/reports/standard/receipt.scm:51
 msgid "Footer logo width"
@@ -26869,7 +26869,7 @@ msgstr "标题旁边的发票编号"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:90
 msgid "table-border-collapse"
-msgstr "表格边框崩溃"
+msgstr "表格边框合并"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:91
 msgid "table-header-border-color"
@@ -26885,7 +26885,7 @@ msgstr "嵌入式CSS"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:99
 msgid "Logo filename"
-msgstr "徽标文件名"
+msgstr "徽标文件"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:100
 msgid "Logo width"
@@ -28032,7 +28032,7 @@ msgstr "CSV禁用了双列金额"
 #: gnucash/report/trep-engine.scm:2237
 #, scheme-format
 msgid "From ~a to ~a"
-msgstr "从 ~a到 ~a"
+msgstr "起期 ~a 止期 ~a"
 
 #: libgnucash/app-utils/business-options.scm:69
 msgid "Company Address"
