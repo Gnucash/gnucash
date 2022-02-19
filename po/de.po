@@ -36,8 +36,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-02-12 12:00+0000\n"
-"Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
+"PO-Revision-Date: 2022-02-18 17:57+0000\n"
+"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -45,7 +45,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.11-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -682,10 +682,10 @@ msgid ""
 "use. Click the triangle at the far right of the column headings to change "
 "the display."
 msgstr ""
-"Sie können die Wertpapier-Editor Anzeige die «Quelle» zu einem Wertpapier "
-"anzeigen lassen und so die Herkunft der online-Daten sehen. Klicken Sie dazu "
+"Sie können sich im Wertpapier-Editor die «Quelle» zu einem Wertpapier "
+"anzeigen lassen und so die Herkunft der Online-Daten sehen. Klicken Sie dazu "
 "auf das Dreieck am rechten Ende der Überschriften und setzen Sie das Häkchen "
-"bei »Quelle«"
+"bei »Quelle«."
 
 #: doc/tip_of_the_day.list.c:90
 msgid ""
@@ -3282,7 +3282,7 @@ msgstr "Ungültiges Konto in Buchungsteil"
 msgid "Split with memo %s has an unparseable Credit Formula."
 msgstr ""
 "Der Buchungsteil mit Buchungstext %s hat eine für das Programm "
-"unverständliche Haben-Formel"
+"unverständliche Haben-Formel."
 
 #: gnucash/gnome/dialog-sx-editor.c:757 gnucash/gnome/dialog-sx-editor.c:773
 msgid "Unparsable Formula in Split"
@@ -3293,7 +3293,7 @@ msgstr "Unverständliche Formel in Buchungsteil"
 msgid "Split with memo %s has an unparseable Debit Formula."
 msgstr ""
 "Der Buchungsteil mit Buchungstext %s hat eine für das Programm "
-"unverständliche Soll-Formel"
+"unverständliche Soll-Formel."
 
 #: gnucash/gnome/dialog-sx-from-trans.c:557
 msgid ""
@@ -4490,7 +4490,7 @@ msgstr "Bemerkung bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:183
 msgid "Edit note for the selected account and period."
-msgstr "Die Bemerkung für das gewählte Konto und Periode bearbeiten"
+msgstr "Die Bemerkung für das gewählte Konto und Periode bearbeiten."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:187
 #: gnucash/report/reports/standard/budget.scm:39
@@ -7258,7 +7258,7 @@ msgstr "Unbestätigt"
 
 #: gnucash/gnome-search/search-string.c:169
 msgid "You need to enter some search text."
-msgstr "Sie müssen einen Suchausdruck angeben"
+msgstr "Sie müssen einen Suchausdruck angeben."
 
 #: gnucash/gnome-search/search-string.c:198
 #: gnucash/import-export/bi-import/dialog-bi-import.c:136
@@ -7515,11 +7515,11 @@ msgstr "Es gibt bereits ein Konto mit diesem Namen."
 
 #: gnucash/gnome-utils/dialog-account.c:866
 msgid "You must choose a valid parent account."
-msgstr "Wählen Sie ein gültiges übergeordnetes Konto"
+msgstr "Wählen Sie ein gültiges übergeordnetes Konto."
 
 #: gnucash/gnome-utils/dialog-account.c:875
 msgid "You must select an account type."
-msgstr "Wählen Sie eine Kontoart"
+msgstr "Wählen Sie eine Kontoart."
 
 #: gnucash/gnome-utils/dialog-account.c:884
 msgid ""
@@ -7833,7 +7833,7 @@ msgid ""
 msgstr ""
 "Da noch keine Konten erstellt wurden, müssen Sie nach dem Erstellen der "
 "Konten über Datei->Eigenschaften zu diesem Dialog zurückkehren, um ein "
-"Erfolgskonto vorzuwählen,"
+"Erfolgskonto vorzuwählen."
 
 #: gnucash/gnome-utils/dialog-options.c:701
 msgid "Select no account"
@@ -12904,27 +12904,22 @@ msgstr "Buchung ausschneiden"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:100
 msgid "This dialog is presented before allowing you to cut a transaction."
-msgstr "Diese Rückfrage kommt vor dem Löschen einer Buchung."
+msgstr "Diese Rückfrage wird vor dem Ausschneiden einer Buchung angezeigt."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
 msgid "Cut a transaction with reconciled splits"
 msgstr "Eine Buchung mit abgeglichenen Teilen ausschneiden"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:105
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to delete a transaction that "
-#| "contains reconciled splits. Doing so will throw off the reconciled value "
-#| "of the register and can make it hard to perform future reconciliations."
 msgid ""
 "This dialog is presented before allowing you to cut a transaction that "
 "contains reconciled splits. Doing so will throw off the reconciled value of "
 "the register and can make it hard to perform future reconciliations."
 msgstr ""
-"Diese Rückfrage kommt vor dem Löschen einer Buchung, die abgeglichene "
-"Buchungsteile enthält. Löschen jener Buchung und Buchungsteile wird den "
-"abgeglichenen Wert im Konto verändern und kann daher zukünftiges Abgleichen "
-"erschweren."
+"Diese Rückfrage kommt vor dem Ausschneiden einer Buchung, die abgeglichene "
+"Buchungsteile enthält. Ausschneiden einer Buchung oder Buchungsteilen wird "
+"den abgeglichenen Wert im Konto verändern und kann daher zukünftiges "
+"Abgleichen erschweren."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:109
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:212
@@ -16613,6 +16608,9 @@ msgid ""
 "Description and Notes to the matched Description and Notes instead of "
 "replacing them."
 msgstr ""
+"Beim Übernehmen und Abgleichen mit einer übereinstimmenden Buchung wird die "
+"importierte Beschreibung und Bemerkung an die Beschreibung und Bemerkung der "
+"entsprechenden Buchung angefügt, anstatt diese zu ersetzen."
 
 #: gnucash/gtkbuilder/dialog-import.glade:994
 msgid "_Reconcile after match"
@@ -29497,7 +29495,7 @@ msgstr "Habenkonten"
 
 #: gnucash/report/trep-engine.scm:518
 msgid "Specify date to filter by..."
-msgstr ""
+msgstr "Geben Sie das Datum an, nach dem gefiltert werden soll..."
 
 #: gnucash/report/trep-engine.scm:527
 msgid "Convert all transactions into a common currency."
