@@ -40,13 +40,11 @@ typedef struct
 G_GNUC_UNUSED static void
 setup( Fixture *fixture, gconstpointer pData )
 {
-    qof_string_cache_init();
 }
 
 G_GNUC_UNUSED static void
 teardown( Fixture *fixture, gconstpointer pData )
 {
-    qof_string_cache_destroy();
 }
 
 static void

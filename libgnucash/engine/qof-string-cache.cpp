@@ -41,23 +41,11 @@ static QofLogModule log_module = QOF_MOD_UTIL;
 /* =================================================================== */
 /* The QOF string cache                                                */
 /*                                                                     */
-/* The cache is an std:unordered_map where an std::string is the key,  */
+/* The cache is a std:unordered_map where a std::string is the key,    */
 /* and a ref count is the value                                        */
 /* =================================================================== */
 
 static std::unordered_map<std::string, int> cache;
-
-void
-qof_string_cache_init(void)
-{
-    // nop
-}
-
-void
-qof_string_cache_destroy (void)
-{
-    cache.clear ();
-}
 
 /* If the key exists in the cache, check the refcount.  If 1, just
  * remove the key.  Otherwise, decrement the refcount */
@@ -90,7 +78,7 @@ qof_string_cache_insert(const char * key)
 
     auto map_iter = cache.find (key);
     if (map_iter == cache.end())
-        map_iter = cache.insert_or_assign (key, 1).first;
+        map_iter = cache.emplace (key, 1).first;
     else
         map_iter->second++;
 

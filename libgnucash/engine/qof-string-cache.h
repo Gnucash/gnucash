@@ -70,12 +70,6 @@ extern "C"
  *
  **/
 
-/** Initialize the string cache */
-void qof_string_cache_init(void);
-
-/** Destroy the qof_string_cache */
-void qof_string_cache_destroy(void);
-
 /** You can use this function as a destroy notifier for a GHashTable
    that uses common strings as keys (or values, for that matter.)
 */
