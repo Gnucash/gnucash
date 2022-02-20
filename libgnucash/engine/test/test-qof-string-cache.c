@@ -24,6 +24,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+#include <time.h>
 #include <config.h>
 #include <string.h>
 #include <glib.h>
@@ -45,6 +46,32 @@ setup( Fixture *fixture, gconstpointer pData )
 G_GNUC_UNUSED static void
 teardown( Fixture *fixture, gconstpointer pData )
 {
+}
+
+static void multi(gboolean insertion)
+{
+    for (gint i = 0; i < 100000; i++)
+    {
+        gchar *str = g_strdup_printf ("integer %d", i);
+        if (insertion)
+            qof_string_cache_insert (str);
+        else
+            qof_string_cache_remove (str);
+        g_free (str);
+    }
+}
+
+static void timeIt (gint insertions, gint deletions)
+{
+    clock_t startTime, endTime;
+    startTime = clock();
+    for (gint i = 0; i < insertions; i++)
+        multi (TRUE);
+    for (gint i = 0; i < deletions; i++)
+        multi (FALSE);
+    endTime = clock();
+    printf ("%d insertions, %d deletions: elapsed = %f\n",
+            insertions, deletions, ((float) (endTime - startTime) / CLOCKS_PER_SEC));
 }
 
 static void
@@ -73,6 +100,11 @@ test_qof_string_cache( void )
     strncpy(str, "str1", sizeof(str));
     str1_4 = qof_string_cache_insert(str);      /* Refcount = 1 */
     g_assert(str1_1 != str1_4);
+
+    timeIt (1, 0);
+    timeIt (3, 0);
+    timeIt (5, 5);
+    timeIt (8, 12);
 }
 
 void
