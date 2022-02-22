@@ -340,6 +340,9 @@ developing over time"))
                c report-currency
                (lambda (a b) (exchange-fn a b date))))))
 
+        (define acct->name
+          (if show-fullname? gnc-account-get-full-name xaccAccountGetName))
+
         (define (all-zeros data)
           (cond
            ((number? data) (zero? data))
@@ -465,11 +468,8 @@ developing over time"))
            (case sort-method
              ((alphabetical)
               (lambda (a b)
-                (if show-fullname?
-                    (gnc:string-locale<? (gnc-account-get-full-name (car a))
-                                         (gnc-account-get-full-name (car b)))
-                    (gnc:string-locale<? (xaccAccountGetName (car a))
-                                         (xaccAccountGetName (car b))))))
+                (gnc:string-locale<? (acct->name (car a))
+                                     (acct->name (car b)))))
              ((acct-code)
               (lambda (a b)
                 (gnc:string-locale<? (xaccAccountGetCode (car a))
@@ -546,8 +546,7 @@ developing over time"))
                (let* ((acct (car series))
                       (label (cond
                               ((string? acct) (car series))
-                              (show-fullname? (gnc-account-get-full-name acct))
-                              (else (xaccAccountGetName acct))))
+                              (else (acct->name acct))))
                       (amounts (cadr series))
                       (stack (if stacked? "default" (number->string stack)))
                       (fill (eq? chart-type 'barchart))
@@ -571,9 +570,7 @@ developing over time"))
                                       (1+ tree-depth))
                                 (list gnc:pagename-general
                                       gnc:optname-reportname
-                                      (if show-fullname?
-                                          (gnc-account-get-full-name acct)
-                                          (xaccAccountGetName acct)))))))))
+                                      (acct->name acct))))))))
                  (gnc:html-chart-add-data-series!
                   chart label amounts color
                   'stack stack 'fill fill 'urls urls)))
@@ -621,8 +618,7 @@ developing over time"))
                    (lambda (col)
                      (cond
                       ((string? col) col)
-                      (show-fullname? (gnc-account-get-full-name col))
-                      (else (xaccAccountGetName col))))
+                      (else (acct->name col))))
                    (map car all-data))
                   (if cols>1?
                       (list (G_ "Grand Total"))
@@ -642,8 +638,7 @@ developing over time"))
                           (lambda (col)
                             (cond
                              ((string? col) col)
-                             (show-fullname? (gnc-account-get-full-name col))
-                             (else (xaccAccountGetName col))))
+                             (else (acct->name col))))
                           (map car all-data))
                          (if (pair? (cdr all-data))
                              (list (G_ "Grand Total"))
