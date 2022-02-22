@@ -51,6 +51,8 @@
 (export gnc:html-chart-set-currency-iso!)
 (export gnc:html-chart-currency-symbol)
 (export gnc:html-chart-set-currency-symbol!)
+(export gnc:html-chart-format-style)
+(export gnc:html-chart-set-format-style!)
 (export gnc:html-chart-render)
 (export gnc:html-chart-set-custom-x-axis-ticks?!)
 (export gnc:html-chart-set-title!)
@@ -144,13 +146,14 @@
 
 (define-record-type <html-chart>
   (make-html-chart width height chart-options currency-iso
-                   currency-symbol custom-x-axis-ticks? custom-y-axis-ticks?)
+                   currency-symbol format-style custom-x-axis-ticks? custom-y-axis-ticks?)
   html-chart?
   (width html-chart-width html-chart-set-width)
   (height html-chart-height html-chart-set-height)
   (chart-options html-chart-chart-options html-chart-set-chart-options)
   (currency-iso html-chart-currency-iso html-chart-set-currency-iso)
   (currency-symbol html-chart-currency-symbol html-chart-set-currency-symbol)
+  (format-style html-chart-format-style html-chart-set-format-style)
   (custom-x-axis-ticks? html-chart-custom-x-axis-ticks?
                         html-chart-set-custom-x-axis-ticks?)
   (custom-y-axis-ticks? html-chart-custom-y-axis-ticks?
@@ -166,6 +169,8 @@
 (define gnc:html-chart-set-currency-iso! html-chart-set-currency-iso)
 (define gnc:html-chart-currency-symbol html-chart-currency-symbol)
 (define gnc:html-chart-set-currency-symbol! html-chart-set-currency-symbol)
+(define gnc:html-chart-format-style html-chart-format-style)
+(define gnc:html-chart-set-format-style! html-chart-set-format-style)
 (define gnc:html-chart-custom-x-axis-ticks? html-chart-custom-x-axis-ticks?)
 (define gnc:html-chart-set-custom-x-axis-ticks?! html-chart-set-custom-x-axis-ticks?)
 (define gnc:html-chart-custom-y-axis-ticks? html-chart-custom-y-axis-ticks?)
@@ -254,6 +259,7 @@
                                   (cons 'text ""))))))
    "XXX"     ;currency-iso
    "\u00A4"  ;currency-symbol
+   "currency";format-style
    #t        ;custom x-axis ticks?
    #t        ;custom y-axis ticks?
    ))
@@ -341,10 +347,10 @@
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toLocaleString
 var toLocaleStringSupportsOptions = (typeof Intl == 'object' && Intl && typeof Intl.NumberFormat == 'function');
 
-// format a number e.g. 2.5 into monetary e.g. \"$2.50\"
+// format a number e.g. 2.5 into monetary e.g. \"$2.50\" or other style formsty
 function numformat(amount) {
   if (toLocaleStringSupportsOptions) {
-      return amount.toLocaleString(undefined, {style:'currency', currency:curriso});
+      return amount.toLocaleString(undefined, {style:formsty, currency:curriso});
   } else {
       return currsym + amount.toLocaleString();
   }
@@ -457,6 +463,7 @@ document.getElementById(chartid).onclick = function(evt) {
     (push (format #f "<script id='script-~a'>\n" id))
     (push (format #f "var curriso = ~s;\n" (gnc:html-chart-currency-iso chart)))
     (push (format #f "var currsym = ~s;\n" (gnc:html-chart-currency-symbol chart)))
+    (push (format #f "var formsty = ~s;\n" (gnc:html-chart-format-style chart)))
     (push (format #f "var chartid = ~s;\n" id))
     (push (format #f "var jumpid = 'jump-~a';\n" id))
     (push (format #f "var loadstring = ~s;\n" (G_ "Load")))
