@@ -27,7 +27,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-02-18 17:57+0000\n"
+"PO-Revision-Date: 2022-02-23 05:55+0000\n"
 "Last-Translator: YTX <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -2458,7 +2458,7 @@ msgstr "已入账"
 
 #: gnucash/gnome/dialog-invoice.c:3484 gnucash/gnome/dialog-invoice.c:3637
 msgid "Due"
-msgstr "到期"
+msgstr "止期"
 
 #: gnucash/gnome/dialog-invoice.c:3486 gnucash/gnome/dialog-lot-viewer.c:872
 #: gnucash/gnome/dialog-order.c:894
@@ -22359,7 +22359,7 @@ msgstr "方式"
 #: gnucash/report/reports/standard/trial-balance.scm:129
 #: gnucash/report/trep-engine.scm:106
 msgid "Report's currency"
-msgstr "报表币种"
+msgstr "币种"
 
 #: gnucash/report/reports/aging.scm:41
 #: gnucash/report/reports/example/average-balance.scm:44
@@ -23375,13 +23375,13 @@ msgstr "显示特定时间的负债余额饼图"
 #: gnucash/report/reports/standard/customer-summary.scm:48
 #: gnucash/report/reports/standard/customer-summary.scm:49
 msgid "Income Accounts"
-msgstr "收入科目"
+msgstr "收入"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:60
 #: gnucash/report/reports/standard/customer-summary.scm:56
 #: gnucash/report/reports/standard/customer-summary.scm:57
 msgid "Expense Accounts"
-msgstr "支出科目"
+msgstr "支出"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:61
 #: gnucash/report/reports/standard/balance-sheet.scm:485
@@ -23702,7 +23702,7 @@ msgstr "汇率"
 #: gnucash/report/reports/standard/income-statement.scm:110
 #: gnucash/report/reports/standard/trial-balance.scm:131
 msgid "Show Foreign Currencies"
-msgstr "显示外国货币"
+msgstr "显示外币"
 
 #: gnucash/report/reports/standard/account-summary.scm:134
 #: gnucash/report/reports/standard/balance-sheet.scm:140
@@ -24412,7 +24412,7 @@ msgstr "启用图表链接"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:116
 #: gnucash/report/trep-engine.scm:104
 msgid "Common Currency"
-msgstr "通用货币"
+msgstr "统一币种"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:117
 msgid "Convert all amounts to a single currency."
@@ -24421,12 +24421,12 @@ msgstr "将所有金额转换为单一货币。"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:123
 #: gnucash/report/trep-engine.scm:105
 msgid "Show original currency amount"
-msgstr "显示原始货币数额"
+msgstr "显示原始币种数额"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:124
 #: gnucash/report/trep-engine.scm:539
 msgid "Also show original currency amounts"
-msgstr "同时显示原始货币数额"
+msgstr "同时显示原始币种数额"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:126
 msgid "If more than 1 period column, include overall period?"
@@ -25537,7 +25537,7 @@ msgstr "成本"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:146
 msgid "Tax Accounts"
-msgstr "税务科目"
+msgstr "税务"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:147
 msgid ""
@@ -25554,12 +25554,12 @@ msgstr ""
 #: gnucash/report/reports/standard/income-gst-statement.scm:157
 #: gnucash/report/reports/standard/income-gst-statement.scm:161
 msgid "Report Format"
-msgstr "报表错误"
+msgstr "格式"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:162
 #: gnucash/report/reports/standard/income-gst-statement.scm:171
 msgid "Default Format"
-msgstr "默认字体"
+msgstr "默认"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:163
 msgid ""
@@ -25583,7 +25583,7 @@ msgstr "澳大利亚BAS"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:173
 msgid "UK VAT Return"
-msgstr "回报合计"
+msgstr "英国增值税申报表"
 
 #. Translators: "Gross Sales" refer to Net Sales + GST/VAT on Sales
 #: gnucash/report/reports/standard/income-gst-statement.scm:312
@@ -26250,20 +26250,20 @@ msgstr "收付明细"
 #: gnucash/report/reports/standard/new-owner-report.scm:91
 #: gnucash/report/reports/standard/owner-report.scm:87
 msgid "This report requires a customer to be selected."
-msgstr "请为该报表选择一位客户。"
+msgstr "请为该报表设置一位客户。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:96
 #: gnucash/report/reports/standard/owner-report.scm:88
 msgid "This report requires a employee to be selected."
-msgstr "请为该报表选择一位员工。"
+msgstr "请为该报表设置一位员工。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:101
 msgid "This report requires a job to be selected."
-msgstr "请为该报表需要选择一个项目。"
+msgstr "请为该报表设置一个项目。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:106
 msgid "This report requires a vendor to be selected."
-msgstr "请为该报表选择一位供应商。"
+msgstr "请为该报表设置一位供应商。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:231
 msgid "Partial Amount"
@@ -26386,7 +26386,7 @@ msgstr "没有选定科目"
 
 #: gnucash/report/reports/standard/owner-report.scm:108
 msgid "This report requires a valid account to be selected."
-msgstr "请为该报表选择一个有效的科目。"
+msgstr "请为该报表设置一个有效的科目。"
 
 #: gnucash/report/reports/standard/owner-report.scm:768
 msgid "Report:"
@@ -27186,7 +27186,7 @@ msgstr "描述。"
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:424
 msgid ""
 "No invoice has been selected -- please use the Options menu to select one."
-msgstr "未选择发票，请使用“选项”设置。"
+msgstr "未选择发票，请在“选项”设置。"
 
 #: gnucash/report/reports/support/receipt.eguile.scm:286
 msgid ""
@@ -27800,7 +27800,7 @@ msgstr "指定筛选日期的依据…"
 
 #: gnucash/report/trep-engine.scm:527
 msgid "Convert all transactions into a common currency."
-msgstr "将所有交易转换为通用货币。"
+msgstr "将所有交易转换为同一个币种。"
 
 #: gnucash/report/trep-engine.scm:550
 msgid "Formats the table suitable for cut & paste exporting with extra cells."
