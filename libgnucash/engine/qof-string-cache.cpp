@@ -61,7 +61,7 @@ qof_string_cache_remove(const char * key)
         return;
 
     if (map_iter->second == 1)
-        cache.erase (skey);
+        cache.erase (map_iter);
     else
         map_iter->second--;
 }
