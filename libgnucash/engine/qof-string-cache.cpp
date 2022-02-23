@@ -77,10 +77,9 @@ qof_string_cache_insert(const char * key)
     if (!key[0])
         return "";
 
-    std::string skey {key};
-    auto map_iter = cache.find (skey);
+    auto map_iter = cache.find (key);
     if (map_iter == cache.end())
-        map_iter = cache.emplace (skey, 1).first;
+        map_iter = cache.emplace (key, 1).first;
     else
         map_iter->second++;
 
