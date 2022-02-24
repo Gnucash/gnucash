@@ -55,8 +55,7 @@ qof_string_cache_remove(const char * key)
     if (!key || !key[0])
         return;
 
-    std::string skey {key};
-    auto map_iter = cache.find (skey);
+    auto map_iter = cache.find (key);
     if (map_iter == cache.end())
         return;
 
