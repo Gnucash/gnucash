@@ -55,7 +55,8 @@ qof_string_cache_remove(const char * key)
     if (!key || !key[0])
         return;
 
-    auto map_iter = cache.find (key);
+    std::string_view skey { key };
+    auto map_iter = cache.find (skey);
     if (map_iter == cache.end())
         return;
 
@@ -76,9 +77,10 @@ qof_string_cache_insert(const char * key)
     if (!key[0])
         return "";
 
-    auto map_iter = cache.find (key);
+    std::string_view skey { key };
+    auto map_iter = cache.find (skey);
     if (map_iter == cache.end())
-        map_iter = cache.emplace (key, 1).first;
+        map_iter = cache.emplace (skey, 1).first;
     else
         map_iter->second++;
 
