@@ -45,7 +45,7 @@ static QofLogModule log_module = QOF_MOD_UTIL;
 /* and a ref count is the value                                        */
 /* =================================================================== */
 
-static std::unordered_map<std::string, int> cache;
+static std::unordered_map<std::string_view, int> cache;
 
 /* If the key exists in the cache, check the refcount.  If 1, just
  * remove the key.  Otherwise, decrement the refcount */
@@ -55,13 +55,15 @@ qof_string_cache_remove(const char * key)
     if (!key || !key[0])
         return;
 
-    std::string_view skey { key };
-    auto map_iter = cache.find (skey);
+    auto map_iter = cache.find (key);
     if (map_iter == cache.end())
         return;
 
     if (map_iter->second == 1)
+    {
+        g_free ((gpointer)map_iter->first.data());
         cache.erase (map_iter);
+    }
     else
         map_iter->second--;
 }
@@ -77,14 +79,16 @@ qof_string_cache_insert(const char * key)
     if (!key[0])
         return "";
 
-    std::string_view skey { key };
-    auto map_iter = cache.find (skey);
+    auto map_iter = cache.find (key);
     if (map_iter == cache.end())
+    {
+        std::string_view skey { g_strdup (key) };
         map_iter = cache.emplace (skey, 1).first;
+    }
     else
         map_iter->second++;
 
-    return map_iter->first.c_str();
+    return map_iter->first.data();
 }
 
 const char *
