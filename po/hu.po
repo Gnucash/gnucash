@@ -4,21 +4,23 @@
 # HOSSZÚ Péter <hosszu@web.de>, 2001-2003.
 # SULYOK Péter <peti@sulyok.hu>, 2003-2006.
 # Kornel Tako <takokornel@gmail.com>, 2007.
+# Kárász Attila <cult.edie@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2011-07-30 16:57+0100\n"
-"Last-Translator: Takó Kornél <takokornel@gmail.com>\n"
-"Language-Team: Hungarian\n"
+"PO-Revision-Date: 2022-02-25 10:55+0000\n"
+"Last-Translator: Kárász Attila <cult.edie@gmail.com>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
+"gnucash/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Weblate 4.11-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -619,6 +621,9 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
+"A GNUCash közösségben a levelezési lista az előnyberészesített forma. Az új "
+"kiadások bejelentése , felhasználói csoport és egyéb miatt nézzétek meg ezt "
+"az oldalt. https://wiki.gnucash.org/wiki/Mailing_Lists"
 
 #: doc/tip_of_the_day.list.c:9
 msgid ""
@@ -655,11 +660,15 @@ msgstr ""
 "online kézikönyvben található."
 
 #: doc/tip_of_the_day.list.c:23
+#, fuzzy
 msgid ""
 "It is possible to change which columns display in the Chart of Accounts. "
 "Just locate the triangle at the far right of the column headings, and click "
 "it to see the different columns available."
 msgstr ""
+"Megváltoztathatja a számlatükörben, hogy melyik oszlopok jelenjenek meg. "
+"Csak keresse meg a háromszöget az oszlop tetejének jobb oldalán és "
+"rákattintva láthatja az elérhető különböző oszlopokat."
 
 #: doc/tip_of_the_day.list.c:27
 #, fuzzy
