@@ -470,18 +470,28 @@ in the Options panel."))
          str)
         (display #\" port))))
 
-  (define max-items (apply max (map length lst)))
+  (define max-items
+    (let lp ((lst lst) (maximum 0))
+      (cond
+       ((null? lst) maximum)
+       ((pair? lst) (lp (cdr lst) (max maximum (length (car lst)))))
+       (else (error "strify " lst " must be a proper list")))))
 
   (define (strify obj)
     (cond
-     ((not obj) "")
+     ((or (null? obj) (not obj)) "")
      ((string? obj) (string-sanitize-csv obj))
      ((number? obj) (number->string (exact->inexact obj)))
-     ((list? obj) (string-join
-                   (map strify
-                        (append obj
-                                (make-list (- max-items (length obj)) #f)))
-                   ","))
+     ((pair? obj) (let lp ((row obj) (acc '()) (pad max-items))
+                    (cond
+                     ((zero? pad) (string-concatenate-reverse acc))
+                     ((null? row) (lp '() (cons "," acc) (1- pad)))
+                     ((pair? row) (lp (cdr row)
+                                      (cons* (if (pair? (cdr row)) "," "")
+                                             (strify (car row))
+                                             acc)
+                                      (1- pad)))
+                     (else (error "strify " obj " must be a proper list")))))
      ((gnc:gnc-monetary? obj) (strify (gnc:gnc-monetary-amount obj)))
      (else (object->string obj))))
 
