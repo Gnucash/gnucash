@@ -67,6 +67,7 @@
   (test-begin "transaction.scm")
   (null-test)
   (trep-tests)
+  (csv-tests)
   (reconcile-tests)
   ;; (test-end) must be run as the last function, it will
   ;; return #f if any of the tests have failed.
@@ -927,6 +928,30 @@
           "\"from\",\"1969-01-01\"\n\"to\",\"1970-12-31\"\n\"Amount (GBP)\",2.15\n\"Amount\",3.0"
           (gnc:html-document-export-string document))))
     (test-end "csv-export")))
+
+(define (csv-tests)
+  (test-begin "csv tests")
+  (test-equal "gnc:lists->csv empty"
+    ""
+    (gnc:lists->csv '(())))
+  (test-equal "gnc:lists->csv simple"
+    "\"from\",\"01/01/2010\""
+    (gnc:lists->csv
+     '(("from" "01/01/2010"))))
+  (test-equal "gnc:lists->csv complex"
+    "\"from\",\"01/01/2010\",,,
+\"to\",\"31/12/2010\",,,
+\"total\",23500.0,30000.0,3.5714285714285716,sym"
+    (gnc:lists->csv
+     '(("from" "01/01/2010")
+       ("to" "31/12/2010")
+       ("total" 23500 30000 25/7 sym))))
+  (test-error "gnc:lists->csv improper list"
+    (gnc:lists->csv
+     '(("from" "01/01/2010")
+       ("to" "31/12/2010")
+       ("total" 23500 30000 25/7 . sym))))
+  (test-end "csv tests"))
 
 (define (reconcile-tests)
   (let* ((env (create-test-env))
