@@ -11,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-02-28 09:44+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"PO-Revision-Date: 2022-02-28 12:55+0000\n"
+"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -710,7 +710,7 @@ msgid ""
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
-"על מנת לחפש בכל התנועות, יש לבצע חיפוש ('עריכה &larr; חיפוש...') מעמוד תרשים "
+"לחפש בכל התנועות, יש לבצע חיפוש ('עריכה &larr; חיפוש...') מעמוד תרשים "
 "החשבונות הראשי. להגבלת החיפוש לחשבון יחיד, יש להפעיל את החיפוש מיומן התנועות "
 "של אותו חשבון."
 
@@ -3489,7 +3489,7 @@ msgstr "אפ_שרויות מיסוי"
 #: gnucash/gnome/gnc-plugin-page-register2.c:268
 #: gnucash/gnome/gnc-plugin-page-register.c:377
 msgid "Setup relevant accounts for tax reports, e.g. US income tax"
-msgstr "הגדרת חשבונות רלוונטיים לדוחות מס, לדוגמה, מס הכנסה ארה״ב"
+msgstr "הגדרת חשבונות הקשורים לעיניין דוחות מס, לדוגמה, מס הכנסה ארה״ב"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:164
 msgid "_Scheduled Transactions"
@@ -8599,7 +8599,7 @@ msgstr "מדריך שימוש ומדריך _מושגים"
 
 #: gnucash/gnome-utils/gnc-main-window.c:387
 msgid "Open the GnuCash Tutorial"
-msgstr "פתיחת מדריך־משתמש גנוקאש"
+msgstr "פתיחת מדריך למשתמש גנוקאש"
 
 #: gnucash/gnome-utils/gnc-main-window.c:391
 msgid "_Contents"
