@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-02-10 07:33+0000\n"
+"PO-Revision-Date: 2022-02-27 07:34+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.11.1-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -27680,7 +27680,7 @@ msgstr "Letra do texto"
 
 #: gnucash/report/reports/standard/receipt.scm:48
 msgid "Header logo filename"
-msgstr "Ficheiro logótipo de cabeçalho"
+msgstr "Nome do ficheiro de logótipo de cabeçalho"
 
 #: gnucash/report/reports/standard/receipt.scm:49
 msgid "Header logo width"
@@ -27688,7 +27688,7 @@ msgstr "Largura do logótipo de cabeçalho"
 
 #: gnucash/report/reports/standard/receipt.scm:50
 msgid "Footer logo filename"
-msgstr "Ficheiro de logótipo de rodapé"
+msgstr "Nome do ficheiro de logótipo de rodapé"
 
 #: gnucash/report/reports/standard/receipt.scm:51
 msgid "Footer logo width"
@@ -27806,7 +27806,7 @@ msgstr "O formato para conversão data -> cadeia da data de hoje."
 #. "%l:%M %P, %e %B %Y" means " 9:56 pm, 19 June 2019"
 #: gnucash/report/reports/standard/receipt.scm:109
 msgid "%l:%M %P, %e %B %Y"
-msgstr "%l:%M %P, %e %B %Y"
+msgstr "%l:%M %P, %e de %B de %Y"
 
 #: gnucash/report/reports/standard/receipt.scm:139
 #: gnucash/report/reports/standard/taxinvoice.scm:190
@@ -27988,7 +27988,7 @@ msgstr "Texto Para"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:83
 msgid "Ref text"
-msgstr "Texto da referência"
+msgstr "Texto ref."
 
 #: gnucash/report/reports/standard/taxinvoice.scm:84
 msgid "Job Name text"
