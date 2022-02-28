@@ -641,12 +641,9 @@ static Split *
 gnc_find_split_in_trans_by_memo (Transaction *trans, const char *memo,
                                  gboolean unit_price)
 {
-    int i = 0;
-    Split *split;
-
-    while ((split = xaccTransGetSplit(trans, i)) != NULL)
+    for (GList *n = xaccTransGetSplitList (trans); n; n = n->next)
     {
-        i++;
+        Split *split = n->data;
         if (unit_price)
         {
             gnc_numeric price = xaccSplitGetSharePrice (split);
@@ -899,21 +896,19 @@ gnc_split_register_auto_completion (SplitRegister *reg,
                 gnc_split_register_get_default_account (reg);
             gnc_commodity *trans_cmdty = xaccTransGetCurrency(trans);
             gnc_commodity *acct_cmdty = xaccAccountGetCommodity(default_account);
-            Split *s;
-            int i = 0;
             if (gnc_commodity_is_currency(acct_cmdty) &&
                 !gnc_commodity_equal(trans_cmdty, acct_cmdty))
                 xaccTransSetCurrency(trans, acct_cmdty);
 
-            while ((s = xaccTransGetSplit(trans, i)) != NULL)
+            for (GList *n = xaccTransGetSplitList (trans); n; n = n->next)
             {
+                Split *s = n->data;
                 if (default_account == xaccSplitGetAccount(s))
                 {
                     blank_split = s;
                     info->blank_split_guid = *xaccSplitGetGUID(blank_split);
                     break;
                 }
-                i++;
             }
         }
 

@@ -1164,8 +1164,6 @@ static Split *
 gtv_sr_get_this_split (GncTreeViewSplitReg *view, Transaction *trans)
 {
     GncTreeModelSplitReg *model;
-    int i;
-    Split *split = NULL;
     Account *anchor;
 
     model = gnc_tree_view_split_reg_get_model_from_view (view);
@@ -1178,7 +1176,9 @@ gtv_sr_get_this_split (GncTreeViewSplitReg *view, Transaction *trans)
             return gnc_tree_model_split_get_blank_split (model);
     }
 
-    for (i = 0; (split = xaccTransGetSplit (trans, i)); i++) {
+    for (GList *n = xaccTransGetSplitList (trans); n; n = n->next)
+    {
+        Split *split = n->data;
         if (anchor == xaccSplitGetAccount (split))
             return split;
     }
@@ -1210,8 +1210,7 @@ gtv_sr_get_split_pair (GncTreeViewSplitReg *view, Transaction *trans, Split **os
     }
     else
     {
-        int i;
-        Split *s, *first_split;
+        Split *first_split;
 
         first_split = xaccTransGetSplit (trans, 0);
 
@@ -1219,8 +1218,9 @@ gtv_sr_get_split_pair (GncTreeViewSplitReg *view, Transaction *trans, Split **os
             return FALSE;
         else // two split trans
         {
-            for (i = 0; (s = xaccTransGetSplit (trans, i)); i++)
+            for (GList *n = xaccTransGetSplitList (trans); n; n = n->next)
             {
+                Split *s = n->data;
                 if (anchor == xaccSplitGetAccount (s))
                 {
                     *split = s;
@@ -1241,13 +1241,12 @@ gtv_sr_get_split_pair (GncTreeViewSplitReg *view, Transaction *trans, Split **os
 static gboolean
 gtv_sr_get_imbalance (Transaction *trans)
 {
-    int i;
-    Split *split = NULL;
     const gchar *acc_name;
     const gchar *prefix = _("Imbalance");
 
-    for (i = 0; (split = xaccTransGetSplit (trans, i)); i++)
+    for (GList *n = xaccTransGetSplitList (trans); n; n = n->next)
     {
+        Split *split = n->data;
         if (xaccSplitGetAccount (split) != NULL)
         {
             acc_name = xaccAccountGetName (xaccSplitGetAccount (split));

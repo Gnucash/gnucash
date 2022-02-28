@@ -339,14 +339,11 @@ calculate_selected_total_helper (GtkTreeModel *model,
 {
     gnc_numeric *subtotal = (gnc_numeric*) data;
     gnc_numeric cur_val;
-    GValue value = { 0 };
     GNCLot *lot;
     Account *acct;
     gnc_commodity *currency;
 
-    gtk_tree_model_get_value (model, iter, 5, &value);
-    lot = (GNCLot *) g_value_get_pointer (&value);
-    g_value_unset (&value);
+    gtk_tree_model_get (model, iter, 5, &lot, -1);
 
     /* Find the amount's currency to determine the required precision */
     acct = gnc_lot_get_account (lot);
@@ -413,13 +410,10 @@ gnc_payment_dialog_highlight_documents (PaymentWindow *pw)
     {
         do
         {
-            GValue value = { 0 };
             GNCLot *lot;
             GList *li_node;
 
-            gtk_tree_model_get_value (model, &iter, 5, &value);
-            lot = (GNCLot *) g_value_get_pointer (&value);
-            g_value_unset (&value);
+            gtk_tree_model_get (model, &iter, 5, &lot, -1);
 
             if (!lot)
                 continue; /* Lot has been deleted behind our back... */
@@ -949,11 +943,8 @@ get_selected_lots (GtkTreeModel *model,
 {
     GList **return_list = data;
     GNCLot *lot;
-    GValue value = { 0 };
 
-    gtk_tree_model_get_value (model, iter, 5, &value);
-    lot = (GNCLot *) g_value_get_pointer (&value);
-    g_value_unset (&value);
+    gtk_tree_model_get (model, iter, 5, &lot, -1);
 
     if (lot)
         *return_list = g_list_insert_sorted (*return_list, lot, (GCompareFunc)gncOwnerLotsSortFunc);
@@ -1186,16 +1177,13 @@ static void print_date (G_GNUC_UNUSED GtkTreeViewColumn *tree_column,
                         GtkTreeIter *iter,
                         G_GNUC_UNUSED gpointer data)
 {
-    GValue value = { 0 };
     time64 doc_date_time;
     gchar *doc_date_str;
 
     g_return_if_fail (cell && iter && tree_model);
 
 
-    gtk_tree_model_get_value (tree_model, iter, 0, &value);
-    doc_date_time = (time64) g_value_get_int64 (&value);
-    g_value_unset (&value);
+    gtk_tree_model_get (tree_model, iter, 0, &doc_date_time, -1);
     doc_date_str = qof_print_date (doc_date_time);
     g_object_set (G_OBJECT (cell), "text", doc_date_str, NULL);
     g_free (doc_date_str);
