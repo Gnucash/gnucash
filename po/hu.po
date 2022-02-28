@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-02-25 10:55+0000\n"
+"PO-Revision-Date: 2022-02-28 15:56+0000\n"
 "Last-Translator: Kárász Attila <cult.edie@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.11.1-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -322,7 +322,7 @@ msgstr "Angol (ASCII)"
 
 #: borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
-msgstr "Farsi (MacFarsi)"
+msgstr "Perzsa(MacFarsi)"
 
 #: borrowed/goffice/go-charmap-sel.c:166
 msgid "Georgian (GEOSTD8)"
@@ -376,7 +376,7 @@ msgstr "Héber (ISO-8859-8-I)"
 
 #: borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr "Hebrew (MacHebrew)"
+msgstr "Héber (MacHebrew)"
 
 # #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
 # src/trans.h:252
@@ -586,7 +586,7 @@ msgstr "Nyugati (Windows-1252)"
 
 #: borrowed/goffice/go-charmap-sel.c:441
 msgid "Locale: "
-msgstr "Locale: "
+msgstr "Hely : "
 
 #: borrowed/goffice/go-charmap-sel.c:476
 #, fuzzy
@@ -602,9 +602,8 @@ msgid "Menu"
 msgstr "Menü"
 
 #: borrowed/goffice/go-optionmenu.c:339
-#, fuzzy
 msgid "The menu of options"
-msgstr "A szám-opció %s."
+msgstr "A szám-opció %s"
 
 #: doc/tip_of_the_day.list.c:1
 msgid ""
@@ -899,14 +898,15 @@ msgid ""
 "Click on \"Back\" to adjust the dates or \"Cancel\"."
 msgstr ""
 "Egy könyv létrehozását választotta. Az új könyv minden tranzakciót %s "
-"éjfélig tartalmazni fog(összesen %d tranzakció a %d folyószámlákon). "
-"Kattintson a 'Következő' -re a könyv létrehozásához.Kattintson a 'Vissza' "
-"gombra az adatok megváltoztatásához."
+"éjfélig tartalmazni fog(összesen %d tranzakció a %d folyószámlákon). \n"
+"\n"
+"Kattintson a 'Következő' -re a könyv létrehozásához.\n"
+"Kattintson a 'Vissza' gombra az adatok megváltoztatásához."
 
 #: gnucash/gnome/assistant-acct-period.c:388
 #, c-format
 msgid "Period %s - %s"
-msgstr "Időszak %s -tól %s -ig "
+msgstr "Időszak %s -tól %s -ig"
 
 #: gnucash/gnome/assistant-acct-period.c:406
 #, c-format
@@ -922,7 +922,7 @@ msgid ""
 "Congratulations! You are done closing books!\n"
 msgstr ""
 "%s\n"
-"Gratulálunk! Ön végzett a könyvek lezárásával!"
+"Gratulálunk! Ön végzett a könyvek lezárásával!\n"
 
 #: gnucash/gnome/assistant-acct-period.c:594
 #: gnucash/gtkbuilder/dialog-fincalc.glade:642
@@ -953,9 +953,8 @@ msgid "Accounts in '%s'"
 msgstr "<b>Számlák '%s'-ban</b>"
 
 #: gnucash/gnome/assistant-hierarchy.c:880
-#, fuzzy
 msgid "No description provided."
-msgstr "(nincs magyarázat)"
+msgstr "Nincs magyarázat."
 
 #: gnucash/gnome/assistant-hierarchy.c:895
 msgid "Accounts in Category"
@@ -1070,9 +1069,9 @@ msgstr "Kölcsön"
 
 #. Translators: %s is "Taxes", or "Insurance", or similar
 #: gnucash/gnome/assistant-loan.cpp:1480
-#, fuzzy, c-format
+#, c-format
 msgid "Loan Repayment Option: \"%s\""
-msgstr "Kölcsön visszafizetési kalkulátor"
+msgstr "Kölcsön visszafizetési kalkulátor:\"%s\""
 
 #. Translators: The following symbols will build the *
 #. * header line of exported CSV files:
@@ -1779,9 +1778,8 @@ msgid "_OK"
 msgstr ""
 
 #: gnucash/gnome/dialog-doclink.c:238
-#, fuzzy
 msgid "Amend URL:"
-msgstr "Bevitel"
+msgstr "Bevitel URL:"
 
 #: gnucash/gnome/dialog-doclink.c:242
 msgid "Enter URL like http://www.gnucash.org:"
@@ -1802,14 +1800,12 @@ msgid "File Not Found"
 msgstr "Nem található"
 
 #: gnucash/gnome/dialog-doclink.c:540
-#, fuzzy
 msgid "Address Found"
-msgstr "Cím: "
+msgstr "Cím"
 
 #: gnucash/gnome/dialog-doclink.c:542
-#, fuzzy
 msgid "Address Not Found"
-msgstr "Cím: "
+msgstr "Cím nem található"
 
 #: gnucash/gnome/dialog-doclink.c:592 gnucash/gnome/dialog-imap-editor.c:883
 #, fuzzy
@@ -1831,9 +1827,8 @@ msgid "Manage Document Link"
 msgstr ""
 
 #: gnucash/gnome/dialog-doclink.c:754
-#, fuzzy
 msgid "Transaction can not be modified."
-msgstr "Tranzakció összeg"
+msgstr "Tranzakció nem módosítható."
 
 # #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
 # src/prefs.c:378
@@ -2235,7 +2230,7 @@ msgstr ""
 #: gnucash/report/trep-engine.scm:1076 gnucash/report/trep-engine.scm:1197
 #: gnucash/report/trep-engine.scm:1198
 msgid "Memo"
-msgstr "Megjegyzés"
+msgstr "Emlékeztető"
 
 #: gnucash/gnome/dialog-find-transactions2.c:155
 #: gnucash/gnome/dialog-find-transactions.c:155
@@ -2286,7 +2281,7 @@ msgstr "Egyeztetett dátum"
 
 #. Translators: This is a ngettext(3) message, %d is the number of maps missing
 #: gnucash/gnome/dialog-imap-editor.c:363
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There is %d invalid mapping,\n"
 "\n"
@@ -2295,7 +2290,10 @@ msgid_plural ""
 "There are %d invalid mappings,\n"
 "\n"
 "Would you like to remove them now?"
-msgstr[0] "Az %s adótáblázat nem létezik. Kívánja létrehozni?"
+msgstr[0] ""
+"Hibás a %d összerendelése,\n"
+"\n"
+"Szeretné törölni most?"
 
 #: gnucash/gnome/dialog-imap-editor.c:368
 #, c-format
@@ -2508,9 +2506,8 @@ msgid "View Expense Voucher"
 msgstr "Költség bizonylat megtekintése"
 
 #: gnucash/gnome/dialog-invoice.c:2519
-#, fuzzy
 msgid "Open Linked Document:"
-msgstr "Új folyószámla"
+msgstr "Csatolt dokumentum megnyitása:"
 
 #: gnucash/gnome/dialog-invoice.c:2633 gnucash/gnome/dialog-invoice.c:2858
 #, fuzzy
@@ -2725,10 +2722,10 @@ msgstr "Számla keresése"
 #. Translators: %d is the number of bills/credit notes due. This is a
 #. ngettext(3) message.
 #: gnucash/gnome/dialog-invoice.c:3717
-#, fuzzy, c-format
+#, c-format
 msgid "The following vendor document is due:"
 msgid_plural "The following %d vendor documents are due:"
-msgstr[0] "\"Az alábbi %d számla esedékes\""
+msgstr[0] "Az alábbi %d számla esedékes:"
 
 #: gnucash/gnome/dialog-invoice.c:3721
 msgid "Due Bills Reminder"
@@ -2738,10 +2735,10 @@ msgstr "Esedékes számlák emlékeztetője"
 #. Translators: %d is the number of invoices/credit notes due. This is a
 #. ngettext(3) message.
 #: gnucash/gnome/dialog-invoice.c:3728
-#, fuzzy, c-format
+#, c-format
 msgid "The following customer document is due:"
 msgid_plural "The following %d customer documents are due:"
-msgstr[0] "\"Az alábbi %d számla esedékes\""
+msgstr[0] "Az alábbi %d számla esedékes:"
 
 #: gnucash/gnome/dialog-invoice.c:3732
 #, fuzzy
@@ -2924,11 +2921,8 @@ msgid "You must select a company for payment processing."
 msgstr "Ki kell választani egy céget a kifizetés lebonyolításához."
 
 #: gnucash/gnome/dialog-payment.c:260
-#, fuzzy
 msgid "There is a problem with the Payment or Refund amount."
-msgstr ""
-"Baj van a következő opcióval: %s:%s.\n"
-"%s"
+msgstr "Hiba van a fizetés vagy a jóváírás összeével."
 
 #: gnucash/gnome/dialog-payment.c:281
 msgid "You must select a transfer account from the account tree."
@@ -3426,7 +3420,7 @@ msgid "Invalid Transactions"
 msgstr "Tranzakció érvényesítése"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:866
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There are no Scheduled Transactions to be entered at this time. (One "
 "transaction automatically created)"
@@ -3454,11 +3448,11 @@ msgstr "Létrehozott tranzakció"
 
 #: gnucash/gnome/dialog-tax-info.c:287
 msgid "Last Valid Year: "
-msgstr "Utolsó érvényes év:"
+msgstr "Utolsó érvényes év: "
 
 #: gnucash/gnome/dialog-tax-info.c:288
 msgid "Form Line Data: "
-msgstr "Űrlap sor adat:"
+msgstr "Űrlap sor adat: "
 
 #. Translators: Tax Code
 #: gnucash/gnome/dialog-tax-info.c:290
@@ -3803,7 +3797,7 @@ msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transactions automatically created)"
 msgstr[0] ""
-"Nincs létrehozandó ütemezett tranzakció. (%d tranzakció automatikusan "
+"Nincs létrehozandó ütemezett tranzakció. (a %d tranzakció automatikusan "
 "létrehozva)"
 
 #: gnucash/gnome/gnc-plugin-budget.c:63
@@ -3812,9 +3806,8 @@ msgid "_New Budget"
 msgstr "Új költségvetés"
 
 #: gnucash/gnome/gnc-plugin-budget.c:64
-#, fuzzy
 msgid "Create a new Budget."
-msgstr "Új költségvetés létrehozása"
+msgstr "Új költségvetés létrehozása."
 
 #: gnucash/gnome/gnc-plugin-budget.c:69
 #, fuzzy
@@ -3833,18 +3826,16 @@ msgid "_Copy Budget"
 msgstr "Költségvetés másolása"
 
 #: gnucash/gnome/gnc-plugin-budget.c:76
-#, fuzzy
 msgid "Copy an existing Budget."
-msgstr "Meglévő költségvetés másolása"
+msgstr "Meglévő költségvetés másolása."
 
 #: gnucash/gnome/gnc-plugin-budget.c:80
 msgid "_Delete Budget"
 msgstr "Költségvetés törlése"
 
 #: gnucash/gnome/gnc-plugin-budget.c:81
-#, fuzzy
 msgid "Delete an existing Budget."
-msgstr "Meglévő költségvetés kinyitása"
+msgstr "Meglévő költségvetés kinyitása."
 
 #: gnucash/gnome/gnc-plugin-budget.c:288
 msgid "Select a Budget"
@@ -4177,7 +4168,7 @@ msgstr "A kiválasztott számla és minden alszámlájának megnyitása"
 #: gnucash/gnome/gnc-plugin-page-register2.c:245
 #: gnucash/gnome/gnc-plugin-page-register.c:354
 msgid "Edit _Account"
-msgstr "_Folyószámla szerkesztése "
+msgstr "_Folyószámla szerkesztése"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:249
 #: gnucash/gnome/gnc-plugin-page-register2.c:246
@@ -4199,9 +4190,8 @@ msgid "_Cascade Account Properties..."
 msgstr "Számla színe"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:259
-#, fuzzy
 msgid "Cascade selected properties for account"
-msgstr "Válasszon ki egy érvényes kölcsönszámlát."
+msgstr "Válasszon ki egy érvényes kölcsönszámlát"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:263
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:268
@@ -12959,7 +12949,6 @@ msgid "Setup Account Period"
 msgstr "Számlázási időszakok beállítása"
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:41
-#, fuzzy
 msgid ""
 "\n"
 "Select an accounting period and the closing date which must not be in the "
@@ -12967,8 +12956,9 @@ msgid ""
 "\n"
 "Books will be closed at midnight on the selected date."
 msgstr ""
-"Válasszon számlázási időszakot és záró napot az időszakhoz. A könyveket a "
-"kiválasztott napon éjfélkor zárják."
+"\n"
+"Válasszon számlázási időszakot és záró napot az időszakhoz.\n"
+"A könyveket a kiválasztott napon éjfélkor zárják."
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:85
 msgid "Book Closing Dates"
@@ -13026,7 +13016,9 @@ msgstr "Jelentésszámlák"
 msgid ""
 "\n"
 "Enter file name and location for the Import...\n"
-msgstr "Nincsenek opciók a jelentéshez."
+msgstr ""
+"\n"
+"Nincsenek opciók a jelentéshez.\n"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:91
 #, fuzzy
@@ -13241,7 +13233,9 @@ msgstr "Azonosító törlése"
 msgid ""
 "\n"
 "Enter file name and location for the Export...\n"
-msgstr "Nincsenek opciók a jelentéshez."
+msgstr ""
+"\n"
+"Nincsenek opciók a jelentéshez.\n"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:720
 #, fuzzy
@@ -13654,7 +13648,9 @@ msgstr "Új számlahierarchia beállítása"
 msgid ""
 "\n"
 "Please choose the currency to use for new accounts."
-msgstr "Válassza ki az új számlák pénznemét."
+msgstr ""
+"\n"
+"Válassza ki az új számlák pénznemét."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:108
 msgid "Choose Currency"
@@ -14935,11 +14931,8 @@ msgid "Show accounts which have a zero total value."
 msgstr "A nulla egyenlegű számlák elrejtése."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1065
-#, fuzzy
 msgid "Use Commodity Value"
-msgstr ""
-"\n"
-"Áru: "
+msgstr "Áru:"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1196
 #: gnucash/gtkbuilder/dialog-customer.glade:213
@@ -20495,7 +20488,9 @@ msgstr ""
 msgid ""
 "\n"
 "Processing...\n"
-msgstr "_Kifizetés lebonyolítása..."
+msgstr ""
+"\n"
+"_Kifizetés lebonyolítása...\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:716
 #, fuzzy, c-format
