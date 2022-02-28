@@ -27,7 +27,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-02-23 05:55+0000\n"
+"PO-Revision-Date: 2022-02-27 08:55+0000\n"
 "Last-Translator: YTX <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -36,7 +36,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.11.1-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -5762,7 +5762,7 @@ msgstr "更新当前报表的已保存配置。报表配置将保存在文件%s�
 msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu. The report configuration will be saved in the file %s."
-msgstr "添加当前报表配置到\"报表 -> 已保存模板\"，配置将被保存在文件%s中。"
+msgstr "添加当前报表配置到\"报表 -> 已存模板\"，配置将被保存在文件%s中。"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1205
 msgid "_Print Report..."
@@ -5782,11 +5782,11 @@ msgstr "将当前报表导出为 PDF 文档"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1236
 msgid "Save _Report Configuration"
-msgstr "保存报表模板(_R)"
+msgstr "保存模板(_R)"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1240
 msgid "Save Report Configuration As..."
-msgstr "另存报表模板..."
+msgstr "另存模板..."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1244
 msgid "Export _Report"
@@ -6413,7 +6413,7 @@ msgstr "显示 ~a 报表"
 #: gnucash/gnome/report-menus.scm:90
 #: gnucash/gtkbuilder/dialog-custom-report.glade:8
 msgid "Saved Report Configurations"
-msgstr "已保存模板"
+msgstr "已存模板"
 
 #: gnucash/gnome/report-menus.scm:92
 msgid "Manage and run saved report configurations"
@@ -22670,7 +22670,7 @@ msgstr "显示已选数据的图形。"
 #: gnucash/report/reports/example/average-balance.scm:126
 #: gnucash/report/reports/example/average-balance.scm:301
 msgid "Plot Type"
-msgstr "绘图类型"
+msgstr "类型"
 
 #: gnucash/report/reports/example/average-balance.scm:127
 msgid "The type of graph to generate."
@@ -23887,14 +23887,14 @@ msgstr "基准"
 #: gnucash/report/reports/standard/cashflow-barchart.scm:337
 #: gnucash/report/reports/standard/cash-flow.scm:279
 msgid "Money In"
-msgstr "金钱流入"
+msgstr "资金流入"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1064
 #: gnucash/report/reports/standard/cashflow-barchart.scm:297
 #: gnucash/report/reports/standard/cashflow-barchart.scm:338
 #: gnucash/report/reports/standard/cash-flow.scm:300
 msgid "Money Out"
-msgstr "金钱流出"
+msgstr "资金流出"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1065
 msgid "Realized Gain"
@@ -24064,7 +24064,7 @@ msgstr "是否包括资产部标签。"
 #: gnucash/report/reports/standard/balance-sheet.scm:116
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:82
 msgid "Include assets total"
-msgstr "包含资产合计"
+msgstr "资产合计"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:118
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:84
@@ -24094,7 +24094,7 @@ msgstr "是否包括负债标签。"
 #: gnucash/report/reports/standard/balance-sheet.scm:125
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:88
 msgid "Include liabilities total"
-msgstr "包含负债合计"
+msgstr "负债合计"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:127
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:90
@@ -24114,7 +24114,7 @@ msgstr "是否包括股权部分的标签。"
 #: gnucash/report/reports/standard/balance-sheet.scm:131
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:94
 msgid "Include equity total"
-msgstr "包括所有者权益合计"
+msgstr "所有者权益合计"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:133
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:96
@@ -24387,15 +24387,15 @@ msgstr "表中每个金额作为超链接显示到其窗口。"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:106
 msgid "Label sections"
-msgstr "期间标签"
+msgstr "标签"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:107
 msgid "Whether or not to include a label for sections."
-msgstr "是否包括期间标签。"
+msgstr "是否包括标签。"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:108
 msgid "Include totals"
-msgstr "显示总计"
+msgstr "显示合计"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:109
 msgid "Whether or not to include a line indicating total amounts."
@@ -24951,11 +24951,11 @@ msgstr "包含没有股份的科目"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:48
 msgid "Show Money In"
-msgstr "金钱流入"
+msgstr "显示资金流入"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:49
 msgid "Show Money Out"
-msgstr "金钱流出"
+msgstr "显示资金流出"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:50
 msgid "Show Net Flow"
@@ -25019,11 +25019,11 @@ msgstr "~a 和选定的子科目"
 
 #: gnucash/report/reports/standard/cash-flow.scm:270
 msgid "Money into selected accounts comes from"
-msgstr "金钱流入自所选的科目"
+msgstr "所选科目资金来源"
 
 #: gnucash/report/reports/standard/cash-flow.scm:291
 msgid "Money out of selected accounts goes to"
-msgstr "金钱流出到所选的科目"
+msgstr "所选科目资金流出"
 
 #: gnucash/report/reports/standard/category-barchart.scm:41
 #: gnucash/report/reports/standard/net-charts.scm:362
