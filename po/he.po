@@ -12,7 +12,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
 "PO-Revision-Date: 2022-02-28 09:44+0000\n"
-"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -3489,7 +3489,7 @@ msgstr "אפ_שרויות מיסוי"
 #: gnucash/gnome/gnc-plugin-page-register2.c:268
 #: gnucash/gnome/gnc-plugin-page-register.c:377
 msgid "Setup relevant accounts for tax reports, e.g. US income tax"
-msgstr "הגדרת חשבונות הקשורים דוחות מס, לדוגמה, מס הכנסה ארה״ב"
+msgstr "הגדרת חשבונות רלוונטיים לדוחות מס, לדוגמה, מס הכנסה ארה״ב"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:164
 msgid "_Scheduled Transactions"
