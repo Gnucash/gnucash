@@ -124,11 +124,11 @@ extern const gchar*
 gnc_v2_book_version_string;        /* see gnc-book-xml-v2 */
 
 /* Forward declarations */
-static FILE* try_gz_open (const char* filename, const char* perms,
-                          gboolean compress,
-                          gboolean write);
-static gboolean is_gzipped_file (const gchar* name);
-static gboolean wait_for_gzip (FILE* file);
+static std::pair<FILE*, GThread*> try_gz_open (const char* filename,
+                                               const char* perms,
+                                               gboolean compress,
+                                               gboolean write);
+static bool is_gzipped_file (const gchar* name);
 
 static void
 clear_up_account_commodity (
@@ -796,22 +796,21 @@ qof_session_load_from_xml_file_v2_full (
          * https://bugs.gnucash.org/show_bug.cgi?id=712528 for more
          * info.
          */
-         const char* filename = xml_be->get_filename();
-        FILE* file;
-        gboolean is_compressed = is_gzipped_file (filename);
-        file = try_gz_open (filename, "r", is_compressed, FALSE);
-        if (file == NULL)
+        auto filename = xml_be->get_filename();
+        auto [file, thread] = try_gz_open (filename, "r",
+                                           is_gzipped_file (filename), FALSE);
+        if (!file)
         {
             PWARN ("Unable to open file %s", filename);
-            retval = FALSE;
+            retval = false;
         }
         else
         {
             retval = gnc_xml_parse_fd (top_parser, file,
                                        generic_callback, gd, book);
             fclose (file);
-            if (is_compressed)
-                wait_for_gzip (file);
+            if (thread)
+                g_thread_join (thread) != nullptr;
         }
     }
 
@@ -1538,7 +1537,7 @@ cleanup_gz_thread_func:
     return GINT_TO_POINTER (success);
 }
 
-static FILE*
+static std::pair<FILE*, GThread*>
 try_gz_open (const char* filename, const char* perms, gboolean compress,
              gboolean write)
 {
@@ -1546,11 +1545,11 @@ try_gz_open (const char* filename, const char* perms, gboolean compress,
         compress = TRUE;
 
     if (!compress)
-        return g_fopen (filename, perms);
+        return std::pair<FILE*, GThread*>(g_fopen (filename, perms),
+                                          nullptr);
 
     {
         int filedes[2]{};
-        GThread* thread;
         gz_thread_params_t* params;
         FILE* file;
 
@@ -1575,7 +1574,8 @@ try_gz_open (const char* filename, const char* perms, gboolean compress,
                 close(filedes[0]);
                 close(filedes[1]);
             }
-            return g_fopen (filename, perms);
+            return std::pair<FILE*, GThread*>(g_fopen (filename, perms),
+                                              nullptr);
         }
 
         params = g_new (gz_thread_params_t, 1);
@@ -1584,8 +1584,8 @@ try_gz_open (const char* filename, const char* perms, gboolean compress,
         params->perms = g_strdup (perms);
         params->write = write;
 
-        thread = g_thread_new ("xml_thread", (GThreadFunc) gz_thread_func,
-                               params);
+        auto thread = g_thread_new ("xml_thread", (GThreadFunc) gz_thread_func,
+                                    params);
         if (!thread)
         {
             g_warning ("Could not create thread for (de)compression.");
@@ -1595,70 +1595,38 @@ try_gz_open (const char* filename, const char* perms, gboolean compress,
             close (filedes[0]);
             close (filedes[1]);
 
-            return g_fopen (filename, perms);
         }
-
-        if (write)
-            file = fdopen (filedes[1], "w");
         else
-            file = fdopen (filedes[0], "r");
-
-        G_LOCK (threads);
-        if (!threads)
-            threads = g_hash_table_new (g_direct_hash, g_direct_equal);
-
-        g_hash_table_insert (threads, file, thread);
-        G_UNLOCK (threads);
-
-        return file;
-    }
-}
-
-static gboolean
-wait_for_gzip (FILE* file)
-{
-    gboolean retval = TRUE;
-
-    G_LOCK (threads);
-    if (threads)
-    {
-        GThread* thread = static_cast<decltype (thread)> (g_hash_table_lookup (threads,
-                                                          file));
-        if (thread)
         {
-            g_hash_table_remove (threads, file);
-            retval = GPOINTER_TO_INT (g_thread_join (thread));
+            if (write)
+                file = fdopen (filedes[1], "w");
+            else
+                file = fdopen (filedes[0], "r");
         }
-    }
-    G_UNLOCK (threads);
 
-    return retval;
+        return std::pair<FILE*, GThread*>(file, thread);
+    }
 }
 
 gboolean
-gnc_book_write_to_xml_file_v2 (
-    QofBook* book,
-    const char* filename,
-    gboolean compress)
+gnc_book_write_to_xml_file_v2 (QofBook* book, const char* filename,
+                               gboolean compress)
 {
-    FILE* out;
-    gboolean success = TRUE;
+    bool success = true;
 
-    out = try_gz_open (filename, "w", compress, TRUE);
+    auto [file, thread] = try_gz_open (filename, "w", compress, TRUE);
+    if (!file)
+        return false;
 
     /* Try to write as much as possible */
-    if (!out
-        || !gnc_book_write_to_xml_filehandle_v2 (book, out))
-        success = FALSE;
+    success = (gnc_book_write_to_xml_filehandle_v2 (book, file));
 
     /* Close the output stream */
-    if (out && fclose (out))
-        success = FALSE;
+    success = ! (fclose (file));
 
     /* Optionally wait for parallel compression threads */
-    if (out && compress)
-        if (!wait_for_gzip (out))
-            success = FALSE;
+    if (thread)
+        success =  g_thread_join (thread) != nullptr;
 
     return success;
 }
@@ -1697,7 +1665,7 @@ gnc_book_write_accounts_to_xml_file_v2 (QofBackend* qof_be, QofBook* book,
 }
 
 /***********************************************************************/
-static gboolean
+static bool
 is_gzipped_file (const gchar* name)
 {
     unsigned char buf[2];
@@ -1705,22 +1673,23 @@ is_gzipped_file (const gchar* name)
 
     if (fd == -1)
     {
-        return FALSE;
+        return false;
     }
 
     if (read (fd, buf, 2) != 2)
     {
         close (fd);
-        return FALSE;
+        return false;
     }
     close (fd);
 
+    /* 037 0213 are the header id bytes for a gzipped file. */
     if (buf[0] == 037 && buf[1] == 0213)
     {
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 QofBookFileType
@@ -1845,18 +1814,16 @@ gnc_xml2_find_ambiguous (const gchar* filename, GList* encodings,
                          GHashTable** unique, GHashTable** ambiguous,
                          GList** impossible)
 {
-    FILE* file = NULL;
     GList* iconv_list = NULL, *conv_list = NULL, *iter;
     iconv_item_type* iconv_item = NULL, *ascii = NULL;
     const gchar* enc;
     GHashTable* processed = NULL;
     gint n_impossible = 0;
     GError* error = NULL;
-    gboolean is_compressed;
     gboolean clean_return = FALSE;
 
-    is_compressed = is_gzipped_file (filename);
-    file = try_gz_open (filename, "r", is_compressed, FALSE);
+    auto [file, thread] = try_gz_open (filename, "r",
+                                       is_gzipped_file (filename), FALSE);
     if (file == NULL)
     {
         PWARN ("Unable to open file %s", filename);
@@ -2039,8 +2006,8 @@ cleanup_find_ambs:
     if (file)
     {
         fclose (file);
-        if (is_compressed)
-            wait_for_gzip (file);
+        if (thread)
+            g_thread_join (thread);
     }
 
     return (clean_return) ? n_impossible : -1;
@@ -2056,17 +2023,14 @@ static void
 parse_with_subst_push_handler (xmlParserCtxtPtr xml_context,
                                push_data_type* push_data)
 {
-    const gchar* filename;
-    FILE* file = NULL;
     GIConv ascii = (GIConv) - 1;
     GString* output = NULL;
     GError* error = NULL;
-    gboolean is_compressed;
 
-    filename = push_data->filename;
-    is_compressed = is_gzipped_file (filename);
-    file = try_gz_open (filename, "r", is_compressed, FALSE);
-    if (file == NULL)
+    auto filename = push_data->filename;
+    auto [file, thread] = try_gz_open (filename, "r",
+                                       is_gzipped_file (filename), FALSE);
+    if (!file)
     {
         PWARN ("Unable to open file %s", filename);
         goto cleanup_push_handler;
@@ -2179,8 +2143,8 @@ cleanup_push_handler:
     if (file)
     {
         fclose (file);
-        if (is_compressed)
-            wait_for_gzip (file);
+        if (thread)
+            g_thread_join (thread);
     }
 }
 
