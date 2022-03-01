@@ -1387,46 +1387,126 @@ gnc_book_write_accounts_to_xml_filehandle_v2 (QofBackend* qof_be, QofBook* book,
     return success;
 }
 
-#define BUFLEN 4096
+#ifdef G_OS_WIN32
+static inline gzFile
+gzopen_win32 (const char* filename, const char* perms)
+{
+    gzFile file;
+    char* new_perms = nullptr;
+    char* conv_name = g_win32_locale_filename_from_utf8 (filename);
+
+    if (!conv_name)
+    {
+        g_warning ("Could not convert '%s' to system codepage",
+                   filename);
+        success = 0;
+        return nullptr;
+    }
+
+    if (strchr (perms, 'b'))
+        new_perms = g_strdup (perms);
+    else
+        new_perms = g_strdup_printf ("%cb%s", *perms, perms + 1);
+
+    file = gzopen (conv_name, new_perms);
+    g_free (new_perms);
+    g_free (conv_name);
+    return file;
+}
+#endif
+
+constexpr uint32_t BUFLEN{4096};
+
+static inline bool
+gz_thread_write (gzFile file, gz_thread_params_t* params)
+{
+    bool success = true;
+    gchar buffer[BUFLEN];
+
+    while (success)
+    {
+        auto bytes = read (params->fd, buffer, BUFLEN);
+        if (bytes > 0)
+        {
+            if (gzwrite (file, buffer, bytes) <= 0)
+            {
+                gint errnum;
+                auto error = gzerror (file, &errnum);
+                g_warning ("Could not write the compressed file '%s'. The error is: '%s' (%d)",
+                           params->filename, error, errnum);
+                success = false;
+            }
+        }
+        else if (bytes == 0)
+        {
+            printf("gz_thread_func EOF\n");
+            break;
+        }
+        else
+        {
+            g_warning ("Could not read from pipe. The error is '%s' (errno %d)",
+                       g_strerror (errno) ? g_strerror (errno) : "", errno);
+            success = false;
+        }
+    }
+    return success;
+}
+
+#if COMPILER(MSVC)
+#define WRITE_FN _write
+#else
+#define WRITE_FN write
+#endif
+
+static inline bool
+gz_thread_read (gzFile file, gz_thread_params_t* params)
+{
+    bool success = true;
+    gchar buffer[BUFLEN];
+
+    while (success)
+    {
+        auto gzval = gzread (file, buffer, BUFLEN);
+        if (gzval > 0)
+        {
+            if (WRITE_FN (params->fd, buffer, gzval) < 0)
+            {
+                g_warning ("Could not write to pipe. The error is '%s' (%d)",
+                           g_strerror (errno) ? g_strerror (errno) : "", errno);
+                success = false;
+            }
+        }
+        else if (gzval == 0)
+        {
+            break;
+        }
+        else
+        {
+            gint errnum;
+            const gchar* error = gzerror (file, &errnum);
+            g_warning ("Could not read from compressed file '%s'. The error is: '%s' (%d)",
+                       params->filename, error, errnum);
+            success = false;
+        }
+    }
+    return success;
+}
 
 /* Compress or decompress function that is to be run in a separate thread.
  * Returns 1 on success or 0 otherwise, stuffed into a pointer type. */
 static gpointer
 gz_thread_func (gz_thread_params_t* params)
 {
-    gchar buffer[BUFLEN];
-    gssize bytes;
     gint gzval;
-    gzFile file;
-    gint success = 1;
+    bool success = true;
 
 #ifdef G_OS_WIN32
-    {
-        gchar* conv_name = g_win32_locale_filename_from_utf8 (params->filename);
-        gchar* perms;
-
-        if (!conv_name)
-        {
-            g_warning ("Could not convert '%s' to system codepage",
-                       params->filename);
-            success = 0;
-            goto cleanup_gz_thread_func;
-        }
-
-        if (strchr (params->perms, 'b'))
-            perms = g_strdup (params->perms);
-        else
-            perms = g_strdup_printf ("%cb%s", *params->perms, params->perms + 1);
-
-        file = gzopen (conv_name, perms);
-        g_free (perms);
-        g_free (conv_name);
-    }
+    auto file = gzopen_win32 (params->filename, params->perms);
 #else /* !G_OS_WIN32 */
-    file = gzopen (params->filename, params->perms);
+    auto file = gzopen (params->filename, params->perms);
 #endif /* G_OS_WIN32 */
 
-    if (file == NULL)
+    if (!file)
     {
         g_warning ("Child threads gzopen failed");
         success = 0;
@@ -1435,73 +1515,18 @@ gz_thread_func (gz_thread_params_t* params)
 
     if (params->write)
     {
-        while (success)
-        {
-            bytes = read (params->fd, buffer, BUFLEN);
-            if (bytes > 0)
-            {
-                if (gzwrite (file, buffer, bytes) <= 0)
-                {
-                    gint errnum;
-                    const gchar* error = gzerror (file, &errnum);
-                    g_warning ("Could not write the compressed file '%s'. The error is: '%s' (%d)",
-                               params->filename, error, errnum);
-                    success = 0;
-                }
-            }
-            else if (bytes == 0)
-            {
-                printf("gz_thread_func EOF\n");
-                break;
-            }
-            else
-            {
-                g_warning ("Could not read from pipe. The error is '%s' (errno %d)",
-                           g_strerror (errno) ? g_strerror (errno) : "", errno);
-                success = 0;
-            }
-        }
+        success = gz_thread_write (file, params);
     }
     else
     {
-        while (success)
-        {
-            gzval = gzread (file, buffer, BUFLEN);
-            if (gzval > 0)
-            {
-                if (
-#if COMPILER(MSVC)
-                    _write
-#else
-                    write
-#endif
-                    (params->fd, buffer, gzval) < 0)
-                {
-                    g_warning ("Could not write to pipe. The error is '%s' (%d)",
-                               g_strerror (errno) ? g_strerror (errno) : "", errno);
-                    success = 0;
-                }
-            }
-            else if (gzval == 0)
-            {
-                break;
-            }
-            else
-            {
-                gint errnum;
-                const gchar* error = gzerror (file, &errnum);
-                g_warning ("Could not read from compressed file '%s'. The error is: '%s' (%d)",
-                           params->filename, error, errnum);
-                success = 0;
-            }
-        }
+        success = gz_thread_read (file, params);
     }
 
     if ((gzval = gzclose (file)) != Z_OK)
     {
         g_warning ("Could not close the compressed file '%s' (errnum %d)",
                    params->filename, gzval);
-        success = 0;
+        success = false;
     }
 
 cleanup_gz_thread_func:
