@@ -630,7 +630,7 @@ libgnucash/engine/engine-helpers.c
 libgnucash/engine/gncAddress.c
 libgnucash/engine/gnc-aqbanking-templates.cpp
 libgnucash/engine/gncBillTerm.c
-libgnucash/engine/gnc-budget.c
+libgnucash/engine/gnc-budget.cpp
 libgnucash/engine/gncBusiness.c
 libgnucash/engine/gnc-commodity.c
 libgnucash/engine/gnc-commodity.h
