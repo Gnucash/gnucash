@@ -409,7 +409,7 @@
 (define unreserved-chars-rfc3986
   (char-set-union
    (string->char-set "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
-   (string->char-set ":/?#[]@")         ;gen-delims
+   (string->char-set ":/?[]@")         ;gen-delims
    (string->char-set "-._~")))
 
 ;;path must be absolute. On Windows an absolute path begins with a
