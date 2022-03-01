@@ -109,14 +109,8 @@ GType gnc_commodity_namespace_get_type(void);
 /* The ISO define is deprecated in favor of CURRENCY */
 #define GNC_COMMODITY_NS_ISO           "ISO4217"
 #define GNC_COMMODITY_NS_CURRENCY      "CURRENCY"
-#define GNC_COMMODITY_NS_BOND       N_("BOND")
-#define GNC_COMMODITY_NS_SHARE      N_("SHARE")
-#define GNC_COMMODITY_NS_MUTUAL     N_("FUND")
-#define GNC_COMMODITY_NS_OPTION     N_("OPTION")
-#define GNC_COMMODITY_NS_NONCURRENCY _("All non-currency")
-/* Delay translation of this one, we use it in both translated and untranslated form
-   when presenting the currency related namespace to the user */
-#define GNC_COMMODITY_NS_ISO_GUI    N_("Currencies")
+#define GNC_COMMODITY_NS_NONCURRENCY   NC_("Commodity Type", "All non-currency")
+#define GNC_COMMODITY_NS_ISO_GUI       NC_("Commodity Type", "Currencies")
 
 /** Max fraction is 10^9 because 10^10 would require changing it to an
  * int64_t.

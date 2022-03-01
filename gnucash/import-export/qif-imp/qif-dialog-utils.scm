@@ -736,46 +736,29 @@
                           ;; compatible with the QIF type?
                           (and (string=? s (caddr elt))
                                (not (and (string? qif-type)
-                                         (string=? (GNC-COMMODITY-NS-MUTUAL)
+                                         (string=? (GNC-COMMODITY-NS-NONCURRENCY)
                                                    (cadr elt))
                                          (or (string-ci=? qif-type "stock")
                                              (string-ci=? qif-type "etf"))))))
                         prefs)
                    #f)))
-        (cond
-          ;; If a preferences match was found, use its namespace.
-          (pref-match
-           (cadr pref-match))
-
-          ;; Guess SHARE for symbols of 1-4 characters.
-          ((<= l 4)
-           (GNC-COMMODITY-NS-SHARE))
-
-          ;; Otherwise it's probably a fund.
-          (else
-           (GNC-COMMODITY-NS-MUTUAL))))
+        ;; If a preferences match was found, use its namespace.
+        (if pref-match (cadr pref-match))
       ;; There's no symbol. Default to a fund.
-      (GNC-COMMODITY-NS-MUTUAL)))
+      (GNC-COMMODITY-NS-NONCURRENCY))))
 
   ;; Was a QIF type given?
   (if (string? qif-type)
      ;; Yes. We might be able to definitely determine the namespace.
-     (cond
-       ;; Mutual fund
-       ((string-ci=? qif-type "mutual fund")
-        (GNC-COMMODITY-NS-MUTUAL))
-
-       ;; Index
-       ((string-ci=? qif-type "index")
-        ;; This QIF type must be wrong; indexes aren't tradable!
-        (GNC-COMMODITY-NS-MUTUAL))
-
-       (else
-        (guess-by-symbol qif-symbol)))
+     (if (or
+          (string-ci=? qif-type "mutual fund")
+          (string-ci=? qif-type "index"))
+         (GNC-COMMODITY-NS-NONCURRENCY)
+         (guess-by-symbol qif-symbol)))
 
      ;; No QIF type was given, so guess a
      ;; default namespace by symbol alone.
-     (guess-by-symbol qif-symbol)))
+  (guess-by-symbol qif-symbol))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
