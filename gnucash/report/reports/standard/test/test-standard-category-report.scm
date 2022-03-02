@@ -245,7 +245,7 @@
         (sxml->table-row-col sxml 1 0 2))
 
       ;; test ratios
-      (set-option expense-options gnc:pagename-display "Replace amounts with percentage ratios." #t)
+      (set-option expense-options gnc:pagename-display "Percentage chart" #t)
       (let ((sxml (gnc:options->sxml expense-report-uuid expense-options
                                      "test-standard-category-report"
                                      "ratios"

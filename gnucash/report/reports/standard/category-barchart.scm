@@ -185,8 +185,8 @@ developing over time"))
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-display
-      (N_ "Replace amounts with percentage ratios.")
-      "e1" (N_ "Display percentage contribution of each account to the Gand Total instead of amounts.")
+      (N_ "Percentage chart")
+      "e1" (N_ "Display account contributions as a percentage of the total value for the period.")
       #f))
 
     (gnc:options-add-plot-size!
@@ -259,7 +259,7 @@ developing over time"))
          (work-to-do 0)
          (all-data #f)
          (show-table? (get-option gnc:pagename-display (N_ "Show table")))
-         (ratio-chart? (get-option gnc:pagename-display (N_ "Replace amounts with percentage ratios.")))
+         (ratio-chart? (get-option gnc:pagename-display (N_ "Percentage chart")))
          (document (gnc:make-html-document))
          (chart (gnc:make-html-chart))
          (topl-accounts (gnc:filter-accountlist-type
