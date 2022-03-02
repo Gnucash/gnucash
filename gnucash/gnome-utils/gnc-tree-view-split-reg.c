@@ -3772,7 +3772,7 @@ gtv_sr_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
     case GDK_KEY_minus:
     case GDK_KEY_KP_Add:
     case GDK_KEY_KP_Subtract:
-
+    case GDK_KEY_semicolon: // See https://bugs.gnucash.org/show_bug.cgi?id=798386
         if (!spath)
             return TRUE;
 

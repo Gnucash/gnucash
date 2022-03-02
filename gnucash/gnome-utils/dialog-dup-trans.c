@@ -124,7 +124,9 @@ gnc_dup_key_press_event_cb (GtkWidget *widget, GdkEventKey *event, gpointer user
             (event->state & modifiers) == GDK_MOD1_MASK)
             return FALSE;
 
-        if (event->keyval == GDK_KEY_plus || event->keyval == GDK_KEY_KP_Add)
+        /* See https://bugs.gnucash.org/show_bug.cgi?id=798386 for semicolon */
+        if (event->keyval == GDK_KEY_plus || event->keyval == GDK_KEY_KP_Add ||
+            event->keyval == GDK_KEY_semicolon)
             increment = 1;
         else if (event->keyval == GDK_KEY_minus || event->keyval == GDK_KEY_KP_Subtract)
             increment = -1;
