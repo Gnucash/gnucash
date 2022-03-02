@@ -5,14 +5,15 @@
 # Juraj Korec <euro777@gmail.com>, 2008.
 # Zdenko Podobny <zdenop@gmail.com>, 2009, 2010, 2011, 2018
 # Dullus <dullus@gmail.com>, 2022.
+# Zdenko Podobný <zdenop@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-01-07 11:54+0000\n"
-"Last-Translator: Dullus <dullus@gmail.com>\n"
+"PO-Revision-Date: 2022-03-02 21:55+0000\n"
+"Last-Translator: Zdenko Podobný <zdenop@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sk/>\n"
 "Language: sk\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.11.1-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-Language: Slovak\n"
 "X-Poedit-Country: SLOVAKIA\n"
@@ -5275,9 +5276,8 @@ msgstr "Odstráni aktuálnu položku"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:223
 #: gnucash/gnome/gnc-plugin-page-register.c:332
-#, fuzzy
 msgid "_Print Checks..."
-msgstr "Tlač LaTeX"
+msgstr "_Tlač šeky…"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:230
 #: gnucash/gnome/gnc-plugin-page-register.c:339
@@ -5312,7 +5312,7 @@ msgstr "Skopírovať aktuálny výber do schránky"
 #: gnucash/gnome/gnc-plugin-page-report.c:1227
 #: gnucash/gnome-utils/gnc-main-window.c:331
 msgid "Paste the clipboard content at the cursor position"
-msgstr ""
+msgstr "Vložiť obsah schránky na pozíciu kurzora"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:300
 #, fuzzy
@@ -5360,9 +5360,8 @@ msgid "Add _Reversing Transaction"
 msgstr "Pridať _reverznú transakciu"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:327
-#, fuzzy
 msgid "Move Transaction _Up"
-msgstr "_Uložiť transakciu"
+msgstr "Posunúť transakciu _hore"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:328
 msgid ""
@@ -5414,17 +5413,15 @@ msgstr "Upraviť kurz pre aktuálnu transakciu"
 #. with focus on the current transaction's entry in that register.
 #: gnucash/gnome/gnc-plugin-page-register2.c:387
 #: gnucash/gnome/gnc-plugin-page-register.c:513
-#, fuzzy
 msgid "_Jump to the other account"
-msgstr "Zobrazovať iný kód účtu?"
+msgstr "_Skočiť na protiúčet"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:388
 #: gnucash/gnome/gnc-plugin-page-register.c:514
-#, fuzzy
-#| msgid "Open a register report for the selected Transaction"
 msgid ""
 "Open a new register tab for the other account with focus on this transaction."
-msgstr "Otvorí okno výkazu pre túto zvolenú transakciu"
+msgstr ""
+"Otvorí novú kartu registra pre druhý účet so zameraním na túto transakciu."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:392
 #: gnucash/gnome/gnc-plugin-page-register.c:518
@@ -5483,9 +5480,8 @@ msgid ""
 msgstr "Zobraziť dva riadky informácií pre každú transakciu"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:430
-#, fuzzy
 msgid "Show _Extra Dates"
-msgstr "Zobraziť kurzy"
+msgstr "Zobraziť _extra dátumy"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:431
 #, fuzzy
@@ -5775,10 +5771,8 @@ msgid "_Sort By..."
 msgstr "U_sporiadať podľa..."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:500
-#, fuzzy
-#| msgid "Post Date"
 msgid "_Go to Date"
-msgstr "Dátum vystavenia"
+msgstr "_Prejsť na deň"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:501
 #, fuzzy
@@ -6347,9 +6341,8 @@ msgid "Standard Order"
 msgstr "Š_tandardné poradie"
 
 #: gnucash/gnome/gnc-split-reg.c:685
-#, fuzzy
 msgid "Date of Entry"
-msgstr "Dátumu po_ložky"
+msgstr "Dátumu položky"
 
 #: gnucash/gnome/gnc-split-reg.c:688 gnucash/gnome/window-reconcile2.c:1784
 #: gnucash/gnome/window-reconcile.c:2000
@@ -9115,9 +9108,8 @@ msgstr ""
 
 #. Translators: Return to the transaction to update
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1737
-#, fuzzy
 msgid "_Return"
-msgstr "Kapitálový výnos"
+msgstr "_Návrat"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1780
 #: gnucash/register/ledger-core/split-register-control.c:1830
@@ -9173,7 +9165,7 @@ msgstr "Účet %s neexistuje. Chcete ho vytvoriť?"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:2121
 msgid "You can not paste from the general journal to a register."
-msgstr ""
+msgstr "Nemôžete vložiť z hlavnej knihy do registra."
 
 #: gnucash/gnome-utils/gnc-tree-model-account.c:754
 msgid "New top level account"
@@ -20108,7 +20100,7 @@ msgstr "Pripomenutie splatnosti faktúry"
 
 #: gnucash/import-export/bi-import/gnc-plugin-bi-import.c:58
 msgid "Import bills and invoices from a CSV text file"
-msgstr ""
+msgstr "Importovať účty a faktúry z CSV súboru"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:80
 msgid ""
@@ -20220,14 +20212,12 @@ msgstr "Cena podielu"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:622
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:62
-#, fuzzy
 msgid "Transaction ID"
-msgstr "Transakcia"
+msgstr "ID Transakcia"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:625
-#, fuzzy
 msgid "Commodity/Currency"
-msgstr "Obvyklá mena"
+msgstr "Komodita/Mena"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
 #: gnucash/import-export/csv-exp/csv-tree-export.c:155
@@ -20269,9 +20259,8 @@ msgid "Export A_ctive Register to CSV..."
 msgstr "Exportovať hierarchiu účtov do nového GnuCash súboru"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:66
-#, fuzzy
 msgid "Export the Active Register to a CSV file"
-msgstr "Exportovať hierarchiu účtov do nového GnuCash súboru"
+msgstr "Exportovať Aktívny register do CSV súboru"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:71
 #, c-format
@@ -21617,7 +21606,7 @@ msgstr "Pridať zostávajúce dobré ceny?"
 #: gnucash/price-quotes.scm:541
 #, scheme-format
 msgid "Found Finance::Quote version ~A."
-msgstr ""
+msgstr "Nájdená verzia ~A Finance::Quote."
 
 #: gnucash/python/init.py:18
 #: gnucash/report/reports/example/welcome-to-gnucash.scm:49
@@ -21630,9 +21619,9 @@ msgid "Have a nice day!"
 msgstr "Príjemný deň!"
 
 #: gnucash/python/init.py:118
-#, fuzzy, python-format
+#, python-format
 msgid "Welcome to GnuCash %s Shell"
-msgstr "Vitajte v GnuCash"
+msgstr "Vitajte v GnuCash %s Shell"
 
 #: gnucash/register/ledger-core/gncEntryLedger.c:250
 msgid "Hours"
@@ -21697,10 +21686,9 @@ msgid "X"
 msgstr ""
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:81
-#, fuzzy
 msgctxt "sample for 'Date'"
 msgid "12/12/2000"
-msgstr "sample:12/12/2000"
+msgstr "12/12/2000"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:86
 #, fuzzy
@@ -21730,10 +21718,10 @@ msgstr "sample:999,999.00"
 
 #. Translators: Header for Discount Type
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:110
-#, fuzzy, no-c-format
+#, no-c-format
 msgctxt "sample for 'Discount Type'"
 msgid "+%"
-msgstr "%"
+msgstr "+%"
 
 #. Translators: Header for Discount How
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:116
@@ -23252,7 +23240,7 @@ msgstr "Zobraziť v legende celkový zostatok?"
 #: libgnucash/app-utils/date-utilities.scm:187
 #, scheme-format
 msgid "~a to ~a"
-msgstr ""
+msgstr "~a do ~a"
 
 #: gnucash/report/reports/example/hello-world.scm:57
 #: gnucash/report/reports/example/hello-world.scm:67
@@ -23302,9 +23290,8 @@ msgid "String Option"
 msgstr "Nastavenie reťazca"
 
 #: gnucash/report/reports/example/hello-world.scm:82
-#, fuzzy
 msgid "This is a string option."
-msgstr "Toto je nastavenie reťazca"
+msgstr "Toto je nastavenie reťazca."
 
 #: gnucash/report/reports/example/hello-world.scm:82
 #: gnucash/report/reports/example/hello-world.scm:301
@@ -23317,27 +23304,24 @@ msgid "Just a Date Option"
 msgstr "Iba nastavenie dátumu"
 
 #: gnucash/report/reports/example/hello-world.scm:93
-#, fuzzy
 msgid "This is a date option."
-msgstr "Toto je nastavenie dátumu"
+msgstr "Toto je nastavenie dátumu."
 
 #: gnucash/report/reports/example/hello-world.scm:99
 msgid "Combo Date Option"
 msgstr "Nastavenie dátumu"
 
 #: gnucash/report/reports/example/hello-world.scm:100
-#, fuzzy
 msgid "This is a combination date option."
-msgstr "Toto je nastavenie kombinovaného dátumu"
+msgstr "Toto je nastavenie dátumovej kombinácie."
 
 #: gnucash/report/reports/example/hello-world.scm:106
 msgid "Relative Date Option"
 msgstr "Nastavenia relatívneho dátumu"
 
 #: gnucash/report/reports/example/hello-world.scm:107
-#, fuzzy
 msgid "This is a relative date option."
-msgstr "Toto je nastavenie relatívneho dátumu"
+msgstr "Toto je nastavenie relatívneho dátumu."
 
 #: gnucash/report/reports/example/hello-world.scm:117
 msgid "Number Option"
@@ -23355,9 +23339,8 @@ msgid "Background Color"
 msgstr "Farba pozadia"
 
 #: gnucash/report/reports/example/hello-world.scm:136
-#, fuzzy
 msgid "This is a color option."
-msgstr "Toto je nastavenie farby"
+msgstr "Toto je nastavenie farby."
 
 #: gnucash/report/reports/example/hello-world.scm:157
 #: gnucash/report/reports/example/hello-world.scm:170
@@ -23370,18 +23353,16 @@ msgid "An account list option"
 msgstr "Nastavenie zoznamu účtov"
 
 #: gnucash/report/reports/example/hello-world.scm:158
-#, fuzzy
 msgid "This is an account list option."
-msgstr "Toto je nastavenie zoznamu účtov"
+msgstr "Toto je nastavenie zoznamu účtov."
 
 #: gnucash/report/reports/example/hello-world.scm:170
 msgid "A list option"
 msgstr "Zoznam možností"
 
 #: gnucash/report/reports/example/hello-world.scm:171
-#, fuzzy
 msgid "This is a list option."
-msgstr "Toto je nastavenie zoznamu"
+msgstr "Toto je nastavenie zoznamu."
 
 #: gnucash/report/reports/example/hello-world.scm:173
 #: gnucash/report/reports/example/hello-world.scm:194
@@ -23413,9 +23394,8 @@ msgid ""
 msgstr "Toto je na testovanie. Vaše výkazy by nemali mať takého nastavenia."
 
 #: gnucash/report/reports/example/hello-world.scm:192
-#, fuzzy
 msgid "This is a Radio Button option."
-msgstr "Toto je nastavenie dátumu"
+msgstr "Toto je nastavenie dátumu."
 
 #: gnucash/report/reports/example/hello-world.scm:195
 #, fuzzy
@@ -23428,9 +23408,8 @@ msgid "Bad option."
 msgstr "Zlé nastavenie"
 
 #: gnucash/report/reports/example/hello-world.scm:201
-#, fuzzy
 msgid "Ugly option."
-msgstr "Hnusné nastavenie"
+msgstr "Hnusné nastavenie."
 
 #: gnucash/report/reports/example/hello-world.scm:316
 msgid ""
@@ -23443,13 +23422,13 @@ msgstr ""
 "guile (scheme)."
 
 #: gnucash/report/reports/example/hello-world.scm:322
-#, fuzzy, scheme-format
+#, scheme-format
 msgid ""
 "For help on writing reports, or to contribute your brand new, totally cool "
 "report, consult the mailing list ~a."
 msgstr ""
 "Pomoc pri písaní výkazov, alebo ak chcete prispieť s úplne novým, absolútne "
-"špičkovým výkazom, konzultujete v e-mailovej konferencií %s."
+"špičkovým výkazom, konzultujete v e-mailovej konferencií ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:327
 #, fuzzy
@@ -23470,14 +23449,14 @@ msgstr ""
 "tspl2d/&gt;."
 
 #: gnucash/report/reports/example/hello-world.scm:332
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The current time is ~a."
-msgstr "Aktuálny čas je %s."
+msgstr "Aktuálny čas je ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:337
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The boolean option is ~a."
-msgstr "Boolean nastavenie je %s."
+msgstr "Boolean nastavenie je ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:338
 msgid "true"
@@ -23523,9 +23502,9 @@ msgid "The number option is ~a."
 msgstr "Nastavenie čísla je %s."
 
 #: gnucash/report/reports/example/hello-world.scm:383
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The number option formatted as currency is ~a."
-msgstr "Nastavenie čísla formátovaného ako mena je %s."
+msgstr "Nastavenie čísla formátovaného ako mena je ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:395
 msgid "Items you selected:"
@@ -23544,9 +23523,8 @@ msgid "You have selected no accounts."
 msgstr "Nevybrali ste si účet."
 
 #: gnucash/report/reports/example/hello-world.scm:452
-#, fuzzy
 msgid "Display help"
-msgstr "Zobraziť"
+msgstr "Zobraziť pomocníka"
 
 #: gnucash/report/reports/example/hello-world.scm:481
 msgid "Sample Report with Examples"
@@ -23585,7 +23563,7 @@ msgstr "Vitajte v GnuCash"
 #: gnucash/report/reports/example/welcome-to-gnucash.scm:44
 #, scheme-format
 msgid "GnuCash ~a has lots of nice features. Here are a few."
-msgstr ""
+msgstr "GnuCash ~a má veľa pekných vlastností. Tu je niekoľko."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:79
 msgid "Tax Report / TXF Export"
@@ -23681,9 +23659,8 @@ msgstr "Zvolené účty (nič = všetko)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:168
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:204
-#, fuzzy
 msgid "Select accounts."
-msgstr "Zvolené účty"
+msgstr "Zvoliť účty."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:174
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:210
@@ -23712,9 +23689,9 @@ msgstr ""
 "so zdrojmi dlžníkov sa môžu opakovať."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:808
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Period from ~a to ~a"
-msgstr "Obdobie od %s do %s"
+msgstr "Obdobie od  ~a do  ~a"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:845
 msgid "Tax Report & XML Export"
@@ -24200,9 +24177,8 @@ msgid "Shows each account in the table as a hyperlink to its register window."
 msgstr ""
 
 #: gnucash/report/reports/standard/account-summary.scm:119
-#, fuzzy
 msgid "Show an account's balance."
-msgstr "Zobrazovať zostatok na účte"
+msgstr "Zobraziť zostatok na účte."
 
 #: gnucash/report/reports/standard/account-summary.scm:121
 #, fuzzy
@@ -24210,18 +24186,16 @@ msgid "Show an account's account code."
 msgstr "Zobraziť kód účtu"
 
 #: gnucash/report/reports/standard/account-summary.scm:123
-#, fuzzy
 msgid "Show an account's account type."
-msgstr "Zobraziť typ účtu"
+msgstr "Zobraziť typ účtu."
 
 #: gnucash/report/reports/standard/account-summary.scm:124
 msgid "Account Description"
 msgstr "Popis účtu"
 
 #: gnucash/report/reports/standard/account-summary.scm:125
-#, fuzzy
 msgid "Show an account's description."
-msgstr "Zobraziť popis účtu"
+msgstr "Zobraziť popis účtu."
 
 #: gnucash/report/reports/standard/account-summary.scm:126
 msgid "Account Notes"
@@ -24309,9 +24283,9 @@ msgstr "Vynechať účty"
 #: gnucash/report/reports/standard/equity-statement.scm:303
 #: gnucash/report/reports/standard/income-statement.scm:406
 #: gnucash/report/reports/standard/trial-balance.scm:407
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "For Period Covering ~a to ~a"
-msgstr "Obdobie pokrývajúce od %s do %s"
+msgstr "Obdobie pokrývajúce od ~a do ~a"
 
 #: gnucash/report/reports/standard/account-summary.scm:410
 msgid "Account title"
@@ -25038,7 +25012,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balsheet-pnl.scm:623
 #: gnucash/report/trep-engine.scm:1574
 msgid "Total For "
-msgstr "Celkovo za"
+msgstr "Sumár za "
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:830
 #, fuzzy
@@ -25790,7 +25764,7 @@ msgstr "Saldá %s do %s"
 #: gnucash/report/reports/standard/category-barchart.scm:650
 #: gnucash/report/trep-engine.scm:1643 gnucash/report/trep-engine.scm:1902
 msgid "Grand Total"
-msgstr "Hlavný súčet"
+msgstr "Spolu"
 
 #: gnucash/report/reports/standard/category-barchart.scm:664
 #: gnucash/report/reports/standard/net-charts.scm:466
@@ -26080,9 +26054,8 @@ msgstr "Primárny kľúč"
 
 #: gnucash/report/reports/standard/general-ledger.scm:125
 #: gnucash/report/trep-engine.scm:82 gnucash/report/trep-engine.scm:1086
-#, fuzzy
 msgid "Show Full Account Name"
-msgstr "Zobraziť úplné mená účtov v legende?"
+msgstr "Zobraziť celá názvy účtov"
 
 #: gnucash/report/reports/standard/general-ledger.scm:127
 #: gnucash/report/trep-engine.scm:79
@@ -27798,9 +27771,8 @@ msgid "Your ref: "
 msgstr ""
 
 #: gnucash/report/reports/standard/taxinvoice.scm:198
-#, fuzzy
 msgid "Job number: "
-msgstr "Číslo úlohy"
+msgstr "Číslo úlohy: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:200
 #, fuzzy
@@ -28916,7 +28888,7 @@ msgstr "Získať transakcie online"
 
 #: gnucash/report/trep-engine.scm:1001
 msgid "Hide"
-msgstr ""
+msgstr "Skryť"
 
 #: gnucash/report/trep-engine.scm:1012
 #, fuzzy
@@ -28953,9 +28925,9 @@ msgstr ""
 
 #. Translators: Both ~a's are dates
 #: gnucash/report/trep-engine.scm:2237
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "From ~a to ~a"
-msgstr "Od %s do %s"
+msgstr "Od ~a do ~a"
 
 #: libgnucash/app-utils/business-options.scm:69
 msgid "Company Address"
