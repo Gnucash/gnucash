@@ -182,7 +182,7 @@ GncSqlColumnTableEntryImpl<CT_OWNERREF>::add_to_query(QofIdTypeConst obj_name,
     auto owner = (*getter) (pObject);
 
     QofInstance* inst = nullptr;
-    GncOwnerType type;
+    GncOwnerType type = GNC_OWNER_NONE;
 
     auto type_hdr = std::string{m_col_name} + "_type";
     auto guid_hdr = std::string{m_col_name} + "_guid";
