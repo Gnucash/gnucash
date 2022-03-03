@@ -1550,8 +1550,6 @@ try_gz_open (const char* filename, const char* perms, gboolean compress,
 
     {
         int filedes[2]{};
-        gz_thread_params_t* params;
-        FILE* file;
 
 #ifdef G_OS_WIN32
         if (_pipe (filedes, 4096, _O_BINARY) < 0)
@@ -1578,7 +1576,7 @@ try_gz_open (const char* filename, const char* perms, gboolean compress,
                                               nullptr);
         }
 
-        params = g_new (gz_thread_params_t, 1);
+        gz_thread_params_t* params = g_new (gz_thread_params_t, 1);
         params->fd = filedes[write ? 0 : 1];
         params->filename = g_strdup (filename);
         params->perms = g_strdup (perms);
@@ -1586,6 +1584,9 @@ try_gz_open (const char* filename, const char* perms, gboolean compress,
 
         auto thread = g_thread_new ("xml_thread", (GThreadFunc) gz_thread_func,
                                     params);
+
+        FILE* file = nullptr;
+
         if (!thread)
         {
             g_warning ("Could not create thread for (de)compression.");
@@ -1594,6 +1595,7 @@ try_gz_open (const char* filename, const char* perms, gboolean compress,
             g_free (params);
             close (filedes[0]);
             close (filedes[1]);
+            file = g_fopen (filename, perms);
 
         }
         else
