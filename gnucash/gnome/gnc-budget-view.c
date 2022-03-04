@@ -1566,16 +1566,16 @@ gnc_budget_view_refresh (GncBudgetView *budget_view)
 
     num_periods = gnc_budget_get_num_periods (priv->budget);
 
-    col_list = priv->period_col_list;
+    col_list = g_list_reverse (priv->period_col_list);
     totals_col_list = g_list_reverse (priv->totals_col_list);
     num_periods_visible = g_list_length (col_list);
 
     /* Hide any unneeded extra columns */
     while (num_periods_visible > num_periods)
     {
-        col = GTK_TREE_VIEW_COLUMN((g_list_last (col_list))->data);
+        col = GTK_TREE_VIEW_COLUMN (col_list->data);
         gtk_tree_view_remove_column (GTK_TREE_VIEW(priv->tree_view), col);
-        col_list = g_list_delete_link (col_list, g_list_last (col_list));
+        col_list = g_list_delete_link (col_list, col_list);
         num_periods_visible--;
 
         col = GTK_TREE_VIEW_COLUMN(totals_col_list->data);
@@ -1622,7 +1622,7 @@ gnc_budget_view_refresh (GncBudgetView *budget_view)
                   budget_col_source, budget_col_edited, renderer);
         g_object_set_data (G_OBJECT(col), "budget_view", budget_view);
         g_object_set_data (G_OBJECT(col), "period_num", GUINT_TO_POINTER(num_periods_visible));
-        col_list = g_list_append (col_list, col);
+        col_list = g_list_prepend (col_list, col);
 
         // add some padding to the right of the numbers
         gbv_renderer_add_padding (renderer);
@@ -1645,7 +1645,7 @@ gnc_budget_view_refresh (GncBudgetView *budget_view)
     gdk_rgba_free (note_color);
     gdk_rgba_free (note_color_selected);
 
-    priv->period_col_list = col_list;
+    priv->period_col_list = g_list_reverse (col_list);
     priv->totals_col_list = g_list_reverse (totals_col_list);
 
     if (priv->total_col == NULL)
