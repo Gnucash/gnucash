@@ -1398,7 +1398,6 @@ gzopen_win32 (const char* filename, const char* perms)
     {
         g_warning ("Could not convert '%s' to system codepage",
                    filename);
-        success = 0;
         return nullptr;
     }
 
