@@ -1438,7 +1438,6 @@ gz_thread_write (gzFile file, gz_thread_params_t* params)
         }
         else if (bytes == 0)
         {
-            printf("gz_thread_func EOF\n");
             break;
         }
         else
