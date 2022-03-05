@@ -1386,10 +1386,10 @@ gnc_book_write_accounts_to_xml_filehandle_v2 (QofBackend* qof_be, QofBook* book,
     return success;
 }
 
-#ifdef G_OS_WIN32
 static inline gzFile
-gzopen_win32 (const char* filename, const char* perms)
+do_gzopen (const char* filename, const char* perms)
 {
+#ifdef G_OS_WIN32
     gzFile file;
     char* new_perms = nullptr;
     char* conv_name = g_win32_locale_filename_from_utf8 (filename);
@@ -1410,8 +1410,10 @@ gzopen_win32 (const char* filename, const char* perms)
     g_free (new_perms);
     g_free (conv_name);
     return file;
-}
+#else
+    return gzopen (filename, perms);
 #endif
+}
 
 constexpr uint32_t BUFLEN{4096};
 
@@ -1497,11 +1499,7 @@ gz_thread_func (gz_thread_params_t* params)
     gint gzval;
     bool success = true;
 
-#ifdef G_OS_WIN32
-    auto file = gzopen_win32 (params->filename, params->perms);
-#else /* !G_OS_WIN32 */
-    auto file = gzopen (params->filename, params->perms);
-#endif /* G_OS_WIN32 */
+    auto file = do_gzopen (params->filename, params->perms);
 
     if (!file)
     {
@@ -1570,6 +1568,7 @@ try_gz_open (const char* filename, const char* perms, gboolean compress,
                 close(filedes[0]);
                 close(filedes[1]);
             }
+
             return std::pair<FILE*, GThread*>(g_fopen (filename, perms),
                                               nullptr);
         }
@@ -1594,7 +1593,6 @@ try_gz_open (const char* filename, const char* perms, gboolean compress,
             close (filedes[0]);
             close (filedes[1]);
             file = g_fopen (filename, perms);
-
         }
         else
         {
@@ -1701,20 +1699,8 @@ gnc_is_xml_data_file_v2 (const gchar* name, gboolean* with_encoding)
         char first_chunk[256];
         int num_read;
 
-#ifdef G_OS_WIN32
-        {
-            gchar* conv_name = g_win32_locale_filename_from_utf8 (name);
-            if (!conv_name)
-                g_warning ("Could not convert '%s' to system codepage", name);
-            else
-            {
-                file = gzopen (conv_name, "rb");
-                g_free (conv_name);
-            }
-        }
-#else
-        file = gzopen (name, "r");
-#endif
+        file = do_gzopen (name, "r");
+
         if (file == NULL)
             return GNC_BOOK_NOT_OURS;
 
