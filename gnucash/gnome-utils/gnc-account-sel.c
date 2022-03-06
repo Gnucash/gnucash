@@ -403,6 +403,9 @@ gnc_account_sel_finalize (GObject *object)
     if (gas->acctTypeFilters)
         g_list_free (gas->acctTypeFilters);
 
+    if (gas->acctCommodityFilters)
+        g_list_free (gas->acctCommodityFilters);
+
     G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
