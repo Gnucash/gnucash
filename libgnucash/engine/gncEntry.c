@@ -1368,7 +1368,7 @@ gncEntryRecomputeValues (GncEntry *entry)
         time64 modtime = gncTaxTableLastModifiedSecs (entry->i_tax_table);
         if (entry->i_taxtable_modtime != modtime)
         {
-            PINFO ("Invoice tax table changed");
+            PINFO ("Invoice tax table changed since last recompute.");
             entry->values_dirty = TRUE;
             entry->i_taxtable_modtime = modtime;
         }
@@ -1378,7 +1378,7 @@ gncEntryRecomputeValues (GncEntry *entry)
         time64 modtime = gncTaxTableLastModifiedSecs (entry->b_tax_table);
         if (entry->b_taxtable_modtime != modtime)
         {
-            PINFO ("Bill tax table changed");
+            PINFO ("Bill tax table changed since last recompute.");
             entry->values_dirty = TRUE;
             entry->b_taxtable_modtime = modtime;
         }
@@ -1405,6 +1405,7 @@ gncEntryRecomputeValues (GncEntry *entry)
     denom = get_entry_commodity_denom (entry);
 
     /* Compute the invoice values */
+    DEBUG("Compute Invoice Values.");
     gncEntryComputeValue (entry->quantity, entry->i_price,
                           (entry->i_taxable ? entry->i_tax_table : NULL),
                           entry->i_taxincluded,
@@ -1415,6 +1416,7 @@ gncEntryRecomputeValues (GncEntry *entry)
                           &(entry->i_tax_values));
 
     /* Compute the bill values */
+    DEBUG("Compute BILL Values.");
     gncEntryComputeValue (entry->quantity, entry->b_price,
                           (entry->b_taxable ? entry->b_tax_table : NULL),
                           entry->b_taxincluded,
