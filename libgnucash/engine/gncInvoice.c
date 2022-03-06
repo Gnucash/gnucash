@@ -30,6 +30,7 @@
 #include <config.h>
 
 #include <stdint.h>
+#include <inttypes.h>
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <qofinstance-p.h>
@@ -943,6 +944,7 @@ static gnc_numeric gncInvoiceGetNetAndTaxesInternal (GncInvoice *invoice, gboole
 
     g_return_val_if_fail (invoice, net_total);
 
+    ENTER ("");
     /* Is the current document an invoice/credit note related to a customer or a vendor/employee ?
      * The GncEntry code needs to know to return the proper entry amounts
      */
@@ -966,7 +968,7 @@ static gnc_numeric gncInvoiceGetNetAndTaxesInternal (GncInvoice *invoice, gboole
             if (gnc_numeric_check (value) == GNC_ERROR_OK)
                 net_total = gnc_numeric_add (net_total, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
             else
-                g_warning ("bad value in our entry");
+                PWARN ("bad value in our entry");
         }
 
         if (taxes)
@@ -991,6 +993,7 @@ static gnc_numeric gncInvoiceGetNetAndTaxesInternal (GncInvoice *invoice, gboole
         *taxes = tv_list;
     }
 
+    LEAVE ("%" PRId64 "/%" PRId64, net_total.num, net_total.denom);
     return net_total;
 }
 
@@ -1004,6 +1007,7 @@ static gnc_numeric gncInvoiceGetTotalInternal (GncInvoice *invoice, gboolean use
 
     if (!invoice) return gnc_numeric_zero ();
 
+    ENTER ("");
     total = gncInvoiceGetNetAndTaxesInternal (invoice, use_value, use_tax? &taxes : NULL, use_payment_type, type);
 
     if (use_tax)
@@ -1015,6 +1019,7 @@ static gnc_numeric gncInvoiceGetTotalInternal (GncInvoice *invoice, gboolean use
                                  GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT | GNC_HOW_RND_ROUND_HALF_UP);
         gncAccountValueDestroy (taxes);
     }
+    LEAVE ("%" PRId64 "/%" PRId64, total.num, total.denom);
     return total;
 }
 
@@ -1070,6 +1075,7 @@ GList * gncInvoiceGetTypeListForOwnerType (GncOwnerType type)
         type_list = g_list_append (type_list, GINT_TO_POINTER(GNC_INVOICE_EMPL_CREDIT_NOTE));
         return type_list;
     default:
+        PWARN("Bad owner type, no invoices.");
         return NULL;
     }
 
@@ -1379,6 +1385,7 @@ GHashTable *gncInvoiceGetForeignCurrencies (const GncInvoice *invoice)
     gboolean is_cn = gncInvoiceGetIsCreditNote (invoice);
     GHashTable *amt_hash = g_hash_table_new_full (g_direct_hash, g_direct_equal,
                                                   NULL, g_free);
+    ENTER ("");
 
     for (entries_iter = invoice->entries; entries_iter != NULL; entries_iter = g_list_next(entries_iter))
     {
@@ -1429,6 +1436,8 @@ GHashTable *gncInvoiceGetForeignCurrencies (const GncInvoice *invoice)
         }
         gncAccountValueDestroy (tt_amts);
     }
+
+    LEAVE ("");
     return amt_hash;
 }
 
@@ -1442,6 +1451,7 @@ static gboolean gncInvoicePostAddSplit (QofBook *book,
 {
     Split *split;
 
+    ENTER ("");
     split = xaccMallocSplit (book);
     /* set action and memo? */
 
@@ -1484,6 +1494,8 @@ static gboolean gncInvoicePostAddSplit (QofBook *book,
               We can't really do anything sensible about it, and this is
                         a user-interface free zone so we can't try asking the user
               again either, have to return NULL*/
+            PERR("Multiple commodities with no price.");
+            LEAVE ("FALSE");
             return FALSE;
         }
         else
@@ -1496,6 +1508,7 @@ static gboolean gncInvoicePostAddSplit (QofBook *book,
         }
     }
 
+    LEAVE ("TRUE");
     return TRUE;
 }
 
@@ -1522,6 +1535,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     if (!invoice || !acc) return NULL;
     if (gncInvoiceIsPosted (invoice)) return NULL;
 
+    ENTER ("");
     gncInvoiceBeginEdit (invoice);
     book = qof_instance_get_book (invoice);
 
@@ -1624,6 +1638,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
         value = gncEntryGetBalValue (entry, TRUE, is_cust_doc);
         tax   = gncEntryGetBalTaxValue (entry, TRUE, is_cust_doc);
 
+        DEBUG ("Tax %" PRId64 "/%" PRId64 " on entry value %" PRId64 "/%" PRId64,
+               tax.num, tax.denom, value.num, value.denom);
         /* add the value for the account split */
         this_acc = (is_cust_doc ? gncEntryGetInvAccount (entry) :
                     gncEntryGetBillAccount (entry));
@@ -1642,6 +1658,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
                       We can't really do anything sensible about it, and this is
                       a user-interface free zone so we can't try asking the user
                       again either, have to return NULL*/
+                    PERR("Failed to add split %s", gncEntryGetDescription (entry));
+                    LEAVE ("NULL");
                     return NULL;
                 }
 
@@ -1676,12 +1694,12 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
             }
             else
-                g_warning ("bad value in our entry");
+                PWARN ("bad value in our entry");
         }
 
         /* check the taxes */
         if (gnc_numeric_check (tax) != GNC_ERROR_OK)
-            g_warning ("bad tax in our entry");
+            PWARN ("bad tax in our entry");
 
     } /* for */
 
@@ -1691,6 +1709,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     gncAccountValueDestroy (taxes);
 
     /* Iterate through the splitinfo list and generate the splits */
+    if (splitinfo)
+        PINFO ("Processing Split List");
     for (iter = splitinfo; iter; iter = iter->next)
     {
         GncAccountValue *acc_val = iter->data;
@@ -1704,6 +1724,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
               We can't really do anything sensible about it, and this is
               a user-interface free zone so we can't try asking the user
               again either, have to return NULL*/
+            PERR("Failed to add split %s, aborting accumulated splits.", memo);
             return NULL;
         }
     }
@@ -1720,6 +1741,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
         gnc_numeric to_charge_bal_amount = (is_cn ? gnc_numeric_neg (invoice->to_charge_amount)
                                             : invoice->to_charge_amount);
 
+        PINFO ("Process to_card payment split");
         /* Set memo. */
         xaccSplitSetMemo (split, _("Extra to Charge Card"));
         /* Set action based on book option */
@@ -1740,6 +1762,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     {
         Split *split = xaccMallocSplit (book);
 
+        PINFO ("Process to_card balancing split");
         /* Set memo */
         xaccSplitSetMemo (split, memo);
         /* Set action based on book option */
@@ -1778,6 +1801,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     if (autopay)
         gncInvoiceAutoApplyPayments (invoice);
 
+    LEAVE ("");
     return txn;
 }
 
@@ -1797,6 +1821,7 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
     lot = gncInvoiceGetPostedLot (invoice);
     g_return_val_if_fail (lot, FALSE);
 
+    ENTER ("");
     /* Destroy the Posted Transaction */
     xaccTransClearReadOnly (txn);
     xaccTransBeginEdit (txn);
@@ -1822,6 +1847,8 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
     // Note: make a copy of the lot list here, when splits are deleted from the lot,
     //       the original list may be destroyed by the lot code.
     lot_split_list = g_list_copy (gnc_lot_get_split_list (lot));
+    if (lot_split_list)
+        PINFO ("Recreating link transactions for remaining lots");
     for (lot_split_iter = lot_split_list; lot_split_iter; lot_split_iter = lot_split_iter->next)
     {
         Split *split = lot_split_iter->data;
@@ -1911,6 +1938,8 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
 
     mark_invoice (invoice);
     gncInvoiceCommitEdit (invoice);
+
+    LEAVE ("TRUE");
 
     return TRUE;
 }

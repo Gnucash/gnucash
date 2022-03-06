@@ -29,6 +29,7 @@
 
 #include <glib.h>
 #include <qofinstance-p.h>
+#include <inttypes.h>
 
 #include "gnc-commodity.h"
 
@@ -120,7 +121,7 @@ gncEntryDiscountHowToString (GncDiscountHow how)
     case (GNC_DISC_POSTTAX):
         return "POSTTAX";
     default:
-        g_warning ("asked to translate unknown discount-how %d.\n", how);
+        PWARN ("asked to translate unknown discount-how %d.\n", how);
         break;
     }
     return NULL;
@@ -145,7 +146,7 @@ gboolean gncEntryDiscountStringToHow (const char *str, GncDiscountHow *how)
         *how = GNC_DISC_POSTTAX;
         return TRUE;
     }
-    g_warning ("asked to translate unknown discount-how string %s.\n",
+    PWARN ("asked to translate unknown discount-how string %s.\n",
                str ? str : "(null)");
 
     return FALSE;
@@ -162,7 +163,7 @@ const char * gncEntryPaymentTypeToString (GncEntryPaymentType type)
     case (GNC_PAYMENT_CARD):
         return "CARD";
     default:
-        g_warning ("asked to translate unknown payment type %d.\n", type);
+        PWARN ("asked to translate unknown payment type %d.\n", type);
         break;
     }
     return NULL ;
@@ -182,7 +183,7 @@ gboolean gncEntryPaymentStringToType (const char *str, GncEntryPaymentType *type
         *type = GNC_PAYMENT_CARD;
         return TRUE;
     }
-    g_warning ("asked to translate unknown discount-how string %s.\n",
+    PWARN ("asked to translate unknown discount-how string %s.\n",
                str ? str : "(null)");
 
     return FALSE;
@@ -591,29 +592,46 @@ void gncEntrySetInvPrice (GncEntry *entry, gnc_numeric price)
 void gncEntrySetInvTaxable (GncEntry *entry, gboolean taxable)
 {
     if (!entry) return;
-    if (entry->i_taxable == taxable) return;
+
+    ENTER ("%d", taxable);
+    if (entry->i_taxable == taxable) {
+         LEAVE ("Value already set");
+         return;
+    }
     gncEntryBeginEdit (entry);
     entry->i_taxable = taxable;
     entry->values_dirty = TRUE;
     mark_entry (entry);
     gncEntryCommitEdit (entry);
+    LEAVE ("");
 }
 
 void gncEntrySetInvTaxIncluded (GncEntry *entry, gboolean taxincluded)
 {
     if (!entry) return;
-    if (entry->i_taxincluded == taxincluded) return;
+
+    ENTER ("%d", taxincluded);
+    if (entry->i_taxincluded == taxincluded) {
+         LEAVE ("Value already set");
+         return;
+    }
     gncEntryBeginEdit (entry);
     entry->i_taxincluded = taxincluded;
     entry->values_dirty = TRUE;
     mark_entry (entry);
     gncEntryCommitEdit (entry);
+    LEAVE ("");
 }
 
 void gncEntrySetInvTaxTable (GncEntry *entry, GncTaxTable *table)
 {
     if (!entry) return;
-    if (entry->i_tax_table == table) return;
+
+    ENTER ("%s", gncTaxTableGetName (table));
+    if (entry->i_tax_table == table) {
+         LEAVE ("Value already set");
+         return;
+    }
     gncEntryBeginEdit (entry);
     if (entry->i_tax_table)
         gncTaxTableDecRef (entry->i_tax_table);
@@ -623,6 +641,7 @@ void gncEntrySetInvTaxTable (GncEntry *entry, GncTaxTable *table)
     entry->values_dirty = TRUE;
     mark_entry (entry);
     gncEntryCommitEdit (entry);
+    LEAVE ("");
 }
 
 void gncEntrySetInvDiscount (GncEntry *entry, gnc_numeric discount)
@@ -715,29 +734,46 @@ void gncEntrySetBillPrice (GncEntry *entry, gnc_numeric price)
 void gncEntrySetBillTaxable (GncEntry *entry, gboolean taxable)
 {
     if (!entry) return;
-    if (entry->b_taxable == taxable) return;
+
+    ENTER ("%d", taxable);
+    if (entry->b_taxable == taxable) {
+         LEAVE ("Value already set");
+         return;
+    }
     gncEntryBeginEdit (entry);
     entry->b_taxable = taxable;
     entry->values_dirty = TRUE;
     mark_entry (entry);
     gncEntryCommitEdit (entry);
+    LEAVE ("");
 }
 
 void gncEntrySetBillTaxIncluded (GncEntry *entry, gboolean taxincluded)
 {
     if (!entry) return;
-    if (entry->b_taxincluded == taxincluded) return;
+
+    ENTER ("%d", taxincluded);
+    if (entry->b_taxincluded == taxincluded) {
+         LEAVE ("Value already set");
+         return;
+    }
     gncEntryBeginEdit (entry);
     entry->b_taxincluded = taxincluded;
     entry->values_dirty = TRUE;
     mark_entry (entry);
     gncEntryCommitEdit (entry);
+    LEAVE ("");
 }
 
 void gncEntrySetBillTaxTable (GncEntry *entry, GncTaxTable *table)
 {
     if (!entry) return;
-    if (entry->b_tax_table == table) return;
+
+    ENTER ("%s", gncTaxTableGetName (table));
+    if (entry->b_tax_table == table) {
+         LEAVE ("Value already set");
+         return;
+    }
     gncEntryBeginEdit (entry);
     if (entry->b_tax_table)
         gncTaxTableDecRef (entry->b_tax_table);
@@ -747,6 +783,7 @@ void gncEntrySetBillTaxTable (GncEntry *entry, GncTaxTable *table)
     entry->values_dirty = TRUE;
     mark_entry (entry);
     gncEntryCommitEdit (entry);
+    LEAVE ("");
 }
 
 void gncEntrySetBillable (GncEntry *entry, gboolean billable)
@@ -1106,10 +1143,12 @@ static void gncEntryComputeValueInt (gnc_numeric qty, gnc_numeric price,
     GList     * entries = gncTaxTableGetEntries (tax_table);
     GList     * node;
 
+    ENTER ("");
     /* Step 1: compute the aggregate price */
 
     aggregate = gnc_numeric_mul (qty, price, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE | GNC_HOW_RND_ROUND);
 
+    PINFO ("Aggregate value %" PRId64 "/%" PRId64, aggregate.num, aggregate.denom);
     /* Step 2: compute the pre-tax aggregate */
 
     /* First, compute the aggregate tpercent and tvalue numbers */
@@ -1129,14 +1168,14 @@ static void gncEntryComputeValueInt (gnc_numeric qty, gnc_numeric price,
                                         GNC_HOW_DENOM_LCD);
             break;
         default:
-            g_warning ("Unknown tax type: %d", gncTaxTableEntryGetType (entry));
+            PWARN ("Unknown tax type: %d", gncTaxTableEntryGetType (entry));
             break;
         }
     }
     /* now we need to convert from 5% -> .05 */
     tpercent = gnc_numeric_div (tpercent, percent, GNC_DENOM_AUTO,
                                 GNC_HOW_DENOM_EXACT | GNC_HOW_RND_NEVER);
-
+    PINFO("Tax rate %" PRId64 "/%" PRId64, tpercent.num, tpercent.denom);
     /* Next, actually compute the pre-tax aggregate value based on the
      * taxincluded flag.
      */
@@ -1153,13 +1192,16 @@ static void gncEntryComputeValueInt (gnc_numeric qty, gnc_numeric price,
                                           gnc_numeric_create (1, 1),
                                           GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD),
                                   GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE | GNC_HOW_RND_ROUND);
+        PINFO ("pretax %" PRId64 "/%" PRId64, pretax.num, pretax.denom);
 	if (!gnc_numeric_zero_p(qty))
 	{
 	  i_net_price = gnc_numeric_div (pretax, qty, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE | GNC_HOW_RND_ROUND);
 	}
+        PINFO("i_net_price %" PRId64 "/%" PRId64, i_net_price.num, i_net_price.denom);
     }
     else
     {
+        PINFO ("Tax not included or no tax table, pretax is aggregate");
         pretax = aggregate;
     }
 
@@ -1224,7 +1266,7 @@ static void gncEntryComputeValueInt (gnc_numeric qty, gnc_numeric price,
         break;
 
     default:
-        g_warning ("unknown DiscountHow value: %d", discount_how);
+        PWARN ("unknown DiscountHow value: %d", discount_how);
         break;
     }
 
@@ -1247,6 +1289,7 @@ static void gncEntryComputeValueInt (gnc_numeric qty, gnc_numeric price,
     {
         GList *	taxes = NULL;
 
+        PINFO("Computing tax value list");
         for (node = entries; node; node = node->next)
         {
             GncTaxTableEntry *entry = node->data;
@@ -1276,6 +1319,7 @@ static void gncEntryComputeValueInt (gnc_numeric qty, gnc_numeric price,
     if (net_price != NULL)
       *net_price = i_net_price;
 
+    LEAVE ("");
     return;
 }
 
@@ -1317,12 +1361,14 @@ gncEntryRecomputeValues (GncEntry *entry)
     int denom;
     GList *tv_iter;
 
+    ENTER ("");
     /* See if either tax table changed since we last computed values */
     if (entry->i_tax_table)
     {
         time64 modtime = gncTaxTableLastModifiedSecs (entry->i_tax_table);
         if (entry->i_taxtable_modtime != modtime)
         {
+            PINFO ("Invoice tax table changed");
             entry->values_dirty = TRUE;
             entry->i_taxtable_modtime = modtime;
         }
@@ -1332,13 +1378,16 @@ gncEntryRecomputeValues (GncEntry *entry)
         time64 modtime = gncTaxTableLastModifiedSecs (entry->b_tax_table);
         if (entry->b_taxtable_modtime != modtime)
         {
+            PINFO ("Bill tax table changed");
             entry->values_dirty = TRUE;
             entry->b_taxtable_modtime = modtime;
         }
     }
 
-    if (!entry->values_dirty)
+    if (!entry->values_dirty) {
+        LEAVE ("No changes");
         return;
+    }
 
     /* Clear the last-computed tax values */
     if (entry->i_tax_values)
@@ -1397,6 +1446,7 @@ gncEntryRecomputeValues (GncEntry *entry)
                                                       denom, GNC_HOW_DENOM_EXACT | GNC_HOW_RND_ROUND_HALF_UP);
     }
     entry->values_dirty = FALSE;
+    LEAVE ("");
 }
 
 /* The "Int" functions below are for internal use only.

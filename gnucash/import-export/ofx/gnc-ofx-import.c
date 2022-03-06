@@ -625,7 +625,10 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
             }
             else if (data.reference_number_valid)
             {
-                gnc_set_num_action(transaction, split, data.reference_number, NULL);
+                const char *num_value =
+                    strcasecmp (data.reference_number, "null") == 0 ? "" :
+                    data.check_number;
+                gnc_set_num_action(transaction, split, num_value, NULL);
             }
             /* Also put the ofx transaction's memo in the
              * split's memo field */
