@@ -348,7 +348,7 @@ gnc_entry_ledger_get_taxable_value (VirtualLocation virt_loc,
         const char *valstr =
             get_taxable_entry (virt_loc, translate, conditionally_changed,
                                user_data);
-        if (valstr && *valstr == 'X')
+        if (valstr && *valstr != ' ')
             return TRUE;
     }
     return FALSE;
