@@ -1386,10 +1386,7 @@ gnucash_scroll_event (GtkWidget *widget, GdkEventScroll *event)
         v_value += gtk_adjustment_get_step_increment (vadj);
         break;
     case GDK_SCROLL_SMOOTH:
-        if (event->delta_y < 0)
-            v_value -= gtk_adjustment_get_step_increment (vadj);
-        if (event->delta_y > 0)
-            v_value += gtk_adjustment_get_step_increment (vadj);
+        v_value += event->delta_y;
         break;
     default:
         return FALSE;
