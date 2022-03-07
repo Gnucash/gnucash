@@ -1362,12 +1362,21 @@ gnucash_sheet_button_release_event (GtkWidget *widget, GdkEventButton *event)
     return TRUE;
 }
 
+static float
+clamp_scrollable_value (float value, GtkAdjustment* adj)
+{
+    float lower = gtk_adjustment_get_lower (adj);
+    float upper = gtk_adjustment_get_upper (adj);
+    float size = gtk_adjustment_get_page_size (adj);
+    return CLAMP(value, lower, upper - size);
+
+}
 static gboolean
 gnucash_scroll_event (GtkWidget *widget, GdkEventScroll *event)
 {
     GnucashSheet *sheet;
     GtkAdjustment *vadj;
-    gfloat v_value;
+    gfloat h_value, v_value;
 
     g_return_val_if_fail (widget != NULL, TRUE);
     g_return_val_if_fail (GNUCASH_IS_SHEET(widget), TRUE);
@@ -1386,14 +1395,16 @@ gnucash_scroll_event (GtkWidget *widget, GdkEventScroll *event)
         v_value += gtk_adjustment_get_step_increment (vadj);
         break;
     case GDK_SCROLL_SMOOTH:
+        h_value = gtk_adjustment_get_value (sheet->hadj);
+        h_value += event->delta_x;
+        h_value = clamp_scrollable_value (h_value, sheet->hadj);
+        gtk_adjustment_set_value (sheet->hadj, h_value);
         v_value += event->delta_y;
         break;
     default:
         return FALSE;
     }
-    v_value = CLAMP(v_value, gtk_adjustment_get_lower (vadj),
-              gtk_adjustment_get_upper (vadj) - gtk_adjustment_get_page_size (vadj));
-
+    v_value = clamp_scrollable_value (v_value, vadj);
     gtk_adjustment_set_value (vadj, v_value);
 
     if (event->delta_y == 0)
