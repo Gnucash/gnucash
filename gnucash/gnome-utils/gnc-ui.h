@@ -104,6 +104,14 @@ extern void
 gnc_error_dialog (GtkWindow *parent,
                   const char *format, ...) G_GNUC_PRINTF (2, 3);
 
+extern gchar *
+gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const gchar *default_input);
+
+extern gchar *
+gnc_input_dialog_with_entry (GtkWidget *parent, const gchar *title, const gchar *msg, const gchar *default_input);
+
+extern void
+gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg);
 
 extern void
 gnc_gnome_help (GtkWindow *parent, const char *file_name, const char *target_link);
