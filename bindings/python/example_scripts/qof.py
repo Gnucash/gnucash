@@ -9,8 +9,11 @@
 
 import datetime
 from random import randint
-from gnucash import Session, SessionOpenMode, Account, Transaction, Split, GncNumeric, Query
-from gnucash import QOF_COMPARE_GTE, QOF_COMPARE_GT, QOF_QUERY_AND, QOF_QUERY_OR, QOF_STRING_MATCH_NORMAL
+from gnucash import Session, SessionOpenMode, Account, Transaction, Split, \
+                    GncNumeric, Query
+from gnucash import QOF_COMPARE_GTE, QOF_COMPARE_GT, QOF_QUERY_AND, \
+                    QOF_QUERY_OR, QOF_STRING_MATCH_NORMAL, QOF_COMPARE_CONTAINS, \
+                    QOF_NUMERIC_MATCH_ANY
 from gnucash import gnucash_core_c
 from gnucash import gnucash_core
 
@@ -129,7 +132,6 @@ with Session(uri, SessionOpenMode.SESSION_NEW_STORE) as ses:
     print("Query transactions with date > 1950: " + str(len(transactions_2)) + " (Should be about 50).")
 
     # query description
-    QOF_COMPARE_CONTAINS = 7
     isRegex = False
     terms = [(['desc'], gnucash_core.QueryStringPredicate(QOF_COMPARE_CONTAINS, "Transaction 5", QOF_STRING_MATCH_NORMAL, isRegex), QOF_QUERY_AND)]
     transactions_3 = query_transactions(book, terms)
@@ -138,21 +140,18 @@ with Session(uri, SessionOpenMode.SESSION_NEW_STORE) as ses:
     # SPLITS
     #
     # query memo
-    QOF_COMPARE_CONTAINS = 7
     isRegex = False
     terms = [(['memo'], gnucash_core.QueryStringPredicate(QOF_COMPARE_CONTAINS, "A22", QOF_STRING_MATCH_NORMAL, isRegex), QOF_QUERY_AND)]
     splits_1 = query_splits(book, terms)
     print("Query splits with memo containing 'A22': " + str(len(splits_1)) + " (Should be 1).")
 
     # query description
-    QOF_COMPARE_CONTAINS = 7
     isRegex = False
     terms = [(['trans', 'desc'], gnucash_core.QueryStringPredicate(QOF_COMPARE_CONTAINS, "Transaction 5", QOF_STRING_MATCH_NORMAL, isRegex), QOF_QUERY_AND)]
     splits_2 = query_splits(book, terms)
     print("Query splits with transaction description containing 'Transaction 5': " + str(len(splits_2)) + " (Should be 22).")
 
     # query memo and desc
-    QOF_COMPARE_CONTAINS = 7
     isRegex = False
     terms = [(['memo'], gnucash_core.QueryStringPredicate(QOF_COMPARE_CONTAINS, "A22", QOF_STRING_MATCH_NORMAL, isRegex), QOF_QUERY_AND)]
     terms += [(['trans', 'desc'], gnucash_core.QueryStringPredicate(QOF_COMPARE_CONTAINS, "Transaction 55", QOF_STRING_MATCH_NORMAL, isRegex), QOF_QUERY_OR)]
@@ -161,7 +160,6 @@ with Session(uri, SessionOpenMode.SESSION_NEW_STORE) as ses:
 
     # query split value
     threshold = GncNumeric(5000, 100)
-    QOF_NUMERIC_MATCH_ANY = 1
-    terms = [(["amount"], gnucash_core_c.qof_query_numeric_predicate(QOF_COMPARE_GT, QOF_NUMERIC_MATCH_ANY, threshold.instance), QOF_QUERY_AND)]
+    terms = [(["amount"], gnucash_core.QueryNumericPredicate(QOF_COMPARE_GT, QOF_NUMERIC_MATCH_ANY, threshold), QOF_QUERY_AND)]
     splits_3 = query_splits(book, terms)
-    print("Query splits with amount > " + str(threshold) + ": " + str(len(splits_3)) + " (Should be about 50).")
+    print("Query splits with amount > " + str(threshold) + ": " + str(len(splits_3)) + " (Should be about 100).")

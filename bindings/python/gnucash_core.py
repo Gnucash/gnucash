@@ -908,7 +908,29 @@ from gnucash.gnucash_core_c import \
     QOF_COMPARE_EQUAL, \
     QOF_COMPARE_GT, \
     QOF_COMPARE_GTE, \
-    QOF_COMPARE_NEQ
+    QOF_COMPARE_NEQ, \
+    QOF_COMPARE_CONTAINS, \
+    QOF_COMPARE_NCONTAINS
+
+from gnucash.gnucash_core_c import \
+    QOF_DATE_MATCH_NORMAL, \
+    QOF_DATE_MATCH_DAY
+
+from gnucash.gnucash_core_c import \
+    QOF_NUMERIC_MATCH_DEBIT, \
+    QOF_NUMERIC_MATCH_CREDIT, \
+    QOF_NUMERIC_MATCH_ANY
+
+from gnucash.gnucash_core_c import \
+    QOF_GUID_MATCH_ANY, \
+    QOF_GUID_MATCH_NONE, \
+    QOF_GUID_MATCH_NULL, \
+    QOF_GUID_MATCH_ALL, \
+    QOF_GUID_MATCH_LIST_ANY
+
+from gnucash.gnucash_core_c import \
+    QOF_CHAR_MATCH_ANY, \
+    QOF_CHAR_MATCH_NONE
 
 from gnucash.gnucash_core_c import \
     INVOICE_TYPE
@@ -967,3 +989,9 @@ class QueryGuidPredicate(GnuCashCoreClass):
 
 QueryGuidPredicate.add_constructor_and_methods_with_prefix(
     'qof_query_', 'guid_predicate')
+
+class QueryNumericPredicate(GnuCashCoreClass):
+    pass
+
+QueryNumericPredicate.add_constructor_and_methods_with_prefix(
+    'qof_query_', 'numeric_predicate')
