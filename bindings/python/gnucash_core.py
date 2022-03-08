@@ -967,3 +967,9 @@ class QueryGuidPredicate(GnuCashCoreClass):
 
 QueryGuidPredicate.add_constructor_and_methods_with_prefix(
     'qof_query_', 'guid_predicate')
+
+class QueryNumericPredicate(GnuCashCoreClass):
+    pass
+
+QueryNumericPredicate.add_constructor_and_methods_with_prefix(
+    'qof_query_', 'numeric_predicate')

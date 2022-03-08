@@ -161,7 +161,7 @@ with Session(uri, SessionOpenMode.SESSION_NEW_STORE) as ses:
 
     # query split value
     threshold = GncNumeric(5000, 100)
-    QOF_NUMERIC_MATCH_ANY = 1
-    terms = [(["amount"], gnucash_core_c.qof_query_numeric_predicate(QOF_COMPARE_GT, QOF_NUMERIC_MATCH_ANY, threshold.instance), QOF_QUERY_AND)]
+    QOF_NUMERIC_MATCH_ANY = 3
+    terms = [(["amount"], gnucash_core.QueryNumericPredicate(QOF_COMPARE_GT, QOF_NUMERIC_MATCH_ANY, threshold), QOF_QUERY_AND)]
     splits_3 = query_splits(book, terms)
     print("Query splits with amount > " + str(threshold) + ": " + str(len(splits_3)) + " (Should be about 50).")
