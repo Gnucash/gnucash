@@ -882,84 +882,97 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
 
 typedef enum
 {
-    DESCRIPTION = 0,
-    MEMO        = 1,
-    NOTES       = 2,
+    DESCRIPTION,
+    MEMO,
+    NOTES,
 } edit_field;
 
 static void
-gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info, edit_field field)
+gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info,
+                           edit_field field)
 {
     GtkTreeView *treeview;
     GtkTreeSelection *selection;
     GtkTreeModel *model;
-    GtkTreeIter iter;
-    GNCImportTransInfo *trans_info;
     GList *selected_rows;
-    gboolean first, is_selection;
     GList *refs = NULL;
-    const gchar* messages[] = {_("Enter new Description"),_("Enter new Memo"),_("Enter new Notes")};
-    const gchar* message = messages[field];
-    
+    GtkTreeStore* store;
+    GNCImportTransInfo *trans_info;
+    Transaction* trans;
+    GtkTreeIter iter;
+
+    g_return_if_fail (info != NULL);
     ENTER("assign_transfer_account_to_selection_cb");
+
     treeview = GTK_TREE_VIEW(info->view);
     model = gtk_tree_view_get_model (treeview);
+    store  = GTK_TREE_STORE (model);
     selection = gtk_tree_view_get_selection (treeview);
     selected_rows = gtk_tree_selection_get_selected_rows (selection, &model);
-    first = TRUE;
-    is_selection = TRUE;
-    
-    DEBUG("Rows in selection = %i",
-          gtk_tree_selection_count_selected_rows (selection));
-    DEBUG("Entering loop over selection");
 
-    if (gtk_tree_selection_count_selected_rows (selection) > 0)
+    if (!selected_rows)
     {
-        GtkTreeStore* store = GTK_TREE_STORE (model);
-        for (GList* l = selected_rows; l != NULL; l = l->next)
+        LEAVE ("No selected rows");
+        return;
+    }
+
+    if (selected_rows->next)
+    {
+        LEAVE ("User selected multiple rows, not supported");
+        return;
+    }
+
+    g_return_if_fail (gtk_tree_model_get_iter (model, &iter,
+                                               selected_rows->data));
+
+    gtk_tree_model_get (model, &iter, DOWNLOADED_COL_DATA,
+                        &trans_info, -1);
+    trans = gnc_import_TransInfo_get_trans (trans_info);
+
+    switch (field)
+    {
+        case DESCRIPTION:
         {
-            gchar *path_str = gtk_tree_path_to_string (l->data);
-            GtkTreeRowReference *ref = gtk_tree_row_reference_new (model, l->data);
-            g_free (path_str);
-            refs = g_list_prepend (refs, ref);
-            if (gtk_tree_model_get_iter (model, &iter, l->data))
-            {
-                Split* first_split;
-                Transaction* trans;
-                gtk_tree_model_get (model, &iter, DOWNLOADED_COL_DATA, &trans_info, -1);
-                trans = gnc_import_TransInfo_get_trans (trans_info);
-                if (field == DESCRIPTION)
-                {
-                    gchar* new_field = gnc_input_dialog_with_entry(info->main_widget, "", message, xaccTransGetDescription (trans));
-                    if (!new_field) break;
-                    xaccTransSetDescription (trans, new_field);
-                    gtk_tree_store_set (store, &iter, DOWNLOADED_COL_DESCRIPTION, new_field, -1);
-                    g_free (new_field);
-                }
-                else if (field == MEMO)
-                {
-                    gchar* new_field;
-                    first_split = gnc_import_TransInfo_get_fsplit (trans_info);
-                    new_field = gnc_input_dialog_with_entry(info->main_widget, "", message, xaccSplitGetMemo (first_split));
-                    if (!new_field) break;
-                    xaccSplitSetMemo (first_split, new_field);
-                    gtk_tree_store_set (store, &iter, DOWNLOADED_COL_MEMO, new_field, -1);
-                    g_free (new_field);
-                }
-                else if (field == NOTES)
-                {
-                    gchar* new_field = gnc_input_dialog_with_entry(info->main_widget, "", message, xaccTransGetNotes (trans));
-                    if (!new_field) break;
-                    xaccTransSetNotes (trans, new_field);
-                    g_free (new_field);
-                }
-            }
+            char* new_field =
+                gnc_input_dialog_with_entry(info->main_widget, "",
+                                            _("Enter new Description"),
+                                            xaccTransGetDescription (trans));
+            if (!new_field) break;
+            xaccTransSetDescription (trans, new_field);
+            gtk_tree_store_set (store, &iter, DOWNLOADED_COL_DESCRIPTION,
+                                new_field, -1);
+            g_free (new_field);
+            break;
+        }
+        case MEMO:
+        {
+            Split *first_split =
+                gnc_import_TransInfo_get_fsplit (trans_info);
+            char *new_field =
+                gnc_input_dialog_with_entry(info->main_widget, "",
+                                            _("Enter new Memo"),
+                                            xaccSplitGetMemo (first_split));
+            if (!new_field) break;
+            xaccSplitSetMemo (first_split, new_field);
+            gtk_tree_store_set (store, &iter,
+                                DOWNLOADED_COL_MEMO, new_field, -1);
+            g_free (new_field);
+            break;
+        }
+        case NOTES:
+        {
+            char* new_field =
+                gnc_input_dialog_with_entry(info->main_widget, "",
+                                            _("Enter new Notes"),
+                                            xaccTransGetNotes (trans));
+            if (!new_field) break;
+            xaccTransSetNotes (trans, new_field);
+            g_free (new_field);
+            break;
         }
     }
     g_list_free_full (selected_rows, (GDestroyNotify)gtk_tree_path_free);
-    g_list_free (refs);
     LEAVE("");
-
 }
 
 static void
