@@ -736,58 +736,29 @@
                           ;; compatible with the QIF type?
                           (and (string=? s (caddr elt))
                                (not (and (string? qif-type)
-                                         (string=? GNC_COMMODITY_NS_MUTUAL
+                                         (string=? (GNC-COMMODITY-NS-NONCURRENCY)
                                                    (cadr elt))
                                          (or (string-ci=? qif-type "stock")
                                              (string-ci=? qif-type "etf"))))))
                         prefs)
                    #f)))
-        (cond
-          ;; If a preferences match was found, use its namespace.
-          (pref-match
-           (cadr pref-match))
-
-          ;; Guess NYSE for symbols of 1-3 characters.
-          ((< l 4)
-           GNC_COMMODITY_NS_NYSE)
-
-          ;; Guess NYSE for symbols of 1-3 characters
-          ;; followed by a dot and 1-2 characters.
-          ((and d
-                (< l 7)
-                (< 0 d 4)
-                (<= 2 (- l d) 3))
-           GNC_COMMODITY_NS_NYSE)
-
-          ;; Guess NASDAQ for symbols of 4 characters.
-          ((= l 4)
-           GNC_COMMODITY_NS_NASDAQ)
-
-          ;; Otherwise it's probably a fund.
-          (else
-           GNC_COMMODITY_NS_MUTUAL)))
+        ;; If a preferences match was found, use its namespace.
+        (if pref-match (cadr pref-match))
       ;; There's no symbol. Default to a fund.
-      GNC_COMMODITY_NS_MUTUAL))
+      (GNC-COMMODITY-NS-NONCURRENCY))))
 
   ;; Was a QIF type given?
   (if (string? qif-type)
      ;; Yes. We might be able to definitely determine the namespace.
-     (cond
-       ;; Mutual fund
-       ((string-ci=? qif-type "mutual fund")
-        GNC_COMMODITY_NS_MUTUAL)
-
-       ;; Index
-       ((string-ci=? qif-type "index")
-        ;; This QIF type must be wrong; indexes aren't tradable!
-        GNC_COMMODITY_NS_MUTUAL)
-
-       (else
-        (guess-by-symbol qif-symbol)))
+     (if (or
+          (string-ci=? qif-type "mutual fund")
+          (string-ci=? qif-type "index"))
+         (GNC-COMMODITY-NS-NONCURRENCY)
+         (guess-by-symbol qif-symbol)))
 
      ;; No QIF type was given, so guess a
      ;; default namespace by symbol alone.
-     (guess-by-symbol qif-symbol)))
+  (guess-by-symbol qif-symbol))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

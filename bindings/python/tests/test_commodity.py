@@ -21,12 +21,12 @@ class TestCommodityNamespace(CommoditySession):
         #print(self.table.__class__)
         namespace_names = self.table.get_namespaces()
         #print(namespace_names)
-        self.assertEqual(namespace_names, ['AMEX', 'NYSE', 'NASDAQ', 'EUREX', 'FUND', 'template', 'CURRENCY'])
+        self.assertEqual(namespace_names, ['All non-currency', 'template', 'CURRENCY'])
 
     def test_namespaces_list(self):
         namespaces = self.table.get_namespaces_list()
         namespace_names = [ns.get_name() for ns in namespaces]
-        self.assertEqual(namespace_names, ['AMEX', 'NYSE', 'NASDAQ', 'EUREX', 'FUND', 'template', 'CURRENCY'])
+        self.assertEqual(namespace_names, ['All non-currency', 'template', 'CURRENCY'])
 
 if __name__ == '__main__':
     main()
