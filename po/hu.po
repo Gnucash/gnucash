@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-02-28 15:56+0000\n"
+"PO-Revision-Date: 2022-03-09 14:57+0000\n"
 "Last-Translator: Kárász Attila <cult.edie@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.11.1-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -4424,12 +4424,15 @@ msgid "Accounts"
 msgstr "Folyószámlák"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1430
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Account %s does not have the same currency as the one you're moving "
 "transactions from.\n"
 "Are you sure you want to do this?"
-msgstr "Egy létező tranzakciót készül felülírni. Biztosan ezt akarja tenni?"
+msgstr ""
+"A %s számlának nem ugyanaz az a pénzneme, mint ahonnan tranzakciót mozgatnád."
+"\n"
+"Biztosan meg akarod csinálni?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1438
 #, fuzzy
@@ -4508,23 +4511,21 @@ msgid "Are you sure you want to do this?"
 msgstr "Biztosan ezt akarja tenni?"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:147
-#, fuzzy
 msgid "Open the selected account."
-msgstr "A kiválasztott számla megnyitása"
+msgstr "A kiválasztott számla megnyitása."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:152
 msgid "Open _Subaccounts"
 msgstr "Al_számla megnyitása"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:153
-#, fuzzy
 msgid "Open the selected account and all its subaccounts."
-msgstr "A kiválasztott számla és minden alszámlájának megnyitása"
+msgstr "A kiválasztott számla és minden alszámlájának megnyitása."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:159
 #, fuzzy
 msgid "_Delete Budget..."
-msgstr "Költségvetés törlése"
+msgstr "Költségvetés törlése..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:160
 msgid "Select this or another budget and delete it."
@@ -4533,35 +4534,30 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-budget.c:164
 #, fuzzy
 msgid "Budget _Options..."
-msgstr "Költségvetés lehetőségei"
+msgstr "Költségvetés beállításai..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:165
-#, fuzzy
 msgid "Edit this budget's options."
-msgstr "A költségvetés beállításainak szerkesztése"
+msgstr "A költségvetés beállításainak szerkesztése."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:169
-#, fuzzy
 msgid "Esti_mate Budget..."
-msgstr "Költségvetés becslése"
+msgstr "Költségvetés becslése..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:171
-#, fuzzy
 msgid ""
 "Estimate a budget value for the selected accounts from past transactions."
 msgstr ""
 "Költségvetésérték becslése a kiválasztott számlákra múltbéli tranzakciók "
-"alapján"
+"alapján."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:175
-#, fuzzy
 msgid "_All Periods..."
-msgstr "Időszak"
+msgstr "Összes időszak..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:177
-#, fuzzy
 msgid "Edit budget for all periods for the selected accounts."
-msgstr "A kiválasztott folyószámlák szerkesztése"
+msgstr "A kiválasztott folyószámlák szerkesztése."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:181
 #, fuzzy
@@ -4569,9 +4565,8 @@ msgid "Edit Note"
 msgstr "Kedvezményezett folyószámla"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:183
-#, fuzzy
 msgid "Edit note for the selected account and period."
-msgstr "A kiválasztott folyószámlák szerkesztése"
+msgstr "A kiválasztott folyószámlák és időszakok megjegyzésének szerkesztése."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:187
 #: gnucash/report/reports/standard/budget.scm:39
@@ -4579,15 +4574,12 @@ msgid "Budget Report"
 msgstr "Kosár jelentés"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:189
-#, fuzzy
-#| msgid "Print the current report"
 msgid "Run the budget report."
-msgstr "A jelen jelentés nyomtatása"
+msgstr "Költségvetési riport futtatása."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:199
-#, fuzzy
 msgid "Refresh this window."
-msgstr "Ezen ablak frissítése"
+msgstr "Ezen ablak frissítése."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:222
 #: gnucash/gnome/gnc-plugin-page-report.c:1137
@@ -4977,7 +4969,7 @@ msgstr "E számla szerkesztése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:375
 msgid "Create a new invoice as a duplicate of the current one"
-msgstr "Új számla generálása a jelenlegiből."
+msgstr "Új számla készítése a jelenlegi mintájára"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:376
 #, fuzzy
@@ -5039,9 +5031,8 @@ msgid "Edit this bill"
 msgstr "E számla szerkesztése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:396
-#, fuzzy
 msgid "Create a new bill as a duplicate of the current one"
-msgstr "Új számla generálása a jelenlegiből."
+msgstr "Új számla generálása a jelenlegl mintájára"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:397
 #, fuzzy
@@ -5094,9 +5085,8 @@ msgid "Edit this voucher"
 msgstr "E számla szerkesztése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:417
-#, fuzzy
 msgid "Create a new voucher as a duplicate of the current one"
-msgstr "Új számla generálása a jelenlegiből."
+msgstr "Új nyugta generálása a jelenlegi mintájára."
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:418
 #, fuzzy
@@ -5150,9 +5140,8 @@ msgid "Edit this credit note"
 msgstr "Jelentés opciók szerkesztése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:438
-#, fuzzy
 msgid "Create a new credit note as a duplicate of the current one"
-msgstr "Új számla generálása a jelenlegiből."
+msgstr "Új jóváírás generálása a jelenlegi mintájára."
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:439
 #, fuzzy
@@ -5307,9 +5296,8 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:216
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:295
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:935
-#, fuzzy
 msgid "Customer Listing"
-msgstr "Ügyfél: "
+msgstr "Ügyfél lista"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:217
 msgid "Show customer aging overview for all customers"
@@ -5378,11 +5366,11 @@ msgid "Employees"
 msgstr "Munkatárs"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1105
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The owner %s will be deleted.\n"
 "Are you sure you want to do this?"
-msgstr "A bankszámlán eltérés van. Biztosan be kívánja fejezni?"
+msgstr "A tulajdonos %s törölve lesz. Biztosan ezt akarja?"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:194
 #: gnucash/gnome/gnc-plugin-page-register.c:292
@@ -5615,7 +5603,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register2.c:377
 #: gnucash/gnome/gnc-plugin-page-register.c:495
 msgid "_Blank Transaction"
-msgstr "Üres tranzakció "
+msgstr "Üres tranzakció"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:378
 #: gnucash/gnome/gnc-plugin-page-register.c:496
@@ -5699,11 +5687,10 @@ msgstr "_Kétsoros"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:425
 #: gnucash/gnome/gnc-plugin-page-register.c:554
-#, fuzzy
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Document\" for "
 "each transaction."
-msgstr "Kétsoros tranzakció-információ"
+msgstr "Kétsoros tranzakció-információ."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:430
 #, fuzzy
@@ -6015,18 +6002,16 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3406
-#, fuzzy
 msgid "Filter By:"
-msgstr "Szűrés..."
+msgstr "Szűrés:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3420
 msgid "Start Date:"
 msgstr "Kezdő dátum:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3426
-#, fuzzy
 msgid "Show previous number of days:"
-msgstr "Részvények számának megjelenítése"
+msgstr "Mutasd az előző napokat:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3433
 msgid "End Date:"
@@ -6096,9 +6081,8 @@ msgid "A reversing entry has already been created for this transaction."
 msgstr "Már van egy fordított(stornó) bejegyzés e tranzakcióhoz."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4088
-#, fuzzy
 msgid "Jump to the transaction?"
-msgstr "A jelenlegi tranzakció szerkesztése"
+msgstr "Ugorjunk a tranzakcióra?"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4095
 #, fuzzy
@@ -6217,9 +6201,8 @@ msgid "Save _Report Configuration"
 msgstr "Adja meg a beállítás elérési útját"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1240
-#, fuzzy
 msgid "Save Report Configuration As..."
-msgstr "Adja meg a beállítás elérési útját"
+msgstr "Riport beállítások mentése mint..."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1244
 msgid "Export _Report"
@@ -6413,11 +6396,10 @@ msgstr "Érvénytelen tranzakciók"
 
 #. Translators: This is a ngettext(3) message, %d is the number of scheduled transactions deleted
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:871
-#, fuzzy, c-format
-#| msgid "Do you really want to delete this scheduled transaction?"
+#, c-format
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete %d scheduled transactions?"
-msgstr[0] "Biztosan törölni kívánja a kiválasztott tranzakciót?"
+msgstr[0] "Biztosan törölni kívánja %d az ütemezett tranzakciót?"
 
 #: gnucash/gnome/gnc-plugin-register2.c:57
 #: gnucash/gnome/gnc-plugin-register.c:58
@@ -6456,9 +6438,8 @@ msgid "St_yle Sheets"
 msgstr "Stíluslapok"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:58
-#, fuzzy
 msgid "Edit report style sheets"
-msgstr "Jelentés-stíluslapok szerkesztése."
+msgstr "Jelentés-stíluslapok szerkesztése"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:148
 #: gnucash/report/reports/standard/view-column.scm:127
@@ -6530,10 +6511,9 @@ msgid "This account register is read-only."
 msgstr "A számlaregiszter csak olvasható."
 
 #: gnucash/gnome/gnc-split-reg2.c:938 gnucash/gnome/gnc-split-reg.c:2448
-#, fuzzy, c-format
-#| msgid "This account register is read-only."
+#, c-format
 msgid "The '%s' account register is read-only."
-msgstr "A számlaregiszter csak olvasható."
+msgstr "A '%s' számlaregiszter csak olvasható."
 
 #: gnucash/gnome/gnc-split-reg2.c:1003
 msgid ""
@@ -6639,9 +6619,8 @@ msgid "_Cut Split"
 msgstr "Automatikus könyvelés"
 
 #: gnucash/gnome/gnc-split-reg.c:990
-#, fuzzy
 msgid "Cut the current transaction?"
-msgstr "A jelenlegi tranzakció szerkesztése"
+msgstr "A jelenlegi tranzakciót kivágjuk?"
 
 #: gnucash/gnome/gnc-split-reg.c:991
 #, fuzzy
@@ -6753,9 +6732,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:2371
-#, fuzzy
 msgid "Sort By:"
-msgstr "Rendezés"
+msgstr "Rendezés:"
 
 #: gnucash/gnome/gnc-split-reg.c:2509
 msgid ""
@@ -6765,28 +6743,26 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:2524
-#, fuzzy
 msgid ""
 "The transactions of this account may not be edited.\n"
 "If you want to edit transactions in this register, please open the account "
 "options and turn off the placeholder checkbox."
 msgstr ""
-"E számla nem szerkeszthető. Ha mégis szerkeszteni kíván tranzakciókat e "
-"regiszterben, nyissa meg a számlaszerkesztést és kapcsolja ki az "
-"'Elválasztó'-t."
+"E számla nem szerkeszthető.\n"
+"Ha mégis szerkeszteni kíván tranzakciókat e regiszterben, nyissa meg a "
+"számlaszerkesztést és kapcsolja ki az 'Elválasztó'-t."
 
 #: gnucash/gnome/gnc-split-reg.c:2531
-#, fuzzy
 msgid ""
 "The transactions in one of the selected sub-accounts may not be edited.\n"
 "If you want to edit transactions in this register, please open the sub-"
 "account options and turn off the placeholder checkbox.\n"
 "You may also open an individual account instead of a set of accounts."
 msgstr ""
-"A kiválasztott alszámlák egyike nem szerkeszthető. Ha szerkeszteni kívánja a "
-"tranzakciókat e regiszterben, nyissa meg az alszámlabeállításokat és "
-"kapcsolja ki az 'Elválasztó'-t. Különben a számlát megnyithatja önmagában is "
-"és nem csak számlakészletként."
+"A kiválasztott alszámlák egyike nem szerkeszthető.\n"
+"Ha szerkeszteni kívánja a tranzakciókat e regiszterben, nyissa meg az "
+"alszámlabeállításokat és kapcsolja ki az 'Elválasztó'-t.\n"
+"Különben a számlát megnyithatja önmagában is és nem csak számlakészletként."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:5
 #: gnucash/gnome/gnucash.desktop.in.in:6
@@ -6991,7 +6967,7 @@ msgstr "_Kamatfizetés bevitele..."
 
 #: gnucash/gnome/window-reconcile2.c:738 gnucash/gnome/window-reconcile.c:795
 msgid "Enter _Interest Charge..."
-msgstr "Enter _Interest Charge..."
+msgstr "Írja be a _kamatdíjat..."
 
 #: gnucash/gnome/window-reconcile2.c:1225 gnucash/gnome/window-reconcile.c:1378
 msgid "Are you sure you want to delete the selected transaction?"
@@ -7120,7 +7096,7 @@ msgstr "Ellenőrzés és javítás"
 #: gnucash/gnome/window-reconcile2.c:2182 gnucash/gnome/window-reconcile.c:2429
 #: gnucash/gtkbuilder/dialog-account.glade:1753
 msgid "_Balance"
-msgstr "Egyenleg:"
+msgstr "_Egyenleg"
 
 #: gnucash/gnome/window-reconcile2.c:2183 gnucash/gnome/window-reconcile.c:2430
 msgid "Add a new balancing entry to the account"
@@ -7233,12 +7209,11 @@ msgid "New Split"
 msgstr "Kifejtés"
 
 #: gnucash/gnome-search/dialog-search.c:1119
-#, fuzzy
 msgctxt ""
 "Item represents an unknown object type (in the sense of bill, customer, "
 "invoice, transaction, split,...)!"
 msgid "New item"
-msgstr "_Új tétel..."
+msgstr "_Új tétel"
 
 #: gnucash/gnome-search/dialog-search.c:1162
 #: gnucash/gnome-utils/gnc-recurrence.c:544
@@ -7246,7 +7221,7 @@ msgstr "_Új tétel..."
 #: gnucash/gtkbuilder/dialog-price.glade:837
 #, fuzzy
 msgid "_Add"
-msgstr "Cím: "
+msgstr "_Új"
 
 #: gnucash/gnome-search/dialog-search.c:1172
 msgid "all criteria are met"
@@ -7392,7 +7367,7 @@ msgstr "Nem igazolt"
 
 #: gnucash/gnome-search/search-string.c:169
 msgid "You need to enter some search text."
-msgstr "Adjon meg kereső kifejezést"
+msgstr "Adjon meg kereső kifejezést."
 
 #: gnucash/gnome-search/search-string.c:198
 #: gnucash/import-export/bi-import/dialog-bi-import.c:136
@@ -7419,9 +7394,8 @@ msgid "does not match regex"
 msgstr "reg.kif. nem illik"
 
 #: gnucash/gnome-search/search-string.c:322
-#, fuzzy
 msgid "Match case"
-msgstr "Illeszkedés?"
+msgstr "Illeszkedés"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:178
 msgid ""
@@ -7659,16 +7633,16 @@ msgid "Cannot change currency"
 msgstr "Bejegyzés megszakítása"
 
 #: gnucash/gnome-utils/dialog-account.c:1418
-#, fuzzy
 msgid ""
 "This Account contains Transactions.\n"
 "Changing this option is not possible."
 msgstr ""
-"A számla tartalmaz csak olvasható tranzakciókat is, amiket nem törölhet."
+"A számla tartalmaz tranzakciókat.\n"
+"A változtatás nem lehetséges."
 
 #: gnucash/gnome-utils/dialog-account.c:1610
 msgid "Edit Account"
-msgstr "Folyószámla szerkesztése "
+msgstr "Folyószámla szerkesztése"
 
 #: gnucash/gnome-utils/dialog-account.c:1613
 #, c-format
@@ -7701,7 +7675,7 @@ msgstr ""
 #, fuzzy, c-format
 msgid ""
 "Set the account placeholder value for account '%s' including all sub-accounts"
-msgstr "Csak a forrás számla egyenlegét mutassuk, kihagyva az alszámlákat"
+msgstr "A forrás számla egyenlegét mutassuk, '%s' beleértve az alszámlákat is"
 
 #: gnucash/gnome-utils/dialog-account.c:2334
 #, fuzzy, c-format
