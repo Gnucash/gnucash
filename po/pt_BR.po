@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-07 00:19+0100\n"
-"PO-Revision-Date: 2022-02-08 22:57+0000\n"
+"PO-Revision-Date: 2022-03-07 21:17+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -2447,7 +2447,7 @@ msgstr "Duplicata"
 #: gnucash/gnome/dialog-invoice.c:3358
 #: gnucash/gnome/gnc-plugin-page-invoice.c:459
 msgid "Post"
-msgstr "Envie"
+msgstr "Postar"
 
 #: gnucash/gnome/dialog-invoice.c:3339 gnucash/gnome/dialog-invoice.c:3348
 #: gnucash/gnome/dialog-invoice.c:3359
@@ -5043,7 +5043,7 @@ msgstr "Remova"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:461
 msgid "Pay"
-msgstr "Pague"
+msgstr "Pagamento"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:145
 msgid "E_dit Vendor"
