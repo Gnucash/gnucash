@@ -22,6 +22,7 @@ bindings/python/example_scripts/gncinvoice_jinja.py
 bindings/python/example_scripts/latex_invoices.py
 bindings/python/example_scripts/new_book_with_opening_balances.py
 bindings/python/example_scripts/price_database_example.py
+bindings/python/example_scripts/qof.py
 bindings/python/example_scripts/quotes_historic.py
 bindings/python/example_scripts/rest-api/gnucash_rest.py
 bindings/python/example_scripts/rest-api/gnucash_simple.py
