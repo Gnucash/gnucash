@@ -12611,12 +12611,7 @@ msgstr "Podkočiarka(;)"
 msgid "Separators"
 msgstr "Široké oddeľovače"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/assistant-csv-export.glade:230
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/assistant-csv-export.glade:237
->>>>>>> weblate/maint
 msgid "Choose Export Settings"
 msgstr "Zvoľte exportné nastavenia"
 
@@ -12727,12 +12722,7 @@ msgstr "Pre tento výkaz nie sú nastavenia."
 msgid "Choose File Name for Export"
 msgstr "Zvoliť súbor pre import"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/assistant-csv-export.glade:714
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/assistant-csv-export.glade:734
->>>>>>> weblate/maint
 msgid "Export Now..."
 msgstr "Exportovať terať…"
 
@@ -12884,25 +12874,13 @@ msgstr "<b>Formát času</b>"
 msgid "Date Format"
 msgstr "Formát dátumu"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:601
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:599
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:604
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:611
->>>>>>> weblate/maint
 msgid "Currency Format"
 msgstr "Formát meny"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:613
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:611
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:616
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:623
->>>>>>> weblate/maint
 msgid "Encoding"
 msgstr "Kódovanie"
 
@@ -12934,14 +12912,8 @@ msgid ""
 "line 5. Lines 6, 8, 10,... will be skipped."
 msgstr ""
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:781
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:784
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:793
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:805
->>>>>>> weblate/maint
 msgid "<b>Miscellaneous</b>"
 msgstr "<b>Rôzne</b>"
 
@@ -13058,12 +13030,7 @@ msgid ""
 "line 5. Lines 6, 8, 10,... will be skipped."
 msgstr ""
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:815
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:833
->>>>>>> weblate/maint
 msgid "<b>Account</b>"
 msgstr "<b>Účet</b>"
 
@@ -13184,14 +13151,8 @@ msgid "<b>Category Description</b>"
 msgstr "<b>Popis kategórie</b>"
 
 #. %s is an account template
-<<<<<<< HEAD
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:377
-#, fuzzy, c-format
-#| msgid "Accounts in '%s'"
-=======
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:384
 #, c-format
->>>>>>> weblate/maint
 msgid "Accounts in %s"
 msgstr "Účty v %s"
 
@@ -13534,12 +13495,7 @@ msgstr "Dátum do"
 msgid "Loan Review"
 msgstr "Prehľad"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/assistant-loan.glade:1255
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/assistant-loan.glade:1251
->>>>>>> weblate/maint
 msgid "Schedule added successfully."
 msgstr "Plán bol úspešne pridaný."
 
@@ -14000,12 +13956,7 @@ msgstr "Rozdelenie akcií"
 msgid "Introduction placeholder"
 msgstr ""
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:21
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/assistant-xml-encoding.glade:30
->>>>>>> weblate/maint
 msgid "Title placeholder"
 msgstr "Zástupca titulku"
 
@@ -14128,12 +14079,7 @@ msgstr ""
 msgid "<b>Invoices</b>"
 msgstr "<b>Faktúry</b>"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/business-prefs.glade:145
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/business-prefs.glade:144
->>>>>>> weblate/maint
 msgid "Not_ify when due"
 msgstr "_Upozorniť pri splatnosti"
 
@@ -14357,12 +14303,7 @@ msgstr "Zobraziť účty s nulovým _zostatkom"
 msgid "Show accounts which have a zero total value."
 msgstr "Zahrnúť účty, ktoré majú nulový zostatok"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/dialog-account.glade:1060
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/dialog-account.glade:1065
->>>>>>> weblate/maint
 msgid "Use Commodity Value"
 msgstr "\\Použiť hodnotu komodity"
 
@@ -14882,12 +14823,7 @@ msgstr ""
 msgid "Type of quote source"
 msgstr "Typ zdroja cien"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/dialog-commodity.glade:358
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/dialog-commodity.glade:355
->>>>>>> weblate/maint
 msgid "_Display symbol"
 msgstr "_Zobraziť symbol"
 
@@ -14945,12 +14881,7 @@ msgstr "ISIN, CUSI_P alebo iný kód"
 msgid "_Symbol/abbreviation"
 msgstr "_Symbol/skratka"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/dialog-commodity.glade:525
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/dialog-commodity.glade:522
->>>>>>> weblate/maint
 msgid "_Full name"
 msgstr "Úp_lný názov"
 
@@ -15115,13 +15046,7 @@ msgstr "Dialóg úlohy"
 msgid "Linked _Location"
 msgstr "<b>Informácie o rozdelení</b>"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/dialog-doclink.glade:346
-#, fuzzy
-#| msgid "(none)"
-=======
-#: gnucash/gtkbuilder/dialog-doclink.glade:349
->>>>>>> weblate/maint
 msgid "(None)"
 msgstr "(Nič)"
 
@@ -15138,12 +15063,7 @@ msgstr ""
 msgid "Reload and Locate Linked Documents"
 msgstr "_Všetky transakcie"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/dialog-doclink.glade:544
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/dialog-doclink.glade:550
->>>>>>> weblate/maint
 msgid "_Reload"
 msgstr "_Znova načítať"
 
@@ -15171,12 +15091,7 @@ msgstr "Dialóg úlohy"
 msgid "Available"
 msgstr "Vyúčtovateľné?"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/dialog-doclink.glade:712
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/dialog-doclink.glade:718
->>>>>>> weblate/maint
 msgid "Relative"
 msgstr "Relatívne"
 
@@ -15365,12 +15280,7 @@ msgstr "Budúca hodnota"
 msgid "Clear the entry."
 msgstr "Vyčistiť položku"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/dialog-fincalc.glade:333
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/dialog-fincalc.glade:331
->>>>>>> weblate/maint
 msgid "Precision"
 msgstr "Presnosť"
 
@@ -16252,12 +16162,7 @@ msgstr "Použiť 24 hodinový časový formát (namiesto 12 hodinového)."
 msgid "<b>Date Completion</b>"
 msgstr "<b>Dopĺňanie dátumov</b>"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/dialog-preferences.glade:1202
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/dialog-preferences.glade:1112
->>>>>>> weblate/maint
 msgid "When a date is entered without year, it should be taken"
 msgstr "Keď je zadaný dátum bez uvedenia roku, tak ten bude doplnený"
 
@@ -16266,12 +16171,7 @@ msgid ""
 "Dates will be completed so that they are within the current calendar year."
 msgstr ""
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/dialog-preferences.glade:1231
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/dialog-preferences.glade:1141
->>>>>>> weblate/maint
 msgid ""
 "In a sliding 12-month window starting this\n"
 "many months before the current month"
@@ -16315,12 +16215,7 @@ msgid ""
 "one."
 msgstr "Automaticky vkladať desatinnú bodku do súm, ktoré sú vložené bez nej."
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/dialog-preferences.glade:1369
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/dialog-preferences.glade:1279
->>>>>>> weblate/maint
 msgid "_Decimal places"
 msgstr "_Desatinné miesta"
 
@@ -16361,12 +16256,7 @@ msgstr ""
 msgid "days"
 msgstr "dní"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/dialog-preferences.glade:1664
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/dialog-preferences.glade:1519
->>>>>>> weblate/maint
 msgid "<b>_Retain log/backup files</b>"
 msgstr "<b>_Uchovávanie protokolových/záložných súborov</b>"
 
@@ -16420,14 +16310,8 @@ msgid ""
 "feature is started. Otherwise no extra explanation is shown."
 msgstr ""
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/dialog-preferences.glade:1896
 #: gnucash/gtkbuilder/dialog-sx.glade:1259
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/dialog-preferences.glade:1751
-#: gnucash/gtkbuilder/dialog-sx.glade:1234
->>>>>>> weblate/maint
 msgid "For"
 msgstr "Do"
 
@@ -16444,23 +16328,12 @@ msgstr "Ča_kať na odpoveď"
 msgid "seconds"
 msgstr ""
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/dialog-preferences.glade:2018
 #: gnucash/gtkbuilder/dialog-preferences.glade:2036
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/dialog-preferences.glade:1873
-#: gnucash/gtkbuilder/dialog-preferences.glade:1891
->>>>>>> weblate/maint
 msgid "Path head for Linked Files Relative Paths"
 msgstr "Začiatok relatívne cesty k prepojeným súborom"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/dialog-preferences.glade:2065
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/dialog-preferences.glade:1920
->>>>>>> weblate/maint
 msgid "Enable horizontal grid lines on table displays"
 msgstr "Povoliť vodorovné čiary mriežky na zobrazeniach tabuľky"
 
@@ -16484,13 +16357,9 @@ msgstr ""
 "Povoliť zvislé čiary mriežky na zobrazeniach tabuľky. Pôjde najmä o stromové "
 "zobrazenia, ako je stránka Účty."
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/dialog-preferences.glade:2102
 #, fuzzy
 #| msgid "<b>Files</b>"
-=======
-#: gnucash/gtkbuilder/dialog-preferences.glade:1957
->>>>>>> weblate/maint
 msgid "<b>Linked Files</b>"
 msgstr "<b>Prepojené súbory</b>"
 
@@ -16757,7 +16626,6 @@ msgstr "Zobraziť vertikálne ohraničenie buniek."
 #: gnucash/gtkbuilder/dialog-preferences.glade:3014
 #: gnucash/report/reports/standard/invoice.scm:188
 #: gnucash/report/reports/standard/invoice.scm:194
-<<<<<<< HEAD
 #: gnucash/report/reports/standard/invoice.scm:333
 #: gnucash/report/reports/standard/invoice.scm:340
 #: gnucash/report/reports/standard/invoice.scm:347
@@ -16765,23 +16633,10 @@ msgstr "Zobraziť vertikálne ohraničenie buniek."
 #: gnucash/report/reports/standard/invoice.scm:361
 #: gnucash/report/reports/standard/invoice.scm:368
 #, fuzzy
-=======
-#: gnucash/report/reports/standard/invoice.scm:335
-#: gnucash/report/reports/standard/invoice.scm:342
-#: gnucash/report/reports/standard/invoice.scm:349
-#: gnucash/report/reports/standard/invoice.scm:356
-#: gnucash/report/reports/standard/invoice.scm:363
-#: gnucash/report/reports/standard/invoice.scm:370
->>>>>>> weblate/maint
 msgid "Layout"
 msgstr "Rozloženie"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/dialog-preferences.glade:3026
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/dialog-preferences.glade:2758
->>>>>>> weblate/maint
 msgid "_Future transactions after blank transaction"
 msgstr "_Budúce transakcie po prázdne transakcií"
 
@@ -16903,14 +16758,8 @@ msgstr ""
 "Ak je zaškrtnuté, každá faktúra sa otvorí vo svojom okne najvyššej úrovne. "
 "Ak nie je zaškrtnuté, faktúra bude otvorená v aktuálnom okne."
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/dialog-preferences.glade:3652
 #: gnucash/gtkbuilder/dialog-preferences.glade:3732
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/dialog-preferences.glade:3229
-#: gnucash/gtkbuilder/dialog-preferences.glade:3309
->>>>>>> weblate/maint
 msgid "Default zoom level"
 msgstr "Predvolená úroveň priblíženia"
 
@@ -17004,14 +16853,8 @@ msgstr ""
 msgid "Windows"
 msgstr "Okná"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/dialog-preferences.glade:4253
 #: gnucash/gtkbuilder/dialog-preferences.glade:4282
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/dialog-preferences.glade:3759
-#: gnucash/gtkbuilder/dialog-preferences.glade:3782
->>>>>>> weblate/maint
 msgid "Online Quotes"
 msgstr "Online cenovy"
 
@@ -17524,12 +17367,7 @@ msgstr ""
 msgid "Daily"
 msgstr "Denne"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/dialog-sx.glade:129
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/dialog-sx.glade:132
->>>>>>> weblate/maint
 msgid "Bi-Weekly"
 msgstr "Dvojtýždenne"
 
@@ -17555,12 +17393,7 @@ msgstr "Bez konca"
 msgid "Number of Occurrences"
 msgstr "Počet výskytov"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/dialog-sx.glade:508
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/dialog-sx.glade:512
->>>>>>> weblate/maint
 msgid "<b>Since Last Run</b>"
 msgstr "<b>Od posledného spustenia</b>"
 
@@ -17576,12 +17409,7 @@ msgstr "_Spustiť pri otváraní súboru"
 msgid "Run the \"since last run\" process when a file is opened."
 msgstr ""
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/dialog-sx.glade:558
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/dialog-sx.glade:562
->>>>>>> weblate/maint
 msgid "_Show notification window"
 msgstr "Zobraziť _okno s upozornením"
 
@@ -17773,21 +17601,11 @@ msgstr "Odstrániť"
 msgid "Ne_w"
 msgstr "No_vý"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/dialog-tax-table.glade:286
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/dialog-tax-table.glade:291
->>>>>>> weblate/maint
 msgid "Value $"
 msgstr "Hodnota $"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/dialog-tax-table.glade:289
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/dialog-tax-table.glade:294
->>>>>>> weblate/maint
 msgid "Percent %"
 msgstr "Percentá %"
 
@@ -18433,12 +18251,7 @@ msgstr "_Adresa"
 msgid "Add 'value' to current budget for each period"
 msgstr ""
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:152
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:151
->>>>>>> weblate/maint
 msgid "Multiply"
 msgstr "Násobiť"
 
@@ -18533,21 +18346,11 @@ msgstr "Otvoriť zvolený rozpočet"
 msgid "Delete the Selected Budget"
 msgstr "Odstrániť označený rozpočet"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:837
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:868
->>>>>>> weblate/maint
 msgid "Budget Notes"
 msgstr "Poznámky k rozpočtu"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:892
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:923
->>>>>>> weblate/maint
 msgid "Enter Note"
 msgstr "Vložiť poznámku"
 
@@ -18562,14 +18365,8 @@ msgstr "Duplikovať transakciu"
 msgid "_Number"
 msgstr "Čís_lo"
 
-<<<<<<< HEAD
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:149
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:693
-#, fuzzy
-=======
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:148
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:691
->>>>>>> weblate/maint
 msgid "_Transaction Number"
 msgstr "Číslo _transakcie"
 
@@ -18982,12 +18779,7 @@ msgstr ""
 msgid "_Start AqBanking Wizard"
 msgstr "_Spustiť AqBanking sprievodcu"
 
-<<<<<<< HEAD
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:113
-#, fuzzy
-=======
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:121
->>>>>>> weblate/maint
 msgid "Start Online Banking Wizard"
 msgstr "Spustiť sprievodcu Online bankovníctva"
 
@@ -18998,12 +18790,7 @@ msgid ""
 "selected matches\". Click \"Next\" when all desired accounts are matching."
 msgstr ""
 
-<<<<<<< HEAD
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:169
-#, fuzzy
-=======
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:177
->>>>>>> weblate/maint
 msgid "_Delete selected matches"
 msgstr "O_dstráni zvolené zhody"
 
@@ -19081,21 +18868,11 @@ msgstr "časový rozsah transakcií, ktoré získať:"
 msgid "From"
 msgstr "Od"
 
-<<<<<<< HEAD
 #: gnucash/import-export/aqb/dialog-ab.glade:390
-#, fuzzy
-=======
-#: gnucash/import-export/aqb/dialog-ab.glade:391
->>>>>>> weblate/maint
 msgid "_Earliest possible date"
 msgstr "Najskorší _možný dátum"
 
-<<<<<<< HEAD
 #: gnucash/import-export/aqb/dialog-ab.glade:407
-#, fuzzy
-=======
-#: gnucash/import-export/aqb/dialog-ab.glade:408
->>>>>>> weblate/maint
 msgid "_Last retrieval date"
 msgstr "Dátum pos_ledného načítania"
 
@@ -19261,12 +19038,7 @@ msgstr "Číslo účtu pôvodcu"
 msgid "Bank Code"
 msgstr "Bankový kód"
 
-<<<<<<< HEAD
 #: gnucash/import-export/aqb/dialog-ab.glade:1483
-#, fuzzy
-=======
-#: gnucash/import-export/aqb/dialog-ab.glade:1494
->>>>>>> weblate/maint
 msgid "_Add current"
 msgstr "Prid_ať aktuálne"
 
@@ -20906,12 +20678,7 @@ msgstr "Dodací kontakt"
 msgid "Shipping Email"
 msgstr "Dodací kontakt"
 
-<<<<<<< HEAD
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:172
-#, fuzzy
-=======
-#: gnucash/import-export/customer-import/dialog-customer-import-gui.c:177
->>>>>>> weblate/maint
 msgid "Import Customers from csv"
 msgstr "Importovať odberateľov z csv"
 
@@ -22502,12 +22269,7 @@ msgstr "Tento výkaz vyžaduje, aby ste zadali určité nastavenia."
 msgid "No accounts selected"
 msgstr "Nie je zvolený žiaden účet"
 
-<<<<<<< HEAD
 #: gnucash/report/html-utilities.scm:399
-#, fuzzy
-=======
-#: gnucash/report/html-utilities.scm:398
->>>>>>> weblate/maint
 msgid "This report requires accounts to be selected in the report options."
 msgstr "Tento výkaz vyžaduje, aby boli zvolené účty v nastavení výkazu."
 
@@ -24087,13 +23849,8 @@ msgstr "Mesačný priemer"
 msgid "Weekly Average"
 msgstr "Týždenný priemer"
 
-<<<<<<< HEAD
 #: gnucash/report/reports/standard/account-piecharts.scm:535
-#, fuzzy, scheme-format
-=======
-#: gnucash/report/reports/standard/account-piecharts.scm:539
 #, scheme-format
->>>>>>> weblate/maint
 msgid "Balance at ~a"
 msgstr "Saldokonto v ~a"
 
@@ -25838,13 +25595,8 @@ msgstr ""
 msgid "Daily Average"
 msgstr "Priemerný posun"
 
-<<<<<<< HEAD
 #: gnucash/report/reports/standard/category-barchart.scm:505
-#, fuzzy, scheme-format
-=======
-#: gnucash/report/reports/standard/category-barchart.scm:508
 #, scheme-format
->>>>>>> weblate/maint
 msgid "Balances ~a to ~a"
 msgstr "Saldá ~a do ~a"
 
@@ -26763,21 +26515,11 @@ msgstr "Splatná čiastka"
 msgid "Invoice in progress..."
 msgstr "Faktúra sa spracováva..."
 
-<<<<<<< HEAD
 #: gnucash/report/reports/standard/invoice.scm:608
-#, fuzzy
-=======
-#: gnucash/report/reports/standard/invoice.scm:610
->>>>>>> weblate/maint
 msgid "Reference:"
 msgstr "Referencia:"
 
-<<<<<<< HEAD
 #: gnucash/report/reports/standard/invoice.scm:620
-#, fuzzy
-=======
-#: gnucash/report/reports/standard/invoice.scm:622
->>>>>>> weblate/maint
 msgid "Terms:"
 msgstr "Podmienky:"
 
@@ -26985,12 +26727,7 @@ msgstr "Graf Príjmov/Výdavkov"
 msgid "Income & Expense Barchart"
 msgstr "Graf Príjmov a Výdavkov"
 
-<<<<<<< HEAD
 #: gnucash/report/reports/standard/net-charts.scm:515
-#, fuzzy
-=======
-#: gnucash/report/reports/standard/net-charts.scm:507
->>>>>>> weblate/maint
 msgid "Net Worth Linechart"
 msgstr "Liniový graf Čistej hodnoty"
 
@@ -27619,22 +27356,12 @@ msgid "Display the amount?"
 msgstr "Zobraziť sumu?"
 
 #: gnucash/report/reports/standard/register.scm:402
-<<<<<<< HEAD
 #: gnucash/report/trep-engine.scm:1021
-#, fuzzy
-=======
-#: gnucash/report/trep-engine.scm:1002
->>>>>>> weblate/maint
 msgid "Single Column"
 msgstr "Jednostĺpcové"
 
 #: gnucash/report/reports/standard/register.scm:403
-<<<<<<< HEAD
 #: gnucash/report/trep-engine.scm:1022
-#, fuzzy
-=======
-#: gnucash/report/trep-engine.scm:1003
->>>>>>> weblate/maint
 msgid "Two Columns"
 msgstr "Dvojstĺpcové"
 
@@ -28626,17 +28353,12 @@ msgstr "Názov účtu"
 msgid "Use regular expressions for account name filter"
 msgstr ""
 
-<<<<<<< HEAD
 #: gnucash/report/trep-engine.scm:114
 #, fuzzy
 msgid "Account Name Filter excludes matched strings"
 msgstr "Názov účtu"
 
 #: gnucash/report/trep-engine.scm:115
-#, fuzzy
-=======
-#: gnucash/report/trep-engine.scm:113
->>>>>>> weblate/maint
 msgid "Transaction Filter"
 msgstr "Filter transakcií"
 
@@ -28654,12 +28376,7 @@ msgstr ""
 msgid "Transaction Filter is case insensitive"
 msgstr "Dátum transakcie"
 
-<<<<<<< HEAD
 #: gnucash/report/trep-engine.scm:122 gnucash/report/trep-engine.scm:197
-#, fuzzy
-=======
-#: gnucash/report/trep-engine.scm:120 gnucash/report/trep-engine.scm:195
->>>>>>> weblate/maint
 msgid "Reconciled Status"
 msgstr "Stav vysporiadania"
 
@@ -28744,12 +28461,7 @@ msgstr "Potvrdené"
 msgid "Reconciled only"
 msgstr "Vysporiadané"
 
-<<<<<<< HEAD
 #: gnucash/report/trep-engine.scm:411
-#, fuzzy
-=======
-#: gnucash/report/trep-engine.scm:409
->>>>>>> weblate/maint
 msgid "Use Global Preference"
 msgstr "Použiť globálne nastavenia"
 
@@ -28996,12 +28708,7 @@ msgstr "Získať transakcie online"
 msgid "Hide"
 msgstr "Skryť"
 
-<<<<<<< HEAD
 #: gnucash/report/trep-engine.scm:1031
-#, fuzzy
-=======
-#: gnucash/report/trep-engine.scm:1012
->>>>>>> weblate/maint
 msgid "Enable hyperlinks in amounts."
 msgstr "Povoliť hyperodkazy v sumách."
 
