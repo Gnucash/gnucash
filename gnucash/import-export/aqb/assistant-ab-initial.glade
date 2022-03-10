@@ -12,7 +12,7 @@
     <signal name="close" handler="aai_on_finish" swapped="no"/>
     <signal name="prepare" handler="aai_on_prepare" swapped="no"/>
     <child>
-      <!-- n-columns=1 n-rows=2 -->
+      <!-- n-columns=1 n-rows=4 -->
       <object class="GtkGrid" id="start_page">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -20,7 +20,7 @@
         <property name="margin-end">12</property>
         <property name="border-width">12</property>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="start_label1">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="halign">start</property>
@@ -32,11 +32,11 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="start_label2">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes" comments="See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.">The requirements for Online Banking vary between the different supported AqBanking backends, but usually you will need:
+            <property name="label" translatable="yes">The requirements for Online Banking vary between the different supported AqBanking backends, but usually you will need:
 * Your bank needs to grant you online access. See on their website or ask their customer service for how to obtain it.
 They should also tell you:
 * Your user ID that identifies you to their server, often your base account number;
@@ -45,16 +45,42 @@ They should also tell you:
 * Authentication methods vary by backend and chosen method:
  * FinTS PIN/TAN: Some methods require a specific gadget like a card reader or a mobile;
  * FinTS HBCI: You have to exchange the public parts of asymmetric keys with your bank ("Ini-Letter").
- * PayPal: registered email address, password, API signature;
-
-See https://wiki.gnucash.org/wiki/AqBanking for more details.
-
-Note: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented Online Banking server. You should not rely on time-critical transfers through Online Banking, because sometimes the bank does not give you correct feedback when a transfer is rejected.</property>
+ * PayPal: registered email address, password, API signature;</property>
             <property name="wrap">True</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
             <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="start_markup_label3">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="halign">start</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
+            <property name="label" translatable="yes" comments="See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.">See &lt;a href="https://wiki.gnucash.org/wiki/AqBanking"&gt;https://wiki.gnucash.org/wiki/AqBanking&lt;/a&gt; for more details</property>
+            <property name="use-markup">True</property>
+            <property name="wrap">True</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="start_label4">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Note: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented Online Banking server. You should not rely on time-critical transfers through Online Banking, because sometimes the bank does not give you correct feedback when a transfer is rejected.</property>
+            <property name="wrap">True</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">3</property>
           </packing>
         </child>
       </object>
@@ -66,21 +92,69 @@ Note: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented Online Ban
       </packing>
     </child>
     <child>
-      <object class="GtkBox" id="wizard_page">
+      <object class="GtkBox" id="aqbanking_page">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="halign">start</property>
         <property name="valign">center</property>
         <property name="margin-start">12</property>
         <property name="margin-end">12</property>
         <property name="border-width">12</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
+        <property name="spacing">6</property>
         <child>
-          <object class="GtkLabel" id="wizard_label">
+          <object class="GtkLabel" id="aqbanking_label1">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">The Setup of your Online Banking connection is handled by the external program "AqBanking Setup Wizard".
-You have to set up at least one connection before you can continue.
+            <property name="halign">start</property>
+            <property name="margin-bottom">6</property>
+            <property name="label" translatable="yes">The Setup of your Online Banking connection is handled by the external program "AqBanking Setup".</property>
+            <property name="wrap">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="aqbanking_label2">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">That means:
+* It ignores GnuCash's preferences like "Close log window when finished".
+* To report issues read</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="aqbanking_markup_label3">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">start</property>
+            <property name="margin-bottom">6</property>
+            <property name="label" translatable="yes">&lt;a href="https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"&gt;https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/&lt;/a&gt;</property>
+            <property name="use-markup">True</property>
+            <property name="wrap">True</property>
+            <property name="wrap-mode">char</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="aqbanking_label4">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">You have to set up at least one connection before you can continue.
 
 Please press the button below to start it.</property>
             <property name="wrap">True</property>
@@ -88,29 +162,28 @@ Please press the button below to start it.</property>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="position">5</property>
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="ab_wizard_button">
-            <property name="label" translatable="yes">_Start AqBanking Wizard</property>
+          <object class="GtkButton" id="ab_assistant_button">
+            <property name="label" translatable="yes">_Start AqBanking Setup</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <property name="halign">center</property>
             <property name="use-underline">True</property>
-            <signal name="clicked" handler="aai_wizard_button_clicked_cb" swapped="no"/>
+            <signal name="clicked" handler="aai_button_clicked_cb" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">6</property>
           </packing>
         </child>
       </object>
       <packing>
-        <property name="page-type">intro</property>
-        <property name="title" translatable="yes">Start Online Banking Wizard</property>
+        <property name="title" translatable="yes">Start Online Banking Setup</property>
         <property name="complete">True</property>
         <property name="has-padding">False</property>
       </packing>
