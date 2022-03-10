@@ -243,6 +243,16 @@
       (test-equal "auto"
         '("Auto")
         (sxml->table-row-col sxml 1 0 2))
+
+      ;; test ratios
+      (set-option expense-options gnc:pagename-display "Percentage chart" #t)
+      (let ((sxml (gnc:options->sxml expense-report-uuid expense-options
+                                     "test-standard-category-report"
+                                     "ratios"
+                                     #:strip-tag "script")))
+        (test-equal "multi-acct ratios"
+          '("57.14 %" "14.29 %" "14.29 %" "14.29 %" "$14.00")
+          (cdr (sxml->table-row-col sxml 1 2 #f))))
       (test-end "multi-acct-test"))))
 
 
