@@ -884,7 +884,7 @@ gbv_treeview_resized_cb (GtkWidget *widget, GtkAllocation *allocation,
         if ((g_strcmp0 (name, "description") == 0) && (!priv->show_account_desc))
             total_node = g_list_next (total_node);
 
-        if (gtk_tree_view_column_get_visible (tree_view_col))
+        if (gtk_tree_view_column_get_visible (tree_view_col) && total_node != NULL)
         {
             gint col_width = gtk_tree_view_column_get_width (tree_view_col);
             GtkTreeViewColumn *totals_view_col = total_node->data;
