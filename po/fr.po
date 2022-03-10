@@ -23,6 +23,7 @@
 # Pascal HUE <pascal.hue35@gmail.com>, 2021.
 # Alexandre <nasmi3+weblate@gmail.com>, 2021.
 # Maxime Leroy <lisacintosh@gmail.com>, 2021.
+# Sébastien Ray <sebastien.ray@normalesup.org>, 2022.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
 #
@@ -41,7 +42,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -353,7 +354,7 @@ msgstr "Europe du Sud (ISO-8859-3)"
 
 #: borrowed/goffice/go-charmap-sel.c:201
 msgid "Thai (TIS-620)"
-msgstr "Thai (TIS-620)"
+msgstr "Thaï (TIS-620)"
 
 #: borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
@@ -2740,7 +2741,7 @@ msgstr "Émis"
 # messages-i18n.c:168 po/guile_strings.txt:259
 #: gnucash/gnome/dialog-invoice.c:3484 gnucash/gnome/dialog-invoice.c:3637
 msgid "Due"
-msgstr "Due"
+msgstr "À payer"
 
 # messages-i18n.c:310
 #: gnucash/gnome/dialog-invoice.c:3486 gnucash/gnome/dialog-lot-viewer.c:869
@@ -3316,7 +3317,7 @@ msgstr "Lignes"
 # messages-i18n.c:261
 #: gnucash/gnome/dialog-report-column-view.c:424
 msgid "Cols"
-msgstr "Cols"
+msgstr "Colonnes"
 
 #: gnucash/gnome/dialog-report-style-sheet.c:172
 #, c-format
@@ -10457,7 +10458,7 @@ msgstr "TIP"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2867
 #: gnucash/register/ledger-core/split-register.c:2560
 msgid "Direct Debit"
-msgstr "Prélèvement"
+msgstr "Prélèvement automatique"
 
 # messages-i18n.c:253
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2873
@@ -23020,7 +23021,7 @@ msgstr "Compte avec symbole"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:617
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:628
 msgid "Amount Num."
-msgstr "N° du montant"
+msgstr "Montant (num.)"
 
 # po/guile_strings.txt:186
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:617
@@ -31042,7 +31043,7 @@ msgstr "En texte"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:83
 msgid "Ref text"
-msgstr "Texte Réf."
+msgstr "Texte réf."
 
 # po/guile_strings.txt:188
 #: gnucash/report/reports/standard/taxinvoice.scm:84
