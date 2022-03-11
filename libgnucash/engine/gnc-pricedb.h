@@ -175,6 +175,7 @@ typedef enum
     PRICE_SOURCE_SPLIT_REG,        // "user:split-register"
     PRICE_SOURCE_SPLIT_IMPORT,     // "user:split-import"
     PRICE_SOURCE_STOCK_SPLIT,      // "user:stock-split"
+    PRICE_SOURCE_STOCK_TRANSACTION,// "user:stock-transaction"
     PRICE_SOURCE_INVOICE,          // "user:invoice-post"
     PRICE_SOURCE_TEMP,             // "temporary"
     PRICE_SOURCE_INVALID,          // "invalid"
