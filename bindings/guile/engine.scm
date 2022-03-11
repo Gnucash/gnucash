@@ -37,6 +37,9 @@
 (export account-full-name<?)
 (export accounts-get-children-depth)
 
+(define-public GNC_COMMODITY_NS_CURRENCY "CURRENCY")
+(define-public GNC_COMMODITY_NS_NONCURRENCY (gettext "ALL NON-CURRENCY"))
+
 (define (gnc-pricedb-lookup-latest-before-t64 . args)
   (issue-deprecation-warning "gnc-pricedb-lookup-latest-before-t64 has been renamed to gnc-pricedb-lookup-nearest-before-t64")
   (apply gnc-pricedb-lookup-nearest-before-t64 args))
