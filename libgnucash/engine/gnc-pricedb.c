@@ -126,6 +126,7 @@ static const char* source_names[(size_t)PRICE_SOURCE_INVALID + 1] =
     "user:split-register",
     "user:split-import",
     "user:stock-split",
+    "user:stock-transaction",
     "user:invoice-post", /* Retained for backwards compatibility */
     "temporary",
     "invalid"
