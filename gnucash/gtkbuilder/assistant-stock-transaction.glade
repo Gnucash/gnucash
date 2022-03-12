@@ -247,7 +247,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">(Previous Balance)</property>
+                <property name="label">(Previous Balance)</property>
                 <property name="use-underline">True</property>
                 <property name="justify">center</property>
               </object>
@@ -275,7 +275,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">(Next Balance)</property>
+                <property name="label">(Next Balance)</property>
                 <property name="use-underline">True</property>
                 <property name="justify">center</property>
               </object>
