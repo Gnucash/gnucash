@@ -8,11 +8,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-10 06:37+0000\n"
-"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
+"PO-Revision-Date: 2022-03-10 06:38+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -8604,7 +8604,7 @@ msgstr "מדריך שימוש ומדריך _מושגים"
 
 #: gnucash/gnome-utils/gnc-main-window.c:387
 msgid "Open the GnuCash Tutorial"
-msgstr "פתיחת מדריך למשתמש – גנוקאש"
+msgstr "פתיחת מדריך למשתמש בגנוקאש"
 
 #: gnucash/gnome-utils/gnc-main-window.c:391
 msgid "_Contents"
@@ -10118,8 +10118,8 @@ msgid ""
 "Enable debugging mode: provide deep detail in the logs.\n"
 "This is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
 msgstr ""
-"אפשור מצב ניפו־תקלים: אספקת מידע מפורט ביומן־הרישום.\n"
-"זהה ל: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
+"אפשור מצב איתור תקלים: מספק מידע מפורט ביומן־הרישום.\n"
+"זהה ל־: ‎--log \"=info\" --log \"qof=info\" --log \"gnc=info\"‎"
 
 #: gnucash/gnucash-core-app.cpp:289
 msgid "Enable extra/development/debugging features."
@@ -16611,12 +16611,6 @@ msgstr "אפשור עדכון פעולת התאמה"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2298
 #, fuzzy
-#| msgid ""
-#| "Enable the UPDATE AND RECONCILE action in the transaction matcher. If "
-#| "enabled, a transaction whose best match's score is above the Auto-CLEAR "
-#| "threshold and has a different date or amount than the matching existing "
-#| "transaction will cause the existing transaction to be updated and cleared "
-#| "by default."
 msgid ""
 "Enable the UPDATE AND CLEAR action in the transaction matcher. If enabled, a "
 "transaction whose best match's score is above the Auto-CLEAR threshold and "
@@ -21021,10 +21015,8 @@ msgid "y/d/m"
 msgstr "y/d/m"
 
 #: gnucash/import-export/import-main-matcher.c:462
-#, fuzzy
-#| msgid "No transactions were found associated with the ~a."
 msgid "No new transactions were found in this import."
-msgstr "לא נמצאו תנועות משויכת ל  ~a."
+msgstr "לא נמצאו תנועות חדשות בייבוא הזה."
 
 #: gnucash/import-export/import-main-matcher.c:630
 #: gnucash/import-export/import-main-matcher.c:783
@@ -21032,44 +21024,32 @@ msgid "Destination account for the auto-balance split."
 msgstr "חשבון היעד עבור פיצול איזון אוטומטי."
 
 #: gnucash/import-export/import-main-matcher.c:943
-#, fuzzy
-#| msgid "Enter the Entry Description"
 msgid "Enter new Description"
-msgstr "נא להזין תיאור הרשומה"
+msgstr "נא למלא תיאור חדש"
 
 #: gnucash/import-export/import-main-matcher.c:958
-#, fuzzy
-#| msgid "Enter Due Date"
 msgid "Enter new Memo"
-msgstr "נא להזין תאריך פרעון"
+msgstr "נא למלא מזכר חדש"
 
 #: gnucash/import-export/import-main-matcher.c:971
-#, fuzzy
-#| msgid "Enter Note"
 msgid "Enter new Notes"
-msgstr "נא להזין הערה"
+msgstr "נא למלא הערות חדשות"
 
 #: gnucash/import-export/import-main-matcher.c:1097
 msgid "Assign a transfer account to the selection."
 msgstr "הקצאת חשבון להעברת השורות שנבחרו."
 
 #: gnucash/import-export/import-main-matcher.c:1108
-#, fuzzy
-#| msgid "description"
 msgid "Edit description."
-msgstr "תיאור"
+msgstr "עריכת תיאור."
 
 #: gnucash/import-export/import-main-matcher.c:1116
-#, fuzzy
-#| msgid "Edit Job"
 msgid "Edit memo."
-msgstr "עריכת ריכוז"
+msgstr "עריכת מזכר."
 
 #: gnucash/import-export/import-main-matcher.c:1124
-#, fuzzy
-#| msgid "Edit Note"
 msgid "Edit notes."
-msgstr "עריכת הערה"
+msgstr "עריכת הערות."
 
 # ת=הוספת תנועה
 #: gnucash/import-export/import-main-matcher.c:1286
@@ -21294,10 +21274,8 @@ msgstr ""
 "אם זירת המסחר או סוג השקעה המתאים אינו מוצג, ניתן להזין אחת חדשה."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:906
-#, fuzzy
-#| msgid "_Name or description"
 msgid "Name or _description"
-msgstr "_שם או תיאור"
+msgstr "שם או _תיאור"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:930
 msgid "_Ticker symbol or other abbreviation"
@@ -28221,10 +28199,8 @@ msgid "Use regular expressions for account name filter"
 msgstr "שימוש בביטוי רגיל לסינון לפי שם"
 
 #: gnucash/report/trep-engine.scm:114
-#, fuzzy
-#| msgid "Transaction Filter excludes matched strings"
 msgid "Account Name Filter excludes matched strings"
-msgstr "מסנן תנועות מחריג מחרוזות תואמות"
+msgstr "מסנן שמות חשבונות מחריג מחרוזות תואמות"
 
 #: gnucash/report/trep-engine.scm:115
 msgid "Transaction Filter"
@@ -28372,11 +28348,8 @@ msgstr ""
 "יאחזר רשומה 'נסיעות לונדון 2017/1 '. "
 
 #: gnucash/report/trep-engine.scm:600
-#, fuzzy
-#| msgid ""
-#| "If this option is selected, transactions matching filter are excluded."
 msgid "If this option is selected, accounts matching filter are excluded."
-msgstr "בחירת אפשרות זו, תחריג תנועות התואמות למסנן."
+msgstr "בחירת אפשרות זו, תחריג חשבונות התואמים למסנן."
 
 #: gnucash/report/trep-engine.scm:606
 msgid ""
@@ -28494,7 +28467,6 @@ msgstr "הצגת תאריך התאמה?"
 
 #: gnucash/report/trep-engine.scm:945
 #, fuzzy
-#| msgid "Display the reconciled date?"
 msgid "Display the entered date?"
 msgstr "הצגת תאריך התאמה?"
 
@@ -29413,15 +29385,11 @@ msgid ""
 msgstr "רוח או הפסד ממומשים מחשבונות סחורות או המרה שלא נרשמו במקומות אחרים."
 
 #: libgnucash/engine/gnc-commodity.h:112
-#, fuzzy
-#| msgid "All non-currency"
 msgctxt "Commodity Type"
 msgid "All non-currency"
 msgstr "כל לא־מטבע"
 
 #: libgnucash/engine/gnc-commodity.h:113
-#, fuzzy
-#| msgid "Currencies"
 msgctxt "Commodity Type"
 msgid "Currencies"
 msgstr "מטבעות"
