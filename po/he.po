@@ -8,11 +8,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-10 06:38+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"PO-Revision-Date: 2022-03-11 15:54+0000\n"
+"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -2455,7 +2455,7 @@ msgstr "האם נרשם?"
 #: gnucash/gtkbuilder/dialog-order.glade:548
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:139
 msgid "Date Opened"
-msgstr "תאריך המסמך"
+msgstr "תאריך יצירה"
 
 #: gnucash/gnome/dialog-invoice.c:3397
 #: gnucash/gtkbuilder/dialog-invoice.glade:42
@@ -10118,7 +10118,7 @@ msgid ""
 "Enable debugging mode: provide deep detail in the logs.\n"
 "This is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
 msgstr ""
-"אפשור מצב איתור תקלים: מספק מידע מפורט ביומן־הרישום.\n"
+"אפשור מצב ניפוי־תקלים: מספק מידע מפורט ביומן־הרישום.\n"
 "זהה ל־: ‎--log \"=info\" --log \"qof=info\" --log \"gnc=info\"‎"
 
 #: gnucash/gnucash-core-app.cpp:289
@@ -13847,7 +13847,7 @@ msgstr ""
 "נראה שקובץ ה־QIF שנטען מכיל תנועות בחשבון אחד בלבד, אך הקובץ אינו מכיל את שם "
 "החשבון.\n"
 "\n"
-"נא למלא את שם החשבון. אם הקובץ יוצא מתוכנת חשבונאות אחרת, יש להשתמש באותו שם "
+"נא להזין שם חשבון. אם הקובץ יוצא מתוכנת חשבונאות אחרת, יש להשתמש באותו שם "
 "חשבון ששימש באותה התוכנה.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:368
@@ -16610,16 +16610,15 @@ msgid "Enable update match action"
 msgstr "אפשור עדכון פעולת התאמה"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2298
-#, fuzzy
 msgid ""
 "Enable the UPDATE AND CLEAR action in the transaction matcher. If enabled, a "
 "transaction whose best match's score is above the Auto-CLEAR threshold and "
 "has a different date or amount than the matching existing transaction will "
 "cause the existing transaction to be updated and cleared by default."
 msgstr ""
-"אפשור עדכון וסגירה בתהליך התאמת התנועות. אם אפשרות זו זמינה, התנועה שתוצאת "
-"ההתאמה הטובה ביותר שלה היא מעל לסף ההתאמה האוטומטי וכוללת תאריך או סכום "
-"שונים מהתנועה הקיימת התואמת, תביא לעדכון וסגירה של התנועה הקיימת כברירת מחדל."
+"אפשור פעולת 'עדכון וסגירה' בתהליך התאמת התנועות. אם אפשרות זו פעילה, תנועה "
+"בעלת תוצאת התאמה מיטבית, הגבוהה מסף ה'התאמה האוטומטית', שבה התאריך או הסכום "
+"שונים מהתנועה התואמת הקיימת , תביא לעדכון וסגירת התנועה הקיימת, כברירת מחדל."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2331
 msgid ""
@@ -21025,15 +21024,15 @@ msgstr "חשבון היעד עבור פיצול איזון אוטומטי."
 
 #: gnucash/import-export/import-main-matcher.c:943
 msgid "Enter new Description"
-msgstr "נא למלא תיאור חדש"
+msgstr "נא להזין תיאור חדש"
 
 #: gnucash/import-export/import-main-matcher.c:958
 msgid "Enter new Memo"
-msgstr "נא למלא מזכר חדש"
+msgstr "נא להזין מזכר חדש"
 
 #: gnucash/import-export/import-main-matcher.c:971
 msgid "Enter new Notes"
-msgstr "נא למלא הערות חדשות"
+msgstr "נא להזין הערות חדשות"
 
 #: gnucash/import-export/import-main-matcher.c:1097
 msgid "Assign a transfer account to the selection."
@@ -23591,7 +23590,7 @@ msgstr "תקופה חלופית"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:152
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:182
 msgid "Override or modify From: & To:."
-msgstr "רמיסה או הסגלה מ: ו ל:."
+msgstr "עקיפה או הסגלה מ: ול:."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:154
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
@@ -26319,7 +26318,7 @@ msgstr "הזכאי"
 
 #: gnucash/report/reports/standard/invoice.scm:255
 msgid "Display the Payable to: information."
-msgstr "הצגת מוטב: מידע."
+msgstr "הצגת המוטב: מידע."
 
 #: gnucash/report/reports/standard/invoice.scm:262
 msgid "Payable to string"
@@ -28466,9 +28465,8 @@ msgid "Display the reconciled date?"
 msgstr "הצגת תאריך התאמה?"
 
 #: gnucash/report/trep-engine.scm:945
-#, fuzzy
 msgid "Display the entered date?"
-msgstr "הצגת תאריך התאמה?"
+msgstr "להציג את התאריך שהוזן?"
 
 #: gnucash/report/trep-engine.scm:950
 msgid "Display the notes if the memo is unavailable?"
