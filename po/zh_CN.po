@@ -27,8 +27,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-10 07:55+0000\n"
-"Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
+"PO-Revision-Date: 2022-03-12 04:55+0000\n"
+"Last-Translator: YTX <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -5745,7 +5745,7 @@ msgstr "保存模板"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.c:1143
 msgid "Save Config As..."
-msgstr "另存模板..."
+msgstr "另存模板"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1144
 msgid "Make Pdf"
@@ -5787,7 +5787,7 @@ msgstr "保存模板(_R)"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1240
 msgid "Save Report Configuration As..."
-msgstr "另存模板..."
+msgstr "另存模板"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1244
 msgid "Export _Report"
@@ -6414,7 +6414,7 @@ msgstr "显示 ~a 报表"
 #: gnucash/gnome/report-menus.scm:90
 #: gnucash/gtkbuilder/dialog-custom-report.glade:8
 msgid "Saved Report Configurations"
-msgstr "已存模板"
+msgstr "模板清单"
 
 #: gnucash/gnome/report-menus.scm:92
 msgid "Manage and run saved report configurations"
