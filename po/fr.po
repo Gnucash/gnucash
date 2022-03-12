@@ -22,7 +22,7 @@
 # Diego Marin <alterne@gmail.com>, 2021.
 # Pascal HUE <pascal.hue35@gmail.com>, 2021.
 # Alexandre <nasmi3+weblate@gmail.com>, 2021.
-# Maxime Leroy <lisacintosh@gmail.com>, 2021.
+# Maxime Leroy <lisacintosh@gmail.com>, 2021, 2022.
 # Sébastien Ray <sebastien.ray@normalesup.org>, 2022.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
@@ -30,10 +30,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2021-12-10 07:51+0000\n"
+"PO-Revision-Date: 2022-03-11 08:54+0000\n"
 "Last-Translator: Maxime Leroy <lisacintosh@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
@@ -510,6 +510,10 @@ msgid ""
 "(File[->Most Recently Used-List]).\n"
 "The full path is displayed in the status bar."
 msgstr ""
+"Si vous voulez connaitre dans quels répertoires vos fichiers GnuCash récents "
+"sont stockés, survolez une des entrées dans le menu de l'historique.\n"
+"(Fichier[-> Les plus récents utilisés]).\n"
+"Le chemin complet est affiché dans la barre de status."
 
 #: doc/tip_of_the_day.list.c:24
 msgid ""
@@ -17082,9 +17086,9 @@ msgid ""
 "retrieving quotes online, this field must exactly match the ticker symbol "
 "used by the quote source (including case)."
 msgstr ""
-"Saisissez le code du produit (ex. CSO ou AAPL). Si vous chargez les cours en "
-"ligne, ce champ doit être exactement identique au code utilisé par la source "
-"des cours (y compris la casse)."
+"Saisissez le code du produit (ex. CSCO ou AAPL). Si vous chargez les cours "
+"en ligne, ce champ doit être exactement identique au code utilisé par la "
+"source des cours (y compris la casse)."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:166
 msgid ""
@@ -17113,6 +17117,9 @@ msgid ""
 "investment categories like STOCKS and BONDS or exchange names like NASDAQ "
 "and LSE."
 msgstr ""
+"Sélectionnez une catégorie pour le produit ou créez-en une nouvelle. Vous "
+"pouvez utiliser des catégories d'investissement comme ACTIONS et BONDS ou "
+"d'échange comme NASDAQ ou LSE."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:329
 msgid ""
@@ -18838,20 +18845,13 @@ msgid "Enable update match action"
 msgstr "Autoriser la mise à jour des action de correspondance"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2298
-#, fuzzy
-#| msgid ""
-#| "Enable the UPDATE AND RECONCILE action in the transaction matcher. If "
-#| "enabled, a transaction whose best match's score is above the Auto-CLEAR "
-#| "threshold and has a different date or amount than the matching existing "
-#| "transaction will cause the existing transaction to be updated and cleared "
-#| "by default."
 msgid ""
 "Enable the UPDATE AND CLEAR action in the transaction matcher. If enabled, a "
 "transaction whose best match's score is above the Auto-CLEAR threshold and "
 "has a different date or amount than the matching existing transaction will "
 "cause the existing transaction to be updated and cleared by default."
 msgstr ""
-"Active l'action METTRE À JOUR ET RAPPROCHER dans l'outil d'association de "
+"Active l'action METTRE À JOUR ET EFFACER dans l'outil d'association de "
 "transactions. Si actif, pour toute transaction dont le score de meilleure "
 "similarité est au-dessus du seuil d'auto-POINTAGE et qui possède une date ou "
 "un montant différent de la transaction correspondante existante, la "
@@ -23806,10 +23806,8 @@ msgstr "a/j/m"
 
 # po/guile_strings.txt:153
 #: gnucash/import-export/import-main-matcher.c:462
-#, fuzzy
-#| msgid "Do transaction report on this account."
 msgid "No new transactions were found in this import."
-msgstr "Faire un rapport de transaction sur ce compte."
+msgstr "Aucune nouvelle transaction trouvée lors de cet importation."
 
 #: gnucash/import-export/import-main-matcher.c:630
 #: gnucash/import-export/import-main-matcher.c:783
@@ -23819,24 +23817,18 @@ msgstr ""
 
 # messages-i18n.c:223
 #: gnucash/import-export/import-main-matcher.c:943
-#, fuzzy
-#| msgid "Enter the Entry Description"
 msgid "Enter new Description"
-msgstr "Saisir la description de la ligne"
+msgstr "Entrez une nouvelle description"
 
 # messages-i18n.c:267 po/guile_strings.txt:6
 #: gnucash/import-export/import-main-matcher.c:958
-#, fuzzy
-#| msgid "Enter Due Date"
 msgid "Enter new Memo"
-msgstr "Entrez la date d’échéance"
+msgstr "Entrez un nouveau mémo"
 
 # messages-i18n.c:306 po/guile_strings.txt:176
 #: gnucash/import-export/import-main-matcher.c:971
-#, fuzzy
-#| msgid "Enter Note"
 msgid "Enter new Notes"
-msgstr "Entrer une note"
+msgstr "Entrez de nouvelles notes"
 
 # messages-i18n.c:20
 #: gnucash/import-export/import-main-matcher.c:1097
@@ -23845,24 +23837,18 @@ msgstr "Assigner le compte de transfert à la sélection."
 
 # messages-i18n.c:275 po/guile_strings.txt:129
 #: gnucash/import-export/import-main-matcher.c:1108
-#, fuzzy
-#| msgid "description"
 msgid "Edit description."
-msgstr "description"
+msgstr "Modifier la description."
 
 # messages-i18n.c:281
 #: gnucash/import-export/import-main-matcher.c:1116
-#, fuzzy
-#| msgid "Edit Job"
 msgid "Edit memo."
-msgstr "Modification de la prestation"
+msgstr "Modifier le mémo."
 
 # po/guile_strings.txt:89
 #: gnucash/import-export/import-main-matcher.c:1124
-#, fuzzy
-#| msgid "Edit Note"
 msgid "Edit notes."
-msgstr "Editer les notes"
+msgstr "Modifier les notes."
 
 #: gnucash/import-export/import-main-matcher.c:1286
 msgctxt "Column header for 'Adding transaction'"
@@ -24106,10 +24092,8 @@ msgstr ""
 
 # messages-i18n.c:275 po/guile_strings.txt:129
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:906
-#, fuzzy
-#| msgid "_Name or description"
 msgid "Name or _description"
-msgstr "_Nom ou description"
+msgstr "Nom ou _description"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:930
 msgid "_Ticker symbol or other abbreviation"
@@ -31179,22 +31163,16 @@ msgstr "Couleur CSS."
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: gnucash/report/reports/standard/taxinvoice.scm:192
-#, fuzzy
-#| msgid "Invoice number: "
 msgid "Invoice number:"
-msgstr "N° de facture : "
+msgstr "N° de facture :"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:194
-#, fuzzy
-#| msgid "To: "
 msgid "To:"
-msgstr "À : "
+msgstr "À :"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:196
-#, fuzzy
-#| msgid "Your ref: "
 msgid "Your ref:"
-msgstr "Votre réf. : "
+msgstr "Votre réf. :"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:208
 msgid "Embedded CSS."
@@ -32021,10 +31999,8 @@ msgid "Use regular expressions for account name filter"
 msgstr "Utiliser des expressions régulières pour le filtre du nom du compte"
 
 #: gnucash/report/trep-engine.scm:114
-#, fuzzy
-#| msgid "Transaction Filter excludes matched strings"
 msgid "Account Name Filter excludes matched strings"
-msgstr "Le filtre des transactions n'intègre pas les textes trouvés"
+msgstr "Le filtre des noms de compte n'intègre pas les textes trouvés"
 
 # messages-i18n.c:346
 #: gnucash/report/trep-engine.scm:115
@@ -32197,13 +32173,9 @@ msgstr ""
 "pour 'Voyage 03/2021 Paris'. "
 
 #: gnucash/report/trep-engine.scm:600
-#, fuzzy
-#| msgid ""
-#| "If this option is selected, transactions matching filter are excluded."
 msgid "If this option is selected, accounts matching filter are excluded."
 msgstr ""
-"Si cette option est sélectionnée, les filtres sur les transactions sont "
-"exclues."
+"Si cette option est sélectionnée, les filtres sur les comptes sont exclus."
 
 #: gnucash/report/trep-engine.scm:606
 msgid ""
@@ -32341,10 +32313,8 @@ msgstr "Afficher la date de rapprochement ?"
 
 # po/guile_strings.txt:219
 #: gnucash/report/trep-engine.scm:945
-#, fuzzy
-#| msgid "Display the reconciled date?"
 msgid "Display the entered date?"
-msgstr "Afficher la date de rapprochement ?"
+msgstr "Afficher la date entrée ?"
 
 # po/guile_strings.txt:219
 #: gnucash/report/trep-engine.scm:950
@@ -33376,8 +33346,6 @@ msgstr "Toutes les non-devises"
 # messages-i18n.c:266 po/guile_strings.txt:112
 # src/gnome/glade-gnc-dialogs.c:641
 #: libgnucash/engine/gnc-commodity.h:113
-#, fuzzy
-#| msgid "Currencies"
 msgctxt "Commodity Type"
 msgid "Currencies"
 msgstr "Devises"
