@@ -24,11 +24,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-02-27 08:55+0000\n"
-"Last-Translator: YTX <ytx.cash@gmail.com>\n"
+"PO-Revision-Date: 2022-03-10 07:55+0000\n"
+"Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -36,7 +36,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.11.1-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -16283,20 +16283,12 @@ msgid "Enable update match action"
 msgstr "启用编辑匹配操作"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2298
-#, fuzzy
-#| msgid ""
-#| "Enable the UPDATE AND RECONCILE action in the transaction matcher. If "
-#| "enabled, a transaction whose best match's score is above the Auto-CLEAR "
-#| "threshold and has a different date or amount than the matching existing "
-#| "transaction will cause the existing transaction to be updated and cleared "
-#| "by default."
 msgid ""
 "Enable the UPDATE AND CLEAR action in the transaction matcher. If enabled, a "
 "transaction whose best match's score is above the Auto-CLEAR threshold and "
 "has a different date or amount than the matching existing transaction will "
 "cause the existing transaction to be updated and cleared by default."
-msgstr ""
-"启用事务匹配中的更新和归类操作。如果选择，则使用不同日期或金额的现有事务进行"
+msgstr "启用事务匹配中的更新和清理操作。如果选择，则使用不同日期或金额的现有事务进行"
 "更新，并使用不同的日期或金额清除，具有匹配处理的匹配分数。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2331
@@ -20616,9 +20608,8 @@ msgid "y/d/m"
 msgstr "年/日/月"
 
 #: gnucash/import-export/import-main-matcher.c:462
-#, fuzzy
 msgid "No new transactions were found in this import."
-msgstr "当前交易事项没有关联至 URL。"
+msgstr "这个导入中没有找到新交易。"
 
 #: gnucash/import-export/import-main-matcher.c:630
 #: gnucash/import-export/import-main-matcher.c:783
@@ -20626,43 +20617,32 @@ msgid "Destination account for the auto-balance split."
 msgstr "自动结算分录的目标科目。"
 
 #: gnucash/import-export/import-main-matcher.c:943
-#, fuzzy
-#| msgid "Enter the Entry Description"
 msgid "Enter new Description"
-msgstr "输入条目描述"
+msgstr "输入新描述"
 
 #: gnucash/import-export/import-main-matcher.c:958
-#, fuzzy
-#| msgid "Enter Due Date"
 msgid "Enter new Memo"
-msgstr "截止日期"
+msgstr "输入新备注"
 
 #: gnucash/import-export/import-main-matcher.c:971
-#, fuzzy
-#| msgid "Enter Note"
 msgid "Enter new Notes"
-msgstr "输入备注"
+msgstr "输入新笔记"
 
 #: gnucash/import-export/import-main-matcher.c:1097
 msgid "Assign a transfer account to the selection."
 msgstr "您必须自科目表选择转账科目。"
 
 #: gnucash/import-export/import-main-matcher.c:1108
-#, fuzzy
 msgid "Edit description."
-msgstr "描述"
+msgstr "编辑描述。"
 
 #: gnucash/import-export/import-main-matcher.c:1116
-#, fuzzy
-#| msgid "Edit Job"
 msgid "Edit memo."
-msgstr "编辑工作"
+msgstr "编辑备注。"
 
 #: gnucash/import-export/import-main-matcher.c:1124
-#, fuzzy
-#| msgid "Edit Note"
 msgid "Edit notes."
-msgstr "预算说明"
+msgstr "编辑笔记。"
 
 #: gnucash/import-export/import-main-matcher.c:1286
 msgctxt "Column header for 'Adding transaction'"
@@ -20881,10 +20861,8 @@ msgstr ""
 "者合适的投资类型，您可以输入一个新的。"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:906
-#, fuzzy
-#| msgid "_Name or description"
 msgid "Name or _description"
-msgstr "名字或描述(_N)"
+msgstr "名字或描述(_D)"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:930
 msgid "_Ticker symbol or other abbreviation"
@@ -27030,22 +27008,16 @@ msgid "CSS color."
 msgstr "CSS颜色。"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:192
-#, fuzzy
-#| msgid "Invoice number: "
 msgid "Invoice number:"
-msgstr "发票号码: "
+msgstr "发票号码："
 
 #: gnucash/report/reports/standard/taxinvoice.scm:194
-#, fuzzy
-#| msgid "To: "
 msgid "To:"
-msgstr "敬请关注。 "
+msgstr "致："
 
 #: gnucash/report/reports/standard/taxinvoice.scm:196
-#, fuzzy
-#| msgid "Your ref: "
 msgid "Your ref:"
-msgstr "参考： "
+msgstr "参考号："
 
 #: gnucash/report/reports/standard/taxinvoice.scm:208
 msgid "Embedded CSS."
@@ -27764,10 +27736,8 @@ msgid "Use regular expressions for account name filter"
 msgstr "正则表达式"
 
 #: gnucash/report/trep-engine.scm:114
-#, fuzzy
-#| msgid "Transaction Filter excludes matched strings"
 msgid "Account Name Filter excludes matched strings"
-msgstr "排除匹配的字符串"
+msgstr "科目名过滤器排除匹配的字符串"
 
 #: gnucash/report/trep-engine.scm:115
 msgid "Transaction Filter"
@@ -27912,11 +27882,8 @@ msgstr ""
 "个字符匹配单个字符，例如'20 ../。'匹配2017/1伦敦的旅行'。 "
 
 #: gnucash/report/trep-engine.scm:600
-#, fuzzy
-#| msgid ""
-#| "If this option is selected, transactions matching filter are excluded."
 msgid "If this option is selected, accounts matching filter are excluded."
-msgstr "如果选择了这个选项，匹配过滤器的交易将被排除。"
+msgstr "如果选择了这个选项，将排除匹配过滤器的科目。"
 
 #: gnucash/report/trep-engine.scm:606
 msgid ""
@@ -28031,10 +27998,8 @@ msgid "Display the reconciled date?"
 msgstr "是否显示对账日期？"
 
 #: gnucash/report/trep-engine.scm:945
-#, fuzzy
-#| msgid "Display the reconciled date?"
 msgid "Display the entered date?"
-msgstr "是否显示对账日期？"
+msgstr "是否显示输入日期？"
 
 #: gnucash/report/trep-engine.scm:950
 msgid "Display the notes if the memo is unavailable?"
@@ -28928,18 +28893,14 @@ msgid ""
 msgstr "来自商品或贸易科目的实际损益没有被记录在其它地方。"
 
 #: libgnucash/engine/gnc-commodity.h:112
-#, fuzzy
-#| msgid "All non-currency"
 msgctxt "Commodity Type"
 msgid "All non-currency"
 msgstr "所有非货币"
 
 #: libgnucash/engine/gnc-commodity.h:113
-#, fuzzy
-#| msgid "Currencies"
 msgctxt "Commodity Type"
 msgid "Currencies"
-msgstr "现金"
+msgstr "货币"
 
 #: libgnucash/engine/gnc-date.cpp:79
 msgid "%B %#d, %Y"
