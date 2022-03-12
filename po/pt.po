@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-02-27 07:34+0000\n"
+"PO-Revision-Date: 2022-03-11 06:28+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11.1-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -483,6 +483,10 @@ msgid ""
 "(File[->Most Recently Used-List]).\n"
 "The full path is displayed in the status bar."
 msgstr ""
+"Se deseja saber em que pastas estão armazenados os seus ficheiros GnuCash "
+"recentes, ponha o rato sobre uma das entradas no histórico\n"
+"(Ficheiro[->Ficheiros recentes-Lista]).\n"
+"Verá o caminho completo na barra de estado."
 
 #: doc/tip_of_the_day.list.c:24
 msgid ""
@@ -15465,6 +15469,8 @@ msgid ""
 "investment categories like STOCKS and BONDS or exchange names like NASDAQ "
 "and LSE."
 msgstr ""
+"Seleccione a categoria da mercadoria ou insira uma nova. Possibilidades "
+"seriam ACÇÕES e FUNDOS ou nomes de bolsas, como NASDAQ e LSE."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:329
 msgid ""
@@ -17038,20 +17044,13 @@ msgid "Enable update match action"
 msgstr "Activar acção de actualização de comparação"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2298
-#, fuzzy
-#| msgid ""
-#| "Enable the UPDATE AND RECONCILE action in the transaction matcher. If "
-#| "enabled, a transaction whose best match's score is above the Auto-CLEAR "
-#| "threshold and has a different date or amount than the matching existing "
-#| "transaction will cause the existing transaction to be updated and cleared "
-#| "by default."
 msgid ""
 "Enable the UPDATE AND CLEAR action in the transaction matcher. If enabled, a "
 "transaction whose best match's score is above the Auto-CLEAR threshold and "
 "has a different date or amount than the matching existing transaction will "
 "cause the existing transaction to be updated and cleared by default."
 msgstr ""
-"Activar a acção de ACTUALIZAR E RECONCILIAR no comparador de transacções. Se "
+"Activar a acção de ACTUALIZAR E LIMPAR no comparador de transacções. Se "
 "activa, uma transacção cuja comparação esteja acima do limiar de confirmação "
 "automática e tenha uma data ou quantia diferentes da transacção "
 "correspondente existente fará com que a transacção existente seja "
@@ -21581,10 +21580,8 @@ msgid "y/d/m"
 msgstr "a/d/m"
 
 #: gnucash/import-export/import-main-matcher.c:462
-#, fuzzy
-#| msgid "Do transaction report on this account."
 msgid "No new transactions were found in this import."
-msgstr "Fazer relatório de transacções nesta conta."
+msgstr "Nenhuma transacção nova nesta importação."
 
 #: gnucash/import-export/import-main-matcher.c:630
 #: gnucash/import-export/import-main-matcher.c:783
@@ -21592,44 +21589,32 @@ msgid "Destination account for the auto-balance split."
 msgstr "Conta destino da parcela de saldo automático."
 
 #: gnucash/import-export/import-main-matcher.c:943
-#, fuzzy
-#| msgid "Enter the Entry Description"
 msgid "Enter new Description"
-msgstr "Insira a descrição da transacção"
+msgstr "Insira a nova descrição"
 
 #: gnucash/import-export/import-main-matcher.c:958
-#, fuzzy
-#| msgid "Enter Due Date"
 msgid "Enter new Memo"
-msgstr "Insira a data de vencimento"
+msgstr "Insira a nova nota"
 
 #: gnucash/import-export/import-main-matcher.c:971
-#, fuzzy
-#| msgid "Enter Note"
 msgid "Enter new Notes"
-msgstr "Inserir nota"
+msgstr "Inserir novas notas"
 
 #: gnucash/import-export/import-main-matcher.c:1097
 msgid "Assign a transfer account to the selection."
 msgstr "Atribuir uma conta de transferência à selecção."
 
 #: gnucash/import-export/import-main-matcher.c:1108
-#, fuzzy
-#| msgid "description"
 msgid "Edit description."
-msgstr "descrição"
+msgstr "Editar descrição."
 
 #: gnucash/import-export/import-main-matcher.c:1116
-#, fuzzy
-#| msgid "Edit Job"
 msgid "Edit memo."
-msgstr "Editar tarefa"
+msgstr "Editar nota."
 
 #: gnucash/import-export/import-main-matcher.c:1124
-#, fuzzy
-#| msgid "Edit Note"
 msgid "Edit notes."
-msgstr "Editar nota"
+msgstr "Editar notas."
 
 #: gnucash/import-export/import-main-matcher.c:1286
 msgctxt "Column header for 'Adding transaction'"
@@ -21855,10 +21840,8 @@ msgstr ""
 "câmbio ou um tipo de investimento apropriado, pode criar um novo."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:906
-#, fuzzy
-#| msgid "_Name or description"
 msgid "Name or _description"
-msgstr "_Nome ou descrição"
+msgstr "Nome ou _descrição"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:930
 msgid "_Ticker symbol or other abbreviation"
@@ -28185,22 +28168,16 @@ msgid "CSS color."
 msgstr "Cor CSS."
 
 #: gnucash/report/reports/standard/taxinvoice.scm:192
-#, fuzzy
-#| msgid "Invoice number: "
 msgid "Invoice number:"
-msgstr "Número da factura: "
+msgstr "Número da factura:"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:194
-#, fuzzy
-#| msgid "To: "
 msgid "To:"
-msgstr "Para: "
+msgstr "Para:"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:196
-#, fuzzy
-#| msgid "Your ref: "
 msgid "Your ref:"
-msgstr "Sua ref.: "
+msgstr "Sua ref.:"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:208
 msgid "Embedded CSS."
@@ -28509,7 +28486,7 @@ msgstr ""
 
 #: gnucash/report/stylesheets/css.scm:212
 msgid "&lt;/style is disallowed in CSS. Using default CSS."
-msgstr "&lt;/style é desaconselhado em CSS. A utilizar a CSS predefinida."
+msgstr "&lt;/style&gt; é desaconselhado em CSS. A utilizar a CSS predefinida."
 
 #: gnucash/report/stylesheets/css.scm:231
 msgid "CSS-based stylesheet (experimental)"
@@ -28681,12 +28658,12 @@ msgstr "Cor predefinida alternativa das células das tabelas."
 #: gnucash/report/stylesheets/footer.scm:154
 #: gnucash/report/stylesheets/head-or-tail.scm:200
 msgid "Subheading/Subtotal Cell Color"
-msgstr "Cor da célula de subtítulo/sub-total"
+msgstr "Cor da célula de subtítulo/subtotal"
 
 #: gnucash/report/stylesheets/footer.scm:155
 #: gnucash/report/stylesheets/head-or-tail.scm:201
 msgid "Default color for subtotal rows."
-msgstr "Cor predefinida para linhas de sub-total."
+msgstr "Cor predefinida para linhas de subtotal."
 
 #: gnucash/report/stylesheets/footer.scm:162
 #: gnucash/report/stylesheets/head-or-tail.scm:208
@@ -28696,7 +28673,7 @@ msgstr "Cor da célula de sub-subtítulo/total"
 #: gnucash/report/stylesheets/footer.scm:163
 #: gnucash/report/stylesheets/head-or-tail.scm:209
 msgid "Color for subsubtotals."
-msgstr "Cor de sub-totais."
+msgstr "Cor de subtotais."
 
 #: gnucash/report/stylesheets/footer.scm:170
 #: gnucash/report/stylesheets/head-or-tail.scm:216
@@ -28795,7 +28772,7 @@ msgstr "Mostrar data"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:78
 msgid "The creation date for this report."
-msgstr "A data de criação para este relatório."
+msgstr "A data de criação deste relatório."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:83
 msgid "Show time in addition to date"
@@ -28909,7 +28886,7 @@ msgstr "Tipo de filtro"
 
 #: gnucash/report/trep-engine.scm:74
 msgid "Subtotal Table"
-msgstr "Tabela de sub-total"
+msgstr "Tabela de subtotal"
 
 #: gnucash/report/trep-engine.scm:84 gnucash/report/trep-engine.scm:1108
 msgid "Show Account Description"
@@ -28921,7 +28898,7 @@ msgstr "Mostrar cabeçalhos de débito/crédito informais"
 
 #: gnucash/report/trep-engine.scm:87
 msgid "Show subtotals only (hide transactional data)"
-msgstr "Mostrar só sub-totais (ocultar dados de transacção)"
+msgstr "Mostrar só subtotais (ocultar dados de transacção)"
 
 #: gnucash/report/trep-engine.scm:88
 msgid "Add indenting columns"
@@ -28944,10 +28921,8 @@ msgid "Use regular expressions for account name filter"
 msgstr "Usar expressões regulares no filtro de nome de conta"
 
 #: gnucash/report/trep-engine.scm:114
-#, fuzzy
-#| msgid "Transaction Filter excludes matched strings"
 msgid "Account Name Filter excludes matched strings"
-msgstr "O filtro de transacção exclui cadeias coincidentes"
+msgstr "O filtro de nome de conta exclui cadeias coincidentes"
 
 #: gnucash/report/trep-engine.scm:115
 msgid "Transaction Filter"
@@ -29094,18 +29069,14 @@ msgid ""
 msgstr ""
 "Por predefinição, o filtro de conta só procura a sub-cadeia. Defina como "
 "verdadeiro para activar todas as capacidades das expressões regulares POSIX. "
-"\"Carro|Voos\" corresponde a: Carro Despesas:Voos. Use um ponto (.) para "
+"\"Carro|Voos\" corresponde a: Carro Despesas: Voos. Use um ponto (.) para "
 "corresponder a um único carácter \"20 ../. \" corresponde a \"Viagem 2017/1 "
 "Londres\". "
 
 #: gnucash/report/trep-engine.scm:600
-#, fuzzy
-#| msgid ""
-#| "If this option is selected, transactions matching filter are excluded."
 msgid "If this option is selected, accounts matching filter are excluded."
 msgstr ""
-"Se esta opção estiver marcada, as transacções que cumpram o filtro são "
-"excluídas."
+"Se esta opção estiver marcada, as contas que cumpram o filtro são excluídas."
 
 #: gnucash/report/trep-engine.scm:606
 msgid ""
@@ -29126,10 +29097,10 @@ msgid ""
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
 "will match both tags within description, notes or memo."
 msgstr ""
-"Por predefinição, o filtro de transacção só procura a sub-cadeia. Defina "
-"como verdadeiro para activar todas as capacidades das expressões regulares "
-"POSIX. \"#trabalho|#família\" corresponde a ambas as etiquetas dentro de "
-"descrição, notas ou memorando."
+"Por predefinição, o filtro de transacção só procura a subcadeia. Defina como "
+"verdadeiro para activar todas as capacidades das expressões regulares POSIX. "
+"\"#trabalho|#família\" corresponde a ambas as etiquetas dentro de descrição, "
+"notas ou memorando."
 
 #: gnucash/report/trep-engine.scm:624
 msgid "If this option is selected, transactions matching filter are excluded."
@@ -29179,11 +29150,11 @@ msgstr "Ordenar por este critério primeiro."
 
 #: gnucash/report/trep-engine.scm:789
 msgid "Show the full account name for subtotals and subheadings?"
-msgstr "Mostrar o nome de conta completo para sub-totais e subtítulos?"
+msgstr "Mostrar o nome de conta completo para subtotais e subtítulos?"
 
 #: gnucash/report/trep-engine.scm:796
 msgid "Show the account code for subtotals and subheadings?"
-msgstr "Mostrar o código de conta para sub-totais e subtítulos?"
+msgstr "Mostrar o código de conta para subtotais e subtítulos?"
 
 #: gnucash/report/trep-engine.scm:803
 msgid "Show the account description for subheadings?"
@@ -29195,19 +29166,19 @@ msgstr "Mostrar cabeçalhos informais para contas de débito/crédito?"
 
 #: gnucash/report/trep-engine.scm:817
 msgid "Add indenting columns with grouping and subtotals?"
-msgstr "Adicionar colunas indentadas com agrupamento e sub-total?"
+msgstr "Adicionar colunas indentadas com agrupamento e subtotal?"
 
 #: gnucash/report/trep-engine.scm:824
 msgid "Show subtotals only, hiding transactional detail?"
-msgstr "Mostrar só sub-totais, ocultando detalhes da transacção?"
+msgstr "Mostrar só subtotais, ocultando detalhes da transacção?"
 
 #: gnucash/report/trep-engine.scm:831
 msgid "Subtotal according to the primary key?"
-msgstr "Sub-total de acordo com a chave primária?"
+msgstr "Subtotal de acordo com a chave primária?"
 
 #: gnucash/report/trep-engine.scm:840 gnucash/report/trep-engine.scm:879
 msgid "Do a date subtotal."
-msgstr "Fazer um sub-total de data."
+msgstr "Fazer um subtotal de data."
 
 #: gnucash/report/trep-engine.scm:850
 msgid "Order of primary sorting."
@@ -29219,7 +29190,7 @@ msgstr "Ordenar por este critério em segundo."
 
 #: gnucash/report/trep-engine.scm:870
 msgid "Subtotal according to the secondary key?"
-msgstr "Sub-total de acordo com a chave secundária?"
+msgstr "Subtotal de acordo com a chave secundária?"
 
 #: gnucash/report/trep-engine.scm:889
 msgid "Order of Secondary sorting."
@@ -29230,10 +29201,8 @@ msgid "Display the reconciled date?"
 msgstr "Mostrar a data de reconciliação?"
 
 #: gnucash/report/trep-engine.scm:945
-#, fuzzy
-#| msgid "Display the reconciled date?"
 msgid "Display the entered date?"
-msgstr "Mostrar a data de reconciliação?"
+msgstr "Mostrar a data inserida?"
 
 #: gnucash/report/trep-engine.scm:950
 msgid "Display the notes if the memo is unavailable?"
@@ -29257,7 +29226,7 @@ msgstr "Mostrar o documento ligado à transacção"
 
 #: gnucash/report/trep-engine.scm:961
 msgid "Display a subtotal summary table."
-msgstr "Mostrar uma tabela resumo do sub-total."
+msgstr "Mostrar uma tabela resumo do subtotal."
 
 #: gnucash/report/trep-engine.scm:969
 msgid "Display the trans number?"
@@ -30184,15 +30153,11 @@ msgstr ""
 "registados em mais lado nenhum."
 
 #: libgnucash/engine/gnc-commodity.h:112
-#, fuzzy
-#| msgid "All non-currency"
 msgctxt "Commodity Type"
 msgid "All non-currency"
 msgstr "Tudo não-moeda"
 
 #: libgnucash/engine/gnc-commodity.h:113
-#, fuzzy
-#| msgid "Currencies"
 msgctxt "Commodity Type"
 msgid "Currencies"
 msgstr "Moedas"
