@@ -30,9 +30,13 @@
 #include <qof.h>
 #include <qofbookslots.h>
 #include <qofinstance-p.h>
+#include <unordered_map>
+#include <vector>
+#include <memory>
 
 #include "Account.h"
 
+#include "guid.hpp"
 #include "gnc-budget.h"
 #include "gnc-commodity.h"
 
@@ -58,6 +62,17 @@ typedef struct
     QofInstanceClass parent_class;
 } BudgetClass;
 
+struct PeriodData
+{
+    std::string note;
+    bool value_is_set;
+    gnc_numeric value;
+};
+
+using PeriodDataVec = std::vector<PeriodData>;
+using AcctMap = std::unordered_map<const Account*, PeriodDataVec>;
+using StringVec = std::vector<std::string>;
+
 typedef struct GncBudgetPrivate
 {
     /* The name is an arbitrary string assigned by the user. */
@@ -68,6 +83,8 @@ typedef struct GncBudgetPrivate
 
     /* Recurrence (period info) for the budget */
     Recurrence recurrence;
+
+    std::unique_ptr<AcctMap> acct_map;
 
     /* Number of periods */
     guint  num_periods;
@@ -93,6 +110,7 @@ gnc_budget_init(GncBudget* budget)
     priv = GET_PRIVATE(budget);
     priv->name = CACHE_INSERT(_("Unnamed Budget"));
     priv->description = CACHE_INSERT("");
+    priv->acct_map = std::make_unique<AcctMap>();
 
     priv->num_periods = 12;
     date = gnc_g_date_new_today ();
@@ -173,7 +191,7 @@ gnc_budget_set_property( GObject* object,
         gnc_budget_set_num_periods(budget, g_value_get_uint(value));
         break;
     case PROP_RECURRENCE:
-        gnc_budget_set_recurrence(budget, g_value_get_pointer(value));
+        gnc_budget_set_recurrence (budget, static_cast<Recurrence*>(g_value_get_pointer(value)));
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -262,6 +280,7 @@ gnc_budget_free(QofInstance *inst)
 
     CACHE_REMOVE(priv->name);
     CACHE_REMOVE(priv->description);
+    priv->acct_map = nullptr;   // nullify to ensure unique_ptr is freed.
 
     /* qof_instance_release (&budget->inst); */
     g_object_unref(budget);
@@ -286,12 +305,11 @@ gnc_budget_commit_edit(GncBudget *bgt)
 GncBudget*
 gnc_budget_new(QofBook *book)
 {
-    GncBudget* budget;
-
     g_return_val_if_fail(book, NULL);
 
     ENTER(" ");
-    budget = g_object_new(GNC_TYPE_BUDGET, NULL);
+
+    auto budget { static_cast<GncBudget*>(g_object_new(GNC_TYPE_BUDGET, nullptr)) };
     qof_instance_init_data (&budget->inst, GNC_ID_BUDGET, book);
 
     qof_event_gen( &budget->inst, QOF_EVENT_CREATE , NULL);
@@ -461,6 +479,13 @@ gnc_budget_set_num_periods(GncBudget* budget, guint num_periods)
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
 
+    std::for_each (priv->acct_map->begin(),
+                   priv->acct_map->end(),
+                   [num_periods](auto& it)
+                   {
+                       it.second.resize(num_periods);
+                   });
+
     qof_event_gen( &budget->inst, QOF_EVENT_MODIFY, NULL);
 }
 
@@ -471,15 +496,25 @@ gnc_budget_get_num_periods(const GncBudget* budget)
     return GET_PRIVATE(budget)->num_periods;
 }
 
-static inline void
-make_period_path (const Account *account, guint period_num, char *path1, char *path2)
+static inline StringVec
+make_period_data_path (const Account *account, guint period_num)
 {
-    const GncGUID *guid;
-    gchar *bufend;
-    guid = xaccAccountGetGUID (account);
-    guid_to_string_buff (guid, path1);
-    g_sprintf (path2, "%d", period_num);
+    gnc::GUID acct_guid {*(xaccAccountGetGUID (account))};
+    return { acct_guid.to_string(), std::to_string (period_num) };
 }
+
+static inline StringVec
+make_period_note_path (const Account *account, guint period_num)
+{
+    StringVec path { GNC_BUDGET_NOTES_PATH };
+    StringVec data_path { make_period_data_path (account, period_num) };
+    std::move (data_path.begin(), data_path.end(), std::back_inserter (path));
+    return path;
+}
+
+static PeriodData& get_perioddata (const GncBudget *budget,
+                                   const Account *account,
+                                   guint period_num);
 
 /* period_num is zero-based */
 /* What happens when account is deleted, after we have an entry for it? */
@@ -487,15 +522,17 @@ void
 gnc_budget_unset_account_period_value(GncBudget *budget, const Account *account,
                                       guint period_num)
 {
-    gchar path_part_one [GUID_ENCODING_LENGTH + 1];
-    gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
-
     g_return_if_fail (budget != NULL);
     g_return_if_fail (account != NULL);
-    make_period_path (account, period_num, path_part_one, path_part_two);
+    g_return_if_fail (period_num < GET_PRIVATE(budget)->num_periods);
+
+    auto& data = get_perioddata (budget, account, period_num);
+    data.value_is_set = false;
 
     gnc_budget_begin_edit(budget);
-    qof_instance_set_kvp (QOF_INSTANCE (budget), NULL, 2, path_part_one, path_part_two);
+    auto path = make_period_data_path (account, period_num);
+    auto budget_kvp { QOF_INSTANCE (budget)->kvp_data };
+    delete budget_kvp->set_path (path, nullptr);
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
 
@@ -509,9 +546,6 @@ void
 gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
                                     guint period_num, gnc_numeric val)
 {
-    gchar path_part_one [GUID_ENCODING_LENGTH + 1];
-    gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
-
     /* Watch out for an off-by-one error here:
      * period_num starts from 0 while num_periods starts from 1 */
     if (period_num >= GET_PRIVATE(budget)->num_periods)
@@ -523,18 +557,22 @@ gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
     g_return_if_fail (budget != NULL);
     g_return_if_fail (account != NULL);
 
-    make_period_path (account, period_num, path_part_one, path_part_two);
+    auto& perioddata = get_perioddata (budget, account, period_num);
+    auto budget_kvp { QOF_INSTANCE (budget)->kvp_data };
+    auto path = make_period_data_path (account, period_num);
 
     gnc_budget_begin_edit(budget);
     if (gnc_numeric_check(val))
-        qof_instance_set_kvp (QOF_INSTANCE (budget), NULL, 2, path_part_one, path_part_two);
+    {
+        delete budget_kvp->set_path (path, nullptr);
+        perioddata.value_is_set = false;
+    }
     else
     {
-        GValue v = G_VALUE_INIT;
-        g_value_init (&v, GNC_TYPE_NUMERIC);
-        g_value_set_boxed (&v, &val);
-        qof_instance_set_kvp (QOF_INSTANCE (budget), &v, 2, path_part_one, path_part_two);
-        g_value_unset (&v);
+        KvpValue* v = new KvpValue (val);
+        delete budget_kvp->set_path (path, v);
+        perioddata.value_is_set = true;
+        perioddata.value = val;
     }
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
@@ -543,62 +581,33 @@ gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
 
 }
 
-/* We don't need these here, but maybe they're useful somewhere else?
-   Maybe this should move to Account.h */
-
 gboolean
-gnc_budget_is_account_period_value_set(const GncBudget *budget,
-                                       const Account *account,
-                                       guint period_num)
+gnc_budget_is_account_period_value_set (const GncBudget *budget,
+                                        const Account *account,
+                                        guint period_num)
 {
-    GValue v = G_VALUE_INIT;
-    gchar path_part_one [GUID_ENCODING_LENGTH + 1];
-    gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
-    gconstpointer ptr = NULL;
-
-    g_return_val_if_fail(GNC_IS_BUDGET(budget), FALSE);
-    g_return_val_if_fail(account, FALSE);
-
-    make_period_path (account, period_num, path_part_one, path_part_two);
-    qof_instance_get_kvp (QOF_INSTANCE (budget), &v, 2, path_part_one, path_part_two);
-    if (G_VALUE_HOLDS_BOXED (&v))
-        ptr = g_value_get_boxed (&v);
-    g_value_unset (&v);
-    return (ptr != NULL);
+    g_return_val_if_fail (period_num < GET_PRIVATE(budget)->num_periods, false);
+    return get_perioddata (budget, account, period_num).value_is_set;
 }
 
 gnc_numeric
-gnc_budget_get_account_period_value(const GncBudget *budget,
-                                    const Account *account,
-                                    guint period_num)
+gnc_budget_get_account_period_value (const GncBudget *budget,
+                                     const Account *account,
+                                     guint period_num)
 {
-    gnc_numeric *numeric = NULL;
-    gnc_numeric retval;
-    gchar path_part_one [GUID_ENCODING_LENGTH + 1];
-    gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
-    GValue v = G_VALUE_INIT;
+    g_return_val_if_fail (period_num < GET_PRIVATE(budget)->num_periods,
+                          gnc_numeric_zero());
+    auto& data = get_perioddata (budget, account, period_num);
+    if (!data.value_is_set)
+        return gnc_numeric_zero();
 
-    g_return_val_if_fail(GNC_IS_BUDGET(budget), gnc_numeric_zero());
-    g_return_val_if_fail(account, gnc_numeric_zero());
-
-    make_period_path (account, period_num, path_part_one, path_part_two);
-    qof_instance_get_kvp (QOF_INSTANCE (budget), &v, 2, path_part_one, path_part_two);
-    if (G_VALUE_HOLDS_BOXED (&v))
-        numeric = (gnc_numeric*)g_value_get_boxed (&v);
-
-    retval = numeric ? *numeric : gnc_numeric_zero ();
-    g_value_unset (&v);
-    return retval;
+    return data.value;
 }
-
 
 void
 gnc_budget_set_account_period_note(GncBudget *budget, const Account *account,
                                     guint period_num, const gchar *note)
 {
-    gchar path_part_one [GUID_ENCODING_LENGTH + 1];
-    gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
-
     /* Watch out for an off-by-one error here:
      * period_num starts from 0 while num_periods starts from 1 */
     if (period_num >= GET_PRIVATE(budget)->num_periods)
@@ -610,19 +619,22 @@ gnc_budget_set_account_period_note(GncBudget *budget, const Account *account,
     g_return_if_fail (budget != NULL);
     g_return_if_fail (account != NULL);
 
-    make_period_path (account, period_num, path_part_one, path_part_two);
+    auto& perioddata = get_perioddata (budget, account, period_num);
+    auto budget_kvp { QOF_INSTANCE (budget)->kvp_data };
+    auto path = make_period_note_path (account, period_num);
 
     gnc_budget_begin_edit(budget);
     if (note == NULL)
-        qof_instance_set_kvp (QOF_INSTANCE (budget), NULL, 3, GNC_BUDGET_NOTES_PATH, path_part_one, path_part_two);
+    {
+        delete budget_kvp->set_path (path, nullptr);
+        perioddata.note.clear ();
+    }
     else
     {
-        GValue v = G_VALUE_INIT;
-        g_value_init (&v, G_TYPE_STRING);
-        g_value_set_string (&v, note);
+        KvpValue* v = new KvpValue (g_strdup (note));
 
-        qof_instance_set_kvp (QOF_INSTANCE (budget), &v, 3, GNC_BUDGET_NOTES_PATH, path_part_one, path_part_two);
-        g_value_unset (&v);
+        delete budget_kvp->set_path (path, v);
+        perioddata.note = note;
     }
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
@@ -632,22 +644,12 @@ gnc_budget_set_account_period_note(GncBudget *budget, const Account *account,
 }
 
 gchar *
-gnc_budget_get_account_period_note(const GncBudget *budget,
-                                   const Account *account, guint period_num)
+gnc_budget_get_account_period_note (const GncBudget *budget,
+                                    const Account *account, guint period_num)
 {
-    gchar path_part_one [GUID_ENCODING_LENGTH + 1];
-    gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
-    GValue v = G_VALUE_INIT;
-    gchar *retval;
-
-    g_return_val_if_fail(GNC_IS_BUDGET(budget), NULL);
-    g_return_val_if_fail(account, NULL);
-
-    make_period_path (account, period_num, path_part_one, path_part_two);
-    qof_instance_get_kvp (QOF_INSTANCE (budget), &v, 3, GNC_BUDGET_NOTES_PATH, path_part_one, path_part_two);
-    retval = G_VALUE_HOLDS_STRING (&v) ? g_value_dup_string(&v) : NULL;
-    g_value_unset (&v);
-    return retval;
+    g_return_val_if_fail (period_num < GET_PRIVATE(budget)->num_periods, nullptr);
+    auto& data = get_perioddata (budget, account, period_num);
+    return data.note.empty () ? nullptr : g_strdup (data.note.c_str());
 }
 
 time64
@@ -672,6 +674,46 @@ gnc_budget_get_account_period_actual_value(
     g_return_val_if_fail(GNC_IS_BUDGET(budget) && acc, gnc_numeric_zero());
     return recurrenceGetAccountPeriodValue(&GET_PRIVATE(budget)->recurrence,
                                            acc, period_num);
+}
+
+static PeriodData&
+get_perioddata (const GncBudget *budget, const Account *account, guint period_num)
+{
+    GncBudgetPrivate *priv = GET_PRIVATE (budget);
+
+    if (period_num >= priv->num_periods)
+        throw std::out_of_range("period_num >= num_periods");
+
+    auto& map = priv->acct_map;
+    auto map_iter = map->find (account);
+
+    if (map_iter == map->end ())
+    {
+        auto budget_kvp { QOF_INSTANCE (budget)->kvp_data };
+
+        PeriodDataVec vec {};
+        vec.reserve (priv->num_periods);
+
+        for (guint i = 0; i < priv->num_periods; i++)
+        {
+            std::string note;
+            auto kval1 { budget_kvp->get_slot (make_period_data_path (account, i)) };
+            auto kval2 { budget_kvp->get_slot (make_period_note_path (account, i)) };
+
+            auto is_set = kval1 && kval1->get_type() == KvpValue::Type::NUMERIC;
+            auto num = is_set ? kval1->get<gnc_numeric>() : gnc_numeric_zero ();
+
+            if (kval2 && kval2->get_type() == KvpValue::Type::STRING)
+                note = kval2->get<const char*>();
+
+            PeriodData data { std::move (note), is_set, num };
+            vec.push_back (std::move(data));
+        }
+        map_iter = map->insert_or_assign(account, std::move(vec)).first;
+    }
+
+    auto& vec = map_iter->second;
+    return vec.at(period_num);
 }
 
 GncBudget*
@@ -760,7 +802,7 @@ static QofObject budget_object_def =
     DI(.interface_version = ) QOF_OBJECT_VERSION,
     DI(.e_type            = ) GNC_ID_BUDGET,
     DI(.type_label        = ) "Budget",
-    DI(.create            = ) (gpointer)gnc_budget_new,
+    DI(.create            = ) (void*(*)(QofBook*)) gnc_budget_new,
     DI(.book_begin        = ) NULL,
     DI(.book_end          = ) gnc_budget_book_end,
     DI(.is_dirty          = ) qof_collection_is_dirty,

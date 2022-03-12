@@ -96,10 +96,10 @@ test_gnc_set_budget_num_periods_data_retention ()
     gnc_budget_set_num_periods(budget, 10);
     gnc_budget_set_num_periods(budget, 20);
 
-    /* value and note are retained */
-    g_assert (gnc_budget_is_account_period_value_set(budget, acc, 15));
+    /* value and note are lost */
+    g_assert (!gnc_budget_is_account_period_value_set(budget, acc, 15));
     note = gnc_budget_get_account_period_note (budget, acc, 11);
-    g_assert_cmpstr (note, ==, "undefined");
+    g_assert_cmpstr (note, ==, NULL);
     g_free (note);
 
     gnc_budget_destroy(budget);

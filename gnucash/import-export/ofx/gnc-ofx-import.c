@@ -614,11 +614,21 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
             /* set tran-num and/or split-action per book option */
             if (data.check_number_valid)
             {
-                gnc_set_num_action(transaction, split, data.check_number, NULL);
+                /* SQL will correctly interpret the string "null", but
+                 * the transaction num field is declared to be
+                 * non-null so substitute the empty string.
+                 */
+                const char *num_value =
+                    strcasecmp (data.check_number, "null") == 0 ? "" :
+                    data.check_number;
+                gnc_set_num_action(transaction, split, num_value, NULL);
             }
             else if (data.reference_number_valid)
             {
-                gnc_set_num_action(transaction, split, data.reference_number, NULL);
+                const char *num_value =
+                    strcasecmp (data.reference_number, "null") == 0 ? "" :
+                    data.check_number;
+                gnc_set_num_action(transaction, split, num_value, NULL);
             }
             /* Also put the ofx transaction's memo in the
              * split's memo field */

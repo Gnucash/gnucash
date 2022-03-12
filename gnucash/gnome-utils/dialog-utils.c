@@ -486,7 +486,8 @@ gnc_handle_date_accelerator (GdkEventKey *event,
     case GDK_KEY_KP_Add:
     case GDK_KEY_plus:
     case GDK_KEY_equal:
-        if (event->state & GDK_SHIFT_MASK)
+    case GDK_KEY_semicolon: // See https://bugs.gnucash.org/show_bug.cgi?id=798386
+         if (event->state & GDK_SHIFT_MASK)
             g_date_add_days (&gdate, 7);
         else if (event->state & GDK_MOD1_MASK)
             g_date_add_months (&gdate, 1);

@@ -51,7 +51,7 @@ gnc_checkbox_cell_set_value (BasicCell *_cell, const char *value)
     CheckboxCell *cell = (CheckboxCell *) _cell;
     gboolean flag = FALSE;
 
-    if (value && *value == 'X')
+    if (value && *value != ' ')
         flag = TRUE;
 
     gnc_checkbox_cell_set_flag (cell, flag);

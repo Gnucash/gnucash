@@ -810,16 +810,13 @@ static void print_date (GtkTreeViewColumn *tree_column,
                         GtkTreeIter *iter,
                         gpointer data)
 {
-    GValue value = { 0 };
     time64 doc_date_time;
     gchar *doc_date_str = g_strdup (_("Open"));
     gint col = GPOINTER_TO_INT(data);
 
     g_return_if_fail (cell && iter && tree_model);
 
-    gtk_tree_model_get_value (tree_model, iter, col, &value);
-    doc_date_time = (time64) g_value_get_int64 (&value);
-    g_value_unset (&value);
+    gtk_tree_model_get (tree_model, iter, col, &doc_date_time, -1);
 
     if (doc_date_time != G_MAXINT64) /* assumes INT64_MAX represents an invalid date/time */
     {

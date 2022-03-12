@@ -5,14 +5,15 @@
 # Kjartan Maraas <kmaraas@gnome.org>, 2005.
 # John Erling Blad <jeblad@gmail.com>, 2018
 # Allan Nordhøy <epost@anotheragency.no>, 2021.
+# Petter Reinholdtsen <pere-weblate@hungry.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-01-02 22:54+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2022-03-11 08:54+0000\n"
+"Last-Translator: Petter Reinholdtsen <pere-weblate@hungry.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "glossary/nb_NO/>\n"
 "Language: nb\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.12-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -342,7 +343,7 @@ msgstr "Egendefinert"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
-msgstr ""
+msgstr "kontrollpanel"
 
 #. "The backend where the data is stored."
 msgid "database"
@@ -394,7 +395,7 @@ msgstr "dokumentlenke"
 
 #. "The last day to pay an invoice in time."
 msgid "due date"
-msgstr ""
+msgstr "forfallsdato"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
@@ -448,7 +449,7 @@ msgstr "resultatoppstilling"
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 msgid "free software"
-msgstr ""
+msgstr "fri programvare"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
@@ -506,7 +507,7 @@ msgstr "Tapte kontoer"
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
 msgid "Lot"
-msgstr ""
+msgstr "Parti"
 
 #. "Combine two books into one (see book)."
 msgid "merge, to"
@@ -658,7 +659,7 @@ msgstr "resultat"
 
 #. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
-msgstr "Resultat & Tap"
+msgstr "Vinning & Tap"
 
 #. "-"
 msgid "quick-fill"
@@ -718,7 +719,7 @@ msgstr ""
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
-msgstr "Beholdt inntjening"
+msgstr "Overført resultat"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 msgid "reverse transaction, to (Action in the register)"
@@ -762,7 +763,7 @@ msgstr "splitt"
 
 #. "Alias of 'shares'"
 msgid "stocks"
-msgstr ""
+msgstr "aksjer"
 
 #. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
 #, fuzzy
@@ -800,7 +801,7 @@ msgstr ""
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr ""
+msgstr "avgiftstype: MVA"
 
 #. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
@@ -883,13 +884,13 @@ msgid "withdraw (in the reconcile dialog)"
 msgstr "uttak"
 
 msgid "stock"
-msgstr ""
+msgstr "aksje"
 
 msgid "due"
-msgstr ""
+msgstr "forfall"
 
 msgid "Online"
-msgstr ""
+msgstr "Oppkoblet"
 
 msgid "Direct Debit"
 msgstr ""

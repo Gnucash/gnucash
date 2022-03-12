@@ -34,6 +34,10 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
 
+;; useful functions
+(define (safe-/ x y)
+  (if (zero? y) 0 (/ x y)))
+
 ;; The option names are defined here to 1. save typing and 2. avoid
 ;; spelling errors. The *reportnames* are defined here (and not only
 ;; once at the very end) because I need them to define the "other"
@@ -176,6 +180,15 @@ developing over time"))
       "e" (N_ "Display a table of the selected data.")
       #f))
 
+    ;; contributed by https://github.com/exxus
+    ;; https://github.com/Gnucash/gnucash/pull/1272
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display
+      (N_ "Percentage chart")
+      "e1" (N_ "Display account contributions as a percentage of the total value for the period.")
+      #f))
+
     (gnc:options-add-plot-size!
      options gnc:pagename-display
      optname-plot-width optname-plot-height "f" (cons 'percent 100.0) (cons 'percent 100.0))
@@ -246,6 +259,7 @@ developing over time"))
          (work-to-do 0)
          (all-data #f)
          (show-table? (get-option gnc:pagename-display (N_ "Show table")))
+         (ratio-chart? (get-option gnc:pagename-display (N_ "Percentage chart")))
          (document (gnc:make-html-document))
          (chart (gnc:make-html-chart))
          (topl-accounts (gnc:filter-accountlist-type
@@ -328,25 +342,34 @@ developing over time"))
              ;; created.
              (other-anchor ""))
 
-        ;; Converts a commodity-collector into gnc-monetary in the report's
-        ;; currency using the exchange-fn calculated above. Returns a gnc-monetary
+        ;; Converts a commodity-collector into amount in the report's
+        ;; currency using the exchange-fn calculated above. Returns an amount
         ;; multiplied by the averaging-multiplier (smaller than one; multiplication
         ;; instead of division to avoid division-by-zero issues) in case
         ;; the user wants to see the amounts averaged over some value.
-        (define (collector->monetary c date)
-          (gnc:make-gnc-monetary
-           report-currency
-           (* averaging-multiplier
-              (gnc:gnc-monetary-amount
-               (gnc:sum-collector-commodity
-                c report-currency
-                (lambda (a b) (exchange-fn a b date)))))))
+        (define (collector->report-currency-amount c date)
+          (* averaging-multiplier
+             (gnc:gnc-monetary-amount
+              (gnc:sum-collector-commodity
+               c report-currency
+               (lambda (a b) (exchange-fn a b date))))))
+
+        (define acct->name
+          (if show-fullname? gnc-account-get-full-name xaccAccountGetName))
 
         (define (all-zeros data)
           (cond
-           ((gnc:gnc-monetary? data) (zero? (gnc:gnc-monetary-amount data)))
+           ((number? data) (zero? data))
            ((pair? data) (every all-zeros data))
            (else (error 'huh))))
+
+        (define (get-negative-accounts data)
+          (let lp ((data data) (retval #f))
+            (match data
+              (() retval)
+              (((acc (? (cut any negative? <>))) . rest)
+               (lp rest (cons (acct->name acc) (or retval '()))))
+              ((_ . rest) (lp rest retval)))))
 
         ;; this is an alist of account-balances
         ;; (list (list acc0 bal0 bal1 bal2 ...)
@@ -396,11 +419,11 @@ developing over time"))
                   (loop (cdr list-of-mon-collectors)
                         (cdr dates-list)
                         (cons (if do-intervals?
-                                  (collector->monetary
+                                  (collector->report-currency-amount
                                    (gnc:collector- (cadr list-of-mon-collectors)
                                                    (car list-of-mon-collectors))
                                    (cadr dates-list))
-                                  (collector->monetary
+                                  (collector->report-currency-amount
                                    (car list-of-mon-collectors)
                                    (car dates-list)))
                               result))))))
@@ -462,26 +485,21 @@ developing over time"))
         ;; Sort the account list according to the account code field.
         (set! all-data
           (sort
-           (filter (lambda (l)
-                     (not (zero? (gnc:gnc-monetary-amount
-                                  (apply gnc:monetary+ (cadr l))))))
+           (filter (lambda (l) (not (zero? (apply + (cadr l)))))
                    (traverse-accounts 1 topl-accounts))
            (case sort-method
              ((alphabetical)
               (lambda (a b)
-                (if show-fullname?
-                    (gnc:string-locale<? (gnc-account-get-full-name (car a))
-                                         (gnc-account-get-full-name (car b)))
-                    (gnc:string-locale<? (xaccAccountGetName (car a))
-                                         (xaccAccountGetName (car b))))))
+                (gnc:string-locale<? (acct->name (car a))
+                                     (acct->name (car b)))))
              ((acct-code)
               (lambda (a b)
                 (gnc:string-locale<? (xaccAccountGetCode (car a))
                                      (xaccAccountGetCode (car b)))))
              ((amount)
               (lambda (a b)
-                (> (gnc:gnc-monetary-amount (apply gnc:monetary+ (cadr a)))
-                   (gnc:gnc-monetary-amount (apply gnc:monetary+ (cadr b)))))))))
+                (> (apply + (cadr a))
+                   (apply + (cadr b))))))))
 
         (cond
          ((or (null? all-data) (all-zeros (map cadr all-data)))
@@ -490,11 +508,28 @@ developing over time"))
            (gnc:html-make-empty-data-warning
             report-title (gnc:report-id report-obj))))
 
+         ((and ratio-chart? (get-negative-accounts all-data)) =>
+          (lambda (neg-accounts)
+            (gnc:html-document-add-object!
+             document
+             (gnc:html-make-generic-warning
+              report-title (gnc:report-id report-obj)
+              "Negative amounts detected"
+              "Charting ratios cannot occur on accounts with negative balances. \
+Please deselect the accounts with negative balances."))
+
+            (gnc:html-document-add-object!
+             document (gnc:make-html-text (gnc:html-markup-ul neg-accounts)))))
+
          (else
           (let* ((dates-list (if do-intervals?
                                  (list-head dates-list (1- (length dates-list)))
                                  dates-list))
-                 (date-string-list (map qof-print-date dates-list)))
+                 (date-string-list (map qof-print-date dates-list))
+                 (list-of-rows (apply zip (map cadr all-data)))
+
+                 ;; total amounts
+                 (row-totals (map (cut fold + 0 <>) list-of-rows)))
 
             ;; Set chart title, subtitle etc.
             (gnc:html-chart-set-type!
@@ -514,7 +549,8 @@ developing over time"))
 
             (gnc:html-chart-set-data-labels! chart date-string-list)
             (gnc:html-chart-set-y-axis-label!
-             chart (gnc-commodity-get-mnemonic report-currency))
+             chart (if ratio-chart? "Ratio"
+                       (gnc-commodity-get-mnemonic report-currency)))
 
             ;; If we have too many categories, we sum them into a new
             ;; 'other' category and add a link to a new report with just
@@ -523,7 +559,7 @@ developing over time"))
                 (let* ((start (take all-data (1- max-slices)))
                        (finish (drop all-data (1- max-slices)))
                        (other-sum (map
-                                   (lambda (l) (apply gnc:monetary+ l))
+                                   (lambda (l) (apply + l))
                                    (apply zip (map cadr finish)))))
                   (set! all-data
                     (append start
@@ -549,9 +585,8 @@ developing over time"))
                (let* ((acct (car series))
                       (label (cond
                               ((string? acct) (car series))
-                              (show-fullname? (gnc-account-get-full-name acct))
-                              (else (xaccAccountGetName acct))))
-                      (amounts (map gnc:gnc-monetary-amount (cadr series)))
+                              (else (acct->name acct))))
+                      (amounts (cadr series))
                       (stack (if stacked? "default" (number->string stack)))
                       (fill (eq? chart-type 'barchart))
                       (urls (cond
@@ -574,12 +609,10 @@ developing over time"))
                                       (1+ tree-depth))
                                 (list gnc:pagename-general
                                       gnc:optname-reportname
-                                      (if show-fullname?
-                                          (gnc-account-get-full-name acct)
-                                          (xaccAccountGetName acct)))))))))
+                                      (acct->name acct))))))))
                  (gnc:html-chart-add-data-series!
-                  chart label amounts color
-                  'stack stack 'fill fill 'urls urls)))
+                  chart label (if ratio-chart? (map safe-/ amounts row-totals) amounts)
+                  color 'stack stack 'fill fill 'urls urls)))
              all-data
              (gnc:assign-colors (length all-data))
              (iota (length all-data)))
@@ -589,6 +622,8 @@ developing over time"))
              chart (gnc-commodity-get-mnemonic report-currency))
             (gnc:html-chart-set-currency-symbol!
              chart (gnc-commodity-get-nice-symbol report-currency))
+            (gnc:html-chart-set-format-style!
+             chart (if ratio-chart? "percent" "currency"))
 
             (gnc:report-percent-done 98)
             (gnc:html-document-add-object! document chart)
@@ -601,18 +636,27 @@ developing over time"))
                 (define (make-cell contents)
                   (gnc:make-html-table-cell/markup "number-cell" contents))
 
+                (define (make-cell-percent amt grandt)
+                  (gnc:make-html-table-cell/markup "number-cell" (* (safe-/ amt grandt) 100) " %"))
+
+                (define (make-monetary-cell amount)
+                  (make-cell (gnc:make-gnc-monetary report-currency amount)))
+
                 (for-each
-                 (lambda (date row)
+                 (lambda (date row row-total)
                    (gnc:html-table-append-row!
                     table
                     (append (list (make-cell date))
-                            (map make-cell row)
+                            (map (if ratio-chart?
+                                     (cut make-cell-percent <> row-total)
+                                     make-monetary-cell)
+                                 row)
                             (if cols>1?
-                                (list
-                                 (make-cell (apply gnc:monetary+ row)))
+                                (list (make-monetary-cell (apply + row)))
                                 '()))))
                  date-string-list
-                 (apply zip (map cadr all-data)))
+                 list-of-rows
+                 row-totals)
 
                 (gnc:html-table-set-col-headers!
                  table
@@ -622,8 +666,7 @@ developing over time"))
                    (lambda (col)
                      (cond
                       ((string? col) col)
-                      (show-fullname? (gnc-account-get-full-name col))
-                      (else (xaccAccountGetName col))))
+                      (else (acct->name col))))
                    (map car all-data))
                   (if cols>1?
                       (list (G_ "Grand Total"))
@@ -643,8 +686,7 @@ developing over time"))
                           (lambda (col)
                             (cond
                              ((string? col) col)
-                             (show-fullname? (gnc-account-get-full-name col))
-                             (else (xaccAccountGetName col))))
+                             (else (acct->name col))))
                           (map car all-data))
                          (if (pair? (cdr all-data))
                              (list (G_ "Grand Total"))
@@ -655,10 +697,10 @@ developing over time"))
                             (list date)
                             row
                             (if (pair? (cdr all-data))
-                                (list (apply gnc:monetary+ row))
+                                (list (apply + row))
                                 '())))
                          (map (cut gnc-print-time64 <> iso-date) dates-list)
-                         (apply zip (map cadr all-data)))))))))))))))
+                         list-of-rows)))))))))))))
 
     (unless (gnc:html-document-export-string document)
       (gnc:html-document-set-export-error document (G_ "No exportable data")))

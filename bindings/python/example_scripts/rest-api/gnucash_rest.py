@@ -63,6 +63,9 @@ from gnucash import \
     QOF_COMPARE_NEQ
 
 from gnucash import \
+    QOF_DATE_MATCH_NORMAL
+
+from gnucash import \
     INVOICE_TYPE
 
 from gnucash import \
@@ -914,8 +917,6 @@ def getAccountSplits(book, guid, date_posted_from, date_posted_to):
     query.set_book(book)
 
     SPLIT_TRANS= 'trans'
-
-    QOF_DATE_MATCH_NORMAL = 1
 
     TRANS_DATE_POSTED = 'date-posted'
 

@@ -416,7 +416,7 @@ const gchar *gnc_plugin_page_get_page_color (GncPluginPage *page);
  *
  *  @param page The page whose name should be retrieved.
  *
- *  @param The color for this page.  This string is owned by the page and
+ *  @param color The color for this page.  This string is owned by the page and
  *  should not be freed by the caller.
  */
 void gnc_plugin_page_set_page_color (GncPluginPage *page, const char *color);

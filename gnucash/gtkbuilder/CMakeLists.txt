@@ -8,6 +8,7 @@ set (gtkbuilder_SOURCES
         assistant-loan.glade
         assistant-qif-import.glade
         assistant-stock-split.glade
+        assistant-stock-transaction.glade
         assistant-xml-encoding.glade
         business-options-gnome.glade
         business-prefs.glade

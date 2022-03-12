@@ -124,11 +124,11 @@ extern const gchar*
 gnc_v2_book_version_string;        /* see gnc-book-xml-v2 */
 
 /* Forward declarations */
-static FILE* try_gz_open (const char* filename, const char* perms,
-                          gboolean compress,
-                          gboolean write);
-static gboolean is_gzipped_file (const gchar* name);
-static gboolean wait_for_gzip (FILE* file);
+static std::pair<FILE*, GThread*> try_gz_open (const char* filename,
+                                               const char* perms,
+                                               gboolean compress,
+                                               gboolean write);
+static bool is_gzipped_file (const gchar* name);
 
 static void
 clear_up_account_commodity (
@@ -796,22 +796,21 @@ qof_session_load_from_xml_file_v2_full (
          * https://bugs.gnucash.org/show_bug.cgi?id=712528 for more
          * info.
          */
-         const char* filename = xml_be->get_filename();
-        FILE* file;
-        gboolean is_compressed = is_gzipped_file (filename);
-        file = try_gz_open (filename, "r", is_compressed, FALSE);
-        if (file == NULL)
+        auto filename = xml_be->get_filename();
+        auto [file, thread] = try_gz_open (filename, "r",
+                                           is_gzipped_file (filename), FALSE);
+        if (!file)
         {
             PWARN ("Unable to open file %s", filename);
-            retval = FALSE;
+            retval = false;
         }
         else
         {
             retval = gnc_xml_parse_fd (top_parser, file,
                                        generic_callback, gd, book);
             fclose (file);
-            if (is_compressed)
-                wait_for_gzip (file);
+            if (thread)
+                g_thread_join (thread) != nullptr;
         }
     }
 
@@ -1387,46 +1386,122 @@ gnc_book_write_accounts_to_xml_filehandle_v2 (QofBackend* qof_be, QofBook* book,
     return success;
 }
 
-#define BUFLEN 4096
+static inline gzFile
+do_gzopen (const char* filename, const char* perms)
+{
+#ifdef G_OS_WIN32
+    gzFile file;
+    char* new_perms = nullptr;
+    char* conv_name = g_win32_locale_filename_from_utf8 (filename);
+
+    if (!conv_name)
+    {
+        g_warning ("Could not convert '%s' to system codepage",
+                   filename);
+        return nullptr;
+    }
+
+    if (strchr (perms, 'b'))
+        new_perms = g_strdup (perms);
+    else
+        new_perms = g_strdup_printf ("%cb%s", *perms, perms + 1);
+
+    file = gzopen (conv_name, new_perms);
+    g_free (new_perms);
+    g_free (conv_name);
+    return file;
+#else
+    return gzopen (filename, perms);
+#endif
+}
+
+constexpr uint32_t BUFLEN{4096};
+
+static inline bool
+gz_thread_write (gzFile file, gz_thread_params_t* params)
+{
+    bool success = true;
+    gchar buffer[BUFLEN];
+
+    while (success)
+    {
+        auto bytes = read (params->fd, buffer, BUFLEN);
+        if (bytes > 0)
+        {
+            if (gzwrite (file, buffer, bytes) <= 0)
+            {
+                gint errnum;
+                auto error = gzerror (file, &errnum);
+                g_warning ("Could not write the compressed file '%s'. The error is: '%s' (%d)",
+                           params->filename, error, errnum);
+                success = false;
+            }
+        }
+        else if (bytes == 0)
+        {
+            break;
+        }
+        else
+        {
+            g_warning ("Could not read from pipe. The error is '%s' (errno %d)",
+                       g_strerror (errno) ? g_strerror (errno) : "", errno);
+            success = false;
+        }
+    }
+    return success;
+}
+
+#if COMPILER(MSVC)
+#define WRITE_FN _write
+#else
+#define WRITE_FN write
+#endif
+
+static inline bool
+gz_thread_read (gzFile file, gz_thread_params_t* params)
+{
+    bool success = true;
+    gchar buffer[BUFLEN];
+
+    while (success)
+    {
+        auto gzval = gzread (file, buffer, BUFLEN);
+        if (gzval > 0)
+        {
+            if (WRITE_FN (params->fd, buffer, gzval) < 0)
+            {
+                g_warning ("Could not write to pipe. The error is '%s' (%d)",
+                           g_strerror (errno) ? g_strerror (errno) : "", errno);
+                success = false;
+            }
+        }
+        else if (gzval == 0)
+        {
+            break;
+        }
+        else
+        {
+            gint errnum;
+            const gchar* error = gzerror (file, &errnum);
+            g_warning ("Could not read from compressed file '%s'. The error is: '%s' (%d)",
+                       params->filename, error, errnum);
+            success = false;
+        }
+    }
+    return success;
+}
 
 /* Compress or decompress function that is to be run in a separate thread.
  * Returns 1 on success or 0 otherwise, stuffed into a pointer type. */
 static gpointer
 gz_thread_func (gz_thread_params_t* params)
 {
-    gchar buffer[BUFLEN];
-    gssize bytes;
     gint gzval;
-    gzFile file;
-    gint success = 1;
+    bool success = true;
 
-#ifdef G_OS_WIN32
-    {
-        gchar* conv_name = g_win32_locale_filename_from_utf8 (params->filename);
-        gchar* perms;
+    auto file = do_gzopen (params->filename, params->perms);
 
-        if (!conv_name)
-        {
-            g_warning ("Could not convert '%s' to system codepage",
-                       params->filename);
-            success = 0;
-            goto cleanup_gz_thread_func;
-        }
-
-        if (strchr (params->perms, 'b'))
-            perms = g_strdup (params->perms);
-        else
-            perms = g_strdup_printf ("%cb%s", *params->perms, params->perms + 1);
-
-        file = gzopen (conv_name, perms);
-        g_free (perms);
-        g_free (conv_name);
-    }
-#else /* !G_OS_WIN32 */
-    file = gzopen (params->filename, params->perms);
-#endif /* G_OS_WIN32 */
-
-    if (file == NULL)
+    if (!file)
     {
         g_warning ("Child threads gzopen failed");
         success = 0;
@@ -1435,73 +1510,18 @@ gz_thread_func (gz_thread_params_t* params)
 
     if (params->write)
     {
-        while (success)
-        {
-            bytes = read (params->fd, buffer, BUFLEN);
-            if (bytes > 0)
-            {
-                if (gzwrite (file, buffer, bytes) <= 0)
-                {
-                    gint errnum;
-                    const gchar* error = gzerror (file, &errnum);
-                    g_warning ("Could not write the compressed file '%s'. The error is: '%s' (%d)",
-                               params->filename, error, errnum);
-                    success = 0;
-                }
-            }
-            else if (bytes == 0)
-            {
-                printf("gz_thread_func EOF\n");
-                break;
-            }
-            else
-            {
-                g_warning ("Could not read from pipe. The error is '%s' (errno %d)",
-                           g_strerror (errno) ? g_strerror (errno) : "", errno);
-                success = 0;
-            }
-        }
+        success = gz_thread_write (file, params);
     }
     else
     {
-        while (success)
-        {
-            gzval = gzread (file, buffer, BUFLEN);
-            if (gzval > 0)
-            {
-                if (
-#if COMPILER(MSVC)
-                    _write
-#else
-                    write
-#endif
-                    (params->fd, buffer, gzval) < 0)
-                {
-                    g_warning ("Could not write to pipe. The error is '%s' (%d)",
-                               g_strerror (errno) ? g_strerror (errno) : "", errno);
-                    success = 0;
-                }
-            }
-            else if (gzval == 0)
-            {
-                break;
-            }
-            else
-            {
-                gint errnum;
-                const gchar* error = gzerror (file, &errnum);
-                g_warning ("Could not read from compressed file '%s'. The error is: '%s' (%d)",
-                           params->filename, error, errnum);
-                success = 0;
-            }
-        }
+        success = gz_thread_read (file, params);
     }
 
     if ((gzval = gzclose (file)) != Z_OK)
     {
         g_warning ("Could not close the compressed file '%s' (errnum %d)",
                    params->filename, gzval);
-        success = 0;
+        success = false;
     }
 
 cleanup_gz_thread_func:
@@ -1513,7 +1533,7 @@ cleanup_gz_thread_func:
     return GINT_TO_POINTER (success);
 }
 
-static FILE*
+static std::pair<FILE*, GThread*>
 try_gz_open (const char* filename, const char* perms, gboolean compress,
              gboolean write)
 {
@@ -1521,13 +1541,11 @@ try_gz_open (const char* filename, const char* perms, gboolean compress,
         compress = TRUE;
 
     if (!compress)
-        return g_fopen (filename, perms);
+        return std::pair<FILE*, GThread*>(g_fopen (filename, perms),
+                                          nullptr);
 
     {
         int filedes[2]{};
-        GThread* thread;
-        gz_thread_params_t* params;
-        FILE* file;
 
 #ifdef G_OS_WIN32
         if (_pipe (filedes, 4096, _O_BINARY) < 0)
@@ -1550,17 +1568,22 @@ try_gz_open (const char* filename, const char* perms, gboolean compress,
                 close(filedes[0]);
                 close(filedes[1]);
             }
-            return g_fopen (filename, perms);
+
+            return std::pair<FILE*, GThread*>(g_fopen (filename, perms),
+                                              nullptr);
         }
 
-        params = g_new (gz_thread_params_t, 1);
+        gz_thread_params_t* params = g_new (gz_thread_params_t, 1);
         params->fd = filedes[write ? 0 : 1];
         params->filename = g_strdup (filename);
         params->perms = g_strdup (perms);
         params->write = write;
 
-        thread = g_thread_new ("xml_thread", (GThreadFunc) gz_thread_func,
-                               params);
+        auto thread = g_thread_new ("xml_thread", (GThreadFunc) gz_thread_func,
+                                    params);
+
+        FILE* file = nullptr;
+
         if (!thread)
         {
             g_warning ("Could not create thread for (de)compression.");
@@ -1569,71 +1592,39 @@ try_gz_open (const char* filename, const char* perms, gboolean compress,
             g_free (params);
             close (filedes[0]);
             close (filedes[1]);
-
-            return g_fopen (filename, perms);
+            file = g_fopen (filename, perms);
         }
-
-        if (write)
-            file = fdopen (filedes[1], "w");
         else
-            file = fdopen (filedes[0], "r");
-
-        G_LOCK (threads);
-        if (!threads)
-            threads = g_hash_table_new (g_direct_hash, g_direct_equal);
-
-        g_hash_table_insert (threads, file, thread);
-        G_UNLOCK (threads);
-
-        return file;
-    }
-}
-
-static gboolean
-wait_for_gzip (FILE* file)
-{
-    gboolean retval = TRUE;
-
-    G_LOCK (threads);
-    if (threads)
-    {
-        GThread* thread = static_cast<decltype (thread)> (g_hash_table_lookup (threads,
-                                                          file));
-        if (thread)
         {
-            g_hash_table_remove (threads, file);
-            retval = GPOINTER_TO_INT (g_thread_join (thread));
+            if (write)
+                file = fdopen (filedes[1], "w");
+            else
+                file = fdopen (filedes[0], "r");
         }
-    }
-    G_UNLOCK (threads);
 
-    return retval;
+        return std::pair<FILE*, GThread*>(file, thread);
+    }
 }
 
 gboolean
-gnc_book_write_to_xml_file_v2 (
-    QofBook* book,
-    const char* filename,
-    gboolean compress)
+gnc_book_write_to_xml_file_v2 (QofBook* book, const char* filename,
+                               gboolean compress)
 {
-    FILE* out;
-    gboolean success = TRUE;
+    bool success = true;
 
-    out = try_gz_open (filename, "w", compress, TRUE);
+    auto [file, thread] = try_gz_open (filename, "w", compress, TRUE);
+    if (!file)
+        return false;
 
     /* Try to write as much as possible */
-    if (!out
-        || !gnc_book_write_to_xml_filehandle_v2 (book, out))
-        success = FALSE;
+    success = (gnc_book_write_to_xml_filehandle_v2 (book, file));
 
     /* Close the output stream */
-    if (out && fclose (out))
-        success = FALSE;
+    success = ! (fclose (file));
 
     /* Optionally wait for parallel compression threads */
-    if (out && compress)
-        if (!wait_for_gzip (out))
-            success = FALSE;
+    if (thread)
+        success =  g_thread_join (thread) != nullptr;
 
     return success;
 }
@@ -1672,7 +1663,7 @@ gnc_book_write_accounts_to_xml_file_v2 (QofBackend* qof_be, QofBook* book,
 }
 
 /***********************************************************************/
-static gboolean
+static bool
 is_gzipped_file (const gchar* name)
 {
     unsigned char buf[2];
@@ -1680,22 +1671,23 @@ is_gzipped_file (const gchar* name)
 
     if (fd == -1)
     {
-        return FALSE;
+        return false;
     }
 
     if (read (fd, buf, 2) != 2)
     {
         close (fd);
-        return FALSE;
+        return false;
     }
     close (fd);
 
+    /* 037 0213 are the header id bytes for a gzipped file. */
     if (buf[0] == 037 && buf[1] == 0213)
     {
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 QofBookFileType
@@ -1707,20 +1699,8 @@ gnc_is_xml_data_file_v2 (const gchar* name, gboolean* with_encoding)
         char first_chunk[256];
         int num_read;
 
-#ifdef G_OS_WIN32
-        {
-            gchar* conv_name = g_win32_locale_filename_from_utf8 (name);
-            if (!conv_name)
-                g_warning ("Could not convert '%s' to system codepage", name);
-            else
-            {
-                file = gzopen (conv_name, "rb");
-                g_free (conv_name);
-            }
-        }
-#else
-        file = gzopen (name, "r");
-#endif
+        file = do_gzopen (name, "r");
+
         if (file == NULL)
             return GNC_BOOK_NOT_OURS;
 
@@ -1820,18 +1800,16 @@ gnc_xml2_find_ambiguous (const gchar* filename, GList* encodings,
                          GHashTable** unique, GHashTable** ambiguous,
                          GList** impossible)
 {
-    FILE* file = NULL;
     GList* iconv_list = NULL, *conv_list = NULL, *iter;
     iconv_item_type* iconv_item = NULL, *ascii = NULL;
     const gchar* enc;
     GHashTable* processed = NULL;
     gint n_impossible = 0;
     GError* error = NULL;
-    gboolean is_compressed;
     gboolean clean_return = FALSE;
 
-    is_compressed = is_gzipped_file (filename);
-    file = try_gz_open (filename, "r", is_compressed, FALSE);
+    auto [file, thread] = try_gz_open (filename, "r",
+                                       is_gzipped_file (filename), FALSE);
     if (file == NULL)
     {
         PWARN ("Unable to open file %s", filename);
@@ -2014,8 +1992,8 @@ cleanup_find_ambs:
     if (file)
     {
         fclose (file);
-        if (is_compressed)
-            wait_for_gzip (file);
+        if (thread)
+            g_thread_join (thread);
     }
 
     return (clean_return) ? n_impossible : -1;
@@ -2031,17 +2009,14 @@ static void
 parse_with_subst_push_handler (xmlParserCtxtPtr xml_context,
                                push_data_type* push_data)
 {
-    const gchar* filename;
-    FILE* file = NULL;
     GIConv ascii = (GIConv) - 1;
     GString* output = NULL;
     GError* error = NULL;
-    gboolean is_compressed;
 
-    filename = push_data->filename;
-    is_compressed = is_gzipped_file (filename);
-    file = try_gz_open (filename, "r", is_compressed, FALSE);
-    if (file == NULL)
+    auto filename = push_data->filename;
+    auto [file, thread] = try_gz_open (filename, "r",
+                                       is_gzipped_file (filename), FALSE);
+    if (!file)
     {
         PWARN ("Unable to open file %s", filename);
         goto cleanup_push_handler;
@@ -2154,8 +2129,8 @@ cleanup_push_handler:
     if (file)
     {
         fclose (file);
-        if (is_compressed)
-            wait_for_gzip (file);
+        if (thread)
+            g_thread_join (thread);
     }
 }
 

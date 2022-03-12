@@ -28,5 +28,7 @@
 
 (load-and-reexport (sw_engine)
                    (gnucash engine business-core)
-                   (gnucash engine commodity-table)
                    (gnucash engine gnc-numeric))
+
+(define-public GNC_COMMODITY_NS_CURRENCY "CURRENCY")
+(define-public GNC_COMMODITY_NS_NONCURRENCY (gettext "ALL NON-CURRENCY"))

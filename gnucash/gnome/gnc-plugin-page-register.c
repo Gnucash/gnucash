@@ -56,6 +56,7 @@
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "assistant-stock-split.h"
+#include "assistant-stock-transaction.h"
 #include "gnc-component-manager.h"
 #include "gnc-date.h"
 #include "gnc-date-edit.h"
@@ -215,6 +216,9 @@ static void gnc_plugin_page_register_cmd_style_double_line (
 
 static void gnc_plugin_page_register_cmd_reconcile (GtkAction* action,
                                                     GncPluginPageRegister* plugin_page);
+static void gnc_plugin_page_register_cmd_stock_assistant (GtkAction* action,
+                                                          GncPluginPageRegister* page);
+
 static void gnc_plugin_page_register_cmd_autoclear (GtkAction* action,
                                                     GncPluginPageRegister* plugin_page);
 static void gnc_plugin_page_register_cmd_transfer (GtkAction* action,
@@ -479,6 +483,11 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         G_CALLBACK (gnc_plugin_page_register_cmd_autoclear)
     },
     {
+        "ActionsStockAssistantAction", NULL, N_ ("Stock Ass_istant"), NULL,
+        N_ ("Stock Assistant"),
+        G_CALLBACK (gnc_plugin_page_register_cmd_stock_assistant)
+    },
+    {
         "ActionsStockSplitAction", NULL, N_ ("Stoc_k Split..."), NULL,
         N_ ("Record a stock split or a stock merger"),
         G_CALLBACK (gnc_plugin_page_register_cmd_stock_split)
@@ -608,6 +617,18 @@ static const gchar* view_style_actions[] =
     "ViewStyleBasicAction",
     "ViewStyleAutoSplitAction",
     "ViewStyleJournalAction",
+    NULL
+};
+
+static const gchar* actions_requiring_extra[] =
+{
+    "ActionsStockAssistantAction",
+    NULL
+};
+
+static const gchar* actions_requiring_priced_account[] =
+{
+    "ActionsStockAssistantAction",
     NULL
 };
 
@@ -1238,6 +1259,12 @@ gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister* page)
     action_group = gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE (page));
     gnc_plugin_update_actions (action_group, actions_requiring_account,
                                "sensitive", is_readwrite && account != NULL);
+
+    gnc_plugin_update_actions (action_group, actions_requiring_extra,
+                               "visible", gnc_prefs_is_extra_enabled ());
+
+    gnc_plugin_update_actions (action_group, actions_requiring_priced_account,
+                               "sensitive", xaccAccountIsPriced (account));
 
     /* Set "style" radio button */
     ledger_type = gnc_ledger_display_type (priv->ledger);
@@ -4508,6 +4535,23 @@ gnc_plugin_page_register_cmd_reconcile (GtkAction* action,
                                                         page)->window));
     recnData = recnWindow (GTK_WIDGET (window), account);
     gnc_ui_reconcile_window_raise (recnData);
+    LEAVE (" ");
+}
+
+static void
+gnc_plugin_page_register_cmd_stock_assistant (GtkAction* action,
+                                              GncPluginPageRegister* page)
+{
+    Account *account;
+    GtkWindow *window;
+
+    ENTER ("(action %p, plugin_page %p)", action, page);
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
+    window = gnc_window_get_gtk_window (GNC_WINDOW (GNC_PLUGIN_PAGE (page)->window));
+    account = gnc_plugin_page_register_get_account (page);
+    gnc_stock_transaction_assistant (GTK_WIDGET (window), account);
+
     LEAVE (" ");
 }
 

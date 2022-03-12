@@ -4,6 +4,7 @@ set (gnc_gnome_noinst_HEADERS
   assistant-hierarchy.h
   assistant-loan.h
   assistant-stock-split.h
+  assistant-stock-transaction.h
   business-options-gnome.h
   business-urls.h
   business-gnome-utils.h
@@ -66,6 +67,7 @@ set (gnc_gnome_SOURCES
   assistant-hierarchy.c
   assistant-loan.cpp
   assistant-stock-split.c
+  assistant-stock-transaction.cpp
   business-options-gnome.c
   business-urls.c
   business-gnome-utils.c

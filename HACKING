@@ -17,57 +17,7 @@ the design document.
 
 Coding Style Conventions
 ------------------------
-
-General:
-
- * When modifying a file, the style convention in that file should be
-   followed.
-
- * When creating a new file, the style of existing files should be
-   followed.
-
- * When creating lots of new files in a new directory, you may use
-   your own coding standards, but please try to stick as closely as
-   possible to the GNU coding standards.
-
- * Do not submit patches that consist of (gratuitous) stylistic changes.
-
-
-C:
-
- * Use ISO C.
-
- * Use glib memory routines where possible. This means you should be
-   using g_malloc(), g_new(), g_free(), etc., instead of malloc(),
-   free(), etc. Do not mix glib memory calls with libc calls!
-
- * Where possible, use glib data abstractions instead of rolling your
-   own. Glib linked lists and pointer arrays are very convenient and
-   have been extensively used and tested.
-
- * All gnucash functions and global variables are prefixed with gnc_
-
- * Use static functions whenever possible
-
- * Use const whenever possible
-
-
-Scheme:
-
- * All gnucash functions and global variables are prefixed with gnc:
-
- * All global variables are enclosed in ** (i.e. gnc:*load-path*)
-
- * All private functions are enclosed in __ (i.e. gnc:_do-not-call_)
-
- * All C functions wrapped into scheme have dashes in place of underscores.
-   (xaccSplitGetBalance --> gnc:split-get-balance) - but FIXME:
-   This policy seems to have been dropped in favor of having
-   identical function names. cstim, 2006-10-30.
-
-
-Dave Peticolas <dave@krondo.com>
-August 22, 2000
+Please refer to https://wiki.gnucash.org/wiki/CodingStandard.
 
 ==============
 TIPS AND HINTS

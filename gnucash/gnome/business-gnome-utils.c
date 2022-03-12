@@ -579,7 +579,6 @@ gnc_simple_combo_get_value (GtkComboBox *cbox)
 {
     GtkTreeIter iter;
     GtkTreeModel *model;
-    GValue value = { 0 };
     gpointer retval;
 
     if (!cbox) return NULL;
@@ -587,9 +586,7 @@ gnc_simple_combo_get_value (GtkComboBox *cbox)
     model = gtk_combo_box_get_model (cbox);
     if (!gtk_combo_box_get_active_iter (cbox, &iter))
         return NULL;
-    gtk_tree_model_get_value (model, &iter, 1, &value);
-    retval = g_value_get_pointer (&value);
-    g_value_unset (&value);
+    gtk_tree_model_get (model, &iter, 1, &retval, -1);
     return retval;
 }
 
@@ -610,28 +607,25 @@ gnc_simple_combo_set_value (GtkComboBox *cbox, gpointer data)
 
     while (valid_iter)
     {
-        GValue value = { 0 };
+        gpointer ptr;
 
-        gtk_tree_model_get_value (model, &iter, 1, &value);
+        gtk_tree_model_get (model, &iter, 1, &ptr, -1);
         if (lsd && lsd->is_equal)    // A specific comparator function was set
         {
-            if ((lsd->is_equal)(g_value_get_pointer(&value), data))
+            if ((lsd->is_equal)(ptr, data))
             {
                 gtk_combo_box_set_active_iter (cbox, &iter);
-                g_value_unset (&value);
                 return;
             }
         }
         else    // No specific comparator function set, use generic pointer comparison instead
         {
-            if (g_value_get_pointer(&value) == data)
+            if (ptr == data)
             {
                 gtk_combo_box_set_active_iter (cbox, &iter);
-                g_value_unset (&value);
                 return;
             }
         }
-        g_value_unset (&value);
         valid_iter = gtk_tree_model_iter_next (model, &iter);
     }
 }
