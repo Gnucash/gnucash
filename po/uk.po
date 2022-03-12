@@ -4,15 +4,15 @@
 # The last version has some new strings translated and some mistakes fixed.
 # Yuri Syrota <rasta@renome.rovno.ua>, 2000.
 # Maxim V. Dziumanenko <dziumanenko@gmail.com>, 2007.
-# Yuri Chornoivan <yurchor@ukr.net>, 2011, 2018, 2019, 2020, 2021.
+# Yuri Chornoivan <yurchor@ukr.net>, 2011, 2018, 2019, 2020, 2021, 2022.
 # Maksym Kobieliev <maximaximums@gmail.com>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2021-12-19 19:53+0000\n"
+"PO-Revision-Date: 2022-03-10 07:55+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/uk/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Project-Style: default\n"
 
@@ -489,6 +489,10 @@ msgid ""
 "(File[->Most Recently Used-List]).\n"
 "The full path is displayed in the status bar."
 msgstr ""
+"Якщо вам потрібні дані щодо каталогів, у яких зберігаються ваші нещодавні "
+"файли GnuCash, наведіть вказівник миші на записи у меню журналу\n"
+"(Файл[->Список нещодавно використаних]).\n"
+"Повний шлях до файла буде показано на смужці стану."
 
 #: doc/tip_of_the_day.list.c:24
 msgid ""
@@ -15665,6 +15669,8 @@ msgid ""
 "investment categories like STOCKS and BONDS or exchange names like NASDAQ "
 "and LSE."
 msgstr ""
+"Виберіть категорію товару або введіть нову. Можна використати категорії "
+"інвестування, зокрема STOCKS і BONDS, або назви бірж, зокрема NASDAQ і LSE."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:329
 msgid ""
@@ -17255,20 +17261,13 @@ msgid "Enable update match action"
 msgstr "Увімкнути оновлення відповідної дії"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2298
-#, fuzzy
-#| msgid ""
-#| "Enable the UPDATE AND RECONCILE action in the transaction matcher. If "
-#| "enabled, a transaction whose best match's score is above the Auto-CLEAR "
-#| "threshold and has a different date or amount than the matching existing "
-#| "transaction will cause the existing transaction to be updated and cleared "
-#| "by default."
 msgid ""
 "Enable the UPDATE AND CLEAR action in the transaction matcher. If enabled, a "
 "transaction whose best match's score is above the Auto-CLEAR threshold and "
 "has a different date or amount than the matching existing transaction will "
 "cause the existing transaction to be updated and cleared by default."
 msgstr ""
-"Увімкнути дію UPDATE AND RECONCILE у засобі встановлення відповідності "
+"Увімкнути дію UPDATE AND CLEAR у засобі встановлення відповідності "
 "транзакцій. Якщо увімкнено, наявність записів транзакцій, для яких найкраща "
 "оцінка відповідності перебуває над пороговим значенням Auto-CLEAR і має іншу "
 "дату або суму, ніж відповідний наявний запис транзакції, типово спричинить "
@@ -21852,10 +21851,8 @@ msgid "y/d/m"
 msgstr "р/д/м"
 
 #: gnucash/import-export/import-main-matcher.c:462
-#, fuzzy
-#| msgid "No transactions were found associated with the ~a."
 msgid "No new transactions were found in this import."
-msgstr "Не знайдено транзакцій, які пов'язано із ~a."
+msgstr "В цих імпортованих даних не знайдено нових транзакцій."
 
 #: gnucash/import-export/import-main-matcher.c:630
 #: gnucash/import-export/import-main-matcher.c:783
@@ -21863,44 +21860,32 @@ msgid "Destination account for the auto-balance split."
 msgstr "Рахунок призначення для дроблення для автоматичного балансування."
 
 #: gnucash/import-export/import-main-matcher.c:943
-#, fuzzy
-#| msgid "Enter the Entry Description"
 msgid "Enter new Description"
-msgstr "Введіть опис позиції"
+msgstr "Введіть новий опис"
 
 #: gnucash/import-export/import-main-matcher.c:958
-#, fuzzy
-#| msgid "Enter Due Date"
 msgid "Enter new Memo"
-msgstr "Введіть дату сплати"
+msgstr "Введіть нову примітку"
 
 #: gnucash/import-export/import-main-matcher.c:971
-#, fuzzy
-#| msgid "Enter Note"
 msgid "Enter new Notes"
-msgstr "Введіть нотатку"
+msgstr "Введіть нові нотатки"
 
 #: gnucash/import-export/import-main-matcher.c:1097
 msgid "Assign a transfer account to the selection."
 msgstr "Призначити рахунок переказу до позначеного."
 
 #: gnucash/import-export/import-main-matcher.c:1108
-#, fuzzy
-#| msgid "description"
 msgid "Edit description."
-msgstr "опис"
+msgstr "Редагувати опис."
 
 #: gnucash/import-export/import-main-matcher.c:1116
-#, fuzzy
-#| msgid "Edit Job"
 msgid "Edit memo."
-msgstr "Редагувати роботу"
+msgstr "Редагувати примітку."
 
 #: gnucash/import-export/import-main-matcher.c:1124
-#, fuzzy
-#| msgid "Edit Note"
 msgid "Edit notes."
-msgstr "Змінити нотатку"
+msgstr "Редагувати нотатки."
 
 #: gnucash/import-export/import-main-matcher.c:1286
 msgctxt "Column header for 'Adding transaction'"
@@ -22126,10 +22111,8 @@ msgstr ""
 "відповідного тинку або типу інвестиції, ви можете ввести власні дані."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:906
-#, fuzzy
-#| msgid "_Name or description"
 msgid "Name or _description"
-msgstr "_Назва або опис"
+msgstr "Назва або _опис"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:930
 msgid "_Ticker symbol or other abbreviation"
@@ -28458,22 +28441,16 @@ msgid "CSS color."
 msgstr "Колір CSS."
 
 #: gnucash/report/reports/standard/taxinvoice.scm:192
-#, fuzzy
-#| msgid "Invoice number: "
 msgid "Invoice number:"
-msgstr "Номер рахунку-фактури: "
+msgstr "Номер рахунку-фактури:"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:194
-#, fuzzy
-#| msgid "To: "
 msgid "To:"
-msgstr "До: "
+msgstr "До:"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:196
-#, fuzzy
-#| msgid "Your ref: "
 msgid "Your ref:"
-msgstr "Ваше посилання: "
+msgstr "Ваше посилання:"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:208
 msgid "Embedded CSS."
@@ -29206,10 +29183,8 @@ msgid "Use regular expressions for account name filter"
 msgstr "Використовувати формальні вирази для фільтрування рахунків за назвою"
 
 #: gnucash/report/trep-engine.scm:114
-#, fuzzy
-#| msgid "Transaction Filter excludes matched strings"
 msgid "Account Name Filter excludes matched strings"
-msgstr "Фільтрування за транзакціями виключає відповідні рядки"
+msgstr "Фільтрування за назвою рахунку виключає відповідні рядки"
 
 #: gnucash/report/trep-engine.scm:115
 msgid "Transaction Filter"
@@ -29362,12 +29337,9 @@ msgstr ""
 "«Подорож 2017/1 Лондон». "
 
 #: gnucash/report/trep-engine.scm:600
-#, fuzzy
-#| msgid ""
-#| "If this option is selected, transactions matching filter are excluded."
 msgid "If this option is selected, accounts matching filter are excluded."
 msgstr ""
-"Якщо позначено цей пункт, транзакції, які відповідатимуть фільтру, буде "
+"Якщо позначено цей пункт, рахунки, які відповідатимуть фільтру, буде "
 "виключено."
 
 #: gnucash/report/trep-engine.scm:606
@@ -29494,10 +29466,8 @@ msgid "Display the reconciled date?"
 msgstr "Показувати дату узгодження?"
 
 #: gnucash/report/trep-engine.scm:945
-#, fuzzy
-#| msgid "Display the reconciled date?"
 msgid "Display the entered date?"
-msgstr "Показувати дату узгодження?"
+msgstr "Показувати дату введення?"
 
 #: gnucash/report/trep-engine.scm:950
 msgid "Display the notes if the memo is unavailable?"
@@ -30453,15 +30423,11 @@ msgstr ""
 "не були записані в іншому місці."
 
 #: libgnucash/engine/gnc-commodity.h:112
-#, fuzzy
-#| msgid "All non-currency"
 msgctxt "Commodity Type"
 msgid "All non-currency"
 msgstr "Усі невалютні"
 
 #: libgnucash/engine/gnc-commodity.h:113
-#, fuzzy
-#| msgid "Currencies"
 msgctxt "Commodity Type"
 msgid "Currencies"
 msgstr "Валюти"
