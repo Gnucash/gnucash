@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-02-28 12:55+0000\n"
+"PO-Revision-Date: 2022-03-10 06:37+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.11.1-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Poedit-Basepath: .\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -483,6 +483,10 @@ msgid ""
 "(File[->Most Recently Used-List]).\n"
 "The full path is displayed in the status bar."
 msgstr ""
+"להצגת הספריות בהן גנוקאש אחסן את הקבצים האחרונים שהיו בשימוש, ניתן לרחף מעל "
+"אחד הערכים בתפריט ההיסטוריה\n"
+"(קובץ[->רשימת הקבצים האחרונים שהיו בשימוש]).\n"
+"הנתיב המלא מוצג בשורת המצב."
 
 #: doc/tip_of_the_day.list.c:24
 msgid ""
@@ -8600,7 +8604,7 @@ msgstr "מדריך שימוש ומדריך _מושגים"
 
 #: gnucash/gnome-utils/gnc-main-window.c:387
 msgid "Open the GnuCash Tutorial"
-msgstr "פתיחת מדריך למשתמש גנוקאש"
+msgstr "פתיחת מדריך למשתמש – גנוקאש"
 
 #: gnucash/gnome-utils/gnc-main-window.c:391
 msgid "_Contents"
@@ -15072,6 +15076,8 @@ msgid ""
 "investment categories like STOCKS and BONDS or exchange names like NASDAQ "
 "and LSE."
 msgstr ""
+"בחירת סוג־אב עבור הסחורה, או הזנת סוג־אב חדש. ניתן להשתמש בסוגי־אב 'השקעה' "
+"כגון מניות, אגרות־חוב או בשמות בּוּרְסוֹת כמו NASDAQ, LSE ועוד."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:329
 msgid ""
@@ -27485,22 +27491,16 @@ msgid "CSS color."
 msgstr "צבע CSS."
 
 #: gnucash/report/reports/standard/taxinvoice.scm:192
-#, fuzzy
-#| msgid "Invoice number: "
 msgid "Invoice number:"
-msgstr "מספר חשבונית: "
+msgstr "מספר חשבונית:"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:194
-#, fuzzy
-#| msgid "To: "
 msgid "To:"
-msgstr "ל: "
+msgstr "ל:"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:196
-#, fuzzy
-#| msgid "Your ref: "
 msgid "Your ref:"
-msgstr "סימוכין: "
+msgstr "סימוכין:"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:208
 msgid "Embedded CSS."
