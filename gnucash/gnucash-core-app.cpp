@@ -42,7 +42,6 @@ extern "C" {
 #include <gnc-path.h>
 #include <gnc-prefs.h>
 #include <gnc-gsettings.h>
-#include <gnc-report.h>
 #include <gnc-splash.h>
 #include <gnc-version.h>
 #include "gnucash-locale-platform.h"
@@ -53,6 +52,7 @@ extern "C" {
 #include <iostream>
 #include <string>
 #include <vector>
+#include <gnc-report.h>
 
 namespace bl = boost::locale;
 

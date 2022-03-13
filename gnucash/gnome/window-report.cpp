@@ -37,13 +37,13 @@ extern "C"
 
 #include "swig-runtime.h"
 #include "gnc-guile-utils.h"
-#include "gnc-report.h"
 #include "gnc-ui.h"
 #include "window-report.h"
 #include "guile-mappings.h"
 
 #include "gnc-plugin-page-report.h"
 }
+#include "gnc-report.h"
 #include "dialog-options.hpp"
 #include "dialog-report-column-view.hpp"
 

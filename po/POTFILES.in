@@ -439,7 +439,7 @@ gnucash/report/commodity-utilities.scm
 gnucash/report/eguile-html-utilities.scm
 gnucash/report/eguile.scm
 gnucash/report/eguile-utilities.scm
-gnucash/report/gnc-report.c
+gnucash/report/gnc-report.cpp
 gnucash/report/html-acct-table.scm
 gnucash/report/html-anytag.scm
 gnucash/report/html-chart.scm

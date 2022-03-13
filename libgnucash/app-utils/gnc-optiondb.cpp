@@ -570,29 +570,6 @@ GncOptionDB::load_from_kvp(QofBook* book) noexcept
         });
 }
 
-GncOptionDB*
-gnc_get_optiondb_from_dispatcher(SCM dispatcher)
-{
-    SCM  get_options = scm_c_eval_string("gnc:options-get");
-    if (dispatcher == SCM_BOOL_F)
-        return nullptr;
-    auto scm_ptr{scm_call_1(get_options, dispatcher)};
-    auto smob{!scm_is_null(scm_ptr) && SCM_INSTANCEP(scm_ptr) &&
-              scm_is_true(scm_slot_exists_p(scm_ptr, SCM_EOL)) ?
-              scm_slot_ref(scm_ptr, SCM_EOL) : (scm_ptr)};
-
-    void *c_ptr{nullptr};
-    if (!SCM_NULLP(smob))
-    {
-        if (SCM_POINTER_P(smob))
-            c_ptr = SCM_POINTER_VALUE(smob);
-        else
-            c_ptr = reinterpret_cast<void*>(SCM_CELL_WORD_1(smob));
-    }
-    auto u_ptr{static_cast<std::unique_ptr<GncOptionDB>*>(c_ptr)};
-    return u_ptr->get();
-}
-
 void
 gnc_register_string_option(GncOptionDB* db, const char* section,
                            const char* name, const char* key,

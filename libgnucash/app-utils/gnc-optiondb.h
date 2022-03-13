@@ -90,20 +90,6 @@ GncOptionDB* gnc_option_db_new(void);
 void gnc_option_db_destroy(GncOptionDB* odb);
 
 /**
- * Obtain a GncOptionDB* from Scheme
- *
- * When report or stylesheet options are generated in Scheme the GncObjectDB is
- * wrapped in a std::unique_ptr and then in a Guile SMOB by SWIG. The GUI code
- * needs a reference to the GncObjectDB and we don't want to introduce swig
- * library dependencies.
- *
- * @param dispatch The scheme dispatch function returned by gnc:new-options
- * @return GncOptiondDB* Do not free this pointer!
- */
-GncOptionDB*
-gnc_get_optiondb_from_dispatcher(SCM dispatcher);
-
-/**
  * Write all changed ui_item values to their options.
  * @param odb The GncOptionDB.
  * @return A GList* conatining the names of options that raised exceptions when

@@ -65,7 +65,6 @@ extern "C"
 #include "gnc-plugin-page-report.h"
 #include "gnc-plugin-file-history.h"
 #include "gnc-prefs.h"
-#include "gnc-report.h"
 #include "gnc-session.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
@@ -79,6 +78,7 @@ extern "C"
 
 
 #include <memory>
+#include <gnc-report.h>
 #include <gnc-optiondb-impl.hpp>
 
 /* NW: you can add GNC_MOD_REPORT to gnc-engine.h

@@ -37,10 +37,10 @@ extern "C"
 #include "gnc-gtk-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-guile-utils.h"
-#include "gnc-report.h"
 #include "gnc-ui.h"
 #include <guile-mappings.h>
 }
+#include "gnc-report.h"
 #include <dialog-options.hpp>
 #include <gnc-optiondb.h>
 

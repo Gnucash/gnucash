@@ -35,12 +35,12 @@ extern "C"
 #include "window-report.h"
 #include "guile-mappings.h"
 #include "gnc-guile-utils.h"
-#include "gnc-report.h"
 #include "gnc-ui.h"
 }
 
 #include "dialog-report-column-view.hpp"
 #include <dialog-options.hpp>
+#include <gnc-report.h>
 #include <gnc-optiondb.h>
 
 enum available_cols

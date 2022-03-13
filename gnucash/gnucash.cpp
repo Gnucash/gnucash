@@ -54,7 +54,6 @@ extern "C" {
 #include <gnc-plugin-report-system.h>
 #include <gnc-prefs.h>
 #include <gnc-prefs-utils.h>
-#include <gnc-report.h>
 #include <gnc-session.h>
 #include <gnc-splash.h>
 #include <gnucash-register.h>
@@ -68,6 +67,7 @@ extern "C" {
 #include <boost/nowide/args.hpp>
 #endif
 #include <iostream>
+#include <gnc-report.h>
 #include <gnc-locale-utils.hpp>
 
 namespace bl = boost::locale;

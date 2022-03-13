@@ -30,19 +30,22 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include <libguile.h>
+extern "C"
+{
 #include <stdio.h>
 #include <string.h>
-#include "gfec.h"
 #include <string.h>
 #include <errno.h>
 #include <fcntl.h>
 
-#include "gnc-filepath-utils.h"
-#include "gnc-guile-utils.h"
+#include <gfec.h>
+#include <gnc-filepath-utils.h>
+#include <gnc-guile-utils.h>
+#include <gnc-engine.h>
+}
 #include "gnc-report.h"
-#include "gnc-engine.h"
 
-extern SCM scm_init_sw_report_module(void);
+extern "C" SCM scm_init_sw_report_module(void);
 
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -130,11 +133,11 @@ gnc_report_remove_by_id(gint id)
 
 SCM gnc_report_find(gint id)
 {
-    gpointer report = NULL;
+    SCM report = nullptr;
 
     if (reports)
     {
-        report = g_hash_table_lookup(reports, &id);
+        report = static_cast<SCM>(g_hash_table_lookup(reports, &id));
     }
 
     if (!report)
@@ -303,9 +306,6 @@ gnc_saved_reports_write_internal (const gchar *file, const gchar *contents, gboo
 {
     gboolean success = TRUE;
     gint fd;
-#ifndef __MINGW32__
-    extern int errno;
-#endif
     ssize_t written;
     gint length;
     gint flags = O_WRONLY | O_CREAT | (overwrite ? O_TRUNC : O_APPEND);
@@ -393,3 +393,27 @@ gnc_saved_reports_write_to_file (const gchar* report_def, gboolean overwrite)
 
     return success;
 }
+
+GncOptionDB*
+gnc_get_optiondb_from_dispatcher(SCM dispatcher)
+{
+    SCM  get_options = scm_c_eval_string("gnc:options-get");
+    if (dispatcher == SCM_BOOL_F)
+        return nullptr;
+    auto scm_ptr{scm_call_1(get_options, dispatcher)};
+    auto smob{!scm_is_null(scm_ptr) && SCM_INSTANCEP(scm_ptr) &&
+              scm_is_true(scm_slot_exists_p(scm_ptr, SCM_EOL)) ?
+              scm_slot_ref(scm_ptr, SCM_EOL) : (scm_ptr)};
+
+    void *c_ptr{nullptr};
+    if (!SCM_NULLP(smob))
+    {
+        if (SCM_POINTER_P(smob))
+            c_ptr = SCM_POINTER_VALUE(smob);
+        else
+            c_ptr = reinterpret_cast<void*>(SCM_CELL_WORD_1(smob));
+    }
+    auto u_ptr{static_cast<std::unique_ptr<GncOptionDB>*>(c_ptr)};
+    return u_ptr->get();
+}
+

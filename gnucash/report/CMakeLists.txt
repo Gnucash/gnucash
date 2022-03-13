@@ -14,7 +14,7 @@ gnc_add_swig_guile_command (swig-report-c
 )
 
 set (report_SOURCES
-  gnc-report.c
+        gnc-report.cpp
 )
 
 add_library (gnc-report
