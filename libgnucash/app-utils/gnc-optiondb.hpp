@@ -54,7 +54,7 @@ extern "C"
 
 class GncOptionDB;
 using GncOptionDBPtr = std::unique_ptr<GncOptionDB>;
-using GncOptionAccountList = std::vector<const Account*>;
+using GncOptionAccountList = std::vector<GncGUID>;
 
 using GncOptionAccountTypeList = std::vector<GNCAccountType>;
 using GncMultichoiceOptionEntry = std::tuple<const std::string,

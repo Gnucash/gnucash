@@ -1524,7 +1524,7 @@ create_option_widget<GncOptionUIType::DATE_BOTH>(GncOption& option,
                                      documentation, enclosing, packed);
 }
 
-using GncOptionAccountList = std::vector<const Account*>;
+using GncOptionAccountList = std::vector<GncGUID>;
 
 static void
 account_select_all_cb(GtkWidget *widget, gpointer data)
@@ -1604,8 +1604,12 @@ public:
         GList *acc_list = nullptr;
         const GncOptionAccountList& accounts =
             option.get_value<GncOptionAccountList>();
-        for (auto account : accounts)
-            acc_list = g_list_prepend(acc_list, static_cast<void*>(const_cast<Account*>(account)));
+        auto book{gnc_get_current_book()};
+        for (auto guid : accounts)
+        {
+            auto account{xaccAccountLookup(&guid, book)};
+            acc_list = g_list_prepend(acc_list, account);
+        }
         acc_list = g_list_reverse(acc_list);
         gnc_tree_view_account_set_selected_accounts(widget, acc_list, TRUE);
         g_list_free(acc_list);
@@ -1617,7 +1621,10 @@ public:
         GncOptionAccountList acc_vec;
         acc_vec.reserve(g_list_length(acc_list));
         for (auto node = acc_list; node; node = g_list_next(node))
-            acc_vec.push_back(static_cast<const Account*>(node->data));
+        {
+            auto guid{qof_entity_get_guid(node->data)};
+            acc_vec.push_back(*guid);
+        }
         g_list_free(acc_list);
         option.set_value(acc_vec);
     }

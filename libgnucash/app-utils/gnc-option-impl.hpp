@@ -717,7 +717,7 @@ operator>> <GncOptionMultichoiceValue>(std::istream& iss,
 }
 
 
-using GncOptionAccountList = std::vector<const Account*>;
+using GncOptionAccountList = std::vector<GncGUID>;
 
 using GncOptionAccountTypeList = std::vector<GNCAccountType>;
 
@@ -795,7 +795,7 @@ public:
     }
     GList* account_type_list() const noexcept;
     void reset_default_value() { m_value = m_default_value; }
-    bool is_changed() const noexcept { return m_value != m_default_value; }
+    bool is_changed() const noexcept;
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
     bool is_multiselect() const noexcept { return m_multiselect; }
@@ -821,7 +821,7 @@ operator<< <GncOptionAccountListValue>(std::ostream& oss,
             first = false;
         else
             oss << " ";
-        oss << qof_instance_to_string(QOF_INSTANCE(value));
+        oss << guid_to_string(&value);
     }
     return oss;
 }
@@ -836,7 +836,10 @@ operator>> <GncOptionAccountListValue>(std::istream& iss,
         std::string str;
         std::getline(iss, str, ' ');
         if (!str.empty())
-            values.emplace_back((Account*)qof_instance_from_string(str, opt.get_ui_type()));
+        {
+            auto guid{qof_entity_get_guid(qof_instance_from_string(str, opt.get_ui_type()))};
+            values.push_back(*guid);
+        }
         else
             break;
     }
@@ -856,32 +859,32 @@ public:
                           const char* key, const char* doc_string,
                           GncOptionUIType ui_type) :
         OptionClassifier{section, name, key, doc_string}, m_ui_type{ui_type},
-        m_value{}, m_default_value{}, m_allowed{} {}
+        m_value{*guid_null()}, m_default_value{*guid_null()}, m_allowed{} {}
 
     GncOptionAccountSelValue(const char* section, const char* name,
                           const char* key, const char* doc_string,
                           GncOptionUIType ui_type,
                           const Account* value) :
         OptionClassifier{section, name, key, doc_string}, m_ui_type{ui_type},
-        m_value{const_cast<Account*>(value)},
-        m_default_value{const_cast<Account*>(value)}, m_allowed{} {}
+        m_value{*qof_entity_get_guid(value)},
+        m_default_value{*qof_entity_get_guid(value)}, m_allowed{} {}
     GncOptionAccountSelValue(const char* section, const char* name,
                           const char* key, const char* doc_string,
                           GncOptionUIType ui_type,
                           GncOptionAccountTypeList&& allowed) :
         OptionClassifier{section, name, key, doc_string}, m_ui_type{ui_type},
-        m_value{}, m_default_value{}, m_allowed{std::move(allowed)} {}
+        m_value{*guid_null()}, m_default_value{*guid_null()},
+        m_allowed{std::move(allowed)} {}
     GncOptionAccountSelValue(const char* section, const char* name,
                           const char* key, const char* doc_string,
                           GncOptionUIType ui_type,
                           const Account* value,
                           GncOptionAccountTypeList&& allowed) :
         OptionClassifier{section, name, key, doc_string}, m_ui_type{ui_type},
-        m_value{}, m_default_value{}, m_allowed{std::move(allowed)} {
+        m_value{*guid_null()}, m_default_value{*guid_null()}, m_allowed{std::move(allowed)} {
             if (!validate(value))
                 throw std::invalid_argument("Supplied Value not in allowed set.");
-            m_value = const_cast<Account*>(value);
-            m_default_value = const_cast<Account*>(value);
+            m_value = m_default_value = *qof_entity_get_guid(value);
         }
 
     const Account* get_value() const;
@@ -889,25 +892,31 @@ public:
     bool validate (const Account* value) const;
     void set_value (const Account* value) {
         if (validate(value))
-            //throw!
-            m_value = const_cast<Account*>(value);
+        {
+            auto guid{qof_entity_get_guid(value)};
+            m_value = *guid;
+        }
+        //else throw
     }
     void set_default_value (const Account* value) {
         if (validate(value))
-            //throw!
-            m_value = m_default_value = const_cast<Account*>(value);
+        {
+            auto guid{qof_entity_get_guid(value)};
+            m_value = m_default_value = *guid;
+        }
+        //else throw
     }
     GList* account_type_list() const noexcept;
     void reset_default_value() { m_value = m_default_value; }
-    bool is_changed() const noexcept { return m_value != m_default_value; }
+    bool is_changed() const noexcept { return !guid_equal(&m_value, &m_default_value); }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
     std::string serialize() const noexcept;
     bool deserialize(const std::string& str) noexcept;
 private:
     GncOptionUIType m_ui_type;
-    Account* m_value;
-    Account* m_default_value;
+    GncGUID m_value;
+    GncGUID m_default_value;
     GncOptionAccountTypeList m_allowed;
 };
 

@@ -28,6 +28,7 @@
 #include <sstream>
 #include <kvp-value.hpp>
 #include <qofbookslots.h>
+#include <guid.hpp>
 #include "gnc-optiondb.h"
 #include "gnc-optiondb.hpp"
 #include "gnc-optiondb-impl.hpp"
@@ -708,6 +709,11 @@ gnc_register_account_list_limited_option(GncOptionDB* db,
 {
     try
     {
+        std::cout << "gnc_register_account_list_limited_option for accounts ";
+        std::for_each(value.begin(), value.end(), [](auto& guid){
+            std::cout << gnc::GUID(guid).to_string() << " ";
+        });
+        std::cout << std::endl;
         GncOption option{GncOptionAccountListValue{section, name, key, doc_string,
                     GncOptionUIType::ACCOUNT_LIST, value, std::move(allowed)}};
         db->register_option(section, std::move(option));
@@ -729,7 +735,7 @@ find_children(Account* account, void* data)
     const GncOptionAccountTypeList& types = datapair->second;
     if (std::find(types.begin(), types.end(),
                   xaccAccountGetType(account)) != types.end())
-        list.push_back(account);
+        list.push_back(*qof_entity_get_guid(account));
 }
 
 GncOptionAccountList

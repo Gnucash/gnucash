@@ -428,7 +428,10 @@ scm_to_value<GncOptionAccountList>(SCM new_value)
         void* account{};
         SWIG_ConvertPtr(node, &account, SWIGTYPE_p_Account, 0);
         if (account)
-            retval.push_back(static_cast<Account*>(account));
+        {
+            auto guid{qof_entity_get_guid(static_cast<Account*>(account))};
+            retval.push_back(*guid);
+        }
         next = scm_cdr(next);
         if (scm_is_null(next))
             break;
@@ -440,9 +443,13 @@ template <>inline SCM
 scm_from_value<GncOptionAccountList>(GncOptionAccountList value)
 {
     SCM s_list = SCM_EOL;
-    for (auto acct : value)
+    auto book{gnc_get_current_book()};
+    for (auto guid : value)
+    {
+        auto acct{xaccAccountLookup(&guid, book)};
         s_list = scm_cons(SWIG_NewPointerObj(acct, SWIGTYPE_p_Account, 0),
                           s_list);
+    }
     return scm_reverse(s_list);
 }
 
@@ -452,13 +459,14 @@ void gnc_option_test_book_destroy(QofBook*);
 QofBook*
 gnc_option_test_book_new()
 {
-    return static_cast<QofBook*>(g_object_new(QOF_TYPE_BOOK, nullptr));
+    auto session = gnc_get_current_session();
+    return gnc_get_current_book();
 }
 
 void
 gnc_option_test_book_destroy(QofBook* book)
 {
-    g_object_unref(book);
+    gnc_clear_current_session();
 }
 
 %}
@@ -574,7 +582,8 @@ gnc_option_test_book_destroy(QofBook* book)
         SCM s_account = scm_list_ref($input, scm_from_size_t(i));
         Account* acct = (Account*)SWIG_MustGetPtr(s_account,
                                                   SWIGTYPE_p_Account, 1, 0);
-        $1.push_back(acct);
+        if (acct)
+            $1.push_back(*qof_entity_get_guid(acct));
     }
 }
 
@@ -602,7 +611,7 @@ gnc_option_test_book_destroy(QofBook* book)
     $1 = &types;
 }
 
-%typemap(in) GncOptionAccountList
+%typemap(in) GncOptionAccountList const & (GncOptionAccountList alist)
 {
     auto len = scm_is_true($input) ? scm_to_size_t(scm_length($input)) : 0;
     for (std::size_t i = 0; i < len; ++i)
@@ -610,8 +619,10 @@ gnc_option_test_book_destroy(QofBook* book)
         SCM s_account = scm_list_ref($input, scm_from_size_t(i));
         Account* acct = (Account*)SWIG_MustGetPtr(s_account,
                                                   SWIGTYPE_p_Account, 1, 0);
-        $1.push_back(acct);
+        if (acct)
+            alist.push_back(*qof_entity_get_guid(acct));
     }
+    $1 = &alist;
 }
 
 %typemap(in) GncOptionAccountList& (GncOptionAccountList acclist)
@@ -623,7 +634,7 @@ gnc_option_test_book_destroy(QofBook* book)
         SCM s_account = scm_list_ref($input, scm_from_size_t(i));
         Account* acct = (Account*)SWIG_MustGetPtr(s_account,
                                                   SWIGTYPE_p_Account, 1, 0);
-        acclist.push_back(acct);
+        acclist.push_back(*qof_entity_get_guid(acct));
     }
     $1 = &acclist;
 }
@@ -631,18 +642,26 @@ gnc_option_test_book_destroy(QofBook* book)
 %typemap(out) GncOptionAccountList
 {
     $result = SCM_EOL;
-    for (auto acct : $1)
+    auto book{gnc_get_current_book()};
+    for (auto guid : $1)
+    {
+        auto acct{xaccAccountLookup(&guid, book)};
         $result = scm_cons(SWIG_NewPointerObj(acct, SWIGTYPE_p_Account, 0),
                            $result);
+    }
     $result = scm_reverse($result);
 }
 
-%typemap(out) GncOptionAccountList&
+%typemap(out) const GncOptionAccountList&
 {
     $result = SCM_EOL;
-    for (auto acct : *$1)
+    auto book{gnc_get_current_book()};
+    for (auto guid : *$1)
+    {
+        auto acct{xaccAccountLookup(&guid, book)};
         $result = scm_cons(SWIG_NewPointerObj(acct, SWIGTYPE_p_Account, 0),
                            $result);
+    }
     $result = scm_reverse ($result)
 }
 
@@ -1080,17 +1099,17 @@ inline SCM return_scm_value(ValueType value)
                               GncOptionAccountListValue>)
                 {
                     static const SCM list_format_str{scm_from_utf8_string("'~s")};
-                    auto acct_list{option.get_value()};
-                    if (acct_list.empty())
+                    auto guid_list{option.get_value()};
+                    if (guid_list.empty())
                         return no_value;
-                    SCM guid_list{SCM_EOL};
-                    for(auto acct : acct_list)
+                    SCM string_list{SCM_EOL};
+                    for(auto guid : guid_list)
                     {
-                        auto acct_str{qof_instance_to_string(QOF_INSTANCE(acct))};
-                        auto acct_scm{scm_from_utf8_string(acct_str.c_str())};
-                        guid_list = scm_cons(acct_scm, guid_list);
+                        auto guid_str{guid_to_string(&guid)};
+                        auto guid_scm{scm_from_utf8_string(guid_str)};
+                        string_list = scm_cons(guid_scm, string_list);
                     }
-                    return scm_simple_format(SCM_BOOL_F, list_format_str, scm_list_1(guid_list));
+                    return scm_simple_format(SCM_BOOL_F, list_format_str, scm_list_1(string_list));
 
                 }
                 if constexpr (is_QofInstanceValue_v<decltype(option)>)

@@ -86,10 +86,12 @@ TEST_F(GncOptionDBTest, test_register_string_option)
  */
 
 
-struct AccountTestBook
+struct GncOptionDBAccountTest : public ::testing::Test
 {
-    AccountTestBook() :
-        m_book{qof_book_new()}, m_root{gnc_account_create_root(m_book)}
+    GncOptionDBAccountTest() :
+        m_sess{gnc_get_current_session()}, m_book{gnc_get_current_book()},
+        m_root{gnc_account_create_root(m_book)},
+        m_db{std::make_unique<GncOptionDB>()}
     {
         auto create_account = [this](Account* parent, GNCAccountType type,
                                        const char* name)->Account* {
@@ -117,31 +119,31 @@ struct AccountTestBook
         create_account(expenses, ACCT_TYPE_EXPENSE, "Gas");
         create_account(expenses, ACCT_TYPE_EXPENSE, "Rent");
    }
-    ~AccountTestBook()
+    ~GncOptionDBAccountTest()
     {
         xaccAccountBeginEdit(m_root);
         xaccAccountDestroy(m_root); //It does the commit
-        qof_book_destroy(m_book);
+        gnc_clear_current_session();
     }
 
+    QofSession* m_sess;
     QofBook* m_book;
     Account* m_root;
+    GncOptionDBPtr m_db;
 };
 
-TEST_F(GncOptionDBTest, test_register_account_list_option)
+TEST_F(GncOptionDBAccountTest, test_register_account_list_option)
 {
-    AccountTestBook book;
-    auto acclist{gnc_account_list_from_types(book.m_book, {ACCT_TYPE_STOCK})};
+    auto acclist{gnc_account_list_from_types(m_book, {ACCT_TYPE_STOCK})};
     gnc_register_account_list_option(m_db, "foo", "bar", "baz",
                                      "Phony Option", acclist);
     EXPECT_EQ(4U, m_db->find_option("foo", "bar")->get_value<GncOptionAccountList>().size());
     EXPECT_EQ(acclist[3], m_db->find_option("foo", "bar")->get_value<GncOptionAccountList>().at(3));
 }
 
-TEST_F(GncOptionDBTest, test_register_account_list_limited_option)
+TEST_F(GncOptionDBAccountTest, test_register_account_list_limited_option)
 {
-    AccountTestBook book;
-    auto acclist{gnc_account_list_from_types(book.m_book, {ACCT_TYPE_STOCK})};
+    auto acclist{gnc_account_list_from_types(m_book, {ACCT_TYPE_STOCK})};
     gnc_register_account_list_limited_option(m_db, "foo", "bar", "baz",
                                              "Phony Option", acclist,
                                              {ACCT_TYPE_STOCK});
@@ -149,10 +151,9 @@ TEST_F(GncOptionDBTest, test_register_account_list_limited_option)
     EXPECT_EQ(acclist[3], m_db->find_option("foo", "bar")->get_value<GncOptionAccountList>().at(3));
 }
 
-TEST_F(GncOptionDBTest, test_register_account_sel_limited_option)
+TEST_F(GncOptionDBAccountTest, test_register_account_sel_limited_option)
 {
-    AccountTestBook book;
-    auto acclist{gnc_account_list_from_types(book.m_book, {ACCT_TYPE_STOCK})};
+    auto acclist{gnc_account_list_from_types(m_book, {ACCT_TYPE_STOCK})};
     GncOptionAccountList accsel{acclist[2]};
     gnc_register_account_list_limited_option(m_db, "foo", "bar", "baz",
                                              "Phony Option", accsel,
@@ -161,10 +162,9 @@ TEST_F(GncOptionDBTest, test_register_account_sel_limited_option)
     EXPECT_EQ(accsel[0], m_db->find_option("foo", "bar")->get_value<GncOptionAccountList>().at(0));
 }
 
-TEST_F(GncOptionDBTest, test_register_account_sel_limited_option_fail_construct)
+TEST_F(GncOptionDBAccountTest, test_register_account_sel_limited_option_fail_construct)
 {
-    AccountTestBook book;
-    auto acclist{gnc_account_list_from_types(book.m_book, {ACCT_TYPE_STOCK})};
+    auto acclist{gnc_account_list_from_types(m_book, {ACCT_TYPE_STOCK})};
     GncOptionAccountList accsel{acclist[2]};
     gnc_register_account_list_limited_option(m_db, "foo", "bar", "baz", "Phony Option",
                                      accsel, {ACCT_TYPE_BANK});
@@ -276,6 +276,12 @@ TEST_F(GncOptionDBTest, test_register_start_date_option)
 
 }
 
+static bool
+operator==(const GncGUID& l, const GncGUID& r)
+{
+    return guid_equal(&l, &r);
+}
+
 class GncOptionDBIOTest : public ::testing::Test
 {
 protected:
@@ -322,7 +328,8 @@ protected:
                                  RelativeDatePeriod::START_CURRENT_QUARTER);
         gnc_register_account_list_option(m_db, "quux", "xyzzy", "second",
                                          "Phony AccountList Option",
-                                         {aapl, hpe});
+                                         {*qof_entity_get_guid(aapl),
+                                          *qof_entity_get_guid(hpe)});
     }
 
     ~GncOptionDBIOTest()

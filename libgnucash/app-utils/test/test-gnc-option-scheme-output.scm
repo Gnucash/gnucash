@@ -315,7 +315,7 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
             (test-template test-account-list-output-template)
             (new-acclist (gnc-account-list-from-types book (list ACCT-TYPE-BANK))))
         (gnc:option-set-value option new-acclist)
-        (test-equal "account list form"
+        (test-equal "account list form" ;;fails
                     (test-template (GncOption-serialize option))
                     (gnc:generate-restore-forms odb "options"))
         ))
@@ -338,7 +338,7 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
       (let ((option (gnc:lookup-option odb "foo" "bar"))
             (test-template test-string-output-template))
         (gnc:option-set-value option bank)
-        (test-equal "account sel form"
+        (test-equal "account sel form" ;; fails
                     (test-template (GncOption-serialize option))
                     (gnc:generate-restore-forms odb "options"))
         ))

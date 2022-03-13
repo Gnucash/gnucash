@@ -515,7 +515,7 @@ find_children(Account* account, void* data)
     const GncOptionAccountTypeList& types = datapair->second;
     if (std::find(types.begin(), types.end(),
                   xaccAccountGetType(account)) != types.end())
-        list.push_back(account);
+        list.push_back(*qof_entity_get_guid(account));
 }
 
 class GncOptionAccountTest : public ::testing::Test
@@ -570,6 +570,12 @@ protected:
     QofBook* m_book;
     Account* m_root;
 };
+
+static bool
+operator==(const GncGUID& l, const GncGUID& r)
+{
+    return guid_equal(&l, &r);
+}
 
 TEST_F(GncOptionAccountTest, test_test_constructor_and_destructor)
 {
@@ -662,9 +668,9 @@ TEST_F(GncOptionAccountTest, test_account_list_out)
                                            GncOptionUIType::ACCOUNT_LIST,
                                            acclist}};
     std::ostringstream oss;
-    std::string acc_guids{gnc::GUID{*qof_instance_get_guid(acclist[0])}.to_string()};
+    std::string acc_guids{gnc::GUID{acclist[0]}.to_string()};
     acc_guids += " ";
-    acc_guids += gnc::GUID{*qof_instance_get_guid(acclist[1])}.to_string();
+    acc_guids += gnc::GUID{acclist[1]}.to_string();
 
     oss << option;
     EXPECT_EQ(acc_guids, oss.str());
@@ -675,7 +681,7 @@ TEST_F(GncOptionAccountTest, test_account_list_out)
                                                GncOptionUIType::ACCOUNT_LIST,
                                                accsel,
                                                GncOptionAccountTypeList{ACCT_TYPE_BANK}}};
-    acc_guids = gnc::GUID{*qof_instance_get_guid(accsel[0])}.to_string();
+    acc_guids = gnc::GUID{accsel[0]}.to_string();
 
     oss.str("");
     oss << sel_option;
@@ -688,9 +694,9 @@ TEST_F(GncOptionAccountTest, test_account_list_in)
     GncOption option{GncOptionAccountListValue{"foo", "bar", "baz", "Bogus Option",
                                            GncOptionUIType::ACCOUNT_LIST,
                                            acclist}};
-    std::string acc_guids{gnc::GUID{*qof_instance_get_guid(acclist[0])}.to_string()};
+    std::string acc_guids{gnc::GUID{acclist[0]}.to_string()};
     acc_guids += " ";
-    acc_guids += gnc::GUID{*qof_instance_get_guid(acclist[1])}.to_string();
+    acc_guids += gnc::GUID{acclist[1]}.to_string();
 
     std::istringstream iss{acc_guids};
     iss >> option;
@@ -703,7 +709,7 @@ TEST_F(GncOptionAccountTest, test_account_list_in)
                                                accsel,
                                                GncOptionAccountTypeList{ACCT_TYPE_BANK}}};
     GncOptionAccountList acclistbad{list_of_types({ACCT_TYPE_STOCK})};
-    acc_guids = gnc::GUID{*qof_instance_get_guid(acclistbad[1])}.to_string();
+    acc_guids = gnc::GUID{acclistbad[1]}.to_string();
     acc_guids += " ";
 
     iss.str(acc_guids);
@@ -711,7 +717,7 @@ TEST_F(GncOptionAccountTest, test_account_list_in)
     EXPECT_EQ(accsel, sel_option.get_value<GncOptionAccountList>());
 
     iss.clear();  //Reset the failedbit from the invalid selection type.
-    acc_guids = gnc::GUID{*qof_instance_get_guid(acclist[1])}.to_string();
+    acc_guids = gnc::GUID{acclist[1]}.to_string();
     EXPECT_NO_THROW({
             iss.str(acc_guids);
             iss >> sel_option;

@@ -112,16 +112,16 @@
         (test-equal (car acctlist) (car acct-list))) )))
 
   (define (test-make-account-list-limited-option book)
-    (test-group "test-make-account-list-option"
+    (test-group "test-make-account-list-limited-option"
     (let ((option-db (new-gnc-optiondb))
           (acctlist (gnc-account-list-from-types book
                                (list ACCT-TYPE-STOCK))))
-      (gnc-register-account-list-limited-option
+      (gnc-register-account-list-limited-option ;; Error not account type twice
        option-db "foo" "bar" "baz"
        "Phony Option" acctlist (list ACCT-TYPE-STOCK))
       (let ((acct-list (gnc-option-value option-db "foo" "bar")))
-        (test-equal (length acctlist) (length acct-list))
-        (test-equal (cadr acctlist) (cadr acct-list)))
+        (test-equal (length acctlist) (length acct-list)) ;; fails acct-list 4 vs #f
+        (test-equal (cadr acctlist) (cadr acct-list)))    ;; fails () vs. #f both wrong
       (gnc-register-account-list-limited-option
        option-db "waldo" "pepper" "baz"
        "Phony Option" acctlist (list ACCT-TYPE-BANK))

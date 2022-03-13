@@ -275,13 +275,20 @@ GncOptionAccountListValue::validate(const GncOptionAccountList& values) const
         return true;
     if ((get_ui_type() == GncOptionUIType::ACCOUNT_SEL || !m_multiselect) &&
         values.size() != 1)
+    {
+        std::cerr << "GncOptionAccountListValue::validate: Multiple values for a non-multiselect option." << std::endl;
         return false;
+    }
     if (m_allowed.empty())
         return true;
-    for(auto account : values) {
+    auto book{gnc_get_current_book()};
+    for(auto& guid : values)
+    {
         if (std::find(m_allowed.begin(), m_allowed.end(),
-                      xaccAccountGetType(account)) == m_allowed.end())
-            return false;
+                      xaccAccountGetType(xaccAccountLookup(&guid, book))) == m_allowed.end())
+        {
+            std::cerr << "GncOptionAccountListValue::validate: Account " << gnc::GUID(guid).to_string() << " is not of an allowed type" << std::endl;
+            return false; }
     }
     return true;
 }
@@ -310,16 +317,32 @@ GncOptionAccountListValue::get_default_value() const
     if (!account_list)
         return retval;
 
+    auto book{gnc_get_current_book()};
     for (auto node = account_list; node; node = g_list_next (node))
+    {
         if (std::find(m_allowed.begin(), m_allowed.end(),
                       xaccAccountGetType(GNC_ACCOUNT(node->data))) != m_allowed.end())
         {
-            retval.push_back(GNC_ACCOUNT(node->data));
+            retval.push_back(*qof_entity_get_guid(GNC_ACCOUNT(node->data)));
             break;
         }
+    }
     g_list_free(account_list);
     return retval;
 }
+
+static bool
+operator==(const GncGUID& l, const GncGUID& r)
+{
+    return guid_equal(&l, &r);
+}
+
+bool
+GncOptionAccountListValue::is_changed() const noexcept
+{
+    return m_value != m_default_value;
+}
+
 
 
 /**
@@ -354,15 +377,20 @@ GncOptionAccountSelValue::validate(const Account* value) const
 const Account*
 GncOptionAccountSelValue::get_value() const
 {
-    return m_value ? m_value : get_default_value();
+    auto book{gnc_get_current_book()};
+    return guid_equal(guid_null(), &m_value) ? get_default_value() :
+           xaccAccountLookup(&m_value, book);
 }
 
 const Account*
 GncOptionAccountSelValue::get_default_value() const
 {
 
-    if (m_default_value)
-        return m_default_value;
+    if (!guid_equal(guid_null(), &m_default_value))
+    {
+        auto book{gnc_get_current_book()};
+        return xaccAccountLookup(&m_default_value, book);
+    }
 
     /* If no default has been set and there's an allowed set then find the first
      * account that matches one of the allowed account types.
@@ -713,7 +741,7 @@ GncOptionAccountListValue::serialize() const noexcept
         if (!first)
             retval += " ";
         first = false;
-        retval += qof_instance_to_string(QOF_INSTANCE(val));
+        retval += guid_to_string(&val);
     }
     return retval;
 }
@@ -732,8 +760,9 @@ GncOptionAccountListValue::deserialize(const std::string& str) noexcept
         if (!first)
             ++pos;
         first = false;
-        auto ptr = qof_instance_from_string(str.substr(pos, pos + GUID_ENCODING_LENGTH), get_ui_type());
-        m_value.push_back(reinterpret_cast<Account*>(ptr));
+        GncGUID guid{};
+        string_to_guid(str.substr(pos, pos + GUID_ENCODING_LENGTH).c_str(), &guid);
+        m_value.push_back(guid);
         pos += GUID_ENCODING_LENGTH;
     }
     return true;
@@ -743,7 +772,7 @@ std::string
 GncOptionAccountSelValue::serialize() const noexcept
 {
     static const std::string no_value{"No Value"};
-    return m_value ?qof_instance_to_string(QOF_INSTANCE(m_value)) : no_value;
+    return guid_equal(guid_null(), &m_value) ? no_value : guid_to_string(&m_value);
 }
 
 bool
