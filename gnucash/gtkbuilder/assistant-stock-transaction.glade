@@ -122,7 +122,7 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="margin-bottom">6</property>
-            <property name="label" translatable="yes">Select the type of transaction date and description for your records.</property>
+            <property name="label" translatable="yes">Select the date and description for your records.</property>
             <property name="wrap">True</property>
           </object>
           <packing>
@@ -197,7 +197,7 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="margin-bottom">6</property>
-            <property name="label" translatable="yes">Enter the date and the number of shares you gained or lost in the transaction.</property>
+            <property name="label" translatable="yes">Enter the number of shares you gained or lost in the transaction.</property>
             <property name="wrap">True</property>
           </object>
           <packing>
@@ -518,7 +518,7 @@
         </child>
       </object>
       <packing>
-        <property name="title" translatable="yes" comments="Dialog title for the remains of a stock split">Cash</property>
+        <property name="title" translatable="yes">Cash</property>
         <property name="complete">True</property>
       </packing>
     </child>
