@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-11 06:28+0000\n"
+"PO-Revision-Date: 2022-03-13 07:06+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -29270,7 +29270,7 @@ msgstr "Reverter exibição de montante para certos tipos de conta."
 
 #: gnucash/report/trep-engine.scm:1197
 msgid "Num/T-Num"
-msgstr "Num/Num-T"
+msgstr "Nº/Nº-T"
 
 #: gnucash/report/trep-engine.scm:1246
 msgid "Transfer from/to"
@@ -29294,7 +29294,7 @@ msgstr "CSV desactivado para quantias em coluna dupla"
 #: gnucash/report/trep-engine.scm:2269
 #, scheme-format
 msgid "From ~a to ~a"
-msgstr "De ~a para ~a"
+msgstr "De ~a a ~a"
 
 #: libgnucash/app-utils/business-options.scm:69
 msgid "Company Address"
