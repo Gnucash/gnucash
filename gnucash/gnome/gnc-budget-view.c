@@ -1265,6 +1265,9 @@ budget_col_edited (Account *account, GtkTreeViewColumn *col,
     guint period_num;
     gnc_numeric numeric = gnc_numeric_error (GNC_ERROR_ARG);
 
+    if (qof_book_is_readonly (gnc_get_current_book ()))
+        return;
+
     if (!xaccParseAmount (new_text, TRUE, &numeric, NULL) &&
                 !(new_text && *new_text == '\0'))
         return;
