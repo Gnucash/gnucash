@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-13 07:06+0000\n"
+"PO-Revision-Date: 2022-03-14 06:41+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -29878,24 +29878,23 @@ msgstr "Erro numérico"
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1018
 #, c-format
 msgid "Unknown account for guid [%s], cancelling SX [%s] creation."
-msgstr "Conta desconhecida para guid [%s], a cancelar criação de SX [%s]."
+msgstr "Conta [%s] desconhecida, a cancelar o agendamento de [%s]."
 
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1071
 #, c-format
 msgid "Error parsing SX [%s] key [%s]=formula [%s] at [%s]: %s."
-msgstr "Erro ao analisar chave SX [%s] [%s]=fórmula [%s] em [%s]: %s."
+msgstr "Erro ao analisar [%s], chave [%s]=fórmula [%s] em [%s]: %s."
 
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1125
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1790
 #, c-format
 msgid "Error %d in SX [%s] final gnc_numeric value, using 0 instead."
-msgstr "Erro %d em SX [%s] final gnc_numeric value, a usar antes 0."
+msgstr "Erro %d em [%s], valor final de gnc_numeric, a usar antes 0."
 
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1799
 #, c-format
 msgid "No exchange rate available in SX [%s] for %s -> %s, value is zero."
-msgstr ""
-"Sem taxa de câmbio disponível em SX [%s] para %s -> %s, o valor é zero."
+msgstr "Sem taxa de câmbio disponível em [%s] para %s -> %s, o valor é zero."
 
 #. Translators: This and the following strings appear on
 #. the account tab if the Tax Info column is displayed,
@@ -29917,13 +29916,13 @@ msgstr "Campo de imposto não especificado"
 #: libgnucash/app-utils/gnc-ui-util.c:702
 #, c-format
 msgid "Tax type %s: invalid code %s for account type"
-msgstr "Tipo de imposto %s: código inválido %s para o tipo de conta"
+msgstr "Tipo de imposto %s: código %s inválido para o tipo de conta"
 
 #: libgnucash/app-utils/gnc-ui-util.c:706
 #, c-format
 msgid "Not tax-related; tax type %s: invalid code %s for account type"
 msgstr ""
-"Não sujeita a imposto; tipo de imposto %s: código inválido %s para o tipo de "
+"Não sujeita a imposto; tipo de imposto %s: código %s inválido para o tipo de "
 "conta"
 
 #: libgnucash/app-utils/gnc-ui-util.c:719
@@ -29934,7 +29933,7 @@ msgstr "Código %s inválido para o tipo de imposto %s"
 #: libgnucash/app-utils/gnc-ui-util.c:723
 #, c-format
 msgid "Not tax-related; invalid code %s for tax type %s"
-msgstr "Não sujeita a imposto; código inválido %s para o tipo de imposto %s"
+msgstr "Não sujeita a imposto; código %s inválido para o tipo de imposto %s"
 
 #: libgnucash/app-utils/gnc-ui-util.c:741
 #, c-format
@@ -29983,7 +29982,7 @@ msgstr "c"
 #: libgnucash/app-utils/gnc-ui-util.c:875
 msgctxt "Reconciled flag 'reconciled'"
 msgid "y"
-msgstr "s"
+msgstr "r"
 
 #: libgnucash/app-utils/gnc-ui-util.c:877
 msgctxt "Reconciled flag 'frozen'"
@@ -30045,7 +30044,7 @@ msgstr "Aviso"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:678
 msgid "Your gnucash metadata has been migrated."
-msgstr "Os seus meta-dados gnucash foram migrados."
+msgstr "Os seus meta-dados GnuCash foram migrados."
 
 #. Translators: this refers to a directory name.
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:680
@@ -30121,7 +30120,7 @@ msgstr "Acção"
 
 #: libgnucash/engine/Account.cpp:4475
 msgid "Mutual Fund"
-msgstr "Fundo de investimento"
+msgstr "Fundo mutualista"
 
 #: libgnucash/engine/Account.cpp:4480
 msgid "A/Receivable"
@@ -30137,12 +30136,12 @@ msgstr "Raiz"
 
 #: libgnucash/engine/Account.cpp:4944
 msgid "Orphaned Gains"
-msgstr "Ganhos orfãos"
+msgstr "Ganhos órfãos"
 
 #: libgnucash/engine/Account.cpp:4958 libgnucash/engine/cap-gains.c:806
 #: libgnucash/engine/cap-gains.c:811 libgnucash/engine/cap-gains.c:812
 msgid "Realized Gain/Loss"
-msgstr "Ganho/Perda realizado"
+msgstr "Ganhos/Perdas realizados"
 
 #: libgnucash/engine/Account.cpp:4960
 msgid ""
@@ -30193,7 +30192,7 @@ msgstr "m-d"
 
 #: libgnucash/engine/gnc-datetime.cpp:572
 msgid "Unknown date format specifier passed as argument."
-msgstr "Especificador de formato de data inválido passado como argumento."
+msgstr "Formato de data inválido passado como argumento."
 
 #: libgnucash/engine/gnc-datetime.cpp:577
 msgid "Value can't be parsed into a date using the selected date format."
@@ -30269,11 +30268,11 @@ msgstr "Usar contas de bolsa"
 
 #: libgnucash/engine/qofbookslots.h:67
 msgid "Currency Accounting"
-msgstr "Contabilidade de moeda"
+msgstr "Moeda contabilizável"
 
 #: libgnucash/engine/qofbookslots.h:68
 msgid "Book Currency"
-msgstr "Livro de moeda"
+msgstr "Moeda do livro"
 
 #: libgnucash/engine/qofbookslots.h:69
 msgid "Default Gains Policy"
