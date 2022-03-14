@@ -33,10 +33,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-02-18 17:57+0000\n"
+"PO-Revision-Date: 2022-03-14 20:55+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -45,7 +45,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -511,6 +511,11 @@ msgid ""
 "(File[->Most Recently Used-List]).\n"
 "The full path is displayed in the status bar."
 msgstr ""
+"Wenn Sie wissen wollen, in welchem Verzeichnis Ihre GnuCash-Dateien "
+"gespeichert sind, bewegen Sie den Mauszeiger über einen der nummerierten "
+"Einträge im »Datei«-Menü.\n"
+"»Datei[->Liste der zuletzt verwendeten Dateien]«\n"
+"Der vollständige Pfad wird in der Statusleiste angezeigt."
 
 #: doc/tip_of_the_day.list.c:24
 msgid ""
@@ -15790,6 +15795,9 @@ msgid ""
 "investment categories like STOCKS and BONDS or exchange names like NASDAQ "
 "and LSE."
 msgstr ""
+"Wählen Sie eine Kategorie für die Devise/Wertpapier oder geben Sie eine neue "
+"ein. Sie können Anlagekategorien wie Aktien und Fonds oder Börsennamen wie "
+"DAX und NASDAQ verwenden."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:329
 msgid ""
@@ -22005,10 +22013,8 @@ msgid "y/d/m"
 msgstr "Jahr/Tag/Monat"
 
 #: gnucash/import-export/import-main-matcher.c:462
-#, fuzzy
-#| msgid "Do transaction report on this account."
 msgid "No new transactions were found in this import."
-msgstr "Erstelle den Buchungsbericht zu diesem Konto."
+msgstr "Bei dem Import wurden keine neuen Buchungen gefunden."
 
 #: gnucash/import-export/import-main-matcher.c:630
 #: gnucash/import-export/import-main-matcher.c:783
@@ -22016,44 +22022,32 @@ msgid "Destination account for the auto-balance split."
 msgstr "Gegenkonto für Ausgleichsbuchung."
 
 #: gnucash/import-export/import-main-matcher.c:943
-#, fuzzy
-#| msgid "Enter the Entry Description"
 msgid "Enter new Description"
-msgstr "Geben Sie die Beschreibung des Postens ein"
+msgstr "Neue Beschreibung eingeben"
 
 #: gnucash/import-export/import-main-matcher.c:958
-#, fuzzy
-#| msgid "Enter Due Date"
 msgid "Enter new Memo"
-msgstr "Fälligkeitsdatum eingeben"
+msgstr "Neuen Buchungstext eingeben"
 
 #: gnucash/import-export/import-main-matcher.c:971
-#, fuzzy
-#| msgid "Enter Note"
 msgid "Enter new Notes"
-msgstr "Bemerkung eingeben"
+msgstr "Neue Bemerkung eingeben"
 
 #: gnucash/import-export/import-main-matcher.c:1097
 msgid "Assign a transfer account to the selection."
 msgstr "Gegenkonto zu Auswahl zuweisen."
 
 #: gnucash/import-export/import-main-matcher.c:1108
-#, fuzzy
-#| msgid "Sort by description."
 msgid "Edit description."
-msgstr "Sortieren nach Beschreibung"
+msgstr "Beschreibung bearbeiten."
 
 #: gnucash/import-export/import-main-matcher.c:1116
-#, fuzzy
-#| msgid "Edit Job"
 msgid "Edit memo."
-msgstr "Auftrag bearbeiten"
+msgstr "Buchungstext bearbeiten."
 
 #: gnucash/import-export/import-main-matcher.c:1124
-#, fuzzy
-#| msgid "Edit Note"
 msgid "Edit notes."
-msgstr "Bemerkung bearbeiten"
+msgstr "Bemerkung bearbeiten."
 
 #: gnucash/import-export/import-main-matcher.c:1286
 msgctxt "Column header for 'Adding transaction'"
@@ -28690,22 +28684,16 @@ msgid "CSS color."
 msgstr "CSS-Farbe."
 
 #: gnucash/report/reports/standard/taxinvoice.scm:192
-#, fuzzy
-#| msgid "Invoice number: "
 msgid "Invoice number:"
-msgstr "Rechnungsnummer: "
+msgstr "Rechnungsnummer:"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:194
-#, fuzzy
-#| msgid "To: "
 msgid "To:"
-msgstr "An: "
+msgstr "An:"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:196
-#, fuzzy
-#| msgid "Your ref: "
 msgid "Your ref:"
-msgstr "Ihr Zeichen: "
+msgstr "Ihr Zeichen:"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:208
 msgid "Embedded CSS."
@@ -29453,10 +29441,10 @@ msgid "Use regular expressions for account name filter"
 msgstr "Regulären Ausdruck für Import nutzen"
 
 #: gnucash/report/trep-engine.scm:114
-#, fuzzy
-#| msgid "Transaction Filter excludes matched strings"
 msgid "Account Name Filter excludes matched strings"
-msgstr "Buchungsfilter blendet passende Zeichenketten aus"
+msgstr ""
+"Der Filter für die Kontobezeichnung schließt übereinstimmende Zeichenfolgen "
+"aus"
 
 #: gnucash/report/trep-engine.scm:115
 msgid "Transaction Filter"
@@ -29609,13 +29597,10 @@ msgstr ""
 "anzuzeigen, z.B. '20../.' wird mit'Reise 2017/1 London' übereinstimmen. "
 
 #: gnucash/report/trep-engine.scm:600
-#, fuzzy
-#| msgid ""
-#| "If this option is selected, transactions matching filter are excluded."
 msgid "If this option is selected, accounts matching filter are excluded."
 msgstr ""
-"Wenn aktiv, werden die Buchungen ausgeblendet, die auf den Buchungsfilter "
-"passen."
+"Wenn diese Option ausgewählt ist, werden Konten, die dem Filter entsprechen, "
+"ausgeschlossen."
 
 #: gnucash/report/trep-engine.scm:606
 msgid ""
