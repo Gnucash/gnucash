@@ -1850,11 +1850,13 @@ xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
     return (bufp - orig_bufp);
 }
 
+#define BUFLEN 1024
+
 const char *
 xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info)
 {
     /* hack alert -- this is not thread safe ... */
-    static char buf[1024];
+    static char buf[BUFLEN];
 
     if (!xaccSPrintAmount (buf, val, info))
         buf[0] = '\0';
@@ -1863,6 +1865,55 @@ xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info)
     return buf;
 }
 
+const char *
+gnc_print_amount_with_bidi_ltr_isolate (gnc_numeric val, GNCPrintAmountInfo info)
+{
+    /* hack alert -- this is not thread safe ... */
+    static char buf[BUFLEN];
+    static const char ltr_isolate[] = { 0xe2, 0x81, 0xa6 };
+    static const char ltr_pop_isolate[] = { 0xe2, 0x81, 0xa9 };
+    size_t offset = info.use_symbol ? 3 : 0;
+
+    memset (buf, 0, BUFLEN);
+    if (!xaccSPrintAmount (buf + offset, val, info))
+    {
+        buf[0] = '\0';
+        return buf;
+    };
+
+    if (!info.use_symbol)
+        return buf;
+
+    memcpy (buf, ltr_isolate, 3);
+
+    if (buf[BUFLEN - 4] == '\0')
+    {
+        size_t length = strlen (buf);
+        memcpy (buf + length, ltr_pop_isolate, 3);
+    }
+    else
+    {
+        buf[BUFLEN - 1] = '\0';
+        memcpy (buf + BUFLEN - 4, ltr_pop_isolate, 3);
+
+        PWARN("buffer length %d exceeded, string truncated was %s", BUFLEN, buf);
+    }
+    /* its OK to return buf, since we declared it static
+       and is immediately g_strdup'd */
+    return buf;
+}
+
+gchar *
+gnc_wrap_text_with_bidi_ltr_isolate (const gchar *text)
+{
+    static const char *ltr = "\u2066"; // ltr isolate
+    static const char *pop = "\u2069"; // pop directional formatting
+
+    if (!text)
+        return NULL;
+
+    return g_strconcat (ltr, text, pop, NULL);
+}
 
 /********************************************************************\
  ********************************************************************/

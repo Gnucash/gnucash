@@ -560,6 +560,7 @@ gnc_tree_model_account_compute_period_balance (GncTreeModelAccount *model,
                                                gboolean *negative)
 {
     GncTreeModelAccountPrivate *priv;
+    GNCPrintAmountInfo print_info;
     time64 t1, t2;
     gnc_numeric b3;
 
@@ -583,7 +584,9 @@ gnc_tree_model_account_compute_period_balance (GncTreeModelAccount *model,
     if (negative)
         *negative = gnc_numeric_negative_p (b3);
 
-    return g_strdup(xaccPrintAmount (b3, gnc_account_print_info (acct, TRUE)));
+    print_info = gnc_account_print_info (acct, TRUE);
+
+    return g_strdup (gnc_print_amount_with_bidi_ltr_isolate (b3, print_info));
 }
 
 static gboolean
