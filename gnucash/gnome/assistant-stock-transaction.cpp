@@ -751,7 +751,17 @@ refresh_page_finish (StockTransactionInfo *info)
     }
 
     if (!gnc_numeric_equal (debit, credit))
-        add_error_str (errors, N_("Debits and credits are not balanced"));
+    {
+        auto imbalance_str = N_("Total Debits of %s does not balance with total Credits of %s.");
+        auto print_info = gnc_commodity_print_info (info->currency, true);
+        auto debit_str = g_strdup (xaccPrintAmount (debit, print_info));
+        auto credit_str = g_strdup (xaccPrintAmount (credit, print_info));
+        auto error_str = g_strdup_printf (_(imbalance_str), debit_str, credit_str);
+        errors.emplace_back (error_str);
+        g_free (error_str);
+        g_free (credit_str);
+        g_free (debit_str);
+    }
 
     if (errors.empty())
     {
