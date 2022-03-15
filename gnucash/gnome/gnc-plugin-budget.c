@@ -138,7 +138,6 @@ static void add_to_window (GncPlugin *plugin, GncMainWindow *mainwindow, GQuark 
 static void remove_from_window (GncPlugin *plugin, GncMainWindow *window, GQuark type)
 {
     g_signal_handlers_disconnect_by_func (window, G_CALLBACK(page_changed), plugin);
-    PWARN ("removed");
 }
 
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginBudget, gnc_plugin_budget, GNC_TYPE_PLUGIN)
