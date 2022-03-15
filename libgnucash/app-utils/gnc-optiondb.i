@@ -67,6 +67,7 @@ namespace std {
 #include "gnc-optiondb.hpp"
 #include "gnc-optiondb-impl.hpp"
 #include "gnc-option-date.hpp"
+#include <array>
 #include <sstream>
 #include <iomanip>
 
