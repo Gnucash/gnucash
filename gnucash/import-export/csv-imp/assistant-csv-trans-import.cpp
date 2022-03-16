@@ -1572,9 +1572,7 @@ void CsvImpTransAssist::preview_refresh_table ()
 
     /* Start with counting the current number of columns (ntcols)
      * we have in the treeview */
-    auto columns = gtk_tree_view_get_columns (treeview);
-    auto ntcols = g_list_length(columns);
-    g_list_free (columns);
+    auto ntcols = gtk_tree_view_get_n_columns (treeview);
 
     /* Drop redundant columns if the model has less data columns than the new model
      * ntcols = n° of columns in treeview (1 error column + x data columns)

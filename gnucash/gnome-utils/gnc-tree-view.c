@@ -2154,13 +2154,7 @@ gint
 gnc_tree_view_append_column (GncTreeView *view,
                              GtkTreeViewColumn *column)
 {
-    GList *columns;
-    int n;
-
-    /* There's no easy way to get this number. */
-    columns = gtk_tree_view_get_columns (GTK_TREE_VIEW(view));
-    n = g_list_length (columns);
-    g_list_free (columns);
+    int n = gtk_tree_view_get_n_columns (GTK_TREE_VIEW(view));
 
     /* Ignore the initial column, the selection menu */
     if (n >= 1)
@@ -2177,7 +2171,7 @@ get_column_next_to (GtkTreeView *tv, GtkTreeViewColumn **col, gboolean backward)
     gboolean wrapped = FALSE;
 
     cols = gtk_tree_view_get_columns (tv);
-    g_return_val_if_fail (g_list_length (cols) > 0, FALSE);
+    g_return_val_if_fail (cols != NULL, FALSE);
 
     node = g_list_find (cols, *col);
     g_return_val_if_fail (node, FALSE);
