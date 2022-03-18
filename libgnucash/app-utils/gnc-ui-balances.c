@@ -146,7 +146,8 @@ gnc_ui_account_get_print_balance (xaccGetBalanceInCurrencyFn fn,
     balance = gnc_ui_account_get_balance_full(fn, account, recurse,
               negative, NULL);
     print_info = gnc_account_print_info(account, TRUE);
-    return g_strdup(xaccPrintAmount(balance, print_info));
+
+    return g_strdup (gnc_print_amount_with_bidi_ltr_isolate (balance, print_info));
 }
 
 
@@ -178,7 +179,8 @@ gnc_ui_account_get_print_report_balance (xaccGetBalanceInCurrencyFn fn,
     balance = gnc_ui_account_get_balance_full(fn, account, recurse,
               negative, report_commodity);
     print_info = gnc_commodity_print_info(report_commodity, TRUE);
-    return g_strdup(xaccPrintAmount(balance, print_info));
+
+    return g_strdup (gnc_print_amount_with_bidi_ltr_isolate (balance, print_info));
 }
 
 static gnc_numeric
@@ -312,7 +314,8 @@ gnc_ui_owner_get_print_balance (GncOwner *owner,
 
     balance = gnc_ui_owner_get_balance_full (owner, negative, NULL);
     print_info = gnc_commodity_print_info (gncOwnerGetCurrency (owner), TRUE);
-    return g_strdup (xaccPrintAmount (balance, print_info));
+
+    return g_strdup (gnc_print_amount_with_bidi_ltr_isolate (balance, print_info));
 }
 
 /**
@@ -338,6 +341,7 @@ gnc_ui_owner_get_print_report_balance (GncOwner *owner,
     balance = gnc_ui_owner_get_balance_full (owner, negative,
               report_commodity);
     print_info = gnc_commodity_print_info (report_commodity, TRUE);
-    return g_strdup (xaccPrintAmount (balance, print_info));
+
+    return g_strdup (gnc_print_amount_with_bidi_ltr_isolate (balance, print_info));
 }
 

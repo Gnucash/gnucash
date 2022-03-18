@@ -13,10 +13,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-02-27 02:34+0000\n"
+"PO-Revision-Date: 2022-03-13 04:55+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sv/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11.1-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -489,6 +489,10 @@ msgid ""
 "(File[->Most Recently Used-List]).\n"
 "The full path is displayed in the status bar."
 msgstr ""
+"Om du vill veta i vilka kataloger dina senaste GnuCash-filer lagras, håll "
+"musen över ett av objekten i historikmenyn\n"
+"(Arkiv[->Lista över senaste filer]).\n"
+"Den fullständiga sökvägen visas i statusfältet."
 
 #: doc/tip_of_the_day.list.c:24
 msgid ""
@@ -15496,6 +15500,9 @@ msgid ""
 "investment categories like STOCKS and BONDS or exchange names like NASDAQ "
 "and LSE."
 msgstr ""
+"Välj en kategori för varan eller ange en ny. Man kan använda "
+"investeringskategorier som AKTIER och OBLIGATIONER, eller börsnamn som "
+"NASDAQ och OMX."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:329
 msgid ""
@@ -17066,20 +17073,13 @@ msgid "Enable update match action"
 msgstr "Aktivera åtgärd uppdatera matchning"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2298
-#, fuzzy
-#| msgid ""
-#| "Enable the UPDATE AND RECONCILE action in the transaction matcher. If "
-#| "enabled, a transaction whose best match's score is above the Auto-CLEAR "
-#| "threshold and has a different date or amount than the matching existing "
-#| "transaction will cause the existing transaction to be updated and cleared "
-#| "by default."
 msgid ""
 "Enable the UPDATE AND CLEAR action in the transaction matcher. If enabled, a "
 "transaction whose best match's score is above the Auto-CLEAR threshold and "
 "has a different date or amount than the matching existing transaction will "
 "cause the existing transaction to be updated and cleared by default."
 msgstr ""
-"Aktivera åtgärden UPPDATERA OCH AVSTÄM i transaktionsmatchningen. Om den "
+"Aktivera åtgärden UPPDATERA OCH CLEARA i transaktionsmatchningen. Om den "
 "aktiveras kommer en transaktion vars bästa matchningspoäng är över Auto-"
 "CLEAR-tröskeln och har ett annat datum eller belopp än den matchande "
 "befintliga transaktionen att leda till att den befintliga transaktionen "
@@ -21598,10 +21598,8 @@ msgid "y/d/m"
 msgstr "å/d/m"
 
 #: gnucash/import-export/import-main-matcher.c:462
-#, fuzzy
-#| msgid "Do transaction report on this account."
 msgid "No new transactions were found in this import."
-msgstr "Skapa transaktionsrapport för detta konto."
+msgstr "Inga nya transaktioner hittades i denna import."
 
 #: gnucash/import-export/import-main-matcher.c:630
 #: gnucash/import-export/import-main-matcher.c:783
@@ -21609,44 +21607,32 @@ msgid "Destination account for the auto-balance split."
 msgstr "Destinationskonto för auto-saldodelning."
 
 #: gnucash/import-export/import-main-matcher.c:943
-#, fuzzy
-#| msgid "Enter the Entry Description"
 msgid "Enter new Description"
-msgstr "Ange postens beskrivning"
+msgstr "Ange ny beskrivning"
 
 #: gnucash/import-export/import-main-matcher.c:958
-#, fuzzy
-#| msgid "Enter Due Date"
 msgid "Enter new Memo"
-msgstr "Ange förfallodatum"
+msgstr "Ange ny minnesanteckning"
 
 #: gnucash/import-export/import-main-matcher.c:971
-#, fuzzy
-#| msgid "Enter Note"
 msgid "Enter new Notes"
-msgstr "Mata in anteckning"
+msgstr "Ange ny anteckning"
 
 #: gnucash/import-export/import-main-matcher.c:1097
 msgid "Assign a transfer account to the selection."
 msgstr "Tilldela ett överföringskonto till urvalet."
 
 #: gnucash/import-export/import-main-matcher.c:1108
-#, fuzzy
-#| msgid "Sort by description."
 msgid "Edit description."
-msgstr "Sortera efter beskrivning."
+msgstr "Redigera beskrivning."
 
 #: gnucash/import-export/import-main-matcher.c:1116
-#, fuzzy
-#| msgid "Edit Job"
 msgid "Edit memo."
-msgstr "Redigera jobb"
+msgstr "Redigera minnesanteckning."
 
 #: gnucash/import-export/import-main-matcher.c:1124
-#, fuzzy
-#| msgid "Edit Note"
 msgid "Edit notes."
-msgstr "Redigera anteckning"
+msgstr "Redigera anteckning."
 
 #: gnucash/import-export/import-main-matcher.c:1286
 msgctxt "Column header for 'Adding transaction'"
@@ -21872,10 +21858,8 @@ msgstr ""
 "investeringstyp kan du mata in en ny."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:906
-#, fuzzy
-#| msgid "_Name or description"
 msgid "Name or _description"
-msgstr "_Namn eller beskrivning"
+msgstr "Namn eller _beskrivning"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:930
 msgid "_Ticker symbol or other abbreviation"
@@ -28183,22 +28167,16 @@ msgid "CSS color."
 msgstr "CSS-färg."
 
 #: gnucash/report/reports/standard/taxinvoice.scm:192
-#, fuzzy
-#| msgid "Invoice number: "
 msgid "Invoice number:"
-msgstr "Fakturanummer: "
+msgstr "Fakturanummer:"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:194
-#, fuzzy
-#| msgid "To: "
 msgid "To:"
-msgstr "Till: "
+msgstr "Till:"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:196
-#, fuzzy
-#| msgid "Your ref: "
 msgid "Your ref:"
-msgstr "Er ref: "
+msgstr "Er ref:"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:208
 msgid "Embedded CSS."
@@ -28928,10 +28906,8 @@ msgid "Use regular expressions for account name filter"
 msgstr "Använd regeluttryck för kontonamnfilter"
 
 #: gnucash/report/trep-engine.scm:114
-#, fuzzy
-#| msgid "Transaction Filter excludes matched strings"
 msgid "Account Name Filter excludes matched strings"
-msgstr "Transaktionsfilter exkluderar matchade strängar"
+msgstr "Kontonamnfilter exkluderar matchade strängar"
 
 #: gnucash/report/trep-engine.scm:115
 msgid "Transaction Filter"
@@ -29082,13 +29058,9 @@ msgstr ""
 "matcha \"Resa 2017/1 London\". "
 
 #: gnucash/report/trep-engine.scm:600
-#, fuzzy
-#| msgid ""
-#| "If this option is selected, transactions matching filter are excluded."
 msgid "If this option is selected, accounts matching filter are excluded."
 msgstr ""
-"Om detta alternativ väljs kommer transaktioner som matchar filtret att "
-"exkluderas."
+"Om detta alternativ väljs kommer konton som matchar filtret att exkluderas."
 
 #: gnucash/report/trep-engine.scm:606
 msgid ""
@@ -29213,10 +29185,8 @@ msgid "Display the reconciled date?"
 msgstr "Visa avstämningsdatum?"
 
 #: gnucash/report/trep-engine.scm:945
-#, fuzzy
-#| msgid "Display the reconciled date?"
 msgid "Display the entered date?"
-msgstr "Visa avstämningsdatum?"
+msgstr "Visa registreringsdatum?"
 
 #: gnucash/report/trep-engine.scm:950
 msgid "Display the notes if the memo is unavailable?"
@@ -30160,15 +30130,11 @@ msgstr ""
 "inte har bokförts någon annanstans."
 
 #: libgnucash/engine/gnc-commodity.h:112
-#, fuzzy
-#| msgid "All non-currency"
 msgctxt "Commodity Type"
 msgid "All non-currency"
 msgstr "Alla penningfria"
 
 #: libgnucash/engine/gnc-commodity.h:113
-#, fuzzy
-#| msgid "Currencies"
 msgctxt "Commodity Type"
 msgid "Currencies"
 msgstr "Valutor"

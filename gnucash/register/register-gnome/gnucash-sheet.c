@@ -1377,6 +1377,7 @@ gnucash_scroll_event (GtkWidget *widget, GdkEventScroll *event)
     GnucashSheet *sheet;
     GtkAdjustment *vadj;
     gfloat h_value, v_value;
+    int direction;
 
     g_return_val_if_fail (widget != NULL, TRUE);
     g_return_val_if_fail (GNUCASH_IS_SHEET(widget), TRUE);
@@ -1394,12 +1395,22 @@ gnucash_scroll_event (GtkWidget *widget, GdkEventScroll *event)
     case GDK_SCROLL_DOWN:
         v_value += gtk_adjustment_get_step_increment (vadj);
         break;
+/* GdkQuartz reserves GDK_SCROLL_SMOOTH for high-resolution touchpad
+ * scrolling events, and in that case scrolling by line is much too
+ * fast. Gdk/Wayland and Gdk/Win32 pass GDK_SCROLL_SMOOTH for all
+ * scroll-wheel events and expect coarse resolution.
+ */
     case GDK_SCROLL_SMOOTH:
         h_value = gtk_adjustment_get_value (sheet->hadj);
         h_value += event->delta_x;
         h_value = clamp_scrollable_value (h_value, sheet->hadj);
         gtk_adjustment_set_value (sheet->hadj, h_value);
+#if defined MAC_INTEGRATION
         v_value += event->delta_y;
+#else
+        direction = event->delta_y > 0 ? 1 : event->delta_y < 0 ? -1 : 0;
+        v_value += gtk_adjustment_get_step_increment (vadj) * direction;
+#endif
         break;
     default:
         return FALSE;

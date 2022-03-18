@@ -578,7 +578,7 @@ gsr_update_summary_label( GtkWidget *label,
     char string[256];
     const gchar *label_str = NULL;
     GtkWidget *text_label, *hbox;
-    gchar *tooltip;
+    gchar *bidi_string;
 
     if ( label == NULL )
         return;
@@ -605,11 +605,13 @@ gsr_update_summary_label( GtkWidget *label,
     }
 
     gnc_set_label_color( label, amount );
-    gtk_label_set_text( GTK_LABEL(label), string );
+    bidi_string = gnc_wrap_text_with_bidi_ltr_isolate (string);
+    gtk_label_set_text( GTK_LABEL(label), bidi_string );
+    g_free (bidi_string);
 
     if (label_str)
     {
-        tooltip = g_strdup_printf ("%s %s", label_str, string);
+        gchar *tooltip = g_strdup_printf ("%s %s", label_str, string);
         gtk_widget_set_tooltip_text (GTK_WIDGET(hbox), tooltip);
         g_free (tooltip);
     }

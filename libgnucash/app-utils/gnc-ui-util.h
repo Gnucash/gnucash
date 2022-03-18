@@ -391,6 +391,28 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
                          gunichar group_separator, const char *ignore_list,
                          gnc_numeric *result, char **endstr);
 
+/**
+ * Make a string representation of a gnc_numeric.  Warning, the
+ * gnc_numeric is not checked for validity and the returned char* may
+ * point to random garbage.
+ *
+ * This is the same as xaccPrintAmount but wraps the output with BiDi
+ * left to right isolate if a symbol is displayed.
+ */
+const char *
+gnc_print_amount_with_bidi_ltr_isolate (gnc_numeric val, GNCPrintAmountInfo info);
+
+/**
+ * This function helps with GTK's use of 'Unicode Bidirectional
+ * Text Algorithm'. To keep the format of the text, this function wraps
+ * the text with a BiDi isolate charatcter and a BiDi closing character.
+ *
+ * This helps with monetary values in RTL languages that display the
+ * currency symbol.
+ */
+gchar *
+gnc_wrap_text_with_bidi_ltr_isolate (const char *text);
+
 /* Initialization ***************************************************/
 
 void gnc_ui_util_init (void);
@@ -436,9 +458,9 @@ gchar * gnc_filter_text_for_currency_symbol (const gchar *incoming_text,
                                              const gchar *symbol);
 
 /** Returns the incoming text removed of currency symbol
- * 
+ *
  * @param comm commodity of entry if known
- * 
+ *
  * @param incoming_text The text to filter
  *
  * @param symbol return the symbol used

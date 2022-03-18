@@ -399,6 +399,7 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
         for (current = g_list_first(currency_list); current; current = g_list_next(current))
         {
             gchar *total_mode_label;
+            gchar *bidi_total, *bidi_asset_amount, *bidi_profit_amount;
 
             currency_accum = current->data;
 
@@ -412,16 +413,22 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
 
             gtk_list_store_append(summary->datamodel, &iter);
             total_mode_label = get_total_mode_label (currency_accum);
+            bidi_total = gnc_wrap_text_with_bidi_ltr_isolate(total_mode_label);
+            bidi_asset_amount = gnc_wrap_text_with_bidi_ltr_isolate(asset_amount_string);
+            bidi_profit_amount = gnc_wrap_text_with_bidi_ltr_isolate(profit_amount_string);    
             gtk_list_store_set(summary->datamodel, &iter,
-                               COLUMN_MNEMONIC_TYPE, total_mode_label,
+                               COLUMN_MNEMONIC_TYPE, bidi_total,
                                COLUMN_ASSETS,        _("Net Assets:"),
-                               COLUMN_ASSETS_VALUE,  asset_amount_string,
+                               COLUMN_ASSETS_VALUE,  bidi_asset_amount,
                                COLUMN_ASSETS_NEG,    gnc_numeric_negative_p(currency_accum->assets),
                                COLUMN_PROFITS,       _("Profits:"),
-                               COLUMN_PROFITS_VALUE, profit_amount_string,
+                               COLUMN_PROFITS_VALUE, bidi_profit_amount,
                                COLUMN_PROFITS_NEG,   gnc_numeric_negative_p(currency_accum->profits),
                                -1);
             g_free(total_mode_label);
+            g_free(bidi_total);
+            g_free(bidi_asset_amount);
+            g_free(bidi_profit_amount);
         }
         gtk_combo_box_set_model(GTK_COMBO_BOX(summary->totals_combo),
                                 GTK_TREE_MODEL(summary->datamodel));

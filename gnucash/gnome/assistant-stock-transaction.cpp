@@ -659,6 +659,8 @@ check_page (GtkListStore *list, gnc_numeric& debit, gnc_numeric& credit,
         acctstr = "";
     else if (acct)
         acctstr = xaccAccountGetName (acct);
+    else if ((splitfield & FieldMask::ALLOW_ZERO) && gnc_numeric_zero_p (amount))
+        acctstr = "";
     else
     {
         add_error (errors, N_("Account for %s is missing"), page);
@@ -696,6 +698,8 @@ refresh_page_finish (StockTransactionInfo *info)
     {
         auto stock_amount = gnc_amount_edit_get_amount
             (GNC_AMOUNT_EDIT(info->stock_amount_edit));
+        if (!gnc_numeric_positive_p (stock_amount))
+            add_error_str (errors, N_("Stock amount must be positive"));
         if (info->txn_type->stock_amount & FieldMask::ENABLED_CREDIT)
             stock_amount = gnc_numeric_neg (stock_amount);
         auto new_bal = gnc_numeric_add_fixed (info->balance_at_date, stock_amount);

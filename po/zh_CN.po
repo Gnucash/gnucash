@@ -27,7 +27,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-12 04:55+0000\n"
+"PO-Revision-Date: 2022-03-12 09:55+0000\n"
 "Last-Translator: YTX <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -5787,7 +5787,7 @@ msgstr "保存模板(_R)"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1240
 msgid "Save Report Configuration As..."
-msgstr "另存模板"
+msgstr "另存模板..."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1244
 msgid "Export _Report"
@@ -6414,7 +6414,7 @@ msgstr "显示 ~a 报表"
 #: gnucash/gnome/report-menus.scm:90
 #: gnucash/gtkbuilder/dialog-custom-report.glade:8
 msgid "Saved Report Configurations"
-msgstr "模板清单"
+msgstr "模板清单..."
 
 #: gnucash/gnome/report-menus.scm:92
 msgid "Manage and run saved report configurations"
@@ -17382,7 +17382,7 @@ msgstr "模板"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1476
 msgid "Since Last Run..."
-msgstr "待执行计划交易"
+msgstr "计划交易清单..."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1576
 msgid "_Review created transactions"

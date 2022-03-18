@@ -202,6 +202,17 @@ static GtkActionEntry gnc_plugin_page_budget_actions [] =
 
 };
 
+static const gchar *writeable_actions[] =
+{
+    /* actions which must be disabled on a readonly book. */
+    "DeleteBudgetAction",
+    "OptionsBudgetAction",
+    "EstimateBudgetAction",
+    "AllPeriodsBudgetAction",
+    "BudgetNoteAction",
+    NULL
+};
+
 static guint gnc_plugin_page_budget_n_actions =
     G_N_ELEMENTS(gnc_plugin_page_budget_actions);
 
@@ -365,6 +376,10 @@ gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page)
                                   gnc_plugin_page_budget_n_actions,
                                   plugin_page);
     gnc_plugin_init_short_names (action_group, toolbar_labels);
+
+    if (qof_book_is_readonly (gnc_get_current_book()))
+        gnc_plugin_update_actions (action_group, writeable_actions,
+                                   "sensitive", FALSE);
 
     /* Visible types */
     priv->fd.visible_types = -1; /* Start with all types */
