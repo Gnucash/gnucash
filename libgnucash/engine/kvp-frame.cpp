@@ -74,9 +74,10 @@ KvpFrame::get_child_frame_or_nullptr (Path const & path) noexcept
     if (!path.size ())
         return this;
     auto key = path.front ();
-    if (m_valuemap.find (key.c_str ()) == m_valuemap.end ())
+    auto map_iter = m_valuemap.find (key.c_str ());
+    if (map_iter == m_valuemap.end ())
         return nullptr;
-    auto child = m_valuemap.at (key.c_str ())->get <KvpFrame *> ();
+    auto child = map_iter->second->get <KvpFrame *> ();
     Path send;
     std::copy (path.begin () + 1, path.end (), std::back_inserter (send));
     return child->get_child_frame_or_nullptr (send);
@@ -190,6 +191,7 @@ std::vector<std::string>
 KvpFrameImpl::get_keys() const noexcept
 {
     std::vector<std::string> ret;
+    ret.reserve (m_valuemap.size());
     std::for_each(m_valuemap.begin(), m_valuemap.end(),
         [&ret](const KvpFrameImpl::map_type::value_type &a)
         {
