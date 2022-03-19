@@ -845,7 +845,8 @@ gncnumeric_dict =   {
                         'add_fixed' : GncNumeric,
                         'sub_fixed' : GncNumeric,
                         'convert' : GncNumeric,
-                        'reduce' : GncNumeric
+                        'reduce' : GncNumeric,
+                        'invert' : GncNumeric
                     }
 methods_return_instance(GncNumeric, gncnumeric_dict)
 
