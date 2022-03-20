@@ -37,6 +37,7 @@ g4 = GncNumeric(n4)
 print("4 - create from float")
 print(n4, "(", type(n4), ") =>", g4)
 print(n4, "==", g4, ":", n4 == g4)
+print('Same float with higher precision: %.32f' % n4)
 print()
 
 # Compare float, string and int
