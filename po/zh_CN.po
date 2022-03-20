@@ -27,7 +27,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-12 09:55+0000\n"
+"PO-Revision-Date: 2022-03-20 14:55+0000\n"
 "Last-Translator: YTX <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -9197,7 +9197,7 @@ msgstr "距离"
 #: gnucash/report/reports/standard/register.scm:218
 #: libgnucash/engine/Split.c:1614 libgnucash/engine/Split.c:1631
 msgid "-- Split Transaction --"
-msgstr "-- 复合会计分录 --"
+msgstr "-- 复合分录 --"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:46
 msgid "-- Stock Split --"
