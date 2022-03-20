@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-11 08:54+0000\n"
+"PO-Revision-Date: 2022-03-19 08:55+0000\n"
 "Last-Translator: Petter Reinholdtsen <pere-weblate@hungry.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/nb_NO/>\n"
@@ -3023,7 +3023,7 @@ msgstr "bruker"
 #: gnucash/gtkbuilder/dialog-print-check.glade:290
 #: gnucash/gtkbuilder/gnc-date-format.glade:30
 msgid "Custom"
-msgstr "Brukerdefinert"
+msgstr "Tilpasset"
 
 #: gnucash/gnome/dialog-print-check.c:2603
 #: gnucash/gtkbuilder/dialog-preferences.glade:3984
@@ -5093,7 +5093,7 @@ msgstr "Avposter"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:461
 msgid "Pay"
-msgstr ""
+msgstr "Betal"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:145
 #, fuzzy
@@ -9473,7 +9473,7 @@ msgstr "Wire"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2867
 #: gnucash/register/ledger-core/split-register.c:2560
 msgid "Direct Debit"
-msgstr "Direkte debitering"
+msgstr "Direktebetaling"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2873
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2877
@@ -30784,11 +30784,10 @@ msgid "Looking for imbalances in account %s: %u of %u"
 msgstr "Ser etter ubalanse i konto %s: %u av %u"
 
 #: libgnucash/engine/Split.c:1647
-#, fuzzy
 msgctxt ""
 "Displayed account code of the other account in a multi-split transaction"
 msgid "Split"
-msgstr "Splitt"
+msgstr "Del opp"
 
 #: libgnucash/engine/Transaction.c:2778
 msgid "Voided transaction"
