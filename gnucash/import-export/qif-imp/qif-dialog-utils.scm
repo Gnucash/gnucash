@@ -736,7 +736,7 @@
                           ;; compatible with the QIF type?
                           (and (string=? s (caddr elt))
                                (not (and (string? qif-type)
-                                         (string=? (GNC-COMMODITY-NS-NONCURRENCY)
+                                         (string=? GNC_COMMODITY_NS_NONCURRENCY
                                                    (cadr elt))
                                          (or (string-ci=? qif-type "stock")
                                              (string-ci=? qif-type "etf"))))))
@@ -745,7 +745,7 @@
         ;; If a preferences match was found, use its namespace.
         (if pref-match (cadr pref-match))
       ;; There's no symbol. Default to a fund.
-      (GNC-COMMODITY-NS-NONCURRENCY))))
+      GNC_COMMODITY_NS_NONCURRENCY)))
 
   ;; Was a QIF type given?
   (if (string? qif-type)
@@ -753,7 +753,7 @@
      (if (or
           (string-ci=? qif-type "mutual fund")
           (string-ci=? qif-type "index"))
-         (GNC-COMMODITY-NS-NONCURRENCY)
+         GNC_COMMODITY_NS_NONCURRENCY
          (guess-by-symbol qif-symbol)))
 
      ;; No QIF type was given, so guess a
