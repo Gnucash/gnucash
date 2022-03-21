@@ -331,6 +331,16 @@ operator>> <GncOptionValue<bool>>(std::istream& iss,
     opt.set_value(instr == "#t" ? true : false);
     return iss;
 }
+
+template<> inline std::istream&
+operator>> <GncOptionValue<GncOptionReportPlacementVec>>(std::istream& iss,
+    GncOptionValue<GncOptionReportPlacementVec>& opt)
+{
+    uint32_t id, wide, high;
+    iss >> id >> wide >> high;
+        opt.set_value(GncOptionReportPlacementVec{{id, wide, high}});
+    return iss;
+}
 #endif // SWIG
 
 /** @class GncOptionRangeValue

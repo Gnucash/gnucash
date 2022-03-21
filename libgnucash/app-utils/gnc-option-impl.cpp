@@ -27,6 +27,8 @@
 #include <guid.hpp>
 #include <cassert>
 #include <sstream>
+#include <numeric>
+
 extern "C"
 {
 #include "gnc-accounting-period.h"
@@ -661,6 +663,18 @@ GncOptionValue<ValueType>::serialize() const noexcept
         ostr << type << " " << guid;
         return ostr.str();
     }
+    if constexpr(std::is_same_v<ValueType, GncOptionReportPlacementVec>)
+    {
+        std::ostringstream ostr{};
+        ostr << "'(";
+        std::for_each(m_value.begin(), m_value.end(),
+                 [&ostr](auto rp){
+                    auto [id, wide, high] = rp;
+                    ostr << "(" << id << " " << wide << " " << high << " #f) ";
+                 });
+        ostr << ")";
+        return ostr.str();
+    }
     else if constexpr(is_same_decayed_v<ValueType, std::string>)
         return m_value;
     else if constexpr(is_same_decayed_v<ValueType, bool>)
@@ -683,6 +697,18 @@ GncOptionValue<ValueType>::deserialize(const std::string& str) noexcept
         istr >> type >> guid;
         auto inst{qof_instance_from_string(guid, get_ui_type())};
         qofOwnerSetEntity(const_cast<GncOwner*>(m_value), inst);
+    }
+    if constexpr(std::is_same_v<ValueType, GncOptionReportPlacementVec>)
+    {
+        std::istringstream istr{str};
+        GncOptionReportPlacementVec rpv;
+        while (istr)
+        {
+            uint32_t id, wide, high;
+            istr >> id >> wide >> high;
+            rpv.emplace_back(id, wide, high);
+        }
+        set_value(rpv);
     }
     else if constexpr(is_same_decayed_v<ValueType, std::string>)
         set_value(str);
@@ -920,6 +946,7 @@ template GncOptionValue<RelativeDatePeriod>::GncOptionValue(const GncOptionValue
 template GncOptionValue<size_t>::GncOptionValue(const GncOptionValue<size_t>&);
 template GncOptionValue<GncOptionAccountList>::GncOptionValue(const GncOptionValue<GncOptionAccountList>&);
 template GncOptionValue<GncMultichoiceOptionIndexVec>::GncOptionValue(const GncOptionValue<GncMultichoiceOptionIndexVec>&);
+template GncOptionValue<GncOptionReportPlacementVec>::GncOptionValue(const GncOptionValue<GncOptionReportPlacementVec>&);
 template GncOptionValue<SCM>::GncOptionValue(const GncOptionValue<SCM>&);
 template void GncOptionValue<bool>::set_value(bool);
 template void GncOptionValue<int>::set_value(int);
@@ -934,6 +961,7 @@ template void GncOptionValue<RelativeDatePeriod>::set_value(RelativeDatePeriod);
 template void GncOptionValue<size_t>::set_value(size_t);
 template void GncOptionValue<GncOptionAccountList>::set_value(GncOptionAccountList);
 template void GncOptionValue<GncMultichoiceOptionIndexVec>::set_value(GncMultichoiceOptionIndexVec);
+template void GncOptionValue<GncOptionReportPlacementVec>::set_value(GncOptionReportPlacementVec);
 template void GncOptionValue<bool>::set_default_value(bool);
 template void GncOptionValue<int>::set_default_value(int);
 template void GncOptionValue<int64_t>::set_default_value(int64_t);
@@ -947,6 +975,7 @@ template void GncOptionValue<RelativeDatePeriod>::set_default_value(RelativeDate
 template void GncOptionValue<size_t>::set_default_value(size_t);
 template void GncOptionValue<GncOptionAccountList>::set_default_value(GncOptionAccountList);
 template void GncOptionValue<GncMultichoiceOptionIndexVec>::set_default_value(GncMultichoiceOptionIndexVec);
+template void GncOptionValue<GncOptionReportPlacementVec>::set_default_value(GncOptionReportPlacementVec);
 template void GncOptionValue<bool>::reset_default_value();
 template void GncOptionValue<int>::reset_default_value();
 template void GncOptionValue<int64_t>::reset_default_value();
@@ -960,6 +989,7 @@ template void GncOptionValue<RelativeDatePeriod>::reset_default_value();
 template void GncOptionValue<size_t>::reset_default_value();
 template void GncOptionValue<GncOptionAccountList>::reset_default_value();
 template void GncOptionValue<GncMultichoiceOptionIndexVec>::reset_default_value();
+template void GncOptionValue<GncOptionReportPlacementVec>::reset_default_value();
 template std::string GncOptionValue<bool>::serialize() const noexcept;
 template std::string GncOptionValue<int>::serialize() const noexcept;
 template std::string GncOptionValue<int64_t>::serialize() const noexcept;
@@ -970,6 +1000,7 @@ template std::string GncOptionValue<std::string>::serialize() const noexcept;
 template std::string GncOptionValue<const QofQuery*>::serialize() const noexcept;
 template std::string GncOptionValue<const GncOwner*>::serialize() const noexcept;
 template std::string GncOptionValue<SCM>::serialize() const noexcept;
+template std::string GncOptionValue<GncOptionReportPlacementVec>::serialize() const noexcept;
 template std::string GncOptionRangeValue<int>::serialize() const noexcept;
 template std::string GncOptionRangeValue<double>::serialize() const noexcept;
 template bool GncOptionValue<bool>::deserialize(const std::string&) noexcept;
@@ -982,5 +1013,6 @@ template bool GncOptionValue<std::string>::deserialize(const std::string&) noexc
 template bool GncOptionValue<const QofQuery*>::deserialize(const std::string&) noexcept;
 template bool GncOptionValue<const GncOwner*>::deserialize(const std::string&) noexcept;
 template bool GncOptionValue<SCM>::deserialize(const std::string&) noexcept;
+template bool GncOptionValue<GncOptionReportPlacementVec>::deserialize(const std::string&) noexcept;
 template bool GncOptionRangeValue<int>::deserialize(const std::string&) noexcept;
 template bool GncOptionRangeValue<double>::deserialize(const std::string&) noexcept;

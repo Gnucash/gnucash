@@ -81,6 +81,21 @@ TEST_F(GncOptionDBTest, test_register_string_option)
     EXPECT_STREQ("waldo", m_db->lookup_string_option("foo", "bar").c_str());
 }
 
+TEST_F(GncOptionDBTest, test_register_report_placement_option)
+{
+    uint32_t report_id = 456;
+    uint32_t wide = 2, high = 2;
+    GncOptionReportPlacementVec rp{{report_id, wide, high}};
+
+    gnc_register_report_placement_option(m_db, "foo", "bar");
+    auto option{m_db->find_option("foo", "bar")};
+    option->set_value(rp);
+    auto value{option->get_value<GncOptionReportPlacementVec>()};
+    EXPECT_EQ(value.size(), 1);
+    auto [v_id, v_wide, v_height] = value.at(0);
+    EXPECT_EQ(report_id, v_id);
+}
+
 /* Note: The following test-fixture code is also present in slightly different
  * form in gtest-gnc-option.cpp.
  */

@@ -481,6 +481,7 @@ template RelativeDatePeriod GncOption::get_value<RelativeDatePeriod>() const;
 template GncOptionAccountList GncOption::get_value<GncOptionAccountList>() const;
 template GncMultichoiceOptionIndexVec GncOption::get_value<GncMultichoiceOptionIndexVec>() const;
 template SCM GncOption::get_value<SCM>() const;
+template GncOptionReportPlacementVec GncOption::get_value<GncOptionReportPlacementVec>() const;
 
 template bool GncOption::get_default_value<bool>() const;
 template int GncOption::get_default_value<int>() const;
@@ -495,6 +496,7 @@ template RelativeDatePeriod GncOption::get_default_value<RelativeDatePeriod>() c
 template GncOptionAccountList GncOption::get_default_value<GncOptionAccountList>() const;
 template GncMultichoiceOptionIndexVec GncOption::get_default_value<GncMultichoiceOptionIndexVec>() const;
 template SCM GncOption::get_default_value<SCM>() const;
+template GncOptionReportPlacementVec GncOption::get_default_value<GncOptionReportPlacementVec>() const;
 
 template void GncOption::set_value(bool);
 template void GncOption::set_value(int);
@@ -511,6 +513,7 @@ template void GncOption::set_value(size_t);
 template void GncOption::set_value(GncOptionAccountList);
 template void GncOption::set_value(GncMultichoiceOptionIndexVec);
 template void GncOption::set_value(SCM);
+template void GncOption::set_value(GncOptionReportPlacementVec);
 
 template void GncOption::set_default_value(bool);
 template void GncOption::set_default_value(int);
@@ -526,6 +529,7 @@ template void GncOption::set_default_value(size_t);
 template void GncOption::set_default_value(GncOptionAccountList);
 template void GncOption::set_default_value(GncMultichoiceOptionIndexVec);
 template void GncOption::set_default_value(SCM);
+template void GncOption::set_default_value(GncOptionReportPlacementVec);
 
 template void GncOption::get_limits(double&, double&, double&) const noexcept;
 template void GncOption::get_limits(int&, int&, int&) const noexcept;
@@ -541,6 +545,7 @@ template bool GncOption::validate(const Account*) const;
 template bool GncOption::validate(const QofQuery*) const;
 template bool GncOption::validate(RelativeDatePeriod) const;
 template bool GncOption::validate(GncMultichoiceOptionIndexVec) const;
+template bool GncOption::validate(GncOptionReportPlacementVec) const;
 
 template GncOption* gnc_make_option<const std::string&>(const char*,
                                                         const char*,
@@ -553,4 +558,5 @@ template GncOption* gnc_make_option<bool>(const char*, const char*, const char*,
 template GncOption* gnc_make_option<int64_t>(const char*, const char*,
                                              const char*, const char*, int64_t,
                                              GncOptionUIType);
+
 
