@@ -1243,13 +1243,6 @@ inline SCM return_scm_value(ValueType value)
                     return scm_simple_format(SCM_BOOL_F, plain_format_str,
                                              scm_val);
                 }
-                if constexpr (is_same_decayed_v<decltype(option),
-                              GncOptionValue<SCM>>)
-                {
-                    auto scm_val{scm_list_1(return_scm_value(option.get_value()))};
-                    return scm_simple_format(SCM_BOOL_F, ticked_format_str,
-                                             scm_val);
-                }
                if constexpr (is_same_decayed_v<decltype(option),
                               GncOptionValue<GncOptionReportPlacementVec>>)
                 {

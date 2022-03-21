@@ -93,38 +93,16 @@ public:
                               ValueType value,
                               GncOptionUIType ui_type = GncOptionUIType::INTERNAL) :
         OptionClassifier{section, name, key, doc_string},
-        m_ui_type(ui_type), m_value{value}, m_default_value{value} {
-            if constexpr(std::is_same_v<std::decay_t<ValueType>, SCM>) {
-                if (value) {
-                    scm_gc_protect_object(m_value);
-                    scm_gc_protect_object(m_default_value);
-                }
-            }
-        }
+        m_ui_type(ui_type), m_value{value}, m_default_value{value} { }
     GncOptionValue<ValueType>(const GncOptionValue<ValueType>& from) :
         OptionClassifier{from.m_section, from.m_name, from.m_sort_tag,
                          from.m_doc_string},
         m_ui_type(from.get_ui_type()), m_value{from.get_value()},
-        m_default_value{from.get_default_value()}
-    {
-        if constexpr(std::is_same_v<std::decay_t<ValueType>, SCM>) {
-            if (m_value)
-                scm_gc_protect_object(m_value);
-            if (m_default_value)
-                scm_gc_protect_object(m_default_value);
-        }
-    }
+        m_default_value{from.get_default_value()}{}
     GncOptionValue<ValueType>(GncOptionValue<ValueType>&&) = default;
     GncOptionValue<ValueType>& operator=(const GncOptionValue<ValueType>&) = default;
     GncOptionValue<ValueType>& operator=(GncOptionValue<ValueType>&&) = default;
-    ~GncOptionValue<ValueType>() {
-            if constexpr(std::is_same_v<std::decay_t<ValueType>, SCM>) {
-                if (m_value)
-                    scm_gc_unprotect_object(m_value);
-                if (m_default_value)
-                    scm_gc_unprotect_object(m_default_value);
-            }
-        }
+    ~GncOptionValue<ValueType>() = default;
     ValueType get_value() const { return m_value; }
     ValueType get_default_value() const { return m_default_value; }
     void set_value(ValueType new_value);
@@ -297,8 +275,7 @@ template<class OptType,
 std::istream& operator>>(std::istream& iss, OptType& opt)
 {
     std::decay_t<decltype(opt.get_value())> value;
-    if constexpr (std::is_same_v<std::decay_t<decltype(opt.get_value())>, SCM> ||
-                  std::is_same_v<std::decay_t<decltype(opt.get_value())>, const _gncOwner*> ||
+    if constexpr (std::is_same_v<std::decay_t<decltype(opt.get_value())>, const _gncOwner*> ||
                   std::is_same_v<std::decay_t<decltype(opt.get_value())>, const _QofQuery*>)
         return iss;
     else

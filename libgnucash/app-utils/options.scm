@@ -270,8 +270,13 @@
                                                (GncOptionUIType-INTERNAL)))
      ((string? default) (gnc-make-string-option section name key desc default
                                                 (GncOptionUIType-INTERNAL)))
+     ((procedure? default)
+        (format #t "gnc:make-internal-option passed procedure resolving to ~a~%" (default))
+        (gnc-make-bool-option section name key desc #f (GncOptionUIType-INTERNAL)))
      (else
-       (gnc-make-SCM-option section name key desc default type)))))
+       (format #t "gnc:make-internal-option passed something unknown that looks like ~a~%" default)
+       (gnc-make-bool-option section name key desc #f (GncOptionUIType-INTERNAL))))))
+
 (define-public (gnc:make-owner-option section name key docstring getter validator owner-type)
   (issue-deprecation-warning "gnc:make-owner-option is deprecated. Make and register the option in one command with gnc-register-owner-option.")
   (let* ((ui-type (cond
