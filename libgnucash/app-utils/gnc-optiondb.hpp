@@ -571,35 +571,6 @@ inline void gnc_register_color_option(GncOptionDBPtr& db, const char* section,
     gnc_register_color_option(db.get(), section, name, key, doc_string, value);
 }
 
-/**
- * Create a new internal string option and register it in the options database.
- *
- * Internal options are used for passing state data in some reports. As the name
- * suggests they do not create UI elements in options dialogs.
- * @param db A GncOptionDB* for calling from C. Caller retains ownership.
- * @param section The database section for the option.
- * @param name The option name.
- * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
- * @param value The initial and default value for the option.
- */
-void gnc_register_internal_option(GncOptionDB* db, const char* section,
-                                  const char* name, const char* key,
-                                  const char* doc_string, SCM value);
-
-
-/**
- * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
- */
-inline void gnc_register_internal_option(GncOptionDBPtr& db,
-                                         const char* section, const char* name,
-                                         const char* key,
-                                         const char* doc_string,
-                                         SCM value)
-{
-    gnc_register_internal_option(db.get(), section, name, key,
-                                 doc_string, value);
-}
-
 void gnc_register_internal_option(GncOptionDBPtr& db,
                                           const char* section, const char* name,
                                           const char* key,

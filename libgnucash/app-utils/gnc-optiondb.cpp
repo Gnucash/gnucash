@@ -832,16 +832,6 @@ gnc_register_owner_option(GncOptionDB* db, const char* section,
 }
 
 void
-gnc_register_internal_option(GncOptionDB* db, const char* section,
-                             const char* name, const char* key,
-                             const char* doc_string, SCM value)
-{
-    GncOption option{section, name, key, doc_string, value,
-            GncOptionUIType::INTERNAL};
-    db->register_option(section, std::move(option));
-}
-
-void
 gnc_register_invoice_option(GncOptionDB* db, const char* section,
                             const char* name, const char* key,
                             const char* doc_string, GncInvoice* value)
@@ -1247,22 +1237,6 @@ gnc_option_db_lookup_qofinstance_value(GncOptionDB* odb, const char* section,
 {
     auto option{odb->find_option(section, name)};
     return option->get_value<const QofInstance*>();
-}
-
-SCM
-gnc_option_db_lookup_scm_value(GncOptionDB* odb, const char* section,
-                               const char* name)
-{
-    auto option{odb->find_option(section, name)};
-    return option->get_value<SCM>();
-}
-
-void
-gnc_option_db_set_scm_value(GncOptionDB* odb, const char* section,
-                            const char* name, SCM value)
-{
-    auto option{odb->find_option(section, name)};
-    option->set_value(value);
 }
 
 // Force creation of templates

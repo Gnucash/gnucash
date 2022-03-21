@@ -166,31 +166,6 @@ const QofInstance* gnc_option_db_lookup_qofinstance_value(GncOptionDB*,
                                                           const char*,
                                                           const char*);
 
-/**
- * Retrieve the GList* value of an option in the GncOptionDB
- *
- * @param odb the GncOptionDB
- * @param section the section in which the option is stored
- * @param name the option name
- * @return the GList* of the value or nullptr if the option isn't found
- * or if its value isn't a string.
- */
-SCM gnc_option_db_lookup_scm_value(GncOptionDB*, const char*, const char*);
-
-/**
- * Set the GList* value of an option in the GncOptionDB.
- *
- * The value will not be saved if the option is not in the GncOptionDB or if the
- * type of the option isn't string or text.
- *
- * @param odb the GncOptionDB
- * @param section the section in which the option is stored
- * @param name the option name
- * @param value the value to be stored in the option.
- */
-void gnc_option_db_set_scm_value(GncOptionDB*, const char*,
-                                    const char*, SCM);
-
 #ifdef __cplusplus
 }
 #endif

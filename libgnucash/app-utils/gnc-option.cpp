@@ -433,16 +433,6 @@ GncOption::in_stream(std::istream& iss)
                       }, *m_option);
 }
 
-GncOption*
-gnc_make_SCM_option(const char* section, const char* name,
-                    const char* key, const char* doc_string,
-                    SCM value, GncOptionUIType ui_type)
-{
-    return new GncOption(section, name, key, doc_string,
-                         reinterpret_cast<SCM>(value), ui_type);
-}
-
-
 /* We must instantiate all of the templates we need here because we don't expose
  * the template implementation in the public header.
  */
@@ -461,8 +451,6 @@ template GncOption::GncOption(const char*, const char*, const char*,
 template GncOption::GncOption(const char*, const char*, const char*,
                               const char*, std::string, GncOptionUIType);
 template GncOption::GncOption(const char*, const char*, const char*,
-                              const char*, SCM, GncOptionUIType);
-template GncOption::GncOption(const char*, const char*, const char*,
                               const char*, const QofQuery*, GncOptionUIType);
 template GncOption::GncOption(const char*, const char*, const char*,
                               const char*, const GncOwner*, GncOptionUIType);
@@ -480,7 +468,6 @@ template const Account* GncOption::get_value<const Account*>() const;
 template RelativeDatePeriod GncOption::get_value<RelativeDatePeriod>() const;
 template GncOptionAccountList GncOption::get_value<GncOptionAccountList>() const;
 template GncMultichoiceOptionIndexVec GncOption::get_value<GncMultichoiceOptionIndexVec>() const;
-template SCM GncOption::get_value<SCM>() const;
 template GncOptionReportPlacementVec GncOption::get_value<GncOptionReportPlacementVec>() const;
 
 template bool GncOption::get_default_value<bool>() const;
@@ -495,7 +482,6 @@ template const Account* GncOption::get_default_value<const Account*>() const;
 template RelativeDatePeriod GncOption::get_default_value<RelativeDatePeriod>() const;
 template GncOptionAccountList GncOption::get_default_value<GncOptionAccountList>() const;
 template GncMultichoiceOptionIndexVec GncOption::get_default_value<GncMultichoiceOptionIndexVec>() const;
-template SCM GncOption::get_default_value<SCM>() const;
 template GncOptionReportPlacementVec GncOption::get_default_value<GncOptionReportPlacementVec>() const;
 
 template void GncOption::set_value(bool);
@@ -512,7 +498,6 @@ template void GncOption::set_value(RelativeDatePeriod);
 template void GncOption::set_value(size_t);
 template void GncOption::set_value(GncOptionAccountList);
 template void GncOption::set_value(GncMultichoiceOptionIndexVec);
-template void GncOption::set_value(SCM);
 template void GncOption::set_value(GncOptionReportPlacementVec);
 
 template void GncOption::set_default_value(bool);
@@ -528,7 +513,6 @@ template void GncOption::set_default_value(RelativeDatePeriod);
 template void GncOption::set_default_value(size_t);
 template void GncOption::set_default_value(GncOptionAccountList);
 template void GncOption::set_default_value(GncMultichoiceOptionIndexVec);
-template void GncOption::set_default_value(SCM);
 template void GncOption::set_default_value(GncOptionReportPlacementVec);
 
 template void GncOption::get_limits(double&, double&, double&) const noexcept;

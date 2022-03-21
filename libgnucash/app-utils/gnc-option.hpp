@@ -104,7 +104,6 @@ using GncOptionVariant = std::variant<GncOptionValue<std::string>,
                                       GncOptionQofInstanceValue,
                                       GncOptionValue<const QofQuery*>,
                                       GncOptionValue<const GncOwner*>,
-                                      GncOptionValue<SCM>,
                                       GncOptionValue<GncOptionReportPlacementVec>,
                                       GncOptionAccountListValue,
                                       GncOptionAccountSelValue,
@@ -255,14 +254,6 @@ gnc_make_option(const char* section, const char* name,
 {
     return new GncOption(section, name, key, doc_string, value, ui_type);
 }
-
-/**
- * Free function wrapping GncOption's constructor using an SCM value.
- * To work around SWIG_Guile's typedef of SCM to unsigned long
- */
-GncOption* gnc_make_SCM_option(const char* section, const char* name,
-                               const char* key, const char* doc_string,
-                               SCM value, GncOptionUIType ui_type);
 
 #endif //GNC_OPTION_HPP_
 
