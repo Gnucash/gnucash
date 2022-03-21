@@ -40,8 +40,10 @@
 #include <iomanip>
 #include <variant>
 #include <memory>
+#include <tuple>
 #include "gnc-option-ui.hpp"
 #include "gnc-option-date.hpp"
+#include <guid.hpp>
 
 struct OptionClassifier;
 class GncOptionUIItem;
@@ -62,7 +64,8 @@ class GncOptionMultichoiceValue;
 template <typename ValueType> class GncOptionRangeValue;
 class GncOptionCommodityValue;
 class GncOptionDateValue;
-
+using GncOptionReportPlacement = std::tuple<uint32_t, uint32_t, uint32_t>;
+using GncOptionReportPlacementVec = std::vector<GncOptionReportPlacement>;
 template <typename T>
 struct is_OptionClassifier
 {
@@ -102,6 +105,7 @@ using GncOptionVariant = std::variant<GncOptionValue<std::string>,
                                       GncOptionValue<const QofQuery*>,
                                       GncOptionValue<const GncOwner*>,
                                       GncOptionValue<SCM>,
+                                      GncOptionValue<GncOptionReportPlacementVec>,
                                       GncOptionAccountListValue,
                                       GncOptionAccountSelValue,
                                       GncOptionMultichoiceValue,

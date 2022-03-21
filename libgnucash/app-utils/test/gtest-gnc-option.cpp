@@ -1311,3 +1311,19 @@ TEST_F(GncDateOption, test_stream_in_prev_year_end)
     EXPECT_EQ(time1, m_option.get_value<time64>());
 }
 
+TEST(GncOption, test_create)
+{
+    uint32_t report_id = 123;
+    uint32_t wide = 2, high = 2;
+    GncOptionReportPlacementVec rp{{report_id, wide, high}};
+
+    GncOptionValue<GncOptionReportPlacementVec> rpv("foo", "bar", "baz", "Phony Option", rp);
+    GncOption option{rpv};
+    auto value{option.get_value<GncOptionReportPlacementVec>()};
+    EXPECT_EQ(value.size(), 1u);
+    auto [sid, swide, shigh] = value.at(0);
+    EXPECT_EQ(report_id, sid);
+    EXPECT_EQ(wide, swide);
+    EXPECT_EQ(high, shigh);
+
+}

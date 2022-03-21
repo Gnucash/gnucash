@@ -274,6 +274,39 @@ scm_from_value<GncOwner*>(GncOwner* value)
     return scm_from_value<const GncOwner*>(value);
 }
 
+template <>inline SCM
+scm_from_value<GncOptionAccountList>(GncOptionAccountList value)
+{
+    SCM s_list = SCM_EOL;
+    auto book{gnc_get_current_book()};
+    for (auto guid : value)
+    {
+        auto acct{xaccAccountLookup(&guid, book)};
+        s_list = scm_cons(SWIG_NewPointerObj(acct, SWIGTYPE_p_Account, 0),
+                          s_list);
+    }
+    return scm_reverse(s_list);
+}
+
+template <>inline SCM
+scm_from_value<GncOptionReportPlacementVec>(GncOptionReportPlacementVec value)
+{
+    SCM s_list = SCM_EOL;
+    for (auto placement : value)
+   {
+        auto [id, wide, high] = placement;
+        auto scm_id{scm_from_uint32(id)};
+        auto scm_wide{scm_from_uint32(wide)};
+        auto scm_high{scm_from_uint32(high)};
+        /* The trailing SCM_BOOL_F is a placeholder for a never-used callback function,
+         * present for backward compatibility so that older GnuCash versions can load a
+         * saved multicolumn report.
+         */
+        s_list = scm_cons(scm_list_4(scm_id, scm_wide, scm_high, SCM_BOOL_F), s_list);
+    }
+    return scm_reverse(s_list);
+}
+
 static std::string
 scm_color_list_to_string(SCM list)
 {
@@ -440,18 +473,25 @@ scm_to_value<GncOptionAccountList>(SCM new_value)
     return retval;
 }
 
-template <>inline SCM
-scm_from_value<GncOptionAccountList>(GncOptionAccountList value)
+template <>inline GncOptionReportPlacementVec
+scm_to_value<GncOptionReportPlacementVec>(SCM new_value)
 {
-    SCM s_list = SCM_EOL;
-    auto book{gnc_get_current_book()};
-    for (auto guid : value)
+    GncOptionReportPlacementVec rp;
+    GncOptionAccountList retval{};
+    if (scm_is_false(scm_list_p(new_value)) || scm_is_null(new_value))
+        return rp;
+    auto next{new_value};
+    while (auto node{scm_car(next)})
     {
-        auto acct{xaccAccountLookup(&guid, book)};
-        s_list = scm_cons(SWIG_NewPointerObj(acct, SWIGTYPE_p_Account, 0),
-                          s_list);
+        auto id{scm_to_uint32(scm_car(node))};
+        auto wide{scm_to_uint32(scm_cadr(node))};
+        auto high{scm_to_uint32(scm_caddr(node))};
+        rp.emplace_back(id, wide, high);
+        next = scm_cdr(next);
+        if (scm_is_null(next))
+            break;
     }
-    return scm_reverse(s_list);
+    return rp;
 }
 
 QofBook* gnc_option_test_book_new();
@@ -640,6 +680,12 @@ gnc_option_test_book_destroy(QofBook* book)
     $1 = &acclist;
 }
 
+%typemap (in) GncOptionReportPlacementVec& (GncOptionReportPlacementVec rp)
+{
+    rp = scm_to_value<GncOptionReportPlacementVec>($input);
+    $1 = &rp;
+}
+
 %typemap(out) GncOptionAccountList
 {
     $result = SCM_EOL;
@@ -664,6 +710,11 @@ gnc_option_test_book_destroy(QofBook* book)
                            $result);
     }
     $result = scm_reverse ($result)
+}
+
+%typemap(out) const GncOptionReportPlacementVec&
+{
+    $result = scm_from_value<GncOptionReportPlacementVec>($1);
 }
 
 wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
@@ -709,7 +760,6 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 %ignore gnc_register_number_Plot_size_option(GncOptionDB*, const char*, const char*, const char*, const char*, int);
 %ignore gnc_register_query_option(GncOptionDB*, const char*, const char*, const char*, const char*, QofQuery*);
 %ignore gnc_register_color_option(GncOptionDB*, const char*, const char*, const char*, const char*, std::string);
-%ignore gnc_register_internal_option(GncOptionDB*, const char*, const char*, const char*, const char*, std::string);
 %ignore gnc_register_currency_option(GncOptionDB*, const char*, const char*, const char*, const char*, gnc_commodity*);
 %ignore gnc_register_invoice_option(GncOptionDB*, const char*, const char*, const char*, const char*, GncInvoice*);
 %ignore gnc_register_taxtable_option(GncOptionDB*, const char*, const char*, const char*, const char*, GncTaxTable*);
@@ -721,7 +771,8 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 %ignore gnc_register_date_option(GncOptionDB*, const char*, const char*, const char*, const char*, RelativeDatePeriodVec, bool);
 %ignore gnc_register_start_date_option(GncOptionDB*, const char*, const char*, const char*, const char*, bool);
 %ignore gnc_register_end_date_option(GncOptionDB*, const char*, const char*, const char*, const char*, bool);
-
+%ignore gnc_register_internal_option(GncOptionDBPtr&, const char*, const char*, const char*, const char*, const std::string&);
+%ignore gnc_register_internal_option(GncOptionDBPtr&, const char*, const char*, const char*, const char*, bool);
 %typemap(in) GncOption* "$1 = scm_is_true($input) ? static_cast<GncOption*>(scm_to_pointer($input)) : nullptr;"
 %typemap(out) GncOption* "$result = ($1) ? scm_from_pointer($1, nullptr) : SCM_BOOL_F;"
 
@@ -1057,7 +1108,6 @@ inline SCM return_scm_value(ValueType value)
 %template(gnc_make_int64_option) gnc_make_option<int64_t>;
 %template(gnc_make_query_option) gnc_make_option<const QofQuery*>;
 %template(gnc_make_owner_option) gnc_make_option<const GncOwner*>;
-
 %extend GncOption {
     bool is_budget_option()
     {
@@ -1195,6 +1245,13 @@ inline SCM return_scm_value(ValueType value)
                 }
                 if constexpr (is_same_decayed_v<decltype(option),
                               GncOptionValue<SCM>>)
+                {
+                    auto scm_val{scm_list_1(return_scm_value(option.get_value()))};
+                    return scm_simple_format(SCM_BOOL_F, ticked_format_str,
+                                             scm_val);
+                }
+               if constexpr (is_same_decayed_v<decltype(option),
+                              GncOptionValue<GncOptionReportPlacementVec>>)
                 {
                     auto scm_val{scm_list_1(return_scm_value(option.get_value()))};
                     return scm_simple_format(SCM_BOOL_F, ticked_format_str,

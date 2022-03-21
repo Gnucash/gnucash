@@ -600,6 +600,21 @@ inline void gnc_register_internal_option(GncOptionDBPtr& db,
                                  doc_string, value);
 }
 
+void gnc_register_internal_option(GncOptionDBPtr& db,
+                                          const char* section, const char* name,
+                                          const char* key,
+                                          const char* doc_string,
+                                          const std::string& value);
+
+void gnc_register_internal_option(GncOptionDBPtr& db,
+                                          const char* section, const char* name,
+                                          const char* key,
+                                          const char* doc_string,
+                                          bool value);
+
+void gnc_register_report_placement_option(GncOptionDBPtr& db,
+                                          const char* section, const char* name);
+
 /**
  * Create a new currency option and register it in the options database.
  *

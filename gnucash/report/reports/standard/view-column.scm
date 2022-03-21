@@ -42,8 +42,7 @@
 	    (gnc:register-option options opt))))
     ;; the report-list is edited by a special add-on page for the
     ;; options editor.
-    (opt-register 
-     (gnc:make-internal-option "__general" "report-list" '()))
+    (gnc-register-report-placement-option (gnc:options-get options) "__general" "report-list")
     
     (opt-register
      (gnc:make-number-range-option 
@@ -83,7 +82,6 @@
        (let* ((subreport (gnc-report-find (car report-info)))
 	      (colspan (cadr report-info))
 	      (rowspan (caddr report-info))
-	      (opt-callback (cadddr report-info))
 	      (toplevel-cell (gnc:make-html-table-cell/size rowspan colspan))
 	      (report-table (gnc:make-html-table))
 	      (contents-cell (gnc:make-html-table-cell)))

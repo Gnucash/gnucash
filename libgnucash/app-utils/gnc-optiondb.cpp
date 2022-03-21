@@ -840,6 +840,7 @@ gnc_register_internal_option(GncOptionDB* db, const char* section,
             GncOptionUIType::INTERNAL};
     db->register_option(section, std::move(option));
 }
+
 void
 gnc_register_invoice_option(GncOptionDB* db, const char* section,
                             const char* name, const char* key,
@@ -992,6 +993,20 @@ gnc_register_end_date_option(GncOptionDB* db, const char* section,
         GncOptionUIType::DATE_RELATIVE;
     GncOption option{GncOptionDateValue(section, name, key, doc_string,
                                         ui_type, end_dates)};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_report_placement_option(GncOptionDBPtr& db,
+                                     const char* section, const char* name)
+{
+    /* This is a special option with it's own UI file so we have fake values to pass
+     * to the template creation function.
+     */
+    GncOptionReportPlacementVec value;
+    GncOption option{GncOptionValue<GncOptionReportPlacementVec>{section, name,
+                                                              "no_key", "nodoc_string",
+                                                              value,GncOptionUIType::REPORT_PLACEMENT}};
     db->register_option(section, std::move(option));
 }
 

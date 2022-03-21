@@ -54,6 +54,7 @@
   (test-gnc-make-date-option)
   (test-gnc-make-date-set-option)
   (test-gnc-make-number-range-option)
+  (test-gnc-make-report-placement-option)
   (test-end "test-gnc-optiondb-scheme"))
 
 (define (test-gnc-make-text-option)
@@ -235,3 +236,14 @@
     (gnc-set-option option-db "foo" "bar" 20)
     (test-equal 20.0 (gnc-option-value option-db "foo" "bar")))
   (test-end "test-gnc-number-range-option"))
+
+(define (test-gnc-make-report-placement-option)
+  (test-begin "test-gnc-report-placement-option")
+    (let* ((report1 123)
+           (report2 456)
+           (rp (list (list report1 2 3) (list report2 3 2)))
+           (option-db (new-gnc-optiondb)))
+           (gnc-register-report-placement-option option-db "foo" "bar")
+           (gnc-set-option option-db "foo" "bar" rp)
+           (test-equal report2 (car (cadr (gnc-option-value option-db "foo" "bar")))))
+  (test-end "test-gnc-report-placement-option"))

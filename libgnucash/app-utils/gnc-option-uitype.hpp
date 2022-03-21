@@ -67,7 +67,7 @@ enum class GncOptionUIType : unsigned int
     JOB,
     TAX_TABLE,
     QUERY,
-    REPORT_LIST,
+    REPORT_PLACEMENT,
     MAX_VALUE,  //Nake sure this one is always last
 };
 
