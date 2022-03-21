@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-16 10:54+0000\n"
+"PO-Revision-Date: 2022-03-21 14:56+0000\n"
 "Last-Translator: Kárász Attila <cult.edie@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -11008,7 +11008,7 @@ msgstr "Fo_rgás"
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:76
 #, fuzzy
 msgid "Number of degrees to rotate the check."
-msgstr "Cellák _száma:"
+msgstr "A csekk forgatásához szükséges fokok száma."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:80
 #, fuzzy
@@ -11127,9 +11127,8 @@ msgstr "Az párbeszédablak szélessége és mérete az utolsó bezáráskor."
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:103
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:184
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:185
-#, fuzzy
 msgid "Position of the horizontal pane divider."
-msgstr "A csekk pozíciója a lapon"
+msgstr "A vízszintes elválasztó helyzete."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:135
 msgid ""
@@ -11201,11 +11200,11 @@ msgid ""
 "transaction will cause the existing transaction to be updated and cleared by "
 "default."
 msgstr ""
-"Enable the UPDATE AND RECONCILE action in the transaction matcher. If "
-"enabled, a transaction whose best match's score is above the Auto-CLEAR "
-"threshold and has a different date or amount than the matching existing "
-"transaction will cause the existing transaction to be updated and cleared by "
-"default."
+"Engedélyezze a FRISSÍTÉS ÉS ÖSSZEGZÉS műveletet a tranzakcióegyeztetőben. Ha "
+"engedélyezve van, akkor az a tranzakció, amelynek legjobb egyezési pontszáma "
+"meghaladja az Automatikus-TÖRLÉS küszöbértékét, és amelynek dátuma vagy "
+"összege eltér az egyező meglévő tranzakcióétól, a meglévő tranzakciót "
+"alapértelmezés szerint frissíti és törli."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:15
 msgid "Use bayesian matching"
@@ -11340,9 +11339,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:68
-#, fuzzy
 msgid "Display or hide reconciled matches"
-msgstr "Egyeztetés dátumának megjelenítése?"
+msgstr "Egyeztetések mutatása vagy elrejtése"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:69
 msgid ""
@@ -11374,8 +11372,10 @@ msgstr "Dokumentáció megjeleníté_se"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:33
 #: gnucash/gtkbuilder/dialog-account-picker.glade:40
+#, fuzzy
 msgid "Show some documentation-only pages in QIF Import assistant."
-msgstr "Show some documentation-only pages in QIF Import assistant."
+msgstr ""
+"Néhány csak dokumentációs oldal megjelenítése a QIF importálási segédben."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:5
 msgid "Pre-select cleared transactions"
@@ -11740,9 +11740,8 @@ msgid "Sign reverse balances on income and expense accounts."
 msgstr "Bevételi és költségszámlák egyenlegének megjelölése visszafelé."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:110
-#, fuzzy
 msgid "Use account colors in the account hierarchy"
-msgstr "A megadott folyószámla nem található."
+msgstr "Használja a számla színt a számla csoportban"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:111
 msgid ""
@@ -12125,10 +12124,8 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:291
 #: gnucash/gtkbuilder/dialog-preferences.glade:3219
-#, fuzzy
-#| msgid "Show all transactions on one line. (Two in double line mode.)"
 msgid "Show all transactions on one line or in double line mode on two."
-msgstr "Minden tranzakció egy sorban. (Kettőben,duplasoros módban.)"
+msgstr "Minden tranzakció egy sorban (Kettőben,dupla soros módban)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:292
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:297
@@ -12144,16 +12141,12 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:296
 #: gnucash/gtkbuilder/dialog-preferences.glade:3238
-#, fuzzy
-#| msgid ""
-#| "Automatically expand the current transaction to show all splits. All "
-#| "other transactions are shown on one line. (Two in double line mode.)"
 msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line or in double line mode on two."
 msgstr ""
 "Az aktuális tranzakció automatikus kifejtése. Az összes többi egy sorban "
-"jelenik meg. (Kettőben a duplasoros módban.)"
+"jelenik meg (Kettőben a duplasoros módban)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:301
 #: gnucash/gtkbuilder/dialog-preferences.glade:3257
