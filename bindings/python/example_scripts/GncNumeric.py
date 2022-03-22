@@ -53,10 +53,16 @@ print("Compare GncNumeric from string (2) to GncNumeric from int (3)")
 print(g2, "==", g3, ":", g2 == g3)
 print()
 
-# Create from float with specified precision
-print("Create from float with specified precision")
-for n in range(0,20):
-    print(GncNumeric(n4, GNC_DENOM_AUTO, GNC_HOW_DENOM_SIGFIG | n * 0x100))
+def GNC_HOW_DENOM_SIGFIGS(n):
+    """Leaned on the C Macro"""
+    return GNC_HOW_DENOM_SIGFIG | (n << 8 & GNC_NUMERIC_SIGFIGS_MASK)
+
+GNC_NUMERIC_SIGFIGS_MASK = 0x0000ff00
+
+# Create from float with specified significant figures
+print(f"Create from float (Example 4, ={n4}) with specified significant figures")
+for sigfigs in range(0,20):
+    print(sigfigs, GncNumeric(n4, GNC_DENOM_AUTO, GNC_HOW_DENOM_SIGFIGS(sigfigs)))
 print()
 
 # Convert GncNumeric from float to remove errors
