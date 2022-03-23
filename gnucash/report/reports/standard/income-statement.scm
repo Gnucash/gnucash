@@ -441,10 +441,7 @@
                                 trading-total
                                 (gnc:collector- expense-total)))
 
-               (inc-table (gnc:make-html-table))
-               (exp-table (gnc:make-html-table))
-               (tra-table (gnc:make-html-table))
-
+               (build-table (gnc:make-html-table))
                (table-env
                 (list
                  (list 'start-date start-date)
@@ -494,67 +491,86 @@
                label                0  1 "text-cell"
                bal          (+ col 1)  1 "number-cell")))
 
-          (let ((space (make-list tree-depth (gnc:make-html-table-cell/min-width 60))))
-            (gnc:html-table-append-row! inc-table space)
-            (gnc:html-table-append-row! exp-table space)
-            (gnc:html-table-append-row! tra-table space))
-          (gnc:report-percent-done 80)
+          (define (add-revenue-table table)
+            (when label-revenue?
+              (add-subtotal-line table (G_ "Revenues") #f #f))
+            (gnc:html-table-add-account-balances table revenue-table params)
+            (when total-revenue?
+              (add-subtotal-line table (G_ "Total Revenue") #f revenue-total))
+            table)
 
-          (when label-revenue?
-            (add-subtotal-line inc-table (G_ "Revenues") #f #f))
-          (gnc:html-table-add-account-balances inc-table revenue-table params)
-          (when total-revenue?
-            (add-subtotal-line inc-table (G_ "Total Revenue") #f revenue-total))
-          (gnc:report-percent-done 85)
+          (define (add-expense-table table)
+            (when label-expense?
+              (add-subtotal-line table (G_ "Expenses") #f #f))
+            (gnc:html-table-add-account-balances table expense-table params)
+            (when total-expense?
+              (add-subtotal-line table (G_ "Total Expenses") #f expense-total))
+            table)
 
-          (when label-expense?
-            (add-subtotal-line exp-table (G_ "Expenses") #f #f))
-          (gnc:html-table-add-account-balances exp-table expense-table params)
-          (when total-expense?
-            (add-subtotal-line exp-table (G_ "Total Expenses") #f expense-total))
+          (define (add-trading-table table)
+            (when label-trading?
+              (add-subtotal-line table (G_ "Trading") #f #f))
+            (gnc:html-table-add-account-balances table trading-table params)
+            (when total-trading?
+              (add-subtotal-line table (G_ "Total Trading") #f trading-total))
+            table)
 
-          (when label-trading?
-            (add-subtotal-line tra-table (G_ "Trading") #f #f))
-          (gnc:html-table-add-account-balances tra-table trading-table params)
-          (when total-trading?
-            (add-subtotal-line tra-table (G_ "Total Trading") #f trading-total))
+          (cond
+           (two-column?
+            (let* ((exp-table (add-expense-table (gnc:make-html-table)))
+                   (inc-table (add-revenue-table (gnc:make-html-table)))
+                   (tra-table (add-trading-table (gnc:make-html-table)))
+                   (inc-cell (gnc:make-html-table-cell inc-table))
+                   (tra-cell (if (null? trading-accounts)
+                                 (gnc:html-make-empty-cell)
+                                 (gnc:make-html-table-cell tra-table)))
+                   (exp-cell (gnc:make-html-table-cell exp-table)))
+              (define (add-cells . lst) (gnc:html-table-append-row! build-table lst))
+              (add-rule (if standard-order? exp-table inc-table))
+              (add-report-line
+               (if standard-order? exp-table inc-table)
+               (string-append (G_ "Net income") period-for)
+               (string-append (G_ "Net loss") period-for)
+               net-income (* 2 (1- tree-depth)) exchange-fn #f #f)
+              (if standard-order?
+                  (add-cells inc-cell tra-cell exp-cell)
+                  (add-cells exp-cell inc-cell tra-cell))))
 
-          (add-report-line
-           (if standard-order? exp-table inc-table)
-           (string-append (G_ "Net income") period-for)
-           (string-append (G_ "Net loss") period-for)
-           net-income (* 2 (1- tree-depth)) exchange-fn #f #f)
+           ;; single-column
+           (standard-order?
+            (add-revenue-table build-table)
+            (add-rule build-table)
+            (unless (null? trading-accounts)
+              (add-trading-table build-table)
+              (add-rule build-table))
+            (add-expense-table build-table)
+            (add-rule build-table)
+            (add-report-line
+             build-table
+             (string-append (G_ "Net income") period-for)
+             (string-append (G_ "Net loss") period-for)
+             net-income (* 2 (1- tree-depth)) exchange-fn #f #f))
 
-          ;; add the sections in the desired order to document
-          (let ((build-table (gnc:make-html-table))
-                (inc-cell (gnc:make-html-table-cell inc-table))
-                (tra-cell (if (null? trading-accounts)
-                              (gnc:html-make-empty-cell)
-                              (gnc:make-html-table-cell tra-table)))
-                (exp-cell (gnc:make-html-table-cell exp-table)))
-            (define (add-cells . lst) (gnc:html-table-append-row! build-table lst))
-            (cond
-             ((and two-column? standard-order?)
-              (add-cells inc-cell tra-cell exp-cell))
+           (else
+            (add-expense-table build-table)
+            (add-rule build-table)
+            (unless (null? trading-accounts)
+              (add-trading-table build-table)
+              (add-rule build-table))
+            (add-revenue-table build-table)
+            (add-rule build-table)
+            (add-report-line
+             build-table
+             (string-append (G_ "Net income") period-for)
+             (string-append (G_ "Net loss") period-for)
+             net-income (* 2 (1- tree-depth)) exchange-fn #f #f)))
 
-             (two-column?
-              (add-cells exp-cell inc-cell tra-cell))
+          (gnc:html-table-set-style!
+           build-table "td"
+           'attribute '("align" "left")
+           'attribute '("valign" "top"))
 
-             (standard-order?
-              (add-cells inc-cell)
-              (unless (null? trading-accounts) (add-cells tra-cell))
-              (add-cells exp-cell))
-
-             (else
-              (add-cells exp-cell)
-              (add-cells inc-cell)
-              (unless (null? trading-accounts) (add-cells tra-cell))))
-
-            (gnc:html-table-set-style!
-             build-table "td"
-             'attribute '("align" "left")
-             'attribute '("valign" "top"))
-            (gnc:html-document-add-object! doc build-table))
+          (gnc:html-document-add-object! doc build-table)
 
           ;; add currency information if requested
           (gnc:report-percent-done 90)

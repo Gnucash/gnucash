@@ -369,39 +369,39 @@
          (sxml (options->sxml pnl-uuid pnl-options "pnl-default")))
     (test-equal "total revenue  = $1,270.00"
       (list "$1,270.00")
-      ((sxpath '(// table // (tr 1) // table // (tr 5) // (td 6) // *text*))
+      ((sxpath '(// table // (tr 4) // (td 6) // *text*))
        sxml))
     (test-equal "total expenses  = $0.00"
       (list "$0.00")
-      ((sxpath '(// table // (tr 2) // table // (tr 3) // (td 6) // *text*))
+      ((sxpath '(// table // (tr 7) // (td 6) // *text*))
        sxml))
 
     (set-option! pnl-options "Commodities" "Price Source" 'weighted-average)
     (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-weighted-average")))
       (test-equal "weighted average revenue = $1160.36"
         (list "$1,160.36")
-        ((sxpath '(// table // (tr 1) // table // (tr 5) // (td 6) // *text*))
+        ((sxpath '(// table // (tr 4) // (td 6) // *text*))
          sxml)))
 
     (set-option! pnl-options "Commodities" "Price Source" 'average-cost)
     (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-average-cost")))
       (test-equal "average-cost revenue = $976"
         (list "$976.00")
-        ((sxpath '(// table // (tr 1) // table // (tr 5) // (td 6) // *text*))
+        ((sxpath '(// table // (tr 4) // (td 6) // *text*))
          sxml)))
 
     (set-option! pnl-options "Commodities" "Price Source" 'pricedb-nearest)
     (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-pricedb-nearest")))
       (test-equal "pricedb-nearest revenue = $1270"
         (list "$1,270.00")
-        ((sxpath '(// table // (tr 1) // table // (tr 5) // (td 6) // *text*))
+        ((sxpath '(// table // (tr 4) // (td 6) // *text*))
          sxml)))
 
     (set-option! pnl-options "Commodities" "Price Source" 'pricedb-latest)
     (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-pricedb-latest")))
       (test-equal "pricedb-latest revenue = $1270"
         (list "$1,270.00")
-        ((sxpath '(// table // (tr 1) // table // (tr 5) // (td 6) // *text*))
+        ((sxpath '(// table // (tr 4) // (td 6) // *text*))
          sxml)))
 
     ;; set multilevel subtotal style
@@ -411,27 +411,27 @@
     (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-multilevel")))
       (test-equal "multilevel. income = -$250.00"
         (list "-$250.00")
-        ((sxpath '(// table // (tr 1) // table // (tr 3) // (td 6) // *text*))
+        ((sxpath '(// table // (tr 2) // (td 6) // *text*))
          sxml))
       (test-equal "multilevel. income-GBP = -#600"
         (list "-#600.00" "-$1,020.00")
-        ((sxpath '(// table // (tr 1) // table // (tr 4) // (td 5) // *text*))
+        ((sxpath '(// table // (tr 3) // (td 5) // *text*))
          sxml))
       (test-equal "multilevel. total income = -$1,270.00"
         (list "-$1,270.00")
-        ((sxpath '(// table // (tr 1) // table // (tr 5) // (td 6) // *text*))
+        ((sxpath '(// table // (tr 4) // (td 6) // *text*))
          sxml))
       (test-equal "multilevel. total revenue = $1,270.00"
         (list "$1,270.00")
-        ((sxpath '(// table // (tr 1) // table // (tr 6) // (td 6) // *text*))
+        ((sxpath '(// table // (tr 5) // (td 6) // *text*))
          sxml))
       (test-equal "multilevel. expenses = $0.00"
         (list "$0.00")
-        ((sxpath '(// table // (tr 2) // table // (tr 3) // (td 6) // *text*))
+        ((sxpath '(// table // (tr 8) // (td 6) // *text*))
          sxml))
       (test-equal "multilevel. net-income = $1,270"
         (list "$1,270.00")
-        ((sxpath '(// table // (tr 2) // table // (tr 4) // (td 6) // *text*))
+        ((sxpath '(// table // (tr 9) // (td 6) // *text*))
          sxml)))
 
     ;; set recursive-subtotal subtotal style
@@ -439,21 +439,21 @@
     (set-option! pnl-options "Display" "Parent account subtotals" 'f)
     (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-recursive")))
       (test-equal "recursive. income = $1020+250"
-        (list "-#600.00" "-$1,020.00" "-$250.00" "-$250.00" "$0.00" "-#600.00" "-$1,020.00" "-$250.00" "-$250.00" "$0.00")
-        (sxml->table-row-col sxml 1 3 6))
+        (list "-#600.00" "-$1,020.00" "-$250.00" "-$250.00")
+        (sxml->table-row-col sxml 1 2 6))
       (test-equal "recursive. income-gbp = $1020"
-        (list "-#600.00" "-$1,020.00" "-#600.00" "-$1,020.00")
-        (sxml->table-row-col sxml 1 4 5))
+        (list "-#600.00" "-$1,020.00")
+        (sxml->table-row-col sxml 1 3 5))
       (test-equal "recursive. total revenue = $1270"
-        (list "$1,270.00" "$1,270.00")
-        (sxml->table-row-col sxml 1 5 6)))
+        (list "$1,270.00")
+        (sxml->table-row-col sxml 1 4 6)))
 
     (set-option! pnl-options "Commodities" "Show Foreign Currencies" #f)
     (set-option! pnl-options "Commodities" "Show Exchange Rates" #f)
     (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-disable show-fcur show-rates")))
       (test-equal "show-fcur disabled"
-        (list "-$1,270.00" "$0.00" "-$1,270.00" "$0.00")
-        (sxml->table-row-col sxml 1 3 6))
+        (list "-$1,270.00")
+        (sxml->table-row-col sxml 1 2 6))
       (test-equal "show-rates disabled"
         '()
         (sxml->table-row-col sxml 2 #f #f)))
@@ -462,8 +462,8 @@
     (set-option! pnl-options "Commodities" "Show Exchange Rates" #t)
     (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-enable show-fcur show-rates")))
       (test-equal "show-fcur enabled"
-        (list "-#600.00" "-$1,020.00" "-$250.00" "-$250.00" "$0.00" "-#600.00" "-$1,020.00" "-$250.00" "-$250.00" "$0.00")
-        (sxml->table-row-col sxml 1 3 6))
+        (list "-#600.00" "-$1,020.00" "-$250.00" "-$250.00")
+        (sxml->table-row-col sxml 1 2 6))
       (test-equal "show-rates enabled"
         (list "#1.00" "$1.7000")
         (sxml->table-row-col sxml 2 #f #f)))
