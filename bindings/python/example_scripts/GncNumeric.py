@@ -40,6 +40,15 @@ print(n4, "==", g4, ":", n4 == g4)
 print('Same float with higher precision: %.32f' % n4)
 print()
 
+# Create from float
+n5 = 2245.67
+g5 = GncNumeric(n5)
+print("5 - create from float")
+print(n5, "(", type(n5), ") =>", g5)
+print(n5, "==", g5, ":", n5 == g5)
+print('Same float with higher precision: %.32f' % n5)
+print()
+
 # Compare float, string and int
 print("Compare GncNumeric from float (4) to GncNumeric from string (2)")
 print(g2, "==", g4, ":", g2 == g4)
@@ -67,6 +76,18 @@ print()
 
 # Convert GncNumeric from float to remove errors
 print("Convert float to different denominator to remove conversion errors")
-g5 = g4.convert(1000, GNC_HOW_RND_ROUND)
-print(g4, "(", type(g4), ") =>", g5)
+g4b = g4.convert(1000, GNC_HOW_RND_ROUND)
+print(g4, "(", type(g4), ") =>", g4b)
+print()
+
+# Create from float with specified significant figures
+print(f"Create from float (Example 5, ={n5}) with specified significant figures")
+for sigfigs in range(0,20):
+    print(sigfigs, GncNumeric(n5, GNC_DENOM_AUTO, GNC_HOW_DENOM_SIGFIGS(sigfigs)))
+print()
+
+# Convert GncNumeric from float to remove errors
+print("Convert float to different denominator to remove conversion errors")
+g5b = g5.convert(1000, GNC_HOW_RND_ROUND)
+print(g5, "(", type(g5), ") =>", g5b)
 
