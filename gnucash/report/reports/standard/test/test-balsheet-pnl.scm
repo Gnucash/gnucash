@@ -431,7 +431,7 @@
          sxml))
       (test-equal "multilevel. net-income = $1,270"
         (list "$1,270.00")
-        ((sxpath '(// table // (tr 9) // (td 6) // *text*))
+        ((sxpath '(// table // (tr 10) // (td 6) // *text*))
          sxml)))
 
     ;; set recursive-subtotal subtotal style
