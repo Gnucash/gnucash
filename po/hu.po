@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-21 14:56+0000\n"
+"PO-Revision-Date: 2022-03-24 15:55+0000\n"
 "Last-Translator: Kárász Attila <cult.edie@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -12158,7 +12158,9 @@ msgstr "Minden tranzakció kifejtve az összes kifejtés megjelenítéséhez."
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Documents\" for "
 "each transaction."
-msgstr "Kétsoros tranzakció-információ"
+msgstr ""
+"Kétsoros tranzakció-információ, művelettel, megjegyzéssel és csatolt "
+"dokumentummal minden mozzanathoz."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:307
 msgid ""
@@ -12229,7 +12231,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:336
 #, fuzzy
 msgid "Number of transactions to show in a register."
-msgstr "_Tranzakciók száma:"
+msgstr "Tranzakciók számának kiírása a nyilvántartásban:"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:337
 #: gnucash/gtkbuilder/dialog-preferences.glade:3288
@@ -12241,9 +12243,8 @@ msgstr ""
 "tranzakció megjelenítését jelenti."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:341
-#, fuzzy
 msgid "Number of characters for auto complete."
-msgstr "Cellák _száma:"
+msgstr "Betűk száma az automatikus kiegészítéshez."
 
 #. Register2 feature
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:342
