@@ -435,7 +435,7 @@ the option '~a'."))
     (if (string? currency)
         (gnc-commodity-table-lookup
          (gnc-commodity-table-get-table (gnc-get-current-book))
-         GNC_COMMODITY_NS_CURRENCY currency)
+         (GNC-COMMODITY-NS-CURRENCY) currency)
         currency))
 
    (let* ((value (currency->scm default-value))
@@ -561,7 +561,7 @@ the option '~a'."))
   (define (commodity->scm commodity)
     (if (string? commodity)
         (list 'commodity-scm
-              GNC_COMMODITY_NS_CURRENCY
+              (GNC-COMMODITY-NS-CURRENCY)
               commodity)
         (list 'commodity-scm
               (gnc-commodity-get-namespace commodity)
@@ -1560,7 +1560,7 @@ the option '~a'."))
     (if (string? currency-string)
         (gnc-commodity-table-lookup
          (gnc-commodity-table-get-table (gnc-get-current-book))
-         GNC_COMMODITY_NS_CURRENCY currency-string)
+         (GNC-COMMODITY-NS-CURRENCY) currency-string)
         #f))
 
   (define (currency? val)

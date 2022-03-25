@@ -2212,7 +2212,7 @@ gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
 
     if (!table)
         return NULL;
-    if (g_strcmp0(name_space, GNC_COMMODITY_NS_NONCURRENCY) == 0)
+    if (g_strcmp0(name_space, GNC_COMMODITY_NS_NONISO_GUI) == 0)
         return commodity_table_get_all_noncurrency_commodities(table);
     ns = gnc_commodity_table_find_namespace(table, name_space);
     if (!ns)
@@ -2510,7 +2510,6 @@ gnc_commodity_table_add_default_data(gnc_commodity_table *table, QofBook *book)
     gnc_commodity* c;
 
     ENTER ("table=%p", table);
-    gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_NONCURRENCY, book);
     gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_TEMPLATE, book);
     c = gnc_commodity_new(book, "template", GNC_COMMODITY_NS_TEMPLATE, "template", "template", 1);
     gnc_commodity_table_insert(table, c);

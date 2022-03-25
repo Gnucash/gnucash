@@ -724,6 +724,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define (qif-dialog:default-namespace qif-symbol qif-type prefs)
 
+  (define (currency_ns? ns)
+    (or (string=? (GNC-COMMODITY-NS-CURRENCY) ns)
+        (string=? (GNC-COMMODITY-NS-LEGACY) ns)
+        (string=? (GNC-COMMODITY-NS-ISO4217) ns)))
+
   ;; Guess a namespace based on the symbol alone.
   (define (guess-by-symbol s)
     (if (string? s)
@@ -736,28 +741,19 @@
                           ;; compatible with the QIF type?
                           (and (string=? s (caddr elt))
                                (not (and (string? qif-type)
-                                         (string=? GNC_COMMODITY_NS_NONCURRENCY
-                                                   (cadr elt))
+                                         (not (currency_ns? (cadr elt))
                                          (or (string-ci=? qif-type "stock")
-                                             (string-ci=? qif-type "etf"))))))
+                                             (string-ci=? qif-type "etf")
+                                             (string-ci=? qif-type "mutual fund")
+                                             (string-ci=? qif-type "index")
+)))))
                         prefs)
-                   #f)))
+                   #f))))
         ;; If a preferences match was found, use its namespace.
-        (if pref-match (cadr pref-match))
-      ;; There's no symbol. Default to a fund.
-      GNC_COMMODITY_NS_NONCURRENCY)))
+        (if pref-match (cadr pref-match)))
+      ;; There's no symbol. Use the built-in default.
+      (GNC-COMMODITY-NS-NONCURRENCY)))
 
-  ;; Was a QIF type given?
-  (if (string? qif-type)
-     ;; Yes. We might be able to definitely determine the namespace.
-     (if (or
-          (string-ci=? qif-type "mutual fund")
-          (string-ci=? qif-type "index"))
-         GNC_COMMODITY_NS_NONCURRENCY
-         (guess-by-symbol qif-symbol)))
-
-     ;; No QIF type was given, so guess a
-     ;; default namespace by symbol alone.
   (guess-by-symbol qif-symbol))
 
 
