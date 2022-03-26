@@ -800,11 +800,20 @@ from gnucash.gnucash_core_c import \
     GNC_HOW_RND_PROMOTE, GNC_HOW_RND_ROUND_HALF_DOWN, \
     GNC_HOW_RND_ROUND_HALF_UP, GNC_HOW_RND_ROUND, GNC_HOW_RND_NEVER
 
+# GncNumeric bitmasks for HOW flags
+from gnucash.gnucash_core_c import \
+    GNC_NUMERIC_RND_MASK, GNC_NUMERIC_DENOM_MASK, GNC_NUMERIC_SIGFIGS_MASK
+
 # GncNumeric denominator types
 # used for the how argument in arithmetic functions like GncNumeric.add
 from gnucash.gnucash_core_c import \
     GNC_HOW_DENOM_EXACT, GNC_HOW_DENOM_REDUCE, GNC_HOW_DENOM_LCD, \
     GNC_HOW_DENOM_FIXED, GNC_HOW_DENOM_SIGFIG
+
+# GncNumeric function to calculate denominator type for sigfigs
+def GNC_HOW_DENOM_SIGFIGS(n):
+    """Leaned on the C Macro in gnc-numeric.h"""
+    return GNC_HOW_DENOM_SIGFIG | (n << 8 & GNC_NUMERIC_SIGFIGS_MASK)
 
 # import account types
 from gnucash.gnucash_core_c import \
