@@ -66,6 +66,7 @@
 #include "gnc-engine.h"
 #include "gnc-event.h"
 #include "gnc-features.h"
+#include "gnc-glib-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-gui-query.h"
@@ -3398,42 +3399,19 @@ gnc_plugin_page_register_filter_response_cb (GtkDialog* dialog,
 
 static void
 gpp_update_match_filter_text (cleared_match_t match, const guint mask,
-                              const gchar* filter_name, gchar** show, gchar** hide)
+                              const gchar* filter_name, GList **show, GList **hide)
 {
     if ((match & mask) == mask)
-    {
-        if (*show == NULL)
-            *show = g_strdup (filter_name);
-        else
-        {
-            gchar* temp = g_strdup (*show);
-            g_free (*show);
-            *show = g_strconcat (temp, ", ", filter_name, NULL);
-        }
-    }
+        *show = g_list_prepend (*show, g_strdup (filter_name));
     else
-    {
-        if (*hide == NULL)
-            *hide = g_strdup (filter_name);
-        else
-        {
-            gchar* temp = g_strdup (*hide);
-            g_free (*hide);
-            *hide = g_strconcat (temp, ", ", filter_name, NULL);
-        }
-    }
+        *hide = g_list_prepend (*hide, g_strdup (filter_name));
 }
 
 static void
 gnc_plugin_page_register_set_filter_tooltip (GncPluginPageRegister* page)
 {
     GncPluginPageRegisterPrivate* priv;
-    GncPluginPage* plugin_page;
-    gchar* text = NULL;
-    gchar* text_header = g_strdup_printf ("%s", _ ("Filter By:"));
-    gchar* text_start = NULL;
-    gchar* text_end = NULL;
-    gchar* text_cleared = NULL;
+    GList *t_list = NULL;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
@@ -3444,28 +3422,31 @@ gnc_plugin_page_register_set_filter_tooltip (GncPluginPageRegister* page)
     if (priv->fd.start_time != 0)
     {
         gchar* sdate = qof_print_date (priv->fd.start_time);
-        text_start = g_strdup_printf ("%s %s", _ ("Start Date:"), sdate);
+        t_list = g_list_prepend
+            (t_list, g_strdup_printf ("%s %s", _("Start Date:"), sdate));
         g_free (sdate);
     }
 
     // filtered number of days
     if (priv->fd.days > 0)
-        text_start = g_strdup_printf ("%s %d", _ ("Show previous number of days:"),
-                                      priv->fd.days);
+        t_list = g_list_prepend
+            (t_list, g_strdup_printf ("%s %d", _("Show previous number of days:"),
+                                      priv->fd.days));
 
     // filtered end time
     if (priv->fd.end_time != 0)
     {
         gchar* edate = qof_print_date (priv->fd.end_time);
-        text_end = g_strdup_printf ("%s %s", _ ("End Date:"), edate);
+        t_list = g_list_prepend
+            (t_list, g_strdup_printf ("%s %s", _("End Date:"), edate));
         g_free (edate);
     }
 
     // filtered match items
-    if (priv->fd.cleared_match != 31)
+    if (priv->fd.cleared_match != CLEARED_ALL)
     {
-        gchar* show = NULL;
-        gchar* hide = NULL;
+        GList *show = NULL;
+        GList *hide = NULL;
 
         gpp_update_match_filter_text (priv->fd.cleared_match, 0x01, _ ("Unreconciled"),
                                       &show, &hide);
@@ -3478,62 +3459,42 @@ gnc_plugin_page_register_set_filter_tooltip (GncPluginPageRegister* page)
         gpp_update_match_filter_text (priv->fd.cleared_match, 0x10, _ ("Voided"),
                                       &show, &hide);
 
-        if (show == NULL)
-            text_cleared = g_strconcat (_ ("Hide:"), " ", hide, NULL);
-        else
-            text_cleared = g_strconcat (_ ("Show:"), " ", show, "\n", _ ("Hide:"), " ",
-                                        hide, NULL);
+        show = g_list_reverse (show);
+        hide = g_list_reverse (hide);
 
-        g_free (show);
-        g_free (hide);
-    }
-    // create the tooltip based on created text variables
-    if ((text_start != NULL) || (text_end != NULL) || (text_cleared != NULL))
-    {
-        if (text_start != NULL)
-            text = g_strconcat (text_header, "\n", text_start, NULL);
-
-        if (text_end != NULL)
+        if (show)
         {
-            if (text == NULL)
-                text = g_strconcat (text_header, "\n", text_end, NULL);
-            else
-            {
-                gchar* temp = g_strdup (text);
-                g_free (text);
-                text = g_strconcat (temp, "\n", text_end, NULL);
-                g_free (temp);
-            }
+            char *str = gnc_g_list_stringjoin (show, ", ");
+            t_list = g_list_prepend
+                (t_list, g_strdup_printf ("%s %s", _("Show:"), str));
+            g_free (str);
         }
 
-        if (text_cleared != NULL)
+        if (hide)
         {
-            if (text == NULL)
-                text = g_strconcat (text_header, "\n", text_cleared, NULL);
-            else
-            {
-                gchar* temp = g_strdup (text);
-                g_free (text);
-                text = g_strconcat (temp, "\n", text_cleared, NULL);
-                g_free (temp);
-            }
+            char *str = gnc_g_list_stringjoin (hide, ", ");
+            t_list = g_list_prepend
+                (t_list, g_strdup_printf ("%s %s", _("Hide:"), str));
+            g_free (str);
         }
+
+        g_list_free_full (show, g_free);
+        g_list_free_full (hide, g_free);
     }
+
+    t_list = g_list_reverse (t_list);
+
+    if (t_list)
+        t_list = g_list_prepend (t_list, g_strdup (_("Filter By:")));
+
     // free the existing text if present
     if (priv->gsr->filter_text != NULL)
         g_free (priv->gsr->filter_text);
 
     // set the tooltip text variable in the gsr
-    priv->gsr->filter_text = g_strdup (text);
+    priv->gsr->filter_text = gnc_g_list_stringjoin (t_list, "\n");
 
-    if (text_start)
-        g_free (text_start);
-    if (text_end)
-        g_free (text_end);
-    if (text_cleared)
-        g_free (text_cleared);
-    g_free (text_header);
-    g_free (text);
+    g_list_free_full (t_list, g_free);
 
     LEAVE (" ");
 }
