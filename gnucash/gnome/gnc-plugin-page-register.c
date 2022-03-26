@@ -3344,52 +3344,38 @@ gnc_plugin_page_register_filter_response_cb (GtkDialog* dialog,
 
         if (priv->fd.save_filter)
         {
-            gchar* filter = g_strdup_printf ("0x%04x",
-                                             priv->fd.cleared_match); // cleared match
-            gchar* tmp = g_strdup (filter);
+            gchar *filter;
+            GList *flist = NULL;
+
+            // cleared match
+            flist = g_list_prepend
+                (flist, g_strdup_printf ("0x%04x", priv->fd.cleared_match));
 
             // start time
-            if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
-                                                  priv->fd.start_date_choose)) && priv->fd.start_time != 0)
-            {
-                gchar* timeval = gnc_plugin_page_register_filter_time2dmy (
-                                     priv->fd.start_time);
-                filter = g_strconcat (tmp, ",", timeval, NULL);
-                g_free (timeval);
-            }
+            if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->fd.start_date_choose)) && priv->fd.start_time != 0)
+                flist = g_list_prepend (flist, gnc_plugin_page_register_filter_time2dmy (priv->fd.start_time));
             else
-                filter = g_strconcat (tmp, ",0", NULL);
-
-            g_free (tmp);
-            tmp = g_strdup (filter);
-            g_free (filter);
+                flist = g_list_prepend (flist, g_strdup ("0"));
 
             // end time
             if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->fd.end_date_choose))
                 && priv->fd.end_time != 0)
-            {
-                gchar* timeval = gnc_plugin_page_register_filter_time2dmy (priv->fd.end_time);
-                filter = g_strconcat (tmp, ",", timeval, NULL);
-                g_free (timeval);
-            }
+                flist = g_list_prepend (flist, gnc_plugin_page_register_filter_time2dmy (priv->fd.end_time));
             else
-                filter = g_strconcat (tmp, ",0", NULL);
-
-            g_free (tmp);
-            tmp = g_strdup (filter);
-            g_free (filter);
+                flist = g_list_prepend (flist, g_strdup ("0"));
 
             // number of days
             if (priv->fd.days > 0)
-                filter = g_strdup_printf ("%s,%d", tmp, priv->fd.days);
+                flist = g_list_prepend (flist, g_strdup_printf ("%d", priv->fd.days));
             else
-                filter = g_strconcat (tmp, ",0", NULL);
+                flist = g_list_prepend (flist, g_strdup ("0"));
 
-            g_free (tmp);
-
+            flist = g_list_reverse (flist);
+            filter = gnc_g_list_stringjoin (flist, ",");
             PINFO ("The filter to save is %s", filter);
             gnc_plugin_page_register_set_filter (plugin_page, filter);
             g_free (filter);
+            g_list_free_full (flist, g_free);
         }
     }
     priv->fd.dialog = NULL;
