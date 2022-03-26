@@ -1,5 +1,79 @@
 Version history:
 ------- -------
+4.10 - 27 March 2022
+The eleventh release of the 4.x Stable Series
+Between 4.9 and 4.10, the following bugfixes were accomplished:
+
+    Bug 684507 - commodity namespace should be localized
+    Bug 741674 - Newly created Scheduled Transactions appear in existing search windows
+    Bug 797501 - Currency symbols in Hebrew (RTL) language
+    Bug 797772 - Allow reconciliation report to double filter by both posting and reconciliation date
+    Bug 798164 - Import transaction window does not allow changing the transaction description.
+    Bug 798272 - up/down arrow keys do not work in account selection pop-up
+    Bug 798375 - Transfer Account Selection not editable after typing error
+    Bug 798386 - Cannot increment date by 1 day with Japanese keyboard.Allow ';' to increment the date because on those keyboards + is shift-;.
+    Bug 798391 -OFX import routine keeps prompting for accepted (and reconciled) transactions when imported again
+    Bug 797610 - Scrolling is too fast to follow
+    Bug 798392 - Reports do not display when Reports JavaScript dependencies are located at a filepath that includes special characters like hash ("#")
+    Bug 798395 - ofxdirectconnect downloads crash gnucash 4.9
+    Bug 798408 - The calculation in budgets UI and reports are wrong.
+    Bug 798411 - Untranslated/Unused string [pt only]
+    Bug 798415 - Due Bills Reminder Dialog - Right align 'amount'This was a right-to-left language (e.g. Hebrew) problem.
+    Bug 798435 - Crash on print after printing checks
+    Bug 798438 - on reconcile window, click on the last column 'R' does not order the entries according with the status
+    Bug 798448 - Column 'num' cannot be null
+    Bug 798458 - Build failure with gcc 12
+    Bug 798474 - Windows 10: Mouse scroll wheel on register only scrolls 1 pixel at a time (instead of 1 line at a time)
+
+The following fixes and improvements were not associated with bug reports:
+
+    Added a BETA Stock Transaction Assistant to help create a variety of securities transactions. To try it out start GnuCash with the --extra option, open a stock-type register, and select Actions>Stock Assistant. Please note any issues on Bug 798004.
+    Remove the hard-coded default namespaces"AMEX", "NASDAQ", "NYSE", "EUREX", and "FUND" from the New Security dialog. These namespaces were added to the list of existing namespaces; it was necessary to create a commodity that used one of them to make that one an actual namespace, so users who have commodities in e.g. the namespace NYSE will still see that namespace in the selection list. Reasoning: The list was necessarily incomplete and confused new users.
+    Fixed the Income Statement report table formating so that all sections get laid out to the same width.
+    [Python Bindings]Implement some comparison and arithmetic operators for GncNumeric
+    Budgets are sensitive to readonly status
+
+    Disable some budget features if book is readonly
+    Fix suppression of "cut split/transaction" warnings for the current session
+
+    These were not working because they were missing from the temporary warnings settings schema. The warnings could only be dismissed permanently. Add them to the temporary warnings section of the settings schema.
+    Currencies in several locations not displayed correctly for Hebrew
+    [category-barchart] Added option to show ratios
+    [html-chart] Add format style option for numbers
+    Better wording for tax table changed info message.
+    [register] Checkbox any value other than 0x20 (ASCII space) is true.
+
+    Because it can be X or U+2716 now and could be something else in future. Fixes in particular the disappearing tax-included and tax-table in the Invoice/Bill entry register.
+    [gnc-budget-view.c] modify GList in reverse
+
+    because the GList modification in gnc_budget_view_refresh works on the tail end (see g_list_last being chopped off successively, followed by g_list_append successively), wherease it's much faster to work on the head end. Therefore: reverse, modify, and re-reverse.
+    [Python Bindings]Provide the complete set of QOF enums in gnucash
+    [Pyton Bindings]Provide wrapper for qof numeric predicate
+
+    Python bindings already have some wrapping objects for qof predicates. This adds the one missing for GncNumeric comparisons. Additionally fixes a wrong number for QOF_NUMERIC_MATCH_ANY in example file.
+    Remove commodity-table.scm, no longer required after adjusting qif-dialog-utils
+    Preferences, Import: UPDATE AND RECONCILE should be UPDATE AND CLEAR
+
+    on preference "Enable update match action" tooltip text.
+    [register] Enable horizontal scrolling with a touchpad.
+    [business]Add diagnostic messages to GncEntry and GncInvoice.
+    Replace code style guidance with reference to the wiki Coding Standard page.
+    Update Form/Schedule line references for 2021 for the US Income Tax Report
+    Update the register help label when cell read only
+    Change AR/AP Type cell to be read only
+
+    The Type cell in AR/AP registers should not be changeable from the register so make the cell read only.
+    Tip-of-the-Day, new tip: the full file path is shown in the status bar.
+    [assistant-qif-import] Prevent ambiguous mnemonic
+
+    Mnemonic N clashes with GtkAssistant "Next". Change to D which does not clash.
+    Numerous performance and code-clarity improvements.
+
+New API: None
+Deprecations: None
+
+New and Updated Translations: Chinese (Simplified), Chinese (Traditional), Croatian, Czech, Dutch, Finnish, French, German, Greek, Hebrew, Hungarian, Italian, Norwegian Bokmål, Portuguese, Portuguese (Brazil), Romanian, Slovak, Spanish, Spanish (Nicaragua), Swedish, Turkish, Ukrainian
+
 4.9 - 19 December 2021
 The tenth release of the 4.x Stable Series
 Between 4.8 and 4.9, the following bugfixes were accomplished:
@@ -102,14 +176,10 @@ The following fixes and improvements were not associated with bug reports:
       been removed in the past to be able to properly obsolete them
       (and to test the obsoleting code)
 
-New API
+New API: None
+Deprecations: None
 
-None
-Deprecations
-
-None
-
-New and Updated Translations: Chinese (Simplified), Chinese (Traditional), Croatian, French, German, Hebrew, Italian, Norwegian Bokmål, Portuguese, Portuguese (Brazil), Spanish, Ukranian. 
+New and Updated Translations: Chinese (Simplified), Chinese (Traditional), Croatian, French, German, Hebrew, Italian, Norwegian Bokmål, Portuguese, Portuguese (Brazil), Spanish, Ukranian.
 
 4.8  - 28 September 2021
 The ninth release of the 4.x stable series.
@@ -222,9 +292,7 @@ The following fixes and improvements were not associated with bug reports:
     [Portfolio Reports] Allow share digits to 9 decimal places to match the
        maximum commodity fraction.
 
-New API
-
-    None
+New API: None
 
 Deprecations
 
