@@ -9111,6 +9111,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-main-window.c:4738
 msgid "translator-credits"
 msgstr ""
+"Kárász Attila, 2022\n"
 "Kornel Tako, 2007\n"
 "SULYOK Péter, 2003-2006\n"
 "HOSSZÚ Péter, 2001-2003"
