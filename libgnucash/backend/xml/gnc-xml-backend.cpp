@@ -116,7 +116,9 @@ GncXmlBackend::session_begin(QofSession* session, const char* new_uri,
                       SessionOpenMode mode)
 {
     /* Make sure the directory is there */
-    m_fullpath = gnc_uri_get_path (new_uri);
+    auto path_str = gnc_uri_get_path (new_uri);
+    m_fullpath = path_str;
+    g_free (path_str);
 
     if (m_fullpath.empty())
     {

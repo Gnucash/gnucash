@@ -617,7 +617,7 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
     {
         gtk_list_store_append(GTK_LIST_STORE(model), &iter);
         gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0,
-                            GNC_COMMODITY_NS_NONCURRENCY, -1);
+                            GNC_COMMODITY_NS_NONISO_GUI, -1);
     }
 
     /* add all others to the combobox */

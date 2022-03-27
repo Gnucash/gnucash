@@ -27,7 +27,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-12 09:55+0000\n"
+"PO-Revision-Date: 2022-03-23 09:56+0000\n"
 "Last-Translator: YTX <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -7373,7 +7373,7 @@ msgstr "您必须为此商品输入非空白的“全名”、“标记/缩写�
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:237
 msgid "Path head for files is,"
-msgstr "文件的路径前缀是，"
+msgstr "凭证目录："
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:239
 msgid "Path head does not exist,"
@@ -7386,7 +7386,7 @@ msgstr "“首选项 -> 常规 -> 路径”未设置，默认使用“%s”"
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:426
 msgid "Existing"
-msgstr "使用现有的"
+msgstr "当前"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:150
 msgid "You can type '+' or '-' to increment or decrement the number."
@@ -9197,7 +9197,7 @@ msgstr "距离"
 #: gnucash/report/reports/standard/register.scm:218
 #: libgnucash/engine/Split.c:1614 libgnucash/engine/Split.c:1631
 msgid "-- Split Transaction --"
-msgstr "-- 复合会计分录 --"
+msgstr "-- 复合分录 --"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:46
 msgid "-- Stock Split --"
@@ -14986,27 +14986,23 @@ msgstr "问题"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:49
 msgid "Change Linked Document path head"
-msgstr "已有关联是"
+msgstr "改变凭证目录"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:85
 msgid ""
 "Existing relative file path links will be converted to absolute ones by "
 "combining them with the existing path head unless box unticked."
-msgstr ""
-"对现有相对文件路径的链接将通过与现有路径的开头合并而被转换为绝对路径，除非该"
-"复选框未被选中。"
+msgstr "选中，凭证的相对路径将与当前目录结合，从而转换为绝对路径。"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:140
 msgid ""
 "Existing absolute file path links will be converted to relative ones by "
 "comparing them to the new path head unless box unticked."
-msgstr ""
-"对现有绝对文件路径的链接将通过与新的路径起始部分进行比较而转换为相对路径，除"
-"非该复选框未被选中。"
+msgstr "选中，凭证的绝对路径将与新目录比较，从而转换为相对路径。"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:178
 msgid "Note: Only Document Links that are not read-only will be changed."
-msgstr "备注：只更改只读文档链接。"
+msgstr "备注：仅更改非只读凭证链接。"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:276
 msgid "Linked _File"
@@ -16246,7 +16242,7 @@ msgstr "秒钟"
 #: gnucash/gtkbuilder/dialog-preferences.glade:2018
 #: gnucash/gtkbuilder/dialog-preferences.glade:2036
 msgid "Path head for Linked Files Relative Paths"
-msgstr "路径"
+msgstr "目录"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2065
 msgid "Enable horizontal grid lines on table displays"
@@ -16270,7 +16266,7 @@ msgstr "主窗格显示垂直网格线。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2102
 msgid "<b>Linked Files</b>"
-msgstr "<b>凭证路径</b>"
+msgstr "<b>凭证目录</b>"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2273

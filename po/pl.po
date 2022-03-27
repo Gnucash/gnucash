@@ -2,14 +2,15 @@
 # Adithya K <adithyak04@gmail.com>, 2021.
 # Maciej Błędkowski <mble@tuta.io>, 2021.
 # Henio Szewczyk <henryk.szewczyk09@gmail.com>, 2021.
+# 154pinkchairs <ovehis@riseup.net>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2021-06-02 22:33+0000\n"
-"Last-Translator: Henio Szewczyk <henryk.szewczyk09@gmail.com>\n"
+"PO-Revision-Date: 2022-03-25 15:09+0000\n"
+"Last-Translator: 154pinkchairs <ovehis@riseup.net>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
 "Language: pl\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Poedit-Bookmarks: 2255,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -483,6 +484,10 @@ msgid ""
 "(File[->Most Recently Used-List]).\n"
 "The full path is displayed in the status bar."
 msgstr ""
+"Jeśli chcesz wiedzieć, w których folderach zapisane są Twoje ostatnie pliki "
+"GnuCash, najedź na jeden z wpisów w menu historii\n"
+"(Plik[->Lista Ostatnio Używanych]).\n"
+"Pełna ścieżka wyświetlana jest na pasku stanu."
 
 #: doc/tip_of_the_day.list.c:24
 msgid ""
@@ -894,6 +899,9 @@ msgid ""
 "new accounts. Accounts in other currencies must be\n"
 "added manually."
 msgstr ""
+"Wybrano walutę księgowania i będzie ona używana\n"
+"dla nowych kont. Konta w innych walutach muszą \n"
+"zostać dodane ręcznie."
 
 #: gnucash/gnome/assistant-hierarchy.c:1495
 msgid "Please choose the currency to use for new accounts."
@@ -1503,7 +1511,7 @@ msgstr "Identyfikator klienta"
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:149
 #: libgnucash/app-utils/business-options.scm:68
 msgid "Company Name"
-msgstr "Nazwa firmy"
+msgstr "Nazwa Firmy"
 
 #: gnucash/gnome/dialog-customer.c:935 gnucash/gnome/dialog-vendor.c:727
 msgid "Contact"
@@ -2936,7 +2944,7 @@ msgstr "Usunąć ceny?"
 #: gnucash/report/reports/standard/income-statement.scm:116
 #: gnucash/report/reports/standard/trial-balance.scm:91
 msgid "Entries"
-msgstr "Pozycje"
+msgstr "Wpisy"
 
 #: gnucash/gnome/dialog-price-edit-db.c:458
 #, fuzzy
@@ -7786,9 +7794,8 @@ msgid "Path head not set, using '%s' for relative paths"
 msgstr "Nie ustawiono ścieżki, używając \"%s\" dla ścieżki względnej"
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:426
-#, fuzzy
 msgid "Existing"
-msgstr "Użyj istniejącego"
+msgstr "Istniejące"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:150
 msgid "You can type '+' or '-' to increment or decrement the number."

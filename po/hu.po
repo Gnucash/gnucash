@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-02-28 15:56+0000\n"
+"PO-Revision-Date: 2022-03-24 15:55+0000\n"
 "Last-Translator: Kárász Attila <cult.edie@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -7679,10 +7679,12 @@ msgid ""
 msgstr "A forrás számla egyenlegét mutassuk, '%s' beleértve az alszámlákat is"
 
 #: gnucash/gnome-utils/dialog-account.c:2334
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Set the account hidden value for account '%s' including all sub-accounts"
-msgstr "Csak a forrás számla egyenlegét mutassuk, kihagyva az alszámlákat"
+msgstr ""
+"Állítsa be a számla rejtett értékét a '%s' számlához, beleértve az összes "
+"alszámlát"
 
 #: gnucash/gnome-utils/dialog-book-close.c:294
 msgid "Please select an Equity account to hold the total Period Income."
@@ -7693,13 +7695,12 @@ msgid "Please select an Equity account to hold the total Period Expense."
 msgstr ""
 
 #: gnucash/gnome-utils/dialog-commodity.c:160
-#, fuzzy
 msgid ""
 "\n"
 "Please select a commodity to match"
 msgstr ""
 "\n"
-"Válasszon ki egy illeszkedő árut:"
+"Válasszon ki egy illeszkedő árut"
 
 #: gnucash/gnome-utils/dialog-commodity.c:167
 msgid ""
@@ -7862,9 +7863,8 @@ msgstr "Mentés másként..."
 #: gnucash/gnome-utils/dialog-file-access.c:311
 #: gnucash/gnome-utils/dialog-file-access.c:320
 #: gnucash/gtkbuilder/dialog-file-access.glade:40
-#, fuzzy
 msgid "_Save As"
-msgstr "Mentés másként..."
+msgstr "Mentés másként"
 
 #: gnucash/gnome-utils/dialog-options.c:225
 #: gnucash/gnome-utils/gnc-main-window.c:307
@@ -7965,7 +7965,7 @@ msgstr "Alszámla kiválasztása"
 
 #: gnucash/gnome-utils/dialog-options.c:1508
 msgid "Select all descendents of selected account."
-msgstr "A kiválasztott számlák alszámláinak kiválasztása"
+msgstr "A kiválasztott számlák alszámláinak kiválasztása."
 
 #: gnucash/gnome-utils/dialog-options.c:1514
 #: gnucash/gnome-utils/dialog-options.c:1650
@@ -7982,7 +7982,7 @@ msgstr "Rejtett számlák megjelenítése"
 
 #: gnucash/gnome-utils/dialog-options.c:1535
 msgid "Show accounts that have been marked hidden."
-msgstr "Rejtettnek megjelölt számlák megjelenítése"
+msgstr "Rejtettnek megjelölt számlák megjelenítése."
 
 #: gnucash/gnome-utils/dialog-options.c:1638
 msgid "Select all entries."
@@ -8035,11 +8035,8 @@ msgid "Pixels"
 msgstr ""
 
 #: gnucash/gnome-utils/dialog-options.c:3067
-#, fuzzy
 msgid "Percent"
-msgstr ""
-"Érték $\n"
-"Százalék %"
+msgstr "Százalék"
 
 #. Translators: Both %s will be the account separator character; the
 #. resulting string is a demonstration how the account separator
@@ -8098,9 +8095,9 @@ msgid "_Rename"
 msgstr "_Újra számozás"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:705
-#, fuzzy, c-format
+#, c-format
 msgid "Tax table name \"%s\" already exists."
-msgstr "Ez az áru már létezik."
+msgstr "Az adó táblában ez a név \"%s\" már létezik."
 
 #: gnucash/gnome-utils/dialog-tax-table.c:729
 #, c-format
@@ -8242,16 +8239,14 @@ msgstr "Új..."
 #: gnucash/gnome-utils/gnc-amount-edit.c:411
 #: gnucash/register/register-core/formulacell.c:121
 #: gnucash/register/register-core/pricecell.c:161
-#, fuzzy, c-format
-#| msgid "An error occurred while processing %s."
+#, c-format
 msgid "An error occurred while processing '%s' at position %d"
-msgstr "A feldolgozás során %s hiba lépett fel."
+msgstr "A feldolgozás során %s hiba lépett fel az %d helyen"
 
 #: gnucash/gnome-utils/gnc-amount-edit.c:417
-#, fuzzy, c-format
-#| msgid "An error occurred while processing %s."
+#, c-format
 msgid "An error occurred while processing '%s'"
-msgstr "A feldolgozás során %s hiba lépett fel."
+msgstr "A feldolgozás során %s hiba lépett fel"
 
 #: gnucash/gnome-utils/gnc-autoclear.c:100
 msgid "Account is already at Auto-Clear Balance."
@@ -8747,7 +8742,7 @@ msgstr "Adatok betöltése..."
 
 #: gnucash/gnome-utils/gnc-file.c:987
 msgid "Re-saving user data..."
-msgstr "Adatok újra mentése"
+msgstr "Adatok újra mentése..."
 
 #: gnucash/gnome-utils/gnc-file.c:1350
 msgid "Exporting file..."
@@ -8811,9 +8806,8 @@ msgid "GnuCash could not find the linked document."
 msgstr "GnuCash nem tudta zárolni %s fájlt."
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:583
-#, fuzzy
 msgid "GnuCash could not open the linked document:"
-msgstr "GnuCash nem tudta zárolni %s fájlt."
+msgstr "GnuCash nem tudta megnyitni %s a csatolt dokumentumot:"
 
 #. Translators: %s is a path to a database or any other url,
 #. like mysql://user@server.somewhere/somedb, https://www.somequotes.com/thequotes
@@ -9049,10 +9043,8 @@ msgid "This window is closing and will not be restored."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-main-window.c:1460
-#, fuzzy
-#| msgid "Close this window"
 msgid "Close Window?"
-msgstr "Ablak bezárása"
+msgstr "Ablak bezárása?"
 
 #. Translators: This string is shown in the window title if this
 #. document is, well, read-only.
@@ -9070,9 +9062,9 @@ msgstr ""
 
 #. Translators: This message appears in the status bar after opening the file.
 #: gnucash/gnome-utils/gnc-main-window.c:1764
-#, fuzzy, c-format
+#, c-format
 msgid "File %s opened. %s"
-msgstr "A fájl megnyitása sikertelen volt."
+msgstr "A fájl %s megnyitva. %s"
 
 #: gnucash/gnome-utils/gnc-main-window.c:2887
 msgctxt "lower case key for short cut to 'Accounts'"
@@ -9119,6 +9111,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-main-window.c:4738
 msgid "translator-credits"
 msgstr ""
+"Kárász Attila, 2022\n"
 "Kornel Tako, 2007\n"
 "SULYOK Péter, 2003-2006\n"
 "HOSSZÚ Péter, 2001-2003"
@@ -9311,9 +9304,8 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:477
 #: gnucash/register/ledger-core/split-register.c:626
 #: gnucash/register/register-gnome/datecell-gnome.c:108
-#, fuzzy
 msgid "Cannot store a transaction at this date"
-msgstr "Tranzakciódátum megjelenítése?"
+msgstr "Erre a dátumra nem tárolható a tranzakció"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1359
 #: gnucash/register/ledger-core/split-register.c:628
@@ -9326,9 +9318,8 @@ msgstr ""
 #. Translators: This message will be presented when a user
 #. attempts to record a transaction without splits
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1723
-#, fuzzy
 msgid "Not enough information for Blank Transaction?"
-msgstr "Kétsoros tranzakció-információ"
+msgstr "Kevés az információ az Üres Tranzakcióhoz?"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1725
 #, fuzzy
@@ -9433,7 +9424,7 @@ msgstr "Ellenőrzés"
 #: gnucash/register/ledger-core/split-register.c:2544
 #: gnucash/register/ledger-core/split-register.c:2575
 msgid "ATM Deposit"
-msgstr "ATM Deposit"
+msgstr "ATM Befizetés"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2852
 #: gnucash/register/ledger-core/split-register.c:2545
@@ -9534,7 +9525,7 @@ msgstr "AutoBetét"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2865
 #: gnucash/register/ledger-core/split-register.c:2558
 msgid "Wire"
-msgstr "Wire"
+msgstr "Vezeték"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2867
 #: gnucash/register/ledger-core/split-register.c:2560
@@ -9611,7 +9602,7 @@ msgstr "Visszaigénylés"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2914
 #: gnucash/register/ledger-core/split-register.c:2607
 msgid "Paycheck"
-msgstr "Paycheck"
+msgstr "Fizetés ellenőrzés"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2927
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:109
@@ -9938,9 +9929,8 @@ msgstr "Időzóna"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:353
 #: gnucash/gtkbuilder/dialog-customer.glade:133
-#, fuzzy
 msgid "Customer Number"
-msgstr "Ügyfélszám: "
+msgstr "Ügyfélszám"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:361
 #: gnucash/gtkbuilder/dialog-vendor.glade:134
@@ -9950,48 +9940,42 @@ msgstr "Beszállítószám"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:365
 #: gnucash/gtkbuilder/dialog-employee.glade:109
-#, fuzzy
 msgid "Employee Number"
-msgstr "Munkatárs-szám: "
+msgstr "Munkatárs-szám"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:417
 #: gnucash/report/reports/aging.scm:48 gnucash/report/reports/aging.scm:682
 #: gnucash/report/reports/standard/new-aging.scm:49
-#, fuzzy
 msgid "Address Name"
-msgstr "Cím: "
+msgstr "Cím"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:422
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:126
 #: gnucash/report/reports/aging.scm:49 gnucash/report/reports/aging.scm:684
 #: gnucash/report/reports/standard/new-aging.scm:52
-#, fuzzy
 msgid "Address 1"
-msgstr "Cím: "
+msgstr "Cím 1"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:427
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:127
 #: gnucash/report/reports/aging.scm:50 gnucash/report/reports/aging.scm:686
 #: gnucash/report/reports/standard/new-aging.scm:53
-#, fuzzy
 msgid "Address 2"
-msgstr "Cím: "
+msgstr "Cím 2"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:432
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:128
 #: gnucash/report/reports/aging.scm:51 gnucash/report/reports/aging.scm:688
 #: gnucash/report/reports/standard/new-aging.scm:54
-#, fuzzy
 msgid "Address 3"
-msgstr "Cím: "
+msgstr "Cím 3"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:437
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:129
 #: gnucash/report/reports/aging.scm:52 gnucash/report/reports/aging.scm:690
 #: gnucash/report/reports/standard/new-aging.scm:55
-#, fuzzy
 msgid "Address 4"
-msgstr "Cím: "
+msgstr "Cím 4"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:447
 #: gnucash/gtkbuilder/dialog-customer.glade:284
@@ -10005,9 +9989,8 @@ msgid "Fax"
 msgstr "Fax"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:452
-#, fuzzy
 msgid "E-mail"
-msgstr "Email "
+msgstr "Email"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:478
 #: gnucash/gtkbuilder/dialog-customer.glade:201
@@ -10045,9 +10028,8 @@ msgstr "Kiegyenlítés"
 #. Translators: currently max 34 (ASCII) chars (= 17 or 8 UTF-8 chars depending on the block)
 #. See "MAX_DATE_LENGTH" in https://code.gnucash.org/docs/MAINT/group__Date.html
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:1489
-#, fuzzy
 msgid " Scheduled "
-msgstr "Ütemezett"
+msgstr " ütemezett "
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2316
 #: gnucash/register/ledger-core/split-register-control.c:1521
@@ -10319,7 +10301,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:152
 msgid "Last Occur"
-msgstr "Utolsó előfordulás: "
+msgstr "Utolsó előfordulás"
 
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:157
 msgid "Next Occur"
@@ -10390,19 +10372,16 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:113
-#, fuzzy
 msgid "Name of the report to run\n"
-msgstr "Cégnév"
+msgstr "A futtatandó riport neve\n"
 
 #: gnucash/gnucash-cli.cpp:115
-#, fuzzy
 msgid "Specify export type\n"
-msgstr "2. Válasszon import típust"
+msgstr "Válasszon import típust\n"
 
 #: gnucash/gnucash-cli.cpp:117
-#, fuzzy
 msgid "Output file for report\n"
-msgstr "A háttér mintázata a reportokban."
+msgstr "Kimenti fájl a riporthoz\n"
 
 #: gnucash/gnucash-cli.cpp:132
 msgid "Unknown quotes command '{1}'"
@@ -10427,31 +10406,25 @@ msgid "Missing command or option"
 msgstr "Ez egy szín extra"
 
 #: gnucash/gnucash-commands.cpp:92
-#, fuzzy
 msgid "No quotes retrieved. Finance::Quote isn't installed properly."
 msgstr ""
 "Nincsenek elérhető árfolyamok. Pénzügy::Az árfolyamok nincsenek megfelelően "
-"telepítve.\n"
+"telepítve."
 
 #: gnucash/gnucash-core-app.cpp:81
-#, fuzzy
 msgid "This is a development version. It may or may not work."
-msgstr "Ez egy fejlesztői változat. Talán működik, talán nem.\n"
+msgstr "Ez egy fejlesztői változat. Talán működik, talán nem."
 
 #: gnucash/gnucash-core-app.cpp:82
-#, fuzzy
 msgid "Report bugs and other problems to gnucash-devel@gnucash.org"
 msgstr ""
-"Jelentsen programhibákat és más problémákat gnucash-devel@gnucash.org "
-"címen!\n"
+"Küldjék a programhibákat és más problémákat gnucash-devel@gnucash.org címre!"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:84
 #, fuzzy
 msgid "You can also lookup and file bug reports at {1}"
-msgstr ""
-"Hibajelentéseket megtekinthet vagy leadhat a https://bugs.gnucash.org "
-"lapon.\n"
+msgstr "Kikeresheted és küldheted a hiba jelentést {1}"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:86
@@ -11036,7 +11009,7 @@ msgstr "Fo_rgás"
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:76
 #, fuzzy
 msgid "Number of degrees to rotate the check."
-msgstr "Cellák _száma:"
+msgstr "A csekk forgatásához szükséges fokok száma."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:80
 #, fuzzy
@@ -11155,9 +11128,8 @@ msgstr "Az párbeszédablak szélessége és mérete az utolsó bezáráskor."
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:103
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:184
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:185
-#, fuzzy
 msgid "Position of the horizontal pane divider."
-msgstr "A csekk pozíciója a lapon"
+msgstr "A vízszintes elválasztó helyzete."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:135
 msgid ""
@@ -11229,11 +11201,11 @@ msgid ""
 "transaction will cause the existing transaction to be updated and cleared by "
 "default."
 msgstr ""
-"Enable the UPDATE AND RECONCILE action in the transaction matcher. If "
-"enabled, a transaction whose best match's score is above the Auto-CLEAR "
-"threshold and has a different date or amount than the matching existing "
-"transaction will cause the existing transaction to be updated and cleared by "
-"default."
+"Engedélyezze a FRISSÍTÉS ÉS ÖSSZEGZÉS műveletet a tranzakcióegyeztetőben. Ha "
+"engedélyezve van, akkor az a tranzakció, amelynek legjobb egyezési pontszáma "
+"meghaladja az Automatikus-TÖRLÉS küszöbértékét, és amelynek dátuma vagy "
+"összege eltér az egyező meglévő tranzakcióétól, a meglévő tranzakciót "
+"alapértelmezés szerint frissíti és törli."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:15
 msgid "Use bayesian matching"
@@ -11368,9 +11340,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:68
-#, fuzzy
 msgid "Display or hide reconciled matches"
-msgstr "Egyeztetés dátumának megjelenítése?"
+msgstr "Egyeztetések mutatása vagy elrejtése"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:69
 msgid ""
@@ -11402,8 +11373,10 @@ msgstr "Dokumentáció megjeleníté_se"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:33
 #: gnucash/gtkbuilder/dialog-account-picker.glade:40
+#, fuzzy
 msgid "Show some documentation-only pages in QIF Import assistant."
-msgstr "Show some documentation-only pages in QIF Import assistant."
+msgstr ""
+"Néhány csak dokumentációs oldal megjelenítése a QIF importálási segédben."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:5
 msgid "Pre-select cleared transactions"
@@ -11768,9 +11741,8 @@ msgid "Sign reverse balances on income and expense accounts."
 msgstr "Bevételi és költségszámlák egyenlegének megjelölése visszafelé."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:110
-#, fuzzy
 msgid "Use account colors in the account hierarchy"
-msgstr "A megadott folyószámla nem található."
+msgstr "Használja a számla színt a számla csoportban"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:111
 msgid ""
@@ -12153,10 +12125,8 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:291
 #: gnucash/gtkbuilder/dialog-preferences.glade:3219
-#, fuzzy
-#| msgid "Show all transactions on one line. (Two in double line mode.)"
 msgid "Show all transactions on one line or in double line mode on two."
-msgstr "Minden tranzakció egy sorban. (Kettőben,duplasoros módban.)"
+msgstr "Minden tranzakció egy sorban (Kettőben,dupla soros módban)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:292
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:297
@@ -12172,16 +12142,12 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:296
 #: gnucash/gtkbuilder/dialog-preferences.glade:3238
-#, fuzzy
-#| msgid ""
-#| "Automatically expand the current transaction to show all splits. All "
-#| "other transactions are shown on one line. (Two in double line mode.)"
 msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line or in double line mode on two."
 msgstr ""
 "Az aktuális tranzakció automatikus kifejtése. Az összes többi egy sorban "
-"jelenik meg. (Kettőben a duplasoros módban.)"
+"jelenik meg (Kettőben a duplasoros módban)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:301
 #: gnucash/gtkbuilder/dialog-preferences.glade:3257
@@ -12193,7 +12159,9 @@ msgstr "Minden tranzakció kifejtve az összes kifejtés megjelenítéséhez."
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Documents\" for "
 "each transaction."
-msgstr "Kétsoros tranzakció-információ"
+msgstr ""
+"Kétsoros tranzakció-információ, művelettel, megjegyzéssel és csatolt "
+"dokumentummal minden mozzanathoz."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:307
 msgid ""
@@ -12264,7 +12232,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:336
 #, fuzzy
 msgid "Number of transactions to show in a register."
-msgstr "_Tranzakciók száma:"
+msgstr "Tranzakciók számának kiírása a nyilvántartásban:"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:337
 #: gnucash/gtkbuilder/dialog-preferences.glade:3288
@@ -12276,9 +12244,8 @@ msgstr ""
 "tranzakció megjelenítését jelenti."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:341
-#, fuzzy
 msgid "Number of characters for auto complete."
-msgstr "Cellák _száma:"
+msgstr "Betűk száma az automatikus kiegészítéshez."
 
 #. Register2 feature
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:342

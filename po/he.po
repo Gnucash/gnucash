@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-11 15:54+0000\n"
+"PO-Revision-Date: 2022-03-22 07:56+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -473,7 +473,7 @@ msgid ""
 msgstr ""
 "ניתן בקלות לייבא את הנתונים הפיננסיים הקיימים מתוכנת אמ.אס מוני, קוויקן, או "
 "כול תוכנה אחרות שמסוגלות לייצא קובצי QIF או OFX. בתפריט 'קובץ', יש לבחור "
-"בתפריט־משנה 'ייבוא', ואז לבחור בפריט תפריט, קובץ QIF או OFX בהתאמה. לאחר "
+"בתפריט־משנה 'ייבוא', ואז לבחור בפריט תפריט, 'קובץ QIF'או 'OFX'בהתאמה. לאחר "
 "מכן, להמשיך על פי ההוראות שיסופקו."
 
 #: doc/tip_of_the_day.list.c:20
@@ -23590,12 +23590,12 @@ msgstr "תקופה חלופית"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:152
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:182
 msgid "Override or modify From: & To:."
-msgstr "עקיפה או הסגלה מ: ול:."
+msgstr "עקיפה או הסגלה של 'מאת': ו'עבור':."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:154
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
 msgid "Use From - To"
-msgstr "שימוש ב מ ל"
+msgstr "שימוש ב'מאת' –'עבור'"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:185

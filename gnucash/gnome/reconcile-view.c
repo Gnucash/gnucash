@@ -690,10 +690,11 @@ gnc_reconcile_view_set_list (GNCReconcileView  *view, gboolean reconcile)
     for (node = list_of_rows; node; node = node->next)
     {
         GtkTreeRowReference *rowref = gtk_tree_row_reference_new (model, node->data);
-        rr_list = g_list_append (rr_list, rowref);
+        rr_list = g_list_prepend (rr_list, rowref);
         gtk_tree_path_free (node->data);
     }
 
+    rr_list = g_list_reverse (rr_list);
     for (node = rr_list; node; node = node->next)
     {
         GtkTreeIter          iter;

@@ -109,7 +109,9 @@ GType gnc_commodity_namespace_get_type(void);
 /* The ISO define is deprecated in favor of CURRENCY */
 #define GNC_COMMODITY_NS_ISO           "ISO4217"
 #define GNC_COMMODITY_NS_CURRENCY      "CURRENCY"
-#define GNC_COMMODITY_NS_NONCURRENCY   NC_("Commodity Type", "All non-currency")
+#define GNC_COMMODITY_NS_NONCURRENCY "NONCURRENCY"
+
+#define GNC_COMMODITY_NS_NONISO_GUI   NC_("Commodity Type", "All non-currency")
 #define GNC_COMMODITY_NS_ISO_GUI       NC_("Commodity Type", "Currencies")
 
 /** Max fraction is 10^9 because 10^10 would require changing it to an

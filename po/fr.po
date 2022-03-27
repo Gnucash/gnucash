@@ -24,6 +24,7 @@
 # Alexandre <nasmi3+weblate@gmail.com>, 2021.
 # Maxime Leroy <lisacintosh@gmail.com>, 2021, 2022.
 # Sébastien Ray <sebastien.ray@normalesup.org>, 2022.
+# ButterflyOfFire <ButterflyOfFire@protonmail.com>, 2022.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
 #
@@ -33,8 +34,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-11 08:54+0000\n"
-"Last-Translator: Maxime Leroy <lisacintosh@gmail.com>\n"
+"PO-Revision-Date: 2022-03-25 19:09+0000\n"
+"Last-Translator: ButterflyOfFire <ButterflyOfFire@protonmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -33341,7 +33342,7 @@ msgstr ""
 #| msgid "All non-currency"
 msgctxt "Commodity Type"
 msgid "All non-currency"
-msgstr "Toutes les non-devises"
+msgstr "Tous les éléments non monétaires"
 
 # messages-i18n.c:266 po/guile_strings.txt:112
 # src/gnome/glade-gnc-dialogs.c:641

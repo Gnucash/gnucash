@@ -28,6 +28,8 @@
 #  @author Jeff Green,   ParIT Worker Co-operative <jeff@parit.ca>
 #  @ingroup python_bindings
 
+import operator
+
 from enum import IntEnum
 from urllib.parse import urlparse
 
@@ -426,7 +428,7 @@ class GncNumeric(GnuCashCoreClass):
         elif len(args) == 1:
             arg = args[0]
             if isinstance(arg, int):
-                return gnc_numeric_create(arg ,1)
+                return gnc_numeric_create(arg, 1)
             elif isinstance(arg, float):
                 return double_to_gnc_numeric(arg, GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED | GNC_HOW_RND_NEVER)
             elif isinstance(arg, str):
@@ -434,8 +436,10 @@ class GncNumeric(GnuCashCoreClass):
                 if not string_to_gnc_numeric(arg, instance):
                     raise TypeError('Failed to convert to GncNumeric: ' + str(args))
                 return instance
+            elif isinstance(arg, GncNumeric):
+                return arg.instance
             else:
-                raise TypeError('Only single int/float/str allowed: ' + str(args))
+                raise TypeError('Only single int/float/str/GncNumeric allowed: ' + str(args))
         elif len(args) == 2:
             if isinstance(args[0], int) and isinstance(args[1], int):
                 return gnc_numeric_create(*args)
@@ -450,6 +454,133 @@ class GncNumeric(GnuCashCoreClass):
                 raise TypeError('Only (float, int, GNC_HOW_RND_*) allowed: ' + str(args))
         else:
             raise TypeError('Required single int/float/str or two ints: ' + str(args))
+
+    # from https://docs.python.org/3/library/numbers.html#numbers.Integral
+    # and https://github.com/python/cpython/blob/3.7/Lib/fractions.py
+
+    def _operator_fallbacks(monomorphic_operator, fallback_operator):
+        """fallbacks are not needed except for method name,
+        keep for possible later use"""
+        def forward(a, b):
+            if isinstance(b, GncNumeric):
+                return monomorphic_operator(a, b)
+            if isinstance(b, (int, float)):
+                return monomorphic_operator(a, GncNumeric(b))
+            else:
+                return NotImplemented
+        forward.__name__ = '__' + fallback_operator.__name__ + '__'
+        forward.__doc__ = monomorphic_operator.__doc__
+
+        def reverse(b, a):
+            if isinstance(a, (GncNumeric, int, float)):
+                return forward(b, a)
+            else:
+                return NotImplemented
+        reverse.__name__ = '__r' + fallback_operator.__name__ + '__'
+        reverse.__doc__ = monomorphic_operator.__doc__
+
+        return forward, reverse
+
+    def _add(a, b):
+        return a.add(b, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND)
+
+    def _sub(a, b):
+        return a.sub(b, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND)
+
+    def _mul(a, b):
+        return a.mul(b, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND)
+
+    def _div(a, b):
+        return a.div(b, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND)
+
+    def _floordiv(a, b):
+        return a.div(b, 1, GNC_HOW_RND_TRUNC)
+
+    __add__, __radd__ = _operator_fallbacks(_add, operator.add)
+    __iadd__ = __add__
+    __sub__, __rsub__ = _operator_fallbacks(_sub, operator.sub)
+    __isub__ = __sub__
+    __mul__, __rmul__ = _operator_fallbacks(_mul, operator.mul)
+    __imul__ = __mul__
+    __truediv__, __rtruediv__ = _operator_fallbacks(_div, operator.truediv)
+    __itruediv__ = __truediv__
+    __floordiv__, __rfloordiv__ = _operator_fallbacks(_floordiv, operator.floordiv)
+    __ifloordiv__ = __floordiv__
+
+    # Comparisons derived from https://github.com/python/cpython/blob/3.7/Lib/fractions.py
+    def _lt(a, b):
+        return a.compare(b) == -1
+
+    def _gt(a, b):
+        return a.compare(b) == 1
+
+    def _le(a, b):
+        return a.compare(b) in (0,-1)
+
+    def _ge(a, b):
+        return a.compare(b) in (0,1)
+
+    def _eq(a, b):
+        return a.compare(b) == 0
+
+    def _richcmp(self, other, op):
+        """Helper for comparison operators, for internal use only.
+        Implement comparison between a GncNumeric instance `self`,
+        and either another GncNumeric instance, an int or a float
+        `other`.  If `other` is not an instance of that kind, return
+        NotImplemented. `op` should be one of the six standard
+        comparison operators. The comparisons are based on
+        GncNumeric.compare().
+        """
+        import math
+        if isinstance(other, GncNumeric):
+            return op(other)
+        elif isinstance(other, (int, float)):
+            return op(GncNumeric(other))
+        else:
+            return NotImplemented
+
+    def __lt__(a, b):
+        """a < b"""
+        return a._richcmp(b, a._lt)
+
+    def __gt__(a, b):
+        """a > b"""
+        return a._richcmp(b, a._gt)
+
+    def __le__(a, b):
+        """a <= b"""
+        return a._richcmp(b, a._le)
+
+    def __ge__(a, b):
+        """a >= b"""
+        return a._richcmp(b, a._ge)
+
+    def __eq__(a, b):
+        """a == b"""
+        return a._richcmp(b, a._eq)
+
+    def __bool__(a):
+        """a != 0"""
+        return bool(a.num())
+
+    def __float__(self):
+        return self.to_double()
+
+    def __int__(self):
+        return int(self.to_double())
+
+    def __pos__(a):
+        """+a"""
+        return GncNumeric(a.num(), a.denom())
+
+    def __neg__(a):
+        """-a"""
+        return a.neg()
+
+    def __abs__(a):
+        """abs(a)"""
+        return a.abs()
 
     def to_fraction(self):
         from fractions import Fraction
@@ -673,7 +804,7 @@ from gnucash.gnucash_core_c import \
 # used for the how argument in arithmetic functions like GncNumeric.add
 from gnucash.gnucash_core_c import \
     GNC_HOW_DENOM_EXACT, GNC_HOW_DENOM_REDUCE, GNC_HOW_DENOM_LCD, \
-    GNC_HOW_DENOM_FIXED
+    GNC_HOW_DENOM_FIXED, GNC_HOW_DENOM_SIGFIG
 
 # import account types
 from gnucash.gnucash_core_c import \
@@ -714,7 +845,8 @@ gncnumeric_dict =   {
                         'add_fixed' : GncNumeric,
                         'sub_fixed' : GncNumeric,
                         'convert' : GncNumeric,
-                        'reduce' : GncNumeric
+                        'reduce' : GncNumeric,
+                        'invert' : GncNumeric
                     }
 methods_return_instance(GncNumeric, gncnumeric_dict)
 
