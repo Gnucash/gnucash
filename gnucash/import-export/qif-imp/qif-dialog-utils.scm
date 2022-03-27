@@ -727,7 +727,7 @@
   (define (currency_ns? ns)
     (or (string=? (GNC-COMMODITY-NS-CURRENCY) ns)
         (string=? (GNC-COMMODITY-NS-LEGACY) ns)
-        (string=? (GNC-COMMODITY-NS-ISO4217) ns)))
+        (string=? (GNC-COMMODITY-NS-ISO) ns)))
 
   ;; Guess a namespace based on the symbol alone.
   (define (guess-by-symbol s)
