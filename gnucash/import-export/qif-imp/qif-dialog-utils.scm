@@ -741,12 +741,12 @@
                           ;; compatible with the QIF type?
                           (and (string=? s (caddr elt))
                                (not (and (string? qif-type)
-                                         (not (currency_ns? (cadr elt))
+                                         (not (currency_ns? (cadr elt)))
                                          (or (string-ci=? qif-type "stock")
                                              (string-ci=? qif-type "etf")
                                              (string-ci=? qif-type "mutual fund")
                                              (string-ci=? qif-type "index")
-)))))
+))))
                         prefs)
                    #f))))
         ;; If a preferences match was found, use its namespace.
