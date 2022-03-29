@@ -35,6 +35,10 @@
 
 #ifndef __GNC_MAIN_WINDOW_H
 #define __GNC_MAIN_WINDOW_H
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #include <gtk/gtk.h>
 #include "gnc-plugin-page.h"
@@ -450,12 +454,15 @@ GtkWidget *gnc_book_options_dialog_cb (gboolean modal, gchar *title,
  * just in Book Options dialog opened from main window but also in new-file
  * assistant).
  *
- *  @param GNCOptionDB * options.
+ *  @param GncOptionDB * options.
  *
  *  @return TRUE if gnc_gui_refresh_all should be called; otherwise FALSE.
  **/
-gboolean gnc_book_options_dialog_apply_helper(GNCOptionDB * options);
+gboolean gnc_book_options_dialog_apply_helper(GncOptionDB * options);
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* __GNC_MAIN_WINDOW_H */
 
 /** @} */

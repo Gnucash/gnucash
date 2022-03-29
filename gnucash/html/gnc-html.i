@@ -24,7 +24,6 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include <glib-object.h>
-#include <dialog-options.h>
 #include <dialog-utils.h>
 #include <gnc-amount-edit.h>
 #include <gnc-date-edit.h>
@@ -34,6 +33,9 @@
 #include <gnc-html.h>
 %}
 #if defined(SWIGGUILE)
+
+%typemap (freearg) const char* "if (must_free$argnum && $1) SWIG_free((char*)$1);";
+
 %{
 #include "guile-mappings.h"
 

@@ -41,7 +41,6 @@
 #include "gnc-window.h"
 #include "gnc-icons.h"
 #include "dialog-doclink-utils.h"
-#include "dialog-options.h"
 #include "dialog-commodity.h"
 #include "dialog-totd.h"
 #include "gnc-ui-util.h"
@@ -73,76 +72,16 @@ const gchar *msg_no_help_reason =
     /* Translators: URI of missing help files */
 const gchar *msg_no_help_location = N_("Expected location");
 
-static void gnc_book_options_help_cb (GNCOptionWin *win, gpointer dat);
-
 void
 gnc_gnome_utils_init (void)
 {
     gnc_component_manager_init ();
-    gnc_options_ui_initialize ();
 
     scm_init_sw_gnome_utils_module();
     scm_c_use_module ("sw_gnome_utils");
     scm_c_use_module("gnucash gnome-utils");
 }
 
-
-static void
-gnc_global_options_help_cb (GNCOptionWin *win, gpointer dat)
-{
-    gnc_gnome_help (GTK_WINDOW(gnc_options_dialog_widget (win)), HF_HELP, HL_GLOBPREFS);
-}
-
-static void
-gnc_book_options_help_cb (GNCOptionWin *win, gpointer dat)
-{
-    gnc_gnome_help (GTK_WINDOW(gnc_options_dialog_widget (win)), HF_HELP, HL_BOOK_OPTIONS);
-}
-
-void
-gnc_options_dialog_set_book_options_help_cb (GNCOptionWin *win)
-{
-    gnc_options_dialog_set_help_cb(win,
-                                (GNCOptionWinCallback)gnc_book_options_help_cb,
-                                NULL);
-}
-
-void
-gnc_options_dialog_set_new_book_option_values (GNCOptionDB *odb)
-{
-    GNCOption *num_source_option;
-    GtkWidget *num_source_is_split_action_button;
-    gboolean num_source_is_split_action;
-
-    if (!odb) return;
-    num_source_is_split_action = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL,
-                                                    GNC_PREF_NUM_SOURCE);
-    if (num_source_is_split_action)
-    {
-        num_source_option = gnc_option_db_get_option_by_name(odb,
-                                                 OPTION_SECTION_ACCOUNTS,
-                                                 OPTION_NAME_NUM_FIELD_SOURCE);
-        num_source_is_split_action_button =
-                                gnc_option_get_gtk_widget (num_source_option);
-        gtk_toggle_button_set_active
-                    (GTK_TOGGLE_BUTTON (num_source_is_split_action_button),
-                        num_source_is_split_action);
-    }
-}
-
-static void
-gnc_style_sheet_options_help_cb (GNCOptionWin *win, gpointer dat)
-{
-    gnc_gnome_help (GTK_WINDOW(gnc_options_dialog_widget (win)), HF_HELP, HL_STYLE_SHEET);
-}
-
-void
-gnc_options_dialog_set_style_sheet_options_help_cb (GNCOptionWin *win)
-{
-    gnc_options_dialog_set_help_cb (win,
-                                   (GNCOptionWinCallback)gnc_style_sheet_options_help_cb,
-                                    NULL);
-}
 
 /* gnc_configure_date_format
  *    sets dateFormat to the current value on the scheme side
@@ -771,8 +710,6 @@ gnc_gui_init(void)
                                 NULL);
 
     gnc_file_set_shutdown_callback (gnc_shutdown);
-
-    gnc_options_dialog_set_global_help_cb (gnc_global_options_help_cb, NULL);
 
     main_window = gnc_main_window_new ();
     // Bug#350993:

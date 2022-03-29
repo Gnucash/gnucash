@@ -97,8 +97,8 @@
 
 (define (advanced-tests)
   (test-group-with-cleanup "advanced-portfolio-tests"
-    (let ((account-alist (create-stock-test-data))
-          (options (gnc:make-report-options advanced-uuid)))
+    (let* ((account-alist (create-stock-test-data))
+           (options (gnc:make-report-options advanced-uuid)))
       (let ((sxml (options->sxml advanced-uuid options "basic average")))
         (test-equal "advanced: average basis"
           '("AAPL" "AAPL" "NASDAQ" "42.00" "$6.0000" "$484.88" "$252.00" "$800.00"

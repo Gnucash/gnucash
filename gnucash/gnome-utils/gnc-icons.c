@@ -33,6 +33,7 @@
 #include "gnc-filepath-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-path.h"
+#include <gnc-engine.h> // For define GNC_MOD_GUI
 
 static QofLogModule log_module = GNC_MOD_GUI;
 

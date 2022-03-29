@@ -1,3 +1,4 @@
+set(MODULEPATH ${CMAKE_SOURCE_DIR}/libgnucash/app-utils)
 
 set(APP_UTILS_TEST_INCLUDE_DIRS
   ${CMAKE_BINARY_DIR}/common # for config.h
@@ -10,8 +11,6 @@ set(APP_UTILS_TEST_INCLUDE_DIRS
 )
 
 set(APP_UTILS_TEST_LIBS gnc-app-utils gnc-test-engine test-core ${GIO_LDFLAGS} ${GUILE_LDFLAGS})
-
-set(test_app_utils_SOURCES test-app-utils.c test-option-util.cpp test-gnc-ui-util.c)
 
 macro(add_app_utils_test _TARGET _SOURCE_FILES)
   gnc_add_test(${_TARGET} "${_SOURCE_FILES}" APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
@@ -27,6 +26,26 @@ gnc_add_test_with_guile(test-scm-query-string test-scm-query-string.cpp
   APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS
 )
 add_app_utils_test(test-sx test-sx.cpp)
+
+set(gtest_gnc_option_SOURCES
+  gtest-gnc-option.cpp
+  gtest-gnc-optiondb.cpp)
+
+set(gtest_gnc_option_INCLUDES
+  ${MODULEPATH}
+  ${CMAKE_SOURCE_DIR}/libgnucash/engine
+  ${CMAKE_BINARY_DIR}/common # for config.h
+  ${GLIB2_INCLUDE_DIRS}
+  ${GUILE_INCLUDE_DIRS})
+
+set(gtest_gnc_option_LIBS
+  gnc-app-utils
+  gnc-engine
+  ${GLIB2_LDFLAGS}
+  ${GUILE_LDFLAGS}
+  gtest)
+
+gnc_add_test(test-gnc-option "${gtest_gnc_option_SOURCES}" gtest_gnc_option_INCLUDES gtest_gnc_option_LIBS)
 
 set(GUILE_DEPENDS
   scm-test-engine
@@ -60,16 +79,19 @@ gnc_add_scheme_test_targets(scm-test-c-interface
 gnc_add_scheme_tests("${test_app_utils_scheme_SOURCES}")
 
 if (HAVE_SRFI64)
-    gnc_add_scheme_test_targets(scm-test-app-utils-srfi64
-        SOURCES "${test_app_utils_scheme_SRFI64_SOURCES}"
-        OUTPUT_DIR "tests"
-        DEPENDS "${GUILE_DEPENDS};scm-srfi64-extras")
+  gnc_add_scheme_test_targets(scm-test-app-utils-srfi64
+    SOURCES "${test_app_utils_scheme_SRFI64_SOURCES}"
+    OUTPUT_DIR "tests"
+    DEPENDS "${GUILE_DEPENDS};scm-srfi64-extras")
 
-    gnc_add_scheme_tests("${test_app_utils_scheme_SRFI64_SOURCES}")
+  gnc_add_scheme_test_targets(scm-test-gnc-optiondb
+    SOURCES "test-gnc-optiondb.scm" "test-gnc-option-scheme-output.scm"
+    OUTPUT_DIR "tests"
+    DEPENDS "swig-apputils-guile-cpp;scm-srfi64-extras")
+  gnc_add_scheme_tests("test-gnc-optiondb.scm")
+  gnc_add_scheme_tests("test-gnc-option-scheme-output.scm")
+  gnc_add_scheme_tests("${test_app_utils_scheme_SRFI64_SOURCES}")
 endif()
-
-# Doesn't work yet:
-gnc_add_test_with_guile(test-app-utils "${test_app_utils_SOURCES}" APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
 
 set_dist_list(test_app_utils_DIST
   CMakeLists.txt

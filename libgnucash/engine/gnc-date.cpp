@@ -1548,15 +1548,15 @@ gnc_gdate_set_quarter_end (GDate *date)
 void
 gnc_gdate_set_prev_quarter_start (GDate *date)
 {
-    gnc_gdate_set_quarter_start(date);
     g_date_subtract_months(date, 3);
+    gnc_gdate_set_quarter_start(date);
 }
 
 void
 gnc_gdate_set_prev_quarter_end (GDate *date)
 {
-    gnc_gdate_set_quarter_end(date);
     g_date_subtract_months(date, 3);
+    gnc_gdate_set_quarter_end(date);
 }
 
 /* ================================================= */

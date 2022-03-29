@@ -21,8 +21,12 @@
 %module sw_app_utils
 %{
 /* Includes the header in the wrapper code */
+#include <glib.h>
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 #include <config.h>
-#include <option-util.h>
 #include <gnc-euro.h>
 #include <gnc-exp-parser.h>
 #include <gnc-ui-util.h>
@@ -33,14 +37,22 @@
 #include <gnc-sx-instance-model.h>
 
 #include "gnc-engine-guile.h"
+#ifdef __cplusplus
+}
+#endif
 %}
 
-#if defined(SWIGGUILE)
+#if defined(SWIGGUILE) //Always C++
 %{
+extern "C"
+{
 #include "guile-mappings.h"
 
 SCM scm_init_sw_app_utils_module (void);
+}
 %}
+
+%include "gnc-optiondb.i"
 #endif
 
 #if defined(SWIGPYTHON)
@@ -53,9 +65,6 @@ PyObject* SWIG_init (void);
 
 %import "base-typemaps.i"
 
-typedef void (*GNCOptionChangeCallback) (gpointer user_data);
-typedef int GNCOptionDBHandle;
-
 void gnc_prefs_init();
 
 QofBook * gnc_get_current_book (void);
@@ -64,11 +73,6 @@ const gchar * gnc_get_current_book_tax_name (void);
 const gchar * gnc_get_current_book_tax_type (void);
 Account * gnc_get_current_root_account (void);
 
-GNCOptionDB * gnc_option_db_new(SCM guile_options);
-void gnc_option_db_destroy(GNCOptionDB *odb);
-
-void gnc_option_db_set_option_selectable_by_name(SCM guile_option,
-      const char *section, const char *name, gboolean selectable);
 
 #if defined(SWIGGUILE)
 %typemap(out) GncCommodityList * {
@@ -76,7 +80,7 @@ void gnc_option_db_set_option_selectable_by_name(SCM guile_option,
   GList *node;
 
   for (node = $1; node; node = node->next)
-    list = scm_cons(gnc_quoteinfo2scm(node->data), list);
+      list = scm_cons(gnc_quoteinfo2scm(static_cast<gnc_commodity*>(node->data)), list);
 
   $result = scm_reverse(list);
 }
@@ -90,10 +94,6 @@ gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table);
 
 gnc_commodity * gnc_default_currency (void);
 gnc_commodity * gnc_default_report_currency (void);
-
-void gncp_option_invoke_callback(GNCOptionChangeCallback callback, void *data);
-void gnc_option_db_register_option(GNCOptionDBHandle handle,
-        SCM guile_option);
 
 GNCPrintAmountInfo gnc_default_print_info (gboolean use_symbol);
 GNCPrintAmountInfo gnc_account_print_info (const Account *account,
@@ -118,8 +118,6 @@ gnc_numeric gnc_convert_from_euro(const gnc_commodity * currency,
 
 time64 gnc_accounting_period_fiscal_start(void);
 time64 gnc_accounting_period_fiscal_end(void);
-
-void gnc_register_kvp_option_generator(QofIdType id_type, SCM generator);
 
 %typemap(out) GHashTable * {
   SCM table = scm_c_make_hash_table (g_hash_table_size($1) + 17);

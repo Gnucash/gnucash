@@ -36,7 +36,7 @@ set (gnome_utils_SOURCES
   dialog-dup-trans.c
   dialog-file-access.c
   dialog-object-references.c
-  dialog-options.c
+  dialog-options.cpp
   dialog-preferences.c
   dialog-query-view.c
   dialog-reset-warnings.c
@@ -60,7 +60,7 @@ set (gnome_utils_SOURCES
   gnc-currency-edit.c
   gnc-date-delta.c
   gnc-date-edit.c
-  gnc-date-format.c 
+  gnc-date-format.c
   gnc-dense-cal.c
   gnc-dense-cal-model.c
   gnc-dense-cal-store.c
@@ -75,7 +75,7 @@ set (gnome_utils_SOURCES
   gnc-gui-query.c
   gnc-icons.c
   gnc-keyring.c
-  gnc-main-window.c
+  gnc-main-window.cpp
   gnc-menu-extensions.c
   gnc-plugin-file-history.c
   gnc-plugin-manager.c
@@ -110,6 +110,7 @@ set (gnome_utils_SOURCES
 
 set(gnome_utils_noinst_HEADERS
   dialog-tax-table.h
+  dialog-options.hpp
   gnc-autosave.h
   gnc-gobject-utils.h
   gnc-gtk-utils.h
@@ -127,7 +128,6 @@ set (gnome_utils_HEADERS
   dialog-file-access.h
   dialog-preferences.h
   dialog-object-references.h
-  dialog-options.h
   dialog-query-view.h
   dialog-reset-warnings.h
   dialog-totd.h

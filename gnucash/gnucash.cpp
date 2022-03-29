@@ -33,12 +33,15 @@
 #include "gnucash-core-app.hpp"
 
 extern "C" {
+#include <glib/gi18n.h>
 #include <dialog-new-user.h>
 #include <gfec.h>
+#include <gnc-engine.h> // For define GNC_MOD_GUI
 #include <gnc-file.h>
 #include <gnc-filepath-utils.h>
 #include <gnc-gnome-utils.h>
 #include <gnc-gsettings.h>
+#include <gnc-hooks.h>
 #include <gnc-module.h>
 #include <gnc-path.h>
 #include <gnc-plugin-bi-import.h>
@@ -51,7 +54,6 @@ extern "C" {
 #include <gnc-plugin-report-system.h>
 #include <gnc-prefs.h>
 #include <gnc-prefs-utils.h>
-#include <gnc-report.h>
 #include <gnc-session.h>
 #include <gnc-splash.h>
 #include <gnucash-register.h>
@@ -65,6 +67,7 @@ extern "C" {
 #include <boost/nowide/args.hpp>
 #endif
 #include <iostream>
+#include <gnc-report.h>
 #include <gnc-locale-utils.hpp>
 
 namespace bl = boost::locale;

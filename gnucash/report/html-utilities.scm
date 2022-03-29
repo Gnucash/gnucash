@@ -80,10 +80,12 @@
       (list)))
 
 (define (gnc:register-guid type guid)
-  (gnc-build-url URL-TYPE-REGISTER (string-append type guid) ""))
+  (and guid  (gnc-build-url URL-TYPE-REGISTER (string-append type guid) "")))
 
 (define (gnc:account-anchor-text acct)
-  (gnc:register-guid "acct-guid=" (gncAccountGetGUID acct)))
+  (if acct
+      (gnc:register-guid "acct-guid=" (gncAccountGetGUID acct))
+      (format #t "No Account!")))
 
 (define (gnc:split-anchor-text split)
   (gnc:register-guid "split-guid=" (gncSplitGetGUID split)))

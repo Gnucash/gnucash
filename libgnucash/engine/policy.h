@@ -43,24 +43,6 @@ extern "C" {
 
 typedef struct gncpolicy_s GNCPolicy;
 
-/** Valid Policy List
- *  Provides a glist of implemented policies.
- *
- *  List must be freed with g_list_free().
- */
-GList * gnc_get_valid_policy_list (void);
-
-/** Valid Policy Name
- *  Uses the Valid Policy List to determine if a policy name is valid.
- */
-gboolean gnc_valid_policy_name (const gchar *policy_name);
-
-const char *PolicyGetName (const GNCPolicy *pcy);
-
-const char *PolicyGetDescription (const GNCPolicy *pcy);
-
-const char *PolicyGetHint (const GNCPolicy *pcy);
-
 /** First-in, First-out Policy
  *  This policy will create FIFO Lots.  FIFO Lots have the following
  *  properties:
@@ -69,23 +51,9 @@ const char *PolicyGetHint (const GNCPolicy *pcy);
  *  -- Splits are added to the lot in date order, with earliest splits
  *     added first.
  *  -- All splits in the lot share the same transaction currency as
- *     the split that opened the lot (if book-currency book option
- *     selected, this will always be book currency).
+ *     the split that opened the lot
  */
 GNCPolicy *xaccGetFIFOPolicy (void);
-
-/** Last-in, Last-out Policy
- *  This policy will create LIFO Lots.  LIFO Lots have the following
- *  properties:
- *  -- The lot is started with the latest posted split that isn't
- *     a part of another lot already.
- *  -- Splits are added to the lot in date order, with latest splits
- *     added first.
- *  -- All splits in the lot share the same transaction currency as
- *     the split that opened the lot (if book-currency book option
- *     selected, this will always be book currency).
- */
-GNCPolicy *xaccGetLIFOPolicy (void);
 
 #ifdef __cplusplus
 } /* extern "C" */

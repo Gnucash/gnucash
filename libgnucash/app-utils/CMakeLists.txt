@@ -11,11 +11,13 @@ set (app_utils_noinst_HEADERS
   calculation/finproto.h
   calculation/fin_spl_protos.h
   calculation/fin_static_proto.h
+  gnc-option-date.hpp
+  gnc-option-impl.hpp
+  gnc-optiondb-impl.hpp
 )
 
 set (app_utils_HEADERS
   QuickFill.h
-  business-options.h
   file-utils.h
   gfec.h
   gnc-basic-gobject.h
@@ -28,19 +30,25 @@ set (app_utils_HEADERS
   gnc-gsettings.h
   gnc-help-utils.h
   gnc-helpers.h
+  gnc-option.hpp
+  gnc-optiondb.h
+  gnc-optiondb.hpp
   gnc-prefs-utils.h
-  gnc-state.h  
+  gnc-state.h
   gnc-sx-instance-model.h
   gnc-ui-util.h
   gnc-ui-balances.h
-  option-util.h
 )
 
 # Command to generate the swig-app-utils-guile.c wrapper file
-gnc_add_swig_guile_command (swig-apputils-guile-c
-    SWIG_APP_UTILS_GUILE_C swig-app-utils-guile.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i ""
+set(SWIG_ARGS "-c++" "-procdoc" "sw-gnc-option-doc" "-procdocformat" "plain")
+gnc_add_swig_guile_command (swig-apputils-guile-cpp #target
+    SWIG_APP_UTILS_GUILE_CPP swig-app-utils-guile.cpp #outvar, output
+    ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i #input
+    "${CMAKE_SOURCE_DIR}/bindings;${CMAKE_SOURCE_DIR}/bindings/guile" #includes
+    ${CMAKE_CURRENT_SOURCE_DIR}/gnc-optiondb.i #additional dependencies
 )
+unset(SWIG_ARGS)
 
 # Command to generate the swig-app-utils-python.c wrapper file
 gnc_add_swig_python_command (swig-app-utils-python
@@ -52,7 +60,6 @@ gnc_add_swig_python_command (swig-app-utils-python
 set (app_utils_SOURCES
   calculation/expression_parser.c
   calculation/fin.c
-  business-options.c
   QuickFill.c
   file-utils.c
   gfec.c
@@ -64,12 +71,15 @@ set (app_utils_SOURCES
   gnc-exp-parser.c
   gnc-gsettings.cpp
   gnc-helpers.c
+  gnc-option-date.cpp
+  gnc-option.cpp
+  gnc-option-impl.cpp
+  gnc-optiondb.cpp
   gnc-prefs-utils.c
   gnc-sx-instance-model.c
   gnc-state.c
   gnc-ui-util.c
   gnc-ui-balances.c
-  option-util.c
   )
 
 set_source_files_properties (${app_utils_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
@@ -84,6 +94,7 @@ set(app_utils_ALL_LIBRARIES
     gnc-engine
     gnc-locale-tax
     gnucash-guile
+    ${GLIB_LDFLAGS}
     ${GIO_LDFLAGS}
     ${LIBXML2_LDFLAGS}
     ${LIBXSLT_LDFLAGS}
@@ -105,7 +116,7 @@ if (WIN32)
 endif()
 
 
-add_library (gnc-app-utils ${app_utils_ALL_SOURCES} ${SWIG_APP_UTILS_GUILE_C})
+add_library (gnc-app-utils ${app_utils_ALL_SOURCES} ${SWIG_APP_UTILS_GUILE_CPP})
 target_link_libraries(gnc-app-utils ${app_utils_ALL_LIBRARIES})
 
 target_include_directories (gnc-app-utils
@@ -178,14 +189,6 @@ set (app_utils_SCHEME_1a
     options.scm
 )
 
-set (app_utils_SCHEME_1b
-    business-options.scm
-)
-
-set (app_utils_SCHEME_1c
-    business-prefs.scm
-)
-
 set (app_utils_SCHEME_2
     app-utils.scm
 )
@@ -207,22 +210,10 @@ gnc_add_scheme_targets(scm-app-utils-1a
     DEPENDS "scm-app-utils-1"
     MAKE_LINKS)
 
-gnc_add_scheme_targets(scm-app-utils-1b
-    SOURCES "${app_utils_SCHEME_1b}"
-    OUTPUT_DIR "gnucash/app-utils"
-    DEPENDS "scm-app-utils-1a"
-    MAKE_LINKS)
-
-gnc_add_scheme_targets(scm-bus-prefs
-    SOURCES "${app_utils_SCHEME_1c}"
-    OUTPUT_DIR "gnucash/app-utils"
-    DEPENDS "scm-app-utils-1b"
-    MAKE_LINKS)
-
 gnc_add_scheme_targets(scm-app-utils-2
     SOURCES "${app_utils_SCHEME_2}"
     OUTPUT_DIR "gnucash"
-    DEPENDS "scm-bus-prefs"
+    DEPENDS "scm-app-utils-1a"
     MAKE_LINKS)
 
 add_custom_target(scm-app-utils ALL DEPENDS scm-app-utils-2 scm-app-utils-1)

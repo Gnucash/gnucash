@@ -30,7 +30,7 @@ typedef struct _gnc_html_history gnc_html_history;
 
 struct _gnc_html_history_node
 {
-    URLType type;
+    char* type;
     gchar   * location;
     gchar   * label;
 };

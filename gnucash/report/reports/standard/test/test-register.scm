@@ -51,8 +51,8 @@
   (gnc:options->sxml uuid options "test-register" test-title))
 
 (define (test-register)
-  (let* ((options (gnc:make-report-options uuid))
-         (account-alist (create-test-data))
+  (let* ((account-alist (create-test-data))
+         (options (gnc:make-report-options uuid))
          (bank (cdr (assoc "Bank" account-alist))))
 
     (gnc-commodity-set-user-symbol

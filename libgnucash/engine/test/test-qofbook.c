@@ -454,111 +454,6 @@ test_book_use_trading_accounts( Fixture *fixture, gconstpointer pData )
 }
 
 static void
-test_book_use_book_currency( Fixture *fixture, gconstpointer pData )
-{
-    const gchar *cur;
-    const gchar *pol;
-    GncGUID *acct;
-    const GncGUID *acct2;
-
-    cur = qof_book_get_book_currency_name( fixture-> book );
-    g_assert_cmpstr( cur, == , NULL );
-    pol = qof_book_get_default_gains_policy( fixture-> book );
-    g_assert_cmpstr( pol, == , NULL );
-    acct2 = qof_book_get_default_gain_loss_acct_guid( fixture-> book );
-    g_assert (acct2 == NULL );
-
-    g_test_message( "Testing with existing trading accounts set to true - t" );
-    qof_book_begin_edit (fixture->book);
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "trading-accts", "t",
-		      NULL);
-    cur = qof_book_get_book_currency_name( fixture-> book );
-    g_assert_cmpstr( cur, == , NULL );
-    pol = qof_book_get_default_gains_policy( fixture-> book );
-    g_assert_cmpstr( pol, == , NULL );
-    acct2 = qof_book_get_default_gain_loss_acct_guid( fixture-> book );
-    g_assert (acct2 == NULL );
-    qof_book_commit_edit (fixture->book);
-
-    qof_book_destroy( fixture->book );
-    fixture->book = qof_book_new();
-
-    g_test_message( "Testing with book-currency set and no default-gains-policy or account" );
-    qof_book_begin_edit (fixture->book);
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "book-currency", "USD",
-		      NULL);
-    cur = qof_book_get_book_currency_name( fixture-> book );
-    g_assert_cmpstr( cur, == , "USD" );
-    pol = qof_book_get_default_gains_policy( fixture-> book );
-    g_assert_cmpstr( pol, == , NULL );
-    acct2 = qof_book_get_default_gain_loss_acct_guid( fixture-> book );
-    g_assert (acct2 == NULL );
-    qof_book_commit_edit (fixture->book);
-
-    qof_book_destroy( fixture->book );
-    fixture->book = qof_book_new();
-
-    g_test_message( "Testing with default-gains-policy set and no book-currency" );
-    qof_book_begin_edit (fixture->book);
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "default-gains-policy", "fifo",
-		      NULL);
-    cur = qof_book_get_book_currency_name( fixture-> book );
-    g_assert_cmpstr( cur, == , NULL );
-    pol = qof_book_get_default_gains_policy( fixture-> book );
-    g_assert_cmpstr( pol, == , "fifo" );
-    acct2 = qof_book_get_default_gain_loss_acct_guid( fixture-> book );
-    g_assert (acct2 == NULL );
-    qof_book_commit_edit (fixture->book);
-
-    qof_book_destroy( fixture->book );
-    fixture->book = qof_book_new();
-
-    g_test_message( "Testing with book-currency and default-gains-policy set to nonsense" );
-    qof_book_begin_edit (fixture->book);
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "book-currency", "myMoney",
-		      NULL);
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "default-gains-policy", "random",
-		      NULL);
-    cur = qof_book_get_book_currency_name( fixture-> book );
-    g_assert_cmpstr( cur, == , "myMoney" );
-    pol = qof_book_get_default_gains_policy( fixture-> book );
-    g_assert_cmpstr( pol, == , "random" );
-    acct2 = qof_book_get_default_gain_loss_acct_guid( fixture-> book );
-    g_assert (acct2 == NULL );
-    qof_book_commit_edit (fixture->book);
-
-    qof_book_destroy( fixture->book );
-    fixture->book = qof_book_new();
-
-    g_test_message( "Testing with book-currency, default-gains-policy and default-gains-account set to valid values" );
-    qof_book_begin_edit (fixture->book);
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "book-currency", "USD",
-		      NULL);
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "default-gains-policy", "fifo",
-		      NULL);
-    acct = guid_new();
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "default-gain-loss-account-guid", acct,
-		      NULL);
-    cur = qof_book_get_book_currency_name( fixture-> book );
-    g_assert_cmpstr( cur, == , "USD" );
-    pol = qof_book_get_default_gains_policy( fixture-> book );
-    g_assert_cmpstr( pol, == , "fifo" );
-    acct2 = qof_book_get_default_gain_loss_acct_guid( fixture-> book );
-    g_assert_cmpstr( guid_to_string (acct), == , guid_to_string (acct2) );
-    g_assert (guid_equal(acct, acct2));
-    guid_free (acct);
-    qof_book_commit_edit (fixture->book);
-}
-
-static void
 test_book_get_num_days_autofreeze( Fixture *fixture, gconstpointer pData )
 {
     g_test_message( "Testing default: No auto-freeze days are set" );
@@ -931,7 +826,6 @@ test_suite_qofbook ( void )
     GNC_TEST_ADD( suitename, "get counter format", Fixture, NULL, setup, test_book_get_counter_format, teardown );
     GNC_TEST_ADD( suitename, "increment and format counter", Fixture, NULL, setup, test_book_increment_and_format_counter, teardown );
     GNC_TEST_ADD( suitename, "use trading accounts", Fixture, NULL, setup, test_book_use_trading_accounts, teardown );
-    GNC_TEST_ADD( suitename, "use book-currency", Fixture, NULL, setup, test_book_use_book_currency, teardown );
     GNC_TEST_ADD( suitename, "get autofreeze days", Fixture, NULL, setup, test_book_get_num_days_autofreeze, teardown );
     GNC_TEST_ADD( suitename, "use split action for num field", Fixture, NULL, setup, test_book_use_split_action_for_num_field, teardown );
     GNC_TEST_ADD( suitename, "mark session dirty", Fixture, NULL, setup, test_book_mark_session_dirty, teardown );

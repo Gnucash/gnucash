@@ -87,40 +87,6 @@ const gchar * gnc_get_current_book_tax_type (void);
   * callbacks when num_field_source book option changes so that
   * registers/reports can update themselves; sets feature flag */
 void gnc_book_option_num_field_source_change_cb (gboolean num_action);
-
-/** Calls gnc_book_option_book_currency_selected to initiate registered
-  * callbacks when currency accounting book option changes to book-currency so
-  * that registers/reports can update themselves; sets feature flag */
-void gnc_book_option_book_currency_selected_cb (gboolean use_book_currency);
-
-/** Returns TRUE if both book-currency and default gain/loss policy KVPs exist
-  * and are valid and trading accounts are not used */
-gboolean gnc_book_use_book_currency (QofBook *book);
-
-/** Returns pointer to Book Currency name for book or NULL; determines
-  * that both book-currency and default gain/loss policy KVPs exist and that
-  * both are valid, a requirement for the 'book-currency' currency accounting
-  * method to apply. */
-const gchar * gnc_book_get_book_currency_name (QofBook *book);
-
-/** Returns pointer to Book Currency for book or NULL; determines
-  * that both book-currency and default gain/loss policy KVPs exist and that
-  * both are valid, a requirement for the 'book-currency' currency accounting
-  * method to apply. */
-gnc_commodity * gnc_book_get_book_currency (QofBook *book);
-
-/** Returns pointer to default gain/loss policy for book or NULL; determines
-  * that both book-currency and default gain/loss policy KVPs exist and that
-  * both are valid, a requirement for the 'book-currency' currency accounting
-  * method to apply. */
-const gchar * gnc_book_get_default_gains_policy (QofBook *book);
-
-/** Returns pointer to default gain/loss account for book or NULL; determines
-  * that both book-currency and default gain/loss policy KVPs exist and that
-  * both are valid, a requirement for the 'book-currency' currency accounting
-  * method to apply. */
-Account * gnc_book_get_default_gain_loss_acct (QofBook *book);
-
 Account * gnc_get_current_root_account (void);
 gnc_commodity_table * gnc_get_current_commodities (void);
 

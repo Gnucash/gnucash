@@ -49,7 +49,6 @@
 #include "gnc-budget.h"
 #include "gnc-features.h"
 
-#include "dialog-options.h"
 #include "dialog-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
@@ -61,7 +60,6 @@
 #include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
-#include "option-util.h"
 #include "gnc-main-window.h"
 #include "gnc-component-manager.h"
 #include "gnc-state.h"

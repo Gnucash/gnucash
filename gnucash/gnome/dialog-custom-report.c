@@ -29,10 +29,8 @@
 #include "swig-runtime.h"
 
 #include "dialog-custom-report.h"
-#include "dialog-options.h"
 #include "dialog-utils.h"
 #include "gnc-main-window.h"
-#include "option-util.h"
 #include "window-report.h"
 #include "guile-mappings.h"
 #include "gnc-guile-utils.h"

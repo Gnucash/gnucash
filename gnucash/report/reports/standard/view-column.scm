@@ -42,8 +42,7 @@
 	    (gnc:register-option options opt))))
     ;; the report-list is edited by a special add-on page for the
     ;; options editor.
-    (opt-register 
-     (gnc:make-internal-option "__general" "report-list" '()))
+    (gnc-register-report-placement-option (gnc:options-get options) "__general" "report-list")
     
     (opt-register
      (gnc:make-number-range-option 
@@ -52,18 +51,6 @@
       1 0 20 0 1))
     
     options))
-
-(define (make-child-options-callback view child)
-  (let* ((view-opts (gnc:report-options view))
-	 (child-opts (gnc:report-options child))
-	 (id 
-	  (gnc:options-register-callback
-	   #f #f 
-	   (lambda ()
-	     (gnc:report-set-dirty?! child #t)
-	     (gnc:options-touch view-opts))
-	   child-opts)))
-    id))
 
 (define (render-view report)
   (let* ((view-doc (gnc:make-html-document))
@@ -80,17 +67,6 @@
 	 (current-width 0)
 	 (current-row-num 0))
 
-    ;; make sure each subreport has an option change callback that 
-    ;; pings the parent
-    (let loop ((reports reports) (new-reports '()))
-      (match reports
-        (() (gnc:option-set-value report-opt (reverse new-reports)))
-        (((child rowspan colspan callback) . rest)
-         (let ((callback (or callback
-                             (make-child-options-callback
-                              report (gnc-report-find child)))))
-           (loop rest (cons (list child rowspan colspan callback) new-reports))))))
-    
     ;; we really would rather do something smart here with the
     ;; report's cached text if possible.  For the moment, we'll have
     ;; to rerun every report, every time... FIXME
@@ -106,7 +82,6 @@
        (let* ((subreport (gnc-report-find (car report-info)))
 	      (colspan (cadr report-info))
 	      (rowspan (caddr report-info))
-	      (opt-callback (cadddr report-info))
 	      (toplevel-cell (gnc:make-html-table-cell/size rowspan colspan))
 	      (report-table (gnc:make-html-table))
 	      (contents-cell (gnc:make-html-table-cell)))

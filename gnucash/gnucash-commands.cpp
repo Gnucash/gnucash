@@ -37,7 +37,6 @@ extern "C" {
 #include <gnc-prefs.h>
 #include <gnc-prefs-utils.h>
 #include <gnc-gnome-utils.h>
-#include <gnc-report.h>
 #include <gnc-session.h>
 #include <qoflog.h>
 }
@@ -45,6 +44,7 @@ extern "C" {
 #include <boost/locale.hpp>
 #include <fstream>
 #include <iostream>
+#include <gnc-report.h>
 
 namespace bl = boost::locale;
 

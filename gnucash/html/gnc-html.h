@@ -294,4 +294,5 @@ void gnc_html_unregister_url_handler( URLType url_type );
 
 const gchar* gnc_html_get_embedded_param( gpointer eb, const gchar* param_name );
 
+G_END_DECLS
 #endif
