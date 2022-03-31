@@ -1320,7 +1320,7 @@ TEST(GncOption, test_create)
     GncOptionValue<GncOptionReportPlacementVec> rpv("foo", "bar", "baz", "Phony Option", rp);
     GncOption option{rpv};
     auto value{option.get_value<GncOptionReportPlacementVec>()};
-    EXPECT_EQ(value.size(), 1);
+    EXPECT_EQ(value.size(), 1u);
     auto [sid, swide, shigh] = value.at(0);
     EXPECT_EQ(report_id, sid);
     EXPECT_EQ(wide, swide);
