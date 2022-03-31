@@ -9,14 +9,15 @@
 # ashalash1409 <ashalash1409@hotmail.com>, 2013
 # khadiramd <khadird@yahoo.com>, 2013
 # ButterflyOfFire <ButterflyOfFire@protonmail.com>, 2022.
+# ltai0001 <yltaief@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-25 19:09+0000\n"
-"Last-Translator: ButterflyOfFire <ButterflyOfFire@protonmail.com>\n"
+"PO-Revision-Date: 2022-03-29 02:07+0000\n"
+"Last-Translator: ltai0001 <yltaief@gmail.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ar/>\n"
 "Language: ar\n"
@@ -678,7 +679,7 @@ msgid ""
 "the Menu key or the Ctrl-Down key combination."
 msgstr ""
 "لرفع قائمة الحسابات في مجال التحويلات في صفحة السجل، اضغط مفتاح القائمة أو "
-"تركيبة المفاتيح تحكم+سهم لأسفل"
+"تركيبة المفاتيح تحكم+سهم لأسفل."
 
 #: doc/tip_of_the_day.list.c:108
 msgid ""
@@ -903,17 +904,14 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/assistant-hierarchy.c:1495
-#, fuzzy
 msgid "Please choose the currency to use for new accounts."
-msgstr ""
-"\n"
-"الرجاء اختيار عملة لاستخدامها في الحسابات جديدة."
+msgstr "الرجاء اختيار عملة لاستخدامها في الحسابات جديدة."
 
 #: gnucash/gnome/assistant-hierarchy.c:1540
 #: gnucash/gnome/assistant-hierarchy.c:1559
 #: gnucash/gnome-utils/dialog-utils.c:810
 msgid "New Book Options"
-msgstr "خيارات دفتر جديد."
+msgstr "خيارات دفتر جديد"
 
 #: gnucash/gnome/assistant-loan.cpp:128
 msgid "Taxes"
@@ -1245,7 +1243,7 @@ msgid ""
 "You must provide a unique name for this Billing Term. Your choice \"%s\" is "
 "already in use."
 msgstr ""
-"يجب توفير اسم فريد لهذا الفترة للمطالبات.الاسم المدخل \"%s\" مستخدم من قبل"
+"يجب توفير اسم فريد لهذا الفترة للمطالبات.الاسم المدخل \"%s\" مستخدم من قبل."
 
 #: gnucash/gnome/dialog-billterms.c:531
 #: gnucash/gnome-utils/gnc-date-delta.c:222
@@ -2160,7 +2158,7 @@ msgstr "البحث عن المعاملات"
 #: gnucash/report/trep-engine.scm:944 gnucash/report/trep-engine.scm:1069
 #: gnucash/report/trep-engine.scm:1183
 msgid "Reconciled Date"
-msgstr "تاريخ التسوية "
+msgstr "تاريخ التسوية"
 
 #. Translators: This is a ngettext(3) message, %d is the number of maps missing
 #: gnucash/gnome/dialog-imap-editor.c:363
@@ -2420,8 +2418,8 @@ msgid ""
 "One or more selected invoices have already been posted.\n"
 "Re-check your selection."
 msgstr ""
-"يوجد فاتورة واحدة أو أكثر قد تم ترحيلها إلى الأستاذ العام\n"
-"أعد تحديد خياراتك"
+"يوجد فاتورة واحدة أو أكثر قد تم ترحيلها إلى الأستاذ العام.\n"
+"أعد تحديد خياراتك."
 
 #: gnucash/gnome/dialog-invoice.c:3257
 msgid "Do you really want to post these invoices?"
@@ -2636,11 +2634,11 @@ msgstr "مطالبات الواجب تذكرها"
 
 #: gnucash/gnome/dialog-job.c:139
 msgid "The Job must be given a name."
-msgstr "هذه الوظيفة يجب أن تعطى اسم"
+msgstr "هذه الوظيفة يجب أن تعطى اسم."
 
 #: gnucash/gnome/dialog-job.c:149
 msgid "You must choose an owner for this job."
-msgstr "يجب عليك إختيار صاحب هذه الوظيفة"
+msgstr "يجب عليك إختيار صاحب هذه الوظيفة."
 
 #: gnucash/gnome/dialog-job.c:157
 #, fuzzy
@@ -2747,7 +2745,7 @@ msgstr "المجموعات في حساب %s"
 
 #: gnucash/gnome/dialog-order.c:171
 msgid "The Order must be given an ID."
-msgstr "يجب ان يعطى الطلب معرف للطلب"
+msgstr "يجب ان يعطى الطلب معرف للطلب."
 
 #: gnucash/gnome/dialog-order.c:278
 msgid "The Order must have at least one Entry."
@@ -2969,9 +2967,8 @@ msgid "Are you sure you want to replace the existing price?"
 msgstr "هل أنت متأكد أنك تريد حذف السعر المحدد؟"
 
 #: gnucash/gnome/dialog-price-editor.c:232
-#, fuzzy
 msgid "Replace price?"
-msgstr "الأسعار المسجلة."
+msgstr "الأسعار المسجلة؟"
 
 #: gnucash/gnome/dialog-price-editor.c:238
 msgid "_Replace"
@@ -2979,11 +2976,11 @@ msgstr ""
 
 #: gnucash/gnome/dialog-price-editor.c:269
 msgid "You must select a Security."
-msgstr "حدد الأمان"
+msgstr "من المفروض ان تحدد الأمان."
 
 #: gnucash/gnome/dialog-price-editor.c:274
 msgid "You must select a Currency."
-msgstr "إختر العملة"
+msgstr "إختر العملة."
 
 #: gnucash/gnome/dialog-price-editor.c:288
 #: gnucash/gnome-utils/dialog-transfer.c:1717
@@ -3126,12 +3123,12 @@ msgstr "لقد تغيرت العملية المجدولة. هل أنت متأك�
 #: gnucash/gnome/dialog-sx-editor2.c:636
 #, c-format
 msgid "Couldn't parse credit formula for split \"%s\"."
-msgstr "لا يمكن تحليل صيغة الائتمان للتقسيم %s"
+msgstr "لا يمكن تحليل صيغة الائتمان للتقسيم %s."
 
 #: gnucash/gnome/dialog-sx-editor2.c:658
 #, c-format
 msgid "Couldn't parse debit formula for split \"%s\"."
-msgstr "لا يمكن تحليل صيغة الخصم للتقسيم %s"
+msgstr "لا يمكن تحليل صيغة الخصم للتقسيم %s."
 
 #: gnucash/gnome/dialog-sx-editor2.c:691 gnucash/gnome/dialog-sx-editor.c:874
 #: gnucash/gnome/dialog-sx-from-trans.c:261
@@ -3219,7 +3216,7 @@ msgstr "المعاملات المجدولة مع متغيرات أو عدة عم
 #: gnucash/gnome/dialog-sx-editor.c:675
 #, c-format
 msgid "Couldn't parse %s for split \"%s\"."
-msgstr "لا يمكن تحليل %s للعملية \"%s\""
+msgstr "لا يمكن تحليل %s للعملية \"%s\"."
 
 #: gnucash/gnome/dialog-sx-editor.c:739
 #, c-format
@@ -3338,11 +3335,11 @@ msgstr "المعاملات التي تم إنشاؤها"
 
 #: gnucash/gnome/dialog-tax-info.c:287
 msgid "Last Valid Year: "
-msgstr "اخر سنة صالحة:"
+msgstr "اخر سنة صالحة: "
 
 #: gnucash/gnome/dialog-tax-info.c:288
 msgid "Form Line Data: "
-msgstr "نموذج خط البيانات:"
+msgstr "نموذج خط البيانات: "
 
 #. Translators: Tax Code
 #: gnucash/gnome/dialog-tax-info.c:290
@@ -9485,7 +9482,7 @@ msgstr "الهاتف"
 #: gnucash/register/ledger-core/split-register.c:2555
 #: gnucash/register/ledger-core/split-register.c:2581
 msgid "Online"
-msgstr "على الإنترنت"
+msgstr "عبر الإنترنت"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2864
 #: gnucash/register/ledger-core/split-register.c:2557
