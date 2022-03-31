@@ -481,7 +481,11 @@ reldate_set_day_and_time(struct tm& now, RelativeDateType type)
     }
     else if (type == RelativeDateType::END)
     {
-        now.tm_mday = gnc_date_get_last_mday(now.tm_mon, now.tm_year + 1900);
+        /* Ensure that the month is between 0 and 12*/
+        auto year_delta = now.tm_mon / 12 + now.tm_mon < 0 ? -1 : 0;
+        auto month = now.tm_mon - 12 * year_delta;
+        auto year = now.tm_year + year_delta + 1900;
+        now.tm_mday = gnc_date_get_last_mday(month, year);
         gnc_tm_set_day_end(&now);
     }
     // Do nothing for LAST and NEXT.
@@ -559,8 +563,8 @@ gnc_relative_date_to_time64(RelativeDatePeriod period)
             else if (reldate_is_next(period))
                 now.tm_mday += 7;
     }
-    normalize_reldate_tm(now);
     reldate_set_day_and_time(now, checked_reldate(period).m_type);
+    normalize_reldate_tm(now);
     return static_cast<time64>(GncDateTime(now));
 }
 
