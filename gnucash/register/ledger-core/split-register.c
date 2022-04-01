@@ -1490,7 +1490,7 @@ gnc_split_register_save_to_copy_buffer (SplitRegister *reg,
 
     /* use the changed flag to avoid heavy-weight updates
      * of the split & transaction fields. This will help
-     * cut down on unneccessary register redraws. */
+     * cut down on unnecessary register redraws. */
     if (!gnc_table_current_cursor_changed (reg->table, FALSE))
         return FALSE;
 

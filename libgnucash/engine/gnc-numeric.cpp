@@ -123,8 +123,8 @@ GncNumeric::GncNumeric(const std::string& str, bool autoround)
     static const std::string hex_frag("(0x[a-f0-9]+)");
     static const std::string slash( "[ \\t]*/[ \\t]*");
     /* The llvm standard C++ library refused to recognize the - in the
-     * numer_frag patter with the default ECMAScript syntax so we use the awk
-     * syntax.
+     * numer_frag pattern with the default ECMAScript syntax so we use the
+     * awk syntax.
      */
     static const regex numeral(numer_frag);
     static const regex hex(hex_frag);

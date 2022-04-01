@@ -333,7 +333,7 @@ get_trans_info (GtkTreeModel* model, GtkTreeIter* iter)
                         -1);
     return transaction_info;
 }
-/* This fuction find the top matching register transaction for the imported transaction pointed to by iter
+/* This function finds the top matching register transaction for the imported transaction pointed to by iter
  * It then goes through the list of all other imported transactions and creates a list of the ones that
  * have the same register transaction as their top match (i.e., are in conflict). It finds the best of them
  * (match-score-wise) and returns the rest as a list. The imported transactions in that list will get their

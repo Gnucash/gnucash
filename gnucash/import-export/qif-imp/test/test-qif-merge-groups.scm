@@ -87,7 +87,7 @@
           2
           (length (assoc-ref matches new-txn2)))
 
-        (test-equal "test-gnc:account-tree-find-duplicates - 3nd txn matches none"
+        (test-equal "test-gnc:account-tree-find-duplicates - 3rd txn matches none"
           #f
           (assoc-ref matches new-txn3))
 

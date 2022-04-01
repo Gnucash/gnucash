@@ -236,7 +236,7 @@
     </trn:split>
     <trn:split>
       <split:id type="guid">686e0a76ab0ae02b10526729d4309509</split:id>
-      <split:memo>soem as invst</split:memo>
+      <split:memo>some as invst</split:memo>
       <split:reconciled-state>n</split:reconciled-state>
       <split:value>-190000/100</split:value>
       <split:quantity>-190000/100</split:quantity>

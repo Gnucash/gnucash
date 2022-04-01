@@ -461,7 +461,7 @@ TransactionGetTokens(GNCImportTransInfo *info)
     tokens = tokenize_string(tokens, text);
 
     /* The day of week the transaction occurred is a good indicator of
-     * what account this transaction belongs in.  Get the date and covert
+     * what account this transaction belongs in.  Get the date and convert
      * it to day of week as a token
      */
     transtime = xaccTransGetDate(transaction);

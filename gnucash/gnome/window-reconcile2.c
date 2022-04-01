@@ -569,7 +569,7 @@ gnc_save_reconcile_interval (Account *account, time64 statement_date)
 
     /*
      * See if we need to remember days(weeks) or months.  The only trick
-     * value is 28 days which could be wither 4 weeks or 1 month.
+     * value is 28 days which could be either 4 weeks or 1 month.
      */
     if (days == 28)
     {

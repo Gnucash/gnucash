@@ -496,7 +496,7 @@ the option '~a'."))
        #f)
 
      ;; generate-restore-form
-     ;; "return 'ascii represention of a function'
+     ;; "return 'ascii representation of a function'
      ;; that will set the option passed as its lone parameter
      ;; to the value it was when the picker was first displayed"
      ;;

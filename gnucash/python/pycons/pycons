@@ -113,7 +113,7 @@ def replace (console, canvas, anchor):
 
 # ----------------------------------------------------------------------- refresh
 def refresh(console):
-    """ Refreshs all active canvas  """
+    """ Refreshes all active canvas  """
 
     figures = console.figures
     for fig in figures:
@@ -213,7 +213,7 @@ def insert (console, figure):
 
 # ----------------------------------------------------------------------- refresh
 def refresh(console):
-    """ Refreshs all active canvas  """
+    """ Refreshes all active canvas  """
     figures = console.figures
     for fig in figures:
         figure, canvas, anchor = fig

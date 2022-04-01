@@ -18,7 +18,7 @@
 # - SRC_DIR (top level source code directory)
 # - SRC (full path to gnucash.appdata.xml.in)
 # - DST (full path to destination for gnucash.appdata.xml)
-# - REL_FILE (path to file containg (packaging) release info)
+# - REL_FILE (path to file containing (packaging) release info)
 # - VCS_INFO_FILE (full path to gnc-vcs-info.h - can be in source tree (release builds) or build tree (git builds))
 # - GNUCASH_BUILD_ID (optional, extra version information supplied by packagers)
 

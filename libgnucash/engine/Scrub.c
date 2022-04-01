@@ -654,7 +654,7 @@ xaccTransClearTradingSplits (Transaction *trans)
 
     xaccTransBeginEdit (trans);
     /* destroy_splits doesn't actually free the splits but this gets
-     * the list ifself freed.
+     * the list itself freed.
      */
     g_list_free_full (trading_splits, destroy_split);
     xaccTransCommitEdit (trans);
