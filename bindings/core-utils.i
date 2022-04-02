@@ -171,16 +171,11 @@ extern const char* ngettext (const char *msgid1, const char *msgid2,
 extern const char* gettext(const char*);
 %rename ("gnc:C_gettext") wrap_C_;
 %inline %{
-    /* This helper function wraps the C_() macro in to a function.
-       Direct wrapping results in a compiler error on direct string concatenation
-       inside the macro expansion, so I'm making a detour via g_strconcat */
+    /* This helper function wraps the C_() macro in a function. */
     const char* wrap_C_(const char* context, const char* msg);
     const char* wrap_C_(const char* context, const char* msg)
     {
-        gchar* combo = g_strconcat (context, "\004", msg, NULL);
-        const gchar* translated = g_dpgettext (NULL, combo, strlen (context) + 1);
-        g_free (combo);
-        return translated;
+        return g_dpgettext2 (NULL, context, msg);
     }
 %}
 %rename ("gnc-utf8?") wrap_gnc_utf8_validate;
