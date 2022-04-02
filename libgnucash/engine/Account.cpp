@@ -49,6 +49,7 @@ extern "C" {
 
 #include <numeric>
 #include <map>
+#include <unordered_set>
 
 static QofLogModule log_module = GNC_MOD_ACCOUNT;
 
@@ -6226,6 +6227,21 @@ gboolean xaccAccountRegister (void)
     qof_class_register (GNC_ID_ACCOUNT, (QofSortFunc) qof_xaccAccountOrder, params);
 
     return qof_object_register (&account_object_def);
+}
+
+using AccountSet = std::unordered_set<Account*>;
+static void maybe_add_descendants (Account* acc, gpointer arg)
+{
+    if (static_cast <AccountSet*> (arg)->insert (acc).second)
+        g_list_foreach (GET_PRIVATE(acc)->children, (GFunc) maybe_add_descendants, arg);
+};
+
+GList *
+gnc_accounts_and_all_descendants (GList *accounts)
+{
+    AccountSet accset;
+    g_list_foreach (accounts, (GFunc) maybe_add_descendants, &accset);
+    return std::accumulate (accset.begin(), accset.end(), (GList*) nullptr, g_list_prepend);
 }
 
 /* ======================= UNIT TESTING ACCESS =======================
