@@ -446,15 +446,23 @@ namespace IANAParser
 	    auto info_index = info_index_zero + index;
 	    if (transition_size  == 4)
 	    {
-		transitions.push_back(
-		    {*(endian_swap(reinterpret_cast<int32_t*>(&fileblock[fb_index]))),
-			    static_cast<uint8_t>(fileblock[info_index])});
+                int32_t transition_time;
+                // Ensure correct alignment for ARM.
+                memcpy(&transition_time,
+                       endian_swap(reinterpret_cast<int32_t*>(&fileblock[fb_index])),
+                       sizeof(int32_t));
+                auto info = static_cast<uint8_t>(fileblock[info_index]);
+                transitions.push_back({transition_time, info});
 	    }
 	    else
 	    {
-		transitions.push_back(
-		    {*(endian_swap(reinterpret_cast<int64_t*>(&fileblock[fb_index]))),
-			    static_cast<uint8_t>(fileblock[info_index])});
+                int64_t transition_time;
+                // Ensure correct alignment for ARM.
+                memcpy(&transition_time,
+                       endian_swap(reinterpret_cast<int64_t*>(&fileblock[fb_index])),
+                       sizeof(int64_t));
+                auto info = static_cast<uint8_t>(fileblock[info_index]);
+                transitions.push_back({transition_time, info});
 	    }
 	}
 
