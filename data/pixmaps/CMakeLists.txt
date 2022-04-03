@@ -1,40 +1,4 @@
-
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION ${CMAKE_INSTALL_DATADIR}/gnucash
-    PATTERN Makefile* EXCLUDE
-    PATTERN CMake* EXCLUDE
-    PATTERN CTest* EXCLUDE
-    PATTERN cmake* EXCLUDE
-    PATTERN hicolor EXCLUDE
-)
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}
-    DESTINATION ${DATADIR_BUILD}/gnucash
-    PATTERN Makefile* EXCLUDE
-    PATTERN CMake* EXCLUDE
-    PATTERN CTest* EXCLUDE
-    PATTERN cmake* EXCLUDE
-    PATTERN hicolor EXCLUDE
-)
-install(
-    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/hicolor DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/icons
-    REGEX "hicolor/.*/apps/.*" EXCLUDE
-)
-file(
-    COPY ${CMAKE_CURRENT_SOURCE_DIR}/hicolor
-    DESTINATION ${DATADIR_BUILD}/gnucash/icons
-    REGEX "hicolor/.*/apps/.*" EXCLUDE
-)
-
-install(
-    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/hicolor DESTINATION  ${CMAKE_INSTALL_DATADIR}/icons
-    REGEX "hicolor/.*/actions/.*" EXCLUDE
-)
-file(
-    COPY ${CMAKE_CURRENT_SOURCE_DIR}/hicolor
-    DESTINATION ${DATADIR_BUILD}/icons
-    REGEX "hicolor/.*/actions/.*" EXCLUDE
-)
-
-set(gncpixmap_DATA
+set(gnc_action_icons
     hicolor/16x16/actions/gnc-account.png
     hicolor/24x24/actions/gnc-account.png
     hicolor/16x16/actions/gnc-account-delete.png
@@ -71,12 +35,9 @@ set(gncpixmap_DATA
     hicolor/24x24/actions/gnc-sx-new.png
     hicolor/16x16/actions/gnc-transfer.png
     hicolor/24x24/actions/gnc-transfer.png
-    gnucash-icon.ico
-    gnucash-icon-48x48.bmp
-    gnucash_splash.png
 )
 
-set(gncicon_DATA
+set(gnc_app_icons
     hicolor/16x16/apps/gnucash-icon.png
     hicolor/22x22/apps/gnucash-icon.png
     hicolor/24x24/apps/gnucash-icon.png
@@ -86,12 +47,35 @@ set(gncicon_DATA
     hicolor/96x96/apps/gnucash-icon.png
     hicolor/128x128/apps/gnucash-icon.png
     hicolor/256x256/apps/gnucash-icon.png
-)
-
-set(gncscalableicon_DATA
     hicolor/scalable/apps/gnucash-icon.svg
 )
 
-set_local_dist(pixmaps_DIST_local CMakeLists.txt ${gncpixmap_DATA}
-    ${gncicon_DATA} ${gncscalableicon_DATA})
+set(gnc_other_pixmaps
+gnucash-icon.ico
+gnucash-icon-48x48.bmp
+gnucash_splash.png
+)
+
+install(FILES ${gnc_other_pixmaps} DESTINATION ${CMAKE_INSTALL_DATADIR}/gnucash/pixmaps)
+file(COPY ${gnc_other_pixmaps} DESTINATION ${DATADIR_BUILD}/gnucash/pixmaps)
+
+set(dest_base_dir "gnucash/icons")
+
+function (copy_iconpaths_to_dest iconpaths dest_base_dir)
+    foreach(iconpath ${iconpaths})
+        get_filename_component(dest_rel_dir ${iconpath} DIRECTORY)
+        set(dest_dir "${dest_base_dir}/${dest_rel_dir}")
+        install(FILES ${iconpath} DESTINATION "${CMAKE_INSTALL_DATADIR}/${dest_dir}")
+        file(COPY ${iconpath} DESTINATION "${DATADIR_BUILD}/${dest_dir}")
+    endforeach()
+endfunction()
+
+copy_iconpaths_to_dest ("${gnc_action_icons}" "gnucash/icons")
+copy_iconpaths_to_dest ("${gnc_app_icons}" "icons")
+
+#install(FILES ${gnc_app_icons} DESTINATION ${CMAKE_INSTALL_DATADIR}/icons)
+#file(COPY ${gnc_app_icons} DESTINATION ${DATADIR_BUILD}/icons)
+
+set_local_dist(pixmaps_DIST_local CMakeLists.txt ${gnc_action_icons}
+    ${gnc_other_pixmaps} ${gnc_app_icons})
 set(pixmaps_DIST ${pixmaps_DIST_local} PARENT_SCOPE)

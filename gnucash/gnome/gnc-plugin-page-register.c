@@ -400,7 +400,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         G_CALLBACK (gnc_plugin_page_register_cmd_paste_transaction)
     },
     {
-        "DuplicateTransactionAction", "edit-copy", DUPLICATE_TRANSACTION_LABEL, "",
+        "DuplicateTransactionAction", "edit-copy-ours", DUPLICATE_TRANSACTION_LABEL, "",
         DUPLICATE_TRANSACTION_TIP,
         G_CALLBACK (gnc_plugin_page_register_cmd_duplicate_transaction)
     },
