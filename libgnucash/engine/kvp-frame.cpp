@@ -78,6 +78,8 @@ KvpFrame::get_child_frame_or_nullptr (Path const & path) noexcept
     if (map_iter == m_valuemap.end ())
         return nullptr;
     auto child = map_iter->second->get <KvpFrame *> ();
+    if (!child)
+        return nullptr;
     Path send;
     std::copy (path.begin () + 1, path.end (), std::back_inserter (send));
     return child->get_child_frame_or_nullptr (send);
