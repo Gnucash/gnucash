@@ -27,7 +27,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-31 04:07+0000\n"
+"PO-Revision-Date: 2022-04-03 09:06+0000\n"
 "Last-Translator: YTX <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -21496,7 +21496,7 @@ msgstr "折扣类型"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:82
 msgid "Discount How"
-msgstr "折扣多少"
+msgstr "折扣方式"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:87
 #: gnucash/report/reports/standard/invoice.scm:96
@@ -21509,15 +21509,15 @@ msgstr "单价"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:102
 msgid "Taxable?"
-msgstr "须纳税的？"
+msgstr "应税"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:107
 msgid "Tax Included?"
-msgstr "含税？"
+msgstr "含税"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:112
 msgid "Invoiced?"
-msgstr "已开发票？"
+msgstr "发票"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:117
 #: gnucash/report/reports/standard/invoice.scm:249
