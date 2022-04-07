@@ -91,7 +91,7 @@ TEST_F(GncOptionDBTest, test_register_report_placement_option)
     auto option{m_db->find_option("foo", "bar")};
     option->set_value(rp);
     auto value{option->get_value<GncOptionReportPlacementVec>()};
-    EXPECT_EQ(value.size(), 1);
+    EXPECT_EQ(value.size(), 1u);
     auto [v_id, v_wide, v_height] = value.at(0);
     EXPECT_EQ(report_id, v_id);
 }
