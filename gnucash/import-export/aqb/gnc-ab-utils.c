@@ -93,13 +93,27 @@ struct _GncABImExContextImport
     GData *tmp_job_list;
 };
 
+static inline is_leap_year (int year)
+{
+    return (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0 ));
+}
+
 static inline time64
 gnc_gwen_date_to_time64 (const GNC_GWEN_DATE* date)
 {
 #if AQBANKING_VERSION_INT >= 59900
-    return gnc_dmy2time64_neutral(GWEN_Date_GetDay(date),
-                                  GWEN_Date_GetMonth(date),
-                                  GWEN_Date_GetYear(date));
+    int day = GWEN_Date_GetDay(date);
+    int month = GWEN_Date_GetMonth(date);
+    int year = GWEN_Date_GetYear(date);
+    /* Some banks use nominal 30-day months and set the value date as
+     * the day after the posted date. In February this can appear to
+     * be an invalid date because February has fewer than 30 days. If
+     * that's the case then back up a day to get a real date for
+     * posting.
+     */
+    if (month == 2 && day <= 30 && day > is_leap_year(year) ? 29 : 28)
+        --day;
+    return gnc_dmy2time64_neutral(day, month, year);
 #else
     int month, day, year;
     GWEN_Time_GetBrokenDownDate(date, &day, &month, &year);
