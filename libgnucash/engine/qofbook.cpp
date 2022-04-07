@@ -1185,7 +1185,7 @@ qof_book_commit_edit(QofBook *book)
 }
 
 /* Deal with the fact that some options are not in the "options" tree but rather
- * in the "counters" tree */
+ * in the "counters" or "counter_formats" tree */
 static Path gslist_to_option_path (GSList *gspath)
 {
     Path tmp_path;
@@ -1194,7 +1194,7 @@ static Path gslist_to_option_path (GSList *gspath)
     Path path_v {str_KVP_OPTION_PATH};
     for (auto item = gspath; item != nullptr; item = g_slist_next(item))
         tmp_path.push_back(static_cast<const char*>(item->data));
-    if (tmp_path.front() == "counters")
+    if ((tmp_path.front() == "counters") || (tmp_path.front() == "counter_formats"))
         return tmp_path;
 
     path_v.insert(path_v.end(), tmp_path.begin(), tmp_path.end());

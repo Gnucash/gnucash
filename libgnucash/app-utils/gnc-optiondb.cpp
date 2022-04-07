@@ -414,7 +414,7 @@ static inline void
 counter_option_path(const GncOption& option, GSList* list, std::string& name)
 {
     constexpr const char* counters{"counters"};
-    constexpr const char* formats{"counter_formats/"};
+    constexpr const char* formats{"counter_formats"};
     auto key = option.get_key();
     name = key.substr(0, key.size() - 1);
     list->next->data = (void*)name.c_str();
