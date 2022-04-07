@@ -93,7 +93,7 @@ struct _GncABImExContextImport
     GData *tmp_job_list;
 };
 
-static inline is_leap_year (int year)
+static inline gboolean is_leap_year (int year)
 {
     return (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0 ));
 }
@@ -111,7 +111,7 @@ gnc_gwen_date_to_time64 (const GNC_GWEN_DATE* date)
      * that's the case then back up a day to get a real date for
      * posting.
      */
-    if (month == 2 && day <= 30 && day > is_leap_year(year) ? 29 : 28)
+    if (month == 2 && day <= 30 && day > (is_leap_year(year) ? 29 : 28))
         --day;
     return gnc_dmy2time64_neutral(day, month, year);
 #else
