@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-04-04 05:08+0000\n"
+"PO-Revision-Date: 2022-04-10 21:10+0000\n"
 "Last-Translator: ltai0001 <yltaief@gmail.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ar/>\n"
@@ -3775,7 +3775,7 @@ msgstr "فتح مربع الحوار \"العثور على العميل\""
 #: gnucash/gnome/gnc-plugin-business.c:319
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:201
 msgid "New _Invoice..."
-msgstr "فاتورة جديدة..."
+msgstr "_فاتورة جديدة..."
 
 #: gnucash/gnome/gnc-plugin-business.c:176
 #: gnucash/gnome/gnc-plugin-business.c:320
@@ -3784,7 +3784,7 @@ msgstr "فتح مربع الحوار \"فاتورة جديدة\""
 
 #: gnucash/gnome/gnc-plugin-business.c:180
 msgid "Find In_voice..."
-msgstr "العثور على الفاتورة..."
+msgstr "ال_عثور على الفاتورة..."
 
 #: gnucash/gnome/gnc-plugin-business.c:181
 msgid "Open the Find Invoice dialog"
@@ -3854,7 +3854,7 @@ msgstr "فتح مربع حوار بحث عن مورد"
 #: gnucash/gnome/gnc-plugin-business.c:218
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:196
 msgid "New _Bill..."
-msgstr "فاتورة جديدة..."
+msgstr "_فاتورة جديدة..."
 
 #: gnucash/gnome/gnc-plugin-business.c:219
 msgid "Open the New Bill dialog"
@@ -3862,7 +3862,7 @@ msgstr "فتح مربع حوار مطالبة جديدة"
 
 #: gnucash/gnome/gnc-plugin-business.c:223
 msgid "Find Bi_ll..."
-msgstr "بحث عن مطالبة"
+msgstr "_بحث عن مطالبة..."
 
 #: gnucash/gnome/gnc-plugin-business.c:224
 msgid "Open the Find Bill dialog"
@@ -3899,7 +3899,7 @@ msgstr "فتح مربع الحوار \"العثور على الموظف\""
 
 #: gnucash/gnome/gnc-plugin-business.c:261
 msgid "New _Expense Voucher..."
-msgstr "إيصال مصروفات جديد..."
+msgstr "إيصال _مصروفات جديد..."
 
 #: gnucash/gnome/gnc-plugin-business.c:262
 msgid "Open the New Expense Voucher dialog"
@@ -3907,7 +3907,7 @@ msgstr "أفتح صفحة نظرة عامة عن موظف"
 
 #: gnucash/gnome/gnc-plugin-business.c:266
 msgid "Find Expense _Voucher..."
-msgstr "العثور على إيصال المصاريف"
+msgstr "ال_عثور على إيصال المصاريف..."
 
 #: gnucash/gnome/gnc-plugin-business.c:267
 msgid "Open the Find Expense Voucher dialog"
@@ -3924,7 +3924,7 @@ msgstr "معلومات العملية"
 
 #: gnucash/gnome/gnc-plugin-business.c:283
 msgid "Sales _Tax Table"
-msgstr "جدول ضريبة المبيعات"
+msgstr "_جدول ضريبة المبيعات"
 
 #: gnucash/gnome/gnc-plugin-business.c:284
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
@@ -3960,7 +3960,7 @@ msgstr "فتح مربع الحوار \"تذكير فواتير مستحقة\""
 
 #: gnucash/gnome/gnc-plugin-business.c:302
 msgid "E_xport"
-msgstr "تصدير"
+msgstr "ت_صدير"
 
 #: gnucash/gnome/gnc-plugin-business.c:307
 #: gnucash/gnome/gnc-plugin-business.c:308
@@ -4002,7 +4002,7 @@ msgstr "إنشاء حساب جديد"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:204
 msgid "New Account _Hierarchy..."
-msgstr "التسلسل الهرمي لحساب جديد..."
+msgstr "تسلسل هرمي جديد للحساب..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:205
 msgid "Extend the current book by merging with new account type categories"
@@ -4013,7 +4013,7 @@ msgstr "تمديد الدفتر الحالي عن طريق الدمج مع فئ�
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:345
 #: gnucash/gnome/gnc-plugin-page-budget.c:146
 msgid "Open _Account"
-msgstr "فتح حساب"
+msgstr "_فتح حساب"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:211
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:222
@@ -4023,7 +4023,7 @@ msgstr "فتح الحساب المحدد"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:215
 msgid "Open _Old Style Register Account"
-msgstr "فتح نافذة دفتر أستاذ عام نمط قديم"
+msgstr "فتح نافذة دفتر أستاذ عام نمط _قديم"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:216
 msgid "Open the old style register selected account"
@@ -4033,7 +4033,7 @@ msgstr "فتح نافذة دفتر أستاذ عام نمط قديم محدد"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:240
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:350
 msgid "Open _SubAccounts"
-msgstr "فتح الحسابات الفرعية"
+msgstr "فتح الحسابات ال_فرعية"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:230
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:241
@@ -4043,7 +4043,7 @@ msgstr "فتح الحساب المحدد وجميع ما لها من الحسا�
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:234
 msgid "Open Old St_yle Subaccounts"
-msgstr "فتح الحسابات الفرعية بالنمط القديم"
+msgstr "فتح الحسابات الفرعية بالنمط ال_قديم"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:235
 msgid "Open the old style register selected account and all its subaccounts"
@@ -4053,7 +4053,7 @@ msgstr "فتح الحسابات بالنمط القديم و كذا كل حسا�
 #: gnucash/gnome/gnc-plugin-page-register2.c:245
 #: gnucash/gnome/gnc-plugin-page-register.c:354
 msgid "Edit _Account"
-msgstr "تحرير الحساب"
+msgstr "_تحرير الحساب"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:249
 #: gnucash/gnome/gnc-plugin-page-register2.c:246
@@ -4070,9 +4070,8 @@ msgid "Delete selected account"
 msgstr "حذف الحساب المحدد"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:258
-#, fuzzy
 msgid "_Cascade Account Properties..."
-msgstr "لون الحساب"
+msgstr "لون الحساب..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:259
 #, fuzzy
@@ -4122,7 +4121,7 @@ msgstr "_تصفية بواسطة..."
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:170
 #: gnucash/gnome-utils/gnc-main-window.c:351
 msgid "_Refresh"
-msgstr "تحديث"
+msgstr "ت_حديث"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:296
 #: gnucash/gnome/gnc-plugin-page-invoice.c:163
@@ -4139,7 +4138,7 @@ msgstr "تحديث هذه النافذة"
 #: gnucash/gnome/gnc-plugin-page-register2.c:357
 #: gnucash/gnome/gnc-plugin-page-register.c:475
 msgid "_Reconcile..."
-msgstr "تسوية"
+msgstr "_تسوية..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:303
 #: gnucash/gnome/gnc-plugin-page-register2.c:358
@@ -4151,7 +4150,7 @@ msgstr "التسوية بين الحسابات المختارة"
 #: gnucash/gnome/gnc-plugin-page-register2.c:362
 #: gnucash/gnome/gnc-plugin-page-register.c:480
 msgid "_Auto-clear..."
-msgstr "مسح تلقائي"
+msgstr "مسح _تلقائي..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:308
 msgid "Automatically clear individual transactions, given a cleared amount"
@@ -4175,7 +4174,7 @@ msgstr "نقل الأموال من حساب واحد إلى آخر"
 #: gnucash/gnome/gnc-plugin-page-register2.c:367
 #: gnucash/gnome/gnc-plugin-page-register.c:485
 msgid "Stoc_k Split..."
-msgstr "تجزئة السهم"
+msgstr "تجزئة ال_سهم..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:318
 #: gnucash/gnome/gnc-plugin-page-register2.c:368
@@ -4187,7 +4186,7 @@ msgstr "تسجيل تجزئة السهم أو الاندماج الأسهم"
 #: gnucash/gnome/gnc-plugin-page-register2.c:372
 #: gnucash/gnome/gnc-plugin-page-register.c:490
 msgid "View _Lots..."
-msgstr "عرض المجموعات"
+msgstr "عرض ال_مجموعات..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:323
 #: gnucash/gnome/gnc-plugin-page-register2.c:373
@@ -4197,7 +4196,7 @@ msgstr "عارض/محرر المجموعات"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:327
 msgid "Check & Repair A_ccount"
-msgstr "فحص وإصلاح حساب"
+msgstr "فحص وإ_صلاح حساب"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:328
 #: gnucash/gnome/window-reconcile2.c:2174 gnucash/gnome/window-reconcile.c:2436
@@ -4209,7 +4208,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:332
 msgid "Check & Repair Su_baccounts"
-msgstr "فحص و إصلاح الحسابات الفرعية"
+msgstr "فحص و إصلاح الحسابات ال_فرعية"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:333
 msgid ""
@@ -4221,7 +4220,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:338
 msgid "Check & Repair A_ll"
-msgstr "فحص & و إصلاح الجميع"
+msgstr "فحص و إصلاح ال_جميع"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:339
 msgid ""
@@ -4234,7 +4233,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:343
 #: gnucash/gnome/gnc-plugin-register2.c:64
 msgid "_Register2"
-msgstr "سجل2"
+msgstr "_دفتر2"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:406
 msgid "Open2"
@@ -4399,7 +4398,7 @@ msgstr "فتح الحساب المحدد"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:152
 msgid "Open _Subaccounts"
-msgstr "فتح الحسابات الفرعية"
+msgstr "فتح ال_حسابات الفرعية"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:153
 #, fuzzy
@@ -4416,9 +4415,8 @@ msgid "Select this or another budget and delete it."
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:164
-#, fuzzy
 msgid "Budget _Options..."
-msgstr "خيارات الميزانية"
+msgstr "خيارات ال_ميزانية..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:165
 #, fuzzy
@@ -4426,9 +4424,8 @@ msgid "Edit this budget's options."
 msgstr "تحرير خيارات هذه الميزانية"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:169
-#, fuzzy
 msgid "Esti_mate Budget..."
-msgstr "تقديرات الميزانية"
+msgstr "ت_قديرات الميزانية..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:171
 #, fuzzy
@@ -4438,9 +4435,8 @@ msgstr ""
 "تقدير قيمة الميزانية لحسابات التقديرية المختارة بناء على المعاملات السابقة"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:175
-#, fuzzy
 msgid "_All Periods..."
-msgstr "الفترة"
+msgstr "_كل الفترات..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:177
 #, fuzzy
@@ -4591,7 +4587,7 @@ msgstr "قم بإنشاء نسخة من الإدخال الحالي"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:204
 msgid "Move Entry _Up"
-msgstr "نقل الإدخال لأعلى"
+msgstr "نقل الإدخال لأ_على"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:205
 msgid "Move the current entry one row upwards"
@@ -4599,7 +4595,7 @@ msgstr "نقل الإدخال الحالي سطرا واحدا لأعلى"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:209
 msgid "Move Entry Do_wn"
-msgstr "نقل الإدخال لأسفل"
+msgstr "نقل الإدخال لأ_سفل"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:210
 msgid "Move the current entry one row downwards"
@@ -4672,9 +4668,8 @@ msgid "Sort by description"
 msgstr "فرز حسب الوصف"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:296
-#, fuzzy
 msgid "_Print Invoice"
-msgstr "طباعة الفاتورة"
+msgstr "_طباعة الفاتورة"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:297
 msgid "_Edit Invoice"
@@ -4719,9 +4714,8 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-invoice.c:346
 #: gnucash/gnome/gnc-plugin-page-invoice.c:367
 #: gnucash/gnome/gnc-plugin-page-register.c:304
-#, fuzzy
 msgid "_Open Linked Document"
-msgstr "حساب جديد"
+msgstr "إفتح المستند ال_مرتبط"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:310
 msgid "_Use as Default Layout for Customer Documents"
@@ -4732,24 +4726,20 @@ msgid "_Reset Default Layout for Customer Documents"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:317
-#, fuzzy
 msgid "_Print Bill"
-msgstr "طباعة"
+msgstr "_طباعة الفاتورة"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:318
-#, fuzzy
 msgid "_Edit Bill"
-msgstr "تعديل الفاتورة"
+msgstr "ت_عديل الفاتورة"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:319
-#, fuzzy
 msgid "_Duplicate Bill"
-msgstr "مكررة"
+msgstr "ت_كرير الفاتورة"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:320
-#, fuzzy
 msgid "_Post Bill"
-msgstr "دفع الفاتورة"
+msgstr "_دفع الفاتورة"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:321
 #, fuzzy
@@ -4757,14 +4747,12 @@ msgid "_Unpost Bill"
 msgstr "_إلغ ترحيل هذه الفاتورة"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:322
-#, fuzzy
 msgid "New _Bill"
-msgstr "فاتورة جديدة"
+msgstr "فاتورة _جديدة"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:323
-#, fuzzy
 msgid "_Pay Bill"
-msgstr "دفع الفاتورة"
+msgstr "_دفع الفاتورة"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:331
 msgid "_Use as Default Layout for Vendor Documents"
@@ -4780,9 +4768,8 @@ msgid "_Print Voucher"
 msgstr "_طباعة الشيكات"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:339
-#, fuzzy
 msgid "_Edit Voucher"
-msgstr "عرض/تحرير القسيمة"
+msgstr "ت_حرير القسيمة"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:340
 #, fuzzy
@@ -4805,9 +4792,8 @@ msgid "New _Voucher"
 msgstr "قسيمة جديدة"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:344
-#, fuzzy
 msgid "_Pay Voucher"
-msgstr "قسيمة الشراء"
+msgstr "دفع قسيمة الشراء"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:352
 msgid "_Use as Default Layout for Employee Documents"
@@ -5106,7 +5092,7 @@ msgstr "اليوم"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:145
 msgid "E_dit Vendor"
-msgstr "تحرير المورد"
+msgstr "ت_حرير المورد"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:146
 msgid "Edit the selected vendor"
@@ -5122,7 +5108,7 @@ msgstr "تحرير العميل المحدد"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:155
 msgid "E_dit Employee"
-msgstr "تحرير موظف"
+msgstr "ت_حرير موظف"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:156
 msgid "Edit the selected employee"
@@ -5142,7 +5128,7 @@ msgstr "إنشاء موظف جديد"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:177
 msgid "_Delete Owner..."
-msgstr "حذف مالك"
+msgstr "_حذف مالك..."
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:178
 msgid "Delete selected owner"
@@ -5158,7 +5144,7 @@ msgstr "إنشاء فاتورة جديدة"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:206
 msgid "New _Voucher..."
-msgstr "قسيمة جديدة..."
+msgstr "_قسيمة جديدة..."
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:207
 msgid "Create a new voucher"
@@ -5250,7 +5236,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register2.c:194
 #: gnucash/gnome/gnc-plugin-page-register.c:292
 msgid "Cu_t Transaction"
-msgstr "قص المعاملات"
+msgstr "ق_ص المعاملة"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:195
 #: gnucash/gnome/gnc-plugin-page-register.c:293
@@ -5265,7 +5251,7 @@ msgstr "_لصق المعاملات"
 #: gnucash/gnome/gnc-plugin-page-register2.c:197
 #: gnucash/gnome/gnc-plugin-page-register.c:295
 msgid "Dup_licate Transaction"
-msgstr "تكرار المعاملات"
+msgstr "ت_كرار المعاملة"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:198
 #: gnucash/gnome/gnc-plugin-page-register.c:296
@@ -5277,29 +5263,29 @@ msgstr "_حذف المعاملات"
 #: gnucash/gnome/gnc-plugin-page-register2.c:199
 #: gnucash/gnome/gnc-plugin-page-register.c:308
 msgid "Cu_t Split"
-msgstr "قص التقسيم"
+msgstr "ق_ص التقسيم"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:200
 #: gnucash/gnome/gnc-plugin-page-register.c:309
 msgid "_Copy Split"
-msgstr "نسخ التقسيم"
+msgstr "_نسخ التقسيم"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:201
 #: gnucash/gnome/gnc-plugin-page-register.c:310
 msgid "_Paste Split"
-msgstr "لصق التقسيم"
+msgstr "_لصق التقسيم"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:202
 #: gnucash/gnome/gnc-plugin-page-register.c:311
 msgid "Dup_licate Split"
-msgstr "تكرار التقسيم"
+msgstr "تك_رار التقسيم"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:203
 #: gnucash/gnome/gnc-plugin-page-register.c:312
 #: gnucash/gnome/gnc-split-reg.c:1504
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1024
 msgid "_Delete Split"
-msgstr "حذف التقسيم."
+msgstr "ح_ذف التقسيم"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:204
 #: gnucash/gnome/gnc-plugin-page-register.c:313
@@ -5361,7 +5347,7 @@ msgstr "_طباعة الشيكات..."
 #: gnucash/gnome/gnc-plugin-page-report.c:1216
 #: gnucash/gnome-utils/gnc-main-window.c:320
 msgid "Cu_t"
-msgstr "قص"
+msgstr "_قص"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:231
 #: gnucash/gnome/gnc-plugin-page-register.c:340
@@ -5393,7 +5379,7 @@ msgstr "لصق محتوى الحافظة في موضع المؤشر"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:300
 msgid "Remo_ve All Splits"
-msgstr "أزل جميع التقسيمات"
+msgstr "أ_زل جميع التقسيمات"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:301
 #: gnucash/gnome/gnc-plugin-page-register.c:410
@@ -5413,7 +5399,7 @@ msgstr "سجل المعاملة الحالية"
 #: gnucash/gnome/gnc-plugin-page-register2.c:310
 #: gnucash/gnome/gnc-plugin-page-register.c:419
 msgid "Ca_ncel Transaction"
-msgstr "إلغاء المعاملات"
+msgstr "إل_غاء المعاملة"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:311
 #: gnucash/gnome/gnc-plugin-page-register.c:420
@@ -5428,16 +5414,16 @@ msgstr "_إلغاء المعاملات"
 #: gnucash/gnome/gnc-plugin-page-register2.c:319
 #: gnucash/gnome/gnc-plugin-page-register.c:428
 msgid "_Unvoid Transaction"
-msgstr "إعكس إلغاء هذه المعاملة"
+msgstr "إ_عكس إلغاء المعاملة"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:323
 #: gnucash/gnome/gnc-plugin-page-register.c:432
 msgid "Add _Reversing Transaction"
-msgstr "إضافة معاملة عكسية"
+msgstr "إضافة معاملة _عكسية"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:327
 msgid "Move Transaction _Up"
-msgstr "تحريك لأعلى"
+msgstr "تحريك لل_أعلى"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:328
 msgid ""
@@ -5449,7 +5435,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:332
 msgid "Move Transaction Do_wn"
-msgstr "تحريك لأسفل"
+msgstr "تحريك لأ_سفل"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:333
 msgid ""
@@ -5480,7 +5466,7 @@ msgstr "الانتقال إلى معاملة فارغة في أسفل السجل
 #: gnucash/gnome/gnc-plugin-page-register2.c:382
 #: gnucash/gnome/gnc-plugin-page-register.c:505
 msgid "Edit E_xchange Rate"
-msgstr "تحرير سعر الصرف"
+msgstr "تحرير سعر ال_صرف"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:383
 #: gnucash/gnome/gnc-plugin-page-register.c:506
@@ -5508,7 +5494,7 @@ msgstr "فتح تقرير سجل للمعاملات المحددة"
 #: gnucash/gnome/gnc-plugin-page-register2.c:392
 #: gnucash/gnome/gnc-plugin-page-register.c:518
 msgid "Sche_dule..."
-msgstr "الجدول الزمني..."
+msgstr "ال_جدول الزمني..."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:393
 #: gnucash/gnome/gnc-plugin-page-register.c:519
@@ -5550,7 +5536,7 @@ msgstr "فتح تقرير سجل للمعاملات المحددة"
 #: gnucash/gnome/gnc-plugin-page-register2.c:424
 #: gnucash/gnome/gnc-plugin-page-register.c:553
 msgid "_Double Line"
-msgstr "خط مزدوج"
+msgstr "خط _مزدوج"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:425
 #: gnucash/gnome/gnc-plugin-page-register.c:554
@@ -5562,7 +5548,7 @@ msgstr "إظهار سطرين من المعلومات لكل معاملة"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:430
 msgid "Show _Extra Dates"
-msgstr "إظهار التواريخ الإضافية"
+msgstr "إظهار التواريخ الإ_ضافية"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:431
 msgid "Show entered and reconciled dates"
@@ -5571,7 +5557,7 @@ msgstr "أظهر تواريخ الإدخال و التسوية"
 #: gnucash/gnome/gnc-plugin-page-register2.c:436
 #: gnucash/gnome/gnc-plugin-page-register.c:559
 msgid "S_plit Transaction"
-msgstr "تقسيم المعاملات"
+msgstr "ت_قسيم المعاملات"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:437
 #: gnucash/gnome/gnc-plugin-page-register.c:560
@@ -5581,7 +5567,7 @@ msgstr "عرض كل التقسيمات في المعاملة الحالية"
 #: gnucash/gnome/gnc-plugin-page-register2.c:448
 #: gnucash/gnome/gnc-plugin-page-register.c:571
 msgid "_Basic Ledger"
-msgstr "دفتر الأستاذ الأساسي"
+msgstr "دفتر الأستاذ الأ_ساسي"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:449
 #: gnucash/gnome/gnc-plugin-page-register.c:572
@@ -5603,7 +5589,7 @@ msgstr "إظهار المعاملات على خط أو اثنين ووسع ال�
 #: gnucash/gnome/gnc-plugin-page-register.c:581
 #: gnucash/gtkbuilder/dialog-preferences.glade:3251
 msgid "Transaction _Journal"
-msgstr "معاملات دفتر اليومية"
+msgstr "_دفتر المعاملات اليومية"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:459
 #: gnucash/gnome/gnc-plugin-page-register.c:582
@@ -5841,12 +5827,12 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register.c:409
 msgid "Remo_ve Other Splits"
-msgstr "أزل التقسيمات الأخرى"
+msgstr "_أزل التقسيمات الأخرى"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:454
 #: gnucash/gnome-utils/gnc-main-window.c:343
 msgid "_Sort By..."
-msgstr "فرز حسب..."
+msgstr "إ_فرز حسب..."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:500
 #, fuzzy
@@ -6064,7 +6050,7 @@ msgstr "تصدير التقرير الحالي لمستند بصيغة PDF"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1236
 msgid "Save _Report Configuration"
-msgstr "حفظ خيارات التقرير"
+msgstr "حفظ _خيارات التقرير"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1240
 msgid "Save Report Configuration As..."
@@ -6223,7 +6209,7 @@ msgstr "إنشاء معاملة جديدة مجدولة"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:145
 msgid "_New 2"
-msgstr "جديد2"
+msgstr "_جديد 2"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:146
 msgid "Create a new scheduled transaction 2"
@@ -6235,7 +6221,7 @@ msgstr "تحرير المعاملة المجدولة المحددة"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:157
 msgid "_Edit 2"
-msgstr "تحرير2"
+msgstr "_تحرير2"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:158
 msgid "Edit the selected scheduled transaction 2"
@@ -6269,9 +6255,8 @@ msgstr[5] "هل تريد حذف هذه المعاملة المجدولة حقا�
 
 #: gnucash/gnome/gnc-plugin-register2.c:57
 #: gnucash/gnome/gnc-plugin-register.c:58
-#, fuzzy
 msgid "_General Journal"
-msgstr "دفتر اليومية العامة"
+msgstr "_دفتر اليومية العامة"
 
 #: gnucash/gnome/gnc-plugin-register2.c:58
 #, fuzzy
@@ -8765,10 +8750,8 @@ msgstr "فتح ملف/موقع"
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:513
 #: gnucash/gnome-utils/gnc-gnome-utils.c:553
-#, fuzzy
-#| msgid "GnuCash could not find the associated file."
 msgid "GnuCash could not find the linked document."
-msgstr "جنوكاش لا يمكنه العثور على ملفات المرتبطة"
+msgstr "جنوكاش لا يمكنه العثور على ملفات المرتبطة."
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:583
 #, fuzzy
