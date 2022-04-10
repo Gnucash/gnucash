@@ -61,6 +61,7 @@ set (scm_tests_with_srfi64_SOURCES
   test-core-utils.scm
   test-business-core.scm
   test-scm-engine.scm
+  test-scm-kvpvalue.scm
   )
 
 if (HAVE_SRFI64)

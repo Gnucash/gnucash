@@ -226,6 +226,9 @@ struct KvpFrameImpl
     bool empty() const noexcept { return m_valuemap.empty(); }
     friend int compare(const KvpFrameImpl&, const KvpFrameImpl&) noexcept;
 
+    map_type::iterator begin() { return m_valuemap.begin(); }
+    map_type::iterator end() { return m_valuemap.end(); }
+
     private:
     map_type m_valuemap;
 
