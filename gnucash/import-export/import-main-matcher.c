@@ -1559,7 +1559,7 @@ get_required_color (const gchar *class_name)
 static void
 remove_child_row (GtkTreeModel *model, GtkTreeIter *iter)
 {
-    if (gtk_tree_model_iter_has_child (model, iter))
+    while (gtk_tree_model_iter_has_child (model, iter))
     {
         GtkTreeIter  child;
         gtk_tree_model_iter_nth_child (model, &child, iter, 0);
@@ -1567,41 +1567,39 @@ remove_child_row (GtkTreeModel *model, GtkTreeIter *iter)
     }
 }
 
+static void add_row (GtkTreeModel *model, GtkTreeIter *iter, const char *date,
+                     const char *account, const char *amount, const char *narrative)
+{
+    GtkTreeStore *store = GTK_TREE_STORE (model);
+    GtkTreeIter child;
+    gtk_tree_store_append (store, &child, iter);
+    gtk_tree_store_set (store, &child, DOWNLOADED_COL_DATE_TXT, date, -1);
+    gtk_tree_store_set (store, &child, DOWNLOADED_COL_ACCOUNT, account, -1);
+    gtk_tree_store_set (store, &child, DOWNLOADED_COL_AMOUNT, amount, -1);
+    gtk_tree_store_set (store, &child, DOWNLOADED_COL_DESCRIPTION, narrative, -1);
+    gtk_tree_store_set (store, &child, DOWNLOADED_COL_ENABLE, FALSE, -1);
+}
+
 static void
 update_child_row (GNCImportMatchInfo *sel_match, GtkTreeModel *model, GtkTreeIter *iter)
 {
-    GtkTreeStore *store;
-    GtkTreeIter  child;
-    gchar *text = qof_print_date (xaccTransGetDate (sel_match->trans));
-    const gchar *ro_text;
+    const Transaction *trans = sel_match->trans;
+    gchar *datestr = qof_print_date (xaccTransGetDate (trans));
 
-    const gchar *desc = xaccTransGetDescription (sel_match->trans);
-    const gchar *memo = xaccSplitGetMemo (sel_match->split);
+    remove_child_row (model, iter);
+    add_row (model, iter, datestr, "", "", xaccTransGetDescription (trans));
+    g_free (datestr);
 
-    store = GTK_TREE_STORE(model);
-
-    if (!gtk_tree_model_iter_has_child (model, iter))
-        gtk_tree_store_append (GTK_TREE_STORE(model), &child, iter);
-    else
-        gtk_tree_model_iter_nth_child (model, &child, iter, 0);
-
-    gtk_tree_store_set (store, &child, DOWNLOADED_COL_DATE_TXT, text, -1);
-
-    if (xaccTransCountSplits (sel_match->trans) == 2)
-        gtk_tree_store_set (store, &child, DOWNLOADED_COL_ACCOUNT, xaccAccountGetName (
-                            xaccSplitGetAccount (xaccSplitGetOtherSplit (sel_match->split))), -1);
-    else
-        gtk_tree_store_set (store, &child, DOWNLOADED_COL_ACCOUNT, _("-- Split Transaction --"), -1);
-
-    ro_text = xaccPrintAmount (xaccSplitGetAmount (sel_match->split),
-                               gnc_split_amount_print_info (sel_match->split, TRUE));
-
-    gtk_tree_store_set (store, &child, DOWNLOADED_COL_AMOUNT, ro_text, -1);
-    gtk_tree_store_set (store, &child, DOWNLOADED_COL_MEMO, memo, -1);
-    gtk_tree_store_set (store, &child, DOWNLOADED_COL_DESCRIPTION, desc, -1);
-
-    gtk_tree_store_set (store, &child, DOWNLOADED_COL_ENABLE, FALSE, -1);
-    g_free (text);
+    for (GList *n = xaccTransGetSplitList (trans); n; n = n->next)
+    {
+        Split *s = n->data;
+        const gchar *acct_name = xaccAccountGetName (xaccSplitGetAccount (s));
+        const gchar *memo = xaccSplitGetMemo (s);
+        const gchar *amount = xaccPrintAmount (xaccSplitGetAmount (s),
+                                               gnc_split_amount_print_info (s, TRUE));
+        add_row (model, iter, (sel_match->split == s) ? "==>" : "",
+                 acct_name, amount, (memo && *memo) ? memo : "(no memo)");
+    }
 }
 
 static gchar *
