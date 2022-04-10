@@ -447,7 +447,9 @@ for styling the invoice. Please see the exported report for the CSS class names.
           (addif (quantity-col used-columns)
                  (gnc:make-html-table-cell/markup
                   "number-cell"
-                  (gncEntryGetDocQuantity entry credit-note?)))
+                  (xaccPrintAmount
+                   (gncEntryGetDocQuantity entry credit-note?)
+                   (gnc-default-print-info #f))))
 
           (addif (price-col used-columns)
                  (gnc:make-html-table-cell/markup
