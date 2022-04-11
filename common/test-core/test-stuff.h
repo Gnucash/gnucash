@@ -86,7 +86,7 @@ void print_test_results(void);
  * Use this to set whether successful tests
  * should print a message.
  * Default is false.
- * Successful test messages are useful while initally constructing the
+ * Successful test messages are useful while initially constructing the
  * test suite, but when it's completed, no news is good news.
  * A successful test run will be indicated by the message
  * from print_test_results().

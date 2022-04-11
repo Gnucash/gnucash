@@ -1410,7 +1410,7 @@ gnc_main_window_quit(GncMainWindow *window)
     {
         GList *w, *next;
 
-        /* This is not a typical list iteration. There is a possability
+        /* This is not a typical list iteration. There is a possibility
          * that the window maybe removed from the active_windows list so
          * we have to cache the 'next' pointer before executing any code
          * in the loop. */

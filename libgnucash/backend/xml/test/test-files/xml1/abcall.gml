@@ -194,7 +194,7 @@
         </split>
         <split>
           <guid>686e0a76ab0ae02b10526729d4309509</guid>
-          <memo>soem as invst</memo>
+          <memo>some as invst</memo>
           <reconcile-state>n</reconcile-state>
           <value>-190000/100</value>
           <quantity>-190000/100</quantity>

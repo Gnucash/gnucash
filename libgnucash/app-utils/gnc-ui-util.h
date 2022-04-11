@@ -446,7 +446,7 @@ gchar * gnc_filter_text_for_control_chars (const gchar *incoming_text);
  *
  * @param symbol to remove
  *
- * @param cursor_position the posistion of cursor in the incoming text
+ * @param cursor_position the position of cursor in the incoming text
  *
  * @return nothing
 */
@@ -460,7 +460,7 @@ void gnc_filter_text_set_cursor_position (const gchar *incoming_text,
  *
  * @param symbol to remove
  *
- * @param cursor_position the posistion of cursor in the incoming text
+ * @param cursor_position the position of cursor in the incoming text
  *
  * @return The incoming text with symbol removed to be freed by the caller
 */

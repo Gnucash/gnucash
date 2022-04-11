@@ -572,7 +572,7 @@ TEST(gnc_datetime_functions, test_date)
 /* This test works only in the America/LosAngeles time zone and
  * there's no straightforward way to make it more flexible. It ensures
  * that DST in that timezone transitions correctly for each day of the
- * week in which March begines.
+ * week in which March begins.
 
  TEST(gnc_datetime_functions, test_timezone_offset)
 {

@@ -315,7 +315,7 @@ struct _print_check_dialog
 };
 
 
-/* This function walks ths list of available check formats looking for a
+/* This function walks the list of available check formats looking for a
  * specific format as specified by guid number.  If found, a pointer to it is
  * returned to the caller.  Additionally, if the caller passed a pointer to a
  * GtkTreeIter, then the iter for that entry will also be returned.

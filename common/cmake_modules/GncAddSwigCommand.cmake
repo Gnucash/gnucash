@@ -6,7 +6,7 @@
 
 # gnc_add_swig_guile_command is used to generate guile swig wrappers
 # - _target is the name of a global target that will be set for this wrapper file,
-#    this can be used elsewhere to create a depencency on this wrapper
+#    this can be used elsewhere to create a dependency on this wrapper
 # - _out_var will be set to the full path to the generated wrapper file
 # - _output is the name of the wrapper file to generate
 # - _input is the swig interface file (*.i) to generate this wrapper from
@@ -47,7 +47,7 @@ endmacro (gnc_add_swig_guile_command)
 # gnc_add_swig_python_command is used to generate python swig wrappers
 # from the tarball will be used instead
 # - _target is the name of a global target that will be set for this wrapper file,
-#    this can be used elsewhere to create a depencency on this wrapper
+#    this can be used elsewhere to create a dependency on this wrapper
 # - _out_var will be set to the full path to the generated wrapper file
 # - _py_out_var is the same but for the python module that's generated together with the wrapper
 # - _output is the name of the wrapper file to generate
