@@ -1559,12 +1559,10 @@ get_required_color (const gchar *class_name)
 static void
 remove_child_row (GtkTreeModel *model, GtkTreeIter *iter)
 {
-    while (gtk_tree_model_iter_has_child (model, iter))
-    {
-        GtkTreeIter  child;
-        gtk_tree_model_iter_nth_child (model, &child, iter, 0);
-        gtk_tree_store_remove (GTK_TREE_STORE(model), &child);
-    }
+    GtkTreeIter child;
+    gboolean has_childen = gtk_tree_model_iter_children (model, &child, iter);
+    while (has_childen)
+        has_childen = gtk_tree_store_remove (GTK_TREE_STORE(model), &child);
 }
 
 static void add_row (GtkTreeModel *model, GtkTreeIter *iter, const char *date,
@@ -1573,11 +1571,13 @@ static void add_row (GtkTreeModel *model, GtkTreeIter *iter, const char *date,
     GtkTreeStore *store = GTK_TREE_STORE (model);
     GtkTreeIter child;
     gtk_tree_store_append (store, &child, iter);
-    gtk_tree_store_set (store, &child, DOWNLOADED_COL_DATE_TXT, date, -1);
-    gtk_tree_store_set (store, &child, DOWNLOADED_COL_ACCOUNT, account, -1);
-    gtk_tree_store_set (store, &child, DOWNLOADED_COL_AMOUNT, amount, -1);
-    gtk_tree_store_set (store, &child, DOWNLOADED_COL_DESCRIPTION, narrative, -1);
-    gtk_tree_store_set (store, &child, DOWNLOADED_COL_ENABLE, FALSE, -1);
+    gtk_tree_store_set (store, &child,
+                        DOWNLOADED_COL_DATE_TXT, date,
+                        DOWNLOADED_COL_ACCOUNT, account,
+                        DOWNLOADED_COL_AMOUNT, amount,
+                        DOWNLOADED_COL_DESCRIPTION, narrative,
+                        DOWNLOADED_COL_ENABLE, FALSE,
+                        -1);
 }
 
 static void
