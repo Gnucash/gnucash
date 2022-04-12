@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-25 15:09+0000\n"
+"PO-Revision-Date: 2022-04-12 02:10+0000\n"
 "Last-Translator: 154pinkchairs <ovehis@riseup.net>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
@@ -1717,9 +1717,8 @@ msgid "Manage Document Link"
 msgstr ""
 
 #: gnucash/gnome/dialog-doclink.c:760
-#, fuzzy
 msgid "Transaction can not be modified."
-msgstr "Kwota transakcji"
+msgstr "Transakcja nie może zostać zmodyfikowana."
 
 #: gnucash/gnome/dialog-doclink.c:821 libgnucash/engine/gncOwner.c:215
 #, fuzzy
@@ -2794,11 +2793,8 @@ msgid "You must select a company for payment processing."
 msgstr "Aby przetworzyć płatność, musisz wybrać firmę."
 
 #: gnucash/gnome/dialog-payment.c:260
-#, fuzzy
 msgid "There is a problem with the Payment or Refund amount."
-msgstr ""
-"Wystąpił problem z opcją %s:%s.\n"
-"%s"
+msgstr "Wystąpił problem z kwotą płatności lub zwrotu."
 
 #: gnucash/gnome/dialog-payment.c:281
 msgid "You must select a transfer account from the account tree."
@@ -3699,9 +3695,8 @@ msgid "_New Budget"
 msgstr "Nowy budżet"
 
 #: gnucash/gnome/gnc-plugin-budget.c:64
-#, fuzzy
 msgid "Create a new Budget."
-msgstr "Utwórz nowy budżet"
+msgstr "Utwórz nowy budżet."
 
 #: gnucash/gnome/gnc-plugin-budget.c:69
 #, fuzzy
@@ -3720,18 +3715,16 @@ msgid "_Copy Budget"
 msgstr "Kopiuj budżet"
 
 #: gnucash/gnome/gnc-plugin-budget.c:76
-#, fuzzy
 msgid "Copy an existing Budget."
-msgstr "Skopiuj istniejący budżet"
+msgstr "Skopiuj istniejący budżet."
 
 #: gnucash/gnome/gnc-plugin-budget.c:80
 msgid "_Delete Budget"
 msgstr "_Usuń budżet"
 
 #: gnucash/gnome/gnc-plugin-budget.c:81
-#, fuzzy
 msgid "Delete an existing Budget."
-msgstr "Otwórz istniejący budżet"
+msgstr "Usuń istniejący budżet."
 
 #: gnucash/gnome/gnc-plugin-budget.c:288
 msgid "Select a Budget"
@@ -4398,60 +4391,51 @@ msgid "Are you sure you want to do this?"
 msgstr "Czy na pewno chcesz to zrobić?"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:147
-#, fuzzy
 msgid "Open the selected account."
-msgstr "Otwórz zaznaczone konto"
+msgstr "Otwórz zaznaczone konto."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:152
 msgid "Open _Subaccounts"
 msgstr "Otwórz konta po_drzędne"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:153
-#, fuzzy
 msgid "Open the selected account and all its subaccounts."
-msgstr "Otwórz wybrane konto i wszystkie jego konta podrzędne"
+msgstr "Otwórz zaznaczone konto i wszystkie jego konta podrzędne."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:159
-#, fuzzy
 msgid "_Delete Budget..."
-msgstr "_Usuń budżet"
+msgstr "_Usuń budżet..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:160
 msgid "Select this or another budget and delete it."
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:164
-#, fuzzy
 msgid "Budget _Options..."
-msgstr "Opcje budżetu"
+msgstr "_Opcje budżetu..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:165
-#, fuzzy
 msgid "Edit this budget's options."
-msgstr "Edytuj opcje bieżącego budżetu"
+msgstr "Edytuj opcje bieżącego budżetu."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:169
-#, fuzzy
 msgid "Esti_mate Budget..."
-msgstr "Oszacuj budżet"
+msgstr "Osza_cuj budżet..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:171
-#, fuzzy
 msgid ""
 "Estimate a budget value for the selected accounts from past transactions."
 msgstr ""
 "Oszacuj wartość budżetu dla wybranych kont na podstawie poprzednich "
-"transakcji"
+"transakcji."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:175
-#, fuzzy
 msgid "_All Periods..."
-msgstr "Okres"
+msgstr "_Wszystkie okresy..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:177
-#, fuzzy
 msgid "Edit budget for all periods for the selected accounts."
-msgstr "Modyfikuje zaznaczone konto"
+msgstr "Edytuj budżet z wszystkich okresów dla wybranych kont."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:181
 #, fuzzy
@@ -4459,9 +4443,8 @@ msgid "Edit Note"
 msgstr "Nota kredytowa"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:183
-#, fuzzy
 msgid "Edit note for the selected account and period."
-msgstr "Modyfikuje zaznaczone konto"
+msgstr "Edytuj notatkę dla zaznaczonego konta i okresu."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:187
 #: gnucash/report/reports/standard/budget.scm:39
@@ -4469,15 +4452,12 @@ msgid "Budget Report"
 msgstr "Raport z budżetu"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:189
-#, fuzzy
-#| msgid "Print the current report"
 msgid "Run the budget report."
-msgstr "Drukuje bieżący raport"
+msgstr "Drukuje bieżący raport."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:199
-#, fuzzy
 msgid "Refresh this window."
-msgstr "Odświeża to okno"
+msgstr "Odśwież to okno."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:222
 #: gnucash/gnome/gnc-plugin-page-report.c:1137
