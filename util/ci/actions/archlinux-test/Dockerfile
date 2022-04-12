@@ -8,6 +8,5 @@ run echo en_US.UTF-8 UTF-8 >> /etc/locale.gen
 run echo en_GB.UTF-8 UTF-8 >> /etc/locale.gen
 run echo fr_FR.UTF-8 UTF-8 >> /etc/locale.gen
 run locale-gen
-run git config --global --add safe.directory /github/workspace
 copy entrypoint.sh /
 entrypoint /entrypoint.sh
