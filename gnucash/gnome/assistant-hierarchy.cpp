@@ -130,18 +130,23 @@ typedef struct
 
 } hierarchy_data;
 
-void on_prepare (GtkAssistant  *assistant, GtkWidget *page,
-                 hierarchy_data  *data);
+extern "C"
+{
+void on_prepare (GtkAssistant *assistant, GtkWidget *page,
+                 hierarchy_data *data);
+
+void on_cancel (GtkAssistant *gtkassistant, hierarchy_data *data);
+void on_finish (GtkAssistant *gtkassistant, hierarchy_data *data);
+
+void select_all_clicked (GtkButton *button,
+                         hierarchy_data *data);
+void clear_all_clicked (GtkButton *button,
+                        hierarchy_data *data);
+}
+
 void on_choose_account_categories_prepare (hierarchy_data  *data);
-void select_all_clicked (GtkButton       *button,
-                         hierarchy_data  *data);
-void clear_all_clicked (GtkButton       *button,
-                        hierarchy_data  *data);
 void on_final_account_prepare (hierarchy_data  *data);
 void on_select_currency_prepare (hierarchy_data  *data);
-void on_cancel (GtkAssistant      *gtkassistant, hierarchy_data *data);
-void on_finish (GtkAssistant  *gtkassistant, hierarchy_data *data);
-
 
 static void add_one_category (GncExampleAccount *acc, hierarchy_data *data);
 static void categories_page_enable_next (hierarchy_data *data);
