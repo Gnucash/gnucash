@@ -506,7 +506,6 @@ void GncOptionsDialog::call_apply_cb() noexcept
     if (m_apply_cb)
         (m_apply_cb)(this, m_apply_cb_data);
     m_close_cb = close_cb;
-    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(m_window));
     set_sensitive(false);
 }
 
@@ -518,7 +517,6 @@ void GncOptionsDialog::call_help_cb() noexcept
 
 void GncOptionsDialog::call_close_cb() noexcept
 {
-    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(m_window));
     if (m_close_cb)
     {
         gtk_window_close(GTK_WINDOW(m_window));
@@ -556,6 +554,7 @@ dialog_help_button_cb(GtkWidget * widget, GncOptionsDialog *win)
 static void
 dialog_cancel_button_cb(GtkWidget * widget, GncOptionsDialog *win)
 {
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(win->get_widget()));
     win->call_close_cb();
 }
 
@@ -563,6 +562,7 @@ dialog_cancel_button_cb(GtkWidget * widget, GncOptionsDialog *win)
 static void
 dialog_apply_button_cb(GtkWidget * widget, GncOptionsDialog *win)
 {
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(win->get_widget()));
     win->call_apply_cb();
 }
 
@@ -645,7 +645,6 @@ static void
 component_close_handler (gpointer data)
 {
     GncOptionsDialog *win = static_cast<decltype(win)>(data);
-    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(win->get_widget()));
     dialog_cancel_button_cb (NULL, win);
 }
 
