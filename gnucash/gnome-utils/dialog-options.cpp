@@ -1893,6 +1893,7 @@ public:
     {
         auto widget{GTK_TREE_VIEW(get_widget())};
         auto selection{gtk_tree_view_get_selection(widget)};
+        g_signal_handlers_block_by_func(selection, (gpointer)list_changed_cb, &option);
         gtk_tree_selection_unselect_all(selection);
         for (auto index : option.get_value<GncMultichoiceOptionIndexVec>())
         {
@@ -1900,6 +1901,7 @@ public:
             gtk_tree_selection_select_path(selection, path);
             gtk_tree_path_free(path);
         }
+        g_signal_handlers_unblock_by_func(selection, (gpointer)list_changed_cb, &option);
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
