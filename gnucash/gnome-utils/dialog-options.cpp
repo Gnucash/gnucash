@@ -1248,7 +1248,6 @@ RelativeDateEntry::set_option_from_entry(GncOption& option)
 void
 RelativeDateEntry::block_signals(bool block)
 {
-    auto entry{G_OBJECT(GNC_DATE_EDIT(m_entry)->date_entry)};
     if (block)
         g_signal_handler_block(m_entry, m_handler_id);
     else
