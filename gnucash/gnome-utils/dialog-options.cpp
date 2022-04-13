@@ -304,18 +304,12 @@ gnc_option_set_ui_widget(GncOption& option, GtkGrid *page_box, gint grid_row)
     }
     if (!packed && (enclosing != NULL))
     {
-        /* Pack option widget into an extra eventbox because otherwise the
-           "documentation" tooltip is not displayed. */
-        GtkWidget *eventbox = gtk_event_box_new();
-
-        gtk_container_add (GTK_CONTAINER (eventbox), enclosing);
-
         /* attach the option widget to the second column of the grid */
-        gtk_grid_attach (GTK_GRID(page_box), eventbox,
+        gtk_grid_attach (GTK_GRID(page_box), enclosing,
                          1, grid_row, // left, top
                          1, 1);  // width, height
 
-        gtk_widget_set_tooltip_text (eventbox, documentation);
+        gtk_widget_set_tooltip_text (enclosing, documentation);
     }
 
     if (value != NULL)
@@ -1462,15 +1456,10 @@ create_date_option_widget(GncOption& option, GtkGrid *page_box,
 
     gtk_widget_set_halign (GTK_WIDGET(*enclosing), GTK_ALIGN_START);
 
-    /* Pack option widget into an extra eventbox because otherwise the
-       "documentation" tooltip is not displayed. */
-    auto eventbox = gtk_event_box_new();
-    gtk_container_add (GTK_CONTAINER (eventbox), *enclosing);
-
-    gtk_grid_attach (GTK_GRID(page_box), eventbox, 1, grid_row, 1, 1);
+    gtk_grid_attach (GTK_GRID(page_box), *enclosing, 1, grid_row, 1, 1);
     *packed = TRUE;
 
-    gtk_widget_set_tooltip_text (eventbox, documentation);
+    gtk_widget_set_tooltip_text (*enclosing, documentation);
 
     auto ui_item{dynamic_cast<GncOptionDateUIItem*>(option.get_ui_item())};
     if (auto date_ui{ui_item ? ui_item->get_entry() : nullptr})
@@ -2020,15 +2009,10 @@ create_option_widget<GncOptionUIType::LIST> (GncOption& option,
 
     align_label (name_label);
 
-    /* Pack option widget into an extra eventbox because otherwise the
-       "documentation" tooltip is not displayed. */
-    auto eventbox = gtk_event_box_new();
-    gtk_container_add (GTK_CONTAINER (eventbox), *enclosing);
-
-    gtk_grid_attach (GTK_GRID(page_box), eventbox, 1, grid_row, 1, 1);
+    gtk_grid_attach (GTK_GRID(page_box), *enclosing, 1, grid_row, 1, 1);
     *packed = TRUE;
 
-    gtk_widget_set_tooltip_text(eventbox, documentation);
+    gtk_widget_set_tooltip_text(*enclosing, documentation);
 
     gtk_widget_show(*enclosing);
     return value;
