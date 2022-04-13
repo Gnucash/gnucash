@@ -1986,11 +1986,6 @@ create_list_widget(GncOption& option, char *name)
 
     g_object_set (G_OBJECT(hbox), "margin", 3, NULL);
 
-    option.set_ui_item(std::make_unique<GncGtkListUIItem>(GTK_WIDGET(view)));
-    option.set_ui_item_from_option();
-
-    gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(view), FALSE, FALSE, 0);
-
     return frame;
 }
 
