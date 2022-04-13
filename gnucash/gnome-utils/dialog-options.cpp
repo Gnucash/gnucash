@@ -2186,15 +2186,15 @@ public:
         GncOptionGtkUIItem{widget, GncOptionUIType::FONT} {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
-        GtkFontButton *font_button = GTK_FONT_BUTTON(get_widget());
-        gtk_font_button_set_font_name(font_button,
+        GtkFontChooser *font_chooser = GTK_FONT_CHOOSER(get_widget());
+        gtk_font_chooser_set_font(font_chooser,
                                       option.get_value<std::string>().c_str());
 
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
-        GtkFontButton *font_button = GTK_FONT_BUTTON(get_widget());
-        option.set_value(std::string{gtk_font_button_get_font_name(font_button)});
+        GtkFontChooser *font_chooser = GTK_FONT_CHOOSER(get_widget());
+        option.set_value(std::string{gtk_font_chooser_get_font(font_chooser)});
     }
 };
 
