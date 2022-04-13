@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-04-12 02:10+0000\n"
+"PO-Revision-Date: 2022-04-13 19:11+0000\n"
 "Last-Translator: 154pinkchairs <ovehis@riseup.net>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
@@ -3917,7 +3917,7 @@ msgstr "Pokaż wszystkie powiązania transakcji"
 
 #: gnucash/gnome/gnc-plugin-business.c:283
 msgid "Sales _Tax Table"
-msgstr "Tabela podatkowa dla sprzedaży"
+msgstr "Tab_ela podatkowa dla sprzedaży"
 
 #: gnucash/gnome/gnc-plugin-business.c:284
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
@@ -3935,7 +3935,7 @@ msgstr "Wyświetla i pozwala na modyfikację terminów płatności"
 
 #: gnucash/gnome/gnc-plugin-business.c:293
 msgid "Bills _Due Reminder"
-msgstr "Przypomnienia o płatnościach"
+msgstr "Prz_ypomnienia o płatnościach"
 
 #: gnucash/gnome/gnc-plugin-business.c:294
 msgid "Open the Bills Due Reminder dialog"
@@ -4472,9 +4472,8 @@ msgid "Estimate"
 msgstr "Oszacuj"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:224
-#, fuzzy
 msgid "All Periods"
-msgstr "Okres"
+msgstr "Wszystkie okresy"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:225
 #, fuzzy
@@ -4732,7 +4731,7 @@ msgstr "E_dytuj rachunek"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:319
 msgid "_Duplicate Bill"
-msgstr "Duplikuj rachunek"
+msgstr "D_uplikuj rachunek"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:320
 #, fuzzy
@@ -5422,7 +5421,7 @@ msgstr "Usuń wszystkie podziały bieżącej transakcji"
 #: gnucash/gnome/gnc-plugin-page-register2.c:305
 #: gnucash/gnome/gnc-plugin-page-register.c:414
 msgid "_Enter Transaction"
-msgstr "Wprowadź transakcję"
+msgstr "Wp_rowadź transakcję"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:306
 #: gnucash/gnome/gnc-plugin-page-register.c:415
@@ -9269,7 +9268,7 @@ msgstr "_Zbilansuj ręcznie"
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:289
 #: gnucash/register/ledger-core/split-register-control.c:140
 msgid "Let GnuCash _add an adjusting split"
-msgstr "Pozwól programowi GnuCash dodać podział regulujący"
+msgstr "Pozwól programowi GnuCash _dodać podział regulujący"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:294
 #: gnucash/register/ledger-core/split-register-control.c:145
@@ -10406,14 +10405,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:113
-#, fuzzy
 msgid "Name of the report to run\n"
-msgstr "Nazwa firmy"
+msgstr "Nazwa raportu do wygenerowania\n"
 
 #: gnucash/gnucash-cli.cpp:115
-#, fuzzy
 msgid "Specify export type\n"
-msgstr "Wybierz typ zniżki"
+msgstr "Wybierz typ eksportu\n"
 
 #: gnucash/gnucash-cli.cpp:117
 #, fuzzy
@@ -13319,7 +13316,7 @@ msgstr "_Wybierz konta subkonta"
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:625
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:470
 msgid "Select _All"
-msgstr "Zaznacz wszystko"
+msgstr "Z_aznacz wszystko"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:426
 #: gnucash/gtkbuilder/assistant-loan.glade:1208
@@ -13339,7 +13336,7 @@ msgstr "Zaznacz _wszystkie"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:456
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:141
 msgid "Select _Range"
-msgstr "Wybierz zakres"
+msgstr "Wybierz za_kres"
 
 #. Filter By Dialog, Date Tab, Start section
 #: gnucash/gtkbuilder/assistant-csv-export.glade:484
@@ -17493,7 +17490,7 @@ msgstr "Automatycznie wywołaj listę kont lub zadań w czasie wprowadzania."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2811
 msgid "Tab order in_cludes Transfer on Memorised Transactions"
-msgstr "Kolejność TAB uwzględnia pole Transfer w zapamiętanych transakcjach"
+msgstr "Kolejność TAB uwz_ględnia pole Transfer w zapamiętanych transakcjach"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2817
 msgid "Move to Transfer field when memorised transaction auto filled."
@@ -18568,7 +18565,7 @@ msgstr "<b>Wpisy tabeli podatkowej</b>"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:197
 msgid "De_lete"
-msgstr "Usuń"
+msgstr "_Usuń"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:212
 msgid "Ne_w"
@@ -19204,9 +19201,8 @@ msgid "On the"
 msgstr "Dzień"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:15
-#, fuzzy
 msgid "Edit budget for all periods"
-msgstr "Okres budżetu:"
+msgstr "Edytuj budżet dla wszystkich okresów"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:117
 msgid "Replace"
@@ -21296,7 +21292,7 @@ msgstr "_Rozciągnij kolumnę"
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1325
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1247
 msgid "_Narrow this column"
-msgstr "Zwęź bieżącą kolumnę"
+msgstr "Zwęź _bieżącą kolumnę"
 
 #. Translators: This is a ngettext(3) message, %d is the number of prices added
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1884
@@ -22293,7 +22289,7 @@ msgstr "Wypełniacz"
 
 #: gnucash/import-export/qif-imp/gnc-plugin-qif-import.c:48
 msgid "Import _QIF..."
-msgstr "Zaimportuj plik QIF..."
+msgstr "Zaimportuj plik _QIF..."
 
 #: gnucash/import-export/qif-imp/gnc-plugin-qif-import.c:49
 msgid "Import a Quicken QIF file"
@@ -23651,7 +23647,7 @@ msgstr "Przykłady"
 
 #: gnucash/report/report-core.scm:156
 msgid "_Experimental"
-msgstr "Eksprymentalny"
+msgstr "_Eksprymentalny"
 
 #: gnucash/report/report-core.scm:157
 #, fuzzy

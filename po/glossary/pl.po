@@ -3,14 +3,15 @@
 # A. Tokarski <szczur@malinablue.punkt.pl>, 2005.
 # Updated to 2.2.x by nowak2000@poczta.onet.pl
 # Henio Szewczyk <henryk.szewczyk09@gmail.com>, 2021.
+# 154pinkchairs <ovehis@riseup.net>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-01-02 22:54+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2022-04-13 19:11+0000\n"
+"Last-Translator: 154pinkchairs <ovehis@riseup.net>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "pl/>\n"
 "Language: pl\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.12-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -881,7 +882,7 @@ msgid "due"
 msgstr ""
 
 msgid "Online"
-msgstr ""
+msgstr "Online"
 
 msgid "Direct Debit"
-msgstr ""
+msgstr "Polecenie zapłaty"
