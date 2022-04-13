@@ -299,7 +299,6 @@ void gnc_import_TransInfo_delete (GNCImportTransInfo *info)
 GdkPixbuf* gen_probability_pixbuf(gint score_original, GNCImportSettings *settings, GtkWidget * widget)
 {
     GdkPixbuf* retval = NULL;
-    gint i, j;
     gint score;
     const gint height = 15;
     const gint width_each_bar = 7;
@@ -312,24 +311,20 @@ GdkPixbuf* gen_probability_pixbuf(gint score_original, GNCImportSettings *settin
     const gint num_colors = 5;
     gchar * size_str;
     gchar * none_color_str = g_strdup_printf("  c None");
-    gchar * green_color_str = g_strdup_printf("g c green");
-    gchar * yellow_color_str = g_strdup_printf("y c yellow");
-    gchar * red_color_str = g_strdup_printf("r c red");
-    gchar * black_color_str = g_strdup_printf("b c black");
+    gchar * green_color_str = g_strdup_printf("g c #2ECC40");
+    gchar * yellow_color_str = g_strdup_printf("y c #FFDC00");
+    gchar * red_color_str = g_strdup_printf("r c #FF4136");
+    gchar * black_color_str = g_strdup_printf("b c #111111");
     gchar * xpm[2+num_colors+height];
     gint add_threshold, clear_threshold;
 
     g_assert(settings);
     g_assert(widget);
-    if (score_original < 0)
-    {
-        score = 0;
-    }
-    else
-    {
-        score = score_original;
-    }
-    size_str = g_strdup_printf("%d%s%d%s%d%s", (width_each_bar * score) + width_first_bar/*width*/, " ", height, " ", num_colors, " 1"/*characters per pixel*/);
+
+    score = (score_original < 0) ? 0 : score_original;
+    size_str = g_strdup_printf("%d %d %d 1",
+                               (width_each_bar * score) + width_first_bar, /*width*/
+                               height, num_colors);
 
     /*DEBUG("Begin");*/
     xpm[0] = size_str;
@@ -341,46 +336,22 @@ GdkPixbuf* gen_probability_pixbuf(gint score_original, GNCImportSettings *settin
     add_threshold = gnc_import_Settings_get_add_threshold(settings);
     clear_threshold = gnc_import_Settings_get_clear_threshold(settings);
 
-    for (i = 0; i < height; i++)
+    for (gint i = 0; i < height; i++)
     {
         xpm[num_colors+1+i] = g_new0(char, (width_each_bar * score) + width_first_bar + 1);
-        for (j = 0; j <= score; j++)
+        for (gint j = 0; j <= score; j++)
         {
-            if (i == 0 || i == height - 1)
-            {
-                if (j == 0)
-                {
-                    strcat(xpm[num_colors+1+i], black_first_bar);
-                }
-                else
-                {
-                    strcat(xpm[num_colors+1+i], black_bar);
-                }
-            }
-            else
-            {
-                if (j == 0)
-                {
-                    strcat(xpm[num_colors+1+i], black_first_bar);
-                }
-                else if (j <= add_threshold)
-                {
-                    strcat(xpm[num_colors+1+i], red_bar);
-                }
-                else if (j >= clear_threshold)
-                {
-                    strcat(xpm[num_colors+1+i], green_bar);
-                }
-                else
-                {
-                    strcat(xpm[num_colors+1+i], yellow_bar);
-                }
-            }
+            strcat (xpm[num_colors+1+i],
+                    (i == 0 || i == height - 1) ? (j ? black_bar : black_first_bar) :
+                    (j == 0) ? black_first_bar :
+                    (j <= add_threshold) ? red_bar :
+                    (j >= clear_threshold) ? green_bar :
+                    yellow_bar);
         }
     }
 
     retval =  gdk_pixbuf_new_from_xpm_data((const gchar **)xpm);
-    for (i = 0; i <= num_colors + height; i++)
+    for (gint i = 0; i <= num_colors + height; i++)
     {
         /*DEBUG("free_loop i=%d%s%s",i,": ",xpm[i]);*/
         g_free(xpm[i]);
