@@ -1365,7 +1365,7 @@ class GncOptionDateUIItem : public GncOptionGtkUIItem
 {
 public:
     GncOptionDateUIItem(GncDateEntryPtr entry, GncOptionUIType type) :
-        GncOptionGtkUIItem{nullptr, type}, m_entry{std::move(entry)} { }
+        GncOptionGtkUIItem{entry->get_widget(), type}, m_entry{std::move(entry)} { }
     ~GncOptionDateUIItem() = default;
     void clear_ui_item() override { m_entry = nullptr; }
     void set_ui_item_from_option(GncOption& option) noexcept override
