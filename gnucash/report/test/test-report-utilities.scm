@@ -546,9 +546,11 @@
             (account-lookup "GBP Savings")
             (account-lookup "Expenses")
             (account-lookup "Fuel"))
-      (gnc:accounts-and-all-descendants
-       (list (account-lookup "Expenses")
-             (account-lookup "GBP Bank"))))
+      (sort
+       (gnc-accounts-and-all-descendants
+        (list (account-lookup "Expenses")
+              (account-lookup "GBP Bank")))
+       gnc:account-full-name<?))
 
     (teardown)))
 

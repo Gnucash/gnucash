@@ -686,7 +686,7 @@
                                                    optname-period-collapse-after)))
          (doc (gnc:make-html-document))
          (accounts (if show-subaccts?
-                       (gnc:accounts-and-all-descendants accounts)
+                       (gnc-accounts-and-all-descendants accounts)
                        accounts)))
     ;; end of defines
 

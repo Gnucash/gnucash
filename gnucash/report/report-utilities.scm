@@ -234,9 +234,10 @@
 
 ;; Return accountslist *and* their descendant accounts
 (define (gnc:accounts-and-all-descendants accountslist)
-  (sort-and-delete-duplicates
-   (apply append accountslist (map gnc-account-get-descendants accountslist))
-   gnc:account-path-less-p equal?))
+  (issue-deprecation-warning "gnc:accounts-and-all-descendants is \
+now deprecated, use gnc-accounts-and-all-descendants instead. sort \
+with gnc:account-full-name<? if necessary.")
+  (sort (gnc-accounts-and-all-descendants accountslist) gnc:account-full-name<?))
 
 ;;; Here's a statistics collector...  Collects max, min, total, and makes
 ;;; it easy to get at the mean.

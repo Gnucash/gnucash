@@ -232,10 +232,10 @@
     (define (default-testing-options)
       (let ((options (gnc:make-report-options rpt-uuid)))
         (set-option! options "Accounts" "Sales"
-                     (gnc:accounts-and-all-descendants
+                     (gnc-accounts-and-all-descendants
                       (list (get-acct "Income"))))
         (set-option! options "Accounts" "Purchases"
-                     (gnc:accounts-and-all-descendants
+                     (gnc-accounts-and-all-descendants
                       (list (get-acct "Expenses"))))
         (set-option! options "Accounts" "Tax Accounts"
                      (list (get-acct "Purchases VAT")
