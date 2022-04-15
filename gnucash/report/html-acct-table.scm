@@ -697,7 +697,7 @@
           (for-each
            (lambda (acct)
              (this-collector 'merge (get-balance acct-balances acct) #f))
-           (gnc:accounts-and-all-descendants (list account)))
+           (cons account (gnc-account-get-descendants-sorted account)))
           this-collector))
 
       (let lp ((accounts (if less-p (sort accts less-p) accts))

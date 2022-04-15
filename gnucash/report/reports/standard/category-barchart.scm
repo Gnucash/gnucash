@@ -294,7 +294,7 @@ developing over time"))
 
      (else
       (let* ((commodity-list (gnc:accounts-get-commodities
-                              (gnc:accounts-and-all-descendants accounts)
+                              (gnc-accounts-and-all-descendants accounts)
                               report-currency))
              (exchange-fn (gnc:case-exchange-time-fn
                            price-source report-currency
@@ -394,7 +394,7 @@ developing over time"))
                       #:nosplit->elt (gnc:make-gnc-monetary comm 0)))))
            ;; all selected accounts (of report-specific type), *and*
            ;; their descendants (of any type) need to be scanned.
-           (gnc:accounts-and-all-descendants accounts)))
+           (gnc-accounts-and-all-descendants accounts)))
 
         ;; Creates the <balance-list> to be used in the function
         ;; below.

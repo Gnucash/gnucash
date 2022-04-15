@@ -186,7 +186,7 @@
           ;; needed so as to amortize the cpu time properly.
 	  (gnc:report-percent-done 1)
 	  (set! commodity-list (gnc:accounts-get-commodities
-                                (gnc:accounts-and-all-descendants accounts)
+                                (gnc-accounts-and-all-descendants accounts)
                                 report-currency))
           (gnc:report-percent-done 5)
           (set! exchange-fn (gnc:case-exchange-time-fn
@@ -208,7 +208,7 @@
           (gnc:report-percent-done 25)
           (if dosubs?
                (set! accounts
-                 (gnc:accounts-and-all-descendants accounts)))
+                 (gnc-accounts-and-all-descendants accounts)))
           (gnc:report-percent-done 30)
 
           (xaccQueryAddAccountMatch
