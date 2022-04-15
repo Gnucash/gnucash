@@ -195,6 +195,17 @@ static AccountParms complex_accts[] =
 
 };
 
+static AccountParms complex_accts_duplicated[] =
+{
+    {ACCT_TYPE_EXPENSE, "A", "root", "1A", "", "", "", "", NULL},
+    {ACCT_TYPE_EXPENSE, "B", "root", "1B", "", "", "", "", NULL},
+    {ACCT_TYPE_EXPENSE, "C", "root", "1C", "", "", "", "", NULL},
+    {ACCT_TYPE_EXPENSE, "D", "A", "2D", "", "", "", "", NULL},
+    {ACCT_TYPE_EXPENSE, "E", "B", "2E", "", "", "", "", NULL},
+    {ACCT_TYPE_EXPENSE, "F", "C", "2F", "", "", "", "", NULL},
+    {ACCT_TYPE_EXPENSE, "B", "D", "3B", "", "", "", "", NULL},
+};
+
 static TxnParms lot_txns[] =
 {
     {
@@ -256,6 +267,10 @@ static TxnParms lot_txns[] =
 static SetupData complex = {G_N_ELEMENTS (complex_accts),
                             (AccountParms**)(&complex_accts), 0, NULL
                            };
+
+static SetupData complex_duplicated = {G_N_ELEMENTS (complex_accts_duplicated),
+    (AccountParms**)(&complex_accts_duplicated), 0, NULL
+};
 
 static SetupData complex_data = {G_N_ELEMENTS (complex_accts),
                                  (AccountParms**)(&complex_accts),
@@ -1885,6 +1900,24 @@ test_gnc_account_lookup_by_name (Fixture *fixture, gconstpointer pData)
     g_free (code);
 
 }
+
+/* gnc_account_lookup_by_name
+Account *
+gnc_account_lookup_by_name_duplicated (const Account *parent, const char * name)
+ */
+static void
+test_gnc_account_lookup_by_name_duplicated (Fixture *fixture, gconstpointer pData)
+{
+    Account *root, *target;
+    gchar *code;
+    root = gnc_account_get_root (fixture->acct);
+    target = gnc_account_lookup_by_name (root, "B");
+    g_assert (target != NULL);
+    g_object_get (target, "code", &code, NULL);
+    g_assert_cmpstr (code, == , "1B");
+    g_free (code);
+}
+
 /* gnc_account_lookup_by_code
 Account *
 gnc_account_lookup_by_code (const Account *parent, const char * code)// C: 5 in 3 */
@@ -2789,6 +2822,7 @@ test_suite_account (void)
     GNC_TEST_ADD (suitename, "gnc account get descendants", Fixture, &complex, setup, test_gnc_account_get_descendants,  teardown );
     GNC_TEST_ADD (suitename, "gnc account get descendants sorted", Fixture, &complex, setup, test_gnc_account_get_descendants_sorted,  teardown );
     GNC_TEST_ADD (suitename, "gnc account lookup by name", Fixture, &complex, setup, test_gnc_account_lookup_by_name,  teardown );
+    GNC_TEST_ADD (suitename, "gnc account lookup by name - duplicated", Fixture, &complex_duplicated, setup, test_gnc_account_lookup_by_name_duplicated,  teardown );
     GNC_TEST_ADD (suitename, "gnc account lookup by code", Fixture, &complex, setup, test_gnc_account_lookup_by_code,  teardown );
     GNC_TEST_ADD (suitename, "gnc account lookup by full name helper", Fixture, &complex, setup, test_gnc_account_lookup_by_full_name_helper,  teardown );
     GNC_TEST_ADD (suitename, "gnc account lookup by full name", Fixture, &complex, setup, test_gnc_account_lookup_by_full_name,  teardown );
