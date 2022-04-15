@@ -135,8 +135,8 @@ endmacro(find_guile_dirs)
 # If keyword TEST is specified this target will be treated as a test target.
 # That is its compiled files won't be installed and will be added to the set
 # of tests to run via the "check" target. If TEST is not set the targets are
-# considerd normal targets and will be added to the list of files to install.
-# They will be installed in the guile compied directory relative to the prefix
+# considered normal targets and will be added to the list of files to install.
+# They will be installed in the guile compiled directory relative to the prefix
 # set up for this build, with the OUTPUT_DIR appended to it. For example:
 # /usr/local/lib/x86_64-linux-gnu/guile/2.0/site-cache/gnucash
 function(gnc_add_scheme_targets _TARGET)

@@ -9,14 +9,15 @@
 # ashalash1409 <ashalash1409@hotmail.com>, 2013
 # khadiramd <khadird@yahoo.com>, 2013
 # ButterflyOfFire <ButterflyOfFire@protonmail.com>, 2022.
+# ltai0001 <yltaief@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-25 19:09+0000\n"
-"Last-Translator: ButterflyOfFire <ButterflyOfFire@protonmail.com>\n"
+"PO-Revision-Date: 2022-04-10 21:10+0000\n"
+"Last-Translator: ltai0001 <yltaief@gmail.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ar/>\n"
 "Language: ar\n"
@@ -678,7 +679,7 @@ msgid ""
 "the Menu key or the Ctrl-Down key combination."
 msgstr ""
 "لرفع قائمة الحسابات في مجال التحويلات في صفحة السجل، اضغط مفتاح القائمة أو "
-"تركيبة المفاتيح تحكم+سهم لأسفل"
+"تركيبة المفاتيح تحكم+سهم لأسفل."
 
 #: doc/tip_of_the_day.list.c:108
 msgid ""
@@ -903,17 +904,14 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/assistant-hierarchy.c:1495
-#, fuzzy
 msgid "Please choose the currency to use for new accounts."
-msgstr ""
-"\n"
-"الرجاء اختيار عملة لاستخدامها في الحسابات جديدة."
+msgstr "الرجاء اختيار عملة لاستخدامها في الحسابات جديدة."
 
 #: gnucash/gnome/assistant-hierarchy.c:1540
 #: gnucash/gnome/assistant-hierarchy.c:1559
 #: gnucash/gnome-utils/dialog-utils.c:810
 msgid "New Book Options"
-msgstr "خيارات دفتر جديد."
+msgstr "خيارات دفتر جديد"
 
 #: gnucash/gnome/assistant-loan.cpp:128
 msgid "Taxes"
@@ -1245,7 +1243,7 @@ msgid ""
 "You must provide a unique name for this Billing Term. Your choice \"%s\" is "
 "already in use."
 msgstr ""
-"يجب توفير اسم فريد لهذا الفترة للمطالبات.الاسم المدخل \"%s\" مستخدم من قبل"
+"يجب توفير اسم فريد لهذا الفترة للمطالبات.الاسم المدخل \"%s\" مستخدم من قبل."
 
 #: gnucash/gnome/dialog-billterms.c:531
 #: gnucash/gnome-utils/gnc-date-delta.c:222
@@ -2160,7 +2158,7 @@ msgstr "البحث عن المعاملات"
 #: gnucash/report/trep-engine.scm:944 gnucash/report/trep-engine.scm:1069
 #: gnucash/report/trep-engine.scm:1183
 msgid "Reconciled Date"
-msgstr "تاريخ التسوية "
+msgstr "تاريخ التسوية"
 
 #. Translators: This is a ngettext(3) message, %d is the number of maps missing
 #: gnucash/gnome/dialog-imap-editor.c:363
@@ -2420,8 +2418,8 @@ msgid ""
 "One or more selected invoices have already been posted.\n"
 "Re-check your selection."
 msgstr ""
-"يوجد فاتورة واحدة أو أكثر قد تم ترحيلها إلى الأستاذ العام\n"
-"أعد تحديد خياراتك"
+"يوجد فاتورة واحدة أو أكثر قد تم ترحيلها إلى الأستاذ العام.\n"
+"أعد تحديد خياراتك."
 
 #: gnucash/gnome/dialog-invoice.c:3257
 msgid "Do you really want to post these invoices?"
@@ -2636,11 +2634,11 @@ msgstr "مطالبات الواجب تذكرها"
 
 #: gnucash/gnome/dialog-job.c:139
 msgid "The Job must be given a name."
-msgstr "هذه الوظيفة يجب أن تعطى اسم"
+msgstr "هذه الوظيفة يجب أن تعطى اسم."
 
 #: gnucash/gnome/dialog-job.c:149
 msgid "You must choose an owner for this job."
-msgstr "يجب عليك إختيار صاحب هذه الوظيفة"
+msgstr "يجب عليك إختيار صاحب هذه الوظيفة."
 
 #: gnucash/gnome/dialog-job.c:157
 #, fuzzy
@@ -2747,7 +2745,7 @@ msgstr "المجموعات في حساب %s"
 
 #: gnucash/gnome/dialog-order.c:171
 msgid "The Order must be given an ID."
-msgstr "يجب ان يعطى الطلب معرف للطلب"
+msgstr "يجب ان يعطى معرف للطلب"
 
 #: gnucash/gnome/dialog-order.c:278
 msgid "The Order must have at least one Entry."
@@ -2969,21 +2967,20 @@ msgid "Are you sure you want to replace the existing price?"
 msgstr "هل أنت متأكد أنك تريد حذف السعر المحدد؟"
 
 #: gnucash/gnome/dialog-price-editor.c:232
-#, fuzzy
 msgid "Replace price?"
-msgstr "الأسعار المسجلة."
+msgstr "الأسعار المسجلة؟"
 
 #: gnucash/gnome/dialog-price-editor.c:238
 msgid "_Replace"
-msgstr ""
+msgstr "_إستبدل"
 
 #: gnucash/gnome/dialog-price-editor.c:269
 msgid "You must select a Security."
-msgstr "حدد الأمان"
+msgstr "من المفروض ان تحدد الأمان."
 
 #: gnucash/gnome/dialog-price-editor.c:274
 msgid "You must select a Currency."
-msgstr "إختر العملة"
+msgstr "إختر العملة."
 
 #: gnucash/gnome/dialog-price-editor.c:288
 #: gnucash/gnome-utils/dialog-transfer.c:1717
@@ -3126,12 +3123,12 @@ msgstr "لقد تغيرت العملية المجدولة. هل أنت متأك�
 #: gnucash/gnome/dialog-sx-editor2.c:636
 #, c-format
 msgid "Couldn't parse credit formula for split \"%s\"."
-msgstr "لا يمكن تحليل صيغة الائتمان للتقسيم %s"
+msgstr "لا يمكن تحليل صيغة الائتمان للتقسيم %s."
 
 #: gnucash/gnome/dialog-sx-editor2.c:658
 #, c-format
 msgid "Couldn't parse debit formula for split \"%s\"."
-msgstr "لا يمكن تحليل صيغة الخصم للتقسيم %s"
+msgstr "لا يمكن تحليل صيغة الخصم للتقسيم %s."
 
 #: gnucash/gnome/dialog-sx-editor2.c:691 gnucash/gnome/dialog-sx-editor.c:874
 #: gnucash/gnome/dialog-sx-from-trans.c:261
@@ -3219,7 +3216,7 @@ msgstr "المعاملات المجدولة مع متغيرات أو عدة عم
 #: gnucash/gnome/dialog-sx-editor.c:675
 #, c-format
 msgid "Couldn't parse %s for split \"%s\"."
-msgstr "لا يمكن تحليل %s للعملية \"%s\""
+msgstr "لا يمكن تحليل %s للعملية \"%s\"."
 
 #: gnucash/gnome/dialog-sx-editor.c:739
 #, c-format
@@ -3338,11 +3335,11 @@ msgstr "المعاملات التي تم إنشاؤها"
 
 #: gnucash/gnome/dialog-tax-info.c:287
 msgid "Last Valid Year: "
-msgstr "اخر سنة صالحة:"
+msgstr "اخر سنة صالحة: "
 
 #: gnucash/gnome/dialog-tax-info.c:288
 msgid "Form Line Data: "
-msgstr "نموذج خط البيانات:"
+msgstr "نموذج خط البيانات: "
 
 #. Translators: Tax Code
 #: gnucash/gnome/dialog-tax-info.c:290
@@ -3364,14 +3361,14 @@ msgstr "هوية ضريبة الدخل"
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:40
 #: gnucash/gtkbuilder/dialog-tax-info.glade:43
 msgid "_Apply"
-msgstr ""
+msgstr "_تطبيق"
 
 #: gnucash/gnome/dialog-tax-info.c:1239
 msgid ""
 "CAUTION: If you set TXF categories, and later change 'Type', you will need "
 "to manually reset those categories one at a time"
 msgstr ""
-"تحذير: إذا قمت بتعيين فئات TXF، وقمت لاحقا بتغيير النوع، ​سوف تحتاج إلى إعادة "
+"تحذير: إذا قمت بتعيين فئات TXF، وقمت لاحقا بتغيير النوع، سوف تحتاج إلى إعادة "
 "تعيين تلك الفئات يدويا كلا على حدة"
 
 #: gnucash/gnome/dialog-tax-info.c:1392
@@ -3481,7 +3478,7 @@ msgstr "مجموع"
 
 #: gnucash/gnome/gnc-plugin-account-tree.c:59
 msgid "New Accounts _Page"
-msgstr "صفحة حسابات جديدة"
+msgstr "_صفحة حسابات جديدة"
 
 #: gnucash/gnome/gnc-plugin-account-tree.c:60
 msgid "Open a new Account Tree page"
@@ -3489,7 +3486,7 @@ msgstr "فتح صفحة جديدة في \"شجرة تصنيف الحساب\""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:111
 msgid "New _File"
-msgstr "ملف جديد"
+msgstr "_ملف جديد"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:112
 msgid "Create a new file"
@@ -3516,7 +3513,7 @@ msgstr "حفظ الملف الحالي"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:126
 msgid "Save _As..."
-msgstr "حفظ باسم..."
+msgstr "حفظ _باسم..."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:127
 msgid "Save this file with a different name"
@@ -3524,7 +3521,7 @@ msgstr "حفظ هذا الملف مع اسم مختلف"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:131
 msgid "Re_vert"
-msgstr "الغاء التغييرات"
+msgstr "_الغاء التغييرات"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:132
 msgid "Reload the current database, reverting all unsaved changes"
@@ -3532,7 +3529,7 @@ msgstr "إعادة تحميل قاعدة البيانات الحالية، با�
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:137
 msgid "Export _Accounts"
-msgstr "تصدير الحسابات"
+msgstr "تصدير ال_حسابات"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:138
 msgid "Export the account hierarchy to a new GnuCash datafile"
@@ -3557,7 +3554,7 @@ msgstr "البحث عن المعاملات مع البحث"
 #: gnucash/gnome/gnc-plugin-page-register2.c:263
 #: gnucash/gnome/gnc-plugin-page-register.c:372
 msgid "Ta_x Report Options"
-msgstr "خيارات التقرير الضريبي"
+msgstr "خيارات التقرير ال_ضريبي"
 
 #. Translators: currently implemented are
 #. US: income tax and
@@ -3585,7 +3582,7 @@ msgstr "قائمة المعاملات المجدولة"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:171
 msgid "Since _Last Run..."
-msgstr "منذ آخر تشغيل..."
+msgstr "منذ آ_خر تشغيل..."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:172
 msgid "Create Scheduled Transactions since the last time run"
@@ -3602,20 +3599,19 @@ msgstr "إعداد المعاملات الجدولة لسداد قرض"
 #: gnucash/gnome/gnc-plugin-basic-commands.c:180
 #: gnucash/report/report-core.scm:153
 msgid "B_udget"
-msgstr "الميزانية"
+msgstr "ال_ميزانية"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:183
 msgid "Close _Books"
-msgstr "إغلاق الدفاتر"
+msgstr "إ_غلاق الدفاتر"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:184
 msgid "Archive old data using accounting periods"
 msgstr "أرشيف البيانات القديمة باستخدام الفترات المحاسبية"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:191
-#, fuzzy
 msgid "_Price Database"
-msgstr "قاعدة بيانات الأسعار"
+msgstr "قاعدة بيانات الأ_سعار"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:192
 msgid "View and edit the prices for stocks and mutual funds"
@@ -3639,7 +3635,7 @@ msgstr "استخدام حاسبة سداد القرض/الرهن العقاري"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:206
 msgid "_Close Book"
-msgstr "إغلق الدفتر"
+msgstr "إ_غلق الدفتر"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:207
 msgid "Close the Book at the end of the Period"
@@ -3700,9 +3696,8 @@ msgstr[5] ""
 "لا توجد معاملات مجدولة للإدخال في هذا الوقت. (تم إنشاء %d معاملة أليا)"
 
 #: gnucash/gnome/gnc-plugin-budget.c:63
-#, fuzzy
 msgid "_New Budget"
-msgstr "الميزانية الجديدة"
+msgstr "ال_ميزانية الجديدة"
 
 #: gnucash/gnome/gnc-plugin-budget.c:64
 #, fuzzy
@@ -3710,9 +3705,8 @@ msgid "Create a new Budget."
 msgstr "إنشاء ميزانية جديدة"
 
 #: gnucash/gnome/gnc-plugin-budget.c:69
-#, fuzzy
 msgid "_Open Budget"
-msgstr "فتح الميزانية"
+msgstr "_فتح الميزانية"
 
 #: gnucash/gnome/gnc-plugin-budget.c:70
 msgid ""
@@ -3781,7 +3775,7 @@ msgstr "فتح مربع الحوار \"العثور على العميل\""
 #: gnucash/gnome/gnc-plugin-business.c:319
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:201
 msgid "New _Invoice..."
-msgstr "فاتورة جديدة..."
+msgstr "_فاتورة جديدة..."
 
 #: gnucash/gnome/gnc-plugin-business.c:176
 #: gnucash/gnome/gnc-plugin-business.c:320
@@ -3790,7 +3784,7 @@ msgstr "فتح مربع الحوار \"فاتورة جديدة\""
 
 #: gnucash/gnome/gnc-plugin-business.c:180
 msgid "Find In_voice..."
-msgstr "العثور على الفاتورة..."
+msgstr "ال_عثور على الفاتورة..."
 
 #: gnucash/gnome/gnc-plugin-business.c:181
 msgid "Open the Find Invoice dialog"
@@ -3799,7 +3793,7 @@ msgstr "فتح مربع الحوار \"العثور على الفاتورة\""
 #: gnucash/gnome/gnc-plugin-business.c:185
 #: gnucash/gnome/gnc-plugin-business.c:228
 msgid "New _Job..."
-msgstr "الوظيفة الجديدة..."
+msgstr "ال_وظيفة الجديدة..."
 
 #: gnucash/gnome/gnc-plugin-business.c:186
 #: gnucash/gnome/gnc-plugin-business.c:229
@@ -3809,7 +3803,7 @@ msgstr "فتح مربع حوار وظيفة جديدة"
 #: gnucash/gnome/gnc-plugin-business.c:190
 #: gnucash/gnome/gnc-plugin-business.c:233
 msgid "Find Jo_b..."
-msgstr "البحث عن الوظيفة..."
+msgstr "ال_بحث عن الوظيفة..."
 
 #: gnucash/gnome/gnc-plugin-business.c:191
 #: gnucash/gnome/gnc-plugin-business.c:234
@@ -3843,7 +3837,7 @@ msgstr "_مورد"
 #: gnucash/gnome/gnc-plugin-business.c:208
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:160
 msgid "_New Vendor..."
-msgstr "مورد جديد ..."
+msgstr "مورد _جديد ..."
 
 #: gnucash/gnome/gnc-plugin-business.c:209
 msgid "Open the New Vendor dialog"
@@ -3851,7 +3845,7 @@ msgstr "فتح مربع حوار مورد جديد"
 
 #: gnucash/gnome/gnc-plugin-business.c:213
 msgid "_Find Vendor..."
-msgstr "العثور على المورد..."
+msgstr "ال_عثور على المورد..."
 
 #: gnucash/gnome/gnc-plugin-business.c:214
 msgid "Open the Find Vendor dialog"
@@ -3860,7 +3854,7 @@ msgstr "فتح مربع حوار بحث عن مورد"
 #: gnucash/gnome/gnc-plugin-business.c:218
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:196
 msgid "New _Bill..."
-msgstr "فاتورة جديدة..."
+msgstr "_فاتورة جديدة..."
 
 #: gnucash/gnome/gnc-plugin-business.c:219
 msgid "Open the New Bill dialog"
@@ -3868,7 +3862,7 @@ msgstr "فتح مربع حوار مطالبة جديدة"
 
 #: gnucash/gnome/gnc-plugin-business.c:223
 msgid "Find Bi_ll..."
-msgstr "بحث عن مطالبة"
+msgstr "_بحث عن مطالبة..."
 
 #: gnucash/gnome/gnc-plugin-business.c:224
 msgid "Open the Find Bill dialog"
@@ -3905,7 +3899,7 @@ msgstr "فتح مربع الحوار \"العثور على الموظف\""
 
 #: gnucash/gnome/gnc-plugin-business.c:261
 msgid "New _Expense Voucher..."
-msgstr "إيصال مصروفات جديد..."
+msgstr "إيصال _مصروفات جديد..."
 
 #: gnucash/gnome/gnc-plugin-business.c:262
 msgid "Open the New Expense Voucher dialog"
@@ -3913,7 +3907,7 @@ msgstr "أفتح صفحة نظرة عامة عن موظف"
 
 #: gnucash/gnome/gnc-plugin-business.c:266
 msgid "Find Expense _Voucher..."
-msgstr "العثور على إيصال المصاريف"
+msgstr "ال_عثور على إيصال المصاريف..."
 
 #: gnucash/gnome/gnc-plugin-business.c:267
 msgid "Open the Find Expense Voucher dialog"
@@ -3930,7 +3924,7 @@ msgstr "معلومات العملية"
 
 #: gnucash/gnome/gnc-plugin-business.c:283
 msgid "Sales _Tax Table"
-msgstr "جدول ضريبة المبيعات"
+msgstr "_جدول ضريبة المبيعات"
 
 #: gnucash/gnome/gnc-plugin-business.c:284
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
@@ -3966,7 +3960,7 @@ msgstr "فتح مربع الحوار \"تذكير فواتير مستحقة\""
 
 #: gnucash/gnome/gnc-plugin-business.c:302
 msgid "E_xport"
-msgstr "تصدير"
+msgstr "ت_صدير"
 
 #: gnucash/gnome/gnc-plugin-business.c:307
 #: gnucash/gnome/gnc-plugin-business.c:308
@@ -4008,7 +4002,7 @@ msgstr "إنشاء حساب جديد"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:204
 msgid "New Account _Hierarchy..."
-msgstr "التسلسل الهرمي لحساب جديد..."
+msgstr "تسلسل هرمي جديد للحساب..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:205
 msgid "Extend the current book by merging with new account type categories"
@@ -4019,7 +4013,7 @@ msgstr "تمديد الدفتر الحالي عن طريق الدمج مع فئ�
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:345
 #: gnucash/gnome/gnc-plugin-page-budget.c:146
 msgid "Open _Account"
-msgstr "فتح حساب"
+msgstr "_فتح حساب"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:211
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:222
@@ -4029,7 +4023,7 @@ msgstr "فتح الحساب المحدد"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:215
 msgid "Open _Old Style Register Account"
-msgstr "فتح نافذة دفتر أستاذ عام نمط قديم"
+msgstr "فتح نافذة دفتر أستاذ عام نمط _قديم"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:216
 msgid "Open the old style register selected account"
@@ -4039,7 +4033,7 @@ msgstr "فتح نافذة دفتر أستاذ عام نمط قديم محدد"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:240
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:350
 msgid "Open _SubAccounts"
-msgstr "فتح الحسابات الفرعية"
+msgstr "فتح الحسابات ال_فرعية"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:230
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:241
@@ -4049,7 +4043,7 @@ msgstr "فتح الحساب المحدد وجميع ما لها من الحسا�
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:234
 msgid "Open Old St_yle Subaccounts"
-msgstr "فتح الحسابات الفرعية بالنمط القديم"
+msgstr "فتح الحسابات الفرعية بالنمط ال_قديم"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:235
 msgid "Open the old style register selected account and all its subaccounts"
@@ -4059,7 +4053,7 @@ msgstr "فتح الحسابات بالنمط القديم و كذا كل حسا�
 #: gnucash/gnome/gnc-plugin-page-register2.c:245
 #: gnucash/gnome/gnc-plugin-page-register.c:354
 msgid "Edit _Account"
-msgstr "تحرير الحساب"
+msgstr "_تحرير الحساب"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:249
 #: gnucash/gnome/gnc-plugin-page-register2.c:246
@@ -4076,9 +4070,8 @@ msgid "Delete selected account"
 msgstr "حذف الحساب المحدد"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:258
-#, fuzzy
 msgid "_Cascade Account Properties..."
-msgstr "لون الحساب"
+msgstr "لون الحساب..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:259
 #, fuzzy
@@ -4128,7 +4121,7 @@ msgstr "_تصفية بواسطة..."
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:170
 #: gnucash/gnome-utils/gnc-main-window.c:351
 msgid "_Refresh"
-msgstr "تحديث"
+msgstr "ت_حديث"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:296
 #: gnucash/gnome/gnc-plugin-page-invoice.c:163
@@ -4145,7 +4138,7 @@ msgstr "تحديث هذه النافذة"
 #: gnucash/gnome/gnc-plugin-page-register2.c:357
 #: gnucash/gnome/gnc-plugin-page-register.c:475
 msgid "_Reconcile..."
-msgstr "تسوية"
+msgstr "_تسوية..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:303
 #: gnucash/gnome/gnc-plugin-page-register2.c:358
@@ -4157,7 +4150,7 @@ msgstr "التسوية بين الحسابات المختارة"
 #: gnucash/gnome/gnc-plugin-page-register2.c:362
 #: gnucash/gnome/gnc-plugin-page-register.c:480
 msgid "_Auto-clear..."
-msgstr "مسح تلقائي"
+msgstr "مسح _تلقائي..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:308
 msgid "Automatically clear individual transactions, given a cleared amount"
@@ -4181,7 +4174,7 @@ msgstr "نقل الأموال من حساب واحد إلى آخر"
 #: gnucash/gnome/gnc-plugin-page-register2.c:367
 #: gnucash/gnome/gnc-plugin-page-register.c:485
 msgid "Stoc_k Split..."
-msgstr "تجزئة السهم"
+msgstr "تجزئة ال_سهم..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:318
 #: gnucash/gnome/gnc-plugin-page-register2.c:368
@@ -4193,7 +4186,7 @@ msgstr "تسجيل تجزئة السهم أو الاندماج الأسهم"
 #: gnucash/gnome/gnc-plugin-page-register2.c:372
 #: gnucash/gnome/gnc-plugin-page-register.c:490
 msgid "View _Lots..."
-msgstr "عرض المجموعات"
+msgstr "عرض ال_مجموعات..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:323
 #: gnucash/gnome/gnc-plugin-page-register2.c:373
@@ -4203,7 +4196,7 @@ msgstr "عارض/محرر المجموعات"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:327
 msgid "Check & Repair A_ccount"
-msgstr "فحص وإصلاح حساب"
+msgstr "فحص وإ_صلاح حساب"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:328
 #: gnucash/gnome/window-reconcile2.c:2174 gnucash/gnome/window-reconcile.c:2436
@@ -4215,7 +4208,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:332
 msgid "Check & Repair Su_baccounts"
-msgstr "فحص و إصلاح الحسابات الفرعية"
+msgstr "فحص و إصلاح الحسابات ال_فرعية"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:333
 msgid ""
@@ -4227,7 +4220,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:338
 msgid "Check & Repair A_ll"
-msgstr "فحص & و إصلاح الجميع"
+msgstr "فحص و إصلاح ال_جميع"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:339
 msgid ""
@@ -4240,7 +4233,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:343
 #: gnucash/gnome/gnc-plugin-register2.c:64
 msgid "_Register2"
-msgstr "سجل2"
+msgstr "_دفتر2"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:406
 msgid "Open2"
@@ -4313,13 +4306,14 @@ msgid "Accounts"
 msgstr "حسابات"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1430
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Account %s does not have the same currency as the one you're moving "
 "transactions from.\n"
 "Are you sure you want to do this?"
 msgstr ""
-"أنت على وشك الكتابة فوق المعاملة قائمة. هل أنت متأكد أنك تريد أن تفعل ذلك؟"
+"أنت على وشك الكتابة فوق المعاملة قائمة.\n"
+"هل أنت متأكد أنك تريد أن تفعل ذلك؟"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1438
 #, fuzzy
@@ -4404,7 +4398,7 @@ msgstr "فتح الحساب المحدد"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:152
 msgid "Open _Subaccounts"
-msgstr "فتح الحسابات الفرعية"
+msgstr "فتح ال_حسابات الفرعية"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:153
 #, fuzzy
@@ -4421,9 +4415,8 @@ msgid "Select this or another budget and delete it."
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:164
-#, fuzzy
 msgid "Budget _Options..."
-msgstr "خيارات الميزانية"
+msgstr "خيارات ال_ميزانية..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:165
 #, fuzzy
@@ -4431,9 +4424,8 @@ msgid "Edit this budget's options."
 msgstr "تحرير خيارات هذه الميزانية"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:169
-#, fuzzy
 msgid "Esti_mate Budget..."
-msgstr "تقديرات الميزانية"
+msgstr "ت_قديرات الميزانية..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:171
 #, fuzzy
@@ -4443,9 +4435,8 @@ msgstr ""
 "تقدير قيمة الميزانية لحسابات التقديرية المختارة بناء على المعاملات السابقة"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:175
-#, fuzzy
 msgid "_All Periods..."
-msgstr "الفترة"
+msgstr "_كل الفترات..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:177
 #, fuzzy
@@ -4596,7 +4587,7 @@ msgstr "قم بإنشاء نسخة من الإدخال الحالي"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:204
 msgid "Move Entry _Up"
-msgstr "نقل الإدخال لأعلى"
+msgstr "نقل الإدخال لأ_على"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:205
 msgid "Move the current entry one row upwards"
@@ -4604,7 +4595,7 @@ msgstr "نقل الإدخال الحالي سطرا واحدا لأعلى"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:209
 msgid "Move Entry Do_wn"
-msgstr "نقل الإدخال لأسفل"
+msgstr "نقل الإدخال لأ_سفل"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:210
 msgid "Move the current entry one row downwards"
@@ -4677,9 +4668,8 @@ msgid "Sort by description"
 msgstr "فرز حسب الوصف"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:296
-#, fuzzy
 msgid "_Print Invoice"
-msgstr "طباعة الفاتورة"
+msgstr "_طباعة الفاتورة"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:297
 msgid "_Edit Invoice"
@@ -4724,9 +4714,8 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-invoice.c:346
 #: gnucash/gnome/gnc-plugin-page-invoice.c:367
 #: gnucash/gnome/gnc-plugin-page-register.c:304
-#, fuzzy
 msgid "_Open Linked Document"
-msgstr "حساب جديد"
+msgstr "إفتح المستند ال_مرتبط"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:310
 msgid "_Use as Default Layout for Customer Documents"
@@ -4737,24 +4726,20 @@ msgid "_Reset Default Layout for Customer Documents"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:317
-#, fuzzy
 msgid "_Print Bill"
-msgstr "طباعة"
+msgstr "_طباعة الفاتورة"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:318
-#, fuzzy
 msgid "_Edit Bill"
-msgstr "تعديل الفاتورة"
+msgstr "ت_عديل الفاتورة"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:319
-#, fuzzy
 msgid "_Duplicate Bill"
-msgstr "مكررة"
+msgstr "ت_كرير الفاتورة"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:320
-#, fuzzy
 msgid "_Post Bill"
-msgstr "دفع الفاتورة"
+msgstr "_دفع الفاتورة"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:321
 #, fuzzy
@@ -4762,14 +4747,12 @@ msgid "_Unpost Bill"
 msgstr "_إلغ ترحيل هذه الفاتورة"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:322
-#, fuzzy
 msgid "New _Bill"
-msgstr "فاتورة جديدة"
+msgstr "فاتورة _جديدة"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:323
-#, fuzzy
 msgid "_Pay Bill"
-msgstr "دفع الفاتورة"
+msgstr "_دفع الفاتورة"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:331
 msgid "_Use as Default Layout for Vendor Documents"
@@ -4785,9 +4768,8 @@ msgid "_Print Voucher"
 msgstr "_طباعة الشيكات"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:339
-#, fuzzy
 msgid "_Edit Voucher"
-msgstr "عرض/تحرير القسيمة"
+msgstr "ت_حرير القسيمة"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:340
 #, fuzzy
@@ -4810,9 +4792,8 @@ msgid "New _Voucher"
 msgstr "قسيمة جديدة"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:344
-#, fuzzy
 msgid "_Pay Voucher"
-msgstr "قسيمة الشراء"
+msgstr "دفع قسيمة الشراء"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:352
 msgid "_Use as Default Layout for Employee Documents"
@@ -5111,7 +5092,7 @@ msgstr "اليوم"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:145
 msgid "E_dit Vendor"
-msgstr "تحرير المورد"
+msgstr "ت_حرير المورد"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:146
 msgid "Edit the selected vendor"
@@ -5127,7 +5108,7 @@ msgstr "تحرير العميل المحدد"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:155
 msgid "E_dit Employee"
-msgstr "تحرير موظف"
+msgstr "ت_حرير موظف"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:156
 msgid "Edit the selected employee"
@@ -5147,7 +5128,7 @@ msgstr "إنشاء موظف جديد"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:177
 msgid "_Delete Owner..."
-msgstr "حذف مالك"
+msgstr "_حذف مالك..."
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:178
 msgid "Delete selected owner"
@@ -5163,7 +5144,7 @@ msgstr "إنشاء فاتورة جديدة"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:206
 msgid "New _Voucher..."
-msgstr "قسيمة جديدة..."
+msgstr "_قسيمة جديدة..."
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:207
 msgid "Create a new voucher"
@@ -5248,12 +5229,14 @@ msgstr "الموظفين"
 msgid ""
 "The owner %s will be deleted.\n"
 "Are you sure you want to do this?"
-msgstr "سيتم حذف المالك%s هل أنت متأكد أنك تريد أن تفعل هذا؟"
+msgstr ""
+"سيتم حذف المالك%s.\n"
+"هل أنت متأكد أنك تريد أن تفعل هذا؟"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:194
 #: gnucash/gnome/gnc-plugin-page-register.c:292
 msgid "Cu_t Transaction"
-msgstr "قص المعاملات"
+msgstr "ق_ص المعاملة"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:195
 #: gnucash/gnome/gnc-plugin-page-register.c:293
@@ -5268,7 +5251,7 @@ msgstr "_لصق المعاملات"
 #: gnucash/gnome/gnc-plugin-page-register2.c:197
 #: gnucash/gnome/gnc-plugin-page-register.c:295
 msgid "Dup_licate Transaction"
-msgstr "تكرار المعاملات"
+msgstr "ت_كرار المعاملة"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:198
 #: gnucash/gnome/gnc-plugin-page-register.c:296
@@ -5280,29 +5263,29 @@ msgstr "_حذف المعاملات"
 #: gnucash/gnome/gnc-plugin-page-register2.c:199
 #: gnucash/gnome/gnc-plugin-page-register.c:308
 msgid "Cu_t Split"
-msgstr "قص التقسيم"
+msgstr "ق_ص التقسيم"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:200
 #: gnucash/gnome/gnc-plugin-page-register.c:309
 msgid "_Copy Split"
-msgstr "نسخ التقسيم"
+msgstr "_نسخ التقسيم"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:201
 #: gnucash/gnome/gnc-plugin-page-register.c:310
 msgid "_Paste Split"
-msgstr "لصق التقسيم"
+msgstr "_لصق التقسيم"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:202
 #: gnucash/gnome/gnc-plugin-page-register.c:311
 msgid "Dup_licate Split"
-msgstr "تكرار التقسيم"
+msgstr "تك_رار التقسيم"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:203
 #: gnucash/gnome/gnc-plugin-page-register.c:312
 #: gnucash/gnome/gnc-split-reg.c:1504
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1024
 msgid "_Delete Split"
-msgstr "حذف التقسيم."
+msgstr "ح_ذف التقسيم"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:204
 #: gnucash/gnome/gnc-plugin-page-register.c:313
@@ -5364,7 +5347,7 @@ msgstr "_طباعة الشيكات..."
 #: gnucash/gnome/gnc-plugin-page-report.c:1216
 #: gnucash/gnome-utils/gnc-main-window.c:320
 msgid "Cu_t"
-msgstr "قص"
+msgstr "_قص"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:231
 #: gnucash/gnome/gnc-plugin-page-register.c:340
@@ -5396,7 +5379,7 @@ msgstr "لصق محتوى الحافظة في موضع المؤشر"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:300
 msgid "Remo_ve All Splits"
-msgstr "أزل جميع التقسيمات"
+msgstr "أ_زل جميع التقسيمات"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:301
 #: gnucash/gnome/gnc-plugin-page-register.c:410
@@ -5416,7 +5399,7 @@ msgstr "سجل المعاملة الحالية"
 #: gnucash/gnome/gnc-plugin-page-register2.c:310
 #: gnucash/gnome/gnc-plugin-page-register.c:419
 msgid "Ca_ncel Transaction"
-msgstr "إلغاء المعاملات"
+msgstr "إل_غاء المعاملة"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:311
 #: gnucash/gnome/gnc-plugin-page-register.c:420
@@ -5431,16 +5414,16 @@ msgstr "_إلغاء المعاملات"
 #: gnucash/gnome/gnc-plugin-page-register2.c:319
 #: gnucash/gnome/gnc-plugin-page-register.c:428
 msgid "_Unvoid Transaction"
-msgstr "إعكس إلغاء هذه المعاملة"
+msgstr "إ_عكس إلغاء المعاملة"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:323
 #: gnucash/gnome/gnc-plugin-page-register.c:432
 msgid "Add _Reversing Transaction"
-msgstr "إضافة معاملة عكسية"
+msgstr "إضافة معاملة _عكسية"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:327
 msgid "Move Transaction _Up"
-msgstr "تحريك لأعلى"
+msgstr "تحريك لل_أعلى"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:328
 msgid ""
@@ -5452,7 +5435,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:332
 msgid "Move Transaction Do_wn"
-msgstr "تحريك لأسفل"
+msgstr "تحريك لأ_سفل"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:333
 msgid ""
@@ -5483,7 +5466,7 @@ msgstr "الانتقال إلى معاملة فارغة في أسفل السجل
 #: gnucash/gnome/gnc-plugin-page-register2.c:382
 #: gnucash/gnome/gnc-plugin-page-register.c:505
 msgid "Edit E_xchange Rate"
-msgstr "تحرير سعر الصرف"
+msgstr "تحرير سعر ال_صرف"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:383
 #: gnucash/gnome/gnc-plugin-page-register.c:506
@@ -5511,7 +5494,7 @@ msgstr "فتح تقرير سجل للمعاملات المحددة"
 #: gnucash/gnome/gnc-plugin-page-register2.c:392
 #: gnucash/gnome/gnc-plugin-page-register.c:518
 msgid "Sche_dule..."
-msgstr "الجدول الزمني..."
+msgstr "ال_جدول الزمني..."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:393
 #: gnucash/gnome/gnc-plugin-page-register.c:519
@@ -5553,7 +5536,7 @@ msgstr "فتح تقرير سجل للمعاملات المحددة"
 #: gnucash/gnome/gnc-plugin-page-register2.c:424
 #: gnucash/gnome/gnc-plugin-page-register.c:553
 msgid "_Double Line"
-msgstr "خط مزدوج"
+msgstr "خط _مزدوج"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:425
 #: gnucash/gnome/gnc-plugin-page-register.c:554
@@ -5565,7 +5548,7 @@ msgstr "إظهار سطرين من المعلومات لكل معاملة"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:430
 msgid "Show _Extra Dates"
-msgstr "إظهار التواريخ الإضافية"
+msgstr "إظهار التواريخ الإ_ضافية"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:431
 msgid "Show entered and reconciled dates"
@@ -5574,7 +5557,7 @@ msgstr "أظهر تواريخ الإدخال و التسوية"
 #: gnucash/gnome/gnc-plugin-page-register2.c:436
 #: gnucash/gnome/gnc-plugin-page-register.c:559
 msgid "S_plit Transaction"
-msgstr "تقسيم المعاملات"
+msgstr "ت_قسيم المعاملات"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:437
 #: gnucash/gnome/gnc-plugin-page-register.c:560
@@ -5584,7 +5567,7 @@ msgstr "عرض كل التقسيمات في المعاملة الحالية"
 #: gnucash/gnome/gnc-plugin-page-register2.c:448
 #: gnucash/gnome/gnc-plugin-page-register.c:571
 msgid "_Basic Ledger"
-msgstr "دفتر الأستاذ الأساسي"
+msgstr "دفتر الأستاذ الأ_ساسي"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:449
 #: gnucash/gnome/gnc-plugin-page-register.c:572
@@ -5606,7 +5589,7 @@ msgstr "إظهار المعاملات على خط أو اثنين ووسع ال�
 #: gnucash/gnome/gnc-plugin-page-register.c:581
 #: gnucash/gtkbuilder/dialog-preferences.glade:3251
 msgid "Transaction _Journal"
-msgstr "معاملات دفتر اليومية"
+msgstr "_دفتر المعاملات اليومية"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:459
 #: gnucash/gnome/gnc-plugin-page-register.c:582
@@ -5844,12 +5827,12 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register.c:409
 msgid "Remo_ve Other Splits"
-msgstr "أزل التقسيمات الأخرى"
+msgstr "_أزل التقسيمات الأخرى"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:454
 #: gnucash/gnome-utils/gnc-main-window.c:343
 msgid "_Sort By..."
-msgstr "فرز حسب..."
+msgstr "إ_فرز حسب..."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:500
 #, fuzzy
@@ -6067,7 +6050,7 @@ msgstr "تصدير التقرير الحالي لمستند بصيغة PDF"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1236
 msgid "Save _Report Configuration"
-msgstr "حفظ خيارات التقرير"
+msgstr "حفظ _خيارات التقرير"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1240
 msgid "Save Report Configuration As..."
@@ -6226,7 +6209,7 @@ msgstr "إنشاء معاملة جديدة مجدولة"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:145
 msgid "_New 2"
-msgstr "جديد2"
+msgstr "_جديد 2"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:146
 msgid "Create a new scheduled transaction 2"
@@ -6238,7 +6221,7 @@ msgstr "تحرير المعاملة المجدولة المحددة"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:157
 msgid "_Edit 2"
-msgstr "تحرير2"
+msgstr "_تحرير2"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:158
 msgid "Edit the selected scheduled transaction 2"
@@ -6272,9 +6255,8 @@ msgstr[5] "هل تريد حذف هذه المعاملة المجدولة حقا�
 
 #: gnucash/gnome/gnc-plugin-register2.c:57
 #: gnucash/gnome/gnc-plugin-register.c:58
-#, fuzzy
 msgid "_General Journal"
-msgstr "دفتر اليومية العامة"
+msgstr "_دفتر اليومية العامة"
 
 #: gnucash/gnome/gnc-plugin-register2.c:58
 #, fuzzy
@@ -8768,10 +8750,8 @@ msgstr "فتح ملف/موقع"
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:513
 #: gnucash/gnome-utils/gnc-gnome-utils.c:553
-#, fuzzy
-#| msgid "GnuCash could not find the associated file."
 msgid "GnuCash could not find the linked document."
-msgstr "جنوكاش لا يمكنه العثور على ملفات المرتبطة"
+msgstr "جنوكاش لا يمكنه العثور على ملفات المرتبطة."
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:583
 #, fuzzy
@@ -9485,7 +9465,7 @@ msgstr "الهاتف"
 #: gnucash/register/ledger-core/split-register.c:2555
 #: gnucash/register/ledger-core/split-register.c:2581
 msgid "Online"
-msgstr "على الإنترنت"
+msgstr "عبر الإنترنت"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2864
 #: gnucash/register/ledger-core/split-register.c:2557
@@ -9997,7 +9977,7 @@ msgstr "لاتوازن"
 #. See "MAX_DATE_LENGTH" in https://code.gnucash.org/docs/MAINT/group__Date.html
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:1489
 msgid " Scheduled "
-msgstr "مجدولة"
+msgstr " مجدولة. "
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2316
 #: gnucash/register/ledger-core/split-register-control.c:1521
@@ -10325,17 +10305,17 @@ msgstr ""
 #: gnucash/gnucash-cli.cpp:113
 #, fuzzy
 msgid "Name of the report to run\n"
-msgstr "اسم الشركة."
+msgstr "اسم الشركة.\n"
 
 #: gnucash/gnucash-cli.cpp:115
 #, fuzzy
 msgid "Specify export type\n"
-msgstr "2. حدد نوع الاستيراد"
+msgstr "2. حدد نوع الاستيراد\n"
 
 #: gnucash/gnucash-cli.cpp:117
 #, fuzzy
 msgid "Output file for report\n"
-msgstr "خيارات الخلفية المكررة للتقارير"
+msgstr "خيارات الخلفية المكررة للتقارير\n"
 
 #: gnucash/gnucash-cli.cpp:132
 msgid "Unknown quotes command '{1}'"
@@ -10360,9 +10340,8 @@ msgid "Missing command or option"
 msgstr "هذا خيار اللون."
 
 #: gnucash/gnucash-commands.cpp:92
-#, fuzzy
 msgid "No quotes retrieved. Finance::Quote isn't installed properly."
-msgstr "العروض لم يتم استرجاعها. لم يتم تثبيت المالية :: العروض بشكل صحيح.\n"
+msgstr "العروض لم يتم استرجاعها. لم يتم تثبيت المالية :: العروض بشكل صحيح."
 
 #: gnucash/gnucash-core-app.cpp:81
 msgid "This is a development version. It may or may not work."
@@ -10508,11 +10487,10 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnucash.cpp:345
-#, fuzzy
 msgid "Run '{1} --help' to see a full list of available command line options."
 msgstr ""
 "%s\n"
-"شغل '%s --help' to see a full list of available command line options.\n"
+"شغل '%s --help' to see a full list of available command line options."
 
 #. Translators: Do not translate $DISPLAY! It is an environment variable for X11
 #: gnucash/gnucash.cpp:348
@@ -11525,7 +11503,6 @@ msgid "Character to use as separator between account names"
 msgstr "الحرف المستخدم كفاصل بين أسماء الحسابات"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:21
-#, fuzzy
 msgid ""
 "This setting determines the character that will be used between components "
 "of an account name. Possible values are any single non-alphanumeric unicode "
@@ -11533,8 +11510,8 @@ msgid ""
 "\", \"dash\" and \"period\"."
 msgstr ""
 "يحدد هذا الإعداد الحرف الذي سيتم استخدامه بين مكونات اسم حساب. القيم الممكنة "
-"هي أي حرف يونيكود غير أبجدي رقمي واحد، أو أي من التالي\"نقطتان,خفض,خفض عكسي,"
-"شرطة,نقطة\""
+"هي أي حرف يونيكود غير أبجدي رقمي واحد، أو أي من التالي\"نقطتان\",\"خفض\","
+"\"خفض عكسي\",\"شرطة\",\"نقطة\"."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:25
 #, fuzzy
@@ -13225,7 +13202,7 @@ msgstr "تصدير الآن ..."
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:722
 msgid "Summary"
-msgstr "المـلخص"
+msgstr "الملخص"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:727
 msgid "Export Summary"
@@ -13649,7 +13626,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:163
 msgid "<b>Categories</b>"
-msgstr "</b>التصنيفات<b>"
+msgstr "<b>التصنيفات<b/>"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:273
 #: gnucash/gtkbuilder/dialog-account.glade:906
@@ -13658,7 +13635,7 @@ msgstr "مسح الكل"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:311
 msgid "<b>Category Description</b>"
-msgstr "</b>وصف التصنيفات<b>"
+msgstr "<b>وصف التصنيفات<b/>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:377
@@ -13674,13 +13651,11 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:484
-#, fuzzy
 msgid ""
 "The selection you make here is only the starting point for your personalized "
 "account hierarchy. Accounts can be added, renamed, moved, or deleted by hand "
 "later at any time."
 msgstr ""
-"\n"
 "حدد الفئات التي تتوافق مع الطرق التي ستستخدمها لجنوكاش. كل فئة قمت بتحديدها "
 "سوف تسبب إنشاء عدة حسابات. حدد الفئات التي تريدها. يمكنك إنشاء حسابات إضافية "
 "دائما باليد في وقت لاحق."
@@ -14362,11 +14337,8 @@ msgid "Enter Information about..."
 msgstr "أدخل معلومات عن"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1050
-#, fuzzy
 msgid "All fields must be complete to continue..."
-msgstr ""
-"\n"
-"يجب أن يكون لكل الحسابات إدخالات صالحة للمتابعة.\n"
+msgstr "يجب أن يكون لكل الحسابات إدخالات صالحة للمتابعة."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1067
 msgid "Tradable commodities"
@@ -14458,7 +14430,7 @@ msgstr "تحديث حسابات GnuCash الخاصة بك"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1369
 msgid "Summary Text"
-msgstr "المـلخص"
+msgstr "الملخص"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1374
 msgid "Qif Import Summary"
@@ -15632,7 +15604,7 @@ msgid ""
 "the Reports menu or tool bar."
 msgstr ""
 "يتم حفظ خيارات التقارير المحفوظة من خلال فتحتقرير من تقارير القائمة،\n"
-"و تغيير خيارات التقرير ثم اختيار \"حفظ خيارات التقرير\" من\n"
+"و تغيير خيارات التقرير ثم اختيار \"حفظ خيارات التقرير\"\n"
 "من قائمة التقارير أو شريط الأدوات."
 
 #: gnucash/gtkbuilder/dialog-date-close.glade:7
@@ -16023,9 +15995,8 @@ msgid "Based On"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:219
-#, fuzzy
 msgid "Match String"
-msgstr "مماثل غير موجود!"
+msgstr "مماثل غير موجود"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:233
 #, fuzzy
@@ -16746,7 +16717,7 @@ msgid ""
 msgstr ""
 "الحرف الذي سيتم استخدامه بين مكونات اسم حساب. قيمة المسموحة هو أي حرف واحد "
 "إلا الحروف والأرقام، أو أي من التالي: \":\" أو \"\" أو \"/\" أو \"-\" أو \"."
-"\""
+"\"."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:946
 #: gnucash/gtkbuilder/dialog-preferences.glade:3674
@@ -17935,7 +17906,7 @@ msgstr "_العثور على..."
 
 #: gnucash/gtkbuilder/dialog-search.glade:134
 msgid " Search "
-msgstr "البحث"
+msgstr " البحث "
 
 #: gnucash/gtkbuilder/dialog-search.glade:207
 msgid "Search for items where"
@@ -19214,10 +19185,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/window-autoclear.glade:101
-#, fuzzy
-#| msgid "Fraction"
 msgid "Caution!"
-msgstr "الكسور"
+msgstr "الكسور!"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:116
 msgid ""
@@ -20433,9 +20402,9 @@ msgstr ""
 "الانترنت توفر مجموعة من التنسيقات التي من الممكن الإختيار منها."
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:297
-#, fuzzy, c-format
+#, c-format
 msgid "Validation...\n"
-msgstr "التطبيق"
+msgstr "التطبيق\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:327
 #, c-format
@@ -20499,16 +20468,18 @@ msgid "Error(s) in invoice without id, all rows of this invoice ignored.\n"
 msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:647
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Processing...\n"
-msgstr "_عملية الدفع..."
+msgstr ""
+"\n"
+"_عملية الدفع...\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:716
-#, fuzzy, c-format
+#, c-format
 msgid "Invoice %s created.\n"
-msgstr "ملاحظات الفاتورة"
+msgstr "ملاحظات الفاتورة\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:731
 #, fuzzy
@@ -20526,14 +20497,14 @@ msgid "Invoice %s not updated because it is already posted.\n"
 msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:767
-#, fuzzy, c-format
+#, c-format
 msgid "Invoice %s updated.\n"
-msgstr "ملاحظات الفاتورة"
+msgstr "ملاحظات الفاتورة.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:885
-#, fuzzy, c-format
+#, c-format
 msgid "Invoice %s posted.\n"
-msgstr "ملاحظات الفاتورة"
+msgstr "ملاحظات الفاتورة.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:890
 #, c-format
@@ -20546,9 +20517,9 @@ msgid "Invoice %s NOT posted because it requires currency conversion.\n"
 msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:920
-#, fuzzy, c-format
+#, c-format
 msgid "Nothing to process.\n"
-msgstr "لا تحذيرات لإعادة تعيينها."
+msgstr "لا تحذيرات لإعادة تعيينها.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:138
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:123
@@ -21259,9 +21230,8 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:519
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:574
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:582
-#, fuzzy
 msgid "Column '{1}' could not be understood.\n"
-msgstr "لا يمكن فهم العمود %s."
+msgstr "لا يمكن فهم العمود %s.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:280
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:327
@@ -23917,7 +23887,7 @@ msgstr "هذا خيار سلسلة نصيه ."
 #: gnucash/report/reports/example/hello-world.scm:301
 #: gnucash/report/reports/example/hello-world.scm:470
 msgid "Hello, World"
-msgstr "مرحبا بالعالم!"
+msgstr "‪‫مرحبا بالعالم"
 
 #: gnucash/report/reports/example/hello-world.scm:92
 msgid "Just a Date Option"
@@ -23933,7 +23903,7 @@ msgstr "خيار التاريخ المركب"
 
 #: gnucash/report/reports/example/hello-world.scm:100
 msgid "This is a combination date option."
-msgstr "هذا خيار خيار التاريخ المركب"
+msgstr "هذا خيار التاريخ المركب."
 
 #: gnucash/report/reports/example/hello-world.scm:106
 msgid "Relative Date Option"
@@ -24547,7 +24517,7 @@ msgid ""
 "rather as the average e.g. per month."
 msgstr ""
 "تحديد ما إذا كان ينبغي أن تظهر المبالغ على مدى فترة زمنية كاملة أو كمتوسط ."
-"على ​​سبيل المثال شهريا."
+"على سبيل المثال شهريا."
 
 #: gnucash/report/reports/standard/account-piecharts.scm:114
 #: gnucash/report/reports/standard/category-barchart.scm:119
@@ -24598,7 +24568,7 @@ msgstr "المتوسط الشهري"
 #: gnucash/report/reports/standard/account-piecharts.scm:401
 #: gnucash/report/reports/standard/category-barchart.scm:316
 msgid "Weekly Average"
-msgstr "المتوسط ​​الاسبوعي"
+msgstr "المتوسط الاسبوعي"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:535
 #, scheme-format
@@ -24939,10 +24909,8 @@ msgid "Basis calculation method."
 msgstr "طريقة حساب الأساس."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:89
-#, fuzzy
-#| msgid "Use average cost of all shares for basis."
 msgid "Average cost of all shares"
-msgstr "استخدام متوسط ​​تكلفة كل سهم كأساس."
+msgstr "استخدام متوسط تكلفة كل سهم كأساس"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:90
 msgid "First-in first-out"
@@ -25650,9 +25618,8 @@ msgid "Barchart"
 msgstr "المخطط البياني للأصول"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1188
-#, fuzzy
 msgid " to "
-msgstr "%s إلى %s"
+msgstr " إلى "
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1251
 #: gnucash/report/reports/standard/trial-balance.scm:855
@@ -26322,7 +26289,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/category-barchart.scm:317
 msgid "Daily Average"
-msgstr "المتوسط ​​اليومي"
+msgstr "المتوسط اليومي"
 
 #: gnucash/report/reports/standard/category-barchart.scm:505
 #, scheme-format
@@ -27071,7 +27038,7 @@ msgstr "سلسلة الاتصال بالشركة"
 
 #: gnucash/report/reports/standard/invoice.scm:276
 msgid "The phrase used to introduce the company contact."
-msgstr "نص عبارة عبارة بيانات اتصال الشركة."
+msgstr "نص عبارة بيانات اتصال الشركة."
 
 #: gnucash/report/reports/standard/invoice.scm:277
 #, fuzzy
@@ -27153,7 +27120,7 @@ msgstr "ملاحظات إضافية للوضع على الفاتورة."
 #: gnucash/report/reports/standard/invoice.scm:329
 #: gnucash/report/reports/standard/taxinvoice.scm:205
 msgid "Thank you for your patronage!"
-msgstr "شكرا لرعايتكم"
+msgstr "شكرا لرعايتكم!"
 
 #: gnucash/report/reports/standard/invoice.scm:333
 msgid "Row 1 Left"
@@ -27184,9 +27151,8 @@ msgstr "يمين"
 
 #: gnucash/report/reports/standard/invoice.scm:421
 #: gnucash/report/reports/standard/job-report.scm:239
-#, fuzzy
 msgid "Payment, thank you!"
-msgstr "نشكر لك ، دفع المبلغ"
+msgstr "نشكر لك ، دفع المبلغ!"
 
 #. Translators: This "T" is displayed in the taxable column, if this entry contains tax
 #: gnucash/report/reports/standard/invoice.scm:476
@@ -27969,9 +27935,8 @@ msgstr "%A %d %B %Y"
 
 #: gnucash/report/reports/standard/receipt.scm:139
 #: gnucash/report/reports/standard/taxinvoice.scm:190
-#, fuzzy
 msgid "Payment received, thank you!"
-msgstr "تم استلام المبلغ ، شكرا لك"
+msgstr "تم استلام المبلغ ، شكرا لك!"
 
 #: gnucash/report/reports/standard/receipt.scm:143
 #, fuzzy
@@ -29540,8 +29505,7 @@ msgstr "رقم المطالبة"
 msgid ""
 "The format string to use for generating bill numbers. This is a printf-style "
 "format string."
-msgstr ""
-"طريقة التنسيق لاستخدامها لتوليد أرقام أرقام المطالبات.هو نص على غرار printf."
+msgstr "طريقة التنسيق لاستخدامها لتوليد أرقام المطالبات.هو نص على غرار printf."
 
 #: libgnucash/app-utils/business-prefs.scm:55
 msgid ""
@@ -29609,8 +29573,7 @@ msgstr "رقم الطلب"
 msgid ""
 "The format string to use for generating order numbers. This is a printf-"
 "style format string."
-msgstr ""
-"طريقة التنسيق لاستخدامها لتوليد أرقام أرقام الطلبات.هو نص على غرار printf."
+msgstr "طريقة التنسيق لاستخدامها لتوليد أرقام الطلبات.هو نص على غرار printf."
 
 #: libgnucash/app-utils/business-prefs.scm:67
 msgid ""
@@ -29631,8 +29594,7 @@ msgstr "رقم المورد"
 msgid ""
 "The format string to use for generating vendor numbers. This is a printf-"
 "style format string."
-msgstr ""
-"طريقة التنسيق لاستخدامها لتوليد أرقام أرقام الموردين .هو نص على غرار printf."
+msgstr "طريقة التنسيق لاستخدامها لتوليد أرقام الموردين .هو نص على غرار printf."
 
 #: libgnucash/app-utils/business-prefs.scm:71
 msgid ""
@@ -30336,11 +30298,11 @@ msgstr "ولدت من فاتورة. حاول عكس ترحيل الفاتورة.
 
 #: libgnucash/engine/gncInvoice.c:2216
 msgid " (posted)"
-msgstr "(تم الترحيل)"
+msgstr " (تم الترحيل)"
 
 #: libgnucash/engine/gncOrder.c:546
 msgid " (closed)"
-msgstr "(مغلقة)"
+msgstr " (مغلقة)"
 
 #: libgnucash/engine/gncOwner.c:1015
 msgid "Offset between documents: "

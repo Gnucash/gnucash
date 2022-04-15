@@ -22,7 +22,7 @@
 
     <release version="encoded_version">
        ...
-    </releaase>
+    </release>
 
     encoded_version = gnucash_major  * 1000 + gnucash_minor
     For example for gnucash 4.7 encoded_version becomes 4 * 1000 + 7 = 4007

@@ -6004,6 +6004,8 @@ gnc_account_imap_get_info (Account *acc, const char *category)
         qof_instance_foreach_slot (QOF_INSTANCE(acc), IMAP_FRAME, category,
                                    build_non_bayes, &imapInfo);
     }
+    g_free (imapInfo.head);
+    g_free (imapInfo.category);
     return g_list_reverse(imapInfo.list);
 }
 

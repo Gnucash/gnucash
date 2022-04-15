@@ -44,7 +44,7 @@
  *  The PolicyGetLot() routine returns a lot into which the
  *     indicated split should be placed.
  *
- *  The PolicyGetSplit() routine returns an unassinged split
+ *  The PolicyGetSplit() routine returns an unassigned split
  *     from the account that is appropriate for placing into the
  *     indicated lot.  For the FIFO policy, that would be the
  *     earliest split that is not in any account, and is of the

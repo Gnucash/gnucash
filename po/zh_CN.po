@@ -27,7 +27,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-23 09:56+0000\n"
+"PO-Revision-Date: 2022-04-03 09:06+0000\n"
 "Last-Translator: YTX <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -492,7 +492,7 @@ msgid ""
 "stored, hover over one of the entries in the history menu\n"
 "(File[->Most Recently Used-List]).\n"
 "The full path is displayed in the status bar."
-msgstr ""
+msgstr "状态栏显示历史文件地址。"
 
 #: doc/tip_of_the_day.list.c:24
 msgid ""
@@ -3438,7 +3438,7 @@ msgstr "计划交易列表"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:171
 msgid "Since _Last Run..."
-msgstr "待执行(_L)..."
+msgstr "计划清单(_L)..."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:172
 msgid "Create Scheduled Transactions since the last time run"
@@ -5665,7 +5665,7 @@ msgstr "交易汇总"
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:68
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
-msgstr "这笔交易事项被标记只读，原因是：“%s”"
+msgstr "此交易只读，原因：“%s”"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4089
 #: gnucash/gnome/gnc-split-reg.c:1131
@@ -6199,7 +6199,7 @@ msgstr "剪切交易(_C)"
 #: gnucash/gnome/gnc-split-reg.c:1158
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:66
 msgid "Cannot modify or delete this transaction."
-msgstr "无法修改或删除该交易事项。"
+msgstr "无法修改或删除该交易。"
 
 #: gnucash/gnome/gnc-split-reg.c:1172
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:83
@@ -21496,7 +21496,7 @@ msgstr "折扣类型"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:82
 msgid "Discount How"
-msgstr "折扣多少"
+msgstr "折扣方式"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:87
 #: gnucash/report/reports/standard/invoice.scm:96
@@ -21509,15 +21509,15 @@ msgstr "单价"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:102
 msgid "Taxable?"
-msgstr "须纳税的？"
+msgstr "应税"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:107
 msgid "Tax Included?"
-msgstr "含税？"
+msgstr "含税"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:112
 msgid "Invoiced?"
-msgstr "已开发票？"
+msgstr "发票"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:117
 #: gnucash/report/reports/standard/invoice.scm:249
@@ -21890,7 +21890,7 @@ msgid ""
 "\n"
 "'%s'"
 msgstr ""
-"无法修改或删除这笔交易事项。这笔交易事项被标记为只读，因为：\n"
+"无法修改或删除此交易，这笔交易只读，因为：\n"
 "\n"
 "“%s”"
 
@@ -28954,7 +28954,7 @@ msgstr "额外的签账卡"
 
 #: libgnucash/engine/gncInvoice.c:1786
 msgid "Generated from an invoice. Try unposting the invoice."
-msgstr "从发票产生的。试着取消入账此发票。"
+msgstr "商业交易，无法直接删除，可以取消入账。"
 
 #: libgnucash/engine/gncInvoice.c:2216
 msgid " (posted)"

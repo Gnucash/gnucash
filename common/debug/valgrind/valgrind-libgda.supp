@@ -37,7 +37,7 @@
 #     if Free: name of free-ing fn)
 
 {
-	libgda permanant memory for gda_paramlist_dtd
+	libgda permanent memory for gda_paramlist_dtd
 	Memcheck:Leak
 	fun:malloc
 	fun:xmlStrndup

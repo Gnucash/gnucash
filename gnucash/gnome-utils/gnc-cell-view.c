@@ -226,7 +226,7 @@ gcv_start_editing (GtkCellEditable *cell_editable,
     GncCellView *cv = GNC_CELL_VIEW(cell_editable);
     GtkTextIter siter, eiter;
 
-    // Remove the text_view tooltip after 5secs to stop it recuring
+    // Remove the text_view tooltip after 5secs to stop it recurring
     cv->tooltip_id = g_timeout_add (5000, (GSourceFunc) gcv_remove_tooltip, cv);
 
     gtk_text_buffer_get_bounds (cv->buffer, &siter, &eiter);

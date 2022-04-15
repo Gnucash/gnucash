@@ -2116,7 +2116,7 @@
   <act:parent type="guid">ce8a0ff9cfc2c79c99e6c65d5e258a55</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Pension Contrbution</act:name>
+  <act:name>Pension Contribution</act:name>
   <act:id type="guid">91e7e5e4cd2374c9aca8024cdc1c4997</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -2929,7 +2929,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Federal 
-Witholding</act:name>
+Withholding</act:name>
   <act:id type="guid">2ea59a43e4fa1b7225e3b8896c74713d</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -3555,7 +3555,7 @@ Witholding</act:name>
   <trn:date-entered>
     <ts:date>2000-09-17 20:34:05 +0200</ts:date>
   </trn:date-entered>
-  <trn:description>Fed Tax Witholding</trn:description>
+  <trn:description>Fed Tax Withholding</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">7faf50cecbe6d64bd04275aa35974d02</split:id>

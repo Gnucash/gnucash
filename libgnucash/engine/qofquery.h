@@ -115,7 +115,7 @@ typedef enum
 #define QOF_PARAM_VERSION "version"
 
 /* --------------------------------------------------------- */
-/** \name Query Subsystem Initialization and Shudown  */
+/** \name Query Subsystem Initialization and Shutdown  */
 // @{
 /** Subsystem initialization and shutdown. Call init() once
  *  to initialize the query subsystem; call shutdown() to free

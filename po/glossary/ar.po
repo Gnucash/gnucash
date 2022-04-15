@@ -1,15 +1,15 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # "Frank H. Ellenberger" <frank.h.ellenberger@gmail.com>, 2013
-#
+# ltai0001 <yltaief@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-01-02 22:54+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2022-03-29 02:07+0000\n"
+"Last-Translator: ltai0001 <yltaief@gmail.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/gnucash/glossary/"
 "ar/>\n"
 "Language: ar\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.12-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -258,7 +258,7 @@ msgstr ""
 
 #. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
 msgid "Budget"
-msgstr ""
+msgstr "الميزانية"
 
 #. "-"
 msgid "business (adjective)"
@@ -318,7 +318,7 @@ msgstr ""
 
 #. "-"
 msgid "Credit Card"
-msgstr ""
+msgstr "بطاقة الائتمان"
 
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
@@ -334,7 +334,7 @@ msgstr ""
 
 #. "Custom print format (i.e. according to the user's wishes) as opposed to a template choice."
 msgid "Custom"
-msgstr ""
+msgstr "مخصص"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
@@ -346,7 +346,7 @@ msgstr ""
 
 #. "A specific numbered day of the month"
 msgid "Date"
-msgstr ""
+msgstr "تاريخ"
 
 #. "DD/MM/YY or MM/DD/YY or something else"
 msgid "date format"
@@ -498,7 +498,7 @@ msgstr ""
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
 msgid "Lot"
-msgstr ""
+msgstr "مجموعة"
 
 #. "Combine two books into one (see book)."
 msgid "merge, to"
@@ -518,7 +518,7 @@ msgstr ""
 
 #. "One textfield per split that should help you remember what this split was about."
 msgid "Memo"
-msgstr ""
+msgstr "مذكرة"
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
@@ -646,7 +646,7 @@ msgstr ""
 
 #. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
-msgstr ""
+msgstr "الأرباح والخسائر"
 
 #. "-"
 msgid "quick-fill"
@@ -706,7 +706,7 @@ msgstr ""
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
-msgstr ""
+msgstr "الأرباح المحتجزة"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 msgid "reverse transaction, to (Action in the register)"
@@ -875,7 +875,7 @@ msgid "due"
 msgstr ""
 
 msgid "Online"
-msgstr ""
+msgstr "عبر الإنترنت"
 
 msgid "Direct Debit"
-msgstr ""
+msgstr "خصم من الحساب مباشرة"

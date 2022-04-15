@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-25 15:09+0000\n"
+"PO-Revision-Date: 2022-04-13 19:11+0000\n"
 "Last-Translator: 154pinkchairs <ovehis@riseup.net>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
@@ -1717,9 +1717,8 @@ msgid "Manage Document Link"
 msgstr ""
 
 #: gnucash/gnome/dialog-doclink.c:760
-#, fuzzy
 msgid "Transaction can not be modified."
-msgstr "Kwota transakcji"
+msgstr "Transakcja nie może zostać zmodyfikowana."
 
 #: gnucash/gnome/dialog-doclink.c:821 libgnucash/engine/gncOwner.c:215
 #, fuzzy
@@ -2794,11 +2793,8 @@ msgid "You must select a company for payment processing."
 msgstr "Aby przetworzyć płatność, musisz wybrać firmę."
 
 #: gnucash/gnome/dialog-payment.c:260
-#, fuzzy
 msgid "There is a problem with the Payment or Refund amount."
-msgstr ""
-"Wystąpił problem z opcją %s:%s.\n"
-"%s"
+msgstr "Wystąpił problem z kwotą płatności lub zwrotu."
 
 #: gnucash/gnome/dialog-payment.c:281
 msgid "You must select a transfer account from the account tree."
@@ -3699,9 +3695,8 @@ msgid "_New Budget"
 msgstr "Nowy budżet"
 
 #: gnucash/gnome/gnc-plugin-budget.c:64
-#, fuzzy
 msgid "Create a new Budget."
-msgstr "Utwórz nowy budżet"
+msgstr "Utwórz nowy budżet."
 
 #: gnucash/gnome/gnc-plugin-budget.c:69
 #, fuzzy
@@ -3720,18 +3715,16 @@ msgid "_Copy Budget"
 msgstr "Kopiuj budżet"
 
 #: gnucash/gnome/gnc-plugin-budget.c:76
-#, fuzzy
 msgid "Copy an existing Budget."
-msgstr "Skopiuj istniejący budżet"
+msgstr "Skopiuj istniejący budżet."
 
 #: gnucash/gnome/gnc-plugin-budget.c:80
 msgid "_Delete Budget"
 msgstr "_Usuń budżet"
 
 #: gnucash/gnome/gnc-plugin-budget.c:81
-#, fuzzy
 msgid "Delete an existing Budget."
-msgstr "Otwórz istniejący budżet"
+msgstr "Usuń istniejący budżet."
 
 #: gnucash/gnome/gnc-plugin-budget.c:288
 msgid "Select a Budget"
@@ -3924,7 +3917,7 @@ msgstr "Pokaż wszystkie powiązania transakcji"
 
 #: gnucash/gnome/gnc-plugin-business.c:283
 msgid "Sales _Tax Table"
-msgstr "Tabela podatkowa dla sprzedaży"
+msgstr "Tab_ela podatkowa dla sprzedaży"
 
 #: gnucash/gnome/gnc-plugin-business.c:284
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
@@ -3942,7 +3935,7 @@ msgstr "Wyświetla i pozwala na modyfikację terminów płatności"
 
 #: gnucash/gnome/gnc-plugin-business.c:293
 msgid "Bills _Due Reminder"
-msgstr "Przypomnienia o płatnościach"
+msgstr "Prz_ypomnienia o płatnościach"
 
 #: gnucash/gnome/gnc-plugin-business.c:294
 msgid "Open the Bills Due Reminder dialog"
@@ -4398,60 +4391,51 @@ msgid "Are you sure you want to do this?"
 msgstr "Czy na pewno chcesz to zrobić?"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:147
-#, fuzzy
 msgid "Open the selected account."
-msgstr "Otwórz zaznaczone konto"
+msgstr "Otwórz zaznaczone konto."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:152
 msgid "Open _Subaccounts"
 msgstr "Otwórz konta po_drzędne"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:153
-#, fuzzy
 msgid "Open the selected account and all its subaccounts."
-msgstr "Otwórz wybrane konto i wszystkie jego konta podrzędne"
+msgstr "Otwórz zaznaczone konto i wszystkie jego konta podrzędne."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:159
-#, fuzzy
 msgid "_Delete Budget..."
-msgstr "_Usuń budżet"
+msgstr "_Usuń budżet..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:160
 msgid "Select this or another budget and delete it."
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:164
-#, fuzzy
 msgid "Budget _Options..."
-msgstr "Opcje budżetu"
+msgstr "_Opcje budżetu..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:165
-#, fuzzy
 msgid "Edit this budget's options."
-msgstr "Edytuj opcje bieżącego budżetu"
+msgstr "Edytuj opcje bieżącego budżetu."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:169
-#, fuzzy
 msgid "Esti_mate Budget..."
-msgstr "Oszacuj budżet"
+msgstr "Osza_cuj budżet..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:171
-#, fuzzy
 msgid ""
 "Estimate a budget value for the selected accounts from past transactions."
 msgstr ""
 "Oszacuj wartość budżetu dla wybranych kont na podstawie poprzednich "
-"transakcji"
+"transakcji."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:175
-#, fuzzy
 msgid "_All Periods..."
-msgstr "Okres"
+msgstr "_Wszystkie okresy..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:177
-#, fuzzy
 msgid "Edit budget for all periods for the selected accounts."
-msgstr "Modyfikuje zaznaczone konto"
+msgstr "Edytuj budżet z wszystkich okresów dla wybranych kont."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:181
 #, fuzzy
@@ -4459,9 +4443,8 @@ msgid "Edit Note"
 msgstr "Nota kredytowa"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:183
-#, fuzzy
 msgid "Edit note for the selected account and period."
-msgstr "Modyfikuje zaznaczone konto"
+msgstr "Edytuj notatkę dla zaznaczonego konta i okresu."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:187
 #: gnucash/report/reports/standard/budget.scm:39
@@ -4469,15 +4452,12 @@ msgid "Budget Report"
 msgstr "Raport z budżetu"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:189
-#, fuzzy
-#| msgid "Print the current report"
 msgid "Run the budget report."
-msgstr "Drukuje bieżący raport"
+msgstr "Drukuje bieżący raport."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:199
-#, fuzzy
 msgid "Refresh this window."
-msgstr "Odświeża to okno"
+msgstr "Odśwież to okno."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:222
 #: gnucash/gnome/gnc-plugin-page-report.c:1137
@@ -4492,9 +4472,8 @@ msgid "Estimate"
 msgstr "Oszacuj"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:224
-#, fuzzy
 msgid "All Periods"
-msgstr "Okres"
+msgstr "Wszystkie okresy"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:225
 #, fuzzy
@@ -4752,7 +4731,7 @@ msgstr "E_dytuj rachunek"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:319
 msgid "_Duplicate Bill"
-msgstr "Duplikuj rachunek"
+msgstr "D_uplikuj rachunek"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:320
 #, fuzzy
@@ -5442,7 +5421,7 @@ msgstr "Usuń wszystkie podziały bieżącej transakcji"
 #: gnucash/gnome/gnc-plugin-page-register2.c:305
 #: gnucash/gnome/gnc-plugin-page-register.c:414
 msgid "_Enter Transaction"
-msgstr "Wprowadź transakcję"
+msgstr "Wp_rowadź transakcję"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:306
 #: gnucash/gnome/gnc-plugin-page-register.c:415
@@ -9289,7 +9268,7 @@ msgstr "_Zbilansuj ręcznie"
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:289
 #: gnucash/register/ledger-core/split-register-control.c:140
 msgid "Let GnuCash _add an adjusting split"
-msgstr "Pozwól programowi GnuCash dodać podział regulujący"
+msgstr "Pozwól programowi GnuCash _dodać podział regulujący"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:294
 #: gnucash/register/ledger-core/split-register-control.c:145
@@ -10426,14 +10405,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:113
-#, fuzzy
 msgid "Name of the report to run\n"
-msgstr "Nazwa firmy"
+msgstr "Nazwa raportu do wygenerowania\n"
 
 #: gnucash/gnucash-cli.cpp:115
-#, fuzzy
 msgid "Specify export type\n"
-msgstr "Wybierz typ zniżki"
+msgstr "Wybierz typ eksportu\n"
 
 #: gnucash/gnucash-cli.cpp:117
 #, fuzzy
@@ -13339,7 +13316,7 @@ msgstr "_Wybierz konta subkonta"
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:625
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:470
 msgid "Select _All"
-msgstr "Zaznacz wszystko"
+msgstr "Z_aznacz wszystko"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:426
 #: gnucash/gtkbuilder/assistant-loan.glade:1208
@@ -13359,7 +13336,7 @@ msgstr "Zaznacz _wszystkie"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:456
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:141
 msgid "Select _Range"
-msgstr "Wybierz zakres"
+msgstr "Wybierz za_kres"
 
 #. Filter By Dialog, Date Tab, Start section
 #: gnucash/gtkbuilder/assistant-csv-export.glade:484
@@ -17513,7 +17490,7 @@ msgstr "Automatycznie wywołaj listę kont lub zadań w czasie wprowadzania."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2811
 msgid "Tab order in_cludes Transfer on Memorised Transactions"
-msgstr "Kolejność TAB uwzględnia pole Transfer w zapamiętanych transakcjach"
+msgstr "Kolejność TAB uwz_ględnia pole Transfer w zapamiętanych transakcjach"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2817
 msgid "Move to Transfer field when memorised transaction auto filled."
@@ -18588,7 +18565,7 @@ msgstr "<b>Wpisy tabeli podatkowej</b>"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:197
 msgid "De_lete"
-msgstr "Usuń"
+msgstr "_Usuń"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:212
 msgid "Ne_w"
@@ -19224,9 +19201,8 @@ msgid "On the"
 msgstr "Dzień"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:15
-#, fuzzy
 msgid "Edit budget for all periods"
-msgstr "Okres budżetu:"
+msgstr "Edytuj budżet dla wszystkich okresów"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:117
 msgid "Replace"
@@ -21316,7 +21292,7 @@ msgstr "_Rozciągnij kolumnę"
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1325
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1247
 msgid "_Narrow this column"
-msgstr "Zwęź bieżącą kolumnę"
+msgstr "Zwęź _bieżącą kolumnę"
 
 #. Translators: This is a ngettext(3) message, %d is the number of prices added
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1884
@@ -22313,7 +22289,7 @@ msgstr "Wypełniacz"
 
 #: gnucash/import-export/qif-imp/gnc-plugin-qif-import.c:48
 msgid "Import _QIF..."
-msgstr "Zaimportuj plik QIF..."
+msgstr "Zaimportuj plik _QIF..."
 
 #: gnucash/import-export/qif-imp/gnc-plugin-qif-import.c:49
 msgid "Import a Quicken QIF file"
@@ -23671,7 +23647,7 @@ msgstr "Przykłady"
 
 #: gnucash/report/report-core.scm:156
 msgid "_Experimental"
-msgstr "Eksprymentalny"
+msgstr "_Eksprymentalny"
 
 #: gnucash/report/report-core.scm:157
 #, fuzzy

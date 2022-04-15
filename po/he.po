@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-22 07:56+0000\n"
+"PO-Revision-Date: 2022-03-31 08:08+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -4930,7 +4930,7 @@ msgstr "ביטול רישום"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:461
 msgid "Pay"
-msgstr "לשלם"
+msgstr "תשלום"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:145
 msgid "E_dit Vendor"

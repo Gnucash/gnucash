@@ -655,7 +655,7 @@ gnc_date_edit_class_init (GNCDateEditClass *klass)
                                     PROP_TIME,
                                     g_param_spec_int64("time",
                                             "Date/time (seconds)",
-                                            "Date/time represented in seconds since Januari 31st, 1970",
+                                            "Date/time represented in seconds since midnight UTC, 1 January 1970",
                                             G_MININT64,
                                             G_MAXINT64,
                                             0,

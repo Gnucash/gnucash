@@ -40,7 +40,6 @@ extern "C"
 #include <stddef.h>
 #include "qof.h"
 #include "qoflog.h"
-#include "qofutil.h"
 #include "qofbackend.h"
 #include "qofclass.h"
 #include "qofbook.h"

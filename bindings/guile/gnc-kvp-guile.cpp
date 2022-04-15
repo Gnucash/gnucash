@@ -1,6 +1,7 @@
 #include <guid.hpp>
 #include <kvp-frame.hpp>
 #include <libguile.h>
+#include <numeric>
 
 extern "C"
 {
@@ -20,6 +21,17 @@ extern "C"
  *       unlikely. The general problem is distinguishing kvp
  *       types based only on the scheme type.
  */
+
+static bool scm_is_list_of_string_pairs (SCM val)
+{
+    for (; !scm_is_null (val); val = scm_cdr (val))
+    {
+        if (!(scm_is_pair (val) && scm_is_pair (scm_car (val)) &&
+              scm_is_string (scm_caar (val))))
+            return false;
+    }
+    return true;
+}
 
 KvpValue *
 gnc_scm_to_kvp_value_ptr(SCM val)
@@ -59,16 +71,31 @@ gnc_scm_to_kvp_value_ptr(SCM val)
     {
         return new KvpValue{gnc_scm_to_utf8_string(val)};
     }
-    else if (SWIG_IsPointerOfType(val, SWIG_TypeQuery("_p_KvpFrame")))
+    else if (!scm_is_null (val) && scm_is_list_of_string_pairs (val))
     {
-#define FUNC_NAME G_STRFUNC
-        auto vp_frame = SWIG_MustGetPtr(val,
-                                        SWIG_TypeQuery("_p_KvpFrame"), 1, 0);
-        KvpFrame *frame = static_cast<KvpFrame*>(vp_frame);
-#undef FUNC_NAME
-        return new KvpValue{frame};
+        auto frame = new KvpFrame;
+        for (; !scm_is_null (val); val = scm_cdr (val))
+        {
+            auto key_str = scm_to_utf8_stringn (scm_caar (val), nullptr);
+            auto val_scm = scm_cdar (val);
+            auto prev = frame->set ({key_str}, gnc_scm_to_kvp_value_ptr (val_scm));
+            g_free (key_str);
+            // there is a pre-existing key-value
+            if (prev)
+                delete prev;
+        }
+        return new KvpValue (frame);
     }
-    /* FIXME: add list handler here */
+    else if (!scm_is_null (val) && scm_is_list (val))
+    {
+        GList *kvplist = nullptr;
+        for (; !scm_is_null (val); val = scm_cdr (val))
+        {
+            auto elt = gnc_scm_to_kvp_value_ptr (scm_car (val));
+            kvplist = g_list_prepend (kvplist, elt);
+        }
+        return new KvpValue (g_list_reverse (kvplist));
+    }
     return NULL;
 }
 
@@ -102,12 +129,26 @@ gnc_kvp_value_ptr_to_scm(KvpValue* val)
     break;
     case KvpValue::Type::FRAME:
     {
-        auto frame = val->get<KvpFrame*>();
-        if (frame != nullptr)
-            return SWIG_NewPointerObj(frame, SWIG_TypeQuery("_p_KvpFrame"), 0);
+        auto frame { val->get<KvpFrame*>() };
+        auto acc = [](const auto& rv, const auto& iter)
+        {
+            auto key_scm { scm_from_utf8_string (iter.first) };
+            auto val_scm { gnc_kvp_value_ptr_to_scm (iter.second) };
+            return scm_acons (key_scm, val_scm, rv);
+        };
+        return scm_reverse (std::accumulate (frame->begin(), frame->end(), SCM_EOL, acc));
     }
     break;
     case KvpValue::Type::GLIST:
+    {
+        SCM lst = SCM_EOL;
+        for (GList *n = val->get<GList*>(); n; n = n->next)
+        {
+            auto elt = gnc_kvp_value_ptr_to_scm (static_cast<KvpValue*>(n->data));
+            lst = scm_cons (elt, lst);
+        }
+        return scm_reverse (lst);
+    }
     default:
 	break;
     }

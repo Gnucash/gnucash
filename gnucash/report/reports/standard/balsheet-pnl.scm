@@ -753,17 +753,17 @@ also show overall period profit & loss."))
          ;; account-balances is a list of monetary amounts
          (accounts-balances
           (map
-           (lambda (acc)
-             (cons acc (let ((cols-data (assoc-ref accounts-cols-data acc)))
-                         (map col-datum-get-split-balance cols-data))))
-           accounts))
+           (match-lambda
+             ((acc . cols-data)
+              (cons acc (map col-datum-get-split-balance cols-data))))
+           accounts-cols-data))
 
          (accounts-balances-with-closing
           (map
-           (lambda (acc)
-             (cons acc (let ((cols-data (assoc-ref accounts-cols-data acc)))
-                         (map col-datum-get-split-balance-with-closing cols-data))))
-           accounts))
+           (match-lambda
+             ((acc . cols-data)
+              (cons acc (map col-datum-get-split-balance-with-closing cols-data))))
+           accounts-cols-data))
 
          (exchange-fn (and common-currency
                            (gnc:case-exchange-time-fn
@@ -914,11 +914,10 @@ also show overall period profit & loss."))
              ;; split is the last one at date boundary
              (accounts-splits-dates
               (map
-               (lambda (acc)
-                 (cons acc (let ((cols-data (assoc-ref accounts-cols-data acc)))
-                             (list->vector
-                              (map col-datum-get-last-split cols-data)))))
-               accounts))
+               (match-lambda
+                 ((acc . cols-data)
+                  (cons acc (list->vector (map col-datum-get-last-split cols-data)))))
+               accounts-cols-data))
 
              (get-cell-anchor-fn
               (lambda (account col-idx)
@@ -944,10 +943,10 @@ also show overall period profit & loss."))
              ;; dates. split-value-balance determined by transaction currency.
              (accounts-value-balances
               (map
-               (lambda (acc)
-                 (cons acc (let ((cols-data (assoc-ref accounts-cols-data acc)))
-                             (map col-datum-get-split-value-balance cols-data))))
-               accounts))
+               (match-lambda
+                 ((acc . cols-data)
+                  (cons acc (map col-datum-get-split-value-balance cols-data))))
+               accounts-cols-data))
 
              ;; a vector of collectors whereby each collector is the sum
              ;; of asset and liability split-value-balances at report

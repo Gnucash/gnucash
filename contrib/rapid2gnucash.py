@@ -23,7 +23,7 @@ Convert a CSV file exported from Rapid Electronics (UK) to a form importable by 
 Line format is:
 line number,product code,quantity,availability,product description,unit price,discounts,line total,delivery,sub total,vat,grand total
 
-Useage: rapid2gnucash.py  DOWNLOADED_BASKET.csv "ORDER_NUMBER" <"Expense account">  >  output.csv
+Usage: rapid2gnucash.py  DOWNLOADED_BASKET.csv "ORDER_NUMBER" <"Expense account">  >  output.csv
 
 We need to remove first line and totals
 
@@ -46,7 +46,7 @@ try:
 	INV_ID=sys.argv[2]
 except:
 	print "No order number  specified."
-	print "Useage: rapid2gnucash.py  DOWNLOADED_BASKET.csv \"ORDER_NUMBER\""
+	print "Usage: rapid2gnucash.py  DOWNLOADED_BASKET.csv \"ORDER_NUMBER\""
 	quit(1)
 try:
 	ACCOUNT=sys.argv[3]
