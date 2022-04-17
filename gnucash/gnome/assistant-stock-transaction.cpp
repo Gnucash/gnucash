@@ -1034,6 +1034,7 @@ create_gas (GtkBuilder *builder, gint row,
     for (auto& it : type)
         acct_list = g_list_prepend (acct_list, (gpointer)it);
     auto curr_list = g_list_prepend (nullptr, currency);
+    gnc_account_sel_filter_placeholder (GNC_ACCOUNT_SEL (gas), true);
     gnc_account_sel_set_new_account_ability (GNC_ACCOUNT_SEL (gas), true);
     gnc_account_sel_set_acct_filters (GNC_ACCOUNT_SEL (gas), acct_list, curr_list);
     gtk_widget_show (gas);
