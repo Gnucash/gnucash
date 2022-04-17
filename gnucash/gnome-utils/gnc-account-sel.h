@@ -43,6 +43,7 @@ typedef struct
     GtkBox hbox;
     gboolean initDone;
     gboolean isModal;
+    gboolean hide_placeholder;
     GtkListStore *store;
     GtkComboBox *combo;
     GList *acctTypeFilters;
@@ -90,6 +91,12 @@ Account*   gnc_account_sel_get_account (GNCAccountSel *gas);
  **/
 void gnc_account_sel_set_acct_filters (GNCAccountSel *gas, GList *typeFilters,
                                        GList *commodityFilters);
+
+/**
+ * The GNCAccountSel can be setup to filter the accounts displayed.
+ * @param hide - choose non-placeholder accounts only
+ **/
+void gnc_account_sel_filter_placeholder (GNCAccountSel *gas, gboolean hide);
 
 /**
  * Conditional inclusion of a new-account button to the right of the

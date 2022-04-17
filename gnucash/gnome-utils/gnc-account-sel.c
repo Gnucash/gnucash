@@ -153,6 +153,7 @@ gnc_account_sel_init (GNCAccountSel *gas)
 
     gas->initDone = FALSE;
     gas->acctTypeFilters = FALSE;
+    gas->hide_placeholder = FALSE;
     gas->newAccountButton = NULL;
     gas->currentSelection = -1;
 
@@ -256,6 +257,10 @@ gas_filter_accounts (gpointer data, gpointer user_data)
 
     atnd = (account_filter_data*)user_data;
     a = (Account*)data;
+
+    if (atnd->gas->hide_placeholder && xaccAccountGetPlaceholder (a))
+        return;
+
     /* Filter as we've been configured to do. */
     if (atnd->gas->acctTypeFilters)
     {
@@ -387,6 +392,14 @@ gnc_account_sel_set_acct_filters (GNCAccountSel *gas, GList *typeFilters,
     if (commodityFilters)
         gas->acctCommodityFilters = g_list_copy (commodityFilters);
 
+    gas_populate_list (gas);
+}
+
+void
+gnc_account_sel_filter_placeholder (GNCAccountSel *gas, gboolean hide)
+{
+    g_return_if_fail (gas);
+    gas->hide_placeholder = hide;
     gas_populate_list (gas);
 }
 
