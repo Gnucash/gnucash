@@ -647,7 +647,7 @@ component_close_handler (gpointer data)
 /** Constructs a GncOptionsDialog
  *
  * Based on the description in the GtkBuilder file. Initializes signals.
- * Two component classes might be used, DIALOG_BOOK_OPTIONS_CM_CLASS or DIALOG_OPTIONS_CM_CLASS of which the latter is the default. 
+ * Two component classes might be used, DIALOG_BOOK_OPTIONS_CM_CLASS or DIALOG_OPTIONS_CM_CLASS of which the latter is the default.
  *
  * @param modal: If true the "Apply" button is hidden. It doesn't make the dialog run in its own event loop so it's not truly modal.
  * @param title: The title that will appear in the dialog's title bar.
@@ -2642,9 +2642,9 @@ create_option_widget<GncOptionUIType::PLOT_SIZE> (GncOption& option,
     g_signal_connect(G_OBJECT(value_percent), "changed",
                      G_CALLBACK(gnc_option_changed_widget_cb), &option);
     g_signal_connect(G_OBJECT(px_butt), "toggled",
-                         G_CALLBACK(gnc_rd_option_px_set_cb), &option);
+                     G_CALLBACK(gnc_rd_option_px_set_cb), &option);
     g_signal_connect(G_OBJECT(p_butt), "toggled",
-                         G_CALLBACK(gnc_rd_option_p_set_cb), &option);
+                     G_CALLBACK(gnc_rd_option_p_set_cb), &option);
 
     gtk_container_add(GTK_CONTAINER(*enclosing), hbox);
     gtk_widget_show_all(*enclosing);
