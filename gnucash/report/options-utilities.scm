@@ -157,7 +157,7 @@
    (gnc:make-number-plot-size-option
     pagename name-width
     (string-append sort-tag "a")
-    (N_ "Width of plot in pixels.") default-width
+    (N_ "Width of plot, 10 - 100 in percent, above in pixels.") default-width
     100 20000 0 5))
 
   (gnc:register-option
@@ -165,7 +165,7 @@
    (gnc:make-number-plot-size-option
     pagename name-height
     (string-append sort-tag "b")
-    (N_ "Height of plot in pixels.") default-height
+    (N_ "Height of plot, 10 - 100 in percent, above in pixels.") default-height
     100 20000 0 5)))
 
 ;; A multicoice option for the marker of a scatter plot.

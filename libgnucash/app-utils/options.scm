@@ -255,7 +255,7 @@
 (define-public (gnc:make-number-plot-size-option section name key docstring default min max dec-places step)
   (issue-deprecation-warning "gnc:make-number-plot-size-option is deprecated. Make and register the option in one command with gnc-register-plot-size-range-option.")
   ;; Ignore what the call asks for, only 10-100% makes sense.
-  (gnc-make-plot-size-option section name key docstring 100 10 100 1))
+  (gnc-make-plot-size-option section name key docstring 100 10 2000 1))
 (define-public (gnc:make-query-option section name default)
   (issue-deprecation-warning "gnc:make-query-option is deprecated. Make and register the option in one command with gnc-register-query-option.")
   (let ((defv (if (list? default) default (gnc-query2scm default))))
