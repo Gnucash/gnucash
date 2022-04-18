@@ -2691,10 +2691,12 @@ public:
     {
         GtkTreeIter iter;
         auto widget{GTK_COMBO_BOX(get_widget())};
-        gtk_combo_box_get_active_iter(widget, &iter);
-        auto tree_model{gtk_combo_box_get_model(widget)};
-        auto budget{gnc_tree_model_budget_get_budget(tree_model, &iter)};
-        option.set_value(qof_instance_cast(budget));
+        if (gtk_combo_box_get_active_iter(widget, &iter))
+        {
+            auto tree_model{gtk_combo_box_get_model(widget)};
+            auto budget{gnc_tree_model_budget_get_budget(tree_model, &iter)};
+            option.set_value(qof_instance_cast(budget));
+        }
     }
 };
 
