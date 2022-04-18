@@ -214,7 +214,9 @@ dialog_changed_internal (GtkWidget *widget, bool sensitive)
     auto option_win =
         static_cast<GncOptionsDialog*>(g_object_get_data(G_OBJECT(toplevel),
                                                      "optionwin"));
-    option_win->set_sensitive(sensitive);
+
+    if (option_win) // this null when part of assistant
+        option_win->set_sensitive(sensitive);
 }
 
 void
