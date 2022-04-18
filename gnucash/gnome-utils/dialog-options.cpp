@@ -1828,13 +1828,13 @@ create_option_widget<GncOptionUIType::ACCOUNT_SEL> (GncOption& option,
     gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(widget),
                                      acct_type_list, NULL);
     g_list_free(acct_type_list);
-    g_signal_connect(widget, "account_sel_changed",
-                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
 
-
-// gnc_account_sel doesn't emit a changed signal
+    // gnc_account_sel doesn't emit a changed signal
     option.set_ui_item(std::make_unique<GncGtkAccountSelUIItem>(widget));
     option.set_ui_item_from_option();
+
+    g_signal_connect(widget, "account_sel_changed",
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
