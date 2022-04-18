@@ -2021,12 +2021,19 @@ public:
         GncOptionGtkUIItem{widget, GncOptionUIType::NUMBER_RANGE} {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
-        gtk_spin_button_set_value(GTK_SPIN_BUTTON(get_widget()),
-                                  option.get_value<double>());
+        if (option.is_alternate())
+            gtk_spin_button_set_value(GTK_SPIN_BUTTON(get_widget()),
+                                      option.get_value<int>());
+        else
+            gtk_spin_button_set_value(GTK_SPIN_BUTTON(get_widget()),
+                                      option.get_value<double>());
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
-        option.set_value<double>(gtk_spin_button_get_value(GTK_SPIN_BUTTON(get_widget())));
+        if (option.is_alternate())
+            option.set_value<int>(gtk_spin_button_get_value(GTK_SPIN_BUTTON(get_widget())));
+        else
+            option.set_value<double>(gtk_spin_button_get_value(GTK_SPIN_BUTTON(get_widget())));
     }
 };
 
@@ -2042,7 +2049,19 @@ create_range_spinner(GncOption& option)
     gdouble upper_bound = G_MAXDOUBLE;
     gdouble step_size = 1.0;
 
-    option.get_limits(upper_bound, lower_bound, step_size);
+    if (option.is_alternate())
+    {
+        int tmp_lower_bound = G_MININT;
+        int tmp_upper_bound = G_MAXINT;
+        int tmp_step_size = 1.0;
+        option.get_limits<int>(tmp_upper_bound, tmp_lower_bound, tmp_step_size);
+        lower_bound =(double)tmp_lower_bound;
+        upper_bound = (double)tmp_upper_bound;
+        step_size = (double)tmp_step_size;
+    }
+    else
+        option.get_limits<double>(upper_bound, lower_bound, step_size);
+
     auto adj = GTK_ADJUSTMENT(gtk_adjustment_new(lower_bound, lower_bound,
                                                  upper_bound, step_size,
                                                  step_size * 5.0,

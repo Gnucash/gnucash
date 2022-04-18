@@ -335,8 +335,9 @@ public:
         OptionClassifier{section, name, key, doc_string},
         m_value{value >= min && value <= max ? value : min},
         m_default_value{value >= min && value <= max ? value : min},
-        m_min{min}, m_max{max}, m_step{step} {}
-
+        m_min{min}, m_max{max}, m_step{step} {
+           if constexpr(is_same_decayed_v<ValueType, int>)
+                set_alternate(true);}
     GncOptionRangeValue<ValueType>(const GncOptionRangeValue<ValueType>&) = default;
     GncOptionRangeValue<ValueType>(GncOptionRangeValue<ValueType>&&) = default;
     GncOptionRangeValue<ValueType>& operator=(const GncOptionRangeValue<ValueType>&) = default;
@@ -369,10 +370,7 @@ public:
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
     bool is_alternate() const noexcept { return m_alternate; }
-    void set_alternate(bool value) noexcept {
-        if (m_ui_type == GncOptionUIType::PLOT_SIZE)
-            m_alternate = value;
-    }
+    void set_alternate(bool value) noexcept { m_alternate = value; }
     std::string serialize() const noexcept;
     bool deserialize(const std::string& str) noexcept;
 private:
