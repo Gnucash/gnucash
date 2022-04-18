@@ -1359,6 +1359,7 @@ gppat_populate_gas_list(GtkWidget *dialog,
 
     /* Setting the account type filter triggers GNCAccountSel population. */
     gnc_account_sel_set_acct_filters (gas, filter, NULL);
+    gnc_account_sel_filter_placeholder (gas, TRUE);
 
     /* Accounts to be deleted must be removed. */
     gnc_account_sel_purge_account( gas, account, exclude_subaccounts);
