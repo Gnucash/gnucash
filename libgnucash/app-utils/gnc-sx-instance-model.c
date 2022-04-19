@@ -1267,9 +1267,7 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
 
     /* Bug#500427: copy the notes, if any */
     if (xaccTransGetNotes(template_txn) != NULL)
-    {
-        xaccTransSetNotes(new_txn, g_strdup(xaccTransGetNotes(template_txn)));
-    }
+        xaccTransSetNotes (new_txn, xaccTransGetNotes (template_txn));
 
     xaccTransSetDate(new_txn,
                      g_date_get_day(&creation_data->instance->date),
