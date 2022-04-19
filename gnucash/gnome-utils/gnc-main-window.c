@@ -2481,7 +2481,11 @@ main_window_update_page_set_read_only_icon (GncPluginPage *page,
 
     ENTER(" ");
 
-    g_return_if_fail(page && page->window && GNC_IS_MAIN_WINDOW(page->window));
+    g_return_if_fail (page && page->window);
+
+    if (!GNC_IS_MAIN_WINDOW (page->window))
+        return;
+
     window = GNC_MAIN_WINDOW(page->window);
 
     /* Get the notebook tab widget */
