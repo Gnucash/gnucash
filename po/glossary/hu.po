@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-04-06 09:35+0000\n"
+"PO-Revision-Date: 2022-04-20 12:13+0000\n"
 "Last-Translator: Kárász Attila <cult.edie@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/hu/>\n"
@@ -729,7 +729,7 @@ msgstr ""
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
 msgid "report form: Vertical Form"
-msgstr ""
+msgstr "report form: Vízszintes elrendezés"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
@@ -741,7 +741,7 @@ msgstr "Fordított tranzakció (Sztornó)"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
-msgstr ""
+msgstr "értékesítés"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
@@ -777,7 +777,7 @@ msgstr "osztás"
 
 #. "Alias of 'shares'"
 msgid "stocks"
-msgstr ""
+msgstr "készletek"
 
 #. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
 #, fuzzy
@@ -809,16 +809,18 @@ msgid "tax type: income tax"
 msgstr "Számla típus: Bevétel"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
+#, fuzzy
 msgid "tax type: sales tax"
-msgstr ""
+msgstr "tax type: forgalmi adó"
 
 #. "'Goods and Service Tax' is one form of sales tax."
+#, fuzzy
 msgid "tax type: GST"
-msgstr ""
+msgstr "tax type: GST"
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr ""
+msgstr "tax type: ÁFA"
 
 #. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
@@ -901,7 +903,7 @@ msgid "withdraw (in the reconcile dialog)"
 msgstr "kivét"
 
 msgid "stock"
-msgstr ""
+msgstr "készlet"
 
 msgid "due"
 msgstr "esedékes"
