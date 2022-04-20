@@ -847,6 +847,7 @@ tax_info_show_acct_type_accounts (TaxInfoDialog *ti_dialog)
             info.include_type[type] = FALSE;
     }
 
+    info.show_hidden = TRUE;
     gnc_tree_view_account_set_view_info (tree, &info);
 
     load_category_list (ti_dialog);
