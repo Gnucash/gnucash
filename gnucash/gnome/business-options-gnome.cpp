@@ -167,6 +167,9 @@ public:
         if (taxtable)
             gnc_simple_combo_set_value(GTK_COMBO_BOX(get_widget()),
                                        GNC_TAXTABLE(taxtable));
+        else
+            gnc_simple_combo_set_value(GTK_COMBO_BOX(get_widget()),
+                                       nullptr);
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {

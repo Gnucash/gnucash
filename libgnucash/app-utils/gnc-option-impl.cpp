@@ -587,7 +587,7 @@ qof_instance_from_guid(GncGUID* guid, GncOptionUIType type)
             qof_type = "gncInvoice";
             break;
         case GncOptionUIType::TAX_TABLE:
-            qof_type = "gncTaxtable";
+            qof_type = "gncTaxTable";
             break;
         case GncOptionUIType::ACCOUNT_LIST:
         case GncOptionUIType::ACCOUNT_SEL:
