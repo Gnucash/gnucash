@@ -1319,6 +1319,11 @@ void
 BothDateEntry::toggle_relative(bool use_absolute)
 {
     m_use_absolute = use_absolute;
+
+    gtk_widget_set_sensitive(GTK_WIDGET(m_abs_entry->get_widget()),
+                             m_use_absolute);
+    gtk_widget_set_sensitive(GTK_WIDGET(m_rel_entry->get_widget()),
+                             !m_use_absolute);
 }
 
 void
@@ -1334,6 +1339,8 @@ BothDateEntry::set_entry_from_option(GncOption& option)
                                  !m_use_absolute);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_abs_button),
                                  m_use_absolute);
+
+    toggle_relative(m_use_absolute);
 }
 
 void
