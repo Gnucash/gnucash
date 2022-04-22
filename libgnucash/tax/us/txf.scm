@@ -174,6 +174,7 @@
     (cons 'N292 #(not-impl "Sched C" "Spouse" 0 #t "" ((1980 ""))))
     (cons 'N319 #(not-impl "Sched C" "Principal business/prof" 2 #t "" ((1980 "A"))))
     (cons 'N293 #(none "Sched C" "Gross receipts or sales" 1 #t "" ((2012 "1") (2011 "1b") (1989 "1") (1980 "1a"))))
+    (cons 'N296 #(none "Sched C" "Returns and allowances" 1 #t "" ((1989 "2") (1980 "1b"))))
     (cons 'N303 #(none "Sched C" "Other business income" 1 #t "" ((1989 "6") (1987 "4") (1981 "4b") (1980 "4"))))
 
     (cons 'N497 #(not-impl "Sched C-EZ" "Schedule C-EZ" 1 #t ""))
