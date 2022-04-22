@@ -1346,8 +1346,7 @@ inline SCM return_scm_value(ValueType value)
                             if (scm_is_string(new_value))
                             {
                                  auto strval{scm_to_utf8_string(new_value)};
-                                 auto val{qof_instance_from_string(strval, option.get_ui_type())};
-                                 option.set_value(GNC_COMMODITY(val));
+                                 option.deserialize(strval);
                                  return;
                             }
                             option.set_value(scm_to_value<gnc_commodity*>(new_value));

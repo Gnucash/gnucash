@@ -224,7 +224,7 @@ GncOptionCommodityValue::reset_default_value()
 bool
 GncOptionCommodityValue::is_changed() const noexcept
 {
-    return m_namespace == m_default_namespace && m_mnemonic == m_default_mnemonic;
+    return m_namespace != m_default_namespace || m_mnemonic != m_default_mnemonic;
 }
 
 bool

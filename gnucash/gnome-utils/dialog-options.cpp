@@ -976,15 +976,16 @@ public:
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
         auto widget{GNC_CURRENCY_EDIT(get_widget())};
-        auto instance{option.get_value<const QofInstance*>()};
-        if (instance)
-            gnc_currency_edit_set_currency(widget, GNC_COMMODITY(instance));
+        auto currency{option.get_value<gnc_commodity*>()};
+
+        if (currency)
+            gnc_currency_edit_set_currency(widget, GNC_COMMODITY(currency));
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
         auto widget{GNC_CURRENCY_EDIT(get_widget())};
         auto currency = gnc_currency_edit_get_currency(widget);
-        option.set_value(qof_instance_cast(currency));
+        option.set_value<gnc_commodity*>(currency);
     }
 };
 
@@ -1016,15 +1017,16 @@ public:
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
         auto widget{GNC_GENERAL_SELECT(get_widget())};
-        auto instance{option.get_value<const QofInstance*>()};
-        if (instance)
-            gnc_general_select_set_selected(widget, GNC_COMMODITY(instance));
+        auto commodity{option.get_value<gnc_commodity*>()};
+
+        if (commodity)
+            gnc_general_select_set_selected(widget, GNC_COMMODITY(commodity));
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
         auto widget{GNC_GENERAL_SELECT(get_widget())};
         auto commodity{gnc_general_select_get_selected(widget)};
-        option.set_value(qof_instance_cast(commodity));
+        option.set_value<gnc_commodity*>(GNC_COMMODITY(commodity));
     }
 };
 
