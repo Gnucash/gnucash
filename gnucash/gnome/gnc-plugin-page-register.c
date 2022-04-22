@@ -1265,7 +1265,7 @@ gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister* page)
                                "visible", gnc_prefs_is_extra_enabled ());
 
     gnc_plugin_update_actions (action_group, actions_requiring_priced_account,
-                               "sensitive", xaccAccountIsPriced (account));
+                               "sensitive", account && xaccAccountIsPriced (account));
 
     /* Set "style" radio button */
     ledger_type = gnc_ledger_display_type (priv->ledger);

@@ -299,7 +299,7 @@
 
     (gnc:report-percent-done 1)
     (set! commodity-list (gnc:accounts-get-commodities
-                          (gnc:accounts-and-all-descendants accounts)
+                          (gnc-accounts-and-all-descendants accounts)
                           report-currency))
     (gnc:report-percent-done 10)
     (set! exchange-fn (gnc:case-exchange-time-fn

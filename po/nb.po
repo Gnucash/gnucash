@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-19 08:55+0000\n"
+"PO-Revision-Date: 2022-04-21 12:07+0000\n"
 "Last-Translator: Petter Reinholdtsen <pere-weblate@hungry.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/nb_NO/>\n"
@@ -485,6 +485,10 @@ msgid ""
 "(File[->Most Recently Used-List]).\n"
 "The full path is displayed in the status bar."
 msgstr ""
+"Hvis du vil vite hvilke kataloger de siste GnuCash-filene dine er lagret i, "
+"hold musepekeren over en av oppføringene i historiemenyen\n"
+"(Fil[->Sist brukte-liste]).\n"
+"Hele stien vises i statuslinjen."
 
 #: doc/tip_of_the_day.list.c:24
 msgid ""
@@ -504,17 +508,20 @@ msgid ""
 "Just locate the triangle at the far right of the column headings, and click "
 "it to see the different columns available."
 msgstr ""
+"Det er mulig å endre hvilke kolonner som vises i kontoplanen. Bare finn "
+"trekanten helt til høyre i kolonneoverskriftene, og klikk på den for å se de "
+"forskjellige kolonnene som er tilgjengelige."
 
 #: doc/tip_of_the_day.list.c:33
-#, fuzzy
 msgid ""
 "Click the right mouse button (control-click in Mac OS X) in the Accounts tab "
 "of the main window to bring up the account menu options. Within each "
 "register, clicking the right mouse button brings up the transaction menu "
 "options."
 msgstr ""
-"Bruk høyre museknapp i et hovedvindu for å få frem kontomenyvalgene. I hvert "
-"registreringsvindu henter høyre museknapp frem transaksjonsmenyvalgene."
+"Bruk høyre museknapp (Ctrl-klikk på Mac OS X) i kontofanen til hovedvinduen "
+"for å få frem kontomenyvalgene. Bruk høyre musknapp i hvert "
+"registreringsvindu for å hente frem transaksjonsmenyvalgene."
 
 #: doc/tip_of_the_day.list.c:38
 msgid ""
@@ -537,6 +544,12 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgstr ""
+"Hver transaksjon har et «Notat»-felt hvor du kan legge inn nyttig "
+"informasjon.\n"
+"\n"
+"For å gjøre det synlig\n"
+"velg «Vis» i menylinjen og kryss av for «Dobbellinjer» eller\n"
+"sjekk «Dobbellinjemodus» i Alternativer: Register Standarder."
 
 #: doc/tip_of_the_day.list.c:50
 #, fuzzy
@@ -552,7 +565,6 @@ msgstr ""
 "\"Vis->Stil\"."
 
 #: doc/tip_of_the_day.list.c:55
-#, fuzzy
 msgid ""
 "As you enter amounts in the register, you can use the GnuCash calculator to "
 "add, subtract, multiply and divide. Simply type the first value, then select "
@@ -560,9 +572,9 @@ msgid ""
 "calculated amount."
 msgstr ""
 "Ved inntasting av beløp under registreringen kan du bruke GnuCash-"
-"kalkulatoren til å addere, subtrahere, multiplisere og dividere. Dette "
-"gjøres ved å skrive inn første verdi, så bruk «+», «-», «*» eller «/», fyll "
-"så inn neste verdi, og trykk enter for å fylle inn kalkulert verdi."
+"kalkulatoren til å legge sammen, trekke fra, gange og dele. Dette gjøres ved "
+"å skrive inn første verdi, så bruk «+», «-», «*» eller «/», fyll så inn "
+"neste verdi, og trykk enter for å fylle inn kalkulert verdi."
 
 #: doc/tip_of_the_day.list.c:60
 #, fuzzy
@@ -670,6 +682,8 @@ msgid ""
 "To raise the accounts menu in the transfer field of a register page, press "
 "the Menu key or the Ctrl-Down key combination."
 msgstr ""
+"For å heve kontomenyen i overføringsfeltet på en registerside, trykk på "
+"menytasten eller Ctrl-Ned tastekombinasjonen."
 
 #: doc/tip_of_the_day.list.c:108
 msgid ""

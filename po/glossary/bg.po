@@ -2,14 +2,15 @@
 # Copyright (C) 2001 Free Software Foundation, Inc.
 # Christian Stimming <stimming@tuhh.de>, 2001
 # An's Page <anspage@outlook.com>, 2020.
+# Aleksandar Hadzhivelichkov <Raphaelo245@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-01-02 22:54+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2022-04-21 01:13+0000\n"
+"Last-Translator: Aleksandar Hadzhivelichkov <Raphaelo245@gmail.com>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/bg/>\n"
 "Language: bg\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Poedit-Language: Bulgarian\n"
 "X-Poedit-Country: BULGARIA\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -28,7 +29,7 @@ msgstr "Срок"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
-msgstr ""
+msgstr "\"\""
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -48,19 +49,19 @@ msgstr "име на сметка"
 
 #. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
 msgid "account type: Active"
-msgstr "Акаунт сметка : Активен"
+msgstr "тип сметка : действаща"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 msgid "account type: Asset"
-msgstr "account type: Актив"
+msgstr "тип сметка: Актив"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
 msgid "account type: Assets & Liabilities"
-msgstr "account type: Пасив"
+msgstr "тип сметка: Пасив"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
-msgstr "account type: разплащателна сметка"
+msgstr "тип сметка: разплащателна сметка"
 
 #. "-"
 msgid "account type: currency"
@@ -114,15 +115,15 @@ msgstr "account type: брокерска сметка"
 
 #. "-"
 msgid "account: parent account"
-msgstr "account: основна сметка"
+msgstr "сметка: основна сметка"
 
 #. "-"
 msgid "account: subaccount"
-msgstr "account: подсметка"
+msgstr "сметка: подсметка"
 
 #. "-"
 msgid "account: top level account"
-msgstr "account: главна сметка"
+msgstr "сметка: главна сметка"
 
 #. "The process of doing something that caused a transaction to happen"
 msgid "Action (register)"

@@ -425,7 +425,7 @@
             (gnc:html-document-add-object!
              doc (gnc:html-make-rates-table
                   report-commodity price-fn
-                  (gnc:accounts-and-all-descendants accounts))))))
+                  (gnc-accounts-and-all-descendants accounts))))))
 
     (gnc:report-finished)
     doc))

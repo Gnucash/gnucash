@@ -555,6 +555,7 @@
   (gnc:string-locale<? (xaccAccountGetName a)
                        (xaccAccountGetName b)))
 (define (gnc:account-path-less-p a b)
+  (issue-deprecation-warning "gnc:account-path-less-p is deprecated. use gnc:account-full-name<? instead")
   (gnc:string-locale<? (gnc-account-get-full-name a)
                        (gnc-account-get-full-name b)))
 
@@ -696,7 +697,7 @@
           (for-each
            (lambda (acct)
              (this-collector 'merge (get-balance acct-balances acct) #f))
-           (gnc:accounts-and-all-descendants (list account)))
+           (cons account (gnc-account-get-descendants-sorted account)))
           this-collector))
 
       (let lp ((accounts (if less-p (sort accts less-p) accts))

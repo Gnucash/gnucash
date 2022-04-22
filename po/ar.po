@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-04-10 21:10+0000\n"
+"PO-Revision-Date: 2022-04-20 05:10+0000\n"
 "Last-Translator: ltai0001 <yltaief@gmail.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ar/>\n"
@@ -433,9 +433,8 @@ msgid "Western (Windows-1252)"
 msgstr ""
 
 #: borrowed/goffice/go-charmap-sel.c:441
-#, fuzzy
 msgid "Locale: "
-msgstr "لغة النظام:"
+msgstr "لغة النظام: "
 
 #: borrowed/goffice/go-charmap-sel.c:476
 #, fuzzy
@@ -2745,11 +2744,11 @@ msgstr "المجموعات في حساب %s"
 
 #: gnucash/gnome/dialog-order.c:171
 msgid "The Order must be given an ID."
-msgstr "يجب ان يعطى معرف للطلب"
+msgstr "يجب ان يعطى معرف للطلب."
 
 #: gnucash/gnome/dialog-order.c:278
 msgid "The Order must have at least one Entry."
-msgstr "في هذا الطلب تحتاج ادخال واحد على الأقل"
+msgstr "يجب أن يحتوي الطلب على إدخال واحد على الأقل."
 
 #: gnucash/gnome/dialog-order.c:300
 msgid ""
@@ -2989,7 +2988,7 @@ msgstr "يجب إدخال كمية صالحة."
 
 #: gnucash/gnome/dialog-print-check.c:824
 msgid "Cannot save check format file."
-msgstr "لا يمكن hgحفظ. تحقق من نسق الملف."
+msgstr "لا يمكن الحفظ. تحقق من نسق الملف."
 
 #: gnucash/gnome/dialog-print-check.c:826
 #, fuzzy, c-format
@@ -3970,7 +3969,7 @@ msgstr "البحث عن نص"
 #: gnucash/gnome/gnc-plugin-business.c:312
 #: gnucash/gnome/gnc-plugin-business.c:313
 msgid "Initialize Test Data"
-msgstr "تهيئة بيانات الاختبار "
+msgstr "تهيئة بيانات الاختبار"
 
 #: gnucash/gnome/gnc-plugin-business.c:326
 msgid "Assign as payment..."
@@ -4368,9 +4367,9 @@ msgid "All transactions in this account will be deleted."
 msgstr "سيتم حذف جميع المعاملات في هذا الحساب."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1754
-#, fuzzy, c-format
+#, c-format
 msgid "Its sub-account will be moved to the account %s."
-msgstr "سيتم نقل كل الحسابات الفرعية للحساب %s "
+msgstr "سيتم نقل كل الحسابات الفرعية للحساب %s"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1760
 #, fuzzy, c-format
@@ -5890,7 +5889,7 @@ msgstr "مسح"
 #: gnucash/import-export/import-match-picker.c:437
 #: gnucash/report/trep-engine.scm:151
 msgid "Reconciled"
-msgstr "تمت التسوية "
+msgstr "تمت التسوية"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3449
 #: gnucash/gnome-search/search-reconciled.c:230
@@ -6003,7 +6002,7 @@ msgstr "تصدير"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.c:1140
 msgid "Save Config"
-msgstr ""
+msgstr "حفظ الخيارات"
 
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As..."
 #. to be used as toolbar button label.
@@ -6014,7 +6013,7 @@ msgstr "حفظ بإسم ..."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1144
 msgid "Make Pdf"
-msgstr ""
+msgstr "إنشاء PDF"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1196
 #, c-format
@@ -6836,7 +6835,7 @@ msgstr "الرصيد النهائي"
 
 #: gnucash/gnome/window-reconcile2.c:1814 gnucash/gnome/window-reconcile.c:2030
 msgid "Reconciled Balance"
-msgstr "تسوية الرصيد "
+msgstr "تسوية الرصيد"
 
 #: gnucash/gnome/window-reconcile2.c:1824 gnucash/gnome/window-reconcile.c:2040
 #: gnucash/report/reports/standard/cash-flow.scm:312
@@ -7499,10 +7498,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome-utils/dialog-account.c:1329
-#, fuzzy
-#| msgid "Cancel the current entry"
 msgid "Cannot change currency"
-msgstr "إلغاء الإدخال الحالي"
+msgstr "لا يمكن تغيير العملة"
 
 #: gnucash/gnome-utils/dialog-account.c:1418
 #, fuzzy
@@ -7577,7 +7574,7 @@ msgid ""
 "Commodity: "
 msgstr ""
 "\n"
-"سلعة:"
+"سلعة: "
 
 #. Translators: Replace here and later CUSIP by the name of your local
 #. National Securities Identifying Number
@@ -7590,7 +7587,7 @@ msgid ""
 "Exchange code (ISIN, CUSIP or similar): "
 msgstr ""
 "\n"
-"كود البورصة (الترقيم الدولي، CUSIP أو ما شابه ذلك):"
+"كود البورصة (الترقيم الدولي، CUSIP أو ما شابه ذلك): "
 
 #: gnucash/gnome-utils/dialog-commodity.c:176
 msgid ""
@@ -7598,7 +7595,7 @@ msgid ""
 "Mnemonic (Ticker symbol or similar): "
 msgstr ""
 "\n"
-"(رمز السهم أو ما شابه ذلك):"
+"(رمز السهم أو ما شابه ذلك): "
 
 #: gnucash/gnome-utils/dialog-commodity.c:275
 #: gnucash/gtkbuilder/dialog-commodity.glade:644
@@ -8075,7 +8072,7 @@ msgstr "المبلغ المدين"
 #: gnucash/gnome-utils/dialog-transfer.c:2060
 #: gnucash/gtkbuilder/dialog-transfer.glade:560
 msgid "To Amount"
-msgstr "القيمةإلى "
+msgstr "القيمة إلى"
 
 #: gnucash/gnome-utils/dialog-utils.c:435
 msgid ""
@@ -8307,7 +8304,7 @@ msgstr "_عرض"
 #: gnucash/gnome-utils/gnc-dense-cal.c:338
 #: gnucash/report/stylesheets/footer.scm:377
 msgid "Date: "
-msgstr "التاريخ:"
+msgstr "التاريخ: "
 
 #: gnucash/gnome-utils/gnc-dense-cal.c:351
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:147
@@ -8568,7 +8565,6 @@ msgstr ""
 "البرنامج لمعرفة كيفية انهاء جلسات مستخدمين معلقة ."
 
 #: gnucash/gnome-utils/gnc-file.c:515
-#, fuzzy
 msgid ""
 "The library \"libdbi\" installed on your system doesn't correctly store "
 "large numbers. This means GnuCash cannot use SQL databases correctly. "
@@ -8579,10 +8575,9 @@ msgstr ""
 "المكتبة \"libdbi\" مخزنة في نظامك بشكل لا يحفظ مبالغ كبيرة بشكل صحيح. هذا "
 "يعني أن البرنامج لا يستطيع استخدام قاعدة البيانات. إن البرنامج لن يقوم بفتح "
 "أو حفظ قاعدة البيانات حتى يتم تحميل مكتبة أخرى. أرجو زيارة الموقع التالي "
-"لمزيد من المعلومات https://bugs.gnucash.org/show_bug.cgi?id=611936 "
+"لمزيد من المعلومات https://bugs.gnucash.org/show_bug.cgi?id=611936"
 
 #: gnucash/gnome-utils/gnc-file.c:527
-#, fuzzy
 msgid ""
 "GnuCash could not complete a critical test for the presence of a bug in the "
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
@@ -8591,7 +8586,7 @@ msgid ""
 msgstr ""
 "البرنامج لا يستطيع إكمال عملية الإختبار للمكتبة \"libdbi\" بسبب وجود عطل "
 "بها. أرجو زيارة الرابط التالي لمزيد من المعلومات https://bugs.gnucash.org/"
-"show_bug.cgi?id=645216 "
+"show_bug.cgi?id=645216"
 
 #: gnucash/gnome-utils/gnc-file.c:537
 msgid ""
@@ -10303,19 +10298,16 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:113
-#, fuzzy
 msgid "Name of the report to run\n"
-msgstr "اسم الشركة.\n"
+msgstr "اسم التقرير المراد تشغيله\n"
 
 #: gnucash/gnucash-cli.cpp:115
-#, fuzzy
 msgid "Specify export type\n"
-msgstr "2. حدد نوع الاستيراد\n"
+msgstr "حدد نوع الاستيراد\n"
 
 #: gnucash/gnucash-cli.cpp:117
-#, fuzzy
 msgid "Output file for report\n"
-msgstr "خيارات الخلفية المكررة للتقارير\n"
+msgstr "ملف الإخراج للتقرير\n"
 
 #: gnucash/gnucash-cli.cpp:132
 msgid "Unknown quotes command '{1}'"
@@ -11161,10 +11153,8 @@ msgstr ""
 "في قائمة المطابقة."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:25
-#, fuzzy
-#| msgid "Add matching transactions below this score"
 msgid "Likely matching transaction within these days"
-msgstr "قم بإضافة العمليات المتطابقة التي لها نقاط أقل من "
+msgstr "العمليات المتطابقة خلال هذه الأيام"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:26
 #, fuzzy
@@ -11198,7 +11188,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:35
 msgid "Add matching transactions below this score"
-msgstr "قم بإضافة العمليات المتطابقة التي لها نقاط أقل من "
+msgstr "قم بإضافة العمليات المتطابقة التي لها نقاط أقل من"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:36
 msgid ""
@@ -12010,7 +12000,7 @@ msgid ""
 msgstr ""
 "إذا حددت، يتم تعيين الخيار الافتراضي للدفتر للملفات الجديدة بحيث الصيغة "
 "الرقمي خلية في العرض / التحديث بالسجلات لحقل عمل الانقسام و رقم المعاملة "
-"يظهر على السطر الثاني في وضع خط مزدوج ( غير مرئي في وضع سطر واحد). "
+"يظهر على السطر الثاني في وضع خط مزدوج ( غير مرئي في وضع سطر واحد)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:241
 #, fuzzy
@@ -13422,11 +13412,12 @@ msgid "Import Preview"
 msgstr "استيراد الحسابات الآن"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1014
-#, fuzzy
 msgid ""
 "<b>Press \"Apply\" to add the Prices.\n"
 "\"Cancel\" to abort.</b>"
-msgstr "قم بالضغط على تطبيق لعمل ملف تصدير./nاضغط إلغاء لإيقاف العملية."
+msgstr ""
+"<b>اضغط على \"تطبيق\" لإضافة الأسعار.\n"
+"\"إلغاء\" للإجهاض</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1029
 #, fuzzy
@@ -13626,7 +13617,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:163
 msgid "<b>Categories</b>"
-msgstr "<b>التصنيفات<b/>"
+msgstr "<b>التصنيفات</b>"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:273
 #: gnucash/gtkbuilder/dialog-account.glade:906
@@ -13635,7 +13626,7 @@ msgstr "مسح الكل"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:311
 msgid "<b>Category Description</b>"
-msgstr "<b>وصف التصنيفات<b/>"
+msgstr "<b>وصف التصنيفات</b>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:377
@@ -14018,7 +14009,7 @@ msgstr "وهمية"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:30
 msgid "QIF Import Assistant"
-msgstr "مساعد استيراد QIF "
+msgstr "مساعد استيراد QIF"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-qif-import.glade:42
@@ -14361,7 +14352,6 @@ msgstr "استيراد QIF"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1227
-#, fuzzy
 msgid ""
 "\n"
 "If you are importing a QIF file from a bank or other financial institution, "
@@ -14384,7 +14374,7 @@ msgstr ""
 "ستظهر لديك المطابقات أسفل منها. اذا وجدت أن المطابقة صحيحة اضغط عليها. ان "
 "تحديدك سيتم تأكيده في عامود \"مطابق\".\n"
 "\n"
-"اضغط على \"التالي\" لمراجعة نتائج المطابقة. "
+"اضغط على \"التالي\" لمراجعة نتائج المطابقة."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1243
 msgid "Match existing transactions"
@@ -14422,7 +14412,7 @@ msgstr ""
 "اضغط على \"عودة\" لمراجعة مطابقة الحسابات والمجموعات وتعديل اعدادات العملة "
 "أو الإستثمار للحسابات الجديدة أو إضافة ملفات جديدة.\n"
 "\n"
-"اضغط على\"إلغاء\" لإلغاء عملية الاستيراد. "
+"اضغط على\"إلغاء\" لإلغاء عملية الاستيراد."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1361
 msgid "Update your GnuCash accounts"
@@ -15049,7 +15039,7 @@ msgstr "_إظهار الوثائق"
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:561
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:406
 msgid "_Reconciled"
-msgstr "تمت التسوية "
+msgstr "_تمت التسوية"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:72
 msgid "_Cleared"
@@ -15149,7 +15139,7 @@ msgstr "فتح المستندات المستوردة في علامة تبويب 
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:392
 msgid "Open not yet posted documents in tabs "
-msgstr "فتح المستندات التي لم ترحل في علامة تبويب جديدة"
+msgstr "فتح المستندات التي لم ترحل في علامة تبويب جديدة "
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:410
 msgid "Don't open imported documents in tabs"
@@ -15533,7 +15523,7 @@ msgstr "حد الائتمان:"
 #: gnucash/gtkbuilder/dialog-customer.glade:566
 #: gnucash/gtkbuilder/dialog-vendor.glade:536
 msgid "Tax Included"
-msgstr "وتشمل الضرائب "
+msgstr "وتشمل الضرائب"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:579
 #: gnucash/gtkbuilder/dialog-tax-table.glade:399
@@ -16057,9 +16047,8 @@ msgstr "حدد مطابقة المعاملات الموجودة"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:313
-#, fuzzy
 msgid "Show Reconciled"
-msgstr "تمت التسوية "
+msgstr "تمت التسوية"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:374
@@ -16690,7 +16679,7 @@ msgstr "حرف"
 #: gnucash/gtkbuilder/dialog-preferences.glade:821
 #: gnucash/gtkbuilder/gnc-date-format.glade:207
 msgid "Sample"
-msgstr "عينة "
+msgstr "عينة"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:858
 msgid "Show the Account Color as background"
@@ -16845,9 +16834,8 @@ msgid "days"
 msgstr "أيام"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1664
-#, fuzzy
 msgid "<b>_Retain log/backup files</b>"
-msgstr "الإحتفاظ بملفات السجل:"
+msgstr "<b>الا_حتفاظ بملفات السجل/النسخ الاحتياطي</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1676
 msgid "Com_press files"
@@ -17844,7 +17832,7 @@ msgstr "أدخل عرض صف/ عمود التقرير"
 
 #: gnucash/gtkbuilder/dialog-report.glade:544
 msgid "_Row span"
-msgstr "_امتداد الصف "
+msgstr "_امتداد الصف"
 
 #: gnucash/gtkbuilder/dialog-report.glade:559
 msgid "_Column span"
@@ -18098,7 +18086,7 @@ msgstr "<b>مرات الحدوث</b>"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1174
 msgid "Last Occurred: "
-msgstr "حدث آخر:"
+msgstr "حدث آخر: "
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1208
 msgid "Repeats:"
@@ -18295,7 +18283,7 @@ msgstr "UK (31/12/2001)"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:18
 msgid "Europe (31.12.2001)"
-msgstr "Europe (31.12.2001)"
+msgstr "أوروبا (31.12.2001)"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:21
 msgid "ISO (2001-12-31)"
@@ -18716,7 +18704,7 @@ msgstr "حدد تاريخ الحدوث أعلاه."
 #: gnucash/gtkbuilder/gnc-frequency.glade:710
 msgctxt "Daily"
 msgid "Every"
-msgstr "كل . يومي"
+msgstr "كل"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:741
 msgctxt "Daily"
@@ -19129,7 +19117,7 @@ msgstr "سنة"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:50
 msgid "Every "
-msgstr "كل"
+msgstr "كل "
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:62
 msgid ""
@@ -19289,7 +19277,7 @@ msgstr "جديد؟"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:8
 msgid "AqBanking Initial Assistant"
-msgstr "المساعدة الأولية لبرنامج AqBanking "
+msgstr "المساعدة الأولية لبرنامج AqBanking"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:27
 msgid ""
@@ -19347,7 +19335,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:96
 msgid "_Start AqBanking Wizard"
-msgstr "إبدأ إعدادات برنامج AqBanking "
+msgstr "إ_بدأ إعدادات برنامج AqBanking"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:113
 msgid "Start Online Banking Wizard"
@@ -20118,7 +20106,7 @@ msgstr "تحديد الملف لاستيراده"
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:140
 msgid "Import module for DTAUS import not found."
-msgstr "لم يتم العثور على ملفات الاستيراد DTAUS "
+msgstr "لم يتم العثور على ملفات الاستيراد DTAUS."
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:295
 #, fuzzy, c-format
@@ -20587,7 +20575,7 @@ msgstr "متعدد الأسطر"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:194
 msgid "Import Bills or Invoices from csv"
-msgstr "استيراد فواتير من ملف إكسل"
+msgstr "استيراد فواتير من ملف CVS"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:222
 #, c-format
@@ -20787,9 +20775,8 @@ msgstr "إظهار اسم الحساب كامل"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:629
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:76
-#, fuzzy
 msgid "Reconcile Date"
-msgstr "تاريخ التسوية "
+msgstr "تاريخ التسوية"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54
 msgid "Export Account T_ree to CSV..."
@@ -21274,9 +21261,8 @@ msgid "Transfer Memo"
 msgstr "نقل إلى"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:80
-#, fuzzy
 msgid "Transfer Reconciled"
-msgstr "تاريخ التسوية "
+msgstr "تمت تسوية التحويل"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:81
 #, fuzzy
@@ -21471,7 +21457,7 @@ msgstr ""
 
 #: gnucash/import-export/import-account-matcher.c:472
 msgid "(Full account ID: "
-msgstr "(كامل معرف الحساب:"
+msgstr "(كامل معرف الحساب: "
 
 #: gnucash/import-export/import-commodity-matcher.c:113
 msgid ""
@@ -21599,7 +21585,7 @@ msgstr "نقل جديد %s إلى (أوتوماتيك) \"%s\""
 #: gnucash/import-export/import-main-matcher.c:1745
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
-msgstr "جديد ، غير متوازن يحتاج الحساب لتحويل %s"
+msgstr "جديد، غير متوازن (يحتاج الحساب لتحويل %s)!"
 
 #: gnucash/import-export/import-main-matcher.c:1763
 #, fuzzy, c-format
@@ -22021,7 +22007,7 @@ msgstr "تم تجاهل بعض الأحرف."
 #: gnucash/import-export/qif-imp/qif-file.scm:185
 #: gnucash/import-export/qif-imp/qif-file.scm:189
 msgid "Converted to: "
-msgstr "تحويل إلى:"
+msgstr "تحويل إلى: "
 
 #: gnucash/import-export/qif-imp/qif-file.scm:188
 msgid "Some characters have been converted according to your locale."
@@ -22139,7 +22125,7 @@ msgstr "العثور على معاملات مكررة"
 #: gnucash/import-export/qif-imp/qif-parse.scm:172
 #, scheme-format
 msgid "Unrecognized account type '~s'. Defaulting to Bank."
-msgstr "نوع الحساب ~a غير معروف العودة للخيار الإفتراضي للبنك."
+msgstr "نوع الحساب ~s غير معروف العودة للخيار الإفتراضي للبنك."
 
 #: gnucash/import-export/qif-imp/qif-parse.scm:235
 #, scheme-format
@@ -22577,7 +22563,7 @@ msgstr "المجموع الفرعي لهذا المدخل"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
 msgid "The total tax of this entry "
-msgstr "الضريبة الإجمالية لهذا المدخل"
+msgstr "الضريبة الإجمالية لهذا المدخل "
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:783
 msgid "Is this entry billable to a customer or job?"
@@ -22779,9 +22765,9 @@ msgid "Tot Shares"
 msgstr "إجمالي الأسهم"
 
 #: gnucash/register/ledger-core/split-register-model.c:537
-#, fuzzy, c-format
+#, c-format
 msgid "Reconciled on %s"
-msgstr "تمت التسوية "
+msgstr "تمت التسوية في %s"
 
 #: gnucash/register/ledger-core/split-register-model.c:1018
 msgid "Scheduled"
@@ -22849,9 +22835,9 @@ msgid ""
 "\n"
 "'%s'"
 msgstr ""
-"لا يمكن تعديل أو حذف هذه الحركة. هذه الحركة :\n"
+"لا يمكن تعديل أو حذف هذه المعاملة. هذه المعاملة حدد ت للقراءة فقط و السبب:\n"
 "\n"
-"للقراءة فقط و السبب %s "
+"'%s'"
 
 #: gnucash/register/ledger-core/split-register-model.c:2209
 #, fuzzy
@@ -23343,13 +23329,12 @@ msgid ""
 "report system, especially your saved reports, for a report with this report-"
 "guid: "
 msgstr ""
-"واحد من التقارير الخاصة بك لديه تقرير-GUID مكرر. يرجى التحقق من نظام "
-"التقرير، وخاصة التقارير المحفوظة، للحصول على تقرير مع هذا التقرير-GUID:"
+"واحد من التقارير الخاصة بك لديه تقرير-GUID مكرر. يرجى التحقق من نظام التقرير،"
+" وخاصة التقارير المحفوظة، للحصول على تقرير مع هذا التقرير-GUID: "
 
 #: gnucash/report/report-core.scm:212
-#, fuzzy
 msgid "Wrong report definition: "
-msgstr "تحميل خيارات التقرير"
+msgstr "تعريف خاطئ للتقرير: "
 
 #: gnucash/report/report-core.scm:213
 msgid " Report is missing a GUID."
@@ -24122,9 +24107,8 @@ msgid "A sample report with examples."
 msgstr "نموذج تقرير مع الأمثلة."
 
 #: gnucash/report/reports/example/sample-graphs.scm:42
-#, fuzzy
 msgid "Sample Graphs"
-msgstr "عينة "
+msgstr "عينة من الرسوم البيانية"
 
 #: gnucash/report/reports/example/sample-graphs.scm:142
 msgid "Pie:"
@@ -24321,7 +24305,7 @@ msgstr "لا تقم بطباعة جميع أسماء الحسابات الاعل
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:220
 msgid "Print all Transfer To/From Accounts"
-msgstr "طباعة كافة حسابات التحويلات من-الي "
+msgstr "طباعة كافة حسابات التحويلات من-الي"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:221
 msgid "Print all split details for multi-split transactions."
@@ -25478,7 +25462,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balsheet-pnl.scm:76
 #: gnucash/report/trep-engine.scm:568
 msgid "Add summary of options."
-msgstr ""
+msgstr "إضافة ملخص للخيارات."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:78
 msgid "Account full name instead of indenting"
@@ -25584,7 +25568,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balsheet-pnl.scm:623
 #: gnucash/report/trep-engine.scm:1603
 msgid "Total For "
-msgstr "إجمالي"
+msgstr "إجمالي "
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:830
 #, fuzzy
@@ -28279,14 +28263,12 @@ msgid "Amount Due (inc GST)"
 msgstr "المبلغ المستحق"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:306
-#, fuzzy
 msgid "Invoice #: "
-msgstr "الفاتورة"
+msgstr "الفاتورة #: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:307
-#, fuzzy
 msgid "Reference: "
-msgstr "مرجع"
+msgstr "مرجع: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:308
 #, fuzzy
@@ -28813,13 +28795,13 @@ msgstr "عمق مشطوف الحواف في الجداول."
 #: gnucash/report/stylesheets/head-or-tail.scm:425
 #: gnucash/report/stylesheets/head-or-tail.scm:519
 msgid "Prepared by: "
-msgstr "أعده:"
+msgstr "من إعداد: "
 
 #: gnucash/report/stylesheets/footer.scm:374
 #: gnucash/report/stylesheets/head-or-tail.scm:433
 #: gnucash/report/stylesheets/head-or-tail.scm:527
 msgid "Prepared for: "
-msgstr "أعدت من أجل:"
+msgstr "أعدت من أجل: "
 
 #: gnucash/report/stylesheets/footer.scm:413
 #: gnucash/report/stylesheets/footer.scm:429
@@ -28927,14 +28909,12 @@ msgstr ""
 #: gnucash/report/stylesheets/head-or-tail.scm:449
 #: gnucash/report/stylesheets/head-or-tail.scm:536
 #: gnucash/report/stylesheets/head-or-tail.scm:543
-#, fuzzy
 msgid "Report Creation Date: "
-msgstr "اختلاف التقرير"
+msgstr "تاريخ إنشاء التقرير: "
 
 #: gnucash/report/stylesheets/head-or-tail.scm:551
-#, fuzzy
 msgid "GnuCash "
-msgstr "جنوكاش"
+msgstr "جنوكاش "
 
 #: gnucash/report/stylesheets/head-or-tail.scm:566
 #: gnucash/report/stylesheets/head-or-tail.scm:570
@@ -29030,9 +29010,8 @@ msgid "Transaction Filter is case insensitive"
 msgstr "تاريخ المعاملة"
 
 #: gnucash/report/trep-engine.scm:122 gnucash/report/trep-engine.scm:197
-#, fuzzy
 msgid "Reconciled Status"
-msgstr "تاريخ التسوية "
+msgstr "حالة التسوية"
 
 #: gnucash/report/trep-engine.scm:123
 msgid "Void Transactions"
@@ -29114,9 +29093,8 @@ msgid "Cleared only"
 msgstr "مسح"
 
 #: gnucash/report/trep-engine.scm:397
-#, fuzzy
 msgid "Reconciled only"
-msgstr "تمت التسوية "
+msgstr "تمت التسوية فقط"
 
 #: gnucash/report/trep-engine.scm:411
 #, fuzzy
@@ -29637,7 +29615,7 @@ msgstr "معرف الشركة الخاص (على سبيل المثال ' معر�
 
 #: libgnucash/app-utils/business-prefs.scm:121
 msgid "Default Customer TaxTable"
-msgstr "الجدول الإفتراضي لضرائب العميل"
+msgstr "جدول الضرائب الإفتراضي للعميل"
 
 #: libgnucash/app-utils/business-prefs.scm:122
 msgid "The default tax table to apply to customers."
@@ -29645,7 +29623,7 @@ msgstr "جدول الضرائب الافتراضية التي تنطبق على 
 
 #: libgnucash/app-utils/business-prefs.scm:127
 msgid "Default Vendor TaxTable"
-msgstr "الجدول الإفتراضي لضرائب المورد"
+msgstr "جدول الضرائب الإفتراضي للمورد"
 
 #: libgnucash/app-utils/business-prefs.scm:128
 msgid "The default tax table to apply to vendors."
@@ -30306,7 +30284,7 @@ msgstr " (مغلقة)"
 
 #: libgnucash/engine/gncOwner.c:1015
 msgid "Offset between documents: "
-msgstr "مسافة بين الوثائق:"
+msgstr "الإزاحة بين المستندات: "
 
 #: libgnucash/engine/gncOwner.c:1127
 msgid "Lot Link"
@@ -30396,7 +30374,7 @@ msgstr " (x%u)"
 #: libgnucash/engine/Recurrence.c:660
 #, c-format
 msgid "last %s"
-msgstr "last %s"
+msgstr "آخر %s"
 
 #. Translators: %s is the string 1st, 2nd, 3rd and so on, and
 #. %s is an already-localized form of the day of the week.

@@ -1273,6 +1273,7 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
         _("If you don't save, changes from the past %d days and %d hours will be discarded.");
     time64 oldest_change;
     gint minutes, hours, days;
+    guint timer_source = 0;
     if (!gnc_current_session_exist())
         return FALSE;
     session = gnc_get_current_session();
@@ -1342,10 +1343,12 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
         g_object_set (G_OBJECT (label), "xalign", 0.0, nullptr);
 
         g_object_set_data (G_OBJECT (dialog), "count-down-label", label);
-        g_timeout_add_seconds (1, (GSourceFunc)auto_save_countdown, dialog);
+        timer_source = g_timeout_add_seconds (1, (GSourceFunc)auto_save_countdown, dialog);
     }
 
     response = gtk_dialog_run (GTK_DIALOG (dialog));
+    if (timer_source)
+        g_source_remove (timer_source);
     gtk_widget_destroy(dialog);
 
     switch (response)
@@ -2487,7 +2490,11 @@ main_window_update_page_set_read_only_icon (GncPluginPage *page,
 
     ENTER(" ");
 
-    g_return_if_fail(page && page->window && GNC_IS_MAIN_WINDOW(page->window));
+    g_return_if_fail (page && page->window);
+
+    if (!GNC_IS_MAIN_WINDOW (page->window))
+        return;
+
     window = GNC_MAIN_WINDOW(page->window);
 
     /* Get the notebook tab widget */

@@ -156,7 +156,7 @@
 
          ;;add subaccounts if requested
          (accounts (if show-subaccts?
-                       (gnc:accounts-and-all-descendants accounts)
+                       (gnc-accounts-and-all-descendants accounts)
                        accounts))
          (accounts (sort accounts gnc:account-full-name<?)))
 

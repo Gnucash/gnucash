@@ -49,6 +49,7 @@ extern "C" {
 
 #include <numeric>
 #include <map>
+#include <unordered_set>
 
 static QofLogModule log_module = GNC_MOD_ACCOUNT;
 
@@ -3047,6 +3048,30 @@ gnc_account_get_descendants_sorted (const Account *account)
     return g_list_reverse (list);
 }
 
+// because gnc_account_lookup_by_name and gnc_account_lookup_by_code
+// are described in Account.h searching breadth-first until 4.6, and
+// accidentally modified to search depth-first from 4.7
+// onwards. Restore breath-first searching in 4.11 onwards to match
+// previous behaviour and function description in Account.h
+static gpointer
+account_foreach_descendant_breadthfirst_until (const Account *acc,
+                                               AccountCb2 thunk,
+                                               gpointer user_data)
+{
+    gpointer result {nullptr};
+
+    g_return_val_if_fail (GNC_IS_ACCOUNT(acc), nullptr);
+    g_return_val_if_fail (thunk, nullptr);
+
+    for (auto node = GET_PRIVATE(acc)->children; !result && node; node = node->next)
+        result = thunk (static_cast<Account*>(node->data), user_data);
+
+    for (auto node = GET_PRIVATE(acc)->children; !result && node; node = node->next)
+        result = account_foreach_descendant_breadthfirst_until (static_cast<Account*>(node->data), thunk, user_data);
+
+    return result;
+}
+
 static gpointer
 is_acct_name (Account *account, gpointer user_data)
 {
@@ -3057,7 +3082,7 @@ is_acct_name (Account *account, gpointer user_data)
 Account *
 gnc_account_lookup_by_name (const Account *parent, const char * name)
 {
-    return (Account*)gnc_account_foreach_descendant_until (parent, is_acct_name, (char*)name);
+    return (Account*)account_foreach_descendant_breadthfirst_until (parent, is_acct_name, (char*)name);
 }
 
 static gpointer
@@ -3070,7 +3095,7 @@ is_acct_code (Account *account, gpointer user_data)
 Account *
 gnc_account_lookup_by_code (const Account *parent, const char * code)
 {
-    return (Account*)gnc_account_foreach_descendant_until (parent, is_acct_code, (char*)code);
+    return (Account*)account_foreach_descendant_breadthfirst_until (parent, is_acct_code, (char*)code);
 }
 
 static gpointer
@@ -6205,6 +6230,21 @@ gboolean xaccAccountRegister (void)
     qof_class_register (GNC_ID_ACCOUNT, (QofSortFunc) qof_xaccAccountOrder, params);
 
     return qof_object_register (&account_object_def);
+}
+
+using AccountSet = std::unordered_set<Account*>;
+static void maybe_add_descendants (Account* acc, gpointer arg)
+{
+    if (static_cast <AccountSet*> (arg)->insert (acc).second)
+        g_list_foreach (GET_PRIVATE(acc)->children, (GFunc) maybe_add_descendants, arg);
+};
+
+GList *
+gnc_accounts_and_all_descendants (GList *accounts)
+{
+    AccountSet accset;
+    g_list_foreach (accounts, (GFunc) maybe_add_descendants, &accset);
+    return std::accumulate (accset.begin(), accset.end(), (GList*) nullptr, g_list_prepend);
 }
 
 /* ======================= UNIT TESTING ACCESS =======================
