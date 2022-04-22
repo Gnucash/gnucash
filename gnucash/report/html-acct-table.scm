@@ -545,20 +545,6 @@
     (gnc:html-acct-table-add-accounts! acct-table accts)
     acct-table))
 
-;; some useful predicates to export
-(define (gnc:account-code-less-p a b)
-  (issue-deprecation-warning "gnc:account-code-less-p is unused.")
-  (gnc:string-locale<? (xaccAccountGetCode a)
-                       (xaccAccountGetCode b)))
-(define (gnc:account-name-less-p a b)
-  (issue-deprecation-warning "gnc:account-name-less-p is unused.")
-  (gnc:string-locale<? (xaccAccountGetName a)
-                       (xaccAccountGetName b)))
-(define (gnc:account-path-less-p a b)
-  (issue-deprecation-warning "gnc:account-path-less-p is deprecated. use gnc:account-full-name<? instead")
-  (gnc:string-locale<? (gnc-account-get-full-name a)
-                       (gnc-account-get-full-name b)))
-
 
 (define (gnc:html-acct-table-add-accounts! acct-table accounts)
   ;; 
