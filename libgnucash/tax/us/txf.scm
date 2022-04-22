@@ -174,6 +174,7 @@
     (cons 'N292 #(not-impl "Sched C" "Spouse" 0 #t "" ((1980 ""))))
     (cons 'N319 #(not-impl "Sched C" "Principal business/prof" 2 #t "" ((1980 "A"))))
     (cons 'N293 #(none "Sched C" "Gross receipts or sales" 1 #t "" ((2012 "1") (2011 "1b") (1989 "1") (1980 "1a"))))
+    (cons 'N296 #(none "Sched C" "Returns and allowances" 1 #t "" ((1989 "2") (1980 "1b"))))
     (cons 'N303 #(none "Sched C" "Other business income" 1 #t "" ((1989 "6") (1987 "4") (1981 "4b") (1980 "4"))))
 
     (cons 'N497 #(not-impl "Sched C-EZ" "Schedule C-EZ" 1 #t ""))
@@ -593,7 +594,6 @@
     (cons 'N523 #(none "Sched A" "Misc., no 2% AGI limit" 1 #f "" ((2018 "16") (2007 "28") (1995 "27") (1994 "28") (1991 "25") (1990 "26") (1987 "25") (1984 "22") (1983 "24") (1982 "26") (1980 "31"))))
 
     (cons 'N291 #(not-impl "Sched C" "Schedule C" 1 #t ""))
-    (cons 'N296 #(none "Sched C" "Returns and allowances" 1 #t "" ((1989 "2") (1980 "1b"))))
     (cons 'N304 #(none "Sched C" "Advertising" 1 #t "" ((1989 "8") (1980 "6"))))
     (cons 'N306 #(none "Sched C" "Car and truck expenses" 1 #t "" ((2003 "9") (1989 "10") (1982 "9") (1980 "10"))))
     (cons 'N307 #(none "Sched C" "Commissions and fees" 1 #t "" ((2003 "10") (1989 "11") (1982 "10") (1980 "11"))))
