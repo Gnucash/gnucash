@@ -80,7 +80,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-04-15 13:12+0000\n"
+"PO-Revision-Date: 2022-04-27 19:08+0000\n"
 "Last-Translator: Cow <javier.fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -89,7 +89,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.12.1-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\""
@@ -559,9 +559,8 @@ msgid ""
 "The full path is displayed in the status bar."
 msgstr ""
 "Si desea conocer cuales directorios donde están almacenados los archivos "
-"GnuCash recientes, pase el cursor sobre una de los asientos en el menú de "
-"historial\n"
-"(Archivo[->Listado más recientes utilizados]).\n"
+"GnuCash recientes, pase el cursor sobre una de los asientos\n"
+"en el menú de historial (Archivo[->Listado más recientes utilizados]).\n"
 "La ruta completa es representada dentro de la barra de estado."
 
 #: doc/tip_of_the_day.list.c:24
@@ -5176,7 +5175,7 @@ msgstr "_Borrar titular..."
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:178
 msgid "Delete selected owner"
-msgstr "Borrar el titular seleccionado"
+msgstr "Borra el titular seleccionado"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:197
 msgid "Create a new bill"
@@ -5275,7 +5274,7 @@ msgid ""
 "Are you sure you want to do this?"
 msgstr ""
 "Este titular %s será eliminado.\n"
-"¿Seguro que desea hacer ésto?"
+"¿Seguro que desea hacer esto?"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:194
 #: gnucash/gnome/gnc-plugin-page-register.c:292
@@ -5591,12 +5590,12 @@ msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Document\" for "
 "each transaction."
 msgstr ""
-"Muestra una línea adicional con \"Operación\", \"Notas\" y \"Documento "
-"Asociado\" para cada transacción."
+"Muestra una línea adicional con «Operación», «Notas» y «Documento Asociado» "
+"para cada transacción."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:430
 msgid "Show _Extra Dates"
-msgstr "Mostrar fechas _extra"
+msgstr "Mostrar fechas _adicionales"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:431
 msgid "Show entered and reconciled dates"
@@ -22925,7 +22924,7 @@ msgstr "999'00"
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:154
 msgctxt "sample for 'Billable'"
 msgid "BI"
-msgstr "Ca"
+msgstr "FA"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:158
 msgctxt "sample"
@@ -23204,7 +23203,7 @@ msgstr "22/02/2000"
 #: gnucash/register/ledger-core/split-register-layout.c:671
 msgctxt "sample"
 msgid "99999"
-msgstr "99.999"
+msgstr "12345"
 
 #: gnucash/register/ledger-core/split-register-layout.c:679
 msgctxt "sample"
@@ -30558,7 +30557,7 @@ msgstr "g"
 #: libgnucash/app-utils/gnc-ui-util.c:879
 msgctxt "Reconciled flag 'void'"
 msgid "v"
-msgstr "a"
+msgstr "p"
 
 #: libgnucash/app-utils/gnc-ui-util.c:919
 msgctxt "Document Link flag for 'web'"
@@ -30568,7 +30567,7 @@ msgstr "w"
 #: libgnucash/app-utils/gnc-ui-util.c:921
 msgctxt "Document Link flag for 'file'"
 msgid "f"
-msgstr "f"
+msgstr "a"
 
 #: libgnucash/app-utils/gnc-ui-util.c:950
 msgid "Opening Balances"
@@ -30723,7 +30722,7 @@ msgstr ""
 #: libgnucash/engine/gnc-commodity.h:112
 msgctxt "Commodity Type"
 msgid "All non-currency"
-msgstr "Todas excepto moneda"
+msgstr "Todo no monetario"
 
 #: libgnucash/engine/gnc-commodity.h:113
 msgctxt "Commodity Type"
