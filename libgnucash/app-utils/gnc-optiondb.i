@@ -1141,7 +1141,7 @@ inline SCM return_scm_value(ValueType value)
     SCM save_scm_value()
     {
         static const SCM plain_format_str{scm_from_utf8_string("~s")};
-        static const SCM ticked_format_str{scm_from_utf8_string("'~a")};
+        static const SCM ticked_format_str{scm_from_utf8_string("'~s")};
 //scm_simple_format needs a scheme list of arguments to match the format
 //placeholders.
         return std::visit([$self] (auto &option) -> SCM {
@@ -1185,7 +1185,7 @@ inline SCM return_scm_value(ValueType value)
                      }
                      else
                      {
-                          const SCM commodity_fmt{scm_from_utf8_string("~s ~s")};
+                          const SCM commodity_fmt{scm_from_utf8_string("'(commodity-scm ~s ~s)")};
                           auto name_space{gnc_commodity_get_namespace(comm)};
                           auto commodity_val{scm_list_2(scm_from_utf8_string(name_space),
                                                         scm_from_utf8_string(mnemonic))};
@@ -1232,7 +1232,7 @@ inline SCM return_scm_value(ValueType value)
                     }
                     else
                     {
-                        auto scm_str{scm_list_1(scm_from_utf8_string(serial.c_str()))};
+                        auto scm_str{scm_list_1(scm_string_to_symbol(scm_from_utf8_string(serial.c_str())))};
                         return scm_simple_format(SCM_BOOL_F, ticked_format_str, scm_str);
                     }
                 }
@@ -1330,15 +1330,16 @@ inline SCM return_scm_value(ValueType value)
                             return;
                         }
                         auto len{scm_to_uint(scm_length(new_value))};
-                        std::string mnemonic{scm_to_utf8_string(scm_list_ref(new_value, scm_from_uint(0)))};
                         if (len > 1)
                         {
-                             std::string name_space{scm_to_utf8_string(scm_list_ref(new_value, scm_from_uint(1)))};
-                             option.deserialize(name_space + ":" + mnemonic);
+                            auto revlist{scm_reverse(new_value)};
+                            std::string name_space{scm_to_utf8_string(scm_cadr(revlist))};
+                            std::string mnemonic{scm_to_utf8_string(scm_car(revlist))};
+                            option.deserialize(name_space + ":" + mnemonic);
                         }
                         else
                         {
-                            option.deserialize(mnemonic);
+                            option.deserialize(scm_to_utf8_string(scm_car(new_value)));
                         }
                         return;
                     }
