@@ -580,8 +580,8 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
     QofBook *book;
     Transaction *gnc_trans;
     const gchar *fitid;
-    const GNC_GWEN_DATE *valuta_date;
-    time64 current_time;
+    const GNC_GWEN_DATE *value_date, *post_date;
+    time64 current_time, post_time;
     const char *custref;
     gchar *description;
     Split *split;
@@ -595,22 +595,28 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
     xaccTransBeginEdit(gnc_trans);
 
     /* Date / Time */
-    valuta_date = AB_Transaction_GetValutaDate(ab_trans);
-    if (!valuta_date)
-    {
-        const GNC_GWEN_DATE *normal_date = AB_Transaction_GetDate(ab_trans);
-        if (normal_date)
-            valuta_date = normal_date;
-    }
-    if (valuta_date)
-    {
-        time64 secs = gnc_gwen_date_to_time64(valuta_date);
-        xaccTransSetDatePostedSecsNormalized(gnc_trans, secs);
-    }
+    /* SWIFT import formats (in particular MT940) provide for two
+     * dates, the entry date and the value date (valuta is value in
+     * German). The value date is the effective date for financial
+     * calculation purposes and is mandatory, the entry date is the
+     * date that the financial institution posted the
+     * transaction. Since the entry date is normally closer to the
+     * date that the customer's book should recognize the transaction
+     * we prefer that date if present.
+     */
+    post_date = AB_Transaction_GetDate(ab_trans);
+    value_date = AB_Transaction_GetValutaDate(ab_trans);
+    if (post_date)
+         post_time = gnc_gwen_date_to_time64(post_date);
+    else if (value_date)
+         post_time = gnc_gwen_date_to_time64(value_date);
     else
     {
-        g_warning("transaction_cb: Oops, date 'valuta_date' was NULL");
+        g_warning("transaction_cb: Import had no transaction date");
+        post_time = gnc_time (NULL);
     }
+    xaccTransSetDatePostedSecsNormalized(gnc_trans, post_time);
+
     xaccTransSetDateEnteredSecs(gnc_trans, gnc_time (NULL));
 
     /* Currency.  We take simply the default currency of the gnucash account */
