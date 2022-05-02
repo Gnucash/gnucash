@@ -80,6 +80,17 @@
 
 " value))
 
+(define (test-list-output-template value)
+  (format #f "
+; Section: foo
+
+(let ((option (gnc:lookup-option options
+                                 \"foo\"
+                                 \"bar\")))
+  ((lambda (o) (if o (gnc:option-set-value o '~s))) option))
+
+" value))
+
 (define (test-currency-output-template value)
   (format #f "
 ; Section: foo
@@ -99,7 +110,7 @@
 (let ((option (gnc:lookup-option options
                                  \"foo\"
                                  \"bar\")))
-  ((lambda (o) (if o (gnc:option-set-value o ~s ~s))) option))
+  ((lambda (o) (if o (gnc:option-set-value o '(commodity-scm ~s ~s)))) option))
 
 " (car value-parts) (cadr value-parts))))
 
@@ -356,21 +367,41 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
 (define (test-gnc-multichoice-option-to-scheme)
   (test-begin "test-gnc-multichoice-option-to-scheme")
   (let ((odb (gnc:new-options))
-        (test-template test-literal-output-template)
-        (value "5"))
+        (test-template test-list-output-template)
+        (valuenum 1)
+        (valuestr "two")
+        (valuelstr "two plus three")
+        (valuesym 'four)
+        (valuelsym (string->symbol "three plus three")))
     (gnc:register-option
      odb
      (gnc:make-multichoice-option
           "foo" "bar" "baz" "Phoney Option" 3
           (list (vector 'all "All")
-          (vector 1 "1") (vector 2 "2") (vector 3 "3")
-          (vector 4 "4") (vector 5 "5") (vector 6 "6"))))
+          (vector 1 "1") (vector "two" "Two") (vector 3 "3")
+          (vector 'four "4") (vector "two plus three" "5")
+          (vector  (string->symbol "three plus three") "6"))))
     (test-equal "multichoice unchanged" test-unchanged-section-output-template
                 (gnc:generate-restore-forms odb "options"))
     (let ((option (gnc:lookup-option odb "foo" "bar")))
-      (gnc:option-set-value option value)
-      (test-equal "multichoice form" (test-template (GncOption-serialize option))
-                  (gnc:generate-restore-forms odb "options"))))
+      (gnc:option-set-value option valuenum)
+      (test-equal "multichoice number key" (test-literal-output-template
+                                            (GncOption-serialize option))
+                    (gnc:generate-restore-forms odb "options"))
+      (gnc:option-set-value option valuestr)
+      (test-equal "multichoice simple string key" (test-template (GncOption-serialize option))
+                      (gnc:generate-restore-forms odb "options"))
+      (gnc:option-set-value option valuelstr)
+      (test-equal "multichoice long string key" (test-template (GncOption-serialize option))
+                        (gnc:generate-restore-forms odb "options"))
+      (gnc:option-set-value option valuesym)
+      (test-equal "multichoice symbol key" (test-template
+                                            (string->symbol (GncOption-serialize option)))
+                          (gnc:generate-restore-forms odb "options"))
+      (gnc:option-set-value option valuelsym)
+      (test-equal "multichoice long symbol key" (test-template
+                                                 (string->symbol (GncOption-serialize option)))
+      (gnc:generate-restore-forms odb "options"))))
   (test-end "test-gnc-multichoice-option-to-scheme"))
 
 (define (test-gnc-list-option-to-scheme)

@@ -944,12 +944,12 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         static const char* empty{""};
         auto scm_to_str = [](auto item)->const char* {
                 if (scm_is_integer(item))
-                    scm_number_to_string(item, scm_from_uint(10u));
-                if (scm_is_symbol(item))
-                    return scm_to_utf8_string(scm_symbol_to_string(item));
-                else if (scm_is_string(item))
+                    item = scm_number_to_string(item, scm_from_uint(10u));
+                else if (scm_is_symbol(item))
+                    item = scm_symbol_to_string(item);
+                if (scm_is_string(item))
                     return scm_to_utf8_string(item);
-                else return empty;
+                return empty;
             };
         GncMultichoiceOptionIndexVec vec;
         auto choice_is_list{option.get_ui_type() == GncOptionUIType::LIST}; 
@@ -1141,7 +1141,8 @@ inline SCM return_scm_value(ValueType value)
     SCM save_scm_value()
     {
         static const SCM plain_format_str{scm_from_utf8_string("~s")};
-        static const SCM ticked_format_str{scm_from_utf8_string("'~s")};
+        static const SCM ticked_format_str{scm_from_utf8_string("'~a")};
+        static const SCM list_format_str{scm_from_utf8_string("'~s")};
 //scm_simple_format needs a scheme list of arguments to match the format
 //placeholders.
         return std::visit([$self] (auto &option) -> SCM {
@@ -1149,7 +1150,6 @@ inline SCM return_scm_value(ValueType value)
                 if constexpr (is_same_decayed_v<decltype(option),
                               GncOptionAccountListValue>)
                 {
-                    static const SCM list_format_str{scm_from_utf8_string("'~s")};
                     auto guid_list{option.get_value()};
                     if (guid_list.empty())
                         return no_value;
@@ -1219,8 +1219,32 @@ inline SCM return_scm_value(ValueType value)
                                              scm_list_1(gnc_query2scm(value)));
                 }
                 if constexpr (is_same_decayed_v<decltype(option),
-                              GncOptionMultichoiceValue> ||
-                              is_same_decayed_v<decltype(option),
+                              GncOptionMultichoiceValue>)
+                {
+                    auto serial{option.serialize()};
+                    if (serial.empty())
+                    {
+                        return no_value;
+                    }
+                    else
+                    {
+                        auto keytype{option.get_keytype(option.get_index())};
+                        auto scm_str{scm_from_utf8_string(serial.c_str())};
+                        switch (keytype)
+                        {
+                        case GncOptionMultichoiceKeyType::SYMBOL:
+                            return scm_simple_format(SCM_BOOL_F, list_format_str,
+                                                     scm_list_1(scm_string_to_symbol(scm_str)));
+                        case GncOptionMultichoiceKeyType::STRING:
+                            return scm_simple_format(SCM_BOOL_F, list_format_str,
+                                                     scm_list_1((scm_str)));
+                        case GncOptionMultichoiceKeyType::NUMBER:
+                            return scm_simple_format(SCM_BOOL_F, ticked_format_str,
+                                                     scm_list_1(scm_str));
+                        }
+                    }
+                }
+                if constexpr (is_same_decayed_v<decltype(option),
                               GncOptionRangeValue<int>>  ||
                               is_same_decayed_v<decltype(option),
                               GncOptionRangeValue<double>>)
@@ -1232,7 +1256,7 @@ inline SCM return_scm_value(ValueType value)
                     }
                     else
                     {
-                        auto scm_str{scm_list_1(scm_string_to_symbol(scm_from_utf8_string(serial.c_str())))};
+                        auto scm_str{scm_list_1(scm_from_utf8_string(serial.c_str()))};
                         return scm_simple_format(SCM_BOOL_F, ticked_format_str, scm_str);
                     }
                 }
