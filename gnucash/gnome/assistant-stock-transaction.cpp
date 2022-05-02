@@ -692,7 +692,7 @@ refresh_page_finish (StockTransactionInfo *info)
 
     gnc_numeric debit = gnc_numeric_zero ();
     gnc_numeric credit = gnc_numeric_zero ();
-    StringVec errors;
+    StringVec errors, warnings;
 
     if (info->txn_type->stock_amount != FieldMask::DISABLED)
     {
@@ -763,23 +763,24 @@ refresh_page_finish (StockTransactionInfo *info)
         g_free (debit_str);
     }
 
-    if (errors.empty())
+    // generate final summary message. Collates a header, the errors
+    // and warnings. Then allow completion if errors is empty.
+    auto header = errors.empty() ?
+        N_("No errors found. Click Apply to create transaction.") :
+        N_("The following errors must be fixed:");
+    auto summary = std::string { _(header) };
+    auto summary_add = [&summary](auto a) { summary += "\n• "; summary += a; };
+    std::for_each (errors.begin(), errors.end(), summary_add);
+    if (!warnings.empty())
     {
-        auto success_msg = N_("No errors found. Click Apply to create transaction.");
-        gtk_assistant_set_page_complete (GTK_ASSISTANT (info->window),
-                                         info->finish_page, true);
-        gtk_label_set_text (GTK_LABEL (info->finish_summary), _(success_msg));
+        auto warnings_header = N_ ("The following warnings exist:");
+        summary += "\n\n";
+        summary += _(warnings_header);
+        std::for_each (warnings.begin(), warnings.end(), summary_add);
     }
-    else
-    {
-        auto header_str = N_("The following errors must be fixed:");
-        auto header = std::string { _(header_str) };
-        auto fold = [](auto a, auto b) { return std::move(a) + '\n' + std::move(b); };
-        auto errmsg { std::accumulate (errors.begin(), errors.end(), header, fold) };
-        gtk_assistant_set_page_complete (GTK_ASSISTANT (info->window),
-                                         info->finish_page, false);
-        gtk_label_set_text (GTK_LABEL (info->finish_summary), errmsg.c_str());
-    }
+    gtk_label_set_text (GTK_LABEL (info->finish_summary), summary.c_str());
+    gtk_assistant_set_page_complete (GTK_ASSISTANT (info->window),
+                                     info->finish_page, errors.empty());
 }
 
 void

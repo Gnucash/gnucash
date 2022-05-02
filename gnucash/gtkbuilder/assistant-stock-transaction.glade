@@ -896,6 +896,7 @@
           <object class="GtkScrolledWindow" id="finish_scrolled">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
+            <property name="vscrollbar-policy">never</property>
             <child>
               <object class="GtkTreeView" id="transaction_view">
                 <property name="visible">True</property>
@@ -919,6 +920,7 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="label">summary of errors</property>
+            <property name="wrap">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
