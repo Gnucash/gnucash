@@ -170,8 +170,8 @@
            ((string? rendered-elt)
             rendered-elt)
            ((list? rendered-elt)
-            (apply string-append
-                   (gnc:html-document-tree-collapse rendered-elt)))
+            (string-concatenate
+             (gnc:html-document-tree-collapse rendered-elt)))
            (#t 
             (format #f "hold on there podner. form=~s\n" rendered-elt)
             ""))))
