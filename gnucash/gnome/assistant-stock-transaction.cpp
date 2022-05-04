@@ -58,8 +58,8 @@ static const char* ASSISTANT_STOCK_TRANSACTION_CM_CLASS = "assistant-stock-trans
 enum assistant_pages
 {
     PAGE_INTRO = 0,
+    PAGE_TRANSACTION_DETAILS,
     PAGE_TRANSACTION_TYPE,
-    PAGE_TRANSATION_DETAILS,
     PAGE_STOCK_AMOUNT,
     PAGE_STOCK_VALUE,
     PAGE_CASH,
@@ -817,8 +817,15 @@ stock_assistant_prepare (GtkAssistant  *assistant, GtkWidget *page,
 
     switch (currentpage)
     {
-    case PAGE_TRANSACTION_TYPE:
+    case PAGE_TRANSACTION_TYPE:;
         // initialize transaction types.
+        gnc_numeric balance;
+        time64 date;
+        date = gnc_date_edit_get_date_end (GNC_DATE_EDIT (info->date_edit));
+        balance = xaccAccountGetBalanceAsOfDate (info->acct, date);
+        info->txn_types = gnc_numeric_zero_p (balance) ? &starting_types
+            : gnc_numeric_positive_p (balance) ? &long_types
+            : &short_types;
         gtk_combo_box_text_remove_all (GTK_COMBO_BOX_TEXT (info->transaction_type_combo));
         for (auto& it : *(info->txn_types))
             gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (info->transaction_type_combo),
@@ -1142,11 +1149,6 @@ stock_assistant_create (StockTransactionInfo *info)
 
     // Set the name for this assistant so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(info->window), "gnc-id-assistant-stock-transaction");
-
-    auto balance = xaccAccountGetBalance (info->acct);
-    info->txn_types = gnc_numeric_zero_p (balance) ? &starting_types
-        : gnc_numeric_positive_p (balance) ? &long_types
-        : &short_types;
 
     info->currency = gnc_account_get_currency_or_parent (info->acct);
 
