@@ -694,6 +694,31 @@ refresh_page_finish (StockTransactionInfo *info)
     gnc_numeric credit = gnc_numeric_zero ();
     StringVec errors, warnings;
 
+    // check the stock transaction date. If there are existing stock
+    // transactions dated after the date specified, it is very likely
+    // the later stock transactions will be invalidated. warn the user
+    // to review them.
+    auto new_date = gnc_date_edit_get_date_end (GNC_DATE_EDIT (info->date_edit));
+    auto last_split = static_cast<const Split*> (g_list_last (xaccAccountGetSplitList (info->acct))->data);
+    auto last_split_date = xaccTransGetDate (xaccSplitGetParent (last_split));
+    if (new_date <= last_split_date)
+    {
+        auto last_split_date_str = qof_print_date (last_split_date);
+        auto new_date_str = qof_print_date (new_date);
+        // Translators: the first %s is the new transaction date;
+        // the second %s is the current stock account's latest
+        // transaction date.
+        auto warn_txt =  g_strdup_printf (_("You will enter a transaction \
+with date %s which is earlier than the latest transaction in this account, \
+dated %s. Doing so may affect the cost basis, and therefore capital gains, \
+of transactions dated after the new entry. Please review all transactions \
+to ensure proper recording."), new_date_str, last_split_date_str);
+        warnings.push_back (warn_txt);
+        g_free (warn_txt);
+        g_free (new_date_str);
+        g_free (last_split_date_str);
+    }
+
     if (info->txn_type->stock_amount != FieldMask::DISABLED)
     {
         auto stock_amount = gnc_amount_edit_get_amount
