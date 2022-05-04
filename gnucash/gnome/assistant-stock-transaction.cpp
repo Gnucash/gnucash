@@ -28,6 +28,7 @@
 #include <string>
 #include <numeric>
 #include <algorithm>
+#include <optional>
 
 extern "C" {
 #include "Transaction.h"
@@ -428,7 +429,7 @@ typedef struct
     GtkWidget * window;
     GtkWidget * assistant;
 
-    const TxnTypeVec * txn_types;
+    std::optional<TxnTypeVec> txn_types;
     Account   * acct;
     gnc_commodity * currency;
 
@@ -436,7 +437,7 @@ typedef struct
     GtkWidget * transaction_type_page;
     GtkWidget * transaction_type_combo;
     GtkWidget * transaction_type_explanation;
-    const TxnTypeInfo * txn_type;
+    std::optional<TxnTypeInfo> txn_type;
 
     // transaction details page
     GtkWidget * transaction_details_page;
@@ -506,7 +507,10 @@ refresh_page_transaction_type (GtkWidget *widget, gpointer user_data)
     if (type_idx < 0)           // combo isn't initialized yet.
         return;
 
-    info->txn_type = &(info->txn_types->at (type_idx));
+    if (!info->txn_types)
+        return;
+
+    info->txn_type = info->txn_types->at (type_idx);
 
     gtk_label_set_text (GTK_LABEL (info->transaction_type_explanation),
                         _(info->txn_type->explanation));
@@ -823,9 +827,9 @@ stock_assistant_prepare (GtkAssistant  *assistant, GtkWidget *page,
         time64 date;
         date = gnc_date_edit_get_date_end (GNC_DATE_EDIT (info->date_edit));
         balance = xaccAccountGetBalanceAsOfDate (info->acct, date);
-        info->txn_types = gnc_numeric_zero_p (balance) ? &starting_types
-            : gnc_numeric_positive_p (balance) ? &long_types
-            : &short_types;
+        info->txn_types = gnc_numeric_zero_p (balance) ? starting_types
+            : gnc_numeric_positive_p (balance) ? long_types
+            : short_types;
         gtk_combo_box_text_remove_all (GTK_COMBO_BOX_TEXT (info->transaction_type_combo));
         for (auto& it : *(info->txn_types))
             gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (info->transaction_type_combo),
