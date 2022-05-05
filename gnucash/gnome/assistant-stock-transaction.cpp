@@ -28,6 +28,7 @@
 #include <string>
 #include <numeric>
 #include <algorithm>
+#include <optional>
 
 extern "C" {
 #include "Transaction.h"
@@ -58,8 +59,8 @@ static const char* ASSISTANT_STOCK_TRANSACTION_CM_CLASS = "assistant-stock-trans
 enum assistant_pages
 {
     PAGE_INTRO = 0,
+    PAGE_TRANSACTION_DETAILS,
     PAGE_TRANSACTION_TYPE,
-    PAGE_TRANSATION_DETAILS,
     PAGE_STOCK_AMOUNT,
     PAGE_STOCK_VALUE,
     PAGE_CASH,
@@ -428,7 +429,7 @@ typedef struct
     GtkWidget * window;
     GtkWidget * assistant;
 
-    const TxnTypeVec * txn_types;
+    std::optional<TxnTypeVec> txn_types;
     Account   * acct;
     gnc_commodity * currency;
 
@@ -436,7 +437,7 @@ typedef struct
     GtkWidget * transaction_type_page;
     GtkWidget * transaction_type_combo;
     GtkWidget * transaction_type_explanation;
-    const TxnTypeInfo * txn_type;
+    std::optional<TxnTypeInfo> txn_type;
 
     // transaction details page
     GtkWidget * transaction_details_page;
@@ -506,7 +507,10 @@ refresh_page_transaction_type (GtkWidget *widget, gpointer user_data)
     if (type_idx < 0)           // combo isn't initialized yet.
         return;
 
-    info->txn_type = &(info->txn_types->at (type_idx));
+    if (!info->txn_types)
+        return;
+
+    info->txn_type = info->txn_types->at (type_idx);
 
     gtk_label_set_text (GTK_LABEL (info->transaction_type_explanation),
                         _(info->txn_type->explanation));
@@ -692,7 +696,32 @@ refresh_page_finish (StockTransactionInfo *info)
 
     gnc_numeric debit = gnc_numeric_zero ();
     gnc_numeric credit = gnc_numeric_zero ();
-    StringVec errors;
+    StringVec errors, warnings;
+
+    // check the stock transaction date. If there are existing stock
+    // transactions dated after the date specified, it is very likely
+    // the later stock transactions will be invalidated. warn the user
+    // to review them.
+    auto new_date = gnc_date_edit_get_date_end (GNC_DATE_EDIT (info->date_edit));
+    auto last_split = static_cast<const Split*> (g_list_last (xaccAccountGetSplitList (info->acct))->data);
+    auto last_split_date = xaccTransGetDate (xaccSplitGetParent (last_split));
+    if (new_date <= last_split_date)
+    {
+        auto last_split_date_str = qof_print_date (last_split_date);
+        auto new_date_str = qof_print_date (new_date);
+        // Translators: the first %s is the new transaction date;
+        // the second %s is the current stock account's latest
+        // transaction date.
+        auto warn_txt =  g_strdup_printf (_("You will enter a transaction \
+with date %s which is earlier than the latest transaction in this account, \
+dated %s. Doing so may affect the cost basis, and therefore capital gains, \
+of transactions dated after the new entry. Please review all transactions \
+to ensure proper recording."), new_date_str, last_split_date_str);
+        warnings.push_back (warn_txt);
+        g_free (warn_txt);
+        g_free (new_date_str);
+        g_free (last_split_date_str);
+    }
 
     if (info->txn_type->stock_amount != FieldMask::DISABLED)
     {
@@ -763,23 +792,24 @@ refresh_page_finish (StockTransactionInfo *info)
         g_free (debit_str);
     }
 
-    if (errors.empty())
+    // generate final summary message. Collates a header, the errors
+    // and warnings. Then allow completion if errors is empty.
+    auto header = errors.empty() ?
+        N_("No errors found. Click Apply to create transaction.") :
+        N_("The following errors must be fixed:");
+    auto summary = std::string { _(header) };
+    auto summary_add = [&summary](auto a) { summary += "\n• "; summary += a; };
+    std::for_each (errors.begin(), errors.end(), summary_add);
+    if (!warnings.empty())
     {
-        auto success_msg = N_("No errors found. Click Apply to create transaction.");
-        gtk_assistant_set_page_complete (GTK_ASSISTANT (info->window),
-                                         info->finish_page, true);
-        gtk_label_set_text (GTK_LABEL (info->finish_summary), _(success_msg));
+        auto warnings_header = N_ ("The following warnings exist:");
+        summary += "\n\n";
+        summary += _(warnings_header);
+        std::for_each (warnings.begin(), warnings.end(), summary_add);
     }
-    else
-    {
-        auto header_str = N_("The following errors must be fixed:");
-        auto header = std::string { _(header_str) };
-        auto fold = [](auto a, auto b) { return std::move(a) + '\n' + std::move(b); };
-        auto errmsg { std::accumulate (errors.begin(), errors.end(), header, fold) };
-        gtk_assistant_set_page_complete (GTK_ASSISTANT (info->window),
-                                         info->finish_page, false);
-        gtk_label_set_text (GTK_LABEL (info->finish_summary), errmsg.c_str());
-    }
+    gtk_label_set_text (GTK_LABEL (info->finish_summary), summary.c_str());
+    gtk_assistant_set_page_complete (GTK_ASSISTANT (info->window),
+                                     info->finish_page, errors.empty());
 }
 
 void
@@ -791,8 +821,15 @@ stock_assistant_prepare (GtkAssistant  *assistant, GtkWidget *page,
 
     switch (currentpage)
     {
-    case PAGE_TRANSACTION_TYPE:
+    case PAGE_TRANSACTION_TYPE:;
         // initialize transaction types.
+        gnc_numeric balance;
+        time64 date;
+        date = gnc_date_edit_get_date_end (GNC_DATE_EDIT (info->date_edit));
+        balance = xaccAccountGetBalanceAsOfDate (info->acct, date);
+        info->txn_types = gnc_numeric_zero_p (balance) ? starting_types
+            : gnc_numeric_positive_p (balance) ? long_types
+            : short_types;
         gtk_combo_box_text_remove_all (GTK_COMBO_BOX_TEXT (info->transaction_type_combo));
         for (auto& it : *(info->txn_types))
             gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (info->transaction_type_combo),
@@ -1116,11 +1153,6 @@ stock_assistant_create (StockTransactionInfo *info)
 
     // Set the name for this assistant so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(info->window), "gnc-id-assistant-stock-transaction");
-
-    auto balance = xaccAccountGetBalance (info->acct);
-    info->txn_types = gnc_numeric_zero_p (balance) ? &starting_types
-        : gnc_numeric_positive_p (balance) ? &long_types
-        : &short_types;
 
     info->currency = gnc_account_get_currency_or_parent (info->acct);
 
