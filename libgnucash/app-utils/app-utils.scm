@@ -30,9 +30,5 @@
                    (gnucash app-utils date-utilities)
                    (gnucash app-utils options)
                    (gnucash app-utils c-interface))
-;; gw-engine-spec.scm
-(re-export HOOK-SAVE-OPTIONS)
 
-(export gnc:get-debit-string)
-(export gnc:get-credit-string)
-(export gnc:config-file-format-version)
+(re-export HOOK-SAVE-OPTIONS)
