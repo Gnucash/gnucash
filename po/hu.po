@@ -5,14 +5,15 @@
 # SULYOK Péter <peti@sulyok.hu>, 2003-2006.
 # Kornel Tako <takokornel@gmail.com>, 2007.
 # Kárász Attila <cult.edie@gmail.com>, 2022.
+# Szia Tomi <sziatomi01@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-04-20 12:13+0000\n"
-"Last-Translator: Kárász Attila <cult.edie@gmail.com>\n"
+"PO-Revision-Date: 2022-04-29 01:08+0000\n"
+"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.12.1-dev\n"
 
 # #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
 # src/trans.h:283
@@ -3429,8 +3430,8 @@ msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transactions automatically created)"
 msgstr[0] ""
-"Nincs létrehozandó ütemezett tranzakció. (%d tranzakció automatikusan "
-"létrehozva)"
+"Jelenleg nincs ütemezett tranzakció amelyet meg kell adni. (%d tranzakció "
+"automatikusan létrejött)"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:998
 #: gnucash/gnome-search/dialog-search.c:1104

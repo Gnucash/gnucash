@@ -841,25 +841,21 @@ void split_find_match (GNCImportTransInfo * trans_info,
 
 /* append the imported transaction description to the matched transaction description */
 static void
-desc_append (Transaction* selected_match_trans, Transaction* imp_trans)
+desc_append (Transaction* selected_match_trans, gchar *new_desc)
 {
-    gchar* tmp = g_strconcat( xaccTransGetDescription (selected_match_trans),
-                              "|",
-                              xaccTransGetDescription (imp_trans),
-                              NULL);
+    const gchar* curr_desc = xaccTransGetDescription (selected_match_trans);
+    gchar* tmp = g_strconcat(curr_desc, "|", new_desc, NULL);
     xaccTransSetDescription (selected_match_trans, tmp);
     g_free (tmp);
 }
 
 /* append the imported transaction notes to the matched transaction notes */
 static void
-notes_append (Transaction* selected_match_trans, Transaction* imp_trans)
+notes_append (Transaction* selected_match_trans, gchar* new_notes)
 {
-    gchar* tmp = g_strconcat (xaccTransGetNotes (selected_match_trans),
-                              "|",
-                              xaccTransGetNotes (imp_trans),
-                              NULL);
-    xaccTransSetNotes (selected_match_trans, tmp);
+    const gchar* curr_notes = xaccTransGetNotes (selected_match_trans);
+    gchar* tmp = g_strconcat (curr_notes, "|", new_notes, NULL);
+    xaccTransSetNotes (selected_match_trans, tmp );
     g_free (tmp);
 }
 
@@ -875,24 +871,44 @@ update_desc_and_notes (const GNCImportTransInfo* trans_info)
 
     if (trans_info->append_text)
     {
-        gchar* desc_imported = g_utf8_normalize (xaccTransGetDescription (
-            imp_trans), -1, G_NORMALIZE_ALL);
-        gchar* desc_matched = g_utf8_normalize (xaccTransGetDescription (
-            selected_match->trans), -1, G_NORMALIZE_ALL);
-        gchar* note_imported = g_utf8_normalize (xaccTransGetNotes (
-                imp_trans), -1, G_NORMALIZE_ALL);
-        gchar* note_matched = g_utf8_normalize (xaccTransGetNotes (
-            selected_match->trans), -1, G_NORMALIZE_ALL);
+        gchar *desc_imported, *desc_matched, *note_imported, *note_matched;
+        const gchar* raw_str = xaccTransGetDescription (imp_trans);
+
+        desc_imported =
+            raw_str ? g_utf8_normalize (raw_str, -1, G_NORMALIZE_ALL) : NULL;
+        raw_str = xaccTransGetDescription (selected_match->trans);
+        desc_matched =
+            raw_str ? g_utf8_normalize (raw_str, -1, G_NORMALIZE_ALL) : NULL;
+        raw_str = xaccTransGetNotes (imp_trans);
+        note_imported =
+            raw_str ? g_utf8_normalize (raw_str, -1, G_NORMALIZE_ALL) : NULL;
+        raw_str = xaccTransGetNotes (selected_match->trans);
+        note_matched =
+           raw_str ? g_utf8_normalize (raw_str, -1, G_NORMALIZE_ALL) : NULL;
 
         // Append if desc_imported not already in desc_matched
-        if (g_utf8_strlen (desc_imported, -1) > g_utf8_strlen (desc_matched, -1) ||
-            !strstr (desc_matched, desc_imported))
-            desc_append (selected_match->trans, imp_trans);
+        if (desc_imported &&
+            (!desc_matched ||
+             g_utf8_strlen (desc_imported, -1) > g_utf8_strlen (desc_matched, -1) ||
+             !strstr (desc_matched, desc_imported)))
+        {
+            if (desc_matched && *desc_matched)
+                desc_append (selected_match->trans, desc_imported);
+            else
+                xaccTransSetDescription (selected_match->trans, desc_imported);
+        }
 
         // Append if note_imported not already in note_matched
-        if (g_utf8_strlen (note_imported, -1) > g_utf8_strlen (note_matched, -1) ||
-            !strstr (note_matched, note_imported))
-            notes_append (selected_match->trans, imp_trans);
+        if (note_imported &&
+            (!note_matched ||
+             g_utf8_strlen (note_imported, -1) > g_utf8_strlen (note_matched, -1) ||
+             !strstr (note_matched, note_imported)))
+        {
+            if (note_matched && *note_matched)
+                notes_append (selected_match->trans, note_imported);
+            else
+                xaccTransSetNotes (selected_match->trans, note_imported);
+        }
 
         g_free(desc_imported);
         g_free(desc_matched);

@@ -29,88 +29,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkBox" id="transaction_type_page">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="margin-start">12</property>
-        <property name="border-width">6</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkLabel" id="transaction_type_page_label">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-bottom">6</property>
-            <property name="label" translatable="yes">Select the type of stock activity that you wish to record. The available types depend on whether the current stock balance is positive, nil, or negative (i.e. when shorting stock). The type will determine the component splits.</property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <!-- n-columns=2 n-rows=2 -->
-          <object class="GtkGrid" id="transaction_type_table">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="row-spacing">3</property>
-            <property name="column-spacing">6</property>
-            <child>
-              <object class="GtkLabel" id="transaction_type_combo_label">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes">Type</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBoxText" id="transaction_type_page_combobox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <items>
-                  <item translatable="yes">a1</item>
-                  <item translatable="yes">b2</item>
-                  <item translatable="yes">c3</item>
-                </items>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="transaction_type_page_explanation">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes">label</property>
-                <property name="wrap">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="title" translatable="yes">Transaction Type</property>
-        <property name="complete">True</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkBox" id="transaction_details_page">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -183,6 +101,88 @@
       </object>
       <packing>
         <property name="title" translatable="yes">Transaction Details</property>
+        <property name="complete">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="transaction_type_page">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="margin-start">12</property>
+        <property name="border-width">6</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel" id="transaction_type_page_label">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-bottom">6</property>
+            <property name="label" translatable="yes">Select the type of stock activity that you wish to record. The available types depend on whether the current stock balance is positive, nil, or negative (i.e. when shorting stock). The type will determine the component splits.</property>
+            <property name="wrap">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <!-- n-columns=2 n-rows=2 -->
+          <object class="GtkGrid" id="transaction_type_table">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="row-spacing">3</property>
+            <property name="column-spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="transaction_type_combo_label">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">Type</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="transaction_type_page_combobox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <items>
+                  <item>a1</item>
+                  <item>b2</item>
+                  <item>c3</item>
+                </items>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="transaction_type_page_explanation">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label">label</property>
+                <property name="wrap">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="title" translatable="yes">Transaction Type</property>
         <property name="complete">True</property>
       </packing>
     </child>
@@ -333,7 +333,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">(autocalculated price)</property>
+                <property name="label">(autocalculated price)</property>
                 <property name="use-underline">True</property>
                 <property name="justify">center</property>
               </object>
@@ -896,6 +896,7 @@
           <object class="GtkScrolledWindow" id="finish_scrolled">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
+            <property name="vscrollbar-policy">never</property>
             <child>
               <object class="GtkTreeView" id="transaction_view">
                 <property name="visible">True</property>
@@ -918,7 +919,8 @@
           <object class="GtkLabel" id="finish_summary">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">summary of errors</property>
+            <property name="label">summary of errors</property>
+            <property name="wrap">True</property>
           </object>
           <packing>
             <property name="expand">False</property>

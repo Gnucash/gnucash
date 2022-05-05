@@ -382,28 +382,30 @@ also show overall period profit & loss."))
   (define (make-narrow-cell)
     (gnc:make-html-table-cell/min-width 1))
 
+  (define (show-depth? lvl)
+    (or (not depth-limit) (<= lvl depth-limit)))
+
   (define (add-indented-row indent label label-markup row-markup amount-indent rest)
-    (when (or (not depth-limit) (<= indent depth-limit))
-      (let* ((account-cell (if label-markup
-                               (gnc:make-html-table-cell/size/markup
-                                1 (if disable-account-indent? 1 (- maxindent indent))
-                                label-markup label)
-                               (gnc:make-html-table-cell/size
-                                1 (if disable-account-indent? 1 (- maxindent indent))
-                                label)))
-             (row (append
-                   (if disable-account-indent?
-                       '()
-                       (make-list-thunk indent make-narrow-cell))
-                   (list account-cell)
-                   (gnc:html-make-empty-cells
-                    (if amount-indenting? (1- amount-indent) 0))
-                   (if reverse-cols? (reverse rest) rest)
-                   (gnc:html-make-empty-cells
-                    (if amount-indenting? (- maxindent amount-indent) 0)))))
-        (if row-markup
-            (gnc:html-table-append-row/markup! table row-markup row)
-            (gnc:html-table-append-row! table row)))))
+    (let* ((account-cell (if label-markup
+                             (gnc:make-html-table-cell/size/markup
+                              1 (if disable-account-indent? 1 (- maxindent indent))
+                              label-markup label)
+                             (gnc:make-html-table-cell/size
+                              1 (if disable-account-indent? 1 (- maxindent indent))
+                              label)))
+           (row (append
+                 (if disable-account-indent?
+                     '()
+                     (make-list-thunk indent make-narrow-cell))
+                 (list account-cell)
+                 (gnc:html-make-empty-cells
+                  (if amount-indenting? (1- amount-indent) 0))
+                 (if reverse-cols? (reverse rest) rest)
+                 (gnc:html-make-empty-cells
+                  (if amount-indenting? (- maxindent amount-indent) 0)))))
+      (if row-markup
+          (gnc:html-table-append-row/markup! table row-markup row)
+          (gnc:html-table-append-row! table row))))
 
   (define (monetary+ . monetaries)
     ;; usage: (monetary+ monetary...)
@@ -518,8 +520,9 @@ also show overall period profit & loss."))
              ((_ . tail) (lp1 tail))))))))
 
   (define* (add-recursive-subtotal lvl lvl-acct #:key account-style-normal?)
-    (if (or show-zb-accts?
-            (is-not-zero? (account-and-descendants lvl-acct)))
+    (if (and (or show-zb-accts?
+                 (is-not-zero? (account-and-descendants lvl-acct)))
+             (show-depth? lvl))
         (add-indented-row lvl
                           (render-account lvl-acct (not account-style-normal?))
                           (if account-style-normal?
@@ -545,9 +548,10 @@ also show overall period profit & loss."))
   (define* (add-account-row lvl-curr curr #:key
                             (override-show-zb-accts? #f)
                             (account-indent 0))
-    (if (or show-zb-accts?
-            override-show-zb-accts?
-            (is-not-zero? (list curr)))
+    (if (and (or show-zb-accts?
+                 override-show-zb-accts?
+                 (is-not-zero? (list curr)))
+             (show-depth? lvl-curr))
         (add-indented-row lvl-curr
                           (render-account curr #f)
                           "text-cell"
