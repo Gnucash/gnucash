@@ -430,6 +430,10 @@ typedef struct
     GtkWidget * assistant;
 
     std::optional<TxnTypeVec> txn_types;
+    // the following stores date at which the txn_types were set. If
+    // the GNCDateEdit date is modified, it will trigger recreation of
+    // the txn_types above.
+    std::optional<time64>     txn_types_date;
     Account   * acct;
     gnc_commodity * currency;
 
@@ -830,6 +834,9 @@ stock_assistant_prepare (GtkAssistant  *assistant, GtkWidget *page,
         gnc_numeric balance;
         time64 date;
         date = gnc_date_edit_get_date_end (GNC_DATE_EDIT (info->date_edit));
+        if (info->txn_types_date && (info->txn_types_date == date))
+            break;
+        info->txn_types_date = date;
         balance = xaccAccountGetBalanceAsOfDate (info->acct, date);
         info->txn_types = gnc_numeric_zero_p (balance) ? starting_types
             : gnc_numeric_positive_p (balance) ? long_types
