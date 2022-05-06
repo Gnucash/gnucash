@@ -10,7 +10,7 @@
 ;;    statement to no more than daily resolution.
 ;;    
 ;;    The Company Name field does not currently default to the name
-;;    in (gnc-get-current-book).
+;;    in (gnc-get-current-book).  Corrected by this PR.
 ;;    
 ;;    Line & column alignments may still not conform with
 ;;    textbook accounting practice (they're close though!).
@@ -51,6 +51,9 @@
 ;; defined in *one* place.
 (define optname-report-title (N_ "Report Title"))
 (define opthelp-report-title (N_ "Title for this report."))
+
+(define optname-party-name-book (N_ "Force Configured Company Name"))
+(define opthelp-party-name-book (N_ "Force the Configured Company Name to be used in the report."))
 
 (define optname-party-name (N_ "Company name"))
 (define opthelp-party-name (N_ "Name of company/individual."))
@@ -147,9 +150,13 @@
       gnc:pagename-general optname-report-title
       "a" opthelp-report-title (G_ reportname)))
     (add-option
+      (gnc:make-simple-boolean-option 
+      gnc:pagename-general optname-party-name-book
+      "b1" opthelp-party-name-book #t))
+    (add-option
       (gnc:make-string-option
       gnc:pagename-general optname-party-name
-      "b" opthelp-party-name (or (gnc:company-info book gnc:*company-name*) "")))
+      "b2" opthelp-party-name (or (gnc:company-info book gnc:*company-name*) "")))
     
     ;; period over which to report income
     (gnc:options-add-date-interval!
@@ -294,8 +301,11 @@
   
   ;; get all option's values
   (let* (
+         (book (gnc-get-current-book)) ; XXX Find a way to get the book that opened the report
 	 (report-title (get-option gnc:pagename-general optname-report-title))
-	 (company-name (get-option gnc:pagename-general optname-party-name))
+         (company-name (if optname-party-name-book
+                       (gnc:company-info book gnc:*company-name*)
+                       (get-option gnc:pagename-general optname-party-name)))
          (start-date-printable (gnc:date-option-absolute-time
 				(get-option gnc:pagename-general
 					    optname-start-date)))
