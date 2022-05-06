@@ -69,6 +69,10 @@
 #define OPTION_SECTION_BUDGETING       N_("Budgeting")
 #define OPTION_NAME_DEFAULT_BUDGET     N_("Default Budget")
 
+#define OPTION_SECTION_BUSINESS        N_("Business")
+
+#define OPTION_NAME_DEFAULT_INVOICE_REPORT  N_("Default Invoice Report")
+
 /** @} */
 
 /* For the grep-happy:

@@ -41,6 +41,54 @@ extern "C" {
 
 #define GNC_PREF_AUTO_PAY "auto-pay"
 
+/** Retrieve the buitin guid for the Invoice Report to be
+ *  used as the default to print Invoices
+ *
+ * @return The guid of the saved Invoice Report
+ */
+const char *gnc_get_builtin_default_invoice_print_report (void);
+
+/** Migrate the Default Invoice Report from prefs to book properties
+ *  used to print Invoices
+ * 
+ * @return The guid of the saved Invoice Report
+ */
+const char * gnc_migrate_default_invoice_print_report (void);
+
+/** Retrieve the guid of the Invoice Report to be used to
+ *  print Invoices
+ *
+ * @return The guid of the saved Invoice Report
+ */
+char *gnc_get_default_invoice_print_report (void);
+
+/** Setup a combo used for displaying list of Invoice Reports.
+ *
+ *  @param combo The GtkComboBox that presents the list.
+ *
+ *  @param warning The warning image, displayed if the default guid is
+ *                 not in the Invoice list.
+ */
+void gnc_default_print_report_list (GtkWidget *combo, GtkWidget *warning);
+
+/** Retrieve the string representing the Invoice Report used as the default
+ *  to print Invoices. This is a concatination of report name and guid
+ *
+ *  @param combo The GtkComboBox that presents the list.
+ * 
+ *  @return The string used to represent the selected Invoice Report
+ */
+gchar *gnc_default_print_report_list_combo_get_report (GtkComboBox *cbox);
+
+/** Set the active report to the guid string
+ *
+ *  @param combo The GtkComboBox that presents the list.
+ * 
+ *  @param guid The guid of the Invoice Report
+ */
+void gnc_default_print_report_list_combo_set_report (GtkComboBox *cbox,
+                                                     const gchar *guid);
+
 
 GtkWidget * gnc_owner_select_create (GtkWidget *label, GtkWidget *hbox,
                                      QofBook *book, GncOwner *owner);

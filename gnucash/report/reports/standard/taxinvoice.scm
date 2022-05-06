@@ -304,6 +304,7 @@
   'menu-name (N_ "Tax Invoice")
   'menu-tip (N_ "Display a customer invoice with tax columns (using eguile template)")
   'menu-path (list gnc:menuname-business-reports)
+  'hook 'invoice
   'options-generator options-generator
   'renderer report-renderer)
 
@@ -330,5 +331,6 @@
   'menu-name (N_ "Australian Tax Invoice")
   'menu-tip (N_ "Display an Australian customer invoice with tax columns (using eguile template)")
   'menu-path (list gnc:menuname-business-reports)
+  'hook 'invoice
   'options-generator au-tax-options-generator
   'renderer report-renderer)
