@@ -29,6 +29,7 @@
 #include <numeric>
 #include <algorithm>
 #include <optional>
+#include <stdexcept>
 
 extern "C" {
 #include "Transaction.h"
@@ -514,7 +515,17 @@ refresh_page_transaction_type (GtkWidget *widget, gpointer user_data)
     if (!info->txn_types)
         return;
 
-    info->txn_type = info->txn_types->at (type_idx);
+    try
+    {
+        info->txn_type = info->txn_types->at (type_idx);
+    }
+    catch (const std::out_of_range& e)
+    {
+        PERR ("out of range type_idx=%d", type_idx);
+        return;
+    }
+
+    g_return_if_fail (info->txn_type);
 
     gtk_label_set_text (GTK_LABEL (info->transaction_type_explanation),
                         _(info->txn_type->explanation));
@@ -529,6 +540,7 @@ static void
 refresh_page_stock_amount (GtkWidget *widget, gpointer user_data)
 {
     auto info = static_cast<StockTransactionInfo*>(user_data);
+    g_return_if_fail (info->txn_type);
 
     auto pinfo = gnc_commodity_print_info (xaccAccountGetCommodity (info->acct), true);
     auto bal = info->balance_at_date;
@@ -556,6 +568,7 @@ refresh_page_stock_value (GtkWidget *widget, gpointer user_data)
 {
     auto info = static_cast<StockTransactionInfo*>(user_data);
     gnc_numeric amount, value;
+    g_return_if_fail (info->txn_type);
 
     if (info->txn_type->stock_amount == FieldMask::DISABLED ||
         info->txn_type->stock_value == FieldMask::DISABLED ||
@@ -694,6 +707,7 @@ gas_account (GtkWidget *gas)
 static void
 refresh_page_finish (StockTransactionInfo *info)
 {
+    g_return_if_fail (info->txn_type);
     auto view = GTK_TREE_VIEW (info->finish_split_view);
     auto list = GTK_LIST_STORE (gtk_tree_view_get_model(view));
     gtk_list_store_clear (list);
@@ -978,6 +992,7 @@ stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
     auto info = static_cast<StockTransactionInfo*>(user_data);
     AccountVec account_commits;
     auto book = gnc_get_current_book ();
+    g_return_if_fail (info->txn_type);
 
     gnc_suspend_gui_refresh ();
 
