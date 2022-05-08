@@ -128,6 +128,7 @@ typedef struct _RenumberDialog
     GtkWidget *dialog;
     GtkWidget *prefix;
     GtkWidget *interval;
+    GtkWidget *digits;
     GtkWidget *example1;
     GtkWidget *example2;
 
@@ -147,6 +148,7 @@ static void gnc_account_window_set_name (AccountWindow *aw);
 
 void gnc_account_renumber_prefix_changed_cb (GtkEditable *editable, RenumberDialog *data);
 void gnc_account_renumber_interval_changed_cb (GtkSpinButton *spinbutton, RenumberDialog *data);
+void gnc_account_renumber_digits_changed_cb (GtkSpinButton *spinbutton, RenumberDialog *data);
 void gnc_account_renumber_response_cb (GtkDialog *dialog, gint response, RenumberDialog *data);
 
 void gnc_account_window_destroy_cb (GtkWidget *object, gpointer data);
@@ -2043,15 +2045,33 @@ gnc_account_renumber_update_examples (RenumberDialog *data)
 {
     gchar *str;
     gchar *prefix;
-    gint interval;
+    gint   interval;
+    gint   digits;
     unsigned int num_digits = 1;
 
     g_return_if_fail (data->num_children > 0);
+
     prefix = gtk_editable_get_chars (GTK_EDITABLE(data->prefix), 0, -1);
     interval = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(data->interval));
+    digits = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(data->digits));
+
     if (interval <= 0)
         interval = 10;
+
     num_digits = (unsigned int)log10((double)(data->num_children * interval)) + 1;
+
+    if (digits <= num_digits)
+    {
+        g_signal_handlers_block_by_func (GTK_SPIN_BUTTON(data->digits),
+                                         (gpointer)gnc_account_renumber_digits_changed_cb,
+                                          data);
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON(data->digits), num_digits);
+        g_signal_handlers_unblock_by_func (GTK_SPIN_BUTTON(data->digits),
+                                           (gpointer)gnc_account_renumber_digits_changed_cb,
+                                            data);
+    }
+    else
+        num_digits = digits;
 
     if (strlen (prefix))
         str = g_strdup_printf ("%s-%0*d", prefix, num_digits, interval);
@@ -2089,19 +2109,27 @@ gnc_account_renumber_interval_changed_cb (GtkSpinButton *spinbutton,
 }
 
 void
+gnc_account_renumber_digits_changed_cb (GtkSpinButton *spinbutton,
+                                        RenumberDialog *data)
+{
+    gnc_account_renumber_update_examples (data);
+}
+
+void
 gnc_account_renumber_response_cb (GtkDialog *dialog,
                                   gint response,
                                   RenumberDialog *data)
 {
-    GList *children = NULL, *tmp;
-    gchar *prefix;
-    gint interval;
-    unsigned int num_digits, i;
-
     if (response == GTK_RESPONSE_OK)
     {
+        GList *children = gnc_account_get_children_sorted (data->parent);
+        GList *tmp;
+        gchar *prefix;
+        gint interval;
+        unsigned int num_digits, i;
+
         gtk_widget_hide (data->dialog);
-        children = gnc_account_get_children_sorted (data->parent);
+
         if (children == NULL)
         {
             PWARN("Can't renumber children of an account with no children!");
@@ -2110,14 +2138,10 @@ gnc_account_renumber_response_cb (GtkDialog *dialog,
         }
         prefix = gtk_editable_get_chars (GTK_EDITABLE(data->prefix), 0, -1);
         interval = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(data->interval));
-
-        if (interval <= 0)
-            interval = 10;
-
-        num_digits = (unsigned int)log10 ((double)(data->num_children * interval) + 1);
+        num_digits = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(data->digits));
 
         gnc_set_busy_cursor (NULL, TRUE);
-        for (tmp = children, i = 1; tmp; tmp = g_list_next(tmp), i += 1)
+        for (tmp = children, i = 1; tmp; tmp = g_list_next (tmp), i += 1)
         {
             gchar *str;
             if (strlen (prefix))
@@ -2125,13 +2149,14 @@ gnc_account_renumber_response_cb (GtkDialog *dialog,
                                        num_digits, interval * i);
             else
                 str = g_strdup_printf ("%0*d", num_digits, interval * i);
+
             xaccAccountSetCode (tmp->data, str);
             g_free (str);
         }
         gnc_unset_busy_cursor (NULL);
+        g_free (prefix);
         g_list_free (children);
     }
-
     gtk_widget_destroy (data->dialog);
     g_free (data);
 }
@@ -2148,12 +2173,14 @@ gnc_account_renumber_create_dialog (GtkWidget *window, Account *account)
      * should be disabled if the account has no children.
      */
     g_return_if_fail (gnc_account_n_children (account) > 0);
+
     data = g_new (RenumberDialog, 1);
     data->parent = account;
     data->num_children = gnc_account_n_children (account);
 
     builder = gtk_builder_new ();
     gnc_builder_add_from_file (builder, "dialog-account.glade", "interval_adjustment");
+    gnc_builder_add_from_file (builder, "dialog-account.glade", "digit_spin_adjustment");
     gnc_builder_add_from_file (builder, "dialog-account.glade", "account_renumber_dialog");
     data->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "account_renumber_dialog"));
     gtk_window_set_transient_for (GTK_WINDOW(data->dialog), GTK_WINDOW(window));
@@ -2163,9 +2190,7 @@ gnc_account_renumber_create_dialog (GtkWidget *window, Account *account)
 
     widget = GTK_WIDGET(gtk_builder_get_object (builder, "header_label"));
     fullname = gnc_account_get_full_name (account);
-    string = g_strdup_printf (_( "Renumber the immediate sub-accounts of %s? "
-                                 "This will replace the account code field of "
-                                 "each child account with a newly generated code."),
+    string = g_strdup_printf (_("Renumber the immediate sub-accounts of '%s'?"),
                               fullname);
     gtk_label_set_text (GTK_LABEL(widget), string);
     g_free (string);
@@ -2173,6 +2198,7 @@ gnc_account_renumber_create_dialog (GtkWidget *window, Account *account)
 
     data->prefix = GTK_WIDGET(gtk_builder_get_object (builder, "prefix_entry"));
     data->interval = GTK_WIDGET(gtk_builder_get_object (builder, "interval_spin"));
+    data->digits = GTK_WIDGET(gtk_builder_get_object (builder, "digit_spin"));
     data->example1 = GTK_WIDGET(gtk_builder_get_object (builder, "example1_label"));
     data->example2 = GTK_WIDGET(gtk_builder_get_object (builder, "example2_label"));
 
