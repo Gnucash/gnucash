@@ -1,17 +1,20 @@
+# Taehun Yun <yooontehoon@naver.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2009-07-15 11:40+0900\n"
-"Last-Translator: Jin-Hwan Jeong <yongdoria@gmail.com>\n"
-"Language-Team:\n"
+"PO-Revision-Date: 2022-05-10 16:14+0000\n"
+"Last-Translator: Taehun Yun <yooontehoon@naver.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.12.1\n"
 "X-Poedit-Language: Korean\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 
@@ -21,7 +24,7 @@ msgstr "아랍어"
 
 #: borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "발트어"
 
 #: borrowed/goffice/go-charmap-sel.c:72
 msgid "Central European"
@@ -111,7 +114,7 @@ msgstr "아랍어 (Windows-1256)"
 
 #: borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
-msgstr ""
+msgstr "아르메니아어 (ARMSCII-8)"
 
 #: borrowed/goffice/go-charmap-sel.c:124
 msgid "Baltic (ISO-8859-13)"
@@ -126,9 +129,8 @@ msgid "Baltic (Windows-1257)"
 msgstr "발트어 (Windows-1257)"
 
 #: borrowed/goffice/go-charmap-sel.c:127
-#, fuzzy
 msgid "Celtic (ISO-8859-14)"
-msgstr "ISO-8859-14 (셀틱)"
+msgstr "켈트어 (ISO-8859-14)"
 
 #: borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
@@ -180,7 +182,7 @@ msgstr "중국어 번체 (EUC-TW)"
 
 #: borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"
-msgstr ""
+msgstr "크로아티아어 (MacCroatian)"
 
 #: borrowed/goffice/go-charmap-sel.c:149
 msgid "Cyrillic (IBM-855)"
@@ -208,16 +210,15 @@ msgstr "키릴어 (Windows-1251)"
 
 #: borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
-msgstr ""
+msgstr "러시아어 (CP-866)"
 
 #: borrowed/goffice/go-charmap-sel.c:160
 msgid "Ukrainian (KOI8-U)"
-msgstr ""
+msgstr "우크라이나어 (KOI8-U)"
 
 #: borrowed/goffice/go-charmap-sel.c:161
-#, fuzzy
 msgid "Ukrainian (MacUkrainian)"
-msgstr "KOI8-U (우크라이나)"
+msgstr "우크라이나어 (MacUkrainian)"
 
 #: borrowed/goffice/go-charmap-sel.c:163
 msgid "English (ASCII)"
