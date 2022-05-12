@@ -36,7 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-14 20:55+0000\n"
+"PO-Revision-Date: 2022-05-08 21:12+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -45,7 +45,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.12.1\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -1173,7 +1173,7 @@ msgstr "Anteile"
 
 #: gnucash/gnome/assistant-stock-split.c:787
 msgid "You don't have any stock accounts with balances!"
-msgstr "Sie haben keine Aktienkonten mit mehr als Null Aktien."
+msgstr "Sie haben keine Aktienkonten mit mehr als Null Aktien!"
 
 # Fixme: Source Accelerator missing in dialog-invoice?
 #: gnucash/gnome/business-gnome-utils.c:73
@@ -12910,7 +12910,7 @@ msgstr "Diese Rückfrage wird vor dem Ausschneiden einer Buchung angezeigt."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
 msgid "Cut a transaction with reconciled splits"
-msgstr "Eine Buchung mit abgeglichenen Teilen ausschneiden"
+msgstr "Eine Buchung mit abgeglichenen Buchungsteilen ausschneiden"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:105
 msgid ""
@@ -13135,7 +13135,7 @@ msgstr ""
 "\n"
 "Achtung: Dieses Feature ist noch in Entwicklung und funktioniert "
 "wahrscheinlich nur fehlerhaft. Es könnte sogar Ihre Daten korrumpieren! "
-"Bitte sorgen Sie daher für ein rechtzeitiges Backup."
+"Bitte sorgen Sie daher für ein rechtzeitiges Backup!"
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:24
 msgid "Setup Account Period"
@@ -16404,7 +16404,7 @@ msgstr "Zugeordneter Kontonamen"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:247
 msgid "Count of Match String Usage"
-msgstr "Wie oft verwendet?"
+msgstr "Häufigkeit der Verwendung"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:290
 msgid ""
@@ -16872,7 +16872,7 @@ msgstr "Bestellungsposten"
 msgid ""
 "The order ID number. If left blank a reasonable number will be chosen for you"
 msgstr ""
-"Die Bestellungsnummer. Falls keine angegeben wird, wird automatisch ein "
+"Die Bestellnummer. Falls keine angegeben wird, wird automatisch ein "
 "sinnvoller Wert gewählt"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:136
@@ -17392,13 +17392,6 @@ msgid "Enable update match action"
 msgstr "»Abgleichen und Datenübernahme«-Aktion aktivieren"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2298
-#, fuzzy
-#| msgid ""
-#| "Enable the UPDATE AND RECONCILE action in the transaction matcher. If "
-#| "enabled, a transaction whose best match's score is above the Auto-CLEAR "
-#| "threshold and has a different date or amount than the matching existing "
-#| "transaction will cause the existing transaction to be updated and cleared "
-#| "by default."
 msgid ""
 "Enable the UPDATE AND CLEAR action in the transaction matcher. If enabled, a "
 "transaction whose best match's score is above the Auto-CLEAR threshold and "
@@ -21374,7 +21367,7 @@ msgstr ""
 "\n"
 "%u Konten wurden hinzugefügt und %u aktualisiert.\n"
 "\n"
-"Folgende Fehler traten auf:"
+"Folgende Fehler traten auf..."
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:466
 #, c-format
@@ -22095,7 +22088,7 @@ msgstr "Neu (%s nach »%s«, automatisch gewählt)"
 #: gnucash/import-export/import-main-matcher.c:1745
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
-msgstr "Neu (verbleibende %s benötigen Konto, nicht ausgeglichen)."
+msgstr "Neu (verbleibende %s benötigen Konto, nicht ausgeglichen)!"
 
 #: gnucash/import-export/import-main-matcher.c:1763
 #, c-format
@@ -22276,8 +22269,6 @@ msgstr ""
 "eintippen."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:906
-#, fuzzy
-#| msgid "_Name or description"
 msgid "Name or _description"
 msgstr "_Name oder Beschreibung"
 
@@ -27476,7 +27467,7 @@ msgstr "Anzeigen der Steuerwirksamkeit des Postens?"
 
 #: gnucash/report/reports/standard/invoice.scm:235
 msgid "Display each entry's total total tax?"
-msgstr "Zeigen jeden Eintrag des gesamten Steueranteils an"
+msgstr "Jeden Eintrag des gesamten Steueranteils anzeigen?"
 
 #: gnucash/report/reports/standard/invoice.scm:240
 msgid "Display the entry's value?"
@@ -29726,10 +29717,8 @@ msgid "Display the reconciled date?"
 msgstr "Anzeigen des Abgleich-Datums?"
 
 #: gnucash/report/trep-engine.scm:945
-#, fuzzy
-#| msgid "Display the reconciled date?"
 msgid "Display the entered date?"
-msgstr "Anzeigen des Abgleich-Datums?"
+msgstr "Anzeigen des Eingabe-Datums?"
 
 #: gnucash/report/trep-engine.scm:950
 msgid "Display the notes if the memo is unavailable?"
@@ -30697,15 +30686,11 @@ msgstr ""
 "worden sind."
 
 #: libgnucash/engine/gnc-commodity.h:112
-#, fuzzy
-#| msgid "All non-currency"
 msgctxt "Commodity Type"
 msgid "All non-currency"
 msgstr "Alle Nicht-Währungen"
 
 #: libgnucash/engine/gnc-commodity.h:113
-#, fuzzy
-#| msgid "Currencies"
 msgctxt "Commodity Type"
 msgid "Currencies"
 msgstr "Währungen"
