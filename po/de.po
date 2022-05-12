@@ -25,6 +25,7 @@
 # Christoph Franzen <christoph@alte-pflasterei.de>, 2021.
 # Thomas Kriegel <warrel040@gmx.de>, 2021.
 # Stefan Bayer <stefan.bayer@stefanbayer.net>, 2021.
+# S <t0kie@mailbox.org>, 2022.
 #
 # Konventionen/Tastenkürzel:
 # »Zitate«: [altgr]+[Y]/[X]
@@ -37,7 +38,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
 "PO-Revision-Date: 2022-05-08 21:12+0000\n"
-"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
+"Last-Translator: S <t0kie@mailbox.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -12771,7 +12772,7 @@ msgid ""
 msgstr ""
 "Dieser Dialog wird angezeigt, bevor Sie ein Forderungs-/"
 "Verbindlichkeitskonto anlegen können. Diese Kontoarten sind für die "
-"Geschäftsbuchungen reserviert und sollten nicht manuell geändert werden,"
+"Geschäftsbuchungen reserviert und sollten nicht manuell geändert werden."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:54
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:177
