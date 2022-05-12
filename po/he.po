@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-31 08:08+0000\n"
+"PO-Revision-Date: 2022-05-10 09:18+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.12.1\n"
 "X-Poedit-Basepath: .\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -483,10 +483,10 @@ msgid ""
 "(File[->Most Recently Used-List]).\n"
 "The full path is displayed in the status bar."
 msgstr ""
-"להצגת הספריות בהן גנוקאש אחסן את הקבצים האחרונים שהיו בשימוש, ניתן לרחף מעל "
-"אחד הערכים בתפריט ההיסטוריה\n"
-"(קובץ[->רשימת הקבצים האחרונים שהיו בשימוש]).\n"
-"הנתיב המלא מוצג בשורת המצב."
+"ניתן לרחף מעל אחד הערכים בתפריט ההיסטוריה (קובץlarr;[רשימת הקבצים האחרונים "
+"שהיו בשימוש]),\n"
+"להצגת רשימת התיקיות בהן אחסנה גנוקאש את הקבצים האחרונים שהיו בשימוש.\n"
+"הנתיב המלא יוצג בשורת המצב."
 
 #: doc/tip_of_the_day.list.c:24
 msgid ""
@@ -5844,8 +5844,8 @@ msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
-"הוספת תצורת הדוח הנוכחי לתפריט 'תצורות דוחות שנשמרו'. הגדרות הדוח יישמרו "
-"בקובץ %s."
+"הוספת תצורת הדוח הנוכחי לתפריט 'דוחותlarr;תצורות דוחות שנשמרו'. תצורת הדוח "
+"תשמר לקובץ %s."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1205
 msgid "_Print Report..."
@@ -6292,8 +6292,8 @@ msgid ""
 "The date of this transaction is older than the \"Read-Only Threshold\" set "
 "for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
-"תאריך התנועה קודם לערך 'סף לקריאה בלבד' עבור ספר חשבונות זה. ניתן לשנות "
-"הגדרה זו מתפריט 'קובץ &larr; מאפיינים &larr; חשבונות'."
+"תאריך התנועה, קודם לערך שהוגדר ב'סף לקריאה בלבד' עבור ספר חשבונות זה. ניתן "
+"לשנות הגדרה זו מתפריט 'קובץ &larr; מאפיינים &larr; חשבונות'."
 
 #: gnucash/gnome/gnc-split-reg.c:1208
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:840
@@ -7554,9 +7554,9 @@ msgid ""
 "dialog (via File->Properties), after account setup, if you want to set a "
 "default gain/loss account."
 msgstr ""
-"מאחר שלא הוגדרו עדיין חשבונות, יהיה צורך לחזור לתיבת דו־שיח זו (מתפריט 'קובץ "
-"&larr; מאפיינים'), לאחר הגדרת החשבון, על מנת להגדיר חשבון ברירת מחדל של "
-"רווח/הפסד."
+"על מנת להגדיר חשבון ברירת מחדל עבור 'רווח/הפסד', ומאחר שטרם הוגדרו חשבונות, "
+"ידרש לחזור לתיבת דו־שיח זו (מתפריט 'קובץ &larr; מאפיינים'), לאחר שחשבון "
+"יוגדר."
 
 #: gnucash/gnome-utils/dialog-options.c:701
 msgid "Select no account"
@@ -7576,10 +7576,10 @@ msgid ""
 "(via File->Properties), after account setup, to select a\n"
 "default gain/loss account."
 msgstr ""
-"אין חשבונות הכנסות או הוצאות\n"
-"למטבע הספרים שנקבע; יש לחזור לתיבת דו־שיח זו\n"
-"(מתפריט 'קובץ &larr; מאפיינים'), לאחר הגדרת החשבון, כדי לבחור\n"
-"ברירת מחדל לחשבון רווח/הפסד."
+"אין חשבונות 'הכנסות' או 'הוצאות'\n"
+"למטבע הספרים שצויין; כדי לבחור בחשבון ברירת מחדל לחשבון 'רווח/הפסד',\n"
+"לאחר הקמת חשבון, יש לחזור לתיבת דו־שיח זו\n"
+"(מתפריט 'קובץ &larr; מאפיינים')."
 
 #: gnucash/gnome-utils/dialog-options.c:869
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:299
@@ -29124,7 +29124,7 @@ msgstr "שגיאה %d בערך gnc_numeric סופי SX [%s‏]‏, שימוש ב
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1799
 #, c-format
 msgid "No exchange rate available in SX [%s] for %s -> %s, value is zero."
-msgstr "אין שערי המרה זמינים ב SX [%s] עבור %s &larr; %s, ערך אפס."
+msgstr "שערי חליפין לא זמינים ב־SX [%s] שער חליפיןור %s &larr; %s, ערך 'אפס'."
 
 #. Translators: This and the following strings appear on
 #. the account tab if the Tax Info column is displayed,
