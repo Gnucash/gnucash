@@ -80,7 +80,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-04-27 19:08+0000\n"
+"PO-Revision-Date: 2022-05-12 20:17+0000\n"
 "Last-Translator: Cow <javier.fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -89,7 +89,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12.1-dev\n"
+"X-Generator: Weblate 4.13-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\""
@@ -558,8 +558,8 @@ msgid ""
 "(File[->Most Recently Used-List]).\n"
 "The full path is displayed in the status bar."
 msgstr ""
-"Si desea conocer cuales directorios donde están almacenados los archivos "
-"GnuCash recientes, pase el cursor sobre una de los asientos\n"
+"Si desea conocer cuales directorios donde están almacenados los archivos de "
+"GnuCash recientes, cubra el cursor de uno de los asientos\n"
 "en el menú de historial (Archivo[->Listado más recientes utilizados]).\n"
 "La ruta completa es representada dentro de la barra de estado."
 
@@ -692,7 +692,7 @@ msgid ""
 "selected date. You can use '+' and '-' to increment and decrement check "
 "numbers as well."
 msgstr ""
-"Al introducir fechas, puede pulsar ‘+’ o ‘-’ para incrementar o decrementar "
+"Al introducir fechas, puede teclear ‘+’ o ‘-’ para incrementar o decrementar "
 "la fecha seleccionada. Puede usar ‘+’ y ‘-’ para incrementar y decrementar "
 "números de casillas también."
 
@@ -733,10 +733,10 @@ msgid ""
 "use. Click the triangle at the far right of the column headings to change "
 "the display."
 msgstr ""
-"Puede fijar las pantallas del Editor de Garantía para representar el Origen "
-"Cotizado de una garantía, la cual facilita cuales origines alineados que sus "
-"garantía utiliza. Pulse el triángulo al último de las cabeceras de columna "
-"para modificar la pantalla."
+"Puede fijar las pantallas del Editor de Garantía para representar la "
+"Cotización Origen de una garantía, la cual facilita cuales origines "
+"alineados que sus garantía utiliza. Pulse el triángulo al último de las "
+"cabeceras de columna para modificar la pantalla."
 
 #: doc/tip_of_the_day.list.c:96
 msgid ""
@@ -1034,11 +1034,11 @@ msgstr "Remuneraciones Varias"
 #: gnucash/gnome/assistant-loan.cpp:770
 #, c-format
 msgid "... pay \"%s\"?"
-msgstr "... liquidar «%s»?"
+msgstr "... remunerar «%s»?"
 
 #: gnucash/gnome/assistant-loan.cpp:782
 msgid "via Escrow account?"
-msgstr "vía cuenta de Aval?"
+msgstr "vía cuenta de aval?"
 
 #: gnucash/gnome/assistant-loan.cpp:929
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2894
@@ -1765,11 +1765,11 @@ msgstr "Enlace Documental Existente es"
 
 #: gnucash/gnome/dialog-doclink.c:531 gnucash/gnome/dialog-doclink.c:576
 msgid "File Found"
-msgstr "Fichero Encontrado"
+msgstr "Archivo Encontrado"
 
 #: gnucash/gnome/dialog-doclink.c:533
 msgid "File Not Found"
-msgstr "Fichero No Encontrado"
+msgstr "Archivo No Encontrado"
 
 #: gnucash/gnome/dialog-doclink.c:546
 msgid "Address Found"
@@ -1859,10 +1859,10 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
-"Pulsación doble en el apunte en la columna Id para ir al Ítem de Negocio.\n"
-"Pulsación doble en el apunte en la columna Enlazar para abrir el Documento "
+"Pulsación doble en el asiento en la columna Id para ir al Ítem de Negocio.\n"
+"Pulsación doble en el asiento en la columna Enlazar para abrir el Documento "
 "Enlazado.\n"
-"Pulsación doble en el apunte en la columna Disponible para modificar el "
+"Pulsación doble en el asiento en la columna Disponible para modificar el "
 "enlace documental."
 
 #: gnucash/gnome/dialog-doclink.c:1103
@@ -2436,7 +2436,7 @@ msgstr "Vista de Anotación Crediticia"
 
 #: gnucash/gnome/dialog-invoice.c:2159
 msgid "View Invoice"
-msgstr "Vista Facturante"
+msgstr "Vista de Factura"
 
 #: gnucash/gnome/dialog-invoice.c:2168
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:291
@@ -3983,28 +3983,28 @@ msgstr "Abre “Crear comprobante de gasto” como diálogo"
 
 #: gnucash/gnome/gnc-plugin-business.c:266
 msgid "Find Expense _Voucher..."
-msgstr "Buscar anotación de _comprobante..."
+msgstr "Buscar _comprobante de gasto..."
 
 #: gnucash/gnome/gnc-plugin-business.c:267
 msgid "Open the Find Expense Voucher dialog"
-msgstr "Abre “Buscar Comprobante de Gasto” como diálogo"
+msgstr "Abre el diálogo “Buscar Comprobante de Gasto”"
 
 #: gnucash/gnome/gnc-plugin-business.c:278
 msgid "Business Linked Documents"
-msgstr "Documentos enlazados con negocios"
+msgstr "Documentos Enlazados a Negocios"
 
 #: gnucash/gnome/gnc-plugin-business.c:279
 msgid "View all Linked Business Documents"
-msgstr "Ver todos los documentos de negocio asociados"
+msgstr "Ver todos los Documentos Enlazados del Negocio"
 
 #: gnucash/gnome/gnc-plugin-business.c:283
 msgid "Sales _Tax Table"
-msgstr "Lengüeta _impositiva para venta"
+msgstr "Lengüeta _impositiva de ventas"
 
 #: gnucash/gnome/gnc-plugin-business.c:284
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
 msgstr ""
-"Vea y edite el listado de las Lengüetas Impositivas sobre Ventas (TIV/IVA)"
+"Vea y edite el listado de las Lengüetas de Impositivas sobre Ventas (TIV/IVA)"
 
 #: gnucash/gnome/gnc-plugin-business.c:288
 msgid "_Billing Terms Editor"
@@ -4020,15 +4020,15 @@ msgstr "Recordar cargos _vencidos"
 
 #: gnucash/gnome/gnc-plugin-business.c:294
 msgid "Open the Bills Due Reminder dialog"
-msgstr "Abre “Recordatorio de cargos vencidos” como diálogo"
+msgstr "Abre el diálogo “Recordatorio de cargos vencidos”"
 
 #: gnucash/gnome/gnc-plugin-business.c:298
 msgid "Invoices _Due Reminder"
-msgstr "Recordar facturas _vencidas"
+msgstr "Recordatorio de facturas _vencidas"
 
 #: gnucash/gnome/gnc-plugin-business.c:299
 msgid "Open the Invoices Due Reminder dialog"
-msgstr "Abre “Recordatorio de recibos vencidas” como diálogo"
+msgstr "Abre el diálogo “Recordatorio de Facturas Vencidas”"
 
 #: gnucash/gnome/gnc-plugin-business.c:302
 msgid "E_xport"
@@ -4246,13 +4246,13 @@ msgstr "Transfiere fondos desde una cuenta a otra"
 #: gnucash/gnome/gnc-plugin-page-register2.c:367
 #: gnucash/gnome/gnc-plugin-page-register.c:485
 msgid "Stoc_k Split..."
-msgstr "Desglosar _mercancía..."
+msgstr "Desglosar _provisión..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:318
 #: gnucash/gnome/gnc-plugin-page-register2.c:368
 #: gnucash/gnome/gnc-plugin-page-register.c:486
 msgid "Record a stock split or a stock merger"
-msgstr "Registrar un desglose o una unión de acción"
+msgstr "Registrar un desglose o una unión de provisión"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:322
 #: gnucash/gnome/gnc-plugin-page-register2.c:372
@@ -4760,7 +4760,7 @@ msgstr "Crear _factura"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:302
 msgid "_Pay Invoice"
-msgstr "_Liquidar factura"
+msgstr "_Remunerar factura"
 
 #. Translators: This is a menu item that opens a dialog for linking an
 #. external file or URL with the bill, invoice, transaction, or voucher or
@@ -5039,7 +5039,8 @@ msgstr "Introduzca una remuneración para el titular de este comprobante"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:423
 msgid "Open a employee report window for the owner of this voucher"
 msgstr ""
-"Abre una ventana del boletín de operador para el titular de este comprobante"
+"Abre una ventana del boletín de operadores para el titular de este "
+"comprobante"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:430
 msgid ""
@@ -5053,55 +5054,52 @@ msgid ""
 "Reset default layout for all employee vouchers and credit notes back to "
 "built-in defaults and update the current page accordingly"
 msgstr ""
-"Restablecer diseño por defecto para todos los comprobantes de operativos y "
+"Restablecer diseño por defecto para todos los comprobantes de personal y "
 "anotaciones crediticias devueltas a empotrados predeterminados y actualizar "
 "la página actual de acorde a ello"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:436
 msgid "Make a printable credit note"
-msgstr "Crear una nota de crédito imprimible"
+msgstr "Crea una anotación haber declarable"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:437
 msgid "Edit this credit note"
-msgstr "Editar esta nota de crédito"
+msgstr "Editar esta nota de haber"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:438
 msgid "Create a new credit note as a duplicate of the current one"
-msgstr ""
-"Crea una anotación crediticia nueva como un duplicado de la cuenta efectiva"
+msgstr "Crea una anotación haber nueva como un duplicado de la cuenta efectiva"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:439
 msgid "Post this credit note to your Chart of Accounts"
-msgstr "Contabiliza esta anotación crediticia a su Árbol de Cuentas"
+msgstr "Contabiliza esta anotación haber a su Árbol de Cuentas"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:440
 msgid "Unpost this credit note and make it editable"
-msgstr "Descontabiliza esta anotación crediticia y hacerla editable"
+msgstr "Descontabiliza esta anotación haber y hacerla editable"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:441
 msgid "Create a new credit note for the same owner as the current one"
 msgstr ""
-"Crea una anotación crediticia nueva para el mismo titular como el de la "
-"cuenta efectiva"
+"Crea una anotación haber nueva para el mismo titular como el de la efectiva"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:442
 msgid "Move to the blank entry at the bottom of the credit note"
-msgstr "Ir al apunte en blanco al suelo de la anotación crediticia"
+msgstr "Ir al asiento en blanco al suelo de la anotación haber"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:443
 msgid "Enter a payment for the owner of this credit note"
-msgstr ""
-"Introduce una remuneración para el titular de esta anotación crediticia"
+msgstr "Introduce una remuneración para el titular de esta anotación haber"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:444
 msgid "Open a company report window for the owner of this credit note"
 msgstr ""
 "Abre una ventana del boletín de sociedad para el titular de esta anotación "
-"crediticia"
+"haber"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:445
 msgid "Manage Document Link..."
-msgstr "Gestionar enlace de documento..."
+msgstr "Gestionar enlace documental..."
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:452
 #: gnucash/gnome/gnc-plugin-page-register2.c:498
@@ -5131,7 +5129,7 @@ msgstr "Descontabilizar"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:461
 msgid "Pay"
-msgstr "Liquidar"
+msgstr "Remunerar"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:145
 msgid "E_dit Vendor"
@@ -5139,7 +5137,7 @@ msgstr "Editar _proveedor"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:146
 msgid "Edit the selected vendor"
-msgstr "Edita el proveedor seleccionado"
+msgstr "Edite el proveedor seleccionado"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:150
 msgid "E_dit Customer"
@@ -5201,7 +5199,7 @@ msgstr "Listado de Proveedores"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:212
 msgid "Show vendor aging overview for all vendors"
-msgstr "Muestra la previsión de proveedor frente a todos los proveedores"
+msgstr "Muestra la antigüedad del proveedor frente a todos los proveedores"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:216
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:295
@@ -5211,7 +5209,7 @@ msgstr "Listado de Clientes"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:217
 msgid "Show customer aging overview for all customers"
-msgstr "Muestra la previsión del cliente frente a todos los clientes"
+msgstr "Muestra la antigüedad del cliente frente a todos los clientes"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:221
 #: gnucash/report/reports/standard/job-report.scm:511
@@ -5221,7 +5219,7 @@ msgstr "Boletín de Proveedor"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:222
 msgid "Show vendor report"
-msgstr "Muestra el boletín de proveedores"
+msgstr "Muestra el boletín del proveedor"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:226
 #: gnucash/report/reports/standard/job-report.scm:505
@@ -5231,7 +5229,7 @@ msgstr "Boletín de Cliente"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:227
 msgid "Show customer report"
-msgstr "Muestra el boletín de clientes"
+msgstr "Muestra el boletín del cliente"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:231
 #: gnucash/report/reports/standard/job-report.scm:514
@@ -5397,7 +5395,7 @@ msgstr "Cor_tar"
 #: gnucash/gnome/gnc-plugin-page-report.c:1217
 #: gnucash/gnome-utils/gnc-main-window.c:321
 msgid "Cut the current selection and copy it to clipboard"
-msgstr "Corta la selección efectiva y copiarlo al portapapeles"
+msgstr "Corta la selección efectiva y copiarla al portapapeles"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:235
 #: gnucash/gnome/gnc-plugin-page-register.c:344
@@ -6051,7 +6049,7 @@ msgstr "Guardar Config"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.c:1143
 msgid "Save Config As..."
-msgstr "Guardar config como..."
+msgstr "Guardar Config como..."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1144
 msgid "Make Pdf"
@@ -6064,7 +6062,7 @@ msgid ""
 "will be saved in the file %s."
 msgstr ""
 "Actualiza la configuración guardada del boletín actual. La configuración del "
-"boletín será guardada en el fichero %s."
+"boletín será guardada en el archivo %s."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1199
 #, c-format
@@ -6074,7 +6072,7 @@ msgid ""
 msgstr ""
 "Agrega la configuración del boletín actual al menú «Boletines -> "
 "Configuraciones del Boletín Guardado». La configuración del boletín será "
-"guardado en el fichero %s."
+"guardada en el archivo %s."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1205
 msgid "_Print Report..."
@@ -6086,19 +6084,19 @@ msgstr "Escribe el boletín efectivo"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1210
 msgid "Export as P_DF..."
-msgstr "Exportar como P_DF..."
+msgstr "Exportar como *.p_df..."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1211
 msgid "Export the current report as a PDF document"
-msgstr "Exporta el boletín efectivo como un documento PDF"
+msgstr "Exporta el boletín presente como un documento *.pdf"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1236
 msgid "Save _Report Configuration"
-msgstr "_Guardar configuración boletinada"
+msgstr "Guarda_r configuración del informe"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1240
 msgid "Save Report Configuration As..."
-msgstr "Guardar Configuración de Boletín como..."
+msgstr "Guardar configuración de boletín como..."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1244
 msgid "Export _Report"
@@ -6106,7 +6104,7 @@ msgstr "Exportar _boletín"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1245
 msgid "Export HTML-formatted report to file"
-msgstr "Exportar boletín con formato HTML a fichero"
+msgstr "Exportar boletín con formato *.html a fichero"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1249
 msgid "_Report Options"
@@ -6115,15 +6113,15 @@ msgstr "Opciones de _boletín"
 #: gnucash/gnome/gnc-plugin-page-report.c:1250
 #: gnucash/report/html-utilities.scm:322
 msgid "Edit report options"
-msgstr "Editar opciones boletinadas"
+msgstr "Edite opciones del boletín"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1255
 msgid "Back"
-msgstr "Atras"
+msgstr "Atrás"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1256
 msgid "Move back one step in the history"
-msgstr "Retroceder un paso en la historia"
+msgstr "Retrocede un paso en el historial"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1260
 msgid "Forward"
@@ -6131,7 +6129,7 @@ msgstr "Siguiente"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1261
 msgid "Move forward one step in the history"
-msgstr "Avanzar un paso en la historia"
+msgstr "Avanza un paso en el historial"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1265
 msgid "Reload"
@@ -6147,7 +6145,7 @@ msgstr "Detener"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1271
 msgid "Cancel outstanding HTML requests"
-msgstr "Cancelar petición pendiente de HTML"
+msgstr "Cancela petición *.html pendiente"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1524
 #: gnucash/gnome/gnc-plugin-page-report.c:1557
@@ -9057,11 +9055,11 @@ msgstr "Barra de _herramientas"
 
 #: gnucash/gnome-utils/gnc-main-window.c:410
 msgid "Show/hide the toolbar on this window"
-msgstr "Mostrar/ocultar la barra de herramientas en esta ventana"
+msgstr "Muestra/oculta la barra de herramientas en esta ventana"
 
 #: gnucash/gnome-utils/gnc-main-window.c:414
 msgid "Su_mmary Bar"
-msgstr "Barra de _resumen"
+msgstr "Barra de resu_men"
 
 #: gnucash/gnome-utils/gnc-main-window.c:415
 msgid "Show/hide the summary bar on this window"
@@ -12370,13 +12368,13 @@ msgid ""
 "If active, each new register will be opened in a new window. Otherwise each "
 "new register will be opened as a tab in the main window."
 msgstr ""
-"Si se activa, cada registro nuevo se abrirá en una ventana nueva. En otro "
+"Si se activa, cada registro nuevo será abierto en una ventana nueva. En otro "
 "caso, cada registro nuevo será abierto como una lengüeta en la ventana "
 "principal."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:271
 msgid "Color all lines of a transaction the same"
-msgstr "Rellenar todas las líneas de una transacción con el mismo color"
+msgstr "Colorea todas las líneas de una transacción con el mismo color"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:272
 msgid ""
@@ -27355,7 +27353,7 @@ msgstr ""
 #: gnucash/report/reports/standard/income-statement.scm:517
 #: libgnucash/engine/Account.cpp:4483 libgnucash/engine/Scrub.c:497
 msgid "Trading"
-msgstr "Comercial"
+msgstr "Comerciales"
 
 #: gnucash/report/reports/standard/income-statement.scm:520
 msgid "Total Trading"
@@ -30048,7 +30046,7 @@ msgid ""
 "style format string."
 msgstr ""
 "La cadena de formato que se utiliza para generar números de operación. Esto "
-"es una cadena de formato de estilo de escritura."
+"es una cadena con formato de estilo para escritura."
 
 #: libgnucash/app-utils/business-prefs.scm:67
 msgid ""
@@ -30092,7 +30090,7 @@ msgstr "La dirección de su sociedad."
 
 #: libgnucash/app-utils/business-prefs.scm:91
 msgid "The contact person to print on invoices."
-msgstr "La persona de contacto a escribir sobre recibos."
+msgstr "La persona de contacto a escribir sobre facturas."
 
 #: libgnucash/app-utils/business-prefs.scm:96
 msgid "The phone number of your business."
@@ -30164,8 +30162,8 @@ msgid ""
 "Check to have trading accounts used for transactions involving more than one "
 "currency or commodity."
 msgstr ""
-"Marcar para tener cuentas de mercado bursátil usadas para transacciones "
-"implicando más de una moneda o materia prima."
+"Marcar para tener cuentas mercantiles usadas para transacciones implicando "
+"más de una moneda o materia prima."
 
 #: libgnucash/app-utils/business-prefs.scm:167
 msgid "Budget to be used when none has been otherwise specified."
@@ -30249,7 +30247,7 @@ msgstr "Primer día del mes anterior."
 
 #: libgnucash/app-utils/date-utilities.scm:1000
 msgid "Last day of previous month."
-msgstr "Ultimo día del mes anterior."
+msgstr "Último día del mes anterior."
 
 #: libgnucash/app-utils/date-utilities.scm:1004
 msgid "Start of next month"
@@ -30261,7 +30259,7 @@ msgstr "Primer día del mes siguiente."
 
 #: libgnucash/app-utils/date-utilities.scm:1011
 msgid "End of next month"
-msgstr "Final del siguiente mes"
+msgstr "Final del mes siguiente"
 
 #: libgnucash/app-utils/date-utilities.scm:1014
 msgid "Last day of next month."
@@ -30329,7 +30327,7 @@ msgstr "Una semana anterior."
 
 #: libgnucash/app-utils/date-utilities.scm:1078
 msgid "Three Months Ago"
-msgstr "Tres meses por detrás"
+msgstr "Hace Tres Meses"
 
 #: libgnucash/app-utils/date-utilities.scm:1080
 msgid "Three Months Ago."
@@ -30345,7 +30343,7 @@ msgstr "Seis meses anteriores."
 
 #: libgnucash/app-utils/date-utilities.scm:1089
 msgid "One Year Ago"
-msgstr "Hace un año"
+msgstr "Hace Un Año"
 
 #: libgnucash/app-utils/date-utilities.scm:1091
 msgid "One Year Ago."
@@ -30353,7 +30351,7 @@ msgstr "Un año anterior."
 
 #: libgnucash/app-utils/date-utilities.scm:1095
 msgid "One Month Ahead"
-msgstr "Un mes por delante"
+msgstr "Tras Un Mes"
 
 #: libgnucash/app-utils/date-utilities.scm:1097
 msgid "One Month Ahead."
@@ -30361,7 +30359,7 @@ msgstr "Un mes posterior."
 
 #: libgnucash/app-utils/date-utilities.scm:1101
 msgid "One Week Ahead"
-msgstr "Una semana por delante"
+msgstr "Tras Una Semana"
 
 #: libgnucash/app-utils/date-utilities.scm:1103
 msgid "One Week Ahead."
@@ -30369,7 +30367,7 @@ msgstr "Una semana posterior."
 
 #: libgnucash/app-utils/date-utilities.scm:1107
 msgid "Three Months Ahead"
-msgstr "Tres meses por delante"
+msgstr "Tras Tres Meses"
 
 #: libgnucash/app-utils/date-utilities.scm:1109
 msgid "Three Months Ahead."
@@ -30385,7 +30383,7 @@ msgstr "Seis meses posteriores."
 
 #: libgnucash/app-utils/date-utilities.scm:1118
 msgid "One Year Ahead"
-msgstr "Un año por delante"
+msgstr "Tras Un Año"
 
 #: libgnucash/app-utils/date-utilities.scm:1120
 msgid "One Year Ahead."
@@ -30432,7 +30430,7 @@ msgstr "Error numérico"
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1018
 #, c-format
 msgid "Unknown account for guid [%s], cancelling SX [%s] creation."
-msgstr "Cuenta desconocida para guid [%s], cancelando creación SX[%s]."
+msgstr "Cuenta desconocida para guid [%s], cancelando creación SX [%s]."
 
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1071
 #, c-format
