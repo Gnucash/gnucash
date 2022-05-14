@@ -67,6 +67,7 @@
 #define HL_PRINTCHECK        "print-check"
 #define HL_RECNWIN           "acct-reconcile"
 #define HL_SXEDITOR          "trans-sched"
+#define HL_SX_SLR            "trans-sched-slr"
 #define HL_BOOK_OPTIONS      "book-options"
 #define HL_STYLE_SHEET       "change-style"
 #define HL_CLOSE_BOOK        "tool-close-book"
