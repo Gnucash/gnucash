@@ -5,7 +5,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-05-10 16:14+0000\n"
+"PO-Revision-Date: 2022-05-14 11:16+0000\n"
 "Last-Translator: Taehun Yun <yooontehoon@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ko/>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12.1\n"
+"X-Generator: Weblate 4.13-dev\n"
 "X-Poedit-Language: Korean\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 
@@ -4006,7 +4006,7 @@ msgstr "계정 필터(_F)..."
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:170
 #: gnucash/gnome-utils/gnc-main-window.c:351
 msgid "_Refresh"
-msgstr "새롭게(_R)"
+msgstr "새로고침(_R)"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:296
 #: gnucash/gnome/gnc-plugin-page-invoice.c:163
@@ -4017,7 +4017,7 @@ msgstr "새롭게(_R)"
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:171
 #: gnucash/gnome-utils/gnc-main-window.c:352
 msgid "Refresh this window"
-msgstr "작업창 새롭게"
+msgstr "작업창 새로고침"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:302
 #: gnucash/gnome/gnc-plugin-page-register2.c:357
@@ -4350,9 +4350,8 @@ msgid "Run the budget report."
 msgstr "현재 보고서 인쇄하기"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:199
-#, fuzzy
 msgid "Refresh this window."
-msgstr "작업창 새롭게"
+msgstr "작업창 새로고침."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:222
 #: gnucash/gnome/gnc-plugin-page-report.c:1137
@@ -4492,7 +4491,7 @@ msgstr "선택한 계정 서기을 한 행 아래로 이동"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:238
 msgid "_Company Report"
-msgstr "회사 보고서"
+msgstr "회사 보고서(_C)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:247
 msgid "_Standard"
@@ -4512,7 +4511,7 @@ msgstr "일반 계정 순서를 유지"
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:651
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:862
 msgid "_Date"
-msgstr "날짜"
+msgstr "날짜(_D)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:248
 msgid "Sort by date"
@@ -4521,7 +4520,7 @@ msgstr "날짜에 의한 배열"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:249
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:881
 msgid "Date of _Entry"
-msgstr "입력 날짜"
+msgstr "입력 날짜(_E)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:249
 msgid "Sort by the date of entry"
@@ -4560,18 +4559,16 @@ msgid "Sort by description"
 msgstr "세부 항목에 의한 배열"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:296
-#, fuzzy
 msgid "_Print Invoice"
-msgstr "청구서 인쇄"
+msgstr "청구서 인쇄(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:297
 msgid "_Edit Invoice"
 msgstr "청구서 편집(_E)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:298
-#, fuzzy
 msgid "_Duplicate Invoice"
-msgstr "청구서 편집(_E)"
+msgstr "청구서 복제(_D)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:299
 msgid "_Post Invoice"
@@ -4587,7 +4584,7 @@ msgstr "새 청구서(_I)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:302
 msgid "_Pay Invoice"
-msgstr "청구서 지불"
+msgstr "청구서 지불(_P)"
 
 #. Translators: This is a menu item that opens a dialog for linking an
 #. external file or URL with the bill, invoice, transaction, or voucher or
@@ -8669,7 +8666,7 @@ msgstr "새 최상위 레벨 GnuCash 창 열기"
 
 #: gnucash/gnome-utils/gnc-main-window.c:378
 msgid "New Window with _Page"
-msgstr "현재 페이지를 새 작업창으로"
+msgstr "현재 페이지를 새 작업창으로(_P)"
 
 #: gnucash/gnome-utils/gnc-main-window.c:379
 msgid "Move the current page to a new top-level GnuCash window."
@@ -8784,17 +8781,15 @@ msgstr "저장하지 않으면, %d 시간 %d 분 동안 작업한 내용이 무�
 
 #: gnucash/gnome-utils/gnc-main-window.c:1309
 msgid "Close _Without Saving"
-msgstr "저장하지 않고 닫기"
+msgstr "저장하지 않고 닫기(_W)"
 
 #: gnucash/gnome-utils/gnc-main-window.c:1454
 msgid "This window is closing and will not be restored."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-main-window.c:1460
-#, fuzzy
-#| msgid "Close this window"
 msgid "Close Window?"
-msgstr "이 작업창을 닫음"
+msgstr "작업창을 닫으시겠습니까?"
 
 #. Translators: This string is shown in the window title if this
 #. document is, well, read-only.
@@ -9000,7 +8995,7 @@ msgstr "현재 거래가 수지가 맞지 않음."
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:287
 #: gnucash/register/ledger-core/split-register-control.c:138
 msgid "Balance it _manually"
-msgstr "수동으로 수지를 맞춤"
+msgstr "수동으로 수지를 맞춤(_M)"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:289
 #: gnucash/register/ledger-core/split-register-control.c:140
@@ -12669,7 +12664,7 @@ msgstr "전체 선택(_S)"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:456
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:141
 msgid "Select _Range"
-msgstr "범위 선택"
+msgstr "범위 선택(_R)"
 
 #. Filter By Dialog, Date Tab, Start section
 #: gnucash/gtkbuilder/assistant-csv-export.glade:484
@@ -13118,7 +13113,6 @@ msgid "Match Transactions"
 msgstr "거래 붙여넣기"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:21
-#, fuzzy
 msgid ""
 "This assistant will help you create a set of GnuCash accounts for your "
 "assets (such as investments, checking or savings accounts), liabilities "
@@ -13132,21 +13126,27 @@ msgid ""
 "\n"
 "Click 'Cancel' if you do not wish to create any new accounts now."
 msgstr ""
-"이 드루이드는 자산(투자,저축계정 체크등),부채(대출),수입과 지출을 위한 "
-"GnuCash 계정을 생성하도록 도와 줄 것입니다..\n"
+"이 어시스턴트는 자산(예: 투자, 당좌예금 또는 저축예금), 부채(예: 대출) 및 "
+"다양한 종류의 수입과 지출에 대한 GnuCash 계정 세트를 만듭니다.\n"
 "\n"
-"지금 새 계정의 생성을 원하지 않으면 취소를 누르시오."
+"여기에서 귀하의 요구에 가장 가까운 계정 세트를 선택할 수 있습니다. "
+"어시스턴트가 완료되면 나중에 언제든지 계정을 추가, 이름 변경, 수정 및 제거할 "
+"수 있습니다. 또한 하위 계정을 추가하고 한 상위 계정에서 다른 상위 계정으로 "
+"계정(하위 계정과 함께)을 이동할 수도 있습니다.\n"
+"\n"
+"지금 새 계정을 만들지 않으려면 '취소'를 클릭하십시오."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:30
 msgid "New Account Hierarchy Setup"
 msgstr "새 계정 세부 설정"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:44
-#, fuzzy
 msgid ""
 "\n"
 "Please choose the currency to use for new accounts."
-msgstr "새 계정에서 사용할 통화를 선택하시오."
+msgstr ""
+"\n"
+"새 계정에서 사용할 통화를 선택하세요."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:102
 msgid "Choose Currency"
@@ -13166,7 +13166,7 @@ msgstr "<b>범주</b>"
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:273
 #: gnucash/gtkbuilder/dialog-account.glade:906
 msgid "C_lear All"
-msgstr "전체 해제"
+msgstr "전체 해제(_L)"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:311
 msgid "<b>Category Description</b>"
@@ -13223,6 +13223,19 @@ msgid ""
 "<b>Note:</b> all accounts except Equity and placeholder accounts may have an "
 "opening balance.\n"
 msgstr ""
+"\n"
+"계정 이름을 변경하려면 계정이 포함된 행을 클릭한 다음 계정 이름을 클릭하고 "
+"변경합니다.\n"
+"\n"
+"일부 계정은 \"자리표시자\"로 표시됩니다. 자리표시자 계정은 계정 계층을 "
+"만드는 데 사용되며 일반적으로 거래나 기초 잔액이 없습니다. 계정을 자리표시자 "
+"계정으로 지정하려면 해당 계정의 체크박스를 클릭합니다.\n"
+"\n"
+"계정에 기초 잔액이 있도록 하려면 계정이 포함된 행을 클릭한 다음 기초 잔액 "
+"필드를 클릭하고 시작 잔액을 입력하십시오.\n"
+"\n"
+"<b>참고:</b> 자본 및 자리 표시자 계정을 제외한 모든 계정에는 기초 잔액이 "
+"있을 수 있습니다.\n"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:566
 #, fuzzy
@@ -13230,7 +13243,6 @@ msgid "Setup selected accounts"
 msgstr "선택된 계정의 삭제"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:576
-#, fuzzy
 msgid ""
 "Press 'Apply' to create your new accounts. You will then be able to save "
 "them to a file or database.\n"
@@ -13239,11 +13251,12 @@ msgid ""
 "\n"
 "Press 'Cancel' to close this dialog without creating any new accounts."
 msgstr ""
-"새 계정을 생성하기 위하여 '적용'을 누르시오.\n"
+"'적용'을 눌러 새 계정을 만드십시오. 그런 다음 파일이나 데이터베이스에 저장할 "
+"수 있습니다.\n"
 "\n"
-"선택을 재검토하기 위하여 '뒤로'를 누르시오.\n"
+"선택 사항을 검토하려면 '뒤로'를 누르십시오.\n"
 "\n"
-"새 계정 생성없이 이 대화창을 닫기 위하여 '취소'를 누르시오."
+"새 계정을 만들지 않고 이 대화 상자를 닫으려면 '취소'를 누르십시오."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:585
 msgid "Finish Account Setup"
@@ -14071,7 +14084,7 @@ msgstr "도구 마개 단추에서 라벨"
 
 #: gnucash/gtkbuilder/business-prefs.glade:86
 msgid "_Open in new window"
-msgstr "새 창에서 열기"
+msgstr "새 창에서 열기(_O)"
 
 #: gnucash/gtkbuilder/business-prefs.glade:92
 msgid ""
@@ -14081,7 +14094,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/business-prefs.glade:104
 msgid "_Accumulate splits on post"
-msgstr "포스트판에서 분리된 것 모으기"
+msgstr "포스트판에서 분리된 것 모으기(_A)"
 
 #: gnucash/gtkbuilder/business-prefs.glade:110
 msgid ""
@@ -14111,7 +14124,7 @@ msgstr "보고서 변화"
 
 #: gnucash/gtkbuilder/business-prefs.glade:175
 msgid "_Tax included"
-msgstr "포함 세금"
+msgstr "세금 포함(_T)"
 
 #: gnucash/gtkbuilder/business-prefs.glade:181
 msgid ""
@@ -14151,7 +14164,7 @@ msgstr "지불 절차"
 
 #: gnucash/gtkbuilder/business-prefs.glade:290
 msgid "Days in ad_vance"
-msgstr "만기까지 남은 일"
+msgstr "만기까지 남은 일(_V)"
 
 #: gnucash/gtkbuilder/business-prefs.glade:305
 msgid "How many days in the future to warn about Bills coming due."
@@ -14163,7 +14176,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/business-prefs.glade:353
 msgid "_Days in advance"
-msgstr "만기까지 남은 일"
+msgstr "만기까지 남은 일(_D)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:7
 #, fuzzy
@@ -21222,9 +21235,8 @@ msgid "Enter a name for the account"
 msgstr "계정을 위한 이름 입력"
 
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:443
-#, fuzzy
 msgid "Placeholder?"
-msgstr "자리표시자"
+msgstr "자리표시자?"
 
 #: gnucash/import-export/qif-imp/gnc-plugin-qif-import.c:48
 msgid "Import _QIF..."
