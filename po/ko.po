@@ -5,7 +5,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-05-14 11:16+0000\n"
+"PO-Revision-Date: 2022-05-16 03:18+0000\n"
 "Last-Translator: Taehun Yun <yooontehoon@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ko/>\n"
@@ -2682,9 +2682,8 @@ msgid "Find Order"
 msgstr "오더 찾기"
 
 #: gnucash/gnome/dialog-payment.c:237
-#, fuzzy
 msgid "You must enter a valid account name for posting."
-msgstr "포스팅을 위한 계정 이름을 입력하여야 합니다."
+msgstr "기록을 위해 유효한 계정 이름을 입력하여야 합니다."
 
 #: gnucash/gnome/dialog-payment.c:246
 msgid "You must select a company for payment processing."
@@ -3323,9 +3322,8 @@ msgid "Transfer"
 msgstr "이체"
 
 #: gnucash/gnome/gnc-budget-view.c:511
-#, fuzzy
 msgid "Remaining to Budget"
-msgstr "기존 예산 열기"
+msgstr "남은 예산"
 
 #: gnucash/gnome/gnc-budget-view.c:1659 gnucash/gnome/window-reconcile2.c:1094
 #: gnucash/gnome/window-reconcile.c:1167
@@ -3565,35 +3563,30 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: gnucash/gnome/gnc-plugin-budget.c:63
-#, fuzzy
 msgid "_New Budget"
-msgstr "새 예산"
+msgstr "새 예산(_N)"
 
 #: gnucash/gnome/gnc-plugin-budget.c:64
-#, fuzzy
 msgid "Create a new Budget."
-msgstr "새 예산 생성"
+msgstr "새 예산을 생성합니다."
 
 #: gnucash/gnome/gnc-plugin-budget.c:69
-#, fuzzy
 msgid "_Open Budget"
-msgstr "예산 열기"
+msgstr "예산 열기(_O)"
 
 #: gnucash/gnome/gnc-plugin-budget.c:70
 msgid ""
 "Open an existing Budget in a new tab. If none exists a new budget will be "
 "created."
-msgstr ""
+msgstr "새 탭에서 기존 예산을 엽니다. 존재하지 않는 경우 새 예산이 생성됩니다."
 
 #: gnucash/gnome/gnc-plugin-budget.c:75
-#, fuzzy
 msgid "_Copy Budget"
-msgstr "예산 열기"
+msgstr "예산 복사(_C)"
 
 #: gnucash/gnome/gnc-plugin-budget.c:76
-#, fuzzy
 msgid "Copy an existing Budget."
-msgstr "기존 예산 열기"
+msgstr "기존 예산을 복사합니다."
 
 #: gnucash/gnome/gnc-plugin-budget.c:80
 msgid "_Delete Budget"
@@ -10459,7 +10452,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:112
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:154
 msgid "Auto pay when posting."
-msgstr ""
+msgstr "기록 시 자동 결제."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:113
 #: gnucash/gtkbuilder/business-prefs.glade:199
@@ -14078,9 +14071,8 @@ msgid "General"
 msgstr "일반"
 
 #: gnucash/gtkbuilder/business-prefs.glade:68
-#, fuzzy
 msgid "Enable extra _buttons"
-msgstr "도구 마개 단추에서 라벨"
+msgstr "추가 버튼 활성화(_B)"
 
 #: gnucash/gtkbuilder/business-prefs.glade:86
 msgid "_Open in new window"
@@ -14108,19 +14100,17 @@ msgid "<b>Invoices</b>"
 msgstr "<b>청구서</b>"
 
 #: gnucash/gtkbuilder/business-prefs.glade:145
-#, fuzzy
 msgid "Not_ify when due"
-msgstr "만기시 알림(_N)"
+msgstr "만기시 알림(_I)"
 
 #: gnucash/gtkbuilder/business-prefs.glade:151
 #: gnucash/gtkbuilder/business-prefs.glade:240
 msgid "Whether to display the list of Bills Due at startup."
-msgstr "시동시 어음 만기 목록을 나타낼지"
+msgstr "시작 시 만기 어음 목록을 표시할지 여부입니다."
 
 #: gnucash/gtkbuilder/business-prefs.glade:166
-#, fuzzy
 msgid "Report for printing"
-msgstr "보고서 변화"
+msgstr "인쇄할 보고서"
 
 #: gnucash/gtkbuilder/business-prefs.glade:175
 msgid "_Tax included"
@@ -14134,9 +14124,8 @@ msgstr ""
 
 #. See the tooltip "At post time..." for details.
 #: gnucash/gtkbuilder/business-prefs.glade:193
-#, fuzzy
 msgid "_Process payments on posting"
-msgstr "지불 절차"
+msgstr "기록 시 지불 처리(_P)"
 
 #: gnucash/gtkbuilder/business-prefs.glade:224
 msgid "<b>Bills</b>"
@@ -14158,9 +14147,8 @@ msgstr ""
 
 #. See the tooltip "At post time..." for details.
 #: gnucash/gtkbuilder/business-prefs.glade:270
-#, fuzzy
 msgid "Pro_cess payments on posting"
-msgstr "지불 절차"
+msgstr "기록 시 지불 처리(_C)"
 
 #: gnucash/gtkbuilder/business-prefs.glade:290
 msgid "Days in ad_vance"
@@ -14398,14 +14386,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:1477
-#, fuzzy
-#| msgid "Automatic _interest transfer"
 msgid "Auto _interest transfer"
 msgstr "자동 이자 이체(_I)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1493
 msgid "Ta_x related"
-msgstr "관계된 세금"
+msgstr "세금 관련(_X)"
 
 #. Translators: use the same words here as in 'Ta_x Report Options'.
 #: gnucash/gtkbuilder/dialog-account.glade:1498
@@ -14469,9 +14455,8 @@ msgstr "예제"
 
 #: gnucash/gtkbuilder/dialog-account.glade:2018
 #: gnucash/report/reports/standard/balance-forecast.scm:42
-#, fuzzy
 msgid "Interval"
-msgstr "간격:"
+msgstr "간격"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:34
 msgid "_Show documentation"
@@ -14484,9 +14469,8 @@ msgid "_Reconciled"
 msgstr "통장정리(_R)"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:72
-#, fuzzy
 msgid "_Cleared"
-msgstr "청산됨"
+msgstr "청산됨(_C)"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:78
 msgid ""
@@ -14495,9 +14479,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:91
-#, fuzzy
 msgid "_Not cleared"
-msgstr "청산되지 않음"
+msgstr "청산되지 않음(_N)"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:97
 msgid ""
@@ -14516,9 +14499,8 @@ msgid "Select Account"
 msgstr "계정 선택"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:237
-#, fuzzy
 msgid "_Select or add a GnuCash account:"
-msgstr "GnuCash 계정 선택 또는 더하기"
+msgstr "GnuCash 계정 선택 또는 추가(_S):"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:7
 #, fuzzy
@@ -14532,9 +14514,8 @@ msgid "1. Choose the file to import"
 msgstr "읽어올 파일 선택"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:153
-#, fuzzy
 msgid "Import bill CSV data"
-msgstr "CSV 읽어오기(_C)"
+msgstr "CSV 읽어오기"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:173
 msgid "Import invoice CSV data"
@@ -14848,9 +14829,8 @@ msgid "Type of quote source"
 msgstr "인용 소스 형태"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:358
-#, fuzzy
 msgid "_Display symbol"
-msgstr "시세 기호 보이기"
+msgstr "시세 기호 보이기(_D)"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:373
 msgid "Time_zone"
@@ -14901,7 +14881,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:466
 msgid "F_raction traded"
-msgstr "기준가 정밀도"
+msgstr "기준가 정밀도(_R)"
 
 #. Again replace CUSIP by your National Securities Identifying Number.
 #: gnucash/gtkbuilder/dialog-commodity.glade:480
@@ -14909,7 +14889,6 @@ msgid "ISIN, CUSI_P or other code"
 msgstr "CUSIP 또는 다른 코드(_P)"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:510
-#, fuzzy
 msgid "_Symbol/abbreviation"
 msgstr "심볼/약어(_S)"
 
@@ -15066,18 +15045,14 @@ msgid "Note: Only Document Links that are not read-only will be changed."
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:276
-#, fuzzy
 msgid "Linked _File"
-msgstr "작업 대화창"
+msgstr "연결된 파일(_F)"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:292
-#, fuzzy
 msgid "Linked _Location"
-msgstr "현재 작업"
+msgstr "연결된 위치(_L)"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:346
-#, fuzzy
-#| msgid "(none)"
 msgid "(None)"
 msgstr "(없음)"
 
@@ -15096,38 +15071,32 @@ msgid "Reload and Locate Linked Documents"
 msgstr "<b>새 거래 정보</b>"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:544
-#, fuzzy
 msgid "_Reload"
-msgstr "다시 읽어오기"
+msgstr "다시 읽어오기(_R)"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:558
-#, fuzzy
 msgid "_Locate Linked Documents"
-msgstr "새 계정"
+msgstr "연결된 문서 찾기(_L)"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:598
-#, fuzzy
 msgid "All Linked Documents"
-msgstr "새 계정"
+msgstr "연결된 모든 문서"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:652
 msgid "Id"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:680
-#, fuzzy
 msgid "Linked Document"
-msgstr "작업 대화창"
+msgstr "연결된 문서"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:697
-#, fuzzy
 msgid "Available"
-msgstr "과세가능?"
+msgstr "사용 가능"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:712
-#, fuzzy
 msgid "Relative"
-msgstr "상대적(_R):"
+msgstr "상대적"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:756
 msgid ""
@@ -15366,31 +15335,24 @@ msgid "Search the Account List"
 msgstr "부모 계정"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:38
-#, fuzzy
 msgid "Close _on Jump"
-msgstr "장부 마감(_C)"
+msgstr "이동 시 닫기(_O)"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:55
-#, fuzzy
 msgid "_Jump To"
-msgstr "이동(_J)"
+msgstr "대상으로 이동(_J)"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:127
-#, fuzzy
-#| msgid "All accounts"
 msgid "All _accounts"
-msgstr "전체 계정"
+msgstr "전체 계정(_A)"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:165
-#, fuzzy
-#| msgid " Search "
 msgid "Search scope"
-msgstr " 찾기 "
+msgstr "검색 범위"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:191
-#, fuzzy
 msgid "Account Full Name"
-msgstr "계정명"
+msgstr "계정 전체 이름"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:215
 msgid "Case insensitive searching is available on 'Account Full Name'."
@@ -15398,7 +15360,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:258
 msgid "Sea_rch"
-msgstr ""
+msgstr "검색(_R)"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:294
 msgid ""
@@ -15454,18 +15416,16 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:335
-#, fuzzy
 msgid "_Filter"
-msgstr "파일(_F)"
+msgstr "필터(_F)"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:349
 msgid "_Expand All"
-msgstr ""
+msgstr "모두 펼치기(_E)"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:363
-#, fuzzy
 msgid "Collapse _All"
-msgstr "전체 지우기"
+msgstr "모두 닫기(_A)"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:399
 msgid ""
@@ -15631,25 +15591,20 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-import.glade:919
-#, fuzzy
 msgid "Show _Account column"
-msgstr "계정 코드를 보일까요?"
+msgstr "계정 열 표시(_A)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:935
-#, fuzzy
 msgid "Show _Memo column"
-msgstr "계정 코드를 보일까요?"
+msgstr "메모 열 표시(_M)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:951
-#, fuzzy
 msgid "Show matched _information"
-msgstr "청구서 정보"
+msgstr "일치하는 정보 표시(_I)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:966
-#, fuzzy
-#| msgid "Spend"
 msgid "A_ppend"
-msgstr "소비"
+msgstr "추가(_P)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:970
 msgid ""
@@ -15709,6 +15664,8 @@ msgid ""
 "Unposting this Invoice will delete the posted transaction.\n"
 "Are you sure you want to unpost it?"
 msgstr ""
+"이 청구서를 기록 취소하면 기록된 거래가 삭제됩니다.\n"
+"기록을 취소하시겠습니까?"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:1291
 msgid "Yes, reset the Tax Tables"
@@ -19785,7 +19742,7 @@ msgstr ""
 #: gnucash/import-export/bi-import/dialog-bi-import.c:372
 #, c-format
 msgid "Row %d, invoice %s/%u: %s is not a valid posting date.\n"
-msgstr ""
+msgstr "%d행, 송장 %s/%u: %s은(는) 유효한 기록 날짜가 아닙니다.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:380
 #, c-format
@@ -29811,7 +29768,7 @@ msgstr "별도 청구 카드"
 
 #: libgnucash/engine/gncInvoice.c:1786
 msgid "Generated from an invoice. Try unposting the invoice."
-msgstr ""
+msgstr "청구서에서 생성됩니다. 청구서를 기록 취소해 보세요."
 
 #: libgnucash/engine/gncInvoice.c:2216
 msgid " (posted)"
@@ -29936,6 +29893,8 @@ msgid ""
 "Please delete this transaction. Explanation at https://wiki.gnucash.org/wiki/"
 "Business_Features_Issues#Double_posting"
 msgstr ""
+"이 거래를 삭제하세요. 설명: https://wiki.gnucash.org/wiki/"
+"Business_Features_Issues#Double_posting"
 
 #: libgnucash/engine/ScrubBusiness.c:565
 msgid ""
