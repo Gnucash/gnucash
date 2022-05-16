@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-04-20 05:10+0000\n"
+"PO-Revision-Date: 2022-05-15 07:16+0000\n"
 "Last-Translator: ltai0001 <yltaief@gmail.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ar/>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.13-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -1912,10 +1912,9 @@ msgstr "الضرائب ذات الصلة"
 #. Translators: %s is a full account name.
 #. This is a label in Search Account from context menu.
 #: gnucash/gnome/dialog-find-account.c:491
-#, fuzzy, c-format
-#| msgid "Accounts in '%s'"
+#, c-format
 msgid "Su_b-accounts of '%s'"
-msgstr "حسابات في '%s'"
+msgstr "الحسابات ال_فرعية في '%s'"
 
 #: gnucash/gnome/dialog-find-transactions2.c:107
 #: gnucash/gnome/dialog-find-transactions.c:105
@@ -2184,9 +2183,8 @@ msgstr ""
 
 #: gnucash/gnome/dialog-imap-editor.c:368
 #: gnucash/gnome/dialog-imap-editor.c:605
-#, fuzzy
 msgid "Map Account NOT found"
-msgstr "رمز الحساب"
+msgstr "رمز الحساب غير موجود"
 
 #: gnucash/gnome/dialog-imap-editor.c:370
 msgid "(Note, if there is a large number, it may take a while)"
@@ -3642,17 +3640,15 @@ msgstr "إغلاق الدفتر في نهاية الفترة"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:211
 msgid "_Import Map Editor"
-msgstr ""
+msgstr "ا_ستيراد المحرر"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:212
 msgid "View and Delete Bayesian and non-Bayesian information"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:216
-#, fuzzy
-#| msgid "Transaction amount"
 msgid "_Transaction Linked Documents"
-msgstr "مبلغ المعاملة"
+msgstr "ال_مستندات المرتبطة بالمعاملة"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:217
 #, fuzzy
@@ -3714,9 +3710,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-budget.c:75
-#, fuzzy
 msgid "_Copy Budget"
-msgstr "نسخ الميزانية"
+msgstr "_نسخ الميزانية"
 
 #: gnucash/gnome/gnc-plugin-budget.c:76
 #, fuzzy
@@ -4001,7 +3996,7 @@ msgstr "إنشاء حساب جديد"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:204
 msgid "New Account _Hierarchy..."
-msgstr "تسلسل هرمي جديد للحساب..."
+msgstr "تسلسل _هرمي جديد للحساب..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:205
 msgid "Extend the current book by merging with new account type categories"
@@ -4070,7 +4065,7 @@ msgstr "حذف الحساب المحدد"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:258
 msgid "_Cascade Account Properties..."
-msgstr "لون الحساب..."
+msgstr "_تتالي خصائص الحساب..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:259
 #, fuzzy
@@ -4321,7 +4316,7 @@ msgstr "_حدد لنقل حساب"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1439
 msgid "_Do it anyway"
-msgstr ""
+msgstr "ا_فعل على أي حال"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1522
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1658
@@ -4534,7 +4529,7 @@ msgstr "يجب تحديد حساب واحد على الأقل للتقدير."
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:109
 msgid "Sort _Order"
-msgstr "ترتيب الفرز"
+msgstr "_فرز الترتيب"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:114
 msgid "Create a new account"
@@ -4776,9 +4771,8 @@ msgid "_Duplicate Voucher"
 msgstr "فاتورة _مكررة"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:341
-#, fuzzy
 msgid "_Post Voucher"
-msgstr "قسيمة الشراء"
+msgstr "_سجل قسيمة الشراء"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:342
 #, fuzzy
@@ -4786,13 +4780,12 @@ msgid "_Unpost Voucher"
 msgstr "_إلغ ترحيل هذه الفاتورة"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:343
-#, fuzzy
 msgid "New _Voucher"
-msgstr "قسيمة جديدة"
+msgstr "قسيمة _جديدة"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:344
 msgid "_Pay Voucher"
-msgstr "دفع قسيمة الشراء"
+msgstr "_دفع قسيمة الشراء"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:352
 msgid "_Use as Default Layout for Employee Documents"
@@ -4803,24 +4796,20 @@ msgid "_Reset Default Layout for Employee Documents"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:359
-#, fuzzy
 msgid "_Print Credit Note"
-msgstr "تحرير إشعار إضافة"
+msgstr "_طباعة مذكرة ائتمان"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:360
-#, fuzzy
 msgid "_Edit Credit Note"
-msgstr "تحرير إشعار إضافة"
+msgstr "ت_حرير إمذكرة ائتمان"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:361
-#, fuzzy
 msgid "_Duplicate Credit Note"
-msgstr "تحرير إشعار إضافة"
+msgstr "_تكرار مذكرة ائتمان"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:362
-#, fuzzy
 msgid "_Post Credit Note"
-msgstr "تحرير إشعار إضافة"
+msgstr "_نشر مذكرة ائتمان"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:363
 #, fuzzy
