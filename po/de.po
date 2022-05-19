@@ -26,6 +26,8 @@
 # Thomas Kriegel <warrel040@gmx.de>, 2021.
 # Stefan Bayer <stefan.bayer@stefanbayer.net>, 2021.
 # S <t0kie@mailbox.org>, 2022.
+# grimpeur78 <grimpeur78@gmail.com>, 2022.
+# Jan Schneider <grimpeur78@gmail.com>, 2022.
 #
 # Konventionen/Tastenkürzel:
 # »Zitate«: [altgr]+[Y]/[X]
@@ -37,8 +39,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-05-08 21:12+0000\n"
-"Last-Translator: S <t0kie@mailbox.org>\n"
+"PO-Revision-Date: 2022-05-19 17:16+0000\n"
+"Last-Translator: Jan Schneider <grimpeur78@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -46,7 +48,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12.1\n"
+"X-Generator: Weblate 4.13-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -6769,7 +6771,7 @@ msgstr "Sie haben keinen Mandanten ausgewählt"
 #: gnucash/report/reports/standard/new-owner-report.scm:99
 #: libgnucash/engine/gncOwner.c:219
 msgid "Job"
-msgstr "Auftrag"
+msgstr "Aufgabe"
 
 #: gnucash/gnome/search-owner.c:231
 #: gnucash/gnome-search/search-reconciled.c:183
@@ -7772,7 +7774,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:426
 msgid "Existing"
-msgstr "Existierend"
+msgstr "Bestehend"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:150
 msgid "You can type '+' or '-' to increment or decrement the number."
@@ -22964,7 +22966,7 @@ msgstr "Zwischensumme"
 #: gnucash/report/reports/standard/owner-report.scm:56
 #: libgnucash/app-utils/business-options.scm:78
 msgid "Tax"
-msgstr "Steuern"
+msgstr "Steuer"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:127
 msgid "Billable?"
