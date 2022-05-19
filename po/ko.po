@@ -5,7 +5,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-05-16 03:18+0000\n"
+"PO-Revision-Date: 2022-05-17 09:14+0000\n"
 "Last-Translator: Taehun Yun <yooontehoon@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ko/>\n"
@@ -1782,9 +1782,8 @@ msgstr "자리표시자"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:981
 #: gnucash/gtkbuilder/dialog-account.glade:323
 #: gnucash/import-export/csv-exp/csv-tree-export.c:158
-#, fuzzy
 msgid "Hidden"
-msgstr "숨김(_I)"
+msgstr "숨김"
 
 #: gnucash/gnome/dialog-find-account.c:437
 #, fuzzy
@@ -5523,10 +5522,8 @@ msgstr "분할"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:503
 #: gnucash/gnome/gnc-plugin-page-register.c:626
-#, fuzzy
-#| msgid "_Jump"
 msgid "Jump"
-msgstr "이동(_J)"
+msgstr "이동"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:504
 #: gnucash/gnome/gnc-plugin-page-register.c:627
@@ -5536,9 +5533,8 @@ msgstr "일정"
 #: gnucash/gnome/gnc-plugin-page-register2.c:507
 #: gnucash/gnome/gnc-plugin-page-register.c:630
 #: gnucash/gnome/window-autoclear.c:88
-#, fuzzy
 msgid "Auto-clear"
-msgstr "허용치 자동 지우기(_L)"
+msgstr "자동 지우기"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:681
 msgid ""
@@ -7743,9 +7739,8 @@ msgid "Select the default account selection."
 msgstr "기본 계정 선택을 선택."
 
 #: gnucash/gnome-utils/dialog-options.c:1533
-#, fuzzy
 msgid "Show Hidden Accounts"
-msgstr "숨긴 계정 보이기(_H)"
+msgstr "숨긴 계정 보이기"
 
 #: gnucash/gnome-utils/dialog-options.c:1535
 #, fuzzy
@@ -10254,9 +10249,8 @@ msgstr ""
 "수 있습니다."
 
 #: gnucash/gnucash-core-app.cpp:295
-#, fuzzy
 msgid "Hidden Options"
-msgstr "예산 설정"
+msgstr "숨겨진 옵션"
 
 #: gnucash/gnucash-core-app.cpp:298
 msgid "[datafile]"
@@ -14293,35 +14287,28 @@ msgid "Show _hidden accounts"
 msgstr "숨긴 계정 보이기(_H)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:972
-#, fuzzy
 msgid "Show accounts which have the option \"Hidden\" checked."
-msgstr "제로 분할 수지를 가진 계정 포함"
+msgstr "\"숨김\" 옵션이 체크된 계정을 표시합니다."
 
 #: gnucash/gtkbuilder/dialog-account.glade:986
-#, fuzzy
 msgid "Show _unused accounts"
-msgstr "숨긴 계정 보이기(_H)"
+msgstr "사용하지 않는 계정 보이기(_U)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:990
-#, fuzzy
 msgid "Show accounts which do not have any transactions."
-msgstr "계정 %s 은 거래를 허용하지 않습니다."
+msgstr "거래가 없는 계정을 표시합니다."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1004
 msgid "Show _zero total accounts"
 msgstr "제로 합계 계정 보이기(_Z)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1008
-#, fuzzy
 msgid "Show accounts which have a zero total value."
-msgstr "전체 값이 0인 계정 숨기기"
+msgstr "합계가 0인 계정을 표시합니다."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1060
-#, fuzzy
 msgid "Use Commodity Value"
-msgstr ""
-"\n"
-"상품: "
+msgstr "상품 가치 사용"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1192
 #: gnucash/gtkbuilder/dialog-customer.glade:214
@@ -14339,9 +14326,8 @@ msgid "_Account code"
 msgstr "계정 코드(_A)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1244
-#, fuzzy
 msgid "_Description"
-msgstr "세부 항목(_D)"
+msgstr "설명(_D)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1284
 #, fuzzy
@@ -14349,13 +14335,12 @@ msgid "Smallest _fraction"
 msgstr "가장 작은 분량(_F)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1298
-#, fuzzy
 msgid "Account _Color"
-msgstr "계정 코드"
+msgstr "계정 색상(_C)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1351
 msgid "No_tes"
-msgstr "장부(_T)"
+msgstr "비고(_T)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1423
 msgid "Smallest fraction of this commodity that can be referenced."
@@ -15614,9 +15599,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-import.glade:982
-#, fuzzy
 msgid "_Reconcile after match"
-msgstr "통장정리 (자동) 일치"
+msgstr "일치 후 조정(_R)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1005
 msgid "Generic import transaction matcher"
@@ -15637,7 +15621,7 @@ msgstr "(소유주)"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:420
 msgid "Open Document Link"
-msgstr ""
+msgstr "문서 링크 열기"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:537
 #: gnucash/gtkbuilder/dialog-invoice.glade:1115
@@ -15686,7 +15670,7 @@ msgstr "작업 대화창"
 #: gnucash/gtkbuilder/dialog-job.glade:130
 msgid ""
 "The job ID number. If left blank a reasonable number will be chosen for you"
-msgstr "작업 ID 번호. "
+msgstr "작업 ID 번호입니다. 비어 있는 경우 적절한 번호가 자동으로 선택됩니다"
 
 #: gnucash/gtkbuilder/dialog-job.glade:164
 msgid "Job Information"
@@ -15734,7 +15718,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-print-check.glade:745
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1014
 msgid "_Notes"
-msgstr "장부(_N)"
+msgstr "비고(_N)"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:174
 msgid "Enter any notes you want to make about this lot."
@@ -15754,9 +15738,8 @@ msgid "Show only open lots"
 msgstr "도표 보이기"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:304
-#, fuzzy
 msgid "<b>Splits _free</b>"
-msgstr "분할 찾기"
+msgstr "<b>자유 분할(_F)</b>"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:359
 #, fuzzy
@@ -15764,13 +15747,12 @@ msgid "<b>Splits _in lot</b>"
 msgstr "<b>분할 정보</b>"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:25
-#, fuzzy
 msgid "_No"
-msgstr "현재(_N)"
+msgstr "아니오(_N)"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:40
 msgid "_Yes"
-msgstr ""
+msgstr "예(_Y)"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:87
 msgid ""
@@ -15802,11 +15784,11 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:244
 msgid "C_reate a new set of accounts"
-msgstr "새 계정 생성(_C)"
+msgstr "새 계정 세트 생성(_R)"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:261
 msgid "_Import my QIF files"
-msgstr "기존 QIF 파일 읽어오기"
+msgstr "QIF 파일 읽어오기(_I)"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:278
 msgid "_Open the new user tutorial"
@@ -15818,56 +15800,51 @@ msgid "Object references"
 msgstr "기본 설정"
 
 #: gnucash/gtkbuilder/dialog-object-references.glade:52
-#, fuzzy
 msgid "Explanation"
-msgstr "거래 나누기(_P)"
+msgstr "설명"
 
 #: gnucash/gtkbuilder/dialog-options.glade:44
 msgid "Close dialog and make no changes."
-msgstr ""
+msgstr "대화 상자를 닫고 변경하지 않습니다."
 
 #: gnucash/gtkbuilder/dialog-options.glade:61
 msgid "Apply changes but do not close dialog."
-msgstr ""
+msgstr "변경 사항을 적용하지만 대화 상자를 닫지 않습니다."
 
 #: gnucash/gtkbuilder/dialog-options.glade:78
-#, fuzzy
 msgid "Apply changes and close dialog."
-msgstr "종업원 찾기 대화창 열기"
+msgstr "변경 사항을 적용하고 대화 상자를 닫습니다."
 
 #: gnucash/gtkbuilder/dialog-order.glade:8
 msgid "Order Entry"
 msgstr "순서 기입"
 
 #: gnucash/gtkbuilder/dialog-order.glade:58
-#, fuzzy
 msgid "_Invoices"
-msgstr "청구서"
+msgstr "청구서(_I)"
 
 #: gnucash/gtkbuilder/dialog-order.glade:74
-#, fuzzy
 msgid "Close _Order"
-msgstr "마감 순서"
+msgstr "주문 마감(_O)"
 
 #: gnucash/gtkbuilder/dialog-order.glade:230
 #: gnucash/gtkbuilder/dialog-order.glade:575
 msgid "Order Information"
-msgstr "순서 정보"
+msgstr "주문 정보"
 
 #: gnucash/gtkbuilder/dialog-order.glade:391
 msgid "Order Entries"
-msgstr "순서 기입"
+msgstr "주문 항목"
 
 #: gnucash/gtkbuilder/dialog-order.glade:531
 msgid ""
 "The order ID number. If left blank a reasonable number will be chosen for you"
-msgstr "이전 ID 번호"
+msgstr "주문 ID 번호입니다. 비어 있는 경우 적절한 번호가 자동으로 선택됩니다"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:136
 #: gnucash/gtkbuilder/dialog-payment.glade:168
-#, fuzzy
 msgid "The company associated with this payment."
-msgstr "이 보고서를 위한 회사"
+msgstr "이 지불과 관련된 회사입니다."
 
 #: gnucash/gtkbuilder/dialog-payment.glade:169
 msgid "Partner"
@@ -15916,9 +15893,8 @@ msgid "(USD)"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-payment.glade:662
-#, fuzzy
 msgid "Transaction Details"
-msgstr "거래 보고서(_R)"
+msgstr "거래 세부 정보"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:698
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:78
@@ -15927,27 +15903,23 @@ msgstr "이체 계좌"
 
 #. Date format label for 07/31/2013
 #: gnucash/gtkbuilder/dialog-preferences.glade:50
-#, fuzzy
 msgid "US"
-msgstr "미국(_U):"
+msgstr "미국"
 
 #. Date format label for 31/07/2013
 #: gnucash/gtkbuilder/dialog-preferences.glade:54
-#, fuzzy
 msgid "UK"
-msgstr "영국(_K)"
+msgstr "영국"
 
 #. Date format label for 31.07.2013
 #: gnucash/gtkbuilder/dialog-preferences.glade:58
-#, fuzzy
 msgid "Europe"
 msgstr "유럽"
 
 #. Date format label for 2013-07-31
 #: gnucash/gtkbuilder/dialog-preferences.glade:62
-#, fuzzy
 msgid "ISO"
-msgstr "ISO(_I):"
+msgstr "ISO"
 
 #. Label for locale settings of formats, …
 #: gnucash/gtkbuilder/dialog-preferences.glade:66
@@ -15958,9 +15930,8 @@ msgid "Locale"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:140
-#, fuzzy
 msgid "_Reset"
-msgstr "재번호화(_R)"
+msgstr "초기화(_R)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:185
 #: gnucash/gtkbuilder/dialog-preferences.glade:629
@@ -15973,6 +15944,8 @@ msgid ""
 "window\n"
 "Press 'Close' to return to the preference window\n"
 msgstr ""
+"'초기화'를 누르면 원래 계정 구분 기호를 사용하고 설정 창을 닫습니다.\n"
+"'닫기'를 누르면 설정 창으로 돌아갑니다.\n"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:251
 msgid "GnuCash Preferences"
@@ -15989,7 +15962,7 @@ msgstr "전체 합계 포함(_G)"
 #: gnucash/gtkbuilder/dialog-preferences.glade:342
 msgid ""
 "Show a grand total of all accounts converted to the default report currency."
-msgstr ""
+msgstr "모든 계정의 전체 합계를 보고서의 기본 통화로 변환하여 표시합니다."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:354
 msgid "Include _non-currency totals"
@@ -16202,9 +16175,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1369
-#, fuzzy
 msgid "_Decimal places"
-msgstr "소수점 위치(_D):"
+msgstr "소수점 위치(_D)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1384
 msgid "How many automatic decimal places will be filled in."
@@ -16244,9 +16216,8 @@ msgid "days"
 msgstr "일"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1664
-#, fuzzy
 msgid "<b>_Retain log/backup files</b>"
-msgstr "로그 파일 유지(_R):"
+msgstr "<b>로그/백업 파일 유지(_R)</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1676
 msgid "Com_press files"
@@ -16274,11 +16245,11 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1774
 msgid "Show splash scree_n"
-msgstr "시동화면 보이기(_N)"
+msgstr "스플래시 화면 보이기(_N)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1780
 msgid "Show splash screen at startup."
-msgstr "시동시 시동화면 보이기"
+msgstr "시작 시 스플래시 화면을 표시합니다."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1795
 msgid "Auto-save time _interval"
@@ -16413,7 +16384,7 @@ msgstr "허용치 자동 지우기(_L)"
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2447
 msgid "Auto-_add threshold"
-msgstr "허용치 자동 더하기"
+msgstr "허용치 자동 더하기(_A)"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2461
@@ -16578,7 +16549,7 @@ msgstr "행 사이 수평선 그리기(_Z)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2971
 msgid "Show horizontal borders on the cells."
-msgstr "셀에서 수평경계 보이기."
+msgstr "셀에 가로 테두리를 표시합니다."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2983
 msgid "Draw _vertical lines between columns"
@@ -16586,7 +16557,7 @@ msgstr "열 사이 수직선 그리기(_V)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2989
 msgid "Show vertical borders on the cells."
-msgstr "셀에서 수직 경계 보이기"
+msgstr "셀에 세로 테두리를 표시합니다."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3014
 #: gnucash/report/reports/standard/invoice.scm:188
@@ -16597,14 +16568,12 @@ msgstr "셀에서 수직 경계 보이기"
 #: gnucash/report/reports/standard/invoice.scm:354
 #: gnucash/report/reports/standard/invoice.scm:361
 #: gnucash/report/reports/standard/invoice.scm:368
-#, fuzzy
 msgid "Layout"
-msgstr "<b>계정(_A)</b>"
+msgstr "레이아웃"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3026
-#, fuzzy
 msgid "_Future transactions after blank transaction"
-msgstr "엔터는 빈 거래로 이동(_E)"
+msgstr "향후 거래를 빈 거래보다 나중에 표시(_F)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3032
 msgid ""
@@ -16672,20 +16641,18 @@ msgstr "열 갯수(_R)"
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:3397
-#, fuzzy
 msgid "Show the _entered and reconcile dates"
-msgstr "사용된 환전 비율 보이기"
+msgstr "입력 및 조정 날짜 표시(_E)"
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:3413
-#, fuzzy
 msgid "Show the calendar b_uttons"
-msgstr "이름 열 보이기"
+msgstr "달력 버튼 표시(_U)"
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:3429
 msgid "_Move the selection to the blank split on expand"
-msgstr ""
+msgstr "확장 시 선택 부분을 빈 분할로 이동(_M)"
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:3445
@@ -16839,18 +16806,16 @@ msgid "Price Editor"
 msgstr "가격 편집기"
 
 #: gnucash/gtkbuilder/dialog-price.glade:132
-#, fuzzy
 msgid "_Namespace"
-msgstr "네임스페이스"
+msgstr "네임스페이스(_N)"
 
 #: gnucash/gtkbuilder/dialog-price.glade:189
 msgid "S_ource"
 msgstr "소스(_O)"
 
 #: gnucash/gtkbuilder/dialog-price.glade:367
-#, fuzzy
 msgid "Remove Old Prices"
-msgstr "이전 내용 제거(_O)"
+msgstr "이전 가격 제거"
 
 #: gnucash/gtkbuilder/dialog-price.glade:430
 #, fuzzy
@@ -16864,25 +16829,23 @@ msgstr "입력 날짜보다 이전 가격을 제거"
 
 #: gnucash/gtkbuilder/dialog-price.glade:464
 msgid "Last of _Week"
-msgstr ""
+msgstr "주의 마지막(_W)"
 
 #: gnucash/gtkbuilder/dialog-price.glade:468
 msgid "Keep the last price of each week if present before date."
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-price.glade:481
-#, fuzzy
 msgid "Last of _Month"
-msgstr "마지막 달"
+msgstr "월의 마지막(_M)"
 
 #: gnucash/gtkbuilder/dialog-price.glade:485
 msgid "Keep the last price of each month if present before date."
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-price.glade:498
-#, fuzzy
 msgid "Last of _Quarter"
-msgstr "이 분기 시작"
+msgstr "분기의 마지막(_Q)"
 
 #: gnucash/gtkbuilder/dialog-price.glade:502
 msgid ""
@@ -16891,9 +16854,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-price.glade:515
-#, fuzzy
 msgid "Last of _Period"
-msgstr "기간"
+msgstr "기간의 마지막(_P)"
 
 #: gnucash/gtkbuilder/dialog-price.glade:519
 msgid ""
@@ -16991,13 +16953,12 @@ msgid "Remove prices older than a user-entered date."
 msgstr "입력 날짜보다 이전 가격을 제거"
 
 #: gnucash/gtkbuilder/dialog-price.glade:903
-#, fuzzy
 msgid "_Get Quotes"
-msgstr "가격 견적 얻음"
+msgstr "가격 견적 얻음(_G)"
 
 #: gnucash/gtkbuilder/dialog-price.glade:908
 msgid "Get new online quotes for stock accounts."
-msgstr "주식 계정의 새 온라인 가격 견적 얻음"
+msgstr "주식 계정의 새 온라인 가격 견적을 얻으세요."
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:129
 msgid "Save Custom Check Format"
@@ -17071,9 +17032,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:533
 #: gnucash/gtkbuilder/dialog-print-check.glade:1084
-#, fuzzy
 msgid "_Address"
-msgstr "주소: "
+msgstr "주소(_A)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:560
 msgid "Checks on first _page"
@@ -17105,7 +17065,6 @@ msgid "_Units"
 msgstr "단위(_U)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:969
-#, fuzzy
 msgid "_Translation"
 msgstr "번역(_T)"
 
@@ -17115,18 +17074,17 @@ msgstr "회전(_R)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:1031
 msgid "The origin point is the upper left-hand corner of the page."
-msgstr "원래 점은 페이지의 왼쪽 위 모서리임"
+msgstr "원래 점은 페이지의 왼쪽 위 모서리입니다."
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:1044
 msgid "The origin point is the lower left-hand corner of the page."
-msgstr "원래 점은 페이지 왼쪽 아래 모서리임."
+msgstr "원래 점은 페이지 왼쪽 아래 모서리입니다."
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:1057
 msgid "Degrees"
 msgstr "각도"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:1066
-#, fuzzy
 msgid "_Save Format"
 msgstr "형식 저장(_S)"
 
@@ -17159,11 +17117,11 @@ msgstr "<b>이용가능한 보고서(_V)</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:71
 msgid "<b>_Selected Reports</b>"
-msgstr "<b>선택된 보고서/b>"
+msgstr "<b>선택된 보고서(_S)</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:101
 msgid "A_dd >>"
-msgstr "더하기(D) >>"
+msgstr "추가(_D) >>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:117
 msgid "<< _Remove"
@@ -17203,7 +17161,7 @@ msgstr "보고서 행/열 간격 입력"
 
 #: gnucash/gtkbuilder/dialog-report.glade:544
 msgid "_Row span"
-msgstr "행 간격"
+msgstr "행 간격(_R)"
 
 #: gnucash/gtkbuilder/dialog-report.glade:559
 msgid "_Column span"
@@ -17257,9 +17215,8 @@ msgid "_New item..."
 msgstr "새 항목(_N)..."
 
 #: gnucash/gtkbuilder/dialog-search.glade:82
-#, fuzzy
 msgid "_Find"
-msgstr "찾기(_F)..."
+msgstr "찾기(_F)"
 
 #: gnucash/gtkbuilder/dialog-search.glade:134
 msgid " Search "
@@ -17270,9 +17227,8 @@ msgid "Search for items where"
 msgstr "항목 탐색 위치"
 
 #: gnucash/gtkbuilder/dialog-search.glade:228
-#, fuzzy
 msgid "<b>Match all entries</b>"
-msgstr "전체 입력 일치"
+msgstr "<b>전체 입력 일치</b>"
 
 #: gnucash/gtkbuilder/dialog-search.glade:281
 msgid "Search Criteria"
@@ -17415,23 +17371,18 @@ msgid "Crea_te in advance"
 msgstr "미리 생성"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:709
-#, fuzzy
 msgid "R_emind in advance"
-msgstr "미리 기억"
+msgstr "미리 알림(_E)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:720
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "Re_view created transactions"
-msgstr "생성된 거래를 재검토(_R)"
+msgstr "생성된 거래 검토(_V)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:724
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid ""
 "Set 'Review created transactions' as the default in the \"since last run\" "
 "dialog."
-msgstr "생성된 거래를 재검토(_R)"
+msgstr "'생성된 거래 검토'를 \"마지막 실행 이후\"대화 상자에서 기본값으로 설정합니다."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:788
 msgid "Edit Scheduled Transaction"
@@ -17442,9 +17393,8 @@ msgid "Create in advance"
 msgstr "미리 생성"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:969
-#, fuzzy
 msgid "Remind in advance"
-msgstr "미리 기억"
+msgstr "미리 알림"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1028
 msgid "Create automatically"
@@ -17496,7 +17446,7 @@ msgstr "마지막 실행 이후.."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1576
 msgid "_Review created transactions"
-msgstr "생성된 거래를 재검토(_R)"
+msgstr "생성된 거래를 검토(_R)"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:13
 #, fuzzy
@@ -17520,23 +17470,20 @@ msgid "_Expense"
 msgstr "지출(_E)"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:302
-#, fuzzy
 msgid "_Asset"
-msgstr "자산"
+msgstr "자산(_A)"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:318
-#, fuzzy
 msgid "_Liability/Equity"
-msgstr "부채"
+msgstr "부채/자본(_L)"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:472
-#, fuzzy
 msgid "<b>Account Tax Information</b>"
-msgstr "<b>세금 정보</b>"
+msgstr "<b>계정 세금 정보</b>"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:483
 msgid "Tax _Related"
-msgstr "관련 세금"
+msgstr "세금 관련(_R)"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:515
 msgid "<b>_TXF Categories</b>"
@@ -17565,13 +17512,12 @@ msgid "<b>Tax Table Entries</b>"
 msgstr "<b>과세 표 기입</b>"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:197
-#, fuzzy
 msgid "De_lete"
-msgstr "삭제"
+msgstr "삭제(_L)"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:212
 msgid "Ne_w"
-msgstr ""
+msgstr "신규(_W)"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:286
 #, fuzzy
@@ -17579,11 +17525,8 @@ msgid "Value $"
 msgstr "가치"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:289
-#, fuzzy
 msgid "Percent %"
-msgstr ""
-"가치 $\n"
-"백분율 %"
+msgstr "백분율 %"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:385
 msgid "<b>Tax Table Entry</b>"
@@ -17594,18 +17537,16 @@ msgid "GnuCash Tip Of The Day"
 msgstr "오늘의 GnuCash 도움말"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:26
-#, fuzzy
 msgid "_Previous"
-msgstr "첫째 설정"
+msgstr "이전(_P)"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:41
 msgid "_Next"
-msgstr ""
+msgstr "다음(_N)"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:95
-#, fuzzy
 msgid "<b>Tip of the Day</b>"
-msgstr "<b>오늘의 도움말:</b>"
+msgstr "<b>오늘의 도움말</b>"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:145
 msgid "_Show tips at startup"
@@ -17631,12 +17572,11 @@ msgstr "<b>통화 이체</b>"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:520
 msgid "Exchange Rate"
-msgstr "환전 비율"
+msgstr "환율"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:601
-#, fuzzy
 msgid "_Fetch Rate"
-msgstr "환전 비율(_E):"
+msgstr "환율 가져오기(_F)"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:7
 msgid "Username and Password"
@@ -17659,32 +17599,31 @@ msgstr "암호(_P)"
 msgid ""
 "The vendor ID number. If left blank a reasonable number will be chosen for "
 "you"
-msgstr ""
+msgstr "공급업체의 ID 번호입니다. 비어 있는 경우 적절한 번호가 자동으로 선택됩니다"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:12
 msgid "US (12/31/2001)"
-msgstr ""
+msgstr "미국 (12/31/2001)"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:15
 msgid "UK (31/12/2001)"
-msgstr ""
+msgstr "영국 (31/12/2001)"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:18
 msgid "Europe (31.12.2001)"
-msgstr ""
+msgstr "유럽 (31.12.2001)"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:21
 msgid "ISO (2001-12-31)"
-msgstr ""
+msgstr "ISO (2001-12-31)"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:27
 msgid "UTC - Coordinated Universal Time"
-msgstr ""
+msgstr "UTC - 협정 세계시"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:33
-#, fuzzy
 msgid "No Fancy Date Format"
-msgstr "날짜 표시 형식"
+msgstr "날짜 형식 없음"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:66
 msgid "%Y-%m-%d"
@@ -17707,247 +17646,238 @@ msgstr "날짜 형식"
 #: gnucash/gtkbuilder/gnc-frequency.glade:434
 #: libgnucash/engine/Recurrence.c:666
 msgid "1st"
-msgstr ""
+msgstr "1일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:43
 #: gnucash/gtkbuilder/gnc-frequency.glade:211
 #: gnucash/gtkbuilder/gnc-frequency.glade:437
 #: libgnucash/engine/Recurrence.c:666
-#, fuzzy
 msgid "2nd"
-msgstr "끝"
+msgstr "2일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:46
 #: gnucash/gtkbuilder/gnc-frequency.glade:214
 #: gnucash/gtkbuilder/gnc-frequency.glade:440
 #: libgnucash/engine/Recurrence.c:666
 msgid "3rd"
-msgstr ""
+msgstr "3일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:49
 #: gnucash/gtkbuilder/gnc-frequency.glade:217
 #: gnucash/gtkbuilder/gnc-frequency.glade:443
 #: libgnucash/engine/Recurrence.c:666
 msgid "4th"
-msgstr ""
+msgstr "4일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:52
 #: gnucash/gtkbuilder/gnc-frequency.glade:220
 #: gnucash/gtkbuilder/gnc-frequency.glade:446
 msgid "5th"
-msgstr ""
+msgstr "5일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:55
 #: gnucash/gtkbuilder/gnc-frequency.glade:223
 #: gnucash/gtkbuilder/gnc-frequency.glade:449
 msgid "6th"
-msgstr ""
+msgstr "6일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:58
 #: gnucash/gtkbuilder/gnc-frequency.glade:226
 #: gnucash/gtkbuilder/gnc-frequency.glade:452
 msgid "7th"
-msgstr ""
+msgstr "7일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:61
 #: gnucash/gtkbuilder/gnc-frequency.glade:229
 #: gnucash/gtkbuilder/gnc-frequency.glade:455
 msgid "8th"
-msgstr ""
+msgstr "8일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:64
 #: gnucash/gtkbuilder/gnc-frequency.glade:232
 #: gnucash/gtkbuilder/gnc-frequency.glade:458
 msgid "9th"
-msgstr ""
+msgstr "9일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:67
 #: gnucash/gtkbuilder/gnc-frequency.glade:235
 #: gnucash/gtkbuilder/gnc-frequency.glade:461
 msgid "10th"
-msgstr ""
+msgstr "10일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:70
 #: gnucash/gtkbuilder/gnc-frequency.glade:238
 #: gnucash/gtkbuilder/gnc-frequency.glade:464
 msgid "11th"
-msgstr ""
+msgstr "11일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:73
 #: gnucash/gtkbuilder/gnc-frequency.glade:241
 #: gnucash/gtkbuilder/gnc-frequency.glade:467
 msgid "12th"
-msgstr ""
+msgstr "12일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:76
 #: gnucash/gtkbuilder/gnc-frequency.glade:244
 #: gnucash/gtkbuilder/gnc-frequency.glade:470
 msgid "13th"
-msgstr ""
+msgstr "13일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:79
 #: gnucash/gtkbuilder/gnc-frequency.glade:247
 #: gnucash/gtkbuilder/gnc-frequency.glade:473
 msgid "14th"
-msgstr ""
+msgstr "14일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:82
 #: gnucash/gtkbuilder/gnc-frequency.glade:250
 #: gnucash/gtkbuilder/gnc-frequency.glade:476
 msgid "15th"
-msgstr ""
+msgstr "15일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:85
 #: gnucash/gtkbuilder/gnc-frequency.glade:253
 #: gnucash/gtkbuilder/gnc-frequency.glade:479
 msgid "16th"
-msgstr ""
+msgstr "16일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:88
 #: gnucash/gtkbuilder/gnc-frequency.glade:256
 #: gnucash/gtkbuilder/gnc-frequency.glade:482
 msgid "17th"
-msgstr ""
+msgstr "17일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:91
 #: gnucash/gtkbuilder/gnc-frequency.glade:259
 #: gnucash/gtkbuilder/gnc-frequency.glade:485
 msgid "18th"
-msgstr ""
+msgstr "18일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:94
 #: gnucash/gtkbuilder/gnc-frequency.glade:262
 #: gnucash/gtkbuilder/gnc-frequency.glade:488
 msgid "19th"
-msgstr ""
+msgstr "19일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:97
 #: gnucash/gtkbuilder/gnc-frequency.glade:265
 #: gnucash/gtkbuilder/gnc-frequency.glade:491
 msgid "20th"
-msgstr ""
+msgstr "20일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:100
 #: gnucash/gtkbuilder/gnc-frequency.glade:268
 #: gnucash/gtkbuilder/gnc-frequency.glade:494
 msgid "21st"
-msgstr ""
+msgstr "21일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:103
 #: gnucash/gtkbuilder/gnc-frequency.glade:271
 #: gnucash/gtkbuilder/gnc-frequency.glade:497
 msgid "22nd"
-msgstr ""
+msgstr "22일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:106
 #: gnucash/gtkbuilder/gnc-frequency.glade:274
 #: gnucash/gtkbuilder/gnc-frequency.glade:500
 msgid "23rd"
-msgstr ""
+msgstr "23일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:109
 #: gnucash/gtkbuilder/gnc-frequency.glade:277
 #: gnucash/gtkbuilder/gnc-frequency.glade:503
 msgid "24th"
-msgstr ""
+msgstr "24일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:112
 #: gnucash/gtkbuilder/gnc-frequency.glade:280
 #: gnucash/gtkbuilder/gnc-frequency.glade:506
 msgid "25th"
-msgstr ""
+msgstr "25일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:115
 #: gnucash/gtkbuilder/gnc-frequency.glade:283
 #: gnucash/gtkbuilder/gnc-frequency.glade:509
 msgid "26th"
-msgstr ""
+msgstr "26일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:118
 #: gnucash/gtkbuilder/gnc-frequency.glade:286
 #: gnucash/gtkbuilder/gnc-frequency.glade:512
 msgid "27th"
-msgstr ""
+msgstr "27일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:121
 #: gnucash/gtkbuilder/gnc-frequency.glade:289
 #: gnucash/gtkbuilder/gnc-frequency.glade:515
 msgid "28th"
-msgstr ""
+msgstr "28일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:124
 #: gnucash/gtkbuilder/gnc-frequency.glade:292
 #: gnucash/gtkbuilder/gnc-frequency.glade:518
 msgid "29th"
-msgstr ""
+msgstr "29일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:127
 #: gnucash/gtkbuilder/gnc-frequency.glade:295
 #: gnucash/gtkbuilder/gnc-frequency.glade:521
 msgid "30th"
-msgstr ""
+msgstr "30일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:130
 #: gnucash/gtkbuilder/gnc-frequency.glade:298
 #: gnucash/gtkbuilder/gnc-frequency.glade:524
 msgid "31st"
-msgstr ""
+msgstr "31일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:133
 #: gnucash/gtkbuilder/gnc-frequency.glade:301
 #: gnucash/gtkbuilder/gnc-frequency.glade:527
-#, fuzzy
 msgid "Last day of month"
-msgstr "이전 달의 마지막 일"
+msgstr "월말"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:136
 #: gnucash/gtkbuilder/gnc-frequency.glade:304
 #: gnucash/gtkbuilder/gnc-frequency.glade:530
-#, fuzzy
 msgid "Last Monday"
-msgstr "마지막 일"
+msgstr "마지막 월요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:139
 #: gnucash/gtkbuilder/gnc-frequency.glade:307
 #: gnucash/gtkbuilder/gnc-frequency.glade:533
-#, fuzzy
 msgid "Last Tuesday"
-msgstr "화요일"
+msgstr "마지막 화요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:142
 #: gnucash/gtkbuilder/gnc-frequency.glade:310
 #: gnucash/gtkbuilder/gnc-frequency.glade:536
-#, fuzzy
 msgid "Last Wednesday"
-msgstr "수요일"
+msgstr "마지막 수요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:145
 #: gnucash/gtkbuilder/gnc-frequency.glade:313
 #: gnucash/gtkbuilder/gnc-frequency.glade:539
-#, fuzzy
 msgid "Last Thursday"
-msgstr "목요일"
+msgstr "마지막 목요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:148
 #: gnucash/gtkbuilder/gnc-frequency.glade:316
 #: gnucash/gtkbuilder/gnc-frequency.glade:542
-#, fuzzy
 msgid "Last Friday"
-msgstr "마지막 일"
+msgstr "마지막 금요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:151
 #: gnucash/gtkbuilder/gnc-frequency.glade:319
 #: gnucash/gtkbuilder/gnc-frequency.glade:545
-#, fuzzy
 msgid "Last Saturday"
-msgstr "토요일"
+msgstr "마지막 토요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:154
 #: gnucash/gtkbuilder/gnc-frequency.glade:322
 #: gnucash/gtkbuilder/gnc-frequency.glade:548
-#, fuzzy
 msgid "Last Sunday"
-msgstr "마지막 일"
+msgstr "마지막 일요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:168
 #: gnucash/gtkbuilder/gnc-frequency.glade:692
@@ -17983,115 +17913,115 @@ msgstr "같은 주 & 날"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:325
 msgid "1st Mon"
-msgstr ""
+msgstr "첫째 월요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:328
 msgid "1st Tue"
-msgstr ""
+msgstr "첫째 화요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:331
 msgid "1st Wed"
-msgstr ""
+msgstr "첫째 수요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:334
 msgid "1st Thu"
-msgstr ""
+msgstr "첫째 목요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:337
 msgid "1st Fri"
-msgstr ""
+msgstr "첫째 금요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:340
 msgid "1st Sat"
-msgstr ""
+msgstr "첫째 토요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:343
 msgid "1st Sun"
-msgstr ""
+msgstr "첫째 일요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:346
 msgid "2nd Mon"
-msgstr ""
+msgstr "둘째 월요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:349
 msgid "2nd Tue"
-msgstr ""
+msgstr "둘째 화요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:352
 msgid "2nd Wed"
-msgstr ""
+msgstr "둘째 수요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:355
 msgid "2nd Thu"
-msgstr ""
+msgstr "둘째 목요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:358
 msgid "2nd Fri"
-msgstr ""
+msgstr "둘째 금요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:361
 msgid "2nd Sat"
-msgstr ""
+msgstr "둘째 토요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:364
 msgid "2nd Sun"
-msgstr ""
+msgstr "둘째 일요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:367
 msgid "3rd Mon"
-msgstr ""
+msgstr "셋째 월요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:370
 msgid "3rd Tue"
-msgstr ""
+msgstr "셋째 화요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:373
 msgid "3rd Wed"
-msgstr ""
+msgstr "셋째 수요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:376
 msgid "3rd Thu"
-msgstr ""
+msgstr "셋째 목요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:379
 msgid "3rd Fri"
-msgstr ""
+msgstr "셋째 금요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:382
 msgid "3rd Sat"
-msgstr ""
+msgstr "셋째 토요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:385
 msgid "3rd Sun"
-msgstr ""
+msgstr "셋째 일요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:388
 msgid "4th Mon"
-msgstr ""
+msgstr "넷째 월요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:391
 msgid "4th Tue"
-msgstr ""
+msgstr "넷째 화요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:394
 msgid "4th Wed"
-msgstr ""
+msgstr "넷째 수요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:397
 msgid "4th Thu"
-msgstr ""
+msgstr "넷째 목요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:400
 msgid "4th Fri"
-msgstr ""
+msgstr "넷째 금요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:403
 msgid "4th Sat"
-msgstr ""
+msgstr "넷째 토요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:406
 msgid "4th Sun"
-msgstr ""
+msgstr "넷째 일요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:649
 msgid "Not scheduled"
@@ -18099,7 +18029,7 @@ msgstr "자동 이체 없음"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:673
 msgid "Select occurrence date above."
-msgstr "위 발생 날짜 선택"
+msgstr "위에서 발생 날짜를 선택하세요."
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:710
 #, fuzzy
@@ -18153,7 +18083,7 @@ msgstr "일요일"
 #: gnucash/gtkbuilder/gnc-frequency.glade:928
 #: gnucash/report/reports/example/daily-reports.scm:174
 msgid "Monday"
-msgstr "월"
+msgstr "월요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:943
 #: gnucash/report/reports/example/daily-reports.scm:175
@@ -18209,31 +18139,30 @@ msgstr "예산 기간:"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:117
 msgid "Replace"
-msgstr ""
+msgstr "바꾸기"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:121
 msgid ""
 "Replace the budget for all periods with new 'value'. Use empty value to "
 "unset budget for the accounts."
-msgstr ""
+msgstr "모든 기간의 예산을 새 '값'으로 바꿉니다. 빈 값을 사용하여 계정의 예산을 설정 "
+"해제합니다."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:134
-#, fuzzy
 msgid "Add"
-msgstr "주소: "
+msgstr "더하기"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:138
 msgid "Add 'value' to current budget for each period"
-msgstr ""
+msgstr "각 기간의 현재 예산에 '값' 더하기"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:152
-#, fuzzy
 msgid "Multiply"
-msgstr "다수행(_M):"
+msgstr "곱하기"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:156
 msgid "Multiply current budget for each period by 'value'"
-msgstr ""
+msgstr "각 기간의 현재 예산에 '값' 곱하기"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:178
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:316
