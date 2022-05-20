@@ -606,13 +606,12 @@ gnc_ui_print_restore_dialog(PrintCheckDialog *pcd)
 
     /* Options page */
     guid = gnc_prefs_get_string (GNC_PREFS_GROUP, GNC_PREF_CHECK_FORMAT_GUID);
-    if (guid == NULL)
+    if (!(guid && *guid))
         gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox), 0);
     else if (strcmp(guid, "custom") == 0)
     {
         gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox),
                                  pcd->format_max - 1);
-        g_free (guid);
     }
     else
     {
@@ -625,8 +624,8 @@ gnc_ui_print_restore_dialog(PrintCheckDialog *pcd)
         {
             gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox), 0);
         }
-        g_free (guid);
     }
+    g_free (guid);
 
     active = gnc_prefs_get_int(GNC_PREFS_GROUP, GNC_PREF_CHECK_POSITION);
 
@@ -642,7 +641,7 @@ gnc_ui_print_restore_dialog(PrintCheckDialog *pcd)
     if (active == QOF_DATE_FORMAT_CUSTOM)
     {
         format = gnc_prefs_get_string (GNC_PREFS_GROUP, GNC_PREF_DATE_FORMAT_USER);
-        if (format)
+        if (format && *format)
         {
             gnc_date_format_set_custom(GNC_DATE_FORMAT(pcd->date_format), format);
             g_free(format);
@@ -1701,7 +1700,7 @@ gnc_ui_print_check_dialog_create(GtkWidget *parent,
 
     /* Default font (set in preferences) */
     font = gnc_prefs_get_string(GNC_PREFS_GROUP, GNC_PREF_DEFAULT_FONT);
-    pcd->default_font = font ? font : g_strdup(DEFAULT_FONT);
+    pcd->default_font = font && *font ? font : g_strdup(DEFAULT_FONT);
 
     /* Update the combo boxes bases on the available check formats */
     initialize_format_combobox(pcd);
