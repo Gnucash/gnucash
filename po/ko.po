@@ -5,7 +5,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-05-17 09:14+0000\n"
+"PO-Revision-Date: 2022-05-20 10:18+0000\n"
 "Last-Translator: Taehun Yun <yooontehoon@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ko/>\n"
@@ -226,11 +226,11 @@ msgstr "영어 (ASCII)"
 
 #: borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
-msgstr ""
+msgstr "페르시아어 (MacFarsi)"
 
 #: borrowed/goffice/go-charmap-sel.c:166
 msgid "Georgian (GEOSTD8)"
-msgstr ""
+msgstr "조지아어 (GEOSTD8)"
 
 #: borrowed/goffice/go-charmap-sel.c:167
 msgid "Greek (ISO-8859-7)"
@@ -246,11 +246,11 @@ msgstr "그리스어 (Windows-1253)"
 
 #: borrowed/goffice/go-charmap-sel.c:170
 msgid "Gujarati (MacGujarati)"
-msgstr ""
+msgstr "구자라트어 (MacGujarati)"
 
 #: borrowed/goffice/go-charmap-sel.c:172
 msgid "Gurmukhi (MacGurmukhi)"
-msgstr ""
+msgstr "구르무키 (MacGurmukhi)"
 
 #: borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
@@ -274,11 +274,11 @@ msgstr "히브리어 (Windows-1255)"
 
 #: borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
-msgstr ""
+msgstr "힌디어 (MacDevanagari)"
 
 #: borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
-msgstr ""
+msgstr "아이슬란드어 (MacIcelandic)"
 
 #: borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
@@ -302,32 +302,31 @@ msgstr "한국어 (ISO-2022-KR)"
 
 #: borrowed/goffice/go-charmap-sel.c:192
 msgid "Korean (JOHAB)"
-msgstr "한국어 (조합)"
+msgstr "한국어 (JOHAB)"
 
 #: borrowed/goffice/go-charmap-sel.c:193
 msgid "Korean (UHC)"
-msgstr "한국어 (통합 한글)"
+msgstr "한국어 (UHC)"
 
 #: borrowed/goffice/go-charmap-sel.c:194
-#, fuzzy
 msgid "Nordic (ISO-8859-10)"
-msgstr "ISO-8859-10 (노르딕)"
+msgstr "북유럽 (ISO-8859-10)"
 
 #: borrowed/goffice/go-charmap-sel.c:195
 msgid "Romanian (MacRomanian)"
-msgstr ""
+msgstr "루마니아어 (MacRomanian)"
 
 #: borrowed/goffice/go-charmap-sel.c:197
 msgid "Romanian (ISO-8859-16)"
-msgstr ""
+msgstr "루마니아어 (ISO-8859-16)"
 
 #: borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
-msgstr ""
+msgstr "남유럽어 (ISO-8859-3)"
 
 #: borrowed/goffice/go-charmap-sel.c:201
 msgid "Thai (TIS-620)"
-msgstr ""
+msgstr "태국어 (TIS-620)"
 
 #: borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
@@ -418,28 +417,27 @@ msgid "Locale: "
 msgstr "로케일: "
 
 #: borrowed/goffice/go-charmap-sel.c:476
-#, fuzzy
 msgid "Conversion Direction"
-msgstr "분류"
+msgstr "전환 방향"
 
 #: borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr ""
+msgstr "이 값은 수행할 iconv 테스트를 결정합니다."
 
 #: borrowed/goffice/go-optionmenu.c:339
 msgid "Menu"
-msgstr ""
+msgstr "메뉴"
 
 #: borrowed/goffice/go-optionmenu.c:339
-#, fuzzy
 msgid "The menu of options"
-msgstr "번호 설정은 %s임."
+msgstr "옵션 메뉴"
 
 #: doc/tip_of_the_day.list.c:3
 msgid ""
 "The GnuCash online manual has lots of helpful information. You can access "
 "the manual under the Help menu."
-msgstr ""
+msgstr "GnuCash 온라인 설명서에는 유용한 정보가 많이 있습니다. 도움말 메뉴에서 "
+"설명서에 액세스할 수 있습니다."
 
 #. Translators: You can replace the link, if a translated page exists.
 #: doc/tip_of_the_day.list.c:7
@@ -448,6 +446,9 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
+"메일링 리스트는 GnuCash 커뮤니티에서 선호하는 커뮤니케이션 형식입니다. 새 "
+"릴리스, 사용자 그룹 등의 발표는 다음 위치에서 표를 참조하세요: https://wiki."
+"gnucash.org/wiki/Mailing_Lists"
 
 #: doc/tip_of_the_day.list.c:11
 msgid ""
@@ -455,6 +456,8 @@ msgid ""
 "lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome."
 "org"
 msgstr ""
+"GnuCash 개발자는 쉽게 연락할 수 있습니다. 여러 메일링 리스트와 함께 IRC에서 "
+"라이브 채팅을 할 수 있습니다! irc.gnome.org에서 #gnucash에 가입하십시오"
 
 #: doc/tip_of_the_day.list.c:15
 msgid ""
@@ -463,9 +466,9 @@ msgid ""
 "on the sub-menu Import and click on QIF or OFX file, respectively. Then, "
 "follow the instructions provided."
 msgstr ""
-"Quicken, MS Money 또는 QiF 파일 또는 QFX 파일에서 내보내기한 다른 프로그램에"
-"서 쉽게 기존 자료를 읽어올 수 있습니다. 파일 메뉴의 하위메뉴에서 읽어오기에"
-"서 QIF 또는 QFX를 각각 클릭하시고 제공된 명령어를 따르시오"
+"Quicken, MS Money 또는 QiF 파일, QFX 파일을 내보내는 다른 프로그램에서 기존 "
+"재무 데이터를 쉽게 읽어올 수 있습니다. 파일 메뉴에서 읽어오기를 클릭하고 QIF "
+"또는 QFX 파일을 각각 클릭합니다. 그 다음 제공된 지침을 따르세요."
 
 #: doc/tip_of_the_day.list.c:20
 msgid ""
@@ -474,6 +477,10 @@ msgid ""
 "(File[->Most Recently Used-List]).\n"
 "The full path is displayed in the status bar."
 msgstr ""
+"최근 GnuCash 파일이 저장된 디렉토리를 확인하려면, 히스토리 메뉴의 항목 중 "
+"하나에 마우스를 가져갑니다\n"
+"(파일 [->가장 최근에 사용 된 목록]).\n"
+"전체 경로가 상태 표시줄에 표시됩니다."
 
 #: doc/tip_of_the_day.list.c:24
 msgid ""
@@ -482,6 +489,9 @@ msgid ""
 "For more information on income and expense accounts, please see the GnuCash "
 "online manual."
 msgstr ""
+"Quicken과 같은 다른 금융 프로그램에 익숙하다면 GnuCash는 수입과 지출을 "
+"추적하기 위해 카테고리 대신 계정을 사용한다는 점에 유의하십시오. 수입 및 "
+"지출 계정에 대한 자세한 내용은 GnuCash 온라인 설명서를 참조하십시오."
 
 #: doc/tip_of_the_day.list.c:29
 msgid ""
@@ -489,6 +499,8 @@ msgid ""
 "Just locate the triangle at the far right of the column headings, and click "
 "it to see the different columns available."
 msgstr ""
+"계정과목표에 표시되는 열을 변경할 수 있습니다. 열 머리글의 맨 오른쪽에 있는 "
+"삼각형을 클릭하면 사용 가능한 다른 열이 표시됩니다."
 
 #: doc/tip_of_the_day.list.c:33
 msgid ""
@@ -505,6 +517,9 @@ msgid ""
 "more information on choosing an account type or setting up a chart of "
 "accounts, please see the GnuCash online manual."
 msgstr ""
+"메인 화면의 툴바에서 새로 만들기 버튼을 클릭하여 새 계정을 만듭니다. 그러면 "
+"계정 세부 정보를 입력할 수 있는 대화 상자가 나타납니다. 계정 유형 선택 또는 "
+"계정과목표 설정에 대한 자세한 내용은 GnuCash 온라인 설명서를 참조하십시오."
 
 #: doc/tip_of_the_day.list.c:44
 msgid ""
@@ -523,6 +538,9 @@ msgid ""
 "View menu, you can choose the register style Auto-Split Ledger or "
 "Transaction Journal."
 msgstr ""
+"여러 공제가 있는 급여와 같은 복수 분할 거래를 입력하려면 툴바에서 분할 "
+"버튼을 클릭하십시오. 또는 보기 메뉴에서 등록 스타일의 자동 분할 원장 또는 "
+"거래 분개를 선택할 수 있습니다."
 
 #: doc/tip_of_the_day.list.c:55
 msgid ""
@@ -583,6 +601,9 @@ msgid ""
 "Currency Transfer options for entering the exchange rate or the other "
 "currency's amount will be available."
 msgstr ""
+"다른 통화로 된 계정 간에 자금을 이체하려면 등록 툴바에서 이체 버튼을 "
+"클릭하고 계정을 선택하면 환율 또는 다른 통화 금액을 입력할 수 있는 통화 이체 "
+"옵션을 사용할 수 있습니다."
 
 #: doc/tip_of_the_day.list.c:91
 msgid ""
@@ -1429,39 +1450,34 @@ msgid "Are you sure you want to delete %s?"
 msgstr "\"%s\"를 삭제하겠습니까?"
 
 #: gnucash/gnome/dialog-custom-report.c:436
-#, fuzzy
 msgid "You must select a report configuration to load."
-msgstr "통화를 선택해야 합니다."
+msgstr "불러올 보고서 구성을 선택해야 합니다."
 
 #: gnucash/gnome/dialog-custom-report.c:451
-#, fuzzy
 msgid "You must select a report configuration to delete."
-msgstr "상품을 선택해야 합니다."
+msgstr "삭제할 보고서 구성을 선택해야 합니다."
 
 #: gnucash/gnome/dialog-custom-report.c:465
 msgid "Unable to change report configuration name."
-msgstr ""
+msgstr "보고서 구성 이름을 변경할 수 없습니다."
 
 #: gnucash/gnome/dialog-custom-report.c:477
 msgid ""
 "A saved report configuration with this name already exists, please choose "
 "another name."
-msgstr ""
+msgstr "이 이름의 저장된 보고서 구성이 이미 존재합니다, 다른 이름을 선택하십시오."
 
 #: gnucash/gnome/dialog-custom-report.c:503
-#, fuzzy
 msgid "Load report configuration"
-msgstr "설정 경로 설정"
+msgstr "보고서 구성 불러오기"
 
 #: gnucash/gnome/dialog-custom-report.c:505
-#, fuzzy
 msgid "Edit report configuration name"
-msgstr "보고서 설정 편집"
+msgstr "보고서 구성 이름 수정"
 
 #: gnucash/gnome/dialog-custom-report.c:507
-#, fuzzy
 msgid "Delete report configuration"
-msgstr "설정 경로 설정"
+msgstr "보고서 구성 삭제"
 
 #: gnucash/gnome/dialog-date-close.c:75
 msgid "No Account selected. Please try again."
@@ -4744,7 +4760,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:376
 msgid "Post this invoice to your Chart of Accounts"
-msgstr ""
+msgstr "이 청구서를 계정과목표에 게시"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:377
 msgid "Unpost this invoice and make it editable"
@@ -4860,7 +4876,7 @@ msgstr "각 새 등록을 위하여 새 창 생성"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:418
 msgid "Post this voucher to your Chart of Accounts"
-msgstr ""
+msgstr "이 바우처를 계정과목표에 게시"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:419
 msgid "Unpost this voucher and make it editable"
@@ -5937,14 +5953,16 @@ msgstr ""
 msgid ""
 "Update the current report's saved configuration. The report configuration "
 "will be saved in the file %s."
-msgstr ""
+msgstr "현재 보고서의 저장된 구성을 업데이트합니다. 보고서 구성은 %s 파일에 "
+"저장됩니다."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1199
 #, c-format
 msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu. The report configuration will be saved in the file %s."
-msgstr ""
+msgstr "현재 보고서의 구성을 '보고서->저장된 보고서 구성' 메뉴에 추가합니다. 보고서 "
+"구성은 %s 파일에 저장됩니다."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1205
 msgid "_Print Report..."
@@ -5955,24 +5973,20 @@ msgid "Print the current report"
 msgstr "현재 보고서 인쇄하기"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1210
-#, fuzzy
 msgid "Export as P_DF..."
-msgstr "QIF 읽어오기(_Q)..."
+msgstr "PDF로 내보내기(_D)..."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1211
-#, fuzzy
 msgid "Export the current report as a PDF document"
-msgstr "현재 보고서 인쇄하기"
+msgstr "현재 보고서를 PDF 문서로 내보내기"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1236
-#, fuzzy
 msgid "Save _Report Configuration"
-msgstr "설정 경로 설정"
+msgstr "보고서 구성 저장(_R)"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1240
-#, fuzzy
 msgid "Save Report Configuration As..."
-msgstr "설정 경로 설정"
+msgstr "보고서 구성을 다른 이름으로 저장..."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1244
 msgid "Export _Report"
@@ -6610,13 +6624,12 @@ msgstr "수량을 보일까요?"
 
 #: gnucash/gnome/report-menus.scm:90
 #: gnucash/gtkbuilder/dialog-custom-report.glade:8
-#, fuzzy
 msgid "Saved Report Configurations"
-msgstr "설정 경로 설정"
+msgstr "저장된 보고서 구성"
 
 #: gnucash/gnome/report-menus.scm:92
 msgid "Manage and run saved report configurations"
-msgstr ""
+msgstr "저장된 보고서 구성 관리 및 실행"
 
 #: gnucash/gnome/report-menus.scm:116
 #: gnucash/report/reports/standard/dashboard.scm:52
@@ -8391,6 +8404,10 @@ msgid ""
 "your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?"
 "id=645216 for more information."
 msgstr ""
+"GnuCash는 \"libdbi\" 라이브러리에 버그가 있는지에 대한 중요한 테스트를 "
+"완료할 수 없습니다. 이는 SQL 데이터베이스의 잘못된 권한 구성으로 인해 발생할 "
+"수 있습니다. 자세한 내용은 https://bugs.gnucash.org/show_bug.cgi?id=645216을 "
+"참조하십시오."
 
 #: gnucash/gnome-utils/gnc-file.c:537
 msgid ""
@@ -8686,11 +8703,11 @@ msgstr "GnuCash에 대하여"
 
 #: gnucash/gnome-utils/gnc-main-window.c:409
 msgid "_Toolbar"
-msgstr "도구막대(_T)"
+msgstr "툴바(_T)"
 
 #: gnucash/gnome-utils/gnc-main-window.c:410
 msgid "Show/hide the toolbar on this window"
-msgstr "이 작업창에서 도구막대 보이기/숨기기"
+msgstr "이 작업창에서 툴바 보이기/숨기기"
 
 #: gnucash/gnome-utils/gnc-main-window.c:414
 msgid "Su_mmary Bar"
@@ -10484,16 +10501,16 @@ msgid ""
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:127
-#, fuzzy
 msgid "Enable extra toolbar buttons for business"
-msgstr "도구 마개 단추에서 라벨"
+msgstr "비즈니스를 위한 추가 툴바 버튼 활성화"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:128
 #: gnucash/gtkbuilder/business-prefs.glade:74
 msgid ""
 "If active, extra toolbar buttons for common business functions are shown as "
 "well. Otherwise they are not shown."
-msgstr ""
+msgstr "활성화되면 일반적인 비즈니스 기능에 대한 추가 툴바 버튼도 표시됩니다. 그렇지 "
+"않으면 표시되지 않습니다."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:132
 #: gnucash/gtkbuilder/business-prefs.glade:320
@@ -11411,7 +11428,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:125
 msgid "Show close buttons on notebook tabs"
-msgstr "장부북 탭의 닫기 단추 보이기"
+msgstr "각 탭에 닫기 단추 보이기"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:126
 msgid ""
@@ -11420,10 +11437,13 @@ msgid ""
 "this setting, pages can always be closed via the \"close\" menu item or the "
 "\"close\" button on toolbar."
 msgstr ""
+"활성화된 경우 닫을 수 있는 모든 탭에 \"닫기\" 버튼이 표시됩니다. 그렇지 "
+"않으면 해당 버튼이 탭에 표시되지 않습니다. 이 설정에 관계없이 페이지는 항상 "
+"\"닫기\" 메뉴 항목이나 툴바의 \"닫기\" 버튼을 통해 닫을 수 있습니다."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:130
 msgid "Width of notebook tabs"
-msgstr "장부북 탭 너비"
+msgstr "탭의 너비"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:131
 msgid ""
@@ -11431,6 +11451,8 @@ msgid ""
 "tab is longer than this value (the test is approximate) then the tab label "
 "will have the middle cut and replaced with an ellipsis."
 msgstr ""
+"이 키는 탭의 최대 너비를 지정합니다. 탭의 텍스트가 이 값보다 길면(테스트는 "
+"근사치임) 탭 레이블이 잘리고 줄임표로 표시됩니다."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:135
 msgid "Opens new tab adjacent to current tab instead of at the end"
@@ -11561,7 +11583,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:195
 #: gnucash/gtkbuilder/dialog-preferences.glade:3901
 msgid "Display the notebook tabs at the top of the window."
-msgstr "창 상단에 장부북 탭 보이기"
+msgstr "창 상단에 탭 표시"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:196
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:201
@@ -11572,21 +11594,24 @@ msgid ""
 "notebooks are drawn. Possible values are \"top\", \"left\", \"bottom\" and "
 "\"right\". It defaults to \"top\"."
 msgstr ""
+"이 설정은 창에서 페이지를 전환하기 위한 탭이 그려지는 모서리를 결정합니다. "
+"가능한 값은 \"상단\", \"왼쪽\", \"하단 및 \"오른쪽\"입니다. 기본값은 \"상단"
+"\"입니다."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:200
 #: gnucash/gtkbuilder/dialog-preferences.glade:3920
 msgid "Display the notebook tabs at the bottom of the window."
-msgstr "창 하단에 장부북 탭 보이기"
+msgstr "창 하단에 탭 표시"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:205
 #: gnucash/gtkbuilder/dialog-preferences.glade:3939
 msgid "Display the notebook tabs at the left of the window."
-msgstr "창 왼쪽에 장부북 탭 보이기"
+msgstr "창 왼쪽에 탭 표시"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:210
 #: gnucash/gtkbuilder/dialog-preferences.glade:3958
 msgid "Display the notebook tabs at the right of the window."
-msgstr "창 오른쪽에 장부북 탭 보이기"
+msgstr "창 오른쪽에 탭 표시"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:215
 #: gnucash/gtkbuilder/dialog-preferences.glade:3990
@@ -14984,9 +15009,8 @@ msgid "<b>2. Select Import Type</b>"
 msgstr "할인형태 선택"
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:52
-#, fuzzy
 msgid "Exit the saved report configurations dialog"
-msgstr "새 고객 대화창 열기"
+msgstr "저장된 보고서 구성 대화 상자 종료"
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:100
 msgid ""
@@ -15002,6 +15026,9 @@ msgid ""
 "Configuration\" from\n"
 "the Reports menu or tool bar."
 msgstr ""
+"저장된 보고서 설정을 만들려면 먼저 보고서 메뉴에서 보고서를 열고,\n"
+"보고서의 옵션을 원하는 대로 변경한 다음 \"보고서 설정 저장\"을\n"
+"보고서 메뉴 또는 툴바에서 선택합니다."
 
 #: gnucash/gtkbuilder/dialog-date-close.glade:7
 #: gnucash/gtkbuilder/dialog-date-close.glade:261
@@ -16743,13 +16770,13 @@ msgstr "<b>탭</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:4045
 msgid "Show close button on _notebook tabs"
-msgstr "장부북 탭에서 닫기버튼 보이기(_N)"
+msgstr "탭에서 닫기 버튼 보이기(_N)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:4051
 msgid ""
 "Show a close button on each notebook tab. These function identically to the "
 "'Close' menu item."
-msgstr ""
+msgstr "각 탭에 닫기 버튼을 표시합니다. 이 기능은 '닫기' 메뉴 항목과 동일합니다."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:4072
 msgid ""
