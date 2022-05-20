@@ -18,7 +18,7 @@
 # K. Herbert <herbert.ka@mailo.com>, 2020.
 # Milo Ivir <mail@milotype.de>, 2020.
 # Alois Spitzbart <spitz234@hotmail.com>, 2020, 2021.
-# Christian Wehling <christian.wehling@web.de>, 2020, 2021, 2022.
+# Christian Wehling <christian.wehling@web.de>, 2020-2022.
 # Marco Zietzling <marco.zietzling@gmail.com>, 2020, 2021.
 # Christian Stimming <christian@cstimming.de>, 2021.
 # Julian Heinzel <jeinzi@gmx.de>, 2021.
@@ -26,7 +26,6 @@
 # Thomas Kriegel <warrel040@gmx.de>, 2021.
 # Stefan Bayer <stefan.bayer@stefanbayer.net>, 2021.
 # S <t0kie@mailbox.org>, 2022.
-# grimpeur78 <grimpeur78@gmail.com>, 2022.
 # Jan Schneider <grimpeur78@gmail.com>, 2022.
 #
 # Konventionen/Tastenkürzel:
@@ -9151,11 +9150,13 @@ msgstr "Finanzverwaltung für Privatanwender und Kleinbetriebe."
 #: gnucash/gnome-utils/gnc-main-window.c:4738
 msgid "translator-credits"
 msgstr ""
+"Frank H. Ellenberger, 2007, 2009-2022\n"
+"Christian Wehling, 2020-2022\n"
+"Jan Schneider, 2022\n"
 "Christian Stimming, 2001-2021\n"
-"Frank H. Ellenberger, 2007, 2009-2021\n"
-"Christian Wehling, 2020-2021\n"
 "Marco Zietzling, 2020-2021\n"
 "Alois Spitzbart, 2020-2021\n"
+"Stefan Bayer, 2021\n"
 "Christoph Franzen, 2021\n"
 "Thomas Kriegel, 2021\n"
 "Julian Heinzel, 2021\n"
