@@ -5,7 +5,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-05-20 10:18+0000\n"
+"PO-Revision-Date: 2022-05-24 14:14+0000\n"
 "Last-Translator: Taehun Yun <yooontehoon@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ko/>\n"
@@ -509,6 +509,9 @@ msgid ""
 "register, clicking the right mouse button brings up the transaction menu "
 "options."
 msgstr ""
+"메인 화면의 계정 탭에서 마우스 오른쪽 버튼을 클릭(Mac OS X에서는 컨트롤 클릭)"
+"하여 계정 메뉴 옵션을 표시합니다. 각 기록부 내에서 마우스 오른쪽 버튼을 "
+"클릭하면 거래 메뉴 옵션이 나타납니다."
 
 #: doc/tip_of_the_day.list.c:38
 msgid ""
@@ -4122,14 +4125,12 @@ msgstr "전체 계정에서 잔액이 맞지 않는 거래 및 오르판 스플�
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:343
 #: gnucash/gnome/gnc-plugin-register2.c:64
-#, fuzzy
 msgid "_Register2"
-msgstr "등록"
+msgstr "기록부2(_R)"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:406
-#, fuzzy
 msgid "Open2"
-msgstr "열기"
+msgstr "2번 열기"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:408
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:285
@@ -5393,7 +5394,7 @@ msgstr "빈 거래로 이동(_B)"
 #: gnucash/gnome/gnc-plugin-page-register2.c:378
 #: gnucash/gnome/gnc-plugin-page-register.c:496
 msgid "Move to the blank transaction at the bottom of the register"
-msgstr "등록하단의 빈 거래로 이동"
+msgstr "기록부 하단의 빈 거래로 이동"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:382
 #: gnucash/gnome/gnc-plugin-page-register.c:505
@@ -5416,11 +5417,9 @@ msgstr "다른 계정 코드 보이기"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:388
 #: gnucash/gnome/gnc-plugin-page-register.c:514
-#, fuzzy
-#| msgid "Open a register report for the selected Transaction"
 msgid ""
 "Open a new register tab for the other account with focus on this transaction."
-msgstr "선택된 거래의 등록 보고서를 열기"
+msgstr "이 거래에 초점을 맞춘 다른 계정에 대한 새 기록부 탭을 엽니다."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:392
 #: gnucash/gnome/gnc-plugin-page-register.c:518
@@ -5452,7 +5451,7 @@ msgstr "계정 보고서"
 #: gnucash/gnome/gnc-plugin-page-register2.c:409
 #: gnucash/gnome/gnc-plugin-page-register.c:537
 msgid "Open a register report for this Account"
-msgstr "이 거래의 등록 보고서 열기"
+msgstr "이 거래의 기록 보고서 열기"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:413
 #: gnucash/gnome/gnc-plugin-page-register.c:541
@@ -5463,7 +5462,7 @@ msgstr "온라인 거래 입력"
 #: gnucash/gnome/gnc-plugin-page-register2.c:414
 #: gnucash/gnome/gnc-plugin-page-register.c:542
 msgid "Open a register report for the selected Transaction"
-msgstr "선택된 거래의 등록 보고서를 열기"
+msgstr "선택된 거래의 기록 보고서 열기"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:424
 #: gnucash/gnome/gnc-plugin-page-register.c:553
@@ -5578,8 +5577,8 @@ msgid ""
 "the changes to this transaction, discard the transaction, or cancel the "
 "operation?"
 msgstr ""
-"이 등록은 거래 변경을 미루고 있습니다. 거래 변경을 저장 또는 무시, 이 작업을 "
-"취소하겠습니까?"
+"이 기록부에는 거래에 대한 보류 중인 변경 사항이 있습니다. 변경사항을 "
+"저장하시겠습니까, 거래를 취소하시겠습니까, 또는 작업을 취소하겠습니까?"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1627
 #: gnucash/gnome/gnc-plugin-page-register.c:2011
