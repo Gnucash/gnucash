@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-05-03 21:10+0000\n"
+"PO-Revision-Date: 2022-05-24 14:14+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.12.1\n"
+"X-Generator: Weblate 4.13-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -2827,7 +2827,7 @@ msgstr ""
 #: gnucash/report/reports/standard/new-owner-report.scm:306
 #: gnucash/report/reports/standard/new-owner-report.scm:704
 msgid "Pre-Payment"
-msgstr "Pré-Pagamento"
+msgstr "Pré-pagamento"
 
 #: gnucash/gnome/dialog-payment.c:1010
 msgid ""
@@ -5370,7 +5370,7 @@ msgstr "Cancele a transação atual"
 #: gnucash/gnome/gnc-plugin-page-register2.c:315
 #: gnucash/gnome/gnc-plugin-page-register.c:424
 msgid "_Void Transaction"
-msgstr "_Anule a transação"
+msgstr "_Transação anulada"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:319
 #: gnucash/gnome/gnc-plugin-page-register.c:428
@@ -5836,7 +5836,7 @@ msgstr "Não reconciliado"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:876
 #: gnucash/report/trep-engine.scm:150
 msgid "Cleared"
-msgstr "Pré-reconciliada"
+msgstr "Foi limpo"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3447
 #: gnucash/gnome-search/search-reconciled.c:227
@@ -7001,7 +7001,7 @@ msgstr "_Remova"
 
 #: gnucash/gnome-search/dialog-search.c:1100
 msgid "Order"
-msgstr "Número do pedido"
+msgstr "Pedido"
 
 #: gnucash/gnome-search/dialog-search.c:1102
 #: gnucash/gtkbuilder/dialog-order.glade:421
