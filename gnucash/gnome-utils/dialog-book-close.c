@@ -46,6 +46,7 @@
 #define DIALOG_BOOK_CLOSE_CM_CLASS "dialog-book-close"
 
 void gnc_book_close_response_cb(GtkDialog *, gint, GtkDialog *);
+static void close_limited_book_cb (GtkWidget *widget, gpointer data);
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -61,6 +62,11 @@ struct CloseBookWindow
     GtkWidget* income_acct_widget;
     GtkWidget* expense_acct_widget;
     GtkWidget* desc_widget;
+    GtkWidget* close_limited_widget;
+    GtkWidget* income_root_label;
+    GtkWidget* income_root_widget;
+    GtkWidget* expense_root_label;
+    GtkWidget* expense_root_widget;
 
     /* The final settings */
     time64 close_date;
@@ -213,10 +219,10 @@ static void finish_txn_cb(gnc_commodity* cmdty,
 
 static void close_accounts_of_type(struct CloseBookWindow* cbw,
                                    Account* acct,
+                                   Account *root,
                                    GNCAccountType acct_type)
 {
     struct CloseAccountsCB cacb;
-    Account* root_acct;
 
     g_return_if_fail(cbw);
     g_return_if_fail(acct);
@@ -229,8 +235,8 @@ static void close_accounts_of_type(struct CloseBookWindow* cbw,
                                       NULL, g_free);
 
     /* Iterate through all accounts and set up the balancing splits */
-    root_acct = gnc_book_get_root_account(cbw->book);
-    gnc_account_foreach_descendant(root_acct, close_accounts_cb, &cacb);
+    close_accounts_cb (root, &cacb);
+    gnc_account_foreach_descendant (root, close_accounts_cb, &cacb);
 
     /* now iterate through the transactions and handle each currency */
     cacb.hash_size = g_hash_table_size(cacb.txns);
@@ -261,13 +267,32 @@ static void destroy_cb(GObject *object, gpointer data)
     }
 }
 
+static void close_limited_book_cb (GtkWidget *widget, gpointer data)
+{
+    gboolean limited;
+    struct CloseBookWindow *cbw = data;
+
+    g_return_if_fail (widget);
+    limited = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+
+    gtk_widget_set_visible (cbw->income_root_widget, limited);
+    gtk_widget_set_visible (cbw->income_root_label, limited);
+    gtk_widget_set_visible (cbw->expense_root_widget, limited);
+    gtk_widget_set_visible (cbw->expense_root_label, limited);
+
+    /* setting size to 1x1 means the window dimensions will be
+       the smallest possible to accommodate the widgets enclosed. */
+    gtk_window_resize (GTK_WINDOW (cbw->dialog), 1, 1);
+}
 
 void
 gnc_book_close_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
 {
     struct CloseBookWindow* cbw;
     Account* income_acct;
+    Account* income_root;
     Account* expense_acct;
+    Account* expense_root;
 
     ENTER("dialog %p, response %d, unused %p", dialog, response, unused);
 
@@ -288,6 +313,17 @@ gnc_book_close_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
         income_acct = gnc_account_sel_get_account(GNC_ACCOUNT_SEL(cbw->income_acct_widget));
         expense_acct = gnc_account_sel_get_account(GNC_ACCOUNT_SEL(cbw->expense_acct_widget));
 
+        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (cbw->close_limited_widget)))
+        {
+            income_root = gnc_account_sel_get_account(GNC_ACCOUNT_SEL(cbw->income_root_widget));
+            expense_root = gnc_account_sel_get_account(GNC_ACCOUNT_SEL(cbw->expense_root_widget));
+        }
+        else
+        {
+            income_root = gnc_book_get_root_account (cbw->book);
+            expense_root = gnc_book_get_root_account (cbw->book);
+        }
+
         if (!income_acct)
         {
             gnc_error_dialog(GTK_WINDOW (cbw->dialog), "%s",
@@ -303,8 +339,8 @@ gnc_book_close_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
         }
 
         gnc_suspend_gui_refresh();
-        close_accounts_of_type(cbw, income_acct, ACCT_TYPE_INCOME);
-        close_accounts_of_type(cbw, expense_acct, ACCT_TYPE_EXPENSE);
+        close_accounts_of_type(cbw, income_acct, income_root, ACCT_TYPE_INCOME);
+        close_accounts_of_type(cbw, expense_acct, expense_root, ACCT_TYPE_EXPENSE);
         gnc_resume_gui_refresh();
 
         /* FALL THROUGH */
@@ -320,7 +356,7 @@ void gnc_ui_close_book (QofBook* book, GtkWindow *parent)
     struct CloseBookWindow *cbw;
     GtkBuilder* builder;
     GtkWidget* box;
-    GList* equity_list = NULL;
+    GList* type_list = NULL;
 
     g_return_if_fail(book);
 
@@ -348,12 +384,12 @@ void gnc_ui_close_book (QofBook* book, GtkWindow *parent)
     gtk_box_pack_start(GTK_BOX(box), cbw->close_date_widget, TRUE, TRUE, 0);
 
     /* income acct */
-    equity_list = g_list_prepend(equity_list, GINT_TO_POINTER(ACCT_TYPE_EQUITY));
+    type_list = g_list_prepend(type_list, GINT_TO_POINTER(ACCT_TYPE_EQUITY));
     box = GTK_WIDGET(gtk_builder_get_object (builder, "income_acct_box"));
     cbw->income_acct_widget = gnc_account_sel_new();
     gnc_account_sel_set_hexpand (GNC_ACCOUNT_SEL(cbw->income_acct_widget), TRUE);
     gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(cbw->income_acct_widget),
-                                     equity_list, NULL);
+                                     type_list, NULL);
     gnc_account_sel_set_new_account_ability(GNC_ACCOUNT_SEL(cbw->income_acct_widget), TRUE);
     gtk_box_pack_start(GTK_BOX(box), cbw->income_acct_widget, TRUE, TRUE, 0);
 
@@ -362,9 +398,37 @@ void gnc_ui_close_book (QofBook* book, GtkWindow *parent)
     cbw->expense_acct_widget = gnc_account_sel_new();
     gnc_account_sel_set_hexpand (GNC_ACCOUNT_SEL(cbw->expense_acct_widget), TRUE);
     gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(cbw->expense_acct_widget),
-                                     equity_list, NULL);
+                                     type_list, NULL);
     gnc_account_sel_set_new_account_ability(GNC_ACCOUNT_SEL(cbw->expense_acct_widget), TRUE);
     gtk_box_pack_start(GTK_BOX(box), cbw->expense_acct_widget, TRUE, TRUE, 0);
+    g_list_free(type_list);
+
+    /* close limited accounts widget */
+    cbw->close_limited_widget = GTK_WIDGET(gtk_builder_get_object (builder, "close_book_limited_tree"));
+    g_signal_connect (cbw->close_limited_widget, "toggled",
+                      G_CALLBACK(close_limited_book_cb), cbw);
+
+    /* income root */
+    cbw->income_root_label = GTK_WIDGET(gtk_builder_get_object (builder, "income_root_label"));
+
+    type_list = g_list_prepend (NULL, GINT_TO_POINTER(ACCT_TYPE_INCOME));
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "income_root_box"));
+    cbw->income_root_widget = gnc_account_sel_new();
+    gnc_account_sel_set_hexpand (GNC_ACCOUNT_SEL(cbw->income_acct_widget), TRUE);
+    gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(cbw->income_root_widget), type_list, NULL);
+    gtk_box_pack_start(GTK_BOX(box), cbw->income_root_widget, TRUE, TRUE, 0);
+    g_list_free(type_list);
+
+    /* expense root */
+    cbw->expense_root_label = GTK_WIDGET(gtk_builder_get_object (builder, "expense_root_label"));
+
+    type_list = g_list_prepend (NULL, GINT_TO_POINTER(ACCT_TYPE_EXPENSE));
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "expense_root_box"));
+    cbw->expense_root_widget = gnc_account_sel_new();
+    gnc_account_sel_set_hexpand (GNC_ACCOUNT_SEL(cbw->income_acct_widget), TRUE);
+    gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(cbw->expense_root_widget), type_list, NULL);
+    gtk_box_pack_start(GTK_BOX(box), cbw->expense_root_widget, TRUE, TRUE, 0);
+    g_list_free(type_list);
 
     /* desc */
     cbw->desc_widget = GTK_WIDGET(gtk_builder_get_object (builder, "desc_entry"));
@@ -388,6 +452,7 @@ void gnc_ui_close_book (QofBook* book, GtkWindow *parent)
     /* Run the dialog */
     gtk_widget_show_all(cbw->dialog);
 
-    g_list_free(equity_list);
+    /* call this callback to initialize the window geometry. */
+    close_limited_book_cb (cbw->close_limited_widget, cbw);
 }
 
