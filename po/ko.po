@@ -5,7 +5,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-05-24 14:14+0000\n"
+"PO-Revision-Date: 2022-05-27 05:18+0000\n"
 "Last-Translator: Taehun Yun <yooontehoon@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ko/>\n"
@@ -390,7 +390,7 @@ msgstr "베트남어 (Windows-1258)"
 
 #: borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "히브리어 표기 (ISO-8859-8)"
 
 #: borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
@@ -11582,7 +11582,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:195
 #: gnucash/gtkbuilder/dialog-preferences.glade:3901
 msgid "Display the notebook tabs at the top of the window."
-msgstr "창 상단에 탭 표시"
+msgstr "창 상단에 탭을 표시합니다."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:196
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:201
@@ -11600,17 +11600,17 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:200
 #: gnucash/gtkbuilder/dialog-preferences.glade:3920
 msgid "Display the notebook tabs at the bottom of the window."
-msgstr "창 하단에 탭 표시"
+msgstr "창 하단에 탭을 표시합니다."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:205
 #: gnucash/gtkbuilder/dialog-preferences.glade:3939
 msgid "Display the notebook tabs at the left of the window."
-msgstr "창 왼쪽에 탭 표시"
+msgstr "창 왼쪽에 탭을 표시합니다."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:210
 #: gnucash/gtkbuilder/dialog-preferences.glade:3958
 msgid "Display the notebook tabs at the right of the window."
-msgstr "창 오른쪽에 탭 표시"
+msgstr "창 오른쪽에 탭을 표시합니다."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:215
 #: gnucash/gtkbuilder/dialog-preferences.glade:3990
@@ -13249,9 +13249,8 @@ msgstr ""
 "있을 수 있습니다.\n"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:566
-#, fuzzy
 msgid "Setup selected accounts"
-msgstr "선택된 계정의 삭제"
+msgstr "선택한 계정 설정"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:576
 msgid ""
@@ -13274,64 +13273,61 @@ msgid "Finish Account Setup"
 msgstr "계정 설정 종료"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:26
-#, fuzzy
 msgid "Current Year"
-msgstr "금년 종료일"
+msgstr "올해"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:29
 msgid "Now + 1 Year"
-msgstr ""
+msgstr "내년"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:32
 msgid "Whole Loan"
-msgstr ""
+msgstr "대출 전체"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:46
 #: gnucash/gtkbuilder/assistant-loan.glade:152
-#, fuzzy
 msgid "Interest Rate"
-msgstr "이익 비율"
+msgstr "이자율"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:49
 msgid "APR (Compounded Daily)"
-msgstr ""
+msgstr "연이율 (일 복리)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:52
 msgid "APR (Compounded Weekly)"
-msgstr ""
+msgstr "연이율 (주 복리)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:55
 msgid "APR (Compounded Monthly)"
-msgstr ""
+msgstr "연이율 (월 복리)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:58
 msgid "APR (Compounded Quarterly)"
-msgstr ""
+msgstr "연이율 (분기 복리)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:61
 msgid "APR (Compounded Annually)"
-msgstr ""
+msgstr "연이율 (연 복리)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:72
-#, fuzzy
 msgid "Fixed Rate"
-msgstr "환전 비율(_E):"
+msgstr "고정 금리"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:75
 msgid "3/1 Year ARM"
-msgstr ""
+msgstr "3년 고정형 변동 금리"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:78
 msgid "5/1 Year ARM"
-msgstr ""
+msgstr "5년 고정형 변동 금리"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:81
 msgid "7/1 Year ARM"
-msgstr ""
+msgstr "7년 고정형 변동 금리"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:84
 msgid "10/1 Year ARM"
-msgstr ""
+msgstr "10년 고정형 변동 금리"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:104
 msgid ""
