@@ -63,6 +63,7 @@
 #define HL_ACCEDIT           "acct-edit"
 #define HL_COMMODITY         "tool-commodity"
 #define HL_FIND_TRANSACTIONS "tool-find"
+#define HL_FIN_CALC          "tool-calc"
 #define HL_GLOBPREFS         "set-prefs"
 #define HL_PRINTCHECK        "print-check"
 #define HL_RECNWIN           "acct-reconcile"
