@@ -800,20 +800,21 @@ compute_monthyear (const GncBillTerm *term, time64 post_date,
 static time64
 compute_time (const GncBillTerm *term, time64 post_date, int days)
 {
-    time64 res = post_date;
+    time64 res = gnc_time64_get_day_neutral (post_date);
     int day, month, year;
 
     switch (term->type)
     {
     case GNC_TERM_TYPE_DAYS:
         res += (SECS_PER_DAY * days);
+        res = gnc_time64_get_day_neutral (res);
         break;
     case GNC_TERM_TYPE_PROXIMO:
         compute_monthyear (term, post_date, &month, &year);
         day = gnc_date_get_last_mday (month - 1, year);
         if (days < day)
             day = days;
-        res = gnc_dmy2time64 (day, month, year);
+        res = gnc_dmy2time64_neutral (day, month, year);
         break;
     }
     return res;
