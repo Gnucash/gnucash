@@ -179,9 +179,10 @@
           (when headers?
             ;;This is the only place where <html> appears
             ;;with the exception of 3 eguile report templates:
-            ;;<guile-sitedir>/gnucash/reports/data/taxinvoice.eguile.scm:<html>
             ;;<guile-sitedir>/gnucash/reports/data/balsheet-eg.eguile.scm:<html>
+            ;;<guile-sitedir>/gnucash/reports/data/owner-billing.eguile.scm:<html>
             ;;<guile-sitedir>/gnucash/reports/data/receipt.eguile.scm:<html>
+            ;;<guile-sitedir>/gnucash/reports/data/taxinvoice.eguile.scm:<html>
 
             (push "<!DOCTYPE html>\n")
             (push "<html dir='auto'>\n")
