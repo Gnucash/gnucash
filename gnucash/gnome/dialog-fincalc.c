@@ -37,6 +37,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine.h"
+#include "gnc-ui.h"
 #include "gnc-gui-query.h"
 #include "gnc-locale-utils.h"
 
@@ -496,6 +497,10 @@ void fincalc_response_cb (GtkDialog *dialog,
 {
     switch (response)
     {
+    case GTK_RESPONSE_HELP:
+        gnc_gnome_help (GTK_WINDOW(dialog), HF_HELP, HL_FIN_CALC);
+        return;
+
     case GTK_RESPONSE_OK:
         /* Do something here whenever the hidden schedule button is clicked. */
         /* Fall through */
