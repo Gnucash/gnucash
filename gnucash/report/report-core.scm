@@ -2,16 +2,16 @@
 ;; report-impl.scm : structures/utilities for representing reports
 ;; Copyright 2000 Bill Gribble <grib@gnumatic.com>
 ;;
-;; This program is free software; you can redistribute it and/or    
-;; modify it under the terms of the GNU General Public License as   
-;; published by the Free Software Foundation; either version 2 of   
-;; the License, or (at your option) any later version.              
-;;                                                                  
-;; This program is distributed in the hope that it will be useful,  
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-;; GNU General Public License for more details.                     
-;;                                                                  
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, contact:
 ;;
@@ -39,7 +39,7 @@
 (use-modules (gnucash report html-utilities))
 
 (load-and-reexport (sw_report)
-                   (sw_engine))
+		   (sw_engine))
 
 (export <report>)
 (export gnc:all-report-template-guids)
@@ -58,6 +58,7 @@
 (export gnc:menuname-experimental)
 (export gnc:menuname-income-expense)
 (export gnc:menuname-multicolumn)
+(export gnc:menuname-property-mgmt)
 (export gnc:menuname-reports)
 (export gnc:menuname-taxes)
 (export gnc:optname-invoice-number)
@@ -151,6 +152,7 @@
 (define gnc:menuname-asset-liability (N_ "_Assets & Liabilities"))
 (define gnc:menuname-income-expense (N_ "_Income & Expense"))
 (define gnc:menuname-budget (N_ "B_udget"))
+(define gnc:menuname-property-mgmt (N_ "_Property management"))
 (define gnc:menuname-taxes (N_ "_Taxes"))
 (define gnc:menuname-example (N_ "E_xamples"))
 (define gnc:menuname-experimental (N_ "_Experimental"))
@@ -167,9 +169,9 @@
 ;; A <report-template> represents one of the available report types.
 (define-record-type <report-template>
   (make-new-record-template version name report-guid parent-type options-generator
-                            options-cleanup-cb options-changed-cb
-                            renderer in-menu? menu-path menu-name
-                            menu-tip export-types export-thunk)
+			    options-cleanup-cb options-changed-cb
+			    renderer in-menu? menu-path menu-name
+			    menu-tip export-types export-thunk)
   report-template?
   (version report-template-version)
   (report-guid report-template-report-guid report-template-set-report-guid!)
@@ -244,24 +246,24 @@ not found.")))
     (match args
       (()
        (let ((report-guid (gnc:report-template-report-guid report-rec))
-             (report-name (gnc:report-template-name report-rec)))
-         (cond
-          ;; missing report-guid: is an error
-          ((not report-guid)
-           (gui-error (string-append rpterr-guid1 report-name rpterr-guid2)))
+	     (report-name (gnc:report-template-name report-rec)))
+	 (cond
+	  ;; missing report-guid: is an error
+	  ((not report-guid)
+	   (gui-error (string-append rpterr-guid1 report-name rpterr-guid2)))
 
-          ;; dupe: report-guid is a duplicate
-          ((hash-ref *gnc:_report-templates_* report-guid)
-           (gui-error (string-append rpterr-dupe report-guid)))
+	  ;; dupe: report-guid is a duplicate
+	  ((hash-ref *gnc:_report-templates_* report-guid)
+	   (gui-error (string-append rpterr-dupe report-guid)))
 
-          ;; has export-type but no export-thunk. or vice versa.
-          ((xor (gnc:report-template-export-thunk report-rec)
-                (gnc:report-template-export-types report-rec))
-           (gui-error (format #f "Export needs both thunk and types: ~a" report-guid)))
+	  ;; has export-type but no export-thunk. or vice versa.
+	  ((xor (gnc:report-template-export-thunk report-rec)
+		(gnc:report-template-export-types report-rec))
+	   (gui-error (format #f "Export needs both thunk and types: ~a" report-guid)))
 
-          ;; good: new report definition, store into report-templates hash
-          (else
-           (hash-set! *gnc:_report-templates_* report-guid report-rec)))))
+	  ;; good: new report definition, store into report-templates hash
+	  (else
+	   (hash-set! *gnc:_report-templates_* report-guid report-rec)))))
 
       (((? not-a-field? fld) . _)
        (gnc:error "gnc:define-report: " fld " is not a valid field"))
@@ -273,50 +275,50 @@ not found.")))
 (define (gnc:report-template-new-options/report-guid template-id template-name)
   (let ((templ (hash-ref *gnc:_report-templates_* template-id)))
     (and templ
-         (gnc:report-template-new-options templ))))
+	 (gnc:report-template-new-options templ))))
 
 (define (gnc:report-template-menu-name/report-guid template-id template-name)
   (let ((templ (hash-ref *gnc:_report-templates_* template-id)))
     (and templ
-         (or (gnc:report-template-menu-name templ)
-             (gnc:report-template-name templ)))))
+	 (or (gnc:report-template-menu-name templ)
+	     (gnc:report-template-name templ)))))
 
 (define (gnc:report-template-renderer/report-guid template-id template-name)
   (let ((templ (hash-ref *gnc:_report-templates_* template-id)))
     (and templ
-         (gnc:report-template-renderer templ))))
+	 (gnc:report-template-renderer templ))))
 
 (define (gnc:report-template-new-options report-template)
   (let ((generator (gnc:report-template-options-generator report-template))
-        (namer
-         (gnc:make-string-option
-          gnc:pagename-general gnc:optname-reportname "0a"
-          (N_ "Enter a descriptive name for this report.")
-          (G_ (gnc:report-template-name report-template))))
-        (stylesheet
-         (gnc:make-multichoice-option
-          gnc:pagename-general gnc:optname-stylesheet "0b"
-          (N_ "Select a stylesheet for the report.")
-          (string->symbol (N_ "Default"))
-          (map
-           (lambda (ss)
-             (vector
-              (string->symbol (gnc:html-style-sheet-name ss))
-              (gnc:html-style-sheet-name ss)))
-           (gnc:get-html-style-sheets)))))
+	(namer
+	 (gnc:make-string-option
+	  gnc:pagename-general gnc:optname-reportname "0a"
+	  (N_ "Enter a descriptive name for this report.")
+	  (G_ (gnc:report-template-name report-template))))
+	(stylesheet
+	 (gnc:make-multichoice-option
+	  gnc:pagename-general gnc:optname-stylesheet "0b"
+	  (N_ "Select a stylesheet for the report.")
+	  (string->symbol (N_ "Default"))
+	  (map
+	   (lambda (ss)
+	     (vector
+	      (string->symbol (gnc:html-style-sheet-name ss))
+	      (gnc:html-style-sheet-name ss)))
+	   (gnc:get-html-style-sheets)))))
 
     (let ((options (if (procedure? generator)
-                       (or (gnc:backtrace-if-exception generator)
-                           (begin
-                             (gnc:warn "BUG DETECTED: Scheme exception raised in "
-                                       "report options generator procedure named "
-                                       (procedure-name generator))
-                             (gnc:new-options)))
-                       (gnc:new-options))))
+		       (or (gnc:backtrace-if-exception generator)
+			   (begin
+			     (gnc:warn "BUG DETECTED: Scheme exception raised in "
+				       "report options generator procedure named "
+				       (procedure-name generator))
+			     (gnc:new-options)))
+		       (gnc:new-options))))
       (or (gnc:lookup-option options gnc:pagename-general gnc:optname-reportname)
-          (gnc:register-option options namer))
+	  (gnc:register-option options namer))
       (or (gnc:lookup-option options gnc:pagename-general gnc:optname-stylesheet)
-          (gnc:register-option options stylesheet))
+	  (gnc:register-option options stylesheet))
       options)))
 
 ;; A <report> represents an instantiation of a particular report type.
@@ -352,38 +354,38 @@ not found.")))
 (define (gnc:report-set-dirty?! report val)
   (gnc:report-set-dirty?-internal! report val)
   (let* ((template (hash-ref *gnc:_report-templates_* (gnc:report-type report)))
-         (cb (gnc:report-template-options-changed-cb template)))
+	 (cb (gnc:report-template-options-changed-cb template)))
     (if (and cb (procedure? cb))
-        (cb report))))
+	(cb report))))
 
 ;; gnc:make-report instantiates a report from a report-template.
 ;; The actual report is stored away in a hash-table -- only the id is returned.
 (define (gnc:make-report template-id . rest)
   (let* ((template-parent (gnc:report-template-parent-type
-                           (hash-ref *gnc:_report-templates_* template-id)))
-         (report-type (or template-parent template-id))
-         (custom-template (if template-parent template-id ""))
-         (r (make-report
-             report-type     ;; type
-             #f              ;; id
-             #f              ;; options
-             #t              ;; dirty
-             #f              ;; needs-save
-             #f              ;; editor-widget
-             #f              ;; ctext
-             custom-template ;; custom-template
-             ))
-         (template (hash-ref *gnc:_report-templates_* template-id)))
+			   (hash-ref *gnc:_report-templates_* template-id)))
+	 (report-type (or template-parent template-id))
+	 (custom-template (if template-parent template-id ""))
+	 (r (make-report
+	     report-type     ;; type
+	     #f              ;; id
+	     #f              ;; options
+	     #t              ;; dirty
+	     #f              ;; needs-save
+	     #f              ;; editor-widget
+	     #f              ;; ctext
+	     custom-template ;; custom-template
+	     ))
+	 (template (hash-ref *gnc:_report-templates_* template-id)))
     (let ((options (if (null? rest)
-                       (gnc:report-template-new-options template)
-                       (car rest))))
+		       (gnc:report-template-new-options template)
+		       (car rest))))
       (gnc:report-set-options! r options)
       (gnc:options-register-callback
        #f #f
        (lambda ()
-         (gnc:report-set-dirty?! r #t)
-         (let ((cb (gnc:report-template-options-changed-cb template)))
-           (if cb (cb r))))
+	 (gnc:report-set-dirty?! r #t)
+	 (let ((cb (gnc:report-template-options-changed-cb template)))
+	   (if cb (cb r))))
        options))
     (gnc:report-set-id! r (gnc-report-add r))
     (gnc:report-id r)))
@@ -394,67 +396,67 @@ not found.")))
  use gnc:restore-report-by-guid-with-custom-template instead.")
   (if options
       (let* ((r (make-report template-id id options #t #t #f #f ""))
-             (report-id (gnc-report-add r)))
-        (if (number? report-id)
-            (gnc:report-set-id! r report-id))
-        report-id)
+	     (report-id (gnc-report-add r)))
+	(if (number? report-id)
+	    (gnc:report-set-id! r report-id))
+	report-id)
       (begin
-        (gui-error-missing-template template-name)
-        #f)))
+	(gui-error-missing-template template-name)
+	#f)))
 
 (define (gnc:restore-report-by-guid-with-custom-template
-         id template-id template-name custom-template-id options)
+	 id template-id template-name custom-template-id options)
   (if options
       (let* ((r (make-report template-id id options #t #t #f #f custom-template-id))
-             (report-id (gnc-report-add r)))
-        (if (number? report-id)
-            (gnc:report-set-id! r report-id))
-        report-id)
+	     (report-id (gnc-report-add r)))
+	(if (number? report-id)
+	    (gnc:report-set-id! r report-id))
+	report-id)
       (begin
-        (gui-error-missing-template template-name)
-        #f)))
+	(gui-error-missing-template template-name)
+	#f)))
 
 (define (gnc:make-report-options template-id)
   (let ((template (hash-ref *gnc:_report-templates_* template-id)))
     (and template
-         (gnc:report-template-new-options template))))
+	 (gnc:report-template-new-options template))))
 
 ;; A convenience wrapper to get the report-template's export types from
 ;; an instantiated report.
 (define (gnc:report-export-types report)
   (let ((template (hash-ref *gnc:_report-templates_*
-                            (gnc:report-type report))))
+			    (gnc:report-type report))))
     (and template
-         (gnc:report-template-export-types template))))
+	 (gnc:report-template-export-types template))))
 
 ;; A convenience wrapper to get the report-template's export thunk from
 ;; an instantiated report.
 (define (gnc:report-export-thunk report)
   (let ((template (hash-ref *gnc:_report-templates_*
-                            (gnc:report-type report))))
+			    (gnc:report-type report))))
     (and template
-         (gnc:report-template-export-thunk template))))
+	 (gnc:report-template-export-thunk template))))
 
 (define (gnc:report-menu-name report)
   (let ((template (hash-ref *gnc:_report-templates_*
-                            (gnc:report-type report))))
+			    (gnc:report-type report))))
     (and template
-         (or (gnc:report-template-menu-name template)
-             (gnc:report-name report)))))
+	 (or (gnc:report-template-menu-name template)
+	     (gnc:report-name report)))))
 
 (define (gnc:report-name report)
   (let* ((opt (gnc:report-options report)))
     (and opt
-         (gnc:option-value
-          (gnc:lookup-option opt gnc:pagename-general gnc:optname-reportname)))))
+	 (gnc:option-value
+	  (gnc:lookup-option opt gnc:pagename-general gnc:optname-reportname)))))
 
 (define (gnc:report-stylesheet report)
   (gnc:html-style-sheet-find
    (symbol->string (gnc:option-value
-                    (gnc:lookup-option
-                     (gnc:report-options report)
-                     gnc:pagename-general
-                     gnc:optname-stylesheet)))))
+		    (gnc:lookup-option
+		     (gnc:report-options report)
+		     gnc:pagename-general
+		     gnc:optname-stylesheet)))))
 
 (define (gnc:report-set-stylesheet! report stylesheet)
   (gnc:option-set-value
@@ -490,7 +492,7 @@ not found.")))
 ;; pairs whose cars = guid <string> and cdrs = report-template <record>
 (define (gnc:custom-report-templates-list)
   (filter (compose gnc:report-template-parent-type cdr)
-          (hash-map->list cons *gnc:_report-templates_*)))
+	  (hash-map->list cons *gnc:_report-templates_*)))
 
 ;; This function should be called right before changing a custom-template's name
 ;; to test if the new name is unique among the existting custom reports.
@@ -498,21 +500,21 @@ not found.")))
 (define (gnc:report-template-has-unique-name? templ-guid new-name)
   (or (not new-name)
       (not (any
-            (lambda (tmpl)
-              (and (not (equal? (car tmpl) templ-guid))
-                   (equal? (gnc:report-template-name (cdr tmpl)) new-name)))
-            (gnc:custom-report-templates-list)))))
+	    (lambda (tmpl)
+	      (and (not (equal? (car tmpl) templ-guid))
+		   (equal? (gnc:report-template-name (cdr tmpl)) new-name)))
+	    (gnc:custom-report-templates-list)))))
 
 ;; Generate a unique custom template name using the given string as a base
 ;; If this string already exists as a custom template name, a
 ;; number will be appended to it.
 (define (gnc:report-template-make-unique-name new-name)
   (let loop ((name new-name)
-             (counter 1))
+	     (counter 1))
     (if (gnc:report-template-has-unique-name? #f name)
-        name
-        (loop (string-append new-name (number->string counter))
-              (1+ counter)))))
+	name
+	(loop (string-append new-name (number->string counter))
+	      (1+ counter)))))
 
 
 ;; Load and save functions
@@ -523,10 +525,10 @@ not found.")))
   ;; clean up the options if necessary.  this is only needed
   ;; in special cases.
   (let* ((report-type (gnc:report-type report))
-         (template (hash-ref *gnc:_report-templates_* report-type))
-         (thunk (gnc:report-template-options-cleanup-cb template)))
+	 (template (hash-ref *gnc:_report-templates_* report-type))
+	 (thunk (gnc:report-template-options-cleanup-cb template)))
     (if thunk
-        (thunk report)))
+	(thunk report)))
 
   ;; save them
   (string-append
@@ -550,78 +552,78 @@ not found.")))
 (define (gnc:report-serialize-embedded embedded-reports)
   (let* ((result-string ""))
     (if embedded-reports
-        (begin
-          (for-each
-           (lambda (subreport-id)
-             (let* ((subreport (gnc-report-find subreport-id))
-                    (subreport-type (gnc:report-type subreport))
-                    (subreport-template (hash-ref *gnc:_report-templates_* subreport-type))
-                    (subreport-template-name (gnc:report-template-name subreport-template))
-                    (thunk (gnc:report-template-options-cleanup-cb subreport-template)))
-               ;; clean up the options if necessary.  this is only needed
-               ;; in special cases.
-               (if thunk
-                   (thunk subreport))
-               ;; save them
-               (set! result-string
-                 (string-append
-                  result-string
-                  "\n      ;;;; Options for embedded report\n"
-                  "      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
-                  (format #f "      ;; options for report ~S\n" (gnc:report-name subreport))
-                  (format #f "      (let ((options (gnc:report-template-new-options/report-guid ~S ~S)))"
-                          subreport-type
-                          subreport-template-name)
-                  (gnc:generate-restore-forms (gnc:report-options subreport) "options")
-                  (format #f "\n        (set! new-embedded-report-ids\n          (append\n            new-embedded-report-ids\n              (list (gnc:restore-report-by-guid-with-custom-template #f ~S ~S ~S options))\n          )\n        )\n"
-                          subreport-type
-                          subreport-template-name
-                          (gnc:report-custom-template subreport))
-                  "      )\n"))))
-           embedded-reports)
-          ;;(set! result-string (string-append result-string (gnc:update-section-general)))
-          (set! result-string
-            (string-append
-             result-string
-             "\n"
-             "      ;;;; Update Section: __general\n"
-             "      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
-             "      (let*\n"
-             "        (\n"
-             "          (option (gnc:lookup-option options \"__general\" \"report-list\"))\n"
-             "          (saved-report-list (gnc:option-value option))\n"
-             "        )\n"
-             "        (\n"
-             "          (lambda (option)\n"
-             "            (if option ((gnc:option-setter option) (map (lambda (x y) (cons x (cdr y))) new-embedded-report-ids saved-report-list)))\n"
-             "          )\n"
-             "          option\n"
-             "        )\n"
-             "      )\n"))))
+	(begin
+	  (for-each
+	   (lambda (subreport-id)
+	     (let* ((subreport (gnc-report-find subreport-id))
+		    (subreport-type (gnc:report-type subreport))
+		    (subreport-template (hash-ref *gnc:_report-templates_* subreport-type))
+		    (subreport-template-name (gnc:report-template-name subreport-template))
+		    (thunk (gnc:report-template-options-cleanup-cb subreport-template)))
+	       ;; clean up the options if necessary.  this is only needed
+	       ;; in special cases.
+	       (if thunk
+		   (thunk subreport))
+	       ;; save them
+	       (set! result-string
+		 (string-append
+		  result-string
+		  "\n      ;;;; Options for embedded report\n"
+		  "      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
+		  (format #f "      ;; options for report ~S\n" (gnc:report-name subreport))
+		  (format #f "      (let ((options (gnc:report-template-new-options/report-guid ~S ~S)))"
+			  subreport-type
+			  subreport-template-name)
+		  (gnc:generate-restore-forms (gnc:report-options subreport) "options")
+		  (format #f "\n        (set! new-embedded-report-ids\n          (append\n            new-embedded-report-ids\n              (list (gnc:restore-report-by-guid-with-custom-template #f ~S ~S ~S options))\n          )\n        )\n"
+			  subreport-type
+			  subreport-template-name
+			  (gnc:report-custom-template subreport))
+		  "      )\n"))))
+	   embedded-reports)
+	  ;;(set! result-string (string-append result-string (gnc:update-section-general)))
+	  (set! result-string
+	    (string-append
+	     result-string
+	     "\n"
+	     "      ;;;; Update Section: __general\n"
+	     "      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
+	     "      (let*\n"
+	     "        (\n"
+	     "          (option (gnc:lookup-option options \"__general\" \"report-list\"))\n"
+	     "          (saved-report-list (gnc:option-value option))\n"
+	     "        )\n"
+	     "        (\n"
+	     "          (lambda (option)\n"
+	     "            (if option ((gnc:option-setter option) (map (lambda (x y) (cons x (cdr y))) new-embedded-report-ids saved-report-list)))\n"
+	     "          )\n"
+	     "          option\n"
+	     "        )\n"
+	     "      )\n"))))
     result-string))
 
 (define (gnc:report-template-serialize-internal name type templ-name options guid)
   (let* ((embedded-serialized (gnc:report-serialize-embedded (gnc:report-embedded-list options)))
-         (result (string-append
-                  ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
-                  (format #f ";; Options for saved report ~S, based on template ~S\n"
-                          name type)
-                  (format
-                   #f "(let ()\n  (define (options-gen)\n    (let\n         (\n           (options (gnc:report-template-new-options/report-guid ~S ~S))\n           (new-embedded-report-ids '()) ;; only used with Multicolumn View Reports\n         )"
-                   type templ-name)
-                  (gnc:generate-restore-forms options "options")
-                  (if embedded-serialized
-                      embedded-serialized
-                      "")
-                  "\n      options\n    )\n  )\n"
-                  (format
-                   #f "  (gnc:define-report \n    'version 1\n    'name ~S\n    'report-guid ~S\n    'parent-type ~S\n    'options-generator options-gen\n    'menu-path (list gnc:menuname-custom)\n    'renderer (gnc:report-template-renderer/report-guid ~S ~S)\n  )\n)\n\n"
-                   name
-                   (or guid
-                       (guid-new-return)) ;; when saving a report, we need to create a guid for it for later reloading
-                   type
-                   type
-                   templ-name))))
+	 (result (string-append
+		  ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
+		  (format #f ";; Options for saved report ~S, based on template ~S\n"
+			  name type)
+		  (format
+		   #f "(let ()\n  (define (options-gen)\n    (let\n         (\n           (options (gnc:report-template-new-options/report-guid ~S ~S))\n           (new-embedded-report-ids '()) ;; only used with Multicolumn View Reports\n         )"
+		   type templ-name)
+		  (gnc:generate-restore-forms options "options")
+		  (if embedded-serialized
+		      embedded-serialized
+		      "")
+		  "\n      options\n    )\n  )\n"
+		  (format
+		   #f "  (gnc:define-report \n    'version 1\n    'name ~S\n    'report-guid ~S\n    'parent-type ~S\n    'options-generator options-gen\n    'menu-path (list gnc:menuname-custom)\n    'renderer (gnc:report-template-renderer/report-guid ~S ~S)\n  )\n)\n\n"
+		   name
+		   (or guid
+		       (guid-new-return)) ;; when saving a report, we need to create a guid for it for later reloading
+		   type
+		   type
+		   templ-name))))
     (gnc:debug result)
     result))
 
@@ -631,16 +633,16 @@ not found.")))
   ;; clean up the options if necessary.  this is only needed
   ;; in special cases.
   (let* ((template (hash-ref *gnc:_report-templates_* (gnc:report-type report)))
-         (thunk (gnc:report-template-options-cleanup-cb template)))
+	 (thunk (gnc:report-template-options-cleanup-cb template)))
     (if thunk
-        (thunk report)))
+	(thunk report)))
 
   ;; save them
   (let* ((name (gnc:report-template-make-unique-name (gnc:report-name report)))
-         (type (gnc:report-type report))
-         (templ-name (gnc:report-template-name
-                      (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
-         (options (gnc:report-options report)))
+	 (type (gnc:report-type report))
+	 (templ-name (gnc:report-template-name
+		      (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
+	 (options (gnc:report-options report)))
     (gnc:report-template-serialize-internal name type templ-name options #f)))
 
 ;; Generate guile code required to recreate a report template
@@ -651,11 +653,11 @@ not found.")))
 ;; instatiated reports in the saved reports file...
 (define (gnc:report-template-serialize report-template)
   (let* ((name (gnc:report-template-name report-template))
-         (type (gnc:report-template-parent-type report-template))
-         (templ-name (gnc:report-template-name
-                      (hash-ref *gnc:_report-templates_* type)))
-         (options (gnc:report-template-new-options report-template))
-         (guid (gnc:report-template-report-guid report-template)))
+	 (type (gnc:report-template-parent-type report-template))
+	 (templ-name (gnc:report-template-name
+		      (hash-ref *gnc:_report-templates_* type)))
+	 (options (gnc:report-template-new-options report-template))
+	 (guid (gnc:report-template-report-guid report-template)))
     (gnc:report-template-serialize-internal name type templ-name options guid)))
 
 ;; Convert a report into a report template and save this template in the savefile
@@ -668,44 +670,44 @@ not found.")))
 (define (gnc:report-to-template report overwrite?)
   ;; This implements the Save Report Configuration tasks
   (let* ((custom-template-id (gnc:report-custom-template report))
-         (overwrite-ok? (and (gnc:report-template-is-custom/template-guid?
-                              custom-template-id)
-                             overwrite?))
-         ;; Generate a serialized report-template with a random guid
-         (saved-form (gnc:report-template-serialize-from-report report))
-         ;; Immediately evaluate the serialized report template to
-         ;; - check if it's error free and can be deserialized
-         ;; - load it into the runtime for immediate use by the user
-         ;; (Bug #342206)
-         (save-result (eval-string saved-form)))
+	 (overwrite-ok? (and (gnc:report-template-is-custom/template-guid?
+			      custom-template-id)
+			     overwrite?))
+	 ;; Generate a serialized report-template with a random guid
+	 (saved-form (gnc:report-template-serialize-from-report report))
+	 ;; Immediately evaluate the serialized report template to
+	 ;; - check if it's error free and can be deserialized
+	 ;; - load it into the runtime for immediate use by the user
+	 ;; (Bug #342206)
+	 (save-result (eval-string saved-form)))
 
     (and (record? save-result)
-         (begin
-           ;; If it's ok to overwrite the old template, delete it now.
-           (if overwrite-ok?
-               (let ((templ-name
-                      (gnc:report-template-name
-                       (hash-ref *gnc:_report-templates_* custom-template-id))))
-                 ;; We're overwriting, which needs some additional steps
-                 ;; 1. Remove the newly generated template from the template list again
-                 (hash-remove! *gnc:_report-templates_*
-                               (gnc:report-template-report-guid save-result))
-                 ;; 2. We still have the template record available
-                 ;; though, so adapt it to the template we want to
-                 ;; override (ie update guid and name)
-                 (gnc:report-template-set-report-guid! save-result custom-template-id)
-                 (gnc:report-template-set-name save-result templ-name)
-                 ;; 3. Overwrite the template with the new one
-                 (hash-set! *gnc:_report-templates_* custom-template-id save-result)))
+	 (begin
+	   ;; If it's ok to overwrite the old template, delete it now.
+	   (if overwrite-ok?
+	       (let ((templ-name
+		      (gnc:report-template-name
+		       (hash-ref *gnc:_report-templates_* custom-template-id))))
+		 ;; We're overwriting, which needs some additional steps
+		 ;; 1. Remove the newly generated template from the template list again
+		 (hash-remove! *gnc:_report-templates_*
+			       (gnc:report-template-report-guid save-result))
+		 ;; 2. We still have the template record available
+		 ;; though, so adapt it to the template we want to
+		 ;; override (ie update guid and name)
+		 (gnc:report-template-set-report-guid! save-result custom-template-id)
+		 (gnc:report-template-set-name save-result templ-name)
+		 ;; 3. Overwrite the template with the new one
+		 (hash-set! *gnc:_report-templates_* custom-template-id save-result)))
 
-           ;; Regardless of how we got here, we now have a new template to write
-           ;; so let's write it
-           (and (gnc:save-all-reports)
-                (let ((templ-guid (gnc:report-template-report-guid save-result)))
-                  ;; Indicate the report was instantiated from the new template
-                  (gnc:report-set-custom-template! report templ-guid)
-                  ;; Inform the calling function of the new template's guid
-                  templ-guid))))))
+	   ;; Regardless of how we got here, we now have a new template to write
+	   ;; so let's write it
+	   (and (gnc:save-all-reports)
+		(let ((templ-guid (gnc:report-template-report-guid save-result)))
+		  ;; Indicate the report was instantiated from the new template
+		  (gnc:report-set-custom-template! report templ-guid)
+		  ;; Inform the calling function of the new template's guid
+		  templ-guid))))))
 
 ;; Convert a report into a new report template and add this template to the save file
 (define (gnc:report-to-template-new report)
@@ -728,11 +730,11 @@ not found.")))
   (gnc-saved-reports-backup)
   (gnc-saved-reports-write-to-file "" #t)
   (every identity
-         (map
-          (lambda (p)
-            (gnc:debug "saving report " (car p))
-            (gnc:report-template-save-to-savefile (cdr p)))
-          (gnc:custom-report-templates-list))))
+	 (map
+	  (lambda (p)
+	    (gnc:debug "saving report " (car p))
+	    (gnc:report-template-save-to-savefile (cdr p)))
+	  (gnc:custom-report-templates-list))))
 
 
 ;; gets the renderer from the report template;
@@ -743,21 +745,21 @@ not found.")))
 ;; the former requires further processing, the latter is just returned.
 (define (gnc:report-render-html report headers?)
   (if (and (not (gnc:report-dirty? report))
-           (gnc:report-ctext report))
+	   (gnc:report-ctext report))
       (gnc:report-ctext report)
       (let ((template (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
-        (and template
-             (let* ((renderer (gnc:report-template-renderer template))
-                    (stylesheet (gnc:report-stylesheet report))
-                    (doc (renderer report))
-                    (html (cond
-                           ((string? doc) doc)
-                           (else
-                            (gnc:html-document-set-style-sheet! doc stylesheet)
-                            (gnc:html-document-render doc headers?)))))
-               (gnc:report-set-ctext! report html) ;; cache the html
-               (gnc:report-set-dirty?! report #f)  ;; mark it clean
-               html)))))
+	(and template
+	     (let* ((renderer (gnc:report-template-renderer template))
+		    (stylesheet (gnc:report-stylesheet report))
+		    (doc (renderer report))
+		    (html (cond
+			   ((string? doc) doc)
+			   (else
+			    (gnc:html-document-set-style-sheet! doc stylesheet)
+			    (gnc:html-document-render doc headers?)))))
+	       (gnc:report-set-ctext! report html) ;; cache the html
+	       (gnc:report-set-dirty?! report #f)  ;; mark it clean
+	       html)))))
 
 ;; render report. will return a 2-element list: either (list html #f)
 ;; where html is the report html string, or (list #f captured-error)
@@ -771,7 +773,7 @@ not found.")))
 (define (gnc:report-run id)
   (issue-deprecation-warning "gnc:report-run is deprecated. use gnc:render-report instead.")
   (let ((report (gnc-report-find id))
-        (html #f))
+	(html #f))
     (gnc-set-busy-cursor '() #t)
     (gnc:backtrace-if-exception
      (lambda ()
@@ -791,17 +793,17 @@ not found.")))
 (define (gnc:report-embedded-list options)
   (let* ((option (gnc:lookup-option options "__general" "report-list")))
     (and option
-         (let ((opt-value (gnc:option-value option)))
-           (map car opt-value)))))
+	 (let ((opt-value (gnc:option-value option)))
+	   (map car opt-value)))))
 
 ;; delete an existing report from the hash table and then call to
 ;; resave the saved-reports file... report is gone
 (define (gnc:delete-report template-guid)
   (if (hash-ref *gnc:_report-templates_* template-guid)
       (begin
-        (gnc:debug "Deleting report " template-guid)
-        (hash-remove! *gnc:_report-templates_* template-guid)
-        (gnc:save-all-reports))))
+	(gnc:debug "Deleting report " template-guid)
+	(hash-remove! *gnc:_report-templates_* template-guid)
+	(gnc:save-all-reports))))
 
 ;; rename an existing report from the hash table and then
 ;; resave the saved-reports file
@@ -820,12 +822,12 @@ not found.")))
   (for-each
    (lambda (template)
      (format port "* ~a ~a\n"
-             (if (gnc:report-template-parent-type template) "C" " ")
-             (gnc:report-template-name template)))
+	     (if (gnc:report-template-parent-type template) "C" " ")
+	     (gnc:report-template-name template)))
    (sort (hash-fold (lambda (k v p) (if (pred? v) (cons v p) p)) '()
-                    *gnc:_report-templates_*)
-         (lambda (a b) (gnc:string-locale<? (gnc:report-template-name a)
-                                            (gnc:report-template-name b))))))
+		    *gnc:_report-templates_*)
+	 (lambda (a b) (gnc:string-locale<? (gnc:report-template-name a)
+					    (gnc:report-template-name b))))))
 
 (define (stderr-log tmpl . args)
   (apply format (current-error-port) tmpl args)
@@ -833,12 +835,12 @@ not found.")))
 
 (define (template-export report template export-type dry-run?)
   (let* ((report-guid (gnc:report-template-report-guid template))
-         (parent-template-guid (gnc:report-template-parent-type template))
-         (template (if parent-template-guid
-                       (hash-ref *gnc:_report-templates_* parent-template-guid)
-                       template))
-         (export-thunk (gnc:report-template-export-thunk template))
-         (export-types (gnc:report-template-export-types template)))
+	 (parent-template-guid (gnc:report-template-parent-type template))
+	 (template (if parent-template-guid
+		       (hash-ref *gnc:_report-templates_* parent-template-guid)
+		       template))
+	 (export-thunk (gnc:report-template-export-thunk template))
+	 (export-types (gnc:report-template-export-types template)))
 
     (cond
      ((not export-thunk)
@@ -847,15 +849,15 @@ not found.")))
       (stderr-log "Use -R show to describe report\n"))
      ((not (assoc export-type export-types))
       (stderr-log "Export-type disallowed: ~a. Allowed types: ~a\n"
-                  export-type (string-join (map car export-types) ", ")))
+		  export-type (string-join (map car export-types) ", ")))
      (dry-run? #t)
      (else
       (display "Running export..." (current-error-port))
       (let ((output (export-thunk
-                     (gnc-report-find (gnc:make-report report-guid))
-                     (assoc-ref export-types export-type))))
-        (display "done!\n" (current-error-port))
-        output)))))
+		     (gnc-report-find (gnc:make-report report-guid))
+		     (assoc-ref export-types export-type))))
+	(display "done!\n" (current-error-port))
+	output)))))
 
 (define (reportname->templates report)
   (or (and=> (gnc:find-report-template report) list)
@@ -875,23 +877,23 @@ not found.")))
      (else
       (for-each
        (lambda (template)
-         (let* ((options-gen (gnc:report-template-options-generator template))
-                (parent-guid (gnc:report-template-parent-type template))
-                (parent-template (and parent-guid
-                                      (hash-ref *gnc:_report-templates_* parent-guid)))
-                (export-types (gnc:report-template-export-types
-                               (or parent-template template))))
-           (format port "\n* name: ~a\n  guid: ~a\n~a~a~a"
-                   (gnc:report-template-name template)
-                   (gnc:report-template-report-guid template)
-                   (if parent-template
-                       (format #f "  parent-template: ~a\n"
-                               (gnc:report-template-name parent-template))
-                       "")
-                   (if export-types
-                       (format #f "  export-types: ~a\n"
-                               (string-join (map car export-types) ", ")) "")
-                   (gnc:html-render-options-changed (options-gen) #t))))
+	 (let* ((options-gen (gnc:report-template-options-generator template))
+		(parent-guid (gnc:report-template-parent-type template))
+		(parent-template (and parent-guid
+				      (hash-ref *gnc:_report-templates_* parent-guid)))
+		(export-types (gnc:report-template-export-types
+			       (or parent-template template))))
+	   (format port "\n* name: ~a\n  guid: ~a\n~a~a~a"
+		   (gnc:report-template-name template)
+		   (gnc:report-template-report-guid template)
+		   (if parent-template
+		       (format #f "  parent-template: ~a\n"
+			       (gnc:report-template-name parent-template))
+		       "")
+		   (if export-types
+		       (format #f "  export-types: ~a\n"
+			       (string-join (map car export-types) ", ")) "")
+		   (gnc:html-render-options-changed (options-gen) #t))))
        templates)))))
 
 ;; In: report - string matching reportname
@@ -911,7 +913,7 @@ not found.")))
       (stderr-log "\n"))
 
      (export-type (template-export report (car templates)
-                                   export-type #t))
+				   export-type #t))
      (else #t))))
 
 ;; In: report - string matching reportname

@@ -2,7 +2,7 @@
 ;;  report-menus.scm
 ;;  code to initialize the report menus
 ;;
-;;  Copyright (c) 2001 Linux Developers Group, Inc. 
+;;  Copyright (c) 2001 Linux Developers Group, Inc.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This program is free software; you can redistribute it and/or
@@ -45,27 +45,27 @@
   (gnc:report-templates-for-each
    (lambda (report-guid template)
      (let ((name (or (gnc:report-template-menu-name template)
-                     (gnc:report-template-name template))))
+		     (gnc:report-template-name template))))
        (set! *template-items* (cons (cons name template) *template-items*)))))
 
   (for-each
    (lambda (item)
      (let* ((menu-name (car item))
-            (template (cdr item))
-            (report-guid (gnc:report-template-report-guid template))
-            (menu-tip (or (gnc:report-template-menu-tip template)
-                          (format #f (G_ "Display the ~a report") (G_ menu-name))))
-            (menu-path (append (list gnc:menuname-reports)
-                               (or (gnc:report-template-menu-path template)
-                                   '()))))
+	    (template (cdr item))
+	    (report-guid (gnc:report-template-report-guid template))
+	    (menu-tip (or (gnc:report-template-menu-tip template)
+			  (format #f (G_ "Display the ~a report") (G_ menu-name))))
+	    (menu-path (append (list gnc:menuname-reports)
+			       (or (gnc:report-template-menu-path template)
+				   '()))))
        (gnc-add-scm-extension
-        (gnc:make-menu-item
-         menu-name report-guid menu-tip menu-path
-         (lambda (window)
-           (gnc-main-window-open-report
-            (gnc:make-report report-guid) window))))))
+	(gnc:make-menu-item
+	 menu-name report-guid menu-tip menu-path
+	 (lambda (window)
+	   (gnc-main-window-open-report
+	    (gnc:make-report report-guid) window))))))
    (sort (filter (compose gnc:report-template-in-menu? cdr) *template-items*)
-         (lambda (a b) (gnc:string-locale>? (car a) (car b))))))
+	 (lambda (a b) (gnc:string-locale>? (car a) (car b))))))
 
 (define (gnc:report-menu-setup)
   (define asset-liability-menu
@@ -84,6 +84,8 @@
     (gnc:make-menu gnc:menuname-taxes (list gnc:menuname-reports)))
   (define business-menu
     (gnc:make-menu gnc:menuname-business-reports (list gnc:menuname-reports)))
+  (define property-mgmt-menu
+    (gnc:make-menu gnc:menuname-property-mgmt (list gnc:menuname-reports)))
 
   (gnc-add-scm-extension
    (gnc:make-menu-item
@@ -103,6 +105,7 @@
   (gnc-add-scm-extension experimental-menu)
   (gnc-add-scm-extension multicolumn-menu)
   (gnc-add-scm-extension business-menu)
+  (gnc-add-scm-extension property-mgmt-menu)
 
   ;; run report-hook danglers
   (gnc-hook-run HOOK-REPORT '())
