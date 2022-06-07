@@ -174,16 +174,16 @@
       (if (pair? pair)
 	  (let ((type (car pair)))
 	    (cond
-	      ((eqv? type GNC-OWNER-CUSTOMER)
-	       (gncOwnerInitCustomer
+		 ((eqv? type GNC-OWNER-COOWNER)
+		  (gncOwnerInitCoOwner
 		option-value
-		(gncCustomerLookupFlip (cdr pair) (gnc-get-current-book)))
+		   (gncCoOwnerLookupFlip (cdr pair) (gnc-get-current-book)))
 	       option-value)
 
-	       ((eqv? type GNC-OWNER-VENDOR)
-		(gncOwnerInitVendor
+		((eqv? type GNC-OWNER-CUSTOMER)
+		 (gncOwnerInitCustomer
 		 option-value
-		 (gncVendorLookupFlip (cdr pair) (gnc-get-current-book)))
+		  (gncCustomerLookupFlip (cdr pair) (gnc-get-current-book)))
 		option-value)
 
 	       ((eqv? type GNC-OWNER-EMPLOYEE)
@@ -196,6 +196,12 @@
 		(gncOwnerInitJob
 		 option-value
 		 (gncJobLookupFlip (cdr pair) (gnc-get-current-book)))
+		option-value)
+
+	       ((eqv? type GNC-OWNER-VENDOR)
+		(gncOwnerInitVendor
+		 option-value
+		 (gncVendorLookupFlip (cdr pair) (gnc-get-current-book)))
 		option-value)
 
 	       (else '())))
