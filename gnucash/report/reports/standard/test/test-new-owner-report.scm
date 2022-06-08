@@ -62,16 +62,25 @@
 
 (define structure
   (list "Root" (list (cons 'type ACCT-TYPE-ASSET)
+		     (cons 'commodity (get-currency "EUR"))
                      (cons 'commodity (get-currency "USD")))
+	(list "Asset"
+	      (list "Bank-EUR"))
         (list "Asset"
               (list "Bank-USD"))
         (list "VAT"
               (list "VAT-on-Purchases")
               (list "VAT-on-Sales" (list (cons 'type ACCT-TYPE-LIABILITY))))
+	(list "Income" (list (cons 'type ACCT-TYPE-INCOME))
+	      (list "Income-EUR"))
         (list "Income" (list (cons 'type ACCT-TYPE-INCOME))
               (list "Income-USD"))
+	(list "A/Receivable" (list (cons 'type ACCT-TYPE-RECEIVABLE))
+	      (list "AR-EUR"))
         (list "A/Receivable" (list (cons 'type ACCT-TYPE-RECEIVABLE))
               (list "AR-USD"))
+	(list "A/Payable" (list (cons 'type ACCT-TYPE-PAYABLE))
+	      (list "AP-EUR")))
         (list "A/Payable" (list (cons 'type ACCT-TYPE-PAYABLE))
               (list "AP-USD"))))
 
@@ -84,13 +93,26 @@
          (get-acct (lambda (name)
                      (or (assoc-ref account-alist name)
                          (error "invalid account name" name))))
+	 (AR (get-acct "AR-EUR"))
          (AR (get-acct "AR-USD"))
+	 (Bank (get-acct "Bank-EUR"))
          (Bank (get-acct "Bank-USD"))
          (YEAR (gnc:time64-get-year (gnc:get-today))))
 
     (define owner-1
-      (let* ((cust-1 (gncCustomerCreate (gnc-get-current-book)))
+      (let* ((coowner-1 (gncCoOwnerCreate (gnc-get-current-book)))
              (owner-1 (gncOwnerNew)))
+	(gncCoOwnerSetID coowner-1 "coowner-1-id")
+	(gncCoOwnerSetName coowner-1 "coowner-1-name")
+	(gncCoOwnerSetNotes coowner-1 "coowner-1-notes")
+	(gncCoOwnerSetCurrency coowner-1 (get-currency "EUR"))
+	(gncCoOwnerSetTaxIncluded coowner-1 1)
+	(gncOwnerInitCoOwner owner-1 coowner-1)
+	owner-1))
+
+    (define owner-2
+      (let* ((cust-1 (gncCustomerCreate (gnc-get-current-book)))
+	     (owner-2 (gncOwnerNew)))
         (gncCustomerSetID cust-1 "cust-1-id")
         (gncCustomerSetName cust-1 "cust-1-name")
         (gncCustomerSetNotes cust-1 "cust-1-notes")
@@ -99,13 +121,13 @@
         (gncOwnerInitCustomer owner-1 cust-1)
         owner-1))
 
-    ;; inv-1 is generated for a customer
+    ;; inv-1 is generated for a coowner
     (define inv-1
       (let ((inv-1 (gncInvoiceCreate (gnc-get-current-book))))
         (gncInvoiceSetOwner inv-1 owner-1)
         (gncInvoiceSetNotes inv-1 "inv-1-notes")
         (gncInvoiceSetBillingID inv-1 "inv-1-billing-id")
-        (gncInvoiceSetCurrency inv-1 (get-currency "USD"))
+	(gncInvoiceSetCurrency inv-1 (get-currency "EUR"))
         inv-1))
 
     (define (make-entry amt)
@@ -114,7 +136,7 @@
         (gncEntrySetDescription entry "entry-desc")
         (gncEntrySetAction entry "entry-action")
         (gncEntrySetNotes entry "entry-notes")
-        (gncEntrySetInvAccount entry (get-acct "Income-USD"))
+	(gncEntrySetInvAccount entry (get-acct "Income-EUR"))
         (gncEntrySetDocQuantity entry 1 #f)
         (gncEntrySetInvPrice entry amt)
         entry))
@@ -123,7 +145,7 @@
       (let ((inv (gncInvoiceCopy inv-1)))
         (gncInvoiceAddEntry inv (make-entry amount))
         (gncInvoicePostToAccount inv
-                                 (get-acct "AR-USD")         ;post-to acc
+				 (get-acct "AR-EUR")         ;post-to acc
                                  date                        ;posted-date
                                  date                        ;due-date
                                  desc                        ;desc
@@ -155,7 +177,81 @@
         (xaccTransCommitEdit txn)
         txn))
 
-    (define (default-testing-options owner account)
+    (define (testing-options-coowner owner account)
+      ;; owner-report will run from 1.1.2010 to 1.7.2010
+      (let ((options (gnc:make-report-options uuid)))
+	(set-option! options "General" "CoOwner" owner)
+	(set-option! options "General" "From"
+		     (cons 'absolute (gnc-dmy2time64 1 1 2010)))
+	(set-option! options "General" "To"
+		     (cons 'absolute (gnc-dmy2time64 1 7 2011)))
+	(set-option! options "Display Columns" "Transaction Links" 'detailed)
+	options))
+
+    ;; inv €10,55
+    (add-invoice (gnc-dmy2time64 13 05 2010) 27/4 "€10.55")
+
+    ;; inv $50.99, 2 payments
+    (let ((inv (add-invoice (gnc-dmy2time64 13 01 2010) 23/2 "$50.99")))
+      (gncInvoiceApplyPayment inv '() Bank 3/2 1
+			      (gnc-dmy2time64 18 03 2010)
+			      "inv >90 payment" "pay only $3.50")
+
+      (gncInvoiceApplyPayment inv '() Bank 2 1
+			      (gnc-dmy2time64 20 03 2010)
+			      "inv >90 payment" "pay only $5.00"))
+
+    ;; CN €3.00
+    (let ((new-cn (add-invoice (gnc-dmy2time64 22 06 2010) -3 "CN")))
+      (gncInvoiceSetIsCreditNote new-cn #t))
+
+    (display "new-owner-report tests:\n")
+    (test-begin "new-owner-report")
+    (let* ((options (testing-options-coowner owner-1 (get-acct "AR-EUR")))
+	   (sxml (options->sxml options "new-owner-report basic")))
+      (test-equal "line 1"
+	'("2010-01-13" "2010-01-13" "Invoice" "€50,99" "€50,99" "2010-03-18"
+	  "Payment" "inv >90 payment" "€50,99" "pay only €3,50" "-€3,50" "-€3,50")
+	((sxpath `(html body (table 3) tbody (tr 1) // *text*)) sxml))
+      (test-equal "line 2"
+	'("2010-03-20" "Payment" "inv >90 payment" "pay only €5.00" "-€5.00" "-€5.00")
+	((sxpath `(// (table 3) // tbody // (tr 2) // *text*)) sxml))
+      )
+    (test-end "new-owner-report")))
+
+    ;; inv-2 is generated for a customer
+    (define inv-2
+      (let ((inv-2 (gncInvoiceCreate (gnc-get-current-book))))
+	(gncInvoiceSetOwner inv-2 owner-2)
+	(gncInvoiceSetNotes inv-2 "inv-2-notes")
+	(gncInvoiceSetBillingID inv-2 "inv-2-billing-id")
+	(gncInvoiceSetCurrency inv-2 (get-currency "USD"))
+	inv-2))
+
+    (define (make-entry amt)
+      (let ((entry (gncEntryCreate (gnc-get-current-book))))
+	(gncEntrySetDateGDate entry (time64-to-gdate (current-time)))
+	(gncEntrySetDescription entry "entry-desc")
+	(gncEntrySetAction entry "entry-action")
+	(gncEntrySetNotes entry "entry-notes")
+	(gncEntrySetInvAccount entry (get-acct "Income-USD"))
+	(gncEntrySetDocQuantity entry 1 #f)
+	(gncEntrySetInvPrice entry amt)
+	entry))
+
+    (define (add-invoice date amount desc)
+      (let ((inv (gncInvoiceCopy inv-2)))
+	(gncInvoiceAddEntry inv (make-entry amount))
+	(gncInvoicePostToAccount inv
+				 (get-acct "AR-USD")         ;post-to acc
+				 date                        ;posted-date
+				 date                        ;due-date
+				 desc                        ;desc
+				 #t                          ;acc-splits?
+				 #f)                         ;autopay
+	inv))
+
+    (define (testing-options-customer owner account)
       ;; owner-report will run from 1.1.1980 to 1.7.1980
       (let ((options (gnc:make-report-options uuid)))
         (set-option! options "General" "Customer" owner)
@@ -225,7 +321,7 @@
 
     (display "new-owner-report tests:\n")
     (test-begin "new-customer-report")
-    (let* ((options (default-testing-options owner-1 (get-acct "AR-USD")))
+    (let* ((options (testing-options-customer owner-2 (get-acct "AR-USD")))
            (sxml (options->sxml options "new-customer-report basic")))
       (test-equal "line 1"
         '("1980-01-13" "1980-01-13" "Invoice" "$11.50" "$11.50" "1980-03-18"
