@@ -4,7 +4,7 @@
 # Tor Harald Thorland <linux@strigen.com>, 2005-2006.
 # Sigve Indregard <sigve.indregard@gmail.com>, 2006.
 # John Erling Blad <jeblad@gmail.com>, 2018, 2020
-# Allan Nordhøy <epost@anotheragency.no>, 2020, 2021.
+# Allan Nordhøy <epost@anotheragency.no>, 2020, 2021, 2022.
 # Petter Reinholdtsen <pere-weblate@hungry.com>, 2022.
 msgid ""
 msgstr ""
@@ -12,8 +12,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-04-21 12:07+0000\n"
-"Last-Translator: Petter Reinholdtsen <pere-weblate@hungry.com>\n"
+"PO-Revision-Date: 2022-05-31 02:16+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/nb_NO/>\n"
 "Language: nb\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.13-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -1546,10 +1546,11 @@ msgid "Unable to change report configuration name."
 msgstr "Kunne ikke endre rapportoppsettsnavn."
 
 #: gnucash/gnome/dialog-custom-report.c:477
+#, fuzzy
 msgid ""
 "A saved report configuration with this name already exists, please choose "
 "another name."
-msgstr ""
+msgstr "En lagret rapport med dette navnet finnes allerede. Velg et annet navn."
 
 #: gnucash/gnome/dialog-custom-report.c:503
 #, fuzzy
@@ -9060,12 +9061,13 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 "Oversettelse til norsk bokmål av:\n"
+"Allan Nordhøy <epost@anotheragency.no>, 2021,2022\n"
 "John Erling Blad <jeblad@gmail.com>, 2018, 2020.\n"
 "Sigve Indregard <sigve.indregard@gmail.com>, 2006.\n"
 "Tor Harald Thorland <tortho@strigen.com>, 2005-2006.\n"
 "Kjartan Maraas <kmaraas@gnome.org>, 2000.\n"
 "\n"
-"Vennligst send en e-post dersom du har\n"
+"Send en e-post dersom du har\n"
 "kommentarer til oversettelsen."
 
 #: gnucash/gnome-utils/gnc-main-window.c:4741
