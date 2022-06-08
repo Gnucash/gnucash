@@ -6,7 +6,7 @@
 # Christian Stimming <stimming@tuhh.de>, 2001-2020.
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2007, 2009-2022.
 # Andreas Hentze <pictarus@gmx.de>, 2019
-# Joachim Wetzig <jo.wetzig@web.de>, 2019
+# Joachim Wetzig <jo.wetzig@web.de>, 2019, 2022.
 # Dmitriy Mangul <dimang.freetime@gmail.com>, 2017-2018
 # Mechtilde Stehmann <ooo@mechtilde.de>, 2014-2018.
 # quazgar <quazgar@posteo.de> 2017.
@@ -38,8 +38,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-05-19 17:16+0000\n"
-"Last-Translator: Jan Schneider <grimpeur78@gmail.com>\n"
+"PO-Revision-Date: 2022-05-30 21:19+0000\n"
+"Last-Translator: Joachim Wetzig <jo.wetzig@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -2216,8 +2216,14 @@ msgid_plural ""
 "There are %d invalid mappings,\n"
 "\n"
 "Would you like to remove them now?"
-msgstr[0] "Es gibt %d ungültige Zuordnung. Soll sie gelöscht werden?"
-msgstr[1] "Es gibt %d ungültige Zuordnungen. Sollen sie gelöscht werden?"
+msgstr[0] ""
+"Es gibt %d ungültige Zuordnung. \n"
+"\n"
+"Möchten Sie sie jetzt löschen?"
+msgstr[1] ""
+"Es gibt %d ungültige Zuordnungen. \n"
+"\n"
+"Möchten Sie sie jetzt löschen?"
 
 #: gnucash/gnome/dialog-imap-editor.c:368
 #, c-format
@@ -2730,6 +2736,7 @@ msgstr "Auftrag suchen"
 #: gnucash/gnome/window-reconcile2.c:1659 gnucash/gnome/window-reconcile.c:1835
 #: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
 #: gnucash/gnome-utils/gnc-file.c:1141
+#, fuzzy
 msgid "Open"
 msgstr "Öffnen"
 
@@ -2931,7 +2938,7 @@ msgid ""
 "payment"
 msgstr ""
 "Die ausgewählte Buchung hat keine Teile, die einer Zahlung zugewiesen werden "
-"kann."
+"können."
 
 #: gnucash/gnome/dialog-payment.c:1624
 msgid ""
@@ -2940,8 +2947,9 @@ msgid ""
 "Please select one, the others will be ignored.\n"
 "\n"
 msgstr ""
-"Während diese Transaktion mehrere Splits hat, die man als 'Zahlungssplit' "
-"bezeichnet, weiß GnuCash nur, wie man mit einem umgeht.\n"
+"Diese Transaktion hat mehrere Splits, \n"
+"die man als 'Zahlungssplit' bezeichnen kann; GnuCash weiß nur, wie man mit "
+"einem umgeht.\n"
 "Bitte wählen Sie einen aus, die anderen werden ignoriert.\n"
 "\n"
 
@@ -3626,7 +3634,7 @@ msgstr "Term_inierte Buchungen"
 # Fixme: Source should have HEllip?
 #: gnucash/gnome/gnc-plugin-basic-commands.c:166
 msgid "_Scheduled Transaction Editor"
-msgstr "Terminierte Buchungen _Editor..."
+msgstr "_Editor für Terminierte Buchungen"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:167
 msgid "The list of Scheduled Transactions"
@@ -4358,7 +4366,8 @@ msgid ""
 "Are you sure you want to do this?"
 msgstr ""
 "Das Zielkonto %s hat nicht die gleiche Währung wie das Konto, von dem Sie "
-"die Buchungen verschieben. Sollen die Buchungen trotzdem verschoben werden?"
+"die Buchungen verschieben. \n"
+"Sollen die Buchungen trotzdem verschoben werden?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1438
 msgid "_Pick another account"
@@ -4489,7 +4498,7 @@ msgstr "_Alle Perioden..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:177
 msgid "Edit budget for all periods for the selected accounts."
-msgstr "Budget für alle Perioden bearbeiten"
+msgstr "Budget für alle Perioden bearbeiten."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:181
 msgid "Edit Note"
@@ -4506,7 +4515,7 @@ msgstr "Budget-Bericht"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:189
 msgid "Run the budget report."
-msgstr "Aktuellen Bericht drucken"
+msgstr "Aktuellen Bericht drucken."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:199
 msgid "Refresh this window."
@@ -4727,7 +4736,7 @@ msgstr "Rechnungsbuchung _rückgängig"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:301
 msgid "New _Invoice"
-msgstr "Neue _Rechnung..."
+msgstr "Neue _Rechnung"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:302
 msgid "_Pay Invoice"
@@ -7543,8 +7552,7 @@ msgstr "Sie müssen eine Währung/Wertpapier auswählen."
 #: gnucash/gnome-utils/dialog-account.c:952
 msgid "You must enter a valid opening balance or leave it blank."
 msgstr ""
-"Sie müssen entweder einen gültigen Anfangsbestand angeben\n"
-"oder das Feld freilassen."
+"Sie müssen einen gültigen Anfangsbestand angeben oder das Feld freilassen."
 
 #: gnucash/gnome-utils/dialog-account.c:976
 msgid ""
@@ -7570,8 +7578,8 @@ msgid ""
 "This Account contains Transactions.\n"
 "Changing this option is not possible."
 msgstr ""
-"Dieses Konto enthält Buchungen. Daher kann diese Option nicht geändert "
-"werden."
+"Dieses Konto enthält Buchungen. \n"
+"Daher kann diese Option nicht geändert werden."
 
 #: gnucash/gnome-utils/dialog-account.c:1610
 msgid "Edit Account"
@@ -7861,9 +7869,10 @@ msgid ""
 "(via File->Properties), after account setup, to select a\n"
 "default gain/loss account."
 msgstr ""
-"Es gibt kein Erfolgskonto in der festgelegten Buchwährung. Nach der "
-"Konteneinrichtung müssen Sie über Datei->Eigenschaften zu diesem Dialog "
-"zurückkehren, um ein Erfolgskonto vorzuwählen."
+"Es gibt kein Erfolgskonto in der festgelegten Buchwährung. \n"
+"Nach der Konteneinrichtung müssen Sie über \n"
+"Datei->Eigenschaften zu diesem Dialog zurückkehren,\n"
+" um ein Erfolgskonto vorzuwählen."
 
 #: gnucash/gnome-utils/dialog-options.c:869
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:299
@@ -9164,7 +9173,7 @@ msgstr ""
 "K. Herbert, 2020\n"
 "Manuel Bichler, 2020\n"
 "Andreas Hentze, 2019\n"
-"Joachim Wetzig, 2019\n"
+"Joachim Wetzig, 2019-2022\n"
 "Dmitriy Mangul, 2017-2018\n"
 "Mechtilde Stehmann, 2014-2018\n"
 "quazgar, 2017\n"
@@ -14960,7 +14969,7 @@ msgstr "Datei umwandeln"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:145
 msgid "finish placeholder"
-msgstr "finish placeholder"
+msgstr "Platzhalter für Beenden"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:150
 msgid "Finish GnuCash Datafile Import"
@@ -24620,7 +24629,7 @@ msgstr "Sie haben keine Werte aus der Liste gewählt."
 
 #: gnucash/report/reports/example/hello-world.scm:447
 msgid "You have selected no accounts."
-msgstr "Sie haben kein Konto ausgewählt"
+msgstr "Sie haben keine Konten ausgewählt"
 
 #: gnucash/report/reports/example/hello-world.scm:452
 msgid "Display help"
@@ -25974,7 +25983,7 @@ msgstr "Zusammenfassung der Optionen hinzufügen"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:76
 #: gnucash/report/trep-engine.scm:568
 msgid "Add summary of options."
-msgstr "Zusammenfassung der Optionen hinzufügen"
+msgstr "Zusammenfassung der Optionen hinzufügen."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:78
 msgid "Account full name instead of indenting"
@@ -29511,7 +29520,7 @@ msgstr "Abschlussbuchungen ausschließen..."
 
 #: gnucash/report/trep-engine.scm:371
 msgid "Show both closing and regular transactions"
-msgstr "reguläre und Abschlussbuchungssätze anzeigen."
+msgstr "Reguläre und Abschlussbuchungssätze anzeigen."
 
 #: gnucash/report/trep-engine.scm:375
 msgid "Show closing transactions only"
@@ -29762,7 +29771,7 @@ msgid ""
 "parameter is guessed)."
 msgstr ""
 "Kontobezeichnung des Gegenkontos anzeigen? (Wenn dies eine mehrteiliger "
-"Buchungssatz ist, wird dieser Parameter empfohlen.)"
+"Buchungssatz ist, wird dieser Parameter geraten.)"
 
 #: gnucash/report/trep-engine.scm:1005
 msgid "Amount of detail to display per transaction."
@@ -30638,12 +30647,10 @@ msgid ""
 "Below you will find the list of invalid account names:\n"
 "%s"
 msgstr ""
-"Das Trennzeichen \"%s\" wird schon in einem oder mehreren Kontennamen\n"
-"verwendet.\n"
+"Das Trennzeichen \"%s\" wird in einem oder mehreren Kontennamen verwendet.\n"
 "\n"
-"Dies ist nicht erlaubt und würde zu fehlerhaften Verhalten führen. Sie\n"
-"müssen entweder ein anderes Trennzeichen auswählen oder die\n"
-"Kontennamen ändern.\n"
+"Dies wird zu unerwartetem Verhalten führen. Wählen Sie ein anderes "
+"Trennzeichen oder ändern Sie die Kontennamen.\n"
 "\n"
 "Folgende Kontennamen sind betroffen:\n"
 "%s"
