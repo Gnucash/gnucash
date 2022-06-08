@@ -34,20 +34,22 @@
 #include "gnc-component-manager.h"
 #include "gnc-gtk-utils.h"
 
+#include "gncCoOwner.h"
 #include "gncCustomer.h"
-#include "gncJob.h"
-#include "gncVendor.h"
-#include "gncOwner.h"
 #include "gncInvoice.h"
+#include "gncJob.h"
+#include "gncOwner.h"
+#include "gncVendor.h"
 
 #include "gnc-general-search.h"
 #include "qof.h"
 #include "business-gnome-utils.h"
+#include "dialog-coowner.h"
 #include "dialog-customer.h"
-#include "dialog-job.h"
-#include "dialog-vendor.h"
 #include "dialog-employee.h"
 #include "dialog-invoice.h"
+#include "dialog-job.h"
+#include "dialog-vendor.h"
 
 #include "gnc-commodity.h"
 
@@ -85,12 +87,28 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
     case GNC_OWNER_UNDEFINED:
         return NULL;
 
+    case GNC_OWNER_COOWNER:
+        if (type == GNCSEARCH_TYPE_SELECT)
+            search_cb = gnc_coowner_search_select;
+        else
+            search_cb = gnc_coowner_search_edit;
+        type_name = GNC_COOWNER_MODULE_NAME;
+        break;
+
     case GNC_OWNER_CUSTOMER:
         if (type == GNCSEARCH_TYPE_SELECT)
             search_cb = gnc_customer_search_select;
         else
             search_cb = gnc_customer_search_edit;
         type_name = GNC_CUSTOMER_MODULE_NAME;
+        break;
+
+    case GNC_OWNER_EMPLOYEE:
+        if (type == GNCSEARCH_TYPE_SELECT)
+            search_cb = gnc_employee_search_select;
+        else
+            search_cb = gnc_employee_search_edit;
+        type_name = GNC_EMPLOYEE_MODULE_NAME;
         break;
 
     case GNC_OWNER_JOB:
@@ -107,14 +125,6 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
         else
             search_cb = gnc_vendor_search_edit;
         type_name = GNC_VENDOR_MODULE_NAME;
-        break;
-
-    case GNC_OWNER_EMPLOYEE:
-        if (type == GNCSEARCH_TYPE_SELECT)
-            search_cb = gnc_employee_search_select;
-        else
-            search_cb = gnc_employee_search_edit;
-        type_name = GNC_EMPLOYEE_MODULE_NAME;
         break;
 
     default:

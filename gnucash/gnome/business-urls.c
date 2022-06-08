@@ -32,18 +32,20 @@
 #include "qof.h"
 #include "stdint.h"
 
+#include "gncCoOwner.h"
 #include "gncCustomer.h"
-#include "gncJob.h"
-#include "gncVendor.h"
 #include "gncEmployee.h"
 #include "gncInvoice.h"
+#include "gncJob.h"
+#include "gncVendor.h"
 
 #include "business-urls.h"
+#include "dialog-coowner.h"
 #include "dialog-customer.h"
 #include "dialog-employee.h"
-#include "dialog-vendor.h"
 #include "dialog-invoice.h"
 #include "dialog-job.h"
+#include "dialog-vendor.h"
 
 /* Disable -Waddress.  GCC 4.2 warns (and fails to compile with -Werror) when
  * passing the address of a guid on the stack to QOF_BOOK_LOOKUP_ENTITY via

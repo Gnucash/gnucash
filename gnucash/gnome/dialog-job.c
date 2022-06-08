@@ -40,8 +40,8 @@
 #include "gncJobP.h"
 
 #include "business-gnome-utils.h"
-#include "dialog-job.h"
 #include "dialog-invoice.h"
+#include "dialog-job.h"
 #include "dialog-payment.h"
 
 #define DIALOG_NEW_JOB_CM_CLASS "dialog-new-job"
@@ -71,21 +71,22 @@ struct _job_select_window
 
 struct _job_window
 {
-    GtkWidget *	dialog;
-    GtkWidget *	id_entry;
-    GtkWidget *	cust_edit;
-    GtkWidget *	name_entry;
-    GtkWidget *	desc_entry;
-    GtkWidget *	rate_entry;
-    GtkWidget *	active_check;
+    GtkWidget * dialog;
+    GtkWidget * id_entry;
+    GtkWidget * coowner_edit;
+    GtkWidget * cust_edit;
+    GtkWidget * name_entry;
+    GtkWidget * desc_entry;
+    GtkWidget * rate_entry;
+    GtkWidget * active_check;
 
-    JobDialogType	dialog_type;
-    GncGUID		job_guid;
-    gint		component_id;
-    QofBook *	book;
-    GncJob *	created_job;
+    JobDialogType       dialog_type;
+    GncGUID             job_guid;
+    gint                component_id;
+    QofBook *   book;
+    GncJob *    created_job;
 
-    GncOwner	owner;
+    GncOwner    owner;
 
 };
 
@@ -315,7 +316,7 @@ gnc_job_new_window (GtkWindow *parent, QofBook *bookp, GncOwner *owner, GncJob *
 {
     JobWindow *jw;
     GtkBuilder *builder;
-    GtkWidget *owner_box, *owner_label, *edit, *hbox;
+    GtkWidget *coowner_box, *owner_box, *owner_label, *edit, *hbox;
 
     /*
      * Find an existing window for this job.  If found, bring it to
@@ -361,6 +362,7 @@ gnc_job_new_window (GtkWindow *parent, QofBook *bookp, GncOwner *owner, GncJob *
     jw->desc_entry = GTK_WIDGET(gtk_builder_get_object (builder, "desc_entry"));
     jw->active_check = GTK_WIDGET(gtk_builder_get_object (builder, "active_check"));
 
+    coowner_box = GTK_WIDGET(gtk_builder_get_object (builder, "coowner_hbox"));
     owner_box = GTK_WIDGET(gtk_builder_get_object (builder, "customer_hbox"));
     owner_label = GTK_WIDGET(gtk_builder_get_object (builder, "owner_label"));
 
@@ -383,6 +385,8 @@ gnc_job_new_window (GtkWindow *parent, QofBook *bookp, GncOwner *owner, GncJob *
         jw->job_guid = *gncJobGetGUID (job);
 
         jw->dialog_type = EDIT_JOB;
+        jw->coowner_edit = gnc_owner_edit_create (owner_label, coowner_box,
+                                               bookp, owner);
         jw->cust_edit = gnc_owner_edit_create (owner_label, owner_box,
                                                bookp, owner);
 
@@ -415,6 +419,8 @@ gnc_job_new_window (GtkWindow *parent, QofBook *bookp, GncOwner *owner, GncJob *
         }
         else
         {
+            jw->coowner_edit = gnc_owner_select_create (owner_label, coowner_box,
+                            bookp, owner);
             jw->cust_edit = gnc_owner_select_create (owner_label, owner_box,
                             bookp, owner);
         }
@@ -456,9 +462,10 @@ gnc_ui_job_new (GtkWindow *parent, GncOwner *ownerp, QofBook *bookp)
 
     if (ownerp)
     {
-        g_return_val_if_fail ((gncOwnerGetType (ownerp) == GNC_OWNER_CUSTOMER) ||
-                              (gncOwnerGetType (ownerp) == GNC_OWNER_VENDOR),
-                              NULL);
+      g_return_val_if_fail ((gncOwnerGetType (ownerp) == GNC_OWNER_COOWNER) ||
+                            (gncOwnerGetType (ownerp) == GNC_OWNER_CUSTOMER) ||
+                            (gncOwnerGetType (ownerp) == GNC_OWNER_VENDOR),
+                            NULL);
         gncOwnerCopy (ownerp, &owner);
     }
     else

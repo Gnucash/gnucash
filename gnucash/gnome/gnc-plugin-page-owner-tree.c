@@ -41,12 +41,13 @@
 #include "gnc-plugin-page-owner-tree.h"
 #include "gnc-plugin-page-report.h"
 
-#include "dialog-vendor.h"
+#include "dialog-coowner.h"
 #include "dialog-customer.h"
 #include "dialog-employee.h"
 #include "dialog-invoice.h"
 #include "dialog-job.h"
 #include "dialog-payment.h"
+#include "dialog-vendor.h"
 
 #include "gncOwner.h"
 #include "dialog-utils.h"
@@ -621,10 +622,20 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
         label = _("Unknown");
         style_label = "gnc-class-unknown";
         break;
+    case GNC_OWNER_COOWNER :
+        label = _("Co-Owner");
+        state_section = "Co-Owner Overview";
+        style_label = "gnc-class-coowner";
+        break;
     case GNC_OWNER_CUSTOMER :
         label = _("Customers");
         state_section = "Customers Overview";
         style_label = "gnc-class-customers";
+        break;
+    case GNC_OWNER_EMPLOYEE :
+        label = _("Employees");
+        state_section = "Employees Overview";
+        style_label = "gnc-class-employees";
         break;
     case GNC_OWNER_JOB :
         label = _("Jobs");
@@ -635,11 +646,6 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
         label = _("Vendors");
         state_section = "Vendors Overview";
         style_label = "gnc-class-vendors";
-        break;
-    case GNC_OWNER_EMPLOYEE :
-        label = _("Employees");
-        state_section = "Employees Overview";
-        style_label = "gnc-class-employees";
         break;
     }
 
@@ -805,9 +811,19 @@ static void gnc_ui_owner_edit (GtkWindow *parent, GncOwner *owner)
     case GNC_OWNER_NONE :
     case GNC_OWNER_UNDEFINED :
         break;
+    case GNC_OWNER_COOWNER :
+    {
+        gnc_ui_coowner_edit (parent, owner->owner.coowner);
+        break;
+    }
     case GNC_OWNER_CUSTOMER :
     {
         gnc_ui_customer_edit (parent, owner->owner.customer);
+        break;
+    }
+    case GNC_OWNER_EMPLOYEE :
+    {
+        gnc_ui_employee_edit (parent, owner->owner.employee);
         break;
     }
     case GNC_OWNER_JOB :
@@ -818,11 +834,6 @@ static void gnc_ui_owner_edit (GtkWindow *parent, GncOwner *owner)
     case GNC_OWNER_VENDOR :
     {
         gnc_ui_vendor_edit (parent, owner->owner.vendor);
-        break;
-    }
-    case GNC_OWNER_EMPLOYEE :
-    {
-        gnc_ui_employee_edit (parent, owner->owner.employee);
         break;
     }
     }
@@ -921,16 +932,22 @@ build_aging_report (GncOwnerType owner_type)
     {
         return -1;
     }
-    case GNC_OWNER_VENDOR :
+    case GNC_OWNER_COOWNER :
     {
-        report_name  = "gnc:payables-report-create";
-        report_title = _("Vendor Listing");
+        report_name = "gnc:receivables-report-create";
+        report_title = _("CO-Owner Listing");
         break;
     }
     case GNC_OWNER_CUSTOMER :
     {
         report_name = "gnc:receivables-report-create";
         report_title = _("Customer Listing");
+        break;
+    }
+    case GNC_OWNER_VENDOR :
+    {
+        report_name  = "gnc:payables-report-create";
+        report_title = _("Vendor Listing");
         break;
     }
     }
@@ -1024,9 +1041,19 @@ gnc_plugin_page_owner_tree_cmd_new_owner (GtkAction *action, GncPluginPageOwnerT
     case GNC_OWNER_NONE :
     case GNC_OWNER_UNDEFINED :
         break;
+    case GNC_OWNER_COOWNER :
+    {
+        gnc_ui_coowner_new (parent, gnc_get_current_book ());
+        break;
+    }
     case GNC_OWNER_CUSTOMER :
     {
         gnc_ui_customer_new (parent, gnc_get_current_book ());
+        break;
+    }
+    case GNC_OWNER_EMPLOYEE :
+    {
+        gnc_ui_employee_new (parent, gnc_get_current_book ());
         break;
     }
     case GNC_OWNER_JOB :
@@ -1038,11 +1065,6 @@ gnc_plugin_page_owner_tree_cmd_new_owner (GtkAction *action, GncPluginPageOwnerT
     case GNC_OWNER_VENDOR :
     {
         gnc_ui_vendor_new (parent, gnc_get_current_book ());
-        break;
-    }
-    case GNC_OWNER_EMPLOYEE :
-    {
-        gnc_ui_employee_new (parent, gnc_get_current_book ());
         break;
     }
     }
@@ -1177,10 +1199,22 @@ gnc_plugin_page_owner_tree_cmd_new_invoice (GtkAction *action,
     case GNC_OWNER_UNDEFINED :
         gncOwnerInitUndefined(&current_owner, NULL);
         break;
+    case GNC_OWNER_COOWNER :
+    {
+        gncOwnerInitCoOwner(&current_owner,
+                             gncOwnerGetCoOwner(gnc_plugin_page_owner_tree_get_current_owner (page)) );
+        break;
+    }
     case GNC_OWNER_CUSTOMER :
     {
         gncOwnerInitCustomer(&current_owner,
                              gncOwnerGetCustomer(gnc_plugin_page_owner_tree_get_current_owner (page)) );
+        break;
+    }
+    case GNC_OWNER_EMPLOYEE :
+    {
+        gncOwnerInitEmployee(&current_owner,
+                             gncOwnerGetEmployee(gnc_plugin_page_owner_tree_get_current_owner (page)) );
         break;
     }
     case GNC_OWNER_JOB :
@@ -1193,12 +1227,6 @@ gnc_plugin_page_owner_tree_cmd_new_invoice (GtkAction *action,
     {
         gncOwnerInitVendor(&current_owner,
                            gncOwnerGetVendor(gnc_plugin_page_owner_tree_get_current_owner (page)) );
-        break;
-    }
-    case GNC_OWNER_EMPLOYEE :
-    {
-        gncOwnerInitEmployee(&current_owner,
-                             gncOwnerGetEmployee(gnc_plugin_page_owner_tree_get_current_owner (page)) );
         break;
     }
     }
