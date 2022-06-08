@@ -1,16 +1,18 @@
 set(stylesheets_DATA
-  taxinvoice.css
-  receipt.css
   balsheet-eg.css
+  receipt.css
+  owner-billing.css
+  taxinvoice.css
 )
 
 install(FILES ${stylesheets_DATA}
         DESTINATION ${CMAKE_INSTALL_PREFIX}/${GUILE_REL_SITEDIR}/gnucash/reports/stylesheets)
 
 set(templates_DATA
-  taxinvoice.eguile.scm
-  receipt.eguile.scm
   balsheet-eg.eguile.scm
+  receipt.eguile.scm
+  owner-billing.eguile.scm
+  taxinvoice.eguile.scm
 )
 
 install(FILES ${templates_DATA}
