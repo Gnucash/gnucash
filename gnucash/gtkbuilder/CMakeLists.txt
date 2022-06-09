@@ -19,11 +19,13 @@ set (gtkbuilder_SOURCES
         dialog-billterms.glade
         dialog-book-close.glade
         dialog-choose-owner.glade
+        dialog-coowner.glade
+        dialog-coowner-report.glade
         dialog-commodities.glade
         dialog-commodity.glade
+        dialog-customer.glade
         dialog-custom-report.glade
         dialog-customer-import-gui.glade
-        dialog-customer.glade
         dialog-date-close.glade
         dialog-employee.glade
         dialog-file-access.glade

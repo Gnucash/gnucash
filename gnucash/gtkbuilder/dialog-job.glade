@@ -225,6 +225,19 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkBox" id="coowner_hbox">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkBox" id="customer_hbox">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>

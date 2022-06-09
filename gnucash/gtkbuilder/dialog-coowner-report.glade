@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.38.2 -->
+<interface>
+  <requires lib="gtk+" version="3.22"/>
+  <object class="GtkDialog" id="custom_report_dialog">
+    <property name="can-focus">False</property>
+    <property name="border-width">5</property>
+    <property name="title" translatable="yes">Saved Report Configurations</property>
+    <property name="modal">True</property>
+    <property name="window-position">center-on-parent</property>
+    <property name="type-hint">dialog</property>
+    <property name="skip-taskbar-hint">True</property>
+    <property name="skip-pager-hint">True</property>
+    <signal name="close" handler="custom_report_dialog_close_cb" swapped="no"/>
+    <signal name="destroy" handler="custom_report_dialog_destroy_cb" swapped="no"/>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="dialog-vbox1">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="dialog-action_area1">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
+            <child>
+              <object class="GtkButton" id="helpbutton">
+                <property name="label" translatable="yes">_Help</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <signal name="clicked" handler="custom_report_help_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+                <property name="secondary">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="close_report_button">
+                <property name="label" translatable="yes">_Close</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="has-tooltip">True</property>
+                <property name="tooltip-markup">Exit the saved report configurations dialog</property>
+                <property name="tooltip-text" translatable="yes">Exit the saved report configurations dialog</property>
+                <property name="use-underline">True</property>
+                <signal name="clicked" handler="close_custom_report_clicked_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack-type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="custom_report_sw">
+            <property name="width-request">300</property>
+            <property name="height-request">150</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <child>
+              <object class="GtkTreeView" id="custom_report_list_view">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="has-tooltip">True</property>
+                <property name="headers-visible">False</property>
+                <signal name="button-release-event" handler="custom_report_list_view_clicked_cb" swapped="no"/>
+                <signal name="query-tooltip" handler="custom_report_query_tooltip_cb" swapped="no"/>
+                <signal name="row-activated" handler="custom_report_list_view_row_activated_cb" swapped="no"/>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection" id="treeview-selection1"/>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label2">
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">
+Currently you have no saved reports.
+</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label1">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Saved report configurations are created by first opening a report from the Reports menu,
+altering the report's options to your taste and then choosing "Save Report Configuration" from
+the Reports menu or tool bar.</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="0">close_report_button</action-widget>
+    </action-widgets>
+  </object>
+</interface>
