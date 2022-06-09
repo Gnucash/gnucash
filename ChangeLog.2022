@@ -1,0 +1,7 @@
+2022-01-01 Pedro Albuquerque
+
+        * Translation update  by Pedro Albuquerque <pmra@gmx.com> using Weblate (HEAD)
+
+2022-01-01 Christopher Lam
+
+        * [register] simplify gnc:register-report-create-internal
