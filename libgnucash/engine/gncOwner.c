@@ -36,13 +36,14 @@
 #include <string.h>		/* for memcpy() */
 #include <qofinstance-p.h>
 
+#include "gncCoOwnerP.h"
 #include "gncCustomerP.h"
 #include "gncEmployeeP.h"
+#include "gncInvoice.h"
 #include "gncJobP.h"
 #include "gncOwner.h"
 #include "gncOwnerP.h"
 #include "gncVendorP.h"
-#include "gncInvoice.h"
 #include "gnc-commodity.h"
 #include "Scrub2.h"
 #include "Split.h"
@@ -77,26 +78,31 @@ void gncOwnerBeginEdit (GncOwner *owner)
     {
     case GNC_OWNER_NONE :
     case GNC_OWNER_UNDEFINED :
-        break;
+	break;
+    case GNC_OWNER_COOWNER :
+    {
+	gncCoOwnerBeginEdit(owner->owner.coowner);
+	break;
+    }
     case GNC_OWNER_CUSTOMER :
     {
-        gncCustomerBeginEdit(owner->owner.customer);
-        break;
-    }
-    case GNC_OWNER_JOB :
-    {
-        gncJobBeginEdit(owner->owner.job);
-        break;
-    }
-    case GNC_OWNER_VENDOR :
-    {
-        gncVendorBeginEdit(owner->owner.vendor);
-        break;
+	gncCustomerBeginEdit(owner->owner.customer);
+	break;
     }
     case GNC_OWNER_EMPLOYEE :
     {
-        gncEmployeeBeginEdit(owner->owner.employee);
-        break;
+	gncEmployeeBeginEdit(owner->owner.employee);
+	break;
+    }
+    case GNC_OWNER_JOB :
+    {
+	gncJobBeginEdit(owner->owner.job);
+	break;
+    }
+    case GNC_OWNER_VENDOR :
+    {
+	gncVendorBeginEdit(owner->owner.vendor);
+	break;
     }
     }
 }
@@ -108,26 +114,31 @@ void gncOwnerCommitEdit (GncOwner *owner)
     {
     case GNC_OWNER_NONE :
     case GNC_OWNER_UNDEFINED :
-        break;
+	break;
+    case GNC_OWNER_COOWNER :
+    {
+	gncCoOwnerCommitEdit(owner->owner.coowner);
+	break;
+    }
     case GNC_OWNER_CUSTOMER :
     {
-        gncCustomerCommitEdit(owner->owner.customer);
-        break;
-    }
-    case GNC_OWNER_JOB :
-    {
-        gncJobCommitEdit(owner->owner.job);
-        break;
-    }
-    case GNC_OWNER_VENDOR :
-    {
-        gncVendorCommitEdit(owner->owner.vendor);
-        break;
+	gncCustomerCommitEdit(owner->owner.customer);
+	break;
     }
     case GNC_OWNER_EMPLOYEE :
     {
-        gncEmployeeCommitEdit(owner->owner.employee);
-        break;
+	gncEmployeeCommitEdit(owner->owner.employee);
+	break;
+    }
+    case GNC_OWNER_JOB :
+    {
+	gncJobCommitEdit(owner->owner.job);
+	break;
+    }
+    case GNC_OWNER_VENDOR :
+    {
+	gncVendorCommitEdit(owner->owner.vendor);
+	break;
     }
     }
 }
@@ -139,26 +150,31 @@ void gncOwnerDestroy (GncOwner *owner)
     {
     case GNC_OWNER_NONE :
     case GNC_OWNER_UNDEFINED :
-        break;
+	break;
+    case GNC_OWNER_COOWNER :
+    {
+	gncCoOwnerDestroy(owner->owner.coowner);
+	break;
+    }
     case GNC_OWNER_CUSTOMER :
     {
-        gncCustomerDestroy(owner->owner.customer);
-        break;
-    }
-    case GNC_OWNER_JOB :
-    {
-        gncJobDestroy(owner->owner.job);
-        break;
-    }
-    case GNC_OWNER_VENDOR :
-    {
-        gncVendorDestroy(owner->owner.vendor);
-        break;
+	gncCustomerDestroy(owner->owner.customer);
+	break;
     }
     case GNC_OWNER_EMPLOYEE :
     {
-        gncEmployeeDestroy(owner->owner.employee);
-        break;
+	gncEmployeeDestroy(owner->owner.employee);
+	break;
+    }
+    case GNC_OWNER_JOB :
+    {
+	gncJobDestroy(owner->owner.job);
+	break;
+    }
+    case GNC_OWNER_VENDOR :
+    {
+	gncVendorDestroy(owner->owner.vendor);
+	break;
     }
     }
 }
@@ -177,6 +193,19 @@ void gncOwnerInitCustomer (GncOwner *owner, GncCustomer *customer)
     owner->owner.customer = customer;
 }
 
+void gncOwnerInitCoOwner (GncOwner *owner, GncCoOwner *coowner)
+{
+    if (!owner) return;
+    owner->type = GNC_OWNER_COOWNER;
+    owner->owner.coowner = coowner;
+}
+void gncOwnerInitEmployee (GncOwner *owner, GncEmployee *employee)
+{
+    if (!owner) return;
+    owner->type = GNC_OWNER_EMPLOYEE;
+    owner->owner.employee = employee;
+}
+
 void gncOwnerInitJob (GncOwner *owner, GncJob *job)
 {
     if (!owner) return;
@@ -191,13 +220,6 @@ void gncOwnerInitVendor (GncOwner *owner, GncVendor *vendor)
     owner->owner.vendor = vendor;
 }
 
-void gncOwnerInitEmployee (GncOwner *owner, GncEmployee *employee)
-{
-    if (!owner) return;
-    owner->type = GNC_OWNER_EMPLOYEE;
-    owner->owner.employee = employee;
-}
-
 GncOwnerType gncOwnerGetType (const GncOwner *owner)
 {
     if (!owner) return GNC_OWNER_NONE;
@@ -210,20 +232,22 @@ const char * gncOwnerGetTypeString (const GncOwner *owner)
     switch (type)
     {
     case GNC_OWNER_NONE:
-        return N_("None");
+	return N_("None");
     case GNC_OWNER_UNDEFINED:
-        return N_("Undefined");
+	return N_("Undefined");
+    case GNC_OWNER_COOWNER:
+	return N_("Co-Owner");
     case GNC_OWNER_CUSTOMER:
-        return N_("Customer");
-    case GNC_OWNER_JOB:
-        return N_("Job");
-    case GNC_OWNER_VENDOR:
-        return N_("Vendor");
+	return N_("Customer");
     case GNC_OWNER_EMPLOYEE:
-        return N_("Employee");
+	return N_("Employee");
+    case GNC_OWNER_JOB:
+	return N_("Job");
+    case GNC_OWNER_VENDOR:
+	return N_("Vendor");
     default:
-        PWARN ("Unknown owner type");
-        return NULL;
+	PWARN ("Unknown owner type");
+	return NULL;
     }
 }
 
@@ -240,33 +264,38 @@ QofIdTypeConst gncOwnerTypeToQofIdType(GncOwnerType t)
     {
     case GNC_OWNER_NONE :
     {
-        type = NULL;
-        break;
+	type = NULL;
+	break;
     }
     case GNC_OWNER_UNDEFINED :
     {
-        type = NULL;
-        break;
+	type = NULL;
+	break;
+    }
+    case GNC_OWNER_COOWNER :
+    {
+	type = GNC_ID_COOWNER;
+	break;
     }
     case GNC_OWNER_CUSTOMER :
     {
-        type = GNC_ID_CUSTOMER;
-        break;
-    }
-    case GNC_OWNER_JOB :
-    {
-        type = GNC_ID_JOB;
-        break;
-    }
-    case GNC_OWNER_VENDOR :
-    {
-        type = GNC_ID_VENDOR;
-        break;
+	type = GNC_ID_CUSTOMER;
+	break;
     }
     case GNC_OWNER_EMPLOYEE :
     {
-        type = GNC_ID_EMPLOYEE;
-        break;
+	type = GNC_ID_EMPLOYEE;
+	break;
+    }
+    case GNC_OWNER_JOB :
+    {
+	type = GNC_ID_JOB;
+	break;
+    }
+    case GNC_OWNER_VENDOR :
+    {
+	type = GNC_ID_VENDOR;
+	break;
     }
     }
     return type;
@@ -279,38 +308,43 @@ qofOwnerGetOwner (const GncOwner *owner)
 
     if (!owner)
     {
-        return NULL;
+	return NULL;
     }
     ent = NULL;
     switch (owner->type)
     {
     case GNC_OWNER_NONE :
     {
-        break;
+	break;
     }
     case GNC_OWNER_UNDEFINED :
     {
-        break;
+	break;
+    }
+    case GNC_OWNER_COOWNER :
+    {
+	ent = QOF_INSTANCE(owner->owner.coowner);
+	break;
     }
     case GNC_OWNER_CUSTOMER :
     {
-        ent = QOF_INSTANCE(owner->owner.customer);
-        break;
-    }
-    case GNC_OWNER_JOB :
-    {
-        ent = QOF_INSTANCE(owner->owner.job);
-        break;
-    }
-    case GNC_OWNER_VENDOR :
-    {
-        ent = QOF_INSTANCE(owner->owner.vendor);
-        break;
+	ent = QOF_INSTANCE(owner->owner.customer);
+	break;
     }
     case GNC_OWNER_EMPLOYEE :
     {
-        ent = QOF_INSTANCE(owner->owner.employee);
-        break;
+	ent = QOF_INSTANCE(owner->owner.employee);
+	break;
+    }
+    case GNC_OWNER_JOB :
+    {
+	ent = QOF_INSTANCE(owner->owner.job);
+	break;
+    }
+    case GNC_OWNER_VENDOR :
+    {
+	ent = QOF_INSTANCE(owner->owner.vendor);
+	break;
     }
     }
     return ent;
@@ -321,44 +355,50 @@ qofOwnerSetEntity (GncOwner *owner, QofInstance *ent)
 {
     if (!owner || !ent)
     {
-        return;
+	return;
     }
-    if (0 == g_strcmp0(ent->e_type, GNC_ID_CUSTOMER))
+    if (0 == g_strcmp0(ent->e_type, GNC_ID_COOWNER))
     {
-        owner->type = GNC_OWNER_CUSTOMER;
-        gncOwnerInitCustomer(owner, (GncCustomer*)ent);
+	owner->type = GNC_OWNER_COOWNER;
+	gncOwnerInitCoOwner(owner, (GncCoOwner*)ent);
     }
-    else if (0 == g_strcmp0(ent->e_type, GNC_ID_JOB))
+    else if (0 == g_strcmp0(ent->e_type, GNC_ID_CUSTOMER))
     {
-        owner->type = GNC_OWNER_JOB;
-        gncOwnerInitJob(owner, (GncJob*)ent);
-    }
-    else if (0 == g_strcmp0(ent->e_type, GNC_ID_VENDOR))
-    {
-        owner->type = GNC_OWNER_VENDOR;
-        gncOwnerInitVendor(owner, (GncVendor*)ent);
+	owner->type = GNC_OWNER_CUSTOMER;
+	gncOwnerInitCustomer(owner, (GncCustomer*)ent);
     }
     else if (0 == g_strcmp0(ent->e_type, GNC_ID_EMPLOYEE))
     {
-        owner->type = GNC_OWNER_EMPLOYEE;
-        gncOwnerInitEmployee(owner, (GncEmployee*)ent);
+	owner->type = GNC_OWNER_EMPLOYEE;
+	gncOwnerInitEmployee(owner, (GncEmployee*)ent);
+    }
+    else if (0 == g_strcmp0(ent->e_type, GNC_ID_JOB))
+    {
+	owner->type = GNC_OWNER_JOB;
+	gncOwnerInitJob(owner, (GncJob*)ent);
+    }
+    else if (0 == g_strcmp0(ent->e_type, GNC_ID_VENDOR))
+    {
+	owner->type = GNC_OWNER_VENDOR;
+	gncOwnerInitVendor(owner, (GncVendor*)ent);
     }
     else
     {
-        owner->type = GNC_OWNER_NONE;
-        owner->owner.undefined = NULL;
+	owner->type = GNC_OWNER_NONE;
+	owner->owner.undefined = NULL;
     }
 }
 
 gboolean GNC_IS_OWNER (QofInstance *ent)
 {
     if (!ent)
-        return FALSE;
+	return FALSE;
 
-    return (GNC_IS_VENDOR(ent) ||
-            GNC_IS_CUSTOMER(ent) ||
-            GNC_IS_EMPLOYEE(ent) ||
-            GNC_IS_JOB(ent));
+    return (GNC_IS_COOWNER(ent) ||
+	    GNC_IS_CUSTOMER(ent) ||
+	    GNC_IS_EMPLOYEE(ent) ||
+	    GNC_IS_JOB(ent) ||
+	    GNC_IS_VENDOR(ent));
 }
 gpointer gncOwnerGetUndefined (const GncOwner *owner)
 {
@@ -367,11 +407,25 @@ gpointer gncOwnerGetUndefined (const GncOwner *owner)
     return owner->owner.undefined;
 }
 
+GncCoOwner * gncOwnerGetCoOwner (const GncOwner *owner)
+{
+    if (!owner) return NULL;
+    if (owner->type != GNC_OWNER_COOWNER) return NULL;
+    return owner->owner.coowner;
+}
+
 GncCustomer * gncOwnerGetCustomer (const GncOwner *owner)
 {
     if (!owner) return NULL;
     if (owner->type != GNC_OWNER_CUSTOMER) return NULL;
     return owner->owner.customer;
+}
+
+GncEmployee * gncOwnerGetEmployee (const GncOwner *owner)
+{
+    if (!owner) return NULL;
+    if (owner->type != GNC_OWNER_EMPLOYEE) return NULL;
+    return owner->owner.employee;
 }
 
 GncJob * gncOwnerGetJob (const GncOwner *owner)
@@ -386,13 +440,6 @@ GncVendor * gncOwnerGetVendor (const GncOwner *owner)
     if (!owner) return NULL;
     if (owner->type != GNC_OWNER_VENDOR) return NULL;
     return owner->owner.vendor;
-}
-
-GncEmployee * gncOwnerGetEmployee (const GncOwner *owner)
-{
-    if (!owner) return NULL;
-    if (owner->type != GNC_OWNER_EMPLOYEE) return NULL;
-    return owner->owner.employee;
 }
 
 void gncOwnerCopy (const GncOwner *src, GncOwner *dest)
@@ -412,9 +459,9 @@ gboolean gncOwnerEqual (const GncOwner *a, const GncOwner *b)
 int gncOwnerGCompareFunc (const GncOwner *a, const GncOwner *b)
 {
     if (gncOwnerEqual (a, b))
-        return 0;
+	return 0;
     else
-        return 1;
+	return 1;
 }
 
 const char * gncOwnerGetID (const GncOwner *owner)
@@ -425,15 +472,17 @@ const char * gncOwnerGetID (const GncOwner *owner)
     case GNC_OWNER_NONE:
     case GNC_OWNER_UNDEFINED:
     default:
-        return NULL;
+	return NULL;
+    case GNC_OWNER_COOWNER:
+	return gncCoOwnerGetID (owner->owner.coowner);
     case GNC_OWNER_CUSTOMER:
-        return gncCustomerGetID (owner->owner.customer);
-    case GNC_OWNER_JOB:
-        return gncJobGetID (owner->owner.job);
-    case GNC_OWNER_VENDOR:
-        return gncVendorGetID (owner->owner.vendor);
+	return gncCustomerGetID (owner->owner.customer);
     case GNC_OWNER_EMPLOYEE:
-        return gncEmployeeGetID (owner->owner.employee);
+	return gncEmployeeGetID (owner->owner.employee);
+    case GNC_OWNER_JOB:
+	return gncJobGetID (owner->owner.job);
+    case GNC_OWNER_VENDOR:
+	return gncVendorGetID (owner->owner.vendor);
     }
 }
 
@@ -445,15 +494,17 @@ const char * gncOwnerGetName (const GncOwner *owner)
     case GNC_OWNER_NONE:
     case GNC_OWNER_UNDEFINED:
     default:
-        return NULL;
+	return NULL;
+    case GNC_OWNER_COOWNER:
+	return gncCoOwnerGetName (owner->owner.coowner);
     case GNC_OWNER_CUSTOMER:
-        return gncCustomerGetName (owner->owner.customer);
-    case GNC_OWNER_JOB:
-        return gncJobGetName (owner->owner.job);
-    case GNC_OWNER_VENDOR:
-        return gncVendorGetName (owner->owner.vendor);
+	return gncCustomerGetName (owner->owner.customer);
     case GNC_OWNER_EMPLOYEE:
-        return gncEmployeeGetName (owner->owner.employee);
+	return gncEmployeeGetName (owner->owner.employee);
+    case GNC_OWNER_JOB:
+	return gncJobGetName (owner->owner.job);
+    case GNC_OWNER_VENDOR:
+	return gncVendorGetName (owner->owner.vendor);
     }
 }
 
@@ -466,13 +517,15 @@ GncAddress * gncOwnerGetAddr (const GncOwner *owner)
     case GNC_OWNER_UNDEFINED:
     case GNC_OWNER_JOB:
     default:
-        return NULL;
+	return NULL;
+    case GNC_OWNER_COOWNER:
+	return gncCoOwnerGetAddr (owner->owner.coowner);
     case GNC_OWNER_CUSTOMER:
-        return gncCustomerGetAddr (owner->owner.customer);
-    case GNC_OWNER_VENDOR:
-        return gncVendorGetAddr (owner->owner.vendor);
+	return gncCustomerGetAddr (owner->owner.customer);
     case GNC_OWNER_EMPLOYEE:
-        return gncEmployeeGetAddr (owner->owner.employee);
+	return gncEmployeeGetAddr (owner->owner.employee);
+    case GNC_OWNER_VENDOR:
+	return gncVendorGetAddr (owner->owner.vendor);
     }
 }
 
@@ -484,15 +537,17 @@ gnc_commodity * gncOwnerGetCurrency (const GncOwner *owner)
     case GNC_OWNER_NONE:
     case GNC_OWNER_UNDEFINED:
     default:
-        return NULL;
+	return NULL;
+    case GNC_OWNER_COOWNER:
+	return gncCoOwnerGetCurrency (owner->owner.coowner);
     case GNC_OWNER_CUSTOMER:
-        return gncCustomerGetCurrency (owner->owner.customer);
-    case GNC_OWNER_VENDOR:
-        return gncVendorGetCurrency (owner->owner.vendor);
+	return gncCustomerGetCurrency (owner->owner.customer);
     case GNC_OWNER_EMPLOYEE:
-        return gncEmployeeGetCurrency (owner->owner.employee);
+	return gncEmployeeGetCurrency (owner->owner.employee);
     case GNC_OWNER_JOB:
-        return gncOwnerGetCurrency (gncJobGetOwner (owner->owner.job));
+      return gncOwnerGetCurrency (gncJobGetOwner (owner->owner.job));
+    case GNC_OWNER_VENDOR:
+	return gncVendorGetCurrency (owner->owner.vendor);
     }
 }
 
@@ -504,15 +559,15 @@ gboolean gncOwnerGetActive (const GncOwner *owner)
     case GNC_OWNER_NONE:
     case GNC_OWNER_UNDEFINED:
     default:
-        return FALSE;
+	return FALSE;
     case GNC_OWNER_CUSTOMER:
-        return gncCustomerGetActive (owner->owner.customer);
+	return gncCustomerGetActive (owner->owner.customer);
     case GNC_OWNER_VENDOR:
-        return gncVendorGetActive (owner->owner.vendor);
+	return gncVendorGetActive (owner->owner.vendor);
     case GNC_OWNER_EMPLOYEE:
-        return gncEmployeeGetActive (owner->owner.employee);
+	return gncEmployeeGetActive (owner->owner.employee);
     case GNC_OWNER_JOB:
-        return gncJobGetActive (owner->owner.job);
+	return gncJobGetActive (owner->owner.job);
     }
 }
 
@@ -525,15 +580,17 @@ const GncGUID * gncOwnerGetGUID (const GncOwner *owner)
     case GNC_OWNER_NONE:
     case GNC_OWNER_UNDEFINED:
     default:
-        return NULL;
+	return NULL;
+    case GNC_OWNER_COOWNER:
+	return qof_instance_get_guid (QOF_INSTANCE(owner->owner.coowner));
     case GNC_OWNER_CUSTOMER:
-        return qof_instance_get_guid (QOF_INSTANCE(owner->owner.customer));
-    case GNC_OWNER_JOB:
-        return qof_instance_get_guid (QOF_INSTANCE(owner->owner.job));
-    case GNC_OWNER_VENDOR:
-        return qof_instance_get_guid (QOF_INSTANCE(owner->owner.vendor));
+	return qof_instance_get_guid (QOF_INSTANCE(owner->owner.customer));
     case GNC_OWNER_EMPLOYEE:
-        return qof_instance_get_guid (QOF_INSTANCE(owner->owner.employee));
+	return qof_instance_get_guid (QOF_INSTANCE(owner->owner.employee));
+    case GNC_OWNER_JOB:
+	return qof_instance_get_guid (QOF_INSTANCE(owner->owner.job));
+    case GNC_OWNER_VENDOR:
+	return qof_instance_get_guid (QOF_INSTANCE(owner->owner.vendor));
     }
 }
 
@@ -543,22 +600,25 @@ gncOwnerSetActive (const GncOwner *owner, gboolean active)
     if (!owner) return;
     switch (owner->type)
     {
-    case GNC_OWNER_CUSTOMER:
-        gncCustomerSetActive (owner->owner.customer, active);
-        break;
-    case GNC_OWNER_VENDOR:
-        gncVendorSetActive (owner->owner.vendor, active);
-        break;
+    case GNC_OWNER_COOWNER:
+	gncCoOwnerSetActive (owner->owner.coowner, active);
+	break;
+   case GNC_OWNER_CUSTOMER:
+	gncCustomerSetActive (owner->owner.customer, active);
+	break;
     case GNC_OWNER_EMPLOYEE:
-        gncEmployeeSetActive (owner->owner.employee, active);
-        break;
-    case GNC_OWNER_JOB:
-        gncJobSetActive (owner->owner.job, active);
-        break;
+	gncEmployeeSetActive (owner->owner.employee, active);
+	break;
+     case GNC_OWNER_JOB:
+	gncJobSetActive (owner->owner.job, active);
+	break;
+    case GNC_OWNER_VENDOR:
+	gncVendorSetActive (owner->owner.vendor, active);
+	break;
     case GNC_OWNER_NONE:
     case GNC_OWNER_UNDEFINED:
     default:
-        break;
+	break;
     }
 }
 
@@ -566,7 +626,7 @@ GncGUID gncOwnerRetGUID (GncOwner *owner)
 {
     const GncGUID *guid = gncOwnerGetGUID (owner);
     if (guid)
-        return *guid;
+	return *guid;
     return *guid_null ();
 }
 
@@ -578,13 +638,14 @@ const GncOwner * gncOwnerGetEndOwner (const GncOwner *owner)
     case GNC_OWNER_NONE:
     case GNC_OWNER_UNDEFINED:
     default:
-        return NULL;
+	return NULL;
+    case GNC_OWNER_COOWNER:
     case GNC_OWNER_CUSTOMER:
-    case GNC_OWNER_VENDOR:
     case GNC_OWNER_EMPLOYEE:
-        return owner;
+    case GNC_OWNER_VENDOR:
+	return owner;
     case GNC_OWNER_JOB:
-        return gncJobGetOwner (owner->owner.job);
+	return gncJobGetOwner (owner->owner.job);
     }
 }
 
@@ -595,22 +656,24 @@ int gncOwnerCompare (const GncOwner *a, const GncOwner *b)
     if (a && !b) return -1;
 
     if (a->type != b->type)
-        return (a->type - b->type);
+	return (a->type - b->type);
 
     switch (a->type)
     {
     case GNC_OWNER_NONE:
     case GNC_OWNER_UNDEFINED:
     default:
-        return 0;
+	return 0;
+    case GNC_OWNER_COOWNER:
+	return gncCoOwnerCompare (a->owner.coowner, b->owner.coowner);
     case GNC_OWNER_CUSTOMER:
-        return gncCustomerCompare (a->owner.customer, b->owner.customer);
-    case GNC_OWNER_VENDOR:
-        return gncVendorCompare (a->owner.vendor, b->owner.vendor);
+	return gncCustomerCompare (a->owner.customer, b->owner.customer);
     case GNC_OWNER_EMPLOYEE:
-        return gncEmployeeCompare (a->owner.employee, b->owner.employee);
+	return gncEmployeeCompare (a->owner.employee, b->owner.employee);
     case GNC_OWNER_JOB:
-        return gncJobCompare (a->owner.job, b->owner.job);
+	return gncJobCompare (a->owner.job, b->owner.job);
+    case GNC_OWNER_VENDOR:
+	return gncVendorCompare (a->owner.vendor, b->owner.vendor);
     }
 }
 
@@ -623,7 +686,7 @@ const GncGUID * gncOwnerGetEndGUID (const GncOwner *owner)
 void gncOwnerAttachToLot (const GncOwner *owner, GNCLot *lot)
 {
      if (!owner || !lot)
-        return;
+	return;
 
     gnc_lot_begin_edit (lot);
 
@@ -651,21 +714,24 @@ gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner)
     type = (GncOwnerType) type64;
     switch (type)
     {
+    case GNC_OWNER_COOWNER:
+	gncOwnerInitCoOwner (owner, gncCoOwnerLookup (book, guid));
+	break;
     case GNC_OWNER_CUSTOMER:
-        gncOwnerInitCustomer (owner, gncCustomerLookup (book, guid));
-        break;
-    case GNC_OWNER_VENDOR:
-        gncOwnerInitVendor (owner, gncVendorLookup (book, guid));
-        break;
+	gncOwnerInitCustomer (owner, gncCustomerLookup (book, guid));
+	break;
     case GNC_OWNER_EMPLOYEE:
-        gncOwnerInitEmployee (owner, gncEmployeeLookup (book, guid));
-        break;
+	gncOwnerInitEmployee (owner, gncEmployeeLookup (book, guid));
+	break;
     case GNC_OWNER_JOB:
-        gncOwnerInitJob (owner, gncJobLookup (book, guid));
-        break;
+	gncOwnerInitJob (owner, gncJobLookup (book, guid));
+	break;
+    case GNC_OWNER_VENDOR:
+	gncOwnerInitVendor (owner, gncVendorLookup (book, guid));
+	break;
     default:
-        guid_free (guid);
-        return FALSE;
+	guid_free (guid);
+	return FALSE;
     }
 
     guid_free (guid);
@@ -679,19 +745,19 @@ gboolean gncOwnerGetOwnerFromTxn (Transaction *txn, GncOwner *owner)
     if (!txn || !owner) return FALSE;
 
     if (xaccTransGetTxnType (txn) == TXN_TYPE_NONE)
-        return FALSE;
+	return FALSE;
 
     apar_split = xaccTransGetFirstAPARAcctSplit (txn, TRUE);
     if (apar_split)
     {
-        GNCLot *lot = xaccSplitGetLot (apar_split);
-        GncInvoice *invoice = gncInvoiceGetInvoiceFromLot (lot);
-        if (invoice)
-            gncOwnerCopy (gncInvoiceGetOwner (invoice), owner);
-        else if (!gncOwnerGetOwnerFromLot (lot, owner))
-                return FALSE;
+	GNCLot *lot = xaccSplitGetLot (apar_split);
+	GncInvoice *invoice = gncInvoiceGetInvoiceFromLot (lot);
+	if (invoice)
+	    gncOwnerCopy (gncInvoiceGetOwner (invoice), owner);
+	else if (!gncOwnerGetOwnerFromLot (lot, owner))
+		return FALSE;
 
-        return TRUE; // Got owner from either invoice or lot
+	return TRUE; // Got owner from either invoice or lot
     }
 
     return FALSE;
@@ -713,13 +779,13 @@ gncOwnerLotMatchOwnerFunc (GNCLot *lot, gpointer user_data)
 
     /* Determine the owner associated to the lot */
     if (invoice)
-        /* Invoice lots */
-        end_owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
+	/* Invoice lots */
+	end_owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
     else if (gncOwnerGetOwnerFromLot (lot, &lot_owner))
-        /* Pre-payment lots */
-        end_owner = gncOwnerGetEndOwner (&lot_owner);
+	/* Pre-payment lots */
+	end_owner = gncOwnerGetEndOwner (&lot_owner);
     else
-        return FALSE;
+	return FALSE;
 
     /* Is this a lot for the requested owner ? */
     return gncOwnerEqual (end_owner, req_owner);
@@ -735,23 +801,23 @@ gncOwnerLotsSortFunc (GNCLot *lotA, GNCLot *lotB)
     ib = gncInvoiceGetInvoiceFromLot (lotB);
 
     if (ia)
-        da = gncInvoiceGetDateDue (ia);
+	da = gncInvoiceGetDateDue (ia);
     else
-        da = xaccTransRetDatePosted (xaccSplitGetParent (gnc_lot_get_earliest_split (lotA)));
+	da = xaccTransRetDatePosted (xaccSplitGetParent (gnc_lot_get_earliest_split (lotA)));
 
     if (ib)
-        db = gncInvoiceGetDateDue (ib);
+	db = gncInvoiceGetDateDue (ib);
     else
-        db = xaccTransRetDatePosted (xaccSplitGetParent (gnc_lot_get_earliest_split (lotB)));
+	db = xaccTransRetDatePosted (xaccSplitGetParent (gnc_lot_get_earliest_split (lotB)));
 
     return (da > db) - (da < db);
 }
 
 GNCLot *
 gncOwnerCreatePaymentLotSecs (const GncOwner *owner, Transaction **preset_txn,
-                              Account *posted_acc, Account *xfer_acc,
-                              gnc_numeric amount, gnc_numeric exch, time64 date,
-                              const char *memo, const char *num)
+			      Account *posted_acc, Account *xfer_acc,
+			      gnc_numeric amount, gnc_numeric exch, time64 date,
+			      const char *memo, const char *num)
 {
     QofBook *book;
     Split *split;
@@ -772,102 +838,102 @@ gncOwnerCreatePaymentLotSecs (const GncOwner *owner, Transaction **preset_txn,
 //    reverse = use_reversed_payment_amounts(owner);
 
     if (preset_txn && *preset_txn)
-        txn = *preset_txn;
+	txn = *preset_txn;
 
     if (txn)
     {
-        xaccTransSetDescription (txn, name ? name : "");
+	xaccTransSetDescription (txn, name ? name : "");
 
-        /* Pre-existing transaction was specified. We completely clear it,
-         * except for the split in the transfer account, unless the
-         * transaction can't be reused (wrong currency, wrong transfer account).
-         * In that case, the transaction is simply removed and an new
-         * one created. */
+	/* Pre-existing transaction was specified. We completely clear it,
+	 * except for the split in the transfer account, unless the
+	 * transaction can't be reused (wrong currency, wrong transfer account).
+	 * In that case, the transaction is simply removed and an new
+	 * one created. */
 
-        xfer_split = xaccTransFindSplitByAccount(txn, xfer_acc);
+	xfer_split = xaccTransFindSplitByAccount(txn, xfer_acc);
 
-        if (xaccTransGetCurrency(txn) != gncOwnerGetCurrency (owner))
-        {
-            PINFO("Uh oh, mismatching currency/commodity between selected transaction and owner. We fall back to manual creation of a new transaction.");
-            xfer_split = NULL;
-        }
+	if (xaccTransGetCurrency(txn) != gncOwnerGetCurrency (owner))
+	{
+	    PINFO("Uh oh, mismatching currency/commodity between selected transaction and owner. We fall back to manual creation of a new transaction.");
+	    xfer_split = NULL;
+	}
 
-        if (!xfer_split)
-        {
-            PINFO("Huh? Asset account not found anymore. Fully deleting old txn and now creating a new one.");
+	if (!xfer_split)
+	{
+	    PINFO("Huh? Asset account not found anymore. Fully deleting old txn and now creating a new one.");
 
-            xaccTransBeginEdit (txn);
-            xaccTransDestroy (txn);
-            xaccTransCommitEdit (txn);
+	    xaccTransBeginEdit (txn);
+	    xaccTransDestroy (txn);
+	    xaccTransCommitEdit (txn);
 
-            txn = NULL;
-        }
-        else
-        {
-            int i = 0;
-            xaccTransBeginEdit (txn);
-            while (i < xaccTransCountSplits(txn))
-            {
-                Split *split = xaccTransGetSplit (txn, i);
-                if (split == xfer_split)
-                {
-                    gnc_set_num_action (NULL, split, num, _("Payment"));
-                    ++i;
-                }
-                else
-                {
-                    xaccSplitDestroy(split);
-                }
-            }
-            /* Note: don't commit transaction now - that would insert an imbalance split.*/
-        }
+	    txn = NULL;
+	}
+	else
+	{
+	    int i = 0;
+	    xaccTransBeginEdit (txn);
+	    while (i < xaccTransCountSplits(txn))
+	    {
+		Split *split = xaccTransGetSplit (txn, i);
+		if (split == xfer_split)
+		{
+		    gnc_set_num_action (NULL, split, num, _("Payment"));
+		    ++i;
+		}
+		else
+		{
+		    xaccSplitDestroy(split);
+		}
+	    }
+	    /* Note: don't commit transaction now - that would insert an imbalance split.*/
+	}
     }
 
     /* Create the transaction if we don't have one yet */
     if (!txn)
     {
-        txn = xaccMallocTransaction (book);
-        xaccTransBeginEdit (txn);
+	txn = xaccMallocTransaction (book);
+	xaccTransBeginEdit (txn);
     }
 
     /* Insert a split for the transfer account if we don't have one yet */
     if (!xfer_split)
     {
 
-        /* Set up the transaction */
-        xaccTransSetDescription (txn, name ? name : "");
-        /* set per book option */
-        xaccTransSetCurrency (txn, commodity);
+	/* Set up the transaction */
+	xaccTransSetDescription (txn, name ? name : "");
+	/* set per book option */
+	xaccTransSetCurrency (txn, commodity);
 
 
-        /* The split for the transfer account */
-        split = xaccMallocSplit (book);
-        xaccSplitSetMemo (split, memo);
-        /* set per book option */
-        gnc_set_num_action (NULL, split, num, _("Payment"));
-        xaccAccountBeginEdit (xfer_acc);
-        xaccAccountInsertSplit (xfer_acc, split);
-        xaccAccountCommitEdit (xfer_acc);
-        xaccTransAppendSplit (txn, split);
+	/* The split for the transfer account */
+	split = xaccMallocSplit (book);
+	xaccSplitSetMemo (split, memo);
+	/* set per book option */
+	gnc_set_num_action (NULL, split, num, _("Payment"));
+	xaccAccountBeginEdit (xfer_acc);
+	xaccAccountInsertSplit (xfer_acc, split);
+	xaccAccountCommitEdit (xfer_acc);
+	xaccTransAppendSplit (txn, split);
 
-        if (gnc_commodity_equal(xaccAccountGetCommodity(xfer_acc), commodity))
-        {
-            xaccSplitSetBaseValue (split, amount, commodity);
-        }
-        else
-        {
-            /* This will be a multi-currency transaction. The amount passed to this
-             * function is in the owner commodity (also used by the post account).
-             * For the xfer split we also need to value the payment in the xfer account's
-             * commodity.
-             * exch is from post account to xfer account so that can be used directly
-             * to calculate the equivalent amount in the xfer account's commodity. */
-            gnc_numeric xfer_amount = gnc_numeric_mul (amount, exch, GNC_DENOM_AUTO,
-                                                 GNC_HOW_RND_ROUND_HALF_UP);
+	if (gnc_commodity_equal(xaccAccountGetCommodity(xfer_acc), commodity))
+	{
+	    xaccSplitSetBaseValue (split, amount, commodity);
+	}
+	else
+	{
+	    /* This will be a multi-currency transaction. The amount passed to this
+	     * function is in the owner commodity (also used by the post account).
+	     * For the xfer split we also need to value the payment in the xfer account's
+	     * commodity.
+	     * exch is from post account to xfer account so that can be used directly
+	     * to calculate the equivalent amount in the xfer account's commodity. */
+	    gnc_numeric xfer_amount = gnc_numeric_mul (amount, exch, GNC_DENOM_AUTO,
+						 GNC_HOW_RND_ROUND_HALF_UP);
 
-            xaccSplitSetAmount(split, xfer_amount); /* Payment in xfer account currency */
-            xaccSplitSetValue(split, amount); /* Payment in transaction currency */
-        }
+	    xaccSplitSetAmount(split, xfer_amount); /* Payment in xfer account currency */
+	    xaccSplitSetValue(split, amount); /* Payment in transaction currency */
+	}
     }
 
     /* Add a split in the post account */
@@ -897,7 +963,7 @@ gncOwnerCreatePaymentLotSecs (const GncOwner *owner, Transaction **preset_txn,
     /* Commit this new transaction */
     xaccTransCommitEdit (txn);
     if (preset_txn)
-        *preset_txn = txn;
+	*preset_txn = txn;
 
     return payment_lot;
 }
@@ -918,58 +984,58 @@ Split *gncOwnerFindOffsettingSplit (GNCLot *lot, gnc_numeric target_value)
     gint best_flags = 0;
 
     if (!lot)
-        return NULL;
+	return NULL;
 
     for (ls_iter = gnc_lot_get_split_list (lot); ls_iter; ls_iter = ls_iter->next)
     {
-        Split *split = ls_iter->data;
-        Transaction *txn;
-        gnc_numeric split_value;
-        gint new_flags = 0;
-        gint val_cmp = 0;
+	Split *split = ls_iter->data;
+	Transaction *txn;
+	gnc_numeric split_value;
+	gint new_flags = 0;
+	gint val_cmp = 0;
 
-        if (!split)
-            continue;
+	if (!split)
+	    continue;
 
 
-        txn = xaccSplitGetParent (split);
-        if (!txn)
-        {
-            // Ooops - the split doesn't belong to any transaction !
-            // This is not expected so issue a warning and continue with next split
-            PWARN("Encountered a split in a payment lot that's not part of any transaction. "
-                  "This is unexpected! Skipping split %p.", split);
-            continue;
-        }
+	txn = xaccSplitGetParent (split);
+	if (!txn)
+	{
+	    // Ooops - the split doesn't belong to any transaction !
+	    // This is not expected so issue a warning and continue with next split
+	    PWARN("Encountered a split in a payment lot that's not part of any transaction. "
+		  "This is unexpected! Skipping split %p.", split);
+	    continue;
+	}
 
-        // Check if this split has the opposite sign of the target value we want to offset
-        split_value = xaccSplitGetValue (split);
-        if (gnc_numeric_positive_p (target_value) == gnc_numeric_positive_p (split_value))
-            continue;
+	// Check if this split has the opposite sign of the target value we want to offset
+	split_value = xaccSplitGetValue (split);
+	if (gnc_numeric_positive_p (target_value) == gnc_numeric_positive_p (split_value))
+	    continue;
 
-        // Ok we have found a split that potentially can offset the target value
-        // Let's see if it's better than what we have found already.
-        val_cmp = gnc_numeric_compare (gnc_numeric_abs (split_value),
-                                       gnc_numeric_abs (target_value));
-        if (val_cmp == 0)
-            new_flags += is_equal;
-        else if (val_cmp > 0)
-            new_flags += is_more;
-        else
-            new_flags += is_less;
+	// Ok we have found a split that potentially can offset the target value
+	// Let's see if it's better than what we have found already.
+	val_cmp = gnc_numeric_compare (gnc_numeric_abs (split_value),
+				       gnc_numeric_abs (target_value));
+	if (val_cmp == 0)
+	    new_flags += is_equal;
+	else if (val_cmp > 0)
+	    new_flags += is_more;
+	else
+	    new_flags += is_less;
 
-        if (xaccTransGetTxnType (txn) != TXN_TYPE_LINK)
-            new_flags += is_pay_split;
+	if (xaccTransGetTxnType (txn) != TXN_TYPE_LINK)
+	    new_flags += is_pay_split;
 
-        if ((new_flags >= best_flags) &&
-            (gnc_numeric_compare (gnc_numeric_abs (split_value),
-                                  gnc_numeric_abs (best_val)) > 0))
-        {
-            // The new split is a better match than what we found so far
-            best_split = split;
-            best_flags = new_flags;
-            best_val   = split_value;
-        }
+	if ((new_flags >= best_flags) &&
+	    (gnc_numeric_compare (gnc_numeric_abs (split_value),
+				  gnc_numeric_abs (best_val)) > 0))
+	{
+	    // The new split is a better match than what we found so far
+	    best_split = split;
+	    best_flags = new_flags;
+	    best_val   = split_value;
+	}
     }
 
     return best_split;
@@ -985,10 +1051,10 @@ gncOwnerReduceSplitTo (Split *split, gnc_numeric target_value)
     GNCLot *lot;
 
     if (gnc_numeric_positive_p (split_val) != gnc_numeric_positive_p (target_value))
-        return FALSE; // Split and target value have to be of the same sign
+	return FALSE; // Split and target value have to be of the same sign
 
     if (gnc_numeric_equal (split_val, target_value))
-        return FALSE; // Split already has the target value
+	return FALSE; // Split already has the target value
 
     rem_val = gnc_numeric_sub (split_val, target_value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD); // note: values are of opposite sign
     rem_split = xaccMallocSplit (xaccSplitGetBook (split));
@@ -1019,38 +1085,38 @@ gncOwnerSetLotLinkMemo (Transaction *ll_txn)
     GList *titles = NULL, *titer;
 
     if (!ll_txn)
-        return;
+	return;
 
     if (xaccTransGetTxnType (ll_txn) != TXN_TYPE_LINK)
-        return;
+	return;
 
     // Find all splits in the lot link transaction that are also in a document lot
     for (lts_iter = xaccTransGetSplitList (ll_txn); lts_iter; lts_iter = lts_iter->next)
     {
-        Split *split = lts_iter->data;
-        GNCLot *lot;
-        GncInvoice *invoice;
-        gchar *title;
+	Split *split = lts_iter->data;
+	GNCLot *lot;
+	GncInvoice *invoice;
+	gchar *title;
 
-        if (!split)
-            continue;
+	if (!split)
+	    continue;
 
-        lot = xaccSplitGetLot (split);
-        if (!lot)
-            continue;
+	lot = xaccSplitGetLot (split);
+	if (!lot)
+	    continue;
 
-        invoice = gncInvoiceGetInvoiceFromLot (lot);
-        if (!invoice)
-            continue;
+	invoice = gncInvoiceGetInvoiceFromLot (lot);
+	if (!invoice)
+	    continue;
 
-        title = g_strdup_printf ("%s %s", gncInvoiceGetTypeString (invoice), gncInvoiceGetID (invoice));
+	title = g_strdup_printf ("%s %s", gncInvoiceGetTypeString (invoice), gncInvoiceGetID (invoice));
 
-        titles = g_list_prepend (titles, title);
-        splits = g_list_prepend (splits, split); // splits don't need to be sorted
+	titles = g_list_prepend (titles, title);
+	splits = g_list_prepend (splits, split); // splits don't need to be sorted
     }
 
     if (!titles)
-        return; // We didn't find document lots
+	return; // We didn't find document lots
 
     titles = g_list_sort (titles, (GCompareFunc)g_strcmp0);
 
@@ -1058,17 +1124,17 @@ gncOwnerSetLotLinkMemo (Transaction *ll_txn)
     new_memo = g_strconcat (memo_prefix, titles->data, NULL);
     for (titer = titles->next; titer; titer = titer->next)
     {
-        gchar *tmp_memo = g_strconcat (new_memo, " - ", titer->data, NULL);
-        g_free (new_memo);
-        new_memo = tmp_memo;
+	gchar *tmp_memo = g_strconcat (new_memo, " - ", titer->data, NULL);
+	g_free (new_memo);
+	new_memo = tmp_memo;
     }
     g_list_free_full (titles, g_free);
 
     // Update the memos of all the splits we found previously (if needed)
     for (siter = splits; siter; siter = siter->next)
     {
-        if (g_strcmp0 (xaccSplitGetMemo (siter->data), new_memo) != 0)
-            xaccSplitSetMemo (siter->data, new_memo);
+	if (g_strcmp0 (xaccSplitGetMemo (siter->data), new_memo) != 0)
+	    xaccSplitSetMemo (siter->data, new_memo);
     }
 
     g_list_free (splits);
@@ -1087,34 +1153,34 @@ get_ll_transaction_from_lot (GNCLot *lot)
 
     /* This should really only be called on a document lot */
     if (!gncInvoiceGetInvoiceFromLot (lot))
-        return NULL;
+	return NULL;
 
     /* The given lot is a valid document lot. Now iterate over all
      * other lot links in this lot to find one more document lot.
      */
     for (ls_iter = gnc_lot_get_split_list (lot); ls_iter; ls_iter = ls_iter->next)
     {
-        Split *ls = ls_iter->data;
-        Transaction *ll_txn = xaccSplitGetParent (ls);
-        SplitList *ts_iter;
+	Split *ls = ls_iter->data;
+	Transaction *ll_txn = xaccSplitGetParent (ls);
+	SplitList *ts_iter;
 
-        if (xaccTransGetTxnType (ll_txn) != TXN_TYPE_LINK)
-            continue;
+	if (xaccTransGetTxnType (ll_txn) != TXN_TYPE_LINK)
+	    continue;
 
-        for (ts_iter = xaccTransGetSplitList (ll_txn); ts_iter; ts_iter = ts_iter->next)
-        {
-            Split *ts = ts_iter->data;
-            GNCLot *tslot = xaccSplitGetLot (ts);
+	for (ts_iter = xaccTransGetSplitList (ll_txn); ts_iter; ts_iter = ts_iter->next)
+	{
+	    Split *ts = ts_iter->data;
+	    GNCLot *tslot = xaccSplitGetLot (ts);
 
-            if (!tslot)
-                continue;
+	    if (!tslot)
+		continue;
 
-            if (tslot == lot)
-                continue;
+	    if (tslot == lot)
+		continue;
 
-            if (gncInvoiceGetInvoiceFromLot (lot))
-                return ll_txn; /* Got one more document lot - mission accomplished */
-        }
+	    if (gncInvoiceGetInvoiceFromLot (lot))
+		return ll_txn; /* Got one more document lot - mission accomplished */
+	}
     }
 
     /* The lot doesn't have an ll_txn with the requested criteria... */
@@ -1135,25 +1201,25 @@ gncOwnerCreateLotLink (GNCLot *from_lot, GNCLot *to_lot, const GncOwner *owner)
 
     /* Sanity check */
     if (!gncInvoiceGetInvoiceFromLot (from_lot) ||
-        !gncInvoiceGetInvoiceFromLot (to_lot))
-        return;
+	!gncInvoiceGetInvoiceFromLot (to_lot))
+	return;
 
     /* Determine transaction date based on lot splits */
     from_time = xaccTransRetDatePosted (xaccSplitGetParent (gnc_lot_get_latest_split (from_lot)));
     to_time   = xaccTransRetDatePosted (xaccSplitGetParent (gnc_lot_get_latest_split (to_lot)));
     if (from_time >= to_time)
-        time_posted = from_time;
+	time_posted = from_time;
     else
-        time_posted = to_time;
+	time_posted = to_time;
 
     /* Figure out how much we can offset between the lots */
     from_lot_bal = gnc_lot_get_balance (from_lot);
     to_lot_bal = gnc_lot_get_balance (to_lot);
     if (gnc_numeric_compare (gnc_numeric_abs (from_lot_bal),
-                             gnc_numeric_abs (to_lot_bal)) > 0)
-        from_lot_bal = gnc_numeric_neg (to_lot_bal);
+			     gnc_numeric_abs (to_lot_bal)) > 0)
+	from_lot_bal = gnc_numeric_neg (to_lot_bal);
     else
-        to_lot_bal = gnc_numeric_neg (from_lot_bal);
+	to_lot_bal = gnc_numeric_neg (from_lot_bal);
 
     xaccAccountBeginEdit (acct);
 
@@ -1161,27 +1227,27 @@ gncOwnerCreateLotLink (GNCLot *from_lot, GNCLot *to_lot, const GncOwner *owner)
     ll_txn = get_ll_transaction_from_lot (from_lot);
 
     if (!ll_txn)
-        ll_txn = get_ll_transaction_from_lot (to_lot);
+	ll_txn = get_ll_transaction_from_lot (to_lot);
 
     if (!ll_txn)
     {
-        /* No pre-existing lot link. Create one. */
-        ll_txn = xaccMallocTransaction (gnc_lot_get_book (from_lot));
-        xaccTransBeginEdit (ll_txn);
-        xaccTransSetDescription (ll_txn, name ? name : "(Unknown)");
-        xaccTransSetCurrency (ll_txn, xaccAccountGetCommodity(acct));
-        xaccTransSetDateEnteredSecs (ll_txn, gnc_time (NULL));
-        xaccTransSetDatePostedSecs (ll_txn, time_posted);
-        xaccTransSetTxnType (ll_txn, TXN_TYPE_LINK);
+	/* No pre-existing lot link. Create one. */
+	ll_txn = xaccMallocTransaction (gnc_lot_get_book (from_lot));
+	xaccTransBeginEdit (ll_txn);
+	xaccTransSetDescription (ll_txn, name ? name : "(Unknown)");
+	xaccTransSetCurrency (ll_txn, xaccAccountGetCommodity(acct));
+	xaccTransSetDateEnteredSecs (ll_txn, gnc_time (NULL));
+	xaccTransSetDatePostedSecs (ll_txn, time_posted);
+	xaccTransSetTxnType (ll_txn, TXN_TYPE_LINK);
     }
     else
     {
-        time64 time = xaccTransRetDatePosted (ll_txn);
-        xaccTransBeginEdit (ll_txn);
+	time64 time = xaccTransRetDatePosted (ll_txn);
+	xaccTransBeginEdit (ll_txn);
 
-        /* Maybe we need to update the post date of the transaction ? */
-        if (time_posted > time)
-            xaccTransSetDatePostedSecs (ll_txn, time_posted);
+	/* Maybe we need to update the post date of the transaction ? */
+	if (time_posted > time)
+	    xaccTransSetDatePostedSecs (ll_txn, time_posted);
     }
 
     /* Create a split for the from_lot */
@@ -1229,18 +1295,18 @@ static void gncOwnerOffsetLots (GNCLot *from_lot, GNCLot *to_lot, const GncOwner
     /* from lot should not be a document lot because we're removing a split from there ! */
     if (gncInvoiceGetInvoiceFromLot (from_lot))
     {
-        PWARN ("from_lot %p is a document lot. That is not allowed in gncOwnerOffsetLots", from_lot);
-        return;
+	PWARN ("from_lot %p is a document lot. That is not allowed in gncOwnerOffsetLots", from_lot);
+	return;
     }
 
     /* Get best matching split from from_lot to offset to_lot */
     target_offset = gnc_lot_get_balance (to_lot);
     if (gnc_numeric_zero_p (target_offset))
-        return; // to_lot is already balanced, nothing more to do
+	return; // to_lot is already balanced, nothing more to do
 
     split = gncOwnerFindOffsettingSplit (from_lot, target_offset);
     if (!split)
-        return; // No suitable offsetting split found, nothing more to do
+	return; // No suitable offsetting split found, nothing more to do
 
     /* If the offsetting split is bigger than the amount needed to balance
      * to_lot, reduce the split so its reduced value closes to_lot exactly.
@@ -1248,8 +1314,8 @@ static void gncOwnerOffsetLots (GNCLot *from_lot, GNCLot *to_lot, const GncOwner
      * opposite sign of to_lot's balance in order to be able to close it.
      */
     if (gnc_numeric_compare (gnc_numeric_abs (xaccSplitGetValue (split)),
-                             gnc_numeric_abs (target_offset)) > 0)
-        gncOwnerReduceSplitTo (split, gnc_numeric_neg (target_offset));
+			     gnc_numeric_abs (target_offset)) > 0)
+	gncOwnerReduceSplitTo (split, gnc_numeric_neg (target_offset));
 
     /* Move the reduced split from from_lot to to_lot */
     gnc_lot_add_split (to_lot, split);
@@ -1274,124 +1340,124 @@ void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots)
 
     for (left_iter = lots; left_iter; left_iter = left_iter->next)
     {
-        GNCLot *left_lot = left_iter->data;
-        gnc_numeric left_lot_bal;
-        gboolean left_lot_has_doc;
-        gboolean left_modified = FALSE;
-        Account *acct;
-        GList *right_iter;
+	GNCLot *left_lot = left_iter->data;
+	gnc_numeric left_lot_bal;
+	gboolean left_lot_has_doc;
+	gboolean left_modified = FALSE;
+	Account *acct;
+	GList *right_iter;
 
-        /* Only attempt to apply payments to open lots.
-         * Note that due to the iterative nature of this function lots
-         * in the list may become empty/closed before they are evaluated as
-         * base lot, so we should check this for each lot. */
-        if (!left_lot)
-            continue;
-        if (gnc_lot_count_splits (left_lot) == 0)
-        {
-            gnc_lot_destroy (left_lot);
-            left_iter->data = NULL;
-            continue;
-        }
-        if (gnc_lot_is_closed (left_lot))
-            continue;
+	/* Only attempt to apply payments to open lots.
+	 * Note that due to the iterative nature of this function lots
+	 * in the list may become empty/closed before they are evaluated as
+	 * base lot, so we should check this for each lot. */
+	if (!left_lot)
+	    continue;
+	if (gnc_lot_count_splits (left_lot) == 0)
+	{
+	    gnc_lot_destroy (left_lot);
+	    left_iter->data = NULL;
+	    continue;
+	}
+	if (gnc_lot_is_closed (left_lot))
+	    continue;
 
-        acct = gnc_lot_get_account (left_lot);
-        xaccAccountBeginEdit (acct);
+	acct = gnc_lot_get_account (left_lot);
+	xaccAccountBeginEdit (acct);
 
-        left_lot_bal = gnc_lot_get_balance (left_lot);
-        left_lot_has_doc = (gncInvoiceGetInvoiceFromLot (left_lot) != NULL);
+	left_lot_bal = gnc_lot_get_balance (left_lot);
+	left_lot_has_doc = (gncInvoiceGetInvoiceFromLot (left_lot) != NULL);
 
-        /* Attempt to offset left_lot with any of the remaining lots. To do so
-         * iterate over the remaining lots adding lot links or moving payments
-         * around.
-         */
-        for (right_iter = left_iter->next; right_iter; right_iter = right_iter->next)
-        {
-            GNCLot *right_lot = right_iter->data;
-            gnc_numeric right_lot_bal;
-            gboolean right_lot_has_doc;
+	/* Attempt to offset left_lot with any of the remaining lots. To do so
+	 * iterate over the remaining lots adding lot links or moving payments
+	 * around.
+	 */
+	for (right_iter = left_iter->next; right_iter; right_iter = right_iter->next)
+	{
+	    GNCLot *right_lot = right_iter->data;
+	    gnc_numeric right_lot_bal;
+	    gboolean right_lot_has_doc;
 
-            /* Only attempt to use open lots to balance the base lot.
-             * Note that due to the iterative nature of this function lots
-             * in the list may become empty/closed before they are evaluated as
-             * base lot, so we should check this for each lot. */
-            if (!right_lot)
-                continue;
-            if (gnc_lot_count_splits (right_lot) == 0)
-            {
-                gnc_lot_destroy (right_lot);
-                right_iter->data = NULL;
-                continue;
-            }
-            if (gnc_lot_is_closed (right_lot))
-                continue;
+	    /* Only attempt to use open lots to balance the base lot.
+	     * Note that due to the iterative nature of this function lots
+	     * in the list may become empty/closed before they are evaluated as
+	     * base lot, so we should check this for each lot. */
+	    if (!right_lot)
+		continue;
+	    if (gnc_lot_count_splits (right_lot) == 0)
+	    {
+		gnc_lot_destroy (right_lot);
+		right_iter->data = NULL;
+		continue;
+	    }
+	    if (gnc_lot_is_closed (right_lot))
+		continue;
 
-            /* Balancing transactions for invoice/payments can only happen
-             * in the same account. */
-            if (acct != gnc_lot_get_account (right_lot))
-                continue;
+	    /* Balancing transactions for invoice/payments can only happen
+	     * in the same account. */
+	    if (acct != gnc_lot_get_account (right_lot))
+		continue;
 
 
-            /* Only attempt to balance if the base lot and balancing lot are
-             * of the opposite sign. (Otherwise we would increase the balance
-             * of the lot - Duh */
-            right_lot_bal = gnc_lot_get_balance (right_lot);
-            if (gnc_numeric_positive_p (left_lot_bal) == gnc_numeric_positive_p (right_lot_bal))
-                continue;
+	    /* Only attempt to balance if the base lot and balancing lot are
+	     * of the opposite sign. (Otherwise we would increase the balance
+	     * of the lot - Duh */
+	    right_lot_bal = gnc_lot_get_balance (right_lot);
+	    if (gnc_numeric_positive_p (left_lot_bal) == gnc_numeric_positive_p (right_lot_bal))
+		continue;
 
-            /* Ok we found two lots than can (partly) offset each other.
-             * Depending on the lot types, a different action is needed to accomplish this.
-             * 1. Both lots are document lots (invoices/credit notes)
-             *    -> Create a lot linking transaction between the lots
-             * 2. Both lots are payment lots (lots without a document attached)
-             *    -> Use part of the bigger lot to the close the smaller lot
-             * 3. One document lot with one payment lot
-             *    -> Use (part of) the payment to offset (part of) the document lot,
-             *       Which one will be closed depends on which is the bigger one
-             */
-            right_lot_has_doc = (gncInvoiceGetInvoiceFromLot (right_lot) != NULL);
-            if (left_lot_has_doc && right_lot_has_doc)
-                gncOwnerCreateLotLink (left_lot, right_lot, owner);
-            else if (!left_lot_has_doc && !right_lot_has_doc)
-            {
-                gint cmp = gnc_numeric_compare (gnc_numeric_abs (left_lot_bal),
-                                                gnc_numeric_abs (right_lot_bal));
-                if (cmp >= 0)
-                    gncOwnerOffsetLots (left_lot, right_lot, owner);
-                else
-                    gncOwnerOffsetLots (right_lot, left_lot, owner);
-            }
-            else
-            {
-                GNCLot *doc_lot = left_lot_has_doc ? left_lot : right_lot;
-                GNCLot *pay_lot = left_lot_has_doc ? right_lot : left_lot;
-                // Ok, let's try to move a payment from pay_lot to doc_lot
-                gncOwnerOffsetLots (pay_lot, doc_lot, owner);
-            }
+	    /* Ok we found two lots than can (partly) offset each other.
+	     * Depending on the lot types, a different action is needed to accomplish this.
+	     * 1. Both lots are document lots (invoices/credit notes)
+	     *    -> Create a lot linking transaction between the lots
+	     * 2. Both lots are payment lots (lots without a document attached)
+	     *    -> Use part of the bigger lot to the close the smaller lot
+	     * 3. One document lot with one payment lot
+	     *    -> Use (part of) the payment to offset (part of) the document lot,
+	     *       Which one will be closed depends on which is the bigger one
+	     */
+	    right_lot_has_doc = (gncInvoiceGetInvoiceFromLot (right_lot) != NULL);
+	    if (left_lot_has_doc && right_lot_has_doc)
+		gncOwnerCreateLotLink (left_lot, right_lot, owner);
+	    else if (!left_lot_has_doc && !right_lot_has_doc)
+	    {
+		gint cmp = gnc_numeric_compare (gnc_numeric_abs (left_lot_bal),
+						gnc_numeric_abs (right_lot_bal));
+		if (cmp >= 0)
+		    gncOwnerOffsetLots (left_lot, right_lot, owner);
+		else
+		    gncOwnerOffsetLots (right_lot, left_lot, owner);
+	    }
+	    else
+	    {
+		GNCLot *doc_lot = left_lot_has_doc ? left_lot : right_lot;
+		GNCLot *pay_lot = left_lot_has_doc ? right_lot : left_lot;
+		// Ok, let's try to move a payment from pay_lot to doc_lot
+		gncOwnerOffsetLots (pay_lot, doc_lot, owner);
+	    }
 
-            /* If we get here, then right_lot was modified
-             * If the lot has a document, send an event for send an event for it as well
-             * so it gets potentially updated as paid */
+	    /* If we get here, then right_lot was modified
+	     * If the lot has a document, send an event for send an event for it as well
+	     * so it gets potentially updated as paid */
 
-            {
-                GncInvoice *this_invoice = gncInvoiceGetInvoiceFromLot(right_lot);
-                if (this_invoice)
-                    qof_event_gen (QOF_INSTANCE(this_invoice), QOF_EVENT_MODIFY, NULL);
-            }
-            left_modified = TRUE;
-        }
+	    {
+		GncInvoice *this_invoice = gncInvoiceGetInvoiceFromLot(right_lot);
+		if (this_invoice)
+		    qof_event_gen (QOF_INSTANCE(this_invoice), QOF_EVENT_MODIFY, NULL);
+	    }
+	    left_modified = TRUE;
+	}
 
-        /* If left_lot was modified and the lot has a document,
-         * send an event for send an event for it as well
-         * so it gets potentially updated as paid */
-        if (left_modified)
-        {
-            GncInvoice *this_invoice = gncInvoiceGetInvoiceFromLot(left_lot);
-            if (this_invoice)
-                qof_event_gen (QOF_INSTANCE(this_invoice), QOF_EVENT_MODIFY, NULL);
-        }
-        xaccAccountCommitEdit (acct);
+	/* If left_lot was modified and the lot has a document,
+	 * send an event for send an event for it as well
+	 * so it gets potentially updated as paid */
+	if (left_modified)
+	{
+	    GncInvoice *this_invoice = gncInvoiceGetInvoiceFromLot(left_lot);
+	    if (this_invoice)
+		qof_event_gen (QOF_INSTANCE(this_invoice), QOF_EVENT_MODIFY, NULL);
+	}
+	xaccAccountCommitEdit (acct);
 
     }
 }
@@ -1406,37 +1472,37 @@ void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots)
  */
 void
 gncOwnerApplyPaymentSecs (const GncOwner *owner, Transaction **preset_txn,
-                          GList *lots, Account *posted_acc, Account *xfer_acc,
-                          gnc_numeric amount, gnc_numeric exch, time64 date,
-                          const char *memo, const char *num, gboolean auto_pay)
+			  GList *lots, Account *posted_acc, Account *xfer_acc,
+			  gnc_numeric amount, gnc_numeric exch, time64 date,
+			  const char *memo, const char *num, gboolean auto_pay)
 {
     GNCLot *payment_lot = NULL;
     GList *selected_lots = NULL;
 
     /* Verify our arguments */
     if (!owner || !posted_acc
-               || (!xfer_acc && !gnc_numeric_zero_p (amount)) ) return;
+	       || (!xfer_acc && !gnc_numeric_zero_p (amount)) ) return;
     g_return_if_fail (owner->owner.undefined);
 
     /* If there's a real amount to transfer create a lot for this payment */
     if (!gnc_numeric_zero_p (amount))
-        payment_lot = gncOwnerCreatePaymentLotSecs (owner, preset_txn,
-                                                    posted_acc, xfer_acc,
-                                                    amount, exch, date, memo,
-                                                    num);
+	payment_lot = gncOwnerCreatePaymentLotSecs (owner, preset_txn,
+						    posted_acc, xfer_acc,
+						    amount, exch, date, memo,
+						    num);
 
     if (lots)
-        selected_lots = lots;
+	selected_lots = lots;
     else if (auto_pay)
-        selected_lots = xaccAccountFindOpenLots (posted_acc, gncOwnerLotMatchOwnerFunc,
-                        (gpointer)owner, NULL);
+	selected_lots = xaccAccountFindOpenLots (posted_acc, gncOwnerLotMatchOwnerFunc,
+			(gpointer)owner, NULL);
 
     /* And link the selected lots and the payment lot together as well as possible.
      * If the payment was bigger than the selected documents/overpayments, only
      * part of the payment will be used. Similarly if more documents were selected
      * than the payment value set, not all documents will be marked as paid. */
     if (payment_lot)
-        selected_lots = g_list_prepend (selected_lots, payment_lot);
+	selected_lots = g_list_prepend (selected_lots, payment_lot);
     gncOwnerAutoApplyPaymentsWithLots (owner, selected_lots);
     g_list_free (selected_lots);
 }
@@ -1448,14 +1514,15 @@ gncOwnerGetAccountTypesList (const GncOwner *owner)
 
     switch (gncOwnerGetType (owner))
     {
+    case GNC_OWNER_COOWNER:
     case GNC_OWNER_CUSTOMER:
-        return (g_list_prepend (NULL, (gpointer)ACCT_TYPE_RECEIVABLE));
-    case GNC_OWNER_VENDOR:
+	return (g_list_prepend (NULL, (gpointer)ACCT_TYPE_RECEIVABLE));
     case GNC_OWNER_EMPLOYEE:
-        return (g_list_prepend (NULL, (gpointer)ACCT_TYPE_PAYABLE));
-        break;
+    case GNC_OWNER_VENDOR:
+	return (g_list_prepend (NULL, (gpointer)ACCT_TYPE_PAYABLE));
+	break;
     default:
-        return (g_list_prepend (NULL, (gpointer)ACCT_TYPE_NONE));
+	return (g_list_prepend (NULL, (gpointer)ACCT_TYPE_NONE));
     }
 }
 
@@ -1477,7 +1544,7 @@ gncOwnerGetCommoditiesList (const GncOwner *owner)
  */
 gnc_numeric
 gncOwnerGetBalanceInCurrency (const GncOwner *owner,
-                              const gnc_commodity *report_currency)
+			      const gnc_commodity *report_currency)
 {
     gnc_numeric balance = gnc_numeric_zero ();
     QofBook *book;
@@ -1492,55 +1559,55 @@ gncOwnerGetBalanceInCurrency (const GncOwner *owner,
 
     cached_balance = gncOwnerGetCachedBalance (owner);
     if (cached_balance)
-        balance = *cached_balance;
+	balance = *cached_balance;
     else
     {
-        /* No valid cache value found for balance. Let's recalculate */
-        GList *acct_list  = gnc_account_get_descendants (gnc_book_get_root_account (book));
-        GList *acct_types = gncOwnerGetAccountTypesList (owner);
-        GList *acct_node;
+	/* No valid cache value found for balance. Let's recalculate */
+	GList *acct_list  = gnc_account_get_descendants (gnc_book_get_root_account (book));
+	GList *acct_types = gncOwnerGetAccountTypesList (owner);
+	GList *acct_node;
 
-        /* For each account */
-        for (acct_node = acct_list; acct_node; acct_node = acct_node->next)
-        {
-            Account *account = acct_node->data;
-            GList *lot_list = NULL, *lot_node;
+	/* For each account */
+	for (acct_node = acct_list; acct_node; acct_node = acct_node->next)
+	{
+	    Account *account = acct_node->data;
+	    GList *lot_list = NULL, *lot_node;
 
-            /* Check if this account can have lots for the owner, otherwise skip to next */
-            if (g_list_index (acct_types, (gpointer)xaccAccountGetType (account))
-                    == -1)
-                continue;
+	    /* Check if this account can have lots for the owner, otherwise skip to next */
+	    if (g_list_index (acct_types, (gpointer)xaccAccountGetType (account))
+		    == -1)
+		continue;
 
 
-            if (!gnc_commodity_equal (owner_currency, xaccAccountGetCommodity (account)))
-                continue;
+	    if (!gnc_commodity_equal (owner_currency, xaccAccountGetCommodity (account)))
+		continue;
 
-            /* Get a list of open lots for this owner and account */
-            lot_list = xaccAccountFindOpenLots (account, gncOwnerLotMatchOwnerFunc,
-                                                (gpointer)owner, NULL);
-            /* For each lot */
-            for (lot_node = lot_list; lot_node; lot_node = lot_node->next)
-            {
-                GNCLot *lot = lot_node->data;
-                gnc_numeric lot_balance = gnc_lot_get_balance (lot);
-                GncInvoice *invoice = gncInvoiceGetInvoiceFromLot(lot);
-                if (invoice)
-                balance = gnc_numeric_add (balance, lot_balance,
-                                            gnc_commodity_get_fraction (owner_currency), GNC_HOW_RND_ROUND_HALF_UP);
-            }
-            g_list_free (lot_list);
-        }
-        g_list_free (acct_list);
-        g_list_free (acct_types);
+	    /* Get a list of open lots for this owner and account */
+	    lot_list = xaccAccountFindOpenLots (account, gncOwnerLotMatchOwnerFunc,
+						(gpointer)owner, NULL);
+	    /* For each lot */
+	    for (lot_node = lot_list; lot_node; lot_node = lot_node->next)
+	    {
+		GNCLot *lot = lot_node->data;
+		gnc_numeric lot_balance = gnc_lot_get_balance (lot);
+		GncInvoice *invoice = gncInvoiceGetInvoiceFromLot(lot);
+		if (invoice)
+		balance = gnc_numeric_add (balance, lot_balance,
+					    gnc_commodity_get_fraction (owner_currency), GNC_HOW_RND_ROUND_HALF_UP);
+	    }
+	    g_list_free (lot_list);
+	}
+	g_list_free (acct_list);
+	g_list_free (acct_types);
 
-        gncOwnerSetCachedBalance (owner, &balance);
+	gncOwnerSetCachedBalance (owner, &balance);
     }
 
     pdb = gnc_pricedb_get_db (book);
 
     if (report_currency)
-        balance = gnc_pricedb_convert_balance_latest_price (
-                      pdb, balance, owner_currency, report_currency);
+	balance = gnc_pricedb_convert_balance_latest_price (
+		      pdb, balance, owner_currency, report_currency);
 
     return balance;
 }
@@ -1556,7 +1623,7 @@ owner_from_lot (GNCLot *lot)
 
     if (!lot) return NULL;
     if (gncOwnerGetOwnerFromLot (lot, &owner))
-        return &owner;
+	return &owner;
 
     return NULL;
 }
@@ -1566,8 +1633,8 @@ reg_lot (void)
 {
     static QofParam params[] =
     {
-        { OWNER_FROM_LOT, _GNC_MOD_NAME, (QofAccessFunc)owner_from_lot, NULL },
-        { NULL },
+	{ OWNER_FROM_LOT, _GNC_MOD_NAME, (QofAccessFunc)owner_from_lot, NULL },
+	{ NULL },
     };
 
     qof_class_register (GNC_ID_LOT, NULL, params);
@@ -1577,29 +1644,35 @@ gboolean gncOwnerGetOwnerFromTypeGuid (QofBook *book, GncOwner *owner, QofIdType
 {
     if (!book || !owner || !type || !guid) return FALSE;
 
-    if (0 == g_strcmp0(type, GNC_ID_CUSTOMER))
+    if (0 == g_strcmp0(type, GNC_ID_COOWNER))
     {
-        GncCustomer *customer = gncCustomerLookup(book, guid);
-        gncOwnerInitCustomer(owner, customer);
-        return (NULL != customer);
+	GncCoOwner *coowner = gncCoOwnerLookup(book, guid);
+	gncOwnerInitCoOwner(owner, coowner);
+	return (NULL != coowner);
     }
-    else if (0 == g_strcmp0(type, GNC_ID_JOB))
+    else if (0 == g_strcmp0(type, GNC_ID_CUSTOMER))
     {
-        GncJob *job = gncJobLookup(book, guid);
-        gncOwnerInitJob(owner, job);
-        return (NULL != job);
-    }
-    else if (0 == g_strcmp0(type, GNC_ID_VENDOR))
-    {
-        GncVendor *vendor = gncVendorLookup(book, guid);
-        gncOwnerInitVendor(owner, vendor);
-        return (NULL != vendor);
+	GncCustomer *customer = gncCustomerLookup(book, guid);
+	gncOwnerInitCustomer(owner, customer);
+	return (NULL != customer);
     }
     else if (0 == g_strcmp0(type, GNC_ID_EMPLOYEE))
     {
-        GncEmployee *employee = gncEmployeeLookup(book, guid);
-        gncOwnerInitEmployee(owner, employee);
-        return (NULL != employee);
+	GncEmployee *employee = gncEmployeeLookup(book, guid);
+	gncOwnerInitEmployee(owner, employee);
+	return (NULL != employee);
+    }
+    else if (0 == g_strcmp0(type, GNC_ID_JOB))
+    {
+	GncJob *job = gncJobLookup(book, guid);
+	gncOwnerInitJob(owner, job);
+	return (NULL != job);
+    }
+    else if (0 == g_strcmp0(type, GNC_ID_VENDOR))
+    {
+	GncVendor *vendor = gncVendorLookup(book, guid);
+	gncOwnerInitVendor(owner, vendor);
+	return (NULL != vendor);
     }
     return 0;
 }
@@ -1608,16 +1681,17 @@ gboolean gncOwnerRegister (void)
 {
     static QofParam params[] =
     {
-        { OWNER_TYPE, QOF_TYPE_INT64,      (QofAccessFunc)gncOwnerGetType,          NULL },
-        { OWNER_CUSTOMER, GNC_ID_CUSTOMER, (QofAccessFunc)gncOwnerGetCustomer,      NULL },
-        { OWNER_JOB, GNC_ID_JOB,           (QofAccessFunc)gncOwnerGetJob,           NULL },
-        { OWNER_VENDOR, GNC_ID_VENDOR,     (QofAccessFunc)gncOwnerGetVendor,        NULL },
-        { OWNER_EMPLOYEE, GNC_ID_EMPLOYEE, (QofAccessFunc)gncOwnerGetEmployee,      NULL },
-        { OWNER_PARENT, GNC_ID_OWNER,      (QofAccessFunc)gncOwnerGetEndOwner,      NULL },
-        { OWNER_PARENTG, QOF_TYPE_GUID,    (QofAccessFunc)gncOwnerGetEndGUID,       NULL },
-        { OWNER_NAME, QOF_TYPE_STRING,     (QofAccessFunc)gncOwnerGetName, NULL },
-        { QOF_PARAM_GUID, QOF_TYPE_GUID,   (QofAccessFunc)gncOwnerGetGUID, NULL },
-        { NULL },
+	{ OWNER_TYPE, QOF_TYPE_INT64,      (QofAccessFunc)gncOwnerGetType,          NULL },
+	/* { OWNER_COOWNER, GNC_ID_COOWNER,   (QofAccessFunc)gncOwnerGetCoOwner,       NULL }, */
+	{ OWNER_CUSTOMER, GNC_ID_CUSTOMER, (QofAccessFunc)gncOwnerGetCustomer,      NULL },
+	{ OWNER_EMPLOYEE, GNC_ID_EMPLOYEE, (QofAccessFunc)gncOwnerGetEmployee,      NULL },
+	{ OWNER_JOB, GNC_ID_JOB,           (QofAccessFunc)gncOwnerGetJob,           NULL },
+	{ OWNER_VENDOR, GNC_ID_VENDOR,     (QofAccessFunc)gncOwnerGetVendor,        NULL },
+	{ OWNER_PARENT, GNC_ID_OWNER,      (QofAccessFunc)gncOwnerGetEndOwner,      NULL },
+	{ OWNER_PARENTG, QOF_TYPE_GUID,    (QofAccessFunc)gncOwnerGetEndGUID,       NULL },
+	{ OWNER_NAME, QOF_TYPE_STRING,     (QofAccessFunc)gncOwnerGetName, NULL },
+	{ QOF_PARAM_GUID, QOF_TYPE_GUID,   (QofAccessFunc)gncOwnerGetGUID, NULL },
+	{ NULL },
     };
 
     qof_class_register (GNC_ID_OWNER, (QofSortFunc)gncOwnerCompare, params);
@@ -1631,12 +1705,14 @@ gncOwnerGetCachedBalance (const GncOwner *owner)
 {
     if (!owner) return NULL;
 
-    if (gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER)
-        return gncCustomerGetCachedBalance (gncOwnerGetCustomer (owner));
-    else if (gncOwnerGetType (owner) == GNC_OWNER_VENDOR)
-        return gncVendorGetCachedBalance (gncOwnerGetVendor (owner));
+    if (gncOwnerGetType (owner) == GNC_OWNER_COOWNER)
+	return gncCoOwnerGetCachedBalance (gncOwnerGetCoOwner (owner));
+    else if (gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER)
+	return gncCustomerGetCachedBalance (gncOwnerGetCustomer (owner));
     else if (gncOwnerGetType (owner) == GNC_OWNER_EMPLOYEE)
-        return gncEmployeeGetCachedBalance (gncOwnerGetEmployee (owner));
+	return gncEmployeeGetCachedBalance (gncOwnerGetEmployee (owner));
+    else if (gncOwnerGetType (owner) == GNC_OWNER_VENDOR)
+	return gncVendorGetCachedBalance (gncOwnerGetVendor (owner));
 
     return NULL;
 }
@@ -1645,10 +1721,12 @@ void gncOwnerSetCachedBalance (const GncOwner *owner, const gnc_numeric *new_bal
 {
     if (!owner) return;
 
-    if (gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER)
-        gncCustomerSetCachedBalance (gncOwnerGetCustomer (owner), new_bal);
-    else if (gncOwnerGetType (owner) == GNC_OWNER_VENDOR)
-        gncVendorSetCachedBalance (gncOwnerGetVendor (owner), new_bal);
+    if (gncOwnerGetType (owner) == GNC_OWNER_COOWNER)
+	gncCoOwnerSetCachedBalance (gncOwnerGetCoOwner (owner), new_bal);
+    else if (gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER)
+	gncCustomerSetCachedBalance (gncOwnerGetCustomer (owner), new_bal);
     else if (gncOwnerGetType (owner) == GNC_OWNER_EMPLOYEE)
-        gncEmployeeSetCachedBalance (gncOwnerGetEmployee (owner), new_bal);
+	gncEmployeeSetCachedBalance (gncOwnerGetEmployee (owner), new_bal);
+    else if (gncOwnerGetType (owner) == GNC_OWNER_VENDOR)
+	gncVendorSetCachedBalance (gncOwnerGetVendor (owner), new_bal);
 }

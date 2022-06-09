@@ -55,9 +55,11 @@ typedef GList GncInvoiceList;
 typedef enum
 {
     GNC_INVOICE_UNDEFINED ,
+    GNC_INVOICE_COOWNER_INVOICE ,     /* Invoice */
     GNC_INVOICE_CUST_INVOICE ,       /* Invoice */
-    GNC_INVOICE_VEND_INVOICE ,       /* Bill */
     GNC_INVOICE_EMPL_INVOICE ,       /* Voucher */
+    GNC_INVOICE_VEND_INVOICE ,        /* Bill */
+    GNC_INVOICE_COOWNER_CREDIT_NOTE , /* Credit Note for a customer */
     GNC_INVOICE_CUST_CREDIT_NOTE ,   /* Credit Note for a customer */
     GNC_INVOICE_VEND_CREDIT_NOTE ,   /* Credit Note from a vendor */
     GNC_INVOICE_EMPL_CREDIT_NOTE ,   /* Credit Note from an employee,

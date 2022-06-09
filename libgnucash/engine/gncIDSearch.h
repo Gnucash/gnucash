@@ -27,6 +27,7 @@
 #include <glib/gstdio.h>
 #include "qof.h"
 //#include "gncAddressP.h"
+#include "gncCoOwnerP.h"
 #include "gncCustomerP.h"
 //#include "gncCustomer.h"
 #include "gncInvoice.h"
@@ -38,9 +39,10 @@
 #define GNC_invoice_import_invoice_import_H
 
 
+GncInvoice  * gnc_search_bill_on_id   (QofBook *book, const gchar *id);
+GncCoOwner * gnc_search_coowner_on_id  (QofBook *book, const gchar *id);
 GncCustomer * gnc_search_customer_on_id  (QofBook *book, const gchar *id);
 GncInvoice  * gnc_search_invoice_on_id   (QofBook *book, const gchar *id);
-GncInvoice  * gnc_search_bill_on_id   (QofBook *book, const gchar *id);
 GncVendor  * gnc_search_vendor_on_id   (QofBook *book, const gchar *id);
 
 #endif

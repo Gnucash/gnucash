@@ -682,14 +682,49 @@ gncTaxTableGetDefault (QofBook *book, GncOwnerType type)
 {
     GSList *path = NULL;
     const GncGUID *guid = NULL;
-    const char *vendor = "Default Vendor TaxTable";
+    const char *coowner = "Default Co-Onwer TaxTable";
     const char *customer = "Default Customer TaxTable";
+    const char *vendor = "Default Vendor TaxTable";
     const char *section = "Business";
 
     g_return_val_if_fail (book != NULL, NULL);
-    g_return_val_if_fail (type == GNC_OWNER_CUSTOMER || \
+    g_return_val_if_fail (type == GNC_OWNER_COOWNER || \
+			  type == GNC_OWNER_CUSTOMER ||		\
                           type == GNC_OWNER_VENDOR, NULL);
-    path = g_slist_prepend (path, type == GNC_OWNER_CUSTOMER ? (void*)customer : (void*)vendor);
+
+    switch (type)
+    {
+    case GNC_OWNER_COOWNER:
+    {
+	path = g_slist_prepend (path, (void*)coowner);
+      break;
+    }
+    case GNC_OWNER_CUSTOMER:
+    {
+	path = g_slist_prepend (path, (void*)customer);
+	break;
+    }
+    case GNC_OWNER_EMPLOYEE:
+    {
+	break;
+    }
+    case GNC_OWNER_JOB:
+    {
+      break;
+    }
+    case GNC_OWNER_VENDOR:
+    {
+	path = g_slist_prepend (path, (void*)vendor);
+      break;
+    }
+    case GNC_OWNER_UNDEFINED:
+    {
+	break;
+    }
+    default:
+	PWARN ("Invalid owner type: %d\n", type);
+    }
+
     path = g_slist_prepend (path, (void*)section);
 
     guid = qof_book_get_guid_option (book, path);

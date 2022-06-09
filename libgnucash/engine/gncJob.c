@@ -250,6 +250,9 @@ static void gncJobFree (GncJob *job)
 
     switch (gncOwnerGetType (&(job->owner)))
     {
+    case GNC_OWNER_COOWNER:
+	gncCoOwnerRemoveJob (gncOwnerGetCoOwner(&job->owner), job);
+	break;
     case GNC_OWNER_CUSTOMER:
         gncCustomerRemoveJob (gncOwnerGetCustomer(&job->owner), job);
         break;
@@ -331,6 +334,7 @@ void gncJobSetOwner (GncJob *job, GncOwner *owner)
 
     switch (gncOwnerGetType (owner))
     {
+    case GNC_OWNER_COOWNER:
     case GNC_OWNER_CUSTOMER:
     case GNC_OWNER_VENDOR:
         break;
@@ -343,6 +347,9 @@ void gncJobSetOwner (GncJob *job, GncOwner *owner)
 
     switch (gncOwnerGetType (&(job->owner)))
     {
+    case GNC_OWNER_COOWNER:
+	gncCoOwnerRemoveJob (gncOwnerGetCoOwner(&job->owner), job);
+	break;
     case GNC_OWNER_CUSTOMER:
         gncCustomerRemoveJob (gncOwnerGetCustomer(&job->owner), job);
         break;
@@ -357,6 +364,9 @@ void gncJobSetOwner (GncJob *job, GncOwner *owner)
 
     switch (gncOwnerGetType (&(job->owner)))
     {
+    case GNC_OWNER_COOWNER:
+	gncCoOwnerAddJob (gncOwnerGetCoOwner(&job->owner), job);
+	break;
     case GNC_OWNER_CUSTOMER:
         gncCustomerAddJob (gncOwnerGetCustomer(&job->owner), job);
         break;

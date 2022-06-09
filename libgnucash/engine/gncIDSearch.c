@@ -26,10 +26,11 @@
 
 typedef enum
 {   UNDEFINED,
+    BILL,
+    COOWNER,
     CUSTOMER,
-    VENDOR,
     INVOICE,
-    BILL
+    VENDOR,
 }GncSearchType;
 
 static void * search(QofBook * book, const gchar *id, void * object, GncSearchType type);
@@ -42,6 +43,15 @@ static QofLogModule log_module = G_LOG_DOMAIN;
  @return GncCustomer * Pointer to the customer or NULL of there is no customer
  **********************************************************************/
 
+
+GncCoOwner *
+gnc_search_coowner_on_id (QofBook * book, const gchar *id)
+{
+    GncCoOwner *coowner = NULL;
+    GncSearchType type = COOWNER;
+    coowner = (GncCoOwner*)search(book, id, coowner, type);
+    return coowner;
+}
 
 GncCustomer *
 gnc_search_customer_on_id (QofBook * book, const gchar *id)
@@ -131,9 +141,19 @@ static void * search(QofBook * book, const gchar *id, void * object, GncSearchTy
         {
             c = result->data;
             
-            if (type == CUSTOMER && strcmp(id, gncCustomerGetID(c)) == 0)
+	    if (type == COOWNER && strcmp(id, gncCoOwnerGetID(c)) == 0)
+	    {
+		object = c;
+		break;
+	    }
+	    else if (type == CUSTOMER && strcmp(id, gncCustomerGetID(c)) == 0)
+	    {
+		object = c;
+		break;
+	    }
+	    else if (type == INVOICE && strcmp(id, gncInvoiceGetID(c)) == 0
+			&& gncInvoiceGetType(c) == GNC_INVOICE_COOWNER_INVOICE)
             {
-                // correct id found
                 object = c;
                 break;
             }

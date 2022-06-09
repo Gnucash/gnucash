@@ -65,6 +65,8 @@ set (engine_HEADERS
   gncBillTerm.h
   gncBillTermP.h
   gncBusiness.h
+  gncCoOwner.h
+  gncCoOwnerP.h
   gncCustomer.h
   gncCustomerP.h
   gncEmployee.h
@@ -161,6 +163,7 @@ set (engine_SOURCES
   gncAddress.c
   gncBillTerm.c
   gncBusiness.c
+  gncCoOwner.c
   gncCustomer.c
   gncEmployee.c
   gncEntry.c
@@ -207,8 +210,8 @@ add_library (gnc-engine
 
 target_sources(gnc-engine
     PRIVATE
-        $<$<BOOL:${WIN32}>:qof-win32.cpp>
-        $<$<BOOL:${WIN32}>:${CMAKE_SOURCE_DIR}/borrowed/libc/strptime.c>
+	$<$<BOOL:${WIN32}>:qof-win32.cpp>
+	$<$<BOOL:${WIN32}>:${CMAKE_SOURCE_DIR}/borrowed/libc/strptime.c>
 )
 
 # Add dependency on iso-4217-currencies.c
@@ -229,15 +232,15 @@ target_compile_definitions (gnc-engine PRIVATE -DG_LOG_DOMAIN=\"gnc.engine\")
 
 target_include_directories (gnc-engine
     PRIVATE
-        ${CMAKE_CURRENT_BINARY_DIR} # for iso-4217-currencies.c
+	${CMAKE_CURRENT_BINARY_DIR} # for iso-4217-currencies.c
     PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_BINARY_DIR}/common # for config.h
-        ${CMAKE_SOURCE_DIR}/common # for platform.h
-        ${GLIB2_INCLUDE_DIRS}
-        ${LIBINTL_INCLUDE_PATH}
-        ${REGEX_INCLUDE_PATH}
-        ${CMAKE_SOURCE_DIR}/borrowed/libc # for strptime.h
+	${CMAKE_CURRENT_SOURCE_DIR}
+	${CMAKE_BINARY_DIR}/common # for config.h
+	${CMAKE_SOURCE_DIR}/common # for platform.h
+	${GLIB2_INCLUDE_DIRS}
+	${LIBINTL_INCLUDE_PATH}
+	${REGEX_INCLUDE_PATH}
+	${CMAKE_SOURCE_DIR}/borrowed/libc # for strptime.h
 )
 
 if (APPLE)
@@ -252,21 +255,21 @@ install(TARGETS gnc-engine
 install(FILES ${engine_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
 
 set(engine_EXTRA_DIST
-        design.txt
-        extensions.txt
-        iso-4217-currencies.xml
-        iso-currencies-to-c.xsl
-        kvp_doc.txt
-        README
-        README.query-api
-        SX-book-p.h
-        )
+	design.txt
+	extensions.txt
+	iso-4217-currencies.xml
+	iso-currencies-to-c.xsl
+	kvp_doc.txt
+	README
+	README.query-api
+	SX-book-p.h
+	)
 
 if (NOT WIN32)
   list(APPEND engine_EXTRA_DIST qof-win32.cpp)
 endif()
 set_local_dist(engine_DIST_local CMakeLists.txt ${engine_SOURCES} ${engine_HEADERS}
-                     ${engine_noinst_HEADERS} ${engine_EXTRA_DIST})
+		     ${engine_noinst_HEADERS} ${engine_EXTRA_DIST})
 set(engine_DIST
     ${engine_DIST_local}
     ${engine_test_core_DIST}

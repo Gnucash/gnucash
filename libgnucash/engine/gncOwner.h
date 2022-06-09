@@ -41,18 +41,20 @@ typedef enum
 {
     GNC_OWNER_NONE ,
     GNC_OWNER_UNDEFINED ,
+    GNC_OWNER_COOWNER ,
     GNC_OWNER_CUSTOMER ,
+    GNC_OWNER_EMPLOYEE ,
     GNC_OWNER_JOB ,
     GNC_OWNER_VENDOR ,
-    GNC_OWNER_EMPLOYEE ,
 } GncOwnerType;
 
 #include "qof.h"
+#include "gncCoOwner.h"
 #include "gncCustomer.h"
-#include "gncJob.h"
-#include "gncVendor.h"
 #include "gncEmployee.h"
 #include "gncInvoice.h"
+#include "gncJob.h"
+#include "gncVendor.h"
 #include "Account.h"
 #include "gnc-lot.h"
 
@@ -93,11 +95,12 @@ struct _gncOwner
     GncOwnerType     type;      /**< Customer, Job, Vendor, Employee or Undefined. */
     union
     {
-        gpointer       undefined;
-        GncCustomer *  customer;
-        GncJob *       job;
-        GncVendor *    vendor;
-        GncEmployee *  employee;
+	gpointer       undefined;
+	GncCoOwner *   coowner;
+	GncCustomer *  customer;
+	GncJob *       job;
+	GncVendor *    vendor;
+	GncEmployee *  employee;
     } owner;                   /**< holds the pointer to the owner object. */
     gpointer         qof_temp; /**< Set type independently of the owner. */
 };
@@ -108,6 +111,7 @@ struct _gncOwner
 @{
 */
 void gncOwnerInitUndefined (GncOwner *owner, gpointer obj);
+void gncOwnerInitCoOwner (GncOwner *owner, GncCoOwner *coowner);
 void gncOwnerInitCustomer (GncOwner *owner, GncCustomer *customer);
 void gncOwnerInitJob (GncOwner *owner, GncJob *job);
 void gncOwnerInitVendor (GncOwner *owner, GncVendor *vendor);
@@ -125,6 +129,9 @@ gboolean gncOwnerIsValid (const GncOwner *owner);
 /** If the given owner is of type GNC_OWNER_UNDEFINED, returns the undefined
  * pointer, which is usually NULL. Otherwise returns NULL. */
 gpointer gncOwnerGetUndefined (const GncOwner *owner);
+/** If the given owner is of type GNC_OWNER_COOWNER, returns the pointer
+ * to the co-owner object. Otherwise returns NULL. */
+GncCoOwner * gncOwnerGetCoOwner (const GncOwner *owner);
 /** If the given owner is of type GNC_OWNER_CUSTOMER, returns the pointer
  * to the customer object. Otherwise returns NULL. */
 GncCustomer * gncOwnerGetCustomer (const GncOwner *owner);
@@ -217,9 +224,9 @@ gboolean gncOwnerGetOwnerFromTypeGuid (QofBook *book, GncOwner *owner, QofIdType
  */
 GNCLot *
 gncOwnerCreatePaymentLotSecs (const GncOwner *owner, Transaction **preset_txn,
-                              Account *posted_acc, Account *xfer_acc,
-                              gnc_numeric amount, gnc_numeric exch, time64 date,
-                              const char *memo, const char *num);
+			      Account *posted_acc, Account *xfer_acc,
+			      gnc_numeric amount, gnc_numeric exch, time64 date,
+			      const char *memo, const char *num);
 
 /**
  * Given a list of lots, try to balance as many of them as possible
@@ -270,9 +277,9 @@ void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots);
  */
 void
 gncOwnerApplyPaymentSecs (const GncOwner *owner, Transaction **preset_txn,
-                          GList *lots, Account *posted_acc, Account *xfer_acc,
-                          gnc_numeric amount, gnc_numeric exch, time64 date,
-                          const char *memo, const char *num, gboolean auto_pay);
+			  GList *lots, Account *posted_acc, Account *xfer_acc,
+			  gnc_numeric amount, gnc_numeric exch, time64 date,
+			  const char *memo, const char *num, gboolean auto_pay);
 
 /** Helper function to find a split in lot that best offsets target_value
  *  Obviously it should be of opposite sign.
@@ -314,7 +321,7 @@ GList * gncOwnerGetCommoditiesList (const GncOwner *owner);
  */
 gnc_numeric
 gncOwnerGetBalanceInCurrency (const GncOwner *owner,
-                              const gnc_commodity *report_currency);
+			      const gnc_commodity *report_currency);
 
 #define OWNER_TYPE        "type"
 #define OWNER_TYPE_STRING "type-string"  /**< Allows the type to be handled externally. */
