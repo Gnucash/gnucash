@@ -8,6 +8,7 @@ set (backend_sql_SOURCES
   gnc-bill-term-sql.cpp
   gnc-book-sql.cpp
   gnc-budget-sql.cpp
+  gnc-coowner-sql.cpp
   gnc-commodity-sql.cpp
   gnc-customer-sql.cpp
   gnc-employee-sql.cpp
@@ -36,6 +37,7 @@ set (backend_sql_noinst_HEADERS
   gnc-book-sql.h
   gnc-budget-sql.h
   gnc-commodity-sql.h
+  gnc-coowner-sql.h
   gnc-customer-sql.h
   gnc-employee-sql.h
   gnc-entry-sql.h
