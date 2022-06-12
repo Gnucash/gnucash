@@ -28,8 +28,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-05-15 19:17+0000\n"
-"Last-Translator: Yu Hongbo <linuxbckp@gmail.com>\n"
+"PO-Revision-Date: 2022-06-11 14:17+0000\n"
+"Last-Translator: YTX <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -8263,7 +8263,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-file.c:850
 #: gnucash/gtkbuilder/dialog-file-access.glade:98
 msgid "Open _Read-Only"
-msgstr "只读打开(_R)"
+msgstr "只读模式(_R)"
 
 #: gnucash/gnome-utils/gnc-file.c:853
 msgid "Create _New File"
@@ -8271,7 +8271,7 @@ msgstr "新建文件(_N)"
 
 #: gnucash/gnome-utils/gnc-file.c:856
 msgid "Open _Anyway"
-msgstr "强行打开(_A)"
+msgstr "读写模式(_A)"
 
 #: gnucash/gnome-utils/gnc-file.c:859
 msgid "Open _Folder"
