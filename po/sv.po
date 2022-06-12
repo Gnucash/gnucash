@@ -10,14 +10,15 @@
 # Jonas Norling <norling@lysator.liu.se>, 2004, 2006.
 # Erik Johansson <erik@ejohansson.se>, 2014, 2016.
 # Arve Eriksson <031299870@telia.com>, 2021, 2022.
+# Luna Jernberg <droidbittin@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-13 04:55+0000\n"
-"Last-Translator: Arve Eriksson <031299870@telia.com>\n"
+"PO-Revision-Date: 2022-06-12 14:15+0000\n"
+"Last-Translator: Luna Jernberg <droidbittin@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sv/>\n"
 "Language: sv\n"
@@ -25,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.13-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -2811,7 +2812,7 @@ msgstr ""
 #: gnucash/report/reports/standard/new-owner-report.scm:306
 #: gnucash/report/reports/standard/new-owner-report.scm:704
 msgid "Pre-Payment"
-msgstr "Förskottsbetalning"
+msgstr "För-betalning"
 
 #: gnucash/gnome/dialog-payment.c:1010
 msgid ""
@@ -5803,7 +5804,7 @@ msgstr "Ej avstämd"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:876
 #: gnucash/report/trep-engine.scm:150
 msgid "Cleared"
-msgstr "Clearad"
+msgstr "Rensat"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3447
 #: gnucash/gnome-search/search-reconciled.c:227
@@ -18368,7 +18369,7 @@ msgstr "<b>Valutaöverföring</b>"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:520
 msgid "Exchange Rate"
-msgstr "Växelkurs"
+msgstr "Växlingskurs"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:601
 msgid "_Fetch Rate"
