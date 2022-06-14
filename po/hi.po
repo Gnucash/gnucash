@@ -2,14 +2,15 @@
 # Copyright (C) 2014, C-DAC, GIST, Pune, India.
 # Parimal Khade <parimal.khade@gmail.com>, 2014.
 # Hindi and Sanskrit Speaker <ifiotsbywzpamtrbbk@wqcefp.com>, 2021.
+# Hemanshu Kumar <hemanshusubs@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2021-02-20 06:50+0000\n"
-"Last-Translator: Hindi and Sanskrit Speaker <ifiotsbywzpamtrbbk@wqcefp.com>\n"
+"PO-Revision-Date: 2022-06-11 00:14+0000\n"
+"Last-Translator: Hemanshu Kumar <hemanshusubs@gmail.com>\n"
 "Language-Team: Hindi <https://hosted.weblate.org/projects/gnucash/gnucash/hi/"
 ">\n"
 "Language: hi\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 4.13-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -29,11 +30,11 @@ msgstr "बाल्टिक"
 
 #: borrowed/goffice/go-charmap-sel.c:72
 msgid "Central European"
-msgstr "मध्य यूरोपियन"
+msgstr "मध्य यूरोपीय"
 
 #: borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr "चाइनीस"
+msgstr "चीनी"
 
 #: borrowed/goffice/go-charmap-sel.c:74
 #: gnucash/gnome-utils/assistant-xml-encoding.c:242
@@ -42,27 +43,29 @@ msgstr "सिरिलिक"
 
 #: borrowed/goffice/go-charmap-sel.c:75
 msgid "Greek"
-msgstr "ग्रीक"
+msgstr "यूनानी"
 
 #: borrowed/goffice/go-charmap-sel.c:76
+#, fuzzy
 msgid "Hebrew"
-msgstr "हिब्रू"
+msgstr "यहूदी"
 
 #: borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr "इंडियन"
+msgstr "भारतीय"
 
 #: borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
 msgstr "जापानी"
 
 #: borrowed/goffice/go-charmap-sel.c:79
+#, fuzzy
 msgid "Korean"
-msgstr "कोरियन"
+msgstr "कोरियाई"
 
 #: borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr "तुर्किश"
+msgstr "तुर्की"
 
 #: borrowed/goffice/go-charmap-sel.c:81
 #: gnucash/gnome-utils/assistant-xml-encoding.c:224
@@ -71,7 +74,7 @@ msgstr "यूनिकोड"
 
 #: borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr "वियतनामीस"
+msgstr "वीयतनामी"
 
 #: borrowed/goffice/go-charmap-sel.c:83
 msgid "Western"
@@ -86,104 +89,114 @@ msgid "Other"
 msgstr "अन्य"
 
 #: borrowed/goffice/go-charmap-sel.c:115
+#, fuzzy
 msgid "Arabic (IBM-864)"
-msgstr "अरेबिक (IBM -864)"
+msgstr "अरबी (IBM-864)"
 
 #: borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "अरबी (IBM-864-I)"
 
 #: borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "अरबी (ISO-8859-6)"
 
 #: borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "अरबी (ISO-8859-6-E)"
 
 #: borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "अरबी (ISO-8859-6-I)"
 
 #: borrowed/goffice/go-charmap-sel.c:121
+#, fuzzy
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "अरबी (MacArabic)"
 
 #: borrowed/goffice/go-charmap-sel.c:122
+#, fuzzy
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "अरबी (Windows-1256)"
 
 #: borrowed/goffice/go-charmap-sel.c:123
+#, fuzzy
 msgid "Armenian (ARMSCII-8)"
-msgstr ""
+msgstr "अर्मेनियाई (ARMSCII-8)"
 
 #: borrowed/goffice/go-charmap-sel.c:124
 msgid "Baltic (ISO-8859-13)"
 msgstr "बाल्टिक (ISO-8859-13)"
 
 #: borrowed/goffice/go-charmap-sel.c:125
+#, fuzzy
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "बाल्टिक (ISO-8859-4)"
 
 #: borrowed/goffice/go-charmap-sel.c:126
+#, fuzzy
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "बाल्टिक (विंडोज-1257)"
 
 #: borrowed/goffice/go-charmap-sel.c:127
+#, fuzzy
 msgid "Celtic (ISO-8859-14)"
-msgstr "सेल्टिक (ISO-8859-14)"
+msgstr "केल्टिक (ISO-8859-14)"
 
 #: borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "मध्य यूरोपीय (IBM-852)"
 
 #: borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "मध्य यूरोपीय (ISO-8859-2)"
 
 #: borrowed/goffice/go-charmap-sel.c:132
+#, fuzzy
 msgid "Central European (MacCE)"
-msgstr ""
+msgstr "मध्य यूरोपीय (MacCE)"
 
 #: borrowed/goffice/go-charmap-sel.c:134
+#, fuzzy
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "मध्य यूरोपीय (Windows-1250)"
 
 #: borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
-msgstr ""
+msgstr "सरलीकृत चीनी (GB18030)"
 
 #: borrowed/goffice/go-charmap-sel.c:137
 msgid "Chinese Simplified (GB2312)"
-msgstr ""
+msgstr "सरलीकृत चीनी (GB2312)"
 
 #: borrowed/goffice/go-charmap-sel.c:138
 msgid "Chinese Simplified (GBK)"
-msgstr ""
+msgstr "सरलीकृत चीनी (GBK)"
 
 #: borrowed/goffice/go-charmap-sel.c:139
 msgid "Chinese Simplified (HZ)"
-msgstr ""
+msgstr "सरलीकृत चीनी (HZ)"
 
 #: borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
-msgstr ""
+msgstr "सरलीकृत चीनी (विंडोज़-936)"
 
 #: borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "पारम्परिक चीनी (Big5)"
 
 #: borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "पारम्परिक चीनी (Big5-HKSCS)"
 
 #: borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr ""
+msgstr "पारम्परिक चीनी (EUC-TW)"
 
 #: borrowed/goffice/go-charmap-sel.c:147
+#, fuzzy
 msgid "Croatian (MacCroatian)"
-msgstr ""
+msgstr "क्रोएशियाई (MacCroatian)"
 
 #: borrowed/goffice/go-charmap-sel.c:149
 msgid "Cyrillic (IBM-855)"
@@ -212,49 +225,48 @@ msgstr ""
 
 #: borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
-msgstr ""
+msgstr "रूसी (CP-866)"
 
 #: borrowed/goffice/go-charmap-sel.c:160
 msgid "Ukrainian (KOI8-U)"
-msgstr ""
+msgstr "यूक्रेनी (KO18-U)"
 
 #: borrowed/goffice/go-charmap-sel.c:161
-#, fuzzy
 msgid "Ukrainian (MacUkrainian)"
-msgstr "KOI8-U (यूक्रेनियाई) "
+msgstr "यूक्रेनी (MacUkrainian)"
 
 #: borrowed/goffice/go-charmap-sel.c:163
 msgid "English (ASCII)"
-msgstr ""
+msgstr "अंग्रेज़ी (ASCII)"
 
 #: borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
-msgstr ""
+msgstr "फ़ारसी (MacFarsi)"
 
 #: borrowed/goffice/go-charmap-sel.c:166
+#, fuzzy
 msgid "Georgian (GEOSTD8)"
-msgstr ""
+msgstr "जॉर्जियाई (GEOSTD8)"
 
 #: borrowed/goffice/go-charmap-sel.c:167
-#, fuzzy
 msgid "Greek (ISO-8859-7)"
-msgstr "ISO-8859-7 (यूनानी) "
+msgstr "यूनानी (ISO-8859-7)"
 
 #: borrowed/goffice/go-charmap-sel.c:168
 msgid "Greek (MacGreek)"
-msgstr ""
+msgstr "यूनानी (MacGreek)"
 
 #: borrowed/goffice/go-charmap-sel.c:169
 msgid "Greek (Windows-1253)"
-msgstr ""
+msgstr "यूनानी (विंडोज़-1253)"
 
 #: borrowed/goffice/go-charmap-sel.c:170
 msgid "Gujarati (MacGujarati)"
-msgstr ""
+msgstr "गुजराती (MacGujarati)"
 
 #: borrowed/goffice/go-charmap-sel.c:172
 msgid "Gurmukhi (MacGurmukhi)"
-msgstr ""
+msgstr "गुरमुखी (MacGurmukhi)"
 
 #: borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
@@ -278,7 +290,7 @@ msgstr ""
 
 #: borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
-msgstr ""
+msgstr "हिंदी (MacDevanagari)"
 
 #: borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
@@ -286,31 +298,35 @@ msgstr ""
 
 #: borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
-msgstr ""
+msgstr "जापानी (EUC-JP)"
 
 #: borrowed/goffice/go-charmap-sel.c:187
 msgid "Japanese (ISO-2022-JP)"
-msgstr ""
+msgstr "जापानी (ISO-2022-JP)"
 
 #: borrowed/goffice/go-charmap-sel.c:189
 msgid "Japanese (Shift_JIS)"
-msgstr ""
+msgstr "जापानी (शिफ़्ट_JIS)"
 
 #: borrowed/goffice/go-charmap-sel.c:190
+#, fuzzy
 msgid "Korean (EUC-KR)"
-msgstr ""
+msgstr "कोरियाई (EUC-KR)"
 
 #: borrowed/goffice/go-charmap-sel.c:191
+#, fuzzy
 msgid "Korean (ISO-2022-KR)"
-msgstr ""
+msgstr "कोरियाई (ISO-2022-KR)"
 
 #: borrowed/goffice/go-charmap-sel.c:192
+#, fuzzy
 msgid "Korean (JOHAB)"
-msgstr ""
+msgstr "कोरियाई (JOHAB)"
 
 #: borrowed/goffice/go-charmap-sel.c:193
+#, fuzzy
 msgid "Korean (UHC)"
-msgstr ""
+msgstr "कोरियाई (UHC)"
 
 #: borrowed/goffice/go-charmap-sel.c:194
 #, fuzzy
@@ -318,62 +334,63 @@ msgid "Nordic (ISO-8859-10)"
 msgstr "ISO-8859-10 (नॉर्डिक) "
 
 #: borrowed/goffice/go-charmap-sel.c:195
+#, fuzzy
 msgid "Romanian (MacRomanian)"
-msgstr ""
+msgstr "रोमानियाई (MacRomanian)"
 
 #: borrowed/goffice/go-charmap-sel.c:197
+#, fuzzy
 msgid "Romanian (ISO-8859-16)"
-msgstr ""
+msgstr "रोमानियाई (ISO-8859-16)"
 
 #: borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
-msgstr ""
+msgstr "दक्षिण यूरोपीय (ISO-8859-3)"
 
 #: borrowed/goffice/go-charmap-sel.c:201
+#, fuzzy
 msgid "Thai (TIS-620)"
-msgstr ""
+msgstr "थाई (TIS-620)"
 
 #: borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
-msgstr ""
+msgstr "तुर्की (IBM-857)"
 
 #: borrowed/goffice/go-charmap-sel.c:203
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "तुर्की (ISO-8859-9)"
 
 #: borrowed/goffice/go-charmap-sel.c:204
 msgid "Turkish (MacTurkish)"
-msgstr ""
+msgstr "तुर्की (MacTurkish)"
 
 #: borrowed/goffice/go-charmap-sel.c:206
 msgid "Turkish (Windows-1254)"
-msgstr ""
+msgstr "तुर्की (विंडोज़-1254)"
 
 #: borrowed/goffice/go-charmap-sel.c:208
-#, fuzzy
 msgid "Unicode (UTF-7)"
-msgstr "यूनिकोड"
+msgstr "यूनिकोड (UTF-7)"
 
 #: borrowed/goffice/go-charmap-sel.c:209
-#, fuzzy
 msgid "Unicode (UTF-8)"
-msgstr "यूनिकोड"
+msgstr "यूनिकोड (UTF-8)"
 
 #: borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
-msgstr ""
+msgstr "यूनिकोड (UTF-16BE)"
 
 #: borrowed/goffice/go-charmap-sel.c:211
 msgid "Unicode (UTF-16LE)"
-msgstr ""
+msgstr "यूनिकोड (UTF-16LE)"
 
 #: borrowed/goffice/go-charmap-sel.c:212
 msgid "Unicode (UTF-32BE)"
-msgstr ""
+msgstr "यूनिकोड (UTF-32BE)"
 
 #: borrowed/goffice/go-charmap-sel.c:213
 msgid "Unicode (UTF-32LE)"
-msgstr ""
+msgstr "यूनिकोड (UTF-32LE)"
 
 #: borrowed/goffice/go-charmap-sel.c:214
 #, fuzzy
@@ -381,75 +398,82 @@ msgid "User Defined"
 msgstr "यूजरनेम"
 
 #: borrowed/goffice/go-charmap-sel.c:215
+#, fuzzy
 msgid "Vietnamese (TCVN)"
-msgstr ""
+msgstr "वियतनामी (TCVN)"
 
 #: borrowed/goffice/go-charmap-sel.c:217
+#, fuzzy
 msgid "Vietnamese (VISCII)"
-msgstr ""
+msgstr "वियतनामी (VISCII)"
 
 #: borrowed/goffice/go-charmap-sel.c:218
+#, fuzzy
 msgid "Vietnamese (VPS)"
-msgstr ""
+msgstr "वियतनामी (VPS)"
 
 #: borrowed/goffice/go-charmap-sel.c:219
+#, fuzzy
 msgid "Vietnamese (Windows-1258)"
-msgstr ""
+msgstr "वियतनामी (Windows-1258)"
 
 #: borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
 msgstr ""
 
 #: borrowed/goffice/go-charmap-sel.c:223
+#, fuzzy
 msgid "Western (IBM-850)"
-msgstr ""
+msgstr "पश्चिमी (IBM-850)"
 
 #: borrowed/goffice/go-charmap-sel.c:224
+#, fuzzy
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "पश्चिमी (ISO-8859-1)"
 
 #: borrowed/goffice/go-charmap-sel.c:225
+#, fuzzy
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "पश्चिमी (ISO-8859-15)"
 
 #: borrowed/goffice/go-charmap-sel.c:227
+#, fuzzy
 msgid "Western (MacRoman)"
-msgstr ""
+msgstr "पश्चिमी (MacRoman)"
 
 #: borrowed/goffice/go-charmap-sel.c:228
+#, fuzzy
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "पश्चिमी (Windows-1252)"
 
 #: borrowed/goffice/go-charmap-sel.c:441
-#, fuzzy
 msgid "Locale: "
-msgstr "लोक_ल:"
+msgstr "स्थान : "
 
 #: borrowed/goffice/go-charmap-sel.c:476
-#, fuzzy
 msgid "Conversion Direction"
-msgstr "रूपांतरण पूरा हो गया"
+msgstr "रूपांतरण दिशा"
 
 #: borrowed/goffice/go-charmap-sel.c:477
+#, fuzzy
 msgid "This value determines which iconv test to perform."
-msgstr ""
+msgstr "यह मान निर्धारित करता है कि कौन सा iconv परीक्षण करना है।"
 
 #: borrowed/goffice/go-optionmenu.c:339
 msgid "Menu"
-msgstr ""
+msgstr "सूची"
 
 #: borrowed/goffice/go-optionmenu.c:339
-#, fuzzy
 msgid "The menu of options"
-msgstr "नंबर विकल्प है %s."
+msgstr "विकल्पों की सूची"
 
 #: doc/tip_of_the_day.list.c:3
 msgid ""
 "The GnuCash online manual has lots of helpful information. You can access "
 "the manual under the Help menu."
 msgstr ""
-"GnuCash ऑनलाइन मैनुअल में बहुत सी उपयोगी जानकारियां हैं. आप हेल्प मेन्यू के अंतर्गत इस मैनुअल "
-"को प्राप्त कर सकते हैं."
+"GnuCash ऑनलाइन मैनुअल में बहुत सी उपयोगी जानकारियां हैं. आप सहायता सूची के "
+"अंतर्गत इस मैनुअल को प्राप्त कर सकते हैं."
 
 #. Translators: You can replace the link, if a translated page exists.
 #: doc/tip_of_the_day.list.c:7
@@ -458,6 +482,9 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
+"मेलिंग सूचियाँ GnuCash समुदाय में संचार का पसंदीदा रूप हैं। नई रिलीज़, "
+"उपयोगकर्ता समूह आदि की घोषणाओं के लिए https://wiki.gnucash.org/wiki/"
+"Mailing_Lists पर तालिका देखें"
 
 #: doc/tip_of_the_day.list.c:11
 msgid ""
@@ -465,8 +492,9 @@ msgid ""
 "lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome."
 "org"
 msgstr ""
-"GnuCash डेवलपरों से संपर्क करना आसान है. साथ ही कई मेलिंग सूचियों में आप IRC पर उनके साथ "
-"लाइव चैट कर सकते हैं! irc.gnome.org पर #gnucash पर उनके साथ जुडें."
+"GnuCash डेवलपरों से संपर्क करना आसान है. साथ ही कई मेलिंग सूचियों में आप IRC "
+"पर उनके साथ लाइव चैट कर सकते हैं! irc.gnome.org पर #gnucash पर उनके साथ "
+"जुड़ें."
 
 #: doc/tip_of_the_day.list.c:15
 msgid ""
@@ -1203,8 +1231,9 @@ msgid "Entity type does not match %s: %s"
 msgstr "इकाई का प्रकार मेल नहीं खाता है %s: %s"
 
 #: gnucash/gnome/dialog-billterms.c:270
+#, fuzzy
 msgid "Discount days cannot be more than due days."
-msgstr ""
+msgstr "छूट के दिन नियत दिनों से अधिक नहीं हो सकते."
 
 #: gnucash/gnome/dialog-billterms.c:324
 msgid "You must provide a name for this Billing Term."
@@ -1640,8 +1669,9 @@ msgid "Amend URL:"
 msgstr "दर्ज करें "
 
 #: gnucash/gnome/dialog-doclink.c:246
+#, fuzzy
 msgid "Enter URL like http://www.gnucash.org:"
-msgstr ""
+msgstr "http://www.gnucash.org की तरह URL दर्ज करें:"
 
 #: gnucash/gnome/dialog-doclink.c:260
 #, fuzzy
@@ -2165,8 +2195,9 @@ msgid "Map Account NOT found"
 msgstr "खाता कोड"
 
 #: gnucash/gnome/dialog-imap-editor.c:370
+#, fuzzy
 msgid "(Note, if there is a large number, it may take a while)"
-msgstr ""
+msgstr "(ध्यान दें, यदि बड़ी संख्या है, तो इसमें कुछ समय लग सकता है)"
 
 #: gnucash/gnome/dialog-imap-editor.c:704
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:123

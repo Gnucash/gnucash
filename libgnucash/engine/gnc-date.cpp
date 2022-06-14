@@ -1532,17 +1532,13 @@ gnc_gdate_set_quarter_start (GDate *date)
 void
 gnc_gdate_set_quarter_end (GDate *date)
 {
-    gint months;
+     const GDateMonth months[] = {G_DATE_MARCH, G_DATE_JUNE,
+                                  G_DATE_SEPTEMBER, G_DATE_DECEMBER};
+     const GDateDay days[] = {31, 30, 30, 31};
+     int quarter = (g_date_get_month (date) - 1) / 3;
 
-    /* Set the date to the first day of the specified month. */
-    g_date_set_day(date, 1);
-
-    /* Add 1-3 months to get the first day of the next quarter.*/
-    months = (g_date_get_month(date) - G_DATE_JANUARY) % 3;
-    g_date_add_months(date, 3 - months);
-
-    /* Now back up one day */
-    g_date_subtract_days(date, 1);
+     g_date_set_month (date, months[quarter]);
+     g_date_set_day (date, days[quarter]);
 }
 
 void

@@ -6,7 +6,7 @@
 # Christian Stimming <stimming@tuhh.de>, 2001-2020.
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2007, 2009-2022.
 # Andreas Hentze <pictarus@gmx.de>, 2019
-# Joachim Wetzig <jo.wetzig@web.de>, 2019
+# Joachim Wetzig <jo.wetzig@web.de>, 2019, 2022.
 # Dmitriy Mangul <dimang.freetime@gmail.com>, 2017-2018
 # Mechtilde Stehmann <ooo@mechtilde.de>, 2014-2018.
 # quazgar <quazgar@posteo.de> 2017.
@@ -18,13 +18,15 @@
 # K. Herbert <herbert.ka@mailo.com>, 2020.
 # Milo Ivir <mail@milotype.de>, 2020.
 # Alois Spitzbart <spitz234@hotmail.com>, 2020, 2021.
-# Christian Wehling <christian.wehling@web.de>, 2020, 2021, 2022.
+# Christian Wehling <christian.wehling@web.de>, 2020-2022.
 # Marco Zietzling <marco.zietzling@gmail.com>, 2020, 2021.
 # Christian Stimming <christian@cstimming.de>, 2021.
 # Julian Heinzel <jeinzi@gmx.de>, 2021.
 # Christoph Franzen <christoph@alte-pflasterei.de>, 2021.
 # Thomas Kriegel <warrel040@gmx.de>, 2021.
 # Stefan Bayer <stefan.bayer@stefanbayer.net>, 2021.
+# S <t0kie@mailbox.org>, 2022.
+# Jan Schneider <grimpeur78@gmail.com>, 2022.
 #
 # Konventionen/Tastenkürzel:
 # »Zitate«: [altgr]+[Y]/[X]
@@ -36,7 +38,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-03-14 20:55+0000\n"
+"PO-Revision-Date: 2022-06-12 21:18+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -45,7 +47,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.13-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -1173,7 +1175,7 @@ msgstr "Anteile"
 
 #: gnucash/gnome/assistant-stock-split.c:787
 msgid "You don't have any stock accounts with balances!"
-msgstr "Sie haben keine Aktienkonten mit mehr als Null Aktien."
+msgstr "Sie haben keine Aktienkonten mit mehr als Null Aktien!"
 
 # Fixme: Source Accelerator missing in dialog-invoice?
 #: gnucash/gnome/business-gnome-utils.c:73
@@ -2214,8 +2216,14 @@ msgid_plural ""
 "There are %d invalid mappings,\n"
 "\n"
 "Would you like to remove them now?"
-msgstr[0] "Es gibt %d ungültige Zuordnung. Soll sie gelöscht werden?"
-msgstr[1] "Es gibt %d ungültige Zuordnungen. Sollen sie gelöscht werden?"
+msgstr[0] ""
+"Es gibt eine ungültige Zuordnung.\n"
+"\n"
+"Möchten Sie sie jetzt löschen?"
+msgstr[1] ""
+"Es gibt %d ungültige Zuordnungen.\n"
+"\n"
+"Möchten Sie sie jetzt löschen?"
 
 #: gnucash/gnome/dialog-imap-editor.c:368
 #, c-format
@@ -2728,6 +2736,7 @@ msgstr "Auftrag suchen"
 #: gnucash/gnome/window-reconcile2.c:1659 gnucash/gnome/window-reconcile.c:1835
 #: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
 #: gnucash/gnome-utils/gnc-file.c:1141
+#, fuzzy
 msgid "Open"
 msgstr "Öffnen"
 
@@ -2929,7 +2938,7 @@ msgid ""
 "payment"
 msgstr ""
 "Die ausgewählte Buchung hat keine Teile, die einer Zahlung zugewiesen werden "
-"kann."
+"können."
 
 #: gnucash/gnome/dialog-payment.c:1624
 msgid ""
@@ -2938,8 +2947,9 @@ msgid ""
 "Please select one, the others will be ignored.\n"
 "\n"
 msgstr ""
-"Während diese Transaktion mehrere Splits hat, die man als 'Zahlungssplit' "
-"bezeichnet, weiß GnuCash nur, wie man mit einem umgeht.\n"
+"Diese Transaktion hat mehrere Splits,\n"
+"die man als 'Zahlungssplit' bezeichnen kann; GnuCash weiß nur, wie man mit "
+"einem umgeht.\n"
 "Bitte wählen Sie einen aus, die anderen werden ignoriert.\n"
 "\n"
 
@@ -3624,7 +3634,7 @@ msgstr "Term_inierte Buchungen"
 # Fixme: Source should have HEllip?
 #: gnucash/gnome/gnc-plugin-basic-commands.c:166
 msgid "_Scheduled Transaction Editor"
-msgstr "Terminierte Buchungen _Editor..."
+msgstr "_Editor für Terminierte Buchungen"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:167
 msgid "The list of Scheduled Transactions"
@@ -4356,7 +4366,8 @@ msgid ""
 "Are you sure you want to do this?"
 msgstr ""
 "Das Zielkonto %s hat nicht die gleiche Währung wie das Konto, von dem Sie "
-"die Buchungen verschieben. Sollen die Buchungen trotzdem verschoben werden?"
+"die Buchungen verschieben.\n"
+"Sollen die Buchungen trotzdem verschoben werden?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1438
 msgid "_Pick another account"
@@ -4487,7 +4498,7 @@ msgstr "_Alle Perioden..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:177
 msgid "Edit budget for all periods for the selected accounts."
-msgstr "Budget für alle Perioden bearbeiten"
+msgstr "Budget für alle Perioden bearbeiten."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:181
 msgid "Edit Note"
@@ -4504,7 +4515,7 @@ msgstr "Budget-Bericht"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:189
 msgid "Run the budget report."
-msgstr "Aktuellen Bericht drucken"
+msgstr "Budget-Bericht ausführen."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:199
 msgid "Refresh this window."
@@ -4725,7 +4736,7 @@ msgstr "Rechnungsbuchung _rückgängig"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:301
 msgid "New _Invoice"
-msgstr "Neue _Rechnung..."
+msgstr "Neue _Rechnung"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:302
 msgid "_Pay Invoice"
@@ -6768,7 +6779,7 @@ msgstr "Sie haben keinen Mandanten ausgewählt"
 #: gnucash/report/reports/standard/new-owner-report.scm:99
 #: libgnucash/engine/gncOwner.c:219
 msgid "Job"
-msgstr "Auftrag"
+msgstr "Aufgabe"
 
 #: gnucash/gnome/search-owner.c:231
 #: gnucash/gnome-search/search-reconciled.c:183
@@ -7541,8 +7552,7 @@ msgstr "Sie müssen eine Währung/Wertpapier auswählen."
 #: gnucash/gnome-utils/dialog-account.c:952
 msgid "You must enter a valid opening balance or leave it blank."
 msgstr ""
-"Sie müssen entweder einen gültigen Anfangsbestand angeben\n"
-"oder das Feld freilassen."
+"Sie müssen einen gültigen Anfangsbestand angeben oder das Feld freilassen."
 
 #: gnucash/gnome-utils/dialog-account.c:976
 msgid ""
@@ -7568,8 +7578,8 @@ msgid ""
 "This Account contains Transactions.\n"
 "Changing this option is not possible."
 msgstr ""
-"Dieses Konto enthält Buchungen. Daher kann diese Option nicht geändert "
-"werden."
+"Dieses Konto enthält Buchungen.\n"
+"Daher kann diese Option nicht geändert werden."
 
 #: gnucash/gnome-utils/dialog-account.c:1610
 msgid "Edit Account"
@@ -7771,7 +7781,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:426
 msgid "Existing"
-msgstr "Existierend"
+msgstr "Bestehend"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:150
 msgid "You can type '+' or '-' to increment or decrement the number."
@@ -7859,9 +7869,10 @@ msgid ""
 "(via File->Properties), after account setup, to select a\n"
 "default gain/loss account."
 msgstr ""
-"Es gibt kein Erfolgskonto in der festgelegten Buchwährung. Nach der "
-"Konteneinrichtung müssen Sie über Datei->Eigenschaften zu diesem Dialog "
-"zurückkehren, um ein Erfolgskonto vorzuwählen."
+"Es gibt kein Erfolgskonto in der festgelegten Buchwährung.\n"
+"Nach der Konteneinrichtung müssen Sie über\n"
+"Datei->Eigenschaften zu diesem Dialog zurückkehren,\n"
+"um ein Erfolgskonto vorzuwählen."
 
 #: gnucash/gnome-utils/dialog-options.c:869
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:299
@@ -9148,11 +9159,14 @@ msgstr "Finanzverwaltung für Privatanwender und Kleinbetriebe."
 #: gnucash/gnome-utils/gnc-main-window.c:4738
 msgid "translator-credits"
 msgstr ""
+"Frank H. Ellenberger, 2007, 2009-2022\n"
+"Joachim Wetzig, 2019-2022\n"
+"Christian Wehling, 2020-2022\n"
+"Jan Schneider, 2022\n"
 "Christian Stimming, 2001-2021\n"
-"Frank H. Ellenberger, 2007, 2009-2021\n"
-"Christian Wehling, 2020-2021\n"
 "Marco Zietzling, 2020-2021\n"
 "Alois Spitzbart, 2020-2021\n"
+"Stefan Bayer, 2021\n"
 "Christoph Franzen, 2021\n"
 "Thomas Kriegel, 2021\n"
 "Julian Heinzel, 2021\n"
@@ -9160,7 +9174,6 @@ msgstr ""
 "K. Herbert, 2020\n"
 "Manuel Bichler, 2020\n"
 "Andreas Hentze, 2019\n"
-"Joachim Wetzig, 2019\n"
 "Dmitriy Mangul, 2017-2018\n"
 "Mechtilde Stehmann, 2014-2018\n"
 "quazgar, 2017\n"
@@ -12771,7 +12784,7 @@ msgid ""
 msgstr ""
 "Dieser Dialog wird angezeigt, bevor Sie ein Forderungs-/"
 "Verbindlichkeitskonto anlegen können. Diese Kontoarten sind für die "
-"Geschäftsbuchungen reserviert und sollten nicht manuell geändert werden,"
+"Geschäftsbuchungen reserviert und sollten nicht manuell geändert werden."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:54
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:177
@@ -12910,7 +12923,7 @@ msgstr "Diese Rückfrage wird vor dem Ausschneiden einer Buchung angezeigt."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
 msgid "Cut a transaction with reconciled splits"
-msgstr "Eine Buchung mit abgeglichenen Teilen ausschneiden"
+msgstr "Eine Buchung mit abgeglichenen Buchungsteilen ausschneiden"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:105
 msgid ""
@@ -13135,7 +13148,7 @@ msgstr ""
 "\n"
 "Achtung: Dieses Feature ist noch in Entwicklung und funktioniert "
 "wahrscheinlich nur fehlerhaft. Es könnte sogar Ihre Daten korrumpieren! "
-"Bitte sorgen Sie daher für ein rechtzeitiges Backup."
+"Bitte sorgen Sie daher für ein rechtzeitiges Backup!"
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:24
 msgid "Setup Account Period"
@@ -14956,7 +14969,7 @@ msgstr "Datei umwandeln"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:145
 msgid "finish placeholder"
-msgstr "finish placeholder"
+msgstr "Platzhalter für Beenden"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:150
 msgid "Finish GnuCash Datafile Import"
@@ -15896,8 +15909,8 @@ msgid ""
 "The customer ID number. If left blank a reasonable number will be chosen for "
 "you"
 msgstr ""
-"Die Kundennummer. Falls keine angegeben wird, wird automatisch ein "
-"sinnvoller Wert gewählt"
+"Die Kundennummer. Falls keine angegeben ist, wird automatisch ein sinnvoller "
+"Wert gewählt"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:258
 #: gnucash/gtkbuilder/dialog-customer.glade:790
@@ -16117,7 +16130,7 @@ msgid ""
 "The employee ID number. If left blank a reasonable number will be chosen for "
 "you"
 msgstr ""
-"Die Mitarbeiternummer. Falls keine angegeben wird, wird automatisch ein "
+"Die Mitarbeiternummer. Falls keine angegeben ist, wird automatisch ein "
 "sinnvoller Wert gewählt"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:424
@@ -16404,7 +16417,7 @@ msgstr "Zugeordneter Kontonamen"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:247
 msgid "Count of Match String Usage"
-msgstr "Wie oft verwendet?"
+msgstr "Häufigkeit der Verwendung"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:290
 msgid ""
@@ -16667,7 +16680,7 @@ msgid ""
 "The invoice ID number. If left blank a reasonable number will be chosen for "
 "you."
 msgstr ""
-"Die Rechnungsnummer. Falls keine angegeben wird, wird automatisch ein "
+"Die Rechnungsnummer. Falls keine angegeben ist, wird automatisch ein "
 "sinnvoller Wert gewählt."
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:1262
@@ -16698,7 +16711,7 @@ msgstr "Auftrag-Dialog"
 msgid ""
 "The job ID number. If left blank a reasonable number will be chosen for you"
 msgstr ""
-"Die Auftragsnummer. Falls keine angegeben wird, wird automatisch ein "
+"Die Auftragsnummer. Falls keine angegeben ist, wird automatisch ein "
 "sinnvoller Wert gewählt"
 
 #: gnucash/gtkbuilder/dialog-job.glade:164
@@ -16796,9 +16809,9 @@ msgid ""
 "will be displayed again next time you start GnuCash. If you press the <i>No</"
 "i> button, it will not be displayed again."
 msgstr ""
-"Wenn Sie <i>Ja</i> klicken, wird das Begrüßungsfenster beim nächsten Starten "
-"von GnuCash wieder angezeigt. Wenn Sie <i>Nein</i> klicken, wird es nicht "
-"wieder angezeigt."
+"Wenn Sie <i>Ja</i> klicken, wird das Begrüßungsdialog <i>Willkommen in "
+"GnuCash</i> beim nächsten Starten von GnuCash wieder angezeigt. Wenn Sie "
+"<i>Nein</i> klicken, wird es nicht wieder angezeigt."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:210
 msgid "<span size=\"larger\" weight=\"bold\">Welcome to GnuCash!</span>"
@@ -16872,7 +16885,7 @@ msgstr "Bestellungsposten"
 msgid ""
 "The order ID number. If left blank a reasonable number will be chosen for you"
 msgstr ""
-"Die Bestellungsnummer. Falls keine angegeben wird, wird automatisch ein "
+"Die Bestellnummer. Falls keine angegeben ist, wird automatisch ein "
 "sinnvoller Wert gewählt"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:136
@@ -17392,13 +17405,6 @@ msgid "Enable update match action"
 msgstr "»Abgleichen und Datenübernahme«-Aktion aktivieren"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2298
-#, fuzzy
-#| msgid ""
-#| "Enable the UPDATE AND RECONCILE action in the transaction matcher. If "
-#| "enabled, a transaction whose best match's score is above the Auto-CLEAR "
-#| "threshold and has a different date or amount than the matching existing "
-#| "transaction will cause the existing transaction to be updated and cleared "
-#| "by default."
 msgid ""
 "Enable the UPDATE AND CLEAR action in the transaction matcher. If enabled, a "
 "transaction whose best match's score is above the Auto-CLEAR threshold and "
@@ -18740,7 +18746,7 @@ msgid ""
 "The vendor ID number. If left blank a reasonable number will be chosen for "
 "you"
 msgstr ""
-"Die Lieferantennummer. Falls keine angegeben wird, wird automatisch ein "
+"Die Lieferantennummer. Falls keine angegeben ist, wird automatisch ein "
 "sinnvoller Wert gewählt"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:12
@@ -21374,7 +21380,7 @@ msgstr ""
 "\n"
 "%u Konten wurden hinzugefügt und %u aktualisiert.\n"
 "\n"
-"Folgende Fehler traten auf:"
+"Folgende Fehler traten auf..."
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:466
 #, c-format
@@ -22095,7 +22101,7 @@ msgstr "Neu (%s nach »%s«, automatisch gewählt)"
 #: gnucash/import-export/import-main-matcher.c:1745
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
-msgstr "Neu (verbleibende %s benötigen Konto, nicht ausgeglichen)."
+msgstr "Neu (verbleibende %s benötigen Konto, nicht ausgeglichen)!"
 
 #: gnucash/import-export/import-main-matcher.c:1763
 #, c-format
@@ -22276,8 +22282,6 @@ msgstr ""
 "eintippen."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:906
-#, fuzzy
-#| msgid "_Name or description"
 msgid "Name or _description"
 msgstr "_Name oder Beschreibung"
 
@@ -22972,7 +22976,7 @@ msgstr "Zwischensumme"
 #: gnucash/report/reports/standard/owner-report.scm:56
 #: libgnucash/app-utils/business-options.scm:78
 msgid "Tax"
-msgstr "Steuern"
+msgstr "Steuer"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:127
 msgid "Billable?"
@@ -24625,7 +24629,7 @@ msgstr "Sie haben keine Werte aus der Liste gewählt."
 
 #: gnucash/report/reports/example/hello-world.scm:447
 msgid "You have selected no accounts."
-msgstr "Sie haben kein Konto ausgewählt"
+msgstr "Sie haben keine Konten ausgewählt"
 
 #: gnucash/report/reports/example/hello-world.scm:452
 msgid "Display help"
@@ -25979,7 +25983,7 @@ msgstr "Zusammenfassung der Optionen hinzufügen"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:76
 #: gnucash/report/trep-engine.scm:568
 msgid "Add summary of options."
-msgstr "Zusammenfassung der Optionen hinzufügen"
+msgstr "Zusammenfassung der Optionen hinzufügen."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:78
 msgid "Account full name instead of indenting"
@@ -27476,7 +27480,7 @@ msgstr "Anzeigen der Steuerwirksamkeit des Postens?"
 
 #: gnucash/report/reports/standard/invoice.scm:235
 msgid "Display each entry's total total tax?"
-msgstr "Zeigen jeden Eintrag des gesamten Steueranteils an"
+msgstr "Jeden Eintrag des gesamten Steueranteils anzeigen?"
 
 #: gnucash/report/reports/standard/invoice.scm:240
 msgid "Display the entry's value?"
@@ -29516,7 +29520,7 @@ msgstr "Abschlussbuchungen ausschließen..."
 
 #: gnucash/report/trep-engine.scm:371
 msgid "Show both closing and regular transactions"
-msgstr "reguläre und Abschlussbuchungssätze anzeigen."
+msgstr "Reguläre und Abschlussbuchungssätze anzeigen."
 
 #: gnucash/report/trep-engine.scm:375
 msgid "Show closing transactions only"
@@ -29726,10 +29730,8 @@ msgid "Display the reconciled date?"
 msgstr "Anzeigen des Abgleich-Datums?"
 
 #: gnucash/report/trep-engine.scm:945
-#, fuzzy
-#| msgid "Display the reconciled date?"
 msgid "Display the entered date?"
-msgstr "Anzeigen des Abgleich-Datums?"
+msgstr "Anzeigen des Eingabe-Datums?"
 
 #: gnucash/report/trep-engine.scm:950
 msgid "Display the notes if the memo is unavailable?"
@@ -29769,7 +29771,7 @@ msgid ""
 "parameter is guessed)."
 msgstr ""
 "Kontobezeichnung des Gegenkontos anzeigen? (Wenn dies eine mehrteiliger "
-"Buchungssatz ist, wird dieser Parameter empfohlen.)"
+"Buchungssatz ist, wird dieser Parameter geraten.)"
 
 #: gnucash/report/trep-engine.scm:1005
 msgid "Amount of detail to display per transaction."
@@ -30645,12 +30647,10 @@ msgid ""
 "Below you will find the list of invalid account names:\n"
 "%s"
 msgstr ""
-"Das Trennzeichen \"%s\" wird schon in einem oder mehreren Kontennamen\n"
-"verwendet.\n"
+"Das Trennzeichen \"%s\" wird in einem oder mehreren Kontennamen verwendet.\n"
 "\n"
-"Dies ist nicht erlaubt und würde zu fehlerhaften Verhalten führen. Sie\n"
-"müssen entweder ein anderes Trennzeichen auswählen oder die\n"
-"Kontennamen ändern.\n"
+"Dies wird zu unerwartetem Verhalten führen. Wählen Sie ein anderes "
+"Trennzeichen oder ändern Sie die Kontennamen.\n"
 "\n"
 "Folgende Kontennamen sind betroffen:\n"
 "%s"
@@ -30697,15 +30697,11 @@ msgstr ""
 "worden sind."
 
 #: libgnucash/engine/gnc-commodity.h:112
-#, fuzzy
-#| msgid "All non-currency"
 msgctxt "Commodity Type"
 msgid "All non-currency"
 msgstr "Alle Nicht-Währungen"
 
 #: libgnucash/engine/gnc-commodity.h:113
-#, fuzzy
-#| msgid "Currencies"
 msgctxt "Commodity Type"
 msgid "Currencies"
 msgstr "Währungen"

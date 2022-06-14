@@ -476,15 +476,14 @@ gnc_budget_set_num_periods(GncBudget* budget, guint num_periods)
 
     gnc_budget_begin_edit(budget);
     priv->num_periods = num_periods;
-    qof_instance_set_dirty(&budget->inst);
-    gnc_budget_commit_edit(budget);
-
     std::for_each (priv->acct_map->begin(),
                    priv->acct_map->end(),
                    [num_periods](auto& it)
                    {
                        it.second.resize(num_periods);
                    });
+    qof_instance_set_dirty(&budget->inst);
+    gnc_budget_commit_edit(budget);
 
     qof_event_gen( &budget->inst, QOF_EVENT_MODIFY, NULL);
 }

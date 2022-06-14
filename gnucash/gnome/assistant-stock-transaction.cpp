@@ -29,6 +29,7 @@
 #include <numeric>
 #include <algorithm>
 #include <optional>
+#include <stdexcept>
 
 extern "C" {
 #include "Transaction.h"
@@ -430,6 +431,10 @@ typedef struct
     GtkWidget * assistant;
 
     std::optional<TxnTypeVec> txn_types;
+    // the following stores date at which the txn_types were set. If
+    // the GNCDateEdit date is modified, it will trigger recreation of
+    // the txn_types above.
+    std::optional<time64>     txn_types_date;
     Account   * acct;
     gnc_commodity * currency;
 
@@ -510,7 +515,17 @@ refresh_page_transaction_type (GtkWidget *widget, gpointer user_data)
     if (!info->txn_types)
         return;
 
-    info->txn_type = info->txn_types->at (type_idx);
+    try
+    {
+        info->txn_type = info->txn_types->at (type_idx);
+    }
+    catch (const std::out_of_range& e)
+    {
+        PERR ("out of range type_idx=%d", type_idx);
+        return;
+    }
+
+    g_return_if_fail (info->txn_type);
 
     gtk_label_set_text (GTK_LABEL (info->transaction_type_explanation),
                         _(info->txn_type->explanation));
@@ -525,6 +540,7 @@ static void
 refresh_page_stock_amount (GtkWidget *widget, gpointer user_data)
 {
     auto info = static_cast<StockTransactionInfo*>(user_data);
+    g_return_if_fail (info->txn_type);
 
     auto pinfo = gnc_commodity_print_info (xaccAccountGetCommodity (info->acct), true);
     auto bal = info->balance_at_date;
@@ -552,6 +568,7 @@ refresh_page_stock_value (GtkWidget *widget, gpointer user_data)
 {
     auto info = static_cast<StockTransactionInfo*>(user_data);
     gnc_numeric amount, value;
+    g_return_if_fail (info->txn_type);
 
     if (info->txn_type->stock_amount == FieldMask::DISABLED ||
         info->txn_type->stock_value == FieldMask::DISABLED ||
@@ -690,6 +707,7 @@ gas_account (GtkWidget *gas)
 static void
 refresh_page_finish (StockTransactionInfo *info)
 {
+    g_return_if_fail (info->txn_type);
     auto view = GTK_TREE_VIEW (info->finish_split_view);
     auto list = GTK_LIST_STORE (gtk_tree_view_get_model(view));
     gtk_list_store_clear (list);
@@ -703,24 +721,28 @@ refresh_page_finish (StockTransactionInfo *info)
     // the later stock transactions will be invalidated. warn the user
     // to review them.
     auto new_date = gnc_date_edit_get_date_end (GNC_DATE_EDIT (info->date_edit));
-    auto last_split = static_cast<const Split*> (g_list_last (xaccAccountGetSplitList (info->acct))->data);
-    auto last_split_date = xaccTransGetDate (xaccSplitGetParent (last_split));
-    if (new_date <= last_split_date)
+    auto last_split_node = g_list_last (xaccAccountGetSplitList (info->acct));
+    if (last_split_node)
     {
-        auto last_split_date_str = qof_print_date (last_split_date);
-        auto new_date_str = qof_print_date (new_date);
-        // Translators: the first %s is the new transaction date;
-        // the second %s is the current stock account's latest
-        // transaction date.
-        auto warn_txt =  g_strdup_printf (_("You will enter a transaction \
+        auto last_split = static_cast<const Split*> (last_split_node->data);
+        auto last_split_date = xaccTransGetDate (xaccSplitGetParent (last_split));
+        if (new_date <= last_split_date)
+        {
+            auto last_split_date_str = qof_print_date (last_split_date);
+            auto new_date_str = qof_print_date (new_date);
+            // Translators: the first %s is the new transaction date;
+            // the second %s is the current stock account's latest
+            // transaction date.
+            auto warn_txt =  g_strdup_printf (_("You will enter a transaction \
 with date %s which is earlier than the latest transaction in this account, \
 dated %s. Doing so may affect the cost basis, and therefore capital gains, \
 of transactions dated after the new entry. Please review all transactions \
 to ensure proper recording."), new_date_str, last_split_date_str);
-        warnings.push_back (warn_txt);
-        g_free (warn_txt);
-        g_free (new_date_str);
-        g_free (last_split_date_str);
+            warnings.push_back (warn_txt);
+            g_free (warn_txt);
+            g_free (new_date_str);
+            g_free (last_split_date_str);
+        }
     }
 
     if (info->txn_type->stock_amount != FieldMask::DISABLED)
@@ -826,6 +848,9 @@ stock_assistant_prepare (GtkAssistant  *assistant, GtkWidget *page,
         gnc_numeric balance;
         time64 date;
         date = gnc_date_edit_get_date_end (GNC_DATE_EDIT (info->date_edit));
+        if (info->txn_types_date && (info->txn_types_date == date))
+            break;
+        info->txn_types_date = date;
         balance = xaccAccountGetBalanceAsOfDate (info->acct, date);
         info->txn_types = gnc_numeric_zero_p (balance) ? starting_types
             : gnc_numeric_positive_p (balance) ? long_types
@@ -967,6 +992,7 @@ stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
     auto info = static_cast<StockTransactionInfo*>(user_data);
     AccountVec account_commits;
     auto book = gnc_get_current_book ();
+    g_return_if_fail (info->txn_type);
 
     gnc_suspend_gui_refresh ();
 

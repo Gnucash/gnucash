@@ -21,13 +21,14 @@
 # YTX <ytx.cash@gmail.com>, 2021, 2022.
 # 李元基 <lovedebushiu@qq.com>, 2022.
 # Eric <alchemillatruth@purelymail.com>, 2022.
+# Yu Hongbo <linuxbckp@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.9-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-04-03 09:06+0000\n"
+"PO-Revision-Date: 2022-06-11 14:17+0000\n"
 "Last-Translator: YTX <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -36,7 +37,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.13-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -2398,7 +2399,7 @@ msgstr "已入账"
 #: gnucash/gtkbuilder/dialog-order.glade:548
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:139
 msgid "Date Opened"
-msgstr "日期"
+msgstr "打开日期"
 
 #: gnucash/gnome/dialog-invoice.c:3397
 #: gnucash/gtkbuilder/dialog-invoice.glade:42
@@ -8262,7 +8263,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-file.c:850
 #: gnucash/gtkbuilder/dialog-file-access.glade:98
 msgid "Open _Read-Only"
-msgstr "只读打开(_R)"
+msgstr "只读模式(_R)"
 
 #: gnucash/gnome-utils/gnc-file.c:853
 msgid "Create _New File"
@@ -8270,7 +8271,7 @@ msgstr "新建文件(_N)"
 
 #: gnucash/gnome-utils/gnc-file.c:856
 msgid "Open _Anyway"
-msgstr "强行打开(_A)"
+msgstr "读写模式(_A)"
 
 #: gnucash/gnome-utils/gnc-file.c:859
 msgid "Open _Folder"
@@ -14772,7 +14773,8 @@ msgid ""
 "Select a category for the commodity or enter a new one. One might use "
 "investment categories like STOCKS and BONDS or exchange names like NASDAQ "
 "and LSE."
-msgstr ""
+msgstr "选择或输入一个币种。必须使用例如STOCKS和BONDS的投资类别，或者使用类似于NASDAQ"
+"和LSE的证券交易所名。"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:329
 msgid ""

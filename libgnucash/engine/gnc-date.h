@@ -702,7 +702,7 @@ void gnc_gdate_set_prev_month_end (GDate *date);
 
 /** This function modifies a GDate to set it to the first day of the
  *  quarter in which it falls.  For example, if this function is called
- *  with a date of 2003-09-24 the date will be modified to 2003-09-01.
+ *  with a date of 2003-09-24 the date will be modified to 2003-07-01.
  *
  *  @param date The GDate to modify. */
 void gnc_gdate_set_quarter_start (GDate *date);
@@ -710,7 +710,7 @@ void gnc_gdate_set_quarter_start (GDate *date);
 
 /** This function modifies a GDate to set it to the last day of the
  *  quarter in which it falls.  For example, if this function is called
- *  with a date of 2003-09-24 the date will be modified to 2003-12-31.
+ *  with a date of 2003-09-24 the date will be modified to 2003-09-30.
  *
  *  @param date The GDate to modify. */
 void gnc_gdate_set_quarter_end (GDate *date);
@@ -719,7 +719,7 @@ void gnc_gdate_set_quarter_end (GDate *date);
 /** This function modifies a GDate to set it to the first day of the
  *  quarter prior to the one in which it falls.  For example, if this
  *  function is called with a date of 2003-09-24 the date will be
- *  modified to 2003-06-01.
+ *  modified to 2003-04-01.
  *
  *  @param date The GDate to modify. */
 void gnc_gdate_set_prev_quarter_start (GDate *date);
@@ -728,7 +728,7 @@ void gnc_gdate_set_prev_quarter_start (GDate *date);
 /** This function modifies a GDate to set it to the last day of the
  *  quarter prior to the one in which it falls.  For example, if this
  *  function is called with a date of 2003-09-24 the date will be
- *  modified to 2003-07-31.
+ *  modified to 2003-06-30.
  *
  *  @param date The GDate to modify. */
 void gnc_gdate_set_prev_quarter_end (GDate *date);
