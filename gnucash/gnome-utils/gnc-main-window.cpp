@@ -182,6 +182,7 @@ static void gnc_main_window_cmd_view_refresh (GtkAction *action, GncMainWindow *
 static void gnc_main_window_cmd_view_toolbar (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_summary (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_statusbar (GtkAction *action, GncMainWindow *window);
+static void gnc_main_window_cmd_view_tab_position (GtkAction *action, GtkRadioAction *current, GncMainWindow *window);
 static void gnc_main_window_cmd_actions_reset_warnings (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_actions_rename_page (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_window_new (GtkAction *action, GncMainWindow *window);
@@ -356,6 +357,10 @@ static GtkActionEntry gnc_menu_actions [] =
     /* View menu */
 
     {
+        "ViewTabPositionAction", nullptr, N_("Tab P_osition"), nullptr,
+        nullptr, nullptr
+    },
+    {
         "ViewSortByAction", nullptr, N_("_Sort By..."), nullptr,
         N_("Select sorting criteria for this page view"), nullptr
     },
@@ -439,6 +444,32 @@ static GtkToggleActionEntry toggle_actions [] =
 };
 /** The number of toggle actions provided by the main window. */
 static guint n_toggle_actions = G_N_ELEMENTS (toggle_actions);
+
+/** An array of all of the radio actions provided by the main window
+ *  for tab positions. */
+static GtkRadioActionEntry tab_pos_radio_entries [] =
+{
+    {
+        "ViewTabPositionTopAction", nullptr, N_("To_p"), nullptr,
+        N_("Display the notebook tabs at the top of the window."), GTK_POS_TOP
+    },
+    {
+        "ViewTabPositionBottomAction", nullptr, N_("B_ottom"), nullptr,
+        N_("Display the notebook tabs at the bottom of the window."), GTK_POS_BOTTOM
+    },
+    {
+        "ViewTabPositionLeftAction", nullptr, N_("_Left"), nullptr,
+        N_("Display the notebook tabs at the left of the window."), GTK_POS_LEFT
+    },
+    {
+        "ViewTabPositionRightAction", nullptr, N_("_Right"), nullptr,
+        N_("Display the notebook tabs at the right of the window."), GTK_POS_RIGHT
+    },
+};
+
+/** The number of radio actions provided by the main window for tab
+ *  positions. */
+static guint n_tab_pos_radio_entries = G_N_ELEMENTS (tab_pos_radio_entries);
 
 #ifndef MAC_INTEGRATION
 /** An array of all of the radio action provided by the main window
@@ -3579,12 +3610,21 @@ gnc_main_window_update_tab_position (gpointer prefs, gchar *pref, gpointer user_
     GncMainWindow *window;
     GtkPositionType position = GTK_POS_TOP;
     GncMainWindowPrivate *priv;
+    GtkAction *first_action;
+    GtkAction *position_action;
+    gsize i;
 
     g_return_if_fail (GNC_IS_MAIN_WINDOW(user_data));
 
     window = GNC_MAIN_WINDOW(user_data);
 
     ENTER ("window %p", window);
+
+    /* Ignore notification of the preference that is being set to false when
+     * the choice of tab position changes. */
+    if (pref && !gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, pref))
+        return;
+
     if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_BOTTOM))
         position = GTK_POS_BOTTOM;
     else if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_LEFT))
@@ -3594,6 +3634,24 @@ gnc_main_window_update_tab_position (gpointer prefs, gchar *pref, gpointer user_
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE (window);
     gtk_notebook_set_tab_pos (GTK_NOTEBOOK (priv->notebook), position);
+
+    first_action = gtk_action_group_get_action (priv->action_group,
+                                                tab_pos_radio_entries[0].name);
+
+    for (i = n_tab_pos_radio_entries - 1; i > 0; i--)
+        if (tab_pos_radio_entries[i].value == position)
+            break;
+
+    position_action = gtk_action_group_get_action (priv->action_group,
+                                                   tab_pos_radio_entries[i].name);
+
+    g_signal_handlers_block_by_func (G_OBJECT (first_action),
+                                     (gpointer)gnc_main_window_cmd_view_tab_position,
+                                     window);
+    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (position_action), TRUE);
+    g_signal_handlers_unblock_by_func (G_OBJECT (first_action),
+                                       (gpointer)gnc_main_window_cmd_view_tab_position,
+                                       window);
 
     LEAVE ("");
 }
@@ -3718,16 +3776,21 @@ gnc_main_window_window_menu (GncMainWindow *window)
     gchar *filename = gnc_filepath_locate_ui_file("gnc-windows-menu-ui-quartz.xml");
 #else
     gchar *filename = gnc_filepath_locate_ui_file("gnc-windows-menu-ui.xml");
-    GncMainWindowPrivate *priv;
 #endif
     GError *error = nullptr;
+    GncMainWindowPrivate *priv;
     g_assert(filename);
     merge_id = gtk_ui_manager_add_ui_from_file(window->ui_merge, filename,
                &error);
     g_free(filename);
     g_assert(merge_id);
-#ifndef MAC_INTEGRATION
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+    gtk_action_group_add_radio_actions (priv->action_group,
+                                        tab_pos_radio_entries, n_tab_pos_radio_entries,
+                                        0,
+                                        G_CALLBACK(gnc_main_window_cmd_view_tab_position),
+                                        window);
+#ifndef MAC_INTEGRATION
     gtk_action_group_add_radio_actions (priv->action_group,
                                         radio_entries, n_radio_entries,
                                         0,
@@ -4569,6 +4632,45 @@ gnc_main_window_cmd_window_move_page (GtkAction *action, GncMainWindow *window)
           priv->current_page, priv->current_page);
 
     LEAVE("page moved");
+}
+
+static void
+gnc_main_window_cmd_view_tab_position (GtkAction *action,
+                                         GtkRadioAction *current,
+                                         GncMainWindow *window)
+{
+    GtkPositionType value = static_cast<GtkPositionType>(gtk_radio_action_get_current_value(current));
+
+    if (value != GTK_POS_TOP && gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_TOP))
+        gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_TOP, FALSE);
+
+    if (value != GTK_POS_BOTTOM && gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_BOTTOM))
+        gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_BOTTOM, FALSE);
+
+    if (value != GTK_POS_LEFT && gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_LEFT))
+        gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_LEFT, FALSE);
+
+    if (value != GTK_POS_RIGHT && gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_RIGHT))
+        gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_RIGHT, FALSE);
+
+    switch (value)
+    {
+    case GTK_POS_TOP:
+        gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_TOP, TRUE);
+        break;
+
+    case GTK_POS_BOTTOM:
+        gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_BOTTOM, TRUE);
+        break;
+
+    case GTK_POS_LEFT:
+        gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_LEFT, TRUE);
+        break;
+
+    case GTK_POS_RIGHT:
+        gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_RIGHT, TRUE);
+        break;
+    }
 }
 
 #ifndef MAC_INTEGRATION
