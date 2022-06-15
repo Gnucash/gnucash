@@ -121,6 +121,7 @@ GType gnc_transaction_get_type(void);
 /** @name Transaction Type field values
 @{
 */
+#define TXN_TYPE_UNCACHED '?' /** Transaction type not yet cached */
 #define TXN_TYPE_NONE	 '\0' /**< No transaction type       */
 #define TXN_TYPE_INVOICE 'I'  /**< Transaction is an invoice */
 #define TXN_TYPE_PAYMENT 'P'  /**< Transaction is a payment  */
@@ -302,14 +303,21 @@ gboolean xaccTransUseTradingAccounts(const Transaction *trans);
  */
 void          xaccTransSortSplits (Transaction *trans);
 
-/** Set the  Transaction Type
+/** Set the Transaction Type: note the type will be saved into the
+ *  Transaction kvp property as a backward compatibility measure, for
+ *  previous GnuCash versions whose xaccTransGetTxnType reads from the
+ *  kvp slots.
  *
  * See #TXN_TYPE_NONE, #TXN_TYPE_INVOICE and #TXN_TYPE_PAYMENT */
 void	      xaccTransSetTxnType (Transaction *trans, char type);
-/** Returns the  Transaction Type
+
+/** Returns the Transaction Type: note this type will be derived from
+ * the transaction splits, returning #TXN_TYPE_NONE,
+ * #TXN_TYPE_INVOICE, #TXN_TYPE_LINK, or #TXN_TYPE_PAYMENT according
+ * to heuristics. It does not query the transaction kvp slots.
  *
  * See #TXN_TYPE_NONE, #TXN_TYPE_INVOICE and #TXN_TYPE_PAYMENT */
-char	      xaccTransGetTxnType (const Transaction *trans);
+char	      xaccTransGetTxnType (Transaction *trans);
 
 /** Sets the transaction Number (or ID) field; rather than use this function
  *  directly, see 'gnc_set_num_action' in engine/engine-helpers.c & .h which

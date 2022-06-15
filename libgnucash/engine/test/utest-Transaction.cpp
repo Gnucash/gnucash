@@ -1838,13 +1838,8 @@ test_xaccTransGetReadOnly (Fixture *fixture, gconstpointer pData)
 static void
 test_xaccTransGetTxnType (Fixture *fixture, gconstpointer pData)
 {
-    const char i = 'I';
-    const char p = 'P';
     auto txn = fixture->txn;
-    xaccTransSetTxnType(txn, i);
-    g_assert_cmpint (i, ==, xaccTransGetTxnType(txn));
-    xaccTransSetTxnType(txn, p);
-    g_assert_cmpint (p, ==, xaccTransGetTxnType(txn));
+    g_assert_cmpint (TXN_TYPE_NONE, ==, xaccTransGetTxnType(txn));
 }
 
 /* xaccTransGetReadOnly C: 7 in 5  Local: 1:0:0

@@ -279,6 +279,7 @@ gnc_transaction_init(Transaction* trans)
     trans->notes = (char*) is_unset;
     trans->doclink = (char*) is_unset;
     trans->void_reason = (char*) is_unset;
+    trans->txn_type = TXN_TYPE_UNCACHED;
     LEAVE (" ");
 }
 
@@ -1705,6 +1706,7 @@ xaccTransCommitEdit (Transaction *trans)
         qof_instance_set_dirty(QOF_INSTANCE(trans));
     }
 
+    trans->txn_type = TXN_TYPE_UNCACHED;
     qof_commit_edit_part2(QOF_INSTANCE(trans),
                           (void (*) (QofInstance *, QofBackendError))
                           trans_on_error,
@@ -2551,22 +2553,43 @@ xaccTransRetDateDue(const Transaction *trans)
 }
 
 char
-xaccTransGetTxnType (const Transaction *trans)
+xaccTransGetTxnType (Transaction *trans)
 {
-    const char *s = NULL;
-    GValue v = G_VALUE_INIT;
-    char ret = TXN_TYPE_NONE;
+    gboolean has_nonAPAR_amount = FALSE;
 
     if (!trans) return TXN_TYPE_NONE;
-    qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, TRANS_TXN_TYPE_KVP);
-    if (G_VALUE_HOLDS_STRING (&v))
+
+    if (trans->txn_type != TXN_TYPE_UNCACHED)
+        return trans->txn_type;
+
+    trans->txn_type = TXN_TYPE_NONE;
+    for (GList *n = xaccTransGetSplitList (trans); n; n = g_list_next (n))
     {
-         s = g_value_get_string (&v);
-         if (s && strlen (s) == 1)
-             ret = s[0];
+        Account *acc = xaccSplitGetAccount (n->data);
+
+        if (!acc)
+            continue;
+
+        if (!xaccAccountIsAPARType (xaccAccountGetType (acc)) &&
+            !gnc_numeric_zero_p (xaccSplitGetValue (n->data)))
+            has_nonAPAR_amount = TRUE;
+        else if (trans->txn_type == TXN_TYPE_NONE)
+        {
+            GNCLot *lot = xaccSplitGetLot (n->data);
+            GncInvoice *invoice = gncInvoiceGetInvoiceFromLot (lot);
+            GncOwner owner;
+
+            if (invoice && trans == gncInvoiceGetPostedTxn (invoice))
+                trans->txn_type = TXN_TYPE_INVOICE;
+            else if (invoice || gncOwnerGetOwnerFromLot (lot, &owner))
+                trans->txn_type = TXN_TYPE_PAYMENT;
+        }
     }
-    g_value_unset (&v);
-    return ret;
+
+    if (!has_nonAPAR_amount && (trans->txn_type == TXN_TYPE_PAYMENT))
+        trans->txn_type = TXN_TYPE_LINK;
+
+    return trans->txn_type;
 }
 
 const char *
