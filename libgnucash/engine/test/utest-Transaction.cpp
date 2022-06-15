@@ -1838,6 +1838,10 @@ test_xaccTransGetReadOnly (Fixture *fixture, gconstpointer pData)
 static void
 test_xaccTransGetTxnType (Fixture *fixture, gconstpointer pData)
 {
+    // note this will only test TXN_TYPE_NONE, because TxnType is derived
+    // from split data. Testing for TXN_TYPE_INVOICE TXN_TYPE_PAYMENT
+    // will require creating invoices, so, they are tested in
+    // utest-Invoice.c
     auto txn = fixture->txn;
     g_assert_cmpint (TXN_TYPE_NONE, ==, xaccTransGetTxnType(txn));
 }
