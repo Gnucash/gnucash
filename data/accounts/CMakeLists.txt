@@ -13,6 +13,7 @@ add_subdirectory(de_DE)
 add_subdirectory(el_GR)
 add_subdirectory(en_GB)
 add_subdirectory(en_IN)
+add_subdirectory(es_AR)
 add_subdirectory(es_ES)
 add_subdirectory(es_MX)
 add_subdirectory(fi_FI)
@@ -46,7 +47,7 @@ add_subdirectory(zh_TW)
 set_local_dist(dist_list CMakeLists.txt )
 
 set(accounts_DIST ${C_DIST} ${CA_DIST} ${CS_DIST} ${DA_DIST} ${DE_AT_DIST} ${DE_CH_DIST} ${DE_DE_DIST} ${EL_GR_DIST}
-                  ${EN_GB_DIST} ${EN_IN_DIST} ${ES_ES_DIST} ${ES_MX_DIST} ${FI_FI_DIST} ${FR_BE_DIST} ${FR_CA_DIST}
+                  ${EN_GB_DIST} ${EN_IN_DIST} ${ES_AR_DIST} ${ES_ES_DIST} ${ES_MX_DIST} ${FI_FI_DIST} ${FR_BE_DIST} ${FR_CA_DIST}
                   ${FR_CH_DIST} ${FR_FR_DIST} ${HE_DIST} ${HR_DIST} ${HU_DIST} ${IT_DIST} ${JA_DIST} ${KO_DIST} ${LT_DIST}
                   ${LV_DIST} ${NB_DIST} ${NL_DIST} ${PL_DIST} ${PT_BR_DIST} ${PT_PT_DIST} ${RU_DIST} ${SK_DIST}
                   ${SV_AX_DIST} ${SV_FI_DIST} ${SV_SE_DIST} ${TR_TR_DIST} ${ZH_CN_DIST}
