@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-06-11 00:14+0000\n"
+"PO-Revision-Date: 2022-06-13 11:14+0000\n"
 "Last-Translator: Hemanshu Kumar <hemanshusubs@gmail.com>\n"
 "Language-Team: Hindi <https://hosted.weblate.org/projects/gnucash/gnucash/hi/"
 ">\n"
@@ -208,12 +208,11 @@ msgstr "सिरिलिक (ISO-8859-5)"
 
 #: borrowed/goffice/go-charmap-sel.c:152
 msgid "Cyrillic (ISO-IR-111)"
-msgstr ""
+msgstr "सिरिलिक (ISO-IR-111)"
 
 #: borrowed/goffice/go-charmap-sel.c:154
-#, fuzzy
 msgid "Cyrillic (KOI8-R)"
-msgstr "सिरिलिक"
+msgstr "सिरिलिक (KOI8-R)"
 
 #: borrowed/goffice/go-charmap-sel.c:155
 msgid "Cyrillic (MacCyrillic)"
@@ -221,7 +220,7 @@ msgstr ""
 
 #: borrowed/goffice/go-charmap-sel.c:157
 msgid "Cyrillic (Windows-1251)"
-msgstr ""
+msgstr "सिरिलिक (विंडोज़-1251)"
 
 #: borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
@@ -270,15 +269,15 @@ msgstr "गुरमुखी (MacGurmukhi)"
 
 #: borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr ""
+msgstr "यहूदी (IBM-862)"
 
 #: borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr ""
+msgstr "यहूदी (ISO-8859-8-E)"
 
 #: borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr ""
+msgstr "यहूदी (ISO-8859-8-I)"
 
 #: borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
@@ -455,9 +454,8 @@ msgid "Conversion Direction"
 msgstr "रूपांतरण दिशा"
 
 #: borrowed/goffice/go-charmap-sel.c:477
-#, fuzzy
 msgid "This value determines which iconv test to perform."
-msgstr "यह मान निर्धारित करता है कि कौन सा iconv परीक्षण करना है।"
+msgstr "यह मान निर्धारित करता है कि कौनसा iconv परीक्षण करना है।"
 
 #: borrowed/goffice/go-optionmenu.c:339
 msgid "Menu"
@@ -514,6 +512,10 @@ msgid ""
 "(File[->Most Recently Used-List]).\n"
 "The full path is displayed in the status bar."
 msgstr ""
+"यदि आप जानना चाहते हैं कि आपकी हाल की GnuCash फ़ाइलें किन फ़ोल्डेरों में स्थि"
+"त हैं, तो हिस्टरी सूची के विकल्पों में से एक पर होवर करें \n"
+"(फ़ाइल [->सबसे हाल में उपयोग हुई - सूची)।\n"
+" पूरा पथ स्टेटस पट्टी में प्रदर्शित होता है।"
 
 #: doc/tip_of_the_day.list.c:24
 msgid ""
@@ -522,9 +524,10 @@ msgid ""
 "For more information on income and expense accounts, please see the GnuCash "
 "online manual."
 msgstr ""
-"अगर आप क्विकन जैसे अन्य वित्तीय प्रोग्रामों से परिचित हैं तो ध्यान दें कि GnuCash आय और "
-"व्यय का अपता लगाने के लिए श्रेणियों के बजाय खातों का उपयोग करता है. आय और व्यय खातों पर "
-"अधिक जानकारी के लिए, कृपया GnuCash ऑनलाइन मैनुअल देखें. "
+"अगर आप क्विकन जैसे अन्य वित्तीय प्रोग्रामों से परिचित हैं तो ध्यान दें कि "
+"GnuCash आय और व्यय का अपता लगाने के लिए श्रेणियों के बजाय खातों का उपयोग करता"
+" है. आय और व्यय खातों पर अधिक जानकारी के लिए, कृपया GnuCash ऑनलाइन मैनुअल "
+"देखें।"
 
 #: doc/tip_of_the_day.list.c:29
 msgid ""
@@ -532,17 +535,20 @@ msgid ""
 "Just locate the triangle at the far right of the column headings, and click "
 "it to see the different columns available."
 msgstr ""
+"खातों के चार्ट में कौन से कॉलम प्रदर्शित होते हैं, इसे बदलना संभव है। बस कॉ"
+"लम शीर्षकों के दाईं ओर त्रिभुज ढूँढें, और उपलब्ध विभिन्न कॉलम को देखने के लि"
+"ए उस पर क्लिक करें।"
 
 #: doc/tip_of_the_day.list.c:33
-#, fuzzy
 msgid ""
 "Click the right mouse button (control-click in Mac OS X) in the Accounts tab "
 "of the main window to bring up the account menu options. Within each "
 "register, clicking the right mouse button brings up the transaction menu "
 "options."
 msgstr ""
-"एकाउंट मेन्यू विकल्पों को सामने लाने के लिए मुख्य विंडो में दाएं माउस बटन पर क्लिक करें. प्रत्येक "
-"रजिस्टर के भीतर, दाएं माउस बटन पर क्लिक करने से लेनदेन के मेन्यू विकल्प सामने आ जाते हैं. "
+"खाता सूची के विकल्पों को सामने लाने के लिए मुख्य विंडो में दाएं माउस बटन पर "
+"क्लिक करें (Mac OS X में कंट्रोल-क्लिक)। प्रत्येक रजिस्टर के भीतर, दाएं माउस "
+"बटन पर क्लिक करने से सौदे के मेन्यू विकल्प सामने आ जाते हैं."
 
 #: doc/tip_of_the_day.list.c:38
 msgid ""
@@ -564,6 +570,11 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgstr ""
+"प्रत्येक सौदे में एक \"नोट\" फ़ील्ड है जहां आप उपयोगी जानकारी डाल सकते हैं।\n"
+"\n"
+"इसे देखने के लिए\n"
+"मेनू बार में \"देखें\" का चयन करें और \"डबल लाइन\" पर चिन्ह लगाएँ, या\n"
+"प्राथमिकताओं : रेजिस्टर डिफ़ॉल्ट में \"डबल लाइन मोड\" चुनें."
 
 #: doc/tip_of_the_day.list.c:50
 msgid ""
@@ -572,9 +583,9 @@ msgid ""
 "View menu, you can choose the register style Auto-Split Ledger or "
 "Transaction Journal."
 msgstr ""
-"बहु-विभाजन वाले लेनदेनों जैसे कि अनेक कटौती वाले एक भुगतान चेक को दर्ज करने के लिए, टूल बार "
-"में स्प्लिट बटन पर क्लिक करें. वैकल्पिक रूप से, व्यू मेन्यू में, आप रजिस्टर स्टाइल ऑटो-स्प्लिट लेजर "
-"या लेनदेन जर्नल को चुन सकते हैं."
+"बहु-विभाजन वाले सौदों जैसे कि अनेक कटौती वाले एक भुगतान चेक को दर्ज करने के "
+"लिए, टूल बार में स्प्लिट बटन पर क्लिक करें. अथवा व्यू मेन्यू में, आप रजिस्टर "
+"स्टाइल में ऑटो-स्प्लिट लेजर या सौदा जर्नल को चुन सकते हैं."
 
 #: doc/tip_of_the_day.list.c:55
 msgid ""
@@ -583,9 +594,10 @@ msgid ""
 "'+', '-','*', or '/'. Type the second value and press Enter to record the "
 "calculated amount."
 msgstr ""
-"जब आप पंजी में राशियां दर्ज करते हैं, आप जोड़, घटाव, गुणा और भाग करने के लिए GnuCash "
-"कैलकुलेटर का उपयोग कर सकते हैं. बस पहला मान टाइप करें, फिर '+', '-','*', या '/' का "
-"चयन करें. दूसरा मान टाइप करें और परिकलित राशि दर्ज करने के लिए 'एंटर' दबाएं."
+"जब आप पंजी में राशियां दर्ज करते हैं, आप जोड़, घटाव, गुणा और भाग करने के लिए "
+"GnuCash कैलकुलेटर का उपयोग कर सकते हैं. बस पहला मान टाइप करें, फिर '+', "
+"'-','*', या '/' का चयन करें. दूसरा मान टाइप करें और परिगणित राशि दर्ज करने के"
+" लिए 'एंटर' दबाएं."
 
 #: doc/tip_of_the_day.list.c:60
 msgid ""
@@ -594,9 +606,9 @@ msgid ""
 "GnuCash will automatically complete the remainder of the transaction as it "
 "was last entered."
 msgstr ""
-"क्विक-फिल आम लेनदेनों को दर्ज करना सरल बनाता है. जब आप किसी आम लेनदेन वर्णन का पहला "
-"अक्षर टाइप करते हैं, उसके बाद टैब बटन दबाएं, GnuCash स्वचालित रूप से शेष लेनदेन पूरा करेगा "
-"जैसे इसे पिछली बार दर्ज किया गया था."
+"क्विक-फिल आम सौदों को दर्ज करना सरल बनाता है. जब आप किसी आम सौदे के वर्णन का "
+"पहला अक्षर टाइप करते हैं, उसके बाद टैब बटन दबाएं, GnuCash अपने आप शेष सौदा "
+"पूरा करेगा जैसे इसे पिछली बार दर्ज किया गया था."
 
 #: doc/tip_of_the_day.list.c:65
 msgid ""
@@ -606,10 +618,10 @@ msgid ""
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
 "Assets:Cash)."
 msgstr ""
-"ट्रांसफर रजिस्टर कॉलम में मौजूदा खाता नाम के पहले अक्षर(रों) को टाइप करें, और GnuCash "
-"आपके खातों की सूची से नाम को पूरा कर देगा. उप-खातों के लिए, मूल खाते के पहले अक्षर(रों) को "
-"टाइप करें, उसके बाद ':' और उप-खाते के पहले अक्षर(रों) (जैसे एसेट्स:कैश के लिए A:C) को टाइप "
-"करें."
+"ट्रांसफर रजिस्टर कॉलम में मौजूदा खाता नाम के पहले अक्षर(रों) को टाइप करें, "
+"और GnuCash आपके खातों की सूची से नाम को पूरा कर देगा. उप-खातों के लिए, मूल "
+"खाते के पहले अक्षरों को टाइप करें, उसके बाद ':' और उप-खाते के पहले अक्षरों "
+"(जैसे एसेट्स : कैश के लिए A:C) को टाइप करें."
 
 #: doc/tip_of_the_day.list.c:71
 #, fuzzy
