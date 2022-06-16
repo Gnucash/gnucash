@@ -27,6 +27,7 @@
 # Stefan Bayer <stefan.bayer@stefanbayer.net>, 2021.
 # S <t0kie@mailbox.org>, 2022.
 # Jan Schneider <grimpeur78@gmail.com>, 2022.
+# Steffen Möller <steffen_moeller@gmx.de>, 2022.
 #
 # Konventionen/Tastenkürzel:
 # »Zitate«: [altgr]+[Y]/[X]
@@ -38,8 +39,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-06-12 21:18+0000\n"
-"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
+"PO-Revision-Date: 2022-06-13 14:19+0000\n"
+"Last-Translator: Steffen Möller <steffen_moeller@gmx.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -480,7 +481,7 @@ msgid ""
 msgstr ""
 "E-Mail-Listen sind die bevorzugte Form der Kommunikation innerhalb der "
 "GnuCash-Gemeinschaft. Für Ankündigungen neuer Versionen, Benutzergruppen "
-"etc. siehe die Liste in https://wiki.gnucash.org/wiki/Mailing_Lists."
+"etc. siehe die Liste in https://wiki.gnucash.org/wiki/Mailing_Lists"
 
 #: doc/tip_of_the_day.list.c:11
 msgid ""
@@ -2938,7 +2939,7 @@ msgid ""
 "payment"
 msgstr ""
 "Die ausgewählte Buchung hat keine Teile, die einer Zahlung zugewiesen werden "
-"können."
+"können"
 
 #: gnucash/gnome/dialog-payment.c:1624
 msgid ""
@@ -3981,7 +3982,7 @@ msgstr "Alle Rechnungsverknüpfungen zeigen"
 
 #: gnucash/gnome/gnc-plugin-business.c:283
 msgid "Sales _Tax Table"
-msgstr "USt.-_Steuertabelle..."
+msgstr "USt.-_Steuertabelle"
 
 #: gnucash/gnome/gnc-plugin-business.c:284
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
@@ -4055,11 +4056,11 @@ msgstr "Ein neues Konto eröffnen"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:204
 msgid "New Account _Hierarchy..."
-msgstr "Konten_hierarchie hinzufügen"
+msgstr "Konten_hierarchie hinzufügen..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:205
 msgid "Extend the current book by merging with new account type categories"
-msgstr "Im aktuellen Kontobuch neue Kontenhierarchien hinzufügen."
+msgstr "Im aktuellen Kontobuch neue Kontenhierarchien hinzufügen"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:210
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:221
@@ -5484,7 +5485,7 @@ msgid ""
 "cleared amount"
 msgstr ""
 "Automatisch diejenigen Buchungen abgleichen, deren Summe einem vorgegebenen "
-"Betrag entspricht."
+"Betrag entspricht"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:377
 #: gnucash/gnome/gnc-plugin-page-register.c:495
@@ -5499,7 +5500,7 @@ msgstr "Zur freien Buchungszeile am Ende dieses Kontobuchs gehen"
 #: gnucash/gnome/gnc-plugin-page-register2.c:382
 #: gnucash/gnome/gnc-plugin-page-register.c:505
 msgid "Edit E_xchange Rate"
-msgstr "Wech_selkurs bearbeiten..."
+msgstr "Wech_selkurs bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:383
 #: gnucash/gnome/gnc-plugin-page-register.c:506
@@ -5618,8 +5619,8 @@ msgstr "_Aktive vollständig"
 msgid ""
 "Show transactions on one or two lines and expand the current transaction"
 msgstr ""
-"Alle Buchungssätze außer dem aktuellen ein- bis zweizeilig anzeigen. Den "
-"aktuellen Buchungssatz vollständig anzeigen."
+"Alle Buchungssätze außer dem aktuellen ein- bis zweizeilig anzeigen und den "
+"aktuellen Buchungssatz vollständig anzeigen"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:458
 #: gnucash/gnome/gnc-plugin-page-register.c:581
@@ -6664,7 +6665,7 @@ msgstr "GnuCash"
 #: gnucash/gnome/gnucash.appdata.xml.in.in:6
 #: gnucash/gnome/gnucash.desktop.in.in:8
 msgid "Manage your finances, accounts, and investments"
-msgstr "Verwaltung der Finanzen von Privatanwendern und Kleinbetrieben."
+msgstr "Verwaltung der Finanzen von Privatanwendern und Kleinbetrieben"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:8
 msgid ""
@@ -7328,27 +7329,26 @@ msgid ""
 "file.\n"
 msgstr ""
 "\n"
-"Die zu öffnende Datei enthält keine Angaben zu der verwendeten "
-"Zeichenkodierung. Dies ist bei allen Dateien der GnuCash-Version 1.9 oder "
-"älter der Fall. Es bedeutet, dass GnuCash die enthaltenen Texte in "
-"mehrfacher Bedeutung lesen könnte. Eine solche Mehrdeutigkeit kann nicht "
-"automatisch behoben werden.\n"
+"Die Datei, die Sie zu laden versuchen, stammt von einer älteren Version von "
+"GnuCash. Das Dateiformat in den älteren Versionen enthielt keine "
+"detaillierte Spezifikation der verwendeten Zeichenkodierung. Das bedeutet, "
+"dass der Text in Ihrer Datendatei auf verschiedene, nicht eindeutige Arten "
+"gelesen werden konnte. Diese Mehrdeutigkeit kann nicht automatisch aufgelöst "
+"werden, aber das neue GnuCash 2.0.0-Dateiformat enthält alle notwendigen "
+"Angaben, so dass Sie diesen Schritt nicht mehr durchführen müssen.\n"
 "\n"
-"Auf der nächsten Seite sollen Sie die besten Bedeutungen der gelesenen Texte "
-"auswählen. GnuCash versucht, eine möglichst passende Zeichenkodierung zu "
-"vorzuschlagen. Wenn die Zeichenkodierung passend war, werden alle Texte "
-"richtig (z.B. Umlaute) aussehen und Sie können einfach »Weiter« klicken.\n"
+"GnuCash wird versuchen, die richtige Zeichenkodierung für Ihre Datei zu "
+"erraten. Auf der nächsten Seite zeigt GnuCash die Texte an, die bei der "
+"Verwendung dieser Schätzung entstehen. Sie müssen überprüfen, ob die Wörter "
+"wie erwartet aussehen. Entweder sieht alles gut aus und Sie können einfach "
+"auf \"Weiter\" drücken. Oder die Wörter enthalten unerwartete Zeichen. In "
+"diesem Fall sollten Sie verschiedene Zeichenkodierungen auswählen, um andere "
+"Ergebnisse zu erhalten. Möglicherweise müssen Sie die Liste der "
+"Zeichenkodierungen bearbeiten, indem Sie auf die entsprechende Schaltfläche "
+"klicken.\n"
 "\n"
-"Wenn die Texte nicht wie erwartet aussehen, sollten Sie eine andere "
-"Zeichenkodierung mit der oberen Auswahlbox probieren. Wenn auch dies noch "
-"nicht hilft, können Sie weitere Zeichenkodierungen auswählen, indem Sie auf "
-"den Knopf rechts oben klicken bis es lesbar ist.\n"
-"\n"
-"Es werden keine Änderungen vorgenommen, bevor Sie nicht auf der allerletzten "
-"Seite »Anwenden« klicken. Sie können jederzeit mit »Zurück« auf diese Seite "
-"zurückkehren, um diese Erklärung erneut zu lesen.\n"
-"\n"
-"Klicken Sie nun »Weiter«.\n"
+"Drücken Sie nun \"Weiter\", um die richtige Zeichenkodierung für Ihre Datei "
+"auszuwählen.\n"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:198
 msgid "Ambiguous character encoding"
@@ -7777,7 +7777,7 @@ msgstr "Pfad-Anfang existiert nicht:"
 msgid "Path head not set, using '%s' for relative paths"
 msgstr ""
 "Kein Pfad-Anfang eingestellt. Es wird »%s« als Pfad-Anfang für relative "
-"Pfade verwendet."
+"Pfade verwendet"
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:426
 msgid "Existing"
@@ -7813,7 +7813,7 @@ msgstr "Speichern unter..."
 #: gnucash/gnome-utils/dialog-file-access.c:320
 #: gnucash/gtkbuilder/dialog-file-access.glade:40
 msgid "_Save As"
-msgstr "Speichern _unter..."
+msgstr "Speichern _unter"
 
 #: gnucash/gnome-utils/dialog-options.c:225
 #: gnucash/gnome-utils/gnc-main-window.c:307
@@ -8168,7 +8168,7 @@ msgid ""
 "this year"
 msgstr ""
 "Das eingegebene Datum ist außerhalb des gültigen Bereichs 01.01.1400 - "
-"31.12.9999. Es wird auf dieses Jahr zurückgesetzt."
+"31.12.9999. Es wird auf dieses Jahr zurückgesetzt"
 
 #: gnucash/gnome-utils/dialog-utils.c:437
 msgid "Date out of range"
@@ -8199,7 +8199,7 @@ msgstr "Neu..."
 #: gnucash/register/register-core/pricecell.c:161
 #, c-format
 msgid "An error occurred while processing '%s' at position %d"
-msgstr "Fehler aufgetreten beim Verarbeiten von »%s« an der Position %d."
+msgstr "Fehler aufgetreten beim Verarbeiten von »%s« an der Position %d"
 
 #: gnucash/gnome-utils/gnc-amount-edit.c:417
 #, c-format
@@ -8418,7 +8418,7 @@ msgstr "Die URL »%s« kann von dieser GnuCash-Version nicht verarbeitet werden.
 #: gnucash/gnome-utils/gnc-file.c:290
 #, c-format
 msgid "Can't parse the URL %s."
-msgstr "Folgende URL konnte nicht verarbeitet werden: %s"
+msgstr "Folgende URL konnte nicht verarbeitet werden: %s."
 
 #: gnucash/gnome-utils/gnc-file.c:295
 #, c-format
@@ -8457,9 +8457,8 @@ msgid ""
 msgstr ""
 "Für die Datenbank »%s« konnte keine exklusive Schreibberechtigung erreicht "
 "werden. Diese Datenbank ist wahrscheinlich von jemand anderem in Benutzung. "
-"In diesem Fall sollten Sie die Datenbank nicht öffnen.\n"
-"\n"
-"Möchten Sie trotzdem mit dem Öffnen der Datenbank fortfahren?"
+"In diesem Fall sollten Sie die Datenbank nicht öffnen. Möchten Sie trotzdem "
+"mit dem Öffnen der Datenbank fortfahren?"
 
 #: gnucash/gnome-utils/gnc-file.c:336
 #, c-format
@@ -8470,9 +8469,8 @@ msgid ""
 msgstr ""
 "Für die Datenbank »%s« konnte keine exklusive Schreibberechtigung erreicht "
 "werden. Diese Datenbank ist wahrscheinlich von jemand anderem in Benutzung. "
-"In diesem Fall sollten Sie die Datenbank nicht importieren.\n"
-"\n"
-"Möchten Sie trotzdem mit dem Importieren der Datenbank fortfahren?"
+"In diesem Fall sollten Sie die Datenbank nicht importieren. Möchten Sie "
+"trotzdem mit dem Importieren der Datenbank fortfahren?"
 
 #: gnucash/gnome-utils/gnc-file.c:344
 #, c-format
@@ -8483,9 +8481,8 @@ msgid ""
 msgstr ""
 "Für die Datenbank »%s« konnte keine exklusive Schreibberechtigung erreicht "
 "werden. Diese Datenbank ist wahrscheinlich von jemand anderem in Benutzung. "
-"In diesem Fall sollten Sie die Datenbank nicht speichern.\n"
-"\n"
-"Möchten Sie trotzdem mit dem Speichern der Datenbank fortfahren?"
+"In diesem Fall sollten Sie die Datenbank nicht speichern. Möchten Sie "
+"trotzdem mit dem Speichern der Datenbank fortfahren?"
 
 #: gnucash/gnome-utils/gnc-file.c:352
 #, c-format
@@ -8496,9 +8493,8 @@ msgid ""
 msgstr ""
 "Für die Datei »%s« konnte keine exklusive Schreibberechtigung erreicht "
 "werden. Diese Datei ist wahrscheinlich von jemand anderem in Benutzung. In "
-"diesem Fall sollten Sie die Datei nicht öffnen.\n"
-"\n"
-"Möchten Sie trotzdem mit dem Öffnen der Datei fortfahren?"
+"diesem Fall sollten Sie die Datei nicht exportieren. Möchten Sie trotzdem "
+"mit dem Exportieren der Datei fortfahren?"
 
 #: gnucash/gnome-utils/gnc-file.c:377
 #, c-format
@@ -8581,7 +8577,7 @@ msgstr "Der Dateityp der Datei »%s« ist unbekannt."
 #: gnucash/gnome-utils/gnc-file.c:461
 #, c-format
 msgid "Could not make a backup of the file %s"
-msgstr "Von der Datei »%s« konnte kein Backup erstellt werden."
+msgstr "Von der Datei »%s« konnte kein Backup erstellt werden"
 
 #: gnucash/gnome-utils/gnc-file.c:466
 #, c-format
