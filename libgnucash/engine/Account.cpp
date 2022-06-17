@@ -306,6 +306,7 @@ gnc_account_init(Account* acc)
     priv->accountName = qof_string_cache_insert("");
     priv->accountCode = qof_string_cache_insert("");
     priv->description = qof_string_cache_insert("");
+    priv->sort_index = -1;
 
     priv->type = ACCT_TYPE_NONE;
 
@@ -1486,6 +1487,8 @@ destroy_pending_splits_for_account(QofInstance *ent, gpointer acc)
             xaccSplitDestroy(split);
 }
 
+static bool sorted_accounts_invalid = true;
+
 void
 xaccAccountCommitEdit (Account *acc)
 {
@@ -1563,6 +1566,7 @@ xaccAccountCommitEdit (Account *acc)
     }
 
     qof_commit_edit_part2(&acc->inst, on_err, on_done, acc_free);
+    sorted_accounts_invalid = true;
 }
 
 void
@@ -2358,8 +2362,8 @@ static int revorder[NUM_ACCOUNT_TYPES] =
 };
 
 
-int
-xaccAccountOrder (const Account *aa, const Account *ab)
+static int
+xaccAccountOrderInt (const Account *aa, const Account *ab)
 {
     AccountPrivate *priv_aa, *priv_ab;
     const char *da, *db;
@@ -2379,7 +2383,7 @@ xaccAccountOrder (const Account *aa, const Account *ab)
     db = priv_ab->accountCode;
 
     /* Otherwise do a string sort */
-    result = g_strcmp0 (da, db);
+    result = safe_utf8_collate (da, db);
     if (result)
         return result;
 
@@ -2411,6 +2415,33 @@ xaccAccountOrder (const Account *aa, const Account *ab)
 
     /* guarantee a stable sort */
     return qof_instance_guid_compare(aa, ab);
+}
+
+int
+xaccAccountOrder (const Account *aa, const Account *ab)
+{
+    if (!aa)
+        return ab ? 1 : 0;
+    if (!ab)
+        return -1;
+
+    if (sorted_accounts_invalid)
+    {
+        DEBUG ("regenerating sorted accounts list");
+        auto book = gnc_account_get_book (aa);
+        auto root = gnc_book_get_root_account (book);
+        auto all_accounts = gnc_account_get_descendants (root);
+        all_accounts = g_list_sort (all_accounts, (GCompareFunc) xaccAccountOrderInt);
+        auto idx = 0;
+        for (GList *n = all_accounts; n; n = n->next, idx++)
+            GET_PRIVATE (n->data)->sort_index = idx;
+        g_list_free (all_accounts);
+        sorted_accounts_invalid = false;
+    }
+
+    auto priv_aa = GET_PRIVATE(aa);
+    auto priv_ab = GET_PRIVATE(ab);
+    return (priv_aa->sort_index - priv_ab->sort_index);
 }
 
 static int

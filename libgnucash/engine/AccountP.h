@@ -71,6 +71,8 @@ typedef struct AccountPrivate
      */
     const char *accountName;
 
+    int sort_index;             /* sorted accounts index */
+
     /* The accountCode is an arbitrary string assigned by the user.
      * It is intended to be reporting code that is a synonym for the
      * accountName. Typically, it will be a numeric value that follows
