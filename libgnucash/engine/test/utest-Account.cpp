@@ -1567,7 +1567,7 @@ test_xaccAccountRecomputeBalance (Fixture *fixture, gconstpointer pData)
 int
 xaccAccountOrder (const Account *aa, const Account *ab)// C: 11 in 3 */
 static void
-test_xaccAccountOrder ( )
+test_xaccAccountOrder (Fixture *fixture, gconstpointer pData)
 {
     Account *aa = NULL, *ab = NULL;
     QofBook *book = qof_book_new ();
@@ -1592,36 +1592,44 @@ test_xaccAccountOrder ( )
                   "name", "foo",
                   NULL);
 
+    fixture->func->reset_sorted_accounts ();
     g_assert_cmpint (xaccAccountOrder (aa, aa), == , 0);
     g_assert_cmpint (xaccAccountOrder (aa, ab), == ,
                      qof_instance_guid_compare (aa, ab));
     g_object_set (G_OBJECT (ab), "name", "bar", NULL);
+    fixture->func->reset_sorted_accounts ();
     g_assert_cmpint (xaccAccountOrder (aa, ab), > , 0);
     g_object_set (G_OBJECT (ab), "name", "waldo", NULL);
+    fixture->func->reset_sorted_accounts ();
     g_assert_cmpint (xaccAccountOrder (aa, ab), < , 0);
 
     g_object_set (G_OBJECT (ab), "type", ACCT_TYPE_BANK, NULL);
     g_test_message ("The next test should fail: There's an error in the sort"
                     " sequence that causes ACCT_TYPE_BANK to sort last"
                     " instead of first\n");
+    fixture->func->reset_sorted_accounts ();
     g_assert_cmpint (xaccAccountOrder (aa, ab), < , 0);
     g_object_set (G_OBJECT (ab), "type", ACCT_TYPE_STOCK, NULL);
+    fixture->func->reset_sorted_accounts ();
     g_assert_cmpint (xaccAccountOrder (aa, ab), > , 0);
     g_object_set (G_OBJECT (ab),
                   "type", ACCT_TYPE_INCOME,
                   "name", "bar",
                   NULL);
+    fixture->func->reset_sorted_accounts ();
     g_assert_cmpint (xaccAccountOrder (aa, ab), < , 0);
 
     g_object_set (G_OBJECT (ab), "code", "2222",
                   "name", "waldo",
                   NULL);
+    fixture->func->reset_sorted_accounts ();
     g_assert_cmpint (xaccAccountOrder (aa, ab), > , 0);
     g_object_set (G_OBJECT (ab),
                   "code", "4444",
                   "type", ACCT_TYPE_STOCK,
                   "name", "bar",
                   NULL);
+    fixture->func->reset_sorted_accounts ();
     g_assert_cmpint (xaccAccountOrder (aa, ab), < , 0);
     qof_instance_decrease_editlevel (aa);
     qof_instance_decrease_editlevel (ab);
@@ -2813,7 +2821,7 @@ test_suite_account (void)
     GNC_TEST_ADD (suitename, "gnc account insert & remove split", Fixture, NULL, setup, test_gnc_account_insert_remove_split,  teardown );
     GNC_TEST_ADD (suitename, "xaccAccount Insert and Remove Lot", Fixture, &good_data, setup, test_xaccAccountInsertRemoveLot,  teardown );
     GNC_TEST_ADD (suitename, "xaccAccountRecomputeBalance", Fixture, &some_data, setup, test_xaccAccountRecomputeBalance,  teardown );
-    GNC_TEST_ADD_FUNC (suitename, "xaccAccountOrder", test_xaccAccountOrder );
+    GNC_TEST_ADD (suitename, "xaccAccountOrder", Fixture, nullptr, setup, test_xaccAccountOrder, teardown );
     GNC_TEST_ADD (suitename, "qofAccountSetParent", Fixture, &some_data, setup, test_qofAccountSetParent,  teardown );
     GNC_TEST_ADD (suitename, "gnc account append/remove child", Fixture, NULL, setup, test_gnc_account_append_remove_child,  teardown );
     GNC_TEST_ADD (suitename, "gnc account n descendants", Fixture, &some_data, setup, test_gnc_account_n_descendants,  teardown );

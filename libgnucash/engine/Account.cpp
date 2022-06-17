@@ -6308,6 +6308,12 @@ utest_account_get_private (Account *acc)
     return GET_PRIVATE (acc);
 }
 
+static void
+utest_account_reset_sorted_accounts (void)
+{
+    sorted_accounts_invalid = true;
+}
+
 AccountTestFunctions*
 _utest_account_fill_functions(void)
 {
@@ -6320,6 +6326,7 @@ _utest_account_fill_functions(void)
     func->qofAccountSetParent = qofAccountSetParent;
     func->gnc_account_lookup_by_full_name_helper =
         gnc_account_lookup_by_full_name_helper;
+    func->reset_sorted_accounts = utest_account_reset_sorted_accounts;
 
     return func;
 }
