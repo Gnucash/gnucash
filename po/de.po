@@ -39,8 +39,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-06-13 14:19+0000\n"
-"Last-Translator: Steffen Möller <steffen_moeller@gmx.de>\n"
+"PO-Revision-Date: 2022-06-18 00:51+0000\n"
+"Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -481,7 +481,7 @@ msgid ""
 msgstr ""
 "E-Mail-Listen sind die bevorzugte Form der Kommunikation innerhalb der "
 "GnuCash-Gemeinschaft. Für Ankündigungen neuer Versionen, Benutzergruppen "
-"etc. siehe die Liste in https://wiki.gnucash.org/wiki/Mailing_Lists"
+"etc. siehe die Liste in https://wiki.gnucash.org/wiki/Mailing_Lists."
 
 #: doc/tip_of_the_day.list.c:11
 msgid ""
@@ -1014,7 +1014,7 @@ msgstr "Darlehen"
 #: gnucash/gnome/assistant-loan.cpp:1480
 #, c-format
 msgid "Loan Repayment Option: \"%s\""
-msgstr "Darlehensrechner-Option: \"%s\""
+msgstr "Darlehensrechner-Option: »%s«"
 
 #. Translators: The following symbols will build the *
 #. * header line of exported CSV files:
@@ -2939,7 +2939,7 @@ msgid ""
 "payment"
 msgstr ""
 "Die ausgewählte Buchung hat keine Teile, die einer Zahlung zugewiesen werden "
-"können"
+"können."
 
 #: gnucash/gnome/dialog-payment.c:1624
 msgid ""
@@ -3982,7 +3982,7 @@ msgstr "Alle Rechnungsverknüpfungen zeigen"
 
 #: gnucash/gnome/gnc-plugin-business.c:283
 msgid "Sales _Tax Table"
-msgstr "USt.-_Steuertabelle"
+msgstr "USt.-_Steuertabelle…"
 
 #: gnucash/gnome/gnc-plugin-business.c:284
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
@@ -4056,11 +4056,11 @@ msgstr "Ein neues Konto eröffnen"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:204
 msgid "New Account _Hierarchy..."
-msgstr "Konten_hierarchie hinzufügen..."
+msgstr "Konten_hierarchie hinzufügen…"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:205
 msgid "Extend the current book by merging with new account type categories"
-msgstr "Im aktuellen Kontobuch neue Kontenhierarchien hinzufügen"
+msgstr "Im aktuellen Kontobuch neue Kontenhierarchien hinzufügen."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:210
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:221
@@ -5485,7 +5485,7 @@ msgid ""
 "cleared amount"
 msgstr ""
 "Automatisch diejenigen Buchungen abgleichen, deren Summe einem vorgegebenen "
-"Betrag entspricht"
+"Betrag entspricht."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:377
 #: gnucash/gnome/gnc-plugin-page-register.c:495
@@ -5500,7 +5500,7 @@ msgstr "Zur freien Buchungszeile am Ende dieses Kontobuchs gehen"
 #: gnucash/gnome/gnc-plugin-page-register2.c:382
 #: gnucash/gnome/gnc-plugin-page-register.c:505
 msgid "Edit E_xchange Rate"
-msgstr "Wech_selkurs bearbeiten"
+msgstr "Wech_selkurs bearbeiten…"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:383
 #: gnucash/gnome/gnc-plugin-page-register.c:506
@@ -5619,8 +5619,8 @@ msgstr "_Aktive vollständig"
 msgid ""
 "Show transactions on one or two lines and expand the current transaction"
 msgstr ""
-"Alle Buchungssätze außer dem aktuellen ein- bis zweizeilig anzeigen und den "
-"aktuellen Buchungssatz vollständig anzeigen"
+"Alle Buchungssätze außer dem aktuellen ein- bis zweizeilig und den "
+"aktuellen vollständig anzeigen."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:458
 #: gnucash/gnome/gnc-plugin-page-register.c:581
@@ -6665,7 +6665,7 @@ msgstr "GnuCash"
 #: gnucash/gnome/gnucash.appdata.xml.in.in:6
 #: gnucash/gnome/gnucash.desktop.in.in:8
 msgid "Manage your finances, accounts, and investments"
-msgstr "Verwaltung der Finanzen von Privatanwendern und Kleinbetrieben"
+msgstr "Finanzverwaltung für Privatanwender und Kleinbetrieben"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:8
 msgid ""
@@ -7341,13 +7341,13 @@ msgstr ""
 "erraten. Auf der nächsten Seite zeigt GnuCash die Texte an, die bei der "
 "Verwendung dieser Schätzung entstehen. Sie müssen überprüfen, ob die Wörter "
 "wie erwartet aussehen. Entweder sieht alles gut aus und Sie können einfach "
-"auf \"Weiter\" drücken. Oder die Wörter enthalten unerwartete Zeichen. In "
+"auf »Weiter« drücken. Oder die Wörter enthalten unerwartete Zeichen. In "
 "diesem Fall sollten Sie verschiedene Zeichenkodierungen auswählen, um andere "
 "Ergebnisse zu erhalten. Möglicherweise müssen Sie die Liste der "
 "Zeichenkodierungen bearbeiten, indem Sie auf die entsprechende Schaltfläche "
 "klicken.\n"
 "\n"
-"Drücken Sie nun \"Weiter\", um die richtige Zeichenkodierung für Ihre Datei "
+"Drücken Sie nun »Weiter«, um die richtige Zeichenkodierung für Ihre Datei "
 "auszuwählen.\n"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:198
@@ -7777,7 +7777,7 @@ msgstr "Pfad-Anfang existiert nicht:"
 msgid "Path head not set, using '%s' for relative paths"
 msgstr ""
 "Kein Pfad-Anfang eingestellt. Es wird »%s« als Pfad-Anfang für relative "
-"Pfade verwendet"
+"Pfade verwendet."
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:426
 msgid "Existing"
@@ -7813,7 +7813,7 @@ msgstr "Speichern unter..."
 #: gnucash/gnome-utils/dialog-file-access.c:320
 #: gnucash/gtkbuilder/dialog-file-access.glade:40
 msgid "_Save As"
-msgstr "Speichern _unter"
+msgstr "Speichern _unter…"
 
 #: gnucash/gnome-utils/dialog-options.c:225
 #: gnucash/gnome-utils/gnc-main-window.c:307
@@ -8168,7 +8168,7 @@ msgid ""
 "this year"
 msgstr ""
 "Das eingegebene Datum ist außerhalb des gültigen Bereichs 01.01.1400 - "
-"31.12.9999. Es wird auf dieses Jahr zurückgesetzt"
+"31.12.9999. Es wird auf dieses Jahr zurückgesetzt."
 
 #: gnucash/gnome-utils/dialog-utils.c:437
 msgid "Date out of range"
@@ -8199,7 +8199,7 @@ msgstr "Neu..."
 #: gnucash/register/register-core/pricecell.c:161
 #, c-format
 msgid "An error occurred while processing '%s' at position %d"
-msgstr "Fehler aufgetreten beim Verarbeiten von »%s« an der Position %d"
+msgstr "Fehler aufgetreten beim Verarbeiten von »%s« an der Position %d."
 
 #: gnucash/gnome-utils/gnc-amount-edit.c:417
 #, c-format
@@ -9385,8 +9385,8 @@ msgid ""
 "Threshold\" set for this book. This setting can be changed in File-"
 ">Properties->Accounts."
 msgstr ""
-"Das eingegebene Datum der duplizierten Buchung ist älter als die \"Nur-Lese "
-"Schwelle\" dieser Datei. Diese Einstellung kann in Datei->Eigenschaften-"
+"Das eingegebene Datum der duplizierten Buchung ist älter als die »Nur-Lese "
+"Schwelle« dieser Datei. Diese Einstellung kann in Datei->Eigenschaften-"
 ">Konten geändert werden."
 
 #. Translators: This message will be presented when a user
@@ -10564,8 +10564,8 @@ msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"Datei, in welche die Logmeldungen geschrieben werden; Voreinstellung \"/tmp/"
-"gnucash.trace\"; kann auch \"stderr\" oder \"stdout\" sein."
+"Datei, in welche die Logmeldungen geschrieben werden; Voreinstellung »/tmp/"
+"gnucash.trace«; kann auch »stderr« oder »stdout« sein."
 
 #: gnucash/gnucash-core-app.cpp:295
 msgid "Hidden Options"
@@ -11565,16 +11565,16 @@ msgid ""
 "Set \"Review Created Transactions\" as the default for the \"since last run"
 "\" dialog."
 msgstr ""
-"Legen Sie \"Erzeugte Buchungen durchsehen\" als Standard für den Dialog "
-"\"seit letzten Aufruf\" fest."
+"Legen Sie »Erzeugte Buchungen durchsehen« als Standard für den Dialog "
+"»seit letzten Aufruf« fest."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:28
 msgid ""
 "This setting controls whether as default the \"review created transactions\" "
 "is set for the \"since last run\" dialog."
 msgstr ""
-"Diese Einstellung steuert, ob für den Dialog \"seit letzten Aufruf\" "
-"standardmäßig die \"Überprüfung erzeugter Buchungen\" eingestellt ist."
+"Diese Einstellung steuert, ob für den Dialog »seit letzten Aufruf« "
+"standardmäßig die »Überprüfung erzeugter Buchungen« eingestellt ist."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:35
 msgid "Set the \"auto create\" flag by default"
@@ -12239,7 +12239,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:246
 msgid "Superseded by \"use-gnucash-color-theme\""
-msgstr "Ersetzt durch \"use-gnucash-color-theme\""
+msgstr "Ersetzt durch »use-gnucash-color-theme«"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:247
 msgid ""
@@ -14053,7 +14053,7 @@ msgstr ""
 "Um den Namen eines Kontos zu ändern, klicken Sie zunächst auf die Zeile, "
 "welche das Konto enthält, dann auf den Kontennamen und ändern Sie ihn.\n"
 "\n"
-"Einige Konten sind als \"Platzhalter\" markiert. Platzhalter-Konten dienen "
+"Einige Konten sind als »Platzhalter« markiert. Platzhalter-Konten dienen "
 "der Gruppierung der Konten in einer Hierarchie und enthalten normalerweise "
 "keine Buchungen - auch keinen Anfangsbestand. Um ein Konto als Platzhalter "
 "zu kennzeichnen, klicken Sie in das entsprechende Kästchen des Kontos.\n"
@@ -16017,7 +16017,7 @@ msgstr ""
 "Gespeicherte Berichtskonfigurationen werden erstellt, wenn ein Bericht das "
 "erste Mal aus dem Menü 'Berichte' geöffnet wird.\n"
 "Nachdem Sie die Berichtsoptionen an Ihren Bedarf angepasst haben, wählen Sie "
-"\" Berichtskonfiguration speichern\" aus\n"
+"»Berichtskonfiguration speichern« aus\n"
 "dem Menü 'Bericht' oder der Symbolleiste."
 
 #: gnucash/gtkbuilder/dialog-date-close.glade:7
@@ -19814,7 +19814,7 @@ msgstr ""
 " * FinTS PIN/TAN: Einige Methoden erfordern ein spezielles Gerät wie einen "
 "Kartenlesegerät oder ein Smartphone;\n"
 " * FinTS HBCI: Sie müssen die öffentlichen Teile der asymmetrischen "
-"Schlüssel mit Ihrer Bank austauschen (\"Ini-Letter\").\n"
+"Schlüssel mit Ihrer Bank austauschen (»Ini-Letter«).\n"
 " * PayPal: registrierte E-Mail-Adresse, Passwort, API-Signatur;\n"
 "\n"
 "Siehe https://wiki.gnucash.org/wiki/AqBanking für weitere Details.\n"
@@ -20310,7 +20310,7 @@ msgstr ""
 "Ihr lokales Bankkonto hat keine SEPA Konteninformationen gespeichert. Es tut "
 "uns leid. aber in dieser Entwicklerversion ist ein weiterer Schritt "
 "notwendig, welcher noch nicht direkt in GnuCash implementiert ist - Bitte "
-"führen Sie das Kommandozeilenprogramm \"aqhbci-tool\" für Ihr Konto wie "
+"führen Sie das Kommandozeilenprogramm »aqhbci-tool« für Ihr Konto wie "
 "folgt aus: aqhbci-tool4 getaccsepa -b %s -a %s"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:610
@@ -21187,7 +21187,7 @@ msgid ""
 "register in 'Basic Ledger' mode. As such some transfer detail could be lost."
 msgstr ""
 "Für jede Transaktion gibt es eine Zeile, was einer einzelnen Zeile in einem "
-"Register im Modus \"einzeilige Darstellung\" entspricht. Daher können einige "
+"Register im Modus »einzeilige Darstellung« entspricht. Daher können einige "
 "Übertragungsdetails verloren gehen."
 
 #. Translators: %s is the file name.
@@ -22263,7 +22263,7 @@ msgid ""
 "If there isn't one, or you don't know it, create your own."
 msgstr ""
 "Geben Sie das Tickersymbol oder eine andere übliche Abkürzung ein, zum "
-"Beispiel »RHT«. Wenn es keine gibt oder Sie das nicht kennen, können Sie "
+"Beispiel »DTE«. Wenn es keine gibt oder Sie das nicht kennen, können Sie "
 "sich selber einen Eintrag ausdenken und eintragen."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:866
@@ -30643,7 +30643,7 @@ msgid ""
 "Below you will find the list of invalid account names:\n"
 "%s"
 msgstr ""
-"Das Trennzeichen \"%s\" wird in einem oder mehreren Kontennamen verwendet.\n"
+"Das Trennzeichen »%s« wird in einem oder mehreren Kontennamen verwendet.\n"
 "\n"
 "Dies wird zu unerwartetem Verhalten führen. Wählen Sie ein anderes "
 "Trennzeichen oder ändern Sie die Kontennamen.\n"
