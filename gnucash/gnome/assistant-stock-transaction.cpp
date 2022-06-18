@@ -573,7 +573,7 @@ refresh_page_stock_value (GtkWidget *widget, gpointer user_data)
     if (info->txn_type->stock_amount == FieldMask::DISABLED ||
         info->txn_type->stock_value == FieldMask::DISABLED ||
         gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->stock_amount_edit), &amount, true, nullptr) ||
-        gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->stock_value_edit),  &value,  true, nullptr) || 
+        gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->stock_value_edit),  &value,  true, nullptr) ||
         gnc_numeric_zero_p (value))
     {
         // Translators: StockAssistant: N/A denotes stock price is not computable
@@ -648,7 +648,7 @@ check_page (GtkListStore *list, gnc_numeric& debit, gnc_numeric& credit,
             amtstr = "";
         else
         {
-            add_error (errors, N_("Amount for %s is missing"), page);
+            add_error (errors, N_("Amount for %s is missing."), page);
             amtstr = _(missing_str);
         }
     }

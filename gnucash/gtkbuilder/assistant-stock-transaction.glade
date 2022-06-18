@@ -422,7 +422,7 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="margin-bottom">6</property>
-            <property name="label" translatable="yes">In this page, input the asset account, and the monetary amount received/spent. It may differ from the stock value from the last page, if there are broker fees associated with this transaction.</property>
+            <property name="label" translatable="yes">In this page, input the asset account, and the monetary amount received/spent. It may differ from the stock value from the last page, if there are brokerage fees associated with this transaction.</property>
             <property name="wrap">True</property>
           </object>
           <packing>
@@ -534,7 +534,7 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="margin-bottom">6</property>
-            <property name="label" translatable="yes">In this page, input any broker fees incurred in this transaction. The fee may be capitalized into the asset account, or expensed into a broker fees account. Typically fees on purchase are capitalized, and fees on sales are expensed. If there are no fees involved in this transaction, it can be left blank.</property>
+            <property name="label" translatable="yes">In this page, input any brokerage fees incurred in this transaction. The fee may be capitalized into the asset account, or expensed into a brokerage fees account. Typically fees on purchase are capitalized, and fees on sales are expensed. If there are no fees involved in this transaction, it can be left blank.</property>
             <property name="wrap">True</property>
           </object>
           <packing>
@@ -608,7 +608,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Broker Fees</property>
+                <property name="label" translatable="yes">Brokerage Fees</property>
                 <property name="use-underline">True</property>
                 <property name="justify">center</property>
                 <property name="mnemonic-widget">fees_memo_entry</property>
@@ -620,7 +620,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="capitalize_fees_checkbutton">
-                <property name="label" translatable="yes">Capitalize broker fees into stock account?</property>
+                <property name="label" translatable="yes">Capitalize brokerage fees into stock account?</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -644,7 +644,7 @@
         </child>
       </object>
       <packing>
-        <property name="title" translatable="yes" comments="Broker Fees">Fees</property>
+        <property name="title" translatable="yes" comments="Brokerage Fees">Fees</property>
         <property name="complete">True</property>
       </packing>
     </child>
@@ -756,7 +756,7 @@
         </child>
       </object>
       <packing>
-        <property name="title" translatable="yes" comments="Broker Fees">Dividend</property>
+        <property name="title" translatable="yes" comments="Brokerage Fees">Dividend</property>
         <property name="complete">True</property>
       </packing>
     </child>
