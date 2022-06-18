@@ -137,7 +137,7 @@ static const TxnTypeVec starting_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing an
         // Initial stock purchase
-        NC_("Stock Assistant: Transaction Type", "Open buy"),
+        N_("Open buy"),
         N_("Initial stock purchase")
     },
     {
@@ -150,7 +150,7 @@ static const TxnTypeVec starting_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing an
         // initial stock short-sale
-        NC_("Stock Assistant: Transaction Type", "Open short"),
+        N_("Open short"),
         N_("Initial stock short-sale")
     }
 };
@@ -167,7 +167,7 @@ static const TxnTypeVec long_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing
         // purchase of stock.
-        NC_("Stock Assistant: Transaction Type", "Buy"),
+        N_("Buy"),
         N_("Buying stock.")
     },
     {
@@ -180,7 +180,7 @@ static const TxnTypeVec long_types
         FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE, // capgains_amt
         // Translators: this is a stock transaction describing sale of
         // stock, and recording capital gains/loss
-        NC_("Stock Assistant: Transaction Type", "Sell"),
+        N_("Sell"),
         N_("Selling stock, and record capital gains/loss")
     },
     {
@@ -193,7 +193,7 @@ static const TxnTypeVec long_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing
         // dividends issued to holder
-        NC_("Stock Assistant: Transaction Type", "Dividend"),
+        N_("Dividend"),
         N_("Company issues dividends to holder")
     },
     {
@@ -207,7 +207,7 @@ static const TxnTypeVec long_types
         // Translators: this is a stock transaction describing
         // dividend issued to holder, and is reinvested. Some
         // dividends are distributed as cash.
-        NC_("Stock Assistant: Transaction Type", "Dividend reinvestment (w/ remainder)"),
+        N_("Dividend reinvestment (with remainder)"),
         N_("Company issues dividend which is reinvested. Some dividends are paid to holder")
     },
     {
@@ -220,7 +220,7 @@ static const TxnTypeVec long_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing
         // dividend which is wholly reinvested.
-        NC_("Stock Assistant: Transaction Type", "Dividend reinvestment (w/o remainder)"),
+        N_("Dividend reinvestment (without remainder)"),
         N_("Company issues dividend which is wholly reinvested.")
     },
     {
@@ -233,7 +233,7 @@ static const TxnTypeVec long_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing return
         // of capital
-        NC_("Stock Assistant: Transaction Type", "Return of Capital"),
+        N_("Return of Capital"),
         N_("Stock returns capital to holder")
     },
     {
@@ -246,7 +246,7 @@ static const TxnTypeVec long_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing a
         // notional distribution
-        NC_("Stock Assistant: Transaction Type", "Notional distribution"),
+        N_("Notional distribution"),
         N_("Stock returns a notional distribution")
     },
     {
@@ -259,7 +259,7 @@ static const TxnTypeVec long_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing a stock
         // split
-        NC_("Stock Assistant: Transaction Type", "Stock split"),
+        N_("Stock split"),
         N_("Stock price is fractionally reduced")
     },
     {
@@ -271,7 +271,7 @@ static const TxnTypeVec long_types
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing a reverse split
-        NC_("Stock Assistant: Transaction Type", "Reverse split"),
+        N_("Reverse split"),
         N_("Stock price is fractionally increased.")
     },
     {
@@ -284,7 +284,7 @@ static const TxnTypeVec long_types
         FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE, // capgains_amt
         // Translators: this is a stock transaction describing a
         // reverse split. Some fractional stock is returned as cash.
-        NC_("Stock Assistant: Transaction Type", "Reverse split w/ cash in lieu for fractionals"),
+        N_("Reverse split with cash in lieu for fractionals"),
         N_("Stock price is fractionally increased. Fractional remaining stock is returned as cash.")
     },
 };
@@ -301,7 +301,7 @@ static const TxnTypeVec short_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing
         // shorting of stock.
-        NC_("Stock Assistant: Transaction Type", "Short sell"),
+        N_("Short sell"),
         N_("Shorting stock.")
     },
     {
@@ -314,7 +314,7 @@ static const TxnTypeVec short_types
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE,          // capg_amt
         // Translators: this is a stock transaction describing cover
         // buying stock, and recording capital gains/loss
-        NC_("Stock Assistant: Transaction Type", "Cover buy"),
+        N_("Cover buy"),
         N_("Cover buying stock, and record capital gains/loss")
     },
     {
@@ -327,7 +327,7 @@ static const TxnTypeVec short_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing
         // dividends retrieved from holder when shorting stock
-        NC_("Stock Assistant: Transaction Type", "Compensatory Dividend"),
+        N_("Compensatory Dividend"),
         N_("Company issues dividends to holder when shorting stock")
     },
     {
@@ -341,7 +341,7 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing
         // dividends retrieved from holder when shorting stock. Some
         // dividends are recovered from holder
-        NC_("Stock Assistant: Transaction Type", "Dividend reinvestment (w/ remainder)"),
+        N_("Dividend reinvestment (with remainder)"),
         N_("Company issues dividends to holder when shorting stock. Some dividends are recovered from holder")
     },
     {
@@ -354,7 +354,7 @@ static const TxnTypeVec short_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing
         // dividends retrieved from holder when shorting stock,
-        NC_("Stock Assistant: Transaction Type", "Dividend reinvestment (w/o remainder)"),
+        N_("Dividend reinvestment (without remainder)"),
         N_("Company issues dividend when shorting stock, which are wholly recovered from holder.")
     },
     {
@@ -367,7 +367,7 @@ static const TxnTypeVec short_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing return
         // of capital retrieved from holder when shorting stock
-        NC_("Stock Assistant: Transaction Type", "Compensatory Return of Capital"),
+        N_("Compensatory Return of Capital"),
         N_("Return retrieves capital from holder when shorting stock")
     },
     {
@@ -380,7 +380,7 @@ static const TxnTypeVec short_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing a
         // notional distribution when shorting stock
-        NC_("Stock Assistant: Transaction Type", "Compensatory Notional distribution"),
+        N_("Compensatory Notional distribution"),
         N_("Stock retrieves a notional distribution")
     },
     {
@@ -393,7 +393,7 @@ static const TxnTypeVec short_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing a stock
         // split when shorting stock
-        NC_("Stock Assistant: Transaction Type", "Stock split"),
+        N_("Stock split"),
         N_("Stock price is fractionally reduced when shorting stock")
     },
     {
@@ -406,7 +406,7 @@ static const TxnTypeVec short_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing a
         // reverse split when shorting stock.
-        NC_("Stock Assistant: Transaction Type", "Reverse split"),
+        N_("Reverse split"),
         N_("Stock price is fractionally increased when shorting stock.")
     },
     {
@@ -420,7 +420,7 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing a
         // reverse split when shorting stock. Fractional remaining
         // stock is retrieved as cash.
-        NC_("Stock Assistant: Transaction Type", "Reverse split w/ cash in lieu for fractionals"),
+        N_("Reverse split with cash in lieu for fractionals"),
         N_("Stock price is fractionally increased when shorting stock. Fractional remaining stock is retrieved as cash.")
     },
 };
@@ -858,8 +858,7 @@ stock_assistant_prepare (GtkAssistant  *assistant, GtkWidget *page,
         gtk_combo_box_text_remove_all (GTK_COMBO_BOX_TEXT (info->transaction_type_combo));
         for (auto& it : *(info->txn_types))
             gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (info->transaction_type_combo),
-                                            g_dpgettext2 (nullptr, "Stock Assistant: Transaction Type",
-                                                          it.friendly_name));
+                                            _(it.friendly_name));
         gtk_combo_box_set_active (GTK_COMBO_BOX (info->transaction_type_combo), 0);
         refresh_page_transaction_type (info->transaction_type_combo, info);
         gtk_widget_grab_focus (info->transaction_type_combo);
