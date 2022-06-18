@@ -519,7 +519,7 @@ refresh_page_transaction_type (GtkWidget *widget, gpointer user_data)
     {
         info->txn_type = info->txn_types->at (type_idx);
     }
-    catch (const std::out_of_range& e)
+    catch (const std::out_of_range&)
     {
         PERR ("out of range type_idx=%d", type_idx);
         return;
