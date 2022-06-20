@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-03-09 18:00-0800\n"
-"PO-Revision-Date: 2022-04-29 01:08+0000\n"
+"PO-Revision-Date: 2022-06-20 02:20+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12.1-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 
 # #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
 # src/trans.h:283
@@ -2231,7 +2231,7 @@ msgstr ""
 #: gnucash/report/trep-engine.scm:1096 gnucash/report/trep-engine.scm:1226
 #: gnucash/report/trep-engine.scm:1227
 msgid "Memo"
-msgstr "Emlékeztető"
+msgstr "Értelmezés"
 
 #: gnucash/gnome/dialog-find-transactions2.c:155
 #: gnucash/gnome/dialog-find-transactions.c:155
@@ -21887,7 +21887,7 @@ msgstr "Tőkejöv. (rövid)"
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:189
 #: libgnucash/app-utils/gnc-ui-util.c:953
 msgid "Retained Earnings"
-msgstr "Nyereség visszaforgatása"
+msgstr "Eredménytartalék"
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:118
 msgid "Commissions"
@@ -26844,7 +26844,7 @@ msgstr "Bevételi kimutatás"
 
 #: gnucash/report/reports/standard/income-statement.scm:572
 msgid "Profit & Loss"
-msgstr "Nyereség és veszteség"
+msgstr "Eredménykimutatás"
 
 #: gnucash/report/reports/standard/invoice.scm:102
 #: gnucash/report/reports/standard/invoice.scm:234
