@@ -6,14 +6,15 @@
 # Maxim V. Dziumanenko <dziumanenko@gmail.com>, 2007.
 # Yuri Chornoivan <yurchor@ukr.net>, 2011, 2018, 2019, 2020, 2021, 2022.
 # Maksym Kobieliev <maximaximums@gmail.com>, 2013.
+# Artem <artem@molotov.work>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-06-20 23:46+0200\n"
-"PO-Revision-Date: 2022-06-21 07:17+0000\n"
-"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"PO-Revision-Date: 2022-06-21 16:43+0000\n"
+"Last-Translator: Artem <artem@molotov.work>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/uk/>\n"
 "Language: uk\n"
@@ -2511,7 +2512,7 @@ msgstr "Надіслано?"
 #: gnucash/gtkbuilder/dialog-order.glade:548
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:139
 msgid "Date Opened"
-msgstr "Дата"
+msgstr "Дата відкриття"
 
 #: gnucash/gnome/dialog-invoice.c:3401
 #: gnucash/gtkbuilder/dialog-invoice.glade:42
@@ -16839,7 +16840,7 @@ msgstr "США"
 #. Date format label for 31/07/2013
 #: gnucash/gtkbuilder/dialog-preferences.glade:54
 msgid "UK"
-msgstr "Великобританія"
+msgstr "Велика Британія"
 
 #. Date format label for 31.07.2013
 #: gnucash/gtkbuilder/dialog-preferences.glade:58
