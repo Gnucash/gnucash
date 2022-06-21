@@ -25,11 +25,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-06-20 23:46+0200\n"
-"PO-Revision-Date: 2022-06-11 14:17+0000\n"
-"Last-Translator: YTX <ytx.cash@gmail.com>\n"
+"PO-Revision-Date: 2022-06-21 01:19+0000\n"
+"Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -37,7 +37,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -3106,8 +3106,7 @@ msgid "Invalid Account in Split"
 msgstr "分录中有无效的科目"
 
 #: gnucash/gnome/dialog-sx-editor.c:754
-#, fuzzy, c-format
-#| msgid "Split with memo %s has an unparseable Credit Formula."
+#, c-format
 msgid "Split with memo %s has an unparsable Credit Formula."
 msgstr "带有备注%s的子交易有一个无法解析的信用公式。"
 
@@ -3116,10 +3115,9 @@ msgid "Unparsable Formula in Split"
 msgstr "分录中有无法处理的函数"
 
 #: gnucash/gnome/dialog-sx-editor.c:770
-#, fuzzy, c-format
-#| msgid "Split with memo %s has an unparseable Debit Formula."
+#, c-format
 msgid "Split with memo %s has an unparsable Debit Formula."
-msgstr "用备忘录分割 %s 有一个不可分割的借方公式。"
+msgstr "用备忘录分割 %s 有一个不可解析的借方公式。"
 
 #: gnucash/gnome/dialog-sx-from-trans.c:557
 msgid ""
@@ -5586,16 +5584,12 @@ msgid "_Sort By..."
 msgstr "排序(_S)..."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:490
-#, fuzzy
-#| msgid "Stock Split Assistant"
 msgid "Stock Ass_istant"
-msgstr "股票拆分详情"
+msgstr "股票助手(_I)"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:491
-#, fuzzy
-#| msgid "Stock Split Assistant"
 msgid "Stock Assistant"
-msgstr "股票拆分详情"
+msgstr "股票助手"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:510
 msgid "_Go to Date"
@@ -7232,10 +7226,9 @@ msgid "New Account"
 msgstr "新建科目"
 
 #: gnucash/gnome-utils/dialog-account.c:2193
-#, fuzzy, c-format
-#| msgid "Renumber sub-accounts"
+#, c-format
 msgid "Renumber the immediate sub-accounts of '%s'?"
-msgstr "重新编码子科目"
+msgstr "重新编号'%s'的直接子账户吗？"
 
 #: gnucash/gnome-utils/dialog-account.c:2299
 #, c-format
@@ -14453,20 +14446,14 @@ msgid "Interval"
 msgstr "间隔"
 
 #: gnucash/gtkbuilder/dialog-account.glade:2112
-#, fuzzy
-#| msgid "Number of Periods"
 msgid "Number of Digits"
-msgstr "期数"
+msgstr "位数"
 
 #: gnucash/gtkbuilder/dialog-account.glade:2126
-#, fuzzy
-#| msgid ""
-#| "Renumber the immediate sub-accounts of %s? This will replace the account "
-#| "code field of each child account with a newly generated code."
 msgid ""
 "This will replace the account code field of each child account with a newly "
 "generated code"
-msgstr "重新编码 %s 的子科目，以替换原有编码。"
+msgstr "这会将每个子账户的账户代码字段替换为新生成的代码"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:34
 msgid "_Show documentation"
@@ -18570,31 +18557,6 @@ msgid ""
 msgstr "此向导可帮助您设置网上银行。"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:39
-#, fuzzy
-#| msgid ""
-#| "The requirements for Online Banking vary between the different supported "
-#| "AqBanking backends, but usually you will need:\n"
-#| "* Your bank needs to grant you online access. See on their website or ask "
-#| "their customer service for how to obtain it.\n"
-#| "They should also tell you:\n"
-#| "* Your user ID that identifies you to their server, often your base "
-#| "account number;\n"
-#| "* The URL of their Online Banking server;\n"
-#| "* In some cases the routing number of your bank's branch is useful in "
-#| "this assistant;\n"
-#| "* Authentication methods vary by backend and chosen method:\n"
-#| " * FinTS PIN/TAN: Some methods require a specific gadget like a card "
-#| "reader or a mobile;\n"
-#| " * FinTS HBCI: You have to exchange the public parts of asymmetric keys "
-#| "with your bank (\"Ini-Letter\").\n"
-#| " * PayPal: registered email address, password, API signature;\n"
-#| "\n"
-#| "See https://wiki.gnucash.org/wiki/AqBanking for more details.\n"
-#| "\n"
-#| "Note: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented "
-#| "Online Banking server. You should not rely on time-critical transfers "
-#| "through Online Banking, because sometimes the bank does not give you "
-#| "correct feedback when a transfer is rejected."
 msgid ""
 "The requirements for Online Banking vary between the different supported "
 "AqBanking backends, but usually you will need:\n"
@@ -18623,13 +18585,7 @@ msgstr ""
 "* 认证方法因后端和选择的方法而异。\n"
 " * FinTS PIN/TAN：有些方法需要一个特定的小工具，如读卡器或手机。\n"
 " * FinTS HBCI：你必须与你的银行交换非对称密钥的公共部分（\"Ini-Letter\"）。\n"
-" * PayPal：注册的电子邮件地址、密码、API签名。\n"
-"\n"
-"更多细节见https://wiki.gnucash.org/wiki/AqBanking。\n"
-"\n"
-"注意：对任何事情都不做保证。有些银行的网上银行服务器实施得很差。你不应该依赖"
-"通过网上银行进行的时间紧迫的转账，因为有时银行在转账被拒绝时不会给你正确的反"
-"馈。"
+" * PayPal：注册的电子邮件地址、密码、API签名;"
 
 #. See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:65
@@ -18651,21 +18607,10 @@ msgid "Initial Online Banking Setup"
 msgstr "初始化网银"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:111
-#, fuzzy
-#| msgid ""
-#| "The Setup of your Online Banking connection is handled by the external "
-#| "program \"AqBanking Setup Wizard\".\n"
-#| "You have to set up at least one connection before you can continue.\n"
-#| "\n"
-#| "Please press the button below to start it."
 msgid ""
 "The Setup of your Online Banking connection is handled by the external "
 "program \"AqBanking Setup\"."
-msgstr ""
-"您的网上银行连接的设置是由外部程序 \"AqBanking设置向导 \"处理的。\n"
-"在您继续之前，您必须至少设置一个连接。\n"
-"\n"
-"请按下面的按钮来启动它。"
+msgstr "您的网上银行连接的设置由外部程序 \"AqBanking设置向导 \"处理。"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:125
 msgid ""
@@ -18681,34 +18626,22 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:157
-#, fuzzy
-#| msgid ""
-#| "The Setup of your Online Banking connection is handled by the external "
-#| "program \"AqBanking Setup Wizard\".\n"
-#| "You have to set up at least one connection before you can continue.\n"
-#| "\n"
-#| "Please press the button below to start it."
 msgid ""
 "You have to set up at least one connection before you can continue.\n"
 "\n"
 "Please press the button below to start it."
 msgstr ""
-"您的网上银行连接的设置是由外部程序 \"AqBanking设置向导 \"处理的。\n"
 "在您继续之前，您必须至少设置一个连接。\n"
 "\n"
 "请按下面的按钮来启动它。"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:170
-#, fuzzy
-#| msgid "_Start AqBanking Wizard"
 msgid "_Start AqBanking Setup"
-msgstr "启动 AqBanking 向导(_S)"
+msgstr "启动 AqBanking 设置(_S)"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:186
-#, fuzzy
-#| msgid "Initial Online Banking Setup"
 msgid "Start Online Banking Setup"
-msgstr "初始化网银"
+msgstr "开始网上银行设置"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:204
 msgid ""
@@ -25266,10 +25199,8 @@ msgstr "图表中的最大堆叠数量。"
 
 #: gnucash/report/reports/standard/category-barchart.scm:188
 #: gnucash/report/reports/standard/category-barchart.scm:262
-#, fuzzy
-#| msgid "Enable chart"
 msgid "Percentage chart"
-msgstr "启用图表"
+msgstr "百分比图"
 
 #: gnucash/report/reports/standard/category-barchart.scm:189
 msgid ""
