@@ -275,7 +275,10 @@ Gnucash::Gnucash::configure_program_options (void)
     auto context = g_option_context_new (m_tagline.c_str());
     auto gtk_options = gtk_get_option_group(FALSE);
     g_option_context_add_group (context, gtk_options);
-    m_gtk_help_msg = g_option_context_get_help (context, FALSE, gtk_options);
+
+    auto help_cstr = g_option_context_get_help (context, FALSE, gtk_options);
+    m_gtk_help_msg = help_cstr;
+    g_free (help_cstr);
     g_option_context_free (context);
 
     bpo::options_description app_options(_("Application Options"));

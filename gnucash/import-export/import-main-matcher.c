@@ -1101,7 +1101,7 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
                       info);
     DEBUG("Callback to assign destination account to selection connected");
     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-    
+
     if (show_edit_actions)
     {
         menuitem = gtk_menu_item_new_with_label (
@@ -1111,7 +1111,7 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
                           info);
         DEBUG("Callback to edit description");
         gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-        
+
         menuitem = gtk_menu_item_new_with_label (
                                                  _("Edit memo."));
         g_signal_connect (menuitem, "activate",
@@ -1119,7 +1119,7 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
                           info);
         DEBUG("Callback to edit memo");
         gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-        
+
         menuitem = gtk_menu_item_new_with_label (
                                                  _("Edit notes."));
         g_signal_connect (menuitem, "activate",
@@ -1721,16 +1721,16 @@ refresh_model_row (GNCImportMainMatcher *gui,
                         == TRUE)
                 {
                     text =
-                        /* Translators: %1$s is the amount to be
-                           transferred. %2$s is the destination account. */
+                        /* Translators: %1$s is the amount to be transferred,
+                           %2$s the destination account. */
                         g_strdup_printf (_("New, transfer %s to (manual) \"%s\""),
                                          imbalance, tmp);
                 }
                 else
                 {
                     text =
-                        /* Translators: %1$s is the amount to be
-                           transferred. %2$s is the destination account. */
+                        /* Translators: %1$s is the amount to be transferred,
+                           %2$s the destination account. */
                         g_strdup_printf (_("New, transfer %s to (auto) \"%s\""),
                                          imbalance, tmp);
                 }

@@ -31,7 +31,7 @@ endforeach (lingua)
 add_custom_target(po-gmo ALL DEPENDS ${CATALOGS})
 
 set_local_dist(po_DIST_local ${po_SOURCES} CMakeLists.txt
-  POTFILES.in POTFILES.skip README gnucash-pot.cmake)
+  POTFILES.in POTFILES.ignore POTFILES.skip README gnucash-pot.cmake)
 set(po_DIST ${po_DIST_local} ${po_glossary_DIST} PARENT_SCOPE)
 
 function(read_file_removing_comments OUTPUT PATH)
@@ -73,6 +73,12 @@ function(make_gnucash_potfiles)
 
   # Remove the paths that we have marked as explicitly skipped
   read_file_removing_comments(SKIP_LINES POTFILES.skip)
+  foreach (path ${SKIP_LINES})
+      list(REMOVE_ITEM GOOD_FILES ${path})
+  endforeach ()
+
+  # Remove the paths that we have marked as explicitly ignore
+  read_file_removing_comments(SKIP_LINES POTFILES.ignore)
   foreach (path ${SKIP_LINES})
       list(REMOVE_ITEM GOOD_FILES ${path})
   endforeach ()
