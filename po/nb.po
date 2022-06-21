@@ -9,11 +9,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-06-20 23:46+0200\n"
-"PO-Revision-Date: 2022-05-31 02:16+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2022-06-21 23:19+0000\n"
+"Last-Translator: Petter Reinholdtsen <pere-weblate@hungry.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/nb_NO/>\n"
 "Language: nb\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -3346,9 +3346,8 @@ msgid "Last Valid Year: "
 msgstr "Sist gyldig år: "
 
 #: gnucash/gnome/dialog-tax-info.c:288
-#, fuzzy
 msgid "Form Line Data: "
-msgstr "Format:"
+msgstr ""
 
 #. Translators: Tax Code
 #: gnucash/gnome/dialog-tax-info.c:290
@@ -7597,10 +7596,9 @@ msgid "New Account"
 msgstr "Ny konto"
 
 #: gnucash/gnome-utils/dialog-account.c:2193
-#, fuzzy, c-format
-#| msgid "Renumber sub-accounts"
+#, c-format
 msgid "Renumber the immediate sub-accounts of '%s'?"
-msgstr "Omnummerér underkontoer"
+msgstr "Omnummerér direkte underkontoer til «%s»?"
 
 #: gnucash/gnome-utils/dialog-account.c:2299
 #, c-format
@@ -7661,13 +7659,12 @@ msgstr ""
 "Børskode (ISIN, CUSIP eller lignende): "
 
 #: gnucash/gnome-utils/dialog-commodity.c:176
-#, fuzzy
 msgid ""
 "\n"
 "Mnemonic (Ticker symbol or similar): "
 msgstr ""
 "\n"
-"Forkortelse (ticker-symbol eller lignende):"
+"Forkortelse (ticker-symbol eller lignende): "
 
 #: gnucash/gnome-utils/dialog-commodity.c:275
 #: gnucash/gtkbuilder/dialog-commodity.glade:644
@@ -9901,9 +9898,8 @@ msgstr "Tidssone"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:353
 #: gnucash/gtkbuilder/dialog-customer.glade:133
-#, fuzzy
 msgid "Customer Number"
-msgstr "Kundenummer: "
+msgstr "Kundenummer:"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:361
 #: gnucash/gtkbuilder/dialog-vendor.glade:134
@@ -13492,9 +13488,8 @@ msgstr "<b>Fra</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:886
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:57
-#, fuzzy
 msgid "Currency To"
-msgstr "Valuta: "
+msgstr "Valuta til"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:953
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:882
@@ -14656,9 +14651,8 @@ msgid "_Edit list of encodings"
 msgstr "R_ediger tegnkodingsliste"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:69
-#, fuzzy
 msgid "Default encoding"
-msgstr "Forvalgt tegnkoding: "
+msgstr "Forvalgt tegnkoding"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:136
 msgid "Convert the file"
@@ -16136,9 +16130,8 @@ msgid "Based On"
 msgstr "Sluttet den:"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:219
-#, fuzzy
 msgid "Match String"
-msgstr "Treff mangler!"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:233
 #, fuzzy
@@ -16572,41 +16565,36 @@ msgid "_Open the new user tutorial"
 msgstr "_Gjennomgang for nye brukere"
 
 #: gnucash/gtkbuilder/dialog-object-references.glade:8
-#, fuzzy
 msgid "Object references"
-msgstr "Brukervalg"
+msgstr "Objektreferanser"
 
 #: gnucash/gtkbuilder/dialog-object-references.glade:52
-#, fuzzy
 msgid "Explanation"
-msgstr "S_plitt transaksjon"
+msgstr "Forklaring"
 
 #: gnucash/gtkbuilder/dialog-options.glade:44
 msgid "Close dialog and make no changes."
-msgstr ""
+msgstr "Lukk dialogvinduet uten å gjøre endringer."
 
 #: gnucash/gtkbuilder/dialog-options.glade:61
 msgid "Apply changes but do not close dialog."
-msgstr ""
+msgstr "Iverksett endringer uten å lukke dialogvindu."
 
 #: gnucash/gtkbuilder/dialog-options.glade:78
-#, fuzzy
 msgid "Apply changes and close dialog."
-msgstr "Åpne dialogen for ansattsøk"
+msgstr "Iverksett endringer og lukk dialogvindu."
 
 #: gnucash/gtkbuilder/dialog-order.glade:8
 msgid "Order Entry"
 msgstr "Ordrelinje"
 
 #: gnucash/gtkbuilder/dialog-order.glade:58
-#, fuzzy
 msgid "_Invoices"
-msgstr "Fakturaer"
+msgstr "_Fakturaer"
 
 #: gnucash/gtkbuilder/dialog-order.glade:74
-#, fuzzy
 msgid "Close _Order"
-msgstr "Lukk ordre"
+msgstr "Avslutt _ordre"
 
 #: gnucash/gtkbuilder/dialog-order.glade:230
 #: gnucash/gtkbuilder/dialog-order.glade:575
@@ -16626,22 +16614,20 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-payment.glade:136
 #: gnucash/gtkbuilder/dialog-payment.glade:168
-#, fuzzy
 msgid "The company associated with this payment."
-msgstr "Firma for denne rapporten"
+msgstr "Bedrift som kobles med denne betalingen."
 
 #: gnucash/gtkbuilder/dialog-payment.glade:169
 msgid "Partner"
-msgstr ""
+msgstr "Partner"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:207
 msgid "Post To"
 msgstr "Postér til"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:335
-#, fuzzy
 msgid "Documents"
-msgstr "Justeringer"
+msgstr "Dokumenter"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:412
 #: gnucash/gtkbuilder/dialog-payment.glade:439
@@ -16665,7 +16651,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-payment.glade:469
 #: gnucash/report/reports/standard/new-owner-report.scm:283
 msgid "Refund"
-msgstr ""
+msgstr "Tilbakebetaling"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:623
 #: gnucash/gtkbuilder/dialog-print-check.glade:296
@@ -16674,12 +16660,11 @@ msgstr "Skriv ut sjekk"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:640
 msgid "(USD)"
-msgstr ""
+msgstr "(NOK)"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:662
-#, fuzzy
 msgid "Transaction Details"
-msgstr "Transaksjonsjournal"
+msgstr "Transaksjonsdetaljer"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:698
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:78
@@ -16688,27 +16673,23 @@ msgstr "Motkonto"
 
 #. Date format label for 07/31/2013
 #: gnucash/gtkbuilder/dialog-preferences.glade:50
-#, fuzzy
 msgid "US"
-msgstr "_USA:"
+msgstr "USA"
 
 #. Date format label for 31/07/2013
 #: gnucash/gtkbuilder/dialog-preferences.glade:54
-#, fuzzy
 msgid "UK"
-msgstr "_Storbritannia:"
+msgstr "Storbritannia"
 
 #. Date format label for 31.07.2013
 #: gnucash/gtkbuilder/dialog-preferences.glade:58
-#, fuzzy
 msgid "Europe"
-msgstr "Europeisk"
+msgstr "Europa"
 
 #. Date format label for 2013-07-31
 #: gnucash/gtkbuilder/dialog-preferences.glade:62
-#, fuzzy
 msgid "ISO"
-msgstr "_ISO:"
+msgstr "ISO"
 
 #. Label for locale settings of formats, …
 #: gnucash/gtkbuilder/dialog-preferences.glade:66
@@ -16719,9 +16700,8 @@ msgid "Locale"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:140
-#, fuzzy
 msgid "_Reset"
-msgstr "_Nummer"
+msgstr "_Nullstill"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:185
 #: gnucash/gtkbuilder/dialog-preferences.glade:629
@@ -16859,9 +16839,8 @@ msgstr "Tegn"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:821
 #: gnucash/gtkbuilder/gnc-date-format.glade:207
-#, fuzzy
 msgid "Sample"
-msgstr "Eksempel: "
+msgstr "Eksempel"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:858
 #, fuzzy
@@ -17045,9 +17024,8 @@ msgid "<b>Search Dialog</b>"
 msgstr "<b>Søkedialog</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1743
-#, fuzzy
 msgid "New search _limit"
-msgstr "\"Nytt søk\"-_grense: "
+msgstr "\"Nytt søk\"-_grense"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1758
 msgid "Default to 'new search' if fewer than this number of items is returned."
@@ -17898,9 +17876,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:533
 #: gnucash/gtkbuilder/dialog-print-check.glade:1084
-#, fuzzy
 msgid "_Address"
-msgstr "Adresse: "
+msgstr "_Adresse"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:560
 msgid "Checks on first _page"
@@ -19424,10 +19401,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/window-autoclear.glade:101
-#, fuzzy
-#| msgid "Fraction"
 msgid "Caution!"
-msgstr "Del"
+msgstr "Pass på!"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:116
 msgid ""
@@ -27532,9 +27507,8 @@ msgstr "Ekstra notater på denne fakturaen."
 
 #: gnucash/report/reports/standard/invoice.scm:329
 #: gnucash/report/reports/standard/taxinvoice.scm:205
-#, fuzzy
 msgid "Thank you for your patronage!"
-msgstr "Takk for ordren."
+msgstr "Takk for ditt bidrag!"
 
 #: gnucash/report/reports/standard/invoice.scm:333
 msgid "Row 1 Left"
@@ -27565,9 +27539,8 @@ msgstr "Høyre"
 
 #: gnucash/report/reports/standard/invoice.scm:421
 #: gnucash/report/reports/standard/job-report.scm:239
-#, fuzzy
 msgid "Payment, thank you!"
-msgstr "Innbetaling"
+msgstr "Betaling, takk!"
 
 #. Translators: This "T" is displayed in the taxable column, if this entry contains tax
 #: gnucash/report/reports/standard/invoice.scm:478
@@ -28345,9 +28318,8 @@ msgstr ""
 
 #: gnucash/report/reports/standard/receipt.scm:139
 #: gnucash/report/reports/standard/taxinvoice.scm:190
-#, fuzzy
 msgid "Payment received, thank you!"
-msgstr "Innbetaling"
+msgstr "Takk for mottatt betaling!"
 
 #: gnucash/report/reports/standard/receipt.scm:143
 msgid "Notes added at end of invoice -- may contain HTML markup"
@@ -28718,9 +28690,8 @@ msgid "Reference: "
 msgstr "Referanse: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:308
-#, fuzzy
 msgid "Engagement: "
-msgstr "Investeringer"
+msgstr ""
 
 #: gnucash/report/reports/standard/taxinvoice.scm:314
 #: gnucash/report/reports/standard/taxinvoice.scm:316
