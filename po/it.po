@@ -52,10 +52,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-06-20 23:46+0200\n"
-"PO-Revision-Date: 2022-03-18 14:05+0000\n"
+"PO-Revision-Date: 2022-06-21 10:17+0000\n"
 "Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "it/>\n"
@@ -64,7 +64,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -3297,8 +3297,7 @@ msgid "Invalid Account in Split"
 msgstr "Conto non valido nella suddivisione"
 
 #: gnucash/gnome/dialog-sx-editor.c:754
-#, fuzzy, c-format
-#| msgid "Split with memo %s has an unparseable Credit Formula."
+#, c-format
 msgid "Split with memo %s has an unparsable Credit Formula."
 msgstr ""
 "La suddivisione con memo %s ha una formula per l'Avere non analizzabile."
@@ -3308,8 +3307,7 @@ msgid "Unparsable Formula in Split"
 msgstr "Formula non riconoscibile nella suddivisione"
 
 #: gnucash/gnome/dialog-sx-editor.c:770
-#, fuzzy, c-format
-#| msgid "Split with memo %s has an unparseable Debit Formula."
+#, c-format
 msgid "Split with memo %s has an unparsable Debit Formula."
 msgstr "La suddivisione con memo %s ha una formula del Dare non analizzabile."
 
@@ -5908,16 +5906,12 @@ msgid "_Sort By..."
 msgstr "_Ordina per..."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:490
-#, fuzzy
-#| msgid "Stock Split Assistant"
 msgid "Stock Ass_istant"
-msgstr "Assistente frazionamento azionario"
+msgstr "Ass_istente azioni"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:491
-#, fuzzy
-#| msgid "Stock Split Assistant"
 msgid "Stock Assistant"
-msgstr "Assistente frazionamento azionario"
+msgstr "Assistente azioni"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:510
 msgid "_Go to Date"
@@ -7643,10 +7637,9 @@ msgid "New Account"
 msgstr "Nuovo conto"
 
 #: gnucash/gnome-utils/dialog-account.c:2193
-#, fuzzy, c-format
-#| msgid "Renumber sub-accounts"
+#, c-format
 msgid "Renumber the immediate sub-accounts of '%s'?"
-msgstr "Rinumerazione sottoconti"
+msgstr "Rinumerare i sottoconti diretti di '%s'?"
 
 #: gnucash/gnome-utils/dialog-account.c:2299
 #, c-format
@@ -9190,7 +9183,7 @@ msgstr "Contabilità delle finanze personali e per piccole imprese."
 #: gnucash/gnome-utils/gnc-main-window.c:4745
 msgid "translator-credits"
 msgstr ""
-"Giuseppe Foti (2020, 2021)\n"
+"Giuseppe Foti (2020, 2021, 2022)\n"
 "Cristian Marchi (2008, 2009, 2010, 2014)\n"
 "Simone Zinanni (2008)\n"
 "Lorenzo Cappelletti (2002, 2003-2005)\n"
@@ -15668,22 +15661,16 @@ msgid "Interval"
 msgstr "Intervallo"
 
 #: gnucash/gtkbuilder/dialog-account.glade:2112
-#, fuzzy
-#| msgid "Number of Periods"
 msgid "Number of Digits"
-msgstr "Numero di periodi"
+msgstr "Numero di cifre"
 
 #: gnucash/gtkbuilder/dialog-account.glade:2126
-#, fuzzy
-#| msgid ""
-#| "Renumber the immediate sub-accounts of %s? This will replace the account "
-#| "code field of each child account with a newly generated code."
 msgid ""
 "This will replace the account code field of each child account with a newly "
 "generated code"
 msgstr ""
-"Rinumerare i sottoconti del conto «%s»?. Questa operazione sostituirà i "
-"valori del campo del numero di ogni conto figlio con un nuovo codice."
+"Questa operazione sostituirà il codice di ogni conto figlio con un nuovo "
+"codice"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:34
 msgid "_Show documentation"
@@ -20106,31 +20093,6 @@ msgstr ""
 "banca."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:39
-#, fuzzy
-#| msgid ""
-#| "The requirements for Online Banking vary between the different supported "
-#| "AqBanking backends, but usually you will need:\n"
-#| "* Your bank needs to grant you online access. See on their website or ask "
-#| "their customer service for how to obtain it.\n"
-#| "They should also tell you:\n"
-#| "* Your user ID that identifies you to their server, often your base "
-#| "account number;\n"
-#| "* The URL of their Online Banking server;\n"
-#| "* In some cases the routing number of your bank's branch is useful in "
-#| "this assistant;\n"
-#| "* Authentication methods vary by backend and chosen method:\n"
-#| " * FinTS PIN/TAN: Some methods require a specific gadget like a card "
-#| "reader or a mobile;\n"
-#| " * FinTS HBCI: You have to exchange the public parts of asymmetric keys "
-#| "with your bank (\"Ini-Letter\").\n"
-#| " * PayPal: registered email address, password, API signature;\n"
-#| "\n"
-#| "See https://wiki.gnucash.org/wiki/AqBanking for more details.\n"
-#| "\n"
-#| "Note: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented "
-#| "Online Banking server. You should not rely on time-critical transfers "
-#| "through Online Banking, because sometimes the bank does not give you "
-#| "correct feedback when a transfer is rejected."
 msgid ""
 "The requirements for Online Banking vary between the different supported "
 "AqBanking backends, but usually you will need:\n"
@@ -20164,15 +20126,7 @@ msgstr ""
 "lettore di schede o un cellulare;\n"
 "* FinTS HBCI: devi scambiare le parti pubbliche delle chiavi asimmetriche "
 "con la tua banca ('Ini-Letter').\n"
-"* PayPal: indirizzo email registrato, password, firma API;\n"
-"\n"
-"Vedi https://wiki.gnucash.org/wiki/AqBanking per maggiori dettagli.\n"
-"\n"
-"Nota: NESSUNA GARANZIA DI FUNZIONAMENTO. Alcune banche gestiscono un server "
-"di Online Banking mal implementato. Non dovresti fare affidamento su Online "
-"Banking per trasferimenti critici in termini di tempo, perché a volte la "
-"banca non fornisce un feedback corretto quando un trasferimento viene "
-"rifiutato."
+"* PayPal: indirizzo email registrato, password, firma API;"
 
 #. See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:65
@@ -20180,6 +20134,8 @@ msgid ""
 "See <a href=\"https://wiki.gnucash.org/wiki/AqBanking\">https://wiki.gnucash."
 "org/wiki/AqBanking</a> for more details"
 msgstr ""
+"Vedi <a href=\"https://wiki.gnucash.org/wiki/AqBanking\">https://wiki.gnucash"
+".org/wiki/AqBanking</a> per maggiori dettagli"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:78
 msgid ""
@@ -20188,28 +20144,23 @@ msgid ""
 "Online Banking, because sometimes the bank does not give you correct "
 "feedback when a transfer is rejected."
 msgstr ""
+"Nota bene: NESSUNA GARANZIA DI ALCUN GENERE. Alcune banche utilizzano server "
+"per l'Online Banking mal configurati. Non dovresti fare affidamento "
+"sull'Online banking per trasferimenti con requisiti temporali critici perché "
+"alcune volte la banca non restituisce un messaggio corretto quando il "
+"trasferimento viene rifiutato."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:89
 msgid "Initial Online Banking Setup"
 msgstr "Impostazione iniziale dell'Online Banking"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:111
-#, fuzzy
-#| msgid ""
-#| "The Setup of your Online Banking connection is handled by the external "
-#| "program \"AqBanking Setup Wizard\".\n"
-#| "You have to set up at least one connection before you can continue.\n"
-#| "\n"
-#| "Please press the button below to start it."
 msgid ""
 "The Setup of your Online Banking connection is handled by the external "
 "program \"AqBanking Setup\"."
 msgstr ""
 "L'impostazione della connessione all'Online Banking è gestita da un "
-"programma esterno denominato «assistente per l'impostazione di AqBanking».\n"
-"Per continuare, devi impostare almeno una connessione.\n"
-"\n"
-"Fai clic sul pulsante qui sotto per avviare la procedura."
+"programma esterno denominato «Impostazione di AqBanking»."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:125
 msgid ""
@@ -20217,43 +20168,36 @@ msgid ""
 "* It ignores GnuCash's preferences like \"Close log window when finished\".\n"
 "* To report issues read"
 msgstr ""
+"Questo significa:\n"
+"* ignora le preferenze di GnuCash come \"Chiudi la finestra di log al "
+"termine\".\n"
+"* riportare i messaggi come letti"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:141
 msgid ""
 "<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
 "\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 msgstr ""
+"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/\""
+">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:157
-#, fuzzy
-#| msgid ""
-#| "The Setup of your Online Banking connection is handled by the external "
-#| "program \"AqBanking Setup Wizard\".\n"
-#| "You have to set up at least one connection before you can continue.\n"
-#| "\n"
-#| "Please press the button below to start it."
 msgid ""
 "You have to set up at least one connection before you can continue.\n"
 "\n"
 "Please press the button below to start it."
 msgstr ""
-"L'impostazione della connessione all'Online Banking è gestita da un "
-"programma esterno denominato «assistente per l'impostazione di AqBanking».\n"
 "Per continuare, devi impostare almeno una connessione.\n"
 "\n"
 "Fai clic sul pulsante qui sotto per avviare la procedura."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:170
-#, fuzzy
-#| msgid "_Start AqBanking Wizard"
 msgid "_Start AqBanking Setup"
-msgstr "Avvia l'a_ssistente per l'impostazione di AqBanking"
+msgstr "Avvia l'impo_stazione di AqBanking"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:186
-#, fuzzy
-#| msgid "Initial Online Banking Setup"
 msgid "Start Online Banking Setup"
-msgstr "Impostazione iniziale dell'Online Banking"
+msgstr "Avvia l'impostazione dell'Online Banking"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:204
 msgid ""
@@ -27290,16 +27234,16 @@ msgstr "Numero massimo di pile nel grafico."
 
 #: gnucash/report/reports/standard/category-barchart.scm:188
 #: gnucash/report/reports/standard/category-barchart.scm:262
-#, fuzzy
-#| msgid "Enable chart"
 msgid "Percentage chart"
-msgstr "Abilita grafico"
+msgstr "Grafico percentuale"
 
 #: gnucash/report/reports/standard/category-barchart.scm:189
 msgid ""
 "Display account contributions as a percentage of the total value for the "
 "period."
 msgstr ""
+"Mostra i contributi del conto come percentuale del valore totale per il "
+"periodo."
 
 #: gnucash/report/reports/standard/category-barchart.scm:292
 msgid "Invalid dates"
