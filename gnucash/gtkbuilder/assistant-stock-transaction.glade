@@ -644,7 +644,7 @@
         </child>
       </object>
       <packing>
-        <property name="title" translatable="yes" comments="Brokerage Fees">Fees</property>
+        <property name="title" translatable="yes">Fees</property>
         <property name="complete">True</property>
       </packing>
     </child>
@@ -756,7 +756,7 @@
         </child>
       </object>
       <packing>
-        <property name="title" translatable="yes" comments="Brokerage Fees">Dividend</property>
+        <property name="title" translatable="yes">Dividend</property>
         <property name="complete">True</property>
       </packing>
     </child>
