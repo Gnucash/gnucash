@@ -1004,12 +1004,12 @@ stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
     auto date = gnc_date_edit_get_date (GNC_DATE_EDIT (info->date_edit));
     xaccTransSetDatePostedSecsNormalized (trans, date);
 
-    if (info->txn_type->stock_amount != FieldMask::DISABLED ||
-        info->txn_type->stock_value != FieldMask::DISABLED)
-        create_split (trans, info->txn_type->stock_value,
-                      NC_ ("Stock Assistant: Action field", "Stock"), info->acct,
-                      account_commits, info->stock_memo_edit, info->stock_amount_edit,
-                      info->stock_value_edit, false);
+    create_split (trans, info->txn_type->stock_value,
+                  NC_ ("Stock Assistant: Action field", "Stock"),
+                  info->acct, account_commits, info->stock_memo_edit,
+                  info->txn_type->stock_amount != FieldMask::DISABLED ? info->stock_amount_edit : nullptr,
+                  info->txn_type->stock_value != FieldMask::DISABLED ? info->stock_value_edit : nullptr,
+                  false);
 
     if (info->txn_type->cash_value != FieldMask::DISABLED)
         create_split (trans, info->txn_type->cash_value,
