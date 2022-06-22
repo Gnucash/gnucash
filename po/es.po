@@ -80,7 +80,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-06-20 23:46+0200\n"
-"PO-Revision-Date: 2022-06-21 07:17+0000\n"
+"PO-Revision-Date: 2022-06-22 07:21+0000\n"
 "Last-Translator: Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>"
 "\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
@@ -3317,22 +3317,22 @@ msgid "Invalid Account in Split"
 msgstr "Cuenta Inválida del Desglose"
 
 #: gnucash/gnome/dialog-sx-editor.c:754
-#, fuzzy, c-format
-#| msgid "Split with memo %s has an unparseable Credit Formula."
+#, c-format
 msgid "Split with memo %s has an unparsable Credit Formula."
 msgstr ""
-"Desglose con memorándum %s tiene una Fórmula Crediticia mal interpretada."
+"Desglose con memorándum %s tiene una Fórmula Crediticia que no se puede "
+"interpretar."
 
 #: gnucash/gnome/dialog-sx-editor.c:757 gnucash/gnome/dialog-sx-editor.c:773
 msgid "Unparsable Formula in Split"
 msgstr "Fórmula No Interpretada del Desglose"
 
 #: gnucash/gnome/dialog-sx-editor.c:770
-#, fuzzy, c-format
-#| msgid "Split with memo %s has an unparseable Debit Formula."
+#, c-format
 msgid "Split with memo %s has an unparsable Debit Formula."
 msgstr ""
-"Desglose con memorándum %s tiene una Fórmula Debiticia no interpretable."
+"Desglose con memorándum %s tiene una Fórmula de Débito que no se puede "
+"interpretar."
 
 #: gnucash/gnome/dialog-sx-from-trans.c:557
 msgid ""
@@ -5886,16 +5886,12 @@ msgid "_Sort By..."
 msgstr "_Ordenar por..."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:490
-#, fuzzy
-#| msgid "Stock Split Assistant"
 msgid "Stock Ass_istant"
-msgstr "Asistencia de División de Acción"
+msgstr "As_istente de acciones"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:491
-#, fuzzy
-#| msgid "Stock Split Assistant"
 msgid "Stock Assistant"
-msgstr "Asistencia de División de Acción"
+msgstr "Asistente de acciones"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:510
 msgid "_Go to Date"
@@ -15523,10 +15519,8 @@ msgid "Interval"
 msgstr "Intervalo"
 
 #: gnucash/gtkbuilder/dialog-account.glade:2112
-#, fuzzy
-#| msgid "Number of Periods"
 msgid "Number of Digits"
-msgstr "Número de periodos"
+msgstr "Número de dígitos"
 
 #: gnucash/gtkbuilder/dialog-account.glade:2126
 msgid ""
@@ -16714,7 +16708,7 @@ msgstr "Mostrar columna de _Memo"
 
 #: gnucash/gtkbuilder/dialog-import.glade:951
 msgid "Show matched _information"
-msgstr "Mostrar información cotejada"
+msgstr "Mostrar _información cotejada"
 
 #: gnucash/gtkbuilder/dialog-import.glade:966
 msgid "A_ppend"
@@ -19902,7 +19896,6 @@ msgstr ""
 ">https://wiki.gnucash.org/wiki/AqBanking</a>"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:78
-#, fuzzy
 msgid ""
 "Note: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented Online "
 "Banking server. You should not rely on time-critical transfers through "
@@ -19956,16 +19949,12 @@ msgstr ""
 "Por favor, pulse en el botón inferior para iniciarlo."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:170
-#, fuzzy
-#| msgid "_Start AqBanking Wizard"
 msgid "_Start AqBanking Setup"
-msgstr "_Iniciar asistente AqBanca"
+msgstr "_Iniciar configuración de AqBanca"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:186
-#, fuzzy
-#| msgid "Initial Online Banking Setup"
 msgid "Start Online Banking Setup"
-msgstr "Configuración Inicial de Conexión Bancaria"
+msgstr "Iniciar configuración de Conexión Bancaria"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:204
 msgid ""
@@ -26855,10 +26844,8 @@ msgstr "Número máximo de pilas en el árbol."
 
 #: gnucash/report/reports/standard/category-barchart.scm:188
 #: gnucash/report/reports/standard/category-barchart.scm:262
-#, fuzzy
-#| msgid "Enable chart"
 msgid "Percentage chart"
-msgstr "Habilitar gráfico"
+msgstr "Gráfico de porcentaje"
 
 #: gnucash/report/reports/standard/category-barchart.scm:189
 msgid ""
