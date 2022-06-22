@@ -260,34 +260,38 @@ gnc_doclink_cell_set_read_only (Doclinkcell *cell, gboolean read_only)
     cell->read_only = read_only;
 }
 
+static gboolean
+test_use_glyphs (void)
+{
+    static gboolean cached = FALSE;
+    static gboolean use_glyphs = TRUE;
+
+    if (!cached)
+    {
+        GtkWidget *label = gtk_label_new (NULL);
+        gchar *test_text = g_strconcat (GLYPH_LINK, ",", GLYPH_PAPERCLIP, NULL);
+        PangoLayout *test_layout = gtk_widget_create_pango_layout (label, test_text);
+
+        pango_layout_set_text (test_layout, test_text, strlen (test_text));
+
+        use_glyphs = (pango_layout_get_unknown_glyphs_count (test_layout) != 0);
+        cached = TRUE;
+
+        g_object_unref (test_layout);
+        g_free (test_text);
+    }
+    return use_glyphs;
+}
+
+
 void
 gnc_doclink_cell_set_use_glyphs (Doclinkcell *cell)
 {
-#ifdef MAC_INTEGRATION
-    cell->use_glyphs = FALSE;
-#else 
-    gboolean use_glyphs = TRUE;
-    gchar *test_text;
-    GtkWidget *label;
-    PangoLayout *test_layout;
-    gint count;
-
     g_return_if_fail (cell != NULL);
 
-    label = gtk_label_new (NULL);
-    test_text = g_strconcat (GLYPH_LINK, ",", GLYPH_PAPERCLIP, NULL);
-    test_layout = gtk_widget_create_pango_layout (GTK_WIDGET (label), test_text);
-
-    pango_layout_set_text (test_layout, test_text, strlen (test_text));
-
-    count = pango_layout_get_unknown_glyphs_count (test_layout);
-
-    if (count != 0)
-        use_glyphs = FALSE;
-
-    g_object_unref (test_layout);
-    g_free (test_text);
-
-    cell->use_glyphs = use_glyphs;
+#ifdef MAC_INTEGRATION
+    cell->use_glyphs = FALSE;
+#else
+    cell->use_glyphs = test_use_glyphs();
 #endif
 }
