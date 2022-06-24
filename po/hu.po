@@ -9,10 +9,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-06-20 23:46+0200\n"
-"PO-Revision-Date: 2022-06-20 02:20+0000\n"
+"PO-Revision-Date: 2022-06-24 04:13+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -3340,11 +3340,9 @@ msgstr ""
 "Nem lehet automatikusan létrehozni időzített tranzakciókat változókkal."
 
 #: gnucash/gnome/dialog-sx-editor.c:675
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't parse %s for split \"%s\"."
-msgstr ""
-"Nem sikerült feldolgozni a jóváírás kiszámítási-képletét a \"%s\" "
-"részkönyvelésben."
+msgstr "%s nem értelmezhető a \"%s\" felosztáshoz."
 
 #: gnucash/gnome/dialog-sx-editor.c:739
 #, c-format
@@ -7671,10 +7669,9 @@ msgid "New Account"
 msgstr "Új folyószámla"
 
 #: gnucash/gnome-utils/dialog-account.c:2193
-#, fuzzy, c-format
-#| msgid "Renumber sub-accounts"
+#, c-format
 msgid "Renumber the immediate sub-accounts of '%s'?"
-msgstr "Alszámlák újraszámozása"
+msgstr "Átszámozza '%s' közvetlen alfiókjait?"
 
 #: gnucash/gnome-utils/dialog-account.c:2299
 #, c-format
@@ -15574,9 +15571,8 @@ msgid "For importing vendor lists."
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:192
-#, fuzzy
 msgid "<b>2. Select Import Type</b>"
-msgstr "2. Válasszon import típust"
+msgstr "<b>2. Válasszon import típust</b>"
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:52
 #, fuzzy
@@ -19894,14 +19890,13 @@ msgid "Credited BIC (Bank Code)"
 msgstr "Terhelt számla bankkódja"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:540
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The internal check of the destination IBAN '%s' failed. This means the "
 "account number might contain an error."
 msgstr ""
-"A célszámla '%s' számának belső ellenőrzése a megadott '%s' bankkóddal "
-"sikertelen. Ez azt jelenti, hogy a számlaszám talán hibás. Mégis elküldi az "
-"online átutalás feladatot ezzel a számlaszámmal?"
+"A célszámla belső ellenőrzése a megadott IBAN '%s' számmal sikertelen. Ez "
+"azt jelenti, hogy a számlaszám hibás lehet."
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:595
 #, c-format
@@ -20202,9 +20197,9 @@ msgid "Import module for DTAUS import not found."
 msgstr ""
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:295
-#, fuzzy, c-format
+#, c-format
 msgid "Job %d status %d - %s\n"
-msgstr "Feladat %d státusz %d - %s: %s\n"
+msgstr "Feladat %d státusz %d - %s:\n"
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:297
 #, fuzzy, c-format
@@ -20472,9 +20467,9 @@ msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:404
 #: gnucash/import-export/bi-import/dialog-bi-import.c:475
-#, fuzzy, c-format
+#, c-format
 msgid "Row %d, invoice %s/%u: account %s does not exist.\n"
-msgstr "Mutass egy számla megjegyzést"
+msgstr "%d. sor, %s/%u számla: %s folyószámla nem létezik.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:416
 #, c-format
@@ -20511,9 +20506,9 @@ msgstr ""
 "_Kifizetés lebonyolítása...\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:716
-#, fuzzy, c-format
+#, c-format
 msgid "Invoice %s created.\n"
-msgstr "Megjegyzések"
+msgstr "A %s számla létrehozva.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:731
 #, fuzzy
@@ -20531,14 +20526,14 @@ msgid "Invoice %s not updated because it is already posted.\n"
 msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:767
-#, fuzzy, c-format
+#, c-format
 msgid "Invoice %s updated.\n"
-msgstr "Megjegyzések"
+msgstr "A %s számla frissítve.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:885
-#, fuzzy, c-format
+#, c-format
 msgid "Invoice %s posted.\n"
-msgstr "Megjegyzések"
+msgstr "A %s számla naplózva.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:890
 #, c-format
@@ -20937,27 +20932,27 @@ msgstr "_Oszlop szűkítése"
 
 #. Translators: This is a ngettext(3) message, %d is the number of prices added
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1882
-#, fuzzy, c-format
+#, c-format
 msgid "%d added price"
 msgid_plural "%d added prices"
-msgstr[0] "Új ár hozzáadása."
+msgstr[0] "%d hozáadott ár"
 
 #. Translators: This is a ngettext(3) message, %d is the number of duplicate prices
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1887
-#, fuzzy, c-format
+#, c-format
 msgid "%d duplicate price"
 msgid_plural "%d duplicate prices"
-msgstr[0] "_Számla duplikálása"
+msgstr[0] "%d duplikált ár"
 
 #. Translators: This is a ngettext(3) message, %d is the number of replaced prices
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1892
-#, fuzzy, c-format
+#, c-format
 msgid "%d replaced price"
 msgid_plural "%d replaced prices"
-msgstr[0] "A rögzített árak"
+msgstr[0] "%d cserélt ár"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1897
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The prices were imported from file '%s'.\n"
 "\n"
@@ -20965,7 +20960,13 @@ msgid ""
 "- %s\n"
 "- %s\n"
 "- %s"
-msgstr "%s fájl elemzése során hiba történt."
+msgstr ""
+"Az árak amik a '%s' fájlból importáltak.\n"
+"\n"
+"Az importálás összefoglalója:\n"
+"- %s\n"
+"- %s\n"
+"- %s"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1941
 #, c-format
@@ -21029,9 +21030,9 @@ msgid "Row %u, commodity %s / %s not found\n"
 msgstr ""
 
 #: gnucash/import-export/csv-imp/csv-account-import.c:314
-#, fuzzy, c-format
+#, c-format
 msgid "Row %u, account %s not in %s\n"
-msgstr "Mutass egy számla megjegyzést"
+msgstr "%u. sor, %s folyószámla nincs itt: %s\n"
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:60
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:57
@@ -21434,13 +21435,13 @@ msgstr ""
 "számlát."
 
 #: gnucash/import-export/import-account-matcher.c:280
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The account '%s' has a different commodity to the one required, '%s'. Please "
 "choose a different account."
 msgstr ""
-"%s számla egy helykitöltő számla, és nem enged átutalásokat. Válasszon másik "
-"számlát."
+"A(z) '%s' folyószámla más árucikkel rendelkezik, mint a szükséges '%s'. "
+"Kérem válasszon másik folyószámlát."
 
 #: gnucash/import-export/import-account-matcher.c:472
 msgid "(Full account ID: "
@@ -21571,16 +21572,14 @@ msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "Új, kiegyenlítetlen (szükséges %s átutalásához)!"
 
 #: gnucash/import-export/import-main-matcher.c:1763
-#, fuzzy, c-format
-#| msgid "Reconcile (manual) match"
+#, c-format
 msgid "Reconcile (manual) match to %s"
-msgstr "Reconcile (manual) match"
+msgstr "Egyezés a következővel: %s (kézileg kiválasztott feladat)"
 
 #: gnucash/import-export/import-main-matcher.c:1768
-#, fuzzy, c-format
-#| msgid "Reconcile (auto) match"
+#, c-format
 msgid "Reconcile (auto) match to %s"
-msgstr "(auto) egyezés"
+msgstr "Egyezés a következővel: %s (automatikusan kiválasztott feladat)"
 
 #: gnucash/import-export/import-main-matcher.c:1777
 #: gnucash/import-export/import-main-matcher.c:1807
@@ -21588,16 +21587,17 @@ msgid "Match missing!"
 msgstr "Nincs egyező!"
 
 #: gnucash/import-export/import-main-matcher.c:1793
-#, fuzzy, c-format
-#| msgid "Update and reconcile (manual) match"
+#, c-format
 msgid "Update and reconcile (manual) match to %s"
-msgstr "Update and reconcile (manual) match"
+msgstr ""
+"Frissítés és egyeztetés a következővel: %s (kézileg kiválasztott feladat)"
 
 #: gnucash/import-export/import-main-matcher.c:1798
-#, fuzzy, c-format
-#| msgid "Update and reconcile (auto) match"
+#, c-format
 msgid "Update and reconcile (auto) match to %s"
-msgstr "Update and reconcile (auto) match"
+msgstr ""
+"Frissítés és egyeztetés a következővel: %s (automatikusan kiválasztott "
+"feladat)"
 
 #: gnucash/import-export/import-main-matcher.c:1815
 msgid "Do not import (no action selected)"
@@ -21874,11 +21874,9 @@ msgid "GnuCash was unable to save your mapping preferences."
 msgstr ""
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3447
-#, fuzzy, c-format
+#, c-format
 msgid "There was a problem with the import."
-msgstr ""
-"Baj van a következő opcióval: %s:%s.\n"
-"%s"
+msgstr "Hiba történt az importálás során."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3449
 #, fuzzy, c-format
@@ -22196,9 +22194,9 @@ msgid "Have a nice day!"
 msgstr "Legyen szép napja!"
 
 #: gnucash/python/init.py:118
-#, fuzzy, python-format
+#, python-format
 msgid "Welcome to GnuCash %s Shell"
-msgstr "Üdvözli a GnuCash"
+msgstr "Üdvözöljük a GnuCash %s Shellben"
 
 #: gnucash/register/ledger-core/gncEntryLedger.c:250
 msgid "Hours"
@@ -22745,9 +22743,9 @@ msgid "Tot Shares"
 msgstr "Rész össz"
 
 #: gnucash/register/ledger-core/split-register-model.c:537
-#, fuzzy, c-format
+#, c-format
 msgid "Reconciled on %s"
-msgstr "Egyeztetett"
+msgstr "Egyeztetés: %s"
 
 #: gnucash/register/ledger-core/split-register-model.c:1018
 msgid "Scheduled"
@@ -22839,7 +22837,7 @@ msgid "Change transaction containing a reconciled split?"
 msgstr "Egyeztetett kifejtés megváltoztatása?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2211
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The transaction you are about to change contains reconciled splits in the "
 "following accounts:\n"
@@ -22847,8 +22845,11 @@ msgid ""
 "\n"
 "Are you sure you want to continue with this change?"
 msgstr ""
-"Egyeztetett kifejtés megváltoztatására készül. Ezzel megnehezítheti a "
-"későbbi egyeztetést! Folytatás e változtatással?"
+"A módosítani kívánt tranzakció egyeztetett felosztásokat tartalmaz a "
+"következő folyószámlákon:\n"
+"%s\n"
+"\n"
+"Biztosan folytatni szeretné ezt a változtatást?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2223
 #, fuzzy
@@ -30545,9 +30546,9 @@ msgstr "Utolsó %s"
 #. Translators: %s is the string 1st, 2nd, 3rd and so on, and
 #. %s is an already-localized form of the day of the week.
 #: libgnucash/engine/Recurrence.c:674
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s"
-msgstr "%s %s - %s"
+msgstr "%s %s"
 
 #. Translators: %d is the number of Recurrences in the list.
 #: libgnucash/engine/Recurrence.c:727
