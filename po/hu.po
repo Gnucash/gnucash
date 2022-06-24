@@ -1182,14 +1182,13 @@ msgstr "Letéti kifizetések"
 #: gnucash/gnome/assistant-stock-split.c:391
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2946
 #: gnucash/register/ledger-core/split-register.c:2639
-#, fuzzy
 msgctxt "Action Column"
 msgid "Split"
-msgstr "Kifejtés"
+msgstr "Felaprózás"
 
 #: gnucash/gnome/assistant-stock-split.c:417
 msgid "Error adding price."
-msgstr "Hiba az ár felvételekor."
+msgstr "Hiba az új ár hozzáadásakor."
 
 #: gnucash/gnome/assistant-stock-split.c:582
 #: gnucash/gnome/dialog-find-transactions2.c:111
@@ -1241,7 +1240,7 @@ msgstr "Részvények"
 
 #: gnucash/gnome/assistant-stock-split.c:787
 msgid "You don't have any stock accounts with balances!"
-msgstr "Nincs részvényszámlája pozitív egyenleggel!"
+msgstr "Nincs olyan részvényszámlája, aminek pozitív az egyenlege!"
 
 #: gnucash/gnome/business-gnome-utils.c:73
 #: gnucash/gnome/business-gnome-utils.c:260 gnucash/gnome/dialog-invoice.c:1511
@@ -4145,9 +4144,8 @@ msgstr "A kiválasztott számla megnyitása"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:229
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:240
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:350
-#, fuzzy
 msgid "Open _SubAccounts"
-msgstr "Al_számla megnyitása"
+msgstr "Al_számlák megnyitása"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:230
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:241
@@ -4169,7 +4167,7 @@ msgstr "A kiválasztott számla és minden alszámlájának megnyitása"
 #: gnucash/gnome/gnc-plugin-page-register2.c:245
 #: gnucash/gnome/gnc-plugin-page-register.c:359
 msgid "Edit _Account"
-msgstr "_Folyószámla szerkesztése"
+msgstr "_Számla szerkesztése"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:249
 #: gnucash/gnome/gnc-plugin-page-register2.c:246
@@ -4198,17 +4196,15 @@ msgstr "Válasszon ki egy érvényes kölcsönszámlát"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:268
 #: gnucash/gnome/gnc-plugin-page-register2.c:250
 #: gnucash/gnome/gnc-plugin-page-register.c:364
-#, fuzzy
 msgid "F_ind Account"
-msgstr "egy folyószámla"
+msgstr "Számla _keresése"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:264
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:269
 #: gnucash/gnome/gnc-plugin-page-register2.c:251
 #: gnucash/gnome/gnc-plugin-page-register.c:365
-#, fuzzy
 msgid "Find an account"
-msgstr "egy folyószámla"
+msgstr "Számla keresése"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:273
 msgid "_Renumber Subaccounts..."
@@ -4290,13 +4286,13 @@ msgstr "Pénz átvezetése egyik folyószámlák a másikra"
 #: gnucash/gnome/gnc-plugin-page-register2.c:367
 #: gnucash/gnome/gnc-plugin-page-register.c:495
 msgid "Stoc_k Split..."
-msgstr "Részvény_kifejtés..."
+msgstr "Részvény_felaprózás..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:318
 #: gnucash/gnome/gnc-plugin-page-register2.c:368
 #: gnucash/gnome/gnc-plugin-page-register.c:496
 msgid "Record a stock split or a stock merger"
-msgstr "Részvénykifejtés vagy összevonás rögzítése"
+msgstr "Részvényfelaprózás vagy összevonás rögzítése"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:322
 #: gnucash/gnome/gnc-plugin-page-register2.c:372
@@ -4572,11 +4568,11 @@ msgstr "A kiválasztott folyószámlák és időszakok megjegyzésének szerkesz
 #: gnucash/gnome/gnc-plugin-page-budget.c:187
 #: gnucash/report/reports/standard/budget.scm:39
 msgid "Budget Report"
-msgstr "Kosár jelentés"
+msgstr "Költségvetési jelentés"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:189
 msgid "Run the budget report."
-msgstr "Költségvetési riport futtatása."
+msgstr "Költségvetési jelentés futtatása."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:199
 msgid "Refresh this window."
@@ -7952,7 +7948,7 @@ msgstr "%s számla törlése"
 #: gnucash/gnome-utils/dialog-options.c:1492
 #: gnucash/gnome-utils/dialog-options.c:1636
 msgid "Select All"
-msgstr "Mindent kijelöl"
+msgstr "Összes kijelölése"
 
 #: gnucash/gnome-utils/dialog-options.c:1494
 msgid "Select all accounts."
@@ -7961,7 +7957,7 @@ msgstr "Minden számla kiválasztása."
 #: gnucash/gnome-utils/dialog-options.c:1499
 #: gnucash/gnome-utils/dialog-options.c:1643
 msgid "Clear All"
-msgstr "Minden törlése"
+msgstr "Kijelölések törlése"
 
 #: gnucash/gnome-utils/dialog-options.c:1501
 msgid "Clear the selection and unselect all accounts."
@@ -7969,11 +7965,11 @@ msgstr "A kiválasztás törlése és számlakiválasztás megszüntetése."
 
 #: gnucash/gnome-utils/dialog-options.c:1506
 msgid "Select Children"
-msgstr "Alszámla kiválasztása"
+msgstr "Alszámlák kijelölése"
 
 #: gnucash/gnome-utils/dialog-options.c:1508
 msgid "Select all descendents of selected account."
-msgstr "A kiválasztott számlák alszámláinak kiválasztása."
+msgstr "A kiválasztott számla alszámláinak kiválasztása."
 
 #: gnucash/gnome-utils/dialog-options.c:1514
 #: gnucash/gnome-utils/dialog-options.c:1650
@@ -9062,7 +9058,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/gnc-main-window.c:1601
 msgid "Unsaved Book"
-msgstr "elmenetelen könyv"
+msgstr "Elmentetlen könyv"
 
 #: gnucash/gnome-utils/gnc-main-window.c:1764
 msgid "Last modified on %a, %b %d, %Y at %I:%M %p"
@@ -14407,26 +14403,23 @@ msgstr "Számla-összefoglaló"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:9
 #: gnucash/gtkbuilder/assistant-stock-split.glade:28
-#, fuzzy
 msgid "Stock Split Assistant"
-msgstr "Részvénykifejtés részletei"
+msgstr "Részvényfelaprózási segéd"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:22
-#, fuzzy
 msgid "This assistant will help you record a stock split or stock merger.\n"
-msgstr "E tündér segít a részvénymegosztás vagy összesítés rögzítésében."
+msgstr "Ez a segéd végigvezeti egy részvényfelaprózás vagy -összevonás "
+"rögzítésén.\n"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:44
 msgid ""
 "Select the account for which you want to record a stock split or merger."
 msgstr ""
-"Válassza ki a számlát, amelyre részvényosztást vagy összevonást kíván "
-"rögzíteni."
+"Válassza ki a felaprózni vagy összevonni kívánt részvény számláját."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:77
-#, fuzzy
 msgid "Stock Split Account"
-msgstr "Részvényszámla"
+msgstr "Részvényszámla kiválasztása"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:92
 msgid ""
@@ -14435,26 +14428,25 @@ msgid ""
 "for the share distribution. You can also enter a description of the "
 "transaction, or accept the default one."
 msgstr ""
-"Adja meg a dátumát és a számát azon részvényeknek,melyeket egy "
-"részvényosztás vagy összevonás által nyert vagy vesztett! Részvény-"
-"összevonásokra adjon negatív értéket. A tranzakcióhoz megadható egy leírás "
-"is."
+"Adja meg, mikor és mennyi részvényt nyert vagy vesztett a "
+"felaprózás illetve összevonás során. Részvényösszevonás esetén "
+"negatív értéket adjon meg. A tranzakcióhoz megjegyzést is fűzhet."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:143
 msgid "Desc_ription"
-msgstr "_Magyarázat"
+msgstr "_Megjegyzés"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:158
 msgid "Stock Split"
-msgstr "Részvénykifejtés"
+msgstr "Részvényfelaprózás"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:181
 msgid ""
 "If you want to record a stock price for the split, enter it below. You may "
 "safely leave it blank."
 msgstr ""
-"Ha a kifejtéshez részvényárat kíván megadni, írja be! E rovat üresen is "
-"hagyható."
+"Ha akarja, alább megadhatja a felaprózás utáni részvényárat, de ez nem "
+"kötelező."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:197
 msgid "New _Price"
@@ -14466,17 +14458,17 @@ msgstr "Pénzne_m"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:241
 msgid "Stock Split Details"
-msgstr "Részvénykifejtés részletei"
+msgstr "Felaprózás részletei"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:257
 msgid ""
 "If you received a cash disbursement as a result of the stock split, enter "
 "the details of that payment here. Otherwise, just click \"Next\"."
-msgstr ""
+msgstr "Ha a felaprózás során pénzbeli kifizetésben is részesült, alább "
+"megadhatja az összeget. Egyébként kattintson a \"Következő\" gombra."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:279
 #: gnucash/import-export/aqb/dialog-ab.glade:1201
-#, fuzzy
 msgid "_Amount"
 msgstr "_Összeg:"
 
@@ -14489,7 +14481,7 @@ msgstr "_Megjegyzés"
 #. Default memo text for the remains of a stock split
 #: gnucash/gtkbuilder/assistant-stock-split.glade:309
 msgid "Cash in lieu"
-msgstr "Kiegyenlítési összeg"
+msgstr "Törtrészvény kiegyenlítése"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:346
 msgid "<b>_Income Account</b>"
@@ -14502,23 +14494,21 @@ msgstr "<b>E_szközszámla</b>"
 #. Dialog title for the remains of a stock split
 #: gnucash/gtkbuilder/assistant-stock-split.glade:403
 msgid "Cash In Lieu"
-msgstr "Kiegyenlítési összeg"
+msgstr "Törtrészvény ellenértéke"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:413
-#, fuzzy
 msgid ""
 "If you are finished creating the stock split or merger, press \"Apply\". You "
 "may also press \"Back\" to review your choices, or \"Cancel\" to quit "
 "without making any changes."
 msgstr ""
-"Ha befejezte a részvényosztást,vagy összevonást,kattintson az 'Alkalmazás'-"
-"ra.Ellenőrzéshez,a 'Vissza' -ra,vagy a 'Megszakítás'-ra,ha a kilép "
-"változtatás nélkül."
+"Ha elégedett a rögzített adatokkal, kattintson az \"Alkalmaz\" "
+"gombra. A \"Vissza\" gombbal még egyszer áttekintheti az előző oldalakat, "
+"a \"Mégse\" gombbal pedig az adatok rögzítése nélkül kiléphet."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:418
-#, fuzzy
 msgid "Stock Split Finish"
-msgstr "Részvénykifejtés"
+msgstr "Részvényfelaprózás befejezése"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:16
 msgid "Introduction placeholder"
@@ -25877,7 +25867,7 @@ msgstr "Bevétel-ábra"
 #: gnucash/report/reports/standard/budget-barchart.scm:200
 #, scheme-format
 msgid "Bgt: ~a Act: ~a"
-msgstr ""
+msgstr "Terv: ~a Jelenlegi: ~a"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:206
 msgid "Actual"
@@ -26141,12 +26131,12 @@ msgstr ""
 #. Translators: Abbreviation for "Budget" amount
 #: gnucash/report/reports/standard/budget.scm:524
 msgid "Bgt"
-msgstr "Kosár"
+msgstr "Terv"
 
 #. Translators: Abbreviation for "Actual" amount
 #: gnucash/report/reports/standard/budget.scm:529
 msgid "Act"
-msgstr "Művelet"
+msgstr "Jelen"
 
 #. Translators: Abbreviation for "Difference" amount
 #: gnucash/report/reports/standard/budget.scm:534
