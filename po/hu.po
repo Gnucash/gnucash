@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-06-20 23:46+0200\n"
-"PO-Revision-Date: 2022-06-24 04:13+0000\n"
+"PO-Revision-Date: 2022-06-24 04:20+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -16846,9 +16846,8 @@ msgid "days"
 msgstr "nap"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1664
-#, fuzzy
 msgid "<b>_Retain log/backup files</b>"
-msgstr "Naplófájlok megő_rzése:"
+msgstr "<b>A napló-/mentési fájlok megőrzése (Ctrl+R)_R</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1676
 msgid "Com_press files"
