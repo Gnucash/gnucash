@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-06-21 14:21+0000\n"
+"PO-Revision-Date: 2022-06-25 20:20+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/hu/>\n"
@@ -57,15 +57,15 @@ msgstr "számlatípus: Eszköz"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
 msgid "account type: Assets & Liabilities"
-msgstr "számlatípus: Eszközök és Források"
+msgstr "számlatípus: Eszközök és források"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
-msgstr "számlatípus: ellenőrzés"
+msgstr "számlatípus: Ellenőrzés"
 
 #. "-"
 msgid "account type: currency"
-msgstr "számlatípus: pénznem"
+msgstr "számlatípus: Pénznem"
 
 #. "see: Equity, but see also 'account type: Passive'"
 msgid "account type: Equity"
@@ -85,7 +85,7 @@ msgstr "számlatípus: Kötelezettség"
 
 #. "-"
 msgid "account type: money-market"
-msgstr "számlatípus: pénzpiac"
+msgstr "számlatípus: Pénzpiac"
 
 #. "-"
 msgid "account type: Mutual fund"
@@ -97,11 +97,11 @@ msgstr "számlatípus: Passzív"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
 msgid "account type: Profit & Loss"
-msgstr "számlatípus: Nyereség és Veszteség"
+msgstr "számlatípus: Nyereség és veszteség"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
-msgstr "számlatípus: megtakarítás"
+msgstr "számlatípus: Megtakarítás"
 
 #. "-"
 msgid "account type: Stock"
@@ -109,7 +109,7 @@ msgstr "számlatípus: Részvény"
 
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
 msgid "account type: trading"
-msgstr "számlatípus: kereskedés"
+msgstr "számlatípus: Kereskedés"
 
 #. "-"
 msgid "account: parent account"
@@ -185,19 +185,19 @@ msgstr "művelet: eladás"
 
 #. "-"
 msgid "action: Teller"
-msgstr "Végrehajtás: Pénztár"
+msgstr "művelet: pénztár"
 
 #. "see: transfer 2. (=credit transfer)"
 msgid "action: transfer"
-msgstr "Átutalás, átvezetés"
+msgstr "művelet: átutalás"
 
 #. "-"
 msgid "action: wire"
-msgstr "Átutalás"
+msgstr "művelet: átruházás"
 
 #. "-"
 msgid "action: withdraw"
-msgstr "Végrehajtás: kivét"
+msgstr "művelet: visszavonás"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
