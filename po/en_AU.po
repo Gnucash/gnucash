@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-06-20 23:46+0200\n"
-"PO-Revision-Date: 2022-06-25 13:32+0000\n"
+"PO-Revision-Date: 2022-06-25 13:38+0000\n"
 "Last-Translator: Simon Arlott <weblate.simon@arlott.org>\n"
 "Language-Team: English (Australia) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/en_AU/>\n"
@@ -26237,7 +26237,7 @@ msgid "~a and subaccounts"
 msgstr "~a and subaccounts"
 
 #: gnucash/report/reports/standard/cash-flow.scm:206
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "~a and selected subaccounts"
 msgstr "~a and selected subaccounts"
 
