@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-06-20 23:46+0200\n"
-"PO-Revision-Date: 2022-06-23 22:19+0000\n"
+"PO-Revision-Date: 2022-06-25 13:38+0000\n"
 "Last-Translator: Simon Arlott <weblate.simon@arlott.org>\n"
 "Language-Team: English (Australia) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/en_AU/>\n"
@@ -6623,7 +6623,7 @@ msgid "R"
 msgstr "R"
 
 #: gnucash/gnome/report-menus.scm:57
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Display the ~a report"
 msgstr "Display the ~a report"
 
@@ -20726,7 +20726,7 @@ msgstr "Accu-splits"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:194
 msgid "Import Bills or Invoices from csv"
-msgstr "Import Bills or Invoices from csv"
+msgstr "Import Bills or Invoices from CSV"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:222
 #, c-format
@@ -21562,7 +21562,7 @@ msgstr "Shipping Email"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:172
 msgid "Import Customers from csv"
-msgstr "Import Customers from csv"
+msgstr "Import Customers from CSV"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:188
 msgid "customers"
@@ -22264,17 +22264,17 @@ msgid "Finding duplicate transactions"
 msgstr "Finding duplicate transactions"
 
 #: gnucash/import-export/qif-imp/qif-parse.scm:172
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Unrecognized account type '~s'. Defaulting to Bank."
 msgstr "Unrecognised account type '~s'. Defaulting to Bank."
 
 #: gnucash/import-export/qif-imp/qif-parse.scm:235
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Unrecognized action '~a'."
 msgstr "Unrecognised action '~a'."
 
 #: gnucash/import-export/qif-imp/qif-parse.scm:254
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Unrecognized status '~a'. Defaulting to uncleared."
 msgstr "Unrecognised status '~a'. Defaulting to uncleared."
 
@@ -22364,7 +22364,7 @@ msgid "Have a nice day!"
 msgstr "Have a nice day!"
 
 #: gnucash/python/init.py:118
-#, fuzzy, python-format
+#, python-format
 msgid "Welcome to GnuCash %s Shell"
 msgstr "Welcome to GnuCash %s Shell"
 
@@ -22466,14 +22466,14 @@ msgstr "999,999.00"
 
 #. Translators: Header for Discount Type
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:110
-#, fuzzy, no-c-format
+#, no-c-format
 msgctxt "sample for 'Discount Type'"
 msgid "+%"
 msgstr "+%"
 
 #. Translators: Header for Discount How
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:116
-#, fuzzy, no-c-format
+#, no-c-format
 msgctxt "sample for Discount How'"
 msgid "+%"
 msgstr "+%"
@@ -23031,7 +23031,7 @@ msgid "List"
 msgstr "List"
 
 #: gnucash/report/eguile.scm:150
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Template file \"~a\" can not be read"
 msgstr "Template file \"~a\" can not be read"
 
@@ -24120,7 +24120,7 @@ msgstr ""
 "existing reports."
 
 #: gnucash/report/reports/example/hello-world.scm:322
-#, fuzzy, scheme-format
+#, scheme-format
 msgid ""
 "For help on writing reports, or to contribute your brand new, totally cool "
 "report, consult the mailing list ~a."
@@ -24150,7 +24150,7 @@ msgid "The current time is ~a."
 msgstr "The current time is ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:337
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The boolean option is ~a."
 msgstr "The boolean option is ~a."
 
@@ -24163,42 +24163,42 @@ msgid "false"
 msgstr "false"
 
 #: gnucash/report/reports/example/hello-world.scm:342
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The radio button option is ~a."
 msgstr "The radio button option is ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:347
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The multi-choice option is ~a."
 msgstr "The multi-choice option is ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:352
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The string option is ~a."
 msgstr "The string option is ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:357
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The date option is ~a."
 msgstr "The date option is ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:362
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The relative date option is ~a."
 msgstr "The relative date option is ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:367
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The combination date option is ~a."
 msgstr "The combination date option is ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:372
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The number option is ~a."
 msgstr "The number option is ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:383
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The number option formatted as currency is ~a."
 msgstr "The number option formatted as currency is ~a."
 
@@ -24251,12 +24251,12 @@ msgid "Scatter:"
 msgstr "Scatter:"
 
 #: gnucash/report/reports/example/welcome-to-gnucash.scm:41
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Welcome to GnuCash ~a !"
 msgstr "Welcome to GnuCash ~a !"
 
 #: gnucash/report/reports/example/welcome-to-gnucash.scm:44
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "GnuCash ~a has lots of nice features. Here are a few."
 msgstr "GnuCash ~a has lots of nice features. Here are a few."
 
@@ -24374,7 +24374,7 @@ msgstr ""
 "codes with payer sources may be repeated."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:808
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Period from ~a to ~a"
 msgstr "Period from ~a to ~a"
 
@@ -24665,7 +24665,7 @@ msgid "Weekly Average"
 msgstr "Weekly Average"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:535
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Balance at ~a"
 msgstr "Balance at ~a"
 
@@ -24942,7 +24942,7 @@ msgstr "Omit Accounts"
 #: gnucash/report/reports/standard/equity-statement.scm:303
 #: gnucash/report/reports/standard/income-statement.scm:406
 #: gnucash/report/reports/standard/trial-balance.scm:407
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "For Period Covering ~a to ~a"
 msgstr "For Period Covering ~a to ~a"
 
@@ -26009,17 +26009,17 @@ msgid "Total Expenses"
 msgstr "Total Expenses"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:527
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "for Budget ~a"
 msgstr "for Budget ~a"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:529
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "for Budget ~a Period ~d"
 msgstr "for Budget ~a Period ~d"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:532
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "for Budget ~a Periods ~d - ~d"
 msgstr "for Budget ~a Periods ~d - ~d"
 
@@ -26232,12 +26232,12 @@ msgid "Show full account names (including parent accounts)."
 msgstr "Show full account names (including parent accounts)."
 
 #: gnucash/report/reports/standard/cash-flow.scm:205
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "~a and subaccounts"
 msgstr "~a and subaccounts"
 
 #: gnucash/report/reports/standard/cash-flow.scm:206
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "~a and selected subaccounts"
 msgstr "~a and selected subaccounts"
 
