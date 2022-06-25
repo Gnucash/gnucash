@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-06-20 23:46+0200\n"
-"PO-Revision-Date: 2022-06-25 14:05+0000\n"
+"PO-Revision-Date: 2022-06-25 15:21+0000\n"
 "Last-Translator: Simon Arlott <weblate.simon@arlott.org>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/en_GB/>\n"
@@ -3945,7 +3945,7 @@ msgstr "Test Search Dialogue"
 #: gnucash/gnome/gnc-plugin-business.c:312
 #: gnucash/gnome/gnc-plugin-business.c:313
 msgid "Initialize Test Data"
-msgstr "Initialize Test Data"
+msgstr "Initialise Test Data"
 
 #: gnucash/gnome/gnc-plugin-business.c:326
 msgid "Assign as payment..."
@@ -10913,7 +10913,7 @@ msgid ""
 "The default font to use when printing checks. This value will be overridden "
 "by any font specified in a check description file."
 msgstr ""
-"The default font to use when printing checks. This value will be overridden "
+"The default font to use when printing cheques. This value will be overridden "
 "by any font specified in a cheque description file."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:105
@@ -12427,7 +12427,7 @@ msgid ""
 "entry. The changed data must be saved or the duplication canceled."
 msgstr ""
 "This dialogue is presented when you attempt to duplicate a modified invoice "
-"entry. The changed data must be saved or the duplication canceled."
+"entry. The changed data must be saved or the duplication cancelled."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:29
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:152
@@ -12692,7 +12692,7 @@ msgid ""
 "transaction. The changed data must be saved or the duplication canceled."
 msgstr ""
 "This dialogue is presented when you attempt to duplicate a modified "
-"transaction. The changed data must be saved or the duplication canceled."
+"transaction. The changed data must be saved or the duplication cancelled."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:124
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:247
@@ -16573,7 +16573,7 @@ msgstr "Refund"
 #: gnucash/gtkbuilder/dialog-payment.glade:623
 #: gnucash/gtkbuilder/dialog-print-check.glade:296
 msgid "Print Check"
-msgstr "Print Check"
+msgstr "Print Cheque"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:640
 msgid "(USD)"
@@ -21718,7 +21718,7 @@ msgstr "The log file you selected was empty."
 msgid ""
 "The log file you selected cannot be read. The file header was not recognized."
 msgstr ""
-"The log file you selected cannot be read. The file header was not recognized."
+"The log file you selected cannot be read. The file header was not recognised."
 
 #: gnucash/import-export/log-replay/gnc-plugin-log-replay.c:48
 msgid "_Replay GnuCash .log file..."
@@ -21744,7 +21744,7 @@ msgstr "Unknown OFX account"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1001
 msgid "Unknown OFX checking account"
-msgstr "Unknown OFX checking account"
+msgstr "Unknown OFX current account"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1005
 msgid "Unknown OFX savings account"
@@ -21869,7 +21869,7 @@ msgstr "_Resume"
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1888
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3065
 msgid "Canceled"
-msgstr "Canceled"
+msgstr "Cancelled"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1827
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1831
@@ -24983,11 +24983,11 @@ msgstr "Money Out"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1065
 msgid "Realized Gain"
-msgstr "Realized Gain"
+msgstr "Realised Gain"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1066
 msgid "Unrealized Gain"
-msgstr "Unrealized Gain"
+msgstr "Unrealised Gain"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1067
 msgid "Total Gain"
@@ -28808,7 +28808,7 @@ msgstr "Head or Tail"
 
 #: gnucash/report/stylesheets/plain.scm:47
 msgid "Background color for reports."
-msgstr "Background color for reports."
+msgstr "Background colour for reports."
 
 #: gnucash/report/stylesheets/plain.scm:53
 msgid "Background Pixmap"
@@ -28816,7 +28816,7 @@ msgstr "Background Pixmap"
 
 #: gnucash/report/stylesheets/plain.scm:63
 msgid "Background color for alternate lines."
-msgstr "Background color for alternate lines."
+msgstr "Background colour for alternate lines."
 
 #: gnucash/report/stylesheets/plain.scm:227
 msgid "Plain"
