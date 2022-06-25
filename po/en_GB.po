@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-06-20 23:46+0200\n"
-"PO-Revision-Date: 2022-06-25 13:28+0000\n"
+"PO-Revision-Date: 2022-06-25 14:05+0000\n"
 "Last-Translator: Simon Arlott <weblate.simon@arlott.org>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/en_GB/>\n"
@@ -21477,7 +21477,7 @@ msgstr "Shipping Email"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:172
 msgid "Import Customers from csv"
-msgstr "Import Customers from csv"
+msgstr "Import Customers from CSV"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:188
 msgid "customers"

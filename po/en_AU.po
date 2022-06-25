@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-06-20 23:46+0200\n"
-"PO-Revision-Date: 2022-06-25 13:38+0000\n"
+"PO-Revision-Date: 2022-06-25 14:05+0000\n"
 "Last-Translator: Simon Arlott <weblate.simon@arlott.org>\n"
 "Language-Team: English (Australia) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/en_AU/>\n"
@@ -26347,7 +26347,7 @@ msgid "Daily Average"
 msgstr "Daily Average"
 
 #: gnucash/report/reports/standard/category-barchart.scm:541
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Balances ~a to ~a"
 msgstr "Balances ~a to ~a"
 
@@ -28527,12 +28527,12 @@ msgid "Credit Lines"
 msgstr "Credit Lines"
 
 #: gnucash/report/report-utilities.scm:714
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Building '~a' report ..."
 msgstr "Building '~a' report ..."
 
 #: gnucash/report/report-utilities.scm:720
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Rendering '~a' report ..."
 msgstr "Rendering '~a' report ..."
 
@@ -29338,7 +29338,7 @@ msgstr "CSV disabled for double column amounts"
 
 #. Translators: Both ~a's are dates
 #: gnucash/report/trep-engine.scm:2269
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "From ~a to ~a"
 msgstr "From ~a to ~a"
 
