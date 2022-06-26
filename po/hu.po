@@ -13,8 +13,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-06-20 23:46+0200\n"
-"PO-Revision-Date: 2022-06-25 15:50+0000\n"
-"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
+"PO-Revision-Date: 2022-06-26 22:20+0000\n"
+"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -2231,7 +2231,7 @@ msgstr ""
 #: gnucash/report/trep-engine.scm:1096 gnucash/report/trep-engine.scm:1226
 #: gnucash/report/trep-engine.scm:1227
 msgid "Memo"
-msgstr "Értelmezés"
+msgstr "Feljegyzés, emlékeztető"
 
 #: gnucash/gnome/dialog-find-transactions2.c:155
 #: gnucash/gnome/dialog-find-transactions.c:155
@@ -9534,7 +9534,7 @@ msgstr "Vezeték"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2867
 #: gnucash/register/ledger-core/split-register.c:2560
 msgid "Direct Debit"
-msgstr "Direkt kifizetés"
+msgstr "Csoportos beszedési megbízás"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2873
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2877
@@ -15921,10 +15921,8 @@ msgid "All _accounts"
 msgstr "Minden számla"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:165
-#, fuzzy
-#| msgid " Search "
 msgid "Search scope"
-msgstr " Keresés "
+msgstr "Keresés hatóköre"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:191
 #, fuzzy
@@ -25647,9 +25645,8 @@ msgid "Barchart"
 msgstr "Eszköz-oszlopdiagram"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1191
-#, fuzzy
 msgid " to "
-msgstr "%s és %s között"
+msgstr " és "
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1254
 #: gnucash/report/reports/standard/trial-balance.scm:855
@@ -26912,7 +26909,7 @@ msgstr "Bevételi kimutatás"
 
 #: gnucash/report/reports/standard/income-statement.scm:588
 msgid "Profit & Loss"
-msgstr "Eredménykimutatás"
+msgstr "Eredménykimutatás (?)"
 
 #: gnucash/report/reports/standard/invoice.scm:102
 #: gnucash/report/reports/standard/invoice.scm:234
@@ -28059,7 +28056,7 @@ msgstr "Egyeztetési státusz"
 #: gnucash/report/reports/standard/register.scm:388
 #: libgnucash/engine/gnc-lot.c:819
 msgid "Lot"
-msgstr "Tétel"
+msgstr "Köteg (Gyüjtemény)"
 
 #: gnucash/report/reports/standard/register.scm:160
 msgid "Debit Value"

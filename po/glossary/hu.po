@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-06-25 20:20+0000\n"
+"PO-Revision-Date: 2022-06-26 22:20+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/hu/>\n"
@@ -49,71 +49,71 @@ msgstr "számlanév"
 
 #. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
 msgid "account type: Active"
-msgstr "számlatípus: Aktív"
+msgstr "számlatípus: aktív"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 msgid "account type: Asset"
-msgstr "számlatípus: Eszköz"
+msgstr "számlatípus: eszköz"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
 msgid "account type: Assets & Liabilities"
-msgstr "számlatípus: Eszközök és források"
+msgstr "számlatípus: eszközök és források"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
-msgstr "számlatípus: Ellenőrzés"
+msgstr "számlatípus: ellenőrzés"
 
 #. "-"
 msgid "account type: currency"
-msgstr "számlatípus: Pénznem"
+msgstr "számlatípus: pénznem"
 
 #. "see: Equity, but see also 'account type: Passive'"
 msgid "account type: Equity"
-msgstr "számlatípus: Tőke"
+msgstr "számlatípus: tőke"
 
 #. "-"
 msgid "account type: Expense"
-msgstr "számlatípus: Költség"
+msgstr "számlatípus: költség"
 
 #. "-"
 msgid "account type: Income"
-msgstr "számlatípus: Bevétel"
+msgstr "számlatípus: bevétel"
 
 #. "A debt, a financial obligation, but see also 'account type: Passive'"
 msgid "account type: Liability"
-msgstr "számlatípus: Kötelezettség"
+msgstr "számlatípus: kötelezettség"
 
 #. "-"
 msgid "account type: money-market"
-msgstr "számlatípus: Pénzpiac"
+msgstr "számlatípus: pénzpiac"
 
 #. "-"
 msgid "account type: Mutual fund"
-msgstr "számlatípus: Befektetési alap"
+msgstr "számlatípus: befektetési alap"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
 msgid "account type: Passive"
-msgstr "számlatípus: Passzív"
+msgstr "számlatípus: passzív"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
 msgid "account type: Profit & Loss"
-msgstr "számlatípus: Nyereség és veszteség"
+msgstr "számlatípus: nyereség és veszteség"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
-msgstr "számlatípus: Megtakarítás"
+msgstr "számlatípus: megtakarítás"
 
 #. "-"
 msgid "account type: Stock"
-msgstr "számlatípus: Részvény"
+msgstr "számlatípus: részvény"
 
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
 msgid "account type: trading"
-msgstr "számlatípus: Kereskedés"
+msgstr "számlatípus: kereskedés"
 
 #. "-"
 msgid "account: parent account"
-msgstr "számla: szülő számla"
+msgstr "számla: szülőszámla"
 
 #. "-"
 msgid "account: subaccount"
@@ -145,7 +145,7 @@ msgstr "művelet: letét"
 
 #. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
 msgid "action: direct debit"
-msgstr "művelet: közvetlen terhelés"
+msgstr "művelet: csoportos beszedési megbízás"
 
 #. "transaction is a distribution (???)"
 msgid "action: dist"
@@ -153,31 +153,31 @@ msgstr "művelet: elosztás"
 
 #. "transaction is a dividend"
 msgid "action: div"
-msgstr "Végrehajtás: osztalék"
+msgstr "művelet: osztalék"
 
 #. "-"
 msgid "action: fee"
-msgstr "Végrehajtás: díj"
+msgstr "művelet: díj"
 
 #. "transaction comes from interest"
 msgid "action: int"
-msgstr "Végrehajtás: kamat"
+msgstr "művelet: kamat"
 
 #. "-"
 msgid "action: loan"
-msgstr "Végrehajtás: hitel"
+msgstr "művelet: hitel"
 
 #. "see: payment 1."
 msgid "action: payment"
-msgstr "Végrehajtás: kifizetés"
+msgstr "művelet: kifizetés"
 
 #. "Point of sale"
 msgid "action: POS"
-msgstr "Végrhajtás: POS"
+msgstr "művelet: POS"
 
 #. "-"
 msgid "action: rebate"
-msgstr "Végrehajtás: engedmény"
+msgstr "művelet: engedmény"
 
 #. "-"
 msgid "action: sell"
@@ -213,11 +213,11 @@ msgstr "esedékes összeg"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
-msgstr "Átlag"
+msgstr "átlag"
 
 #. "The amount of money that is in one's account"
 msgid "balance (noun)"
-msgstr "Egyenleg "
+msgstr "egyenleg"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
 msgid "balance b/f"
@@ -229,19 +229,19 @@ msgstr "egyensúly c/f"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
-msgstr "Mérleg"
+msgstr "mérleg"
 
 #. "To arrange for income and spending to be equal"
 msgid "balance, to"
-msgstr "Kiegyenlítés..."
+msgstr "kiegyenlítés"
 
 #. "-"
 msgid "bank"
-msgstr "Bank"
+msgstr "bank"
 
 #. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received (from a vendor), whereas an 'invoice' is one that we sent out (to a customer)."
 msgid "bill"
-msgstr "Számla (pl. Készpénzfizetési)"
+msgstr "szállítói számla"
 
 #. "see invoice owner"
 msgid "bill owner"
@@ -249,15 +249,15 @@ msgstr "a bejövő számla tulajdonosa"
 
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
-msgstr "Számlázási feltételek"
+msgstr "számlázási feltételek"
 
 #. "The dataset that encapsulates all the collections of entities (accounts etc.) in gnucash. The written records of the financial affairs of a business."
 msgid "Book"
-msgstr "Könyv"
+msgstr "Főkönyv"
 
 #. "Completing the records of financial affairs for a specific time period, e.g. at the end of the year."
 msgid "book closing"
-msgstr "Könyv lezárása"
+msgstr "Főkönyvzárás"
 
 #. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
 msgid "Budget"
@@ -265,51 +265,51 @@ msgstr "Költségvetés"
 
 #. "-"
 msgid "business (adjective)"
-msgstr "Üzleti"
+msgstr "üzleti"
 
 #. "as Menu Item: Headline for features that are related to small business accounting"
 msgid "business (noun)"
-msgstr "Cég (Cégforma)"
+msgstr "üzlet (cég, kereskedelmi, alvállalkozó)"
 
 #. "Profits made from the sale of investments or property"
 msgid "capital gains"
-msgstr "Tőkenyereség"
+msgstr "tőkenyereség"
 
 #. "Distinguishing the uppercase and lowercase letters"
 msgid "case sensitive"
-msgstr "Nagybetűérzékeny "
+msgstr "nagy-/kisbetűérzékeny"
 
 #. "Money in coins or notes"
 msgid "cash"
-msgstr "Készpénz"
+msgstr "készpénz"
 
 #. "(esp. US) (= cheque) A special printed form on which one writes an order to a bank to pay a sum of money from one's account to another person"
 msgid "check"
-msgstr "Csekk"
+msgstr "csekk"
 
 #. "To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Formerly known as 'to scrub'."
 msgid "check and repair, to"
-msgstr "Ellenőriz és javít"
+msgstr "ellenőriz és javít"
 
 #. "To end an application's relationship with an open file so that the application will no longer be able to access the file without opening it again. "
 msgid "close, to"
-msgstr "Bezárás"
+msgstr "bezárás"
 
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
 msgid "commodity"
-msgstr "Pénznem / Részvény / Áru "
+msgstr "árucikk (áru, deviza, értékpapírok, részvény)"
 
 #. "e.g. NASDAQ"
 msgid "commodity listing"
-msgstr "Árutőzsde"
+msgstr "árutőzsde"
 
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
 msgid "commodity option: fraction"
-msgstr "Felosztás"
+msgstr "áruopció: címlet"
 
 #. "e.g. USD, DEM"
 msgid "commodity option: Symbol"
-msgstr "Szimbólum"
+msgstr "áruopció: Szimbólum (pl. USD, DEM)"
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
 msgid "compound interests"
@@ -317,7 +317,7 @@ msgstr "kamatos kamatok"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
-msgstr "Tartozik (szakmai kifejezés), jóváírás, rendelkezésre állóösszeg"
+msgstr "Rendelkezésre álló összeg (a nyilvántartás oszlopa)"
 
 #. "-"
 msgid "Credit Card"
@@ -325,7 +325,7 @@ msgstr "Hitelkártya"
 
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
-msgstr "Átutalás"
+msgstr "átutalás"
 
 #. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
 msgid "credit note"
@@ -333,7 +333,7 @@ msgstr "jóváírás"
 
 #. "The system of money used in a country"
 msgid "currency"
-msgstr "Pénznem"
+msgstr "pénznem"
 
 #. "Custom print format (i.e. according to the user's wishes) as opposed to a template choice."
 msgid "Custom"
@@ -345,7 +345,7 @@ msgstr "irányítópult"
 
 #. "The backend where the data is stored."
 msgid "database"
-msgstr "Adatbázis"
+msgstr "adatbázis"
 
 #. "A specific numbered day of the month"
 msgid "Date"
@@ -353,31 +353,31 @@ msgstr "Dátum"
 
 #. "DD/MM/YY or MM/DD/YY or something else"
 msgid "date format"
-msgstr "Dátum formátum"
+msgstr "dátumformátum"
 
 #. "A range in time that is delimited by two distinct dates."
 msgid "date range"
-msgstr "Időszak"
+msgstr "időszak"
 
 #. "(a) A written note in an account of a sum owed or paid out. (b) A sum withdrawn from an account."
 msgid "Debit (column in register)"
-msgstr "Tartozik (oszlop)"
+msgstr "Terhelés (a nyilvántartás oszlopa)"
 
 #. "Each option has a default setting that it is shipped with, until the user changes the setting."
 msgid "default"
-msgstr "Alapértelmezett "
+msgstr "alapértelmezett"
 
 #. "see credit"
 msgid "deposit (in the reconcile dialog)"
-msgstr "Betét"
+msgstr "betét (az egyeztetési párbeszédpanelen) (?)"
 
 #. "The process of something becoming less valuable"
 msgid "depreciation"
-msgstr "Értékcsökkenés"
+msgstr "értékcsökkenés"
 
 #. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
 msgid "Description (column in register)"
-msgstr "Magyarázat, Leírás"
+msgstr "Magyarázat, Leírás (a nyilvántartás oszlopa)"
 
 #. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
 msgid "discount"
@@ -385,7 +385,7 @@ msgstr "kedvezmény"
 
 #. "Important Buzzword :)"
 msgid "double entry"
-msgstr "Dupla bejegyzés"
+msgstr "kettős könyvvitel"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
@@ -401,43 +401,43 @@ msgstr "e-mail"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
-msgstr "Munkatárs"
+msgstr "munkavállaló"
 
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
 msgid "equity"
-msgstr "Saját tőke"
+msgstr "saját tőke"
 
 #. "Report that ... FIXME: Add description."
 msgid "equity statement"
-msgstr "Saját tőke számadás"
+msgstr "tőkekimutatás"
 
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
 msgid "escrow (account)"
-msgstr "Letéti számla "
+msgstr "letét (számla)"
 
 #. "The relation in value between the money used in different countries"
 msgid "exchange rate"
-msgstr "Átváltási árfolyam"
+msgstr "átváltási árfolyam"
 
 #. "in the account creation dialog??"
 msgid "field"
-msgstr "Mező"
+msgstr "mező"
 
 #. "Any piece of information (text, graphics, executable) put together and given a name. All the information you have on the hard drive is arranged as a collection of  files."
 msgid "file"
-msgstr "Fájl"
+msgstr "fájl"
 
 #. "-"
 msgid "file type"
-msgstr "Fájl típus"
+msgstr "fájltípus"
 
 #. "-"
 msgid "financial calculator: interest rate"
-msgstr "Pénzügyi számológép: Kamat mértéke"
+msgstr "pénzügyi számológép: kamatláb"
 
 #. "see: payment"
 msgid "financial calculator: payments"
-msgstr "Pénzügyi számológép: Kifizetés"
+msgstr "pénzügyi számológép: kifizetés"
 
 #. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
 msgid "financial statement"
@@ -449,43 +449,43 @@ msgstr "szabad szoftver"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
-msgstr "Nyereség"
+msgstr "nyereség"
 
 #. "Name of an automatically created account to get imbalanced transactions back in balance"
 msgid "imbalance"
-msgstr "Hiányszámla"
+msgstr "hiányszámla"
 
 #. "Process of extracting data from a non-Gnucash format into a Gnucash file. E.g. QIF Import."
 msgid "import"
-msgstr "Importálás"
+msgstr "importálás"
 
 #. "Report that ... FIXME: add description. This report used to be called the 'Profit & Loss', but it was renamed on 2004-07-13."
 msgid "income statement"
-msgstr "Bevétel számadás"
+msgstr "jövedelemkimutatás"
 
 #. "Money charged for borrowing money, or paid to somebody who invests money"
 msgid "interest"
-msgstr "Kamat"
+msgstr "kamat"
 
 #. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out (to a customer), whereas a 'bill' is one that we received (from a vendor)."
 msgid "invoice"
-msgstr "Számla"
+msgstr "kimenő számla"
 
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
-msgstr "Megbízás"
+msgstr "megbízás (?)"
 
 #. "A book in which a bank, business firm, etc. records its financial accounts"
 msgid "ledger"
-msgstr "Főkönyv"
+msgstr "főkönyv"
 
 #. "The heading for the right side of the balance sheet. See also: Equity."
 msgid "liabilities/equity"
-msgstr "Kötelezettségek"
+msgstr "kötelezettség/tőke"
 
 #. "A sum of money that is lent (by a bank), see also: financial calculator, Mortgage"
 msgid "loan"
-msgstr "Kölcsön"
+msgstr "kölcsön"
 
 #. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
 msgid "loan: APR"
@@ -493,15 +493,15 @@ msgstr "kölcsön: THM"
 
 #. "The money lost in business activity"
 msgid "loss"
-msgstr "Veszteség"
+msgstr "veszteség"
 
 #. "name of an automatically created account"
 msgid "Lost Accounts"
-msgstr "Veszteség számla"
+msgstr "Veszteségszámlák"
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
 msgid "Lot"
-msgstr "Tétel"
+msgstr "Köteg (Gyüjtemény)"
 
 #. "Combine two books into one (see book)."
 msgid "merge, to"
@@ -509,19 +509,19 @@ msgstr "összefésülés"
 
 #. "The thing that the scatter plot uses to mark each data point"
 msgid "marker"
-msgstr "Kijelölő"
+msgstr "kijelölő"
 
 #. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
 msgid "markup"
-msgstr "haszonkulcs"
+msgstr "árrés"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
-msgstr "Többablakos mód"
+msgstr "MDI mód (több dokumentumos felület)"
 
 #. "One textfield per split that should help you remember what this split was about."
 msgid "Memo"
-msgstr "Értelmezés"
+msgstr "Feljegyzés, emlékeztető"
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
@@ -537,39 +537,39 @@ msgstr "jelzálogkölcsön: fix kamatlábú"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
-msgstr "Nemzeti fizetőeszköz"
+msgstr "nemzeti fizetőeszköz"
 
 #. "(of money) remaining when nothing more is to be taken away"
 msgid "net"
-msgstr "Netto"
+msgstr "nettó"
 
 #. "net total of all assets"
 msgid "net assets"
-msgstr "Netto eszköz"
+msgstr "nettó eszköz"
 
 #. "The total income minus the total expenses of a given time period."
 msgid "net profit"
-msgstr "Netto nyereség"
+msgstr "nettó nyereség"
 
 #. "Your net worth is your assets minus your liabilities. If your accounts are balanced, your net worth should equal your equity plus your net profit."
 msgid "net worth"
-msgstr "Netto vagyon"
+msgstr "nettó vagyon"
 
 #. "One textfield per transaction that can hold explanatory text about the transaction."
 msgid "notes (register)"
-msgstr "Megjegyzés"
+msgstr "jegyzetek (könyvelés)"
 
 #. "Abbreviation for: number; Field in a transaction. If this transaction was done by check, then the check number should be noted in this field."
 msgid "Num (column in register)"
-msgstr "Szám"
+msgstr "Szám (oszlop a könyvelésben)"
 
 #. "to make accessible"
 msgid "open, to"
-msgstr "Megnyitás"
+msgstr "megnyitás"
 
 #. "If an account starts with a non-zero balance, then this amount is called the opening balance."
 msgid "opening balance"
-msgstr "Nyitó egyenleg "
+msgstr "nyitóegyenleg"
 
 #. "A menu choice in the graphical user interface that allows the user to specify how the application will act each time it is used. "
 msgid "options"
@@ -577,43 +577,46 @@ msgstr "Opciók"
 
 #. "Watch out: Although this word exists in gnucash program code, all that program code in gnucash is currently not activated. In the future, it will be used in business accounting as follows: A particular request to make or supply goods, but belonging to a (larger) job. Such a request can come from a customer or be sent to a vendor. An order will probably generate one invoice or bill."
 msgid "order"
-msgstr "Megbízás"
+msgstr "rendelés"
 
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
-msgstr "Árva"
+msgstr "árva"
 
 #. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
 msgid "owner (of bill, invoice or expense voucher)"
-msgstr "tulajdonos (számla vagy költségelszámolás birtokosa)"
+msgstr ""
+"ügyfél (a bejövő számla, kimenő számla, vagy költségelszámolás birtokosa)"
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
-msgstr "Jelszó"
+msgstr "jelmondat"
 
 #. "An amount that must be paid / An amount for which money has not yet been received"
 msgid "Payables/Receivables"
-msgstr "Fizetendők/Teljesítendők"
+msgstr "Kifizetendők/Követelések"
 
 #. "A person to whom sth is paid"
 msgid "payee"
-msgstr "Kedvezményezett"
+msgstr "kedvezményezett"
 
 #. "A person who pays or who has to pay for sth"
 msgid "payer"
-msgstr "Kifizető"
+msgstr "kifizető"
 
 #. "1. The action of paying sb/sth or of being paid. 2. A sum of money paid."
 msgid "payment"
-msgstr "Kifizetés"
+msgstr "kifizetés"
 
 #. "An account where no transactions may be posted to; transactions can only be posted to subaccounts of this account, so this account serves as a placeholder in the hierarchy"
 msgid "placeholder"
-msgstr "Töltelék"
+msgstr ""
+"helykitöltő (helyörző számla, amelynek csak az alszámláira könyvelhetők el "
+"tranzakciók)"
 
 #. "A set of investments owned by a person"
 msgid "portfolio"
-msgstr "portfolio"
+msgstr "portfólió"
 
 #. "Register invoice, voucher in account register"
 msgid "post, to"
@@ -621,35 +624,35 @@ msgstr "nyivántartásba vesz"
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
-msgstr "Beállítások"
+msgstr "beállítások"
 
 #. "Loan repayment calculator: your payments are split in interests payment and principal payment"
 msgid "principal payment"
-msgstr "visszafizetés"
+msgstr "tőkefizetés (tőkerészlet)"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
-msgstr "Ár"
+msgstr "ár"
 
 #. "An ask is an offer to sell, and the price you want to sell at."
 msgid "price type: ask"
-msgstr "Ár típus: Eladási ajánlat"
+msgstr "ártípus: eladási ajánlat"
 
 #. "A bid is an offer to buy, and the price you want to buy at."
 msgid "price type: bid"
-msgstr "Ár típus: Vételi ajánlat"
+msgstr "ártípus: vételi ajánlat"
 
 #. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
 msgid "price: quotes"
-msgstr "Ár: árfolyam"
+msgstr "ár: árajánlatok"
 
 #. "Money gained in business, esp. the difference between the amount earned (sales) and the amount spent (expenses/cost): Profit is sales minus expenses/cost."
 msgid "profit"
-msgstr "Nyereség"
+msgstr "nyereség"
 
 #. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
-msgstr "Eredménykimutatás"
+msgstr "Eredménykimutatás (?)"
 
 #. "-"
 msgid "quick-fill"
@@ -657,47 +660,47 @@ msgstr "gyorskitöltés"
 
 #. "-"
 msgid "rebalance, to (a transaction)"
-msgstr "Újraszámolás"
+msgstr "újraszámolás (egy tranzakciót)"
 
 #. "reconcile an account, a reconciled split. To find a way to make the bank's account statement agree with the user's recorded transactions in an account."
 msgid "reconcile, to"
-msgstr "Egyeztet"
+msgstr "egyeztetés"
 
 #. "-"
 msgid "record keeping"
-msgstr "nyilvántartás"
+msgstr "nyilvántartás vezetése"
 
 #. "A list of items; a book containing such a list"
 msgid "register"
-msgstr "Regiszter,lap"
+msgstr "nyilvántartás"
 
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
-msgstr "Osztott tranzakció"
+msgstr "nyilvántartási bejegyzés: megosztott tranzakció"
 
 #. "-"
 msgid "register entry: stock split"
-msgstr "Részvény felosztás"
+msgstr "nyilvántartási bejegyzés: részvényfelosztás"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
-msgstr "auto-osztott főkönyv"
+msgstr "nyilvántartás: automatikusan osztott főkönyv"
 
 #. "another form of register"
 msgid "register: basic ledger"
-msgstr "Alap főkönyv"
+msgstr "nyilvántartás: alap főkönyv"
 
 #. "another form of register"
 msgid "register: general ledger"
-msgstr "Általános főkönyv"
+msgstr "nyilvántartás: általános főkönyv"
 
 #. "another form of register"
 msgid "register: transaction journal"
-msgstr "Tranzakció napló"
+msgstr "nyilvántartás: tranzakciós napló"
 
 #. "reload the current document"
 msgid "reload, to"
-msgstr "Újratöltés"
+msgstr "újratöltés"
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
 msgid "report form: T Account Form"
@@ -705,7 +708,7 @@ msgstr "jelentési űrlap: T-számlaűrlap"
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
 msgid "report form: Vertical Form"
-msgstr "report form: Vízszintes elrendezés"
+msgstr "jelentési űrlap: vízszintes elrendezés"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
@@ -713,7 +716,7 @@ msgstr "Eredménytartalék"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 msgid "reverse transaction, to (Action in the register)"
-msgstr "Fordított tranzakció (Sztornó)"
+msgstr "fordított tranzakció (lenullázza a nyilvántartásba vett tranzakciót)"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
@@ -721,7 +724,7 @@ msgstr "értékesítés"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
-msgstr "Mentés ide..."
+msgstr "mentés (fájlba)"
 
 #. "A transaction or reminder of a transaction that can be automatically executed at a specific time. It can be executed either once, or several times at regular intervals."
 msgid "Scheduled Transaction"
@@ -729,27 +732,27 @@ msgstr "Ütemezett tranzakciók"
 
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
 msgid "scrub, to"
-msgstr "Ellenőrzés és javítás"
+msgstr "ellenőrzés és javítás"
 
 #. "A document or certificate showing who owns shares"
 msgid "security"
-msgstr "Biztosíték"
+msgstr "bizonyíték"
 
 #. "-"
 msgid "Share Balance (register)"
-msgstr "Osztalék egyenleg"
+msgstr "Osztalékegyenleg (nyilvántartás)"
 
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
 msgid "shares"
-msgstr "Osztalék"
+msgstr "osztalék"
 
 #. "(often: of a quote) A place from which something comes or is obtained."
 msgid "source"
-msgstr "Forrás"
+msgstr "forrás"
 
 #. "One of the two or several parts a transaction is divided into"
 msgid "split"
-msgstr "osztás"
+msgstr "felosztás"
 
 #. "Alias of 'shares'"
 msgid "stocks"
@@ -761,7 +764,7 @@ msgstr "részvényfelosztás"
 
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
-msgstr "Oldal stílus"
+msgstr "stíluslap"
 
 #. "The total of a set of figures that are part of a larger group of figures"
 msgid "subtotal"
@@ -769,27 +772,27 @@ msgstr "részösszeg"
 
 #. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
 msgid "tax code"
-msgstr "adónem"
+msgstr "adónem (?)"
 
 #. "field of an account"
 msgid "tax info"
-msgstr "adó info"
+msgstr "adóinformáció"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
 msgid "tax type: income tax"
-msgstr "adónem: jövedelemadó"
+msgstr "adótípus: jövedelemadó"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
-msgstr "adónem: forgalmi adó"
+msgstr "adótípus: forgalmi adó"
 
 #. "'Goods and Service Tax' is one form of sales tax."
 msgid "tax type: GST"
-msgstr "áruk és szolgáltatások adója"
+msgstr "adótípus: áruk és szolgáltatások adója"
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr "tax type: ÁFA"
+msgstr "adótípus: ÁFA"
 
 #. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
@@ -813,31 +816,31 @@ msgstr "tranzakció"
 
 #. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
-msgstr "tisztázva"
+msgstr "tranzakció állapota: jóváhagyott"
 
 #. "-"
 msgid "transaction state: frozen"
-msgstr "rögzítve"
+msgstr "tranzakció állapota: rögzítve"
 
 #. "A transaction that was reconciled with the bank's statement."
 msgid "transaction state: reconciled"
-msgstr "egyeztetve"
+msgstr "tranzakció állapota: egyeztetve"
 
 #. "A transaction that is void i.e. not valid (anymore)."
 msgid "transaction state: voided"
-msgstr "érvénytelenítve"
+msgstr "tranzakció állapota: érvénytelen"
 
 #. "1. The action of transferring sth. 2. see: credit transfer"
 msgid "transfer (noun)"
-msgstr "Átutalás, átvezetés"
+msgstr "átutalás (főnév)"
 
 #. "The account where an amount is transferred to"
 msgid "transfer account"
-msgstr "Célszámla "
+msgstr "átutalási számla"
 
 #. "To move money from one account to another. Will create a transaction."
 msgid "transfer, to (register toolbar)"
-msgstr "Átutalás"
+msgstr "átvitel ide (nyilvántartás-eszköztár)"
 
 #. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
 msgid "trial balance (report)"
@@ -861,15 +864,15 @@ msgstr "érték"
 
 #. "In small business accounting: A person or company that sells items and is supplying goods"
 msgid "vendor"
-msgstr "kereskedő"
+msgstr "eladó"
 
 #. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
 msgid "voucher"
-msgstr "Nyugta"
+msgstr "utalvány"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
-msgstr "kivét"
+msgstr "visszavonás(az egyeztetési párbeszédpanelen)"
 
 msgid "stock"
 msgstr "készlet"
@@ -881,4 +884,4 @@ msgid "Online"
 msgstr "Online"
 
 msgid "Direct Debit"
-msgstr "Direkt kifizetés"
+msgstr "Csoportos beszedési megbízás"
