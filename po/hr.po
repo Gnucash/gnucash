@@ -5,10 +5,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-06-20 23:46+0200\n"
-"PO-Revision-Date: 2022-03-11 22:55+0000\n"
+"PO-Revision-Date: 2022-06-22 19:20+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -470,9 +470,9 @@ msgid ""
 "follow the instructions provided."
 msgstr ""
 "Bez problema možeš uvesti postojeće financijske podatke iz Quicken, MS Money "
-"ili drugih programa koji izvoze QIF ili OFX datoteke. U izborniku "
-"„Datoteka“, klikni na pod-izbornik „Uvezi“ i klikni na QIF ili OFX datoteku. "
-"Zatim slijedi upute."
+"ili drugih programa koji izvoze QIF ili OFX datoteke. U izborniku „Datoteka“"
+", pritisni pod-izbornik „Uvezi“ i pritisni na QIF ili OFX datoteku. Zatim "
+"slijedi upute."
 
 #: doc/tip_of_the_day.list.c:20
 msgid ""
@@ -505,7 +505,7 @@ msgid ""
 "it to see the different columns available."
 msgstr ""
 "Moguće je odrediti stupce, koji se prikazuju u kontnom planu. Na krajnjoj "
-"desnoj strani zaglavnog retka klikni strelicu/trokutić i odaberi željene "
+"desnoj strani zaglavnog retka pritisni strelicu/trokutić i odaberi željene "
 "stupce."
 
 #: doc/tip_of_the_day.list.c:33
@@ -515,9 +515,9 @@ msgid ""
 "register, clicking the right mouse button brings up the transaction menu "
 "options."
 msgstr ""
-"Klikni desni gumb miša (ctrl-klik na Mac OS X) u glavnom prozoru za prikaz "
-"izbornika opcija konta. U svakom registru se pritiskom na desni gumb miša "
-"prikazuje izbornik opcija za transakcije."
+"Pritisni desni gumb miša (tipka ctrl i pritiskanje lijeve tipke miša na Mac "
+"OS X) u glavnom prozoru za prikaz izbornika opcija konta. U svakom registru "
+"se pritiskom desnog gumba miša prikazuje izbornik opcija za transakcije."
 
 #: doc/tip_of_the_day.list.c:38
 msgid ""
@@ -554,8 +554,8 @@ msgid ""
 "View menu, you can choose the register style Auto-Split Ledger or "
 "Transaction Journal."
 msgstr ""
-"Za upis višedjelne transakcije poput plaće s višestrukim odbicima, klikni "
-"gumb „Podjela“ na traci alata. Alternativno, u izborniku „Prikaz“ možeš "
+"Za upis višedjelne transakcije poput plaće s višestrukim odbicima, pritisni "
+"gumb „Podjela“ u traci alata. Alternativno, u izborniku „Prikaz“ možeš "
 "odabrati stil registra „Podjela aktivne transakcije“ ili „Dnevnik "
 "transakcija“."
 
@@ -641,8 +641,8 @@ msgid ""
 "Currency Transfer options for entering the exchange rate or the other "
 "currency's amount will be available."
 msgstr ""
-"Za prijenos sredstva između konta s različitim valutama, klikni na gumb "
-"„Prenesi“ na traci alata registra, zatim odaberi konta i opcije za prijenos "
+"Za prijenos sredstva između konta s različitim valutama, pritisni na gumb "
+"„Prenesi“ u traci alata registra, zatim odaberi konta i opcije za prijenos "
 "valuta za upisivanje tečaja ili će iznos druge valute biti dostupan."
 
 #: doc/tip_of_the_day.list.c:91
@@ -654,7 +654,7 @@ msgid ""
 msgstr ""
 "Uređivački prozor vrijednosnih papira možeš postaviti tako, da prikazuje "
 "izvor tečajeva. Time lako vidiš, koje internetske izvore koristiš za "
-"vrijednosne papire. Na krajnjoj desnoj strani zaglavnog retka klikni "
+"vrijednosne papire. Na krajnjoj desnoj strani zaglavnog retka pritisni "
 "strelicu/trokutić i promijeni prikaz."
 
 #: doc/tip_of_the_day.list.c:96
@@ -794,8 +794,8 @@ msgstr ""
 "Pokušavaš stvoriti knjigu. Knjiga će sadržati sve transakcije sve do ponoći "
 "%s (za ukupno %d transakcija iz %d konta).\n"
 "\n"
-"Dopuni naslov i napomene ili klikni na „Dalje” za nastavak.\n"
-"Klikni „Natrag” za dopunjavanje datuma ili „Prekini”."
+"Dopuni naslov i napomene ili pritisni na „Dalje” za nastavljanje.\n"
+"Pritisni „Natrag” za dopunjavanje datuma ili „Prekini”."
 
 #: gnucash/gnome/assistant-acct-period.c:388
 #, c-format
@@ -808,7 +808,7 @@ msgid ""
 "The book will be created with the title %s when you click on \"Apply\". "
 "Click on \"Back\" to adjust, or \"Cancel\" to not create any book."
 msgstr ""
-"Kad klikneš „Primijeni“, izradit će se knjiga s naslovom „%s“. Klikni "
+"Kad pritisneš „Primijeni“, izradit će se knjiga s naslovom „%s“. Pritisni "
 "„Natrag“ za podešavanje ili „Prekini“, kako se knjiga ne bi izradila."
 
 #: gnucash/gnome/assistant-acct-period.c:525
@@ -3223,18 +3223,16 @@ msgid "Invalid Account in Split"
 msgstr "Neispravan konto u stavci"
 
 #: gnucash/gnome/dialog-sx-editor.c:754
-#, fuzzy, c-format
-#| msgid "Split with memo %s has an unparseable Credit Formula."
+#, c-format
 msgid "Split with memo %s has an unparsable Credit Formula."
-msgstr "Stavka s bilješkom „%s“ ima neobradivu formulu potraživanja."
+msgstr "Stavka s bilješkom „%s“ ima neobradivu formulu za potraživanje."
 
 #: gnucash/gnome/dialog-sx-editor.c:757 gnucash/gnome/dialog-sx-editor.c:773
 msgid "Unparsable Formula in Split"
 msgstr "Neobradiva formula u stavci"
 
 #: gnucash/gnome/dialog-sx-editor.c:770
-#, fuzzy, c-format
-#| msgid "Split with memo %s has an unparseable Debit Formula."
+#, c-format
 msgid "Split with memo %s has an unparsable Debit Formula."
 msgstr "Stavka s bilješkom „%s“ ima neobradivu formulu za dugovanje."
 
@@ -5622,7 +5620,7 @@ msgstr "Portfelj"
 #: gnucash/gnome/gnc-plugin-page-register.c:2101
 #: gnucash/gnome/gnc-plugin-page-register.c:3546
 msgid "Search Results"
-msgstr "Traži u rezultatima"
+msgstr "Rezultati pretrage"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2418
 msgid "General Journal Report"
@@ -5756,19 +5754,15 @@ msgstr "Ukloni _ostale stavke"
 #: gnucash/gnome/gnc-plugin-page-register.c:459
 #: gnucash/gnome-utils/gnc-main-window.c:343
 msgid "_Sort By..."
-msgstr "_Razvrstaj prema …"
+msgstr "_Razvrstaj po …"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:490
-#, fuzzy
-#| msgid "Stock Split Assistant"
 msgid "Stock Ass_istant"
-msgstr "Pomoćnik za podjelu dionice"
+msgstr "Pomoćn_ik za dionice"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:491
-#, fuzzy
-#| msgid "Stock Split Assistant"
 msgid "Stock Assistant"
-msgstr "Pomoćnik za podjelu dionice"
+msgstr "Pomoćn_ik za dionice"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:510
 msgid "_Go to Date"
@@ -5878,7 +5872,7 @@ msgstr "Podaci nove transakcije"
 #: gnucash/gnome/gnc-plugin-page-register.c:4161
 #, c-format
 msgid "Sort %s by..."
-msgstr "Razvrstaj „%s“ prema …"
+msgstr "Razvrstaj „%s“ po …"
 
 #. Translators: %s refer to the following in
 #. order: invoice type, invoice ID, owner name,
@@ -6501,7 +6495,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:2373
 msgid "Sort By:"
-msgstr "Razvrstaj prema:"
+msgstr "Razvrstaj po:"
 
 #: gnucash/gnome/gnc-split-reg.c:2511
 msgid ""
@@ -7212,12 +7206,12 @@ msgstr ""
 "GnuCash će pokušati pogoditi ispravno kodiranje slovnih znakova za tvoju "
 "datoteku podataka. Na sljedećoj stranici će vam pokazati rezultirajući "
 "tekst, kad pogađa kodiranje. Moraš provjeriti ispravnost riječi. Ako sve "
-"izgleda kako treba, jednostavno klikni „Dalje“. Ako riječi sadržavaju "
+"izgleda kako treba, jednostavno pritisni „Dalje“. Ako riječi sadržavaju "
 "neočekivane znakove, moraš odabrati druga kodiranja slovnih znakova, za "
 "drugačije rezultate. Možda ćeš morati promijeniti popis kodiranja, pritiskom "
 "na odgovarajuće gumbe.\n"
 "\n"
-"Sad klikni „Dalje“, za odabir ispravnog kodiranja za tvoju datoteku "
+"Sada pritisni „Dalje“, za biranje ispravnog kodiranja za tvoju datoteku "
 "podataka.\n"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:198
@@ -7232,7 +7226,7 @@ msgid ""
 "\n"
 "You can also go back and verify your selections by clicking on \"Back\"."
 msgstr ""
-"Datoteka je uspješno učitana. Ako klikneš na „Primijeni“ bit će spremljena i "
+"Datoteka je uspješno učitana. Ako pritisneš „Primijeni“ bit će spremljena i "
 "ponovo učitana u glavni program. Na taj ćeš način imati radnu datoteku kao "
 "sigurnosnu kopiju u istoj mapi.\n"
 "\n"
@@ -7457,10 +7451,9 @@ msgid "New Account"
 msgstr "Novi konto"
 
 #: gnucash/gnome-utils/dialog-account.c:2193
-#, fuzzy, c-format
-#| msgid "Renumber sub-accounts"
+#, c-format
 msgid "Renumber the immediate sub-accounts of '%s'?"
-msgstr "Ponovi numeriranje podkonta"
+msgstr "Ponovo numerirati neposredna podkodnta od „%s”?"
 
 #: gnucash/gnome-utils/dialog-account.c:2299
 #, c-format
@@ -8092,7 +8085,7 @@ msgid_plural ""
 msgstr[0] ""
 "Kako bi se promjene spremile, tvoja se datoteka podataka mora spremiti na "
 "tvrdom disku. GnuCash ima funkciju za automatsko spremanje datoteke svake %d "
-"minute, baš kao da svaki put klikneš gumb „Spremi“.\n"
+"minute, baš kao da svaki put pritisneš gumb „Spremi“.\n"
 "\n"
 "Promijeni vremenski interval ili isključiti ovu funkciju u izborniku "
 "„Uredi→Postavke→Opće→Interval za automatsko spremanje“.\n"
@@ -8101,7 +8094,7 @@ msgstr[0] ""
 msgstr[1] ""
 "Kako bi se promjene spremile, tvoja se datoteka podataka mora spremiti na "
 "tvrdom disku. GnuCash ima funkciju za automatsko spremanje datoteke svake %d "
-"minute, baš kao da svaki put klikneš gumb „Spremi“.\n"
+"minute, baš kao da svaki put pritisneš gumb „Spremi“.\n"
 "\n"
 "Promijeni vremenski interval ili isključiti ovu funkciju u izborniku "
 "„Uredi→Postavke→Opće→Interval za automatsko spremanje“.\n"
@@ -8110,7 +8103,7 @@ msgstr[1] ""
 msgstr[2] ""
 "Kako bi se promjene spremile, tvoja se datoteka podataka mora spremiti na "
 "tvrdom disku. GnuCash ima funkciju za automatsko spremanje datoteke svakih "
-"%d minuta, baš kao da svaki put klikneš gumb „Spremi“.\n"
+"%d minuta, baš kao da svaki put pritisneš gumb „Spremi“.\n"
 "\n"
 "Promijeni vremenski interval ili isključiti ovu funkciju u izborniku "
 "„Uredi→Postavke→Opće→Interval za automatsko spremanje“.\n"
@@ -12922,7 +12915,7 @@ msgstr "Završetak obračunskog razdoblja"
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:238
 msgid "Press 'Close' to Exit."
-msgstr "Klikni „Zatvori“ za izlaz."
+msgstr "Pritisni „Zatvori“ za izlaz."
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:249
 msgid "Summary Page"
@@ -12960,7 +12953,7 @@ msgstr ""
 "ukoliko postoji određeni vrijednosni papir/valuta. Ako konto postoji, "
 "aktualizirat će se četiri polja – šifra, opis, napomene i boja.\n"
 "\n"
-"Klikni „Dalje“ za nastavljanje ili „Prekini“ za prekid uvoza.\n"
+"Pritisni „Dalje“ za nastavljanje ili „Prekini“ za prekid uvoza.\n"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:51
 msgid "Import Account Assistant"
@@ -13016,7 +13009,7 @@ msgid ""
 "Press Apply to create export file.\n"
 "Cancel to abort."
 msgstr ""
-"Klikni „Primijeni“ za stvaranje datoteke za izvoz.\n"
+"Pritisni „Primijeni“ za stvaranje datoteke za izvoz.\n"
 "„Prekini“ za prekid."
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:285
@@ -13239,7 +13232,7 @@ msgstr ""
 "„Količina”.\n"
 "\n"
 "Postoje razne opcije za određivanje razdvojnog znaka i fiksne širine. Za "
-"željenu fiksnu širinu, klikni dvaput na prikazanu tablicu i ako treba, "
+"željenu fiksnu širinu, pritisni dvaput na prikazanu tablicu i ako treba, "
 "podesi širinu desnim gumbom miša.\n"
 "\n"
 "Npr. \"RR.L\",\"21/11/2016\",5.345,\"HRK\" i \"EUR\",\"2016-11-21\",1.56,"
@@ -13257,7 +13250,7 @@ msgstr ""
 "\n"
 "Ovo je nepovratna radnja, stoga imaj sigurnosnu kopiju pri ruci.\n"
 "\n"
-"Klikni „Dalje“ za nastavljanje ili „Prekini“ za prekid uvoza."
+"Pritisni „Dalje“ za nastavljanje ili „Prekini“ za prekid uvoza."
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:72
 msgid "Price Import Assistant"
@@ -13270,7 +13263,7 @@ msgid ""
 "Select location and file name for the Import, then click \"OK\"...\n"
 msgstr ""
 "\n"
-"Odaberi direktorij i ime datoteke za uvoz, zatim klikni „U redu“ …\n"
+"Odaberi direktorij i ime datoteke za uvoz, zatim pritisni „U redu“ …\n"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:100
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:90
@@ -13339,14 +13332,14 @@ msgstr "Spojnica (-)"
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:461
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:451
 msgid "Double-click anywhere on the table below to insert a column break"
-msgstr "Dvoklik bilo gdje u donjoj tablici, za umetanje prijeloma stupca"
+msgstr "Pritisni dvaput bilo gdje u donjoj tablici, za umetanje prekida stupca"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:487
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:477
 msgid "Right-click anywhere in a column to modify it (widen, narrow, merge)"
 msgstr ""
-"Za promjenu (širenje, sužavanje, spajanje), pritisni desnim klikom bilo gdje "
-"u stupcu"
+"Za promjenu (širenje, sužavanje, spajanje), pritisni desnu tipku miša bilo "
+"gdje u stupcu"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:530
 msgid "Allow existing prices to be over written."
@@ -13450,7 +13443,7 @@ msgid ""
 "<b>Press \"Apply\" to add the Prices.\n"
 "\"Cancel\" to abort.</b>"
 msgstr ""
-"<b>Klikni „Primijeni” za dodavanje cijena.\n"
+"<b>Pritisni „Primijeni” za dodavanje cijena.\n"
 "„Prekini” za prekid.</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1029
@@ -13620,7 +13613,7 @@ msgid ""
 "\n"
 "More information can be displayed by using the help button."
 msgstr ""
-"Ako klikneš na „Dalje”, GnuCash će izvršiti razne provjere.\n"
+"Ako pritisneš „Dalje”, GnuCash će izvršiti razne provjere.\n"
 "\n"
 "Ako jedna od tih <i>provjera ne uspije</i>, program će te automatski "
 "preusmjeriti na stranicu za pregled, gdje greške možeš pokušati ispraviti.\n"
@@ -13662,16 +13655,16 @@ msgid ""
 "\n"
 "Click 'Cancel' if you do not wish to create any new accounts now."
 msgstr ""
-"Ovaj pomoćnik pomaže pri stvaranju skupine GnuCash konta za imovinu "
-"(investicije, kreditne račune ili štedne račune), obveze (kredite/zajmove) i "
+"Ovaj pomoćnik pomaže pri stvaranju skupine GnuCash konta za imovinu ("
+"investicije, kreditne račune ili štedne račune), obveze (kredite/zajmove) i "
 "razne vrste prihoda i rashoda.\n"
 "\n"
 "Ovdje možeš odabrati skupinu konta koja odgovara tvojim potrebama. Nakon što "
 "pomoćnik završi, moći ćeš dodati, preimenovati, promijeniti i ukloniti konta "
-"kad god želiš. Također ćeš moći dodavati podkonta i premještati konta "
-"(zajedno s njihovim podkontima) iz jednog matičnog konta u drugi.\n"
+"kad god želiš. Također ćeš moći dodavati podkonta i premještati konta ("
+"zajedno s njihovim podkontima) iz jednog matičnog konta u drugi.\n"
 "\n"
-"Klikni „Prekini”, ako sad ne želiš stvoriti nova konta."
+"Pritisni „Prekini”, ako sada ne želiš stvoriti nova konta."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:30
 msgid "New Account Hierarchy Setup"
@@ -13761,16 +13754,16 @@ msgid ""
 "opening balance.\n"
 msgstr ""
 "\n"
-"Ako želiš promijeniti ime konta, klikni na redak koji sadržava konto, zatim "
-"klikni na ime konta, te ga promijeni.\n"
+"Ako želiš promijeniti ime konta, pritisni redak koji sadržava konto, zatim "
+"pritisni ime konta, te ga promijeni.\n"
 "\n"
 "Neka konta su označeni kao „Rezervirani”. Rezervirana konta se koriste za "
 "stvaranje hijerarhije konta u kontnom planu i nemaju transakcije, niti "
 "početni saldo. Ako želiš promijeniti konto u rezervirani konto, uključi "
 "odgovarajuću potvrdu za taj konto.\n"
 "\n"
-"Ako želiš da konto sadržava početni saldo, klikni na redak željenog konto, "
-"zatim klikni na polje za početni saldo i upiši početni saldo.\n"
+"Ako želiš da konto sadržava početni saldo, pritisni redak željenog konto, "
+"zatim pritisni polje za početni saldo i upiši početni saldo.\n"
 "\n"
 "<b>Napomena:</b> sva konta, osim konta kapitala i rezervirana konta, mogu "
 "imati početni saldo.\n"
@@ -13788,16 +13781,16 @@ msgid ""
 "\n"
 "Press 'Cancel' to close this dialog without creating any new accounts."
 msgstr ""
-"Klikni „Primijeni“ za stvaranje novih konta. Nakon toga ih možeš spremiti u "
-"datoteku ili u bazu podataka.\n"
+"Pritisni „Primijeni“ za stvaranje novih konta. Nakon toga ih možeš spremiti "
+"u datoteku ili u bazu podataka.\n"
 "\n"
-"Klikni „Natrag“ za pregled tvog odabira.\n"
+"Pritisni „Natrag“ za pregled tvog odabira.\n"
 "\n"
-"Klikni „Prekini“ za zatvaranje ovog dijaloga, bez stvaranja novih konta."
+"Pritisni „Prekini“ za zatvaranje ovog dijaloga, bez stvaranja novih konta."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:585
 msgid "Finish Account Setup"
-msgstr "Završi s postavljanjem konta"
+msgstr "Završi postavljanje konta"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:26
 msgid "Current Year"
@@ -14045,7 +14038,7 @@ msgid ""
 "Review the details below and if correct press Apply to create the schedule."
 msgstr ""
 "\n"
-"Pregledaj detalje ispod. Ako su točni, klikni „Primijeni“ za stvaranje "
+"Pregledaj detalje ispod. Ako su točni, pritisni „Primijeni“ za stvaranje "
 "terminirane transakcije."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1111
@@ -14114,10 +14107,10 @@ msgstr ""
 "mnogim drugima.\n"
 "\n"
 "Proces uvoza se sastoji od nekoliko koraka. Tvoja se GnuCash konta neće "
-"promijeniti, sve dok ne klikneš „Primijeni“ na kraju procesa.\n"
+"promijeniti, sve dok ne pritisneš „Primijeni“ na kraju procesa.\n"
 "\n"
-"Klikni „Dalje“ za pokretanje učitavanja tvojih QIF podataka ili „Prekini“ za "
-"prekid procesa."
+"Pritisni „Dalje“ za pokretanje učitavanja tvojih QIF podataka ili „Prekini“ "
+"za prekid procesa."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:51
 msgid "Import QIF files"
@@ -14133,7 +14126,7 @@ msgid ""
 "You will have the opportunity to load as many files as you wish, so don't "
 "worry if your data is in multiple files.\n"
 msgstr ""
-"Odaberi datoteku za učitavanje. Kad klikneš „Dalje“, datoteka će biti "
+"Odaberi datoteku za učitavanje. Kad pritisneš „Dalje“, datoteka će biti "
 "učitana i analizirana. Možda ćeš morati odgovoriti na neka pitanja o kontima "
 "u datoteci.\n"
 "\n"
@@ -14183,8 +14176,8 @@ msgstr ""
 #: gnucash/gtkbuilder/assistant-qif-import.glade:405
 msgid "Click \"Back\" to cancel the loading of this file and choose another."
 msgstr ""
-"Ako želiš prekinuti učitavanje ove datoteke, klikni „Natrag“ i odaberi jednu "
-"drugu datoteku."
+"Ako želiš prekinuti učitavanje ove datoteke, pritisni „Natrag“ i odaberi "
+"jednu drugu datoteku."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:333
 msgid "Set a date format for this QIF file"
@@ -14223,12 +14216,12 @@ msgid ""
 "Click \"Next\" to finish loading files and move to the next step of the QIF "
 "import process."
 msgstr ""
-"Klikni „Učitaj još jednu datoteku“, ako imaš još podataka koje želiš uvesti "
-"u ovom trenutku. Koristi ovo, ako su tvoja konta spremljena u zasebnim QIF "
-"datotekama.\n"
+"Pritisni „Učitaj jednu drugu datoteku“, ako imaš još podataka koje želiš "
+"uvesti u ovom trenutku. Koristi ovo, ako su tvoja konta spremljena u "
+"zasebnim QIF datotekama.\n"
 "\n"
-"Klikni „Dalje“ za završavanje učitavanja datoteka i za prelazak na sljedeći "
-"korak procesa uvoza QIF datoteka."
+"Pritisni „Dalje“ za završavanje učitavanja datoteka i za prelazak na "
+"sljedeći korak procesa uvoza QIF datoteka."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:474
 msgid "_Unload selected file"
@@ -14236,7 +14229,7 @@ msgstr "_Poništi učitavanje odabrane datoteke"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:489
 msgid "_Load another file"
-msgstr "_Učitaj još jednu datoteku"
+msgstr "_Učitaj jednu drugu datoteku"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:511
 msgid "QIF files you have loaded"
@@ -14264,7 +14257,7 @@ msgstr ""
 "Ako GnuCash konto već postoji s istim imenom ili sa sličnim imenom i "
 "kompatibilnom vrstom, taj konto će biti korišten za poklapanje; u protivnom, "
 "GnuCash će stvoriti novi konto istog imena i vrste kao QIF konto. Ako ti ne "
-"odgovara predloženi GnuCash konto, klikni dva puta da ga promijeniš.\n"
+"odgovara predloženi GnuCash konto, pritisni dva puta da ga promijeniš.\n"
 "\n"
 "Napominjemo, da će GnuCash napraviti mnoga konta, koji ne postoje na tvojim "
 "ostalim programima osobnih financija, uključujući zaseban konto za svaku "
@@ -14314,7 +14307,7 @@ msgstr ""
 "\n"
 "Na sljedećoj stranici ćeš imati priliku pogledati predložena poklapanja "
 "između QIF kategorija i GnuCash konta. Poklapanja koja ti se ne sviđaju "
-"možeš promijeniti. Klikni dvaput na redak koji sadržava ime kategorije.\n"
+"možeš promijeniti. Pritisni dvaput na redak koji sadržava ime kategorije.\n"
 "\n"
 "Ako se kasnije predomisliš, možeš prerasporediti strukturu konta u GnuCashu."
 
@@ -14467,10 +14460,10 @@ msgstr ""
 "\n"
 "Na sljedećoj će stranici biti prikazan popis uvezenih transakcija. Prilikom "
 "odabira transakcije, popis mogućih poklapanja bit će prikazan ispod nje. Ako "
-"pronađeš točno poklapanje, klikni ga. Tvoj će odabir biti potvrđen oznakom u "
-"stupcu „Se poklapa?“.\n"
+"pronađeš točno poklapanje, pritisni ga. Tvoj će odabir biti potvrđen oznakom "
+"u stupcu „Se poklapa?“.\n"
 "\n"
-"Klikni „Dalje“ za pregled mogućih poklapanja."
+"Pritisni „Dalje“ za pregled mogućih poklapanja."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1243
 msgid "Match existing transactions"
@@ -14501,16 +14494,16 @@ msgid ""
 "\n"
 "Click \"Cancel\" to abort the QIF import process."
 msgstr ""
-"Klikni „Primijeni“ za uvoz podataka i za aktualiziranje tvojih GnuCash "
+"Pritisni „Primijeni“ za uvoz podataka i za aktualiziranje tvojih GnuCash "
 "konta. Informacije o poklapanju upisanih konta i kategorija će biti "
 "spremljene i korištene kao standardne vrijednosti prilikom sljedećeg QIF "
 "uvoza.\n"
 "\n"
-"Klikni „Natrag“ za pregledavanje poklapanja tvojih konta i kategorija, za "
+"Pritisni „Natrag“ za pregledavanje poklapanja tvojih konta i kategorija, za "
 "mijenjanje postavaka za valute i vrijednosne papire novih konta ili za "
 "dodavanje daljnjih datoteka na područje za izvođenje.\n"
 "\n"
-"Klikni „Prekini“ za prekid procesa QIF uvoza."
+"Pritisni „Prekini“ za prekid procesa QIF uvoza."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1361
 msgid "Update your GnuCash accounts"
@@ -14588,7 +14581,7 @@ msgid ""
 "the details of that payment here. Otherwise, just click \"Next\"."
 msgstr ""
 "Ako dobiješ novčanu isplatu kao rezultat podjele dionica, ovdje upiši "
-"detalje tog plaćanja. U protivnom, klikni „Dalje“."
+"detalje tog plaćanja. U protivnom, pritisni „Dalje“."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:279
 #: gnucash/import-export/aqb/dialog-ab.glade:1201
@@ -14625,9 +14618,9 @@ msgid ""
 "may also press \"Back\" to review your choices, or \"Cancel\" to quit "
 "without making any changes."
 msgstr ""
-"Kad završiš stvaranje podjele ili spajanje dionica, klikni „Primijeni“. "
+"Kad završiš stvaranje podjele ili spajanje dionica, pritisni „Primijeni“. "
 "Također možeš pritisnuti „Natrag“ za pregled tvojih odabira ili „Prekini“ za "
-"izlaz bez unošenja promjena."
+"prekidanje bez unošenja promjena."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:418
 msgid "Stock Split Finish"
@@ -15120,22 +15113,16 @@ msgid "Interval"
 msgstr "Interval"
 
 #: gnucash/gtkbuilder/dialog-account.glade:2112
-#, fuzzy
-#| msgid "Number of Periods"
 msgid "Number of Digits"
-msgstr "Broj razdoblja"
+msgstr "Broj znamenki"
 
 #: gnucash/gtkbuilder/dialog-account.glade:2126
-#, fuzzy
-#| msgid ""
-#| "Renumber the immediate sub-accounts of %s? This will replace the account "
-#| "code field of each child account with a newly generated code."
 msgid ""
 "This will replace the account code field of each child account with a newly "
 "generated code"
 msgstr ""
-"Želiš li ponovo pobrojiti podređena podkonta od „%s“? Ovime će se "
-"promijeniti polje šifre svakog podređenog konta novostvorenom šifrom."
+"Ovime će se zamijeniti polje koda šifre svakog podređenog konta s novom "
+"generiranom šifrom"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:34
 msgid "_Show documentation"
@@ -15534,7 +15521,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:405
 msgid "_Multiple"
-msgstr "_Višestruko"
+msgstr "_Više"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:411
 msgid ""
@@ -15548,7 +15535,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:426
 msgid "Si_ngle"
-msgstr "Pojedinač_no"
+msgstr "Jed_na"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:432
 msgid ""
@@ -16032,7 +16019,7 @@ msgstr "_Sva konta"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:165
 msgid "Search scope"
-msgstr "Opseg pretraživanja"
+msgstr "Opseg pretrage"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:191
 msgid "Account Full Name"
@@ -16053,7 +16040,8 @@ msgid ""
 "Tree,\n"
 "if account should not be shown, this will be temporarily overridden."
 msgstr ""
-"Odaberi redak i klikni „Prijeđi na”, za prijelaz na konto u kontnom planu.\n"
+"Odaberi redak i pritisni „Prijeđi na”, za prijelaz na konto u kontnom planu."
+"\n"
 "Ukoliko se konto ne prikaže, ovo će se privremeno prepisati."
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:35
@@ -16165,9 +16153,10 @@ msgid ""
 "checked can be added to a selection."
 msgstr ""
 "Može se odabrati više redaka transakcija i dodijeliti račun za prijenos svim "
-"odabranim retcima. Koristi Ctrl lijevi klik ili Shift-klik za biranje više "
-"redaka, a zatim desnom tipkom miša odaberi račun za prijenos. Odabiru se "
-"mogu dodati samo redovi s oznakom „Nova”."
+"odabranim retcima. Koristi tipku Ctrl s pritiskom lijevog gumba miša ili "
+"tipku Shift zajedno s pritiskom tipke miša za biranje više redaka, a zatim "
+"pritiskom desne tipke miša odaberi račun za prijenos. Odabiru se mogu dodati "
+"samo redci s oznakom „Nova”."
 
 #: gnucash/gtkbuilder/dialog-import.glade:456
 msgid ""
@@ -16194,7 +16183,7 @@ msgid ""
 "Double click on the transaction to either change the matching transaction in "
 "GnuCash or the destination account of the auto-balance split (if required)."
 msgstr ""
-"Dvoklik na transakciju za promjenu poklapajuće transakcije koju želiš "
+"Pritisni transakciju dvaput za mijenjanje poklapajuće transakcije koju želiš "
 "uskladiti ili odredišnog konta automatski usklađene stavke (ako je potrebno)."
 
 #: gnucash/gtkbuilder/dialog-import.glade:470
@@ -16476,9 +16465,9 @@ msgid ""
 "will be displayed again next time you start GnuCash. If you press the <i>No</"
 "i> button, it will not be displayed again."
 msgstr ""
-"Ako klikneš <i>Da</i>, dijalog <i>Dobro došli u GnuCash</i> će se ponovo "
-"prikazati prilikom sljedećeg pokretanja GnuCash. Ako klikneš <i>Ne</i>, neće "
-"se više prikazivati."
+"Ako pritisneš <i>Da</i>, dijalog <i>Dobro došli u GnuCash</i> će se ponovo "
+"prikazati prilikom sljedećeg pokretanja GnuCasha. Ako pritisneš <i>Ne</i>, "
+"neće se više prikazivati."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:210
 msgid "<span size=\"larger\" weight=\"bold\">Welcome to GnuCash!</span>"
@@ -16493,8 +16482,8 @@ msgid ""
 msgstr ""
 "Dostupne se neke unaprijed određene radnje, koje većina novih korisnika želi "
 "koristiti prilikom pokretanja GnuCasha. Odaberi jednu od ovih radnji i "
-"klikni <i>U redu</i> ili klikni <i>Prekini</i>, ako ne želiš obaviti nijednu "
-"od njih."
+"pritisni <i>U redu</i> ili pritisni <i>Prekini</i>, ako ne želiš obaviti "
+"nijednu od njih."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:244
 msgid "C_reate a new set of accounts"
@@ -17982,7 +17971,7 @@ msgid ""
 msgstr ""
 "Postavljeno je, da se sljedeći dijalozi upozorenja ne prikazuju. Za ponovo "
 "prikazivanje ovih dijaloga, odaberi polje za potvrdu pored dijaloga, zatim "
-"klikni „U redu“."
+"pritisni „U redu“."
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:120
 msgid "_Unselect All"
@@ -18022,7 +18011,7 @@ msgstr "<b>Usporedi sve unose</b>"
 
 #: gnucash/gtkbuilder/dialog-search.glade:281
 msgid "Search Criteria"
-msgstr "Kriteriji za traženje"
+msgstr "Kriteriji pretrage"
 
 #: gnucash/gtkbuilder/dialog-search.glade:314
 msgid "New search"
@@ -18065,7 +18054,7 @@ msgid ""
 "now be corrected. Press OK to edit them."
 msgstr ""
 "Sljedeće terminirane transakcije se pozivaju na izbrisani konto i sad se "
-"moraju ispraviti. Za uređivanje, klikni „U redu“."
+"moraju ispraviti. Za uređivanje, pritisni „U redu“."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:123
 #: gnucash/gtkbuilder/gnc-frequency.glade:171
@@ -18244,7 +18233,7 @@ msgstr "Podaci poreza na prihod"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:145
 msgid "Click to change Tax Name and/or Tax Type."
-msgstr "Klikni za promjenu imena poreza i/ili vrstu poreza."
+msgstr "Pritisni za mijenjanje imena poreza i/ili vrstu poreza."
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:246
 msgid "<b>_Accounts</b>"
@@ -19131,7 +19120,7 @@ msgstr ""
 #. Sort register by Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:770
 msgid "Sort register by..."
-msgstr "Razvrstaj registar prema …"
+msgstr "Razvrstaj registar po …"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:833
 msgid "_Standard Order"
@@ -19143,11 +19132,11 @@ msgstr "Zadrži uobičajeni redoslijed konta."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:866
 msgid "Sort by date."
-msgstr "Razvrstaj prema datumu."
+msgstr "Razvrstaj po datumu."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:885
 msgid "Sort by the date of entry."
-msgstr "Razvrstaj prema datumu unosa."
+msgstr "Razvrstaj po datumu unosa."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:900
 msgid "S_tatement Date"
@@ -19157,7 +19146,7 @@ msgstr "Datum _stanja"
 msgid ""
 "Sort by the statement date (and group by cleared, unreconciled, reconciled)."
 msgstr ""
-"Razvrstaj prema datumu stanja (i grupiraj prema potvrđenim, neusklađenim, "
+"Razvrstaj po datumu stanja (i grupiraj po potvrđenim, neusklađenim, "
 "usklađenim)."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:919
@@ -19166,7 +19155,7 @@ msgstr "_Broj"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:923
 msgid "Sort by number."
-msgstr "Razvrstaj prema broju."
+msgstr "Razvrstaj po broju."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:938
 msgid "Amo_unt"
@@ -19174,15 +19163,15 @@ msgstr "_Iznos"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:942
 msgid "Sort by amount."
-msgstr "Razvrstaj prema iznosu."
+msgstr "Razvrstaj po iznosu."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:961
 msgid "Sort by memo."
-msgstr "Razvrstaj prema bilješkama."
+msgstr "Razvrstaj po bilješkama."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:980
 msgid "Sort by description."
-msgstr "Razvrstaj prema opisu."
+msgstr "Razvrstaj po opisu."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:995
 msgid "_Action"
@@ -19190,11 +19179,11 @@ msgstr "_Radnja"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:999
 msgid "Sort by action field."
-msgstr "Razvrstaj prema polju radnje."
+msgstr "Razvrstaj po polju radnje."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1018
 msgid "Sort by notes field."
-msgstr "Razvrstaj prema polju napomena."
+msgstr "Razvrstaj po polju napomena."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1049
 msgid "Sa_ve Sort Order"
@@ -19404,31 +19393,6 @@ msgid ""
 msgstr "Ovaj pomoćnik pomaže postavljati vezu s bankom za internet bankarstvo."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:39
-#, fuzzy
-#| msgid ""
-#| "The requirements for Online Banking vary between the different supported "
-#| "AqBanking backends, but usually you will need:\n"
-#| "* Your bank needs to grant you online access. See on their website or ask "
-#| "their customer service for how to obtain it.\n"
-#| "They should also tell you:\n"
-#| "* Your user ID that identifies you to their server, often your base "
-#| "account number;\n"
-#| "* The URL of their Online Banking server;\n"
-#| "* In some cases the routing number of your bank's branch is useful in "
-#| "this assistant;\n"
-#| "* Authentication methods vary by backend and chosen method:\n"
-#| " * FinTS PIN/TAN: Some methods require a specific gadget like a card "
-#| "reader or a mobile;\n"
-#| " * FinTS HBCI: You have to exchange the public parts of asymmetric keys "
-#| "with your bank (\"Ini-Letter\").\n"
-#| " * PayPal: registered email address, password, API signature;\n"
-#| "\n"
-#| "See https://wiki.gnucash.org/wiki/AqBanking for more details.\n"
-#| "\n"
-#| "Note: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented "
-#| "Online Banking server. You should not rely on time-critical transfers "
-#| "through Online Banking, because sometimes the bank does not give you "
-#| "correct feedback when a transfer is rejected."
 msgid ""
 "The requirements for Online Banking vary between the different supported "
 "AqBanking backends, but usually you will need:\n"
@@ -19462,14 +19426,7 @@ msgstr ""
 "kartica ili mobitela;\n"
 " * FinTS HBCI: Moraš razmijeniti javne dijelove asimetričnih ključeva sa "
 "tvojom bankom („Ini-Pismo”).\n"
-" * PayPal: Registrirana email adresa, lozinka, API potpis;\n"
-"\n"
-"Pogledaj pojedinosti na https://wiki.gnucash.org/wiki/AqBanking.\n"
-"\n"
-"Napomena: BEZ JAMSTVA. Neke banke imaju loše implementirani poslužitelj za "
-"internetsko bankarstvo. Ne oslanjaj se na vremenski kritične prijenose putem "
-"internetskog bankarstva, jer banke ponekad ne daju ispravne povratne "
-"informacije kad se prijenos odbije."
+" * PayPal: Registrirana email adresa, lozinka, API potpis;"
 
 #. See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:65
@@ -19477,6 +19434,8 @@ msgid ""
 "See <a href=\"https://wiki.gnucash.org/wiki/AqBanking\">https://wiki.gnucash."
 "org/wiki/AqBanking</a> for more details"
 msgstr ""
+"Pogledaj daljnje detalje na <a href=\"https://wiki.gnucash.org/wiki/"
+"AqBanking\">https://wiki.gnucash.org/wiki/AqBanking</a>"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:78
 msgid ""
@@ -19485,28 +19444,22 @@ msgid ""
 "Online Banking, because sometimes the bank does not give you correct "
 "feedback when a transfer is rejected."
 msgstr ""
+"Napomena: NEMA JAMSTAVA NI ZA ŠTO. Neke banke vode loše implementiran "
+"poslužitelj internet bankarstva. Ne oslanjaj se na vremenski kritične "
+"prijenose putem internet bankarstva, jer banka ponekad ne daje ispravne "
+"povratne informacije kad se prijenos odbije."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:89
 msgid "Initial Online Banking Setup"
-msgstr "Postavljanje internet bankarstva"
+msgstr "Izvorno postavljanje internet bankarstva"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:111
-#, fuzzy
-#| msgid ""
-#| "The Setup of your Online Banking connection is handled by the external "
-#| "program \"AqBanking Setup Wizard\".\n"
-#| "You have to set up at least one connection before you can continue.\n"
-#| "\n"
-#| "Please press the button below to start it."
 msgid ""
 "The Setup of your Online Banking connection is handled by the external "
 "program \"AqBanking Setup\"."
 msgstr ""
-"Postavkama veze tvog internet bankarstva upravlja vanjski program „Čarobnjak "
-"za postavljanje AqBanking“.\n"
-"Za nastavljanje moraš postaviti barem jednu vezu.\n"
-"\n"
-"Klikni donji gumb za pokretanje."
+"Postavom veze tvog internet bankarstva upravlja vanjski program „"
+"Postavljanje AqBanking-a“."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:125
 msgid ""
@@ -19514,43 +19467,36 @@ msgid ""
 "* It ignores GnuCash's preferences like \"Close log window when finished\".\n"
 "* To report issues read"
 msgstr ""
+"To znači:\n"
+"* Zanemaruje GnuCashove postavke poput „Zatvori log-prozor nakon završetka”."
+"\n"
+"* Za prijavljivanje problema, pročitaj"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:141
 msgid ""
 "<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
 "\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 msgstr ""
+"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/\""
+">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:157
-#, fuzzy
-#| msgid ""
-#| "The Setup of your Online Banking connection is handled by the external "
-#| "program \"AqBanking Setup Wizard\".\n"
-#| "You have to set up at least one connection before you can continue.\n"
-#| "\n"
-#| "Please press the button below to start it."
 msgid ""
 "You have to set up at least one connection before you can continue.\n"
 "\n"
 "Please press the button below to start it."
 msgstr ""
-"Postavkama veze tvog internet bankarstva upravlja vanjski program „Čarobnjak "
-"za postavljanje AqBanking“.\n"
 "Za nastavljanje moraš postaviti barem jednu vezu.\n"
 "\n"
-"Klikni donji gumb za pokretanje."
+"Pritisni donji gumb za pokretanje."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:170
-#, fuzzy
-#| msgid "_Start AqBanking Wizard"
 msgid "_Start AqBanking Setup"
-msgstr "_Pokreni čarobnjaka za AqBanking"
+msgstr "_Pokreni postavljanje AqBanking-a"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:186
-#, fuzzy
-#| msgid "Initial Online Banking Setup"
 msgid "Start Online Banking Setup"
-msgstr "Postavljanje internet bankarstva"
+msgstr "Pokreni postavljanje internet bankarstva"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:204
 msgid ""
@@ -19558,9 +19504,10 @@ msgid ""
 "match it to a GnuCash account or select incorrect matches and click \"Delete "
 "selected matches\". Click \"Next\" when all desired accounts are matching."
 msgstr ""
-"Dvoklik na redak s imenom konta internetskog bankarstva, ako ga želiš "
-"poklopiti s GnuCash kontom ili odaberi netočna poklapanja i klikni „Izbriši "
-"odabrana poklapanja”. Klikni „Dalje” kad se sva željena konta poklapaju."
+"Pritisni dvaput na redak s imenom konta internetskog bankarstva, ako ga "
+"želiš poklopiti s GnuCash kontom ili odaberi netočna poklapanja i pritisni „"
+"Izbriši odabrana poklapanja”. Pritisni „Dalje” kad se sva željena konta "
+"poklapaju."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:242
 msgid "_Delete selected matches"
@@ -19581,12 +19528,13 @@ msgid ""
 "Press \"Apply\" now."
 msgstr ""
 "Podešavanje za usklađivanje konta internet bankarstva s kontima GnuCasha je "
-"završeno. Sad možeš pokrenuti radnje internet bankarstva nad tim kontima.\n"
+"završeno. Sada možeš pokrenuti radnje internetskog bankarstva nad tim "
+"kontima.\n"
 "\n"
 "Ako želiš dodati neku drugu banku, korisnika ili konto, pomoćnika možeš "
 "ponovo pokrenuti u bilo kojem trenutku.\n"
 "\n"
-"Sad klikni „Primijeni“."
+"Sada pritisni „Primijeni“."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:296
 msgid "Online Banking Setup Finished"
@@ -19863,8 +19811,8 @@ msgid ""
 "If active, the window will be closed automatically when you finish the HBCI/"
 "AqBanking import process. Otherwise it will stay open."
 msgstr ""
-"Ako je aktivirano, prozor će se sam zatvoriti kad završiš proces uvoza HBCI/"
-"AqBanking internetskog bankarstva. U protivnom će ostati otvoren."
+"Ako je aktivirano, prozor će se sam zatvoriti kad završiš proces uvoza "
+"HBCI-a/AqBanking-a. U protivnom će ostati otvoren."
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:52
 msgid "Remember the _PIN in memory"
@@ -19877,9 +19825,9 @@ msgid ""
 "during a session. Otherwise it will have to be entered again each time "
 "during a session when it is needed."
 msgstr ""
-"Ako je aktivirano, PIN za HBCI/AqBanking radnje će biti zapamćen u memoriji "
-"za vrijeme sesije. U protivnom ćeš ga u tijeku sesije, svaki put morati "
-"ponovo upisati."
+"Ako je aktivirano, PIN za HBCI/AqBanking radnje zapamtit će se u memoriji za "
+"vrijeme sesije. U protivnom ćeš ga u tijeku sesije, svaki put morati ponovo "
+"upisati."
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:70
 msgid "_Verbose debug messages"
@@ -20374,7 +20322,7 @@ msgid ""
 "Initial setup of Online Banking access (HBCI, or OFX DirectConnect, using "
 "AqBanking)"
 msgstr ""
-"Izvorne postavke za pristup internet bankarstvu (HBCI, ili OFX DirektKonekt, "
+"Izvorne postavke za pristup internet bankarstvu (HBCI ili OFX DirektKonekt, "
 "koristeći AqBanking)"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:102
@@ -20805,8 +20753,8 @@ msgstr ""
 "Ovaj pomoćnik pomaže pri izvozu kontnog plana u datoteku s dolje određenim "
 "znakom razdvajanja.\n"
 "\n"
-"Odaberi potrebne postavke za datoteku, a zatim klikni „Dalje“ za nastavak "
-"ili „Prekini“ za prekid izvoza.\n"
+"Odaberi potrebne postavke za datoteku, a zatim pritisni „Dalje“ za "
+"nastavljanje ili „Prekini“ za prekid izvoza.\n"
 
 #. Translators: %s is one of the following paragraphs about rows/transaction.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:87
@@ -20871,7 +20819,7 @@ msgid ""
 msgstr ""
 "Pritiskom na „Primijeni” će se ovaj kontni plan izvesti u datoteku „%s”.\n"
 "\n"
-"Možeš provjeriti tvoj odabir pritiskom na „Natrag” ili klikni „Prekini” za "
+"Možeš provjeriti tvoj odabir pritiskom na „Natrag” ili pritisni „Prekini” za "
 "prekid izvoza.\n"
 
 #. Translators: %s is the file name and %u the number of accounts.
@@ -20887,7 +20835,7 @@ msgstr ""
 "Pritiskom na „Primijeni” će se transakcije izvesti u datoteku „%s”, a broj "
 "izvezenih konta će biti %u.\n"
 "\n"
-"Možeš provjeriti tvoj odabir pritiskom na „Natrag” ili klikni „Prekini” za "
+"Možeš provjeriti tvoj odabir pritiskom na „Natrag” ili pritisni „Prekini” za "
 "prekid izvoza.\n"
 
 #. Translators: %s is the file name.
@@ -20902,7 +20850,7 @@ msgid ""
 msgstr ""
 "Pritiskom na „Primijeni” će se transakcije izvesti u datoteku „%s”.\n"
 "\n"
-"Možeš provjeriti tvoj odabir pritiskom na „Natrag” ili klikni „Prekini” za "
+"Možeš provjeriti tvoj odabir pritiskom na „Natrag” ili pritisni „Prekini” za "
 "prekid izvoza.\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:763
@@ -20991,9 +20939,9 @@ msgid ""
 "You can verify your selections by clicking on 'Back' or 'Cancel' to Abort "
 "Import.\n"
 msgstr ""
-"Kad klikneš „Primijeni”, konta će se uvesti iz datoteke „%s”.\n"
+"Kada pritisneš „Primijeni”, konta će se uvesti iz datoteke „%s”.\n"
 "\n"
-"Možeš provjeriti tvoj odabir pritiskom na „Natrag” ili klikni „Prekini” za "
+"Možeš provjeriti tvoj odabir pritiskom na „Natrag” ili pritisni „Prekini” za "
 "prekid uvoza.\n"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:73
@@ -21010,16 +20958,16 @@ msgid ""
 "Note: After import, you may need to use 'View / Filter By / Other' menu "
 "option and select to show unused Accounts.\n"
 msgstr ""
-"Kad klikneš „Primijeni”, konta će se uvesti iz datoteke „%s”.\n"
+"Kada pritisneš „Primijeni”, konta će se uvesti iz datoteke „%s”.\n"
 "\n"
-"Možeš provjeriti tvoj odabir pritiskom na „Natrag” ili klikni „Prekini” za "
+"Možeš provjeriti tvoj odabir pritiskom na „Natrag” ili pritisni „Prekini” za "
 "prekid uvoza.\n"
 "\n"
 "Ako je ovo tvoj izvorni uvoz u datoteku, najprije ćeš vidjeti dijalog za "
 "postavljanje opcija knjige, budući da one utječu na način konvertiranja "
 "uvoza u GnuCash transakcije.\n"
-"Napomena: Nakon uvoza možda moraš primijeniti opciju u izborniku "
-"„Prikaz→Filtriraj / Ostalo” i odabrati prikazivanje nekorištenih konta.\n"
+"Napomena: Nakon uvoza možda moraš primijeniti opciju u izborniku „Prikaz / "
+"Filtriraj / Ostalo” i odabrati prikazivanje nekorištenih konta.\n"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:458
 #, c-format
@@ -21174,8 +21122,8 @@ msgid ""
 "To change mapping, double click on a row or select a row and press the "
 "button..."
 msgstr ""
-"Za promjenu mapiranja, upotrijebi dvoklik na redak ili odaberi redak i zatim "
-"klikni gumb …"
+"Za promjenu mapiranja, pritisni dvaput na redak ili odaberi redak i pritisni "
+"gumb …"
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2016
 #, c-format
@@ -21210,7 +21158,8 @@ msgstr ""
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2067
 msgid "Double click on rows to change, then click on Apply to Import"
 msgstr ""
-"Dvoklik na retke koje želiš promijeniti, zatim klikni „Primijeni“ za uvoz"
+"Pritisni dvaput na retke koje želiš promijeniti, zatim pritisni „Primijeni“ "
+"za uvoz"
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2122
@@ -22004,9 +21953,9 @@ msgid ""
 "are no errors or warnings, you will automatically proceed to the next step. "
 "Otherwise, the details will be shown below for your review."
 msgstr ""
-"Kad klikneš gumb za početak, GnuCash će učitati tvoju QIF datoteku. Ako nema "
-"grešaka ili upozorenja, nastavit će do sljedećeg koraka. U protivnom će "
-"ispod biti prikazani detalji, koje možeš pregledati."
+"Kad pritisneš gumb za početak, GnuCash će učitati tvoju QIF datoteku. Ako "
+"nema grešaka ili upozorenja, nastavit će do sljedećeg koraka. U protivnom će "
+"se dolje prikazati detalji koje možeš pregledati."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:2649
 msgid "Choose the QIF file currency"
@@ -22041,9 +21990,9 @@ msgid ""
 "are no errors or warnings, you will automatically proceed to the next step. "
 "Otherwise, the details will be shown below for your review."
 msgstr ""
-"Kad klikneš gumb za početak, GnuCash će uvesti tvoju QIF datoteku. Ako nema "
-"grešaka ili upozorenja, nastavit će do sljedećeg koraka. U protivnom će "
-"ispod biti prikazani detalji, koje možeš pregledati."
+"Kad pritisneš gumb za početak, GnuCash će uvesti tvoju QIF datoteku. Ako "
+"nema grešaka ili upozorenja, nastavit će do sljedećeg koraka. U protivnom će "
+"se dolje prikazati detalji koje možeš pregledati."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3414
 msgid "GnuCash was unable to save your mapping preferences."
@@ -22966,14 +22915,14 @@ msgstr ""
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
 msgstr ""
-"Ova se transakcija sastoji od višestrukih stavaka; klikni gumb „Proširi” za "
-"prikaz svih"
+"Ova se transakcija sastoji od višestrukih stavaka; pritisni gumb „Proširi” "
+"za prikaz svih"
 
 #: gnucash/register/ledger-core/split-register-model.c:1577
 msgid ""
 "This transaction is a stock split; press the Split button to see details"
 msgstr ""
-"Ova je transakcija podjela dionice; klikni gumb „Proširi” za prikaz detalja"
+"Ova je transakcija podjela dionice; pritisni gumb „Proširi” za prikaz detalja"
 
 #: gnucash/register/ledger-core/split-register-model.c:2096
 #, c-format
@@ -23480,7 +23429,7 @@ msgstr "Odaberi stilski predložak za izvještaj."
 #: gnucash/report/reports/aging.scm:38
 #: gnucash/report/reports/standard/new-aging.scm:40
 msgid "Sort By"
-msgstr "Razvrstaj prema"
+msgstr "Razvrstaj po"
 
 #: gnucash/report/reports/aging.scm:39
 #: gnucash/report/reports/standard/customer-summary.scm:77
@@ -23589,7 +23538,7 @@ msgstr ""
 #: gnucash/report/reports/aging.scm:345
 #: gnucash/report/reports/standard/new-aging.scm:93
 msgid "Sort companies by."
-msgstr "Razvrstaj poduzeća prema."
+msgstr "Razvrstaj poduzeća po."
 
 #: gnucash/report/reports/aging.scm:348
 #: gnucash/report/reports/standard/new-aging.scm:95
@@ -23737,7 +23686,7 @@ msgid ""
 "No valid account selected. Click on the Options button and select the "
 "account to use."
 msgstr ""
-"Nije odabran nijedan valjani konto. Klikni gumb „Opcije” i odaberi konto, "
+"Nije odabran nijedan valjani konto. Pritisni gumb „Opcije” i odaberi konto "
 "koji ćeš koristiti."
 
 #: gnucash/report/reports/example/average-balance.scm:38
@@ -23886,11 +23835,11 @@ msgstr "Rashod prema danu u tjednu"
 
 #: gnucash/report/reports/example/daily-reports.scm:42
 msgid "Shows a piechart with the total income for each day of the week"
-msgstr "Prikaži kružni dijagram s ukupnim prihodom za svaki dan u tjednu"
+msgstr "Prikazuje kružni dijagram s ukupnim prihodom za svaki dan u tjednu"
 
 #: gnucash/report/reports/example/daily-reports.scm:44
 msgid "Shows a piechart with the total expenses for each day of the week"
-msgstr "Prikaži kružni dijagram s ukupnim rashodom za svaki dan u tjednu"
+msgstr "Prikazuje kružni dijagram s ukupnim rashodom za svaki dan u tjednu"
 
 #: gnucash/report/reports/example/daily-reports.scm:58
 #: gnucash/report/reports/standard/account-piecharts.scm:71
@@ -24545,7 +24494,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/account-piecharts.scm:53
 msgid "Shows a piechart with the Liabilities balance at a given time"
-msgstr "Prikaži kružni dijagram sa saldom obveza u određenom trenutku"
+msgstr "Prikazuje kružni dijagram sa saldom obveza u određenom trenutku"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:59
 #: gnucash/report/reports/standard/customer-summary.scm:48
@@ -24838,7 +24787,7 @@ msgstr "Prikaži konta kao hiperpoveznice"
 #: gnucash/report/reports/standard/trial-balance.scm:126
 msgid "Shows each account in the table as a hyperlink to its register window."
 msgstr ""
-"Prikaži svaki konto u tablici kao hiperpoveznicu na njegov prozor registra."
+"Prikazuje svaki konto u tablici kao hiperpoveznicu na njegov prozor registra."
 
 #: gnucash/report/reports/standard/account-summary.scm:119
 msgid "Show an account's balance."
@@ -25477,7 +25426,7 @@ msgstr "Prikaži imovinu na lijevoj strani, obveze i kapital na desnoj"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:224
 msgid "Sign: -$10.00"
-msgstr "Znak: -10,00 kn"
+msgstr "Predznak: -10,00 kn"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:225
 msgid "Brackets: ($10.00)"
@@ -25596,7 +25545,7 @@ msgstr "Prikaži iznose kao hiperpoveznice"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:103
 msgid "Shows each amounts in the table as a hyperlink to a register or report."
 msgstr ""
-"Prikaži svaki iznos u tablici kao hiperpoveznicu na prozor registra ili "
+"Prikazuje svaki iznos u tablici kao hiperpoveznicu na prozor registra ili "
 "izvještaj."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:106
@@ -26334,16 +26283,14 @@ msgstr "Najveći broj naslaganja u stupčanom dijagramu."
 
 #: gnucash/report/reports/standard/category-barchart.scm:188
 #: gnucash/report/reports/standard/category-barchart.scm:262
-#, fuzzy
-#| msgid "Enable chart"
 msgid "Percentage chart"
-msgstr "Uključi dijagram"
+msgstr "Dijagram postotaka"
 
 #: gnucash/report/reports/standard/category-barchart.scm:189
 msgid ""
 "Display account contributions as a percentage of the total value for the "
 "period."
-msgstr ""
+msgstr "Prikaži doprinose računa kao postotak ukupne vrijednosti za razdoblje."
 
 #: gnucash/report/reports/standard/category-barchart.scm:292
 msgid "Invalid dates"
@@ -27274,8 +27221,8 @@ msgid ""
 "No valid invoice selected. Click on the Options button and select the "
 "invoice to use."
 msgstr ""
-"Nije odabran nijedan valjani izlazni račun. Klikni gumb „Opcije” i odaberi "
-"račun, koji ćeš koristiti."
+"Nije odabran nijedan valjani izlazni račun. Pristisni gumb „Opcije” i "
+"odaberi račun koji ćeš koristiti."
 
 #. Translators: This is the format of the invoice title.
 #. The first ~a is "Invoice", "Credit Note"... and the second the number.
@@ -27367,7 +27314,7 @@ msgstr "Nije odabran nijedan valjani zaposlenik."
 
 #: gnucash/report/reports/standard/job-report.scm:589
 msgid "Click on the \"Options\" button to select a company."
-msgstr "Za odabir poduzeća, klikni gumb „Opcije”."
+msgstr "Za odabir poduzeća, pritisni gumb „Opcije”."
 
 #: gnucash/report/reports/standard/lot-viewer.scm:60
 msgid "The account to search for lots."
@@ -29245,7 +29192,7 @@ msgstr "Redoslijed primarnog razvrstavanja."
 
 #: gnucash/report/trep-engine.scm:859
 msgid "Sort by this criterion second."
-msgstr "Razvrstaj zatim prema ovom kriteriju."
+msgstr "Razvrstaj zatim po ovom kriteriju."
 
 #: gnucash/report/trep-engine.scm:870
 msgid "Subtotal according to the secondary key?"
@@ -30224,7 +30171,7 @@ msgstr ""
 #: libgnucash/engine/gnc-commodity.h:114
 msgctxt "Commodity Type"
 msgid "All non-currency"
-msgstr "Sve ne-valutno"
+msgstr "Sve ne-valutna"
 
 #: libgnucash/engine/gnc-commodity.h:115
 msgctxt "Commodity Type"
@@ -30432,7 +30379,7 @@ msgstr "Provjera poslovnih stavaka u kontu „%s“: %u od %u"
 #: libgnucash/engine/Scrub.c:144
 #, c-format
 msgid "Looking for orphans in account %s: %u of %u"
-msgstr "Traženje nepovezanih stavaka u kontu „%s“: %u od %u"
+msgstr "Traženje nepovezanih stavki u kontu „%s“: %u od %u"
 
 #: libgnucash/engine/Scrub.c:354
 #, c-format

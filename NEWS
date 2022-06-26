@@ -1,5 +1,83 @@
 Version history:
 ------- -------
+4.11 - 26 June 2022
+Between 4.10 and 4.11, the following bugfixes were accomplished:
+
+    Bug 797163 - qof_book_get_option segfaults when retrieving a non-leaf frame
+    Bug 798053 - Accounts renumeration (renumbering)
+    Bug 798471 - Can't see or select Income or Expense accounts in Income Tax
+                 Information GUI
+    Bug 798483 - GnuCash Crashing With SIGSEGV During QFX Import Transaction
+                 Matching
+    Bug 798491 - MT940 of day 28.02.2022 ends in transactiondate 01.01.1970
+    Bug 798493 - Invoice Report Quantity & Unit Price fields have limited
+                 decimal precision on printed invoices
+    Bug 798496 - gncEntry Quantity and Discount are misusing commodity scu
+    Bug 798499 - Expense Chart data tables include extra columns of data
+    Bug 798500 - FTBFS (tests failure) on armhf
+    Bug 798501 - Balance wrong date end of period
+    Bug 798531 - Selecting "Print" from the file menu on a report crashes
+                 gnucash
+    Bug 798533 - Crash when importing quicken @ currency
+    Bug 798535 - Crash when increasing the number of periods in a budget
+    Bug 798547 - Calculated Due Date is short 1 day when posting on day of fall
+                 change from Daylight Time to Standard Time.
+
+The following fixes and improvements were not associated with bug reports:
+
+    Partially fix Bug 771095 by inserting a help button in the Since-Last-Run dialog.
+    Lock down GITHUB_TOKEN permissions on workflows.
+    [g_option_context_get_help() returns a char* which must be freed.
+    [assistant-stock-transaction] dividends must include stock account.
+    Fix arch linux CI build failures.
+    Add a help button to the financial calculator dialog.
+    [assistant-stock-transaction] avoid resetting txn_types unnecessarily.
+    [assistant-stock-transaction] reorder of Pages - date before type.
+    [import matcher] Only append description if there's something to append to.
+        Otherwise just set the new string.
+    [balsheet-pnl] test "lvl <= depth-limit" outside add-indented-row
+        this will be the first step trying to fix bug 798502. the bug likely
+        resides in the (if) conditional in (add-account-row).
+    [gnc-main-window] page->window is not main_window, skip warning.
+        This function gets called for both regular register *and* the embedded
+        register in the SX template editor. The latter is not a main_window,
+        and launching the SX editor would lead to warnings.
+    [gnc-plugin-page-register] if account==NULL, skip AccountIsPriced because
+        gnc_plugin_page_register_ui_initial_state may be called for non-account
+        registers (eg the sx editor) and account may be null.
+    [gnc-account-sel.c] prepend & reverse while building acct list
+        and don't use confusing double pointer
+    Fix use-after-free in unable to save database dialog.
+    [account.cpp] restore breadth-first search for 2 functions
+        gnc_account_lookup_by_name and gnc_account_lookup_by_code were
+        searching breadth-first and accidentally changed to depth-first in 4.7.
+    [reports] use new function names
+    [account.cpp] gnc_accounts_and_all_descendants converted from scm
+    [CI]Work around new git security measure.
+    [balsheet-pnl] faster definition of balance lists
+    [gnc-numeric.cpp] Reduce logging level of gnc_numeric exception message
+        because exceptions are expected in some use cases.
+    Redo icon handling in cmake
+    Using globs for file copying prevents cmake from discovering newly added
+        icons. Writing rules that explicitly use lists of icons will fix this
+        as a new icon in the sources will have to be added to the list and will
+        force reparsing by cmake. We have to maintain the lists anyway for our
+        dist target so there's actually no extra work involved for the devs.
+    [assistant-stock-transaction] better Dr/Cr imbalance error message
+
+New API:
+    gnc:accounts-and-all-descendants-sorted
+    gnc-accounts-and-all-descendantsNone
+
+Deprecations:
+    gnc:account-path-less-p
+    gnc:accounts-and-all-descendants
+
+New and Updated Translations: Arabic, Chinese (Simplified), Croatian,
+English (Australia), English (New Zealand), English (United Kingdom), French,
+German, Hebrew, Hindi, Hungarian, Italian, Korean, Nepali, Norwegian Bokmål,
+Polish, Portuguese (Brazil), Russian, Spanish, Swedish, Ukrainian
+
 4.10 - 27 March 2022
 The eleventh release of the 4.x Stable Series
 Between 4.9 and 4.10, the following bugfixes were accomplished:
