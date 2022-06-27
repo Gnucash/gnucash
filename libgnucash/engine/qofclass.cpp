@@ -21,62 +21,30 @@
  *                                                                  *
 \********************************************************************/
 
+#include <unordered_map>
+#include <string>
+#include <algorithm>
+
 #include <config.h>
-#include <glib.h>
 
 #include "qof.h"
 #include "qofclass-p.h"
 
 static QofLogModule log_module = QOF_MOD_CLASS;
 
-static GHashTable *classTable = NULL;
-static GHashTable *sortTable = NULL;
-static gboolean initialized = FALSE;
-
-static gboolean clear_table (gpointer key, gpointer value, gpointer user_data)
-{
-    g_hash_table_destroy (static_cast<GHashTable*>(value));
-    return TRUE;
-}
+using QofParamMap = std::unordered_map <std::string,const QofParam*>;
+static std::unordered_map<std::string,QofParamMap> classTable;
+static std::unordered_map<std::string,QofSortFunc> sortTable;
 
 /* *******************************************************************/
 /* PRIVATE FUNCTIONS */
-
-static gboolean check_init (void)
-{
-    if (initialized) return TRUE;
-
-    PERR("You must call qof_class_init() before using qof_class.");
-    return FALSE;
-}
-
-void
-qof_class_init(void)
-{
-    if (initialized) return;
-    initialized = TRUE;
-
-    classTable = g_hash_table_new (g_str_hash, g_str_equal);
-    sortTable = g_hash_table_new (g_str_hash, g_str_equal);
-}
-
-void
-qof_class_shutdown (void)
-{
-    if (!initialized) return;
-    initialized = FALSE;
-
-    g_hash_table_foreach_remove (classTable, clear_table, NULL);
-    g_hash_table_destroy (classTable);
-    g_hash_table_destroy (sortTable);
-}
 
 QofSortFunc
 qof_class_get_default_sort (QofIdTypeConst obj_name)
 {
     if (!obj_name) return NULL;
-    return reinterpret_cast<QofSortFunc>(g_hash_table_lookup (sortTable,
-							      obj_name));
+    auto sort_iter = sortTable.find (obj_name);
+    return sort_iter->second;
 }
 
 /* *******************************************************************/
@@ -87,26 +55,14 @@ qof_class_register (QofIdTypeConst obj_name,
                     QofSortFunc default_sort_function,
                     const QofParam *params)
 {
-    GHashTable *ht;
-    int i;
-
     if (!obj_name) return;
-    if (!check_init()) return;
 
     if (default_sort_function)
-    {
-        g_hash_table_insert (sortTable, (char *)obj_name,
-			     reinterpret_cast<void*>(default_sort_function));
-    }
+        sortTable.insert_or_assign (obj_name, default_sort_function);
 
-    ht = static_cast<GHashTable*>(g_hash_table_lookup (classTable, obj_name));
+    auto [class_iter, result] = classTable.insert ({obj_name, QofParamMap {}});
 
-    /* If it doesn't already exist, create a new table for this object */
-    if (!ht)
-    {
-        ht = g_hash_table_new (g_str_hash, g_str_equal);
-        g_hash_table_insert (classTable, (char *)obj_name, ht);
-    }
+    auto& param_map = class_iter->second;
 
     /* At least right now, we allow dummy, parameterless objects,
      * for testing purposes.  Although I suppose that should be
@@ -114,10 +70,8 @@ qof_class_register (QofIdTypeConst obj_name,
     /* Now insert all the parameters */
     if (params)
     {
-        for (i = 0; params[i].param_name; i++)
-            g_hash_table_insert (ht,
-                                 (char *)params[i].param_name,
-                                 (gpointer)&(params[i]));
+        for (int i = 0; params[i].param_name; i++)
+            param_map.insert_or_assign (params[i].param_name, &params[i]);
     }
 }
 
@@ -125,31 +79,30 @@ gboolean
 qof_class_is_registered (QofIdTypeConst obj_name)
 {
     if (!obj_name) return FALSE;
-    if (!check_init()) return FALSE;
 
-    if (g_hash_table_lookup (classTable, obj_name)) return TRUE;
+    auto class_iter = classTable.find (obj_name);
 
-    return FALSE;
+    return (class_iter != classTable.end());
 }
 
 const QofParam *
 qof_class_get_parameter (QofIdTypeConst obj_name,
                          const char *parameter)
 {
-    GHashTable *ht;
-
     g_return_val_if_fail (obj_name, NULL);
     g_return_val_if_fail (parameter, NULL);
-    if (!check_init()) return NULL;
 
-    ht = static_cast<GHashTable*>(g_hash_table_lookup (classTable, obj_name));
-    if (!ht)
+    auto class_iter = classTable.find (obj_name);
+    if (class_iter == classTable.end())
     {
         PWARN ("no object of type %s", obj_name);
         return NULL;
     }
 
-    return static_cast<QofParam*>(g_hash_table_lookup (ht, parameter));
+    auto& param_map = class_iter->second;
+    auto param_iter = param_map.find (parameter);
+
+    return param_iter != param_map.end() ? param_iter->second : nullptr;
 }
 
 QofAccessFunc
@@ -200,81 +153,38 @@ qof_class_get_parameter_type (QofIdTypeConst obj_name,
 
 /* ================================================================ */
 
-struct class_iterate
-{
-    QofClassForeachCB   fcn;
-    gpointer            data;
-};
-
-static void
-class_foreach_cb (gpointer key, gpointer item, gpointer arg)
-{
-    struct class_iterate *iter = static_cast<class_iterate*>(arg);
-    QofIdTypeConst id = static_cast<QofIdTypeConst>(key);
-
-    iter->fcn (id, iter->data);
-}
-
 void
 qof_class_foreach (QofClassForeachCB cb, gpointer user_data)
 {
-    struct class_iterate iter;
-
     if (!cb) return;
-    if (!classTable) return;
 
-    iter.fcn = cb;
-    iter.data = user_data;
-
-    g_hash_table_foreach (classTable, class_foreach_cb, &iter);
+    std::for_each (classTable.begin(), classTable.end(),
+                   [&cb, &user_data](const auto& it)
+                   { cb (it.first.c_str(), user_data); });
 }
 
 /* ================================================================ */
-
-struct parm_iterate
-{
-    QofParamForeachCB   fcn;
-    gpointer            data;
-};
-
-static void
-param_foreach_cb (gpointer key, gpointer item, gpointer arg)
-{
-    struct parm_iterate *iter = static_cast<parm_iterate*>(arg);
-    QofParam *parm = static_cast<QofParam*>(item);
-
-    iter->fcn (parm, iter->data);
-}
 
 void
 qof_class_param_foreach (QofIdTypeConst obj_name,
                          QofParamForeachCB cb, gpointer user_data)
 {
-    struct parm_iterate iter;
-    GHashTable *param_ht;
-
     if (!obj_name || !cb) return;
-    if (!classTable) return;
-    param_ht = static_cast<GHashTable*>(g_hash_table_lookup (classTable, obj_name));
-    if (!param_ht) return;
 
-    iter.fcn = cb;
-    iter.data = user_data;
+    auto class_iter = classTable.find (obj_name);
+    if (class_iter == classTable.end())
+        return;
 
-    g_hash_table_foreach (param_ht, param_foreach_cb, &iter);
+    auto& param_map = class_iter->second;
+
+    std::for_each (param_map.begin(), param_map.end(),
+                   [&cb, &user_data](const auto& it)
+                   { cb (const_cast<QofParam*>(it.second), user_data); });
 }
-
-struct param_ref_list
-{
-    GList *list;
-};
 
 static void
 find_reference_param_cb(QofParam *param, gpointer user_data)
 {
-    struct param_ref_list *b;
-
-    b = (struct param_ref_list*)user_data;
     if ((param->param_getfcn == NULL) || (param->param_setfcn == NULL))
     {
         return;
@@ -327,20 +237,16 @@ find_reference_param_cb(QofParam *param, gpointer user_data)
     {
         return;
     }
-    b->list = g_list_append(b->list, param);
+    auto list = static_cast<GList*>(user_data);
+    list = g_list_prepend (list, param);
 }
 
 GList*
 qof_class_get_referenceList(QofIdTypeConst type)
 {
-    GList *ref_list;
-    struct param_ref_list b;
-
-    ref_list = NULL;
-    b.list = NULL;
-    qof_class_param_foreach(type, find_reference_param_cb, &b);
-    ref_list = g_list_copy(b.list);
-    return ref_list;
+    GList *list = nullptr;
+    qof_class_param_foreach(type, find_reference_param_cb, &list);
+    return g_list_reverse (list);
 }
 
 
