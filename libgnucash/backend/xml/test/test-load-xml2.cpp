@@ -59,7 +59,7 @@ extern "C"
 #define GNC_LIB_REL_PATH "xml"
 
 static void
-remove_files_pattern (const char* begining, const char* ending)
+remove_files_pattern (const char* beginning, const char* ending)
 {
 }
 
