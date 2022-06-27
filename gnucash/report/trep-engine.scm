@@ -1881,25 +1881,22 @@ be excluded from periodic reporting.")
    (lambda (cell)
      (cell-match? cell row col))
    grid))
-(define (grid-del grid row col)
-  ;; grid filter - del all row/col - if #f then delete whole row/col
-  (filter
-   (lambda (cell)
-     (not (cell-match? cell row col)))
-   grid))
 (define (grid-rows grid)
   (delete-duplicates (map (lambda (cell) (vector-ref cell 0)) grid)))
 (define (grid-cols grid)
   (delete-duplicates (map (lambda (cell) (vector-ref cell 1)) grid)))
 (define (grid-add grid row col data)
-  ;;misonomer - we don't 'add' to existing data, we delete old data
-  ;;stored at row/col and add again. this is fine because the grid
-  ;;should never have duplicate data in the trep.
-  (set! grid (grid-del grid row col))
-  (set! grid (cons (vector row col data) grid))
-  grid)
-(define (grid->html-table grid list-of-rows list-of-cols)
-  (define row-average-enabled? (> (length list-of-cols) 1))
+  ;; we don't need to check for duplicate cells in a row/col because
+  ;; in the trep it should never happen.
+  (cons (vector row col data) grid))
+(define (grid->html-table grid)
+  (define (<? a b)
+    (cond ((string? (car a)) (gnc:string-locale<? (car a) (car b)))
+          ((number? (car a)) (< (car a) (car b)))
+          (else (gnc:error "unknown sortvalue"))))
+  (define list-of-rows (sort (delete 'row-total (grid-rows grid)) <?))
+  (define list-of-cols (sort (delete 'col-total (grid-cols grid)) <?))
+  (define row-average-enabled? (pair? (cdr list-of-cols)))
   (define (monetary-div monetary divisor)
     (and monetary
          (let* ((amount (gnc:gnc-monetary-amount monetary))
@@ -2276,19 +2273,7 @@ warning will be removed in GnuCash 5.0"))
              (gnc:html-render-options-changed options)))
 
           (when subtotal-table?
-            (let* ((generic<?
-                    (lambda (a b)
-                      (cond ((string? (car a)) (gnc:string-locale<? (car a) (car b)))
-                            ((number? (car a)) (< (car a) (car b)))
-                            (else (gnc:error "unknown sortvalue")))))
-                   (list-of-rows
-                    (stable-sort! (delete 'row-total (grid-rows grid))
-                                  generic<?))
-                   (list-of-cols
-                    (stable-sort! (delete 'col-total (grid-cols grid))
-                                  generic<?)))
-              (gnc:html-document-add-object!
-               document (grid->html-table grid list-of-rows list-of-cols))))
+            (gnc:html-document-add-object! document (grid->html-table grid)))
 
           (unless (and subtotal-table?
                        (opt-val pagename-sorting optname-show-subtotals-only))
