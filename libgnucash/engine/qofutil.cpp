@@ -259,7 +259,6 @@ void
 qof_init (void)
 {
     qof_log_init();
-    qof_string_cache_init();
     qof_object_initialize ();
     qof_query_init ();
     qof_book_register ();
@@ -271,7 +270,6 @@ qof_close(void)
     qof_query_shutdown ();
     qof_object_shutdown ();
     QofBackend::release_backends();
-    qof_string_cache_destroy ();
     qof_log_shutdown();
 }
 

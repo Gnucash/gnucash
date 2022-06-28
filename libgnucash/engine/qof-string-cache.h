@@ -58,23 +58,15 @@ extern "C"
  * just decrement the reference count.  Basically you should use this
  * instead of g_free.
  *
- * Just in case it's not clear: The remove function must NOT be called
- * for the string you passed INTO the insert function.  It must be
- * called for the _cached_ string that is _returned_ by the insert
- * function.
- *
  * Note that all the work is done when inserting or removing.  Once
- * cached the strings are just plain C strings.
+ * cached the strings are std::string objects.
  *
- * The string cache is demand-created on first use.
+ * The string cache is always available.
  *
  **/
 
-/** Initialize the string cache */
-void qof_string_cache_init(void);
-
-/** Destroy the qof_string_cache */
-void qof_string_cache_destroy(void);
+/** Clear the string cache */
+void qof_string_cache_clear (void);
 
 /** You can use this function as a destroy notifier for a GHashTable
    that uses common strings as keys (or values, for that matter.)

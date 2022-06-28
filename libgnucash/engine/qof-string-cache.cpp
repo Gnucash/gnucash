@@ -25,7 +25,9 @@
  *   Author: Linas Vepstas (linas@linas.org)                        *
  *   Author: Phil Longstaff (phil.longstaff@yahoo.ca)               *
 \********************************************************************/
-#include <glib.h>
+
+#include <string>
+#include <unordered_map>
 
 extern "C"
 {
@@ -43,40 +45,16 @@ static QofLogModule log_module = QOF_MOD_UTIL;
 /* =================================================================== */
 /* The QOF string cache                                                */
 /*                                                                     */
-/* The cache is a GHashTable where a copy of the string is the key,    */
-/* and a ref count is the value                                        */
+/* The cache is an unordered_map where a copy of the string is the     */
+/* key, and a ref count is the value                                   */
 /* =================================================================== */
 
-static GHashTable* qof_string_cache = NULL;
-
-static GHashTable*
-qof_get_string_cache(void)
-{
-    if (!qof_string_cache)
-    {
-        qof_string_cache = g_hash_table_new_full(
-                               g_str_hash,               /* hash_func          */
-                               g_str_equal,              /* key_equal_func     */
-                               g_free,                   /* key_destroy_func   */
-                               g_free);                  /* value_destroy_func */
-    }
-    return qof_string_cache;
-}
+static std::unordered_map<std::string, guint> qof_string_cache;
 
 void
-qof_string_cache_init(void)
+qof_string_cache_clear (void)
 {
-    (void)qof_get_string_cache();
-}
-
-void
-qof_string_cache_destroy (void)
-{
-    if (qof_string_cache)
-    {
-        g_hash_table_destroy(qof_string_cache);
-    }
-    qof_string_cache = NULL;
+    qof_string_cache.clear();
 }
 
 /* If the key exists in the cache, check the refcount.  If 1, just
@@ -84,24 +62,18 @@ qof_string_cache_destroy (void)
 void
 qof_string_cache_remove(const char * key)
 {
-    if (key && key[0] != 0)
-    {
-        GHashTable* cache = qof_get_string_cache();
-        gpointer value;
-        gpointer cache_key;
-        if (g_hash_table_lookup_extended(cache, key, &cache_key, &value))
-        {
-            guint* refcount = (guint*)value;
-            if (*refcount == 1)
-            {
-                g_hash_table_remove(cache, key);
-            }
-            else
-            {
-                --(*refcount);
-            }
-        }
-    }
+    if (!key || !key[0])
+        return;
+
+    auto cache_iter = qof_string_cache.find (key);
+    if (cache_iter == qof_string_cache.end())
+        return;
+
+    auto& refcount = cache_iter->second;
+    if (refcount == 1)
+        qof_string_cache.erase (cache_iter);
+    else
+        refcount--;
 }
 
 /* If the key exists in the cache, increment the refcount.  Otherwise,
@@ -109,32 +81,16 @@ qof_string_cache_remove(const char * key)
 const char *
 qof_string_cache_insert(const char * key)
 {
-    if (key)
-    {
-        if (key[0] == 0)
-        {
-            return "";
-        }
+    if (!key)
+        return nullptr;
 
-        GHashTable* cache = qof_get_string_cache();
-        gpointer value;
-        gpointer cache_key;
-        if (g_hash_table_lookup_extended(cache, key, &cache_key, &value))
-        {
-            guint* refcount = (guint*)value;
-            ++(*refcount);
-            return static_cast <char *> (cache_key);
-        }
-        else
-        {
-            gpointer new_key = g_strdup(static_cast<const char*>(key));
-            guint* refcount = static_cast<unsigned int*>(g_malloc(sizeof(guint)));
-            *refcount = 1;
-            g_hash_table_insert(cache, new_key, refcount);
-            return static_cast <char *> (new_key);
-        }
-    }
-    return NULL;
+    if (!key[0])
+        return "";
+
+    auto [cache_iter, inserted] = qof_string_cache.insert ({key, 0});
+    (cache_iter->second)++;
+
+    return cache_iter->first.c_str();
 }
 
 const char *
