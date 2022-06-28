@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-06-20 23:46+0200\n"
-"PO-Revision-Date: 2022-06-26 22:20+0000\n"
+"PO-Revision-Date: 2022-06-28 00:18+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -584,7 +584,7 @@ msgstr "Nyugati (Windows-1252)"
 
 #: borrowed/goffice/go-charmap-sel.c:441
 msgid "Locale: "
-msgstr "Hely : "
+msgstr "Hely: "
 
 #: borrowed/goffice/go-charmap-sel.c:476
 #, fuzzy
@@ -5368,7 +5368,9 @@ msgstr "Munkatárs"
 msgid ""
 "The owner %s will be deleted.\n"
 "Are you sure you want to do this?"
-msgstr "A tulajdonos %s törölve lesz. Biztosan ezt akarja?"
+msgstr ""
+"%s tulajdonos törölve lesz.\n"
+"Biztosan ezt akarja?"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:194
 #: gnucash/gnome/gnc-plugin-page-register.c:297
@@ -14220,17 +14222,6 @@ msgid "Match QIF categories with GnuCash accounts"
 msgstr "QIF-kategóriák és GnuCash-számlák összevetése"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:787
-#, fuzzy
-#| msgid ""
-#| "QIF files downloaded from banks and other financial institutions may not "
-#| "have information about Accounts and Categories which would allow them to "
-#| "be correctly assigned to GnuCash accounts.\n"
-#| "\n"
-#| "In the following page, you will see the text that appears in the Payee "
-#| "and Memo fields of transactions with no QIF Account or Category. By "
-#| "default these transactions are assigned to the 'Unspecified' account in "
-#| "GnuCash. If you select a different account, it will be remembered for "
-#| "future QIF files. "
 msgid ""
 "QIF files downloaded from banks and other financial institutions may not "
 "have information about Accounts and Categories which would allow them to be "
@@ -14241,9 +14232,15 @@ msgid ""
 "these transactions are assigned to the 'Unspecified' account in GnuCash. If "
 "you select a different account, it will be remembered for future QIF files."
 msgstr ""
-"Bankoktól és más pénzügyi intézetektől letöltött QIF fájlok nem mindig "
+"A bankoktól és más pénzügyi intézetektől letöltött QIF fájlok nem mindig "
 "tartalmaznak a számlákról és kategóriákról megfelelő információt, amelyek "
-"alapján GnuCash számlákhoz lehetne rendelni azokat."
+"alapján helyesen lehetne GnuCash számlákhoz hozzárendelni őket.\n"
+"\n"
+"A következő oldalon azt a szöveget fogja látni, amely a Kedvezményezett és a "
+"Jegyzet mezőkben jelenik meg a QIF-számla vagy kategória nélküli "
+"tranzakcióknál. Alapértelmezés szerint ezek a tranzakciók a GnuCash „Nem "
+"meghatározott” számlájához vannak rendelve. Ha másik fiókot választ, a "
+"rendszer emlékezni fog rá a jövőbeni QIF-fájlokhoz."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:800
 msgid "Payees and memos"
@@ -15183,9 +15180,8 @@ msgid "Discount Day"
 msgstr "Engedménynapok"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:251
-#, fuzzy
 msgid "Cutoff Day"
-msgstr "Fordulónap: "
+msgstr "Fordulónap:"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:265
 msgid ""
@@ -15301,7 +15297,7 @@ msgstr "Összes költség"
 
 #: gnucash/gtkbuilder/dialog-choose-owner.glade:7
 msgid "Choose Owner Dialog"
-msgstr "Tulajdonos kiválasztása "
+msgstr "Tulajdonos kiválasztása"
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:8
 #: gnucash/gtkbuilder/dialog-commodities.glade:27
@@ -15491,7 +15487,7 @@ msgstr "Cím"
 #: gnucash/report/reports/aging.scm:696
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:187
 msgid "Email"
-msgstr "Email "
+msgstr "E-mail"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:422
 msgid "Billing Address"
@@ -18202,11 +18198,8 @@ msgid "Value $"
 msgstr "Érték"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:289
-#, fuzzy
 msgid "Percent %"
-msgstr ""
-"Érték $\n"
-"Százalék %"
+msgstr "Százalék %"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:385
 msgid "<b>Tax Table Entry</b>"
@@ -19895,56 +19888,45 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:610
-#, fuzzy
 msgid ""
 "You did not enter a recipient name. A recipient name is required for an "
 "online transfer.\n"
 msgstr ""
-"Nem adták meg tranzakció célját. Egy cél szükséges az online átutaláshoz.\n"
+"Nem adta meg a címzett nevét. Az online átutaláshoz szükséges a címzett neve."
 "\n"
-"Újra be akarja vinni a feladatot?"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:630
-#, fuzzy
 msgid ""
 "You did not enter a recipient account. A recipient account is required for "
 "an online transfer.\n"
 msgstr ""
-"Nem adták meg tranzakció célját. Egy cél szükséges az online átutaláshoz.\n"
-"\n"
-"Újra be akarja vinni a feladatot?"
+"Nem adta meg a címzett számláját. Az online átutaláshoz szükséges a címzett "
+"számlája.\n"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:646
-#, fuzzy
 msgid ""
 "You did not enter a recipient bank. A recipient bank is required for an "
 "online transfer.\n"
 msgstr ""
-"Nem adták meg tranzakció célját. Egy cél szükséges az online átutaláshoz.\n"
-"\n"
-"Újra be akarja vinni a feladatot?"
+"Nem adta meg a címzett bankját. Az online átutaláshoz szükséges a címzett "
+"bankja.\n"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:664
-#, fuzzy
 msgid ""
 "The amount is zero or the amount field could not be interpreted correctly. "
 "You might have mixed up decimal point and comma, compared to your locale "
 "settings. This does not result in a valid online transfer job."
 msgstr ""
-"Az összeg nulla vagy az összeg mező nem értelmezhető. Talán összekeverte a "
-"tizedesvesszőt és pontot. Ez nem eredményez érvényes online átutalást.\n"
-"\n"
-"Kívánja újra bevinni a feladatot?"
+"Az összeg nulla, vagy az összeg mező nem értelmezhető helyesen. Talán "
+"összekeverte a tizedespontot és a vesszőt. Ez nem eredményez érvényes online "
+"átutalást."
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:681
-#, fuzzy
 msgid ""
 "You did not enter any transaction purpose. A purpose is required for an "
 "online transfer.\n"
 msgstr ""
-"Nem adták meg tranzakció célját. Egy cél szükséges az online átutaláshoz.\n"
-"\n"
-"Újra be akarja vinni a feladatot?"
+"Nem adta meg tranzakció célját. Egy cél szükséges az online átutaláshoz.\n"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:1098
 msgid ""
@@ -20225,7 +20207,9 @@ msgstr[0] ""
 msgid ""
 "The PIN needs to be at least %d characters\n"
 "long. Do you want to try again?"
-msgstr "A PIN-kód legalább %d karakter kell legyen. Akarja újrapróbálni?"
+msgstr ""
+"A PIN-kód legalább %d karakter kell legyen.\n"
+"Szeretné újra megpróbálni?"
 
 #: gnucash/import-export/aqb/gnc-gwen-gui.c:1676
 msgid ""
@@ -20417,9 +20401,9 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:297
-#, fuzzy, c-format
+#, c-format
 msgid "Validation...\n"
-msgstr "alkalmazás"
+msgstr "Érvényesítés...\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:327
 #, c-format
@@ -20532,9 +20516,9 @@ msgid "Invoice %s NOT posted because it requires currency conversion.\n"
 msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:920
-#, fuzzy, c-format
+#, c-format
 msgid "Nothing to process.\n"
-msgstr "Nincs figyelmeztetés alaphelyzetre való visszaállításkor."
+msgstr "Nincs mit feldolgozni.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:138
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:123
@@ -20880,11 +20864,8 @@ msgstr "Néhány karakter el lett dobva."
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:980
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:945
-#, fuzzy
 msgid "There was a problem saving the settings, please try again."
-msgstr ""
-"Baj van a következő opcióval: %s:%s.\n"
-"%s"
+msgstr "Hiba történt a beállítások mentésekor, kérlek próbáld újra."
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1146
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1119
@@ -21200,9 +21181,8 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:519
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:574
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:582
-#, fuzzy
 msgid "Column '{1}' could not be understood.\n"
-msgstr "%s oszlop nem értelmezhető"
+msgstr "A(z) '{1}' oszlop nem értelmezhető.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:280
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:327
