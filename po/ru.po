@@ -13,14 +13,15 @@
 # Val Saven <val.saven@gmail.com>, 2021.
 # Artem <KovalevArtem.ru@gmail.com>, 2021.
 # МАН69К <weblate@mah69k.net>, 2022.
+# Nikita Samoilov <n.p.samoilov@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-06-20 23:46+0200\n"
-"PO-Revision-Date: 2022-06-08 13:14+0000\n"
-"Last-Translator: МАН69К <weblate@mah69k.net>\n"
+"PO-Revision-Date: 2022-06-27 17:20+0000\n"
+"Last-Translator: Nikita Samoilov <n.p.samoilov@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ru/>\n"
 "Language: ru\n"
@@ -29,7 +30,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 "X-Source-Language: C\n"
 
 # For the translation in '../borrowed/goffice/go-charmap-sel.c' see 
@@ -463,6 +464,9 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
+"Списки рассылки являются предпочтительной формой коммуникации в сообществе "
+"GnuCash. Объявления о новых выпусках, группах пользователей и т.д. см. в "
+"таблице https://wiki.gnucash.org/wiki/Mailing_Lists"
 
 #: doc/tip_of_the_day.list.c:11
 msgid ""
@@ -494,6 +498,10 @@ msgid ""
 "(File[->Most Recently Used-List]).\n"
 "The full path is displayed in the status bar."
 msgstr ""
+"Если вы желаете знать, в каких директориях хранятся недавние файлы GnuCash, "
+"наведите курсор на одну из записей в меню\n"
+"(Файл[->Список недавних]).\n"
+"Полный путь отображается в строке статуса."
 
 #: doc/tip_of_the_day.list.c:24
 msgid ""
@@ -513,6 +521,9 @@ msgid ""
 "Just locate the triangle at the far right of the column headings, and click "
 "it to see the different columns available."
 msgstr ""
+"Можно изменить столбцы, отображаемые в плане счетов. Просто найдите "
+"треугольник справа от заголовков столбцов и щелкните его, чтобы увидеть "
+"различные доступные столбцы."
 
 #: doc/tip_of_the_day.list.c:33
 msgid ""
@@ -547,6 +558,12 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgstr ""
+"Каждая проводка имеет поле \"Примечания\", куда можно поместить полезную "
+"информацию.\n"
+"\n"
+"Чтобы сделать его видимым\n"
+"выберите \"Вид\" в строке меню и установите флажок \"Две строки\" или\n"
+"установите флажок \"Двустрочный режим\" в Настройки:Настройки журнала."
 
 #: doc/tip_of_the_day.list.c:50
 msgid ""
@@ -897,6 +914,9 @@ msgid ""
 "new accounts. Accounts in other currencies must be\n"
 "added manually."
 msgstr ""
+"Вы выбрали валюту книги и она будет\n"
+"использована для новых счетов. Счета в других\n"
+"валютах необходимо добавлять вручную."
 
 #: gnucash/gnome/assistant-hierarchy.c:1495
 msgid "Please choose the currency to use for new accounts."
@@ -1585,10 +1605,8 @@ msgstr "Выбран виртуальный счёт. Попробуйте ещ�
 
 #: gnucash/gnome/dialog-doclink.c:161
 #: gnucash/gnome/gnc-plugin-page-register.c:4773
-#, fuzzy
-#| msgid "Select Account"
 msgid "Select document"
-msgstr "Выбрать счет"
+msgstr "Выбрать документ"
 
 #: gnucash/gnome/dialog-doclink.c:164 gnucash/gnome/gnc-plugin-budget.c:323
 #: gnucash/gnome-search/search-account.c:238
@@ -1661,21 +1679,19 @@ msgstr "Выбрать счет"
 #: gnucash/import-export/aqb/dialog-ab.glade:598
 #: gnucash/import-export/aqb/dialog-ab.glade:906
 msgid "_OK"
-msgstr ""
+msgstr "ОК"
 
 #: gnucash/gnome/dialog-doclink.c:242
-#, fuzzy
 msgid "Amend URL:"
-msgstr "Ввести"
+msgstr "Изменить URL:"
 
 #: gnucash/gnome/dialog-doclink.c:246
 msgid "Enter URL like http://www.gnucash.org:"
-msgstr ""
+msgstr "Введите URL-адрес, например http://www.gnucash.org:"
 
 #: gnucash/gnome/dialog-doclink.c:260
-#, fuzzy
 msgid "Existing Document Link is"
-msgstr "Существующие активы"
+msgstr "Существующая ссылка на документ"
 
 #: gnucash/gnome/dialog-doclink.c:531 gnucash/gnome/dialog-doclink.c:576
 msgid "File Found"
@@ -1694,9 +1710,8 @@ msgid "Address Not Found"
 msgstr "Адрес не найден"
 
 #: gnucash/gnome/dialog-doclink.c:598 gnucash/gnome/dialog-imap-editor.c:883
-#, fuzzy
 msgid "Total Entries"
-msgstr "Итоговая цена"
+msgstr "Всего записей"
 
 #: gnucash/gnome/dialog-doclink.c:656
 #, fuzzy
@@ -1710,25 +1725,21 @@ msgstr "Не удалось открыть исходный файл."
 #: gnucash/gnome/gnc-plugin-page-invoice.c:1361
 #: gnucash/gnome/gnc-plugin-page-register.c:653
 msgid "Manage Document Link"
-msgstr ""
+msgstr "Управление ссылкой на документ"
 
 #: gnucash/gnome/dialog-doclink.c:760
-#, fuzzy
 msgid "Transaction can not be modified."
-msgstr "Сумма проводки"
+msgstr "Проводку нельзя изменить."
 
 #: gnucash/gnome/dialog-doclink.c:821 libgnucash/engine/gncOwner.c:215
-#, fuzzy
 msgid "Undefined"
-msgstr "Определённая пользователем"
+msgstr "Не определено"
 
 #. Translators: This is the label of a dialog box that lists all of the
 #. transaction that have files or URIs linked with them.
 #: gnucash/gnome/dialog-doclink.c:1080
-#, fuzzy
-#| msgid "Transaction Details"
 msgid "Transaction Document Links"
-msgstr "Детали проводки"
+msgstr "Ссылки на документы к проводкам"
 
 #: gnucash/gnome/dialog-doclink.c:1083
 #: gnucash/gnome/dialog-find-transactions2.c:157
@@ -1784,15 +1795,12 @@ msgstr ""
 "'Документ', чтобы открыть Документ."
 
 #: gnucash/gnome/dialog-doclink.c:1103
-#, fuzzy
 msgid "Business Document Links"
-msgstr "_Документы проводок"
+msgstr "Документы проводок"
 
 #: gnucash/gnome/dialog-employee.c:213
-#, fuzzy
-#| msgid "You must enter a payment address."
 msgid "You must enter a Payment-Address Name."
-msgstr "Вы должны указать назначение платежа."
+msgstr "Вы должны указать имя назначения платежа."
 
 #: gnucash/gnome/dialog-employee.c:308
 msgid "Edit Employee"
@@ -1885,9 +1893,8 @@ msgid "The number of payments cannot be negative."
 msgstr "Число платежей не может быть отрицательным."
 
 #: gnucash/gnome/dialog-find-account.c:378
-#, fuzzy
 msgid "Find Account"
-msgstr "_Найти счёт"
+msgstr "Найти счёт"
 
 #: gnucash/gnome/dialog-find-account.c:415
 msgid "Place Holder"
@@ -1909,17 +1916,15 @@ msgid "Balance Zero"
 msgstr "Нулевой баланс"
 
 #: gnucash/gnome/dialog-find-account.c:459
-#, fuzzy
 msgid "Tax related"
-msgstr "Относящиеся к _налогам"
+msgstr "Относящиеся к налогам"
 
 #. Translators: %s is a full account name.
 #. This is a label in Search Account from context menu.
 #: gnucash/gnome/dialog-find-account.c:491
-#, fuzzy, c-format
-#| msgid "Accounts in '%s'"
+#, c-format
 msgid "Su_b-accounts of '%s'"
-msgstr "Счета в '%s'"
+msgstr "Субсчета в '%s'"
 
 #: gnucash/gnome/dialog-find-transactions2.c:107
 #: gnucash/gnome/dialog-find-transactions.c:105
@@ -2192,11 +2197,13 @@ msgstr "Код счёта"
 #: gnucash/gnome/dialog-imap-editor.c:370
 msgid "(Note, if there is a large number, it may take a while)"
 msgstr ""
+"(Обратите внимание, если имеется большое значение, это может занять "
+"некоторое время)"
 
 #: gnucash/gnome/dialog-imap-editor.c:704
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:123
 msgid "Bayesian"
-msgstr ""
+msgstr "Байесовский"
 
 #: gnucash/gnome/dialog-imap-editor.c:719
 #, fuzzy
@@ -2323,12 +2330,12 @@ msgstr "Сторно"
 
 #: gnucash/gnome/dialog-invoice.c:2102
 msgid "PAID"
-msgstr ""
+msgstr "ОПЛАЧЕНО"
 
 #: gnucash/gnome/dialog-invoice.c:2104
 #: gnucash/report/reports/standard/new-owner-report.scm:575
 msgid "UNPAID"
-msgstr ""
+msgstr "НЕ ОПЛАЧЕНО"
 
 #: gnucash/gnome/dialog-invoice.c:2152 gnucash/gnome/dialog-invoice.c:2171
 #: gnucash/gnome/dialog-invoice.c:2190
@@ -2388,9 +2395,8 @@ msgid "View Expense Voucher"
 msgstr "Просмотреть товарный чек"
 
 #: gnucash/gnome/dialog-invoice.c:2523
-#, fuzzy
 msgid "Open Linked Document:"
-msgstr "Новый счёт"
+msgstr "Открыть связанный документ:"
 
 #: gnucash/gnome/dialog-invoice.c:2637 gnucash/gnome/dialog-invoice.c:2862
 msgid "Bill Information"
@@ -2601,10 +2607,10 @@ msgstr "Найти счёт-фактуру"
 #. Translators: %d is the number of bills/credit notes due. This is a
 #. ngettext(3) message.
 #: gnucash/gnome/dialog-invoice.c:3721
-#, fuzzy, c-format
+#, c-format
 msgid "The following vendor document is due:"
 msgid_plural "The following %d vendor documents are due:"
-msgstr[0] "Следующий %d счёт должен быть оплачен к:"
+msgstr[0] "Следующий счёт должен быть оплачен к:"
 msgstr[1] "Следующие %d счёта должны быть оплачены к:"
 msgstr[2] "Следующие %d счетов должны быть оплачены к:"
 
@@ -2615,10 +2621,10 @@ msgstr "Напоминание о платежах"
 #. Translators: %d is the number of invoices/credit notes due. This is a
 #. ngettext(3) message.
 #: gnucash/gnome/dialog-invoice.c:3732
-#, fuzzy, c-format
+#, c-format
 msgid "The following customer document is due:"
 msgid_plural "The following %d customer documents are due:"
-msgstr[0] "Следующий %d счёт должен быть оплачен к:"
+msgstr[0] "Следующий счёт должен быть оплачен к:"
 msgstr[1] "Следующие %d счёта должны быть оплачены к:"
 msgstr[2] "Следующие %d счетов должны быть оплачены к:"
 
@@ -2636,12 +2642,8 @@ msgid "You must choose an owner for this job."
 msgstr "Вы должны выбрать владельца для этой операции."
 
 #: gnucash/gnome/dialog-job.c:157
-#, fuzzy
-#| msgid "Credit must be a positive amount or you must leave it blank."
 msgid "The rate amount must be valid or you must leave it blank."
-msgstr ""
-"Кредит должен быть положительным числом, или вы должны оставить это поле "
-"пустым."
+msgstr "Ставка должна быть положительной, иначе оставьте поле пустым."
 
 #: gnucash/gnome/dialog-job.c:258
 msgid "Edit Job"
@@ -2802,10 +2804,8 @@ msgid "You must select a company for payment processing."
 msgstr "Вы должны выбрать фирму для осуществления платежа."
 
 #: gnucash/gnome/dialog-payment.c:260
-#, fuzzy
-#| msgid "There was a problem with the import."
 msgid "There is a problem with the Payment or Refund amount."
-msgstr "Возникла проблема при импорте."
+msgstr "Возникла проблема с суммами платежа или возврата."
 
 #: gnucash/gnome/dialog-payment.c:281
 msgid "You must select a transfer account from the account tree."
@@ -2816,6 +2816,8 @@ msgid ""
 "No documents were selected to assign this payment to. This may create an "
 "unattached payment."
 msgstr ""
+"Не выбраны документы для назначения этого платежа. Это может создать "
+"неприсоединенный платеж."
 
 #: gnucash/gnome/dialog-payment.c:542 gnucash/gnome/dialog-payment.c:1361
 #: gnucash/report/reports/standard/new-aging.scm:180
@@ -2893,6 +2895,8 @@ msgid ""
 "The selected transaction doesn't have splits that can be assigned as a "
 "payment"
 msgstr ""
+"Выбранная транзакция не имеет разделений, которые можно назначить в качестве "
+"платежа"
 
 #: gnucash/gnome/dialog-payment.c:1624
 msgid ""
@@ -2908,9 +2912,8 @@ msgid "Warning"
 msgstr "Сбросить предупреждения"
 
 #: gnucash/gnome/dialog-payment.c:1630 gnucash/gnome/dialog-payment.c:1750
-#, fuzzy
 msgid "Continue"
-msgstr "Непрерывно"
+msgstr "Продолжить"
 
 #: gnucash/gnome/dialog-payment.c:1631
 #: gnucash/gnome/gnc-plugin-page-invoice.c:453
@@ -2953,23 +2956,20 @@ msgid "Entries"
 msgstr "Записи"
 
 #: gnucash/gnome/dialog-price-edit-db.c:458
-#, fuzzy
 msgid "Are you sure you want to delete these prices?"
-msgstr "Вы действительно желаете удалить %d выбранную цену?"
+msgstr "Вы действительно желаете удалить выбранные цены?"
 
 #: gnucash/gnome/dialog-price-editor.c:226
-#, fuzzy
 msgid "Are you sure you want to replace the existing price?"
-msgstr "Вы действительно желаете удалить %d выбранную цену?"
+msgstr "Вы действительно желаете заменить существующую цену?"
 
 #: gnucash/gnome/dialog-price-editor.c:232
-#, fuzzy
 msgid "Replace price?"
-msgstr "Записанные цены."
+msgstr "Заменить цену?"
 
 #: gnucash/gnome/dialog-price-editor.c:238
 msgid "_Replace"
-msgstr ""
+msgstr "_Заменить"
 
 #: gnucash/gnome/dialog-price-editor.c:269
 msgid "You must select a Security."
@@ -2989,9 +2989,9 @@ msgid "Cannot save check format file."
 msgstr "Невозможно сохранить файл чековых форматов."
 
 #: gnucash/gnome/dialog-print-check.c:825
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open file %s"
-msgstr "Невозможно открыть текущий лог-файл: %s"
+msgstr "Не удается открыть файл: %s"
 
 #: gnucash/gnome/dialog-print-check.c:1513
 msgid "There is a duplicate check format file."
@@ -3353,7 +3353,7 @@ msgstr "Декларация о доходах"
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:40
 #: gnucash/gtkbuilder/dialog-tax-info.glade:43
 msgid "_Apply"
-msgstr ""
+msgstr "_Применить"
 
 #: gnucash/gnome/dialog-tax-info.c:1240
 msgid ""
@@ -3644,10 +3644,8 @@ msgid "View and Delete Bayesian and non-Bayesian information"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:216
-#, fuzzy
-#| msgid "Transaction amount"
 msgid "_Transaction Linked Documents"
-msgstr "Сумма проводки"
+msgstr "_Документы проводки"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:217
 #, fuzzy
@@ -3688,44 +3686,40 @@ msgstr[2] ""
 "автоматически)"
 
 #: gnucash/gnome/gnc-plugin-budget.c:63
-#, fuzzy
 msgid "_New Budget"
-msgstr "Новый бюджет"
+msgstr "_Новый бюджет"
 
 #: gnucash/gnome/gnc-plugin-budget.c:64
-#, fuzzy
 msgid "Create a new Budget."
-msgstr "Создать новый бюджет"
+msgstr "Создать новый бюджет."
 
 #: gnucash/gnome/gnc-plugin-budget.c:69
-#, fuzzy
 msgid "_Open Budget"
-msgstr "Открыть бюджет"
+msgstr "_Открыть бюджет"
 
 #: gnucash/gnome/gnc-plugin-budget.c:70
 msgid ""
 "Open an existing Budget in a new tab. If none exists a new budget will be "
 "created."
 msgstr ""
+"Открыть существующий бюджет в новой вкладке. Если его не существует, будет "
+"создан новый бюджет."
 
 #: gnucash/gnome/gnc-plugin-budget.c:75
-#, fuzzy
 msgid "_Copy Budget"
-msgstr "Копировать бюджет"
+msgstr "_Копировать бюджет"
 
 #: gnucash/gnome/gnc-plugin-budget.c:76
-#, fuzzy
 msgid "Copy an existing Budget."
-msgstr "Копировать существующий бюджет"
+msgstr "Копировать существующий бюджет."
 
 #: gnucash/gnome/gnc-plugin-budget.c:80
 msgid "_Delete Budget"
 msgstr "_Удалить бюджет"
 
 #: gnucash/gnome/gnc-plugin-budget.c:81
-#, fuzzy
 msgid "Delete an existing Budget."
-msgstr "Открыть существующий бюджет"
+msgstr "Удалить существующий бюджет."
 
 #: gnucash/gnome/gnc-plugin-budget.c:321
 msgid "Select a Budget"
@@ -3973,9 +3967,8 @@ msgid "Assign the selected transaction as payment"
 msgstr "Назначить выбранную проводку в качестве платежа"
 
 #: gnucash/gnome/gnc-plugin-business.c:331
-#, fuzzy
 msgid "Edit payment..."
-msgstr "Назначить как платёж..."
+msgstr "Изменить платёж..."
 
 #: gnucash/gnome/gnc-plugin-business.c:332
 #, fuzzy
@@ -4062,14 +4055,12 @@ msgid "Delete selected account"
 msgstr "Удалить выбранный счёт"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:258
-#, fuzzy
 msgid "_Cascade Account Properties..."
-msgstr "Цвет счёта"
+msgstr "_Каскадные настройки счета..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:259
-#, fuzzy
 msgid "Cascade selected properties for account"
-msgstr "Выберите корректный счёт займов."
+msgstr "Внести настройки на все подсчета"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:263
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:268
@@ -4082,9 +4073,8 @@ msgstr "_Найти счёт"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:269
 #: gnucash/gnome/gnc-plugin-page-register2.c:251
 #: gnucash/gnome/gnc-plugin-page-register.c:365
-#, fuzzy
 msgid "Find an account"
-msgstr "Поиск проводок"
+msgstr "Найти счет"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:273
 msgid "_Renumber Subaccounts..."
@@ -4260,7 +4250,7 @@ msgstr "Удалить"
 #: gnucash/gnome/gnc-plugin-page-register.c:1990
 #: gnucash/gnome/gnc-plugin-page-register.c:5081
 msgid "'Check & Repair' is currently running, do you want to abort it?"
-msgstr ""
+msgstr "'Проверить и восстановить' запущен, хотите остановить?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:521
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:527
@@ -4299,12 +4289,15 @@ msgid "Accounts"
 msgstr "Счета"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1430
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Account %s does not have the same currency as the one you're moving "
 "transactions from.\n"
 "Are you sure you want to do this?"
-msgstr "Вы действительно хотите перезаписать существующую проводку?"
+msgstr ""
+"Валюта счета %s отличается от валюты счета, с которого вы перемещаете "
+"проводки.\n"
+"Вы уверены что хотите продолжить?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1438
 #, fuzzy
@@ -4313,7 +4306,7 @@ msgstr "_Выбрать счёт для передачи"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1439
 msgid "_Do it anyway"
-msgstr ""
+msgstr "_Всё равно выполнить"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1522
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1658
@@ -4342,6 +4335,9 @@ msgid ""
 "\n"
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
+"Счет \"%s\" имеет более одного субсчета.\n"
+"\n"
+"Переместите субсчета или удалите из перед удалением этого счета."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1729
 #, c-format
@@ -4359,14 +4355,14 @@ msgid "All transactions in this account will be deleted."
 msgstr "Все проводки в этом счёте будут удалены."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1754
-#, fuzzy, c-format
+#, c-format
 msgid "Its sub-account will be moved to the account %s."
-msgstr "Все его субсчета будут перенесены на счёт %s."
+msgstr "Субсчет будет перенесен на счёт %s."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1760
-#, fuzzy, c-format
+#, c-format
 msgid "Its subaccount will be deleted."
-msgstr "Все его субсчета будут удалены."
+msgstr "Его субсчёт будет удалён."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1764
 #, c-format
@@ -4383,42 +4379,36 @@ msgid "Are you sure you want to do this?"
 msgstr "Вы уверены, что хотите сделать это?"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:147
-#, fuzzy
 msgid "Open the selected account."
-msgstr "Открыть выбранный счет"
+msgstr "Открыть выбранный счет."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:152
 msgid "Open _Subaccounts"
 msgstr "Открыть _субсчета"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:153
-#, fuzzy
 msgid "Open the selected account and all its subaccounts."
-msgstr "Открыть выбранный счёт и все его субсчета"
+msgstr "Открыть выбранный счёт и все его субсчета."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:159
-#, fuzzy
 msgid "_Delete Budget..."
-msgstr "_Удалить бюджет"
+msgstr "_Удалить бюджет..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:160
 msgid "Select this or another budget and delete it."
-msgstr ""
+msgstr "Выбрать этот или другой бюджет и удалить его."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:164
-#, fuzzy
 msgid "Budget _Options..."
-msgstr "Настройки бюджета"
+msgstr "_Настройки бюджета..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:165
-#, fuzzy
 msgid "Edit this budget's options."
-msgstr "Изменить параметры этого бюджета"
+msgstr "Изменить параметры этого бюджета."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:169
-#, fuzzy
 msgid "Esti_mate Budget..."
-msgstr "Оценка бюджета"
+msgstr "Оценка бюджета..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:171
 #, fuzzy
@@ -4427,14 +4417,12 @@ msgid ""
 msgstr "Оценка параметров бюджета для выделенных счетов по сделанным проводкам"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:175
-#, fuzzy
 msgid "_All Periods..."
-msgstr "Период"
+msgstr "_Все периоды..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:177
-#, fuzzy
 msgid "Edit budget for all periods for the selected accounts."
-msgstr "Изменить выбранный счёт"
+msgstr "Изменить бюджет для всех периодов для выбранных счетов."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:181
 #, fuzzy
@@ -4452,15 +4440,12 @@ msgid "Budget Report"
 msgstr "Бюджетный отчет"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:189
-#, fuzzy
-#| msgid "Print the current report"
 msgid "Run the budget report."
-msgstr "Напечатать текущий отчет"
+msgstr "Запустить бюджетный отчёт."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:199
-#, fuzzy
 msgid "Refresh this window."
-msgstr "Обновить это окно"
+msgstr "Обновить это окно."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:233
 #: gnucash/gnome/gnc-plugin-page-report.c:1137
@@ -4475,9 +4460,8 @@ msgid "Estimate"
 msgstr "Оценить"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:235
-#, fuzzy
 msgid "All Periods"
-msgstr "Период"
+msgstr "Все периоды"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:236
 #, fuzzy
@@ -4485,10 +4469,8 @@ msgid "Note"
 msgstr "Заметки"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:237
-#, fuzzy
-#| msgid "Account Report"
 msgid "Run Report"
-msgstr "Отчёт по счёту"
+msgstr "Запустить отчет"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:321
 #: gnucash/gnome/gnc-plugin-page-budget.c:362
@@ -4517,14 +4499,12 @@ msgid "You must select at least one account to estimate."
 msgstr "Вы должны выбрать хотя бы один счёт для оценки."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:1171
-#, fuzzy
 msgid "You must select at least one account to edit."
-msgstr "Вы должны выбрать хотя бы один счёт для оценки."
+msgstr "Вы должны выбрать хотя бы один счёт для изменения."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:1273
-#, fuzzy
 msgid "You must select one budget cell to edit."
-msgstr "Вы должны выбрать хотя бы один счёт для оценки."
+msgstr "Вы должны выбрать одну ячейку бюджета для редактирования."
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:109
 msgid "Sort _Order"
@@ -4661,9 +4641,8 @@ msgid "Sort by description"
 msgstr "Упорядочить по описанию"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:296
-#, fuzzy
 msgid "_Print Invoice"
-msgstr "Печать счёта-фактуры"
+msgstr "_Печать счёта-фактуры"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:297
 msgid "_Edit Invoice"
@@ -4708,9 +4687,8 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-invoice.c:346
 #: gnucash/gnome/gnc-plugin-page-invoice.c:367
 #: gnucash/gnome/gnc-plugin-page-register.c:309
-#, fuzzy
 msgid "_Open Linked Document"
-msgstr "Новый счёт"
+msgstr "_Открыть привязанный документ"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:310
 msgid "_Use as Default Layout for Customer Documents"
@@ -4721,19 +4699,16 @@ msgid "_Reset Default Layout for Customer Documents"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:317
-#, fuzzy
 msgid "_Print Bill"
-msgstr "Печать"
+msgstr "_Печать"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:318
-#, fuzzy
 msgid "_Edit Bill"
-msgstr "Изменить платеж"
+msgstr "_Изменить платеж"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:319
-#, fuzzy
 msgid "_Duplicate Bill"
-msgstr "Дублировать"
+msgstr "_Дублировать"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:320
 #, fuzzy
@@ -19115,9 +19090,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:134
-#, fuzzy
 msgid "Add"
-msgstr "_Адрес"
+msgstr "Добавить"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:138
 msgid "Add 'value' to current budget for each period"
