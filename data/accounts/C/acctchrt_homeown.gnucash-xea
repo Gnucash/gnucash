@@ -106,6 +106,12 @@
   </act:commodity>
   <act:description>Taxes</act:description>
   <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Property Tax</act:name>

@@ -73,6 +73,12 @@
   </act:commodity>
   <act:description>Insurance</act:description>
   <act:parent type="new">9a2b4520f113372f4e576f5b6dc129c6</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Rental Insurance</act:name>
