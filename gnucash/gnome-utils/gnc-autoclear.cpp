@@ -22,11 +22,12 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *******************************************************************/
 
+#include <numeric>
 #include <cmath>
 #include <vector>
-#include <unordered_map>
 #include <unordered_set>
 #include <chrono>
+#include <boost/unordered_map.hpp>
 
 #include <config.h>
 #include <gtk/gtk.h>
@@ -98,23 +99,6 @@ static void looping_update_status (GtkLabel *label, guint nc_progress,
     g_free (text);
 }
 
-class Hasher
-{
-public:
-    size_t operator() (gint64 const& key) const
-    {
-        return key;
-    }
-};
-class EqualFn
-{
-public:
-    bool operator() (gint64 const& t1, gint64 const& t2) const
-    {
-        return (t1 == t2);
-    }
-};
-
 static inline gint64
 normalize_num (gnc_numeric amount, int denom)
 {
@@ -123,11 +107,12 @@ normalize_num (gnc_numeric amount, int denom)
 };
 
 static gint
-count_unique (SplitVec nc_vector, int commodity_scu)
+count_unique (SplitVec nc_vector, int scu)
 {
-    std::unordered_set<gint64, Hasher, EqualFn> buckets {};
-    for (auto& n : nc_vector)
-        buckets.insert (normalize_num (xaccSplitGetAmount (n), commodity_scu));
+    std::unordered_set<gint64> buckets;
+    std::for_each (nc_vector.begin(), nc_vector.end(),
+                   [&buckets, &scu](const auto& e)
+                   { buckets.insert (normalize_num (xaccSplitGetAmount (e), scu)); });
     return buckets.size ();
 }
 
@@ -136,21 +121,17 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                           time64 end_date,
                           GList **splits, GError **error, GtkLabel *label)
 {
-    SplitVec nc_vector {};
-    std::unordered_map<gint64, SplitVec, Hasher, EqualFn> sack;
+    SplitVec nc_vector, solution;
+    boost::unordered_map <gint64, SplitVec> sack;
     guint nc_progress = 0;
     int commodity_scu;
     gboolean debugging_enabled = qof_log_check (G_LOG_DOMAIN, QOF_LOG_DEBUG);
     GQuark autoclear_quark = g_quark_from_static_string ("autoclear");
     gint64 toclear_normalized;
-    Timer timer { std::chrono::seconds (2) };
+    Timer timer { std::chrono::seconds (10) };
 
     g_return_val_if_fail (GNC_IS_ACCOUNT (account), FALSE);
     g_return_val_if_fail (splits != nullptr, FALSE);
-
-    *splits = nullptr;
-
-    nc_vector.reserve(g_list_length(xaccAccountGetSplitList(account)));
 
     /* Extract which splits are not cleared and compute the amount we have to clear */
     for (GList *node = xaccAccountGetSplitList (account); node; node = node->next)
@@ -171,8 +152,6 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
             nc_vector.push_back (split);
     }
 
-    nc_vector.shrink_to_fit ();
-
     if (gnc_numeric_zero_p (toclear_value))
     {
         g_set_error (error, autoclear_quark, AUTOCLEAR_NOP, "%s",
@@ -191,24 +170,21 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 
     sack.reserve (pow (2, count_unique (nc_vector, commodity_scu)) - 1);
 
-    for (auto& split : nc_vector)
+    for (const auto& split : nc_vector)
     {
         auto amount = xaccSplitGetAmount (split);
         auto amount_normalized = normalize_num (amount, commodity_scu);
-        std::vector<WorkItem> workvector {};
+        std::vector<WorkItem> workvector;
 
         workvector.reserve (sack.size () + 1);
         if (sack.find (amount_normalized) != sack.end ())
             workvector.emplace_back (amount_normalized, SplitVec{});
         else
-        {
-            SplitVec new_splits = { split };
-            workvector.emplace_back (amount_normalized, std::move(new_splits));
-        }
+            workvector.emplace_back (amount_normalized, SplitVec{split});
 
         // printf ("new split. sack size = %ld\n", sack.size());
 
-        for (auto& [map_value, map_splits] : sack)
+        for (const auto& [map_value, map_splits] : sack)
         {
             gint64 new_value;
             if (__builtin_add_overflow (map_value, amount_normalized, &new_value))
@@ -217,12 +193,11 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                              "Overflow error: Amount numbers are too large!");
                 goto skip_knapsack;
             }
-            if (map_splits.empty() ||
-                sack.find (new_value) != sack.end ())
+            if (map_splits.empty() || sack.find (new_value) != sack.end ())
                 workvector.emplace_back (new_value, SplitVec{});
             else
             {
-                SplitVec new_splits{};
+                SplitVec new_splits;
                 new_splits.reserve(map_splits.size() + 1);
                 new_splits = map_splits;
                 new_splits.push_back (split);
@@ -230,7 +205,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
             }
         }
 
-        for (auto& item : workvector)
+        for (const auto& item : workvector)
             sack.insert_or_assign(item.reachable_amount, std::move(item.splits_vector));
 
         looping_update_status (label, ++nc_progress, nc_vector.size (), sack.size ());
@@ -273,9 +248,10 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         goto skip_knapsack;
     }
 
-    /* copy GList because std::unordered_map value will be freed */
-    for (auto& s : sack[toclear_normalized])
-        *splits = g_list_prepend (*splits, s);
+    /* copy GList because unordered_map value will be freed */
+    solution = sack[toclear_normalized];
+    *splits = std::accumulate (solution.begin(), solution.end(),
+                               static_cast<GList*>(nullptr), g_list_prepend);
 
  skip_knapsack:
 
