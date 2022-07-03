@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-06-20 23:46+0200\n"
-"PO-Revision-Date: 2022-06-28 00:18+0000\n"
+"PO-Revision-Date: 2022-07-03 23:21+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -10423,7 +10423,7 @@ msgstr "Ez egy fejlesztői változat. Talán működik, talán nem."
 #: gnucash/gnucash-core-app.cpp:82
 msgid "Report bugs and other problems to gnucash-devel@gnucash.org"
 msgstr ""
-"Küldjék a programhibákat és más problémákat gnucash-devel@gnucash.org címre!"
+"A programhibákat és más problémákat gnucash-devel@gnucash.org címre küldjék"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:84
@@ -15967,9 +15967,8 @@ msgid "Based On"
 msgstr "Vége"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:219
-#, fuzzy
 msgid "Match String"
-msgstr "Nincs egyező!"
+msgstr "Karakterláncok összehasonlítása"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:233
 #, fuzzy
@@ -19215,10 +19214,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/window-autoclear.glade:101
-#, fuzzy
-#| msgid "Fraction"
 msgid "Caution!"
-msgstr "Egység"
+msgstr "Vigyázat!"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:116
 msgid ""
@@ -25967,22 +25964,19 @@ msgid "Total Expenses"
 msgstr "Költségek összesen"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:527
-#, fuzzy, scheme-format
-#| msgid "Budget Name"
+#, scheme-format
 msgid "for Budget ~a"
-msgstr "Költségvetés neve"
+msgstr "Költségvetés ~a"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:529
-#, fuzzy, scheme-format
-#| msgid "Budget Period"
+#, scheme-format
 msgid "for Budget ~a Period ~d"
-msgstr "Költségvetés-időszak"
+msgstr "Költségvetés ~a Időszak ~d"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:532
-#, fuzzy, scheme-format
-#| msgid "Budget Period"
+#, scheme-format
 msgid "for Budget ~a Periods ~d - ~d"
-msgstr "Költségvetés-időszak"
+msgstr "Költségvetés ~a Időszaka ~d - ~d"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:560
 #: gnucash/report/reports/standard/equity-statement.scm:457
@@ -27174,9 +27168,8 @@ msgstr "A számlára helyezendő extra közlemények"
 
 #: gnucash/report/reports/standard/invoice.scm:329
 #: gnucash/report/reports/standard/taxinvoice.scm:205
-#, fuzzy
 msgid "Thank you for your patronage!"
-msgstr "Köszönjük a támogatását"
+msgstr "Köszönjük a támogatását!"
 
 #: gnucash/report/reports/standard/invoice.scm:333
 msgid "Row 1 Left"
@@ -27207,9 +27200,8 @@ msgstr "Jobb"
 
 #: gnucash/report/reports/standard/invoice.scm:421
 #: gnucash/report/reports/standard/job-report.scm:239
-#, fuzzy
 msgid "Payment, thank you!"
-msgstr "Fizetés, köszönöm"
+msgstr "Fizetés, köszönjük!"
 
 #. Translators: This "T" is displayed in the taxable column, if this entry contains tax
 #: gnucash/report/reports/standard/invoice.scm:478
@@ -27999,9 +27991,8 @@ msgstr "%B %#d, %Y"
 
 #: gnucash/report/reports/standard/receipt.scm:139
 #: gnucash/report/reports/standard/taxinvoice.scm:190
-#, fuzzy
 msgid "Payment received, thank you!"
-msgstr "Fizetés, beérkezett köszönet"
+msgstr "Fizetés beérkezett, köszönjük!"
 
 #: gnucash/report/reports/standard/receipt.scm:143
 msgid "Notes added at end of invoice -- may contain HTML markup"
@@ -30570,4 +30561,4 @@ msgstr "Tranzakció érvénytelenítve"
 
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
-msgstr "Segítség nem áll rendelkezésre."
+msgstr "Nem áll rendelkezésre segítség."
