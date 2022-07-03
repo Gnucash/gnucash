@@ -86,6 +86,11 @@ teardown( Fixture *fixture, gconstpointer pData )
     gncInvoiceBeginEdit(fixture->invoice);
     gncInvoiceDestroy(fixture->invoice);
 
+    xaccAccountBeginEdit(fixture->account);
+    xaccAccountDestroy(fixture->account);
+    xaccAccountBeginEdit(fixture->account2);
+    xaccAccountDestroy(fixture->account2);
+
     if (data->is_cust_doc)
     {
         gncCustomerBeginEdit(fixture->customer);
@@ -97,10 +102,6 @@ teardown( Fixture *fixture, gconstpointer pData )
         gncVendorDestroy(fixture->vendor);
     }
 
-    xaccAccountBeginEdit(fixture->account);
-    xaccAccountDestroy(fixture->account);
-    xaccAccountBeginEdit(fixture->account2);
-    xaccAccountDestroy(fixture->account2);
     gnc_commodity_destroy(fixture->commodity);
 
     qof_book_destroy( fixture->book );
