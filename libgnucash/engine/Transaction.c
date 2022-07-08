@@ -2112,6 +2112,12 @@ xaccTransSetTxnType (Transaction *trans, char type)
     GValue v = G_VALUE_INIT;
     g_return_if_fail(trans);
     g_value_init (&v, G_TYPE_STRING);
+    qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, TRANS_TXN_TYPE_KVP);
+    if (!g_strcmp0 (s, g_value_get_string (&v)))
+    {
+        g_value_unset (&v);
+        return;
+    }
     g_value_set_string (&v, s);
     xaccTransBeginEdit(trans);
     qof_instance_set_kvp (QOF_INSTANCE (trans), &v, 1, TRANS_TXN_TYPE_KVP);
