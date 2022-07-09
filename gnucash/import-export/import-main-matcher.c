@@ -894,6 +894,30 @@ typedef enum
     NOTES,
 } edit_field;
 
+typedef struct
+{
+    Split *split;
+    Transaction *trans;
+    GtkTreeIter iter;
+} RowInfo;
+
+static void rowinfo_free (RowInfo* info)
+{
+    g_free (info);
+}
+
+static RowInfo * row_get_info (gpointer row, GNCImportMainMatcher *info)
+{
+    GNCImportTransInfo *trans_info;
+    GtkTreeModel *model = gtk_tree_view_get_model (info->view);
+    RowInfo *retval = g_new (RowInfo, 1);
+    gtk_tree_model_get_iter (model, &retval->iter, row);
+    gtk_tree_model_get (model, &retval->iter, DOWNLOADED_COL_DATA, &trans_info, -1);
+    retval->trans = gnc_import_TransInfo_get_trans (trans_info);
+    retval->split = gnc_import_TransInfo_get_fsplit (trans_info);
+    return retval;
+}
+
 static void
 gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info,
                            edit_field field)
@@ -901,12 +925,9 @@ gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info,
     GtkTreeView *treeview;
     GtkTreeSelection *selection;
     GtkTreeModel *model;
-    GList *selected_rows;
-    GList *refs = NULL;
+    GList *selected_rows, *row_info_list;
     GtkTreeStore* store;
-    GNCImportTransInfo *trans_info;
     Transaction* trans;
-    GtkTreeIter iter;
 
     g_return_if_fail (info != NULL);
     ENTER("assign_transfer_account_to_selection_cb");
@@ -923,18 +944,8 @@ gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info,
         return;
     }
 
-    if (selected_rows->next)
-    {
-        LEAVE ("User selected multiple rows, not supported");
-        return;
-    }
-
-    g_return_if_fail (gtk_tree_model_get_iter (model, &iter,
-                                               selected_rows->data));
-
-    gtk_tree_model_get (model, &iter, DOWNLOADED_COL_DATA,
-                        &trans_info, -1);
-    trans = gnc_import_TransInfo_get_trans (trans_info);
+    row_info_list = gnc_g_list_map (selected_rows, (GncGMapFunc) row_get_info, info);
+    trans = ((RowInfo*)row_info_list->data)->trans;
 
     switch (field)
     {
@@ -945,24 +956,33 @@ gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info,
                                             _("Enter new Description"),
                                             xaccTransGetDescription (trans));
             if (!new_field) break;
-            xaccTransSetDescription (trans, new_field);
-            gtk_tree_store_set (store, &iter, DOWNLOADED_COL_DESCRIPTION,
-                                new_field, -1);
+            for (GList *n = row_info_list; n; n = g_list_next (n))
+            {
+                RowInfo *info = n->data;
+                xaccTransSetDescription (info->trans, new_field);
+                gtk_tree_store_set (store, &info->iter,
+                                    DOWNLOADED_COL_DESCRIPTION, new_field,
+                                    -1);
+            }
             g_free (new_field);
             break;
         }
         case MEMO:
         {
-            Split *first_split =
-                gnc_import_TransInfo_get_fsplit (trans_info);
+            Split *first_split = xaccTransGetSplit (trans, 0);
             char *new_field =
                 gnc_input_dialog_with_entry(info->main_widget, "",
                                             _("Enter new Memo"),
                                             xaccSplitGetMemo (first_split));
             if (!new_field) break;
-            xaccSplitSetMemo (first_split, new_field);
-            gtk_tree_store_set (store, &iter,
-                                DOWNLOADED_COL_MEMO, new_field, -1);
+            for (GList *n = row_info_list; n; n = g_list_next (n))
+            {
+                RowInfo *info = n->data;
+                xaccSplitSetMemo (info->split, new_field);
+                gtk_tree_store_set (store, &info->iter,
+                                    DOWNLOADED_COL_MEMO, new_field,
+                                    -1);
+            }
             g_free (new_field);
             break;
         }
@@ -973,11 +993,16 @@ gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info,
                                             _("Enter new Notes"),
                                             xaccTransGetNotes (trans));
             if (!new_field) break;
-            xaccTransSetNotes (trans, new_field);
+            for (GList *n = row_info_list; n; n = g_list_next (n))
+            {
+                RowInfo *info = n->data;
+                xaccTransSetNotes (info->trans, new_field);
+            }
             g_free (new_field);
             break;
         }
     }
+    g_list_free_full (row_info_list, (GDestroyNotify)rowinfo_free);
     g_list_free_full (selected_rows, (GDestroyNotify)gtk_tree_path_free);
     LEAVE("");
 }
@@ -1092,6 +1117,11 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
 {
     GtkWidget *menu, *menuitem;
     GdkEventButton *event_button;
+    GtkTreeModel *model;
+    GtkTreeSelection *selection;
+    GList *selected_rows;
+    const char *desc, *memo, *notes;
+    gboolean edit_desc = TRUE, edit_notes = TRUE, edit_memo = TRUE;
 
     ENTER ("");
     menu = gtk_menu_new();
@@ -1104,7 +1134,31 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
     DEBUG("Callback to assign destination account to selection connected");
     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
-    if (show_edit_actions)
+    model = gtk_tree_view_get_model (treeview);
+    selection = gtk_tree_view_get_selection (treeview);
+    selected_rows = gtk_tree_selection_get_selected_rows (selection, &model);
+    for (GList *n = selected_rows; (edit_desc || edit_notes || edit_memo) && n;
+         n = g_list_next(n))
+    {
+        RowInfo *rowinfo = row_get_info (n->data, info);
+        if (!n->prev)       /* only the first row */
+        {
+            desc = xaccTransGetDescription (rowinfo->trans);
+            notes = xaccTransGetNotes (rowinfo->trans);
+            memo = xaccSplitGetMemo (rowinfo->split);
+            rowinfo_free (rowinfo);
+            continue;
+        }
+        if (edit_desc && g_strcmp0 (desc, xaccTransGetDescription (rowinfo->trans)))
+            edit_desc = FALSE;
+        if (edit_notes && g_strcmp0 (notes, xaccTransGetNotes (rowinfo->trans)))
+            edit_notes = FALSE;
+        if (edit_memo && g_strcmp0 (memo, xaccSplitGetMemo (rowinfo->split)))
+            edit_memo = FALSE;
+        rowinfo_free (rowinfo);
+    }
+
+    if (edit_desc)
     {
         menuitem = gtk_menu_item_new_with_label (
                                                  _("Edit description."));
@@ -1113,7 +1167,10 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
                           info);
         DEBUG("Callback to edit description");
         gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+    }
 
+    if (edit_memo)
+    {
         menuitem = gtk_menu_item_new_with_label (
                                                  _("Edit memo."));
         g_signal_connect (menuitem, "activate",
@@ -1121,7 +1178,10 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
                           info);
         DEBUG("Callback to edit memo");
         gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+    }
 
+    if (edit_notes)
+    {
         menuitem = gtk_menu_item_new_with_label (
                                                  _("Edit notes."));
         g_signal_connect (menuitem, "activate",
@@ -1135,6 +1195,7 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
     /* Note: event can be NULL here when called from view_onPopupMenu; */
     gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent*)event);
 
+    g_list_free_full (selected_rows, (GDestroyNotify)gtk_tree_path_free);
     LEAVE ("");
 }
 
@@ -1160,9 +1221,7 @@ gnc_gen_trans_onButtonPressed_cb (GtkTreeView *treeview,
             // or the selected transaction is an ADD.
             selection = gtk_tree_view_get_selection (treeview);
             count = gtk_tree_selection_count_selected_rows (selection);
-            if (count > 1)
-                gnc_gen_trans_view_popup_menu (treeview, event, info, FALSE);
-            else if (count > 0)
+            if (count > 0)
             {
                 GList* selected;
                 GtkTreeModel *model;
