@@ -1114,7 +1114,6 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
                                GNCImportMainMatcher *info)
 {
     GtkWidget *menu, *menuitem;
-    GdkEventButton *event_button;
     GtkTreeModel *model;
     GtkTreeSelection *selection;
     GList *selected_rows;
@@ -1156,40 +1155,28 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
         rowinfo_free (rowinfo);
     }
 
-    if (edit_desc)
-    {
-        menuitem = gtk_menu_item_new_with_label (
-                                                 _("Edit description."));
-        g_signal_connect (menuitem, "activate",
-                          G_CALLBACK (gnc_gen_trans_edit_description_cb),
-                          info);
-        DEBUG("Callback to edit description");
-        gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-    }
+    menuitem = gtk_menu_item_new_with_label (_("Edit description."));
+    gtk_widget_set_sensitive (menuitem, edit_desc);
+    g_signal_connect (menuitem, "activate",
+                      G_CALLBACK (gnc_gen_trans_edit_description_cb),
+                      info);
+    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
-    if (edit_memo)
-    {
-        menuitem = gtk_menu_item_new_with_label (
-                                                 _("Edit memo."));
-        g_signal_connect (menuitem, "activate",
-                          G_CALLBACK (gnc_gen_trans_edit_memo_cb),
-                          info);
-        DEBUG("Callback to edit memo");
-        gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-    }
+    menuitem = gtk_menu_item_new_with_label (_("Edit memo."));
+    gtk_widget_set_sensitive (menuitem, edit_memo);
+    g_signal_connect (menuitem, "activate",
+                      G_CALLBACK (gnc_gen_trans_edit_memo_cb),
+                      info);
+    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
-    if (edit_notes)
-    {
-        menuitem = gtk_menu_item_new_with_label (
-                                                 _("Edit notes."));
-        g_signal_connect (menuitem, "activate",
-                          G_CALLBACK (gnc_gen_trans_edit_notes_cb),
-                          info);
-        DEBUG("Callback to edit notes");
-        gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-    }
+    menuitem = gtk_menu_item_new_with_label (_("Edit notes."));
+    gtk_widget_set_sensitive (menuitem, edit_notes);
+    g_signal_connect (menuitem, "activate",
+                      G_CALLBACK (gnc_gen_trans_edit_notes_cb),
+                      info);
+    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+
     gtk_widget_show_all (menu);
-    event_button = (GdkEventButton *) event;
     /* Note: event can be NULL here when called from view_onPopupMenu; */
     gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent*)event);
 
