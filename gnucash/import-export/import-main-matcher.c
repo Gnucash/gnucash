@@ -130,8 +130,7 @@ static void gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *
                                                                    GNCImportMainMatcher *info);
 static void gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
                                            GdkEvent *event,
-                                           GNCImportMainMatcher *info,
-                                           gboolean show_edit_actions);
+                                           GNCImportMainMatcher *info);
 static gboolean gnc_gen_trans_onButtonPressed_cb (GtkTreeView *treeview,
                                                   GdkEvent *event,
                                                   GNCImportMainMatcher *info);
@@ -1112,8 +1111,7 @@ gnc_gen_trans_row_changed_cb (GtkTreeSelection *selection,
 static void
 gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
                                GdkEvent *event,
-                               GNCImportMainMatcher *info,
-                               gboolean show_edit_actions)
+                               GNCImportMainMatcher *info)
 {
     GtkWidget *menu, *menuitem;
     GdkEventButton *event_button;
@@ -1227,7 +1225,7 @@ gnc_gen_trans_onButtonPressed_cb (GtkTreeView *treeview,
                 GtkTreeModel *model;
                 selected = gtk_tree_selection_get_selected_rows (selection, &model);
                 if (get_action_for_path (selected->data, model) == GNCImport_ADD)
-                    gnc_gen_trans_view_popup_menu (treeview, event, info, TRUE);
+                    gnc_gen_trans_view_popup_menu (treeview, event, info);
                 g_list_free_full (selected, (GDestroyNotify)gtk_tree_path_free);
             }
             LEAVE("return TRUE");
@@ -1248,7 +1246,7 @@ gnc_gen_trans_onPopupMenu_cb (GtkTreeView *treeview,
     selection = gtk_tree_view_get_selection (treeview);
     if (gtk_tree_selection_count_selected_rows (selection) > 0)
     {
-      gnc_gen_trans_view_popup_menu (treeview, NULL, info, TRUE);
+      gnc_gen_trans_view_popup_menu (treeview, NULL, info);
       LEAVE ("TRUE");
       return TRUE;
     }
