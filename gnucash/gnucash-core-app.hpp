@@ -62,6 +62,7 @@ private:
     /* Command-line option variables */
     bool m_show_help = false;
     bool m_show_version = false;
+    bool m_show_paths = false;
     bool m_debug = false;
     bool m_extra = false;
     boost::optional <std::string> m_gsettings_prefix;

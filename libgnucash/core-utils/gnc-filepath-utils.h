@@ -172,4 +172,22 @@ gchar *gnc_filepath_locate_ui_file (const gchar *name);
  */
 gchar *gnc_filepath_locate_doc_file (const gchar *name);
 
+typedef struct
+{
+    const gchar *env_name;
+    const gchar *env_path;
+    gboolean modifiable;
+} EnvPaths;
+
+
+/** Returns a GList* of the environment variables used by GnuCash.
+ *
+ *  @return a GList* of EnvPaths structs, describing the environment
+ *  variables used by GnuCash.
+ *
+ *  @note It is the caller's responsibility to free the GList with
+ *  g_list_free_full (paths, g_free)
+ */
+GList *gnc_list_all_paths (void);
+
 #endif /* GNC_FILEPATH_UTILS_H */
