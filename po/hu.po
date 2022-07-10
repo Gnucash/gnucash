@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-06-20 23:46+0200\n"
-"PO-Revision-Date: 2022-07-03 23:21+0000\n"
+"PO-Revision-Date: 2022-07-10 23:13+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -587,15 +587,12 @@ msgid "Locale: "
 msgstr "Hely: "
 
 #: borrowed/goffice/go-charmap-sel.c:476
-#, fuzzy
 msgid "Conversion Direction"
-msgstr "Konverzió Iránya"
+msgstr "Konverziós irány"
 
 #: borrowed/goffice/go-charmap-sel.c:477
-#, fuzzy
 msgid "This value determines which iconv test to perform."
-msgstr ""
-"Ez az érték határozza meg, hogy melyik iconv tesztet kell végrehajtani."
+msgstr "Ez az érték határozza meg, hogy melyik iconv tesztet kell végrehajtani."
 
 #: borrowed/goffice/go-optionmenu.c:339
 msgid "Menu"
@@ -653,6 +650,10 @@ msgid ""
 "(File[->Most Recently Used-List]).\n"
 "The full path is displayed in the status bar."
 msgstr ""
+"Ha tudni szeretné, hogy a legutóbbi GnuCash fájljai mely könyvtárakban "
+"vannak tárolva, vigye az egérmutatót az előzmények menü egyik bejegyzésére.\n"
+"(Fájl[->Legutóbb használt lista]).\n"
+"A teljes elérési út megjelenik az állapotsorban."
 
 #: doc/tip_of_the_day.list.c:24
 msgid ""
@@ -667,7 +668,6 @@ msgstr ""
 "online kézikönyvben található."
 
 #: doc/tip_of_the_day.list.c:29
-#, fuzzy
 msgid ""
 "It is possible to change which columns display in the Chart of Accounts. "
 "Just locate the triangle at the far right of the column headings, and click "
@@ -678,16 +678,16 @@ msgstr ""
 "rákattintva láthatja az elérhető különböző oszlopokat."
 
 #: doc/tip_of_the_day.list.c:33
-#, fuzzy
 msgid ""
 "Click the right mouse button (control-click in Mac OS X) in the Accounts tab "
 "of the main window to bring up the account menu options. Within each "
 "register, clicking the right mouse button brings up the transaction menu "
 "options."
 msgstr ""
-"Kattintson a jobb egérgombbal a főablakba, hogy megnyissa a számlamenüt. "
-"Minden regiszterben a jobb egérgombbal való kattintás a tranzakciómenüt "
-"nyitja meg."
+"Kattintson a jobb egérgombbal (Mac OS X esetén a Control billentyűt lenyomva "
+"tartva) a főablak Számlák lapján a számlamenü lehetőségeinek "
+"megjelenítéséhez. Az egyes bejegyzéseken belül a jobb egérgombbal kattintva "
+"a tranzakciómenü lehetőségei jelennek meg."
 
 #: doc/tip_of_the_day.list.c:38
 msgid ""
@@ -4890,9 +4890,8 @@ msgid "_Edit Voucher"
 msgstr "Bizonylat szerkesztése/megtekintése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:340
-#, fuzzy
 msgid "_Duplicate Voucher"
-msgstr "_Számla duplikálása"
+msgstr "Utalvány _Duplikálása"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:341
 #, fuzzy
@@ -5084,7 +5083,7 @@ msgstr "E számla szerkesztése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:417
 msgid "Create a new voucher as a duplicate of the current one"
-msgstr "Új nyugta generálása a jelenlegi mintájára."
+msgstr "Új nyugta létrehozása a jelenlegi másolataként"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:418
 #, fuzzy
