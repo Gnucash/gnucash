@@ -1,39 +1,39 @@
 # Localization for Marathi language.
 # Copyright (C) 2014, C-DAC, GIST, Pune, India.
 # Chandrakant Dhutadmal <cpdhutadmal@yahoo.com>, 2014.
-#
+# Hemant More <hemantrmore@tutanota.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-06-20 23:46+0200\n"
-"PO-Revision-Date: 2014-09-26 19:58-0500\n"
-"Last-Translator: Chandrakant Dhutadmal <cpdhutadmal@yahoo.com>\n"
-"Language-Team: NONE\n"
+"PO-Revision-Date: 2022-07-08 19:19+0000\n"
+"Last-Translator: Hemant More <hemantrmore@tutanota.com>\n"
+"Language-Team: Marathi <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"mr/>\n"
 "Language: mr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 1.6.9\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "अरबी"
 
 #: borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "बाल्टिक"
 
 #: borrowed/goffice/go-charmap-sel.c:72
-#, fuzzy
 msgid "Central European"
-msgstr "युरोपीयन"
+msgstr "मध्य युरोपीय"
 
 #: borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "चीनी"
 
 #: borrowed/goffice/go-charmap-sel.c:74
 #: gnucash/gnome-utils/assistant-xml-encoding.c:242
@@ -41,29 +41,28 @@ msgid "Cyrillic"
 msgstr "सिरिलीक"
 
 #: borrowed/goffice/go-charmap-sel.c:75
-#, fuzzy
 msgid "Greek"
-msgstr "हिरवा"
+msgstr "ग्रीक"
 
 #: borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "हिब्रू"
 
 #: borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr ""
+msgstr "भारतीय"
 
 #: borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "जपानी"
 
 #: borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "कोरियन"
 
 #: borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "तुर्की"
 
 #: borrowed/goffice/go-charmap-sel.c:81
 #: gnucash/gnome-utils/assistant-xml-encoding.c:224
@@ -72,12 +71,11 @@ msgstr "युनिकोड"
 
 #: borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "व्हिएतनामी"
 
 #: borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "नोंदपुस्तक"
+msgstr "पाश्चिमात्य"
 
 #: borrowed/goffice/go-charmap-sel.c:84
 #: gnucash/gtkbuilder/assistant-loan.glade:966
@@ -89,101 +87,99 @@ msgstr "अन्य"
 
 #: borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "अरबी (IBM-864)"
 
 #: borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "अरबी (IBM-864-I)"
 
 #: borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "अरबी (ISO-8859-6)"
 
 #: borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "अरबी (ISO-8859-6-E)"
 
 #: borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "अरबी (ISO-8859-6-I)"
 
 #: borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "अरबी (MacArabic)"
 
 #: borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "अरबी (Windows-1256)"
 
 #: borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
-msgstr ""
+msgstr "आर्मेनियन (ARMSCII-8)"
 
 #: borrowed/goffice/go-charmap-sel.c:124
-#, fuzzy
 msgid "Baltic (ISO-8859-13)"
-msgstr "ISO-8859-13 (बाल्टिक)"
+msgstr "बाल्टिक (ISO-8859-13)"
 
 #: borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "बाल्टिक (ISO-8859-4)"
 
 #: borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "बाल्टिक (Windows-1257)"
 
 #: borrowed/goffice/go-charmap-sel.c:127
-#, fuzzy
 msgid "Celtic (ISO-8859-14)"
-msgstr "ISO-8859-14 (सेल्टिक)"
+msgstr "सेल्टिक (ISO-8859-14)"
 
 #: borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "मध्य युरोपिय (IBM-852)"
 
 #: borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "मध्य युरोपिय (ISO-8859-2)"
 
 #: borrowed/goffice/go-charmap-sel.c:132
 msgid "Central European (MacCE)"
-msgstr ""
+msgstr "मध्य युरोपिय (MacCE)"
 
 #: borrowed/goffice/go-charmap-sel.c:134
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "मध्य युरोपिय (Windows-1250)"
 
 #: borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
-msgstr ""
+msgstr "चीनी सरलीकृत (GB18030)"
 
 #: borrowed/goffice/go-charmap-sel.c:137
 msgid "Chinese Simplified (GB2312)"
-msgstr ""
+msgstr "चीनी सरलीकृत (GB2312)"
 
 #: borrowed/goffice/go-charmap-sel.c:138
 msgid "Chinese Simplified (GBK)"
-msgstr ""
+msgstr "चीनी सरलीकृत (GBK)"
 
 #: borrowed/goffice/go-charmap-sel.c:139
 msgid "Chinese Simplified (HZ)"
-msgstr ""
+msgstr "चीनी सरलीकृत (HZ)"
 
 #: borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
-msgstr ""
+msgstr "चीनी सरलीकृत (Windows-936)"
 
 #: borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "चिनी पारंपारिक (Big5)"
 
 #: borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "चिनी पारंपारिक (Big5-HKSCS)"
 
 #: borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr ""
+msgstr "चीनी पारंपारिक (EUC-TW)"
 
 #: borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"
@@ -426,9 +422,8 @@ msgid "Western (Windows-1252)"
 msgstr ""
 
 #: borrowed/goffice/go-charmap-sel.c:441
-#, fuzzy
 msgid "Locale: "
-msgstr "स्थानि_क:  "
+msgstr "स्थानिक: "
 
 #: borrowed/goffice/go-charmap-sel.c:476
 #, fuzzy
@@ -885,11 +880,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/assistant-hierarchy.c:1495
-#, fuzzy
 msgid "Please choose the currency to use for new accounts."
-msgstr ""
-"\n"
-"कृपया नव्या खात्यांसाठी वापरण्यासाठी चलन निवडा."
+msgstr "कृपया नवीन खात्यांसाठी वापरायचे चलन निवडा."
 
 #: gnucash/gnome/assistant-hierarchy.c:1540
 #: gnucash/gnome/assistant-hierarchy.c:1559
@@ -9412,7 +9404,7 @@ msgstr "ऑनलाइन"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2864
 #: gnucash/register/ledger-core/split-register.c:2557
 msgid "AutoDep"
-msgstr "AutoDep"
+msgstr "स्वयं जमा"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2865
 #: gnucash/register/ledger-core/split-register.c:2558
@@ -13743,23 +13735,23 @@ msgstr "व्याज दर"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:49
 msgid "APR (Compounded Daily)"
-msgstr "एपीआर (रोज परिणामगणन)"
+msgstr "एपीआर (दैनिक चक्रवाढ)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:52
 msgid "APR (Compounded Weekly)"
-msgstr "एपीआर (साप्ताहिक परिणामगणन)"
+msgstr "एपीआर (साप्ताहिक चक्रवाढ)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:55
 msgid "APR (Compounded Monthly)"
-msgstr "एपीआर (मासिक परिणामगणन)"
+msgstr "एपीआर (मासिक चक्रवाढ)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:58
 msgid "APR (Compounded Quarterly)"
-msgstr "एपीआर (त्रैमासिक परिणामगणन)"
+msgstr "एपीआर (त्रैमासिक चक्रवाढ)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:61
 msgid "APR (Compounded Annually)"
-msgstr "एपीआर (वार्षिक परिणामगणन)"
+msgstr "एपीआर (वार्षिक चक्रवाढ)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:72
 msgid "Fixed Rate"
@@ -13833,9 +13825,8 @@ msgid "Start Date"
 msgstr "प्रारंभ तारीख"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:178
-#, fuzzy
 msgid "Length"
-msgstr "लांबी"
+msgstr "अवधी"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:204
 msgid "Loan Account"
@@ -17434,7 +17425,7 @@ msgstr "रिपोर्ट"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3814
 msgid "<b>Window Geometry</b>"
-msgstr "<bविंडो भूमिती</b>"
+msgstr "<b>विंडोची भूमिती</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3834
 msgid "_Save window size and position"
@@ -26186,17 +26177,17 @@ msgstr ""
 #. Translators: Abbreviation for "Budget" amount
 #: gnucash/report/reports/standard/budget.scm:524
 msgid "Bgt"
-msgstr "Bgt"
+msgstr "अंदाजपत्रक"
 
 #. Translators: Abbreviation for "Actual" amount
 #: gnucash/report/reports/standard/budget.scm:529
 msgid "Act"
-msgstr "Act"
+msgstr "वास्तविक"
 
 #. Translators: Abbreviation for "Difference" amount
 #: gnucash/report/reports/standard/budget.scm:534
 msgid "Diff"
-msgstr "Diff"
+msgstr "फरक"
 
 #. Translators: using accumulated amounts mean
 #. budget will report on budgeted and actual
@@ -30587,4 +30578,4 @@ msgstr "व्यवहार रद्दबादल झाला"
 
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
-msgstr "मदत उपलब्ध नाही"
+msgstr "मदत उपलब्ध नाही."
