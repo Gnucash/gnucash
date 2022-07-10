@@ -61,7 +61,7 @@
 (use-modules (gnucash core-utils))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
-
+(use-modules (sw_expressions))
 ;; account summary report prints a table of account information,
 ;; optionally with clickable links to open the corresponding register
 ;; window.

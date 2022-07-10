@@ -28,13 +28,11 @@ extern "C"
 #endif
 #include <config.h>
 #include <gnc-euro.h>
-#include <gnc-exp-parser.h>
 #include <gnc-ui-util.h>
 #include <gnc-prefs-utils.h>
 #include <gnc-helpers.h>
 #include <gnc-accounting-period.h>
 #include <gnc-session.h>
-#include <gnc-sx-instance-model.h>
 
 #include "gnc-engine-guile.h"
 #ifdef __cplusplus
@@ -119,23 +117,4 @@ gnc_numeric gnc_convert_from_euro(const gnc_commodity * currency,
 time64 gnc_accounting_period_fiscal_start(void);
 time64 gnc_accounting_period_fiscal_end(void);
 
-%typemap(out) GHashTable * {
-  SCM table = scm_c_make_hash_table (g_hash_table_size($1) + 17);
-  GHashTableIter iter;
-  gpointer key, value;
-
-  g_hash_table_iter_init (&iter, $1);
-  while (g_hash_table_iter_next (&iter, &key, &value)) {
-    const GncGUID* c_guid = (const GncGUID*) key;
-    const gnc_numeric* c_numeric = (const gnc_numeric*) value;
-    SCM scm_guid = gnc_guid2scm(*c_guid);
-    SCM scm_numeric = gnc_numeric_to_scm(*c_numeric);
-
-    scm_hash_set_x(table, scm_guid, scm_numeric);
-  }
-  g_hash_table_destroy($1);
-  $result = table;
-}
-GHashTable* gnc_sx_all_instantiate_cashflow_all(GDate range_start, GDate range_end);
-%clear GHashTable *;
 #endif

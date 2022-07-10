@@ -22,7 +22,8 @@
 (define-module (gnucash report report-core))
 
 (eval-when (compile load eval expand)
-  (load-extension "libgnc-report" "scm_init_sw_report_module"))
+  (load-extension "libgnc-report" "scm_init_sw_report_module")
+  (load-extension "libgnc-expressions-guile" "scm_init_sw_expressions_module"))
 
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))

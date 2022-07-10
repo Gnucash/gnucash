@@ -7,10 +7,6 @@ include (GncFindLibm)
 # Build the library
 
 set (app_utils_noinst_HEADERS
-  calculation/finvar.h
-  calculation/finproto.h
-  calculation/fin_spl_protos.h
-  calculation/fin_static_proto.h
   gnc-option-date.hpp
   gnc-option-impl.hpp
   gnc-option-ui.hpp
@@ -28,7 +24,6 @@ set (app_utils_HEADERS
   gnc-addr-quickfill.h
   gnc-entry-quickfill.h
   gnc-euro.h
-  gnc-exp-parser.h
   gnc-gsettings.h
   gnc-help-utils.h
   gnc-helpers.h
@@ -37,7 +32,6 @@ set (app_utils_HEADERS
   gnc-optiondb.hpp
   gnc-prefs-utils.h
   gnc-state.h
-  gnc-sx-instance-model.h
   gnc-ui-util.h
   gnc-ui-balances.h
 )
@@ -60,8 +54,6 @@ gnc_add_swig_python_command (swig-app-utils-python
 )
 
 set (app_utils_SOURCES
-  calculation/expression_parser.c
-  calculation/fin.c
   QuickFill.c
   file-utils.c
   gfec.c
@@ -70,7 +62,6 @@ set (app_utils_SOURCES
   gnc-addr-quickfill.c
   gnc-entry-quickfill.c
   gnc-euro.c
-  gnc-exp-parser.c
   gnc-gsettings.cpp
   gnc-helpers.c
   gnc-option-date.cpp
@@ -78,7 +69,6 @@ set (app_utils_SOURCES
   gnc-option-impl.cpp
   gnc-optiondb.cpp
   gnc-prefs-utils.c
-  gnc-sx-instance-model.c
   gnc-state.c
   gnc-ui-util.c
   gnc-ui-balances.c
@@ -175,16 +165,95 @@ if (WITH_PYTHON)
 
 endif()
 
+set(expressions_SOURCES
+        calculation/expression_parser.c
+        calculation/fin.c
+        gnc-exp-parser.c
+        gnc-sx-instance-model.c
+        )
 
+set(expressions_noinstall_HEADERS
+        calculation/finvar.h
+        calculation/finproto.h
+        calculation/fin_spl_protos.h
+        calculation/fin_static_proto.h
+        )
+set(expressions_HEADERS
+        gnc-exp-parser.h
+        gnc-sx-instance-model.h
+        )
 
-install(FILES ${app_utils_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
+set(expressions_all_sources ${expressions_SOURCES} ${expressions_noinstall_HEADERS} ${expressions_HEADERS})
+
+set_source_files_properties(${expressions_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+add_library(gnc-expressions
+        ${expressions_HEADERS}
+        ${expressions_SOURCES}
+        )
+
+target_include_directories(gnc-expressions
+        PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/calculation
+        ${CMAKE_SOURCE_DIR}/bindings/guile
+        ${CMAKE_SOURCE_DIR}/libgnucash/app-utils
+        ${GUILE_INCLUDE_DIRS}
+        ${GLIB2_INCLUDE_DIRS}
+        PRIVATE
+        ${CMAKE_SOURCE_DIR}/common
+        ${CMAKE_BINARY_DIR}/common)
+
+target_link_libraries(gnc-expressions
+        PUBLIC
+        gnc-engine
+        gnucash-guile
+        gnc-app-utils
+        ${GUILE_LDFLAGS}
+        ${GLIB2_LDFLAGS})
+
+install(TARGETS gnc-expressions
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        )
+
+#Generate the swig-expressions-guile.c wrapper file
+gnc_add_swig_guile_command(swig-expressions-guile-c #target
+        SWIG_EXPRESSIONS_GUILE_C swig-expressions-guile.c #outvar, output
+        ${CMAKE_CURRENT_SOURCE_DIR}/expressions.i #input
+        "${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_SOURCE_DIR}/libgnucash/app-utils;${CMAKE_SOURCE_DIR}/libgnucash/expressions" #includes
+        )
+
+add_library(gnc-expressions-guile SHARED
+        ${SWIG_EXPRESSIONS_GUILE_C})
+
+target_include_directories(gnc-expressions-guile
+        PUBLIC
+        ${CMAKE_SOURCE_DIR}/libgnucash/expressions
+        ${GUILE_INCLUDE_DIRS}
+        ${GLIB2_INCLUDE_DIRS})
+
+target_link_libraries(gnc-expressions-guile
+        gnc-expressions
+        gnc-engine
+        gnc-app-utils
+        ${GUILE_LDFLAGS}
+        ${GLIB2_LDFLAGS})
+
+install(TARGETS gnc-expressions-guile
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        )
+
+install(FILES ${app_utils_HEADERS} ${expressions_HEADERS}
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
 
 # And now handle scheme files
 
 set (app_utils_SCHEME_1
     c-interface.scm
     date-utilities.scm
-    fin.scm
 )
 
 set (app_utils_SCHEME_1a
@@ -220,6 +289,18 @@ gnc_add_scheme_targets(scm-app-utils-2
 
 add_custom_target(scm-app-utils ALL DEPENDS scm-app-utils-2 scm-app-utils-1)
 
+set(expressions_SCHEME
+        fin.scm)
+
+set(GUILE_INTERNAL_DEPENDS
+        scm-app-utils-1)
+
+gnc_add_scheme_targets(scm-expressions
+        SOURCES "${expressions_SCHEME}"
+        OUTPUT_DIR "gnucash/app-utils"
+        DEPENDS "${GUILE_INTERNAL_DEPENDS}"
+        MAKE_LINKS)
+
 set_local_dist(app_utils_DIST_local
     ${app_utils_ALL_SOURCES}
     ${app_utils_SCHEME_1}
@@ -228,7 +309,9 @@ set_local_dist(app_utils_DIST_local
     ${app_utils_SCHEME_1c}
     ${app_utils_SCHEME_2}
     ${app_utils_SCHEME_3}
-    app-utils.i gnc-optiondb.i CMakeLists.txt gnc-help-utils.c)
+    ${expressions_all_sources}
+    ${expressions_SCHEME}
+    app-utils.i gnc-optiondb.i expressions.i CMakeLists.txt gnc-help-utils.c)
 
 set(app_utils_DIST
     ${app_utils_DIST_local}

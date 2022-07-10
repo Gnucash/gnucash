@@ -134,6 +134,7 @@ target_link_libraries(gnc-gnome
     gnc-register-core
     gnc-gnome-utils
     gnc-engine
+    gnc-expressions
     gnc-html
     gnc-locale-tax
     gnucash-guile
