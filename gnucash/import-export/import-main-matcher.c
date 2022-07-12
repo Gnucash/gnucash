@@ -1133,7 +1133,6 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
     /* Note: event can be NULL here when called from view_onPopupMenu; */
     gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent*)event);
 
-    g_list_free_full (selected_rows, (GDestroyNotify)gtk_tree_path_free);
     LEAVE ("");
 }
 
