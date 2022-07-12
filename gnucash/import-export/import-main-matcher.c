@@ -90,7 +90,10 @@ enum downloaded_cols
     DOWNLOADED_COL_AMOUNT,
     DOWNLOADED_COL_AMOUNT_DOUBLE, // used only for sorting
     DOWNLOADED_COL_DESCRIPTION,
+    DOWNLOADED_COL_DESCRIPTION_ORIGINAL,
     DOWNLOADED_COL_MEMO,
+    DOWNLOADED_COL_MEMO_ORIGINAL,
+    DOWNLOADED_COL_NOTES_ORIGINAL,
     DOWNLOADED_COL_ACTION_ADD,
     DOWNLOADED_COL_ACTION_CLEAR,
     DOWNLOADED_COL_ACTION_UPDATE,
@@ -898,10 +901,14 @@ typedef struct
     Split *split;
     Transaction *trans;
     GtkTreeIter iter;
+    char *orig_desc, *orig_notes, *orig_memo;
 } RowInfo;
 
 static void rowinfo_free (RowInfo* info)
 {
+    g_free (info->orig_desc);
+    g_free (info->orig_notes);
+    g_free (info->orig_memo);
     g_free (info);
 }
 
@@ -911,7 +918,12 @@ static RowInfo * row_get_info (gpointer row, GNCImportMainMatcher *info)
     GtkTreeModel *model = gtk_tree_view_get_model (info->view);
     RowInfo *retval = g_new (RowInfo, 1);
     gtk_tree_model_get_iter (model, &retval->iter, row);
-    gtk_tree_model_get (model, &retval->iter, DOWNLOADED_COL_DATA, &trans_info, -1);
+    gtk_tree_model_get (model, &retval->iter,
+                        DOWNLOADED_COL_DATA, &trans_info,
+                        DOWNLOADED_COL_DESCRIPTION_ORIGINAL, &retval->orig_desc,
+                        DOWNLOADED_COL_NOTES_ORIGINAL, &retval->orig_notes,
+                        DOWNLOADED_COL_MEMO_ORIGINAL, &retval->orig_memo,
+                        -1);
     retval->trans = gnc_import_TransInfo_get_trans (trans_info);
     retval->split = gnc_import_TransInfo_get_fsplit (trans_info);
     return retval;
@@ -1025,6 +1037,46 @@ gnc_gen_trans_edit_notes_cb (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
 }
 
 static void
+gnc_gen_trans_reset_edits_cb (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
+{
+    GtkTreeView *treeview;
+    GtkTreeModel *model;
+    GtkTreeStore *store;
+    GtkTreeSelection *selection;
+    GList *selected_rows;
+
+    g_return_if_fail (info != NULL);
+    ENTER("gnc_gen_trans_reset_edits_cb");
+
+    treeview = GTK_TREE_VIEW(info->view);
+    model = gtk_tree_view_get_model (treeview);
+    store  = GTK_TREE_STORE (model);
+    selection = gtk_tree_view_get_selection (treeview);
+    selected_rows = gtk_tree_selection_get_selected_rows (selection, &model);
+
+    if (!selected_rows)
+    {
+        LEAVE ("No selected rows");
+        return;
+    }
+
+    for (GList *n = selected_rows; n; n = g_list_next (n))
+    {
+        RowInfo *rowinfo = row_get_info (n->data, info);
+        xaccTransSetDescription (rowinfo->trans, rowinfo->orig_desc);
+        xaccTransSetNotes (rowinfo->trans, rowinfo->orig_notes);
+        xaccSplitSetMemo (rowinfo->split, rowinfo->orig_memo);
+        gtk_tree_store_set (store, &rowinfo->iter,
+                            DOWNLOADED_COL_DESCRIPTION, rowinfo->orig_desc,
+                            DOWNLOADED_COL_MEMO, rowinfo->orig_memo,
+                            -1);
+        rowinfo_free (rowinfo);
+    };
+    g_list_free_full (selected_rows, (GDestroyNotify)gtk_tree_path_free);
+    LEAVE("");
+}
+
+static void
 gnc_gen_trans_row_activated_cb (GtkTreeView *treeview,
                                 GtkTreePath *path,
                                 GtkTreeViewColumn *column,
@@ -1119,6 +1171,7 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
     GList *selected_rows;
     const char *desc, *memo, *notes;
     gboolean edit_desc = TRUE, edit_notes = TRUE, edit_memo = TRUE;
+    gboolean has_edits = FALSE;
 
     ENTER ("");
     menu = gtk_menu_new();
@@ -1138,6 +1191,13 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
          n = g_list_next(n))
     {
         RowInfo *rowinfo = row_get_info (n->data, info);
+
+        if (!has_edits &&
+            (g_strcmp0 (xaccSplitGetMemo (rowinfo->split), rowinfo->orig_memo) ||
+             g_strcmp0 (xaccTransGetNotes (rowinfo->trans), rowinfo->orig_notes) ||
+             g_strcmp0 (xaccTransGetDescription (rowinfo->trans), rowinfo->orig_desc)))
+            has_edits = TRUE;
+
         if (!n->prev)       /* only the first row */
         {
             desc = xaccTransGetDescription (rowinfo->trans);
@@ -1173,6 +1233,13 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
     gtk_widget_set_sensitive (menuitem, edit_notes);
     g_signal_connect (menuitem, "activate",
                       G_CALLBACK (gnc_gen_trans_edit_notes_cb),
+                      info);
+    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+
+    menuitem = gtk_menu_item_new_with_label (_("Reset edits."));
+    gtk_widget_set_sensitive (menuitem, has_edits);
+    g_signal_connect (menuitem, "activate",
+                      G_CALLBACK (gnc_gen_trans_reset_edits_cb),
                       info);
     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
@@ -1312,6 +1379,7 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
     view = info->view;
     store = gtk_tree_store_new (NUM_DOWNLOADED_COLS, G_TYPE_STRING, G_TYPE_INT64,
                                 G_TYPE_STRING, G_TYPE_STRING, G_TYPE_DOUBLE,
+                                G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
                                 G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN,
                                 G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_STRING,
                                 GDK_TYPE_PIXBUF, G_TYPE_POINTER, G_TYPE_STRING,
@@ -1726,13 +1794,22 @@ refresh_model_row (GNCImportMainMatcher *gui,
     gtk_tree_store_set (store, iter, DOWNLOADED_COL_AMOUNT, ro_text, -1);
     gtk_tree_store_set (store, iter, DOWNLOADED_COL_AMOUNT_DOUBLE, gnc_numeric_to_double (amount), -1);
 
+    /* Notes */
+    ro_text = xaccTransGetNotes (gnc_import_TransInfo_get_trans (info));
+    gtk_tree_store_set (store, iter, DOWNLOADED_COL_NOTES_ORIGINAL, ro_text, -1);
+
     /*Description*/
     ro_text = xaccTransGetDescription (gnc_import_TransInfo_get_trans (info) );
-    gtk_tree_store_set (store, iter, DOWNLOADED_COL_DESCRIPTION, ro_text, -1);
-
+    gtk_tree_store_set (store, iter,
+                        DOWNLOADED_COL_DESCRIPTION, ro_text,
+                        DOWNLOADED_COL_DESCRIPTION_ORIGINAL, ro_text,
+                        -1);
     /*Memo*/
     ro_text = xaccSplitGetMemo (split);
-    gtk_tree_store_set (store, iter, DOWNLOADED_COL_MEMO, ro_text, -1);
+    gtk_tree_store_set (store, iter,
+                        DOWNLOADED_COL_MEMO, ro_text,
+                        DOWNLOADED_COL_MEMO_ORIGINAL, ro_text,
+                        -1);
 
     /*Actions*/
 
@@ -2203,10 +2280,14 @@ query_tooltip_tree_view_cb (GtkWidget *widget, gint x, gint y,
         switch (num_col)
         {
         case DOWNLOADED_COL_DESCRIPTION:
-            gtk_tree_model_get (model, &iter, DOWNLOADED_COL_DESCRIPTION, &tooltip_text, -1);
+            gtk_tree_model_get (model, &iter,
+                                DOWNLOADED_COL_DESCRIPTION_ORIGINAL, &tooltip_text,
+                                -1);
             break;
         case DOWNLOADED_COL_MEMO:
-            gtk_tree_model_get (model, &iter, DOWNLOADED_COL_MEMO, &tooltip_text, -1);
+            gtk_tree_model_get (model, &iter,
+                                DOWNLOADED_COL_MEMO_ORIGINAL, &tooltip_text,
+                                -1);
             break;
         default:
             break;
