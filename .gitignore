@@ -199,3 +199,4 @@ xcuserdata/
 messages.mo
 /.settings/
 /build/
+*.LCK
