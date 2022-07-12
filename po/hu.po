@@ -13,8 +13,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-06-20 23:46+0200\n"
-"PO-Revision-Date: 2022-07-10 23:13+0000\n"
-"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"PO-Revision-Date: 2022-07-11 18:21+0000\n"
+"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 
 # #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
 # src/trans.h:283
@@ -3844,7 +3844,7 @@ msgstr "Költségvetés kiválasztása"
 #: gnucash/gnome/gnc-plugin-business.c:155
 #: gnucash/gnome/gnc-plugin-business.c:305 gnucash/report/report-core.scm:164
 msgid "_Business"
-msgstr "_Üzlet"
+msgstr "_Vállalkozás"
 
 #: gnucash/gnome/gnc-plugin-business.c:158
 msgid "_Customer"
@@ -4256,7 +4256,7 @@ msgstr "_Egyeztetés..."
 #: gnucash/gnome/gnc-plugin-page-register2.c:358
 #: gnucash/gnome/gnc-plugin-page-register.c:481
 msgid "Reconcile the selected account"
-msgstr "A kiválasztott folyószámlák egyeztetése"
+msgstr "A kiválasztott folyószámla egyeztetése"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:307
 #: gnucash/gnome/gnc-plugin-page-register2.c:362
@@ -8836,7 +8836,7 @@ msgstr "Tra_nzakciók"
 
 #: gnucash/gnome-utils/gnc-main-window.c:279
 msgid "_Reports"
-msgstr "Jelentések"
+msgstr "_Kimutatások"
 
 #: gnucash/gnome-utils/gnc-main-window.c:280
 msgid "_Tools"
