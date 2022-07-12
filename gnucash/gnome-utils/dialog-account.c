@@ -49,7 +49,7 @@
 #include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
-
+#include <gnc-locale-tax.h>
 
 #define DIALOG_NEW_ACCOUNT_CM_CLASS "dialog-new-account"
 #define DIALOG_EDIT_ACCOUNT_CM_CLASS "dialog-edit-account"

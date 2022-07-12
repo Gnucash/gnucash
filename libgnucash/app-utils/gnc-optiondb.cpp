@@ -21,7 +21,6 @@
  *                                                                  *
 \********************************************************************/
 
-#include <libguile.h>
 #include <functional>
 #include <string>
 #include <limits>

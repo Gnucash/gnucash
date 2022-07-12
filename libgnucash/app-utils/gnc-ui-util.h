@@ -142,9 +142,6 @@ gchar *gnc_get_account_name_for_split_register(const Account *account,
  *                  of things like stock account values from share
  *                  values to an amount the requested currency.
  */
-char *gnc_ui_account_get_tax_info_string (const Account *account);
-
-char *gnc_ui_account_get_tax_info_sub_acct_string (const Account *account);
 
 const char * gnc_get_reconcile_str (char reconciled_flag);
 const char * gnc_get_reconcile_valid_flags (void);

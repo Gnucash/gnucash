@@ -41,6 +41,7 @@
 #include "gnc-gobject-utils.h"
 #include "gnc-ui-balances.h"
 #include "gnc-ui-util.h"
+#include <gnc-locale-tax.h>
 
 #define TREE_MODEL_ACCOUNT_CM_CLASS "tree-model-account"
 

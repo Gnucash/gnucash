@@ -55,6 +55,13 @@ gnc_add_swig_python_command (swig-core-utils-python
     ${CORE_UTILS_HEADERS}
 )
 
+# Command to generate the swig-app-utils-python.c wrapper file
+gnc_add_swig_python_command (swig-app-utils-python
+        SWIG_APP_UTILS_PYTHON_C SWIG_APP_UTILS_PYTHON_PY
+        swig-app-utils-python.c sw_app_utils.py
+        ${CMAKE_CURRENT_SOURCE_DIR}/../app-utils.i ""
+        )
+
 if(WITH_PYTHON)
 
   ### gnucash_core_c
@@ -145,6 +152,39 @@ if(WITH_PYTHON)
   add_custom_target(sw-core-utils-build ALL
     COMMAND ${CMAKE_COMMAND} -E copy ${LIBDIR_BUILD}/gnucash/_sw_core_utils${CMAKE_SHARED_MODULE_SUFFIX} ${PYTHON_SYSCONFIG_BUILD}/gnucash
     DEPENDS sw_core_utils)
+
+  ### App-utils
+  set(PYEXEC_FILES sw_app_utils.py)
+  add_library (sw_app_utils MODULE ${SWIG_APP_UTILS_PYTHON_C})
+
+  target_link_libraries(sw_app_utils gnc-app-utils ${app_utils_ALL_LIBRARIES} ${PYTHON_LIBRARIES})
+  set_target_properties(sw_app_utils PROPERTIES PREFIX "_")
+  if (HAVE_STRINGOP_TRUNCATION)
+    target_compile_options(sw_app_utils PRIVATE -Wno-error=stringop-truncation)
+  endif()
+
+  add_custom_target(sw-app-utils-py ALL
+          COMMAND ${CMAKE_COMMAND} -E copy ${SWIG_APP_UTILS_PYTHON_PY} ${PYTHON_SYSCONFIG_BUILD}/gnucash
+          DEPENDS ${SWIG_APP_UTILS_PYTHON_C})
+
+  target_include_directories (sw_app_utils
+          PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
+          PRIVATE ${app_utils_ALL_INCLUDES} ${PYTHON_INCLUDE_DIRS}
+          )
+  target_compile_definitions (sw_app_utils PRIVATE -DG_LOG_DOMAIN=\"gnc.app-utils\")
+
+  if (APPLE)
+    set_target_properties (sw_app_utils PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}")
+  endif()
+
+  install(TARGETS sw_app_utils
+          LIBRARY DESTINATION ${PYTHON_SYSCONFIG_OUTPUT}/gnucash
+          ARCHIVE DESTINATION ${PYTHON_SYSCONFIG_OUTPUT}/gnucash
+          )
+
+  add_custom_target(sw-app-utils-build ALL
+          COMMAND ${CMAKE_COMMAND} -E copy ${LIBDIR_BUILD}/gnucash/_sw_app_utils${CMAKE_SHARED_MODULE_SUFFIX} ${PYTHON_SYSCONFIG_BUILD}/gnucash
+          DEPENDS sw_app_utils)
 
 endif()
 

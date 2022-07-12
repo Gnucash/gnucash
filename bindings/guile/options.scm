@@ -20,7 +20,7 @@
 (define-module (gnucash app-utils options))
 
 (eval-when (compile load eval expand)
-  (load-extension "libgnc-app-utils" "scm_init_sw_app_utils_module"))
+  (load-extension "libgnucash-guile" "scm_init_sw_app_utils_module"))
 
 (use-modules (gnucash core-utils))
 (use-modules (gnucash engine))

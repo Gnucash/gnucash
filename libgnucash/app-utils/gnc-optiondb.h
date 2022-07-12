@@ -63,8 +63,6 @@ typedef struct GncOption GncOption;
 typedef struct GncOptionDB GncOptionDB;
 #endif
 
-#include <libguile.h>
-
 #ifdef __cplusplus
 extern "C"
 {

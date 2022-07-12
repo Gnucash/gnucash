@@ -30,11 +30,13 @@ extern "C"
 #include <gnc-euro.h>
 #include <gnc-ui-util.h>
 #include <gnc-prefs-utils.h>
+#if defined(SWIGGUILE)
 #include <gnc-helpers.h>
+#include "gnc-engine-guile.h"
+#endif
 #include <gnc-accounting-period.h>
 #include <gnc-session.h>
 
-#include "gnc-engine-guile.h"
 #ifdef __cplusplus
 }
 #endif

@@ -7,6 +7,9 @@ set_source_files_properties (${locale_tax_SOURCES} PROPERTIES OBJECT_DEPENDS ${C
 
 add_library(gnc-locale-tax ${locale_tax_SOURCES})
 target_link_libraries(gnc-locale-tax
+    gnc-engine
+    gnc-app-utils
+    gnucash-guile
     ${GLIB2_LDFLAGS}
     ${GUILE_LDFLAGS})
 

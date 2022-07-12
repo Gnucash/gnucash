@@ -24,7 +24,11 @@
 
 #ifndef GNC_LOCALE_TAX_H_
 #define GNC_LOCALE_TAX_H_
+#include <config.h>
+#include <Account.h>
 
 void gnc_locale_tax_init (void);
+char *gnc_ui_account_get_tax_info_string (const Account *account);
+char *gnc_ui_account_get_tax_info_sub_acct_string (const Account *account);
 
 #endif

@@ -2,7 +2,7 @@
 ;; Load the C++ option implementation, avoiding the options.scm ones.
 (eval-when
  (compile load eval expand)
- (load-extension "libgnc-app-utils" "scm_init_sw_app_utils_module"))
+ (load-extension "libgnucash-guile" "scm_init_sw_app_utils_module"))
 (use-modules (sw_app_utils))
 (use-modules (srfi srfi-64))
 (use-modules (tests srfi64-extras))

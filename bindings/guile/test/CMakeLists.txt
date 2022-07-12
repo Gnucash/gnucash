@@ -6,15 +6,20 @@ set(ENGINE_TEST_INCLUDE_DIRS
     ${CMAKE_SOURCE_DIR}/libgnucash/engine/test-core
     ${CMAKE_BINARY_DIR}/common # for config.h
     ${CMAKE_SOURCE_DIR}/common/test-core  # for unittest-support.h
+    ${CMAKE_SOURCE_DIR}/libgnucash/app-utils
     ${CMAKE_SOURCE_DIR}/bindings/guile # for gnc-engine-guile.h
     ${GLIB2_INCLUDE_DIRS}
+    ${GUILE_INCLUDE_DIRS}
 )
 
 set(ENGINE_TEST_LIBS
     gnc-engine
+    gnc-app-utils
     gnc-test-engine
     test-core
     gnucash-guile
+    ${GIO_LDFLAGS}
+    ${GUILE_LDFLAGS}
     ${LIBXML2_LDFLAGS}
     -lm)
 
@@ -105,11 +110,57 @@ set(test_engine_SCHEME_DIST
     test-business-core.scm
 )
 
+set(test_app_utils_scheme_SOURCES
+        test-c-interface.scm
+        test-load-app-utils-module.scm
+        )
+
+set (test_app_utils_scheme_SRFI64_SOURCES
+        test-date-utilities.scm
+        test-options.scm
+        )
+
+gnc_add_scheme_test_targets(scm-test-load-app-utils-module
+        SOURCES "test-load-app-utils-module.scm"
+        OUTPUT_DIR "tests"
+        DEPENDS "${GUILE_DEPENDS}")
+
+gnc_add_scheme_test_targets(scm-test-c-interface
+        SOURCES "test-c-interface.scm"
+        OUTPUT_DIR "tests"
+        DEPENDS "${GUILE_DEPENDS}")
+
+gnc_add_scheme_tests("${test_app_utils_scheme_SOURCES}")
+
+if (HAVE_SRFI64)
+    gnc_add_scheme_test_targets(scm-test-app-utils-srfi64
+            SOURCES "${test_app_utils_scheme_SRFI64_SOURCES}"
+            OUTPUT_DIR "tests"
+            DEPENDS "${GUILE_DEPENDS};scm-srfi64-extras")
+
+    gnc_add_scheme_test_targets(scm-test-gnc-optiondb
+            SOURCES "test-gnc-optiondb.scm" "test-gnc-option-scheme-output.scm"
+            OUTPUT_DIR "tests"
+            DEPENDS "swig-apputils-guile-cpp;scm-srfi64-extras")
+    gnc_add_scheme_tests("test-gnc-optiondb.scm")
+    gnc_add_scheme_tests("test-gnc-option-scheme-output.scm")
+    gnc_add_scheme_tests("${test_app_utils_scheme_SRFI64_SOURCES}")
+endif()
+
+gnc_add_test_with_guile(test-print-queries test-print-queries.cpp ENGINE_TEST_INCLUDE_DIRS ENGINE_TEST_LIBS)
+gnc_add_test_with_guile(test-scm-query-string test-scm-query-string.cpp
+        ENGINE_TEST_INCLUDE_DIRS ENGINE_TEST_LIBS
+        )
+
 set_local_dist(test_guile_DIST_local
     CMakeLists.txt
+    test-print-queries.cpp
     test-scm-query.cpp
+    test-scm-query-string.cpp
     ${test_engine_SCHEME_DIST}
     ${test_scm_SCHEME}
+    ${test_app_utils_scheme_SOURCES}
+    ${test_app_utils_scheme_SRFI64_SOURCES}
 )
 set(test_guile_DIST
     ${test_guile_DIST_local}

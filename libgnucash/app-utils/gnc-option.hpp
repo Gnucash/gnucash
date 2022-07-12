@@ -34,7 +34,6 @@
 #define GNC_OPTION_HPP_
 
 #include <glib.h>
-#include <libguile.h>
 #include <string>
 #include <iostream>
 #include <iomanip>

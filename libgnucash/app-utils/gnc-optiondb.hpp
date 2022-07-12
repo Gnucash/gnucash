@@ -38,7 +38,6 @@
 #include <exception>
 #include <optional>
 #include <iostream>
-#include <libguile.h>
 extern "C"
 {
 #include <config.h>

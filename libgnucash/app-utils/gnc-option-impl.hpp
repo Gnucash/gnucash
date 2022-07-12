@@ -43,7 +43,6 @@ extern "C"
 #include <gnc-commodity.h>
 }
 #include <gnc-datetime.hpp>
-#include <libguile.h>
 #include <string>
 #include <utility>
 #include <vector>

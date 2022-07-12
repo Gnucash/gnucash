@@ -207,6 +207,7 @@ target_link_libraries(gnc-gnome-utils
     gnc-app-utils
     gnc-engine
     gnc-expressions
+    gnc-locale-tax
     gnc-backend-xml-utils
     gnucash-guile
     PkgConfig::GTK3

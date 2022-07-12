@@ -3,6 +3,7 @@ add_subdirectory(python)
 
 set_local_dist(bindings_DIST_local
     CMakeLists.txt
+    app-utils.i
     business-core.i
     core-utils.i
     engine.i
