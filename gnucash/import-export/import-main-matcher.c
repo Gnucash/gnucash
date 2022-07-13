@@ -80,6 +80,11 @@ struct _main_matcher_info
     GSList* temp_trans_list;  // Temporary list of imported transactions
     GHashTable* acct_id_hash; // Hash table, per account, of list of transaction IDs.
     GSList* edited_accounts;  // List of accounts currently edited.
+
+    /* only when editing fields */
+    gboolean edit_desc;
+    gboolean edit_notes;
+    gboolean edit_memo;
 };
 
 enum downloaded_cols
@@ -889,13 +894,6 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
     LEAVE("");
 }
 
-typedef enum
-{
-    DESCRIPTION,
-    MEMO,
-    NOTES,
-} edit_field;
-
 typedef struct
 {
     Split *split;
@@ -929,16 +927,79 @@ static RowInfo * row_get_info (gpointer row, GNCImportMainMatcher *info)
     return retval;
 }
 
+static gboolean
+input_new_fields (GtkWidget *parent, RowInfo *info, GtkTreeStore *store,
+                  gboolean edit_desc, gboolean edit_notes, gboolean edit_memo,
+                  char **new_desc, char **new_notes, char **new_memo)
+{
+    GtkWidget *desc_entry, *notes_entry, *memo_entry, *label, *grid;
+    GtkWidget *dialog =
+        gtk_dialog_new_with_buttons ("Edit imported transaction details",
+                                     GTK_WINDOW (parent),
+                                     GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                     _("_OK"), GTK_RESPONSE_ACCEPT,
+                                     _("_Cancel"), GTK_RESPONSE_REJECT,
+                                     NULL);
+    GtkWidget *content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+    gboolean retval;
+
+    grid = gtk_grid_new ();
+
+    label = gtk_label_new ("Description");
+    gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
+
+    desc_entry = gtk_entry_new ();
+    gtk_widget_set_halign (desc_entry, GTK_ALIGN_START);
+    gtk_widget_set_sensitive (desc_entry, edit_desc);
+    gtk_entry_set_text (GTK_ENTRY (desc_entry), xaccTransGetDescription (info->trans));
+    gtk_grid_attach (GTK_GRID (grid), desc_entry, 1, 0, 1, 1);
+
+    label = gtk_label_new ("Notes");
+    gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
+
+    notes_entry = gtk_entry_new ();
+    gtk_widget_set_halign (notes_entry, GTK_ALIGN_START);
+    gtk_widget_set_sensitive (notes_entry, edit_notes);
+    gtk_entry_set_text (GTK_ENTRY (notes_entry), xaccTransGetNotes (info->trans));
+    gtk_grid_attach (GTK_GRID (grid), notes_entry, 1, 1, 1, 1);
+
+    label = gtk_label_new ("Memo");
+    gtk_grid_attach (GTK_GRID (grid), label, 0, 2, 1, 1);
+
+    memo_entry = gtk_entry_new ();
+    gtk_widget_set_halign (memo_entry, GTK_ALIGN_START);
+    gtk_widget_set_sensitive (memo_entry, edit_memo);
+    gtk_entry_set_text (GTK_ENTRY (memo_entry), xaccSplitGetMemo (info->split));
+    gtk_grid_attach (GTK_GRID (grid), memo_entry, 1, 2, 1, 1);
+
+    gtk_container_add_with_properties (GTK_CONTAINER (content_area), grid,
+                                       "position", 1, NULL);
+
+    // run the dialog
+    gtk_widget_show_all (grid);
+
+    retval = (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT);
+
+    if (retval)
+    {
+        *new_desc = g_strdup (gtk_entry_get_text (GTK_ENTRY (desc_entry)));
+        *new_notes = g_strdup (gtk_entry_get_text (GTK_ENTRY (notes_entry)));
+        *new_memo = g_strdup (gtk_entry_get_text (GTK_ENTRY (memo_entry)));
+    }
+
+    gtk_widget_destroy (dialog);
+    return retval;
+}
+
 static void
-gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info,
-                           edit_field field)
+gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
 {
     GtkTreeView *treeview;
     GtkTreeSelection *selection;
     GtkTreeModel *model;
     GList *selected_rows, *row_info_list;
     GtkTreeStore* store;
-    Transaction* trans;
+    char *new_desc, *new_notes, *new_memo;
 
     g_return_if_fail (info != NULL);
     ENTER("assign_transfer_account_to_selection_cb");
@@ -956,84 +1017,40 @@ gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info,
     }
 
     row_info_list = gnc_g_list_map (selected_rows, (GncGMapFunc) row_get_info, info);
-    trans = ((RowInfo*)row_info_list->data)->trans;
 
-    switch (field)
+    if (input_new_fields (info->main_widget, row_info_list->data, store,
+                          info->edit_desc, info->edit_notes, info->edit_memo,
+                          &new_desc, &new_notes, &new_memo))
     {
-        case DESCRIPTION:
+        for (GList *n = row_info_list; n; n = g_list_next (n))
         {
-            char* new_field =
-                gnc_input_dialog_with_entry(info->main_widget, "",
-                                            _("Enter new Description"),
-                                            xaccTransGetDescription (trans));
-            if (!new_field) break;
-            for (GList *n = row_info_list; n; n = g_list_next (n))
+            RowInfo *row = n->data;
+            if (info->edit_desc)
             {
-                RowInfo *info = n->data;
-                xaccTransSetDescription (info->trans, new_field);
-                gtk_tree_store_set (store, &info->iter,
-                                    DOWNLOADED_COL_DESCRIPTION, new_field,
+                gtk_tree_store_set (store, &row->iter,
+                                    DOWNLOADED_COL_DESCRIPTION, new_desc,
                                     -1);
+                xaccTransSetDescription (row->trans, new_desc);
             }
-            g_free (new_field);
-            break;
-        }
-        case MEMO:
-        {
-            Split *first_split = xaccTransGetSplit (trans, 0);
-            char *new_field =
-                gnc_input_dialog_with_entry(info->main_widget, "",
-                                            _("Enter new Memo"),
-                                            xaccSplitGetMemo (first_split));
-            if (!new_field) break;
-            for (GList *n = row_info_list; n; n = g_list_next (n))
+
+            if (info->edit_notes)
+                xaccTransSetNotes (row->trans, new_notes);
+
+            if (info->edit_memo)
             {
-                RowInfo *info = n->data;
-                xaccSplitSetMemo (info->split, new_field);
-                gtk_tree_store_set (store, &info->iter,
-                                    DOWNLOADED_COL_MEMO, new_field,
+                gtk_tree_store_set (store, &row->iter,
+                                    DOWNLOADED_COL_MEMO, new_memo,
                                     -1);
+                xaccSplitSetMemo (row->split, new_memo);
             }
-            g_free (new_field);
-            break;
         }
-        case NOTES:
-        {
-            char* new_field =
-                gnc_input_dialog_with_entry(info->main_widget, "",
-                                            _("Enter new Notes"),
-                                            xaccTransGetNotes (trans));
-            if (!new_field) break;
-            for (GList *n = row_info_list; n; n = g_list_next (n))
-            {
-                RowInfo *info = n->data;
-                xaccTransSetNotes (info->trans, new_field);
-            }
-            g_free (new_field);
-            break;
-        }
+        g_free (new_desc);
+        g_free (new_memo);
+        g_free (new_notes);
     }
     g_list_free_full (row_info_list, (GDestroyNotify)rowinfo_free);
     g_list_free_full (selected_rows, (GDestroyNotify)gtk_tree_path_free);
     LEAVE("");
-}
-
-static void
-gnc_gen_trans_edit_description_cb (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
-{
-    gnc_gen_trans_edit_fields (menuitem, info, DESCRIPTION);
-}
-
-static void
-gnc_gen_trans_edit_memo_cb (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
-{
-    gnc_gen_trans_edit_fields (menuitem, info, MEMO);
-}
-
-static void
-gnc_gen_trans_edit_notes_cb (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
-{
-    gnc_gen_trans_edit_fields (menuitem, info, NOTES);
 }
 
 static void
@@ -1170,7 +1187,6 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
     GtkTreeSelection *selection;
     GList *selected_rows;
     const char *desc, *memo, *notes;
-    gboolean edit_desc = TRUE, edit_notes = TRUE, edit_memo = TRUE;
     gboolean has_edits = FALSE;
 
     ENTER ("");
@@ -1187,7 +1203,14 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
     model = gtk_tree_view_get_model (treeview);
     selection = gtk_tree_view_get_selection (treeview);
     selected_rows = gtk_tree_selection_get_selected_rows (selection, &model);
-    for (GList *n = selected_rows; (edit_desc || edit_notes || edit_memo) && n;
+
+    /* initialise */
+    info->edit_desc = TRUE;
+    info->edit_notes = TRUE;
+    info->edit_memo = TRUE;
+
+    for (GList *n = selected_rows;
+         (!has_edits || info->edit_desc || info->edit_notes || info->edit_memo) && n;
          n = g_list_next(n))
     {
         RowInfo *rowinfo = row_get_info (n->data, info);
@@ -1206,33 +1229,20 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
             rowinfo_free (rowinfo);
             continue;
         }
-        if (edit_desc && g_strcmp0 (desc, xaccTransGetDescription (rowinfo->trans)))
-            edit_desc = FALSE;
-        if (edit_notes && g_strcmp0 (notes, xaccTransGetNotes (rowinfo->trans)))
-            edit_notes = FALSE;
-        if (edit_memo && g_strcmp0 (memo, xaccSplitGetMemo (rowinfo->split)))
-            edit_memo = FALSE;
+        if (info->edit_desc && g_strcmp0 (desc, xaccTransGetDescription (rowinfo->trans)))
+            info->edit_desc = FALSE;
+        if (info->edit_notes && g_strcmp0 (notes, xaccTransGetNotes (rowinfo->trans)))
+            info->edit_notes = FALSE;
+        if (info->edit_memo && g_strcmp0 (memo, xaccSplitGetMemo (rowinfo->split)))
+            info->edit_memo = FALSE;
         rowinfo_free (rowinfo);
     }
 
-    menuitem = gtk_menu_item_new_with_label (_("Edit description."));
-    gtk_widget_set_sensitive (menuitem, edit_desc);
+    menuitem = gtk_menu_item_new_with_label (_("Edit description, notes, memo."));
+    gtk_widget_set_sensitive (menuitem,
+                              info->edit_desc || info->edit_notes || info->edit_memo);
     g_signal_connect (menuitem, "activate",
-                      G_CALLBACK (gnc_gen_trans_edit_description_cb),
-                      info);
-    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-
-    menuitem = gtk_menu_item_new_with_label (_("Edit memo."));
-    gtk_widget_set_sensitive (menuitem, edit_memo);
-    g_signal_connect (menuitem, "activate",
-                      G_CALLBACK (gnc_gen_trans_edit_memo_cb),
-                      info);
-    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-
-    menuitem = gtk_menu_item_new_with_label (_("Edit notes."));
-    gtk_widget_set_sensitive (menuitem, edit_notes);
-    g_signal_connect (menuitem, "activate",
-                      G_CALLBACK (gnc_gen_trans_edit_notes_cb),
+                      G_CALLBACK (gnc_gen_trans_edit_fields),
                       info);
     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
