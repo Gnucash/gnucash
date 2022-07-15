@@ -121,6 +121,8 @@ enum downloaded_cols
 /*static QofLogModule log_module = GNC_MOD_IMPORT;*/
 static QofLogModule log_module = G_MOD_IMPORT_MATCHER;
 
+static const gpointer one = GINT_TO_POINTER (1);
+
 void on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info);
 void on_matcher_cancel_clicked (GtkButton *button, gpointer user_data);
 gboolean on_matcher_delete_event (GtkWidget *widget, GdkEvent *event, gpointer data);
@@ -929,6 +931,40 @@ static RowInfo * row_get_info (gpointer row, GNCImportMainMatcher *info)
     return retval;
 }
 
+static void populate_list (gpointer key, gpointer value, GtkListStore *list)
+{
+    GtkTreeIter iter;
+    char *collated_key = g_utf8_collate_key (key, -1);
+    gtk_list_store_append (list, &iter);
+    gtk_list_store_set (list, &iter, 0, key, 1, collated_key, -1);
+    g_free (collated_key);
+}
+
+static void
+setup_entry (GtkWidget *entry, gboolean sensitive, GHashTable *hash,
+             const char *initial)
+{
+    GtkEntryCompletion* completion;
+    GtkListStore *list;
+
+    gtk_entry_set_text (GTK_ENTRY (entry), sensitive ? initial : _("Disabled"));
+    gtk_widget_set_sensitive (entry, sensitive);
+    if (!sensitive)
+        return;
+
+    list = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
+    g_hash_table_foreach (hash, (GHFunc)populate_list, list);
+    if (!g_hash_table_lookup (hash, (gpointer)initial))
+        populate_list ((gpointer)initial, NULL, list);
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (list), 1,
+                                          GTK_SORT_ASCENDING);
+
+    completion = gtk_entry_completion_new ();
+    gtk_entry_completion_set_model (completion, GTK_TREE_MODEL(list));
+    gtk_entry_completion_set_text_column (completion, 0);
+    gtk_entry_set_completion (GTK_ENTRY (entry), completion);
+}
+
 static gboolean
 input_new_fields (GtkWidget *parent, RowInfo *info, GtkTreeStore *store,
                   gboolean edit_desc, gboolean edit_notes, gboolean edit_memo,
@@ -938,6 +974,7 @@ input_new_fields (GtkWidget *parent, RowInfo *info, GtkTreeStore *store,
     GtkWidget  *dialog;
     GtkBuilder *builder;
     gboolean    retval = FALSE;
+    GHashTable *desc_hash, *notes_hash, *memo_hash;
 
     builder = gtk_builder_new ();
     gnc_builder_add_from_file (builder, "dialog-import.glade", "transaction_edit_dialog");
@@ -948,14 +985,37 @@ input_new_fields (GtkWidget *parent, RowInfo *info, GtkTreeStore *store,
     memo_entry = GTK_WIDGET(gtk_builder_get_object (builder, "memo_entry"));
     notes_entry = GTK_WIDGET(gtk_builder_get_object (builder, "notes_entry"));
 
-    gtk_widget_set_sensitive (desc_entry, edit_desc);
-    gtk_entry_set_text (GTK_ENTRY (desc_entry), xaccTransGetDescription (info->trans));
+    desc_hash = g_hash_table_new (g_str_hash, g_str_equal);
+    notes_hash = g_hash_table_new (g_str_hash, g_str_equal);
+    memo_hash = g_hash_table_new (g_str_hash, g_str_equal);
 
-    gtk_widget_set_sensitive (notes_entry, edit_notes);
-    gtk_entry_set_text (GTK_ENTRY (notes_entry), xaccTransGetNotes (info->trans));
+    for (GList *n = xaccAccountGetSplitList (xaccSplitGetAccount (info->split));
+         n; n = n->next)
+    {
+        const Split *s = n->data;
+        const Transaction *t = xaccSplitGetParent (s);
+        const gchar *key;
 
-    gtk_widget_set_sensitive (memo_entry, edit_memo);
-    gtk_entry_set_text (GTK_ENTRY (memo_entry), xaccSplitGetMemo (info->split));
+        key = xaccTransGetDescription (t);
+        if (key && *key)
+            g_hash_table_insert (desc_hash, (gpointer)key, one);
+
+        key = xaccTransGetNotes (t);
+        if (key && *key)
+            g_hash_table_insert (notes_hash, (gpointer)key, one);
+
+        key = xaccSplitGetMemo (s);
+        if (key && *key)
+            g_hash_table_insert (memo_hash, (gpointer)key, one);
+    };
+
+    setup_entry (desc_entry, edit_desc, desc_hash, xaccTransGetDescription (info->trans));
+    setup_entry (notes_entry, edit_notes, notes_hash, xaccTransGetNotes (info->trans));
+    setup_entry (memo_entry, edit_memo, memo_hash, xaccSplitGetMemo (info->split));
+
+    g_hash_table_destroy (desc_hash);
+    g_hash_table_destroy (notes_hash);
+    g_hash_table_destroy (memo_hash);
 
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 
