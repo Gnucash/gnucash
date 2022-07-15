@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-06-20 23:46+0200\n"
-"PO-Revision-Date: 2022-07-11 18:21+0000\n"
+"PO-Revision-Date: 2022-07-14 15:50+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -8719,7 +8719,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-file.c:850
 #: gnucash/gtkbuilder/dialog-file-access.glade:98
 msgid "Open _Read-Only"
-msgstr ""
+msgstr "Megnyitás csak _olvasásra"
 
 #: gnucash/gnome-utils/gnc-file.c:853
 #, fuzzy
@@ -9055,7 +9055,7 @@ msgstr "Ablak bezárása?"
 #. document is, well, read-only.
 #: gnucash/gnome-utils/gnc-main-window.c:1593
 msgid "(read-only)"
-msgstr ""
+msgstr "(csak olvasható)"
 
 #: gnucash/gnome-utils/gnc-main-window.c:1601
 msgid "Unsaved Book"
@@ -15715,9 +15715,8 @@ msgid "Access Control"
 msgstr "Hozzáférés"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:72
-#, fuzzy
 msgid "<b>Data Format</b>"
-msgstr "<b>Dátumformátum</b>"
+msgstr "<b>Adatformátum</b>"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:140
 msgid "<b>File</b>"
@@ -15733,11 +15732,11 @@ msgstr "Adatbázis"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:210
 msgid "Password"
-msgstr "Jelszó:"
+msgstr "Jelszó"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:281
 msgid "<b>Database Connection</b>"
-msgstr "<b>Adatbázis kapcsolat</b>"
+msgstr "<b>Adatbázis-kapcsolat</b>"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:12
 #: gnucash/gtkbuilder/dialog-fincalc.glade:53
