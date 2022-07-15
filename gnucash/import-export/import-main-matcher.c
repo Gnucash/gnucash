@@ -85,6 +85,10 @@ struct _main_matcher_info
     gboolean edit_desc;
     gboolean edit_notes;
     gboolean edit_memo;
+
+    GHashTable *desc_hash;
+    GHashTable *notes_hash;
+    GHashTable *memo_hash;
 };
 
 enum downloaded_cols
@@ -236,6 +240,11 @@ gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
     g_hash_table_foreach_remove (info->acct_id_hash, delete_hash, NULL);
     g_hash_table_destroy (info->acct_id_hash);
     info->acct_id_hash = NULL;
+
+    g_hash_table_destroy (info->desc_hash);
+    g_hash_table_destroy (info->notes_hash);
+    g_hash_table_destroy (info->memo_hash);
+
     g_free (info);
 }
 
@@ -457,6 +466,47 @@ resolve_conflicts (GNCImportMainMatcher *info)
     }
 }
 
+
+static void
+load_hash_tables (GNCImportMainMatcher *info)
+{
+    GtkTreeModel *model = gtk_tree_view_get_model (info->view);
+    GtkTreeIter import_iter;
+    GList *accounts_list = NULL;
+    gboolean valid = gtk_tree_model_get_iter_first (model, &import_iter);
+    while (valid)
+    {
+        GNCImportTransInfo *trans_info = get_trans_info (model, &import_iter);
+        Split *s = gnc_import_TransInfo_get_fsplit (trans_info);
+        Account *acc = xaccSplitGetAccount (s);
+        if (!g_list_find (accounts_list, acc))
+            accounts_list = g_list_prepend (accounts_list, acc);
+        valid = gtk_tree_model_iter_next (model, &import_iter);
+    }
+    for (GList *m = accounts_list; m; m = m->next)
+    {
+        for (GList *n = xaccAccountGetSplitList (m->data); n; n = n->next)
+        {
+            const Split *s = n->data;
+            const Transaction *t = xaccSplitGetParent (s);
+            const gchar *key;
+
+            key = xaccTransGetDescription (t);
+            if (key && *key)
+                g_hash_table_insert (info->desc_hash, (gpointer)key, one);
+
+            key = xaccTransGetNotes (t);
+            if (key && *key)
+                g_hash_table_insert (info->notes_hash, (gpointer)key, one);
+
+            key = xaccSplitGetMemo (s);
+            if (key && *key)
+                g_hash_table_insert (info->memo_hash, (gpointer)key, one);
+        }
+    }
+    g_list_free (accounts_list);
+}
+
 void
 gnc_gen_trans_list_show_all (GNCImportMainMatcher *info)
 {
@@ -482,6 +532,7 @@ gnc_gen_trans_list_show_all (GNCImportMainMatcher *info)
                                  xaccAccountGetAppendText(account));
 
     gnc_gen_trans_list_create_matches (info);
+    load_hash_tables (info);
     resolve_conflicts (info);
     gtk_widget_show_all (GTK_WIDGET(info->main_widget));
     gnc_gen_trans_list_show_accounts_column (info);
@@ -966,15 +1017,13 @@ setup_entry (GtkWidget *entry, gboolean sensitive, GHashTable *hash,
 }
 
 static gboolean
-input_new_fields (GtkWidget *parent, RowInfo *info, GtkTreeStore *store,
-                  gboolean edit_desc, gboolean edit_notes, gboolean edit_memo,
+input_new_fields (GNCImportMainMatcher *info, RowInfo *rowinfo,
                   char **new_desc, char **new_notes, char **new_memo)
 {
     GtkWidget  *desc_entry, *notes_entry, *memo_entry, *label;
     GtkWidget  *dialog;
     GtkBuilder *builder;
     gboolean    retval = FALSE;
-    GHashTable *desc_hash, *notes_hash, *memo_hash;
 
     builder = gtk_builder_new ();
     gnc_builder_add_from_file (builder, "dialog-import.glade", "transaction_edit_dialog");
@@ -985,39 +1034,11 @@ input_new_fields (GtkWidget *parent, RowInfo *info, GtkTreeStore *store,
     memo_entry = GTK_WIDGET(gtk_builder_get_object (builder, "memo_entry"));
     notes_entry = GTK_WIDGET(gtk_builder_get_object (builder, "notes_entry"));
 
-    desc_hash = g_hash_table_new (g_str_hash, g_str_equal);
-    notes_hash = g_hash_table_new (g_str_hash, g_str_equal);
-    memo_hash = g_hash_table_new (g_str_hash, g_str_equal);
+    setup_entry (desc_entry, info->edit_desc, info->desc_hash, xaccTransGetDescription (rowinfo->trans));
+    setup_entry (notes_entry, info->edit_notes, info->notes_hash, xaccTransGetNotes (rowinfo->trans));
+    setup_entry (memo_entry, info->edit_memo, info->memo_hash, xaccSplitGetMemo (rowinfo->split));
 
-    for (GList *n = xaccAccountGetSplitList (xaccSplitGetAccount (info->split));
-         n; n = n->next)
-    {
-        const Split *s = n->data;
-        const Transaction *t = xaccSplitGetParent (s);
-        const gchar *key;
-
-        key = xaccTransGetDescription (t);
-        if (key && *key)
-            g_hash_table_insert (desc_hash, (gpointer)key, one);
-
-        key = xaccTransGetNotes (t);
-        if (key && *key)
-            g_hash_table_insert (notes_hash, (gpointer)key, one);
-
-        key = xaccSplitGetMemo (s);
-        if (key && *key)
-            g_hash_table_insert (memo_hash, (gpointer)key, one);
-    };
-
-    setup_entry (desc_entry, edit_desc, desc_hash, xaccTransGetDescription (info->trans));
-    setup_entry (notes_entry, edit_notes, notes_hash, xaccTransGetNotes (info->trans));
-    setup_entry (memo_entry, edit_memo, memo_hash, xaccSplitGetMemo (info->split));
-
-    g_hash_table_destroy (desc_hash);
-    g_hash_table_destroy (notes_hash);
-    g_hash_table_destroy (memo_hash);
-
-    gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
+    gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (info->main_widget));
 
     // run the dialog
     gtk_widget_show_all (dialog);
@@ -1047,7 +1068,7 @@ gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
     GtkTreeModel *model;
     GList *selected_rows, *row_info_list;
     GtkTreeStore* store;
-    char *new_desc, *new_notes, *new_memo;
+    char *new_desc = NULL, *new_notes = NULL, *new_memo = NULL;
 
     g_return_if_fail (info != NULL);
     ENTER("assign_transfer_account_to_selection_cb");
@@ -1066,8 +1087,7 @@ gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
 
     row_info_list = gnc_g_list_map (selected_rows, (GncGMapFunc) row_get_info, info);
 
-    if (input_new_fields (info->main_widget, row_info_list->data, store,
-                          info->edit_desc, info->edit_notes, info->edit_memo,
+    if (input_new_fields (info, row_info_list->data,
                           &new_desc, &new_notes, &new_memo))
     {
         for (GList *n = row_info_list; n; n = g_list_next (n))
@@ -1657,6 +1677,11 @@ gnc_gen_trans_list_new (GtkWidget *parent,
                                            info);
     // This ensure this dialog is closed when the session is closed.
     gnc_gui_component_set_session (info->id, gnc_get_current_session());
+
+    info->desc_hash = g_hash_table_new (g_str_hash, g_str_equal);
+    info->notes_hash = g_hash_table_new (g_str_hash, g_str_equal);
+    info->memo_hash = g_hash_table_new (g_str_hash, g_str_equal);
+
     return info;
 }
 
