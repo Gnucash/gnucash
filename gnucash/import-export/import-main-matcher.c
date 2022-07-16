@@ -89,6 +89,8 @@ struct _main_matcher_info
     GHashTable *desc_hash;
     GHashTable *notes_hash;
     GHashTable *memo_hash;
+
+    GList *new_strings;
 };
 
 enum downloaded_cols
@@ -244,6 +246,8 @@ gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
     g_hash_table_destroy (info->desc_hash);
     g_hash_table_destroy (info->notes_hash);
     g_hash_table_destroy (info->memo_hash);
+
+    g_list_free_full (info->new_strings, (GDestroyNotify)g_free);
 
     g_free (info);
 }
@@ -1102,10 +1106,24 @@ gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
                                     DOWNLOADED_COL_DESCRIPTION_STYLE, style,
                                     -1);
                 xaccTransSetDescription (row->trans, new_desc);
+                if (*new_desc && !g_hash_table_lookup (info->desc_hash, new_desc))
+                {
+                    char *new_string = g_strdup (new_desc);
+                    info->new_strings = g_list_prepend (info->new_strings, new_string);
+                    g_hash_table_insert (info->desc_hash, new_string, one);
+                }
             }
 
             if (info->edit_notes)
+            {
                 xaccTransSetNotes (row->trans, new_notes);
+                if (*new_notes && !g_hash_table_lookup (info->notes_hash, new_notes))
+                {
+                    char *new_string = g_strdup (new_notes);
+                    info->new_strings = g_list_prepend (info->new_strings, new_string);
+                    g_hash_table_insert (info->notes_hash, new_string, one);
+                }
+            }
 
             if (info->edit_memo)
             {
@@ -1116,6 +1134,12 @@ gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
                                     DOWNLOADED_COL_MEMO_STYLE, style,
                                     -1);
                 xaccSplitSetMemo (row->split, new_memo);
+                if (*new_memo && !g_hash_table_lookup (info->memo_hash, new_memo))
+                {
+                    char *new_string = g_strdup (new_memo);
+                    info->new_strings = g_list_prepend (info->new_strings, new_string);
+                    g_hash_table_insert (info->memo_hash, new_string, one);
+                }
             }
         }
         g_free (new_desc);
@@ -1682,6 +1706,7 @@ gnc_gen_trans_list_new (GtkWidget *parent,
     info->notes_hash = g_hash_table_new (g_str_hash, g_str_equal);
     info->memo_hash = g_hash_table_new (g_str_hash, g_str_equal);
 
+    info->new_strings = NULL;
     return info;
 }
 
