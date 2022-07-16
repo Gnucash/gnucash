@@ -2150,7 +2150,7 @@ query_tooltip_tree_view_cb (GtkWidget *widget, gint x, gint y,
     // Get the iter pointing to our current column
     if (gtk_tree_model_get_iter(model, &iter, path) && column)
     {
-        const gchar *tooltip_text = NULL;
+        gchar *tooltip_text = NULL;
 
         // Select text based on column
         gint num_col = gtk_tree_view_column_get_sort_column_id (column);
@@ -2173,6 +2173,7 @@ query_tooltip_tree_view_cb (GtkWidget *widget, gint x, gint y,
             gtk_tooltip_set_text (tooltip, tooltip_text);
             gtk_tree_view_set_tooltip_cell (tree_view, tooltip, path, column, NULL);
         }
+        g_free (tooltip_text);
     }
     // Clean up the object
     gtk_tree_path_free (path);
