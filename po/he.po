@@ -8,11 +8,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-17 04:04+0200\n"
-"PO-Revision-Date: 2022-07-15 11:18+0000\n"
-"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
+"PO-Revision-Date: 2022-07-17 07:37+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -8762,7 +8762,7 @@ msgstr "מאפייני ספר חשבונות"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4751 gnucash/gnucash-core-app.cpp:261
 msgid "(user modifiable)"
-msgstr ""
+msgstr "(זמין לעריכת המשתמש)"
 
 #. Translators: %s will be replaced with the current year
 #: gnucash/gnome-utils/gnc-main-window.c:4778
@@ -10103,10 +10103,8 @@ msgid "{1} [options] [datafile]"
 msgstr "{1} [אפשרויות] [קובץ נתונים]"
 
 #: gnucash/gnucash-core-app.cpp:255
-#, fuzzy
-#| msgid "GnuCash "
 msgid "GnuCash Paths"
-msgstr "גנוקאש "
+msgstr "נתיבי גנוקאש"
 
 #: gnucash/gnucash-core-app.cpp:270
 msgid "GnuCash {1}"
@@ -10152,10 +10150,8 @@ msgstr ""
 "ניתן להפעיל אפשרות זו מספר פעמים."
 
 #: gnucash/gnucash-core-app.cpp:309
-#, fuzzy
-#| msgid "Show plot"
 msgid "Show paths"
-msgstr "הצגת תרשים"
+msgstr "הצגת נתיבים"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
@@ -15181,10 +15177,8 @@ msgstr "ISIN, CUSI_P או קוד אחר"
 #: gnucash/gtkbuilder/dialog-commodity.glade:485
 #: gnucash/gtkbuilder/dialog-commodity.glade:767
 #: gnucash/gtkbuilder/dialog-price.glade:122
-#, fuzzy
-#| msgid "Namespace"
 msgid "Nam_espace"
-msgstr "מרחב שם"
+msgstr "מ_רחב שם"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:500
 msgid "_Symbol/abbreviation"
