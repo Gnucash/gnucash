@@ -1291,8 +1291,8 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
 
     ENTER ("");
     menu = gtk_menu_new();
-    menuitem = gtk_menu_item_new_with_label (
-                   _("Assign a transfer account to the selection."));
+    menuitem = gtk_menu_item_new_with_mnemonic
+        (_("_Assign a transfer account to the selection"));
     g_signal_connect (menuitem, "activate",
                       G_CALLBACK(
                       gnc_gen_trans_assign_transfer_account_to_selection_cb),
@@ -1338,7 +1338,7 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
         rowinfo_free (rowinfo);
     }
 
-    menuitem = gtk_menu_item_new_with_label (_("Edit description, notes, memo."));
+    menuitem = gtk_menu_item_new_with_mnemonic (_("_Edit description, notes, memo"));
     gtk_widget_set_sensitive (menuitem,
                               info->edit_desc || info->edit_notes || info->edit_memo);
     g_signal_connect (menuitem, "activate",
@@ -1346,7 +1346,7 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
                       info);
     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
-    menuitem = gtk_menu_item_new_with_label (_("Reset edits."));
+    menuitem = gtk_menu_item_new_with_mnemonic (_("_Reset all edits"));
     gtk_widget_set_sensitive (menuitem, has_edits);
     g_signal_connect (menuitem, "activate",
                       G_CALLBACK (gnc_gen_trans_reset_edits_cb),
