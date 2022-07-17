@@ -171,13 +171,13 @@ public:
 /** Not implemented for GncOptionValue. */
     template <typename ValueType> bool validate(ValueType value) const;
 /** Implemented only for GncOptionMultiselectValue. */
-    std::size_t num_permissible_values() const;
+    uint16_t num_permissible_values() const;
 /** Implemented only for GncOptionMultiselectValue. */
-    std::size_t permissible_value_index(const char* value) const;
+    uint16_t permissible_value_index(const char* value) const;
 /** Implemented only for GncOptionMultiselectValue. */
-    const char* permissible_value(std::size_t index) const;
+    const char* permissible_value(uint16_t index) const;
 /** Implemented only for GncOptionMultiselectValue. */
-    const char* permissible_value_name(std::size_t index) const;
+    const char* permissible_value_name(uint16_t index) const;
 /** Implemented only for GncOptionAccountListValue. */
     GList* account_type_list() const noexcept;
     bool is_alternate() const noexcept;

@@ -282,12 +282,12 @@ TEST_F(GncOptionDBTest, test_register_start_date_option)
      * gnc-optiondb.cpp.
      */
     EXPECT_EQ(static_cast<unsigned int>(std::distance(begin_dates.begin(), index)),
-              m_db->find_option("foo", "bar")->get_value<size_t>());
+              m_db->find_option("foo", "bar")->get_value<uint16_t>());
     m_db->set_option("foo", "bar", RelativeDatePeriod::END_THIS_MONTH);
     EXPECT_EQ(RelativeDatePeriod::START_THIS_MONTH,
               m_db->find_option("foo", "bar")->get_value<RelativeDatePeriod>());
-    m_db->set_option("foo", "bar", static_cast<size_t>(5));
-    EXPECT_EQ(5u, m_db->find_option("foo", "bar")->get_value<size_t>());
+    m_db->set_option("foo", "bar", static_cast<uint16_t>(5));
+    EXPECT_EQ(5u, m_db->find_option("foo", "bar")->get_value<uint16_t>());
 
 }
 

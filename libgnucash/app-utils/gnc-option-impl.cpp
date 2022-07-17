@@ -465,7 +465,7 @@ GncOptionDateValue::get_default_value() const noexcept
 /* Use asserts for pre- and post-conditions to deliberately crash if they're not
  * met as the program design should prevent that from happening.
  */
-size_t
+uint16_t
 GncOptionDateValue::get_period_index() const noexcept
 {
     assert (m_period != RelativeDatePeriod::ABSOLUTE);
@@ -475,7 +475,7 @@ GncOptionDateValue::get_period_index() const noexcept
     return item - m_period_set.begin();
 }
 
-size_t
+uint16_t
 GncOptionDateValue::get_default_period_index() const noexcept
 {
     assert(m_period != RelativeDatePeriod::ABSOLUTE);
@@ -487,7 +487,7 @@ GncOptionDateValue::get_default_period_index() const noexcept
 }
 
 void
-GncOptionDateValue::set_value(size_t index) noexcept
+GncOptionDateValue::set_value(uint16_t index) noexcept
 {
     assert(!m_period_set.empty());
     assert(index < m_period_set.size());
@@ -495,7 +495,7 @@ GncOptionDateValue::set_value(size_t index) noexcept
     m_period = m_period_set[index];
 }
 
-size_t
+uint16_t
 GncOptionDateValue::permissible_value_index(const char* key) const noexcept
 {
     auto index = std::find_if(m_period_set.begin(), m_period_set.end(),
@@ -800,11 +800,11 @@ GncOptionMultichoiceValue::serialize() const noexcept
 bool
 GncOptionMultichoiceValue::deserialize(const std::string& str) noexcept
 {
-    static const auto size_t_max = std::numeric_limits<std::size_t>::max();
+    static const auto uint16_t_max = std::numeric_limits<uint16_t>::max();
     if (str.empty())
 
         return false;
-    size_t pos{};
+    uint16_t pos{};
     while (pos < str.size())
     {
         auto endpos{str.find(' ', pos)};
@@ -812,7 +812,7 @@ GncOptionMultichoiceValue::deserialize(const std::string& str) noexcept
             endpos = str.size();
         //need a null-terminated char* to pass to permissible_value_index
         auto index{permissible_value_index(str.substr(pos, endpos).c_str())};
-        if (index == size_t_max)
+        if (index == uint16_t_max)
             return false;
         m_value.push_back(index);
         pos = endpos + 1;
@@ -870,7 +870,7 @@ GncOptionDateValue::deserialize(const std::string& str) noexcept
     if (type_str == "absolute")
     {
         // Need a cast to disambiguate from time64.
-        set_value(static_cast<size_t>(std::stoll(period_str)));
+        set_value(static_cast<uint16_t>(std::stoll(period_str)));
         return true;
     }
     else if (type_str == "relative ")
@@ -914,7 +914,7 @@ template GncOptionValue<std::string>::GncOptionValue(const GncOptionValue<std::s
 template GncOptionValue<const QofQuery*>::GncOptionValue(const GncOptionValue<const QofQuery*>&);
 template GncOptionValue<const GncOwner*>::GncOptionValue(const GncOptionValue<const GncOwner*>&);
 template GncOptionValue<RelativeDatePeriod>::GncOptionValue(const GncOptionValue<RelativeDatePeriod>&);
-template GncOptionValue<size_t>::GncOptionValue(const GncOptionValue<size_t>&);
+template GncOptionValue<uint16_t>::GncOptionValue(const GncOptionValue<uint16_t>&);
 template GncOptionValue<GncOptionAccountList>::GncOptionValue(const GncOptionValue<GncOptionAccountList>&);
 template GncOptionValue<GncMultichoiceOptionIndexVec>::GncOptionValue(const GncOptionValue<GncMultichoiceOptionIndexVec>&);
 template GncOptionValue<GncOptionReportPlacementVec>::GncOptionValue(const GncOptionValue<GncOptionReportPlacementVec>&);
@@ -928,7 +928,7 @@ template void GncOptionValue<std::string>::set_value(std::string);
 template void GncOptionValue<const QofQuery*>::set_value(const QofQuery*);
 template void GncOptionValue<const GncOwner*>::set_value(const GncOwner*);
 template void GncOptionValue<RelativeDatePeriod>::set_value(RelativeDatePeriod);
-template void GncOptionValue<size_t>::set_value(size_t);
+template void GncOptionValue<uint16_t>::set_value(uint16_t);
 template void GncOptionValue<GncOptionAccountList>::set_value(GncOptionAccountList);
 template void GncOptionValue<GncMultichoiceOptionIndexVec>::set_value(GncMultichoiceOptionIndexVec);
 template void GncOptionValue<GncOptionReportPlacementVec>::set_value(GncOptionReportPlacementVec);
@@ -942,7 +942,7 @@ template void GncOptionValue<std::string>::set_default_value(std::string);
 template void GncOptionValue<const QofQuery*>::set_default_value(const QofQuery*);
 template void GncOptionValue<const GncOwner*>::set_default_value(const GncOwner*);
 template void GncOptionValue<RelativeDatePeriod>::set_default_value(RelativeDatePeriod);
-template void GncOptionValue<size_t>::set_default_value(size_t);
+template void GncOptionValue<uint16_t>::set_default_value(uint16_t);
 template void GncOptionValue<GncOptionAccountList>::set_default_value(GncOptionAccountList);
 template void GncOptionValue<GncMultichoiceOptionIndexVec>::set_default_value(GncMultichoiceOptionIndexVec);
 template void GncOptionValue<GncOptionReportPlacementVec>::set_default_value(GncOptionReportPlacementVec);
@@ -956,7 +956,7 @@ template void GncOptionValue<std::string>::reset_default_value();
 template void GncOptionValue<const QofQuery*>::reset_default_value();
 template void GncOptionValue<const GncOwner*>::reset_default_value();
 template void GncOptionValue<RelativeDatePeriod>::reset_default_value();
-template void GncOptionValue<size_t>::reset_default_value();
+template void GncOptionValue<uint16_t>::reset_default_value();
 template void GncOptionValue<GncOptionAccountList>::reset_default_value();
 template void GncOptionValue<GncMultichoiceOptionIndexVec>::reset_default_value();
 template void GncOptionValue<GncOptionReportPlacementVec>::reset_default_value();

@@ -77,7 +77,7 @@ struct OptionClassifier
 
 
 #ifndef SWIG
-auto constexpr size_t_max = std::numeric_limits<std::size_t>::max();
+auto constexpr uint16_t_max = std::numeric_limits<uint16_t>::max();
 #endif
 
 /** @class GncOptionValue
@@ -424,7 +424,7 @@ operator>> (std::istream& iss, OptType& opt)
 using GncMultichoiceOptionEntry = std::tuple<const std::string,
                                              const std::string,
                                              GncOptionMultichoiceKeyType>;
-using GncMultichoiceOptionIndexVec = std::vector<std::size_t>;
+using GncMultichoiceOptionIndexVec = std::vector<uint16_t>;
 using GncMultichoiceOptionChoices = std::vector<GncMultichoiceOptionEntry>;
 
 /** @class GncOptionMultichoiceValue
@@ -457,7 +457,7 @@ public:
         if (value)
         {
             if (auto index = find_key(value);
-                index != size_t_max)
+                index != uint16_t_max)
             {
                 m_value.push_back(index);
                 m_default_value.push_back(index);
@@ -467,7 +467,7 @@ public:
 
     GncOptionMultichoiceValue(const char* section, const char* name,
                               const char* key, const char* doc_string,
-                              size_t index,
+                              uint16_t index,
                               GncMultichoiceOptionChoices&& choices,
                               GncOptionUIType ui_type = GncOptionUIType::MULTICHOICE) :
         OptionClassifier{section, name, key, doc_string},
@@ -516,7 +516,7 @@ public:
             return c_list_string;
     }
 
-    size_t get_index() const
+    uint16_t get_index() const
     {
         if (m_value.size() > 0)
             return m_value[0];
@@ -535,7 +535,7 @@ public:
     bool validate(const std::string& value) const noexcept
     {
         auto index = find_key(value);
-        return index != size_t_max;
+        return index != uint16_t_max;
 
     }
     bool validate(const GncMultichoiceOptionIndexVec& indexes) const noexcept
@@ -549,7 +549,7 @@ public:
     void set_value(const std::string& value)
     {
         auto index = find_key(value);
-        if (index != size_t_max)
+        if (index != uint16_t_max)
         {
             m_value.clear();
             m_value.push_back(index);
@@ -558,7 +558,7 @@ public:
             throw std::invalid_argument("Value not a valid choice.");
 
     }
-    void set_value(size_t index)
+    void set_value(uint16_t index)
     {
         if (index < m_choices.size())
         {
@@ -572,7 +572,7 @@ public:
     void set_default_value(const std::string& value)
     {
         auto index = find_key(value);
-        if (index != size_t_max)
+        if (index != uint16_t_max)
         {
             m_value.clear();
             m_value.push_back(index);
@@ -583,7 +583,7 @@ public:
             throw std::invalid_argument("Value not a valid choice.");
 
     }
-    void set_default_value(size_t index)
+    void set_default_value(uint16_t index)
     {
         if (index < m_choices.size())
         {
@@ -610,19 +610,19 @@ public:
         else
             throw std::invalid_argument("One of the supplied indexes was out of range.");
     }
-    std::size_t num_permissible_values() const noexcept
+    uint16_t num_permissible_values() const noexcept
     {
         return m_choices.size();
     }
-    std::size_t permissible_value_index(const char* key) const noexcept
+    uint16_t permissible_value_index(const char* key) const noexcept
     {
             return find_key(key);
     }
-    const char* permissible_value(std::size_t index) const
+    const char* permissible_value(uint16_t index) const
     {
         return std::get<0>(m_choices.at(index)).c_str();
     }
-    const char* permissible_value_name(std::size_t index) const
+    const char* permissible_value_name(uint16_t index) const
     {
         return std::get<1>(m_choices.at(index)).c_str();
     }
@@ -634,7 +634,7 @@ public:
     std::string serialize() const noexcept;
     bool deserialize(const std::string& str) noexcept;
 private:
-    std::size_t find_key (const std::string& key) const noexcept
+    uint16_t find_key (const std::string& key) const noexcept
     {
         auto iter = std::find_if(m_choices.begin(), m_choices.end(),
                               [key](auto choice) {
@@ -642,7 +642,7 @@ private:
         if (iter != m_choices.end())
             return iter - m_choices.begin();
         else
-            return size_t_max;
+            return uint16_t_max;
 
     }
     GncOptionUIType m_ui_type;
@@ -682,7 +682,7 @@ operator>> <GncOptionMultichoiceValue>(std::istream& iss,
         if (!str.empty())
         {
             auto index = opt.permissible_value_index(str.c_str());
-            if (index != size_t_max)
+            if (index != uint16_t_max)
                 values.push_back(index);
             else
             {
@@ -983,8 +983,8 @@ public:
     time64 get_default_value() const noexcept;
     RelativeDatePeriod get_period() const noexcept { return m_period; }
     RelativeDatePeriod get_default_period() const noexcept { return m_default_period; }
-    size_t get_period_index() const noexcept;
-    size_t get_default_period_index() const noexcept;
+    uint16_t get_period_index() const noexcept;
+    uint16_t get_default_period_index() const noexcept;
     std::ostream& out_stream(std::ostream& oss) const noexcept;
     std::istream& in_stream(std::istream& iss);
     bool validate(RelativeDatePeriod value);
@@ -1007,7 +1007,7 @@ public:
             m_date = time;
         }
     }
-    void set_value(size_t index) noexcept;
+    void set_value(uint16_t index) noexcept;
     void set_default_value(RelativeDatePeriod value) {
         if (validate(value))
         {
@@ -1022,16 +1022,16 @@ public:
             m_date = m_default_date = time;
         }
     }
-    std::size_t num_permissible_values() const noexcept
+    uint16_t num_permissible_values() const noexcept
     {
         return m_period_set.size();
     }
-    std::size_t permissible_value_index(const char* key) const noexcept;
-    const char* permissible_value(std::size_t index) const
+    uint16_t permissible_value_index(const char* key) const noexcept;
+    const char* permissible_value(uint16_t index) const
     {
         return gnc_relative_date_storage_string(m_period_set.at(index));
     }
-    const char* permissible_value_name(std::size_t index) const
+    const char* permissible_value_name(uint16_t index) const
     {
         return gnc_relative_date_display_string(m_period_set.at(index));
     }

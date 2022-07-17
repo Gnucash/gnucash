@@ -22,6 +22,7 @@
  *                                                                  *
 \********************************************************************/
 %include "constraints.i"
+%include <stdint.i>
 
 typedef void * gpointer; // Not sure why SWIG doesn't figure this out.
 %typemap(newfree) gchar * "g_free($1);"
@@ -173,7 +174,6 @@ typedef char gchar;
 #elif defined(SWIGPYTHON) /* Typemaps for Python */
 
 %import "glib.h"
-%include <stdint.i>
 
 %apply int { gint };
 %apply unsigned int { guint };

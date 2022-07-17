@@ -783,7 +783,7 @@ TEST_F(GncMultichoiceOption, test_permissible_value_stuff)
                  std::out_of_range);
     EXPECT_THROW({ auto result = m_option.permissible_value_name(9); },
         std::out_of_range);
-    EXPECT_EQ(std::numeric_limits<std::size_t>::max(),
+    EXPECT_EQ(std::numeric_limits<uint16_t>::max(),
               m_option.permissible_value_index("xyzzy"));
 }
 
@@ -842,14 +842,14 @@ TEST_F(GncListOption, test_set_value)
             m_option.set_value(GncMultichoiceOptionIndexVec{1, 3});
             EXPECT_STREQ("multiple values",
                          m_option.get_value<std::string>().c_str());
-            EXPECT_EQ(1U, m_option.get_value<size_t>());
+            EXPECT_EQ(1U, m_option.get_value<uint16_t>());
             auto vec{m_option.get_value<GncMultichoiceOptionIndexVec>()};
             ASSERT_EQ(2U, vec.size());
             EXPECT_EQ(1U, vec[0]);
             EXPECT_EQ(3U, vec[1]);
         });
     EXPECT_THROW({ m_option.set_value(GncMultichoiceOptionIndexVec{2, 5}); }, std::invalid_argument);
-    EXPECT_EQ(1U, m_option.get_value<size_t>());
+    EXPECT_EQ(1U, m_option.get_value<uint16_t>());
 }
 
 TEST_F(GncListOption, test_list_out)
@@ -1066,15 +1066,15 @@ TEST_F(GncDateOptionList, test_set_and_get_relative)
     m_option.set_value(RelativeDatePeriod::START_THIS_MONTH);
     EXPECT_EQ(time1, m_option.get_value<time64>());
     EXPECT_EQ(RelativeDatePeriod::START_THIS_MONTH, m_option.get_value<RelativeDatePeriod>());
-    size_t index(std::find(c_begin_dates.begin(), c_begin_dates.end(),
+    uint16_t index(std::find(c_begin_dates.begin(), c_begin_dates.end(),
                          RelativeDatePeriod::START_THIS_MONTH) - c_begin_dates.begin());
-    EXPECT_EQ(index, m_option.get_value<size_t>());
+    EXPECT_EQ(index, m_option.get_value<uint16_t>());
     // And check that nothing happens when we try to set m_option to an end date
     m_option.set_value(RelativeDatePeriod::END_THIS_MONTH);
     EXPECT_EQ(RelativeDatePeriod::START_THIS_MONTH, m_option.get_value<RelativeDatePeriod>());
-    m_option.set_value(static_cast<size_t>(5));
+    m_option.set_value(static_cast<uint16_t>(5));
     EXPECT_EQ(RelativeDatePeriod::START_CAL_YEAR, m_option.get_value<RelativeDatePeriod>());
-    EXPECT_EQ(5u, m_option.get_value<size_t>());
+    EXPECT_EQ(5u, m_option.get_value<uint16_t>());
 }
 
 TEST_F(GncDateOption, test_stream_out)

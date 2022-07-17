@@ -1095,12 +1095,12 @@ public:
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
         auto widget{GTK_COMBO_BOX(get_widget())};
-        gtk_combo_box_set_active(widget, option.get_value<size_t>());
+        gtk_combo_box_set_active(widget, option.get_value<uint16_t>());
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
         auto widget{GTK_COMBO_BOX(get_widget())};
-        option.set_value<size_t>(static_cast<size_t>(gtk_combo_box_get_active(widget)));
+        option.set_value<uint16_t>(static_cast<uint16_t>(gtk_combo_box_get_active(widget)));
     }
 };
 
@@ -1240,13 +1240,13 @@ RelativeDateEntry::RelativeDateEntry(GncOption& option)
 void
 RelativeDateEntry::set_entry_from_option(GncOption& option)
 {
-    gtk_combo_box_set_active(GTK_COMBO_BOX(m_entry), option.get_value<size_t>());
+    gtk_combo_box_set_active(GTK_COMBO_BOX(m_entry), option.get_value<uint16_t>());
 }
 
 void
 RelativeDateEntry::set_option_from_entry(GncOption& option)
 {
-    option.set_value<size_t>(gtk_combo_box_get_active(GTK_COMBO_BOX(m_entry)));
+    option.set_value<uint16_t>(gtk_combo_box_get_active(GTK_COMBO_BOX(m_entry)));
 }
 
 void
@@ -2383,7 +2383,7 @@ public:
         GncOptionGtkUIItem{widget, GncOptionUIType::RADIOBUTTON} {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
-        auto index{option.get_value<size_t>()};
+        auto index{option.get_value<uint16_t>()};
         auto list{gtk_container_get_children(GTK_CONTAINER(get_widget()))};
         auto box{GTK_WIDGET(list->data)};
         g_list_free(list);
@@ -2397,7 +2397,7 @@ public:
         }
         else
         {
-            PERR("Invalid Radio Button Selection %lu", index);
+            PERR("Invalid Radio Button Selection %hu", index);
             g_list_free(list);
             return;
         }
@@ -2412,7 +2412,7 @@ public:
     {
         auto index{g_object_get_data(G_OBJECT(get_widget()),
                                      "gnc_radiobutton_index")};
-        option.set_value<size_t>(GPOINTER_TO_INT(index));
+        option.set_value<uint16_t>(GPOINTER_TO_INT(index));
     }
 };
 

@@ -527,7 +527,7 @@ gnc_option_test_book_destroy(QofBook* book)
 %ignore GncOptionDateValue(GncOptionDateValue&&);
 %ignore GncOptionDateValue::operator=(const GncOptionDateValue&);
 %ignore GncOptionDateValue::operator=(GncOptionDateValue&&);
-%ignore GncOptionDateValue::set_value(size_t); // Used only by dialog-options
+%ignore GncOptionDateValue::set_value(uint16_t); // Used only by dialog-options
 %ignore operator<<(std::ostream&, const GncOption&);
 %ignore operator<<(std::ostream&, const RelativeDatePeriod);
 %ignore operator>>(std::istream&, GncOption&);
@@ -779,9 +779,9 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 %header %{
 
     static std::vector<SCM> reldate_values{};
-    inline size_t index_of(RelativeDatePeriod per)
+    inline uint16_t index_of(RelativeDatePeriod per)
     {
-        return static_cast<size_t>(per) + 1;
+        return static_cast<uint16_t>(per) + 1;
     }
     
     static void init_reldate_values()
@@ -891,7 +891,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     inline static SCM scm_relative_date_from_period(RelativeDatePeriod period)
     {
         init_reldate_values();
-        return reldate_values[static_cast<size_t>(period) + 1];
+        return reldate_values[static_cast<uint16_t>(period) + 1];
     }
 
     inline static bool scm_date_absolute(SCM date)
@@ -940,7 +940,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     scm_to_multichoices(const SCM new_value,
                         const GncOptionMultichoiceValue& option)
     {
-        static const auto size_t_max = std::numeric_limits<std::size_t>::max();
+        static const auto uint16_t_max = std::numeric_limits<uint16_t>::max();
         static const char* empty{""};
         auto scm_to_str = [](auto item)->const char* {
                 if (scm_is_integer(item))
@@ -962,14 +962,14 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
             {
                 auto item{scm_list_ref(new_value, scm_from_size_t(i))};
                 auto index{option.permissible_value_index(scm_to_str(item))};
-                if (index < size_t_max)
+                if (index < uint16_t_max)
                     vec.push_back(index);
             }
         }
         else
         {
             auto index{option.permissible_value_index(scm_to_str(new_value))};
-            if (index < size_t_max)
+            if (index < uint16_t_max)
                 vec.push_back(index);
         }
         return vec;
