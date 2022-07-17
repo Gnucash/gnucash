@@ -45,7 +45,7 @@
 #define GNC_RESPONSE_BACK    2
 
 /* Callbacks */
-void gnc_totd_dialog_response_cb (GtkDialog *dialog, gint reponse, gpointer user_data);
+void gnc_totd_dialog_response_cb (GtkDialog *dialog, gint response, gpointer user_data);
 void gnc_totd_dialog_startup_toggled_cb (GtkToggleButton *button, gpointer user_data);
 
 /* The Tips */
