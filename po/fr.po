@@ -30,10 +30,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.11-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2022-06-20 23:46+0200\n"
+"Project-Id-Version: GnuCash 4.11-1\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2022-07-17 04:04+0200\n"
 "PO-Revision-Date: 2022-06-21 07:17+0000\n"
 "Last-Translator: Maxime Leroy <lisacintosh@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
@@ -1429,8 +1429,8 @@ msgstr "Supprimer le bien ?"
 #: gnucash/gnome-utils/gnc-file.c:118 gnucash/gnome-utils/gnc-file.c:366
 #: gnucash/gnome-utils/gnc-file.c:664 gnucash/gnome-utils/gnc-gui-query.c:300
 #: gnucash/gnome-utils/gnc-gui-query.c:332
-#: gnucash/gnome-utils/gnc-main-window.c:1311
-#: gnucash/gnome-utils/gnc-main-window.c:1468
+#: gnucash/gnome-utils/gnc-main-window.c:1313
+#: gnucash/gnome-utils/gnc-main-window.c:1470
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:886
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1023
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1063
@@ -1447,8 +1447,8 @@ msgstr "Supprimer le bien ?"
 #: gnucash/gtkbuilder/dialog-billterms.glade:968
 #: gnucash/gtkbuilder/dialog-book-close.glade:38
 #: gnucash/gtkbuilder/dialog-choose-owner.glade:21
-#: gnucash/gtkbuilder/dialog-commodity.glade:69
-#: gnucash/gtkbuilder/dialog-commodity.glade:675
+#: gnucash/gtkbuilder/dialog-commodity.glade:59
+#: gnucash/gtkbuilder/dialog-commodity.glade:665
 #: gnucash/gtkbuilder/dialog-customer.glade:64
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:42
 #: gnucash/gtkbuilder/dialog-date-close.glade:23
@@ -1467,8 +1467,8 @@ msgstr "Supprimer le bien ?"
 #: gnucash/gtkbuilder/dialog-options.glade:38
 #: gnucash/gtkbuilder/dialog-order.glade:454
 #: gnucash/gtkbuilder/dialog-payment.glade:78
-#: gnucash/gtkbuilder/dialog-price.glade:70
-#: gnucash/gtkbuilder/dialog-price.glade:383
+#: gnucash/gtkbuilder/dialog-price.glade:60
+#: gnucash/gtkbuilder/dialog-price.glade:373
 #: gnucash/gtkbuilder/dialog-print-check.glade:145
 #: gnucash/gtkbuilder/dialog-print-check.glade:329
 #: gnucash/gtkbuilder/dialog-progress.glade:122
@@ -1705,7 +1705,7 @@ msgstr "Sélectionner un document"
 #: gnucash/gnome-utils/gnc-gui-query.c:297
 #: gnucash/gnome-utils/gnc-gui-query.c:331
 #: gnucash/gnome-utils/gnc-gui-query.c:417
-#: gnucash/gnome-utils/gnc-main-window.c:1469
+#: gnucash/gnome-utils/gnc-main-window.c:1471
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:196
 #: gnucash/gtkbuilder/dialog-account.glade:35
 #: gnucash/gtkbuilder/dialog-account.glade:832
@@ -1716,8 +1716,8 @@ msgstr "Sélectionner un document"
 #: gnucash/gtkbuilder/dialog-billterms.glade:986
 #: gnucash/gtkbuilder/dialog-book-close.glade:53
 #: gnucash/gtkbuilder/dialog-choose-owner.glade:36
-#: gnucash/gtkbuilder/dialog-commodity.glade:85
-#: gnucash/gtkbuilder/dialog-commodity.glade:691
+#: gnucash/gtkbuilder/dialog-commodity.glade:75
+#: gnucash/gtkbuilder/dialog-commodity.glade:681
 #: gnucash/gtkbuilder/dialog-customer.glade:80
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:58
 #: gnucash/gtkbuilder/dialog-date-close.glade:38
@@ -1737,8 +1737,8 @@ msgstr "Sélectionner un document"
 #: gnucash/gtkbuilder/dialog-options.glade:72
 #: gnucash/gtkbuilder/dialog-order.glade:470
 #: gnucash/gtkbuilder/dialog-payment.glade:94
-#: gnucash/gtkbuilder/dialog-price.glade:99
-#: gnucash/gtkbuilder/dialog-price.glade:398
+#: gnucash/gtkbuilder/dialog-price.glade:89
+#: gnucash/gtkbuilder/dialog-price.glade:388
 #: gnucash/gtkbuilder/dialog-print-check.glade:160
 #: gnucash/gtkbuilder/dialog-progress.glade:136
 #: gnucash/gtkbuilder/dialog-report.glade:465
@@ -2099,7 +2099,7 @@ msgstr "Prix du titre"
 #: gnucash/report/reports/standard/register.scm:647
 #: gnucash/report/trep-engine.scm:223 gnucash/report/trep-engine.scm:1016
 #: gnucash/report/trep-engine.scm:1067 gnucash/report/trep-engine.scm:1366
-#: gnucash/report/trep-engine.scm:1382 gnucash/report/trep-engine.scm:2083
+#: gnucash/report/trep-engine.scm:1382 gnucash/report/trep-engine.scm:2080
 msgid "Amount"
 msgstr "Montant brut"
 
@@ -2107,7 +2107,7 @@ msgstr "Montant brut"
 #: gnucash/gnome/dialog-find-transactions2.c:126
 #: gnucash/gnome/dialog-find-transactions.c:124
 #: gnucash/gnome/dialog-lot-viewer.c:976
-#: gnucash/gnome/dialog-sx-since-last-run.c:1044
+#: gnucash/gnome/dialog-sx-since-last-run.c:1046
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2884
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2904
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:79
@@ -3342,10 +3342,10 @@ msgstr "Nom de la feuille de style"
 #: gnucash/gnome/dialog-sx-editor2.c:165 gnucash/gnome/dialog-sx-editor.c:167
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:151
 #: gnucash/gnome/window-reconcile2.c:2187 gnucash/gnome/window-reconcile.c:2449
-#: gnucash/gnome-utils/gnc-main-window.c:275
+#: gnucash/gnome-utils/gnc-main-window.c:277
 #: gnucash/gtkbuilder/dialog-billterms.glade:679
 #: gnucash/gtkbuilder/dialog-commodities.glade:156
-#: gnucash/gtkbuilder/dialog-price.glade:868
+#: gnucash/gtkbuilder/dialog-price.glade:858
 #: gnucash/gtkbuilder/dialog-report.glade:622
 #: gnucash/gtkbuilder/dialog-tax-info.glade:141
 #: gnucash/gtkbuilder/dialog-tax-table.glade:182
@@ -3360,13 +3360,13 @@ msgstr "_Transaction"
 
 # messages-i18n.c:145
 #: gnucash/gnome/dialog-sx-editor2.c:167 gnucash/gnome/dialog-sx-editor.c:169
-#: gnucash/gnome-utils/gnc-main-window.c:276
+#: gnucash/gnome-utils/gnc-main-window.c:278
 msgid "_View"
 msgstr "_Affichage"
 
 # messages-i18n.c:240
 #: gnucash/gnome/dialog-sx-editor2.c:168 gnucash/gnome/dialog-sx-editor.c:170
-#: gnucash/gnome-utils/gnc-main-window.c:277
+#: gnucash/gnome-utils/gnc-main-window.c:279
 msgid "_Actions"
 msgstr "A_ctions"
 
@@ -3580,7 +3580,7 @@ msgstr "(valeur requise)"
 msgid "Invalid Transactions"
 msgstr "Transactions invalides"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:866
+#: gnucash/gnome/dialog-sx-since-last-run.c:867
 #, c-format
 msgid ""
 "There are no Scheduled Transactions to be entered at this time. (One "
@@ -3596,20 +3596,20 @@ msgstr[1] ""
 "transactions créées automatiquement)"
 
 # messages-i18n.c:162
-#: gnucash/gnome/dialog-sx-since-last-run.c:998
+#: gnucash/gnome/dialog-sx-since-last-run.c:1000
 #: gnucash/gnome-search/dialog-search.c:1104
 msgid "Transaction"
 msgstr "Transaction"
 
 # messages-i18n.c:267 po/guile_strings.txt:6
-#: gnucash/gnome/dialog-sx-since-last-run.c:1014
+#: gnucash/gnome/dialog-sx-since-last-run.c:1016
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:667
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:512
 msgid "Status"
 msgstr "État"
 
 # messages-i18n.c:176
-#: gnucash/gnome/dialog-sx-since-last-run.c:1108
+#: gnucash/gnome/dialog-sx-since-last-run.c:1110
 msgid "Created Transactions"
 msgstr "Transaction créées"
 
@@ -3641,7 +3641,7 @@ msgstr "Identification des taxes sur le revenu"
 
 #: gnucash/gnome/dialog-tax-info.c:1191
 #: gnucash/gtkbuilder/dialog-options.glade:55
-#: gnucash/gtkbuilder/dialog-price.glade:85
+#: gnucash/gtkbuilder/dialog-price.glade:75
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:40
 #: gnucash/gtkbuilder/dialog-tax-info.glade:43
 msgid "_Apply"
@@ -3763,7 +3763,7 @@ msgstr "Montant restant à entrer dans le budget"
 #: gnucash/report/reports/standard/new-owner-report.scm:312
 #: gnucash/report/reports/standard/portfolio.scm:278
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:113
-#: gnucash/report/trep-engine.scm:1945
+#: gnucash/report/trep-engine.scm:1942
 msgid "Total"
 msgstr "Total"
 
@@ -3800,7 +3800,7 @@ msgstr "Ouvrir un fichier GnuCash existant"
 # messages-i18n.c:327
 #: gnucash/gnome/gnc-plugin-basic-commands.c:121
 #: gnucash/gnome-utils/gnc-file.c:100 gnucash/gnome-utils/gnc-file.c:666
-#: gnucash/gnome-utils/gnc-main-window.c:1312
+#: gnucash/gnome-utils/gnc-main-window.c:1314
 #: gnucash/html/gnc-html-webkit1.c:1198
 msgid "_Save"
 msgstr "_Enregistrer"
@@ -4476,7 +4476,7 @@ msgstr "Renumérote les sous-comptes du compte sélectionné"
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:185
 #: gnucash/gnome/gnc-plugin-page-register2.c:340
 #: gnucash/gnome/gnc-plugin-page-register.c:463
-#: gnucash/gnome-utils/gnc-main-window.c:347
+#: gnucash/gnome-utils/gnc-main-window.c:349
 msgid "_Filter By..."
 msgstr "_Filtrer par..."
 
@@ -4489,7 +4489,7 @@ msgstr "_Filtrer par..."
 #: gnucash/gnome/gnc-plugin-page-register.c:467
 #: gnucash/gnome/gnc-plugin-page-report.c:1231
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:170
-#: gnucash/gnome-utils/gnc-main-window.c:351
+#: gnucash/gnome-utils/gnc-main-window.c:353
 msgid "_Refresh"
 msgstr "_Actualiser"
 
@@ -4501,7 +4501,7 @@ msgstr "_Actualiser"
 #: gnucash/gnome/gnc-plugin-page-register.c:468
 #: gnucash/gnome/gnc-plugin-page-report.c:1232
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:171
-#: gnucash/gnome-utils/gnc-main-window.c:352
+#: gnucash/gnome-utils/gnc-main-window.c:354
 msgid "Refresh this window"
 msgstr "Actualiser cette fenêtre"
 
@@ -4980,7 +4980,7 @@ msgstr "Copier"
 #: gnucash/gnome/gnc-plugin-page-register2.c:240
 #: gnucash/gnome/gnc-plugin-page-register.c:354
 #: gnucash/gnome/gnc-plugin-page-report.c:1226
-#: gnucash/gnome-utils/gnc-main-window.c:330
+#: gnucash/gnome-utils/gnc-main-window.c:332
 msgid "_Paste"
 msgstr "C_oller"
 
@@ -5055,7 +5055,7 @@ msgstr "Conserve l'ordre normal de la facture"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:248
 #: gnucash/gtkbuilder/assistant-stock-split.glade:115
 #: gnucash/gtkbuilder/dialog-account.glade:1773
-#: gnucash/gtkbuilder/dialog-price.glade:176
+#: gnucash/gtkbuilder/dialog-price.glade:166
 #: gnucash/gtkbuilder/dialog-print-check.glade:700
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:97
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:651
@@ -5092,7 +5092,7 @@ msgstr "Trier par quantité"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:251
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1137
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1139
-#: gnucash/gtkbuilder/dialog-price.glade:219
+#: gnucash/gtkbuilder/dialog-price.glade:209
 #: gnucash/register/ledger-core/split-register.c:2098
 #: gnucash/register/ledger-core/split-register.c:2101
 msgid "_Price"
@@ -5865,7 +5865,7 @@ msgstr "_Imprimer les chèques..."
 #: gnucash/gnome/gnc-plugin-page-register2.c:230
 #: gnucash/gnome/gnc-plugin-page-register.c:344
 #: gnucash/gnome/gnc-plugin-page-report.c:1216
-#: gnucash/gnome-utils/gnc-main-window.c:320
+#: gnucash/gnome-utils/gnc-main-window.c:322
 msgid "Cu_t"
 msgstr "Co_uper"
 
@@ -5873,14 +5873,14 @@ msgstr "Co_uper"
 #: gnucash/gnome/gnc-plugin-page-register2.c:231
 #: gnucash/gnome/gnc-plugin-page-register.c:345
 #: gnucash/gnome/gnc-plugin-page-report.c:1217
-#: gnucash/gnome-utils/gnc-main-window.c:321
+#: gnucash/gnome-utils/gnc-main-window.c:323
 msgid "Cut the current selection and copy it to clipboard"
 msgstr "Coupe la selection courante et la copie dans le presse-papiers"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:235
 #: gnucash/gnome/gnc-plugin-page-register.c:349
 #: gnucash/gnome/gnc-plugin-page-report.c:1221
-#: gnucash/gnome-utils/gnc-main-window.c:325
+#: gnucash/gnome-utils/gnc-main-window.c:327
 msgid "_Copy"
 msgstr "_Copier"
 
@@ -5888,14 +5888,14 @@ msgstr "_Copier"
 #: gnucash/gnome/gnc-plugin-page-register2.c:236
 #: gnucash/gnome/gnc-plugin-page-register.c:350
 #: gnucash/gnome/gnc-plugin-page-report.c:1222
-#: gnucash/gnome-utils/gnc-main-window.c:326
+#: gnucash/gnome-utils/gnc-main-window.c:328
 msgid "Copy the current selection to clipboard"
 msgstr "Copie la selection courante dans le presse-papiers"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:241
 #: gnucash/gnome/gnc-plugin-page-register.c:355
 #: gnucash/gnome/gnc-plugin-page-report.c:1227
-#: gnucash/gnome-utils/gnc-main-window.c:331
+#: gnucash/gnome-utils/gnc-main-window.c:333
 msgid "Paste the clipboard content at the cursor position"
 msgstr "Copie le contenu du presse-papier à la position du curseur"
 
@@ -6415,7 +6415,7 @@ msgstr "_Effacer les autres répartitions"
 
 # messages-i18n.c:225
 #: gnucash/gnome/gnc-plugin-page-register.c:459
-#: gnucash/gnome-utils/gnc-main-window.c:343
+#: gnucash/gnome-utils/gnc-main-window.c:345
 msgid "_Sort By..."
 msgstr "_Trier..."
 
@@ -6833,7 +6833,7 @@ msgstr "_Récurrente"
 # messages-i18n.c:145
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:139
 #: gnucash/gtkbuilder/dialog-billterms.glade:494
-#: gnucash/gtkbuilder/dialog-commodity.glade:660
+#: gnucash/gtkbuilder/dialog-commodity.glade:650
 #: gnucash/gtkbuilder/dialog-report.glade:334
 #: gnucash/gtkbuilder/dialog-report.glade:638
 #: gnucash/gtkbuilder/dialog-tax-table.glade:103
@@ -7594,11 +7594,11 @@ msgstr "_Compte"
 #: gnucash/gnome/window-reconcile2.c:2129
 #: gnucash/gnome/window-reconcile2.c:2210 gnucash/gnome/window-reconcile.c:2391
 #: gnucash/gnome/window-reconcile.c:2472
-#: gnucash/gnome-utils/gnc-main-window.c:283
+#: gnucash/gnome-utils/gnc-main-window.c:285
 #: gnucash/gtkbuilder/dialog-account.glade:1121
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:23
 #: gnucash/gtkbuilder/dialog-book-close.glade:22
-#: gnucash/gtkbuilder/dialog-commodity.glade:53
+#: gnucash/gtkbuilder/dialog-commodity.glade:43
 #: gnucash/gtkbuilder/dialog-customer.glade:47
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:25
 #: gnucash/gtkbuilder/dialog-custom-report.glade:29
@@ -7677,7 +7677,7 @@ msgid "Edit the main account for this register"
 msgstr "Édite le compte principal de ce registre"
 
 #: gnucash/gnome/window-reconcile2.c:2173 gnucash/gnome/window-reconcile.c:2435
-#: gnucash/gnome-utils/gnc-main-window.c:358
+#: gnucash/gnome-utils/gnc-main-window.c:360
 msgid "_Check & Repair"
 msgstr "_Vérifier et réparer"
 
@@ -7791,7 +7791,7 @@ msgstr "Vous devez sélectionner un item de la liste"
 #: gnucash/gnome-utils/gnc-recurrence.c:547
 #: gnucash/gtkbuilder/dialog-commodities.glade:138
 #: gnucash/gtkbuilder/dialog-doclink.glade:215
-#: gnucash/gtkbuilder/dialog-price.glade:850
+#: gnucash/gtkbuilder/dialog-price.glade:840
 msgid "_Remove"
 msgstr "_Supprimer"
 
@@ -7826,7 +7826,7 @@ msgstr "Nouvel item"
 #: gnucash/gnome-search/dialog-search.c:1162
 #: gnucash/gnome-utils/gnc-recurrence.c:544
 #: gnucash/gtkbuilder/dialog-commodities.glade:121
-#: gnucash/gtkbuilder/dialog-price.glade:833
+#: gnucash/gtkbuilder/dialog-price.glade:823
 msgid "_Add"
 msgstr "_Ajouter"
 
@@ -8402,7 +8402,7 @@ msgstr ""
 "Mnémonique (symbole boursier ou similaire) : "
 
 #: gnucash/gnome-utils/dialog-commodity.c:275
-#: gnucash/gtkbuilder/dialog-commodity.glade:644
+#: gnucash/gtkbuilder/dialog-commodity.glade:634
 msgid "Select security/currency"
 msgstr "Sélection de titre/devise"
 
@@ -8416,7 +8416,7 @@ msgid "Select security"
 msgstr "Sélection de titre"
 
 #: gnucash/gnome-utils/dialog-commodity.c:281
-#: gnucash/gtkbuilder/dialog-price.glade:147
+#: gnucash/gtkbuilder/dialog-price.glade:137
 msgid "_Security"
 msgstr "_Titre"
 
@@ -8426,7 +8426,7 @@ msgstr "Sélection de devise"
 
 # src/gnome/glade-gnc-dialogs.c:173
 #: gnucash/gnome-utils/dialog-commodity.c:286
-#: gnucash/gtkbuilder/dialog-price.glade:162
+#: gnucash/gtkbuilder/dialog-price.glade:152
 msgid "Cu_rrency"
 msgstr "De_vise"
 
@@ -8468,7 +8468,7 @@ msgstr "Nouveau titre"
 
 # messages-i18n.c:231
 #: gnucash/gnome-utils/dialog-commodity.c:992
-#: gnucash/gtkbuilder/dialog-commodity.glade:239
+#: gnucash/gtkbuilder/dialog-commodity.glade:229
 msgid "Security Information"
 msgstr "Informations sur les titres"
 
@@ -8549,7 +8549,7 @@ msgstr "Enregistrer _sous"
 
 # messages-i18n.c:261
 #: gnucash/gnome-utils/dialog-options.c:225
-#: gnucash/gnome-utils/gnc-main-window.c:307
+#: gnucash/gnome-utils/gnc-main-window.c:309
 #: gnucash/gtkbuilder/dialog-billterms.glade:731
 #: gnucash/gtkbuilder/dialog-commodities.glade:174
 #: gnucash/gtkbuilder/dialog-custom-report.glade:46
@@ -8562,7 +8562,7 @@ msgstr "Enregistrer _sous"
 #: gnucash/gtkbuilder/dialog-order.glade:42
 #: gnucash/gtkbuilder/dialog-preferences.glade:154
 #: gnucash/gtkbuilder/dialog-preferences.glade:285
-#: gnucash/gtkbuilder/dialog-price.glade:935
+#: gnucash/gtkbuilder/dialog-price.glade:925
 #: gnucash/gtkbuilder/dialog-query-view.glade:22
 #: gnucash/gtkbuilder/dialog-report.glade:268
 #: gnucash/gtkbuilder/dialog-report.glade:670
@@ -8833,7 +8833,7 @@ msgid "Show the income and expense accounts"
 msgstr "Afficher les comptes de revenus et de dépenses"
 
 #: gnucash/gnome-utils/dialog-transfer.c:707
-#: gnucash/report/trep-engine.scm:2154 gnucash/report/trep-engine.scm:2160
+#: gnucash/report/trep-engine.scm:2151 gnucash/report/trep-engine.scm:2157
 msgid "Error"
 msgstr "Erreur"
 
@@ -9167,7 +9167,7 @@ msgid "(unnamed)"
 msgstr "(sans nom)"
 
 # messages-i18n.c:293
-#: gnucash/gnome-utils/gnc-file.c:94 gnucash/gnome-utils/gnc-main-window.c:287
+#: gnucash/gnome-utils/gnc-file.c:94 gnucash/gnome-utils/gnc-main-window.c:289
 #: gnucash/import-export/bi-import/gnc-plugin-bi-import.c:57
 #: gnucash/import-export/customer-import/gnc-plugin-customer-import.c:57
 msgid "_Import"
@@ -9187,7 +9187,7 @@ msgid "Save"
 msgstr "Enregistrer"
 
 # messages-i18n.c:285
-#: gnucash/gnome-utils/gnc-file.c:106 gnucash/gnome-utils/gnc-main-window.c:288
+#: gnucash/gnome-utils/gnc-file.c:106 gnucash/gnome-utils/gnc-main-window.c:290
 msgid "_Export"
 msgstr "E_xporter"
 
@@ -9504,7 +9504,7 @@ msgid "Save changes to the file?"
 msgstr "Enregistrer les modifications du fichier ?"
 
 #: gnucash/gnome-utils/gnc-file.c:656
-#: gnucash/gnome-utils/gnc-main-window.c:1305
+#: gnucash/gnome-utils/gnc-main-window.c:1307
 #, c-format
 msgid "If you don't save, changes from the past %d minute will be discarded."
 msgid_plural ""
@@ -9566,7 +9566,7 @@ msgstr "Ouvrir le _dossier"
 
 # messages-i18n.c:282 po/guile_strings.txt:8
 # src/gnome/glade-gnc-dialogs.c:650
-#: gnucash/gnome-utils/gnc-file.c:865 gnucash/gnome-utils/gnc-main-window.c:312
+#: gnucash/gnome-utils/gnc-file.c:865 gnucash/gnome-utils/gnc-main-window.c:314
 msgid "_Quit"
 msgstr "_Quitter"
 
@@ -9615,7 +9615,7 @@ msgstr ""
 "continuer ?"
 
 #: gnucash/gnome-utils/gnc-file.c:1701
-#: gnucash/gnome-utils/gnc-main-window.c:1273
+#: gnucash/gnome-utils/gnc-main-window.c:1275
 msgid "<unknown>"
 msgstr "<inconnu>"
 
@@ -9657,244 +9657,244 @@ msgstr "GnuCash n’a pu ouvrir le document lié :"
 msgid "Enter a user name and password to connect to: %s"
 msgstr "Saisissez un nom d'utilisateur et un mot de passe pour : %s"
 
-#: gnucash/gnome-utils/gnc-main-window.c:133
+#: gnucash/gnome-utils/gnc-main-window.c:135
 #, c-format
 msgid "Changes will be saved automatically in %u seconds"
 msgstr "Les changements seront enregistrés automatiquement dans %u secondes"
 
 # messages-i18n.c:192
-#: gnucash/gnome-utils/gnc-main-window.c:274
+#: gnucash/gnome-utils/gnc-main-window.c:276
 msgid "_File"
 msgstr "_Fichier"
 
 # messages-i18n.c:346
-#: gnucash/gnome-utils/gnc-main-window.c:278
+#: gnucash/gnome-utils/gnc-main-window.c:280
 msgid "Tra_nsaction"
 msgstr "Tra_nsaction"
 
 # messages-i18n.c:326
-#: gnucash/gnome-utils/gnc-main-window.c:279
+#: gnucash/gnome-utils/gnc-main-window.c:281
 msgid "_Reports"
 msgstr "_Rapports"
 
 # po/guile_strings.txt:264
-#: gnucash/gnome-utils/gnc-main-window.c:280
+#: gnucash/gnome-utils/gnc-main-window.c:282
 msgid "_Tools"
 msgstr "_Outils"
 
 # messages-i18n.c:284 po/guile_strings.txt:274
 # src/gnome/glade-gnc-dialogs.c:647
-#: gnucash/gnome-utils/gnc-main-window.c:281
+#: gnucash/gnome-utils/gnc-main-window.c:283
 msgid "E_xtensions"
 msgstr "E_xtensions"
 
 # po/guile_strings.txt:31
-#: gnucash/gnome-utils/gnc-main-window.c:282
+#: gnucash/gnome-utils/gnc-main-window.c:284
 msgid "_Windows"
 msgstr "_Fenêtres"
 
 # messages-i18n.c:317 src/gnome/glade-gnc-dialogs.c:971
-#: gnucash/gnome-utils/gnc-main-window.c:290
+#: gnucash/gnome-utils/gnc-main-window.c:292
 msgid "_Print..."
 msgstr "Im_primer..."
 
 # messages-i18n.c:105
-#: gnucash/gnome-utils/gnc-main-window.c:291
+#: gnucash/gnome-utils/gnc-main-window.c:293
 msgid "Print the currently active page"
 msgstr "Imprime la page active actuelle"
 
 # src/gnome/glade-gnc-dialogs.c:786
-#: gnucash/gnome-utils/gnc-main-window.c:297
+#: gnucash/gnome-utils/gnc-main-window.c:299
 msgid "Pa_ge Setup..."
 msgstr "_Mise en page..."
 
-#: gnucash/gnome-utils/gnc-main-window.c:298
+#: gnucash/gnome-utils/gnc-main-window.c:300
 msgid "Specify the page size and orientation for printing"
 msgstr "Spécifier la taille de la page et son orientation pour l'impression"
 
 # messages-i18n.c:316
-#: gnucash/gnome-utils/gnc-main-window.c:302
+#: gnucash/gnome-utils/gnc-main-window.c:304
 msgid "Proper_ties"
 msgstr "Proprié_tés"
 
-#: gnucash/gnome-utils/gnc-main-window.c:303
+#: gnucash/gnome-utils/gnc-main-window.c:305
 msgid "Edit the properties of the current file"
 msgstr "Édite les propriétés du fichier actuel"
 
 # messages-i18n.c:105
-#: gnucash/gnome-utils/gnc-main-window.c:308
+#: gnucash/gnome-utils/gnc-main-window.c:310
 msgid "Close the currently active page"
 msgstr "Ferme la page active actuelle"
 
 # messages-i18n.c:176
-#: gnucash/gnome-utils/gnc-main-window.c:313
+#: gnucash/gnome-utils/gnc-main-window.c:315
 msgid "Quit this application"
 msgstr "Quitter cette application"
 
 # messages-i18n.c:315
-#: gnucash/gnome-utils/gnc-main-window.c:335
+#: gnucash/gnome-utils/gnc-main-window.c:337
 msgid "Pr_eferences"
 msgstr "Préfére_nces"
 
-#: gnucash/gnome-utils/gnc-main-window.c:336
+#: gnucash/gnome-utils/gnc-main-window.c:338
 msgid "Edit the global preferences of GnuCash"
 msgstr "Éditer les préférences globales de GnuCash"
 
-#: gnucash/gnome-utils/gnc-main-window.c:344
+#: gnucash/gnome-utils/gnc-main-window.c:346
 msgid "Select sorting criteria for this page view"
 msgstr "Choisissez le critère de tri pour voir cette page"
 
 # src/gnome/glade-gnc-dialogs.c:506
-#: gnucash/gnome-utils/gnc-main-window.c:348
+#: gnucash/gnome-utils/gnc-main-window.c:350
 msgid "Select the account types that should be displayed."
 msgstr "Sélectionner les types de compte à afficher."
 
-#: gnucash/gnome-utils/gnc-main-window.c:360
+#: gnucash/gnome-utils/gnc-main-window.c:362
 msgid "Reset _Warnings..."
 msgstr "Réactiver les _avertissements..."
 
-#: gnucash/gnome-utils/gnc-main-window.c:361
+#: gnucash/gnome-utils/gnc-main-window.c:363
 msgid "Reset the state of all warning messages so they will be shown again."
 msgstr ""
 "Réinitialise l'état de tous les avertissments, pour qu'ils apparaissent à "
 "nouveau."
 
-#: gnucash/gnome-utils/gnc-main-window.c:365
+#: gnucash/gnome-utils/gnc-main-window.c:367
 msgid "Re_name Page"
 msgstr "Renommer la _page"
 
-#: gnucash/gnome-utils/gnc-main-window.c:366
+#: gnucash/gnome-utils/gnc-main-window.c:368
 msgid "Rename this page."
 msgstr "Renomme cette page."
 
 # po/guile_strings.txt:31
-#: gnucash/gnome-utils/gnc-main-window.c:373
+#: gnucash/gnome-utils/gnc-main-window.c:375
 msgid "_New Window"
 msgstr "_Nouvelle fenêtre"
 
 # messages-i18n.c:85
-#: gnucash/gnome-utils/gnc-main-window.c:374
+#: gnucash/gnome-utils/gnc-main-window.c:376
 msgid "Open a new top-level GnuCash window."
 msgstr "Ouvre une fenêtre principale GnuCash."
 
-#: gnucash/gnome-utils/gnc-main-window.c:378
+#: gnucash/gnome-utils/gnc-main-window.c:380
 msgid "New Window with _Page"
 msgstr "Nouvelle fenêtre avec _page"
 
-#: gnucash/gnome-utils/gnc-main-window.c:379
+#: gnucash/gnome-utils/gnc-main-window.c:381
 msgid "Move the current page to a new top-level GnuCash window."
 msgstr "Déplace la page actuelle vers la fenêtre principale de GnuCash."
 
-#: gnucash/gnome-utils/gnc-main-window.c:386
+#: gnucash/gnome-utils/gnc-main-window.c:388
 msgid "Tutorial and Concepts _Guide"
 msgstr "T_utoriel et guide des concepts"
 
 # messages-i18n.c:85
-#: gnucash/gnome-utils/gnc-main-window.c:387
+#: gnucash/gnome-utils/gnc-main-window.c:389
 msgid "Open the GnuCash Tutorial"
 msgstr "Ouvre le tutoriel de GnuCash"
 
 # src/gnome/glade-gnc-dialogs.c:1460
-#: gnucash/gnome-utils/gnc-main-window.c:391
+#: gnucash/gnome-utils/gnc-main-window.c:393
 msgid "_Contents"
 msgstr "_Sommaire"
 
 # messages-i18n.c:85
-#: gnucash/gnome-utils/gnc-main-window.c:392
+#: gnucash/gnome-utils/gnc-main-window.c:394
 msgid "Open the GnuCash Help"
 msgstr "Ouvre le manuel de GnuCash"
 
 # messages-i18n.c:242 po/guile_strings.txt:50
-#: gnucash/gnome-utils/gnc-main-window.c:396
+#: gnucash/gnome-utils/gnc-main-window.c:398
 msgid "_About"
 msgstr "À _propos"
 
 # messages-i18n.c:83
-#: gnucash/gnome-utils/gnc-main-window.c:397
+#: gnucash/gnome-utils/gnc-main-window.c:399
 msgid "About GnuCash"
 msgstr "À propos de GnuCash"
 
 # po/guile_strings.txt:264
-#: gnucash/gnome-utils/gnc-main-window.c:409
+#: gnucash/gnome-utils/gnc-main-window.c:411
 msgid "_Toolbar"
 msgstr "_Outils"
 
-#: gnucash/gnome-utils/gnc-main-window.c:410
+#: gnucash/gnome-utils/gnc-main-window.c:412
 msgid "Show/hide the toolbar on this window"
 msgstr "Afficher/masquer la barre d'outils pour cette fenêtre"
 
-#: gnucash/gnome-utils/gnc-main-window.c:414
+#: gnucash/gnome-utils/gnc-main-window.c:416
 msgid "Su_mmary Bar"
 msgstr "Barre de _synthèse"
 
-#: gnucash/gnome-utils/gnc-main-window.c:415
+#: gnucash/gnome-utils/gnc-main-window.c:417
 msgid "Show/hide the summary bar on this window"
 msgstr "Afficher/masquer la barre de synthèse de cette fenêtre"
 
-#: gnucash/gnome-utils/gnc-main-window.c:419
+#: gnucash/gnome-utils/gnc-main-window.c:421
 msgid "Stat_us Bar"
 msgstr "_Barre d'état"
 
-#: gnucash/gnome-utils/gnc-main-window.c:420
+#: gnucash/gnome-utils/gnc-main-window.c:422
 msgid "Show/hide the status bar on this window"
 msgstr "Afficher/masquer la barre d'état"
 
 # po/guile_strings.txt:31
-#: gnucash/gnome-utils/gnc-main-window.c:432
+#: gnucash/gnome-utils/gnc-main-window.c:434
 msgid "Window _1"
 msgstr "Fenêtre _1"
 
 # po/guile_strings.txt:31
-#: gnucash/gnome-utils/gnc-main-window.c:433
+#: gnucash/gnome-utils/gnc-main-window.c:435
 msgid "Window _2"
 msgstr "Fenêtre _2"
 
 # po/guile_strings.txt:31
-#: gnucash/gnome-utils/gnc-main-window.c:434
+#: gnucash/gnome-utils/gnc-main-window.c:436
 msgid "Window _3"
 msgstr "Fenêtre _3"
 
 # po/guile_strings.txt:31
-#: gnucash/gnome-utils/gnc-main-window.c:435
+#: gnucash/gnome-utils/gnc-main-window.c:437
 msgid "Window _4"
 msgstr "Fenêtre _4"
 
 # po/guile_strings.txt:31
-#: gnucash/gnome-utils/gnc-main-window.c:436
+#: gnucash/gnome-utils/gnc-main-window.c:438
 msgid "Window _5"
 msgstr "Fenêtre _5"
 
 # po/guile_strings.txt:31
-#: gnucash/gnome-utils/gnc-main-window.c:437
+#: gnucash/gnome-utils/gnc-main-window.c:439
 msgid "Window _6"
 msgstr "Fenêtre _6"
 
 # po/guile_strings.txt:31
-#: gnucash/gnome-utils/gnc-main-window.c:438
+#: gnucash/gnome-utils/gnc-main-window.c:440
 msgid "Window _7"
 msgstr "Fenêtre _7"
 
 # po/guile_strings.txt:31
-#: gnucash/gnome-utils/gnc-main-window.c:439
+#: gnucash/gnome-utils/gnc-main-window.c:441
 msgid "Window _8"
 msgstr "Fenêtre _8"
 
 # po/guile_strings.txt:31
-#: gnucash/gnome-utils/gnc-main-window.c:440
+#: gnucash/gnome-utils/gnc-main-window.c:442
 msgid "Window _9"
 msgstr "Fenêtre _9"
 
 # po/guile_strings.txt:31
-#: gnucash/gnome-utils/gnc-main-window.c:441
+#: gnucash/gnome-utils/gnc-main-window.c:443
 msgid "Window _0"
 msgstr "Fenêtre _0"
 
-#: gnucash/gnome-utils/gnc-main-window.c:1256
+#: gnucash/gnome-utils/gnc-main-window.c:1258
 #, c-format
 msgid "Save changes to file %s before closing?"
 msgstr "Enregistrer les modifications du fichier %s avant de le fermer ?"
 
-#: gnucash/gnome-utils/gnc-main-window.c:1259
+#: gnucash/gnome-utils/gnc-main-window.c:1261
 #, c-format
 msgid ""
 "If you don't save, changes from the past %d hours and %d minutes will be "
@@ -9903,7 +9903,7 @@ msgstr ""
 "Si vous n'enregistrez pas, les modifications réalisées depuis %d heures et "
 "%d minutes seront perdues."
 
-#: gnucash/gnome-utils/gnc-main-window.c:1261
+#: gnucash/gnome-utils/gnc-main-window.c:1263
 #, c-format
 msgid ""
 "If you don't save, changes from the past %d days and %d hours will be "
@@ -9912,79 +9912,83 @@ msgstr ""
 "Si vous n'enregistrez pas, les modifications réalisées depuis %d jours and "
 "%d heures seront perdues."
 
-#: gnucash/gnome-utils/gnc-main-window.c:1310
+#: gnucash/gnome-utils/gnc-main-window.c:1312
 msgid "Close _Without Saving"
 msgstr "Fermer _sans enregistrer"
 
-#: gnucash/gnome-utils/gnc-main-window.c:1457
+#: gnucash/gnome-utils/gnc-main-window.c:1459
 msgid "This window is closing and will not be restored."
 msgstr "Cette fenêtre se ferme et ne sera pas rétablie."
 
 # messages-i18n.c:74
-#: gnucash/gnome-utils/gnc-main-window.c:1463
+#: gnucash/gnome-utils/gnc-main-window.c:1465
 msgid "Close Window?"
 msgstr "Fermer fenêtre ?"
 
 #. Translators: This string is shown in the window title if this
 #. document is, well, read-only.
-#: gnucash/gnome-utils/gnc-main-window.c:1593
+#: gnucash/gnome-utils/gnc-main-window.c:1595
 msgid "(read-only)"
 msgstr "(en lecture seule)"
 
 # messages-i18n.c:261
-#: gnucash/gnome-utils/gnc-main-window.c:1601
+#: gnucash/gnome-utils/gnc-main-window.c:1603
 msgid "Unsaved Book"
 msgstr "Livre non enregistré"
 
-#: gnucash/gnome-utils/gnc-main-window.c:1764
+#: gnucash/gnome-utils/gnc-main-window.c:1766
 msgid "Last modified on %a, %b %d, %Y at %I:%M %p"
 msgstr "Dernière modification le %a %d %b %Y à %H:%M"
 
 # messages-i18n.c:44
 #. Translators: This message appears in the status bar after opening the file.
-#: gnucash/gnome-utils/gnc-main-window.c:1767
+#: gnucash/gnome-utils/gnc-main-window.c:1769
 #, c-format
 msgid "File %s opened. %s"
 msgstr "Fichier %s ouvert. %s"
 
-#: gnucash/gnome-utils/gnc-main-window.c:2894
+#: gnucash/gnome-utils/gnc-main-window.c:2896
 msgctxt "lower case key for short cut to 'Accounts'"
 msgid "a"
 msgstr "c"
 
-#: gnucash/gnome-utils/gnc-main-window.c:2984
+#: gnucash/gnome-utils/gnc-main-window.c:2986
 msgid "Unable to save to database."
 msgstr "Impossible d'enregistrer la base de données."
 
-#: gnucash/gnome-utils/gnc-main-window.c:2986
+#: gnucash/gnome-utils/gnc-main-window.c:2988
 msgid "Unable to save to database: Book is marked read-only."
 msgstr ""
 "Impossible d'enregistrer la base de données : le livre est noté comme étant "
 "en lecture seule."
 
 # po/guile_strings.txt:43
-#: gnucash/gnome-utils/gnc-main-window.c:4331
+#: gnucash/gnome-utils/gnc-main-window.c:4333
 #: gnucash/gtkbuilder/assistant-qif-import.glade:959
 msgid "Book Options"
 msgstr "Options du Grand Livre"
 
+#: gnucash/gnome-utils/gnc-main-window.c:4751 gnucash/gnucash-core-app.cpp:261
+msgid "(user modifiable)"
+msgstr ""
+
 #. Translators: %s will be replaced with the current year
-#: gnucash/gnome-utils/gnc-main-window.c:4715
+#: gnucash/gnome-utils/gnc-main-window.c:4778
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
 msgstr "Copyright © 1997- %s Les contributeurs de GnuCash."
 
-#: gnucash/gnome-utils/gnc-main-window.c:4727
+#: gnucash/gnome-utils/gnc-main-window.c:4790
 #: gnucash/gnome-utils/gnc-splash.c:98
 msgid "Version"
 msgstr "Version"
 
-#: gnucash/gnome-utils/gnc-main-window.c:4728
-#: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:262
+#: gnucash/gnome-utils/gnc-main-window.c:4791
+#: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:278
 msgid "Build ID"
 msgstr "ID de build"
 
-#: gnucash/gnome-utils/gnc-main-window.c:4736
+#: gnucash/gnome-utils/gnc-main-window.c:4799
 msgid "Accounting for personal and small business finance."
 msgstr "Gestion de finances personnelles et de petites entreprises."
 
@@ -9993,7 +9997,7 @@ msgstr "Gestion de finances personnelles et de petites entreprises."
 #. Enter your name or that of your team and an email contact for feedback.
 #. The string can have multiple rows, so you can also add a list of
 #. contributors.
-#: gnucash/gnome-utils/gnc-main-window.c:4745
+#: gnucash/gnome-utils/gnc-main-window.c:4808
 msgid "translator-credits"
 msgstr ""
 "Christopher Lam, 2018\n"
@@ -10010,7 +10014,7 @@ msgstr ""
 "\n"
 "Communauté francophone GnuCash <gnucash-fr@gnucash.org>"
 
-#: gnucash/gnome-utils/gnc-main-window.c:4748
+#: gnucash/gnome-utils/gnc-main-window.c:4811
 msgid "Visit the GnuCash website."
 msgstr "Visitez le site web de GnuCash."
 
@@ -10715,7 +10719,7 @@ msgstr "Nom du compte"
 # messages-i18n.c:262
 #: gnucash/gnome-utils/gnc-tree-view-account.c:817
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2918
-#: gnucash/gtkbuilder/dialog-price.glade:573
+#: gnucash/gtkbuilder/dialog-price.glade:563
 msgid "Commodity"
 msgstr "Produit"
 
@@ -10901,7 +10905,7 @@ msgstr "D"
 
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:413
 #: gnucash/gnome-utils/gnc-tree-view-price.c:414
-#: gnucash/gtkbuilder/dialog-price.glade:645
+#: gnucash/gtkbuilder/dialog-price.glade:635
 msgid "Source"
 msgstr "Source"
 
@@ -11421,7 +11425,7 @@ msgid "Unknown quotes command '{1}'"
 msgstr "Commande de devis inconnue '{1}'"
 
 #: gnucash/gnucash-cli.cpp:139 gnucash/gnucash-cli.cpp:153
-#: gnucash/gnucash.cpp:313
+#: gnucash/gnucash.cpp:316
 msgid "Missing data file parameter"
 msgstr "Paramètre de fichier de données manquant"
 
@@ -11483,28 +11487,35 @@ msgid "{1} [options] [datafile]"
 msgstr "{1} [options] [datafile]"
 
 # messages-i18n.c:83
-#: gnucash/gnucash-core-app.cpp:254
+#: gnucash/gnucash-core-app.cpp:255
+#, fuzzy
+#| msgid "GnuCash "
+msgid "GnuCash Paths"
+msgstr "GnuCash "
+
+# messages-i18n.c:83
+#: gnucash/gnucash-core-app.cpp:270
 msgid "GnuCash {1}"
 msgstr "GnuCash {1}"
 
-#: gnucash/gnucash-core-app.cpp:255
+#: gnucash/gnucash-core-app.cpp:271
 msgid "GnuCash {1} development version"
 msgstr "GnuCash {1}, version de développement"
 
 # po/guile_strings.txt:43
-#: gnucash/gnucash-core-app.cpp:280
+#: gnucash/gnucash-core-app.cpp:296
 msgid "Common Options"
 msgstr "Options générales"
 
-#: gnucash/gnucash-core-app.cpp:283
+#: gnucash/gnucash-core-app.cpp:299
 msgid "Show this help message"
 msgstr "Afficher ce message d'aide"
 
-#: gnucash/gnucash-core-app.cpp:285
+#: gnucash/gnucash-core-app.cpp:301
 msgid "Show GnuCash version"
 msgstr "Version de GnuCash"
 
-#: gnucash/gnucash-core-app.cpp:287
+#: gnucash/gnucash-core-app.cpp:303
 msgid ""
 "Enable debugging mode: provide deep detail in the logs.\n"
 "This is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
@@ -11513,12 +11524,12 @@ msgstr ""
 "journaux.\n"
 "C'est équivalent à : --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
 
-#: gnucash/gnucash-core-app.cpp:289
+#: gnucash/gnucash-core-app.cpp:305
 msgid "Enable extra/development/debugging features."
 msgstr ""
 "Active des fonctionnalités supplémentaires, de développement ou de débogage."
 
-#: gnucash/gnucash-core-app.cpp:291
+#: gnucash/gnucash-core-app.cpp:307
 msgid ""
 "Log level overrides, of the form \"modulename={debug,info,warn,crit,"
 "error}\"\n"
@@ -11530,7 +11541,14 @@ msgstr ""
 "Exemples : \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\n"
 "Ceci peut être invoqué plusieurs fois."
 
-#: gnucash/gnucash-core-app.cpp:293
+# messages-i18n.c:215
+#: gnucash/gnucash-core-app.cpp:309
+#, fuzzy
+#| msgid "Show plot"
+msgid "Show paths"
+msgstr "Afficher un graphique"
+
+#: gnucash/gnucash-core-app.cpp:311
 msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
@@ -11539,11 +11557,11 @@ msgstr ""
 "options possibles \"stderr\" ou \"stdout\"."
 
 # po/guile_strings.txt:221
-#: gnucash/gnucash-core-app.cpp:295
+#: gnucash/gnucash-core-app.cpp:313
 msgid "Hidden Options"
 msgstr "Options masquées"
 
-#: gnucash/gnucash-core-app.cpp:298
+#: gnucash/gnucash-core-app.cpp:316
 msgid "[datafile]"
 msgstr "[datafile]"
 
@@ -11556,25 +11574,25 @@ msgid "Loading data..."
 msgstr "Chargement des données..."
 
 # messages-i18n.c:176
-#: gnucash/gnucash.cpp:278
+#: gnucash/gnucash.cpp:281
 msgid "Application Options"
 msgstr "Options de l'application"
 
-#: gnucash/gnucash.cpp:281
+#: gnucash/gnucash.cpp:284
 msgid "Do not load the last file opened"
 msgstr "Ne pas charger le dernier fichier ouvert"
 
 # po/guile_strings.txt:172
-#: gnucash/gnucash.cpp:283
+#: gnucash/gnucash.cpp:286
 msgid "Show help for gtk options"
 msgstr "Afficher l'aide pour les options GTK"
 
 # po/guile_strings.txt:138
-#: gnucash/gnucash.cpp:285
+#: gnucash/gnucash.cpp:288
 msgid "Deprecated Options"
 msgstr "Options obsolètes"
 
-#: gnucash/gnucash.cpp:288
+#: gnucash/gnucash.cpp:291
 msgid ""
 "Add price quotes to given GnuCash datafile.\n"
 "Note this option has been deprecated and will be removed in GnuCash 5.0.\n"
@@ -11584,7 +11602,7 @@ msgstr ""
 "Note : Cette option est obsolète et sera retiré dans GnuCash 5.0.\n"
 "Veuillez plutôt utiliser `gnucash-cli --quotes get <fichier vers la base>`."
 
-#: gnucash/gnucash.cpp:292
+#: gnucash/gnucash.cpp:295
 msgid ""
 "Regular expression determining which namespace commodities will be "
 "retrieved.\n"
@@ -11598,7 +11616,7 @@ msgstr ""
 "Veuillez plutôt utiliser `gnucash-cli --quotes get --namespace <nom "
 "d'espace> <fichier vers la base>`."
 
-#: gnucash/gnucash.cpp:309
+#: gnucash/gnucash.cpp:312
 msgid ""
 "The '--add-price-quotes' option to gnucash has been deprecated and will be "
 "removed in GnuCash 5.0. Please use 'gnucash-cli --quotes get <datafile>' "
@@ -11608,14 +11626,14 @@ msgstr ""
 "GnuCash 5.0. Veuillez plutôt utiliser `gnucash-cli --quotes get <fichier "
 "vers la base>`."
 
-#: gnucash/gnucash.cpp:345
+#: gnucash/gnucash.cpp:348
 msgid "Run '{1} --help' to see a full list of available command line options."
 msgstr ""
 "Lancez '{1} --help' pour voir une liste complète des options disponibles en "
 "ligne de commande."
 
 #. Translators: Do not translate $DISPLAY! It is an environment variable for X11
-#: gnucash/gnucash.cpp:348
+#: gnucash/gnucash.cpp:351
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
@@ -16997,9 +17015,7 @@ msgstr "Descri_ption"
 #: gnucash/gtkbuilder/dialog-billterms.glade:589
 #: gnucash/gtkbuilder/dialog-billterms.glade:924
 #: gnucash/gtkbuilder/dialog-billterms.glade:1150
-#: gnucash/gtkbuilder/dialog-commodity.glade:495
-#: gnucash/gtkbuilder/dialog-commodity.glade:777
-#: gnucash/gtkbuilder/dialog-price.glade:204
+#: gnucash/gtkbuilder/dialog-price.glade:194
 #: gnucash/gtkbuilder/dialog-tax-table.glade:476
 msgid "_Type"
 msgstr "_Type"
@@ -17090,17 +17106,7 @@ msgstr "Supprime le produit actuel."
 msgid "Edit the current commodity."
 msgstr "Modifie le produit actuel."
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:19
-#: gnucash/gtkbuilder/dialog-price.glade:35
-msgid "Dummy commodity Line"
-msgstr "Ligne d'un bien fictif"
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:30
-#: gnucash/gtkbuilder/dialog-price.glade:46
-msgid "Dummy namespace Line"
-msgstr "Ligne d'un nom d'espace fictif"
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:130
+#: gnucash/gtkbuilder/dialog-commodity.glade:120
 msgid ""
 "Enter the full name of the commodity. Example: Cisco Systems Inc., or Apple "
 "Computer, Inc."
@@ -17108,7 +17114,7 @@ msgstr ""
 "Saisir le nom complet du produit. Exemple : Cisco Systems Inc, ou Apple "
 "Computer, Inc."
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:148
+#: gnucash/gtkbuilder/dialog-commodity.glade:138
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
@@ -17118,7 +17124,7 @@ msgstr ""
 "en ligne, ce champ doit être exactement identique au code utilisé par la "
 "source des cours (y compris la casse)."
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:166
+#: gnucash/gtkbuilder/dialog-commodity.glade:156
 msgid ""
 "Enter a unique code used to identify the commodity. Or, you may safely leave "
 "this field blank."
@@ -17126,7 +17132,7 @@ msgstr ""
 "Saisissez un code unique pour identifier le produit. Vous pouvez aussi "
 "laisser le champ vide."
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:201
+#: gnucash/gtkbuilder/dialog-commodity.glade:191
 msgid ""
 "Enter the smallest fraction of the commodity which can be traded. For stocks "
 "which can only be traded in whole numbers, enter 1."
@@ -17135,11 +17141,11 @@ msgstr ""
 "les actions qui ne peuvent être échangées que par nombre entier, saisir 1."
 
 # messages-i18n.c:231
-#: gnucash/gtkbuilder/dialog-commodity.glade:225
+#: gnucash/gtkbuilder/dialog-commodity.glade:215
 msgid "<b>Quote Source Information</b>"
 msgstr "<b>Informations sur la source du cours</b>"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:309
+#: gnucash/gtkbuilder/dialog-commodity.glade:296
 msgid ""
 "Select a category for the commodity or enter a new one. One might use "
 "investment categories like STOCKS and BONDS or exchange names like NASDAQ "
@@ -17149,7 +17155,7 @@ msgstr ""
 "pouvez utiliser des catégories d'investissement comme ACTIONS et BONDS ou "
 "d'échange comme NASDAQ ou LSE."
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:329
+#: gnucash/gtkbuilder/dialog-commodity.glade:319
 msgid ""
 "Enter a display symbol. This can safely be left blank, in which case the "
 "ticker symbol or the currency ISO code will be used."
@@ -17157,24 +17163,24 @@ msgstr ""
 "Entrez un symbole d’affichage. Celui-ci peut très bien être laissé vide, "
 "auquel cas le code mnémonique ou le code ISO de la devise sera utilisé."
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:345
+#: gnucash/gtkbuilder/dialog-commodity.glade:335
 msgid "Type of quote source"
 msgstr "Type de source de cours"
 
 # po/guile_strings.txt:219
-#: gnucash/gtkbuilder/dialog-commodity.glade:358
+#: gnucash/gtkbuilder/dialog-commodity.glade:348
 msgid "_Display symbol"
 msgstr "_Symbole d’affichage"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:373
+#: gnucash/gtkbuilder/dialog-commodity.glade:363
 msgid "Time_zone"
 msgstr "Fuseau _horaire"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:384
+#: gnucash/gtkbuilder/dialog-commodity.glade:374
 msgid "_Unknown"
 msgstr "_Inconnu"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:390
+#: gnucash/gtkbuilder/dialog-commodity.glade:380
 msgid ""
 "These are quote sources that were recently added to F::Q. GnuCash does not "
 "know if these sources retrieve information from a single site or from "
@@ -17185,11 +17191,11 @@ msgstr ""
 "Internet."
 
 # messages-i18n.c:188 po/guile_strings.txt:51
-#: gnucash/gtkbuilder/dialog-commodity.glade:405
+#: gnucash/gtkbuilder/dialog-commodity.glade:395
 msgid "_Multiple"
 msgstr "_Multiple"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:411
+#: gnucash/gtkbuilder/dialog-commodity.glade:401
 msgid ""
 "These are F::Q quote sources that retrieve information from multiple sites "
 "on the internet. If one of the sites is unavailable, F::Q will attempt to "
@@ -17200,11 +17206,11 @@ msgstr ""
 "\" essaiera de charger les informations depuis un autre site."
 
 # messages-i18n.c:169 po/guile_strings.txt:62
-#: gnucash/gtkbuilder/dialog-commodity.glade:426
+#: gnucash/gtkbuilder/dialog-commodity.glade:416
 msgid "Si_ngle"
 msgstr "U_nique"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:432
+#: gnucash/gtkbuilder/dialog-commodity.glade:422
 msgid ""
 "These are F::Q quote sources that retrieve information from a single site on "
 "the internet. If that site is unavailable, you will not be able to retrieve "
@@ -17214,35 +17220,44 @@ msgstr ""
 "un seul site sur Internet. Si ce site est inaccessible, vous ne pourrez par "
 "charger les cours."
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:447
+#: gnucash/gtkbuilder/dialog-commodity.glade:437
 msgid "_Get Online Quotes"
 msgstr "_Télécharger les cotations en ligne"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:466
+#: gnucash/gtkbuilder/dialog-commodity.glade:456
 msgid "F_raction traded"
 msgstr "F_raction échangeable"
 
 #. Again replace CUSIP by your National Securities Identifying Number.
-#: gnucash/gtkbuilder/dialog-commodity.glade:480
+#: gnucash/gtkbuilder/dialog-commodity.glade:470
 msgid "ISIN, CUSI_P or other code"
 msgstr "CUSI_P ou autre code"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:510
+# po/guile_strings.txt:188
+#: gnucash/gtkbuilder/dialog-commodity.glade:485
+#: gnucash/gtkbuilder/dialog-commodity.glade:767
+#: gnucash/gtkbuilder/dialog-price.glade:122
+#, fuzzy
+#| msgid "Namespace"
+msgid "Nam_espace"
+msgstr "Domaine"
+
+#: gnucash/gtkbuilder/dialog-commodity.glade:500
 msgid "_Symbol/abbreviation"
 msgstr "_Code/abréviation"
 
 # src/gnome/glade-gnc-dialogs.c:155
-#: gnucash/gtkbuilder/dialog-commodity.glade:525
+#: gnucash/gtkbuilder/dialog-commodity.glade:515
 msgid "_Full name"
 msgstr "Nom _complet"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:563
+#: gnucash/gtkbuilder/dialog-commodity.glade:553
 msgid "Warning: Finance::Quote not installed properly."
 msgstr ""
 "Attention : le module perl Finance::Quote n'est pas installé correctement."
 
 # messages-i18n.c:238
-#: gnucash/gtkbuilder/dialog-commodity.glade:723
+#: gnucash/gtkbuilder/dialog-commodity.glade:713
 msgid "Select user information here..."
 msgstr "Sélectionner les détails utilisateur ici..."
 
@@ -18538,7 +18553,7 @@ msgstr "<b>Labels</b>"
 
 # po/guile_strings.txt:243
 #: gnucash/gtkbuilder/dialog-preferences.glade:680
-#: gnucash/gtkbuilder/dialog-price.glade:446
+#: gnucash/gtkbuilder/dialog-price.glade:436
 msgid "_None"
 msgstr "_Aucun"
 
@@ -19441,54 +19456,49 @@ msgid "Net Asset Value"
 msgstr "Valeur nette de l’actif"
 
 # messages-i18n.c:202
-#: gnucash/gtkbuilder/dialog-price.glade:53
+#: gnucash/gtkbuilder/dialog-price.glade:43
 msgid "Price Editor"
 msgstr "Éditeur de cours"
 
-# po/guile_strings.txt:188
-#: gnucash/gtkbuilder/dialog-price.glade:132
-msgid "_Namespace"
-msgstr "Espace de _nommage"
-
-#: gnucash/gtkbuilder/dialog-price.glade:189
+#: gnucash/gtkbuilder/dialog-price.glade:179
 msgid "S_ource"
 msgstr "S_ource"
 
 # messages-i18n.c:321
-#: gnucash/gtkbuilder/dialog-price.glade:367
+#: gnucash/gtkbuilder/dialog-price.glade:357
 msgid "Remove Old Prices"
 msgstr "Retirer les anciens prix"
 
-#: gnucash/gtkbuilder/dialog-price.glade:430
+#: gnucash/gtkbuilder/dialog-price.glade:420
 msgid "Delete prices that meet the following criteria:"
 msgstr "Supprimer tous les prix correspondant à ce critère :"
 
-#: gnucash/gtkbuilder/dialog-price.glade:450
+#: gnucash/gtkbuilder/dialog-price.glade:440
 msgid "Remove all prices before date."
 msgstr "Supprime les cours antérieurs à cette date."
 
-#: gnucash/gtkbuilder/dialog-price.glade:464
+#: gnucash/gtkbuilder/dialog-price.glade:454
 msgid "Last of _Week"
 msgstr "Dernier de la _semaine"
 
-#: gnucash/gtkbuilder/dialog-price.glade:468
+#: gnucash/gtkbuilder/dialog-price.glade:458
 msgid "Keep the last price of each week if present before date."
 msgstr "Garde le dernier prix de chaque semaine si présent avant la date."
 
-#: gnucash/gtkbuilder/dialog-price.glade:481
+#: gnucash/gtkbuilder/dialog-price.glade:471
 msgid "Last of _Month"
 msgstr "Dernier du _mois"
 
-#: gnucash/gtkbuilder/dialog-price.glade:485
+#: gnucash/gtkbuilder/dialog-price.glade:475
 msgid "Keep the last price of each month if present before date."
 msgstr "Garde le dernier prix de chaque mois si présent avant la date."
 
 # po/guile_strings.txt:107
-#: gnucash/gtkbuilder/dialog-price.glade:498
+#: gnucash/gtkbuilder/dialog-price.glade:488
 msgid "Last of _Quarter"
 msgstr "Dernier du _trimestre"
 
-#: gnucash/gtkbuilder/dialog-price.glade:502
+#: gnucash/gtkbuilder/dialog-price.glade:492
 msgid ""
 "Keep the last price of each fiscal quarter if present before date. The "
 "fiscal quarter is derived from the accounting period end date."
@@ -19498,11 +19508,11 @@ msgstr ""
 "comptable."
 
 # po/guile_strings.txt:186
-#: gnucash/gtkbuilder/dialog-price.glade:515
+#: gnucash/gtkbuilder/dialog-price.glade:505
 msgid "Last of _Period"
 msgstr "La dernière _période"
 
-#: gnucash/gtkbuilder/dialog-price.glade:519
+#: gnucash/gtkbuilder/dialog-price.glade:509
 msgid ""
 "Keep the last price of each fiscal period if present before date. The fiscal "
 "period is derived from the accounting period end date."
@@ -19511,11 +19521,11 @@ msgstr ""
 "période fiscale est défini à partir de la date de fin de la période "
 "comptable."
 
-#: gnucash/gtkbuilder/dialog-price.glade:532
+#: gnucash/gtkbuilder/dialog-price.glade:522
 msgid "_Scaled"
 msgstr "_Mis à l'échelle"
 
-#: gnucash/gtkbuilder/dialog-price.glade:536
+#: gnucash/gtkbuilder/dialog-price.glade:526
 msgid ""
 "With the scaled option, prices are removed relative to the date selected. "
 "'One a month' is used for dates older than a year and 'One a week' is used "
@@ -19526,43 +19536,43 @@ msgstr ""
 "'Une par semaine' pour les dates entre six mois et un an."
 
 # messages-i18n.c:222
-#: gnucash/gtkbuilder/dialog-price.glade:584
+#: gnucash/gtkbuilder/dialog-price.glade:574
 msgid "First Date"
 msgstr "Première date"
 
 # messages-i18n.c:262
-#: gnucash/gtkbuilder/dialog-price.glade:615
+#: gnucash/gtkbuilder/dialog-price.glade:605
 msgid "From these Commodities"
 msgstr "Depuis ces produits"
 
-#: gnucash/gtkbuilder/dialog-price.glade:629
+#: gnucash/gtkbuilder/dialog-price.glade:619
 msgid "Keeping the last available price for option"
 msgstr "Garder la dernière cotation disponible pour l'option"
 
-#: gnucash/gtkbuilder/dialog-price.glade:661
+#: gnucash/gtkbuilder/dialog-price.glade:651
 msgid "Include _Fetched online prices"
 msgstr "Inclure les prix _récupérés en ligne"
 
-#: gnucash/gtkbuilder/dialog-price.glade:665
+#: gnucash/gtkbuilder/dialog-price.glade:655
 msgid "If activated, prices added by Finance::Quote will be included."
 msgstr "Si actif, les prix ajoutés avec Finance::Quote seront inclus."
 
 # messages-i18n.c:25
-#: gnucash/gtkbuilder/dialog-price.glade:680
+#: gnucash/gtkbuilder/dialog-price.glade:670
 msgid "Include manually _Entered prices"
 msgstr "Inclure les prix _entrés manuellement"
 
 # messages-i18n.c:25
-#: gnucash/gtkbuilder/dialog-price.glade:684
+#: gnucash/gtkbuilder/dialog-price.glade:674
 msgid "If activated, include manually entered prices."
 msgstr "Si actif, inclure les prix entrés manuellement."
 
 # messages-i18n.c:176
-#: gnucash/gtkbuilder/dialog-price.glade:701
+#: gnucash/gtkbuilder/dialog-price.glade:691
 msgid "_Added by the application"
 msgstr "_Ajouté par cette application"
 
-#: gnucash/gtkbuilder/dialog-price.glade:705
+#: gnucash/gtkbuilder/dialog-price.glade:695
 msgid ""
 "If activated, include application added prices.\n"
 "\n"
@@ -19579,44 +19589,44 @@ msgstr ""
 "valeurs ; retirer ces prix risque donc de rendre les valeurs moins fiables."
 
 # src/gnome/glade-gnc-dialogs.c:1324
-#: gnucash/gtkbuilder/dialog-price.glade:751
+#: gnucash/gtkbuilder/dialog-price.glade:741
 msgid "Before _Date"
 msgstr "_Date"
 
 # messages-i18n.c:316
-#: gnucash/gtkbuilder/dialog-price.glade:791
+#: gnucash/gtkbuilder/dialog-price.glade:781
 #: gnucash/report/reports/standard/price-scatter.scm:82
 msgid "Price Database"
 msgstr "Base des cours"
 
-#: gnucash/gtkbuilder/dialog-price.glade:838
+#: gnucash/gtkbuilder/dialog-price.glade:828
 msgid "Add a new price."
 msgstr "Ajouter un nouveau cours."
 
 # messages-i18n.c:105
-#: gnucash/gtkbuilder/dialog-price.glade:856
+#: gnucash/gtkbuilder/dialog-price.glade:846
 msgid "Remove the current price."
 msgstr "Supprimer le cours actuel."
 
 # messages-i18n.c:105
-#: gnucash/gtkbuilder/dialog-price.glade:874
+#: gnucash/gtkbuilder/dialog-price.glade:864
 msgid "Edit the current price."
 msgstr "Modifier le cours actuel."
 
 # messages-i18n.c:321
-#: gnucash/gtkbuilder/dialog-price.glade:886
+#: gnucash/gtkbuilder/dialog-price.glade:876
 msgid "Remove _Old"
 msgstr "Supprimer les _anciens"
 
-#: gnucash/gtkbuilder/dialog-price.glade:891
+#: gnucash/gtkbuilder/dialog-price.glade:881
 msgid "Remove prices older than a user-entered date."
 msgstr "Supprime les cours antérieurs à une date indiquée par l’utilisateur."
 
-#: gnucash/gtkbuilder/dialog-price.glade:903
+#: gnucash/gtkbuilder/dialog-price.glade:893
 msgid "_Get Quotes"
 msgstr "_Récupérer les cotations"
 
-#: gnucash/gtkbuilder/dialog-price.glade:908
+#: gnucash/gtkbuilder/dialog-price.glade:898
 msgid "Get new online quotes for stock accounts."
 msgstr "Télécharge les cotations en ligne pour les comptes titres."
 
@@ -21539,8 +21549,8 @@ msgid ""
 "<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
 "\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 msgstr ""
-"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/\""
-">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
+"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
+"\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:157
 msgid ""
@@ -26281,7 +26291,7 @@ msgstr "Le type de graphique à générer."
 # po/guile_strings.txt:104
 #: gnucash/report/reports/example/average-balance.scm:129
 #: gnucash/report/reports/example/average-balance.scm:149
-#: gnucash/report/trep-engine.scm:1946 libgnucash/engine/policy.c:58
+#: gnucash/report/trep-engine.scm:1943 libgnucash/engine/policy.c:58
 msgid "Average"
 msgstr "Moyenne"
 
@@ -29140,7 +29150,7 @@ msgstr "Solde ~a vers ~a"
 # messages-i18n.c:312
 #: gnucash/report/reports/standard/category-barchart.scm:672
 #: gnucash/report/reports/standard/category-barchart.scm:692
-#: gnucash/report/trep-engine.scm:1672 gnucash/report/trep-engine.scm:1931
+#: gnucash/report/trep-engine.scm:1672 gnucash/report/trep-engine.scm:1928
 msgid "Grand Total"
 msgstr "Total général"
 
@@ -32491,7 +32501,7 @@ msgid "CSV disabled for double column amounts"
 msgstr "L'option CSV est désactivée pour les comptes avec double colonnes"
 
 #. Translators: Both ~a's are dates
-#: gnucash/report/trep-engine.scm:2269
+#: gnucash/report/trep-engine.scm:2266
 #, scheme-format
 msgid "From ~a to ~a"
 msgstr "Du ~a au ~a"
@@ -33284,31 +33294,31 @@ msgid "Invalid option value"
 msgstr "Valeur invalide pour l'option"
 
 #. Translators: this string refers to a file name that gets renamed
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:648
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:649
 msgid "Renamed to:"
 msgstr "Renommer en :"
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:673
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:674
 msgid "Notice"
 msgstr "Avis"
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:678
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:679
 msgid "Your gnucash metadata has been migrated."
 msgstr "Les meta-données de GnuCash ont été mises à jour."
 
 #. Translators: this refers to a directory name.
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:680
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:681
 msgid "Old location:"
 msgstr "Ancien emplacement :"
 
 # messages-i18n.c:231
 #. Translators: this refers to a directory name.
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:682
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:683
 msgid "New location:"
 msgstr "Nouvel emplacement :"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:684
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:685
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
@@ -33316,28 +33326,28 @@ msgstr ""
 "Si vous n'a pas l'intention de {1} 2.6.x ou une version plus ancienne sur ce "
 "système, vous pouvez supprimer l'ancien dossier en toute sécurité."
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:691
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:692
 msgid "In addition:"
 msgstr "En plus :"
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:697
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:698
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "Le fichier suivant a été copié vers {1} à la place :"
 msgstr[1] "Les fichiers suivants ont été copiés vers {1} à la place :"
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:701
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:702
 msgid "The following file in {1} has been renamed:"
 msgstr "Le fichier suivant dans {1} a été renommé :"
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:711
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:712
 msgid "The following file has become obsolete and will be ignored:"
 msgid_plural "The following files have become obsolete and will be ignored:"
 msgstr[0] "Le fichier suivant est devenu obsolète et sera ignoré :"
 msgstr[1] "Les fichiers suivants sont devenus obsolètes et seront ignorés :"
 
 # messages-i18n.c:37
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:721
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:722
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] "Le fichier suivant n'a pas pu être déplacé vers {1} :"
@@ -33651,12 +33661,12 @@ msgid "Split"
 msgstr "Répartition"
 
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
-#: libgnucash/engine/Transaction.c:2778
+#: libgnucash/engine/Transaction.c:2784
 msgid "Voided transaction"
 msgstr "Transaction invalidée"
 
 # messages-i18n.c:346
-#: libgnucash/engine/Transaction.c:2794
+#: libgnucash/engine/Transaction.c:2800
 msgid "Transaction Voided"
 msgstr "Transaction invalidée"
 

@@ -4,10 +4,10 @@
 # Adithya K <adithyak04@gmail.com>, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.11-pre1\n"
+"Project-Id-Version: GnuCash 4.11-1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2022-06-20 23:46+0200\n"
+"POT-Creation-Date: 2022-07-17 04:04+0200\n"
 "PO-Revision-Date: 2021-02-20 14:50+0000\n"
 "Last-Translator: Adithya K <adithyak04@gmail.com>\n"
 "Language-Team: Bodo <https://hosted.weblate.org/projects/gnucash/gnucash/brx/"
@@ -1327,8 +1327,8 @@ msgstr "बेसादखौ खोमोर?"
 #: gnucash/gnome-utils/gnc-file.c:118 gnucash/gnome-utils/gnc-file.c:366
 #: gnucash/gnome-utils/gnc-file.c:664 gnucash/gnome-utils/gnc-gui-query.c:300
 #: gnucash/gnome-utils/gnc-gui-query.c:332
-#: gnucash/gnome-utils/gnc-main-window.c:1311
-#: gnucash/gnome-utils/gnc-main-window.c:1468
+#: gnucash/gnome-utils/gnc-main-window.c:1313
+#: gnucash/gnome-utils/gnc-main-window.c:1470
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:886
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1023
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1063
@@ -1345,8 +1345,8 @@ msgstr "बेसादखौ खोमोर?"
 #: gnucash/gtkbuilder/dialog-billterms.glade:968
 #: gnucash/gtkbuilder/dialog-book-close.glade:38
 #: gnucash/gtkbuilder/dialog-choose-owner.glade:21
-#: gnucash/gtkbuilder/dialog-commodity.glade:69
-#: gnucash/gtkbuilder/dialog-commodity.glade:675
+#: gnucash/gtkbuilder/dialog-commodity.glade:59
+#: gnucash/gtkbuilder/dialog-commodity.glade:665
 #: gnucash/gtkbuilder/dialog-customer.glade:64
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:42
 #: gnucash/gtkbuilder/dialog-date-close.glade:23
@@ -1365,8 +1365,8 @@ msgstr "बेसादखौ खोमोर?"
 #: gnucash/gtkbuilder/dialog-options.glade:38
 #: gnucash/gtkbuilder/dialog-order.glade:454
 #: gnucash/gtkbuilder/dialog-payment.glade:78
-#: gnucash/gtkbuilder/dialog-price.glade:70
-#: gnucash/gtkbuilder/dialog-price.glade:383
+#: gnucash/gtkbuilder/dialog-price.glade:60
+#: gnucash/gtkbuilder/dialog-price.glade:373
 #: gnucash/gtkbuilder/dialog-print-check.glade:145
 #: gnucash/gtkbuilder/dialog-print-check.glade:329
 #: gnucash/gtkbuilder/dialog-progress.glade:122
@@ -1582,7 +1582,7 @@ msgstr "एकाउन्ट सायख"
 #: gnucash/gnome-utils/gnc-gui-query.c:297
 #: gnucash/gnome-utils/gnc-gui-query.c:331
 #: gnucash/gnome-utils/gnc-gui-query.c:417
-#: gnucash/gnome-utils/gnc-main-window.c:1469
+#: gnucash/gnome-utils/gnc-main-window.c:1471
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:196
 #: gnucash/gtkbuilder/dialog-account.glade:35
 #: gnucash/gtkbuilder/dialog-account.glade:832
@@ -1593,8 +1593,8 @@ msgstr "एकाउन्ट सायख"
 #: gnucash/gtkbuilder/dialog-billterms.glade:986
 #: gnucash/gtkbuilder/dialog-book-close.glade:53
 #: gnucash/gtkbuilder/dialog-choose-owner.glade:36
-#: gnucash/gtkbuilder/dialog-commodity.glade:85
-#: gnucash/gtkbuilder/dialog-commodity.glade:691
+#: gnucash/gtkbuilder/dialog-commodity.glade:75
+#: gnucash/gtkbuilder/dialog-commodity.glade:681
 #: gnucash/gtkbuilder/dialog-customer.glade:80
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:58
 #: gnucash/gtkbuilder/dialog-date-close.glade:38
@@ -1614,8 +1614,8 @@ msgstr "एकाउन्ट सायख"
 #: gnucash/gtkbuilder/dialog-options.glade:72
 #: gnucash/gtkbuilder/dialog-order.glade:470
 #: gnucash/gtkbuilder/dialog-payment.glade:94
-#: gnucash/gtkbuilder/dialog-price.glade:99
-#: gnucash/gtkbuilder/dialog-price.glade:398
+#: gnucash/gtkbuilder/dialog-price.glade:89
+#: gnucash/gtkbuilder/dialog-price.glade:388
 #: gnucash/gtkbuilder/dialog-print-check.glade:160
 #: gnucash/gtkbuilder/dialog-progress.glade:136
 #: gnucash/gtkbuilder/dialog-report.glade:465
@@ -1972,14 +1972,14 @@ msgstr "शेयार बेसेन"
 #: gnucash/report/reports/standard/register.scm:647
 #: gnucash/report/trep-engine.scm:223 gnucash/report/trep-engine.scm:1016
 #: gnucash/report/trep-engine.scm:1067 gnucash/report/trep-engine.scm:1366
-#: gnucash/report/trep-engine.scm:1382 gnucash/report/trep-engine.scm:2083
+#: gnucash/report/trep-engine.scm:1382 gnucash/report/trep-engine.scm:2080
 msgid "Amount"
 msgstr "बिबां"
 
 #: gnucash/gnome/dialog-find-transactions2.c:126
 #: gnucash/gnome/dialog-find-transactions.c:124
 #: gnucash/gnome/dialog-lot-viewer.c:976
-#: gnucash/gnome/dialog-sx-since-last-run.c:1044
+#: gnucash/gnome/dialog-sx-since-last-run.c:1046
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2884
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2904
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:79
@@ -3068,10 +3068,10 @@ msgstr "स्टाइल सिट मुं"
 #: gnucash/gnome/dialog-sx-editor2.c:165 gnucash/gnome/dialog-sx-editor.c:167
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:151
 #: gnucash/gnome/window-reconcile2.c:2187 gnucash/gnome/window-reconcile.c:2449
-#: gnucash/gnome-utils/gnc-main-window.c:275
+#: gnucash/gnome-utils/gnc-main-window.c:277
 #: gnucash/gtkbuilder/dialog-billterms.glade:679
 #: gnucash/gtkbuilder/dialog-commodities.glade:156
-#: gnucash/gtkbuilder/dialog-price.glade:868
+#: gnucash/gtkbuilder/dialog-price.glade:858
 #: gnucash/gtkbuilder/dialog-report.glade:622
 #: gnucash/gtkbuilder/dialog-tax-info.glade:141
 #: gnucash/gtkbuilder/dialog-tax-table.glade:182
@@ -3084,12 +3084,12 @@ msgid "_Transaction"
 msgstr "लेनदेन"
 
 #: gnucash/gnome/dialog-sx-editor2.c:167 gnucash/gnome/dialog-sx-editor.c:169
-#: gnucash/gnome-utils/gnc-main-window.c:276
+#: gnucash/gnome-utils/gnc-main-window.c:278
 msgid "_View"
 msgstr "नुथाय"
 
 #: gnucash/gnome/dialog-sx-editor2.c:168 gnucash/gnome/dialog-sx-editor.c:170
-#: gnucash/gnome-utils/gnc-main-window.c:277
+#: gnucash/gnome-utils/gnc-main-window.c:279
 msgid "_Actions"
 msgstr "हाबाफोर"
 
@@ -3276,7 +3276,7 @@ msgstr "(बेसेन नांगौ)"
 msgid "Invalid Transactions"
 msgstr "बातिलनङै लेनदेन"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:866
+#: gnucash/gnome/dialog-sx-since-last-run.c:867
 #, c-format
 msgid ""
 "There are no Scheduled Transactions to be entered at this time. (One "
@@ -3291,18 +3291,18 @@ msgstr[1] ""
 "बे समाव हाबहोनो गोनां जेबो फारिलाइ खालामखानाय लेनदेन गैया। (%d लेनदेनखौ गावनो गाव "
 "महरै सोरजियो)"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:998
+#: gnucash/gnome/dialog-sx-since-last-run.c:1000
 #: gnucash/gnome-search/dialog-search.c:1104
 msgid "Transaction"
 msgstr "लेनदेन"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:1014
+#: gnucash/gnome/dialog-sx-since-last-run.c:1016
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:667
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:512
 msgid "Status"
 msgstr "थाखोमान"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:1108
+#: gnucash/gnome/dialog-sx-since-last-run.c:1110
 msgid "Created Transactions"
 msgstr "सोरजिनाय लेनदेनफोर"
 
@@ -3330,7 +3330,7 @@ msgstr "आय खाजोना थाथि"
 
 #: gnucash/gnome/dialog-tax-info.c:1191
 #: gnucash/gtkbuilder/dialog-options.glade:55
-#: gnucash/gtkbuilder/dialog-price.glade:85
+#: gnucash/gtkbuilder/dialog-price.glade:75
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:40
 #: gnucash/gtkbuilder/dialog-tax-info.glade:43
 msgid "_Apply"
@@ -3445,7 +3445,7 @@ msgstr "मोनसे थाखानाय बाजेतखौ खेव"
 #: gnucash/report/reports/standard/new-owner-report.scm:312
 #: gnucash/report/reports/standard/portfolio.scm:278
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:113
-#: gnucash/report/trep-engine.scm:1945
+#: gnucash/report/trep-engine.scm:1942
 msgid "Total"
 msgstr "गासै"
 
@@ -3475,7 +3475,7 @@ msgstr "मोनसे थाखानाय GnuCash फाइलखौ खे�
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:121
 #: gnucash/gnome-utils/gnc-file.c:100 gnucash/gnome-utils/gnc-file.c:666
-#: gnucash/gnome-utils/gnc-main-window.c:1312
+#: gnucash/gnome-utils/gnc-main-window.c:1314
 #: gnucash/html/gnc-html-webkit1.c:1198
 msgid "_Save"
 msgstr "थिना दोन"
@@ -4080,7 +4080,7 @@ msgstr "सायखखानाय एकाउन्टनि चिल्ड�
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:185
 #: gnucash/gnome/gnc-plugin-page-register2.c:340
 #: gnucash/gnome/gnc-plugin-page-register.c:463
-#: gnucash/gnome-utils/gnc-main-window.c:347
+#: gnucash/gnome-utils/gnc-main-window.c:349
 msgid "_Filter By..."
 msgstr "..मथे फिल्टार खालाम..."
 
@@ -4092,7 +4092,7 @@ msgstr "..मथे फिल्टार खालाम..."
 #: gnucash/gnome/gnc-plugin-page-register.c:467
 #: gnucash/gnome/gnc-plugin-page-report.c:1231
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:170
-#: gnucash/gnome-utils/gnc-main-window.c:351
+#: gnucash/gnome-utils/gnc-main-window.c:353
 msgid "_Refresh"
 msgstr "गोदान खालाम"
 
@@ -4103,7 +4103,7 @@ msgstr "गोदान खालाम"
 #: gnucash/gnome/gnc-plugin-page-register.c:468
 #: gnucash/gnome/gnc-plugin-page-report.c:1232
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:171
-#: gnucash/gnome-utils/gnc-main-window.c:352
+#: gnucash/gnome-utils/gnc-main-window.c:354
 msgid "Refresh this window"
 msgstr "बे उइन्ड'खौ गोदान खालाम"
 
@@ -4526,7 +4526,7 @@ msgstr "कपि खालाम"
 #: gnucash/gnome/gnc-plugin-page-register2.c:240
 #: gnucash/gnome/gnc-plugin-page-register.c:354
 #: gnucash/gnome/gnc-plugin-page-report.c:1226
-#: gnucash/gnome-utils/gnc-main-window.c:330
+#: gnucash/gnome-utils/gnc-main-window.c:332
 msgid "_Paste"
 msgstr "फोनांजाब हो"
 
@@ -4589,7 +4589,7 @@ msgstr "सरासनस्रा सालान अर्डार दोन
 #: gnucash/gnome/gnc-plugin-page-invoice.c:248
 #: gnucash/gtkbuilder/assistant-stock-split.glade:115
 #: gnucash/gtkbuilder/dialog-account.glade:1773
-#: gnucash/gtkbuilder/dialog-price.glade:176
+#: gnucash/gtkbuilder/dialog-price.glade:166
 #: gnucash/gtkbuilder/dialog-print-check.glade:700
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:97
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:651
@@ -4621,7 +4621,7 @@ msgstr "बिबां मथे थख' साजाय"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:251
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1137
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1139
-#: gnucash/gtkbuilder/dialog-price.glade:219
+#: gnucash/gtkbuilder/dialog-price.glade:209
 #: gnucash/register/ledger-core/split-register.c:2098
 #: gnucash/register/ledger-core/split-register.c:2101
 msgid "_Price"
@@ -5328,35 +5328,35 @@ msgstr "प्रिन्ट चेक्‌स..."
 #: gnucash/gnome/gnc-plugin-page-register2.c:230
 #: gnucash/gnome/gnc-plugin-page-register.c:344
 #: gnucash/gnome/gnc-plugin-page-report.c:1216
-#: gnucash/gnome-utils/gnc-main-window.c:320
+#: gnucash/gnome-utils/gnc-main-window.c:322
 msgid "Cu_t"
 msgstr "दानस'"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:231
 #: gnucash/gnome/gnc-plugin-page-register.c:345
 #: gnucash/gnome/gnc-plugin-page-report.c:1217
-#: gnucash/gnome-utils/gnc-main-window.c:321
+#: gnucash/gnome-utils/gnc-main-window.c:323
 msgid "Cut the current selection and copy it to clipboard"
 msgstr "दानि सायखनायखौ दानस' आरो बेखौ क्लिपबर्डाव कपि खालाम।"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:235
 #: gnucash/gnome/gnc-plugin-page-register.c:349
 #: gnucash/gnome/gnc-plugin-page-report.c:1221
-#: gnucash/gnome-utils/gnc-main-window.c:325
+#: gnucash/gnome-utils/gnc-main-window.c:327
 msgid "_Copy"
 msgstr "कपि खालाम"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:236
 #: gnucash/gnome/gnc-plugin-page-register.c:350
 #: gnucash/gnome/gnc-plugin-page-report.c:1222
-#: gnucash/gnome-utils/gnc-main-window.c:326
+#: gnucash/gnome-utils/gnc-main-window.c:328
 msgid "Copy the current selection to clipboard"
 msgstr "दानि सायखनायखौ क्लिपबर्डाव कपि खालाम"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:241
 #: gnucash/gnome/gnc-plugin-page-register.c:355
 #: gnucash/gnome/gnc-plugin-page-report.c:1227
-#: gnucash/gnome-utils/gnc-main-window.c:331
+#: gnucash/gnome-utils/gnc-main-window.c:333
 msgid "Paste the clipboard content at the cursor position"
 msgstr "क्लिपबर्डनि आयदाखौ कार्सरनि जायगायाव फोनांजाब हो"
 
@@ -5822,7 +5822,7 @@ msgid "Remo_ve Other Splits"
 msgstr "गुबुन बोखावनायखौ बोखार"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:459
-#: gnucash/gnome-utils/gnc-main-window.c:343
+#: gnucash/gnome-utils/gnc-main-window.c:345
 msgid "_Sort By..."
 msgstr "..मथे थख' साजाय..."
 
@@ -6202,7 +6202,7 @@ msgstr "थि"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:139
 #: gnucash/gtkbuilder/dialog-billterms.glade:494
-#: gnucash/gtkbuilder/dialog-commodity.glade:660
+#: gnucash/gtkbuilder/dialog-commodity.glade:650
 #: gnucash/gtkbuilder/dialog-report.glade:334
 #: gnucash/gtkbuilder/dialog-report.glade:638
 #: gnucash/gtkbuilder/dialog-tax-table.glade:103
@@ -6880,11 +6880,11 @@ msgstr "बिबां"
 #: gnucash/gnome/window-reconcile2.c:2129
 #: gnucash/gnome/window-reconcile2.c:2210 gnucash/gnome/window-reconcile.c:2391
 #: gnucash/gnome/window-reconcile.c:2472
-#: gnucash/gnome-utils/gnc-main-window.c:283
+#: gnucash/gnome-utils/gnc-main-window.c:285
 #: gnucash/gtkbuilder/dialog-account.glade:1121
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:23
 #: gnucash/gtkbuilder/dialog-book-close.glade:22
-#: gnucash/gtkbuilder/dialog-commodity.glade:53
+#: gnucash/gtkbuilder/dialog-commodity.glade:43
 #: gnucash/gtkbuilder/dialog-customer.glade:47
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:25
 #: gnucash/gtkbuilder/dialog-custom-report.glade:29
@@ -6952,7 +6952,7 @@ msgid "Edit the main account for this register"
 msgstr "बे रेजिस्टारनि थाखाय गाहाइ एकाउन्ट सुजु"
 
 #: gnucash/gnome/window-reconcile2.c:2173 gnucash/gnome/window-reconcile.c:2435
-#: gnucash/gnome-utils/gnc-main-window.c:358
+#: gnucash/gnome-utils/gnc-main-window.c:360
 msgid "_Check & Repair"
 msgstr "आनजाद खालाम & फाहाम"
 
@@ -7045,7 +7045,7 @@ msgstr "नोंथाङा लिस्ट निफ्राय मोनस
 #: gnucash/gnome-utils/gnc-recurrence.c:547
 #: gnucash/gtkbuilder/dialog-commodities.glade:138
 #: gnucash/gtkbuilder/dialog-doclink.glade:215
-#: gnucash/gtkbuilder/dialog-price.glade:850
+#: gnucash/gtkbuilder/dialog-price.glade:840
 #, fuzzy
 msgid "_Remove"
 msgstr "<< गैया खालाम"
@@ -7079,7 +7079,7 @@ msgstr "गोदान आइटेम"
 #: gnucash/gnome-search/dialog-search.c:1162
 #: gnucash/gnome-utils/gnc-recurrence.c:544
 #: gnucash/gtkbuilder/dialog-commodities.glade:121
-#: gnucash/gtkbuilder/dialog-price.glade:833
+#: gnucash/gtkbuilder/dialog-price.glade:823
 #, fuzzy
 msgid "_Add"
 msgstr "थं"
@@ -7610,7 +7610,7 @@ msgstr ""
 "नेम'निक (टिकार दिन्थिसिन एबा बे बादि एखे):"
 
 #: gnucash/gnome-utils/dialog-commodity.c:275
-#: gnucash/gtkbuilder/dialog-commodity.glade:644
+#: gnucash/gtkbuilder/dialog-commodity.glade:634
 msgid "Select security/currency"
 msgstr "रैखाथि/रां सायख"
 
@@ -7624,7 +7624,7 @@ msgid "Select security"
 msgstr "रैखाथि सायख"
 
 #: gnucash/gnome-utils/dialog-commodity.c:281
-#: gnucash/gtkbuilder/dialog-price.glade:147
+#: gnucash/gtkbuilder/dialog-price.glade:137
 msgid "_Security"
 msgstr "रैखाथि"
 
@@ -7633,7 +7633,7 @@ msgid "Select currency"
 msgstr "रां सायख"
 
 #: gnucash/gnome-utils/dialog-commodity.c:286
-#: gnucash/gtkbuilder/dialog-price.glade:162
+#: gnucash/gtkbuilder/dialog-price.glade:152
 msgid "Cu_rrency"
 msgstr "मुद्रा (सोलिनाय रां)"
 
@@ -7671,7 +7671,7 @@ msgid "New security"
 msgstr "गोदान रैखाथि"
 
 #: gnucash/gnome-utils/dialog-commodity.c:992
-#: gnucash/gtkbuilder/dialog-commodity.glade:239
+#: gnucash/gtkbuilder/dialog-commodity.glade:229
 msgid "Security Information"
 msgstr "रैखाथि फोरमायथिहोग्रा"
 
@@ -7748,7 +7748,7 @@ msgid "_Save As"
 msgstr "..बादि थिना दोन..."
 
 #: gnucash/gnome-utils/dialog-options.c:225
-#: gnucash/gnome-utils/gnc-main-window.c:307
+#: gnucash/gnome-utils/gnc-main-window.c:309
 #: gnucash/gtkbuilder/dialog-billterms.glade:731
 #: gnucash/gtkbuilder/dialog-commodities.glade:174
 #: gnucash/gtkbuilder/dialog-custom-report.glade:46
@@ -7761,7 +7761,7 @@ msgstr "..बादि थिना दोन..."
 #: gnucash/gtkbuilder/dialog-order.glade:42
 #: gnucash/gtkbuilder/dialog-preferences.glade:154
 #: gnucash/gtkbuilder/dialog-preferences.glade:285
-#: gnucash/gtkbuilder/dialog-price.glade:935
+#: gnucash/gtkbuilder/dialog-price.glade:925
 #: gnucash/gtkbuilder/dialog-query-view.glade:22
 #: gnucash/gtkbuilder/dialog-report.glade:268
 #: gnucash/gtkbuilder/dialog-report.glade:670
@@ -8004,7 +8004,7 @@ msgid "Show the income and expense accounts"
 msgstr "आय आरो खरसा एकाउन्टफोरखौ दिन्थि"
 
 #: gnucash/gnome-utils/dialog-transfer.c:707
-#: gnucash/report/trep-engine.scm:2154 gnucash/report/trep-engine.scm:2160
+#: gnucash/report/trep-engine.scm:2151 gnucash/report/trep-engine.scm:2157
 msgid "Error"
 msgstr "गोरोन्थि"
 
@@ -8296,7 +8296,7 @@ msgstr "गलेगलेथाय"
 msgid "(unnamed)"
 msgstr "(मुंहोयै)"
 
-#: gnucash/gnome-utils/gnc-file.c:94 gnucash/gnome-utils/gnc-main-window.c:287
+#: gnucash/gnome-utils/gnc-file.c:94 gnucash/gnome-utils/gnc-main-window.c:289
 #: gnucash/import-export/bi-import/gnc-plugin-bi-import.c:57
 #: gnucash/import-export/customer-import/gnc-plugin-customer-import.c:57
 msgid "_Import"
@@ -8313,7 +8313,7 @@ msgstr "लाबोनाय"
 msgid "Save"
 msgstr "थिना दोन"
 
-#: gnucash/gnome-utils/gnc-file.c:106 gnucash/gnome-utils/gnc-main-window.c:288
+#: gnucash/gnome-utils/gnc-file.c:106 gnucash/gnome-utils/gnc-main-window.c:290
 msgid "_Export"
 msgstr "दैथायनाय"
 
@@ -8594,7 +8594,7 @@ msgid "Save changes to the file?"
 msgstr "सोलायनायफोरखौ फाइलाव थिना दोन?"
 
 #: gnucash/gnome-utils/gnc-file.c:656
-#: gnucash/gnome-utils/gnc-main-window.c:1305
+#: gnucash/gnome-utils/gnc-main-window.c:1307
 #, c-format
 msgid "If you don't save, changes from the past %d minute will be discarded."
 msgid_plural ""
@@ -8654,7 +8654,7 @@ msgstr "फरायनो-थाखायल'खौ खेव"
 msgid "Open _Folder"
 msgstr "प्लेसह'ल्डार"
 
-#: gnucash/gnome-utils/gnc-file.c:865 gnucash/gnome-utils/gnc-main-window.c:312
+#: gnucash/gnome-utils/gnc-file.c:865 gnucash/gnome-utils/gnc-main-window.c:314
 msgid "_Quit"
 msgstr "नागार लां"
 
@@ -8697,7 +8697,7 @@ msgid ""
 msgstr "%s फाइलआ सिगाङावनो दं। थारैनो नोंथाङा बेखौ अभारराइट खालामनो लुबैयो नामा?"
 
 #: gnucash/gnome-utils/gnc-file.c:1701
-#: gnucash/gnome-utils/gnc-main-window.c:1273
+#: gnucash/gnome-utils/gnc-main-window.c:1275
 msgid "<unknown>"
 msgstr "<मोनथिमोनै>"
 
@@ -8744,210 +8744,210 @@ msgstr "GnuCash आ थाफानाय URI खौ खेवनो हाय�
 msgid "Enter a user name and password to connect to: %s"
 msgstr "..जों फोनांजाब खालामनो थाखाय मोनसे बाहायग्रामुं आरो पासवर्ड हाबहो: %s"
 
-#: gnucash/gnome-utils/gnc-main-window.c:133
+#: gnucash/gnome-utils/gnc-main-window.c:135
 #, c-format
 msgid "Changes will be saved automatically in %u seconds"
 msgstr "सोलायनायखौ गावनो गाव महरै %u सेकेन्दआव थिना दोनगोन"
 
-#: gnucash/gnome-utils/gnc-main-window.c:274
+#: gnucash/gnome-utils/gnc-main-window.c:276
 msgid "_File"
 msgstr "फाइल"
 
-#: gnucash/gnome-utils/gnc-main-window.c:278
+#: gnucash/gnome-utils/gnc-main-window.c:280
 msgid "Tra_nsaction"
 msgstr "लेनदेन"
 
-#: gnucash/gnome-utils/gnc-main-window.c:279
+#: gnucash/gnome-utils/gnc-main-window.c:281
 msgid "_Reports"
 msgstr "रिपर्टफोर"
 
-#: gnucash/gnome-utils/gnc-main-window.c:280
+#: gnucash/gnome-utils/gnc-main-window.c:282
 msgid "_Tools"
 msgstr "टुलस"
 
-#: gnucash/gnome-utils/gnc-main-window.c:281
+#: gnucash/gnome-utils/gnc-main-window.c:283
 msgid "E_xtensions"
 msgstr "फेहेरनायफोर"
 
-#: gnucash/gnome-utils/gnc-main-window.c:282
+#: gnucash/gnome-utils/gnc-main-window.c:284
 msgid "_Windows"
 msgstr "उइन्ड'स"
 
-#: gnucash/gnome-utils/gnc-main-window.c:290
+#: gnucash/gnome-utils/gnc-main-window.c:292
 msgid "_Print..."
 msgstr "साफाय..."
 
-#: gnucash/gnome-utils/gnc-main-window.c:291
+#: gnucash/gnome-utils/gnc-main-window.c:293
 msgid "Print the currently active page"
 msgstr "दासान्दि मावथि बिलाइखौ साफाय"
 
-#: gnucash/gnome-utils/gnc-main-window.c:297
+#: gnucash/gnome-utils/gnc-main-window.c:299
 msgid "Pa_ge Setup..."
 msgstr "बिलाइनि सेटआप..."
 
-#: gnucash/gnome-utils/gnc-main-window.c:298
+#: gnucash/gnome-utils/gnc-main-window.c:300
 msgid "Specify the page size and orientation for printing"
 msgstr "साफायनायनि थाखाय बिलाइनि महर आरो अरियेन्टेसनखौ थिक खालाम"
 
-#: gnucash/gnome-utils/gnc-main-window.c:302
+#: gnucash/gnome-utils/gnc-main-window.c:304
 msgid "Proper_ties"
 msgstr "आथुखायफोर"
 
-#: gnucash/gnome-utils/gnc-main-window.c:303
+#: gnucash/gnome-utils/gnc-main-window.c:305
 msgid "Edit the properties of the current file"
 msgstr "दानि फाइलनि आखुथायफोरखौ सुजु"
 
-#: gnucash/gnome-utils/gnc-main-window.c:308
+#: gnucash/gnome-utils/gnc-main-window.c:310
 msgid "Close the currently active page"
 msgstr "दासान्दि मावथि बिलाइखौ बन्द खालाम"
 
-#: gnucash/gnome-utils/gnc-main-window.c:313
+#: gnucash/gnome-utils/gnc-main-window.c:315
 msgid "Quit this application"
 msgstr "बे एप्लिकेसनखौ नागार लां"
 
-#: gnucash/gnome-utils/gnc-main-window.c:335
+#: gnucash/gnome-utils/gnc-main-window.c:337
 msgid "Pr_eferences"
 msgstr "पसन्द"
 
-#: gnucash/gnome-utils/gnc-main-window.c:336
+#: gnucash/gnome-utils/gnc-main-window.c:338
 msgid "Edit the global preferences of GnuCash"
 msgstr "GnuCash नि मुलुगनां पसन्दखौ सुजु"
 
-#: gnucash/gnome-utils/gnc-main-window.c:344
+#: gnucash/gnome-utils/gnc-main-window.c:346
 msgid "Select sorting criteria for this page view"
 msgstr "बे बिलाइनि नुथाइनि थाखाय थख' साजायनाय खान्थिखौ सायख"
 
-#: gnucash/gnome-utils/gnc-main-window.c:348
+#: gnucash/gnome-utils/gnc-main-window.c:350
 msgid "Select the account types that should be displayed."
 msgstr "दिन्थिफुंनो गोनां एकाउन्ट रोखोमफोरखौ सायख।"
 
-#: gnucash/gnome-utils/gnc-main-window.c:360
+#: gnucash/gnome-utils/gnc-main-window.c:362
 msgid "Reset _Warnings..."
 msgstr "सांग्रांथिखौ फिन फज..."
 
-#: gnucash/gnome-utils/gnc-main-window.c:361
+#: gnucash/gnome-utils/gnc-main-window.c:363
 msgid "Reset the state of all warning messages so they will be shown again."
 msgstr ""
 "सांग्रांथि होनाय गासै खौरांनि जायगाखौ फिन फज जाहाते बेफोरखौ आरोबाव दिन्थिनाय जागोन।"
 
-#: gnucash/gnome-utils/gnc-main-window.c:365
+#: gnucash/gnome-utils/gnc-main-window.c:367
 msgid "Re_name Page"
 msgstr "बिलाइखौ फिन मुं हो"
 
-#: gnucash/gnome-utils/gnc-main-window.c:366
+#: gnucash/gnome-utils/gnc-main-window.c:368
 msgid "Rename this page."
 msgstr "बे बिलाइखौ फिन मुं हो।"
 
-#: gnucash/gnome-utils/gnc-main-window.c:373
+#: gnucash/gnome-utils/gnc-main-window.c:375
 msgid "_New Window"
 msgstr "गोदान उइन्ड'"
 
-#: gnucash/gnome-utils/gnc-main-window.c:374
+#: gnucash/gnome-utils/gnc-main-window.c:376
 msgid "Open a new top-level GnuCash window."
 msgstr "मोनसे गोदान गोजौ-थाखोनि GnuCash उइन्ड'खौ खेव।"
 
-#: gnucash/gnome-utils/gnc-main-window.c:378
+#: gnucash/gnome-utils/gnc-main-window.c:380
 msgid "New Window with _Page"
 msgstr "बिलाइजों गोदान उइन्ड'"
 
-#: gnucash/gnome-utils/gnc-main-window.c:379
+#: gnucash/gnome-utils/gnc-main-window.c:381
 msgid "Move the current page to a new top-level GnuCash window."
 msgstr "दानि बिलाइखौ मोनसे गोदान-थाखोनि GnuCash उइन्ड'याव लां"
 
-#: gnucash/gnome-utils/gnc-main-window.c:386
+#: gnucash/gnome-utils/gnc-main-window.c:388
 msgid "Tutorial and Concepts _Guide"
 msgstr "टिउट'रियाल आरो सानखांथि गाइडफोर"
 
-#: gnucash/gnome-utils/gnc-main-window.c:387
+#: gnucash/gnome-utils/gnc-main-window.c:389
 msgid "Open the GnuCash Tutorial"
 msgstr "GnuCash टिउट'रियालखौ खेव"
 
-#: gnucash/gnome-utils/gnc-main-window.c:391
+#: gnucash/gnome-utils/gnc-main-window.c:393
 msgid "_Contents"
 msgstr "थानाय आयदाफोर"
 
-#: gnucash/gnome-utils/gnc-main-window.c:392
+#: gnucash/gnome-utils/gnc-main-window.c:394
 msgid "Open the GnuCash Help"
 msgstr "GnuCash मददखौ खेव"
 
-#: gnucash/gnome-utils/gnc-main-window.c:396
+#: gnucash/gnome-utils/gnc-main-window.c:398
 msgid "_About"
 msgstr "सोमोन्दै"
 
-#: gnucash/gnome-utils/gnc-main-window.c:397
+#: gnucash/gnome-utils/gnc-main-window.c:399
 msgid "About GnuCash"
 msgstr "GnuCash नि सोमोन्दै"
 
-#: gnucash/gnome-utils/gnc-main-window.c:409
+#: gnucash/gnome-utils/gnc-main-window.c:411
 msgid "_Toolbar"
 msgstr "टुलबार"
 
-#: gnucash/gnome-utils/gnc-main-window.c:410
+#: gnucash/gnome-utils/gnc-main-window.c:412
 msgid "Show/hide the toolbar on this window"
 msgstr "टुलबारखौ बे उइन्ड'याव दिन्थि/दोनखोमा"
 
-#: gnucash/gnome-utils/gnc-main-window.c:414
+#: gnucash/gnome-utils/gnc-main-window.c:416
 msgid "Su_mmary Bar"
 msgstr "गुबैराव बार"
 
-#: gnucash/gnome-utils/gnc-main-window.c:415
+#: gnucash/gnome-utils/gnc-main-window.c:417
 msgid "Show/hide the summary bar on this window"
 msgstr "गुबैराव बारखौ बे उइन्ड'याव दिन्थि/दोनखोमा"
 
-#: gnucash/gnome-utils/gnc-main-window.c:419
+#: gnucash/gnome-utils/gnc-main-window.c:421
 msgid "Stat_us Bar"
 msgstr "स्टेटास बार"
 
-#: gnucash/gnome-utils/gnc-main-window.c:420
+#: gnucash/gnome-utils/gnc-main-window.c:422
 msgid "Show/hide the status bar on this window"
 msgstr "स्टेटास बारखौ बे उइन्ड'याव दिन्थि/दोनखोमा"
 
-#: gnucash/gnome-utils/gnc-main-window.c:432
+#: gnucash/gnome-utils/gnc-main-window.c:434
 msgid "Window _1"
 msgstr "उइन्ड'_1"
 
-#: gnucash/gnome-utils/gnc-main-window.c:433
+#: gnucash/gnome-utils/gnc-main-window.c:435
 msgid "Window _2"
 msgstr "उइन्ड'_2"
 
-#: gnucash/gnome-utils/gnc-main-window.c:434
+#: gnucash/gnome-utils/gnc-main-window.c:436
 msgid "Window _3"
 msgstr "उइन्ड'_3"
 
-#: gnucash/gnome-utils/gnc-main-window.c:435
+#: gnucash/gnome-utils/gnc-main-window.c:437
 msgid "Window _4"
 msgstr "उइन्ड'_4"
 
-#: gnucash/gnome-utils/gnc-main-window.c:436
+#: gnucash/gnome-utils/gnc-main-window.c:438
 msgid "Window _5"
 msgstr "उइन्ड'_5"
 
-#: gnucash/gnome-utils/gnc-main-window.c:437
+#: gnucash/gnome-utils/gnc-main-window.c:439
 msgid "Window _6"
 msgstr "उइन्ड'_6"
 
-#: gnucash/gnome-utils/gnc-main-window.c:438
+#: gnucash/gnome-utils/gnc-main-window.c:440
 msgid "Window _7"
 msgstr "उइन्ड'_7"
 
-#: gnucash/gnome-utils/gnc-main-window.c:439
+#: gnucash/gnome-utils/gnc-main-window.c:441
 msgid "Window _8"
 msgstr "उइन्ड'_8"
 
-#: gnucash/gnome-utils/gnc-main-window.c:440
+#: gnucash/gnome-utils/gnc-main-window.c:442
 msgid "Window _9"
 msgstr "उइन्ड'_9"
 
-#: gnucash/gnome-utils/gnc-main-window.c:441
+#: gnucash/gnome-utils/gnc-main-window.c:443
 msgid "Window _0"
 msgstr "उइन्ड'_0"
 
-#: gnucash/gnome-utils/gnc-main-window.c:1256
+#: gnucash/gnome-utils/gnc-main-window.c:1258
 #, c-format
 msgid "Save changes to file %s before closing?"
 msgstr "बन्द खालामनायनि सिगां सोलायनायफोरखौ %s फाइलआन थिना दोन?"
 
-#: gnucash/gnome-utils/gnc-main-window.c:1259
+#: gnucash/gnome-utils/gnc-main-window.c:1261
 #, c-format
 msgid ""
 "If you don't save, changes from the past %d hours and %d minutes will be "
@@ -8956,7 +8956,7 @@ msgstr ""
 "नोंथाङा थिना दोनाब्ला, सिगां %d घन्टा आरो %d मिनिटनि सोलायनायफोरखौ नागारनाय "
 "जागोन।"
 
-#: gnucash/gnome-utils/gnc-main-window.c:1261
+#: gnucash/gnome-utils/gnc-main-window.c:1263
 #, c-format
 msgid ""
 "If you don't save, changes from the past %d days and %d hours will be "
@@ -8964,15 +8964,15 @@ msgid ""
 msgstr ""
 "नोंथाङा थिना दोनाब्ला, सिगां %d सान आरो %d घन्टानि सोलायनायफोरखौ नागारनाय जागोन।"
 
-#: gnucash/gnome-utils/gnc-main-window.c:1310
+#: gnucash/gnome-utils/gnc-main-window.c:1312
 msgid "Close _Without Saving"
 msgstr "थिना दोनागारानो बन्द खालाम"
 
-#: gnucash/gnome-utils/gnc-main-window.c:1457
+#: gnucash/gnome-utils/gnc-main-window.c:1459
 msgid "This window is closing and will not be restored."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:1463
+#: gnucash/gnome-utils/gnc-main-window.c:1465
 #, fuzzy
 #| msgid "Close this window"
 msgid "Close Window?"
@@ -8980,60 +8980,64 @@ msgstr "बे उइन्ड'खौ बन्द खालाम"
 
 #. Translators: This string is shown in the window title if this
 #. document is, well, read-only.
-#: gnucash/gnome-utils/gnc-main-window.c:1593
+#: gnucash/gnome-utils/gnc-main-window.c:1595
 msgid "(read-only)"
 msgstr "(फरायनो-थाखायल')"
 
-#: gnucash/gnome-utils/gnc-main-window.c:1601
+#: gnucash/gnome-utils/gnc-main-window.c:1603
 msgid "Unsaved Book"
 msgstr "थिना दोनै बिजाब"
 
-#: gnucash/gnome-utils/gnc-main-window.c:1764
+#: gnucash/gnome-utils/gnc-main-window.c:1766
 #, fuzzy
 msgid "Last modified on %a, %b %d, %Y at %I:%M %p"
 msgstr "%a, %b %e, %Y at %I:%M%P आव जोबथा सुद्रायनाय"
 
 #. Translators: This message appears in the status bar after opening the file.
-#: gnucash/gnome-utils/gnc-main-window.c:1767
+#: gnucash/gnome-utils/gnc-main-window.c:1769
 #, c-format
 msgid "File %s opened. %s"
 msgstr "फाइल %s खौ खेवबायमोन। %s"
 
-#: gnucash/gnome-utils/gnc-main-window.c:2894
+#: gnucash/gnome-utils/gnc-main-window.c:2896
 msgctxt "lower case key for short cut to 'Accounts'"
 msgid "a"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:2984
+#: gnucash/gnome-utils/gnc-main-window.c:2986
 msgid "Unable to save to database."
 msgstr "डाटाबेसाव थिना दोननो हायाखै।"
 
-#: gnucash/gnome-utils/gnc-main-window.c:2986
+#: gnucash/gnome-utils/gnc-main-window.c:2988
 msgid "Unable to save to database: Book is marked read-only."
 msgstr "डाटाबेसाव थिना दोननो हायाखै: बिजाबखौ खालि-फरायनाय बादिल' दाग होनाय जायो।"
 
-#: gnucash/gnome-utils/gnc-main-window.c:4331
+#: gnucash/gnome-utils/gnc-main-window.c:4333
 #: gnucash/gtkbuilder/assistant-qif-import.glade:959
 msgid "Book Options"
 msgstr "बिजाबनि उफ्राफोर"
 
+#: gnucash/gnome-utils/gnc-main-window.c:4751 gnucash/gnucash-core-app.cpp:261
+msgid "(user modifiable)"
+msgstr ""
+
 #. Translators: %s will be replaced with the current year
-#: gnucash/gnome-utils/gnc-main-window.c:4715
+#: gnucash/gnome-utils/gnc-main-window.c:4778
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:4727
+#: gnucash/gnome-utils/gnc-main-window.c:4790
 #: gnucash/gnome-utils/gnc-splash.c:98
 msgid "Version"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:4728
-#: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:262
+#: gnucash/gnome-utils/gnc-main-window.c:4791
+#: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:278
 msgid "Build ID"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:4736
+#: gnucash/gnome-utils/gnc-main-window.c:4799
 #, fuzzy
 msgid "Accounting for personal and small business finance."
 msgstr "- GnuCash निजि आरो फिसा फालांगि रांखान्थि मेनेजमेन्ट"
@@ -9042,11 +9046,11 @@ msgstr "- GnuCash निजि आरो फिसा फालांगि र�
 #. Enter your name or that of your team and an email contact for feedback.
 #. The string can have multiple rows, so you can also add a list of
 #. contributors.
-#: gnucash/gnome-utils/gnc-main-window.c:4745
+#: gnucash/gnome-utils/gnc-main-window.c:4808
 msgid "translator-credits"
 msgstr "Ritu Panwar <ritup@cdac.in>, 2014"
 
-#: gnucash/gnome-utils/gnc-main-window.c:4748
+#: gnucash/gnome-utils/gnc-main-window.c:4811
 msgid "Visit the GnuCash website."
 msgstr ""
 
@@ -9683,7 +9687,7 @@ msgstr "एकाउन्ट मुं"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:817
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2918
-#: gnucash/gtkbuilder/dialog-price.glade:573
+#: gnucash/gtkbuilder/dialog-price.glade:563
 msgid "Commodity"
 msgstr "बेसाद"
 
@@ -9850,7 +9854,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:413
 #: gnucash/gnome-utils/gnc-tree-view-price.c:414
-#: gnucash/gtkbuilder/dialog-price.glade:645
+#: gnucash/gtkbuilder/dialog-price.glade:635
 msgid "Source"
 msgstr "फुंखा"
 
@@ -10305,7 +10309,7 @@ msgid "Unknown quotes command '{1}'"
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:139 gnucash/gnucash-cli.cpp:153
-#: gnucash/gnucash.cpp:313
+#: gnucash/gnucash.cpp:316
 msgid "Missing data file parameter"
 msgstr ""
 
@@ -10369,40 +10373,45 @@ msgstr "- GnuCash निजि आरो फिसा फालांगि र�
 msgid "{1} [options] [datafile]"
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:254
+#: gnucash/gnucash-core-app.cpp:255
+#, fuzzy
+msgid "GnuCash Paths"
+msgstr "GnuCash"
+
+#: gnucash/gnucash-core-app.cpp:270
 #, fuzzy
 msgid "GnuCash {1}"
 msgstr "GnuCash"
 
-#: gnucash/gnucash-core-app.cpp:255
+#: gnucash/gnucash-core-app.cpp:271
 #, fuzzy
 msgid "GnuCash {1} development version"
 msgstr "GnuCash %s जौगानाय लिरस्लायनाय"
 
-#: gnucash/gnucash-core-app.cpp:280
+#: gnucash/gnucash-core-app.cpp:296
 #, fuzzy
 msgid "Common Options"
 msgstr "बिजाबनि उफ्राफोर"
 
-#: gnucash/gnucash-core-app.cpp:283
+#: gnucash/gnucash-core-app.cpp:299
 msgid "Show this help message"
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:285
+#: gnucash/gnucash-core-app.cpp:301
 msgid "Show GnuCash version"
 msgstr "GnuCash लिरस्लायनायखौ दिन्थि"
 
-#: gnucash/gnucash-core-app.cpp:287
+#: gnucash/gnucash-core-app.cpp:303
 msgid ""
 "Enable debugging mode: provide deep detail in the logs.\n"
 "This is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:289
+#: gnucash/gnucash-core-app.cpp:305
 msgid "Enable extra/development/debugging features."
 msgstr "बांद्राय/जौगानाय/डेबागिं आखुथायफोरखौ हाहोनाय खालाम।"
 
-#: gnucash/gnucash-core-app.cpp:291
+#: gnucash/gnucash-core-app.cpp:307
 msgid ""
 "Log level overrides, of the form \"modulename={debug,info,warn,crit,"
 "error}\"\n"
@@ -10410,7 +10419,13 @@ msgid ""
 "This can be invoked multiple times."
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:293
+#: gnucash/gnucash-core-app.cpp:309
+#, fuzzy
+#| msgid "Show plot"
+msgid "Show paths"
+msgstr "दब्लाइ दिन्थि"
+
+#: gnucash/gnucash-core-app.cpp:311
 msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
@@ -10418,12 +10433,12 @@ msgstr ""
 "..आव लग खालामनो फाइल; \"/tmp/gnucash.trace\" आव डिफल्ट; \"stderr\" एबा "
 "\"stdout\"जानो हागौ।"
 
-#: gnucash/gnucash-core-app.cpp:295
+#: gnucash/gnucash-core-app.cpp:313
 #, fuzzy
 msgid "Hidden Options"
 msgstr "बाजेतनि उफ्राफोर"
 
-#: gnucash/gnucash-core-app.cpp:298
+#: gnucash/gnucash-core-app.cpp:316
 msgid "[datafile]"
 msgstr "[डाटाफाइल]"
 
@@ -10435,33 +10450,33 @@ msgstr "राङारि आनजाद खालाम गासिनो �
 msgid "Loading data..."
 msgstr "डाटा ल'ड खालाम गासिनो दं..."
 
-#: gnucash/gnucash.cpp:278
+#: gnucash/gnucash.cpp:281
 #, fuzzy
 msgid "Application Options"
 msgstr "एप्लिकेसन"
 
-#: gnucash/gnucash.cpp:281
+#: gnucash/gnucash.cpp:284
 msgid "Do not load the last file opened"
 msgstr "जोबथा खेवनाय फाइलखौ ल'ड दाखालाम"
 
-#: gnucash/gnucash.cpp:283
+#: gnucash/gnucash.cpp:286
 #, fuzzy
 msgid "Show help for gtk options"
 msgstr "गिबि उफ्रानि थाखाय मदद"
 
-#: gnucash/gnucash.cpp:285
+#: gnucash/gnucash.cpp:288
 #, fuzzy
 msgid "Deprecated Options"
 msgstr "रिपर्टनि उफ्रा"
 
-#: gnucash/gnucash.cpp:288
+#: gnucash/gnucash.cpp:291
 msgid ""
 "Add price quotes to given GnuCash datafile.\n"
 "Note this option has been deprecated and will be removed in GnuCash 5.0.\n"
 "Please use 'gnucash-cli --quotes get <datafile>' instead."
 msgstr ""
 
-#: gnucash/gnucash.cpp:292
+#: gnucash/gnucash.cpp:295
 msgid ""
 "Regular expression determining which namespace commodities will be "
 "retrieved.\n"
@@ -10470,14 +10485,14 @@ msgid ""
 "instead."
 msgstr ""
 
-#: gnucash/gnucash.cpp:309
+#: gnucash/gnucash.cpp:312
 msgid ""
 "The '--add-price-quotes' option to gnucash has been deprecated and will be "
 "removed in GnuCash 5.0. Please use 'gnucash-cli --quotes get <datafile>' "
 "instead."
 msgstr ""
 
-#: gnucash/gnucash.cpp:345
+#: gnucash/gnucash.cpp:348
 #, fuzzy
 msgid "Run '{1} --help' to see a full list of available command line options."
 msgstr ""
@@ -10485,7 +10500,7 @@ msgstr ""
 "मोननो हाथाव बिथोन सारि उफ्रानि आबुं लिस्टखौ नायनो '%s --मदद' खौ सालाय।\n"
 
 #. Translators: Do not translate $DISPLAY! It is an environment variable for X11
-#: gnucash/gnucash.cpp:348
+#: gnucash/gnucash.cpp:351
 #, fuzzy
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
@@ -15368,9 +15383,7 @@ msgstr "बेखेवथि"
 #: gnucash/gtkbuilder/dialog-billterms.glade:589
 #: gnucash/gtkbuilder/dialog-billterms.glade:924
 #: gnucash/gtkbuilder/dialog-billterms.glade:1150
-#: gnucash/gtkbuilder/dialog-commodity.glade:495
-#: gnucash/gtkbuilder/dialog-commodity.glade:777
-#: gnucash/gtkbuilder/dialog-price.glade:204
+#: gnucash/gtkbuilder/dialog-price.glade:194
 #: gnucash/gtkbuilder/dialog-tax-table.glade:476
 msgid "_Type"
 msgstr "रोखोम"
@@ -15447,23 +15460,13 @@ msgstr "दानि बेसादखौ गैया खालाम"
 msgid "Edit the current commodity."
 msgstr "दानि बेसादखौ सुजु"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:19
-#: gnucash/gtkbuilder/dialog-price.glade:35
-msgid "Dummy commodity Line"
-msgstr "बबा बेसाद सारि"
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:30
-#: gnucash/gtkbuilder/dialog-price.glade:46
-msgid "Dummy namespace Line"
-msgstr "बबा नेमस्पेस सारि"
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:130
+#: gnucash/gtkbuilder/dialog-commodity.glade:120
 msgid ""
 "Enter the full name of the commodity. Example: Cisco Systems Inc., or Apple "
 "Computer, Inc."
 msgstr "बेसादनि आबुं मुं हाबहो। बिदिन्थि: सिस्क' सिस्टेम Inc., एबा एप्पल कम्पुटार, Inc."
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:148
+#: gnucash/gtkbuilder/dialog-commodity.glade:138
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
@@ -15473,7 +15476,7 @@ msgstr ""
 "होनाय) अनलाइनखौ मोनफिनगासिनो दंब्ला बे फोथारखौ (केसखौ लाफानानै) कट्स(दैखांना होनाय) "
 "फुंखाजों बाहायजानाय टिकार दिन्थिसिनजों गोरोबहोथार नांगोन।"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:166
+#: gnucash/gtkbuilder/dialog-commodity.glade:156
 msgid ""
 "Enter a unique code used to identify the commodity. Or, you may safely leave "
 "this field blank."
@@ -15481,7 +15484,7 @@ msgstr ""
 "मुवाखौ थाथि खालामनो मोनसे रुजुजायै क'ड हाबहो। एबा, नोंथाङा बे फोथारखौ सांग्राङै लांदां "
 "नागार।"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:201
+#: gnucash/gtkbuilder/dialog-commodity.glade:191
 msgid ""
 "Enter the smallest fraction of the commodity which can be traded. For stocks "
 "which can only be traded in whole numbers, enter 1."
@@ -15489,18 +15492,18 @@ msgstr ""
 "बाइनो-फाननो हाथाव मुवानि बयनिख्रुइबो फिसासिन बाहागोखौ हाबहो। स्टकफोरनि थाखाय "
 "जायखालि आबुं अनजिमायाव बाइनो-फाननो हायो, 1 हाबहो।"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:225
+#: gnucash/gtkbuilder/dialog-commodity.glade:215
 msgid "<b>Quote Source Information</b>"
 msgstr "<b>दैखांना होनाय फुंखानि फोरमायथिहोग्रा</b>"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:309
+#: gnucash/gtkbuilder/dialog-commodity.glade:296
 msgid ""
 "Select a category for the commodity or enter a new one. One might use "
 "investment categories like STOCKS and BONDS or exchange names like NASDAQ "
 "and LSE."
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:329
+#: gnucash/gtkbuilder/dialog-commodity.glade:319
 msgid ""
 "Enter a display symbol. This can safely be left blank, in which case the "
 "ticker symbol or the currency ISO code will be used."
@@ -15508,23 +15511,23 @@ msgstr ""
 "दिन्थिफुंनाय दिन्थिसिनखौ हाबहो। बेखौ रैखाथियै लांदाङै दोननो हायोब्ला टिकार दिन्थिसिन "
 "एबा सोलिनाय रां ISO क'डखौ बाहायगोन।"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:345
+#: gnucash/gtkbuilder/dialog-commodity.glade:335
 msgid "Type of quote source"
 msgstr "दैखांना होनाय फुंखानि रोखोम"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:358
+#: gnucash/gtkbuilder/dialog-commodity.glade:348
 msgid "_Display symbol"
 msgstr "दिन्थिफुंनाय दिन्थिसिन"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:373
+#: gnucash/gtkbuilder/dialog-commodity.glade:363
 msgid "Time_zone"
 msgstr "समनि ओनसोल"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:384
+#: gnucash/gtkbuilder/dialog-commodity.glade:374
 msgid "_Unknown"
 msgstr "मोनथिमोनै"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:390
+#: gnucash/gtkbuilder/dialog-commodity.glade:380
 msgid ""
 "These are quote sources that were recently added to F::Q. GnuCash does not "
 "know if these sources retrieve information from a single site or from "
@@ -15534,11 +15537,11 @@ msgstr ""
 "मोनथिया जदि बेफोर फुंखाया फोरमायथिहोग्राखौ इन्टारनेटआव मोनसेल' साइट निफ्राय एबा गोबां "
 "साइट निफ्राय मोनफिनो।"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:405
+#: gnucash/gtkbuilder/dialog-commodity.glade:395
 msgid "_Multiple"
 msgstr "गोबां"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:411
+#: gnucash/gtkbuilder/dialog-commodity.glade:401
 msgid ""
 "These are F::Q quote sources that retrieve information from multiple sites "
 "on the internet. If one of the sites is unavailable, F::Q will attempt to "
@@ -15548,11 +15551,11 @@ msgstr ""
 "फोरमायथिहोग्राखौ मोनफिनो। साइटनि मोनसेआ मोननो हाथाव नङाब्ला F::Q आ "
 "फोरमायथिहोग्राखौ गुबुन मोनसे साइट निफ्राय मोनफिननो हागोन।"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:426
+#: gnucash/gtkbuilder/dialog-commodity.glade:416
 msgid "Si_ngle"
 msgstr "मोनसेल'"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:432
+#: gnucash/gtkbuilder/dialog-commodity.glade:422
 msgid ""
 "These are F::Q quote sources that retrieve information from a single site on "
 "the internet. If that site is unavailable, you will not be able to retrieve "
@@ -15562,32 +15565,40 @@ msgstr ""
 "फोरमायथिहोग्राखौ मोनफिनो। बै साइटआ मोननो हाथाव नङाब्ला नोंथाङा कट्स(दैखांना "
 "होनाय)खौ मोनफिननो हानाय नङा।"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:447
+#: gnucash/gtkbuilder/dialog-commodity.glade:437
 msgid "_Get Online Quotes"
 msgstr "अनलाइन दैखांना होनाय ला"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:466
+#: gnucash/gtkbuilder/dialog-commodity.glade:456
 msgid "F_raction traded"
 msgstr "बाहागोयाव बायनाय-फाननाय"
 
 #. Again replace CUSIP by your National Securities Identifying Number.
-#: gnucash/gtkbuilder/dialog-commodity.glade:480
+#: gnucash/gtkbuilder/dialog-commodity.glade:470
 msgid "ISIN, CUSI_P or other code"
 msgstr "ISIN, CUSI_P एबा गुबुन क'ड"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:510
+#: gnucash/gtkbuilder/dialog-commodity.glade:485
+#: gnucash/gtkbuilder/dialog-commodity.glade:767
+#: gnucash/gtkbuilder/dialog-price.glade:122
+#, fuzzy
+#| msgid "Namespace"
+msgid "Nam_espace"
+msgstr "मुंनि जायगा"
+
+#: gnucash/gtkbuilder/dialog-commodity.glade:500
 msgid "_Symbol/abbreviation"
 msgstr "दिन्थिसिन/गुसुं महर"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:525
+#: gnucash/gtkbuilder/dialog-commodity.glade:515
 msgid "_Full name"
 msgstr "आबुं मुं"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:563
+#: gnucash/gtkbuilder/dialog-commodity.glade:553
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "सांग्रांथि: रांखान्थि::दैखांना होनायखौ मोजाङै इनष्टल खालामनाय जायाखै।"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:723
+#: gnucash/gtkbuilder/dialog-commodity.glade:713
 msgid "Select user information here..."
 msgstr "बेयाव बाहायग्रानि फोरमायथिहोग्रा सायख..."
 
@@ -16782,7 +16793,7 @@ msgid "<b>Labels</b>"
 msgstr "<b>लेबेलफोर</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:680
-#: gnucash/gtkbuilder/dialog-price.glade:446
+#: gnucash/gtkbuilder/dialog-price.glade:436
 msgid "_None"
 msgstr "मोनसेबो नङा"
 
@@ -17603,123 +17614,119 @@ msgstr "जोबथा"
 msgid "Net Asset Value"
 msgstr "नेट धोन बेसेन"
 
-#: gnucash/gtkbuilder/dialog-price.glade:53
+#: gnucash/gtkbuilder/dialog-price.glade:43
 msgid "Price Editor"
 msgstr "बेसेन सुजुगिरि"
 
-#: gnucash/gtkbuilder/dialog-price.glade:132
-msgid "_Namespace"
-msgstr "*मुंनि जायगा"
-
-#: gnucash/gtkbuilder/dialog-price.glade:189
+#: gnucash/gtkbuilder/dialog-price.glade:179
 msgid "S_ource"
 msgstr "फुंखा"
 
-#: gnucash/gtkbuilder/dialog-price.glade:367
+#: gnucash/gtkbuilder/dialog-price.glade:357
 #, fuzzy
 msgid "Remove Old Prices"
 msgstr "गोजामखौ गैया खालाम"
 
-#: gnucash/gtkbuilder/dialog-price.glade:430
+#: gnucash/gtkbuilder/dialog-price.glade:420
 #, fuzzy
 msgid "Delete prices that meet the following criteria:"
 msgstr "गाहायनि मानदान्दायाव सोनारनानै गाहायनि अक्ट'नि सिगां गासै स्टक दामखौ खोमोर:"
 
-#: gnucash/gtkbuilder/dialog-price.glade:450
+#: gnucash/gtkbuilder/dialog-price.glade:440
 #, fuzzy
 msgid "Remove all prices before date."
 msgstr "बाहायग्रा-हाबहोनाय अक्ट' निख्रुइ गोजामसिन बेसेनखौ बोखार।"
 
-#: gnucash/gtkbuilder/dialog-price.glade:464
+#: gnucash/gtkbuilder/dialog-price.glade:454
 msgid "Last of _Week"
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-price.glade:468
+#: gnucash/gtkbuilder/dialog-price.glade:458
 msgid "Keep the last price of each week if present before date."
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-price.glade:481
+#: gnucash/gtkbuilder/dialog-price.glade:471
 #, fuzzy
 msgid "Last of _Month"
 msgstr "दाननि जोबथा"
 
-#: gnucash/gtkbuilder/dialog-price.glade:485
+#: gnucash/gtkbuilder/dialog-price.glade:475
 msgid "Keep the last price of each month if present before date."
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-price.glade:498
+#: gnucash/gtkbuilder/dialog-price.glade:488
 #, fuzzy
 msgid "Last of _Quarter"
 msgstr "उननि दानथामनि जागायनाय"
 
-#: gnucash/gtkbuilder/dialog-price.glade:502
+#: gnucash/gtkbuilder/dialog-price.glade:492
 msgid ""
 "Keep the last price of each fiscal quarter if present before date. The "
 "fiscal quarter is derived from the accounting period end date."
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-price.glade:515
+#: gnucash/gtkbuilder/dialog-price.glade:505
 #, fuzzy
 msgid "Last of _Period"
 msgstr "जोबथा बाजेत समफारि"
 
-#: gnucash/gtkbuilder/dialog-price.glade:519
+#: gnucash/gtkbuilder/dialog-price.glade:509
 msgid ""
 "Keep the last price of each fiscal period if present before date. The fiscal "
 "period is derived from the accounting period end date."
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-price.glade:532
+#: gnucash/gtkbuilder/dialog-price.glade:522
 #, fuzzy
 msgid "_Scaled"
 msgstr "जायगानि"
 
-#: gnucash/gtkbuilder/dialog-price.glade:536
+#: gnucash/gtkbuilder/dialog-price.glade:526
 msgid ""
 "With the scaled option, prices are removed relative to the date selected. "
 "'One a month' is used for dates older than a year and 'One a week' is used "
 "for dates older than six months to a year."
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-price.glade:584
+#: gnucash/gtkbuilder/dialog-price.glade:574
 #, fuzzy
 msgid "First Date"
 msgstr "पस्ट खालार"
 
-#: gnucash/gtkbuilder/dialog-price.glade:615
+#: gnucash/gtkbuilder/dialog-price.glade:605
 #, fuzzy
 msgid "From these Commodities"
 msgstr "बेसादफोर"
 
-#: gnucash/gtkbuilder/dialog-price.glade:629
+#: gnucash/gtkbuilder/dialog-price.glade:619
 #, fuzzy
 msgid "Keeping the last available price for option"
 msgstr "स्टकनि थाखाय जोबथा बेसेनखौ खोमोर"
 
-#: gnucash/gtkbuilder/dialog-price.glade:661
+#: gnucash/gtkbuilder/dialog-price.glade:651
 msgid "Include _Fetched online prices"
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-price.glade:665
+#: gnucash/gtkbuilder/dialog-price.glade:655
 msgid "If activated, prices added by Finance::Quote will be included."
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-price.glade:680
+#: gnucash/gtkbuilder/dialog-price.glade:670
 #, fuzzy
 msgid "Include manually _Entered prices"
 msgstr "आखाइजों हाबहोनाय दामखौ खोमोर"
 
-#: gnucash/gtkbuilder/dialog-price.glade:684
+#: gnucash/gtkbuilder/dialog-price.glade:674
 #, fuzzy
 msgid "If activated, include manually entered prices."
 msgstr "आखाइजों हाबहोनाय दामखौ खोमोर"
 
-#: gnucash/gtkbuilder/dialog-price.glade:701
+#: gnucash/gtkbuilder/dialog-price.glade:691
 #, fuzzy
 msgid "_Added by the application"
 msgstr "बे एप्लिकेसनखौ नागार लां"
 
-#: gnucash/gtkbuilder/dialog-price.glade:705
+#: gnucash/gtkbuilder/dialog-price.glade:695
 msgid ""
 "If activated, include application added prices.\n"
 "\n"
@@ -17729,41 +17736,41 @@ msgid ""
 "reliable."
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-price.glade:751
+#: gnucash/gtkbuilder/dialog-price.glade:741
 msgid "Before _Date"
 msgstr "खालार"
 
-#: gnucash/gtkbuilder/dialog-price.glade:791
+#: gnucash/gtkbuilder/dialog-price.glade:781
 #: gnucash/report/reports/standard/price-scatter.scm:82
 msgid "Price Database"
 msgstr "दाम डाटाबेस"
 
-#: gnucash/gtkbuilder/dialog-price.glade:838
+#: gnucash/gtkbuilder/dialog-price.glade:828
 msgid "Add a new price."
 msgstr "गोदान बेसेन दाजाबदेर।"
 
-#: gnucash/gtkbuilder/dialog-price.glade:856
+#: gnucash/gtkbuilder/dialog-price.glade:846
 msgid "Remove the current price."
 msgstr "दानि दामखौ बोखार"
 
-#: gnucash/gtkbuilder/dialog-price.glade:874
+#: gnucash/gtkbuilder/dialog-price.glade:864
 msgid "Edit the current price."
 msgstr "दानि बेसेनखौ सुजु।"
 
-#: gnucash/gtkbuilder/dialog-price.glade:886
+#: gnucash/gtkbuilder/dialog-price.glade:876
 msgid "Remove _Old"
 msgstr "गोजामखौ गैया खालाम"
 
-#: gnucash/gtkbuilder/dialog-price.glade:891
+#: gnucash/gtkbuilder/dialog-price.glade:881
 msgid "Remove prices older than a user-entered date."
 msgstr "बाहायग्रा-हाबहोनाय अक्ट' निख्रुइ गोजामसिन बेसेनखौ बोखार।"
 
-#: gnucash/gtkbuilder/dialog-price.glade:903
+#: gnucash/gtkbuilder/dialog-price.glade:893
 #, fuzzy
 msgid "_Get Quotes"
 msgstr "दैखांना होनायफोरखौ ला"
 
-#: gnucash/gtkbuilder/dialog-price.glade:908
+#: gnucash/gtkbuilder/dialog-price.glade:898
 msgid "Get new online quotes for stock accounts."
 msgstr "स्टक एकाउन्टफोरनि थाखाय गोदान अनलाइन दैखांना होनायफोरखौ ला"
 
@@ -23916,7 +23923,7 @@ msgstr "दिहुननो थाखाय ग्राफनि रोखो
 
 #: gnucash/report/reports/example/average-balance.scm:129
 #: gnucash/report/reports/example/average-balance.scm:149
-#: gnucash/report/trep-engine.scm:1946 libgnucash/engine/policy.c:58
+#: gnucash/report/trep-engine.scm:1943 libgnucash/engine/policy.c:58
 msgid "Average"
 msgstr "गर"
 
@@ -26507,7 +26514,7 @@ msgstr "~a आव ~a बेलेन्सफोर"
 
 #: gnucash/report/reports/standard/category-barchart.scm:672
 #: gnucash/report/reports/standard/category-barchart.scm:692
-#: gnucash/report/trep-engine.scm:1672 gnucash/report/trep-engine.scm:1931
+#: gnucash/report/trep-engine.scm:1672 gnucash/report/trep-engine.scm:1928
 msgid "Grand Total"
 msgstr "दाजाबगासै"
 
@@ -29597,7 +29604,7 @@ msgid "CSV disabled for double column amounts"
 msgstr ""
 
 #. Translators: Both ~a's are dates
-#: gnucash/report/trep-engine.scm:2269
+#: gnucash/report/trep-engine.scm:2266
 #, scheme-format
 msgid "From ~a to ~a"
 msgstr "~a निफ्राय ~a सिम"
@@ -30329,60 +30336,60 @@ msgid "Invalid option value"
 msgstr "बाहायजायै एनक'डिं सायखबाय"
 
 #. Translators: this string refers to a file name that gets renamed
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:648
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:649
 #, fuzzy
 msgid "Renamed to:"
 msgstr "बिलाइखौ फिन मुं हो"
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:673
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:674
 msgid "Notice"
 msgstr ""
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:678
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:679
 msgid "Your gnucash metadata has been migrated."
 msgstr ""
 
 #. Translators: this refers to a directory name.
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:680
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:681
 #, fuzzy
 msgid "Old location:"
 msgstr "फाइल/जायगाखौ खोव"
 
 #. Translators: this refers to a directory name.
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:682
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:683
 #, fuzzy
 msgid "New location:"
 msgstr "गोदान बोखावनाय फोरमायथिहोग्रा"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:684
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:685
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
 msgstr ""
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:691
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:692
 msgid "In addition:"
 msgstr ""
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:697
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:698
 #, fuzzy
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "बे एनक'डिंखौ सिगाङावनो लिस्टजों दाजाबदेरबाय।"
 msgstr[1] "बे एनक'डिंखौ सिगाङावनो लिस्टजों दाजाबदेरबाय।"
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:701
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:702
 msgid "The following file in {1} has been renamed:"
 msgstr ""
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:711
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:712
 msgid "The following file has become obsolete and will be ignored:"
 msgid_plural "The following files have become obsolete and will be ignored:"
 msgstr[0] ""
 msgstr[1] ""
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:721
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:722
 #, fuzzy
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
@@ -30676,11 +30683,11 @@ msgctxt ""
 msgid "Split"
 msgstr "बोखावनाय"
 
-#: libgnucash/engine/Transaction.c:2778
+#: libgnucash/engine/Transaction.c:2784
 msgid "Voided transaction"
 msgstr "बातिल खालामनाय लेनदेन"
 
-#: libgnucash/engine/Transaction.c:2794
+#: libgnucash/engine/Transaction.c:2800
 msgid "Transaction Voided"
 msgstr "लेनदेन बातिल खालामबाय"
 
