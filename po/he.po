@@ -11,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-06-20 23:46+0200\n"
-"PO-Revision-Date: 2022-06-21 14:16+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"PO-Revision-Date: 2022-07-15 11:18+0000\n"
+"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 "X-Poedit-Basepath: .\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -718,8 +718,8 @@ msgid ""
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
-"לחפש בכל התנועות, יש לבצע חיפוש ('עריכה &larr; חיפוש...') מעמוד תרשים "
-"החשבונות הראשי. להגבלת החיפוש לחשבון יחיד, יש להפעיל את החיפוש מיומן התנועות "
+"לחיפוש בכל התנועות: יש לבצע חיפוש ('עריכה &larr; חיפוש...') מעמוד תרשים "
+"החשבונות הראשי. להגבלת החיפוש לחשבון יחיד: יש להפעיל את החיפוש מיומן התנועות "
 "של אותו חשבון."
 
 #: doc/tip_of_the_day.list.c:125
@@ -14747,16 +14747,10 @@ msgid "Number of Digits"
 msgstr "מספר הספרות"
 
 #: gnucash/gtkbuilder/dialog-account.glade:2126
-#, fuzzy
-#| msgid ""
-#| "Renumber the immediate sub-accounts of %s? This will replace the account "
-#| "code field of each child account with a newly generated code."
 msgid ""
 "This will replace the account code field of each child account with a newly "
 "generated code"
-msgstr ""
-"מספור מחדש של חשבונות המשנה הישירים של %s? פעולה זו תחליף את שדה קוד החשבון "
-"של כל חשבון משנה עם קוד חדש שיוצר."
+msgstr "פעולה זו תחליף את שדה קוד החשבון של כל חשבון משנה עם קוד חדש שיוצר"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:34
 msgid "_Show documentation"
@@ -18980,6 +18974,9 @@ msgid ""
 "Online Banking, because sometimes the bank does not give you correct "
 "feedback when a transfer is rejected."
 msgstr ""
+"הערה: אין אחריות לדבר. מקצת מהבנקים מפעילים שרתי בנקאות מקוונים שמיושמו "
+"בצורה גרועה.אין להסתמך על העברות בנקאיות מקוונת, במיוחד בכאלה שמימד הזמן בהן "
+"מהותי. לפעמים הבנק לא מספק משוב תקין כאשר העברה נדחית."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:89
 msgid "Initial Online Banking Setup"

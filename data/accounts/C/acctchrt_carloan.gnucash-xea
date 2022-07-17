@@ -118,6 +118,12 @@
   </act:commodity>
   <act:description>Interest</act:description>
   <act:parent type="new">acacdcb998e45fb741766622e8542f0b</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Vehicle Loan Interest</act:name>

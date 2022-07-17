@@ -212,6 +212,12 @@
   </act:commodity>
   <act:description>Brokerage Account</act:description>
   <act:parent type="new">0efa7e60042a8d5e4f07a2e6f76bb66d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bond</act:name>
@@ -564,6 +570,12 @@
   </act:commodity>
   <act:description>Interest Income</act:description>
   <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bond Interest</act:name>
@@ -873,6 +885,12 @@
   </act:commodity>
   <act:description>Entertainment</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Music/Movies</act:name>
@@ -961,6 +979,12 @@
   </act:commodity>
   <act:description>Insurance</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Auto Insurance</act:name>
@@ -1027,6 +1051,12 @@
   </act:commodity>
   <act:description>Interest</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Education Loan Interest</act:name>
@@ -1181,6 +1211,12 @@
   </act:commodity>
   <act:description>Taxes</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Federal</act:name>
@@ -1258,6 +1294,12 @@
   </act:commodity>
   <act:description>Taxes (Spouse)</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Federal</act:name>
@@ -1324,6 +1366,12 @@
   </act:commodity>
   <act:description>Utilities</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Electric</act:name>

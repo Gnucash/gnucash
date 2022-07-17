@@ -129,6 +129,12 @@
   </act:commodity>
   <act:description>Interest Income</act:description>
   <act:parent type="new">4b3e36f325569b80efc7d3331bdf851b</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>CD Interest</act:name>

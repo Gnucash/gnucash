@@ -118,6 +118,12 @@
   </act:commodity>
   <act:description>Interest</act:description>
   <act:parent type="new">fdbf47b39f70e8818f325eee7931039a</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Education Loan Interest</act:name>

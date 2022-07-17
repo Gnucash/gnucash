@@ -69,6 +69,7 @@ extern "C" {
 #include <boost/filesystem.hpp>
 #include <boost/locale.hpp>
 #include <iostream>
+#include <numeric>
 
 /* Below cvt and bfs_locale should be used with boost::filesystem::path (bfs)
  * objects created alter in this source file. The rationale is as follows:
@@ -1306,5 +1307,27 @@ gnc_filepath_locate_doc_file (const gchar *name)
     return result;
 }
 
+GList *
+gnc_list_all_paths (void)
+{
+    if (gnc_userdata_home.empty())
+        gnc_filepath_init ();
+
+    std::vector<EnvPaths> paths
+        { { "GNC_USERDATA_DIR", gnc_userdata_home_str.c_str(), true},
+          { "GNC_USERCONFIG_DIR", gnc_userconfig_home_str.c_str(), true },
+          { "GNC_BIN", g_getenv ("GNC_BIN"), false },
+          { "GNC_LIB", g_getenv ("GNC_LIB"), false },
+          { "GNC_CONF", g_getenv ("GNC_CONF"), false },
+          { "GNC_DATA", g_getenv ("GNC_DATA"), false },
+        };
+    auto accum = [](const auto& a, const auto& b)
+    {
+        EnvPaths *ep = g_new0 (EnvPaths, 1);
+        *ep = b;
+        return g_list_prepend (a, ep);
+    };
+    return std::accumulate (paths.rbegin(), paths.rend(), (GList*) nullptr, accum);
+}
 
 /* =============================== END OF FILE ========================== */

@@ -53,6 +53,8 @@ void gnc_style_context_get_border_color (GtkStyleContext *context,
                                          GtkStateFlags    state,
                                          GdkRGBA         *color);
 
+GtkWidget *gnc_get_dialog_widget_from_id (GtkDialog *dialog, const gchar *id);
+
 /** @} */
 
 #endif /* GNC_GTK_UTILS_H */

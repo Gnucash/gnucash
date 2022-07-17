@@ -6,14 +6,15 @@
 # Ferdinand Tampubolon <dnandz@gmail.com>, 2021.
 # Reza Almanda <rezaalmanda27@gmail.com>, 2021.
 # Syahmin Sukhairi <syahmin@gmail.com>, 2021.
+# Azhar Pusparadhian <pazhar@rocketmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-06-20 23:46+0200\n"
-"PO-Revision-Date: 2021-06-09 03:33+0000\n"
-"Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
+"PO-Revision-Date: 2022-07-09 07:20+0000\n"
+"Last-Translator: Azhar Pusparadhian <pazhar@rocketmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/id/>\n"
 "Language: id\n"
@@ -21,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -9415,7 +9416,7 @@ msgstr "Kawat"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2867
 #: gnucash/register/ledger-core/split-register.c:2560
 msgid "Direct Debit"
-msgstr "Penarikan Langsung"
+msgstr "Debit Langsung"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2873
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2877

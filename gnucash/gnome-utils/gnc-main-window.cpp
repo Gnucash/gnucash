@@ -54,6 +54,7 @@ extern "C"
 #include "engine-helpers.h"
 #include "file-utils.h"
 #include "gnc-component-manager.h"
+#include "dialog-doclink-utils.h"
 #include "gnc-engine.h"
 #include "gnc-features.h"
 #include "gnc-file.h"
@@ -62,6 +63,7 @@ extern "C"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-gui-query.h"
+#include "gnc-gtk-utils.h"
 #include "gnc-hooks.h"
 #include "gnc-icons.h"
 #include "gnc-session.h"
@@ -4672,6 +4674,67 @@ url_signal_cb (GtkAboutDialog *dialog, gchar *uri, gpointer data)
     return TRUE;
 }
 
+static gboolean
+link_button_cb (GtkLinkButton *button, gpointer user_data)
+{
+   const gchar *uri = gtk_link_button_get_uri (button);
+   gnc_launch_doclink (GTK_WINDOW(user_data), uri);
+   return TRUE;
+}
+
+static void
+add_about_paths (GtkDialog *dialog)
+{
+    GtkWidget *page_vbox = gnc_get_dialog_widget_from_id (dialog, "page_vbox");
+    GtkWidget *grid;
+    GList *paths;
+    gint i = 0;
+
+    if (!page_vbox)
+    {
+        PWARN("Unable to find AboutDialog 'page_vbox' Widget");
+        return;
+    }
+
+    grid = gtk_grid_new ();
+    paths = gnc_list_all_paths ();
+
+    for (GList *path_node = paths; path_node; path_node = g_list_next (path_node))
+    {
+        EnvPaths *ep = (EnvPaths*)path_node->data;
+
+        gchar *env_name = g_strconcat (ep->env_name, ":", NULL);
+        GtkWidget *label = gtk_label_new (env_name);
+        const gchar *uri = gnc_uri_create_uri ("file", NULL, 0, NULL, NULL, ep->env_path);
+        gchar *display_uri = gnc_doclink_get_unescaped_just_uri (uri);
+        GtkWidget *widget = gtk_link_button_new_with_label (uri, display_uri);
+
+        gtk_grid_attach (GTK_GRID(grid), label, 0, i, 1, 1);
+        gtk_widget_set_halign (label, GTK_ALIGN_END);
+        gtk_grid_attach (GTK_GRID(grid), widget, 1, i, 1, 1);
+        gtk_widget_set_halign (widget, GTK_ALIGN_START);
+        gtk_widget_set_margin_top (widget, 0);
+        gtk_widget_set_margin_bottom (widget, 0);
+
+        if (ep->modifiable)
+        {
+            GtkWidget *mod_lab = gtk_label_new (_("(user modifiable)"));
+            gtk_grid_attach (GTK_GRID(grid), mod_lab, 2, i, 1, 1);
+            gtk_widget_show (mod_lab);
+        }
+        g_signal_connect (widget, "activate-link",
+                          G_CALLBACK(link_button_cb), dialog);
+        i++;
+
+        g_free (display_uri);
+        g_free (env_name);
+    }
+    gtk_container_add_with_properties (GTK_CONTAINER(page_vbox), grid,
+                                       "position", 1, NULL);
+    gtk_widget_show_all (grid);
+    g_list_free_full (paths, g_free);
+}
+
 /** Create and display the "about" dialog for gnucash.
  *
  *  @param action The GtkAction for the "about" menu item.
@@ -4729,6 +4792,10 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
     g_object_unref (logo);
     g_signal_connect (dialog, "activate-link",
                       G_CALLBACK (url_signal_cb), nullptr);
+
+    // Add enviroment paths
+    add_about_paths (dialog);
+
     /* Set dialog to resize. */
     gtk_window_set_resizable(GTK_WINDOW (dialog), TRUE);
 
