@@ -25,10 +25,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-17 04:04+0200\n"
-"PO-Revision-Date: 2022-06-21 01:19+0000\n"
+"PO-Revision-Date: 2022-07-17 05:15+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -37,7 +37,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -9973,10 +9973,8 @@ msgid "{1} [options] [datafile]"
 msgstr "{1} [选项] [数据文件]"
 
 #: gnucash/gnucash-core-app.cpp:255
-#, fuzzy
-#| msgid "GnuCash "
 msgid "GnuCash Paths"
-msgstr "GnuCash "
+msgstr "GnuCash 路径"
 
 #: gnucash/gnucash-core-app.cpp:270
 msgid "GnuCash {1}"
@@ -10022,10 +10020,8 @@ msgstr ""
 "这可以多次调用。"
 
 #: gnucash/gnucash-core-app.cpp:309
-#, fuzzy
-#| msgid "Show plot"
 msgid "Show paths"
-msgstr "显示图表"
+msgstr "显示路径"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
@@ -14882,10 +14878,8 @@ msgstr "ISIN、CUSIP或其它代码(_P)"
 #: gnucash/gtkbuilder/dialog-commodity.glade:485
 #: gnucash/gtkbuilder/dialog-commodity.glade:767
 #: gnucash/gtkbuilder/dialog-price.glade:122
-#, fuzzy
-#| msgid "Namespace"
 msgid "Nam_espace"
-msgstr "命名空间"
+msgstr "命名空间(_E)"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:500
 msgid "_Symbol/abbreviation"
