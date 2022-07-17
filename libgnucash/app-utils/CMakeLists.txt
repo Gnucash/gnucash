@@ -13,6 +13,8 @@ set (app_utils_noinst_HEADERS
   calculation/fin_static_proto.h
   gnc-option-date.hpp
   gnc-option-impl.hpp
+  gnc-option-ui.hpp
+  gnc-option-uitype.hpp
   gnc-optiondb-impl.hpp
 )
 
@@ -226,7 +228,7 @@ set_local_dist(app_utils_DIST_local
     ${app_utils_SCHEME_1c}
     ${app_utils_SCHEME_2}
     ${app_utils_SCHEME_3}
-    app-utils.i CMakeLists.txt gnc-help-utils.c)
+    app-utils.i gnc-optiondb.i CMakeLists.txt gnc-help-utils.c)
 
 set(app_utils_DIST
     ${app_utils_DIST_local}

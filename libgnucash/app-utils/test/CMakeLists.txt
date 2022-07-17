@@ -100,9 +100,13 @@ set_dist_list(test_app_utils_DIST
   test-print-queries.cpp
   test-scm-query-string.cpp
   test-sx.cpp
+  gtest-gnc-option.cpp
+  gtest-gnc-optiondb.cpp
   test-c-interface.scm
   test-date-utilities.scm
   test-options.scm
+  test-gnc-optiondb.scm
+  test-gnc-option-scheme-output.scm
   ${test_app_utils_scheme_SOURCES}
   ${test_app_utils_SOURCES}
 )

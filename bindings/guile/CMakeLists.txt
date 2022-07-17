@@ -129,7 +129,6 @@ add_custom_target(scm-engine ALL DEPENDS scm-engine-2 scm-engine-1 scm-engine-0)
 set_local_dist(guile_DIST_local
     CMakeLists.txt
     core-utils.scm
-    gnc-module.scm
     ${guile_SOURCES}
     ${guile_HEADERS}
     ${engine_SCHEME_0}
