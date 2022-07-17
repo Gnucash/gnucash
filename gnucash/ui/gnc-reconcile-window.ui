@@ -1,0 +1,287 @@
+<?xml version="1.0"?>
+<interface>
+  <menu id="winmenu">
+    <submenu>
+      <attribute name="label" translatable="yes">_Reconcile</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">_Reconcile Information...</attribute>
+          <attribute name="action">win.RecnChangeInfoAction</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">_Finish</attribute>
+          <attribute name="action">win.RecnFinishAction</attribute>
+          <attribute name="accel">&lt;Primary&gt;w</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Postpone</attribute>
+          <attribute name="action">win.RecnPostponeAction</attribute>
+          <attribute name="accel">&lt;Primary&gt;p</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Cancel</attribute>
+          <attribute name="action">win.RecnCancelAction</attribute>
+        </item>
+      </section>
+    </submenu>
+    <submenu>
+      <attribute name="label" translatable="yes">_Account</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">_Open Account</attribute>
+          <attribute name="action">win.AccountOpenAccountAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Edit Account</attribute>
+          <attribute name="action">win.AccountEditAccountAction</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">_Transfer...</attribute>
+          <attribute name="action">win.AccountTransferAction</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">_Check &amp; Repair</attribute>
+          <attribute name="action">win.AccountCheckRepairAction</attribute>
+        </item>
+      </section>
+    </submenu>
+    <submenu>
+      <attribute name="label" translatable="yes">_Transaction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">_Balance</attribute>
+          <attribute name="action">win.TransBalanceAction</attribute>
+          <attribute name="accel">&lt;Primary&gt;b</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Edit</attribute>
+          <attribute name="action">win.TransEditAction</attribute>
+          <attribute name="accel">&lt;Primary&gt;e</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Reconcile Selection</attribute>
+          <attribute name="action">win.TransRecAction</attribute>
+          <attribute name="accel">&lt;Primary&gt;r</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Unreconcile Selection</attribute>
+          <attribute name="action">win.TransUnRecAction</attribute>
+          <attribute name="accel">&lt;Primary&gt;u</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Delete</attribute>
+          <attribute name="action">win.TransDeleteAction</attribute>
+          <attribute name="accel">&lt;Primary&gt;d</attribute>
+        </item>
+      </section>
+    </submenu>
+    <submenu>
+      <attribute name="label" translatable="yes">_Help</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">_Help</attribute>
+          <attribute name="action">win.HelpHelpAction</attribute>
+        </item>
+      </section>
+    </submenu>
+  </menu>
+
+  <menu id="winpop">
+    <item>
+      <attribute name="label" translatable="yes">_Balance</attribute>
+      <attribute name="action">win.TransBalanceAction</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Edit</attribute>
+      <attribute name="action">win.TransEditAction</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Reconcile Selection</attribute>
+      <attribute name="action">win.TransRecAction</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Unreconcile Selection</attribute>
+      <attribute name="action">win.TransUnRecAction</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Delete</attribute>
+      <attribute name="action">win.TransDeleteAction</attribute>
+    </item>
+  </menu>
+
+  <object class="GtkToolbar" id="toolbar">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkToolButton" id="but1">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="tooltip-text" translatable="yes">Add a new balancing entry to the account</property>
+        <property name="action-name">win.TransBalanceAction</property>
+        <property name="label" translatable="yes">_Balance</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">document-new</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+
+    <child>
+      <object class="GtkToolButton" id="but2">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="action-name">win.TransEditAction</property>
+        <property name="tooltip-text" translatable="yes">Edit the current transaction</property>
+        <property name="label" translatable="yes">_Edit</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">document-properties</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+
+    <child>
+      <object class="GtkToolButton" id="but3">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="tooltip-text" translatable="yes">Reconcile the selected transactions</property>
+        <property name="action-name">win.TransRecAction</property>
+        <property name="label" translatable="yes">Reconcile Selection</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">emblem-default</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+
+    <child>
+      <object class="GtkToolButton" id="but4">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="tooltip-text" translatable="yes">Unreconcile the selected transactions</property>
+        <property name="action-name">win.TransUnRecAction</property>
+        <property name="label" translatable="yes">Unreconcile Selection</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">edit-clear</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+
+    <child>
+      <object class="GtkToolButton" id="but5">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="tooltip-text" translatable="yes">Delete the selected transaction</property>
+        <property name="action-name">win.TransDeleteAction</property>
+        <property name="label" translatable="yes">_Delete</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">edit-delete</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+
+    <child>
+      <object class="GtkToolButton" id="but6">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="tooltip-text" translatable="yes">Open the account</property>
+        <property name="action-name">win.AccountOpenAccountAction</property>
+        <property name="label" translatable="yes">_Open</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">go-jump</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+
+    <child>
+      <object class="GtkToolButton" id="but7">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="tooltip-text" translatable="yes">Finish the reconciliation of this account</property>
+        <property name="action-name">win.RecnFinishAction</property>
+        <property name="label" translatable="yes">_Finish</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">system-run</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+     </packing>
+    </child>
+
+    <child>
+      <object class="GtkToolButton" id="but8">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="tooltip-text" translatable="yes">Postpone the reconciliation of this account</property>
+        <property name="action-name">win.RecnPostponeAction</property>
+        <property name="label" translatable="yes">_Postpone</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">go-previous</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+
+    <child>
+      <object class="GtkToolButton" id="but9">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="tooltip-text" translatable="yes">Cancel the reconciliation of this account</property>
+        <property name="action-name">win.RecnCancelAction</property>
+        <property name="label" translatable="yes">_Cancel</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">process-stop</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+  </object>
+</interface>

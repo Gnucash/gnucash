@@ -78,8 +78,10 @@ struct _RecnWindow
 
     GtkWidget *window;           /* The reconcile window                 */
 
-    GtkUIManager *ui_merge;
-    GtkActionGroup *action_group;
+    GtkBuilder          *builder;
+    GSimpleActionGroup  *simple_action_group;
+
+
     GncPluginPage *page;
 
     GtkWidget *starting;         /* The starting balance                 */
@@ -133,9 +135,9 @@ static void   recn_destroy_cb (GtkWidget *w, gpointer data);
 static void   recn_cancel (RecnWindow *recnData);
 static gboolean recn_delete_cb (GtkWidget *widget, GdkEvent *event, gpointer data);
 static gboolean recn_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer data);
-static void   recnFinishCB (GtkAction *action, RecnWindow *recnData);
-static void   recnPostponeCB (GtkAction *action, gpointer data);
-static void   recnCancelCB (GtkAction *action, gpointer data);
+static void   recnFinishCB (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void   recnPostponeCB (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void   recnCancelCB (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 void gnc_start_recn_children_changed (GtkWidget *widget, startRecnWindowData *data);
 void gnc_start_recn_interest_clicked_cb (GtkButton *button, startRecnWindowData *data);
@@ -154,14 +156,6 @@ static time64 gnc_reconcile_last_statement_date = 0;
 
 
 /** IMPLEMENTATIONS *************************************************/
-
-/** An array of all of the actions provided by the main window code.
- *  This includes some placeholder actions for the menus that are
- *  visible in the menu bar but have no action associated with
- *  them. */
-static GtkActionEntry recnWindow_actions [];
-/** The number of actions provided by the main window. */
-static guint recnWindow_n_actions;
 
 static gpointer
 commodity_compare(Account *account, gpointer user_data) {
@@ -265,7 +259,7 @@ recnRecalculateBalance (RecnWindow *recnData)
     gchar *datestr;
     GNCPrintAmountInfo print_info;
     gboolean reverse_balance, include_children;
-    GtkAction *action;
+    GAction *action;
 
     account = recn_get_account (recnData);
     if (!account)
@@ -301,13 +295,15 @@ recnRecalculateBalance (RecnWindow *recnData)
     gnc_add_colorized_amount (recnData->reconciled, reconciled, print_info, reverse_balance);
     gnc_add_colorized_amount (recnData->difference, diff, print_info, reverse_balance);
 
-    action = gtk_action_group_get_action (recnData->action_group,
-                                          "RecnFinishAction");
-    gtk_action_set_sensitive(action, gnc_numeric_zero_p (diff));
+    action = g_simple_action_group_lookup (recnData->simple_action_group,
+                                           "RecnFinishAction");
 
-    action = gtk_action_group_get_action (recnData->action_group,
-                                          "TransBalanceAction");
-    gtk_action_set_sensitive(action, !gnc_numeric_zero_p (diff));
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), gnc_numeric_zero_p (diff));
+
+    action = g_simple_action_group_lookup (recnData->simple_action_group,
+                                           "TransBalanceAction");
+
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !gnc_numeric_zero_p (diff));
 
     return diff;
 }
@@ -859,7 +855,7 @@ gnc_reconcile_window_set_sensitivity(RecnWindow *recnData)
 {
     gboolean sensitive = FALSE;
     GNCReconcileView *view;
-    GtkAction *action;
+    GAction *action;
 
     view = GNC_RECONCILE_VIEW(recnData->debit);
     if (gnc_reconcile_view_num_selected(view) == 1)
@@ -869,12 +865,15 @@ gnc_reconcile_window_set_sensitivity(RecnWindow *recnData)
     if (gnc_reconcile_view_num_selected(view) == 1)
         sensitive = TRUE;
 
-    action = gtk_action_group_get_action (recnData->action_group,
-                                          "TransEditAction");
-    gtk_action_set_sensitive(action, sensitive);
-    action = gtk_action_group_get_action (recnData->action_group,
-                                          "TransDeleteAction");
-    gtk_action_set_sensitive(action, sensitive);
+    action = g_simple_action_group_lookup (recnData->simple_action_group,
+                                           "TransEditAction");
+
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), sensitive);
+
+    action = g_simple_action_group_lookup (recnData->simple_action_group,
+                                           "TransDeleteAction");
+
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), sensitive);
 
     sensitive = FALSE;
 
@@ -886,12 +885,15 @@ gnc_reconcile_window_set_sensitivity(RecnWindow *recnData)
     if (gnc_reconcile_view_num_selected(view) > 0)
         sensitive = TRUE;
 
-    action = gtk_action_group_get_action (recnData->action_group,
-                                          "TransRecAction");
-    gtk_action_set_sensitive(action, sensitive);
-    action = gtk_action_group_get_action (recnData->action_group,
-                                          "TransUnRecAction");
-    gtk_action_set_sensitive(action, sensitive);
+    action = g_simple_action_group_lookup (recnData->simple_action_group,
+                                           "TransRecAction");
+
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), sensitive);
+
+    action = g_simple_action_group_lookup (recnData->simple_action_group,
+                                           "TransUnRecAction");
+
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), sensitive);
 }
 
 
@@ -929,11 +931,13 @@ gnc_reconcile_window_row_cb(GNCReconcileView *view, gpointer item,
 static void
 do_popup_menu(RecnWindow *recnData, GdkEventButton *event)
 {
-    GtkWidget *menu = gtk_ui_manager_get_widget (recnData->ui_merge, "/MainPopup");
+    GMenuModel *menu_model = (GMenuModel *)gtk_builder_get_object (recnData->builder, "winpop");
+    GtkWidget *menu = gtk_menu_new_from_model (menu_model);
 
     if (!menu)
         return;
 
+    gtk_menu_attach_to_widget (GTK_MENU(menu), GTK_WIDGET(recnData->window), NULL);
     gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *) event);
 }
 
@@ -969,23 +973,25 @@ gnc_reconcile_window_button_press_cb (GtkWidget *widget,
                                       GdkEventButton *event,
                                       RecnWindow *recnData)
 {
-    GNCQueryView      *qview = GNC_QUERY_VIEW(widget);
-    GtkTreeSelection  *selection;
-    GtkTreePath       *path;
-
     if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
     {
+        GNCQueryView *qview = GNC_QUERY_VIEW(widget);
+        GtkTreePath *path;
 
         /* Get tree path for row that was clicked */
-        gtk_tree_view_get_path_at_pos(GTK_TREE_VIEW(qview),
-                                      (gint) event->x,
-                                      (gint) event->y,
-                                      &path, NULL, NULL, NULL);
+        gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW(qview),
+                                       (gint) event->x,
+                                       (gint) event->y,
+                                       &path, NULL, NULL, NULL);
 
-        selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(qview));
-        gtk_tree_selection_select_path(selection, path);
-        gtk_tree_path_free(path);
-        do_popup_menu(recnData, event);
+        if (path)
+        {
+            GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(qview));
+
+            gtk_tree_selection_select_path (selection, path);
+            gtk_tree_path_free (path);
+        }
+        do_popup_menu (recnData, event);
         return TRUE;
     }
     return FALSE;
@@ -1196,17 +1202,21 @@ gnc_reconcile_window_get_current_split(RecnWindow *recnData)
 
 
 static void
-gnc_ui_reconcile_window_help_cb(GtkWidget *widget, gpointer data)
+gnc_ui_reconcile_window_help_cb (GSimpleAction *simple,
+                                 GVariant      *parameter,
+                                 gpointer       user_data)
 {
-    RecnWindow *recnData = data;
+    RecnWindow *recnData = user_data;
     gnc_gnome_help (GTK_WINDOW(recnData->window), HF_HELP, HL_RECNWIN);
 }
 
 
 static void
-gnc_ui_reconcile_window_change_cb(GtkAction *action, gpointer data)
+gnc_ui_reconcile_window_change_cb (GSimpleAction *simple,
+                                   GVariant      *parameter,
+                                   gpointer       user_data)
 {
-    RecnWindow *recnData = data;
+    RecnWindow *recnData = user_data;
     Account *account = recn_get_account (recnData);
     gnc_numeric new_ending = recnData->new_ending;
     time64 statement_date = recnData->statement_date;
@@ -1224,9 +1234,11 @@ gnc_ui_reconcile_window_change_cb(GtkAction *action, gpointer data)
 
 
 static void
-gnc_ui_reconcile_window_balance_cb(GtkButton *button, gpointer data)
+gnc_ui_reconcile_window_balance_cb (GSimpleAction *simple,
+                                    GVariant      *parameter,
+                                    gpointer       user_data)
 {
-    RecnWindow *recnData = data;
+    RecnWindow *recnData = user_data;
     GNCSplitReg *gsr;
     Account *account;
     gnc_numeric balancing_amount;
@@ -1254,9 +1266,11 @@ gnc_ui_reconcile_window_balance_cb(GtkButton *button, gpointer data)
 
 
 static void
-gnc_ui_reconcile_window_rec_cb(GtkButton *button, gpointer data)
+gnc_ui_reconcile_window_rec_cb (GSimpleAction *simple,
+                                GVariant      *parameter,
+                                gpointer       user_data)
 {
-    RecnWindow *recnData = data;
+    RecnWindow *recnData = user_data;
     GNCReconcileView *debit, *credit;
 
     debit  = GNC_RECONCILE_VIEW(recnData->debit);
@@ -1268,9 +1282,11 @@ gnc_ui_reconcile_window_rec_cb(GtkButton *button, gpointer data)
 
 
 static void
-gnc_ui_reconcile_window_unrec_cb(GtkButton *button, gpointer data)
+gnc_ui_reconcile_window_unrec_cb (GSimpleAction *simple,
+                                  GVariant      *parameter,
+                                  gpointer       user_data)
 {
-    RecnWindow *recnData = data;
+    RecnWindow *recnData = user_data;
     GNCReconcileView *debit, *credit;
 
     debit  = GNC_RECONCILE_VIEW(recnData->debit);
@@ -1363,9 +1379,11 @@ gnc_reconcile_window_delete_set_next_selection (RecnWindow *recnData, Split *spl
 
 
 static void
-gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
+gnc_ui_reconcile_window_delete_cb (GSimpleAction *simple,
+                                   GVariant *parameter,
+                                   gpointer user_data)
 {
-    RecnWindow *recnData = data;
+    RecnWindow *recnData = user_data;
     Transaction *trans;
     Split *split, *next_split;
 
@@ -1398,9 +1416,11 @@ gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
 
 
 static void
-gnc_ui_reconcile_window_edit_cb(GtkButton *button, gpointer data)
+gnc_ui_reconcile_window_edit_cb (GSimpleAction *simple,
+                                 GVariant *parameter,
+                                 gpointer user_data)
 {
-    RecnWindow *recnData = data;
+    RecnWindow *recnData = user_data;
     GNCSplitReg *gsr;
     Split *split;
 
@@ -1450,9 +1470,11 @@ gnc_recn_set_window_name(RecnWindow *recnData)
 
 
 static void
-gnc_recn_edit_account_cb(GtkAction *action, gpointer data)
+gnc_recn_edit_account_cb (GSimpleAction *simple,
+                          GVariant      *parameter,
+                          gpointer       user_data)
 {
-    RecnWindow *recnData = data;
+    RecnWindow *recnData = user_data;
     Account *account = recn_get_account (recnData);
 
     if (account == NULL)
@@ -1463,9 +1485,11 @@ gnc_recn_edit_account_cb(GtkAction *action, gpointer data)
 
 
 static void
-gnc_recn_xfer_cb(GtkAction *action, gpointer data)
+gnc_recn_xfer_cb (GSimpleAction *simple,
+                  GVariant      *parameter,
+                  gpointer       user_data)
 {
-    RecnWindow *recnData = data;
+    RecnWindow *recnData = user_data;
     Account *account = recn_get_account (recnData);
 
     if (account == NULL)
@@ -1476,9 +1500,11 @@ gnc_recn_xfer_cb(GtkAction *action, gpointer data)
 
 
 static void
-gnc_recn_scrub_cb(GtkAction *action, gpointer data)
+gnc_recn_scrub_cb (GSimpleAction *simple,
+                   GVariant      *parameter,
+                   gpointer       user_data)
 {
-    RecnWindow *recnData = data;
+    RecnWindow *recnData = user_data;
     Account *account = recn_get_account (recnData);
 
     if (account == NULL)
@@ -1498,9 +1524,11 @@ gnc_recn_scrub_cb(GtkAction *action, gpointer data)
 
 
 static void
-gnc_recn_open_cb(GtkAction *action, gpointer data)
+gnc_recn_open_cb (GSimpleAction *simple,
+                  GVariant      *parameter,
+                  gpointer       user_data)
 {
-    RecnWindow *recnData = data;
+    RecnWindow *recnData = user_data;
 
     gnc_reconcile_window_open_register(recnData);
 }
@@ -1751,6 +1779,67 @@ recnWindow_add_widget (GtkUIManager *merge,
 }
 
 
+static GActionEntry recWindow_actions_entries [] =
+{
+    { "RecnChangeInfoAction", gnc_ui_reconcile_window_change_cb },
+    { "RecnFinishAction", recnFinishCB },
+    { "RecnPostponeAction", recnPostponeCB },
+    { "RecnCancelAction", recnCancelCB },
+
+    { "AccountOpenAccountAction", gnc_recn_open_cb },
+    { "AccountEditAccountAction", gnc_recn_edit_account_cb },
+    { "AccountTransferAction", gnc_recn_xfer_cb },
+    { "AccountCheckRepairAction", gnc_recn_scrub_cb },
+
+    { "TransBalanceAction", gnc_ui_reconcile_window_balance_cb },
+    { "TransEditAction", gnc_ui_reconcile_window_edit_cb },
+    { "TransDeleteAction", gnc_ui_reconcile_window_delete_cb },
+    { "TransRecAction", gnc_ui_reconcile_window_rec_cb },
+    { "TransUnRecAction", gnc_ui_reconcile_window_unrec_cb },
+
+    { "HelpHelpAction", gnc_ui_reconcile_window_help_cb },
+};
+
+
+/** The number of actions provided by the main window. */
+static guint recnWindow_n_actions_entries = G_N_ELEMENTS (recWindow_actions_entries);
+
+
+static void
+add_accel_for_menu_item (GtkWidget *widget, gpointer user_data)
+{
+    if (GTK_IS_MENU_ITEM(widget))
+    {
+        GtkWidget *al = gtk_bin_get_child (GTK_BIN(widget));
+        if (al)
+        {
+            guint key;
+            GdkModifierType mods;
+
+            gtk_accel_label_get_accel (GTK_ACCEL_LABEL(al), &key, &mods);
+
+            if (key > 0)
+                gtk_widget_add_accelerator (GTK_WIDGET(widget), "activate",
+                                            GTK_ACCEL_GROUP(user_data),
+                                            key, mods, GTK_ACCEL_VISIBLE);
+        }
+    }
+}
+
+
+static void
+menu_lookup (GtkWidget *widget, gpointer user_data)
+{
+    if (GTK_IS_MENU_ITEM(widget))
+    {
+        GtkMenuItem* menuItem = GTK_MENU_ITEM(widget);
+        GtkWidget* subMenu = gtk_menu_item_get_submenu (menuItem);
+        if (GTK_IS_CONTAINER(subMenu))
+            gtk_container_foreach (GTK_CONTAINER(subMenu),
+                                   add_accel_for_menu_item, user_data);
+    }
+}
+
 /********************************************************************\
  * recnWindowWithBalance
  *
@@ -1815,48 +1904,48 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
     gtk_box_pack_start(GTK_BOX (vbox), dock, FALSE, TRUE, 0);
 
     {
-        gchar *filename;
-        gint merge_id;
-        GtkAction *action;
-        GtkActionGroup *action_group;
+        GtkToolbar *tool_bar;
+        GMenuModel *menu_model;
+        GtkWidget *menu_bar;
+        GtkAccelGroup *accel_group = gtk_accel_group_new ();
+        const gchar *ui = "/org/gnucash/ui/gnc-reconcile-window.ui";
         GError *error = NULL;
 
-        recnData->ui_merge = gtk_ui_manager_new ();
-        g_signal_connect (recnData->ui_merge, "add_widget",
-                          G_CALLBACK (recnWindow_add_widget), dock);
+        recnData->builder = gtk_builder_new ();
 
-        action_group = gtk_action_group_new ("ReconcileWindowActions");
-        recnData->action_group = action_group;
-        gtk_action_group_set_translation_domain(action_group, PROJECT_NAME);
-        gtk_action_group_add_actions (action_group, recnWindow_actions,
-                                      recnWindow_n_actions, recnData);
-        action =
-            gtk_action_group_get_action (action_group, "AccountOpenAccountAction");
-        g_object_set (G_OBJECT(action), "short_label", _("Open"), NULL);
+        gtk_builder_add_from_resource (recnData->builder, ui, &error);
 
-        gtk_ui_manager_insert_action_group (recnData->ui_merge, action_group, 0);
-
-        filename = gnc_filepath_locate_ui_file("gnc-reconcile-window-ui.xml");
-        /* Can't do much without a ui. */
-        g_assert (filename);
-
-        merge_id = gtk_ui_manager_add_ui_from_file (recnData->ui_merge,
-                   filename, &error);
-        g_assert(merge_id || error);
-        if (merge_id)
+        if (error)
         {
-            gtk_window_add_accel_group (GTK_WINDOW (recnData->window),
-                                        gtk_ui_manager_get_accel_group(recnData->ui_merge));
-            gtk_ui_manager_ensure_update (recnData->ui_merge);
+            g_critical ("Failed to load ui resource %s, Error %s", ui, error->message);
+            g_error_free (error);
+            gnc_unregister_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
+            g_free (recnData);
+            return NULL;
         }
-        else
-        {
-            g_critical("Failed to load ui file.\n  Filename %s\n  Error %s",
-                       filename, error->message);
-            g_error_free(error);
-            g_assert(merge_id != 0);
-        }
-        g_free(filename);
+
+        menu_model = (GMenuModel *)gtk_builder_get_object (recnData->builder, "winmenu");
+        menu_bar = gtk_menu_bar_new_from_model (menu_model);
+        gtk_container_add (GTK_CONTAINER(vbox), menu_bar);
+
+        tool_bar = (GtkToolbar *)gtk_builder_get_object (recnData->builder, "toolbar");
+        g_object_set (tool_bar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
+        gtk_container_add (GTK_CONTAINER(vbox), GTK_WIDGET(tool_bar));
+
+        gtk_window_add_accel_group (GTK_WINDOW(recnData->window), accel_group);
+
+        // need to add the accelerator keys
+        gtk_container_foreach (GTK_CONTAINER(menu_bar), menu_lookup, accel_group);
+
+        recnData->simple_action_group = g_simple_action_group_new ();
+
+        g_action_map_add_action_entries (G_ACTION_MAP(recnData->simple_action_group),
+                                         recWindow_actions_entries,
+                                         recnWindow_n_actions_entries,
+                                         recnData);
+
+        gtk_widget_insert_action_group (GTK_WIDGET(recnData->window), "win",
+                                        G_ACTION_GROUP(recnData->simple_action_group));
     }
 
     g_signal_connect(recnData->window, "popup-menu",
@@ -2059,15 +2148,15 @@ use Find Transactions to find them, unreconcile, and re-reconcile."));
 
 #ifdef MAC_INTEGRATION
     {
-        GtkWidget *menubar = gtk_ui_manager_get_widget (recnData->ui_merge,
-                                                        "/menubar");
-        GtkosxApplication *theApp = g_object_new (GTKOSX_TYPE_APPLICATION,
-                                                  NULL);
-        if (GTK_IS_MENU_ITEM (menubar))
-            menubar = gtk_menu_item_get_submenu (GTK_MENU_ITEM (menubar));
-        gtk_widget_hide (menubar);
-        gtkosx_application_set_menu_bar (theApp, GTK_MENU_SHELL (menubar));
-        g_object_unref (theApp);
+//FIXME        GtkWidget *menubar = gtk_ui_manager_get_widget (recnData->ui_merge,
+//                                                        "/menubar");
+//        GtkosxApplication *theApp = g_object_new (GTKOSX_TYPE_APPLICATION,
+//                                                  NULL);
+//        if (GTK_IS_MENU_ITEM (menubar))
+//            menubar = gtk_menu_item_get_submenu (GTK_MENU_ITEM (menubar));
+//        gtk_widget_hide (menubar);
+//        gtkosx_application_set_menu_bar (theApp, GTK_MENU_SHELL (menubar));
+//        g_object_unref (theApp);
     }
 #endif
     recnRecalculateBalance(recnData);
@@ -2132,6 +2221,8 @@ static void
 recn_destroy_cb (GtkWidget *w, gpointer data)
 {
     RecnWindow *recnData = data;
+    gchar **actions = g_action_group_list_actions (G_ACTION_GROUP(recnData->simple_action_group));
+    gint num_actions = g_strv_length (actions);
 
     gnc_unregister_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
 
@@ -2139,8 +2230,12 @@ recn_destroy_cb (GtkWidget *w, gpointer data)
         gnc_resume_gui_refresh ();
 
     //Disable the actions, the handlers try to access recnData
-    gtk_action_group_set_sensitive(recnData->action_group, FALSE);
-
+    for (gint i = 0; i < num_actions; i++)
+    {
+        GAction *action = g_simple_action_group_lookup (recnData->simple_action_group, actions[i]);
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
+    }
+    g_strfreev (actions);
     g_free (recnData);
 }
 
@@ -2280,8 +2375,11 @@ acct_traverse_descendants (Account *acct, AccountProc fn)
  * Return: none                                                     *
 \********************************************************************/
 static void
-recnFinishCB (GtkAction *action, RecnWindow *recnData)
+recnFinishCB (GSimpleAction *simple,
+              GVariant      *parameter,
+              gpointer       user_data)
 {
+    RecnWindow *recnData = user_data;
     gboolean auto_payment;
     Account *account;
     time64 date;
@@ -2340,9 +2438,11 @@ recnFinishCB (GtkAction *action, RecnWindow *recnData)
  * Return: none                                                     *
 \********************************************************************/
 static void
-recnPostponeCB (GtkAction *action, gpointer data)
+recnPostponeCB (GSimpleAction *simple,
+                GVariant      *parameter,
+                gpointer       user_data)
 {
-    RecnWindow *recnData = data;
+    RecnWindow *recnData = user_data;
     Account *account;
 
     {
@@ -2370,110 +2470,10 @@ recnPostponeCB (GtkAction *action, gpointer data)
 
 
 static void
-recnCancelCB (GtkAction *action, gpointer data)
+recnCancelCB (GSimpleAction *simple,
+              GVariant      *parameter,
+              gpointer       user_data)
 {
-    RecnWindow *recnData = data;
+    RecnWindow *recnData = user_data;
     recn_cancel(recnData);
 }
-
-
-/** An array of all of the actions provided by the main window code.
- *  This includes some placeholder actions for the menus that are
- *  visible in the menu bar but have no action associated with
- *  them. */
-static GtkActionEntry recnWindow_actions [] =
-{
-    /* Toplevel */
-
-    { "ReconcileMenuAction",   NULL, N_("_Reconcile"), NULL, NULL, NULL, },
-    { "AccountMenuAction",     NULL, N_("_Account"), NULL, NULL, NULL, },
-    { "TransactionMenuAction", NULL, N_("_Transaction"), NULL, NULL, NULL, },
-    { "HelpMenuAction",        NULL, N_("_Help"), NULL, NULL, NULL, },
-
-    /* Reconcile menu */
-
-    {
-        "RecnChangeInfoAction", NULL, N_("_Reconcile Information..."),  NULL,
-        N_("Change the reconcile information "
-        "including statement date and ending balance."),
-        G_CALLBACK (gnc_ui_reconcile_window_change_cb)
-    },
-    {
-        "RecnFinishAction", "system-run", N_("_Finish"), "<primary>w",
-        N_("Finish the reconciliation of this account"),
-        G_CALLBACK(recnFinishCB)
-    },
-    {
-        "RecnPostponeAction", "go-previous", N_("_Postpone"), "<primary>p",
-        N_("Postpone the reconciliation of this account"),
-        G_CALLBACK(recnPostponeCB)
-    },
-    {
-        "RecnCancelAction", "process-stop", N_("_Cancel"), NULL,
-        N_("Cancel the reconciliation of this account"),
-        G_CALLBACK(recnCancelCB)
-    },
-
-    /* Account menu */
-
-    {
-        "AccountOpenAccountAction", "go-jump", N_("_Open Account"), NULL,
-        N_("Open the account"),
-        G_CALLBACK(gnc_recn_open_cb)
-    },
-    {
-        "AccountEditAccountAction", NULL, N_("_Edit Account"), NULL,
-        N_("Edit the main account for this register"),
-        G_CALLBACK(gnc_recn_edit_account_cb)
-    },
-    {
-        "AccountTransferAction", NULL, N_("_Transfer..."), NULL,
-        N_("Transfer funds from one account to another"),
-        G_CALLBACK(gnc_recn_xfer_cb)
-    },
-    {
-        "AccountCheckRepairAction", NULL, N_("_Check & Repair"), NULL,
-        N_("Check for and repair unbalanced transactions and orphan splits "
-        "in this account"),
-        G_CALLBACK(gnc_recn_scrub_cb)
-    },
-
-    /* Transaction menu */
-
-    {
-        "TransBalanceAction", "document-new", N_("_Balance"), "<primary>b",
-        N_("Add a new balancing entry to the account"),
-        G_CALLBACK(gnc_ui_reconcile_window_balance_cb)
-    },
-    {
-        "TransEditAction", "document-properties", N_("_Edit"),  "<primary>e",
-        N_("Edit the current transaction"),
-        G_CALLBACK(gnc_ui_reconcile_window_edit_cb)
-    },
-    {
-        "TransDeleteAction", "edit-delete", N_("_Delete"),  "<primary>d",
-        N_("Delete the selected transaction"),
-        G_CALLBACK(gnc_ui_reconcile_window_delete_cb)
-    },
-    {
-        "TransRecAction", "emblem-default", N_("_Reconcile Selection"), "<primary>r",
-        N_("Reconcile the selected transactions"),
-        G_CALLBACK(gnc_ui_reconcile_window_rec_cb)
-    },
-    {
-        "TransUnRecAction", "edit-clear", N_("_Unreconcile Selection"), "<primary>u",
-        N_("Unreconcile the selected transactions"),
-        G_CALLBACK(gnc_ui_reconcile_window_unrec_cb)
-    },
-
-    /* Help menu */
-
-    {
-        "HelpHelpAction", NULL, N_("_Help"), NULL,
-        N_("Open the GnuCash help window"),
-        G_CALLBACK(gnc_ui_reconcile_window_help_cb)
-    },
-};
-
-/** The number of actions provided by the main window. */
-static guint recnWindow_n_actions = G_N_ELEMENTS (recnWindow_actions);
