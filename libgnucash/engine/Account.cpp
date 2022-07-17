@@ -6101,10 +6101,13 @@ gnc_account_delete_all_bayes_maps (Account *acc)
     {
         auto slots = qof_instance_get_slots_prefix (QOF_INSTANCE (acc), IMAP_FRAME_BAYES);
         if (!slots.size()) return;
+        xaccAccountBeginEdit (acc);
         for (auto const & entry : slots)
         {
              qof_instance_slot_path_delete (QOF_INSTANCE (acc), {entry.first});
         }
+        qof_instance_set_dirty (QOF_INSTANCE(acc));
+        xaccAccountCommitEdit (acc);
     }
 }
 
