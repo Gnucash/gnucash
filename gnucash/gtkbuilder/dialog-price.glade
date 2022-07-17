@@ -30,22 +30,12 @@
       <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Dummy commodity Line</col>
-      </row>
-    </data>
   </object>
   <object class="GtkListStore" id="liststore3">
     <columns>
       <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Dummy namespace Line</col>
-      </row>
-    </data>
   </object>
   <object class="GtkDialog" id="price_dialog">
     <property name="can-focus">False</property>
@@ -129,7 +119,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">_Namespace</property>
+                <property name="label" translatable="yes">Nam_espace</property>
                 <property name="use-underline">True</property>
                 <property name="justify">center</property>
                 <property name="mnemonic-widget">namespace_cbwe</property>
