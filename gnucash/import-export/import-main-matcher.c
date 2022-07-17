@@ -221,7 +221,9 @@ gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
     // We've deferred balance computations on many accounts. Let's do it now that we're done.
     update_all_balances (info);
 
+    gnc_import_PendingMatches_delete (info->pending_matches);
     g_hash_table_foreach_remove (info->acct_id_hash, delete_hash, NULL);
+    g_hash_table_destroy (info->acct_id_hash);
     info->acct_id_hash = NULL;
     g_free (info);
 }
@@ -1052,10 +1054,10 @@ gnc_gen_trans_row_changed_cb (GtkTreeSelection *selection,
     {
         // Unselect rows that should not be selectable
         GList* list = gtk_tree_selection_get_selected_rows (selection, &model);
-        for ( ; list; list=list->next)
+        for (GList *n = list; n; n = n->next)
         {
-            if (get_action_for_path (list->data, model) != GNCImport_ADD)
-                gtk_tree_selection_unselect_path (selection, list->data);
+            if (get_action_for_path (n->data, model) != GNCImport_ADD)
+                gtk_tree_selection_unselect_path (selection, n->data);
         }
         g_list_free_full (list, (GDestroyNotify)gtk_tree_path_free);
     }
