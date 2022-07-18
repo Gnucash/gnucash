@@ -986,13 +986,45 @@ static RowInfo * row_get_info (gpointer row, GNCImportMainMatcher *info)
     return retval;
 }
 
+enum
+{
+    COMPLETION_LIST_ORIGINAL,
+    COMPLETION_LIST_COLLATED,
+    COMPLETION_LIST_NORMALIZED_FOLDED,
+};
+
 static void populate_list (gpointer key, gpointer value, GtkListStore *list)
 {
     GtkTreeIter iter;
-    char *collated_key = g_utf8_collate_key (key, -1);
+    const char *original = key;
+    char *collated = g_utf8_collate_key (original, -1);
+    char *normalized = collated ? g_utf8_normalize (original, -1, G_NORMALIZE_ALL) : NULL;
+    char *normalized_folded = normalized ? g_utf8_casefold (normalized, -1) : NULL;
     gtk_list_store_append (list, &iter);
-    gtk_list_store_set (list, &iter, 0, key, 1, collated_key, -1);
-    g_free (collated_key);
+    gtk_list_store_set (list, &iter,
+                        COMPLETION_LIST_ORIGINAL, original,
+                        COMPLETION_LIST_COLLATED, collated,
+                        COMPLETION_LIST_NORMALIZED_FOLDED, normalized_folded,
+                        -1);
+    g_free (normalized_folded);
+    g_free (normalized);
+    g_free (collated);
+}
+
+static gboolean
+match_func (GtkEntryCompletion *completion, const char *entry_str,
+            GtkTreeIter *iter, gpointer user_data)
+{
+    GtkTreeModel *model = user_data;
+    gchar *existing_str = NULL;
+    gboolean ret = FALSE;
+    gtk_tree_model_get (model, iter,
+                        COMPLETION_LIST_NORMALIZED_FOLDED, &existing_str,
+                        -1);
+    if (existing_str && *existing_str && strstr (existing_str, entry_str))
+        ret = TRUE;
+    g_free (existing_str);
+    return ret;
 }
 
 static void
@@ -1007,16 +1039,20 @@ setup_entry (GtkWidget *entry, gboolean sensitive, GHashTable *hash,
     if (!sensitive)
         return;
 
-    list = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
+    list = gtk_list_store_new (3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
     g_hash_table_foreach (hash, (GHFunc)populate_list, list);
     if (!g_hash_table_lookup (hash, (gpointer)initial))
         populate_list ((gpointer)initial, NULL, list);
-    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (list), 1,
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (list),
+                                          COMPLETION_LIST_COLLATED,
                                           GTK_SORT_ASCENDING);
 
     completion = gtk_entry_completion_new ();
     gtk_entry_completion_set_model (completion, GTK_TREE_MODEL(list));
-    gtk_entry_completion_set_text_column (completion, 0);
+    gtk_entry_completion_set_text_column (completion, COMPLETION_LIST_ORIGINAL);
+    gtk_entry_completion_set_match_func (completion,
+                                         (GtkEntryCompletionMatchFunc)match_func,
+                                         GTK_TREE_MODEL(list), NULL);
     gtk_entry_set_completion (GTK_ENTRY (entry), completion);
 }
 

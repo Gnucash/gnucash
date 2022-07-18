@@ -927,7 +927,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Description</property>
+                <property name="label" translatable="yes">_Description</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">desc_entry</property>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -939,7 +941,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Notes</property>
+                <property name="label" translatable="yes">_Notes</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">notes_entry</property>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -951,7 +955,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Memo</property>
+                <property name="label" translatable="yes">_Memo</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">memo_entry</property>
               </object>
               <packing>
                 <property name="left-attach">0</property>
