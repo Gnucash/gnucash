@@ -226,7 +226,7 @@
   (let ((defval (if default (default) '())))
   (gnc-make-account-sel-limited-option section name key docstring defval '())))
 (define-public (gnc:make-multichoice-option section name key docstring default multichoice)
-  (issue-deprecation-warning "gnc:make-multichoice-option is deprecated. Make and register the option in one command with gnc-register-multichoice-option.")
+  (issue-deprecation-warning "gnc:make-multichoice-option is deprecated. Make and register the option in one command with gnc:register-multichoice-option.")
   (let ((defval (cond ((symbol? default)
                        (symbol->string default))
                       ((number? default)
@@ -339,7 +339,6 @@
 ;; because we need to transform the default argument first depending on its
 ;; Scheme type.
 (define-public (gnc:register-multichoice-option options section name key docstring default multichoice)
-  (issue-deprecation-warning "gnc:make-multichoice-option is deprecated. Make and register the option in one command with gnc-register-multichoice-option.")
   (let ((defval (cond ((symbol? default)
                        (symbol->string default))
                       ((number? default)
