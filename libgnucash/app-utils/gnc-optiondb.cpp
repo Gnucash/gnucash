@@ -929,10 +929,14 @@ gnc_register_date_option(GncOptionDB* db,
                                   RelativeDatePeriodVec& period_set,
                                   bool both)
 {
+    auto is_absolute = period_set.size() == 1 &&
+                       period_set.front() == RelativeDatePeriod::ABSOLUTE;
     auto ui_type = both ? GncOptionUIType::DATE_BOTH :
-        GncOptionUIType::DATE_RELATIVE;
+        is_absolute ? GncOptionUIType::DATE_ABSOLUTE : GncOptionUIType::DATE_RELATIVE;
     GncOption option{GncOptionDateValue(section, name, key, doc_string,
                                         ui_type, period_set)};
+    if (is_absolute)
+        option.set_default_value(gnc_time(nullptr));
     db->register_option(section, std::move(option));
 }
 
