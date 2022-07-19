@@ -31,10 +31,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-17 04:04+0200\n"
-"PO-Revision-Date: 2022-06-21 07:17+0000\n"
+"PO-Revision-Date: 2022-07-19 06:16+0000\n"
 "Last-Translator: Maxime Leroy <lisacintosh@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
@@ -43,7 +43,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -9970,7 +9970,7 @@ msgstr "Options du Grand Livre"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4751 gnucash/gnucash-core-app.cpp:261
 msgid "(user modifiable)"
-msgstr ""
+msgstr "(modifiable par l'utilisateur)"
 
 #. Translators: %s will be replaced with the current year
 #: gnucash/gnome-utils/gnc-main-window.c:4778
@@ -11488,10 +11488,8 @@ msgstr "{1} [options] [datafile]"
 
 # messages-i18n.c:83
 #: gnucash/gnucash-core-app.cpp:255
-#, fuzzy
-#| msgid "GnuCash "
 msgid "GnuCash Paths"
-msgstr "GnuCash "
+msgstr "Chemins de GnuCash"
 
 # messages-i18n.c:83
 #: gnucash/gnucash-core-app.cpp:270
@@ -11543,10 +11541,8 @@ msgstr ""
 
 # messages-i18n.c:215
 #: gnucash/gnucash-core-app.cpp:309
-#, fuzzy
-#| msgid "Show plot"
 msgid "Show paths"
-msgstr "Afficher un graphique"
+msgstr "Afficher les chemins"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
@@ -17240,7 +17236,7 @@ msgstr "CUSI_P ou autre code"
 #, fuzzy
 #| msgid "Namespace"
 msgid "Nam_espace"
-msgstr "Domaine"
+msgstr "Domain_e"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:500
 msgid "_Symbol/abbreviation"
