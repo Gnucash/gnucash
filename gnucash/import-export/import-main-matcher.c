@@ -164,14 +164,6 @@ static gboolean query_tooltip_tree_view_cb (GtkWidget *widget, gint x, gint y,
                                             gpointer user_data);
 /* end local prototypes */
 
-static
-gboolean delete_hash (gpointer key, gpointer value, gpointer user_data)
-{
-    // Value is a hash table that needs to be destroyed.
-    g_hash_table_destroy (value);
-    return TRUE;
-}
-
 static void
 update_all_balances (GNCImportMainMatcher *info)
 {
@@ -239,10 +231,7 @@ gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
     update_all_balances (info);
 
     gnc_import_PendingMatches_delete (info->pending_matches);
-    g_hash_table_foreach_remove (info->acct_id_hash, delete_hash, NULL);
     g_hash_table_destroy (info->acct_id_hash);
-    info->acct_id_hash = NULL;
-
     g_hash_table_destroy (info->desc_hash);
     g_hash_table_destroy (info->notes_hash);
     g_hash_table_destroy (info->memo_hash);
@@ -1593,7 +1582,8 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
     g_signal_connect (view, "popup-menu",
                       G_CALLBACK(gnc_gen_trans_onPopupMenu_cb), info);
 
-    info->acct_id_hash = g_hash_table_new (g_direct_hash, g_direct_equal);
+    info->acct_id_hash = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL,
+                                                (GDestroyNotify)g_hash_table_destroy);
 }
 
 static void
