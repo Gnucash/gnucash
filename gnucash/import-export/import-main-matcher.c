@@ -1378,6 +1378,8 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
                       info);
     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
+    gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (treeview), NULL);
+
     gtk_widget_show_all (menu);
     /* Note: event can be NULL here when called from view_onPopupMenu; */
     gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent*)event);
