@@ -7,11 +7,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-17 04:04+0200\n"
-"PO-Revision-Date: 2022-06-16 20:17+0000\n"
-"Last-Translator: WaldiS <sto@tutanota.de>\n"
+"PO-Revision-Date: 2022-07-20 15:51+0000\n"
+"Last-Translator: 154pinkchairs <ovehis@riseup.net>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
 "Language: pl\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 "X-Poedit-Bookmarks: 2255,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -508,9 +508,9 @@ msgid ""
 "Just locate the triangle at the far right of the column headings, and click "
 "it to see the different columns available."
 msgstr ""
-"Istnieje możliwość zmiany kolumn wyświetlanych w Planie kont. Wystarczy "
-"zlokalizować trójkąt znajdujący się daleko po prawej stronie nagłówków "
-"kolumn i kliknąć go, aby wyświetlić różne dostępne kolumny."
+"Istnieje możliwość zmiany kolumn wyświetlanych w Tabeli Kont. Wystarczy "
+"odszukać trójkąt znajdujący się najdalej po prawej stronie nagłówków kolumn "
+"i kliknąć go, aby wyświetlić różne dostępne kolumny."
 
 #: doc/tip_of_the_day.list.c:33
 msgid ""
@@ -1917,10 +1917,9 @@ msgstr "Podatkowe"
 #. Translators: %s is a full account name.
 #. This is a label in Search Account from context menu.
 #: gnucash/gnome/dialog-find-account.c:491
-#, fuzzy, c-format
-#| msgid "Accounts in '%s'"
+#, c-format
 msgid "Su_b-accounts of '%s'"
-msgstr "Konta w '%s'"
+msgstr "_Podkonta w '%s'"
 
 #: gnucash/gnome/dialog-find-transactions2.c:107
 #: gnucash/gnome/dialog-find-transactions.c:105
@@ -4070,14 +4069,12 @@ msgid "Delete selected account"
 msgstr "Usuń zaznaczone konto"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:258
-#, fuzzy
 msgid "_Cascade Account Properties..."
-msgstr "Ko_lor konta:"
+msgstr "Przenieś właściwości konta..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:259
-#, fuzzy
 msgid "Cascade selected properties for account"
-msgstr "Wybierz prawidłowe konto pożyczki."
+msgstr "Przenieś wybrane właściwości konta"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:263
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:268
@@ -13211,11 +13208,12 @@ msgid "Import Account Assistant"
 msgstr "_Plan kont..."
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:66
-#, fuzzy
 msgid ""
 "\n"
 "Enter file name and location for the Import...\n"
-msgstr "Dla bieżącego raportu nie podano żadnych opcji."
+msgstr ""
+"\n"
+"Podaj nazwę pliku i lokalizację importu...\n"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:79
 #, fuzzy
@@ -13431,11 +13429,12 @@ msgid "Account Selection"
 msgstr "Usuwanie konta"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:687
-#, fuzzy
 msgid ""
 "\n"
 "Enter file name and location for the Export...\n"
-msgstr "Dla bieżącego raportu nie podano żadnych opcji."
+msgstr ""
+"\n"
+"Podaj nazwę pliku i lokalizację eksportu...\n"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:700
 #, fuzzy
@@ -18464,7 +18463,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-sx.glade:694
 msgid "Crea_te in advance"
-msgstr "U_twórz z wyprzedzeniem"
+msgstr "_Utwórz z wyprzedzeniem"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:709
 msgid "R_emind in advance"
@@ -19260,6 +19259,8 @@ msgid ""
 "Replace the budget for all periods with new 'value'. Use empty value to "
 "unset budget for the accounts."
 msgstr ""
+"Zastąp budżet dla wszystkich okresów nową „wartością”. Użyj pustej wartości, "
+"aby usunąć wartość budżetu dla wybranych kont."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:134
 msgid "Add"
