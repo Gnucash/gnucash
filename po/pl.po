@@ -4,6 +4,7 @@
 # Henio Szewczyk <henryk.szewczyk09@gmail.com>, 2021.
 # 154pinkchairs <ovehis@riseup.net>, 2022.
 # WaldiS <sto@tutanota.de>, 2022.
+# gnu-ewm <gnu.ewm@protonmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-1\n"
@@ -11,7 +12,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-17 04:04+0200\n"
 "PO-Revision-Date: 2022-07-20 15:51+0000\n"
-"Last-Translator: 154pinkchairs <ovehis@riseup.net>\n"
+"Last-Translator: gnu-ewm <gnu.ewm@protonmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
 "Language: pl\n"
@@ -16290,10 +16291,8 @@ msgid "All _accounts"
 msgstr "Wszystkie konta"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:165
-#, fuzzy
-#| msgid " Search "
 msgid "Search scope"
-msgstr " Szukaj "
+msgstr "Zakres wyszukiwania"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:191
 #, fuzzy
@@ -20949,11 +20948,13 @@ msgid "Error(s) in invoice without id, all rows of this invoice ignored.\n"
 msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:647
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Processing...\n"
-msgstr "_Przetwórz płatność…"
+msgstr ""
+"\n"
+"Przetwarzanie...\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:716
 #, fuzzy, c-format
