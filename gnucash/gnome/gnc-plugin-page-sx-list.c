@@ -480,6 +480,13 @@ treeview_button_press (GtkTreeView *treeview, GdkEvent *event,
     return FALSE;
 }
 
+static gboolean
+treeview_popup_menu (GtkTreeView *treeview, GncPluginPageSxList *page)
+{
+    treeview_popup (treeview, NULL, page);
+    return TRUE;
+}
+
 static GtkWidget *
 gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
 {
@@ -571,6 +578,8 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
 
     g_signal_connect (G_OBJECT(priv->tree_view), "button-press-event",
                       G_CALLBACK(treeview_button_press), page);
+    g_signal_connect (G_OBJECT(priv->tree_view), "popup-menu",
+                      G_CALLBACK(treeview_popup_menu), page);
 
     /* Add vbox and label */
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
