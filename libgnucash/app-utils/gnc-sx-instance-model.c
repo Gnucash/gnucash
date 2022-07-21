@@ -120,6 +120,7 @@ scrub_sx_split_numeric (Split* split, const char *debcred)
                           NULL);
         num_val_changed = TRUE;
     }
+    g_free (formval);
     g_free (numval);
     return num_val_changed;
 }
@@ -1053,6 +1054,8 @@ _get_sx_formula_value(const SchedXaction* sx,
          * localization problems with separators. */
 	numeric->num = numeric_val->num;
 	numeric->denom = numeric_val->denom;
+        g_free (formula_str);
+        g_free (numeric_val);
         return;
     }
 
@@ -1082,6 +1085,8 @@ _get_sx_formula_value(const SchedXaction* sx,
             g_hash_table_destroy(parser_vars);
         }
     }
+    g_free (formula_str);
+    g_free (numeric_val);
 }
 
 static void

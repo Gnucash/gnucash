@@ -1172,7 +1172,11 @@ static gint check_trans_online_id(Transaction *trans1, void *user_data)
     online_id1 = gnc_import_get_split_online_id (split1);
 
     if (!online_id1 || !online_id1[0])
+    {
+        if (online_id1)
+            g_free (online_id1);
         online_id1 = gnc_import_get_trans_online_id (trans1);
+    }
 
     online_id2 = gnc_import_get_split_online_id(split2);
 

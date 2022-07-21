@@ -669,13 +669,18 @@ gnc_sxed_split_calculate_formula (GncSxEditorDialog *sxed, Split *s,
                       key, &str,
                       NULL);
     if (str == NULL || strlen (str) == 0)
+    {
+        if (str)
+            g_free (str);
         return TRUE; /* No formula no foul */
+    }
     if (gnc_sx_parse_vars_from_formula (str, vars, &tmp) < 0)
     {
         gchar *err = g_strdup_printf (_("Couldn't parse %s for split \"%s\"."),
                                       key, xaccSplitGetMemo (s));
         gnc_error_dialog (GTK_WINDOW (sxed->dialog), "%s", err);
         g_free (err);
+        g_free (str);
 
         return FALSE;
     }
@@ -685,6 +690,7 @@ gnc_sxed_split_calculate_formula (GncSxEditorDialog *sxed, Split *s,
     else
         tcds->debitSum = gnc_numeric_add (tcds->debitSum, tmp, 100,
                                           GNC_DENOM_AUTO | GNC_HOW_DENOM_LCD);
+    g_free (str);
     return TRUE;
 }
 
