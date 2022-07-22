@@ -484,6 +484,17 @@ void gnc_register_number_plot_size_option(GncOptionDB* db,
                                           const char* doc_string,
                                           int value);
 
+inline void gnc_register_number_plot_size_option(GncOptionDB* db,
+                                          const char* section, const char* name,
+                                          const char* key,
+                                          const char* doc_string,
+                                          float value)
+{
+    gnc_register_number_plot_size_option(db, section, name, key,
+                                         doc_string, static_cast<int>(value));
+}
+
+
 /**
  * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
  */
@@ -496,6 +507,17 @@ inline void gnc_register_number_plot_size_option(const GncOptionDBPtr& db,
 {
     gnc_register_number_plot_size_option(db.get(), section, name, key,
                                          doc_string, value);
+}
+
+inline void gnc_register_number_plot_size_option(const GncOptionDBPtr& db,
+                                                 const char* section,
+                                                 const char* name,
+                                                 const char* key,
+                                                 const char* doc_string,
+                                                 float value)
+{
+    gnc_register_number_plot_size_option(db.get(), section, name, key,
+                                         doc_string, static_cast<int>(value));
 }
 
 /**
