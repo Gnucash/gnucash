@@ -771,8 +771,6 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 %ignore gnc_register_date_option(GncOptionDB*, const char*, const char*, const char*, const char*, RelativeDatePeriodVec, bool);
 %ignore gnc_register_start_date_option(GncOptionDB*, const char*, const char*, const char*, const char*, bool);
 %ignore gnc_register_end_date_option(GncOptionDB*, const char*, const char*, const char*, const char*, bool);
-%ignore gnc_register_internal_option(GncOptionDBPtr&, const char*, const char*, const char*, const char*, const std::string&);
-%ignore gnc_register_internal_option(GncOptionDBPtr&, const char*, const char*, const char*, const char*, bool);
 %typemap(in) GncOption* "$1 = scm_is_true($input) ? static_cast<GncOption*>(scm_to_pointer($input)) : nullptr;"
 %typemap(out) GncOption* "$result = ($1) ? scm_from_pointer($1, nullptr) : SCM_BOOL_F;"
 

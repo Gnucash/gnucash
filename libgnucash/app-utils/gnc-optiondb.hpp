@@ -593,16 +593,12 @@ inline void gnc_register_color_option(GncOptionDBPtr& db, const char* section,
 }
 
 void gnc_register_internal_option(GncOptionDBPtr& db,
-                                          const char* section, const char* name,
-                                          const char* key,
-                                          const char* doc_string,
-                                          const std::string& value);
+                                  const char* section, const char* name,
+                                  const std::string& value);
 
 void gnc_register_internal_option(GncOptionDBPtr& db,
-                                          const char* section, const char* name,
-                                          const char* key,
-                                          const char* doc_string,
-                                          bool value);
+                                  const char* section, const char* name,
+                                  bool value);
 
 void gnc_register_report_placement_option(GncOptionDBPtr& db,
                                           const char* section, const char* name);

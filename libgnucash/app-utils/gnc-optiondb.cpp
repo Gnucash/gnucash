@@ -1003,6 +1003,28 @@ gnc_register_report_placement_option(GncOptionDBPtr& db,
     db->register_option(section, std::move(option));
 }
 
+void
+gnc_register_internal_option(GncOptionDBPtr& db,
+                             const char* section, const char* name,
+                             const std::string& value)
+{
+    GncOption option{
+        GncOptionValue<std::string>{section, name, "", "", value,
+                                    GncOptionUIType::INTERNAL}};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_internal_option(GncOptionDBPtr& db,
+                             const char* section, const char* name,
+                             bool value)
+{
+    GncOption option{
+        GncOptionValue<bool>{section, name, "", "", value,
+                             GncOptionUIType::INTERNAL}};
+    db->register_option(section, std::move(option));
+}
+
 GncOptionDB*
 gnc_option_db_new(void)
 {
