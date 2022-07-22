@@ -86,9 +86,9 @@ struct _main_matcher_info
     gboolean edit_notes;
     gboolean edit_memo;
 
-    GHashTable *desc_hash;
-    GHashTable *notes_hash;
-    GHashTable *memo_hash;
+    GList *desc_list;
+    GList *notes_list;
+    GList *memo_list;
 
     GList *new_strings;
 };
@@ -186,6 +186,45 @@ defer_bal_computation (GNCImportMainMatcher *info, Account* acc)
     }
 }
 
+typedef struct
+{
+    const char *str;
+    char *collated;
+    char *normalized_folded;
+} StringInfo;
+
+static inline StringInfo*
+make_stringinfo (const char *str)
+{
+    StringInfo *elt = g_new (StringInfo, 1);
+    char *normalized = g_utf8_normalize (str, -1, G_NORMALIZE_ALL);
+    elt->str = str;
+    elt->collated = g_utf8_collate_key (str, -1);
+    elt->normalized_folded = normalized ? g_utf8_casefold (normalized, -1) : NULL;
+    g_free (normalized);
+    return elt;
+}
+
+static int stringinfo_eq (StringInfo *info, const gchar *str)
+{
+    return g_strcmp0 (info->str, str);
+}
+
+static gint stringinfo_cmp (StringInfo *la, StringInfo *lb)
+{
+    if (la)
+        return lb ? g_strcmp0 (la->collated, lb->collated) : 1;
+    else
+        return lb ? -1 : 0;
+}
+
+static void stringinfo_free (StringInfo *a)
+{
+    g_free (a->collated);
+    g_free (a->normalized_folded);
+    g_free (a);
+}
+
 void
 gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
 {
@@ -232,10 +271,10 @@ gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
 
     gnc_import_PendingMatches_delete (info->pending_matches);
     g_hash_table_destroy (info->acct_id_hash);
-    g_hash_table_destroy (info->desc_hash);
-    g_hash_table_destroy (info->notes_hash);
-    g_hash_table_destroy (info->memo_hash);
 
+    g_list_free_full (info->desc_list, (GDestroyNotify)stringinfo_free);
+    g_list_free_full (info->notes_list, (GDestroyNotify)stringinfo_free);
+    g_list_free_full (info->memo_list, (GDestroyNotify)stringinfo_free);
     g_list_free_full (info->new_strings, (GDestroyNotify)g_free);
 
     g_free (info);
@@ -459,14 +498,22 @@ resolve_conflicts (GNCImportMainMatcher *info)
     }
 }
 
+static void add_stringinfo_list (gpointer key, gpointer value, GList **list)
+{
+    StringInfo *elt = make_stringinfo (key);
+    *list = g_list_prepend (*list, elt);
+}
 
 static void
-load_hash_tables (GNCImportMainMatcher *info)
+load_stringinfo_lists (GNCImportMainMatcher *info)
 {
     GtkTreeModel *model = gtk_tree_view_get_model (info->view);
     GtkTreeIter import_iter;
     GList *accounts_list = NULL;
     gboolean valid = gtk_tree_model_get_iter_first (model, &import_iter);
+    GHashTable *desc_hash = g_hash_table_new (g_str_hash, g_str_equal);
+    GHashTable *notes_hash = g_hash_table_new (g_str_hash, g_str_equal);
+    GHashTable *memo_hash = g_hash_table_new (g_str_hash, g_str_equal);
     while (valid)
     {
         GNCImportTransInfo *trans_info = get_trans_info (model, &import_iter);
@@ -486,17 +533,30 @@ load_hash_tables (GNCImportMainMatcher *info)
 
             key = xaccTransGetDescription (t);
             if (key && *key)
-                g_hash_table_insert (info->desc_hash, (gpointer)key, one);
+                g_hash_table_insert (desc_hash, (gpointer)key, one);
 
             key = xaccTransGetNotes (t);
             if (key && *key)
-                g_hash_table_insert (info->notes_hash, (gpointer)key, one);
+                g_hash_table_insert (notes_hash, (gpointer)key, one);
 
             key = xaccSplitGetMemo (s);
             if (key && *key)
-                g_hash_table_insert (info->memo_hash, (gpointer)key, one);
+                g_hash_table_insert (memo_hash, (gpointer)key, one);
         }
     }
+
+    g_hash_table_foreach (desc_hash, (GHFunc)add_stringinfo_list, &info->desc_list);
+    g_hash_table_foreach (notes_hash, (GHFunc)add_stringinfo_list, &info->notes_list);
+    g_hash_table_foreach (memo_hash, (GHFunc)add_stringinfo_list, &info->memo_list);
+
+    g_hash_table_destroy (desc_hash);
+    g_hash_table_destroy (notes_hash);
+    g_hash_table_destroy (memo_hash);
+
+    info->desc_list = g_list_sort (info->desc_list, (GCompareFunc) stringinfo_cmp);
+    info->notes_list = g_list_sort (info->notes_list, (GCompareFunc) stringinfo_cmp);
+    info->memo_list = g_list_sort (info->memo_list, (GCompareFunc) stringinfo_cmp);
+
     g_list_free (accounts_list);
 }
 
@@ -525,7 +585,7 @@ gnc_gen_trans_list_show_all (GNCImportMainMatcher *info)
                                  xaccAccountGetAppendText(account));
 
     gnc_gen_trans_list_create_matches (info);
-    load_hash_tables (info);
+    load_stringinfo_lists (info);
     resolve_conflicts (info);
     gtk_widget_show_all (GTK_WIDGET(info->main_widget));
     gnc_gen_trans_list_show_accounts_column (info);
@@ -982,19 +1042,14 @@ enum
     NUM_COMPLETION_COLS
 };
 
-static void populate_list (gpointer key, gpointer value, GtkListStore *list)
+static void addto_list_store (StringInfo *info, GtkListStore *list)
 {
     GtkTreeIter iter;
-    const char *original = key;
-    char *normalized = g_utf8_normalize (original, -1, G_NORMALIZE_ALL);
-    char *normalized_folded = normalized ? g_utf8_casefold (normalized, -1) : NULL;
     gtk_list_store_append (list, &iter);
     gtk_list_store_set (list, &iter,
-                        COMPLETION_LIST_ORIGINAL, original,
-                        COMPLETION_LIST_NORMALIZED_FOLDED, normalized_folded,
+                        COMPLETION_LIST_ORIGINAL, info->str,
+                        COMPLETION_LIST_NORMALIZED_FOLDED, info->normalized_folded,
                         -1);
-    g_free (normalized_folded);
-    g_free (normalized);
 }
 
 static gboolean
@@ -1014,7 +1069,7 @@ match_func (GtkEntryCompletion *completion, const char *entry_str,
 }
 
 static void
-setup_entry (GtkWidget *entry, gboolean sensitive, GHashTable *hash,
+setup_entry (GtkWidget *entry, gboolean sensitive, GList *existing_list,
              const char *initial)
 {
     GtkEntryCompletion* completion;
@@ -1026,9 +1081,14 @@ setup_entry (GtkWidget *entry, gboolean sensitive, GHashTable *hash,
         return;
 
     list = gtk_list_store_new (NUM_COMPLETION_COLS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
-    g_hash_table_foreach (hash, (GHFunc)populate_list, list);
-    if (!g_hash_table_lookup (hash, (gpointer)initial))
-        populate_list ((gpointer)initial, NULL, list);
+    if (initial && *initial && !g_list_find_custom (existing_list, initial,
+                                                    (GCompareFunc)stringinfo_eq))
+    {
+        StringInfo *info = make_stringinfo (initial);
+        addto_list_store (info, list);
+        stringinfo_free (info);
+    }
+    g_list_foreach (existing_list, (GFunc)addto_list_store, list);
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (list),
                                           COMPLETION_LIST_ORIGINAL,
                                           GTK_SORT_ASCENDING);
@@ -1060,9 +1120,9 @@ input_new_fields (GNCImportMainMatcher *info, RowInfo *rowinfo,
     memo_entry = GTK_WIDGET(gtk_builder_get_object (builder, "memo_entry"));
     notes_entry = GTK_WIDGET(gtk_builder_get_object (builder, "notes_entry"));
 
-    setup_entry (desc_entry, info->edit_desc, info->desc_hash, xaccTransGetDescription (rowinfo->trans));
-    setup_entry (notes_entry, info->edit_notes, info->notes_hash, xaccTransGetNotes (rowinfo->trans));
-    setup_entry (memo_entry, info->edit_memo, info->memo_hash, xaccSplitGetMemo (rowinfo->split));
+    setup_entry (desc_entry, info->edit_desc, info->desc_list, xaccTransGetDescription (rowinfo->trans));
+    setup_entry (notes_entry, info->edit_notes, info->notes_list, xaccTransGetNotes (rowinfo->trans));
+    setup_entry (memo_entry, info->edit_memo, info->memo_list, xaccSplitGetMemo (rowinfo->split));
 
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (info->main_widget));
 
@@ -1128,22 +1188,28 @@ gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
                                     DOWNLOADED_COL_DESCRIPTION_STYLE, style,
                                     -1);
                 xaccTransSetDescription (row->trans, new_desc);
-                if (*new_desc && !g_hash_table_lookup (info->desc_hash, new_desc))
+                if (*new_desc && !g_list_find_custom (info->desc_list, new_desc,
+                                                      (GCompareFunc)stringinfo_eq))
                 {
                     char *new_string = g_strdup (new_desc);
                     info->new_strings = g_list_prepend (info->new_strings, new_string);
-                    g_hash_table_insert (info->desc_hash, new_string, one);
+                    info->desc_list = g_list_insert_sorted
+                        (info->desc_list, make_stringinfo (new_string),
+                         (GCompareFunc) stringinfo_cmp);
                 }
             }
 
             if (info->edit_notes)
             {
                 xaccTransSetNotes (row->trans, new_notes);
-                if (*new_notes && !g_hash_table_lookup (info->notes_hash, new_notes))
+                if (*new_notes && !g_list_find_custom (info->notes_list, new_notes,
+                                                      (GCompareFunc)stringinfo_eq))
                 {
                     char *new_string = g_strdup (new_notes);
                     info->new_strings = g_list_prepend (info->new_strings, new_string);
-                    g_hash_table_insert (info->notes_hash, new_string, one);
+                    info->notes_list = g_list_insert_sorted
+                        (info->notes_list, make_stringinfo (new_string),
+                         (GCompareFunc) stringinfo_cmp);
                 }
             }
 
@@ -1156,11 +1222,14 @@ gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
                                     DOWNLOADED_COL_MEMO_STYLE, style,
                                     -1);
                 xaccSplitSetMemo (row->split, new_memo);
-                if (*new_memo && !g_hash_table_lookup (info->memo_hash, new_memo))
+                if (*new_memo && !g_list_find_custom (info->memo_list, new_memo,
+                                                      (GCompareFunc)stringinfo_eq))
                 {
                     char *new_string = g_strdup (new_memo);
                     info->new_strings = g_list_prepend (info->new_strings, new_string);
-                    g_hash_table_insert (info->memo_hash, new_string, one);
+                    info->memo_list = g_list_insert_sorted
+                        (info->memo_list, make_stringinfo (new_string),
+                         (GCompareFunc) stringinfo_cmp);
                 }
             }
         }
@@ -1730,9 +1799,9 @@ gnc_gen_trans_list_new (GtkWidget *parent,
     // This ensure this dialog is closed when the session is closed.
     gnc_gui_component_set_session (info->id, gnc_get_current_session());
 
-    info->desc_hash = g_hash_table_new (g_str_hash, g_str_equal);
-    info->notes_hash = g_hash_table_new (g_str_hash, g_str_equal);
-    info->memo_hash = g_hash_table_new (g_str_hash, g_str_equal);
+    info->desc_list = NULL;
+    info->notes_list = NULL;
+    info->memo_list = NULL;
 
     info->new_strings = NULL;
     return info;
