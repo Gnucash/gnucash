@@ -980,6 +980,7 @@ enum
     COMPLETION_LIST_ORIGINAL,
     COMPLETION_LIST_COLLATED,
     COMPLETION_LIST_NORMALIZED_FOLDED,
+    NUM_COMPLETION_COLS
 };
 
 static void populate_list (gpointer key, gpointer value, GtkListStore *list)
@@ -1028,12 +1029,12 @@ setup_entry (GtkWidget *entry, gboolean sensitive, GHashTable *hash,
     if (!sensitive)
         return;
 
-    list = gtk_list_store_new (3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+    list = gtk_list_store_new (NUM_COMPLETION_COLS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
     g_hash_table_foreach (hash, (GHFunc)populate_list, list);
     if (!g_hash_table_lookup (hash, (gpointer)initial))
         populate_list ((gpointer)initial, NULL, list);
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (list),
-                                          COMPLETION_LIST_COLLATED,
+                                          COMPLETION_LIST_ORIGINAL,
                                           GTK_SORT_ASCENDING);
 
     completion = gtk_entry_completion_new ();
@@ -1124,7 +1125,7 @@ gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
             RowInfo *row = n->data;
             if (info->edit_desc)
             {
-                guint64 style = g_strcmp0 (new_desc, row->orig_desc) ?
+                gint style = g_strcmp0 (new_desc, row->orig_desc) ?
                     PANGO_STYLE_ITALIC : PANGO_STYLE_NORMAL;
                 gtk_tree_store_set (store, &row->iter,
                                     DOWNLOADED_COL_DESCRIPTION, new_desc,
@@ -1152,7 +1153,7 @@ gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
 
             if (info->edit_memo)
             {
-                guint64 style = g_strcmp0 (new_memo, row->orig_memo) ?
+                gint style = g_strcmp0 (new_memo, row->orig_memo) ?
                     PANGO_STYLE_ITALIC : PANGO_STYLE_NORMAL;
                 gtk_tree_store_set (store, &row->iter,
                                     DOWNLOADED_COL_MEMO, new_memo,
@@ -1525,8 +1526,8 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
     view = info->view;
     store = gtk_tree_store_new (NUM_DOWNLOADED_COLS, G_TYPE_STRING, G_TYPE_INT64,
                                 G_TYPE_STRING, G_TYPE_STRING, G_TYPE_DOUBLE,
-                                G_TYPE_STRING, G_TYPE_STRING, G_TYPE_UINT64, //description stuff
-                                G_TYPE_STRING, G_TYPE_STRING, G_TYPE_UINT64, //memo stuff
+                                G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT, //description stuff
+                                G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT, //memo stuff
                                 G_TYPE_STRING, G_TYPE_BOOLEAN,
                                 G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_STRING,
                                 GDK_TYPE_PIXBUF, G_TYPE_POINTER, G_TYPE_STRING,
