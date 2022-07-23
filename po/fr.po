@@ -31,10 +31,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-22 06:33+0200\n"
-"PO-Revision-Date: 2022-07-19 06:16+0000\n"
+"PO-Revision-Date: 2022-07-23 09:57+0000\n"
 "Last-Translator: Maxime Leroy <lisacintosh@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
@@ -9744,10 +9744,8 @@ msgstr "Éditer les préférences globales de GnuCash"
 
 # messages-i18n.c:240
 #: gnucash/gnome-utils/gnc-main-window.c:345
-#, fuzzy
-#| msgid "<b>Tab Position</b>"
 msgid "Tab P_osition"
-msgstr "<b>Position de l'onglet</b>"
+msgstr "P_osition de l'onglet"
 
 #: gnucash/gnome-utils/gnc-main-window.c:348
 msgid "Select sorting criteria for this page view"
@@ -18055,10 +18053,8 @@ msgid "Green"
 msgstr "Vert"
 
 #: gnucash/gtkbuilder/dialog-import.glade:871
-#, fuzzy
-#| msgid "Do not print transaction detail"
 msgid "Edit imported transaction details"
-msgstr "Ne pas imprimer le détail de la transaction"
+msgstr "Modifier le détail de la transaction importée"
 
 # messages-i18n.c:306 po/guile_strings.txt:176
 #: gnucash/gtkbuilder/dialog-import.glade:944
@@ -23915,25 +23911,19 @@ msgstr "Désactivé"
 # messages-i18n.c:20
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1321
-#, fuzzy
-#| msgid "Assign a transfer account to the selection."
 msgid "_Assign a transfer account to the selection"
-msgstr "Assigner le compte de transfert à la sélection."
+msgstr "_Assigner le compte de transfert à la sélection"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1368
-#, fuzzy
-#| msgid "Description, Notes, or Memo"
 msgid "_Edit description, notes, or memo"
-msgstr "Description, Notes ou Mémo"
+msgstr "_Modifier la description, les notes ou le mémo"
 
 # messages-i18n.c:324 po/guile_strings.txt:181
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1377
-#, fuzzy
-#| msgid "Reset defaults"
 msgid "_Reset all edits"
-msgstr "Réinitialiser aux valeurs par défaut"
+msgstr "_Réinitialiser toutes les modifications"
 
 #: gnucash/import-export/import-main-matcher.c:1547
 msgctxt "Column header for 'Adding transaction'"
