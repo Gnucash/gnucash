@@ -11,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-22 06:33+0200\n"
-"PO-Revision-Date: 2022-07-23 09:57+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"PO-Revision-Date: 2022-07-23 14:22+0000\n"
+"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -3284,7 +3284,7 @@ msgstr "כעת"
 #: gnucash/gnome/dialog-tax-info.c:1185
 #: gnucash/gtkbuilder/dialog-tax-info.glade:89
 msgid "Income Tax Identity"
-msgstr "מזהה מס הכנסה"
+msgstr "מזהה מס הכנסה (מספר תיק)"
 
 #: gnucash/gnome/dialog-tax-info.c:1191
 #: gnucash/gtkbuilder/dialog-options.glade:55
@@ -3484,7 +3484,7 @@ msgstr "מציאת תנועות באמצעות חיפוש"
 #: gnucash/gnome/gnc-plugin-page-register2.c:263
 #: gnucash/gnome/gnc-plugin-page-register.c:377
 msgid "Ta_x Report Options"
-msgstr "אפ_שרויות מיסוי"
+msgstr "אפ_שרויות דוח מס"
 
 #. Translators: currently implemented are
 #. US: income tax and
@@ -5845,7 +5845,7 @@ msgstr "יצירת PDF"
 msgid ""
 "Update the current report's saved configuration. The report configuration "
 "will be saved in the file %s."
-msgstr "עדכון תצורת הדוח השמור הנוכחי. הגדרות הדוח יישמרו בקובץ %s."
+msgstr "עדכון תצורת הדוח השמור הנוכחי. תצורת הדוח תישמר בקובץ %s."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1199
 #, c-format
@@ -5976,7 +5976,7 @@ msgid ""
 "This report must be upgraded to return a document object with export-string "
 "or export-error."
 msgstr ""
-"חובה לשדרג דוח זה על מנת להחזיר פריט מסמך עם, export-string או, export-error."
+"על מנת להחזיר פריט מסמך עם export-string או, export-error, יש לשדרג דוח זה."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1765
 #, c-format
@@ -6121,7 +6121,7 @@ msgstr "ארעה שגיאה בעת הרצת הדוח."
 #: gnucash/gnome/gnc-plugin-report-system.c:206
 #, c-format
 msgid "Badly formed options URL: %s"
-msgstr "תצורת אפשרויות מען URL שגויה: %s"
+msgstr "תצורת אפשרויות מען־URL שגויה: %s"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:194
 #, c-format
@@ -7584,7 +7584,7 @@ msgid ""
 "default gain/loss account."
 msgstr ""
 "אין חשבונות 'הכנסות' או 'הוצאות'\n"
-"למטבע הספרים שצויין; כדי לבחור בחשבון ברירת מחדל לחשבון 'רווח/הפסד',\n"
+"למטבע הספרים שצוין; כדי לבחור בחשבון ברירת מחדל לחשבון 'רווח/הפסד',\n"
 "לאחר הקמת חשבון, יש לחזור לתיבת דו־שיח זו\n"
 "(מתפריט 'קובץ &larr; מאפיינים')."
 
@@ -7825,8 +7825,8 @@ msgid ""
 "You can't transfer from a non-currency account. Try reversing the \"from\" "
 "and \"to\" accounts and making the \"amount\" negative."
 msgstr ""
-"לא ניתן להעביר מחשבון שאינו מטבעי. נסו להפוך את סדר הערכים 'מחשבון' "
-"ו־'לחשבון' והזינו את ה־'סכום' כמספר שלילי."
+"לא ניתן להעביר מחשבון שאינו מטבעי. ניתן לנסות להפוך את סדר הערכים 'מחשבון' ו־"
+"'לחשבון' והלהזין את ה'סכום' כמספר שלילי."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1486
 msgid "You must enter a valid price."
@@ -8189,8 +8189,9 @@ msgid ""
 "system, you may not have write permission for the directory or your anti-"
 "virus software is preventing this action."
 msgstr ""
-"לגנוקאש לא התאפשר לכתוב ל־%s. מסד נתונים זה עשוי להיות במערכת קבצים לקריאה "
-"בלבד, ייתכן שחסרה הרשאת כתיבה לספריה, או, תוכנת האנטי־וירוס מונעת פעולה זו."
+"לא הייתה אפשרות לגנוקאש לכתוב ל־%s. מסד נתונים זה עשוי להמצא על מערכת־קבצים "
+"לקריאה בלבד, ייתכן שחסרה הרשאת כתיבה לספריה, או, שתכנת האנטי־וירוס מונעת "
+"פעולה זו."
 
 #: gnucash/gnome-utils/gnc-file.c:385
 #, c-format
@@ -8337,9 +8338,9 @@ msgid ""
 "your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?"
 "id=645216 for more information."
 msgstr ""
-"גנוקאש לא יכולה להשלים בדיקה מהותית לאיתור תקל בספרית 'libdbi'. יתכן שהדבר "
-"נגרם כתוצאה מתצורת הרשאות שגויה במסד נתוני SQL. למידע נוסף, ניתן לעיין ב־"
-"https://bugs.gnucash.org/show_bug.cgi?id=645216."
+"גנוקאש לא יכולה להשלים בדיקה מהותית לאיתור המצאות תקל בספרית 'libdbi'. יתכן "
+"שהדבר נגרם כתוצאה מתצורת הרשאות שגויה במסד נתוני SQL. למידע נוסף, ניתן לעיין "
+"ב־https://bugs.gnucash.org/show_bug.cgi?id=645216."
 
 #: gnucash/gnome-utils/gnc-file.c:537
 msgid ""
@@ -8563,13 +8564,11 @@ msgstr "הע_דפות"
 
 #: gnucash/gnome-utils/gnc-main-window.c:339
 msgid "Edit the global preferences of GnuCash"
-msgstr "עריכת המאפיינים הכלליים של גנוקאש"
+msgstr "עריכת ההעדפות הכלליות של גנוקאש"
 
 #: gnucash/gnome-utils/gnc-main-window.c:345
-#, fuzzy
-#| msgid "<b>Tab Position</b>"
 msgid "Tab P_osition"
-msgstr "<b>מיקום לשונית</b>"
+msgstr "מיקום ל_שונית"
 
 #: gnucash/gnome-utils/gnc-main-window.c:348
 msgid "Select sorting criteria for this page view"
@@ -8617,7 +8616,7 @@ msgstr "מדריך שימוש ומדריך _מושגים"
 
 #: gnucash/gnome-utils/gnc-main-window.c:391
 msgid "Open the GnuCash Tutorial"
-msgstr "פתיחת מדריך למשתמש בגנוקאש"
+msgstr "פתיחת מדריך למשתמש – גנוקאש"
 
 #: gnucash/gnome-utils/gnc-main-window.c:395
 msgid "_Contents"
@@ -8843,7 +8842,7 @@ msgstr "חשבונאות לאנשים פרטיים ועסקים קטנים."
 #: gnucash/gnome-utils/gnc-main-window.c:4910
 msgid "translator-credits"
 msgstr ""
-"אבי מרקוביץ avi.markovitz@gmail.com ,2021, 2020, 2019\n"
+"אבי מרקוביץ avi.markovitz@gmail.com 2022 ,2021, 2020, 2019\n"
 "ירון שהרבני 2021\n"
 "אורי הוך 2006"
 
@@ -10077,10 +10076,10 @@ msgid ""
 msgstr ""
 "הפעלת פקודות לענין דוחות. הפקודות הבאות נתמכות.\n"
 "\n"
-"רשימה: \tרשימת דוחות זמינים.\n"
-"הצגה: \tתיאור השינויים שנעשו בדוח האמור. ניתן להגדיר קובץ נתונים לתאור מספר "
+"  list: \t רשימת דוחות זמינים.\n"
+"  show:  תיאור השינויים שנעשו בדוח האמור. ניתן להגדיר קובץ נתונים לתאור מספר "
 "אפשרויות שנשמרו.\n"
-"הרצה: \tהרצת הדוח האמור מקובץ נתוני גנוקאש הנתון.\n"
+"  run: \tהרצת הדוח האמור מקובץ נתוני גנוקאש הנתון.\n"
 
 #: gnucash/gnucash-cli.cpp:113
 msgid "Name of the report to run\n"
@@ -10183,7 +10182,7 @@ msgid ""
 "Enable debugging mode: provide deep detail in the logs.\n"
 "This is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
 msgstr ""
-"אפשור מצב ניפוי־תקלים: מספק מידע מפורט ביומן־הרישום.\n"
+"אפשור מצב ניפוי־תקלים: אספקת מידע מפורט ביומן־הרישום.\n"
 "זהה ל־: ‎--log \"=info\" --log \"qof=info\" --log \"gnc=info\"‎"
 
 #: gnucash/gnucash-core-app.cpp:305
@@ -11288,7 +11287,7 @@ msgstr "נתיב ראשי לצרופות מקושרות לתנועה"
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:26
 msgid ""
 "This is the path head for the Transaction Linked Files with relative paths"
-msgstr "זהו הנתיב הראשי לצרופות בעלות נתיבים יחסיים, המקושרות לתנועה"
+msgstr "זהו הנתיב הראשי, לצרופות עם נתיבים יחסיים, שמקושרות לתנועה"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:30
 msgid "Compress the data file"
@@ -11307,7 +11306,7 @@ msgid ""
 "If active, GnuCash shows an explanation of the auto-save feature the first "
 "time that feature is started. Otherwise no extra explanation is shown."
 msgstr ""
-"אם האפשרות פעילה, גנוקאש יציג הסבר על תכונת השמירה האוטומטית בהפעלה ראשונה "
+"אם האפשרות פעילה, גנוקאש תציג הסבר על תכונת השמירה האוטומטית בהפעלה ראשונה "
 "של התכונה. אחרת לא יוצג הסבר נוסף."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:40
@@ -11411,10 +11410,10 @@ msgid ""
 "days'"
 msgstr ""
 "אפשרות זו מגדירה מה ייעשה בקובצי יומני־רישום/גיבויים ישנים. 'לעד' פירושו "
-"לשמור את כל הקבצים הישנים. 'לעולם לא' פירושו שלא נשמרים קובצי יומן־"
-"רישום/גיבוי ישנים. בכל פעם שמתבצעת שמירה, גרסאות ישנות יותר של הקובץ מוסרות. "
-"'ימים' פירושו מספר הימים שיש לשמור קבצים ישנים. מספר הימים מוגדר במפתח 'ימים "
-"לשמירה'"
+"לשמור את כל הקבצים הישנים. 'לעולם לא' פירושו שלא נשמרים קובצי יומן־רישום/"
+"גיבוי ישנים. בכל פעם שמתבצעת שמירה, גרסאות ישנות יותר של הקובץ מוסרות. "
+"'ימים' פירושו מספר הימים שיש לשמור קבצים ישנים. מספר הימים מוגדר במפתח "
+"'retain-days'"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:80
 #: gnucash/gtkbuilder/dialog-preferences.glade:1902
@@ -11929,9 +11928,9 @@ msgid ""
 "register is first opened. The setting can be changed at any time via the "
 "\"View->Double Line\" menu item."
 msgstr ""
-"הצגת שורה נוספת ביומן, לכל תנועה הכוללת 'פעולה', 'הערות', ו'צרופות'. זוהי "
-"הגדרת ברירת המחדל עבור יומן שיפתח לראשונה. ניתן לשנות את ההגדרה בכל עת, "
-"מפריט 'מצג &larr; שורה כפולה'."
+"הצגת שורה נוספת ביומן בכל תנועה הכוללת: 'פעולה', 'הערות', ו'צרופות'. זוהי "
+"הגדרת ברירת המחדל שיופיעו בפתיחה הראשונה של היומן. ניתן לשנות את ההגדרה בכל "
+"עת, מפריט 'מצג &larr; שורה כפולה'."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:311
 msgid "Only display leaf account names."
@@ -12403,12 +12402,12 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:99
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:222
 msgid "Cut a transaction"
-msgstr "_גזירת תנועה"
+msgstr "גזירת תנועה"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:100
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:223
 msgid "This dialog is presented before allowing you to cut a transaction."
-msgstr "חלון דו־שיח זה מוצג לפני שתתאפשר גזירת תנועה."
+msgstr "חלון דו־שיח זה מוצג לפני שניתן יהיה לגזור תנועה."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:227
@@ -13436,8 +13435,8 @@ msgid ""
 "If not satisfied with the available templates, please read the wiki page "
 "linked below and share your new or improved template."
 msgstr ""
-"אם התבניות הזמינות אינן מספקות, נא לעיין בעמוד הוויקי שלהלן, שם ניתן לשתף את "
-"התבניות החדשות שיצרת."
+"אם התבניות הזמינות אינן מספקות, נא לעיין בעמוד הוויקי שלהלן, שם ניתן לשתף "
+"תבניות חדשות שנוצרו על ידי משתמשים."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:484
 msgid ""
@@ -13904,8 +13903,8 @@ msgstr ""
 "נראה שקובץ ה־QIF שנטען מכיל תנועות בחשבון אחד בלבד, אך הקובץ אינו מכיל את שם "
 "החשבון.\n"
 "\n"
-"נא להזין שם חשבון. אם הקובץ יוצא מתוכנת חשבונאות אחרת, יש להשתמש באותו שם "
-"חשבון ששימש באותה התוכנה.\n"
+"נא להזין שם חשבון. אם הקובץ יוצא מתכנת הנהלת־חשבונות אחרת, נא להשתמש באותו "
+"שם חשבון ששימש באותה התכנה.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:368
 msgid "Account name"
@@ -14727,7 +14726,7 @@ msgid ""
 "Use Edit->Tax Report Options to set the tax-related flag and assign a tax "
 "code to this account."
 msgstr ""
-"תיבת בר מיסוי תהיה פעילה אם הוגדרו קוד מיסוי לחשבונות אלו בתפריט 'עריכה "
+"תיבת 'בר מיסוי' תהיה פעילה אם הוגדרו קוד מיסוי לחשבונות אלו בתפריט 'עריכה "
 "&larr; אפשרויות מיסוי'."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1517
@@ -15234,9 +15233,7 @@ msgstr "בחירת מידע משתמש כאן..."
 msgid ""
 "The customer ID number. If left blank a reasonable number will be chosen for "
 "you"
-msgstr ""
-"מזהה הלקוח. אם השדה יותר ריק, מספר זיהוי ספק סביר ייקבע על ידי המערכת באופן "
-"אוטומטי"
+msgstr "מזהה הלקוח. אם השדה ישאר ריק, המערכת תקצה מזהה־ ספק סביר"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:258
 #: gnucash/gtkbuilder/dialog-customer.glade:790
@@ -15907,10 +15904,8 @@ msgid "Green"
 msgstr "ירוק"
 
 #: gnucash/gtkbuilder/dialog-import.glade:871
-#, fuzzy
-#| msgid "Do not print transaction detail"
 msgid "Edit imported transaction details"
-msgstr "לא להדפיס פרטי תנועה"
+msgstr "עריכת פרטי תנועה מיובאת"
 
 #: gnucash/gtkbuilder/dialog-import.glade:944
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:151
@@ -20027,7 +20022,7 @@ msgid ""
 "which you can choose one here."
 msgstr ""
 "הגדרת מבנה נתונים בו יעשה שימוש בעת יבוא קובצי SWIFT MT942. ספריית אייקיו־"
-"בנקינג מציעה מגוון מבני יבוא (נקראים 'פרופילים') מהן, ניתן כאן, לבחור אחת."
+"בנקינג מציעה מגוון מבני יבוא (נקראים 'פרופילים') מהם, ניתן כאן, לבחור אחד."
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:297
 #, c-format
@@ -21108,24 +21103,18 @@ msgstr "מנוטרל"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1321
-#, fuzzy
-#| msgid "Assign a transfer account to the selection."
 msgid "_Assign a transfer account to the selection"
-msgstr "הקצאת חשבון להעברת השורות שנבחרו."
+msgstr "_הקצאת חשבון 'העברת' לשורות שנבחרו"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1368
-#, fuzzy
-#| msgid "Description, Notes, or Memo"
 msgid "_Edit description, notes, or memo"
-msgstr "תיאור, הערות, או מזכר"
+msgstr "עריכת תיאור, הערות, או מזכר"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1377
-#, fuzzy
-#| msgid "Reset defaults"
 msgid "_Reset all edits"
-msgstr "איפוס לברירת מחדל"
+msgstr "_שיצוב לבררת מחדל"
 
 # ת=הוספת תנועה
 #: gnucash/import-export/import-main-matcher.c:1547
@@ -21255,7 +21244,7 @@ msgstr "_הרצה מחודשת של קובץ log. גנוקאש..."
 #: gnucash/import-export/log-replay/gnc-plugin-log-replay.c:49
 msgid "Replay a GnuCash log file after a crash. This cannot be undone."
 msgstr ""
-"הרצה מחודשת של קובץ יומן־הרישום של גנוקאש אחרי קריסה. הפעולה בלתי הפיכה."
+"ביצוע חוזר של קובץ יומן־רישום גנוקאש, אחרי קריסה. פעולה זו היא בלתי הפיכה."
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:671
 #, c-format
@@ -22544,7 +22533,7 @@ msgstr "לא קיימות גרסאות תקציב. נדרש לייצור לפח�
 
 #: gnucash/report/html-utilities.scm:391
 msgid "This report requires you to specify certain report options."
-msgstr "נדרשות לדוח זה, הגדרות מסוימות באפשרויות דוח."
+msgstr "לדוח זה נדרשות הגדרות מסוימות באפשרויות דוח."
 
 #: gnucash/report/html-utilities.scm:398
 msgid "No accounts selected"
@@ -23517,7 +23506,7 @@ msgid ""
 "For help on writing reports, or to contribute your brand new, totally cool "
 "report, consult the mailing list ~a."
 msgstr ""
-"לעזרה בכתיבת־דוחות, או לשיתוף הדוח החדש והמדליק שיצרת, ניתן להיוועץ ברשימת "
+"לקבלת עזרה בכתיבת־דוחות, או לשיתוף דוח חדש ו'מדליק', ניתן להיוועץ ברשימת "
 "הדיוור ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:327
@@ -26454,7 +26443,7 @@ msgstr "שימוש בתמצית מס ברירת מחדל"
 msgid ""
 "Display all tax categories separately (one per line) instead of one single "
 "tax line.?"
-msgstr "הצגת כול סוגי־אב מס (אחת לכול שורה) במקום שורת מס בודדת?"
+msgstr "הצגת כל סוגי־אב מס בנפרד (אחת לכול שורה) במקום שורת מס בודדת?"
 
 #: gnucash/report/reports/standard/invoice.scm:292
 msgid "References"
@@ -27559,7 +27548,7 @@ msgstr "מספר חשבונית:"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:194
 msgid "To:"
-msgstr "ל:"
+msgstr "עבור:"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:196
 msgid "Your ref:"
@@ -28697,13 +28686,13 @@ msgstr "מספר לקוח"
 msgid ""
 "The format string to use for generating customer numbers. This is a printf-"
 "style format string."
-msgstr "מחרוזת תיבנות לחילול מזהה לקוח. זוהי מחרוזת תבנות בסגנון printf."
+msgstr "מחרוזת תבנית שתשמש לחילול מזהה לקוח. זוהי מחרוזת תבנית בסגנון printf."
 
 #: libgnucash/app-utils/business-prefs.scm:43
 msgid ""
 "The previous customer number generated. This number will be incremented to "
 "generate the next customer number."
-msgstr "מזהה הלקוח הקודם שחולל. מספר זה יגדל ב־,1 לחילול מזהה הלקוח הבא."
+msgstr "מזהה הלקוח הקודם שחולל. מספר הזיהוי יקודם ב־1 לחילול מזהה הלקוח הבא."
 
 #: libgnucash/app-utils/business-prefs.scm:44
 msgid "Employee number format"
@@ -29210,7 +29199,7 @@ msgstr "שגיאה %d בערך gnc_numeric סופי SX [%s‏]‏, שימוש ב
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1802
 #, c-format
 msgid "No exchange rate available in SX [%s] for %s -> %s, value is zero."
-msgstr "שערי חליפין לא זמינים ב־SX [%s] שער חליפיןור %s &larr; %s, ערך 'אפס'."
+msgstr "שערי חליפין לא זמינים ב־SX [%s]  עבור %s <- %s, ערך 'אפס'."
 
 #. Translators: This and the following strings appear on
 #. the account tab if the Tax Info column is displayed,
