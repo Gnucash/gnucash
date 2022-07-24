@@ -978,7 +978,6 @@ static RowInfo * row_get_info (gpointer row, GNCImportMainMatcher *info)
 enum
 {
     COMPLETION_LIST_ORIGINAL,
-    COMPLETION_LIST_COLLATED,
     COMPLETION_LIST_NORMALIZED_FOLDED,
     NUM_COMPLETION_COLS
 };
@@ -987,18 +986,15 @@ static void populate_list (gpointer key, gpointer value, GtkListStore *list)
 {
     GtkTreeIter iter;
     const char *original = key;
-    char *collated = g_utf8_collate_key (original, -1);
-    char *normalized = collated ? g_utf8_normalize (original, -1, G_NORMALIZE_ALL) : NULL;
+    char *normalized = g_utf8_normalize (original, -1, G_NORMALIZE_ALL);
     char *normalized_folded = normalized ? g_utf8_casefold (normalized, -1) : NULL;
     gtk_list_store_append (list, &iter);
     gtk_list_store_set (list, &iter,
                         COMPLETION_LIST_ORIGINAL, original,
-                        COMPLETION_LIST_COLLATED, collated,
                         COMPLETION_LIST_NORMALIZED_FOLDED, normalized_folded,
                         -1);
     g_free (normalized_folded);
     g_free (normalized);
-    g_free (collated);
 }
 
 static gboolean
