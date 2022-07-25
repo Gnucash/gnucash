@@ -985,6 +985,7 @@ enum
 {
     COMPLETION_LIST_ORIGINAL,
     COMPLETION_LIST_NORMALIZED_FOLDED,
+    COMPLETION_LIST_RENDERED,
     COMPLETION_LIST_FREQUENCY,
     NUM_COMPLETION_COLS
 };
@@ -996,12 +997,18 @@ static void populate_list (gpointer key, gpointer value, GtkListStore *list)
     guint count = GPOINTER_TO_UINT (value);
     char *normalized = g_utf8_normalize (original, -1, G_NORMALIZE_ALL);
     char *normalized_folded = normalized ? g_utf8_casefold (normalized, -1) : NULL;
+    char *rendered = value ?
+        g_strdup_printf ("%s (%d %s)", original, count,
+                         ngettext("occurrence", "occurrences", count)) :
+        g_strdup (original);
     gtk_list_store_append (list, &iter);
     gtk_list_store_set (list, &iter,
                         COMPLETION_LIST_ORIGINAL, original,
                         COMPLETION_LIST_NORMALIZED_FOLDED, normalized_folded,
+                        COMPLETION_LIST_RENDERED, rendered,
                         COMPLETION_LIST_FREQUENCY, count,
                         -1);
+    g_free (rendered);
     g_free (normalized_folded);
     g_free (normalized);
 }
@@ -1027,6 +1034,7 @@ setup_entry (GtkWidget *entry, gboolean sensitive, GHashTable *hash,
              const char *initial)
 {
     GtkEntryCompletion* completion;
+    GtkCellRenderer *cell;
     GtkListStore *list;
 
     gtk_entry_set_text (GTK_ENTRY (entry), sensitive ? initial : _("Disabled"));
@@ -1035,7 +1043,7 @@ setup_entry (GtkWidget *entry, gboolean sensitive, GHashTable *hash,
         return;
 
     list = gtk_list_store_new (NUM_COMPLETION_COLS, G_TYPE_STRING, G_TYPE_STRING,
-                               G_TYPE_UINT);
+                               G_TYPE_STRING, G_TYPE_UINT);
     g_hash_table_foreach (hash, (GHFunc)populate_list, list);
     if (!g_hash_table_lookup (hash, (gpointer)initial))
         populate_list ((gpointer)initial, NULL, list);
@@ -1045,10 +1053,18 @@ setup_entry (GtkWidget *entry, gboolean sensitive, GHashTable *hash,
 
     completion = gtk_entry_completion_new ();
     gtk_entry_completion_set_model (completion, GTK_TREE_MODEL(list));
-    gtk_entry_completion_set_text_column (completion, COMPLETION_LIST_ORIGINAL);
+    g_object_set (G_OBJECT (completion),
+                  "text-column", COMPLETION_LIST_ORIGINAL,
+                  NULL);
     gtk_entry_completion_set_match_func (completion,
                                          (GtkEntryCompletionMatchFunc)match_func,
                                          GTK_TREE_MODEL(list), NULL);
+
+    cell = gtk_cell_renderer_text_new ();
+    gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (completion), cell, TRUE);
+    gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion), cell,
+                                   "text", COMPLETION_LIST_RENDERED);
+
     gtk_entry_set_completion (GTK_ENTRY (entry), completion);
 }
 
