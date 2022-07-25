@@ -127,8 +127,6 @@ enum downloaded_cols
 /*static QofLogModule log_module = GNC_MOD_IMPORT;*/
 static QofLogModule log_module = G_MOD_IMPORT_MATCHER;
 
-static const gpointer one = GINT_TO_POINTER (1);
-
 void on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info);
 void on_matcher_cancel_clicked (GtkButton *button, gpointer user_data);
 gboolean on_matcher_delete_event (GtkWidget *widget, GdkEvent *event, gpointer data);
@@ -459,6 +457,14 @@ resolve_conflicts (GNCImportMainMatcher *info)
     }
 }
 
+static void
+increase_hash_count (GHashTable *hash, const char *key)
+{
+    guint count = GPOINTER_TO_UINT (g_hash_table_lookup (hash, (gpointer)key)) + 1;
+
+    DEBUG ("[%s] new count = %d", key, count);
+    g_hash_table_insert (hash, (gpointer)key, GUINT_TO_POINTER (count));
+}
 
 static void
 load_hash_tables (GNCImportMainMatcher *info)
@@ -486,15 +492,15 @@ load_hash_tables (GNCImportMainMatcher *info)
 
             key = xaccTransGetDescription (t);
             if (key && *key)
-                g_hash_table_insert (info->desc_hash, (gpointer)key, one);
+                increase_hash_count (info->desc_hash, key);
 
             key = xaccTransGetNotes (t);
             if (key && *key)
-                g_hash_table_insert (info->notes_hash, (gpointer)key, one);
+                increase_hash_count (info->notes_hash, key);
 
             key = xaccSplitGetMemo (s);
             if (key && *key)
-                g_hash_table_insert (info->memo_hash, (gpointer)key, one);
+                increase_hash_count (info->memo_hash, key);
         }
     }
     g_list_free (accounts_list);
@@ -979,6 +985,7 @@ enum
 {
     COMPLETION_LIST_ORIGINAL,
     COMPLETION_LIST_NORMALIZED_FOLDED,
+    COMPLETION_LIST_FREQUENCY,
     NUM_COMPLETION_COLS
 };
 
@@ -986,12 +993,14 @@ static void populate_list (gpointer key, gpointer value, GtkListStore *list)
 {
     GtkTreeIter iter;
     const char *original = key;
+    guint count = GPOINTER_TO_UINT (value);
     char *normalized = g_utf8_normalize (original, -1, G_NORMALIZE_ALL);
     char *normalized_folded = normalized ? g_utf8_casefold (normalized, -1) : NULL;
     gtk_list_store_append (list, &iter);
     gtk_list_store_set (list, &iter,
                         COMPLETION_LIST_ORIGINAL, original,
                         COMPLETION_LIST_NORMALIZED_FOLDED, normalized_folded,
+                        COMPLETION_LIST_FREQUENCY, count,
                         -1);
     g_free (normalized_folded);
     g_free (normalized);
@@ -1025,7 +1034,8 @@ setup_entry (GtkWidget *entry, gboolean sensitive, GHashTable *hash,
     if (!sensitive)
         return;
 
-    list = gtk_list_store_new (NUM_COMPLETION_COLS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+    list = gtk_list_store_new (NUM_COMPLETION_COLS, G_TYPE_STRING, G_TYPE_STRING,
+                               G_TYPE_UINT);
     g_hash_table_foreach (hash, (GHFunc)populate_list, list);
     if (!g_hash_table_lookup (hash, (gpointer)initial))
         populate_list ((gpointer)initial, NULL, list);
@@ -1094,7 +1104,7 @@ maybe_add_string (GNCImportMainMatcher *info, GHashTable *hash, const char *str)
         return;
     new_string = g_strdup (str);
     info->new_strings = g_list_prepend (info->new_strings, new_string);
-    g_hash_table_insert (hash, new_string, one);
+    increase_hash_count (hash, new_string);
 }
 
 static void
