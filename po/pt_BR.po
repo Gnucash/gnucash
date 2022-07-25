@@ -15,10 +15,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-22 06:33+0200\n"
-"PO-Revision-Date: 2022-07-18 13:22+0000\n"
+"PO-Revision-Date: 2022-07-25 00:18+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -8788,10 +8788,8 @@ msgid "Edit the global preferences of GnuCash"
 msgstr "Editar as preferências globais do GnuCash"
 
 #: gnucash/gnome-utils/gnc-main-window.c:345
-#, fuzzy
-#| msgid "<b>Tab Position</b>"
 msgid "Tab P_osition"
-msgstr "<b>Posição da Aba</b>"
+msgstr "P_osição da Aba"
 
 #: gnucash/gnome-utils/gnc-main-window.c:348
 msgid "Select sorting criteria for this page view"
@@ -16498,10 +16496,8 @@ msgid "Green"
 msgstr "Verde"
 
 #: gnucash/gtkbuilder/dialog-import.glade:871
-#, fuzzy
-#| msgid "Do not print transaction detail"
 msgid "Edit imported transaction details"
-msgstr "Não imprima os detalhes da transação"
+msgstr "Edite os detalhes das transações importadas"
 
 #: gnucash/gtkbuilder/dialog-import.glade:944
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:151
@@ -21890,24 +21886,18 @@ msgstr "Desativado"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1321
-#, fuzzy
-#| msgid "Assign a transfer account to the selection."
 msgid "_Assign a transfer account to the selection"
-msgstr "Atribua uma conta de transferência à seleção."
+msgstr "_Atribua uma conta de transferência à seleção"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1368
-#, fuzzy
-#| msgid "Description, Notes, or Memo"
 msgid "_Edit description, notes, or memo"
-msgstr "Descrição, notas ou memorando"
+msgstr "_Edite a descrição, as notas ou o memorando"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1377
-#, fuzzy
-#| msgid "Reset defaults"
 msgid "_Reset all edits"
-msgstr "Restaurar padrões"
+msgstr "_Redefina todas as edições"
 
 #: gnucash/import-export/import-main-matcher.c:1547
 msgctxt "Column header for 'Adding transaction'"
