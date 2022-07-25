@@ -1040,8 +1040,8 @@ setup_entry (GtkWidget *entry, gboolean sensitive, GHashTable *hash,
     if (!g_hash_table_lookup (hash, (gpointer)initial))
         populate_list ((gpointer)initial, NULL, list);
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (list),
-                                          COMPLETION_LIST_ORIGINAL,
-                                          GTK_SORT_ASCENDING);
+                                          COMPLETION_LIST_FREQUENCY,
+                                          GTK_SORT_DESCENDING);
 
     completion = gtk_entry_completion_new ();
     gtk_entry_completion_set_model (completion, GTK_TREE_MODEL(list));
