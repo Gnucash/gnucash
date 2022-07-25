@@ -36,10 +36,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-22 06:33+0200\n"
-"PO-Revision-Date: 2022-07-12 21:16+0000\n"
+"PO-Revision-Date: 2022-07-25 20:24+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -741,15 +741,15 @@ msgid ""
 "To schedule a transaction every year you can choose the monthly basic "
 "frequency and then set 'Every 12 months'."
 msgstr ""
-"Der Editor für die terminierten Buchungen verfügt über eine sehr flexible "
+"Der Editor für die geplanten Buchungen verfügt über eine sehr flexible "
 "Konfiguration der Häufigkeit. Die Standardhäufigkeit, um eine Buchung zu "
-"terminieren, sind täglich, wöchentlich und monatlich. Es können auch "
-"erweiterte Schemata eingerichtet werden. Einige Beispiele:\n"
+"planen, sind täglich, wöchentlich und monatlich. Es können auch erweiterte "
+"Schemata eingerichtet werden. Einige Beispiele:\n"
 "\n"
-"Um eine Buchung für jede dritte Woche zu terminieren, können Sie die "
-"wöchentliche Standardhäufigkeit wählen und dann 'Jede 3. Woche'.\n"
+"Um eine Buchung für jede dritte Woche zu planen, können Sie die wöchentliche "
+"Standardhäufigkeit wählen und dann 'Jede 3. Woche'.\n"
 "\n"
-"Um eine Buchung für jedes Jahr zu terminieren, können Sie die monatliche "
+"Um eine Buchung für jedes Jahr zu planen, können Sie die monatliche "
 "Standardhäufigkeit wählen und dann 'Alle 12 Monate'."
 
 #: doc/tip_of_the_day.list.c:117
@@ -3171,8 +3171,8 @@ msgstr "A_ktionen"
 msgid ""
 "This Scheduled Transaction has changed; are you sure you want to cancel?"
 msgstr ""
-"Diese terminierte Buchung wurde geändert. Sind Sie sicher, dass Sie "
-"abbrechen wollen?"
+"Diese geplante Buchung wurde geändert. Sind Sie sicher, dass Sie abbrechen "
+"wollen?"
 
 #: gnucash/gnome/dialog-sx-editor2.c:636
 #, c-format
@@ -3194,12 +3194,12 @@ msgid ""
 "The Scheduled Transaction Editor cannot automatically balance this "
 "transaction. Should it still be entered?"
 msgstr ""
-"Der Terminierte-Buchungen-Editor kann diese Buchung nicht automatisch "
+"Der Editor für geplante Buchungen kann diese Buchung nicht automatisch "
 "ausgeglichen erstellen. Soll sie trotzdem erstellt werden?"
 
 #: gnucash/gnome/dialog-sx-editor2.c:712 gnucash/gnome/dialog-sx-editor.c:492
 msgid "Please name the Scheduled Transaction."
-msgstr "Bitte geben Sie der terminierten Buchung einen Namen."
+msgstr "Bitte geben Sie der geplanten Buchung einen Namen."
 
 #: gnucash/gnome/dialog-sx-editor2.c:739 gnucash/gnome/dialog-sx-editor.c:518
 #, c-format
@@ -3207,20 +3207,20 @@ msgid ""
 "A Scheduled Transaction with the name \"%s\" already exists. Are you sure "
 "you want to name this one the same?"
 msgstr ""
-"Eine terminierte Buchung mit dem Namen »%s« existiert bereits. Sind Sie "
-"sicher, dass die aktuelle den gleichen Namen erhalten soll?"
+"Eine geplante Buchung mit dem Namen »%s« existiert bereits. Sind Sie sicher, "
+"dass die aktuelle den gleichen Namen erhalten soll?"
 
 #: gnucash/gnome/dialog-sx-editor2.c:767
 msgid "Scheduled Transactions with variables cannot be automatically created."
 msgstr ""
-"Terminierte Buchungen mit Variablen können nicht automatisch erstellt werden."
+"Geplante Buchungen mit Variablen können nicht automatisch erstellt werden."
 
 #: gnucash/gnome/dialog-sx-editor2.c:777 gnucash/gnome/dialog-sx-editor.c:627
 msgid ""
 "Scheduled Transactions without a template transaction cannot be "
 "automatically created."
 msgstr ""
-"Terminierte Buchungen ohne Buchungsvorlage können nicht automatisch erstellt "
+"Geplante Buchungen ohne Buchungsvorlage können nicht automatisch erstellt "
 "werden."
 
 #: gnucash/gnome/dialog-sx-editor2.c:792 gnucash/gnome/dialog-sx-editor.c:542
@@ -3245,8 +3245,8 @@ msgid ""
 "You have attempted to create a Scheduled Transaction which will never run. "
 "Do you really want to do this?"
 msgstr ""
-"Sie versuchen gerade, eine Terminierte Buchung zu erstellen, die nie "
-"auftritt. Wollen Sie wirklich fortsetzen?"
+"Sie versuchen gerade, eine geplante Buchung zu erstellen, die nie auftritt. "
+"Wollen Sie wirklich fortsetzen?"
 
 #: gnucash/gnome/dialog-sx-editor2.c:1301
 msgid ""
@@ -3278,8 +3278,8 @@ msgid ""
 "Scheduled Transactions with variables or involving more than one commodity "
 "cannot be automatically created."
 msgstr ""
-"Terminierte Buchungen mit Variablen oder mit mehr als einem Wertpapier "
-"können nicht automatisch erstellt werden."
+"Geplante Buchungen mit Variablen oder mit mehr als einem Wertpapier können "
+"nicht automatisch erstellt werden."
 
 #: gnucash/gnome/dialog-sx-editor.c:679
 #, c-format
@@ -3318,17 +3318,17 @@ msgid ""
 "The Scheduled Transaction is unbalanced. You are strongly encouraged to "
 "correct this situation."
 msgstr ""
-"Diese Terminierte Buchung ist nicht ausgeglichen. Bitte korrigieren Sie "
-"diese Buchung."
+"Diese geplante Buchung ist nicht ausgeglichen. Bitte korrigieren Sie diese "
+"Buchung."
 
 #: gnucash/gnome/dialog-sx-from-trans.c:789
 msgid ""
 "Cannot create a Scheduled Transaction from a Transaction currently being "
 "edited. Please Enter the Transaction before Scheduling."
 msgstr ""
-"Es kann keine Terminierte Buchung von einer Buchung erstellt werden, die "
+"Es kann keine geplante Buchung von einer Buchung erstellt werden, die "
 "ihrerseits gerade bearbeitet wird. Bitte speichern Sie die Buchung, bevor "
-"Sie eine Terminierte Buchung daraus erstellen wollen."
+"Sie eine geplante Buchung daraus erstellen wollen."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:402
 msgid "Ignored"
@@ -3375,10 +3375,10 @@ msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transactions automatically created)"
 msgstr[0] ""
-"Es gibt derzeit keine terminierten Buchungen einzugeben. (Eine Buchung "
-"automatisch erstellt)"
+"Es gibt derzeit keine geplante Buchung einzugeben. (Eine Buchung automatisch "
+"erstellt)"
 msgstr[1] ""
-"Es gibt derzeit keine terminierten Buchungen einzugeben. (%d Buchungen "
+"Es gibt derzeit keine geplanten Buchungen einzugeben. (%d Buchungen "
 "automatisch erstellt)"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1000
@@ -3637,11 +3637,11 @@ msgstr "Term_inierte Buchungen"
 # Fixme: Source should have HEllip?
 #: gnucash/gnome/gnc-plugin-basic-commands.c:166
 msgid "_Scheduled Transaction Editor"
-msgstr "_Editor für Terminierte Buchungen"
+msgstr "_Editor für geplante Buchungen"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:167
 msgid "The list of Scheduled Transactions"
-msgstr "Die Liste der terminierten Buchungen"
+msgstr "Die Liste der geplanten Buchungen"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:171
 msgid "Since _Last Run..."
@@ -3649,7 +3649,7 @@ msgstr "Seit _letztem Aufruf..."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:172
 msgid "Create Scheduled Transactions since the last time run"
-msgstr "Alle terminierten Buchungen seit dem letzten Aufruf erstellen."
+msgstr "Alle geplanten Buchungen seit dem letzten Aufruf erstellen."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:176
 msgid "_Mortgage & Loan Repayment..."
@@ -3657,7 +3657,7 @@ msgstr "_Hypothek & Darlehen Assistent..."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:177
 msgid "Setup scheduled transactions for repayment of a loan"
-msgstr "Terminierte Buchungen einrichten, die ein Darlehen tilgen sollen"
+msgstr "Geplante Buchungen einrichten, die ein Darlehen tilgen sollen"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:180
 #: gnucash/report/report-core.scm:153
@@ -3733,8 +3733,7 @@ msgstr "»Tipp des Tages« anzeigen"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:545
 msgid "There are no Scheduled Transactions to be entered at this time."
-msgstr ""
-"Es gibt derzeit keine terminierten Buchungen, die gebucht werden sollten."
+msgstr "Es gibt derzeit keine geplanten Buchungen, die gebucht werden sollten."
 
 #. Translators: %d is the number of transactions. This is a
 #. ngettext(3) message.
@@ -3747,11 +3746,11 @@ msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transactions automatically created)"
 msgstr[0] ""
-"Es gibt keine terminierten Buchungen, die erstellt werden sollen. (Eine "
-"Buchung automatisch erstellt)"
+"Es gibt keine geplante Buchung, die erstellt werden soll. (Eine Buchung "
+"automatisch erstellt)"
 msgstr[1] ""
-"Es gibt keine terminierten Buchungen, die erstellt werden sollen. (%d "
-"Buchungen automatisch erstellt)"
+"Es gibt keine geplanten Buchungen, die erstellt werden sollen. (%d Buchungen "
+"automatisch erstellt)"
 
 #: gnucash/gnome/gnc-plugin-budget.c:63
 msgid "_New Budget"
@@ -5534,7 +5533,7 @@ msgstr "_Terminiert..."
 #: gnucash/gnome/gnc-plugin-page-register.c:529
 msgid ""
 "Create a Scheduled Transaction with the current transaction as a template"
-msgstr "Terminierte Buchung erstellen mit aktuellem Buchungssatz als Vorlage"
+msgstr "Geplante Buchung mit aktuellem Buchungssatz als Vorlage erstellen"
 
 #. Translators: The following 2 are Scrub actions in register view
 #: gnucash/gnome/gnc-plugin-page-register2.c:397
@@ -6248,7 +6247,7 @@ msgstr "_Neu"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:140
 msgid "Create a new scheduled transaction"
-msgstr "Neue terminierte Buchung erstellen"
+msgstr "Neue geplante Buchung erstellen"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:145
 msgid "_New 2"
@@ -6256,11 +6255,11 @@ msgstr "_Neu"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:146
 msgid "Create a new scheduled transaction 2"
-msgstr "Neue terminierte Buchung erstellen"
+msgstr "Neue geplante Buchung erstellen"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:152
 msgid "Edit the selected scheduled transaction"
-msgstr "Ausgewählte terminierte Buchung bearbeiten"
+msgstr "Ausgewählte geplante Buchung bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:157
 msgid "_Edit 2"
@@ -6268,11 +6267,11 @@ msgstr "_Bearbeiten (neu)"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:158
 msgid "Edit the selected scheduled transaction 2"
-msgstr "Ausgewählte terminierte Buchung bearbeiten"
+msgstr "Ausgewählte geplante Buchung bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:164
 msgid "Delete the selected scheduled transaction"
-msgstr "Ausgewählte terminierte Buchung löschen"
+msgstr "Ausgewählte geplante Buchung löschen"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:441
 #: gnucash/gtkbuilder/dialog-account.glade:553
@@ -6289,8 +6288,8 @@ msgstr "Bevorstehende Buchungen"
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete %d scheduled transactions?"
 msgstr[0] ""
-"Sind Sie sicher, dass Sie die ausgewählte Terminierte Buchung löschen wollen?"
-msgstr[1] "Sind Sie sicher, dass Sie %d Terminierte Buchungen löschen wollen?"
+"Sind Sie sicher, dass Sie die ausgewählte geplante Buchung löschen wollen?"
+msgstr[1] "Sind Sie sicher, dass Sie %d geplanten Buchungen löschen wollen?"
 
 #: gnucash/gnome/gnc-plugin-register2.c:57
 #: gnucash/gnome/gnc-plugin-register.c:58
@@ -6722,8 +6721,7 @@ msgstr "Präzise Berichte und Grafiken Ihrer Finanzdaten erzeugen"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:21
 msgid "Set up scheduled transactions to avoid repeated data entry"
-msgstr ""
-"Terminierte Buchungen einrichten, um wiederholte Dateneingabe zu vermeiden"
+msgstr "Geplante Buchungen einrichten, um wiederholte Dateneingabe zu vermeiden"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:22
 msgid ""
@@ -10157,7 +10155,7 @@ msgstr "Ausgleichskonto"
 #. See "MAX_DATE_LENGTH" in https://code.gnucash.org/docs/MAINT/group__Date.html
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:1489
 msgid " Scheduled "
-msgstr " Terminiert "
+msgstr " Geplant "
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2316
 #: gnucash/register/ledger-core/split-register-control.c:1521
@@ -11611,9 +11609,9 @@ msgid ""
 "the initial opening of the data file when GnuCash starts. If this setting is "
 "active, run the \"since last run\" process, otherwise it is not run."
 msgstr ""
-"Diese Einstellung bestimmt, ob die Aktion »Terminierte Buchungen->Seit "
-"letztem Aufruf...« beim Öffnen einer Datei automatisch ausgeführt wird. Nur "
-"wenn die Einstellung aktiviert ist, wird der Prozess gestartet."
+"Diese Einstellung bestimmt, ob die Aktion »Geplante Buchungen->Seit letztem "
+"Aufruf...« beim Öffnen einer Datei automatisch ausgeführt wird. Nur wenn die "
+"Einstellung aktiviert ist, wird der Prozess gestartet."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:22
 msgid "Show \"since last run\" notification dialog when a file is opened."
@@ -11629,9 +11627,9 @@ msgid ""
 "show the dialog, otherwise it is not shown."
 msgstr ""
 "Diese Einstellung bestimmt, ob nur der Benachrichtigungsdialog »Seit letztem "
-"Aufruf...« der terminierten Buchungen beim Öffnen einer Datei angezeigt "
-"wird, wenn die »Seit letztem Aufruf«-Verarbeitung aktiviert ist. Nur wenn "
-"diese Einstellung aktiviert ist, wird der Dialog angezeigt."
+"Aufruf...« der geplanten Buchungen beim Öffnen einer Datei angezeigt wird, "
+"wenn die »Seit letztem Aufruf«-Verarbeitung aktiviert ist. Nur wenn diese "
+"Einstellung aktiviert ist, wird der Dialog angezeigt."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:27
 msgid ""
@@ -11652,7 +11650,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:35
 msgid "Set the \"auto create\" flag by default"
 msgstr ""
-"»Automatisch erstellen« für neue terminierte Buchungen als Voreinstellung "
+"»Automatisch erstellen« für neue geplante Buchungen als Voreinstellung "
 "wählen."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:36
@@ -11662,21 +11660,21 @@ msgid ""
 "transaction creation, or at any later time by editing the scheduled "
 "transaction."
 msgstr ""
-"Wenn aktiviert, werden neu erstellte Terminierte Buchungen »Automatisch "
+"Wenn aktiviert, werden neu erstellte geplante Buchungen »Automatisch "
 "erstellen« als Voreinstellung aktiviert haben. Diese Einstellung kann bei "
-"jeder Terminierten Buchung geändert werden."
+"jeder geplanten Buchung geändert werden."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:40
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:41
 msgid "How many days in advance to notify the user."
 msgstr ""
-"Anzahl der Tage im Voraus, mit denen über die Terminierte Buchungen "
+"Anzahl der Tage im Voraus, mit denen über die geplanten Buchungen "
 "benachrichtigt werden soll."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:52
 msgid "Set the \"notify\" flag by default"
 msgstr ""
-"»Benachrichtigen« für neue terminierte Buchungen als Voreinstellung wählen."
+"»Benachrichtigen« für neue geplante Buchungen als Voreinstellung wählen."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:53
 msgid ""
@@ -11685,16 +11683,16 @@ msgid ""
 "creation, or at any later time by editing the scheduled transaction. This "
 "setting only has meaning if the create-auto setting is active."
 msgstr ""
-"Wenn gewählt, werden neu erstellte Terminierte Buchungen »Benachrichtigen« "
-"als Voreinstellung aktiviert haben. Diese Einstellung kann bei jeder "
-"Terminierten Buchung auch nachträglich geändert werden. Diese Einstellung "
-"ist nur von Bedeutung, wenn »Automatisch erstellen« aktiviert ist."
+"Wenn gewählt, werden neu erstellte geplante Buchungen »Benachrichtigen« als "
+"Voreinstellung aktiviert haben. Diese Einstellung kann bei jeder geplanten "
+"Buchung auch nachträglich geändert werden. Diese Einstellung ist nur von "
+"Bedeutung, wenn »Automatisch erstellen« aktiviert ist."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:57
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:58
 msgid "How many days in advance to remind the user."
 msgstr ""
-"Anzahl der Tage im Voraus, die an Terminierte Buchungen erinnert werden soll."
+"Anzahl der Tage im Voraus, die an geplante Buchungen erinnert werden soll."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:5
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:6
@@ -14222,10 +14220,10 @@ msgstr ""
 "Dieser Assistent ist eine Schritt-für-Schritt Anleitung, um die Rückzahlung "
 "eines Darlehens in GnuCash einzurichten. Sie können die Parameter Ihres "
 "Darlehens und der Tilgungsraten angeben. Mit diesen Informationen werden die "
-"entsprechenden terminierten Buchungen erstellt.\n"
+"entsprechenden geplanten Buchungen erstellt.\n"
 "\n"
 "Wenn Ihnen ein Fehler unterläuft oder Sie später Änderungen vornehmen "
-"möchten, können Sie die erstellte terminierte Buchung direkt ändern."
+"möchten, können Sie die erstellte geplante Buchung direkt ändern."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:111
 msgid "Loan / Mortgage Repayment Setup"
@@ -14278,7 +14276,7 @@ msgid ""
 msgstr ""
 "Geben Sie die Anzahl der Monate an, die noch getilgt werden müssen. Daraus "
 "resultiert sowohl der noch zu tilgende Betrag als auch die Dauer der "
-"terminierten Buchung."
+"geplanten Buchung."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:288
 msgid "Months Remaining"
@@ -14400,7 +14398,7 @@ msgid ""
 "Review the details below and if correct press Apply to create the schedule."
 msgstr ""
 "\n"
-"Prüfen Sie die Details unten und klicken Sie »Anwenden«, um die terminierten "
+"Prüfen Sie die Details unten und klicken Sie »Anwenden«, um die geplanten "
 "Buchungen zu erstellen."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1111
@@ -16378,7 +16376,7 @@ msgstr "Den einen leeren Eintrag in den Feldern ausrechnen."
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:514
 msgid "<b>Payment Options</b>"
-msgstr "<b>Zahlungsraten Optionen</b>"
+msgstr "<b>Darlehensoptionen</b>"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:535
 msgid "Payment Total"
@@ -18469,8 +18467,8 @@ msgid ""
 "The following Scheduled Transactions reference the deleted account and must "
 "now be corrected. Press OK to edit them."
 msgstr ""
-"Die folgenden terminierten Buchungen gehören zu dem gelöschten Konto und "
-"müssen nun geändert werden. Klicken Sie Ok, um sie zu ändern."
+"Die folgenden geplanten Buchungen gehören zu dem gelöschten Konto und müssen "
+"nun geändert werden. Klicken Sie Ok, um sie zu ändern."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:123
 #: gnucash/gtkbuilder/gnc-frequency.glade:171
@@ -18492,7 +18490,7 @@ msgstr "Jährlich"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:144
 msgid "Make Scheduled Transaction"
-msgstr "Terminierte Buchung erstellen"
+msgstr "Geplante Buchung erstellen"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:159
 msgid "Advanced..."
@@ -18543,7 +18541,7 @@ msgstr "Neue Buchungen _automatisch erstellen"
 #: gnucash/gtkbuilder/dialog-sx.glade:579
 msgid "Set the 'auto-create' flag on newly created scheduled transactions."
 msgstr ""
-"»Automatisch erstellen« für neue terminierte Buchungen als Voreinstellung "
+"»Automatisch erstellen« für neue geplante Buchungen als Voreinstellung "
 "wählen."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:599
@@ -18565,7 +18563,7 @@ msgstr "Be_nachrichtigen, bevor neue Buchungen erstellt werden"
 #: gnucash/gtkbuilder/dialog-sx.glade:675
 msgid "Set the 'notify' flag on newly created scheduled transactions."
 msgstr ""
-"»Benachrichtigen« für neue terminierte Buchungen als Voreinstellung wählen."
+"»Benachrichtigen« für neue geplante Buchungen als Voreinstellung wählen."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:694
 msgid "Crea_te in advance"
@@ -18589,7 +18587,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-sx.glade:788
 msgid "Edit Scheduled Transaction"
-msgstr "Terminierte Buchungen bearbeiten"
+msgstr "Geplante Buchungen bearbeiten"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:954
 msgid "Create in advance"
@@ -25161,7 +25159,7 @@ msgstr "Kontenübersicht"
 
 #: gnucash/report/reports/standard/account-summary.scm:70
 msgid "Future Scheduled Transactions Summary"
-msgstr "Zukünftige Terminierte Buchungen"
+msgstr "Zukünftige geplante Buchungen"
 
 #: gnucash/report/reports/standard/account-summary.scm:72
 #: gnucash/report/reports/standard/balance-sheet.scm:75
