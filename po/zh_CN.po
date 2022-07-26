@@ -17,7 +17,7 @@
 # TianXing_Yi <ytx.cash@gmail.com>, 2021.
 # cjh <cjh@cjh0613.com>, 2021.
 # Eric <spice2wolf@gmail.com>, 2021.
-# J0kWang <lianjiefly@gmail.com>, 2021.
+# J0kWang <lianjiefly@gmail.com>, 2021, 2022.
 # YTX <ytx.cash@gmail.com>, 2021, 2022.
 # 李元基 <lovedebushiu@qq.com>, 2022.
 # Eric <alchemillatruth@purelymail.com>, 2022.
@@ -28,8 +28,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-22 06:33+0200\n"
-"PO-Revision-Date: 2022-07-22 07:21+0000\n"
-"Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
+"PO-Revision-Date: 2022-07-26 15:51+0000\n"
+"Last-Translator: J0kWang <lianjiefly@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -18641,6 +18641,9 @@ msgid ""
 "* It ignores GnuCash's preferences like \"Close log window when finished\".\n"
 "* To report issues read"
 msgstr ""
+"意思是：\n"
+"*它无视GnuCash的 \"完成后关闭日志窗口 \"等偏好。\n"
+"*报告问题的阅读(状态)"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:141
 msgid ""
