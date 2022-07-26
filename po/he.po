@@ -11,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-22 06:33+0200\n"
-"PO-Revision-Date: 2022-07-26 07:25+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"PO-Revision-Date: 2022-07-26 15:51+0000\n"
+"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -15233,7 +15233,7 @@ msgstr "בחירת מידע משתמש כאן..."
 msgid ""
 "The customer ID number. If left blank a reasonable number will be chosen for "
 "you"
-msgstr "מזהה הלקוח. אם השדה יישאר ריק, המערכת תקצה מזהה־ספק סביר."
+msgstr "מזהה הלקוח. אם השדה יישאר ריק, המערכת תקצה מזהה־לקוח סביר"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:258
 #: gnucash/gtkbuilder/dialog-customer.glade:790
@@ -23631,7 +23631,7 @@ msgstr "פיזור:"
 #: gnucash/report/reports/example/welcome-to-gnucash.scm:41
 #, scheme-format
 msgid "Welcome to GnuCash ~a !"
-msgstr "ברוכים הבאים לגנוקאש ~a !"
+msgstr "ברוך בואך לגנוקאש ~a !"
 
 #: gnucash/report/reports/example/welcome-to-gnucash.scm:44
 #, scheme-format
