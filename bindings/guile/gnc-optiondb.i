@@ -929,6 +929,17 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         return gnc_relative_date_to_time64(scm_relative_date_get_period(date));
     }
 
+    void gnc_register_complex_boolean_option(GncOptionDBPtr&, const char*,
+                                             const char*, const char*,
+                                             const char*, bool, SCM);
+
+    void gnc_register_multichoice_callback_option(GncOptionDBPtr&, const char*,
+                                                  const char*, const char*,
+                                                  const char*, const char*,
+                                                  GncMultichoiceOptionChoices&&,
+                                                  SCM);
+
+
 %} //%header
 
 %ignore GncOptionMultichoiceKeyType;
@@ -1531,7 +1542,66 @@ inline SCM return_scm_value(ValueType value)
                     return SCM_BOOL_F;
             }, swig_get_option($self));
     }
+
 };
+
+%inline %{
+/**
+ * Create a new complex boolean option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option.
+ * @param widget_changed_cb A Scheme callback to run from the UIItem's "changed" signal.
+ */
+void gnc_register_complex_boolean_option(GncOptionDBPtr& db,
+                                         const char* section, const char* name,
+                                         const char* key,
+                                         const char* doc_string,
+                                         bool value, SCM widget_changed_cb)
+{
+    GncOption option{section, name, key, doc_string, value,
+            GncOptionUIType::BOOLEAN};
+    option.set_widget_changed (widget_changed_cb);
+    db->register_option(section, std::move(option));
+}
+
+/**
+ * Create a new multichoice option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The set of possible values for the option. Only one can be selected. Note that the value will be moved from the parameter and using the parameter after this call will result in undefined behavior.
+ * @param widget_changed_cb A Scheme callback to run from the UIItem's "changed" signal.
+ */
+void
+gnc_register_multichoice_callback_option(GncOptionDBPtr& db,
+                                         const char* section,
+                                         const char* name, const char* key,
+                                         const char* doc_string,
+                                         const char* default_val,
+                                         GncMultichoiceOptionChoices&& choices,
+                                         SCM widget_changed_cb)
+{
+    std::string defval{default_val};
+    auto found{std::find_if(choices.begin(), choices.end(),
+                            [&defval](auto& choice)->bool {
+                                return defval == std::get<0>(choice);
+                            })};
+    if (found == choices.end())
+        defval = (choices.empty() ? std::string{"None"} :
+                  std::get<0>(choices.at(0)));
+    GncOption option{GncOptionMultichoiceValue{section, name, key, doc_string,
+                defval.c_str(), std::move(choices)}};
+    option.set_widget_changed(widget_changed_cb);
+    db->register_option(section, std::move(option));
+}
+
+%}
 
 %extend GncOptionDB {
     %template(set_option_string) set_option<std::string>;

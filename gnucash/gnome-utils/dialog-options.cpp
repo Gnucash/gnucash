@@ -180,6 +180,11 @@ GncOptionGtkUIItem::set_widget(GtkWidget* widget)
     m_widget = static_cast<GtkWidget*>(g_object_ref(widget));
 }
 
+SCM
+GncOptionGtkUIItem::get_widget_scm_value(const GncOption& option) const
+{
+    return SCM_BOOL_F;
+}
 
 static void dialog_reset_cb(GtkWidget * w, gpointer data);
 static void dialog_list_select_cb (GtkTreeSelection *selection, gpointer data);
@@ -238,7 +243,15 @@ void
 gnc_option_changed_widget_cb(GtkWidget *widget, GncOption* option)
 {
     if (!option) return;
-    const_cast<GncOptionUIItem*>(option->get_ui_item())->set_dirty(true);
+    auto ui_item{option->get_ui_item()};
+    auto widget_changed_cb{option->get_widget_changed()};
+    auto gtk_ui_item{dynamic_cast<GncOptionGtkUIItem*>(ui_item)};
+    if (widget_changed_cb && gtk_ui_item)
+    {
+        SCM widget_value{gtk_ui_item->get_widget_scm_value(*option)};
+        scm_call_1(static_cast<SCM>(widget_changed_cb), widget_value);
+    }
+    const_cast<GncOptionUIItem*>(ui_item)->set_dirty(true);
     dialog_changed_internal(widget, true);
 }
 
@@ -445,6 +458,11 @@ dialog_append_page(GncOptionsDialog* dlg, GncOptionSectionPtr& section)
                              GTK_WIDGET(page_content_box), page_label);
 
     /* Switch to selection from a list if the page count threshold is reached */
+    /* Run any callbacks on the default widget values. */
+    section->foreach_option(
+        [](GncOption& option) {
+            gnc_option_changed_option_cb(nullptr, &option);
+        });
     return setup_notebook_pages(dlg, page_content_box, name);
 }
 
@@ -838,6 +856,12 @@ public:
         auto widget{GTK_TOGGLE_BUTTON(get_widget())};
         option.set_value(static_cast<bool>(gtk_toggle_button_get_active(widget)));
     }
+    SCM get_widget_scm_value(const GncOption& option) const override
+    {
+        auto widget{GTK_TOGGLE_BUTTON(get_widget())};
+        return gtk_toggle_button_get_active(widget) ?
+            SCM_BOOL_T : SCM_BOOL_F;
+    }
 };
 
 template <> GtkWidget *
@@ -1101,6 +1125,13 @@ public:
     {
         auto widget{GTK_COMBO_BOX(get_widget())};
         option.set_value<uint16_t>(static_cast<uint16_t>(gtk_combo_box_get_active(widget)));
+    }
+    SCM get_widget_scm_value(const GncOption& option) const override
+    {
+        auto widget{GTK_COMBO_BOX(get_widget())};
+        auto id{gtk_combo_box_get_active(widget)};
+        auto value{option.permissible_value(id)};
+        return scm_from_utf8_symbol(value);
     }
 };
 

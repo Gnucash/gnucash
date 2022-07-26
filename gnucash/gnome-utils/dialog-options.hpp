@@ -32,6 +32,7 @@
 
 #include <vector>
 
+#include <libguile.h>
 #include <gnc-option-uitype.hpp>
 #include <gnc-option-ui.hpp>
 
@@ -92,6 +93,7 @@ public:
     void clear_ui_item() override;
     void set_widget(GtkWidget* widget);
     virtual GtkWidget* const get_widget() const { return m_widget; }
+    virtual SCM get_widget_scm_value(const GncOption&) const;
     static WidgetCreateFunc option_widget_factory(GncOption& option,
                                                   GtkGrid* page,
                                                   GtkLabel* name,

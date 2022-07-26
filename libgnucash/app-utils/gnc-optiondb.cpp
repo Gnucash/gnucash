@@ -644,17 +644,6 @@ gnc_register_simple_boolean_option(GncOptionDB* db,
 }
 
 void
-gnc_register_complex_boolean_option(GncOptionDB* db,
-                                    const char* section, const char* name,
-                                    const char* key, const char* doc_string,
-                                    bool value)
-{
-    GncOption option{section, name, key, doc_string, value,
-            GncOptionUIType::BOOLEAN};
-    db->register_option(section, std::move(option));
-}
-
-void
 gnc_register_pixmap_option(GncOptionDB* db, const char* section,
                            const char* name, const char* key,
                            const char* doc_string, std::string value)
