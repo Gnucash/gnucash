@@ -62,6 +62,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 void gnc_prices_dialog_destroy_cb (GtkWidget *object, gpointer data);
 void gnc_prices_dialog_close_cb (GtkDialog *dialog, gpointer data);
+void gnc_prices_dialog_help_cb (GtkDialog *dialog, gpointer data);
 void gnc_prices_dialog_edit_clicked (GtkWidget *widget, gpointer data);
 void gnc_prices_dialog_remove_clicked (GtkWidget *widget, gpointer data);
 void gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data);
@@ -131,6 +132,15 @@ gnc_prices_dialog_close_cb (GtkDialog *dialog, gpointer data)
     ENTER(" ");
     gnc_close_gui_component_by_data (DIALOG_PRICE_DB_CM_CLASS, pdb_dialog);
     LEAVE(" ");
+}
+
+
+void
+gnc_prices_dialog_help_cb (GtkDialog *dialog, gpointer data)
+{
+    PricesDialog *pdb_dialog = data;
+
+    gnc_gnome_help (GTK_WINDOW (pdb_dialog->window), HF_HELP, HL_PRICE_DB);
 }
 
 
