@@ -12,7 +12,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-22 06:33+0200\n"
 "PO-Revision-Date: 2022-07-26 07:25+0000\n"
-"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -8843,7 +8843,7 @@ msgstr "חשבונאות לאנשים פרטיים ועסקים קטנים."
 msgid "translator-credits"
 msgstr ""
 "אבי מרקוביץ avi.markovitz@gmail.com 2022 ,2021, 2020, 2019\n"
-"ירון שהרבני 2021\n"
+"ירון שהרבני 2021, 2022\n"
 "אורי הוך 2006"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4913
@@ -15233,7 +15233,7 @@ msgstr "בחירת מידע משתמש כאן..."
 msgid ""
 "The customer ID number. If left blank a reasonable number will be chosen for "
 "you"
-msgstr "מזהה הלקוח. אם השדה ישאר ריק, המערכת תקצה מזהה־ ספק סביר"
+msgstr "מזהה הלקוח. אם השדה יישאר ריק, המערכת תקצה מזהה־ספק סביר."
 
 #: gnucash/gtkbuilder/dialog-customer.glade:258
 #: gnucash/gtkbuilder/dialog-customer.glade:790
@@ -21109,7 +21109,7 @@ msgstr "_הקצאת חשבון 'העברת' לשורות שנבחרו"
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1368
 msgid "_Edit description, notes, or memo"
-msgstr "עריכת תיאור, הערות, או מזכר"
+msgstr "_עריכת תיאור, הערות, או מזכר"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1377
@@ -29199,7 +29199,7 @@ msgstr "שגיאה %d בערך gnc_numeric סופי SX [%s‏]‏, שימוש ב
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1802
 #, c-format
 msgid "No exchange rate available in SX [%s] for %s -> %s, value is zero."
-msgstr "שערי חליפין לא זמינים ב־SX [%s]  עבור %s <- %s, ערך 'אפס'."
+msgstr "שערי חליפין לא זמינים ב־SX [%s] עבור %s <- %s, ערך 'אפס'."
 
 #. Translators: This and the following strings appear on
 #. the account tab if the Tax Info column is displayed,
