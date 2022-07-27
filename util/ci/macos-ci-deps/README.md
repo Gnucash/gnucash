@@ -11,7 +11,7 @@ Procedure:
 * Set up a Gtk-OSX build environment following the [GnuCash Quartz Build instructions](https://wiki.gnucash.org/wiki/MacOS/Quartz).
 * Retrieve [jhbuildrc-custom](https://github.com/gnucash/gnucash-on-osx/jhbuildrc-custom) and put it in ~/.config.
 * Set `modules = _modules_deps` on the appropriate line of `jhbuildrc-custom`.
-* If you are not running the same version of macOS as the Github actions virtual environment change the `setup_SDK()` line at the bottom of `jhbuildrc-custom` to `setup_SDK('10.15')`, substituting the VM's macOS version for '10.15'.
+* If you are not running the same version of macOS as the Github actions virtual environment change the `setup_SDK()` line at the bottom of `jhbuildrc-custom` to `setup_SDK('11')`, substituting the VM's macOS version for '11'.
 * Create the directory `/Users/runner/` and make yourself the owner:
   ```
   sudo mkdir /Users/runner
