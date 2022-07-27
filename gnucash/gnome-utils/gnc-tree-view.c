@@ -1037,13 +1037,17 @@ gnc_tree_view_set_state_section (GncTreeView *view,
             gchar *key = keys[idx];
             if (g_strcmp0 (key, STATE_KEY_SORT_COLUMN) == 0)
             {
-                gnc_tree_view_set_sort_column (view,
-                                               g_key_file_get_string (state_file, priv->state_section, key, NULL));
+                gchar *name = g_key_file_get_string (state_file, priv->state_section,
+                                                     key, NULL);
+                gnc_tree_view_set_sort_column (view, name);
+                g_free (name);
             }
             else if (g_strcmp0 (key, STATE_KEY_SORT_ORDER) == 0)
             {
-                gnc_tree_view_set_sort_order (view,
-                                              g_key_file_get_string (state_file, priv->state_section, key, NULL));
+                gchar *name = g_key_file_get_string (state_file, priv->state_section,
+                                                     key, NULL);
+                gnc_tree_view_set_sort_order (view, name);
+                g_free (name);
             }
             else if (g_strcmp0 (key, STATE_KEY_COLUMN_ORDER) == 0)
             {
