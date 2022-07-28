@@ -111,7 +111,7 @@ gnc_gwen_date_to_time64 (const GNC_GWEN_DATE* date)
      * that's the case then back up a day to get a real date for
      * posting.
      */
-    if (month == 2 && day <= 30 && day > (is_leap_year(year) ? 29 : 28))
+    while (month == 2 && day <= 30 && day > (is_leap_year(year) ? 29 : 28))
         --day;
     return gnc_dmy2time64_neutral(day, month, year);
 #else
@@ -600,16 +600,16 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
      * German). The value date is the effective date for financial
      * calculation purposes and is mandatory, the entry date is the
      * date that the financial institution posted the
-     * transaction. Since the entry date is normally closer to the
-     * date that the customer's book should recognize the transaction
-     * we prefer that date if present.
+     * transaction. Unfortunately if the transaction field doesn't
+     * provide an entry date AQBanking substitutes the date from the
+     * last balance instead of using the value date or NULL, making
+     * the field unreliable.
      */
-    post_date = AB_Transaction_GetDate(ab_trans);
     value_date = AB_Transaction_GetValutaDate(ab_trans);
-    if (post_date)
-         post_time = gnc_gwen_date_to_time64(post_date);
-    else if (value_date)
+    if (value_date)
          post_time = gnc_gwen_date_to_time64(value_date);
+    else if ((post_date = AB_Transaction_GetDate(ab_trans))) // always true
+         post_time = gnc_gwen_date_to_time64(post_date);
     else
     {
         g_warning("transaction_cb: Import had no transaction date");
