@@ -1058,7 +1058,7 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
     if (!(data->awaiting & AWAIT_BALANCES))
     {
          GtkWindow *parent = data->generic_importer ?
-              GTK_WINDOW(data->generic_importer) :
+              GTK_WINDOW(gnc_gen_trans_list_widget(data->generic_importer)) :
               GTK_WINDOW(data->parent);
          const char* balance_msg =
               _("The bank has sent balance information in its response.\n"
