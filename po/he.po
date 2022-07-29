@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-22 06:33+0200\n"
-"PO-Revision-Date: 2022-07-26 15:51+0000\n"
+"PO-Revision-Date: 2022-07-28 11:17+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -8025,7 +8025,7 @@ msgstr "מעתה"
 
 #: gnucash/gnome-utils/gnc-date-edit.c:888
 msgid "Calendar"
-msgstr "לוח שנה"
+msgstr "לוח שנה אזרחית"
 
 #: gnucash/gnome-utils/gnc-dense-cal.c:252
 msgid "12 months"
@@ -11620,7 +11620,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:165
 #: gnucash/gtkbuilder/dialog-preferences.glade:1212
 msgid "In the current calendar year"
-msgstr "השנה הקלנדרית הנוכחית"
+msgstr "השנה האזרחית הנוכחית"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:166
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:171
@@ -11629,8 +11629,8 @@ msgid ""
 "within the current calendar year or close to the current date based on a "
 "sliding window starting a set number of months backwards in time."
 msgstr ""
-"כאשר תאריך מוזן ללא שנה ניתן להשלימו לשנה הקלנדרית הנוכחית או קרוב לתאריך "
-"הנוכחי בהתבסס על חלון הזזה שמתחיל מספר מוגדר של חודשים אחורה בזמן."
+"כאשר תאריך מוזן ללא שנה, ניתן להשלימו לשנה האזרחית הנוכחית, או קרוב לתאריך "
+"הנוכחי, בהתבסס על חלון־גלישה שמתחיל מספר חודשים מוגדר, אחורה בזמן."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:170
 msgid ""
@@ -11970,12 +11970,12 @@ msgstr "הצגת תאריך הרישום ותאריך ההתאמה בבחירת 
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:326
 msgid "Show the calendar buttons"
-msgstr "הצגת לחצני לוח שנה"
+msgstr "הצגת לחצני לוח שנה אזרחית"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:327
 #: gnucash/gtkbuilder/dialog-preferences.glade:3417
 msgid "Show the calendar buttons Cancel, Today and Select."
-msgstr "הצגת לחצני לוח השנה, ביטול, היום ובחירה."
+msgstr "הצגת לחצני ביטול לוח השנה האזרחית, היום ובחירה."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:331
 msgid "Move the selection to the blank split on expand"
@@ -16473,7 +16473,7 @@ msgstr "כאשר תאריך מוזן ללא שנה, השנה תושלם"
 #: gnucash/gtkbuilder/dialog-preferences.glade:1218
 msgid ""
 "Dates will be completed so that they are within the current calendar year."
-msgstr "תאריכים יושלמו כך שיהיו במסגרת השנה הקלנדרית הנוכחית."
+msgstr "תאריכים יושלמו כך שיחולו במסגרת השנה האזרחית הנוכחית."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1231
 msgid ""
@@ -17017,7 +17017,7 @@ msgstr "הצגת תאריכי ר_ישום והתאמה"
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:3413
 msgid "Show the calendar b_uttons"
-msgstr "הצגת לחצני לוח ש_נה"
+msgstr "הצגת לחצני לוחה ש_נה האזרחית"
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:3429
@@ -18785,8 +18785,8 @@ msgid ""
 "Number of calendar units in the recurrence: E.g. Biweekly = every 2 weeks; "
 "Quarterly = every 3 months"
 msgstr ""
-"מספר יחידות קלנדריות במחזורים: כלומר דו שבועי = כל שבועיים, רבעוני = כל 3 "
-"חודשים"
+"מספר יחידות לוח־שנה־אזרחית במחזורים: כלומר דו שבועי = כל שבועיים, רבעוני = "
+"כל 3 חודשים"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:109
 msgid "beginning on"
@@ -28940,19 +28940,19 @@ msgstr ""
 
 #: libgnucash/app-utils/date-utilities.scm:923
 msgid "First day of the current calendar year."
-msgstr "היום הראשון, בלוח השנה הנוכחית."
+msgstr "היום הראשון, בלוח השנה האזרחית הנוכחית."
 
 #: libgnucash/app-utils/date-utilities.scm:930
 msgid "Last day of the current calendar year."
-msgstr "היום האחרון, בלוח השנה הנוכחית."
+msgstr "היום האחרון, בלוח השנה האזרחית הנוכחית."
 
 #: libgnucash/app-utils/date-utilities.scm:937
 msgid "First day of the previous calendar year."
-msgstr "היום הראשון, בלוח השנה הקודמת."
+msgstr "היום הראשון, בלוח השנה האזרחית הקודמת."
 
 #: libgnucash/app-utils/date-utilities.scm:944
 msgid "Last day of the previous calendar year."
-msgstr "היום האחרון, בלוח השנה הקודמת."
+msgstr "היום האחרון, בלוח השנה האזרחית הקודמת."
 
 #: libgnucash/app-utils/date-utilities.scm:948
 msgid "Start of next year"
@@ -28960,7 +28960,7 @@ msgstr "תחילת השנה הבאה"
 
 #: libgnucash/app-utils/date-utilities.scm:951
 msgid "First day of the next calendar year."
-msgstr "היום הראשון, בבלוח השנה הבאה."
+msgstr "היום הראשון, בבלוח השנה האזרחית הבאה."
 
 #: libgnucash/app-utils/date-utilities.scm:955
 msgid "End of next year"
