@@ -94,12 +94,12 @@ typedef struct _GncABImExContextImport GncABImExContextImport;
  * Initialize the gwenhywfar library by calling GWEN_Init() and setting up
  * gwenhywfar logging.
  */
-void gnc_GWEN_Init(void);
+void gnc_GWEN_Init (void);
 
 /**
  * Finalize the gwenhywfar library.
  */
-void gnc_GWEN_Fini(void);
+void gnc_GWEN_Fini (void);
 
 /**
  * If there is a cached AB_BANKING object, return it initialized.  Otherwise,
@@ -108,7 +108,7 @@ void gnc_GWEN_Fini(void);
  *
  * @return The AB_BANKING object
  */
-AB_BANKING *gnc_AB_BANKING_new(void);
+AB_BANKING *gnc_AB_BANKING_new (void);
 
 /**
  * Delete the AB_BANKING @a api.  If this is also the one that was cached by
@@ -116,7 +116,7 @@ AB_BANKING *gnc_AB_BANKING_new(void);
  *
  * @param api AB_BANKING or NULL for the cached AB_BANKING object
  */
-void gnc_AB_BANKING_delete(AB_BANKING *api);
+void gnc_AB_BANKING_delete (AB_BANKING *api);
 
 /**
  * Finish the AB_BANKING @a api.  If this is also the one that was cached by
@@ -127,7 +127,7 @@ void gnc_AB_BANKING_delete(AB_BANKING *api);
  * @param api AB_BANKING object
  * @return Zero on success
  */
-gint gnc_AB_BANKING_fini(AB_BANKING *api);
+gint gnc_AB_BANKING_fini (AB_BANKING *api);
 
 /**
  * Get the corresponding AqBanking account to the GnuCash account @a gnc_acc.
@@ -138,7 +138,7 @@ gint gnc_AB_BANKING_fini(AB_BANKING *api);
  * @param gnc_acc The GnuCash account to query for GNC_AB_ACCOUNT_SPEC reference data
  * @return The GNC_AB_ACCOUNT_SPEC found or NULL otherwise
  */
-GNC_AB_ACCOUNT_SPEC *gnc_ab_get_ab_account(const AB_BANKING *api, Account *gnc_acc);
+GNC_AB_ACCOUNT_SPEC *gnc_ab_get_ab_account (const AB_BANKING *api, Account *gnc_acc);
 
 /**
  * Print the value of @a value with two decimal places and @a value's
@@ -147,7 +147,7 @@ GNC_AB_ACCOUNT_SPEC *gnc_ab_get_ab_account(const AB_BANKING *api, Account *gnc_a
  * @param value AB_VALUE or NULL
  * @return A newly allocated string
  */
-gchar *gnc_AB_VALUE_to_readable_string(const AB_VALUE *value);
+gchar *gnc_AB_VALUE_to_readable_string (const AB_VALUE *value);
 
 /**
  * Return the job as string.
@@ -155,7 +155,7 @@ gchar *gnc_AB_VALUE_to_readable_string(const AB_VALUE *value);
  * @param value GNC_AB_JOB or NULL
  * @return A newly allocated string
  */
-gchar *gnc_AB_JOB_to_readable_string(const GNC_AB_JOB *job);
+gchar *gnc_AB_JOB_to_readable_string (const GNC_AB_JOB *job);
 
 /**
  * Return the job_id as string.
@@ -163,7 +163,7 @@ gchar *gnc_AB_JOB_to_readable_string(const GNC_AB_JOB *job);
  * @param job_id
  * @return A newly allocated string
  */
-gchar *gnc_AB_JOB_ID_to_string(gulong job_id);
+gchar *gnc_AB_JOB_ID_to_string (gulong job_id);
 
 /**
  * Retrieve the merged "remote name" fields from a transaction.  The returned
@@ -173,7 +173,7 @@ gchar *gnc_AB_JOB_ID_to_string(gulong job_id);
  * @param ab_trans AqBanking transaction
  * @return A newly allocated string or NULL otherwise
  */
-gchar *gnc_ab_get_remote_name(const AB_TRANSACTION *ab_trans);
+gchar *gnc_ab_get_remote_name (const AB_TRANSACTION *ab_trans);
 
 /**
  * Retrieve the merged purpose fields from a transaction.  The returned string
@@ -183,7 +183,7 @@ gchar *gnc_ab_get_remote_name(const AB_TRANSACTION *ab_trans);
  * @param ab_trans AqBanking transaction
  * @return A newly allocated string, may be ""
  */
-gchar *gnc_ab_get_purpose(const AB_TRANSACTION *ab_trans, gboolean is_ofx);
+gchar *gnc_ab_get_purpose (const AB_TRANSACTION *ab_trans, gboolean is_ofx);
 
 /**
  * Create the appropriate description field for a GnuCash Transaction by the
@@ -193,7 +193,7 @@ gchar *gnc_ab_get_purpose(const AB_TRANSACTION *ab_trans, gboolean is_ofx);
  * @param ab_trans AqBanking transaction
  * @return A newly allocated string, may be ""
  */
-gchar *gnc_ab_description_to_gnc(const AB_TRANSACTION *ab_trans, gboolean is_ofx);
+gchar *gnc_ab_description_to_gnc (const AB_TRANSACTION *ab_trans, gboolean is_ofx);
 
 /**
  * Create the appropriate memo field for a GnuCash Split by the information
@@ -203,7 +203,7 @@ gchar *gnc_ab_description_to_gnc(const AB_TRANSACTION *ab_trans, gboolean is_ofx
  * @param ab_trans AqBanking transaction
  * @return A newly allocated string, may be ""
  */
-gchar *gnc_ab_memo_to_gnc(const AB_TRANSACTION *ab_trans);
+gchar *gnc_ab_memo_to_gnc (const AB_TRANSACTION *ab_trans);
 
 /**
  * Create an unbalanced and dirty GnuCash transaction with a split to @a gnc_acc
@@ -213,7 +213,7 @@ gchar *gnc_ab_memo_to_gnc(const AB_TRANSACTION *ab_trans);
  * @param gnc_acc Account of to use for the split
  * @return A dirty GnuCash transaction or NULL otherwise
  */
-Transaction *gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc);
+Transaction *gnc_ab_trans_to_gnc (const AB_TRANSACTION *ab_trans, Account *gnc_acc);
 
 /**
  * Import balances and transactions found in a AB_IMEXPORTER_CONTEXT into
@@ -239,9 +239,11 @@ Transaction *gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_ac
  * gnc_ab_ieci_get_job_list() must be called and the result freed with
  * AB_Job_List2_FreeAll()
  */
-GncABImExContextImport *gnc_ab_import_context(
-    AB_IMEXPORTER_CONTEXT *context, guint awaiting, gboolean execute_txns,
-    AB_BANKING *api, GtkWidget *parent);
+GncABImExContextImport *gnc_ab_import_context (AB_IMEXPORTER_CONTEXT *context,
+                                               guint awaiting,
+                                               gboolean execute_txns,
+                                               AB_BANKING *api,
+                                               GtkWidget *parent);
 
 /**
  * Extract awaiting from @a data.
@@ -250,7 +252,7 @@ GncABImExContextImport *gnc_ab_import_context(
  * @return The initial awaiting bitmask plus IGNORE_* for unexpected and then
  * ignored items, and FOUND_* for non-empty items
  */
-guint gnc_ab_ieci_get_found(GncABImExContextImport *ieci);
+guint gnc_ab_ieci_get_found (GncABImExContextImport *ieci);
 
 /**
  * Extract the job list from @a data.
@@ -258,7 +260,7 @@ guint gnc_ab_ieci_get_found(GncABImExContextImport *ieci);
  * @param ieci The return value of gnc_ab_import_context()
  * @return The list of jobs, freeable with AB_Job_List2_FreeAll()
  */
-GNC_AB_JOB_LIST2 *gnc_ab_ieci_get_job_list(GncABImExContextImport *ieci);
+GNC_AB_JOB_LIST2 *gnc_ab_ieci_get_job_list (GncABImExContextImport *ieci);
 
 /**
  * Run the generic transaction matcher dialog.
@@ -266,7 +268,7 @@ GNC_AB_JOB_LIST2 *gnc_ab_ieci_get_job_list(GncABImExContextImport *ieci);
  * @param ieci The return value of gnc_ab_import_context()
  * @return The return value of gnc_gen_trans_list_run().
  */
-gboolean gnc_ab_ieci_run_matcher(GncABImExContextImport *ieci);
+gboolean gnc_ab_ieci_run_matcher (GncABImExContextImport *ieci);
 
 
 /**
@@ -274,7 +276,7 @@ gboolean gnc_ab_ieci_run_matcher(GncABImExContextImport *ieci);
  *
  * @return a GWEN_DB containing all permanently accepted SSL certificates (hashed).
  */
-GWEN_DB_NODE *gnc_ab_get_permanent_certs(void);
+GWEN_DB_NODE *gnc_ab_get_permanent_certs (void);
 
 /**
  * Creates an online ID from bank code and account number.
@@ -285,7 +287,7 @@ GWEN_DB_NODE *gnc_ab_get_permanent_certs(void);
  * @param accountnumber  Account number
  * @return an online ID
  */
-gchar* gnc_ab_create_online_id(const gchar *bankcode, const gchar *accountnumber);
+gchar* gnc_ab_create_online_id (const gchar *bankcode, const gchar *accountnumber);
 
 
 #if (AQBANKING_VERSION_INT >= 60400)
@@ -296,7 +298,7 @@ gchar* gnc_ab_create_online_id(const gchar *bankcode, const gchar *accountnumber
  * @return A GList of newly allocated GncABTransTempls
  */
 GList*
-gnc_ab_trans_templ_list_new_from_ref_accounts(GNC_AB_ACCOUNT_SPEC *ab_acc);
+gnc_ab_trans_templ_list_new_from_ref_accounts (GNC_AB_ACCOUNT_SPEC *ab_acc);
 #endif
 
 G_END_DECLS
