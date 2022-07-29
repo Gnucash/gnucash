@@ -2162,9 +2162,39 @@ gnc_main_window_update_tab_color (gpointer gsettings, gchar *pref, gpointer user
 }
 
 
-/** Set the tab label ellipsize value. The special check for a zero
- *  value handles the case where a user hasn't set a tab width and
- *  the preference default isn't detected.
+/** This data structure allows the passing of the tab width and
+ *  whether the tab layout is on the left or right.
+ */
+typedef struct
+{
+    gint tab_width;
+    gboolean tabs_left_right;
+} TabWidth;
+
+static TabWidth *
+populate_tab_width_struct (void)
+{
+    TabWidth *tw;
+
+    tw = g_new0 (TabWidth, 1);
+    tw->tab_width = gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_WIDTH);
+    tw->tabs_left_right = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_LEFT) ||
+                          gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_RIGHT);
+
+    return tw;
+}
+
+/** Set the tab label ellipsize value.
+ *  When the tabs are on the left or right, the label width is set to
+ *  the tab_width value. Doing this maintains a steady notepad header
+ *  width for the tabs.
+ *
+ *  When the tabs are on the top or bottom, the label width is set to
+ *  the number of characters when shorter than tab_width so they take
+ *  up less room.
+ *
+ *  The special check for a zero value handles the case where a user
+ *  hasn't set a tab width and the preference default isn't detected.
  *
  *  @internal
  *
@@ -2172,9 +2202,11 @@ gnc_main_window_update_tab_color (gpointer gsettings, gchar *pref, gpointer user
  *
  *  @param tab_width Tab width the user has set in preferences.
  *
+ *  @param tab_left_right Whether the tab layout is on the left or right.
+ *
  */
 static void
-gnc_main_window_set_tab_ellipsize (GtkWidget *label, gint tab_width)
+gnc_main_window_set_tab_ellipsize (GtkWidget *label, gint tab_width, gboolean tab_left_right)
 {
     const gchar *lab_text = gtk_label_get_text (GTK_LABEL(label));
 
@@ -2183,7 +2215,11 @@ gnc_main_window_set_tab_ellipsize (GtkWidget *label, gint tab_width)
         gint text_length = g_utf8_strlen (lab_text, -1);
         if (text_length < tab_width)
         {
-            gtk_label_set_width_chars (GTK_LABEL(label), text_length);
+            if (tab_left_right) // tabs position is left or right
+                gtk_label_set_width_chars (GTK_LABEL(label), tab_width);
+            else // tabs position is top or bottom
+                gtk_label_set_width_chars (GTK_LABEL(label), text_length);
+
             gtk_label_set_ellipsize (GTK_LABEL(label), PANGO_ELLIPSIZE_NONE);
         }
         else
@@ -2212,19 +2248,21 @@ gnc_main_window_set_tab_ellipsize (GtkWidget *label, gint tab_width)
  */
 static void
 gnc_main_window_update_tab_width_one_page (GncPluginPage *page,
-        gpointer user_data)
+                                           gpointer user_data)
 {
-    gint *new_value = user_data;
+    TabWidth *tw = user_data;
     GtkWidget *label;
 
-    ENTER("page %p, visible %d", page, *new_value);
+    ENTER("page %p, tab width %d, tabs on left or right %d",
+           page, tw->tab_width, tw->tabs_left_right);
+
     label = g_object_get_data(G_OBJECT (page), PLUGIN_PAGE_TAB_LABEL);
     if (!label)
     {
         LEAVE("no label");
         return;
     }
-    gnc_main_window_set_tab_ellipsize (label, *new_value);
+    gnc_main_window_set_tab_ellipsize (label, tw->tab_width, tw->tabs_left_right);
     LEAVE(" ");
 }
 
@@ -2244,13 +2282,15 @@ gnc_main_window_update_tab_width_one_page (GncPluginPage *page,
 static void
 gnc_main_window_update_tab_width (gpointer prefs, gchar *pref, gpointer user_data)
 {
-    gint new_value;
+    TabWidth *tw;
 
     ENTER(" ");
-    new_value = gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_WIDTH);
-    gnc_main_window_foreach_page(
-        gnc_main_window_update_tab_width_one_page,
-        &new_value);
+
+    tw = populate_tab_width_struct ();
+
+    gnc_main_window_foreach_page (gnc_main_window_update_tab_width_one_page, tw);
+    g_free (tw);
+
     LEAVE(" ");
 }
 
@@ -2343,7 +2383,7 @@ main_window_update_page_name (GncPluginPage *page,
     GncMainWindowPrivate *priv;
     GtkWidget *label, *entry;
     gchar *name, *old_page_name, *old_page_long_name;
-    gint lab_width;
+    TabWidth *tw;
 
     ENTER(" ");
 
@@ -2383,8 +2423,9 @@ main_window_update_page_name (GncPluginPage *page,
         gtk_label_set_text(GTK_LABEL(label), name);
 
     /* Adjust the label width for new text */
-    lab_width = gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_WIDTH);
-    gnc_main_window_update_tab_width_one_page (page, &lab_width);
+    tw = populate_tab_width_struct ();
+    gnc_main_window_update_tab_width_one_page (page, tw);
+    g_free (tw);
 
     /* Update Tooltip on notebook Tab */
     if (old_page_long_name && old_page_name
@@ -3200,7 +3241,7 @@ gnc_main_window_open_page (GncMainWindow *window,
     const gchar *icon, *text, *color_string, *lab_text;
     GtkWidget *image;
     GList *tmp;
-    gint width;
+    TabWidth *tw;
 
     ENTER("window %p, page %p", window, page);
     if (window)
@@ -3244,13 +3285,14 @@ gnc_main_window_open_page (GncMainWindow *window,
     /*
      * The page tab.
      */
-    width = gnc_prefs_get_float(GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_WIDTH);
     icon = GNC_PLUGIN_PAGE_GET_CLASS(page)->tab_icon;
     lab_text = gnc_plugin_page_get_page_name(page);
     label = gtk_label_new (lab_text);
     g_object_set_data (G_OBJECT (page), PLUGIN_PAGE_TAB_LABEL, label);
 
-    gnc_main_window_set_tab_ellipsize (label, width);
+    tw = populate_tab_width_struct ();
+    gnc_main_window_update_tab_width_one_page (page, tw);
+    g_free (tw);
 
     gtk_widget_show (label);
 
@@ -3650,6 +3692,8 @@ gnc_main_window_update_tab_position (gpointer prefs, gchar *pref, gpointer user_
     g_signal_handlers_unblock_by_func (G_OBJECT (first_action),
                                        G_CALLBACK (gnc_main_window_cmd_view_tab_position),
                                        window);
+
+    gnc_main_window_update_tab_width (NULL, GNC_PREF_TAB_WIDTH, NULL);
 
     LEAVE ("");
 }
