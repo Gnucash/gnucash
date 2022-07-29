@@ -697,11 +697,6 @@
       <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Dummy</col>
-      </row>
-    </data>
   </object>
   <object class="GtkDialog" id="new_style_sheet_dialog">
     <property name="can-focus">False</property>
