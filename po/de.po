@@ -39,8 +39,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-22 06:33+0200\n"
-"PO-Revision-Date: 2022-07-25 20:24+0000\n"
-"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
+"PO-Revision-Date: 2022-07-28 05:15+0000\n"
+"Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -13643,7 +13643,7 @@ msgstr ""
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:193
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:183
 msgid "<b>Load and Save Settings</b>"
-msgstr "<b>Lade- und Speichern-Einstellungen</b>"
+msgstr "<b>Einstellungen speichern oder laden</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:242
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:231
