@@ -821,6 +821,7 @@ gdc_free_all_mark_data(GncDenseCal *dcal)
         gdc_mark_data *mark = l->data;
         g_list_free (mark->ourMarks);
         g_free (mark->name);
+        g_free (mark->info);
         g_free (mark);
     }
     g_list_free(dcal->markData);
@@ -1888,26 +1889,22 @@ cleanup:
 static void
 gdc_add_markings(GncDenseCal *cal)
 {
-    GList *tags;
-    tags = gnc_dense_cal_model_get_contained(cal->model);
-    for (; tags != NULL; tags = tags->next)
-    {
-        guint tag = GPOINTER_TO_UINT(tags->data);
-        gdc_add_tag_markings(cal, tag);
-    }
+    GList *tags = gnc_dense_cal_model_get_contained(cal->model);
+
+    for (GList *n = tags; n; n = n->next)
+        gdc_add_tag_markings(cal, GPOINTER_TO_UINT(n->data));
+
     g_list_free(tags);
 }
 
 static void
 gdc_remove_markings(GncDenseCal *cal)
 {
-    GList *tags;
-    tags = gnc_dense_cal_model_get_contained(cal->model);
-    for (; tags != NULL; tags = tags->next)
-    {
-        guint tag = GPOINTER_TO_UINT(tags->data);
-        gdc_mark_remove(cal, tag, FALSE);
-    }
+    GList *tags = gnc_dense_cal_model_get_contained(cal->model);
+
+    for (GList *n = tags; n; n = n->next)
+        gdc_mark_remove(cal, GPOINTER_TO_UINT(n->data), FALSE);
+
     g_list_free(tags);
 }
 
@@ -2051,6 +2048,8 @@ gdc_mark_remove(GncDenseCal *dcal, guint mark_to_remove, gboolean redraw)
     }
     g_list_free(mark_data->ourMarks);
     dcal->markData = g_list_remove(dcal->markData, mark_data);
+    g_free (mark_data->name);
+    g_free (mark_data->info);
     g_free(mark_data);
 
     if (redraw)
