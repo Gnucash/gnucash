@@ -817,6 +817,8 @@ gnucash_sheet_finalize (GObject *object)
     g_hash_table_destroy (sheet->cursor_styles);
     g_hash_table_destroy (sheet->dimensions_hash_table);
 
+    g_object_unref (sheet->cursor);
+
     if (G_OBJECT_CLASS(sheet_parent_class)->finalize)
         (*G_OBJECT_CLASS(sheet_parent_class)->finalize)(object);
 }
