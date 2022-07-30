@@ -77,7 +77,7 @@ struct _GNCDateFormatPrivate
 };
 
 #define GNC_DATE_FORMAT_GET_PRIVATE(o)  \
-   ((GNCDateFormatPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_DATE_FORMAT))
+   ((GNCDateFormatPrivate*)gnc_date_format_get_instance_private((GNCDateFormat*)o))
 
 static guint date_format_signals [LAST_SIGNAL] = { 0 };
 

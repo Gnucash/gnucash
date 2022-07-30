@@ -99,8 +99,10 @@ typedef struct GncPluginPageSxListPrivate
 
 } GncPluginPageSxListPrivate;
 
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageSxList, gnc_plugin_page_sx_list, GNC_TYPE_PLUGIN_PAGE)
+
 #define GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(o)  \
-   ((GncPluginPageSxListPrivate*)g_type_instance_get_private ((GTypeInstance*)o, GNC_TYPE_PLUGIN_PAGE_SX_LIST))
+   ((GncPluginPageSxListPrivate*)gnc_plugin_page_sx_list_get_instance_private((GncPluginPageSxList*)o))
 
 static GObjectClass *parent_class = NULL;
 
@@ -209,8 +211,6 @@ gnc_plugin_page_sx_list_focus_widget (GncPluginPage *sx_plugin_page)
     }
     return FALSE;
 }
-
-G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageSxList, gnc_plugin_page_sx_list, GNC_TYPE_PLUGIN_PAGE)
 
 static void
 gnc_plugin_page_sx_list_class_init (GncPluginPageSxListClass *klass)

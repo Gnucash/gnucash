@@ -138,7 +138,7 @@ enum
 };
 
 #define GET_PRIVATE(o)  \
-    ((AccountPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_ACCOUNT))
+    ((AccountPrivate*)gnc_account_get_instance_private((Account*)o))
 
 /* This map contains a set of strings representing the different column types. */
 static const std::map<GNCAccountType, const char*> gnc_acct_debit_strs = {

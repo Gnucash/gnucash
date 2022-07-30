@@ -97,7 +97,7 @@ typedef struct GncTreeModelSelectionPrivate
 } GncTreeModelSelectionPrivate;
 
 #define GNC_TREE_MODEL_SELECTION_GET_PRIVATE(o)  \
-   ((GncTreeModelSelectionPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_TREE_MODEL_SELECTION))
+   ((GncTreeModelSelectionPrivate*)gnc_tree_model_selection_get_instance_private((GncTreeModelSelection*)o))
 
 static GObjectClass *parent_class = NULL;
 

@@ -60,7 +60,7 @@ struct _GNCSearchDatePrivate
 G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchDate, gnc_search_date, GNC_TYPE_SEARCH_CORE_TYPE)
 
 #define _PRIVATE(o) \
-   ((GNCSearchDatePrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_SEARCH_DATE))
+   ((GNCSearchDatePrivate*)gnc_search_date_get_instance_private((GNCSearchDate*)o))
 
 static GNCSearchCoreTypeClass *parent_class;
 

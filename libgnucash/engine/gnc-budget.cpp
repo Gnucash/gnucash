@@ -91,7 +91,7 @@ typedef struct GncBudgetPrivate
 } GncBudgetPrivate;
 
 #define GET_PRIVATE(o) \
-    ((GncBudgetPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_BUDGET))
+    ((GncBudgetPrivate*)gnc_budget_get_instance_private((GncBudget*)o))
 
 struct _GncBudgetClass
 {

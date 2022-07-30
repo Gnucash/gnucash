@@ -220,7 +220,7 @@ gtm_sr_make_iter (GncTreeModelSplitReg *model, gint f, GList *tnode, GList *snod
 
 
 #define GNC_TREE_MODEL_SPLIT_REG_GET_PRIVATE(o)  \
-   ((GncTreeModelSplitRegPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_TREE_MODEL_SPLIT_REG))
+   ((GncTreeModelSplitRegPrivate*)gnc_tree_model_split_reg_get_instance_private((GncTreeModelSplitReg*)o))
 
 /************************************************************/
 /*               g_object required functions                */

@@ -58,7 +58,7 @@ typedef struct GncTreeViewPricePrivate
 } GncTreeViewPricePrivate;
 
 #define GNC_TREE_VIEW_PRICE_GET_PRIVATE(o)  \
-   ((GncTreeViewPricePrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_TREE_VIEW_PRICE))
+   ((GncTreeViewPricePrivate*)gnc_tree_view_price_get_instance_private((GncTreeViewPrice*)o))
 
 
 /************************************************************/

@@ -44,8 +44,10 @@ typedef struct GncPluginManagerPrivate
     GHashTable *plugins_table;
 }  GncPluginManagerPrivate;
 
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginManager, gnc_plugin_manager, G_TYPE_OBJECT)
+
 #define GNC_PLUGIN_MANAGER_GET_PRIVATE(o)  \
-   ((GncPluginManagerPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_MANAGER))
+   ((GncPluginManagerPrivate*)gnc_plugin_manager_get_instance_private((GncPluginManager*)o))
 
 enum
 {
@@ -150,8 +152,6 @@ gnc_plugin_manager_get_plugin (GncPluginManager *manager,
     priv = GNC_PLUGIN_MANAGER_GET_PRIVATE(manager);
     return GNC_PLUGIN (g_hash_table_lookup (priv->plugins_table, name));
 }
-
-G_DEFINE_TYPE_WITH_PRIVATE(GncPluginManager, gnc_plugin_manager, G_TYPE_OBJECT)
 
 static void
 gnc_plugin_manager_class_init (GncPluginManagerClass *klass)

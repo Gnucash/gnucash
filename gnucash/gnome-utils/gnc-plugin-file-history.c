@@ -106,7 +106,7 @@ typedef struct GncPluginFileHistoryPrivate
 
 
 #define GNC_PLUGIN_FILE_HISTORY_GET_PRIVATE(o)  \
-   ((GncPluginFileHistoryPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_FILE_HISTORY))
+   ((GncPluginFileHistoryPrivate*)gnc_plugin_file_history_get_instance_private((GncPluginFileHistory*)o))
 
 /************************************************************
  *                     Other Functions                      *

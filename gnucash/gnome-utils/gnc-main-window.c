@@ -247,7 +247,7 @@ GNC_DEFINE_TYPE_WITH_CODE(GncMainWindow, gnc_main_window, GTK_TYPE_WINDOW,
 		                               gnc_window_main_window_init))
 
 #define GNC_MAIN_WINDOW_GET_PRIVATE(o)  \
-   ((GncMainWindowPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_MAIN_WINDOW))
+   ((GncMainWindowPrivate*)gnc_main_window_get_instance_private((GncMainWindow*)o))
 
 /** This data structure maintains information about one action groups
  *  that has been installed in this window. */

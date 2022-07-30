@@ -116,7 +116,7 @@ typedef struct GncPluginPageAccountTreePrivate
 } GncPluginPageAccountTreePrivate;
 
 #define GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(o)  \
-   ((GncPluginPageAccountTreePrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_PAGE_ACCOUNT_TREE))
+     ((GncPluginPageAccountTreePrivate*)gnc_plugin_page_account_tree_get_instance_private((GncPluginPageAccountTree*)o))
 
 static GObjectClass *parent_class = NULL;
 

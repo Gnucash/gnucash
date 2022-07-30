@@ -283,7 +283,7 @@ typedef struct GncPluginPageBudgetPrivate
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageBudget, gnc_plugin_page_budget, GNC_TYPE_PLUGIN_PAGE)
 
 #define GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(o)  \
-   ((GncPluginPageBudgetPrivate*)g_type_instance_get_private ((GTypeInstance*)o, GNC_TYPE_PLUGIN_PAGE_BUDGET))
+   ((GncPluginPageBudgetPrivate*)gnc_plugin_page_budget_get_instance_private((GncPluginPageBudget*)o))
 
 static GObjectClass *parent_class = NULL;
 
