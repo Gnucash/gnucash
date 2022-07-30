@@ -207,9 +207,7 @@ gnc_sx_instance_get_variables_for_parser(GHashTable *instance_var_hash)
 {
     GHashTable *parser_vars;
 
-    /* fixme: the following GHashTable should g_free keys and
-       gnc_sx_variable_free the values, however this breaks SX formulas */
-    parser_vars = g_hash_table_new(g_str_hash, g_str_equal);
+    parser_vars = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
     g_hash_table_foreach(instance_var_hash, (GHFunc)_sx_var_to_raw_numeric, parser_vars);
     return parser_vars;
 }
