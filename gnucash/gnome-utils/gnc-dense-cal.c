@@ -818,8 +818,10 @@ gdc_free_all_mark_data(GncDenseCal *dcal)
     /* Remove the old mark data. */
     for (l = dcal->markData; l; l = l->next)
     {
-        g_list_free(((gdc_mark_data*)l->data)->ourMarks);
-        g_free((gdc_mark_data*)l->data);
+        gdc_mark_data *mark = l->data;
+        g_list_free (mark->ourMarks);
+        g_free (mark->name);
+        g_free (mark);
     }
     g_list_free(dcal->markData);
     dcal->markData = NULL;
@@ -902,12 +904,13 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
     cairo_t *cr;
     gchar *primary_color_class, *secondary_color_class, *marker_color_class;
 
-    timer = g_timer_new();
     DEBUG("drawing");
     widget = GTK_WIDGET(dcal);
 
     if (!dcal->surface)
         return;
+
+    timer = g_timer_new();
 
     g_timer_start(timer);
     cr = cairo_create (dcal->surface);
