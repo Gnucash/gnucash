@@ -2738,7 +2738,6 @@ static void
 gnc_ppr_update_status_query (GncPluginPageRegister* page)
 {
     GncPluginPageRegisterPrivate* priv;
-    GSList* param_list;
     Query* query;
     SplitRegister* reg;
 
@@ -2762,9 +2761,9 @@ gnc_ppr_update_status_query (GncPluginPageRegister* page)
     reg = gnc_ledger_display_get_split_register (priv->ledger);
 
     /* Remove the old status match */
-    param_list = qof_query_build_param_list (SPLIT_RECONCILE, NULL);
-    if (param_list && (reg->type != SEARCH_LEDGER))
+    if (reg->type != SEARCH_LEDGER)
     {
+        GSList *param_list = qof_query_build_param_list (SPLIT_RECONCILE, NULL);
         qof_query_purge_terms (query, param_list);
         g_slist_free (param_list);
     }
@@ -2802,7 +2801,6 @@ static void
 gnc_ppr_update_date_query (GncPluginPageRegister* page)
 {
     GncPluginPageRegisterPrivate* priv;
-    GSList* param_list;
     Query* query;
     SplitRegister* reg;
 
@@ -2827,9 +2825,10 @@ gnc_ppr_update_date_query (GncPluginPageRegister* page)
     reg = gnc_ledger_display_get_split_register (priv->ledger);
 
     /* Delete any existing old date spec. */
-    param_list = qof_query_build_param_list (SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
-    if (param_list && (reg->type != SEARCH_LEDGER))
+    if (reg->type != SEARCH_LEDGER)
     {
+        GSList *param_list = qof_query_build_param_list (SPLIT_TRANS,
+                                                         TRANS_DATE_POSTED, NULL);
         qof_query_purge_terms (query, param_list);
         g_slist_free (param_list);
     }
