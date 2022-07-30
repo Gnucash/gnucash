@@ -744,9 +744,8 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
 
             gtk_widget_set_tooltip_text (GTK_WIDGET(gsr->filter_label), gsr->filter_text);
 
-            if (old_tt_text)
-                g_free (old_tt_text);
         }
+        g_free (old_tt_text);
     }
 
     if (gsr->shares_label == NULL && gsr->value_label == NULL)
