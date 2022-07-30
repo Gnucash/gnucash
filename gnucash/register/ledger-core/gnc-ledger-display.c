@@ -530,6 +530,8 @@ gnc_ledger_display_template_gl (char* id)
         gnc_split_register_set_template_account (sr, acct);
     }
 
+    qof_query_destroy (q);
+
     LEAVE ("%p", ld);
     return ld;
 }
