@@ -102,15 +102,8 @@ style_dimensions_destroy (BlockDimensions *dimensions)
     if (dimensions == NULL)
         return;
 
-    dimensions->refcount--;
-
-    if (dimensions->refcount == 0)
-    {
-        g_table_destroy (dimensions->cell_dimensions);
-        dimensions->cell_dimensions = NULL;
-
-        g_free(dimensions);
-    }
+    g_table_destroy (dimensions->cell_dimensions);
+    g_free (dimensions);
 }
 
 

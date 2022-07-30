@@ -2521,9 +2521,8 @@ gnucash_sheet_new (Table *table)
     sheet->item_editor = gnc_item_edit_new (sheet);
 
     /* some register data */
-    sheet->dimensions_hash_table = g_hash_table_new_full (g_int_hash,
-                                   g_int_equal,
-                                   g_free, g_free);
+    sheet->dimensions_hash_table = g_hash_table_new_full (g_int_hash, g_int_equal,
+                                                          g_free, NULL);
 
     /* add tooltips to sheet */
     gtk_widget_set_has_tooltip (GTK_WIDGET(sheet), TRUE);
