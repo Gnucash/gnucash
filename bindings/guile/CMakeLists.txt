@@ -234,6 +234,7 @@ set_local_dist(guile_DIST_local
     ${app_utils_SCHEME_1c}
     ${app_utils_SCHEME_2}
     ${app_utils_SCHEME_3}
+    ${expressions_SCHEME}
     expressions.i)
 set(guile_DIST ${guile_DIST_local} ${test_guile_DIST} PARENT_SCOPE)
 

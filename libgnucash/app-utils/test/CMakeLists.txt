@@ -23,7 +23,7 @@ macro(add_app_utils_test _TARGET _SOURCE_FILES)
 endmacro()
 
 gnc_add_test_with_guile(test-exp-parser test-exp-parser.c
-  APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS
+  APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS scm-expressions
  )
 add_app_utils_test(test-print-parse-amount test-print-parse-amount.cpp)
 add_app_utils_test(test-sx test-sx.cpp)
