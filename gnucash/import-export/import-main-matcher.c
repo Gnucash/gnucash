@@ -403,8 +403,6 @@ remove_top_matches (GNCImportMainMatcher* gui, GtkTreeModel* model, GList* confl
         match_trans = g_list_remove (match_trans, match_trans->data);
         gnc_import_TransInfo_set_match_list (trans_info, match_trans);
     }
-
-    g_list_free (conflicts);
 }
 
 static void
@@ -448,6 +446,8 @@ resolve_conflicts (GNCImportMainMatcher *info)
             valid = gtk_tree_model_iter_next (model, &import_iter);
         /* NOTE: The loop is guaranteed to terminate because whenever we go back to the top
          * we remove at least 1 match, and there's a finite number of them. */
+
+        g_list_free (conflicts);
     }
 
     // Refresh all
