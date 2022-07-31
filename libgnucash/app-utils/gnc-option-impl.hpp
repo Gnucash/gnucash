@@ -110,6 +110,7 @@ public:
     bool is_changed() const noexcept { return m_value != m_default_value; }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
+    bool is_internal() { return m_ui_type == GncOptionUIType::INTERNAL; }
     std::string serialize() const noexcept;
     bool deserialize(const std::string& str) noexcept;
 private:
@@ -141,6 +142,7 @@ public:
     bool is_changed() const noexcept;
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
+    bool is_internal() { return m_ui_type == GncOptionUIType::INTERNAL; }
     std::string serialize() const noexcept;
     bool deserialize(const std::string& str) noexcept;
 private:
@@ -188,6 +190,7 @@ public:
     bool is_changed() const noexcept;
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
+    bool is_internal() { return m_ui_type == GncOptionUIType::INTERNAL; }
     std::string serialize() const noexcept;
     bool deserialize(const std::string& str) noexcept;
 private:
@@ -368,6 +371,7 @@ public:
     bool is_changed() const noexcept { return m_value != m_default_value; }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
+    bool is_internal() { return m_ui_type == GncOptionUIType::INTERNAL; }
     bool is_alternate() const noexcept { return m_alternate; }
     void set_alternate(bool value) noexcept { m_alternate = value; }
     std::string serialize() const noexcept;
@@ -630,6 +634,7 @@ public:
     bool is_changed() const noexcept { return m_value != m_default_value; }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
+    bool is_internal() { return m_ui_type == GncOptionUIType::INTERNAL; }
     GncOptionMultichoiceKeyType get_keytype(unsigned i) const { return std::get<2>(m_choices.at(i)); }
     std::string serialize() const noexcept;
     bool deserialize(const std::string& str) noexcept;
@@ -782,6 +787,7 @@ public:
     bool is_changed() const noexcept;
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
+    bool is_internal() { return m_ui_type == GncOptionUIType::INTERNAL; }
     bool is_multiselect() const noexcept { return m_multiselect; }
     std::string serialize() const noexcept;
     bool deserialize(const std::string& str) noexcept;
@@ -895,6 +901,7 @@ public:
     bool is_changed() const noexcept { return !guid_equal(&m_value, &m_default_value); }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
+    bool is_internal() { return m_ui_type == GncOptionUIType::INTERNAL; }
     std::string serialize() const noexcept;
     bool deserialize(const std::string& str) noexcept;
 private:
@@ -1043,6 +1050,7 @@ public:
             m_date != m_default_date; }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
+    bool is_internal() { return m_ui_type == GncOptionUIType::INTERNAL; }
     const RelativeDatePeriodVec& get_period_set() const { return m_period_set; }
     std::string serialize() const noexcept;
     bool deserialize(const std::string& str) noexcept;

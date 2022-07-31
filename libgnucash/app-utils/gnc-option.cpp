@@ -282,6 +282,14 @@ GncOption::make_internal()
 }
 
 bool
+GncOption::is_internal()
+{
+    return std::visit([](auto& option)->bool {
+                   return option.is_internal();
+               }, *m_option);
+}
+
+bool
 GncOption::is_changed() const noexcept
 {
     return std::visit([](const auto& option)->bool {

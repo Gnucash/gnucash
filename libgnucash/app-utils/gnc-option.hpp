@@ -160,6 +160,7 @@ public:
     void set_ui_item_from_option();
     void set_option_from_ui_item();
     void make_internal();
+    bool is_internal();
     bool is_changed() const noexcept;
 /** @returns false unless m_option contains a GncOptionMultiselectValue or
  * GncOptionAccountListValue for which multiple selections have been enabled.
