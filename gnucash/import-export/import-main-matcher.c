@@ -1086,6 +1086,17 @@ input_new_fields (GNCImportMainMatcher *info, RowInfo *rowinfo,
     return retval;
 }
 
+static inline void
+maybe_add_string (GNCImportMainMatcher *info, GHashTable *hash, const char *str)
+{
+    char *new_string;
+    if (!str || !str[0] || g_hash_table_lookup (info->desc_hash, str))
+        return;
+    new_string = g_strdup (str);
+    info->new_strings = g_list_prepend (info->new_strings, new_string);
+    g_hash_table_insert (hash, new_string, one);
+}
+
 static void
 gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
 {
@@ -1128,23 +1139,13 @@ gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
                                     DOWNLOADED_COL_DESCRIPTION_STYLE, style,
                                     -1);
                 xaccTransSetDescription (row->trans, new_desc);
-                if (*new_desc && !g_hash_table_lookup (info->desc_hash, new_desc))
-                {
-                    char *new_string = g_strdup (new_desc);
-                    info->new_strings = g_list_prepend (info->new_strings, new_string);
-                    g_hash_table_insert (info->desc_hash, new_string, one);
-                }
+                maybe_add_string (info, info->desc_hash, new_desc);
             }
 
             if (info->edit_notes)
             {
                 xaccTransSetNotes (row->trans, new_notes);
-                if (*new_notes && !g_hash_table_lookup (info->notes_hash, new_notes))
-                {
-                    char *new_string = g_strdup (new_notes);
-                    info->new_strings = g_list_prepend (info->new_strings, new_string);
-                    g_hash_table_insert (info->notes_hash, new_string, one);
-                }
+                maybe_add_string (info, info->notes_hash, new_notes);
             }
 
             if (info->edit_memo)
@@ -1156,12 +1157,7 @@ gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
                                     DOWNLOADED_COL_MEMO_STYLE, style,
                                     -1);
                 xaccSplitSetMemo (row->split, new_memo);
-                if (*new_memo && !g_hash_table_lookup (info->memo_hash, new_memo))
-                {
-                    char *new_string = g_strdup (new_memo);
-                    info->new_strings = g_list_prepend (info->new_strings, new_string);
-                    g_hash_table_insert (info->memo_hash, new_string, one);
-                }
+                maybe_add_string (info, info->memo_hash, new_memo);
             }
         }
         g_free (new_desc);
