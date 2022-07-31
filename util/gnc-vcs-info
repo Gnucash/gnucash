@@ -147,6 +147,47 @@ then
   fi
 fi
 
+# Maybe it's a git worktree?
+real_gitdir="${real_srcdir}"/.git
+if test -f "${real_gitdir}"
+then
+  worktrees=`grep worktrees ${real_gitdir}`
+  if test $? = 0 ; then
+
+    if [ "$request" = "type" ]
+    then
+      echo "git"
+      exit 0
+    fi
+
+    # The windows build uses environment variable $GIT_CMD to invoke git (adding git
+    # to the PATH in Windows results in a build failure).
+    # So for platform independence, use GIT_CMD for all
+    [ -n "$GIT_CMD" ] || GIT_CMD=git
+    if [ "$request" = "date" ]
+    then
+      exec "$GIT_CMD" log -1 --format=%cd --date=short
+      exit 0
+    fi
+
+    githead=`"$GIT_CMD" log -1 --pretty=format:"%h" HEAD 2>/dev/null`  # short hash only
+    if test $? = 0 ; then
+      /bin/echo -n $githead
+      # Add a "+" to the hash if there deleted or modified files (not excluded by .gitignore and friends)
+      # "Ignores" untracked files
+      # [ $("$GIT_CMD" ls-files -dkm 2>/dev/null | wc -l) -gt 0 ] && /bin/echo -n "+"
+      # Includes untracked files
+      [ $("$GIT_CMD" ls-files -dkmo --exclude-standard 2>/dev/null | wc -l) -gt 0 ] && /bin/echo -n "+"
+      echo
+      exit 0
+    else
+      exit 1
+    fi
+
+  fi
+fi
+
+
 if test -d "${real_srcdir}"/.bzr ;
 then
   # If we're only interested in the vcs type, then we're done here
