@@ -1307,7 +1307,7 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
     GtkWidget *menu, *menuitem;
     GtkTreeModel *model;
     GtkTreeSelection *selection;
-    GList *selected_rows;
+    GList *selected_rows, *row_info_list;
     const char *desc = NULL, *memo = NULL, *notes = NULL;
     gboolean has_edits = FALSE;
 
@@ -1326,39 +1326,43 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
     model = gtk_tree_view_get_model (treeview);
     selection = gtk_tree_view_get_selection (treeview);
     selected_rows = gtk_tree_selection_get_selected_rows (selection, &model);
+    row_info_list = gnc_g_list_map (selected_rows, (GncGMapFunc) row_get_info, info);
+
+    if (row_info_list)          /* should never be NULL. collect from first row. */
+    {
+        RowInfo* first_rowinfo = row_info_list->data;
+        desc = xaccTransGetDescription (first_rowinfo->trans);
+        notes = xaccTransGetNotes (first_rowinfo->trans);
+        memo = xaccSplitGetMemo (first_rowinfo->split);
+    }
 
     /* initialise */
     info->edit_desc = TRUE;
     info->edit_notes = TRUE;
     info->edit_memo = TRUE;
 
-    for (GList *n = selected_rows;
-         (!has_edits || info->edit_desc || info->edit_notes || info->edit_memo) && n;
-         n = g_list_next(n))
+    /* determine whether to enable editing fields (if all rows have
+       same field string) and resetting fields (if any row differs from
+       imported data) */
+    for (GList *n = row_info_list; n; n = g_list_next(n))
     {
-        RowInfo *rowinfo = row_get_info (n->data, info);
-
+        RowInfo *rowinfo = n->data;
         if (!has_edits &&
             (g_strcmp0 (xaccSplitGetMemo (rowinfo->split), rowinfo->orig_memo) ||
              g_strcmp0 (xaccTransGetNotes (rowinfo->trans), rowinfo->orig_notes) ||
              g_strcmp0 (xaccTransGetDescription (rowinfo->trans), rowinfo->orig_desc)))
             has_edits = TRUE;
 
-        if (!n->prev)       /* only the first row */
-        {
-            desc = xaccTransGetDescription (rowinfo->trans);
-            notes = xaccTransGetNotes (rowinfo->trans);
-            memo = xaccSplitGetMemo (rowinfo->split);
-            rowinfo_free (rowinfo);
-            continue;
-        }
         if (info->edit_desc && g_strcmp0 (desc, xaccTransGetDescription (rowinfo->trans)))
             info->edit_desc = FALSE;
         if (info->edit_notes && g_strcmp0 (notes, xaccTransGetNotes (rowinfo->trans)))
             info->edit_notes = FALSE;
         if (info->edit_memo && g_strcmp0 (memo, xaccSplitGetMemo (rowinfo->split)))
             info->edit_memo = FALSE;
-        rowinfo_free (rowinfo);
+
+        /* all flags were switched. no need to scan remaining rows. */
+        if (has_edits && !info->edit_desc && !info->edit_notes && !info->edit_memo)
+            break;
     }
 
     /* Translators: Menu entry, no full stop */
@@ -1384,6 +1388,7 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
     /* Note: event can be NULL here when called from view_onPopupMenu; */
     gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent*)event);
 
+    g_list_free_full (row_info_list, (GDestroyNotify)rowinfo_free);
     g_list_free_full (selected_rows, (GDestroyNotify)gtk_tree_path_free);
     LEAVE ("");
 }
