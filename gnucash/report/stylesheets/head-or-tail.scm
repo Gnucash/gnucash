@@ -43,198 +43,159 @@
 (use-modules (gnucash html))
 
 (define (head-or-tail-options)
-  (let* ((options (gnc:new-options))
-         (opt-register
-          (lambda (opt)
-            (gnc:register-option options opt))))
-    (opt-register
-     (gnc:make-string-option
+  (let ((options (gnc-new-optiondb)))
+
+    (gnc-register-string-option options
       (N_ "General")
       (N_ "Preparer") "a"
       (N_ "Name of person preparing the report.")
-      ""))
-    (opt-register
-     (gnc:make-string-option
+      "")
+    (gnc-register-string-option options
       (N_ "General")
       (N_ "Prepared for") "b"
       (N_ "Name of organization or company prepared for.")
-      ""))
-    (opt-register
-     (gnc:make-simple-boolean-option
+      "")
+    (gnc-register-simple-boolean-option options
       (N_ "General")
       (N_ "Show preparer info") "c"
       (N_ "Name of organization or company.")
-      #t))
-    (opt-register
-     (gnc:make-simple-boolean-option
+      #t)
+    (gnc-register-simple-boolean-option options
       (N_ "General")
       (N_ "Show receiver info") "d"
       (N_ "Name of organization or company the report is prepared for.")
-      #t))
-    (opt-register
-     (gnc:make-simple-boolean-option
+      #t)
+    (gnc-register-simple-boolean-option options
       (N_ "General")
       (N_ "Show date") "e"
       (N_ "The creation date for this report.")
-      #t))
-    (opt-register
-     (gnc:make-simple-boolean-option
+      #t)
+    (gnc-register-simple-boolean-option options
       (N_ "General")
       (N_ "Show time in addition to date") "f"
       (N_ "The creation time for this report can only be shown if the date is shown.")
-      #t))
-    (opt-register
-     (gnc:make-simple-boolean-option
+      #t)
+    (gnc-register-simple-boolean-option options
       (N_ "General")
       (N_ "Show GnuCash Version") "g"
       (N_ "Show the currently used GnuCash version.")
-      #t))
-    (opt-register
-     (gnc:make-simple-boolean-option
+      #t)
+    (gnc-register-simple-boolean-option options
       (N_ "General")
       (N_ "Enable Links") "h"
       (N_ "Enable hyperlinks in reports.")
-      #t))
+      #t)
     ;; FIXME: put this in a more sensible tab like Text or Header/Footer
-    (opt-register
-     (gnc:make-text-option
+    (gnc-register-text-option options
       (N_ "General")
       (N_ "Additional Comments") "i"
       (N_ "String for additional report information.")
-      ""))
-    (opt-register
-     (gnc:make-simple-boolean-option
+      "")
+    (gnc-register-simple-boolean-option options
       (N_ "General")
       (N_ "Show preparer info at bottom") "j"
       (N_ "Per default the preparer info will be shown before the report data.")
-      #f))
-    (opt-register
-     (gnc:make-simple-boolean-option
+      #f)
+    (gnc-register-simple-boolean-option options
       (N_ "General")
       (N_ "Show receiver info at bottom") "k"
       (N_ "Per default the receiver info will be shown before the report data.")
-      #f))
-    (opt-register
-     (gnc:make-simple-boolean-option
+      #f)
+    (gnc-register-simple-boolean-option options
       (N_ "General")
       (N_ "Show date/time at bottom") "l"
       (N_ "Per default the date/time info will be shown before the report data.")
-      #f))
-    (opt-register
-     (gnc:make-simple-boolean-option
+      #f)
+    (gnc-register-simple-boolean-option options
       (N_ "General")
       (N_ "Show comments at bottom") "m"
       (N_ "Per default the additional comments text will be shown before the report data.")
-      #f))
-    (opt-register
-     (gnc:make-simple-boolean-option
+      #f)
+    (gnc-register-simple-boolean-option options
       (N_ "General")
       (N_ "Show GnuCash version at bottom") "m"
       (N_ "Per default the GnuCash version will be shown before the report data.")
-      #f))
+      #f)
 
-    (opt-register
-     (gnc:make-pixmap-option
+    (gnc-register-pixmap-option options
       (N_ "Images")
       (N_ "Background Tile") "a" (N_ "Background tile for reports.")
-      ""))
-    (opt-register
-     (gnc:make-pixmap-option
+      "")
+    (gnc-register-pixmap-option options
       (N_ "Images")
 ;;; Translators: Banner is an image like Logo.
       (N_ "Heading Banner") "b" (N_ "Banner for top of report.")
-      ""))
-    (opt-register
-     (gnc:make-multichoice-option
+      "")
+    (gnc-register-multichoice-option options
       (N_ "Images")
       (N_ "Heading Alignment") "c" (N_ "Banner for top of report.")
-      'left
+      "left"
       (list (vector 'left (N_ "Left"))
             (vector 'center (N_ "Center"))
-            (vector 'right (N_ "Right")))))
-    (opt-register
-     (gnc:make-pixmap-option
+            (vector 'right (N_ "Right"))))
+    (gnc-register-pixmap-option options
       (N_ "Images")
       (N_ "Logo") "d" (N_ "Company logo image.")
-      ""))
+      "")
 
-    (opt-register
-     (gnc:make-color-option
+    (gnc-register-color-option options
       (N_ "Colors")
       (N_ "Background Color") "a" (N_ "General background color for report.")
-      (list #xff #xff #xff #xff)
-      255 #f))
+      "ffffff")
 
-    (opt-register
-     (gnc:make-color-option
+    (gnc-register-color-option options
       (N_ "Colors")
       (N_ "Text Color") "b" (N_ "Normal body text color.")
-      (list #x00 #x00 #x00 #xff)
-      255 #f))
+      "000000")
 
-    (opt-register
-     (gnc:make-color-option
+    (gnc-register-color-option options
       (N_ "Colors")
       (N_ "Link Color") "c" (N_ "Link text color.")
-      (list #xb2 #x22 #x22 #xff)
-      255 #f))
+      "b22222")
 
-    (opt-register
-     (gnc:make-color-option
+    (gnc-register-color-option options
       (N_ "Colors")
       (N_ "Table Cell Color") "c" (N_ "Default background for table cells.")
-      (list #xff #xff #xff #xff)
-      255 #f))
+      "ffffff")
 
-    (opt-register
-     (gnc:make-color-option
+    (gnc-register-color-option options
       (N_ "Colors")
       (N_ "Alternate Table Cell Color") "d"
       (N_ "Default alternate background for table cells.")
-      (list #xff #xff #xff #xff)
-      255 #f))
+      "ffffff")
 
-    (opt-register
-     (gnc:make-color-option
+    (gnc-register-color-option options
       (N_ "Colors")
       (N_ "Subheading/Subtotal Cell Color") "e"
       (N_ "Default color for subtotal rows.")
-      (list #xee #xe8 #xaa #xff)
-      255 #f))
+      "eexe8xaa")
 
-    (opt-register
-     (gnc:make-color-option
+    (gnc-register-color-option options
       (N_ "Colors")
       (N_ "Sub-subheading/total Cell Color") "f"
       (N_ "Color for subsubtotals.")
-      (list #xfa #xfa #xd2 #xff)
-      255 #f))
+      "fafad2")
 
-    (opt-register
-     (gnc:make-color-option
+    (gnc-register-color-option options
       (N_ "Colors")
       (N_ "Grand Total Cell Color") "g"
       (N_ "Color for grand totals.")
-      (list #xff #xff #x00 #xff)
-      255 #f))
+      "ffff00")
 
-    (opt-register
-     (gnc:make-number-range-option
+    (gnc-register-number-range-option options
       (N_ "Tables")
       (N_ "Table cell spacing") "a" (N_ "Space between table cells.")
-      1 0 20 0 1))
+      1 0 20 1)
 
-    (opt-register
-     (gnc:make-number-range-option
+    (gnc-register-number-range-option options
       (N_ "Tables")
       (N_ "Table cell padding") "b" (N_ "Space between table cell edge and content.")
-      1 0 20 0 1))
+      1 0 20 1)
 
-    (opt-register
-     (gnc:make-number-range-option
+    (gnc-register-number-range-option options
       (N_ "Tables")
       (N_ "Table border width") "c" (N_ "Bevel depth on tables.")
-      1 0 20 0 1))
+      1 0 20 1)
     (register-font-options options)
 
     options))
@@ -243,12 +204,11 @@
   (let* ((ssdoc (gnc:make-html-document))
          (opt-val
           (lambda (section name)
-            (gnc:option-value
-             (gnc:lookup-option options section name))))
+            (gnc-optiondb-lookup-value options section name)))
          (color-val
           (lambda (section name)
-            (gnc:color-option->html
-             (gnc:lookup-option options section name))))
+            (gnc:color->html
+             (gnc-optiondb-lookup-value options section name))))
          (preparer (opt-val "General" "Preparer"))
          (prepared-for (opt-val "General" "Prepared for"))
          (show-preparer? (opt-val "General" "Show preparer info"))
