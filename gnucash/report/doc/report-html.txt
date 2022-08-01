@@ -355,23 +355,18 @@ We have three different kinds of style control information available:
 
      (let ()
       (define sample-options
-        (let* ((options (gnc:new-options))
-               (opt-register 
-                 (lambda (opt)
-                   (gnc:register-option options opt))))
-          (opt-register
-            (gnc:make-color-option
+        (let ((options (gnc-new-optiondb)))
+          (gnc-register-color-option options
               (_ "Style Sheet Options")
 	      (_ "Background Color") "a" (_ "Background color for reports.")
-	      (list #xff #xff #xff #xff)
-	      255 #f))
+	      "ffffff")
           options))
 
        (define (sample-renderer options doc)
          (let ((ssdoc (gnc:make-html-document))
                (bgcolor 
-                (gnc:color-option->html
-                 (gnc:lookup-option options 
+                (gnc:color->html
+                 (gnc-optiondb-lookup-value options 
                                     (_ "Style Sheet Options")
                                     (_ "Background Color")))))
 
