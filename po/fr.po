@@ -25,6 +25,7 @@
 # Maxime Leroy <lisacintosh@gmail.com>, 2021, 2022.
 # Sébastien Ray <sebastien.ray@normalesup.org>, 2022.
 # ButterflyOfFire <ButterflyOfFire@protonmail.com>, 2022.
+# Laurent Bigonville <bigon@bigon.be>, 2022.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
 #
@@ -34,8 +35,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-22 06:33+0200\n"
-"PO-Revision-Date: 2022-07-23 09:57+0000\n"
-"Last-Translator: Maxime Leroy <lisacintosh@gmail.com>\n"
+"PO-Revision-Date: 2022-07-31 08:20+0000\n"
+"Last-Translator: Laurent Bigonville <bigon@bigon.be>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -1229,7 +1230,7 @@ msgstr "Éditer..."
 #: gnucash/report/reports/standard/invoice.scm:774
 #: libgnucash/engine/Account.cpp:176 libgnucash/engine/gncInvoice.c:1116
 msgid "Bill"
-msgstr "Facture"
+msgstr "Facture fournisseur"
 
 #: gnucash/gnome/business-gnome-utils.c:222 gnucash/gnome/dialog-doclink.c:814
 #: gnucash/gnome/dialog-invoice.c:2644 gnucash/gnome/dialog-invoice.c:2870
