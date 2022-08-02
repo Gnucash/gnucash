@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-07-25 20:24+0000\n"
+"PO-Revision-Date: 2022-08-01 18:18+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/glossary/"
 "de/>\n"
@@ -314,7 +314,7 @@ msgstr "Schliessen"
 
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
 msgid "commodity"
-msgstr "Handelsgut, Devise/Wertpapier (auch: Währung, Aktie, Option)"
+msgstr "Handelsgut, Währung/Wertpapier (auch: Aktie, Option, Bonds)"
 
 # bis <=2.2.4: Börsenplatzkürzel
 #. "e.g. NASDAQ"
