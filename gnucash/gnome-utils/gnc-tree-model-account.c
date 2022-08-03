@@ -104,8 +104,14 @@ typedef struct GncTreeModelAccountPrivate
 
 } GncTreeModelAccountPrivate;
 
+G_DEFINE_TYPE_WITH_CODE (GncTreeModelAccount,
+                         gnc_tree_model_account, GNC_TYPE_TREE_MODEL,
+                         G_ADD_PRIVATE (GncTreeModelAccount)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL,
+                                                gnc_tree_model_account_tree_model_init))
+
 #define GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(o)  \
-   ((GncTreeModelAccountPrivate*)g_type_instance_get_private ((GTypeInstance*)o, GNC_TYPE_TREE_MODEL_ACCOUNT))
+   ((GncTreeModelAccountPrivate*)gnc_tree_model_account_get_instance_private((GncTreeModelAccount*)o))
 
 
 /************************************************************/
@@ -152,11 +158,6 @@ gnc_tree_model_account_update_color (gpointer gsettings, gchar *key, gpointer us
 
 /** A pointer to the parent class of an account tree model. */
 static GObjectClass *parent_class = NULL;
-
-G_DEFINE_TYPE_WITH_CODE (GncTreeModelAccount, gnc_tree_model_account, GNC_TYPE_TREE_MODEL,
-                         G_ADD_PRIVATE (GncTreeModelAccount)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL,
-                                                gnc_tree_model_account_tree_model_init))
 
 static void
 gnc_tree_model_account_class_init (GncTreeModelAccountClass *klass)

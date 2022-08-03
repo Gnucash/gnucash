@@ -513,7 +513,7 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
         gnc_commodity *currency;
         Transaction *trans = xaccSplitGetParent (split);
         time64 date = xaccTransGetDate (trans);
-        gnc_numeric amnt, valu, gains;
+        gnc_numeric amnt, value, gains;
 
         /* Do not show gains splits, however do show empty business splits */
         if (!is_business_lot && gnc_numeric_zero_p (xaccSplitGetAmount(split))) continue;
@@ -541,13 +541,13 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
          * For non-business accounts which are part of a lot,
          * invert the sign on the first. */
         currency = xaccTransGetCurrency (trans);
-        valu = xaccSplitGetValue (split);
+        value = xaccSplitGetValue (split);
         if (lv->selected_lot && !is_business_lot && (node != split_list))
-                valu = gnc_numeric_neg (valu);
-        xaccSPrintAmount (valbuff, valu,
+                value = gnc_numeric_neg (value);
+        xaccSPrintAmount (valbuff, value,
                           gnc_commodity_print_info (currency, TRUE));
         gtk_list_store_set (store, &iter, SPLIT_COL_VALUE, valbuff, -1);
-        gtk_list_store_set (store, &iter, SPLIT_COL_VALUE_DOUBLE, gnc_numeric_to_double (valu), -1);
+        gtk_list_store_set (store, &iter, SPLIT_COL_VALUE_DOUBLE, gnc_numeric_to_double (value), -1);
 
         /* Gains. Blank if none. */
         gains = xaccSplitGetCapGains (split);

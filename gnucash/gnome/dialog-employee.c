@@ -129,32 +129,20 @@ static void gnc_ui_to_employee (EmployeeWindow *ew, GncEmployee *employee)
     if (ew->dialog_type == NEW_EMPLOYEE)
         qof_event_gen(QOF_INSTANCE(employee), QOF_EVENT_ADD, NULL);
 
-    gncEmployeeSetID (employee, gtk_editable_get_chars
-                      (GTK_EDITABLE (ew->id_entry), 0, -1));
-    gncEmployeeSetUsername (employee, gtk_editable_get_chars
-                            (GTK_EDITABLE (ew->username_entry), 0, -1));
+    gncEmployeeSetID (employee, gtk_entry_get_text (GTK_ENTRY (ew->id_entry)));
+    gncEmployeeSetUsername (employee, gtk_entry_get_text (GTK_ENTRY (ew->username_entry)));
 
-    gncAddressSetName (addr, gtk_editable_get_chars
-                       (GTK_EDITABLE (ew->name_entry), 0, -1));
-    gncAddressSetAddr1 (addr, gtk_editable_get_chars
-                        (GTK_EDITABLE (ew->addr1_entry), 0, -1));
-    gncAddressSetAddr2 (addr, gtk_editable_get_chars
-                        (GTK_EDITABLE (ew->addr2_entry), 0, -1));
-    gncAddressSetAddr3 (addr, gtk_editable_get_chars
-                        (GTK_EDITABLE (ew->addr3_entry), 0, -1));
-    gncAddressSetAddr4 (addr, gtk_editable_get_chars
-                        (GTK_EDITABLE (ew->addr4_entry), 0, -1));
-    gncAddressSetPhone (addr, gtk_editable_get_chars
-                        (GTK_EDITABLE (ew->phone_entry), 0, -1));
-    gncAddressSetFax (addr, gtk_editable_get_chars
-                      (GTK_EDITABLE (ew->fax_entry), 0, -1));
-    gncAddressSetEmail (addr, gtk_editable_get_chars
-                        (GTK_EDITABLE (ew->email_entry), 0, -1));
-
+    gncAddressSetName (addr, gtk_entry_get_text (GTK_ENTRY (ew->name_entry)));
+    gncAddressSetAddr1 (addr, gtk_entry_get_text (GTK_ENTRY (ew->addr1_entry)));
+    gncAddressSetAddr2 (addr, gtk_entry_get_text (GTK_ENTRY (ew->addr2_entry)));
+    gncAddressSetAddr3 (addr, gtk_entry_get_text (GTK_ENTRY (ew->addr3_entry)));
+    gncAddressSetAddr4 (addr, gtk_entry_get_text (GTK_ENTRY (ew->addr4_entry)));
+    gncAddressSetPhone (addr, gtk_entry_get_text (GTK_ENTRY (ew->phone_entry)));
+    gncAddressSetFax (addr, gtk_entry_get_text (GTK_ENTRY (ew->fax_entry)));
+    gncAddressSetEmail (addr, gtk_entry_get_text (GTK_ENTRY (ew->email_entry)));
     gncEmployeeSetActive (employee, gtk_toggle_button_get_active
                           (GTK_TOGGLE_BUTTON (ew->active_check)));
-    gncEmployeeSetLanguage (employee, gtk_editable_get_chars
-                            (GTK_EDITABLE (ew->language_entry), 0, -1));
+    gncEmployeeSetLanguage (employee, gtk_entry_get_text (GTK_ENTRY (ew->language_entry)));
 
     /* Parse and set the workday and rate amounts */
     gncEmployeeSetWorkday (employee, gnc_amount_edit_get_amount

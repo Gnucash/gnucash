@@ -973,8 +973,7 @@ be excluded from periodic reporting.")
     (gnc:register-trep-option
      (gnc:make-complex-boolean-option
       gnc:pagename-display (N_ "Memo")
-      "d"  (G_ "Display the memo?") disp-memo?
-      disp-memo?
+      "d"  (G_ "Display the memo?") disp-memo? #f
       (lambda (x)
         (set! disp-memo? x)
         (apply-selectable-by-name-display-options))))
@@ -983,8 +982,7 @@ be excluded from periodic reporting.")
     (gnc:register-trep-option
      (gnc:make-complex-boolean-option
       gnc:pagename-display (N_ "Account Name")
-      "e"  (G_ "Display the account name?") disp-accname?
-      disp-accname?
+      "e"  (G_ "Display the account name?") disp-accname? #f
       (lambda (x)
         (set! disp-accname? x)
         (apply-selectable-by-name-display-options))))
@@ -993,8 +991,7 @@ be excluded from periodic reporting.")
     (gnc:register-trep-option
      (gnc:make-complex-boolean-option
       gnc:pagename-display (N_ "Other Account Name")
-      "h5"  (G_ "Display the other account name? (if this is a split transaction, this parameter is guessed).") disp-other-accname?
-      disp-other-accname?
+      "h5"  (G_ "Display the other account name? (if this is a split transaction, this parameter is guessed).") disp-other-accname? #f
       (lambda (x)
         (set! disp-other-accname? x)
         (apply-selectable-by-name-display-options))))

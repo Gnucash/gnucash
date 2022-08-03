@@ -74,7 +74,7 @@ typedef struct GncPluginCsvExportPrivate
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginCsvExport, gnc_plugin_csv_export, GNC_TYPE_PLUGIN)
 
 #define GNC_PLUGIN_CSV_EXPORT_GET_PRIVATE(o)  \
-   ((GncPluginCsvExportPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_CSV_EXPORT))
+   ((GncPluginCsvExportPrivate*)gnc_plugin_csv_export_get_instance_private((GncPluginCsvExport*)o))
 
 static GObjectClass *parent_class = NULL;
 

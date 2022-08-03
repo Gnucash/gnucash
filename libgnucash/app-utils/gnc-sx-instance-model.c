@@ -88,40 +88,46 @@ static void _gnc_sx_instance_event_handler(QofInstance *ent, QofEventId event_ty
 static gnc_commodity* get_transaction_currency(SxTxnCreationData *creation_data, SchedXaction *sx, Transaction *template_txn);
 /* ------------------------------------------------------------ */
 
-static gboolean
-scrub_sx_split_numeric (Split* split, const char *debcred)
+typedef struct
 {
-    const gboolean is_credit = g_strcmp0 (debcred, "credit") == 0;
-    const char *formula = is_credit ?
-        "sx-credit-formula" : "sx-debit-formula";
-    const char *numeric = is_credit ?
-        "sx-credit-numeric" : "sx-debit-numeric";
+    const char *name;
+    gnc_numeric amount;
+} ScrubItem;
+
+static void
+scrub_sx_split_numeric (Split* split, gboolean is_credit, GList **changes)
+{
+    const char *formula = is_credit ? "sx-credit-formula" : "sx-debit-formula";
+    const char *numeric = is_credit ? "sx-credit-numeric" : "sx-debit-numeric";
     char *formval;
     gnc_numeric *numval = NULL;
-    GHashTable *parser_vars = g_hash_table_new (g_str_hash, g_str_equal);
+    GHashTable *parser_vars = g_hash_table_new_full
+        (g_str_hash, g_str_equal, g_free, (GDestroyNotify)gnc_sx_variable_free);
     char *error_loc;
     gnc_numeric amount = gnc_numeric_zero ();
     gboolean parse_result = FALSE;
-    gboolean num_val_changed = FALSE;
-    qof_instance_get (QOF_INSTANCE (split),
-		  formula, &formval,
-		  numeric, &numval,
-		  NULL);
-    parse_result =
-        gnc_exp_parser_parse_separate_vars (formval, &amount,
-                                            &error_loc, parser_vars);
+
+    qof_instance_get (QOF_INSTANCE (split), formula, &formval,
+                      numeric, &numval, NULL);
+
+    parse_result = gnc_exp_parser_parse_separate_vars (formval, &amount,
+                                                       &error_loc, parser_vars);
+
     if (!parse_result || g_hash_table_size (parser_vars) != 0)
         amount = gnc_numeric_zero ();
+
     g_hash_table_unref (parser_vars);
+
     if (!numval || !gnc_numeric_eq (amount, *numval))
     {
-        qof_instance_set (QOF_INSTANCE (split),
-                          numeric, &amount,
-                          NULL);
-        num_val_changed = TRUE;
+        ScrubItem *change = g_new (ScrubItem, 1);
+        change->name = numeric;
+        change->amount = amount;
+        *changes = g_list_prepend (*changes, change);
     }
+
+    g_free (formval);
     g_free (numval);
-    return num_val_changed;
 }
 
 /* Fixes error in pre-2.6.16 where the numeric slot wouldn't get changed if the
@@ -132,14 +138,20 @@ gnc_sx_scrub_split_numerics (gpointer psplit, gpointer puser)
 {
     Split *split = GNC_SPLIT (psplit);
     Transaction *trans = xaccSplitGetParent (split);
-    gboolean changed;
+    GList *changes = NULL;
+    scrub_sx_split_numeric (split, TRUE, &changes);
+    scrub_sx_split_numeric (split, FALSE, &changes);
+    if (!changes)
+        return;
+
     xaccTransBeginEdit (trans);
-    changed = scrub_sx_split_numeric (split, "credit") +
-        scrub_sx_split_numeric (split, "debit");
-    if (!changed)
-        xaccTransRollbackEdit (trans);
-    else
-        xaccTransCommitEdit (trans);
+    for (GList *n = changes; n; n = n->next)
+    {
+        ScrubItem *change = n->data;
+        qof_instance_set (QOF_INSTANCE (split), change->name, &change->amount, NULL);
+    }
+    xaccTransCommitEdit (trans);
+    g_list_free_full (changes, g_free);
 }
 
 static void
@@ -194,7 +206,8 @@ GHashTable*
 gnc_sx_instance_get_variables_for_parser(GHashTable *instance_var_hash)
 {
     GHashTable *parser_vars;
-    parser_vars = g_hash_table_new(g_str_hash, g_str_equal);
+
+    parser_vars = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
     g_hash_table_foreach(instance_var_hash, (GHFunc)_sx_var_to_raw_numeric, parser_vars);
     return parser_vars;
 }
@@ -1053,6 +1066,8 @@ _get_sx_formula_value(const SchedXaction* sx,
          * localization problems with separators. */
 	numeric->num = numeric_val->num;
 	numeric->denom = numeric_val->denom;
+        g_free (formula_str);
+        g_free (numeric_val);
         return;
     }
 
@@ -1082,6 +1097,8 @@ _get_sx_formula_value(const SchedXaction* sx,
             g_hash_table_destroy(parser_vars);
         }
     }
+    g_free (formula_str);
+    g_free (numeric_val);
 }
 
 static void

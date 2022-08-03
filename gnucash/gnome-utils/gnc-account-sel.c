@@ -204,10 +204,11 @@ gas_populate_list (GNCAccountSel *gas)
     GtkEntry *entry;
     gint i, active = -1;
     GList *accts, *ptr;
-    gchar *currentSel, *name;
+    const gchar *currentSel;
+    gchar *name;
 
     entry = GTK_ENTRY(gtk_bin_get_child (GTK_BIN(gas->combo)));
-    currentSel = gtk_editable_get_chars (GTK_EDITABLE(entry), 0, -1 );
+    currentSel = gtk_entry_get_text (entry);
 
     g_signal_handlers_block_by_func (gas->combo, combo_changed_cb , gas);
 
@@ -244,8 +245,6 @@ gas_populate_list (GNCAccountSel *gas)
     g_signal_handlers_unblock_by_func (gas->combo, combo_changed_cb , gas);
 
     g_list_free (atnd.outList);
-    if (currentSel)
-        g_free (currentSel);
 }
 
 static void

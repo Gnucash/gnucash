@@ -132,7 +132,7 @@ GNC_DEFINE_TYPE_WITH_CODE(GncTreeView, gnc_tree_view, GTK_TYPE_TREE_VIEW,
                           G_ADD_PRIVATE(GncTreeView))
 
 #define GNC_TREE_VIEW_GET_PRIVATE(o)  \
-   ((GncTreeViewPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_TREE_VIEW))
+   ((GncTreeViewPrivate*)gnc_tree_view_get_instance_private((GncTreeView*)o))
 
 
 /************************************************************/
@@ -1037,13 +1037,17 @@ gnc_tree_view_set_state_section (GncTreeView *view,
             gchar *key = keys[idx];
             if (g_strcmp0 (key, STATE_KEY_SORT_COLUMN) == 0)
             {
-                gnc_tree_view_set_sort_column (view,
-                                               g_key_file_get_string (state_file, priv->state_section, key, NULL));
+                gchar *name = g_key_file_get_string (state_file, priv->state_section,
+                                                     key, NULL);
+                gnc_tree_view_set_sort_column (view, name);
+                g_free (name);
             }
             else if (g_strcmp0 (key, STATE_KEY_SORT_ORDER) == 0)
             {
-                gnc_tree_view_set_sort_order (view,
-                                              g_key_file_get_string (state_file, priv->state_section, key, NULL));
+                gchar *name = g_key_file_get_string (state_file, priv->state_section,
+                                                     key, NULL);
+                gnc_tree_view_set_sort_order (view, name);
+                g_free (name);
             }
             else if (g_strcmp0 (key, STATE_KEY_COLUMN_ORDER) == 0)
             {

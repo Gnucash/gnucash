@@ -393,6 +393,7 @@ add_price (gchar *so_far, Split *split, gboolean t_void, CsvExportInfo *info)
     conv = csv_txn_test_field_string (info, string_amount);
     result = g_strconcat (so_far, conv, info->end_sep, EOLSTR, NULL);
     g_free (conv);
+    g_free (so_far);
     return result;
 }
 
@@ -649,6 +650,7 @@ void csv_transactions_export (CsvExportInfo *info)
                 DEBUG("Account being processed is : %s", xaccAccountGetName (acc));
                 account_splits (info, acc, fh);
             }
+            g_list_free (info->csva.account_list);
         }
         else
             account_splits (info, info->account, fh);

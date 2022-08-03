@@ -73,7 +73,7 @@ static void gnc_html_dispose( GObject* obj );
 static void gnc_html_finalize( GObject* obj );
 /*
 #define GNC_HTML_GET_PRIVATE(o) \
-     ((GncHtmlPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_HTML))
+     ((GncHtmlPrivate*)gnc_html_get_instance_private((GncHtml*)o))
 */
 #define GNC_HTML_GET_PRIVATE(o) (GNC_HTML(o)->priv)
 

@@ -56,7 +56,7 @@ typedef struct GncTreeModelAccountTypesPrivate
 } GncTreeModelAccountTypesPrivate;
 
 #define GNC_TREE_MODEL_ACCOUNT_TYPES_GET_PRIVATE(o)  \
-   ((GncTreeModelAccountTypesPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_TREE_MODEL_ACCOUNT_TYPES))
+   ((GncTreeModelAccountTypesPrivate*)gnc_tree_model_account_types_get_instance_private((GncTreeModelAccountTypes*)o))
 
 static GObjectClass *parent_class = NULL;
 

@@ -2311,6 +2311,7 @@ gnc_template_register_get_xfrm_entry (VirtualLocation virt_loc,
     account = xaccAccountLookup (guid, gnc_get_current_book());
     name = account ? gnc_get_account_name_for_split_register (account,
                                                               reg->show_leaf_accounts) : NULL;
+    guid_free (guid);
     return name;
 }
 
@@ -2322,8 +2323,10 @@ gnc_template_register_get_fdebt_entry (VirtualLocation virt_loc,
 {
     SplitRegister* reg = user_data;
     Split* split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
-    char* formula = NULL;
+    static char* formula = NULL;
 
+    g_free (formula);
+    formula = NULL;
     if (split)
     {
         qof_instance_get (QOF_INSTANCE (split),
@@ -2356,8 +2359,10 @@ gnc_template_register_get_fcred_entry (VirtualLocation virt_loc,
 {
     SplitRegister* reg = user_data;
     Split* split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
-    char* formula = NULL;
+    static char* formula = NULL;
 
+    g_free (formula);
+    formula = NULL;
     if (split)
     {
         qof_instance_get (QOF_INSTANCE (split),

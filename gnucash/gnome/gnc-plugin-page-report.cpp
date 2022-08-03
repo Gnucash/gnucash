@@ -140,7 +140,7 @@ typedef struct GncPluginPageReportPrivate
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageReport, gnc_plugin_page_report, GNC_TYPE_PLUGIN_PAGE)
 
 #define GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(o)  \
-   ((GncPluginPageReportPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_PAGE_REPORT))
+   ((GncPluginPageReportPrivate*)gnc_plugin_page_report_get_instance_private((GncPluginPageReport*)o))
 
 static void gnc_plugin_page_report_class_init( GncPluginPageReportClass *klass );
 static void gnc_plugin_page_report_init( GncPluginPageReport *plugin_page );

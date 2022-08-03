@@ -56,7 +56,7 @@ struct _GNCSearchBooleanPrivate
 G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchBoolean, gnc_search_boolean, GNC_TYPE_SEARCH_CORE_TYPE)
 
 #define _PRIVATE(o) \
-   ((GNCSearchBooleanPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_SEARCH_BOOLEAN))
+   ((GNCSearchBooleanPrivate*)gnc_search_boolean_get_instance_private((GNCSearchBoolean*)o))
 
 static GNCSearchCoreTypeClass *parent_class;
 

@@ -61,7 +61,7 @@ struct _GNCSearchAccountPrivate
 G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchAccount, gnc_search_account, GNC_TYPE_SEARCH_CORE_TYPE)
 
 #define _PRIVATE(o) \
-   ((GNCSearchAccountPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_SEARCH_ACCOUNT))
+   ((GNCSearchAccountPrivate*)gnc_search_account_get_instance_private((GNCSearchAccount*)o))
 
 static GNCSearchCoreTypeClass *parent_class;
 

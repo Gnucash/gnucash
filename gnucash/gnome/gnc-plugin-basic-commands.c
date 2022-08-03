@@ -277,7 +277,7 @@ typedef struct GncPluginBasicCommandsPrivate
 } GncPluginBasicCommandsPrivate;
 
 #define GNC_PLUGIN_BASIC_COMMANDS_GET_PRIVATE(o)  \
-   ((GncPluginBasicCommandsPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_BASIC_COMMANDS))
+   ((GncPluginBasicCommandsPrivate*)gnc_plugin_basic_commands_get_instance_private((GncPluginBasicCommands*)o))
 
 /** A pointer to the parent class of a plugin page. */
 static GObjectClass *parent_class = NULL;

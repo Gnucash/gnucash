@@ -98,8 +98,14 @@ typedef struct GncTreeModelOwnerPrivate
     const gchar *negative_color;
 } GncTreeModelOwnerPrivate;
 
+G_DEFINE_TYPE_WITH_CODE(GncTreeModelOwner, gnc_tree_model_owner,
+                        GNC_TYPE_TREE_MODEL,
+                        G_ADD_PRIVATE(GncTreeModelOwner)
+                        G_IMPLEMENT_INTERFACE(GTK_TYPE_TREE_MODEL,
+                                         gnc_tree_model_owner_tree_model_init))
+
 #define GNC_TREE_MODEL_OWNER_GET_PRIVATE(o)  \
-   ((GncTreeModelOwnerPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_TREE_MODEL_OWNER))
+   ((GncTreeModelOwnerPrivate*)gnc_tree_model_owner_get_instance_private((GncTreeModelOwner*)o))
 
 
 /************************************************************/
@@ -145,11 +151,6 @@ gnc_tree_model_owner_class_init (GncTreeModelOwnerClass *klass)
     o_class->finalize = gnc_tree_model_owner_finalize;
     o_class->dispose = gnc_tree_model_owner_dispose;
 }
-
-G_DEFINE_TYPE_WITH_CODE(GncTreeModelOwner, gnc_tree_model_owner, GNC_TYPE_TREE_MODEL,
-		G_ADD_PRIVATE(GncTreeModelOwner)
-                G_IMPLEMENT_INTERFACE(GTK_TYPE_TREE_MODEL,
-                                      gnc_tree_model_owner_tree_model_init))
 
 static void
 gnc_tree_model_owner_init (GncTreeModelOwner *model)

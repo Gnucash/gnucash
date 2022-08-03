@@ -1105,6 +1105,7 @@ close_handler (gpointer user_data)
 
     gnc_save_window_size (GNC_PREFS_GROUP_STARTUP, GTK_WINDOW(app_dialog->dialog));
     gtk_widget_destroy (app_dialog->dialog);
+    g_free (app_dialog);
 }
 
 static void

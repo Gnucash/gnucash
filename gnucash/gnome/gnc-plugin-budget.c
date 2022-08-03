@@ -102,7 +102,7 @@ typedef struct GncPluginBudgetPrivate
 } GncPluginBudgetPrivate;
 
 #define GNC_PLUGIN_BUDGET_GET_PRIVATE(o)  \
-   ((GncPluginBudgetPrivate*)g_type_instance_get_private ((GTypeInstance*)o, GNC_TYPE_PLUGIN_BUDGET))
+   ((GncPluginBudgetPrivate*)gnc_plugin_budget_get_instance_private((GncPluginBudget*)o))
 
 static GObjectClass *parent_class = NULL;
 

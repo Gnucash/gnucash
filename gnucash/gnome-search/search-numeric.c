@@ -62,7 +62,7 @@ struct _GNCSearchNumericPrivate
 G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchNumeric, gnc_search_numeric, GNC_TYPE_SEARCH_CORE_TYPE)
 
 #define _PRIVATE(o) \
-   ((GNCSearchNumericPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_SEARCH_NUMERIC))
+   ((GNCSearchNumericPrivate*)gnc_search_numeric_get_instance_private((GNCSearchNumeric*)o))
 
 static GNCSearchCoreTypeClass *parent_class;
 
