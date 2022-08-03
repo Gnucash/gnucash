@@ -11,6 +11,7 @@ set(account_DATA
   acctchrt_homeloan.gnucash-xea
   acctchrt_homeown.gnucash-xea
   acctchrt_otherloan.gnucash-xea
+  acctchrt_pme-19.gnucash-xea
   acctchrt_renter.gnucash-xea
   acctchrt_retiremt.gnucash-xea
   acctchrt_spouseinc.gnucash-xea
