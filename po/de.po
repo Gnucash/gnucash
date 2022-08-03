@@ -39,7 +39,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-22 06:33+0200\n"
-"PO-Revision-Date: 2022-07-29 15:51+0000\n"
+"PO-Revision-Date: 2022-08-01 20:19+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -1351,25 +1351,25 @@ msgid ""
 "That commodity is currently used by at least one of your accounts. You may "
 "not delete it."
 msgstr ""
-"Diese Devise/Wertpapier wird von (mindestens) einem Konto benutzt. Sie "
-"können Sie daher nicht löschen."
+"Diese Währung/Wertpapier wird von (mindestens) einem Konto benutzt. Sie "
+"können es daher nicht löschen."
 
 #: gnucash/gnome/dialog-commodities.c:197
 msgid ""
 "This commodity has price quotes. Are you sure you want to delete the "
 "selected commodity and its price quotes?"
 msgstr ""
-"Zu dieser Devise/Wertpapier existieren Kurswerte. Sind Sie sicher, dass Sie "
-"die gewählte Devise/Wertpapier und ihre Kurswerte löschen wollen?"
+"Zu dieser Währung/Wertpapier existieren Kurswerte. Sind Sie sicher, dass Sie "
+"die gewählte Währung/Wertpapier und ihre Kurswerte löschen wollen?"
 
 #: gnucash/gnome/dialog-commodities.c:204
 msgid "Are you sure you want to delete the selected commodity?"
 msgstr ""
-"Sind Sie sicher, dass Sie die gewählte Devise/Wertpapier löschen wollen?"
+"Sind Sie sicher, dass Sie die gewählte Währung/Wertpapier löschen wollen?"
 
 #: gnucash/gnome/dialog-commodities.c:213
 msgid "Delete commodity?"
-msgstr "Devise/Wertpapier löschen?"
+msgstr "Währung/Wertpapier löschen?"
 
 #: gnucash/gnome/dialog-commodities.c:217 gnucash/gnome/dialog-doclink.c:165
 #: gnucash/gnome/dialog-price-edit-db.c:207
@@ -7657,7 +7657,7 @@ msgid ""
 "Commodity: "
 msgstr ""
 "\n"
-"Devise/Wertpapier: "
+"Währung/Wertpapier: "
 
 #. Translators: Replace here and later CUSIP by the name of your local
 #. National Securities Identifying Number
@@ -7683,7 +7683,7 @@ msgstr ""
 #: gnucash/gnome-utils/dialog-commodity.c:275
 #: gnucash/gtkbuilder/dialog-commodity.glade:634
 msgid "Select security/currency"
-msgstr "Bitte wählen Sie das Wertpapier/Devise/Währung"
+msgstr "Bitte wählen Sie ein Wertpapier/ eine Währung"
 
 #: gnucash/gnome-utils/dialog-commodity.c:276
 #: gnucash/gtkbuilder/dialog-account.glade:1265
@@ -7754,12 +7754,12 @@ msgstr "Sie können keine neue nationale Währung erstellen."
 #, c-format
 msgid "%s is a reserved commodity type. Please use something else."
 msgstr ""
-"%s ist als Typ für Währungen oder Wertpapiere reserviert. Bitte verwenden "
-"Sie eine andere Bezeichnung."
+"%s ist als Typ für Währungen/Wertpapiere reserviert. Bitte verwenden Sie "
+"eine andere Bezeichnung."
 
 #: gnucash/gnome-utils/dialog-commodity.c:1294
 msgid "That commodity already exists."
-msgstr "Diese Devise/Wertpapier existiert bereits."
+msgstr "Diese Währung/Wertpapier existiert bereits."
 
 #: gnucash/gnome-utils/dialog-commodity.c:1345
 msgid ""
@@ -7767,7 +7767,7 @@ msgid ""
 "\" for the commodity."
 msgstr ""
 "Sie müssen in den Feldern »Voller Name«, »Symbol/Abkürzung« und »Typ« für "
-"die Devise/Wertpapier etwas angeben."
+"die Währung/Wertpapier etwas angeben."
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:237
 msgid "Path head for files is,"
@@ -9883,7 +9883,7 @@ msgstr "Kontobezeichnung"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2918
 #: gnucash/gtkbuilder/dialog-price.glade:563
 msgid "Commodity"
-msgstr "Devise/Wertpapier"
+msgstr "Währung/Wertpapier"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:823
 #: gnucash/import-export/csv-exp/csv-tree-export.c:156
@@ -11717,9 +11717,8 @@ msgid ""
 "To retrieve online quotes from Alphavantage, this key needs to be set. A key "
 "can be retrieved from the Alpha Vantage website."
 msgstr ""
-"Um online Börsenkurse von Alphavantage abzurufen, muss dieser Schlüssel "
-"gesetzt sein. Ein Schlüssel kann von der Alpha Vantage Webseite bezogen "
-"werden."
+"Um online Kurse von Alphavantage abzurufen, muss dieser Schlüssel gesetzt "
+"sein. Ein Schlüssel kann von der Alpha Vantage Webseite bezogen werden."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:10
 msgid "The version of these settings"
@@ -12765,17 +12764,17 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:29
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:152
 msgid "Delete a commodity"
-msgstr "Eine Devise/Wertpapier löschen"
+msgstr "Eine Währung/Wertpapier löschen"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:30
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:153
 msgid "This dialog is presented before allowing you to delete a commodity."
-msgstr "Diese Rückfrage kommt vor dem Löschen einer Devise/Wertpapier."
+msgstr "Diese Rückfrage kommt vor dem Löschen einer Währung/Wertpapiers."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:34
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:157
 msgid "Delete a commodity with price quotes"
-msgstr "Eine Devise/Wertpapier mit den Kurswerten löschen"
+msgstr "Eine Währung/Wertpapier mit den Kurswerten löschen"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:35
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:158
@@ -12783,9 +12782,9 @@ msgid ""
 "This dialog is presented before allowing you to delete a commodity that has "
 "price quotes attached. Deleting the commodity will delete the quotes as well."
 msgstr ""
-"Diese Rückfrage kommt vor dem Löschen einer Devise/Wertpapier, wenn diese "
-"noch Kursinformationen gespeichert hat. Löschen des Wertpapiers wird die "
-"Kursinformationen ebenfalls löschen."
+"Diese Rückfrage kommt vor dem Löschen einer Währung/Wertpapier, wenn diese "
+"noch Kursinformationen gespeichert hat. Löschen von Währung/Wertpapier wird "
+"die Kursinformationen ebenfalls löschen."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:39
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:162
@@ -13059,9 +13058,9 @@ msgid ""
 "If active, non currency commodities (stocks) will be shown. Otherwise they "
 "will be hidden."
 msgstr ""
-"Wenn aktiviert, werden Wertpapiere in der Zusammenfassungs-Zeile angezeigt, "
-"die keine Devisen/Währungen sind. Wenn nicht aktiviert, werden nur Währungen "
-"angezeigt."
+"Wenn aktiviert, werden nur Handelsgüter (z.B. Wertpapiere) in der "
+"Zusammenfassungs-Zeile angezeigt, die keine Währungen sind. Wenn nicht "
+"aktiviert, werden nur Währungen angezeigt."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:15
 msgid "Use relative profit/loss starting date"
@@ -13544,13 +13543,12 @@ msgid ""
 "\n"
 "Click on \"Next\" to proceed or \"Cancel\" to Abort Import."
 msgstr ""
-"Dieser Assistent hilft Ihnen beim Import von Kurswerten aus einer CSV "
-"Datei.\n"
+"Dieser Assistent hilft Ihnen beim Import von Kurswerten aus einer CSV Datei."
+"\n"
 "\n"
 "Für einen erfolgreichen Import müssen mindestens Spalten vorhanden sein für "
-"»Datum«, »Betrag«, »Von Wertpapier/Devise« und »Zu Währung«.\n"
-"\n"
-"Falls alle Einträge für das gleiche Wertpapier oder Währung sind, kann das "
+"»Datum«, »Betrag«, »Von Namensraum«, »Von Symbol« und »Zu Währung«. Falls "
+"alle Einträge für das gleiche Wertpapier oder Währung sind, kann das "
 "vorausgewählt werden und die benötigten Spalten sind nur noch Datum und "
 "Betrag.\n"
 "\n"
@@ -13562,10 +13560,9 @@ msgstr ""
 "oder \"EUR\",\"2019-04-18\",1.125,\"USD\"\n"
 "\n"
 "Es gibt eine Option zur Auswahl der Startzeile, der Endzeile sowie zur Wahl, "
-"wie viele Zeilen, ausgehend von der Startzeile, übersprungen werden sollen "
-"(z.B. für den Fall, dass Ihre Datei einen Block mit Kopfzeilen enthält). "
-"Eine weitere Option ist, bereits vorhandene Preise für den Tag zu "
-"überschreiben.\n"
+"wie viele Zeilen, ausgehend von der Startzeile, übersprungen werden sollen ("
+"z.B. für den Fall, dass Ihre Datei einen Block mit Kopfzeilen enthält). Eine "
+"weitere Option ist, bereits vorhandene Preise für den Tag zu überschreiben.\n"
 "\n"
 "Zu guter Letzt hat die Vorschauseite für weitere Importe Knöpfe zum "
 "Speichern und Laden der Einstellungen. Sie können Ihre angepassten "
@@ -13751,7 +13748,7 @@ msgstr "<b>Verschiedenes</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:841
 msgid "<b>Commodity From</b>"
-msgstr "<b>Von Devise/Wertpapier</b>"
+msgstr "<b>Von Währung/Wertpapier</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:886
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:57
@@ -15380,7 +15377,7 @@ msgstr "Be_merkung"
 #: gnucash/gtkbuilder/dialog-account.glade:1430
 msgid "Smallest fraction of this commodity that can be referenced."
 msgstr ""
-"Kleinste Stückelung, in der diese Devise/Wertpapier gehandelt werden kann."
+"Kleinste Stückelung, in der diese Währung/Wertpapier gehandelt werden kann."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1452
 msgid "Placeholde_r"
@@ -15445,8 +15442,8 @@ msgid ""
 "This account holds opening balance transactions. Only one account per "
 "commodity can hold opening balance transactions."
 msgstr ""
-"Dieses Konto enthält die Anfangsbestand-Buchungen. Pro Währung/Aktie kann "
-"nur ein Konto die Anfangsbestand-Buchungen enthalten."
+"Dieses Konto enthält die Anfangsbestand-Buchungen. Pro Währung/Wertpapier "
+"kann nur ein Konto die Anfangsbestand-Buchungen enthalten."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1569
 msgid "<b>Acco_unt Type</b>"
@@ -15804,23 +15801,23 @@ msgstr "Nationale Währungen anzeigen"
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:126
 msgid "Add a new commodity."
-msgstr "Neue Devise/Wertpapier hinzufügen."
+msgstr "Neue Währung/Wertpapier hinzufügen."
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:144
 msgid "Remove the current commodity."
-msgstr "Aktuelle Devise/Wertpapier entfernen."
+msgstr "Aktuelle Währung/Wertpapier entfernen."
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:162
 msgid "Edit the current commodity."
-msgstr "Aktuelle Devise/Wertpapier bearbeiten."
+msgstr "Aktuelle Währung/Wertpapier bearbeiten."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:120
 msgid ""
 "Enter the full name of the commodity. Example: Cisco Systems Inc., or Apple "
 "Computer, Inc."
 msgstr ""
-"Bitte geben Sie den vollen Namen der Devise/Wertpapier ein: z.B. »Deutsche "
-"Bank AG« oder »Google, Inc.«"
+"Bitte geben Sie den vollen Namen der Währung/Wertpapiers ein: z.B. »Deutsche "
+"Bank AG« oder »Google, Inc.«."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:138
 msgid ""
@@ -15837,7 +15834,7 @@ msgid ""
 "Enter a unique code used to identify the commodity. Or, you may safely leave "
 "this field blank."
 msgstr ""
-"Geben Sie einen eindeutigen Code für die Devise/Wertpapier ein. Sie können "
+"Geben Sie einen eindeutigen Code für die Währung/Wertpapier ein. Sie können "
 "dieses Feld aber auch leer lassen."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:191
@@ -15845,13 +15842,13 @@ msgid ""
 "Enter the smallest fraction of the commodity which can be traded. For stocks "
 "which can only be traded in whole numbers, enter 1."
 msgstr ""
-"Geben Sie die kleinste Stückelung an, mit der die Devise/Wertpapier "
+"Geben Sie die kleinste Stückelung an, mit der die Währung/Wertpapier "
 "gehandelt werden kann. Für Wertpapiere, die nur in ganzzahligen Mengen "
 "gehandelt werden, geben Sie 1 ein."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:215
 msgid "<b>Quote Source Information</b>"
-msgstr "<b>Börsenkursquelle</b>"
+msgstr "<b>Kursquelle</b>"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:296
 msgid ""
@@ -15859,9 +15856,9 @@ msgid ""
 "investment categories like STOCKS and BONDS or exchange names like NASDAQ "
 "and LSE."
 msgstr ""
-"Wählen Sie eine Kategorie für die Devise/Wertpapier oder geben Sie eine neue "
-"ein. Sie können Anlagekategorien wie Aktien und Fonds oder Börsennamen wie "
-"DAX und NASDAQ verwenden."
+"Wählen Sie eine Kategorie für die Währung/Wertpapier oder geben Sie eine "
+"neue ein. Sie können Anlagekategorien wie Aktien und Fonds oder Börsennamen "
+"wie DAX und NASDAQ verwenden."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:319
 msgid ""
@@ -15874,7 +15871,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:335
 msgid "Type of quote source"
-msgstr "Art der Kursabruf-Quelle"
+msgstr "Art der Kursquelle"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:348
 msgid "_Display symbol"
@@ -15928,7 +15925,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:437
 msgid "_Get Online Quotes"
-msgstr "_Börsenkurse online abrufen"
+msgstr "_Kurse online abrufen"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:456
 msgid "F_raction traded"
@@ -17093,9 +17090,9 @@ msgid ""
 "If checked, non-currency commodities will be shown in the summary bar. If "
 "clear, only currencies will be shown."
 msgstr ""
-"Wenn aktiviert, werden Wertpapiere in der Zusammenfassungs-Zeile angezeigt, "
-"die keine Devisen/Währungen sind. Wenn nicht aktiviert, werden nur Währungen "
-"angezeigt."
+"Wenn aktiviert, werden nur Handelsgüter (z.B. Wertpapiere) in der "
+"Zusammenfassungs-Zeile angezeigt, die keine Währungen sind. Wenn nicht "
+"aktiviert, werden nur Währungen angezeigt."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:402
 msgid "_Relative"
@@ -18057,7 +18054,7 @@ msgstr "Erstes Datum"
 
 #: gnucash/gtkbuilder/dialog-price.glade:605
 msgid "From these Commodities"
-msgstr "Von diesen Devisen/Wertpapieren"
+msgstr "Von diesen Währungen/Wertpapieren"
 
 #: gnucash/gtkbuilder/dialog-price.glade:619
 msgid "Keeping the last available price for option"
@@ -22069,9 +22066,9 @@ msgid ""
 "Please note that the exchange code of the commodity you select will be "
 "overwritten."
 msgstr ""
-"Bitte wählen Sie eine Devise/Wertpapier, die zum folgenden Aktiencode passt. "
-"Achtung: Der Aktiencode der ausgewählten Devise/Wertpapier wird anschließend "
-"überschrieben."
+"Bitte wählen Sie eine Währung/Wertpapier, die zum folgenden Aktiencode "
+"passt. Achtung: Der Aktiencode der ausgewählten Währung/Wertpapier wird "
+"anschließend überschrieben."
 
 #: gnucash/import-export/import-format-dialog.c:78
 msgid "m/d/y"
@@ -22746,13 +22743,13 @@ msgstr "Buchungsdatum fehlt."
 
 #: gnucash/price-quotes.scm:448
 msgid "No commodities marked for quote retrieval."
-msgstr "Keine Devisen/Wertpapiere zum Börsenkurs-Abruf markiert."
+msgstr "Keine Währungen/Wertpapiere zum Kurs-Abruf markiert."
 
 #: gnucash/price-quotes.scm:452 gnucash/price-quotes.scm:474
 msgid "Unable to get quotes or diagnose the problem."
 msgstr ""
-"Abrufen der Börsenkurse fehlgeschlagen. Genauere Diagnose ebenfalls "
-"fehlgeschlagen."
+"Das Abrufen der Kurse ist fehlgeschlagen. Eine genauere Diagnose ist nicht "
+"möglich."
 
 #: gnucash/price-quotes.scm:456
 msgid ""
@@ -22771,16 +22768,15 @@ msgstr ""
 
 #: gnucash/price-quotes.scm:466
 msgid "There was a system error while retrieving the price quotes."
-msgstr "Beim Herunterladen der Börsenkurse ist ein Systemfehler aufgetreten."
+msgstr "Beim Herunterladen der Kurse ist ein Systemfehler aufgetreten."
 
 #: gnucash/price-quotes.scm:470
 msgid "There was an unknown error while retrieving the price quotes."
-msgstr ""
-"Beim Herunterladen der Börsenkurse ist ein unbekannter Fehler aufgetreten."
+msgstr "Beim Herunterladen der Kurse ist ein unbekannter Fehler aufgetreten."
 
 #: gnucash/price-quotes.scm:493 gnucash/price-quotes.scm:504
 msgid "Unable to retrieve quotes for these items:"
-msgstr "Abrufen von Börsenkursen für diese Werte fehlgeschlagen:"
+msgstr "Abrufen von Kursen für diese Werte fehlgeschlagen:"
 
 #: gnucash/price-quotes.scm:497
 msgid "Continue using only the good quotes?"
@@ -28201,7 +28197,7 @@ msgstr "Einheiten"
 
 #: gnucash/report/reports/standard/price-scatter.scm:42
 msgid "Price of Commodity"
-msgstr "Preis der Devise/Wertpapier"
+msgstr "Preis der Währung/Wertpapiers"
 
 #: gnucash/report/reports/standard/price-scatter.scm:44
 msgid "Invert prices"
@@ -28218,7 +28214,7 @@ msgstr "Markierungsfarbe"
 #: gnucash/report/reports/standard/price-scatter.scm:72
 msgid "Calculate the price of this commodity."
 msgstr ""
-"Die Devise/Wertpapier, für die der Preis in diesem Bericht dargestellt "
+"Die Währung/Wertpapier, für die der Preis in diesem Bericht dargestellt "
 "werden soll."
 
 #: gnucash/report/reports/standard/price-scatter.scm:80
@@ -28231,7 +28227,7 @@ msgstr "Tatsächliche Buchungen"
 
 #: gnucash/report/reports/standard/price-scatter.scm:88
 msgid "Plot commodity per currency rather than currency per commodity."
-msgstr "Devise/Wertpapier pro Währung zeichnen statt Währung pro Wertpapier."
+msgstr "Handelsgut pro Währung zeichnen statt Währung pro Handelsgut."
 
 #: gnucash/report/reports/standard/price-scatter.scm:104
 msgid "Color of the marker."
@@ -28251,23 +28247,23 @@ msgstr "Halbjahre"
 
 #: gnucash/report/reports/standard/price-scatter.scm:222
 msgid "Identical commodities"
-msgstr "Identische Devisen/Wertpapiere"
+msgstr "Identische Währungen/Wertpapiere"
 
 #: gnucash/report/reports/standard/price-scatter.scm:223
 msgid ""
 "Your selected commodity and the currency of the report are identical. It "
 "doesn't make sense to show prices for identical commodities."
 msgstr ""
-"Die gewählte Devise/Wertpapier, deren Preis angezeigt werden soll, und die "
+"Die gewählte Währung/Wertpapier, deren Preis angezeigt werden soll, und die "
 "Währung des Berichts sind identisch. Es ergibt keinen Sinn, einen Preis für "
-"identische Devisen/Wertpapiere anzuzeigen."
+"identische Währungen/Wertpapiere anzuzeigen."
 
 #: gnucash/report/reports/standard/price-scatter.scm:261
 msgid ""
 "There is no price information available for the selected commodities in the "
 "selected time period."
 msgstr ""
-"Es ist keine Kursinformationen für die gewählte Devise/Wertpapier im "
+"Es ist keine Kursinformationen für die gewählte Währung/Wertpapier im "
 "gewählten Zeitraum vorhanden."
 
 #: gnucash/report/reports/standard/price-scatter.scm:266
@@ -28279,7 +28275,7 @@ msgid ""
 "There was only one single price found for the selected commodities in the "
 "selected time period. This doesn't give a useful plot."
 msgstr ""
-"Es wurde nur ein einziger Preis für die gewählte Devise/Wertpapier im "
+"Es wurde nur ein einziger Preis für die gewählte Währung/Wertpapier im "
 "gewählten Zeitraum gefunden. Dies ergibt kein sinnvolles Diagramm."
 
 #: gnucash/report/reports/standard/price-scatter.scm:273
