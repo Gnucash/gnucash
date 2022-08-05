@@ -523,10 +523,12 @@ inline void gnc_register_query_option(GncOptionDBPtr& db, const char* section,
  * @param name The option name.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param value The initial and default value for the option.
+ * @param type The type of owner, determines the UI type.
  */
 void gnc_register_owner_option(GncOptionDB* db, const char* section,
                                const char* name, const char* key,
-                               const char* doc_string, const GncOwner* value);
+                               const char* doc_string, const GncOwner* value,
+                               GncOwnerType type);
 
 /**
  * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
@@ -534,9 +536,10 @@ void gnc_register_owner_option(GncOptionDB* db, const char* section,
 inline void gnc_register_owner_option(GncOptionDBPtr& db, const char* section,
                                       const char* name, const char* key,
                                       const char* doc_string,
-                                      const GncOwner* value)
+                                      const GncOwner* value,
+                                      GncOwnerType type)
 {
-    gnc_register_owner_option(db.get(), section, name, key, doc_string, value);
+    gnc_register_owner_option(db.get(), section, name, key, doc_string, value, type);
 }
 
 /**

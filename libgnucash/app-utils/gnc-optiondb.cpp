@@ -678,6 +678,10 @@ gnc_register_account_list_limited_option(GncOptionDB* db,
         std::for_each(value.begin(), value.end(), [](auto& guid){
             std::cout << gnc::GUID(guid).to_string() << " ";
         });
+        std::cout << "and types ";
+        std::for_each(allowed.begin(), allowed.end(), [](auto type) {
+            std::cout << xaccAccountTypeEnumAsString(type) << " ";
+        });
         std::cout << std::endl;
         GncOption option{GncOptionAccountListValue{section, name, key, doc_string,
                     GncOptionUIType::ACCOUNT_LIST, value, std::move(allowed)}};
@@ -812,10 +816,29 @@ gnc_register_query_option(GncOptionDB* db, const char* section,
 void
 gnc_register_owner_option(GncOptionDB* db, const char* section,
                           const char* name, const char* key,
-                          const char* doc_string, const GncOwner* value)
+                          const char* doc_string, const GncOwner* value,
+                          GncOwnerType type)
 {
+    GncOptionUIType uitype;
+    switch (type)
+    {
+    case GNC_OWNER_CUSTOMER:
+        uitype = GncOptionUIType::CUSTOMER;
+        break;
+    case GNC_OWNER_EMPLOYEE:
+        uitype = GncOptionUIType::EMPLOYEE;
+        break;
+    case GNC_OWNER_JOB:
+        uitype = GncOptionUIType::JOB;
+        break;
+    case GNC_OWNER_VENDOR:
+        uitype = GncOptionUIType::VENDOR;
+        break;
+    default:
+        uitype = GncOptionUIType::INTERNAL;
+    };
     GncOption option{section, name, key, doc_string, value,
-            GncOptionUIType::INTERNAL};
+                     uitype};
     db->register_option(section, std::move(option));
 }
 
