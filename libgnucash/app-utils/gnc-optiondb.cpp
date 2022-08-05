@@ -33,6 +33,10 @@
 #include "gnc-optiondb-impl.hpp"
 #include "gnc-option-ui.hpp"
 
+extern "C"
+{
+#include <gnc-session.h>
+}
 constexpr const char* log_module{G_LOG_DOMAIN};
 
 constexpr auto stream_max = std::numeric_limits<std::streamsize>::max();
@@ -633,6 +637,30 @@ gnc_register_commodity_option(GncOptionDB* db, const char* section,
 }
 
 void
+gnc_register_commodity_option(GncOptionDB* db, const char* section,
+                              const char* name, const char* key,
+                              const char* doc_string, const char* value)
+{
+    gnc_commodity* commodity{};
+    const auto book{qof_session_get_book(gnc_get_current_session())};
+    const auto commodity_table{gnc_commodity_table_get_table(book)};
+    const auto namespaces{gnc_commodity_table_get_namespaces(commodity_table)};
+    for (auto node = namespaces; node && commodity == nullptr;
+         node = g_list_next(node))
+    {
+        commodity = gnc_commodity_table_lookup(commodity_table,
+                                               (const char*)(node->data),
+                                               value);
+        if (commodity)
+            break;
+    }
+    GncOption option{GncOptionCommodityValue{section, name, key, doc_string,
+                commodity,
+                GncOptionUIType::COMMODITY}};
+    db->register_option(section, std::move(option));
+}
+
+void
 gnc_register_simple_boolean_option(GncOptionDB* db,
                                    const char* section, const char* name,
                                    const char* key, const char* doc_string,
@@ -901,7 +929,23 @@ gnc_register_currency_option(GncOptionDB* db, const char* section,
                              const char* doc_string, gnc_commodity *value)
 {
     GncOption option{GncOptionCommodityValue{
-        section, name, key, doc_string, value,GncOptionUIType::CURRENCY
+        section, name, key, doc_string, value, GncOptionUIType::CURRENCY
+        }};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_currency_option(GncOptionDB* db, const char* section,
+                             const char* name, const char* key,
+                             const char* doc_string, const char* value)
+{
+    const auto book{qof_session_get_book(gnc_get_current_session())};
+    const auto commodity_table{gnc_commodity_table_get_table(book)};
+    const auto commodity = gnc_commodity_table_lookup(commodity_table,
+                                                      "CURRENCY",
+                                                      value);
+    GncOption option{GncOptionCommodityValue{
+        section, name, key, doc_string, commodity, GncOptionUIType::CURRENCY
         }};
     db->register_option(section, std::move(option));
 }

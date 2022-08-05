@@ -203,6 +203,28 @@ inline void gnc_register_commodity_option(const GncOptionDBPtr& db,
     gnc_register_commodity_option(db.get(), section, name, key,
                                   doc_string, value);
 }
+/**
+ * As above but with a const char* value, which should be the symbol
+ * for the commodity. All security editor namespaces will be searched
+ * to retrieve it.
+ */
+void gnc_register_commodity_option(GncOptionDB* db,
+                                   const char* section, const char* name,
+                                   const char* key, const char* doc_string,
+                                   const char* value);
+
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_commodity_option(const GncOptionDBPtr& db,
+                                          const char* section,
+                                          const char* name, const char* key,
+                                          const char* doc_string,
+                                          const char* value)
+{
+    gnc_register_commodity_option(db.get(), section, name, key,
+                                  doc_string, value);
+}
 
 /**
  * Create a new simple boolean option and register it in the options database.
@@ -598,6 +620,26 @@ inline void gnc_register_currency_option(const GncOptionDBPtr& db,
                                           const char* name, const char* key,
                                           const char* doc_string,
                                           gnc_commodity* value)
+{
+    gnc_register_currency_option(db.get(), section, name, key,
+                                 doc_string, value);
+}
+
+/**
+ * As above but with a const char* value, which must be the ISO4217 three-letter
+ * symbol for the currency.
+ */
+void gnc_register_currency_option(GncOptionDB* db,
+                                  const char* section,
+                                  const char* name, const char* key,
+                                  const char* doc_string,
+                                  const char* value);
+
+inline void gnc_register_currency_option(const GncOptionDBPtr& db,
+                                          const char* section,
+                                          const char* name, const char* key,
+                                          const char* doc_string,
+                                          const char* value)
 {
     gnc_register_currency_option(db.get(), section, name, key,
                                  doc_string, value);
