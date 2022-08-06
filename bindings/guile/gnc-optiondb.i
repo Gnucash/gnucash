@@ -759,7 +759,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 %ignore gnc_register_multichoice_option(GncOptionDB*, const char*, const char*, const char*, const char*, const char*, GncMultichoiceOptionChoices&&);
 %ignore gnc_register_list_option(GncOptionDB*, const char*, const char*, const char*, const char*, const char*, GncMultichoiceOptionChoices&&);
 %ignore gnc_register_number_Plot_size_option(GncOptionDB*, const char*, const char*, const char*, const char*, int);
-%ignore gnc_register_query_option(GncOptionDB*, const char*, const char*, const char*, const char*, QofQuery*);
+%ignore gnc_register_query_option(GncOptionDB*, const char*, const char*, const QofQuery*);
 %ignore gnc_register_color_option(GncOptionDB*, const char*, const char*, const char*, const char*, std::string);
 %ignore gnc_register_currency_option(GncOptionDB*, const char*, const char*, const char*, const char*, gnc_commodity*);
 %ignore gnc_register_currency_option(GncOptionDB*, const char*, const char*, const char*, const char*, const char*);

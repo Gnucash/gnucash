@@ -833,10 +833,9 @@ gnc_register_number_plot_size_option(GncOptionDB* db,
 
 void
 gnc_register_query_option(GncOptionDB* db, const char* section,
-                          const char* name, const char* key,
-                          const char* doc_string, const QofQuery* value)
+                          const char* name, const QofQuery* value)
 {
-    GncOption option{section, name, key, doc_string, value,
+    GncOption option{section, name, "", "", value,
             GncOptionUIType::INTERNAL};
     db->register_option(section, std::move(option));
 }
