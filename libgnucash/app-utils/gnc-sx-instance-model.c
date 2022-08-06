@@ -107,16 +107,16 @@ scrub_sx_split_numeric (Split* split, gboolean is_credit, GList **changes)
     gnc_numeric amount = gnc_numeric_zero ();
     gboolean parse_result = FALSE;
 
-    qof_instance_get (QOF_INSTANCE (split), formula, &formval,
-                      numeric, &numval, NULL);
+    qof_instance_get (QOF_INSTANCE (split),
+                      formula, &formval,
+                      numeric, &numval,
+                      NULL);
 
     parse_result = gnc_exp_parser_parse_separate_vars (formval, &amount,
                                                        &error_loc, parser_vars);
 
     if (!parse_result || g_hash_table_size (parser_vars) != 0)
         amount = gnc_numeric_zero ();
-
-    g_hash_table_unref (parser_vars);
 
     if (!numval || !gnc_numeric_eq (amount, *numval))
     {
@@ -126,6 +126,7 @@ scrub_sx_split_numeric (Split* split, gboolean is_credit, GList **changes)
         *changes = g_list_prepend (*changes, change);
     }
 
+    g_hash_table_destroy (parser_vars);
     g_free (formval);
     g_free (numval);
 }
@@ -148,7 +149,9 @@ gnc_sx_scrub_split_numerics (gpointer psplit, gpointer puser)
     for (GList *n = changes; n; n = n->next)
     {
         ScrubItem *change = n->data;
-        qof_instance_set (QOF_INSTANCE (split), change->name, &change->amount, NULL);
+        qof_instance_set (QOF_INSTANCE (split),
+                          change->name, &change->amount,
+                          NULL);
     }
     xaccTransCommitEdit (trans);
     g_list_free_full (changes, g_free);
