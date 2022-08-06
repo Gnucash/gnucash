@@ -102,7 +102,7 @@ scrub_sx_split_numeric (Split* split, gboolean is_credit, GList **changes)
     char *formval;
     gnc_numeric *numval = NULL;
     GHashTable *parser_vars = g_hash_table_new_full
-        (g_str_hash, g_str_equal, g_free, (GDestroyNotify)gnc_sx_variable_free);
+        (g_str_hash, g_str_equal, g_free, (GDestroyNotify)g_free);
     char *error_loc;
     gnc_numeric amount = gnc_numeric_zero ();
     gboolean parse_result = FALSE;
