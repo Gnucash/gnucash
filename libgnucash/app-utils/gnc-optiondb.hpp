@@ -86,6 +86,7 @@ gnc_account_list_from_types(QofBook *book,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param value The initial and default value for the option.
  */
@@ -111,6 +112,7 @@ inline void gnc_register_string_option(const GncOptionDBPtr& db,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param value The initial and default value for the option.
  */
@@ -135,6 +137,7 @@ inline void gnc_register_text_option(const GncOptionDBPtr& db,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param value The initial and default value for the option.
  */
@@ -159,6 +162,7 @@ inline void gnc_register_font_option(const GncOptionDBPtr& db,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param value The initial and default value for the option.
  */
@@ -183,6 +187,7 @@ inline void gnc_register_budget_option(const GncOptionDBPtr& db,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param value The initial and default value for the option.
  */
@@ -232,6 +237,7 @@ inline void gnc_register_commodity_option(const GncOptionDBPtr& db,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param value The initial and default value for the option.
  */
@@ -260,6 +266,7 @@ inline void gnc_register_simple_boolean_option(const GncOptionDBPtr& db,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param value The initial and default value for the option.
  */
@@ -284,6 +291,7 @@ inline void gnc_register_pixmap_option(GncOptionDBPtr& db, const char* section,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param value The initial and default values for the option.
  * @param allowed The accounts which are available for selection.
@@ -316,6 +324,7 @@ inline void gnc_register_account_list_limited_option(GncOptionDBPtr& db,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param value The initial and default values for the option.
  */
@@ -344,6 +353,7 @@ inline void gnc_register_account_list_option(GncOptionDBPtr& db,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param value The initial and default value for the option.
  * @param allowed The accounts which are available for selection.
@@ -376,6 +386,7 @@ inline void gnc_register_account_sel_limited_option(GncOptionDBPtr& db,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param value The set of possible values for the option. Only one can be selected. Note that the value will be moved from the parameter and using the parameter after this call will result in undefined behavior.
  */
@@ -405,6 +416,7 @@ inline void gnc_register_multichoice_option(GncOptionDBPtr& db,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param value The initial and default value for the option.
  * @param list The values available for selection. Note that this parameter will be moved from so using it after this call will result in undefined behavior.
@@ -434,6 +446,7 @@ inline void gnc_register_list_option(GncOptionDBPtr& db, const char* section,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param value The initial and default value for the option.
  * @param min The minimum value for the spin control.
@@ -468,6 +481,7 @@ void gnc_register_number_range_option(GncOptionDBPtr& db,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param value The initial and default value for the option.
  */
@@ -542,6 +556,7 @@ inline void gnc_register_query_option(GncOptionDBPtr& db, const char* section,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param value The initial and default value for the option.
  * @param type The type of owner, determines the UI type.
@@ -569,6 +584,7 @@ inline void gnc_register_owner_option(GncOptionDBPtr& db, const char* section,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param value The initial and default value for the option.
  */
@@ -604,6 +620,7 @@ void gnc_register_report_placement_option(GncOptionDBPtr& db,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param value The initial and default value for the option. It is checked with gnc_commodity_is_currency.
  */
@@ -650,6 +667,7 @@ inline void gnc_register_currency_option(const GncOptionDBPtr& db,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param value The initial and default value for the option.
  */
@@ -676,6 +694,7 @@ inline void gnc_register_invoice_option(const GncOptionDBPtr& db,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param value The initial and default value for the option.
  */
@@ -702,6 +721,7 @@ inline void gnc_register_taxtable_option(const GncOptionDBPtr& db,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param value The initial and default value for the option.
  */
@@ -727,6 +747,7 @@ inline void gnc_register_counter_option(const GncOptionDBPtr& db,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param value The initial and default value for the option.
  */
@@ -755,6 +776,7 @@ inline void gnc_register_counter_format_option(GncOptionDBPtr& db,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param value The initial and default value for the option.
  */
@@ -789,6 +811,7 @@ enum RelativeDateUI : uint8_t
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param period The default/starting relative date value for the option.
  * @param ui What UI to display, relative, absolute, or both.
@@ -820,6 +843,7 @@ inline void gnc_register_date_option(GncOptionDBPtr& db, const char* section,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param time The initial time to set in the option.
  * @param ui What UI to display, relative, absolute, or both.
@@ -847,6 +871,7 @@ inline void gnc_register_date_option(GncOptionDBPtr& db, const char* section,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param period_set A vector of relative date periods to display in the relative control.
  * @param both Whether to display both a relative and absolute control or a onla a relative control.
@@ -876,6 +901,7 @@ inline void gnc_register_date_option(GncOptionDBPtr& db, const char* section,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param both Whether to display both a relative and absolute control or a onla a relative control.
  */
@@ -902,6 +928,7 @@ inline void gnc_register_start_date_option(GncOptionDBPtr& db,
  * @param db A GncOptionDB* for calling from C. Caller retains ownership.
  * @param section The database section for the option.
  * @param name The option name.
+ * @param key A short tag used to sort the controls in the dialog.
  * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
  * @param both Whether to display both a relative and absolute control or a onla a relative control.
  */
