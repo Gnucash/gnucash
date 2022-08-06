@@ -132,8 +132,8 @@
   (define test4-name "Test Report Template")
   (test-begin "test-report-template-getters")
   (test-assert "gnc:report-template-new-options/report-guid"
-    (procedure?
-     (gnc:report-template-new-options/report-guid test4-guid test4-name)))
+    (is-gncoptiondb
+     (gnc:optiondb (gnc:report-template-new-options/report-guid test4-guid test4-name))))
   (test-equal "gnc:report-template-menu-name/report-guid"
     "Menu Name"
     (gnc:report-template-menu-name/report-guid test4-guid test4-name))
@@ -141,8 +141,8 @@
     "Renderer"
     (gnc:report-template-renderer/report-guid test4-guid test4-name))
   (test-assert "gnc:report-template-new-options"
-    (procedure?
-     (gnc:report-template-new-options (gnc:find-report-template test4-guid))))
+    (is-gncoptiondb
+     (gnc:optiondb (gnc:report-template-new-options (gnc:find-report-template test4-guid)))))
   (test-end "test-report-template-getters"))
 
 (define (test-make-report)
@@ -159,8 +159,8 @@
      (gnc:restore-report-by-guid-with-custom-template
       "id" test4-guid test4-name "custom-template-id" #f)))
   (test-assert "gnc:make-report-options"
-    (procedure?
-     (gnc:make-report-options test4-guid)))
+    (is-gncoptiondb
+     (gnc:optiondb (gnc:make-report-options test4-guid))))
   (test-end "test-make-report"))
 
 (define (test-report)

@@ -142,7 +142,7 @@
 (define (test-gnc-string-option-to-scheme)
   (test-begin "test-gnc-string-option-to-scheme")
   (test-option-scheme-output "string"
-                             gnc:make-string-option GncOption-get-scm-value
+                             gnc:make-string-option GncOption-get-value
                              test-string-output-template
                              "waldo" "pepper")
   (test-end "test-gnc-string-option-to-scheme"))
@@ -150,7 +150,7 @@
 (define (test-gnc-text-option-to-scheme)
   (test-begin "test-gnc-text-option-to-scheme")
   (test-option-scheme-output "text"
-                             gnc:make-string-option GncOption-get-scm-value
+                             gnc:make-string-option GncOption-get-value
                              test-string-output-template
                              ""
 "Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium
@@ -161,7 +161,7 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
 (define (test-gnc-font-option-to-scheme)
   (test-begin "test-gnc-font-option-to-scheme")
   (test-option-scheme-output "font"
-                             gnc:make-font-option GncOption-get-scm-value
+                             gnc:make-font-option GncOption-get-value
                              test-string-output-template
                              "URW Bookman L Bold Italic 12"
                              "Helvetica 12")
@@ -231,14 +231,14 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
   (test-begin "test-gnc-bool-option-to-scheme")
   (test-option-scheme-output "bool"
                              gnc:make-simple-boolean-option
-                             GncOption-get-scm-value
+                             GncOption-get-value
                              test-string-output-template #f #t)
   (test-end "test-gnc-bool-option-to-scheme"))
 
 (define (test-gnc-pixmap-option-to-scheme)
   (test-begin "test-gnc-pixmap-option-to-scheme")
   (test-option-scheme-output "pixmap"
-                             gnc:make-pixmap-option GncOption-get-scm-value
+                             gnc:make-pixmap-option GncOption-get-value
                              test-string-output-template
                              "" "~/mybusiness/mylogo.png")
   (test-end "test-gnc-pixmap-option-to-scheme"))
@@ -258,7 +258,7 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
                   (gnc:generate-restore-forms odb "options"))
       (set! value '(relative . end-prev-year))
       (gnc:option-set-value option value)
-      (test-equal "Relative Date Value" value (GncOption-get-scm-value option))
+      (test-equal "Relative Date Value" value (GncOption-get-value option))
       (test-equal "Relative Date" (test-template (GncOption-serialize option))
                   (gnc:generate-restore-forms odb "options"))))
   (test-end "test-gnc-date-option-to-scheme"))
@@ -503,7 +503,7 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
       (let ((option (gnc:lookup-option odb "__reg" "query"))
             (test-template query-literal-output-template))
         (gnc:option-set-value option (gnc-scm2query query-scm))
-        (test-equal  "query form" (test-template (GncOption-get-scm-value option))
+        (test-equal  "query form" (test-template (GncOption-get-value option))
                     (gnc:generate-restore-forms odb "options"))
         ))
   (test-end "test-gnc-query-option-to-scheme"))

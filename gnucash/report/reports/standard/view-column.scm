@@ -42,7 +42,7 @@
 	    (gnc:register-option options opt))))
     ;; the report-list is edited by a special add-on page for the
     ;; options editor.
-    (gnc-register-report-placement-option (gnc:options-get options) "__general" "report-list")
+    (gnc-register-report-placement-option (gnc:optiondb options) "__general" "report-list")
     
     (opt-register
      (gnc:make-number-range-option 

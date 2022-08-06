@@ -143,7 +143,7 @@
 
 (define (accsum-options-generator sx? reportname)
   (let* ((options (gnc:new-options))
-         (odb (gnc:options-get options)))
+         (odb (gnc:optiondb options)))
 
    (gnc-register-string-option odb
       gnc:pagename-general optname-report-title

@@ -24,18 +24,6 @@
 (use-modules (srfi srfi-64))
 (use-modules (tests srfi64-extras))
 
-;; This is a special case where we can't use the exported registration function
-;; because we need to transform the default argument first depending on its
-;; Scheme type.
-(define (gnc:register-multichoice-option options section name key docstring default multichoice)
-  (issue-deprecation-warning "gnc:make-multichoice-option is deprecated. Make and register the option in one command with gnc-register-multichoice-option.")
-  (let ((defval (cond ((symbol? default)
-                       (symbol->string default))
-                      ((number? default)
-                       (number->string default))
-                     (else default))))
-  (gnc-register-multichoice-option options section name key docstring defval multichoice)))
-
 ;; Load the C++ option implementation, avoiding the options.scm ones.
 (eval-when
  (compile load eval expand)
@@ -59,7 +47,7 @@
 
 (define (test-gnc-make-text-option)
   (test-begin "test-gnc-test-string-option")
-  (let* ((option-db (new-gnc-optiondb))
+  (let* ((option-db (gnc-new-optiondb))
          (string-opt (gnc-register-string-option option-db "foo" "bar" "baz"
                                                  "Phony Option" "waldo")))
     (test-equal "waldo" (gnc-option-value option-db "foo" "bar"))
@@ -103,7 +91,7 @@
 
   (define (test-make-account-list-option book)
     (test-group "test-make-account-list-option"
-    (let ((option-db (new-gnc-optiondb))
+    (let ((option-db (gnc-new-optiondb))
           (acctlist (gnc-account-list-from-types book
                                (list ACCT-TYPE-STOCK))))
       (gnc-register-account-list-option option-db "foo" "bar" "baz"
@@ -114,7 +102,7 @@
 
   (define (test-make-account-list-limited-option book)
     (test-group "test-make-account-list-limited-option"
-    (let ((option-db (new-gnc-optiondb))
+    (let ((option-db (gnc-new-optiondb))
           (acctlist (gnc-account-list-from-types book
                                (list ACCT-TYPE-STOCK))))
       (gnc-register-account-list-limited-option ;; Error not account type twice
@@ -131,7 +119,7 @@
 
   (define (test-make-account-sel-limited-option book)
     (test-group "test-make-account-list-option"
-    (let ((option-db (new-gnc-optiondb))
+    (let ((option-db (gnc-new-optiondb))
           (acctlist (gnc-account-list-from-types book
                                (list ACCT-TYPE-STOCK))))
       (gnc-register-account-sel-limited-option
@@ -165,15 +153,16 @@
   (assq-ref (assq-ref keylist key) info))
 
   (test-begin "test-gnc-test-multichoice-option")
-  (let* ((option-db (new-gnc-optiondb))
+  (let* ((option-db (gnc-new-optiondb))
          (multilist (list
                        (list "plugh" (cons 'text "xyzzy") (cons 'tip "thud"))
                        (list 'waldo (cons 'text "pepper") (cons 'tip "salt"))
                        (list "pork" (cons 'text "sausage") (cons 'tip "links"))
                        (list "corge" (cons 'text "grault") (cons 'tip "garply"))))
          (multichoice (keylist->vectorlist multilist))
-         (multi-opt (gnc:register-multichoice-option option-db "foo" "bar" "baz"
-                                                     "Phony Option" 'waldo multichoice)))
+         (multi-opt (gnc-register-multichoice-option
+                     option-db "foo" "bar" "baz"
+                     "Phony Option" "waldo" multichoice)))
 
     (test-equal 'waldo (gnc-option-value option-db "foo" "bar"))
     (gnc-set-option option-db "foo" "bar" "corge")
@@ -183,7 +172,7 @@
 
 (define (test-gnc-make-list-option)
   (test-begin "test-gnc-test-list-option")
-  (let* ((option-db (new-gnc-optiondb))
+  (let* ((option-db (gnc-new-optiondb))
          (value-list (list (vector "AvgBalPlot" "Average" "Average Balance")
                            (vector "GainPlot" "Profit" "Profit (Gain minus Loss)")
                            (vector "GLPlot" "Gain/Loss" "Gain and Loss")))
@@ -198,7 +187,7 @@
 
 (define (test-gnc-make-date-option)
   (test-begin "test-gnc-test-date-option")
-  (let* ((option-db (new-gnc-optiondb))
+  (let* ((option-db (gnc-new-optiondb))
          (date-opt (gnc-register-date-option option-db "foo" "bar"
                                              "baz" "Phony Option"
                                              (RelativeDatePeriod-TODAY)))
@@ -210,7 +199,7 @@
 
 (define (test-gnc-make-date-set-option)
   (test-begin "test-gnc-test-date-set-option")
-  (let* ((option-db (new-gnc-optiondb))
+  (let* ((option-db (gnc-new-optiondb))
          (date-opt (gnc-register-date-option-set
                     option-db "foo" "bar" "baz" "Phony Option"
                     '(today
@@ -228,8 +217,8 @@
 
 (define (test-gnc-make-number-range-option)
   (test-begin "test-gnc-number-range-option")
-  (let* ((option-db (new-gnc-optiondb))
-         (number-opt (gnc-register-number-range-option-double option-db "foo" "bar"
+  (let* ((option-db (gnc-new-optiondb))
+         (number-opt (gnc-register-number-range-option option-db "foo" "bar"
                                                        "baz" "Phony Option"
                                                        15 5 30 1)))
     (test-equal 15.0 (gnc-option-value option-db "foo" "bar"))
@@ -242,7 +231,7 @@
     (let* ((report1 123)
            (report2 456)
            (rp (list (list report1 2 3) (list report2 3 2)))
-           (option-db (new-gnc-optiondb)))
+           (option-db (gnc-new-optiondb)))
            (gnc-register-report-placement-option option-db "foo" "bar")
            (gnc-set-option option-db "foo" "bar" rp)
            (test-equal report2 (car (cadr (gnc-option-value option-db "foo" "bar")))))

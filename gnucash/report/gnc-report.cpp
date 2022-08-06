@@ -397,7 +397,7 @@ gnc_saved_reports_write_to_file (const gchar* report_def, gboolean overwrite)
 GncOptionDB*
 gnc_get_optiondb_from_dispatcher(SCM dispatcher)
 {
-    SCM  get_options = scm_c_eval_string("gnc:options-get");
+    SCM  get_options = scm_c_eval_string("gnc:optiondb");
     if (dispatcher == SCM_BOOL_F)
         return nullptr;
     auto scm_ptr{scm_call_1(get_options, dispatcher)};

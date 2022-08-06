@@ -31,24 +31,30 @@
 (use-modules (ice-9 format))
 (use-modules (ice-9 pretty-print))
 
+;; Conditionally extract the GncOptionDBPtr& from a passed in options:
+; If it's a procedure then it's the object returned by gnc:new-options;
+; otherwise it is assumed to be a GncOptionDBPtr&.
+(define-public (gnc:optiondb options)
+  (if (procedure? options) (options 'get) options))
+
 (define-public (gnc:lookup-option options section name)
   (if options
-      (gnc-lookup-option (options 'lookup) section name)
+      (gnc-lookup-option (gnc:optiondb options) section name)
       #f))
 
 (define-public (gnc:option-setter option)
-  (issue-deprecation-warning "gnc:option-setter is deprecated. Option values are set and retrieved by gnc-set-option and gnc-option-db-lookup.")
+  (issue-deprecation-warning "gnc:option-setter is deprecated. Option values are set and retrieved by gnc-set-option and gnc-optiondb-lookup-value.")
   (lambda (value)
-    (GncOption-set-value-from-scm option value)
+    (GncOption-set-value option value)
     ))
 
 (define-public (gnc:option-set-value option value)
     (issue-deprecation-warning "gnc:option-set-value and indeed all direct option access is deprecated. Use gnc-set-option instead.")
-    (GncOption-set-value-from-scm option value))
+    (GncOption-set-value option value))
 
 (define-public (gnc:option-set-default-value option value)
     (issue-deprecation-warning "gnc:option-set-default-value and indeed all direct option access is deprecated. Use gnc-set-option instead.")
-    (GncOption-set-default-value-from-scm option value))
+    (GncOption-set-default-value option value))
 
 (define-public (gnc:option-section option)
   (GncOption-get-section option))
@@ -57,29 +63,31 @@
   (GncOption-get-name option))
 
 (define-public (gnc:option-default-value option)
-  (GncOption-get-scm-default-value option))
+  (GncOption-get-default-value option))
 
 (define-public (gnc:option-value option)
-    (issue-deprecation-warning "gnc:option-value and indeed all direct option access is deprecated. Use gnc-option-db-lookup-option instead.")
-    (GncOption-get-scm-value option))
+    (issue-deprecation-warning "gnc:option-value and indeed all direct option access is deprecated. Use gnc-optiondb-lookup-value instead.")
+    (GncOption-get-value option))
 
-(define-public (gnc:color-option->html opt)
+(define-public (gnc:color->html color)
   ;; HTML doesn't like alpha values.
-  (let* ((color (GncOption-get-scm-value opt))
-         (html-color (if (> (string-length color) 6)
-                         (substring color 0 6)
-                         color)))
+  (let ((html-color (if (> (string-length color) 6)
+                       (substring color 0 6)
+                       color)))
     (format #f "#~a" html-color)))
 
+(define-public (gnc:color-option->html opt)
+  (gnc:color->html (GncOption-get-value opt)))
+
 (define-public (gnc:color-option->hex-string opt)
-  (format #f "~a" (GncOption-get-scm-value opt)))
+  (format #f "~a" (GncOption-get-value opt)))
 
 (define-public (gnc:option-get-value book category key)
   (define acc (if (pair? key) cons list))
   (qof-book-get-option book (acc category key)))
 
 (define-public (gnc:option-make-internal! options section name)
-  (let ((option (gnc-lookup-option (options 'lookup) section name)))
+  (let ((option (gnc-lookup-option (gnc:optiondb options) section name)))
     (and option (GncOption-make-internal option))))
 
 (define-public (gnc:option-type option)
@@ -87,20 +95,16 @@
 
 ;; Create the database and return a dispatch function.
 (define-public (gnc:new-options)
-  (let ((optiondb (new-gnc-optiondb)))
+  (let ((optiondb (gnc-new-optiondb)))
     (define (dispatch key)
       optiondb)
     dispatch))
 
-;; Use the dispatch function to get the optiondb
-(define-public (gnc:options-get dispatch)
-  (dispatch 'get))
-
-(define-public (gnc:options-set-default-section optiondb section)
-  (GncOptionDB-set-default-section (GncOptionDBPtr-get (optiondb 'set-default-section)) section))
+(define-public (gnc:options-set-default-section options section)
+  (GncOptionDBPtr-set-default-section (gnc:optiondb options) section))
 
 (define-public (gnc:options-for-each func optdb)
-  (gnc-optiondb-foreach (optdb 'foreach) func))
+  (gnc-optiondb-foreach (gnc:optiondb optdb) func))
 
 ;; Copies all values from src-options to dest-options, that is, it
 ;; copies the values of all options from src which exist in dest to
@@ -110,12 +114,12 @@
    dest-options
    (gnc:options-for-each 
     (lambda (src-option) 
-      (let ((dest-option (gnc:lookup-option dest-options 
+      (let ((dest-option (gnc-lookup-option (gnc:optiondb dest-options)
                                             (gnc:option-section src-option)
                                             (gnc:option-name src-option))))
         (if dest-option
-            (gnc:option-set-value dest-option 
-                                  (gnc:option-value src-option)))))
+            (GncOption-set-value dest-option 
+                                 (GncOption-get-value src-option)))))
     src-options)))
 
 ;; Get scheme commands to set changed options, used to write a file that will
@@ -132,8 +136,8 @@
     (GncOption-is-budget-option option))
 
   (define (option-op option)
-    (let ((value (gnc:option-value option))
-          (default-value (gnc:option-default-value option)))
+    (let ((value (GncOption-get-value option))
+          (default-value (GncOption-get-default-value option)))
       (if (not (equal? value default-value))
           (display (string-append
                       "(let ((option (gnc:lookup-option " toplevel-name "\n"
@@ -144,7 +148,7 @@
                       "  ("
                       (cond
                        ((gnc:option-is-budget? option)
-                       (let* ((budget (gnc:option-value option))
+                       (let* ((budget (GncOption-get-value option))
                               (guid (gncBudgetGetGUID budget))
                               (guid-string (gnc:value->string guid)))
                               (if (string? guid-string)
@@ -163,8 +167,7 @@
                       " option))\n\n")))))
 
   (define (generate-forms)
-    (let ((odb (options 'generate-restore-forms)))
-      (gnc-optiondb-foreach2 odb section-op option-op)))
+      (gnc-optiondb-foreach2 (gnc:optiondb options) section-op option-op))
 
   (with-output-to-string generate-forms))
 
@@ -172,11 +175,11 @@
 ;; The following implement the old API that separated creation from registration.
 (define-public (gnc:register-option optdb opt)
   (issue-deprecation-warning "gnc:register-option is deprecated. Use gnc-register-foo-option instead.")
-  (GncOptionDB-register-option (GncOptionDBPtr-get (optdb 'register-option))
-                               (GncOption-get-section opt) opt))
+  (GncOptionDBPtr-register-option (gnc:optiondb optdb)
+                                  (GncOption-get-section opt) opt))
 
 (define-public (gnc:unregister-option optdb section name)
-  (GncOptionDB-unregister-option (GncOptionDBPtr-get (optdb 'unregister-option)) section name))
+  (GncOptionDBPtr-unregister-option (gnc:optiondb optdb) section name))
 
 (define-public (gnc:make-string-option section name key docstring default)
   (issue-deprecation-warning "gnc:make-string-option is deprecated. Make and register the option in one command with gnc-register-string-option.")
@@ -226,7 +229,7 @@
   (let ((defval (if default (default) '())))
   (gnc-make-account-sel-limited-option section name key docstring defval '())))
 (define-public (gnc:make-multichoice-option section name key docstring default multichoice)
-  (issue-deprecation-warning "gnc:make-multichoice-option is deprecated. Make and register the option in one command with gnc:register-multichoice-option.")
+  (issue-deprecation-warning "gnc:make-multichoice-option is deprecated. Make and register the option in one command with gnc-register-multichoice-option.")
   (let ((defval (cond ((symbol? default)
                        (symbol->string default))
                       ((number? default)
@@ -321,13 +324,13 @@
         (both (if (eq? subtype 'both) #t #f)))
     (gnc-make-date-option section name key docstring default relative-date-list both)))
 
-(define-public (gnc:options-make-end-date! optiondb pagename optname sort-tag docstring)
-  (gnc-register-end-date-option (optiondb 'make-option) pagename optname sort-tag docstring))
+(define-public (gnc:options-make-end-date! options pagename optname sort-tag docstring)
+  (gnc-register-end-date-option (gnc:optiondb options) pagename optname sort-tag docstring))
 
-(define-public (gnc:options-make-date-interval! optiondb pagename name-from info-from name-to info-to sort-tag)
-  (gnc-register-start-date-option (optiondb 'make-option) pagename name-from
+(define-public (gnc:options-make-date-interval! options pagename name-from info-from name-to info-to sort-tag)
+  (gnc-register-start-date-option (gnc:optiondb options) pagename name-from
                                   (string-append sort-tag "a") info-from)
-  (gnc-register-end-date-option (optiondb 'make-option) pagename name-to
+  (gnc-register-end-date-option (gnc:optiondb options) pagename name-to
                                 (string-append sort-tag "b") info-to))
 (define-public (gnc:date-option-absolute-time option-value)
   (if (pair? option-value)
@@ -335,16 +338,6 @@
               (cdr option-value)
               (gnc-relative-date-to-time64 (cdr option-value)))
           option-value))
-;; This is a special case where we can't use the exported registration function
-;; because we need to transform the default argument first depending on its
-;; Scheme type.
-(define-public (gnc:register-multichoice-option options section name key docstring default multichoice)
-  (let ((defval (cond ((symbol? default)
-                       (symbol->string default))
-                      ((number? default)
-                       (number->string default))
-                     (else default))))
-  (gnc-register-multichoice-option options section name key docstring defval multichoice)))
 
 ;; Scheme code for supporting options for the business modules
 ;;

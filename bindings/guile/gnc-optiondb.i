@@ -931,11 +931,18 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         return gnc_relative_date_to_time64(scm_relative_date_get_period(date));
     }
 
-    %}
+%} //%header
 
 %ignore GncOptionMultichoiceKeyType;
 
 %inline %{
+
+    inline SCM
+    is_gncoptiondb (const SCM ptr)
+    {
+        return SWIG_Guile_IsPointerOfType (ptr, SWIGTYPE_p_std__unique_ptrT_GncOptionDB_t) ? SCM_BOOL_T : SCM_BOOL_F;
+    }
+
     inline GncMultichoiceOptionIndexVec
     scm_to_multichoices(const SCM new_value,
                         const GncOptionMultichoiceValue& option)
@@ -1108,6 +1115,11 @@ inline SCM return_scm_value(ValueType value)
 %template(gnc_make_int64_option) gnc_make_option<int64_t>;
 %template(gnc_make_query_option) gnc_make_option<const QofQuery*>;
 %template(gnc_make_owner_option) gnc_make_option<const GncOwner*>;
+
+%rename (get_value) GncOption::get_scm_value;
+%rename (get_default_value) GncOption::get_scm_default_value;
+%rename (set_value) GncOption::set_value_from_scm;
+%rename (set_default_value) GncOption::set_default_value_from_scm;
 %extend GncOption {
     bool is_budget_option()
     {
@@ -1529,8 +1541,7 @@ inline SCM return_scm_value(ValueType value)
     %template(set_option_time64) set_option<time64>;
 };
 
-%template(gnc_register_number_range_option_double) gnc_register_number_range_option<double>;
-%template(gnc_register_number_range_option_int) gnc_register_number_range_option<int>;
+%template(gnc_register_number_range_option) gnc_register_number_range_option<double>;
 
 %inline %{
     /* qof_book_set_data isn't exported by sw-engine and we need it to set up a
@@ -1812,7 +1823,7 @@ inline SCM return_scm_value(ValueType value)
 
     using GncOptionDBPtr = std::unique_ptr<GncOptionDB>;
 /* Forward decls */
-    GncOptionDBPtr new_gnc_optiondb();
+    GncOptionDBPtr gnc_new_optiondb();
     GncOption* gnc_lookup_option(const GncOptionDBPtr& optiondb,
                                  const char* section, const char* name);
 
@@ -1827,8 +1838,9 @@ inline SCM return_scm_value(ValueType value)
     }
 
     static SCM
-    gnc_option_db_lookup_value(const GncOptionDB* optiondb, const char* section,
-                               const char* name)
+    gnc_optiondb_lookup_value(const GncOptionDBPtr& optiondb,
+                              const char* section,
+                              const char* name)
     {
         auto db_opt = optiondb->find_option(section, name);
         if (!db_opt)
@@ -1869,7 +1881,7 @@ inline SCM return_scm_value(ValueType value)
     }
 
     GncOptionDBPtr
-    new_gnc_optiondb()
+    gnc_new_optiondb()
     {
         auto db_ptr{std::make_unique<GncOptionDB>()};
         return db_ptr;
@@ -1883,7 +1895,7 @@ inline SCM return_scm_value(ValueType value)
     }
 
     static void
-    gnc_option_db_set_option_selectable_by_name(GncOptionDBPtr& odb,
+    gnc_optiondb_set_option_selectable_by_name(GncOptionDBPtr& odb,
                                                 const char* section,
                                                 const char* name,
                                                 bool selectable)

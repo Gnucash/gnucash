@@ -286,37 +286,36 @@ not found.")))
          (gnc:report-template-renderer templ))))
 
 (define (gnc:report-template-new-options report-template)
-  (let ((generator (gnc:report-template-options-generator report-template))
-        (namer
-         (gnc:make-string-option
-          gnc:pagename-general gnc:optname-reportname "0a"
-          (N_ "Enter a descriptive name for this report.")
-          (G_ (gnc:report-template-name report-template))))
-        (stylesheet
-         (gnc:make-multichoice-option
-          gnc:pagename-general gnc:optname-stylesheet "0b"
-          (N_ "Select a stylesheet for the report.")
-          (string->symbol (N_ "Default"))
-          (map
-           (lambda (ss)
-             (vector
-              (string->symbol (gnc:html-style-sheet-name ss))
-              (gnc:html-style-sheet-name ss)))
-           (gnc:get-html-style-sheets)))))
-
-    (let ((options (if (procedure? generator)
+  (let* ((generator (gnc:report-template-options-generator report-template))
+         (options (if (procedure? generator)
                        (or (gnc:backtrace-if-exception generator)
                            (begin
                              (gnc:warn "BUG DETECTED: Scheme exception raised in "
                                        "report options generator procedure named "
                                        (procedure-name generator))
-                             (gnc:new-options)))
-                       (gnc:new-options))))
-      (or (gnc:lookup-option options gnc:pagename-general gnc:optname-reportname)
-          (gnc:register-option options namer))
-      (or (gnc:lookup-option options gnc:pagename-general gnc:optname-stylesheet)
-          (gnc:register-option options stylesheet))
-      options)))
+                             (gnc-new-optiondb)))
+                       (gnc-new-optiondb)))
+         (optiondb (gnc:optiondb options)))
+      (or
+       (gnc-lookup-option optiondb gnc:pagename-general gnc:optname-reportname)
+       (gnc-register-string-option optiondb
+        gnc:pagename-general gnc:optname-reportname "0a"
+        (N_ "Enter a descriptive name for this report.")
+        (G_ (gnc:report-template-name report-template))))
+      (or
+       (gnc-lookup-option optiondb gnc:pagename-general gnc:optname-stylesheet)
+       (gnc-register-multichoice-option
+        optiondb
+        gnc:pagename-general gnc:optname-stylesheet "0b"
+        (N_ "Select a stylesheet for the report.")
+        (N_ "Default")
+        (map
+         (lambda (ss)
+           (vector
+            (string->symbol (gnc:html-style-sheet-name ss))
+            (gnc:html-style-sheet-name ss)))
+         (gnc:get-html-style-sheets))))
+      options))
 
 ;; A <report> represents an instantiation of a particular report type.
 (define-record-type <report>

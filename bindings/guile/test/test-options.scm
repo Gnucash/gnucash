@@ -14,7 +14,7 @@
   (test-end "test-options"))
 
 (define (test-lookup-option)
-  (let* ((options (new-gnc-optiondb))
+  (let* ((options (gnc-new-optiondb))
          (string-opt (gnc-register-string-option options "Section" "Start Date"
                                                  "sort-tag" "docstring" "waldo")
                      ))
