@@ -88,13 +88,6 @@ hash_table_to_list(GHashTable *table)
     return result_list;
 }
 
-static void
-hash_entry_free_gfunc(gpointer data, G_GNUC_UNUSED gpointer user_data)
-{
-    HashEntry *entry = (HashEntry *) data;
-    g_free(entry);
-}
-
 /* GObject Initialization */
 G_DEFINE_TYPE(GNCPrice, gnc_price, QOF_TYPE_INSTANCE);
 
@@ -781,17 +774,10 @@ gnc_price_list_remove(PriceList **prices, GNCPrice *p)
     return TRUE;
 }
 
-static void
-price_list_destroy_helper(gpointer data, gpointer user_data)
-{
-    gnc_price_unref((GNCPrice *) data);
-}
-
 void
 gnc_price_list_destroy(PriceList *prices)
 {
-    g_list_foreach(prices, price_list_destroy_helper, NULL);
-    g_list_free(prices);
+    g_list_free_full (prices, (GDestroyNotify) gnc_price_unref);
 }
 
 gboolean
@@ -2824,7 +2810,6 @@ stable_price_traversal(GNCPriceDB *db,
 {
     GSList *currency_hashes = NULL;
     gboolean ok = TRUE;
-    GSList *i = NULL;
 
     if (!db || !f) return FALSE;
 
@@ -2832,42 +2817,28 @@ stable_price_traversal(GNCPriceDB *db,
     currency_hashes = g_slist_sort(currency_hashes,
                                    compare_hash_entries_by_commodity_key);
 
-    for (i = currency_hashes; i; i = i->next)
+    for (GSList *i = currency_hashes; i; i = i->next)
     {
         HashEntry *entry = (HashEntry *) i->data;
         GHashTable *currency_hash = (GHashTable *) entry->value;
         GSList *price_lists = hash_table_to_list(currency_hash);
-        GSList *j;
-
         price_lists = g_slist_sort(price_lists, compare_hash_entries_by_commodity_key);
-        for (j = price_lists; j; j = j->next)
+
+        for (GSList *j = price_lists; j; j = j->next)
         {
             HashEntry *pricelist_entry = (HashEntry *) j->data;
             GList *price_list = (GList *) pricelist_entry->value;
-            GList *node;
 
-            for (node = (GList *) price_list; node; node = node->next)
+            for (GList *node = price_list; ok && node; node = node->next)
             {
-                GNCPrice *price = (GNCPrice *) node->data;
-
                 /* stop traversal when f returns FALSE */
-                if (FALSE == ok) break;
-                if (!f(price, user_data)) ok = FALSE;
+                ok = f(node->data, user_data);
             }
         }
-        if (price_lists)
-        {
-            g_slist_foreach(price_lists, hash_entry_free_gfunc, NULL);
-            g_slist_free(price_lists);
-            price_lists = NULL;
-        }
+        g_slist_free_full (price_lists, (GDestroyNotify) g_free);
     }
 
-    if (currency_hashes)
-    {
-        g_slist_foreach(currency_hashes, hash_entry_free_gfunc, NULL);
-        g_slist_free(currency_hashes);
-    }
+    g_slist_free_full (currency_hashes, (GDestroyNotify) g_free);
     return ok;
 }
 
