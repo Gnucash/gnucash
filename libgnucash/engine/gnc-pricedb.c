@@ -698,60 +698,39 @@ compare_prices_by_date(gconstpointer a, gconstpointer b)
                          gnc_price_get_guid((GNCPrice *) b));
 }
 
-typedef struct
+/* return 0 if GNCPrice* a and b date, currency, commodity and price
+   match, otherwise return non-zero */
+static gint
+price_cmp (const GNCPrice *a, const GNCPrice *b)
 {
-    GNCPrice* pPrice;
-    gboolean isDupl;
-} PriceListIsDuplStruct;
+    gint retval;
 
-static void
-price_list_is_duplicate( gpointer data, gpointer user_data )
-{
-    GNCPrice* pPrice = (GNCPrice*)data;
-    PriceListIsDuplStruct* pStruct = (PriceListIsDuplStruct*)user_data;
-    time64 time_a, time_b;
+    retval = gnc_numeric_compare (gnc_price_get_value (a),
+                                  gnc_price_get_value (b));
+    if (retval) return retval;
 
-    time_a = time64CanonicalDayTime( gnc_price_get_time64( pPrice ) );
-    time_b = time64CanonicalDayTime( gnc_price_get_time64( pStruct->pPrice ) );
+    retval = gnc_commodity_compare (gnc_price_get_commodity (a),
+                                    gnc_price_get_commodity (b));
+    if (retval) return retval;
 
-    /* If the date, currency, commodity and price match, it's a duplicate */
-    if ( !gnc_numeric_equal( gnc_price_get_value( pPrice ),  gnc_price_get_value( pStruct->pPrice ) ) ) return;
-    if ( gnc_price_get_commodity( pPrice ) != gnc_price_get_commodity( pStruct->pPrice ) ) return;
-    if ( gnc_price_get_currency( pPrice ) != gnc_price_get_currency( pStruct->pPrice ) ) return;
+    retval = gnc_commodity_compare (gnc_price_get_currency (a),
+                                    gnc_price_get_currency (b));
+    if (retval) return retval;
 
-    if (time_a != time_b) return;
-
-    pStruct->isDupl = TRUE;
+    return (time64_cmp (time64CanonicalDayTime (gnc_price_get_time64 (a)),
+                        time64CanonicalDayTime (gnc_price_get_time64 (b))));
 }
 
 gboolean
 gnc_price_list_insert(PriceList **prices, GNCPrice *p, gboolean check_dupl)
 {
-    GList *result_list;
-    PriceListIsDuplStruct* pStruct;
-    gboolean isDupl;
-
     if (!prices || !p) return FALSE;
     gnc_price_ref(p);
 
-    if (check_dupl)
-    {
-        pStruct = g_new0( PriceListIsDuplStruct, 1 );
-        pStruct->pPrice = p;
-        pStruct->isDupl = FALSE;
-        g_list_foreach( *prices, price_list_is_duplicate, pStruct );
-        isDupl = pStruct->isDupl;
-        g_free( pStruct );
+    if (check_dupl && g_list_find_custom (*prices, p, (GCompareFunc) price_cmp))
+        return TRUE;
 
-        if ( isDupl )
-        {
-            return TRUE;
-        }
-    }
-
-    result_list = g_list_insert_sorted(*prices, p, compare_prices_by_date);
-    if (!result_list) return FALSE;
-    *prices = result_list;
+    *prices = g_list_insert_sorted(*prices, p, compare_prices_by_date);
     return TRUE;
 }
 
