@@ -533,6 +533,8 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
 
     instances->instance_list = g_list_reverse (instlist);
 
+    gnc_sx_destroy_temporal_state (temporal_state);
+
     return instances;
 }
 
