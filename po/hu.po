@@ -10,10 +10,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-22 06:33+0200\n"
-"PO-Revision-Date: 2022-07-14 15:50+0000\n"
+"PO-Revision-Date: 2022-08-08 22:21+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -3723,9 +3723,8 @@ msgid "Archive old data using accounting periods"
 msgstr "Régi adatok archíválása könyvelési időszakok használatával"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:191
-#, fuzzy
 msgid "_Price Database"
-msgstr "Ár adatbázis"
+msgstr "Árfolyam-adatbázis"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:192
 msgid "View and edit the prices for stocks and mutual funds"
@@ -17623,7 +17622,7 @@ msgstr "_Dátum"
 #: gnucash/gtkbuilder/dialog-price.glade:781
 #: gnucash/report/reports/standard/price-scatter.scm:82
 msgid "Price Database"
-msgstr "Ár adatbázis"
+msgstr "Árfolyam-adatbázis"
 
 #: gnucash/gtkbuilder/dialog-price.glade:828
 msgid "Add a new price."
@@ -21336,9 +21335,8 @@ msgid "Import _Prices from a CSV file..."
 msgstr "Tranzakciók importálása szöveges fájlból"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:61
-#, fuzzy
 msgid "Import Prices from a CSV file"
-msgstr "Tranzakciók importálása szöveges fájlból"
+msgstr "Árfolyamok CSV-fájlból"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:134
 #, fuzzy

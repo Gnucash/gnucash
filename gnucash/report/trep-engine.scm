@@ -1893,7 +1893,7 @@ be excluded from periodic reporting.")
           (else (gnc:error "unknown sortvalue"))))
   (define list-of-rows (sort (delete 'row-total (grid-rows grid)) <?))
   (define list-of-cols (sort (delete 'col-total (grid-cols grid)) <?))
-  (define row-average-enabled? (pair? (cdr list-of-cols)))
+  (define row-average-enabled? (and (pair? list-of-cols) (pair? (cdr list-of-cols))))
   (define (monetary-div monetary divisor)
     (and monetary
          (let* ((amount (gnc:gnc-monetary-amount monetary))

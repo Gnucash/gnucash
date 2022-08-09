@@ -39,7 +39,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-22 06:33+0200\n"
-"PO-Revision-Date: 2022-08-01 20:19+0000\n"
+"PO-Revision-Date: 2022-08-06 19:20+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -17955,11 +17955,11 @@ msgstr "Online Kurse"
 
 #: gnucash/gtkbuilder/dialog-price.glade:12
 msgid "Bid"
-msgstr "Geldkurs"
+msgstr "Geldkurs (Ihr Verkauf)"
 
 #: gnucash/gtkbuilder/dialog-price.glade:15
 msgid "Ask"
-msgstr "Briefkurs"
+msgstr "Briefkurs (Ihr Kauf)"
 
 #: gnucash/gtkbuilder/dialog-price.glade:18
 msgid "Last"
