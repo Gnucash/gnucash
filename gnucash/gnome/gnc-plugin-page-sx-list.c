@@ -376,6 +376,83 @@ gppsl_model_populated_cb (GtkTreeModel *tree_model, GncPluginPageSxList *page)
     }
 }
 
+static void
+gpps_new_cb (GtkMenuItem *menuitem, GncPluginPageSxList *page)
+{
+    gnc_plugin_page_sx_list_cmd_new (NULL, page);
+    return;
+}
+
+static void
+gpps_edit_cb (GtkMenuItem *menuitem, GncPluginPageSxList *page)
+{
+    gnc_plugin_page_sx_list_cmd_edit (NULL, page);
+    return;
+}
+
+static void
+gpps_delete_cb (GtkMenuItem *menuitem, GncPluginPageSxList *page)
+{
+    gnc_plugin_page_sx_list_cmd_delete (NULL, page);
+    return;
+}
+
+static void
+treeview_popup (GtkTreeView *treeview, GdkEvent *event, GncPluginPageSxList *page)
+{
+    GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE (page);
+    GtkTreeView *tree_view = GTK_TREE_VIEW (priv->tree_view);
+    GtkTreeSelection *selection = gtk_tree_view_get_selection (tree_view);
+    gint count_selection = gtk_tree_selection_count_selected_rows (selection);
+    GtkWidget *menu, *menuitem;
+
+    menu = gtk_menu_new();
+
+    menuitem = gtk_menu_item_new_with_mnemonic (_("_New"));
+    g_signal_connect (menuitem, "activate", G_CALLBACK(gpps_new_cb), page);
+    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+
+    menuitem = gtk_menu_item_new_with_mnemonic (_("_Edit"));
+    g_signal_connect (menuitem, "activate", G_CALLBACK(gpps_edit_cb), page);
+    gtk_widget_set_sensitive (menuitem, count_selection > 0);
+    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+
+    menuitem = gtk_menu_item_new_with_mnemonic (_("_Delete"));
+    g_signal_connect (menuitem, "activate", G_CALLBACK(gpps_delete_cb), page);
+    gtk_widget_set_sensitive (menuitem, count_selection > 0);
+    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+
+    gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (priv->tree_view), NULL);
+    gtk_widget_show_all (menu);
+    gtk_menu_popup_at_pointer (GTK_MENU (menu), event);
+}
+
+static gboolean
+treeview_button_press (GtkTreeView *treeview, GdkEvent *event,
+                       GncPluginPageSxList *page)
+{
+    GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE (page);
+    GtkTreeView *tree_view = GTK_TREE_VIEW (priv->tree_view);
+    GtkTreeSelection *selection = gtk_tree_view_get_selection (tree_view);
+
+    if (event->type == GDK_BUTTON_PRESS)
+    {
+        GdkEventButton *event_button = (GdkEventButton*)event;
+        if (event_button->button == GDK_BUTTON_SECONDARY)
+        {
+            treeview_popup (tree_view, event, page);
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+static gboolean
+treeview_popup_menu (GtkTreeView *treeview, GncPluginPageSxList *page)
+{
+    treeview_popup (treeview, NULL, page);
+    return TRUE;
+}
 
 static GtkWidget *
 gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
@@ -465,6 +542,11 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
         g_signal_connect (G_OBJECT(gtk_tree_view_get_model (GTK_TREE_VIEW(priv->tree_view))),
                           "model-populated", (GCallback)gppsl_model_populated_cb, (gpointer)page);
     }
+
+    g_signal_connect (G_OBJECT(priv->tree_view), "button-press-event",
+                      G_CALLBACK(treeview_button_press), page);
+    g_signal_connect (G_OBJECT(priv->tree_view), "popup-menu",
+                      G_CALLBACK(treeview_popup_menu), page);
 
     /* Add vbox and label */
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
