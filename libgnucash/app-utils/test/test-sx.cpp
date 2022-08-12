@@ -117,7 +117,10 @@ test_once()
     gnc_gdate_set_today (when);
     while (random_offset_within_one_year == 0)
         random_offset_within_one_year = get_random_int_in_range(-365, 365);
-    g_date_add_days(when, random_offset_within_one_year);
+    if (random_offset_within_one_year > 0)
+        g_date_add_days(when, random_offset_within_one_year);
+    else
+        g_date_subtract_days(when, -random_offset_within_one_year);
 
     end = g_date_new();
     g_date_clear(end, 1);
