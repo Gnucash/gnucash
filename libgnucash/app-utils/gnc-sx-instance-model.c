@@ -1206,7 +1206,8 @@ static gnc_commodity*
 get_transaction_currency(SxTxnCreationData *creation_data,
                          SchedXaction *sx, Transaction *template_txn)
 {
-    gnc_commodity *first_currency = NULL, *first_cmdty = NULL;
+    gnc_commodity *first_currency = NULL, *first_cmdty = NULL,
+        *fallback_cmdty = NULL;
     gboolean err_flag = FALSE, txn_cmdty_in_splits = FALSE;
     gnc_commodity *txn_cmdty = xaccTransGetCurrency (template_txn);
     GList* txn_splits = xaccTransGetSplitList (template_txn);
@@ -1234,6 +1235,9 @@ get_transaction_currency(SxTxnCreationData *creation_data,
         /* Don't consider the commodity of a transaction that has
          * neither a credit nor a debit formula. */
 
+        if (!fallback_cmdty)
+            fallback_cmdty = xaccAccountGetCommodity (split_account);
+
         if (split_is_marker(t_split))
              continue;
 
@@ -1256,9 +1260,11 @@ get_transaction_currency(SxTxnCreationData *creation_data,
     if (first_currency &&
         (!txn_cmdty_in_splits || !gnc_commodity_is_currency (txn_cmdty)))
         return first_currency;
-    if (!txn_cmdty_in_splits)
+    if (!txn_cmdty_in_splits && first_cmdty)
         return first_cmdty;
-    return txn_cmdty;
+    if (txn_cmdty)
+        return txn_cmdty;
+    return fallback_cmdty;
 }
 
 static gboolean

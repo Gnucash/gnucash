@@ -20,12 +20,15 @@
 
 #include <config.h>
 #include <glib.h>
+#include <libguile.h>
 
 extern "C"
 {
 #include <stdlib.h>
 #include "SX-book.h"
+#include "SX-ttinfo.h"
 #include "gnc-date.h"
+#include "gnc-session.h"
 #include "gnc-sx-instance-model.h"
 #include "gnc-ui-util.h"
 
@@ -114,7 +117,10 @@ test_once()
     gnc_gdate_set_today (when);
     while (random_offset_within_one_year == 0)
         random_offset_within_one_year = get_random_int_in_range(-365, 365);
-    g_date_add_days(when, random_offset_within_one_year);
+    if (random_offset_within_one_year > 0)
+        g_date_add_days(when, random_offset_within_one_year);
+    else
+        g_date_subtract_days(when, -random_offset_within_one_year);
 
     end = g_date_new();
     g_date_clear(end, 1);
@@ -214,8 +220,125 @@ test_state_changes()
     remove_sx(foo);
 }
 
-int
-main(int argc, char **argv)
+static void
+make_one_transaction_begin(TTInfo **tti, Account **account1, Account **account2)
+{
+    QofBook *book = qof_session_get_book(gnc_get_current_session());
+
+    *account1 = get_random_account(book);
+    *account2 = get_random_account(book);
+    *tti = gnc_ttinfo_malloc();
+
+    // Both accounts need to have the same currency
+    xaccAccountBeginEdit(*account2);
+    xaccAccountSetCommodity(*account2, xaccAccountGetCommodity(*account1));
+    xaccAccountCommitEdit(*account2);
+
+}
+
+static void
+make_one_transaction_end(TTInfo **tti, SchedXaction *sx)
+{
+    QofBook *book = qof_session_get_book(gnc_get_current_session());
+    GList *txns = g_list_append(NULL, *tti);
+    xaccSchedXactionSetTemplateTrans(sx, txns, book);
+    gnc_ttinfo_free(*tti);
+    *tti = NULL;
+}
+
+static void
+make_one_transaction_with_two_splits(SchedXaction *sx, const char *value1,
+                                     const char *value2, int set_txcurr)
+{
+    TTInfo *tti;
+    Account *account1;
+    Account *account2;
+
+    make_one_transaction_begin(&tti, &account1, &account2);
+
+    if (set_txcurr)
+        gnc_ttinfo_set_currency(tti, xaccAccountGetCommodity(account1));
+
+    TTSplitInfo *split1 = gnc_ttsplitinfo_malloc();
+    TTSplitInfo *split2 = gnc_ttsplitinfo_malloc();
+
+    gnc_ttsplitinfo_set_account(split1, account1);
+    gnc_ttsplitinfo_set_debit_formula(split1, value1);
+    gnc_ttinfo_append_template_split(tti, split1);
+
+    gnc_ttsplitinfo_set_account(split2, account2);
+    gnc_ttsplitinfo_set_credit_formula(split2, value2);
+    gnc_ttinfo_append_template_split(tti, split2);
+
+    make_one_transaction_end(&tti, sx);
+}
+
+static void
+make_one_transaction(SchedXaction *sx)
+{
+    make_one_transaction_with_two_splits(sx, "123", "123", FALSE);
+}
+
+static void
+make_one_zero_transaction(SchedXaction *sx)
+{
+    make_one_transaction_with_two_splits(sx, "0", "0", FALSE);
+}
+
+static void
+make_one_empty_transaction(SchedXaction *sx)
+{
+    make_one_transaction_with_two_splits(sx, "", "", FALSE);
+}
+
+static void
+make_one_empty_transaction_with_txcurr(SchedXaction *sx)
+{
+    make_one_transaction_with_two_splits(sx, "", "", TRUE);
+}
+
+static void
+test_auto_create_transactions(const char *name, void (*populate_sx)(SchedXaction*), unsigned int expected_txns)
+{
+    GncSxInstanceModel *model;
+    GDate yesterday, today;
+    SchedXaction *one_sx;
+    GncSxSummary summary;
+    GList *auto_created_txns = NULL;
+
+    g_date_clear(&today, 1);
+    gnc_gdate_set_today(&today);
+
+    yesterday = today;
+    g_date_subtract_days(&yesterday, 1);
+
+    one_sx = add_daily_sx(name, &yesterday, NULL, NULL);
+
+    xaccSchedXactionSetNumOccur(one_sx, 1);
+    xaccSchedXactionSetRemOccur(one_sx, 1);
+    xaccSchedXactionSetAutoCreate(one_sx, TRUE, FALSE);
+
+    populate_sx(one_sx);
+
+    model = gnc_sx_get_current_instances();
+    gnc_sx_instance_model_summarize(model, &summary);
+    gnc_sx_instance_model_effect_change(model, TRUE, &auto_created_txns, NULL);
+
+    do_test_args(summary.need_dialog == 0, "Dialog not required",
+        __FILE__, __LINE__, "for %s", name);
+    do_test_args(summary.num_auto_create_no_notify_instances == 1, "1 automatically created instance",
+        __FILE__, __LINE__, "for %s", name);
+    do_test_args(g_list_length(auto_created_txns) == expected_txns, "Automatically created transactions",
+        __FILE__, __LINE__, "for %s: auto_created_txns = %u, expected_txns = %u",
+        name, g_list_length(auto_created_txns), expected_txns);
+
+    g_list_free(auto_created_txns);
+    g_object_unref(model);
+    remove_sx(one_sx);
+}
+
+static void
+real_main(void *closure, int argc, char **argv)
 {
     g_setenv ("GNC_UNINSTALLED", "1", TRUE);
     qof_init();
@@ -230,6 +353,18 @@ main(int argc, char **argv)
     test_basic();
     test_state_changes();
 
+    test_auto_create_transactions("make_one_transaction", make_one_transaction, 1);
+    test_auto_create_transactions("make_one_zero_transaction", make_one_zero_transaction, 1);
+    test_auto_create_transactions("make_one_empty_transaction", make_one_empty_transaction, 1);
+    test_auto_create_transactions("make_one_empty_transaction_with_txcurr", make_one_empty_transaction_with_txcurr, 1);
+
     print_test_results();
     exit(get_rv());
+}
+
+int main(int argc, char **argv)
+{
+    /* do things this way so we can test scheme function calls from expressions */
+    scm_boot_guile(argc, argv, real_main, NULL);
+    return 0;
 }
