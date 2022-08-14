@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-22 06:33+0200\n"
-"PO-Revision-Date: 2022-08-12 10:21+0000\n"
+"PO-Revision-Date: 2022-08-14 19:16+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -3778,11 +3778,11 @@ msgstr "<b>Új tranzakció-információ</b>"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:224
 msgid "_Tips Of The Day"
-msgstr "A nap ö_tletei"
+msgstr "A nap _tippjei"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:225
 msgid "View the Tips of the Day"
-msgstr "Tekintse meg a nap ötleteit"
+msgstr "A Nap tippjeinek megtekintése"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:545
 msgid "There are no Scheduled Transactions to be entered at this time."
@@ -8724,20 +8724,16 @@ msgid "Open _Read-Only"
 msgstr "Megnyitás csak _olvasásra"
 
 #: gnucash/gnome-utils/gnc-file.c:853
-#, fuzzy
-#| msgid "_Create New File"
 msgid "Create _New File"
-msgstr "Új fájl létrehozása"
+msgstr "_Új fájl létrehozása"
 
 #: gnucash/gnome-utils/gnc-file.c:856
-#, fuzzy
 msgid "Open _Anyway"
-msgstr "Megnyitás mindenképpen"
+msgstr "Megnyitás mégis"
 
 #: gnucash/gnome-utils/gnc-file.c:859
-#, fuzzy
 msgid "Open _Folder"
-msgstr "Töltelék"
+msgstr "_Mappa megnyitása"
 
 #: gnucash/gnome-utils/gnc-file.c:865 gnucash/gnome-utils/gnc-main-window.c:315
 msgid "_Quit"
@@ -11579,14 +11575,14 @@ msgstr "A következő megjelenítendő tipp."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:17
 msgid "Show \"Tip Of The Day\" at GnuCash start"
-msgstr ""
+msgstr "A \"Nap tippjének\" mutatása a GnuCash indításakor"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:18
 msgid ""
 "Enables the \"Tip Of The Day\" when GnuCash starts up. If active, the dialog "
 "will be shown. Otherwise it will not be shown."
 msgstr ""
-"Ha aktív, megjelenik a \"Nap Tippje\" indításkor. Különben nem jelenik meg."
+"Ha aktív, indításkor megjelenik a \"Nap tippje\". Különben nem jelenik meg."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:5
 #: gnucash/gtkbuilder/dialog-preferences.glade:4229
@@ -16899,7 +16895,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1599
 msgid "Display \"_tip of the day\" dialog"
-msgstr "Mutassd a \" A Nap Tippjét\""
+msgstr "A \"Nap tippje\" ablak mutatása"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1605
 #, fuzzy
@@ -18276,25 +18272,23 @@ msgstr "<b>Adótáblázat-tétel</b>"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:8
 msgid "GnuCash Tip Of The Day"
-msgstr "GnuCash A nap ötlete"
+msgstr "GnuCash A nap tippje"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:26
-#, fuzzy
 msgid "_Previous"
-msgstr "Első opció"
+msgstr "_Előző"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:41
 msgid "_Next"
-msgstr ""
+msgstr "_Következő"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:95
-#, fuzzy
 msgid "<b>Tip of the Day</b>"
-msgstr "<b>A nap ötlete:</b>"
+msgstr "<b>A nap tippje</b>"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:145
 msgid "_Show tips at startup"
-msgstr "_Tippek induláskor"
+msgstr "_Tippek mutatása induláskor"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:8
 msgid "Transfer Funds"
