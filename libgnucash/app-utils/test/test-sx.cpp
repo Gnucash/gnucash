@@ -234,7 +234,6 @@ make_one_transaction_begin(TTInfo **tti, Account **account1, Account **account2)
     xaccAccountSetCommodity(*account2, xaccAccountGetCommodity(*account1));
     xaccAccountCommitEdit(*account2);
 
-    gnc_ttinfo_set_currency(*tti, xaccAccountGetCommodity(*account1));
 }
 
 static void
@@ -248,13 +247,17 @@ make_one_transaction_end(TTInfo **tti, SchedXaction *sx)
 }
 
 static void
-make_one_transaction_with_two_splits(SchedXaction *sx, const char *value1, const char *value2)
+make_one_transaction_with_two_splits(SchedXaction *sx, const char *value1,
+                                     const char *value2, int set_txcurr)
 {
     TTInfo *tti;
     Account *account1;
     Account *account2;
 
     make_one_transaction_begin(&tti, &account1, &account2);
+
+    if (set_txcurr)
+        gnc_ttinfo_set_currency(tti, xaccAccountGetCommodity(account1));
 
     TTSplitInfo *split1 = gnc_ttsplitinfo_malloc();
     TTSplitInfo *split2 = gnc_ttsplitinfo_malloc();
@@ -273,19 +276,25 @@ make_one_transaction_with_two_splits(SchedXaction *sx, const char *value1, const
 static void
 make_one_transaction(SchedXaction *sx)
 {
-    make_one_transaction_with_two_splits(sx, "123", "123");
+    make_one_transaction_with_two_splits(sx, "123", "123", FALSE);
 }
 
 static void
 make_one_zero_transaction(SchedXaction *sx)
 {
-    make_one_transaction_with_two_splits(sx, "0", "0");
+    make_one_transaction_with_two_splits(sx, "0", "0", FALSE);
 }
 
 static void
 make_one_empty_transaction(SchedXaction *sx)
 {
-    make_one_transaction_with_two_splits(sx, "", "");
+    make_one_transaction_with_two_splits(sx, "", "", FALSE);
+}
+
+static void
+make_one_empty_transaction_with_txcurr(SchedXaction *sx)
+{
+    make_one_transaction_with_two_splits(sx, "", "", TRUE);
 }
 
 static void
@@ -347,6 +356,7 @@ real_main(void *closure, int argc, char **argv)
     test_auto_create_transactions("make_one_transaction", make_one_transaction, 1);
     test_auto_create_transactions("make_one_zero_transaction", make_one_zero_transaction, 1);
     test_auto_create_transactions("make_one_empty_transaction", make_one_empty_transaction, 1);
+    test_auto_create_transactions("make_one_empty_transaction_with_txcurr", make_one_empty_transaction_with_txcurr, 1);
 
     print_test_results();
     exit(get_rv());
