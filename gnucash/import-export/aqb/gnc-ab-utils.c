@@ -414,7 +414,24 @@ gnc_ab_get_remote_name (const AB_TRANSACTION *ab_trans)
 
     g_return_val_if_fail (ab_trans, NULL);
 
+#if AQBANKING_VERSION_INT >= 60200
+    /* Prefer the ultimateDebtor, if available.
+     * Happens when processing payments done via VISA debit cards. For details,
+     * see https://lists.gnucash.org/pipermail/gnucash-de/2022-June/012426.html
+     * and https://mailman.aqbanking.de/private/aqbanking-user/2022-August/thread.html
+     * 
+     * This is only relevant when processing transactions received via SEPA.
+     * Not relevant when using gnc_ab_get_remote_name for user input validation.
+     */
+    ab_remote_name = AB_Transaction_GetUltimateDebtor (ab_trans);
+    if (!ab_remote_name)
+    {
+        // No ultimateDebtor given, fall back to the plain remoteName.
+        ab_remote_name = AB_Transaction_GetRemoteName (ab_trans);
+    }
+#else
     ab_remote_name = AB_Transaction_GetRemoteName (ab_trans);
+#endif
     if (ab_remote_name)
 #ifdef AQBANKING6
         gnc_other_name = g_strdup(ab_remote_name);
