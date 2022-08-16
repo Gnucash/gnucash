@@ -283,12 +283,11 @@
       (gnc:account-get-comm-balance-at-date account end-date #f))
 
     (gnc:html-document-set-title! 
-     doc (format #f
-		  (string-append "~a ~a "
-				 (G_ "For Period Covering ~a to ~a"))
-		  company-name report-title
-                  (qof-print-date start-date-printable)
-                  (qof-print-date end-date)))
+     doc (gnc:format (G_ "${company-name} ${report-title} For Period Covering ${start} to ${end}")
+                     'company-name company-name
+                     'report-title report-title
+                     'start (qof-print-date start-date-printable)
+                     'end (qof-print-date end-date)))
     
     (if (null? accounts)
 	
