@@ -399,15 +399,17 @@
          (period-for (string-append " " (G_ "for Period"))))
 
     (gnc:html-document-set-title!
-     doc (if (eq? report-variant 'current)
-             (format #f "~a ~a ~a"
-                     company-name report-title
-                     (qof-print-date end-date))
-             (format #f (string-append "~a ~a "
-                                       (G_ "For Period Covering ~a to ~a"))
-                     company-name report-title
-                     (qof-print-date start-date-printable)
-                     (qof-print-date end-date))))
+     doc
+     (if (eq? report-variant 'current)
+         (gnc:format (G_ "${company-name} ${report-title} ${date}")
+                     'company-name company-name
+                     'report-title report-title
+                     'date (qof-print-date end-date))
+         (gnc:format (G_ "${company-name} ${report-title} For Period Covering ${start} to ${end}")
+                     'company-name company-name
+                     'report-title report-title
+                     'start (qof-print-date start-date-printable)
+                     'end (qof-print-date end-date))))
 
     (if (null? accounts)
 
