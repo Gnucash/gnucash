@@ -30,6 +30,10 @@
     "basic test"
     (gnc:format "basic ${job}" 'job "test"))
 
+  (test-equal "one substitution with hyphen"
+    "master chief"
+    (gnc:format "master ${job-title}" 'job-title "chief"))
+
   (test-equal "two substitutions out of order"
     "basic test"
     (gnc:format "${difficulty} ${job}" 'job "test" 'difficulty "basic"))
