@@ -111,7 +111,7 @@
 (set-exception-printer! 'unbound-variable print-unbound-variable-error)
 
 ;; format.
-(define %regex (make-regexp "[$][{]([[:alnum:]]+)[}]"))
+(define %regex (make-regexp "[$][{]([[:alnum:]\\-]+)[}]"))
 (define (gnc:format str . bindings)
   (define hash (make-hash-table))
   (define (substitute m)
