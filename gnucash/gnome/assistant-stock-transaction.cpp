@@ -1154,14 +1154,19 @@ get_treeview (GtkBuilder *builder, const gchar *treeview_label)
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes
         (_("Memo"), renderer, "text", SPLIT_COL_MEMO, nullptr);
+    gtk_tree_view_column_set_expand (column, true);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
+    gtk_cell_renderer_set_alignment (renderer, 1.0, 0.5);
+    gtk_cell_renderer_set_padding (renderer, 5, 0);
     column = gtk_tree_view_column_new_with_attributes
         (_("Debit"), renderer, "text", SPLIT_COL_DEBIT, nullptr);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
+    gtk_cell_renderer_set_alignment (renderer, 1.0, 0.5);
+    gtk_cell_renderer_set_padding (renderer, 5, 0);
     column = gtk_tree_view_column_new_with_attributes
         (_("Credit"), renderer, "text", SPLIT_COL_CREDIT, nullptr);
     gtk_tree_view_append_column(view, column);
