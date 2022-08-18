@@ -702,22 +702,13 @@ gnc_register_account_list_limited_option(GncOptionDB* db,
 {
     try
     {
-        std::cout << "gnc_register_account_list_limited_option for accounts ";
-        std::for_each(value.begin(), value.end(), [](auto& guid){
-            std::cout << gnc::GUID(guid).to_string() << " ";
-        });
-        std::cout << "and types ";
-        std::for_each(allowed.begin(), allowed.end(), [](auto type) {
-            std::cout << xaccAccountTypeEnumAsString(type) << " ";
-        });
-        std::cout << std::endl;
         GncOption option{GncOptionAccountListValue{section, name, key, doc_string,
                     GncOptionUIType::ACCOUNT_LIST, value, std::move(allowed)}};
         db->register_option(section, std::move(option));
     }
     catch (const std::invalid_argument& err)
     {
-        std::cerr << "Account List Limited Option, value failed validation, option not registered.\n";
+        PWARN("Account List Limited Option, value failed validation, option not registered.");
     }
 }
 
@@ -763,7 +754,7 @@ gnc_register_account_sel_limited_option(GncOptionDB* db,
     }
     catch (const std::invalid_argument& err)
     {
-        std::cerr <<"Account Sel Limited Option, value failed validation, option not registerd.\n";
+        PWARN("Account Sel Limited Option, value failed validation, option not registerd.");
     }
 }
 
@@ -815,7 +806,8 @@ gnc_register_number_range_option(GncOptionDB* db, const char* section,
     }
     catch(const std::invalid_argument& err)
     {
-        std::cerr <<"Number Range Option " << err.what() << ", option not registerd.\n";
+        PWARN("Number Range Option %s, option not registerd.",
+              err.what());
     }
 }
 
