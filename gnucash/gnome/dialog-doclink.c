@@ -242,7 +242,12 @@ setup_location_dialog (GtkBuilder *builder, GtkWidget *button_loc, const gchar *
         gtk_entry_set_text (entry, uri);
     }
     else
-        gtk_label_set_text (location_label, _("Enter an URL like \"https://www.gnucash.org\""));
+        {
+            gchar *enter_uri = g_strdup_printf (_("Enter an URL like \"%s\""),
+                                                PACKAGE_URL);
+            gtk_label_set_text (location_label, enter_uri);
+            g_free (enter_uri);
+        }
 }
 
 static void
