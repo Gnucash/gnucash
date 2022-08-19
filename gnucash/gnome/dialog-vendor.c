@@ -146,27 +146,17 @@ static void gnc_ui_to_vendor (VendorWindow *vw, GncVendor *vendor)
     if (vw->dialog_type == NEW_VENDOR)
         qof_event_gen(QOF_INSTANCE(vendor), QOF_EVENT_ADD, NULL);
 
-    gncVendorSetID (vendor, gtk_editable_get_chars
-                    (GTK_EDITABLE (vw->id_entry), 0, -1));
-    gncVendorSetName (vendor, gtk_editable_get_chars
-                      (GTK_EDITABLE (vw->company_entry), 0, -1));
+    gncVendorSetID (vendor, gtk_entry_get_text (GTK_ENTRY (vw->id_entry)));
+    gncVendorSetName (vendor, gtk_entry_get_text (GTK_ENTRY (vw->company_entry)));
 
-    gncAddressSetName (addr, gtk_editable_get_chars
-                       (GTK_EDITABLE (vw->name_entry), 0, -1));
-    gncAddressSetAddr1 (addr, gtk_editable_get_chars
-                        (GTK_EDITABLE (vw->addr1_entry), 0, -1));
-    gncAddressSetAddr2 (addr, gtk_editable_get_chars
-                        (GTK_EDITABLE (vw->addr2_entry), 0, -1));
-    gncAddressSetAddr3 (addr, gtk_editable_get_chars
-                        (GTK_EDITABLE (vw->addr3_entry), 0, -1));
-    gncAddressSetAddr4 (addr, gtk_editable_get_chars
-                        (GTK_EDITABLE (vw->addr4_entry), 0, -1));
-    gncAddressSetPhone (addr, gtk_editable_get_chars
-                        (GTK_EDITABLE (vw->phone_entry), 0, -1));
-    gncAddressSetFax (addr, gtk_editable_get_chars
-                      (GTK_EDITABLE (vw->fax_entry), 0, -1));
-    gncAddressSetEmail (addr, gtk_editable_get_chars
-                        (GTK_EDITABLE (vw->email_entry), 0, -1));
+    gncAddressSetName (addr, gtk_entry_get_text (GTK_ENTRY (vw->name_entry)));
+    gncAddressSetAddr1 (addr, gtk_entry_get_text (GTK_ENTRY (vw->addr1_entry)));
+    gncAddressSetAddr2 (addr, gtk_entry_get_text (GTK_ENTRY (vw->addr2_entry)));
+    gncAddressSetAddr3 (addr, gtk_entry_get_text (GTK_ENTRY (vw->addr3_entry)));
+    gncAddressSetAddr4 (addr, gtk_entry_get_text (GTK_ENTRY (vw->addr4_entry)));
+    gncAddressSetPhone (addr, gtk_entry_get_text (GTK_ENTRY (vw->phone_entry)));
+    gncAddressSetFax (addr, gtk_entry_get_text (GTK_ENTRY (vw->fax_entry)));
+    gncAddressSetEmail (addr, gtk_entry_get_text (GTK_ENTRY (vw->email_entry)));
 
     gncVendorSetActive (vendor, gtk_toggle_button_get_active
                         (GTK_TOGGLE_BUTTON (vw->active_check)));

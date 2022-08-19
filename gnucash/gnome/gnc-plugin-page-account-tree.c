@@ -367,6 +367,15 @@ static const gchar *actions_requiring_account_rw[] =
     NULL
 };
 
+/** Actions that require the selected account to have subaccounts
+ *  before they are enabled, and the book is in read-write mode. */
+static const gchar *actions_requiring_subaccounts_rw[] =
+{
+    "EditRenumberSubaccountsAction",
+    "EditCascadeAccountAction",
+    NULL
+};
+
 /** Actions that require an account to be selected before they are
  *  enabled. Those actions can be selected even if the book is in readonly mode. */
 static const gchar *actions_requiring_account_always[] =
@@ -387,7 +396,6 @@ static const gchar* readonly_inactive_actions[] =
     "FileAddAccountHierarchyAssistantAction",
     "EditEditAccountAction",
     "EditDeleteAccountAction",
-    "EditRenumberSubaccountsAction",
     "ActionsTransferAction",
     "ActionsReconcileAction",
     "ActionsAutoClearAction",
@@ -889,12 +897,24 @@ gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page)
 
 static void update_inactive_actions(GncPluginPage *plugin_page)
 {
+    GncPluginPageAccountTreePrivate *priv;
     GtkActionGroup *action_group;
-    gboolean is_sensitive = !qof_book_is_readonly(gnc_get_current_book());
+    Account *account = NULL;
+    gboolean allow_write = !qof_book_is_readonly(gnc_get_current_book());
+    gboolean has_account = FALSE;
+    gboolean subaccounts = FALSE;
 
-    // We are readonly - so we have to switch particular actions to inactive.
-    g_return_if_fail(plugin_page);
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE(plugin_page));
+    g_return_if_fail (plugin_page && GNC_IS_PLUGIN_PAGE(plugin_page));
+
+    priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE (plugin_page);
+
+    if (gtk_tree_view_get_selection (priv->tree_view))
+    {
+        account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(priv->tree_view));
+        has_account = (account != NULL);
+        subaccounts = (account && gnc_account_n_children (account) != 0);
+        /* Check here for placeholder accounts, etc. */
+    }
 
     /* Get the action group */
     action_group = gnc_plugin_page_get_action_group(plugin_page);
@@ -902,7 +922,14 @@ static void update_inactive_actions(GncPluginPage *plugin_page)
 
     /* Set the action's sensitivity */
     gnc_plugin_update_actions (action_group, readonly_inactive_actions,
-                               "sensitive", is_sensitive);
+                               "sensitive", allow_write);
+    gnc_plugin_update_actions (action_group, actions_requiring_account_rw,
+                               "sensitive", allow_write && has_account);
+    gnc_plugin_update_actions (action_group, actions_requiring_account_always,
+                               "sensitive", has_account);
+    gnc_plugin_update_actions (action_group, actions_requiring_subaccounts_rw,
+                               "sensitive", allow_write && subaccounts);
+    g_signal_emit (plugin_page, plugin_page_signals[ACCOUNT_SELECTED], 0, account);
 }
 
 /**
@@ -1117,52 +1144,10 @@ gnc_plugin_page_account_tree_double_click_cb (GtkTreeView *treeview,
 
 static void
 gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
-        GncPluginPageAccountTree *page)
+                                                   GncPluginPageAccountTree *page)
 {
-    GtkActionGroup *action_group;
-    GtkAction *action;
-    GtkTreeView *view;
-    Account *account = NULL;
-    gboolean sensitive;
-    gboolean subaccounts;
-    gboolean is_readwrite = !qof_book_is_readonly(gnc_get_current_book());
-
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page));
-
-    if (!selection)
-    {
-        sensitive = FALSE;
-        subaccounts = FALSE;
-    }
-    else
-    {
-        g_return_if_fail(GTK_IS_TREE_SELECTION(selection));
-        view = gtk_tree_selection_get_tree_view (selection);
-        account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(view));
-        sensitive = (account != NULL);
-
-        subaccounts = account && (gnc_account_n_children(account) != 0);
-        /* Check here for placeholder accounts, etc. */
-    }
-
-    action_group = gnc_plugin_page_get_action_group(GNC_PLUGIN_PAGE(page));
-    gnc_plugin_update_actions (action_group, actions_requiring_account_rw,
-                               "sensitive", is_readwrite && sensitive);
-    gnc_plugin_update_actions (action_group, actions_requiring_account_always,
-                               "sensitive", sensitive);
-    g_signal_emit (page, plugin_page_signals[ACCOUNT_SELECTED], 0, account);
-
-    action = gtk_action_group_get_action (action_group, "EditRenumberSubaccountsAction");
-    g_object_set (G_OBJECT(action), "sensitive",
-                  is_readwrite && sensitive && subaccounts, NULL);
-
-    action = gtk_action_group_get_action (action_group, "EditCascadeAccountAction");
-    g_object_set (G_OBJECT(action), "sensitive", subaccounts, NULL);
-
-    gnc_plugin_update_actions (action_group, actions_requiring_account_rw,
-                               "sensitive", is_readwrite && sensitive);
-    gnc_plugin_update_actions (action_group, actions_requiring_account_always,
-                               "sensitive", sensitive);
+    GncPluginPage *plugin_page = GNC_PLUGIN_PAGE(page);
+    update_inactive_actions (plugin_page);
 }
 
 

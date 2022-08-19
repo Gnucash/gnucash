@@ -102,21 +102,21 @@ scrub_sx_split_numeric (Split* split, gboolean is_credit, GList **changes)
     char *formval;
     gnc_numeric *numval = NULL;
     GHashTable *parser_vars = g_hash_table_new_full
-        (g_str_hash, g_str_equal, g_free, (GDestroyNotify)gnc_sx_variable_free);
+        (g_str_hash, g_str_equal, g_free, (GDestroyNotify)g_free);
     char *error_loc;
     gnc_numeric amount = gnc_numeric_zero ();
     gboolean parse_result = FALSE;
 
-    qof_instance_get (QOF_INSTANCE (split), formula, &formval,
-                      numeric, &numval, NULL);
+    qof_instance_get (QOF_INSTANCE (split),
+                      formula, &formval,
+                      numeric, &numval,
+                      NULL);
 
     parse_result = gnc_exp_parser_parse_separate_vars (formval, &amount,
                                                        &error_loc, parser_vars);
 
     if (!parse_result || g_hash_table_size (parser_vars) != 0)
         amount = gnc_numeric_zero ();
-
-    g_hash_table_unref (parser_vars);
 
     if (!numval || !gnc_numeric_eq (amount, *numval))
     {
@@ -126,6 +126,7 @@ scrub_sx_split_numeric (Split* split, gboolean is_credit, GList **changes)
         *changes = g_list_prepend (*changes, change);
     }
 
+    g_hash_table_destroy (parser_vars);
     g_free (formval);
     g_free (numval);
 }
@@ -148,7 +149,9 @@ gnc_sx_scrub_split_numerics (gpointer psplit, gpointer puser)
     for (GList *n = changes; n; n = n->next)
     {
         ScrubItem *change = n->data;
-        qof_instance_set (QOF_INSTANCE (split), change->name, &change->amount, NULL);
+        qof_instance_set (QOF_INSTANCE (split),
+                          change->name, &change->amount,
+                          NULL);
     }
     xaccTransCommitEdit (trans);
     g_list_free_full (changes, g_free);
@@ -448,7 +451,7 @@ static void
 _build_list_from_hash_elts(gpointer key, gpointer value, gpointer user_data)
 {
     GList **list = (GList**)user_data;
-    *list = g_list_insert_sorted(*list, value, _compare_GncSxVariables);
+    *list = g_list_prepend (*list, value);
 }
 
 GList *
@@ -456,13 +459,14 @@ gnc_sx_instance_get_variables(GncSxInstance *inst)
 {
     GList *vars = NULL;
     g_hash_table_foreach(inst->variable_bindings, _build_list_from_hash_elts, &vars);
-    return vars;
+    return g_list_sort (vars, _compare_GncSxVariables);
 }
 
 static GncSxInstances*
 _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
 {
     GncSxInstances *instances = g_new0(GncSxInstances, 1);
+    GList *instlist = NULL;
     SchedXaction *sx = (SchedXaction*)data;
     const GDate *range_end = (const GDate*)user_data;
     GDate creation_end, remind_end;
@@ -490,8 +494,7 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
             seq_num = gnc_sx_get_instance_count(sx, postponed->data);
             inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_POSTPONED,
                                        &inst_date, postponed->data, seq_num);
-            instances->instance_list =
-                g_list_append(instances->instance_list, inst);
+            instlist = g_list_prepend (instlist, inst);
             gnc_sx_destroy_temporal_state(temporal_state);
             temporal_state = gnc_sx_clone_temporal_state(postponed->data);
             gnc_sx_incr_temporal_state(sx, temporal_state);
@@ -509,7 +512,7 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
         seq_num = gnc_sx_get_instance_count(sx, temporal_state);
         inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_TO_CREATE,
                                    &cur_date, temporal_state, seq_num);
-        instances->instance_list = g_list_append(instances->instance_list, inst);
+        instlist = g_list_prepend (instlist, inst);
         gnc_sx_incr_temporal_state(sx, temporal_state);
         cur_date = xaccSchedXactionGetNextInstance(sx, temporal_state);
     }
@@ -523,11 +526,14 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
         seq_num = gnc_sx_get_instance_count(sx, temporal_state);
         inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_REMINDER,
                                    &cur_date, temporal_state, seq_num);
-        instances->instance_list = g_list_append(instances->instance_list,
-                                                 inst);
+        instlist = g_list_prepend (instlist, inst);
         gnc_sx_incr_temporal_state(sx, temporal_state);
         cur_date = xaccSchedXactionGetNextInstance(sx, temporal_state);
     }
+
+    instances->instance_list = g_list_reverse (instlist);
+
+    gnc_sx_destroy_temporal_state (temporal_state);
 
     return instances;
 }
@@ -845,7 +851,7 @@ _find_unreferenced_vars(gchar *key,
         !g_hash_table_lookup_extended(cb_pair->hash, key, NULL, NULL))
     {
         DEBUG("variable [%s] not found", key);
-        cb_pair->list = g_list_append(cb_pair->list, key);
+        cb_pair->list = g_list_prepend (cb_pair->list, key);
     }
 }
 
@@ -925,7 +931,7 @@ gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXactio
             removed_cb_data.hash = new_instances->variable_names;
             removed_cb_data.list = NULL;
             g_hash_table_foreach(existing->variable_names, (GHFunc)_find_unreferenced_vars, &removed_cb_data);
-            removed_var_names = removed_cb_data.list;
+            removed_var_names = g_list_reverse (removed_cb_data.list);
         }
         DEBUG("%d removed variables", g_list_length(removed_var_names));
 
@@ -935,7 +941,7 @@ gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXactio
             added_cb_data.hash = existing->variable_names;
             added_cb_data.list = NULL;
             g_hash_table_foreach(new_instances->variable_names, (GHFunc)_find_unreferenced_vars, &added_cb_data);
-            added_var_names = added_cb_data.list;
+            added_var_names = g_list_reverse (added_cb_data.list);
         }
         DEBUG("%d added variables", g_list_length(added_var_names));
 
@@ -1200,7 +1206,8 @@ static gnc_commodity*
 get_transaction_currency(SxTxnCreationData *creation_data,
                          SchedXaction *sx, Transaction *template_txn)
 {
-    gnc_commodity *first_currency = NULL, *first_cmdty = NULL;
+    gnc_commodity *first_currency = NULL, *first_cmdty = NULL,
+        *fallback_cmdty = NULL;
     gboolean err_flag = FALSE, txn_cmdty_in_splits = FALSE;
     gnc_commodity *txn_cmdty = xaccTransGetCurrency (template_txn);
     GList* txn_splits = xaccTransGetSplitList (template_txn);
@@ -1228,6 +1235,9 @@ get_transaction_currency(SxTxnCreationData *creation_data,
         /* Don't consider the commodity of a transaction that has
          * neither a credit nor a debit formula. */
 
+        if (!fallback_cmdty)
+            fallback_cmdty = xaccAccountGetCommodity (split_account);
+
         if (split_is_marker(t_split))
              continue;
 
@@ -1250,9 +1260,11 @@ get_transaction_currency(SxTxnCreationData *creation_data,
     if (first_currency &&
         (!txn_cmdty_in_splits || !gnc_commodity_is_currency (txn_cmdty)))
         return first_currency;
-    if (!txn_cmdty_in_splits)
+    if (!txn_cmdty_in_splits && first_cmdty)
         return first_cmdty;
-    return txn_cmdty;
+    if (txn_cmdty)
+        return txn_cmdty;
+    return fallback_cmdty;
 }
 
 static gboolean
@@ -1553,7 +1565,7 @@ gnc_sx_instance_model_set_variable(GncSxInstanceModel *model,
 static void
 _list_from_hash_elts(gpointer key, gpointer value, GList **result_list)
 {
-    *result_list = g_list_append(*result_list, value);
+    *result_list = g_list_prepend (*result_list, value);
 }
 
 GList*
@@ -1581,7 +1593,7 @@ gnc_sx_instance_model_check_variables(GncSxInstanceModel *model)
                     GncSxVariableNeeded *need = g_new0(GncSxVariableNeeded, 1);
                     need->instance = inst;
                     need->variable = var;
-                    rtn = g_list_append(rtn, need);
+                    rtn = g_list_prepend (rtn, need);
                 }
             }
             g_list_free(var_list);
