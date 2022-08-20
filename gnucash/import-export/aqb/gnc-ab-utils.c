@@ -453,7 +453,7 @@ gnc_ab_get_purpose (const AB_TRANSACTION *ab_trans, gboolean is_ofx)
          * meaning. Some banks place valuable text into the transaction text,
          * hence we put this text in front of the purpose. */
         ab_transactionText = AB_Transaction_GetTransactionText (ab_trans);
-        if (ab_transactionText)
+        if (ab_transactionText && *ab_transactionText)
             gnc_description = g_strdup (ab_transactionText);
     }
 
@@ -474,10 +474,37 @@ gnc_ab_get_purpose (const AB_TRANSACTION *ab_trans, gboolean is_ofx)
     GWEN_StringList_free (ab_purpose);
 #endif
 
-    if (!gnc_description)
-        gnc_description = g_strdup ("");
-
     return gnc_description;
+}
+
+/* Ultimate Creditor and Ultimate Debtor are newish parameters added
+ * to SWIFT MT940 and CAMT.053 designating the originating
+ * payer or payee on the tranaction. It's unlikely, but still
+ * possible, that a bank would use both this markup and the Non-swift
+ * TransactionText or RemoteName tags.
+ */
+static gchar *
+ab_ultimate_creditor_debtor_to_gnc (const AB_TRANSACTION *ab_trans,
+                                    gboolean is_ofx)
+{
+#if AQBANKING_VERSION_INT < 60200
+    return NULL;
+#else
+    const gchar* ultimate;
+
+    if (is_ofx)
+        return NULL;
+
+    ultimate = AB_Transaction_GetUltimateCreditor (ab_trans);
+
+    if (!ultimate || !*ultimate)
+        ultimate = AB_Transaction_GetUltimateDebtor (ab_trans);
+
+    if (!ultimate || !*ultimate)
+        return NULL;
+
+    return g_strdup (ultimate);
+#endif
 }
 
 gchar *
@@ -486,32 +513,45 @@ gnc_ab_description_to_gnc (const AB_TRANSACTION *ab_trans, gboolean is_ofx)
     /* Description */
     gchar *description = gnc_ab_get_purpose (ab_trans, is_ofx);
     gchar *other_name = gnc_ab_get_remote_name (ab_trans);
-    gchar *retval;
+    gchar *ultimate = ab_ultimate_creditor_debtor_to_gnc (ab_trans, is_ofx);
+    gchar *retval = NULL;
+
+    if (ultimate)
+        retval = ultimate;
+    if (description)
+    {
+        if (retval)
+        {
+            char *tmp = g_strdup_printf ("%s; %s", retval, description);
+            g_free (retval);
+            g_free (description);
+            retval = tmp;
+        }
+        else
+        {
+            retval = description;
+        }
+    }
 
     if (other_name)
     {
-        if (description && *description)
+        if (retval)
         {
-            retval = g_strdup_printf ("%s; %s", description, other_name);
+            char *tmp = g_strdup_printf ("%s; %s", retval, other_name);
+            g_free (retval);
+            g_free (other_name);
+            retval = tmp;
         }
         else
         {
-            retval = g_strdup (other_name);
+            retval = other_name;
         }
     }
-    else
+
+    if (!retval)
     {
-        if (description && *description)
-        {
-            retval = g_strdup (description);
-        }
-        else
-        {
-            retval = g_strdup (_("Unspecified"));
-        }
+        retval = g_strdup (_("Unspecified"));
     }
-    g_free (description);
-    g_free (other_name);
 
     return retval;
 }
