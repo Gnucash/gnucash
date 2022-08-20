@@ -26,9 +26,7 @@ add_app_utils_test(test-print-parse-amount test-print-parse-amount.cpp)
 gnc_add_test_with_guile(test-scm-query-string test-scm-query-string.cpp
   APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS
 )
-gnc_add_test_with_guile(test-sx test-sx.cpp
-  APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS
-)
+add_app_utils_test(test-sx test-sx.cpp)
 
 set(GUILE_DEPENDS
   scm-test-engine

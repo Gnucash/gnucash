@@ -848,9 +848,6 @@ gnc_sx_sxsincelast_book_opened (void)
     gnc_sx_instance_model_effect_change (inst_model, TRUE, &auto_created_txns,
                                          &creation_errors);
 
-    if (auto_created_txns)
-        gnc_gui_refresh_all();
-
     if (summary.need_dialog)
     {
         gnc_ui_sx_since_last_run_dialog (gnc_ui_get_main_window (NULL), inst_model, auto_created_txns);

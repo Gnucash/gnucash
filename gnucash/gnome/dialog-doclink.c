@@ -109,12 +109,12 @@ gnc_doclink_open_uri (GtkWindow *parent, const gchar *uri)
 /* =================================================================== */
 
 static void
-location_ok_cb (GtkEntry *entry, gpointer user_data)
+location_ok_cb (GtkEditable *editable, gpointer user_data)
 {
     GtkWidget *ok_button = user_data;
     gboolean have_scheme = FALSE;
-    const gchar *text = gtk_entry_get_text (entry);
-    GtkWidget *warning_hbox = g_object_get_data (G_OBJECT(entry), "whbox");
+    gchar *text = gtk_editable_get_chars (editable, 0, -1);
+    GtkWidget *warning_hbox = g_object_get_data (G_OBJECT(editable), "whbox");
 
     if (text && *text)
     {
@@ -126,6 +126,7 @@ location_ok_cb (GtkEntry *entry, gpointer user_data)
     }
     gtk_widget_set_visible (warning_hbox, !have_scheme);
     gtk_widget_set_sensitive (ok_button, have_scheme);
+    g_free (text);
 }
 
 static void
@@ -215,7 +216,7 @@ uri_type_selected_cb (GtkToggleButton *button, GtkWidget *widget)
     {
         if (g_strcmp0 (gtk_buildable_get_name (
                              GTK_BUILDABLE(parent_hbox)), "location_hbox") == 0)
-            location_ok_cb (GTK_ENTRY (widget), ok_button);
+            location_ok_cb (GTK_EDITABLE(widget), ok_button);
         else
             file_ok_cb (GTK_BUTTON(widget), ok_button);
 

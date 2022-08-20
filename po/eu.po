@@ -3,24 +3,23 @@
 # Copyright (C) 2005 Free Software Foundation, Inc.
 # Mikel Olasagasti Uranga, 2005
 # Hizkuntza Politikarako Sailburuordetza <hizkpol@ej-gv.es>, 2005.
-# Enrique Ayesta Perojo <eayesta@gmail.com>, 2022.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-22 06:33+0200\n"
-"PO-Revision-Date: 2022-08-05 14:15+0000\n"
-"Last-Translator: Enrique Ayesta Perojo <eayesta@gmail.com>\n"
-"Language-Team: Basque <https://hosted.weblate.org/projects/gnucash/gnucash/"
-"eu/>\n"
+"PO-Revision-Date: 2005-08-05 10:45+0200\n"
+"Last-Translator: Mikel Olasagasti <hey_neken@mundurat.net>\n"
+"Language-Team: Basque <translation-team-eu@lists.sourceforge.net>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: KBabel 1.9.1\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -31165,7 +31164,7 @@ msgstr ""
 
 #: libgnucash/engine/policy.c:62
 msgid "Manually select lots."
-msgstr "Aukeratu sortak eskuz."
+msgstr ""
 
 #: libgnucash/engine/qofbookslots.h:66
 #, fuzzy
@@ -31212,7 +31211,7 @@ msgstr "_Ezabatu kontua"
 #. Translators: " + " is an separator in a list of string-representations of recurrence frequencies
 #: libgnucash/engine/Recurrence.c:511
 msgid " + "
-msgstr " + "
+msgstr ""
 
 #. Translators: %u is the recurrence multiplier, i.e. this
 #. event should occur every %u'th week.
@@ -31236,7 +31235,7 @@ msgstr "azken eguna"
 #: libgnucash/engine/Recurrence.c:674
 #, c-format
 msgid "%s %s"
-msgstr "%s %s"
+msgstr ""
 
 #. Translators: %d is the number of Recurrences in the list.
 #: libgnucash/engine/Recurrence.c:727

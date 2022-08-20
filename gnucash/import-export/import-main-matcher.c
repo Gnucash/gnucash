@@ -1897,7 +1897,6 @@ get_peer_acct_names (Split *split)
         accounts_seen = g_list_prepend (accounts_seen, account);
         g_free (name);
     }
-    names = g_list_sort (names, (GCompareFunc)g_utf8_collate);
     retval = gnc_g_list_stringjoin (names, ", ");
     g_list_free_full (names, g_free);
     g_list_free (accounts_seen);

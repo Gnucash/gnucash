@@ -399,8 +399,10 @@ static void gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
     /* Only set these values for NEW/MOD INVOICE types */
     if (iw->dialog_type != EDIT_INVOICE)
     {
-        gncInvoiceSetID (invoice, gtk_entry_get_text (GTK_ENTRY (iw->id_entry)));
-        gncInvoiceSetBillingID (invoice, gtk_entry_get_text (GTK_ENTRY (iw->billing_id_entry)));
+        gncInvoiceSetID (invoice, gtk_editable_get_chars
+                         (GTK_EDITABLE (iw->id_entry), 0, -1));
+        gncInvoiceSetBillingID (invoice, gtk_editable_get_chars
+                                (GTK_EDITABLE (iw->billing_id_entry), 0, -1));
         gncInvoiceSetTerms (invoice, iw->terms);
 
         gncInvoiceSetDateOpened (invoice, time);

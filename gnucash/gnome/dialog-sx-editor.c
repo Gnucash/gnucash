@@ -264,7 +264,7 @@ editor_ok_button_clicked_cb (GtkButton *b, GncSxEditorDialog *sxed)
 static gboolean
 gnc_sxed_check_name_changed (GncSxEditorDialog *sxed)
 {
-    const char *name = gtk_entry_get_text (GTK_ENTRY (sxed->nameEntry));
+    char *name = gtk_editable_get_chars (GTK_EDITABLE (sxed->nameEntry), 0, -1);
 
     if (strlen (name) == 0)
         return TRUE;

@@ -133,14 +133,16 @@ static void gnc_ui_to_order (OrderWindow *ow, GncOrder *order)
     gnc_suspend_gui_refresh ();
     gncOrderBeginEdit (order);
 
-    gncOrderSetID (order, gtk_entry_get_text (GTK_ENTRY (ow->id_entry)));
+    gncOrderSetID (order, gtk_editable_get_chars
+                   (GTK_EDITABLE (ow->id_entry), 0, -1));
 
     text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->notes_text));
     gtk_text_buffer_get_bounds (text_buffer, &start, &end);
     text = gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE);
     gncOrderSetNotes (order, text);
 
-    gncOrderSetReference (order, gtk_entry_get_text (GTK_ENTRY (ow->ref_entry)));
+    gncOrderSetReference (order, gtk_editable_get_chars
+                          (GTK_EDITABLE (ow->ref_entry), 0, -1));
 
     tt = gnc_date_edit_get_date (GNC_DATE_EDIT (ow->opened_date));
     gncOrderSetDateOpened (order, tt);

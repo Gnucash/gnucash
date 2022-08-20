@@ -10,10 +10,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-22 06:33+0200\n"
-"PO-Revision-Date: 2022-07-30 15:50+0000\n"
+"PO-Revision-Date: 2022-06-25 15:21+0000\n"
 "Last-Translator: Simon Arlott <weblate.simon@arlott.org>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/en_GB/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -8719,8 +8719,10 @@ msgid "Edit the global preferences of GnuCash"
 msgstr "Edit the global preferences of GnuCash"
 
 #: gnucash/gnome-utils/gnc-main-window.c:345
+#, fuzzy
+#| msgid "<b>Tab Position</b>"
 msgid "Tab P_osition"
-msgstr "Tab P_osition"
+msgstr "<b>Tab Position</b>"
 
 #: gnucash/gnome-utils/gnc-main-window.c:348
 msgid "Select sorting criteria for this page view"
@@ -8969,7 +8971,7 @@ msgstr "Book Options"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4853 gnucash/gnucash-core-app.cpp:261
 msgid "(user modifiable)"
-msgstr "(user modifiable)"
+msgstr ""
 
 #. Translators: %s will be replaced with the current year
 #: gnucash/gnome-utils/gnc-main-window.c:4880
@@ -10323,8 +10325,10 @@ msgid "{1} [options] [datafile]"
 msgstr "{1} [options] [datafile]"
 
 #: gnucash/gnucash-core-app.cpp:255
+#, fuzzy
+#| msgid "GnuCash "
 msgid "GnuCash Paths"
-msgstr "GnuCash Paths"
+msgstr "GnuCash "
 
 #: gnucash/gnucash-core-app.cpp:270
 msgid "GnuCash {1}"
@@ -10371,8 +10375,10 @@ msgstr ""
 "This can be invoked multiple times."
 
 #: gnucash/gnucash-core-app.cpp:309
+#, fuzzy
+#| msgid "Show plot"
 msgid "Show paths"
-msgstr "Show paths"
+msgstr "Show plot"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
@@ -15579,8 +15585,10 @@ msgstr "ISIN, S_EDOL or other code"
 #: gnucash/gtkbuilder/dialog-commodity.glade:485
 #: gnucash/gtkbuilder/dialog-commodity.glade:767
 #: gnucash/gtkbuilder/dialog-price.glade:122
+#, fuzzy
+#| msgid "Namespace"
 msgid "Nam_espace"
-msgstr "Nam_espace"
+msgstr "Namespace"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:500
 msgid "_Symbol/abbreviation"
@@ -16285,8 +16293,10 @@ msgid "Green"
 msgstr "Green"
 
 #: gnucash/gtkbuilder/dialog-import.glade:871
+#, fuzzy
+#| msgid "Do not print transaction detail"
 msgid "Edit imported transaction details"
-msgstr "Edit imported transaction details"
+msgstr "Do not print transaction detail"
 
 #: gnucash/gtkbuilder/dialog-import.glade:944
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:151
@@ -21613,18 +21623,24 @@ msgstr "Disabled"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1321
+#, fuzzy
+#| msgid "Assign a transfer account to the selection."
 msgid "_Assign a transfer account to the selection"
-msgstr "_Assign a transfer account to the selection"
+msgstr "Assign a transfer account to the selection."
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1368
+#, fuzzy
+#| msgid "Description, Notes, or Memo"
 msgid "_Edit description, notes, or memo"
-msgstr "_Edit description, notes, or memo"
+msgstr "Description, Notes, or Memo"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1377
+#, fuzzy
+#| msgid "Reset defaults"
 msgid "_Reset all edits"
-msgstr "_Reset all edits"
+msgstr "Reset defaults"
 
 #: gnucash/import-export/import-main-matcher.c:1547
 msgctxt "Column header for 'Adding transaction'"

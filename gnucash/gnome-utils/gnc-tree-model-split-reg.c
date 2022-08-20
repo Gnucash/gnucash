@@ -516,7 +516,7 @@ gtm_sr_foreach_func (GtkTreeModel *model,
     g_assert ( rowref_list != NULL );
 
     rowref = gtk_tree_row_reference_new (model, path);
-    *rowref_list = g_list_prepend (*rowref_list, rowref);
+    *rowref_list = g_list_append (*rowref_list, rowref);
 
     return FALSE; /* do not stop walking the store, call us with next row */
 }
@@ -529,6 +529,8 @@ gtm_sr_remove_all_rows (GncTreeModelSplitReg *model)
     GList *node;
 
     gtk_tree_model_foreach (GTK_TREE_MODEL(model), (GtkTreeModelForeachFunc)gtm_sr_foreach_func, &rr_list);
+
+    rr_list = g_list_reverse (rr_list);
 
     for ( node = rr_list;  node != NULL;  node = node->next )
     {

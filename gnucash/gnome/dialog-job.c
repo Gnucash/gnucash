@@ -105,9 +105,12 @@ static void gnc_ui_to_job (JobWindow *jw, GncJob *job)
 
     qof_event_gen(QOF_INSTANCE(job), QOF_EVENT_ADD, NULL);
 
-    gncJobSetID (job, gtk_entry_get_text (GTK_ENTRY (jw->id_entry)));
-    gncJobSetName (job, gtk_entry_get_text (GTK_ENTRY (jw->name_entry)));
-    gncJobSetReference (job, gtk_entry_get_text (GTK_ENTRY (jw->desc_entry)));
+    gncJobSetID (job, gtk_editable_get_chars (GTK_EDITABLE (jw->id_entry),
+                 0, -1));
+    gncJobSetName (job, gtk_editable_get_chars (GTK_EDITABLE (jw->name_entry),
+                   0, -1));
+    gncJobSetReference (job, gtk_editable_get_chars
+                        (GTK_EDITABLE (jw->desc_entry), 0, -1));
     gncJobSetRate (job, gnc_amount_edit_get_amount
                         (GNC_AMOUNT_EDIT (jw->rate_entry)));
     gncJobSetActive (job, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON

@@ -4,7 +4,6 @@
 (use-modules (gnucash reports standard category-barchart))
 (use-modules (gnucash reports standard net-charts))
 (use-modules (gnucash reports standard account-piecharts))
-(use-modules (gnucash reports standard cash-flow))
 (use-modules (gnucash reports standard cashflow-barchart))
 (use-modules (gnucash reports standard price-scatter))
 (use-modules (gnucash reports example daily-reports))
