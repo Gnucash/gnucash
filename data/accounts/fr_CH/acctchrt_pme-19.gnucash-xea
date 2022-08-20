@@ -33,15 +33,16 @@
       Plan comptable PME CH 2019
   </gnc-act:title>
   <gnc-act:short-description>
-     Nouveau modèle 2019 plan comptable PME Suisse  
+     Modèle 2019 plan comptable PME Suisse  
   </gnc-act:short-description>
   <gnc-act:long-description>
      Plan comptable PME selon Sterchi I Mattle I Helbling publié par veb.ch
+     https://weiterbildung.veb.ch/hubfs/01_Content/03_Dokumente/02_Schulkontorahmen/Schulkontenrahmen_veb.ch_franz.pdf
   </gnc-act:long-description>
   <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
   <gnc:account version="2.0.0">
     <act:name>Root Account</act:name>
-    <act:id type="guid">8cd23636f1e04a74a35c13ae23427c14</act:id>
+    <act:id type="guid">47469471b603439c88189eca6c2e86e1</act:id>
     <act:type>ROOT</act:type>
     <act:commodity>
     <cmdty:space>CURRENCY</cmdty:space>
@@ -60,7 +61,13 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>1</act:code>
     <act:description>1</act:description>
-    <act:parent type="guid">8cd23636f1e04a74a35c13ae23427c14</act:parent>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
+    <act:parent type="guid">47469471b603439c88189eca6c2e86e1</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
     <act:name>Actifs circulants</act:name>
@@ -73,10 +80,16 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>10</act:code>
     <act:description>10</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>   
     <act:parent type="guid">e3f7b59890ec44688241f322db0a7392</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Liquidités</act:name>
+    <act:name>Trésorerie</act:name>
     <act:id type="guid">a602999aceb84ba3b9a1654ba9ba66c0</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -86,6 +99,12 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>100</act:code>
     <act:description>100</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>   
     <act:parent type="guid">264d9071ae2945a186436dc8e4b95dab</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -102,7 +121,7 @@
     <act:parent type="guid">a602999aceb84ba3b9a1654ba9ba66c0</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Poste</act:name>
+    <act:name>Compte postal</act:name>
     <act:id type="guid">29563b55669b47f991244a4e6d579c75</act:id>
     <act:type>BANK</act:type>
     <act:commodity>
@@ -115,7 +134,7 @@
     <act:parent type="guid">a602999aceb84ba3b9a1654ba9ba66c0</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Banque (avoir)</act:name>
+    <act:name>Compte courant</act:name>
     <act:id type="guid">e6619891e57446c8978fa2e92023c58a</act:id>
     <act:type>BANK</act:type>
     <act:commodity>
@@ -128,7 +147,7 @@
     <act:parent type="guid">a602999aceb84ba3b9a1654ba9ba66c0</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Créances résultant de livraisons et prestations</act:name>
+    <act:name>Créances résultant de la vente de biens et de prestations de services</act:name>
     <act:id type="guid">e888673f62eb40dca11fa15887bf46b0</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -138,10 +157,16 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>110</act:code>
     <act:description>110</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>   
     <act:parent type="guid">264d9071ae2945a186436dc8e4b95dab</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Créances provenant de livraisons et de prestations (Débiteurs)</act:name>
+    <act:name>Créances résultant de la vente de biens et de prestations de services envers des tiers (débiteurs-clients)</act:name>
     <act:id type="guid">eb0cf039f7154b35af988ccef891e35f</act:id>
     <act:type>RECEIVABLE</act:type>
     <act:commodity>
@@ -154,7 +179,7 @@
     <act:parent type="guid">e888673f62eb40dca11fa15887bf46b0</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Ducroire</act:name>
+    <act:name>Corrections de la valeur des ventes de biens et de prestations de services (incl. ducroire)</act:name>
     <act:id type="guid">4d13e5097e204258877368d3735ee5e4</act:id>
     <act:type>RECEIVABLE</act:type>
     <act:commodity>
@@ -167,7 +192,20 @@
     <act:parent type="guid">e888673f62eb40dca11fa15887bf46b0</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Stocks et prestations non facturées</act:name>
+    <act:name> Créances résultant de la vente de biens et de prestations de services envers des participations</act:name>
+    <act:id type="guid">4d13e5097e204248877368d3735ee5e4</act:id>
+    <act:type>RECEIVABLE</act:type>
+    <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>CHF</cmdty:id>
+    </act:commodity>
+    <act:commodity-scu>100</act:commodity-scu>
+    <act:code>1110</act:code>
+    <act:description>1110</act:description>
+    <act:parent type="guid">e888673f62eb40dca11fa15887bf46b0</act:parent>
+  </gnc:account>  
+  <gnc:account version="2.0.0">
+    <act:name>Stocks et prestations de services non facturées</act:name>
     <act:id type="guid">5fe44b460f5b45cf89b52a12f2f0abad</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -177,10 +215,16 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>120</act:code>
     <act:description>120</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>     
     <act:parent type="guid">264d9071ae2945a186436dc8e4b95dab</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Marchandises commerciales</act:name>
+    <act:name>Stocks de marchandises commerciales</act:name>
     <act:id type="guid">559a32ef6fc643cb987de492b524d031</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -193,7 +237,7 @@
     <act:parent type="guid">5fe44b460f5b45cf89b52a12f2f0abad</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Matières premières</act:name>
+    <act:name>Stock de matières premières</act:name>
     <act:id type="guid">0a40362a5183425790a6df0cd8045277</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -206,7 +250,7 @@
     <act:parent type="guid">5fe44b460f5b45cf89b52a12f2f0abad</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Matières auxiliaires</act:name>
+    <act:name>Stocks de pièces terminées</act:name>
     <act:id type="guid">05a6995154174d008d7ebec87f7295f1</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -219,7 +263,7 @@
     <act:parent type="guid">5fe44b460f5b45cf89b52a12f2f0abad</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Matières consommables</act:name>
+    <act:name>Stocks de matières auxiliaires</act:name>
     <act:id type="guid">c9d2781eb3fb44d6a64913d85504a57f</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -258,7 +302,7 @@
     <act:parent type="guid">5fe44b460f5b45cf89b52a12f2f0abad</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Stocks de produits non finis</act:name>
+    <act:name>Stocks de produits semi-ouvrés</act:name>
     <act:id type="guid">45bab5223ab042deb9751fa1256fe95b</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -284,7 +328,20 @@
     <act:parent type="guid">5fe44b460f5b45cf89b52a12f2f0abad</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Compte de régularisation de l’actif</act:name>
+    <act:name>Correction de la valeur des stocks et de travaux en cours</act:name>
+    <act:id type="guid">29925c024d5a403bb0a90e9ddb7c8beb</act:id>
+    <act:type>ASSET</act:type>
+    <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>CHF</cmdty:id>
+    </act:commodity>
+    <act:commodity-scu>100</act:commodity-scu>
+    <act:code>1290</act:code>
+    <act:description>1290</act:description>
+    <act:parent type="guid">5fe44b460f5b45cf89b52a12f2f0abad</act:parent>
+  </gnc:account>  
+  <gnc:account version="2.0.0">
+    <act:name>Actifs de régularisation (actifs transitoires)</act:name>
     <act:id type="guid">0f0cb8cc307b4cf19da688ead07174bc</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -294,10 +351,16 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>130</act:code>
     <act:description>130</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>     
     <act:parent type="guid">264d9071ae2945a186436dc8e4b95dab</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Charges payées d‘avance</act:name>
+    <act:name>Charges payées d'avance</act:name>
     <act:id type="guid">545d0c4d02ed43aeaf5190d72ef0f795</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -323,7 +386,7 @@
     <act:parent type="guid">0f0cb8cc307b4cf19da688ead07174bc</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Avoirs à court terme cotés en bourse</act:name>
+    <act:name>Actifs cotés en bourse détenus à court terme</act:name>
     <act:id type="guid">ea98b3c5c9c9434f92b5eb621b22038d</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -333,10 +396,16 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>106</act:code>
     <act:description>106</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>     
     <act:parent type="guid">264d9071ae2945a186436dc8e4b95dab</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Titres</act:name>
+    <act:name>Titres à court terme</act:name>
     <act:id type="guid">cfc6925f45c641d0a73962fd0ea0fabd</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -349,7 +418,7 @@
     <act:parent type="guid">ea98b3c5c9c9434f92b5eb621b22038d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Ajustement de la valeur des titres</act:name>
+    <act:name>Corrections de la valeur des titres</act:name>
     <act:id type="guid">edcd8672409a4bf6a895eac7c8703d34</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -372,10 +441,16 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>114</act:code>
     <act:description>114</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>     
     <act:parent type="guid">264d9071ae2945a186436dc8e4b95dab</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Avances et prêts</act:name>
+    <act:name>Prêts</act:name>
     <act:id type="guid">6f6144410f7d45868ee34569bf9c3d5d</act:id>
     <act:type>RECEIVABLE</act:type>
     <act:commodity>
@@ -388,7 +463,7 @@
     <act:parent type="guid">fb0919cfbd2a4c35b5a73a14bb8cb9eb</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Ajustement de la valeur des avances et des prêts</act:name>
+    <act:name>Corrections de la valeur des avances et des prêts envers des tiers</act:name>
     <act:id type="guid">b543dd80e3654ac1a1c36ca61c826c66</act:id>
     <act:type>RECEIVABLE</act:type>
     <act:commodity>
@@ -401,7 +476,7 @@
     <act:parent type="guid">fb0919cfbd2a4c35b5a73a14bb8cb9eb</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Impôt préalable: TVA s/matériel, marchandises, prestations et énergie</act:name>
+    <act:name>Impôt préalable - TVA s/matériel, marchandises, prestations et énergie</act:name>
     <act:id type="guid">337eb05111ae4beb9598168fa1a0a964</act:id>
     <act:type>RECEIVABLE</act:type>
     <act:commodity>
@@ -414,7 +489,7 @@
     <act:parent type="guid">fb0919cfbd2a4c35b5a73a14bb8cb9eb</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Impôt préalable: TVA s/investissements et autres charges d’exploitation</act:name>
+    <act:name>Impôt préalable - TVA s/investissements et autres charges d'exploitation</act:name>
     <act:id type="guid">68df215725d540f88f6eaf1ba2b266b9</act:id>
     <act:type>RECEIVABLE</act:type>
     <act:commodity>
@@ -427,7 +502,7 @@
     <act:parent type="guid">fb0919cfbd2a4c35b5a73a14bb8cb9eb</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Impôt anticipé</act:name>
+    <act:name>Impôt anticipé à récupérer</act:name>
     <act:id type="guid">2d2c77dfd938491fb84c8b078716338f</act:id>
     <act:type>RECEIVABLE</act:type>
     <act:commodity>
@@ -440,7 +515,7 @@
     <act:parent type="guid">fb0919cfbd2a4c35b5a73a14bb8cb9eb</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Créances envers les assurances sociales et institutions de prévoyance</act:name>
+    <act:name>Créances envers les assurances sociales et institutions de prévoyance professionnelle</act:name>
     <act:id type="guid">2ecfb89a8c0f466b9b43ab19a166f6d1</act:id>
     <act:type>RECEIVABLE</act:type>
     <act:commodity>
@@ -453,7 +528,7 @@
     <act:parent type="guid">fb0919cfbd2a4c35b5a73a14bb8cb9eb</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Impôt à la source</act:name>
+    <act:name>Compte courant Impôt à la source</act:name>
     <act:id type="guid">cf367633674040ce8f4e098b6e1c821f</act:id>
     <act:type>RECEIVABLE</act:type>
     <act:commodity>
@@ -461,8 +536,8 @@
     <cmdty:id>CHF</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
-    <act:code>1189</act:code>
-    <act:description>1189</act:description>
+    <act:code>1188</act:code>
+    <act:description>1188</act:description>
     <act:parent type="guid">fb0919cfbd2a4c35b5a73a14bb8cb9eb</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -479,7 +554,7 @@
     <act:parent type="guid">fb0919cfbd2a4c35b5a73a14bb8cb9eb</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Ajustement de la valeur des créances à court terme</act:name>
+    <act:name>Corrections de la valeur des créances à court terme</act:name>
     <act:id type="guid">ffead78845184361a9749202532344a9</act:id>
     <act:type>RECEIVABLE</act:type>
     <act:commodity>
@@ -502,6 +577,12 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>14</act:code>
     <act:description>14</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>     
     <act:parent type="guid">e3f7b59890ec44688241f322db0a7392</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -515,6 +596,12 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>140</act:code>
     <act:description>140</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>     
     <act:parent type="guid">b54127bcfd3a43b4b8ef187fa85b514d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -531,7 +618,7 @@
     <act:parent type="guid">c58b830157164df9aa197f9a0a0d3525</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Ajustement de la valeur des titres</act:name>
+    <act:name>Corrections de la valeur des titres</act:name>
     <act:id type="guid">e395f07daef54a4d9f1dd96c0f69b3e2</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -570,7 +657,7 @@
     <act:parent type="guid">c58b830157164df9aa197f9a0a0d3525</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Ajustement de la valeur des créances à long terme</act:name>
+    <act:name>Corrections de la valeur des créances à long terme envers des tiers</act:name>
     <act:id type="guid">b819f6775e6e4d8f9ac82381d9b02380</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -593,6 +680,12 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>150</act:code>
     <act:description>150</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>     
     <act:parent type="guid">b54127bcfd3a43b4b8ef187fa85b514d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -609,7 +702,7 @@
     <act:parent type="guid">acf6d436b0124b95b08aea0ef142eb9a</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Ajustement de la valeur des machines et appareils</act:name>
+    <act:name>Amortissements et corrections de la valeur des machines et appareils</act:name>
     <act:id type="guid">e8594be72dae4697b7353e4c42282429</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -635,7 +728,7 @@
     <act:parent type="guid">acf6d436b0124b95b08aea0ef142eb9a</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Ajustement de la valeur du mobilier et des installations</act:name>
+    <act:name>Amortissements et corrections de la valeur du mobilier et installations</act:name>
     <act:id type="guid">5eca184e768945c2b148a2b7752458e6</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -661,7 +754,7 @@
     <act:parent type="guid">acf6d436b0124b95b08aea0ef142eb9a</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Ajustement de la valeur des machines de bureau, inf. et syst. comm.</act:name>
+    <act:name>Amortissements et corrections de la valeur des machines de bureau, informatique, systèmes de communication</act:name>
     <act:id type="guid">b2341b1b75b6493ab7ca6ed71264c4c8</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -687,7 +780,7 @@
     <act:parent type="guid">acf6d436b0124b95b08aea0ef142eb9a</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Ajustement de la valeur des véhicules</act:name>
+    <act:name>Amortissements et corrections de la valeur des véhicules</act:name>
     <act:id type="guid">edd98d2517c547c5973a0af80db3ff7a</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -713,7 +806,7 @@
     <act:parent type="guid">acf6d436b0124b95b08aea0ef142eb9a</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Ajustement de la valeur des outillages et appareils</act:name>
+    <act:name>Amortissements et corrections de la valeur des outillages et appareils</act:name>
     <act:id type="guid">119bb844f3ad4d94863098c3b2d06803</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -736,10 +829,16 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>160</act:code>
     <act:description>160</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>     
     <act:parent type="guid">b54127bcfd3a43b4b8ef187fa85b514d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Immeubles d’exploitation</act:name>
+    <act:name>Immeubles d'exploitation</act:name>
     <act:id type="guid">7fe070f51db8420b97eb23e5a1bd2445</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -752,7 +851,7 @@
     <act:parent type="guid">d0e005ee0f924d68aa5c27de625c106b</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Ajustement de la valeur des immeubles d’exploitation</act:name>
+    <act:name>Amortissements et corrections de la valeur des immeubles d'exploitation</act:name>
     <act:id type="guid">1a70c4acc8a746aeba59021390ac3f89</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -775,10 +874,16 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>170</act:code>
     <act:description>170</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>   
     <act:parent type="guid">b54127bcfd3a43b4b8ef187fa85b514d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Brevets, know-how, licences, droits, développement</act:name>
+    <act:name>Brevets, know-how, processus de fabrication</act:name>
     <act:id type="guid">450c0971814c4becafd9cfc6ad26897a</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -791,7 +896,7 @@
     <act:parent type="guid">6cc852b809f94f08aeaf137ab01e8742</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Ajustement de la valeur des brevets, know-how, licences, droits, dév.</act:name>
+    <act:name>Amortissements et corrections de la valeur des brevets, know-how, processus de fabrication</act:name>
     <act:id type="guid">e4a20cc0882947ebae367ebb71d839bf</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -817,7 +922,7 @@
     <act:parent type="guid">6cc852b809f94f08aeaf137ab01e8742</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Ajustement de la valeur des goodwill</act:name>
+    <act:name>Amortissements et corrections de la valeur des goodwill</act:name>
     <act:id type="guid">030d28c8ebb44210811f3f363178c730</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -840,6 +945,12 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>148</act:code>
     <act:description>148</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>     
     <act:parent type="guid">b54127bcfd3a43b4b8ef187fa85b514d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -856,7 +967,7 @@
     <act:parent type="guid">69a403bd13524112bd20975a94efb78e</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Ajustement de la valeur des participations</act:name>
+    <act:name>Corrections de la valeur des participations</act:name>
     <act:id type="guid">1ab77bb7d37f4fa396d9cedc0653e04d</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -869,7 +980,7 @@
     <act:parent type="guid">69a403bd13524112bd20975a94efb78e</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Capital non versé : capital social, capital de fondation</act:name>
+    <act:name>Capital social (ou capital de fondation) non libéré</act:name>
     <act:id type="guid">160cf2bacf0e45328263e3e4e0584c1e</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -879,10 +990,16 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>180</act:code>
     <act:description>180</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>     
     <act:parent type="guid">b54127bcfd3a43b4b8ef187fa85b514d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Capital actions, capital social, droits de participations ou capital de fondation non versés</act:name>
+    <act:name>Capital-actions non libéré</act:name>
     <act:id type="guid">126586438d5442f6be2cf49da35d3023</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -905,10 +1022,16 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>2</act:code>
     <act:description>2</act:description>
-    <act:parent type="guid">8cd23636f1e04a74a35c13ae23427c14</act:parent>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>  
+    <act:parent type="guid">47469471b603439c88189eca6c2e86e1</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Dettes à court terme</act:name>
+    <act:name>Capitaux étrangers à court terme</act:name>
     <act:id type="guid">518d005b62f247ea8239409f2eaea223</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -918,10 +1041,16 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>20</act:code>
     <act:description>20</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>  
     <act:parent type="guid">294235978d5d48508b11c17fc3a3742b</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Dettes à court terme résultant d’achats et de prestations de services</act:name>
+    <act:name>Dettes à court terme résultant de l’achat de biens et de prestations de services</act:name>
     <act:id type="guid">ab39e01994b845fb94a6e95a6a454e0b</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -931,10 +1060,16 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>200</act:code>
     <act:description>200</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>  
     <act:parent type="guid">518d005b62f247ea8239409f2eaea223</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Dettes résultant d’achats et de prestation de services (créanciers)</act:name>
+    <act:name>Dettes résultant d’achats de biens et de prestations de services de tiers (créanciers-fournisseurs)</act:name>
     <act:id type="guid">8d59aebe9a3948e4b994cb29b913e229</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -947,7 +1082,7 @@
     <act:parent type="guid">ab39e01994b845fb94a6e95a6a454e0b</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Acomptes de clients</act:name>
+    <act:name>Acomptes de tiers</act:name>
     <act:id type="guid">6703b28cdfab44f5986a5cf0fd7f35c1</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -960,7 +1095,7 @@
     <act:parent type="guid">ab39e01994b845fb94a6e95a6a454e0b</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Dettes à court terme rémunérés</act:name>
+    <act:name>Dettes à court terme portant intérêt</act:name>
     <act:id type="guid">78ccf5ae04854b00be1b2ce393a427a3</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -970,10 +1105,16 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>210</act:code>
     <act:description>210</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>    
     <act:parent type="guid">518d005b62f247ea8239409f2eaea223</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Dettes bancaires</act:name>
+    <act:name>Dettes bancaires à court terme</act:name>
     <act:id type="guid">d0a8a51f74344c9ea18f2ae049099fc3</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -999,7 +1140,7 @@
     <act:parent type="guid">78ccf5ae04854b00be1b2ce393a427a3</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Autres dettes à court terme rémunérées</act:name>
+    <act:name>Autres dettes ﬁnancières à court terme envers des tiers</act:name>
     <act:id type="guid">21a8e719e3f245eb8a9430f822ca766d</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -1008,7 +1149,7 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>2140</act:code>
-    <act:description>2140</act:description>
+    <act:description>2140</act:description>  
     <act:parent type="guid">78ccf5ae04854b00be1b2ce393a427a3</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -1022,6 +1163,12 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>220</act:code>
     <act:description>220</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>  
     <act:parent type="guid">518d005b62f247ea8239409f2eaea223</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -1051,7 +1198,7 @@
     <act:parent type="guid">0062147bc2e54d3fb2d47340daaeb197</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Impôt anticipé dû</act:name>
+    <act:name>Impôt anticipé à payer</act:name>
     <act:id type="guid">4902b5e9fd254394b092bdac7d380ee8</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -1077,7 +1224,7 @@
     <act:parent type="guid">0062147bc2e54d3fb2d47340daaeb197</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Autres dettes à court terme</act:name>
+    <act:name>Autres dettes à court terme envers des tiers (sans intérêts)</act:name>
     <act:id type="guid">1caa50dbc0794127acae0b2627681b56</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -1103,7 +1250,7 @@
     <act:parent type="guid">0062147bc2e54d3fb2d47340daaeb197</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Assurances sociales et institutions de prévoyance</act:name>
+    <act:name>Autres dettes à court terme relatives aux charges salariales (sans intérêts)</act:name>
     <act:id type="guid">597d61cbc2fe4612b6af64059a795672</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -1116,7 +1263,7 @@
     <act:parent type="guid">0062147bc2e54d3fb2d47340daaeb197</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Impôt à la source</act:name>
+    <act:name>Compte courant Impôt à la source</act:name>
     <act:id type="guid">f844a18cbdf84120a763b309688087fa</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -1129,7 +1276,7 @@
     <act:parent type="guid">0062147bc2e54d3fb2d47340daaeb197</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Passifs de régularisation et provisions à court terme</act:name>
+    <act:name>Passifs de régularisation (passifs transitoires) et provisions à court terme</act:name>
     <act:id type="guid">a270ba393d11451bad379ba0d9f35787</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -1139,6 +1286,12 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>230</act:code>
     <act:description>230</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>  
     <act:parent type="guid">518d005b62f247ea8239409f2eaea223</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -1155,7 +1308,7 @@
     <act:parent type="guid">a270ba393d11451bad379ba0d9f35787</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Produits encaissés d’avance</act:name>
+    <act:name>Produits encaissés d'avance</act:name>
     <act:id type="guid">85bf526f7e6c446a9be5bacf09034e7b</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -1181,7 +1334,7 @@
     <act:parent type="guid">a270ba393d11451bad379ba0d9f35787</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Dettes à long terme</act:name>
+    <act:name>Capitaux étrangers à long terme</act:name>
     <act:id type="guid">e5e7a14ef75e4d3bb30c6e8d185a4288</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -1191,10 +1344,16 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>24</act:code>
     <act:description>24</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>  
     <act:parent type="guid">294235978d5d48508b11c17fc3a3742b</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Dettes à long terme rémunérées</act:name>
+    <act:name>Dettes à long terme portant intérêt</act:name>
     <act:id type="guid">722dc33a7f5c450683c8ceb182caff33</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -1204,10 +1363,16 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>240</act:code>
     <act:description>240</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>  
     <act:parent type="guid">e5e7a14ef75e4d3bb30c6e8d185a4288</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Dettes bancaires</act:name>
+    <act:name>Dettes bancaires à long terme</act:name>
     <act:id type="guid">1d1932966fe84c7d9d1b69c3d5de56da</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -1282,6 +1447,12 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>250</act:code>
     <act:description>250</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>  
     <act:parent type="guid">e5e7a14ef75e4d3bb30c6e8d185a4288</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -1294,11 +1465,11 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>2500</act:code>
-    <act:description>2500</act:description>
+    <act:description>2500</act:description>  
     <act:parent type="guid">e28344b55f234a64afe228884b9bef81</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Provisions à long termes et provisions légales</act:name>
+    <act:name>Provisions et postes analogues prévus par la loi</act:name>
     <act:id type="guid">52e84a57d83b4f6aa0b57823943be630</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -1308,10 +1479,16 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>260</act:code>
     <act:description>260</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>  
     <act:parent type="guid">e5e7a14ef75e4d3bb30c6e8d185a4288</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Provisions</act:name>
+    <act:name>Provisions et postes analogues prévus par la loi</act:name>
     <act:id type="guid">883bf9dc29bf4f73ac88c9bfa3221a5d</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -1324,9 +1501,9 @@
     <act:parent type="guid">52e84a57d83b4f6aa0b57823943be630</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Fonds propres (personnes morales)</act:name>
+    <act:name>Capitaux propres (personnes morales)</act:name>
     <act:id type="guid">82143ea43dcd4cdbbf5b469c0773f9b6</act:id>
-    <act:type>LIABILITY</act:type>
+    <act:type>EQUITY</act:type>
     <act:commodity>
     <cmdty:space>CURRENCY</cmdty:space>
     <cmdty:id>CHF</cmdty:id>
@@ -1334,12 +1511,18 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>28</act:code>
     <act:description>28</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>  
     <act:parent type="guid">294235978d5d48508b11c17fc3a3742b</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Capital social ou capital de fondation</act:name>
+    <act:name>Capital social (capital-actions, capital de fondation, capital propre)</act:name>
     <act:id type="guid">4f942372d53b486e985f0524ef484a48</act:id>
-    <act:type>LIABILITY</act:type>
+    <act:type>EQUITY</act:type>
     <act:commodity>
     <cmdty:space>CURRENCY</cmdty:space>
     <cmdty:id>CHF</cmdty:id>
@@ -1347,12 +1530,18 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>280</act:code>
     <act:description>280</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>  
     <act:parent type="guid">82143ea43dcd4cdbbf5b469c0773f9b6</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
     <act:name>Capital-actions, capital social, capital de fondation</act:name>
     <act:id type="guid">920c76782e364787b20faddddcc356fe</act:id>
-    <act:type>LIABILITY</act:type>
+    <act:type>EQUITY</act:type>
     <act:commodity>
     <cmdty:space>CURRENCY</cmdty:space>
     <cmdty:id>CHF</cmdty:id>
@@ -1363,9 +1552,9 @@
     <act:parent type="guid">4f942372d53b486e985f0524ef484a48</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Réserves / bénéfices et pertes</act:name>
+    <act:name>Réserves et bénéﬁce reporté ou perte reportée</act:name>
     <act:id type="guid">35e6318959294d84994376047bef94a7</act:id>
-    <act:type>LIABILITY</act:type>
+    <act:type>EQUITY</act:type>
     <act:commodity>
     <cmdty:space>CURRENCY</cmdty:space>
     <cmdty:id>CHF</cmdty:id>
@@ -1373,12 +1562,18 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>290</act:code>
     <act:description>290</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>  
     <act:parent type="guid">82143ea43dcd4cdbbf5b469c0773f9b6</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Réserves légales issues du capital</act:name>
+    <act:name>Réserve légale issue du capital</act:name>
     <act:id type="guid">8675198475f143f3b840fe9822bf097b</act:id>
-    <act:type>LIABILITY</act:type>
+    <act:type>EQUITY</act:type>
     <act:commodity>
     <cmdty:space>CURRENCY</cmdty:space>
     <cmdty:id>CHF</cmdty:id>
@@ -1389,9 +1584,9 @@
     <act:parent type="guid">35e6318959294d84994376047bef94a7</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Réserves d‘évaluation</act:name>
+    <act:name>Réserve d'évaluation</act:name>
     <act:id type="guid">8918ab18185146bca6db267cf17dbba5</act:id>
-    <act:type>LIABILITY</act:type>
+    <act:type>EQUITY</act:type>
     <act:commodity>
     <cmdty:space>CURRENCY</cmdty:space>
     <cmdty:id>CHF</cmdty:id>
@@ -1402,9 +1597,9 @@
     <act:parent type="guid">35e6318959294d84994376047bef94a7</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Réserves légales issues du bénéfice</act:name>
+    <act:name>Réserve légale issue du bénéfice</act:name>
     <act:id type="guid">984b64f48ab74d30a2c1d8d259ab817b</act:id>
-    <act:type>LIABILITY</act:type>
+    <act:type>EQUITY</act:type>
     <act:commodity>
     <cmdty:space>CURRENCY</cmdty:space>
     <cmdty:id>CHF</cmdty:id>
@@ -1415,9 +1610,9 @@
     <act:parent type="guid">35e6318959294d84994376047bef94a7</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Réserves libres</act:name>
+    <act:name>Réserves facultatives</act:name>
     <act:id type="guid">6fa91e39a5f7488cb7d04fc6c2a56810</act:id>
-    <act:type>LIABILITY</act:type>
+    <act:type>EQUITY</act:type>
     <act:commodity>
     <cmdty:space>CURRENCY</cmdty:space>
     <cmdty:id>CHF</cmdty:id>
@@ -1428,9 +1623,9 @@
     <act:parent type="guid">35e6318959294d84994376047bef94a7</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Bénéfice / perte reporté</act:name>
+    <act:name>Bénéfice ou perte reporté</act:name>
     <act:id type="guid">780726e389184e1ab7f7fbfe16d5f17b</act:id>
-    <act:type>LIABILITY</act:type>
+    <act:type>EQUITY</act:type>
     <act:commodity>
     <cmdty:space>CURRENCY</cmdty:space>
     <cmdty:id>CHF</cmdty:id>
@@ -1441,9 +1636,9 @@
     <act:parent type="guid">35e6318959294d84994376047bef94a7</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Bénéfice / perte de l’exercice</act:name>
+    <act:name>Bénéfice ou perte de l'exercice</act:name>
     <act:id type="guid">9bb074b99e4d4a40b9151c2289c10073</act:id>
-    <act:type>LIABILITY</act:type>
+    <act:type>EQUITY</act:type>
     <act:commodity>
     <cmdty:space>CURRENCY</cmdty:space>
     <cmdty:id>CHF</cmdty:id>
@@ -1456,7 +1651,7 @@
   <gnc:account version="2.0.0">
     <act:name>Propres actions, parts sociales, droits de participations (poste négatif)</act:name>
     <act:id type="guid">4df7a3d99e0e407796920758f2708f7d</act:id>
-    <act:type>LIABILITY</act:type>
+    <act:type>EQUITY</act:type>
     <act:commodity>
     <cmdty:space>CURRENCY</cmdty:space>
     <cmdty:id>CHF</cmdty:id>
@@ -1467,7 +1662,25 @@
     <act:parent type="guid">35e6318959294d84994376047bef94a7</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Chiffre d’affaires résultant des ventes et des prestations de services</act:name>
+    <act:name>Soldes initiaux</act:name>
+    <act:id type="new">a19c505d4b414bf3f5b574104959f534</act:id>
+    <act:type>EQUITY</act:type>
+    <act:commodity>
+      <cmdty:space>ISO4217</cmdty:space>
+      <cmdty:id>CHF</cmdty:id>
+    </act:commodity>
+    <act:commodity-scu>100</act:commodity-scu>
+    <act:description>Soldes initiaux</act:description>
+    <act:parent type="new">47469471b603439c88189eca6c2e86e1</act:parent>
+    <act:slots>
+      <slot>
+        <slot:key>equity-type</slot:key>
+        <slot:value type="string">opening-balance</slot:value>
+      </slot>
+    </act:slots>
+  </gnc:account>  
+  <gnc:account version="2.0.0">
+    <act:name>Produits nets des ventes de biens et de prestations de services</act:name>
     <act:id type="guid">112eb0f3756a430aa69b0907a54e0901</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -1477,7 +1690,13 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>3</act:code>
     <act:description>3</act:description>
-    <act:parent type="guid">8cd23636f1e04a74a35c13ae23427c14</act:parent>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>  
+    <act:parent type="guid">47469471b603439c88189eca6c2e86e1</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
     <act:name>Ventes de produits fabriqués</act:name>
@@ -1519,7 +1738,7 @@
     <act:parent type="guid">112eb0f3756a430aa69b0907a54e0901</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Autres ventes et prestations de services</act:name>
+    <act:name>Produits annexes résultant de livraisons et de prestations de services</act:name>
     <act:id type="guid">ffadde9940ad4cf0b9654f0823c5d351</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -1545,7 +1764,7 @@
     <act:parent type="guid">112eb0f3756a430aa69b0907a54e0901</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Déductions sur ventes</act:name>
+    <act:name>Déductions sur ventes (escomptes, rabais, ristournes, …)</act:name>
     <act:id type="guid">f381d3cda1c34bf0a3444dab963b2343</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -1571,7 +1790,7 @@
     <act:parent type="guid">112eb0f3756a430aa69b0907a54e0901</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Consommations propres</act:name>
+    <act:name>Prestations propres</act:name>
     <act:id type="guid">f22875f5c5ff446bb3e3dcbc6b0607cb</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -1623,7 +1842,7 @@
     <act:parent type="guid">112eb0f3756a430aa69b0907a54e0901</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Charges de matériel, de marchandises et de prestations de tiers</act:name>
+    <act:name>Charges de matériel, de marchandises, de prestations de tiers et d’énergie</act:name>
     <act:id type="guid">fbb69d024c454632948625450e3f56a6</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1633,10 +1852,16 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>4</act:code>
     <act:description>4</act:description>
-    <act:parent type="guid">8cd23636f1e04a74a35c13ae23427c14</act:parent>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>  
+    <act:parent type="guid">47469471b603439c88189eca6c2e86e1</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Charges de matériel de l‘atelier</act:name>
+    <act:name>Charges de matériel</act:name>
     <act:id type="guid">62954e9240e242e7886e82a2fe9075dc</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1649,7 +1874,7 @@
     <act:parent type="guid">fbb69d024c454632948625450e3f56a6</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Achats de marchandises destinées à la revente</act:name>
+    <act:name>Charges de marchandises destinées à la revente</act:name>
     <act:id type="guid">69513288a86f4fa09247ce3550b8b5e2</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1662,7 +1887,7 @@
     <act:parent type="guid">fbb69d024c454632948625450e3f56a6</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Prestations / travaux de tiers</act:name>
+    <act:name>Charges de prestations de tiers</act:name>
     <act:id type="guid">286ea0c72e664134869eb7040cc1b2fa</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1675,7 +1900,7 @@
     <act:parent type="guid">fbb69d024c454632948625450e3f56a6</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Charges d‘énergie pour l‘exploitation</act:name>
+    <act:name>Charges d'énergie pour l'exploitation</act:name>
     <act:id type="guid">a8cb56ff219440f091f260f272a7e111</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1688,7 +1913,7 @@
     <act:parent type="guid">fbb69d024c454632948625450e3f56a6</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Déductions sur les charges</act:name>
+    <act:name>Déductions sur les charges (escomptes, rabais, ristourne, ...)</act:name>
     <act:id type="guid">9336a497814046b0a9fa219b4333bd03</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1711,10 +1936,16 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>5</act:code>
     <act:description>5</act:description>
-    <act:parent type="guid">8cd23636f1e04a74a35c13ae23427c14</act:parent>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>    
+    <act:parent type="guid">47469471b603439c88189eca6c2e86e1</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Salaires</act:name>
+    <act:name>Charges salariales</act:name>
     <act:id type="guid">3dd4ad61f7bb46c89e09f75619633b3b</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1749,11 +1980,11 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>5800</act:code>
-    <act:description>5800</act:description>
+    <act:description>5800</act:description>  
     <act:parent type="guid">c2d5092240de4a058420e649983d6e6d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Charges de personnels temporaires</act:name>
+    <act:name>Prestations de tiers/temporaires</act:name>
     <act:id type="guid">5dd9a5822b06481d805756c18293bfdd</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1766,7 +1997,7 @@
     <act:parent type="guid">c2d5092240de4a058420e649983d6e6d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Autres charges d‘exploitation, Amortissements et ajustement de valeur, Résultat financier</act:name>
+    <act:name>Autres charges d'exploitation, Amortissements et corrections de valeur, résultat financier</act:name>
     <act:id type="guid">17ef00426d0b4066ad5297325ecf16a4</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1776,7 +2007,13 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>6</act:code>
     <act:description>6</act:description>
-    <act:parent type="guid">8cd23636f1e04a74a35c13ae23427c14</act:parent>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
+    <act:parent type="guid">47469471b603439c88189eca6c2e86e1</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
     <act:name>Charges de locaux</act:name>
@@ -1792,7 +2029,7 @@
     <act:parent type="guid">17ef00426d0b4066ad5297325ecf16a4</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Entretien, réparations et remplacement des inst. servant à l’exploitation</act:name>
+    <act:name>Entretien, réparations, remplacements (ERR)</act:name>
     <act:id type="guid">cfc48367c9614fa5b323f170141c1114</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1804,6 +2041,19 @@
     <act:description>6100</act:description>
     <act:parent type="guid">17ef00426d0b4066ad5297325ecf16a4</act:parent>
   </gnc:account>
+  <gnc:account version="2.0.0">
+    <act:name>Charges de leasing</act:name>
+    <act:id type="guid">cf458367c9614fa5b323f170141c1114</act:id>
+    <act:type>EXPENSE</act:type>
+    <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>CHF</cmdty:id>
+    </act:commodity>
+    <act:commodity-scu>100</act:commodity-scu>
+    <act:code>6150</act:code>
+    <act:description>6150</act:description>
+    <act:parent type="guid">17ef00426d0b4066ad5297325ecf16a4</act:parent>
+  </gnc:account>  
   <gnc:account version="2.0.0">
     <act:name>Charges de véhicules et de transport</act:name>
     <act:id type="guid">22936c9ba2bb497fb8189982dc498482</act:id>
@@ -1831,7 +2081,7 @@
     <act:parent type="guid">17ef00426d0b4066ad5297325ecf16a4</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Charges d’énergie et évacuation des déchets</act:name>
+    <act:name>Charges d'énergie et évacuation des déchets</act:name>
     <act:id type="guid">a845f9c9f0214c438ca1b3a0ecadd338</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1844,7 +2094,7 @@
     <act:parent type="guid">17ef00426d0b4066ad5297325ecf16a4</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Charges d‘administration</act:name>
+    <act:name>Charges d'administration et d'informatique</act:name>
     <act:id type="guid">be254bd0442f411294580dcade4518a1</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1857,7 +2107,7 @@
     <act:parent type="guid">17ef00426d0b4066ad5297325ecf16a4</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Publicité</act:name>
+    <act:name>Charges de publicité</act:name>
     <act:id type="guid">88881f27434d467eafdb411015df811f</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1870,7 +2120,7 @@
     <act:parent type="guid">17ef00426d0b4066ad5297325ecf16a4</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Autres charges d‘exploitation</act:name>
+    <act:name>Autres charges d'exploitation</act:name>
     <act:id type="guid">40ae3f3a0d61437eaa9b3e3274b1957f</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1882,8 +2132,27 @@
     <act:description>6700</act:description>
     <act:parent type="guid">17ef00426d0b4066ad5297325ecf16a4</act:parent>
   </gnc:account>
+ <gnc:account version="2.0.0">
+    <act:name>Amortissements et corrections de la valeur des immobilisations</act:name>
+    <act:id type="guid">f9aa84353ff2462498ea60128f9114fe</act:id>
+    <act:type>EXPENSE</act:type>
+    <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>CHF</cmdty:id>
+    </act:commodity>
+    <act:commodity-scu>100</act:commodity-scu>
+    <act:code>680</act:code>
+    <act:description>680</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
+    <act:parent type="guid">17ef00426d0b4066ad5297325ecf16a4</act:parent>
+  </gnc:account>  
   <gnc:account version="2.0.0">
-    <act:name>Amortissement et ajustement de valeur des postes sur immobilisations corporelles</act:name>
+    <act:name>Amortissements et corrections de la valeur des immobilisations</act:name>
     <act:id type="guid">f9aa84463ff2462498ea60128f9114fe</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -1893,33 +2162,7 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>6800</act:code>
     <act:description>6800</act:description>
-    <act:parent type="guid">17ef00426d0b4066ad5297325ecf16a4</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
-    <act:name>Leasing immobilisations corporelles meubles</act:name>
-    <act:id type="guid">60ba0279f36e46fa912c72206ed91b75</act:id>
-    <act:type>EXPENSE</act:type>
-    <act:commodity>
-    <cmdty:space>CURRENCY</cmdty:space>
-    <cmdty:id>CHF</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:code>6105</act:code>
-    <act:description>6105</act:description>
-    <act:parent type="guid">17ef00426d0b4066ad5297325ecf16a4</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
-    <act:name>Charges et leasing d’informatique</act:name>
-    <act:id type="guid">6f27632a88df484fb21253cbf8e0cc95</act:id>
-    <act:type>EXPENSE</act:type>
-    <act:commodity>
-    <cmdty:space>CURRENCY</cmdty:space>
-    <cmdty:id>CHF</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:code>6570</act:code>
-    <act:description>6570</act:description>
-    <act:parent type="guid">17ef00426d0b4066ad5297325ecf16a4</act:parent>
+    <act:parent type="guid">f9aa84353ff2462498ea60128f9114fe</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
     <act:name>Charges financières</act:name>
@@ -1948,7 +2191,7 @@
     <act:parent type="guid">17ef00426d0b4066ad5297325ecf16a4</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Résultat des activités annexes d‘exploitation</act:name>
+    <act:name>Résultat des activités annexes d'exploitation</act:name>
     <act:id type="guid">ff17758ba51149a3a16c2e50f4dd12f3</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -1958,7 +2201,13 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>7</act:code>
     <act:description>7</act:description>
-    <act:parent type="guid">8cd23636f1e04a74a35c13ae23427c14</act:parent>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
+    <act:parent type="guid">47469471b603439c88189eca6c2e86e1</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
     <act:name>Produits accessoires</act:name>
@@ -1974,7 +2223,7 @@
     <act:parent type="guid">ff17758ba51149a3a16c2e50f4dd12f3</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Produits des immeubles d‘exploitation</act:name>
+    <act:name>Produits des immeubles d'exploitation</act:name>
     <act:id type="guid">b741158e82af43a983a729b6964f48c4</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -1987,7 +2236,7 @@
     <act:parent type="guid">ff17758ba51149a3a16c2e50f4dd12f3</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Charges des immeubles d‘exploitation</act:name>
+    <act:name>Charges des immeubles d'exploitation</act:name>
     <act:id type="guid">5ba3c1d4c947457c92d7192079c58e93</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -2013,7 +2262,7 @@
     <act:parent type="guid">ff17758ba51149a3a16c2e50f4dd12f3</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Résultats extraordinaires et hors exploitation</act:name>
+    <act:name>Résultats exceptionnels et hors exploitation</act:name>
     <act:id type="guid">67be6ac625cc4b8f8ee6706b0434a335</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -2023,7 +2272,13 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>8</act:code>
     <act:description>8</act:description>
-    <act:parent type="guid">8cd23636f1e04a74a35c13ae23427c14</act:parent>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
+    <act:parent type="guid">47469471b603439c88189eca6c2e86e1</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
     <act:name>Charges hors exploitation</act:name>
@@ -2065,7 +2320,7 @@
     <act:parent type="guid">67be6ac625cc4b8f8ee6706b0434a335</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Charges extraordinaires, exceptionnelles ou hors période</act:name>
+    <act:name>Charges exceptionnelles, uniques ou hors période</act:name>
     <act:id type="guid">e3b24b1150134fa598bcf620da52a2e6</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -2078,7 +2333,7 @@
     <act:parent type="guid">67be6ac625cc4b8f8ee6706b0434a335</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Produits extraordinaires, exceptionnels ou hors période</act:name>
+    <act:name>Produits exceptionnels, uniques ou hors période</act:name>
     <act:id type="guid">7e43a5e29f77460dbda26d475492bd52</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -2101,10 +2356,16 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>9</act:code>
     <act:description>9</act:description>
-    <act:parent type="guid">8cd23636f1e04a74a35c13ae23427c14</act:parent>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
+    <act:parent type="guid">47469471b603439c88189eca6c2e86e1</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Bénéfice / perte de l’exercice</act:name>
+    <act:name>Bénéﬁce de l’exercice/(perte de l’exercice)</act:name>
     <act:id type="guid">3b10783f477e440b971e3dce693236e5</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -2113,20 +2374,7 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>9200</act:code>
-    <act:description>9200</act:description>
+    <act:description>9200</act:description>  
     <act:parent type="guid">99c8d4fa6bac4de0b2d505f65e9b8c6b</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
-    <act:name>Comptes auxiliaires d'affectation du bénéfice</act:name>
-    <act:id type="guid">be48f890d33444f883f41069641daaa3</act:id>
-    <act:type>INCOME</act:type>
-    <act:commodity>
-    <cmdty:space>CURRENCY</cmdty:space>
-    <cmdty:id>CHF</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:code>920</act:code>
-    <act:description>920</act:description>
-    <act:parent type="guid">3b10783f477e440b971e3dce693236e5</act:parent>
   </gnc:account>
 </gnc-account-example>
