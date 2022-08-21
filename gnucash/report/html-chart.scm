@@ -351,8 +351,12 @@ var toLocaleStringSupportsOptions = (typeof Intl == 'object' && Intl && typeof I
 function numformat(amount) {
   if (toLocaleStringSupportsOptions) {
       return amount.toLocaleString(undefined, {style:formsty, currency:curriso});
-  } else {
+  } else if (formsty == 'percent') {
+      return (100 * amount).toLocaleString() + '%';
+  } else if (formsty == 'currency') {
       return currsym + amount.toLocaleString();
+  } else {
+      return amount.toLocaleString();
   }
 }
 ")
