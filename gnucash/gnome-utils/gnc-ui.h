@@ -41,13 +41,13 @@
 /** Help Files ******************************************************/
 #ifdef G_OS_WIN32
 #    define HF_GUIDE         "gnucash-guide.chm"
-#    define HF_HELP          "gnucash-help.chm"
+#    define HF_HELP          "gnucash-manual.chm"
 #elif defined MAC_INTEGRATION
 #    define HF_GUIDE         "GnuCash Guide"
-#    define HF_HELP          "GnuCash Help"
+#    define HF_HELP          "GnuCash Manual"
 #else
 #    define HF_GUIDE         "gnucash-guide"
-#    define HF_HELP          "gnucash-help"
+#    define HF_HELP          "gnucash-manual"
 #endif
 
 /** Links in the Help Files *****************************************/
