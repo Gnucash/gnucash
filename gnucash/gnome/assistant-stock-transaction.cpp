@@ -293,9 +293,9 @@ static const TxnTypeVec long_types
 static const TxnTypeVec short_types
 {
     {
-        FieldMask::ENABLED_DEBIT,          // stock_amt
-        FieldMask::ENABLED_DEBIT,          // stock_val
-        FieldMask::ENABLED_CREDIT,         // cash_amt
+        FieldMask::ENABLED_CREDIT,         // stock_amt
+        FieldMask::ENABLED_CREDIT,         // stock_val
+        FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
         true,                   // fees_capitalize
         FieldMask::DISABLED,               // dividend_amt
