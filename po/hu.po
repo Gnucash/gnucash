@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-22 06:33+0200\n"
-"PO-Revision-Date: 2022-08-14 19:16+0000\n"
+"PO-Revision-Date: 2022-08-22 10:17+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -3559,7 +3559,7 @@ msgstr "Kiadások"
 #: gnucash/register/ledger-core/split-register-model.c:349
 #: gnucash/report/reports/standard/register.scm:144
 msgid "Transfer"
-msgstr "Átvitel"
+msgstr "Átutalás"
 
 #: gnucash/gnome/gnc-budget-view.c:511
 #, fuzzy
