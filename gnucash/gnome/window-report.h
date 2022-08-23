@@ -30,7 +30,7 @@ extern "C"
 #endif
 //#include "gnc-html.h"
 #include "qof.h"
-#include <gnc-optiondb.h>
+#include "gnc-optiondb.h"
 
 typedef struct gnc_report_window_s gnc_report_window;
 

@@ -25,9 +25,9 @@
 #include <string>
 #include <limits>
 #include <sstream>
-#include <kvp-value.hpp>
-#include <qofbookslots.h>
-#include <guid.hpp>
+#include "kvp-value.hpp"
+#include "qofbookslots.h"
+#include "guid.hpp"
 #include "gnc-optiondb.h"
 #include "gnc-optiondb.hpp"
 #include "gnc-optiondb-impl.hpp"
@@ -35,7 +35,7 @@
 
 extern "C"
 {
-#include <gnc-session.h>
+#include "gnc-session.h"
 }
 constexpr const char* log_module{G_LOG_DOMAIN};
 

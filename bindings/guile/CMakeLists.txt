@@ -9,24 +9,24 @@ gnc_add_swig_guile_command (swig-core-utils-guile-c
     ${CORE_UTILS_HEADERS}
 )
 
-# Generate the swig-engine.c wrapper file
+set(SWIG_ARGS "-c++" "-procdoc" "sw-gnc-option-doc" "-procdocformat" "plain")
+# Generate the swig-engine.cpp wrapper file
 gnc_swig_extract_header_files (gnc-engine ENGINE_HEADERS)
-gnc_add_swig_guile_command (swig-engine-c
-    SWIG_ENGINE_C swig-engine.c
+gnc_add_swig_guile_command (swig-engine-cpp
+    SWIG_ENGINE_CPP swig-engine.cpp
     ${CMAKE_SOURCE_DIR}/bindings/engine.i
     "${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_SOURCE_DIR}/libgnucash/engine"
     ${ENGINE_HEADERS}
     ${CMAKE_SOURCE_DIR}/bindings/business-core.i
     ${CMAKE_SOURCE_DIR}/bindings/engine-common.i
+    ${CMAKE_CURRENT_SOURCE_DIR}/gnc-optiondb.i #additional dependencies
 )
 
 # Generate the swig-app-utils-guile.cpp wrapper file
-set(SWIG_ARGS "-c++" "-procdoc" "sw-gnc-option-doc" "-procdocformat" "plain")
 gnc_add_swig_guile_command (swig-apputils-guile-cpp #target
         SWIG_APP_UTILS_GUILE_CPP swig-app-utils-guile.cpp #outvar, output
         ${CMAKE_CURRENT_SOURCE_DIR}/../app-utils.i #input
         "${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_SOURCE_DIR}/libgnucash/app-utils" #includes
-        ${CMAKE_CURRENT_SOURCE_DIR}/gnc-optiondb.i #additional dependencies
         )
 unset(SWIG_ARGS)
 
@@ -46,7 +46,7 @@ set(guile_HEADERS
 
 set(guile_SOURCES
     glib-guile.c
-    gnc-engine-guile.c
+    gnc-engine-guile.cpp
     gnc-guile-bindings.c
     gnc-guile-utils.c
     gnc-helpers.c
@@ -56,7 +56,7 @@ add_library(gnucash-guile SHARED
     ${guile_SOURCES}
     ${guile_HEADERS}
     ${SWIG_CORE_UTILS_GUILE_C}
-    ${SWIG_ENGINE_C}
+    ${SWIG_ENGINE_CPP}
     ${SWIG_APP_UTILS_GUILE_CPP})
 
 add_dependencies(gnucash-guile
@@ -167,15 +167,17 @@ gnc_add_scheme_targets(scm-engine-2
     OUTPUT_DIR gnucash
     DEPENDS "scm-engine-1;${GUILE_DEPENDS}")
 
-add_custom_target(scm-engine ALL DEPENDS scm-engine-2 scm-engine-1 scm-engine-0)
+
+gnc_add_scheme_targets(scm-options
+  SOURCES options.scm
+  OUTPUT_DIR gnucash
+  DEPENDS "scm-engine-2;scm-core-utils;${GUILE_DEPENDS}")
+
+add_custom_target(scm-engine ALL DEPENDS scm-options scm-engine-2 scm-engine-1 scm-engine-0)
 
 set (app_utils_SCHEME_1
         c-interface.scm
         date-utilities.scm
-        )
-
-set (app_utils_SCHEME_1a
-        options.scm
         )
 
 set (app_utils_SCHEME_2
@@ -194,16 +196,10 @@ gnc_add_scheme_targets(scm-app-utils-1
         DEPENDS "${GUILE_DEPENDS}"
         MAKE_LINKS)
 
-gnc_add_scheme_targets(scm-app-utils-1a
-        SOURCES "${app_utils_SCHEME_1a}"
-        OUTPUT_DIR "gnucash/app-utils"
-        DEPENDS "scm-app-utils-1"
-        MAKE_LINKS)
-
 gnc_add_scheme_targets(scm-app-utils-2
         SOURCES "${app_utils_SCHEME_2}"
         OUTPUT_DIR "gnucash"
-        DEPENDS "scm-app-utils-1a"
+        DEPENDS "scm-app-utils-1"
         MAKE_LINKS)
 
 add_custom_target(scm-app-utils ALL DEPENDS scm-app-utils-2 scm-app-utils-1)
@@ -235,7 +231,7 @@ set_local_dist(guile_DIST_local
     ${app_utils_SCHEME_2}
     ${app_utils_SCHEME_3}
     ${expressions_SCHEME}
-    expressions.i)
+    gnc-optiondb.i expressions.i)
 set(guile_DIST ${guile_DIST_local} ${test_guile_DIST} PARENT_SCOPE)
 
 

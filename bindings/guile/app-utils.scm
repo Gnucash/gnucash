@@ -28,7 +28,6 @@
 
 (load-and-reexport (sw_app_utils)
                    (gnucash app-utils date-utilities)
-                   (gnucash app-utils options)
                    (gnucash app-utils c-interface))
 
 (re-export HOOK-SAVE-OPTIONS)

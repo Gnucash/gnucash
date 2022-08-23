@@ -79,7 +79,7 @@ extern "C"
 
 #include <memory>
 #include <gnc-report.h>
-#include <gnc-optiondb-impl.hpp>
+#include "gnc-optiondb-impl.hpp"
 
 /* NW: you can add GNC_MOD_REPORT to gnc-engine.h
 or simply define it locally. Any unique string with

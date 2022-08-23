@@ -82,8 +82,8 @@ GLIST_HELPER_INOUT(GncTaxTableEntryList, SWIGTYPE_p__gncTaxTableEntry);
 GLIST_HELPER_INOUT(OwnerList, SWIGTYPE_p__gncOwner);
 
 #if defined(SWIGGUILE)
-%typemap(in) GncAccountValue * "$1 = gnc_scm_to_account_value_ptr($input);"
-%typemap(out) GncAccountValue * "$result = gnc_account_value_ptr_to_scm($1);"
+%typemap(in) GncAccountValue * "$1 = gnc_scm_to_account_value_ptr((GncAccountValue*)$input);"
+%typemap(out) GncAccountValue * "$result = gnc_account_value_ptr_to_scm((GncAccountValue*)$1);"
 %typemap(in) AccountValueList * {
   SCM list = $input;
   GList *c_list = NULL;
@@ -95,7 +95,7 @@ GLIST_HELPER_INOUT(OwnerList, SWIGTYPE_p__gncOwner);
         if (scm_is_false(p_scm) || scm_is_null(p_scm))
            p = NULL;
         else
-           p = gnc_scm_to_account_value_ptr(p_scm);
+           p = gnc_scm_to_account_value_ptr((GncAccountValue*)p_scm);
 
         c_list = g_list_prepend(c_list, p);
         list = SCM_CDR(list);
@@ -108,7 +108,7 @@ GLIST_HELPER_INOUT(OwnerList, SWIGTYPE_p__gncOwner);
   GList *node;
 
   for (node = $1; node; node = node->next)
-    list = scm_cons(gnc_account_value_ptr_to_scm(node->data), list);
+    list = scm_cons(gnc_account_value_ptr_to_scm((GncAccountValue*)(node->data)), list);
 
   $result = scm_reverse(list);
 }

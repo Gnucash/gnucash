@@ -33,7 +33,7 @@
 
 extern "C"
 {
-#include <gnc-date.h>
+#include "gnc-date.h"
 }
 
 #include <vector>

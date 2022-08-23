@@ -22,21 +22,21 @@
  *******************************************************************/
 
 #include <gtest/gtest.h>
-#include <gnc-option.hpp>
-#include <gnc-option-impl.hpp>
-#include <gnc-option-ui.hpp>
-#include <guid.hpp>
+#include "gnc-option.hpp"
+#include "gnc-option-impl.hpp"
+#include "gnc-option-ui.hpp"
+#include "guid.hpp"
 extern "C"
 {
 #include <config.h>
-#include <qof.h>
-#include <Account.h>
-#include <gnc-budget.h>
-#include <gnc-commodity.h>
-#include <gnc-date.h>
+#include "qof.h"
+#include "Account.h"
+#include "gnc-budget.h"
+#include "gnc-commodity.h"
+#include "gnc-date.h"
 #include <time.h>
-#include <gnc-ui-util.h>
-#include <gnc-session.h>
+#include "gnc-ui-util.h"
+#include "gnc-session.h"
 }
 
 TEST(GncOption, test_string_ctor)

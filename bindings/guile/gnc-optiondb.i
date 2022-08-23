@@ -80,14 +80,6 @@ SCM scm_init_sw_gnc_optiondb_module(void);
 
 %include <std_string.i>
 %import <base-typemaps.i>
-%import (module="sw_engine") <gnc-budget.h>
-%import (module="sw_engine") <gncOwner.h>
-%import (module="sw_engine") <gncCustomer.h>
-%import (module="sw_engine") <gncEmployee.h>
-%import (module="sw_engine") <gncVendor.h>
-%import (module="sw_engine") <gncTaxTable.h>
-%import (module="sw_engine") <gncInvoice.h>
-%import (module="sw_engine") <gncJob.h>
 
  /* Implementation Note: Plain overloads failed to compile because
   *    auto value{option.get_value()};
@@ -158,6 +150,12 @@ SCM scm_init_sw_gnc_optiondb_module(void);
  }
 
 %inline %{
+static inline QofBook*
+get_current_book(void )
+{
+    return qof_session_get_book(gnc_get_current_session());
+}
+
 template <typename ValueType> inline SCM
     scm_from_value(ValueType value);
 /*{
@@ -278,7 +276,7 @@ template <>inline SCM
 scm_from_value<GncOptionAccountList>(GncOptionAccountList value)
 {
     SCM s_list = SCM_EOL;
-    auto book{gnc_get_current_book()};
+    auto book{get_current_book()};
     for (auto guid : value)
     {
         auto acct{xaccAccountLookup(&guid, book)};
@@ -409,14 +407,14 @@ scm_to_value<gnc_commodity*>(SCM new_value)
         if (len > 1)
            name_space = scm_to_utf8_string(scm_list_ref(new_value,
                                                         scm_from_uint(1)));
-        auto book{gnc_get_current_book()};
+        auto book{get_current_book()};
         auto table = gnc_commodity_table_get_table(book);
         return gnc_commodity_table_lookup(table, name_space.c_str(),
                                           mnemonic.c_str());
     }
     if (scm_is_string(new_value))
     {
-        auto book{gnc_get_current_book()};
+        auto book{get_current_book()};
         auto table = gnc_commodity_table_get_table(book);
         std::string mnemonic{scm_to_utf8_string(new_value)};
         return gnc_commodity_table_lookup(table, "CURRENCY", mnemonic.c_str());
@@ -501,7 +499,7 @@ QofBook*
 gnc_option_test_book_new()
 {
     auto session = gnc_get_current_session();
-    return gnc_get_current_book();
+    return get_current_book();
 }
 
 void
@@ -689,7 +687,7 @@ gnc_option_test_book_destroy(QofBook* book)
 %typemap(out) GncOptionAccountList
 {
     $result = SCM_EOL;
-    auto book{gnc_get_current_book()};
+    auto book{get_current_book()};
     for (auto guid : $1)
     {
         auto acct{xaccAccountLookup(&guid, book)};
@@ -702,7 +700,7 @@ gnc_option_test_book_destroy(QofBook* book)
 %typemap(out) const GncOptionAccountList&
 {
     $result = SCM_EOL;
-    auto book{gnc_get_current_book()};
+    auto book{get_current_book()};
     for (auto guid : *$1)
     {
         auto acct{xaccAccountLookup(&guid, book)};
@@ -1426,7 +1424,7 @@ inline SCM return_scm_value(ValueType value)
                             auto strval{scm_to_utf8_string(new_value)};
                             GncGUID guid;
                             string_to_guid(strval, &guid);
-                            auto book{gnc_get_current_book()};
+                            auto book{get_current_book()};
                             option.set_value(xaccAccountLookup(&guid, book));
                         }
                         else
@@ -1508,7 +1506,7 @@ inline SCM return_scm_value(ValueType value)
                             auto strval{scm_to_utf8_string(new_value)};
                             GncGUID guid;
                             string_to_guid(strval, &guid);
-                            auto book{gnc_get_current_book()};
+                            auto book{get_current_book()};
                             option.set_default_value(xaccAccountLookup(&guid, book));
                         }
                         else

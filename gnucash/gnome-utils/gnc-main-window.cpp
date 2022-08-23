@@ -76,7 +76,7 @@ extern "C"
 #include "gnc-warnings.h"
 #include "gnc-window.h"
 #include "gnc-prefs.h"
-#include <gnc-optiondb.h>
+#include "gnc-optiondb.h"
 #include "gnc-autosave.h"
 #include "print-session.h"
 #ifdef MAC_INTEGRATION

@@ -27,42 +27,54 @@
 
 #include <glib.h>
 #include <libguile.h>
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #include "gnc-engine.h"
-#include <gncTaxTable.h>	/* for GncAccountValue */
+#include <gncTaxTable.h>    /* for GncAccountValue */
 #include "gnc-hooks.h"
 
 /* Helpers for various conversions to and from guile */
 
-GDate    gnc_time64_to_GDate(SCM x);
+GDate gnc_time64_to_GDate(SCM x);
 
-SCM  gnc_guid2scm(GncGUID guid);
+SCM gnc_guid2scm(GncGUID guid);
+
 GncGUID gnc_scm2guid(SCM guid_scm);
-int  gnc_guid_p(SCM guid_scm);
+
+int gnc_guid_p(SCM guid_scm);
 
 /* for a list of strings */
-GSList * gnc_query_scm2path (SCM path_scm);
+GSList* gnc_query_scm2path(SCM path_scm);
 
 /* These two functions convert a query object into a scheme
  * representation of the query and vice-versa. They do not
  * simply convert a query pointer to a guile query pointer! */
-SCM gnc_query2scm (QofQuery * q);
-QofQuery * gnc_scm2query (SCM query_scm);
+SCM gnc_query2scm(QofQuery* q);
+
+QofQuery* gnc_scm2query(SCM query_scm);
 
 SCM gnc_numeric_to_scm(gnc_numeric arg);
+
 gnc_numeric gnc_scm_to_numeric(SCM arg);
-gnc_commodity * gnc_scm_to_commodity(SCM scm);
-SCM gnc_commodity_to_scm (const gnc_commodity *commodity);
-SCM gnc_book_to_scm (const QofBook *book);
+
+gnc_commodity* gnc_scm_to_commodity(SCM scm);
+
+SCM gnc_commodity_to_scm(const gnc_commodity* commodity);
+
+SCM gnc_book_to_scm(const QofBook* book);
 
 /* Conversion routines used with tax tables */
-GncAccountValue * gnc_scm_to_account_value_ptr (SCM valuearg);
-SCM gnc_account_value_ptr_to_scm (GncAccountValue *);
+GncAccountValue* gnc_scm_to_account_value_ptr(SCM valuearg);
+
+SCM gnc_account_value_ptr_to_scm(GncAccountValue*);
 
 /**
  * add Scheme-style danglers from a hook
  */
-void gnc_hook_add_scm_dangler(const gchar *name, SCM proc);
+void gnc_hook_add_scm_dangler(const gchar* name, SCM proc);
 
 /** Convert a time string to calendar time representation.  Combine strptime and
  *  mktime into a single function to avoid the need to wrap struct tm *.
@@ -72,5 +84,9 @@ void gnc_hook_add_scm_dangler(const gchar *name, SCM proc);
  *  @param format Format specification.
  *
  *  @return The time in seconds since unix epoch, or -1 on error */
-time64 gnc_parse_time_to_time64 (const gchar *s, const gchar *format);
+time64 gnc_parse_time_to_time64(const gchar* s, const gchar* format);
+
+#ifdef __cplusplus
+}
+#endif
 #endif

@@ -22,14 +22,14 @@
 
 #include "gnc-option-date.hpp"
 #include <array>
-#include <gnc-datetime.hpp>
+#include "gnc-datetime.hpp"
 #include <iostream>
 #include <cassert>
 #include <algorithm>
 
 extern "C"
 {
-#include <gnc-accounting-period.h>
+#include "gnc-accounting-period.h"
 }
 
 #define N_(string) string //So that xgettext will find it

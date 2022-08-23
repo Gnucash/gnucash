@@ -23,16 +23,17 @@ macro(add_app_utils_test _TARGET _SOURCE_FILES)
 endmacro()
 
 gnc_add_test_with_guile(test-exp-parser test-exp-parser.c
-  APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS scm-expressions
- )
+  APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS
+  )
+add_dependencies(test-exp-parser scm-expressions)
 add_app_utils_test(test-print-parse-amount test-print-parse-amount.cpp)
 gnc_add_test_with_guile(test-sx test-sx.cpp
   APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS
 )
 
 set(gtest_gnc_option_SOURCES
-  gtest-gnc-option.cpp
-  gtest-gnc-optiondb.cpp)
+        ../../engine/test/gtest-gnc-option.cpp
+        ../../engine/test/gtest-gnc-optiondb.cpp)
 
 set(gtest_gnc_option_INCLUDES
   ${MODULEPATH}
@@ -64,8 +65,8 @@ set_dist_list(test_app_utils_DIST
   test-exp-parser.c
   test-print-parse-amount.cpp
   test-sx.cpp
-  gtest-gnc-option.cpp
-  gtest-gnc-optiondb.cpp
+        ../../engine/test/gtest-gnc-option.cpp
+        ../../engine/test/gtest-gnc-optiondb.cpp
   test-c-interface.scm
   test-date-utilities.scm
   test-options.scm

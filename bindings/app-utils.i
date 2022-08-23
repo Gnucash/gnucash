@@ -52,7 +52,6 @@ SCM scm_init_sw_app_utils_module (void);
 }
 %}
 
-%include "gnc-optiondb.i"
 #endif
 
 #if defined(SWIGPYTHON)

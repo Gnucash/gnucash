@@ -37,12 +37,12 @@
 extern "C"
 {
 #include <config.h>
-#include <qof.h>
-#include <Account.h>
-#include <gnc-budget.h>
-#include <gnc-commodity.h>
+#include "qof.h"
+#include "Account.h"
+#include "gnc-budget.h"
+#include "gnc-commodity.h"
 }
-#include <gnc-datetime.hpp>
+#include "gnc-datetime.hpp"
 #include <string>
 #include <utility>
 #include <vector>

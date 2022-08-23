@@ -76,7 +76,7 @@ main_helper (void *closure, int argc, char **argv)
 {
     int count = 50;
 
-    scm_c_use_module("gnucash app-utils");
+    scm_c_use_module("gnucash options");
 
     if (argc > 1)
         count = atoi (argv[1]);

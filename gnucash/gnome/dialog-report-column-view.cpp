@@ -42,7 +42,7 @@ extern "C"
 #include "dialog-report-column-view.hpp"
 #include <dialog-options.hpp>
 #include <gnc-report.h>
-#include <gnc-optiondb-impl.hpp>
+#include "gnc-optiondb-impl.hpp"
 
 enum available_cols
 {

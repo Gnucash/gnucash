@@ -47,7 +47,7 @@
 #include "gnc-date.h"
 #include "gnc-prefs.h"
 #include "qof.h"
-#include "gnc-ui-util.h"
+#include "gnc-session.h"
 
 static const QofLogModule log_module = G_LOG_DOMAIN;
 static time64 gnc_accounting_period_start_time64 (GncAccountingPeriod which,
@@ -103,7 +103,7 @@ get_fy_end (void)
     QofBook *book;
     GDate *date = NULL;
 
-    book = gnc_get_current_book();
+    book = qof_session_get_book(gnc_get_current_session());
     qof_instance_get (QOF_INSTANCE (book), "fy-end", &date, NULL);
     return date;
 }

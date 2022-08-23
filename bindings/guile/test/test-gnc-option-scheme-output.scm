@@ -23,7 +23,7 @@
 
 (use-modules (srfi srfi-64))
 (use-modules (tests srfi64-extras))
-(use-modules (gnucash app-utils options))
+(use-modules (gnucash options))
 (use-modules (sw_app_utils))
 (use-modules (sw_engine))
 

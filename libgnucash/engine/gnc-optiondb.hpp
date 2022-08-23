@@ -41,14 +41,14 @@
 extern "C"
 {
 #include <config.h>
-#include <Account.h>
-#include <gnc-budget.h>
-#include <gnc-commodity.h>
-#include <gncInvoice.h>
-#include <gncTaxTable.h>
+#include "Account.h"
+#include "gnc-budget.h"
+#include "gnc-commodity.h"
+#include "gncInvoice.h"
+#include "gncTaxTable.h"
 }
 #include "gnc-option.hpp"
-#include <gnc-datetime.hpp>
+#include "gnc-datetime.hpp"
 
 
 class GncOptionDB;

@@ -33,8 +33,8 @@
 #include <vector>
 
 #include <libguile.h>
-#include <gnc-option-uitype.hpp>
-#include <gnc-option-ui.hpp>
+#include "gnc-option-uitype.hpp"
+#include "gnc-option-ui.hpp"
 
 /** @fn WidgetCreateFunc
  *  Function pointer for per-option-type GtkWidget constructors.

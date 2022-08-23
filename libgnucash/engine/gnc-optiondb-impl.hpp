@@ -42,13 +42,13 @@
 extern "C"
 {
 #include <config.h>
-#include <qof.h>
-#include <gncInvoice.h>
-#include <gncCustomer.h>
-#include <gncEmployee.h>
-#include <gncJob.h>
-#include <gncVendor.h>
-#include <gncTaxTable.h>
+#include "qof.h"
+#include "gncInvoice.h"
+#include "gncCustomer.h"
+#include "gncEmployee.h"
+#include "gncJob.h"
+#include "gncVendor.h"
+#include "gncTaxTable.h"
 }
 
 using GncOptionVec = std::vector<GncOption>;

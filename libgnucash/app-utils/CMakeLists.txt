@@ -6,28 +6,16 @@ include (GncFindLibm)
 
 # Build the library
 
-set (app_utils_noinst_HEADERS
-  gnc-option-date.hpp
-  gnc-option-impl.hpp
-  gnc-option-ui.hpp
-  gnc-option-uitype.hpp
-  gnc-optiondb-impl.hpp
-)
-
 set (app_utils_HEADERS
   QuickFill.h
   file-utils.h
   gnc-basic-gobject.h
   gnc-account-merge.h
-  gnc-accounting-period.h
   gnc-addr-quickfill.h
   gnc-entry-quickfill.h
   gnc-euro.h
   gnc-gsettings.h
   gnc-help-utils.h
-  gnc-option.hpp
-  gnc-optiondb.h
-  gnc-optiondb.hpp
   gnc-prefs-utils.h
   gnc-state.h
   gnc-ui-util.h
@@ -38,15 +26,10 @@ set (app_utils_SOURCES
   QuickFill.c
   file-utils.c
   gnc-account-merge.c
-  gnc-accounting-period.c
   gnc-addr-quickfill.c
   gnc-entry-quickfill.c
   gnc-euro.c
   gnc-gsettings.cpp
-  gnc-option-date.cpp
-  gnc-option.cpp
-  gnc-option-impl.cpp
-  gnc-optiondb.cpp
   gnc-prefs-utils.c
   gnc-state.c
   gnc-ui-util.c
@@ -60,7 +43,7 @@ if (NOT STANDARD_MATH_LIBRARY_FOUND)
   message(FATAL_ERROR "An implementation of the standard C function pow() is required and is supported neither by the C runtime nor libm.so.")
 endif()
 
-set(app_utils_ALL_SOURCES ${app_utils_SOURCES} ${app_utils_HEADERS} ${app_utils_noinst_HEADERS})
+set(app_utils_ALL_SOURCES ${app_utils_SOURCES} ${app_utils_HEADERS})
 set(app_utils_ALL_LIBRARIES
     gnc-engine
     ${GLIB_LDFLAGS}
@@ -173,8 +156,7 @@ set_local_dist(app_utils_DIST_local
     ${app_utils_SCHEME_2}
     ${app_utils_SCHEME_3}
     ${expressions_all_sources}
-    ${expressions_SCHEME}
-    app-utils.i gnc-optiondb.i expressions.i CMakeLists.txt gnc-help-utils.c)
+    CMakeLists.txt gnc-help-utils.c)
 
 
 set(app_utils_DIST

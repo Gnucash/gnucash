@@ -48,7 +48,7 @@ extern "C"
 #include <exception>
 
 #include <dialog-options.hpp>
-#include <gnc-option.hpp>
+#include "gnc-option.hpp"
 #define FUNC_NAME G_STRFUNC
 
 

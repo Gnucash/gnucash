@@ -8,7 +8,7 @@ bindings/guile/date-utilities.scm
 bindings/guile/engine.scm
 bindings/guile/fin.scm
 bindings/guile/glib-guile.c
-bindings/guile/gnc-engine-guile.c
+bindings/guile/gnc-engine-guile.cpp
 bindings/guile/gnc-guile-bindings.c
 bindings/guile/gnc-guile-utils.c
 bindings/guile/gnc-helpers.c
@@ -507,7 +507,6 @@ libgnucash/app-utils/calculation/expression_parser.c
 libgnucash/app-utils/calculation/fin.c
 libgnucash/app-utils/file-utils.c
 libgnucash/app-utils/gfec.c
-libgnucash/app-utils/gnc-accounting-period.c
 libgnucash/app-utils/gnc-account-merge.c
 libgnucash/app-utils/gnc-addr-quickfill.c
 libgnucash/app-utils/gnc-entry-quickfill.c
@@ -515,10 +514,6 @@ libgnucash/app-utils/gnc-euro.c
 libgnucash/app-utils/gnc-exp-parser.c
 libgnucash/app-utils/gnc-gsettings.cpp
 libgnucash/app-utils/gnc-help-utils.c
-libgnucash/app-utils/gnc-option.cpp
-libgnucash/app-utils/gnc-option-date.cpp
-libgnucash/app-utils/gnc-optiondb.cpp
-libgnucash/app-utils/gnc-option-impl.cpp
 libgnucash/app-utils/gnc-prefs-utils.c
 libgnucash/app-utils/gnc-state.c
 libgnucash/app-utils/gnc-sx-instance-model.c
@@ -605,6 +600,7 @@ libgnucash/engine/Account.cpp
 libgnucash/engine/cap-gains.c
 libgnucash/engine/cashobjects.c
 libgnucash/engine/engine-helpers.c
+libgnucash/engine/gnc-accounting-period.c
 libgnucash/engine/gncAddress.c
 libgnucash/engine/gnc-aqbanking-templates.cpp
 libgnucash/engine/gncBillTerm.c
@@ -627,6 +623,10 @@ libgnucash/engine/gncInvoice.c
 libgnucash/engine/gncJob.c
 libgnucash/engine/gnc-lot.c
 libgnucash/engine/gnc-numeric.cpp
+libgnucash/engine/gnc-option.cpp
+libgnucash/engine/gnc-option-date.cpp
+libgnucash/engine/gnc-optiondb.cpp
+libgnucash/engine/gnc-option-impl.cpp
 libgnucash/engine/gncOrder.c
 libgnucash/engine/gncOwner.c
 libgnucash/engine/gnc-pricedb.c

@@ -31,7 +31,7 @@
 (use-modules (sw_report))
 
 (use-modules (gnucash core-utils))
-(use-modules (gnucash app-utils options))
+(use-modules (gnucash options))
 (use-modules (gnucash report html-document))
 (use-modules (ice-9 regex))
 

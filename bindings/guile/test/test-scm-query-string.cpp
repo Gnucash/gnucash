@@ -110,7 +110,7 @@ run_tests (void)
 static void
 main_helper (void *closure, int argc, char **argv)
 {
-    scm_c_use_module("gnucash app-utils");
+    scm_c_use_module("gnucash options");
 
     xaccLogDisable ();
 

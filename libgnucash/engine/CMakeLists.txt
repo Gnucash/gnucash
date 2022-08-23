@@ -15,6 +15,11 @@ set(engine_noinst_HEADERS
   gnc-int128.hpp
   gnc-lot.h
   gnc-lot-p.h
+  gnc-option-date.hpp
+  gnc-option-impl.hpp
+  gnc-option-ui.hpp
+  gnc-option-uitype.hpp
+  gnc-optiondb-impl.hpp
   gnc-pricedb-p.h
   policy-p.h
   qofbook-p.h
@@ -44,6 +49,7 @@ set (engine_HEADERS
   cap-gains.h
   cashobjects.h
   engine-helpers.h
+  gnc-accounting-period.h
   gnc-aqbanking-templates.h
   gnc-budget.h
   gnc-commodity.h
@@ -55,6 +61,9 @@ set (engine_HEADERS
   gnc-hooks.h
   gnc-numeric.h
   gnc-numeric.hpp
+  gnc-option.hpp
+  gnc-optiondb.h
+  gnc-optiondb.hpp
   gnc-pricedb.h
   gnc-rational.hpp
   gnc-rational-rounding.hpp
@@ -140,6 +149,7 @@ set (engine_SOURCES
   Transaction.c
   cap-gains.c
   cashobjects.c
+  gnc-accounting-period.c
   gnc-aqbanking-templates.cpp
   gnc-budget.cpp
   gnc-commodity.c
@@ -152,6 +162,10 @@ set (engine_SOURCES
   gnc-int128.cpp
   gnc-lot.c
   gnc-numeric.cpp
+  gnc-option-date.cpp
+  gnc-option.cpp
+  gnc-option-impl.cpp
+  gnc-optiondb.cpp
   gnc-pricedb.c
   gnc-rational.cpp
   gnc-session.c

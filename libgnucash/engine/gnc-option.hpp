@@ -42,7 +42,7 @@
 #include <tuple>
 #include "gnc-option-ui.hpp"
 #include "gnc-option-date.hpp"
-#include <guid.hpp>
+#include "guid.hpp"
 
 struct OptionClassifier;
 class GncOptionUIItem;

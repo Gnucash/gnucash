@@ -1,6 +1,7 @@
 (use-modules (ice-9 textual-ports))
 (use-modules (ice-9 popen))
 (use-modules (gnucash engine))
+(use-modules (sw_engine))
 (use-modules (gnucash utilities))
 (use-modules (gnucash app-utils))
 (use-modules (tests test-engine-extras))

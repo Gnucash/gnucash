@@ -67,17 +67,17 @@ extern "C"
 #include <sstream>
 
 #include "dialog-options.hpp"
-#include <gnc-optiondb.hpp>
-#include <gnc-optiondb-impl.hpp>
+#include "gnc-optiondb.hpp"
+#include "gnc-optiondb-impl.hpp"
 
 #define GNC_PREF_CLOCK_24H "clock-24h"
 
 
-#include <gnc-option.hpp>
+#include "gnc-option.hpp"
 //#include <gnc-option-impl.hpp>
-#include <gnc-optiondb.hpp>
-#include <gnc-option-uitype.hpp>
-#include <gnc-option-ui.hpp>
+#include "gnc-optiondb.hpp"
+#include "gnc-option-uitype.hpp"
+#include "gnc-option-ui.hpp"
 
 #define FUNC_NAME G_STRFUNC
 /* TODO: clean up "register-stocks" junk

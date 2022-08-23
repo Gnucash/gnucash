@@ -60,6 +60,7 @@ set (scm_tests_with_srfi64_SOURCES
   test-business-core.scm
   test-scm-engine.scm
   test-scm-kvpvalue.scm
+  test-options.scm
   )
 
 if (HAVE_SRFI64)
@@ -117,7 +118,6 @@ set(test_app_utils_scheme_SOURCES
 
 set (test_app_utils_scheme_SRFI64_SOURCES
         test-date-utilities.scm
-        test-options.scm
         )
 
 gnc_add_scheme_test_targets(scm-test-load-app-utils-module

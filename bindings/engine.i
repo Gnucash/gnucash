@@ -21,8 +21,14 @@
 %module sw_engine
 %{
 /* Includes the header in the wrapper code */
-#include <config.h>
 #include <glib.h>
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+#include <config.h>
 #include "qof.h"
 #include "qoflog.h"
 #include "Query.h"
@@ -51,17 +57,25 @@
 #include "gncOwner.h"
 #include "gncTaxTable.h"
 #include "gncVendor.h"
+
+#ifdef __cplusplus
+}
+#endif
 %}
-#if defined(SWIGGUILE)
+#if defined(SWIGGUILE) //Always C++
 %{
+extern "C"
+{
 #include "guile-mappings.h"
 
 SCM scm_init_sw_engine_module (void);
+}
 %}
+%include "gnc-optiondb.i"
 #endif
 
 %import "base-typemaps.i"
-
+%apply struct tm* { tm* };
 GLIST_HELPER_INOUT(SplitList, SWIGTYPE_p_Split);
 GLIST_HELPER_INOUT(TransList, SWIGTYPE_p_Transaction);
 GLIST_HELPER_INOUT(LotList, SWIGTYPE_p_GNCLot);

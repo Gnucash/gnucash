@@ -25,6 +25,7 @@
 
 (use-modules (gnucash core-utils))
 (use-modules (gnucash app-utils))
+(use-modules (gnucash options))
 
 (export gnc:options-add-report-date!)
 (export gnc:options-add-date-interval!)

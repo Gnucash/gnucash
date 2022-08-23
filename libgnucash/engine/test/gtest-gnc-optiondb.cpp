@@ -22,16 +22,16 @@
  *******************************************************************/
 
 #include <gtest/gtest.h>
-#include <gnc-optiondb.hpp>
-#include <gnc-optiondb-impl.hpp>
-#include <gnc-option-ui.hpp>
-#include <kvp-value.hpp>
+#include "gnc-optiondb.hpp"
+#include "gnc-optiondb-impl.hpp"
+#include "gnc-option-ui.hpp"
+#include "kvp-value.hpp"
 #include <glib-2.0/glib.h>
 
 extern "C"
 {
-#include <gnc-ui-util.h>
-#include <gnc-session.h>
+#include "gnc-ui-util.h"
+#include "gnc-session.h"
 }
 
 using GncOptionDBPtr = std::unique_ptr<GncOptionDB>;

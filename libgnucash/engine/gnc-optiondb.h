@@ -68,11 +68,11 @@ extern "C"
 {
 #endif
 #include <config.h>
-#include <Account.h>
-#include <gnc-budget.h>
-#include <gnc-commodity.h>
-#include <gncInvoice.h>
-#include <gncTaxTable.h>
+#include "Account.h"
+#include "gnc-budget.h"
+#include "gnc-commodity.h"
+#include "gncInvoice.h"
+#include "gncTaxTable.h"
 
 /**
  * Create an empty option database.

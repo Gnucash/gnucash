@@ -68,7 +68,7 @@ extern "C"
 #include "gnc-engine.h"
 }
 #include <dialog-options.hpp>
-#include <gnc-optiondb.h>
+#include "gnc-optiondb.h"
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
 

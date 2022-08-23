@@ -17,13 +17,13 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
-(define-module (gnucash app-utils options))
+(define-module (gnucash options))
 
 (eval-when (compile load eval expand)
   (load-extension "libgnucash-guile" "scm_init_sw_app_utils_module"))
 
 (use-modules (gnucash core-utils))
-(use-modules (gnucash engine))
+(use-modules (sw_engine))
 (use-modules (sw_app_utils))
 (use-modules (gnucash utilities))
 (use-modules (srfi srfi-1))
@@ -347,12 +347,6 @@
 ;; Internally, values are always a guid. Externally, both guids and
 ;; invoice pointers may be used to set the value of the option. The
 ;; option always returns a single invoice pointer.
-
-(use-modules (gnucash core-utils))
-(use-modules (gnucash engine))
-(use-modules (gnucash utilities))
-(use-modules (gnucash app-utils options))
-(use-modules (sw_app_utils))
 
 (export gnc:*business-label*)
 (export gnc:*company-name*)

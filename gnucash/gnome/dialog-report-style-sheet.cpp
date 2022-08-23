@@ -42,7 +42,7 @@ extern "C"
 }
 #include "gnc-report.h"
 #include <dialog-options.hpp>
-#include <gnc-optiondb.h>
+#include "gnc-optiondb.h"
 
 #define DIALOG_STYLE_SHEETS_CM_CLASS "style-sheets-dialog"
 #define GNC_PREFS_GROUP              "dialogs.style-sheet"

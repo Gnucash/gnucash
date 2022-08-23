@@ -23,8 +23,8 @@
 
 //#include "options.h"
 #include "gnc-option-impl.hpp"
-#include <gnc-datetime.hpp>
-#include <guid.hpp>
+#include "gnc-datetime.hpp"
+#include "guid.hpp"
 #include <cassert>
 #include <sstream>
 #include <numeric>
@@ -32,7 +32,8 @@
 extern "C"
 {
 #include "gnc-accounting-period.h"
-#include "gnc-ui-util.h"
+#include "gnc-session.h"
+#include "gncOwner.h"
 }
 
 static const QofLogModule log_module{"gnc.options"};
@@ -52,11 +53,22 @@ make_gnc_item(const QofInstance* inst)
     return std::make_pair(std::move(type), std::move(*const_cast<GncGUID*>(guid)));
 }
 
+static inline QofBook*
+get_current_book(void)
+{
+    return qof_session_get_book(gnc_get_current_session());
+}
+
+static inline Account*
+get_current_root_account(void)
+{
+    return gnc_book_get_root_account(get_current_book());
+}
 static const QofInstance*
 qof_instance_from_gnc_item(const GncItem& item)
 {
     auto [type, guid] = item;
-    auto book{gnc_get_current_book()};
+    auto book{get_current_book()};
     auto coll{qof_book_get_collection(book, type)};
     return static_cast<QofInstance*>(qof_collection_lookup_entity(coll, &guid));
 }
@@ -177,7 +189,7 @@ static gnc_commodity*
 gnc_commodity_from_namespace_and_mnemonic(std::string_view name_space,
                                           std::string_view mnemonic)
 {
-    auto book{gnc_get_current_book()};
+    auto book{get_current_book()};
     auto table = gnc_commodity_table_get_table(book);
     return gnc_commodity_table_lookup(table, name_space.data(),
                                       mnemonic.data());
@@ -283,7 +295,7 @@ GncOptionAccountListValue::validate(const GncOptionAccountList& values) const
     }
     if (m_allowed.empty())
         return true;
-    auto book{gnc_get_current_book()};
+    auto book{get_current_book()};
     for(auto& guid : values)
     {
         if (std::find(m_allowed.begin(), m_allowed.end(),
@@ -314,12 +326,12 @@ GncOptionAccountListValue::get_default_value() const
     if (m_allowed.empty())
         return retval;
 
-    auto root{gnc_get_current_root_account()};
+    auto root{get_current_root_account()};
     auto account_list{gnc_account_get_descendants_sorted(root)};
     if (!account_list)
         return retval;
 
-    auto book{gnc_get_current_book()};
+    auto book{get_current_book()};
     for (auto node = account_list; node; node = g_list_next (node))
     {
         if (std::find(m_allowed.begin(), m_allowed.end(),
@@ -379,7 +391,7 @@ GncOptionAccountSelValue::validate(const Account* value) const
 const Account*
 GncOptionAccountSelValue::get_value() const
 {
-    auto book{gnc_get_current_book()};
+    auto book{get_current_book()};
     return guid_equal(guid_null(), &m_value) ? get_default_value() :
            xaccAccountLookup(&m_value, book);
 }
@@ -390,7 +402,7 @@ GncOptionAccountSelValue::get_default_value() const
 
     if (!guid_equal(guid_null(), &m_default_value))
     {
-        auto book{gnc_get_current_book()};
+        auto book{get_current_book()};
         return xaccAccountLookup(&m_default_value, book);
     }
 
@@ -401,7 +413,7 @@ GncOptionAccountSelValue::get_default_value() const
         return nullptr;
 
     const Account* retval{nullptr};
-    auto root{gnc_get_current_root_account()};
+    auto root{get_current_root_account()};
     auto account_list{gnc_account_get_descendants_sorted(root)};
     if (!account_list)
         return nullptr;
@@ -595,7 +607,7 @@ qof_instance_from_guid(GncGUID* guid, GncOptionUIType type)
             qof_type = "Account";
             break;
     }
-    auto book{gnc_get_current_book()};
+    auto book{get_current_book()};
     auto col{qof_book_get_collection(book, qof_type)};
     return QOF_INSTANCE(qof_collection_lookup_entity(col, guid));
 }
