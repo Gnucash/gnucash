@@ -176,6 +176,7 @@ gnucash/gnome-utils/gnc-keyring.c
 gnucash/gnome-utils/gnc-main-window.cpp
 gnucash/gnome-utils/gnc-menu-extensions.c
 gnucash/gnome-utils/gnc-menu-extensions.scm
+gnucash/gnome-utils/gnc-option-gtk-ui.cpp
 gnucash/gnome-utils/gnc-period-select.c
 gnucash/gnome-utils/gnc-plugin.c
 gnucash/gnome-utils/gnc-plugin-file-history.c

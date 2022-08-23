@@ -77,6 +77,7 @@ set (gnome_utils_SOURCES
   gnc-keyring.c
   gnc-main-window.cpp
   gnc-menu-extensions.c
+  gnc-option-gtk-ui.cpp
   gnc-plugin-file-history.c
   gnc-plugin-manager.c
   gnc-plugin-menu-additions.c
@@ -114,6 +115,7 @@ set(gnome_utils_noinst_HEADERS
   gnc-autosave.h
   gnc-gobject-utils.h
   gnc-gtk-utils.h
+  gnc-option-gtk-ui.hpp
   search-param.h
 )
 
@@ -191,7 +193,7 @@ set (gnome_utils_HEADERS
   tree-view-utils.h
   print-session.h
   window-main-summarybar.h
-)
+  )
 
 
 

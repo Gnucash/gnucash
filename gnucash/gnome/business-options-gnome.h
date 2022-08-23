@@ -32,8 +32,16 @@
 /**
  * Set up the business and counters pages in the File Preferences dialog.
  */
-void gnc_business_options_gnome_initialize (void);
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
+void gnc_business_options_gnome_initialize(void);
+
+#ifdef __cplusplus
+}
+#endif
 #endif /* GNC_BUSINESS_OPTIONS_H_ */
 /** @}
     @} */

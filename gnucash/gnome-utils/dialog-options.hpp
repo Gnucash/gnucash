@@ -32,92 +32,9 @@
 
 #include <vector>
 
-#include <libguile.h>
 #include "gnc-option-uitype.hpp"
-#include "gnc-option-ui.hpp"
+#include <gnc-option-ui.hpp>
 
-/** @fn WidgetCreateFunc
- *  Function pointer for per-option-type GtkWidget constructors.
- *  @param option The option to create an element for.
- *  @param page_box The option dialog page's layout grid
- *  @param name_label A GtkLabel to attach to the widget
- *  @param documentation The string to use for the tooltip.
- *  @param enclosing The parent widget
- *  @param packed Whether the widget will be packed into an eventbox.
- *  @return pointer to the widget.
- */
-
-typedef GtkWidget* (*WidgetCreateFunc)(GncOption&, GtkGrid*, GtkLabel*, char*,
-                                       GtkWidget**, bool*);
-/** @class GncOptionUIFactory
- *  Factory class that keeps track of which GncOptionValueType needs which
- *  WidgetCreateFunc and calls the appropriate one when required.
- */
-class GncOptionUIFactory
-{
-public:
-/** Register a WidgetCreateFunc
- *  @param type The UI type
- *  @param func The function to register
- */
-    static void set_func(GncOptionUIType type, WidgetCreateFunc func);
-/** Create a widget
- *  @param option The option for which to create the widget
- *  @param page The Option dialog page in which to insert the widget
- *  @param name The label to attach to the widget
- *  @param description The text for the widget's tooltip
- *  @param enclosing The widget's parent
- *  @param packed Whether the widget will be packed into an eventbox.
- *  @return pointer to the created widget.
- */
-    static GtkWidget* create(GncOption&, GtkGrid*, GtkLabel*, char*,
-                             GtkWidget**, bool*);
-private:
-    static std::vector<WidgetCreateFunc> s_registry;
-    static bool s_initialized;
-};
-
-/** class GncOptionGtkUIItem
- *  Gtk-specific Interface class for Option Widget
- */
-class GncOptionGtkUIItem : public GncOptionUIItem
-{
-public:
-    GncOptionGtkUIItem(GtkWidget* widget, GncOptionUIType type);
-    GncOptionGtkUIItem(const GncOptionGtkUIItem& item);
-    GncOptionGtkUIItem(GncOptionGtkUIItem&&) = default;
-    virtual ~GncOptionGtkUIItem() override;
-/** Control wether the widget is sensitive */
-    virtual void set_selectable(bool) const noexcept override;
-/** Clear the data from the widget. */
-    void clear_ui_item() override;
-    void set_widget(GtkWidget* widget);
-    virtual GtkWidget* const get_widget() const { return m_widget; }
-    virtual SCM get_widget_scm_value(const GncOption&) const;
-    static WidgetCreateFunc option_widget_factory(GncOption& option,
-                                                  GtkGrid* page,
-                                                  GtkLabel* name,
-                                                  char* description,
-                                                  GtkWidget** enclosing,
-                                                  bool* packed);
-private:
-    GtkWidget* m_widget;
-};
-
-template<GncOptionUIType type> GtkWidget*
-create_option_widget(GncOption& option, GtkGrid*, GtkLabel*, char*, GtkWidget**,
-                     bool*);
-
-/** Templated cast to convert various QofInstance subtype ptrs into QofInstance*
- * to placate the C++ type system. QofInstance is a GObject hierarchy so the
- * usual C++ type substitution doesn't work.
- */
-template <typename Instance> inline const QofInstance*
-qof_instance_cast(Instance inst)
-{
-    static_assert(std::is_pointer_v<Instance>, "Pointers Only!");
-    return reinterpret_cast<const QofInstance*>(inst);
-}
 class GncOptionsDialog;
 
 typedef void (* GncOptionsDialogCallback)(GncOptionsDialog*, void* data);
@@ -183,9 +100,6 @@ public:
     void set_style_sheet_help_cb() noexcept;
     void call_style_sheet_help_cb() noexcept;
 };
-
-void gnc_option_changed_widget_cb (GtkWidget *widget, GncOption *option);
-void gnc_option_changed_option_cb (GtkWidget *dummy, GncOption *option);
 
 /**
  * Set the initial values of new book options to values specified in user

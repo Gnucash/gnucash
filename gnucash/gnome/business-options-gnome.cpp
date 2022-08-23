@@ -22,33 +22,27 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
-#include <libguile.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include "business-options-gnome.h"
 
 extern "C"
 {
-#include <config.h>
-
-#include "swig-runtime.h"
-#include "guile-mappings.h"
-
-#include "gnc-ui-util.h"
-#include "dialog-utils.h"
-#include "qof.h"
-#include "gnc-general-search.h"
-
-#include "business-options-gnome.h"
-#include "business-gnome-utils.h"
-#include "dialog-invoice.h"
+#include <config.h> // for scanf format string
+#include <qof.h>
+#include <business-gnome-utils.h>
+#include <gnc-ui-util.h> // for gnc_get_current_book
+#include <gnc-general-search.h> // for GNC_GENERAL_SEARCH
+#include "dialog-utils.h" // for gnc_builder_add_from_file
 }
+
 
 #include <iostream>
 #include <sstream>
 #include <exception>
 
-#include <dialog-options.hpp>
-#include "gnc-option.hpp"
+#include "gnc-option-gtk-ui.hpp"
+#include <gnc-option.hpp>
 #define FUNC_NAME G_STRFUNC
 
 
@@ -119,7 +113,7 @@ create_option_widget<GncOptionUIType::OWNER>(GncOption& option,
 class GncGtkInvoiceUIItem : public GncOptionGtkUIItem
 {
 public:
-    GncGtkInvoiceUIItem(GtkWidget* widget) :
+    explicit GncGtkInvoiceUIItem(GtkWidget* widget) :
         GncOptionGtkUIItem(widget, GncOptionUIType::INVOICE) {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
@@ -159,7 +153,7 @@ create_option_widget<GncOptionUIType::INVOICE>(GncOption& option,
 class GncGtkTaxTableUIItem : public GncOptionGtkUIItem
 {
 public:
-    GncGtkTaxTableUIItem(GtkWidget* widget) :
+    explicit GncGtkTaxTableUIItem(GtkWidget* widget) :
         GncOptionGtkUIItem(widget, GncOptionUIType::TAX_TABLE) {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
