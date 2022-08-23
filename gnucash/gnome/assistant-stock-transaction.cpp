@@ -399,9 +399,12 @@ typedef struct
     // stock amount page
     gnc_numeric balance_at_date;
     GtkWidget * stock_amount_page;
+    GtkWidget * stock_amount_title;
     GtkWidget * prev_amount;
     GtkWidget * next_amount;
+    GtkWidget * next_amount_label;
     GtkWidget * stock_amount_edit;
+    GtkWidget * stock_amount_label;
 
     // stock value page
     GtkWidget * stock_value_page;
@@ -501,6 +504,24 @@ refresh_page_stock_amount (GtkWidget *widget, gpointer user_data)
     if (gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->stock_amount_edit),
                                        &stock_amount, true, nullptr))
         gtk_label_set_text (GTK_LABEL(info->next_amount), nullptr);
+    else if (info->txn_type->input_new_balance)
+    {
+        gnc_numeric ratio = gnc_numeric_div (stock_amount, bal,
+                                             GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+        if (gnc_numeric_check (ratio) || gnc_numeric_negative_p (ratio))
+            gtk_label_set_text (GTK_LABEL(info->next_amount), nullptr);
+        else
+        {
+            auto str = gnc_numeric_to_string (ratio);
+            auto p = str ? strchr (str, '/') : nullptr;
+            if (p)
+                *p = ':';
+            auto lbl = g_strdup_printf (_("%s Split"), str);
+            gtk_label_set_text (GTK_LABEL(info->next_amount), lbl);
+            g_free (lbl);
+            g_free (str);
+        }
+    }
     else
     {
         if (info->txn_type->stock_amount == FieldMask::ENABLED_CREDIT)
@@ -721,7 +742,30 @@ to ensure proper recording."), new_date_str, last_split_date_str);
                     NC_ ("Stock Assistant: Page name", "stock value"), errors);
 
 
-    if (info->txn_type->stock_amount != FieldMask::DISABLED)
+    if (info->txn_type->stock_amount == FieldMask::DISABLED)
+        ;
+    else if (info->txn_type->input_new_balance)
+    {
+        auto stock_amount = gnc_amount_edit_get_amount
+            (GNC_AMOUNT_EDIT(info->stock_amount_edit));
+        auto credit_side = (info->txn_type->stock_amount & FieldMask::ENABLED_CREDIT);
+        auto delta = gnc_numeric_sub_fixed (stock_amount, info->balance_at_date);
+        auto ratio = gnc_numeric_div (stock_amount, info->balance_at_date,
+                                      GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+        auto stock_pinfo = gnc_commodity_print_info
+            (xaccAccountGetCommodity (info->acct), true);
+        stock_amount = gnc_numeric_sub_fixed (stock_amount, info->balance_at_date);
+        line.units = xaccPrintAmount (stock_amount, stock_pinfo);
+        if (gnc_numeric_check (ratio))
+            add_error_str (errors, N_("Invalid stock new balance"));
+        else if (gnc_numeric_negative_p (ratio))
+            add_error_str (errors, N_("New and old balance must have same signs"));
+        else if (gnc_numeric_negative_p (delta) && !credit_side)
+            add_error_str (errors, N_("New balance must be higher than old balance"));
+        else if (gnc_numeric_positive_p (delta) && credit_side)
+            add_error_str (errors, N_("New balance must be lower than old balance"));
+    }
+    else
     {
         auto stock_amount = gnc_amount_edit_get_amount
             (GNC_AMOUNT_EDIT(info->stock_amount_edit));
@@ -880,6 +924,17 @@ stock_assistant_prepare (GtkAssistant  *assistant, GtkWidget *page,
     case PAGE_STOCK_AMOUNT:
         info->balance_at_date = xaccAccountGetBalanceAsOfDate
             (info->acct, gnc_date_edit_get_date_end (GNC_DATE_EDIT (info->date_edit)));
+        gtk_label_set_text_with_mnemonic
+            (GTK_LABEL (info->stock_amount_label),
+             info->txn_type->input_new_balance ? _("Ne_w Balance") : _("_Shares"));
+        gtk_label_set_text
+            (GTK_LABEL (info->next_amount_label),
+             info->txn_type->input_new_balance ? _("Ratio") : _("Next Balance"));
+        gtk_label_set_text
+            (GTK_LABEL (info->stock_amount_title),
+             info->txn_type->input_new_balance ?
+             _("Enter the new balance of shares after the stock split.") :
+             _("Enter the number of shares you gained or lost in the transaction."));
         refresh_page_stock_amount (info->stock_amount_edit, info);
         // fixme: the following doesn't work???
         gtk_widget_grab_focus (gnc_amount_edit_gtk_entry
@@ -945,7 +1000,9 @@ create_split (Transaction *trans, FieldMask splitfield,
     if (skip_if_zero && gnc_numeric_zero_p (value_numeric))
         return;
 
-    if (splitfield & FieldMask::ENABLED_CREDIT)
+    if (info->txn_type->input_new_balance)
+        amount_numeric = gnc_numeric_sub_fixed (amount_numeric, info->balance_at_date);
+    else if (splitfield & FieldMask::ENABLED_CREDIT)
     {
         amount_numeric = gnc_numeric_neg (amount_numeric);
         value_numeric = gnc_numeric_neg (value_numeric);
@@ -1024,6 +1081,8 @@ stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
         gae_amount (info->stock_amount_edit) : gnc_numeric_zero ();
     auto stock_value = info->txn_type->stock_value != FieldMask::DISABLED ?
         gae_amount (info->stock_value_edit) : gnc_numeric_zero ();
+    if (info->txn_type->input_new_balance)
+        stock_amount = gnc_numeric_sub_fixed (stock_amount, info->balance_at_date);
     create_split (trans, info->txn_type->stock_amount | info->txn_type->stock_value,
                   NC_ ("Stock Assistant: Action field", "Stock"),
                   info->acct, account_commits, info->stock_memo_edit,
@@ -1232,9 +1291,12 @@ stock_assistant_create (StockTransactionInfo *info)
 
     /* Stock Amount Page Widgets */
     info->stock_amount_page = get_widget (builder, "stock_amount_page");
+    info->stock_amount_title = get_widget (builder, "stock_amount_title");
     info->prev_amount = get_widget (builder, "prev_balance_amount");
+    info->stock_amount_label = get_widget (builder, "stock_amount_label");
     info->stock_amount_edit = create_gae (builder, 1, xaccAccountGetCommodity (info->acct), "stock_amount_table", "stock_amount_label");
     info->next_amount = get_widget (builder, "next_balance_amount");
+    info->next_amount_label = get_widget (builder, "next_balance_label");
     g_signal_connect (info->stock_amount_edit, "changed",
                       G_CALLBACK (refresh_page_stock_amount), info);
 
