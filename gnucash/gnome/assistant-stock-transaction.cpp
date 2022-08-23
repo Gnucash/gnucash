@@ -113,6 +113,7 @@ FieldMask operator ^(FieldMask lhs, FieldMask rhs)
 struct TxnTypeInfo
 {
     FieldMask stock_amount;
+    bool input_new_balance;
     FieldMask stock_value;
     FieldMask cash_value;
     FieldMask fees_value;
@@ -131,6 +132,7 @@ static const TxnTypeVec starting_types
 {
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -144,6 +146,7 @@ static const TxnTypeVec starting_types
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -161,6 +164,7 @@ static const TxnTypeVec long_types
 {
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -174,6 +178,7 @@ static const TxnTypeVec long_types
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -187,6 +192,7 @@ static const TxnTypeVec long_types
     },
     {
         FieldMask::DISABLED,               // stock_amt
+        false,                             // input_new_balance
         FieldMask::DISABLED,               // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -201,6 +207,7 @@ reinvested must be subsequently recorded as a regular stock purchase.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -214,6 +221,7 @@ reinvested must be subsequently recorded as a regular stock purchase.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -227,6 +235,7 @@ reinvested must be subsequently recorded as a regular stock purchase.")
     },
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
+        true,                              // input_new_balance
         FieldMask::DISABLED,               // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -240,6 +249,7 @@ reinvested must be subsequently recorded as a regular stock purchase.")
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
+        true,                              // input_new_balance
         FieldMask::DISABLED,               // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -260,6 +270,7 @@ static const TxnTypeVec short_types
 {
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -273,6 +284,7 @@ static const TxnTypeVec short_types
     },
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -286,6 +298,7 @@ static const TxnTypeVec short_types
     },
     {
         FieldMask::DISABLED,               // stock_amt
+        false,                             // input_new_balance
         FieldMask::DISABLED,               // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -299,6 +312,7 @@ static const TxnTypeVec short_types
     },
     {
         FieldMask::DISABLED,               // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -312,6 +326,7 @@ static const TxnTypeVec short_types
     },
     {
         FieldMask::DISABLED,               // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -325,6 +340,7 @@ static const TxnTypeVec short_types
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
+        true,                              // input_new_balance
         FieldMask::DISABLED,               // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -338,6 +354,7 @@ static const TxnTypeVec short_types
     },
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
+        true,                              // input_new_balance
         FieldMask::DISABLED,               // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
