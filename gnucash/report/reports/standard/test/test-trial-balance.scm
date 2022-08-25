@@ -60,6 +60,8 @@
          (income (assoc-ref account-alist "Income"))
          (bank (assoc-ref account-alist "Bank")))
 
+    (set-option options "Commodities" "Price Source" 'pricedb-nearest)
+
     (gnc-commodity-set-user-symbol
      (xaccAccountGetCommodity gbp-bank)
      "#")

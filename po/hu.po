@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-22 06:33+0200\n"
-"PO-Revision-Date: 2022-08-08 22:21+0000\n"
+"PO-Revision-Date: 2022-08-22 10:17+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -3559,7 +3559,7 @@ msgstr "Kiadások"
 #: gnucash/register/ledger-core/split-register-model.c:349
 #: gnucash/report/reports/standard/register.scm:144
 msgid "Transfer"
-msgstr "Átvitel"
+msgstr "Átutalás"
 
 #: gnucash/gnome/gnc-budget-view.c:511
 #, fuzzy
@@ -3778,11 +3778,11 @@ msgstr "<b>Új tranzakció-információ</b>"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:224
 msgid "_Tips Of The Day"
-msgstr "A nap ö_tletei"
+msgstr "A nap _tippjei"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:225
 msgid "View the Tips of the Day"
-msgstr "Tekintse meg a nap ötleteit"
+msgstr "A Nap tippjeinek megtekintése"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:545
 msgid "There are no Scheduled Transactions to be entered at this time."
@@ -8724,20 +8724,16 @@ msgid "Open _Read-Only"
 msgstr "Megnyitás csak _olvasásra"
 
 #: gnucash/gnome-utils/gnc-file.c:853
-#, fuzzy
-#| msgid "_Create New File"
 msgid "Create _New File"
-msgstr "Új fájl létrehozása"
+msgstr "_Új fájl létrehozása"
 
 #: gnucash/gnome-utils/gnc-file.c:856
-#, fuzzy
 msgid "Open _Anyway"
-msgstr "Megnyitás mindenképpen"
+msgstr "Megnyitás mégis"
 
 #: gnucash/gnome-utils/gnc-file.c:859
-#, fuzzy
 msgid "Open _Folder"
-msgstr "Töltelék"
+msgstr "_Mappa megnyitása"
 
 #: gnucash/gnome-utils/gnc-file.c:865 gnucash/gnome-utils/gnc-main-window.c:315
 msgid "_Quit"
@@ -10072,7 +10068,7 @@ msgstr "A"
 
 #: gnucash/gnome-utils/gnc-tree-view-price.c:396
 msgid "Security"
-msgstr "Biztosíték"
+msgstr "Értékpapír"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:762
 #, fuzzy
@@ -11579,14 +11575,14 @@ msgstr "A következő megjelenítendő tipp."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:17
 msgid "Show \"Tip Of The Day\" at GnuCash start"
-msgstr ""
+msgstr "A \"Nap tippjének\" mutatása a GnuCash indításakor"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:18
 msgid ""
 "Enables the \"Tip Of The Day\" when GnuCash starts up. If active, the dialog "
 "will be shown. Otherwise it will not be shown."
 msgstr ""
-"Ha aktív, megjelenik a \"Nap Tippje\" indításkor. Különben nem jelenik meg."
+"Ha aktív, indításkor megjelenik a \"Nap tippje\". Különben nem jelenik meg."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:5
 #: gnucash/gtkbuilder/dialog-preferences.glade:4229
@@ -13069,9 +13065,8 @@ msgstr "Jelentésszámlák"
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:335
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1057
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1137
-#, fuzzy
 msgid "Import Summary"
-msgstr "Számla-összefoglaló"
+msgstr "Összefoglalás"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:8
 #, fuzzy
@@ -13097,25 +13092,25 @@ msgstr "Egyszerű elrendezés"
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:316
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:305
 msgid "Comma (,)"
-msgstr "Vessző(,)"
+msgstr "Vessző (,)"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:144
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:333
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:322
 msgid "Colon (:)"
-msgstr "Kettőspont(:)"
+msgstr "Kettőspont (:)"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:161
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:349
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:338
 msgid "Semicolon (;)"
-msgstr "Pontos vessző (;)"
+msgstr "Pontosvessző (;)"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:214
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:225
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:214
 msgid "Separators"
-msgstr "elválasztók"
+msgstr "Elválasztójel"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:230
 #, fuzzy
@@ -13283,11 +13278,39 @@ msgid ""
 "\n"
 "Click on \"Next\" to proceed or \"Cancel\" to Abort Import."
 msgstr ""
+"Ez a segéd végigvezet egy CSV-fájlból történő árfolyamimportálás lépésein.\n"
+"\n"
+"A fájlnak tartalmaznia kell legalább a következő oszlopokat: Dátum, Ár, "
+"Névtér, Szimbólum és Pénznem. Ha minden sor ugyanarra az értékpapírra vagy "
+"pénznemre vonatkozik, akkor elég, ha a fájl csak a Dátum és Árfolyam "
+"oszlopokat tartalmazza, a szimbólumot pedig kiválasztja a legördülő menüből."
+"\n"
+"\n"
+"A fájl oszlopai lehetnek fix szélességűek vagy tagoltak. Utóbbihoz többféle "
+"határoló jelet is beállíthat. Fix szélesség beállításához kattintson duplán "
+"a sorokra. A megadott szélességet a jobb gombbal kattintva megváltoztathatja."
+"\n"
+"\n"
+"A fájl egy sora kinézhet például így: \"BUX\",\"OTP\",\"2017-09-14\",10435,"
+"\"HUF\" vagy CURRENCY;USD;2016-11-21;1.56;GBP\n"
+"\n"
+"Beállíthatja, melyik legyen az első és az utolsó importált sor, illetve "
+"kihagyhat minden második sort, ha a fájl pl. feljécszövegeket tartalmaz. "
+"Lehetőség van a már meglévő napi árfolyamok felülírására is.\n"
+"\n"
+"Az importálási beállítások elmenthetők és egy későbbi importáláskor újra "
+"felhasználhatók, vagy megváltoztathatók és elmenthetők egy új néven. A gyári "
+"beállítások nem írhatók felül.\n"
+"\n"
+"Az importálás nem vonható vissza, ezért fontos, hogy előbb készítsen "
+"biztonsági másolatot.\n"
+"\n"
+"A folytatáshoz kattintson a \"Következő\" gombra, a kilépéshez pedig a "
+"\"Mégse\" gombra."
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:72
-#, fuzzy
 msgid "Price Import Assistant"
-msgstr "GnuCash import tündér"
+msgstr "Árfolyamimportálási segéd"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:87
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:77
@@ -13295,12 +13318,14 @@ msgid ""
 "\n"
 "Select location and file name for the Import, then click \"OK\"...\n"
 msgstr ""
+"\n"
+"Keresse meg, majd jelölje ki az importálni kívánt fájlt és kattintson a "
+"\"Következő\" gombra...\n"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:100
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:90
-#, fuzzy
 msgid "Select File for Import"
-msgstr "Importálandó fájl kiválasztása"
+msgstr "Fájl kiválasztása"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:139
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:130
@@ -13312,6 +13337,11 @@ msgid ""
 "- No settings\n"
 "- Gnucash default export format"
 msgstr ""
+"Beállítások törlése\n"
+"Törli a szomszédos mezőben látható néven mentett beállításokat.\n"
+"Két védett név azonban sosem törölhető:\n"
+"- Mentetlen beállítások\n"
+"- Gnucash alapértelmezett exportálási formátum"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:165
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:156
@@ -13323,21 +13353,26 @@ msgid ""
 "- No settings\n"
 "- Gnucash default export format"
 msgstr ""
+"Beállítások mentése\n"
+"A szomszédos mezőben látható néven elmenti a beállításokat.\n"
+"Két védett név azonban nem használható mentéskor:\n"
+"- Mentetlen beállítások\n"
+"- Gnucash alapértelmezett exportálási formátum"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:193
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:183
 msgid "<b>Load and Save Settings</b>"
-msgstr "<b>Megnyitás és mentés beállítások</b>"
+msgstr "<b>Beállítások mentése és betöltése</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:242
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:231
 msgid "Fixed-Width"
-msgstr "Rögzített szélesség"
+msgstr "Fix szélességű"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:284
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:273
 msgid "Space"
-msgstr "Üres hely"
+msgstr "Szóköz"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:300
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:289
@@ -13352,28 +13387,31 @@ msgstr "Kötőjel (-)"
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:461
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:451
 msgid "Double-click anywhere on the table below to insert a column break"
-msgstr ""
+msgstr "Oszlophatár megadásához kattints duplán a lenti táblázatra"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:487
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:477
 msgid "Right-click anywhere in a column to modify it (widen, narrow, merge)"
 msgstr ""
+"Oszlop szélesítéséhez, keskenyítéséhez vagy összevonásához kattints az "
+"oszlopra jobb gombbal"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:530
 msgid "Allow existing prices to be over written."
-msgstr ""
+msgstr "Meglévő árak felülírásának engedélyzése."
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:535
 msgid ""
 "Normally prices are not over written, select this to change that. This "
 "setting is not saved."
 msgstr ""
+"A meglévő árakat általában nem írjuk felül, de ezzel a beállítással "
+"engedélyezhetjük. Ez a beállítás nem kerül mentésre."
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:559
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:551
-#, fuzzy
 msgid "<b>File Format</b>"
-msgstr "<b>Időformátum</b>"
+msgstr "<b>Fájlformátum</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:589
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:587
@@ -13384,9 +13422,8 @@ msgstr "Dátumformátum"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:601
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:599
-#, fuzzy
 msgid "Currency Format"
-msgstr "Pénznem-információ"
+msgstr "Pénznemformátum"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:613
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:611
@@ -13396,18 +13433,17 @@ msgstr "Kódolás"
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:625
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:623
 msgid "Leading Lines to Skip"
-msgstr ""
+msgstr "Sor kihagyása a fájl elején"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:637
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:635
 msgid "Trailing Lines to Skip"
-msgstr ""
+msgstr "Sor kihagyása a fájl végén"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:716
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:764
-#, fuzzy
 msgid "Skip alternate lines"
-msgstr "Shade alternate transactions"
+msgstr "Minden második sor kihagyása"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:728
 msgid ""
@@ -13420,17 +13456,22 @@ msgid ""
 "* if \"Leading Lines to Skip\" is set to 4, the first line to import will be "
 "line 5. Lines 6, 8, 10,... will be skipped."
 msgstr ""
+"Az első importált sortól számított minden második sor nem lesz importálva. "
+"Figyelembe veszi a fájl elején kihagyott sorokat is.\n"
+"Például\n"
+"* ha a \"Sor kihagyása a fájl elején\" 3, akkor az első importált sor a 4., "
+"az 5., 7., 9., és további sorok ki lesznek hagyva.\n"
+"* ha a \"Sor kihagyása a fájl elején\" 4, akkor az első importált sor a 5., "
+"a 6., 8., 10., és további sorok ki lesznek hagyva."
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:781
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:784
-#, fuzzy
 msgid "<b>Miscellaneous</b>"
-msgstr "<b>Bejövő számlák</b>"
+msgstr "<b>Egyéb beállítások</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:841
-#, fuzzy
 msgid "<b>Commodity From</b>"
-msgstr "<b>Innen</b>"
+msgstr "<b>Szimbólum</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:886
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:57
@@ -13439,34 +13480,30 @@ msgstr "Pénznem"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:953
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:882
-#, fuzzy
 msgid "Select the type of each column to import."
-msgstr "Válassza ki az alábbi oszlopok típusait."
+msgstr "Állítsa be az összes importálandó oszlop típusát."
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:975
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:904
-#, fuzzy
 msgid "Skip Errors"
-msgstr "Hibák"
+msgstr "Hibák átugrása"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:998
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:927
-#, fuzzy
 msgid "Import Preview"
-msgstr "Jelentésszámlák"
+msgstr "Előnézet"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1014
 msgid ""
 "<b>Press \"Apply\" to add the Prices.\n"
 "\"Cancel\" to abort.</b>"
 msgstr ""
-"<b>Nyomjon \"Alkalmazás\"-t az árak megadásához\n"
-"\"Mégsem\"-et a megszakításhoz</b>"
+"<b>Az árfolyamok importálásához kattintson az Alkalmazás gombra.\n"
+"Megszakításhoz kattintson a Mégsem gombra.</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1029
-#, fuzzy
 msgid "Import Prices Now"
-msgstr "Jelentésszámlák"
+msgstr "Importálás"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:28
 #, fuzzy
@@ -16582,7 +16619,7 @@ msgstr "_ISO:"
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:59
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:56
 msgid "Locale"
-msgstr ""
+msgstr "Területi beállítás"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:140
 #, fuzzy
@@ -16858,7 +16895,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1599
 msgid "Display \"_tip of the day\" dialog"
-msgstr "Mutassd a \" A Nap Tippjét\""
+msgstr "A \"Nap tippje\" ablak mutatása"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1605
 #, fuzzy
@@ -18235,25 +18272,23 @@ msgstr "<b>Adótáblázat-tétel</b>"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:8
 msgid "GnuCash Tip Of The Day"
-msgstr "GnuCash A nap ötlete"
+msgstr "GnuCash A nap tippje"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:26
-#, fuzzy
 msgid "_Previous"
-msgstr "Első opció"
+msgstr "_Előző"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:41
 msgid "_Next"
-msgstr ""
+msgstr "_Következő"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:95
-#, fuzzy
 msgid "<b>Tip of the Day</b>"
-msgstr "<b>A nap ötlete:</b>"
+msgstr "<b>A nap tippje</b>"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:145
 msgid "_Show tips at startup"
-msgstr "_Tippek induláskor"
+msgstr "_Tippek mutatása induláskor"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:8
 msgid "Transfer Funds"
@@ -20870,28 +20905,28 @@ msgid ""
 "There were problems reading some saved settings, continuing to load.\n"
 "Please review and save again."
 msgstr ""
+"Néhány mentett beállítás betöltése nem sikerült, de a betöltés folytatódik.\n"
+"Ellenőrizze a beállításokat és mentse el őket újra."
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:907
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:872
-#, fuzzy
 msgid "Delete the Import Settings."
-msgstr "Exportformátum kiválasztása"
+msgstr "Az importálási beállítások törlődni fognak."
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:941
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:906
 msgid "Setting name already exists, overwrite?"
-msgstr ""
+msgstr "Ezen a néven már mentve vannak beállítások. Felülírja őket?"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:955
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:920
-#, fuzzy
 msgid "The settings have been saved."
-msgstr "Néhány karakter el lett dobva."
+msgstr "Beállítások mentve."
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:980
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:945
 msgid "There was a problem saving the settings, please try again."
-msgstr "Hiba történt a beállítások mentésekor, kérlek próbáld újra."
+msgstr "Hiba történt a beállítások mentésekor, próbálja újra."
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1146
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1119
@@ -20901,12 +20936,12 @@ msgstr "Érvénytelen kódolás lett kiválasztva"
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1307
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1229
 msgid "Merge with column on _left"
-msgstr ""
+msgstr "Egyesítés a _bal oldali szomszéddal"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1311
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1233
 msgid "Merge with column on _right"
-msgstr ""
+msgstr "Egyesítés a _jobb oldali szomszéddal"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1316
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1238
@@ -20916,7 +20951,7 @@ msgstr "_Oszlop felosztása"
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1321
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1243
 msgid "_Widen this column"
-msgstr ""
+msgstr "Oszlop _szélesítése"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1325
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1247
@@ -20928,21 +20963,21 @@ msgstr "_Oszlop szűkítése"
 #, c-format
 msgid "%d added price"
 msgid_plural "%d added prices"
-msgstr[0] "%d hozáadott ár"
+msgstr[0] "%d ár importálva"
 
 #. Translators: This is a ngettext(3) message, %d is the number of duplicate prices
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1887
 #, c-format
 msgid "%d duplicate price"
 msgid_plural "%d duplicate prices"
-msgstr[0] "%d duplikált ár"
+msgstr[0] "%d ár duplikált volt"
 
 #. Translators: This is a ngettext(3) message, %d is the number of replaced prices
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1892
 #, c-format
 msgid "%d replaced price"
 msgid_plural "%d replaced prices"
-msgstr[0] "%d cserélt ár"
+msgstr[0] "%d ár lecserélve"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1897
 #, c-format
@@ -20954,7 +20989,7 @@ msgid ""
 "- %s\n"
 "- %s"
 msgstr ""
-"Az árak amik a '%s' fájlból importáltak.\n"
+"Az árak importálása '%s' fájlból megtörtént.\n"
 "\n"
 "Az importálás összefoglalója:\n"
 "- %s\n"
@@ -20970,6 +21005,11 @@ msgid ""
 "Error message:\n"
 "%s"
 msgstr ""
+"Az ár létrehozása közben váratlan hiba történt. Kérjük, küldjön róla egy "
+"hibajelentést.\n"
+"\n"
+"Hibaüzenet:\n"
+"%s"
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1750
 #, fuzzy
@@ -21041,39 +21081,43 @@ msgstr "Vessző: 123.456,78"
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:446
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:472
-#, fuzzy
 msgid "Please select a date column."
-msgstr "Válasszon ki egy érvényes kölcsönszámlát."
+msgstr "Állítsa be, melyik a Dátum oszlop."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:451
-#, fuzzy
 msgid "Please select an amount column."
-msgstr "Válasszon ki egy érvényes kölcsönszámlát."
+msgstr "Állítsa be, melyik az Összeg oszlop."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:458
 msgid ""
 "Please select a 'Currency to' column or set a Currency in the 'Currency To' "
 "field."
 msgstr ""
+"Állítsa be, melyik a Pénznem oszlop, vagy válasszon egy pénznemet a Pénznem "
+"legördülő menüből."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:466
 msgid ""
 "Please select a 'From Symbol' column or set a Commodity in the 'Commodity "
 "From' field."
 msgstr ""
+"Állítsa be, melyik a Szimbólum oszlop, vagy válasszon egy szimbólumot a "
+"Szimbólum legördülő menüből."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:474
 msgid ""
 "Please select a 'From Namespace' column or set a Commodity in the 'Commodity "
 "From' field."
 msgstr ""
+"Állítsa be, melyik a Névtér oszlop, vagy válasszon egy névteret a Névtér "
+"legördülő menüből."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:482
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:188
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:210
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:288
 msgid "'Commodity From' can not be the same as 'Currency To'."
-msgstr ""
+msgstr "A Szimbólum nem lehet azonos a Pénznemmel."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:502
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:524
@@ -21081,13 +21125,15 @@ msgid ""
 "No valid data found in the selected file. It may be empty or the selected "
 "encoding is wrong."
 msgstr ""
+"Nincsenek adatok a kiválasztott fájlban. Lehet, hogy üres vagy rossz kódolás "
+"lett megadva."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:510
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:532
 msgid ""
 "No lines are selected for importing. Please reduce the number of lines to "
 "skip."
-msgstr ""
+msgstr "Nincs importálandó sor. Csökkentse a kihagyandó sorok számát."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:529
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:551
@@ -21095,12 +21141,17 @@ msgid ""
 "Not all fields could be parsed. Please correct the issues reported for each "
 "line or adjust the lines to skip."
 msgstr ""
+"Egyes mezőket nem sikerült értelmezni. Javítsa a soroknál jelzett hibákat "
+"vagy módosítsa a kihagyandó sorok számát."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:580
 msgid ""
 "No 'Currency to' column selected and no selected Currency specified either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
+"Nincs kiválasztva \"Pénznem\" oszlop és nem is lett kiválasztva a legördülő "
+"menüből.\n"
+"Ilyesmi nem fordulhat elő. Kérjük, küldjön erről egy hibajelentést."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:597
 msgid ""
@@ -21108,11 +21159,13 @@ msgid ""
 "From specified either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
+"Nincs kiválasztva \"Névtér/Szimbólum\" oszlop és Szimbólum sem lett "
+"kiválasztva a legördülő menüből.\n"
+"Ilyesmi nem fordulhat elő. Kérjük, küldjön erről egy hibajelentést."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:480
-#, fuzzy
 msgid "Please select an account column."
-msgstr "Válasszon ki egy érvényes kölcsönszámlát."
+msgstr "Állítsa be, melyik a Számla oszlop."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:482
 msgid ""
@@ -21144,12 +21197,10 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:55
-#, fuzzy
 msgid "From Symbol"
 msgstr "Szimbólum"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:56
-#, fuzzy
 msgid "From Namespace"
 msgstr "Névtér"
 
@@ -21157,7 +21208,7 @@ msgstr "Névtér"
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:122
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:216
 msgid "Value doesn't appear to contain a valid number."
-msgstr ""
+msgstr "Úgy tűnik, ez az érték nem szám."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:83
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:88
@@ -21166,38 +21217,36 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:140
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:145
 msgid "Value can't be parsed into a number using the selected currency format."
-msgstr ""
+msgstr "Ez az érték nem felel meg a kiválasztott pénznemformátumnak."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:125
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:202
-#, fuzzy
 msgid "Value can't be parsed into a valid commodity."
-msgstr "Az áru árának kiszámítása."
+msgstr "Úgy tűnik, ez az érték nem egy szimbólum."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:145
-#, fuzzy
 msgid "Value can't be parsed into a valid namespace."
-msgstr "Az áru árának kiszámítása."
+msgstr "Úgy tűnik, ez az érték nem egy névtér."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:159
 msgid "Column value can not be empty."
-msgstr ""
+msgstr "Ez az oszlop nem maradhat üresen."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:178
 msgid "'From Symbol' can not be empty."
-msgstr ""
+msgstr "A Szimbólum nem lehet üres."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:198
 msgid "'From Namespace' can not be empty."
-msgstr ""
+msgstr "A Névtér nem lehet üres."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:223
 msgid "'Currency To' can not be the same as 'Commodity From'."
-msgstr ""
+msgstr "A Pénznem nem lehet ugyanaz, mint a Szimbólum."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:225
 msgid "Value parsed into an invalid currency for a currency column type."
-msgstr ""
+msgstr "Egy pénznem oszlop érvénytelen pénznemszimbólumot tartalmaz."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:238
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:246
@@ -21213,27 +21262,23 @@ msgstr "A(z) '{1}' oszlop nem értelmezhető.\n"
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:280
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:327
 msgid "No date column."
-msgstr "Nincs dátum oszlop"
+msgstr "Nincs dátum oszlop."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:282
-#, fuzzy
 msgid "No amount column."
-msgstr "Nincs dátum oszlop"
+msgstr "Nincs összeg oszlop."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:284
-#, fuzzy
 msgid "No 'Currency to'."
-msgstr "A pénznem oszlop feltüntetése"
+msgstr "Hiányzik a Pénznem."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:286
-#, fuzzy
 msgid "No 'Commodity from'."
-msgstr "Az áru oszlop feltüntetése"
+msgstr "Hiányzik a Szimbólum."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:356
-#, fuzzy
 msgid "Failed to create price from selected columns."
-msgstr "A következő tételek számára nem lehet az árat megállapítani:"
+msgstr "A kiválasztott oszlopokból nem sikerült árat létrehozni."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
 #, fuzzy
@@ -21300,24 +21345,20 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:49
-#, fuzzy
 msgid "No Settings"
-msgstr "Exportformátum kiválasztása"
+msgstr "Mentetlen beállítások"
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:50
-#, fuzzy
 msgid "GnuCash Export Format"
-msgstr "Exportformátum kiválasztása"
+msgstr "GnuCash Exportálási Formátum"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:50
-#, fuzzy
 msgid "Import _Accounts from CSV..."
-msgstr "Számlák exportálás_a"
+msgstr "Számlák CSV-fájlból..."
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:51
-#, fuzzy
 msgid "Import Accounts from a CSV file"
-msgstr "Tranzakciók importálása szöveges fájlból"
+msgstr "Számlák importálása CSV-fájlból"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:55
 #, fuzzy
@@ -21330,9 +21371,8 @@ msgid "Import Transactions from a CSV file"
 msgstr "Tranzakciók importálása szöveges fájlból"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:60
-#, fuzzy
 msgid "Import _Prices from a CSV file..."
-msgstr "Tranzakciók importálása szöveges fájlból"
+msgstr "Á_rfolyamok CSV-fájlból..."
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:61
 msgid "Import Prices from a CSV file"

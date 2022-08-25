@@ -75,6 +75,7 @@ enum split_cols
 {
     SPLIT_COL_ACCOUNT = 0,
     SPLIT_COL_MEMO,
+    SPLIT_COL_MEMO_ESCAPED,
     SPLIT_COL_DEBIT,
     SPLIT_COL_CREDIT,
     NUM_SPLIT_COLS
@@ -292,9 +293,9 @@ static const TxnTypeVec long_types
 static const TxnTypeVec short_types
 {
     {
-        FieldMask::ENABLED_DEBIT,          // stock_amt
-        FieldMask::ENABLED_DEBIT,          // stock_val
-        FieldMask::ENABLED_CREDIT,         // cash_amt
+        FieldMask::ENABLED_CREDIT,         // stock_amt
+        FieldMask::ENABLED_CREDIT,         // stock_val
+        FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
         true,                   // fees_capitalize
         FieldMask::DISABLED,               // dividend_amt
@@ -632,8 +633,7 @@ add_error_str (StringVec& errors, const char* str)
 static void
 check_page (GtkListStore *list, gnc_numeric& debit, gnc_numeric& credit,
             FieldMask splitfield, Account *acct, GtkWidget *memo, GtkWidget *gae,
-            gnc_commodity *comm, bool ignore_account,
-            const char* page, StringVec& errors)
+            gnc_commodity *comm, const char* page, StringVec& errors)
 {
     if (splitfield == FieldMask::DISABLED)
         return;
@@ -674,11 +674,10 @@ check_page (GtkListStore *list, gnc_numeric& debit, gnc_numeric& credit,
     }
 
     auto memostr = gtk_entry_get_text (GTK_ENTRY (memo));
+    auto memostr_escaped = g_markup_escape_text (memostr, -1);
     const gchar *acctstr;
 
-    if (ignore_account)
-        acctstr = "";
-    else if (acct)
+    if (acct)
         acctstr = xaccAccountGetName (acct);
     else if ((splitfield & FieldMask::ALLOW_ZERO) && gnc_numeric_zero_p (amount))
         acctstr = "";
@@ -693,9 +692,11 @@ check_page (GtkListStore *list, gnc_numeric& debit, gnc_numeric& credit,
     gtk_list_store_set (list, &iter,
                         SPLIT_COL_ACCOUNT, acctstr,
                         SPLIT_COL_MEMO, memostr,
+                        SPLIT_COL_MEMO_ESCAPED, memostr_escaped,
                         SPLIT_COL_DEBIT, debit_side ? amtstr : "",
                         SPLIT_COL_CREDIT, !debit_side ? amtstr : "",
                         -1);
+    g_free (memostr_escaped);
 }
 
 static inline Account*
@@ -764,24 +765,24 @@ to ensure proper recording."), new_date_str, last_split_date_str);
 
     check_page (list, debit, credit, info->txn_type->stock_value, info->acct,
                 info->stock_memo_edit, info->stock_value_edit, info->currency,
-                false, NC_ ("Stock Assistant: Page name", "stock value"), errors);
+                NC_ ("Stock Assistant: Page name", "stock value"), errors);
 
     check_page (list, debit, credit, info->txn_type->cash_value,
                 gas_account (info->cash_account), info->cash_memo_edit,
-                info->cash_value, info->currency, false,
+                info->cash_value, info->currency,
                 NC_ ("Stock Assistant: Page name", "cash"), errors);
 
+    auto capitalize_fees = gtk_toggle_button_get_active
+        (GTK_TOGGLE_BUTTON (info->capitalize_fees_checkbox));
     check_page (list, debit, credit, info->txn_type->fees_value,
-                gas_account (info->fees_account), info->fees_memo_edit,
-                info->fees_value, info->currency,
-                gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON
-                                              (info->capitalize_fees_checkbox)),
+                capitalize_fees ? info->acct : gas_account (info->fees_account),
+                info->fees_memo_edit, info->fees_value, info->currency,
                 NC_ ("Stock Assistant: Page name", "fees"), errors);
 
     check_page (list, debit, credit, info->txn_type->dividend_value,
                 gas_account (info->dividend_account),
                 info->dividend_memo_edit, info->dividend_value, info->currency,
-                false, NC_ ("Stock Assistant: Page name", "dividend"), errors);
+                NC_ ("Stock Assistant: Page name", "dividend"), errors);
 
     // the next two checks will involve the two capgains splits:
     // income side and stock side. The capgains_value ^
@@ -792,12 +793,12 @@ to ensure proper recording."), new_date_str, last_split_date_str);
         check_page (list, debit, credit, info->txn_type->capgains_value,
                     gas_account (info->capgains_account),
                     info->capgains_memo_edit, info->capgains_value, info->currency,
-                    false, NC_ ("Stock Assistant: Page name", "capital gains"), errors);
+                    NC_ ("Stock Assistant: Page name", "capital gains"), errors);
 
         check_page (list, debit, credit,
                     info->txn_type->capgains_value ^ (FieldMask::ENABLED_CREDIT | FieldMask::ENABLED_DEBIT),
                     info->acct, info->capgains_memo_edit, info->capgains_value,
-                    info->currency, false,
+                    info->currency,
                     NC_ ("Stock Assistant: Page name", "capital gains"), errors);
     }
 
@@ -1152,16 +1153,22 @@ get_treeview (GtkBuilder *builder, const gchar *treeview_label)
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
+    g_object_set (renderer, "ellipsize", PANGO_ELLIPSIZE_END, nullptr);
     column = gtk_tree_view_column_new_with_attributes
         (_("Memo"), renderer, "text", SPLIT_COL_MEMO, nullptr);
+    gtk_tree_view_column_set_expand (column, true);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
+    gtk_cell_renderer_set_alignment (renderer, 1.0, 0.5);
+    gtk_cell_renderer_set_padding (renderer, 5, 0);
     column = gtk_tree_view_column_new_with_attributes
         (_("Debit"), renderer, "text", SPLIT_COL_DEBIT, nullptr);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
+    gtk_cell_renderer_set_alignment (renderer, 1.0, 0.5);
+    gtk_cell_renderer_set_padding (renderer, 5, 0);
     column = gtk_tree_view_column_new_with_attributes
         (_("Credit"), renderer, "text", SPLIT_COL_CREDIT, nullptr);
     gtk_tree_view_append_column(view, column);
@@ -1242,6 +1249,8 @@ stock_assistant_create (StockTransactionInfo *info)
     info->finish_summary = get_widget (builder, "finish_summary");
     g_signal_connect (G_OBJECT(info->window), "destroy",
                       G_CALLBACK (stock_assistant_window_destroy_cb), info);
+    gtk_tree_view_set_tooltip_column (GTK_TREE_VIEW (info->finish_split_view),
+                                      SPLIT_COL_MEMO_ESCAPED);
 
     gtk_assistant_set_forward_page_func (GTK_ASSISTANT(info->window),
                                          (GtkAssistantPageFunc)forward_page_func,
