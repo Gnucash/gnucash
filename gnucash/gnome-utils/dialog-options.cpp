@@ -166,12 +166,6 @@ create_option_widget(GncOption& option, GtkGrid*, GtkLabel*, char*, GtkWidget**,
 static void
 gnc_option_set_ui_widget(GncOption& option, GtkGrid *page_box, gint grid_row)
 {
-    GtkWidget *enclosing = NULL;
-    GtkWidget *value = NULL;
-    bool packed = FALSE;
-    char *name, *documentation;
-    GtkLabel *name_label;
-
     ENTER("option %p(%s), box %p",
           &option, option.get_name().c_str(), page_box);
     auto type = option.get_ui_type();
@@ -181,45 +175,7 @@ gnc_option_set_ui_widget(GncOption& option, GtkGrid *page_box, gint grid_row)
         return;
     }
 
-
-
-    const char* raw_name = option.get_name().c_str();
-    if (raw_name && *raw_name)
-        name = _(raw_name);
-    else
-        name = nullptr;
-
-    const char* raw_documentation = option.get_docstring().c_str();
-    if (raw_documentation && *raw_documentation)
-        documentation = _(raw_documentation);
-    else
-        documentation = nullptr;
-
-    name_label = GTK_LABEL(gtk_label_new (name));
-    auto widget = GncOptionUIFactory::create(option, page_box, name_label,
-                                             documentation, &enclosing,
-                                             &packed);
-    /* Attach the name label to the first column of the grid and
-       align to the end unless it's a check button, which has its own label. */
-    if (!GTK_IS_CHECK_BUTTON(widget))
-    {
-        gtk_grid_attach (GTK_GRID(page_box), GTK_WIDGET(name_label),
-                         0, grid_row, // left, top
-                         1, 1);  // width, height
-        gtk_widget_set_halign (GTK_WIDGET(name_label), GTK_ALIGN_END);
-    }
-    if (!packed && (enclosing != NULL))
-    {
-        /* attach the option widget to the second column of the grid */
-        gtk_grid_attach (GTK_GRID(page_box), enclosing,
-                         1, grid_row, // left, top
-                         1, 1);  // width, height
-
-        gtk_widget_set_tooltip_text (enclosing, documentation);
-    }
-
-    if (value != NULL)
-        gtk_widget_set_tooltip_text(value, documentation);
+    GncOptionUIFactory::create(option, page_box, grid_row);
 
     LEAVE(" ");
 }

@@ -53,9 +53,8 @@ GncOptionUIFactory::set_func(GncOptionUIType type, WidgetCreateFunc func)
     s_registry[static_cast<size_t>(type)] = func;
 }
 
-GtkWidget*
-GncOptionUIFactory::create(GncOption& option, GtkGrid* page, GtkLabel* name,
-                           char* description, GtkWidget** enclosing, bool* packed)
+void
+GncOptionUIFactory::create(GncOption& option, GtkGrid* page, int row)
 {
     if (!s_initialized)
     {
@@ -65,9 +64,9 @@ GncOptionUIFactory::create(GncOption& option, GtkGrid* page, GtkLabel* name,
     auto type{option.get_ui_type()};
     auto func{s_registry[static_cast<size_t>(type)]};
     if (func)
-        return func(option, page, name, description, enclosing, packed);
-    PERR("No function registered for type %d", static_cast<int>(type));
-    return nullptr;
+        func(option, page, row);
+    else
+        PERR("No function registered for type %d", static_cast<int>(type));
 }
 
 GncOptionGtkUIItem::GncOptionGtkUIItem(GtkWidget* widget,
@@ -124,17 +123,8 @@ GncOptionGtkUIItem::get_widget_scm_value(const GncOption& option) const
 /* Option Widgets                                      */
 /* ***************************************************************/
 
-static void
-align_label (GtkLabel *name_label)
-{
-    /* some option widgets have a large vertical foot print so align
-       the label name to the top and add a small top margin */
-    gtk_widget_set_valign (GTK_WIDGET(name_label), GTK_ALIGN_START);
-    gtk_widget_set_margin_top (GTK_WIDGET(name_label), 6);
-}
-
 static inline GtkWidget* const
-option_get_gtk_widget (const GncOption* option)
+option_get_gtk_widget(const GncOption* option)
 {
     if (!option) return nullptr;
     auto ui_item{dynamic_cast<const GncOptionGtkUIItem*>(option->get_ui_item())};
@@ -142,6 +132,18 @@ option_get_gtk_widget (const GncOption* option)
         return ui_item->get_widget();
 
     return nullptr;
+}
+
+static inline void
+wrap_check_button (const GncOption& option, GtkWidget* widget, GtkGrid* page_box, int row)
+{
+    auto enclosing{gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5)};
+    gtk_box_set_homogeneous (GTK_BOX (enclosing), FALSE);
+    gtk_box_pack_start(GTK_BOX(enclosing), widget, FALSE, FALSE, 0);
+    set_tool_tip(option, enclosing);
+    gtk_widget_show_all(enclosing);
+    /* attach the option widget to the second column of the grid */
+    grid_attach_widget (GTK_GRID(page_box), enclosing, row);
 }
 
 class GncGtkBooleanUIItem : public GncOptionGtkUIItem
@@ -167,20 +169,16 @@ public:
     }
 };
 
-template <> GtkWidget *
+template <> void
 create_option_widget<GncOptionUIType::BOOLEAN> (GncOption& option,
-                                                GtkGrid* page_box,
-                                                GtkLabel* name_label,
-                                                char* documentation,
-    /* Return values */
-                                                GtkWidget** enclosing,
-                                                bool* packed)
-{
+                                                GtkGrid* page_box, int row)
 
-    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-    auto widget =
-        gtk_check_button_new_with_label (gtk_label_get_text(name_label));
+{
+    char *local_name{nullptr};
+    auto name{option.get_name().c_str()};
+    if (name && *name)
+        local_name = _(name);
+    auto widget{gtk_check_button_new_with_label (local_name)};
 
     auto ui_item{std::make_unique<GncGtkBooleanUIItem>(widget)};
 
@@ -189,10 +187,8 @@ create_option_widget<GncOptionUIType::BOOLEAN> (GncOption& option,
 
     g_signal_connect(G_OBJECT(widget), "toggled",
                      G_CALLBACK(gnc_option_changed_widget_cb), &option);
-    gtk_box_pack_start(GTK_BOX(*enclosing), widget, FALSE, FALSE, 0);
-    gtk_widget_show_all(*enclosing);
 
-    return widget;
+    wrap_check_button(option, widget, page_box, row);
 }
 
 class GncGtkStringUIItem : public GncOptionGtkUIItem
@@ -212,18 +208,13 @@ public:
     }
 };
 
-template<> GtkWidget*
+template<> void
 create_option_widget<GncOptionUIType::STRING> (GncOption& option,
-                                               GtkGrid *page_box,
-                                               GtkLabel *name_label,
-                                               char *documentation,
-    /* Return values */
-                                               GtkWidget **enclosing,
-                                               bool *packed)
+                                               GtkGrid *page_box, int row)
 {
-    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-    gtk_widget_set_hexpand (GTK_WIDGET(*enclosing), TRUE);
-    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
+    auto enclosing{gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5)};
+    gtk_widget_set_hexpand (GTK_WIDGET(enclosing), TRUE);
+    gtk_box_set_homogeneous (GTK_BOX (enclosing), FALSE);
     auto widget = gtk_entry_new();
     if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
         gtk_entry_set_alignment (GTK_ENTRY(widget), 1.0);
@@ -234,9 +225,11 @@ create_option_widget<GncOptionUIType::STRING> (GncOption& option,
 
     g_signal_connect(G_OBJECT(widget), "changed",
                      G_CALLBACK(gnc_option_changed_widget_cb), &option);
-    gtk_box_pack_start(GTK_BOX(*enclosing), widget, TRUE, TRUE, 0);
-    gtk_widget_show_all(*enclosing);
-    return widget;
+    gtk_box_pack_start(GTK_BOX(enclosing), widget, TRUE, TRUE, 0);
+    set_name_label(option, page_box, row, true);
+    set_tool_tip(option, enclosing);
+    gtk_widget_show_all(enclosing);
+    grid_attach_widget (GTK_GRID(page_box), enclosing, row);
 }
 
 class GncGtkTextUIItem : public GncOptionGtkUIItem
@@ -256,14 +249,9 @@ public:
     }
 };
 
-template<> GtkWidget*
-create_option_widget<GncOptionUIType::TEXT> (GncOption& option, GtkGrid *page_box,
-                                             GtkLabel *name_label, char *documentation,
-    /* Return values */
-                                             GtkWidget **enclosing, bool *packed)
+template<> void
+create_option_widget<GncOptionUIType::TEXT> (GncOption& option, GtkGrid *page_box, int row)
 {
-    align_label (name_label);
-
     auto scroll = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll),
                                    GTK_POLICY_NEVER,
@@ -273,10 +261,10 @@ create_option_widget<GncOptionUIType::TEXT> (GncOption& option, GtkGrid *page_bo
     auto frame = gtk_frame_new(NULL);
     gtk_container_add(GTK_CONTAINER(frame), scroll);
 
-    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-    gtk_widget_set_vexpand (GTK_WIDGET(*enclosing), TRUE);
-    gtk_widget_set_hexpand (GTK_WIDGET(*enclosing), TRUE);
-    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
+    auto enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+    gtk_widget_set_vexpand (GTK_WIDGET(enclosing), TRUE);
+    gtk_widget_set_hexpand (GTK_WIDGET(enclosing), TRUE);
+    gtk_box_set_homogeneous (GTK_BOX (enclosing), FALSE);
     auto widget = gtk_text_view_new();
     gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(widget), GTK_WRAP_WORD);
     gtk_text_view_set_editable(GTK_TEXT_VIEW(widget), TRUE);
@@ -290,9 +278,11 @@ create_option_widget<GncOptionUIType::TEXT> (GncOption& option, GtkGrid *page_bo
     g_signal_connect(G_OBJECT(text_buffer), "changed",
                      G_CALLBACK(gnc_option_changed_option_cb), &option);
     gtk_container_add (GTK_CONTAINER (scroll), widget);
-    gtk_box_pack_start(GTK_BOX(*enclosing), frame, TRUE, TRUE, 0);
-    gtk_widget_show_all(*enclosing);
-    return widget;
+    gtk_box_pack_start(GTK_BOX(enclosing), frame, TRUE, TRUE, 0);
+    set_name_label(option, page_box, row, true);
+    set_tool_tip(option, enclosing);
+    gtk_widget_show_all(enclosing);
+    grid_attach_widget(GTK_GRID(page_box), enclosing, row);
 }
 
 class GncGtkCurrencyUIItem : public GncOptionGtkUIItem
@@ -316,24 +306,18 @@ public:
     }
 };
 
-template<> GtkWidget*
+template<> void
 create_option_widget<GncOptionUIType::CURRENCY> (GncOption& option, GtkGrid *page_box,
-                                                 GtkLabel *name_label, char *documentation,
-    /* Return values */
-                                                 GtkWidget **enclosing, bool *packed)
+                                                 int row)
 {
-    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-    auto widget = gnc_currency_edit_new();
+    auto widget{gnc_currency_edit_new()};
     auto ui_item{std::make_unique<GncGtkCurrencyUIItem>(widget)};
     option.set_ui_item(std::move(ui_item));
     option.set_ui_item_from_option();
 
     g_signal_connect(G_OBJECT(widget), "changed",
                      G_CALLBACK(gnc_option_changed_widget_cb), &option);
-    gtk_box_pack_start(GTK_BOX(*enclosing), widget, FALSE, FALSE, 0);
-    gtk_widget_show_all(*enclosing);
-    return widget;
+    wrap_widget(option, widget, page_box, row);
 }
 
 class GncGtkCommodityUIItem : public GncOptionGtkUIItem
@@ -357,34 +341,21 @@ public:
     }
 };
 
-template<> GtkWidget*
+template<> void
 create_option_widget<GncOptionUIType::COMMODITY> (GncOption& option, GtkGrid *page_box,
-                                                  GtkLabel *name_label, char *documentation,
-    /* Return values */
-                                                  GtkWidget **enclosing, bool *packed)
+                                                  int row)
 {
-    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
     auto widget = gnc_general_select_new(GNC_GENERAL_SELECT_TYPE_SELECT,
                                          gnc_commodity_edit_get_string,
                                          gnc_commodity_edit_new_select,
                                          NULL);
 
     auto ui_item{std::make_unique<GncGtkCommodityUIItem>(widget)};
-
     option.set_ui_item(std::move(ui_item));
     option.set_ui_item_from_option();
-
-    if (documentation != NULL)
-        gtk_widget_set_tooltip_text(GNC_GENERAL_SELECT(widget)->entry,
-                                    documentation);
-
     g_signal_connect(G_OBJECT(GNC_GENERAL_SELECT(widget)->entry), "changed",
                      G_CALLBACK(gnc_option_changed_widget_cb), &option);
-
-    gtk_box_pack_start(GTK_BOX(*enclosing), widget, FALSE, FALSE, 0);
-    gtk_widget_show_all(*enclosing);
-    return widget;
+    wrap_widget(option, widget, page_box, row);
 }
 
 static GtkWidget*
@@ -438,27 +409,17 @@ public:
     }
 };
 
-template<> GtkWidget*
+template<> void
 create_option_widget<GncOptionUIType::MULTICHOICE> (GncOption& option, GtkGrid *page_box,
-                                                    GtkLabel *name_label, char *documentation,
-    /* Return values */
-                                                    GtkWidget **enclosing, bool *packed)
+                                                    int row)
 {
-    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-
-    auto widget = create_multichoice_widget(option);
+    auto widget{create_multichoice_widget(option)};
     auto ui_item{std::make_unique<GncGtkMultichoiceUIItem>(widget)};
-
     option.set_ui_item(std::move(ui_item));
     option.set_ui_item_from_option();
-
     g_signal_connect(G_OBJECT(widget), "changed",
                      G_CALLBACK(gnc_option_changed_widget_cb), &option);
-
-    gtk_box_pack_start(GTK_BOX(*enclosing), widget, FALSE, FALSE, 0);
-    gtk_widget_show_all(*enclosing);
-    return widget;
+    wrap_widget(option, widget, page_box, row);
 }
 
 
@@ -755,14 +716,10 @@ date_set_relative_cb(GtkWidget *widget, gpointer data1)
     }
 }
 
-static GtkWidget*
-create_date_option_widget(GncOption& option, GtkGrid *page_box,
-                          GtkLabel *name_label, char *documentation,
-    /* Return values */
-                          GtkWidget **enclosing, bool *packed)
+static void
+create_date_option_widget(GncOption& option, GtkGrid *page_box, int row)
 {
-    auto grid_row = GPOINTER_TO_INT(g_object_get_data
-                                        (G_OBJECT(page_box), "options-grid-row"));
+    GtkWidget *enclosing{nullptr};
     auto type = option.get_ui_type();
     switch (type)
     {
@@ -778,32 +735,29 @@ create_date_option_widget(GncOption& option, GtkGrid *page_box,
         default:
             PERR("Attempted to create date option widget with wrong UI type %d",
                  static_cast<int>(type));
-            return nullptr;
             break;
     }
 
     auto widget{option_get_gtk_widget(&option)};
     if (type == GncOptionUIType::DATE_RELATIVE)
     {
-        *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-        gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
+        enclosing = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
+        gtk_box_set_homogeneous(GTK_BOX (enclosing), FALSE);
 
-        gtk_box_pack_start(GTK_BOX(*enclosing), widget, FALSE, FALSE, 0);
+        gtk_box_pack_start(GTK_BOX(enclosing), widget, FALSE, FALSE, 0);
     }
     else
     {
-        *enclosing = gtk_frame_new (NULL);
-        g_object_set (G_OBJECT(widget), "margin", 3, NULL);
+        enclosing = gtk_frame_new(nullptr);
+        g_object_set(G_OBJECT(widget), "margin", 3, NULL);
 
-        gtk_container_add (GTK_CONTAINER(*enclosing), widget);
+        gtk_container_add (GTK_CONTAINER(enclosing), widget);
     }
 
-    gtk_widget_set_halign (GTK_WIDGET(*enclosing), GTK_ALIGN_START);
-
-    gtk_grid_attach (GTK_GRID(page_box), *enclosing, 1, grid_row, 1, 1);
-    *packed = TRUE;
-
-    gtk_widget_set_tooltip_text (*enclosing, documentation);
+    gtk_widget_set_halign (GTK_WIDGET(enclosing), GTK_ALIGN_START);
+    set_name_label(option, page_box, row, false);
+    set_tool_tip(option, enclosing);
+    grid_attach_widget (GTK_GRID(page_box), enclosing, row);
 
     auto ui_item{dynamic_cast<GncOptionDateUIItem*>(option.get_ui_item())};
     if (auto date_ui{ui_item ? ui_item->get_entry() : nullptr})
@@ -813,47 +767,28 @@ create_date_option_widget(GncOption& option, GtkGrid *page_box,
         date_ui->block_signals(false);
     }
 
-    gtk_widget_show_all(*enclosing);
-    return widget;
+    gtk_widget_show_all(enclosing);
 }
 
-template<> GtkWidget*
+template<> void
 create_option_widget<GncOptionUIType::DATE_ABSOLUTE>(GncOption& option,
-                                                     GtkGrid *page_box,
-                                                     GtkLabel *name_label,
-                                                     char *documentation,
-    /* Return values */
-                                                     GtkWidget **enclosing,
-                                                     bool *packed)
+                                                     GtkGrid *page_box, int row)
 {
-    return create_date_option_widget(option, page_box, name_label,
-                                     documentation, enclosing, packed);
+    create_date_option_widget(option, page_box, row);
 }
 
-template<> GtkWidget*
+template<> void
 create_option_widget<GncOptionUIType::DATE_RELATIVE>(GncOption& option,
-                                                     GtkGrid *page_box,
-                                                     GtkLabel *name_label,
-                                                     char *documentation,
-    /* Return values */
-                                                     GtkWidget **enclosing,
-                                                     bool *packed)
+                                                     GtkGrid *page_box, int row)
 {
-    return create_date_option_widget(option, page_box, name_label,
-                                     documentation, enclosing, packed);
+    create_date_option_widget(option, page_box, row);
 }
 
-template<> GtkWidget*
+template<> void
 create_option_widget<GncOptionUIType::DATE_BOTH>(GncOption& option,
-                                                 GtkGrid *page_box,
-                                                 GtkLabel *name_label,
-                                                 char *documentation,
-    /* Return values */
-                                                 GtkWidget **enclosing,
-                                                 bool *packed)
+                                                 GtkGrid *page_box, int row)
 {
-    return create_date_option_widget(option, page_box, name_label,
-                                     documentation, enclosing, packed);
+    create_date_option_widget(option, page_box, row);
 }
 
 using GncOptionAccountList = std::vector<GncGUID>;
@@ -928,7 +863,7 @@ show_hidden_toggled_cb(GtkWidget *widget, GncOption* option)
 class GncGtkAccountListUIItem : public GncOptionGtkUIItem
 {
 public:
-    GncGtkAccountListUIItem(GtkWidget* widget) :
+    explicit GncGtkAccountListUIItem(GtkWidget* widget) :
         GncOptionGtkUIItem{widget, GncOptionUIType::ACCOUNT_LIST} {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
@@ -1104,44 +1039,28 @@ option_account_sel_changed_cb(GtkTreeSelection *sel, gpointer data)
                                  static_cast<GncOption*>(data));
 }
 
-template<> GtkWidget*
+template<> void
 create_option_widget<GncOptionUIType::ACCOUNT_LIST>(GncOption& option,
-                                                    GtkGrid *page_box,
-                                                    GtkLabel *name_label,
-                                                    char *documentation,
-    /* Return values */
-                                                    GtkWidget **enclosing,
-                                                    bool *packed)
+                                                    GtkGrid *page_box, int row)
 {
-    align_label (name_label);
+    auto enclosing{create_account_widget(option, nullptr)};
+    gtk_widget_set_vexpand (GTK_WIDGET(enclosing), TRUE);
+    gtk_widget_set_hexpand (GTK_WIDGET(enclosing), TRUE);
+    set_name_label(option, page_box, row, true);
+    set_tool_tip(option, enclosing);
+    grid_attach_widget (GTK_GRID(page_box), enclosing, row);
 
-    *enclosing = create_account_widget(option, NULL);
-    gtk_widget_set_vexpand (GTK_WIDGET(*enclosing), TRUE);
-    gtk_widget_set_hexpand (GTK_WIDGET(*enclosing), TRUE);
-
-    gtk_widget_set_tooltip_text(*enclosing, documentation);
-
-    auto  grid_row = GPOINTER_TO_INT(g_object_get_data
-                                         (G_OBJECT(page_box), "options-grid-row"));
-    gtk_grid_attach (GTK_GRID(page_box), *enclosing, 1, grid_row, 1, 1);
-    *packed = TRUE;
-
-    auto widget = option_get_gtk_widget(&option);
-
-    auto selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
+    auto widget{option_get_gtk_widget(&option)};
+    auto selection{gtk_tree_view_get_selection(GTK_TREE_VIEW(widget))};
     g_signal_connect(G_OBJECT(selection), "changed",
                      G_CALLBACK(option_account_sel_changed_cb), &option);
-
-    //  gtk_clist_set_row_height(GTK_CLIST(value), 0);
-    //  gtk_widget_set_size_request(value, -1, GTK_CLIST(value)->row_height * 10);
-    gtk_widget_show_all(*enclosing);
-    return widget;
+    gtk_widget_show_all(enclosing);
 }
 
 class GncGtkAccountSelUIItem : public GncOptionGtkUIItem
 {
 public:
-    GncGtkAccountSelUIItem(GtkWidget* widget) :
+    explicit GncGtkAccountSelUIItem(GtkWidget* widget) :
         GncOptionGtkUIItem{widget, GncOptionUIType::ACCOUNT_SEL} {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
@@ -1157,17 +1076,12 @@ public:
     }
 };
 
-template<> GtkWidget*
+template<> void
 create_option_widget<GncOptionUIType::ACCOUNT_SEL> (GncOption& option,
-                                                    GtkGrid *page_box,
-                                                    GtkLabel *name_label,
-                                                    char *documentation,
-    /* Return values */
-                                                    GtkWidget **enclosing,
-                                                    bool *packed)
+                                                    GtkGrid *page_box, int row)
 {
-    auto acct_type_list = option.account_type_list();
-    auto widget = gnc_account_sel_new ();
+    auto acct_type_list{option.account_type_list()};
+    auto widget{gnc_account_sel_new()};
     gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(widget),
                                      acct_type_list, NULL);
     g_list_free(acct_type_list);
@@ -1178,12 +1092,7 @@ create_option_widget<GncOptionUIType::ACCOUNT_SEL> (GncOption& option,
 
     g_signal_connect(widget, "account_sel_changed",
                      G_CALLBACK(gnc_option_changed_widget_cb), &option);
-
-    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-    gtk_box_pack_start(GTK_BOX(*enclosing), widget, FALSE, FALSE, 0);
-    gtk_widget_show_all(*enclosing);
-    return widget;
+    wrap_widget(option, widget, page_box, row);
 }
 
 static void
@@ -1333,30 +1242,16 @@ create_list_widget(GncOption& option, char *name)
     return frame;
 }
 
-template<> GtkWidget *
+template<> void
 create_option_widget<GncOptionUIType::LIST> (GncOption& option,
-                                             GtkGrid *page_box,
-                                             GtkLabel *name_label,
-                                             char *documentation,
-    /* Return values */
-                                             GtkWidget **enclosing,
-                                             bool *packed)
+                                             GtkGrid *page_box, int row)
 {
-    auto grid_row = GPOINTER_TO_INT(g_object_get_data
-                                        (G_OBJECT(page_box), "options-grid-row"));
 
-    *enclosing = create_list_widget(option, NULL);
-    auto value = option_get_gtk_widget(&option);
-
-    align_label (name_label);
-
-    gtk_grid_attach (GTK_GRID(page_box), *enclosing, 1, grid_row, 1, 1);
-    *packed = TRUE;
-
-    gtk_widget_set_tooltip_text(*enclosing, documentation);
-
-    gtk_widget_show(*enclosing);
-    return value;
+    auto enclosing{create_list_widget(option, nullptr)};
+    set_name_label(option, page_box, row, true);
+    set_tool_tip(option, enclosing);
+    grid_attach_widget (GTK_GRID(page_box), enclosing, row);
+    gtk_widget_show(enclosing);
 }
 
 class GncGtkNumberRangeUIItem : public GncOptionGtkUIItem
@@ -1429,32 +1324,17 @@ create_range_spinner(GncOption& option)
     return GTK_SPIN_BUTTON(widget);
 }
 
-template<> GtkWidget *
+template<> void
 create_option_widget<GncOptionUIType::NUMBER_RANGE> (GncOption& option,
-                                                     GtkGrid *page_box,
-                                                     GtkLabel *name_label,
-                                                     char *documentation,
-    /* Return values */
-                                                     GtkWidget **enclosing,
-                                                     bool *packed)
+                                                     GtkGrid *page_box, int row)
 {
-    GtkAdjustment *adj;
-    size_t num_decimals = 0;
-
-    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-
-    auto widget = create_range_spinner(option);
+    auto widget{create_range_spinner(option)};
     option.set_ui_item(std::make_unique<GncGtkNumberRangeUIItem>(GTK_WIDGET(widget)));
     option.set_ui_item_from_option();
 
     g_signal_connect(G_OBJECT(widget), "changed",
                      G_CALLBACK(gnc_option_changed_widget_cb), &option);
-
-    gtk_box_pack_start(GTK_BOX(*enclosing), GTK_WIDGET(widget),
-                       FALSE, FALSE, 0);
-    gtk_widget_show_all(*enclosing);
-    return GTK_WIDGET(widget);
+    wrap_widget(option, GTK_WIDGET(widget), page_box, row);
 }
 
 class GncGtkColorUIItem : public GncOptionGtkUIItem
@@ -1498,17 +1378,9 @@ public:
     }
 };
 
-template<> GtkWidget *
-create_option_widget<GncOptionUIType::COLOR> (GncOption& option, GtkGrid *page_box,
-                                              GtkLabel *name_label, char *documentation,
-    /* Return values */
-                                              GtkWidget **enclosing, bool *packed)
+template<> void
+create_option_widget<GncOptionUIType::COLOR> (GncOption& option, GtkGrid *page_box, int row)
 {
-    bool use_alpha;
-
-    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-
     auto widget = gtk_color_button_new();
     gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(widget), TRUE);
 
@@ -1517,10 +1389,7 @@ create_option_widget<GncOptionUIType::COLOR> (GncOption& option, GtkGrid *page_b
 
     g_signal_connect(G_OBJECT(widget), "color-set",
                      G_CALLBACK(gnc_option_changed_widget_cb), &option);
-
-    gtk_box_pack_start(GTK_BOX(*enclosing), widget, FALSE, FALSE, 0);
-    gtk_widget_show_all(*enclosing);
-    return widget;
+    wrap_widget(option, widget, page_box, row);
 }
 
 class GncGtkFontUIItem : public GncOptionGtkUIItem
@@ -1542,15 +1411,10 @@ public:
     }
 };
 
-template<> GtkWidget *
-create_option_widget<GncOptionUIType::FONT> (GncOption& option, GtkGrid *page_box,
-                                             GtkLabel *name_label, char *documentation,
-    /* Return values */
-                                             GtkWidget **enclosing, bool *packed)
+template<> void
+create_option_widget<GncOptionUIType::FONT> (GncOption& option, GtkGrid *page_box, int row)
 {
-    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-    auto widget = gtk_font_button_new();
+    auto widget{gtk_font_button_new()};
     g_object_set(G_OBJECT(widget),
                  "use-font", TRUE,
                  "show-style", TRUE,
@@ -1559,13 +1423,9 @@ create_option_widget<GncOptionUIType::FONT> (GncOption& option, GtkGrid *page_bo
 
     option.set_ui_item(std::make_unique<GncGtkFontUIItem>(widget));
     option.set_ui_item_from_option();
-
     g_signal_connect(G_OBJECT(widget), "font-set",
                      G_CALLBACK(gnc_option_changed_widget_cb), &option);
-
-    gtk_box_pack_start(GTK_BOX(*enclosing), widget, FALSE, FALSE, 0);
-    gtk_widget_show_all(*enclosing);
-    return widget;
+    wrap_widget(option, widget, page_box, row);
 }
 /* A pointer to the last selected filename */
 #define LAST_SELECTION "last-selection"
@@ -1644,30 +1504,21 @@ public:
     }
 };
 
-template<> GtkWidget *
+template<> void
 create_option_widget<GncOptionUIType::PIXMAP> (GncOption& option,
-                                               GtkGrid *page_box,
-                                               GtkLabel *name_label,
-                                               char *documentation,
-    /* Return values */
-                                               GtkWidget **enclosing,
-                                               bool *packed)
+                                               GtkGrid *page_box, int row)
 {
-
-    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-
-    auto button = gtk_button_new_with_label(_("Clear"));
+    auto enclosing{gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5)};
+    gtk_box_set_homogeneous(GTK_BOX(enclosing), FALSE);
+    auto button{gtk_button_new_with_label(_("Clear"))};
     gtk_widget_set_tooltip_text(button, _("Clear any selected image file."));
-
-    auto widget = gtk_file_chooser_button_new(_("Select image"),
-                                              GTK_FILE_CHOOSER_ACTION_OPEN);
+    auto widget{ gtk_file_chooser_button_new(_("Select image"),
+                                             GTK_FILE_CHOOSER_ACTION_OPEN)};
     gtk_widget_set_tooltip_text(widget, _("Select an image file."));
     g_object_set(G_OBJECT(widget),
                  "width-chars", 30,
                  "preview-widget", gtk_image_new(),
                  (char *)NULL);
-
     option.set_ui_item(std::make_unique<GncGtkPixmapUIItem>(widget));
     option.set_ui_item_from_option();
 
@@ -1680,13 +1531,14 @@ create_option_widget<GncOptionUIType::PIXMAP> (GncOption& option,
     g_signal_connect_swapped(G_OBJECT (button), "clicked",
                              G_CALLBACK(gtk_file_chooser_unselect_all), widget);
 
-    gtk_box_pack_start(GTK_BOX(*enclosing), widget, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(*enclosing), button, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(enclosing), widget, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(enclosing), button, FALSE, FALSE, 0);
 
     gtk_widget_show(widget);
-    gtk_widget_show(*enclosing);
-
-    return widget;
+    set_name_label(option, page_box, row, false);
+    set_tool_tip(option, enclosing);
+    gtk_widget_show(enclosing);
+    grid_attach_widget(page_box, enclosing, row);
 }
 
 static void
@@ -1793,23 +1645,18 @@ create_radiobutton_widget(char *name, GncOption& option)
     return frame;
 }
 
-template<> GtkWidget *
-create_option_widget<GncOptionUIType::RADIOBUTTON> (GncOption& option, GtkGrid *page_box,
-                                                    GtkLabel *name_label, char *documentation,
-    /* Return values */
-                                                    GtkWidget **enclosing, bool *packed)
-{
-    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-
-    align_label (name_label);
-
-    auto widget = create_radiobutton_widget(NULL, option);
-
-    gtk_box_pack_start(GTK_BOX(*enclosing), widget, FALSE, FALSE, 0);
-    gtk_widget_show_all(*enclosing);
-    return widget;
-}
+template<> void
+create_option_widget<GncOptionUIType::RADIOBUTTON> (GncOption& option, GtkGrid *page_box, int row)
+ {
+     auto enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+     gtk_box_set_homogeneous (GTK_BOX (enclosing), FALSE);
+     set_name_label(option, page_box, row, true);
+     set_tool_tip(option, enclosing);
+     auto widget = create_radiobutton_widget(NULL, option);
+     gtk_box_pack_start(GTK_BOX(enclosing), widget, FALSE, FALSE, 0);
+     gtk_widget_show_all(enclosing);
+     grid_attach_widget(page_box, enclosing, row);
+ }
 
 class GncGtkDateFormatUIItem : public GncOptionGtkUIItem
 {
@@ -1830,25 +1677,20 @@ public:
 };
 
 
-template<> GtkWidget *
+template<> void
 create_option_widget<GncOptionUIType::DATE_FORMAT> (GncOption& option,
-                                                    GtkGrid *page_box,
-                                                    GtkLabel *name_label,
-                                                    char *documentation,
-    /* Return values */
-                                                    GtkWidget **enclosing,
-                                                    bool *packed)
+                                                    GtkGrid *page_box, int row)
 {
-    *enclosing = gnc_date_format_new_without_label ();
-    align_label (name_label);
-
-    option.set_ui_item(std::make_unique<GncGtkDateFormatUIItem>(*enclosing));
+    auto enclosing = gnc_date_format_new_without_label ();
+    set_name_label(option, page_box, row, true);
+    set_tool_tip(option, enclosing);
+    option.set_ui_item(std::make_unique<GncGtkDateFormatUIItem>(enclosing));
     option.set_ui_item_from_option();
 
-    g_signal_connect(G_OBJECT(*enclosing), "format_changed",
+    g_signal_connect(G_OBJECT(enclosing), "format_changed",
                      G_CALLBACK(gnc_option_changed_widget_cb), &option);
-    gtk_widget_show_all(*enclosing);
-    return *enclosing;
+    gtk_widget_show_all(enclosing);
+    grid_attach_widget(page_box, enclosing, row);
 }
 
 static void
@@ -1936,26 +1778,22 @@ public:
 };
 
 
-template<> GtkWidget *
+template<> void
 create_option_widget<GncOptionUIType::PLOT_SIZE> (GncOption& option,
-                                                  GtkGrid *page_box,
-                                                  GtkLabel *name_label,
-                                                  char *documentation,
-    /* Return values */
-                                                  GtkWidget **enclosing,
-                                                  bool *packed)
+                                                  GtkGrid *page_box, int row)
 {
     GtkWidget *value_percent;
     GtkWidget *px_butt, *p_butt;
     GtkWidget *hbox;
     GtkAdjustment *adj_percent;
 
-    *enclosing = gtk_frame_new(NULL);
-    gtk_widget_set_halign (GTK_WIDGET(*enclosing), GTK_ALIGN_START);
-
+    auto enclosing = gtk_frame_new(NULL);
+    gtk_widget_set_halign (GTK_WIDGET(enclosing), GTK_ALIGN_START);
+    set_name_label(option, page_box, row, false);
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
     g_object_set (G_OBJECT(hbox), "margin", 3, NULL);
+    set_tool_tip(option, hbox);
 
     auto value_px = create_range_spinner(option);
 
@@ -1991,9 +1829,9 @@ create_option_widget<GncOptionUIType::PLOT_SIZE> (GncOption& option,
     g_signal_connect(G_OBJECT(p_butt), "toggled",
                      G_CALLBACK(gnc_rd_option_p_set_cb), &option);
 
-    gtk_container_add(GTK_CONTAINER(*enclosing), hbox);
-    gtk_widget_show_all(*enclosing);
-    return hbox;
+    gtk_container_add(GTK_CONTAINER(enclosing), hbox);
+    gtk_widget_show_all(enclosing);
+    grid_attach_widget(page_box, enclosing, row);
 }
 
 static GtkWidget *
@@ -2045,18 +1883,10 @@ public:
     }
 };
 
-template<> GtkWidget *
+template<> void
 create_option_widget<GncOptionUIType::BUDGET> (GncOption& option,
-                                               GtkGrid *page_box,
-                                               GtkLabel *name_label,
-                                               char *documentation,
-    /* Return values */
-                                               GtkWidget **enclosing,
-                                               bool *packed)
+                                               GtkGrid *page_box, int row)
 {
-    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-
     auto widget{create_budget_widget(option)};
 
     option.set_ui_item(std::make_unique<GncGtkBudgetUIItem>(widget));
@@ -2066,9 +1896,7 @@ create_option_widget<GncOptionUIType::BUDGET> (GncOption& option,
     g_signal_connect(G_OBJECT(widget), "changed",
                      G_CALLBACK(gnc_option_changed_widget_cb), &option);
 
-    gtk_box_pack_start(GTK_BOX(*enclosing), widget, FALSE, FALSE, 0);
-    gtk_widget_show_all(*enclosing);
-    return widget;
+    wrap_widget(option, widget, page_box, row);
 }
 
 static void

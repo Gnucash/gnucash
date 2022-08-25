@@ -25,6 +25,7 @@
 
 #include <libguile.h>
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <vector>
 #include <gnc-option.hpp>
 #include <gnc-option-uitype.hpp>
@@ -41,8 +42,8 @@
 *  @return pointer to the widget.
 */
 
-typedef GtkWidget* (*WidgetCreateFunc)(GncOption&, GtkGrid*, GtkLabel*, char*,
-                                       GtkWidget**, bool*);
+typedef void (*WidgetCreateFunc)(GncOption&, GtkGrid*, int);
+
 /** @class GncOptionUIFactory
  *  Factory class that keeps track of which GncOptionValueType needs which
  *  WidgetCreateFunc and calls the appropriate one when required.
@@ -58,14 +59,10 @@ public:
 /** Create a widget
  *  @param option The option for which to create the widget
  *  @param page The Option dialog page in which to insert the widget
- *  @param name The label to attach to the widget
- *  @param description The text for the widget's tooltip
- *  @param enclosing The widget's parent
- *  @param packed Whether the widget will be packed into an eventbox.
+ *  @param row The row in which to insert the widget
  *  @return pointer to the created widget.
  */
-    static GtkWidget* create(GncOption&, GtkGrid*, GtkLabel*, char*,
-                             GtkWidget**, bool*);
+    static void create(GncOption& option, GtkGrid* page, int row);
 private:
     static std::vector<WidgetCreateFunc> s_registry;
     static bool s_initialized;
@@ -95,9 +92,8 @@ private:
 void gnc_option_changed_widget_cb (GtkWidget *widget, GncOption *option);
 void gnc_option_changed_option_cb (GtkWidget *dummy, GncOption *option);
 
-template<GncOptionUIType type> GtkWidget*
-create_option_widget(GncOption& option, GtkGrid*, GtkLabel*, char*, GtkWidget**,
-                     bool*);
+template<GncOptionUIType type> void
+create_option_widget(GncOption& option, GtkGrid*, int row);
 
 /** Templated cast to convert various QofInstance subtype ptrs into QofInstance*
  * to placate the C++ type system. QofInstance is a GObject hierarchy so the
@@ -110,4 +106,53 @@ qof_instance_cast(Instance inst)
     return reinterpret_cast<const QofInstance*>(inst);
 }
 
+inline void
+align_label (GtkLabel *name_label)
+{
+    /* some option widgets have a large vertical footprint so align
+       the label name to the top and add a small top margin */
+    gtk_widget_set_valign (GTK_WIDGET(name_label), GTK_ALIGN_START);
+    gtk_widget_set_margin_top (GTK_WIDGET(name_label), 6);
+}
+
+inline void
+set_name_label(const GncOption& option, GtkGrid* page_box, int row, bool align)
+{
+    auto name{option.get_name().c_str()};
+    if (name && *name)
+    {
+        auto label{gtk_label_new(_(name))};
+        if (align)
+            align_label(GTK_LABEL(label));
+        gtk_grid_attach(GTK_GRID(page_box), label, 0, row, 1, 1);
+    }
+}
+
+inline void
+set_tool_tip(const GncOption& option, GtkWidget* box)
+{
+    auto documentation{option.get_docstring().c_str()};
+    if (documentation && *documentation)
+        gtk_widget_set_tooltip_text(box, _(documentation));
+}
+
+inline void
+grid_attach_widget(GtkGrid* grid, GtkWidget* widget, int row)
+{
+    /* attach the option widget to the second column of the grid */
+    gtk_grid_attach (grid, widget, 1, row, 1, 1);
+
+}
+
+inline void
+wrap_widget (const GncOption& option, GtkWidget* widget, GtkGrid* page_box, int row)
+{
+    auto enclosing{gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5)};
+    gtk_box_set_homogeneous (GTK_BOX (enclosing), FALSE);
+    gtk_box_pack_start(GTK_BOX(enclosing), widget, FALSE, FALSE, 0);
+    set_name_label(option, page_box, row, false);
+    set_tool_tip(option, enclosing);
+    gtk_widget_show_all(enclosing);
+    grid_attach_widget(page_box, enclosing, row);
+}
 #endif //GNC_OPTION_GTK_UI_HPP

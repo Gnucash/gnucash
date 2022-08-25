@@ -83,22 +83,16 @@ public:
     }
 };
 
-template<> GtkWidget*
+template<> void
 create_option_widget<GncOptionUIType::OWNER>(GncOption& option,
-                                                GtkGrid *page_box,
-                                                GtkLabel *name_label,
-                                                char *documentation,
-                                                /* Return values */
-                                                GtkWidget **enclosing,
-                                                bool *packed)
+                                                GtkGrid *page_box, int row)
 {
-    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-
     GncOwner owner{};
     auto ui_type{option.get_ui_type()};
     owner.type = ui_type_to_owner_type(ui_type);
-    auto widget = gnc_owner_select_create(nullptr, *enclosing,
+    auto enclosing{gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5)};
+    gtk_box_set_homogeneous (GTK_BOX (enclosing), FALSE);
+    auto widget = gnc_owner_select_create(nullptr, enclosing,
                                           gnc_get_current_book(),
                                           &owner);
 
@@ -106,8 +100,9 @@ create_option_widget<GncOptionUIType::OWNER>(GncOption& option,
     option.set_ui_item_from_option();
     g_signal_connect (G_OBJECT (widget), "changed",
                       G_CALLBACK (gnc_option_changed_widget_cb), &option);
-    gtk_widget_show_all(*enclosing);
-    return widget;
+    set_name_label(option, page_box, row, false);
+    set_tool_tip(option, enclosing);
+    grid_attach_widget(page_box, enclosing, row);
 }
 
 class GncGtkInvoiceUIItem : public GncOptionGtkUIItem
@@ -128,26 +123,23 @@ public:
     }
 };
 
-template<> GtkWidget*
+template<> void
 create_option_widget<GncOptionUIType::INVOICE>(GncOption& option,
-                                               GtkGrid *page_box,
-                                               GtkLabel *name_label,
-                                               char *documentation,
-                                               /* Return values */
-                                               GtkWidget **enclosing,
-                                               bool *packed)
+                                               GtkGrid *page_box, int row)
 {
-    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-    auto widget{gnc_invoice_select_create(*enclosing, gnc_get_current_book(),
+    auto enclosing{gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5)};
+    gtk_box_set_homogeneous (GTK_BOX (enclosing), FALSE);
+    auto widget{gnc_invoice_select_create(enclosing, gnc_get_current_book(),
                                           nullptr, nullptr, nullptr)};
 
     option.set_ui_item(std::make_unique<GncGtkInvoiceUIItem>(widget));
     option.set_ui_item_from_option();
     g_signal_connect(G_OBJECT (widget), "changed",
                      G_CALLBACK (gnc_option_changed_widget_cb), &option);
-    gtk_widget_show_all(*enclosing);
-    return widget;
+
+    set_name_label(option, page_box, row, false);
+    set_tool_tip(option, enclosing);
+    grid_attach_widget(page_box, enclosing, row);
 }
 
 class GncGtkTaxTableUIItem : public GncOptionGtkUIItem
@@ -172,17 +164,10 @@ public:
     }
 };
 
-template<> GtkWidget*
+template<> void
 create_option_widget<GncOptionUIType::TAX_TABLE>(GncOption& option,
-                                                 GtkGrid *page_box,
-                                                 GtkLabel *name_label,
-                                                 char *documentation,
-                                                 /* Return values */
-                                                 GtkWidget **enclosing,
-                                                 bool *packed)
+                                                 GtkGrid *page_box, int row)
 {
-    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
     constexpr const char* glade_file{"business-options-gnome.glade"};
     constexpr const char* glade_store{"taxtable_store"};
     constexpr const char* glade_menu{"taxtable_menu"};
@@ -192,15 +177,13 @@ create_option_widget<GncOptionUIType::TAX_TABLE>(GncOption& option,
     auto widget{GTK_WIDGET(gtk_builder_get_object(builder, glade_menu))};
     gnc_taxtables_combo(GTK_COMBO_BOX(widget), gnc_get_current_book(), TRUE,
                         nullptr);
-    gtk_box_pack_start(GTK_BOX(*enclosing), widget, FALSE, FALSE, 0);
     option.set_ui_item(std::make_unique<GncGtkTaxTableUIItem>(widget));
     option.set_ui_item_from_option();
     g_object_unref(builder); // Needs to wait until after widget has been reffed.
     g_signal_connect (G_OBJECT (widget), "changed",
                       G_CALLBACK (gnc_option_changed_widget_cb), &option);
 
-    gtk_widget_show_all(*enclosing);
-    return widget;
+    wrap_widget(option, widget, page_box, row);
 }
 
 void
