@@ -922,12 +922,9 @@ static void
 create_split (Transaction *trans, FieldMask splitfield,
               const gchar *action, Account *account,
               AccountVec& account_commits, GtkWidget *memo_entry,
-              GtkWidget *amount, GtkWidget *value,
-              bool skip_if_zero)
+              gnc_numeric amount_numeric, gnc_numeric value_numeric,
+              bool skip_if_zero, StockTransactionInfo *info)
 {
-    auto amount_numeric = amount ? gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (amount)) : gnc_numeric_zero ();
-    auto value_numeric = value ? gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (value)) : gnc_numeric_zero ();
-
     if (skip_if_zero && gnc_numeric_zero_p (value_numeric))
         return;
 
@@ -982,6 +979,11 @@ add_price (GtkWidget *amount, GtkWidget *value,
     gnc_price_unref (price);
 }
 
+static gnc_numeric gae_amount (GtkWidget *widget)
+{
+    return gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (widget));
+}
+
 void
 stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
 {
@@ -1001,52 +1003,59 @@ stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
     auto date = gnc_date_edit_get_date (GNC_DATE_EDIT (info->date_edit));
     xaccTransSetDatePostedSecsNormalized (trans, date);
 
+    auto stock_amount = info->txn_type->stock_amount != FieldMask::DISABLED ?
+        gae_amount (info->stock_amount_edit) : gnc_numeric_zero ();
+    auto stock_value = info->txn_type->stock_value != FieldMask::DISABLED ?
+        gae_amount (info->stock_value_edit) : gnc_numeric_zero ();
     create_split (trans, info->txn_type->stock_amount | info->txn_type->stock_value,
                   NC_ ("Stock Assistant: Action field", "Stock"),
                   info->acct, account_commits, info->stock_memo_edit,
-                  info->txn_type->stock_amount != FieldMask::DISABLED ? info->stock_amount_edit : nullptr,
-                  info->txn_type->stock_value != FieldMask::DISABLED ? info->stock_value_edit : nullptr,
-                  false);
+                  stock_amount, stock_value, false, info);
 
     if (info->txn_type->cash_value != FieldMask::DISABLED)
+    {
+        auto cash = gae_amount (info->cash_value);
         create_split (trans, info->txn_type->cash_value,
                       NC_ ("Stock Assistant: Action field", "Cash"),
-                      gas_account (info->cash_account),
-                      account_commits, info->cash_memo_edit, info->cash_value,
-                      info->cash_value, false);
+                      gas_account (info->cash_account), account_commits,
+                      info->cash_memo_edit, cash, cash, false, info);
+    }
 
     if (info->txn_type->fees_value != FieldMask::DISABLED)
     {
+        auto fees = gae_amount (info->fees_value);
         auto capitalize = gtk_toggle_button_get_active
             (GTK_TOGGLE_BUTTON (info->capitalize_fees_checkbox));
         create_split (trans, info->txn_type->fees_value,
                       NC_ ("Stock Assistant: Action field", "Fees"),
                       capitalize ? info->acct : gas_account (info->fees_account),
                       account_commits, info->fees_memo_edit,
-                      capitalize ? nullptr : info->fees_value,
-                      info->fees_value, true);
+                      capitalize ? gnc_numeric_zero () : fees, fees, true, info);
     }
 
     if (info->txn_type->dividend_value != FieldMask::DISABLED)
+    {
+        auto dividend = gae_amount (info->dividend_value);
         create_split (trans, info->txn_type->dividend_value,
                       NC_ ("Stock Assistant: Action field", "Dividend"),
-                      gas_account (info->dividend_account),
-                      account_commits, info->dividend_memo_edit,
-                      info->dividend_value, info->dividend_value, false);
+                      gas_account (info->dividend_account), account_commits,
+                      info->dividend_memo_edit, dividend, dividend, false, info);
+    }
 
     if (info->txn_type->capgains_value != FieldMask::DISABLED)
     {
+        auto capgains = gae_amount (info->capgains_value);
         create_split (trans, info->txn_type->capgains_value,
                       NC_ ("Stock Assistant: Action field", "Capital Gain"),
                       gas_account (info->capgains_account),
                       account_commits, info->capgains_memo_edit,
-                      info->capgains_value, info->capgains_value, false);
+                      capgains, capgains, false, info);
 
         create_split (trans,
                       info->txn_type->capgains_value ^ (FieldMask::ENABLED_CREDIT | FieldMask::ENABLED_DEBIT),
                       NC_ ("Stock Assistant: Action field", "Capital Gain"),
                       info->acct, account_commits, info->capgains_memo_edit,
-                      nullptr, info->capgains_value, false);
+                      gnc_numeric_zero (), capgains, false, info);
     }
 
     if (info->txn_type->stock_amount != FieldMask::DISABLED &&
