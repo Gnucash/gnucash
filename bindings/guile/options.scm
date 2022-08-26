@@ -339,6 +339,14 @@
               (gnc-relative-date-to-time64 (cdr option-value)))
           option-value))
 
+(define-public (gnc:register-multichoice-callback-option options section name key docstring default multichoice widget-changed-cb)
+  (let ((defval (cond ((symbol? default)
+                       (symbol->string default))
+                      ((number? default)
+                       (number->string default))
+                     (else default))))
+  (gnc-register-multichoice-callback-option (gnc:optiondb options) section name key docstring defval multichoice widget-changed-cb)))
+
 ;; Scheme code for supporting options for the business modules
 ;;
 ;; Created by:	Derek Atkins <derek@ihtfp.com>
