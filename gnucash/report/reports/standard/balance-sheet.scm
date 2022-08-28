@@ -151,14 +151,6 @@
       (gnc:make-string-option
       gnc:pagename-general optname-report-title
       "a" opthelp-report-title (G_ reportname)))
-    (add-option
-      (gnc:make-simple-boolean-option 
-      gnc:pagename-general optname-party-name-book
-      "b1" opthelp-party-name-book #t))
-    (add-option
-      (gnc:make-string-option
-      gnc:pagename-general optname-party-name
-      "b2" opthelp-party-name (or (gnc:company-info book gnc:*company-name*) "")))
     
     ;; date at which to report balance
     (gnc:options-add-report-date!
