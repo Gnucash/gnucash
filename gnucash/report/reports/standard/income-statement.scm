@@ -9,9 +9,6 @@
 ;;    This code makes the assumption that you want your income
 ;;    statement to no more than daily resolution.
 ;;    
-;;    The Company Name field does not currently default to the name
-;;    in (gnc-get-current-book).  Corrected by this PR.
-;;    
 ;;    Line & column alignments may still not conform with
 ;;    textbook accounting practice (they're close though!).
 ;;    
@@ -51,12 +48,6 @@
 ;; defined in *one* place.
 (define optname-report-title (N_ "Report Title"))
 (define opthelp-report-title (N_ "Title for this report."))
-
-(define optname-party-name-book (N_ "Force Configured Company Name"))
-(define opthelp-party-name-book (N_ "Force the Configured Company Name to be used in the report."))
-
-(define optname-party-name (N_ "Company name"))
-(define opthelp-party-name (N_ "Name of company/individual."))
 
 (define optname-start-date (N_ "Start Date"))
 (define optname-end-date (N_ "End Date"))
@@ -140,7 +131,6 @@
 ;; options generator
 (define (income-statement-options-generator-internal reportname)
   (let* ((options (gnc:new-options))
-         (book (gnc-get-current-book)) ; XXX Find a way to get the book that opened the report
          (add-option 
           (lambda (new-option)
             (gnc:register-option options new-option))))
@@ -149,14 +139,6 @@
       (gnc:make-string-option
       gnc:pagename-general optname-report-title
       "a" opthelp-report-title (G_ reportname)))
-    (add-option
-      (gnc:make-simple-boolean-option 
-      gnc:pagename-general optname-party-name-book
-      "b1" opthelp-party-name-book #t))
-    (add-option
-      (gnc:make-string-option
-      gnc:pagename-general optname-party-name
-      "b2" opthelp-party-name (or (gnc:company-info book gnc:*company-name*) "")))
     
     ;; period over which to report income
     (gnc:options-add-date-interval!
@@ -301,11 +283,9 @@
   
   ;; get all option's values
   (let* (
-         (book (gnc-get-current-book)) ; XXX Find a way to get the book that opened the report
-	 (report-title (get-option gnc:pagename-general optname-report-title))
-         (company-name (if optname-party-name-book
-                       (gnc:company-info book gnc:*company-name*)
-                       (get-option gnc:pagename-general optname-party-name)))
+	 (book (gnc-get-current-book))
+	 ;; Get company-name should probably be modularized and standardized across reports
+	 (company-name (gnc:company-info book gnc:*company-name*))
          (start-date-printable (gnc:date-option-absolute-time
 				(get-option gnc:pagename-general
 					    optname-start-date)))
