@@ -20,7 +20,7 @@
 ;;    
 ;;    This code makes the assumption that you want your balance
 ;;    sheet to no more than daily resolution.
-;;      
+;;    
 ;;    Line & column alignments still do not conform with
 ;;    textbook accounting practice (they're close though!).
 ;;    
