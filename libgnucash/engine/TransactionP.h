@@ -122,6 +122,8 @@ struct transaction_s
     char * void_reason;
     char * notes;
 
+    char txn_type;
+
     /* Cached bool value to indicate whether this is a closing txn. This is
      * cached from the KVP value because it is queried a lot. Tri-state value: -1
      * = uninitialized; 0 = FALSE, 1 = TRUE. */

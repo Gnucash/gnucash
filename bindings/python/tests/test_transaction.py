@@ -112,15 +112,6 @@ class TestTransaction(TransactionSession):
         self.trans.ClearReadOnly()
         self.assertEqual( None, self.trans.GetReadOnly() )
 
-    def test_txntype(self):
-        self.assertEqual( '\x00', self.trans.GetTxnType() )
-        TYPE = 'I'
-        self.trans.SetTxnType(TYPE)
-        self.assertEqual( TYPE, self.trans.GetTxnType() )
-        TYPE = 'P'
-        self.trans.SetTxnType(TYPE)
-        self.assertEqual( TYPE, self.trans.GetTxnType() )
-
     def test_num(self):
         NUM = '5'
         self.assertEqual( '', self.trans.GetNum() )

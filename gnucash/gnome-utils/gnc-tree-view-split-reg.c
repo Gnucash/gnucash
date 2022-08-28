@@ -301,7 +301,7 @@ struct GncTreeViewSplitRegPrivate
 #define SHOW_SYMBOL FALSE
 
 #define GNC_TREE_VIEW_SPLIT_REG_GET_PRIVATE(o)  \
-   ((GncTreeViewSplitRegPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_TREE_VIEW_SPLIT_REG))
+   ((GncTreeViewSplitRegPrivate*)gnc_tree_view_split_reg_get_instance_private((GncTreeViewSplitReg*)o))
 
 static GObjectClass *parent_class = NULL;
 

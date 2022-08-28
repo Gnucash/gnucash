@@ -5,14 +5,15 @@
 # Val Saven <val.saven@gmail.com>, 2021.
 # TwoEightNine <twoeightnine@list.ru>, 2021.
 # Даниил Морозюк <morozdan2003@gmail.com>, 2021.
+# Nikita Samoilov <n.p.samoilov@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-01-02 22:54+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2022-06-27 15:50+0000\n"
+"Last-Translator: Nikita Samoilov <n.p.samoilov@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/glossary/"
 "ru/>\n"
 "Language: ru\n"
@@ -21,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -29,7 +30,7 @@ msgstr ""
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
-msgstr ""
+msgstr "«»"
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -93,14 +94,12 @@ msgid "account type: Mutual fund"
 msgstr "account type: Взаимный фонд"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
-#, fuzzy
 msgid "account type: Passive"
-msgstr "account type: Актив"
+msgstr "account type: Пассивный"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
-#, fuzzy
 msgid "account type: Profit & Loss"
-msgstr "account type: Актив"
+msgstr "account type: Прибыль и потери"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
@@ -111,9 +110,8 @@ msgid "account type: Stock"
 msgstr "account type: Пакет акций"
 
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
-#, fuzzy
 msgid "account type: trading"
-msgstr "account type: депозит"
+msgstr "account type: обмен валют"
 
 #. "-"
 msgid "account: parent account"
@@ -149,7 +147,7 @@ msgstr "action: депозит"
 
 #. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
 msgid "action: direct debit"
-msgstr ""
+msgstr "action: прямое дебетование"
 
 #. "transaction is a distribution (???)"
 msgid "action: dist"
@@ -177,7 +175,7 @@ msgstr "action: платеж"
 
 #. "Point of sale"
 msgid "action: POS"
-msgstr ""
+msgstr "action: Пункт продажи"
 
 #. "-"
 msgid "action: rebate"
@@ -189,7 +187,7 @@ msgstr "action: продажа"
 
 #. "-"
 msgid "action: Teller"
-msgstr ""
+msgstr "action: Кассир"
 
 #. "see: transfer 2. (=credit transfer)"
 msgid "action: transfer"
@@ -197,7 +195,7 @@ msgstr "action: перевод"
 
 #. "-"
 msgid "action: wire"
-msgstr ""
+msgstr "action: электронный"
 
 #. "-"
 msgid "action: withdraw"
@@ -281,7 +279,6 @@ msgid "business (noun)"
 msgstr "деятельность"
 
 #. "Profits made from the sale of investments or property"
-#, fuzzy
 msgid "capital gains"
 msgstr "доходы от прироста капитала"
 
@@ -323,9 +320,8 @@ msgid "commodity option: Symbol"
 msgstr "commodity option: Обозначение"
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
-#, fuzzy
 msgid "compound interests"
-msgstr "процент"
+msgstr "совокупные проценты"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
@@ -340,22 +336,20 @@ msgid "credit transfer"
 msgstr "перевод средств"
 
 #. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
-#, fuzzy
 msgid "credit note"
-msgstr "перевод средств"
+msgstr "кредит-нота"
 
 #. "The system of money used in a country"
 msgid "currency"
 msgstr "валюта"
 
 #. "Custom print format (i.e. according to the user's wishes) as opposed to a template choice."
-#, fuzzy
 msgid "Custom"
-msgstr "Настроенный"
+msgstr "Настраиваемый"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
-msgstr ""
+msgstr "панель индикаторов"
 
 #. "The backend where the data is stored."
 msgid "database"
@@ -395,9 +389,8 @@ msgid "Description (column in register)"
 msgstr "Описание"
 
 #. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
-#, fuzzy
 msgid "discount"
-msgstr "счет"
+msgstr "скидка"
 
 #. "Important Buzzword :)"
 msgid "double entry"
@@ -405,11 +398,11 @@ msgstr "двойная бухгалтерия"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
-msgstr ""
+msgstr "ссылка на документ"
 
 #. "The last day to pay an invoice in time."
 msgid "due date"
-msgstr ""
+msgstr "срок оплаты"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
@@ -456,14 +449,12 @@ msgid "financial calculator: payments"
 msgstr "financial calculator: платежи"
 
 #. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
-#, fuzzy
-#| msgid "income statement"
 msgid "financial statement"
-msgstr "отчет о доходах"
+msgstr "отчет о финансах"
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 msgid "free software"
-msgstr ""
+msgstr "свободное ПО"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
@@ -508,10 +499,8 @@ msgid "loan"
 msgstr "ссуда"
 
 #. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
-#, fuzzy
-#| msgid "loan"
 msgid "loan: APR"
-msgstr "ссуда"
+msgstr "loan: годовая процентная ставка"
 
 #. "The money lost in business activity"
 msgid "loss"
@@ -535,9 +524,8 @@ msgid "marker"
 msgstr "маркер"
 
 #. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
-#, fuzzy
 msgid "markup"
-msgstr "маркер"
+msgstr "наценка"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
@@ -552,16 +540,12 @@ msgid "Mortgage"
 msgstr "Ипотека"
 
 #. "Adjustable Rate Mortgage"
-#, fuzzy
-#| msgid "Mortgage"
 msgid "mortgage: ARM"
-msgstr "Ипотека"
+msgstr "mortgage: ипотека с нефиксированной ставкой"
 
 #. "Fixed Rate Mortgage"
-#, fuzzy
-#| msgid "Mortgage"
 msgid "mortgage: FRM"
-msgstr "Ипотека"
+msgstr "mortgage: ипотека с фиксированной ставкой"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
@@ -653,9 +637,8 @@ msgid "preferences"
 msgstr "настройки"
 
 #. "Loan repayment calculator: your payments are split in interests payment and principal payment"
-#, fuzzy
 msgid "principal payment"
-msgstr "action: платеж"
+msgstr "основной платеж"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
@@ -682,8 +665,9 @@ msgid "Profit & Loss"
 msgstr "Прибыль и убытки"
 
 #. "-"
+#, fuzzy
 msgid "quick-fill"
-msgstr ""
+msgstr "быстрое заполнение"
 
 #. "-"
 msgid "rebalance, to (a transaction)"
@@ -915,7 +899,7 @@ msgid "due"
 msgstr ""
 
 msgid "Online"
-msgstr ""
+msgstr "Онлайн"
 
 msgid "Direct Debit"
-msgstr ""
+msgstr "Прямое дебетование"

@@ -3805,7 +3805,6 @@ gnc_ui_qif_import_assistant_make (QIFImportWindow *qif_win)
     GtkWidget         *box;
 
     builder = gtk_builder_new ();
-    gnc_builder_add_from_file (builder, "assistant-qif-import.glade", "currency_liststore");
     gnc_builder_add_from_file (builder, "assistant-qif-import.glade", "date_format_liststore");
     gnc_builder_add_from_file (builder, "assistant-qif-import.glade", "qif_import_assistant");
 

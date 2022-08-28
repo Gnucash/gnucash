@@ -1057,8 +1057,10 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
                the match will be remembered */
             if (gnc_import_split_has_online_id(trans_info->first_split))
             {
-                gnc_import_set_split_online_id(selected_match->split,
-                                               gnc_import_get_split_online_id(trans_info->first_split));
+                char *online_id = gnc_import_get_split_online_id
+                    (trans_info->first_split);
+                gnc_import_set_split_online_id(selected_match->split, online_id);
+                g_free (online_id);
             }
 
             /* Done editing. */
@@ -1112,9 +1114,12 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
             /* Copy the online id to the reconciled transaction, so
             		 the match will be remembered */
             if (gnc_import_split_has_online_id(trans_info->first_split))
-                gnc_import_set_split_online_id
-                (selected_match->split,
-                 gnc_import_get_split_online_id(trans_info->first_split));
+            {
+                char *online_id = gnc_import_get_split_online_id
+                    (trans_info->first_split);
+                gnc_import_set_split_online_id (selected_match->split, online_id);
+                g_free (online_id);
+            }
 
             /* Done editing. */
             /*DEBUG("CommitEdit selected_match")*/
@@ -1152,8 +1157,8 @@ static gint check_trans_online_id(Transaction *trans1, void *user_data)
     Account *account;
     Split *split1;
     Split *split2 = user_data;
-    const gchar *online_id1;
-    const gchar *online_id2;
+    gchar *online_id1, *online_id2;
+    gint retval;
 
     account = xaccSplitGetAccount(split2);
     split1 = xaccTransFindSplitByAccount(trans1, account);
@@ -1164,24 +1169,22 @@ static gint check_trans_online_id(Transaction *trans1, void *user_data)
        instead of the transactions */
     g_assert(split1 != NULL);
 
-    if (gnc_import_split_has_online_id(split1))
-        online_id1 = gnc_import_get_split_online_id(split1);
-    else
-        online_id1 = gnc_import_get_trans_online_id(trans1);
+    online_id1 = gnc_import_get_split_online_id (split1);
+
+    if (!online_id1 || !online_id1[0])
+    {
+        if (online_id1)
+            g_free (online_id1);
+        online_id1 = gnc_import_get_trans_online_id (trans1);
+    }
 
     online_id2 = gnc_import_get_split_online_id(split2);
 
-    if ((online_id1 == NULL) ||
-            (online_id2 == NULL) ||
-            (strcmp(online_id1, online_id2) != 0))
-    {
-        return 0;
-    }
-    else
-    {
-        /*printf("test_trans_online_id(): Duplicate found\n");*/
-        return 1;
-    }
+    retval = (!online_id1 || !online_id2 || strcmp (online_id1, online_id2)) ? 0 : 1;
+
+    g_free (online_id1);
+    g_free (online_id2);
+    return retval;
 }
 
 /** Checks whether the given transaction's online_id already exists in
@@ -1191,30 +1194,38 @@ gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_ha
     gboolean online_id_exists = FALSE;
     Account *dest_acct;
     Split *source_split;
+    char *source_online_id;
 
     /* Look for an online_id in the first split */
     source_split = xaccTransGetSplit(trans, 0);
     g_assert(source_split);
 
+    source_online_id = gnc_import_get_split_online_id (source_split);
+
     // No online id, no point in continuing. We'd crash if we tried.
-    if (!gnc_import_get_split_online_id (source_split))
+    if (!source_online_id)
         return FALSE;
-    // Create a hash per account of a hash of all split IDs. Then the test below will be fast if
-    // we have many transactions to import.
+
+    // Create a hash per account of a hash of all split IDs. Then the
+    // test below will be fast if we have many transactions to import.
     dest_acct = xaccSplitGetAccount (source_split);
     if (!g_hash_table_contains (acct_id_hash, dest_acct))
     {
-        GHashTable* new_hash = g_hash_table_new (g_str_hash, g_str_equal);
-        GList* split_list = xaccAccountGetSplitList(dest_acct);
+        GHashTable* new_hash = g_hash_table_new_full
+            (g_str_hash, g_str_equal, g_free, NULL);
         g_hash_table_insert (acct_id_hash, dest_acct, new_hash);
-        for (;split_list;split_list=split_list->next)
+        for (GList *n = xaccAccountGetSplitList (dest_acct) ; n; n=n->next)
         {
-            if (gnc_import_split_has_online_id (split_list->data))
-                g_hash_table_add (new_hash, (void*) gnc_import_get_split_online_id (split_list->data));
+            if (gnc_import_split_has_online_id (n->data))
+            {
+                char *id = gnc_import_get_split_online_id (n->data);
+                if (!g_hash_table_insert (new_hash, (void*) id, GINT_TO_POINTER (1)))
+                    g_free (id);
+            }
         }
     }
     online_id_exists = g_hash_table_contains (g_hash_table_lookup (acct_id_hash, dest_acct),
-                                              gnc_import_get_split_online_id (source_split));
+                                              source_online_id);
     
     /* If it does, abort the process for this transaction, since it is
        already in the system. */
@@ -1224,6 +1235,7 @@ gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_ha
         xaccTransDestroy(trans);
         xaccTransCommitEdit(trans);
     }
+    g_free (source_online_id);
     return online_id_exists;
 }
 

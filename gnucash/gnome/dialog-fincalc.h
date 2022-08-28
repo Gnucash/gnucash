@@ -25,7 +25,7 @@
 
 typedef struct _FinCalcDialog FinCalcDialog;
 
-void gnc_ui_fincalc_dialog_create(GtkWindow *parent);
-void gnc_ui_fincalc_dialog_destroy(FinCalcDialog *fcd);
+void gnc_ui_fincalc_dialog_create (GtkWindow *parent);
+void gnc_ui_fincalc_dialog_destroy (FinCalcDialog *fcd);
 
 #endif

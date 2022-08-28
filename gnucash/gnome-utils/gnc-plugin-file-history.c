@@ -106,7 +106,7 @@ typedef struct GncPluginFileHistoryPrivate
 
 
 #define GNC_PLUGIN_FILE_HISTORY_GET_PRIVATE(o)  \
-   ((GncPluginFileHistoryPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_FILE_HISTORY))
+   ((GncPluginFileHistoryPrivate*)gnc_plugin_file_history_get_instance_private((GncPluginFileHistory*)o))
 
 /************************************************************
  *                     Other Functions                      *
@@ -197,15 +197,15 @@ gnc_history_add_file (const char *newfile)
     {
         from = gnc_history_index_to_pref_name(i);
         filename = gnc_prefs_get_string(GNC_PREFS_GROUP_HISTORY, from);
-        if (filename)
+        if (filename && *filename)
         {
             gnc_prefs_set_string(GNC_PREFS_GROUP_HISTORY, to, filename);
-            g_free(filename);
         }
         else
         {
             gnc_prefs_reset(GNC_PREFS_GROUP_HISTORY, to);
         }
+        g_free(filename);
         g_free(to);
         to = from;
     }

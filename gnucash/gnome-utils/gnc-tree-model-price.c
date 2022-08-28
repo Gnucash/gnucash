@@ -132,7 +132,7 @@ typedef struct GncTreeModelPricePrivate
 } GncTreeModelPricePrivate;
 
 #define GNC_TREE_MODEL_PRICE_GET_PRIVATE(o)  \
-   ((GncTreeModelPricePrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_TREE_MODEL_PRICE))
+   ((GncTreeModelPricePrivate*)gnc_tree_model_price_get_instance_private((GncTreeModelPrice*)o))
 
 /** A pointer to the parent class of a price tree model. */
 static GObjectClass *parent_class = NULL;

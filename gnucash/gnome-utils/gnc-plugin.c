@@ -65,7 +65,7 @@ GNC_DEFINE_TYPE_WITH_CODE(GncPlugin, gnc_plugin, G_TYPE_OBJECT,
 		        G_ADD_PRIVATE(GncPlugin))
 
 #define GNC_PLUGIN_GET_PRIVATE(o)  \
-   ((GncPluginPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN))
+   ((GncPluginPrivate*)gnc_plugin_get_instance_private((GncPlugin*)o))
 
 /** Initialize the class for the new gnucash plugin object.  This will
  *  set up any function pointers that override functions in the parent

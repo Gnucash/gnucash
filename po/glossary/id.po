@@ -6,14 +6,15 @@
 # Ferdinand Tampubolon <dnandz@gmail.com>, 2021.
 # Reza Almanda <rezaalmanda27@gmail.com>, 2021.
 # Syahmin Sukhairi <syahmin@gmail.com>, 2022.
+# Azhar Pusparadhian <pazhar@rocketmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-01-07 05:54+0000\n"
-"Last-Translator: Syahmin Sukhairi <syahmin@gmail.com>\n"
+"PO-Revision-Date: 2022-07-09 07:20+0000\n"
+"Last-Translator: Azhar Pusparadhian <pazhar@rocketmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/id/>\n"
 "Language: id\n"
@@ -21,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -208,10 +209,8 @@ msgid "amount"
 msgstr "jumlah"
 
 #. "The amount finally to pay, respecting discounts, billing terms…"
-#, fuzzy
-#| msgid "amount"
 msgid "amount due"
-msgstr "jumlah"
+msgstr "jumlah dibayarkan"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
@@ -395,7 +394,7 @@ msgstr "link Dokumen"
 
 #. "The last day to pay an invoice in time."
 msgid "due date"
-msgstr ""
+msgstr "Tanggal Jatuh Tempo"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
@@ -877,10 +876,10 @@ msgid "stock"
 msgstr "saham"
 
 msgid "due"
-msgstr ""
+msgstr "Jatuh Tempo"
 
 msgid "Online"
 msgstr "Daring"
 
 msgid "Direct Debit"
-msgstr ""
+msgstr "Debit Langsung"

@@ -520,6 +520,9 @@ xaccSchedXactionFree( SchedXaction *sx )
         sx->deferredList = NULL;
     }
 
+    /* a GList of Recurrences */
+    g_list_free_full (sx->schedule, g_free);
+
     /* qof_instance_release (&sx->inst); */
     g_object_unref( sx );
 }

@@ -101,11 +101,15 @@ static AccountPickerDialog* gnc_import_new_account_picker(void)
 static gpointer test_acct_online_id_match(Account *acct, gpointer data)
 {
     AccountOnlineMatch *match = (AccountOnlineMatch*)data;
-    const char *acct_online_id = gnc_import_get_acc_online_id(acct);
+    char *acct_online_id = gnc_import_get_acc_online_id(acct);
     int acct_len, match_len;
 
     if (acct_online_id == NULL || match->online_id == NULL)
+    {
+        if (acct_online_id)
+            g_free (acct_online_id);
         return NULL;
+    }
 
     acct_len = strlen(acct_online_id);
     match_len = strlen(match->online_id);
@@ -118,7 +122,10 @@ static gpointer test_acct_online_id_match(Account *acct, gpointer data)
     if (strncmp (acct_online_id, match->online_id, acct_len) == 0)
     {
         if (strncmp(acct_online_id, match->online_id, match_len) == 0)
+        {
+            g_free (acct_online_id);
             return (gpointer *) acct;
+        }
         if (match->partial_match == NULL)
         {
             match->partial_match = acct;
@@ -126,7 +133,7 @@ static gpointer test_acct_online_id_match(Account *acct, gpointer data)
         }
         else
         {
-            const char *partial_online_id =
+            char *partial_online_id =
                 gnc_import_get_acc_online_id(match->partial_match);
             int partial_len = strlen(partial_online_id);
             if (partial_online_id[partial_len - 1] == ' ')
@@ -157,9 +164,11 @@ static gpointer test_acct_online_id_match(Account *acct, gpointer data)
                 g_free (name1);
                 g_free (name2);
             }
+            g_free (partial_online_id);
         }
     }
 
+    g_free (acct_online_id);
     return NULL;
 }
 

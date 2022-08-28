@@ -52,8 +52,10 @@ struct _GNCQueryViewPrivate
     gint        component_id;
 };
 
+G_DEFINE_TYPE_WITH_PRIVATE(GNCQueryView, gnc_query_view, GTK_TYPE_TREE_VIEW)
+
 #define GNC_QUERY_VIEW_GET_PRIVATE(o)  \
-   ((GNCQueryViewPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_QUERY_VIEW))
+   ((GNCQueryViewPrivate*)gnc_query_view_get_instance_private((GNCQueryView*)o))
 
 /** Static Globals ****************************************************/
 static GtkTreeViewClass *parent_class = NULL;
@@ -184,8 +186,6 @@ gnc_query_view_refresh_handler (GHashTable *changes, gpointer user_data)
 
     gnc_query_view_set_query_sort (qview, TRUE);
 }
-
-G_DEFINE_TYPE_WITH_PRIVATE(GNCQueryView, gnc_query_view, GTK_TYPE_TREE_VIEW)
 
 static void
 gnc_query_view_init (GNCQueryView *qview)

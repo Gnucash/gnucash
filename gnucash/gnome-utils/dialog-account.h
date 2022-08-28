@@ -138,7 +138,7 @@ Account * gnc_ui_new_accounts_from_name_window (GtkWindow *parent,
 /* Note that the caller owns the valid_types list */
 Account * gnc_ui_new_accounts_from_name_window_with_types (GtkWindow *parent,
                                                            const char *name,
-        GList *valid_types);
+                                                           GList *valid_types);
 
 
 /** Display a modal window for creating a new account.  This function
@@ -162,10 +162,10 @@ Account * gnc_ui_new_accounts_from_name_window_with_types (GtkWindow *parent,
  *  @return A pointer to the newly created account.
  */
 Account * gnc_ui_new_accounts_from_name_with_defaults (GtkWindow *parent,
-                                        const char *name,
-                                        GList *valid_types,
-                                        const gnc_commodity * default_commodity,
-                                        Account * parent_acct);
+                                                       const char *name,
+                                                       GList *valid_types,
+                                                       const gnc_commodity *default_commodity,
+                                                       Account *parent_acct);
 
 /*
  * register a callback that gets called when the account has changed

@@ -87,8 +87,10 @@ typedef struct GncPluginPageOwnerTreePrivate
     OwnerFilterDialog fd;
 } GncPluginPageOwnerTreePrivate;
 
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageOwnerTree, gnc_plugin_page_owner_tree, GNC_TYPE_PLUGIN_PAGE)
+
 #define GNC_PLUGIN_PAGE_OWNER_TREE_GET_PRIVATE(o)  \
-   ((GncPluginPageOwnerTreePrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_PAGE_OWNER_TREE))
+   ((GncPluginPageOwnerTreePrivate*)gnc_plugin_page_owner_tree_get_instance_private((GncPluginPageOwnerTree*)o))
 
 static GObjectClass *parent_class = NULL;
 
@@ -396,8 +398,6 @@ gnc_plugin_page_owner_focus_widget (GncPluginPage *owner_plugin_page)
     }
     return FALSE;
 }
-
-G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageOwnerTree, gnc_plugin_page_owner_tree, GNC_TYPE_PLUGIN_PAGE)
 
 static void
 gnc_plugin_page_owner_tree_class_init (GncPluginPageOwnerTreeClass *klass)

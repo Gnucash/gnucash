@@ -40,7 +40,8 @@
  * Account, Transaction and Split
 \********************************************************************/
 
-const gchar * gnc_import_get_acc_online_id (Account * account)
+gchar *
+gnc_import_get_acc_online_id (Account * account)
 {
     gchar *id = NULL;
     qof_instance_get (QOF_INSTANCE (account), "online-id", &id, NULL);
@@ -49,7 +50,8 @@ const gchar * gnc_import_get_acc_online_id (Account * account)
 
 /* Used in the midst of editing a transaction; make it save the
  * account data. */
-void gnc_import_set_acc_online_id (Account *account, const gchar *id)
+void
+gnc_import_set_acc_online_id (Account *account, const gchar *id)
 {
     g_return_if_fail (account != NULL);
     xaccAccountBeginEdit (account);
@@ -57,15 +59,17 @@ void gnc_import_set_acc_online_id (Account *account, const gchar *id)
     xaccAccountCommitEdit (account);
 }
 
-const gchar * gnc_import_get_trans_online_id (Transaction * transaction)
+gchar *
+gnc_import_get_trans_online_id (Transaction * transaction)
 {
     gchar *id = NULL;
     qof_instance_get (QOF_INSTANCE (transaction), "online-id", &id, NULL);
     return id;
 }
+
 /* Not actually used */
-void gnc_import_set_trans_online_id (Transaction *transaction,
-				     const gchar *id)
+void
+gnc_import_set_trans_online_id (Transaction *transaction, const gchar *id)
 {
     g_return_if_fail (transaction != NULL);
     xaccTransBeginEdit (transaction);
@@ -73,33 +77,40 @@ void gnc_import_set_trans_online_id (Transaction *transaction,
     xaccTransCommitEdit (transaction);
 }
 
-gboolean gnc_import_trans_has_online_id(Transaction * transaction)
+gboolean
+gnc_import_trans_has_online_id (Transaction * transaction)
 {
-    const gchar * online_id;
-    online_id = gnc_import_get_trans_online_id(transaction);
-    return (online_id != NULL && strlen(online_id) > 0);
+    gchar *online_id = gnc_import_get_trans_online_id(transaction);
+    gboolean retval = (online_id && *online_id);
+    g_free (online_id);
+    return retval;
 }
 
-const gchar * gnc_import_get_split_online_id (Split * split)
+gchar *
+gnc_import_get_split_online_id (Split * split)
 {
     gchar *id = NULL;
     qof_instance_get (QOF_INSTANCE (split), "online-id", &id, NULL);
     return id;
 }
+
 /* Used several places in a transaction edit where many other
  * parameters are also being set, so individual commits wouldn't be
  * appropriate. Besides, there isn't a function for one.*/
-void gnc_import_set_split_online_id (Split *split, const gchar *id)
+void
+gnc_import_set_split_online_id (Split *split, const gchar *id)
 {
     g_return_if_fail (split != NULL);
     qof_instance_set (QOF_INSTANCE (split), "online-id", id, NULL);
 }
 
-gboolean gnc_import_split_has_online_id(Split * split)
+gboolean
+gnc_import_split_has_online_id (Split * split)
 {
-    const gchar * online_id;
-    online_id = gnc_import_get_split_online_id(split);
-    return (online_id != NULL && strlen(online_id) > 0);
+    gchar *online_id = gnc_import_get_split_online_id(split);
+    gboolean retval = (online_id && *online_id);
+    g_free (online_id);
+    return retval;
 }
 
 /* @} */
