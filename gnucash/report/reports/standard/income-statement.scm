@@ -283,6 +283,7 @@
   
   ;; get all option's values
   (let* (
+	 (report-title (get-option gnc:pagename-general optname-report-title))
 	 (book (gnc-get-current-book))
 	 ;; Get company-name should probably be modularized and standardized across reports
 	 (company-name (gnc:company-info book gnc:*company-name*))
