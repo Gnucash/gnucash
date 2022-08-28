@@ -20,10 +20,7 @@
 ;;    
 ;;    This code makes the assumption that you want your balance
 ;;    sheet to no more than daily resolution.
-;;    
-;;    The Company Name field does not currently default to the name
-;;    in (gnc-get-current-book).
-;;    
+;;      
 ;;    Line & column alignments still do not conform with
 ;;    textbook accounting practice (they're close though!).
 ;;    
@@ -142,7 +139,6 @@
 ;; options generator
 (define (balance-sheet-options-generator)
   (let* ((options (gnc:new-options))
-         (book (gnc-get-current-book)) ; XXX Find a way to get the book that opened the report
          (add-option 
           (lambda (new-option)
             (gnc:register-option options new-option))))
@@ -284,6 +280,7 @@
   ;; get all option's values
   (let* (
 	 (book (gnc-get-current-book))
+	 ;; Get company-name should probably be modularized and standardized across reports
 	 (company-name (gnc:company-info book gnc:*company-name*))
          (report-title (get-option gnc:pagename-general optname-report-title))
          (reportdate (gnc:time64-end-day-time
