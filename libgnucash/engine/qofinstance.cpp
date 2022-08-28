@@ -112,7 +112,7 @@ typedef struct QofInstancePrivate
 }  QofInstancePrivate;
 
 #define GET_PRIVATE(o)  \
-    ((QofInstancePrivate*)g_type_instance_get_private((GTypeInstance*)o, QOF_TYPE_INSTANCE))
+    ((QofInstancePrivate*)qof_instance_get_instance_private((QofInstance*)o))
 
 G_DEFINE_TYPE_WITH_PRIVATE(QofInstance, qof_instance, G_TYPE_OBJECT);
 QOF_GOBJECT_FINALIZE(qof_instance);

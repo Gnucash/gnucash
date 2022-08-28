@@ -213,44 +213,25 @@ static void gnc_ui_to_customer (CustomerWindow *cw, GncCustomer *cust)
     if (cw->dialog_type == NEW_CUSTOMER)
         qof_event_gen(QOF_INSTANCE(cust), QOF_EVENT_ADD, NULL);
 
-    gncCustomerSetID (cust, gtk_editable_get_chars
-                      (GTK_EDITABLE (cw->id_entry), 0, -1));
-    gncCustomerSetName (cust, gtk_editable_get_chars
-                        (GTK_EDITABLE (cw->company_entry), 0, -1));
+    gncCustomerSetID (cust, gtk_entry_get_text (GTK_ENTRY (cw->id_entry)));
+    gncCustomerSetName (cust, gtk_entry_get_text (GTK_ENTRY (cw->company_entry)));
 
-    gncAddressSetName (addr, gtk_editable_get_chars
-                       (GTK_EDITABLE (cw->name_entry), 0, -1));
-    gncAddressSetAddr1 (addr, gtk_editable_get_chars
-                        (GTK_EDITABLE (cw->addr1_entry), 0, -1));
-    gncAddressSetAddr2 (addr, gtk_editable_get_chars
-                        (GTK_EDITABLE (cw->addr2_entry), 0, -1));
-    gncAddressSetAddr3 (addr, gtk_editable_get_chars
-                        (GTK_EDITABLE (cw->addr3_entry), 0, -1));
-    gncAddressSetAddr4 (addr, gtk_editable_get_chars
-                        (GTK_EDITABLE (cw->addr4_entry), 0, -1));
-    gncAddressSetPhone (addr, gtk_editable_get_chars
-                        (GTK_EDITABLE (cw->phone_entry), 0, -1));
-    gncAddressSetFax (addr, gtk_editable_get_chars
-                      (GTK_EDITABLE (cw->fax_entry), 0, -1));
-    gncAddressSetEmail (addr, gtk_editable_get_chars
-                        (GTK_EDITABLE (cw->email_entry), 0, -1));
-
-    gncAddressSetName (shipaddr, gtk_editable_get_chars
-                       (GTK_EDITABLE (cw->shipname_entry), 0, -1));
-    gncAddressSetAddr1 (shipaddr, gtk_editable_get_chars
-                        (GTK_EDITABLE (cw->shipaddr1_entry), 0, -1));
-    gncAddressSetAddr2 (shipaddr, gtk_editable_get_chars
-                        (GTK_EDITABLE (cw->shipaddr2_entry), 0, -1));
-    gncAddressSetAddr3 (shipaddr, gtk_editable_get_chars
-                        (GTK_EDITABLE (cw->shipaddr3_entry), 0, -1));
-    gncAddressSetAddr4 (shipaddr, gtk_editable_get_chars
-                        (GTK_EDITABLE (cw->shipaddr4_entry), 0, -1));
-    gncAddressSetPhone (shipaddr, gtk_editable_get_chars
-                        (GTK_EDITABLE (cw->shipphone_entry), 0, -1));
-    gncAddressSetFax (shipaddr, gtk_editable_get_chars
-                      (GTK_EDITABLE (cw->shipfax_entry), 0, -1));
-    gncAddressSetEmail (shipaddr, gtk_editable_get_chars
-                        (GTK_EDITABLE (cw->shipemail_entry), 0, -1));
+    gncAddressSetName (addr, gtk_entry_get_text (GTK_ENTRY (cw->name_entry)));
+    gncAddressSetAddr1 (addr, gtk_entry_get_text (GTK_ENTRY (cw->addr1_entry)));
+    gncAddressSetAddr2 (addr, gtk_entry_get_text (GTK_ENTRY (cw->addr2_entry)));
+    gncAddressSetAddr3 (addr, gtk_entry_get_text (GTK_ENTRY (cw->addr3_entry)));
+    gncAddressSetAddr4 (addr, gtk_entry_get_text (GTK_ENTRY (cw->addr4_entry)));
+    gncAddressSetPhone (addr, gtk_entry_get_text (GTK_ENTRY (cw->phone_entry)));
+    gncAddressSetFax (addr, gtk_entry_get_text (GTK_ENTRY (cw->fax_entry)));
+    gncAddressSetEmail (addr, gtk_entry_get_text (GTK_ENTRY (cw->email_entry)));
+    gncAddressSetName (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipname_entry)));
+    gncAddressSetAddr1 (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipaddr1_entry)));
+    gncAddressSetAddr2 (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipaddr2_entry)));
+    gncAddressSetAddr3 (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipaddr3_entry)));
+    gncAddressSetAddr4 (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipaddr4_entry)));
+    gncAddressSetPhone (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipphone_entry)));
+    gncAddressSetFax (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipfax_entry)));
+    gncAddressSetEmail (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipemail_entry)));
 
     gncCustomerSetActive (cust, gtk_toggle_button_get_active
                           (GTK_TOGGLE_BUTTON (cw->active_check)));

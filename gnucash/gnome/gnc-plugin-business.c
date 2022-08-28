@@ -348,7 +348,7 @@ typedef struct GncPluginBusinessPrivate
 } GncPluginBusinessPrivate;
 
 #define GNC_PLUGIN_BUSINESS_GET_PRIVATE(o)  \
-   ((GncPluginBusinessPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_BUSINESS))
+   ((GncPluginBusinessPrivate*)gnc_plugin_business_get_instance_private((GncPluginBusiness*)o))
 
 static GObjectClass *parent_class = NULL;
 

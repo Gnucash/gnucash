@@ -5,7 +5,7 @@ if (WITH_PYTHON)
     # Because it hasn't been built yet
     set(test_core_dir ${CMAKE_BINARY_DIR}/common/test-core)
   endif()
-  add_custom_target(test-python-bindings ALL DEPENDS unittest_support gnucash-core-c-build gnucash-core-c-py sw_app_utils)
+  add_custom_target(test-python-bindings ALL DEPENDS unittest_support gnucash-core-c-build gnucash-core-c-py sw-core-utils-build sw-core-utils-py sw-app-utils-build sw-app-utils-py)
   add_dependencies(check test-python-bindings)
   add_test(python-bindings ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/runTests.py.in)
   set_property(TEST python-bindings PROPERTY ENVIRONMENT

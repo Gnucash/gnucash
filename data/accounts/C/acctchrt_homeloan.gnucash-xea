@@ -118,6 +118,12 @@
   </act:commodity>
   <act:description>Interest</act:description>
   <act:parent type="new">2f076f5ae073173a11d33420cd39fa4d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Mortgage Interest</act:name>

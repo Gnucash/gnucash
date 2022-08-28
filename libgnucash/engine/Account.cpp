@@ -138,7 +138,7 @@ enum
 };
 
 #define GET_PRIVATE(o)  \
-    ((AccountPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_ACCOUNT))
+    ((AccountPrivate*)gnc_account_get_instance_private((Account*)o))
 
 /* This map contains a set of strings representing the different column types. */
 static const std::map<GNCAccountType, const char*> gnc_acct_debit_strs = {
@@ -6101,10 +6101,13 @@ gnc_account_delete_all_bayes_maps (Account *acc)
     {
         auto slots = qof_instance_get_slots_prefix (QOF_INSTANCE (acc), IMAP_FRAME_BAYES);
         if (!slots.size()) return;
+        xaccAccountBeginEdit (acc);
         for (auto const & entry : slots)
         {
              qof_instance_slot_path_delete (QOF_INSTANCE (acc), {entry.first});
         }
+        qof_instance_set_dirty (QOF_INSTANCE(acc));
+        xaccAccountCommitEdit (acc);
     }
 }
 

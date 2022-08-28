@@ -58,7 +58,7 @@ typedef struct GncTreeViewPricePrivate
 } GncTreeViewPricePrivate;
 
 #define GNC_TREE_VIEW_PRICE_GET_PRIVATE(o)  \
-   ((GncTreeViewPricePrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_TREE_VIEW_PRICE))
+   ((GncTreeViewPricePrivate*)gnc_tree_view_price_get_instance_private((GncTreeViewPrice*)o))
 
 
 /************************************************************/
@@ -762,7 +762,7 @@ get_selected_prices_helper (GtkTreeModel *s_model,
     price = gnc_tree_model_price_get_price (GNC_TREE_MODEL_PRICE(model),
                                             &iter);
     if (price)
-        *return_list = g_list_append(*return_list, price);
+        *return_list = g_list_prepend (*return_list, price);
 }
 
 /*
@@ -780,7 +780,7 @@ gnc_tree_view_price_get_selected_prices (GncTreeViewPrice *view)
 
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view));
     gtk_tree_selection_selected_foreach(selection, get_selected_prices_helper, &return_list);
-    return return_list;
+    return g_list_reverse (return_list);
 }
 
 static void
@@ -805,7 +805,7 @@ get_selected_commodity_helper (GtkTreeModel *s_model,
     commodity = gnc_tree_model_price_get_commodity (GNC_TREE_MODEL_PRICE(model), &iter);
 
     if (commodity)
-        *return_list = g_list_append(*return_list, commodity);
+        *return_list = g_list_prepend (*return_list, commodity);
 }
 
 /*
@@ -824,5 +824,5 @@ gnc_tree_view_price_get_selected_commodities (GncTreeViewPrice *view)
 
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view));
     gtk_tree_selection_selected_foreach (selection, get_selected_commodity_helper, &return_list);
-    return return_list;
+    return g_list_reverse (return_list);
 }

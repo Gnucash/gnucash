@@ -58,7 +58,7 @@ typedef struct GncTreeViewCommodityPrivate
 } GncTreeViewCommodityPrivate;
 
 #define GNC_TREE_VIEW_COMMODITY_GET_PRIVATE(o)  \
-   ((GncTreeViewCommodityPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_TREE_VIEW_COMMODITY))
+   ((GncTreeViewCommodityPrivate*)gnc_tree_view_commodity_get_instance_private(GncTreeViewCommodity*)o))
 
 
 /************************************************************/

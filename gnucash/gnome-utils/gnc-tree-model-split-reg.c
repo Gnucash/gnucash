@@ -220,7 +220,7 @@ gtm_sr_make_iter (GncTreeModelSplitReg *model, gint f, GList *tnode, GList *snod
 
 
 #define GNC_TREE_MODEL_SPLIT_REG_GET_PRIVATE(o)  \
-   ((GncTreeModelSplitRegPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_TREE_MODEL_SPLIT_REG))
+   ((GncTreeModelSplitRegPrivate*)gnc_tree_model_split_reg_get_instance_private((GncTreeModelSplitReg*)o))
 
 /************************************************************/
 /*               g_object required functions                */
@@ -516,7 +516,7 @@ gtm_sr_foreach_func (GtkTreeModel *model,
     g_assert ( rowref_list != NULL );
 
     rowref = gtk_tree_row_reference_new (model, path);
-    *rowref_list = g_list_append (*rowref_list, rowref);
+    *rowref_list = g_list_prepend (*rowref_list, rowref);
 
     return FALSE; /* do not stop walking the store, call us with next row */
 }
@@ -529,8 +529,6 @@ gtm_sr_remove_all_rows (GncTreeModelSplitReg *model)
     GList *node;
 
     gtk_tree_model_foreach (GTK_TREE_MODEL(model), (GtkTreeModelForeachFunc)gtm_sr_foreach_func, &rr_list);
-
-    rr_list = g_list_reverse (rr_list);
 
     for ( node = rr_list;  node != NULL;  node = node->next )
     {

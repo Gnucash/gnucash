@@ -71,6 +71,7 @@ typedef struct
     GtkWidget * type_combobox;
     GtkWidget * price_edit;
 
+    GtkWidget * help_button;
     GtkWidget * cancel_button;
     GtkWidget * apply_button;
     GtkWidget * ok_button;
@@ -371,6 +372,10 @@ pedit_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
         gnc_price_unref (pedit_dialog->price);
         pedit_dialog->price = new_price;
     }
+    else if (response == GTK_RESPONSE_HELP)
+    {
+        gnc_gnome_help (GTK_WINDOW (pedit_dialog->dialog), HF_HELP, HL_PRICE_EDIT);
+    }
     else
     {
         gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(pedit_dialog->dialog));
@@ -543,6 +548,9 @@ gnc_price_pedit_dialog_create (GtkWidget *parent,
 
     g_signal_connect (G_OBJECT (w), "changed",
                       G_CALLBACK (pedit_data_changed_cb), pedit_dialog);
+
+    w = GTK_WIDGET(gtk_builder_get_object (builder, "pd_help_button"));
+    pedit_dialog->help_button = w;
 
     w = GTK_WIDGET(gtk_builder_get_object (builder, "pd_cancel_button"));
     pedit_dialog->cancel_button = w;

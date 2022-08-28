@@ -51,6 +51,12 @@
       <menuitem name="ViewToolbar" action="ViewToolbarAction"/>
       <menuitem name="ViewSummary" action="ViewSummaryAction"/>
       <menuitem name="ViewStatusbar" action="ViewStatusbarAction"/>
+      <menu name="ViewTabPosition" action="ViewTabPositionAction">
+        <menuitem name="ViewTabPositionTop" action="ViewTabPositionTopAction"/>
+        <menuitem name="ViewTabPositionBottom" action="ViewTabPositionBottomAction"/>
+        <menuitem name="ViewTabPositionLeft" action="ViewTabPositionLeftAction"/>
+        <menuitem name="ViewTabPositionRight" action="ViewTabPositionRightAction"/>
+      </menu>
       <separator name="ViewSep1"/>
       <placeholder name="ViewContentPlaceholder"/>
       <separator name="ViewSep2"/>

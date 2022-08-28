@@ -14,22 +14,12 @@
       <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Dummy commodity Line</col>
-      </row>
-    </data>
   </object>
   <object class="GtkListStore" id="liststore2">
     <columns>
       <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Dummy namespace Line</col>
-      </row>
-    </data>
   </object>
   <object class="GtkDialog" id="security_dialog">
     <property name="can-focus">False</property>
@@ -302,11 +292,11 @@
               <object class="GtkComboBox" id="namespace_cbwe">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="has-tooltip">True</property>
+                <property name="tooltip-markup" translatable="yes">Select a category for the commodity or enter a new one. One might use investment categories like STOCKS and BONDS or exchange names like NASDAQ and LSE.</property>
                 <property name="model">liststore2</property>
                 <property name="has-entry">True</property>
                 <property name="entry-text-column">0</property>
-                <property name="has-tooltip">True</property>
-                <property name="tooltip-markup" translatable="yes">Select a category for the commodity or enter a new one. One might use investment categories like STOCKS and BONDS or exchange names like NASDAQ and LSE.</property>
                 <signal name="changed" handler="gnc_ui_commodity_changed_cb" swapped="no"/>
                 <child internal-child="entry">
                   <object class="GtkEntry" id="combobox-entry5">
@@ -492,7 +482,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">_Type</property>
+                <property name="label" translatable="yes">Nam_espace</property>
                 <property name="use-underline">True</property>
                 <property name="justify">center</property>
                 <property name="mnemonic-widget">namespace_cbwe</property>
@@ -774,7 +764,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">_Type</property>
+                <property name="label" translatable="yes">Nam_espace</property>
                 <property name="use-underline">True</property>
                 <property name="justify">center</property>
                 <property name="mnemonic-widget">ss_namespace_cbwe</property>

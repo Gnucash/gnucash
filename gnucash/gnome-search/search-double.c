@@ -61,7 +61,7 @@ struct _GNCSearchDoublePrivate
 G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchDouble, gnc_search_double, GNC_TYPE_SEARCH_CORE_TYPE)
 
 #define _PRIVATE(o) \
-   ((GNCSearchDoublePrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_SEARCH_DOUBLE))
+   ((GNCSearchDoublePrivate*)gnc_search_double_get_instance_private((GNCSearchDouble*)o))
 
 static GNCSearchCoreTypeClass *parent_class;
 

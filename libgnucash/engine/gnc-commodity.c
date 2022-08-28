@@ -94,7 +94,7 @@ static const char*
 is_unset = "unset";
 
 #define GET_PRIVATE(o) \
-    ((gnc_commodityPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_COMMODITY))
+    ((gnc_commodityPrivate*)gnc_commodity_get_instance_private((gnc_commodity*)o))
 
 struct _GncCommodityClass
 {

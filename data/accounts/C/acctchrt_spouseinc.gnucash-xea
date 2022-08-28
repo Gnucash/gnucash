@@ -101,6 +101,12 @@
   </act:commodity>
   <act:description>Taxes (Spouse)</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Federal</act:name>

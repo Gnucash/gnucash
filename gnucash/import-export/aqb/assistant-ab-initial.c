@@ -755,7 +755,7 @@ save_kvp_acc_cb(gpointer key, gpointer value, gpointer user_data)
     const gchar *ab_bankcode, *gnc_bankcode;
 #ifdef AQBANKING6
     gchar *ab_online_id;
-    const gchar *gnc_online_id;
+    gchar *gnc_online_id;
 #endif
 
     g_return_if_fail(ab_acc && gnc_acc);
@@ -796,6 +796,7 @@ save_kvp_acc_cb(gpointer key, gpointer value, gpointer user_data)
     if (ab_online_id && (!gnc_online_id || (strcmp(ab_online_id, gnc_online_id) != 0)))
         gnc_import_set_acc_online_id(gnc_acc, ab_online_id);
     g_free(ab_online_id);
+    g_free (gnc_online_id);
 #endif
 }
 

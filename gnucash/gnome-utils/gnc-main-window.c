@@ -51,6 +51,7 @@
 #include "engine-helpers.h"
 #include "file-utils.h"
 #include "gnc-component-manager.h"
+#include "dialog-doclink-utils.h"
 #include "gnc-engine.h"
 #include "gnc-features.h"
 #include "gnc-file.h"
@@ -59,6 +60,7 @@
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-gui-query.h"
+#include "gnc-gtk-utils.h"
 #include "gnc-hooks.h"
 #include "gnc-icons.h"
 #include "gnc-session.h"
@@ -166,6 +168,7 @@ static void gnc_main_window_cmd_view_refresh (GtkAction *action, GncMainWindow *
 static void gnc_main_window_cmd_view_toolbar (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_summary (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_statusbar (GtkAction *action, GncMainWindow *window);
+static void gnc_main_window_cmd_view_tab_position (GtkAction *action, GtkRadioAction *current, GncMainWindow *window);
 static void gnc_main_window_cmd_actions_reset_warnings (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_actions_rename_page (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_window_new (GtkAction *action, GncMainWindow *window);
@@ -244,7 +247,7 @@ GNC_DEFINE_TYPE_WITH_CODE(GncMainWindow, gnc_main_window, GTK_TYPE_WINDOW,
 		                               gnc_window_main_window_init))
 
 #define GNC_MAIN_WINDOW_GET_PRIVATE(o)  \
-   ((GncMainWindowPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_MAIN_WINDOW))
+   ((GncMainWindowPrivate*)gnc_main_window_get_instance_private((GncMainWindow*)o))
 
 /** This data structure maintains information about one action groups
  *  that has been installed in this window. */
@@ -339,6 +342,7 @@ static GtkActionEntry gnc_menu_actions [] =
 
     /* View menu */
 
+    { "ViewTabPositionAction", NULL, N_("Tab P_osition"), NULL, NULL, NULL },
     {
         "ViewSortByAction", NULL, N_("_Sort By..."), NULL,
         N_("Select sorting criteria for this page view"), NULL
@@ -423,6 +427,32 @@ static GtkToggleActionEntry toggle_actions [] =
 };
 /** The number of toggle actions provided by the main window. */
 static guint n_toggle_actions = G_N_ELEMENTS (toggle_actions);
+
+/** An array of all of the radio actions provided by the main window
+ *  for tab positions. */
+static GtkRadioActionEntry tab_pos_radio_entries [] =
+{
+    {
+        "ViewTabPositionTopAction", NULL, N_("To_p"), NULL,
+        N_("Display the notebook tabs at the top of the window."), GTK_POS_TOP
+    },
+    {
+        "ViewTabPositionBottomAction", NULL, N_("B_ottom"), NULL,
+        N_("Display the notebook tabs at the bottom of the window."), GTK_POS_BOTTOM
+    },
+    {
+        "ViewTabPositionLeftAction", NULL, N_("_Left"), NULL,
+        N_("Display the notebook tabs at the left of the window."), GTK_POS_LEFT
+    },
+    {
+        "ViewTabPositionRightAction", NULL, N_("_Right"), NULL,
+        N_("Display the notebook tabs at the right of the window."), GTK_POS_RIGHT
+    },
+};
+
+/** The number of radio actions provided by the main window for tab
+ *  positions. */
+static guint n_tab_pos_radio_entries = G_N_ELEMENTS (tab_pos_radio_entries);
 
 #ifndef MAC_INTEGRATION
 /** An array of all of the radio action provided by the main window
@@ -2132,9 +2162,39 @@ gnc_main_window_update_tab_color (gpointer gsettings, gchar *pref, gpointer user
 }
 
 
-/** Set the tab label ellipsize value. The special check for a zero
- *  value handles the case where a user hasn't set a tab width and
- *  the preference default isn't detected.
+/** This data structure allows the passing of the tab width and
+ *  whether the tab layout is on the left or right.
+ */
+typedef struct
+{
+    gint tab_width;
+    gboolean tabs_left_right;
+} TabWidth;
+
+static TabWidth *
+populate_tab_width_struct (void)
+{
+    TabWidth *tw;
+
+    tw = g_new0 (TabWidth, 1);
+    tw->tab_width = gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_WIDTH);
+    tw->tabs_left_right = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_LEFT) ||
+                          gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_RIGHT);
+
+    return tw;
+}
+
+/** Set the tab label ellipsize value.
+ *  When the tabs are on the left or right, the label width is set to
+ *  the tab_width value. Doing this maintains a steady notepad header
+ *  width for the tabs.
+ *
+ *  When the tabs are on the top or bottom, the label width is set to
+ *  the number of characters when shorter than tab_width so they take
+ *  up less room.
+ *
+ *  The special check for a zero value handles the case where a user
+ *  hasn't set a tab width and the preference default isn't detected.
  *
  *  @internal
  *
@@ -2142,9 +2202,11 @@ gnc_main_window_update_tab_color (gpointer gsettings, gchar *pref, gpointer user
  *
  *  @param tab_width Tab width the user has set in preferences.
  *
+ *  @param tab_left_right Whether the tab layout is on the left or right.
+ *
  */
 static void
-gnc_main_window_set_tab_ellipsize (GtkWidget *label, gint tab_width)
+gnc_main_window_set_tab_ellipsize (GtkWidget *label, gint tab_width, gboolean tab_left_right)
 {
     const gchar *lab_text = gtk_label_get_text (GTK_LABEL(label));
 
@@ -2153,7 +2215,11 @@ gnc_main_window_set_tab_ellipsize (GtkWidget *label, gint tab_width)
         gint text_length = g_utf8_strlen (lab_text, -1);
         if (text_length < tab_width)
         {
-            gtk_label_set_width_chars (GTK_LABEL(label), text_length);
+            if (tab_left_right) // tabs position is left or right
+                gtk_label_set_width_chars (GTK_LABEL(label), tab_width);
+            else // tabs position is top or bottom
+                gtk_label_set_width_chars (GTK_LABEL(label), text_length);
+
             gtk_label_set_ellipsize (GTK_LABEL(label), PANGO_ELLIPSIZE_NONE);
         }
         else
@@ -2182,19 +2248,21 @@ gnc_main_window_set_tab_ellipsize (GtkWidget *label, gint tab_width)
  */
 static void
 gnc_main_window_update_tab_width_one_page (GncPluginPage *page,
-        gpointer user_data)
+                                           gpointer user_data)
 {
-    gint *new_value = user_data;
+    TabWidth *tw = user_data;
     GtkWidget *label;
 
-    ENTER("page %p, visible %d", page, *new_value);
+    ENTER("page %p, tab width %d, tabs on left or right %d",
+           page, tw->tab_width, tw->tabs_left_right);
+
     label = g_object_get_data(G_OBJECT (page), PLUGIN_PAGE_TAB_LABEL);
     if (!label)
     {
         LEAVE("no label");
         return;
     }
-    gnc_main_window_set_tab_ellipsize (label, *new_value);
+    gnc_main_window_set_tab_ellipsize (label, tw->tab_width, tw->tabs_left_right);
     LEAVE(" ");
 }
 
@@ -2214,13 +2282,15 @@ gnc_main_window_update_tab_width_one_page (GncPluginPage *page,
 static void
 gnc_main_window_update_tab_width (gpointer prefs, gchar *pref, gpointer user_data)
 {
-    gint new_value;
+    TabWidth *tw;
 
     ENTER(" ");
-    new_value = gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_WIDTH);
-    gnc_main_window_foreach_page(
-        gnc_main_window_update_tab_width_one_page,
-        &new_value);
+
+    tw = populate_tab_width_struct ();
+
+    gnc_main_window_foreach_page (gnc_main_window_update_tab_width_one_page, tw);
+    g_free (tw);
+
     LEAVE(" ");
 }
 
@@ -2313,7 +2383,7 @@ main_window_update_page_name (GncPluginPage *page,
     GncMainWindowPrivate *priv;
     GtkWidget *label, *entry;
     gchar *name, *old_page_name, *old_page_long_name;
-    gint lab_width;
+    TabWidth *tw;
 
     ENTER(" ");
 
@@ -2353,8 +2423,9 @@ main_window_update_page_name (GncPluginPage *page,
         gtk_label_set_text(GTK_LABEL(label), name);
 
     /* Adjust the label width for new text */
-    lab_width = gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_WIDTH);
-    gnc_main_window_update_tab_width_one_page (page, &lab_width);
+    tw = populate_tab_width_struct ();
+    gnc_main_window_update_tab_width_one_page (page, tw);
+    g_free (tw);
 
     /* Update Tooltip on notebook Tab */
     if (old_page_long_name && old_page_name
@@ -3170,7 +3241,7 @@ gnc_main_window_open_page (GncMainWindow *window,
     const gchar *icon, *text, *color_string, *lab_text;
     GtkWidget *image;
     GList *tmp;
-    gint width;
+    TabWidth *tw;
 
     ENTER("window %p, page %p", window, page);
     if (window)
@@ -3214,13 +3285,14 @@ gnc_main_window_open_page (GncMainWindow *window,
     /*
      * The page tab.
      */
-    width = gnc_prefs_get_float(GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_WIDTH);
     icon = GNC_PLUGIN_PAGE_GET_CLASS(page)->tab_icon;
     lab_text = gnc_plugin_page_get_page_name(page);
     label = gtk_label_new (lab_text);
     g_object_set_data (G_OBJECT (page), PLUGIN_PAGE_TAB_LABEL, label);
 
-    gnc_main_window_set_tab_ellipsize (label, width);
+    tw = populate_tab_width_struct ();
+    gnc_main_window_update_tab_width_one_page (page, tw);
+    g_free (tw);
 
     gtk_widget_show (label);
 
@@ -3576,12 +3648,21 @@ gnc_main_window_update_tab_position (gpointer prefs, gchar *pref, gpointer user_
     GncMainWindow *window;
     GtkPositionType position = GTK_POS_TOP;
     GncMainWindowPrivate *priv;
+    GtkAction *first_action;
+    GtkAction *position_action;
+    gsize i;
 
     g_return_if_fail (GNC_IS_MAIN_WINDOW(user_data));
 
     window = GNC_MAIN_WINDOW(user_data);
 
     ENTER ("window %p", window);
+
+    /* Ignore notification of the preference that is being set to false when
+     * the choice of tab position changes. */
+    if (pref && !gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, pref))
+        return;
+
     if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_BOTTOM))
         position = GTK_POS_BOTTOM;
     else if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_LEFT))
@@ -3591,6 +3672,28 @@ gnc_main_window_update_tab_position (gpointer prefs, gchar *pref, gpointer user_
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE (window);
     gtk_notebook_set_tab_pos (GTK_NOTEBOOK (priv->notebook), position);
+
+    /* Groups of radio actions use the first action for the callback and all
+     * change events so block/unblock signals on the first radio action. */
+    first_action = gtk_action_group_get_action (priv->action_group,
+                                                tab_pos_radio_entries[0].name);
+
+    for (i = n_tab_pos_radio_entries - 1; i > 0; i--)
+        if (tab_pos_radio_entries[i].value == position)
+            break;
+
+    position_action = gtk_action_group_get_action (priv->action_group,
+                                                   tab_pos_radio_entries[i].name);
+
+    g_signal_handlers_block_by_func (G_OBJECT (first_action),
+                                     G_CALLBACK (gnc_main_window_cmd_view_tab_position),
+                                     window);
+    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (position_action), TRUE);
+    g_signal_handlers_unblock_by_func (G_OBJECT (first_action),
+                                       G_CALLBACK (gnc_main_window_cmd_view_tab_position),
+                                       window);
+
+    gnc_main_window_update_tab_width (NULL, GNC_PREF_TAB_WIDTH, NULL);
 
     LEAVE ("");
 }
@@ -3844,6 +3947,12 @@ gnc_main_window_setup_window (GncMainWindow *window)
     g_assert(merge_id || error);
     if (merge_id)
     {
+        gtk_action_group_add_radio_actions (priv->action_group,
+                                            tab_pos_radio_entries,
+                                            n_tab_pos_radio_entries,
+                                            0,
+                                            G_CALLBACK(gnc_main_window_cmd_view_tab_position),
+                                            window);
         gtk_window_add_accel_group (GTK_WINDOW (window),
                                     gtk_ui_manager_get_accel_group(window->ui_merge));
         gtk_ui_manager_ensure_update (window->ui_merge);
@@ -4601,6 +4710,45 @@ gnc_main_window_cmd_window_move_page (GtkAction *action, GncMainWindow *window)
     LEAVE("page moved");
 }
 
+static void
+gnc_main_window_cmd_view_tab_position (GtkAction *action,
+                                         GtkRadioAction *current,
+                                         GncMainWindow *window)
+{
+    GtkPositionType value = gtk_radio_action_get_current_value(current);
+
+    if (value != GTK_POS_TOP && gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_TOP))
+        gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_TOP, FALSE);
+
+    if (value != GTK_POS_BOTTOM && gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_BOTTOM))
+        gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_BOTTOM, FALSE);
+
+    if (value != GTK_POS_LEFT && gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_LEFT))
+        gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_LEFT, FALSE);
+
+    if (value != GTK_POS_RIGHT && gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_RIGHT))
+        gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_RIGHT, FALSE);
+
+    switch (value)
+    {
+    case GTK_POS_TOP:
+        gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_TOP, TRUE);
+        break;
+
+    case GTK_POS_BOTTOM:
+        gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_BOTTOM, TRUE);
+        break;
+
+    case GTK_POS_LEFT:
+        gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_LEFT, TRUE);
+        break;
+
+    case GTK_POS_RIGHT:
+        gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_RIGHT, TRUE);
+        break;
+    }
+}
+
 #ifndef MAC_INTEGRATION
 static void
 gnc_main_window_cmd_window_raise (GtkAction *action,
@@ -4702,6 +4850,67 @@ url_signal_cb (GtkAboutDialog *dialog, gchar *uri, gpointer data)
     return TRUE;
 }
 
+static gboolean
+link_button_cb (GtkLinkButton *button, gpointer user_data)
+{
+   const gchar *uri = gtk_link_button_get_uri (button);
+   gnc_launch_doclink (GTK_WINDOW(user_data), uri);
+   return TRUE;
+}
+
+static void
+add_about_paths (GtkDialog *dialog)
+{
+    GtkWidget *page_vbox = gnc_get_dialog_widget_from_id (dialog, "page_vbox");
+    GtkWidget *grid;
+    GList *paths;
+    gint i = 0;
+
+    if (!page_vbox)
+    {
+        PWARN("Unable to find AboutDialog 'page_vbox' Widget");
+        return;
+    }
+
+    grid = gtk_grid_new ();
+    paths = gnc_list_all_paths ();
+
+    for (GList *path_node = paths; path_node; path_node = g_list_next (path_node))
+    {
+        EnvPaths *ep = (EnvPaths*)path_node->data;
+
+        gchar *env_name = g_strconcat (ep->env_name, ":", NULL);
+        GtkWidget *label = gtk_label_new (env_name);
+        const gchar *uri = gnc_uri_create_uri ("file", NULL, 0, NULL, NULL, ep->env_path);
+        gchar *display_uri = gnc_doclink_get_unescaped_just_uri (uri);
+        GtkWidget *widget = gtk_link_button_new_with_label (uri, display_uri);
+
+        gtk_grid_attach (GTK_GRID(grid), label, 0, i, 1, 1);
+        gtk_widget_set_halign (label, GTK_ALIGN_END);
+        gtk_grid_attach (GTK_GRID(grid), widget, 1, i, 1, 1);
+        gtk_widget_set_halign (widget, GTK_ALIGN_START);
+        gtk_widget_set_margin_top (widget, 0);
+        gtk_widget_set_margin_bottom (widget, 0);
+
+        if (ep->modifiable)
+        {
+            GtkWidget *mod_lab = gtk_label_new (_("(user modifiable)"));
+            gtk_grid_attach (GTK_GRID(grid), mod_lab, 2, i, 1, 1);
+            gtk_widget_show (mod_lab);
+        }
+        g_signal_connect (widget, "activate-link",
+                          G_CALLBACK(link_button_cb), dialog);
+        i++;
+
+        g_free (display_uri);
+        g_free (env_name);
+    }
+    gtk_container_add_with_properties (GTK_CONTAINER(page_vbox), grid,
+                                       "position", 1, NULL);
+    gtk_widget_show_all (grid);
+    g_list_free_full (paths, g_free);
+}
+
 /** Create and display the "about" dialog for gnucash.
  *
  *  @param action The GtkAction for the "about" menu item.
@@ -4759,6 +4968,10 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
     g_object_unref (logo);
     g_signal_connect (dialog, "activate-link",
                       G_CALLBACK (url_signal_cb), NULL);
+
+    // Add enviroment paths
+    add_about_paths (dialog);
+
     /* Set dialog to resize. */
     gtk_window_set_resizable(GTK_WINDOW (dialog), TRUE);
 

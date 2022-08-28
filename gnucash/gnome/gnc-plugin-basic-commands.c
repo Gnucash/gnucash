@@ -38,6 +38,7 @@
 
 #include "gnc-plugin-basic-commands.h"
 #include "gnc-ui-util.h"
+#include "gnc-component-manager.h"
 
 #include "dialog-doclink.h"
 #include "dialog-book-close.h"
@@ -278,7 +279,7 @@ typedef struct GncPluginBasicCommandsPrivate
 } GncPluginBasicCommandsPrivate;
 
 #define GNC_PLUGIN_BASIC_COMMANDS_GET_PRIVATE(o)  \
-   ((GncPluginBasicCommandsPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_BASIC_COMMANDS))
+   ((GncPluginBasicCommandsPrivate*)gnc_plugin_basic_commands_get_instance_private((GncPluginBasicCommands*)o))
 
 /** A pointer to the parent class of a plugin page. */
 static GObjectClass *parent_class = NULL;
@@ -557,6 +558,10 @@ gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActi
     sx_instances = gnc_sx_get_current_instances();
     gnc_sx_instance_model_summarize(sx_instances, &summary);
     gnc_sx_instance_model_effect_change(sx_instances, TRUE, &auto_created_txns, NULL);
+
+    if (auto_created_txns)
+        gnc_gui_refresh_all();
+
     if (summary.need_dialog)
     {
         gnc_ui_sx_since_last_run_dialog (window, sx_instances, auto_created_txns);

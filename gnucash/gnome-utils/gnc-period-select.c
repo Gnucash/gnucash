@@ -111,8 +111,10 @@ struct _GncPeriodSelectPrivate
     GtkWidget *date_label;
 };
 
+G_DEFINE_TYPE_WITH_PRIVATE(GncPeriodSelect, gnc_period_select, GTK_TYPE_BOX)
+
 #define GNC_PERIOD_SELECT_GET_PRIVATE(o)  \
-   ((GncPeriodSelectPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PERIOD_SELECT))
+   ((GncPeriodSelectPrivate*)gnc_period_select_get_instance_private((GncPeriodSelect*)o))
 
 
 /************************************************************/
@@ -559,8 +561,6 @@ gnc_period_select_class_init (GncPeriodSelectClass *klass)
                                             0,
                                             G_PARAM_READWRITE));
 }
-
-G_DEFINE_TYPE_WITH_PRIVATE(GncPeriodSelect, gnc_period_select, GTK_TYPE_BOX)
 
 /** Initialize a new instance of a gnucash accounting period selection
  *  widget.  This function allocates and initializes the object

@@ -249,6 +249,22 @@ Gnucash::CoreApp::parse_command_line (int argc, char **argv)
         exit(1);
     }
 
+    if (m_show_paths)
+    {
+        auto paths { gnc_list_all_paths ()};
+        std::cout << _("GnuCash Paths") << '\n';
+        for (auto n = paths; n; n = n->next)
+        {
+            auto it = static_cast<EnvPaths*>(n->data);
+            std::cout << it->env_name << ": " << it->env_path;
+            if (it->modifiable)
+                std::cout << ' ' << _("(user modifiable)");
+            std::cout << '\n';
+        }
+        g_list_free_full (paths, g_free);
+        exit (0);
+    }
+
     if (m_show_version)
     {
         bl::format rel_fmt (bl::translate ("GnuCash {1}"));
@@ -289,6 +305,8 @@ Gnucash::CoreApp::add_common_program_options (void)
          _("Enable extra/development/debugging features."))
         ("log", bpo::value (&m_log_flags),
          _("Log level overrides, of the form \"modulename={debug,info,warn,crit,error}\"\nExamples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\nThis can be invoked multiple times."))
+        ("paths", bpo::bool_switch(&m_show_paths),
+         _("Show paths"))
         ("logto", bpo::value (&m_log_to_filename),
          _("File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or \"stdout\"."));
 

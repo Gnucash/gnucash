@@ -100,7 +100,7 @@ typedef struct GNCLotPrivate
 } GNCLotPrivate;
 
 #define GET_PRIVATE(o) \
-    ((GNCLotPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_LOT))
+    ((GNCLotPrivate*)gnc_lot_get_instance_private((GNCLot*)o))
 
 #define gnc_lot_set_guid(L,G)  qof_instance_set_guid(QOF_INSTANCE(L),&(G))
 
@@ -399,8 +399,12 @@ gnc_lot_get_account (const GNCLot *lot)
 
 GncInvoice * gnc_lot_get_cached_invoice (const GNCLot *lot)
 {
-    if (!lot) return NULL;
-    return GET_PRIVATE(lot)->cached_invoice;
+     if (!lot) return NULL;
+     else
+     {
+         GNCLotPrivate *priv = GET_PRIVATE(lot);
+         return priv->cached_invoice;
+     }
 }
 
 void

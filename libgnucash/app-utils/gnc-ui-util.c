@@ -210,13 +210,15 @@ gnc_get_default_directory (const gchar *section)
     gchar *dir;
 
     dir = gnc_prefs_get_string (section, GNC_PREF_LAST_PATH);
-    if (!dir)
+    if (!(dir && *dir))
+    {
+        g_free (dir); // if it's ""
 #ifdef G_OS_WIN32
         dir = g_strdup (g_get_user_data_dir ()); /* equivalent of "My Documents" */
 #else
         dir = g_strdup (g_get_home_dir ());
 #endif
-
+    }
     return dir;
 }
 
@@ -1176,7 +1178,8 @@ gnc_default_currency_common (gchar *requested_currency,
         mnemonic = gnc_prefs_get_string(section, GNC_PREF_CURRENCY_OTHER);
         currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
                                               GNC_COMMODITY_NS_CURRENCY, mnemonic);
-        DEBUG("mnemonic %s, result %p", mnemonic ? mnemonic : "(null)", currency);
+        DEBUG("mnemonic %s, result %p",
+              mnemonic && *mnemonic ? mnemonic : "(null)", currency);
         g_free(mnemonic);
     }
 

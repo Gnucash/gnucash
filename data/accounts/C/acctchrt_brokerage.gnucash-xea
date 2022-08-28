@@ -90,6 +90,12 @@
   </act:commodity>
   <act:description>Brokerage Account</act:description>
   <act:parent type="new">7ff59d92615cce4d8388d7e179ee3ff6</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bond</act:name>
@@ -173,6 +179,12 @@
   </act:commodity>
   <act:description>Interest Income</act:description>
   <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bond Interest</act:name>

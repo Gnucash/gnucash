@@ -745,12 +745,14 @@
                                          (or (string-ci=? qif-type "stock")
                                              (string-ci=? qif-type "etf")
                                              (string-ci=? qif-type "mutual fund")
-                                             (string-ci=? qif-type "index")
-))))
+                                             (string-ci=? qif-type "index"))))))
                         prefs)
-                   #f))))
-        ;; If a preferences match was found, use its namespace.
-        (if pref-match (cadr pref-match)))
+                   #f)))
+        ;; If a preferences match was found, use its namespace,
+        ;; otherwise the default non-currency namespace.
+        (if pref-match
+             (cadr pref-match)
+             (GNC-COMMODITY-NS-NONCURRENCY)))
       ;; There's no symbol. Use the built-in default.
       (GNC-COMMODITY-NS-NONCURRENCY)))
 
@@ -815,6 +817,7 @@
                          (set! qif-symbol security-name))
 
                      ;; Create the new security and add it to the hash table.
+
                      (hash-set! security-hash
                                 security-name
                                 (gnc-commodity-new book

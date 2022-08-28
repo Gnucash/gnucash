@@ -720,11 +720,16 @@ gnc_entry_ledger_compute_value (GncEntryLedger *ledger,
     disc_type = gnc_entry_ledger_get_type (ledger, ENTRY_DISTYPE_CELL);
     disc_how = gnc_entry_ledger_get_type (ledger, ENTRY_DISHOW_CELL);
 
-    /* Bills and exp-vouchers don't have discounts */
+    /* Some ledger types (see full list in gnc_entry_ledger_set_cells)
+       don't have discounts */
     if (ledger->type == GNCENTRY_BILL_ENTRY ||
-            ledger->type == GNCENTRY_BILL_VIEWER ||
-            ledger->type == GNCENTRY_EXPVOUCHER_ENTRY ||
-            ledger->type == GNCENTRY_EXPVOUCHER_VIEWER)
+        ledger->type == GNCENTRY_BILL_VIEWER ||
+        ledger->type == GNCENTRY_VEND_CREDIT_NOTE_ENTRY ||
+        ledger->type == GNCENTRY_VEND_CREDIT_NOTE_VIEWER ||
+        ledger->type == GNCENTRY_EXPVOUCHER_ENTRY ||
+        ledger->type == GNCENTRY_EXPVOUCHER_VIEWER ||
+        ledger->type == GNCENTRY_EMPL_CREDIT_NOTE_ENTRY ||
+        ledger->type == GNCENTRY_EMPL_CREDIT_NOTE_VIEWER)
     {
         g_assert (gnc_numeric_zero_p (discount));
         disc_type = GNC_AMT_TYPE_VALUE;
