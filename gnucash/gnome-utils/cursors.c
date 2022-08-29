@@ -83,9 +83,16 @@ gnc_set_busy_cursor (GtkWidget *w, gboolean update_now)
         gnc_ui_set_cursor (gtk_widget_get_window(w), GNC_CURSOR_BUSY, update_now);
     else
     {
-        GList *containerstop, *node;
+        /* gnc_ui_set_cursor runs the event loop and if there's an
+         * idle waiting that destroys a toplevel further down the list
+         * then we'll get a use after free crash unless we have our
+         * own reference, so take a reference to all of the toplevels
+         * and release them all after the loop finishes.
+         */
+        GList *containerstop = gtk_window_list_toplevels (), *node;
+        g_list_foreach (containerstop, (GFunc)g_object_ref, NULL);
 
-        for (containerstop = node = gtk_window_list_toplevels (); node; node = node->next)
+        for (node = containerstop; node; node = node->next)
         {
             w = node->data;
 
@@ -94,7 +101,7 @@ gnc_set_busy_cursor (GtkWidget *w, gboolean update_now)
 
             gnc_ui_set_cursor (gtk_widget_get_window(w), GNC_CURSOR_BUSY, update_now);
         }
-        g_list_free (containerstop);
+        g_list_free_full (containerstop, (GDestroyNotify)g_object_unref);
     }
 }
 
