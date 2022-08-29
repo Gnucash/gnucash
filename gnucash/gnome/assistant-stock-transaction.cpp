@@ -180,9 +180,9 @@ static const TxnTypeVec long_types
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE, // capgains_amt
         // Translators: this is a stock transaction describing sale of
-        // stock, and recording capital gains/loss
+        // stock, and recording capital gain/loss
         N_("Sell"),
-        N_("Selling stock, and record capital gains/loss")
+        N_("Selling stock, and record capital gain/loss")
     },
     {
         FieldMask::DISABLED,               // stock_amt
@@ -314,9 +314,9 @@ static const TxnTypeVec short_types
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE,          // capg_amt
         // Translators: this is a stock transaction describing cover
-        // buying stock, and recording capital gains/loss
-        N_("Cover buy"),
-        N_("Cover buying stock, and record capital gains/loss")
+        // buying stock, and recording capital gain/loss
+        N_("Buy to cover short"),
+        N_("Buy back stock to cover short and record capital gain/loss")
     },
     {
         FieldMask::DISABLED,               // stock_amt
@@ -1005,7 +1005,7 @@ stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
     auto date = gnc_date_edit_get_date (GNC_DATE_EDIT (info->date_edit));
     xaccTransSetDatePostedSecsNormalized (trans, date);
 
-    create_split (trans, info->txn_type->stock_value,
+    create_split (trans, info->txn_type->stock_amount | info->txn_type->stock_value,
                   NC_ ("Stock Assistant: Action field", "Stock"),
                   info->acct, account_commits, info->stock_memo_edit,
                   info->txn_type->stock_amount != FieldMask::DISABLED ? info->stock_amount_edit : nullptr,
@@ -1041,14 +1041,14 @@ stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
     if (info->txn_type->capgains_value != FieldMask::DISABLED)
     {
         create_split (trans, info->txn_type->capgains_value,
-                      NC_ ("Stock Assistant: Action field", "Capital Gains"),
+                      NC_ ("Stock Assistant: Action field", "Capital Gain"),
                       gas_account (info->capgains_account),
                       account_commits, info->capgains_memo_edit,
                       info->capgains_value, info->capgains_value, false);
 
         create_split (trans,
                       info->txn_type->capgains_value ^ (FieldMask::ENABLED_CREDIT | FieldMask::ENABLED_DEBIT),
-                      NC_ ("Stock Assistant: Action field", "Capital Gains"),
+                      NC_ ("Stock Assistant: Action field", "Capital Gain"),
                       info->acct, account_commits, info->capgains_memo_edit,
                       nullptr, info->capgains_value, false);
     }
