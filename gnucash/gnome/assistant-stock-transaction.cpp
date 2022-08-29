@@ -315,8 +315,8 @@ static const TxnTypeVec short_types
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE,          // capg_amt
         // Translators: this is a stock transaction describing cover
         // buying stock, and recording capital gains/loss
-        N_("Cover buy"),
-        N_("Cover buying stock, and record capital gains/loss")
+        N_("Buy to cover short"),
+        N_("Buy back stock to cover short and record capital gain/loss")
     },
     {
         FieldMask::DISABLED,               // stock_amt
