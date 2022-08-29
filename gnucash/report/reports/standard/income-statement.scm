@@ -9,9 +9,6 @@
 ;;    This code makes the assumption that you want your income
 ;;    statement to no more than daily resolution.
 ;;    
-;;    The Company Name field does not currently default to the name
-;;    in (gnc-get-current-book).
-;;    
 ;;    Line & column alignments may still not conform with
 ;;    textbook accounting practice (they're close though!).
 ;;    
@@ -137,7 +134,6 @@
 ;; options generator
 (define (income-statement-options-generator-internal reportname)
   (let* ((options (gnc:new-options))
-         (book (gnc-get-current-book)) ; XXX Find a way to get the book that opened the report
          (add-option 
           (lambda (new-option)
             (gnc:register-option options new-option))))
@@ -146,10 +142,6 @@
       (gnc:make-string-option
       gnc:pagename-general optname-report-title
       "a" opthelp-report-title (G_ reportname)))
-    (add-option
-      (gnc:make-string-option
-      gnc:pagename-general optname-party-name
-      "b" opthelp-party-name (or (gnc:company-info book gnc:*company-name*) "")))
     
     ;; period over which to report income
     (gnc:options-add-date-interval!
@@ -295,7 +287,7 @@
   ;; get all option's values
   (let* (
 	 (report-title (get-option gnc:pagename-general optname-report-title))
-	 (company-name (get-option gnc:pagename-general optname-party-name))
+	 (company-name (or (gnc:company-info (gnc-get-current-book) gnc:*company-name*) ""))
          (start-date-printable (gnc:date-option-absolute-time
 				(get-option gnc:pagename-general
 					    optname-start-date)))
