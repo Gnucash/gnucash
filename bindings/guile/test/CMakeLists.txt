@@ -157,6 +157,9 @@ set_local_dist(test_guile_DIST_local
     test-print-queries.cpp
     test-scm-query.cpp
     test-scm-query-string.cpp
+    test-options.scm
+    test-gnc-optiondb.scm
+    test-gnc-option-scheme-output.scm
     ${test_engine_SCHEME_DIST}
     ${test_scm_SCHEME}
     ${test_app_utils_scheme_SOURCES}

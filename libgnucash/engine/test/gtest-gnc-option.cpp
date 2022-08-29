@@ -35,7 +35,6 @@ extern "C"
 #include "gnc-commodity.h"
 #include "gnc-date.h"
 #include <time.h>
-#include "gnc-ui-util.h"
 #include "gnc-session.h"
 }
 
@@ -143,7 +142,8 @@ TEST(GncOption, test_bool_stream_in)
 class GncOptionTest : public ::testing::Test
 {
 protected:
-    GncOptionTest() : m_session{gnc_get_current_session()}, m_book{gnc_get_current_book()} {}
+    GncOptionTest() : m_session{gnc_get_current_session()},
+                      m_book{qof_session_get_book(gnc_get_current_session())} {}
     ~GncOptionTest() { gnc_clear_current_session(); }
 
     QofSession* m_session;
@@ -200,7 +200,7 @@ class GncOptionCommodityTest : public ::testing::Test
 {
 protected:
     GncOptionCommodityTest() : m_session{gnc_get_current_session()},
-                               m_book{gnc_get_current_book()},
+                               m_book{qof_session_get_book(gnc_get_current_session())},
                                m_table{gnc_commodity_table_new()}
     {
 /* We can't initialize the commodities with their values because we first must
@@ -522,7 +522,8 @@ class GncOptionAccountTest : public ::testing::Test
 {
 protected:
     GncOptionAccountTest() :
-        m_session{gnc_get_current_session()}, m_book{gnc_get_current_book()},
+        m_session{gnc_get_current_session()},
+        m_book{qof_session_get_book(gnc_get_current_session())},
         m_root{gnc_account_create_root(m_book)}
     {
         auto create_account = [this](Account* parent, GNCAccountType type,

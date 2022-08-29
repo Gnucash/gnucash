@@ -30,7 +30,6 @@
 
 extern "C"
 {
-#include "gnc-ui-util.h"
 #include "gnc-session.h"
 }
 
@@ -104,7 +103,8 @@ TEST_F(GncOptionDBTest, test_register_report_placement_option)
 struct GncOptionDBAccountTest : public ::testing::Test
 {
     GncOptionDBAccountTest() :
-        m_sess{gnc_get_current_session()}, m_book{gnc_get_current_book()},
+        m_sess{gnc_get_current_session()},
+        m_book{qof_session_get_book(gnc_get_current_session())},
         m_root{gnc_account_create_root(m_book)},
         m_db{std::make_unique<GncOptionDB>()}
     {
@@ -301,7 +301,8 @@ class GncOptionDBIOTest : public ::testing::Test
 {
 protected:
     GncOptionDBIOTest() :
-        m_book{gnc_get_current_book()}, m_root{gnc_account_create_root(m_book)},
+        m_book{qof_session_get_book(gnc_get_current_session())},
+        m_root{gnc_account_create_root(m_book)},
         m_db{std::make_unique<GncOptionDB>()}
     {
         auto create_account = [this](Account* parent, GNCAccountType type,

@@ -31,25 +31,6 @@ gnc_add_test_with_guile(test-sx test-sx.cpp
   APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS
 )
 
-set(gtest_gnc_option_SOURCES
-        ../../engine/test/gtest-gnc-option.cpp
-        ../../engine/test/gtest-gnc-optiondb.cpp)
-
-set(gtest_gnc_option_INCLUDES
-  ${MODULEPATH}
-  ${CMAKE_SOURCE_DIR}/libgnucash/engine
-  ${CMAKE_BINARY_DIR}/common # for config.h
-  ${GLIB2_INCLUDE_DIRS}
-  ${GUILE_INCLUDE_DIRS})
-
-set(gtest_gnc_option_LIBS
-  gnc-app-utils
-  gnc-engine
-  ${GLIB2_LDFLAGS}
-  ${GUILE_LDFLAGS}
-  gtest)
-
-gnc_add_test(test-gnc-option "${gtest_gnc_option_SOURCES}" gtest_gnc_option_INCLUDES gtest_gnc_option_LIBS)
 
 set(GUILE_DEPENDS
   scm-test-engine
@@ -65,13 +46,8 @@ set_dist_list(test_app_utils_DIST
   test-exp-parser.c
   test-print-parse-amount.cpp
   test-sx.cpp
-        ../../engine/test/gtest-gnc-option.cpp
-        ../../engine/test/gtest-gnc-optiondb.cpp
   test-c-interface.scm
   test-date-utilities.scm
-  test-options.scm
-  test-gnc-optiondb.scm
-  test-gnc-option-scheme-output.scm
   ${test_app_utils_scheme_SOURCES}
   ${test_app_utils_SOURCES}
 )
