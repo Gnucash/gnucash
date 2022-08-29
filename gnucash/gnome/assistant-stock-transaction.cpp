@@ -1005,7 +1005,7 @@ stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
     auto date = gnc_date_edit_get_date (GNC_DATE_EDIT (info->date_edit));
     xaccTransSetDatePostedSecsNormalized (trans, date);
 
-    create_split (trans, info->txn_type->stock_value,
+    create_split (trans, info->txn_type->stock_amount | info->txn_type->stock_value,
                   NC_ ("Stock Assistant: Action field", "Stock"),
                   info->acct, account_commits, info->stock_memo_edit,
                   info->txn_type->stock_amount != FieldMask::DISABLED ? info->stock_amount_edit : nullptr,
