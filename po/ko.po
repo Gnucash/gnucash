@@ -1,12 +1,13 @@
 # Taehun Yun <yooontehoon@naver.com>, 2022.
+# 이정희 <daemul72@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-22 06:33+0200\n"
-"PO-Revision-Date: 2022-05-27 05:18+0000\n"
-"Last-Translator: Taehun Yun <yooontehoon@naver.com>\n"
+"PO-Revision-Date: 2022-08-29 19:18+0000\n"
+"Last-Translator: 이정희 <daemul72@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ko/>\n"
 "Language: ko\n"
@@ -14,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 "X-Poedit-Language: Korean\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 
@@ -725,13 +726,13 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/assistant-acct-period.c:525
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s\n"
 "Congratulations! You are done closing books!\n"
 msgstr ""
-"%s\n"
-"축하합니다! 마감 장부를 완료했습니다!"
+"%s \n"
+"축하합니다! 장부 마감 작업을 완료했습니다!\n"
 
 #: gnucash/gnome/assistant-acct-period.c:594
 #: gnucash/gtkbuilder/dialog-fincalc.glade:650
@@ -2952,9 +2953,8 @@ msgid "Top"
 msgstr "상단"
 
 #: gnucash/gnome/dialog-progress.c:484 gnucash/gnome/dialog-progress.c:533
-#, fuzzy
 msgid "(paused)"
-msgstr " (공시)"
+msgstr "(일시정지됨)"
 
 #: gnucash/gnome/dialog-progress.c:768 gnucash/gnome/dialog-progress.c:771
 msgid "Complete"
@@ -6632,9 +6632,9 @@ msgid "R"
 msgstr "R"
 
 #: gnucash/gnome/report-menus.scm:57
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Display the ~a report"
-msgstr "수량을 보일까요?"
+msgstr "~a 보고서 내보이기"
 
 #: gnucash/gnome/report-menus.scm:90
 #: gnucash/gtkbuilder/dialog-custom-report.glade:8
@@ -8866,9 +8866,8 @@ msgid "(read-only)"
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-main-window.c:1631
-#, fuzzy
 msgid "Unsaved Book"
-msgstr "장부 마감(_C)"
+msgstr "저장되지 않은 장부"
 
 #: gnucash/gnome-utils/gnc-main-window.c:1794
 msgid "Last modified on %a, %b %d, %Y at %I:%M %p"
@@ -8876,14 +8875,14 @@ msgstr ""
 
 #. Translators: This message appears in the status bar after opening the file.
 #: gnucash/gnome-utils/gnc-main-window.c:1797
-#, fuzzy, c-format
+#, c-format
 msgid "File %s opened. %s"
-msgstr "QIF 파일 파싱 오류: %s"
+msgstr "%s 파일이 열렸습니다. %s"
 
 #: gnucash/gnome-utils/gnc-main-window.c:2924
 msgctxt "lower case key for short cut to 'Accounts'"
 msgid "a"
-msgstr ""
+msgstr "과목"
 
 #: gnucash/gnome-utils/gnc-main-window.c:3014
 msgid "Unable to save to database."
@@ -8896,17 +8895,17 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-main-window.c:4396
 #: gnucash/gtkbuilder/assistant-qif-import.glade:959
 msgid "Book Options"
-msgstr "장부 설정"
+msgstr "장부 옵션"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4853 gnucash/gnucash-core-app.cpp:261
 msgid "(user modifiable)"
-msgstr ""
+msgstr "(사용자 수정가능)"
 
 #. Translators: %s will be replaced with the current year
 #: gnucash/gnome-utils/gnc-main-window.c:4880
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
-msgstr ""
+msgstr "Copyright © 1997-%s GnuCash 기여자들."
 
 #: gnucash/gnome-utils/gnc-main-window.c:4892
 #: gnucash/gnome-utils/gnc-splash.c:98
@@ -8916,11 +8915,11 @@ msgstr "버전"
 #: gnucash/gnome-utils/gnc-main-window.c:4893
 #: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:278
 msgid "Build ID"
-msgstr ""
+msgstr "빌드 ID"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4901
 msgid "Accounting for personal and small business finance."
-msgstr ""
+msgstr "개인 및 중소기업 금융에 대한 회계입니다."
 
 #. Translators: the following string will be shown in Help->About->Credits
 #. Enter your name or that of your team and an email contact for feedback.
@@ -8928,11 +8927,13 @@ msgstr ""
 #. contributors.
 #: gnucash/gnome-utils/gnc-main-window.c:4910
 msgid "translator-credits"
-msgstr "Jin-Hwan Jeong, 2009"
+msgstr ""
+"Jin-Hwan Jeong, 2009\n"
+"Junghee Lee, 2022"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4913
 msgid "Visit the GnuCash website."
-msgstr ""
+msgstr "GnuCash 웹사이트를 방문하세요."
 
 #: gnucash/gnome-utils/gnc-period-select.c:71
 #: libgnucash/app-utils/date-utilities.scm:976
@@ -9858,9 +9859,8 @@ msgstr "불균형"
 #. Translators: currently max 34 (ASCII) chars (= 17 or 8 UTF-8 chars depending on the block)
 #. See "MAX_DATE_LENGTH" in https://code.gnucash.org/docs/MAINT/group__Date.html
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:1489
-#, fuzzy
 msgid " Scheduled "
-msgstr "자동 이체"
+msgstr " 예정됨 "
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2316
 #: gnucash/register/ledger-core/split-register-control.c:1521
@@ -12583,11 +12583,12 @@ msgid "Import Account Assistant"
 msgstr "계정 보고"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:66
-#, fuzzy
 msgid ""
 "\n"
 "Enter file name and location for the Import...\n"
-msgstr "이 보고서 설정이 없습니다."
+msgstr ""
+"\n"
+"가져올 파일 이름과 위치를 입력하십시오...\n"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:79
 #, fuzzy
@@ -12801,11 +12802,12 @@ msgid "Account Selection"
 msgstr "계정 삭제"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:687
-#, fuzzy
 msgid ""
 "\n"
 "Enter file name and location for the Export...\n"
-msgstr "이 보고서 설정이 없습니다."
+msgstr ""
+"\n"
+"내보낼 파일 이름과 위치를 입력하십시오...\n"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:700
 #, fuzzy
@@ -12907,9 +12909,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:193
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:183
-#, fuzzy
 msgid "<b>Load and Save Settings</b>"
-msgstr "저축"
+msgstr "<b>설정 불러오기 및 저장하기</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:242
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:231
@@ -13042,11 +13043,12 @@ msgid "Import Preview"
 msgstr "계정 보고"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1014
-#, fuzzy
 msgid ""
 "<b>Press \"Apply\" to add the Prices.\n"
 "\"Cancel\" to abort.</b>"
-msgstr "이들 거래를 생성하기 윟아여 적용을 누름."
+msgstr ""
+"<b>가격을 추가하려면 \"적용하기\"를 누르십시오. \n"
+"중단하려면 \"취소하기\"를 누르십시오.</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1029
 #, fuzzy
@@ -15082,9 +15084,8 @@ msgid "For importing vendor lists."
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:192
-#, fuzzy
 msgid "<b>2. Select Import Type</b>"
-msgstr "할인형태 선택"
+msgstr "<b>2. 가져오기 유형 선택하기</b>"
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:52
 msgid "Exit the saved report configurations dialog"
@@ -15486,9 +15487,8 @@ msgid "Based On"
 msgstr "종료"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:219
-#, fuzzy
 msgid "Match String"
-msgstr "일치하는 것이 없음!"
+msgstr "문자열 일치"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:233
 #, fuzzy
@@ -17474,8 +17474,7 @@ msgstr "생성된 거래 검토(_V)"
 msgid ""
 "Set 'Review created transactions' as the default in the \"since last run\" "
 "dialog."
-msgstr ""
-"'생성된 거래 검토'를 \"마지막 실행 이후\"대화 상자에서 기본값으로 설정합니다."
+msgstr "\"마지막 실행 이후\" 대화상자에서 '생성된 거래 검토'를 기본값으로 설정합니다."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:788
 msgid "Edit Scheduled Transaction"
@@ -18619,10 +18618,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/window-autoclear.glade:101
-#, fuzzy
-#| msgid "Fraction"
 msgid "Caution!"
-msgstr "분량"
+msgstr "주의!"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:116
 msgid ""
@@ -19840,11 +19837,13 @@ msgid "Error(s) in invoice without id, all rows of this invoice ignored.\n"
 msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:647
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Processing...\n"
-msgstr "지불 진행(_P)..."
+msgstr ""
+"\n"
+"처리 중...\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:716
 #, fuzzy, c-format
@@ -19946,9 +19945,8 @@ msgid "Account-posted"
 msgstr "계정 장부"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:160
-#, fuzzy
 msgid "Memo-posted"
-msgstr " (공시)"
+msgstr "메모 게시됨"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:161
 #, fuzzy
@@ -21452,9 +21450,9 @@ msgid "Unrecognized account type '~s'. Defaulting to Bank."
 msgstr ""
 
 #: gnucash/import-export/qif-imp/qif-parse.scm:235
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Unrecognized action '~a'."
-msgstr "미회수 이득"
+msgstr "인식할 수 없는 작업 '~a'입니다."
 
 #: gnucash/import-export/qif-imp/qif-parse.scm:254
 #, scheme-format
@@ -21542,9 +21540,8 @@ msgstr ""
 
 #: gnucash/python/init.py:18
 #: gnucash/report/reports/example/welcome-to-gnucash.scm:49
-#, fuzzy
 msgid "Welcome to GnuCash"
-msgstr "이 프로그램은 재정관리를 위한 GnuCash입니다!"
+msgstr "GnuCash의 사용을 환영합니다"
 
 #: gnucash/python/init.py:103
 #: gnucash/report/reports/example/hello-world.scm:457
@@ -21552,9 +21549,9 @@ msgid "Have a nice day!"
 msgstr "좋은 하루이길!"
 
 #: gnucash/python/init.py:118
-#, fuzzy, python-format
+#, python-format
 msgid "Welcome to GnuCash %s Shell"
-msgstr "이 프로그램은 재정관리를 위한 GnuCash입니다!"
+msgstr "GnuCash %s 셸에 오신 것을 환영합니다"
 
 #: gnucash/register/ledger-core/gncEntryLedger.c:250
 msgid "Hours"
@@ -21965,10 +21962,9 @@ msgstr ""
 #. used to estimate widths.
 #: gnucash/register/ledger-core/split-register-layout.c:644
 #: gnucash/register/ledger-core/split-register-layout.c:652
-#, fuzzy
 msgctxt "sample"
 msgid "22/02/2000"
-msgstr "샘플:12/12/2000"
+msgstr "22/02/2000"
 
 #. Translators: The 'sample' items are
 #. strings which are not displayed, but only
@@ -23476,7 +23472,7 @@ msgstr "이 프로그램은 재정관리를 위한 GnuCash ~a 입니다!"
 #: gnucash/report/reports/example/welcome-to-gnucash.scm:44
 #, scheme-format
 msgid "GnuCash ~a has lots of nice features. Here are a few."
-msgstr "GnuCash  ~a 은 많은 좋은 점이 있습니다."
+msgstr "GnuCash ~a에는 좋은 기능이 많습니다. 여기서 조금 소개합니다."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:79
 msgid "Tax Report / TXF Export"
@@ -23496,7 +23492,7 @@ msgstr ": & 에서 :로 중복 또는 수정"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:154
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
 msgid "Use From - To"
-msgstr " - 에서 로 사용"
+msgstr "시작일과 종료일 사용하기"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
@@ -24979,9 +24975,8 @@ msgid "Barchart"
 msgstr "자산 막대차트"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1191
-#, fuzzy
 msgid " to "
-msgstr "%s에서 %s로"
+msgstr " ～ "
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1254
 #: gnucash/report/reports/standard/trial-balance.scm:855
@@ -26560,9 +26555,8 @@ msgstr "청구서에 넣을 별도 장부"
 
 #: gnucash/report/reports/standard/invoice.scm:329
 #: gnucash/report/reports/standard/taxinvoice.scm:205
-#, fuzzy
 msgid "Thank you for your patronage!"
-msgstr "후원에 감사합니다"
+msgstr "당신의 후원에 감사드립니다!"
 
 #: gnucash/report/reports/standard/invoice.scm:333
 msgid "Row 1 Left"
@@ -26593,9 +26587,8 @@ msgstr "오른쪽"
 
 #: gnucash/report/reports/standard/invoice.scm:421
 #: gnucash/report/reports/standard/job-report.scm:239
-#, fuzzy
 msgid "Payment, thank you!"
-msgstr "지불, 감사"
+msgstr "결제, 감사합니다!"
 
 #. Translators: This "T" is displayed in the taxable column, if this entry contains tax
 #: gnucash/report/reports/standard/invoice.scm:478
@@ -27388,9 +27381,8 @@ msgstr ""
 
 #: gnucash/report/reports/standard/receipt.scm:139
 #: gnucash/report/reports/standard/taxinvoice.scm:190
-#, fuzzy
 msgid "Payment received, thank you!"
-msgstr "지불, 감사"
+msgstr "결제 완료, 감사합니다!"
 
 #: gnucash/report/reports/standard/receipt.scm:143
 msgid "Notes added at end of invoice -- may contain HTML markup"
