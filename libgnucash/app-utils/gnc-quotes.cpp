@@ -26,10 +26,10 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include <sstream>
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/process.hpp>
+#include <boost/regex.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/iostreams/device/array.hpp>
@@ -42,53 +42,60 @@
 #include "gnc-quotes.hpp"
 
 extern "C" {
-#include "gnc-commodity.h"
-#include "gnc-path.h"
+#include <gnc-commodity.h>
+#include <gnc-path.h>
 #include "gnc-ui-util.h"
 #include <gnc-prefs.h>
+#include <gnc-session.h>
 #include <regex.h>
 #include <qofbook.h>
 }
+
+static const QofLogModule log_module = "gnc.price-quotes";
 
 namespace bp = boost::process;
 namespace bfs = boost::filesystem;
 namespace bpt = boost::property_tree;
 namespace bio = boost::iostreams;
 
+using QuoteResult = std::tuple<int, StrVec, StrVec>;
 
 CommVec
 gnc_quotes_get_quotable_commodities(const gnc_commodity_table * table);
+
+class GncQuoteSource
+{
+public:
+    virtual ~GncQuoteSource() = default;
+    virtual const StrVec& get_sources() const noexcept = 0;
+    virtual const std::string & get_version() const noexcept = 0;
+    virtual QuoteResult get_quotes(const std::string& json_str) const = 0;
+    virtual bool usable() const noexcept = 0;
+};
 
 class GncQuotesImpl
 {
 public:
     // Constructor - checks for presence of Finance::Quote and import version and quote sources
     GncQuotesImpl ();
-    GncQuotesImpl (QofBook *book);
+    explicit GncQuotesImpl (QofBook *book);
+    GncQuotesImpl(QofBook*, std::unique_ptr<GncQuoteSource>);
 
     void fetch (QofBook *book);
     void fetch (CommVec& commodities);
     void fetch (gnc_commodity *comm);
 
-    const int cmd_result() noexcept { return m_cmd_result; }
+    int cmd_result() const noexcept { return m_cmd_result; }
     const std::string& error_msg() noexcept { return m_error_msg; }
     const std::string& version() noexcept { return m_version.empty() ? not_found : m_version; }
     const QuoteSources& sources() noexcept { return m_sources; }
     GList* sources_as_glist ();
 
 private:
-    // Check if Finance::Quote is properly installed
-    void check (QofBook *book);
-    // Run the command specified. Returns two vectors for further processing by the caller
-    // - one with the contents of stdout
-    // - one with the contents of stderr
-    // Will also set m_cmd_result
-    template <typename BufferT> CmdOutput run_cmd (const bfs::path &cmd_name, StrVec args, BufferT input);
-
     void query_fq (void);
     void parse_quotes (void);
 
-
+    std::unique_ptr<GncQuoteSource> m_quotesource;
     CommVec m_comm_vec;
     std::string m_version;
     QuoteSources m_sources;
@@ -99,34 +106,144 @@ private:
     gnc_commodity *m_dflt_curr;
 };
 
-/* GncQuotes implementation */
-
-GncQuotesImpl::GncQuotesImpl ()
+class GncFQQuoteSource final : public GncQuoteSource
 {
-    m_version.clear();
-    m_sources.clear();
-    m_error_msg.clear();
-    m_cmd_result  = 0;
-    m_book = nullptr;
-    m_dflt_curr = gnc_default_currency();
+    const bfs::path c_cmd;
+    const std::string c_fq_wrapper;
+    bool m_ready;
+    std::string m_version;
+    StrVec m_sources;
+public:
+    GncFQQuoteSource();
+    ~GncFQQuoteSource() = default;
+    virtual const std::string& get_version() const noexcept override { return m_version; }
+    virtual const StrVec& get_sources() const noexcept override { return m_sources; }
+    virtual QuoteResult get_quotes(const std::string&) const override;
+    virtual bool usable() const noexcept override { return m_ready; }
+private:
+    QuoteResult run_cmd (const StrVec& args, const std::string& json_string) const;
 
-    auto perl_executable = bp::search_path("perl");
-    auto fq_wrapper = std::string(gnc_path_get_bindir()) + "/finance-quote-wrapper";
-    StrVec args { "-w", fq_wrapper, "-v" };
+};
 
-    auto cmd_out = run_cmd (perl_executable.string(), args, StrVec());
+GncFQQuoteSource::GncFQQuoteSource() :
+c_cmd{bp::search_path("perl")},
+c_fq_wrapper{std::string(gnc_path_get_bindir()) + "/finance-quote-wrapper"},
+m_ready{false},
+m_version{}, m_sources{}
+{
+    StrVec args{"-w", c_fq_wrapper, "-v"};
+    const std::string empty_string;
+    auto [rv, sources, errors] = run_cmd(args, empty_string);
+    if (rv)
+    {
+        PERR("Failed to initialize Finance::Quote %s", errors.front().c_str());
+        return;
+    }
+    if (!errors.empty())
+    {
+        for(const auto& err : errors)
+            PERR("Finance::Quote check returned error %s", err.empty() ? "" : err.c_str());
+        return;
+    }
+    static const boost::regex version_fmt{"[0-9]\\.[0-9][0-9]"};
+    auto version{sources.front()};
+    if (version.empty() || !boost::regex_match(version, version_fmt))
+    {
+        PERR("Invalid Finance::Quote Version %s", version.empty() ? "" : version.c_str());
+        return;
+    }
+    m_ready = true;
+    sources.erase(sources.begin());
+    m_sources = std::move(sources);
+}
 
-    for (auto line : cmd_out.first)
-        if (m_version.empty())
-            std::swap (m_version, line);
-        else
-            m_sources.push_back (std::move(line));
+QuoteResult
+GncFQQuoteSource::get_quotes(const std::string& json_str) const
+{
+    StrVec args{"-w", c_fq_wrapper, "-f" };
+    return run_cmd(args, json_str);
+}
 
-    for (auto line : cmd_out.second)
-        m_error_msg.append(std::move(line) + "\n");
+QuoteResult
+GncFQQuoteSource::run_cmd (const StrVec& args, const std::string& json_string) const
+{
+    StrVec out_vec, err_vec;
+    int cmd_result;
 
-    if (m_cmd_result == 0)
-        std::sort (m_sources.begin(), m_sources.end());
+    auto av_key = gnc_prefs_get_string ("general.finance-quote", "alphavantage-api-key");
+    if (!av_key)
+        PWARN("No Alpha Vantage API key set, currency quotes and other AlphaVantage based quotes won't work.");
+
+    try
+    {
+        std::future<std::vector<char> > out_buf, err_buf;
+        boost::asio::io_service svc;
+
+        auto input_buf = bp::buffer (json_string);
+        bp::child process (c_cmd, args,
+                           bp::std_out > out_buf,
+                           bp::std_err > err_buf,
+                           bp::std_in < input_buf,
+                           bp::env["ALPHAVANTAGE_API_KEY"]= (av_key ? av_key : ""),
+                           svc);
+        svc.run();
+        process.wait();
+
+        {
+            auto raw = out_buf.get();
+            std::vector<std::string> data;
+            std::string line;
+            bio::stream_buffer<bio::array_source> sb(raw.data(), raw.size());
+            std::istream is(&sb);
+
+            while (std::getline(is, line) && !line.empty())
+                out_vec.push_back (std::move(line));
+
+            raw = err_buf.get();
+            bio::stream_buffer<bio::array_source> eb(raw.data(), raw.size());
+            std::istream es(&eb);
+
+            while (std::getline(es, line) && !line.empty())
+                err_vec.push_back (std::move(line));
+        }
+        cmd_result = process.exit_code();
+    }
+    catch (std::exception &e)
+    {
+        cmd_result = -1;
+        err_vec.push_back(e.what());
+    };
+
+    return QuoteResult (cmd_result, std::move(out_vec), std::move(err_vec));
+}
+
+/* GncQuotes implementation */
+GncQuotesImpl::GncQuotesImpl() : m_quotesource{new GncFQQuoteSource},
+m_version{}, m_sources{}, m_cmd_result{}, m_error_msg{}, m_book{qof_session_get_book(gnc_get_current_session())},
+m_dflt_curr{gnc_default_currency()}
+{
+    if (!m_quotesource->usable())
+        return;
+    m_sources = m_quotesource->get_sources();
+}
+
+GncQuotesImpl::GncQuotesImpl(QofBook* book) : m_quotesource{new GncFQQuoteSource},
+m_version{}, m_sources{}, m_cmd_result{}, m_error_msg{}, m_book{book},
+m_dflt_curr{gnc_default_currency()}
+{
+    if (!m_quotesource->usable())
+        return;
+    m_sources = m_quotesource->get_sources();
+}
+
+GncQuotesImpl::GncQuotesImpl(QofBook* book, std::unique_ptr<GncQuoteSource> quote_source) :
+m_quotesource{std::move(quote_source)},
+m_version{}, m_sources{}, m_cmd_result{}, m_error_msg{}, m_book{book},
+m_dflt_curr{gnc_default_currency()}
+{
+    if (!m_quotesource->usable())
+        return;
+    m_sources = m_quotesource->get_sources();
 }
 
 GList*
@@ -181,59 +298,6 @@ format_quotes (const std::vector<gnc_commodity*>)
     return std::vector <std::string>();
 }
 
-
-template <typename BufferT> CmdOutput
-GncQuotesImpl::run_cmd (const bfs::path &cmd_name, StrVec args, BufferT input)
-{
-    StrVec out_vec, err_vec;
-
-    auto av_key = gnc_prefs_get_string ("general.finance-quote", "alphavantage-api-key");
-    if (!av_key)
-        std::cerr << "No Alpha Vantage API key set, currency quotes and other AlphaVantage based quotes won't work.\n";
-
-    try
-    {
-        std::future<std::vector<char> > out_buf, err_buf;
-        boost::asio::io_service svc;
-
-        auto input_buf = bp::buffer (input);
-        bp::child process (cmd_name, args,
-                           bp::std_out > out_buf,
-                           bp::std_err > err_buf,
-                           bp::std_in < input_buf,
-                           bp::env["ALPHAVANTAGE_API_KEY"]= (av_key ? av_key : ""),
-                           svc);
-        svc.run();
-        process.wait();
-
-        {
-            auto raw = out_buf.get();
-            std::vector<std::string> data;
-            std::string line;
-            bio::stream_buffer<bio::array_source> sb(raw.data(), raw.size());
-            std::istream is(&sb);
-
-            while (std::getline(is, line) && !line.empty())
-                out_vec.push_back (std::move(line));
-
-            raw = err_buf.get();
-            bio::stream_buffer<bio::array_source> eb(raw.data(), raw.size());
-            std::istream es(&eb);
-
-            while (std::getline(es, line) && !line.empty())
-                err_vec.push_back (std::move(line));
-        }
-        m_cmd_result = process.exit_code();
-    }
-    catch (std::exception &e)
-    {
-        m_cmd_result = -1;
-        m_error_msg = e.what();
-    };
-
-    return CmdOutput (std::move(out_vec), std::move(err_vec));
-}
-
 void
 GncQuotesImpl::query_fq (void)
 {
@@ -262,18 +326,14 @@ GncQuotesImpl::query_fq (void)
     std::ostringstream result;
     bpt::write_json(result, pt);
 
-    auto perl_executable = bp::search_path("perl");
-    auto fq_wrapper = std::string(gnc_path_get_bindir()) + "/finance-quote-wrapper";
-    StrVec args { "-w", fq_wrapper, "-f" };
-
-    auto cmd_out = run_cmd (perl_executable.string(), args, result.str());
-
+    auto [rv, quotes, errors] = m_quotesource->get_quotes(result.str());
     m_fq_answer.clear();
-    if (m_cmd_result == 0)
-        for (auto line : cmd_out.first)
+    m_cmd_result = rv;
+    if (rv == 0)
+        for (auto line : quotes)
             m_fq_answer.append(std::move(line) + "\n");
     else
-        for (auto line : cmd_out.second)
+        for (auto line : errors)
             m_error_msg.append(std::move(line) + "\n");
 
 //     for (auto line : cmd_out.first)
@@ -451,6 +511,9 @@ GncQuotesImpl::parse_quotes (void)
  * gnc_quotes_get_quotable_commodities
  * list commodities in a given namespace that get price quotes
  ********************************************************************/
+/* Helper function to be passed to g_list_for_each applied to the result
+ * of gnc_commodity_namespace_get_commodity_list.
+ */
 static void
 get_quotables_helper1 (gpointer value, gpointer data)
 {
@@ -466,6 +529,7 @@ get_quotables_helper1 (gpointer value, gpointer data)
     l->push_back (comm);
 }
 
+// Helper function to be passed to gnc_commodity_table_for_each
 static gboolean
 get_quotables_helper2 (gnc_commodity *comm, gpointer data)
 {
