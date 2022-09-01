@@ -112,6 +112,8 @@ TEST_F(GncQuotesTest, quotable_commodities)
     auto commodities{gnc_quotes_get_quotable_commodities(gnc_commodity_table_get_table(m_book))};
     EXPECT_EQ(4u, commodities.size());
 }
+
+#ifdef HAVE_F_Q
 TEST_F(GncQuotesTest, wiggle)
 {
     GncQuotes quotes;
@@ -119,3 +121,4 @@ TEST_F(GncQuotesTest, wiggle)
     auto pricedb{gnc_pricedb_get_db(m_book)};
     EXPECT_EQ(3u, gnc_pricedb_get_num_prices(pricedb));
 }
+#endif

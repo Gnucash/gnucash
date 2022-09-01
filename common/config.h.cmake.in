@@ -129,6 +129,9 @@
 /* Define to 1 if you have the `pthread' library (-lpthread). */
 #cmakedefine HAVE_LIBPTHREAD 1
 
+/* Define to 1 if Finance::Quote is installed in perl. */
+#cmakedefine HAVE_F_Q 1
+
 /* System has libsecret 0.18 or better */
 #cmakedefine HAVE_LIBSECRET 1
 

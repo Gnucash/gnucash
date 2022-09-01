@@ -512,6 +512,14 @@ if (NOT PERL_FOUND)
   message(SEND_ERROR "Perl executable not found. Please set PERL_EXECUTABLE.")
 endif()
 
+execute_process(COMMAND
+        ${PERL_EXECUTABLE} -MFinance::Quote -e ""
+        ERROR_QUIET
+        RESULT_VARIABLE have_f_q)
+if (${have_f_q} EQUAL 0)
+  set(HAVE_F_Q 1)
+endif()
+
 get_filename_component(PERL_DIR ${PERL_EXECUTABLE} DIRECTORY)
 
 find_program(POD2MAN_EXECUTABLE pod2man HINTS ${PERL_DIR})
