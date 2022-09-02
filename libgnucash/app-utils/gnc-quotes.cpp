@@ -94,6 +94,7 @@ public:
 private:
     void query_fq (void);
     void parse_quotes (void);
+    std::string comm_vec_to_json_string(void) const;
 
     std::unique_ptr<GncQuoteSource> m_quotesource;
     CommVec m_comm_vec;
@@ -298,8 +299,8 @@ format_quotes (const std::vector<gnc_commodity*>)
     return std::vector <std::string>();
 }
 
-void
-GncQuotesImpl::query_fq (void)
+std::string
+GncQuotesImpl::comm_vec_to_json_string (void) const
 {
     bpt::ptree pt, pt_child;
     pt.put ("defaultcurrency", gnc_commodity_get_mnemonic (m_dflt_curr));
@@ -325,8 +326,14 @@ GncQuotesImpl::query_fq (void)
 
     std::ostringstream result;
     bpt::write_json(result, pt);
+    return result.str();
+}
 
-    auto [rv, quotes, errors] = m_quotesource->get_quotes(result.str());
+void
+GncQuotesImpl::query_fq (void)
+{
+    auto json_str{comm_vec_to_json_string()};
+    auto [rv, quotes, errors] = m_quotesource->get_quotes(json_str);
     m_fq_answer.clear();
     m_cmd_result = rv;
     if (rv == 0)
