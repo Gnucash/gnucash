@@ -528,9 +528,10 @@ gnc_dense_cal_set_month(GncDenseCal *dcal, GDateMonth mon)
 static void
 _gnc_dense_cal_set_month(GncDenseCal *dcal, GDateMonth mon, gboolean redraw)
 {
-    GTimer *t = g_timer_new();
+    GTimer *t;
     if (dcal->month == mon)
         return;
+    t = g_timer_new();
     dcal->month = mon;
     g_timer_start(t);
     recompute_first_of_month_offset(dcal);
