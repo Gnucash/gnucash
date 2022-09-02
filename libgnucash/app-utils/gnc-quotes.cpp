@@ -331,16 +331,16 @@ GncQuotesImpl::query_fq (void)
     m_cmd_result = rv;
     if (rv == 0)
         for (auto line : quotes)
-            m_fq_answer.append(std::move(line) + "\n");
+            m_fq_answer.append(line + "\n");
     else
         for (auto line : errors)
-            m_error_msg.append(std::move(line) + "\n");
+            m_error_msg.append(line + "\n");
 
-//     for (auto line : cmd_out.first)
-//         std::cerr << "Output line retrieved from wrapper:\n" << line << std::endl;
+//        for (auto line : quotes)
+//            PINFO("Output line retrieved from wrapper:\n%s", line.c_str());
 //
-//     for (auto line : cmd_out.second)
-//         std::cerr << "Error line retrieved from wrapper:\n" << line << std::endl;
+//     for (auto line : errors)
+//         PINFO("Error line retrieved from wrapper:\n%s",line.c_str());˚
 
 }
 
@@ -380,7 +380,8 @@ GncQuotesImpl::parse_quotes (void)
                         return;
                     if (pt.find (comm_mnemonic) == pt.not_found())
                     {
-                        std::cerr << "Skipped " << comm_ns << ":" << comm_mnemonic << " - Finance::Quote didn't return any data.\n";
+                        PINFO("Skipped %s:%s - Finance::Quote didn't return any data.",
+                              comm_ns, comm_mnemonic);
                         return;
                     }
 
@@ -409,24 +410,26 @@ GncQuotesImpl::parse_quotes (void)
                     auto currency_str = pt.get_optional<std::string> (key + ".currency");
 
 
-                    std::cout << "Commodity: " << comm_mnemonic << "\n";
-                    std::cout << "     Date: " << (date_str ? *date_str : "missing") << "\n";
-                    std::cout << "     Time: " << (time_str ? *time_str : "missing") << "\n";
-                    std::cout << " Currency: " << (currency_str ? *currency_str : "missing") << "\n";
-                    std::cout << "    Price: " << (price_str ? *price_str : "missing") << "\n";
-                    std::cout << " Inverted: " << (inverted ? "yes" : "no") << "\n\n";
+                    PINFO("Commodity: %s", comm_mnemonic);
+                    PINFO("     Date: %s", (date_str ? date_str->c_str() : "missing"));
+                    PINFO("     Time: %s", (time_str ? time_str->c_str() : "missing"));
+                    PINFO(" Currency: %s", (currency_str ? currency_str->c_str() : "missing"));
+                    PINFO("    Price: %s", (price_str ? price_str->c_str() : "missing"));
+                    PINFO(" Inverted: %s\n", (inverted ? "yes" : "no"));
 
                     if (!success || !*success)
                     {
                         auto errmsg = pt.get_optional<std::string> (key + ".errormsg");
-                        std::cerr << "Skipped " << comm_ns << ":" << comm_mnemonic << " - Finance::Quote returned fetch failure.\n";
-                        std::cerr << "Reason: " << (errmsg ? *errmsg : "unknown") << "\n";
+                        PWARN("Skipped %s:%s - Finance::Quote returned fetch failure.\nReason %s",
+                              comm_ns, comm_mnemonic,
+                              (errmsg ? errmsg->c_str() : "unknown"));
                         return;
                     }
 
                     if (!price_str)
                     {
-                        std::cerr << "Skipped " << comm_ns << ":" << comm_mnemonic << " - Finance::Quote didn't return a valid price\n";
+                        PWARN("Skipped %s:%s - Finance::Quote didn't return a valid price",
+                              comm_ns, comm_mnemonic);
                         return;
                     }
 
@@ -437,7 +440,8 @@ GncQuotesImpl::parse_quotes (void)
                     }
                     catch (...)
                     {
-                        std::cerr << "Skipped " << comm_ns << ":" << comm_mnemonic << " - failed to parse returned price '" << *price_str << "'\n";
+                        PWARN("Skipped %s:%s - failed to parse returned price '%s'",
+                              comm_ns, comm_mnemonic, price_str->c_str());
                         return;
                     }
 
@@ -446,7 +450,8 @@ GncQuotesImpl::parse_quotes (void)
 
                     if (!currency_str)
                     {
-                        std::cerr << "Skipped " << comm_ns << ":" << comm_mnemonic << " - Finance::Quote didn't return a currency\n";
+                        PWARN("Skipped %s:%s - Finance::Quote didn't return a currency",
+                              comm_ns, comm_mnemonic);
                         return;
                     }
                     boost::to_upper (*currency_str);
@@ -455,7 +460,8 @@ GncQuotesImpl::parse_quotes (void)
 
                     if (!currency)
                     {
-                        std::cerr << "Skipped " << comm_ns << ":" << comm_mnemonic << " - failed to parse returned currency '" << *currency_str << "'\n";
+                        PWARN("Skipped %s:%s  - failed to parse returned currency '%s'",
+                              comm_ns, comm_mnemonic, currency_str->c_str());
                         return;
                     }
 
@@ -467,8 +473,9 @@ GncQuotesImpl::parse_quotes (void)
                         iso_date_str = date_tmp.substr (6, 4) + "-" + date_tmp.substr (0, 2) + "-" + date_tmp.substr (3, 2);
                     }
                     else
-                        std::cerr << "Info: no date  was returned for " << comm_ns << ":" << comm_mnemonic << " - will use today\n";
-                    iso_date_str += " " + (time_str ? *time_str : "12:00:00");
+                        PINFO("Info: no date  was returned for %s:%s - will use today %s",
+                              comm_ns, comm_mnemonic,
+                              (iso_date_str += " " + (time_str ? *time_str : "12:00:00")).c_str());
 
                     auto can_convert = true;
                     try
@@ -477,7 +484,8 @@ GncQuotesImpl::parse_quotes (void)
                     }
                     catch (...)
                     {
-                        std::cerr << "Warning: failed to parse quote date and time '" << iso_date_str << "' for " << comm_ns << ":" << comm_mnemonic << " - will use today\n";
+                        PINFO("Warning: failed to parse quote date and time '%s' for %s:%s - will use today",
+                              iso_date_str.c_str(),  comm_ns, comm_mnemonic);
                         can_convert = false;
                     }
 
