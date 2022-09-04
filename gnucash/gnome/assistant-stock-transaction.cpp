@@ -501,6 +501,9 @@ stock_assistant_window_destroy_cb (GtkWidget *object, gpointer user_data)
 {
     auto info = static_cast<StockTransactionInfo*>(user_data);
     gnc_unregister_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, info);
+    info->txn_types_date = std::nullopt;
+    info->txn_types = std::nullopt;
+    info->txn_type = std::nullopt;
     g_free (info);
 }
 
