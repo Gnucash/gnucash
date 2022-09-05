@@ -522,6 +522,10 @@ the split action field to detect capitalized fees on stock activity")
 
   ;; (gnc:dump-all-transactions)
   (gnc:html-document-add-object! document disclaimer)
+
+  (gnc:html-document-add-object!
+   document (gnc:html-render-options-changed (gnc:report-options report-obj)))
+
   document)
 
 
