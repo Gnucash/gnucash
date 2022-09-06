@@ -479,7 +479,7 @@ gnc_ab_get_purpose (const AB_TRANSACTION *ab_trans, gboolean is_ofx)
 
 /* Ultimate Creditor and Ultimate Debtor are newish parameters added
  * to SWIFT MT940 and CAMT.053 designating the originating
- * payer or payee on the tranaction. It's unlikely, but still
+ * payer or payee on the transaction. It's unlikely, but still
  * possible, that a bank would use both this markup and the Non-swift
  * TransactionText or RemoteName tags.
  */

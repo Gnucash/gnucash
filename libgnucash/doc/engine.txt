@@ -25,7 +25,7 @@ If it seems to be an independent concept, it can still be placed
 in the KVP tree of the book, which gives it a 'top-level' existence.
 
 If the concept is used only infrequently, then it probably belongs 
-in a KVP tree.  If the concept has performance-critical requriements,
+in a KVP tree.  If the concept has performance-critical requirements,
 then it is better to implement it as a C struct, and similarly
 design an appropriate SQL table around it, so that the database
 can be queried efficiently and rapidly.

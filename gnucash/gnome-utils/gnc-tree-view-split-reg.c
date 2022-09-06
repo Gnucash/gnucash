@@ -3988,7 +3988,7 @@ gtv_sr_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
                  if (view->priv->dirty_trans != NULL) // from a dirty trans
                     trans_changed = TRUE;
 
-                 /* Reset allow changes for reconciled transctions */
+                 /* Reset allow changes for reconciled transactions */
                  view->change_allowed = FALSE;
             }
 
@@ -6062,7 +6062,7 @@ gnc_tree_view_split_reg_cancel_edit (GncTreeViewSplitReg *view, gboolean reg_clo
         split = gnc_tree_model_split_get_blank_split (model);
         xaccSplitReinit (split); // Clear the blank split
     }
-    /* Reset allow changes for reconciled transctions */
+    /* Reset allow changes for reconciled transactions */
     view->change_allowed = FALSE;
 
     view->priv->auto_complete = FALSE; // reset auto_complete has run flag
