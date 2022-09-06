@@ -6,7 +6,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-07-22 06:33+0200\n"
-"PO-Revision-Date: 2022-09-03 15:21+0000\n"
+"PO-Revision-Date: 2022-09-06 12:23+0000\n"
 "Last-Translator: 이정희 <daemul72@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ko/>\n"
@@ -580,6 +580,9 @@ msgid ""
 "Accounts tab in the main window, highlight the parent account and select "
 "Edit->Open Subaccounts from the menu."
 msgstr ""
+"하나의 기입장에서 모든 하위 계정 거래를 보고 싶으십니까? 기본 창의 계정과목 "
+"탭에서 상위 계정을 강조 표시하고 메뉴에서 편집->하위 계정과목 열기를 "
+"선택합니다."
 
 #: doc/tip_of_the_day.list.c:75
 msgid ""
@@ -619,6 +622,9 @@ msgid ""
 "use. Click the triangle at the far right of the column headings to change "
 "the display."
 msgstr ""
+"증권 편집기 화면에서 증권 시세표 정보 소스를 표시하도록 설정할 수 있습니다. "
+"어떤 온라인 소스를 증권이 사용하는지 쉽게 볼 수 있습니다. 칼럼 머리글의 "
+"오른쪽 끝에 있는 삼각형을 클릭하여 표시를 변경할 수 있습니다."
 
 #: doc/tip_of_the_day.list.c:96
 msgid ""
@@ -660,6 +666,9 @@ msgid ""
 "after midnight, to get the new date as default for new transactions. It is "
 "not necessary to restart GnuCash."
 msgstr ""
+"하룻밤 사이에 작업하는 경우, 자정 이후에 작업 기입장을 닫았다가 다시 열어 새 "
+"거래의 기본값으로 새 날짜를 설정해야 합니다. GnuCash를 다시 시작할 필요는 "
+"없습니다."
 
 #: doc/tip_of_the_day.list.c:121
 msgid ""
@@ -806,7 +815,7 @@ msgstr "자리표시자"
 #: gnucash/gtkbuilder/dialog-account.glade:1867
 #: libgnucash/app-utils/gnc-ui-util.c:1107
 msgid "Opening Balance"
-msgstr "잔고"
+msgstr "기초 잔액"
 
 #: gnucash/gnome/assistant-hierarchy.c:1370
 msgid "Use Existing"
@@ -1684,6 +1693,9 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
+"Id 열의 항목을 두 번 클릭하여 비즈니스 항목으로 이동합니다.\n"
+"링크 열의 항목을 두 번 클릭하여 링크된 문서를 엽니다.\n"
+"사용 가능 열의 항목을 두 번 클릭하여 문서 링크를 수정합니다."
 
 #: gnucash/gnome/dialog-doclink.c:1103
 #, fuzzy
@@ -2402,7 +2414,7 @@ msgstr "보냅니까?"
 #: gnucash/gtkbuilder/dialog-order.glade:548
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:139
 msgid "Date Opened"
-msgstr "개설일자"
+msgstr "발행된 날짜"
 
 #: gnucash/gnome/dialog-invoice.c:3401
 #: gnucash/gtkbuilder/dialog-invoice.glade:42
@@ -3045,13 +3057,13 @@ msgstr "이름이 \"%s\"인 예약된 거래가 이미 있습니다. 이 이름�
 
 #: gnucash/gnome/dialog-sx-editor2.c:767
 msgid "Scheduled Transactions with variables cannot be automatically created."
-msgstr "변수있는 자동 이체는 자동으로 생성될 수 없습니다."
+msgstr "예약된 변수가 있는 거래는 자동으로 만들 수 없습니다."
 
 #: gnucash/gnome/dialog-sx-editor2.c:777 gnucash/gnome/dialog-sx-editor.c:627
 msgid ""
 "Scheduled Transactions without a template transaction cannot be "
 "automatically created."
-msgstr "서식 거래 없는 자동 이체는 자동으로 생성될 수 없습니다."
+msgstr "템플릿 거래가 없는 예약된 거래는 자동으로 만들 수 없습니다."
 
 #: gnucash/gnome/dialog-sx-editor2.c:792 gnucash/gnome/dialog-sx-editor.c:542
 msgid "Please provide a valid end selection."
@@ -3072,8 +3084,7 @@ msgstr ""
 msgid ""
 "You have attempted to create a Scheduled Transaction which will never run. "
 "Do you really want to do this?"
-msgstr ""
-"결코 실행할 수 없는 자동 이체를 생성하려고 시도하고 있습니다. 정말 이 작업을 "
+msgstr "실행되지 않을 예정된 거래를 생성하려고 시도했습니다. 정말 이 작업을 "
 "수행하겠습니까?"
 
 #: gnucash/gnome/dialog-sx-editor2.c:1301
@@ -3499,7 +3510,7 @@ msgstr "주식과 뮤추얼 펀드의 가격 보기 및 편집"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:196
 msgid "_Security Editor"
-msgstr "통화 단위 편집기(_S)\t"
+msgstr "증권 편집기(_S)"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:197
 msgid "View and edit the commodities for stocks and mutual funds"
@@ -7732,7 +7743,7 @@ msgstr "지우기"
 
 #: gnucash/gnome-utils/dialog-options.c:2877
 msgid "Clear any selected image file."
-msgstr "임의 선택 이미지 파일 지우기."
+msgstr "선택한 이미지 파일을 지웁니다."
 
 #: gnucash/gnome-utils/dialog-options.c:2879
 msgid "Select image"
@@ -7740,7 +7751,7 @@ msgstr "이미지 선택"
 
 #: gnucash/gnome-utils/dialog-options.c:2881
 msgid "Select an image file."
-msgstr "이미지 파일 선택하기"
+msgstr "이미지 파일을 선택합니다."
 
 #: gnucash/gnome-utils/dialog-options.c:3061
 msgid "Pixels"
@@ -7872,7 +7883,9 @@ msgstr "계정 %s 은 거래를 허용하지 않습니다."
 msgid ""
 "You can't transfer from a non-currency account. Try reversing the \"from\" "
 "and \"to\" accounts and making the \"amount\" negative."
-msgstr "비 통화 계정에서 이체할 수 없습니다. "
+msgstr ""
+"비통화 계정에서 이체할 수 없습니다. \"보내는 계정\"과 \"받는 계정\" "
+"계정과목을 반대로 하고 \"금액\"을 음수로 설정하십시오."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1486
 msgid "You must enter a valid price."
@@ -24779,14 +24792,12 @@ msgid "Retained Losses"
 msgstr "잉여금 손실"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:514
-#, fuzzy
 msgid "Trading Gains"
-msgstr "버린 이익"
+msgstr "매매 이득"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:515
-#, fuzzy
 msgid "Trading Losses"
-msgstr "잉여금 손실"
+msgstr "매매 손실"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:519
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1090
@@ -25666,50 +25677,41 @@ msgstr "현금 흐름표"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:46
 #: gnucash/report/reports/standard/cash-flow.scm:53
-#, fuzzy
 msgid "Include Trading Accounts in report"
-msgstr "전체 합계 포함(_G)"
+msgstr "보고서에 매매 계정 포함하기"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:48
-#, fuzzy
 msgid "Show Money In"
-msgstr "입금"
+msgstr "입금 표시하기"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:49
-#, fuzzy
 msgid "Show Money Out"
-msgstr "출금"
+msgstr "출금 표시하기"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:50
-#, fuzzy
 msgid "Show Net Flow"
-msgstr "순 자산 막대 보이기"
+msgstr "순거래액 표시하기"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:51
-#, fuzzy
 msgid "Show Table"
-msgstr "표 보이기"
+msgstr "표 표시하기"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:100
 #: gnucash/report/reports/standard/cash-flow.scm:102
-#, fuzzy
 msgid "Include transfers to and from Trading Accounts in the report."
-msgstr "필터 계정에서/로 거래만 포함"
+msgstr "보고서에 받고 보내는 매매 계정 이체를 포함합니다."
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:107
-#, fuzzy
 msgid "Show money in?"
-msgstr "도표 보이기"
+msgstr "입금을 표시하시겠습니까?"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:113
-#, fuzzy
 msgid "Show money out?"
-msgstr "도표 보이기"
+msgstr "출금을 표시하시겠습니까?"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:119
-#, fuzzy
 msgid "Show net money flow?"
-msgstr "도표 보이기"
+msgstr "순현금흐름을 표시하시겠습니까?"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:303
 #: gnucash/report/reports/standard/cashflow-barchart.scm:339
@@ -30026,9 +30028,8 @@ msgid "Manually select lots."
 msgstr ""
 
 #: libgnucash/engine/qofbookslots.h:66
-#, fuzzy
 msgid "Use Trading Accounts"
-msgstr "기존 계정"
+msgstr "매매 계정 사용하기"
 
 #: libgnucash/engine/qofbookslots.h:67
 #, fuzzy
