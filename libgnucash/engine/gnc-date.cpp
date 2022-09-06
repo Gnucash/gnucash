@@ -1335,6 +1335,12 @@ gnc_tm_get_today_start (struct tm *tm)
 }
 
 void
+gnc_tm_get_today_neutral (struct tm *tm)
+{
+    gnc_tm_get_day_neutral(tm, time(NULL));
+}
+
+void
 gnc_tm_get_today_end (struct tm *tm)
 {
     gnc_tm_get_day_end(tm, time(NULL));
