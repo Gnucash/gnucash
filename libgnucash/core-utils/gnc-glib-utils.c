@@ -335,18 +335,25 @@ gnc_g_list_stringjoin (GList *list_of_strings, const gchar *sep)
     gint length = -seplen;
     gchar *retval, *p;
 
-    if (!list_of_strings)
-        return NULL;
-
     for (GList *n = list_of_strings; n; n = n->next)
-        length += strlen ((gchar*)n->data) + seplen;
+    {
+        gchar *str = n->data;
+        if (str && *str)
+            length += strlen (str) + seplen;
+    }
+
+    if (length <= 0)
+        return NULL;
 
     p = retval = (gchar*) g_malloc0 (length * sizeof (gchar) + 1);
     for (GList *n = list_of_strings; n; n = n->next)
     {
-        p = g_stpcpy (p, (gchar*)n->data);
-        if (n->next && sep)
+        gchar *str = n->data;
+        if (!str || !str[0])
+            continue;
+        if (sep && (p != retval))
             p = g_stpcpy (p, sep);
+        p = g_stpcpy (p, str);
     }
 
     return retval;
