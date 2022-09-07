@@ -75,7 +75,7 @@ enum split_cols
 {
     SPLIT_COL_ACCOUNT = 0,
     SPLIT_COL_MEMO,
-    SPLIT_COL_MEMO_ESCAPED,
+    SPLIT_COL_TOOLTIP,
     SPLIT_COL_DEBIT,
     SPLIT_COL_CREDIT,
     NUM_SPLIT_COLS
@@ -695,7 +695,7 @@ check_page (GtkListStore *list, gnc_numeric& debit, gnc_numeric& credit,
     gtk_list_store_set (list, &iter,
                         SPLIT_COL_ACCOUNT, acctstr,
                         SPLIT_COL_MEMO, memostr,
-                        SPLIT_COL_MEMO_ESCAPED, memostr_escaped,
+                        SPLIT_COL_TOOLTIP, memostr_escaped,
                         SPLIT_COL_DEBIT, debit_side ? amtstr : "",
                         SPLIT_COL_CREDIT, !debit_side ? amtstr : "",
                         -1);
@@ -1253,7 +1253,7 @@ stock_assistant_create (StockTransactionInfo *info)
     g_signal_connect (G_OBJECT(info->window), "destroy",
                       G_CALLBACK (stock_assistant_window_destroy_cb), info);
     gtk_tree_view_set_tooltip_column (GTK_TREE_VIEW (info->finish_split_view),
-                                      SPLIT_COL_MEMO_ESCAPED);
+                                      SPLIT_COL_TOOLTIP);
 
     gtk_assistant_set_forward_page_func (GTK_ASSISTANT(info->window),
                                          (GtkAssistantPageFunc)forward_page_func,
