@@ -225,7 +225,7 @@ gnc_cbwe_require_list_item (GtkComboBox *cbwe)
 
 /** Return whether the current gtk theme is a dark one. A theme is considered "dark" if
  *  it has a dark background color with a light foreground color (used for text and so on).
- *  We only test on the foregrond color assuming a sane theme chooses enough contrast between
+ *  We only test on the foreground color assuming a sane theme chooses enough contrast between
  *  foreground and background colors.
  *
  *  @param fg_color The foreground color to test.

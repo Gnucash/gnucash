@@ -323,7 +323,7 @@ deprecated_account_security_handler (xmlNodePtr node, gpointer act_pdata)
     PWARN ("Account %s: Obsolete xml tag 'act:security' will not be preserved.",
            xaccAccountGetName (pdata->account));
     /* If the account has both a commodity and a security element, and
-       the commodity is a currecny, then the commodity is probably
+       the commodity is a currency, then the commodity is probably
        wrong. In that case we want to replace it with the
        security. jralls 2010-11-02 */
     if (!orig || gnc_commodity_is_currency (orig))

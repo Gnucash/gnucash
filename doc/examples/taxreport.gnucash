@@ -1921,7 +1921,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Fertalizer, roto-tiller</act:description>
+  <act:description>Fertilizer, roto-tiller</act:description>
   <act:parent type="guid">ce8a0ff9cfc2c79c99e6c65d5e258a55</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

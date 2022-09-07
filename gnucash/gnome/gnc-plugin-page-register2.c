@@ -1166,7 +1166,7 @@ gnc_plugin_page_register2_create_widget (GncPluginPage *plugin_page)
         gnc_ppr_update_date_query (page, FALSE);
     }
 
-//FIXME may change, can we load filter at same time of sort so we do one querry on load
+//FIXME may change, can we load filter at same time of sort so we do one query on load
     gnc_ledger_display2_refresh (priv->ledger);
 
     /* This sets the default selection on load, not required for templates */

@@ -243,7 +243,7 @@ check_equality_operator (void)
         check_unary_op (gnc_numeric_equal,
                         val, mval, mval, "expected %s = %s");
 
-        /* Certain modulo's should be very cleary un-equal; this
+        /* Certain modulo's should be very clearly un-equal; this
          * helps stop funky modulo-64 aliasing in compares that
          * might creep in. */
         mval.denom >>= 1;
