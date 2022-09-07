@@ -633,6 +633,31 @@ add_error_str (StringVec& errors, const char* str)
     errors.emplace_back (_(str));
 }
 
+struct SummaryLineInfo
+{
+    bool debit_side;
+    std::string account;
+    std::string memo;
+    std::string value;
+};
+
+static void
+add_to_summary_table (GtkListStore *list, SummaryLineInfo line)
+{
+    GtkTreeIter iter;
+    auto tooltip = g_markup_escape_text (line.memo.c_str(), -1);
+    gtk_list_store_append (list, &iter);
+    gtk_list_store_set (list, &iter,
+                        SPLIT_COL_ACCOUNT, line.account.c_str(),
+                        SPLIT_COL_MEMO, line.memo.c_str(),
+                        SPLIT_COL_TOOLTIP, tooltip,
+                        SPLIT_COL_DEBIT, line.debit_side ? line.value.c_str() : "",
+                        SPLIT_COL_CREDIT, !line.debit_side ? line.value.c_str() : "",
+                        -1);
+    g_free (tooltip);
+}
+
+
 static void
 check_page (GtkListStore *list, gnc_numeric& debit, gnc_numeric& credit,
             FieldMask splitfield, Account *acct, GtkWidget *memo, GtkWidget *gae,
@@ -675,7 +700,6 @@ check_page (GtkListStore *list, gnc_numeric& debit, gnc_numeric& credit,
     }
 
     auto memostr = gtk_entry_get_text (GTK_ENTRY (memo));
-    auto memostr_escaped = g_markup_escape_text (memostr, -1);
     const gchar *acctstr;
 
     if (acct)
@@ -688,16 +712,8 @@ check_page (GtkListStore *list, gnc_numeric& debit, gnc_numeric& credit,
         acctstr = _(missing_str);
     }
 
-    GtkTreeIter iter;
-    gtk_list_store_append (list, &iter);
-    gtk_list_store_set (list, &iter,
-                        SPLIT_COL_ACCOUNT, acctstr,
-                        SPLIT_COL_MEMO, memostr,
-                        SPLIT_COL_TOOLTIP, memostr_escaped,
-                        SPLIT_COL_DEBIT, debit_side ? amtstr : "",
-                        SPLIT_COL_CREDIT, !debit_side ? amtstr : "",
-                        -1);
-    g_free (memostr_escaped);
+    SummaryLineInfo line = { debit_side, acctstr, memostr, amtstr };
+    add_to_summary_table (list, line);
 }
 
 static inline Account*
