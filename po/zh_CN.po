@@ -22,14 +22,15 @@
 # 李元基 <lovedebushiu@qq.com>, 2022.
 # Eric <alchemillatruth@purelymail.com>, 2022.
 # Yu Hongbo <linuxbckp@gmail.com>, 2022.
+# Eric <hamburger1024@firemail.cc>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-pot3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-09-07 04:08+0200\n"
-"PO-Revision-Date: 2022-07-26 15:51+0000\n"
-"Last-Translator: J0kWang <lianjiefly@gmail.com>\n"
+"PO-Revision-Date: 2022-09-07 04:22+0000\n"
+"Last-Translator: Eric <hamburger1024@firemail.cc>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -37,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -2586,10 +2587,8 @@ msgid "Find Job"
 msgstr "查找项目"
 
 #: gnucash/gnome/dialog-lot-viewer.c:817
-#, fuzzy
-#| msgid "Empty space"
 msgid "Empty"
-msgstr "命名空间"
+msgstr "清空"
 
 #: gnucash/gnome/dialog-lot-viewer.c:829
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:412
