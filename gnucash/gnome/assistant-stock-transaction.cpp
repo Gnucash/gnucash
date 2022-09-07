@@ -638,8 +638,6 @@ check_page (GtkListStore *list, gnc_numeric& debit, gnc_numeric& credit,
             FieldMask splitfield, Account *acct, GtkWidget *memo, GtkWidget *gae,
             gnc_commodity *comm, const char* page, StringVec& errors)
 {
-    if (splitfield == FieldMask::DISABLED)
-        return;
     const char* missing_str = N_("(missing)");
     const gchar* amtstr;
     gnc_numeric amount;
@@ -766,26 +764,32 @@ to ensure proper recording."), new_date_str, last_split_date_str);
             add_error_str (errors, N_("Cannot cover buy more units than owed"));
     }
 
-    check_page (list, debit, credit, info->txn_type->stock_value, info->acct,
-                info->stock_memo_edit, info->stock_value_edit, info->currency,
-                NC_ ("Stock Assistant: Page name", "stock value"), errors);
+    if (info->txn_type->stock_value != FieldMask::DISABLED)
+        check_page (list, debit, credit, info->txn_type->stock_value, info->acct,
+                    info->stock_memo_edit, info->stock_value_edit, info->currency,
+                    NC_ ("Stock Assistant: Page name", "stock value"), errors);
 
-    check_page (list, debit, credit, info->txn_type->cash_value,
-                gas_account (info->cash_account), info->cash_memo_edit,
-                info->cash_value, info->currency,
-                NC_ ("Stock Assistant: Page name", "cash"), errors);
+    if (info->txn_type->cash_value != FieldMask::DISABLED)
+        check_page (list, debit, credit, info->txn_type->cash_value,
+                    gas_account (info->cash_account), info->cash_memo_edit,
+                    info->cash_value, info->currency,
+                    NC_ ("Stock Assistant: Page name", "cash"), errors);
 
-    auto capitalize_fees = gtk_toggle_button_get_active
-        (GTK_TOGGLE_BUTTON (info->capitalize_fees_checkbox));
-    check_page (list, debit, credit, info->txn_type->fees_value,
-                capitalize_fees ? info->acct : gas_account (info->fees_account),
-                info->fees_memo_edit, info->fees_value, info->currency,
-                NC_ ("Stock Assistant: Page name", "fees"), errors);
+    if (info->txn_type->fees_value != FieldMask::DISABLED)
+    {
+        auto capitalize_fees = gtk_toggle_button_get_active
+            (GTK_TOGGLE_BUTTON (info->capitalize_fees_checkbox));
+        check_page (list, debit, credit, info->txn_type->fees_value,
+                    capitalize_fees ? info->acct : gas_account (info->fees_account),
+                    info->fees_memo_edit, info->fees_value, info->currency,
+                    NC_ ("Stock Assistant: Page name", "fees"), errors);
+    }
 
-    check_page (list, debit, credit, info->txn_type->dividend_value,
-                gas_account (info->dividend_account),
-                info->dividend_memo_edit, info->dividend_value, info->currency,
-                NC_ ("Stock Assistant: Page name", "dividend"), errors);
+    if (info->txn_type->dividend_value != FieldMask::DISABLED)
+        check_page (list, debit, credit, info->txn_type->dividend_value,
+                    gas_account (info->dividend_account),
+                    info->dividend_memo_edit, info->dividend_value, info->currency,
+                    NC_ ("Stock Assistant: Page name", "dividend"), errors);
 
     // the next two checks will involve the two capgains splits:
     // income side and stock side. The capgains_value ^
