@@ -52,10 +52,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-pot3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-09-07 04:08+0200\n"
-"PO-Revision-Date: 2022-06-21 10:17+0000\n"
+"PO-Revision-Date: 2022-09-07 06:24+0000\n"
 "Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "it/>\n"
@@ -64,7 +64,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -2741,10 +2741,8 @@ msgid "Find Job"
 msgstr "Trova lavoro"
 
 #: gnucash/gnome/dialog-lot-viewer.c:817
-#, fuzzy
-#| msgid "Empty space"
 msgid "Empty"
-msgstr "Spazio vuoto"
+msgstr "Vuoto"
 
 #: gnucash/gnome/dialog-lot-viewer.c:829
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:412
@@ -8956,10 +8954,8 @@ msgid "Edit the global preferences of GnuCash"
 msgstr "Modifica le preferenze globali di GnuCash"
 
 #: gnucash/gnome-utils/gnc-main-window.c:345
-#, fuzzy
-#| msgid "<b>Tab Position</b>"
 msgid "Tab P_osition"
-msgstr "<b>Posizione delle schede</b>"
+msgstr "P_osizione delle schede"
 
 #: gnucash/gnome-utils/gnc-main-window.c:348
 msgid "Select sorting criteria for this page view"
@@ -9222,7 +9218,7 @@ msgstr "Opzioni libro"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4897 gnucash/gnucash-core-app.cpp:261
 msgid "(user modifiable)"
-msgstr ""
+msgstr "(modificabile dall'utente)"
 
 #. Translators: %s will be replaced with the current year
 #: gnucash/gnome-utils/gnc-main-window.c:4924
@@ -10602,10 +10598,8 @@ msgstr "{1} [opzioni] [file di dati]"
 
 # linea di comando
 #: gnucash/gnucash-core-app.cpp:255
-#, fuzzy
-#| msgid "GnuCash "
 msgid "GnuCash Paths"
-msgstr "GnuCash "
+msgstr "Percorsi GnuCash"
 
 # linea di comando
 #: gnucash/gnucash-core-app.cpp:270
@@ -10656,10 +10650,8 @@ msgstr ""
 "Sono ammesse invocazioni multiple."
 
 #: gnucash/gnucash-core-app.cpp:309
-#, fuzzy
-#| msgid "Show plot"
 msgid "Show paths"
-msgstr "Visualizza stampa"
+msgstr "Visualizza percorsi"
 
 # linea di comando
 #: gnucash/gnucash-core-app.cpp:311
@@ -16181,10 +16173,8 @@ msgstr "ISIN, CUSI_P o altro codice"
 #: gnucash/gtkbuilder/dialog-commodity.glade:485
 #: gnucash/gtkbuilder/dialog-commodity.glade:767
 #: gnucash/gtkbuilder/dialog-price.glade:138
-#, fuzzy
-#| msgid "Namespace"
 msgid "Nam_espace"
-msgstr "Spazio dei nomi"
+msgstr "Spazio d_ei nomi"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:500
 msgid "_Symbol/abbreviation"
@@ -16907,10 +16897,8 @@ msgid "Green"
 msgstr "Verde"
 
 #: gnucash/gtkbuilder/dialog-import.glade:871
-#, fuzzy
-#| msgid "Do not print transaction detail"
 msgid "Edit imported transaction details"
-msgstr "Non stampare i dettagli della transazione"
+msgstr "Modifica i dettagli della transazione importata"
 
 #: gnucash/gtkbuilder/dialog-import.glade:944
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:151
@@ -22427,24 +22415,18 @@ msgstr "Disabilitato"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1314
-#, fuzzy
-#| msgid "Assign a transfer account to the selection."
 msgid "_Assign a transfer account to the selection"
-msgstr "Assegnare un conto di trasferimento per la selezione."
+msgstr "_Assegnare un conto di trasferimento alla selezione."
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1365
-#, fuzzy
-#| msgid "Description, Notes, or Memo"
 msgid "_Edit description, notes, or memo"
-msgstr "Descrizione, note o promemoria"
+msgstr "_Modifica descrizione, note o promemoria"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1374
-#, fuzzy
-#| msgid "Reset defaults"
 msgid "_Reset all edits"
-msgstr "Ripristina predefiniti"
+msgstr "_Ripristina tutte le modifiche"
 
 #: gnucash/import-export/import-main-matcher.c:1545
 msgctxt "Column header for 'Adding transaction'"
