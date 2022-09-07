@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-pot3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-09-07 04:08+0200\n"
-"PO-Revision-Date: 2022-08-30 17:17+0000\n"
+"PO-Revision-Date: 2022-09-07 09:20+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -2644,10 +2644,8 @@ msgid "Find Job"
 msgstr "חיפוש ריכוז"
 
 #: gnucash/gnome/dialog-lot-viewer.c:817
-#, fuzzy
-#| msgid "Empty space"
 msgid "Empty"
-msgstr "מקום ריק"
+msgstr "ריק"
 
 #: gnucash/gnome/dialog-lot-viewer.c:829
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:412
