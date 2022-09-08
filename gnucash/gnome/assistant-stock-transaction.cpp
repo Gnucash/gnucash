@@ -78,6 +78,7 @@ enum split_cols
     SPLIT_COL_TOOLTIP,
     SPLIT_COL_DEBIT,
     SPLIT_COL_CREDIT,
+    SPLIT_COL_UNITS,
     NUM_SPLIT_COLS
 };
 
@@ -639,6 +640,7 @@ struct SummaryLineInfo
     std::string account;
     std::string memo;
     std::string value;
+    std::string units;
 };
 
 static void
@@ -653,6 +655,7 @@ add_to_summary_table (GtkListStore *list, SummaryLineInfo line)
                         SPLIT_COL_TOOLTIP, tooltip,
                         SPLIT_COL_DEBIT, line.debit_side ? line.value.c_str() : "",
                         SPLIT_COL_CREDIT, !line.debit_side ? line.value.c_str() : "",
+                        SPLIT_COL_UNITS, line.units.c_str(),
                         -1);
     g_free (tooltip);
 }
@@ -667,6 +670,7 @@ check_page (SummaryLineInfo& line, gnc_numeric& debit, gnc_numeric& credit,
     gnc_numeric amount;
 
     line.memo = gtk_entry_get_text (GTK_ENTRY (memo));
+    line.units = "";
     line.debit_side = (splitfield & FieldMask::ENABLED_DEBIT);
 
     if (gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (gae), &amount, true, nullptr))
@@ -759,14 +763,25 @@ to ensure proper recording."), new_date_str, last_split_date_str);
         }
     }
 
+    if (info->txn_type->stock_value == FieldMask::DISABLED)
+        line = { false, xaccAccountGetName (info->acct), "", "", "" };
+    else
+        check_page (line, debit, credit, info->txn_type->stock_value, info->acct,
+                    info->stock_memo_edit, info->stock_value_edit, info->currency,
+                    NC_ ("Stock Assistant: Page name", "stock value"), errors);
+
+
     if (info->txn_type->stock_amount != FieldMask::DISABLED)
     {
         auto stock_amount = gnc_amount_edit_get_amount
             (GNC_AMOUNT_EDIT(info->stock_amount_edit));
+        auto stock_pinfo = gnc_commodity_print_info
+            (xaccAccountGetCommodity (info->acct), true);
         if (!gnc_numeric_positive_p (stock_amount))
             add_error_str (errors, N_("Stock amount must be positive"));
         if (info->txn_type->stock_amount & FieldMask::ENABLED_CREDIT)
             stock_amount = gnc_numeric_neg (stock_amount);
+        line.units = xaccPrintAmount (stock_amount, stock_pinfo);
         auto new_bal = gnc_numeric_add_fixed (info->balance_at_date, stock_amount);
         if (gnc_numeric_positive_p (info->balance_at_date) &&
             gnc_numeric_negative_p (new_bal))
@@ -776,13 +791,7 @@ to ensure proper recording."), new_date_str, last_split_date_str);
             add_error_str (errors, N_("Cannot cover buy more units than owed"));
     }
 
-    if (info->txn_type->stock_value != FieldMask::DISABLED)
-    {
-        check_page (line, debit, credit, info->txn_type->stock_value, info->acct,
-                    info->stock_memo_edit, info->stock_value_edit, info->currency,
-                    NC_ ("Stock Assistant: Page name", "stock value"), errors);
-        add_to_summary_table (list, line);
-    }
+    add_to_summary_table (list, line);
 
     if (info->txn_type->cash_value != FieldMask::DISABLED)
     {
@@ -1174,7 +1183,8 @@ get_treeview (GtkBuilder *builder, const gchar *treeview_label)
     gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(view), gnc_tree_view_get_grid_lines_pref ());
 
     auto store = gtk_list_store_new (NUM_SPLIT_COLS, G_TYPE_STRING, G_TYPE_STRING,
-                                     G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+                                     G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
+                                     G_TYPE_STRING);
     gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
     g_object_unref(store);
 
@@ -1202,6 +1212,13 @@ get_treeview (GtkBuilder *builder, const gchar *treeview_label)
     gtk_cell_renderer_set_padding (renderer, 5, 0);
     column = gtk_tree_view_column_new_with_attributes
         (_("Credit"), renderer, "text", SPLIT_COL_CREDIT, nullptr);
+    gtk_tree_view_append_column(view, column);
+
+    renderer = gtk_cell_renderer_text_new();
+    gtk_cell_renderer_set_alignment (renderer, 1.0, 0.5);
+    gtk_cell_renderer_set_padding (renderer, 5, 0);
+    column = gtk_tree_view_column_new_with_attributes
+        (_("Units"), renderer, "text", SPLIT_COL_UNITS, nullptr);
     gtk_tree_view_append_column(view, column);
 
     return GTK_WIDGET (view);
