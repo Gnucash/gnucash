@@ -637,6 +637,7 @@ add_error_str (StringVec& errors, const char* str)
 struct SummaryLineInfo
 {
     bool debit_side;
+    bool value_is_zero;
     std::string account;
     std::string memo;
     std::string value;
@@ -675,6 +676,7 @@ check_page (SummaryLineInfo& line, gnc_numeric& debit, gnc_numeric& credit,
 
     if (gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (gae), &amount, true, nullptr))
     {
+        line.value_is_zero = false;
         if (splitfield & FieldMask::ALLOW_ZERO)
             line.value = "";
         else
@@ -702,6 +704,7 @@ check_page (SummaryLineInfo& line, gnc_numeric& debit, gnc_numeric& credit,
         else
             credit = gnc_numeric_add_fixed (credit, amount);
         line.value = xaccPrintAmount (amount, gnc_commodity_print_info (comm, true));
+        line.value_is_zero = gnc_numeric_zero_p (amount);
     }
 
     if (acct)
@@ -764,7 +767,7 @@ to ensure proper recording."), new_date_str, last_split_date_str);
     }
 
     if (info->txn_type->stock_value == FieldMask::DISABLED)
-        line = { false, xaccAccountGetName (info->acct), "", "", "" };
+        line = { false, false, xaccAccountGetName (info->acct), "", "", "" };
     else
         check_page (line, debit, credit, info->txn_type->stock_value, info->acct,
                     info->stock_memo_edit, info->stock_value_edit, info->currency,
@@ -810,7 +813,8 @@ to ensure proper recording."), new_date_str, last_split_date_str);
                     capitalize_fees ? info->acct : gas_account (info->fees_account),
                     info->fees_memo_edit, info->fees_value, info->currency,
                     NC_ ("Stock Assistant: Page name", "fees"), errors);
-        add_to_summary_table (list, line);
+        if (!line.value_is_zero)
+            add_to_summary_table (list, line);
     }
 
     if (info->txn_type->dividend_value != FieldMask::DISABLED)
