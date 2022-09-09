@@ -284,6 +284,12 @@ static void gnc_currency_edit_active_changed (GtkComboBox *gobject,
     }
 }
 
+enum
+{
+    CURRENCY_COL_NAME,
+    NUM_CURRENCY_COLS
+};
+
 /** This auxiliary function adds a single currency name to the combo
  *  box.  It is called as an iterator function when running a list of
  *  currencies.
@@ -306,8 +312,9 @@ add_item(gnc_commodity *commodity, GNCCurrencyEdit *gce)
     string = gnc_commodity_get_printname(commodity);
 
     gtk_list_store_append(GTK_LIST_STORE(model), &iter);
-    gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0, string, -1);
-
+    gtk_list_store_set (GTK_LIST_STORE(model), &iter,
+                        CURRENCY_COL_NAME, string,
+                        -1);
 }
 
 
@@ -341,8 +348,9 @@ gnc_currency_edit_new (void)
 {
     GNCCurrencyEdit *gce;
     GtkListStore *store;
+    GtkEntryCompletion* completion;
 
-    store = gtk_list_store_new (1, G_TYPE_STRING);
+    store = gtk_list_store_new (NUM_CURRENCY_COLS, G_TYPE_STRING);
     gce = g_object_new (GNC_TYPE_CURRENCY_EDIT,
                         "model", store,
                         "has-entry", TRUE,
@@ -350,7 +358,7 @@ gnc_currency_edit_new (void)
     g_object_unref (store);
 
     /* Set the column for the text */
-    gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX(gce), 0);
+    gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX(gce), CURRENCY_COL_NAME);
 
     /* Now the signals to make sure the user can't leave the
        widget without a valid currency. */
@@ -358,8 +366,10 @@ gnc_currency_edit_new (void)
 
     /* Fill in all the data. */
     fill_currencies (gce);
-    gtk_tree_sortable_set_sort_column_id
-    (GTK_TREE_SORTABLE(store), 0, GTK_SORT_ASCENDING);
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(store),
+                                          CURRENCY_COL_NAME,
+                                          GTK_SORT_ASCENDING);
+
 
     return GTK_WIDGET (gce);
 }
