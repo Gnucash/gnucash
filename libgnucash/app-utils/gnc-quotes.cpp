@@ -360,36 +360,37 @@ GncQuotesImpl::parse_one_quote(const bpt::ptree& pt, gnc_commodity* comm)
     if (gnc_commodity_equiv(comm, m_dflt_curr) ||
         (!comm_mnemonic || (strcmp (comm_mnemonic, "XXX") == 0)))
         return nullptr;
-    if (pt.find (comm_mnemonic) == pt.not_found())
+    auto comm_pt_ai{pt.find(comm_mnemonic)};
+    if (comm_pt_ai == pt.not_found())
     {
         PINFO("Skipped %s:%s - Finance::Quote didn't return any data.",
               comm_ns, comm_mnemonic);
         return nullptr;
     }
 
-    std::string key = comm_mnemonic;
-    auto success = pt.get_optional<bool> (key + ".success");
+    auto comm_pt{comm_pt_ai->second};
+    auto success = comm_pt.get_optional<bool> ("success");
     std::string price_type = "last";
-    auto price_str = pt.get_optional<std::string> (key + "." + price_type);
+    auto price_str = comm_pt.get_optional<std::string> (price_type);
     if (!price_str)
     {
         price_type = "nav";
-        price_str = pt.get_optional<std::string> (key + "." + price_type);
+        price_str = comm_pt.get_optional<std::string> (price_type);
     }
     if (!price_str)
     {
         price_type = "price";
-        price_str = pt.get_optional<std::string> (key + "." + price_type);
+        price_str = comm_pt.get_optional<std::string> (price_type);
         /* guile wrapper used "unknown" as price type when "price" was found,
          * reproducing here to keep same result for users in the pricedb */
         price_type = "unknown";
     }
 
-    auto inverted_tmp = pt.get_optional<bool> (key + ".inverted");
+    auto inverted_tmp = comm_pt.get_optional<bool> ("inverted");
     auto inverted = inverted_tmp ? *inverted_tmp : false;
-    auto date_str = pt.get_optional<std::string> (key + ".date");
-    auto time_str = pt.get_optional<std::string> (key + ".time");
-    auto currency_str = pt.get_optional<std::string> (key + ".currency");
+    auto date_str = comm_pt.get_optional<std::string> ("date");
+    auto time_str = comm_pt.get_optional<std::string> ("time");
+    auto currency_str = comm_pt.get_optional<std::string> ("currency");
 
 
     PINFO("Commodity: %s", comm_mnemonic);
@@ -401,7 +402,7 @@ GncQuotesImpl::parse_one_quote(const bpt::ptree& pt, gnc_commodity* comm)
 
     if (!success || !*success)
     {
-        auto errmsg = pt.get_optional<std::string> (key + ".errormsg");
+        auto errmsg = comm_pt.get_optional<std::string> ("errormsg");
         PWARN("Skipped %s:%s - Finance::Quote returned fetch failure.\nReason %s",
               comm_ns, comm_mnemonic,
               (errmsg ? errmsg->c_str() : "unknown"));
