@@ -479,7 +479,7 @@ gnc_ab_get_purpose (const AB_TRANSACTION *ab_trans, gboolean is_ofx)
 
 /* Ultimate Creditor and Ultimate Debtor are newish parameters added
  * to SWIFT MT940 and CAMT.053 designating the originating
- * payer or payee on the tranaction. It's unlikely, but still
+ * payer or payee on the transaction. It's unlikely, but still
  * possible, that a bank would use both this markup and the Non-swift
  * TransactionText or RemoteName tags.
  */
@@ -510,50 +510,16 @@ ab_ultimate_creditor_debtor_to_gnc (const AB_TRANSACTION *ab_trans,
 gchar *
 gnc_ab_description_to_gnc (const AB_TRANSACTION *ab_trans, gboolean is_ofx)
 {
-    /* Description */
-    gchar *description = gnc_ab_get_purpose (ab_trans, is_ofx);
-    gchar *other_name = gnc_ab_get_remote_name (ab_trans);
-    gchar *ultimate = ab_ultimate_creditor_debtor_to_gnc (ab_trans, is_ofx);
-    gchar *retval = NULL;
+    GList *acc = NULL;
+    gchar *retval;
 
-    if (ultimate)
-        retval = ultimate;
-    if (description)
-    {
-        if (retval)
-        {
-            char *tmp = g_strdup_printf ("%s; %s", retval, description);
-            g_free (retval);
-            g_free (description);
-            retval = tmp;
-        }
-        else
-        {
-            retval = description;
-        }
-    }
+    acc = g_list_prepend (acc, gnc_ab_get_remote_name (ab_trans));
+    acc = g_list_prepend (acc, gnc_ab_get_purpose (ab_trans, is_ofx));
+    acc = g_list_prepend (acc, ab_ultimate_creditor_debtor_to_gnc (ab_trans, is_ofx));
+    retval = gnc_g_list_stringjoin (acc, "; ");
 
-    if (other_name)
-    {
-        if (retval)
-        {
-            char *tmp = g_strdup_printf ("%s; %s", retval, other_name);
-            g_free (retval);
-            g_free (other_name);
-            retval = tmp;
-        }
-        else
-        {
-            retval = other_name;
-        }
-    }
-
-    if (!retval)
-    {
-        retval = g_strdup (_("Unspecified"));
-    }
-
-    return retval;
+    g_list_free_full (acc, g_free);
+    return retval ? retval : g_strdup (_("Unspecified"));
 }
 
 gchar *

@@ -79,6 +79,11 @@ test_g_list_stringjoin (gconstpointer data)
     g_assert_cmpstr (ret, ==, "one");
     g_free (ret);
 
+   /* The following inserts a NULL between "two" and "one". As a
+       result, the stringjoin effectively skips a step, i.e. it does
+       not insert separator repeatedly between NULL strings */
+    test = g_list_prepend (test, NULL);
+
     test = g_list_prepend (test, "two");
 
     ret = gnc_g_list_stringjoin (test, NULL);

@@ -3040,7 +3040,7 @@ gnc_main_window_new (void)
 #endif
     gnc_engine_add_commit_error_callback( gnc_main_window_engine_commit_error_callback, window );
 
-    // set up a callback for noteboook navigation
+    // set up a callback for notebook navigation
     g_signal_connect (G_OBJECT(window), "key-press-event",
                       G_CALLBACK(gnc_main_window_key_press_event),
                       NULL);
@@ -4939,7 +4939,7 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
     g_signal_connect (dialog, "activate-link",
                       G_CALLBACK (url_signal_cb), nullptr);
 
-    // Add enviroment paths
+    // Add environment paths
     add_about_paths (dialog);
 
     /* Set dialog to resize. */

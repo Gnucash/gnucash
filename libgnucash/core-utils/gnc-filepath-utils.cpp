@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-filepath-utils.c -- file path resolutin utilitie             *
+ * gnc-filepath-utils.c -- file path resolution utility             *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *

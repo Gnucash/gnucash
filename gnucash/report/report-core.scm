@@ -471,7 +471,7 @@ not found.")))
           (hash-map->list cons *gnc:_report-templates_*)))
 
 ;; This function should be called right before changing a custom-template's name
-;; to test if the new name is unique among the existting custom reports.
+;; to test if the new name is unique among the existing custom reports.
 ;; If not the calling function can prevent the name from being updated.
 (define (gnc:report-template-has-unique-name? templ-guid new-name)
   (or (not new-name)

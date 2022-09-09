@@ -53,7 +53,7 @@
     <act:commodity-scu>100</act:commodity-scu>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Actifs</act:name>
+    <act:name>Actif</act:name>
     <act:id type="guid">e3f7b59890ec44688241f322db0a7392</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>

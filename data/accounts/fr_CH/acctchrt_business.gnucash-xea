@@ -48,7 +48,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:commodity-scu>0</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Actifs</act:name>
+  <act:name>Actif</act:name>
   <act:id type="new">4f40ddce996f8f74b4e99f52e275ba14</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -56,7 +56,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Actifs</act:description>
+  <act:description>Actif</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -1356,7 +1356,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:parent type="new">b615fad5f752ab26809e3f1c0e788dd1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Solde</act:name>
+  <act:name>Capitaux propres</act:name>
   <act:id type="new">87e02e757b32b3059652cfe09fe9ae00</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
@@ -1364,7 +1364,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Solde</act:description>
+  <act:description>Capitaux propres</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

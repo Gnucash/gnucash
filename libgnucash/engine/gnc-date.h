@@ -576,7 +576,7 @@ void gnc_tm_set_day_end (struct tm *tm)
 time64 gnc_time64_get_day_start(time64 time_val);
 
 /** The gnc_time64_get_day_neutral() routine will take the given time in
- *  seconds and adjust it to 10:59am of that day. */
+ *  seconds and adjust it to 10:59:00Z of that day. */
 time64 gnc_time64_get_day_neutral(time64 time_val);
 
 /** The gnc_time64_get_day_end() routine will take the given time in
@@ -595,6 +595,10 @@ int gnc_date_get_last_mday (int month, int year);
 /** The gnc_tm_get_today_start() routine takes a pointer to a struct
  *  tm and fills it in with the first second of the today. */
 void   gnc_tm_get_today_start(struct tm *tm);
+
+/** The gnc_tm_get_today_start() routine takes a pointer to a struct
+ *  tm and fills it in with the timezone neutral time (10:59:00Z). */
+void   gnc_tm_get_today_neutral(struct tm *tm);
 
 /** The gnc_tm_get_today_end() routine takes a pointer to a struct
  *  tm and fills it in with the last second of the today. */

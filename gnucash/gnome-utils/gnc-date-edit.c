@@ -296,7 +296,7 @@ gnc_date_edit_popup (GNCDateEdit *gde)
     if (!date_was_valid)
     {
         /* No valid date. Hacky workaround: Instead of crashing we randomly choose today's date. */
-        gnc_tm_get_today_start(&mtm);
+        gnc_tm_get_today_neutral(&mtm);
     }
 
     mtm.tm_mon--;
@@ -307,7 +307,7 @@ gnc_date_edit_popup (GNCDateEdit *gde)
     if (mtm.tm_year >= 1900)
         mtm.tm_year -= 1900;
 
-    gnc_tm_set_day_start(&mtm);
+    gnc_tm_set_day_neutral(&mtm);
 
     /* Set the calendar.  */
     gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), 1);
@@ -1061,7 +1061,7 @@ gnc_date_edit_get_date_internal (GNCDateEdit *gde)
         revert to today's date. Alternatively we can return some value that
         signals that we don't get a valid date, but all callers of this
         function will have to check this. Alas, I'm too lazy to do this here. */
-        gnc_tm_get_today_start(&tm);
+        gnc_tm_get_today_neutral(&tm);
     }
 
     tm.tm_mon--;
@@ -1109,7 +1109,7 @@ gnc_date_edit_get_date_internal (GNCDateEdit *gde)
     }
     else
     {
-        gnc_tm_set_day_start(&tm);
+        gnc_tm_set_day_neutral(&tm);
     }
 
     tm.tm_isdst = -1;

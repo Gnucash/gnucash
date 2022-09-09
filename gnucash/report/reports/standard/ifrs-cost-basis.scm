@@ -182,39 +182,41 @@ the split action field to detect capitalized fees on stock activity")
 ;; N000 should be (not x) however we can accept a zero-amount split too
 (define (N000 x) (if (number? x) (=  x 0) #t))
 
-;;       --stock-- cash cap  exp  divi capg
+;;       <-- bitfield masks to identify ->  purchase?
+;;       <---- the transaction type ----->  |  sale?
+;;       --stock-- cash cap  exp  divi capg |  |  narrative
 ;;       amt  val       fees fees
 
 (define open-types
   (list
-   (list N001 N001 N100 N011 N000 N000 N000 "Open Long")
-   (list N100 N100 N001 N011 N000 N000 N000 "Open Short")))
+   (list N001 N001 N100 N011 N000 N000 N000 #t #f "Open Long")
+   (list N100 N100 N001 N011 N000 N000 N000 #t #f "Open Short")))
 
 (define long-types
   (list
-   (list N001 N001 N100 N011 N000 N000 N000 "Buy")
-   (list N100 N100 N011 N000 N011 N000 N111 "Sell")
-   (list N000 N000 N001 N000 N011 N100 N000 "Dividend")
-   (list N001 N001 N001 N011 N000 N100 N000 "Dividend reinvestment (w/ remainder)")
-   (list N001 N001 N000 N011 N000 N100 N000 "Dividend reinvestment (w/o remainder)")
-   (list N000 N100 N001 N011 N000 N000 N000 "Return of Capital")
-   (list N000 N001 N000 N000 N011 N100 N000 "Notional distribution")
-   (list N001 N000 N000 N011 N000 N000 N000 "Stock split")
-   (list N100 N000 N000 N011 N000 N000 N000 "Reverse split")
-   (list N100 N100 N001 N000 N011 N000 N111 "Reverse split w/ cash in lieu for fractionals")))
+   (list N001 N001 N100 N011 N000 N000 N000 #t #f "Buy")
+   (list N100 N100 N011 N000 N011 N000 N111 #f #t "Sell")
+   (list N000 N000 N001 N000 N011 N100 N000 #f #f "Dividend")
+   (list N001 N001 N001 N011 N000 N100 N000 #t #f "Dividend reinvestment (w/ remainder)")
+   (list N001 N001 N000 N011 N000 N100 N000 #t #f "Dividend reinvestment (w/o remainder)")
+   (list N000 N100 N001 N011 N000 N000 N000 #t #f "Return of Capital")
+   (list N000 N001 N000 N000 N011 N100 N000 #t #f "Notional distribution")
+   (list N001 N000 N000 N011 N000 N000 N000 #f #f "Stock split")
+   (list N100 N000 N000 N011 N000 N000 N000 #f #f "Reverse split")
+   (list N100 N100 N001 N000 N011 N000 N111 #f #t "Reverse split w/ cash in lieu for fractionals")))
 
 (define short-types
   (list
-   (list N100 N100 N001 N011 N000 N000 N000 "Short Sell")
-   (list N001 N001 N110 N000 N011 N000 N111 "Cover Buy")
-   (list N000 N000 N100 N000 N011 N001 N000 "Compensatory dividend")
-   (list N000 N000 N000 N011 N000 N000 N000 "Dividend reinvestment (w remainder)")
-   (list N000 N000 N000 N011 N000 N000 N000 "Dividend reinvestment (w/o remainder)")
-   (list N000 N001 N100 N011 N000 N000 N000 "Compensatory return of capital")
-   (list N000 N100 N000 N000 N011 N001 N000 "Compensatory notional distribution")
-   (list N100 N000 N000 N011 N000 N000 N000 "Stock split")
-   (list N001 N000 N000 N011 N000 N000 N000 "Reverse split")
-   (list N001 N001 N100 N000 N011 N000 N111 "Reverse split w/ cash in lieu for fractionals")))
+   (list N100 N100 N001 N011 N000 N000 N000 #t #f "Short Sell")
+   (list N001 N001 N110 N000 N011 N000 N111 #f #t "Cover Buy")
+   (list N000 N000 N100 N000 N011 N001 N000 #f #f "Compensatory dividend")
+   (list N000 N000 N000 N011 N000 N000 N000 #t #f "Dividend reinvestment (w remainder)")
+   (list N000 N000 N000 N011 N000 N000 N000 #t #f "Dividend reinvestment (w/o remainder)")
+   (list N000 N001 N100 N011 N000 N000 N000 #t #f "Compensatory return of capital")
+   (list N000 N100 N000 N000 N011 N001 N000 #t #f "Compensatory notional distribution")
+   (list N100 N000 N000 N011 N000 N000 N000 #f #f "Stock split")
+   (list N001 N000 N000 N011 N000 N000 N000 #f #f "Reverse split")
+   (list N001 N001 N100 N000 N011 N000 N111 #f #t "Reverse split w/ cash in lieu for fractionals")))
 
 (define (cmp amt neg zero pos)
   (cond ((< amt 0) neg)
@@ -227,8 +229,8 @@ the split action field to detect capitalized fees on stock activity")
     (match types
       (()
        ;; (gnc:pk (qof-print-date (xaccTransGetDate trans)) txn-info)
-       "Unknown")
-      (((amt-fn val-fn proc-fn fee-cap-fn fee-exp-fn div-fn capg-fn res) . tail)
+       (list #f #f "Unknown"))
+      (((amt-fn val-fn proc-fn fee-cap-fn fee-exp-fn div-fn capg-fn . res) . tail)
        (if (and (amt-fn (get-stock-amt txn-info))
                 (val-fn (get-stock-val txn-info))
                 (proc-fn (get-proceeds-val txn-info))
@@ -407,19 +409,17 @@ the split action field to detect capitalized fees on stock activity")
                   (trans-value (M+ (get-stock-val txn-info)
                                    (get-fees-cap-val txn-info)))
                   (new-units (M+ cumul-units trans-units))
+                  (identified
+                   (cond
+                    ((< new-units 0 cumul-units) (list #f #f "ERROR: long→short"))
+                    ((< cumul-units 0 new-units) (list #f #f "ERROR: short→long"))
+                    (else (txn-identify trans txn-info cumul-units))))
 
                   (sale?
-                   (cond
-                    ((< trans-units 0) (<= 0 new-units))
-                    ((> trans-units 0) (<= new-units 0))
-                    (else #f)))
+                   (cadr identified))
 
                   (purchase?
-                   (cond
-                    ((= trans-value 0) dividends-val)        ;dividends
-                    ((= trans-units 0) cash-value)           ;return of capital
-                    ((> trans-units 0) (< 0 new-units))      ;regular buy
-                    ((< trans-units 0) (< new-units 0))))    ;buy during short
+                   (car identified))
 
                   (shorting? (or (< new-units 0)
                                  (and (= new-units 0) (< 0 trans-units))))
@@ -486,10 +486,7 @@ the split action field to detect capitalized fees on stock activity")
                       (gnc:html-string-sanitize (xaccTransGetDescription trans))
                       (to-cell (gnc:html-split-anchor split (to-commodity trans-units)))
                       (to-cell (to-commodity new-units))
-                      (cond
-                       ((< new-units 0 cumul-units) "ERROR: long→short")
-                       ((< cumul-units 0 new-units) "ERROR: short→long")
-                       (else (txn-identify trans txn-info cumul-units)))
+                      (caddr identified)
                       (gnc-commodity-get-mnemonic currency)
                       (to-cell (gnc:default-price-renderer report-currency fx))
                       (to-cell (to-orig-currency purchase-val))
@@ -522,6 +519,10 @@ the split action field to detect capitalized fees on stock activity")
 
   ;; (gnc:dump-all-transactions)
   (gnc:html-document-add-object! document disclaimer)
+
+  (gnc:html-document-add-object!
+   document (gnc:html-render-options-changed (gnc:report-options report-obj)))
+
   document)
 
 

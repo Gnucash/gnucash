@@ -981,7 +981,7 @@
                                 splt-print-amnt))
                  ) ;; end of let*
              ) ;; end of if
-             ) ;; end of lamda
+             ) ;; end of lambda
         all-tran-splits)  ;; end of map
         ;; if several splits are converted from several currencies, it is
         ;; possible that they won't add - this is a 'plug' amount to make

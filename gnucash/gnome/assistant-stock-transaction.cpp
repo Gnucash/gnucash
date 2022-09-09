@@ -75,9 +75,10 @@ enum split_cols
 {
     SPLIT_COL_ACCOUNT = 0,
     SPLIT_COL_MEMO,
-    SPLIT_COL_MEMO_ESCAPED,
+    SPLIT_COL_TOOLTIP,
     SPLIT_COL_DEBIT,
     SPLIT_COL_CREDIT,
+    SPLIT_COL_UNITS,
     NUM_SPLIT_COLS
 };
 
@@ -501,6 +502,9 @@ stock_assistant_window_destroy_cb (GtkWidget *object, gpointer user_data)
 {
     auto info = static_cast<StockTransactionInfo*>(user_data);
     gnc_unregister_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, info);
+    info->txn_types_date = std::nullopt;
+    info->txn_types = std::nullopt;
+    info->txn_type = std::nullopt;
     g_free (info);
 }
 
@@ -630,26 +634,57 @@ add_error_str (StringVec& errors, const char* str)
     errors.emplace_back (_(str));
 }
 
+struct SummaryLineInfo
+{
+    bool debit_side;
+    bool value_is_zero;
+    std::string account;
+    std::string memo;
+    std::string value;
+    std::string units;
+};
+
 static void
-check_page (GtkListStore *list, gnc_numeric& debit, gnc_numeric& credit,
+add_to_summary_table (GtkListStore *list, SummaryLineInfo line)
+{
+    GtkTreeIter iter;
+    auto tooltip = g_markup_escape_text (line.memo.c_str(), -1);
+    gtk_list_store_append (list, &iter);
+    gtk_list_store_set (list, &iter,
+                        SPLIT_COL_ACCOUNT, line.account.c_str(),
+                        SPLIT_COL_MEMO, line.memo.c_str(),
+                        SPLIT_COL_TOOLTIP, tooltip,
+                        SPLIT_COL_DEBIT, line.debit_side ? line.value.c_str() : "",
+                        SPLIT_COL_CREDIT, !line.debit_side ? line.value.c_str() : "",
+                        SPLIT_COL_UNITS, line.units.c_str(),
+                        -1);
+    g_free (tooltip);
+}
+
+
+static void
+check_page (SummaryLineInfo& line, gnc_numeric& debit, gnc_numeric& credit,
             FieldMask splitfield, Account *acct, GtkWidget *memo, GtkWidget *gae,
             gnc_commodity *comm, const char* page, StringVec& errors)
 {
-    if (splitfield == FieldMask::DISABLED)
-        return;
+    // Translators: (missing) denotes that the amount or account is
+    // not provided, or incorrect, in the Stock Transaction Assistant.
     const char* missing_str = N_("(missing)");
-    const gchar* amtstr;
     gnc_numeric amount;
-    bool debit_side = (splitfield & FieldMask::ENABLED_DEBIT);
+
+    line.memo = gtk_entry_get_text (GTK_ENTRY (memo));
+    line.units = "";
+    line.debit_side = (splitfield & FieldMask::ENABLED_DEBIT);
 
     if (gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (gae), &amount, true, nullptr))
     {
+        line.value_is_zero = false;
         if (splitfield & FieldMask::ALLOW_ZERO)
-            amtstr = "";
+            line.value = "";
         else
         {
             add_error (errors, N_("Amount for %s is missing."), page);
-            amtstr = _(missing_str);
+            line.value = _(missing_str);
         }
     }
     else
@@ -664,39 +699,25 @@ check_page (GtkListStore *list, gnc_numeric& debit, gnc_numeric& credit,
         if (gnc_numeric_negative_p (amount))
         {
             amount = gnc_numeric_neg (amount);
-            debit_side = !debit_side;
+            line.debit_side = !line.debit_side;
         }
-        if (debit_side)
+        if (line.debit_side)
             debit = gnc_numeric_add_fixed (debit, amount);
         else
             credit = gnc_numeric_add_fixed (credit, amount);
-        amtstr = xaccPrintAmount (amount, gnc_commodity_print_info (comm, true));
+        line.value = xaccPrintAmount (amount, gnc_commodity_print_info (comm, true));
+        line.value_is_zero = gnc_numeric_zero_p (amount);
     }
 
-    auto memostr = gtk_entry_get_text (GTK_ENTRY (memo));
-    auto memostr_escaped = g_markup_escape_text (memostr, -1);
-    const gchar *acctstr;
-
     if (acct)
-        acctstr = xaccAccountGetName (acct);
+        line.account = xaccAccountGetName (acct);
     else if ((splitfield & FieldMask::ALLOW_ZERO) && gnc_numeric_zero_p (amount))
-        acctstr = "";
+        line.account = "";
     else
     {
         add_error (errors, N_("Account for %s is missing"), page);
-        acctstr = _(missing_str);
+        line.account = _(missing_str);
     }
-
-    GtkTreeIter iter;
-    gtk_list_store_append (list, &iter);
-    gtk_list_store_set (list, &iter,
-                        SPLIT_COL_ACCOUNT, acctstr,
-                        SPLIT_COL_MEMO, memostr,
-                        SPLIT_COL_MEMO_ESCAPED, memostr_escaped,
-                        SPLIT_COL_DEBIT, debit_side ? amtstr : "",
-                        SPLIT_COL_CREDIT, !debit_side ? amtstr : "",
-                        -1);
-    g_free (memostr_escaped);
 }
 
 static inline Account*
@@ -716,6 +737,7 @@ refresh_page_finish (StockTransactionInfo *info)
     gnc_numeric debit = gnc_numeric_zero ();
     gnc_numeric credit = gnc_numeric_zero ();
     StringVec errors, warnings;
+    SummaryLineInfo line;
 
     // check the stock transaction date. If there are existing stock
     // transactions dated after the date specified, it is very likely
@@ -746,14 +768,25 @@ to ensure proper recording."), new_date_str, last_split_date_str);
         }
     }
 
+    if (info->txn_type->stock_value == FieldMask::DISABLED)
+        line = { false, false, xaccAccountGetName (info->acct), "", "", "" };
+    else
+        check_page (line, debit, credit, info->txn_type->stock_value, info->acct,
+                    info->stock_memo_edit, info->stock_value_edit, info->currency,
+                    NC_ ("Stock Assistant: Page name", "stock value"), errors);
+
+
     if (info->txn_type->stock_amount != FieldMask::DISABLED)
     {
         auto stock_amount = gnc_amount_edit_get_amount
             (GNC_AMOUNT_EDIT(info->stock_amount_edit));
+        auto stock_pinfo = gnc_commodity_print_info
+            (xaccAccountGetCommodity (info->acct), true);
         if (!gnc_numeric_positive_p (stock_amount))
             add_error_str (errors, N_("Stock amount must be positive"));
         if (info->txn_type->stock_amount & FieldMask::ENABLED_CREDIT)
             stock_amount = gnc_numeric_neg (stock_amount);
+        line.units = xaccPrintAmount (stock_amount, stock_pinfo);
         auto new_bal = gnc_numeric_add_fixed (info->balance_at_date, stock_amount);
         if (gnc_numeric_positive_p (info->balance_at_date) &&
             gnc_numeric_negative_p (new_bal))
@@ -763,26 +796,37 @@ to ensure proper recording."), new_date_str, last_split_date_str);
             add_error_str (errors, N_("Cannot cover buy more units than owed"));
     }
 
-    check_page (list, debit, credit, info->txn_type->stock_value, info->acct,
-                info->stock_memo_edit, info->stock_value_edit, info->currency,
-                NC_ ("Stock Assistant: Page name", "stock value"), errors);
+    add_to_summary_table (list, line);
 
-    check_page (list, debit, credit, info->txn_type->cash_value,
-                gas_account (info->cash_account), info->cash_memo_edit,
-                info->cash_value, info->currency,
-                NC_ ("Stock Assistant: Page name", "cash"), errors);
+    if (info->txn_type->cash_value != FieldMask::DISABLED)
+    {
+        check_page (line, debit, credit, info->txn_type->cash_value,
+                    gas_account (info->cash_account), info->cash_memo_edit,
+                    info->cash_value, info->currency,
+                    NC_ ("Stock Assistant: Page name", "cash"), errors);
+        add_to_summary_table (list, line);
+    }
 
-    auto capitalize_fees = gtk_toggle_button_get_active
-        (GTK_TOGGLE_BUTTON (info->capitalize_fees_checkbox));
-    check_page (list, debit, credit, info->txn_type->fees_value,
-                capitalize_fees ? info->acct : gas_account (info->fees_account),
-                info->fees_memo_edit, info->fees_value, info->currency,
-                NC_ ("Stock Assistant: Page name", "fees"), errors);
+    if (info->txn_type->fees_value != FieldMask::DISABLED)
+    {
+        auto capitalize_fees = gtk_toggle_button_get_active
+            (GTK_TOGGLE_BUTTON (info->capitalize_fees_checkbox));
+        check_page (line, debit, credit, info->txn_type->fees_value,
+                    capitalize_fees ? info->acct : gas_account (info->fees_account),
+                    info->fees_memo_edit, info->fees_value, info->currency,
+                    NC_ ("Stock Assistant: Page name", "fees"), errors);
+        if (!line.value_is_zero)
+            add_to_summary_table (list, line);
+    }
 
-    check_page (list, debit, credit, info->txn_type->dividend_value,
-                gas_account (info->dividend_account),
-                info->dividend_memo_edit, info->dividend_value, info->currency,
-                NC_ ("Stock Assistant: Page name", "dividend"), errors);
+    if (info->txn_type->dividend_value != FieldMask::DISABLED)
+    {
+        check_page (line, debit, credit, info->txn_type->dividend_value,
+                    gas_account (info->dividend_account),
+                    info->dividend_memo_edit, info->dividend_value, info->currency,
+                    NC_ ("Stock Assistant: Page name", "dividend"), errors);
+        add_to_summary_table (list, line);
+    }
 
     // the next two checks will involve the two capgains splits:
     // income side and stock side. The capgains_value ^
@@ -790,16 +834,18 @@ to ensure proper recording."), new_date_str, last_split_date_str);
     // flags.
     if (info->txn_type->capgains_value != FieldMask::DISABLED)
     {
-        check_page (list, debit, credit, info->txn_type->capgains_value,
+        check_page (line, debit, credit, info->txn_type->capgains_value,
                     gas_account (info->capgains_account),
                     info->capgains_memo_edit, info->capgains_value, info->currency,
                     NC_ ("Stock Assistant: Page name", "capital gains"), errors);
+        add_to_summary_table (list, line);
 
-        check_page (list, debit, credit,
+        check_page (line, debit, credit,
                     info->txn_type->capgains_value ^ (FieldMask::ENABLED_CREDIT | FieldMask::ENABLED_DEBIT),
                     info->acct, info->capgains_memo_edit, info->capgains_value,
                     info->currency,
                     NC_ ("Stock Assistant: Page name", "capital gains"), errors);
+        add_to_summary_table (list, line);
     }
 
     if (!gnc_numeric_equal (debit, credit))
@@ -1143,7 +1189,8 @@ get_treeview (GtkBuilder *builder, const gchar *treeview_label)
     gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(view), gnc_tree_view_get_grid_lines_pref ());
 
     auto store = gtk_list_store_new (NUM_SPLIT_COLS, G_TYPE_STRING, G_TYPE_STRING,
-                                     G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+                                     G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
+                                     G_TYPE_STRING);
     gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
     g_object_unref(store);
 
@@ -1171,6 +1218,13 @@ get_treeview (GtkBuilder *builder, const gchar *treeview_label)
     gtk_cell_renderer_set_padding (renderer, 5, 0);
     column = gtk_tree_view_column_new_with_attributes
         (_("Credit"), renderer, "text", SPLIT_COL_CREDIT, nullptr);
+    gtk_tree_view_append_column(view, column);
+
+    renderer = gtk_cell_renderer_text_new();
+    gtk_cell_renderer_set_alignment (renderer, 1.0, 0.5);
+    gtk_cell_renderer_set_padding (renderer, 5, 0);
+    column = gtk_tree_view_column_new_with_attributes
+        (_("Units"), renderer, "text", SPLIT_COL_UNITS, nullptr);
     gtk_tree_view_append_column(view, column);
 
     return GTK_WIDGET (view);
@@ -1250,7 +1304,7 @@ stock_assistant_create (StockTransactionInfo *info)
     g_signal_connect (G_OBJECT(info->window), "destroy",
                       G_CALLBACK (stock_assistant_window_destroy_cb), info);
     gtk_tree_view_set_tooltip_column (GTK_TREE_VIEW (info->finish_split_view),
-                                      SPLIT_COL_MEMO_ESCAPED);
+                                      SPLIT_COL_TOOLTIP);
 
     gtk_assistant_set_forward_page_func (GTK_ASSISTANT(info->window),
                                          (GtkAssistantPageFunc)forward_page_func,

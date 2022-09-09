@@ -90,7 +90,7 @@ struct _QofBook
     /* Boolean indicates that the session is dirty -- that is, it has
      * not yet been written out to disk after the last time the
      * backend ran commit_edit(). This is distinct from the inherited
-     * QofInstance::dirty, which indicates that some persisitent
+     * QofInstance::dirty, which indicates that some persistent
      * property of the book object itself has been edited and not
      * committed. Some backends write data out as part of
      * commit_edit() and so don't use this flag.
