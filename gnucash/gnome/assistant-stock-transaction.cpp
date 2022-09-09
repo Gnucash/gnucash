@@ -667,6 +667,8 @@ check_page (SummaryLineInfo& line, gnc_numeric& debit, gnc_numeric& credit,
             FieldMask splitfield, Account *acct, GtkWidget *memo, GtkWidget *gae,
             gnc_commodity *comm, const char* page, StringVec& errors)
 {
+    // Translators: (missing) denotes that the amount or account is
+    // not provided, or incorrect, in the Stock Transaction Assistant.
     const char* missing_str = N_("(missing)");
     gnc_numeric amount;
 
