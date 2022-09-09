@@ -352,143 +352,191 @@ GncQuotesImpl::query_fq (void)
 
 }
 
-GNCPrice*
-GncQuotesImpl::parse_one_quote(const bpt::ptree& pt, gnc_commodity* comm)
+struct PriceParams
 {
-    auto comm_ns = gnc_commodity_get_namespace (comm);
-    auto comm_mnemonic = gnc_commodity_get_mnemonic (comm);
-    if (gnc_commodity_equiv(comm, m_dflt_curr) ||
-        (!comm_mnemonic || (strcmp (comm_mnemonic, "XXX") == 0)))
-        return nullptr;
-    auto comm_pt_ai{pt.find(comm_mnemonic)};
-    if (comm_pt_ai == pt.not_found())
-    {
-        PINFO("Skipped %s:%s - Finance::Quote didn't return any data.",
-              comm_ns, comm_mnemonic);
-        return nullptr;
-    }
+    const char* ns;
+    const char* mnemonic;
+    bool success;
+    std::string type;
+    boost::optional<std::string> price;
+    bool inverted;
+    boost::optional<std::string> date;
+    boost::optional<std::string> time;
+    boost::optional<std::string> currency;
+    boost::optional<std::string> errormsg;
+};
 
-    auto comm_pt{comm_pt_ai->second};
-    auto success = comm_pt.get_optional<bool> ("success");
-    std::string price_type = "last";
-    auto price_str = comm_pt.get_optional<std::string> (price_type);
-    if (!price_str)
+static void
+get_price_and_type(PriceParams& p, const bpt::ptree& comm_pt)
+{
+    p.type = "last";
+    p.price = comm_pt.get_optional<std::string> (p.type);
+    if (!p.price)
     {
-        price_type = "nav";
-        price_str = comm_pt.get_optional<std::string> (price_type);
+        p.type = "nav";
+        p.price = comm_pt.get_optional<std::string> (p.type);
     }
-    if (!price_str)
+    if (!p.price)
     {
-        price_type = "price";
-        price_str = comm_pt.get_optional<std::string> (price_type);
+        p.type = "price";
+        p.price = comm_pt.get_optional<std::string> (p.type);
         /* guile wrapper used "unknown" as price type when "price" was found,
          * reproducing here to keep same result for users in the pricedb */
-        price_type = "unknown";
+        p.type = p.price ? "unknown" : "missing";
     }
+}
 
-    auto inverted_tmp = comm_pt.get_optional<bool> ("inverted");
-    auto inverted = inverted_tmp ? *inverted_tmp : false;
-    auto date_str = comm_pt.get_optional<std::string> ("date");
-    auto time_str = comm_pt.get_optional<std::string> ("time");
-    auto currency_str = comm_pt.get_optional<std::string> ("currency");
+static void
+parse_quote_json(PriceParams& p, const bpt::ptree& comm_pt)
+{
+    auto success = comm_pt.get_optional<bool> ("success");
+    p.success = success && *success;
+    if (!p.success)
+        p.errormsg = comm_pt.get_optional<std::string> ("errormsg");
+    get_price_and_type(p, comm_pt);
+    auto inverted = comm_pt.get_optional<bool> ("inverted");
+    p.inverted = inverted && *inverted;
+    p.date = comm_pt.get_optional<std::string> ("date");
+    p.time = comm_pt.get_optional<std::string> ("time");
+    p.currency = comm_pt.get_optional<std::string> ("currency");
 
 
-    PINFO("Commodity: %s", comm_mnemonic);
-    PINFO("     Date: %s", (date_str ? date_str->c_str() : "missing"));
-    PINFO("     Time: %s", (time_str ? time_str->c_str() : "missing"));
-    PINFO(" Currency: %s", (currency_str ? currency_str->c_str() : "missing"));
-    PINFO("    Price: %s", (price_str ? price_str->c_str() : "missing"));
+    PINFO("Commodity: %s", p.mnemonic);
+    PINFO("  Success: %s", (inverted ? "yes" : "no"));
+    PINFO("     Date: %s", (p.date ? p.date->c_str() : "missing"));
+    PINFO("     Time: %s", (p.time ? p.time->c_str() : "missing"));
+    PINFO(" Currency: %s", (p.currency ? p.currency->c_str() : "missing"));
+    PINFO("    Price: %s", (p.price ? p.price->c_str() : "missing"));
     PINFO(" Inverted: %s\n", (inverted ? "yes" : "no"));
+}
 
-    if (!success || !*success)
-    {
-        auto errmsg = comm_pt.get_optional<std::string> ("errormsg");
-        PWARN("Skipped %s:%s - Finance::Quote returned fetch failure.\nReason %s",
-              comm_ns, comm_mnemonic,
-              (errmsg ? errmsg->c_str() : "unknown"));
-        return nullptr;
-    }
-
-    if (!price_str)
-    {
-        PWARN("Skipped %s:%s - Finance::Quote didn't return a valid price",
-              comm_ns, comm_mnemonic);
-        return nullptr;
-    }
-
-    GncNumeric price;
-    try
-    {
-        price = GncNumeric { *price_str };
-    }
-    catch (...)
-    {
-        PWARN("Skipped %s:%s - failed to parse returned price '%s'",
-              comm_ns, comm_mnemonic, price_str->c_str());
-        return nullptr;
-    }
-
-    if (inverted)
-        price = price.inv();
-
-    if (!currency_str)
-    {
-        PWARN("Skipped %s:%s - Finance::Quote didn't return a currency",
-              comm_ns, comm_mnemonic);
-        return nullptr;
-    }
-    boost::to_upper (*currency_str);
-    auto commodity_table = gnc_commodity_table_get_table (m_book);
-    auto currency = gnc_commodity_table_lookup (commodity_table, "ISO4217", currency_str->c_str());
-
-    if (!currency)
-    {
-        PWARN("Skipped %s:%s  - failed to parse returned currency '%s'",
-              comm_ns, comm_mnemonic, currency_str->c_str());
-        return nullptr;
-    }
-
+static time64
+calc_price_time(const PriceParams& p)
+{
+    time64 quote_time;
     std::string iso_date_str = GncDate().format ("%Y-%m-%d");
-    if (date_str)
+    if (p.date)
     {
         // Returned date is always in MM/DD/YYYY format according to F::Q man page, transform it to simplify conversion to GncDateTime
-        auto date_tmp = *date_str;
+        auto date_tmp = *p.date;
         iso_date_str = date_tmp.substr (6, 4) + "-" + date_tmp.substr (0, 2) + "-" + date_tmp.substr (3, 2);
     }
     else
         PINFO("Info: no date  was returned for %s:%s - will use today %s",
-              comm_ns, comm_mnemonic,
-              (iso_date_str += " " + (time_str ? *time_str : "12:00:00")).c_str());
+              p.ns, p.mnemonic,
+              (iso_date_str += " " + (p.time ? *p.time : "12:00:00")).c_str());
 
     auto can_convert = true;
     try
     {
-        GncDateTime testdt {iso_date_str};
+        quote_time = static_cast<time64>(GncDateTime{iso_date_str});
     }
     catch (...)
     {
         PINFO("Warning: failed to parse quote date and time '%s' for %s:%s - will use today",
-              iso_date_str.c_str(),  comm_ns, comm_mnemonic);
-        can_convert = false;
+              iso_date_str.c_str(),  p.ns, p.mnemonic);
+        quote_time = static_cast<time64>(GncDateTime());
     }
 
-    /*  Bit of an odd construct: GncDateTimes can't be copied,
-        which makes it impossible to first create a temporary GncDateTime
-        based on whether the string is parsable and then assign that temporary
-        to our final GncDateTime. The creation has to happen in one go, so
-        below construct will pass a different constructor argument based on
-        whether a test conversion worked or not.
-    */
-    GncDateTime quotedt {can_convert ? iso_date_str : GncDateTime()};
+    return quote_time;
+}
 
+static boost::optional<GncNumeric>
+get_price(const PriceParams& p)
+{
+    boost::optional<GncNumeric> price;
+    try
+    {
+        price = GncNumeric { *p.price };
+    }
+    catch (...)
+    {
+        PWARN("Skipped %s:%s - failed to parse returned price '%s'",
+              p.ns, p.mnemonic, p.price->c_str());
+    }
+
+    if (price && p.inverted)
+        *price = price->inv();
+
+    return price;
+}
+
+static gnc_commodity*
+get_currency(const PriceParams& p, QofBook* book)
+{
+    if (!p.currency)
+    {
+        PWARN("Skipped %s:%s - Finance::Quote didn't return a currency",
+              p.ns, p.mnemonic);
+        return nullptr;
+    }
+    std::string curr_str = *p.currency;
+    boost::to_upper (curr_str);
+    auto commodity_table = gnc_commodity_table_get_table (book);
+    auto currency = gnc_commodity_table_lookup (commodity_table, "ISO4217", curr_str.c_str());
+
+    if (!currency)
+    {
+        PWARN("Skipped %s:%s  - failed to parse returned currency '%s'",
+              p.ns, p.mnemonic, p.currency->c_str());
+        return nullptr;
+    }
+
+    return currency;
+}
+
+GNCPrice*
+GncQuotesImpl::parse_one_quote(const bpt::ptree& pt, gnc_commodity* comm)
+{
+    PriceParams p;
+    p.ns = gnc_commodity_get_namespace (comm);
+    p.mnemonic = gnc_commodity_get_mnemonic (comm);
+    if (gnc_commodity_equiv(comm, m_dflt_curr) ||
+        (!p.mnemonic || (strcmp (p.mnemonic, "XXX") == 0)))
+        return nullptr;
+    auto comm_pt_ai{pt.find(p.mnemonic)};
+    if (comm_pt_ai == pt.not_found())
+    {
+        PINFO("Skipped %s:%s - Finance::Quote didn't return any data.",
+              p.ns, p.mnemonic);
+        return nullptr;
+    }
+
+    auto comm_pt{comm_pt_ai->second};
+    parse_quote_json(p, comm_pt);
+
+    if (!p.success)
+    {
+        PWARN("Skipped %s:%s - Finance::Quote returned fetch failure.\nReason %s",
+              p.ns, p.mnemonic,
+              (p.errormsg ? p.errormsg->c_str() : "unknown"));
+        return nullptr;
+    }
+
+    if (!p.price)
+    {
+        PWARN("Skipped %s:%s - Finance::Quote didn't return a valid price",
+              p.ns, p.mnemonic);
+        return nullptr;
+    }
+
+    auto price{get_price(p)};
+    if (!price)
+        return nullptr;
+
+    auto currency{get_currency(p, m_book)};
+    if (!currency)
+        return nullptr;
+
+    auto quotedt{calc_price_time(p)};
     auto gnc_price = gnc_price_create (m_book);
     gnc_price_begin_edit (gnc_price);
     gnc_price_set_commodity (gnc_price, comm);
     gnc_price_set_currency (gnc_price, currency);
     gnc_price_set_time64 (gnc_price, static_cast<time64> (quotedt));
     gnc_price_set_source (gnc_price, PRICE_SOURCE_FQ);
-    gnc_price_set_typestr (gnc_price, price_type.c_str());
-    gnc_price_set_value (gnc_price, price);
+    gnc_price_set_typestr (gnc_price, p.type.c_str());
+    gnc_price_set_value (gnc_price, *price);
     gnc_price_commit_edit (gnc_price);
     return gnc_price;
 }
