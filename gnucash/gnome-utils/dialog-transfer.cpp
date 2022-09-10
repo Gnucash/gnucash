@@ -1785,18 +1785,19 @@ gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
 
     ENTER(" ");
 
-    GncQuotes quotes;
-    if (quotes.cmd_result() != 0)
+    try
     {
-        if (!quotes.error_msg().empty())
-            PWARN ("%s", quotes.error_msg().c_str());
-        LEAVE("quote retrieval failed");
-        return;
+        GncQuotes quotes;
+        gnc_set_busy_cursor(nullptr, TRUE);
+        quotes.fetch(xferData->book);
+        gnc_unset_busy_cursor(nullptr);
     }
-
-    gnc_set_busy_cursor (nullptr, TRUE);
-    quotes.fetch (xferData->book);
-    gnc_unset_busy_cursor (nullptr);
+    catch (const GncQuoteException& err)
+    {
+        gnc_unset_busy_cursor(nullptr);
+        PERR("Price retrieval failed: %s", err.what());
+        gnc_error_dialog(GTK_WINDOW(xferData->dialog), _("Price retrieval failed: %s"), err.what());
+    }
 
     /*the results should be in the price db now, but don't crash if not. */
     PriceReq pr;

@@ -50,6 +50,7 @@ set(app_utils_ALL_LIBRARIES
     gnc-engine
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_PROPERTY_TREE_LIBRARY}
+    ${Boost_LOCALE_LIBRARY}
     ${GIO_LDFLAGS}
     ${LIBXML2_LDFLAGS}
     ${LIBXSLT_LDFLAGS}

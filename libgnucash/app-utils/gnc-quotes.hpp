@@ -27,6 +27,7 @@
 #include <vector>
 #include <gnc-commodity.hpp>  // For CommVec alias
 #include <glib.h>
+#include <stdexcept>
 
 extern  "C" {
 #include <qofbook.h>
@@ -35,6 +36,11 @@ extern  "C" {
 using StrVec = std::vector  <std::string>;
 using QuoteSources = StrVec;
 using CmdOutput = std::pair <StrVec, StrVec>;
+
+struct GncQuoteException : public std::runtime_error
+{
+    GncQuoteException(const std::string& msg) : std::runtime_error(msg) {}
+};
 
 const std::string not_found = std::string ("Not Found");
 
@@ -54,8 +60,6 @@ public:
     // Fetch quote for the commodity if it has a quote source  set
     void fetch (gnc_commodity *comm);
 
-    const int cmd_result() noexcept;
-    const std::string& error_msg() noexcept;
     const std::string& version() noexcept;
     const QuoteSources& sources() noexcept;
     GList* sources_as_glist ();

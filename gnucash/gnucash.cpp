@@ -174,24 +174,24 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
     gnc_hook_add_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_file_quit, NULL, NULL);
 
     /* Install Price Quote Sources */
-    auto msg = bl::translate ("Checking Finance::Quote...").str(gnc_get_boost_locale());
 
-    GncQuotes quotes;
-    if (quotes.cmd_result() == 0)
+    try
     {
-        msg = (bl::format (bl::translate("Found Finance::Quote version {1}.")) % quotes.version()).str(gnc_get_boost_locale());
+        auto msg = bl::translate ("Checking Finance::Quote...").str(gnc_get_boost_locale());
+        GncQuotes quotes;
+            msg = (bl::format (bl::translate("Found Finance::Quote version {1}.")) % quotes.version()).str(gnc_get_boost_locale());
         auto quote_sources = quotes.sources_as_glist();
         gnc_quote_source_set_fq_installed (quotes.version().c_str(), quote_sources);
         g_list_free (quote_sources);
+        gnc_update_splash_screen (msg.c_str(), GNC_SPLASH_PERCENTAGE_UNKNOWN);
     }
-    else
+    catch (const GncQuoteException& err)
     {
-        msg = bl::translate("Unable to load Finance::Quote.").str(gnc_get_boost_locale());
+        auto msg = bl::translate("Unable to load Finance::Quote.").str(gnc_get_boost_locale());
         PINFO ("Attempt to load Finance::Quote returned this error message:\n");
-        PINFO ("%s", quotes.error_msg().c_str());
+        PINFO ("%s", err.what());
+        gnc_update_splash_screen (msg.c_str(), GNC_SPLASH_PERCENTAGE_UNKNOWN);
     }
-
-    gnc_update_splash_screen (msg.c_str(), GNC_SPLASH_PERCENTAGE_UNKNOWN);
 
     gnc_hook_run(HOOK_STARTUP, NULL);
 

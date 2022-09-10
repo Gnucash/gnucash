@@ -559,18 +559,18 @@ gnc_prices_dialog_get_quotes_clicked (GtkWidget *widget, gpointer data)
     auto pdb_dialog = static_cast<PricesDialog *> (data);
 
     ENTER(" ");
-    GncQuotes quotes;
-    if (quotes.cmd_result() != 0)
-    {
-        if (!quotes.error_msg().empty())
-            PWARN ("%s", quotes.error_msg().c_str());
-        LEAVE("quote retrieval failed");
-        return;
+    try {
+        GncQuotes quotes;
+        gnc_set_busy_cursor (NULL, TRUE);
+        quotes.fetch (pdb_dialog->book);
+        gnc_unset_busy_cursor (NULL);
     }
-
-    gnc_set_busy_cursor (NULL, TRUE);
-    quotes.fetch (pdb_dialog->book);
-    gnc_unset_busy_cursor (NULL);
+    catch (const GncQuoteException& err)
+    {
+        gnc_unset_busy_cursor(nullptr);
+        PERR("Price retrieval failed: %s", err.what());
+        gnc_error_dialog(GTK_WINDOW(pdb_dialog), _("Price retrieval failed: %s"), err.what());
+    }
 
     /* Without this, the summary bar on the accounts tab
      * won't reflect the new prices (bug #522095). */

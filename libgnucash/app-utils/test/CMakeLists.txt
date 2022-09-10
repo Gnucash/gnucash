@@ -44,6 +44,7 @@ set(test_gnc_quotes_LIBS
         gnc-engine
         gtest
         ${Boost_FILESYSTEM_LIBRARY}
+        ${Boost_LOCALE_LIBRARY}
         ${Boost_PROPERTY_TREE_LIBRARY}
         ${Boost_SYSTEM_LIBRARY}
         )

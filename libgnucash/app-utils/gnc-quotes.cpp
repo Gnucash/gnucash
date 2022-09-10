@@ -23,6 +23,7 @@
 #include <config.h>
 
 #include <algorithm>
+#include <stdexcept>
 #include <vector>
 #include <string>
 #include <iostream>
@@ -34,6 +35,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/iostreams/device/array.hpp>
 #include <boost/iostreams/stream_buffer.hpp>
+#include <boost/locale.hpp>
 #include <boost/asio.hpp>
 #include <glib.h>
 #include "gnc-commodity.hpp"
@@ -53,12 +55,18 @@ extern "C" {
 
 static const QofLogModule log_module = "gnc.price-quotes";
 
+namespace bl = boost::locale;
 namespace bp = boost::process;
 namespace bfs = boost::filesystem;
 namespace bpt = boost::property_tree;
 namespace bio = boost::iostreams;
 
 using QuoteResult = std::tuple<int, StrVec, StrVec>;
+
+struct GncQuoteSourceError : public std::runtime_error
+{
+    GncQuoteSourceError(const std::string& err) : std::runtime_error(err) {}
+};
 
 CommVec
 gnc_quotes_get_quotable_commodities(const gnc_commodity_table * table);
@@ -85,8 +93,6 @@ public:
     void fetch (CommVec& commodities);
     void fetch (gnc_commodity *comm);
 
-    int cmd_result() const noexcept { return m_cmd_result; }
-    const std::string& error_msg() noexcept { return m_error_msg; }
     const std::string& version() noexcept { return m_version.empty() ? not_found : m_version; }
     const QuoteSources& sources() noexcept { return m_sources; }
     GList* sources_as_glist ();
@@ -101,8 +107,6 @@ private:
     CommVec m_comm_vec;
     std::string m_version;
     QuoteSources m_sources;
-    int m_cmd_result;
-    std::string m_error_msg;
     std::string m_fq_answer;
     QofBook *m_book;
     gnc_commodity *m_dflt_curr;
@@ -138,21 +142,25 @@ m_version{}, m_sources{}
     auto [rv, sources, errors] = run_cmd(args, empty_string);
     if (rv)
     {
-        PERR("Failed to initialize Finance::Quote %s", errors.front().c_str());
-        return;
+        std::string err{bl::translate("Failed to initialize Finance::Quote: ")};
+        for (auto err_line : errors)
+            err += err_line.empty() ? "" : err_line + "\n";
+        throw(GncQuoteSourceError(err));
     }
     if (!errors.empty())
     {
-        for(const auto& err : errors)
-            PERR("Finance::Quote check returned error %s", err.empty() ? "" : err.c_str());
-        return;
+        std::string err{bl::translate("Finance::Quote check returned error ")};
+        for(const auto& err_line : errors)
+            err += err.empty() ? "" : err_line + "\n";
+        throw(GncQuoteSourceError(err));
     }
     static const boost::regex version_fmt{"[0-9]\\.[0-9][0-9]"};
     auto version{sources.front()};
     if (version.empty() || !boost::regex_match(version, version_fmt))
     {
-        PERR("Invalid Finance::Quote Version %s", version.empty() ? "" : version.c_str());
-        return;
+        std::string err{bl::translate("Invalid Finance::Quote Version ")};
+            err +=  version.empty() ? "" : version;
+        throw(GncQuoteSourceError(err));
     }
     m_ready = true;
     sources.erase(sources.begin());
@@ -221,7 +229,7 @@ GncFQQuoteSource::run_cmd (const StrVec& args, const std::string& json_string) c
 
 /* GncQuotes implementation */
 GncQuotesImpl::GncQuotesImpl() : m_quotesource{new GncFQQuoteSource},
-m_version{}, m_sources{}, m_cmd_result{}, m_error_msg{}, m_book{qof_session_get_book(gnc_get_current_session())},
+m_version{}, m_sources{}, m_book{qof_session_get_book(gnc_get_current_session())},
 m_dflt_curr{gnc_default_currency()}
 {
     if (!m_quotesource->usable())
@@ -230,7 +238,7 @@ m_dflt_curr{gnc_default_currency()}
 }
 
 GncQuotesImpl::GncQuotesImpl(QofBook* book) : m_quotesource{new GncFQQuoteSource},
-m_version{}, m_sources{}, m_cmd_result{}, m_error_msg{}, m_book{book},
+m_version{}, m_sources{}, m_book{book},
 m_dflt_curr{gnc_default_currency()}
 {
     if (!m_quotesource->usable())
@@ -240,8 +248,7 @@ m_dflt_curr{gnc_default_currency()}
 
 GncQuotesImpl::GncQuotesImpl(QofBook* book, std::unique_ptr<GncQuoteSource> quote_source) :
 m_quotesource{std::move(quote_source)},
-m_version{}, m_sources{}, m_cmd_result{}, m_error_msg{}, m_book{book},
-m_dflt_curr{gnc_default_currency()}
+m_version{}, m_sources{}, m_book{book}, m_dflt_curr{gnc_default_currency()}
 {
     if (!m_quotesource->usable())
         return;
@@ -262,12 +269,7 @@ void
 GncQuotesImpl::fetch (QofBook *book)
 {
     if (!book)
-    {
-        m_cmd_result = 1;
-        m_error_msg = _("No book set");
-        m_error_msg += "\n";
-        return;
-    }
+        throw (GncQuoteException(bl::translate("GncQuotes::Fetch called with no book.")));
     auto commodities = gnc_quotes_get_quotable_commodities (
         gnc_commodity_table_get_table (book));
     fetch (commodities);
@@ -290,8 +292,7 @@ GncQuotesImpl::fetch (CommVec& commodities)
     m_book = qof_instance_get_book (m_comm_vec[0]);
 
     query_fq ();
-    if (m_cmd_result == 0)
-        parse_quotes ();
+    parse_quotes ();
 }
 
 static const std::vector <std::string>
@@ -336,14 +337,19 @@ GncQuotesImpl::query_fq (void)
     auto json_str{comm_vec_to_json_string()};
     auto [rv, quotes, errors] = m_quotesource->get_quotes(json_str);
     m_fq_answer.clear();
-    m_cmd_result = rv;
+
     if (rv == 0)
+    {
         for (auto line : quotes)
             m_fq_answer.append(line + "\n");
+    }
     else
-        for (auto line : errors)
-            m_error_msg.append(line + "\n");
-
+    {
+        std::string err_str;
+        for (auto line: errors)
+            err_str.append(line + "\n");
+        throw(GncQuoteException(err_str));
+    }
 //        for (auto line : quotes)
 //            PINFO("Output line retrieved from wrapper:\n%s", line.c_str());
 //
@@ -546,24 +552,35 @@ GncQuotesImpl::parse_quotes (void)
 {
     bpt::ptree pt;
     std::istringstream ss {m_fq_answer};
+    const char* what = nullptr;
 
     try
     {
         bpt::read_json (ss, pt);
     }
     catch (bpt::json_parser_error &e) {
-        m_cmd_result = -1;
-        m_error_msg = m_error_msg +
-                      _("Failed to parse result returned by Finance::Quote.") + "\n" +
-                      _("Error message:") + "\n" +
-                       e.what() + "\n";
-        return;
+        what = e.what();
+    }
+    catch (const std::runtime_error& e)
+    {
+        what = e.what();
+    }
+    catch (const std::logic_error& e)
+    {
+        what = e.what();
     }
     catch (...) {
-        m_cmd_result = -1;
-        m_error_msg = m_error_msg +
-                      _("Failed to parse result returned by Finance::Quote.") + "\n";
-        return;
+        std::string error_msg{_("Failed to parse result returned by Finance::Quote.")};
+        throw(GncQuoteException(error_msg));
+    }
+    if (what)
+    {
+        std::string error_msg{_("Failed to parse result returned by Finance::Quote.")};
+        error_msg += "\n";
+        error_msg += _("Error message:");
+        error_msg += "\n";
+        error_msg += what;
+        throw(GncQuoteException(error_msg));
     }
 
     auto pricedb{gnc_pricedb_get_db(m_book)};
@@ -672,8 +689,16 @@ gnc_quotes_get_quotable_commodities (const gnc_commodity_table * table)
 // Constructor - checks for presence of Finance::Quote and import version and quote sources
 GncQuotes::GncQuotes ()
 {
-    m_impl = std::make_unique<GncQuotesImpl> ();
+    try
+    {
+        m_impl = std::make_unique<GncQuotesImpl>();
+    }
+    catch (const GncQuoteSourceError& err)
+    {
+        throw(GncQuoteException(err.what()));
+    }
 }
+
 
 void
 GncQuotes::fetch (QofBook *book)
@@ -689,16 +714,6 @@ void GncQuotes::fetch (CommVec& commodities)
 void GncQuotes::fetch (gnc_commodity *comm)
 {
     m_impl->fetch (comm);
-}
-
-const int GncQuotes::cmd_result() noexcept
-{
-    return m_impl->cmd_result ();
-}
-
-const std::string& GncQuotes::error_msg() noexcept
-{
-    return m_impl->error_msg ();
 }
 
 const std::string& GncQuotes::version() noexcept

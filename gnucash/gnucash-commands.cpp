@@ -303,9 +303,9 @@ int
 Gnucash::quotes_info (void)
 {
     gnc_prefs_init ();
-    GncQuotes quotes;
-    if (quotes.cmd_result() == 0)
+    try
     {
+        GncQuotes quotes;
         std::cout << bl::format (bl::translate ("Found Finance::Quote version {1}.")) % quotes.version() << "\n";
         std::cout << bl::translate ("Finance::Quote sources: ");
         for (auto source : quotes.sources())
@@ -313,12 +313,9 @@ Gnucash::quotes_info (void)
         std::cout << std::endl;
         return 0;
     }
-    else
+    catch (const GncQuoteException& err)
     {
-        std::cerr << bl::translate ("Finance::Quote isn't "
-                                    "installed properly.") << "\n";
-        std::cerr << bl::translate ("Error message:") << "\n";
-        std::cerr << quotes.error_msg() << std::endl;
+        std::cout << err.what() << std::endl;
         return 1;
     }
 }
@@ -341,32 +338,24 @@ Gnucash::add_quotes (const bo_str& uri)
     if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
         cleanup_and_exit_with_failure (session);
 
-    GncQuotes quotes;
-    if (quotes.cmd_result() == 0)
+    try
     {
+        GncQuotes quotes;
         std::cout << bl::format (bl::translate ("Found Finance::Quote version {1}.")) % quotes.version() << std::endl;
         auto quote_sources = quotes.sources_as_glist();
         gnc_quote_source_set_fq_installed (quotes.version().c_str(), quote_sources);
         g_list_free_full (quote_sources, g_free);
+        quotes.fetch(qof_session_get_book(session));
     }
-    else
+    catch (const GncQuoteException& err)
     {
-        std::cerr << bl::translate ("No quotes retrieved. Finance::Quote isn't "
-                                    "installed properly.") << "\n";
-        std::cerr << bl::translate ("Error message:") << std::endl;
-        std::cerr << quotes.error_msg() << std::endl;
+        std::cerr << err.what() << std::endl;
     }
-    quotes.fetch (qof_session_get_book(session));
-
     qof_session_save(session, NULL);
     if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
         cleanup_and_exit_with_failure (session);
 
     qof_session_destroy(session);
-
-    if (quotes.cmd_result() != 0)
-        std::cerr << bl::format (bl::translate ("Failed to add quotes to {1}.")) % *uri << "\n";
-
     qof_event_resume();
     return 0;
 }
