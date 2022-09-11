@@ -43,35 +43,22 @@ static gnc_euro_rate_struct gnc_euro_rates[] =
 {
     { "ATS",  13.7603 },  /* austrian schilling */
     { "BEF",  40.3399 },  /* belgian franc */
-    { "BFR",  40.3399 },  /* belgian franc */
     { "CYP",  .585274 },  /* cyprus pound */
     { "DEM",  1.95583 },  /* german mark */
-    { "DM",   1.95583 },  /* german mark */
     { "EEK",  15.6466 },  /* Estonian Kroon */
-    { "ESC",  200.482 },  /* portuguese escudo */
     { "ESP",  166.386 },  /* spanish peseta */
     { "EUR",  1.00000 },  /* euro */
-    { "EURO", 1.00000 },  /* euro */
-    { "FF",   6.55957 },  /* french franc */
     { "FIM",  5.94573 },  /* finnmark */
-    { "FMK",  5.94573 },  /* finnmark */
     { "FRF",  6.55957 },  /* french franc */
     { "GRD",  340.750 },  /* greek drachma */
-    { "HFL",  2.20371 },  /* netherland gulden */
     { "HRK",  7.53450 },  /* Croatian kuna */
     { "IEP",  .787564 },  /* irish pound */
-    { "IRP",  .787564 },  /* irish pound */
     { "ITL",  1936.27 },  /* italian lira */
-    { "LFR",  40.3399 },  /* luxembourg franc */
-    { "LIT",  1936.27 },  /* italian lira */
     { "LUF",  40.3399 },  /* luxembourg franc */
     { "LVL",  .702804 },  /* latvian lats */
     { "MTL",  .429300 },  /* maltese lira */
     { "NLG",  2.20371 },  /* netherland gulden */
-    { "PTA",  166.386 },  /* spanish peseta */
     { "PTE",  200.482 },  /* portuguese escudo */
-    { "S",    13.7603 },  /* austrian schilling */
-    { "SCH",  13.7603 },  /* austrian schilling */
     { "SIT",  239.640 },  /* slovenian tolar */
     { "SKK",  30.1260 }   /* slovak koruna */
 };
