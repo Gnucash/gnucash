@@ -36,10 +36,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.11-pot3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-09-07 04:08+0200\n"
-"PO-Revision-Date: 2022-08-06 19:20+0000\n"
+"PO-Revision-Date: 2022-09-11 15:19+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -48,7 +48,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -5377,7 +5377,7 @@ msgstr "Aktuellen Buchungsteil _löschen"
 #: gnucash/gnome/gnc-plugin-page-register2.c:223
 #: gnucash/gnome/gnc-plugin-page-register.c:337
 msgid "_Print Checks..."
-msgstr "Scheck_s drucken..."
+msgstr "Schecks _drucken..."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:230
 #: gnucash/gnome/gnc-plugin-page-register.c:344
@@ -5823,7 +5823,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register2.c:2665
 #: gnucash/gnome/gnc-plugin-page-register.c:3750
 msgid "_Print checks"
-msgstr "Schec_ks drucken"
+msgstr "Schecks _drucken"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2685
 #: gnucash/gnome/gnc-plugin-page-register.c:3769
