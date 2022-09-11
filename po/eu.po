@@ -6,10 +6,10 @@
 # Enrique Ayesta Perojo <eayesta@gmail.com>, 2022.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.11-pot3\n"
+"Project-Id-Version: GnuCash 4.12-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2022-09-07 04:08+0200\n"
+"POT-Creation-Date: 2022-09-11 23:24+0200\n"
 "PO-Revision-Date: 2022-08-05 14:15+0000\n"
 "Last-Translator: Enrique Ayesta Perojo <eayesta@gmail.com>\n"
 "Language-Team: Basque <https://hosted.weblate.org/projects/gnucash/gnucash/"
@@ -2712,11 +2712,9 @@ msgid "Empty"
 msgstr "Izena"
 
 #: gnucash/gnome/dialog-lot-viewer.c:829
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:412
-#: gnucash/gnome/gnc-plugin-page-budget.c:231
-#: gnucash/gnome/window-reconcile2.c:1659 gnucash/gnome/window-reconcile.c:1835
-#: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
-#: gnucash/gnome-utils/gnc-file.c:1141
+#, fuzzy
+#| msgid "Open"
+msgctxt "Adjective"
 msgid "Open"
 msgstr "Ireki"
 
@@ -4371,6 +4369,14 @@ msgstr ""
 #, fuzzy
 msgid "_Register2"
 msgstr "Erregistroa"
+
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:412
+#: gnucash/gnome/gnc-plugin-page-budget.c:231
+#: gnucash/gnome/window-reconcile2.c:1659 gnucash/gnome/window-reconcile.c:1835
+#: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
+#: gnucash/gnome-utils/gnc-file.c:1141
+msgid "Open"
+msgstr "Ireki"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:414
 #, fuzzy
