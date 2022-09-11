@@ -59,6 +59,7 @@ static gnc_euro_rate_struct gnc_euro_rates[] =
     { "FRF",  6.55957 },  /* french franc */
     { "GRD",  340.750 },  /* greek drachma */
     { "HFL",  2.20371 },  /* netherland gulden */
+    { "HRK",  7.53450 },  /* Croatian kuna */
     { "IEP",  .787564 },  /* irish pound */
     { "IRP",  .787564 },  /* irish pound */
     { "ITL",  1936.27 },  /* italian lira */
