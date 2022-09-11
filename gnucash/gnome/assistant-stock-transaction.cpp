@@ -262,7 +262,7 @@ static const TxnTypeVec long_types
         // Translators: this is a stock transaction describing a stock
         // split
         N_("Stock split"),
-        N_("Company issues additional units, thereby reducing the stock price by a divisor, while keeping the $ value of shares constant.")
+        N_("Company issues additional units, thereby reducing the stock price by a divisor, while keeping the total monetary value the overall investment constant.")
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
@@ -274,7 +274,7 @@ static const TxnTypeVec long_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing a reverse split
         N_("Reverse split"),
-        N_("Company redeems units, thereby increasing the stock price by a multiple, while keeping the $ value of shares constant.")
+        N_("Company redeems units, thereby increasing the stock price by a multiple, while keeping the monetary value of the overall investment constant.")
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
@@ -287,7 +287,7 @@ static const TxnTypeVec long_types
         // Translators: this is a stock transaction describing a
         // reverse split. Some fractional stock is returned as cash.
         N_("Reverse split with cash in lieu for fractional unit remainders"),
-        N_("Company redeems units, thereby increasing the stock price by a multiple, while keeping the $ value of shares constant. Any remainder units are sold/redeemed for cash, with a capital gain/loss realized.")
+        N_("Company redeems units, thereby increasing the stock price by a multiple, while keeping the monetary value of overall investment constant. Any remainder units are sold/redeemed for cash, with a capital gain/loss realized.")
     },
 };
 
@@ -370,7 +370,7 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing return
         // of capital retrieved from holder when shorting stock
         N_("Compensatory return of capital"),
-        N_("Company returns capital, and the short stock holder must make a compensatory payment for the returned capital. This reduces the cost basis (less negative towards $0) without affecting # units.")
+        N_("Company returns capital, and the short stock holder must make a compensatory payment for the returned capital. This reduces the cost basis (less negative, towards 0.00 value) without affecting # units.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
@@ -383,7 +383,7 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing a
         // notional distribution when shorting stock
         N_("Compensatory notional distribution"),
-        N_("Company issues a notional distribution, and the short stock holder must make a compensatory payment for the notional distribution. This is recorded as a loss/negative dividend income amount, and increases the cost basis (more negative away from $0) without affecting # units.")
+        N_("Company issues a notional distribution, and the short stock holder must make a compensatory payment for the notional distribution. This is recorded as a loss/negative dividend income amount, and increases the cost basis (more negative, away from 0.00 value) without affecting # units.")
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
@@ -396,7 +396,7 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing a stock
         // split when shorting stock
         N_("Stock split"),
-        N_("Company issues additional units, thereby reducing the stock price by a divisor, while keeping the $ value of shares constant.")
+        N_("Company issues additional units, thereby reducing the stock price by a divisor, while keeping the monetary value of the overall investment constant.")
     },
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
@@ -409,7 +409,7 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing a
         // reverse split when shorting stock.
         N_("Reverse split"),
-        N_("Company redeems units, thereby increasing the stock price by a multiple, while keeping the $ value of shares constant.")
+        N_("Company redeems units, thereby increasing the stock price by a multiple, while keeping the monetary value of the overall investment constant.")
     },
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
@@ -423,7 +423,7 @@ static const TxnTypeVec short_types
         // reverse split when shorting stock. Fractional remaining
         // stock is retrieved as cash.
         N_("Reverse split with cash in lieu for fractionals"),
-        N_("Company redeems units, thereby increasing the stock price by a multiple, while keeping the $ value of shares constant. Any remainder units are closed and covered with a cash payment, with a capital gain/loss realized.")
+        N_("Company redeems units, thereby increasing the stock price by a multiple, while keeping the monetary value of the overall investment constant. Any remainder units are closed and covered with a cash payment, with a capital gain/loss realized.")
     },
 };
 
