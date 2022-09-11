@@ -534,7 +534,6 @@ libgnucash/app-utils/gnc-accounting-period.c
 libgnucash/app-utils/gnc-account-merge.c
 libgnucash/app-utils/gnc-addr-quickfill.c
 libgnucash/app-utils/gnc-entry-quickfill.c
-libgnucash/app-utils/gnc-euro.c
 libgnucash/app-utils/gnc-exp-parser.c
 libgnucash/app-utils/gnc-gsettings.cpp
 libgnucash/app-utils/gnc-helpers.c
@@ -640,6 +639,7 @@ libgnucash/engine/gnc-datetime.cpp
 libgnucash/engine/gncEmployee.c
 libgnucash/engine/gnc-engine.c
 libgnucash/engine/gncEntry.c
+libgnucash/engine/gnc-euro.c
 libgnucash/engine/gnc-event.c
 libgnucash/engine/gnc-features.c
 libgnucash/engine/gnc-hooks.c

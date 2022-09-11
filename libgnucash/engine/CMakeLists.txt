@@ -49,6 +49,7 @@ set (engine_HEADERS
   gnc-date.h
   gnc-datetime.hpp
   gnc-engine.h
+  gnc-euro.h
   gnc-event.h
   gnc-features.h
   gnc-hooks.h
@@ -144,6 +145,7 @@ set (engine_SOURCES
   gnc-date.cpp
   gnc-datetime.cpp
   gnc-engine.c
+  gnc-euro.c
   gnc-event.c
   gnc-features.c
   gnc-hooks.c
