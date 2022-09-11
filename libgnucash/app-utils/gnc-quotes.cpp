@@ -98,16 +98,14 @@ public:
     GList* sources_as_glist ();
 
 private:
-    void query_fq (void);
-    void parse_quotes (void);
-    std::string comm_vec_to_json_string(void) const;
+    std::string query_fq (const CommVec&);
+    void parse_quotes (const std::string& quote_str, const CommVec& commodities);
+    std::string comm_vec_to_json_string(const CommVec&) const;
     GNCPrice* parse_one_quote(const bpt::ptree&, gnc_commodity*);
 
     std::unique_ptr<GncQuoteSource> m_quotesource;
-    CommVec m_comm_vec;
     std::string m_version;
     QuoteSources m_sources;
-    std::string m_fq_answer;
     QofBook *m_book;
     gnc_commodity *m_dflt_curr;
 };
@@ -288,26 +286,17 @@ GncQuotesImpl::fetch (CommVec& commodities)
     if (commodities.empty())
         return;
 
-    m_comm_vec = std::move (commodities);  // Store for later use
-    m_book = qof_instance_get_book (m_comm_vec[0]);
-
-    query_fq ();
-    parse_quotes ();
-}
-
-static const std::vector <std::string>
-format_quotes (const std::vector<gnc_commodity*>)
-{
-    return std::vector <std::string>();
+    auto quote_str{query_fq (commodities)};
+    parse_quotes (quote_str, commodities);
 }
 
 std::string
-GncQuotesImpl::comm_vec_to_json_string (void) const
+GncQuotesImpl::comm_vec_to_json_string (const CommVec& comm_vec) const
 {
     bpt::ptree pt, pt_child;
     pt.put ("defaultcurrency", gnc_commodity_get_mnemonic (m_dflt_curr));
 
-    std::for_each (m_comm_vec.cbegin(), m_comm_vec.cend(),
+    std::for_each (comm_vec.cbegin(), comm_vec.cend(),
                    [this, &pt] (auto comm)
                    {
                        auto comm_mnemonic = gnc_commodity_get_mnemonic (comm);
@@ -331,17 +320,17 @@ GncQuotesImpl::comm_vec_to_json_string (void) const
     return result.str();
 }
 
-void
-GncQuotesImpl::query_fq (void)
+std::string
+GncQuotesImpl::query_fq (const CommVec& comm_vec)
 {
-    auto json_str{comm_vec_to_json_string()};
+    auto json_str{comm_vec_to_json_string(comm_vec)};
     auto [rv, quotes, errors] = m_quotesource->get_quotes(json_str);
-    m_fq_answer.clear();
+    std::string answer;
 
     if (rv == 0)
     {
         for (auto line : quotes)
-            m_fq_answer.append(line + "\n");
+            answer.append(line + "\n");
     }
     else
     {
@@ -350,6 +339,8 @@ GncQuotesImpl::query_fq (void)
             err_str.append(line + "\n");
         throw(GncQuoteException(err_str));
     }
+
+    return answer;
 //        for (auto line : quotes)
 //            PINFO("Output line retrieved from wrapper:\n%s", line.c_str());
 //
@@ -548,10 +539,10 @@ GncQuotesImpl::parse_one_quote(const bpt::ptree& pt, gnc_commodity* comm)
 }
 
 void
-GncQuotesImpl::parse_quotes (void)
+GncQuotesImpl::parse_quotes (const std::string& quote_str, const CommVec& comm_vec)
 {
     bpt::ptree pt;
-    std::istringstream ss {m_fq_answer};
+    std::istringstream ss {quote_str};
     const char* what = nullptr;
 
     try
@@ -584,7 +575,7 @@ GncQuotesImpl::parse_quotes (void)
     }
 
     auto pricedb{gnc_pricedb_get_db(m_book)};
-    for (auto comm : m_comm_vec)
+    for (auto comm : comm_vec)
     {
         auto price{parse_one_quote(pt, comm)};
         if (!price)
