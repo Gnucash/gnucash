@@ -168,7 +168,7 @@ static const TxnTypeVec long_types
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing
-        // purchase of stock.
+        // new purchase of stock.
         N_("Buy"),
         N_("Buying stock long.")
     },
@@ -180,8 +180,8 @@ static const TxnTypeVec long_types
         false,                  // fees_capitalize
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE, // capgains_amt
-        // Translators: this is a stock transaction describing sale of
-        // stock, and recording capital gain/loss
+        // Translators: this is a stock transaction describing new
+        // sale of stock, and recording capital gain/loss
         N_("Sell"),
         N_("Selling stock long, and record capital gain/loss.")
     },
@@ -285,8 +285,8 @@ static const TxnTypeVec long_types
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE, // capgains_amt
         // Translators: this is a stock transaction describing a
-        // reverse split. Some fractional stock is returned as cash.
-        N_("Reverse split with cash in lieu for fractional unit remainders"),
+        // reverse split. Some remainder stock units are returned as cash.
+        N_("Reverse split with cash in lieu for remainder units"),
         N_("Company redeems units, thereby increasing the stock price by a multiple, while keeping the total monetary value of the overall investment constant. Any remainder units are sold/redeemed for cash, with a capital gain/loss realized.")
     },
 };
@@ -420,9 +420,9 @@ static const TxnTypeVec short_types
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE,          // capg_amt
         // Translators: this is a stock transaction describing a
-        // reverse split when shorting stock. Fractional remaining
-        // stock is retrieved as cash.
-        N_("Reverse split with cash in lieu for fractionals"),
+        // reverse split when shorting stock. Remainder stock
+        // units are retrieved as cash.
+        N_("Reverse split with cash in lieu remainder units"),
         N_("Company redeems units, thereby increasing the stock price by a multiple, while keeping the total monetary value of the overall investment constant. Any remainder units are closed and covered with a cash payment, with a capital gain/loss realized.")
     },
 };
