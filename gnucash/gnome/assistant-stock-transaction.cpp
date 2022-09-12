@@ -201,7 +201,7 @@ static const TxnTypeVec long_types
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
         FieldMask::ENABLED_DEBIT,          // stock_val
-        FieldMask::ENABLED_DEBIT,          // cash_amt
+        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
         true,                   // fees_capitalize
         FieldMask::ENABLED_CREDIT,         // dividend_amt
@@ -210,7 +210,7 @@ static const TxnTypeVec long_types
         // dividend issued to holder, and it may be reinvested. Some
         // dividends are distributed as cash.
         N_("Dividend reinvestment"),
-        N_("Company issues dividend, which may be reinvested. Non-reinvested dividends are paid out as cash.")
+        N_("Company issues dividend, which may be reinvested. Remaining non-reinvested dividends (if any) are paid out as a cash dividend.")
     },
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
