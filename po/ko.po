@@ -3,10 +3,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.12-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-09-11 23:24+0200\n"
-"PO-Revision-Date: 2022-09-08 19:22+0000\n"
+"PO-Revision-Date: 2022-09-13 15:50+0000\n"
 "Last-Translator: 이정희 <daemul72@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ko/>\n"
@@ -2512,7 +2512,7 @@ msgstr "비용 영수증"
 
 #: gnucash/gnome/dialog-invoice.c:3585
 msgid "Find Invoice"
-msgstr "청구서 찾기"
+msgstr "송장 찾기"
 
 #. Translators: %d is the number of bills/credit notes due. This is a
 #. ngettext(3) message.
@@ -2555,7 +2555,7 @@ msgstr "출금은 양의 값이거나 또는 공백으로 두어야 합니다."
 
 #: gnucash/gnome/dialog-job.c:255
 msgid "Edit Job"
-msgstr "작업 편집"
+msgstr "작업 편집하기"
 
 #: gnucash/gnome/dialog-job.c:257 gnucash/gnome-search/dialog-search.c:1098
 msgid "New Job"
@@ -2571,7 +2571,7 @@ msgstr "청구서 보기"
 
 #: gnucash/gnome/dialog-job.c:576
 msgid "Owner's Name"
-msgstr "소유자 이름"
+msgstr "소유자의 이름"
 
 #: gnucash/gnome/dialog-job.c:578
 msgid "Only Active?"
@@ -18438,7 +18438,7 @@ msgstr "모든 예상 기간에 대한 모든 실제 기간의 평균 값 사용
 msgid ""
 "GnuCash will estimate budget values for the selected accounts from past "
 "transactions."
-msgstr "GnuCash는 과거 거래에서 선택된 계정에 대한 예산 가치를 추정합니다."
+msgstr "GnuCash는 과거 거래에서 선택된 계정에 대한 예산 값을 추정합니다."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:410
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:658
@@ -18484,7 +18484,7 @@ msgstr "예산 목록 닫기"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:773
 msgid "Create a New Budget"
-msgstr "새 예산 생성"
+msgstr "새 예산 만들기"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:789
 msgid "Open the Selected Budget"
@@ -18492,7 +18492,7 @@ msgstr "선택된 예산 열기"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:805
 msgid "Delete the Selected Budget"
-msgstr "선택된 예산 삭제"
+msgstr "선택된 예산 삭제하기"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:837
 #, fuzzy
@@ -26659,7 +26659,7 @@ msgstr "어음 조건"
 
 #: gnucash/report/reports/standard/invoice.scm:298
 msgid "Display the invoice billing terms?"
-msgstr "청구서 어음 조건 보이기"
+msgstr "송장 어음 조건을 내보이시겠습니까?"
 
 #: gnucash/report/reports/standard/invoice.scm:303
 msgid "Display the billing id?"
@@ -27603,7 +27603,7 @@ msgstr "계정을 보일까요?"
 #: gnucash/report/reports/standard/register.scm:384
 #: gnucash/report/trep-engine.scm:957
 msgid "Display the number of shares?"
-msgstr "주식 갯수 보이기"
+msgstr "주식 수를 드러내시겠습니까?"
 
 #: gnucash/report/reports/standard/register.scm:389
 #, fuzzy
@@ -28256,7 +28256,7 @@ msgstr "배경 타일"
 #: gnucash/report/stylesheets/head-or-tail.scm:139
 #: gnucash/report/stylesheets/plain.scm:53
 msgid "Background tile for reports."
-msgstr "보고서 배경 타일"
+msgstr "보고서의 배경 타일입니다."
 
 #. Translators: Banner is an image like Logo.
 #: gnucash/report/stylesheets/footer.scm:97
@@ -28269,7 +28269,7 @@ msgstr "머릿말 배너"
 #: gnucash/report/stylesheets/head-or-tail.scm:145
 #: gnucash/report/stylesheets/head-or-tail.scm:150
 msgid "Banner for top of report."
-msgstr "보고서 상단 배너"
+msgstr "보고서 상단 배너입니다."
 
 #: gnucash/report/stylesheets/footer.scm:103
 #: gnucash/report/stylesheets/head-or-tail.scm:150
@@ -28564,7 +28564,7 @@ msgstr ""
 
 #: gnucash/report/stylesheets/plain.scm:47
 msgid "Background color for reports."
-msgstr "보고서 배경 색상"
+msgstr "보고서의 배경색입니다."
 
 #: gnucash/report/stylesheets/plain.scm:53
 msgid "Background Pixmap"
@@ -29600,7 +29600,7 @@ msgstr "1년 전"
 
 #: libgnucash/app-utils/gnc-exp-parser.c:622
 msgid "Illegal variable in expression."
-msgstr "식에서 부적합한 변수"
+msgstr "표현식의 잘못된 변수입니다."
 
 #: libgnucash/app-utils/gnc-exp-parser.c:633
 msgid "Unbalanced parenthesis"
