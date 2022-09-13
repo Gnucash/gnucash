@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.12-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-09-11 23:24+0200\n"
-"PO-Revision-Date: 2022-09-07 09:20+0000\n"
+"PO-Revision-Date: 2022-09-12 09:23+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -2648,8 +2648,6 @@ msgid "Empty"
 msgstr "ריק"
 
 #: gnucash/gnome/dialog-lot-viewer.c:829
-#, fuzzy
-#| msgid "Open"
 msgctxt "Adjective"
 msgid "Open"
 msgstr "פתיחה"
