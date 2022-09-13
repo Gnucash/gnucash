@@ -36,10 +36,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.12-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-09-11 23:24+0200\n"
-"PO-Revision-Date: 2022-09-11 20:58+0000\n"
+"PO-Revision-Date: 2022-09-13 03:53+0000\n"
 "Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -2738,10 +2738,9 @@ msgid "Empty"
 msgstr "Leer"
 
 #: gnucash/gnome/dialog-lot-viewer.c:829
-#, fuzzy
 msgctxt "Adjective"
 msgid "Open"
-msgstr "Öffnen"
+msgstr "Offen"
 
 #: gnucash/gnome/dialog-lot-viewer.c:923 gnucash/gnome/dialog-order.c:890
 msgid "Closed"
@@ -3983,7 +3982,7 @@ msgstr "Alle Rechnungsverknüpfungen zeigen"
 
 #: gnucash/gnome/gnc-plugin-business.c:283
 msgid "Sales _Tax Table"
-msgstr "USt.-_Steuertabelle…"
+msgstr "USt.-_Steuertabelle"
 
 #: gnucash/gnome/gnc-plugin-business.c:284
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
@@ -4295,7 +4294,6 @@ msgstr "_Kontobuch Vers. 2"
 #: gnucash/gnome/window-reconcile2.c:1659 gnucash/gnome/window-reconcile.c:1835
 #: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
 #: gnucash/gnome-utils/gnc-file.c:1141
-#, fuzzy
 msgid "Open"
 msgstr "Öffnen"
 
@@ -7830,7 +7828,7 @@ msgstr "Speichern unter..."
 #: gnucash/gnome-utils/dialog-file-access.c:320
 #: gnucash/gtkbuilder/dialog-file-access.glade:40
 msgid "_Save As"
-msgstr "Speichern _unter…"
+msgstr "Speichern _unter"
 
 #: gnucash/gnome-utils/dialog-options.c:225
 #: gnucash/gnome-utils/gnc-main-window.c:310
@@ -27171,7 +27169,7 @@ msgstr "Sekundäre Sortierreihenfolge"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:39
 msgid "Income and GST Statement"
-msgstr "Einkommen- und Umsatzsteuererklärung"
+msgstr "Einkommen- und Umsatzsteuererklärung (Australien)"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:41
 #: gnucash/report/trep-engine.scm:109
