@@ -410,32 +410,45 @@ parse_quote_json(PriceParams& p, const bpt::ptree& comm_pt)
 static time64
 calc_price_time(const PriceParams& p)
 {
-    time64 quote_time;
-    std::string iso_date_str = GncDate().format ("%Y-%m-%d");
+    /* Note that as of F::Q v. 1.52 the only sources that provide
+     * quote times are ftfunds (aka ukfunds), morningstarch, and
+     * mstaruk_fund, but it's faked with a comment "Set a dummy time
+     * as gnucash insists on having a valid format". It's also wrong,
+     * as it lacks seconds. Best ignored.
+     */
     if (p.date)
     {
-        // Returned date is always in MM/DD/YYYY format according to F::Q man page, transform it to simplify conversion to GncDateTime
+        /* Returned date is always in MM/DD/YYYY format according to
+         * F::Q man page, transform it to simplify conversion to
+         * GncDateTime.
+         */
         auto date_tmp = *p.date;
-        iso_date_str = date_tmp.substr (6, 4) + "-" + date_tmp.substr (0, 2) + "-" + date_tmp.substr (3, 2);
+        auto iso_date_str = date_tmp.substr (6, 4) + "-" + date_tmp.substr (0, 2) +
+            "-" + date_tmp.substr (3, 2);
+        try
+        {
+            auto close_time{GncDateTime(iso_date_str + " 16:00:00")};
+            PINFO("Quote date included, using %s for %s:%s",
+                  close_time.format("%Y-%m-%d %H:%M:%S").c_str(), p.ns, p.mnemonic);
+            return static_cast<time64>(close_time);
+        }
+        catch (...)
+        {
+            auto now{GncDateTime()};
+            PWARN("Warning: failed to parse quote date '%s' for %s:%s - will use %s",
+                  iso_date_str.c_str(),  p.ns, p.mnemonic, now.format("%Y-%m-%d %H:%M%S").c_str());
+            return static_cast<time64>(now);
+        }
     }
     else
-        PINFO("Info: no date  was returned for %s:%s - will use today %s",
-              p.ns, p.mnemonic,
-              (iso_date_str += " " + (p.time ? *p.time : "12:00:00")).c_str());
-
-    auto can_convert = true;
-    try
     {
-        quote_time = static_cast<time64>(GncDateTime{iso_date_str});
-    }
-    catch (...)
-    {
-        PINFO("Warning: failed to parse quote date and time '%s' for %s:%s - will use today",
-              iso_date_str.c_str(),  p.ns, p.mnemonic);
-        quote_time = static_cast<time64>(GncDateTime());
+        auto now{GncDateTime()};
+        PINFO("Info: no date  was returned for %s:%s - will use %s",
+              p.ns, p.mnemonic, now.format("%Y-%m-%d %H:%M%S").c_str());
+        return static_cast<time64>(now);
     }
 
-    return quote_time;
+    return INT64_MAX; //Shouldn't be able to get here.
 }
 
 static boost::optional<GncNumeric>
