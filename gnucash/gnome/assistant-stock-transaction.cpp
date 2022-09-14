@@ -736,7 +736,7 @@ refresh_page_finish (StockTransactionInfo *info)
 
     gnc_numeric debit = gnc_numeric_zero ();
     gnc_numeric credit = gnc_numeric_zero ();
-    StringVec errors, warnings;
+    StringVec errors, warnings, infos;
     SummaryLineInfo line;
 
     // check the stock transaction date. If there are existing stock
@@ -797,6 +797,26 @@ to ensure proper recording."), new_date_str, last_split_date_str);
     }
 
     add_to_summary_table (list, line);
+
+    if (info->txn_type->stock_amount != FieldMask::DISABLED &&
+        info->txn_type->stock_value != FieldMask::DISABLED)
+    {
+        auto amt = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT(info->stock_amount_edit));
+        auto val = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT(info->stock_value_edit));
+        auto p = gnc_numeric_div (val, amt, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+        auto curr_pinfo = gnc_commodity_print_info (info->currency, true);
+        // Translators: %s refer to: stock mnemonic, broker currency,
+        // date of transaction.
+        auto tmpl = N_("A price of 1 %s = %s on %s will be recorded.");
+        auto date_str = qof_print_date (new_date);
+        auto price_str = g_strdup_printf
+            (_(tmpl),
+             gnc_commodity_get_mnemonic (xaccAccountGetCommodity (info->acct)),
+             xaccPrintAmount (p, curr_pinfo), date_str);
+        infos.emplace_back (price_str);
+        g_free (price_str);
+        g_free (date_str);
+    }
 
     if (info->txn_type->cash_value != FieldMask::DISABLED)
     {
@@ -869,6 +889,8 @@ to ensure proper recording."), new_date_str, last_split_date_str);
     auto summary = std::string { _(header) };
     auto summary_add = [&summary](auto a) { summary += "\n• "; summary += a; };
     std::for_each (errors.begin(), errors.end(), summary_add);
+    if (errors.empty())
+        std::for_each (infos.begin(), infos.end(), summary_add);
     if (!warnings.empty())
     {
         auto warnings_header = N_ ("The following warnings exist:");
