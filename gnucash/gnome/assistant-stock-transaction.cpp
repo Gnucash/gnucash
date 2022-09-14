@@ -196,34 +196,8 @@ static const TxnTypeVec long_types
         // Translators: this is a stock transaction describing
         // dividends issued to holder
         N_("Dividend"),
-        N_("Company issues cash dividends to holder.")
-    },
-    {
-        FieldMask::ENABLED_DEBIT,          // stock_amt
-        FieldMask::ENABLED_DEBIT,          // stock_val
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        true,                   // fees_capitalize
-        FieldMask::ENABLED_CREDIT,         // dividend_amt
-        FieldMask::DISABLED,               // capg_amt
-        // Translators: this is a stock transaction describing
-        // dividend issued to holder, and it may be reinvested. Some
-        // dividends are distributed as cash.
-        N_("Dividend reinvestment"),
-        N_("Company issues dividend, which may be reinvested. Remaining non-reinvested dividends (if any) are paid out as a cash dividend.")
-    },
-    {
-        FieldMask::ENABLED_DEBIT,          // stock_amt
-        FieldMask::ENABLED_DEBIT,          // stock_val
-        FieldMask::DISABLED,               // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        true,                   // fees_capitalize
-        FieldMask::ENABLED_CREDIT,         // dividend_amt
-        FieldMask::DISABLED,               // capg_amt
-        // Translators: this is a stock transaction describing
-        // dividend which is wholly reinvested.
-        N_("Dividend reinvestment (without remainder) - N/A"),
-        N_("Company issues dividend which is wholly reinvested.")
+        N_("Company issues cash dividends to holder.\n\nAny dividend being \
+reinvested must be subsequently recorded as a regular stock purchase.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
@@ -274,21 +248,12 @@ static const TxnTypeVec long_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing a reverse split
         N_("Reverse split"),
-        N_("Company redeems units, thereby increasing the stock price by a multiple, while keeping the total monetary value of the overall investment constant.")
-    },
-    {
-        FieldMask::ENABLED_CREDIT,         // stock_amt
-        FieldMask::ENABLED_CREDIT,         // stock_val
-        FieldMask::ENABLED_DEBIT,          // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        false,                  // fees_capitalize
-        FieldMask::DISABLED,               // dividend_amt
-        FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE, // capgains_amt
-        // Translators: this is a stock transaction describing a
-        // reverse split. Some remainder stock units are returned as cash.
-        N_("Reverse split with cash in lieu for remainder units"),
-        N_("Company redeems units, thereby increasing the stock price by a multiple, while keeping the total monetary value of the overall investment constant. Any remainder units are sold/redeemed for cash, with a capital gain/loss realized.")
-    },
+        N_("Company redeems units, thereby increasing the stock price by a \
+multiple, while keeping the total monetary value of the overall investment \
+constant.\n\nIf the reverse split results in a cash in lieu for remainder \
+units, please record the sale using the Stock Split Assistant first, then \
+record the reverse split.")
+    }
 };
 
 static const TxnTypeVec short_types
@@ -331,33 +296,6 @@ static const TxnTypeVec short_types
         // dividends retrieved from holder when shorting stock
         N_("Compensatory dividend"),
         N_("Company issues dividends, and the short stock holder must make a compensatory payment for the dividend.")
-    },
-    {
-        FieldMask::ENABLED_CREDIT,         // stock_amt
-        FieldMask::ENABLED_CREDIT,         // stock_val
-        FieldMask::ENABLED_DEBIT,          // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        true,                   // fees_capitalize
-        FieldMask::ENABLED_DEBIT,          // dividend_amt
-        FieldMask::DISABLED,               // capg_amt
-        // Translators: this is a stock transaction describing
-        // dividends retrieved from holder when shorting stock. Some
-        // dividends are recovered from holder
-        N_("Dividend reinvestment (with remainder) - N/A"),
-        N_("Company issues dividends to holder when shorting stock. Some dividends are recovered from holder")
-    },
-    {
-        FieldMask::ENABLED_DEBIT,          // stock_amt
-        FieldMask::ENABLED_DEBIT,          // stock_val
-        FieldMask::DISABLED,               // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        true,                   // fees_capitalize
-        FieldMask::ENABLED_DEBIT,          // dividend_amt
-        FieldMask::DISABLED,               // capg_amt
-        // Translators: this is a stock transaction describing
-        // dividends retrieved from holder when shorting stock,
-        N_("Dividend reinvestment (without remainder) - N/A"),
-        N_("Company issues dividend when shorting stock, which are wholly recovered from holder.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
@@ -409,22 +347,12 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing a
         // reverse split when shorting stock.
         N_("Reverse split"),
-        N_("Company redeems units, thereby increasing the stock price by a multiple, while keeping the total monetary value of the overall investment constant.")
-    },
-    {
-        FieldMask::ENABLED_DEBIT,          // stock_amt
-        FieldMask::ENABLED_DEBIT,          // stock_val
-        FieldMask::ENABLED_CREDIT,         // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        false,                  // fees_capitalize
-        FieldMask::DISABLED,               // dividend_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE,          // capg_amt
-        // Translators: this is a stock transaction describing a
-        // reverse split when shorting stock. Remainder stock
-        // units are retrieved as cash.
-        N_("Reverse split with cash in lieu remainder units"),
-        N_("Company redeems units, thereby increasing the stock price by a multiple, while keeping the total monetary value of the overall investment constant. Any remainder units are closed and covered with a cash payment, with a capital gain/loss realized.")
-    },
+        N_("Company redeems units, thereby increasing the stock price by \
+a multiple, while keeping the total monetary value of the overall investment \
+constant.\n\nIf the reverse split results in a cash in lieu for remainder \
+units, please record the cover buy using the Stock Split Assistant first, \
+then record the reverse split.")
+    }
 };
 
 typedef struct
