@@ -138,9 +138,9 @@ static const TxnTypeVec starting_types
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing an
-        // Initial stock purchase
+        // Initial stock long purchase
         N_("Open buy"),
-        N_("Initial stock purchase")
+        N_("Initial stock long purchase.")
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
@@ -151,9 +151,9 @@ static const TxnTypeVec starting_types
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing an
-        // initial stock short-sale
+        // initial stock short sale
         N_("Open short"),
-        N_("Initial stock short-sale")
+        N_("Initial stock short sale.")
     }
 };
 
@@ -168,9 +168,9 @@ static const TxnTypeVec long_types
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing
-        // purchase of stock.
+        // new purchase of stock.
         N_("Buy"),
-        N_("Buying stock.")
+        N_("Buying stock long.")
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
@@ -180,10 +180,10 @@ static const TxnTypeVec long_types
         false,                  // fees_capitalize
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE, // capgains_amt
-        // Translators: this is a stock transaction describing sale of
-        // stock, and recording capital gain/loss
+        // Translators: this is a stock transaction describing new
+        // sale of stock, and recording capital gain/loss
         N_("Sell"),
-        N_("Selling stock, and record capital gain/loss")
+        N_("Selling stock long, and record capital gain/loss.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
@@ -196,34 +196,8 @@ static const TxnTypeVec long_types
         // Translators: this is a stock transaction describing
         // dividends issued to holder
         N_("Dividend"),
-        N_("Company issues dividends to holder")
-    },
-    {
-        FieldMask::ENABLED_DEBIT,          // stock_amt
-        FieldMask::ENABLED_DEBIT,          // stock_val
-        FieldMask::ENABLED_DEBIT,          // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        true,                   // fees_capitalize
-        FieldMask::ENABLED_CREDIT,         // dividend_amt
-        FieldMask::DISABLED,               // capg_amt
-        // Translators: this is a stock transaction describing
-        // dividend issued to holder, and is reinvested. Some
-        // dividends are distributed as cash.
-        N_("Dividend reinvestment (with remainder)"),
-        N_("Company issues dividend which is reinvested. Some dividends are paid to holder")
-    },
-    {
-        FieldMask::ENABLED_DEBIT,          // stock_amt
-        FieldMask::ENABLED_DEBIT,          // stock_val
-        FieldMask::DISABLED,               // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        true,                   // fees_capitalize
-        FieldMask::ENABLED_CREDIT,         // dividend_amt
-        FieldMask::DISABLED,               // capg_amt
-        // Translators: this is a stock transaction describing
-        // dividend which is wholly reinvested.
-        N_("Dividend reinvestment (without remainder)"),
-        N_("Company issues dividend which is wholly reinvested.")
+        N_("Company issues cash dividends to holder.\n\nAny dividend being \
+reinvested must be subsequently recorded as a regular stock purchase.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
@@ -235,8 +209,8 @@ static const TxnTypeVec long_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing return
         // of capital
-        N_("Return of Capital"),
-        N_("Stock returns capital to holder")
+        N_("Return of capital"),
+        N_("Company returns capital, reducing the cost basis without affecting # units.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
@@ -249,7 +223,7 @@ static const TxnTypeVec long_types
         // Translators: this is a stock transaction describing a
         // notional distribution
         N_("Notional distribution"),
-        N_("Stock returns a notional distribution")
+        N_("Company issues a notional distribution, which is recorded as dividend income and increases the cost basis without affecting # units.")
     },
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
@@ -262,7 +236,7 @@ static const TxnTypeVec long_types
         // Translators: this is a stock transaction describing a stock
         // split
         N_("Stock split"),
-        N_("Stock price is fractionally reduced")
+        N_("Company issues additional units, thereby reducing the stock price by a divisor, while keeping the total monetary value of the overall investment constant.")
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
@@ -274,21 +248,12 @@ static const TxnTypeVec long_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing a reverse split
         N_("Reverse split"),
-        N_("Stock price is fractionally increased.")
-    },
-    {
-        FieldMask::ENABLED_CREDIT,         // stock_amt
-        FieldMask::ENABLED_CREDIT,         // stock_val
-        FieldMask::ENABLED_DEBIT,          // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        false,                  // fees_capitalize
-        FieldMask::DISABLED,               // dividend_amt
-        FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE, // capgains_amt
-        // Translators: this is a stock transaction describing a
-        // reverse split. Some fractional stock is returned as cash.
-        N_("Reverse split with cash in lieu for fractionals"),
-        N_("Stock price is fractionally increased. Fractional remaining stock is returned as cash.")
-    },
+        N_("Company redeems units, thereby increasing the stock price by a \
+multiple, while keeping the total monetary value of the overall investment \
+constant.\n\nIf the reverse split results in a cash in lieu for remainder \
+units, please record the sale using the Stock Split Assistant first, then \
+record the reverse split.")
+    }
 };
 
 static const TxnTypeVec short_types
@@ -304,7 +269,7 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing
         // shorting of stock.
         N_("Short sell"),
-        N_("Shorting stock.")
+        N_("Selling stock short.")
     },
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
@@ -317,7 +282,7 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing cover
         // buying stock, and recording capital gain/loss
         N_("Buy to cover short"),
-        N_("Buy back stock to cover short and record capital gain/loss")
+        N_("Buy back stock to cover short position, and record capital gain/loss.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
@@ -329,35 +294,8 @@ static const TxnTypeVec short_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing
         // dividends retrieved from holder when shorting stock
-        N_("Compensatory Dividend"),
-        N_("Company issues dividends to holder when shorting stock")
-    },
-    {
-        FieldMask::ENABLED_CREDIT,         // stock_amt
-        FieldMask::ENABLED_CREDIT,         // stock_val
-        FieldMask::ENABLED_DEBIT,          // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        true,                   // fees_capitalize
-        FieldMask::ENABLED_DEBIT,          // dividend_amt
-        FieldMask::DISABLED,               // capg_amt
-        // Translators: this is a stock transaction describing
-        // dividends retrieved from holder when shorting stock. Some
-        // dividends are recovered from holder
-        N_("Dividend reinvestment (with remainder)"),
-        N_("Company issues dividends to holder when shorting stock. Some dividends are recovered from holder")
-    },
-    {
-        FieldMask::ENABLED_DEBIT,          // stock_amt
-        FieldMask::ENABLED_DEBIT,          // stock_val
-        FieldMask::DISABLED,               // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        true,                   // fees_capitalize
-        FieldMask::ENABLED_DEBIT,          // dividend_amt
-        FieldMask::DISABLED,               // capg_amt
-        // Translators: this is a stock transaction describing
-        // dividends retrieved from holder when shorting stock,
-        N_("Dividend reinvestment (without remainder)"),
-        N_("Company issues dividend when shorting stock, which are wholly recovered from holder.")
+        N_("Compensatory dividend"),
+        N_("Company issues dividends, and the short stock holder must make a compensatory payment for the dividend.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
@@ -369,8 +307,8 @@ static const TxnTypeVec short_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing return
         // of capital retrieved from holder when shorting stock
-        N_("Compensatory Return of Capital"),
-        N_("Return retrieves capital from holder when shorting stock")
+        N_("Compensatory return of capital"),
+        N_("Company returns capital, and the short stock holder must make a compensatory payment for the returned capital. This reduces the cost basis (less negative, towards 0.00 value) without affecting # units.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
@@ -382,8 +320,8 @@ static const TxnTypeVec short_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing a
         // notional distribution when shorting stock
-        N_("Compensatory Notional distribution"),
-        N_("Stock retrieves a notional distribution")
+        N_("Compensatory notional distribution"),
+        N_("Company issues a notional distribution, and the short stock holder must make a compensatory payment for the notional distribution. This is recorded as a loss/negative dividend income amount, and increases the cost basis (more negative, away from 0.00 value) without affecting # units.")
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
@@ -396,7 +334,7 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing a stock
         // split when shorting stock
         N_("Stock split"),
-        N_("Stock price is fractionally reduced when shorting stock")
+        N_("Company issues additional units, thereby reducing the stock price by a divisor, while keeping the total monetary value of the overall investment constant.")
     },
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
@@ -409,22 +347,12 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing a
         // reverse split when shorting stock.
         N_("Reverse split"),
-        N_("Stock price is fractionally increased when shorting stock.")
-    },
-    {
-        FieldMask::ENABLED_DEBIT,          // stock_amt
-        FieldMask::ENABLED_DEBIT,          // stock_val
-        FieldMask::ENABLED_CREDIT,         // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        false,                  // fees_capitalize
-        FieldMask::DISABLED,               // dividend_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE,          // capg_amt
-        // Translators: this is a stock transaction describing a
-        // reverse split when shorting stock. Fractional remaining
-        // stock is retrieved as cash.
-        N_("Reverse split with cash in lieu for fractionals"),
-        N_("Stock price is fractionally increased when shorting stock. Fractional remaining stock is retrieved as cash.")
-    },
+        N_("Company redeems units, thereby increasing the stock price by \
+a multiple, while keeping the total monetary value of the overall investment \
+constant.\n\nIf the reverse split results in a cash in lieu for remainder \
+units, please record the cover buy using the Stock Split Assistant first, \
+then record the reverse split.")
+    }
 };
 
 typedef struct
@@ -736,7 +664,7 @@ refresh_page_finish (StockTransactionInfo *info)
 
     gnc_numeric debit = gnc_numeric_zero ();
     gnc_numeric credit = gnc_numeric_zero ();
-    StringVec errors, warnings;
+    StringVec errors, warnings, infos;
     SummaryLineInfo line;
 
     // check the stock transaction date. If there are existing stock
@@ -797,6 +725,26 @@ to ensure proper recording."), new_date_str, last_split_date_str);
     }
 
     add_to_summary_table (list, line);
+
+    if (info->txn_type->stock_amount != FieldMask::DISABLED &&
+        info->txn_type->stock_value != FieldMask::DISABLED)
+    {
+        auto amt = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT(info->stock_amount_edit));
+        auto val = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT(info->stock_value_edit));
+        auto p = gnc_numeric_div (val, amt, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+        auto curr_pinfo = gnc_commodity_print_info (info->currency, true);
+        // Translators: %s refer to: stock mnemonic, broker currency,
+        // date of transaction.
+        auto tmpl = N_("A price of 1 %s = %s on %s will be recorded.");
+        auto date_str = qof_print_date (new_date);
+        auto price_str = g_strdup_printf
+            (_(tmpl),
+             gnc_commodity_get_mnemonic (xaccAccountGetCommodity (info->acct)),
+             xaccPrintAmount (p, curr_pinfo), date_str);
+        infos.emplace_back (price_str);
+        g_free (price_str);
+        g_free (date_str);
+    }
 
     if (info->txn_type->cash_value != FieldMask::DISABLED)
     {
@@ -869,6 +817,8 @@ to ensure proper recording."), new_date_str, last_split_date_str);
     auto summary = std::string { _(header) };
     auto summary_add = [&summary](auto a) { summary += "\n• "; summary += a; };
     std::for_each (errors.begin(), errors.end(), summary_add);
+    if (errors.empty())
+        std::for_each (infos.begin(), infos.end(), summary_add);
     if (!warnings.empty())
     {
         auto warnings_header = N_ ("The following warnings exist:");
