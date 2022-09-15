@@ -1312,11 +1312,11 @@ gnc_option_db_lookup_qofinstance_value(GncOptionDB* odb, const char* section,
 }
 
 // Force creation of templates
-template void gnc_register_number_range_option(GncOptionDBPtr& db,
+template void gnc_register_number_range_option(GncOptionDB* db,
                                       const char* section, const char* name,
                                       const char* key, const char* doc_string,
                                       int value, int min, int max, int step);
-template void gnc_register_number_range_option(GncOptionDBPtr& db,
+template void gnc_register_number_range_option(GncOptionDB* db,
                                       const char* section, const char* name,
                                       const char* key, const char* doc_string,
                                       double value, double min,
