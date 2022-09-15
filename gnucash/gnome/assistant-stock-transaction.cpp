@@ -113,6 +113,7 @@ FieldMask operator ^(FieldMask lhs, FieldMask rhs)
 struct TxnTypeInfo
 {
     FieldMask stock_amount;
+    bool input_new_balance;
     FieldMask stock_value;
     FieldMask cash_value;
     FieldMask fees_value;
@@ -131,6 +132,7 @@ static const TxnTypeVec starting_types
 {
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -144,6 +146,7 @@ static const TxnTypeVec starting_types
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -161,6 +164,7 @@ static const TxnTypeVec long_types
 {
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -174,6 +178,7 @@ static const TxnTypeVec long_types
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -187,6 +192,7 @@ static const TxnTypeVec long_types
     },
     {
         FieldMask::DISABLED,               // stock_amt
+        false,                             // input_new_balance
         FieldMask::DISABLED,               // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -201,6 +207,7 @@ reinvested must be subsequently recorded as a regular stock purchase.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -214,6 +221,7 @@ reinvested must be subsequently recorded as a regular stock purchase.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -227,6 +235,7 @@ reinvested must be subsequently recorded as a regular stock purchase.")
     },
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
+        true,                              // input_new_balance
         FieldMask::DISABLED,               // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -240,6 +249,7 @@ reinvested must be subsequently recorded as a regular stock purchase.")
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
+        true,                              // input_new_balance
         FieldMask::DISABLED,               // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -260,6 +270,7 @@ static const TxnTypeVec short_types
 {
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -273,6 +284,7 @@ static const TxnTypeVec short_types
     },
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -286,6 +298,7 @@ static const TxnTypeVec short_types
     },
     {
         FieldMask::DISABLED,               // stock_amt
+        false,                             // input_new_balance
         FieldMask::DISABLED,               // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -299,6 +312,7 @@ static const TxnTypeVec short_types
     },
     {
         FieldMask::DISABLED,               // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -312,6 +326,7 @@ static const TxnTypeVec short_types
     },
     {
         FieldMask::DISABLED,               // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -325,6 +340,7 @@ static const TxnTypeVec short_types
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
+        true,                              // input_new_balance
         FieldMask::DISABLED,               // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -338,6 +354,7 @@ static const TxnTypeVec short_types
     },
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
+        true,                              // input_new_balance
         FieldMask::DISABLED,               // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -382,9 +399,12 @@ typedef struct
     // stock amount page
     gnc_numeric balance_at_date;
     GtkWidget * stock_amount_page;
+    GtkWidget * stock_amount_title;
     GtkWidget * prev_amount;
     GtkWidget * next_amount;
+    GtkWidget * next_amount_label;
     GtkWidget * stock_amount_edit;
+    GtkWidget * stock_amount_label;
 
     // stock value page
     GtkWidget * stock_value_page;
@@ -484,6 +504,24 @@ refresh_page_stock_amount (GtkWidget *widget, gpointer user_data)
     if (gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->stock_amount_edit),
                                        &stock_amount, true, nullptr))
         gtk_label_set_text (GTK_LABEL(info->next_amount), nullptr);
+    else if (info->txn_type->input_new_balance)
+    {
+        gnc_numeric ratio = gnc_numeric_div (stock_amount, bal,
+                                             GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+        if (gnc_numeric_check (ratio) || gnc_numeric_negative_p (ratio))
+            gtk_label_set_text (GTK_LABEL(info->next_amount), nullptr);
+        else
+        {
+            auto str = gnc_numeric_to_string (ratio);
+            auto p = str ? strchr (str, '/') : nullptr;
+            if (p)
+                *p = ':';
+            auto lbl = g_strdup_printf (_("%s Split"), str);
+            gtk_label_set_text (GTK_LABEL(info->next_amount), lbl);
+            g_free (lbl);
+            g_free (str);
+        }
+    }
     else
     {
         if (info->txn_type->stock_amount == FieldMask::ENABLED_CREDIT)
@@ -704,7 +742,30 @@ to ensure proper recording."), new_date_str, last_split_date_str);
                     NC_ ("Stock Assistant: Page name", "stock value"), errors);
 
 
-    if (info->txn_type->stock_amount != FieldMask::DISABLED)
+    if (info->txn_type->stock_amount == FieldMask::DISABLED)
+        ;
+    else if (info->txn_type->input_new_balance)
+    {
+        auto stock_amount = gnc_amount_edit_get_amount
+            (GNC_AMOUNT_EDIT(info->stock_amount_edit));
+        auto credit_side = (info->txn_type->stock_amount & FieldMask::ENABLED_CREDIT);
+        auto delta = gnc_numeric_sub_fixed (stock_amount, info->balance_at_date);
+        auto ratio = gnc_numeric_div (stock_amount, info->balance_at_date,
+                                      GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+        auto stock_pinfo = gnc_commodity_print_info
+            (xaccAccountGetCommodity (info->acct), true);
+        stock_amount = gnc_numeric_sub_fixed (stock_amount, info->balance_at_date);
+        line.units = xaccPrintAmount (stock_amount, stock_pinfo);
+        if (gnc_numeric_check (ratio))
+            add_error_str (errors, N_("Invalid stock new balance"));
+        else if (gnc_numeric_negative_p (ratio))
+            add_error_str (errors, N_("New and old balance must have same signs"));
+        else if (gnc_numeric_negative_p (delta) && !credit_side)
+            add_error_str (errors, N_("New balance must be higher than old balance"));
+        else if (gnc_numeric_positive_p (delta) && credit_side)
+            add_error_str (errors, N_("New balance must be lower than old balance"));
+    }
+    else
     {
         auto stock_amount = gnc_amount_edit_get_amount
             (GNC_AMOUNT_EDIT(info->stock_amount_edit));
@@ -863,6 +924,17 @@ stock_assistant_prepare (GtkAssistant  *assistant, GtkWidget *page,
     case PAGE_STOCK_AMOUNT:
         info->balance_at_date = xaccAccountGetBalanceAsOfDate
             (info->acct, gnc_date_edit_get_date_end (GNC_DATE_EDIT (info->date_edit)));
+        gtk_label_set_text_with_mnemonic
+            (GTK_LABEL (info->stock_amount_label),
+             info->txn_type->input_new_balance ? _("Ne_w Balance") : _("_Shares"));
+        gtk_label_set_text
+            (GTK_LABEL (info->next_amount_label),
+             info->txn_type->input_new_balance ? _("Ratio") : _("Next Balance"));
+        gtk_label_set_text
+            (GTK_LABEL (info->stock_amount_title),
+             info->txn_type->input_new_balance ?
+             _("Enter the new balance of shares after the stock split.") :
+             _("Enter the number of shares you gained or lost in the transaction."));
         refresh_page_stock_amount (info->stock_amount_edit, info);
         // fixme: the following doesn't work???
         gtk_widget_grab_focus (gnc_amount_edit_gtk_entry
@@ -922,16 +994,15 @@ static void
 create_split (Transaction *trans, FieldMask splitfield,
               const gchar *action, Account *account,
               AccountVec& account_commits, GtkWidget *memo_entry,
-              GtkWidget *amount, GtkWidget *value,
-              bool skip_if_zero)
+              gnc_numeric amount_numeric, gnc_numeric value_numeric,
+              bool skip_if_zero, StockTransactionInfo *info)
 {
-    auto amount_numeric = amount ? gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (amount)) : gnc_numeric_zero ();
-    auto value_numeric = value ? gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (value)) : gnc_numeric_zero ();
-
     if (skip_if_zero && gnc_numeric_zero_p (value_numeric))
         return;
 
-    if (splitfield & FieldMask::ENABLED_CREDIT)
+    if (info->txn_type->input_new_balance)
+        amount_numeric = gnc_numeric_sub_fixed (amount_numeric, info->balance_at_date);
+    else if (splitfield & FieldMask::ENABLED_CREDIT)
     {
         amount_numeric = gnc_numeric_neg (amount_numeric);
         value_numeric = gnc_numeric_neg (value_numeric);
@@ -982,6 +1053,11 @@ add_price (GtkWidget *amount, GtkWidget *value,
     gnc_price_unref (price);
 }
 
+static gnc_numeric gae_amount (GtkWidget *widget)
+{
+    return gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (widget));
+}
+
 void
 stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
 {
@@ -1001,52 +1077,61 @@ stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
     auto date = gnc_date_edit_get_date (GNC_DATE_EDIT (info->date_edit));
     xaccTransSetDatePostedSecsNormalized (trans, date);
 
+    auto stock_amount = info->txn_type->stock_amount != FieldMask::DISABLED ?
+        gae_amount (info->stock_amount_edit) : gnc_numeric_zero ();
+    auto stock_value = info->txn_type->stock_value != FieldMask::DISABLED ?
+        gae_amount (info->stock_value_edit) : gnc_numeric_zero ();
+    if (info->txn_type->input_new_balance)
+        stock_amount = gnc_numeric_sub_fixed (stock_amount, info->balance_at_date);
     create_split (trans, info->txn_type->stock_amount | info->txn_type->stock_value,
                   NC_ ("Stock Assistant: Action field", "Stock"),
                   info->acct, account_commits, info->stock_memo_edit,
-                  info->txn_type->stock_amount != FieldMask::DISABLED ? info->stock_amount_edit : nullptr,
-                  info->txn_type->stock_value != FieldMask::DISABLED ? info->stock_value_edit : nullptr,
-                  false);
+                  stock_amount, stock_value, false, info);
 
     if (info->txn_type->cash_value != FieldMask::DISABLED)
+    {
+        auto cash = gae_amount (info->cash_value);
         create_split (trans, info->txn_type->cash_value,
                       NC_ ("Stock Assistant: Action field", "Cash"),
-                      gas_account (info->cash_account),
-                      account_commits, info->cash_memo_edit, info->cash_value,
-                      info->cash_value, false);
+                      gas_account (info->cash_account), account_commits,
+                      info->cash_memo_edit, cash, cash, false, info);
+    }
 
     if (info->txn_type->fees_value != FieldMask::DISABLED)
     {
+        auto fees = gae_amount (info->fees_value);
         auto capitalize = gtk_toggle_button_get_active
             (GTK_TOGGLE_BUTTON (info->capitalize_fees_checkbox));
         create_split (trans, info->txn_type->fees_value,
                       NC_ ("Stock Assistant: Action field", "Fees"),
                       capitalize ? info->acct : gas_account (info->fees_account),
                       account_commits, info->fees_memo_edit,
-                      capitalize ? nullptr : info->fees_value,
-                      info->fees_value, true);
+                      capitalize ? gnc_numeric_zero () : fees, fees, true, info);
     }
 
     if (info->txn_type->dividend_value != FieldMask::DISABLED)
+    {
+        auto dividend = gae_amount (info->dividend_value);
         create_split (trans, info->txn_type->dividend_value,
                       NC_ ("Stock Assistant: Action field", "Dividend"),
-                      gas_account (info->dividend_account),
-                      account_commits, info->dividend_memo_edit,
-                      info->dividend_value, info->dividend_value, false);
+                      gas_account (info->dividend_account), account_commits,
+                      info->dividend_memo_edit, dividend, dividend, false, info);
+    }
 
     if (info->txn_type->capgains_value != FieldMask::DISABLED)
     {
+        auto capgains = gae_amount (info->capgains_value);
         create_split (trans, info->txn_type->capgains_value,
                       NC_ ("Stock Assistant: Action field", "Capital Gain"),
                       gas_account (info->capgains_account),
                       account_commits, info->capgains_memo_edit,
-                      info->capgains_value, info->capgains_value, false);
+                      capgains, capgains, false, info);
 
         create_split (trans,
                       info->txn_type->capgains_value ^ (FieldMask::ENABLED_CREDIT | FieldMask::ENABLED_DEBIT),
                       NC_ ("Stock Assistant: Action field", "Capital Gain"),
                       info->acct, account_commits, info->capgains_memo_edit,
-                      nullptr, info->capgains_value, false);
+                      gnc_numeric_zero (), capgains, false, info);
     }
 
     if (info->txn_type->stock_amount != FieldMask::DISABLED &&
@@ -1206,9 +1291,12 @@ stock_assistant_create (StockTransactionInfo *info)
 
     /* Stock Amount Page Widgets */
     info->stock_amount_page = get_widget (builder, "stock_amount_page");
+    info->stock_amount_title = get_widget (builder, "stock_amount_title");
     info->prev_amount = get_widget (builder, "prev_balance_amount");
+    info->stock_amount_label = get_widget (builder, "stock_amount_label");
     info->stock_amount_edit = create_gae (builder, 1, xaccAccountGetCommodity (info->acct), "stock_amount_table", "stock_amount_label");
     info->next_amount = get_widget (builder, "next_balance_amount");
+    info->next_amount_label = get_widget (builder, "next_balance_label");
     g_signal_connect (info->stock_amount_edit, "changed",
                       G_CALLBACK (refresh_page_stock_amount), info);
 
