@@ -44,15 +44,6 @@
  *  created.  It could be optimized to build a single list store and
  *  share across all extant version of the widget, or even build the
  *  list store once and maintain for the life of the application.
- *
- *  When the GtkComboCellEntry widget supports completion, this Gnucash
- *  widget should be modified so that it is based upon that widget.
- *  That would give users the capability to select a currency by typing
- *  its ISO 4217 code (e.g. USD, GBP, etc).  Moving to that widget
- *  today, however, would cause more problems that its worth.  There is
- *  currently no way to get access to the embedded GtkEntry widget, and
- *  therefore no way to implement completion in gnucash or prevent the
- *  user from typing in random data.
  */
 
 #include <config.h>
@@ -284,6 +275,13 @@ static void gnc_currency_edit_active_changed (GtkComboBox *gobject,
     }
 }
 
+enum
+{
+    CURRENCY_COL_NAME,
+    CURRENCY_COL_NORMALIZED_FOLDED,
+    NUM_CURRENCY_COLS
+};
+
 /** This auxiliary function adds a single currency name to the combo
  *  box.  It is called as an iterator function when running a list of
  *  currencies.
@@ -300,14 +298,21 @@ add_item(gnc_commodity *commodity, GNCCurrencyEdit *gce)
     GtkTreeModel *model;
     GtkTreeIter iter;
     const char *string;
+    gchar *normalized, *normalized_folded;
 
     model = gtk_combo_box_get_model(GTK_COMBO_BOX(gce));
 
     string = gnc_commodity_get_printname(commodity);
+    normalized = g_utf8_normalize (string, -1, G_NORMALIZE_ALL);
+    normalized_folded = normalized ? g_utf8_casefold (normalized, -1) : NULL;
 
     gtk_list_store_append(GTK_LIST_STORE(model), &iter);
-    gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0, string, -1);
-
+    gtk_list_store_set (GTK_LIST_STORE(model), &iter,
+                        CURRENCY_COL_NAME, string,
+                        CURRENCY_COL_NORMALIZED_FOLDED, normalized_folded,
+                        -1);
+    g_free (normalized_folded);
+    g_free (normalized);
 }
 
 
@@ -331,6 +336,21 @@ fill_currencies(GNCCurrencyEdit *gce)
 }
 
 
+static gboolean
+match_func (GtkEntryCompletion *completion, const char *entry_str,
+            GtkTreeIter *iter, GtkTreeModel *model)
+{
+    gchar *currency_name;
+    gboolean ret = FALSE;
+    gtk_tree_model_get (model, iter,
+                        CURRENCY_COL_NORMALIZED_FOLDED, &currency_name,
+                        -1);
+    if (currency_name && *currency_name && strstr (currency_name, entry_str))
+        ret = TRUE;
+    g_free (currency_name);
+    return ret;
+}
+
 /*  Create a new GNCCurrencyEdit widget which can be used to provide
  *  an easy way to enter ISO currency codes.
  *
@@ -341,8 +361,9 @@ gnc_currency_edit_new (void)
 {
     GNCCurrencyEdit *gce;
     GtkListStore *store;
+    GtkEntryCompletion* completion;
 
-    store = gtk_list_store_new (1, G_TYPE_STRING);
+    store = gtk_list_store_new (NUM_CURRENCY_COLS, G_TYPE_STRING, G_TYPE_STRING);
     gce = g_object_new (GNC_TYPE_CURRENCY_EDIT,
                         "model", store,
                         "has-entry", TRUE,
@@ -350,7 +371,7 @@ gnc_currency_edit_new (void)
     g_object_unref (store);
 
     /* Set the column for the text */
-    gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX(gce), 0);
+    gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX(gce), CURRENCY_COL_NAME);
 
     /* Now the signals to make sure the user can't leave the
        widget without a valid currency. */
@@ -358,8 +379,18 @@ gnc_currency_edit_new (void)
 
     /* Fill in all the data. */
     fill_currencies (gce);
-    gtk_tree_sortable_set_sort_column_id
-    (GTK_TREE_SORTABLE(store), 0, GTK_SORT_ASCENDING);
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(store),
+                                          CURRENCY_COL_NAME,
+                                          GTK_SORT_ASCENDING);
+
+    completion = gtk_entry_completion_new ();
+    gtk_entry_completion_set_model (completion, GTK_TREE_MODEL(store));
+    gtk_entry_completion_set_text_column (completion, CURRENCY_COL_NAME);
+    gtk_entry_completion_set_match_func (completion,
+                                         (GtkEntryCompletionMatchFunc)match_func,
+                                         GTK_TREE_MODEL(store), NULL);
+    gtk_entry_set_completion (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (gce))),
+                              completion);
 
     return GTK_WIDGET (gce);
 }
