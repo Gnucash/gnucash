@@ -4,11 +4,11 @@
 # Milo Ivir <mail@milotype.de>, 2019., 2020, 2021, 2022.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.11-pot3\n"
+"Project-Id-Version: GnuCash 4.12-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2022-09-07 04:08+0200\n"
-"PO-Revision-Date: 2022-07-27 17:15+0000\n"
+"POT-Creation-Date: 2022-09-11 23:24+0200\n"
+"PO-Revision-Date: 2022-09-09 15:50+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -2679,17 +2679,13 @@ msgid "Find Job"
 msgstr "Nađi nalog"
 
 #: gnucash/gnome/dialog-lot-viewer.c:817
-#, fuzzy
-#| msgid "Empty space"
 msgid "Empty"
-msgstr "Prazni prostor"
+msgstr "Prazno"
 
 #: gnucash/gnome/dialog-lot-viewer.c:829
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:412
-#: gnucash/gnome/gnc-plugin-page-budget.c:231
-#: gnucash/gnome/window-reconcile2.c:1659 gnucash/gnome/window-reconcile.c:1835
-#: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
-#: gnucash/gnome-utils/gnc-file.c:1141
+#, fuzzy
+#| msgid "Open"
+msgctxt "Adjective"
 msgid "Open"
 msgstr "Otvori"
 
@@ -4211,6 +4207,14 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-register2.c:64
 msgid "_Register2"
 msgstr "_Registar2"
+
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:412
+#: gnucash/gnome/gnc-plugin-page-budget.c:231
+#: gnucash/gnome/window-reconcile2.c:1659 gnucash/gnome/window-reconcile.c:1835
+#: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
+#: gnucash/gnome-utils/gnc-file.c:1141
+msgid "Open"
+msgstr "Otvori"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:414
 msgid "Open2"

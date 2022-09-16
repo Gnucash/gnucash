@@ -26,17 +26,18 @@
 # Sébastien Ray <sebastien.ray@normalesup.org>, 2022.
 # ButterflyOfFire <ButterflyOfFire@protonmail.com>, 2022.
 # Laurent Bigonville <bigon@bigon.be>, 2022.
+# Simon Arlott <weblate.simon@arlott.org>, 2022.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.11-pot3\n"
+"Project-Id-Version: GnuCash 4.12-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2022-09-07 04:08+0200\n"
-"PO-Revision-Date: 2022-07-31 08:20+0000\n"
-"Last-Translator: Laurent Bigonville <bigon@bigon.be>\n"
+"POT-Creation-Date: 2022-09-11 23:24+0200\n"
+"PO-Revision-Date: 2022-09-11 09:20+0000\n"
+"Last-Translator: Simon Arlott <weblate.simon@arlott.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -44,7 +45,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -2903,11 +2904,9 @@ msgstr "Espace vide"
 
 # messages-i18n.c:310
 #: gnucash/gnome/dialog-lot-viewer.c:829
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:412
-#: gnucash/gnome/gnc-plugin-page-budget.c:231
-#: gnucash/gnome/window-reconcile2.c:1659 gnucash/gnome/window-reconcile.c:1835
-#: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
-#: gnucash/gnome-utils/gnc-file.c:1141
+#, fuzzy
+#| msgid "Open"
+msgctxt "Adjective"
 msgid "Open"
 msgstr "Ouvrir"
 
@@ -4629,6 +4628,15 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-register2.c:64
 msgid "_Register2"
 msgstr "_Registre2"
+
+# messages-i18n.c:310
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:412
+#: gnucash/gnome/gnc-plugin-page-budget.c:231
+#: gnucash/gnome/window-reconcile2.c:1659 gnucash/gnome/window-reconcile.c:1835
+#: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
+#: gnucash/gnome-utils/gnc-file.c:1141
+msgid "Open"
+msgstr "Ouvrir"
 
 # messages-i18n.c:310
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:414
@@ -17272,8 +17280,6 @@ msgstr "CUSI_P ou autre code"
 #: gnucash/gtkbuilder/dialog-commodity.glade:485
 #: gnucash/gtkbuilder/dialog-commodity.glade:767
 #: gnucash/gtkbuilder/dialog-price.glade:138
-#, fuzzy
-#| msgid "Namespace"
 msgid "Nam_espace"
 msgstr "Domain_e"
 

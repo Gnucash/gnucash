@@ -8,10 +8,10 @@
 # Kamen Naydenov
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.11-pot3\n"
+"Project-Id-Version: GnuCash 4.12-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2022-09-07 04:08+0200\n"
+"POT-Creation-Date: 2022-09-11 23:24+0200\n"
 "PO-Revision-Date: 2011-10-25 13:27+0200\n"
 "Last-Translator: Rosi Dimova <pocu@bk.ru>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -2707,11 +2707,9 @@ msgid "Empty"
 msgstr "Пространство от имена"
 
 #: gnucash/gnome/dialog-lot-viewer.c:829
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:412
-#: gnucash/gnome/gnc-plugin-page-budget.c:231
-#: gnucash/gnome/window-reconcile2.c:1659 gnucash/gnome/window-reconcile.c:1835
-#: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
-#: gnucash/gnome-utils/gnc-file.c:1141
+#, fuzzy
+#| msgid "Open"
+msgctxt "Adjective"
 msgid "Open"
 msgstr "Отваряне"
 
@@ -4257,6 +4255,14 @@ msgstr ""
 #, fuzzy
 msgid "_Register2"
 msgstr "Регистър"
+
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:412
+#: gnucash/gnome/gnc-plugin-page-budget.c:231
+#: gnucash/gnome/window-reconcile2.c:1659 gnucash/gnome/window-reconcile.c:1835
+#: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
+#: gnucash/gnome-utils/gnc-file.c:1141
+msgid "Open"
+msgstr "Отваряне"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:414
 #, fuzzy

@@ -826,7 +826,7 @@ static gchar* lot_get_closing_date (GNCLot *lot)
     if (!gnc_lot_get_split_list (lot))
         return NULL;
     else if (!gnc_lot_is_closed (lot))
-        return g_strdup (_("Open"));
+        return g_strdup (C_("Adjective", "Open"));
     else
         return qof_print_date (xaccTransGetDate (xaccSplitGetParent (gnc_lot_get_latest_split (lot))));
 }

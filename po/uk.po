@@ -9,12 +9,12 @@
 # Artem <artem@molotov.work>, 2022.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.11-pot3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2022-09-07 04:08+0200\n"
-"PO-Revision-Date: 2022-08-25 12:17+0000\n"
-"Last-Translator: Artem <artem@molotov.work>\n"
+"Project-Id-Version: GnuCash 4.12-pre1\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2022-09-11 23:24+0200\n"
+"PO-Revision-Date: 2022-09-12 11:20+0000\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/uk/>\n"
 "Language: uk\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Project-Style: default\n"
 
@@ -2705,19 +2705,13 @@ msgid "Find Job"
 msgstr "Знайти роботу"
 
 #: gnucash/gnome/dialog-lot-viewer.c:817
-#, fuzzy
-#| msgid "Empty space"
 msgid "Empty"
-msgstr "Порожній простір"
+msgstr "Порожній"
 
 #: gnucash/gnome/dialog-lot-viewer.c:829
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:412
-#: gnucash/gnome/gnc-plugin-page-budget.c:231
-#: gnucash/gnome/window-reconcile2.c:1659 gnucash/gnome/window-reconcile.c:1835
-#: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
-#: gnucash/gnome-utils/gnc-file.c:1141
+msgctxt "Adjective"
 msgid "Open"
-msgstr "Відкрити"
+msgstr "Відкритий"
 
 #: gnucash/gnome/dialog-lot-viewer.c:923 gnucash/gnome/dialog-order.c:890
 msgid "Closed"
@@ -4254,6 +4248,14 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-register2.c:64
 msgid "_Register2"
 msgstr "_Реєстр2"
+
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:412
+#: gnucash/gnome/gnc-plugin-page-budget.c:231
+#: gnucash/gnome/window-reconcile2.c:1659 gnucash/gnome/window-reconcile.c:1835
+#: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
+#: gnucash/gnome-utils/gnc-file.c:1141
+msgid "Open"
+msgstr "Відкрити"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:414
 msgid "Open2"

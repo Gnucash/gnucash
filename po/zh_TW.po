@@ -7,10 +7,10 @@
 # cjh <cjh@cjh0613.com>, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.11-pot3\n"
+"Project-Id-Version: GnuCash 4.12-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2022-09-07 04:08+0200\n"
+"POT-Creation-Date: 2022-09-11 23:24+0200\n"
 "PO-Revision-Date: 2021-12-19 08:53+0000\n"
 "Last-Translator: Brian Hsu <brianhsu.hsu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -2623,11 +2623,9 @@ msgid "Empty"
 msgstr "空白空間"
 
 #: gnucash/gnome/dialog-lot-viewer.c:829
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:412
-#: gnucash/gnome/gnc-plugin-page-budget.c:231
-#: gnucash/gnome/window-reconcile2.c:1659 gnucash/gnome/window-reconcile.c:1835
-#: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
-#: gnucash/gnome-utils/gnc-file.c:1141
+#, fuzzy
+#| msgid "Open"
+msgctxt "Adjective"
 msgid "Open"
 msgstr "開啟"
 
@@ -4102,6 +4100,14 @@ msgstr "檢查並修復所有科目中未結算的交易與無主的分割"
 #: gnucash/gnome/gnc-plugin-register2.c:64
 msgid "_Register2"
 msgstr "登記簿 v2 (_R)"
+
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:412
+#: gnucash/gnome/gnc-plugin-page-budget.c:231
+#: gnucash/gnome/window-reconcile2.c:1659 gnucash/gnome/window-reconcile.c:1835
+#: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
+#: gnucash/gnome-utils/gnc-file.c:1141
+msgid "Open"
+msgstr "開啟"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:414
 msgid "Open2"

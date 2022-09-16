@@ -113,6 +113,7 @@ FieldMask operator ^(FieldMask lhs, FieldMask rhs)
 struct TxnTypeInfo
 {
     FieldMask stock_amount;
+    bool input_new_balance;
     FieldMask stock_value;
     FieldMask cash_value;
     FieldMask fees_value;
@@ -131,6 +132,7 @@ static const TxnTypeVec starting_types
 {
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -138,12 +140,13 @@ static const TxnTypeVec starting_types
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing an
-        // Initial stock purchase
+        // Initial stock long purchase
         N_("Open buy"),
-        N_("Initial stock purchase")
+        N_("Initial stock long purchase.")
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -151,9 +154,9 @@ static const TxnTypeVec starting_types
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing an
-        // initial stock short-sale
+        // initial stock short sale
         N_("Open short"),
-        N_("Initial stock short-sale")
+        N_("Initial stock short sale.")
     }
 };
 
@@ -161,6 +164,7 @@ static const TxnTypeVec long_types
 {
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -168,25 +172,27 @@ static const TxnTypeVec long_types
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing
-        // purchase of stock.
+        // new purchase of stock.
         N_("Buy"),
-        N_("Buying stock.")
+        N_("Buying stock long.")
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
         false,                  // fees_capitalize
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE, // capgains_amt
-        // Translators: this is a stock transaction describing sale of
-        // stock, and recording capital gain/loss
+        // Translators: this is a stock transaction describing new
+        // sale of stock, and recording capital gain/loss
         N_("Sell"),
-        N_("Selling stock, and record capital gain/loss")
+        N_("Selling stock long, and record capital gain/loss.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
+        false,                             // input_new_balance
         FieldMask::DISABLED,               // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -196,37 +202,12 @@ static const TxnTypeVec long_types
         // Translators: this is a stock transaction describing
         // dividends issued to holder
         N_("Dividend"),
-        N_("Company issues dividends to holder")
-    },
-    {
-        FieldMask::ENABLED_DEBIT,          // stock_amt
-        FieldMask::ENABLED_DEBIT,          // stock_val
-        FieldMask::ENABLED_DEBIT,          // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        true,                   // fees_capitalize
-        FieldMask::ENABLED_CREDIT,         // dividend_amt
-        FieldMask::DISABLED,               // capg_amt
-        // Translators: this is a stock transaction describing
-        // dividend issued to holder, and is reinvested. Some
-        // dividends are distributed as cash.
-        N_("Dividend reinvestment (with remainder)"),
-        N_("Company issues dividend which is reinvested. Some dividends are paid to holder")
-    },
-    {
-        FieldMask::ENABLED_DEBIT,          // stock_amt
-        FieldMask::ENABLED_DEBIT,          // stock_val
-        FieldMask::DISABLED,               // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        true,                   // fees_capitalize
-        FieldMask::ENABLED_CREDIT,         // dividend_amt
-        FieldMask::DISABLED,               // capg_amt
-        // Translators: this is a stock transaction describing
-        // dividend which is wholly reinvested.
-        N_("Dividend reinvestment (without remainder)"),
-        N_("Company issues dividend which is wholly reinvested.")
+        N_("Company issues cash dividends to holder.\n\nAny dividend being \
+reinvested must be subsequently recorded as a regular stock purchase.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -235,11 +216,12 @@ static const TxnTypeVec long_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing return
         // of capital
-        N_("Return of Capital"),
-        N_("Stock returns capital to holder")
+        N_("Return of capital"),
+        N_("Company returns capital, reducing the cost basis without affecting # units.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -249,10 +231,11 @@ static const TxnTypeVec long_types
         // Translators: this is a stock transaction describing a
         // notional distribution
         N_("Notional distribution"),
-        N_("Stock returns a notional distribution")
+        N_("Company issues a notional distribution, which is recorded as dividend income and increases the cost basis without affecting # units.")
     },
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
+        true,                              // input_new_balance
         FieldMask::DISABLED,               // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -262,10 +245,11 @@ static const TxnTypeVec long_types
         // Translators: this is a stock transaction describing a stock
         // split
         N_("Stock split"),
-        N_("Stock price is fractionally reduced")
+        N_("Company issues additional units, thereby reducing the stock price by a divisor, while keeping the total monetary value of the overall investment constant.")
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
+        true,                              // input_new_balance
         FieldMask::DISABLED,               // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -274,27 +258,19 @@ static const TxnTypeVec long_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing a reverse split
         N_("Reverse split"),
-        N_("Stock price is fractionally increased.")
-    },
-    {
-        FieldMask::ENABLED_CREDIT,         // stock_amt
-        FieldMask::ENABLED_CREDIT,         // stock_val
-        FieldMask::ENABLED_DEBIT,          // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        false,                  // fees_capitalize
-        FieldMask::DISABLED,               // dividend_amt
-        FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE, // capgains_amt
-        // Translators: this is a stock transaction describing a
-        // reverse split. Some fractional stock is returned as cash.
-        N_("Reverse split with cash in lieu for fractionals"),
-        N_("Stock price is fractionally increased. Fractional remaining stock is returned as cash.")
-    },
+        N_("Company redeems units, thereby increasing the stock price by a \
+multiple, while keeping the total monetary value of the overall investment \
+constant.\n\nIf the reverse split results in a cash in lieu for remainder \
+units, please record the sale using the Stock Split Assistant first, then \
+record the reverse split.")
+    }
 };
 
 static const TxnTypeVec short_types
 {
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -304,10 +280,11 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing
         // shorting of stock.
         N_("Short sell"),
-        N_("Shorting stock.")
+        N_("Selling stock short.")
     },
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -317,10 +294,11 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing cover
         // buying stock, and recording capital gain/loss
         N_("Buy to cover short"),
-        N_("Buy back stock to cover short and record capital gain/loss")
+        N_("Buy back stock to cover short position, and record capital gain/loss.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
+        false,                             // input_new_balance
         FieldMask::DISABLED,               // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -329,38 +307,12 @@ static const TxnTypeVec short_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing
         // dividends retrieved from holder when shorting stock
-        N_("Compensatory Dividend"),
-        N_("Company issues dividends to holder when shorting stock")
-    },
-    {
-        FieldMask::ENABLED_CREDIT,         // stock_amt
-        FieldMask::ENABLED_CREDIT,         // stock_val
-        FieldMask::ENABLED_DEBIT,          // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        true,                   // fees_capitalize
-        FieldMask::ENABLED_DEBIT,          // dividend_amt
-        FieldMask::DISABLED,               // capg_amt
-        // Translators: this is a stock transaction describing
-        // dividends retrieved from holder when shorting stock. Some
-        // dividends are recovered from holder
-        N_("Dividend reinvestment (with remainder)"),
-        N_("Company issues dividends to holder when shorting stock. Some dividends are recovered from holder")
-    },
-    {
-        FieldMask::ENABLED_DEBIT,          // stock_amt
-        FieldMask::ENABLED_DEBIT,          // stock_val
-        FieldMask::DISABLED,               // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        true,                   // fees_capitalize
-        FieldMask::ENABLED_DEBIT,          // dividend_amt
-        FieldMask::DISABLED,               // capg_amt
-        // Translators: this is a stock transaction describing
-        // dividends retrieved from holder when shorting stock,
-        N_("Dividend reinvestment (without remainder)"),
-        N_("Company issues dividend when shorting stock, which are wholly recovered from holder.")
+        N_("Compensatory dividend"),
+        N_("Company issues dividends, and the short stock holder must make a compensatory payment for the dividend.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -369,11 +321,12 @@ static const TxnTypeVec short_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing return
         // of capital retrieved from holder when shorting stock
-        N_("Compensatory Return of Capital"),
-        N_("Return retrieves capital from holder when shorting stock")
+        N_("Compensatory return of capital"),
+        N_("Company returns capital, and the short stock holder must make a compensatory payment for the returned capital. This reduces the cost basis (less negative, towards 0.00 value) without affecting # units.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
+        false,                             // input_new_balance
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -382,11 +335,12 @@ static const TxnTypeVec short_types
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing a
         // notional distribution when shorting stock
-        N_("Compensatory Notional distribution"),
-        N_("Stock retrieves a notional distribution")
+        N_("Compensatory notional distribution"),
+        N_("Company issues a notional distribution, and the short stock holder must make a compensatory payment for the notional distribution. This is recorded as a loss/negative dividend income amount, and increases the cost basis (more negative, away from 0.00 value) without affecting # units.")
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
+        true,                              // input_new_balance
         FieldMask::DISABLED,               // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -396,10 +350,11 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing a stock
         // split when shorting stock
         N_("Stock split"),
-        N_("Stock price is fractionally reduced when shorting stock")
+        N_("Company issues additional units, thereby reducing the stock price by a divisor, while keeping the total monetary value of the overall investment constant.")
     },
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
+        true,                              // input_new_balance
         FieldMask::DISABLED,               // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -409,22 +364,12 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing a
         // reverse split when shorting stock.
         N_("Reverse split"),
-        N_("Stock price is fractionally increased when shorting stock.")
-    },
-    {
-        FieldMask::ENABLED_DEBIT,          // stock_amt
-        FieldMask::ENABLED_DEBIT,          // stock_val
-        FieldMask::ENABLED_CREDIT,         // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        false,                  // fees_capitalize
-        FieldMask::DISABLED,               // dividend_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE,          // capg_amt
-        // Translators: this is a stock transaction describing a
-        // reverse split when shorting stock. Fractional remaining
-        // stock is retrieved as cash.
-        N_("Reverse split with cash in lieu for fractionals"),
-        N_("Stock price is fractionally increased when shorting stock. Fractional remaining stock is retrieved as cash.")
-    },
+        N_("Company redeems units, thereby increasing the stock price by \
+a multiple, while keeping the total monetary value of the overall investment \
+constant.\n\nIf the reverse split results in a cash in lieu for remainder \
+units, please record the cover buy using the Stock Split Assistant first, \
+then record the reverse split.")
+    }
 };
 
 typedef struct
@@ -454,9 +399,12 @@ typedef struct
     // stock amount page
     gnc_numeric balance_at_date;
     GtkWidget * stock_amount_page;
+    GtkWidget * stock_amount_title;
     GtkWidget * prev_amount;
     GtkWidget * next_amount;
+    GtkWidget * next_amount_label;
     GtkWidget * stock_amount_edit;
+    GtkWidget * stock_amount_label;
 
     // stock value page
     GtkWidget * stock_value_page;
@@ -556,6 +504,24 @@ refresh_page_stock_amount (GtkWidget *widget, gpointer user_data)
     if (gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->stock_amount_edit),
                                        &stock_amount, true, nullptr))
         gtk_label_set_text (GTK_LABEL(info->next_amount), nullptr);
+    else if (info->txn_type->input_new_balance)
+    {
+        gnc_numeric ratio = gnc_numeric_div (stock_amount, bal,
+                                             GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+        if (gnc_numeric_check (ratio) || gnc_numeric_negative_p (ratio))
+            gtk_label_set_text (GTK_LABEL(info->next_amount), nullptr);
+        else
+        {
+            auto str = gnc_numeric_to_string (ratio);
+            auto p = str ? strchr (str, '/') : nullptr;
+            if (p)
+                *p = ':';
+            auto lbl = g_strdup_printf (_("%s Split"), str);
+            gtk_label_set_text (GTK_LABEL(info->next_amount), lbl);
+            g_free (lbl);
+            g_free (str);
+        }
+    }
     else
     {
         if (info->txn_type->stock_amount == FieldMask::ENABLED_CREDIT)
@@ -736,7 +702,7 @@ refresh_page_finish (StockTransactionInfo *info)
 
     gnc_numeric debit = gnc_numeric_zero ();
     gnc_numeric credit = gnc_numeric_zero ();
-    StringVec errors, warnings;
+    StringVec errors, warnings, infos;
     SummaryLineInfo line;
 
     // check the stock transaction date. If there are existing stock
@@ -776,7 +742,30 @@ to ensure proper recording."), new_date_str, last_split_date_str);
                     NC_ ("Stock Assistant: Page name", "stock value"), errors);
 
 
-    if (info->txn_type->stock_amount != FieldMask::DISABLED)
+    if (info->txn_type->stock_amount == FieldMask::DISABLED)
+        ;
+    else if (info->txn_type->input_new_balance)
+    {
+        auto stock_amount = gnc_amount_edit_get_amount
+            (GNC_AMOUNT_EDIT(info->stock_amount_edit));
+        auto credit_side = (info->txn_type->stock_amount & FieldMask::ENABLED_CREDIT);
+        auto delta = gnc_numeric_sub_fixed (stock_amount, info->balance_at_date);
+        auto ratio = gnc_numeric_div (stock_amount, info->balance_at_date,
+                                      GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+        auto stock_pinfo = gnc_commodity_print_info
+            (xaccAccountGetCommodity (info->acct), true);
+        stock_amount = gnc_numeric_sub_fixed (stock_amount, info->balance_at_date);
+        line.units = xaccPrintAmount (stock_amount, stock_pinfo);
+        if (gnc_numeric_check (ratio))
+            add_error_str (errors, N_("Invalid stock new balance"));
+        else if (gnc_numeric_negative_p (ratio))
+            add_error_str (errors, N_("New and old balance must have same signs"));
+        else if (gnc_numeric_negative_p (delta) && !credit_side)
+            add_error_str (errors, N_("New balance must be higher than old balance"));
+        else if (gnc_numeric_positive_p (delta) && credit_side)
+            add_error_str (errors, N_("New balance must be lower than old balance"));
+    }
+    else
     {
         auto stock_amount = gnc_amount_edit_get_amount
             (GNC_AMOUNT_EDIT(info->stock_amount_edit));
@@ -797,6 +786,26 @@ to ensure proper recording."), new_date_str, last_split_date_str);
     }
 
     add_to_summary_table (list, line);
+
+    if (info->txn_type->stock_amount != FieldMask::DISABLED &&
+        info->txn_type->stock_value != FieldMask::DISABLED)
+    {
+        auto amt = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT(info->stock_amount_edit));
+        auto val = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT(info->stock_value_edit));
+        auto p = gnc_numeric_div (val, amt, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+        auto curr_pinfo = gnc_commodity_print_info (info->currency, true);
+        // Translators: %s refer to: stock mnemonic, broker currency,
+        // date of transaction.
+        auto tmpl = N_("A price of 1 %s = %s on %s will be recorded.");
+        auto date_str = qof_print_date (new_date);
+        auto price_str = g_strdup_printf
+            (_(tmpl),
+             gnc_commodity_get_mnemonic (xaccAccountGetCommodity (info->acct)),
+             xaccPrintAmount (p, curr_pinfo), date_str);
+        infos.emplace_back (price_str);
+        g_free (price_str);
+        g_free (date_str);
+    }
 
     if (info->txn_type->cash_value != FieldMask::DISABLED)
     {
@@ -869,6 +878,8 @@ to ensure proper recording."), new_date_str, last_split_date_str);
     auto summary = std::string { _(header) };
     auto summary_add = [&summary](auto a) { summary += "\n• "; summary += a; };
     std::for_each (errors.begin(), errors.end(), summary_add);
+    if (errors.empty())
+        std::for_each (infos.begin(), infos.end(), summary_add);
     if (!warnings.empty())
     {
         auto warnings_header = N_ ("The following warnings exist:");
@@ -913,6 +924,17 @@ stock_assistant_prepare (GtkAssistant  *assistant, GtkWidget *page,
     case PAGE_STOCK_AMOUNT:
         info->balance_at_date = xaccAccountGetBalanceAsOfDate
             (info->acct, gnc_date_edit_get_date_end (GNC_DATE_EDIT (info->date_edit)));
+        gtk_label_set_text_with_mnemonic
+            (GTK_LABEL (info->stock_amount_label),
+             info->txn_type->input_new_balance ? _("Ne_w Balance") : _("_Shares"));
+        gtk_label_set_text
+            (GTK_LABEL (info->next_amount_label),
+             info->txn_type->input_new_balance ? _("Ratio") : _("Next Balance"));
+        gtk_label_set_text
+            (GTK_LABEL (info->stock_amount_title),
+             info->txn_type->input_new_balance ?
+             _("Enter the new balance of shares after the stock split.") :
+             _("Enter the number of shares you gained or lost in the transaction."));
         refresh_page_stock_amount (info->stock_amount_edit, info);
         // fixme: the following doesn't work???
         gtk_widget_grab_focus (gnc_amount_edit_gtk_entry
@@ -972,16 +994,15 @@ static void
 create_split (Transaction *trans, FieldMask splitfield,
               const gchar *action, Account *account,
               AccountVec& account_commits, GtkWidget *memo_entry,
-              GtkWidget *amount, GtkWidget *value,
-              bool skip_if_zero)
+              gnc_numeric amount_numeric, gnc_numeric value_numeric,
+              bool skip_if_zero, StockTransactionInfo *info)
 {
-    auto amount_numeric = amount ? gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (amount)) : gnc_numeric_zero ();
-    auto value_numeric = value ? gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (value)) : gnc_numeric_zero ();
-
     if (skip_if_zero && gnc_numeric_zero_p (value_numeric))
         return;
 
-    if (splitfield & FieldMask::ENABLED_CREDIT)
+    if (info->txn_type->input_new_balance)
+        amount_numeric = gnc_numeric_sub_fixed (amount_numeric, info->balance_at_date);
+    else if (splitfield & FieldMask::ENABLED_CREDIT)
     {
         amount_numeric = gnc_numeric_neg (amount_numeric);
         value_numeric = gnc_numeric_neg (value_numeric);
@@ -1032,6 +1053,11 @@ add_price (GtkWidget *amount, GtkWidget *value,
     gnc_price_unref (price);
 }
 
+static gnc_numeric gae_amount (GtkWidget *widget)
+{
+    return gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (widget));
+}
+
 void
 stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
 {
@@ -1051,52 +1077,61 @@ stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
     auto date = gnc_date_edit_get_date (GNC_DATE_EDIT (info->date_edit));
     xaccTransSetDatePostedSecsNormalized (trans, date);
 
+    auto stock_amount = info->txn_type->stock_amount != FieldMask::DISABLED ?
+        gae_amount (info->stock_amount_edit) : gnc_numeric_zero ();
+    auto stock_value = info->txn_type->stock_value != FieldMask::DISABLED ?
+        gae_amount (info->stock_value_edit) : gnc_numeric_zero ();
+    if (info->txn_type->input_new_balance)
+        stock_amount = gnc_numeric_sub_fixed (stock_amount, info->balance_at_date);
     create_split (trans, info->txn_type->stock_amount | info->txn_type->stock_value,
                   NC_ ("Stock Assistant: Action field", "Stock"),
                   info->acct, account_commits, info->stock_memo_edit,
-                  info->txn_type->stock_amount != FieldMask::DISABLED ? info->stock_amount_edit : nullptr,
-                  info->txn_type->stock_value != FieldMask::DISABLED ? info->stock_value_edit : nullptr,
-                  false);
+                  stock_amount, stock_value, false, info);
 
     if (info->txn_type->cash_value != FieldMask::DISABLED)
+    {
+        auto cash = gae_amount (info->cash_value);
         create_split (trans, info->txn_type->cash_value,
                       NC_ ("Stock Assistant: Action field", "Cash"),
-                      gas_account (info->cash_account),
-                      account_commits, info->cash_memo_edit, info->cash_value,
-                      info->cash_value, false);
+                      gas_account (info->cash_account), account_commits,
+                      info->cash_memo_edit, cash, cash, false, info);
+    }
 
     if (info->txn_type->fees_value != FieldMask::DISABLED)
     {
+        auto fees = gae_amount (info->fees_value);
         auto capitalize = gtk_toggle_button_get_active
             (GTK_TOGGLE_BUTTON (info->capitalize_fees_checkbox));
         create_split (trans, info->txn_type->fees_value,
                       NC_ ("Stock Assistant: Action field", "Fees"),
                       capitalize ? info->acct : gas_account (info->fees_account),
                       account_commits, info->fees_memo_edit,
-                      capitalize ? nullptr : info->fees_value,
-                      info->fees_value, true);
+                      capitalize ? gnc_numeric_zero () : fees, fees, true, info);
     }
 
     if (info->txn_type->dividend_value != FieldMask::DISABLED)
+    {
+        auto dividend = gae_amount (info->dividend_value);
         create_split (trans, info->txn_type->dividend_value,
                       NC_ ("Stock Assistant: Action field", "Dividend"),
-                      gas_account (info->dividend_account),
-                      account_commits, info->dividend_memo_edit,
-                      info->dividend_value, info->dividend_value, false);
+                      gas_account (info->dividend_account), account_commits,
+                      info->dividend_memo_edit, dividend, dividend, false, info);
+    }
 
     if (info->txn_type->capgains_value != FieldMask::DISABLED)
     {
+        auto capgains = gae_amount (info->capgains_value);
         create_split (trans, info->txn_type->capgains_value,
                       NC_ ("Stock Assistant: Action field", "Capital Gain"),
                       gas_account (info->capgains_account),
                       account_commits, info->capgains_memo_edit,
-                      info->capgains_value, info->capgains_value, false);
+                      capgains, capgains, false, info);
 
         create_split (trans,
                       info->txn_type->capgains_value ^ (FieldMask::ENABLED_CREDIT | FieldMask::ENABLED_DEBIT),
                       NC_ ("Stock Assistant: Action field", "Capital Gain"),
                       info->acct, account_commits, info->capgains_memo_edit,
-                      nullptr, info->capgains_value, false);
+                      gnc_numeric_zero (), capgains, false, info);
     }
 
     if (info->txn_type->stock_amount != FieldMask::DISABLED &&
@@ -1256,9 +1291,12 @@ stock_assistant_create (StockTransactionInfo *info)
 
     /* Stock Amount Page Widgets */
     info->stock_amount_page = get_widget (builder, "stock_amount_page");
+    info->stock_amount_title = get_widget (builder, "stock_amount_title");
     info->prev_amount = get_widget (builder, "prev_balance_amount");
+    info->stock_amount_label = get_widget (builder, "stock_amount_label");
     info->stock_amount_edit = create_gae (builder, 1, xaccAccountGetCommodity (info->acct), "stock_amount_table", "stock_amount_label");
     info->next_amount = get_widget (builder, "next_balance_amount");
+    info->next_amount_label = get_widget (builder, "next_balance_label");
     g_signal_connect (info->stock_amount_edit, "changed",
                       G_CALLBACK (refresh_page_stock_amount), info);
 

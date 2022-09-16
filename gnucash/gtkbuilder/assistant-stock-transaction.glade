@@ -823,6 +823,7 @@
                 <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="invisible-char">●</property>
+                <property name="text" translatable="yes">Capital Gain</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
