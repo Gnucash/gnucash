@@ -1040,9 +1040,6 @@ budget_accum_helper (Account *account, gpointer data)
                     info->pdb, numeric, currency, info->total_currency,
                     gnc_budget_get_period_start_date (info->budget, info->period_num));
 
-        if (gnc_reverse_balance (account))
-            numeric = gnc_numeric_neg (numeric);
-
         info->total = gnc_numeric_add (info->total, numeric, GNC_DENOM_AUTO,
                                        GNC_HOW_DENOM_LCD);
     }
@@ -1067,9 +1064,6 @@ gbv_get_accumulated_budget_amount (GncBudget *budget, Account *account, guint pe
         gnc_account_foreach_child (account, budget_accum_helper, &info);
     else
         info.total = gnc_budget_get_account_period_value (budget, account, period_num);
-
-    if (gnc_reverse_balance (account))
-        info.total = gnc_numeric_neg (info.total);
 
     return info.total;
 }
@@ -1109,6 +1103,10 @@ budget_col_source (Account *account, GtkTreeViewColumn *col,
             gtk_style_context_get_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
 
             numeric = gbv_get_accumulated_budget_amount (priv->budget, account, period_num);
+
+            if (gnc_reverse_balance (account))
+                numeric = gnc_numeric_neg (numeric);
+
             xaccSPrintAmount (amtbuff, numeric, gnc_account_print_info (account, FALSE));
             if (gnc_is_dark_theme (&color))
                 g_object_set (cell, "foreground",
@@ -1183,9 +1181,6 @@ bgv_get_total_for_account (Account *account, GncBudget *budget, gnc_commodity *n
             if (gnc_account_n_children (account) != 0)
             {
                 numeric = gbv_get_accumulated_budget_amount (budget, account, period_num);
-
-                if (gnc_reverse_balance (account))
-                    numeric = gnc_numeric_neg (numeric);
 
                 if (new_currency)
                 {
