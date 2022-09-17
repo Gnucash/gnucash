@@ -14,10 +14,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.12-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-09-11 23:24+0200\n"
-"PO-Revision-Date: 2022-08-11 07:18+0000\n"
+"PO-Revision-Date: 2022-09-17 17:19+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sv/>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -2682,14 +2682,10 @@ msgid "Find Job"
 msgstr "Sök jobb"
 
 #: gnucash/gnome/dialog-lot-viewer.c:817
-#, fuzzy
-#| msgid "Empty space"
 msgid "Empty"
-msgstr "Tomt utrymme"
+msgstr "Tom"
 
 #: gnucash/gnome/dialog-lot-viewer.c:829
-#, fuzzy
-#| msgid "Open"
 msgctxt "Adjective"
 msgid "Open"
 msgstr "Öppna"
