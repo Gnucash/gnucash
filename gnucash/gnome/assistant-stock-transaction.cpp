@@ -490,6 +490,22 @@ refresh_page_transaction_type (GtkWidget *widget, gpointer user_data)
                                   info->txn_type->fees_capitalize);
 }
 
+static std::optional<gnc_numeric>
+calculate_price (StockTransactionInfo* info)
+{
+    gnc_numeric amount, value;
+
+    if (info->txn_type->stock_amount == FieldMask::DISABLED ||
+        info->txn_type->stock_value == FieldMask::DISABLED ||
+        gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->stock_amount_edit), &amount, true, nullptr) ||
+        gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->stock_value_edit), &value,  true, nullptr))
+        return std::nullopt;
+
+    if (gnc_numeric_zero_p (amount) || gnc_numeric_zero_p (value))
+        return std::nullopt;
+
+    return gnc_numeric_div (value, amount, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+}
 
 static void
 refresh_page_stock_amount (GtkWidget *widget, gpointer user_data)
@@ -540,14 +556,10 @@ static void
 refresh_page_stock_value (GtkWidget *widget, gpointer user_data)
 {
     auto info = static_cast<StockTransactionInfo*>(user_data);
-    gnc_numeric amount, value;
     g_return_if_fail (info->txn_type);
 
-    if (info->txn_type->stock_amount == FieldMask::DISABLED ||
-        info->txn_type->stock_value == FieldMask::DISABLED ||
-        gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->stock_amount_edit), &amount, true, nullptr) ||
-        gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->stock_value_edit),  &value,  true, nullptr) ||
-        gnc_numeric_zero_p (value))
+    auto price = calculate_price (info);
+    if (!price.has_value())
     {
         // Translators: StockAssistant: N/A denotes stock price is not computable
         const char* na_label =  N_("N/A");
@@ -555,9 +567,8 @@ refresh_page_stock_value (GtkWidget *widget, gpointer user_data)
         return;
     }
 
-    auto price = gnc_numeric_div (value, amount, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND);
-    auto pinfo = gnc_commodity_print_info (info->currency, true);
-    gtk_label_set_text (GTK_LABEL (info->price_value), xaccPrintAmount (price, pinfo));
+    auto pinfo = gnc_price_print_info (info->currency, true);
+    gtk_label_set_text (GTK_LABEL (info->price_value), xaccPrintAmount (*price, pinfo));
 }
 
 static void
@@ -796,13 +807,10 @@ to ensure proper recording."), new_date_str, last_split_date_str);
 
     add_to_summary_table (list, line);
 
-    if (info->txn_type->stock_amount != FieldMask::DISABLED &&
-        info->txn_type->stock_value != FieldMask::DISABLED)
+    auto price = calculate_price (info);
+    if (price.has_value())
     {
-        auto amt = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT(info->stock_amount_edit));
-        auto val = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT(info->stock_value_edit));
-        auto p = gnc_numeric_div (val, amt, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
-        auto curr_pinfo = gnc_commodity_print_info (info->currency, true);
+        auto curr_pinfo = gnc_price_print_info (info->currency, true);
         // Translators: %s refer to: stock mnemonic, broker currency,
         // date of transaction.
         auto tmpl = N_("A price of 1 %s = %s on %s will be recorded.");
@@ -810,7 +818,7 @@ to ensure proper recording."), new_date_str, last_split_date_str);
         auto price_str = g_strdup_printf
             (_(tmpl),
              gnc_commodity_get_mnemonic (xaccAccountGetCommodity (info->acct)),
-             xaccPrintAmount (p, curr_pinfo), date_str);
+             xaccPrintAmount (*price, curr_pinfo), date_str);
         infos.emplace_back (price_str);
         g_free (price_str);
         g_free (date_str);
@@ -1036,21 +1044,22 @@ create_split (Transaction *trans, FieldMask splitfield,
 }
 
 static void
-add_price (GtkWidget *amount, GtkWidget *value,
-           gnc_commodity *commodity, gnc_commodity *currency, time64 date)
+add_price (StockTransactionInfo* info, time64 date)
 {
-    auto amt = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (amount));
-    auto val = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (value));
-    auto p = gnc_numeric_div (val, amt, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+    auto p = calculate_price (info);
+
+    if (!p.has_value())
+        return;
+
     auto price = gnc_price_create (gnc_get_current_book ());
 
     gnc_price_begin_edit (price);
-    gnc_price_set_commodity (price, commodity);
-    gnc_price_set_currency (price, currency);
+    gnc_price_set_commodity (price, xaccAccountGetCommodity (info->acct));
+    gnc_price_set_currency (price, info->currency);
     gnc_price_set_time64 (price, date);
     gnc_price_set_source (price, PRICE_SOURCE_STOCK_TRANSACTION);
     gnc_price_set_typestr (price, PRICE_TYPE_UNK);
-    gnc_price_set_value (price, p);
+    gnc_price_set_value (price, *p);
     gnc_price_commit_edit (price);
 
     auto book = gnc_get_current_book ();
@@ -1143,10 +1152,7 @@ stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
                       gnc_numeric_zero (), capgains, false, info);
     }
 
-    if (info->txn_type->stock_amount != FieldMask::DISABLED &&
-        info->txn_type->stock_value != FieldMask::DISABLED)
-        add_price (info->stock_amount_edit, info->stock_value_edit,
-                   xaccAccountGetCommodity (info->acct), info->currency, date);
+    add_price (info, date);
 
     xaccTransCommitEdit (trans);
 
