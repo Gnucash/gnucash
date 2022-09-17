@@ -141,7 +141,11 @@ TEST_F(GncQuotesTest, online_wiggle)
     GncQuotes quotes;
     quotes.fetch(m_book);
     auto pricedb{gnc_pricedb_get_db(m_book)};
-    EXPECT_EQ(3u, gnc_pricedb_get_num_prices(pricedb));
+    auto failures{quotes.failures()};
+    ASSERT_EQ(2u, failures.size());
+    EXPECT_EQ(GncQuoteError::QUOTE_FAILED, std::get<2>(failures[0]));
+    EXPECT_EQ(GncQuoteError::QUOTE_FAILED, std::get<2>(failures[1]));
+    EXPECT_EQ(2u, gnc_pricedb_get_num_prices(pricedb));
 }
 #endif
 
@@ -153,6 +157,9 @@ TEST_F(GncQuotesTest, offline_wiggle)
     StrVec err_vec;
     GncQuotesImpl quotes(m_book, std::make_unique<GncMockQuoteSource>(std::move(quote_vec), std::move(err_vec)));
     quotes.fetch(m_book);
+    auto failures{quotes.failures()};
+    ASSERT_EQ(1u, failures.size());
+    EXPECT_EQ(GncQuoteError::QUOTE_FAILED, std::get<2>(failures[0]));
     auto pricedb{gnc_pricedb_get_db(m_book)};
     EXPECT_EQ(3u, gnc_pricedb_get_num_prices(pricedb));
 }
@@ -169,7 +176,9 @@ TEST_F(GncQuotesTest, comvec_fetch)
     CommVec comms{hpe, aapl};
     GncQuotesImpl quotes(m_book, std::make_unique<GncMockQuoteSource>(std::move(quote_vec), std::move(err_vec)));
     quotes.fetch(comms);
-        auto pricedb{gnc_pricedb_get_db(m_book)};
+    auto failures{quotes.failures()};
+    EXPECT_TRUE(failures.empty());
+    auto pricedb{gnc_pricedb_get_db(m_book)};
     EXPECT_EQ(2u, gnc_pricedb_get_num_prices(pricedb));
 }
 
@@ -184,6 +193,8 @@ TEST_F(GncQuotesTest, fetch_one_commodity)
     auto usd{gnc_commodity_table_lookup(commtable, "ISO4217", "USD")};
     GncQuotesImpl quotes(m_book, std::make_unique<GncMockQuoteSource>(std::move(quote_vec), std::move(err_vec)));
     quotes.fetch(hpe);
+    auto failures{quotes.failures()};
+    EXPECT_TRUE(failures.empty());
     auto pricedb{gnc_pricedb_get_db(m_book)};
     auto price{gnc_pricedb_lookup_latest(pricedb, hpe, usd)};
     auto datetime{static_cast<time64>(GncDateTime("20220901160000"))};
@@ -208,8 +219,11 @@ TEST_F(GncQuotesTest, fetch_one_currency)
     auto usd{gnc_commodity_table_lookup(commtable, "ISO4217", "USD")};
     GncQuotesImpl quotes(m_book, std::make_unique<GncMockQuoteSource>(std::move(quote_vec), std::move(err_vec)));
     quotes.fetch(eur);
+    auto failures{quotes.failures()};
+    EXPECT_TRUE(failures.empty());
     auto pricedb{gnc_pricedb_get_db(m_book)};
     auto price{gnc_pricedb_lookup_latest(pricedb, eur, usd)};
+    EXPECT_EQ(1u, gnc_pricedb_get_num_prices(pricedb));
     auto datetime{static_cast<time64>(GncDateTime())};
 
     EXPECT_EQ(usd, gnc_price_get_currency(price));
@@ -217,6 +231,68 @@ TEST_F(GncQuotesTest, fetch_one_currency)
     EXPECT_EQ(PRICE_SOURCE_FQ, gnc_price_get_source(price));
     EXPECT_EQ(10004, gnc_price_get_value(price).num);
     EXPECT_TRUE(gnc_numeric_equal(GncNumeric{10004, 10000},
+                                  gnc_price_get_value(price)));
+    EXPECT_STREQ("Finance::Quote", gnc_price_get_source_string(price));
+    EXPECT_STREQ("last", gnc_price_get_typestr(price));
+}
+
+TEST_F(GncQuotesTest, no_currency)
+{
+     StrVec quote_vec{
+        "{\"HPE\":{\"date\":\"09/01/2022\",\"last\":13.37,\"success\":1}}"
+    };
+    StrVec err_vec;
+    auto commtable{gnc_commodity_table_get_table(m_book)};
+    auto hpe{gnc_commodity_table_lookup(commtable, "NYSE", "HPE")};
+    auto usd{gnc_commodity_table_lookup(commtable, "ISO4217", "USD")};
+    GncQuotesImpl quotes(m_book, std::make_unique<GncMockQuoteSource>(std::move(quote_vec), std::move(err_vec)));
+    quotes.fetch(hpe);
+    auto failures{quotes.failures()};
+    ASSERT_EQ(1u, failures.size());
+    EXPECT_EQ(GncQuoteError::NO_CURRENCY, std::get<2>(failures[0]));
+    auto pricedb{gnc_pricedb_get_db(m_book)};
+    EXPECT_EQ(0u, gnc_pricedb_get_num_prices(pricedb));
+}
+
+TEST_F(GncQuotesTest, bad_currency)
+{
+     StrVec quote_vec{
+        "{\"HPE\":{\"date\":\"09/01/2022\",\"last\":13.37,\"currency\":\"BTC\",\"success\":1}}"
+     };
+    StrVec err_vec;
+    auto commtable{gnc_commodity_table_get_table(m_book)};
+    auto hpe{gnc_commodity_table_lookup(commtable, "NYSE", "HPE")};
+    auto usd{gnc_commodity_table_lookup(commtable, "ISO4217", "USD")};
+    GncQuotesImpl quotes(m_book, std::make_unique<GncMockQuoteSource>(std::move(quote_vec), std::move(err_vec)));
+    quotes.fetch(hpe);
+    auto failures{quotes.failures()};
+    ASSERT_EQ(1u, failures.size());
+    EXPECT_EQ(GncQuoteError::UNKNOWN_CURRENCY, std::get<2>(failures[0]));
+    auto pricedb{gnc_pricedb_get_db(m_book)};
+    EXPECT_EQ(0u, gnc_pricedb_get_num_prices(pricedb));
+}
+
+TEST_F(GncQuotesTest, no_date)
+{
+     StrVec quote_vec{
+        "{\"HPE\":{\"last\":13.37,\"currency\":\"USD\",\"success\":1}}"
+    };
+    StrVec err_vec;
+    auto commtable{gnc_commodity_table_get_table(m_book)};
+    auto hpe{gnc_commodity_table_lookup(commtable, "NYSE", "HPE")};
+    auto usd{gnc_commodity_table_lookup(commtable, "ISO4217", "USD")};
+    GncQuotesImpl quotes(m_book, std::make_unique<GncMockQuoteSource>(std::move(quote_vec), std::move(err_vec)));
+    quotes.fetch(hpe);
+    auto failures{quotes.failures()};
+    EXPECT_TRUE(failures.empty());
+    auto pricedb{gnc_pricedb_get_db(m_book)};
+    auto price{gnc_pricedb_lookup_latest(pricedb, hpe, usd)};
+    auto datetime{static_cast<time64>(GncDateTime())};
+
+    EXPECT_EQ(usd, gnc_price_get_currency(price));
+    EXPECT_EQ(datetime, gnc_price_get_time64(price));
+    EXPECT_EQ(PRICE_SOURCE_FQ, gnc_price_get_source(price));
+    EXPECT_TRUE(gnc_numeric_equal(GncNumeric{1337, 100},
                                   gnc_price_get_value(price)));
     EXPECT_STREQ("Finance::Quote", gnc_price_get_source_string(price));
     EXPECT_STREQ("last", gnc_price_get_typestr(price));

@@ -96,6 +96,8 @@ public:
     const std::string& version() noexcept { return m_version.empty() ? not_found : m_version; }
     const QuoteSources& sources() noexcept { return m_sources; }
     GList* sources_as_glist ();
+    const QFVec& failures() noexcept;
+    std::string report_failures() noexcept;
 
 private:
     std::string query_fq (const CommVec&);
@@ -106,6 +108,7 @@ private:
     std::unique_ptr<GncQuoteSource> m_quotesource;
     std::string m_version;
     QuoteSources m_sources;
+    QFVec m_failures;
     QofBook *m_book;
     gnc_commodity *m_dflt_curr;
 };
@@ -128,6 +131,8 @@ private:
     QuoteResult run_cmd (const StrVec& args, const std::string& json_string) const;
 
 };
+
+static const std::string empty_string{};
 
 GncFQQuoteSource::GncFQQuoteSource() :
 c_cmd{bp::search_path("perl")},
@@ -227,8 +232,9 @@ GncFQQuoteSource::run_cmd (const StrVec& args, const std::string& json_string) c
 
 /* GncQuotes implementation */
 GncQuotesImpl::GncQuotesImpl() : m_quotesource{new GncFQQuoteSource},
-m_version{}, m_sources{}, m_book{qof_session_get_book(gnc_get_current_session())},
-m_dflt_curr{gnc_default_currency()}
+                                 m_version{}, m_sources{}, m_failures{},
+                                 m_book{qof_session_get_book(gnc_get_current_session())},
+                                 m_dflt_curr{gnc_default_currency()}
 {
     if (!m_quotesource->usable())
         return;
@@ -283,12 +289,73 @@ GncQuotesImpl::fetch (gnc_commodity *comm)
 void
 GncQuotesImpl::fetch (CommVec& commodities)
 {
+    m_failures.clear();
     if (commodities.empty())
         return;
 
     auto quote_str{query_fq (commodities)};
     parse_quotes (quote_str, commodities);
 }
+
+const QFVec&
+GncQuotesImpl::failures() noexcept
+{
+    return m_failures;
+}
+
+static std::string
+explain(GncQuoteError err, const std::string& errmsg)
+{
+    std::string retval;
+    switch (err)
+    {
+    case GncQuoteError::NO_RESULT:
+        if (errmsg.empty())
+            retval += _("Finance::Quote returned no data and set no error.");
+        else
+            retval += _("Finance::Quote returned an error: ") + errmsg;
+        break;
+    case GncQuoteError::QUOTE_FAILED:
+        if (errmsg.empty())
+            retval += _("Finance::Quote reported failure set no error.");
+        else
+            retval += _("Finance::Quote reported failure with  error: ") + errmsg;
+        break;
+    case GncQuoteError::NO_CURRENCY:
+        retval += _("Finance::Quote returned a quote with no currency.");
+        break;
+    case GncQuoteError::UNKNOWN_CURRENCY:
+        retval += _("Finance::Quote returned a quote with a currency GnuCash doesn't know about.");
+        break;
+    case GncQuoteError::NO_PRICE:
+        retval += _("Finance::Quote returned a quote with no price element.");
+        break;
+    case GncQuoteError::PRICE_PARSE_FAILURE:
+        retval += _("Finance::Quote returned a quote with a price that GnuCash was unable to covert to a number.");
+        break;
+    case GncQuoteError::SUCCESS:
+    default:
+        retval += _("The quote has no error set.");
+        break;
+    }
+    return retval;
+}
+
+std::string
+GncQuotesImpl::report_failures() noexcept
+{
+    std::string retval{_("Quotes for the following commodities were unavailable or unusable:\n")};
+    std::for_each(m_failures.begin(), m_failures.end(),
+                  [&retval](auto failure)
+                  {
+                      auto [ns, sym, reason, err] = failure;
+                      retval += "* " + ns + ":" + sym + " " +
+                          explain(reason, err) + "\n";
+                  });
+    return retval;
+}
+
+/* **** Private function implementations ****/
 
 std::string
 GncQuotesImpl::comm_vec_to_json_string (const CommVec& comm_vec) const
@@ -368,11 +435,13 @@ get_price_and_type(PriceParams& p, const bpt::ptree& comm_pt)
 {
     p.type = "last";
     p.price = comm_pt.get_optional<std::string> (p.type);
+
     if (!p.price)
     {
         p.type = "nav";
         p.price = comm_pt.get_optional<std::string> (p.type);
     }
+
     if (!p.price)
     {
         p.type = "price";
@@ -472,11 +541,13 @@ get_price(const PriceParams& p)
 }
 
 static gnc_commodity*
-get_currency(const PriceParams& p, QofBook* book)
+get_currency(const PriceParams& p, QofBook* book, QFVec& failures)
 {
     if (!p.currency)
     {
-        PWARN("Skipped %s:%s - Finance::Quote didn't return a currency",
+        failures.emplace_back(p.ns, p.mnemonic, GncQuoteError::NO_CURRENCY,
+                              empty_string);
+        PWARN("Skipped %s:%s - Finance::Quote returned a quote with no  currency",
               p.ns, p.mnemonic);
         return nullptr;
     }
@@ -487,6 +558,8 @@ get_currency(const PriceParams& p, QofBook* book)
 
     if (!currency)
     {
+        failures.emplace_back(p.ns, p.mnemonic,
+                              GncQuoteError::UNKNOWN_CURRENCY, empty_string);
         PWARN("Skipped %s:%s  - failed to parse returned currency '%s'",
               p.ns, p.mnemonic, p.currency->c_str());
         return nullptr;
@@ -507,6 +580,8 @@ GncQuotesImpl::parse_one_quote(const bpt::ptree& pt, gnc_commodity* comm)
     auto comm_pt_ai{pt.find(p.mnemonic)};
     if (comm_pt_ai == pt.not_found())
     {
+        m_failures.emplace_back(p.ns, p.mnemonic, GncQuoteError::NO_RESULT,
+                                empty_string);
         PINFO("Skipped %s:%s - Finance::Quote didn't return any data.",
               p.ns, p.mnemonic);
         return nullptr;
@@ -517,6 +592,8 @@ GncQuotesImpl::parse_one_quote(const bpt::ptree& pt, gnc_commodity* comm)
 
     if (!p.success)
     {
+        m_failures.emplace_back(p.ns, p.mnemonic, GncQuoteError::QUOTE_FAILED,
+                                p.errormsg ? *p.errormsg : empty_string);
         PWARN("Skipped %s:%s - Finance::Quote returned fetch failure.\nReason %s",
               p.ns, p.mnemonic,
               (p.errormsg ? p.errormsg->c_str() : "unknown"));
@@ -525,6 +602,8 @@ GncQuotesImpl::parse_one_quote(const bpt::ptree& pt, gnc_commodity* comm)
 
     if (!p.price)
     {
+        m_failures.emplace_back(p.ns, p.mnemonic,
+                                GncQuoteError::NO_PRICE, empty_string);
         PWARN("Skipped %s:%s - Finance::Quote didn't return a valid price",
               p.ns, p.mnemonic);
         return nullptr;
@@ -532,11 +611,16 @@ GncQuotesImpl::parse_one_quote(const bpt::ptree& pt, gnc_commodity* comm)
 
     auto price{get_price(p)};
     if (!price)
+    {
+        m_failures.emplace_back(p.ns, p.mnemonic,
+                                GncQuoteError::PRICE_PARSE_FAILURE,
+                                empty_string);
         return nullptr;
+    }
 
-    auto currency{get_currency(p, m_book)};
+    auto currency{get_currency(p, m_book, m_failures)};
     if (!currency)
-        return nullptr;
+       return nullptr;
 
     auto quotedt{calc_price_time(p)};
     auto gnc_price = gnc_price_create (m_book);
@@ -737,3 +821,14 @@ GList* GncQuotes::sources_as_glist ()
 
 GncQuotes::~GncQuotes() = default;
 
+const QFVec&
+GncQuotes::failures() noexcept
+{
+    return m_impl->failures();
+}
+
+const std::string
+GncQuotes::report_failures() noexcept
+{
+    return m_impl->report_failures();
+}
