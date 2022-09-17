@@ -38,6 +38,7 @@ extern "C" {
 #include "assistant-stock-transaction.h"
 #include "gnc-account-sel.h"
 #include "gnc-amount-edit.h"
+#include "gnc-prefs.h"
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
 #include "gnc-tree-view-account.h"
@@ -79,6 +80,7 @@ enum split_cols
     SPLIT_COL_DEBIT,
     SPLIT_COL_CREDIT,
     SPLIT_COL_UNITS,
+    SPLIT_COL_UNITS_COLOR,
     NUM_SPLIT_COLS
 };
 
@@ -608,6 +610,7 @@ struct SummaryLineInfo
     std::string memo;
     std::string value;
     std::string units;
+    bool units_in_red;
 };
 
 static void
@@ -623,6 +626,7 @@ add_to_summary_table (GtkListStore *list, SummaryLineInfo line)
                         SPLIT_COL_DEBIT, line.debit_side ? line.value.c_str() : "",
                         SPLIT_COL_CREDIT, !line.debit_side ? line.value.c_str() : "",
                         SPLIT_COL_UNITS, line.units.c_str(),
+                        SPLIT_COL_UNITS_COLOR, line.units_in_red ? "red" : nullptr,
                         -1);
     g_free (tooltip);
 }
@@ -640,6 +644,7 @@ check_page (SummaryLineInfo& line, gnc_numeric& debit, gnc_numeric& credit,
 
     line.memo = gtk_entry_get_text (GTK_ENTRY (memo));
     line.units = "";
+    line.units_in_red = false;
     line.debit_side = (splitfield & FieldMask::ENABLED_DEBIT);
 
     if (gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (gae), &amount, true, nullptr))
@@ -704,6 +709,8 @@ refresh_page_finish (StockTransactionInfo *info)
     gnc_numeric credit = gnc_numeric_zero ();
     StringVec errors, warnings, infos;
     SummaryLineInfo line;
+    bool negative_in_red = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL,
+                                               GNC_PREF_NEGATIVE_IN_RED);
 
     // check the stock transaction date. If there are existing stock
     // transactions dated after the date specified, it is very likely
@@ -735,7 +742,7 @@ to ensure proper recording."), new_date_str, last_split_date_str);
     }
 
     if (info->txn_type->stock_value == FieldMask::DISABLED)
-        line = { false, false, xaccAccountGetName (info->acct), "", "", "" };
+        line = { false, false, xaccAccountGetName (info->acct), "", "", "", false };
     else
         check_page (line, debit, credit, info->txn_type->stock_value, info->acct,
                     info->stock_memo_edit, info->stock_value_edit, info->currency,
@@ -756,6 +763,7 @@ to ensure proper recording."), new_date_str, last_split_date_str);
             (xaccAccountGetCommodity (info->acct), true);
         stock_amount = gnc_numeric_sub_fixed (stock_amount, info->balance_at_date);
         line.units = xaccPrintAmount (stock_amount, stock_pinfo);
+        line.units_in_red = negative_in_red && gnc_numeric_negative_p (stock_amount);
         if (gnc_numeric_check (ratio))
             add_error_str (errors, N_("Invalid stock new balance"));
         else if (gnc_numeric_negative_p (ratio))
@@ -776,6 +784,7 @@ to ensure proper recording."), new_date_str, last_split_date_str);
         if (info->txn_type->stock_amount & FieldMask::ENABLED_CREDIT)
             stock_amount = gnc_numeric_neg (stock_amount);
         line.units = xaccPrintAmount (stock_amount, stock_pinfo);
+        line.units_in_red = negative_in_red && gnc_numeric_negative_p (stock_amount);
         auto new_bal = gnc_numeric_add_fixed (info->balance_at_date, stock_amount);
         if (gnc_numeric_positive_p (info->balance_at_date) &&
             gnc_numeric_negative_p (new_bal))
@@ -1225,7 +1234,7 @@ get_treeview (GtkBuilder *builder, const gchar *treeview_label)
 
     auto store = gtk_list_store_new (NUM_SPLIT_COLS, G_TYPE_STRING, G_TYPE_STRING,
                                      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
-                                     G_TYPE_STRING);
+                                     G_TYPE_STRING, G_TYPE_STRING);
     gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
     g_object_unref(store);
 
@@ -1259,7 +1268,10 @@ get_treeview (GtkBuilder *builder, const gchar *treeview_label)
     gtk_cell_renderer_set_alignment (renderer, 1.0, 0.5);
     gtk_cell_renderer_set_padding (renderer, 5, 0);
     column = gtk_tree_view_column_new_with_attributes
-        (_("Units"), renderer, "text", SPLIT_COL_UNITS, nullptr);
+        (_("Units"), renderer,
+         "text", SPLIT_COL_UNITS,
+         "foreground", SPLIT_COL_UNITS_COLOR,
+         nullptr);
     gtk_tree_view_append_column(view, column);
 
     return GTK_WIDGET (view);
