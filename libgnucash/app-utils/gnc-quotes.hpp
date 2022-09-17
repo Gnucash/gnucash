@@ -49,20 +49,49 @@ class GncQuotesImpl;
 class GncQuotes
 {
 public:
-    // Constructor - checks for presence of Finance::Quote and import version and quote sources
+    /** Create a GncQuotes object.
+     *
+     * Throws a GncQuoteException if Finance::Quote is not installed or fails to initialize.
+     */
     GncQuotes ();
     ~GncQuotes ();
 
-    // Fetch quotes for all commodities in our db that have a quote source set
+    /** Fetch quotes for all commodities in our db that have a quote source set
+     *
+     * @param book The current book.
+     */
     void fetch (QofBook *book);
-    // Only fetch quotes for the commodities passed that have a quote source  set
+    /** Fetch quotes for a vector of commodities
+     *
+     * @param commodities std::vector of the gnc_commodity* to get quotes for.
+     * @note Commodities without a quote source will be silently ignored.
+     */
     void fetch (CommVec& commodities);
-    // Fetch quote for the commodity if it has a quote source  set
+    /** Fetch quote for a single commodity
+     *
+     * @param comm Commodity for which to retrieve a quote
+     * @note Commodity must have a quote source set or the call will silently fail.
+     */
     void fetch (gnc_commodity *comm);
 
+    /** Get the installed Finance::Quote version
+     *
+     * @return the Finance::Quote version string
+     */
     const std::string& version() noexcept;
+
+    /** Get the available Finance::Quote sources as a std::vector
+     *
+     * @return The quote sources configured in Finance::Quote
+     */
     const QuoteSources& sources() noexcept;
-    GList* sources_as_glist ();
+
+    /** Get the available Finance::Quote sources as a GLixt
+     *
+     * @return A double-linked list containing the names of the installed quote sources.
+     * @note the list and its contents are owned by the caller and should be freed with `g_list_free_full(list, g_free)`.
+     */
+    GList* sources_as_glist () ;
 
 private:
     std::unique_ptr<GncQuotesImpl> m_impl;
