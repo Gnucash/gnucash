@@ -1236,6 +1236,8 @@ get_treeview (GtkBuilder *builder, const gchar *treeview_label)
                                      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
                                      G_TYPE_STRING, G_TYPE_STRING);
     gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+    gtk_tree_selection_set_mode (gtk_tree_view_get_selection (view),
+                                 GTK_SELECTION_NONE);
     g_object_unref(store);
 
     auto renderer = gtk_cell_renderer_text_new();
