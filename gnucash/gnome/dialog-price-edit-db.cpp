@@ -564,6 +564,9 @@ gnc_prices_dialog_get_quotes_clicked (GtkWidget *widget, gpointer data)
         gnc_set_busy_cursor (NULL, TRUE);
         quotes.fetch (pdb_dialog->book);
         gnc_unset_busy_cursor (NULL);
+        if (quotes.had_failures())
+            gnc_warning_dialog(GTK_WINDOW(pdb_dialog->window), "%s",
+                               quotes.report_failures().c_str());
     }
     catch (const GncQuoteException& err)
     {

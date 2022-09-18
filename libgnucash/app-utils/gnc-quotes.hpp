@@ -111,6 +111,12 @@ public:
      */
     GList* sources_as_glist () ;
 
+    /** Report if there were quotes requested but not retrieved.
+     *
+     * @returns True if there were quote failures.
+     */
+    bool had_failures() noexcept;
+
     /** Report the commodities for which quotes were requested but not successfully retrieved.
      *
      * This does not include requested commodities that didn't have a quote source.

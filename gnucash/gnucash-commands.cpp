@@ -346,10 +346,12 @@ Gnucash::add_quotes (const bo_str& uri)
         gnc_quote_source_set_fq_installed (quotes.version().c_str(), quote_sources);
         g_list_free_full (quote_sources, g_free);
         quotes.fetch(qof_session_get_book(session));
+        if (quotes.had_failures())
+            std::cerr << quotes.report_failures() << std::endl;
     }
     catch (const GncQuoteException& err)
     {
-        std::cerr << err.what() << std::endl;
+        std::cerr << bl::translate("Price retrieval failed: ") << err.what() << std::endl;
     }
     qof_session_save(session, NULL);
     if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)

@@ -96,6 +96,7 @@ public:
     const std::string& version() noexcept { return m_version.empty() ? not_found : m_version; }
     const QuoteSources& sources() noexcept { return m_sources; }
     GList* sources_as_glist ();
+    bool had_failures() noexcept { return !m_failures.empty(); }
     const QFVec& failures() noexcept;
     std::string report_failures() noexcept;
 
@@ -820,6 +821,12 @@ GList* GncQuotes::sources_as_glist ()
 }
 
 GncQuotes::~GncQuotes() = default;
+
+bool
+GncQuotes::had_failures() noexcept
+{
+    return m_impl->had_failures();
+}
 
 const QFVec&
 GncQuotes::failures() noexcept
