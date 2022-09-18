@@ -53,6 +53,25 @@ enum account_cols
     NUM_ACCT_COLS
 };
 
+#define BUFLEN 1024
+
+struct _GNCAccountSel
+{
+    GtkBox hbox;
+    gboolean initDone;
+    gboolean isModal;
+    GtkListStore *store;
+    GtkComboBox *combo;
+    GList *acctTypeFilters;
+    GList *acctCommodityFilters;
+    gint eventHandlerId;
+    /* The state of this pointer also serves as a flag about what state
+     * the widget is in WRT the new-account-button ability. */
+    GtkWidget *newAccountButton;
+    gint currentSelection;
+    char sep_key_prefix[BUFLEN];
+};
+
 static guint account_sel_signals [LAST_SIGNAL] = { 0 };
 
 static void gnc_account_sel_init (GNCAccountSel *gas);
@@ -144,10 +163,208 @@ combo_changed_cb (GNCAccountSel *gas, gpointer combo)
     g_signal_emit_by_name (gas, "account_sel_changed");
 }
 
+static char*
+normalize_and_fold (char* utf8_string)
+{
+    char *normalized, *folded;
+    g_return_val_if_fail (utf8_string && *utf8_string, NULL);
+
+    normalized = g_utf8_normalize (utf8_string, -1, G_NORMALIZE_ALL);
+    if (!normalized)
+        return NULL;
+    folded = g_utf8_casefold (normalized, -1);
+    g_free (normalized);
+    return folded;
+}
+
+static gboolean
+completion_function (GtkEntryCompletion *completion, const char *key,
+                     GtkTreeIter *iter, gpointer user_data)
+{
+    GNCAccountSel *gas = GNC_ACCOUNT_SEL(user_data);
+    gchar *full_name = NULL;
+    gboolean ret = FALSE;
+
+    gtk_tree_model_get (GTK_TREE_MODEL(gas->store), iter,
+                        ACCT_COL_NAME, &full_name, -1);
+
+    if (full_name && *full_name)
+    {
+        gchar *fold_full_name = normalize_and_fold (full_name);
+
+        // key is normalised and casefolded
+        if (g_strrstr (fold_full_name, key) != NULL)
+            ret = TRUE;
+
+        g_free (fold_full_name);
+    }
+    g_free (full_name);
+    return ret;
+}
+
+static char*
+normalize_and_lower (char* utf8_string)
+{
+    char *normalized, *lowered;
+    g_return_val_if_fail (utf8_string && *utf8_string, NULL);
+
+    normalized = g_utf8_normalize (utf8_string, -1, G_NORMALIZE_ALL);
+    if (!normalized)
+        return NULL;
+    lowered = g_utf8_strdown (normalized, -1);
+    g_free (normalized);
+    return lowered;
+}
+
+/* Set gas->sep_key_prefix to the account_full_name or to the longest
+ * common characters in the account_full_name.
+ */
+static void
+set_prefix_from_account_name (GNCAccountSel *gas, char* account_full_name,
+                              gint item_offset_to_sep_char,
+                              gint *sep_key_prefix_len)
+{
+    if (item_offset_to_sep_char < *sep_key_prefix_len)
+    {
+        *sep_key_prefix_len = item_offset_to_sep_char;
+        memset (gas->sep_key_prefix, 0, BUFLEN);
+        g_utf8_strncpy (gas->sep_key_prefix, account_full_name, *sep_key_prefix_len);
+    }
+
+    if (item_offset_to_sep_char == *sep_key_prefix_len)
+    {
+        char tmp_prefix[BUFLEN];
+
+        memset (tmp_prefix, 0, BUFLEN);
+        g_utf8_strncpy (tmp_prefix, account_full_name, *sep_key_prefix_len);
+
+        if (g_strcmp0 (gas->sep_key_prefix, tmp_prefix) != 0)
+        {
+            do
+            {
+                gchar *tmp = g_strdup (gas->sep_key_prefix);
+                (*sep_key_prefix_len)--;
+
+                memset (tmp_prefix, 0, BUFLEN);
+                g_utf8_strncpy (tmp_prefix, account_full_name, *sep_key_prefix_len);
+                memset (gas->sep_key_prefix, 0, BUFLEN);
+                g_utf8_strncpy (gas->sep_key_prefix, tmp, *sep_key_prefix_len);
+                g_free (tmp);
+
+            } while (g_strcmp0 (gas->sep_key_prefix, tmp_prefix) != 0);
+        }
+    }
+}
+
+static inline gboolean
+find_next_separator (char* account_full_name,
+                     gint *item_offset_to_sep_char,
+                     gunichar sep_unichar)
+{
+    const char* c;
+    gunichar uc;
+    gboolean found = FALSE;
+
+    c = g_utf8_offset_to_pointer (account_full_name, *item_offset_to_sep_char);
+    (*item_offset_to_sep_char)++;
+
+    while (*c)
+    {
+        uc = g_utf8_get_char (c);
+        if (uc == sep_unichar)
+        {
+            found = TRUE;
+            break;
+        }
+        c = g_utf8_next_char (c);
+        (*item_offset_to_sep_char)++;
+    }
+    return found;
+}
+
+/* Callback for Account separator key */
+static void
+entry_insert_text_cb (GtkEntry *entry, const gchar *text, gint length,
+                      gint *position, gpointer user_data)
+{
+    GNCAccountSel *gas = GNC_ACCOUNT_SEL(user_data);
+    GtkTreeModel *fmodel = gtk_combo_box_get_model (GTK_COMBO_BOX(gas->combo));
+    const gchar *sep_char = gnc_get_account_separator_string ();
+    gchar *entered_text, *lower_entered_text;
+    glong entered_len;
+    gunichar sep_unichar;
+    gint sep_key_prefix_len = G_MAXINT;
+    GtkTreeIter iter;
+    gboolean valid;
+
+    if (g_strcmp0 (text, sep_char) != 0)
+        return;
+
+    memset (gas->sep_key_prefix, 0, BUFLEN);
+
+    entered_text = gtk_editable_get_chars (GTK_EDITABLE(entry), 0, -1);
+
+    if (!(entered_text && *entered_text))
+        return;
+
+    lower_entered_text = normalize_and_lower (entered_text);
+    entered_len = g_utf8_strlen (lower_entered_text, -1); //characters
+    sep_unichar = gnc_get_account_separator ();
+
+    // Get the first item in the list
+    valid = gtk_tree_model_get_iter_first (fmodel, &iter);
+
+    // Walk through the list, reading each full name
+    while (valid)
+    {
+        gchar *account_full_name;
+
+        gtk_tree_model_get (fmodel, &iter, ACCT_COL_NAME, &account_full_name, -1);
+
+        if (account_full_name && *account_full_name)
+        {
+            gchar *lower_account_full_name = normalize_and_lower (account_full_name);
+
+            if (g_str_has_prefix (lower_account_full_name, lower_entered_text))
+            {
+                gint item_offset_to_sep_char = entered_len;
+                gboolean found = find_next_separator (account_full_name,
+                                                      &item_offset_to_sep_char,
+                                                      sep_unichar);
+
+                if (found)
+                    set_prefix_from_account_name (gas, account_full_name,
+                                                  item_offset_to_sep_char,
+                                                  &sep_key_prefix_len);
+            }
+            g_free (lower_account_full_name);
+        }
+        g_free (account_full_name);
+        valid = gtk_tree_model_iter_next (fmodel, &iter);
+    }
+    if (gas->sep_key_prefix[0] == 0)
+        g_utf8_strncpy (gas->sep_key_prefix, entered_text, entered_len);
+
+    g_free (lower_entered_text);
+    g_free (entered_text);
+
+    if (gas->sep_key_prefix[0] != 0)
+    {
+        g_signal_handlers_block_by_func (GTK_EDITABLE(entry), (gpointer) entry_insert_text_cb, user_data);
+        gtk_editable_delete_text (GTK_EDITABLE(entry), 0, -1);
+        gtk_editable_set_position (GTK_EDITABLE(entry), 0);
+        gtk_editable_insert_text (GTK_EDITABLE(entry), gas->sep_key_prefix, -1, position);
+        g_signal_handlers_unblock_by_func (GTK_EDITABLE(entry), (gpointer) entry_insert_text_cb, user_data);
+        g_signal_stop_emission_by_name (GTK_EDITABLE(entry), "insert_text");
+    }
+}
+
 static void
 gnc_account_sel_init (GNCAccountSel *gas)
 {
     GtkWidget *widget;
+    GtkWidget *entry;
+    GtkEntryCompletion *completion;
 
     gtk_orientable_set_orientation (GTK_ORIENTABLE(gas), GTK_ORIENTATION_HORIZONTAL);
 
@@ -169,11 +386,23 @@ gnc_account_sel_init (GNCAccountSel *gas)
                               G_CALLBACK(combo_changed_cb), gas);
     gtk_container_add (GTK_CONTAINER(gas), widget);
 
+    entry = gtk_bin_get_child (GTK_BIN(gas->combo));
+    g_signal_connect (G_OBJECT(entry), "insert_text",
+                      G_CALLBACK(entry_insert_text_cb), gas);
+
     /* Add completion. */
     gnc_cbwe_require_list_item (GTK_COMBO_BOX(widget));
+    completion = gtk_entry_get_completion (GTK_ENTRY(entry));
+    gtk_entry_completion_set_match_func (completion,
+                                         (GtkEntryCompletionMatchFunc)completion_function,
+                                         gas, NULL);
 
     /* Get the accounts, place into combo list */
     gas_populate_list (gas);
+
+    // set sort order
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(gas->store),
+                                          ACCT_COL_NAME, GTK_SORT_ASCENDING);
 
     gas->eventHandlerId =
         qof_event_register_handler (gnc_account_sel_event_cb, gas);
@@ -205,7 +434,6 @@ gas_populate_list (GNCAccountSel *gas)
     gint i, active = -1;
     GList *accts, *ptr;
     const gchar *currentSel;
-    gchar *name;
 
     entry = GTK_ENTRY(gtk_bin_get_child (GTK_BIN(gas->combo)));
     currentSel = gtk_entry_get_text (entry);
@@ -226,15 +454,24 @@ gas_populate_list (GNCAccountSel *gas)
     for (ptr = atnd.outList, i = 0; ptr; ptr = g_list_next(ptr), i++)
     {
         acc = ptr->data;
-        name = gnc_account_get_full_name (acc);
-        gtk_list_store_append (gas->store, &iter);
-        gtk_list_store_set (gas->store, &iter,
-                            ACCT_COL_NAME, name,
-                            ACCT_COL_PTR,  acc,
-                            -1);
-        if (g_utf8_collate (name, currentSel) == 0)
-            active = i;
-        g_free (name);
+        if (acc)
+        {
+            gchar *name = gnc_account_get_full_name (acc);
+
+            if (!(name && *name))
+                return;
+
+            gtk_list_store_append (gas->store, &iter);
+            gtk_list_store_set (gas->store, &iter,
+                                ACCT_COL_NAME, name,
+                                ACCT_COL_PTR,  acc,
+                                -1);
+
+            if (g_utf8_collate (name, currentSel) == 0)
+                active = i;
+
+            g_free (name);
+        }
     }
 
     /* If the account which was in the text box before still exists, then
@@ -326,7 +563,7 @@ gnc_account_sel_set_account (GNCAccountSel *gas, Account *acct,
     }
     else
     {
-        gtk_combo_box_set_active (GTK_COMBO_BOX(gas->combo), -1 );
+        gtk_combo_box_set_active (GTK_COMBO_BOX(gas->combo), -1);
         if (!acct)
         {
             GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child (GTK_BIN(gas->combo)));

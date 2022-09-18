@@ -38,25 +38,7 @@
 #define GNC_ACCOUNT_SEL_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, GNC_TYPE_ACCOUNT_SEL, GNCAccountSelClass)
 #define GNC_IS_ACCOUNT_SEL(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, GNC_TYPE_ACCOUNT_SEL)
 
-typedef struct
-{
-    GtkBox hbox;
-    gboolean initDone;
-    gboolean isModal;
-    GtkListStore *store;
-    GtkComboBox *combo;
-    GList *acctTypeFilters;
-    GList *acctCommodityFilters;
-    gint eventHandlerId;
-    /* The state of this pointer also serves as a flag about what state
-     * the widget is in WRT the new-account-button ability. */
-    GtkWidget *newAccountButton;
-    gint currentSelection;
-
-#if 0 /* completion not implemented. */
-    GCompletion *completion;
-#endif /* 0 - completion not implemented */
-} GNCAccountSel;
+typedef struct _GNCAccountSel GNCAccountSel;
 
 typedef struct
 {
