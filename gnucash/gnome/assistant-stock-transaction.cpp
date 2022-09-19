@@ -263,7 +263,7 @@ reinvested must be subsequently recorded as a regular stock purchase.")
         N_("Company redeems units, thereby increasing the stock price by a \
 multiple, while keeping the total monetary value of the overall investment \
 constant.\n\nIf the reverse split results in a cash in lieu for remainder \
-units, please record the sale using the Stock Split Assistant first, then \
+units, please record the sale using the Stock Transaction Assistant first, then \
 record the reverse split.")
     }
 };
@@ -369,7 +369,7 @@ static const TxnTypeVec short_types
         N_("Company redeems units, thereby increasing the stock price by \
 a multiple, while keeping the total monetary value of the overall investment \
 constant.\n\nIf the reverse split results in a cash in lieu for remainder \
-units, please record the cover buy using the Stock Split Assistant first, \
+units, please record the cover buy using the Stock Transaction Assistant first, \
 then record the reverse split.")
     }
 };
@@ -1099,8 +1099,6 @@ stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
         gae_amount (info->stock_amount_edit) : gnc_numeric_zero ();
     auto stock_value = info->txn_type->stock_value != FieldMask::DISABLED ?
         gae_amount (info->stock_value_edit) : gnc_numeric_zero ();
-    if (info->txn_type->input_new_balance)
-        stock_amount = gnc_numeric_sub_fixed (stock_amount, info->balance_at_date);
     create_split (trans, info->txn_type->stock_amount | info->txn_type->stock_value,
                   NC_ ("Stock Assistant: Action field", "Stock"),
                   info->acct, account_commits, info->stock_memo_edit,
