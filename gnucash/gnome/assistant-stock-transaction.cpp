@@ -526,7 +526,7 @@ refresh_page_stock_amount (GtkWidget *widget, gpointer user_data)
     {
         gnc_numeric ratio = gnc_numeric_div (stock_amount, bal,
                                              GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
-        if (gnc_numeric_check (ratio) || gnc_numeric_negative_p (ratio))
+        if (gnc_numeric_check (ratio) || !gnc_numeric_positive_p (ratio))
             gtk_label_set_text (GTK_LABEL(info->next_amount), nullptr);
         else
         {
@@ -775,10 +775,8 @@ to ensure proper recording."), new_date_str, last_split_date_str);
         stock_amount = gnc_numeric_sub_fixed (stock_amount, info->balance_at_date);
         line.units = xaccPrintAmount (stock_amount, stock_pinfo);
         line.units_in_red = negative_in_red && gnc_numeric_negative_p (stock_amount);
-        if (gnc_numeric_check (ratio))
+        if (gnc_numeric_check (ratio) || !gnc_numeric_positive_p (ratio))
             add_error_str (errors, N_("Invalid stock new balance"));
-        else if (gnc_numeric_negative_p (ratio))
-            add_error_str (errors, N_("New and old balance must have same signs"));
         else if (gnc_numeric_negative_p (delta) && !credit_side)
             add_error_str (errors, N_("New balance must be higher than old balance"));
         else if (gnc_numeric_positive_p (delta) && credit_side)
