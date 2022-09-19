@@ -624,12 +624,6 @@ static const gchar* view_style_actions[] =
     NULL
 };
 
-static const gchar* actions_requiring_extra[] =
-{
-    "ActionsStockAssistantAction",
-    NULL
-};
-
 static const gchar* actions_requiring_priced_account[] =
 {
     "ActionsStockAssistantAction",
@@ -1289,11 +1283,10 @@ gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister* page)
     gnc_plugin_update_actions (action_group, actions_requiring_account,
                                "sensitive", is_readwrite && account != NULL);
 
-    gnc_plugin_update_actions (action_group, actions_requiring_extra,
-                               "visible", gnc_prefs_is_extra_enabled ());
-
     gnc_plugin_update_actions (action_group, actions_requiring_priced_account,
-                               "sensitive", account && xaccAccountIsPriced (account));
+                               "visible", account &&
+                               gnc_prefs_is_extra_enabled () &&
+                               xaccAccountIsPriced (account));
 
     /* Set "style" radio button */
     ledger_type = gnc_ledger_display_type (priv->ledger);
