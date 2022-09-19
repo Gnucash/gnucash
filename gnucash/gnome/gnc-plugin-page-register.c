@@ -487,8 +487,8 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         G_CALLBACK (gnc_plugin_page_register_cmd_autoclear)
     },
     {
-        "ActionsStockAssistantAction", NULL, N_ ("Stock Ass_istant"), NULL,
-        N_ ("Stock Assistant"),
+        "ActionsStockAssistantAction", "applications-utilities",
+        N_ ("Stock Ass_istant"), NULL, N_ ("Stock Assistant"),
         G_CALLBACK (gnc_plugin_page_register_cmd_stock_assistant)
     },
     {
