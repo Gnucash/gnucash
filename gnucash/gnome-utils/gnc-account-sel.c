@@ -70,6 +70,15 @@ struct _GNCAccountSel
     GtkWidget *newAccountButton;
     gint currentSelection;
     char sep_key_prefix[BUFLEN];
+    gboolean hide_placeholder;
+    gboolean hide_hidden;
+};
+
+enum
+{
+    PROP_0,
+    PROP_HIDE_PLACEHOLDER,
+    PROP_HIDE_HIDDEN,
 };
 
 static guint account_sel_signals [LAST_SIGNAL] = { 0 };
@@ -78,6 +87,16 @@ static void gnc_account_sel_init (GNCAccountSel *gas);
 static void gnc_account_sel_class_init (GNCAccountSelClass *klass);
 static void gnc_account_sel_finalize (GObject *object);
 static void gnc_account_sel_dispose (GObject *object);
+
+static void gas_set_property (GObject      *object,
+                              guint         param_id,
+                              const GValue *value,
+                              GParamSpec   *pspec);
+
+static void gas_get_property (GObject    *object,
+                              guint       param_id,
+                              GValue     *value,
+                              GParamSpec *pspec);
 
 static void gas_filter_accounts (gpointer data, gpointer user_data);
 
@@ -131,6 +150,60 @@ gnc_account_sel_event_cb (QofInstance *entity,
 }
 
 static void
+gas_set_property (GObject *object, guint param_id,
+                  const GValue *value, GParamSpec *pspec)
+{
+    GNCAccountSel *gas;
+
+    g_return_if_fail (object != NULL);
+    g_return_if_fail (GNC_IS_ACCOUNT_SEL(object));
+
+    gas = GNC_ACCOUNT_SEL(object);
+
+    switch (param_id)
+    {
+        case PROP_HIDE_PLACEHOLDER:
+            gas->hide_placeholder = g_value_get_boolean (value);
+            break;
+
+        case PROP_HIDE_HIDDEN:
+            gas->hide_hidden = g_value_get_boolean (value);
+            break;
+
+        default:
+            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, param_id, pspec);
+            break;
+    }
+}
+
+static void
+gas_get_property (GObject *object, guint param_id,
+                  GValue *value, GParamSpec *pspec)
+{
+    GNCAccountSel *gas;
+
+    g_return_if_fail (object != NULL);
+    g_return_if_fail (GNC_IS_ACCOUNT_SEL(object));
+
+    gas = GNC_ACCOUNT_SEL(object);
+
+    switch (param_id)
+    {
+        case PROP_HIDE_PLACEHOLDER:
+            g_value_set_boolean (value, gas->hide_placeholder);
+            break;
+
+        case PROP_HIDE_HIDDEN:
+            g_value_set_boolean (value, gas->hide_hidden);
+            break;
+
+        default:
+            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, param_id, pspec);
+            break;
+    }
+}
+
+static void
 gnc_account_sel_class_init (GNCAccountSelClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(klass);
@@ -139,6 +212,21 @@ gnc_account_sel_class_init (GNCAccountSelClass *klass)
 
     object_class->finalize = gnc_account_sel_finalize;
     object_class->dispose = gnc_account_sel_dispose;
+
+    object_class->set_property = gas_set_property;
+    object_class->get_property = gas_get_property;
+
+    g_object_class_install_property (
+        object_class, PROP_HIDE_PLACEHOLDER,
+        g_param_spec_boolean("hide-placeholder", "Hide Placeholder",
+                             "Placeholder accounts are hidden", TRUE,
+                             G_PARAM_READWRITE));
+
+    g_object_class_install_property (
+        object_class, PROP_HIDE_HIDDEN,
+        g_param_spec_boolean("hide-hidden", "Hide Hidden",
+                             "Hidden accounts are hidden", TRUE,
+                             G_PARAM_READWRITE));
 
     account_sel_signals [ACCOUNT_SEL_CHANGED] =
         g_signal_new ("account_sel_changed",
@@ -360,6 +448,98 @@ entry_insert_text_cb (GtkEntry *entry, const gchar *text, gint length,
 }
 
 static void
+update_entry_and_list (GNCAccountSel *gas)
+{
+    GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child (GTK_BIN(gas->combo)));
+
+    g_signal_handlers_block_by_func (gas->combo, combo_changed_cb , gas);
+    gtk_entry_set_text (entry, "");
+    g_signal_handlers_unblock_by_func (gas->combo, combo_changed_cb , gas);
+
+    // refresh the account list
+    gas_populate_list (gas);
+}
+
+static void
+toggle_placeholder_cb (GtkWidget *widget, gpointer user_data)
+{
+    GNCAccountSel *gas = GNC_ACCOUNT_SEL(user_data);
+    gas->hide_placeholder = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(widget));
+    update_entry_and_list (gas);
+}
+
+static void
+toggle_hidden_cb (GtkWidget *widget, gpointer user_data)
+{
+    GNCAccountSel *gas = GNC_ACCOUNT_SEL(user_data);
+    gas->hide_hidden = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(widget));
+    update_entry_and_list (gas);
+}
+
+static void
+icon_release_cb (GtkEntry *entry, GtkEntryIconPosition icon_pos,
+                 GdkEvent* event, gpointer user_data)
+{
+    GNCAccountSel *gas = GNC_ACCOUNT_SEL(user_data);
+    GtkWidget *menu, *h_placeholder, *h_hidden;
+
+    if (icon_pos != GTK_ENTRY_ICON_SECONDARY)
+        return;
+
+    menu = gtk_menu_new ();
+    h_placeholder = gtk_check_menu_item_new_with_mnemonic (_("Hide _Placeholder Accounts"));
+    gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM(h_placeholder), gas->hide_placeholder);
+    h_hidden = gtk_check_menu_item_new_with_mnemonic (_("Hide _Hidden Accounts"));
+    gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM(h_hidden), gas->hide_hidden);
+    gtk_menu_attach_to_widget (GTK_MENU(menu), GTK_WIDGET(gas), NULL);
+    gtk_menu_shell_append (GTK_MENU_SHELL(menu), h_placeholder);
+    gtk_menu_shell_append (GTK_MENU_SHELL(menu), h_hidden);
+    gtk_widget_show_all (menu);
+
+    g_signal_connect (G_OBJECT(h_placeholder), "toggled",
+                      G_CALLBACK(toggle_placeholder_cb), gas);
+    g_signal_connect (G_OBJECT(h_hidden), "toggled",
+                      G_CALLBACK(toggle_hidden_cb), gas);
+
+    gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *)event);
+}
+
+/* An account is included if gas->acctTypeFilters or gas->acctCommodityFilters is populated
+ * and the account is in the list (both lists if both are populated).
+ *
+ * If neither is populated then all accounts are included.
+ */
+static gboolean
+account_is_included (GNCAccountSel *gas, Account *acc)
+{
+    gboolean included = TRUE;
+
+    /* Filter as we've been configured to do. */
+    if (gas->acctTypeFilters)
+    {
+        /* g_list_find is the poor-mans '(member ...)', especially
+         * easy when the data pointers in the list are just casted
+         * account type identifiers. */
+        if (g_list_find (gas->acctTypeFilters,
+                         GINT_TO_POINTER(xaccAccountGetType (acc))) == NULL)
+        {
+            included = FALSE;
+        }
+    }
+
+    if (gas->acctCommodityFilters)
+    {
+        if (g_list_find_custom (gas->acctCommodityFilters,
+                                GINT_TO_POINTER(xaccAccountGetCommodity (acc)),
+                                gnc_commodity_compare_void) == NULL)
+        {
+            included = FALSE;
+        }
+    }
+    return included;
+}
+
+static void
 gnc_account_sel_init (GNCAccountSel *gas)
 {
     GtkWidget *widget;
@@ -372,6 +552,8 @@ gnc_account_sel_init (GNCAccountSel *gas)
     gas->acctTypeFilters = FALSE;
     gas->newAccountButton = NULL;
     gas->currentSelection = -1;
+    gas->hide_placeholder = TRUE;
+    gas->hide_hidden = TRUE;
 
     g_object_set (gas, "spacing", 2, (gchar*)NULL);
 
@@ -387,6 +569,12 @@ gnc_account_sel_init (GNCAccountSel *gas)
     gtk_container_add (GTK_CONTAINER(gas), widget);
 
     entry = gtk_bin_get_child (GTK_BIN(gas->combo));
+    gtk_entry_set_icon_from_icon_name (GTK_ENTRY(entry), GTK_ENTRY_ICON_SECONDARY,
+                                       "preferences-system-symbolic");
+    gtk_entry_set_icon_tooltip_text (GTK_ENTRY(entry), GTK_ENTRY_ICON_SECONDARY,
+                                     _("Set the visibility of placeholder and hidden accounts."));
+    g_signal_connect (G_OBJECT(entry), "icon-release",
+                      G_CALLBACK(icon_release_cb), gas);
     g_signal_connect (G_OBJECT(entry), "insert_text",
                       G_CALLBACK(entry_insert_text_cb), gas);
 
@@ -492,30 +680,16 @@ gas_filter_accounts (gpointer data, gpointer user_data)
 
     atnd = (account_filter_data*)user_data;
     a = (Account*)data;
-    /* Filter as we've been configured to do. */
-    if (atnd->gas->acctTypeFilters)
-    {
-        /* g_list_find is the poor-mans '(member ...)', especially
-         * easy when the data pointers in the list are just casted
-         * account type identifiers. */
-        if (g_list_find (atnd->gas->acctTypeFilters,
-                          GINT_TO_POINTER(xaccAccountGetType (a)))
-                == NULL)
-        {
-            return;
-        }
-    }
 
-    if (atnd->gas->acctCommodityFilters)
-    {
-        if (g_list_find_custom (atnd->gas->acctCommodityFilters,
-                                GINT_TO_POINTER(xaccAccountGetCommodity (a)),
-                                gnc_commodity_compare_void)
-                == NULL)
-        {
-            return;
-        }
-    }
+    if (atnd->gas->hide_placeholder && xaccAccountGetPlaceholder (a))
+        return;
+
+    if (atnd->gas->hide_placeholder && xaccAccountIsHidden (a))
+        return;
+
+    if (!account_is_included (atnd->gas, a))
+        return;
+
     atnd->outList = g_list_prepend (atnd->outList, a);
 }
 
@@ -549,11 +723,44 @@ gnc_account_sel_find_account (GtkTreeModel *model,
     return TRUE;
 }
 
+/* If the account is included in the filters, set hide_placeholder
+ * and hide_hidden accordingly to show it.
+ */
+static void
+check_account_can_be_seen (GNCAccountSel *gas, Account *acct)
+{
+    gboolean changed = FALSE;
+    gboolean included = account_is_included (gas, acct);
+
+    if (included)
+    {
+        gboolean test = xaccAccountGetPlaceholder (acct);
+
+        if (test && gas->hide_placeholder == test)
+        {
+            gas->hide_placeholder = !test;
+            changed = TRUE;
+        }
+
+        test = xaccAccountIsHidden (acct);
+        if (test && gas->hide_hidden == test)
+        {
+            gas->hide_hidden = !test;
+            changed = TRUE;
+        }
+        if (changed)
+            gas_populate_list (gas);
+    }
+}
+
 void
 gnc_account_sel_set_account (GNCAccountSel *gas, Account *acct,
                              gboolean set_default_acct)
 {
     gas_find_data data;
+
+    if (acct)
+        check_account_can_be_seen (gas, acct);
 
     if (set_default_acct)
     {
