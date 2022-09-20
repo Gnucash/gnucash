@@ -28,6 +28,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
+#include "account-quickfill.h"
 #include "dialog-account.h"
 #include "gnc-account-sel.h"
 #include "gnc-commodity.h"
@@ -37,7 +38,7 @@
 #include "gnc-session.h"
 #include "dialog-utils.h"
 
-#define ACCT_DATA_TAG "gnc-account-sel_acct"
+#define QKEY "gas_shared_quickfill"
 
 /* Signal codes */
 enum
@@ -58,17 +59,20 @@ enum account_cols
 struct _GNCAccountSel
 {
     GtkBox hbox;
-    gboolean initDone;
     gboolean isModal;
     GtkListStore *store;
     GtkComboBox *combo;
     GList *acctTypeFilters;
     GList *acctCommodityFilters;
-    gint eventHandlerId;
+    GList *acctExcludeList;
+
     /* The state of this pointer also serves as a flag about what state
      * the widget is in WRT the new-account-button ability. */
     GtkWidget *newAccountButton;
-    gint currentSelection;
+    GtkTreeRowReference *saved_account_ref;
+    gulong row_changed_id;
+    gulong row_deleted_id;
+
     char sep_key_prefix[BUFLEN];
     gboolean hide_placeholder;
     gboolean hide_hidden;
@@ -100,56 +104,13 @@ static void gas_get_property (GObject    *object,
                               GValue     *value,
                               GParamSpec *pspec);
 
-static void gas_filter_accounts (gpointer data, gpointer user_data);
-
-static void gas_populate_list (GNCAccountSel *gas);
-
 static void gas_new_account_click (GtkButton *b, gpointer ud);
 
 static GtkBox *parent_class;
 
-GType
-gnc_account_sel_get_type (void)
-{
-    static GType account_sel_type = 0;
+#define GNC_ACCOUNT_SEL_PATH "gnc-account-sel-path"
 
-    if (account_sel_type == 0)
-    {
-        GTypeInfo account_sel_info =
-        {
-            sizeof (GNCAccountSelClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_account_sel_class_init,
-            NULL,
-            NULL,
-            sizeof (GNCAccountSel),
-            0,
-            (GInstanceInitFunc) gnc_account_sel_init
-        };
-
-        account_sel_type = g_type_register_static (GTK_TYPE_BOX,
-                                                   "GNCAccountSel",
-                                                   &account_sel_info, 0);
-    }
-    return account_sel_type;
-}
-
-static void
-gnc_account_sel_event_cb (QofInstance *entity,
-                          QofEventId event_type,
-                          gpointer user_data,
-                          gpointer event_data)
-{
-    if (!(event_type == QOF_EVENT_CREATE
-       || event_type == QOF_EVENT_MODIFY
-       || event_type == QOF_EVENT_DESTROY)
-       || !GNC_IS_ACCOUNT(entity))
-    {
-        return;
-    }
-    gas_populate_list ((GNCAccountSel*)user_data);
-}
+G_DEFINE_TYPE (GNCAccountSel, gnc_account_sel, GTK_TYPE_BOX)
 
 static void
 gas_set_property (GObject *object, guint param_id,
@@ -269,7 +230,7 @@ gnc_account_sel_class_init (GNCAccountSelClass *klass)
                              "Should GAS take all horizontal space", TRUE,
                              G_PARAM_READWRITE));
 
-    g_object_class_install_property(
+    g_object_class_install_property (
         object_class, PROP_COMBO_ENTRY_WIDTH,
         g_param_spec_int("entry-width", "Number of Charactors",
                          "Set the width of the combo entry",
@@ -290,12 +251,39 @@ gnc_account_sel_class_init (GNCAccountSelClass *klass)
 static void
 combo_changed_cb (GNCAccountSel *gas, gpointer combo)
 {
-    gint selected = gtk_combo_box_get_active (GTK_COMBO_BOX(combo));
-    if (selected == gas->currentSelection)
+    GtkTreeModel *fmodel;
+    GtkTreeIter fiter;
+    GtkTreeIter iter;
+    GtkTreePath *path = NULL;
+    GtkTreePath *saved_account_path = NULL;
+    gboolean emit_signal = TRUE;
+
+    if (!gtk_combo_box_get_active_iter (GTK_COMBO_BOX(gas->combo), &fiter))
         return;
 
-    gas->currentSelection = selected;
-    g_signal_emit_by_name (gas, "account_sel_changed");
+    fmodel = gtk_combo_box_get_model (GTK_COMBO_BOX(gas->combo));
+    gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(fmodel),
+                                                      &iter, &fiter);
+
+    path = gtk_tree_model_get_path (GTK_TREE_MODEL(gas->store), &iter);
+
+    if (gas->saved_account_ref)
+    {
+        saved_account_path = gtk_tree_row_reference_get_path (gas->saved_account_ref);
+        gtk_tree_row_reference_free (gas->saved_account_ref);
+    }
+    gas->saved_account_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL(gas->store), path);
+
+    if (saved_account_path)
+    {
+        if (gtk_tree_path_compare (path, saved_account_path) == 0)
+            emit_signal = FALSE;
+    }
+    gtk_tree_path_free (saved_account_path);
+    gtk_tree_path_free (path);
+
+    if (emit_signal)
+        g_signal_emit_by_name (gas, "account_sel_changed");
 }
 
 static char*
@@ -317,21 +305,21 @@ completion_function (GtkEntryCompletion *completion, const char *key,
                      GtkTreeIter *iter, gpointer user_data)
 {
     GNCAccountSel *gas = GNC_ACCOUNT_SEL(user_data);
+    GtkTreeModel *fmodel = gtk_combo_box_get_model (GTK_COMBO_BOX(gas->combo));
     gchar *full_name = NULL;
     gboolean ret = FALSE;
 
-    gtk_tree_model_get (GTK_TREE_MODEL(gas->store), iter,
-                        ACCT_COL_NAME, &full_name, -1);
+    gtk_tree_model_get (fmodel, iter, ACCT_COL_NAME, &full_name, -1);
 
     if (full_name && *full_name)
     {
-        gchar *fold_full_name = normalize_and_fold (full_name);
+        gchar *full_name_folded = normalize_and_fold (full_name);
 
         // key is normalised and casefolded
-        if (g_strrstr (fold_full_name, key) != NULL)
+        if (g_strrstr (full_name_folded, key) != NULL)
             ret = TRUE;
 
-        g_free (fold_full_name);
+        g_free (full_name_folded);
     }
     g_free (full_name);
     return ret;
@@ -495,16 +483,17 @@ entry_insert_text_cb (GtkEntry *entry, const gchar *text, gint length,
 }
 
 static void
-update_entry_and_list (GNCAccountSel *gas)
+update_entry_and_refilter (GNCAccountSel *gas)
 {
     GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child (GTK_BIN(gas->combo)));
+    GtkTreeModel *fmodel = gtk_combo_box_get_model (GTK_COMBO_BOX(gas->combo));
 
-    g_signal_handlers_block_by_func (gas->combo, combo_changed_cb , gas);
-    gtk_entry_set_text (entry, "");
-    g_signal_handlers_unblock_by_func (gas->combo, combo_changed_cb , gas);
-
-    // refresh the account list
-    gas_populate_list (gas);
+    gtk_editable_delete_text (GTK_EDITABLE(entry), 0, -1);
+    if (gas->saved_account_ref)
+        gtk_tree_row_reference_free (gas->saved_account_ref);
+    gas->saved_account_ref = NULL;
+    gtk_combo_box_set_active (GTK_COMBO_BOX(gas->combo), -1);
+    gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER(fmodel));
 }
 
 static void
@@ -512,7 +501,7 @@ toggle_placeholder_cb (GtkWidget *widget, gpointer user_data)
 {
     GNCAccountSel *gas = GNC_ACCOUNT_SEL(user_data);
     gas->hide_placeholder = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(widget));
-    update_entry_and_list (gas);
+    update_entry_and_refilter (gas);
 }
 
 static void
@@ -520,7 +509,7 @@ toggle_hidden_cb (GtkWidget *widget, gpointer user_data)
 {
     GNCAccountSel *gas = GNC_ACCOUNT_SEL(user_data);
     gas->hide_hidden = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(widget));
-    update_entry_and_list (gas);
+    update_entry_and_refilter (gas);
 }
 
 static void
@@ -551,15 +540,22 @@ icon_release_cb (GtkEntry *entry, GtkEntryIconPosition icon_pos,
     gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *)event);
 }
 
-/* An account is included if gas->acctTypeFilters or gas->acctCommodityFilters is populated
- * and the account is in the list (both lists if both are populated).
+/* An account is included if gas->acctTypeFilters or gas->acctCommodityFilters
+ * is populated and the account is in the list (both lists if both are populated)
+ * and not in gas->acctExcludeList
  *
- * If neither is populated then all accounts are included.
+ * If no list is populated then all accounts are included.
  */
 static gboolean
 account_is_included (GNCAccountSel *gas, Account *acc)
 {
     gboolean included = TRUE;
+
+    if (gas->acctExcludeList)
+    {
+        if (g_list_find (gas->acctExcludeList, acc) != NULL)
+            included = FALSE;
+    }
 
     /* Filter as we've been configured to do. */
     if (gas->acctTypeFilters)
@@ -586,33 +582,134 @@ account_is_included (GNCAccountSel *gas, Account *acc)
     return included;
 }
 
+static gboolean
+account_is_visible_func (GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data)
+{
+    GNCAccountSel *gas = GNC_ACCOUNT_SEL(user_data);
+    Account *acc;
+    gboolean visible = TRUE;
+
+    gtk_tree_model_get (GTK_TREE_MODEL(gas->store), iter, ACCT_COL_PTR, &acc, -1);
+
+    if (acc)
+    {
+        visible = account_is_included (gas, acc);
+
+        if (gas->hide_placeholder && xaccAccountGetPlaceholder (acc))
+            visible = FALSE;
+
+        if (gas->hide_placeholder && xaccAccountIsHidden (acc))
+            visible = FALSE;
+    }
+    return visible;
+}
+
+static void
+row_has_been_deleted_in_store_cb (GtkTreeModel *model, GtkTreePath *path, gpointer user_data)
+{
+    GNCAccountSel *gas = GNC_ACCOUNT_SEL(user_data);
+    GtkTreePath *saved_account_path;
+
+    if (!gas->saved_account_ref)
+        return;
+
+    saved_account_path = gtk_tree_row_reference_get_path (gas->saved_account_ref);
+
+    if (saved_account_path == NULL) // path is already invalid after row delete
+    {
+        GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child (GTK_BIN(gas->combo)));
+
+        g_signal_handlers_block_by_func (gas->combo, combo_changed_cb , gas);
+        gtk_combo_box_set_active (GTK_COMBO_BOX(gas->combo), -1);
+        gtk_editable_delete_text (GTK_EDITABLE(entry), 0, -1);
+        gtk_tree_row_reference_free (gas->saved_account_ref);
+        gas->saved_account_ref = NULL;
+        g_signal_emit_by_name (gas, "account_sel_changed");
+        g_signal_handlers_unblock_by_func (gas->combo, combo_changed_cb , gas);
+    }
+    gtk_tree_path_free (saved_account_path);
+}
+
+static void
+row_has_been_changed_in_store_cb (GtkTreeModel *model, GtkTreePath *path,
+                                  GtkTreeIter *iter, gpointer user_data)
+{
+    GNCAccountSel *gas = GNC_ACCOUNT_SEL(user_data);
+    GtkTreePath *saved_account_path;
+
+    if (!gas->saved_account_ref)
+        return;
+
+    saved_account_path = gtk_tree_row_reference_get_path (gas->saved_account_ref);
+
+    if (gtk_tree_path_compare (path, saved_account_path) == 0)
+    {
+        GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child (GTK_BIN(gas->combo)));
+        gchar *account_full_name = NULL;
+        gint position = 0;
+
+        g_signal_handlers_block_by_func (gas->combo, combo_changed_cb , gas);
+
+        gtk_tree_model_get (model, iter, ACCT_COL_NAME, &account_full_name, -1);
+
+        gtk_editable_delete_text (GTK_EDITABLE(entry), 0, -1);
+        gtk_editable_insert_text (GTK_EDITABLE(entry), account_full_name, -1, &position);
+        gtk_editable_set_position (GTK_EDITABLE(entry), -1);
+        g_free (account_full_name);
+
+        g_signal_handlers_unblock_by_func (gas->combo, combo_changed_cb , gas);
+
+        // see if account visibility has changed
+        if (!account_is_visible_func (model, iter, gas))
+            update_entry_and_refilter (gas);
+    }
+    gtk_tree_path_free (saved_account_path);
+}
+
+
 static void
 gnc_account_sel_init (GNCAccountSel *gas)
 {
     GtkWidget *widget;
     GtkWidget *entry;
     GtkEntryCompletion *completion;
+    Account *root = gnc_get_current_root_account ();
+    GtkTreeModel *filter_model;
 
     gtk_orientable_set_orientation (GTK_ORIENTABLE(gas), GTK_ORIENTATION_HORIZONTAL);
 
-    gas->initDone = FALSE;
-    gas->acctTypeFilters = FALSE;
+    gas->acctTypeFilters = NULL;
+    gas->acctCommodityFilters = NULL;
+    gas->acctExcludeList = NULL;
     gas->newAccountButton = NULL;
-    gas->currentSelection = -1;
     gas->hide_placeholder = TRUE;
     gas->hide_hidden = TRUE;
+    gas->saved_account_ref = NULL;
+    gas->row_changed_id = 0;
+    gas->row_deleted_id = 0;
 
     g_object_set (gas, "spacing", 2, (gchar*)NULL);
 
     // Set the name for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(gas), "gnc-id-account-select");
 
-    gas->store = gtk_list_store_new (NUM_ACCT_COLS, G_TYPE_STRING, G_TYPE_POINTER);
-    widget = gtk_combo_box_new_with_model_and_entry (GTK_TREE_MODEL(gas->store));
+    // We are just using the quickfill list store which will be the same for all
+    gas->store = gnc_get_shared_account_name_list_store (root, QKEY, NULL, NULL);
+
+    // set sort order
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(gas->store),
+                                          ACCT_COL_NAME, GTK_SORT_ASCENDING);
+
+    // the filter will be unique for each GAS.
+    filter_model = gtk_tree_model_filter_new (GTK_TREE_MODEL(gas->store), NULL);
+    gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER(filter_model),
+                                            account_is_visible_func, gas, NULL);
+
+    widget = gtk_combo_box_new_with_model_and_entry (GTK_TREE_MODEL(filter_model));
+    g_object_unref (G_OBJECT(filter_model));
     gas->combo = GTK_COMBO_BOX(widget);
     gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX(widget), ACCT_COL_NAME);
-    g_signal_connect_swapped (gas->combo, "changed",
-                              G_CALLBACK(combo_changed_cb), gas);
+
     gtk_container_add (GTK_CONTAINER(gas), widget);
 
     // set the default horizontal expansion to TRUE
@@ -636,105 +733,18 @@ gnc_account_sel_init (GNCAccountSel *gas)
                                          (GtkEntryCompletionMatchFunc)completion_function,
                                          gas, NULL);
 
-    /* Get the accounts, place into combo list */
-    gas_populate_list (gas);
+    // Set default entry to none and blank entry
+    gtk_combo_box_set_active (GTK_COMBO_BOX(gas->combo), -1);
+    gtk_editable_delete_text (GTK_EDITABLE(entry), 0, -1);
 
-    // set sort order
-    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(gas->store),
-                                          ACCT_COL_NAME, GTK_SORT_ASCENDING);
+    gas->row_deleted_id = g_signal_connect (G_OBJECT(gas->store), "row-deleted",
+                                            G_CALLBACK(row_has_been_deleted_in_store_cb), gas);
 
-    gas->eventHandlerId =
-        qof_event_register_handler (gnc_account_sel_event_cb, gas);
+    gas->row_changed_id = g_signal_connect (G_OBJECT(gas->store), "row-changed",
+                                            G_CALLBACK(row_has_been_changed_in_store_cb), gas);
 
-    gas->initDone = TRUE;
-}
-
-typedef struct
-{
-    GNCAccountSel *gas;
-    GList *outList;
-} account_filter_data;
-
-static void
-gas_populate_list (GNCAccountSel *gas)
-{
-    account_filter_data atnd;
-    Account *root;
-    Account *acc;
-    GtkTreeIter iter;
-    GtkEntry *entry;
-    gint i, active = -1;
-    GList *accts, *ptr;
-    const gchar *currentSel;
-
-    entry = GTK_ENTRY(gtk_bin_get_child (GTK_BIN(gas->combo)));
-    currentSel = gtk_entry_get_text (entry);
-
-    g_signal_handlers_block_by_func (gas->combo, combo_changed_cb , gas);
-
-    root = gnc_book_get_root_account (gnc_get_current_book ());
-    accts = gnc_account_get_descendants_sorted (root);
-
-    atnd.gas        = gas;
-    atnd.outList    = NULL;
-
-    g_list_foreach (accts, gas_filter_accounts, (gpointer)&atnd);
-    g_list_free (accts);
-    atnd.outList = g_list_reverse (atnd.outList);
-
-    gtk_list_store_clear (gas->store);
-    for (ptr = atnd.outList, i = 0; ptr; ptr = g_list_next(ptr), i++)
-    {
-        acc = ptr->data;
-        if (acc)
-        {
-            gchar *name = gnc_account_get_full_name (acc);
-
-            if (!(name && *name))
-                return;
-
-            gtk_list_store_append (gas->store, &iter);
-            gtk_list_store_set (gas->store, &iter,
-                                ACCT_COL_NAME, name,
-                                ACCT_COL_PTR,  acc,
-                                -1);
-
-            if (g_utf8_collate (name, currentSel) == 0)
-                active = i;
-
-            g_free (name);
-        }
-    }
-
-    /* If the account which was in the text box before still exists, then
-     * reset to it. */
-    if (active != -1)
-        gtk_combo_box_set_active (GTK_COMBO_BOX(gas->combo), active);
-
-    g_signal_handlers_unblock_by_func (gas->combo, combo_changed_cb , gas);
-
-    g_list_free (atnd.outList);
-}
-
-static void
-gas_filter_accounts (gpointer data, gpointer user_data)
-{
-    account_filter_data *atnd;
-    Account *a;
-
-    atnd = (account_filter_data*)user_data;
-    a = (Account*)data;
-
-    if (atnd->gas->hide_placeholder && xaccAccountGetPlaceholder (a))
-        return;
-
-    if (atnd->gas->hide_placeholder && xaccAccountIsHidden (a))
-        return;
-
-    if (!account_is_included (atnd->gas, a))
-        return;
-
-    atnd->outList = g_list_prepend (atnd->outList, a);
+    g_signal_connect_swapped (gas->combo, "changed",
+                              G_CALLBACK(combo_changed_cb), gas);
 }
 
 GtkWidget *
@@ -752,14 +762,14 @@ typedef struct
 } gas_find_data;
 
 static gboolean
-gnc_account_sel_find_account (GtkTreeModel *model,
+gnc_account_sel_find_account (GtkTreeModel *fmodel,
                               GtkTreePath *path,
                               GtkTreeIter *iter,
                               gas_find_data *data)
 {
     Account *model_acc;
 
-    gtk_tree_model_get (model, iter, ACCT_COL_PTR, &model_acc, -1);
+    gtk_tree_model_get (fmodel, iter, ACCT_COL_PTR, &model_acc, -1);
     if (data->acct != model_acc)
         return FALSE;
 
@@ -771,7 +781,7 @@ gnc_account_sel_find_account (GtkTreeModel *model,
  * and hide_hidden accordingly to show it.
  */
 static void
-check_account_can_be_seen (GNCAccountSel *gas, Account *acct)
+check_account_can_be_seen (GNCAccountSel *gas, GtkTreeModel *fmodel, Account *acct)
 {
     gboolean changed = FALSE;
     gboolean included = account_is_included (gas, acct);
@@ -793,7 +803,7 @@ check_account_can_be_seen (GNCAccountSel *gas, Account *acct)
             changed = TRUE;
         }
         if (changed)
-            gas_populate_list (gas);
+            gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER(fmodel));
     }
 }
 
@@ -801,10 +811,16 @@ void
 gnc_account_sel_set_account (GNCAccountSel *gas, Account *acct,
                              gboolean set_default_acct)
 {
+    GtkTreeModel *fmodel;
     gas_find_data data;
 
+    g_return_if_fail (gas != NULL);
+    g_return_if_fail (GNC_IS_ACCOUNT_SEL(gas));
+
+    fmodel = gtk_combo_box_get_model (GTK_COMBO_BOX(gas->combo));
+
     if (acct)
-        check_account_can_be_seen (gas, acct);
+        check_account_can_be_seen (gas, fmodel, acct);
 
     if (set_default_acct)
     {
@@ -824,7 +840,7 @@ gnc_account_sel_set_account (GNCAccountSel *gas, Account *acct,
     }
     data.gas = gas;
     data.acct = acct;
-    gtk_tree_model_foreach (GTK_TREE_MODEL(gas->store),
+    gtk_tree_model_foreach (GTK_TREE_MODEL(fmodel),
                             (GtkTreeModelForeachFunc)gnc_account_sel_find_account,
                             &data);
 }
@@ -832,15 +848,24 @@ gnc_account_sel_set_account (GNCAccountSel *gas, Account *acct,
 Account*
 gnc_account_sel_get_account (GNCAccountSel *gas)
 {
+    GtkTreeModel *fmodel;
+    GtkTreeIter fiter;
     GtkTreeIter iter;
     Account *acc;
 
-    if (!gtk_combo_box_get_active_iter (GTK_COMBO_BOX(gas->combo), &iter))
+    g_return_val_if_fail (gas != NULL, NULL);
+    g_return_val_if_fail (GNC_IS_ACCOUNT_SEL(gas), NULL);
+
+    if (!gtk_combo_box_get_active_iter (GTK_COMBO_BOX(gas->combo), &fiter))
         return NULL;
 
+    fmodel = gtk_combo_box_get_model (GTK_COMBO_BOX(gas->combo));
+
+    gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(fmodel),
+                                                      &iter, &fiter);
+
     gtk_tree_model_get (GTK_TREE_MODEL(gas->store), &iter,
-                        ACCT_COL_PTR, &acc,
-                        -1);
+                        ACCT_COL_PTR, &acc, -1);
     return acc;
 }
 
@@ -848,6 +873,8 @@ void
 gnc_account_sel_set_acct_filters (GNCAccountSel *gas, GList *typeFilters,
                                   GList *commodityFilters)
 {
+    g_return_if_fail (gas != NULL);
+    g_return_if_fail (GNC_IS_ACCOUNT_SEL(gas));
 
     if (gas->acctTypeFilters != NULL)
     {
@@ -861,10 +888,6 @@ gnc_account_sel_set_acct_filters (GNCAccountSel *gas, GList *typeFilters,
         gas->acctCommodityFilters = NULL;
     }
 
-    /* If both filters are null, then no filters exist. */
-    if ((!typeFilters) && (!commodityFilters))
-        return;
-
     /* This works because the GNCAccountTypes in the list are
      * ints-casted-as-pointers. */
     if (typeFilters)
@@ -874,7 +897,27 @@ gnc_account_sel_set_acct_filters (GNCAccountSel *gas, GList *typeFilters,
     if (commodityFilters)
         gas->acctCommodityFilters = g_list_copy (commodityFilters);
 
-    gas_populate_list (gas);
+    update_entry_and_refilter (gas);
+}
+
+
+void
+gnc_account_sel_set_acct_exclude_filter (GNCAccountSel *gas,
+                                         GList *excludeFilter)
+{
+    g_return_if_fail (gas != NULL);
+    g_return_if_fail (GNC_IS_ACCOUNT_SEL(gas));
+
+    if (gas->acctExcludeList != NULL)
+    {
+        g_list_free (gas->acctExcludeList);
+        gas->acctExcludeList = NULL;
+    }
+
+    if (excludeFilter)
+        gas->acctExcludeList = g_list_copy (excludeFilter);
+
+    update_entry_and_refilter (gas);
 }
 
 static void
@@ -893,6 +936,9 @@ gnc_account_sel_finalize (GObject *object)
     if (gas->acctCommodityFilters)
         g_list_free (gas->acctCommodityFilters);
 
+    if (gas->acctExcludeList)
+        g_list_free (gas->acctExcludeList);
+
     G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -906,17 +952,17 @@ gnc_account_sel_dispose (GObject *object)
 
     gas = GNC_ACCOUNT_SEL(object);
 
-    if (gas->store)
-    {
-        g_object_unref (gas->store);
-        gas->store = NULL;
-    }
+    if (gas->row_changed_id > 0)
+        g_signal_handler_disconnect (G_OBJECT(gas->store), gas->row_changed_id);
+    gas->row_changed_id = 0;
 
-    if (gas->eventHandlerId)
-    {
-        qof_event_unregister_handler (gas->eventHandlerId);
-        gas->eventHandlerId = 0;
-    }
+    if (gas->row_deleted_id > 0)
+        g_signal_handler_disconnect (G_OBJECT(gas->store), gas->row_deleted_id);
+    gas->row_deleted_id = 0;
+
+    if (gas->saved_account_ref)
+        gtk_tree_row_reference_free (gas->saved_account_ref);
+    gas->saved_account_ref = NULL;
 
     G_OBJECT_CLASS (parent_class)->dispose (object);
 }
@@ -926,6 +972,7 @@ gnc_account_sel_set_new_account_ability (GNCAccountSel *gas,
                                          gboolean state)
 {
     g_return_if_fail (gas != NULL);
+    g_return_if_fail (GNC_IS_ACCOUNT_SEL(gas));
 
     if (state == (gas->newAccountButton != NULL))
     {
@@ -959,19 +1006,21 @@ gnc_account_sel_set_new_account_modal (GNCAccountSel *gas,
                                        gboolean state)
 {
     g_return_if_fail (gas != NULL);
+    g_return_if_fail (GNC_IS_ACCOUNT_SEL(gas));
+
     gas->isModal = state;
 }
 
 static void
-gas_new_account_click (GtkButton *b, gpointer ud)
+gas_new_account_click (GtkButton *b, gpointer user_data)
 {
-    GNCAccountSel *gas = (GNCAccountSel*)ud;
-    Account *account = NULL;
+    GNCAccountSel *gas = (GNCAccountSel*)user_data;
     GtkWindow *parent = GTK_WINDOW(gtk_widget_get_toplevel (GTK_WIDGET(gas)));
+
     if (gas->isModal)
     {
-        account = gnc_ui_new_accounts_from_name_window_with_types (parent, NULL,
-                                                                   gas->acctTypeFilters);
+        Account *account = gnc_ui_new_accounts_from_name_window_with_types (parent, NULL,
+                                                                            gas->acctTypeFilters);
         if (account)
             gnc_account_sel_set_account (gas, account, FALSE);
     }
@@ -981,58 +1030,14 @@ gas_new_account_click (GtkButton *b, gpointer ud)
 }
 
 gint
-gnc_account_sel_get_num_account (GNCAccountSel *gas)
+gnc_account_sel_get_visible_account_num (GNCAccountSel *gas)
 {
-    if (NULL == gas)
-        return 0;
+    GtkTreeModel *fmodel;
 
-    return gtk_tree_model_iter_n_children (GTK_TREE_MODEL(gas->store), NULL);
-}
+    g_return_val_if_fail (gas != NULL, 0);
+    g_return_val_if_fail (GNC_IS_ACCOUNT_SEL(gas), 0);
 
-void
-gnc_account_sel_purge_account (GNCAccountSel *gas,
-                               Account *target,
-                               gboolean recursive)
-{
-    GtkTreeModel *model = GTK_TREE_MODEL(gas->store);
-    GtkTreeIter iter;
-    Account *acc;
-    gboolean more;
+    fmodel = gtk_combo_box_get_model (GTK_COMBO_BOX(gas->combo));
 
-    if (!gtk_tree_model_get_iter_first (model, &iter))
-        return;
-
-    if (!recursive)
-    {
-        do
-        {
-            gtk_tree_model_get (model, &iter, ACCT_COL_PTR, &acc, -1);
-            if (acc == target)
-            {
-                gtk_list_store_remove (gas->store, &iter);
-                break;
-            }
-        }
-        while (gtk_tree_model_iter_next (model, &iter));
-    }
-    else
-    {
-        do
-        {
-            gtk_tree_model_get (model, &iter, ACCT_COL_PTR, &acc, -1);
-            while (acc)
-            {
-                if (acc == target)
-                    break;
-                acc = gnc_account_get_parent (acc);
-            }
-
-            if (acc == target)
-                more = gtk_list_store_remove (gas->store, &iter);
-            else
-                more = gtk_tree_model_iter_next (model, &iter);
-        }
-        while (more);
-    }
-    gtk_combo_box_set_active (GTK_COMBO_BOX(gas->combo), 0);
+    return gtk_tree_model_iter_n_children (fmodel, NULL);
 }
