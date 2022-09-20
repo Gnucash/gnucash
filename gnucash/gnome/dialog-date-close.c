@@ -239,7 +239,6 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
 
     acct_box = GTK_WIDGET(gtk_builder_get_object (builder, "acct_hbox"));
     ddc->acct_combo = gnc_account_sel_new();
-    gnc_account_sel_set_hexpand (GNC_ACCOUNT_SEL(ddc->acct_combo), TRUE);
     gtk_box_pack_start (GTK_BOX(acct_box), ddc->acct_combo, TRUE, TRUE, 0);
 
     date_box = GTK_WIDGET(gtk_builder_get_object (builder, "date_hbox"));
@@ -360,7 +359,6 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
     ddc->acct_combo = gnc_account_sel_new();
     if (*acct)
         gnc_account_sel_set_account (GNC_ACCOUNT_SEL(ddc->acct_combo), *acct, FALSE);
-    gnc_account_sel_set_hexpand (GNC_ACCOUNT_SEL(ddc->acct_combo), TRUE);
     gtk_box_pack_start (GTK_BOX(acct_box), ddc->acct_combo, TRUE, TRUE, 0);
 
     date_box = GTK_WIDGET(gtk_builder_get_object (builder, "date_hbox"));

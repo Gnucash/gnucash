@@ -79,6 +79,7 @@ enum
     PROP_0,
     PROP_HIDE_PLACEHOLDER,
     PROP_HIDE_HIDDEN,
+    PROP_HORIZONTAL_EXPAND,
 };
 
 static guint account_sel_signals [LAST_SIGNAL] = { 0 };
@@ -170,6 +171,11 @@ gas_set_property (GObject *object, guint param_id,
             gas->hide_hidden = g_value_get_boolean (value);
             break;
 
+        case PROP_HORIZONTAL_EXPAND:
+            gtk_widget_set_hexpand (GTK_WIDGET(gas), g_value_get_boolean (value));
+            gtk_widget_set_hexpand (GTK_WIDGET(gas->combo), g_value_get_boolean (value));
+            break;
+
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID(object, param_id, pspec);
             break;
@@ -195,6 +201,10 @@ gas_get_property (GObject *object, guint param_id,
 
         case PROP_HIDE_HIDDEN:
             g_value_set_boolean (value, gas->hide_hidden);
+            break;
+
+        case PROP_HORIZONTAL_EXPAND:
+            g_value_set_boolean (value, gtk_widget_get_hexpand (GTK_WIDGET(gas)));
             break;
 
         default:
@@ -226,6 +236,12 @@ gnc_account_sel_class_init (GNCAccountSelClass *klass)
         object_class, PROP_HIDE_HIDDEN,
         g_param_spec_boolean("hide-hidden", "Hide Hidden",
                              "Hidden accounts are hidden", TRUE,
+                             G_PARAM_READWRITE));
+
+    g_object_class_install_property (
+        object_class, PROP_HIDE_HIDDEN,
+        g_param_spec_boolean("horizontal-expand", "Horizontal Expand",
+                             "Should GAS take all horizontal space", TRUE,
                              G_PARAM_READWRITE));
 
     account_sel_signals [ACCOUNT_SEL_CHANGED] =
@@ -568,6 +584,10 @@ gnc_account_sel_init (GNCAccountSel *gas)
                               G_CALLBACK(combo_changed_cb), gas);
     gtk_container_add (GTK_CONTAINER(gas), widget);
 
+    // set the default horizontal expansion to TRUE
+    gtk_widget_set_hexpand (GTK_WIDGET(gas), TRUE);
+    gtk_widget_set_hexpand (GTK_WIDGET(gas->combo), TRUE);
+
     entry = gtk_bin_get_child (GTK_BIN(gas->combo));
     gtk_entry_set_icon_from_icon_name (GTK_ENTRY(entry), GTK_ENTRY_ICON_SECONDARY,
                                        "preferences-system-symbolic");
@@ -596,13 +616,6 @@ gnc_account_sel_init (GNCAccountSel *gas)
         qof_event_register_handler (gnc_account_sel_event_cb, gas);
 
     gas->initDone = TRUE;
-}
-
-void
-gnc_account_sel_set_hexpand (GNCAccountSel *gas, gboolean expand)
-{
-    gtk_widget_set_hexpand (GTK_WIDGET(gas), expand);
-    gtk_widget_set_hexpand (GTK_WIDGET(gas->combo), expand);
 }
 
 typedef struct

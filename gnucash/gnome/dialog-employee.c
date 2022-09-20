@@ -479,7 +479,6 @@ gnc_employee_new_window (GtkWindow *parent,
     edit = gnc_account_sel_new();
     acct_types = g_list_prepend(NULL, (gpointer)ACCT_TYPE_CREDIT);
     gnc_account_sel_set_acct_filters (GNC_ACCOUNT_SEL(edit), acct_types, NULL);
-    gnc_account_sel_set_hexpand (GNC_ACCOUNT_SEL(edit), TRUE);
     g_list_free (acct_types);
 
     ew->ccard_acct_sel = edit;
