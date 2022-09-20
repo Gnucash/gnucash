@@ -1676,6 +1676,10 @@ gnc_gen_trans_common_setup (GNCImportMainMatcher *info,
     if (heading)
         gtk_label_set_text (GTK_LABEL(heading_label), heading);
 
+    info->desc_hash = g_hash_table_new (g_str_hash, g_str_equal);
+    info->notes_hash = g_hash_table_new (g_str_hash, g_str_equal);
+    info->memo_hash = g_hash_table_new (g_str_hash, g_str_equal);
+    info->new_strings = NULL;
     info->transaction_processed_cb = NULL;
 
     /* Connect the signals */
@@ -1731,11 +1735,6 @@ gnc_gen_trans_list_new (GtkWidget *parent,
     // This ensure this dialog is closed when the session is closed.
     gnc_gui_component_set_session (info->id, gnc_get_current_session());
 
-    info->desc_hash = g_hash_table_new (g_str_hash, g_str_equal);
-    info->notes_hash = g_hash_table_new (g_str_hash, g_str_equal);
-    info->memo_hash = g_hash_table_new (g_str_hash, g_str_equal);
-
-    info->new_strings = NULL;
     return info;
 }
 
