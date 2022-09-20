@@ -1398,6 +1398,11 @@ gppat_setup_account_selector (GtkBuilder *builder, GtkWidget *dialog,
 
     gtk_box_pack_start (GTK_BOX(box), selector, TRUE, TRUE, 0);
     gnc_account_sel_set_hexpand (GNC_ACCOUNT_SEL(selector), TRUE);
+
+    // placeholder accounts are OK for this GAS
+    if (g_strcmp0 (sel_name, DELETE_DIALOG_SA_MAS) == 0)
+        g_object_set (selector, "hide-placeholder", FALSE, NULL);
+
     g_object_set_data(G_OBJECT(dialog), sel_name, selector);
 
     gppat_populate_gas_list(dialog, GNC_ACCOUNT_SEL(selector), TRUE);
