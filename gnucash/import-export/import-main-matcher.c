@@ -1020,14 +1020,17 @@ setup_entry (GtkWidget *entry, gboolean sensitive, GHashTable *hash,
     GtkEntryCompletion* completion;
     GtkListStore *list;
 
-    gtk_entry_set_text (GTK_ENTRY (entry), sensitive ? initial : _("Disabled"));
+    if (!sensitive)
+        gtk_entry_set_text (GTK_ENTRY (entry), _("Disabled"));
+    else if (initial && *initial)
+        gtk_entry_set_text (GTK_ENTRY (entry), initial);
     gtk_widget_set_sensitive (entry, sensitive);
     if (!sensitive)
         return;
 
     list = gtk_list_store_new (NUM_COMPLETION_COLS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
     g_hash_table_foreach (hash, (GHFunc)populate_list, list);
-    if (initial && !g_hash_table_lookup (hash, (gpointer)initial))
+    if (initial && *initial && !g_hash_table_lookup (hash, (gpointer)initial))
         populate_list ((gpointer)initial, NULL, list);
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (list),
                                           COMPLETION_LIST_ORIGINAL,
