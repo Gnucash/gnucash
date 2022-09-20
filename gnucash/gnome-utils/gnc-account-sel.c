@@ -80,6 +80,7 @@ enum
     PROP_HIDE_PLACEHOLDER,
     PROP_HIDE_HIDDEN,
     PROP_HORIZONTAL_EXPAND,
+    PROP_COMBO_ENTRY_WIDTH,
 };
 
 static guint account_sel_signals [LAST_SIGNAL] = { 0 };
@@ -176,6 +177,23 @@ gas_set_property (GObject *object, guint param_id,
             gtk_widget_set_hexpand (GTK_WIDGET(gas->combo), g_value_get_boolean (value));
             break;
 
+        case PROP_COMBO_ENTRY_WIDTH:
+            {
+                GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child (GTK_BIN(gas->combo)));
+                gboolean expand = FALSE;
+                gint width = g_value_get_int (value);
+
+                if (width == -1)
+                    expand = TRUE;
+
+                gtk_widget_set_hexpand (GTK_WIDGET(gas), expand);
+                gtk_widget_set_hexpand (GTK_WIDGET(gas->combo), expand);
+
+                gtk_entry_set_width_chars (entry, width);
+                gtk_widget_queue_resize (GTK_WIDGET(gas));
+            }
+            break;
+
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID(object, param_id, pspec);
             break;
@@ -205,6 +223,13 @@ gas_get_property (GObject *object, guint param_id,
 
         case PROP_HORIZONTAL_EXPAND:
             g_value_set_boolean (value, gtk_widget_get_hexpand (GTK_WIDGET(gas)));
+            break;
+
+        case PROP_COMBO_ENTRY_WIDTH:
+            {
+                GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child (GTK_BIN(gas->combo)));
+                g_value_set_int (value, gtk_entry_get_width_chars (entry));
+            }
             break;
 
         default:
@@ -243,6 +268,12 @@ gnc_account_sel_class_init (GNCAccountSelClass *klass)
         g_param_spec_boolean("horizontal-expand", "Horizontal Expand",
                              "Should GAS take all horizontal space", TRUE,
                              G_PARAM_READWRITE));
+
+    g_object_class_install_property(
+        object_class, PROP_COMBO_ENTRY_WIDTH,
+        g_param_spec_int("entry-width", "Number of Charactors",
+                         "Set the width of the combo entry",
+                         -1, 100, -1, G_PARAM_READWRITE));
 
     account_sel_signals [ACCOUNT_SEL_CHANGED] =
         g_signal_new ("account_sel_changed",
