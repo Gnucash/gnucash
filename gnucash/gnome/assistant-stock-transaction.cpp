@@ -374,10 +374,9 @@ then record the reverse split.")
     }
 };
 
-typedef struct
+struct StockTransactionInfo
 {
     GtkWidget * window;
-    GtkWidget * assistant;
 
     std::optional<TxnTypeVec> txn_types;
     // the following stores date at which the txn_types were set. If
@@ -443,7 +442,7 @@ typedef struct
     GtkWidget * finish_page;
     GtkWidget * finish_split_view;
     GtkWidget * finish_summary;
-} StockTransactionInfo;
+};
 
 
 /******* implementations ***********************************************/
