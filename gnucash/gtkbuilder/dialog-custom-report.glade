@@ -42,6 +42,54 @@
               </packing>
             </child>
             <child>
+              <object class="GtkButton" id="run_button">
+                <property name="label" translatable="yes">_Run</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <signal name="clicked" handler="custom_report_run_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="edit_button">
+                <property name="label" translatable="yes">_Edit</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <signal name="clicked" handler="custom_report_edit_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="delete_button">
+                <property name="label" translatable="yes">_Delete</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <signal name="clicked" handler="custom_report_delete_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="close_report_button">
                 <property name="label" translatable="yes">_Close</property>
                 <property name="visible">True</property>
@@ -56,7 +104,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">1</property>
+                <property name="position">5</property>
               </packing>
             </child>
           </object>
@@ -79,9 +127,6 @@
                 <property name="can-focus">True</property>
                 <property name="has-tooltip">True</property>
                 <property name="headers-visible">False</property>
-                <signal name="button-release-event" handler="custom_report_list_view_clicked_cb" swapped="no"/>
-                <signal name="query-tooltip" handler="custom_report_query_tooltip_cb" swapped="no"/>
-                <signal name="row-activated" handler="custom_report_list_view_row_activated_cb" swapped="no"/>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="treeview-selection1"/>
                 </child>
