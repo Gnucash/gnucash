@@ -696,7 +696,7 @@ check_page (SummaryLineInfo& line, gnc_numeric& debit, gnc_numeric& credit,
         line.account = "";
     else
     {
-        add_error (errors, N_("Account for %s is missing"), page);
+        add_error (errors, N_("Account for %s is missing."), page);
         line.account = _(missing_str);
     }
 }
@@ -775,11 +775,11 @@ to ensure proper recording."), new_date_str, last_split_date_str);
         line.units = xaccPrintAmount (stock_amount, stock_pinfo);
         line.units_in_red = negative_in_red && gnc_numeric_negative_p (stock_amount);
         if (gnc_numeric_check (ratio) || !gnc_numeric_positive_p (ratio))
-            add_error_str (errors, N_("Invalid stock new balance"));
+            add_error_str (errors, N_("Invalid stock new balance."));
         else if (gnc_numeric_negative_p (delta) && !credit_side)
-            add_error_str (errors, N_("New balance must be higher than old balance"));
+            add_error_str (errors, N_("New balance must be higher than old balance."));
         else if (gnc_numeric_positive_p (delta) && credit_side)
-            add_error_str (errors, N_("New balance must be lower than old balance"));
+            add_error_str (errors, N_("New balance must be lower than old balance."));
     }
     else
     {
@@ -788,7 +788,7 @@ to ensure proper recording."), new_date_str, last_split_date_str);
         auto stock_pinfo = gnc_commodity_print_info
             (xaccAccountGetCommodity (info->acct), true);
         if (!gnc_numeric_positive_p (stock_amount))
-            add_error_str (errors, N_("Stock amount must be positive"));
+            add_error_str (errors, N_("Stock amount must be positive."));
         if (info->txn_type->stock_amount & FieldMask::ENABLED_CREDIT)
             stock_amount = gnc_numeric_neg (stock_amount);
         line.units = xaccPrintAmount (stock_amount, stock_pinfo);
@@ -796,10 +796,10 @@ to ensure proper recording."), new_date_str, last_split_date_str);
         auto new_bal = gnc_numeric_add_fixed (info->balance_at_date, stock_amount);
         if (gnc_numeric_positive_p (info->balance_at_date) &&
             gnc_numeric_negative_p (new_bal))
-            add_error_str (errors, N_("Cannot sell more units than owned"));
+            add_error_str (errors, N_("Cannot sell more units than owned."));
         else if (gnc_numeric_negative_p (info->balance_at_date) &&
                  gnc_numeric_positive_p (new_bal))
-            add_error_str (errors, N_("Cannot cover buy more units than owed"));
+            add_error_str (errors, N_("Cannot cover buy more units than owed."));
     }
 
     add_to_summary_table (list, line);
