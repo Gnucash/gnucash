@@ -33,11 +33,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.12-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-09-11 23:24+0200\n"
-"PO-Revision-Date: 2022-09-11 09:20+0000\n"
-"Last-Translator: Simon Arlott <weblate.simon@arlott.org>\n"
+"PO-Revision-Date: 2022-09-23 19:20+0000\n"
+"Last-Translator: Maxime Leroy <lisacintosh@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -45,7 +45,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -2897,10 +2897,8 @@ msgstr "Chercher une prestation"
 
 # po/guile_strings.txt:188
 #: gnucash/gnome/dialog-lot-viewer.c:817
-#, fuzzy
-#| msgid "Empty space"
 msgid "Empty"
-msgstr "Espace vide"
+msgstr "Vide"
 
 # messages-i18n.c:310
 #: gnucash/gnome/dialog-lot-viewer.c:829
@@ -2908,7 +2906,7 @@ msgstr "Espace vide"
 #| msgid "Open"
 msgctxt "Adjective"
 msgid "Open"
-msgstr "Ouvrir"
+msgstr "Ouvert"
 
 # messages-i18n.c:261
 #: gnucash/gnome/dialog-lot-viewer.c:923 gnucash/gnome/dialog-order.c:890
