@@ -11,6 +11,7 @@
 # Adolfo Jayme Barrientos <fitojb@ubuntu.com>, 2021.
 # Francisco Serrador <fserrador@gmail.com>, 2021, 2022.
 # Cow <javier.fserrador@gmail.com>, 2022.
+# Eduardo Malaspina <vaio0@swismail.com>, 2022.
 #
 #
 # ###############################################################################
@@ -77,12 +78,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.12-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-09-11 23:24+0200\n"
-"PO-Revision-Date: 2022-06-22 07:21+0000\n"
-"Last-Translator: Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail."
-"net>\n"
+"PO-Revision-Date: 2022-09-21 15:50+0000\n"
+"Last-Translator: Eduardo Malaspina <vaio0@swismail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -90,11 +90,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\">;</"
-"span>;<span size=\"larger\" weight=\"bold\">\n"
+"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\""
+">;</span>;<span size=\"larger\" weight=\"bold\">\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -9267,7 +9267,7 @@ msgstr "Opciones del Libro"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4897 gnucash/gnucash-core-app.cpp:261
 msgid "(user modifiable)"
-msgstr ""
+msgstr "(modificable por el usuario)"
 
 #. Translators: %s will be replaced with the current year
 #: gnucash/gnome-utils/gnc-main-window.c:4924
