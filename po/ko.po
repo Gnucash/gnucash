@@ -1,13 +1,14 @@
 # Taehun Yun <yooontehoon@naver.com>, 2022.
 # 이정희 <daemul72@gmail.com>, 2022.
+# Minjae Isaac Kwon <minjae.isaac.kwon@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.12-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-09-11 23:24+0200\n"
-"PO-Revision-Date: 2022-09-14 15:50+0000\n"
-"Last-Translator: 이정희 <daemul72@gmail.com>\n"
+"PO-Revision-Date: 2022-09-23 10:21+0000\n"
+"Last-Translator: Minjae Isaac Kwon <minjae.isaac.kwon@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ko/>\n"
 "Language: ko\n"
@@ -15,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 "X-Poedit-Language: Korean\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 
@@ -599,7 +600,8 @@ msgstr ""
 msgid ""
 "To switch between multiple tabs in the main window, press Control+Page Up/"
 "Down."
-msgstr ""
+msgstr "주 윈도우의 여러 탭을 이동하려면, Control 과 Page Up/Down 을 동시에 "
+"입력하십시오."
 
 #: doc/tip_of_the_day.list.c:82
 msgid ""
