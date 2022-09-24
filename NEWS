@@ -1,5 +1,71 @@
 Version history:
 ------- -------
+4.12 - 25 September 2022
+Between 4.11 and 4.12, the following bugfixes were accomplished:
+
+    Bug 794584 - Register not updated when scheduled transactions created
+    Bug 798262 - Scheduled transactions with blank amounts do not get created.
+    Bug 798385 - Description to often only "Landesbank Hessen-Thuringen Girozentrale"
+
+    Prepend the Ulitimate Creditor or Ultimate Debtor to the transaction description.
+    Bug 798565 - Import map editor: deletion of a map does not mark gnucash document as dirty
+    Bug 798573 - Tab Width Behaviour
+
+    Formerly when the notebook tabs on the left or right, the space used fluctuated depending on tab label width. This change sets the label width to the preference setting when the tabs are on the left or right but when top or bottom the width is set to the number of characters when shorter than the preference setting so they take up less room.
+    Bug 798578 - MT940 imports broken - all transactions have date of first transaction
+    Bug 798585 - segfault running sample script
+
+    simple_business_create.py.
+    Bug 798588 - sx scrubbing was using incorrect free function
+    Bug 798590 - Transaction report: wrong type argument in position 1
+    Bug 798598 - Selecting a line in a Vendor Credit Note changes display of Subtotal cell to 0.00
+    Bug 798611 - Date changing when changing timezone by one hour
+
+    When getting a date from the date editor anywhere in the program set the time to neutral time instead of the beginning of the day unless get_date_internal is called with GNC_DATE_EDIT_SHOW_TIME in which case the user-provided time is used.
+    Bug 798616 - Can't register amount greater than 9,000,000,000
+
+    Because when loading the value the split in the xml backend doesn't yet have a parent so the code tried to convert to GNC_COMMODITY_MAX_FRACTION and if the numerator was larger than 10^10 that would overflow. To fix it this changes the "don't know" response in get_currency_denom and get_commodity_denom to GNC_DENOM_AUTO which will normally leave the denominator alone.
+
+The following fixes and improvements were not associated with bug reports:
+
+    It is now possible to edit the description, notes, and memo fields of new transactions in the import matcher and to do so for multiple transactions. The option is accessed via a context menu on selected import lines.
+    Show GnuCash's installation and configuration configuration paths in the About dialog. List the same from the command line with a --paths option.
+    Add account hierarchy templates for locale es_AR
+    Continued work on the Stock Transaction Assistant. If you want to try out this new way of recording your investment transactions start GnuCash with the --extra option. The stock assistant is available on the toolbar and from the Actions menu when a register for a STOCK or FUND account is focused.
+    Replace the very obsolete ghelp: URI scheme with help: and install the documentation according to the XDG documentation spec on non-Mac Linux systems. This ensures that the Help menu documentation items work with Gnome 42 and later.
+    Conforming to the XDG documentation spec, rename the root page of the Help manual to index from help. This has the happy side effect of removing some special-case code from the macOS documentation links.
+    Standardize the top-level Equity and Assets account names in the French templates to "Capitaux propres" and "Actif" respectively.
+    [gnc-ab-utils] concise string accumulator
+    [gnc-glib-utils] gnc_g_list_stringjoin skips NULL data
+    [ifrs-cost-basis] identify sale/purchase according to truth table instead of via flawed heuristics
+    [ifrs-cost-basis] add options used as a report footer
+    [lot-viewer] Show Open & Close dates only when they have a value.
+    Fix use-after-free crash in gnc_set_busy_cursor.
+    Create Swiss SMB account chart acctchrt_pme-19.gnucash-xea.
+    [date-utilities] avoid report crash if start > end date
+    [html-chart] add percent formatter for numbers for older javascript.
+    [trial-balance] set default price-source to average-cost
+
+    to minimise complaints (see Bug 798550)
+    Use macos-latest github runner for mac tests.
+    [dialog-price] Price Database: Insert help buttons
+    Disable transaction type (i.e. Bill or Invoice) in Invoice/Bill Registers, determining the type by inspecting the money flow.
+    Fix python tests dependencies
+
+    So that ninja check works from a clean build directory with Python enabled.
+    Review of account templates C—missing placeholders, redundancies
+    Fixed a variety of fixed memory leaks, poor list handling, and dangling reference errors.
+
+New API:
+     gnc_tm_get_today_neutral to complement gnc_tm_get_today_begin and
+         gnc_tm_get_today_end.
+     gnc_get_dialog_widget_from_id
+     gnc_list_all_paths
+
+Deprecations: None.
+
+New and Updated Translations: Basque, Chinese (Simplified), Croatian, Dutch, English (Australia), English (New Zealand), English (United Kingdom), French, German, Hebrew, Hungarian, Indonesian, Italian, Korean, Marathi, Polish, Portuguese, Portuguese (Brazil), Russian, Swedish, Ukrainian 
+
 4.11 - 26 June 2022
 Between 4.10 and 4.11, the following bugfixes were accomplished:
 
