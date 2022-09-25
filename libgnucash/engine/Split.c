@@ -1130,13 +1130,9 @@ xaccSplitDetermineGainStatus (Split *split)
 static inline int
 get_currency_denom(const Split * s)
 {
-    if (!s)
+    if (!(s && s->parent && s->parent->common_currency))
     {
-        return 0;
-    }
-    else if (!s->parent || !s->parent->common_currency)
-    {
-        return GNC_COMMODITY_MAX_FRACTION;
+        return GNC_DENOM_AUTO;
     }
     else
     {
@@ -1147,13 +1143,9 @@ get_currency_denom(const Split * s)
 static inline int
 get_commodity_denom(const Split * s)
 {
-    if (!s)
+    if (!(s && s->acc))
     {
-        return 0;
-    }
-    else if (!s->acc)
-    {
-        return GNC_COMMODITY_MAX_FRACTION;
+        return GNC_DENOM_AUTO;
     }
     else
     {

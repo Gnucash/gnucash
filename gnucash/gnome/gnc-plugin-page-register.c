@@ -484,8 +484,8 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         G_CALLBACK (gnc_plugin_page_register_cmd_autoclear)
     },
     {
-        "ActionsStockAssistantAction", NULL, N_ ("Stock Ass_istant"), NULL,
-        N_ ("Stock Assistant"),
+        "ActionsStockAssistantAction", "applications-utilities",
+        N_ ("Stock Ass_istant"), NULL, N_ ("Stock Assistant"),
         G_CALLBACK (gnc_plugin_page_register_cmd_stock_assistant)
     },
     {
@@ -618,12 +618,6 @@ static const gchar* view_style_actions[] =
     "ViewStyleBasicAction",
     "ViewStyleAutoSplitAction",
     "ViewStyleJournalAction",
-    NULL
-};
-
-static const gchar* actions_requiring_extra[] =
-{
-    "ActionsStockAssistantAction",
     NULL
 };
 
@@ -1261,11 +1255,10 @@ gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister* page)
     gnc_plugin_update_actions (action_group, actions_requiring_account,
                                "sensitive", is_readwrite && account != NULL);
 
-    gnc_plugin_update_actions (action_group, actions_requiring_extra,
-                               "visible", gnc_prefs_is_extra_enabled ());
-
     gnc_plugin_update_actions (action_group, actions_requiring_priced_account,
-                               "sensitive", account && xaccAccountIsPriced (account));
+                               "visible", account &&
+                               gnc_prefs_is_extra_enabled () &&
+                               xaccAccountIsPriced (account));
 
     /* Set "style" radio button */
     ledger_type = gnc_ledger_display_type (priv->ledger);

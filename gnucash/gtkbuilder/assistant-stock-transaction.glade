@@ -6,7 +6,7 @@
     <property name="can-focus">False</property>
     <property name="halign">start</property>
     <property name="border-width">12</property>
-    <property name="title" translatable="yes">Stock Split Assistant</property>
+    <property name="title" translatable="yes">Stock Transaction Assistant</property>
     <property name="window-position">center</property>
     <property name="default-width">500</property>
     <signal name="cancel" handler="stock_assistant_cancel" swapped="no"/>

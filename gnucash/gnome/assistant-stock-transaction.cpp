@@ -38,6 +38,7 @@ extern "C" {
 #include "assistant-stock-transaction.h"
 #include "gnc-account-sel.h"
 #include "gnc-amount-edit.h"
+#include "gnc-prefs.h"
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
 #include "gnc-tree-view-account.h"
@@ -79,6 +80,7 @@ enum split_cols
     SPLIT_COL_DEBIT,
     SPLIT_COL_CREDIT,
     SPLIT_COL_UNITS,
+    SPLIT_COL_UNITS_COLOR,
     NUM_SPLIT_COLS
 };
 
@@ -261,7 +263,7 @@ reinvested must be subsequently recorded as a regular stock purchase.")
         N_("Company redeems units, thereby increasing the stock price by a \
 multiple, while keeping the total monetary value of the overall investment \
 constant.\n\nIf the reverse split results in a cash in lieu for remainder \
-units, please record the sale using the Stock Split Assistant first, then \
+units, please record the sale using the Stock Transaction Assistant first, then \
 record the reverse split.")
     }
 };
@@ -367,15 +369,14 @@ static const TxnTypeVec short_types
         N_("Company redeems units, thereby increasing the stock price by \
 a multiple, while keeping the total monetary value of the overall investment \
 constant.\n\nIf the reverse split results in a cash in lieu for remainder \
-units, please record the cover buy using the Stock Split Assistant first, \
+units, please record the cover buy using the Stock Transaction Assistant first, \
 then record the reverse split.")
     }
 };
 
-typedef struct
+struct StockTransactionInfo
 {
     GtkWidget * window;
-    GtkWidget * assistant;
 
     std::optional<TxnTypeVec> txn_types;
     // the following stores date at which the txn_types were set. If
@@ -441,7 +442,7 @@ typedef struct
     GtkWidget * finish_page;
     GtkWidget * finish_split_view;
     GtkWidget * finish_summary;
-} StockTransactionInfo;
+};
 
 
 /******* implementations ***********************************************/
@@ -488,6 +489,22 @@ refresh_page_transaction_type (GtkWidget *widget, gpointer user_data)
                                   info->txn_type->fees_capitalize);
 }
 
+static std::optional<gnc_numeric>
+calculate_price (StockTransactionInfo* info)
+{
+    gnc_numeric amount, value;
+
+    if (info->txn_type->stock_amount == FieldMask::DISABLED ||
+        info->txn_type->stock_value == FieldMask::DISABLED ||
+        gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->stock_amount_edit), &amount, true, nullptr) ||
+        gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->stock_value_edit), &value,  true, nullptr))
+        return std::nullopt;
+
+    if (gnc_numeric_zero_p (amount) || gnc_numeric_zero_p (value))
+        return std::nullopt;
+
+    return gnc_numeric_div (value, amount, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+}
 
 static void
 refresh_page_stock_amount (GtkWidget *widget, gpointer user_data)
@@ -508,7 +525,7 @@ refresh_page_stock_amount (GtkWidget *widget, gpointer user_data)
     {
         gnc_numeric ratio = gnc_numeric_div (stock_amount, bal,
                                              GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
-        if (gnc_numeric_check (ratio) || gnc_numeric_negative_p (ratio))
+        if (gnc_numeric_check (ratio) || !gnc_numeric_positive_p (ratio))
             gtk_label_set_text (GTK_LABEL(info->next_amount), nullptr);
         else
         {
@@ -538,14 +555,10 @@ static void
 refresh_page_stock_value (GtkWidget *widget, gpointer user_data)
 {
     auto info = static_cast<StockTransactionInfo*>(user_data);
-    gnc_numeric amount, value;
     g_return_if_fail (info->txn_type);
 
-    if (info->txn_type->stock_amount == FieldMask::DISABLED ||
-        info->txn_type->stock_value == FieldMask::DISABLED ||
-        gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->stock_amount_edit), &amount, true, nullptr) ||
-        gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->stock_value_edit),  &value,  true, nullptr) ||
-        gnc_numeric_zero_p (value))
+    auto price = calculate_price (info);
+    if (!price.has_value())
     {
         // Translators: StockAssistant: N/A denotes stock price is not computable
         const char* na_label =  N_("N/A");
@@ -553,9 +566,8 @@ refresh_page_stock_value (GtkWidget *widget, gpointer user_data)
         return;
     }
 
-    auto price = gnc_numeric_div (value, amount, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND);
-    auto pinfo = gnc_commodity_print_info (info->currency, true);
-    gtk_label_set_text (GTK_LABEL (info->price_value), xaccPrintAmount (price, pinfo));
+    auto pinfo = gnc_price_print_info (info->currency, true);
+    gtk_label_set_text (GTK_LABEL (info->price_value), xaccPrintAmount (*price, pinfo));
 }
 
 static void
@@ -608,6 +620,7 @@ struct SummaryLineInfo
     std::string memo;
     std::string value;
     std::string units;
+    bool units_in_red;
 };
 
 static void
@@ -623,6 +636,7 @@ add_to_summary_table (GtkListStore *list, SummaryLineInfo line)
                         SPLIT_COL_DEBIT, line.debit_side ? line.value.c_str() : "",
                         SPLIT_COL_CREDIT, !line.debit_side ? line.value.c_str() : "",
                         SPLIT_COL_UNITS, line.units.c_str(),
+                        SPLIT_COL_UNITS_COLOR, line.units_in_red ? "red" : nullptr,
                         -1);
     g_free (tooltip);
 }
@@ -640,6 +654,7 @@ check_page (SummaryLineInfo& line, gnc_numeric& debit, gnc_numeric& credit,
 
     line.memo = gtk_entry_get_text (GTK_ENTRY (memo));
     line.units = "";
+    line.units_in_red = false;
     line.debit_side = (splitfield & FieldMask::ENABLED_DEBIT);
 
     if (gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (gae), &amount, true, nullptr))
@@ -681,7 +696,7 @@ check_page (SummaryLineInfo& line, gnc_numeric& debit, gnc_numeric& credit,
         line.account = "";
     else
     {
-        add_error (errors, N_("Account for %s is missing"), page);
+        add_error (errors, N_("Account for %s is missing."), page);
         line.account = _(missing_str);
     }
 }
@@ -704,6 +719,8 @@ refresh_page_finish (StockTransactionInfo *info)
     gnc_numeric credit = gnc_numeric_zero ();
     StringVec errors, warnings, infos;
     SummaryLineInfo line;
+    bool negative_in_red = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL,
+                                               GNC_PREF_NEGATIVE_IN_RED);
 
     // check the stock transaction date. If there are existing stock
     // transactions dated after the date specified, it is very likely
@@ -735,7 +752,7 @@ to ensure proper recording."), new_date_str, last_split_date_str);
     }
 
     if (info->txn_type->stock_value == FieldMask::DISABLED)
-        line = { false, false, xaccAccountGetName (info->acct), "", "", "" };
+        line = { false, false, xaccAccountGetName (info->acct), "", "", "", false };
     else
         check_page (line, debit, credit, info->txn_type->stock_value, info->acct,
                     info->stock_memo_edit, info->stock_value_edit, info->currency,
@@ -756,14 +773,13 @@ to ensure proper recording."), new_date_str, last_split_date_str);
             (xaccAccountGetCommodity (info->acct), true);
         stock_amount = gnc_numeric_sub_fixed (stock_amount, info->balance_at_date);
         line.units = xaccPrintAmount (stock_amount, stock_pinfo);
-        if (gnc_numeric_check (ratio))
-            add_error_str (errors, N_("Invalid stock new balance"));
-        else if (gnc_numeric_negative_p (ratio))
-            add_error_str (errors, N_("New and old balance must have same signs"));
+        line.units_in_red = negative_in_red && gnc_numeric_negative_p (stock_amount);
+        if (gnc_numeric_check (ratio) || !gnc_numeric_positive_p (ratio))
+            add_error_str (errors, N_("Invalid stock new balance."));
         else if (gnc_numeric_negative_p (delta) && !credit_side)
-            add_error_str (errors, N_("New balance must be higher than old balance"));
+            add_error_str (errors, N_("New balance must be higher than old balance."));
         else if (gnc_numeric_positive_p (delta) && credit_side)
-            add_error_str (errors, N_("New balance must be lower than old balance"));
+            add_error_str (errors, N_("New balance must be lower than old balance."));
     }
     else
     {
@@ -772,28 +788,26 @@ to ensure proper recording."), new_date_str, last_split_date_str);
         auto stock_pinfo = gnc_commodity_print_info
             (xaccAccountGetCommodity (info->acct), true);
         if (!gnc_numeric_positive_p (stock_amount))
-            add_error_str (errors, N_("Stock amount must be positive"));
+            add_error_str (errors, N_("Stock amount must be positive."));
         if (info->txn_type->stock_amount & FieldMask::ENABLED_CREDIT)
             stock_amount = gnc_numeric_neg (stock_amount);
         line.units = xaccPrintAmount (stock_amount, stock_pinfo);
+        line.units_in_red = negative_in_red && gnc_numeric_negative_p (stock_amount);
         auto new_bal = gnc_numeric_add_fixed (info->balance_at_date, stock_amount);
         if (gnc_numeric_positive_p (info->balance_at_date) &&
             gnc_numeric_negative_p (new_bal))
-            add_error_str (errors, N_("Cannot sell more units than owned"));
+            add_error_str (errors, N_("Cannot sell more units than owned."));
         else if (gnc_numeric_negative_p (info->balance_at_date) &&
                  gnc_numeric_positive_p (new_bal))
-            add_error_str (errors, N_("Cannot cover buy more units than owed"));
+            add_error_str (errors, N_("Cannot cover buy more units than owed."));
     }
 
     add_to_summary_table (list, line);
 
-    if (info->txn_type->stock_amount != FieldMask::DISABLED &&
-        info->txn_type->stock_value != FieldMask::DISABLED)
+    auto price = calculate_price (info);
+    if (price.has_value())
     {
-        auto amt = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT(info->stock_amount_edit));
-        auto val = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT(info->stock_value_edit));
-        auto p = gnc_numeric_div (val, amt, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
-        auto curr_pinfo = gnc_commodity_print_info (info->currency, true);
+        auto curr_pinfo = gnc_price_print_info (info->currency, true);
         // Translators: %s refer to: stock mnemonic, broker currency,
         // date of transaction.
         auto tmpl = N_("A price of 1 %s = %s on %s will be recorded.");
@@ -801,7 +815,7 @@ to ensure proper recording."), new_date_str, last_split_date_str);
         auto price_str = g_strdup_printf
             (_(tmpl),
              gnc_commodity_get_mnemonic (xaccAccountGetCommodity (info->acct)),
-             xaccPrintAmount (p, curr_pinfo), date_str);
+             xaccPrintAmount (*price, curr_pinfo), date_str);
         infos.emplace_back (price_str);
         g_free (price_str);
         g_free (date_str);
@@ -1027,21 +1041,22 @@ create_split (Transaction *trans, FieldMask splitfield,
 }
 
 static void
-add_price (GtkWidget *amount, GtkWidget *value,
-           gnc_commodity *commodity, gnc_commodity *currency, time64 date)
+add_price (StockTransactionInfo* info, time64 date)
 {
-    auto amt = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (amount));
-    auto val = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (value));
-    auto p = gnc_numeric_div (val, amt, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+    auto p = calculate_price (info);
+
+    if (!p.has_value())
+        return;
+
     auto price = gnc_price_create (gnc_get_current_book ());
 
     gnc_price_begin_edit (price);
-    gnc_price_set_commodity (price, commodity);
-    gnc_price_set_currency (price, currency);
+    gnc_price_set_commodity (price, xaccAccountGetCommodity (info->acct));
+    gnc_price_set_currency (price, info->currency);
     gnc_price_set_time64 (price, date);
     gnc_price_set_source (price, PRICE_SOURCE_STOCK_TRANSACTION);
     gnc_price_set_typestr (price, PRICE_TYPE_UNK);
-    gnc_price_set_value (price, p);
+    gnc_price_set_value (price, *p);
     gnc_price_commit_edit (price);
 
     auto book = gnc_get_current_book ();
@@ -1081,8 +1096,6 @@ stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
         gae_amount (info->stock_amount_edit) : gnc_numeric_zero ();
     auto stock_value = info->txn_type->stock_value != FieldMask::DISABLED ?
         gae_amount (info->stock_value_edit) : gnc_numeric_zero ();
-    if (info->txn_type->input_new_balance)
-        stock_amount = gnc_numeric_sub_fixed (stock_amount, info->balance_at_date);
     create_split (trans, info->txn_type->stock_amount | info->txn_type->stock_value,
                   NC_ ("Stock Assistant: Action field", "Stock"),
                   info->acct, account_commits, info->stock_memo_edit,
@@ -1134,10 +1147,7 @@ stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
                       gnc_numeric_zero (), capgains, false, info);
     }
 
-    if (info->txn_type->stock_amount != FieldMask::DISABLED &&
-        info->txn_type->stock_value != FieldMask::DISABLED)
-        add_price (info->stock_amount_edit, info->stock_value_edit,
-                   xaccAccountGetCommodity (info->acct), info->currency, date);
+    add_price (info, date);
 
     xaccTransCommitEdit (trans);
 
@@ -1225,8 +1235,10 @@ get_treeview (GtkBuilder *builder, const gchar *treeview_label)
 
     auto store = gtk_list_store_new (NUM_SPLIT_COLS, G_TYPE_STRING, G_TYPE_STRING,
                                      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
-                                     G_TYPE_STRING);
+                                     G_TYPE_STRING, G_TYPE_STRING);
     gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+    gtk_tree_selection_set_mode (gtk_tree_view_get_selection (view),
+                                 GTK_SELECTION_NONE);
     g_object_unref(store);
 
     auto renderer = gtk_cell_renderer_text_new();
@@ -1259,7 +1271,10 @@ get_treeview (GtkBuilder *builder, const gchar *treeview_label)
     gtk_cell_renderer_set_alignment (renderer, 1.0, 0.5);
     gtk_cell_renderer_set_padding (renderer, 5, 0);
     column = gtk_tree_view_column_new_with_attributes
-        (_("Units"), renderer, "text", SPLIT_COL_UNITS, nullptr);
+        (_("Units"), renderer,
+         "text", SPLIT_COL_UNITS,
+         "foreground", SPLIT_COL_UNITS_COLOR,
+         nullptr);
     gtk_tree_view_append_column(view, column);
 
     return GTK_WIDGET (view);

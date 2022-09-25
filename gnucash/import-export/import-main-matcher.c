@@ -1020,14 +1020,17 @@ setup_entry (GtkWidget *entry, gboolean sensitive, GHashTable *hash,
     GtkEntryCompletion* completion;
     GtkListStore *list;
 
-    gtk_entry_set_text (GTK_ENTRY (entry), sensitive ? initial : _("Disabled"));
+    if (!sensitive)
+        gtk_entry_set_text (GTK_ENTRY (entry), _("Disabled"));
+    else if (initial && *initial)
+        gtk_entry_set_text (GTK_ENTRY (entry), initial);
     gtk_widget_set_sensitive (entry, sensitive);
     if (!sensitive)
         return;
 
     list = gtk_list_store_new (NUM_COMPLETION_COLS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
     g_hash_table_foreach (hash, (GHFunc)populate_list, list);
-    if (initial && !g_hash_table_lookup (hash, (gpointer)initial))
+    if (initial && *initial && !g_hash_table_lookup (hash, (gpointer)initial))
         populate_list ((gpointer)initial, NULL, list);
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (list),
                                           COMPLETION_LIST_ORIGINAL,
@@ -1676,6 +1679,10 @@ gnc_gen_trans_common_setup (GNCImportMainMatcher *info,
     if (heading)
         gtk_label_set_text (GTK_LABEL(heading_label), heading);
 
+    info->desc_hash = g_hash_table_new (g_str_hash, g_str_equal);
+    info->notes_hash = g_hash_table_new (g_str_hash, g_str_equal);
+    info->memo_hash = g_hash_table_new (g_str_hash, g_str_equal);
+    info->new_strings = NULL;
     info->transaction_processed_cb = NULL;
 
     /* Connect the signals */
@@ -1731,11 +1738,6 @@ gnc_gen_trans_list_new (GtkWidget *parent,
     // This ensure this dialog is closed when the session is closed.
     gnc_gui_component_set_session (info->id, gnc_get_current_session());
 
-    info->desc_hash = g_hash_table_new (g_str_hash, g_str_equal);
-    info->notes_hash = g_hash_table_new (g_str_hash, g_str_equal);
-    info->memo_hash = g_hash_table_new (g_str_hash, g_str_equal);
-
-    info->new_strings = NULL;
     return info;
 }
 
