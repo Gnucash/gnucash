@@ -316,7 +316,7 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
                            (gnc:make-account-list-option
                             "foo" "bar" "a" "baz" (lambda () acctlist)
                             (lambda (ac)
-                              (let ((type (xaccAccountGetAccountType ac)))
+                              (let ((type (xaccAccountGetType ac)))
                                 (or (eq type ACCT-TYPE-STOCK)
                                     (eq type ACCT-TYPE-BANK)))) #t))
       (test-equal "account list unchanged"
@@ -341,7 +341,7 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
                            (gnc:make-account-sel-option
                             "foo" "bar" "a" "baz" (lambda () '())
                             (lambda (ac)
-                              (let ((type (xaccAccountGetAccountType ac)))
+                              (let ((type (xaccAccountGetType ac)))
                                 (or (eq type ACCT-TYPE-STOCK)
                                     (eq type ACCT-TYPE-BANK))))))
       (test-equal "account sel unchanged" test-unchanged-section-output-template
