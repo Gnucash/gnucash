@@ -92,6 +92,7 @@ public:
     void fetch (QofBook *book);
     void fetch (CommVec& commodities);
     void fetch (gnc_commodity *comm);
+    void report (const char* source, const StrVec& commodities, bool verbose);
 
     const std::string& version() noexcept { return m_version.empty() ? not_found : m_version; }
     const QuoteSources& sources() noexcept { return m_sources; }
@@ -101,8 +102,10 @@ public:
     std::string report_failures() noexcept;
 
 private:
+    std::string query_fq (const char* source, const StrVec& commoditites);
     std::string query_fq (const CommVec&);
-    void parse_quotes (const std::string& quote_str, const CommVec& commodities);
+    bpt::ptree parse_quotes (const std::string& quote_str);
+    void create_quotes(const bpt::ptree& pt, const CommVec& comm_vec);
     std::string comm_vec_to_json_string(const CommVec&) const;
     GNCPrice* parse_one_quote(const bpt::ptree&, gnc_commodity*);
 
@@ -132,6 +135,9 @@ private:
     QuoteResult run_cmd (const StrVec& args, const std::string& json_string) const;
 
 };
+
+static void show_quotes(const bpt::ptree& pt, const StrVec& commodities, bool verbose);
+static void show_currency_quotes(const bpt::ptree& pt, const StrVec& commodities, bool verbose);
 
 static const std::string empty_string{};
 
@@ -293,9 +299,42 @@ GncQuotesImpl::fetch (CommVec& commodities)
     m_failures.clear();
     if (commodities.empty())
         return;
+    try
+    {
+        auto quote_str{query_fq (commodities)};
+        auto ptree{parse_quotes (quote_str)};
+        create_quotes(ptree, commodities);
+    }
+    catch (const GncQuoteException& err)
+    {
+        std::cerr << _("Finance::Quote retrieval failed with error ") << err.what() << std::endl;
+    }
+}
 
-    auto quote_str{query_fq (commodities)};
-    parse_quotes (quote_str, commodities);
+void
+GncQuotesImpl::report (const char* source, const StrVec& commodities,
+                       bool verbose)
+{
+    bool is_currency{source && strcmp(source, "currency") == 0};
+    m_failures.clear();
+    if (commodities.empty())
+    {
+        std::cerr << _("There were no commodities for which to retrieve quotes.") << std::endl;
+        return;
+    }
+    try
+    {
+        auto quote_str{query_fq (source, commodities)};
+        auto ptree{parse_quotes (quote_str)};
+        if (is_currency)
+            show_currency_quotes(ptree, commodities, verbose);
+        else
+            show_quotes(ptree, commodities, verbose);
+    }
+    catch (const GncQuoteException& err)
+    {
+        std::cerr << _("Finance::Quote retrieval failed with error ") << err.what() << std::endl;
+    }
 }
 
 const QFVec&
@@ -388,11 +427,10 @@ GncQuotesImpl::comm_vec_to_json_string (const CommVec& comm_vec) const
     return result.str();
 }
 
-std::string
-GncQuotesImpl::query_fq (const CommVec& comm_vec)
+static inline std::string
+get_quotes(const std::string& json_str, const std::unique_ptr<GncQuoteSource>& qs)
 {
-    auto json_str{comm_vec_to_json_string(comm_vec)};
-    auto [rv, quotes, errors] = m_quotesource->get_quotes(json_str);
+    auto [rv, quotes, errors] = qs->get_quotes(json_str);
     std::string answer;
 
     if (rv == 0)
@@ -408,13 +446,47 @@ GncQuotesImpl::query_fq (const CommVec& comm_vec)
         throw(GncQuoteException(err_str));
     }
 
-    return answer;
 //        for (auto line : quotes)
 //            PINFO("Output line retrieved from wrapper:\n%s", line.c_str());
 //
 //     for (auto line : errors)
 //         PINFO("Error line retrieved from wrapper:\n%s",line.c_str());˚
 
+    return answer;
+}
+
+std::string
+GncQuotesImpl::query_fq (const char* source, const StrVec& commodities)
+{
+    bpt::ptree pt;
+    auto is_currency{strcmp(source, "currency") == 0};
+
+    if (is_currency && commodities.size() < 2)
+        throw(GncQuoteException(_("Currency quotes requires at least two currencies")));
+
+    if (is_currency)
+        pt.put("defaultcurrency", commodities[0].c_str());
+    else
+        pt.put("defaultcurrency", gnc_commodity_get_mnemonic(m_dflt_curr));
+
+    std::for_each(is_currency ? ++commodities.cbegin() : commodities.cbegin(),
+                  commodities.cend(),
+                  [this, source, &pt](auto sym)
+                      {
+                          std::string key{source};
+                          key += "." + sym;
+                          pt.put(key, "");
+                      });
+    std::ostringstream result;
+    bpt::write_json(result, pt);
+    return get_quotes(result.str(), m_quotesource);
+}
+
+std::string
+GncQuotesImpl::query_fq (const CommVec& comm_vec)
+{
+    auto json_str{comm_vec_to_json_string(comm_vec)};
+    return get_quotes(json_str, m_quotesource);
 }
 
 struct PriceParams
@@ -636,8 +708,8 @@ GncQuotesImpl::parse_one_quote(const bpt::ptree& pt, gnc_commodity* comm)
     return gnc_price;
 }
 
-void
-GncQuotesImpl::parse_quotes (const std::string& quote_str, const CommVec& comm_vec)
+bpt::ptree
+GncQuotesImpl::parse_quotes (const std::string& quote_str)
 {
     bpt::ptree pt;
     std::istringstream ss {quote_str};
@@ -671,7 +743,12 @@ GncQuotesImpl::parse_quotes (const std::string& quote_str, const CommVec& comm_v
         error_msg += what;
         throw(GncQuoteException(error_msg));
     }
+    return pt;
+}
 
+void
+GncQuotesImpl::create_quotes (const bpt::ptree& pt, const CommVec& comm_vec)
+{
     auto pricedb{gnc_pricedb_get_db(m_book)};
     for (auto comm : comm_vec)
     {
@@ -685,8 +762,134 @@ GncQuotesImpl::parse_quotes (const std::string& quote_str, const CommVec& comm_v
     }
 }
 
+static void
+show_verbose_quote(const bpt::ptree& comm_pt)
+{
+    std::for_each(comm_pt.begin(), comm_pt.end(),
+                  [](auto elem) {
+                      std::cout << std::setw(12) << std::right << elem.first << " => " <<
+                          std::left << elem.second.data() << "\n";
+                  });
+    std::cout << std::endl;
+}
 
+static void
+show_gnucash_quote(const bpt::ptree& comm_pt)
+{
+    constexpr const char* ptr{"<=== "};
+    constexpr const char* dptr{"<=\\ "};
+    constexpr const char* uptr{"<=/ "};
+    //Translators: Means that the preceding element is required
+    const char* reqd{C_("Finance::Quote", "required")};
+    //Translators: Means that the quote will work best if the preceding element is provided
+    const char* rec{C_("Finance::Quote", "recommended")};
+    //Translators: Means that one of the indicated elements is required
+    const char* oot{C_("Finance::Quote", "one of these")};
+    //Translators: Means that the preceding element is optional
+    const char* opt{C_("Finance::Quote", "optional")};
+    //Translators: Means that a required element wasn't reported. The *s are for emphasis.
+    const char* miss{C_("Finance::Quote", "**missing**")};
 
+    const std::string miss_str{miss};
+    auto outline{[](const char* label, std::string value, const char* pointer, const char* req) {
+                         std::cout << std::setw(12) << std::right << label  << std::setw(16) << std::left <<
+       value << pointer << req << "\n";
+                 }};
+    std::cout << _("Finance::Quote fields GnuCash uses:") << "\n";
+//Translators: The stock or Mutual Fund symbol, ISIN, CUSIP, etc.
+    outline(C_("Finance::Quote", "symbol: "),  comm_pt.get<char>("symbol", miss), ptr, reqd);
+//Translators: The date of the quote.
+    outline(C_("Finance::Quote", "date: "),  comm_pt.get<char>("date", miss), ptr, rec);
+//Translators: The quote currency
+    outline(C_("Finance::Quote", "currency: "),  comm_pt.get<char>("currency", miss), ptr, reqd);
+    auto last{comm_pt.get<char>("last", "")};
+    auto nav{comm_pt.get<char>("nav", "")};
+    auto price{comm_pt.get<char>("nav", "")};
+    auto no_price{last.empty() && nav.empty() && price.empty()};
+//Translators: The quote is for the most recent trade on the exchange
+    outline(C_("Finance::Quote", "last: "),  no_price ? miss_str : last, dptr, "");
+//Translators: The quote is for an open-ended mutual fund and represents the net asset value of one unit of the fund at the previous close of trading.
+    outline(C_("Finance::Quote", "nav: "),  no_price ? miss_str : nav, ptr, oot);
+//Translators: The quote is neither a last trade nor an NAV.
+    outline(C_("Finance::Quote", "price: "),  no_price ? miss_str : price, uptr, "");
+    std::cout << std::endl;
+}
+static const bpt::ptree empty_tree{};
+
+static inline const bpt::ptree&
+get_commodity_data(const bpt::ptree& pt, const std::string& comm)
+{
+    auto commdata{pt.find(comm)};
+    if (commdata == pt.not_found())
+    {
+        std::cout << comm << " " << _("Finance::Quote returned no data and set no error.") << std::endl;
+        return empty_tree;
+    }
+    auto& comm_pt{commdata->second};
+    auto success = comm_pt.get_optional<bool> ("success");
+    if (!(success && *success))
+    {
+        auto errormsg = comm_pt.get_optional<std::string> ("errormsg");
+        if (errormsg && !errormsg->empty())
+            std::cout << _("Finance::Quote reported a failure for symbol ") <<
+                comm << ": " << *errormsg << std::endl;
+        else
+            std::cout << _("Finance::Quote failed silently to retrieve a quote for symbol ") <<
+                comm << std::endl;
+        return empty_tree;
+    }
+    return comm_pt;
+}
+
+static void
+show_quotes(const bpt::ptree& pt, const StrVec& commodities, bool verbose)
+{
+    for (auto comm : commodities)
+    {
+        auto comm_pt{get_commodity_data(pt, comm)};
+
+        if (comm_pt == empty_tree)
+            continue;
+
+        if (verbose)
+        {
+            std::cout << comm << ":\n";
+            show_verbose_quote(comm_pt);
+        }
+        else
+        {
+            show_gnucash_quote(comm_pt);
+        }
+    }
+}
+
+static void
+show_currency_quotes(const bpt::ptree& pt, const StrVec& commodities, bool verbose)
+{
+    auto to_cur{commodities.front()};
+    for (auto comm : commodities)
+    {
+        if (comm == to_cur)
+            continue;
+
+        auto comm_pt{get_commodity_data(pt, comm)};
+
+        if (comm_pt == empty_tree)
+            continue;
+
+        if (verbose)
+        {
+            std::cout << comm << ":\n";
+            show_verbose_quote(comm_pt);
+        }
+        else
+        {
+            std::cout << "1 " << comm << " = " <<
+                comm_pt.get<char>("last", "Not Found") << " " << to_cur  << "\n";
+        }
+        std::cout << std::endl;
+    }
+}
 /********************************************************************
  * gnc_quotes_get_quotable_commodities
  * list commodities in a given namespace that get price quotes
@@ -803,6 +1006,12 @@ void GncQuotes::fetch (CommVec& commodities)
 void GncQuotes::fetch (gnc_commodity *comm)
 {
     m_impl->fetch (comm);
+}
+
+void GncQuotes::report (const char* source, const StrVec& commodities,
+                        bool verbose)
+{
+    m_impl->report(source, commodities, verbose);
 }
 
 const std::string& GncQuotes::version() noexcept

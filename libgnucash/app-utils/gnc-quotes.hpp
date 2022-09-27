@@ -91,7 +91,14 @@ public:
      * @note Commodity must have a quote source set or the call will silently fail.
      */
     void fetch (gnc_commodity *comm);
-
+    /** Report quote results from Finance::Quote to std::cout.
+     *
+     * @param source A valid quote source
+     * @param commodities A std::vector of symbols to request quotes for.
+     * @note If requesting currency rates the first symbol is the to-currency and the rest are from-currencies. For example, {"USD", "EUR", "CAD"} will print the price of 1 Euro and 1 Canadian Dollar in US Dollars.
+     * @param verbose Ignored for currency queries. If false it will print the six fields GnuCash uses regardless of whether a value was returned; if true it will print all of the fields for which Finanace::Quote returned values.
+     */
+    void report (const char* source, const StrVec& commodities, bool verbose = false);
     /** Get the installed Finance::Quote version
      *
      * @return the Finance::Quote version string

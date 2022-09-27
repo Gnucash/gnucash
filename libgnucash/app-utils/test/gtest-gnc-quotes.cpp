@@ -142,10 +142,10 @@ TEST_F(GncQuotesTest, online_wiggle)
     quotes.fetch(m_book);
     auto pricedb{gnc_pricedb_get_db(m_book)};
     auto failures{quotes.failures()};
-    ASSERT_EQ(2u, failures.size());
+    ASSERT_EQ(1u, failures.size());
     EXPECT_EQ(GncQuoteError::QUOTE_FAILED, std::get<2>(failures[0]));
-    EXPECT_EQ(GncQuoteError::QUOTE_FAILED, std::get<2>(failures[1]));
-    EXPECT_EQ(2u, gnc_pricedb_get_num_prices(pricedb));
+//    EXPECT_EQ(GncQuoteError::QUOTE_FAILED, std::get<2>(failures[1]));
+    EXPECT_EQ(3u, gnc_pricedb_get_num_prices(pricedb));
 }
 #endif
 
@@ -162,6 +162,29 @@ TEST_F(GncQuotesTest, offline_wiggle)
     EXPECT_EQ(GncQuoteError::QUOTE_FAILED, std::get<2>(failures[0]));
     auto pricedb{gnc_pricedb_get_db(m_book)};
     EXPECT_EQ(3u, gnc_pricedb_get_num_prices(pricedb));
+}
+
+TEST_F(GncQuotesTest, offline_report)
+{
+    StrVec quote_vec{
+        "{\"AAPL\":{\"eps\":6.05,\"success\":1,\"year_range\":\"      129.04 - 182.94\",\"currency\":\"USD\",\"exchange\":\"Sourced from Yahoo Finance (as JSON)\",\"volume\":73539475,\"close\":157.22,\"high\":158.39,\"open\":156.64,\"div_yield\":0.5660857,\"last\":157.96,\"isodate\":\"2022-09-01\",\"method\":\"yahoo_json\",\"name\":\"AAPL (Apple Inc.)\",\"pe\":26.10909,\"low\":154.67,\"type\":\"EQUITY\",\"symbol\":\"AAPL\",\"date\":\"09/01/2022\"},\"HPE\":{\"symbol\":\"HPE\",\"date\":\"09/01/2022\",\"low\":13.13,\"type\":\"EQUITY\",\"method\":\"yahoo_json\",\"name\":\"HPE (Hewlett Packard Enterprise Comp)\",\"isodate\":\"2022-09-01\",\"pe\":4.7921147,\"last\":13.37,\"high\":13.535,\"close\":13.6,\"open\":13.5,\"div_yield\":3.5294116,\"volume\":16370483,\"exchange\":\"Sourced from Yahoo Finance (as JSON)\",\"currency\":\"USD\",\"year_range\":\"        12.4 - 17.76\",\"eps\":2.79,\"success\":1},\"FKCM\":{\"success\":0,\"symbol\":\"FKCM\",\"errormsg\":\"Error retrieving quote for FKCM - no listing for this name found. Please check symbol and the two letter extension (if any)\"}}"
+    };
+    StrVec commodities{"AAPL", "HPE", "FKCM"};
+    StrVec err_vec;
+    GncQuotesImpl quotes(m_book, std::make_unique<GncMockQuoteSource>(std::move(quote_vec), std::move(err_vec)));
+    quotes.report("yahoo_json", commodities, false);
+    quotes.report("yahoo_json", commodities, true);
+}
+
+TEST_F(GncQuotesTest, offline_currency_report)
+{
+    StrVec quote_vec{
+        "{\"EUR\":{\"symbol\":\"EUR\",\"currency\":\"USD\",\"success\":\"1\",\"inverted\":0,\"last\":1.0004}}"};
+    StrVec commodities{"USD", "EUR"};
+    StrVec err_vec;
+    GncQuotesImpl quotes(m_book, std::make_unique<GncMockQuoteSource>(std::move(quote_vec), std::move(err_vec)));
+    quotes.report("currency", commodities, false);
+    quotes.report("currency", commodities, true);
 }
 
 TEST_F(GncQuotesTest, comvec_fetch)
