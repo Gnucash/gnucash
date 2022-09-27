@@ -21,6 +21,7 @@
  ;                                                                  ;
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (ice-9 format))            ; ~f requires (ice-9 format)
 (use-modules (srfi srfi-64))
 (use-modules (tests srfi64-extras))
 (use-modules (gnucash options))
@@ -317,8 +318,8 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
                             "foo" "bar" "a" "baz" (lambda () acctlist)
                             (lambda (ac)
                               (let ((type (xaccAccountGetType ac)))
-                                (or (eq type ACCT-TYPE-STOCK)
-                                    (eq type ACCT-TYPE-BANK)))) #t))
+                                (or (eqv? type ACCT-TYPE-STOCK)
+                                    (eqv? type ACCT-TYPE-BANK)))) #t))
       (test-equal "account list unchanged"
                   test-unchanged-section-output-template
                   (gnc:generate-restore-forms odb "options"))
@@ -342,8 +343,8 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
                             "foo" "bar" "a" "baz" (lambda () '())
                             (lambda (ac)
                               (let ((type (xaccAccountGetType ac)))
-                                (or (eq type ACCT-TYPE-STOCK)
-                                    (eq type ACCT-TYPE-BANK))))))
+                                (or (eqv? type ACCT-TYPE-STOCK)
+                                    (eqv? type ACCT-TYPE-BANK))))))
       (test-equal "account sel unchanged" test-unchanged-section-output-template
                   (gnc:generate-restore-forms odb "options"))
       (let ((option (gnc:lookup-option odb "foo" "bar"))
