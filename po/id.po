@@ -7,14 +7,15 @@
 # Reza Almanda <rezaalmanda27@gmail.com>, 2021.
 # Syahmin Sukhairi <syahmin@gmail.com>, 2021.
 # Azhar Pusparadhian <pazhar@rocketmail.com>, 2022.
+# Sarekashi <sarekashi@tuta.io>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.12-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-09-11 23:24+0200\n"
-"PO-Revision-Date: 2022-07-09 07:20+0000\n"
-"Last-Translator: Azhar Pusparadhian <pazhar@rocketmail.com>\n"
+"PO-Revision-Date: 2022-09-27 06:20+0000\n"
+"Last-Translator: Sarekashi <sarekashi@tuta.io>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/id/>\n"
 "Language: id\n"
@@ -22,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -486,6 +487,10 @@ msgid ""
 "(File[->Most Recently Used-List]).\n"
 "The full path is displayed in the status bar."
 msgstr ""
+"Jika Anda ingin mengetahui di direktori mana berkas GnuCash terbaru Anda "
+"disimpan, arahkan kursor ke salah satu entri di menu riwayat\n"
+"(Berkas[->Daftar Yang Sering Digunakan]).\n"
+"Path lengkap tampil pada bilah status."
 
 #: doc/tip_of_the_day.list.c:24
 msgid ""
@@ -1451,6 +1456,8 @@ msgid ""
 "The Company Name field cannot be left blank, please enter a company name or "
 "a person's name."
 msgstr ""
+"Bidang Nama Perusahaan tidak bisa dikosongkan, silakan masukkan nama "
+"perusahaan atau nama seseorang."
 
 #: gnucash/gnome/dialog-customer.c:322
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
@@ -1787,10 +1794,8 @@ msgid "Business Document Links"
 msgstr "Taut Dokumen Bisnis"
 
 #: gnucash/gnome/dialog-employee.c:201
-#, fuzzy
-#| msgid "You must enter a payment address."
 msgid "You must enter a Payment-Address Name."
-msgstr "Anda harus memasukkan alamat pembayaran."
+msgstr "Anda harus memasukkan Alamat Pembayaran."
 
 #: gnucash/gnome/dialog-employee.c:296
 msgid "Edit Employee"
@@ -1912,10 +1917,9 @@ msgstr "Berhubungan dengan pajak"
 #. Translators: %s is a full account name.
 #. This is a label in Search Account from context menu.
 #: gnucash/gnome/dialog-find-account.c:491
-#, fuzzy, c-format
-#| msgid "Accounts in '%s'"
+#, c-format
 msgid "Su_b-accounts of '%s'"
-msgstr "Akun di '%s'"
+msgstr "Su_b-akun dari '%s'"
 
 #: gnucash/gnome/dialog-find-transactions2.c:107
 #: gnucash/gnome/dialog-find-transactions.c:105
@@ -2628,10 +2632,8 @@ msgid "You must choose an owner for this job."
 msgstr "Anda harus memilih seorang pemilik untuk pekerjaan ini."
 
 #: gnucash/gnome/dialog-job.c:154
-#, fuzzy
-#| msgid "Credit must be a positive amount or you must leave it blank."
 msgid "The rate amount must be valid or you must leave it blank."
-msgstr "Kredit harus bernilai positif atau Anda harus membiarkannya kosong."
+msgstr "Jumlah tarif harus valid atau Anda harus membiarkannya kosong."
 
 #: gnucash/gnome/dialog-job.c:255
 msgid "Edit Job"
@@ -2680,14 +2682,10 @@ msgid "Find Job"
 msgstr "Cari Pekerjaan"
 
 #: gnucash/gnome/dialog-lot-viewer.c:817
-#, fuzzy
-#| msgid "Empty space"
 msgid "Empty"
-msgstr "Ruang kosong"
+msgstr "Kosong"
 
 #: gnucash/gnome/dialog-lot-viewer.c:829
-#, fuzzy
-#| msgid "Open"
 msgctxt "Adjective"
 msgid "Open"
 msgstr "Buka"
@@ -2796,10 +2794,8 @@ msgid "You must select a company for payment processing."
 msgstr "Anda harus memilih sebuah perusahaan untuk proses pembayaran."
 
 #: gnucash/gnome/dialog-payment.c:260
-#, fuzzy
-#| msgid "There was a problem with the import."
 msgid "There is a problem with the Payment or Refund amount."
-msgstr "Terdapat permasalahan impor."
+msgstr "Terdapat permasalahan dengan Pembayaran atau jumlah Pengembalian Dana."
 
 #: gnucash/gnome/dialog-payment.c:281
 msgid "You must select a transfer account from the account tree."
@@ -3238,8 +3234,7 @@ msgid "Invalid Account in Split"
 msgstr "Akun Tak Valid di Split"
 
 #: gnucash/gnome/dialog-sx-editor.c:760
-#, fuzzy, c-format
-#| msgid "Split with memo %s has an unparseable Credit Formula."
+#, c-format
 msgid "Split with memo %s has an unparsable Credit Formula."
 msgstr "Split dengan memo %s memiliki Rumus Kredit yang tak dapat diurai."
 
@@ -3248,8 +3243,7 @@ msgid "Unparsable Formula in Split"
 msgstr "Rumus yang Tak Dapat Diurai di Split"
 
 #: gnucash/gnome/dialog-sx-editor.c:776
-#, fuzzy, c-format
-#| msgid "Split with memo %s has an unparseable Debit Formula."
+#, c-format
 msgid "Split with memo %s has an unparsable Debit Formula."
 msgstr "Split dengan memo %s memiliki Rumus Debit yang tak dapat diurai."
 
@@ -4353,6 +4347,9 @@ msgid ""
 "\n"
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
+"Akun \"%s\" memiliki lebih dari satu sub-akun.\n"
+"\n"
+"Pindahkan sub-akun atau menghapusnya sebelum mencoba menghapus akun ini."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1714
 #, c-format
@@ -4445,10 +4442,8 @@ msgid "Edit Note"
 msgstr "Sunting Catatan"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:183
-#, fuzzy
-#| msgid "Edit note for the selected account and period"
 msgid "Edit note for the selected account and period."
-msgstr "Sunting catatan untuk akun dan periode yang terpilih"
+msgstr "Sunting catatan untuk akun dan periode yang terpilih."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:187
 #: gnucash/report/reports/standard/budget.scm:39
@@ -4456,10 +4451,8 @@ msgid "Budget Report"
 msgstr "Laporan Anggaran"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:189
-#, fuzzy
-#| msgid "Print the current report"
 msgid "Run the budget report."
-msgstr "Cetak laporan saat ini"
+msgstr "Jalankan laporan anggaran."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:199
 msgid "Refresh this window."
@@ -4486,10 +4479,8 @@ msgid "Note"
 msgstr "Catatan"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:237
-#, fuzzy
-#| msgid "Account Report"
 msgid "Run Report"
-msgstr "Laporan Akun"
+msgstr "Jalankan Laporan"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:321
 #: gnucash/gnome/gnc-plugin-page-budget.c:362
@@ -4850,10 +4841,8 @@ msgid "Enter a payment for the owner of this invoice"
 msgstr "Masukkan pembayaran untuk pemilik faktur ini"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:381
-#, fuzzy
-#| msgid "Open a company report window for the owner of this invoice"
 msgid "Open a customer report window for the owner of this invoice"
-msgstr "Buka jendela laporan perusahaan untuk pemilik faktur ini"
+msgstr "Buka jendela laporan pelanggan untuk pemilik faktur ini"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:383
 #: gnucash/gnome/gnc-plugin-page-invoice.c:404
@@ -4911,10 +4900,8 @@ msgid "Enter a payment for the owner of this bill"
 msgstr "Masukkan pembayaran untuk pemilik tagihan ini"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:402
-#, fuzzy
-#| msgid "Open a company report window for the owner of this bill"
 msgid "Open a vendor report window for the owner of this bill"
-msgstr "Buka jendela laporan perusahaan untuk pemilik tagihan ini"
+msgstr "Buka jendela laporan vendor untuk pemilik tagihan ini"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:409
 msgid "Use the current layout as default for all vendor bills and credit notes"
@@ -4963,10 +4950,8 @@ msgid "Enter a payment for the owner of this voucher"
 msgstr "Masukkan pembayaran untuk pemilik voucer ini"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:423
-#, fuzzy
-#| msgid "Open a company report window for the owner of this voucher"
 msgid "Open a employee report window for the owner of this voucher"
-msgstr "Buka jendela laporan perusahaan untuk pemilik voucer ini"
+msgstr "Buka jendela laporan pegawai untuk pemilik voucer ini"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:430
 msgid ""
@@ -5800,16 +5785,12 @@ msgid "_Sort By..."
 msgstr "_Urutkan Berdasar..."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:490
-#, fuzzy
-#| msgid "Stock Split Assistant"
 msgid "Stock Ass_istant"
-msgstr "Asisten Split Saham"
+msgstr "Asisten Saham"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:491
-#, fuzzy
-#| msgid "Stock Split Assistant"
 msgid "Stock Assistant"
-msgstr "Asisten Split Saham"
+msgstr "Asisten Saham"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:510
 msgid "_Go to Date"
@@ -5904,10 +5885,8 @@ msgid "A reversing entry has already been created for this transaction."
 msgstr "Entri balik telah dibuat untuk transaksi ini."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4063
-#, fuzzy
-#| msgid "Cut the current transaction?"
 msgid "Jump to the transaction?"
-msgstr "Potong transaksi saat ini?"
+msgstr "Lompat ke transaksi?"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4070
 msgid "Reverse Transaction"
@@ -6214,12 +6193,11 @@ msgstr "Transaksi Mendatang"
 
 #. Translators: This is a ngettext(3) message, %d is the number of scheduled transactions deleted
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:871
-#, fuzzy, c-format
-#| msgid "Do you really want to delete this scheduled transaction?"
+#, c-format
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete %d scheduled transactions?"
 msgstr[0] "Anda yakin ingin menghapus transaksi terjadwal ini?"
-msgstr[1] "Anda yakin ingin menghapus transaksi terjadwal ini?"
+msgstr[1] "Anda yakin ingin menghapus %d transaksi terjadwal ini?"
 
 #: gnucash/gnome/gnc-plugin-register2.c:57
 #: gnucash/gnome/gnc-plugin-register.c:58
@@ -7511,10 +7489,9 @@ msgid "New Account"
 msgstr "Akun Baru"
 
 #: gnucash/gnome-utils/dialog-account.c:2193
-#, fuzzy, c-format
-#| msgid "Renumber sub-accounts"
+#, c-format
 msgid "Renumber the immediate sub-accounts of '%s'?"
-msgstr "Nomori ulang sub-akun"
+msgstr "Nomori ulang langsung sub-akun dari '%s'?"
 
 #: gnucash/gnome-utils/dialog-account.c:2299
 #, c-format
@@ -7689,10 +7666,8 @@ msgid "Existing"
 msgstr "Sudah Ada"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:150
-#, fuzzy
-#| msgid "Use +- keys to increment/decrement number"
 msgid "You can type '+' or '-' to increment or decrement the number."
-msgstr "Gunakan tombol +- untuk menambah/mengurangi nomor"
+msgstr "Anda bisa mengetik '+' atau '-' untuk menambah atau mengurangi nomor."
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:299
 msgid "Action/Number"
@@ -8097,16 +8072,14 @@ msgstr "Baru..."
 #: gnucash/gnome-utils/gnc-amount-edit.c:411
 #: gnucash/register/register-core/formulacell.c:121
 #: gnucash/register/register-core/pricecell.c:161
-#, fuzzy, c-format
-#| msgid "An error occurred while processing %s."
+#, c-format
 msgid "An error occurred while processing '%s' at position %d"
-msgstr "Terjadi galat saat pemrosesan %s."
+msgstr "Terjadi galat saat pemrosesan '%s' pada posisi %d."
 
 #: gnucash/gnome-utils/gnc-amount-edit.c:417
-#, fuzzy, c-format
-#| msgid "An error occurred while processing %s."
+#, c-format
 msgid "An error occurred while processing '%s'"
-msgstr "Terjadi galat saat pemrosesan %s."
+msgstr "Terjadi galat saat pemrosesan '%s'."
 
 #: gnucash/gnome-utils/gnc-autoclear.c:100
 msgid "Account is already at Auto-Clear Balance."
@@ -8786,10 +8759,8 @@ msgid "Edit the global preferences of GnuCash"
 msgstr "Sunting preferensi global GnuCash"
 
 #: gnucash/gnome-utils/gnc-main-window.c:345
-#, fuzzy
-#| msgid "<b>Tab Position</b>"
 msgid "Tab P_osition"
-msgstr "<b>Posisi Tab</b>"
+msgstr "P_osisi Tab"
 
 #: gnucash/gnome-utils/gnc-main-window.c:348
 msgid "Select sorting criteria for this page view"
@@ -9040,7 +9011,7 @@ msgstr "Opsi Buku"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4897 gnucash/gnucash-core-app.cpp:261
 msgid "(user modifiable)"
-msgstr ""
+msgstr "(dapat dimodifikasi pengguna)"
 
 #. Translators: %s will be replaced with the current year
 #: gnucash/gnome-utils/gnc-main-window.c:4924
@@ -9068,7 +9039,9 @@ msgstr "Program akuntansi untuk mengelola keuangan personal dan usaha kecil."
 #. contributors.
 #: gnucash/gnome-utils/gnc-main-window.c:4954
 msgid "translator-credits"
-msgstr "Triyan W. Nugroho <triyan.wn@gmail.com>, 2020"
+msgstr ""
+"Triyan W. Nugroho <triyan.wn@gmail.com>, 2020\n"
+"Sarekashi <sarekashi@tuta.io>, 2022"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4957
 msgid "Visit the GnuCash website."
@@ -10378,11 +10351,11 @@ msgstr "Untuk mendapatkan versi stabil terakhir, silakan mengacu ke {1}"
 #. Translators: Guile is the programming language of the reports
 #: gnucash/gnucash-core-app.cpp:103
 msgid "Loading system wide Guile extensions…"
-msgstr ""
+msgstr "Memuat keseluruhan sistem ekstensi Guile…"
 
 #: gnucash/gnucash-core-app.cpp:115
 msgid "Loading user specific Guile extensions…"
-msgstr ""
+msgstr "Memuat spesifik pengguna ekstensi Guile…"
 
 #: gnucash/gnucash-core-app.cpp:224
 msgid "- GnuCash, accounting for personal and small business finance"
@@ -10393,10 +10366,8 @@ msgid "{1} [options] [datafile]"
 msgstr "{1} [opsi] [berkas_data]"
 
 #: gnucash/gnucash-core-app.cpp:255
-#, fuzzy
-#| msgid "GnuCash "
 msgid "GnuCash Paths"
-msgstr "GnuCash "
+msgstr "GnuCash Path"
 
 #: gnucash/gnucash-core-app.cpp:270
 msgid "GnuCash {1}"
@@ -10442,10 +10413,8 @@ msgstr ""
 "Ini dapat dipanggil beberapa kali."
 
 #: gnucash/gnucash-core-app.cpp:309
-#, fuzzy
-#| msgid "Show plot"
 msgid "Show paths"
-msgstr "Tampilkan plot"
+msgstr "Tampilkan path"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
@@ -11210,40 +11179,28 @@ msgstr ""
 "kemungkinan cocok akan ditampilkan pada daftar kecocokan."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:25
-#, fuzzy
-#| msgid "Add matching transactions below this score"
 msgid "Likely matching transaction within these days"
-msgstr "Tambahkan transaksi yang cocok di bawah skor ini"
+msgstr "Kemungkinan transaksi yang cocok dalam beberapa hari ini"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:26
-#, fuzzy
-#| msgid ""
-#| "This field specifies the minimum matching score a potential matching "
-#| "transaction must have to be displayed in the match list."
 msgid ""
 "This field specifies the maximum number of days a transaction is likely to "
 "be a match in the list."
 msgstr ""
-"Bidang ini menentukan skor kecocokan minimum sebuah transaksi yang "
-"kemungkinan cocok akan ditampilkan pada daftar kecocokan."
+"Bidang ini menentukan jumlah hari maksimum suatu transaksi yang kemungkinan "
+"besar akan cocok dalam daftar."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:30
-#, fuzzy
-#| msgid "Clear matching transactions above this score"
 msgid "UnLikely matching a transaction outside of these days"
-msgstr "Bersihkan transaksi yang cocok di atas skor ini"
+msgstr "Tidak mungkin mencocokan transaksi di luar hari-hari ini"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:31
-#, fuzzy
-#| msgid ""
-#| "This field specifies the minimum matching score a potential matching "
-#| "transaction must have to be displayed in the match list."
 msgid ""
 "This field specifies the minimum number of days a transaction is unlikely to "
 "be a match in the list."
 msgstr ""
-"Bidang ini menentukan skor kecocokan minimum sebuah transaksi yang "
-"kemungkinan cocok akan ditampilkan pada daftar kecocokan."
+"Bidang ini menentukan jumlah hari minimum suatu transaksi yang tidak mungkin "
+"cocok dalam daftar."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:35
 msgid "Add matching transactions below this score"
@@ -16743,7 +16700,7 @@ msgstr "Tampilkan hanya lot terbuka"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:304
 msgid "<b>Splits _free</b>"
-msgstr "<B> Berbagi_gratis </ b>"
+msgstr "<b>Split _bebas</b>"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:359
 msgid "<b>Splits _in lot</b>"
