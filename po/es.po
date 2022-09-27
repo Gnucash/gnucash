@@ -12,6 +12,7 @@
 # Francisco Serrador <fserrador@gmail.com>, 2021, 2022.
 # Cow <javier.fserrador@gmail.com>, 2022.
 # Eduardo Malaspina <vaio0@swismail.com>, 2022.
+# Luis D. Lafaurie <luis.lafaurie@tecnativa.com>, 2022.
 #
 #
 # ###############################################################################
@@ -81,8 +82,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-09-11 23:24+0200\n"
-"PO-Revision-Date: 2022-09-21 15:50+0000\n"
-"Last-Translator: Eduardo Malaspina <vaio0@swismail.com>\n"
+"PO-Revision-Date: 2022-09-26 21:19+0000\n"
+"Last-Translator: Luis D. Lafaurie <luis.lafaurie@tecnativa.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -2764,17 +2765,13 @@ msgid "Find Job"
 msgstr "Buscar Ejercicio"
 
 #: gnucash/gnome/dialog-lot-viewer.c:817
-#, fuzzy
-#| msgid "Empty space"
 msgid "Empty"
-msgstr "Espacio vacío"
+msgstr "Vacío"
 
 #: gnucash/gnome/dialog-lot-viewer.c:829
-#, fuzzy
-#| msgid "Open"
 msgctxt "Adjective"
 msgid "Open"
-msgstr "Abrir"
+msgstr "Abierto"
 
 #: gnucash/gnome/dialog-lot-viewer.c:923 gnucash/gnome/dialog-order.c:890
 msgid "Closed"
@@ -8954,10 +8951,8 @@ msgid "Edit the global preferences of GnuCash"
 msgstr "Edita las preferencias globales de GnuCash"
 
 #: gnucash/gnome-utils/gnc-main-window.c:345
-#, fuzzy
-#| msgid "<b>Tab Position</b>"
 msgid "Tab P_osition"
-msgstr "<b>Posición de Lengüeta</b>"
+msgstr "<b>Posición de pestaña</b>"
 
 #: gnucash/gnome-utils/gnc-main-window.c:348
 msgid "Select sorting criteria for this page view"
@@ -10636,10 +10631,8 @@ msgid "{1} [options] [datafile]"
 msgstr "{1} [opciones] [fichero de datos]"
 
 #: gnucash/gnucash-core-app.cpp:255
-#, fuzzy
-#| msgid "GnuCash "
 msgid "GnuCash Paths"
-msgstr "GnuCash "
+msgstr "GnuCash"
 
 #: gnucash/gnucash-core-app.cpp:270
 msgid "GnuCash {1}"
@@ -10687,10 +10680,8 @@ msgstr ""
 "boletínuede ser invocado múltiples veces."
 
 #: gnucash/gnucash-core-app.cpp:309
-#, fuzzy
-#| msgid "Show plot"
 msgid "Show paths"
-msgstr "Mostrar trazo"
+msgstr "Mostrar traza"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
@@ -15963,7 +15954,7 @@ msgstr "_Representar símbolo"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:363
 msgid "Time_zone"
-msgstr "_Zona horaria"
+msgstr "Zona_horaria"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:374
 msgid "_Unknown"
@@ -16746,10 +16737,8 @@ msgid "Green"
 msgstr "Verde"
 
 #: gnucash/gtkbuilder/dialog-import.glade:871
-#, fuzzy
-#| msgid "Do not print transaction detail"
 msgid "Edit imported transaction details"
-msgstr "No escribir detalles de transacción"
+msgstr "Editar detalles de transacciones importadas"
 
 #: gnucash/gtkbuilder/dialog-import.glade:944
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:151
@@ -22166,24 +22155,18 @@ msgstr "Deshabilitado"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1314
-#, fuzzy
-#| msgid "Assign a transfer account to the selection."
 msgid "_Assign a transfer account to the selection"
-msgstr "Asigna una cuenta transferencial a la selección."
+msgstr "_Asignar una cuenta a la selección para transferir."
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1365
-#, fuzzy
-#| msgid "Description, Notes, or Memo"
 msgid "_Edit description, notes, or memo"
-msgstr "Descripción, Anotaciones o Memorándum"
+msgstr "_Editar descripción, anotaciones o memorándum"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1374
-#, fuzzy
-#| msgid "Reset defaults"
 msgid "_Reset all edits"
-msgstr "Restablecer predeterminados"
+msgstr "_Restablecer predeterminados"
 
 #: gnucash/import-export/import-main-matcher.c:1545
 msgctxt "Column header for 'Adding transaction'"
