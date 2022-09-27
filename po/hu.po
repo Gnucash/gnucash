@@ -7,14 +7,15 @@
 # Kárász Attila <cult.edie@gmail.com>, 2022.
 # Szia Tomi <sziatomi01@gmail.com>, 2022.
 # mocsa <csaba@feltoltve.hu>, 2022.
+# ovari <ovari123@zoho.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.12-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-09-11 23:24+0200\n"
-"PO-Revision-Date: 2022-08-22 10:17+0000\n"
-"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
+"PO-Revision-Date: 2022-09-27 08:20+0000\n"
+"Last-Translator: ovari <ovari123@zoho.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -22,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 
 # #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
 # src/trans.h:283
@@ -877,7 +878,7 @@ msgstr ""
 
 #: gnucash/gnome/assistant-acct-period.c:188
 msgid "The book was closed successfully."
-msgstr "A könyvelés lezárása sikeres volt."
+msgstr "A könyv lezárása sikeres volt."
 
 #. Translators: %s is a date string. %d is the number of books
 #. that will be created. This is a ngettext(3) message (but
@@ -1022,9 +1023,8 @@ msgstr "Válassza ki az új számlák pénznemét."
 #: gnucash/gnome/assistant-hierarchy.c:1540
 #: gnucash/gnome/assistant-hierarchy.c:1559
 #: gnucash/gnome-utils/dialog-utils.c:810
-#, fuzzy
 msgid "New Book Options"
-msgstr "Könyv beállításai"
+msgstr "Új könyv beállítások"
 
 #: gnucash/gnome/assistant-loan.cpp:128
 msgid "Taxes"
@@ -3719,7 +3719,7 @@ msgstr "_Költségvetés"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:184
 msgid "Close _Books"
-msgstr "Könyvek lezárása"
+msgstr "_Könyvek lezárása"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:185
 msgid "Archive old data using accounting periods"
@@ -3754,11 +3754,11 @@ msgstr "Használja a kölcsön visszafizetési számológépet"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:207
 msgid "_Close Book"
-msgstr "Könyv lezárása"
+msgstr "_Könyv lezárása"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:208
 msgid "Close the Book at the end of the Period"
-msgstr ""
+msgstr "Könyv lezárása az időszak végén"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:212
 msgid "_Import Map Editor"
