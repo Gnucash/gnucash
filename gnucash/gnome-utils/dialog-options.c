@@ -3478,6 +3478,7 @@ gnc_option_set_ui_value_pixmap (GNCOption *option, gboolean use_default,
                                     g_strdup (string), g_free);
             DEBUG("Set %s, retrieved %s", string, test ? test : "(null)");
             gnc_image_option_update_preview_cb (GTK_FILE_CHOOSER(widget), option);
+            g_free (test);
         }
         LEAVE("FALSE");
         g_free ((gpointer *) string);

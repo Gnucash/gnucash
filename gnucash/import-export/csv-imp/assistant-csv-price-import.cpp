@@ -739,7 +739,10 @@ CsvImpPriceAssist::check_for_valid_filename ()
 {
     auto file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(file_chooser));
     if (!file_name || g_file_test (file_name, G_FILE_TEST_IS_DIR))
+    {
+        g_free (file_name);
         return false;
+    }
 
     auto filepath = gnc_uri_get_path (file_name);
     auto starting_dir = g_path_get_dirname (filepath);

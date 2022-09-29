@@ -71,7 +71,6 @@ gnc_file_dialog_int (GtkWindow *parent,
                      )
 {
     GtkWidget *file_box;
-    const char *internal_name;
     char *file_name = NULL;
     gchar * okbutton = NULL;
     const gchar *ok_icon = NULL;
@@ -171,17 +170,17 @@ gnc_file_dialog_int (GtkWindow *parent,
         else
         {
             /* look for constructs like postgres://foo */
-            internal_name = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER (file_box));
-            if (internal_name != NULL)
+            file_name = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER (file_box));
+            if (file_name != NULL)
             {
-                if (strstr (internal_name, "file://") == internal_name)
+                if (strstr (file_name, "file://") == file_name)
                 {
+                    g_free (file_name);
                     /* nope, a local file name */
-                    internal_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (file_box));
+                    file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (file_box));
                 }
-                file_name = g_strdup(internal_name);
+                file_name_list = g_slist_append (file_name_list, file_name);
             }
-            file_name_list = g_slist_append (file_name_list, file_name);
         }
     }
     gtk_widget_destroy(GTK_WIDGET(file_box));
