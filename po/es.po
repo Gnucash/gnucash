@@ -13,6 +13,7 @@
 # Cow <javier.fserrador@gmail.com>, 2022.
 # Eduardo Malaspina <vaio0@swismail.com>, 2022.
 # Luis D. Lafaurie <luis.lafaurie@tecnativa.com>, 2022.
+# Guille Lopez <willelopz@gmail.com>, 2022.
 #
 #
 # ###############################################################################
@@ -82,8 +83,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-09-11 23:24+0200\n"
-"PO-Revision-Date: 2022-09-26 21:19+0000\n"
-"Last-Translator: Luis D. Lafaurie <luis.lafaurie@tecnativa.com>\n"
+"PO-Revision-Date: 2022-09-28 23:23+0000\n"
+"Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -16101,15 +16102,15 @@ msgstr "¿Anular la Lengüeta Imponible global?"
 #: gnucash/gtkbuilder/dialog-order.glade:312
 #: gnucash/gtkbuilder/dialog-order.glade:659
 msgid "Billing Information"
-msgstr "Información de Cargo Pendiente"
+msgstr "Información de facturación"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:954
 msgid "Shipping Information"
-msgstr "Información Transportadora"
+msgstr "Información de envío"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:973
 msgid "Shipping Address"
-msgstr "Dirección de Transporte"
+msgstr "Dirección de envío"
 
 #. Title of dialog
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:9
@@ -16126,7 +16127,7 @@ msgstr "Para importar índices de proveedores."
 
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:192
 msgid "<b>2. Select Import Type</b>"
-msgstr "<b>2. Seleccione la Familia de Importación</b>"
+msgstr "<b>2. Seleccione el tipo de Importación</b>"
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:52
 msgid "Exit the saved report configurations dialog"
