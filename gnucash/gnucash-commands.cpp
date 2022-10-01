@@ -363,6 +363,24 @@ Gnucash::add_quotes (const bo_str& uri)
 }
 
 int
+Gnucash::report_quotes (const char* source, const StrVec& commodities, bool verbose)
+{
+    try
+    {
+        GncQuotes quotes;
+        quotes.report(source, commodities, verbose);
+        if (quotes.had_failures())
+            std::cerr << quotes.report_failures() << std::endl;
+    }
+    catch (const GncQuoteException& err)
+    {
+        std::cerr << bl::translate("Price retrieval failed: ") << err.what() << std::endl;
+        return -1;
+   }
+    return 0;
+}
+
+int
 Gnucash::run_report (const bo_str& file_to_load,
                      const bo_str& run_report,
                      const bo_str& export_type,
