@@ -124,6 +124,7 @@ class GncFQQuoteSource final : public GncQuoteSource
     bool m_ready;
     std::string m_version;
     StrVec m_sources;
+    std::string m_api_key;
 public:
     GncFQQuoteSource();
     ~GncFQQuoteSource() = default;
@@ -145,7 +146,7 @@ GncFQQuoteSource::GncFQQuoteSource() :
 c_cmd{bp::search_path("perl")},
 c_fq_wrapper{std::string(gnc_path_get_bindir()) + "/finance-quote-wrapper"},
 m_ready{false},
-m_version{}, m_sources{}
+m_version{}, m_sources{}, m_api_key{}
 {
     StrVec args{"-w", c_fq_wrapper, "-v"};
     const std::string empty_string;
@@ -175,6 +176,15 @@ m_version{}, m_sources{}
     m_ready = true;
     sources.erase(sources.begin());
     m_sources = std::move(sources);
+
+    auto av_key = gnc_prefs_get_string ("general.finance-quote", "alphavantage-api-key");
+    if (!av_key)
+        av_key = getenv("ALPHAVANTAGE_API_KEY");
+
+    if (av_key)
+        m_api_key = std::string(av_key);
+    else
+        PWARN("No Alpha Vantage API key set, currency quotes and other AlphaVantage based quotes won't work.");
 }
 
 QuoteResult
@@ -190,10 +200,6 @@ GncFQQuoteSource::run_cmd (const StrVec& args, const std::string& json_string) c
     StrVec out_vec, err_vec;
     int cmd_result;
 
-    auto av_key = gnc_prefs_get_string ("general.finance-quote", "alphavantage-api-key");
-    if (!av_key)
-        PWARN("No Alpha Vantage API key set, currency quotes and other AlphaVantage based quotes won't work.");
-
     try
     {
         std::future<std::vector<char> > out_buf, err_buf;
@@ -204,7 +210,7 @@ GncFQQuoteSource::run_cmd (const StrVec& args, const std::string& json_string) c
                            bp::std_out > out_buf,
                            bp::std_err > err_buf,
                            bp::std_in < input_buf,
-                           bp::env["ALPHAVANTAGE_API_KEY"]= (av_key ? av_key : ""),
+                           bp::env["ALPHAVANTAGE_API_KEY"]= (m_api_key.empty() ? m_api_key : ""),
                            svc);
         svc.run();
         process.wait();
