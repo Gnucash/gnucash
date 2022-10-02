@@ -188,8 +188,14 @@ if(WITH_PYTHON)
 
 endif()
 
-set(python_bindings_DATA ${PYEXEC_FILES}
+set(python_bindings_DATA
+  app_utils.py
+  deprecation.py
+  function_class.py
+  gnucash_business.py
   gnucash_core.i
+  gnucash_core.py
+  __init__.py
   sqlite3test.c
   time64.i)
 

@@ -219,6 +219,7 @@ gnc_add_scheme_targets(scm-expressions
 set_local_dist(guile_DIST_local
     CMakeLists.txt
     core-utils.scm
+    options.scm
     ${guile_SOURCES}
     ${guile_HEADERS}
     ${engine_SCHEME_0}
