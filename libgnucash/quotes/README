@@ -8,12 +8,6 @@ finance-quote-wrapper.in:
   allows gnucash to communicate with Finance::Quote.
   The requests and responses are in json format.
 
-gnc-fq-dump.in:
-
-  Source file for gnc-fq-dump which is a perl script that retrieves
-  a quote from Finance::Quote and dumps the response to the terminal.
-  Its useful for determining problems with F::Q.
-
 gnc-fq-update.in:
 
   Source file for gnc-fq-update which is a perl script that updates
