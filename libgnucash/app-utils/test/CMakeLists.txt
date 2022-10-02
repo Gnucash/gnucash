@@ -46,8 +46,6 @@ set_dist_list(test_app_utils_DIST
   test-exp-parser.c
   test-print-parse-amount.cpp
   test-sx.cpp
-  test-c-interface.scm
-  test-date-utilities.scm
   ${test_app_utils_scheme_SOURCES}
   ${test_app_utils_SOURCES}
 )
