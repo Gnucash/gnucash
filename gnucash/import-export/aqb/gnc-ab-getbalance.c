@@ -33,11 +33,7 @@
 
 #include <glib/gi18n.h>
 #include <aqbanking/banking.h>
-#ifdef AQBANKING6
 # include <aqbanking/types/transaction.h>
-#else
-#include <aqbanking/jobgetbalance.h>
-#endif
 
 #include "gnc-ab-getbalance.h"
 #include "gnc-ab-kvp.h"
@@ -70,14 +66,6 @@ gnc_ab_getbalance(GtkWidget *parent, Account *gnc_acc)
         return;
     }
 
-#ifndef AQBANKING6
-    if (AB_Banking_OnlineInit(api) != 0)
-    {
-        g_warning("gnc_ab_gettrans: Couldn't initialize AqBanking API");
-        goto cleanup;
-    }
-    online = TRUE;
-#endif
     /* Get the AqBanking Account */
     ab_acc = gnc_ab_get_ab_account(api, gnc_acc);
     if (!ab_acc)
@@ -88,29 +76,19 @@ gnc_ab_getbalance(GtkWidget *parent, Account *gnc_acc)
     }
 
     /* Get a GetBalance job and enqueue it */
-#ifdef AQBANKING6
     if (!AB_AccountSpec_GetTransactionLimitsForCommand(ab_acc, AB_Transaction_CommandGetBalance))
-#else
-    job = AB_JobGetBalance_new(ab_acc);
-    if (!job || AB_Job_CheckAvailability(job))
-#endif
     {
         g_warning("gnc_ab_getbalance: JobGetBalance not available for this "
                   "account");
         gnc_error_dialog (GTK_WINDOW (parent), _("Online action \"Get Balance\" not available for this account."));
         goto cleanup;
     }
-#ifdef AQBANKING6
     job = AB_Transaction_new();
     AB_Transaction_SetCommand(job, AB_Transaction_CommandGetBalance);
     AB_Transaction_SetUniqueAccountId(job, AB_AccountSpec_GetUniqueId(ab_acc));
 
     job_list = AB_Transaction_List2_new();
     AB_Transaction_List2_PushBack(job_list, job);
-#else
-    job_list = AB_Job_List2_new();
-    AB_Job_List2_PushBack(job_list, job);
-#endif
     /* Get a GUI object */
     gui = gnc_GWEN_Gui_get(parent);
     if (!gui)
@@ -123,38 +101,21 @@ gnc_ab_getbalance(GtkWidget *parent, Account *gnc_acc)
     context = AB_ImExporterContext_new();
 
     /* Execute the job */
-#ifdef AQBANKING6
     AB_Banking_SendCommands(api, job_list, context);
-#else
-    AB_Banking_ExecuteJobs(api, job_list, context);
-#endif
     /* Ignore the return value of AB_Banking_ExecuteJobs(), as the job's
      * status always describes better whether the job was actually
      * transferred to and accepted by the bank.  See also
      * https://lists.gnucash.org/pipermail/gnucash-de/2008-September/006389.html
      */
-#ifdef AQBANKING6
     job_status = AB_Transaction_GetStatus(job);
     if (job_status != AB_Transaction_StatusEnqueued
             && job_status != AB_Transaction_StatusPending
             && job_status != AB_Transaction_StatusAccepted)
-#else
-    job_status = AB_Job_GetStatus(job);
-    if (job_status != AB_Job_StatusFinished
-            && job_status != AB_Job_StatusPending)
-#endif
     {
         g_warning("gnc_ab_getbalance: Error on executing job: %d", job_status);
-#ifdef AQBANKING6
         gnc_error_dialog (GTK_WINDOW (parent),
                           _("Error on executing job.\n\nStatus: %s"),
                           AB_Transaction_Status_toString(job_status));
-#else
-        gnc_error_dialog (GTK_WINDOW (parent),
-                          _("Error on executing job.\n\nStatus: %s - %s"),
-                          AB_Job_Status2Char(job_status),
-                          AB_Job_GetResultText(job));
-#endif
         goto cleanup;
     }
 
@@ -168,18 +129,9 @@ cleanup:
         AB_ImExporterContext_free(context);
     if (gui)
         gnc_GWEN_Gui_release(gui);
-#ifdef AQBANKING6
      if (job_list)
          AB_Transaction_List2_free(job_list);
      if (job)
          AB_Transaction_free(job);
-#else
-    if (job_list)
-        AB_Job_List2_free(job_list);
-    if (job)
-        AB_Job_free(job);
-    if (online)
-        AB_Banking_OnlineFini(api);
-#endif
     gnc_AB_BANKING_fini(api);
 }

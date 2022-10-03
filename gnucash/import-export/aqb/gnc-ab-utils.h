@@ -52,8 +52,6 @@ G_BEGIN_DECLS
  * in the interval [0..99]. */
 #define GWENHYWFAR_VERSION_INT (10000 * GWENHYWFAR_VERSION_MAJOR + 100 * GWENHYWFAR_VERSION_MINOR + GWENHYWFAR_VERSION_PATCHLEVEL)
 
-#if AQBANKING_VERSION_INT >= 59900
-# define AQBANKING6 1
 # define GNC_AB_ACCOUNT_SPEC AB_ACCOUNT_SPEC
 # define GNC_AB_ACCOUNT_SPEC_LIST AB_ACCOUNT_SPEC_LIST
 # define GNC_AB_JOB AB_TRANSACTION
@@ -61,18 +59,6 @@ G_BEGIN_DECLS
 # define GNC_AB_JOB_LIST2_ITERATOR AB_TRANSACTION_LIST2_ITERATOR
 # define GNC_AB_JOB_STATUS AB_TRANSACTION_STATUS
 # define GNC_GWEN_DATE GWEN_DATE
-#else
-# define GNC_AB_ACCOUNT_SPEC AB_ACCOUNT
-# define GNC_AB_ACCOUNT_SPEC_LIST AB_ACCOUNT_LIST2
-# define GNC_AB_JOB AB_JOB
-# define GNC_AB_JOB_LIST2 AB_JOB_LIST2
-# define GNC_AB_JOB_LIST2_ITERATOR AB_JOB_LIST2_ITERATOR
-# define GNC_AB_JOB_STATUS AB_JOB_STATUS
-# define GNC_GWEN_DATE GWEN_TIME
-#endif
-#if GWENHYWFAR_VERSION_INT >= 49900
-# define GWENHYWFAR5
-#endif
 
 #define GNC_PREFS_GROUP_AQBANKING       "dialogs.import.hbci"
 #define GNC_PREF_FORMAT_SWIFT940        "format-swift-mt940"
@@ -290,7 +276,6 @@ GWEN_DB_NODE *gnc_ab_get_permanent_certs (void);
 gchar* gnc_ab_create_online_id (const gchar *bankcode, const gchar *accountnumber);
 
 
-#if (AQBANKING_VERSION_INT >= 60400)
 /**
  * Obtain the list of templates based on the aqbanking account spec's target accounts.
  *
@@ -299,7 +284,6 @@ gchar* gnc_ab_create_online_id (const gchar *bankcode, const gchar *accountnumbe
  */
 GList*
 gnc_ab_trans_templ_list_new_from_ref_accounts (GNC_AB_ACCOUNT_SPEC *ab_acc);
-#endif
 
 G_END_DECLS
 
