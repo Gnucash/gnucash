@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-09-11 23:24+0200\n"
-"PO-Revision-Date: 2022-09-30 11:18+0000\n"
+"PO-Revision-Date: 2022-10-05 01:24+0000\n"
 "Last-Translator: ovari <ovari123@zoho.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -3251,7 +3251,7 @@ msgstr "_Nézet"
 #: gnucash/gnome/dialog-sx-editor2.c:168 gnucash/gnome/dialog-sx-editor.c:170
 #: gnucash/gnome-utils/gnc-main-window.c:280
 msgid "_Actions"
-msgstr "M_űveletek"
+msgstr "_Műveletek"
 
 #: gnucash/gnome/dialog-sx-editor2.c:200 gnucash/gnome/dialog-sx-editor.c:202
 msgid ""
@@ -7065,7 +7065,7 @@ msgstr "_Egyeztetés"
 #: gnucash/gnome/window-reconcile2.c:2127 gnucash/gnome/window-reconcile.c:2389
 #: gnucash/gtkbuilder/dialog-tax-table.glade:506
 msgid "_Account"
-msgstr "_Fiók"
+msgstr "_Számla"
 
 #: gnucash/gnome/window-reconcile2.c:2129
 #: gnucash/gnome/window-reconcile2.c:2210 gnucash/gnome/window-reconcile.c:2391
@@ -7276,9 +7276,8 @@ msgstr "_Új tétel"
 #: gnucash/gnome-utils/gnc-recurrence.c:544
 #: gnucash/gtkbuilder/dialog-commodities.glade:121
 #: gnucash/gtkbuilder/dialog-price.glade:848
-#, fuzzy
 msgid "_Add"
-msgstr "_Új"
+msgstr "_Hozzáadás"
 
 #: gnucash/gnome-search/dialog-search.c:1172
 msgid "all criteria are met"
@@ -9005,7 +9004,7 @@ msgstr "A GnuCash-súgó megnyitása"
 
 #: gnucash/gnome-utils/gnc-main-window.c:400
 msgid "_About"
-msgstr "Névjegy"
+msgstr "_Névjegy"
 
 #: gnucash/gnome-utils/gnc-main-window.c:401
 msgid "About GnuCash"
@@ -15042,9 +15041,8 @@ msgid "Smallest _fraction"
 msgstr "Legkisebb _egység"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1305
-#, fuzzy
 msgid "Account _Color"
-msgstr "Számla színe"
+msgstr "Számla _színe"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1358
 msgid "No_tes"
@@ -16061,10 +16059,8 @@ msgid "_Jump To"
 msgstr "_Ugrás"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:127
-#, fuzzy
-#| msgid "All accounts"
 msgid "All _accounts"
-msgstr "Minden számla"
+msgstr "Minden _számla"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:165
 msgid "Search scope"
@@ -17708,9 +17704,8 @@ msgid "If activated, include manually entered prices."
 msgstr "Kézi _bevitelű árak törlése"
 
 #: gnucash/gtkbuilder/dialog-price.glade:708
-#, fuzzy
 msgid "_Added by the application"
-msgstr "Kilépés az alkalmazásból"
+msgstr "_Alkalmazás hozzáadta"
 
 #: gnucash/gtkbuilder/dialog-price.glade:712
 msgid ""
@@ -17918,7 +17913,7 @@ msgstr "<b>Kivála_sztott jelentések</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:101
 msgid "A_dd >>"
-msgstr "Hozzáa_dás >>"
+msgstr "_Hozzáadás >>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:117
 msgid "<< _Remove"
@@ -19584,9 +19579,8 @@ msgid "Online Banking Connection Window"
 msgstr "Online Banking kapcsolat ablak"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:26
-#, fuzzy
 msgid "_Abort"
-msgstr "Névjegy"
+msgstr "_Névjegy"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:82
 #: gnucash/import-export/aqb/dialog-ab.glade:148
@@ -19806,9 +19800,8 @@ msgid "Bank Code"
 msgstr "Bankkód"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1483
-#, fuzzy
 msgid "_Add current"
-msgstr "Jelenlegi felvétele"
+msgstr "Folyószámla _hozzáadása"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1489
 msgid "Add the current online transaction as a new transaction template"
