@@ -7,8 +7,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-09-11 23:24+0200\n"
-"PO-Revision-Date: 2022-09-23 10:21+0000\n"
-"Last-Translator: Minjae Isaac Kwon <minjae.isaac.kwon@gmail.com>\n"
+"PO-Revision-Date: 2022-10-06 01:20+0000\n"
+"Last-Translator: 이정희 <daemul72@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ko/>\n"
 "Language: ko\n"
@@ -4119,14 +4119,14 @@ msgstr "열기"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:414
 msgid "Open2"
-msgstr "2번 열기"
+msgstr "열기2"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:416
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:287
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:288
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:289
 msgid "Edit"
-msgstr "편집"
+msgstr "편집하기"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:417
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:290
@@ -4142,7 +4142,7 @@ msgstr "새로 만들기"
 #: gnucash/gnome/gnc-plugin-page-register2.c:500
 #: gnucash/gnome/gnc-plugin-page-register.c:645
 msgid "Delete"
-msgstr "삭제"
+msgstr "삭제하기"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:463
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1977
@@ -4196,13 +4196,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1423
-#, fuzzy
 msgid "_Pick another account"
-msgstr "송금 계정 선택(_S)"
+msgstr "다른 계정 선택(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1424
 msgid "_Do it anyway"
-msgstr ""
+msgstr "무조건 하기(_D)"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1507
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1643
@@ -4235,27 +4234,27 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1714
 #, c-format
 msgid "The account %s will be deleted."
-msgstr "계정 %s가 삭제될 것입니다."
+msgstr "%s 계정이 삭제됩니다."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1723
 #, c-format
 msgid "All transactions in this account will be moved to the account %s."
-msgstr "이 계정의 전체 거래를 계정 %s로 이동시킬 것입니다."
+msgstr "이 계정의 모든 거래는 %s 계정으로 이동됩니다."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1730
 #, c-format
 msgid "All transactions in this account will be deleted."
-msgstr "이 계정의 전체 거래를 삭제될 것입니다."
+msgstr "이 계정의 모든 거래가 삭제됩니다."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1739
-#, fuzzy, c-format
+#, c-format
 msgid "Its sub-account will be moved to the account %s."
-msgstr "그 하위 계정 전체를 계정 %s 로 이동시킬 것입니다."
+msgstr "하위 계정은 %s 계정으로 이동됩니다."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1745
-#, fuzzy, c-format
+#, c-format
 msgid "Its subaccount will be deleted."
-msgstr "그 하위 계정 전체를 삭제할 것입니다."
+msgstr "해당 하위 계정이 삭제됩니다."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1749
 #, c-format
@@ -6166,9 +6165,8 @@ msgid "Current Value:"
 msgstr "현재 가치:"
 
 #: gnucash/gnome/gnc-split-reg2.c:886
-#, fuzzy
 msgid "Account Payable / Receivable Register"
-msgstr "수취 계정"
+msgstr "외상매입금 / 외상매출금 기입장"
 
 #: gnucash/gnome/gnc-split-reg2.c:888
 msgid ""
@@ -6176,6 +6174,8 @@ msgid ""
 "Changing the entries may cause harm, please use the business options to "
 "change the entries."
 msgstr ""
+"표시된 기입장은 외상매입금 또는 외상매출금에 대한 것입니다. 항목을 변경하면 "
+"피해가 발생할 수 있으므로 비즈니스 옵션을 사용하여 항목을 변경하십시오."
 
 #: gnucash/gnome/gnc-split-reg2.c:937 gnucash/gnome/gnc-split-reg.c:2448
 msgid "This account register is read-only."
@@ -12121,9 +12121,8 @@ msgstr "이 대화상자는 기존 가격을 바꾸기 전에 표시됩니다."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:49
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:172
-#, fuzzy
 msgid "Edit account payable/accounts receivable register"
-msgstr "수취 계정"
+msgstr "외상매입금/외상매출금 기입장 편집하기"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:50
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:173
@@ -13243,13 +13242,13 @@ msgid ""
 "\n"
 "Click 'Cancel' if you do not wish to create any new accounts now."
 msgstr ""
-"이 어시스턴트는 자산(예: 투자, 당좌예금 또는 저축예금), 부채(예: 대출) 및 다"
-"양한 종류의 수익과 비용에 대한 GnuCash 계정 세트를 만듭니다.\n"
+"이 어시스턴트는 자산(예: 출자, 당좌예금 또는 저축예금), 부채(예: 대여금) 및 "
+"다양한 종류의 수익과 비용에 대한 GnuCash 계정 세트를 만듭니다.\n"
 "\n"
-"여기에서 귀하의 요구에 가장 가까운 계정 세트를 선택할 수 있습니다. 어시스턴트"
-"가 완료되면 나중에 언제든지 계정을 추가, 이름 변경, 수정 및 제거할 수 있습니"
-"다. 또한 하위 계정을 추가하고 한 상위 계정에서 다른 상위 계정으로 계정(하위 "
-"계정과 함께)을 이동할 수도 있습니다.\n"
+"여기에서 귀하의 요구에 가장 가까운 계정 세트를 선택할 수 있습니다. "
+"어시스턴트가 완료되면 나중에 언제든지 계정을 추가, 이름 변경, 수정 및 제거할 "
+"수 있습니다. 또한 하위 계정을 추가하고 한 상위 계정에서 다른 상위 계정으로 "
+"계정(하위 계정과 함께)을 이동할 수도 있습니다.\n"
 "\n"
 "지금 새 계정을 만들지 않으려면 '취소'를 클릭하십시오."
 
@@ -18829,17 +18828,10 @@ msgid "Initial Online Banking Setup"
 msgstr "초기 온라인 뱅킹 설정"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:111
-#, fuzzy
-#| msgid ""
-#| "The Setup of your Online Banking connection is handled by the external "
-#| "program \"AqBanking Setup Wizard\". Please press the button below to "
-#| "start this program."
 msgid ""
 "The Setup of your Online Banking connection is handled by the external "
 "program \"AqBanking Setup\"."
-msgstr ""
-"온라인 뱅킹 연결 설정을 외부 프로그램 \"Aq뱅킹 설정 마법사\"에 의해 제어됩니"
-"다. 이 프로그램을 시작하기 위하여 아래 단추를 눌러 주세요."
+msgstr "온라인 뱅킹 연결 설정은 외부 프로그램 \"AqBanking 설정\"에 의해 처리됩니다."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:125
 msgid ""
@@ -23582,79 +23574,64 @@ msgstr "시작일과 종료일 사용하기"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
-#, fuzzy
-#| msgid "1st Est Tax Quarter"
 msgid "1st Est Tax Quarter (Jan 1 - Mar 31)"
-msgstr "1분기 추정치 세금"
+msgstr "1분기 부가세 예정납부 (1 월 1 일 - 3 월 31 일)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
 msgid "2nd Est Tax Quarter (Apr 1 - May 31)"
-msgstr "예정납세 2분기 (4월 1일 - 5월 31일)"
+msgstr "2분기 부가세 확정납부 (4월 1일 - 6월 30일)"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:190
-#, fuzzy
-#| msgid "3rd Est Tax Quarter"
 msgid "3rd Est Tax Quarter (Jun 1 - Aug 31)"
-msgstr "3분기 추정치 세금"
+msgstr "3분기 부가세 예정납부 (7 월 1 일 - 9 월 30 일)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
-#, fuzzy
-#| msgid "4th Est Tax Quarter"
 msgid "4th Est Tax Quarter (Sep 1 - Dec 31)"
-msgstr "4분기 추정치 세금"
+msgstr "4분기 부가세 확정납부 (10월 1일 - 12월 31일)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:192
 msgid "Last Year"
-msgstr "미지막 해"
+msgstr "전년"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:160
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:193
-#, fuzzy
-#| msgid "Last Yr 1st Est Tax Qtr"
 msgid "Last Yr 1st Est Tax Qtr (Jan 1 - Mar 31)"
-msgstr "마지막 해 1분기 추정치 세금"
+msgstr "전년도 1분기 부가세 예정납부 (1 월 1 일 - 3 월 31 일)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:161
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:194
-#, fuzzy
-#| msgid "Last Yr 2nd Est Tax Qtr"
 msgid "Last Yr 2nd Est Tax Qtr (Apr 1 - May 31)"
-msgstr "마지막 해 2분기 추정치 세금"
+msgstr "전년도 2분기 부가세 확정납부 (4월 1일 - 6월 30일)"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:162
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:198
-#, fuzzy
-#| msgid "Last Yr 3rd Est Tax Qtr"
 msgid "Last Yr 3rd Est Tax Qtr (Jun 1 - Aug 31)"
-msgstr "마지막 해 3분기 추정치 세금"
+msgstr "전년도 3분기 부가세 예정납부 (7 월 1 일 - 9 월 30 일)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:163
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:199
-#, fuzzy
-#| msgid "Last Yr 4th Est Tax Qtr"
 msgid "Last Yr 4th Est Tax Qtr (Sep 1 - Dec 31)"
-msgstr "마지막 해 4분기 추정치 세금"
+msgstr "전년도 4분기 부가세 확정납부 (10월 1일 - 12월 31일)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:167
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:203
 msgid "Select Accounts (none = all)"
-msgstr "계정 선택 (없음 = 전체)"
+msgstr "계정 선택하기 (없음 = 모두)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:168
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:204
-#, fuzzy
 msgid "Select accounts."
-msgstr "계정 선택"
+msgstr "계정을 선택합니다."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:174
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:210
@@ -26662,9 +26639,8 @@ msgid "Invoice in progress..."
 msgstr "진행중인 청구서..."
 
 #: gnucash/report/reports/standard/invoice.scm:610
-#, fuzzy
 msgid "Reference:"
-msgstr "참조"
+msgstr "참조:"
 
 #: gnucash/report/reports/standard/invoice.scm:622
 msgid "Terms:"
@@ -26877,12 +26853,13 @@ msgstr "수익 및 비용 선차트"
 msgid ""
 "No valid A/Payable or A/Receivable account found. Please ensure valid AP/AR "
 "account exists."
-msgstr ""
+msgstr "유효한 지급 또는 수취 계정을 찾을 수 없습니다. 유효한 AP/AR 계정이 있는지 "
+"확인하십시오."
 
 #: gnucash/report/reports/standard/new-aging.scm:64
 msgid ""
 "A/Payable or A/Receivable accounts exist but have no suitable transactions."
-msgstr ""
+msgstr "지급 또는 수취 계정이 있지만 적합한 거래가 없습니다."
 
 #: gnucash/report/reports/standard/new-aging.scm:329
 #: gnucash/report/reports/standard/new-owner-report.scm:538
@@ -27061,9 +27038,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/reports/standard/new-owner-report.scm:943
-#, fuzzy
 msgid "Simple"
-msgstr "샘플:"
+msgstr "단순"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:944
 #, fuzzy
@@ -27120,12 +27096,11 @@ msgstr "보고서:"
 
 #: gnucash/report/reports/standard/payables.scm:36
 msgid "Payable Account"
-msgstr "지불할 계정"
+msgstr "지급 계정"
 
 #: gnucash/report/reports/standard/payables.scm:47
-#, fuzzy
 msgid "The payable account you wish to examine."
-msgstr "조사하기 원하는 지불할 계정"
+msgstr "검토하고자 하는 지급 계정입니다."
 
 #: gnucash/report/reports/standard/portfolio.scm:33
 msgid "Investment Portfolio"
@@ -27412,9 +27387,8 @@ msgid "Receivables Account"
 msgstr "수취 계정"
 
 #: gnucash/report/reports/standard/receivables.scm:48
-#, fuzzy
 msgid "The receivables account you wish to examine."
-msgstr "조사하기 원하는 지불할 계정"
+msgstr "검토하려는 수취 계정입니다."
 
 #: gnucash/report/reports/standard/reconcile-report.scm:62
 #, fuzzy
@@ -27438,9 +27412,8 @@ msgid "Lot"
 msgstr "몫"
 
 #: gnucash/report/reports/standard/register.scm:160
-#, fuzzy
 msgid "Debit Value"
-msgstr "현재 가치:"
+msgstr "차변 금액"
 
 #: gnucash/report/reports/standard/register.scm:162
 #, fuzzy
@@ -28005,11 +27978,11 @@ msgstr "머니 마켓"
 
 #: gnucash/report/report-utilities.scm:211
 msgid "Accounts Receivable"
-msgstr "수취 계정"
+msgstr "외상매출금"
 
 #: gnucash/report/report-utilities.scm:212
 msgid "Accounts Payable"
-msgstr "지불 계정"
+msgstr "외상매입금"
 
 #: gnucash/report/report-utilities.scm:213
 msgid "Credit Lines"
