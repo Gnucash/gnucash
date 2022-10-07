@@ -1219,8 +1219,7 @@ gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_ha
             if (gnc_import_split_has_online_id (n->data))
             {
                 char *id = gnc_import_get_split_online_id (n->data);
-                if (!g_hash_table_insert (new_hash, (void*) id, GINT_TO_POINTER (1)))
-                    g_free (id);
+                g_hash_table_insert (new_hash, (void*) id, GINT_TO_POINTER (1));
             }
         }
     }
