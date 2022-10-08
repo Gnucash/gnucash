@@ -222,8 +222,10 @@ typedef struct GncMainWindowPrivate
      *  manager and stored here when the UI manager provides them
      *  to the main window. */
     GtkWidget *menu_dock;
-    /** The toolbar created by the UI manager.  This pointer
-     * provides easy access for showing/hiding the toolbar. */
+    /** The menubar */
+    GtkWidget *menubar; //FIXMEb added
+    /** The toolbar. This pointer provides easy access for
+     * showing/hiding the toolbar. */
     GtkWidget *toolbar;
     /** The notebook containing all the pages in this window. */
     GtkWidget *notebook;
@@ -2025,12 +2027,13 @@ gnc_main_window_update_all_menu_items (void)
 
     ENTER("");
     /* First update the entries for all existing windows */
-    g_list_foreach(active_windows,
-                   (GFunc)gnc_main_window_update_menu_item,
-                   nullptr);
-    g_list_foreach(active_windows,
-                   (GFunc)gnc_main_window_update_radio_button,
-                   nullptr);
+    g_list_foreach (active_windows,
+                    (GFunc)gnc_main_window_update_menu_item,
+                    nullptr);
+
+    g_list_foreach (active_windows,
+                    (GFunc)gnc_main_window_update_radio_button,
+                    nullptr);
 
     /* Now hide any entries that aren't being used. */
 //FIXMEb
@@ -3600,21 +3603,49 @@ gnc_main_window_actions_updated (GncMainWindow *window)
 //    g_object_unref(force);
 }
 
+ 
+struct group_iterate
+{
+    GAction *action;
+    const gchar *name;
+};
+
+static void
+group_foreach_cb (gpointer key, gpointer item, gpointer arg)
+{
+    struct group_iterate *iter = static_cast<group_iterate*>(arg);
+    GAction *action;
+
+    if (iter->action)
+        return;
+
+    auto entry{static_cast<MergedActionEntry *>(item)};
+
+    action = g_action_map_lookup_action (G_ACTION_MAP(entry->simple_action_group),
+                                         iter->name);
+
+    if (action)
+        iter->action = action;
+}
 
 GAction *
 gnc_main_window_find_action (GncMainWindow *window, const gchar *name)
 {
+    GncMainWindowPrivate *priv;
     GAction *action = nullptr;
-    const GList *groups, *tmp;
+    struct group_iterate iter;
 
-//FIXMEb    groups = gtk_ui_manager_get_action_groups(window->ui_merge);
-//    for (tmp = groups; tmp; tmp = g_list_next(tmp))
-//    {
-//        action = g_action_map_lookup_action (G_ACTION_MAP(tmp->data), name);
-//        if (action)
-//            break;
-//    }
-    return action;
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+    if (priv->merged_actions_table == nullptr)
+        return nullptr;
+
+    iter.action = nullptr;
+    iter.name = name;
+
+    g_hash_table_foreach (priv->merged_actions_table, group_foreach_cb, &iter);
+
+    return iter.action;
 }
 
 
@@ -3641,6 +3672,7 @@ gnc_main_window_get_action_group (GncMainWindow *window,
 
     return entry->simple_action_group;
 }
+
 
 static void
 gnc_main_window_add_to_display_list (GncMainWindow *window,
@@ -3854,12 +3886,15 @@ gnc_main_window_window_menu (GncMainWindow *window)
 #endif
     GError *error = nullptr;
     g_assert(filename);
-    merge_id = gtk_ui_manager_add_ui_from_file(window->ui_merge, filename,
-               &error);
+    merge_id = gtk_ui_manager_add_ui_from_file (window->ui_merge, filename,
+                                                &error);
     g_free(filename);
     g_assert(merge_id);
 #ifndef MAC_INTEGRATION
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+//FIXMEb    Not sure what here, may need to move some stuff from below.
+
 //FIXMEb    gtk_action_group_add_radio_actions (priv->action_group,
 //                                        radio_entries, n_radio_entries,
 //                                        0,
@@ -3892,8 +3927,6 @@ gnc_main_window_setup_window (GncMainWindow *window)
     GError *error = nullptr;
     gchar *filename;
     GMenuModel *menu_model;
-    GtkWidget *menu_bar;
-    GtkToolbar *tool_bar;
 
     ENTER(" ");
 
@@ -3955,14 +3988,14 @@ gnc_main_window_setup_window (GncMainWindow *window)
     }
 
     menu_model = (GMenuModel *)gtk_builder_get_object (builder, "mainwin-menu");
-    menu_bar = gtk_menu_bar_new_from_model (menu_model);
-    gtk_container_add (GTK_CONTAINER(priv->menu_dock), menu_bar); //FIXMEb this may need changing
-    gtk_widget_show (menu_bar);
+    priv->menubar = gtk_menu_bar_new_from_model (menu_model);
+    gtk_container_add (GTK_CONTAINER(priv->menu_dock), priv->menubar); //FIXMEb this may need changing
+    gtk_widget_show (GTK_WIDGET(priv->menubar));
 
-    tool_bar = (GtkToolbar *)gtk_builder_get_object (builder, "mainwin-toolbar");
-    g_object_set (tool_bar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
-    gtk_container_add (GTK_CONTAINER(priv->menu_dock), GTK_WIDGET(tool_bar)); //FIXMEb this may need changing
-    gtk_widget_show (GTK_WIDGET(tool_bar));
+    priv->toolbar = (GtkWidget *)gtk_builder_get_object (builder, "mainwin-toolbar");
+    g_object_set (priv->toolbar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
+    gtk_container_add (GTK_CONTAINER(priv->menu_dock), GTK_WIDGET(priv->toolbar)); //FIXMEb this may need changing
+    gtk_widget_show (GTK_WIDGET(priv->toolbar));
 
 //FIXMEb    window->ui_merge = gtk_ui_manager_new ();
 
@@ -4018,12 +4051,6 @@ gnc_main_window_setup_window (GncMainWindow *window)
 //    g_assert(merge_id || error);
 //    if (merge_id)
 //    {
-//FIXMEb        gtk_action_group_add_radio_actions (priv->action_group,
-//                                            tab_pos_radio_entries,
-//                                            n_tab_pos_radio_entries,
-//                                            0,
-//                                            G_CALLBACK(gnc_main_window_cmd_view_tab_position),
-//                                            window);
 
 //FIXMEb        gtk_window_add_accel_group (GTK_WINDOW (window),
 //                                    gtk_ui_manager_get_accel_group(window->ui_merge));
@@ -5362,11 +5389,39 @@ gnc_main_window_all_action_set_sensitive (const gchar *action_name,
     }
 }
 
-//GtkUIManager *gnc_main_window_get_uimanager (GncMainWindow *window)
-//{
-//    g_assert(window);
-//    return window->ui_merge;
-//}
+GtkWidget *
+gnc_main_window_get_menu (GncMainWindow *window)
+{
+    GncMainWindowPrivate *priv;
+
+    g_return_val_if_fail (GNC_IS_MAIN_WINDOW(window), nullptr);
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+    return priv->menubar;
+}
+
+void
+gnc_main_window_update_toolbar (GncMainWindow *window, GncPluginPage *page)
+{
+    GncMainWindowPrivate *priv;
+    GtkBuilder *builder;
+
+    g_return_if_fail (GNC_IS_MAIN_WINDOW(window));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+    builder = gnc_plugin_page_get_builder (page);
+
+    if (builder)
+    {
+        gtk_container_remove (GTK_CONTAINER(priv->menu_dock), priv->toolbar);
+        priv->toolbar = (GtkWidget *)gtk_builder_get_object (builder, "mainwin-toolbar");
+        g_object_set (priv->toolbar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
+        gtk_container_add (GTK_CONTAINER(priv->menu_dock), priv->toolbar);
+    }
+}
 
 /** @} */
 /** @} */

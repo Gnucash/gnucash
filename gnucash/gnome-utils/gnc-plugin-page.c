@@ -98,6 +98,8 @@ typedef struct _GncPluginPagePrivate
 
     GtkBuilder *builder; //FIXMEb added
     GSimpleActionGroup *simple_action_group; //FIXMEb added
+    const gchar *simple_action_group_name; //FIXMEb added
+    GtkAccelGroup *accel_group; //FIXMEb added
 
     GList *books;
 
@@ -270,6 +272,34 @@ gnc_plugin_page_merge_actions (GncPluginPage *page,
     priv->merge_id = gnc_plugin_add_actions (priv->ui_merge,
                                              priv->action_group,
                                              priv->ui_description);
+}
+
+void
+gnc_plugin_page_merge_actionsb (GncPluginPage *page,
+                                GtkWidget *window)
+{
+    GncPluginPagePrivate *priv;
+    GError *error = NULL;
+    gchar *resource;
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
+
+    priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
+
+    priv->builder = gtk_builder_new ();
+
+    resource = g_strconcat ("/org/gnucash/ui/", priv->ui_description, NULL);
+
+    gtk_builder_set_translation_domain (priv->builder, PROJECT_NAME);
+
+    gtk_builder_add_from_resource (priv->builder, resource, &error);
+
+    if (error)
+    {
+        g_critical ("Failed to load ui resource %s, Error %s", resource, error->message);
+        g_error_free (error);
+    }
+    g_free (resource);
 }
 
 
@@ -522,6 +552,7 @@ gnc_plugin_page_init (GncPluginPage *page, void *data)
     priv->uri         = NULL;
     priv->page_changed_id = 0;
     priv->focus_source_id = 0;
+    priv->accel_group = NULL;
 
     page->window      = NULL;
     page->summarybar  = NULL;
@@ -1074,6 +1105,29 @@ gnc_plugin_page_get_ui_description (GncPluginPage *page)
 }
 
 
+const gchar *
+gnc_plugin_page_get_simple_action_group_name (GncPluginPage *page)
+{
+    GncPluginPagePrivate *priv;
+
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), NULL);
+
+    priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
+
+    return priv->simple_action_group_name;
+
+//    GncPluginPageClass *klass;
+
+//    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), NULL);
+//    klass = GNC_PLUGIN_PAGE_GET_CLASS(page);
+
+//    if (klass->actions_name)
+//        return klass->actions_name;
+//    else
+//        return NULL;
+}
+
+
 /*  Set an alternate UI for the specified page.  This alternate ui
  *  may only use actions specified in the source for the page. */
 void
@@ -1144,14 +1198,25 @@ gnc_plugin_page_create_action_group (GncPluginPage *page, const gchar *group_nam
 GSimpleActionGroup *
 gnc_plugin_page_create_action_groupb (GncPluginPage *page, const gchar *group_name)
 {
-    GncPluginPagePrivate *priv;
-    GSimpleActionGroup *simple_action_group;
+    GncPluginPagePrivate *priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
+ 
+    priv->simple_action_group = g_simple_action_group_new ();
+    priv->simple_action_group_name = group_name;
 
-    priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
-    simple_action_group = g_simple_action_group_new ();
-    priv->simple_action_group = simple_action_group;
-    return simple_action_group;
+    return priv->simple_action_group;
 }
+
+GtkAccelGroup *
+gnc_plugin_page_get_accel_group (GncPluginPage *page)
+{
+    GncPluginPagePrivate *priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
+
+    if (priv->accel_group == NULL)
+        priv->accel_group = gtk_accel_group_new ();
+
+    return priv->accel_group;
+}
+
 
 gboolean
 gnc_plugin_page_finish_pending (GncPluginPage *page)
