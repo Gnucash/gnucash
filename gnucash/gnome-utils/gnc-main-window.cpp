@@ -4173,6 +4173,13 @@ gnc_main_window_add_sub_menus (GncMainWindow *window, GncPluginPage *page,
 
     gnc_main_window_update_display_toolbar_items (window);
 
+    /* The visibility of the Aqbanking menu items when it is not present is mostly
+       controlled by adding the menu attribute "hidden-when" action-disabled but
+       this can not be used for the 'Online Actions' menu item. So to get round this
+       base it visibility on finding a menu item with the setup action 'ABSetupAction */
+    if (!gnc_find_menu_item (priv->menubar, "ABSetupAction"))
+        gtk_widget_hide (gnc_find_menu_item (priv->menubar, "OnlineActionsAction"));
+
     // to do with the cut/copy/paste sensitivity
     gnc_main_window_init_menu_updaters (window);
 

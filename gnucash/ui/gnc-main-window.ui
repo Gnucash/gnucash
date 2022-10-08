@@ -48,22 +48,27 @@
           <item>
             <attribute name="label" translatable="no">OfxImportAction</attribute>
             <attribute name="action">gnc-plugin-ofx-actions.OfxImportAction</attribute>
+            <attribute name="hidden-when">action-disabled</attribute>
           </item>
           <item>
             <attribute name="label" translatable="no">Mt940ImportAction</attribute>
             <attribute name="action">gnc-plugin-aqbanking-actions.Mt940ImportAction</attribute>
+            <attribute name="hidden-when">action-disabled</attribute>
           </item>
           <item>
             <attribute name="label" translatable="no">Mt942ImportAction</attribute>
             <attribute name="action">gnc-plugin-aqbanking-actions.Mt942ImportAction</attribute>
+            <attribute name="hidden-when">action-disabled</attribute>
           </item>
           <item>
             <attribute name="label" translatable="no">DtausImportAction</attribute>
             <attribute name="action">gnc-plugin-aqbanking-actions.DtausImportAction</attribute>
+            <attribute name="hidden-when">action-disabled</attribute>
           </item>
           <item>
             <attribute name="label" translatable="no">DtausImportSendAction</attribute>
             <attribute name="action">gnc-plugin-aqbanking-actions.DtausImportSendAction</attribute>
+            <attribute name="hidden-when">action-disabled</attribute>
           </item>
         </submenu>
       </section>
@@ -415,6 +420,7 @@
         <item>
           <attribute name="label" translatable="no">ABSetupAction</attribute>
           <attribute name="action">gnc-plugin-aqbanking-actions.ABSetupAction</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
         </item>
         <item>
           <attribute name="label" translatable="no">ToolsPriceEditorAction</attribute>
