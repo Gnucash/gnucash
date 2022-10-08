@@ -96,6 +96,15 @@ G_BEGIN_DECLS
 
 /* typedefs & structures */
 
+typedef struct
+{
+    const gchar *action_name;
+    const gchar *stock_id;
+    const gchar *label;
+    const gchar *accelerator;
+    const gchar *tooltip;
+} GncDisplayItem;
+
 /** The instance data structure for a menu-only plugin. */
 typedef struct
 {
@@ -119,6 +128,15 @@ typedef struct
     const gchar *actions_name;
     /** An array of actions that should automatically be added to
      *  any GnuCash "main" content window that is opened. */
+    GActionEntry   *actionsb; //FIXMEb added
+    /** The number of actions in the actions array. */
+    guint           n_actionsb; //FIXMEb added
+
+    /** An array of display items (menu / toolbar entries) */
+    GncDisplayItem *display_items; //FIXMEb added
+    /** The number of display_items in the display item array. */
+    guint           n_display_items; //FIXMEb added
+
     GtkActionEntry *actions;
     /** The number of actions in the actions array. */
     guint n_actions;
@@ -290,7 +308,10 @@ void gnc_plugin_update_actions (GtkActionGroup *action_group,
                                 const gchar **action_names,
                                 const gchar *property_name,
                                 gboolean value);
-
+void gnc_plugin_update_actionsb (GSimpleActionGroup *simple_action_group,
+                                const gchar **action_names,
+                                const gchar *property_name,
+                                gboolean value); //FIXMEb added
 
 /** Load a new set of actions into an existing UI.  The actions from
  *  the provided group will be merged into the pre-existing ui, as

@@ -541,7 +541,7 @@ GtkUIManager *gnc_plugin_page_get_ui_merge (GncPluginPage *page);
  *  @return A pointer to the GtkActionGroup object for this page.
  */
 GtkActionGroup *gnc_plugin_page_get_action_group (GncPluginPage *page);
-
+GSimpleActionGroup *gnc_plugin_page_get_action_groupb (GncPluginPage *page); //FIXMEb added
 
 /** Create the GtkActionGroup object associated with this page.
  *
@@ -557,7 +557,8 @@ GtkActionGroup *gnc_plugin_page_get_action_group (GncPluginPage *page);
  */
 GtkActionGroup * gnc_plugin_page_create_action_group (GncPluginPage *page,
                                                       const gchar *group_name);
-
+GSimpleActionGroup * gnc_plugin_page_create_action_groupb (GncPluginPage *page,
+                                                      const gchar *group_name); //FIXMEb added
 /** Retrieve a GtkAction object associated with this page.
  *
  *  @param page The page whose menu/toolbar action group should be
