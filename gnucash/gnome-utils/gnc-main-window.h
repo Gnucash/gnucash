@@ -427,6 +427,10 @@ void gnc_main_window_all_action_set_sensitive (const gchar *action_name, gboolea
  */
 GAction *gnc_main_window_find_action (GncMainWindow *window, const gchar *name);
 
+GAction *gnc_main_window_find_action_in_group (GncMainWindow *window, 
+                                               const gchar *group_name,
+                                               const gchar *name); //FIXMEb added
+
 GtkWidget *gnc_main_window_get_menu (GncMainWindow *window); //FIXMEb added
 
 void gnc_main_window_update_toolbar (GncMainWindow *window, GncPluginPage *page); //FIXMEb added
