@@ -1,0 +1,736 @@
+<?xml version="1.0"?>
+<interface>
+
+  <menu id="EditAction-c">
+    <section>
+      <item>
+        <attribute name="label" translatable="no">EditCutAction</attribute>
+        <attribute name="action">mainwin.EditCutAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">EditCopyAction</attribute>
+        <attribute name="action">mainwin.EditCopyAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">EditPasteAction</attribute>
+        <attribute name="action">mainwin.EditPasteAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">OTEditCustomerAction</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTEditCustomerAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">OTNewCustomerAction</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTNewCustomerAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">EditFindTransactionsAction</attribute>
+        <attribute name="action">gnc-plugin-basic-commands-actions.EditFindTransactionsAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">EditPreferencesAction</attribute>
+        <attribute name="action">mainwin.EditPreferencesAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">EditStyleSheetsAction</attribute>
+        <attribute name="action">gnc-plugin-report-system-actions.EditStyleSheetsAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">EditTaxOptionsAction</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.EditTaxOptionsAction</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <menu id="EditAction-v">
+    <section>
+      <item>
+        <attribute name="label" translatable="no">EditCutAction</attribute>
+        <attribute name="action">mainwin.EditCutAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">EditCopyAction</attribute>
+        <attribute name="action">mainwin.EditCopyAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">EditPasteAction</attribute>
+        <attribute name="action">mainwin.EditPasteAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">OTEditVendorAction</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTEditVendorAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">OTNewVendorAction</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTNewVendorAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">EditFindTransactionsAction</attribute>
+        <attribute name="action">gnc-plugin-basic-commands-actions.EditFindTransactionsAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">EditPreferencesAction</attribute>
+        <attribute name="action">mainwin.EditPreferencesAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">EditStyleSheetsAction</attribute>
+        <attribute name="action">gnc-plugin-report-system-actions.EditStyleSheetsAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">EditTaxOptionsAction</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.EditTaxOptionsAction</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <menu id="EditAction-e">
+    <section>
+      <item>
+        <attribute name="label" translatable="no">EditCutAction</attribute>
+        <attribute name="action">mainwin.EditCutAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">EditCopyAction</attribute>
+        <attribute name="action">mainwin.EditCopyAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">EditPasteAction</attribute>
+        <attribute name="action">mainwin.EditPasteAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">OTEditEmployeeAction</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTEditEmployeeAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">OTNewEmployeeAction</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTNewEmployeeAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">EditFindTransactionsAction</attribute>
+        <attribute name="action">gnc-plugin-basic-commands-actions.EditFindTransactionsAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">EditPreferencesAction</attribute>
+        <attribute name="action">mainwin.EditPreferencesAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">EditStyleSheetsAction</attribute>
+        <attribute name="action">gnc-plugin-report-system-actions.EditStyleSheetsAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">EditTaxOptionsAction</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.EditTaxOptionsAction</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <menu id="ViewAction">
+    <section>
+      <item>
+        <attribute name="label" translatable="no">ViewToolbarAction</attribute>
+        <attribute name="action">mainwin.ViewToolbarAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">ViewSummaryAction</attribute>
+        <attribute name="action">mainwin.ViewSummaryAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">ViewStatusbarAction</attribute>
+        <attribute name="action">mainwin.ViewStatusbarAction</attribute>
+      </item>
+      <submenu>
+        <attribute name="label" translatable="no">ViewTabPositionAction</attribute>
+        <item>
+          <attribute name="label" translatable="no">ViewTabPositionTopAction</attribute>
+          <attribute name="action">mainwin.ViewTabPositionAction</attribute>
+          <attribute name="target" type="i">0</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ViewTabPositionBottomAction</attribute>
+          <attribute name="action">mainwin.ViewTabPositionAction</attribute>
+          <attribute name="target" type="i">1</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ViewTabPositionLeftAction</attribute>
+          <attribute name="action">mainwin.ViewTabPositionAction</attribute>
+          <attribute name="target" type="i">2</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ViewTabPositionRightAction</attribute>
+          <attribute name="action">mainwin.ViewTabPositionAction</attribute>
+          <attribute name="target" type="i">3</attribute>
+        </item>
+      </submenu>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">ViewFilterByAction</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.ViewFilterByAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">ViewRefreshAction</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.ViewRefreshAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">ViewAccountTreeAction</attribute>
+        <attribute name="action">gnc-plugin-account-tree-actions.ViewAccountTreeAction</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <menu id="ActionsAction">
+    <section>
+    <submenu>
+      <attribute name="label" translatable="no">OnlineActionsAction</attribute>
+      <attribute name="action">gnc-plugin-aqbanking-actions.OnlineActionsAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">ABGetBalanceAction</attribute>
+          <attribute name="action">gnc-plugin-aqbanking-actions.ABGetBalanceAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ABGetTransAction</attribute>
+          <attribute name="action">gnc-plugin-aqbanking-actions.ABGetTransAction</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">ABIssueSepaTransAction</attribute>
+          <attribute name="action">gnc-plugin-aqbanking-actions.ABIssueSepaTransAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ABIssueSepaIntTransAction</attribute>
+          <attribute name="action">gnc-plugin-aqbanking-actions.ABIssueSepaIntTransAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ABIssueIntTransAction</attribute>
+          <attribute name="action">gnc-plugin-aqbanking-actions.ABIssueIntTransAction</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">ABViewLogwindowAction</attribute>
+          <attribute name="action">gnc-plugin-aqbanking-actions.ABViewLogwindowAction</attribute>
+        </item>
+      </section>
+    </submenu>
+    <submenu>
+      <attribute name="label" translatable="no">ActionsScheduledTransactionsAction</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.ActionsScheduledTransactionsAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">ActionsScheduledTransactionEditorAction</attribute>
+          <attribute name="action">gnc-plugin-basic-commands-actions.ActionsScheduledTransactionEditorAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ActionsSinceLastRunAction</attribute>
+          <attribute name="action">gnc-plugin-basic-commands-actions.ActionsSinceLastRunAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ActionsMortgageLoanAction</attribute>
+          <attribute name="action">gnc-plugin-basic-commands-actions.ActionsMortgageLoanAction</attribute>
+        </item>
+     </section>
+    </submenu>
+    <submenu>
+      <attribute name="label" translatable="no">ActionsBudgetAction</attribute>
+      <attribute name="action">gnc-plugin-budget-actions.ActionsBudgetAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">NewBudgetAction</attribute>
+          <attribute name="action">gnc-plugin-budget-actions.NewBudgetAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">OpenBudgetAction</attribute>
+          <attribute name="action">gnc-plugin-budget-actions.OpenBudgetAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">CopyBudgetAction</attribute>
+          <attribute name="action">gnc-plugin-budget-actions.CopyBudgetAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">DeleteBudgetAction</attribute>
+          <attribute name="action">gnc-plugin-budget-actions.DeleteBudgetAction</attribute>
+        </item>
+      </section>
+    </submenu>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">ActionsForgetWarningsAction</attribute>
+        <attribute name="action">mainwin.ActionsForgetWarningsAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">ActionsRenamePageAction</attribute>
+        <attribute name="action">mainwin.ActionsRenamePageAction</attribute>
+      </item>
+    </section>
+  </menu>
+
+
+  <menu id="mainwin-popup-c">
+    <section>
+      <item>
+        <attribute name="label" translatable="no">ActionsRenamePageAction</attribute>
+        <attribute name="action">mainwin.ActionsRenamePageAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">OTEditCustomerAction</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTEditCustomerAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">OTNewInvoiceAction</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTNewInvoiceAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">OTCustomerReportAction</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTCustomerReportAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">OTProcessPaymentAction</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTProcessPaymentAction</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <menu id="mainwin-popup-v">
+    <section>
+      <item>
+        <attribute name="label" translatable="no">ActionsRenamePageAction</attribute>
+        <attribute name="action">mainwin.ActionsRenamePageAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">OTEditVendorAction</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTEditVendorAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">OTNewBillAction</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTNewBillAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">OTVendorReportAction</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTVendorReportAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">OTProcessPaymentAction</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTProcessPaymentAction</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <menu id="mainwin-popup-e">
+    <section>
+      <item>
+        <attribute name="label" translatable="no">ActionsRenamePageAction</attribute>
+        <attribute name="action">mainwin.ActionsRenamePageAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">OTEditEmployeeAction</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTEditEmployeeAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">OTNewVoucherAction</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTNewVoucherAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">OTEmployeeReportAction</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTEmployeeReportAction</attribute>
+      </item>
+    </section>
+  </menu>
+
+
+  <object class="GtkToolbar" id="mainwin-toolbar-c">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkToolButton" id="but1c">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">FileSaveAction</property>
+        <property name="action-name">gnc-plugin-basic-commands-actions.FileSaveAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2c">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">FileCloseAction</property>
+        <property name="action-name">mainwin.FileCloseAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but3c">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">OTNewCustomerAction</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTNewCustomerAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but4c">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">OTEditCustomerAction</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTEditCustomerAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but5c">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">OTNewInvoiceAction</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTNewInvoiceAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but6c">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">OTCustomerListingReportAction</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTCustomerListingReportAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but7c">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">OTProcessPaymentAction</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTProcessPaymentAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+  </object>
+
+  <object class="GtkToolbar" id="mainwin-toolbar-v">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkToolButton" id="but1v">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">FileSaveAction</property>
+        <property name="action-name">gnc-plugin-basic-commands-actions.FileSaveAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2v">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">FileCloseAction</property>
+        <property name="action-name">mainwin.FileCloseAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but3v">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">OTNewVendorAction</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTNewVendorAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but4v">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">OTEditVendorAction</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTEditVendorAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but5v">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">NOTNewBillAction</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTNewBillAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but6v">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">OTVendorListingReportAction</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTVendorListingReportAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but7v">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">OTProcessPaymentAction</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTProcessPaymentAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+  </object>
+
+  <object class="GtkToolbar" id="mainwin-toolbar-e">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkToolButton" id="but1e">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">FileSaveAction</property>
+        <property name="action-name">gnc-plugin-basic-commands-actions.FileSaveAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2e">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">FileCloseAction</property>
+        <property name="action-name">mainwin.FileCloseAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but3e">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">OTNewEmployeeAction</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTNewEmployeeAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but4e">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">OTEditEmployeeAction</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTEditEmployeeAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but5e">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">OTNewVoucherAction</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTNewVoucherAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but6e">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">OTProcessPaymentAction</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTProcessPaymentAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+  </object>
+
+</interface>
