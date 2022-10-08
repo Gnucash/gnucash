@@ -43,24 +43,29 @@ static void gnc_plugin_report_system_finalize (GObject *object);
 
 
 /* Command callbacks */
-static void gnc_plugin_report_system_cmd_edit_style_sheet (GtkAction *action,
-        GncMainWindowActionData *data);
+static void gnc_plugin_report_system_cmd_edit_style_sheet (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-report-system-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-report-system-ui.xml"
+#define PLUGIN_UI_FILENAME  "gnc-plugin-report-system.ui"
 
-static GtkActionEntry gnc_plugin_actions [] =
+static GActionEntry gnc_plugin_actions [] =
+{
+    { "EditStyleSheetsAction", gnc_plugin_report_system_cmd_edit_style_sheet, NULL, NULL, NULL },
+};
+/** The number of actions provided by this plugin. */
+static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
+
+static GncDisplayItem gnc_plugin_display_items [] =
 {
     /* Menu Items */
     {
         "EditStyleSheetsAction", NULL, N_("St_yle Sheets"), NULL,
-        N_("Edit report style sheets"),
-        G_CALLBACK (gnc_plugin_report_system_cmd_edit_style_sheet)
+        N_("Edit report style sheets")
     },
 };
-static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
-
+/** The number of display items provided by this plugin. */
+static guint gnc_plugin_n_display_items = G_N_ELEMENTS (gnc_plugin_display_items);
 
 typedef struct GncPluginReportSystemPrivate
 {
@@ -92,10 +97,12 @@ gnc_plugin_report_system_class_init (GncPluginReportSystemClass *klass)
     plugin_class->plugin_name  = GNC_PLUGIN_REPORT_SYSTEM_NAME;
 
     /* widget addition/removal */
-    plugin_class->actions_name  	   = PLUGIN_ACTIONS_NAME;
-    plugin_class->actions       	   = gnc_plugin_actions;
-    plugin_class->n_actions     	   = gnc_plugin_n_actions;
-    plugin_class->ui_filename   	   = PLUGIN_UI_FILENAME;
+    plugin_class->actions_name    = PLUGIN_ACTIONS_NAME;
+    plugin_class->actionsb        = gnc_plugin_actions;
+    plugin_class->n_actionsb      = gnc_plugin_n_actions;
+    plugin_class->display_items   = gnc_plugin_display_items;
+    plugin_class->n_display_items = gnc_plugin_n_display_items;
+    plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
 }
 
 static void
@@ -116,10 +123,12 @@ gnc_plugin_report_system_finalize (GObject *object)
  ************************************************************/
 
 static void
-gnc_plugin_report_system_cmd_edit_style_sheet (GtkAction *action,
-        GncMainWindowActionData *data)
+gnc_plugin_report_system_cmd_edit_style_sheet (GSimpleAction *simple,
+                                               GVariant      *parameter,
+                                               gpointer       user_data)
 {
-    gnc_style_sheet_dialog_open(GTK_WINDOW (data->window));
+    GncMainWindowActionData *data = user_data;
+    gnc_style_sheet_dialog_open (GTK_WINDOW(data->window));
 }
 
 /************************************************************

@@ -37,20 +37,27 @@ static void gnc_plugin_qif_import_init (GncPluginQifImport *plugin);
 static void gnc_plugin_qif_import_finalize (GObject *object);
 
 /* Command callbacks */
-static void gnc_plugin_qif_import_cmd_new_qif_import (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_qif_import_cmd_new_qif_import (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-qif-import-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-qif-import-ui.xml"
+#define PLUGIN_UI_FILENAME  "gnc-plugin-qif-import.ui"
 
-static GtkActionEntry gnc_plugin_actions [] =
+static GActionEntry gnc_plugin_actions [] =
+{
+    { "QIFImportAction", gnc_plugin_qif_import_cmd_new_qif_import, NULL, NULL, NULL },
+};
+/** The number of actions provided by this plugin. */
+static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
+
+static GncDisplayItem gnc_plugin_display_items [] =
 {
     {
         "QIFImportAction", "go-previous", N_("Import _QIF..."), NULL,
-        N_("Import a Quicken QIF file"),
-        G_CALLBACK (gnc_plugin_qif_import_cmd_new_qif_import)
+        N_("Import a Quicken QIF file")
     },
 };
-static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
+/** The number of display items provided by this plugin. */
+static guint gnc_plugin_n_display_items = G_N_ELEMENTS(gnc_plugin_display_items);
 
 typedef struct GncPluginQifImportPrivate
 {
@@ -84,10 +91,12 @@ gnc_plugin_qif_import_class_init (GncPluginQifImportClass *klass)
     plugin_class->plugin_name  = GNC_PLUGIN_QIF_IMPORT_NAME;
 
     /* widget addition/removal */
-    plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
-    plugin_class->actions      = gnc_plugin_actions;
-    plugin_class->n_actions    = gnc_plugin_n_actions;
-    plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
+    plugin_class->actions_name    = PLUGIN_ACTIONS_NAME;
+    plugin_class->actionsb        = gnc_plugin_actions;
+    plugin_class->n_actionsb      = gnc_plugin_n_actions;
+    plugin_class->display_items   = gnc_plugin_display_items;
+    plugin_class->n_display_items = gnc_plugin_n_display_items;
+    plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
 }
 
 static void
@@ -112,8 +121,9 @@ gnc_plugin_qif_import_finalize (GObject *object)
  ************************************************************/
 
 static void
-gnc_plugin_qif_import_cmd_new_qif_import (GtkAction *action,
-        GncMainWindowActionData *data)
+gnc_plugin_qif_import_cmd_new_qif_import (GSimpleAction *simple,
+                                          GVariant      *parameter,
+                                          gpointer       user_data)
 {
     gnc_file_qif_import();
 }
