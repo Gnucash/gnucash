@@ -124,6 +124,7 @@ static void gnc_plugin_page_sx_list_cmd_new (GSimpleAction *simple, GVariant *pa
 static void gnc_plugin_page_sx_list_cmd_edit (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_plugin_page_sx_list_cmd_delete (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_plugin_page_sx_list_cmd_refresh (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_sx_list_cmd_edit_tax_options (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 
 /* Command callbacks */
 static GActionEntry gnc_plugin_page_sx_list_actions [] =
@@ -133,6 +134,7 @@ static GActionEntry gnc_plugin_page_sx_list_actions [] =
     { "SxListEditAction", gnc_plugin_page_sx_list_cmd_edit, NULL, NULL, NULL },
     { "SxListDeleteAction", gnc_plugin_page_sx_list_cmd_delete, NULL, NULL, NULL },
     { "ViewRefreshAction", gnc_plugin_page_sx_list_cmd_refresh, NULL, NULL, NULL },
+    { "EditTaxOptionsAction", gnc_plugin_page_sx_list_cmd_edit_tax_options, NULL, NULL, NULL },
 };
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_page_sx_list_n_actions = G_N_ELEMENTS(gnc_plugin_page_sx_list_actions);
@@ -161,6 +163,46 @@ static GncDisplayItem gnc_plugin_page_sx_list_display_items [] =
 /** The number of display items provided by this plugin. */
 static guint gnc_plugin_page_sx_list_n_display_items = G_N_ELEMENTS(gnc_plugin_page_sx_list_display_items);
 
+static GncAddSubMenu add_submenus [] =
+{
+    { "EditAction", TRUE },
+    { "ViewAction", TRUE },
+    { "TransactionAction", FALSE },
+    { "ActionsAction", TRUE },
+    { "ScheduledAction", TRUE },
+    { "ReportsAction", TRUE },
+};
+static guint add_submenus_n_actions = G_N_ELEMENTS(add_submenus);
+
+/* As only when loading the sub menus the menu items are updated,
+ * any menu items out of that scope that are made visible need to be
+ * added here */
+static GncActionUpdate update_actions [] =
+{
+    { "FilePrintAction", N_("_Print"), TRUE, NULL },
+    { "FilePrintPDFAction", NULL, FALSE, NULL },
+    { "ReportExportAction", NULL, FALSE, NULL },
+    { "ReportSaveAction", NULL, FALSE, NULL },
+    { "ReportSaveAsAction", NULL, FALSE, NULL },
+
+    { "ReportsCompanyReportAction", NULL, FALSE, NULL },
+    { "OTVendorListingReportAction", NULL, FALSE, NULL },
+    { "OTCustomerListingReportAction", NULL, FALSE, NULL },
+    { "OTVendorReportAction", NULL, FALSE, NULL },
+    { "OTCustomerReportAction", NULL, FALSE, NULL },
+    { "OTEmployeeReportAction", NULL, FALSE, NULL },
+
+    { "ABGetBalanceAction", NULL, FALSE, NULL },
+    { "ABGetTransAction", NULL, FALSE, NULL },
+    { "ABIssueSepaTransAction", NULL, FALSE, NULL },
+    { "ABIssueSepaIntTransAction", NULL, FALSE, NULL },
+    { "ABIssueIntTransAction", NULL, FALSE, NULL },
+
+    { "ReportsAccountReportAction", NULL, FALSE, NULL },
+    { "ReportsAcctTransReportAction", NULL, FALSE, NULL },
+};
+static guint update_actions_n_actions = G_N_ELEMENTS(update_actions);
+
 GncPluginPage *
 gnc_plugin_page_sx_list_new (void)
 {
@@ -175,7 +217,6 @@ gnc_plugin_page_sx_list_new (void)
     return GNC_PLUGIN_PAGE(plugin_page);
 }
 
-
 /**
  * Whenever the current page is changed, if a sx page is
  * the current page, set focus on the tree view.
@@ -187,6 +228,18 @@ gnc_plugin_page_sx_list_focus_widget (GncPluginPage *sx_plugin_page)
     {
         GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(sx_plugin_page);
         GtkTreeView *tree_view = priv->tree_view;
+        GAction *action;
+
+        gnc_main_window_add_sub_menus (GNC_MAIN_WINDOW(sx_plugin_page->window), sx_plugin_page,
+                                       add_submenus, add_submenus_n_actions);
+
+        gnc_main_window_update_action_labels (GNC_MAIN_WINDOW(sx_plugin_page->window),
+                                              update_actions, update_actions_n_actions);
+
+        /* Disable the FilePrintAction */
+        action = gnc_main_window_find_action (GNC_MAIN_WINDOW(sx_plugin_page->window),
+                                              "FilePrintAction");
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
 
         if (GTK_IS_TREE_VIEW(tree_view))
         {
@@ -385,27 +438,6 @@ gppsl_model_populated_cb (GtkTreeModel *tree_model, GncPluginPageSxList *page)
 }
 
 static void
-gpps_new_cb (GtkMenuItem *menuitem, GncPluginPageSxList *page)
-{
-    gnc_plugin_page_sx_list_cmd_new (NULL, NULL, page);
-    return;
-}
-
-static void
-gpps_edit_cb (GtkMenuItem *menuitem, GncPluginPageSxList *page)
-{
-    gnc_plugin_page_sx_list_cmd_edit (NULL, NULL, page);
-    return;
-}
-
-static void
-gpps_delete_cb (GtkMenuItem *menuitem, GncPluginPageSxList *page)
-{
-    gnc_plugin_page_sx_list_cmd_delete (NULL, NULL, page);
-    return;
-}
-
-static void
 treeview_popup (GtkTreeView *treeview, GdkEvent *event, GncPluginPageSxList *page)
 {
     GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE (page);
@@ -413,21 +445,27 @@ treeview_popup (GtkTreeView *treeview, GdkEvent *event, GncPluginPageSxList *pag
     GtkTreeSelection *selection = gtk_tree_view_get_selection (tree_view);
     gint count_selection = gtk_tree_selection_count_selected_rows (selection);
     GtkWidget *menu, *menuitem;
+    gchar *full_action_name;
+    const gchar *group_name = gnc_plugin_page_get_simple_action_group_name (GNC_PLUGIN_PAGE(page));
 
     menu = gtk_menu_new();
 
     menuitem = gtk_menu_item_new_with_mnemonic (_("_New"));
-    g_signal_connect (menuitem, "activate", G_CALLBACK(gpps_new_cb), page);
+    full_action_name = g_strconcat (group_name, ".SxListNewAction", NULL);
+    gtk_actionable_set_action_name (GTK_ACTIONABLE(menuitem), full_action_name);
+    g_free (full_action_name);
     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
     menuitem = gtk_menu_item_new_with_mnemonic (_("_Edit"));
-    g_signal_connect (menuitem, "activate", G_CALLBACK(gpps_edit_cb), page);
-    gtk_widget_set_sensitive (menuitem, count_selection > 0);
+    full_action_name = g_strconcat (group_name, ".SxListEditAction", NULL);
+    gtk_actionable_set_action_name (GTK_ACTIONABLE(menuitem), full_action_name);
+    g_free (full_action_name);
     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
     menuitem = gtk_menu_item_new_with_mnemonic (_("_Delete"));
-    g_signal_connect (menuitem, "activate", G_CALLBACK(gpps_delete_cb), page);
-    gtk_widget_set_sensitive (menuitem, count_selection > 0);
+    full_action_name = g_strconcat (group_name, ".SxListDeleteAction", NULL);
+    gtk_actionable_set_action_name (GTK_ACTIONABLE(menuitem), full_action_name);
+    g_free (full_action_name);
     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
     gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (priv->tree_view), NULL);
@@ -542,13 +580,14 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
 
         selection = gtk_tree_view_get_selection (priv->tree_view);
         gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
-        gtk_tree_selection_select_path (selection, path);
-        gtk_tree_path_free (path);
 
         g_signal_connect (G_OBJECT(selection), "changed", (GCallback)gppsl_selection_changed_cb, (gpointer)page);
         g_signal_connect (G_OBJECT(priv->tree_view), "row-activated", (GCallback)gppsl_row_activated_cb, (gpointer)page);
         g_signal_connect (G_OBJECT(gtk_tree_view_get_model (GTK_TREE_VIEW(priv->tree_view))),
                           "model-populated", (GCallback)gppsl_model_populated_cb, (gpointer)page);
+
+        gtk_tree_selection_select_path (selection, path);
+        gtk_tree_path_free (path);
     }
 
     g_signal_connect (G_OBJECT(priv->tree_view), "button-press-event",
@@ -599,6 +638,11 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     g_signal_connect (G_OBJECT(plugin_page), "inserted",
                       G_CALLBACK(gnc_plugin_page_inserted_cb),
                       NULL);
+
+    // add the display items to the main list
+    gnc_main_window_add_to_display_list (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window),
+                                         gnc_plugin_page_sx_list_display_items,
+                                         gnc_plugin_page_sx_list_n_display_items);
 
     return priv->widget;
 }
@@ -805,6 +849,19 @@ gnc_plugin_page_sx_list_cmd_edit (GSimpleAction *simple,
     g_list_free (to_edit);
     g_list_foreach (selected_paths, (GFunc)gtk_tree_path_free, NULL);
     g_list_free (selected_paths);
+}
+
+static void
+gnc_plugin_page_sx_list_cmd_edit_tax_options (GSimpleAction *simple,
+                                              GVariant      *parameter,
+                                              gpointer       user_data)
+{
+    GncPluginPageSxList *plugin_page = user_data;
+    GtkWidget *window = GTK_WIDGET(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(plugin_page)));
+
+    ENTER ("(action %p, page %p)", simple, plugin_page);
+    gnc_tax_info_dialog (window, NULL);
+    LEAVE (" ");
 }
 
 static void
