@@ -25,20 +25,28 @@
 
 #include <libguile.h>
 
+typedef enum
+{
+    GNC_MENU_ITEM,
+    GNC_SUB_MENU_ITEM,
+    GNC_SEPARATOR_ITEM,
+} GNCMenuItemTypes;
+
 typedef struct _ExtensionInfo
 {
     SCM extension;
 
-    GtkActionEntry ae;
+    gchar *action_label;
+    gchar *action_name;
+    gchar *action_tooltip;
+
     gchar *path;
     gchar *sort_key;
     const gchar *typeStr;
-    GtkUIManagerItemType type;
+
+    GNCMenuItemTypes type;
     gboolean accel_assigned;
 } ExtensionInfo;
-
-
-#define ADDITIONAL_MENUS_PLACEHOLDER "AdditionalMenusPlaceholder"
 
 GSList *gnc_extensions_get_menu_list (void);
 void gnc_extension_invoke_cb (SCM extension, SCM window);
@@ -49,11 +57,11 @@ void gnc_extension_invoke_cb (SCM extension, SCM window);
  *  @param extension A scheme object describing the menu to be
  *  inserted.  Functions written in C should use the gnc-plugin code.
  */
-void gnc_add_scm_extension(SCM extension);
+void gnc_add_scm_extension (SCM extension);
 
 /** This function releases any memory being held by the 'extensions'
  *  code.  It is called from the window shutdown code.
  */
-void gnc_extensions_shutdown(void);
+void gnc_extensions_shutdown (void);
 
 #endif

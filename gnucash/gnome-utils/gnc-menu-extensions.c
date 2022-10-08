@@ -74,7 +74,7 @@ initialize_getters()
 
 
 static gboolean
-gnc_extension_type (SCM extension, GtkUIManagerItemType *type)
+gnc_extension_type (SCM extension, GNCMenuItemTypes *type)
 {
     char *string;
 
@@ -89,15 +89,15 @@ gnc_extension_type (SCM extension, GtkUIManagerItemType *type)
 
     if (g_strcmp0(string, "menu-item") == 0)
     {
-        *type = GTK_UI_MANAGER_MENUITEM;
+        *type = GNC_MENU_ITEM;
     }
     else if (g_strcmp0(string, "menu") == 0)
     {
-        *type = GTK_UI_MANAGER_MENU;
+        *type = GNC_SUB_MENU_ITEM;
     }
     else if (g_strcmp0(string, "separator") == 0)
     {
-        *type = GTK_UI_MANAGER_SEPARATOR;
+        *type = GNC_SEPARATOR_ITEM;
     }
     else
     {
@@ -261,10 +261,10 @@ gnc_create_extension_info (SCM extension)
     gchar* name;
     gchar* guid;
 
-    ext_info = g_new0(ExtensionInfo, 1);
+    ext_info = g_new0 (ExtensionInfo, 1);
     ext_info->extension = extension;
-    gnc_extension_path(extension, &ext_info->path);
-    if (!gnc_extension_type( extension, &ext_info->type ))
+    gnc_extension_path (extension, &ext_info->path);
+    if (!gnc_extension_type (extension, &ext_info->type))
     {
         /* Can't parse the type passed to us.  Bail now. */
         g_free(ext_info);
@@ -272,28 +272,28 @@ gnc_create_extension_info (SCM extension)
     }
 
     /* Get all the pieces */
-    name = gnc_extension_name(extension);
-    guid = gnc_extension_guid(extension);
-    ext_info->ae.label = g_strdup(gettext(name));
-    ext_info->ae.name = gnc_ext_gen_action_name(guid);
-    ext_info->ae.tooltip = gnc_extension_documentation(extension);
-    ext_info->ae.stock_id = NULL;
-    ext_info->ae.accelerator = NULL;
-    ext_info->ae.callback = NULL;
-    g_free(name);
-    g_free(guid);
+    name = gnc_extension_name (extension);
+    guid = gnc_extension_guid (extension);
+    ext_info->action_label = g_strdup (gettext (name));
+    ext_info->action_name = gnc_ext_gen_action_name (guid);
+    ext_info->action_tooltip = gnc_extension_documentation (extension);
+    g_free (name);
+    g_free (guid);
 
-    tmp = g_strdup_printf("%s/%s", ext_info->path, ext_info->ae.label);
-    ext_info->sort_key = g_utf8_collate_key(tmp, -1);
+    tmp = g_strdup_printf ("%s/%s", ext_info->path, ext_info->action_label);
+    ext_info->sort_key = g_utf8_collate_key (tmp, -1);
     g_free(tmp);
 
     switch (ext_info->type)
     {
-    case GTK_UI_MANAGER_MENU:
+    case GNC_SUB_MENU_ITEM:
         typeStr = "menu";
         break;
-    case GTK_UI_MANAGER_MENUITEM:
+    case GNC_MENU_ITEM:
         typeStr = "menuitem";
+        break;
+    case GNC_SEPARATOR_ITEM:
+        typeStr = "sepitem";
         break;
     default:
         typeStr = "unk";
@@ -302,31 +302,31 @@ gnc_create_extension_info (SCM extension)
     ext_info->typeStr = typeStr;
 
     DEBUG( "extension: %s/%s [%s] tip [%s] type %s\n",
-           ext_info->path, ext_info->ae.label, ext_info->ae.name,
-           ext_info->ae.tooltip, ext_info->typeStr );
+           ext_info->path, ext_info->action_label, ext_info->action_name,
+           ext_info->action_tooltip, ext_info->typeStr );
 
-    scm_gc_protect_object(extension);
+    scm_gc_protect_object (extension);
 
     /* need to append so we can run them in order */
-    extension_list = g_slist_append(extension_list, ext_info);
+    extension_list = g_slist_append (extension_list, ext_info);
 
     return TRUE;
 }
 
 static void
-cleanup_extension_info(gpointer extension_info, gpointer not_used)
+cleanup_extension_info (gpointer extension_info, gpointer not_used)
 {
     ExtensionInfo *ext_info = extension_info;
 
     if (ext_info->extension)
-        scm_gc_unprotect_object(ext_info->extension);
+        scm_gc_unprotect_object (ext_info->extension);
 
-    g_free(ext_info->sort_key);
-    g_free((gchar *)ext_info->ae.name);
-    g_free((gchar *)ext_info->ae.label);
-    g_free((gchar *)ext_info->ae.tooltip);
-    g_free(ext_info->path);
-    g_free(ext_info);
+    g_free (ext_info->sort_key);
+    g_free ((gchar *)ext_info->action_name);
+    g_free ((gchar *)ext_info->action_label);
+    g_free ((gchar *)ext_info->action_tooltip);
+    g_free (ext_info->path);
+    g_free (ext_info);
 }
 
 

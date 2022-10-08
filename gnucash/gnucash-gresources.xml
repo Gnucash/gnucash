@@ -10,6 +10,7 @@
     <file>ui/gnc-plugin-page-invoice.ui</file>
     <file>ui/gnc-plugin-page-owner-tree.ui</file>
     <file>ui/gnc-plugin-page-register.ui</file>
+    <file>ui/gnc-plugin-page-report.ui</file>
     <file>ui/gnc-plugin-page-sx-list.ui</file>
   </gresource>
 </gresources>

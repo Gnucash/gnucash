@@ -332,6 +332,7 @@ static GActionEntry gnc_menu_actions [] =
     { "ToolsAction", nullptr, nullptr, nullptr, nullptr },
     { "ExtensionsAction", nullptr, nullptr, nullptr, nullptr },
     { "ReportsAction", nullptr, nullptr, nullptr, nullptr },
+    { "ReportsStubAction", nullptr, nullptr, nullptr, nullptr },
 
     { "FilePageSetupAction", gnc_main_window_cmd_page_setup, nullptr, nullptr, nullptr },
     { "FilePropertiesAction", gnc_main_window_cmd_file_properties, nullptr, nullptr, nullptr },
@@ -381,6 +382,7 @@ static const gchar *menubar_top_level_actions[] =
     "ExtensionsAction",
     "WindowsAction",
     "HelpAction",
+    "ReportsStubAction",
     nullptr
 };
 

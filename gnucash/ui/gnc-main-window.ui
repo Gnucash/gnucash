@@ -368,48 +368,6 @@
       <attribute name="label" translatable="yes">_Reports</attribute>
       <attribute name="action">mainwin.ReportsAction</attribute>
       <section>
-        <item>
-          <attribute name="label" translatable="no">ReportSaveAction</attribute>
-          <attribute name="action">gnc-plugin-report-system-actions.ReportSaveAction</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="no">ReportSaveAsAction</attribute>
-          <attribute name="action">gnc-plugin-report-system-actions.ReportSaveAsAction</attribute>
-        </item>
-      </section>
-      <section>
-        <item>
-          <attribute name="label" translatable="no">ReportsCompanyReportAction</attribute>
-          <attribute name="action">GncPluginPageInvoiceActions.ReportsCompanyReportAction</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="no">OTVendorListingReportAction</attribute>
-          <attribute name="action">GncPluginPageOwnerTreeActions.OTVendorListingReportAction</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="no">OTCustomerListingReportAction</attribute>
-          <attribute name="action">GncPluginPageOwnerTreeActions.OTCustomerListingReportAction</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="no">OTVendorReportAction</attribute>
-          <attribute name="action">GncPluginPageOwnerTreeActions.OTVendorReportAction</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="no">OTCustomerReportAction</attribute>
-          <attribute name="action">GncPluginPageInvoiceActions.OTCustomerReportAction</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="no">OTEmployeeReportAction</attribute>
-          <attribute name="action">GncPluginPageOwnerTreeActions.OTEmployeeReportAction</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="no">ReportsAccountReportAction</attribute>
-          <attribute name="action">GncPluginPageRegisterActions.ReportsAccountReportAction</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="no">ReportsAcctTransReportAction</attribute>
-          <attribute name="action">GncPluginPageRegisterActions.ReportsAcctTransReportAction</attribute>
-        </item>
       </section>
     </submenu>
 
@@ -571,6 +529,56 @@
         </item>
       </section>
     </submenu>
+
+    <submenu>
+      <attribute name="label" translatable="no">ReportsStubAction</attribute>
+      <attribute name="action">mainwin.ReportsStubAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">ReportSaveAction</attribute>
+          <attribute name="action">GncPluginPageReportActions.ReportSaveAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ReportSaveAsAction</attribute>
+          <attribute name="action">GncPluginPageReportActions.ReportSaveAsAction</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">ReportsCompanyReportAction</attribute>
+          <attribute name="action">GncPluginPageInvoiceActions.ReportsCompanyReportAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">OTVendorListingReportAction</attribute>
+          <attribute name="action">GncPluginPageOwnerTreeActions.OTVendorListingReportAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">OTCustomerListingReportAction</attribute>
+          <attribute name="action">GncPluginPageOwnerTreeActions.OTCustomerListingReportAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">OTVendorReportAction</attribute>
+          <attribute name="action">GncPluginPageOwnerTreeActions.OTVendorReportAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">OTCustomerReportAction</attribute>
+          <attribute name="action">GncPluginPageOwnerTreeActions.OTCustomerReportAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">OTEmployeeReportAction</attribute>
+          <attribute name="action">GncPluginPageOwnerTreeActions.OTEmployeeReportAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ReportsAccountReportAction</attribute>
+          <attribute name="action">GncPluginPageRegisterActions.ReportsAccountReportAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ReportsAcctTransReportAction</attribute>
+          <attribute name="action">GncPluginPageRegisterActions.ReportsAcctTransReportAction</attribute>
+        </item>
+      </section>
+    </submenu>
+
   </menu>
 
 
