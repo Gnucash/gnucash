@@ -407,19 +407,18 @@ gnc_history_update_action (GncMainWindow *window,
                            gint index,
                            const gchar *filename)
 {
-    GtkActionGroup *action_group;
-    GtkAction *action;
+    GSimpleActionGroup *simple_action_group;
+    GAction *action;
     gchar *action_name, *label_name, *tooltip, *old_filename;
     gint limit;
 
     ENTER("window %p, index %d, filename %s", window, index,
           filename ? filename : "(null)");
     /* Get the action group */
-    action_group =
-        gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
+    simple_action_group = gnc_main_window_get_action_group (window, PLUGIN_ACTIONS_NAME);
 
-    action_name = g_strdup_printf("RecentFile%dAction", index);
-    action = gtk_action_group_get_action (action_group, action_name);
+//FIXMEb    action_name = g_strdup_printf ("RecentFile%dAction", index);
+//    action = g_action_map_lookup_action (G_ACTION_MAP(simple_action_group), action_name);
 
     limit = gnc_prefs_get_int (GNC_PREFS_GROUP_HISTORY,
                                GNC_PREF_HISTORY_MAXFILES);
@@ -427,26 +426,26 @@ gnc_history_update_action (GncMainWindow *window,
     if (filename && (strlen(filename) > 0) && (index < limit))
     {
         /* set the menu label (w/accelerator) */
-        label_name = gnc_history_generate_label(index, filename);
-        tooltip    = gnc_history_generate_tooltip(index, filename);
-        g_object_set(G_OBJECT(action), "label", label_name,
-                                       "tooltip", tooltip,
-                                       "visible", TRUE,
-                                       NULL);
-        g_free(label_name);
-        g_free(tooltip);
+        label_name = gnc_history_generate_label (index, filename);
+        tooltip    = gnc_history_generate_tooltip (index, filename);
+//FIXMEb        g_object_set(G_OBJECT(action), "label", label_name,
+//                                       "tooltip", tooltip,
+//                                       "visible", TRUE,
+//                                       NULL);
+//        g_free(label_name);
+//        g_free(tooltip);
 
         /* set the filename for the callback function */
-        old_filename = g_object_get_data(G_OBJECT(action), FILENAME_STRING);
-        if (old_filename)
-            g_free(old_filename);
-        g_object_set_data(G_OBJECT(action), FILENAME_STRING, g_strdup(filename));
+//FIXMEb        old_filename = g_object_get_data(G_OBJECT(action), FILENAME_STRING);
+//        if (old_filename)
+//            g_free(old_filename);
+//FIXMEb        g_object_set_data(G_OBJECT(action), FILENAME_STRING, g_strdup(filename));
     }
     else
     {
-        gtk_action_set_visible(action, FALSE);
+//FIXMEb        gtk_action_set_visible(action, FALSE);
     }
-    g_free(action_name);
+//    g_free (action_name);
     LEAVE("");
 }
 

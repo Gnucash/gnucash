@@ -130,7 +130,7 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
                           GQuark type)
 {
     GncPluginClass *klass;
-    GtkActionGroup *action_group;
+    GSimpleActionGroup *simple_action_group;
 
     g_return_if_fail (GNC_IS_PLUGIN (plugin));
     klass = GNC_PLUGIN_GET_CLASS (plugin);
@@ -143,19 +143,18 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
     if (klass->actions_name)
     {
         DEBUG ("%s: %d actions to merge with gui from %s",
-               klass->actions_name, (klass->n_actions + klass->n_toggle_actions), klass->ui_filename);
+               klass->actions_name, klass->n_actions, klass->ui_filename);
         gnc_main_window_merge_actions (window, klass->actions_name,
-                                       klass->actions, klass->n_actions,
-                                       klass->toggle_actions, klass->n_toggle_actions,
+                                       klass->actionsb, klass->n_actionsb,
+                                       klass->display_items, klass->n_display_items,
                                        klass->ui_filename, plugin);
-
 
         if (klass->important_actions)
         {
-            action_group =
-                gnc_main_window_get_action_group(window, klass->actions_name);
-            gnc_plugin_set_important_actions(action_group,
-                                             klass->important_actions);
+            simple_action_group =
+                gnc_main_window_get_action_group (window, klass->actions_name);
+//FIXMEb            gnc_plugin_set_important_actions (simple_action_group,
+//                                              klass->important_actions);
         }
     }
 
@@ -231,18 +230,18 @@ gnc_plugin_get_name (GncPlugin *plugin)
  *
  *  See gnc-plugin.h for documentation on the function arguments. */
 void
-gnc_plugin_init_short_names (GtkActionGroup *action_group,
+gnc_plugin_init_short_names (GSimpleActionGroup *simple_action_group,
                              action_toolbar_labels *toolbar_labels)
 {
-    GtkAction *action;
+    GAction *action;
     gint i;
 
     for (i = 0; toolbar_labels[i].action_name; i++)
     {
         /* Add a couple of short labels for the toolbar */
-        action = gtk_action_group_get_action (action_group,
-                                              toolbar_labels[i].action_name);
-        gtk_action_set_short_label (action, _(toolbar_labels[i].label));
+//FIXMEb        action = g_action_map_lookup_action (G_ACTION_MAP(simple_action_group),
+//                                              toolbar_labels[i].action_name);
+//        gtk_action_set_short_label (action, _(toolbar_labels[i].label));
     }
 }
 
@@ -253,16 +252,16 @@ gnc_plugin_init_short_names (GtkActionGroup *action_group,
  *
  *  See gnc-plugin.h for documentation on the function arguments. */
 void
-gnc_plugin_set_important_actions (GtkActionGroup *action_group,
+gnc_plugin_set_important_actions (GSimpleActionGroup *simple_action_group,
                                   const gchar **name)
 {
-    GtkAction *action;
+    GAction *action;
     gint i;
 
     for (i = 0; name[i]; i++)
     {
-        action = gtk_action_group_get_action (action_group, name[i]);
-        g_object_set (G_OBJECT(action), "is_important", TRUE, NULL);
+//FIXMEb        action = g_action_map_lookup_action (G_ACTION_MAP(simple_action_group), name[i]);
+//        g_object_set (G_OBJECT(action), "is_important", TRUE, NULL);
     }
 
     /* If this trips, you've got too many "important" actions.  That
@@ -312,7 +311,7 @@ gnc_plugin_update_actionsb (GSimpleActionGroup *simple_action_group,
 
     for (i = 0; action_names[i]; i++)
     {
-        action = g_simple_action_group_lookup (simple_action_group, action_names[i]);
+        action = g_action_map_lookup_action (G_ACTION_MAP(simple_action_group), action_names[i]);
         if (action)
         {
 //FIXMEb            g_object_set (G_OBJECT(action), property_name, value, NULL);

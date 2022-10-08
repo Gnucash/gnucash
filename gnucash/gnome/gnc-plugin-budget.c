@@ -125,12 +125,12 @@ gnc_plugin_budget_new (void)
 static void
 page_changed (GncMainWindow *window, GncPluginPage *page, gpointer user_data)
 {
-    GtkActionGroup *action_group =
+    GSimpleActionGroup *simple_action_group =
         gnc_main_window_get_action_group (window, PLUGIN_ACTIONS_NAME);
-//FIXMEb
+
     if (qof_book_is_readonly (gnc_get_current_book()))
-        gnc_plugin_update_actions (action_group, plugin_writeable_actions,
-                                   "sensitive", FALSE);
+        gnc_plugin_update_actionsb (simple_action_group, plugin_writeable_actions,
+                                    "sensitive", FALSE);
 }
 
 static void

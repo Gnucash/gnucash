@@ -174,14 +174,14 @@ gnc_main_window_to_scm (GncMainWindow *window)
  *  that had a menu selected.
  */
 static void
-gnc_plugin_menu_additions_action_cb (GtkAction *action,
+gnc_plugin_menu_additions_action_cb (GAction *action,
                                      GncMainWindowActionData *data)
 {
 
-    g_return_if_fail(GTK_IS_ACTION(action));
-    g_return_if_fail(data != NULL);
+    g_return_if_fail (G_IS_SIMPLE_ACTION(action));
+    g_return_if_fail (data != NULL);
 
-    gnc_extension_invoke_cb(data->data, gnc_main_window_to_scm(data->window));
+    gnc_extension_invoke_cb (data->data, gnc_main_window_to_scm (data->window));
 }
 
 
@@ -410,8 +410,8 @@ gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
  */
 static void
 gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
-        GncMainWindow *window,
-        GQuark type)
+                                         GncMainWindow *window,
+                                         GQuark type)
 {
     GncPluginMenuAdditionsPerWindow per_window;
     static GOnce accel_table_init = G_ONCE_INIT;
@@ -420,6 +420,8 @@ gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
 
     ENTER(" ");
 
+//FIXMEb
+#ifdef skip
     per_window.window = window;
     per_window.ui_manager = window->ui_merge;
     per_window.group = gtk_action_group_new ("MenuAdditions" );
@@ -446,6 +448,7 @@ gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
                                           per_window.group, per_window.merge_id);
 
     g_slist_free(menu_list);
+#endif
     LEAVE(" ");
 }
 
@@ -463,19 +466,19 @@ gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
  */
 static void
 gnc_plugin_menu_additions_remove_from_window (GncPlugin *plugin,
-        GncMainWindow *window,
-        GQuark type)
+                                              GncMainWindow *window,
+                                              GQuark type)
 {
-    GtkActionGroup *group;
+    GSimpleActionGroup *simple_action_group;
 
     ENTER(" ");
 
     /* Have to remove our actions manually. Its only automatic if the
      * actions name is installed into the plugin class. */
-    group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
+    simple_action_group = gnc_main_window_get_action_group (window, PLUGIN_ACTIONS_NAME);
 
-    if (group && !window->just_plugin_prefs)
-        gtk_ui_manager_remove_action_group(window->ui_merge, group);
+//FIXMEb    if (group && !window->just_plugin_prefs)
+//        gtk_ui_manager_remove_action_group(window->ui_merge, simple_action_group);
 
     /* Note: This code does not clean up the per-callback data structures
      * that are created by the gnc_menu_additions_menu_setup_one()

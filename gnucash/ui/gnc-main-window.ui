@@ -1,0 +1,660 @@
+<?xml version="1.0"?>
+<interface>
+
+  <menu id="mainwin-menu">
+    <submenu>
+      <attribute name="label" translatable="yes">_File</attribute>
+      <attribute name="action">mainwin.FileAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">FileNewAction</attribute>
+          <attribute name="action">gnc-plugin-basic-commands-actions.FileNewAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">FileOpenAction</attribute>
+          <attribute name="action">gnc-plugin-basic-commands-actions.FileOpenAction</attribute>
+        </item>
+        <submenu>
+          <attribute name="label" translatable="no">FileImportAction</attribute>
+          <attribute name="action">mainwin.FileImportAction</attribute>
+          <item>
+            <attribute name="label" translatable="no">bi_importAction</attribute>
+            <attribute name="action">gnc-plugin-bi-import-actions.bi_importAction</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="no">CsvImportAccountAction</attribute>
+            <attribute name="action">gnc-plugin-csv-import-actions.CsvImportAccountAction</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="no">CsvImportTransAction</attribute>
+            <attribute name="action">gnc-plugin-csv-import-actions.CsvImportTransAction</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="no">CsvImportPriceAction</attribute>
+            <attribute name="action">gnc-plugin-csv-import-actions.CsvImportPriceAction</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="no">customer_importAction</attribute>
+            <attribute name="action">gnc-plugin-customer-import-actions.customer_importAction</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="no">QIFImportAction</attribute>
+            <attribute name="action">gnc-plugin-qif-import-actions.QIFImportAction</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="no">LogReplayAction</attribute>
+            <attribute name="action">gnc-plugin-log-replay-actions.LogReplayAction</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="no">OfxImportAction</attribute>
+            <attribute name="action">gnc-plugin-ofx-actions.OfxImportAction</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="no">Mt940ImportAction</attribute>
+            <attribute name="action">gnc-plugin-aqbanking-actions.Mt940ImportAction</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="no">Mt942ImportAction</attribute>
+            <attribute name="action">gnc-plugin-aqbanking-actions.Mt942ImportAction</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="no">DtausImportAction</attribute>
+            <attribute name="action">gnc-plugin-aqbanking-actions.DtausImportAction</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="no">DtausImportSendAction</attribute>
+            <attribute name="action">gnc-plugin-aqbanking-actions.DtausImportSendAction</attribute>
+          </item>
+        </submenu>
+      </section>
+      <section>
+        <item>
+           <attribute name="label" translatable="no">FileSaveAction</attribute>
+           <attribute name="action">gnc-plugin-basic-commands-actions.FileSaveAction</attribute>
+        </item>
+        <item>
+           <attribute name="label" translatable="no">FileSaveAsAction</attribute>
+           <attribute name="action">gnc-plugin-basic-commands-actions.FileSaveAsAction</attribute>
+        </item>
+        <item>
+           <attribute name="label" translatable="no">FileRevertAction</attribute>
+           <attribute name="action">gnc-plugin-basic-commands-actions.FileRevertAction</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">FilePrintAction</attribute>
+          <attribute name="action">mainwin.FilePrintAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">FilePageSetupAction</attribute>
+          <attribute name="action">mainwin.FilePageSetupAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">FilePrintPDFAction</attribute>
+          <attribute name="action">gnc-plugin-report-system-actions.FilePrintPDFAction</attribute>
+        </item>
+        <submenu>
+          <attribute name="label" translatable="no">FileExportAction</attribute>
+          <attribute name="action">mainwin.FileExportAction</attribute>
+          <item>
+            <attribute name="label" translatable="no">CsvExportTreeAction</attribute>
+            <attribute name="action">gnc-plugin-csv-export-actions.CsvExportTreeAction</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="no">CsvExportTransAction</attribute>
+            <attribute name="action">gnc-plugin-csv-export-actions.CsvExportTransAction</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="no">CsvExportRegisterAction</attribute>
+            <attribute name="action">gnc-plugin-csv-export-actions.CsvExportRegisterAction</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="no">ReportExportAction</attribute>
+            <attribute name="action">GncPluginPageReportActions.ReportExportAction</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="no">FileExportAccountsAction</attribute>
+            <attribute name="action">gnc-plugin-basic-commands-actions.FileExportAccountsAction</attribute>
+          </item>
+        </submenu>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">FilePropertiesAction</attribute>
+          <attribute name="action">mainwin.FilePropertiesAction</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">RecentFile0Action</attribute>
+          <attribute name="action">gnc-plugin-file-history-actions.RecentFile0Action</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">RecentFile1Action</attribute>
+          <attribute name="action">gnc-plugin-file-history-actions.RecentFile1Action</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">RecentFile2Action</attribute>
+          <attribute name="action">gnc-plugin-file-history-actions.RecentFile2Action</attribute>
+          <attribute name="tt" translatable="no">Edit the properties of the current file</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">RecentFile3Action</attribute>
+          <attribute name="action">gnc-plugin-file-history-actions.RecentFile3Action</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">RecentFile4Action</attribute>
+          <attribute name="action">gnc-plugin-file-history-actions.RecentFile4Action</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">RecentFile5Action</attribute>
+          <attribute name="action">gnc-plugin-file-history-actions.RecentFile5Action</attribute>
+          <attribute name="tt" translatable="no">Edit the properties of the current file</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">RecentFile6Action</attribute>
+          <attribute name="action">gnc-plugin-file-history-actions.RecentFile6Action</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">RecentFile7Action</attribute>
+          <attribute name="action">gnc-plugin-file-history-actions.RecentFile7Action</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">RecentFile8Action</attribute>
+          <attribute name="action">gnc-plugin-file-history-actions.RecentFile8Action</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">RecentFile9Action</attribute>
+          <attribute name="action">gnc-plugin-file-history-actions.RecentFile9Action</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">FileCloseAction</attribute>
+          <attribute name="action">mainwin.FileCloseAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">FileQuitAction</attribute>
+          <attribute name="action">mainwin.FileQuitAction</attribute>
+        </item>
+      </section>
+    </submenu>
+
+    <submenu>
+      <attribute name="label" translatable="yes">_Edit</attribute>
+      <attribute name="action">mainwin.EditAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">EditCutAction</attribute>
+          <attribute name="action">mainwin.EditCutAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">EditCopyAction</attribute>
+          <attribute name="action">mainwin.EditCopyAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">EditPasteAction</attribute>
+          <attribute name="action">mainwin.EditPasteAction</attribute>
+        </item>
+      </section>
+    </submenu>
+
+    <submenu>
+      <attribute name="label" translatable="yes">_View</attribute>
+      <attribute name="action">mainwin.ViewAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">ViewToolbarAction</attribute>
+          <attribute name="action">mainwin.ViewToolbarAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ViewSummaryAction</attribute>
+          <attribute name="action">mainwin.ViewSummaryAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ViewStatusbarAction</attribute>
+          <attribute name="action">mainwin.ViewStatusbarAction</attribute>
+        </item>
+        <submenu>
+          <attribute name="label" translatable="no">ViewTabPositionAction</attribute>
+          <attribute name="action">mainwin.ViewTabPosition</attribute>
+          <item>
+            <attribute name="label" translatable="no">ViewTabPositionTopAction</attribute>
+            <attribute name="action">mainwin.ViewTabPositionAction</attribute>
+            <attribute name="target" type="i">0</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="no">ViewTabPositionBottomAction</attribute>
+            <attribute name="action">mainwin.ViewTabPositionAction</attribute>
+            <attribute name="target" type="i">1</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="no">ViewTabPositionLeftAction</attribute>
+            <attribute name="action">mainwin.ViewTabPositionAction</attribute>
+            <attribute name="target" type="i">2</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="no">ViewTabPositionRightAction</attribute>
+            <attribute name="action">mainwin.ViewTabPositionAction</attribute>
+            <attribute name="target" type="i">3</attribute>
+          </item>
+        </submenu>
+      </section>
+    </submenu>
+
+    <submenu>
+      <attribute name="label" translatable="yes">Tra_nsaction</attribute>
+      <attribute name="action">mainwin.TransactionAction</attribute>
+      <section>
+      </section>
+    </submenu>
+
+    <submenu>
+      <attribute name="label" translatable="yes">_Actions</attribute>
+      <attribute name="action">mainwin.ActionsAction</attribute>
+      <section>
+      </section>
+    </submenu>
+
+    <submenu>
+      <attribute name="label" translatable="yes">_Business</attribute>
+      <attribute name="action">mainwin.BusinessAction</attribute>
+      <submenu>
+        <attribute name="label" translatable="no">CustomerMenuAction</attribute>
+        <attribute name="action">gnc-plugin-business-actions.CustomerMenuAction</attribute>
+        <item>
+          <attribute name="label" translatable="no">CustomerOverviewPageAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.CustomerOverviewPageAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">CustomerNewCustomerOpenAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.CustomerNewCustomerOpenAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">CustomerFindCustomerOpenAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.CustomerFindCustomerOpenAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">CustomerNewInvoiceOpenAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.CustomerNewInvoiceOpenAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">CustomerFindInvoiceOpenAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.CustomerFindInvoiceOpenAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">CustomerNewJobOpenAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.CustomerNewJobOpenAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">CustomerFindJobOpenAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.CustomerFindJobOpenAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">CustomerProcessPaymentAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.CustomerProcessPaymentAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">InvoicesDueReminderOpenAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.InvoicesDueReminderOpenAction</attribute>
+        </item>
+      </submenu>
+      <submenu>
+        <attribute name="label" translatable="no">VendorMenuAction</attribute>
+        <attribute name="action">gnc-plugin-business-actions.VendorMenuAction</attribute>
+        <item>
+          <attribute name="label" translatable="no">VendorOverviewPageAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.VendorOverviewPageAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">VendorNewVendorOpenAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.VendorNewVendorOpenAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">VendorFindVendorOpenAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.VendorFindVendorOpenAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">VendorNewBillOpenAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.VendorNewBillOpenAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">VendorFindBillOpenAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.VendorFindBillOpenAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">VendorNewJobOpenAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.VendorNewJobOpenAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">VendorFindJobOpenAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.VendorFindJobOpenAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">VendorProcessPaymentAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.VendorProcessPaymentAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">BillsDueReminderOpenAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.BillsDueReminderOpenAction</attribute>
+        </item>
+      </submenu>
+      <submenu>
+        <attribute name="label" translatable="no">EmployeeMenuAction</attribute>
+        <attribute name="action">gnc-plugin-business-actions.EmployeeMenuAction</attribute>
+        <item>
+          <attribute name="label" translatable="no">EmployeeOverviewPageAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.EmployeeOverviewPageAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">EmployeeNewEmployeeOpenAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.EmployeeNewEmployeeOpenAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">EmployeeFindEmployeeOpenAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.EmployeeFindEmployeeOpenAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">EmployeeNewExpenseVoucherOpenAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.EmployeeNewExpenseVoucherOpenAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">EmployeeFindExpenseVoucherOpenAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.EmployeeFindExpenseVoucherOpenAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">EmployeeProcessPaymentAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.EmployeeProcessPaymentAction</attribute>
+        </item>
+      </submenu>
+      <item>
+        <attribute name="label" translatable="no">BusinessLinkedDocsAction</attribute>
+        <attribute name="action">gnc-plugin-business-actions.BusinessLinkedDocsAction</attribute>
+      </item>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">TaxTablesOpenAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.TaxTablesOpenAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">BillingTermsOpenAction</attribute>
+          <attribute name="action">gnc-plugin-business-actions.BillingTermsOpenAction</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">BusinessLinkAction</attribute>
+          <attribute name="action">GncPluginPageInvoiceActions.BusinessLinkAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">BusinessLinkOpenAction</attribute>
+          <attribute name="action">GncPluginPageInvoiceActions.BusinessLinkOpenAction</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">ToolsProcessPaymentAction</attribute>
+          <attribute name="action">GncPluginPageInvoiceActions.ToolsProcessPaymentAction</attribute>
+        </item>
+      </section>
+    </submenu>
+
+    <submenu>
+      <attribute name="label" translatable="yes">_Scheduled</attribute>
+      <attribute name="action">mainwin.ScheduledAction</attribute>
+      <section>
+      </section>
+    </submenu>
+
+    <submenu>
+      <attribute name="label" translatable="yes">_Reports</attribute>
+      <attribute name="action">mainwin.ReportsAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">ReportSaveAction</attribute>
+          <attribute name="action">gnc-plugin-report-system-actions.ReportSaveAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ReportSaveAsAction</attribute>
+          <attribute name="action">gnc-plugin-report-system-actions.ReportSaveAsAction</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">ReportsCompanyReportAction</attribute>
+          <attribute name="action">GncPluginPageInvoiceActions.ReportsCompanyReportAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">OTVendorListingReportAction</attribute>
+          <attribute name="action">GncPluginPageOwnerTreeActions.OTVendorListingReportAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">OTCustomerListingReportAction</attribute>
+          <attribute name="action">GncPluginPageOwnerTreeActions.OTCustomerListingReportAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">OTVendorReportAction</attribute>
+          <attribute name="action">GncPluginPageOwnerTreeActions.OTVendorReportAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">OTCustomerReportAction</attribute>
+          <attribute name="action">GncPluginPageInvoiceActions.OTCustomerReportAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">OTEmployeeReportAction</attribute>
+          <attribute name="action">GncPluginPageOwnerTreeActions.OTEmployeeReportAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ReportsAccountReportAction</attribute>
+          <attribute name="action">GncPluginPageRegisterActions.ReportsAccountReportAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ReportsAcctTransReportAction</attribute>
+          <attribute name="action">GncPluginPageRegisterActions.ReportsAcctTransReportAction</attribute>
+        </item>
+      </section>
+    </submenu>
+
+    <submenu>
+      <attribute name="label" translatable="yes">_Tools</attribute>
+      <attribute name="action">mainwin.ToolsAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">ABSetupAction</attribute>
+          <attribute name="action">gnc-plugin-aqbanking-actions.ABSetupAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ToolsPriceEditorAction</attribute>
+          <attribute name="action">gnc-plugin-basic-commands-actions.ToolsPriceEditorAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ToolsCommodityEditorAction</attribute>
+          <attribute name="action">gnc-plugin-basic-commands-actions.ToolsCommodityEditorAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ToolsFinancialCalculatorAction</attribute>
+          <attribute name="action">gnc-plugin-basic-commands-actions.ToolsFinancialCalculatorAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ToolsBookCloseAction</attribute>
+          <attribute name="action">gnc-plugin-basic-commands-actions.ToolsBookCloseAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ToolsImapEditorAction</attribute>
+          <attribute name="action">gnc-plugin-basic-commands-actions.ToolsImapEditorAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ToolsTransLinkedDocsAction</attribute>
+          <attribute name="action">gnc-plugin-basic-commands-actions.ToolsTransLinkedDocsAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ToolsGeneralJournalAction</attribute>
+          <attribute name="action">gnc-plugin-register-actions.ToolsGeneralJournalAction</attribute>
+        </item>
+      </section>
+    </submenu>
+
+    <submenu>
+      <attribute name="label" translatable="yes">E_xtensions</attribute>
+      <attribute name="action">mainwin.ExtensionsAction</attribute>
+      <submenu>
+        <attribute name="label" translatable="no">BusinessTestAction</attribute>
+        <attribute name="action">gnc-plugin-business-actions.BusinessTestAction</attribute>
+        <section>
+          <item>
+            <attribute name="label" translatable="no">BusinessTestSearchAction</attribute>
+            <attribute name="action">gnc-plugin-business-actions.BusinessTestSearchAction</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="no">BusinessTestInitDataAction</attribute>
+            <attribute name="action">gnc-plugin-business-actions.BusinessTestInitDataAction</attribute>
+          </item>
+        </section>
+      </submenu>
+    </submenu>
+
+    <submenu>
+      <attribute name="label" translatable="yes">_Windows</attribute>
+      <attribute name="action">mainwin.WindowsAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">WindowNewAction</attribute>
+          <attribute name="action">mainwin.WindowNewAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">WindowMovePageAction</attribute>
+          <attribute name="action">mainwin.WindowMovePageAction</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Window0Action</attribute>
+          <attribute name="action">mainwin.Window0Action</attribute>
+          <attribute name="target" type="i">0</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">Window1Action</attribute>
+          <attribute name="action">mainwin.Window0Action</attribute>
+          <attribute name="target" type="i">1</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">Window2Action</attribute>
+          <attribute name="action">mainwin.Window0Action</attribute>
+          <attribute name="target" type="i">2</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">Window3Action</attribute>
+          <attribute name="action">mainwin.Window0Action</attribute>
+          <attribute name="target" type="i">3</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">Window4Action</attribute>
+          <attribute name="action">mainwin.Window0Action</attribute>
+          <attribute name="target" type="i">4</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">Window5Action</attribute>
+          <attribute name="action">mainwin.Window0Action</attribute>
+          <attribute name="target" type="i">5</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">Window6Action</attribute>
+          <attribute name="action">mainwin.Window0Action</attribute>
+          <attribute name="target" type="i">6</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">Window7Action</attribute>
+          <attribute name="action">mainwin.Window0Action</attribute>
+          <attribute name="target" type="i">7</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">Window8Action</attribute>
+          <attribute name="action">mainwin.Window0Action</attribute>
+          <attribute name="target" type="i">8</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">Window9Action</attribute>
+          <attribute name="action">mainwin.Window0Action</attribute>
+          <attribute name="target" type="i">9</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+    </submenu>
+
+    <submenu>
+      <attribute name="label" translatable="yes">_Help</attribute>
+      <attribute name="action">mainwin.HelpAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">HelpTutorialAction</attribute>
+          <attribute name="action">mainwin.HelpTutorialAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">HelpTipsOfTheDayAction</attribute>
+          <attribute name="action">gnc-plugin-basic-commands-actions.HelpTipsOfTheDayAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">HelpContentsAction</attribute>
+          <attribute name="action">mainwin.HelpContentsAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">HelpAboutAction</attribute>
+          <attribute name="action">mainwin.HelpAboutAction</attribute>
+        </item>
+      </section>
+    </submenu>
+  </menu>
+
+
+  <menu id="mainwin-popup">
+    <item>
+      <attribute name="label" translatable="no">TestAction</attribute>
+      <attribute name="action">mainwin.TestAction</attribute>
+    </item>
+  </menu>
+
+
+  <object class="GtkToolbar" id="mainwin-toolbar">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkToolButton" id="but1">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="action-name">gnc-plugin-basic-commands-actions.FileSaveAction</property>
+        <property name="label" translatable="no">FileSaveAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="action-name">mainwin.FileCloseAction</property>
+        <property name="label" translatable="no">FileCloseAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+  </object>
+
+</interface>

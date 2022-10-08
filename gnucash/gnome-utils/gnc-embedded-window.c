@@ -84,6 +84,7 @@ typedef struct GncEmbeddedWindowPrivate
      *  This does not include any action provided by menu or content
      *  plugins. */
     GtkActionGroup *action_group;
+    GSimpleActionGroup *simple_action_group; //FIXMEb added
 
     /** The currently selected page. */
     GncPluginPage *page;
@@ -124,7 +125,7 @@ gnc_embedded_window_open_page (GncEmbeddedWindow *window,
     gtk_box_pack_end(GTK_BOX(window), page->notebook_page, TRUE, TRUE, 2);
     gnc_plugin_page_inserted (page);
 
-    gnc_plugin_page_merge_actions (page, window->ui_merge);
+//FIXMEb    gnc_plugin_page_merge_actions (page, window->ui_merge);
     LEAVE(" ");
 }
 
@@ -153,7 +154,7 @@ gnc_embedded_window_close_page (GncEmbeddedWindow *window,
     priv->page = NULL;
     gnc_plugin_page_removed (page);
 
-    gnc_plugin_page_unmerge_actions (page, window->ui_merge);
+//FIXMEb    gnc_plugin_page_unmerge_actions (page, window->ui_merge);
     gtk_ui_manager_ensure_update (window->ui_merge);
 
     gnc_plugin_page_destroy_widget (page);

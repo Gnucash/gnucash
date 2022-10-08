@@ -321,22 +321,24 @@ gnc_plugin_basic_commands_add_to_window (GncPlugin *plugin,
                                          GncMainWindow *window,
                                          GQuark type)
 {
-    GtkActionGroup *action_group =
-        gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
-    gnc_plugin_update_actions(action_group,
-                              gnc_plugin_initially_insensitive_actions,
-                              "sensitive", FALSE);
-    g_signal_connect(window, "page_changed",
-                     G_CALLBACK(gnc_plugin_basic_commands_main_window_page_changed),
-                     plugin);
+    GSimpleActionGroup *simple_action_group = 
+        gnc_main_window_get_action_group (window, PLUGIN_ACTIONS_NAME);
+
+    gnc_plugin_update_actionsb (simple_action_group,
+                               gnc_plugin_initially_insensitive_actions,
+                               "sensitive", FALSE);
+
+    g_signal_connect (window, "page_changed",
+                      G_CALLBACK(gnc_plugin_basic_commands_main_window_page_changed),
+                      plugin);
 }
 
 /** Update the actions sensitivity
 */
 static void update_inactive_actions (GncPluginPage *plugin_page)
 {
-    GncMainWindow  *window;
-    GtkActionGroup *action_group;
+    GncMainWindow *window;
+    GSimpleActionGroup *simple_action_group;
 
     // We are readonly - so we have to switch particular actions to inactive.
     gboolean is_readwrite = !qof_book_is_readonly(gnc_get_current_book());
@@ -348,13 +350,13 @@ static void update_inactive_actions (GncPluginPage *plugin_page)
 
     window = GNC_MAIN_WINDOW(plugin_page->window);
     g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
-    action_group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
-    g_return_if_fail(GTK_IS_ACTION_GROUP(action_group));
+    simple_action_group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
+    g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(simple_action_group));
 
     /* Set the action's sensitivity */
-    gnc_plugin_update_actions (action_group, readwrite_only_active_actions,
+    gnc_plugin_update_actionsb (simple_action_group, readwrite_only_active_actions,
                                "sensitive", is_readwrite);
-    gnc_plugin_update_actions (action_group, dirty_only_active_actions,
+    gnc_plugin_update_actionsb (simple_action_group, dirty_only_active_actions,
                                "sensitive", is_dirty);
 }
 

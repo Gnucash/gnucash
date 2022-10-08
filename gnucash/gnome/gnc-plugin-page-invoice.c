@@ -553,7 +553,6 @@ static void
 gnc_plugin_page_invoice_init (GncPluginPageInvoice *plugin_page)
 {
     GncPluginPage *parent;
-//    GtkActionGroup *action_group;
     GSimpleActionGroup *simple_action_group;
     gboolean use_new;
 
@@ -599,25 +598,25 @@ gnc_plugin_page_invoice_finalize (GObject *object)
 static void
 update_doclink_actions (GncPluginPage *plugin_page, gboolean has_uri)
 {
-    GtkAction *uri_action;
+    GAction *uri_action;
 
     uri_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(plugin_page), "BusinessLinkOpenAction");
-    gtk_action_set_sensitive (uri_action, has_uri);
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(uri_action), has_uri);
 }
 
 static void
-gnc_plugin_page_invoice_action_update (GtkActionGroup *action_group,
+gnc_plugin_page_invoice_action_update (GSimpleActionGroup *simple_action_group,
                                        action_toolbar_labels *action_list,
                                        void (*gtkfunc)(gpointer, gpointer))
 {
-    GtkAction *action;
+    GAction *action;
     gint i;
 
     for (i = 0; action_list[i].action_name; i++)
     {
         /* update the action */
-        action = gtk_action_group_get_action (action_group,
-                                              action_list[i].action_name);
+        action = g_action_map_lookup_action (G_ACTION_MAP(simple_action_group),
+                                             action_list[i].action_name);
         gtkfunc (action, _(action_list[i].label));
     }
 }
@@ -626,7 +625,7 @@ static void
 gnc_plugin_page_update_reset_layout_action (GncPluginPage *page)
 {
     GncPluginPageInvoicePrivate *priv;
-    GtkAction *layout_action;
+    GAction *layout_action;
     gboolean has_default = FALSE;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_INVOICE(page));
@@ -636,13 +635,13 @@ gnc_plugin_page_update_reset_layout_action (GncPluginPage *page)
     layout_action = gnc_plugin_page_get_action (page, "ViewResetLayoutAction");
     if (gnc_invoice_window_document_has_user_state (priv->iw))
         has_default = TRUE;
-    gtk_action_set_sensitive (layout_action, has_default);
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(layout_action), has_default);
 }
 
 void
 gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, gboolean can_unpost)
 {
-    GtkActionGroup *action_group;
+    GSimpleActionGroup *simple_action_group;
     GncPluginPageInvoicePrivate *priv;
     GncInvoiceType invoice_type;
     GncInvoice *invoice;
@@ -713,28 +712,28 @@ gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, g
         can_unpost = FALSE;
     }
 
-    action_group = gnc_plugin_page_get_action_group(page);
-    gnc_plugin_update_actions (action_group, posted_actions,
+    simple_action_group = gnc_plugin_page_get_action_groupb (page);
+    gnc_plugin_update_actionsb (simple_action_group, posted_actions,
                                "sensitive", is_posted);
-    gnc_plugin_update_actions (action_group, unposted_actions,
+    gnc_plugin_update_actionsb (simple_action_group, unposted_actions,
                                "sensitive", !is_posted);
-    gnc_plugin_update_actions (action_group, can_unpost_actions,
+    gnc_plugin_update_actionsb (simple_action_group, can_unpost_actions,
                                "sensitive", can_unpost);
-    gnc_plugin_update_actions (action_group, invoice_book_readwrite_actions,
+    gnc_plugin_update_actionsb (simple_action_group, invoice_book_readwrite_actions,
                                "sensitive", !is_readonly);
 
     /* update the action labels */
-    gnc_plugin_page_invoice_action_update (action_group, label_list, (void*)gtk_action_set_label);
+    gnc_plugin_page_invoice_action_update (simple_action_group, label_list, (void*)gtk_action_set_label);
     /* update the action tooltips */
-    gnc_plugin_page_invoice_action_update (action_group, tooltip_list, (void*)gtk_action_set_tooltip);
+    gnc_plugin_page_invoice_action_update (simple_action_group, tooltip_list, (void*)gtk_action_set_tooltip);
 
     // if there is no default layout do not enable reset action
     gnc_plugin_page_update_reset_layout_action (page);
 
     /* update the layout action labels */
-    gnc_plugin_page_invoice_action_update (action_group, label_layout_list, (void*)gtk_action_set_label);
+    gnc_plugin_page_invoice_action_update (simple_action_group, label_layout_list, (void*)gtk_action_set_label);
     /* update the layout action tooltips */
-    gnc_plugin_page_invoice_action_update (action_group, tooltip_layout_list, (void*)gtk_action_set_tooltip);
+    gnc_plugin_page_invoice_action_update (simple_action_group, tooltip_layout_list, (void*)gtk_action_set_tooltip);
 
     // update doclink buttons
     invoice = gnc_invoice_window_get_invoice (priv->iw);
@@ -1171,7 +1170,7 @@ gnc_plugin_page_invoice_cmd_sort_changed (GSimpleAction *simple,
     GncPluginPageInvoicePrivate *priv;
     invoice_sort_type_t value;
 
-    g_return_if_fail(GTK_IS_ACTION(simple));
+    g_return_if_fail(G_IS_SIMPLE_ACTION(simple));
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
 
     ENTER("action %p, plugin_page %p)", simple, plugin_page);
@@ -1335,7 +1334,7 @@ gnc_plugin_page_invoice_cmd_save_layout (GSimpleAction *simple,
     GncPluginPageInvoice *plugin_page = user_data;
     GncPluginPageInvoicePrivate *priv;
     GtkWindow *parent;
-    GtkAction *layout_action;
+    GAction *layout_action;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
 
@@ -1345,7 +1344,7 @@ gnc_plugin_page_invoice_cmd_save_layout (GSimpleAction *simple,
 
     layout_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(plugin_page),
                                                 "ViewResetLayoutAction");
-    gtk_action_set_sensitive (layout_action, TRUE);
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(layout_action), TRUE);
 
     LEAVE(" ");
 }
@@ -1358,7 +1357,7 @@ gnc_plugin_page_invoice_cmd_reset_layout (GSimpleAction *simple,
     GncPluginPageInvoice *plugin_page = user_data;
     GncPluginPageInvoicePrivate *priv;
     GtkWindow *parent;
-    GtkAction *layout_action;
+    GAction *layout_action;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
 
@@ -1368,7 +1367,7 @@ gnc_plugin_page_invoice_cmd_reset_layout (GSimpleAction *simple,
 
     layout_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(plugin_page),
                                                 "ViewResetLayoutAction");
-    gtk_action_set_sensitive (layout_action, FALSE);
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(layout_action), FALSE);
 
     LEAVE(" ");
 }
@@ -1381,7 +1380,6 @@ gnc_plugin_page_invoice_cmd_link (GSimpleAction *simple,
     GncPluginPageInvoice *plugin_page = user_data;
     GncPluginPageInvoicePrivate *priv;
     GtkWindow *parent;
-    GtkAction *uri_action;
     GncInvoice *invoice;
     const gchar *uri;
     gchar *ret_uri;
@@ -1440,7 +1438,6 @@ gnc_plugin_page_invoice_cmd_link_remove (GSimpleAction *simple,
     GncPluginPageInvoice *plugin_page = user_data;
     GncPluginPageInvoicePrivate *priv;
     GtkWindow *parent;
-    GtkAction *uri_action;
     GncInvoice *invoice;
     GtkWidget *doclink_button;
 

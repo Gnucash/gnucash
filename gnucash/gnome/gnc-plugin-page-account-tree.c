@@ -465,7 +465,6 @@ gnc_plugin_page_account_tree_class_init (GncPluginPageAccountTreeClass *klass)
 static void
 gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 {
-//    GtkActionGroup *action_group;
     GSimpleActionGroup *simple_action_group;
     GncPluginPageAccountTreePrivate *priv;
     GncPluginPage *parent;
@@ -658,22 +657,22 @@ static void
 gnc_plugin_page_account_editing_started_cd (gpointer various, GncPluginPageRegister *page)
 {
     GncPluginPage *plugin_page = GNC_PLUGIN_PAGE(page);
-    GtkAction *action = gnc_main_window_find_action (GNC_MAIN_WINDOW(plugin_page->window),
+    GAction *action = gnc_main_window_find_action (GNC_MAIN_WINDOW(plugin_page->window),
                                                      "EditDeleteAccountAction");
 
     if (action != NULL)
-        gtk_action_set_sensitive (action, FALSE);
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
 }
 
 static void
 gnc_plugin_page_account_editing_finished_cb (gpointer various, GncPluginPageRegister *page)
 {
     GncPluginPage *plugin_page = GNC_PLUGIN_PAGE(page);
-    GtkAction *action = gnc_main_window_find_action (GNC_MAIN_WINDOW(plugin_page->window),
+    GAction *action = gnc_main_window_find_action (GNC_MAIN_WINDOW(plugin_page->window),
                                                      "EditDeleteAccountAction");
 
     if (action != NULL)
-        gtk_action_set_sensitive (action, TRUE);
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), TRUE);
 }
 
 static GtkWidget *
@@ -840,7 +839,7 @@ gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page)
 static void update_inactive_actions(GncPluginPage *plugin_page)
 {
     GncPluginPageAccountTreePrivate *priv;
-    GtkActionGroup *action_group;
+    GSimpleActionGroup *simple_action_group;
     Account *account = NULL;
     gboolean allow_write = !qof_book_is_readonly(gnc_get_current_book());
     gboolean has_account = FALSE;
@@ -859,17 +858,17 @@ static void update_inactive_actions(GncPluginPage *plugin_page)
     }
 
     /* Get the action group */
-    action_group = gnc_plugin_page_get_action_group(plugin_page);
-    g_return_if_fail(GTK_IS_ACTION_GROUP (action_group));
+    simple_action_group = gnc_plugin_page_get_action_groupb (plugin_page);
+    g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP (simple_action_group));
 
     /* Set the action's sensitivity */
-    gnc_plugin_update_actions (action_group, readonly_inactive_actions,
+    gnc_plugin_update_actionsb (simple_action_group, readonly_inactive_actions,
                                "sensitive", allow_write);
-    gnc_plugin_update_actions (action_group, actions_requiring_account_rw,
+    gnc_plugin_update_actionsb (simple_action_group, actions_requiring_account_rw,
                                "sensitive", allow_write && has_account);
-    gnc_plugin_update_actions (action_group, actions_requiring_account_always,
+    gnc_plugin_update_actionsb (simple_action_group, actions_requiring_account_always,
                                "sensitive", has_account);
-    gnc_plugin_update_actions (action_group, actions_requiring_subaccounts_rw,
+    gnc_plugin_update_actionsb (simple_action_group, actions_requiring_subaccounts_rw,
                                "sensitive", allow_write && subaccounts);
     g_signal_emit (plugin_page, plugin_page_signals[ACCOUNT_SELECTED], 0, account);
 }

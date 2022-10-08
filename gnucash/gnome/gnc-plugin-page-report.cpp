@@ -433,7 +433,7 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     GncPluginPageReport *report;
     GncPluginPageReportPrivate *priv;
     GtkWindow *topLvl;
-    GtkAction *action;
+    GAction *action;
     GtkWidget *webview;
     URLType type;
     char * id_name;
@@ -446,8 +446,8 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
 #ifndef WEBKIT1
     /* Hide the ExportPdf action for Webkit2 */
     action = gnc_plugin_page_get_action (page, "FilePrintPDFAction");
-    gtk_action_set_sensitive (action, FALSE);
-    gtk_action_set_visible (action, FALSE);
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
+//FIXMEb    gtk_action_set_visible (action, FALSE);
 #endif
 
     report = GNC_PLUGIN_PAGE_REPORT(page);
@@ -580,10 +580,9 @@ gnc_plugin_page_report_setup( GncPluginPage *ppage )
  * called after a report is loaded into the gnc_html widget
  ********************************************************************/
 static void
-//gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
-gnc_plugin_page_report_load_cb(GncHtml * html, URLType type,
-                               const gchar * location, const gchar * label,
-                               gpointer data)
+gnc_plugin_page_report_load_cb (GncHtml * html, URLType type,
+                                const gchar * location, const gchar * label,
+                                gpointer data)
 {
     GncPluginPageReport *report = GNC_PLUGIN_PAGE_REPORT(data);
     GncPluginPageReportPrivate *priv;
@@ -1055,17 +1054,17 @@ gnc_plugin_page_report_name_changed (GncPluginPage *page, const gchar *name)
 static void
 gnc_plugin_page_report_update_edit_menu (GncPluginPage *page, gboolean hide)
 {
-    GtkAction *action;
+    GAction *action;
 
     action = gnc_plugin_page_get_action (page, "EditCopyAction");
-    gtk_action_set_sensitive (action, TRUE);
-    gtk_action_set_visible (action, TRUE);
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), TRUE);
+//FIXMEb    gtk_action_set_visible (action, TRUE);
     action = gnc_plugin_page_get_action (page, "EditCutAction");
-    gtk_action_set_sensitive (action, FALSE);
-    gtk_action_set_visible (action, !hide);
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
+//FIXMEb    gtk_action_set_visible (action, !hide);
     action = gnc_plugin_page_get_action (page, "EditPasteAction");
-    gtk_action_set_sensitive (action, FALSE);
-    gtk_action_set_visible (action, !hide);
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
+//FIXMEb    gtk_action_set_visible (action, !hide);
 }
 
 static gboolean
@@ -1209,7 +1208,7 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
         { "ReportReloadAction", gnc_plugin_page_report_reload_cb, nullptr, nullptr, nullptr },
         { "ReportStopAction", gnc_plugin_page_report_stop_cb, nullptr, nullptr, nullptr },
     };
-    guint num_report_actions = G_N_ELEMENTS( report_actions );
+    guint num_report_actions = G_N_ELEMENTS(report_actions);
 
     static GncDisplayItem report_display_items [] =
     {
@@ -1273,26 +1272,26 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
     /** The number of display items provided by this plugin. */
     guint num_report_display_items = G_N_ELEMENTS(report_display_items);
 
-    DEBUG( "property reportId=%d", reportId );
+    DEBUG("property reportId=%d", reportId);
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(plugin_page);
     priv->reportId = reportId;
 
-    gnc_plugin_page_report_setup( GNC_PLUGIN_PAGE(plugin_page) );
+    gnc_plugin_page_report_setup( GNC_PLUGIN_PAGE(plugin_page));
 
     /* Init parent declared variables */
     parent = GNC_PLUGIN_PAGE(plugin_page);
     use_new = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REPORT, GNC_PREF_USE_NEW);
-    name = gnc_report_name( priv->initial_report );
-    g_object_set(G_OBJECT(plugin_page),
-                 "page-name",      name,
-                 "page-uri",       "default:",
-                 "ui-description", "gnc-plugin-page-report.ui",
-                 "use-new-window", use_new,
-                 nullptr);
-    g_free(name);
+    name = gnc_report_name (priv->initial_report);
+    g_object_set (G_OBJECT(plugin_page),
+                  "page-name",      name,
+                  "page-uri",       "default:",
+                  "ui-description", "gnc-plugin-page-report.ui",
+                  "use-new-window", use_new,
+                  nullptr);
+    g_free (name);
 
     /* change me when the system supports multiple books */
-    gnc_plugin_page_add_book(parent, gnc_get_current_book());
+    gnc_plugin_page_add_book (parent, gnc_get_current_book());
 
     /* Create menu and toolbar information */
     simple_action_group = gnc_plugin_page_create_action_groupb (parent, "GncPluginPageReportActions");
@@ -1309,9 +1308,8 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
 //                                  num_report_actions,
 //                                  plugin_page );
 
-//FIXMEb    gnc_plugin_update_actions(action_group,
-//                              initially_insensitive_actions,
-//                              "sensitive", FALSE);
+    gnc_plugin_update_actionsb (simple_action_group, initially_insensitive_actions,
+                                "sensitive", FALSE);
 
 //FIXMEb    gnc_plugin_init_short_names (action_group, toolbar_labels);
 
@@ -1375,23 +1373,21 @@ close_handler (gpointer user_data)
 }
 
 static void
-gnc_plugin_page_report_set_fwd_button(GncPluginPageReport *report, int enabled)
+gnc_plugin_page_report_set_fwd_button (GncPluginPageReport *report, int enabled)
 {
-    GtkAction *act;
+    GAction *act;
 
-    act = gnc_plugin_page_get_action(GNC_PLUGIN_PAGE(report),
-                                     "ReportForwAction" );
-    gtk_action_set_sensitive(act, enabled);
+    act = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(report), "ReportForwAction");
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(act), enabled);
 }
 
 static void
-gnc_plugin_page_report_set_back_button(GncPluginPageReport *report, int enabled)
+gnc_plugin_page_report_set_back_button (GncPluginPageReport *report, int enabled)
 {
-    GtkAction *act;
+    GAction *act;
 
-    act = gnc_plugin_page_get_action(GNC_PLUGIN_PAGE(report),
-                                     "ReportBackAction" );
-    gtk_action_set_sensitive(act, enabled);
+    act = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(report), "ReportBackAction");
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(act), enabled);
 }
 
 // ------------------------------------------------------------
@@ -1779,10 +1775,10 @@ gnc_plugin_page_report_export_cb (GSimpleAction *simple,
                 g_free (str);
             }
             else
-            gnc_error_dialog (parent, "%s",
-                  _("This report must be upgraded to return a "
-                    "document object with export-string or "
-                    "export-error."));
+                gnc_error_dialog (parent, "%s",
+                                   _("This report must be upgraded to return a "
+                                     "document object with export-string or "
+                                     "export-error."));
         }
         result = TRUE;
     }
@@ -1991,9 +1987,9 @@ gnc_plugin_page_report_print_cb (GSimpleAction *simple,
 }
 
 static void
-gnc_plugin_page_report_exportpdf_cb(GSimpleAction *simple,
-                                   GVariant *parameter,
-                                   gpointer user_data)
+gnc_plugin_page_report_exportpdf_cb (GSimpleAction *simple,
+                                     GVariant *parameter,
+                                     gpointer user_data)
 {
     GncPluginPageReport *report = (GncPluginPageReport*)user_data;
     GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
@@ -2009,19 +2005,19 @@ gnc_plugin_page_report_exportpdf_cb(GSimpleAction *simple,
         owner = (GncOwner*) gncInvoiceGetOwner(invoice);
         if (owner)
         {
-        QofInstance *inst = qofOwnerGetOwner (owner);
-        gchar *dirname = nullptr;
-        qof_instance_get (inst, "export-pdf-dir", &dirname, nullptr);
+            QofInstance *inst = qofOwnerGetOwner (owner);
+            gchar *dirname = nullptr;
+            qof_instance_get (inst, "export-pdf-dir", &dirname, nullptr);
             // Yes. In the kvp, look up the key for the Export-PDF output
             // directory. If it exists, prepend this to the job name so that
             // we can export to PDF.
-        if (dirname && g_file_test(dirname,
+            if (dirname && g_file_test (dirname,
                        (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)))
-        {
-        gchar *tmp = g_build_filename(dirname, job_name, nullptr);
-        g_free(job_name);
-        job_name = tmp;
-        }
+            {
+                gchar *tmp = g_build_filename (dirname, job_name, nullptr);
+                g_free (job_name);
+                job_name = tmp;
+            }
         }
     }
 
@@ -2035,29 +2031,27 @@ gnc_plugin_page_report_exportpdf_cb(GSimpleAction *simple,
 
     if (owner)
     {
-    /* As this is an invoice report with some owner, we will try
-     * to look up the chosen output directory from the print
-     * settings and store it again in the owner kvp.
-     */
+        /* As this is an invoice report with some owner, we will try
+         * to look up the chosen output directory from the print
+         * settings and store it again in the owner kvp.
+         */
         GtkPrintSettings *print_settings = gnc_print_get_settings();
-        if (print_settings &&
-        gtk_print_settings_has_key(print_settings,
-                       GNC_GTK_PRINT_SETTINGS_EXPORT_DIR))
+        if (print_settings && gtk_print_settings_has_key (print_settings,
+                                  GNC_GTK_PRINT_SETTINGS_EXPORT_DIR))
         {
-            const char* dirname = gtk_print_settings_get(print_settings,
-                                  GNC_GTK_PRINT_SETTINGS_EXPORT_DIR);
+            const char* dirname = gtk_print_settings_get (print_settings,
+                                      GNC_GTK_PRINT_SETTINGS_EXPORT_DIR);
             // Only store the directory if it exists.
-            if (g_file_test(dirname,
+            if (g_file_test (dirname,
                             (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)))
             {
-                QofInstance *inst = qofOwnerGetOwner(owner);
-                gncOwnerBeginEdit(owner);
-        qof_instance_set (inst, "export-pdf-dir", dirname);
-        gncOwnerCommitEdit(owner);
+                QofInstance *inst = qofOwnerGetOwner (owner);
+                gncOwnerBeginEdit (owner);
+                qof_instance_set (inst, "export-pdf-dir", dirname);
+                gncOwnerCommitEdit (owner);
             }
         }
     }
-
     g_free (job_name);
 }
 

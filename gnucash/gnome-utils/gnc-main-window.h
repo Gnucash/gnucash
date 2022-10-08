@@ -55,6 +55,15 @@ extern "C"
 
 /* typedefs & structures */
 
+typedef struct
+{
+    const gchar *action_name;
+    const gchar *icon_name;
+    const gchar *label;
+    const gchar *accelerator;
+    const gchar *tooltip;
+} GncDisplayItem;
+
 /** The instance data structure for a main window object. */
 typedef struct GncMainWindow
 {
@@ -241,10 +250,9 @@ void gnc_main_window_manual_merge_actions (GncMainWindow *window,
  *
  *  @param n_entries The number of actions in the array.
  *
- *  @param toggle_entries A pointer to an array of GtkToggleActionEntry.
- *  These are the toggle actions that will be added to the user interface.
+ *  @param display_items A pointer to an array of GncDisplayItem.
  *
- *  @param n_toggle_entries The number of toggle actions in the array.
+ *  @param n_display_items The number of display items in the array.
  *
  *  @param filename The filename containing the user interface
  *  definition that goes with this set of actions.
@@ -254,10 +262,10 @@ void gnc_main_window_manual_merge_actions (GncMainWindow *window,
  */
 void gnc_main_window_merge_actions (GncMainWindow *window,
                                     const gchar *group_name,
-                                    GtkActionEntry *entries,
+                                    GActionEntry *entries,
                                     guint n_entries,
-                                    GtkToggleActionEntry *toggle_entries,
-                                    guint n_toggle_entries,
+                                    GncDisplayItem *display_items,
+                                    guint n_display_items,
                                     const gchar *filename,
                                     gpointer user_data);
 
@@ -303,8 +311,8 @@ void gnc_main_window_actions_updated (GncMainWindow *window);
  *  specified name.  If the name cannot be found, then NULL will be
  *  returned.
  */
-GtkActionGroup *gnc_main_window_get_action_group (GncMainWindow *window,
-        const gchar *group_name);
+GSimpleActionGroup *gnc_main_window_get_action_group (GncMainWindow *window,
+                                                      const gchar *group_name);
 
 
 /** Set the window where all progressbar updates should occur.  This
@@ -424,7 +432,7 @@ void gnc_main_window_all_action_set_sensitive (const gchar *action_name, gboolea
  *  specified name. If the name cannot be found, then NULL will be
  *  returned.
  */
-GtkAction *gnc_main_window_find_action (GncMainWindow *window, const gchar *name);
+GAction *gnc_main_window_find_action (GncMainWindow *window, const gchar *name);
 
 /**
  * Shows all main windows.

@@ -339,13 +339,11 @@ GncPluginPage *
 gnc_plugin_page_owner_tree_new (GncOwnerType owner_type)
 {
     GncPluginPageOwnerTree *plugin_page;
-
     GncPluginPageOwnerTreePrivate *priv;
     const GList *item;
-
-    GtkActionGroup *action_group;
-    GtkAction    *action;
-    gint          i;
+    GSimpleActionGroup *simple_action_group;
+    GAction *action;
+    gint i;
 
     g_return_val_if_fail( (owner_type != GNC_OWNER_UNDEFINED)
                           && (owner_type != GNC_OWNER_NONE), NULL);
@@ -370,13 +368,14 @@ gnc_plugin_page_owner_tree_new (GncOwnerType owner_type)
     priv->owner_type = owner_type;
 
     /* Hide menu and toolbar items that are not relevant for the active owner list */
-    action_group = gnc_plugin_page_get_action_group(GNC_PLUGIN_PAGE(plugin_page));
+    simple_action_group = gnc_plugin_page_get_action_groupb (GNC_PLUGIN_PAGE(plugin_page));
     for (i = 0; action_owners[i].action_name; i++)
     {
-        action = gtk_action_group_get_action (action_group, action_owners[i].action_name);
-        g_object_set (G_OBJECT(action),
-                      "visible", (priv->owner_type == action_owners[i].owner_type),
-                      NULL);
+        action = g_action_map_lookup_action (G_ACTION_MAP(simple_action_group),
+                                             action_owners[i].action_name);
+//FIXMEb        g_object_set (G_OBJECT(action),
+//                      "visible", (priv->owner_type == action_owners[i].owner_type),
+//                      NULL);
     }
 
     LEAVE("new %s tree page %p", gncOwnerTypeToQofIdType(owner_type), plugin_page);
@@ -436,7 +435,6 @@ gnc_plugin_page_owner_tree_class_init (GncPluginPageOwnerTreeClass *klass)
 static void
 gnc_plugin_page_owner_tree_init (GncPluginPageOwnerTree *plugin_page)
 {
-//    GtkActionGroup *action_group;
     GSimpleActionGroup *simple_action_group;
     GncPluginPageOwnerTreePrivate *priv;
     GncPluginPage *parent;
@@ -492,7 +490,7 @@ gnc_plugin_page_owner_tree_finalize (GObject *object)
 
 static void update_inactive_actions(GncPluginPage *plugin_page)
 {
-    GtkActionGroup *action_group;
+    GSimpleActionGroup *simple_action_group;
     gboolean is_sensitive = !qof_book_is_readonly(gnc_get_current_book());
 
     // We are readonly - so we have to switch particular actions to inactive.
@@ -500,11 +498,11 @@ static void update_inactive_actions(GncPluginPage *plugin_page)
     g_return_if_fail(GNC_IS_PLUGIN_PAGE(plugin_page));
 
     /* Get the action group */
-    action_group = gnc_plugin_page_get_action_group(plugin_page);
-    g_return_if_fail(GTK_IS_ACTION_GROUP (action_group));
+    simple_action_group = gnc_plugin_page_get_action_groupb (plugin_page);
+    g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP (simple_action_group));
 
     /* Set the action's sensitivity */
-    gnc_plugin_update_actions (action_group, readonly_inactive_actions,
+    gnc_plugin_update_actionsb (simple_action_group, readonly_inactive_actions,
                                "sensitive", is_sensitive);
 }
 
@@ -873,7 +871,7 @@ static void
 gnc_plugin_page_owner_tree_selection_changed_cb (GtkTreeSelection *selection,
                                                  GncPluginPageOwnerTree *page)
 {
-    GtkActionGroup *action_group;
+    GSimpleActionGroup *simple_action_group;
     GtkTreeView *view;
     GncOwner *owner = NULL;
     gboolean sensitive;
@@ -893,10 +891,10 @@ gnc_plugin_page_owner_tree_selection_changed_cb (GtkTreeSelection *selection,
         sensitive = (owner != NULL);
     }
 
-    action_group = gnc_plugin_page_get_action_group(GNC_PLUGIN_PAGE(page));
-    gnc_plugin_update_actions (action_group, actions_requiring_owner_always,
+    simple_action_group = gnc_plugin_page_get_action_groupb (GNC_PLUGIN_PAGE(page));
+    gnc_plugin_update_actionsb (simple_action_group, actions_requiring_owner_always,
                                "sensitive", sensitive);
-    gnc_plugin_update_actions (action_group, actions_requiring_owner_rw,
+    gnc_plugin_update_actionsb (simple_action_group, actions_requiring_owner_rw,
                                "sensitive", sensitive && is_readwrite);
     g_signal_emit (page, plugin_page_signals[OWNER_SELECTED], 0, owner);
 }

@@ -221,7 +221,6 @@ gnc_plugin_page_sx_list_class_init (GncPluginPageSxListClass *klass)
 static void
 gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page)
 {
-//    GtkActionGroup *action_group;
     GSimpleActionGroup *simple_action_group;
     GncPluginPage *parent;
 
@@ -239,6 +238,7 @@ gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page)
                                      gnc_plugin_page_sx_list_actions,
                                      gnc_plugin_page_sx_list_n_actions,
                                      plugin_page);
+
     /* gnc_plugin_init_short_names (action_group, toolbar_labels); */
 }
 
@@ -313,18 +313,17 @@ static void
 gppsl_selection_changed_cb (GtkTreeSelection *selection, gpointer user_data)
 {
     GncPluginPage *page;
-    GtkAction *edit_action, *delete_action;
+    GAction *edit_action, *delete_action;
     gboolean selection_state = TRUE;
 
     page = GNC_PLUGIN_PAGE(user_data);
     edit_action = gnc_plugin_page_get_action (page, "SxListEditAction");
     delete_action = gnc_plugin_page_get_action (page, "SxListDeleteAction");
-    selection_state
-    = gtk_tree_selection_count_selected_rows (selection) == 0
-      ? FALSE
-      : TRUE;
-    gtk_action_set_sensitive (edit_action, selection_state);
-    gtk_action_set_sensitive (delete_action, selection_state);
+    selection_state = gtk_tree_selection_count_selected_rows (selection) == 0
+                      ? FALSE
+                      : TRUE;
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(edit_action), selection_state);
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(delete_action), selection_state);
 }
 
 
@@ -523,11 +522,11 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     }
 
     {
-        GtkAction *edit_action, *delete_action;
+        GAction *edit_action, *delete_action;
         edit_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), "SxListEditAction");
         delete_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), "SxListDeleteAction");
-        gtk_action_set_sensitive (edit_action, FALSE);
-        gtk_action_set_sensitive (delete_action, FALSE);
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(edit_action), FALSE);
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(delete_action), FALSE);
     }
 
     {

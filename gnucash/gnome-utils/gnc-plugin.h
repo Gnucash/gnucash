@@ -96,15 +96,6 @@ G_BEGIN_DECLS
 
 /* typedefs & structures */
 
-typedef struct
-{
-    const gchar *action_name;
-    const gchar *stock_id;
-    const gchar *label;
-    const gchar *accelerator;
-    const gchar *tooltip;
-} GncDisplayItem;
-
 /** The instance data structure for a menu-only plugin. */
 typedef struct
 {
@@ -267,7 +258,7 @@ typedef struct
  *  @param toolbar_labels A pointer to a NULL terminated array of data
  *  action_toolbar_labels items.
  */
-void gnc_plugin_init_short_names (GtkActionGroup *action_group,
+void gnc_plugin_init_short_names (GSimpleActionGroup *simple_action_group,
                                   action_toolbar_labels *toolbar_labels);
 
 
@@ -282,7 +273,7 @@ void gnc_plugin_init_short_names (GtkActionGroup *action_group,
  *  @param name A list of actions names to be marked important.  This
  *  list must be NULL terminated.
  */
-void gnc_plugin_set_important_actions (GtkActionGroup *action_group,
+void gnc_plugin_set_important_actions (GSimpleActionGroup *simple_action_group,
                                        const gchar **names);
 
 
