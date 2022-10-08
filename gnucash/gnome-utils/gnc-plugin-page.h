@@ -539,6 +539,9 @@ void gnc_plugin_page_set_ui_description (GncPluginPage *page,
  *  @return A pointer to the GtkBuilder object for this page. */
 GtkBuilder *gnc_plugin_page_get_builder (GncPluginPage *page); //FIXMEb added
 
+const gchar * gnc_plugin_page_get_menu_qualifier (GncPluginPage *page); //FIXMEb added
+void gnc_plugin_page_set_menu_qualifier (GncPluginPage *page,
+                                         const char *menu_qualifier); //FIXMEb added
 
 /** Retrieve the GtkActionGroup object associated with this page.
  *

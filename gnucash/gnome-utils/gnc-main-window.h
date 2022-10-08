@@ -85,6 +85,8 @@ typedef struct
                           GncPluginPage *page);
     void (*page_changed) (GncMainWindow *window,
                           GncPluginPage *page);
+    void (*menu_changed) (GncMainWindow *window,
+                          GncPluginPage *page); //FIXMEb added
 } GncMainWindowClass;
 
 typedef struct
@@ -290,6 +292,23 @@ void gnc_main_window_unmerge_actions (GncMainWindow *window,
  */
 void gnc_main_window_actions_updated (GncMainWindow *window);
 
+void gnc_main_window_menu_item_vis_by_action (GncMainWindow *window,
+                                              const gchar **action_names,
+                                              gboolean vis); //FIXMEb added
+
+struct _GncActionUpdate
+{
+    const gchar *action_name;
+    const gchar *action_label;
+    gboolean     visible;
+    const gchar *action_tooltip;
+}; //FIXMEb added
+
+typedef struct _GncActionUpdate GncActionUpdate; //FIXMEb added
+
+void gnc_main_window_update_action_labels (GncMainWindow *window,
+                                           const GncActionUpdate *updates,
+                                           gint n_updates); //FIXMEb added
 
 /** Retrieve a specific set of user interface actions from a window.
  *  This function can be used to get an group of action to be
@@ -433,7 +452,21 @@ GAction *gnc_main_window_find_action_in_group (GncMainWindow *window,
 
 GtkWidget *gnc_main_window_get_menu (GncMainWindow *window); //FIXMEb added
 
-void gnc_main_window_update_toolbar (GncMainWindow *window, GncPluginPage *page); //FIXMEb added
+struct _GncAddSubMenu
+{
+    const gchar *action_name;
+    gboolean     visible;
+}; //FIXMEb added
+
+typedef struct _GncAddSubMenu GncAddSubMenu; //FIXMEb added
+
+void gnc_main_window_add_sub_menus (GncMainWindow *window, GncPluginPage *page,
+                                    const GncAddSubMenu *submenu,
+                                    gint n_updates); //FIXMEb added
+
+void gnc_main_window_add_to_display_list (GncMainWindow *window,
+                                          const GncDisplayItem *display_items,
+                                          gint n_display_items); //FIXMEb added
 
 /**
  * Shows all main windows.

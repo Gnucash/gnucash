@@ -100,6 +100,7 @@ typedef struct _GncPluginPagePrivate
     GSimpleActionGroup *simple_action_group; //FIXMEb added
     const gchar *simple_action_group_name; //FIXMEb added
     GtkAccelGroup *accel_group; //FIXMEb added
+    const gchar *menu_qualifier; //FIXMEb added
 
     GList *books;
 
@@ -553,6 +554,7 @@ gnc_plugin_page_init (GncPluginPage *page, void *data)
     priv->page_changed_id = 0;
     priv->focus_source_id = 0;
     priv->accel_group = NULL;
+    priv->menu_qualifier = NULL;
 
     page->window      = NULL;
     page->summarybar  = NULL;
@@ -1156,6 +1158,33 @@ gnc_plugin_page_get_builder (GncPluginPage *page)
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     return priv->builder;
+}
+
+
+/*  Retrieve the menu qualifier associated with this page. */
+const gchar *
+gnc_plugin_page_get_menu_qualifier (GncPluginPage *page)
+{
+    GncPluginPagePrivate *priv;
+
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), NULL);
+
+    priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
+    return priv->menu_qualifier;
+}
+
+
+void
+gnc_plugin_page_set_menu_qualifier (GncPluginPage *page,
+                                    const char *menu_qualifier)
+{
+    GncPluginPagePrivate *priv;
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
+
+    priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
+
+    priv->menu_qualifier = menu_qualifier;
 }
 
 

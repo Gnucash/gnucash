@@ -185,18 +185,6 @@
       <attribute name="label" translatable="yes">_Edit</attribute>
       <attribute name="action">mainwin.EditAction</attribute>
       <section>
-        <item>
-          <attribute name="label" translatable="no">EditCutAction</attribute>
-          <attribute name="action">mainwin.EditCutAction</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="no">EditCopyAction</attribute>
-          <attribute name="action">mainwin.EditCopyAction</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="no">EditPasteAction</attribute>
-          <attribute name="action">mainwin.EditPasteAction</attribute>
-        </item>
       </section>
     </submenu>
 
@@ -204,42 +192,6 @@
       <attribute name="label" translatable="yes">_View</attribute>
       <attribute name="action">mainwin.ViewAction</attribute>
       <section>
-        <item>
-          <attribute name="label" translatable="no">ViewToolbarAction</attribute>
-          <attribute name="action">mainwin.ViewToolbarAction</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="no">ViewSummaryAction</attribute>
-          <attribute name="action">mainwin.ViewSummaryAction</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="no">ViewStatusbarAction</attribute>
-          <attribute name="action">mainwin.ViewStatusbarAction</attribute>
-        </item>
-        <submenu>
-          <attribute name="label" translatable="no">ViewTabPositionAction</attribute>
-          <attribute name="action">mainwin.ViewTabPosition</attribute>
-          <item>
-            <attribute name="label" translatable="no">ViewTabPositionTopAction</attribute>
-            <attribute name="action">mainwin.ViewTabPositionAction</attribute>
-            <attribute name="target" type="i">0</attribute>
-          </item>
-          <item>
-            <attribute name="label" translatable="no">ViewTabPositionBottomAction</attribute>
-            <attribute name="action">mainwin.ViewTabPositionAction</attribute>
-            <attribute name="target" type="i">1</attribute>
-          </item>
-          <item>
-            <attribute name="label" translatable="no">ViewTabPositionLeftAction</attribute>
-            <attribute name="action">mainwin.ViewTabPositionAction</attribute>
-            <attribute name="target" type="i">2</attribute>
-          </item>
-          <item>
-            <attribute name="label" translatable="no">ViewTabPositionRightAction</attribute>
-            <attribute name="action">mainwin.ViewTabPositionAction</attribute>
-            <attribute name="target" type="i">3</attribute>
-          </item>
-        </submenu>
       </section>
     </submenu>
 
