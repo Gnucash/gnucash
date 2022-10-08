@@ -44,6 +44,7 @@
 #include "gnc-engine.h"
 #include "gnc-prefs.h"
 #include "gnc-uri-utils.h"
+#include "gnc-gtk-utils.h"
 
 static GObjectClass *parent_class = NULL;
 
@@ -59,7 +60,6 @@ static void gnc_plugin_file_history_finalize (GObject *object);
 
 static void gnc_plugin_file_history_add_to_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
 static void gnc_plugin_file_history_remove_from_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
-
 
 /** The debugging module used by this file. */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -407,45 +407,47 @@ gnc_history_update_action (GncMainWindow *window,
                            gint index,
                            const gchar *filename)
 {
-    GSimpleActionGroup *simple_action_group;
-    GAction *action;
-    gchar *action_name, *label_name, *tooltip, *old_filename;
+    GtkWidget *menu_item = NULL;
+    gchar *action_name;
     gint limit;
 
     ENTER("window %p, index %d, filename %s", window, index,
           filename ? filename : "(null)");
-    /* Get the action group */
-    simple_action_group = gnc_main_window_get_action_group (window, PLUGIN_ACTIONS_NAME);
 
-//FIXMEb    action_name = g_strdup_printf ("RecentFile%dAction", index);
-//    action = g_action_map_lookup_action (G_ACTION_MAP(simple_action_group), action_name);
+    action_name = g_strdup_printf ("RecentFile%dAction", index);
+
+    menu_item =  gnc_find_menu_item (gnc_main_window_get_menu (window), action_name);
+
+    if (!menu_item)
+    {
+        LEAVE("Could not find 'menu_item' with action name '%s'", action_name);
+        g_free (action_name);
+        return;
+    }
 
     limit = gnc_prefs_get_int (GNC_PREFS_GROUP_HISTORY,
                                GNC_PREF_HISTORY_MAXFILES);
 
     if (filename && (strlen(filename) > 0) && (index < limit))
     {
-        /* set the menu label (w/accelerator) */
-        label_name = gnc_history_generate_label (index, filename);
-        tooltip    = gnc_history_generate_tooltip (index, filename);
-//FIXMEb        g_object_set(G_OBJECT(action), "label", label_name,
-//                                       "tooltip", tooltip,
-//                                       "visible", TRUE,
-//                                       NULL);
-//        g_free(label_name);
-//        g_free(tooltip);
+        gchar *label_name = gnc_history_generate_label (index, filename);
+        gchar *tooltip = gnc_history_generate_tooltip (index, filename);
 
-        /* set the filename for the callback function */
-//FIXMEb        old_filename = g_object_get_data(G_OBJECT(action), FILENAME_STRING);
-//        if (old_filename)
-//            g_free(old_filename);
-//FIXMEb        g_object_set_data(G_OBJECT(action), FILENAME_STRING, g_strdup(filename));
+        gtk_menu_item_set_label (GTK_MENU_ITEM(menu_item), label_name);
+
+//FIXMEb tooltip needs fixing to status bar and accelerator ?
+//FIXMEb Setting tool tip on menu recent filee items
+        gtk_widget_set_tooltip_text (menu_item, tooltip);
+
+        gtk_widget_show (menu_item);
+
+        g_free (label_name);
+        g_free (tooltip);
     }
     else
-    {
-//FIXMEb        gtk_action_set_visible(action, FALSE);
-    }
-//    g_free (action_name);
+        gtk_widget_hide (menu_item);
+
+    g_free (action_name);
     LEAVE("");
 }
 
@@ -661,21 +663,31 @@ gnc_plugin_file_history_cmd_open_file (GSimpleAction *simple,
 
 {
     GncMainWindowActionData *data = user_data;
-    gchar *filename;
+    gchar *filename, *pref, *index;
+    const gchar *action_name;
 
-    g_return_if_fail(GTK_IS_ACTION(simple));
-    g_return_if_fail(data != NULL);
+    g_return_if_fail (G_IS_SIMPLE_ACTION(simple));
+    g_return_if_fail (data != NULL);
 
-    /* DRH - Do we need to close all open windows but the first?
-     * Which progress bar should we be using? One in a window, or
-     * in a new "file loading" dialog???
-     */
-    filename = g_object_get_data(G_OBJECT(simple), FILENAME_STRING);
+    // action name will be of the form 'RecentFile1Action'
+    action_name =  g_action_get_name (G_ACTION(simple));
+
+    index = g_utf8_substring (action_name, 10, 11);
+
+    pref = gnc_history_index_to_pref_name (atoi (index));
+    filename = gnc_prefs_get_string (GNC_PREFS_GROUP_HISTORY, pref);
+
+    PINFO("File to open is '%s' on action '%s'", filename, action_name);
+
     gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
     /* also opens new account page */
     gnc_file_open_file (GTK_WINDOW (data->window),
                         filename, /*open_readonly*/ FALSE);
     gnc_window_set_progressbar_window (NULL);
+
+    g_free (pref);
+    g_free (filename);
+    g_free (index);
 }
 
 /** @} */
