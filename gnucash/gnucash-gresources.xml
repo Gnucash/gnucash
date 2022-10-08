@@ -6,6 +6,7 @@
     <file>gnucash-fallback.css</file>
     <file>ui/gnc-main-window.ui</file>
     <file>ui/gnc-plugin-page-account-tree.ui</file>
+    <file>ui/gnc-plugin-page-budget.ui</file>
     <file>ui/gnc-plugin-page-register.ui</file>
   </gresource>
 </gresources>

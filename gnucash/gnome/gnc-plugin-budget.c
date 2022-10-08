@@ -56,7 +56,6 @@ static void gnc_plugin_budget_cmd_delete_budget (GSimpleAction *simple, GVariant
 
 static GActionEntry gnc_plugin_actions [] =
 {
-    { "ActionsBudgetAction", NULL, NULL, NULL, NULL },
     { "NewBudgetAction", gnc_plugin_budget_cmd_new_budget, NULL, NULL, NULL },
     { "OpenBudgetAction", gnc_plugin_budget_cmd_open_budget, NULL, NULL, NULL },
     { "CopyBudgetAction", gnc_plugin_budget_cmd_copy_budget, NULL, NULL, NULL },
@@ -81,7 +80,7 @@ static GncDisplayItem gnc_plugin_display_items [] =
         N_("Copy an existing Budget.")
     },
     {
-        "DeleteBudgetAction", NULL, N_("_Delete Budget"), NULL,
+        "DeleteBudgetAction", "edit-delete", N_("_Delete Budget"), NULL,
         N_("Delete an existing Budget.")
     },
 };

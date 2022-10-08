@@ -120,13 +120,13 @@ static void gnc_plugin_page_budget_cmd_allperiods_budget (GSimpleAction *simple,
 static void gnc_plugin_page_budget_cmd_refresh (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_plugin_page_budget_cmd_budget_note (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_plugin_page_budget_cmd_budget_report (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_page_budget_cmd_edit_tax_options (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 static void allperiods_budget_helper (GtkTreeModel *model, GtkTreePath *path,
                                       GtkTreeIter *iter, gpointer data);
 
 static GActionEntry gnc_plugin_page_budget_actions [] =
 {
-    { "FakeToplevel", NULL, NULL, NULL, NULL },
     { "OpenAccountAction", gnc_plugin_page_budget_cmd_open_account, NULL, NULL, NULL },
     { "OpenSubaccountsAction", gnc_plugin_page_budget_cmd_open_subaccounts, NULL, NULL, NULL },
     { "DeleteBudgetAction", gnc_plugin_page_budget_cmd_delete_budget, NULL, NULL, NULL },
@@ -137,6 +137,7 @@ static GActionEntry gnc_plugin_page_budget_actions [] =
     { "BudgetReportAction", gnc_plugin_page_budget_cmd_budget_report, NULL, NULL, NULL },
     { "ViewFilterByAction", gnc_plugin_page_budget_cmd_view_filter_by, NULL, NULL, NULL },
     { "ViewRefreshAction", gnc_plugin_page_budget_cmd_refresh, NULL, NULL, NULL },
+    { "EditTaxOptionsAction", gnc_plugin_page_budget_cmd_edit_tax_options, NULL, NULL, NULL },
 };
 static guint gnc_plugin_page_budget_n_actions = G_N_ELEMENTS(gnc_plugin_page_budget_actions);
 
@@ -148,15 +149,10 @@ static GncDisplayItem gnc_plugin_page_budget_display_items [] =
         N_("Open the selected account.")
     },
     {
-        "OpenSubaccountsAction", GNC_ICON_OPEN_ACCOUNT,
-        N_("Open _Subaccounts"), NULL,
+        "OpenSubaccountsAction", GNC_ICON_OPEN_ACCOUNT, N_("Open _Subaccounts"), NULL,
         N_("Open the selected account and all its subaccounts.")
     },
     /* Edit menu */
-    {
-        "DeleteBudgetAction", GNC_ICON_DELETE_BUDGET, N_("_Delete Budget..."),
-        NULL, N_("Select this or another budget and delete it.")
-    },
     {
         "OptionsBudgetAction", "document-properties", N_("Budget _Options..."),
         NULL, N_("Edit this budget's options.")
@@ -192,6 +188,44 @@ static GncDisplayItem gnc_plugin_page_budget_display_items [] =
 };
 /** The number of display items provided by this plugin. */
 static guint gnc_plugin_page_budget_n_display_items = G_N_ELEMENTS(gnc_plugin_page_budget_display_items);
+
+static GncAddSubMenu add_submenus [] =
+{
+    { "EditAction", TRUE },
+    { "ViewAction", TRUE },
+    { "TransactionAction", FALSE },
+    { "ActionsAction", TRUE },
+    { "ScheduledAction", FALSE },
+    { "ReportsAction", TRUE },
+};
+static guint add_submenus_n_actions = G_N_ELEMENTS(add_submenus);
+
+/* As only when loading the sub menus the menu items are updated,
+ * any menu items out of that scope that are made visible need to be
+ * added here */
+static GncActionUpdate update_actions [] =
+{
+    { "FilePrintAction", N_("_Print"), TRUE, NULL },
+    { "FilePrintPDFAction", NULL, FALSE, NULL },
+    { "ReportExportAction", NULL, FALSE, NULL },
+    { "ReportSaveAction", NULL, FALSE, NULL },
+    { "ReportSaveAsAction", NULL, FALSE, NULL },
+
+    { "ReportsCompanyReportAction", NULL, FALSE, NULL },
+    { "OTVendorListingReportAction", NULL, FALSE, NULL },
+    { "OTCustomerListingReportAction", NULL, FALSE, NULL },
+    { "OTVendorReportAction", NULL, FALSE, NULL },
+    { "OTCustomerReportAction", NULL, FALSE, NULL },
+    { "OTEmployeeReportAction", NULL, FALSE, NULL },
+
+    { "ReportsAccountReportAction", NULL, FALSE, NULL },
+    { "ReportsAcctTransReportAction", NULL, FALSE, NULL },
+    { "BusinessLinkAction", NULL, FALSE, NULL },
+    { "BusinessLinkOpenAction", NULL, FALSE, NULL },
+    { "ToolsProcessPaymentAction", NULL, FALSE, NULL },
+};
+static guint update_actions_n_actions = G_N_ELEMENTS(update_actions);
+
 
 static const gchar *writeable_actions[] =
 {
@@ -418,6 +452,17 @@ gnc_plugin_page_budget_focus_widget (GncPluginPage *budget_plugin_page)
         GncPluginPageBudgetPrivate *priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(budget_plugin_page);
         GncBudgetView *budget_view = priv->budget_view;
         GtkWidget *account_view = gnc_budget_view_get_account_tree_view (budget_view);
+        GAction *action;
+
+        gnc_main_window_add_sub_menus (GNC_MAIN_WINDOW(budget_plugin_page->window), budget_plugin_page,
+                                       add_submenus, add_submenus_n_actions);
+
+        gnc_main_window_update_action_labels (GNC_MAIN_WINDOW(budget_plugin_page->window),
+                                              update_actions, update_actions_n_actions);
+
+        /* Disable the FilePrintAction */
+        action = gnc_main_window_find_action (GNC_MAIN_WINDOW(budget_plugin_page->window), "FilePrintAction");
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
 
         if (!gtk_widget_is_focus (GTK_WIDGET(account_view)))
             gtk_widget_grab_focus (GTK_WIDGET(account_view));
@@ -506,6 +551,11 @@ gnc_plugin_page_budget_create_widget (GncPluginPage *plugin_page)
     g_signal_connect (G_OBJECT(plugin_page), "inserted",
                       G_CALLBACK(gnc_plugin_page_inserted_cb),
                       NULL);
+
+    // add the display items to the main list
+    gnc_main_window_add_to_display_list (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window),
+                                         gnc_plugin_page_budget_display_items,
+                                         gnc_plugin_page_budget_n_display_items);
 
     LEAVE("widget = %p", priv->budget_view);
     return GTK_WIDGET(priv->budget_view);
@@ -807,9 +857,39 @@ gnc_plugin_page_budget_cmd_delete_budget (GSimpleAction *simple,
     g_return_if_fail (GNC_IS_BUDGET(budget));
     priv->delete_budget = TRUE;
     gnc_budget_gui_delete_budget (budget);
-
 }
 
+static void
+gnc_plugin_page_budget_cmd_edit_tax_options (GSimpleAction *simple,
+                                             GVariant      *parameter,
+                                             gpointer       user_data)
+{
+    GncPluginPageBudget *page = user_data;
+    GncPluginPageBudgetPrivate *priv;
+    GtkTreeSelection *selection;
+    Account *account = NULL;
+    GtkWidget *window;
+
+    page = GNC_PLUGIN_PAGE_BUDGET(page);
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_BUDGET(page));
+
+    ENTER ("(action %p, page %p)", simple, page);
+    priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
+
+    selection = gnc_budget_view_get_selection (priv->budget_view);
+    window = GNC_PLUGIN_PAGE(page)->window;
+
+    if (gtk_tree_selection_count_selected_rows (selection) == 1)
+    {
+        GList *acc_list = gnc_budget_view_get_selected_accounts (priv->budget_view);
+        GList *node = g_list_first (acc_list);
+        account = acc_list->data;
+        g_list_free (acc_list);
+    }
+    gnc_tax_info_dialog (window, account);
+    LEAVE (" ");
+}
 
 /******************************/
 /*       Options Dialog       */
