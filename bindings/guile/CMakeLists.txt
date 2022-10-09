@@ -40,7 +40,9 @@ add_library(gnucash-guile SHARED
     ${SWIG_ENGINE_C})
 
 add_dependencies(gnucash-guile
-    swig-runtime-h)
+    swig-runtime-h
+    swig-core-utils-guile-c
+    swig-engine-c)
 
 target_include_directories(gnucash-guile
     PUBLIC

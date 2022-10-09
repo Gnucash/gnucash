@@ -42,6 +42,7 @@ gnc_add_swig_python_command (swig-unittest-support-python
 
 add_library(test-core-guile ${SWIG_UNITTEST_SUPPORT_GUILE_C})
 target_link_libraries(test-core-guile test-core ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS})
+add_dependencies (test-core-guile swig-unittest-support-guile-c )
 
 if (WITH_PYTHON)
   add_library(unittest_support MODULE ${SWIG_UNITTEST_SUPPORT_PYTHON_C})

@@ -162,7 +162,7 @@ if (WITH_PYTHON)
 
 endif()
 
-
+add_dependencies (gnc-app-utils swig-apputils-guile-c )
 
 install(FILES ${app_utils_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
 
