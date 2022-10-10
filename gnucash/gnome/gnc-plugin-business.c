@@ -930,16 +930,6 @@ static const gchar *register_bus_txn_actions[] =
     NULL
 };
 
-/* As only when loading the sub menus the menu items are updated,
- * any menu items out of that scope that are made visible need to be
- * added here */
-static GncActionUpdate update_actions [] =
-{
-    { "RegisterAssignPayment", N_("Assign as payment..."), TRUE, N_("Assign the selected transaction as payment") },
-    { "RegisterEditPayment", N_("Edit payment..."), TRUE, N_("Edit the payment this transaction is a part of") },
-};
-static guint update_actions_n_actions = G_N_ELEMENTS(update_actions);
-
 static void
 gnc_plugin_business_update_menus (GncPluginPage *plugin_page)
 {
@@ -970,12 +960,17 @@ gnc_plugin_business_update_menus (GncPluginPage *plugin_page)
     // Change visibility and also sensitivity according to whether we are in a txn register
     gnc_plugin_update_actions (simple_action_group, register_txn_actions,
                                "sensitive", is_txn_register && !is_bus_txn && !is_bus_doc);
-    gnc_plugin_update_actions (simple_action_group, register_txn_actions,
-                               "visible", is_txn_register && !is_bus_txn && !is_bus_doc);
+
+    gnc_main_window_menu_item_vis_by_action (GNC_MAIN_WINDOW(plugin_page->window),
+                                             register_txn_actions,
+                                             is_txn_register && !is_bus_txn && !is_bus_doc);
+
     gnc_plugin_update_actions (simple_action_group, register_bus_txn_actions,
                                "sensitive", is_txn_register && is_bus_txn && !is_bus_doc);
-    gnc_plugin_update_actions (simple_action_group, register_bus_txn_actions,
-                               "visible", is_txn_register && is_bus_txn && !is_bus_doc);
+
+    gnc_main_window_menu_item_vis_by_action (GNC_MAIN_WINDOW(plugin_page->window),
+                                             register_bus_txn_actions,
+                                             is_txn_register && is_bus_txn && !is_bus_doc);
 }
 
 
@@ -995,12 +990,7 @@ gnc_plugin_business_main_window_menu_changed (GncMainWindow *window,
                                               gpointer user_data)
 {
     if (page)
-    {
-        gnc_main_window_update_action_labels (window, update_actions,
-                                              update_actions_n_actions);
-
         gnc_plugin_business_main_window_page_changed (window, page, user_data);
-    }
 }
 
 
