@@ -420,6 +420,30 @@
       </packing>
     </child>
     <child>
+      <object class="GtkToolButton" id="but2ca">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">ToolbarNewInvoiceAction</property>
+        <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem" id="extra_separator_c">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkToolButton" id="but3c">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -543,6 +567,30 @@
       </packing>
     </child>
     <child>
+      <object class="GtkToolButton" id="but2va">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">ToolbarNewInvoiceAction</property>
+        <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem" id="extra_separator_v">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkToolButton" id="but3v">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -657,6 +705,30 @@
     </child>
     <child>
       <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2ea">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">ToolbarNewInvoiceAction</property>
+        <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem" id="extra_separator_e">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
       </object>
