@@ -352,8 +352,9 @@ static GActionEntry gnc_menu_actions [] =
 
     { "WindowNewAction", gnc_main_window_cmd_window_new, nullptr, nullptr, nullptr },
     { "WindowMovePageAction", gnc_main_window_cmd_window_move_page, nullptr, nullptr, nullptr },
+#ifndef MAC_INTEGRATION
     { "Window0Action",  gnc_main_window_cmd_window_raise, "i", "@i 0", radio_change_state },
-
+#endif
     { "HelpTutorialAction", gnc_main_window_cmd_help_tutorial, nullptr, nullptr, nullptr },
     { "HelpContentsAction", gnc_main_window_cmd_help_contents, nullptr, nullptr, nullptr },
     { "HelpAboutAction", gnc_main_window_cmd_help_about, nullptr, nullptr, nullptr },
@@ -4004,6 +4005,19 @@ gnc_main_window_add_sub_menus (GncMainWindow *window, GncPluginPage *page,
     gnc_add_accelerator_keys_for_menu (priv->menubar, priv->previous_plugin_page_accel_group);
     gtk_window_add_accel_group (GTK_WINDOW(window), priv->previous_plugin_page_accel_group);
 
+#ifdef MAC_INTEGRATION
+    auto theApp{static_cast<GtkosxApplication *>(g_object_new(GTKOSX_TYPE_APPLICATION, nullptr))};
+    // Edit Preferences
+    auto item = gnc_find_menu_item (priv->menubar, "EditPreferencesAction");
+    if (item)
+    {
+        gtk_widget_hide (GTK_WIDGET(item));
+        gtkosx_application_insert_app_menu_item (theApp, GTK_WIDGET(item), 2);
+    }
+    gtkosx_application_sync_menubar (theApp);
+    g_object_unref (theApp);
+#endif
+
     // need to signal menu has been changed
     g_signal_emit_by_name (window, "menu_changed", page);
 }
@@ -4423,50 +4437,45 @@ gnc_quartz_should_quit (GtkosxApplication *theApp, GncMainWindow *window)
 }
 
 static void
-gnc_quartz_set_menu(GncMainWindow* window)
+gnc_quartz_set_menu (GncMainWindow* window)
 {
+    GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     auto theApp{static_cast<GtkosxApplication *>(g_object_new(GTKOSX_TYPE_APPLICATION, nullptr))};
-    GtkWidget       *menu;
-    GtkWidget       *item;
+    GtkWidget       *item = nullptr;
+    GAction         *action;
 
-    menu = gtk_ui_manager_get_widget (window->ui_merge, "/menubar");
-    if (GTK_IS_MENU_ITEM (menu))
-        menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (menu));
-    gtk_widget_hide(menu);
-    gtkosx_application_set_menu_bar (theApp, GTK_MENU_SHELL (menu));
+    gtk_widget_hide (priv->menubar);
+    gtk_widget_set_no_show_all (priv->menubar, true);
 
-    item = gtk_ui_manager_get_widget (window->ui_merge,
-                                      "/menubar/File/FileQuit");
-    if (GTK_IS_MENU_ITEM (item))
-        gtk_widget_hide (GTK_WIDGET (item));
+    gtkosx_application_set_menu_bar (theApp, GTK_MENU_SHELL(priv->menubar));
 
-    item = gtk_ui_manager_get_widget (window->ui_merge,
-                                      "/menubar/Help/HelpAbout");
-    if (GTK_IS_MENU_ITEM (item))
+    // File Quit
+    item = gnc_find_menu_item (priv->menubar, "FileQuitAction");
+    if (item)
+        gtk_widget_hide (GTK_WIDGET(item));
+
+    // Help About
+    item = gnc_find_menu_item (priv->menubar, "HelpAboutAction");
+    if (item)
     {
-        gtkosx_application_insert_app_menu_item (theApp, GTK_WIDGET (item), 0);
+        gtk_widget_hide (item);
+        gtkosx_application_insert_app_menu_item (theApp, GTK_WIDGET(item), 0);
     }
 
-    item = gtk_ui_manager_get_widget (window->ui_merge,
-                                      "/menubar/Edit/EditPreferences");
-    if (GTK_IS_MENU_ITEM (item))
-    {
-        gtkosx_application_insert_app_menu_item (theApp,
-                gtk_separator_menu_item_new (), 1);
-        gtkosx_application_insert_app_menu_item (theApp, GTK_WIDGET (item), 2);
-    }
+    // Help Menu
+    item = gnc_find_menu_item (priv->menubar, "HelpAction");
+    if (item)
+        gtkosx_application_set_help_menu (theApp, GTK_MENU_ITEM(item));
+    // Windows Menu
+    item = gnc_find_menu_item (priv->menubar, "WindowsAction");
+    if (item)
+        gtkosx_application_set_window_menu (theApp, GTK_MENU_ITEM(item));
 
-    item = gtk_ui_manager_get_widget (window->ui_merge,
-                                      "/menubar/Help");
-    gtkosx_application_set_help_menu(theApp, GTK_MENU_ITEM(item));
-    item = gtk_ui_manager_get_widget (window->ui_merge,
-                                      "/menubar/Windows");
-    gtkosx_application_set_window_menu(theApp, GTK_MENU_ITEM(item));
-    g_signal_connect(theApp, "NSApplicationBlockTermination",
-                     G_CALLBACK(gnc_quartz_should_quit), window);
+    g_signal_connect (theApp, "NSApplicationBlockTermination",
+                      G_CALLBACK(gnc_quartz_should_quit), window);
+
     gtkosx_application_set_use_quartz_accelerators (theApp, FALSE);
     g_object_unref (theApp);
-
 }
 #endif //MAC_INTEGRATION
 
