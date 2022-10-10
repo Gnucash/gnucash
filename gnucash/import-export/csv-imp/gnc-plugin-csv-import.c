@@ -42,7 +42,6 @@ static void gnc_plugin_csv_import_trans_cmd (GSimpleAction *simple, GVariant *pa
 static void gnc_plugin_csv_import_price_cmd (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-csv-import-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-csv-import.ui"
 
 static GActionEntry gnc_plugin_actions [] =
 {
@@ -108,7 +107,6 @@ gnc_plugin_csv_import_class_init (GncPluginCsvImportClass *klass)
     plugin_class->n_actions       = gnc_plugin_n_actions;
     plugin_class->display_items   = gnc_plugin_display_items;
     plugin_class->n_display_items = gnc_plugin_n_display_items;
-    plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
 }
 
 static void

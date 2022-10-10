@@ -98,7 +98,6 @@ static void gnc_main_window_cmd_help_totd (GSimpleAction *simple, GVariant *para
 
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-basic-commands-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-basic-commands.ui"
 
 /** An array of all of the actions provided by the basic commands
  *  plugin. */
@@ -395,7 +394,6 @@ gnc_plugin_basic_commands_class_init (GncPluginBasicCommandsClass *klass)
     plugin_class->n_actions         = gnc_plugin_n_actions;
     plugin_class->display_items     = gnc_plugin_display_items;
     plugin_class->n_display_items   = gnc_plugin_n_display_items;
-    plugin_class->ui_filename       = PLUGIN_UI_FILENAME;
 }
 
 

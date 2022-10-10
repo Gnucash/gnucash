@@ -264,9 +264,6 @@ void gnc_main_window_manual_merge_actions (GncMainWindow *window,
  *
  *  @param n_display_items The number of display items in the array.
  *
- *  @param filename The filename containing the user interface
- *  definition that goes with this set of actions.
- *
  *  @param user_data The data to be provided to all callback
  *  functions.
  */
@@ -276,7 +273,6 @@ void gnc_main_window_merge_actions (GncMainWindow *window,
                                     guint n_entries,
                                     GncDisplayItem *display_items,
                                     guint n_display_items,
-                                    const gchar *filename,
                                     gpointer user_data);
 
 

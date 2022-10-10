@@ -69,8 +69,6 @@ static void gnc_plugin_file_history_cmd_open_file (GSimpleAction *simple, GVaria
 
 /** The label given to the main window for this plugin. */
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-file-history-actions"
-/** The name of the UI description file for this plugin. */
-#define PLUGIN_UI_FILENAME  "gnc-plugin-file-history.ui"
 
 #define GNOME1_HISTORY "History"
 #define GNOME1_MAXFILES "MaxFiles"
@@ -549,7 +547,6 @@ gnc_plugin_file_history_class_init (GncPluginFileHistoryClass *klass)
     plugin_class->actions_name  = PLUGIN_ACTIONS_NAME;
     plugin_class->actions       = gnc_plugin_actions;
     plugin_class->n_actions     = gnc_plugin_n_actions;
-    plugin_class->ui_filename   = PLUGIN_UI_FILENAME;
 }
 
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginFileHistory, gnc_plugin_file_history, GNC_TYPE_PLUGIN)

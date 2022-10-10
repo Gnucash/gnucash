@@ -63,7 +63,6 @@ static void gnc_plugin_menu_additions_action_new_cb (GSimpleAction *simple, GVar
 static QofLogModule log_module = GNC_MOD_GUI;
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-menu-additions-actions"
-#define PLUGIN_UI_FILENAME  "dummy"
 
 /** Private data for this plugin.  This data structure is unused. */
 typedef struct GncPluginMenuAdditionsPrivate
@@ -122,7 +121,6 @@ gnc_plugin_menu_additions_class_init (GncPluginMenuAdditionsClass *klass)
     plugin_class->actions_name       = PLUGIN_ACTIONS_NAME;
     plugin_class->actions            = gnc_plugin_actions;
     plugin_class->n_actions          = gnc_plugin_n_actions;
-    plugin_class->ui_filename        = PLUGIN_UI_FILENAME;
 }
 
 static void

@@ -38,7 +38,6 @@
 #include "gnc-component-manager.h"
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-budget-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-budget.ui"
 
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -162,7 +161,6 @@ gnc_plugin_budget_class_init (GncPluginBudgetClass *klass)
     plugin_class->n_actions          = gnc_plugin_n_actions;
     plugin_class->display_items      = gnc_plugin_display_items;
     plugin_class->n_display_items    = gnc_plugin_n_display_items;
-    plugin_class->ui_filename        = PLUGIN_UI_FILENAME;
     plugin_class->add_to_window      = add_to_window;
     plugin_class->remove_from_window = remove_from_window;
 

@@ -47,7 +47,6 @@ static void gnc_plugin_report_system_cmd_edit_style_sheet (GSimpleAction *simple
 
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-report-system-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-report-system.ui"
 
 static GActionEntry gnc_plugin_actions [] =
 {
@@ -102,7 +101,6 @@ gnc_plugin_report_system_class_init (GncPluginReportSystemClass *klass)
     plugin_class->n_actions       = gnc_plugin_n_actions;
     plugin_class->display_items   = gnc_plugin_display_items;
     plugin_class->n_display_items = gnc_plugin_n_display_items;
-    plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
 }
 
 static void

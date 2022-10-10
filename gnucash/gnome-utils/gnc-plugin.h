@@ -126,9 +126,6 @@ typedef struct
     GncDisplayItem *display_items; //FIXMEb added
     /** The number of display_items in the display item array. */
     guint           n_display_items; //FIXMEb added
-    /** The relative name of the XML file describing the
-     *  menu/toolbar action items. */
-    const gchar *ui_filename;
 
     /*  Virtual Table */
 

@@ -40,7 +40,6 @@ static void gnc_plugin_qif_import_finalize (GObject *object);
 static void gnc_plugin_qif_import_cmd_new_qif_import (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-qif-import-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-qif-import.ui"
 
 static GActionEntry gnc_plugin_actions [] =
 {
@@ -96,7 +95,6 @@ gnc_plugin_qif_import_class_init (GncPluginQifImportClass *klass)
     plugin_class->n_actions       = gnc_plugin_n_actions;
     plugin_class->display_items   = gnc_plugin_display_items;
     plugin_class->n_display_items = gnc_plugin_n_display_items;
-    plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
 }
 
 static void

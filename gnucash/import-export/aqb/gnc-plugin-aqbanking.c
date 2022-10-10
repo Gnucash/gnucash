@@ -81,7 +81,6 @@ static void gnc_plugin_ab_cmd_dtaus_import (GSimpleAction *simple, GVariant *par
 static void gnc_plugin_ab_cmd_dtaus_importsend (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-aqbanking-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-aqbanking.ui"
 
 #define MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW "ABViewLogwindowAction"
 
@@ -246,7 +245,6 @@ gnc_plugin_aqbanking_class_init(GncPluginAqBankingClass *klass)
     plugin_class->n_actions          = gnc_plugin_n_actions;
     plugin_class->display_items      = gnc_plugin_display_items;
     plugin_class->n_display_items    = gnc_plugin_n_display_items;
-    plugin_class->ui_filename        = PLUGIN_UI_FILENAME;
     plugin_class->add_to_window      = gnc_plugin_aqbanking_add_to_window;
     plugin_class->remove_from_window = gnc_plugin_aqbanking_remove_from_window;
 }

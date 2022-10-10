@@ -106,7 +106,6 @@ static void gnc_plugin_business_cmd_assign_payment (GSimpleAction *simple, GVari
 static void update_inactive_actions (GncPluginPage *page);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-business-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-business.ui"
 
 #define GNC_PREF_EXTRA_TOOLBUTTONS "enable-toolbuttons"
 #define GNC_PREF_INV_PRINT_RPT     "invoice-printreport"
@@ -372,7 +371,6 @@ gnc_plugin_business_class_init (GncPluginBusinessClass *klass)
     plugin_class->n_actions       = gnc_plugin_n_actions;
     plugin_class->display_items   = gnc_plugin_display_items;
     plugin_class->n_display_items = gnc_plugin_n_display_items;
-    plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
 }
 
 static void

@@ -143,12 +143,12 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
      */
     if (klass->actions_name)
     {
-        DEBUG ("%s: %d actions to merge with gui from %s",
-               klass->actions_name, klass->n_actions, klass->ui_filename);
+        DEBUG ("%s: %d actions to merge",
+               klass->actions_name, klass->n_actions);
         gnc_main_window_merge_actions (window, klass->actions_name,
                                        klass->actions, klass->n_actions,
                                        klass->display_items, klass->n_display_items,
-                                       klass->ui_filename, plugin);
+                                       plugin);
     }
 
     /*

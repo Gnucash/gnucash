@@ -40,7 +40,6 @@ static void gnc_plugin_log_replay_cmd_new_log_replay (GSimpleAction *simple, GVa
 
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-log-replay-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-log-replay.ui"
 
 static GActionEntry gnc_plugin_actions [] =
 {
@@ -96,7 +95,6 @@ gnc_plugin_log_replay_class_init (GncPluginLogreplayClass *klass)
     plugin_class->n_actions       = gnc_plugin_n_actions;
     plugin_class->display_items   = gnc_plugin_display_items;
     plugin_class->n_display_items = gnc_plugin_n_display_items;
-    plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
 }
 
 static void

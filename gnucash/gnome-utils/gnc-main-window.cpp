@@ -3593,24 +3593,17 @@ gnc_main_window_merge_actions (GncMainWindow *window,
                                guint n_actions,
                                GncDisplayItem *display_items,
                                guint n_display_items,
-                               const gchar *filename,
                                gpointer user_data)
 {
     GncMainWindowPrivate *priv;
     GncMainWindowActionData *data;
     GError *error = nullptr;
     const gchar *resource = "/org/gnucash/";
-    gchar *pathname;
 
     g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
     g_return_if_fail (group_name != nullptr);
     g_return_if_fail (actions != nullptr);
     g_return_if_fail (n_actions > 0);
-    g_return_if_fail (filename != nullptr);
-
-    pathname = g_strconcat (resource, filename, nullptr);
-    if (pathname == nullptr)
-        return;
 
     data = g_new0 (GncMainWindowActionData, 1);
     data->window = window;
@@ -3630,26 +3623,7 @@ gnc_main_window_merge_actions (GncMainWindow *window,
     gtk_widget_insert_action_group (GTK_WIDGET(window), group_name,
                                     G_ACTION_GROUP(entry->simple_action_group));
 
-
-//FIXMEb this is where I might need to add GtkBuilder????
-
-
-//FIXMEb    gtk_ui_manager_insert_action_group (window->ui_merge, entry->action_group, 0);
-//    entry->merge_id = gtk_ui_manager_add_ui_from_file (window->ui_merge, pathname, &error);
-//    g_assert(entry->merge_id || error);
-//    if (entry->merge_id)
-//    {
-//        gtk_ui_manager_ensure_update (window->ui_merge);
-        g_hash_table_insert (priv->merged_actions_table, g_strdup (group_name), entry);
-//    }
-//    else
-//    {
-//        g_critical("Failed to load ui file.\n  Filename %s\n  Error %s",
-//                   filename, error->message);
-//        g_error_free(error);
-//        g_free(entry);
-//    }
-//    g_free(pathname);
+    g_hash_table_insert (priv->merged_actions_table, g_strdup (group_name), entry);
 }
 
 

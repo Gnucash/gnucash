@@ -49,7 +49,6 @@ static void gnc_plugin_account_tree_finalize (GObject *object);
 static void gnc_plugin_account_tree_cmd_new_account_tree (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-account-tree-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-account-tree.ui"
 
 /** An array of all of the actions provided by the account tree
  *  plugin. */
@@ -127,7 +126,6 @@ gnc_plugin_account_tree_class_init (GncPluginAccountTreeClass *klass)
     plugin_class->n_actions       = gnc_plugin_n_actions;
     plugin_class->display_items   = gnc_plugin_display_items;
     plugin_class->n_display_items = gnc_plugin_n_display_items;
-    plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
 }
 
 
