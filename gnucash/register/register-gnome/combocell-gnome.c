@@ -75,6 +75,8 @@ typedef struct _PopBox
     GList* ignore_strings;
 
     GHashTable *item_hash;
+
+    gboolean use_type_ahead_only;
 } PopBox;
 
 
@@ -167,6 +169,8 @@ gnc_combo_cell_init (ComboCell* cell)
     box->ignore_strings = NULL;
 
     box->item_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+    box->use_type_ahead_only = FALSE;
 }
 
 static void
@@ -694,7 +698,7 @@ gnc_combo_cell_modify_verify (BasicCell* _cell,
     /* If item_list is using temp then we're already partly matched by
      * type-ahead and a quickfill_match won't work.
      */
-    if (!gnc_item_list_using_temp (box->item_list))
+    if (!gnc_item_list_using_temp (box->item_list) && !box->use_type_ahead_only)
     {
         // If we were deleting or inserting in the middle, just accept.
         if (change == NULL || *cursor_position < _cell->value_chars)
@@ -924,6 +928,19 @@ gnc_combo_cell_direct_update (BasicCell* bcell,
     *end_selection = -1;
 
     return TRUE;
+}
+
+void
+gnc_combo_cell_use_type_ahead_only (ComboCell* cell)
+{
+    PopBox* box;
+
+    if (cell == NULL) return;
+
+    box = cell->cell.gui_private;
+
+    box->use_type_ahead_only = TRUE;
+
 }
 
 static void

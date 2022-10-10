@@ -108,5 +108,9 @@ void gnc_combo_cell_use_quickfill_cache (ComboCell* cell,
                                          QuickFill* shared_qf);
 void gnc_combo_cell_use_list_store_cache (ComboCell* cell, gpointer data);
 
+/** Set the combocell to use only type ahead search. This will make the
+ *  search to be more like a modified entry completion. */
+void gnc_combo_cell_use_type_ahead_only (ComboCell* cell);
+
 /** @} */
 #endif

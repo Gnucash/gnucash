@@ -862,6 +862,8 @@ gnc_split_register_load_desc_cells (SplitRegister* reg)
     cell = (ComboCell*)
            gnc_table_layout_get_cell (reg->table->layout, DESC_CELL);
 
+    gnc_combo_cell_use_type_ahead_only (cell);
+
     gnc_combo_cell_use_list_store_cache (cell, store);
 }
 /* ====================== END OF FILE ================================== */
