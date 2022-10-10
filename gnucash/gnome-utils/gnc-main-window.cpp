@@ -3947,7 +3947,7 @@ gnc_main_window_add_sub_menus (GncMainWindow *window, GncPluginPage *page,
         return;
 
     gtk_widget_insert_action_group (GTK_WIDGET(window), gnc_plugin_page_get_simple_action_group_name (page),
-                                    G_ACTION_GROUP(gnc_plugin_page_get_action_groupb (page)));
+                                    G_ACTION_GROUP(gnc_plugin_page_get_action_group (page)));
 
     if ((g_strcmp0 (priv->previous_plugin_page_name,
                    plugin_page_actions_group_name) == 0) &&

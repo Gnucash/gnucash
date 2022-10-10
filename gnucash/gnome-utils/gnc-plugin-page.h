@@ -543,21 +543,20 @@ const gchar * gnc_plugin_page_get_menu_qualifier (GncPluginPage *page); //FIXMEb
 void gnc_plugin_page_set_menu_qualifier (GncPluginPage *page,
                                          const char *menu_qualifier); //FIXMEb added
 
-/** Retrieve the GtkActionGroup object associated with this page.
+/** Retrieve the GSimpleActionGroup object associated with this page.
  *
  *  @param page The page whose menu/toolbar action group should be
  *  retrieved.
  *
- *  @return A pointer to the GtkActionGroup object for this page.
+ *  @return A pointer to the GSimpleActionGroup object for this page.
  */
-GtkActionGroup *gnc_plugin_page_get_action_group (GncPluginPage *page);
-GSimpleActionGroup *gnc_plugin_page_get_action_groupb (GncPluginPage *page); //FIXMEb added
+GSimpleActionGroup *gnc_plugin_page_get_action_group (GncPluginPage *page); //FIXMEb added
 
 
 
 GtkAccelGroup *gnc_plugin_page_get_accel_group (GncPluginPage *page); //FIXMEb added
 
-/** Create the GtkActionGroup object associated with this page.
+/** Create the GSimpleActionGroup object associated with this page.
  *
  *  @param page The page whose menu/toolbar action group should be
  *  created.
@@ -566,13 +565,12 @@ GtkAccelGroup *gnc_plugin_page_get_accel_group (GncPluginPage *page); //FIXMEb a
  *  name is used to associate key bindings with actions, so it should
  *  be consistent across all pages of the same type.
  *
- *  @return A pointer to the newly created GtkActionGroup object for
+ *  @return A pointer to the newly created GSimpleActionGroup object for
  *  this page.
  */
-GtkActionGroup * gnc_plugin_page_create_action_group (GncPluginPage *page,
-                                                      const gchar *group_name);
-GSimpleActionGroup * gnc_plugin_page_create_action_groupb (GncPluginPage *page,
-                                                      const gchar *group_name); //FIXMEb added
+GSimpleActionGroup * gnc_plugin_page_create_action_group (GncPluginPage *page,
+                                                          const gchar *group_name); //FIXMEb added
+
 /** Retrieve a GtkAction object associated with this page.
  *
  *  @param page The page whose menu/toolbar action group should be

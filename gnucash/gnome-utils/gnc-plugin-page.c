@@ -1187,20 +1187,8 @@ gnc_plugin_page_set_menu_qualifier (GncPluginPage *page,
     priv->menu_qualifier = menu_qualifier;
 }
 
-
-/*  Retrieve the GtkActionGroup object associated with this page. */
-GtkActionGroup *
-gnc_plugin_page_get_action_group(GncPluginPage *page)
-{
-    GncPluginPagePrivate *priv;
-
-    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), NULL);
-
-    priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
-    return priv->action_group;
-}
 GSimpleActionGroup *
-gnc_plugin_page_get_action_groupb (GncPluginPage *page)
+gnc_plugin_page_get_action_group (GncPluginPage *page)
 {
     GncPluginPagePrivate *priv;
 
@@ -1210,22 +1198,8 @@ gnc_plugin_page_get_action_groupb (GncPluginPage *page)
     return priv->simple_action_group;
 }
 
-/*  Create the GtkActionGroup object associated with this page. */
-GtkActionGroup *
-gnc_plugin_page_create_action_group (GncPluginPage *page, const gchar *group_name)
-{
-    GncPluginPagePrivate *priv;
-    GtkActionGroup *group;
-
-    priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
-    group = gtk_action_group_new (group_name);
-    gtk_action_group_set_translation_domain (group, PROJECT_NAME);
-    priv->action_group = group;
-    return group;
-}
-
 GSimpleActionGroup *
-gnc_plugin_page_create_action_groupb (GncPluginPage *page, const gchar *group_name)
+gnc_plugin_page_create_action_group (GncPluginPage *page, const gchar *group_name)
 {
     GncPluginPagePrivate *priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
 

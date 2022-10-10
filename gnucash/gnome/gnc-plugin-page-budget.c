@@ -389,7 +389,7 @@ gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page)
     gnc_plugin_page_add_book (parent, gnc_get_current_book());
 
     /* Create menu and toolbar information */
-    simple_action_group = gnc_plugin_page_create_action_groupb (parent, "GncPluginPageBudgetActions");
+    simple_action_group = gnc_plugin_page_create_action_group (parent, "GncPluginPageBudgetActions");
     g_action_map_add_action_entries (G_ACTION_MAP(simple_action_group),
                                      gnc_plugin_page_budget_actions,
                                      gnc_plugin_page_budget_n_actions,

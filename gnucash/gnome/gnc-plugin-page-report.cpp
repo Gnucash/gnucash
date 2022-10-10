@@ -1384,7 +1384,7 @@ gnc_plugin_page_report_constr_init (GncPluginPageReport *plugin_page, gint repor
     gnc_plugin_page_add_book (parent, gnc_get_current_book());
 
     /* Create menu and toolbar information */
-    simple_action_group = gnc_plugin_page_create_action_groupb (parent, "GncPluginPageReportActions");
+    simple_action_group = gnc_plugin_page_create_action_group (parent, "GncPluginPageReportActions");
     g_action_map_add_action_entries (G_ACTION_MAP(simple_action_group),
                                      report_actions,
                                      num_report_actions,

@@ -286,7 +286,7 @@ gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page)
                  NULL);
 
     gnc_plugin_page_add_book (parent, gnc_get_current_book());
-    simple_action_group = gnc_plugin_page_create_action_groupb (parent, "GncPluginPageSxListActions");
+    simple_action_group = gnc_plugin_page_create_action_group (parent, "GncPluginPageSxListActions");
     g_action_map_add_action_entries (G_ACTION_MAP(simple_action_group),
                                      gnc_plugin_page_sx_list_actions,
                                      gnc_plugin_page_sx_list_n_actions,

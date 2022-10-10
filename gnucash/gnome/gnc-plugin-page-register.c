@@ -885,7 +885,7 @@ gnc_plugin_page_register_init (GncPluginPageRegister* plugin_page)
                   NULL);
 
     /* Create menu and toolbar information */
-    simple_action_group = gnc_plugin_page_create_action_groupb (parent, "GncPluginPageRegisterActions");
+    simple_action_group = gnc_plugin_page_create_action_group (parent, "GncPluginPageRegisterActions");
     g_action_map_add_action_entries (G_ACTION_MAP(simple_action_group),
                                      gnc_plugin_page_register_actions,
                                      gnc_plugin_page_register_n_actions,
@@ -1126,11 +1126,11 @@ gnc_plugin_page_register_ui_update (gpointer various,
 
     account = gnc_plugin_page_register_get_account (page);
 
-    gnc_plugin_update_actions (gnc_plugin_page_get_action_groupb (GNC_PLUGIN_PAGE(page)),
+    gnc_plugin_update_actions (gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE(page)),
                                actions_requiring_account, "sensitive",
                                !read_only_reg && account != NULL);
 
-    gnc_plugin_update_actions (gnc_plugin_page_get_action_groupb (GNC_PLUGIN_PAGE(page)),
+    gnc_plugin_update_actions (gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE(page)),
                                actions_requiring_priced_account, "sensitive",
                                account && xaccAccountIsPriced (account));
 
@@ -1313,7 +1313,7 @@ gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister* page)
     account = gnc_plugin_page_register_get_account (page);
 
     /* Get the action group */
-    simple_action_group = gnc_plugin_page_get_action_groupb (GNC_PLUGIN_PAGE(page));
+    simple_action_group = gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE(page));
     g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(simple_action_group));
 
     gnc_plugin_update_actions (simple_action_group, actions_requiring_account,
