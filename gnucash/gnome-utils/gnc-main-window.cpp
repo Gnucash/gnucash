@@ -3257,7 +3257,6 @@ gnc_main_window_disconnect (GncMainWindow *window,
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     if (priv->current_page == page)
     {
-//FIXMEb        gnc_plugin_page_unmerge_actions (page, window->ui_merge);
         gnc_plugin_page_unselected (page);
         priv->current_page = nullptr;
     }
@@ -3300,7 +3299,6 @@ gnc_main_window_disconnect (GncMainWindow *window,
 
     gnc_plugin_page_removed (page);
 
-//FIXMEb    gtk_ui_manager_ensure_update (window->ui_merge);
     gnc_window_set_status (GNC_WINDOW(window), page, nullptr);
 }
 
@@ -3651,9 +3649,7 @@ gnc_main_window_unmerge_actions (GncMainWindow *window,
     if (entry == nullptr)
         return;
 
-//FIXMEb    gtk_ui_manager_remove_action_group (window->ui_merge, entry->action_group);
-//    gtk_ui_manager_remove_ui (window->ui_merge, entry->merge_id);
-//    gtk_ui_manager_ensure_update (window->ui_merge);
+    gtk_widget_insert_action_group (GTK_WIDGET(window), group_name, nullptr);
 
     g_hash_table_remove (priv->merged_actions_table, group_name);
 }
@@ -4660,7 +4656,6 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
     if (priv->current_page != nullptr)
     {
         page = priv->current_page;
-//FIXMEb        gnc_plugin_page_unmerge_actions (page, window->ui_merge);
         gnc_plugin_page_unselected (page);
     }
 
@@ -4679,8 +4674,7 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
     if (page != nullptr)
     {
         /* Update the user interface (e.g. menus and toolbars */
-//FIXMEb        gnc_plugin_page_merge_actions (page, window->ui_merge);
-        gnc_plugin_page_merge_actionsb (page, GTK_WIDGET(window));
+        gnc_plugin_page_merge_actions (page, GTK_WIDGET(window));
         visible = gnc_main_window_show_summarybar (window, nullptr);
         gnc_plugin_page_show_summarybar (page, visible);
 
