@@ -5605,34 +5605,6 @@ gnc_main_window_get_display_hash_table (GncWindow *window)
 }
 
 
-static void
-gnc_main_window_all_ui_set_sensitive (GncWindow *unused, gboolean sensitive)
-{
-//FIXMEb
-#ifdef skip
-    for (auto winp = active_windows; winp; winp = g_list_next(winp))
-    {
-        auto window{static_cast<GncMainWindow*>(winp->data)};
-        auto priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-
-        auto groups = gtk_ui_manager_get_action_groups(window->ui_merge);
-        for (auto groupp = groups; groupp; groupp = g_list_next(groupp))
-        {
-            gtk_action_group_set_sensitive(GTK_ACTION_GROUP(groupp->data), sensitive);
-        }
-
-        for (auto tmp = priv->installed_pages; tmp; tmp = g_list_next(tmp))
-        {
-            auto close_button{static_cast<GtkWidget*>(g_object_get_data(static_cast<GObject*>(tmp->data), PLUGIN_PAGE_CLOSE_BUTTON))};
-            if (!close_button)
-                continue;
-            gtk_widget_set_sensitive (close_button, sensitive);
-        }
-    }
-#endif
-}
-
-
 /** Initialize the generic window interface for a main window.
  *
  *  @param iface A pointer to the interface data structure to
@@ -5643,7 +5615,6 @@ gnc_window_main_window_init (GncWindowIface *iface)
     iface->get_gtk_window      = gnc_main_window_get_gtk_window;
     iface->get_statusbar       = gnc_main_window_get_statusbar;
     iface->get_progressbar     = gnc_main_window_get_progressbar;
-    iface->ui_set_sensitive    = gnc_main_window_all_ui_set_sensitive;
     iface->get_menubar         = gnc_main_window_get_menubar;
     iface->get_toolbar         = gnc_main_window_get_toolbar;
     iface->get_disp_hash_table = gnc_main_window_get_display_hash_table;
