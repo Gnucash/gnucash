@@ -675,7 +675,7 @@ gnc_split_register_layout_add_cells (SplitRegister* reg,
 
     gnc_register_add_cell (layout,
                            DESC_CELL,
-                           QUICKFILL_CELL_TYPE_NAME,
+                           COMBO_CELL_TYPE_NAME,
                            C_ ("sample", "Description of a transaction"),
                            CELL_ALIGN_LEFT,
                            TRUE,

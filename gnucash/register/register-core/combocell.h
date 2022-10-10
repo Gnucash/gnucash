@@ -63,6 +63,10 @@ void         gnc_combo_cell_clear_menu (ComboCell* cell);
 void         gnc_combo_cell_add_menu_item (ComboCell* cell,
                                            const char* menustr);
 
+/** Add a unique menu item to the list. */
+void gnc_combo_cell_add_menu_item_unique (ComboCell* cell,
+                                          const char* menustr);
+
 /** Add a 'account name' menu item to the list. When testing for
  *  equality with the currently selected item, this function will
  *  ignore the characters normally used to separate account names. */

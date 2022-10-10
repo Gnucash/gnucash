@@ -73,6 +73,8 @@ typedef struct _PopBox
     gunichar complete_char; /* char to be used for auto-completion */
 
     GList* ignore_strings;
+
+    GHashTable *item_hash;
 } PopBox;
 
 
@@ -163,6 +165,8 @@ gnc_combo_cell_init (ComboCell* cell)
     box->complete_char = '\0';
 
     box->ignore_strings = NULL;
+
+    box->item_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 }
 
 static void
@@ -333,6 +337,9 @@ gnc_combo_cell_destroy (BasicCell* bcell)
             box->qf = NULL;
         }
 
+        if (box->item_hash)
+           g_hash_table_destroy (box->item_hash);
+
         g_list_free_full (box->ignore_strings, g_free);
         box->ignore_strings = NULL;
 
@@ -448,6 +455,64 @@ gnc_combo_cell_add_menu_item (ComboCell* cell, const char* menustr)
 
         gtk_list_store_append (box->tmp_store, &iter);
         gtk_list_store_set (box->tmp_store, &iter, 0, menustr, -1);
+    }
+
+    /* If we're going to be using a pre-fab quickfill,
+     * then don't fill it in here */
+    if (FALSE == box->use_quickfill_cache)
+    {
+        gnc_quickfill_insert (box->qf, menustr, QUICKFILL_ALPHA);
+    }
+}
+
+void
+gnc_combo_cell_add_menu_item_unique (ComboCell* cell, const char* menustr)
+{
+    PopBox* box;
+
+    if (cell == NULL)
+        return;
+    if (menustr == NULL)
+        return;
+
+    box = cell->cell.gui_private;
+
+    if (box->item_list != NULL)
+    {
+        block_list_signals (cell);
+
+        /* check if menustr has already been added. */
+        if (g_hash_table_lookup_extended (box->item_hash, menustr, NULL, NULL))
+            return;
+
+        g_hash_table_insert (box->item_hash, g_strdup (menustr), NULL);
+
+        gnc_item_list_append (box->item_list, menustr);
+        if (cell->cell.value &&
+            (strcmp (menustr, cell->cell.value) == 0))
+            gnc_item_list_select (box->item_list, menustr);
+
+        unblock_list_signals (cell);
+    }
+    else
+    {
+        GtkTreeIter iter;
+
+        // add a blank entry as the first entry in store
+        if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL(cell->shared_store), NULL) == 0)
+        {
+            gtk_list_store_append (cell->shared_store, &iter);
+            gtk_list_store_set (cell->shared_store, &iter, 0, "", -1);
+            g_hash_table_insert (box->item_hash, g_strdup (""), NULL);
+        }
+
+        /* check if menustr has already been added. */
+        if (g_hash_table_lookup_extended (box->item_hash, menustr, NULL, NULL))
+            return;
+
+        g_hash_table_insert (box->item_hash, g_strdup (menustr), NULL);
+        gtk_list_store_append (cell->shared_store, &iter);
+        gtk_list_store_set (cell->shared_store, &iter, 0, menustr, -1);
     }
 
     /* If we're going to be using a pre-fab quickfill,
