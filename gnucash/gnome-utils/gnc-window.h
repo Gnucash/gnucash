@@ -96,10 +96,10 @@ GHashTable    *gnc_window_get_display_hash_table (GncWindow *window);
  *
  *  @param statusbar A pointer to the statusbar widget
  */
-void           gnc_window_connect_proxy (GtkUIManager *merge,
-                                         GtkAction    *action,
-                                         GtkWidget    *proxy,
-                                         GtkWidget    *statusbar);
+//FIXMEbvoid           gnc_window_connect_proxy (GtkUIManager *merge,
+//                                         GAction      *action,
+//                                         GtkWidget    *proxy,
+//                                         GtkWidget    *statusbar);
 
 G_END_DECLS
 

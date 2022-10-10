@@ -265,7 +265,7 @@ gnc_window_show_progress (const char *message, double percentage)
 typedef struct _ActionStatus ActionStatus;
 struct _ActionStatus
 {
-    GtkAction *action;
+    GAction *action;
     GtkWidget *statusbar;
 };
 
@@ -310,9 +310,10 @@ unset_tip (GtkWidget *widget)
         gtk_statusbar_pop (GTK_STATUSBAR (data->statusbar), 0);
 }
 
+#ifdef skip //FIXMEb
 void
 gnc_window_connect_proxy (GtkUIManager *merge,
-                          GtkAction    *action,
+                          GAction      *action,
                           GtkWidget    *proxy,
                           GtkWidget    *statusbar)
 {
@@ -344,4 +345,5 @@ gnc_window_connect_proxy (GtkUIManager *merge,
         }
     }
 }
+#endif
 /* CS: end copied code from gtk+/test/testmerge.c */
