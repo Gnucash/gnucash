@@ -248,7 +248,6 @@ typedef struct GncMainWindowPrivate
     /** The group of all actions provided by the main window
      *  itself.  This does not include any action provided by menu
      *  or content plugins. */
-    GtkActionGroup *action_group;
     GSimpleActionGroup *simple_action_group; //FIXMEb added
     /** A list of all pages that are installed in this window. */
     GList *installed_pages;
@@ -288,12 +287,8 @@ GNC_DEFINE_TYPE_WITH_CODE(GncMainWindow, gnc_main_window, GTK_TYPE_WINDOW,
  *  that has been installed in this window. */
 typedef struct
 {
-    /** The merge identifier for this action group.  This number
-     *  is provided by the UI manager. */
-    guint merge_id;
     /** The action group itself.  This contains all actions added
      *  by a single menu or content plugin. */
-    GtkActionGroup *action_group;
     GSimpleActionGroup *simple_action_group; //FIXMEb added
 } MergedActionEntry;
 
@@ -3560,22 +3555,19 @@ gnc_main_window_get_current_page (GncMainWindow *window)
 void
 gnc_main_window_manual_merge_actions (GncMainWindow *window,
                                       const gchar *group_name,
-                                      GtkActionGroup *group,
-                                      guint merge_id)
+                                      GSimpleActionGroup *group)
 {
     GncMainWindowPrivate *priv;
     MergedActionEntry *entry;
 
     g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
     g_return_if_fail (group_name != nullptr);
-    g_return_if_fail (GTK_IS_ACTION_GROUP(group));
-    g_return_if_fail (merge_id > 0);
+    g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(group));
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     entry = g_new0 (MergedActionEntry, 1);
-    entry->action_group = group;
-    entry->merge_id = merge_id;
-    gtk_ui_manager_ensure_update (window->ui_merge);
+    entry->simple_action_group = group;
+
     g_hash_table_insert (priv->merged_actions_table, g_strdup (group_name), entry);
 }
 
@@ -4225,19 +4217,19 @@ gnc_main_window_init_menu_updaters (GncMainWindow *window)
 static void
 gnc_main_window_window_menu (GncMainWindow *window)
 {
-    guint merge_id;
+//    guint merge_id;
 #ifdef MAC_INTEGRATION
-    gchar *filename = gnc_filepath_locate_ui_file("gnc-windows-menu-ui-quartz.xml");
+    gchar *filename = gnc_filepath_locate_ui_file ("gnc-windows-menu-ui-quartz.xml");
 #else
-    gchar *filename = gnc_filepath_locate_ui_file("gnc-windows-menu-ui.xml");
+    gchar *filename = gnc_filepath_locate_ui_file ("gnc-windows-menu-ui.xml");
     GncMainWindowPrivate *priv;
 #endif
     GError *error = nullptr;
     g_assert(filename);
-    merge_id = gtk_ui_manager_add_ui_from_file (window->ui_merge, filename,
-                                                &error);
-    g_free(filename);
-    g_assert(merge_id);
+//FIXMEb    merge_id = gtk_ui_manager_add_ui_from_file (window->ui_merge, filename,
+//                                                &error);
+    g_free (filename);
+//    g_assert(merge_id);
 #ifndef MAC_INTEGRATION
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
@@ -4298,7 +4290,6 @@ gnc_main_window_setup_window (GncMainWindow *window)
 {
     GncMainWindowPrivate *priv;
     GtkWidget *main_vbox;
-//    guint merge_id;
     GtkBuilder *builder;
     GncPluginManager *manager;
     GtkAccelGroup *accel_group = gtk_accel_group_new ();
@@ -4392,14 +4383,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
     gtk_container_add (GTK_CONTAINER(priv->menu_dock), GTK_WIDGET(priv->toolbar)); //FIXMEb this may need changing
     gtk_widget_show (GTK_WIDGET(priv->toolbar));
 
-//FIXMEb    window->ui_merge = gtk_ui_manager_new ();
-
-    /* Create menu and toolbar information */
-//    priv->action_group = gtk_action_group_new ("MainWindowActions");
-
     priv->simple_action_group = g_simple_action_group_new ();
-
-//FIXMEb    gtk_action_group_set_translation_domain (priv->action_group, PROJECT_NAME);
 
     g_action_map_add_action_entries (G_ACTION_MAP(priv->simple_action_group),
                                      gnc_menu_actions,
@@ -4421,41 +4405,8 @@ gnc_main_window_setup_window (GncMainWindow *window)
     gnc_main_window_menu_item_vis_by_action (window,
                                              always_hidden_actions, false);
 
-
-//    gtk_ui_manager_insert_action_group (window->ui_merge, priv->action_group, 0);
-
     gtk_widget_insert_action_group (GTK_WIDGET(window), "mainwin",
                                     G_ACTION_GROUP(priv->simple_action_group));
-
-//FIXMEb    g_signal_connect (G_OBJECT (window->ui_merge), "add_widget",
-//                      G_CALLBACK (gnc_main_window_add_widget), window);
-
-    /* Use the "connect-proxy" signal for tooltip display in the status bar */
-//FIXMEb    g_signal_connect (G_OBJECT (window->ui_merge), "connect-proxy",
-//                      G_CALLBACK (gnc_window_connect_proxy), priv->statusbar);
-
-//    filename = gnc_filepath_locate_ui_file("gnc-main-window.ui");
-
-//    merge_id = gtk_ui_manager_add_ui_from_file (window->ui_merge,
-//               filename, &error);
-//    g_assert(merge_id || error);
-//    if (merge_id)
-//    {
-
-//FIXMEb        gtk_window_add_accel_group (GTK_WINDOW (window),
-//                                    gtk_ui_manager_get_accel_group(window->ui_merge));
-
-//        gtk_ui_manager_ensure_update (window->ui_merge);
-//    }
-//    else
-//    {
-//        g_critical("Failed to load ui file.\n  Filename %s\n  Error %s",
-//                   filename, error->message);
-//        g_error_free(error);
-//        g_assert(merge_id != 0);
-//    }
-//    g_free(filename);
-
 
 //FIXMEb    gnc_main_window_window_menu (window); may need to use some thing like this
 

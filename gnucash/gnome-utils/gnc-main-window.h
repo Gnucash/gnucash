@@ -82,18 +82,15 @@ typedef struct
 /** The instance data structure for a main window object. */
 typedef struct GncMainWindow
 {
-    GtkWindow gtk_window;	/**< The parent object for a main window. */
-    GtkUIManager *ui_merge; /**< A pointer to the UI Manager data
-                                 structure for the whole window. */
-    gboolean window_quitting; /**< Set to TRUE when quitting from this window. */
+    GtkWindow gtk_window;       /**< The parent object for a main window. */
+    gboolean window_quitting;   /**< Set to TRUE when quitting from this window. */
     gboolean just_plugin_prefs; /**< Just remove preferences only from plugins */
 } GncMainWindow;
 
 /** The class data structure for a main window object. */
 typedef struct
 {
-    GtkWindowClass gtk_window;	/**< The parent class for a
-					   main window. */
+    GtkWindowClass gtk_window; /**< The parent class for a main window. */
 
     /* callbacks */
     void (*page_added)   (GncMainWindow *window,
@@ -163,12 +160,12 @@ void gnc_main_window_open_page (GncMainWindow *window,
 void gnc_main_window_close_page (GncPluginPage *page);
 
 
-/*  Iterator function to walk all pages in all windows, calling the
- *  specified function for each page.
+/**  Iterator function to walk all pages in all windows, calling the
+ *   specified function for each page.
  *
- *  @param entry A pointer to the function to be called.
+ *   @param entry A pointer to the function to be called.
  *
- *  @param user_data A data pointer passed to each call of the function.
+ *   @param user_data A data pointer passed to each call of the function.
  */
 void gnc_main_window_foreach_page (GncMainWindowPageFunc fn,
                                    gpointer user_data);
@@ -230,16 +227,11 @@ main_window_update_page_set_read_only_icon (GncPluginPage *page,
  *  should be unique among all groups added to the window, and will be
  *  needed to remove the actions from this window.
  *
- *  @param group A pointer to an array of GtkActions.  These are the
- *  actions that will be added to the user interface.
- *
- *  @param merge_id A merge identifier retrieved from a call to
- *  gtk_ui_manager_new_merge_id().
+ *  @param group A pointer to the GSimpleActionGroup. 
  */
 void gnc_main_window_manual_merge_actions (GncMainWindow *window,
-        const gchar *group_name,
-        GtkActionGroup *group,
-        guint merge_id);
+                                           const gchar *group_name,
+                                           GSimpleActionGroup *group);
 
 
 /** Add a set of actions to the specified window.  This function
@@ -255,7 +247,7 @@ void gnc_main_window_manual_merge_actions (GncMainWindow *window,
  *  should be unique among all groups added to the window, and will be
  *  needed to remove the actions from this window.
  *
- *  @param entries A pointer to an array of GtkActionEntry.  These
+ *  @param entries A pointer to an array of GActionEntry.  These
  *  are the actions that will be added to the user interface.
  *
  *  @param n_entries The number of actions in the array.
