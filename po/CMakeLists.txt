@@ -141,3 +141,7 @@ if(BUILD_GNUCASH_POT)
   add_custom_target (pot DEPENDS gnucash.pot)
 endif()
 dist_add_generated (${BUILDING_FROM_VCS} gnucash.pot)
+
+if(BUILD_GNUCASH_POT)
+  add_dependencies (dist-po-gnucash-pot pot)
+endif()

@@ -153,7 +153,7 @@ target_include_directories(gnc-gnome
     ${CMAKE_BINARY_DIR}/gnucash/gnome-utils # for gnc-warnings.h
 )
 
-add_dependencies (gnc-gnome swig-runtime-h)
+add_dependencies (gnc-gnome swig-runtime-h swig-gnome-c)
 
 if (MAC_INTEGRATION)
   target_compile_options(gnc-gnome PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
@@ -250,3 +250,4 @@ set_dist_list(gnome_DIST
         CMakeLists.txt gnome.i gnucash.appdata.xml.in.in gnucash.desktop.in.in
         gnucash.releases.xml ${gnc_gnome_noinst_HEADERS} ${gnc_gnome_SOURCES} ${gnome_SCHEME})
 dist_add_generated(${BUILDING_FROM_VCS} gnucash.appdata.xml.in)
+add_dependencies(gnucash-appdata dist-gnucash-gnome-gnucash-appdata-xml-in)

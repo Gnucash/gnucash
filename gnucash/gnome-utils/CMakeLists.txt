@@ -8,6 +8,7 @@ gnc_add_swig_guile_command (swig-gnome-utils-c
     ${CMAKE_CURRENT_SOURCE_DIR}/gnome-utils.i ""
 )
 
+add_dependencies(swig-gnome-utils-c gnc-gnome-utils)
 set (WARNINGS_SCHEMA ${DATADIR_BUILD}/glib-2.0/schemas/org.gnucash.GnuCash.warnings.gschema.xml)
 set (GNC_WARNINGS_C ${CMAKE_CURRENT_BINARY_DIR}/gnc-warnings.c)
 set (GNC_WARNINGS_H ${CMAKE_CURRENT_BINARY_DIR}/gnc-warnings.h)

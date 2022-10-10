@@ -27,6 +27,7 @@
 # ButterflyOfFire <ButterflyOfFire@protonmail.com>, 2022.
 # Laurent Bigonville <bigon@bigon.be>, 2022.
 # Simon Arlott <weblate.simon@arlott.org>, 2022.
+# Philippe Lamare <ph.lamare@free.fr>, 2022.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
 #
@@ -36,8 +37,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-09-11 23:24+0200\n"
-"PO-Revision-Date: 2022-09-23 19:20+0000\n"
-"Last-Translator: Maxime Leroy <lisacintosh@gmail.com>\n"
+"PO-Revision-Date: 2022-10-02 15:52+0000\n"
+"Last-Translator: Philippe Lamare <ph.lamare@free.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -2902,11 +2903,9 @@ msgstr "Vide"
 
 # messages-i18n.c:310
 #: gnucash/gnome/dialog-lot-viewer.c:829
-#, fuzzy
-#| msgid "Open"
 msgctxt "Adjective"
 msgid "Open"
-msgstr "Ouvert"
+msgstr "Ouvrir"
 
 # messages-i18n.c:261
 #: gnucash/gnome/dialog-lot-viewer.c:923 gnucash/gnome/dialog-order.c:890
@@ -33430,11 +33429,9 @@ msgstr ""
 "enregistrés ailleurs."
 
 #: libgnucash/engine/gnc-commodity.h:114
-#, fuzzy
-#| msgid "All non-currency"
 msgctxt "Commodity Type"
 msgid "All non-currency"
-msgstr "Tous les éléments non monétaires"
+msgstr "Tout sauf les devises"
 
 # messages-i18n.c:266 po/guile_strings.txt:112
 # src/gnome/glade-gnc-dialogs.c:641

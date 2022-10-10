@@ -190,10 +190,10 @@ fcb_clicked_cb (GtkButton *button, GtkWidget *ok_button)
             DEBUG("Native file uri is '%s'", uri);
 
             g_object_set_data_full (G_OBJECT(button), "uri", g_strdup (uri), g_free);
-            g_free (uri);
             g_free (filename);
             g_free (unescape_filename);
         }
+        g_free (uri);
         file_ok_cb (button, ok_button);
     }
     g_object_unref (native);

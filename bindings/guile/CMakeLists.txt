@@ -60,7 +60,10 @@ add_library(gnucash-guile SHARED
     ${SWIG_APP_UTILS_GUILE_CPP})
 
 add_dependencies(gnucash-guile
-    swig-runtime-h)
+    swig-runtime-h
+    swig-core-utils-guile-c
+    swig-engine-cpp
+    swig-apputils-guile-cpp)
 
 target_include_directories(gnucash-guile
     PUBLIC
@@ -107,6 +110,7 @@ install(TARGETS gnc-expressions-guile
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
         )
+add_dependencies(gnc-expressions-guile swig-expressions-guile-c)
 
 # Scheme
 
