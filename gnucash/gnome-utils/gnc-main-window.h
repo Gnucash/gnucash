@@ -62,7 +62,22 @@ typedef struct
     const gchar *label;
     const gchar *accelerator;
     const gchar *tooltip;
+    const gchar *short_label;
 } GncDisplayItem;
+
+/** A structure for defining alternate action names for use in the
+ *  toolbar.  All toolbar buttons are homogeneous in size and are sized
+ *  to fit the longest label.  Therefore, this structure should be
+ *  used if an action name is more than one word.  This way the menu
+ *  can have the label "Whizzy Feature", while the toolbar button only
+ *  has the label "Whizzy". */
+typedef struct
+{
+    /** The name of the action. */
+    const char *action_name;
+    /** The alternate toolbar label to use */
+    const char *short_label;
+} GncToolBarShortNames;
 
 /** The instance data structure for a main window object. */
 typedef struct GncMainWindow
@@ -309,6 +324,10 @@ typedef struct _GncActionUpdate GncActionUpdate; //FIXMEb added
 void gnc_main_window_update_action_labels (GncMainWindow *window,
                                            const GncActionUpdate *updates,
                                            gint n_updates); //FIXMEb added
+
+
+void gnc_main_window_init_short_names (GncMainWindow *window,
+                                       GncToolBarShortNames *toolbar_labels); //FIXMEb added
 
 /** Retrieve a specific set of user interface actions from a window.
  *  This function can be used to get an group of action to be

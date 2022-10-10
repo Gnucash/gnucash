@@ -308,6 +308,22 @@ static GncActionUpdate update_actions [] =
 };
 static guint update_actions_n_actions = G_N_ELEMENTS(update_actions);
 
+/** Short labels for use on the toolbar buttons. */
+static GncToolBarShortNames toolbar_labels[] =
+{
+    { "FilePrintAction",      N_("Print") },
+    { "ReportExportAction",   N_("Export") },
+    { "ReportOptionsAction",  N_("Options") },
+    /* Translators: This string is meant to be a short alternative for "Save Report Configuration"
+       to be used as toolbar button label. */
+    { "ReportSaveAction",     N_("Save Config") },
+    /* Translators: This string is meant to be a short alternative for "Save Report Configuration As..."
+       to be used as toolbar button label. */
+    { "ReportSaveAsAction",   N_("Save Config As...") },
+    { "FilePrintPDFAction",   N_("Make Pdf") },
+    { nullptr, nullptr },
+};
+
 static void
 gnc_plugin_page_report_get_property( GObject *obj,
                                      guint prop_id,
@@ -630,6 +646,10 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     gnc_main_window_add_to_display_list (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window),
                                          report_display_items,
                                          report_n_display_items);
+
+    // setup any short toolbar names
+    gnc_main_window_init_short_names (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window),
+                                      toolbar_labels);
 
     // used to capture Ctrl+Alt+PgUp/Down for tab selection
     webview = gnc_html_get_webview (priv->html);
@@ -1252,22 +1272,6 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * priv)
         scm_gc_unprotect_object(priv->edited_reports);
 }
 
-/** Short labels for use on the toolbar buttons. */
-static action_toolbar_labels toolbar_labels[] =
-{
-    { "FilePrintAction",        N_("Print") },
-    { "ReportExportAction",   N_("Export") },
-    { "ReportOptionsAction",  N_("Options") },
-    /* Translators: This string is meant to be a short alternative for "Save Report Configuration"
-       to be used as toolbar button label. */
-    { "ReportSaveAction", N_("Save Config") },
-    /* Translators: This string is meant to be a short alternative for "Save Report Configuration As..."
-       to be used as toolbar button label. */
-    { "ReportSaveAsAction", N_("Save Config As...") },
-    { "FilePrintPDFAction", N_("Make Pdf") },
-    { nullptr, nullptr },
-};
-
 static const gchar *initially_insensitive_actions[] =
 {
     nullptr
@@ -1388,8 +1392,6 @@ gnc_plugin_page_report_constr_init (GncPluginPageReport *plugin_page, gint repor
 
     gnc_plugin_update_actionsb (simple_action_group, initially_insensitive_actions,
                                 "sensitive", FALSE);
-
-//FIXMEb    gnc_plugin_init_short_names (action_group, toolbar_labels);
 }
 
 GncPluginPage*

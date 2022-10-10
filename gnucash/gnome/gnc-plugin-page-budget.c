@@ -248,15 +248,15 @@ static const gchar *actions_requiring_account[] =
 #endif
 
 /** Short labels for use on the toolbar buttons. */
-static action_toolbar_labels toolbar_labels[] =
+static GncToolBarShortNames toolbar_labels[] =
 {
-    { "OpenAccountAction",          N_("Open") },
-    { "DeleteBudgetAction",         N_("Delete") },
-    { "OptionsBudgetAction",        N_("Options") },
-    { "EstimateBudgetAction",       N_("Estimate") },
-    { "AllPeriodsBudgetAction",     N_("All Periods") },
-    { "BudgetNoteAction",           N_("Note") },
-    { "BudgetReportAction",         N_("Run Report") },
+    { "OpenAccountAction",       N_("Open") },
+    { "DeleteBudgetAction",      N_("Delete") },
+    { "OptionsBudgetAction",     N_("Options") },
+    { "EstimateBudgetAction",    N_("Estimate") },
+    { "AllPeriodsBudgetAction",  N_("All Periods") },
+    { "BudgetNoteAction",        N_("Note") },
+    { "BudgetReportAction",      N_("Run Report") },
     { NULL, NULL },
 };
 
@@ -394,8 +394,6 @@ gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page)
                                      gnc_plugin_page_budget_actions,
                                      gnc_plugin_page_budget_n_actions,
                                      plugin_page);
-
-//FIXMEb    gnc_plugin_init_short_names (action_group, toolbar_labels);
 
     if (qof_book_is_readonly (gnc_get_current_book()))
         gnc_plugin_update_actionsb (simple_action_group, writeable_actions,
@@ -556,6 +554,10 @@ gnc_plugin_page_budget_create_widget (GncPluginPage *plugin_page)
     gnc_main_window_add_to_display_list (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window),
                                          gnc_plugin_page_budget_display_items,
                                          gnc_plugin_page_budget_n_display_items);
+
+    // setup any short toolbar names
+    gnc_main_window_init_short_names (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window),
+                                      toolbar_labels);
 
     LEAVE("widget = %p", priv->budget_view);
     return GTK_WIDGET(priv->budget_view);

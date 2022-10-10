@@ -624,7 +624,7 @@ static const gchar* actions_requiring_priced_account[] =
 };
 
 /** Short labels for use on the toolbar buttons. */
-static action_toolbar_labels toolbar_labels[] =
+static GncToolBarShortNames toolbar_labels[] =
 {
     { "ActionsTransferAction",              N_ ("Transfer") },
     { "RecordTransactionAction",            N_ ("Enter") },
@@ -900,7 +900,6 @@ gnc_plugin_page_register_init (GncPluginPageRegister* plugin_page)
                                      gnc_plugin_page_register_n_actions,
                                      plugin_page);
 
-//FIXMEb    gnc_plugin_init_short_names (action_group, toolbar_labels);
 //FIXMEb    gnc_plugin_set_important_actions (action_group, important_actions);
 
     priv->lines_default     = DEFAULT_LINES_AMOUNT;
@@ -1278,7 +1277,8 @@ gnc_plugin_page_register_ui_update (gpointer various,
 
                 /* Adjust the action's label and tooltip */
                 gtk_menu_item_set_label (GTK_MENU_ITEM(menu_item), _ (*label_iter));
-//FIXMEb                gtk_action_set_tooltip (action, _ (*tooltip_iter));
+//FIXMEb Setting tool tip on transaction menu items
+                gtk_widget_set_tooltip_text (GTK_WIDGET(menu_item), _ (*tooltip_iter));
                 ++label_iter;
                 ++tooltip_iter;
             }
@@ -1299,7 +1299,8 @@ gnc_plugin_page_register_ui_update (gpointer various,
 
                 /* Adjust the action's label and tooltip */
                 gtk_menu_item_set_label (GTK_MENU_ITEM(menu_item), _ (*label_iter));
-//FIXMEb                gtk_action_set_tooltip (action, _ (*tooltip_iter));
+//FIXMEb Setting tool tip on transaction menu items
+                gtk_widget_set_tooltip_text (GTK_WIDGET(menu_item), _ (*tooltip_iter));
                 ++label_iter;
                 ++tooltip_iter;
             }
@@ -1640,6 +1641,9 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
     gnc_plugin_add_to_display_hash (display_item_hash,
                                     gnc_plugin_page_register_display_items,
                                     gnc_plugin_page_register_n_display_items);
+
+    // setup any short toolbar names
+    gnc_plugin_init_short_names (display_item_hash, toolbar_labels);
 
     /* DRH - Probably lots of other stuff from regWindowLedger should end up here. */
     LEAVE (" ");

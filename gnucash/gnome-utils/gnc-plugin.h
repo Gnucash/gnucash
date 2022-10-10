@@ -227,22 +227,6 @@ void gnc_plugin_remove_from_window (GncPlugin *plugin,
  */
 const gchar *gnc_plugin_get_name (GncPlugin *plugin);
 
-
-/** A structure for defining alternate action names for use in the
- *  toolbar.  All toolbar buttons are homogeneous in size and are sized
- *  to fit the longest label.  Therefore, this structure should be
- *  used if an action name is more than one word.  This way the menu
- *  can have the label "Whizzy Feature", while the toolbar button only
- *  has the label "Whizzy". */
-typedef struct
-{
-    /** The name of the action. */
-    const char *action_name;
-    /** The alternate toolbar label to use */
-    const char *label;
-} action_toolbar_labels;
-
-
 /** Add "short" labels to existing actions.  The "short" label is the
  *  string used on toolbar buttons when the action is visible.  All
  *  toolbar buttons are homogeneous in size and are sized to fit the
@@ -251,16 +235,13 @@ typedef struct
  *  label "Whizzy Feature", while the toolbar button only has the
  *  label "Whizzy".
  *
- *  @param action_group The group of all actions associated with a
- *  plugin or plugin page.  All actions to me modified must be in this
- *  group.
+ *  @param display_item_hash The table of all the window display items
  *
  *  @param toolbar_labels A pointer to a NULL terminated array of data
- *  action_toolbar_labels items.
+ *  GncToolBarShortNames items.
  */
-void gnc_plugin_init_short_names (GSimpleActionGroup *simple_action_group,
-                                  action_toolbar_labels *toolbar_labels);
-
+void gnc_plugin_init_short_names (GHashTable *display_item_hash,
+                                  GncToolBarShortNames *toolbar_labels);
 
 /** Mark certain actions as "important".  This means that their labels
  *  will appear when the toolbar is set to "Icons and important text"

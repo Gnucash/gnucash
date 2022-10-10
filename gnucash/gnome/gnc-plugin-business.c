@@ -181,7 +181,7 @@ static GncDisplayItem gnc_plugin_display_items [] =
         N_("Open the Find Customer dialog")
     },
     {
-        "CustomerNewInvoiceOpenAction", NULL, N_("New _Invoice..."), NULL,
+        "CustomerNewInvoiceOpenAction", GNC_ICON_INVOICE_NEW, N_("New _Invoice..."), NULL,
         N_("Open the New Invoice dialog")
     },
     {
@@ -212,7 +212,7 @@ static GncDisplayItem gnc_plugin_display_items [] =
         N_("Open the New Vendor dialog")
     },
     {
-        "VendorFindVendorOpenAction", NULL, N_("_Find Vendor..."), NULL,
+        "VendorFindVendorOpenAction", GNC_ICON_INVOICE_NEW, N_("_Find Vendor..."), NULL,
         N_("Open the Find Vendor dialog")
     },
     {
@@ -247,7 +247,7 @@ static GncDisplayItem gnc_plugin_display_items [] =
         N_("Open the New Employee dialog")
     },
     {
-        "EmployeeFindEmployeeOpenAction", NULL, N_("_Find Employee..."), NULL,
+        "EmployeeFindEmployeeOpenAction", GNC_ICON_INVOICE_NEW, N_("_Find Employee..."), NULL,
         N_("Open the Find Employee dialog")
     },
     {

@@ -320,7 +320,7 @@ static const gchar* readonly_inactive_actions[] =
 };
 
 /** Short labels for use on the toolbar buttons. */
-static action_toolbar_labels toolbar_labels[] =
+static GncToolBarShortNames toolbar_labels[] =
 {
     { "OTEditVendorAction",             N_("Edit") },
     { "OTEditCustomerAction",           N_("Edit") },
@@ -493,8 +493,6 @@ gnc_plugin_page_owner_tree_init (GncPluginPageOwnerTree *plugin_page)
                                      gnc_plugin_page_owner_tree_actions,
                                      gnc_plugin_page_owner_tree_n_actions,
                                      plugin_page);
-
-//FIXMEb    gnc_plugin_init_short_names (action_group, toolbar_labels);
 
     /* Init filter */
     priv->fd.show_inactive = TRUE;
@@ -784,6 +782,10 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
     gnc_main_window_add_to_display_list (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window),
                                          gnc_plugin_page_owner_tree_display_items,
                                          gnc_plugin_page_owner_tree_n_display_items);
+
+    // setup any short toolbar names
+    gnc_main_window_init_short_names (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window),
+                                      toolbar_labels);
 
     set_menu_and_toolbar_qualifier (plugin_page);
 

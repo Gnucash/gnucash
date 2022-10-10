@@ -278,7 +278,7 @@ static GncDisplayItem gnc_plugin_page_account_tree_display_items [] =
     },
     /* Actions menu */
     {
-        "ActionsReconcileAction", NULL, N_("_Reconcile..."), NULL,
+        "ActionsReconcileAction", "edit-select-all", N_("_Reconcile..."), NULL,
         N_("Reconcile the selected account")
     },
     {
@@ -286,7 +286,7 @@ static GncDisplayItem gnc_plugin_page_account_tree_display_items [] =
         N_("Automatically clear individual transactions, given a cleared amount")
     },
     {
-        "ActionsTransferAction", NULL, N_("_Transfer..."), "<primary>t",
+        "ActionsTransferAction", GNC_ICON_TRANSFER, N_("_Transfer..."), "<primary>t",
         N_("Transfer funds from one account to another")
     },
     {
@@ -405,12 +405,12 @@ static const gchar* readonly_inactive_actions[] =
 };
 
 /** Short labels for use on the toolbar buttons. */
-static action_toolbar_labels toolbar_labels[] =
+static GncToolBarShortNames toolbar_labels[] =
 {
-    { "FileOpenAccountAction",          N_("Open") },
-    { "EditEditAccountAction",          N_("Edit") },
-    { "FileNewAccountAction",           N_("New") },
-    { "EditDeleteAccountAction",        N_("Delete") },
+    { "EditOpenAccountAction",   N_("Open") },
+    { "EditEditAccountAction",   N_("Edit") },
+    { "FileNewAccountAction",    N_("New") },
+    { "EditDeleteAccountAction", N_("Delete") },
     { NULL, NULL },
 };
 
@@ -545,8 +545,6 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
                                      gnc_plugin_page_account_tree_actions,
                                      gnc_plugin_page_account_tree_n_actions,
                                      plugin_page);
-
-//FIXMEb    gnc_plugin_init_short_names (action_group, toolbar_labels);
 
     /* Visible types */
     priv->fd.visible_types = -1; /* Start with all types */
@@ -841,6 +839,10 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
     gnc_main_window_add_to_display_list (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window),
                                          gnc_plugin_page_account_tree_display_items,
                                          gnc_plugin_page_account_tree_n_display_items);
+
+    // setup any short toolbar names
+    gnc_main_window_init_short_names (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window),
+                                      toolbar_labels);
 
     // Read account filter state information from account section
     gnc_tree_view_account_restore_filter (GNC_TREE_VIEW_ACCOUNT(priv->tree_view), &priv->fd,

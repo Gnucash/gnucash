@@ -407,16 +407,16 @@ static GncActionUpdate creditnote_action_labels[] =
 static guint creditnote_action_labels_n_actions = G_N_ELEMENTS(creditnote_action_labels);
 
 /** Short labels for use on the toolbar buttons. */
-static action_toolbar_labels toolbar_labels[] = {
-    {"RecordEntryAction", N_("Enter")},
-    {"CancelEntryAction", N_("Cancel")},
-    {"DeleteEntryAction", N_("Delete")},
-    {"DuplicateEntryAction", N_("Duplicate")},
-    {"EntryUpAction", N_("Up")},
-    {"EntryDownAction", N_("Down")},
-    {"BlankEntryAction", N_("Blank")},
-    {"EditPostInvoiceAction", N_("Post")},
-    {"EditUnpostInvoiceAction", N_("Unpost")},
+static GncToolBarShortNames toolbar_labels[] = {
+    {"RecordEntryAction",         N_("Enter")},
+    {"CancelEntryAction",         N_("Cancel")},
+    {"DeleteEntryAction",         N_("Delete")},
+    {"DuplicateEntryAction",      N_("Duplicate")},
+    {"EntryUpAction",             N_("Up")},
+    {"EntryDownAction",           N_("Down")},
+    {"BlankEntryAction",          N_("Blank")},
+    {"EditPostInvoiceAction",     N_("Post")},
+    {"EditUnpostInvoiceAction",   N_("Unpost")},
     {"ToolsProcessPaymentAction", N_("Pay")},
     {NULL, NULL},
 };
@@ -544,8 +544,6 @@ gnc_plugin_page_invoice_init (GncPluginPageInvoice *plugin_page)
                                      gnc_plugin_page_invoice_actions,
                                      gnc_plugin_page_invoice_n_actions,
                                      plugin_page);
-
-//FIXMEb    gnc_plugin_init_short_names (action_group, toolbar_labels);
 }
 
 static void
@@ -807,6 +805,10 @@ gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page)
     gnc_main_window_add_to_display_list (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window),
                                          gnc_plugin_page_invoice_display_items,
                                          gnc_plugin_page_invoice_n_display_items);
+
+    // setup any short toolbar names
+    gnc_main_window_init_short_names (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window),
+                                      toolbar_labels);
 
     LEAVE("");
     return priv->widget;

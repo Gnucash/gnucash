@@ -231,18 +231,23 @@ gnc_plugin_get_name (GncPlugin *plugin)
  *
  *  See gnc-plugin.h for documentation on the function arguments. */
 void
-gnc_plugin_init_short_names (GSimpleActionGroup *simple_action_group,
-                             action_toolbar_labels *toolbar_labels)
+gnc_plugin_init_short_names (GHashTable *display_item_hash,
+                             GncToolBarShortNames *toolbar_labels)
 {
-    GAction *action;
-    gint i;
+    g_return_if_fail (display_item_hash != NULL);
+    g_return_if_fail (toolbar_labels != NULL);
 
-    for (i = 0; toolbar_labels[i].action_name; i++)
+    for (gint i = 0; toolbar_labels[i].action_name; i++)
     {
-        /* Add a couple of short labels for the toolbar */
-//FIXMEb        action = g_action_map_lookup_action (G_ACTION_MAP(simple_action_group),
-//                                              toolbar_labels[i].action_name);
-//        gtk_action_set_short_label (action, _(toolbar_labels[i].label));
+        GncDisplayItem *gdi;
+
+        PINFO("action_name is '%s', short_label is '%s'",
+              toolbar_labels[i].action_name, toolbar_labels[i].short_label);
+
+        gdi = (GncDisplayItem*)g_hash_table_lookup (display_item_hash,
+                                                    toolbar_labels[i].action_name);
+        if (gdi)
+            gdi->short_label = toolbar_labels[i].short_label;
     }
 }
 
@@ -361,24 +366,27 @@ gnc_plugin_update_action_labels (GtkWidget *menubar, GtkWidget *toolbar,
 //FIXMEb Setting tool tip on menu items
                 if (update->action_tooltip)
                     gtk_widget_set_tooltip_text (GTK_WIDGET(menu_item), _(update->action_tooltip));
-                PINFO("Set tool item %p label to '%s' and tooltip '%s'", menu_item,
-                                                                         update->action_label,
-                                                                         update->action_tooltip);
+
+                PINFO("Menu item %p, label '%s', tooltip '%s'",
+                       menu_item, update->action_label, update->action_tooltip);
 
                 gtk_widget_set_visible (GTK_WIDGET(menu_item), TRUE);
             }
 
             if (tool_item && GTK_IS_ACTIONABLE(tool_item))
             {
-                gtk_tool_button_set_label (GTK_TOOL_BUTTON(tool_item), _(update->action_label));
-                gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON(tool_item), TRUE);
+                gboolean use_short_names = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(tool_item), "use-short"));
+                if (!use_short_names)
+                {
+                    gtk_tool_button_set_label (GTK_TOOL_BUTTON(tool_item), _(update->action_label));
+                    gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON(tool_item), TRUE);
+                }
 //FIXMEb Setting tool tip on tool items
                 if (update->action_tooltip)
                     gtk_tool_item_set_tooltip_text (GTK_TOOL_ITEM(tool_item), _(update->action_tooltip));
 
-                PINFO("Set tool item %p label to '%s' and tooltip '%s'", menu_item,
-                                                                         update->action_label,
-                                                                         update->action_tooltip);
+                PINFO("Tool item %p, label '%s', tooltip '%s', use_short %d",
+                       menu_item, update->action_label, update->action_tooltip, use_short_names);
 
                 gtk_widget_set_visible (GTK_WIDGET(tool_item), TRUE);
             }
@@ -481,9 +489,19 @@ gnc_plugin_update_display_toolbar_items (GHashTable *display_item_hash,
             if (!gdi)
                 continue;
 
-            PINFO("item_action_name is '%s', label '%s'", item_action_name, _(gdi->label));
+            PINFO("item_action_name is '%s', label '%s', short '%s'",
+                  item_action_name, _(gdi->label), _(gdi->short_label));
 
-            gtk_tool_button_set_label (GTK_TOOL_BUTTON(item), _(gdi->label));
+            if (gdi->short_label)
+            {
+                gtk_tool_button_set_label (GTK_TOOL_BUTTON(item), _(gdi->short_label));
+                g_object_set_data (G_OBJECT(item), "use-short", GINT_TO_POINTER(1));
+            }
+            else
+            {
+                gtk_tool_button_set_label (GTK_TOOL_BUTTON(item), _(gdi->label));
+                g_object_set_data (G_OBJECT(item), "use-short", GINT_TO_POINTER(0));
+            }
             gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON(item), TRUE);
 
             if (gdi->tooltip)
@@ -519,6 +537,7 @@ gnc_plugin_add_to_display_hash (GHashTable *display_item_hash,
             gdi->label = display_items[i].label;
             gdi->accelerator = display_items[i].accelerator;
             gdi->tooltip = display_items[i].tooltip;
+            gdi->short_label = NULL;
             g_hash_table_insert (display_item_hash, g_strdup (display_items[i].action_name), gdi);
         }
     }
