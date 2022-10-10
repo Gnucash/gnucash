@@ -1089,6 +1089,12 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
     // Lets check popup height is the true height
     item_edit->popup_returned_height = popup_h;
 
+    gtk_widget_get_allocation (GTK_WIDGET(item_edit), &alloc);
+
+    // the calendar will be 0
+    if ((popup_w != 0) && (popup_w < alloc.width))
+        popup_w = alloc.width;
+
     if (popup_h == popup_max_height)
         gtk_widget_set_size_request (item_edit->popup_item, popup_w - 1, popup_h);
     else
