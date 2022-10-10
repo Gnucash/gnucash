@@ -3645,30 +3645,6 @@ gnc_main_window_unmerge_actions (GncMainWindow *window,
 }
 
 
-/*  Force a full update of the user interface for the specified
- *  window.  This can be an expensive function, but is needed because
- *  the gtk ui manager doesn't always seem to update properly when
- *  actions are changed.
- */
-void
-gnc_main_window_actions_updated (GncMainWindow *window)
-{
-    GSimpleActionGroup *simple_action_group;
-
-    g_return_if_fail (GNC_IS_MAIN_WINDOW(window));
-
-    /* Unfortunately gtk_ui_manager_ensure_update doesn't work
-     * here.  Force a full update by adding and removing an empty
-     * action group.
-     */
-//FIXMEb    force = gtk_action_group_new("force_update");
-//    gtk_ui_manager_insert_action_group (window->ui_merge, force, 0);
-//    gtk_ui_manager_ensure_update (window->ui_merge);
-//    gtk_ui_manager_remove_action_group (window->ui_merge, force);
-//    g_object_unref(force);
-}
-
-
 struct group_iterate
 {
     GAction *action;

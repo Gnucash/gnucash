@@ -517,7 +517,6 @@ gnc_plugin_history_list_changed (gpointer prefs,
     gnc_history_update_action (window, index, filename);
     g_free (filename);
 
-    gnc_main_window_actions_updated (window);
     LEAVE("");
 }
 
