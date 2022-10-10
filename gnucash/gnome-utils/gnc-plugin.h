@@ -225,28 +225,21 @@ const gchar *gnc_plugin_get_name (GncPlugin *plugin);
 void gnc_plugin_init_short_names (GHashTable *display_item_hash,
                                   GncToolBarShortNames *toolbar_labels);
 
-/** Update a property on a set of existing GtkActions.  This function
- *  can be easily used to make a list of actions visible, invisible,
- *  sensitive, or insensitive.
+/** This function sets the sensitivity of a GAction in a specific
+ *  group.
  *
- *  @param action_group The group of all actions associated with a
- *  plugin or plugin page.  All actions to be modified must be
- *  contained in this group.
+ *  @param simple_action_group The group of all actions associated with a
+ *  plugin or plugin page.
  *
  *  @param action_names A NULL terminated list of actions names that
  *  should be modified.
  *
- *  @param property_name The property name to be changed on the
- *  specified actions. The only two GtkAction properties that it makes
- *  sense to modify are "visible" and "sensitive".
- *
- *  @param value A boolean specifying the new state for the specified
+ *  @param enable A boolean specifying the new state for the specified
  *  property.
  */
-void gnc_plugin_update_actions (GSimpleActionGroup *simple_action_group,
-                                const gchar **action_names,
-                                const gchar *property_name,
-                                gboolean value); //FIXMEb added
+void gnc_plugin_set_actions_enabled (GSimpleActionGroup *simple_action_group,
+                                     const gchar **action_names,
+                                     gboolean enable); //FIXMEb added
 
 void gnc_plugin_update_action_labels (GtkWidget *menubar, GtkWidget *toolbar,
                                       const GncActionUpdate *updates,

@@ -244,38 +244,22 @@ gnc_plugin_init_short_names (GHashTable *display_item_hash,
 }
 
 
-/*  Update a property of existing UI actions.  This function can
- *  modify actions making them visible, invisible, sensitive, or
- *  insensitive.
- *
- *  See gnc-plugin.h for documentation on the function arguments. */
+/*  Update the sensitivity of an action */
 void
-gnc_plugin_update_actions (GSimpleActionGroup *simple_action_group,
-                            const gchar **action_names,
-                            const gchar *property_name,
-                            gboolean value)
+gnc_plugin_set_actions_enabled (GSimpleActionGroup *simple_action_group,
+                                const gchar **action_names, gboolean enable)
 {
-    GAction *action;
-    gint     i;
+    g_return_if_fail (simple_action_group != NULL);
 
-    for (i = 0; action_names[i]; i++)
+    for (gint i = 0; action_names[i]; i++)
     {
-        action = g_action_map_lookup_action (G_ACTION_MAP(simple_action_group), action_names[i]);
+        GAction *action = g_action_map_lookup_action (G_ACTION_MAP(simple_action_group),
+                                                      action_names[i]);
         if (action)
-        {
-//FIXMEb property_name could be 'sensitive' or 'visible'
-             if (g_strcmp0 (property_name, "sensitive") == 0)
-                 g_simple_action_set_enabled (G_SIMPLE_ACTION(action), value);
-             else
-             {
-//FIXMEb visible is done on the menu item, could also be linked to the action being sensitive
-             }
-        }
+             g_simple_action_set_enabled (G_SIMPLE_ACTION(action), enable);
         else
-        {
-            g_warning ("No such action with name '%s' in action group %p)",
-                       action_names[i], simple_action_group);
-        }
+            PERR("No such action with name '%s' in action group %p)",
+                  action_names[i], simple_action_group);
     }
 }
 

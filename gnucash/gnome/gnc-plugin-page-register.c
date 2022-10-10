@@ -1132,13 +1132,13 @@ gnc_plugin_page_register_ui_update (gpointer various,
         gnc_split_reg_get_read_only (priv->gsr))
         read_only_reg = TRUE;
 
-    gnc_plugin_update_actions (gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE(page)),
-                               actions_requiring_account, "sensitive",
-                               !read_only_reg && account != NULL);
+    gnc_plugin_set_actions_enabled (gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE(page)),
+                                    actions_requiring_account,
+                                    !read_only_reg && account != NULL);
 
-    gnc_plugin_update_actions (gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE(page)),
-                               actions_requiring_priced_account, "sensitive",
-                               account && xaccAccountIsPriced (account));
+    gnc_plugin_set_actions_enabled (gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE(page)),
+                                    actions_requiring_priced_account,
+                                    account && xaccAccountIsPriced (account));
 
     /* Set available actions based on read only */
     trans = gnc_split_register_get_current_trans (reg);
@@ -1322,8 +1322,8 @@ gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister* page)
     simple_action_group = gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE(page));
     g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(simple_action_group));
 
-    gnc_plugin_update_actions (simple_action_group, actions_requiring_account,
-                               "sensitive", is_readwrite && account != NULL);
+    gnc_plugin_set_actions_enabled (simple_action_group, actions_requiring_account,
+                                    is_readwrite && account != NULL);
 
     /* Set "style" radio button */
     ledger_type = gnc_ledger_display_type (priv->ledger);
