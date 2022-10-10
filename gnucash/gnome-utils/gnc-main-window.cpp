@@ -1060,8 +1060,10 @@ gnc_main_window_restore_default_state (GncMainWindow *window)
     if (!window)
         window = static_cast<GncMainWindow*>(g_list_nth_data(active_windows, 0));
     gtk_widget_show (GTK_WIDGET(window));
-    action = gnc_main_window_find_action (window, "ViewAccountTreeAction");
-//FIXMEb    gtk_action_activate(action);
+    action = gnc_main_window_find_action_in_group (window,
+                                                   "gnc-plugin-account-tree-actions",
+                                                   "ViewAccountTreeAction");
+    g_action_activate (action, nullptr);
 }
 
 /** Save the state of a single page to a disk.  This function handles
