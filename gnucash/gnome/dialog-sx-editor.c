@@ -162,14 +162,14 @@ static gboolean sxed_confirmed_cancel (GncSxEditorDialog *sxed);
 static gboolean editor_component_sx_equality (gpointer find_data,
                                               gpointer user_data);
 
-static GtkActionEntry gnc_sxed_menu_entries [] =
-{
-    { "EditAction", NULL, N_("_Edit"), NULL, NULL, NULL },
-    { "TransactionAction", NULL, N_("_Transaction"), NULL, NULL, NULL },
-    { "ViewAction", NULL, N_("_View"), NULL, NULL, NULL },
-    { "ActionsAction", NULL, N_("_Actions"), NULL, NULL, NULL },
+static GActionEntry gnc_sxed_menu_entries [] =
+ {
+    { "EditAction", NULL, NULL, NULL, NULL },
+    { "TransactionAction", NULL, NULL, NULL, NULL },
+    { "ViewAction", NULL, NULL, NULL, NULL },
+    { "ActionsAction", NULL, NULL, NULL, NULL },
 };
-static guint gnc_sxed_menu_n_entries = G_N_ELEMENTS (gnc_sxed_menu_entries);
+static guint gnc_sxed_menu_n_entries = G_N_ELEMENTS(gnc_sxed_menu_entries);
 
 /** Implementations *****************************************************/
 
@@ -1354,10 +1354,10 @@ schedXact_editor_create_ledger (GncSxEditorDialog *sxed)
     /* First the embedded window */
     main_vbox = GTK_WIDGET (gtk_builder_get_object (sxed->builder, "register_vbox"));
     sxed->embed_window =
-        gnc_embedded_window_new ("SXWindowActions",
+        gnc_embedded_window_new ("embedded-win",
                                  gnc_sxed_menu_entries,
                                  gnc_sxed_menu_n_entries,
-                                 "gnc-sxed-window-ui.xml",
+                                 "gnc-embedded-window.ui",
                                  sxed->dialog,
                                  FALSE, /* no accelerators */
                                  sxed);
@@ -1366,8 +1366,11 @@ schedXact_editor_create_ledger (GncSxEditorDialog *sxed)
 
     /* Now create the register plugin page. */
     sxed->plugin_page = gnc_plugin_page_register_new_ledger (sxed->ledger);
-    gnc_plugin_page_set_ui_description (sxed->plugin_page,
-                                        "gnc-sxed-window-ui-full.xml");
+
+    gtk_widget_insert_action_group (GTK_WIDGET(sxed->embed_window),
+                                    gnc_plugin_page_get_simple_action_group_name (sxed->plugin_page),
+                                    G_ACTION_GROUP(gnc_plugin_page_get_action_groupb (sxed->plugin_page)));
+
     gnc_plugin_page_register_set_options (sxed->plugin_page,
                                           NUM_LEDGER_LINES_DEFAULT, FALSE);
     gnc_embedded_window_open_page (sxed->embed_window, sxed->plugin_page);

@@ -3837,55 +3837,8 @@ gnc_main_window_update_action_labels (GncMainWindow *window,
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-    for (gint i = 0; n_updates == -1 ? updates[i].action_name != NULL : i < n_updates; i++)
-    {
-        const GncActionUpdate *update = &updates[i];
-
-        GtkWidget *menu_item = gnc_find_menu_item (priv->menubar, update->action_name);
-        GtkWidget *tool_item = gnc_find_toolbar_item (priv->toolbar, update->action_name);
-
-        PINFO("Found menu item %p, tool_item %p, for action_name '%s', vis %d",
-               menu_item, tool_item, update->action_name, update->visible);
-
-        if (update->visible)
-        {
-            if (menu_item && GTK_IS_ACTIONABLE(menu_item) && (update->action_label))
-            {
-                gtk_actionable_set_action_name (GTK_ACTIONABLE(menu_item), nullptr);
-
-                gtk_menu_item_set_label (GTK_MENU_ITEM(menu_item), _(update->action_label));
-                gtk_menu_item_set_use_underline (GTK_MENU_ITEM(menu_item), true);
-//FIXMEb Setting tool tip on menu items
-                if (update->action_tooltip)
-                    gtk_widget_set_tooltip_text (GTK_WIDGET(menu_item), _(update->action_tooltip));
-                PINFO("Set menu item %p label to '%s'", menu_item, update->action_label);
-
-                gtk_widget_set_visible (GTK_WIDGET(menu_item), true);
-            }
-
-            if (tool_item && GTK_IS_ACTIONABLE(tool_item))
-            {
-                gtk_tool_button_set_label (GTK_TOOL_BUTTON(tool_item), _(update->action_label));
-                gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON(tool_item), true);
-//FIXMEb Setting tool tip on tool items
-                if (update->action_tooltip)
-                    gtk_tool_item_set_tooltip_text (GTK_TOOL_ITEM(tool_item), _(update->action_tooltip));
-
-                PINFO("Set tool item %p label to '%s' and tooltip '%s'", menu_item,
-                                                                         update->action_label,
-                                                                         update->action_tooltip);
-
-                gtk_widget_set_visible (GTK_WIDGET(tool_item), true);
-            }
-        }
-        else
-        {
-            if (menu_item)
-                gtk_widget_set_visible (GTK_WIDGET(menu_item), false);
-            if (tool_item)
-                gtk_widget_set_visible (GTK_WIDGET(tool_item), false);
-        }
-    }
+    gnc_plugin_update_action_labels (priv->menubar, priv->toolbar,
+                                     updates, n_updates);
 }
 
 /*  Retrieve a specific set of user interface actions from a window.
@@ -3917,46 +3870,12 @@ static void
 gnc_main_window_update_display_menu_items (GncMainWindow *window, GtkWidget *menu)
 {
     GncMainWindowPrivate *priv;
-    GList *display_list;
 
     g_return_if_fail (GNC_IS_MAIN_WINDOW(window));
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-    display_list = gnc_menu_get_items (menu);
-
-    for (GList *ptr = display_list; ptr; ptr = g_list_next (ptr))
-    {
-        GtkWidget *item = GTK_WIDGET(ptr->data);
-        const gchar *action_name = (const gchar*)g_object_get_data (G_OBJECT(item), "myaction-name");
-
-        if (action_name)
-        {
-            GncDisplayItem *gdi = (GncDisplayItem*)g_hash_table_lookup (priv->display_item_hash,
-                                                                        action_name);
-
-            if (gdi)
-            {
-                gtk_menu_item_set_label (GTK_MENU_ITEM(item), _(gdi->label));
-                gtk_menu_item_set_use_underline (GTK_MENU_ITEM(item), true);
-
-                if (gdi->accelerator)
-                {
-                    GtkWidget *child = gtk_bin_get_child (GTK_BIN (item));
-                    guint  accel_key = 0;
-                    GdkModifierType accel_mods;
-
-                    gtk_accelerator_parse (gdi->accelerator, &accel_key, &accel_mods);
-
-                    if (accel_key > 0)
-                        gtk_accel_label_set_accel (GTK_ACCEL_LABEL(child), accel_key, accel_mods);
-                }
-                if (gdi->tooltip)
-                    gtk_widget_set_tooltip_text (item, gdi->tooltip);
-            }
-        }
-    }
-    g_list_free (display_list);
+    gnc_plugin_update_display_menu_items (priv->display_item_hash, menu);
 }
 
 
@@ -3969,38 +3888,8 @@ gnc_main_window_update_display_toolbar_items (GncMainWindow *window)
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-    for (gint i = 0; i < gtk_toolbar_get_n_items (GTK_TOOLBAR(priv->toolbar)); i++)
-    {
-        GtkToolItem *item = gtk_toolbar_get_nth_item (GTK_TOOLBAR(priv->toolbar), i);
-
-        if (GTK_IS_ACTIONABLE(item))
-        {
-            const gchar *item_action_name = gtk_actionable_get_action_name (GTK_ACTIONABLE(item));
-
-            if (item_action_name)
-            {
-                gchar *ptr = g_strrstr (item_action_name, ".");
-
-                if (ptr)
-                {
-                    GncDisplayItem *gdi = (GncDisplayItem*)g_hash_table_lookup (priv->display_item_hash,
-                                                                                ptr + 1);
-
-                    if (gdi)
-                    {
-                        gtk_tool_button_set_label (GTK_TOOL_BUTTON(item), _(gdi->label));
-                        gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON(item), true);
-
-                        if (gdi->tooltip)
-                            gtk_tool_item_set_tooltip_text (GTK_TOOL_ITEM(item), _(gdi->tooltip));
-
-                        if (gdi->icon_name)
-                            gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON(item), gdi->icon_name);
-                    }
-                }
-            }
-        }
-    }
+    gnc_plugin_update_display_toolbar_items (priv->display_item_hash,
+                                             priv->toolbar);
 }
 
 
@@ -4016,21 +3905,9 @@ gnc_main_window_add_to_display_list (GncMainWindow *window,
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-    for (gint i = 0; n_display_items == -1 ? display_items[i].action_name != NULL : i < n_display_items; i++)
-    {
-        if (!g_hash_table_lookup (priv->display_item_hash, display_items[i].action_name))
-        {
-            GncDisplayItem *gdi = g_new0 (GncDisplayItem, 1);
-
-            gdi->action_name = display_items[i].action_name;
-            gdi->icon_name = display_items[i].icon_name;
-            gdi->label = display_items[i].label;
-            gdi->accelerator = display_items[i].accelerator;
-            gdi->tooltip = display_items[i].tooltip;
-
-            g_hash_table_insert (priv->display_item_hash, g_strdup (display_items[i].action_name), gdi);
-        }
-    }
+    gnc_plugin_add_to_display_hash (priv->display_item_hash,
+                                    display_items,
+                                    n_display_items);
 }
 
 
@@ -4551,6 +4428,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
                                      gnc_menu_n_actions,
                                      window);
 
+    // add the display items to the hash
     gnc_main_window_add_to_display_list (window,
                                          gnc_menu_display_items,
                                          gnc_menu_n_display_items);
@@ -5828,6 +5706,58 @@ gnc_main_window_get_progressbar (GncWindow *window_in)
 }
 
 
+/** Retrieve the menu bar associated with a main window object.
+ *  This function is called via a vector off a generic window
+ *  interface.
+ *
+ *  @param window_in A pointer to a generic window. */
+static GtkWidget *
+gnc_main_window_get_menubar (GncWindow *window)
+{
+    GncMainWindowPrivate *priv;
+
+    g_return_val_if_fail (GNC_IS_MAIN_WINDOW(window), nullptr);
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+    return priv->menubar;
+}
+
+/** Retrieve the tool bar associated with a main window object.
+ *  This function is called via a vector off a generic window
+ *  interface.
+ *
+ *  @param window_in A pointer to a generic window. */
+static GtkWidget *
+gnc_main_window_get_toolbar (GncWindow *window)
+{
+    GncMainWindowPrivate *priv;
+
+    g_return_val_if_fail (GNC_IS_MAIN_WINDOW(window), nullptr);
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+    return priv->toolbar;
+}
+
+/** Retrieve the display hash table associated with a main window object.
+ *  This function is called via a vector off a generic window
+ *  interface.
+ *
+ *  @param window_in A pointer to a generic window. */
+static GHashTable *
+gnc_main_window_get_display_hash_table (GncWindow *window)
+{
+    GncMainWindowPrivate *priv;
+
+    g_return_val_if_fail (GNC_IS_MAIN_WINDOW(window), nullptr);
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+    return priv->display_item_hash;
+}
+
+
 static void
 gnc_main_window_all_ui_set_sensitive (GncWindow *unused, gboolean sensitive)
 {
@@ -5863,10 +5793,13 @@ gnc_main_window_all_ui_set_sensitive (GncWindow *unused, gboolean sensitive)
 static void
 gnc_window_main_window_init (GncWindowIface *iface)
 {
-    iface->get_gtk_window  = gnc_main_window_get_gtk_window;
-    iface->get_statusbar   = gnc_main_window_get_statusbar;
-    iface->get_progressbar = gnc_main_window_get_progressbar;
-    iface->ui_set_sensitive = gnc_main_window_all_ui_set_sensitive;
+    iface->get_gtk_window      = gnc_main_window_get_gtk_window;
+    iface->get_statusbar       = gnc_main_window_get_statusbar;
+    iface->get_progressbar     = gnc_main_window_get_progressbar;
+    iface->ui_set_sensitive    = gnc_main_window_all_ui_set_sensitive;
+    iface->get_menubar         = gnc_main_window_get_menubar;
+    iface->get_toolbar         = gnc_main_window_get_toolbar;
+    iface->get_disp_hash_table = gnc_main_window_get_display_hash_table;
 }
 
 

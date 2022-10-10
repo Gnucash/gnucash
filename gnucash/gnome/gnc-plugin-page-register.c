@@ -547,7 +547,7 @@ static GncDisplayItem gnc_plugin_page_register_display_items [] =
 };
 /** The number of display items provided by this plugin. */
 static guint gnc_plugin_page_register_n_display_items = G_N_ELEMENTS(gnc_plugin_page_register_display_items);
- 
+
 static GncAddSubMenu add_submenus [] =
 {
     { "EditAction", TRUE },
@@ -959,13 +959,31 @@ gnc_plugin_page_register_focus_widget (GncPluginPage* register_plugin_page)
 {
     if (GNC_IS_PLUGIN_PAGE_REGISTER (register_plugin_page))
     {
+        GncWindow* gnc_window = GNC_WINDOW(GNC_PLUGIN_PAGE(register_plugin_page)->window);
         GNCSplitReg *gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE(register_plugin_page));
+        GtkWidget *menubar = gnc_window_get_menubar (gnc_window);
+        GtkWidget *toolbar = gnc_window_get_toolbar (gnc_window);
 
-        gnc_main_window_add_sub_menus (GNC_MAIN_WINDOW(register_plugin_page->window), register_plugin_page,
-                                       add_submenus, add_submenus_n_actions);
+        if (GNC_IS_MAIN_WINDOW(GNC_PLUGIN_PAGE(register_plugin_page)->window))
+        {
+            gnc_main_window_add_sub_menus (GNC_MAIN_WINDOW(register_plugin_page->window), register_plugin_page,
+                                           add_submenus, add_submenus_n_actions);
+        }
+        else
+        {
+            GHashTable *display_item_hash = gnc_window_get_display_hash_table (gnc_window);
+            GtkWindow *enclosing_win = gnc_window_get_gtk_window (gnc_window);
+            GtkAccelGroup *accel_group = gtk_accel_group_new ();
+            gnc_plugin_update_display_menu_items (display_item_hash, menubar);
+            gnc_plugin_update_display_toolbar_items (display_item_hash, toolbar);
 
-        gnc_main_window_update_action_labels (GNC_MAIN_WINDOW(register_plugin_page->window),
-                                              update_actions, update_actions_n_actions);
+            // need to add the accelerator keys
+            gtk_window_add_accel_group (GTK_WINDOW(enclosing_win), accel_group);
+            gnc_add_accelerator_keys_for_menu (GTK_WIDGET(menubar), accel_group);
+        }
+        // need to update labels this way as the register page is also added to embedded window
+        gnc_plugin_update_action_labels (menubar, toolbar,
+                                         update_actions, update_actions_n_actions);
 
         gnc_plugin_page_register_ui_update (NULL, GNC_PLUGIN_PAGE_REGISTER(register_plugin_page));
 
@@ -1075,6 +1093,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
     CursorClass cursor_class;
     const char* uri;
     Account *account;
+    GncWindow* gnc_window = GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window);
 
     /* Set 'Split Transaction' */
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
@@ -1105,8 +1124,11 @@ gnc_plugin_page_register_ui_update (gpointer various,
     g_signal_handlers_unblock_by_func (action, gnc_plugin_page_register_cmd_expand_transaction, page);
 
     /* Enable the FilePrintAction */
-    action = gnc_main_window_find_action (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window), "FilePrintAction");
-    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), TRUE);
+    if (GNC_IS_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window))
+    {
+        action = gnc_main_window_find_action (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window), "FilePrintAction");
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), TRUE);
+    }
 
     /* If we are in a readonly book, or possibly a place holder
      * account register make any modifying action inactive */
@@ -1223,13 +1245,13 @@ gnc_plugin_page_register_ui_update (gpointer various,
 
     /* Modifying action descriptions based on cursor class */
     {
-        GtkWidget *menu_item;
+        GtkWidget *menu_item = NULL;
         const char** iter, **label_iter, **tooltip_iter;
         gboolean curr_label_trans = FALSE;
         iter = tran_vs_split_actions;
         label_iter = tran_action_labels;
 
-        menu_item = gnc_find_menu_item (gnc_main_window_get_menu (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window)), *iter);
+        menu_item = gnc_find_menu_item (gnc_window_get_menubar (gnc_window), *iter);
 
         if (menu_item == NULL)
             return;
@@ -1246,7 +1268,10 @@ gnc_plugin_page_register_ui_update (gpointer various,
             tooltip_iter = split_action_tips;
             for (iter = tran_vs_split_actions; *iter; ++iter)
             {
-                GtkWidget *menu_item = gnc_find_menu_item (gnc_main_window_get_menu (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window)), *iter);
+                GtkWidget *menu_item = gnc_find_menu_item (gnc_window_get_menubar (gnc_window), *iter);
+
+                if (menu_item == NULL)
+                    return;
 
                 PINFO("split menu_item %p label is '%s', iter label is '%s'", menu_item,
                        gtk_menu_item_get_label (GTK_MENU_ITEM(menu_item)), *iter);
@@ -1264,7 +1289,10 @@ gnc_plugin_page_register_ui_update (gpointer various,
             tooltip_iter = tran_action_tips;
             for (iter = tran_vs_split_actions; *iter; ++iter)
             {
-                GtkWidget *menu_item = gnc_find_menu_item (gnc_main_window_get_menu (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window)), *iter);
+                GtkWidget *menu_item = gnc_find_menu_item (gnc_window_get_menubar (gnc_window), *iter);
+
+                if (menu_item == NULL)
+                    return;
 
                 PINFO("trans menu_item %p label is '%s', iter label is '%s'", menu_item,
                        gtk_menu_item_get_label (GTK_MENU_ITEM(menu_item)), *iter);
@@ -1388,6 +1416,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
     gchar* order;
     int filter_changed = 0;
     gboolean create_new_page = FALSE;
+    GHashTable *display_item_hash;
 
     ENTER ("page %p", plugin_page);
     page = GNC_PLUGIN_PAGE_REGISTER (plugin_page);
@@ -1606,10 +1635,11 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
                       G_CALLBACK (gnc_plugin_page_inserted_cb),
                       NULL);
 
-    // add the display items to the main list
-    gnc_main_window_add_to_display_list (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window),
-                                         gnc_plugin_page_register_display_items,
-                                         gnc_plugin_page_register_n_display_items);
+    // need to add these values this way as the register page is also added to embedded window
+    display_item_hash = gnc_window_get_display_hash_table (gnc_window);
+    gnc_plugin_add_to_display_hash (display_item_hash,
+                                    gnc_plugin_page_register_display_items,
+                                    gnc_plugin_page_register_n_display_items);
 
     /* DRH - Probably lots of other stuff from regWindowLedger should end up here. */
     LEAVE (" ");

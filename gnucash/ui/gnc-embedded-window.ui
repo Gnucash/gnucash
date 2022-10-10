@@ -1,0 +1,208 @@
+<?xml version="1.0"?>
+<interface>
+  <menu id="embeddedwin-menu">
+    <submenu>
+      <attribute name="label" translatable="yes">_Edit</attribute>
+      <attribute name="action">embeddedwin.EditAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">EditCutAction</attribute>
+          <attribute name="action">GncPluginPageRegisterActions.EditCutAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">EditCopyAction</attribute>
+          <attribute name="action">GncPluginPageRegisterActions.EditCopyAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">EditPasteAction</attribute>
+          <attribute name="action">GncPluginPageRegisterActions.EditPasteAction</attribute>
+        </item>
+      </section>
+    </submenu>
+    <submenu>
+      <attribute name="label" translatable="yes">Tra_nsaction</attribute>
+      <attribute name="action">embeddedwin.TransactionAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">CutTransactionAction</attribute>
+          <attribute name="action">GncPluginPageRegisterActions.CutTransactionAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">CopyTransactionAction</attribute>
+          <attribute name="action">GncPluginPageRegisterActions.CopyTransactionAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">PasteTransactionAction</attribute>
+          <attribute name="action">GncPluginPageRegisterActions.PasteTransactionAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">DuplicateTransactionAction</attribute>
+          <attribute name="action">GncPluginPageRegisterActions.DuplicateTransactionAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">DeleteTransactionAction</attribute>
+          <attribute name="action">GncPluginPageRegisterActions.DeleteTransactionAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">RemoveTransactionSplitsAction</attribute>
+          <attribute name="action">GncPluginPageRegisterActions.RemoveTransactionSplitsAction</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">RecordTransactionAction</attribute>
+          <attribute name="action">GncPluginPageRegisterActions.RecordTransactionAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">CancelTransactionAction</attribute>
+          <attribute name="action">GncPluginPageRegisterActions.CancelTransactionAction</attribute>
+        </item>
+      </section>
+    </submenu>
+    <submenu>
+      <attribute name="label" translatable="yes">_View</attribute>
+      <attribute name="action">embeddedwin.ViewAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">ViewStyleDoubleLineAction</attribute>
+          <attribute name="action">GncPluginPageRegisterActions.ViewStyleDoubleLineAction</attribute>
+        </item>
+      </section>
+    </submenu>
+    <submenu>
+      <attribute name="label" translatable="yes">_Action</attribute>
+      <attribute name="action">membeddedwin.ActionsAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">ActionsTransferAction</attribute>
+          <attribute name="action">GncPluginPageRegisterActions.ActionsTransferAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">BlankTransactionAction</attribute>
+          <attribute name="action">GncPluginPageRegisterActions.BlankTransactionAction</attribute>
+        </item>
+      </section>
+    </submenu>
+  </menu>
+
+
+  <menu id="embeddedwin-popup">
+    <section>
+      <item>
+        <attribute name="label" translatable="no">DuplicateTransactionAction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.DuplicateTransactionAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">DeleteTransactionAction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.DeleteTransactionAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">RemoveTransactionSplitsAction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.RemoveTransactionSplitsAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">RecordTransactionAction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.RecordTransactionAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">CancelTransactionAction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.CancelTransactionAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">BlankTransactionAction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.BlankTransactionAction</attribute>
+      </item>
+    </section>
+  </menu>
+
+
+  <object class="GtkToolbar" id="embeddedwin-toolbar">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkToolButton" id="but1">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">DuplicateTransactionAction</property>
+        <property name="action-name">GncPluginPageRegisterActions.DuplicateTransactionAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">DeleteTransactionAction</property>
+        <property name="action-name">GncPluginPageRegisterActions.DeleteTransactionAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but3">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">RecordTransactionAction</property>
+        <property name="action-name">GncPluginPageRegisterActions.RecordTransactionAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but4">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">CancelTransactionAction</property>
+        <property name="action-name">GncPluginPageRegisterActions.CancelTransactionAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but5">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">BlankTransactionAction</property>
+        <property name="action-name">GncPluginPageRegisterActions.BlankTransactionAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+  </object>
+
+</interface>

@@ -101,6 +101,42 @@ gnc_window_get_progressbar (GncWindow *window)
     return GNC_WINDOW_GET_IFACE (window)->get_progressbar (window);
 }
 
+GtkWidget *
+gnc_window_get_menubar (GncWindow *window)
+{
+    g_return_val_if_fail (GNC_WINDOW(window), NULL);
+
+    /* optional */
+    if (GNC_WINDOW_GET_IFACE(window)->get_menubar == NULL)
+        return NULL;
+
+    return GNC_WINDOW_GET_IFACE(window)->get_menubar (window);
+}
+
+GtkWidget *
+gnc_window_get_toolbar (GncWindow *window)
+{
+    g_return_val_if_fail (GNC_WINDOW(window), NULL);
+
+    /* optional */
+    if (GNC_WINDOW_GET_IFACE(window)->get_toolbar == NULL)
+        return NULL;
+
+    return GNC_WINDOW_GET_IFACE(window)->get_toolbar (window);
+}
+
+GHashTable *
+gnc_window_get_display_hash_table (GncWindow *window)
+{
+    g_return_val_if_fail (GNC_WINDOW(window), NULL);
+
+    /* optional */
+    if (GNC_WINDOW_GET_IFACE(window)->get_disp_hash_table == NULL)
+        return NULL;
+
+    return GNC_WINDOW_GET_IFACE(window)->get_disp_hash_table (window);
+}
+
 /************************************************************
  *              Auxiliary status bar functions              *
  ************************************************************/

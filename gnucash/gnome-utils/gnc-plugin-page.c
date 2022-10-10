@@ -1228,7 +1228,7 @@ GSimpleActionGroup *
 gnc_plugin_page_create_action_groupb (GncPluginPage *page, const gchar *group_name)
 {
     GncPluginPagePrivate *priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
- 
+
     priv->simple_action_group = g_simple_action_group_new ();
     priv->simple_action_group_name = group_name;
 

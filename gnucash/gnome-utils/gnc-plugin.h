@@ -304,6 +304,19 @@ void gnc_plugin_update_actionsb (GSimpleActionGroup *simple_action_group,
                                 const gchar *property_name,
                                 gboolean value); //FIXMEb added
 
+void gnc_plugin_update_action_labels (GtkWidget *menubar, GtkWidget *toolbar,
+                                      const GncActionUpdate *updates,
+                                      gint n_updates); //FIXMEb added
+
+void gnc_plugin_update_display_menu_items (GHashTable *display_item_hash,
+                                           GtkWidget *menubar); //FIXMEb added
+void gnc_plugin_update_display_toolbar_items (GHashTable *display_item_hash,
+                                              GtkWidget *toolbar); //FIXMEb added
+
+void gnc_plugin_add_to_display_hash (GHashTable *display_item_hash,
+                                     const GncDisplayItem *display_items,
+                                     gint n_display_items); //FIXMEb added
+
 /** Load a new set of actions into an existing UI.  The actions from
  *  the provided group will be merged into the pre-existing ui, as
  *  directed by the specified file.
