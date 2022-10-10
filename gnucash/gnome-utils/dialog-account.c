@@ -102,7 +102,7 @@ typedef struct _AccountWindow
 
     guint32        valid_types;
     GNCAccountType preferred_account_type;
-    GtkWidget     *type_view;
+    GtkWidget     *type_combo;
     GtkTreeView   *parent_tree;
     GtkWidget     *parent_scroll;
 
@@ -1084,9 +1084,9 @@ gnc_account_parent_changed_cb (GtkTreeSelection *selection, gpointer data)
     AccountWindow *aw = data;
     Account *parent_account;
     guint32 types, old_types;
+    GtkTreeModelSort *s_model;
     GtkTreeModel *type_model;
-    GtkTreeSelection *type_selection;
-    gboolean scroll_to = FALSE;
+    gboolean combo_set = FALSE;
 
     g_return_if_fail (aw);
 
@@ -1104,8 +1104,8 @@ gnc_account_parent_changed_cb (GtkTreeSelection *selection, gpointer data)
         types = aw->valid_types &
                 xaccParentAccountTypesCompatibleWith (xaccAccountGetType (parent_account));
     }
-
-    type_model = gtk_tree_view_get_model (GTK_TREE_VIEW(aw->type_view));
+    s_model = GTK_TREE_MODEL_SORT(gtk_combo_box_get_model (GTK_COMBO_BOX(aw->type_combo)));
+    type_model = gtk_tree_model_sort_get_model (s_model);
     if (!type_model)
         return;
 
@@ -1114,7 +1114,7 @@ gnc_account_parent_changed_cb (GtkTreeSelection *selection, gpointer data)
     {
         /* we can change back to the preferred account type */
         aw->type = aw->preferred_account_type;
-        scroll_to = TRUE;
+        combo_set = TRUE;
     }
     else if ((types & (1 << aw->type)) == 0)
     {
@@ -1126,16 +1126,14 @@ gnc_account_parent_changed_cb (GtkTreeSelection *selection, gpointer data)
         /* no type change, but maybe list of valid types changed */
         old_types = gnc_tree_model_account_types_get_mask (type_model);
         if (old_types != types)
-            scroll_to = TRUE;
+            combo_set = TRUE;
     }
 
     gnc_tree_model_account_types_set_mask (type_model, types);
 
-    if (scroll_to)
-    {
-        type_selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(aw->type_view));
-        gnc_tree_model_account_types_set_selection (type_selection, 1 << aw->type);
-    }
+    if (combo_set)
+        gnc_tree_model_account_types_set_active_combo (GTK_COMBO_BOX(aw->type_combo),
+                                                       1 << aw->type);
 
     gnc_account_window_set_name (aw);
 }
@@ -1152,7 +1150,7 @@ set_auto_interest_box(AccountWindow *aw)
 }
 
 static void
-gnc_account_type_changed_cb (GtkTreeSelection *selection, gpointer data)
+gnc_account_type_combo_changed_cb (GtkComboBox *combo, gpointer data)
 {
     AccountWindow *aw = data;
     gboolean sensitive;
@@ -1162,7 +1160,8 @@ gnc_account_type_changed_cb (GtkTreeSelection *selection, gpointer data)
 
     sensitive = FALSE;
 
-    type_id = gnc_tree_model_account_types_get_selection_single (selection);
+    type_id = gnc_tree_model_account_types_get_active_combo (combo);
+
     if (type_id == ACCT_TYPE_NONE)
     {
         aw->type = ACCT_TYPE_INVALID;
@@ -1194,10 +1193,8 @@ gnc_account_type_changed_cb (GtkTreeSelection *selection, gpointer data)
 static void
 gnc_account_type_view_create (AccountWindow *aw, guint32 compat_types)
 {
-    GtkTreeModel *model;
-    GtkTreeSelection *selection;
+    GtkTreeModel *fmodel, *smodel;
     GtkCellRenderer *renderer;
-    GtkTreeView *view;
 
     aw->valid_types &= compat_types;
     if (aw->valid_types == 0)
@@ -1231,23 +1228,28 @@ gnc_account_type_view_create (AccountWindow *aw, guint32 compat_types)
             }
     }
 
-    model = gnc_tree_model_account_types_filter_using_mask (aw->valid_types);
+    fmodel = gnc_tree_model_account_types_filter_using_mask (aw->valid_types);
 
-    view = GTK_TREE_VIEW(aw->type_view);
-    gtk_tree_view_set_model (view, model);
-    g_object_unref (G_OBJECT(model));
+    smodel = gtk_tree_model_sort_new_with_model (fmodel);
+
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(smodel),
+                                          GNC_TREE_MODEL_ACCOUNT_TYPES_COL_NAME,
+                                          GTK_SORT_ASCENDING);
+
+    gtk_combo_box_set_model (GTK_COMBO_BOX(aw->type_combo), smodel);
 
     renderer = gtk_cell_renderer_text_new ();
-    gtk_tree_view_insert_column_with_attributes (view, -1, NULL, renderer, "text",
-                                                 GNC_TREE_MODEL_ACCOUNT_TYPES_COL_NAME,
-                                                 NULL);
-    gtk_tree_view_set_search_column (view, GNC_TREE_MODEL_ACCOUNT_TYPES_COL_NAME);
+    gtk_cell_layout_pack_start (GTK_CELL_LAYOUT(aw->type_combo), renderer, TRUE);
+    gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT(aw->type_combo), renderer,
+                                    "text", GNC_TREE_MODEL_ACCOUNT_TYPES_COL_NAME, NULL);
 
-    selection = gtk_tree_view_get_selection (view);
-    g_signal_connect (G_OBJECT(selection), "changed",
-                      G_CALLBACK(gnc_account_type_changed_cb), aw);
+    g_signal_connect (G_OBJECT(aw->type_combo), "changed",
+                      G_CALLBACK(gnc_account_type_combo_changed_cb), aw);
 
-    gnc_tree_model_account_types_set_selection (selection, 1 << aw->type);
+    g_object_unref (G_OBJECT(fmodel));
+
+    gnc_tree_model_account_types_set_active_combo (GTK_COMBO_BOX(aw->type_combo),
+                                                   1 << aw->type);
 }
 
 void
@@ -1529,7 +1531,7 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
     gtk_label_set_mnemonic_widget (GTK_LABEL(label), GTK_WIDGET(aw->parent_tree));
 
     /* This goes at the end so the select callback has good data. */
-    aw->type_view = GTK_WIDGET(gtk_builder_get_object (builder, "type_view"));
+    aw->type_combo = GTK_WIDGET(gtk_builder_get_object (builder, "account_type_combo"));
 
     // If the account has transactions, reduce the available account types
     // to change the current account type to based on the following
