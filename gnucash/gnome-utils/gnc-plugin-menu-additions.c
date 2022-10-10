@@ -117,12 +117,12 @@ gnc_plugin_menu_additions_class_init (GncPluginMenuAdditionsClass *klass)
     plugin_class->plugin_name   = GNC_PLUGIN_MENU_ADDITIONS_NAME;
 
     /* function overrides */
-    plugin_class->add_to_window = gnc_plugin_menu_additions_add_to_window;
+    plugin_class->add_to_window      = gnc_plugin_menu_additions_add_to_window;
     plugin_class->remove_from_window = gnc_plugin_menu_additions_remove_from_window;
-    plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
-    plugin_class->actionsb      = gnc_plugin_actions;
-    plugin_class->n_actionsb    = gnc_plugin_n_actions;
-    plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
+    plugin_class->actions_name       = PLUGIN_ACTIONS_NAME;
+    plugin_class->actions            = gnc_plugin_actions;
+    plugin_class->n_actions          = gnc_plugin_n_actions;
+    plugin_class->ui_filename        = PLUGIN_UI_FILENAME;
 }
 
 static void

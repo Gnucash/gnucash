@@ -90,8 +90,8 @@ gnc_plugin_ofx_class_init (GncPluginOfxClass *klass)
 
     /* widget addition/removal */
     plugin_class->actions_name    = PLUGIN_ACTIONS_NAME;
-    plugin_class->actionsb        = gnc_plugin_actions;
-    plugin_class->n_actionsb      = gnc_plugin_n_actions;
+    plugin_class->actions         = gnc_plugin_actions;
+    plugin_class->n_actions       = gnc_plugin_n_actions;
     plugin_class->display_items   = gnc_plugin_display_items;
     plugin_class->n_display_items = gnc_plugin_n_display_items;
     plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
