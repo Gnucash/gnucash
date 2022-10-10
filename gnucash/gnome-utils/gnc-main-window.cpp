@@ -3766,7 +3766,8 @@ gnc_main_window_update_action_labels (GncMainWindow *window,
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
     gnc_plugin_update_action_labels (priv->menubar, priv->toolbar,
-                                     updates, n_updates);
+                                     updates, n_updates,
+                                     priv->statusbar);
 }
 
 /*  Retrieve a specific set of user interface actions from a window.
@@ -3803,7 +3804,9 @@ gnc_main_window_update_display_menu_items (GncMainWindow *window, GtkWidget *men
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-    gnc_plugin_update_display_menu_items (priv->display_item_hash, menu);
+    gnc_plugin_update_display_menu_items (priv->display_item_hash,
+                                          menu,
+                                          priv->statusbar);
 }
 
 
@@ -3817,7 +3820,8 @@ gnc_main_window_update_display_toolbar_items (GncMainWindow *window)
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
     gnc_plugin_update_display_toolbar_items (priv->display_item_hash,
-                                             priv->toolbar);
+                                             priv->toolbar,
+                                             priv->statusbar);
 }
 
 

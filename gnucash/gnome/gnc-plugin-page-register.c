@@ -951,6 +951,7 @@ gnc_plugin_page_register_focus_widget (GncPluginPage* register_plugin_page)
         GNCSplitReg *gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE(register_plugin_page));
         GtkWidget *menubar = gnc_window_get_menubar (gnc_window);
         GtkWidget *toolbar = gnc_window_get_toolbar (gnc_window);
+        GtkWidget *statusbar = gnc_window_get_statusbar (gnc_window);
 
         if (GNC_IS_MAIN_WINDOW(GNC_PLUGIN_PAGE(register_plugin_page)->window))
         {
@@ -962,8 +963,8 @@ gnc_plugin_page_register_focus_widget (GncPluginPage* register_plugin_page)
             GHashTable *display_item_hash = gnc_window_get_display_hash_table (gnc_window);
             GtkWindow *enclosing_win = gnc_window_get_gtk_window (gnc_window);
             GtkAccelGroup *accel_group = gtk_accel_group_new ();
-            gnc_plugin_update_display_menu_items (display_item_hash, menubar);
-            gnc_plugin_update_display_toolbar_items (display_item_hash, toolbar);
+            gnc_plugin_update_display_menu_items (display_item_hash, menubar, statusbar);
+            gnc_plugin_update_display_toolbar_items (display_item_hash, toolbar, statusbar);
 
             // need to add the accelerator keys
             gtk_window_add_accel_group (GTK_WINDOW(enclosing_win), accel_group);
@@ -971,7 +972,8 @@ gnc_plugin_page_register_focus_widget (GncPluginPage* register_plugin_page)
         }
         // need to update labels this way as the register page is also added to embedded window
         gnc_plugin_update_action_labels (menubar, toolbar,
-                                         update_actions, update_actions_n_actions);
+                                         update_actions, update_actions_n_actions,
+                                         statusbar);
 
         gnc_plugin_page_register_ui_update (NULL, GNC_PLUGIN_PAGE_REGISTER(register_plugin_page));
 
@@ -1272,8 +1274,8 @@ gnc_plugin_page_register_ui_update (gpointer various,
 
                 /* Adjust the action's label and tooltip */
                 gtk_menu_item_set_label (GTK_MENU_ITEM(menu_item), _ (*label_iter));
-//FIXMEb Setting tool tip on transaction menu items
                 gtk_widget_set_tooltip_text (GTK_WIDGET(menu_item), _ (*tooltip_iter));
+                g_object_set (G_OBJECT(menu_item), "has-tooltip", FALSE, NULL);
                 ++label_iter;
                 ++tooltip_iter;
             }
@@ -1294,8 +1296,8 @@ gnc_plugin_page_register_ui_update (gpointer various,
 
                 /* Adjust the action's label and tooltip */
                 gtk_menu_item_set_label (GTK_MENU_ITEM(menu_item), _ (*label_iter));
-//FIXMEb Setting tool tip on transaction menu items
                 gtk_widget_set_tooltip_text (GTK_WIDGET(menu_item), _ (*tooltip_iter));
+                g_object_set (G_OBJECT(menu_item), "has-tooltip", FALSE, NULL);
                 ++label_iter;
                 ++tooltip_iter;
             }

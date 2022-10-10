@@ -540,3 +540,105 @@ gnc_find_toolbar_item (GtkWidget *toolbar, const gchar *action_name)
     }
     return found;
 }
+
+static void
+statusbar_push (GtkWidget *statusbar, const gchar *text)
+{
+    gtk_statusbar_push (GTK_STATUSBAR(statusbar), 0,
+                        text ? text : " ");
+}
+
+static void
+statusbar_pop (GtkWidget *statusbar)
+{
+    gtk_statusbar_pop (GTK_STATUSBAR(statusbar), 0);
+}
+
+static void
+menu_item_select_cb (GtkWidget *menu_item, gpointer user_data)
+{
+    gchar *tooltip = gtk_widget_get_tooltip_text (menu_item);
+    statusbar_push (user_data, tooltip);
+    g_free (tooltip);
+}
+
+static void
+menu_item_deselect_cb (GtkWidget *menu_item, gpointer user_data)
+{
+    statusbar_pop (user_data);
+}
+
+static gboolean
+tool_item_enter_event (GtkWidget *tool_item, GdkEvent *event,
+                       gpointer user_data)
+{
+    gchar *tooltip = gtk_widget_get_tooltip_text (tool_item);
+    statusbar_push (user_data, tooltip);
+    g_free (tooltip);
+    return FALSE;
+}
+
+static gboolean
+tool_item_leave_event (GtkWidget *tool_item, GdkEvent *event,
+                       gpointer user_data)
+{
+    statusbar_pop (user_data);
+    return FALSE;
+}
+
+/** Setup the callbacks for menu bar items so the tooltip can be
+ *  displayed in the status bar.
+ *
+ *  @param menu_item The menubar menu item widget.
+ *
+ *  @param statusbar The statusbar widget to display the tooltip.
+ */
+void
+gnc_menu_item_setup_tooltip_to_statusbar_callback (GtkWidget *menu_item,
+                                                   GtkWidget *statusbar)
+{
+    g_return_if_fail (menu_item != NULL);
+    g_return_if_fail (statusbar != NULL);
+
+    g_signal_connect (menu_item, "select",
+                      G_CALLBACK(menu_item_select_cb),
+                      statusbar);
+    g_signal_connect (menu_item, "deselect",
+                      G_CALLBACK(menu_item_deselect_cb),
+                      statusbar);
+    g_object_set (G_OBJECT(menu_item), "has-tooltip", FALSE, NULL);
+}
+
+/** Setup the callbacks for tool bar items so the tooltip can be
+ *  displayed in the status bar.
+ *
+ *  @param tool_item The toolbar tool item widget.
+ *
+ *  @param statusbar The statusbar widget to display the tooltip.
+ */
+void
+gnc_tool_item_setup_tooltip_to_statusbar_callback (GtkWidget *tool_item,
+                                                   GtkWidget *statusbar)
+{
+    GtkWidget *child;
+
+    g_return_if_fail (tool_item != NULL);
+    g_return_if_fail (statusbar != NULL);
+
+    child = gtk_bin_get_child (GTK_BIN(tool_item));
+
+    gtk_widget_add_events (GTK_WIDGET(child),
+                           GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK
+                           | GDK_FOCUS_CHANGE_MASK);
+
+    g_signal_connect (child, "enter-notify-event",
+                      G_CALLBACK (tool_item_enter_event),
+                      statusbar);
+
+    g_signal_connect (child, "leave-notify-event",
+                      G_CALLBACK (tool_item_leave_event),
+                      statusbar);
+
+    g_object_set (G_OBJECT(child), "has-tooltip", FALSE, NULL);
+}
+

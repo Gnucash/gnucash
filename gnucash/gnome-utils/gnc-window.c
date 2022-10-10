@@ -78,7 +78,7 @@ gnc_window_get_gtk_window (GncWindow *window)
     return GNC_WINDOW_GET_IFACE (window)->get_gtk_window (window);
 }
 
-static GtkWidget *
+GtkWidget *
 gnc_window_get_statusbar (GncWindow *window)
 {
     g_return_val_if_fail(GNC_WINDOW (window), NULL);
@@ -255,95 +255,3 @@ gnc_window_show_progress (const char *message, double percentage)
     while (gtk_events_pending ())
         gtk_main_iteration ();
 }
-
-
-/* CS: This callback functions will set the statusbar text to the
- * "tooltip" property of the currently selected GtkAction.
- *
- * This code is directly copied from gtk+/test/testmerge.c.
- * Thanks to (L)GPL! */
-typedef struct _ActionStatus ActionStatus;
-struct _ActionStatus
-{
-    GAction *action;
-    GtkWidget *statusbar;
-};
-
-static void
-action_status_destroy (gpointer data)
-{
-    ActionStatus *action_status = data;
-
-    g_object_unref (action_status->action);
-    g_object_unref (action_status->statusbar);
-
-    g_free (action_status);
-}
-
-static void
-set_tip (GtkWidget *widget)
-{
-    ActionStatus *data;
-    gchar *tooltip;
-
-    data = g_object_get_data (G_OBJECT (widget), "action-status");
-
-    if (data)
-    {
-        g_object_get (data->action, "tooltip", &tooltip, NULL);
-
-        gtk_statusbar_push (GTK_STATUSBAR (data->statusbar), 0,
-                            tooltip ? tooltip : " ");
-
-        g_free (tooltip);
-    }
-}
-
-static void
-unset_tip (GtkWidget *widget)
-{
-    ActionStatus *data;
-
-    data = g_object_get_data (G_OBJECT (widget), "action-status");
-
-    if (data)
-        gtk_statusbar_pop (GTK_STATUSBAR (data->statusbar), 0);
-}
-
-#ifdef skip //FIXMEb
-void
-gnc_window_connect_proxy (GtkUIManager *merge,
-                          GAction      *action,
-                          GtkWidget    *proxy,
-                          GtkWidget    *statusbar)
-{
-    if (GTK_IS_MENU_ITEM (proxy))
-    {
-        ActionStatus *data;
-
-        data = g_object_get_data (G_OBJECT (proxy), "action-status");
-        if (data)
-        {
-            g_object_unref (data->action);
-            g_object_unref (data->statusbar);
-
-            data->action = g_object_ref (action);
-            data->statusbar = g_object_ref (statusbar);
-        }
-        else
-        {
-            data = g_new0 (ActionStatus, 1);
-
-            data->action = g_object_ref (action);
-            data->statusbar = g_object_ref (statusbar);
-
-            g_object_set_data_full (G_OBJECT (proxy), "action-status",
-                                    data, action_status_destroy);
-
-            g_signal_connect (proxy, "select",  G_CALLBACK (set_tip), NULL);
-            g_signal_connect (proxy, "deselect", G_CALLBACK (unset_tip), NULL);
-        }
-    }
-}
-#endif
-/* CS: end copied code from gtk+/test/testmerge.c */

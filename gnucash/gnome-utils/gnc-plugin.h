@@ -243,12 +243,14 @@ void gnc_plugin_set_actions_enabled (GSimpleActionGroup *simple_action_group,
 
 void gnc_plugin_update_action_labels (GtkWidget *menubar, GtkWidget *toolbar,
                                       const GncActionUpdate *updates,
-                                      gint n_updates); //FIXMEb added
+                                      gint n_updates, GtkWidget *statusbar); //FIXMEb added
 
 void gnc_plugin_update_display_menu_items (GHashTable *display_item_hash,
-                                           GtkWidget *menubar); //FIXMEb added
+                                           GtkWidget *menubar,
+                                           GtkWidget *statusbar); //FIXMEb added
 void gnc_plugin_update_display_toolbar_items (GHashTable *display_item_hash,
-                                              GtkWidget *toolbar); //FIXMEb added
+                                              GtkWidget *toolbar,
+                                              GtkWidget *statusbar); //FIXMEb added
 
 void gnc_plugin_add_to_display_hash (GHashTable *display_item_hash,
                                      const GncDisplayItem *display_items,

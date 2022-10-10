@@ -406,6 +406,8 @@ gnc_history_update_action (GncMainWindow *window,
                            const gchar *filename)
 {
     GtkWidget *menu_item = NULL;
+    GncWindow* gnc_window;
+    GtkWidget *statusbar;
     gchar *action_name;
     gint limit;
 
@@ -426,6 +428,9 @@ gnc_history_update_action (GncMainWindow *window,
     limit = gnc_prefs_get_int (GNC_PREFS_GROUP_HISTORY,
                                GNC_PREF_HISTORY_MAXFILES);
 
+    gnc_window = GNC_WINDOW(window);
+    statusbar = gnc_window_get_statusbar (gnc_window);
+
     if (filename && (strlen(filename) > 0) && (index < limit))
     {
         gchar *label_name = gnc_history_generate_label (index, filename);
@@ -433,9 +438,9 @@ gnc_history_update_action (GncMainWindow *window,
 
         gtk_menu_item_set_label (GTK_MENU_ITEM(menu_item), label_name);
 
-//FIXMEb tooltip needs fixing to status bar and accelerator ?
-//FIXMEb Setting tool tip on menu recent filee items
         gtk_widget_set_tooltip_text (menu_item, tooltip);
+        gnc_menu_item_setup_tooltip_to_statusbar_callback (GTK_WIDGET(menu_item),
+                                                           statusbar);
 
         gtk_widget_show (menu_item);
 

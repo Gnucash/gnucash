@@ -267,7 +267,7 @@ gnc_plugin_set_actions_enabled (GSimpleActionGroup *simple_action_group,
 void
 gnc_plugin_update_action_labels (GtkWidget *menubar, GtkWidget *toolbar,
                                  const GncActionUpdate *updates,
-                                 gint n_updates)
+                                 gint n_updates, GtkWidget *statusbar)
 {
     g_return_if_fail (menubar != NULL);
     g_return_if_fail (toolbar != NULL);
@@ -291,10 +291,12 @@ gnc_plugin_update_action_labels (GtkWidget *menubar, GtkWidget *toolbar,
 
                 gtk_menu_item_set_label (GTK_MENU_ITEM(menu_item), _(update->action_label));
                 gtk_menu_item_set_use_underline (GTK_MENU_ITEM(menu_item), TRUE);
-//FIXMEb Setting tool tip on menu items
-                if (update->action_tooltip)
-                    gtk_widget_set_tooltip_text (GTK_WIDGET(menu_item), _(update->action_tooltip));
 
+                if (update->action_tooltip)
+                {
+                    gtk_widget_set_tooltip_text (GTK_WIDGET(menu_item), _(update->action_tooltip));
+                    gnc_menu_item_setup_tooltip_to_statusbar_callback (GTK_WIDGET(menu_item), statusbar);
+                }
                 PINFO("Menu item %p, label '%s', tooltip '%s'",
                        menu_item, update->action_label, update->action_tooltip);
 
@@ -309,10 +311,12 @@ gnc_plugin_update_action_labels (GtkWidget *menubar, GtkWidget *toolbar,
                     gtk_tool_button_set_label (GTK_TOOL_BUTTON(tool_item), _(update->action_label));
                     gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON(tool_item), TRUE);
                 }
-//FIXMEb Setting tool tip on tool items
-                if (update->action_tooltip)
-                    gtk_tool_item_set_tooltip_text (GTK_TOOL_ITEM(tool_item), _(update->action_tooltip));
 
+                if (update->action_tooltip)
+                {
+                    gtk_tool_item_set_tooltip_text (GTK_TOOL_ITEM(tool_item), _(update->action_tooltip));
+                    gnc_tool_item_setup_tooltip_to_statusbar_callback (GTK_WIDGET(tool_item), statusbar);
+                }
                 PINFO("Tool item %p, label '%s', tooltip '%s', use_short %d",
                        menu_item, update->action_label, update->action_tooltip, use_short_names);
 
@@ -332,7 +336,8 @@ gnc_plugin_update_action_labels (GtkWidget *menubar, GtkWidget *toolbar,
 
 void
 gnc_plugin_update_display_menu_items (GHashTable *display_item_hash,
-                                      GtkWidget *menubar)
+                                      GtkWidget *menubar,
+                                      GtkWidget *statusbar)
 {
     GList *display_list;
 
@@ -376,7 +381,10 @@ gnc_plugin_update_display_menu_items (GHashTable *display_item_hash,
                 gtk_accel_label_set_accel (GTK_ACCEL_LABEL(child), accel_key, accel_mods);
         }
         if (gdi->tooltip)
+        {
             gtk_widget_set_tooltip_text (item, gdi->tooltip);
+            gnc_menu_item_setup_tooltip_to_statusbar_callback (item, statusbar);
+        }
     }
     g_list_free (display_list);
     LEAVE("");
@@ -385,7 +393,8 @@ gnc_plugin_update_display_menu_items (GHashTable *display_item_hash,
 
 void
 gnc_plugin_update_display_toolbar_items (GHashTable *display_item_hash,
-                                         GtkWidget *toolbar)
+                                         GtkWidget *toolbar,
+                                         GtkWidget *statusbar)
 {
     g_return_if_fail (display_item_hash != NULL);
     g_return_if_fail (toolbar != NULL);
@@ -433,7 +442,10 @@ gnc_plugin_update_display_toolbar_items (GHashTable *display_item_hash,
             gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON(item), TRUE);
 
             if (gdi->tooltip)
+            {
                  gtk_tool_item_set_tooltip_text (GTK_TOOL_ITEM(item), _(gdi->tooltip));
+                 gnc_tool_item_setup_tooltip_to_statusbar_callback (GTK_WIDGET(item), statusbar);
+            }
 
             if (gdi->icon_name)
                 gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON(item), gdi->icon_name);

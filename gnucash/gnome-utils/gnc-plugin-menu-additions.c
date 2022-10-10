@@ -389,6 +389,16 @@ gnc_menu_additions_assign_accel (ExtensionInfo *info, GHashTable *table)
 }
 
 
+static void
+setup_tooltip (GtkWidget *menu_item, ExtensionInfo *ext_info, GtkWidget *statusbar)
+{
+    gtk_actionable_set_action_name (GTK_ACTIONABLE(menu_item), "gnc-plugin-menu-additions-actions.AdditionsAction");
+    gtk_actionable_set_action_target_value (GTK_ACTIONABLE(menu_item), g_variant_new_string (ext_info->action_name));
+    gtk_widget_set_tooltip_text (GTK_WIDGET(menu_item), ext_info->action_tooltip);
+    gnc_menu_item_setup_tooltip_to_statusbar_callback (GTK_WIDGET(menu_item), statusbar);
+}
+
+
 /** Add one extension item to the UI manager.  This function creates a
  *  per-callback data structure for easy access to the opaque Scheme
  *  data block in the callback.  It then adds the action to the UI
@@ -406,6 +416,8 @@ gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
     GtkWidget *item_path, *item_with_full_path;
     gchar *full_path = NULL;
     GtkWidget *menu_item = NULL;
+    GncWindow* gnc_window;
+    GtkWidget *statusbar;
 
     DEBUG( "Adding %s/%s [%s] as [%s]", ext_info->path, ext_info->action_label,
            ext_info->action_name, ext_info->typeStr );
@@ -423,17 +435,15 @@ gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
 
     item_path = g_hash_table_lookup (per_window->build_menu_hash, ext_info->path);
     item_with_full_path = g_hash_table_lookup (per_window->build_menu_hash, full_path);
-//FIXMEb This needs refactoring
+
+    gnc_window = GNC_WINDOW(per_window->window);
+    statusbar = gnc_window_get_statusbar (gnc_window);
+
     if (!item_path && !item_with_full_path)
     {
         menu_item = gtk_menu_item_new_with_mnemonic (ext_info->action_label);
         if (g_strcmp0 (ext_info->typeStr, "menuitem") == 0)
-        {
-            gtk_actionable_set_action_name (GTK_ACTIONABLE(menu_item), "gnc-plugin-menu-additions-actions.AdditionsAction");
-            gtk_actionable_set_action_target_value (GTK_ACTIONABLE(menu_item), g_variant_new_string (ext_info->action_name));
-//FIXMEb Setting tool tip on report menu items
-            gtk_widget_set_tooltip_text (GTK_WIDGET(menu_item), ext_info->action_tooltip);
-        }
+            setup_tooltip (menu_item, ext_info, statusbar);
 
         if (g_strcmp0 (ext_info->typeStr, "menu") == 0)
         {
@@ -448,12 +458,8 @@ gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
         GtkWidget *sub_menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM(item_path));
         menu_item = gtk_menu_item_new_with_mnemonic (ext_info->action_label);
         if (g_strcmp0 (ext_info->typeStr, "menuitem") == 0)
-        {
-            gtk_actionable_set_action_name (GTK_ACTIONABLE(menu_item), "gnc-plugin-menu-additions-actions.AdditionsAction");
-            gtk_actionable_set_action_target_value (GTK_ACTIONABLE(menu_item), g_variant_new_string (ext_info->action_name));
-//FIXMEb Setting tool tip on report menu items
-            gtk_widget_set_tooltip_text (GTK_WIDGET(menu_item), ext_info->action_tooltip);
-        }
+            setup_tooltip (menu_item, ext_info, statusbar);
+
         gtk_menu_shell_append (GTK_MENU_SHELL(sub_menu), menu_item);
     }
 
