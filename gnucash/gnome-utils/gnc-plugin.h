@@ -251,11 +251,7 @@ void gnc_plugin_init_short_names (GHashTable *display_item_hash,
  *  @param value A boolean specifying the new state for the specified
  *  property.
  */
-void gnc_plugin_update_actions (GtkActionGroup *action_group,
-                                const gchar **action_names,
-                                const gchar *property_name,
-                                gboolean value);
-void gnc_plugin_update_actionsb (GSimpleActionGroup *simple_action_group,
+void gnc_plugin_update_actions (GSimpleActionGroup *simple_action_group,
                                 const gchar **action_names,
                                 const gchar *property_name,
                                 gboolean value); //FIXMEb added

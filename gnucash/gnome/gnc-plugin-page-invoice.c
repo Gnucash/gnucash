@@ -675,14 +675,14 @@ gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, g
     gnc_main_window_update_action_labels (window, updates_lay, n_updates_lay);
 
     simple_action_group = gnc_plugin_page_get_action_groupb (page);
-    gnc_plugin_update_actionsb (simple_action_group, posted_actions,
-                                "sensitive", is_posted);
-    gnc_plugin_update_actionsb (simple_action_group, unposted_actions,
-                                "sensitive", !is_posted);
-    gnc_plugin_update_actionsb (simple_action_group, can_unpost_actions,
-                                "sensitive", can_unpost);
-    gnc_plugin_update_actionsb (simple_action_group, invoice_book_readwrite_actions,
-                                "sensitive", !is_readonly);
+    gnc_plugin_update_actions (simple_action_group, posted_actions,
+                               "sensitive", is_posted);
+    gnc_plugin_update_actions (simple_action_group, unposted_actions,
+                               "sensitive", !is_posted);
+    gnc_plugin_update_actions (simple_action_group, can_unpost_actions,
+                               "sensitive", can_unpost);
+    gnc_plugin_update_actions (simple_action_group, invoice_book_readwrite_actions,
+                               "sensitive", !is_readonly);
 
     // if there is no default layout do not enable reset action
     gnc_plugin_page_update_reset_layout_action (page);

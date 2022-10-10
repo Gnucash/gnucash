@@ -1731,9 +1731,9 @@ gnc_main_window_generate_title (GncMainWindow *window)
     /* Update the menus based upon whether this is an "immutable" page. */
     immutable = page &&
                 g_object_get_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE);
-    gnc_plugin_update_actionsb (priv->simple_action_group,
-                                immutable_page_actions,
-                                "sensitive", !immutable);
+    gnc_plugin_update_actions (priv->simple_action_group,
+                               immutable_page_actions,
+                               "sensitive", !immutable);
     /* Trigger sensitivity updtates of other actions such as Save/Revert */
     g_signal_emit_by_name (window, "page_changed", page);
     g_free( filename );
@@ -4439,10 +4439,10 @@ gnc_main_window_setup_window (GncMainWindow *window)
                                          gnc_menu_display_items,
                                          gnc_menu_n_display_items);
 
-    gnc_plugin_update_actionsb (priv->simple_action_group,
+    gnc_plugin_update_actions (priv->simple_action_group,
                                initially_insensitive_actions,
                                "sensitive", FALSE);
-    gnc_plugin_update_actionsb (priv->simple_action_group,
+    gnc_plugin_update_actions (priv->simple_action_group,
                                always_insensitive_actions,
                                "sensitive", FALSE);
 
@@ -4717,7 +4717,7 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
         priv->usage_order = g_list_prepend (priv->usage_order, page);
     }
 
-    gnc_plugin_update_actionsb (priv->simple_action_group,
+    gnc_plugin_update_actions (priv->simple_action_group,
                                multiple_page_actions,
                                "sensitive",
                                g_list_length(priv->installed_pages) > 1);

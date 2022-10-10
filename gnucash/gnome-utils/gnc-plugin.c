@@ -250,31 +250,7 @@ gnc_plugin_init_short_names (GHashTable *display_item_hash,
  *
  *  See gnc-plugin.h for documentation on the function arguments. */
 void
-gnc_plugin_update_actions (GtkActionGroup *action_group,
-                           const gchar **action_names,
-                           const gchar *property_name,
-                           gboolean value)
-{
-    GtkAction    *action;
-    gint          i;
-
-    for (i = 0; action_names[i]; i++)
-    {
-        action = gtk_action_group_get_action (action_group, action_names[i]);
-        if (action)
-        {
-            g_object_set (G_OBJECT(action), property_name, value, NULL);
-        }
-        else
-        {
-            g_warning("No such action with name '%s' in action group %s (size %d)",
-                      action_names[i], gtk_action_group_get_name(action_group),
-                      g_list_length(gtk_action_group_list_actions(action_group)));
-        }
-    }
-}
-void
-gnc_plugin_update_actionsb (GSimpleActionGroup *simple_action_group,
+gnc_plugin_update_actions (GSimpleActionGroup *simple_action_group,
                             const gchar **action_names,
                             const gchar *property_name,
                             gboolean value)
