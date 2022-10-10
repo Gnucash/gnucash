@@ -587,15 +587,6 @@ static GncActionUpdate update_actions [] =
 };
 static guint update_actions_n_actions = G_N_ELEMENTS(update_actions);
 
-/** These are the "important" actions provided by the register page.
- *  Their labels will appear when the toolbar is set to "Icons and
- *  important text" (e.g. GTK_TOOLBAR_BOTH_HORIZ) mode. */
-static const gchar* important_actions[] =
-{
-    "SplitTransactionAction",
-    NULL,
-};
-
 /** Actions that require an account to be selected before they are
  *  enabled. */
 static const gchar* actions_requiring_account[] =
@@ -899,8 +890,6 @@ gnc_plugin_page_register_init (GncPluginPageRegister* plugin_page)
                                      gnc_plugin_page_register_actions,
                                      gnc_plugin_page_register_n_actions,
                                      plugin_page);
-
-//FIXMEb    gnc_plugin_set_important_actions (action_group, important_actions);
 
     priv->lines_default     = DEFAULT_LINES_AMOUNT;
     priv->read_only         = FALSE;

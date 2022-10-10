@@ -136,11 +136,6 @@ typedef struct
     GtkToggleActionEntry *toggle_actions;
     /** The number of toggle actions in the toggle actions array. */
     guint n_toggle_actions;
-    /** A NULL terminated list of actions that should be considered
-     *  important.  In the toolbar, these actions will display the
-     *  action name when the toolbar is in "text beside icons"
-     *  mode. */
-    const gchar **important_actions;
     /** The relative name of the XML file describing the
      *  menu/toolbar action items. */
     const gchar *ui_filename;
@@ -242,21 +237,6 @@ const gchar *gnc_plugin_get_name (GncPlugin *plugin);
  */
 void gnc_plugin_init_short_names (GHashTable *display_item_hash,
                                   GncToolBarShortNames *toolbar_labels);
-
-/** Mark certain actions as "important".  This means that their labels
- *  will appear when the toolbar is set to "Icons and important text"
- *  (e.g. GTK_TOOLBAR_BOTH_HORIZ) mode.
- *
- *  @param action_group The group of all actions associated with a
- *  plugin or plugin page.  All actions to me modified must be in this
- *  group.
- *
- *  @param name A list of actions names to be marked important.  This
- *  list must be NULL terminated.
- */
-void gnc_plugin_set_important_actions (GSimpleActionGroup *simple_action_group,
-                                       const gchar **names);
-
 
 /** Update a property on a set of existing GtkActions.  This function
  *  can be easily used to make a list of actions visible, invisible,
