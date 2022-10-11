@@ -7,10 +7,7 @@
            <menuitem name="FileMt942Import"     action="Mt942ImportAction"/>
            <menuitem name="FileDtausImport"     action="DtausImportAction"/>
            <menuitem name="FileDtausImportsend" action="DtausImportSendAction"/>
-           <!-- When CsvImport works:
-           <menuitem name="FileCsvImport"       action="CsvImportAction"/>
-           <menuitem name="FileCsvImportsend"   action="CsvImportSendAction"/>
-           -->
+           <menuitem name="FileAQBImport"   action="AQBankingImportAction"/>
         </placeholder>
       </menu>
     </menu>

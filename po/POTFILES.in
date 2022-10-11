@@ -303,6 +303,7 @@ gnucash/import-export/aqb/assistant-ab-initial.glade
 gnucash/import-export/aqb/dialog-ab-daterange.c
 gnucash/import-export/aqb/dialog-ab.glade
 gnucash/import-export/aqb/dialog-ab-pref.glade
+gnucash/import-export/aqb/dialog-ab-select-imexporter.c
 gnucash/import-export/aqb/dialog-ab-trans.c
 gnucash/import-export/aqb/gnc-ab-getbalance.c
 gnucash/import-export/aqb/gnc-ab-gettrans.c

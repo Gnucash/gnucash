@@ -28,6 +28,7 @@
  * @author Copyright (C) 2006 Florian Steinel
  * @author Copyright (C) 2006 Christian Stimming
  * @author Copyright (C) 2008 Andreas Koehler <andi5.py@gmx.net>
+ * @author Copyright (C) 2022 John Ralls <jralls@ceridwen.us>
  */
 
 #include <config.h>
@@ -44,10 +45,12 @@
 
 #include "gnc-ab-utils.h"
 
-# include <gwenhywfar/syncio_file.h>
-# include <gwenhywfar/syncio_buffered.h>
+#include <gwenhywfar/syncio_file.h>
+#include <gwenhywfar/syncio_buffered.h>
+#include <gwenhywfar/gui.h>
 typedef GWEN_SYNCIO GWEN_IO_LAYER;
 
+#include "dialog-ab-select-imexporter.h"
 #include "dialog-ab-trans.h"
 #include "dialog-utils.h"
 #include "gnc-file.h"
@@ -275,4 +278,49 @@ gnc_file_aqbanking_import(GtkWindow *parent,
     g_free(ieci);
     AB_ImExporterContext_free(context);
     gnc_AB_BANKING_fini(api);
+}
+
+void
+gnc_file_aqbanking_import_dialog (GtkWindow *parent)
+{
+     AB_BANKING* api = gnc_AB_BANKING_new ();
+     GncABSelectImExDlg* imexd =
+         gnc_ab_select_imex_dlg_new (GTK_WIDGET (parent), api);
+     char *imexporter, *profile;
+     AB_IMEXPORTER_CONTEXT* ctx = NULL;
+
+     if (!imexd)
+     {
+
+         PERR ("Failed to create select imex dialog.");
+         gnc_AB_BANKING_fini(api);
+         return;
+     }
+
+     if (!gnc_ab_select_imex_dlg_run (imexd))
+     {
+         gnc_ab_select_imex_dlg_destroy (imexd);
+         return;
+     }
+
+     imexporter = gnc_ab_select_imex_dlg_get_imexporter_name (imexd);
+     profile = gnc_ab_select_imex_dlg_get_profile_name (imexd);
+
+     if (imexporter && profile)
+     {
+         ctx = named_import_get_context (parent, api, imexporter, profile);
+         gnc_ab_select_imex_dlg_destroy (imexd);
+
+         if (ctx)
+         {
+             GncABImExContextImport* ieci = NULL;
+             ieci = gnc_ab_import_context (ctx, 0, FALSE, api, GTK_WIDGET(parent));
+             g_free(ieci);
+             AB_ImExporterContext_free(ctx);
+         }
+         g_free (imexporter);
+         g_free (profile);
+     }
+
+     gnc_AB_BANKING_fini(api);
 }

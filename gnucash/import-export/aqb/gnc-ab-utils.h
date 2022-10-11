@@ -67,6 +67,12 @@ G_BEGIN_DECLS
 #define GNC_PREF_USE_TRANSACTION_TXT    "use-ns-transaction-text"
 #define GNC_PREF_VERBOSE_DEBUG          "verbose-debug"
 
+typedef struct
+{
+    char* name;
+    char* descr;
+} AB_Node_Pair;
+
 typedef struct _GncABImExContextImport GncABImExContextImport;
 
 #define AWAIT_BALANCES      1 << 1
@@ -284,6 +290,22 @@ gchar* gnc_ab_create_online_id (const gchar *bankcode, const gchar *accountnumbe
  */
 GList*
 gnc_ab_trans_templ_list_new_from_ref_accounts (GNC_AB_ACCOUNT_SPEC *ab_acc);
+
+/**
+ * Retrieve the available AQBanking importers.
+ * @param abi The AQBanking instance.
+ * @return a GList<AB_Node_Pair> containing importer names and descriptions.
+ */
+GList* gnc_ab_imexporter_list (AB_BANKING* abi);
+
+/**
+ * Retrieve the available format templates for an AQBanking importer.
+ * @param api the AQBanking instance.
+ * @param importer_name The importer's name.
+ * @return a GList<AB_Node_Pair> containing format template names and descriptions.
+ */
+GList* gnc_ab_imexporter_profile_list (AB_BANKING* abi,
+                                       const char* importer_name);
 
 G_END_DECLS
 

@@ -1212,3 +1212,55 @@ gnc_ab_trans_templ_list_new_from_ref_accounts (GNC_AB_ACCOUNT_SPEC *ab_acc)
 
     return retval;
 }
+static int
+ab_node_pair_compare (AB_Node_Pair* left, AB_Node_Pair* right)
+{
+     return left ? (right ? g_strcmp0 (left->name, right->name) : -1) :
+          (right ? 1 : 0);
+}
+
+GList*
+gnc_ab_imexporter_list (AB_BANKING* api)
+{
+    GList* desc_list = NULL;
+    GWEN_PLUGIN_DESCRIPTION_LIST2 *il =
+        AB_Banking_GetImExporterDescrs (api);
+    GWEN_PLUGIN_DESCRIPTION_LIST2_ITERATOR *ilit;
+    g_return_val_if_fail (il, NULL);
+    ilit = GWEN_PluginDescription_List2_First(il);
+
+    for (GWEN_PLUGIN_DESCRIPTION *pd =
+            GWEN_PluginDescription_List2Iterator_Data(ilit);
+         pd;
+         pd = GWEN_PluginDescription_List2Iterator_Next(ilit))
+    {
+        AB_Node_Pair *node = NULL;
+        GWEN_BUFFER *tbuf = GWEN_Buffer_new(0, 256, 0, 1);
+
+        node = g_slice_new (AB_Node_Pair);
+        node->name = g_strdup(GWEN_PluginDescription_GetName(pd));
+        node->descr = g_strdup(GWEN_PluginDescription_GetShortDescr(pd));
+        desc_list = g_list_prepend (desc_list, node);
+    }
+    GWEN_PluginDescription_List2_free(il);
+    return g_list_sort (desc_list, (GCompareFunc)ab_node_pair_compare);
+}
+
+GList*
+gnc_ab_imexporter_profile_list (AB_BANKING* api, const char* importer_name)
+{
+    GList* prof_list = NULL;
+    GWEN_DB_NODE* db = AB_Banking_GetImExporterProfiles(api, importer_name);
+    g_return_val_if_fail (db, NULL);
+
+    for (GWEN_DB_NODE *profile = GWEN_DB_GetFirstGroup(db); profile;
+         profile = GWEN_DB_GetNextGroup(profile))
+    {
+         AB_Node_Pair *node = g_slice_new(AB_Node_Pair);
+        if (!profile) continue;
+        node->name = g_strdup(GWEN_DB_GetCharValue(profile, "name", 0, NULL));
+        node->descr = g_strdup(GWEN_DB_GetCharValue(profile, "shortDescr", 0, NULL));
+        prof_list = g_list_prepend (prof_list, node);
+    }
+    return g_list_sort (prof_list, (GCompareFunc)ab_node_pair_compare);
+}

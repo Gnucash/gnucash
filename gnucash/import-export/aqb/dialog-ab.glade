@@ -1643,4 +1643,189 @@
       <action-widget response="-8">exec_now_button</action-widget>
     </action-widgets>
   </object>
+  <object class="GtkListStore" id="imexporter-list">
+    <columns>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="profile-list">
+    <columns>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkDialog" id="aqbanking-select-imexporter-dialog">
+    <property name="can-focus">False</property>
+    <property name="border-width">5</property>
+    <property name="title" translatable="yes">Select File Importer/Exporter</property>
+    <property name="type-hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="dialog-vbox3">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="dialog-action_area3">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
+            <child>
+              <object class="GtkButton" id="imex-cancelbutton">
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="imex-okbutton">
+                <property name="label" translatable="yes">_OK</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack-type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="selector-box">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="border-width">5</property>
+            <property name="orientation">horizontal</property>
+            <property name="spacing">18</property>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="shadow-type">in</property>
+                <property name="min-content-height">300</property>
+                <child>
+                  <object class="GtkTreeView" id="imexporter-sel">
+                    <property name="model">imexporter-list</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="imexporter-name">
+                        <property name="title" translatable="yes">Name</property>
+                        <child>
+                          <object class="GtkCellRendererText"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="imexporter-descr">
+                        <property name="title" translatable="yes">Description</property>
+                        <child>
+                          <object class="GtkCellRendererText"/>
+                          <attributes>
+                            <attribute name="text">1</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="imex-selection">
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="shadow-type">in</property>
+                <property name="min-content-height">300</property>
+                <child>
+                  <object class="GtkTreeView" id="profile-sel">
+                    <property name="model">profile-list</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <!-- Request the maximum width for the profile
+                         list so that it doesn't change the dialog
+                         width when an imexporter with long
+                         descriptions is selected. -->
+                    <property name="width-request">400</property>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="profile-name">
+                        <property name="title" translatable="yes">Name</property>
+                        <child>
+                          <object class="GtkCellRendererText"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="profile-descr">
+                        <property name="title" translatable="yes">Description</property>
+                        <child>
+                          <object class="GtkCellRendererText"/>
+                          <attributes>
+                            <attribute name="text">1</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="prof-selection">
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-6">imex-cancelbutton</action-widget>
+      <action-widget response="-5">imex-okbutton</action-widget>
+    </action-widgets>
+  </object>
 </interface>

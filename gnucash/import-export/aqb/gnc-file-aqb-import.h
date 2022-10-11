@@ -28,6 +28,7 @@
  * @brief DTAUS import module interface
  * @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>
  * @author Copyright (C) 2008 Andreas Koehler <andi5.py@gmx.net>
+ * @author Copyright (C) 2022 John Ralls <jralls@ceridwen.us>
  */
 
 #ifndef GNC_FILE_AQB_IMPORT_H
@@ -61,6 +62,14 @@ void gnc_file_aqbanking_import (GtkWindow *parent,
                                 const gchar *aqbanking_importername,
                                 const gchar *aqbanking_formatname,
                                 gboolean exec_as_aqbanking_jobs);
+
+/**
+ * Import files via AQBanking's Import Dialog. This permits importing
+ * any file format that Aqbanking supports.
+ * @param parent A GtkWindow for setting the import dialog transient for.
+ */
+void gnc_file_aqbanking_import_dialog (GtkWindow *parent);
+
 
 G_END_DECLS
 
