@@ -60,8 +60,6 @@ struct GncQuoteException : public std::runtime_error
     GncQuoteException(const std::string& msg) : std::runtime_error(msg) {}
 };
 
-const std::string not_found = std::string ("Not Found");
-
 class GncQuotesImpl;
 
 class GncQuotes

@@ -147,6 +147,11 @@ TEST_F(GncQuotesTest, online_wiggle)
 //    EXPECT_EQ(GncQuoteError::QUOTE_FAILED, std::get<2>(failures[1]));
     EXPECT_EQ(3u, gnc_pricedb_get_num_prices(pricedb));
 }
+#else
+TEST_F(GncQuotesTest, fq_failure)
+{
+    EXPECT_THROW(GncQuotes quotes;, GncQuoteException);
+}
 #endif
 
 TEST_F(GncQuotesTest, offline_wiggle)
@@ -346,3 +351,9 @@ TEST_F(GncQuotesTest, no_date)
     EXPECT_STREQ("last", gnc_price_get_typestr(price));
 }
 
+TEST_F(GncQuotesTest, test_version)
+{
+    StrVec quote_vec, err_vec;
+    GncQuotesImpl quotes(m_book, std::make_unique<GncMockQuoteSource>(std::move(quote_vec), std::move(err_vec)));
+    EXPECT_STREQ("9.99", quotes.version().c_str());
+}
