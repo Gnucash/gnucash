@@ -137,7 +137,7 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
     {
         if (m_quotes_cmd.front() == "info")
         {
-            return Gnucash::quotes_info ();
+            return Gnucash::check_finance_quote ();
         }
         else if (m_quotes_cmd.front() == "get")
         {

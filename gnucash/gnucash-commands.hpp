@@ -34,7 +34,7 @@ using StrVec = std::vector<std::string>;
 
 namespace Gnucash {
 
-    int quotes_info (void);
+    int check_finance_quote (void);
     int add_quotes (const bo_str& uri);
     int report_quotes (const char* source,
                        const StrVec& commodities,

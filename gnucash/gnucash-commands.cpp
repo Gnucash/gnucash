@@ -300,7 +300,7 @@ scm_report_list ([[maybe_unused]] void *data,
 }
 
 int
-Gnucash::quotes_info (void)
+Gnucash::check_finance_quote (void)
 {
     gnc_prefs_init ();
     try
