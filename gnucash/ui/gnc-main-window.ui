@@ -445,64 +445,54 @@
       </section>
       <section>
         <item>
-          <attribute name="label" translatable="no">Window0Action</attribute>
-          <attribute name="action">mainwin.Window0Action</attribute>
+          <attribute name="label" translatable="no">Window00Action</attribute>
+          <attribute name="action">mainwin.WindowAction</attribute>
           <attribute name="target" type="i">0</attribute>
-          <attribute name="hidden-when">action-disabled</attribute>
         </item>
         <item>
-          <attribute name="label" translatable="no">Window1Action</attribute>
-          <attribute name="action">mainwin.Window0Action</attribute>
+          <attribute name="label" translatable="no">Window01Action</attribute>
+          <attribute name="action">mainwin.WindowAction</attribute>
           <attribute name="target" type="i">1</attribute>
-          <attribute name="hidden-when">action-disabled</attribute>
         </item>
         <item>
-          <attribute name="label" translatable="no">Window2Action</attribute>
-          <attribute name="action">mainwin.Window0Action</attribute>
+          <attribute name="label" translatable="no">Window02Action</attribute>
+          <attribute name="action">mainwin.WindowAction</attribute>
           <attribute name="target" type="i">2</attribute>
-          <attribute name="hidden-when">action-disabled</attribute>
         </item>
         <item>
-          <attribute name="label" translatable="no">Window3Action</attribute>
-          <attribute name="action">mainwin.Window0Action</attribute>
+          <attribute name="label" translatable="no">Window03Action</attribute>
+          <attribute name="action">mainwin.WindowAction</attribute>
           <attribute name="target" type="i">3</attribute>
-          <attribute name="hidden-when">action-disabled</attribute>
         </item>
         <item>
-          <attribute name="label" translatable="no">Window4Action</attribute>
-          <attribute name="action">mainwin.Window0Action</attribute>
+          <attribute name="label" translatable="no">Window04Action</attribute>
+          <attribute name="action">mainwin.WindowAction</attribute>
           <attribute name="target" type="i">4</attribute>
-          <attribute name="hidden-when">action-disabled</attribute>
         </item>
         <item>
-          <attribute name="label" translatable="no">Window5Action</attribute>
-          <attribute name="action">mainwin.Window0Action</attribute>
+          <attribute name="label" translatable="no">Window05Action</attribute>
+          <attribute name="action">mainwin.WindowAction</attribute>
           <attribute name="target" type="i">5</attribute>
-          <attribute name="hidden-when">action-disabled</attribute>
         </item>
         <item>
-          <attribute name="label" translatable="no">Window6Action</attribute>
-          <attribute name="action">mainwin.Window0Action</attribute>
+          <attribute name="label" translatable="no">Window06Action</attribute>
+          <attribute name="action">mainwin.WindowAction</attribute>
           <attribute name="target" type="i">6</attribute>
-          <attribute name="hidden-when">action-disabled</attribute>
         </item>
         <item>
-          <attribute name="label" translatable="no">Window7Action</attribute>
-          <attribute name="action">mainwin.Window0Action</attribute>
+          <attribute name="label" translatable="no">Window07Action</attribute>
+          <attribute name="action">mainwin.WindowAction</attribute>
           <attribute name="target" type="i">7</attribute>
-          <attribute name="hidden-when">action-disabled</attribute>
         </item>
         <item>
-          <attribute name="label" translatable="no">Window8Action</attribute>
-          <attribute name="action">mainwin.Window0Action</attribute>
+          <attribute name="label" translatable="no">Window08Action</attribute>
+          <attribute name="action">mainwin.WindowAction</attribute>
           <attribute name="target" type="i">8</attribute>
-          <attribute name="hidden-when">action-disabled</attribute>
         </item>
         <item>
-          <attribute name="label" translatable="no">Window9Action</attribute>
-          <attribute name="action">mainwin.Window0Action</attribute>
+          <attribute name="label" translatable="no">Window09Action</attribute>
+          <attribute name="action">mainwin.WindowAction</attribute>
           <attribute name="target" type="i">9</attribute>
-          <attribute name="hidden-when">action-disabled</attribute>
         </item>
       </section>
     </submenu>
