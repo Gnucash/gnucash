@@ -37,7 +37,6 @@ if ($( != 0) {
 }
 
 CPAN::Shell->install('Test2'); #Required by an F::Q dependency but cpan doesn't notice.
-CPAN::Shell->install('Date::Manip'); #Required by gnc-fq-helper
 CPAN::Shell->install('Finance::Quote');
 
 ## Local Variables:
