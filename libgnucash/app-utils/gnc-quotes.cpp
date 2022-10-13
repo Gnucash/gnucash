@@ -78,7 +78,6 @@ public:
     virtual const StrVec& get_sources() const noexcept = 0;
     virtual const std::string & get_version() const noexcept = 0;
     virtual QuoteResult get_quotes(const std::string& json_str) const = 0;
-    virtual bool usable() const noexcept = 0;
 };
 
 
@@ -121,7 +120,6 @@ class GncFQQuoteSource final : public GncQuoteSource
 {
     const bfs::path c_cmd;
     const std::string c_fq_wrapper;
-    bool m_ready;
     std::string m_version;
     StrVec m_sources;
     std::string m_api_key;
@@ -131,7 +129,6 @@ public:
     const std::string& get_version() const noexcept override { return m_version; }
     const StrVec& get_sources() const noexcept override { return m_sources; }
     QuoteResult get_quotes(const std::string&) const override;
-    bool usable() const noexcept override { return m_ready; }
 private:
     QuoteResult run_cmd (const StrVec& args, const std::string& json_string) const;
 
@@ -145,8 +142,7 @@ static const std::string empty_string{};
 GncFQQuoteSource::GncFQQuoteSource() :
 c_cmd{bp::search_path("perl")},
 c_fq_wrapper{std::string(gnc_path_get_bindir()) + "/finance-quote-wrapper"},
-m_ready{false}, m_version{},
-m_sources{}, m_api_key{}
+m_version{}, m_sources{}, m_api_key{}
 {
     StrVec args{"-w", c_fq_wrapper, "-v"};
     const std::string empty_string;
@@ -172,7 +168,6 @@ m_sources{}, m_api_key{}
         throw(GncQuoteSourceError(err));
     }
     m_version = std::move(version);
-    m_ready = true;
     sources.erase(sources.begin());
     m_sources = std::move(sources);
 
@@ -248,8 +243,6 @@ GncQuotesImpl::GncQuotesImpl() : m_quotesource{new GncFQQuoteSource},
                                  m_book{qof_session_get_book(gnc_get_current_session())},
                                  m_dflt_curr{gnc_default_currency()}
 {
-    if (!m_quotesource->usable())
-        return;
     m_sources = m_quotesource->get_sources();
 }
 
@@ -257,8 +250,6 @@ GncQuotesImpl::GncQuotesImpl(QofBook* book) : m_quotesource{new GncFQQuoteSource
 m_sources{}, m_book{book},
 m_dflt_curr{gnc_default_currency()}
 {
-    if (!m_quotesource->usable())
-        return;
     m_sources = m_quotesource->get_sources();
 }
 
@@ -266,8 +257,6 @@ GncQuotesImpl::GncQuotesImpl(QofBook* book, std::unique_ptr<GncQuoteSource> quot
 m_quotesource{std::move(quote_source)},
 m_sources{}, m_book{book}, m_dflt_curr{gnc_default_currency()}
 {
-    if (!m_quotesource->usable())
-        return;
     m_sources = m_quotesource->get_sources();
 }
 
