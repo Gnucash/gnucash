@@ -128,10 +128,10 @@ class GncFQQuoteSource final : public GncQuoteSource
 public:
     GncFQQuoteSource();
     ~GncFQQuoteSource() = default;
-    virtual const std::string& get_version() const noexcept override { return m_version; }
-    virtual const StrVec& get_sources() const noexcept override { return m_sources; }
-    virtual QuoteResult get_quotes(const std::string&) const override;
-    virtual bool usable() const noexcept override { return m_ready; }
+    const std::string& get_version() const noexcept override { return m_version; }
+    const StrVec& get_sources() const noexcept override { return m_sources; }
+    QuoteResult get_quotes(const std::string&) const override;
+    bool usable() const noexcept override { return m_ready; }
 private:
     QuoteResult run_cmd (const StrVec& args, const std::string& json_string) const;
 
@@ -453,12 +453,6 @@ get_quotes(const std::string& json_str, const std::unique_ptr<GncQuoteSource>& q
         throw(GncQuoteException(err_str));
     }
 
-//        for (auto line : quotes)
-//            PINFO("Output line retrieved from wrapper:\n%s", line.c_str());
-//
-//     for (auto line : errors)
-//         PINFO("Error line retrieved from wrapper:\n%s",line.c_str());˚
-
     return answer;
 }
 
@@ -589,15 +583,11 @@ calc_price_time(const PriceParams& p)
             return static_cast<time64>(now);
         }
     }
-    else
-    {
-        auto now{GncDateTime()};
-        PINFO("Info: no date  was returned for %s:%s - will use %s",
-              p.ns, p.mnemonic, now.format("%Y-%m-%d %H:%M%S").c_str());
-        return static_cast<time64>(now);
-    }
 
-    return INT64_MAX; //Shouldn't be able to get here.
+    auto now{GncDateTime()};
+    PINFO("No date  was returned for %s:%s - will use %s",
+          p.ns, p.mnemonic, now.format("%Y-%m-%d %H:%M%S").c_str());
+    return static_cast<time64>(now);
 }
 
 static boost::optional<GncNumeric>

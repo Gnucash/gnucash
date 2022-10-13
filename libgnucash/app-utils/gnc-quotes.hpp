@@ -109,7 +109,7 @@ public:
      */
     const QuoteSources& sources() noexcept;
 
-    /** Get the available Finance::Quote sources as a GLixt
+    /** Get the available Finance::Quote sources as a GList
      *
      * @return A double-linked list containing the names of the installed quote sources.
      * @note the list and its contents are owned by the caller and should be freed with `g_list_free_full(list, g_free)`.

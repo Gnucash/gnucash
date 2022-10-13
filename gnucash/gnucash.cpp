@@ -179,7 +179,7 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
     {
         auto msg = bl::translate ("Checking Finance::Quote...").str(gnc_get_boost_locale());
         GncQuotes quotes;
-            msg = (bl::format (bl::translate("Found Finance::Quote version {1}.")) % quotes.version()).str(gnc_get_boost_locale());
+        msg = (bl::format (bl::translate("Found Finance::Quote version {1}.")) % quotes.version()).str(gnc_get_boost_locale());
         auto quote_sources = quotes.sources_as_glist();
         gnc_quote_source_set_fq_installed (quotes.version().c_str(), quote_sources);
         g_list_free (quote_sources);
