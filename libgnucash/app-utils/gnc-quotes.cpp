@@ -303,7 +303,7 @@ GncQuotesImpl::fetch (CommVec& commodities)
 {
     m_failures.clear();
     if (commodities.empty())
-        return;
+        throw (GncQuoteException(bl::translate("GncQuotes::Fetch called with no commodities.")));
     try
     {
         auto quote_str{query_fq (commodities)};
