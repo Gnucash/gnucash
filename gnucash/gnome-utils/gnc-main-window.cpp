@@ -146,6 +146,8 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static GObjectClass *parent_class = nullptr;
 /** An identifier that indicates a "main" window. */
 static GQuark window_type = 0;
+/** A hash table of the display items to update the menu and tool bars */
+static GHashTable *display_item_hash; //FIXMEb added
 /** A list of all extant main windows. This is for convenience as the
  *  same information can be obtained from the object tracking code. */
 static GList *active_windows = nullptr;
@@ -272,7 +274,6 @@ typedef struct GncMainWindowPrivate
     const gchar   *previous_menu_quailifier; //FIXMEb added
     GtkAccelGroup *previous_plugin_page_accel_group; //FIXMEb added
 
-    GHashTable *display_item_hash; //FIXMEb added
 
 } GncMainWindowPrivate;
 
@@ -869,9 +870,8 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     {
         gtk_window_maximize(GTK_WINDOW(window));
     }
-//FIXMEb not sure if this is in the right place
     // update the menubar and toolbar items
-    gnc_main_window_update_display_menu_items (window, priv->menubar);
+    gnc_main_window_update_display_menu_items (window, nullptr);
     gnc_main_window_update_display_toolbar_items (window);
 
 //FIXMEb not sure if this is in the right place
@@ -2890,12 +2890,13 @@ gnc_main_window_init (GncMainWindow *window, void *data)
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(window), "gnc-id-main-window");
 
+    if (!display_item_hash)
+        display_item_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+
     priv->event_handler_id =
         qof_event_register_handler(gnc_main_window_event_handler, window);
 
     priv->restoring_pages = FALSE;
-
-    priv->display_item_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
     priv->previous_plugin_page_name = nullptr;
     priv->previous_menu_quailifier = nullptr;
@@ -2933,6 +2934,7 @@ gnc_main_window_finalize (GObject *object)
 
     if (active_windows == nullptr)
     {
+        g_hash_table_destroy (display_item_hash);
         /* Oops. User killed last window and we didn't catch it. */
         g_idle_add((GSourceFunc)gnc_shutdown, 0);
     }
@@ -3037,8 +3039,6 @@ gnc_main_window_destroy (GtkWidget *widget)
 
         g_hash_table_destroy (priv->merged_actions_table);
         priv->merged_actions_table = nullptr;
-
-        g_hash_table_destroy (priv->display_item_hash);
 
         /* GncPluginManager stuff */
         manager = gnc_plugin_manager_get ();
@@ -3802,13 +3802,19 @@ static void
 gnc_main_window_update_display_menu_items (GncMainWindow *window, GtkWidget *menu)
 {
     GncMainWindowPrivate *priv;
+    GtkWidget *tmp_menu;
 
     g_return_if_fail (GNC_IS_MAIN_WINDOW(window));
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-    gnc_plugin_update_display_menu_items (priv->display_item_hash,
-                                          menu,
+    if (!menu)
+        tmp_menu = priv->menubar;
+    else
+        tmp_menu = menu;
+
+    gnc_plugin_update_display_menu_items (display_item_hash,
+                                          tmp_menu,
                                           priv->statusbar);
 }
 
@@ -3822,7 +3828,7 @@ gnc_main_window_update_display_toolbar_items (GncMainWindow *window)
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-    gnc_plugin_update_display_toolbar_items (priv->display_item_hash,
+    gnc_plugin_update_display_toolbar_items (display_item_hash,
                                              priv->toolbar,
                                              priv->statusbar);
 }
@@ -3840,7 +3846,7 @@ gnc_main_window_add_to_display_list (GncMainWindow *window,
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-    gnc_plugin_add_to_display_hash (priv->display_item_hash,
+    gnc_plugin_add_to_display_hash (display_item_hash,
                                     display_items,
                                     n_display_items);
 }
@@ -4036,7 +4042,7 @@ gnc_main_window_init_short_names (GncMainWindow *window,
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-    gnc_plugin_init_short_names (priv->display_item_hash,
+    gnc_plugin_init_short_names (display_item_hash,
                                  toolbar_labels);
 }
 
@@ -5629,7 +5635,7 @@ gnc_main_window_get_display_hash_table (GncWindow *window)
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-    return priv->display_item_hash;
+    return display_item_hash;
 }
 
 
