@@ -165,12 +165,10 @@ m_sources{}, m_api_key{}
             err += err.empty() ? "" : err_line + "\n";
         throw(GncQuoteSourceError(err));
     }
-    static const boost::regex version_fmt{"[0-9]\\.[0-9][0-9]"};
     auto version{sources.front()};
-    if (version.empty() || !boost::regex_match(version, version_fmt))
+    if (version.empty())
     {
-        std::string err{bl::translate("Invalid Finance::Quote Version ")};
-            err +=  version.empty() ? "" : version;
+        std::string err{bl::translate("No Finance::Quote Version")};
         throw(GncQuoteSourceError(err));
     }
     m_version = std::move(version);
