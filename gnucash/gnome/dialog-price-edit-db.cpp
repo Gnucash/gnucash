@@ -74,7 +74,7 @@ static gboolean gnc_prices_dialog_key_press_cb (GtkWidget *widget,
 }
 
 
-typedef struct
+struct PricesDialog
 {
     GtkWidget * window;
     QofSession *session;
@@ -90,7 +90,7 @@ typedef struct
     GtkWidget *remove_dialog;
     GtkTreeView *remove_view;
     int remove_source;
-} PricesDialog;
+};
 
 
 void
