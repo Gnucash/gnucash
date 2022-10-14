@@ -205,7 +205,7 @@ GncFQQuoteSource::run_cmd (const StrVec& args, const std::string& json_string) c
                            bp::std_out > out_buf,
                            bp::std_err > err_buf,
                            bp::std_in < input_buf,
-                           bp::env["ALPHAVANTAGE_API_KEY"]= (m_api_key.empty() ? m_api_key : ""),
+                           bp::env["ALPHAVANTAGE_API_KEY"]= (m_api_key.empty() ? "" : m_api_key),
                            svc);
         svc.run();
         process.wait();
