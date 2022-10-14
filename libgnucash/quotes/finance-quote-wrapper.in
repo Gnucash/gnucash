@@ -86,18 +86,26 @@ sub check_modules {
 
   return unless @missing;
 
-  print STDERR "\n";
-  print STDERR "You need to install the following Perl modules:\n";
-  foreach my $mod (@missing) {
-    print STDERR "  ".$mod."\n";
+# Test for STDERR being a tty and output a detailed message if it is
+# and a short message if it isn't; in the latter case we're probably
+# being called from GnuCash and it will emit its own localized error.
+  if (-t STDERR)
+  {
+      print STDERR "\n";
+      print STDERR "You need to install the following Perl modules:\n";
+      foreach my $mod (@missing) {
+          print STDERR "  ".$mod."\n";
+      }
+
+      print STDERR "\n";
+      print STDERR "Please see https://wiki.gnucash.org/wiki/Online_Quotes#Finance::Quote for detailed corrective action.\n";
+
+      print "missing-lib\n";
   }
-
-  print STDERR "\n";
-  print STDERR "Use your system's package manager to install them,\n";
-  print STDERR "or run 'gnc-fq-update' as root.\n";
-
-  print "missing-lib\n";
-
+  else
+  {
+      print STDERR "missing_modules ", join(" ", @missing), "\n";
+  }
   exit 1;
 }
 
@@ -112,13 +120,17 @@ sub print_version  {
 }
 
 sub print_usage {
-    print STDERR
-"Usage:
+    if (-t STDERR)
+    {
+        my $message = << 'END';
+Usage:
   Check proper installation and version:
     finance-quote-wrapper -v
   Fetch quotes (input should be passed as JSON via stdin):
     finance-quote-wrapper -f
-";
+END
+        print STDERR $message;
+    }
 }
 
 sub sanitize_hash {
@@ -209,17 +221,28 @@ JSON::Parse->import(qw(valid_json parse_json));
 my $json_input = do { local $/; <STDIN> };
 
 if (!valid_json($json_input)) {
-    print STDERR "Could not parse input as valid JSON.\n";
-    print STDERR "Received input:\n$json_input\n";
+    if (-t STDERR)
+    {
+        print STDERR "Could not parse input as valid JSON.\n";
+        print STDERR "Received input:\n$json_input\n";
+    }
+    else
+    {
+        print STDERR "invalid_json\n";
+    }
     exit 1;
 }
 
 my $requests = parse_json ($json_input);
 
 my $defaultcurrency = $$requests{'defaultcurrency'};
+# This shouldn't be possible if we're called from GnuCash, so only warn in interactive use.
 if (!$defaultcurrency) {
     $defaultcurrency = "USD";
-    print STDERR "Warning: no default currency was specified, assuming 'USD'\n";
+    if (-t STDERR)
+    {
+        print STDERR "Warning: no default currency was specified, assuming 'USD'\n";
+    }
 }
 
 # Create a stockquote object.
