@@ -17,6 +17,7 @@ set (app_utils_HEADERS
   gnc-gsettings.h
   gnc-help-utils.h
   gnc-prefs-utils.h
+  gnc-quotes.hpp
   gnc-state.h
   gnc-ui-util.h
   gnc-ui-balances.h
@@ -31,6 +32,7 @@ set (app_utils_SOURCES
   gnc-euro.c
   gnc-gsettings.cpp
   gnc-prefs-utils.c
+  gnc-quotes.cpp
   gnc-state.c
   gnc-ui-util.c
   gnc-ui-balances.c
@@ -46,7 +48,9 @@ endif()
 set(app_utils_ALL_SOURCES ${app_utils_SOURCES} ${app_utils_HEADERS})
 set(app_utils_ALL_LIBRARIES
     gnc-engine
-    ${GLIB_LDFLAGS}
+    ${Boost_FILESYSTEM_LIBRARY}
+    ${Boost_PROPERTY_TREE_LIBRARY}
+    ${Boost_LOCALE_LIBRARY}
     ${GIO_LDFLAGS}
     ${LIBXML2_LDFLAGS}
     ${LIBXSLT_LDFLAGS}

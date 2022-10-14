@@ -26,13 +26,19 @@
 #define GNUCASH_COMMANDS_HPP
 
 #include <string>
+#include <vector>
 #include <boost/optional.hpp>
 
 using bo_str = boost::optional <std::string>;
+using StrVec = std::vector<std::string>;
 
 namespace Gnucash {
 
+    int check_finance_quote (void);
     int add_quotes (const bo_str& uri);
+    int report_quotes (const char* source,
+                       const StrVec& commodities,
+                       bool verbose);
     int run_report (const bo_str& file_to_load,
                     const bo_str& run_report,
                     const bo_str& export_type,

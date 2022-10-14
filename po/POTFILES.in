@@ -78,7 +78,7 @@ gnucash/gnome/dialog-lot-viewer.c
 gnucash/gnome/dialog-new-user.c
 gnucash/gnome/dialog-order.c
 gnucash/gnome/dialog-payment.c
-gnucash/gnome/dialog-price-edit-db.c
+gnucash/gnome/dialog-price-edit-db.cpp
 gnucash/gnome/dialog-price-editor.c
 gnucash/gnome/dialog-print-check.c
 gnucash/gnome/dialog-progress.c
@@ -141,7 +141,7 @@ gnucash/gnome-utils/dialog-query-view.c
 gnucash/gnome-utils/dialog-reset-warnings.c
 gnucash/gnome-utils/dialog-tax-table.c
 gnucash/gnome-utils/dialog-totd.c
-gnucash/gnome-utils/dialog-transfer.c
+gnucash/gnome-utils/dialog-transfer.cpp
 gnucash/gnome-utils/dialog-userpass.c
 gnucash/gnome-utils/dialog-utils.c
 gnucash/gnome-utils/gnc-account-sel.c
@@ -374,7 +374,6 @@ gnucash/import-export/qif-imp/qif-parse.scm
 gnucash/import-export/qif-imp/qif-to-gnc.scm
 gnucash/import-export/qif-imp/qif-utils.scm
 gnucash/import-export/qif-imp/string.scm
-gnucash/price-quotes.scm
 gnucash/python/gncmod-python.c
 gnucash/python/init.py
 gnucash/python/pycons/console.py
@@ -516,6 +515,7 @@ libgnucash/app-utils/gnc-exp-parser.c
 libgnucash/app-utils/gnc-gsettings.cpp
 libgnucash/app-utils/gnc-help-utils.c
 libgnucash/app-utils/gnc-prefs-utils.c
+libgnucash/app-utils/gnc-quotes.cpp
 libgnucash/app-utils/gnc-state.c
 libgnucash/app-utils/gnc-sx-instance-model.c
 libgnucash/app-utils/gnc-ui-balances.c

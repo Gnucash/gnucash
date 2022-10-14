@@ -43,7 +43,7 @@ set (gnome_utils_SOURCES
   dialog-reset-warnings.c
   dialog-tax-table.c
   dialog-totd.c
-  dialog-transfer.c
+  dialog-transfer.cpp
   dialog-userpass.c
   dialog-utils.c
   gnc-account-sel.c

@@ -31,6 +31,24 @@ gnc_add_test_with_guile(test-sx test-sx.cpp
   APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS
 )
 
+set(test_gnc_quotes_SOURCES
+        gtest-gnc-quotes.cpp
+        )
+
+set(test_gnc_quotes_INCLUDES
+        ${CMAKE_BINARY_DIR}/common # for config.h
+        ${MODULEPATH}
+        )
+
+set(test_gnc_quotes_LIBS
+        gnc-engine
+        gtest
+        ${Boost_FILESYSTEM_LIBRARY}
+        ${Boost_LOCALE_LIBRARY}
+        ${Boost_PROPERTY_TREE_LIBRARY}
+        ${Boost_SYSTEM_LIBRARY}
+        )
+gnc_add_test(test-gnc-quotes "${test_gnc_quotes_SOURCES}" test_gnc_quotes_INCLUDES test_gnc_quotes_LIBS)
 
 set(GUILE_DEPENDS
   scm-test-engine
@@ -43,6 +61,7 @@ set(GUILE_DEPENDS
 
 set_dist_list(test_app_utils_DIST
   CMakeLists.txt
+  gtest-gnc-quotes.cpp
   test-exp-parser.c
   test-print-parse-amount.cpp
   test-sx.cpp

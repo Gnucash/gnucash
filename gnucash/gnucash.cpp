@@ -69,6 +69,7 @@ extern "C" {
 #include <iostream>
 #include <gnc-report.h>
 #include <gnc-locale-utils.hpp>
+#include <gnc-quotes.hpp>
 
 namespace bl = boost::locale;
 
@@ -173,10 +174,24 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
     gnc_hook_add_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_file_quit, NULL, NULL);
 
     /* Install Price Quote Sources */
-    auto msg = bl::translate ("Checking Finance::Quote...").str(gnc_get_boost_locale());
-    gnc_update_splash_screen (msg.c_str(), GNC_SPLASH_PERCENTAGE_UNKNOWN);
-    scm_c_use_module("gnucash price-quotes");
-    scm_c_eval_string("(gnc:price-quotes-install-sources)");
+
+    try
+    {
+        auto msg = bl::translate ("Checking Finance::Quote...").str(gnc_get_boost_locale());
+        GncQuotes quotes;
+        msg = (bl::format (bl::translate("Found Finance::Quote version {1}.")) % quotes.version()).str(gnc_get_boost_locale());
+        auto quote_sources = quotes.sources_as_glist();
+        gnc_quote_source_set_fq_installed (quotes.version().c_str(), quote_sources);
+        g_list_free (quote_sources);
+        gnc_update_splash_screen (msg.c_str(), GNC_SPLASH_PERCENTAGE_UNKNOWN);
+    }
+    catch (const GncQuoteException& err)
+    {
+        auto msg = bl::translate("Unable to load Finance::Quote.").str(gnc_get_boost_locale());
+        PINFO ("Attempt to load Finance::Quote returned this error message:\n");
+        PINFO ("%s", err.what());
+        gnc_update_splash_screen (msg.c_str(), GNC_SPLASH_PERCENTAGE_UNKNOWN);
+    }
 
     gnc_hook_run(HOOK_STARTUP, NULL);
 

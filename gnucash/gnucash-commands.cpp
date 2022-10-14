@@ -45,6 +45,7 @@ extern "C" {
 #include <fstream>
 #include <iostream>
 #include <gnc-report.h>
+#include <gnc-quotes.hpp>
 
 namespace bl = boost::locale;
 
@@ -53,8 +54,8 @@ static std::string empty_string{};
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-static void
-scm_cleanup_and_exit_with_failure (QofSession *session)
+static int
+cleanup_and_exit_with_failure (QofSession *session)
 {
     if (session)
     {
@@ -70,60 +71,15 @@ scm_cleanup_and_exit_with_failure (QofSession *session)
         qof_session_destroy (session);
     }
     qof_event_resume();
-    gnc_shutdown (1);
+    return 1;
 }
 
+/* scm_boot_guile doesn't expect to return, so call shutdown ourselves here */
 static void
-scm_add_quotes(void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+scm_cleanup_and_exit_with_failure (QofSession *session)
 {
-    auto add_quotes_file = static_cast<const std::string*>(data);
-
-    scm_c_eval_string("(debug-set! stack 200000)");
-
-    auto mod = scm_c_resolve_module("gnucash price-quotes");
-    scm_set_current_module(mod);
-
-    gnc_prefs_init ();
-    qof_event_suspend();
-    scm_c_eval_string("(gnc:price-quotes-install-sources)");
-
-    if (!gnc_quote_source_fq_installed())
-    {
-        std::cerr << bl::translate ("No quotes retrieved. Finance::Quote isn't "
-                                    "installed properly.") << "\n";
-        scm_cleanup_and_exit_with_failure (nullptr);
-    }
-
-    auto add_quotes = scm_c_eval_string("gnc:book-add-quotes");
-    auto session = gnc_get_current_session();
-    if (!session)
-        scm_cleanup_and_exit_with_failure (session);
-
-    qof_session_begin(session, add_quotes_file->c_str(), SESSION_NORMAL_OPEN);
-    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
-        scm_cleanup_and_exit_with_failure (session);
-
-    qof_session_load(session, NULL);
-    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
-        scm_cleanup_and_exit_with_failure (session);
-
-    auto scm_book = gnc_book_to_scm(qof_session_get_book(session));
-    auto scm_result = scm_call_2(add_quotes, SCM_BOOL_F, scm_book);
-
-    qof_session_save(session, NULL);
-    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
-        scm_cleanup_and_exit_with_failure (session);
-
-    qof_session_destroy(session);
-    if (!scm_is_true(scm_result))
-    {
-        PERR ("Failed to add quotes to %s.", add_quotes_file->c_str());
-        scm_cleanup_and_exit_with_failure (session);
-    }
-
-    qof_event_resume();
-    gnc_shutdown(0);
-    return;
+    cleanup_and_exit_with_failure (session);
+    gnc_shutdown (1);
 }
 
 static void
@@ -344,11 +300,83 @@ scm_report_list ([[maybe_unused]] void *data,
 }
 
 int
+Gnucash::check_finance_quote (void)
+{
+    gnc_prefs_init ();
+    try
+    {
+        GncQuotes quotes;
+        std::cout << bl::format (bl::translate ("Found Finance::Quote version {1}.")) % quotes.version() << "\n";
+        std::cout << bl::translate ("Finance::Quote sources: ");
+        for (auto source : quotes.sources())
+            std::cout << source << " ";
+        std::cout << std::endl;
+        return 0;
+    }
+    catch (const GncQuoteException& err)
+    {
+        std::cout << err.what() << std::endl;
+        return 1;
+    }
+}
+
+int
 Gnucash::add_quotes (const bo_str& uri)
 {
-    if (uri && !uri->empty())
-        scm_boot_guile (0, nullptr, scm_add_quotes, (void *)&(*uri));
+    gnc_prefs_init ();
+    qof_event_suspend();
 
+    auto session = gnc_get_current_session();
+    if (!session)
+        return 1;
+
+    qof_session_begin(session, uri->c_str(), SESSION_NORMAL_OPEN);
+    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
+        cleanup_and_exit_with_failure (session);
+
+    qof_session_load(session, NULL);
+    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
+        cleanup_and_exit_with_failure (session);
+
+    try
+    {
+        GncQuotes quotes;
+        std::cout << bl::format (bl::translate ("Found Finance::Quote version {1}.")) % quotes.version() << std::endl;
+        auto quote_sources = quotes.sources_as_glist();
+        gnc_quote_source_set_fq_installed (quotes.version().c_str(), quote_sources);
+        g_list_free_full (quote_sources, g_free);
+        quotes.fetch(qof_session_get_book(session));
+        if (quotes.had_failures())
+            std::cerr << quotes.report_failures() << std::endl;
+    }
+    catch (const GncQuoteException& err)
+    {
+        std::cerr << bl::translate("Price retrieval failed: ") << err.what() << std::endl;
+    }
+    qof_session_save(session, NULL);
+    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
+        cleanup_and_exit_with_failure (session);
+
+    qof_session_destroy(session);
+    qof_event_resume();
+    return 0;
+}
+
+int
+Gnucash::report_quotes (const char* source, const StrVec& commodities, bool verbose)
+{
+    try
+    {
+        GncQuotes quotes;
+        quotes.report(source, commodities, verbose);
+        if (quotes.had_failures())
+            std::cerr << quotes.report_failures() << std::endl;
+    }
+    catch (const GncQuoteException& err)
+    {
+        std::cerr << bl::translate("Price retrieval failed: ") << err.what() << std::endl;
+        return -1;
+   }
     return 0;
 }
 

@@ -31,16 +31,4 @@
 SCM  gnc_printinfo2scm(GNCPrintAmountInfo info);
 GNCPrintAmountInfo gnc_scm2printinfo(SCM info_scm);
 
-/** Given a pointer to a gnc-commodity data structure, build a Scheme
- *  list containing the data needed by the code in price-quotes.scm.
- *  This prevents flipping back and forth from Scheme to C while
- *  extracting values from a pointer.
- *
- * @param com A pointer to the commodity to convert.
- *
- * @return A pointer to a Scheme list, or SCM_EOL on error.
- */
-SCM  gnc_quoteinfo2scm(gnc_commodity *com);
-
-
 #endif

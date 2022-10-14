@@ -169,20 +169,6 @@ void gnc_g_list_cut(GList **list, GList *cut_point);
 
 /** @} */
 
-/** @name Message Logging
- @{
-*/
-void gnc_scm_log_warn(const gchar *msg);
-void gnc_scm_log_error(const gchar *msg);
-void gnc_scm_log_msg(const gchar *msg);
-void gnc_scm_log_debug(const gchar *msg);
-
-/** @} */
-
-/** @name glib Miscellaneous Functions
- @{
-*/
-
 
 /**
  * @brief Return a string joining a GList whose elements are gchar*
@@ -198,7 +184,6 @@ void gnc_scm_log_debug(const gchar *msg);
  * caller.
  **/
 gchar * gnc_g_list_stringjoin (GList *list_of_strings, const gchar *sep);
-
 /**
  * @brief Scans the GList elements the minimum number of iterations
  * required to test it against a specified size. Returns -1, 0 or 1
@@ -213,12 +198,6 @@ gchar * gnc_g_list_stringjoin (GList *list_of_strings, const gchar *sep);
  **/
 gint gnc_list_length_cmp (const GList *list, size_t len);
 
-/** Kill a process.  On UNIX send a SIGKILL, on Windows call TerminateProcess.
- *
- *  @param pid The process ID. */
-void gnc_gpid_kill(GPid pid);
-
-/** @} */
 
 #ifdef __cplusplus
 } /* extern "C" */

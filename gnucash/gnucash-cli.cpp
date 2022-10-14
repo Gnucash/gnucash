@@ -42,6 +42,7 @@ extern "C" {
 #include <boost/nowide/args.hpp>
 #endif
 #include <iostream>
+#include <gnc-quotes.hpp>
 
 namespace bl = boost::locale;
 
@@ -59,8 +60,9 @@ namespace Gnucash {
     private:
         void configure_program_options (void);
 
-        boost::optional <std::string> m_quotes_cmd;
+        std::vector<std::string> m_quotes_cmd;
         boost::optional <std::string> m_namespace;
+        bool m_verbose = false;
 
         boost::optional <std::string> m_report_cmd;
         boost::optional <std::string> m_report_name;
@@ -93,11 +95,17 @@ Gnucash::GnucashCli::configure_program_options (void)
 {
     bpo::options_description quotes_options(_("Price Quotes Retrieval Options"));
     quotes_options.add_options()
-    ("quotes,Q", bpo::value (&m_quotes_cmd),
-     _("Execute price quote related commands. Currently only one command is supported.\n\n"
-       "  get: \tFetch current quotes for all foreign currencies and stocks in the given GnuCash datafile.\n"))
+        ("quotes,Q", bpo::value<std::vector<std::string>> (&m_quotes_cmd)->multitoken(),
+     _("Execute price quote related commands. The following commands are supported.\n\n"
+       "  info: \tShow Finance::Quote version and exposed quote sources.\n"
+       "   get: \tFetch current quotes for all foreign currencies and stocks in the given GnuCash datafile.\n"
+       "  dump: \tFetch current quotes for specified currencies or stocks from a specified namespace and print the results to the console.\n"
+       "        \tThis must be followed with a source and one or more symbols, unless the source is \"currency\" in which case it must be followed with two or more symbols, the first of which is the currency in which exchange rates for the rest will be quoted.\n"))
     ("namespace", bpo::value (&m_namespace),
-     _("Regular expression determining which namespace commodities will be retrieved for"));
+     _("Regular expression determining which namespace commodities will be retrieved for when using the get command"))
+     ("verbose,V", bpo::bool_switch (&m_verbose),
+      _("When using the dump command list all of the parameters Finance::Quote returns for the symbol instead of the ones that Gnucash requires."));
+
     m_opt_desc_display->add (quotes_options);
     m_opt_desc_all.add (quotes_options);
 
@@ -125,23 +133,44 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
 {
     Gnucash::CoreApp::start();
 
-    if (m_quotes_cmd)
+    if (!m_quotes_cmd.empty())
     {
-        if (*m_quotes_cmd != "get")
+        if (m_quotes_cmd.front() == "info")
         {
-            std::cerr << bl::format (bl::translate("Unknown quotes command '{1}'")) % *m_quotes_cmd << "\n\n"
-            << *m_opt_desc_display.get();
-            return 1;
+            return Gnucash::check_finance_quote ();
         }
-
-        if (!m_file_to_load || m_file_to_load->empty())
+        else if (m_quotes_cmd.front() == "get")
         {
-            std::cerr << bl::translate("Missing data file parameter") << "\n\n"
-                      << *m_opt_desc_display.get();
-            return 1;
+
+            if (!m_file_to_load || m_file_to_load->empty())
+            {
+                std::cerr << bl::translate("Missing data file parameter") << "\n\n"
+                << *m_opt_desc_display.get() << std::endl;
+                return 1;
+            }
+            else
+                return Gnucash::add_quotes (m_file_to_load);
+        }
+        else if (m_quotes_cmd.front() == "dump")
+        {
+            if (m_quotes_cmd.size() < 3 ||
+                (m_quotes_cmd[1] == "currency" &&
+                 m_quotes_cmd.size() < 4))
+            {
+                std::cerr << bl::translate("Not enough information for quotes dump") << std::endl;
+                return 1;
+            }
+            auto source = m_quotes_cmd[1];
+            m_quotes_cmd.erase(m_quotes_cmd.begin(), m_quotes_cmd.begin() + 2);
+            return Gnucash::report_quotes(source.c_str(), m_quotes_cmd,
+                                          m_verbose);
         }
         else
-            return Gnucash::add_quotes (m_file_to_load);
+        {
+            std::cerr << bl::format (bl::translate("Unknown quotes command '{1}'")) % m_quotes_cmd.front() << "\n\n"
+                      << *m_opt_desc_display.get() << std::endl;
+            return 1;
+        }
     }
 
     if (m_report_cmd)
@@ -151,7 +180,7 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
             if (!m_file_to_load || m_file_to_load->empty())
             {
                 std::cerr << bl::translate("Missing data file parameter") << "\n\n"
-                          << *m_opt_desc_display.get();
+                          << *m_opt_desc_display.get() << std::endl;
                 return 1;
             }
             else
@@ -175,7 +204,7 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
             if (!m_report_name || m_report_name->empty())
             {
                 std::cerr << bl::translate("Missing --name parameter") << "\n\n"
-                          << *m_opt_desc_display.get();
+                          << *m_opt_desc_display.get() << std::endl;
                 return 1;
             }
             else
@@ -183,13 +212,13 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
         else
         {
             std::cerr << bl::format (bl::translate("Unknown report command '{1}'")) % *m_report_cmd << "\n\n"
-                      << *m_opt_desc_display.get();
+                      << *m_opt_desc_display.get() << std::endl;
             return 1;
         }
     }
 
     std::cerr << bl::translate("Missing command or option") << "\n\n"
-              << *m_opt_desc_display.get();
+              << *m_opt_desc_display.get() << std::endl;
 
     return 1;
 }
