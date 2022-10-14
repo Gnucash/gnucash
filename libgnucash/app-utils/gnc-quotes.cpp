@@ -136,6 +136,7 @@ private:
 
 static void show_quotes(const bpt::ptree& pt, const StrVec& commodities, bool verbose);
 static void show_currency_quotes(const bpt::ptree& pt, const StrVec& commodities, bool verbose);
+static std::string parse_quotesource_error(const std::string& line);
 
 static const std::string empty_string{};
 
@@ -293,16 +294,9 @@ GncQuotesImpl::fetch (CommVec& commodities)
     m_failures.clear();
     if (commodities.empty())
         throw (GncQuoteException(bl::translate("GncQuotes::Fetch called with no commodities.")));
-    try
-    {
-        auto quote_str{query_fq (commodities)};
-        auto ptree{parse_quotes (quote_str)};
-        create_quotes(ptree, commodities);
-    }
-    catch (const GncQuoteException& err)
-    {
-        std::cerr << _("Finance::Quote retrieval failed with error ") << err.what() << std::endl;
-    }
+    auto quote_str{query_fq (commodities)};
+    auto ptree{parse_quotes (quote_str)};
+    create_quotes(ptree, commodities);
 }
 
 void
@@ -436,7 +430,12 @@ get_quotes(const std::string& json_str, const std::unique_ptr<GncQuoteSource>& q
     {
         std::string err_str;
         for (auto line: errors)
-            err_str.append(line + "\n");
+        {
+            if (line == "invalid_json\n")
+                PERR("Finanace Quote Wrapper was unable to parse %s",
+                     json_str.c_str());
+            err_str += parse_quotesource_error(line);
+        }
         throw(GncQuoteException(err_str));
     }
 
@@ -874,6 +873,32 @@ show_currency_quotes(const bpt::ptree& pt, const StrVec& commodities, bool verbo
         std::cout << std::endl;
     }
 }
+
+static std::string
+parse_quotesource_error(const std::string& line)
+{
+    std::string err_str;
+    if (line == "invalid_json\n")
+    {
+        err_str += _("GnuCash submitted invalid json to Finance::Quote. The details were logged.");
+    }
+    else if (line.substr(0, 15) == "missing_modules")
+    {
+        PERR("Missing Finance::Quote Dependencies: %s",
+             line.substr(17).c_str());
+        err_str += _("Perl is missing the following modules. Please see https://wiki.gnucash.org/wiki/Online_Quotes#Finance::Quote for detailed corrective action. ");
+        err_str += line.substr(17);
+    }
+    else
+    {
+        PERR("Unrecognized Finance::Quote Error %s", line.c_str());
+        err_str +=_("Unrecognized Finance::Quote Error: ");
+        err_str += line;
+    }
+    err_str += "\n";
+    return err_str;
+}
+
 /********************************************************************
  * gnc_quotes_get_quotable_commodities
  * list commodities in a given namespace that get price quotes

@@ -53,16 +53,35 @@ public:
     GncMockQuoteSource(StrVec&& quotes, StrVec&& errors) :
         m_quotes{std::move(quotes)}, m_errors{std::move(errors)}{}
     ~GncMockQuoteSource() override = default;
-    virtual const std::string& get_version() const noexcept override { return m_version; }
-    virtual const StrVec& get_sources() const noexcept override { return m_sources; }
-    virtual QuoteResult get_quotes(const std::string&) const override;
-    virtual bool usable() const noexcept override { return true; }
+    const std::string& get_version() const noexcept override { return m_version; }
+    const StrVec& get_sources() const noexcept override { return m_sources; }
+    QuoteResult get_quotes(const std::string&) const override;
+};
+
+class GncFailedQuoteSource final : public GncQuoteSource
+{
+
+    const std::string m_version{"0"};
+    const StrVec m_sources;
+public:
+    GncFailedQuoteSource()
+        {
+            std::string err{"Failed to initialize Finance::Quote: "};
+            err += "missing_modules Mozilla::CA Try::Tiny";
+            throw GncQuoteSourceError (err);
+        }
+    ~GncFailedQuoteSource() override = default;
+    const std::string& get_version() const noexcept override { return m_version; }
+    const StrVec& get_sources() const noexcept override { return m_sources; }
+    QuoteResult get_quotes(const std::string&) const override {return {0, {}, {}}; }
 };
 
 QuoteResult
 GncMockQuoteSource::get_quotes(const std::string& json_string) const
 {
-    return {0, m_quotes, m_errors};
+    if (m_errors.empty())
+        return {0, m_quotes, m_errors};
+    return {1, m_quotes, m_errors};
 }
 
 class GncQuotesTest : public ::testing::Test
@@ -356,4 +375,37 @@ TEST_F(GncQuotesTest, test_version)
     StrVec quote_vec, err_vec;
     GncQuotesImpl quotes(m_book, std::make_unique<GncMockQuoteSource>(std::move(quote_vec), std::move(err_vec)));
     EXPECT_STREQ("9.99", quotes.version().c_str());
+}
+
+TEST_F(GncQuotesTest, test_failure_invalid_json)
+{
+    StrVec quote_vec, err_vec{"invalid_json\n"};
+    GncQuotesImpl quotes(m_book, std::make_unique<GncMockQuoteSource>(std::move(quote_vec), std::move(err_vec)));
+    EXPECT_THROW(quotes.fetch(m_book), GncQuoteException);
+    try
+    {
+        quotes.fetch(m_book);
+    }
+    catch (const GncQuoteException& err)
+    {
+        EXPECT_STREQ("GnuCash submitted invalid json to Finance::Quote. The details were logged.\n",
+                     err.what());
+    }
+
+}
+
+TEST_F(GncQuotesTest, test_failure_missing_modules)
+{
+    EXPECT_THROW(GncQuotesImpl quotes(m_book, std::make_unique<GncFailedQuoteSource>()),
+                 GncQuoteSourceError);
+    try
+    {
+        GncQuotesImpl quotes(m_book, std::make_unique<GncFailedQuoteSource>());
+    }
+    catch (const GncQuoteSourceError& err)
+    {
+        EXPECT_STREQ("Failed to initialize Finance::Quote: missing_modules Mozilla::CA Try::Tiny",
+                     err.what());
+    }
+
 }
