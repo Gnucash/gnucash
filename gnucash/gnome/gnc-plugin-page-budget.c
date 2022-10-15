@@ -177,6 +177,10 @@ static GncDisplayItem gnc_plugin_page_budget_display_items [] =
         NULL,
         N_("Run the budget report.")
     },
+    {
+        "EditOpenAccountAction", GNC_ICON_OPEN_ACCOUNT, N_("Open _Account"), NULL,
+        N_("Open the selected account")
+    }, // this is needed for when gnucash starts with --nofile
     /* View menu */
     {
         "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL
