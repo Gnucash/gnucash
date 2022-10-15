@@ -220,6 +220,9 @@ static void gnc_quartz_set_menu (GncMainWindow* window);
 #endif
 static void gnc_main_window_init_menu_updaters (GncMainWindow *window);
 
+static void main_menu_add_submenus (GncMainWindow *window, GtkBuilder *builder,
+                                    const GncAddSubMenu *submenus, gint n_updates,
+                                    const gchar *menu_qualifier);
 
 /** The instance private data structure for an embedded window
  *  object. */
@@ -512,6 +515,43 @@ static GncDisplayItem gnc_menu_display_items [] =
 /** The number of display items provided by the main window. */
 static guint gnc_menu_n_display_items = G_N_ELEMENTS(gnc_menu_display_items);
 
+static GncAddSubMenu add_submenus [] =
+{
+    { "EditAction", true },
+    { "ViewAction", true },
+    { "TransactionAction", false },
+    { "ActionsAction", true },
+    { "ScheduledAction", false },
+    { "ReportsAction", true },
+};
+static guint add_submenus_n_actions = G_N_ELEMENTS(add_submenus);
+
+/* As only when loading the sub menus the menu items are updated,
+ * any menu items out of that scope that are made visible need to be
+ * added here */
+static GncActionUpdate update_actions [] =
+{
+    { "FilePrintAction", N_("_Print"), true, nullptr },
+    { "FilePrintPDFAction", nullptr, false, nullptr },
+    { "ReportExportAction", nullptr, false, nullptr },
+    { "ReportSaveAction", nullptr, false, nullptr },
+    { "ReportSaveAsAction", nullptr, false, nullptr },
+
+    { "ReportsCompanyReportAction", nullptr, false, nullptr },
+    { "OTVendorListingReportAction", nullptr, false, nullptr },
+    { "OTCustomerListingReportAction", nullptr, false, nullptr },
+    { "OTVendorReportAction", nullptr, false, nullptr },
+    { "OTCustomerReportAction", nullptr, false, nullptr },
+    { "OTEmployeeReportAction", nullptr, false, nullptr },
+
+    { "ReportsAccountReportAction", nullptr, false, nullptr },
+    { "ReportsAcctTransReportAction", nullptr, false, nullptr },
+    { "BusinessLinkAction", nullptr, false, nullptr },
+    { "BusinessLinkOpenAction", nullptr, false, nullptr },
+    { "ToolsProcessPaymentAction", nullptr, false, nullptr },
+};
+static guint update_actions_n_actions = G_N_ELEMENTS(update_actions);
+
 /** The following are in the main window so they will always be
  *  present in the menu structure, but they are never sensitive.
  *  These actions should be overridden in child windows where they
@@ -539,6 +579,7 @@ static const gchar *initially_insensitive_actions[] =
  *  have meaning. */
 static const gchar *always_hidden_actions[] =
 {
+    "ReportsStubAction",
     "ViewSortByAction",
     "ViewFilterByAction",
     nullptr
@@ -3613,6 +3654,10 @@ gnc_main_window_merge_actions (GncMainWindow *window,
 
     gnc_main_window_add_to_display_list (window, display_items, n_display_items);
 
+//FIXMEb maybe this can be added to an idle so it just gets called once at end of loading all
+    gnc_main_window_update_display_menu_items (window, priv->menubar);
+    gnc_main_window_update_display_toolbar_items (window);
+
     gtk_widget_insert_action_group (GTK_WIDGET(window), group_name,
                                     G_ACTION_GROUP(entry->simple_action_group));
 
@@ -3853,8 +3898,8 @@ gnc_main_window_add_to_display_list (GncMainWindow *window,
 
 
 static void
-gnc_main_window_update_toolbar (GncMainWindow *window, GncPluginPage *page,
-                                const gchar *toolbar_qualifier)
+main_toolbar_update (GncMainWindow *window, GncPluginPage *page,
+                     const gchar *toolbar_qualifier)
 {
     GncMainWindowPrivate *priv;
     GtkBuilder *builder;
@@ -3893,45 +3938,17 @@ gnc_main_window_update_toolbar (GncMainWindow *window, GncPluginPage *page,
 }
 
 
-void
-gnc_main_window_add_sub_menus (GncMainWindow *window, GncPluginPage *page,
-                               const GncAddSubMenu *submenus,
-                               gint n_updates)
 static void
 move_menu_items_cb (GtkWidget *child, gpointer user_data)
 {
-    GncMainWindowPrivate *priv;
-    const gchar *plugin_page_actions_group_name;
-    GtkBuilder *builder;
-    const gchar *menu_qualifier;
-    GncActionUpdate extra_updates[1];
-
-    g_return_if_fail (GNC_IS_MAIN_WINDOW(window));
-    g_return_if_fail (page != nullptr);
-    g_return_if_fail (submenus != nullptr || n_updates == 0);
-
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-
-    builder = gnc_plugin_page_get_builder (page);
     GtkWidget *parent = gtk_widget_get_parent (child);
 
-    menu_qualifier = gnc_plugin_page_get_menu_qualifier (page);
-
-    if (!builder)
-        return;
-
-    plugin_page_actions_group_name = gnc_plugin_page_get_simple_action_group_name (page);
-
-    if (!plugin_page_actions_group_name)
-        return;
     g_object_ref (child);
     gtk_container_remove (GTK_CONTAINER(parent), child);
     gtk_menu_shell_append (GTK_MENU_SHELL(user_data), child);
     g_object_unref (child);
 }
 
-    gtk_widget_insert_action_group (GTK_WIDGET(window), gnc_plugin_page_get_simple_action_group_name (page),
-                                    G_ACTION_GROUP(gnc_plugin_page_get_action_group (page)));
 static void
 main_menu_add_reportstub_to_report_menu (GncMainWindow *window)
 {
@@ -3941,20 +3958,18 @@ main_menu_add_reportstub_to_report_menu (GncMainWindow *window)
     GtkWidget *report_stub_item = gnc_find_menu_item (priv->menubar, "ReportsStubAction");
     GtkWidget *sub_menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM(report_stub_item));
 
-    if ((g_strcmp0 (priv->previous_plugin_page_name,
-                   plugin_page_actions_group_name) == 0) &&
-        (g_strcmp0 (priv->previous_menu_quailifier,
-                    menu_qualifier) == 0))
-        return;
     // move the report stub to report menu
     gtk_container_foreach (GTK_CONTAINER(sub_menu), move_menu_items_cb, report_item_sub_menu);
     gtk_widget_hide (report_stub_item);
 }
 
-    priv->previous_plugin_page_name = plugin_page_actions_group_name;
-    priv->previous_menu_quailifier = menu_qualifier;
 
-    gnc_main_window_update_toolbar (window, page, menu_qualifier);
+static void
+main_menu_add_submenus (GncMainWindow *window, GtkBuilder *builder,
+                        const GncAddSubMenu *submenus, gint n_updates,
+                        const gchar *menu_qualifier)
+{
+    GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
     for (gint i = 0; i < n_updates; i++)
     {
@@ -4004,8 +4019,55 @@ main_menu_add_reportstub_to_report_menu (GncMainWindow *window)
         else
             gtk_widget_hide (menu_item);
     }
+}
+
+void
+gnc_main_window_add_sub_menus (GncMainWindow *window, GncPluginPage *page,
+                               const GncAddSubMenu *submenus,
+                               gint n_updates)
+{
+    GncMainWindowPrivate *priv;
+    const gchar *plugin_page_actions_group_name;
+    GtkBuilder *builder;
+    const gchar *menu_qualifier;
+    GncActionUpdate extra_updates[1];
+
+    g_return_if_fail (GNC_IS_MAIN_WINDOW(window));
+    g_return_if_fail (page != nullptr);
+    g_return_if_fail (submenus != nullptr || n_updates == 0);
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+    builder = gnc_plugin_page_get_builder (page);
+
+    menu_qualifier = gnc_plugin_page_get_menu_qualifier (page);
+
+    if (!builder)
+        return;
+
+    plugin_page_actions_group_name = gnc_plugin_page_get_simple_action_group_name (page);
+
+    if (!plugin_page_actions_group_name)
+        return;
+
+    gtk_widget_insert_action_group (GTK_WIDGET(window), gnc_plugin_page_get_simple_action_group_name (page),
+                                    G_ACTION_GROUP(gnc_plugin_page_get_action_group (page)));
+
+    if ((g_strcmp0 (priv->previous_plugin_page_name,
+                   plugin_page_actions_group_name) == 0) &&
+        (g_strcmp0 (priv->previous_menu_quailifier,
+                    menu_qualifier) == 0))
+        return;
+
+    priv->previous_plugin_page_name = plugin_page_actions_group_name;
+    priv->previous_menu_quailifier = menu_qualifier;
+
+    main_toolbar_update (window, page, menu_qualifier);
+
     main_menu_add_reportstub_to_report_menu (window);
 
+    main_menu_add_submenus (window, builder, submenus, n_updates,
+                            menu_qualifier);
 
     /* set visibility of the Stock Assistant label based on extra */
     extra_updates[0] = (GncActionUpdate){ "ActionsStockAssistantAction", N_("Stock Ass_istant"),
@@ -4383,12 +4445,16 @@ gnc_main_window_setup_window (GncMainWindow *window)
                                          gnc_menu_display_items,
                                          gnc_menu_n_display_items);
 
+    // add the sub menu for a default window
+    main_menu_add_submenus (window, builder, add_submenus, add_submenus_n_actions, nullptr);
+
     // update the menubar and toolbar items
     gnc_main_window_update_display_menu_items (window, priv->menubar);
     gnc_main_window_update_display_toolbar_items (window);
 
-    // need to add the accelerator keys
-    gnc_add_accelerator_keys_for_menu (GTK_WIDGET(priv->menubar), priv->accel_group);
+    // update the visability of some actions
+    gnc_main_window_update_action_labels (window, update_actions,
+                                          update_actions_n_actions);
 
     gnc_plugin_set_actions_enabled (priv->simple_action_group,
                                     initially_insensitive_actions,

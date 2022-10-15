@@ -572,6 +572,171 @@
   </menu>
 
 
+  <menu id="EditAction">
+    <section>
+      <item>
+        <attribute name="label" translatable="no">EditCutAction</attribute>
+        <attribute name="action">mainwin.EditCutAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">EditCopyAction</attribute>
+        <attribute name="action">mainwin.EditCopyAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">EditPasteAction</attribute>
+        <attribute name="action">mainwin.EditPasteAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">EditFindTransactionsAction</attribute>
+        <attribute name="action">gnc-plugin-basic-commands-actions.EditFindTransactionsAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">EditPreferencesAction</attribute>
+        <attribute name="action">mainwin.EditPreferencesAction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">EditStyleSheetsAction</attribute>
+        <attribute name="action">gnc-plugin-report-system-actions.EditStyleSheetsAction</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <menu id="ViewAction">
+    <section>
+      <item>
+        <attribute name="label" translatable="no">ViewToolbarAction</attribute>
+        <attribute name="action">mainwin.ViewToolbarAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">ViewSummaryAction</attribute>
+        <attribute name="action">mainwin.ViewSummaryAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">ViewStatusbarAction</attribute>
+        <attribute name="action">mainwin.ViewStatusbarAction</attribute>
+      </item>
+      <submenu>
+        <attribute name="label" translatable="no">ViewTabPositionAction</attribute>
+        <item>
+          <attribute name="label" translatable="no">ViewTabPositionTopAction</attribute>
+          <attribute name="action">mainwin.ViewTabPositionAction</attribute>
+          <attribute name="target" type="i">0</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ViewTabPositionBottomAction</attribute>
+          <attribute name="action">mainwin.ViewTabPositionAction</attribute>
+          <attribute name="target" type="i">1</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ViewTabPositionLeftAction</attribute>
+          <attribute name="action">mainwin.ViewTabPositionAction</attribute>
+          <attribute name="target" type="i">2</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ViewTabPositionRightAction</attribute>
+          <attribute name="action">mainwin.ViewTabPositionAction</attribute>
+          <attribute name="target" type="i">3</attribute>
+        </item>
+      </submenu>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">ViewAccountTreeAction</attribute>
+        <attribute name="action">gnc-plugin-account-tree-actions.ViewAccountTreeAction</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <menu id="ActionsAction">
+    <submenu>
+      <attribute name="label" translatable="no">OnlineActionsAction</attribute>
+      <attribute name="action">gnc-plugin-aqbanking-actions.OnlineActionsAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">ABGetBalanceAction</attribute>
+          <attribute name="action">gnc-plugin-aqbanking-actions.ABGetBalanceAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ABGetTransAction</attribute>
+          <attribute name="action">gnc-plugin-aqbanking-actions.ABGetTransAction</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">ABIssueSepaTransAction</attribute>
+          <attribute name="action">gnc-plugin-aqbanking-actions.ABIssueSepaTransAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ABIssueSepaIntTransAction</attribute>
+          <attribute name="action">gnc-plugin-aqbanking-actions.ABIssueSepaIntTransAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ABIssueIntTransAction</attribute>
+          <attribute name="action">gnc-plugin-aqbanking-actions.ABIssueIntTransAction</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">ABViewLogwindowAction</attribute>
+          <attribute name="action">gnc-plugin-aqbanking-actions.ABViewLogwindowAction</attribute>
+        </item>
+      </section>
+    </submenu>
+    <submenu>
+      <attribute name="label" translatable="no">ActionsScheduledTransactionsAction</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.ActionsScheduledTransactionsAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">ActionsScheduledTransactionEditorAction</attribute>
+          <attribute name="action">gnc-plugin-basic-commands-actions.ActionsScheduledTransactionEditorAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ActionsSinceLastRunAction</attribute>
+          <attribute name="action">gnc-plugin-basic-commands-actions.ActionsSinceLastRunAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ActionsMortgageLoanAction</attribute>
+          <attribute name="action">gnc-plugin-basic-commands-actions.ActionsMortgageLoanAction</attribute>
+        </item>
+     </section>
+    </submenu>
+    <submenu>
+      <attribute name="label" translatable="no">ActionsBudgetAction</attribute>
+      <attribute name="action">gnc-plugin-budget-actions.ActionsBudgetAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">NewBudgetAction</attribute>
+          <attribute name="action">gnc-plugin-budget-actions.NewBudgetAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">OpenBudgetAction</attribute>
+          <attribute name="action">gnc-plugin-budget-actions.OpenBudgetAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">CopyBudgetAction</attribute>
+          <attribute name="action">gnc-plugin-budget-actions.CopyBudgetAction</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">DeleteBudgetAction</attribute>
+          <attribute name="action">gnc-plugin-budget-actions.DeleteBudgetAction</attribute>
+        </item>
+      </section>
+    </submenu>
+    <section>
+      <item>
+        <attribute name="label" translatable="no">ActionsForgetWarningsAction</attribute>
+        <attribute name="action">mainwin.ActionsForgetWarningsAction</attribute>
+      </item>
+    </section>
+  </menu>
+
+
   <menu id="mainwin-popup">
     <item>
       <attribute name="label" translatable="no">TestAction</attribute>
@@ -605,6 +770,40 @@
         <property name="label" translatable="no">FileCloseAction</property>
         <property name="use-underline">True</property>
         <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2a">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="no">ToolbarNewInvoiceAction</property>
+        <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">image-missing</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem" id="extra_separator">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
       </object>
       <packing>
         <property name="expand">False</property>
