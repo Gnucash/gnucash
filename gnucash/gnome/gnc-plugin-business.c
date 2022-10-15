@@ -992,9 +992,11 @@ gnc_plugin_business_main_window_menu_changed (GncMainWindow *window,
                                               GncPluginPage *page,
                                               gpointer user_data)
 {
+    // page could be NULL when gnucash started with --nofile
     if (page == gnc_main_window_get_current_page (window))
     {
-        gnc_plugin_business_main_window_page_changed (window, page, user_data);
+        if (page)
+            gnc_plugin_business_main_window_page_changed (window, page, user_data);
         bind_extra_toolbuttons_visibility (window);
     }
 }

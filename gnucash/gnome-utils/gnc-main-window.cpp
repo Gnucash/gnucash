@@ -4338,6 +4338,10 @@ main_window_realize_cb (GtkWidget *widget, gpointer user_data)
     GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
     gnc_add_accelerator_keys_for_menu (GTK_WIDGET(priv->menubar), priv->accel_group);
+
+    /* need to signal menu has been changed, this will call the
+       business function 'bind_extra_toolbuttons_visibility' */
+    g_signal_emit_by_name (window, "menu_changed", nullptr);
 }
 
 static void
