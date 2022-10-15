@@ -469,19 +469,6 @@ gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
 }
 
 
-static void
-move_cb (GtkWidget *child, gpointer user_data)
-{
-    GncPluginMenuAdditionsPerWindow *per_window = user_data;
-    GtkWidget *parent = gtk_widget_get_parent (child);
-    
-    g_object_ref (child);
-    gtk_container_remove (GTK_CONTAINER(parent), child);
-    gtk_menu_shell_append (GTK_MENU_SHELL(per_window->report_menu), child);
-    g_object_unref (child);
-}
-
-
 /** Initialize the report menu and other additional menus.  This
  *  function is called as part of the initialization of a window, when
  *  the plugin menu items are being added to the menu structure.
@@ -506,8 +493,6 @@ gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
     GSList *menu_list;
     GtkWidget *menubar = gnc_main_window_get_menu (window);
     GtkWidget *re_item = gnc_find_menu_item (menubar, "ReportsAction");
-    GtkWidget *report_stub_item = gnc_find_menu_item (menubar, "ReportsStubAction");
-    GtkWidget *sub_menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM(report_stub_item));
     GtkWidget *item;
     GList *report_menu_list;
     gint num_of_items_in_menu;
@@ -541,14 +526,9 @@ gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
     gtk_menu_shell_insert (GTK_MENU_SHELL(per_window.report_menu), item, num_of_items_in_menu - 1);
     g_list_free (report_menu_list);
 
-    // move the report stub to report menu
-    gtk_container_foreach (GTK_CONTAINER(sub_menu), move_cb, &per_window);
-
     // add the report menu to the window
     gtk_menu_item_set_submenu (GTK_MENU_ITEM(re_item), per_window.report_menu);
     gtk_widget_show_all (per_window.report_menu);
-
-    gtk_widget_hide (report_stub_item);
 
     g_hash_table_destroy (per_window.build_menu_hash);
 

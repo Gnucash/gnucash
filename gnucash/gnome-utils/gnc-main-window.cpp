@@ -3897,6 +3897,8 @@ void
 gnc_main_window_add_sub_menus (GncMainWindow *window, GncPluginPage *page,
                                const GncAddSubMenu *submenus,
                                gint n_updates)
+static void
+move_menu_items_cb (GtkWidget *child, gpointer user_data)
 {
     GncMainWindowPrivate *priv;
     const gchar *plugin_page_actions_group_name;
@@ -3911,6 +3913,7 @@ gnc_main_window_add_sub_menus (GncMainWindow *window, GncPluginPage *page,
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
     builder = gnc_plugin_page_get_builder (page);
+    GtkWidget *parent = gtk_widget_get_parent (child);
 
     menu_qualifier = gnc_plugin_page_get_menu_qualifier (page);
 
@@ -3921,15 +3924,32 @@ gnc_main_window_add_sub_menus (GncMainWindow *window, GncPluginPage *page,
 
     if (!plugin_page_actions_group_name)
         return;
+    g_object_ref (child);
+    gtk_container_remove (GTK_CONTAINER(parent), child);
+    gtk_menu_shell_append (GTK_MENU_SHELL(user_data), child);
+    g_object_unref (child);
+}
 
     gtk_widget_insert_action_group (GTK_WIDGET(window), gnc_plugin_page_get_simple_action_group_name (page),
                                     G_ACTION_GROUP(gnc_plugin_page_get_action_group (page)));
+static void
+main_menu_add_reportstub_to_report_menu (GncMainWindow *window)
+{
+    GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+    GtkWidget *report_item = gnc_find_menu_item (priv->menubar, "ReportsAction");
+    GtkWidget *report_item_sub_menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM(report_item));
+    GtkWidget *report_stub_item = gnc_find_menu_item (priv->menubar, "ReportsStubAction");
+    GtkWidget *sub_menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM(report_stub_item));
 
     if ((g_strcmp0 (priv->previous_plugin_page_name,
                    plugin_page_actions_group_name) == 0) &&
         (g_strcmp0 (priv->previous_menu_quailifier,
                     menu_qualifier) == 0))
         return;
+    // move the report stub to report menu
+    gtk_container_foreach (GTK_CONTAINER(sub_menu), move_menu_items_cb, report_item_sub_menu);
+    gtk_widget_hide (report_stub_item);
+}
 
     priv->previous_plugin_page_name = plugin_page_actions_group_name;
     priv->previous_menu_quailifier = menu_qualifier;
@@ -3984,6 +4004,8 @@ gnc_main_window_add_sub_menus (GncMainWindow *window, GncPluginPage *page,
         else
             gtk_widget_hide (menu_item);
     }
+    main_menu_add_reportstub_to_report_menu (window);
+
 
     /* set visibility of the Stock Assistant label based on extra */
     extra_updates[0] = (GncActionUpdate){ "ActionsStockAssistantAction", N_("Stock Ass_istant"),
