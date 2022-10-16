@@ -210,8 +210,6 @@ static GtkWidget *gnc_main_window_get_statusbar (GncWindow *window_in);
 static void statusbar_notification_lastmodified (void);
 static void gnc_main_window_update_tab_position (gpointer prefs, gchar *pref, gpointer user_data);
 static void gnc_main_window_remove_prefs (GncMainWindow *window);
-static void gnc_main_window_update_display_menu_items (GncMainWindow *window, GtkWidget *menu);
-static void gnc_main_window_update_display_toolbar_items (GncMainWindow *window);
 
 #ifdef MAC_INTEGRATION
 static void gnc_quartz_shutdown (GtkosxApplication *theApp, gpointer data);
@@ -3843,7 +3841,7 @@ gnc_main_window_get_action_group (GncMainWindow *window,
 }
 
 
-static void
+void
 gnc_main_window_update_display_menu_items (GncMainWindow *window, GtkWidget *menu)
 {
     GncMainWindowPrivate *priv;
@@ -3864,7 +3862,7 @@ gnc_main_window_update_display_menu_items (GncMainWindow *window, GtkWidget *men
 }
 
 
-static void
+void
 gnc_main_window_update_display_toolbar_items (GncMainWindow *window)
 {
     GncMainWindowPrivate *priv;
@@ -4075,13 +4073,6 @@ gnc_main_window_add_sub_menus (GncMainWindow *window, GncPluginPage *page,
     gnc_main_window_update_action_labels (window, extra_updates, G_N_ELEMENTS(extra_updates));
 
     gnc_main_window_update_display_toolbar_items (window);
-
-    /* The visibility of the Aqbanking menu items when it is not present is mostly
-       controlled by adding the menu attribute "hidden-when" action-disabled but
-       this can not be used for the 'Online Actions' menu item. So to get round this
-       base it visibility on finding a menu item with the setup action 'ABSetupAction */
-    if (!gnc_find_menu_item (priv->menubar, "ABSetupAction"))
-        gtk_widget_hide (gnc_find_menu_item (priv->menubar, "OnlineActionsAction"));
 
     // to do with the cut/copy/paste sensitivity
     gnc_main_window_init_menu_updaters (window);

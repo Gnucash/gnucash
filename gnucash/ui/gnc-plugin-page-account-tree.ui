@@ -131,40 +131,6 @@
 
   <menu id="ActionsAction">
     <submenu>
-      <attribute name="label" translatable="no">OnlineActionsAction</attribute>
-      <attribute name="action">gnc-plugin-aqbanking-actions.OnlineActionsAction</attribute>
-      <section>
-        <item>
-          <attribute name="label" translatable="no">ABGetBalanceAction</attribute>
-          <attribute name="action">gnc-plugin-aqbanking-actions.ABGetBalanceAction</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="no">ABGetTransAction</attribute>
-          <attribute name="action">gnc-plugin-aqbanking-actions.ABGetTransAction</attribute>
-        </item>
-      </section>
-      <section>
-        <item>
-          <attribute name="label" translatable="no">ABIssueSepaTransAction</attribute>
-          <attribute name="action">gnc-plugin-aqbanking-actions.ABIssueSepaTransAction</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="no">ABIssueSepaIntTransAction</attribute>
-          <attribute name="action">gnc-plugin-aqbanking-actions.ABIssueSepaIntTransAction</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="no">ABIssueIntTransAction</attribute>
-          <attribute name="action">gnc-plugin-aqbanking-actions.ABIssueIntTransAction</attribute>
-        </item>
-      </section>
-      <section>
-        <item>
-          <attribute name="label" translatable="no">ABViewLogwindowAction</attribute>
-          <attribute name="action">gnc-plugin-aqbanking-actions.ABViewLogwindowAction</attribute>
-        </item>
-      </section>
-    </submenu>
-    <submenu>
       <attribute name="label" translatable="no">ActionsScheduledTransactionsAction</attribute>
       <attribute name="action">gnc-plugin-basic-commands-actions.ActionsScheduledTransactionsAction</attribute>
       <section>

@@ -42,6 +42,7 @@
 #include "gnc-ab-kvp.h"
 #include "gnc-gwen-gui.h"
 #include "gnc-file-aqb-import.h"
+#include "gnc-gtk-utils.h"
 #include "gnc-plugin-aqbanking.h"
 #include "gnc-plugin-manager.h"
 #include "gnc-plugin-page-account-tree.h"
@@ -254,6 +255,89 @@ gnc_plugin_aqbanking_init(GncPluginAqBanking *plugin)
 {
 }
 
+static GtkWidget *
+add_menu_item (GtkWidget *submenu, const gchar *action_name, gboolean prepend)
+{
+    GtkWidget *menu_item = gtk_menu_item_new_with_label (action_name);
+    gchar *full_action_name = g_strconcat (PLUGIN_ACTIONS_NAME, ".", action_name, NULL);
+
+    if (prepend)
+        gtk_menu_shell_prepend (GTK_MENU_SHELL(submenu), menu_item);
+    else
+        gtk_menu_shell_append (GTK_MENU_SHELL(submenu), menu_item);
+    gtk_actionable_set_action_name (GTK_ACTIONABLE(menu_item), full_action_name);
+    gtk_menu_item_set_use_underline (GTK_MENU_ITEM(menu_item), TRUE);
+
+    g_object_set_data_full (G_OBJECT(menu_item), "myaction-name",
+                            g_strdup (action_name), g_free);
+
+    gtk_widget_show (menu_item);
+    g_free (full_action_name);
+    return menu_item;
+}
+
+static void
+gnc_plugin_aqbanking_add_main_menus (GncMainWindow *window)
+{
+    GtkWidget *menu = gnc_main_window_get_menu (window);
+    GtkWidget *file_import_item = gnc_find_menu_item (menu, "FileImportAction");
+    GtkWidget *file_import_sub = gtk_menu_item_get_submenu (GTK_MENU_ITEM(file_import_item));
+    GtkWidget *tools_item = gnc_find_menu_item (menu, "ToolsAction");
+    GtkWidget *tools_sub = gtk_menu_item_get_submenu (GTK_MENU_ITEM(tools_item));
+
+    add_menu_item (file_import_sub, "Mt940ImportAction", FALSE);
+    add_menu_item (file_import_sub, "Mt942ImportAction", FALSE);
+    add_menu_item (file_import_sub, "DtausImportAction", FALSE);
+    add_menu_item (file_import_sub, "DtausImportSendAction", FALSE);
+    add_menu_item (tools_sub, "ABSetupAction", TRUE);
+}
+
+static void
+gnc_plugin_aqbanking_add_action_menu (GncMainWindow *window)
+{
+    GtkWidget *menu = gnc_main_window_get_menu (window);
+    GtkWidget *action_item = gnc_find_menu_item (menu, "ActionsAction");
+    GtkWidget *action_sub = gtk_menu_item_get_submenu (GTK_MENU_ITEM(action_item));
+    GtkWidget *aqb_menu = gtk_menu_new ();
+    GtkWidget *aqb_menu_item = add_menu_item (action_sub, "OnlineActionsAction", TRUE);
+    GtkWidget *menu_item;
+    gchar *full_action_name;
+
+    gtk_menu_item_set_submenu (GTK_MENU_ITEM(aqb_menu_item), aqb_menu);
+
+    add_menu_item (aqb_menu, "ABGetBalanceAction", FALSE);
+    add_menu_item (aqb_menu, "ABGetTransAction", FALSE);
+    menu_item = gtk_separator_menu_item_new ();
+    gtk_menu_shell_append (GTK_MENU_SHELL(aqb_menu), menu_item);
+    gtk_widget_show (menu_item);
+    add_menu_item (aqb_menu, "ABIssueSepaTransAction", FALSE);
+    add_menu_item (aqb_menu, "ABIssueSepaIntTransAction", FALSE);
+    add_menu_item (aqb_menu, "ABIssueIntTransAction", FALSE);
+    menu_item = gtk_separator_menu_item_new ();
+    gtk_menu_shell_append (GTK_MENU_SHELL(aqb_menu), menu_item);
+    gtk_widget_show (menu_item);
+
+    full_action_name = g_strconcat (PLUGIN_ACTIONS_NAME, ".",
+                                    MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW, NULL);
+    menu_item = gtk_check_menu_item_new_with_mnemonic (MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW);
+    gtk_actionable_set_action_name (GTK_ACTIONABLE(menu_item), full_action_name);
+    gtk_menu_item_set_use_underline (GTK_MENU_ITEM(menu_item), TRUE);
+    gtk_menu_shell_append (GTK_MENU_SHELL(aqb_menu), menu_item);
+    gtk_widget_show (menu_item);
+    g_free (full_action_name);
+
+    gnc_main_window_update_display_menu_items (window, action_sub);
+}
+
+static void
+gnc_plugin_ab_main_window_menu_changed (GncMainWindow *window,
+                                        GncPluginPage *page,
+                                        gpointer user_data)
+{
+    if (page == gnc_main_window_get_current_page (window))
+        gnc_plugin_aqbanking_add_action_menu (window);
+}
+
 /**
  * Called when this plugin is added to a main window.  Connect a few callbacks
  * here to track page changes.
@@ -272,6 +356,11 @@ gnc_plugin_aqbanking_add_to_window(GncPlugin *plugin, GncMainWindow *window,
     g_signal_connect (window, "page_changed",
                       G_CALLBACK(gnc_plugin_ab_main_window_page_changed),
                       plugin);
+    g_signal_connect (window, "menu_changed",
+                      G_CALLBACK(gnc_plugin_ab_main_window_menu_changed),
+                      plugin);
+
+    gnc_plugin_aqbanking_add_main_menus (window);
 
     action = gnc_main_window_find_action_in_group (window, PLUGIN_ACTIONS_NAME,
                                                    MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW);
@@ -292,6 +381,8 @@ gnc_plugin_aqbanking_remove_from_window(GncPlugin *plugin, GncMainWindow *window
         window, G_CALLBACK(gnc_plugin_ab_main_window_page_changed), plugin);
     g_signal_handlers_disconnect_by_func(
         window, G_CALLBACK(gnc_plugin_ab_main_window_page_added), plugin);
+    g_signal_handlers_disconnect_by_func(
+        window, G_CALLBACK(gnc_plugin_ab_main_window_menu_changed), plugin);
 }
 
 /************************************************************

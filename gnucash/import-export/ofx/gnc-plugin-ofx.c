@@ -25,6 +25,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
+#include "gnc-gtk-utils.h"
 #include "gnc-ofx-import.h"
 #include "gnc-plugin-ofx.h"
 #include "gnc-plugin-manager.h"
@@ -32,6 +33,9 @@
 static void gnc_plugin_ofx_class_init (GncPluginOfxClass *klass);
 static void gnc_plugin_ofx_init (GncPluginOfx *plugin);
 static void gnc_plugin_ofx_finalize (GObject *object);
+static void gnc_plugin_ofx_add_to_window (GncPlugin *plugin,
+                                          GncMainWindow *window,
+                                          GQuark type);
 
 /* Command callbacks */
 static void gnc_plugin_ofx_cmd_import (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
@@ -93,11 +97,54 @@ gnc_plugin_ofx_class_init (GncPluginOfxClass *klass)
     plugin_class->n_actions       = gnc_plugin_n_actions;
     plugin_class->display_items   = gnc_plugin_display_items;
     plugin_class->n_display_items = gnc_plugin_n_display_items;
+    plugin_class->add_to_window   = gnc_plugin_ofx_add_to_window;
 }
 
 static void
 gnc_plugin_ofx_init (GncPluginOfx *plugin)
 {
+}
+
+static GtkWidget *
+add_menu_item (GtkWidget *submenu, const gchar *action_name, gboolean prepend)
+{
+    GtkWidget *menu_item = gtk_menu_item_new_with_label (action_name);
+    gchar *full_action_name = g_strconcat (PLUGIN_ACTIONS_NAME, ".", action_name, NULL);
+
+    if (prepend)
+        gtk_menu_shell_prepend (GTK_MENU_SHELL(submenu), menu_item);
+    else
+        gtk_menu_shell_append (GTK_MENU_SHELL(submenu), menu_item);
+    gtk_actionable_set_action_name (GTK_ACTIONABLE(menu_item), full_action_name);
+    gtk_menu_item_set_use_underline (GTK_MENU_ITEM(menu_item), TRUE);
+
+    g_object_set_data_full (G_OBJECT(menu_item), "myaction-name",
+                            g_strdup (action_name), g_free);
+
+    gtk_widget_show (menu_item);
+    g_free (full_action_name);
+    return menu_item;
+}
+
+static void
+gnc_plugin_ofx_add_main_menus (GncMainWindow *window)
+{
+    GtkWidget *menu = gnc_main_window_get_menu (window);
+    GtkWidget *file_import_item = gnc_find_menu_item (menu, "FileImportAction");
+    GtkWidget *file_import_sub = gtk_menu_item_get_submenu (GTK_MENU_ITEM(file_import_item));
+
+    add_menu_item (file_import_sub, "OfxImportAction", FALSE);
+}
+
+/**
+ * Called when this plugin is added to a main window.  Connect a few callbacks
+ * here to track page changes.
+ */
+static void
+gnc_plugin_ofx_add_to_window (GncPlugin *plugin, GncMainWindow *window,
+                               GQuark type)
+{
+    gnc_plugin_ofx_add_main_menus (window);
 }
 
 static void

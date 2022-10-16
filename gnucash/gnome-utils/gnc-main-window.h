@@ -463,6 +463,10 @@ void gnc_main_window_add_to_display_list (GncMainWindow *window,
                                           const GncDisplayItem *display_items,
                                           gint n_display_items); //FIXMEb added
 
+void gnc_main_window_update_display_menu_items (GncMainWindow *window,
+                                                GtkWidget *menu); //FIXMEb added
+
+void gnc_main_window_update_display_toolbar_items (GncMainWindow *window); //FIXMEb added
 /**
  * Shows all main windows.
  **/
