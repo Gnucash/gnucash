@@ -272,7 +272,7 @@ typedef struct GncMainWindowPrivate
     gboolean restoring_pages;
 
     const gchar   *previous_plugin_page_name; //FIXMEb added
-    const gchar   *previous_menu_quailifier; //FIXMEb added
+    const gchar   *previous_menu_qualifier; //FIXMEb added
 
     /** The accelerator group for the window */
     GtkAccelGroup *accel_group; //FIXMEb added
@@ -2936,7 +2936,7 @@ gnc_main_window_init (GncMainWindow *window, void *data)
     priv->restoring_pages = FALSE;
 
     priv->previous_plugin_page_name = nullptr;
-    priv->previous_menu_quailifier = nullptr;
+    priv->previous_menu_qualifier = nullptr;
 
     priv->accel_group = gtk_accel_group_new ();
     gtk_window_add_accel_group (GTK_WINDOW(window), priv->accel_group);
@@ -4053,12 +4053,12 @@ gnc_main_window_add_sub_menus (GncMainWindow *window, GncPluginPage *page,
 
     if ((g_strcmp0 (priv->previous_plugin_page_name,
                    plugin_page_actions_group_name) == 0) &&
-        (g_strcmp0 (priv->previous_menu_quailifier,
+        (g_strcmp0 (priv->previous_menu_qualifier,
                     menu_qualifier) == 0))
         return;
 
     priv->previous_plugin_page_name = plugin_page_actions_group_name;
-    priv->previous_menu_quailifier = menu_qualifier;
+    priv->previous_menu_qualifier = menu_qualifier;
 
     main_toolbar_update (window, page, menu_qualifier);
 
