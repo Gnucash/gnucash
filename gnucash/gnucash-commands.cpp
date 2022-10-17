@@ -307,9 +307,20 @@ Gnucash::check_finance_quote (void)
     {
         GncQuotes quotes;
         std::cout << bl::format (bl::translate ("Found Finance::Quote version {1}.")) % quotes.version() << "\n";
-        std::cout << bl::translate ("Finance::Quote sources: ");
+        std::cout << bl::translate ("Finance::Quote sources:\n");
+        int count{0};
+        const auto width{12};
         for (auto source : quotes.sources())
-            std::cout << source << " ";
+        {
+            auto mul{source.length() / width + 1};
+            count += mul;
+            if (count > 6)
+            {
+                count = mul;
+                std::cout << "\n";
+            }
+            std::cout << std::setw(mul * (width + 1)) << std::left << source;
+        }
         std::cout << std::endl;
         return 0;
     }

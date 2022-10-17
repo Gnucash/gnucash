@@ -171,6 +171,7 @@ m_version{}, m_sources{}, m_api_key{}
     m_version = std::move(version);
     sources.erase(sources.begin());
     m_sources = std::move(sources);
+    std::sort (m_sources.begin(), m_sources.end());
 
     auto av_key = gnc_prefs_get_string ("general.finance-quote", "alphavantage-api-key");
     if (!(av_key && *av_key))
