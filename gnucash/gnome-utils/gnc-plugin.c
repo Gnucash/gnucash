@@ -354,10 +354,10 @@ gnc_plugin_update_display_menu_items (GHashTable *display_item_hash,
         GtkWidget *item = GTK_WIDGET(ptr->data);
         const gchar *action_name = (const gchar*)g_object_get_data (G_OBJECT(item), "myaction-name");
 
-        PINFO("action_name is '%s'", action_name);
-
         if (!action_name)
             continue;
+
+        PINFO("action_name is '%s'", action_name);
 
         gdi = (GncDisplayItem*)g_hash_table_lookup (display_item_hash, action_name);
 
@@ -411,10 +411,10 @@ gnc_plugin_update_display_toolbar_items (GHashTable *display_item_hash,
             GncDisplayItem *gdi;
             gchar *ptr;
 
-            PINFO("item_action_name is '%s'", item_action_name);
-
             if (!item_action_name)
                 continue;
+
+            PINFO("item_action_name is '%s'", item_action_name);
 
             ptr = g_strrstr (item_action_name, ".");
 
