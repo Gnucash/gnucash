@@ -173,7 +173,7 @@ m_version{}, m_sources{}, m_api_key{}
     m_sources = std::move(sources);
 
     auto av_key = gnc_prefs_get_string ("general.finance-quote", "alphavantage-api-key");
-    if (!av_key)
+    if (!(av_key && *av_key))
         av_key = getenv("ALPHAVANTAGE_API_KEY");
 
     if (av_key)

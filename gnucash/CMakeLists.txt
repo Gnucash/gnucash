@@ -152,6 +152,7 @@ if (MAC_INTEGRATION)
   target_link_libraries(gnucash ${OSX_EXTRA_LIBRARIES})
   target_compile_options(gnucash-cli PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
   target_link_libraries(gnucash-cli ${OSX_EXTRA_LIBRARIES})
+  target_link_options(gnucash-cli PRIVATE -Wl,-sectcreate,__TEXT,__info_plist,${CMAKE_SOURCE_DIR}/Info.plist)
 endif()
 
 install(TARGETS gnucash gnucash-cli DESTINATION ${CMAKE_INSTALL_BINDIR})

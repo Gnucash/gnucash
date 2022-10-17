@@ -365,6 +365,7 @@ Gnucash::add_quotes (const bo_str& uri)
 int
 Gnucash::report_quotes (const char* source, const StrVec& commodities, bool verbose)
 {
+    gnc_prefs_init();
     try
     {
         GncQuotes quotes;

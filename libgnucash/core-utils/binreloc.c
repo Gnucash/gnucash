@@ -369,6 +369,7 @@ get_mac_bundle_prefix()
 #if defined ENABLE_BINRELOC && defined MAC_INTEGRATION
     gchar *id = gtkosx_application_get_bundle_id ();
     gchar *path = gtkosx_application_get_resource_path ();
+    gchar *basename = g_path_get_basename (path);
     /* If id is nullthe app is unbundled and the path 
        is just the path to the application directory.
        We already have that and our version is better.
@@ -377,11 +378,23 @@ get_mac_bundle_prefix()
     */
     if (id == NULL || g_getenv ("GNC_UNINSTALLED"))
     {
+        g_free (basename);
         g_free (path);
         g_free (id);
         return NULL;
     }
+
     g_free (id);
+
+    if (g_strcmp0 ("bin", basename) == 0)
+    {
+        g_free (path);
+        g_free (basename);
+        return NULL;
+    }
+
+    g_free (basename);
+
     return path;
 #endif
     return NULL;
