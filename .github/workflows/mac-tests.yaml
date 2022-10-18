@@ -18,7 +18,7 @@ jobs:
       uses: carlosperate/download-file-action@v1.0.3
       id: dependencies
       with:
-        file-url: 'https://downloads.sourceforge.net/gnucash/Dependencies/gnucash-4.x-mac-dependencies.tar.xz'
+        file-url: 'https://downloads.sourceforge.net/gnucash/Dependencies/gnucash-4.900-mac-dependencies.tar.xz'
         file-name: gnucash-dependencies.tar.xz
     - name: download googletest
       uses: carlosperate/download-file-action@v1.0.3

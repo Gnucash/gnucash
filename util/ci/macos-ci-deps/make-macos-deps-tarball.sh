@@ -12,6 +12,7 @@ jhbuild build
 
 cd /Users/runner/gnucash
 mv inst arch
+cp $(which ninja) arch/bin/
 mkdir inst
 for i in 'bin' 'include' 'lib' 'share'; do
     j="$DIR/util/ci/macos-ci-deps/macos_$i.manifest"
