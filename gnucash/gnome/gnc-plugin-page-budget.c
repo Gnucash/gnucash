@@ -1300,6 +1300,7 @@ gnc_plugin_page_budget_cmd_budget_note(GtkAction *action,
         if (!strlen(txt))
             txt = NULL;
         gnc_budget_set_account_period_note(priv->budget, acc, period_num, txt);
+        g_free (txt);
         break;
     default:
         break;
