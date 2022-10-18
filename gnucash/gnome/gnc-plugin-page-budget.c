@@ -1297,9 +1297,8 @@ gnc_plugin_page_budget_cmd_budget_note(GtkAction *action,
     {
     case GTK_RESPONSE_OK:
         txt = xxxgtk_textview_get_text(GTK_TEXT_VIEW(note));
-        if (!strlen(txt))
-            txt = NULL;
-        gnc_budget_set_account_period_note(priv->budget, acc, period_num, txt);
+        gnc_budget_set_account_period_note (priv->budget, acc, period_num,
+                                            (txt && *txt) ? txt : NULL);
         g_free (txt);
         break;
     default:
