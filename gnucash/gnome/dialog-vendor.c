@@ -239,7 +239,7 @@ void
 gnc_vendor_window_help_cb (GtkWidget *widget, gpointer data)
 {
     VendorWindow *vw = data;
-    gnc_gnome_help (GTK_WINDOW(vw->dialog), HF_HELP, HL_USAGE_VENDOR);
+    gnc_gnome_help (GTK_WINDOW(vw->dialog), DF_MANUAL, DL_USAGE_VENDOR);
 }
 
 void

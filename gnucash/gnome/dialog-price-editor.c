@@ -374,7 +374,7 @@ pedit_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
     }
     else if (response == GTK_RESPONSE_HELP)
     {
-        gnc_gnome_help (GTK_WINDOW (pedit_dialog->dialog), HF_HELP, HL_PRICE_EDIT);
+        gnc_gnome_help (GTK_WINDOW (pedit_dialog->dialog), DF_MANUAL, DL_PRICE_EDIT);
     }
     else
     {

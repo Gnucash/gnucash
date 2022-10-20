@@ -4746,13 +4746,13 @@ gnc_main_window_cmd_window_raise (GtkAction *action,
 static void
 gnc_main_window_cmd_help_tutorial (GtkAction *action, GncMainWindow *window)
 {
-    gnc_gnome_help (GTK_WINDOW(window), HF_GUIDE, NULL);
+    gnc_gnome_help (GTK_WINDOW(window), DF_GUIDE, NULL);
 }
 
 static void
 gnc_main_window_cmd_help_contents (GtkAction *action, GncMainWindow *window)
 {
-    gnc_gnome_help (GTK_WINDOW(window), HF_HELP, NULL);
+    gnc_gnome_help (GTK_WINDOW(window), DF_MANUAL, NULL);
 }
 
 /** This is a helper function to find a data file and suck it into

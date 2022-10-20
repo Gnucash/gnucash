@@ -368,7 +368,7 @@ void
 gnc_customer_window_help_cb (GtkWidget *widget, gpointer data)
 {
     CustomerWindow *cw = data;
-    gnc_gnome_help (GTK_WINDOW(cw->dialog), HF_HELP, HL_USAGE_CUSTOMER);
+    gnc_gnome_help (GTK_WINDOW(cw->dialog), DF_MANUAL, DL_USAGE_CUSTOMER);
 }
 
 void

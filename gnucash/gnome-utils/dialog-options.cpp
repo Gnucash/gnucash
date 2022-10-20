@@ -42,7 +42,7 @@ extern "C"
 #include "gnc-component-manager.h"
 #include <gnc-prefs.h> // for GNC_PREFS_NUM_SOURCE
 #include "gnc-session.h" // for gnc_get_current_session
-#include "gnc-ui.h" // for HF_HELP
+#include "gnc-ui.h" // for DF_MANUAL
 }
 
 #include <iostream>
@@ -646,7 +646,7 @@ GncOptionsDialog::set_close_cb( GncOptionsDialogCallback cb, gpointer data) noex
 static void
 gnc_book_options_help_cb (GncOptionsDialog *win, gpointer dat)
 {
-    gnc_gnome_help (GTK_WINDOW (win->get_widget()), HF_HELP, HL_BOOK_OPTIONS);
+    gnc_gnome_help (GTK_WINDOW (win->get_widget()), DF_MANUAL, DL_BOOK_OPTIONS);
 }
 
 void
@@ -658,13 +658,13 @@ GncOptionsDialog::set_book_help_cb() noexcept
 static void
 gnc_global_options_help_cb (GncOptionsDialog *win, gpointer dat)
 {
-    gnc_gnome_help (GTK_WINDOW(win->get_widget()), HF_HELP, HL_GLOBPREFS);
+    gnc_gnome_help (GTK_WINDOW(win->get_widget()), DF_MANUAL, DL_GLOBPREFS);
 }
 
 static void
 gnc_style_sheet_options_help_cb (GncOptionsDialog *win, gpointer dat)
 {
-    gnc_gnome_help (GTK_WINDOW(win->get_widget()), HF_HELP, HL_STYLE_SHEET);
+    gnc_gnome_help (GTK_WINDOW(win->get_widget()), DF_MANUAL, DL_STYLE_SHEET);
 }
 
 void

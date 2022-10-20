@@ -1127,7 +1127,7 @@ dialog_response_cb (GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog
     switch (response_id)
     {
     case GTK_RESPONSE_HELP:
-        gnc_gnome_help (GTK_WINDOW(dialog), HF_HELP, HL_SX_SLR);
+        gnc_gnome_help (GTK_WINDOW(dialog), DF_MANUAL, DL_SX_SLR);
         break;
 
     case GTK_RESPONSE_OK:

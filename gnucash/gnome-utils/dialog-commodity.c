@@ -1140,7 +1140,7 @@ gnc_ui_common_commodity_modal(gnc_commodity *commodity,
             break;
         case GTK_RESPONSE_HELP:
             DEBUG("case HELP");
-            gnc_gnome_help (GTK_WINDOW(win->dialog), HF_HELP, HL_COMMODITY);
+            gnc_gnome_help (GTK_WINDOW(win->dialog), DF_MANUAL, DL_COMMODITY);
             break;
         default:	/* Cancel, Escape, Close, etc. */
             DEBUG("default: %d", value);

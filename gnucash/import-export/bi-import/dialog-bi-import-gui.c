@@ -249,7 +249,7 @@ void
 gnc_bi_import_gui_help_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
-    gnc_gnome_help (GTK_WINDOW(gui->dialog), HF_GUIDE, HL_IMPORT_BC);
+    gnc_gnome_help (GTK_WINDOW(gui->dialog), DF_GUIDE, DL_IMPORT_BC);
 }
 
 static void

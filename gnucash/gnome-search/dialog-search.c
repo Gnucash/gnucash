@@ -656,7 +656,7 @@ search_cancel_cb (GtkButton *button, GNCSearchWindow *sw)
 static void
 search_help_cb (GtkButton *button, GNCSearchWindow *sw)
 {
-    gnc_gnome_help (GTK_WINDOW(sw->dialog), HF_HELP, HL_FIND_TRANSACTIONS);
+    gnc_gnome_help (GTK_WINDOW(sw->dialog), DF_MANUAL, DL_FIND_TRANSACTIONS);
 }
 
 static void

@@ -131,7 +131,7 @@ void
 custom_report_help_cb (GtkWidget *widget, gpointer data)
 {
     CustomReportDialog *crd = data;
-    gnc_gnome_help (GTK_WINDOW(crd->dialog), HF_HELP, HL_USAGE_CUSTOMREP);
+    gnc_gnome_help (GTK_WINDOW(crd->dialog), DF_MANUAL, DL_USAGE_CUSTOMREP);
 }
 
 void

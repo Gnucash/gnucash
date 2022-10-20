@@ -1009,11 +1009,11 @@ gnc_account_window_response_cb (GtkDialog *dialog,
         {
         case NEW_ACCOUNT:
             DEBUG("new acct dialog, HELP");
-            gnc_gnome_help (GTK_WINDOW(dialog), HF_HELP, HL_ACC);
+            gnc_gnome_help (GTK_WINDOW(dialog), DF_MANUAL, DL_ACC);
             break;
         case EDIT_ACCOUNT:
             DEBUG("edit acct dialog, HELP");
-            gnc_gnome_help (GTK_WINDOW(dialog), HF_HELP, HL_ACCEDIT);
+            gnc_gnome_help (GTK_WINDOW(dialog), DF_MANUAL, DL_ACCEDIT);
             break;
         default:
             g_assert_not_reached ();

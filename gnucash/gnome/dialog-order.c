@@ -231,7 +231,7 @@ void
 gnc_order_window_help_cb (GtkWidget *widget, gpointer data)
 {
     OrderWindow *ow = data;
-    gnc_gnome_help (GTK_WINDOW(ow->dialog), HF_HELP, HL_USAGE_BILL);
+    gnc_gnome_help (GTK_WINDOW(ow->dialog), DF_MANUAL, DL_USAGE_BILL);
 }
 
 void

@@ -250,7 +250,7 @@ void
 gnc_employee_window_help_cb (GtkWidget *widget, gpointer data)
 {
     EmployeeWindow *ew = data;
-    gnc_gnome_help (GTK_WINDOW(ew->dialog), HF_HELP, HL_USAGE_EMPLOYEE);
+    gnc_gnome_help (GTK_WINDOW(ew->dialog), DF_MANUAL, DL_USAGE_EMPLOYEE);
 }
 
 void

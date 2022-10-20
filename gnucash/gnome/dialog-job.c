@@ -208,7 +208,7 @@ void
 gnc_job_window_help_cb (GtkWidget *widget, gpointer data)
 {
     JobWindow *jw = data;
-    gnc_gnome_help (GTK_WINDOW(jw->dialog), HF_HELP, HL_USAGE_JOB);
+    gnc_gnome_help (GTK_WINDOW(jw->dialog), DF_MANUAL, DL_USAGE_JOB);
 }
 
 
