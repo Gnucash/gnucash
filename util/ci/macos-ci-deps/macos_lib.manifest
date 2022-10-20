@@ -5,6 +5,7 @@ libaqbanking.44.dylib
 libaqbanking.dylib
 libatk-1.0.0.dylib
 libatk-1.0.dylib
+libboost_atomic.dylib
 libboost_chrono.dylib
 libboost_date_time.dylib
 libboost_filesystem.dylib

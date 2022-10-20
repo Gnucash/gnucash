@@ -4,4 +4,5 @@ gettext
 gettext-0.20.2
 guile
 itstool
+pkgconfig
 swig
