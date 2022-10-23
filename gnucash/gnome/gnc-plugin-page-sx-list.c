@@ -470,14 +470,6 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     }
 
     {
-        GtkAction *edit_action, *delete_action;
-        edit_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), "SxListEditAction");
-        delete_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), "SxListDeleteAction");
-        gtk_action_set_sensitive (edit_action, FALSE);
-        gtk_action_set_sensitive (delete_action, FALSE);
-    }
-
-    {
         GtkTreeSelection *selection;
         GtkTreePath *path = gtk_tree_path_new_first ();
 
@@ -497,6 +489,8 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
         g_signal_connect (G_OBJECT(priv->tree_view), "row-activated", (GCallback)gppsl_row_activated_cb, (gpointer)page);
         g_signal_connect (G_OBJECT(gtk_tree_view_get_model (GTK_TREE_VIEW(priv->tree_view))),
                           "model-populated", (GCallback)gppsl_model_populated_cb, (gpointer)page);
+
+        gppsl_selection_changed_cb (selection, page);
     }
 
     /* Add vbox and label */
