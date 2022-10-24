@@ -61,6 +61,8 @@ extern "C"
 // For GNC_ID_ROOT_ACCOUNT:
 #include "AccountP.h"
 
+#include "qofbook.hpp"
+
 static QofLogModule log_module = QOF_MOD_ENGINE;
 #define AB_KEY "hbci"
 #define AB_TEMPLATES "template-list"
@@ -1253,6 +1255,32 @@ qof_book_set_feature (QofBook *book, const gchar *key, const gchar *descr)
         qof_instance_set_dirty (QOF_INSTANCE (book));
         qof_book_commit_edit (book);
     }
+}
+
+std::vector<std::string>
+qof_book_get_unknown_features (QofBook *book, const FeaturesTable& features)
+{
+    std::vector<std::string> rv;
+    auto test_feature = [&](const KvpFrameImpl::map_type::value_type& feature)
+    {
+        if (features.find (feature.first) == features.end ())
+            rv.push_back (feature.second->get<const char*>());
+    };
+    auto frame = qof_instance_get_slots (QOF_INSTANCE (book));
+    auto slot = frame->get_slot({GNC_FEATURES});
+    if (slot != nullptr)
+    {
+        frame = slot->get<KvpFrame*>();
+        std::for_each (frame->begin (), frame->end (), test_feature);
+    }
+    return rv;
+}
+
+bool
+qof_book_test_feature (QofBook *book, const char *feature)
+{
+    auto frame = qof_instance_get_slots (QOF_INSTANCE (book));
+    return (frame->get_slot({GNC_FEATURES, feature}) != nullptr);
 }
 
 void
