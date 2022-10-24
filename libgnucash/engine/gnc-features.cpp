@@ -19,28 +19,22 @@
  *                                                                  *
 \********************************************************************/
 
+#include <unordered_map>
+#include <string>
+#include <numeric>
+
 #include <config.h>
 
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <sys/types.h>
+#include "qofbook.hpp"
 
-#include "qof.h"
-#include "gnc-features.h"
-#include "gnc-glib-utils.h"
-
-typedef struct
+extern "C"
 {
-    const gchar *key;
-    const gchar *desc;
-} gncFeature;
+#include "gnc-features.h"
+}
 
-static GHashTable *features_table = NULL;
-static gncFeature known_features[] =
+static const FeaturesTable features_table
 {
     { GNC_FEATURE_CREDIT_NOTES, "Customer and vendor credit notes (requires at least GnuCash 2.5.0)" },
     { GNC_FEATURE_NUM_FIELD_SOURCE, "User specifies source of 'num' field'; either transaction number or split action (requires at least GnuCash 2.5.0)" },
@@ -53,7 +47,6 @@ static gncFeature known_features[] =
     { GNC_FEATURE_BUDGET_UNREVERSED, "Store budget amounts unreversed (i.e. natural) signs (requires at least Gnucash 3.8)"},
     { GNC_FEATURE_BUDGET_SHOW_EXTRA_ACCOUNT_COLS, "Show extra account columns in the Budget View (requires at least Gnucash 3.8)"},
     { GNC_FEATURE_EQUITY_TYPE_OPENING_BALANCE, GNC_FEATURE_EQUITY_TYPE_OPENING_BALANCE " (requires at least Gnucash 4.3)" },
-    { NULL },
 };
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -62,40 +55,10 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 /********************************************************************\
 \********************************************************************/
 
-static void gnc_features_init ()
-{
-    gint i;
-
-    if (features_table)
-        return;
-
-    features_table = g_hash_table_new (g_str_hash, g_str_equal);
-    for (i = 0; known_features[i].key; i++)
-        g_hash_table_insert (features_table,
-                             g_strdup (known_features[i].key),
-                             g_strdup (known_features[i].desc));
-}
-
-static void gnc_features_test_one(gpointer pkey, gpointer value,
-                  gpointer data)
-{
-    const gchar *key = (const gchar*)pkey;
-    const gchar *feature_desc = (const gchar*)value;
-    GList **unknown_features;
-
-    g_assert(data);
-    unknown_features = (GList**) data;
-
-    /* Check if this feature is in the known features list. */
-    if (g_hash_table_lookup_extended (features_table, key, NULL, NULL))
-        return;
-
-    /* It is unknown, so add the description to the unknown features list: */
-    g_assert(feature_desc);
-
-    *unknown_features = g_list_prepend(*unknown_features,
-                       (gpointer)feature_desc);
-}
+const char* header = N_("This Dataset contains features not supported "
+                        "by this version of GnuCash. You must use a "
+                        "newer version of GnuCash in order to support "
+                        "the following features:");
 
 /* Check if the session requires features unknown to this version of GnuCash.
  *
@@ -104,78 +67,31 @@ static void gnc_features_test_one(gpointer pkey, gpointer value,
  */
 gchar *gnc_features_test_unknown (QofBook *book)
 {
-
-    GList* features_list = NULL;
-    GHashTable *features_used = qof_book_get_features (book);
-
-    /* Setup the known_features hash table */
-    gnc_features_init();
-
-    /* Iterate over the members of this frame for unknown features */
-    g_hash_table_foreach (features_used, &gnc_features_test_one,
-              &features_list);
-    if (features_list)
-    {
-        const char* sep = "\n* ";
-        const char* header = _("This Dataset contains features not supported "
-                               "by this version of GnuCash. You must use a "
-                               "newer version of GnuCash in order to support "
-                               "the following features:");
-
-        char *features_str = gnc_g_list_stringjoin (features_list, sep);
-        char *msg = g_strconcat (header, sep, features_str, NULL);
-        g_free (features_str);
-        g_list_free(features_list);
-        return msg;
-    }
-    g_hash_table_unref (features_used);
-    return NULL;
+    auto accum = [](auto a, auto b){ return a + "\n* " + b; };
+    auto unknowns {qof_book_get_unknown_features (book, features_table)};
+    return unknowns.empty() ? nullptr :
+        g_strdup (std::accumulate (unknowns.begin(), unknowns.end(),
+                                   std::string (_(header)), accum).c_str());
 }
 
 void gnc_features_set_used (QofBook *book, const gchar *feature)
 {
-    const gchar *description;
-
     g_return_if_fail (book);
     g_return_if_fail (feature);
 
-    gnc_features_init();
-
     /* Can't set an unknown feature */
-    description = g_hash_table_lookup (features_table, feature);
-    if (!description)
+    auto iter = features_table.find (feature);
+    if (iter == features_table.end ())
     {
         PWARN("Tried to set unknown feature as used.");
         return;
     }
 
-    qof_book_set_feature (book, feature, description);
-}
-
-struct CheckFeature
-{
-    gchar const * checked_feature;
-    gboolean found;
-};
-
-static void gnc_features_check_feature_cb (gpointer pkey, gpointer value,
-                  gpointer data)
-{
-    const gchar *key = (const gchar*)pkey;
-    struct CheckFeature * check_data = data;
-    g_assert(data);
-    if (!g_strcmp0 (key, check_data->checked_feature))
-        check_data->found = TRUE;
+    qof_book_set_feature (book, feature, iter->second.c_str());
 }
 
 gboolean gnc_features_check_used (QofBook *book, const gchar * feature)
 {
-    GHashTable *features_used = qof_book_get_features (book);
-    struct CheckFeature check_data = {feature, FALSE};
-    /* Setup the known_features hash table */
-    gnc_features_init();
-    g_hash_table_foreach (features_used, &gnc_features_check_feature_cb, &check_data);
-    g_hash_table_unref (features_used);
-    return check_data.found;
+    return qof_book_test_feature (book, feature);
 }
 

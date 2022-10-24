@@ -93,6 +93,7 @@ set (engine_HEADERS
   qof-backend.hpp
   qofbackend.h
   qofbook.h
+  qofbook.hpp
   qofbookslots.h
   qofchoice.h
   qofclass.h
@@ -145,7 +146,7 @@ set (engine_SOURCES
   gnc-datetime.cpp
   gnc-engine.c
   gnc-event.c
-  gnc-features.c
+  gnc-features.cpp
   gnc-hooks.c
   gnc-int128.cpp
   gnc-lot.c
