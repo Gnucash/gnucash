@@ -91,7 +91,6 @@ load_gnucash_plugins()
 static void
 load_gnucash_modules()
 {
-    int i, len;
     struct
     {
         const gchar * name;
@@ -105,8 +104,8 @@ load_gnucash_modules()
     };
 
     /* module initializations go here */
-    len = sizeof(modules) / sizeof(*modules);
-    for (i = 0; i < len; i++)
+    int len = sizeof(modules) / sizeof(*modules);
+    for (int i = 0; i < len; i++)
     {
         DEBUG("Loading module %s started", modules[i].name);
         gnc_update_splash_screen(modules[i].name, GNC_SPLASH_PERCENTAGE_UNKNOWN);
@@ -139,13 +138,10 @@ static void
 scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
     auto user_file_spec = static_cast<t_file_spec*>(data);
-    SCM main_mod;
-    char* fn = NULL;
-
 
     scm_c_eval_string("(debug-set! stack 200000)");
 
-    main_mod = scm_c_resolve_module("gnucash utilities");
+    auto main_mod = scm_c_resolve_module("gnucash utilities");
     scm_set_current_module(main_mod);
     scm_c_use_module("gnucash app-utils");
 
@@ -196,6 +192,7 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
 
     gnc_hook_run(HOOK_STARTUP, NULL);
 
+    char* fn = nullptr;
     if (!user_file_spec->nofile && (fn = get_file_to_load (user_file_spec->file_to_load)) && *fn )
     {
         auto msg = _("Loading data...");
