@@ -176,7 +176,7 @@ gnc_AB_BANKING_new (void)
     }
     else
     {
-        api = AB_Banking_new ("gnucash", NULL, 0);
+        api = AB_Banking_new (PROJECT_NAME, NULL, 0);
         g_return_val_if_fail (api, NULL);
 
         /* These two values must be set because newest bank regulation requires

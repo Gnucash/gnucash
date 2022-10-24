@@ -69,7 +69,7 @@ gchar *gnc_path_get_datadir()
 gchar *gnc_path_get_pkgdatadir()
 {
     gchar *datadir = gnc_gbr_find_data_dir (DATADIR);
-    gchar *result = g_build_filename (datadir, "gnucash", (char*)NULL);
+    gchar *result = g_build_filename (datadir, PROJECT_NAME, (char*)NULL);
     g_free (datadir);
     //printf("Returning pkgdatadir %s\n", result);
     return result;
@@ -82,7 +82,7 @@ gchar *gnc_path_get_pkgdatadir()
 gchar *gnc_path_get_pkgdocdir()
 {
     gchar *docdir = gnc_gbr_find_data_dir (DATADIR);
-    gchar *result = g_build_filename (docdir, "doc", "gnucash", (char*)NULL);
+    gchar *result = g_build_filename (docdir, "doc", PROJECT_NAME, (char*)NULL);
     g_free (docdir);
     //printf("Returning pkgdocdir %s\n", result);
     return result;
@@ -95,7 +95,7 @@ gchar *gnc_path_get_pkgdocdir()
 gchar *gnc_path_get_pkgsysconfdir()
 {
     gchar *sysconfdir = gnc_gbr_find_etc_dir (SYSCONFDIR);
-    gchar *result = g_build_filename (sysconfdir, "gnucash", (char*)NULL);
+    gchar *result = g_build_filename (sysconfdir, PROJECT_NAME, (char*)NULL);
     g_free (sysconfdir);
     //printf("Returning pkgsysconfdir %s\n", result);
     return result;
@@ -113,7 +113,7 @@ gchar *gnc_path_get_pkglibdir()
     /* Workaround for Bug 618646, {pkglibdir} will be bin/ on Windows */
     gchar *result = gnc_gbr_find_bin_dir(libdir);
 #else
-    gchar *result = g_build_filename (libdir, "gnucash", (char*)NULL);
+    gchar *result = g_build_filename (libdir, PROJECT_NAME, (char*)NULL);
 #endif
     g_free (libdir);
     //printf("Returning pkglibdir %s\n", result);
@@ -192,7 +192,7 @@ gchar *gnc_path_get_scmdir()
 gchar *gnc_path_get_reportdir()
 {
     gchar *scmdir = gnc_path_get_scmdir ();
-    gchar *result = g_build_filename (scmdir, "gnucash", "report", (char*)NULL);
+    gchar *result = g_build_filename (scmdir, PROJECT_NAME, "report", (char*)NULL);
     g_free (scmdir);
 
     return result;
@@ -205,7 +205,7 @@ gchar *gnc_path_get_reportdir()
 gchar *gnc_path_get_reportsdir()
 {
     gchar *scmdir = gnc_path_get_scmdir ();
-    gchar *result = g_build_filename (scmdir, "gnucash", "reports", NULL);
+    gchar *result = g_build_filename (scmdir, PROJECT_NAME, "reports", NULL);
     g_free (scmdir);
     //printf("Returning reportsdir %s\n", result);
     return result;

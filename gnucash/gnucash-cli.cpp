@@ -226,7 +226,8 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
 int
 main(int argc, char **argv)
 {
-    Gnucash::GnucashCli application (argv[0]);
+    const char *app_name = PROJECT_NAME "-cli";
+    Gnucash::GnucashCli application (app_name);
 #ifdef __MINGW32__
     boost::nowide::args a(argc, argv); // Fix arguments - make them UTF-8
 #endif

@@ -287,7 +287,7 @@ Gnucash::Gnucash::configure_program_options (void)
     // for gtk's options. The options themselves are already parsed out by
     // gtk_init_check by the time this function is called though. So it really only
     // serves to be able to display a help message.
-    g_set_prgname ("gnucash");
+    g_set_prgname (PROJECT_NAME);
     auto context = g_option_context_new (m_tagline.c_str());
     auto gtk_options = gtk_get_option_group(FALSE);
     g_option_context_add_group (context, gtk_options);
@@ -357,7 +357,7 @@ Gnucash::Gnucash::start ([[maybe_unused]] int argc, [[maybe_unused]] char **argv
 int
 main(int argc, char ** argv)
 {
-    Gnucash::Gnucash application (argv[0]);
+    Gnucash::Gnucash application (PROJECT_NAME);
 #ifdef __MINGW32__
     boost::nowide::args a(argc, argv); // Fix arguments - make them UTF-8
 #endif

@@ -39,7 +39,7 @@
 static QofLogModule log_module = GNC_MOD_GUI;
 
 #define DEFAULT_HOST "localhost"
-#define DEFAULT_DATABASE "gnucash"
+#define DEFAULT_DATABASE PROJECT_NAME
 #define FILE_ACCESS_OPEN    0
 #define FILE_ACCESS_SAVE_AS 1
 #define FILE_ACCESS_EXPORT  2

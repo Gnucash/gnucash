@@ -233,7 +233,7 @@ setup_business (Fixture* fixture, gconstpointer pData)
 
     emp = gncEmployeeCreate (book);
     gncEmployeeSetID (emp, "0001");
-    gncEmployeeSetUsername (emp, "gnucash");
+    gncEmployeeSetUsername (emp, PROJECT_NAME);
     gncEmployeeSetLanguage (emp, "english");
     gncEmployeeSetCurrency (emp, currency);
 
