@@ -1214,28 +1214,6 @@ static void commit_err (G_GNUC_UNUSED QofInstance *inst, QofBackendError errcode
 }
 
 #define GNC_FEATURES "features"
-static void
-add_feature_to_hash (const gchar *key, KvpValue *value, GHashTable * user_data)
-{
-    gchar *descr = g_strdup(value->get<const char*>());
-    g_hash_table_insert (user_data, (gchar*)key, descr);
-}
-
-GHashTable *
-qof_book_get_features (QofBook *book)
-{
-    KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (book));
-    GHashTable *features = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                                  NULL, g_free);
-
-    auto slot = frame->get_slot({GNC_FEATURES});
-    if (slot != nullptr)
-    {
-        frame = slot->get<KvpFrame*>();
-        frame->for_each_slot_temp(&add_feature_to_hash, features);
-    }
-    return features;
-}
 
 void
 qof_book_set_feature (QofBook *book, const gchar *key, const gchar *descr)
