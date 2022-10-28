@@ -300,7 +300,31 @@ gnc_plugin_update_actions (GtkActionGroup *action_group,
         }
     }
 }
+void
+gnc_plugin_update_actionsb (GSimpleActionGroup *simple_action_group,
+                           const gchar **action_names,
+                           const gchar *property_name,
+                           gboolean value)
+{
+    GAction    *action;
+    gint          i;
 
+
+    for (i = 0; action_names[i]; i++)
+    {
+        action = g_simple_action_group_lookup (simple_action_group, action_names[i]);
+        if (action)
+        {
+//FIXMEb            g_object_set (G_OBJECT(action), property_name, value, NULL);
+        }
+        else
+        {
+//FIXMEb            g_warning("No such action with name '%s' in action group %s (size %d)",
+//                      action_names[i], gtk_action_group_get_name(simple_action_group),
+//                      g_list_length(gtk_action_group_list_actions(simple_action_group)));
+        }
+    }
+}
 
 /** Load a new set of actions into an existing UI.
  *
