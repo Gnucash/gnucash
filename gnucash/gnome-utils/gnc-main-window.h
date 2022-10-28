@@ -434,6 +434,10 @@ void gnc_main_window_all_action_set_sensitive (const gchar *action_name, gboolea
  */
 GAction *gnc_main_window_find_action (GncMainWindow *window, const gchar *name);
 
+GAction *gnc_main_window_find_action_in_group (GncMainWindow *window, 
+                                               const gchar *group_name,
+                                               const gchar *name); //FIXMEb added
+
 GtkWidget *gnc_main_window_get_menu (GncMainWindow *window); //FIXMEb added
 
 GMenuModel *gnc_main_window_get_menu_model (GncMainWindow *window); //FIXMEb added

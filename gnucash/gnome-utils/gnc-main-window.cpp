@@ -173,6 +173,7 @@ static void gnc_main_window_plugin_removed (GncPlugin *manager, GncPlugin *plugi
 static void gnc_main_window_engine_commit_error_callback( gpointer data, QofBackendError errcode );
 
 /* Command callbacks */
+static void gnc_main_window_cmd_redirect (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_main_window_cmd_page_setup (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_main_window_cmd_file_properties (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_main_window_cmd_file_close (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
@@ -210,6 +211,8 @@ static void gnc_quartz_shutdown (GtkosxApplication *theApp, gpointer data);
 static gboolean gnc_quartz_should_quit (GtkosxApplication *theApp, GncMainWindow *window);
 static void gnc_quartz_set_menu (GncMainWindow* window);
 #endif
+static void gnc_main_window_init_menu_updaters (GncMainWindow *window);
+
 
 /** The instance private data structure for an embedded window
  *  object. */
@@ -315,26 +318,32 @@ static GActionEntry gnc_menu_actions [] =
     { "FilePageSetupAction", gnc_main_window_cmd_page_setup, nullptr, nullptr, nullptr },
     { "FilePropertiesAction", gnc_main_window_cmd_file_properties, nullptr, nullptr, nullptr },
     { "FileCloseAction", gnc_main_window_cmd_file_close, nullptr, nullptr, nullptr },
+    { "FilePrintAction", gnc_main_window_cmd_redirect, nullptr, nullptr, nullptr },
     { "FileQuitAction", gnc_main_window_cmd_file_quit, nullptr, nullptr, nullptr },
+
     { "EditCutAction", gnc_main_window_cmd_edit_cut, nullptr, nullptr, nullptr },
     { "EditCopyAction", gnc_main_window_cmd_edit_copy, nullptr, nullptr, nullptr },
     { "EditPasteAction", gnc_main_window_cmd_edit_paste, nullptr, nullptr, nullptr },
     { "EditPreferencesAction", gnc_main_window_cmd_edit_preferences, nullptr, nullptr, nullptr },
-    { "ViewRefreshAction", gnc_main_window_cmd_view_refresh, nullptr, nullptr, nullptr },
+
     { "ActionsForgetWarningsAction", gnc_main_window_cmd_actions_reset_warnings, nullptr, nullptr, nullptr },
     { "ActionsRenamePageAction", gnc_main_window_cmd_actions_rename_page, nullptr, nullptr, nullptr },
-    { "WindowNewAction", gnc_main_window_cmd_window_new, nullptr, nullptr, nullptr },
-    { "WindowMovePageAction", gnc_main_window_cmd_window_move_page, nullptr, nullptr, nullptr },
-    { "HelpTutorialAction", gnc_main_window_cmd_help_tutorial, nullptr, nullptr, nullptr },
-    { "HelpContentsAction", gnc_main_window_cmd_help_contents, nullptr, nullptr, nullptr },
-    { "HelpAboutAction", gnc_main_window_cmd_help_about, nullptr, nullptr, nullptr },
 
+    { "ViewSortByAction", nullptr, nullptr, nullptr, nullptr },
+    { "ViewFilterByAction", nullptr, nullptr, nullptr, nullptr },
+    { "ViewRefreshAction", gnc_main_window_cmd_view_refresh, nullptr, nullptr, nullptr },
     { "ViewToolbarAction", gnc_main_window_cmd_view_toolbar, nullptr, "true", toggle_change_state },
     { "ViewSummaryAction", gnc_main_window_cmd_view_summary, nullptr, "true", toggle_change_state },
     { "ViewStatusbarAction", gnc_main_window_cmd_view_statusbar, nullptr, "true", toggle_change_state },
-
     { "ViewTabPositionAction",  gnc_main_window_cmd_view_tab_position, "i", "@i 0", radio_change_state },
+
+    { "WindowNewAction", gnc_main_window_cmd_window_new, nullptr, nullptr, nullptr },
+    { "WindowMovePageAction", gnc_main_window_cmd_window_move_page, nullptr, nullptr, nullptr },
     { "Window0Action",  gnc_main_window_cmd_window_raise, "i", "@i 0", radio_change_state },
+
+    { "HelpTutorialAction", gnc_main_window_cmd_help_tutorial, nullptr, nullptr, nullptr },
+    { "HelpContentsAction", gnc_main_window_cmd_help_contents, nullptr, nullptr, nullptr },
+    { "HelpAboutAction", gnc_main_window_cmd_help_about, nullptr, nullptr, nullptr },
 };
 /** The number of actions provided by the main window. */
 static guint gnc_menu_n_actions = G_N_ELEMENTS(gnc_menu_actions);
@@ -1002,7 +1011,7 @@ gnc_main_window_restore_all_windows(const GKeyFile *keyfile)
 }
 
 void
-gnc_main_window_restore_default_state(GncMainWindow *window)
+gnc_main_window_restore_default_state (GncMainWindow *window)
 {
     GAction *action;
 
@@ -3694,7 +3703,8 @@ gnc_main_window_actions_updated (GncMainWindow *window)
 struct group_iterate
 {
     GAction *action;
-    const gchar *name;
+    const gchar *group_name;
+    const gchar *action_name;
 };
 
 static void
@@ -3706,10 +3716,16 @@ group_foreach_cb (gpointer key, gpointer item, gpointer arg)
     if (iter->action)
         return;
 
+    if (iter->group_name != nullptr)
+    {
+        if (g_strcmp0 (iter->group_name, (gchar*)key) != 0)
+            return;
+    }
+
     auto entry{static_cast<MergedActionEntry *>(item)};
 
     action = g_action_map_lookup_action (G_ACTION_MAP(entry->simple_action_group),
-                                         iter->name);
+                                         iter->action_name);
 
     if (action)
         iter->action = action;
@@ -3717,6 +3733,22 @@ group_foreach_cb (gpointer key, gpointer item, gpointer arg)
 
 GAction *
 gnc_main_window_find_action (GncMainWindow *window, const gchar *name)
+{
+    GncMainWindowPrivate *priv;
+    GAction *action = nullptr;
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+    action = g_action_map_lookup_action (G_ACTION_MAP(priv->simple_action_group),
+                                         name);
+
+    return action;
+}
+
+GAction *
+gnc_main_window_find_action_in_group (GncMainWindow *window,
+                                      const gchar *group_name,
+                                      const gchar *name)
 {
     GncMainWindowPrivate *priv;
     GAction *action = nullptr;
@@ -3728,7 +3760,8 @@ gnc_main_window_find_action (GncMainWindow *window, const gchar *name)
         return nullptr;
 
     iter.action = nullptr;
-    iter.name = name;
+    iter.action_name = name;
+    iter.group_name = group_name;
 
     g_hash_table_foreach (priv->merged_actions_table, group_foreach_cb, &iter);
 
@@ -3827,10 +3860,11 @@ gnc_main_window_update_edit_actions_sensitivity (GncMainWindow *window, gboolean
     GncPluginPage *page;
     GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
     GAction *action;
-    gboolean can_copy = FALSE, can_cut = FALSE, can_paste = FALSE;
+    gboolean can_copy = false, can_cut = false, can_paste = false;
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     page = priv->current_page;
+
     if (page && GNC_PLUGIN_PAGE_GET_CLASS(page)->update_edit_menu_actions)
     {
         (GNC_PLUGIN_PAGE_GET_CLASS(page)->update_edit_menu_actions)(page, hide);
@@ -3865,23 +3899,21 @@ gnc_main_window_update_edit_actions_sensitivity (GncMainWindow *window, gboolean
     {
 #ifdef ORIGINAL_EPIPHANY_CODE
         /* For now we assume all actions are possible */
-        can_copy = can_cut = can_paste = TRUE;
+        can_copy = can_cut = can_paste = true;
 #else
         /* If its not a GtkEditable, we don't know what to do
          * with it. */
-        can_copy = can_cut = can_paste = FALSE;
+        can_copy = can_cut = can_paste = false;
 #endif
     }
-
     action = gnc_main_window_find_action (window, "EditCopyAction");
     g_simple_action_set_enabled (G_SIMPLE_ACTION(action), can_copy);
-//FIXMEb    gtk_action_set_visible (action, !hide || can_copy);
+
     action = gnc_main_window_find_action (window, "EditCutAction");
     g_simple_action_set_enabled (G_SIMPLE_ACTION(action), can_cut);
-//FIXMEb    gtk_action_set_visible (action, !hide || can_cut);
+
     action = gnc_main_window_find_action (window, "EditPasteAction");
     g_simple_action_set_enabled (G_SIMPLE_ACTION(action), can_paste);
-//FIXMEb    gtk_action_set_visible (action,  !hide || can_paste);
 }
 
 static void
@@ -3890,14 +3922,14 @@ gnc_main_window_enable_edit_actions_sensitivity (GncMainWindow *window)
     GAction *action;
 
     action = gnc_main_window_find_action (window, "EditCopyAction");
-    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), TRUE);
-//FIXMEb    gtk_action_set_visible (action, TRUE);
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), true);
+
     action = gnc_main_window_find_action (window, "EditCutAction");
-    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), TRUE);
-//FIXMEb    gtk_action_set_visible (action, TRUE);
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), true);
+
     action = gnc_main_window_find_action (window, "EditPasteAction");
-    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), TRUE);
-//FIXMEb    gtk_action_set_visible (action, TRUE);
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), true);
+
 }
 
 static void
@@ -3917,17 +3949,26 @@ gnc_main_window_edit_menu_hide_cb (GtkWidget *menu,
 static void
 gnc_main_window_init_menu_updaters (GncMainWindow *window)
 {
+    GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+    GncMenuModelSearch *gsm = g_new0 (GncMenuModelSearch, 1);
     GtkWidget *edit_menu_item, *edit_menu;
-//FIXMEb
 
-//    edit_menu_item = gtk_ui_manager_get_widget
-//                     (window->ui_merge, "/menubar/Edit");
-//    edit_menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (edit_menu_item));
+    gsm->search_action_label = nullptr;
+    gsm->search_action_name = "EditAction";
 
-//    g_signal_connect (edit_menu, "show",
-//                      G_CALLBACK (gnc_main_window_edit_menu_show_cb), window);
-//    g_signal_connect (edit_menu, "hide",
-//                      G_CALLBACK (gnc_main_window_edit_menu_hide_cb), window);
+    if (!gnc_menubar_model_find_item (priv->menubar_model, gsm))
+        return;
+
+    edit_menu_item = gnc_find_menu_item_by_action_label (priv->menubar,
+                                                         gsm->search_action_label);
+
+    edit_menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM(edit_menu_item));
+
+    g_signal_connect (edit_menu, "show",
+                      G_CALLBACK(gnc_main_window_edit_menu_show_cb), window);
+    g_signal_connect (edit_menu, "hide",
+                      G_CALLBACK(gnc_main_window_edit_menu_hide_cb), window);
+    g_free (gsm);
 }
 
 static void
@@ -3971,6 +4012,36 @@ gnc_main_window_page_focus_in (GtkWidget *widget, GdkEvent  *event,
     return FALSE;
 }
 
+static GAction *
+gnc_main_window_get_redirect (GncMainWindow *window, const gchar *action_name)
+{
+    GncMainWindowPrivate *priv;
+    GAction *action = nullptr;
+    const gchar *group_name;
+
+    g_return_val_if_fail (GNC_IS_MAIN_WINDOW (window), nullptr);
+    g_return_val_if_fail (action_name != nullptr, nullptr);
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+    group_name = gnc_plugin_page_get_simple_action_group_name (priv->current_page);
+
+    PINFO("action anme is '%s', group_name is '%s'", action_name, group_name);
+
+    if (group_name)
+    {
+        action = gnc_main_window_find_action_in_group (window, group_name, action_name);
+
+        if (!action)
+            action = gnc_plugin_page_get_action (priv->current_page, action_name);
+    }
+
+    PINFO("Redirect action is %p for action anme '%s' and group_name '%s'",
+           action, action_name, group_name);
+    return action;
+}
+
+
 static void
 gnc_main_window_setup_window (GncMainWindow *window)
 {
@@ -3979,6 +4050,8 @@ gnc_main_window_setup_window (GncMainWindow *window)
 //    guint merge_id;
     GtkBuilder *builder;
     GncPluginManager *manager;
+    GtkAccelGroup *accel_group = gtk_accel_group_new ();
+    GtkWidget *extra_item;
     GList *plugins;
     GError *error = nullptr;
     gchar *filename;
@@ -4032,7 +4105,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
                                     0.01);
 
     builder = gtk_builder_new ();
-
+    gtk_builder_set_translation_domain (builder, PROJECT_NAME);
     gtk_builder_add_from_resource (builder, "/org/gnucash/ui/gnc-main-window.ui", &error);
 
     if (error)
@@ -4047,6 +4120,10 @@ gnc_main_window_setup_window (GncMainWindow *window)
     gtk_container_add (GTK_CONTAINER(priv->menu_dock), priv->menubar); //FIXMEb this may need changing
     gtk_widget_show (GTK_WIDGET(priv->menubar));
 
+    // need to add the accelerator keys
+    gtk_window_add_accel_group (GTK_WINDOW(window), accel_group);
+    gnc_add_accelerator_keys_for_menu (GTK_WIDGET(priv->menubar), accel_group);
+
     priv->toolbar = (GtkWidget *)gtk_builder_get_object (builder, "mainwin-toolbar");
     g_object_set (priv->toolbar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
     gtk_container_add (GTK_CONTAINER(priv->menu_dock), GTK_WIDGET(priv->toolbar)); //FIXMEb this may need changing
@@ -4056,6 +4133,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 
     /* Create menu and toolbar information */
 //    priv->action_group = gtk_action_group_new ("MainWindowActions");
+
     priv->simple_action_group = g_simple_action_group_new ();
 
 //FIXMEb    gtk_action_group_set_translation_domain (priv->action_group, PROJECT_NAME);
@@ -4090,12 +4168,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 //FIXMEb    g_signal_connect (G_OBJECT (window->ui_merge), "connect-proxy",
 //                      G_CALLBACK (gnc_window_connect_proxy), priv->statusbar);
 
-
-
-
 //    filename = gnc_filepath_locate_ui_file("gnc-main-window.ui");
-
-
 
 //    merge_id = gtk_ui_manager_add_ui_from_file (window->ui_merge,
 //               filename, &error);
@@ -4136,11 +4209,10 @@ gnc_main_window_setup_window (GncMainWindow *window)
                            GNC_PREF_TAB_POSITION_RIGHT,
                            (gpointer)gnc_main_window_update_tab_position,
                            window);
-    gnc_main_window_update_tab_position(nullptr, nullptr, window);
+    gnc_main_window_update_tab_position (nullptr, nullptr, window);
 
-    gnc_main_window_init_menu_updaters(window);
+    gnc_main_window_init_menu_updaters (window);
 
-    /* Testing */
     /* Now update the "eXtensions" menu */
     if (!gnc_prefs_is_extra_enabled())
     {
@@ -4433,6 +4505,26 @@ gnc_main_window_plugin_removed (GncPlugin *manager,
 
 /* Command callbacks */
 static void
+gnc_main_window_cmd_redirect (GSimpleAction *simple,
+                              GVariant      *parameter,
+                              gpointer       user_data)
+{
+    GncMainWindow *window = (GncMainWindow*)user_data;
+    GAction *redirect_action;
+
+    PINFO("Redirect action_is %p, name is '%s'", simple, g_action_get_name (G_ACTION(simple)));
+
+    redirect_action = gnc_main_window_get_redirect (window, g_action_get_name (G_ACTION(simple)));
+
+    if (redirect_action)
+    {
+        PINFO("Found action %p", redirect_action);
+        g_action_activate (redirect_action, nullptr);
+        return;
+    }
+}
+
+static void
 gnc_main_window_cmd_page_setup (GSimpleAction *simple,
                                 GVariant      *parameter,
                                 gpointer       user_data)
@@ -4627,6 +4719,18 @@ gnc_main_window_cmd_edit_cut (GSimpleAction *simple,
 {
     GncMainWindow *window = (GncMainWindow*)user_data;
     GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW(window));
+    GAction *redirect_action;
+
+    PINFO("Copy action_is %p, name is '%s'", simple, g_action_get_name (G_ACTION(simple)));
+
+    redirect_action = gnc_main_window_get_redirect (window, g_action_get_name (G_ACTION(simple)));
+
+    if (redirect_action)
+    {
+        PINFO("Found action %p", redirect_action);
+        g_action_activate (redirect_action, nullptr);
+        return;
+    }
 
     if (GTK_IS_EDITABLE(widget))
     {
@@ -4651,6 +4755,18 @@ gnc_main_window_cmd_edit_copy (GSimpleAction *simple,
 {
     GncMainWindow *window = (GncMainWindow*)user_data;
     GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW(window));
+    GAction *redirect_action;
+
+    PINFO("Copy action_is %p, name is '%s'", simple, g_action_get_name (G_ACTION(simple)));
+
+    redirect_action = gnc_main_window_get_redirect (window, g_action_get_name (G_ACTION(simple)));
+
+    if (redirect_action)
+    {
+        PINFO("Found action %p", redirect_action);
+        g_action_activate (redirect_action, nullptr);
+        return;
+    }
 
     if (GTK_IS_EDITABLE(widget))
     {
@@ -4673,6 +4789,18 @@ gnc_main_window_cmd_edit_paste (GSimpleAction *simple,
 {
     GncMainWindow *window = (GncMainWindow*)user_data;
     GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW(window));
+    GAction *redirect_action;
+
+    PINFO("Paste action_is %p, name is '%s'", simple, g_action_get_name (G_ACTION(simple)));
+
+    redirect_action = gnc_main_window_get_redirect (window, g_action_get_name (G_ACTION(simple)));
+
+    if (redirect_action)
+    {
+        PINFO("Found action %p", redirect_action);
+        g_action_activate (redirect_action, nullptr);
+        return;
+    }
 
     if (GTK_IS_EDITABLE(widget))
     {
