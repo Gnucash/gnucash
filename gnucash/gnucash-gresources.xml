@@ -18,6 +18,8 @@
     <file>ui/gnc-plugin-register.ui</file>
     <file>ui/gnc-plugin-report-system.ui</file>
 
+    <file>ui/gnc-plugin-page-account-tree.ui</file>
+
     <file>ui/gnc-plugin-ofx.ui</file>
     <file>ui/gnc-plugin-aqbanking.ui</file>
 
