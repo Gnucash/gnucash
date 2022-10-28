@@ -1,0 +1,685 @@
+<?xml version="1.0"?>
+<interface>
+
+  <menu id="EditPlaceholder2-c">
+    <item>
+      <attribute name="label" translatable="yes">E_dit Customer</attribute>
+      <attribute name="action">GncPluginPageOwnerTreeActions.OTEditCustomerAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;e</attribute>
+      <attribute name="tooltip" translatable="yes">Edit the selected customer</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_New Customer...</attribute>
+      <attribute name="action">GncPluginPageOwnerTreeActions.OTNewCustomerAction</attribute>
+      <attribute name="tooltip" translatable="yes">Create a new customer</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="EditPlaceholder2-v">
+    <item>
+      <attribute name="label" translatable="yes">E_dit Vendor</attribute>
+      <attribute name="action">GncPluginPageOwnerTreeActions.OTEditVendorAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;e</attribute>
+      <attribute name="tooltip" translatable="yes">Edit the selected vendor</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_New Vendor...</attribute>
+      <attribute name="action">GncPluginPageOwnerTreeActions.OTNewVendorAction</attribute>
+      <attribute name="tooltip" translatable="yes">Create a new vendor</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+  
+  <menu id="EditPlaceholder2-e">
+    <item>
+      <attribute name="label" translatable="yes">E_dit Employee</attribute>
+      <attribute name="action">GncPluginPageOwnerTreeActions.OTEditEmployeeAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;e</attribute>
+      <attribute name="tooltip" translatable="yes">Edit the selected employee</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_New Employee...</attribute>
+      <attribute name="action">GncPluginPageOwnerTreeActions.OTNewEmployeeAction</attribute>
+      <attribute name="tooltip" translatable="yes">Create a new employee</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+
+  <menu id="EditPlaceholder3">
+    <item>
+      <attribute name="label" translatable="yes">_Find...</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.EditFindTransactionsAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;f</attribute>
+      <attribute name="tooltip" translatable="yes">Find transactions with a search</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="EditPlaceholder5">
+    <item>
+<!-- Translators: remember to reuse this translation in dialog-account.glade -->
+      <attribute name="label" translatable="yes">Ta_x Report Options</attribute>
+      <attribute name="action">GncPluginPageOwnerTreeActions.EditTaxOptionsAction</attribute>
+<!-- Translators: currently implemented are, US: income tax and DE: VAT, So adjust this string -->
+      <attribute name="tooltip" translatable="yes">Setup relevant accounts for tax reports, e.g. US income tax</attribute>
+        <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="ViewPlaceholder1">
+    <item>
+      <attribute name="label" translatable="yes">_Filter By...</attribute>
+      <attribute name="action">GncPluginPageOwnerTreeActions.ViewFilterByAction</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="ViewPlaceholder4">
+    <item>
+      <attribute name="label" translatable="yes">_Refresh</attribute>
+      <attribute name="action">GncPluginPageOwnerTreeActions.ViewRefreshAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;r</attribute>
+      <attribute name="tooltip" translatable="yes">Refresh this window</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="ReportsPlaceholder1-c">
+    <item>
+      <attribute name="label" translatable="yes">Customer Report</attribute>
+      <attribute name="action">GncPluginPageOwnerTreeActions.OTCustomerReportAction</attribute>
+      <attribute name="tooltip" translatable="yes">Show customer report</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Customer Listing</attribute>
+      <attribute name="action">GncPluginPageOwnerTreeActions.OTCustomerListingReportAction</attribute>
+      <attribute name="tooltip" translatable="yes">Show customer aging overview for all customers</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="ReportsPlaceholder1-v">
+    <item>
+      <attribute name="label" translatable="yes">Vendor Report</attribute>
+      <attribute name="action">GncPluginPageOwnerTreeActions.OTVendorReportAction</attribute>
+      <attribute name="tooltip" translatable="yes">Show vendor report</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="no">Vendor Listing</attribute>
+      <attribute name="action">GncPluginPageOwnerTreeActions.OTVendorListingReportAction</attribute>
+      <attribute name="tooltip" translatable="yes">Show vendor aging overview for all vendors</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="ReportsPlaceholder1-e">
+    <item>
+      <attribute name="label" translatable="no">Employee Report</attribute>
+      <attribute name="action">GncPluginPageOwnerTreeActions.OTEmployeeReportAction</attribute>
+      <attribute name="tooltip" translatable="yes">Show employee report</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+
+  <menu id="mainwin-popup-c">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Re_name Page</attribute>
+        <attribute name="action">mainwin.ActionsRenamePageAction</attribute>
+        <attribute name="tooltip" translatable="yes">Rename this page</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">E_dit Customer</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTEditCustomerAction</attribute>
+        <attribute name="tooltip" translatable="yes">Edit the selected customer</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">New _Invoice...</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTNewInvoiceAction</attribute>
+        <attribute name="tooltip" translatable="yes">Create a new invoice</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Customer Report</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTCustomerReportAction</attribute>
+        <attribute name="tooltip" translatable="yes">Show customer report</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Process Payment</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTProcessPaymentAction</attribute>
+        <attribute name="tooltip" translatable="yes">Process Payment</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <menu id="mainwin-popup-v">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Re_name Page</attribute>
+        <attribute name="action">mainwin.ActionsRenamePageAction</attribute>
+        <attribute name="tooltip" translatable="yes">Rename this page</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">E_dit Vendor</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTEditVendorAction</attribute>
+        <attribute name="tooltip" translatable="yes">Edit the selected vendor</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">New _Bill...</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTNewBillAction</attribute>
+        <attribute name="tooltip" translatable="yes">Create a new bill</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Vendor Report</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTVendorReportAction</attribute>
+        <attribute name="tooltip" translatable="yes">Show vendor report</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Process Payment</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTProcessPaymentAction</attribute>
+        <attribute name="tooltip" translatable="yes">Process Payment</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <menu id="mainwin-popup-e">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Re_name Page</attribute>
+        <attribute name="action">mainwin.ActionsRenamePageAction</attribute>
+        <attribute name="tooltip" translatable="yes">Rename this page</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">E_dit Employee</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTEditEmployeeAction</attribute>
+        <attribute name="tooltip" translatable="yes">Edit the selected customer</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">New _Voucher...</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTNewVoucherAction</attribute>
+        <attribute name="tooltip" translatable="yes">Create a new voucher</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Employee Report</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTEmployeeReportAction</attribute>
+        <attribute name="tooltip" translatable="yes">Show employee report</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Process Payment</attribute>
+        <attribute name="action">GncPluginPageOwnerTreeActions.OTProcessPaymentAction</attribute>
+        <attribute name="tooltip" translatable="yes">Process Payment</attribute>
+      </item>
+    </section>
+  </menu>
+
+
+  <object class="GtkToolbar" id="mainwin-toolbar-c">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkToolButton" id="but1c">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Save</property>
+        <property name="action-name">gnc-plugin-basic-commands-actions.FileSaveAction</property>
+        <property name="tooltip-text" translatable="yes">Save the current file</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">document-save</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2c">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Close</property>
+        <property name="action-name">mainwin.FileCloseAction</property>
+        <property name="tooltip-text" translatable="yes">Close the currently active page</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">window-close</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2ca">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">New _Invoice...</property>
+        <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
+        <property name="tooltip-text" translatable="yes">Open the New Invoice dialog</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-invoice-new</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem" id="extra_separator_c">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but3c">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_New Customer...</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTNewCustomerAction</property>
+        <property name="tooltip-text" translatable="yes">Create a new customer</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-account-new</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but4c">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">E_dit Customer</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTEditCustomerAction</property>
+        <property name="tooltip-text" translatable="yes">Edit the selected customer</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-account-edit</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but5c">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">New _Invoice...</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTNewInvoiceAction</property>
+        <property name="tooltip-text" translatable="yes">Create a new invoice</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-invoice-pay</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but6c">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Customer Listing</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTCustomerListingReportAction</property>
+        <property name="tooltip-text" translatable="yes">Show customer aging overview for all customers</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">document-print-preview</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but7c">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Process Payment</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTProcessPaymentAction</property>
+        <property name="tooltip-text" translatable="yes">Process Payment</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-invoice-pay</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+  </object>
+
+  <object class="GtkToolbar" id="mainwin-toolbar-v">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkToolButton" id="but1v">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Save</property>
+        <property name="action-name">gnc-plugin-basic-commands-actions.FileSaveAction</property>
+        <property name="tooltip-text" translatable="yes">Save the current file</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">document-save</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2v">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Close</property>
+        <property name="action-name">mainwin.FileCloseAction</property>
+        <property name="tooltip-text" translatable="yes">Close the currently active page</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">window-close</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2va">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">New _Invoice...</property>
+        <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
+        <property name="tooltip-text" translatable="yes">Open the New Invoice dialog</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-invoice-new</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem" id="extra_separator_v">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but3v">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_New Vendor...</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTNewVendorAction</property>
+        <property name="tooltip-text" translatable="yes">Create a new vendor</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-account-new</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but4v">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">E_dit Vendor</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTEditVendorAction</property>
+        <property name="tooltip-text" translatable="yes">Edit the selected vendor</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-account-edit</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but5v">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">New _Bill...</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTNewBillAction</property>
+        <property name="tooltip-text" translatable="yes">Create a new bill</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-invoice-pay</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but6v">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Vendor Listing</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTVendorListingReportAction</property>
+        <property name="tooltip-text" translatable="yes">Show vendor aging overview for all vendors</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">document-print-preview</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but7v">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Process Payment</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTProcessPaymentAction</property>
+        <property name="tooltip-text" translatable="yes">Process Payment</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-invoice-pay</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+  </object>
+
+  <object class="GtkToolbar" id="mainwin-toolbar-e">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkToolButton" id="but1e">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Save</property>
+        <property name="action-name">gnc-plugin-basic-commands-actions.FileSaveAction</property>
+        <property name="tooltip-text" translatable="yes">Save the current file</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">document-save</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2e">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Close</property>
+        <property name="action-name">mainwin.FileCloseAction</property>
+        <property name="tooltip-text" translatable="yes">Close the currently active page</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">window-close</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2ea">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">New _Invoice...</property>
+        <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
+        <property name="tooltip-text" translatable="yes">Open the New Invoice dialog</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-invoice-new</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem" id="extra_separator_e">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but3e">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_New Employee...</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTNewEmployeeAction</property>
+        <property name="tooltip-text" translatable="yes">Create a new employee</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-account-new</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but4e">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">E_dit Employee</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTEditEmployeeAction</property>
+        <property name="tooltip-text" translatable="yes">Edit the selected employee</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-account-edit</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but5e">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">New _Voucher...</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTNewVoucherAction</property>
+        <property name="tooltip-text" translatable="yes">Create a new voucher</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-invoice-pay</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but6e">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Process Payment</property>
+        <property name="action-name">GncPluginPageOwnerTreeActions.OTProcessPaymentAction</property>
+        <property name="tooltip-text" translatable="yes">Process Payment</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-invoice-pay</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+  </object>
+
+</interface>
