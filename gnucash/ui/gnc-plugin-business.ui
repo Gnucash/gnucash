@@ -154,4 +154,23 @@
     </item>
   </menu>
 
+  <menu id="ExtensionsPlaceholder0">
+    <submenu>
+      <attribute name="label" translatable="yes">_Business</attribute>
+      <attribute name="action">gnc-plugin-business-actions.BusinessTestAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">Test Search Dialog</attribute>
+          <attribute name="action">gnc-plugin-business-actions.BusinessTestSearchAction</attribute>
+          <attribute name="tooltip" translatable="yes">Test Search Dialog</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Initialize Test Data</attribute>
+          <attribute name="action">gnc-plugin-business-actions.BusinessTestInitDataAction</attribute>
+          <attribute name="tooltip" translatable="yes">Initialize Test Data</attribute>
+        </item>
+      </section>
+    </submenu>
+  </menu>
+
 </interface>

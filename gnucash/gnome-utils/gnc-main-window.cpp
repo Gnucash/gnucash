@@ -349,6 +349,8 @@ static GActionEntry gnc_menu_actions [] =
 
     { "ScheduledAction", nullptr, nullptr, nullptr, nullptr },
 
+    { "ExtensionsAction", nullptr, nullptr, nullptr, nullptr },
+
     { "WindowNewAction", gnc_main_window_cmd_window_new, nullptr, nullptr, nullptr },
     { "WindowMovePageAction", gnc_main_window_cmd_window_move_page, nullptr, nullptr, nullptr },
     { "Window0Action",  gnc_main_window_cmd_window_raise, "i", "@i 0", radio_change_state },
@@ -4468,12 +4470,10 @@ gnc_main_window_setup_window (GncMainWindow *window)
     /* Now update the "eXtensions" menu */
     if (!gnc_prefs_is_extra_enabled())
     {
-//FIXMEb        GAction*  action;
+        GAction* action = g_action_map_lookup_action (G_ACTION_MAP(priv->simple_action_group),
+                                                      "ExtensionsAction");
 
-//        action = g_action_map_lookup_action (G_ACTION_MAP(priv->simple_action_group),
-//                                              "ExtensionsAction");
-// this may need to be disabled and 'hidden when disabled added to ui.
-//        gtk_action_set_visible (action, FALSE);
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), false);
     }
 
     /* GncPluginManager stuff */

@@ -166,6 +166,7 @@ static const gchar *gnc_plugin_load_ui_items [] =
 {
     "BusinessPlaceholder0",
     "BusinessPlaceholder1",
+    "ExtensionsPlaceholder0",
     NULL,
 };
 
