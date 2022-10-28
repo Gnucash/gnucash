@@ -244,11 +244,6 @@ typedef struct GncMainWindowPrivate
      *  window that is contained in the status bar.  This pointer
      *  provides easy access for updating the progressbar. */
     GtkWidget *progressbar;
-
-    /** The group of all actions provided by the main window
-     *  itself.  This does not include any action provided by menu
-     *  or content plugins. */
-    GSimpleActionGroup *simple_action_group; //FIXMEb added
     /** A list of all pages that are installed in this window. */
     GList *installed_pages;
     /** A list of pages in order of use (most recent -> least recent) */
@@ -273,7 +268,7 @@ typedef struct GncMainWindowPrivate
 
 } GncMainWindowPrivate;
 
-GNC_DEFINE_TYPE_WITH_CODE(GncMainWindow, gnc_main_window, GTK_TYPE_WINDOW,
+GNC_DEFINE_TYPE_WITH_CODE(GncMainWindow, gnc_main_window, GTK_TYPE_APPLICATION_WINDOW,
                         G_ADD_PRIVATE (GncMainWindow)
                         G_IMPLEMENT_INTERFACE (GNC_TYPE_WINDOW,
                                        gnc_window_main_window_init))
@@ -1559,7 +1554,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
     /* Update the menus based upon whether this is an "immutable" page. */
     immutable = page &&
                 g_object_get_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE);
-    gnc_plugin_set_actions_enabled (priv->simple_action_group,
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(window),
                                     immutable_page_actions,
                                     !immutable);
     /* Trigger sensitivity updtates of other actions such as Save/Revert */
@@ -1862,7 +1857,7 @@ gnc_main_window_update_radio_button (GncMainWindow *window)
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-    action = g_action_map_lookup_action (G_ACTION_MAP(priv->simple_action_group),
+    action = g_action_map_lookup_action (G_ACTION_MAP(window),
                                          "WindowAction");
 
     /* Block the signal so as not to affect window ordering (top to
@@ -3531,7 +3526,7 @@ gnc_main_window_find_action (GncMainWindow *window, const gchar *name)
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-    action = g_action_map_lookup_action (G_ACTION_MAP(priv->simple_action_group),
+    action = g_action_map_lookup_action (G_ACTION_MAP(window),
                                          name);
 
     return action;
@@ -3550,7 +3545,7 @@ gnc_main_window_find_action_in_group (GncMainWindow *window,
 
     auto action_group = gtk_widget_get_action_group (GTK_WIDGET(window), group_name);
     if (action_group)
-        action = g_action_map_lookup_action (G_ACTION_MAP(action_group), name);
+        action = g_action_map_lookup_action (G_ACTION_MAP(window), name);
 
     return action;
 }
@@ -3837,7 +3832,7 @@ gnc_main_window_update_tab_position (gpointer prefs, gchar *pref, gpointer user_
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     gtk_notebook_set_tab_pos (GTK_NOTEBOOK(priv->notebook), position);
 
-    action = g_action_map_lookup_action (G_ACTION_MAP(priv->simple_action_group),
+    action = g_action_map_lookup_action (G_ACTION_MAP(window),
                                          "ViewTabPositionAction");
 
     g_signal_handlers_block_by_func (G_OBJECT(action),
@@ -4091,6 +4086,11 @@ gnc_main_window_setup_window (GncMainWindow *window)
         return; //FIXMEb this may need changing
     }
 
+    g_action_map_add_action_entries (G_ACTION_MAP(window),
+                                     gnc_menu_actions,
+                                     gnc_menu_n_actions,
+                                     window);
+
     priv->menubar_model = (GMenuModel *)gtk_builder_get_object (builder, "mainwin-menu");
     priv->menubar = gtk_menu_bar_new_from_model (priv->menubar_model);
     gtk_container_add (GTK_CONTAINER(priv->menu_dock), priv->menubar); //FIXMEb this may need changing
@@ -4101,17 +4101,10 @@ gnc_main_window_setup_window (GncMainWindow *window)
     gtk_container_add (GTK_CONTAINER(priv->menu_dock), GTK_WIDGET(priv->toolbar)); //FIXMEb this may need changing
     gtk_widget_show (GTK_WIDGET(priv->toolbar));
 
-    priv->simple_action_group = g_simple_action_group_new ();
-
-    g_action_map_add_action_entries (G_ACTION_MAP(priv->simple_action_group),
-                                     gnc_menu_actions,
-                                     gnc_menu_n_actions,
-                                     window);
-
-    gnc_plugin_set_actions_enabled (priv->simple_action_group,
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(window),
                                     initially_insensitive_actions,
                                     FALSE);
-    gnc_plugin_set_actions_enabled (priv->simple_action_group,
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(window),
                                     always_insensitive_actions,
                                     FALSE);
 
@@ -4119,7 +4112,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
                                              always_hidden_actions, false);
 
     gtk_widget_insert_action_group (GTK_WIDGET(window), "mainwin",
-                                    G_ACTION_GROUP(priv->simple_action_group));
+                                    G_ACTION_GROUP(window));
 
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
                            GNC_PREF_TAB_POSITION_TOP,
@@ -4143,17 +4136,15 @@ gnc_main_window_setup_window (GncMainWindow *window)
 
     /* Disable the Transaction menu */
     action = gnc_main_window_find_action (window, "TransactionAction");
-    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), false);
     /* Disable the Schedule menu */
     action = gnc_main_window_find_action (window, "ScheduledAction");
-    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), false);
 
     /* Now update the "eXtensions" menu */
     if (!gnc_prefs_is_extra_enabled())
     {
-        GAction* action = g_action_map_lookup_action (G_ACTION_MAP(priv->simple_action_group),
-                                                      "ExtensionsAction");
-
+        action = gnc_main_window_find_action (window, "ExtensionsAction");
         g_simple_action_set_enabled (G_SIMPLE_ACTION(action), false);
     }
 
@@ -4275,7 +4266,7 @@ gnc_main_window_show_summarybar (GncMainWindow *window, GAction *action)
     gboolean visible;
 
     if (action == nullptr)
-        action = g_action_map_lookup_action (G_ACTION_MAP(priv->simple_action_group),
+        action = g_action_map_lookup_action (G_ACTION_MAP(window),
                                              "ViewSummaryAction");
     if (action == nullptr)
         return TRUE;
@@ -4348,7 +4339,7 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
         priv->usage_order = g_list_prepend (priv->usage_order, page);
     }
 
-    gnc_plugin_set_actions_enabled (priv->simple_action_group,
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(window),
                                     multiple_page_actions,
                                     g_list_length (priv->installed_pages) > 1);
 

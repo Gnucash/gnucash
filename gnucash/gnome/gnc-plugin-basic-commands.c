@@ -225,7 +225,7 @@ gnc_plugin_basic_commands_add_to_window (GncPlugin *plugin,
     GSimpleActionGroup *simple_action_group =
         gnc_main_window_get_action_group (window, PLUGIN_ACTIONS_NAME);
 
-    gnc_plugin_set_actions_enabled (simple_action_group,
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group),
                                     gnc_plugin_initially_insensitive_actions,
                                     FALSE);
 
@@ -255,9 +255,9 @@ static void update_inactive_actions (GncPluginPage *plugin_page)
     g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(simple_action_group));
 
     /* Set the action's sensitivity */
-    gnc_plugin_set_actions_enabled (simple_action_group, readwrite_only_active_actions,
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), readwrite_only_active_actions,
                                     is_readwrite);
-    gnc_plugin_set_actions_enabled (simple_action_group, dirty_only_active_actions,
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), dirty_only_active_actions,
                                     is_dirty);
 }
 

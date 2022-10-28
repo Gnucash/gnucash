@@ -64,15 +64,15 @@ typedef struct
 /** The instance data structure for a main window object. */
 typedef struct GncMainWindow
 {
-    GtkWindow gtk_window;       /**< The parent object for a main window. */
-    gboolean window_quitting;   /**< Set to TRUE when quitting from this window. */
-    gboolean just_plugin_prefs; /**< Just remove preferences only from plugins */
+    GtkApplicationWindow gtk_application_window;  /**< The parent object for a main window. */
+    gboolean window_quitting;                     /**< Set to TRUE when quitting from this window. */
+    gboolean just_plugin_prefs;                   /**< Just remove preferences only from plugins */
 } GncMainWindow;
 
 /** The class data structure for a main window object. */
 typedef struct
 {
-    GtkWindowClass gtk_window; /**< The parent class for a main window. */
+    GtkApplicationWindowClass gtk_application_window; /**< The parent class for a main window. */
 
     /* callbacks */
     void (*page_added)   (GncMainWindow *window,

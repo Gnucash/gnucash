@@ -250,8 +250,7 @@ void gnc_plugin_init_short_names (GtkWidget *toolbar,
 /** This function sets the sensitivity of a GAction in a specific
  *  group.
  *
- *  @param simple_action_group The group of all actions associated with a
- *  plugin or plugin page.
+ *  @param action_map The action map associated with the window.
  *
  *  @param action_names A NULL terminated list of actions names that
  *  should be modified.
@@ -259,7 +258,7 @@ void gnc_plugin_init_short_names (GtkWidget *toolbar,
  *  @param enable A boolean specifying the new state for the specified
  *  property.
  */
-void gnc_plugin_set_actions_enabled (GSimpleActionGroup *simple_action_group,
+void gnc_plugin_set_actions_enabled (GActionMap *action_map,
                                      const gchar **action_names,
                                      gboolean enable); //FIXMEb added
 

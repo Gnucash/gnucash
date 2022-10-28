@@ -280,7 +280,7 @@ static void update_inactive_actions(GncPluginPage *plugin_page)
     g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(simple_action_group));
 
     /* Set the action's sensitivity */
-    gnc_plugin_set_actions_enabled (simple_action_group, readonly_inactive_actions,
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), readonly_inactive_actions,
                                     is_readwrite);
 }
 
@@ -330,19 +330,19 @@ gnc_plugin_ab_account_selected (GncPluginPage *plugin_page, Account *account,
         bankcode = gnc_ab_get_account_bankcode(account);
         accountid = gnc_ab_get_account_accountid(account);
 
-        gnc_plugin_set_actions_enabled (simple_action_group, need_account_actions,
+        gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), need_account_actions,
                                         (account && bankcode && *bankcode
                                          && accountid && *accountid));
         gnc_main_window_menu_item_vis_by_action (window, need_account_actions, TRUE);
 
 #if (AQBANKING_VERSION_INT < 60400)
-        gnc_plugin_set_actions_enabled (simple_action_group, inactive_account_actions, FALSE);
+        gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), inactive_account_actions, FALSE);
         gnc_main_window_menu_item_vis_by_action (window, inactive_account_actions, FALSE);
 #endif
     }
     else
     {
-        gnc_plugin_set_actions_enabled (simple_action_group, need_account_actions, FALSE);
+        gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), need_account_actions, FALSE);
         gnc_main_window_menu_item_vis_by_action (window, need_account_actions, FALSE);
     }
 

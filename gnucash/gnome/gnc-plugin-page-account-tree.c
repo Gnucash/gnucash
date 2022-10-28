@@ -803,15 +803,15 @@ update_inactive_actions (GncPluginPage *plugin_page)
     g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP (simple_action_group));
 
     /* Set the action's sensitivity */
-    gnc_plugin_set_actions_enabled (simple_action_group, readonly_inactive_actions,
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), readonly_inactive_actions,
                                     allow_write);
-    gnc_plugin_set_actions_enabled (simple_action_group, actions_requiring_account_rw,
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), actions_requiring_account_rw,
                                     allow_write && has_account);
-    gnc_plugin_set_actions_enabled (simple_action_group, actions_requiring_account_always,
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), actions_requiring_account_always,
                                     has_account);
-    gnc_plugin_set_actions_enabled (simple_action_group, actions_requiring_subaccounts_rw,
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), actions_requiring_subaccounts_rw,
                                     allow_write && subaccounts);
-    gnc_plugin_set_actions_enabled (simple_action_group, actions_requiring_priced_account,
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), actions_requiring_priced_account,
                                     account && xaccAccountIsPriced (account));
 
     g_signal_emit (plugin_page, plugin_page_signals[ACCOUNT_SELECTED], 0, account);

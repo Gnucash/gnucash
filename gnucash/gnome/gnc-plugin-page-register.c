@@ -922,11 +922,11 @@ gnc_plugin_page_register_ui_update (gpointer various,
         gnc_split_reg_get_read_only (priv->gsr))
         read_only_reg = TRUE;
 
-    gnc_plugin_set_actions_enabled (gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE(page)),
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE(page))),
                                     actions_requiring_account,
                                     !read_only_reg && account != NULL);
 
-    gnc_plugin_set_actions_enabled (gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE(page)),
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE(page))),
                                     actions_requiring_priced_account,
                                     account && xaccAccountIsPriced (account));
 
@@ -1117,7 +1117,7 @@ gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister* page)
     simple_action_group = gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE(page));
     g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(simple_action_group));
 
-    gnc_plugin_set_actions_enabled (simple_action_group, actions_requiring_account,
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), actions_requiring_account,
                                     is_readwrite && account != NULL);
 
     /* Set "style" radio button */

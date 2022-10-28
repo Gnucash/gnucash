@@ -438,7 +438,7 @@ update_inactive_actions(GncPluginPage *plugin_page)
     g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(simple_action_group));
 
     /* Set the action's sensitivity */
-    gnc_plugin_set_actions_enabled (simple_action_group, readonly_inactive_actions,
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), readonly_inactive_actions,
                                     is_sensitive);
 }
 
@@ -850,9 +850,9 @@ gnc_plugin_page_owner_tree_selection_changed_cb (GtkTreeSelection *selection,
     }
 
     simple_action_group = gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE(page));
-    gnc_plugin_set_actions_enabled (simple_action_group, actions_requiring_owner_always,
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), actions_requiring_owner_always,
                                     sensitive);
-    gnc_plugin_set_actions_enabled (simple_action_group, actions_requiring_owner_rw,
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), actions_requiring_owner_rw,
                                     sensitive && is_readwrite);
     g_signal_emit (page, plugin_page_signals[OWNER_SELECTED], 0, owner);
 }

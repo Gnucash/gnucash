@@ -244,20 +244,20 @@ gnc_plugin_init_short_names (GtkWidget *toolbar,
 
 /*  Update the sensitivity of an action */
 void
-gnc_plugin_set_actions_enabled (GSimpleActionGroup *simple_action_group,
+gnc_plugin_set_actions_enabled (GActionMap *action_map,
                                 const gchar **action_names, gboolean enable)
 {
-    g_return_if_fail (simple_action_group != NULL);
+    g_return_if_fail (action_map != NULL);
 
     for (gint i = 0; action_names[i]; i++)
     {
-        GAction *action = g_action_map_lookup_action (G_ACTION_MAP(simple_action_group),
+        GAction *action = g_action_map_lookup_action (G_ACTION_MAP(action_map),
                                                       action_names[i]);
         if (action)
              g_simple_action_set_enabled (G_SIMPLE_ACTION(action), enable);
         else
             PERR("No such action with name '%s' in action group %p)",
-                  action_names[i], simple_action_group);
+                  action_names[i], action_map);
     }
 }
 

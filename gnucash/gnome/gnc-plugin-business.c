@@ -819,10 +819,10 @@ gnc_plugin_business_update_menus (GncPluginPage *plugin_page)
         is_bus_doc = (xaccTransGetTxnType (trans) == TXN_TYPE_INVOICE);
     }
     // Change visibility and also sensitivity according to whether we are in a txn register
-    gnc_plugin_set_actions_enabled (simple_action_group, register_txn_actions,
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), register_txn_actions,
                                     is_txn_register && !is_bus_txn && !is_bus_doc);
 
-    gnc_plugin_set_actions_enabled (simple_action_group, register_bus_txn_actions,
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), register_bus_txn_actions,
                                     is_txn_register && is_bus_txn && !is_bus_doc);
 }
 
@@ -972,7 +972,7 @@ update_inactive_actions (GncPluginPage *plugin_page)
     g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(simple_action_group));
 
     /* Set the action's sensitivity */
-    gnc_plugin_set_actions_enabled (simple_action_group, readonly_inactive_actions,
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), readonly_inactive_actions,
                                     is_readwrite);
 }
 
