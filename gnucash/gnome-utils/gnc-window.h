@@ -60,9 +60,12 @@ typedef struct
     GTypeInterface parent;
 
     /* Virtual Table */
-    GtkWindow * (* get_gtk_window) (GncWindow *window);
-    GtkWidget * (* get_statusbar) (GncWindow *window);
-    GtkWidget * (* get_progressbar) (GncWindow *window);
+    GtkWindow  * (* get_gtk_window) (GncWindow *window);
+    GtkWidget  * (* get_statusbar) (GncWindow *window);
+    GtkWidget  * (* get_progressbar) (GncWindow *window);
+    GtkWidget  * (* get_menubar) (GncWindow *window);
+    GtkWidget  * (* get_toolbar) (GncWindow *window);
+    GMenuModel  * (* get_menubar_model) (GncWindow *window);
     void (* ui_set_sensitive) (GncWindow *window, gboolean sensitive);
 } GncWindowIface;
 
@@ -78,16 +81,19 @@ void           gnc_window_set_progressbar_window (GncWindow *window);
 GncWindow     *gnc_window_get_progressbar_window (void);
 GtkWidget     *gnc_window_get_progressbar (GncWindow *window);
 void           gnc_window_show_progress (const char *message, double percentage);
+GtkWidget     *gnc_window_get_menubar (GncWindow *window);
+GtkWidget     *gnc_window_get_toolbar (GncWindow *window);
+GMenuModel    *gnc_window_get_menubar_model (GncWindow *window);
 
 /** This callback functions will set the statusbar text to the
  * "tooltip" property of the currently selected GtkAction
- * 
+ *
  *  @param merge A pointer to the ui manager
- * 
+ *
  *  @param action A pointer to the action
- * 
+ *
  *  @param proxy A pointer to the proxy
- * 
+ *
  *  @param statusbar A pointer to the statusbar widget
  */
 void           gnc_window_connect_proxy (GtkUIManager *merge,

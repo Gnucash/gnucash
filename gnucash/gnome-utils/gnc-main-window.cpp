@@ -3853,25 +3853,16 @@ GtkWidget *
 gnc_main_window_menu_find_menu_item (GncMainWindow *window, const gchar *action_name)
 {
     GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-    GncMenuModelSearch *gsm = g_new0 (GncMenuModelSearch, 1);
     GtkWidget *menu_item = GTK_WIDGET(g_hash_table_lookup (priv->display_item_hash, action_name));
 
     priv->num_item_q++; //FIXMEb temp added
 
     if (!menu_item)
     {
-        gsm->search_action_label = nullptr;
-        gsm->search_action_name = action_name;
+        menu_item = gnc_menubar_model_find_menu_item (priv->menubar_model, priv->menubar, action_name);
 
-        if (gnc_menubar_model_find_item (priv->menubar_model, gsm))
-        {
-            menu_item = gnc_find_menu_item_by_action_label (priv->menubar,
-                                                            gsm->search_action_label);
-
-            g_hash_table_insert (priv->display_item_hash, g_strdup (action_name), menu_item);
-        }
+        g_hash_table_insert (priv->display_item_hash, g_strdup (action_name), menu_item);
     }
-    g_free (gsm);
     return menu_item;
 }
 
@@ -5684,6 +5675,58 @@ gnc_main_window_get_progressbar (GncWindow *window_in)
 }
 
 
+/** Retrieve the menu bar associated with a main window object.
+ *  This function is called via a vector off a generic window
+ *  interface.
+ *
+ *  @param window_in A pointer to a generic window. */
+static GtkWidget *
+gnc_main_window_get_menubar (GncWindow *window)
+{
+    GncMainWindowPrivate *priv;
+
+    g_return_val_if_fail (GNC_IS_MAIN_WINDOW(window), nullptr);
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+    return priv->menubar;
+}
+
+/** Retrieve the tool bar associated with a main window object.
+ *  This function is called via a vector off a generic window
+ *  interface.
+ *
+ *  @param window_in A pointer to a generic window. */
+static GtkWidget *
+gnc_main_window_get_toolbar (GncWindow *window)
+{
+    GncMainWindowPrivate *priv;
+
+    g_return_val_if_fail (GNC_IS_MAIN_WINDOW(window), nullptr);
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+    return priv->toolbar;
+}
+
+/** Retrieve the display hash table associated with a main window object.
+ *  This function is called via a vector off a generic window
+ *  interface.
+ *
+ *  @param window_in A pointer to a generic window. */
+static GMenuModel *
+gnc_main_window_get_menubar_model (GncWindow *window)
+{
+    GncMainWindowPrivate *priv;
+
+    g_return_val_if_fail (GNC_IS_MAIN_WINDOW(window), nullptr);
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+    return priv->menubar_model;
+}
+
+
 static void
 gnc_main_window_all_ui_set_sensitive (GncWindow *unused, gboolean sensitive)
 {
@@ -5719,10 +5762,13 @@ gnc_main_window_all_ui_set_sensitive (GncWindow *unused, gboolean sensitive)
 static void
 gnc_window_main_window_init (GncWindowIface *iface)
 {
-    iface->get_gtk_window  = gnc_main_window_get_gtk_window;
-    iface->get_statusbar   = gnc_main_window_get_statusbar;
-    iface->get_progressbar = gnc_main_window_get_progressbar;
-    iface->ui_set_sensitive = gnc_main_window_all_ui_set_sensitive;
+    iface->get_gtk_window      = gnc_main_window_get_gtk_window;
+    iface->get_statusbar       = gnc_main_window_get_statusbar;
+    iface->get_progressbar     = gnc_main_window_get_progressbar;
+    iface->ui_set_sensitive    = gnc_main_window_all_ui_set_sensitive;
+    iface->get_menubar         = gnc_main_window_get_menubar;
+    iface->get_toolbar         = gnc_main_window_get_toolbar;
+    iface->get_menubar_model   = gnc_main_window_get_menubar_model;
 }
 
 

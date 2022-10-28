@@ -57,9 +57,6 @@ typedef struct
 {
     /** The parent object for an embedded window. */
     GtkBox vbox;
-    /** A pointer to the UI Manager data structure for the whole
-     *  window. */
-    GtkUIManager *ui_merge;
 } GncEmbeddedWindow;
 
 
@@ -88,12 +85,12 @@ GType gnc_embedded_window_get_type (void);
  *  @return A pointer to the new object.
  */
 GncEmbeddedWindow *gnc_embedded_window_new (const gchar *action_group_name,
-        GtkActionEntry *action_entries,
-        gint n_action_entries,
-        const gchar *ui_filename,
-        GtkWidget *enclosing_win,
-        gboolean add_accelerators,
-        gpointer user_data);
+                                            GActionEntry *action_entries,
+                                            gint n_action_entries,
+                                            const gchar *ui_filename,
+                                            GtkWidget *enclosing_win,
+                                            gboolean add_accelerators,
+                                            gpointer user_data);
 
 
 /** Display a data plugin page in a window.

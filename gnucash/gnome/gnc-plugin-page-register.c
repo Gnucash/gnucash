@@ -943,17 +943,22 @@ gnc_plugin_page_register_focus_widget (GncPluginPage* register_plugin_page)
 {
     if (GNC_IS_PLUGIN_PAGE_REGISTER (register_plugin_page))
     {
+        GncWindow* gnc_window = GNC_WINDOW(GNC_PLUGIN_PAGE(register_plugin_page)->window);
         GNCSplitReg *gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE(register_plugin_page));
 
-        /* Enable the Transaction menu */
-        GAction *action = gnc_main_window_find_action (GNC_MAIN_WINDOW(register_plugin_page->window), "TransactionAction");
-        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), TRUE);
-        /* Disable the Schedule menu */
-        action = gnc_main_window_find_action (GNC_MAIN_WINDOW(register_plugin_page->window), "ScheduledAction");
-        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
+        if (GNC_IS_MAIN_WINDOW(GNC_PLUGIN_PAGE(register_plugin_page)->window))
+        {
+            /* Enable the Transaction menu */
+            GAction *action = gnc_main_window_find_action (GNC_MAIN_WINDOW(register_plugin_page->window), "TransactionAction");
+            g_simple_action_set_enabled (G_SIMPLE_ACTION(action), TRUE);
+            /* Disable the Schedule menu */
+            action = gnc_main_window_find_action (GNC_MAIN_WINDOW(register_plugin_page->window), "ScheduledAction");
+            g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
 
-        gnc_main_window_update_menu (GNC_MAIN_WINDOW(register_plugin_page->window), register_plugin_page,
-                                     gnc_plugin_load_ui_items);
+            gnc_main_window_update_menu (GNC_MAIN_WINDOW(register_plugin_page->window),
+                                         register_plugin_page,
+                                         gnc_plugin_load_ui_items);
+        }
 
         gnc_plugin_page_register_ui_update (NULL, GNC_PLUGIN_PAGE_REGISTER(register_plugin_page));
 
@@ -1063,6 +1068,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
     CursorClass cursor_class;
     const char* uri;
     Account *account;
+    GncWindow* gnc_window = GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window);
 
     /* Set 'Split Transaction' */
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
@@ -1093,8 +1099,11 @@ gnc_plugin_page_register_ui_update (gpointer various,
     g_signal_handlers_unblock_by_func (action, gnc_plugin_page_register_cmd_expand_transaction, page);
 
     /* Enable the FilePrintAction */
-    action = gnc_main_window_find_action (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window), "FilePrintAction");
-    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), TRUE);
+    if (GNC_IS_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window))
+    {
+        action = gnc_main_window_find_action (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window), "FilePrintAction");
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), TRUE);
+    }
 
     /* If we are in a readonly book, or possibly a place holder
      * account register make any modifying action inactive */
@@ -1139,7 +1148,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
 
         action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                              "PasteTransactionAction");
-       g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !read_only & !voided);
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !read_only & !voided);
 
         action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                              "DeleteTransactionAction");
@@ -1211,64 +1220,72 @@ gnc_plugin_page_register_ui_update (gpointer various,
 
     /* Modifying action descriptions based on cursor class */
     {
-        GtkWidget *menu_item;
+        GncMenuModelSearch *gsm = g_new0 (GncMenuModelSearch, 1);
+        GtkWidget *menu_item = NULL;
+        gboolean found = FALSE;
         const char** iter, **label_iter, **tooltip_iter;
         gboolean curr_label_trans = FALSE;
         iter = tran_vs_split_actions;
-        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), *iter);
         label_iter = tran_action_labels;
 
-        menu_item = gnc_main_window_menu_find_menu_item (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window),
-                                                         *iter);
+        gsm->search_action_label = NULL;
+        gsm->search_action_name = *iter;
 
-        if (menu_item == NULL)
+        found = gnc_menubar_model_find_item (gnc_window_get_menubar_model (gnc_window), gsm);
+
+        PINFO("Test for action '%s', found is %d, iter label is '%s'", *iter, found, _(*label_iter));
+
+        if (!found)
+        {
+            g_free (gsm);
             return;
+        }
 
-        PINFO("menu_item %p label is '%s', iter label is '%s'", menu_item,
-               gtk_menu_item_get_label (GTK_MENU_ITEM(menu_item)), _(*label_iter));
-
-        if (g_strcmp0 (gtk_menu_item_get_label (GTK_MENU_ITEM(menu_item)), _ (*label_iter)) == 0)
+        if (g_strcmp0 (gsm->search_action_label, _(*label_iter)) == 0)
             curr_label_trans = TRUE;
+
+        g_free (gsm);
+
         if ((cursor_class == CURSOR_CLASS_SPLIT) && curr_label_trans)
         {
+            gboolean found = FALSE;
             label_iter = split_action_labels;
             tooltip_iter = split_action_tips;
             for (iter = tran_vs_split_actions; *iter; ++iter)
             {
-                GtkWidget *menu_item = gnc_main_window_menu_find_menu_item (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window),
-                                                                            *iter);
-
-                PINFO("split menu_item %p label is '%s', iter label is '%s'", menu_item,
-                       gtk_menu_item_get_label (GTK_MENU_ITEM(menu_item)), *iter);
-
                 /* Adjust the action's label and tooltip */
-                action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page), *iter);
-                gtk_menu_item_set_label (GTK_MENU_ITEM(menu_item), _ (*label_iter));
-//FIXMEb                gtk_action_set_tooltip (action, _ (*tooltip_iter));
+                found = gnc_menubar_model_update_item (gnc_window_get_menubar_model (gnc_window),
+                                                       *iter, _(*label_iter), _(*tooltip_iter));
+
+                PINFO("split model_item action '%s', found is %d, iter label is '%s'", 
+                        *iter, found, _(*label_iter));
+
                 ++label_iter;
                 ++tooltip_iter;
             }
         }
         else if ((cursor_class == CURSOR_CLASS_TRANS) && !curr_label_trans)
         {
+            gboolean found = FALSE;
             label_iter = tran_action_labels;
             tooltip_iter = tran_action_tips;
             for (iter = tran_vs_split_actions; *iter; ++iter)
             {
-                GtkWidget *menu_item = gnc_main_window_menu_find_menu_item (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window),
-                                                                            *iter);
-
-                PINFO("trans menu_item %p label is '%s', iter label is '%s'", menu_item,
-                       gtk_menu_item_get_label (GTK_MENU_ITEM(menu_item)), *iter);
-
                 /* Adjust the action's label and tooltip */
-                action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page), *iter);
-                gtk_menu_item_set_label (GTK_MENU_ITEM(menu_item), _ (*label_iter));
-//FIXMEb                gtk_action_set_tooltip (action, _ (*tooltip_iter));
+                found = gnc_menubar_model_update_item (gnc_window_get_menubar_model (gnc_window),
+                                                       *iter, _(*label_iter), _(*tooltip_iter));
+
+                PINFO("trans model_item action '%s', found is %d, iter label is '%s'", 
+                        *iter, found, _(*label_iter));
+
                 ++label_iter;
                 ++tooltip_iter;
             }
         }
+        // need to add the accelerator keys, currently there are none
+//FIXMEb
+//        gnc_add_accelerator_keys_for_menu (gnc_window_get_menubar (gnc_window), 
+//                                           gnc_plugin_page_get_accel_group (GNC_PLUGIN_PAGE(page)));
     }
 }
 
