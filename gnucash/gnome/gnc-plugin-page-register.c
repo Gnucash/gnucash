@@ -87,6 +87,7 @@
 #include "window-report.h"
 #include "engine-helpers.h"
 #include "qofbookslots.h"
+#include "gnc-gtk-utils.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -244,7 +245,7 @@ static GncInvoice* invoice_from_split (Split* split);
 static GList* invoices_from_transaction (Transaction* trans);
 
 static void
-change_toggle_state (GSimpleAction *simple,
+toggle_change_state (GSimpleAction *simple,
                      GVariant      *state,
                      gpointer       user_data)
 {
@@ -252,7 +253,7 @@ change_toggle_state (GSimpleAction *simple,
 }
 
 static void
-change_radio_state (GSimpleAction *simple,
+radio_change_state (GSimpleAction *simple,
                     GVariant      *state,
                     gpointer       user_data)
 {
@@ -341,9 +342,9 @@ static GActionEntry gnc_plugin_page_register_actions [] =
     { "ReportsAccountReportAction", gnc_plugin_page_register_cmd_account_report, NULL, NULL, NULL },
     { "ReportsAcctTransReportAction", gnc_plugin_page_register_cmd_transaction_report, NULL, NULL, NULL },
 
-    { "ViewStyleDoubleLineAction", gnc_plugin_page_register_cmd_style_double_line, NULL, "FALSE", change_toggle_state },
-    { "SplitTransactionAction", gnc_plugin_page_register_cmd_expand_transaction, NULL, "FALSE", change_toggle_state },
-    { "ViewStyleRadioAction", gnc_plugin_page_register_cmd_style_changed, "n", 0, change_radio_state },
+    { "ViewStyleDoubleLineAction", gnc_plugin_page_register_cmd_style_double_line, NULL, "false", toggle_change_state },
+    { "SplitTransactionAction", gnc_plugin_page_register_cmd_expand_transaction, NULL, "false", toggle_change_state },
+    { "ViewStyleRadioAction", gnc_plugin_page_register_cmd_style_changed, "i", "@i 0", radio_change_state },
 };
 static guint gnc_plugin_page_register_n_actions = G_N_ELEMENTS(gnc_plugin_page_register_actions);
 
@@ -519,9 +520,56 @@ static GncDisplayItem gnc_plugin_page_register_display_items [] =
         "ReportsAcctTransReportAction", NULL, N_ ("Account Report - Single Transaction"), NULL,
         N_ ("Open a register report for the selected Transaction")
     },
+    /* Toggles and radio */
+    {
+        "ViewStyleDoubleLineAction", NULL, N_ ("_Double Line"), NULL,
+        N_ ("Show a second line with \"Action\", \"Notes\", and \"Linked Document\" for each transaction.")
+    },
+    {
+        "SplitTransactionAction", GNC_ICON_SPLIT_TRANS, N_ ("S_plit Transaction"), NULL,
+        N_ ("Show all splits in the current transaction")
+    },
+    /* Translators: This is a menu item in the View menu */
+    {
+        "ViewStyleBasicAction", NULL, N_ ("_Basic Ledger"), NULL,
+        N_ ("Show transactions on one or two lines")
+    },
+    /* Translators: This is a menu item in the View menu */
+    {
+        "ViewStyleAutoSplitAction", NULL, N_ ("_Auto-Split Ledger"), NULL,
+        N_ ("Show transactions on one or two lines and expand the current transaction")
+    },
+    /* Translators: This is a menu item in the View menu */
+    {
+        "ViewStyleJournalAction", NULL, N_ ("Transaction _Journal"), NULL,
+        N_ ("Show expanded transactions with all splits")
+    }
 };
 /** The number of display items provided by this plugin. */
 static guint gnc_plugin_page_register_n_display_items = G_N_ELEMENTS(gnc_plugin_page_register_display_items);
+
+/** The default menu items that need to be add to the menu */
+static const gchar *gnc_plugin_load_ui_items [] =
+{
+    "EditPlaceholder1",
+    "EditPlaceholder2",
+    "EditPlaceholder3",
+    "EditPlaceholder5",
+    "ViewPlaceholder1",
+    "ViewPlaceholder2",
+    "ViewPlaceholder3",
+    "ViewPlaceholder4",
+    "TransPlaceholder0",
+    "TransPlaceholder1",
+    "TransPlaceholder2",
+    "TransPlaceholder3",
+    "TransPlaceholder4",
+    "ActionsPlaceholder4",
+    "ActionsPlaceholder5",
+    "ActionsPlaceholder6",
+    "ReportsPlaceholder1",
+    NULL,
+};
 
 /** These are the "important" actions provided by the register page.
  *  Their labels will appear when the toolbar is set to "Icons and
@@ -549,6 +597,7 @@ static const gchar* view_style_actions[] =
     "ViewStyleBasicAction",
     "ViewStyleAutoSplitAction",
     "ViewStyleJournalAction",
+    "ViewStyleRadioAction",
     NULL
 };
 
@@ -835,15 +884,6 @@ gnc_plugin_page_register_init (GncPluginPageRegister* plugin_page)
                                      gnc_plugin_page_register_n_actions,
                                      plugin_page);
 
-//FIXMEb    gtk_action_group_add_toggle_actions (action_group,
-//                                         toggle_entries, n_toggle_entries,
-//                                         plugin_page);
-//FIXMEb    gtk_action_group_add_radio_actions (action_group,
-//                                        radio_entries_2, n_radio_entries_2,
-//                                        REG_STYLE_LEDGER,
-//                                        G_CALLBACK (gnc_plugin_page_register_cmd_style_changed),
-//                                        plugin_page);
-
 //FIXMEb    gnc_plugin_init_short_names (action_group, toolbar_labels);
 //FIXMEb    gnc_plugin_set_important_actions (action_group, important_actions);
 
@@ -904,6 +944,16 @@ gnc_plugin_page_register_focus_widget (GncPluginPage* register_plugin_page)
     if (GNC_IS_PLUGIN_PAGE_REGISTER (register_plugin_page))
     {
         GNCSplitReg *gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE(register_plugin_page));
+
+        /* Enable the Transaction menu */
+        GAction *action = gnc_main_window_find_action (GNC_MAIN_WINDOW(register_plugin_page->window), "TransactionAction");
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), TRUE);
+        /* Disable the Schedule menu */
+        action = gnc_main_window_find_action (GNC_MAIN_WINDOW(register_plugin_page->window), "ScheduledAction");
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
+
+        gnc_main_window_update_menu (GNC_MAIN_WINDOW(register_plugin_page->window), register_plugin_page,
+                                     gnc_plugin_load_ui_items);
 
         gnc_plugin_page_register_ui_update (NULL, GNC_PLUGIN_PAGE_REGISTER(register_plugin_page));
 
@@ -1006,29 +1056,61 @@ gnc_plugin_page_register_ui_update (gpointer various,
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
     GAction* action;
+    GNCLedgerDisplayType ledger_type;
     gboolean expanded, voided, read_only = FALSE, read_only_reg = FALSE;
     Transaction* trans;
     GList* invoices;
     CursorClass cursor_class;
     const char* uri;
+    Account *account;
 
     /* Set 'Split Transaction' */
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     reg = gnc_ledger_display_get_split_register (priv->ledger);
     cursor_class = gnc_split_register_get_current_cursor_class (reg);
     expanded = gnc_split_register_current_trans_expanded (reg);
-    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
-                                         "SplitTransactionAction");
+
+    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), "SplitTransactionAction");
     g_simple_action_set_enabled (G_SIMPLE_ACTION(action), reg->style == REG_STYLE_LEDGER);
+
+    /* Set "style" radio button */
+    ledger_type = gnc_ledger_display_type (priv->ledger);
+    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), "ViewStyleRadioAction");
+
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), ledger_type != LD_GL);
+    g_action_change_state (G_ACTION(action), g_variant_new_int32 (reg->style));
+
+    /* Set double line */
+    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), "ViewStyleDoubleLineAction");
+    g_action_change_state (G_ACTION(action), g_variant_new_boolean (reg->use_double_line));
+
+    /* Split Expand */
+    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), "SplitTransactionAction");
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), reg->style == REG_STYLE_LEDGER);
+
     g_signal_handlers_block_by_func (action, gnc_plugin_page_register_cmd_expand_transaction, page);
-//FIXMEb    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), expanded);
+    g_action_change_state (G_ACTION(action), g_variant_new_boolean (expanded));
     g_signal_handlers_unblock_by_func (action, gnc_plugin_page_register_cmd_expand_transaction, page);
+
+    /* Enable the FilePrintAction */
+    action = gnc_main_window_find_action (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window), "FilePrintAction");
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), TRUE);
 
     /* If we are in a readonly book, or possibly a place holder
      * account register make any modifying action inactive */
     if (qof_book_is_readonly (gnc_get_current_book()) ||
         gnc_split_reg_get_read_only (priv->gsr))
         read_only_reg = TRUE;
+
+    account = gnc_plugin_page_register_get_account (page);
+
+    gnc_plugin_update_actionsb (gnc_plugin_page_get_action_groupb (GNC_PLUGIN_PAGE(page)),
+                                actions_requiring_account, "sensitive",
+                                !read_only_reg && account != NULL);
+
+    gnc_plugin_update_actionsb (gnc_plugin_page_get_action_groupb (GNC_PLUGIN_PAGE(page)),
+                                actions_requiring_priced_account, "sensitive",
+                                account && xaccAccountIsPriced (account));
 
     /* Set available actions based on read only */
     trans = gnc_split_register_get_current_trans (reg);
@@ -1041,7 +1123,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
         for (iter = readonly_inactive_actions; *iter; ++iter)
         {
             /* Set the action's sensitivity */
-            GAction* action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page), *iter);
+            GAction* action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), *iter);
             g_simple_action_set_enabled (G_SIMPLE_ACTION(action), TRUE);
         }
         main_window_update_page_set_read_only_icon (GNC_PLUGIN_PAGE(page), FALSE);
@@ -1051,26 +1133,26 @@ gnc_plugin_page_register_ui_update (gpointer various,
 
         voided = xaccTransHasSplitsInState (trans, VREC);
 
-        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
+        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                              "CutTransactionAction");
         g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !read_only & !voided);
 
-        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
+        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                              "PasteTransactionAction");
        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !read_only & !voided);
 
-        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
+        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                              "DeleteTransactionAction");
         g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !read_only & !voided);
 
         if (cursor_class == CURSOR_CLASS_SPLIT)
         {
-            action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
+            action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                                  "DuplicateTransactionAction");
             g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !read_only & !voided);
         }
 
-        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
+        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                              "RemoveTransactionSplitsAction");
         g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !read_only & !voided);
 
@@ -1078,14 +1160,14 @@ gnc_plugin_page_register_ui_update (gpointer various,
         if (read_only)
             voided = TRUE;
 
-        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
+        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                              "VoidTransactionAction");
         g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !voided);
 
         if (read_only)
             voided = FALSE;
 
-        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
+        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                              "UnvoidTransactionAction");
         g_simple_action_set_enabled (G_SIMPLE_ACTION(action), voided);
     }
@@ -1103,7 +1185,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
        - it is an invoice transaction
        - it has splits with an invoice associated with it
     */
-    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
+    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                          "JumpLinkedInvoiceAction");
     if (trans)
     {
@@ -1112,7 +1194,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
         g_list_free (invoices);
     }
 
-    gnc_plugin_business_split_reg_ui_update (GNC_PLUGIN_PAGE (page));
+    gnc_plugin_business_split_reg_ui_update (GNC_PLUGIN_PAGE(page));
 
     /* If we are read only, make any modifying action inactive */
     if (read_only_reg)
@@ -1121,7 +1203,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
         for (iter = readonly_inactive_actions; *iter; ++iter)
         {
             /* Set the action's sensitivity */
-            GAction* action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page), *iter);
+            GAction* action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), *iter);
             g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
         }
         main_window_update_page_set_read_only_icon (GNC_PLUGIN_PAGE(page), TRUE);
@@ -1129,22 +1211,39 @@ gnc_plugin_page_register_ui_update (gpointer various,
 
     /* Modifying action descriptions based on cursor class */
     {
+        GtkWidget *menu_item;
         const char** iter, **label_iter, **tooltip_iter;
         gboolean curr_label_trans = FALSE;
         iter = tran_vs_split_actions;
-        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page), *iter);
+        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), *iter);
         label_iter = tran_action_labels;
-//FIXMEb        if (g_strcmp0 (gtk_action_get_label (action), _ (*label_iter)) == 0)
-//            curr_label_trans = TRUE;
+
+        menu_item = gnc_main_window_menu_find_menu_item (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window),
+                                                         *iter);
+
+        if (menu_item == NULL)
+            return;
+
+        PINFO("menu_item %p label is '%s', iter label is '%s'", menu_item,
+               gtk_menu_item_get_label (GTK_MENU_ITEM(menu_item)), _(*label_iter));
+
+        if (g_strcmp0 (gtk_menu_item_get_label (GTK_MENU_ITEM(menu_item)), _ (*label_iter)) == 0)
+            curr_label_trans = TRUE;
         if ((cursor_class == CURSOR_CLASS_SPLIT) && curr_label_trans)
         {
             label_iter = split_action_labels;
             tooltip_iter = split_action_tips;
             for (iter = tran_vs_split_actions; *iter; ++iter)
             {
+                GtkWidget *menu_item = gnc_main_window_menu_find_menu_item (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window),
+                                                                            *iter);
+
+                PINFO("split menu_item %p label is '%s', iter label is '%s'", menu_item,
+                       gtk_menu_item_get_label (GTK_MENU_ITEM(menu_item)), *iter);
+
                 /* Adjust the action's label and tooltip */
                 action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page), *iter);
-//FIXMEb                gtk_action_set_label (action, _ (*label_iter));
+                gtk_menu_item_set_label (GTK_MENU_ITEM(menu_item), _ (*label_iter));
 //FIXMEb                gtk_action_set_tooltip (action, _ (*tooltip_iter));
                 ++label_iter;
                 ++tooltip_iter;
@@ -1156,9 +1255,15 @@ gnc_plugin_page_register_ui_update (gpointer various,
             tooltip_iter = tran_action_tips;
             for (iter = tran_vs_split_actions; *iter; ++iter)
             {
+                GtkWidget *menu_item = gnc_main_window_menu_find_menu_item (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window),
+                                                                            *iter);
+
+                PINFO("trans menu_item %p label is '%s', iter label is '%s'", menu_item,
+                       gtk_menu_item_get_label (GTK_MENU_ITEM(menu_item)), *iter);
+
                 /* Adjust the action's label and tooltip */
                 action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page), *iter);
-//FIXMEb                gtk_action_set_label (action, _ (*label_iter));
+                gtk_menu_item_set_label (GTK_MENU_ITEM(menu_item), _ (*label_iter));
 //FIXMEb                gtk_action_set_tooltip (action, _ (*tooltip_iter));
                 ++label_iter;
                 ++tooltip_iter;
@@ -1181,7 +1286,11 @@ gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister* page)
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     account = gnc_plugin_page_register_get_account (page);
-    simple_action_group = gnc_plugin_page_get_action_groupb (GNC_PLUGIN_PAGE (page));
+
+    /* Get the action group */
+    simple_action_group = gnc_plugin_page_get_action_groupb (GNC_PLUGIN_PAGE(page));
+    g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(simple_action_group));
+
     gnc_plugin_update_actionsb (simple_action_group, actions_requiring_account,
                                "sensitive", is_readwrite && account != NULL);
 
@@ -1192,35 +1301,22 @@ gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister* page)
 
     /* Set "style" radio button */
     ledger_type = gnc_ledger_display_type (priv->ledger);
-    gnc_plugin_update_actionsb (simple_action_group, view_style_actions,
-                               "sensitive", ledger_type == LD_SINGLE);
+    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), "ViewStyleRadioAction");
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), ledger_type == LD_SINGLE);
 
     reg = gnc_ledger_display_get_split_register (priv->ledger);
-//FIXMEb    for (i = n_radio_entries_2 - 1; i > 0; i--)
-//    {
-//        DEBUG (" index %d: comparing %x to %x", i, radio_entries_2[i].value,
-//               reg->style);
-//        if (radio_entries_2[i].value == reg->style)
-//        {
-//            DEBUG ("match");
-//            break;
-//        }
-//    }
 
-    /* Either a match was found, or fell out with i = 0 */
-//FIXMEb    action = g_action_map_lookup_action (G_ACTION_MAP(simple_action_group), radio_entries_2[i].name);
-//    g_signal_handlers_block_by_func (action,
-//                                     gnc_plugin_page_register_cmd_style_changed, page);
-//FIXMEb    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
-//    g_signal_handlers_unblock_by_func (action,
-//                                       gnc_plugin_page_register_cmd_style_changed, page);
+    g_signal_handlers_block_by_func (action,
+                                     gnc_plugin_page_register_cmd_style_changed, page);
+    g_action_change_state (G_ACTION(action), g_variant_new_int32 (reg->style));
+    g_signal_handlers_unblock_by_func (action,
+                                       gnc_plugin_page_register_cmd_style_changed, page);
 
     /* Set "double line" toggle button */
-    action = g_action_map_lookup_action (G_ACTION_MAP(simple_action_group), "ViewStyleDoubleLineAction");
+    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), "ViewStyleDoubleLineAction");
     g_signal_handlers_block_by_func (action,
                                      gnc_plugin_page_register_cmd_style_double_line, page);
-//FIXMEb    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
-//                                  reg->use_double_line);
+    g_action_change_state (G_ACTION(action), g_variant_new_boolean (reg->use_double_line));
     g_signal_handlers_unblock_by_func (action,
                                        gnc_plugin_page_register_cmd_style_double_line, page);
 }
@@ -1698,6 +1794,7 @@ gnc_plugin_page_register_restore_edit_menu (GncPluginPage* page,
                                             const gchar* group_name)
 {
     GAction* action;
+    GVariant *state;
     GError* error = NULL;
     gchar* style_name;
     gint i;
@@ -1722,16 +1819,22 @@ gnc_plugin_page_register_restore_edit_menu (GncPluginPage* page,
     if (i <= REG_STYLE_JOURNAL)
     {
         DEBUG ("Setting style: %d", i);
-//FIXMEb        action = gnc_plugin_page_get_action (page, radio_entries_2[i].name);
-//        gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
+        action = gnc_plugin_page_get_action (page, "ViewStyleRadioAction");
+        g_action_activate (G_ACTION(action), g_variant_new_int32 (i));
     }
 
     /* Update the  double line action on this page */
-    use_double_line =
-        g_key_file_get_boolean (key_file, group_name, KEY_DOUBLE_LINE, &error);
+    use_double_line = g_key_file_get_boolean (key_file, group_name,
+                                              KEY_DOUBLE_LINE, &error);
     DEBUG ("Setting double_line_mode: %d", use_double_line);
-//FIXMEb    action = gnc_plugin_page_get_action (page, "ViewStyleDoubleLineAction");
-//    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), use_double_line);
+    action = gnc_plugin_page_get_action (page, "ViewStyleDoubleLineAction");
+
+    state = g_action_get_state (G_ACTION(action));
+
+    if (use_double_line != g_variant_get_boolean (state))
+        g_action_activate (G_ACTION(action), NULL);
+
+    g_variant_unref (state);
 
     LEAVE (" ");
 }
@@ -1859,13 +1962,10 @@ gnc_plugin_page_register_update_edit_menu (GncPluginPage* page, gboolean hide)
 
     action = gnc_plugin_page_get_action (page, "EditCopyAction");
     g_simple_action_set_enabled (G_SIMPLE_ACTION(action), can_copy);
-//FIXMEb    gtk_action_set_visible (action, !hide || can_copy);
     action = gnc_plugin_page_get_action (page, "EditCutAction");
     g_simple_action_set_enabled (G_SIMPLE_ACTION(action), can_cut);
-//FIXMEb    gtk_action_set_visible (action, !hide || can_cut);
     action = gnc_plugin_page_get_action (page, "EditPasteAction");
     g_simple_action_set_enabled (G_SIMPLE_ACTION(action), can_paste);
-//FIXMEb    gtk_action_set_visible (action,  !hide || can_paste);
 }
 
 static gboolean is_scrubbing = FALSE;
@@ -4359,7 +4459,6 @@ gnc_plugin_page_register_cmd_style_changed (GSimpleAction *simple,
     GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     SplitRegisterStyle value;
-    gint current;
 
     ENTER ("(action %p, page %p)", simple, page);
 
@@ -4367,10 +4466,11 @@ gnc_plugin_page_register_cmd_style_changed (GSimpleAction *simple,
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
 
-    current = g_variant_get_int16 (parameter);
+    value = (SplitRegisterStyle)g_variant_get_int32 (parameter);
 
-//FIXMEb    value = gtk_radio_action_get_current_value (current);
-//    gnc_split_reg_change_style (priv->gsr, value, priv->enable_refresh);
+    g_action_change_state (G_ACTION(simple), parameter);
+
+    gnc_split_reg_change_style (priv->gsr, value, priv->enable_refresh);
 
     gnc_plugin_page_register_ui_update (NULL, page);
     LEAVE (" ");
@@ -4396,9 +4496,9 @@ gnc_plugin_page_register_cmd_style_double_line (GSimpleAction *simple,
 
     state = g_action_get_state (G_ACTION(simple));
 
-    use_double_line =  g_variant_get_boolean (state);
-
     g_action_change_state (G_ACTION(simple), g_variant_new_boolean (!g_variant_get_boolean (state)));
+
+    use_double_line = !g_variant_get_boolean (state);
 
     if (use_double_line != reg->use_double_line)
     {
@@ -4871,7 +4971,7 @@ gnc_plugin_page_register_cmd_expand_transaction (GSimpleAction *simple,
 
     g_action_change_state (G_ACTION(simple), g_variant_new_boolean (!g_variant_get_boolean (state)));
 
-    expand = g_variant_get_boolean (state);
+    expand = !g_variant_get_boolean (state);
 
     gnc_split_register_expand_current_trans (reg, expand);
     g_variant_unref (state);
@@ -5005,7 +5105,8 @@ gnc_plugin_page_register_cmd_schedule (GSimpleAction *simple,
     LEAVE (" ");
 }
 
-static void scrub_split (Split *split)
+static void
+scrub_split (Split *split)
 {
     Account *acct;
     Transaction *trans;
