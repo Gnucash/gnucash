@@ -1089,11 +1089,20 @@ gnc_plugin_page_register_ui_update (gpointer various,
     g_action_change_state (G_ACTION(action), g_variant_new_boolean (expanded));
     g_signal_handlers_unblock_by_func (action, gnc_plugin_page_register_cmd_expand_transaction, page);
 
-    /* Enable the FilePrintAction */
+    account = gnc_plugin_page_register_get_account (page);
+
+    /* Done like this as the register can be displayed in embedded window */
     if (GNC_IS_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window))
     {
+        /* Enable the FilePrintAction */
         action = gnc_main_window_find_action (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window), "FilePrintAction");
         g_simple_action_set_enabled (G_SIMPLE_ACTION(action), TRUE);
+
+        /* Set the vis of the StockAssistant */
+        gnc_main_window_menu_item_vis_by_action (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window),
+                                                 actions_requiring_priced_account,
+                                                 account && gnc_prefs_is_extra_enabled () &&
+                                                 xaccAccountIsPriced (account));
     }
 
     /* If we are in a readonly book, or possibly a place holder
@@ -1101,8 +1110,6 @@ gnc_plugin_page_register_ui_update (gpointer various,
     if (qof_book_is_readonly (gnc_get_current_book()) ||
         gnc_split_reg_get_read_only (priv->gsr))
         read_only_reg = TRUE;
-
-    account = gnc_plugin_page_register_get_account (page);
 
     gnc_plugin_update_actions (gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE(page)),
                                actions_requiring_account, "sensitive",
@@ -1301,11 +1308,6 @@ gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister* page)
 
     gnc_plugin_update_actions (simple_action_group, actions_requiring_account,
                                "sensitive", is_readwrite && account != NULL);
-
-    gnc_plugin_update_actions (simple_action_group, actions_requiring_priced_account,
-                               "visible", account &&
-                               gnc_prefs_is_extra_enabled () &&
-                               xaccAccountIsPriced (account));
 
     /* Set "style" radio button */
     ledger_type = gnc_ledger_display_type (priv->ledger);
