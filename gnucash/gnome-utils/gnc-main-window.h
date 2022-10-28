@@ -279,18 +279,6 @@ void gnc_main_window_unmerge_actions (GncMainWindow *window,
                                       const gchar *group_name);
 
 
-/** Force a full update of the user interface for the specified
- *  window.  This can be an expensive function, but is needed because
- *  the gtk ui manager doesn't always seem to update properly when
- *  actions are changed.
- *
- *  @param window A pointer to the window whose user interface should
- *  be updated.
- *
- *  @attention Is this function still needed?
- */
-void gnc_main_window_actions_updated (GncMainWindow *window);
-
 void gnc_main_window_menu_item_vis_by_action (GncMainWindow *window,
                                               const gchar **action_names,
                                               gboolean vis); //FIXMEb added
