@@ -138,7 +138,7 @@ gnc_style_sheet_options_close_cb (GNCOptionWin * propertybox,
     ss_info * ssi = user_data;
     GtkTreeIter iter;
 
-    if (gtk_tree_row_reference_valid (ssi->row_ref))
+    if (gnc_style_sheet_dialog && gtk_tree_row_reference_valid (ssi->row_ref))
     {
         StyleSheetDialog * ss = gnc_style_sheet_dialog;
         GtkTreePath *path = gtk_tree_row_reference_get_path (ssi->row_ref);
