@@ -131,108 +131,18 @@ static GActionEntry gnc_plugin_actions [] =
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
 
-static GncDisplayItem gnc_plugin_display_items [] =
+/** The default menu items that need to be add to the menu */
+static const gchar *gnc_plugin_load_ui_items [] =
 {
-    /* File menu */
-    {
-        "FileNewAction", "document-new", N_("New _File"), "<primary>n",
-        N_("Create a new file")
-    },
-    {
-        "FileOpenAction", "document-open", N_("_Open..."), "<primary>o",
-        N_("Open an existing GnuCash file")
-    },
-    {
-        "FileSaveAction", "document-save", N_("_Save"), "<primary>s",
-        N_("Save the current file")
-    },
-    {
-        "FileSaveAsAction", "document-save-as", N_("Save _As..."), "<shift><primary>s",
-        N_("Save this file with a different name")
-    },
-    {
-        "FileRevertAction", "document-revert", N_("Re_vert"), NULL,
-        N_("Reload the current database, reverting all unsaved changes")
-    },
-    {
-        "FileExportAccountsAction", "go-next",
-        N_("Export _Accounts"), NULL,
-        N_("Export the account hierarchy to a new GnuCash datafile")
-    },
-
-    /* Edit menu */
-    {
-        "EditFindTransactionsAction", "edit-find", N_("_Find..."), "<primary>f",
-        N_("Find transactions with a search")
-    },
-    {
-        "EditTaxOptionsAction", NULL,
-        /* Translators: remember to reuse this
-           translation in dialog-account.glade */
-        N_("Ta_x Report Options"), NULL,
-        /* Translators: currently implemented are
-           US: income tax and
-           DE: VAT
-           So adjust this string                  */
-        N_("Setup relevant accounts for tax reports, e.g. US income tax")
-    },
-
-    /* Actions menu */
-    { "ActionsScheduledTransactionsAction", NULL, N_("_Scheduled Transactions"), NULL, NULL },
-    {
-        "ActionsScheduledTransactionEditorAction", NULL, N_("_Scheduled Transaction Editor"), NULL,
-        N_("The list of Scheduled Transactions")
-    },
-    {
-        "ActionsSinceLastRunAction", NULL, N_("Since _Last Run..."), NULL,
-        N_("Create Scheduled Transactions since the last time run")
-    },
-    {
-        "ActionsMortgageLoanAction", NULL, N_("_Mortgage & Loan Repayment..."), NULL,
-        N_("Setup scheduled transactions for repayment of a loan")
-    },
-    { "ActionsBudgetAction", NULL, N_("B_udget"), NULL, NULL },
-#ifdef CLOSE_BOOKS_ACTUALLY_WORKS
-    {
-        "ActionsCloseBooksAction", NULL, N_("Close _Books"), NULL,
-        N_("Archive old data using accounting periods")
-    },
-#endif // CLOSE_BOOKS_ACTUALLY_WORKS
-
-    /* Tools menu */
-    {
-        "ToolsPriceEditorAction", NULL, N_("_Price Database"), NULL,
-        N_("View and edit the prices for stocks and mutual funds")
-    },
-    {
-        "ToolsCommodityEditorAction", NULL, N_("_Security Editor"), NULL,
-        N_("View and edit the commodities for stocks and mutual funds")
-    },
-    {
-        "ToolsFinancialCalculatorAction", NULL, N_("_Loan Repayment Calculator"), NULL,
-        N_("Use the loan/mortgage repayment calculator")
-    },
-    {
-        "ToolsBookCloseAction", NULL, N_("_Close Book"), NULL,
-        N_("Close the Book at the end of the Period")
-    },
-    {
-        "ToolsImapEditorAction", NULL, N_("_Import Map Editor"), NULL,
-        N_("View and Delete Bayesian and non-Bayesian information")
-    },
-    {
-        "ToolsTransLinkedDocsAction", NULL, N_("_Transaction Linked Documents"), NULL,
-        N_("View all Transaction Linked Documents")
-    },
-
-    /* Help menu */
-    {
-        "HelpTipsOfTheDayAction", NULL, N_("_Tips Of The Day"), NULL,
-        N_("View the Tips of the Day")
-    },
+    "FilePlaceholder0",
+    "FilePlaceholder2",
+    "FilePlaceholder4",
+    "EditPlaceholder5",
+    "ActionsPlaceholder2",
+    "ToolsPlaceholder1",
+    "HelpPlaceholder1",
+    NULL,
 };
-/** The number of display items provided by this plugin. */
-static guint gnc_plugin_n_display_items = G_N_ELEMENTS(gnc_plugin_display_items);
 
 /** These are the "important" actions provided by the basic commands
  *  plugin.  Their labels will appear when the toolbar is set to
@@ -321,7 +231,7 @@ gnc_plugin_basic_commands_add_to_window (GncPlugin *plugin,
                                          GncMainWindow *window,
                                          GQuark type)
 {
-    GSimpleActionGroup *simple_action_group = 
+    GSimpleActionGroup *simple_action_group =
         gnc_main_window_get_action_group (window, PLUGIN_ACTIONS_NAME);
 
     gnc_plugin_update_actionsb (simple_action_group,
@@ -402,10 +312,9 @@ gnc_plugin_basic_commands_class_init (GncPluginBasicCommandsClass *klass)
     plugin_class->actions_name      = PLUGIN_ACTIONS_NAME;
     plugin_class->actionsb          = gnc_plugin_actions;
     plugin_class->n_actionsb        = gnc_plugin_n_actions;
-    plugin_class->display_items     = gnc_plugin_display_items;
-    plugin_class->n_display_items   = gnc_plugin_n_display_items;
     plugin_class->important_actions = gnc_plugin_important_actions;
     plugin_class->ui_filename       = PLUGIN_UI_FILENAME;
+    plugin_class->ui_updates        = gnc_plugin_load_ui_items;
 }
 
 

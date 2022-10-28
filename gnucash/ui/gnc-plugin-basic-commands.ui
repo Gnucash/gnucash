@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<interface>
+
+  <menu id="FilePlaceholder0">
+    <item>
+      <attribute name="label" translatable="yes">New _File</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.FileNewAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;n</attribute>
+      <attribute name="tooltip" translatable="yes">Create a new file</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Open...</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.FileOpenAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;o</attribute>
+      <attribute name="tooltip" translatable="yes">Open an existing GnuCash file</attribute>
+    </item>
+  </menu>
+
+  <menu id="FilePlaceholder2">
+    <item>
+       <attribute name="label" translatable="yes">_Save</attribute>
+       <attribute name="action">gnc-plugin-basic-commands-actions.FileSaveAction</attribute>
+       <attribute name="accel">&lt;Primary&gt;s</attribute>
+       <attribute name="tooltip" translatable="yes">Save the current file</attribute>
+    </item>
+    <item>
+       <attribute name="label" translatable="yes">Save _As...</attribute>
+       <attribute name="action">gnc-plugin-basic-commands-actions.FileSaveAsAction</attribute>
+       <attribute name="accel">&lt;Primary&gt;&lt;Shift&gt;s</attribute>
+       <attribute name="tooltip" translatable="yes">Save this file with a different name</attribute>
+    </item>
+    <item>
+       <attribute name="label" translatable="yes">Re_vert</attribute>
+       <attribute name="action">gnc-plugin-basic-commands-actions.FileRevertAction</attribute>
+       <attribute name="tooltip" translatable="yes">Reload the current database, reverting all unsaved changes</attribute>
+    </item>
+  </menu>
+
+  <menu id="FilePlaceholder4">
+    <item>
+      <attribute name="label" translatable="yes">Export _Accounts</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.FileExportAccountsAction</attribute>
+      <attribute name="tooltip" translatable="yes">Export the account hierarchy to a new GnuCash datafile</attribute>
+    </item>
+  </menu>
+
+  <menu id="EditPlaceholder5">
+    <item>
+<!-- Translators: remember to reuse this translation in dialog-account.glade -->
+      <attribute name="label" translatable="yes">Ta_x Report Options</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.EditTaxOptionsAction</attribute>
+<!-- Translators: currently implemented are, US: income tax and DE: VAT, So adjust this string -->
+      <attribute name="tooltip" translatable="yes">Setup relevant accounts for tax reports, e.g. US income tax</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="ActionsPlaceholder2">
+    <submenu>
+      <attribute name="label" translatable="yes">_Scheduled Transactions</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.ActionsScheduledTransactionsAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">_Scheduled Transaction Editor</attribute>
+          <attribute name="action">gnc-plugin-basic-commands-actions.ActionsScheduledTransactionEditorAction</attribute>
+          <attribute name="tooltip" translatable="yes">The list of Scheduled Transactions</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Since _Last Run...</attribute>
+          <attribute name="action">gnc-plugin-basic-commands-actions.ActionsSinceLastRunAction</attribute>
+          <attribute name="tooltip" translatable="yes">Create Scheduled Transactions since the last time run</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Mortgage &amp; Loan Repayment...</attribute>
+          <attribute name="action">gnc-plugin-basic-commands-actions.ActionsMortgageLoanAction</attribute>
+          <attribute name="tooltip" translatable="yes">Setup scheduled transactions for repayment of a loan</attribute>
+        </item>
+     </section>
+    </submenu>
+  </menu>
+
+  <menu id="ToolsPlaceholder1">
+    <item>
+      <attribute name="label" translatable="yes">_Price Database</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.ToolsPriceEditorAction</attribute>
+      <attribute name="tooltip" translatable="yes">View and edit the prices for stocks and mutual funds</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Security Editor</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.ToolsCommodityEditorAction</attribute>
+      <attribute name="tooltip" translatable="yes">View and edit the commodities for stocks and mutual funds</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Loan Repayment Calculator</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.ToolsFinancialCalculatorAction</attribute>
+      <attribute name="tooltip" translatable="yes">Use the loan/mortgage repayment calculator</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Close Book</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.ToolsBookCloseAction</attribute>
+      <attribute name="tooltip" translatable="yes">Close the Book at the end of the Period</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Import Map Editor</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.ToolsImapEditorAction</attribute>
+      <attribute name="tooltip" translatable="yes">View and Delete Bayesian and non-Bayesian information</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Transaction Linked Documents</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.ToolsTransLinkedDocsAction</attribute>
+      <attribute name="tooltip" translatable="yes">View all Transaction Linked Documents</attribute>
+    </item>
+  </menu>
+
+  <menu id="HelpPlaceholder1">
+    <item>
+      <attribute name="label" translatable="yes">_Tips Of The Day</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.HelpTipsOfTheDayAction</attribute>
+      <attribute name="tooltip" translatable="yes">View the Tips of the Day</attribute>
+    </item>
+  </menu>
+
+</interface>
