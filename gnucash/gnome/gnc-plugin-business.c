@@ -52,6 +52,8 @@
 
 #include "gnc-prefs.h"
 #include "gnc-main-window.h"
+#include "gnc-window.h"
+#include "gnc-gtk-utils.h"
 
 #include "gnc-plugin-page-register.h"
 
@@ -104,6 +106,7 @@ static void gnc_plugin_business_cmd_test_init_data (GSimpleAction *simple, GVari
 static void gnc_plugin_business_cmd_assign_payment (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 static void update_inactive_actions (GncPluginPage *page);
+static void bind_extra_toolbuttons_visibility (GncMainWindow *mainwindow);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-business-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-business.ui"
@@ -823,7 +826,6 @@ gnc_plugin_business_update_menus (GncPluginPage *plugin_page)
                                     is_txn_register && is_bus_txn && !is_bus_doc);
 }
 
-
 static void
 gnc_plugin_business_main_window_page_changed (GncMainWindow *window,
                                               GncPluginPage *page,
@@ -833,6 +835,17 @@ gnc_plugin_business_main_window_page_changed (GncMainWindow *window,
     gnc_plugin_business_update_menus(page);
 }
 
+static void
+gnc_plugin_business_main_window_menu_changed (GncMainWindow *window,
+                                              GncPluginPage *page,
+                                              gpointer user_data)
+{
+    if (page == gnc_main_window_get_current_page (window))
+    {
+        gnc_plugin_business_main_window_page_changed (window, page, user_data);
+        bind_extra_toolbuttons_visibility (window);
+    }
+}
 
 void
 gnc_plugin_business_split_reg_ui_update (GncPluginPage *plugin_page)
@@ -972,24 +985,48 @@ static const char* extra_toolbar_actions[] =
 /* Bind the visibility of the extra toolbar buttons to the
  * enable_toolbuttons preference. */
 static void
-bind_toolbuttons_visibility (GncMainWindow *mainwindow)
+bind_extra_toolbuttons_visibility (GncMainWindow *mainwindow)
 {
-    GSimpleActionGroup *simple_action_group;
+    GtkWidget *toolbar;
     const char **iter;
 
-    g_return_if_fail(mainwindow);
-    g_return_if_fail(GNC_IS_MAIN_WINDOW(mainwindow));
+    g_return_if_fail (mainwindow);
+    g_return_if_fail (GNC_IS_MAIN_WINDOW(mainwindow));
 
-    /* Get the action group */
-    simple_action_group = gnc_main_window_get_action_group (mainwindow, PLUGIN_ACTIONS_NAME);
-    g_assert (simple_action_group);
+    toolbar = gnc_window_get_toolbar (GNC_WINDOW(mainwindow));
 
-//FIXMEb    for (iter = extra_toolbar_actions; *iter; ++iter)
-//    {
-        /* Set the action's visibility */
-//        GAction *action = g_action_map_lookup_action (G_ACTION_MAP(simple_action_group), *iter);
-//        gnc_prefs_bind (GNC_PREFS_GROUP_INVOICE, GNC_PREF_EXTRA_TOOLBUTTONS, G_OBJECT (action), "visible");
-//    }
+    if (!toolbar)
+        return;
+
+    // Set the 'extra' tool items visibility
+    for (iter = extra_toolbar_actions; *iter; ++iter)
+    {
+        GtkWidget *tool_item = gnc_find_toolbar_item (toolbar, *iter);
+
+        if (tool_item)
+        {
+            gnc_prefs_bind (GNC_PREFS_GROUP_INVOICE,
+                            GNC_PREF_EXTRA_TOOLBUTTONS,
+                            G_OBJECT(tool_item), "visible");
+        }
+    }
+
+    // Set the 'extra' tool item separator visibility
+    for (gint i = 0; i < gtk_toolbar_get_n_items (GTK_TOOLBAR(toolbar)); i++)
+    {
+        GtkToolItem *tool_item = gtk_toolbar_get_nth_item (GTK_TOOLBAR(toolbar), i);
+
+        if (GTK_IS_SEPARATOR_TOOL_ITEM(tool_item))
+        {
+            if (g_str_has_prefix (gtk_buildable_get_name (GTK_BUILDABLE(tool_item)),
+                           "extra_separator"))
+            {
+                gnc_prefs_bind (GNC_PREFS_GROUP_INVOICE,
+                                GNC_PREF_EXTRA_TOOLBUTTONS,
+                                G_OBJECT(tool_item), "visible");
+            }
+        }
+    }
 }
 
 /**
@@ -1003,10 +1040,12 @@ gnc_plugin_business_add_to_window (GncPlugin *plugin,
                                    GncMainWindow *mainwindow,
                                    GQuark type)
 {
-    bind_toolbuttons_visibility (mainwindow);
-
     g_signal_connect (mainwindow, "page_changed",
                       G_CALLBACK(gnc_plugin_business_main_window_page_changed),
+                      plugin);
+
+    g_signal_connect (mainwindow, "menu_changed",
+                      G_CALLBACK(gnc_plugin_business_main_window_menu_changed),
                       plugin);
 }
 
