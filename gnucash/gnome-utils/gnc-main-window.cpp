@@ -269,7 +269,9 @@ typedef struct GncMainWindowPrivate
 
     const gchar   *previous_plugin_page_name; //FIXMEb added
     const gchar   *previous_menu_qualifier; //FIXMEb added
-    GtkAccelGroup *previous_plugin_page_accel_group; //FIXMEb added
+
+    /** The accelerator group for the window */
+    GtkAccelGroup *accel_group; //FIXMEb added
 
     GHashTable    *display_item_hash; //FIXMEb added
     gint           num_item_q; //FIXMEb temp added
@@ -577,7 +579,6 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     gchar *window_group;
     gsize page_start, page_count, i;
     GError *error = nullptr;
-    GtkAccelGroup *accel_group = gtk_accel_group_new ();
 
     /* Setup */
     ENTER("window %p, data %p (key file %p, window %d)",
@@ -719,10 +720,8 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
         gtk_window_maximize(GTK_WINDOW(window));
     }
 
-//FIXMEb not sure if this is in the right place
     // need to add the accelerator keys
-    gtk_window_add_accel_group (GTK_WINDOW(window), accel_group);
-    gnc_add_accelerator_keys_for_menu (GTK_WIDGET(priv->menubar), accel_group);
+    gnc_add_accelerator_keys_for_menu (GTK_WIDGET(priv->menubar), priv->accel_group);
 
     /* Common view menu items */
     action = gnc_main_window_find_action (window, "ViewToolbarAction");
@@ -2764,7 +2763,9 @@ gnc_main_window_init (GncMainWindow *window, void *data)
 
     priv->previous_plugin_page_name = nullptr;
     priv->previous_menu_qualifier = nullptr;
-    priv->previous_plugin_page_accel_group = nullptr;
+
+    priv->accel_group = gtk_accel_group_new ();
+    gtk_window_add_accel_group (GTK_WINDOW(window), priv->accel_group);
 
     /* Get the show_color_tabs value preference */
     priv->show_color_tabs = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_COLOR);
@@ -3808,7 +3809,6 @@ gnc_main_window_update_menu (GncMainWindow *window, GncPluginPage *page,
                              const gchar **ui_updates)
 {
     GncMainWindowPrivate *priv;
-    GtkAccelGroup *accel_group;
     const gchar *plugin_page_actions_group_name;
     GtkBuilder *builder;
     const gchar *menu_qualifier;
@@ -3888,15 +3888,8 @@ gnc_main_window_update_menu (GncMainWindow *window, GncPluginPage *page,
     // add tooltip redirect call backs
     gnc_plugin_add_menu_tooltip_callbacks (priv->menubar, priv->menubar_model, priv->statusbar);
 
-    // remove existing accelerator group
-    if (priv->previous_plugin_page_accel_group)
-        gtk_window_remove_accel_group (GTK_WINDOW(window), priv->previous_plugin_page_accel_group);
-
-    priv->previous_plugin_page_accel_group = gnc_plugin_page_get_accel_group (page);
-
     // need to add the accelerator keys
-    gnc_add_accelerator_keys_for_menu (priv->menubar, priv->previous_plugin_page_accel_group);
-    gtk_window_add_accel_group (GTK_WINDOW(window), priv->previous_plugin_page_accel_group);
+    gnc_add_accelerator_keys_for_menu (priv->menubar, priv->accel_group);
 
     // need to signal menu has been changed
     g_signal_emit_by_name (window, "menu_changed", page);
@@ -4113,6 +4106,14 @@ gnc_main_window_get_redirect (GncMainWindow *window, const gchar *action_name)
     return action;
 }
 
+static void
+main_window_realize_cb (GtkWidget *widget, gpointer user_data)
+{
+    GncMainWindow *window = (GncMainWindow*)user_data;
+    GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+    gnc_add_accelerator_keys_for_menu (GTK_WIDGET(priv->menubar), priv->accel_group);
+}
 
 static void
 gnc_main_window_setup_window (GncMainWindow *window)
@@ -4121,7 +4122,6 @@ gnc_main_window_setup_window (GncMainWindow *window)
     GtkWidget *main_vbox;
     GtkBuilder *builder;
     GncPluginManager *manager;
-    GtkAccelGroup *accel_group = gtk_accel_group_new ();
     GtkWidget *extra_item;
     GList *plugins;
     GError *error = nullptr;
@@ -4191,10 +4191,6 @@ gnc_main_window_setup_window (GncMainWindow *window)
     gtk_container_add (GTK_CONTAINER(priv->menu_dock), priv->menubar); //FIXMEb this may need changing
     gtk_widget_show (GTK_WIDGET(priv->menubar));
 
-    // need to add the accelerator keys
-    gtk_window_add_accel_group (GTK_WINDOW(window), accel_group);
-    gnc_add_accelerator_keys_for_menu (GTK_WIDGET(priv->menubar), accel_group);
-
     priv->toolbar = (GtkWidget *)gtk_builder_get_object (builder, "mainwin-toolbar");
     g_object_set (priv->toolbar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
     gtk_container_add (GTK_CONTAINER(priv->menu_dock), GTK_WIDGET(priv->toolbar)); //FIXMEb this may need changing
@@ -4259,6 +4255,10 @@ gnc_main_window_setup_window (GncMainWindow *window)
                       G_CALLBACK (gnc_main_window_plugin_added), window);
     g_signal_connect (G_OBJECT (manager), "plugin-removed",
                       G_CALLBACK (gnc_main_window_plugin_removed), window);
+
+    // need to add the accelerator keys this way, mainly for --nofile
+    g_signal_connect (G_OBJECT(window), "realize",
+                      G_CALLBACK(main_window_realize_cb), window);
 
     LEAVE(" ");
 }
