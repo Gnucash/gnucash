@@ -1284,7 +1284,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create (GtkWindow *parent,
     /* populate */
     schedXact_editor_populate (sxed);
 
-    /* Do not call show_all here. Screws up the gtkuimanager code */
+    /* Do not call show_all here */
     gtk_widget_show (sxed->dialog);
     gtk_notebook_set_current_page (GTK_NOTEBOOK (sxed->notebook), 0);
 

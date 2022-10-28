@@ -166,7 +166,6 @@ static void gnc_main_window_update_all_menu_items (void);
 #endif
 
 /* Callbacks */
-static void gnc_main_window_add_widget (GtkUIManager *merge, GtkWidget *widget, GncMainWindow *window);
 static void gnc_main_window_switch_page (GtkNotebook *notebook, gpointer *notebook_page, gint pos, GncMainWindow *window);
 static void gnc_main_window_page_reordered (GtkNotebook *notebook, GtkWidget *child, guint pos, GncMainWindow *window);
 static void gnc_main_window_plugin_added (GncPlugin *manager, GncPlugin *plugin, GncMainWindow *window);
@@ -2021,8 +2020,7 @@ gnc_main_window_update_radio_button (GncMainWindow *window)
 
 /** In every window that the user has open, update the "Window" menu
  *  item that points to the specified window.  This keeps the "Window"
- *  menu items consistent across all open windows.  (These items
- *  cannot be shared because of the way the GtkUIManager code works.)
+ *  menu items consistent across all open windows.
  *
  *  This function is called whenever the user switches pages in a
  *  window, or whenever a window is added or deleted.
@@ -4217,35 +4215,6 @@ gnc_main_window_init_menu_updaters (GncMainWindow *window)
                       G_CALLBACK(gnc_main_window_edit_menu_hide_cb), window);
 }
 
-static void
-gnc_main_window_window_menu (GncMainWindow *window)
-{
-//    guint merge_id;
-#ifdef MAC_INTEGRATION
-    gchar *filename = gnc_filepath_locate_ui_file ("gnc-windows-menu-ui-quartz.xml");
-#else
-    gchar *filename = gnc_filepath_locate_ui_file ("gnc-windows-menu-ui.xml");
-    GncMainWindowPrivate *priv;
-#endif
-    GError *error = nullptr;
-    g_assert(filename);
-//FIXMEb    merge_id = gtk_ui_manager_add_ui_from_file (window->ui_merge, filename,
-//                                                &error);
-    g_free (filename);
-//    g_assert(merge_id);
-#ifndef MAC_INTEGRATION
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-
-//FIXMEb    Not sure what here, may need to move some stuff from below.
-
-//FIXMEb    gtk_action_group_add_radio_actions (priv->action_group,
-//                                        radio_entries, n_radio_entries,
-//                                        0,
-//                                        G_CALLBACK(gnc_main_window_cmd_window_raise),
-//                                        window);
-#endif
-};
-
 /* This is used to prevent the tab having focus */
 static gboolean
 gnc_main_window_page_focus_in (GtkWidget *widget, GdkEvent  *event,
@@ -4394,8 +4363,6 @@ gnc_main_window_setup_window (GncMainWindow *window)
     gtk_widget_insert_action_group (GTK_WIDGET(window), "mainwin",
                                     G_ACTION_GROUP(priv->simple_action_group));
 
-//FIXMEb    gnc_main_window_window_menu (window); may need to use some thing like this
-
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
                            GNC_PREF_TAB_POSITION_TOP,
                            (gpointer)gnc_main_window_update_tab_position,
@@ -4515,26 +4482,6 @@ gnc_quartz_set_menu(GncMainWindow* window)
 #endif //MAC_INTEGRATION
 
 /* Callbacks */
-static void
-gnc_main_window_add_widget (GtkUIManager *merge,
-                            GtkWidget *widget,
-                            GncMainWindow *window)
-{
-    GncMainWindowPrivate *priv;
-
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-    if (GTK_IS_TOOLBAR (widget))
-    {
-        priv->toolbar = widget;
-        gtk_toolbar_set_style (GTK_TOOLBAR(priv->toolbar),
-                               GTK_TOOLBAR_BOTH);
-        gtk_toolbar_set_icon_size (GTK_TOOLBAR(priv->toolbar),
-                                   GTK_ICON_SIZE_SMALL_TOOLBAR);
-    }
-
-    gtk_box_pack_start (GTK_BOX (priv->menu_dock), widget, FALSE, FALSE, 0);
-    gtk_widget_show (widget);
-}
 
 /** Should a summary bar be visible in this window?  In order to
  *  prevent synchronization issues, the "ViewSummaryBar"
