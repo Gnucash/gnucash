@@ -44,6 +44,7 @@
 #include "gnc-engine.h"
 #include "gnc-prefs.h"
 #include "gnc-uri-utils.h"
+#include "gnc-gtk-utils.h"
 
 static GObjectClass *parent_class = NULL;
 
@@ -96,6 +97,12 @@ static GActionEntry gnc_plugin_actions [] =
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
 
+/** The default menu items that need to be add to the menu */
+static const gchar *gnc_plugin_load_ui_items [] =
+{
+    "FilePlaceholder5",
+    NULL,
+};
 
 /** The instance private data for a file history plugin.  This data
  *  structure is unused. */
@@ -407,45 +414,67 @@ gnc_history_update_action (GncMainWindow *window,
                            gint index,
                            const gchar *filename)
 {
-    GSimpleActionGroup *simple_action_group;
-    GAction *action;
-    gchar *action_name, *label_name, *tooltip, *old_filename;
+    GncMenuModelSearch *gsm = g_new0 (GncMenuModelSearch, 1);
+    GtkWidget *menu_item = NULL;
+    gchar *action_name;
     gint limit;
+    gboolean add_item = FALSE;
+    gint pos;
 
     ENTER("window %p, index %d, filename %s", window, index,
           filename ? filename : "(null)");
-    /* Get the action group */
-    simple_action_group = gnc_main_window_get_action_group (window, PLUGIN_ACTIONS_NAME);
 
-//FIXMEb    action_name = g_strdup_printf ("RecentFile%dAction", index);
-//    action = g_action_map_lookup_action (G_ACTION_MAP(simple_action_group), action_name);
+    action_name = g_strdup_printf ("RecentFile%dAction", index);
+
+    gsm->search_action_label = NULL;
+    gsm->search_action_name = action_name;
+
+    if (!gnc_menubar_model_find_item (gnc_main_window_get_menu_model(window), gsm)) // could not find action_name
+    {
+        add_item = TRUE;
+        gsm->search_action_name = "FilePlaceholder5"; // placeholder
+
+        if (!gnc_menubar_model_find_item (gnc_main_window_get_menu_model(window), gsm))
+        {
+            LEAVE("Could not find 'menu_item' with action name '%s'", action_name);
+            g_free (gsm);
+            g_free (action_name);
+            return;
+        }
+        else
+            pos = gsm->index + index;
+    }
+    else
+        pos = gsm->index;
 
     limit = gnc_prefs_get_int (GNC_PREFS_GROUP_HISTORY,
                                GNC_PREF_HISTORY_MAXFILES);
 
     if (filename && (strlen(filename) > 0) && (index < limit))
     {
-        /* set the menu label (w/accelerator) */
-        label_name = gnc_history_generate_label (index, filename);
-        tooltip    = gnc_history_generate_tooltip (index, filename);
-//FIXMEb        g_object_set(G_OBJECT(action), "label", label_name,
-//                                       "tooltip", tooltip,
-//                                       "visible", TRUE,
-//                                       NULL);
-//        g_free(label_name);
-//        g_free(tooltip);
+        GMenuItem *item;
+        gchar *label_name = gnc_history_generate_label (index, filename);
+        gchar *tooltip = gnc_history_generate_tooltip (index, filename);
+        gchar *full_action_name = g_strconcat (PLUGIN_ACTIONS_NAME, ".",
+                                               action_name, NULL);
 
-        /* set the filename for the callback function */
-//FIXMEb        old_filename = g_object_get_data(G_OBJECT(action), FILENAME_STRING);
-//        if (old_filename)
-//            g_free(old_filename);
-//FIXMEb        g_object_set_data(G_OBJECT(action), FILENAME_STRING, g_strdup(filename));
+        item = g_menu_item_new (label_name, full_action_name);
+
+        g_menu_item_set_attribute (item, "tooltip", "s", tooltip);
+
+        if (!add_item)
+            g_menu_remove (G_MENU(gsm->model), pos);
+
+        g_menu_insert_item (G_MENU(gsm->model), pos, item);
+
+//FIXMEb tooltip needs fixing to status bar and accelerator ?
+
+        g_free (full_action_name);
+        g_free (label_name);
+        g_free (tooltip);
     }
-    else
-    {
-//FIXMEb        gtk_action_set_visible(action, FALSE);
-    }
-//    g_free (action_name);
+    g_free (gsm);
+    g_free (action_name);
     LEAVE("");
 }
 
@@ -465,6 +494,7 @@ gnc_history_update_menus (GncMainWindow *window)
     guint i;
 
     ENTER("");
+
     for (i = 0; i < MAX_HISTORY_FILES; i++)
     {
         pref = gnc_history_index_to_pref_name(i);
@@ -548,6 +578,7 @@ gnc_plugin_file_history_class_init (GncPluginFileHistoryClass *klass)
     plugin_class->actionsb      = gnc_plugin_actions;
     plugin_class->n_actionsb    = gnc_plugin_n_actions;
     plugin_class->ui_filename   = PLUGIN_UI_FILENAME;
+    plugin_class->ui_updates    = gnc_plugin_load_ui_items;
 }
 
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginFileHistory, gnc_plugin_file_history, GNC_TYPE_PLUGIN)
@@ -661,21 +692,31 @@ gnc_plugin_file_history_cmd_open_file (GSimpleAction *simple,
 
 {
     GncMainWindowActionData *data = user_data;
-    gchar *filename;
+    gchar *filename, *pref, *index;
+    const gchar *action_name;
 
-    g_return_if_fail(GTK_IS_ACTION(simple));
-    g_return_if_fail(data != NULL);
+    g_return_if_fail (G_IS_SIMPLE_ACTION(simple));
+    g_return_if_fail (data != NULL);
 
-    /* DRH - Do we need to close all open windows but the first?
-     * Which progress bar should we be using? One in a window, or
-     * in a new "file loading" dialog???
-     */
-    filename = g_object_get_data(G_OBJECT(simple), FILENAME_STRING);
+    // action name will be of the form 'RecentFile1Action'
+    action_name =  g_action_get_name (G_ACTION(simple));
+
+    index = g_utf8_substring (action_name, 10, 11);
+
+    pref = gnc_history_index_to_pref_name (atoi (index));
+    filename = gnc_prefs_get_string (GNC_PREFS_GROUP_HISTORY, pref);
+
+    PINFO("File to open is '%s' on action '%s'", filename, action_name);
+
     gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
     /* also opens new account page */
     gnc_file_open_file (GTK_WINDOW (data->window),
                         filename, /*open_readonly*/ FALSE);
     gnc_window_set_progressbar_window (NULL);
+
+    g_free (pref);
+    g_free (filename);
+    g_free (index);
 }
 
 /** @} */

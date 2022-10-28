@@ -13,6 +13,7 @@
     <file>ui/gnc-plugin-csv-export.ui</file>
     <file>ui/gnc-plugin-csv-import.ui</file>
     <file>ui/gnc-plugin-customer-import.ui</file>
+    <file>ui/gnc-plugin-file-history.ui</file>
     <file>ui/gnc-plugin-log-replay.ui</file>
     <file>ui/gnc-plugin-register.ui</file>
     <file>ui/gnc-plugin-report-system.ui</file>

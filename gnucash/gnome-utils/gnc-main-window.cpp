@@ -118,6 +118,7 @@ enum
 #define GNC_PREF_TAB_OPEN_ADJACENT    "tab-open-adjacent"
 
 #define GNC_MAIN_WINDOW_NAME "GncMainWindow"
+#define GNC_MAIN_WINDOW_MAX_NUMBER 10
 
 #define DIALOG_BOOK_OPTIONS_CM_CLASS "dialog-book-options"
 
@@ -332,8 +333,8 @@ static GActionEntry gnc_menu_actions [] =
     { "ViewSummaryAction", gnc_main_window_cmd_view_summary, nullptr, "true", toggle_change_state },
     { "ViewStatusbarAction", gnc_main_window_cmd_view_statusbar, nullptr, "true", toggle_change_state },
 
-    { "ViewTabPositionAction",  gnc_main_window_cmd_view_tab_position, "n", 0, radio_change_state },
-    { "Window0Action",  gnc_main_window_cmd_window_raise, "n", 0, radio_change_state },
+    { "ViewTabPositionAction",  gnc_main_window_cmd_view_tab_position, "i", "@i 0", radio_change_state },
+    { "Window0Action",  gnc_main_window_cmd_window_raise, "i", "@i 0", radio_change_state },
 };
 /** The number of actions provided by the main window. */
 static guint gnc_menu_n_actions = G_N_ELEMENTS(gnc_menu_actions);
@@ -689,7 +690,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     GAction *action;
     gint *pos, *geom, *order;
     gsize length;
-    gboolean max, visible, desired_visibility;
+    gboolean max;
     gchar *window_group;
     gsize page_start, page_count, i;
     GError *error = nullptr;
@@ -836,51 +837,69 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
 
     /* Common view menu items */
     action = gnc_main_window_find_action (window, "ViewToolbarAction");
-//FIXMEb    visible = gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action));
-    desired_visibility = g_key_file_get_boolean (data->key_file, window_group,
-                                                 TOOLBAR_VISIBLE, &error);
-    if (error)
+    if (action)
     {
-        g_warning("error reading group %s key %s: %s",
-                  window_group, TOOLBAR_VISIBLE, error->message);
-        g_error_free(error);
-        error = nullptr;
-    }
-    else if (visible != desired_visibility)
-    {
-//        gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), desired_visibility);
+        GVariant *state = g_action_get_state (G_ACTION(action));
+        gboolean visible = g_variant_get_boolean (state);
+        gboolean desired_visibility = g_key_file_get_boolean (data->key_file, window_group,
+                                                              TOOLBAR_VISIBLE, &error);
+
+        if (error)
+        {
+            g_warning ("error reading group %s key %s: %s",
+                       window_group, TOOLBAR_VISIBLE, error->message);
+            g_error_free (error);
+            error = nullptr;
+        }
+        else if (visible != desired_visibility)
+        {
+            g_action_activate (action, nullptr);
+        }
+        g_variant_unref (state);
     }
 
-    action = gnc_main_window_find_action(window, "ViewSummaryAction");
-//FIXMEb    visible = gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action));
-    desired_visibility = g_key_file_get_boolean (data->key_file, window_group,
-                                                 SUMMARYBAR_VISIBLE, &error);
-    if (error)
+    action = gnc_main_window_find_action (window, "ViewSummaryAction");
+    if (action)
     {
-        g_warning("error reading group %s key %s: %s",
-                  window_group, TOOLBAR_VISIBLE, error->message);
-        g_error_free(error);
-        error = nullptr;
-    }
-    else if (visible != desired_visibility)
-    {
-//        gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), desired_visibility);
+        GVariant *state = g_action_get_state (G_ACTION(action));
+        gboolean visible = g_variant_get_boolean (state);
+        gboolean desired_visibility = g_key_file_get_boolean (data->key_file, window_group,
+                                                              SUMMARYBAR_VISIBLE, &error);
+
+        if (error)
+        {
+            g_warning ("error reading group %s key %s: %s",
+                       window_group, SUMMARYBAR_VISIBLE, error->message);
+            g_error_free (error);
+            error = nullptr;
+        }
+        else if (visible != desired_visibility)
+        {
+            g_action_activate (action, nullptr);
+        }
+        g_variant_unref (state);
     }
 
-    action = gnc_main_window_find_action(window, "ViewStatusbarAction");
-//FIXMEb    visible = gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action));
-    desired_visibility = g_key_file_get_boolean (data->key_file, window_group,
-                                                 STATUSBAR_VISIBLE, &error);
-    if (error)
+    action = gnc_main_window_find_action (window, "ViewStatusbarAction");
+    if (action)
     {
-        g_warning("error reading group %s key %s: %s",
-                  window_group, TOOLBAR_VISIBLE, error->message);
-        g_error_free(error);
-        error = nullptr;
-    }
-    else if (visible != desired_visibility)
-    {
-//        gtk_toggle_action_set_active (GTK_TOGGLE_ACTION(action), desired_visibility);
+        GVariant *state = g_action_get_state (G_ACTION(action));
+        gboolean visible = g_variant_get_boolean (state);
+        gboolean desired_visibility = g_key_file_get_boolean (data->key_file, window_group,
+                                                              STATUSBAR_VISIBLE, &error);
+
+        if (error)
+        {
+            g_warning ("error reading group %s key %s: %s",
+                       window_group, STATUSBAR_VISIBLE, error->message);
+            g_error_free (error);
+            error = nullptr;
+        }
+        else if (visible != desired_visibility)
+        {
+            g_action_activate (action, nullptr);
+        }
+        g_variant_unref (state);
     }
     priv->restoring_pages = TRUE;
     /* Now populate the window with pages. */
@@ -1045,7 +1064,7 @@ gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
     GncMainWindowPrivate *priv;
     GAction *action;
     gint i, num_pages, coords[4], *order;
-    gboolean maximized, minimized, visible;
+    gboolean maximized, minimized, visible = true;
     gchar *window_group;
 
     /* Setup */
@@ -1109,16 +1128,30 @@ gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
 
     /* Common view menu items */
     action = gnc_main_window_find_action (window, "ViewToolbarAction");
-//FIXMEb    visible = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION(action));
-    visible = TRUE; //just added for testing
+    if (action)
+    {
+        GVariant *state = g_action_get_state (G_ACTION(action));
+        visible = g_variant_get_boolean (state);
+        g_variant_unref (state);
+    }
     g_key_file_set_boolean (data->key_file, window_group,
                             TOOLBAR_VISIBLE, visible);
     action = gnc_main_window_find_action (window, "ViewSummaryAction");
-//FIXMEb    visible = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION(action));
+    if (action)
+    {
+        GVariant *state = g_action_get_state (G_ACTION(action));
+        visible = g_variant_get_boolean (state);
+        g_variant_unref (state);
+    }
     g_key_file_set_boolean (data->key_file, window_group,
                             SUMMARYBAR_VISIBLE, visible);
     action = gnc_main_window_find_action (window, "ViewStatusbarAction");
-//FIXMEb    visible = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION(action));
+    if (action)
+    {
+        GVariant *state = g_action_get_state (G_ACTION(action));
+        visible = g_variant_get_boolean (state);
+        g_variant_unref (state);
+    }
     g_key_file_set_boolean (data->key_file, window_group,
                             STATUSBAR_VISIBLE, visible);
 
@@ -1843,31 +1876,33 @@ statusbar_notification_lastmodified()
 
 
 /** This data structure is used to describe the requested state of a
- *  GtkRadioAction, and us used to pass data among several
- *  functions. */
+ *  GAction, and is used to pass data among several functions. */
 struct menu_update
 {
-    /** The name of the GtkRadioAction to be updated. */
+    /** The name of the GAction to be updated. */
     gchar    *action_name;
 
-    /** The new label for this GtkRadioAction. */
+    /** The new label for this GAction. */
     gchar    *label;
 
-    /** Whether or not the GtkRadioAction should be visible. */
+    /** Whether or not the GAction should be visible. */
     gboolean  visible;
+
+    /** Index number in active windows list */
+    gint index;
 };
 
 #ifndef MAC_INTEGRATION
-/** Update the label on the specified GtkRadioAction in the specified
- *  window.  This action is displayed as a menu item in the "Windows"
- *  menu.  This function will end up being called whenever the front
- *  page is changed in any window, or whenever a window is added or
- *  deleted.
+/** Update the label on the menu item specified by the GAction in the
+ *  specified window. This action is displayed as a menu item in the
+ *  "Windows" menu. This function will end up being called whenever the
+ *  front page is changed in any window, or whenever a window is added
+ *  or deleted.
  *
  *  @param window The window whose menu item should be updated.
  *
- *  @param data A data structure containing the name of the
- *  GtkRadioAction, and describing the new state for this action.
+ *  @param data A data structure containing the name of the GAction and
+ *  describing the new state for this action.
  *
  *  @internal
  */
@@ -1876,17 +1911,44 @@ gnc_main_window_update_one_menu_action (GncMainWindow *window,
                                         struct menu_update *data)
 {
     GncMainWindowPrivate *priv;
-    GAction* action;
+    GncMenuModelSearch *gsm = g_new0 (GncMenuModelSearch, 1);
+    GMenuItem *item;
+    gint pos;
 
     ENTER("window %p, action %s, label %s, visible %d", window,
           data->action_name, data->label, data->visible);
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-    action = g_action_map_lookup_action (G_ACTION_MAP(priv->simple_action_group), data->action_name);
-    if (action)
-//FIXMEb        g_object_set(G_OBJECT(action),
-//                     "label", data->label,
-//                     "visible", data->visible,
-//                     (char *)nullptr);
+
+    gsm->search_action_label = nullptr;
+    gsm->search_action_name = "WindowsPlaceholder1";  // placeholder
+
+    if (!gnc_menubar_model_find_item (priv->menubar_model, gsm))
+    {
+        LEAVE("Could not find placeholder 'WindowsPlaceholder1' for windows entries");
+        g_free (gsm);
+        return;
+    }
+
+    pos = gsm->index + data->index + 1;
+
+    if (!data->visible)
+    {
+        if (pos < g_menu_model_get_n_items (gsm->model))
+            g_menu_remove (G_MENU(gsm->model), pos);
+
+        g_free (gsm);
+        LEAVE(" ");
+        return;
+    }
+
+    item = g_menu_item_new (data->label, "mainwin.Window0Action");
+    g_menu_item_set_attribute (item, "target", "i", data->index);
+
+    if (pos < g_menu_model_get_n_items (gsm->model))
+        g_menu_remove (G_MENU(gsm->model), pos);
+    g_menu_insert_item (G_MENU(gsm->model), pos, item);
+
+    g_free (gsm);
     LEAVE(" ");
 }
 
@@ -1906,46 +1968,38 @@ static void
 gnc_main_window_update_radio_button (GncMainWindow *window)
 {
     GncMainWindowPrivate *priv;
-    GAction *action, *first_action;
+    GAction *action;
     GSList *action_list;
-    gchar *action_name;
     gsize index;
 
     ENTER("window %p", window);
 
     /* Show the new entry in all windows. */
     index = g_list_index (active_windows, window);
-//FIXMEb
-#ifdef skip
 
-    if (index >= n_radio_entries)
+    if (index >= GNC_MAIN_WINDOW_MAX_NUMBER)
     {
-        LEAVE("window  %" G_GSIZE_FORMAT ", only %" G_GSIZE_FORMAT " actions", index, n_radio_entries);
+        LEAVE("window %" G_GSIZE_FORMAT ", only %d actions", index, GNC_MAIN_WINDOW_MAX_NUMBER);
         return;
     }
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-    action_name = g_strdup_printf("Window%" G_GSIZE_FORMAT "Action", index);
-    action = g_action_map_lookup_action (G_ACTION_MAP(priv->simple_action_group), action_name);
+
+    action = g_action_map_lookup_action (G_ACTION_MAP(priv->simple_action_group),
+                                         "Window0Action");
 
     /* Block the signal so as not to affect window ordering (top to
      * bottom) on the screen */
-//FIXMEb    action_list = gtk_radio_action_get_group (GTK_RADIO_ACTION(action));
-//    if (action_list)
-//    {
-//        first_action = static_cast<GtkAction*>(g_slist_last(action_list)->data);
-//        g_signal_handlers_block_by_func(G_OBJECT(first_action),
-//                                        (gpointer)gnc_main_window_cmd_window_raise,
-//                                        window);
-//        DEBUG("blocked signal on %p, set %p active, window %p", first_action,
-//              action, window);
-//        gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), TRUE);
-//        g_signal_handlers_unblock_by_func(G_OBJECT(first_action),
-//                                          (gpointer)gnc_main_window_cmd_window_raise,
-//                                          window);
-    }
-    g_free(action_name);
-#endif
+    g_signal_handlers_block_by_func (G_OBJECT(action),
+                                     (gpointer)gnc_main_window_cmd_window_raise,
+                                     window);
+
+    DEBUG("blocked signal on action %p, window %p", action, window);
+    g_action_change_state (G_ACTION(action), g_variant_new_int32 (index));
+
+    g_signal_handlers_unblock_by_func (G_OBJECT(action),
+                                       (gpointer)gnc_main_window_cmd_window_raise,
+                                       window);
     LEAVE(" ");
 }
 
@@ -1970,39 +2024,42 @@ gnc_main_window_update_menu_item (GncMainWindow *window)
     gsize index;
 
     ENTER("window %p", window);
-    index = g_list_index(active_windows, window);
-//FIXMEb
-#ifdef skip
-    if (index > n_radio_entries)
+
+    index = g_list_index (active_windows, window);
+
+    if (index >= GNC_MAIN_WINDOW_MAX_NUMBER)
     {
-        LEAVE("skip window %" G_GSIZE_FORMAT " (only %" G_GSIZE_FORMAT " entries)", index, n_radio_entries);
+        LEAVE("skip window %" G_GSIZE_FORMAT " (only %d entries)", index, GNC_MAIN_WINDOW_MAX_NUMBER);
         return;
     }
 
     /* Figure out the label name. Add the accelerator if possible. */
-    title = gnc_main_window_generate_title(window);
-    strings = g_strsplit(title, "_", 0);
-    g_free(title);
-    expanded = g_strjoinv("__", strings);
-    if (index < 10)
+    title = gnc_main_window_generate_title (window);
+    strings = g_strsplit (title, "_", 0);
+    g_free (title);
+    expanded = g_strjoinv ("__", strings);
+    if (index < GNC_MAIN_WINDOW_MAX_NUMBER)
     {
-        data.label = g_strdup_printf("_%" G_GSIZE_FORMAT " %s", (index + 1) % 10, expanded);
-        g_free(expanded);
+        data.label = g_strdup_printf ("_%" G_GSIZE_FORMAT " %s", (index + 1) % 10, expanded);
+        g_free (expanded);
     }
     else
     {
         data.label = expanded;
     }
-    g_strfreev(strings);
+    g_strfreev (strings);
 
     data.visible = TRUE;
-    data.action_name = g_strdup_printf("Window%" G_GSIZE_FORMAT "Action", index);
-    g_list_foreach(active_windows,
-                   (GFunc)gnc_main_window_update_one_menu_action,
-                   &data);
-    g_free(data.action_name);
-    g_free(data.label);
-#endif
+    data.action_name = g_strdup_printf ("Window%" G_GSIZE_FORMAT "Action", index);
+    data.index = index;
+
+    g_list_foreach (active_windows,
+                    (GFunc)gnc_main_window_update_one_menu_action,
+                    &data);
+
+    g_free (data.action_name);
+    g_free (data.label);
+
     LEAVE(" ");
 }
 #endif /* !MAC_INTEGRATION */
@@ -2020,7 +2077,6 @@ static void
 gnc_main_window_update_all_menu_items (void)
 {
     struct menu_update data;
-    gchar *label;
 
     ENTER("");
     /* First update the entries for all existing windows */
@@ -2033,23 +2089,21 @@ gnc_main_window_update_all_menu_items (void)
                     nullptr);
 
     /* Now hide any entries that aren't being used. */
-//FIXMEb
-#ifdef skip
     data.visible = FALSE;
-    for (gsize i = g_list_length(active_windows); i < n_radio_entries; i++)
+    // need i to descend from GNC_MAIN_WINDOW_MAX_NUMBER
+    for (gsize i = GNC_MAIN_WINDOW_MAX_NUMBER - 1; i > 0 && i >= g_list_length (active_windows); i--)
     {
-        data.action_name = g_strdup_printf("Window%" G_GSIZE_FORMAT "Action", i);
-        label = g_strdup_printf("Window _%" G_GSIZE_FORMAT, (i - 1) % 10);
-        data.label = gettext(label);
+        data.index = i;
+        data.action_name = g_strdup_printf ("Window%dAction", data.index);
+        data.label = g_strdup_printf ("mywin%" G_GSIZE_FORMAT, i % 10);
 
-        g_list_foreach(active_windows,
-                       (GFunc)gnc_main_window_update_one_menu_action,
-                       &data);
+        g_list_foreach (active_windows,
+                        (GFunc)gnc_main_window_update_one_menu_action,
+                        &data);
 
-        g_free(data.action_name);
-        g_free(label);
+        g_free (data.action_name);
+        g_free (data.label);
     }
-#endif
     LEAVE(" ");
 }
 #endif /* !MAC_INTEGRATION */
@@ -3713,10 +3767,9 @@ gnc_main_window_update_tab_position (gpointer prefs, gchar *pref, gpointer user_
 {
     GncMainWindow *window;
     GtkPositionType position = GTK_POS_TOP;
+    gint item = 0;
     GncMainWindowPrivate *priv;
-    GAction *first_action;
-    GAction *position_action;
-    gsize i;
+    GAction *action;
 
     g_return_if_fail (GNC_IS_MAIN_WINDOW(user_data));
 
@@ -3730,37 +3783,36 @@ gnc_main_window_update_tab_position (gpointer prefs, gchar *pref, gpointer user_
         return;
 
     if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_BOTTOM))
+    {
         position = GTK_POS_BOTTOM;
+        item = 1;
+    }
     else if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_LEFT))
+    {
         position = GTK_POS_LEFT;
+        item = 2;
+    }
     else if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_RIGHT))
+    {
         position = GTK_POS_RIGHT;
+        item = 3;
+    }
 
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE (window);
-    gtk_notebook_set_tab_pos (GTK_NOTEBOOK (priv->notebook), position);
-//FIXMEb
-#ifdef skip
-    /* Groups of radio actions use the first action for the callback and all
-     * change events so block/unblock signals on the first radio action. */
-    first_action = g_action_map_lookup_action (G_ACTION_MAP(priv->simple_action_group),
-                                               tab_pos_radio_entries[0].name);
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+    gtk_notebook_set_tab_pos (GTK_NOTEBOOK(priv->notebook), position);
 
-    for (i = n_tab_pos_radio_entries - 1; i > 0; i--)
-        if (tab_pos_radio_entries[i].value == position)
-            break;
+    action = g_action_map_lookup_action (G_ACTION_MAP(priv->simple_action_group),
+                                         "ViewTabPositionAction");
 
-    position_action = g_action_map_lookup_action (G_ACTION_MAP(priv->simple_action_group),
-                                                  tab_pos_radio_entries[i].name);
-
-    g_signal_handlers_block_by_func (G_OBJECT (first_action),
+    g_signal_handlers_block_by_func (G_OBJECT(action),
                                      (gpointer)gnc_main_window_cmd_view_tab_position,
                                      window);
-    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (position_action), TRUE);
-    g_signal_handlers_unblock_by_func (G_OBJECT (first_action),
+    g_action_change_state (G_ACTION(action), g_variant_new_int32 (item));
+    g_signal_handlers_unblock_by_func (G_OBJECT(action),
                                        (gpointer)gnc_main_window_cmd_view_tab_position,
                                        window);
-#endif
-    gnc_main_window_update_tab_width (NULL, (char*)GNC_PREF_TAB_WIDTH, NULL);
+
+    gnc_main_window_update_tab_width (nullptr, (char*)GNC_PREF_TAB_WIDTH, nullptr);
 
     LEAVE ("");
 }
@@ -4092,10 +4144,11 @@ gnc_main_window_setup_window (GncMainWindow *window)
     /* Now update the "eXtensions" menu */
     if (!gnc_prefs_is_extra_enabled())
     {
-//FIXMEb        GtkAction*  action;
+//FIXMEb        GAction*  action;
 
-//        action = g_action_map_lookup_action (G_ACTION_MAP(priv->action_group),
-//                                             "ExtensionsAction");
+//        action = g_action_map_lookup_action (G_ACTION_MAP(priv->simple_action_group),
+//                                              "ExtensionsAction");
+// this may need to be disabled and 'hidden when disabled added to ui.
 //        gtk_action_set_visible (action, FALSE);
     }
 
@@ -4225,16 +4278,23 @@ gnc_main_window_add_widget (GtkUIManager *merge,
 static gboolean
 gnc_main_window_show_summarybar (GncMainWindow *window, GAction *action)
 {
-    GncMainWindowPrivate *priv;
+    GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+    GVariant *state;
+    gboolean visible;
 
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     if (action == nullptr)
         action = g_action_map_lookup_action (G_ACTION_MAP(priv->simple_action_group),
                                              "ViewSummaryAction");
     if (action == nullptr)
         return TRUE;
-//FIXMEb    return gtk_toggle_action_get_active (GTK_TOGGLE_ACTION(action));
-    return 1;
+
+    state = g_action_get_state (G_ACTION(action));
+
+    visible = g_variant_get_boolean (state);
+
+    g_variant_unref (state);
+
+    return visible;
 }
 
 /** This function is invoked when the GtkNotebook switches pages.  It
@@ -4284,7 +4344,7 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
     if (page != nullptr)
     {
         /* Update the user interface (e.g. menus and toolbars */
-//FIXMEb        gnc_plugin_page_merge_actions (page, window->ui_merge);
+        gnc_plugin_page_merge_actionsb (page, GTK_WIDGET(window));
         visible = gnc_main_window_show_summarybar (window, nullptr);
         gnc_plugin_page_show_summarybar (page, visible);
 
@@ -4697,19 +4757,19 @@ gnc_main_window_cmd_view_toolbar (GSimpleAction *simple,
                                   gpointer       user_data)
 {
     GncMainWindow *window = (GncMainWindow*)user_data;
-    GncMainWindowPrivate *priv;
+    GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+    GVariant *state = g_action_get_state (G_ACTION(simple));
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-//FIXMEb    if (gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(simple)))
-#ifdef skip
-    {
+
+    g_action_change_state (G_ACTION(simple), g_variant_new_boolean (!g_variant_get_boolean (state)));
+
+    if (!g_variant_get_boolean (state))
         gtk_widget_show (priv->toolbar);
-    }
     else
-    {
         gtk_widget_hide (priv->toolbar);
-    }
-#endif
+
+    g_variant_unref (state);
 }
 
 static void
@@ -4718,16 +4778,18 @@ gnc_main_window_cmd_view_summary (GSimpleAction *simple,
                                   gpointer       user_data)
 {
     GncMainWindow *window = (GncMainWindow*)user_data;
-    GncMainWindowPrivate *priv;
+    GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     GList *item;
     gboolean visible;
 
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-//FIXMEb    visible = gnc_main_window_show_summarybar(window, simple);
-    for (item = priv->installed_pages; item; item = g_list_next(item))
+    visible = gnc_main_window_show_summarybar (window, G_ACTION(simple));
+
+    g_action_change_state (G_ACTION(simple), g_variant_new_boolean (!visible));
+
+    for (item = priv->installed_pages; item; item = g_list_next (item))
     {
-//        gnc_plugin_page_show_summarybar(static_cast<GncPluginPage*>(item->data),
-//                                        visible);
+        gnc_plugin_page_show_summarybar (static_cast<GncPluginPage*>(item->data),
+                                         !visible);
     }
 }
 
@@ -4737,20 +4799,19 @@ gnc_main_window_cmd_view_statusbar (GSimpleAction *simple,
                                     gpointer       user_data)
 {
     GncMainWindow *window = (GncMainWindow*)user_data;
-    GncMainWindowPrivate *priv;
+    GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+    GVariant *state = g_action_get_state (G_ACTION(simple));
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-//FIXMEb
-#ifdef skip
-    if (gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action)))
-    {
+
+    g_action_change_state (G_ACTION(simple), g_variant_new_boolean (!g_variant_get_boolean (state)));
+
+    if (!g_variant_get_boolean (state))
         gtk_widget_show (priv->statusbar);
-    }
     else
-    {
         gtk_widget_hide (priv->statusbar);
-    }
-#endif
+
+    g_variant_unref (state);
 }
 
 static void
@@ -4838,42 +4899,44 @@ gnc_main_window_cmd_view_tab_position (GSimpleAction *simple,
                                        gpointer       user_data)
 {
     GncMainWindow *window = (GncMainWindow*)user_data;
+    gint item = g_variant_get_int32 (parameter);
 
-//FIXMEb
-#ifdef skip
-    auto value{static_cast<GtkPositionType>(gtk_radio_action_get_current_value(current))};
+    g_action_change_state (G_ACTION(simple), parameter);
 
-    if (value != GTK_POS_TOP && gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_TOP))
+    if (item < 0 || item > 3)
+        return;
+
+    if (item != 0 && gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_TOP))
         gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_TOP, FALSE);
 
-    if (value != GTK_POS_BOTTOM && gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_BOTTOM))
+    if (item != 1 && gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_BOTTOM))
         gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_BOTTOM, FALSE);
 
-    if (value != GTK_POS_LEFT && gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_LEFT))
+    if (item != 2 && gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_LEFT))
         gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_LEFT, FALSE);
 
-    if (value != GTK_POS_RIGHT && gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_RIGHT))
+    if (item != 3 && gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_RIGHT))
         gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_RIGHT, FALSE);
 
-    switch (value)
+    switch (item)
     {
-    case GTK_POS_TOP:
+    case 0:
         gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_TOP, TRUE);
         break;
 
-    case GTK_POS_BOTTOM:
+    case 1:
         gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_BOTTOM, TRUE);
         break;
 
-    case GTK_POS_LEFT:
+    case 2:
         gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_LEFT, TRUE);
         break;
 
-    case GTK_POS_RIGHT:
+    case 3:
         gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_RIGHT, TRUE);
         break;
     }
-#endif
+
 }
 
 #ifndef MAC_INTEGRATION
@@ -4884,18 +4947,23 @@ gnc_main_window_cmd_window_raise (GSimpleAction *simple,
 {
     GncMainWindow *window = (GncMainWindow*)user_data;
     GncMainWindow *new_window;
-    gint value;
+    gint item;
 
-    g_return_if_fail(GTK_IS_ACTION(simple));
-    g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
+    g_return_if_fail (G_IS_SIMPLE_ACTION(simple));
+    g_return_if_fail (GNC_IS_MAIN_WINDOW(window));
 
-    ENTER("action %p, window %p", simple, window);
-//FIXMEb    value = gtk_radio_action_get_current_value(current);
-//    new_window = static_cast<GncMainWindow*>(g_list_nth_data(active_windows, value));
-//    gtk_window_present(GTK_WINDOW(new_window));
+    item = g_variant_get_int32 (parameter);
+
+    ENTER("action %p, window %p, item %d", simple, window, item);
+
+    g_action_change_state (G_ACTION(simple), parameter);
+
+    new_window = static_cast<GncMainWindow*>(g_list_nth_data (active_windows, item));
+    gtk_window_present (GTK_WINDOW(new_window));
+
     /* revert the change in the radio group
      * impossible while handling "changed" (G_SIGNAL_NO_RECURSE) */
-//    g_idle_add((GSourceFunc)gnc_main_window_update_radio_button, window);
+    g_idle_add ((GSourceFunc)gnc_main_window_update_radio_button, window);
     LEAVE(" ");
 }
 #endif /* !MAC_INTEGRATION */
