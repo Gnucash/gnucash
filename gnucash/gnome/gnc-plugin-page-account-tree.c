@@ -150,30 +150,30 @@ void gppat_populate_trans_mas_list(GtkToggleButton *sa_mrb, GtkWidget *dialog);
 void gppat_set_insensitive_iff_rb_active(GtkWidget *widget, GtkToggleButton *b);
 
 /* Command callbacks */
-static void gnc_plugin_page_account_tree_cmd_new_account (GtkAction *action, GncPluginPageAccountTree *plugin_page);
-static void gnc_plugin_page_account_tree_cmd_file_new_hierarchy (GtkAction *action, GncPluginPageAccountTree *plugin_page);
-static void gnc_plugin_page_account_tree_cmd_open_account (GtkAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_open_subaccounts (GtkAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_edit_account (GtkAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_find_account (GtkAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_find_account_popup (GtkAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_renumber_accounts (GtkAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_view_filter_by (GtkAction *action, GncPluginPageAccountTree *plugin_page);
-static void gnc_plugin_page_account_tree_cmd_reconcile (GtkAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_refresh (GtkAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_autoclear (GtkAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_transfer (GtkAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_stock_split (GtkAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_edit_tax_options (GtkAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_lots (GtkAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_scrub (GtkAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_scrub_sub (GtkAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_scrub_all (GtkAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_cascade_account_properties (GtkAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_new_account (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_account_tree_cmd_file_new_hierarchy (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_account_tree_cmd_open_account (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_account_tree_cmd_open_subaccounts (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_account_tree_cmd_edit_account (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_account_tree_cmd_find_account (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_account_tree_cmd_find_account_popup (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_account_tree_cmd_delete_account (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_account_tree_cmd_renumber_accounts (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_account_tree_cmd_view_filter_by (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_account_tree_cmd_reconcile (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_account_tree_cmd_refresh (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_account_tree_cmd_autoclear (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_account_tree_cmd_transfer (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_account_tree_cmd_stock_split (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_account_tree_cmd_edit_tax_options (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_account_tree_cmd_lots (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_account_tree_cmd_scrub (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_account_tree_cmd_scrub_sub (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_account_tree_cmd_scrub_all (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_account_tree_cmd_cascade_account_properties (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 
 /* Account Deletion Actions. */
-static int confirm_delete_account (GtkAction *action,
+static int confirm_delete_account (GSimpleAction *simple,
                                    GncPluginPageAccountTree *page, Account* ta,
                                    Account* sta, Account* saa,
                                    delete_helper_t delete_res);
@@ -185,64 +185,76 @@ static void  do_delete_account (Account* account, Account* saa, Account* sta,
 static guint plugin_page_signals[LAST_SIGNAL] = { 0 };
 
 
-static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
+static GActionEntry gnc_plugin_page_account_tree_actions [] =
 {
-    /* Toplevel */
-    { "FakeToplevel", NULL, "", NULL, NULL, NULL },
+    { "FileNewAccountAction", gnc_plugin_page_account_tree_cmd_new_account, NULL, NULL, NULL },
+    { "FileAddAccountHierarchyAssistantAction", gnc_plugin_page_account_tree_cmd_file_new_hierarchy, NULL, NULL, NULL },
+    { "FileOpenAccountAction", gnc_plugin_page_account_tree_cmd_open_account, NULL, NULL, NULL },
+    { "FileOpenSubaccountsAction", gnc_plugin_page_account_tree_cmd_open_subaccounts, NULL, NULL, NULL },
+    { "EditEditAccountAction", gnc_plugin_page_account_tree_cmd_edit_account, NULL, NULL, NULL },
+    { "EditDeleteAccountAction", gnc_plugin_page_account_tree_cmd_delete_account, NULL, NULL, NULL },
+    { "EditCascadeAccountAction", gnc_plugin_page_account_tree_cmd_cascade_account_properties, NULL, NULL, NULL },
+    { "EditFindAccountAction", gnc_plugin_page_account_tree_cmd_find_account, NULL, NULL, NULL },
+    { "EditFindAccountPopupAction", gnc_plugin_page_account_tree_cmd_find_account_popup, NULL, NULL, NULL },
+    { "EditRenumberSubaccountsAction", gnc_plugin_page_account_tree_cmd_renumber_accounts, NULL, NULL, NULL },
+    { "EditTaxOptionsAction", gnc_plugin_page_account_tree_cmd_edit_tax_options, NULL, NULL, NULL },
+    { "ViewFilterByAction", gnc_plugin_page_account_tree_cmd_view_filter_by, NULL, NULL, NULL },
+    { "ViewRefreshAction", gnc_plugin_page_account_tree_cmd_refresh, NULL, NULL, NULL },
+    { "ActionsReconcileAction", gnc_plugin_page_account_tree_cmd_reconcile, NULL, NULL, NULL },
+    { "ActionsAutoClearAction", gnc_plugin_page_account_tree_cmd_autoclear, NULL, NULL, NULL },
+    { "ActionsTransferAction", gnc_plugin_page_account_tree_cmd_transfer, NULL, NULL, NULL },
+    { "ActionsStockSplitAction", gnc_plugin_page_account_tree_cmd_stock_split, NULL, NULL, NULL },
+    { "ActionsLotsAction", gnc_plugin_page_account_tree_cmd_lots, NULL, NULL, NULL },
+    { "ScrubAction", gnc_plugin_page_account_tree_cmd_scrub, NULL, NULL, NULL },
+    { "ScrubSubAction", gnc_plugin_page_account_tree_cmd_scrub_sub, NULL, NULL, NULL },
+    { "ScrubAllAction", gnc_plugin_page_account_tree_cmd_scrub_all, NULL, NULL, NULL },
+};
+/** The number of actions provided by this plugin. */
+static guint gnc_plugin_page_account_tree_n_actions = G_N_ELEMENTS(gnc_plugin_page_account_tree_actions);
 
+static GncDisplayItem gnc_plugin_page_account_tree_display_items [] =
+{
     /* File menu */
     {
         "FileNewAccountAction", GNC_ICON_NEW_ACCOUNT, N_("New _Account..."), NULL,
-        N_("Create a new Account"),
-        G_CALLBACK (gnc_plugin_page_account_tree_cmd_new_account)
+        N_("Create a new Account")
     },
     {
         "FileAddAccountHierarchyAssistantAction", GNC_ICON_NEW_ACCOUNT, N_("New Account _Hierarchy..."), NULL,
-        N_("Extend the current book by merging with new account type categories"),
-        G_CALLBACK (gnc_plugin_page_account_tree_cmd_file_new_hierarchy)
+        N_("Extend the current book by merging with new account type categories")
     },
     {
         "FileOpenAccountAction", GNC_ICON_OPEN_ACCOUNT, N_("Open _Account"), NULL,
-        N_("Open the selected account"),
-        G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_account)
+        N_("Open the selected account")
     },
-
     {
         "FileOpenSubaccountsAction", GNC_ICON_OPEN_ACCOUNT, N_("Open _SubAccounts"), NULL,
-        N_("Open the selected account and all its subaccounts"),
-        G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_subaccounts)
+        N_("Open the selected account and all its subaccounts")
     },
-
     /* Edit menu */
     {
         "EditEditAccountAction", GNC_ICON_EDIT_ACCOUNT, N_("Edit _Account"), "<primary>e",
-        N_("Edit the selected account"),
-        G_CALLBACK (gnc_plugin_page_account_tree_cmd_edit_account)
+        N_("Edit the selected account")
     },
     {
         "EditDeleteAccountAction", GNC_ICON_DELETE_ACCOUNT, N_("_Delete Account..."), "Delete",
-        N_("Delete selected account"),
-        G_CALLBACK (gnc_plugin_page_account_tree_cmd_delete_account)
+        N_("Delete selected account")
     },
     {
         "EditCascadeAccountAction", NULL, N_("_Cascade Account Properties..."), NULL,
-        N_("Cascade selected properties for account"),
-        G_CALLBACK (gnc_plugin_page_account_tree_cmd_cascade_account_properties)
+        N_("Cascade selected properties for account")
     },
     {
         "EditFindAccountAction", "edit-find", N_("F_ind Account"), "<primary>i",
-        N_("Find an account"),
-        G_CALLBACK (gnc_plugin_page_account_tree_cmd_find_account)
+        N_("Find an account")
     },
     {
         "EditFindAccountPopupAction", "edit-find", N_("F_ind Account"), "<primary>i",
-        N_("Find an account"),
-        G_CALLBACK (gnc_plugin_page_account_tree_cmd_find_account_popup)
+        N_("Find an account")
     },
     {
         "EditRenumberSubaccountsAction", NULL, N_("_Renumber Subaccounts..."), NULL,
-        N_("Renumber the children of the selected account"),
-        G_CALLBACK (gnc_plugin_page_account_tree_cmd_renumber_accounts)
+        N_("Renumber the children of the selected account")
     },
     {
         "EditTaxOptionsAction", NULL,
@@ -253,68 +265,53 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
            US: income tax and
            DE: VAT
            So adjust this string                  */
-        N_("Setup relevant accounts for tax reports, e.g. US income tax"),
-        G_CALLBACK (gnc_plugin_page_account_tree_cmd_edit_tax_options)
+        N_("Setup relevant accounts for tax reports, e.g. US income tax")
     },
     /* View menu */
     {
-        "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL,
-        G_CALLBACK (gnc_plugin_page_account_tree_cmd_view_filter_by)
+        "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL
     },
     {
         "ViewRefreshAction", "view-refresh", N_("_Refresh"), "<primary>r",
-        N_("Refresh this window"),
-        G_CALLBACK (gnc_plugin_page_account_tree_cmd_refresh)
+        N_("Refresh this window")
     },
-
     /* Actions menu */
     {
         "ActionsReconcileAction", NULL, N_("_Reconcile..."), NULL,
-        N_("Reconcile the selected account"),
-        G_CALLBACK (gnc_plugin_page_account_tree_cmd_reconcile)
+        N_("Reconcile the selected account")
     },
     {
         "ActionsAutoClearAction", NULL, N_("_Auto-clear..."), NULL,
-        N_("Automatically clear individual transactions, given a cleared amount"),
-        G_CALLBACK (gnc_plugin_page_account_tree_cmd_autoclear)
+        N_("Automatically clear individual transactions, given a cleared amount")
     },
     {
         "ActionsTransferAction", NULL, N_("_Transfer..."), "<primary>t",
-        N_("Transfer funds from one account to another"),
-        G_CALLBACK (gnc_plugin_page_account_tree_cmd_transfer)
+        N_("Transfer funds from one account to another")
     },
     {
         "ActionsStockSplitAction", NULL, N_("Stoc_k Split..."), NULL,
-        N_("Record a stock split or a stock merger"),
-        G_CALLBACK (gnc_plugin_page_account_tree_cmd_stock_split)
+        N_("Record a stock split or a stock merger")
     },
     {
         "ActionsLotsAction", NULL, N_("View _Lots..."), NULL,
-        N_("Bring up the lot viewer/editor window"),
-        G_CALLBACK (gnc_plugin_page_account_tree_cmd_lots)
+        N_("Bring up the lot viewer/editor window")
     },
     {
         "ScrubAction", NULL, N_("Check & Repair A_ccount"), NULL,
-        N_("Check for and repair unbalanced transactions and orphan splits " "in this account"),
-        G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub)
+        N_("Check for and repair unbalanced transactions and orphan splits " "in this account")
     },
     {
         "ScrubSubAction", NULL, N_("Check & Repair Su_baccounts"), NULL,
         N_("Check for and repair unbalanced transactions and orphan splits "
-        "in this account and its subaccounts"),
-        G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub_sub)
+        "in this account and its subaccounts")
     },
     {
         "ScrubAllAction", NULL, N_("Check & Repair A_ll"), NULL,
-        N_("Check for and repair unbalanced transactions and orphan splits " "in all accounts"),
-        G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub_all)
+        N_("Check for and repair unbalanced transactions and orphan splits " "in all accounts")
     },
-    /* Extensions Menu */
-    { "Register2TestAction", NULL, N_("_Register2"), NULL, NULL, NULL },
 };
-/** The number of actions provided by this plugin. */
-static guint gnc_plugin_page_account_tree_n_actions = G_N_ELEMENTS (gnc_plugin_page_account_tree_actions);
-
+/** The number of display items provided by this plugin. */
+static guint gnc_plugin_page_account_tree_n_display_items = G_N_ELEMENTS(gnc_plugin_page_account_tree_display_items);
 
 /** Actions that require an account to be selected before they are
  *  enabled, and the book is in read-write mode. */
@@ -366,10 +363,10 @@ static const gchar* readonly_inactive_actions[] =
 /** Short labels for use on the toolbar buttons. */
 static action_toolbar_labels toolbar_labels[] =
 {
-    { "FileOpenAccountAction", 	            N_("Open") },
-    { "EditEditAccountAction", 	            N_("Edit") },
-    { "FileNewAccountAction",    	    N_("New") },
-    { "EditDeleteAccountAction", 	    N_("Delete") },
+    { "FileOpenAccountAction",              N_("Open") },
+    { "EditEditAccountAction",              N_("Edit") },
+    { "FileNewAccountAction",           N_("New") },
+    { "EditDeleteAccountAction",        N_("Delete") },
     { NULL, NULL },
 };
 
@@ -468,7 +465,8 @@ gnc_plugin_page_account_tree_class_init (GncPluginPageAccountTreeClass *klass)
 static void
 gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 {
-    GtkActionGroup *action_group;
+//    GtkActionGroup *action_group;
+    GSimpleActionGroup *simple_action_group;
     GncPluginPageAccountTreePrivate *priv;
     GncPluginPage *parent;
     const GList *page_list;
@@ -481,7 +479,7 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
     g_object_set(G_OBJECT(plugin_page),
                  "page-name",      _("Accounts"),
                  "page-uri",       "default:",
-                 "ui-description", "gnc-plugin-page-account-tree-ui.xml",
+                 "ui-description", "gnc-plugin-page-account-tree.ui",
                  NULL);
     g_signal_connect (G_OBJECT (plugin_page), "selected",
                       G_CALLBACK (gnc_plugin_page_account_tree_selected), plugin_page);
@@ -495,18 +493,16 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
     if (!page_list || plugin_page == page_list->data)
     {
         g_object_set_data(G_OBJECT(plugin_page), PLUGIN_PAGE_IMMUTABLE,
-		          GINT_TO_POINTER(1));
+                  GINT_TO_POINTER(1));
     }
 
     /* Create menu and toolbar information */
-    action_group =
-        gnc_plugin_page_create_action_group(parent,
-                                            "GncPluginPageAccountTreeActions");
-    gtk_action_group_add_actions(action_group,
-                                 gnc_plugin_page_account_tree_actions,
-                                 gnc_plugin_page_account_tree_n_actions,
-                                 plugin_page);
-    gnc_plugin_init_short_names (action_group, toolbar_labels);
+    simple_action_group = gnc_plugin_page_create_action_groupb (parent, "GncPluginPageAccountTreeActions");
+    g_action_map_add_action_entries (G_ACTION_MAP(simple_action_group),
+                                     gnc_plugin_page_account_tree_actions,
+                                     gnc_plugin_page_account_tree_n_actions,
+                                     plugin_page);
+//FIXMEb    gnc_plugin_init_short_names (action_group, toolbar_labels);
 
     /* Visible types */
     priv->fd.visible_types = -1; /* Start with all types */
@@ -516,7 +512,7 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
     priv->fd.filter_override = g_hash_table_new (g_direct_hash, g_direct_equal);
 
     LEAVE("page %p, priv %p, action group %p",
-          plugin_page, priv, action_group);
+          plugin_page, priv, simple_action_group);
 }
 
 static void
@@ -934,8 +930,8 @@ gnc_plugin_page_account_tree_save_page (GncPluginPage *plugin_page,
  *  @param group_name The group name to use when restoring data. */
 static GncPluginPage *
 gnc_plugin_page_account_tree_recreate_page (GtkWidget *window,
-        GKeyFile *key_file,
-        const gchar *group_name)
+                                            GKeyFile *key_file,
+                                            const gchar *group_name)
 {
     GncPluginPageAccountTree *account_page;
     GncPluginPageAccountTreePrivate *priv;
@@ -963,7 +959,9 @@ gnc_plugin_page_account_tree_recreate_page (GtkWidget *window,
 /* Callbacks */
 
 static void
-gnc_plugin_page_account_tree_summarybar_position_changed(gpointer prefs, gchar* pref, gpointer user_data)
+gnc_plugin_page_account_tree_summarybar_position_changed (gpointer prefs,
+                                                          gchar* pref,
+                                                          gpointer user_data)
 {
     GncPluginPage *plugin_page;
     GncPluginPageAccountTree *page;
@@ -993,8 +991,8 @@ gnc_plugin_page_account_tree_summarybar_position_changed(gpointer prefs, gchar* 
  *  registered in gnc-main-window.c. */
 static gboolean
 gnc_plugin_page_account_tree_button_press_cb (GtkWidget *widget,
-        GdkEventButton *event,
-        GncPluginPage *page)
+                                              GdkEventButton *event,
+                                              GncPluginPage *page)
 {
 
     g_return_val_if_fail(GNC_IS_PLUGIN_PAGE(page), FALSE);
@@ -1028,9 +1026,9 @@ gppat_open_account_common (GncPluginPageAccountTree *page,
 
 static void
 gnc_plugin_page_account_tree_double_click_cb (GtkTreeView *treeview,
-        GtkTreePath        *path,
-        GtkTreeViewColumn  *col,
-        GncPluginPageAccountTree *page)
+                                              GtkTreePath        *path,
+                                              GtkTreeViewColumn  *col,
+                                              GncPluginPageAccountTree *page)
 {
     GtkTreeModel *model;
     GtkTreeIter iter;
@@ -1076,8 +1074,11 @@ gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
 
 /* Command callbacks */
 static void
-gnc_plugin_page_account_tree_cmd_new_account (GtkAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_new_account (GSimpleAction *simple,
+                                              GVariant      *paramter,
+                                              gpointer       user_data)
 {
+    GncPluginPageAccountTree *page = user_data;
     Account *account = gnc_plugin_page_account_tree_get_current_account (page);
     GtkWindow *parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
     gnc_ui_new_account_window (parent, gnc_get_current_book(),
@@ -1085,15 +1086,20 @@ gnc_plugin_page_account_tree_cmd_new_account (GtkAction *action, GncPluginPageAc
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_file_new_hierarchy (GtkAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_file_new_hierarchy (GSimpleAction *simple,
+                                                     GVariant      *paramter,
+                                                     gpointer       user_data)
 {
+    GncPluginPageAccountTree *page = user_data;
     gnc_ui_hierarchy_assistant(FALSE);
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_open_account (GtkAction *action,
-        GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_open_account (GSimpleAction *simple,
+                                               GVariant      *paramter,
+                                               gpointer       user_data)
 {
+    GncPluginPageAccountTree *page = user_data;
     Account *account;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
@@ -1102,9 +1108,11 @@ gnc_plugin_page_account_tree_cmd_open_account (GtkAction *action,
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_open_subaccounts (GtkAction *action,
-        GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_open_subaccounts (GSimpleAction *simple,
+                                                   GVariant      *paramter,
+                                                   gpointer       user_data)
 {
+    GncPluginPageAccountTree *page = user_data;
     Account *account;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
@@ -1113,11 +1121,14 @@ gnc_plugin_page_account_tree_cmd_open_subaccounts (GtkAction *action,
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_edit_account (GtkAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_edit_account (GSimpleAction *simple,
+                                               GVariant      *paramter,
+                                               gpointer       user_data)
 {
+    GncPluginPageAccountTree *page = user_data;
     Account *account;
     GtkWindow *parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
-    ENTER("action %p, page %p", action, page);
+    ENTER("action %p, page %p", simple, page);
 
     account = gnc_plugin_page_account_tree_get_current_account (page);
     g_return_if_fail (account != NULL);
@@ -1127,11 +1138,14 @@ gnc_plugin_page_account_tree_cmd_edit_account (GtkAction *action, GncPluginPageA
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_find_account (GtkAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_find_account (GSimpleAction *simple,
+                                               GVariant      *paramter,
+                                               gpointer       user_data)
 {
+    GncPluginPageAccountTree *page = user_data;
     GtkWidget *window;
 
-    ENTER("action %p, page %p", action, page);
+    ENTER("action %p, page %p", simple, page);
 
     window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page));
 
@@ -1140,12 +1154,15 @@ gnc_plugin_page_account_tree_cmd_find_account (GtkAction *action, GncPluginPageA
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_find_account_popup (GtkAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_find_account_popup (GSimpleAction *simple,
+                                                     GVariant      *paramter,
+                                                     gpointer       user_data)
 {
+    GncPluginPageAccountTree *page = user_data;
     Account *account = NULL;
     GtkWidget *window;
 
-    ENTER("action %p, page %p", action, page);
+    ENTER("action %p, page %p", simple, page);
 
     account = gnc_plugin_page_account_tree_get_current_account (page);
 
@@ -1156,12 +1173,15 @@ gnc_plugin_page_account_tree_cmd_find_account_popup (GtkAction *action, GncPlugi
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_cascade_account_properties (GtkAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_cascade_account_properties (GSimpleAction *simple,
+                                                             GVariant      *paramter,
+                                                             gpointer       user_data)
 {
+    GncPluginPageAccountTree *page = user_data;
     Account *account = NULL;
     GtkWidget *window;
 
-    ENTER("action %p, page %p", action, page);
+    ENTER("action %p, page %p", simple, page);
 
     account = gnc_plugin_page_account_tree_get_current_account (page);
 
@@ -1507,8 +1527,11 @@ account_delete_dialog (Account *account, GtkWindow *parent, Adopters* adopt)
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_delete_account (GSimpleAction *simple,
+                                                 GVariant      *paramter,
+                                                 gpointer       user_data)
 {
+    GncPluginPageAccountTree *page = user_data;
     Account *account = gnc_plugin_page_account_tree_get_current_account (page);
     gchar *acct_name;
     GtkWidget *window;
@@ -1582,7 +1605,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
         filter = g_object_get_data (G_OBJECT (dialog), DELETE_DIALOG_FILTER);
     gtk_widget_destroy(dialog);
     g_list_free(filter);
-    if (confirm_delete_account (action, page, adopt.trans.new_account,
+    if (confirm_delete_account (simple, page, adopt.trans.new_account,
                                 adopt.subtrans.new_account,
                                 adopt.subacct.new_account,
                                 adopt.delete_res) == GTK_RESPONSE_ACCEPT)
@@ -1593,7 +1616,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
 }
 
 static int
-confirm_delete_account (GtkAction *action, GncPluginPageAccountTree *page,
+confirm_delete_account (GSimpleAction *simple, GncPluginPageAccountTree *page,
                         Account* ta, Account* sta, Account* saa,
                         delete_helper_t delete_res)
 {
@@ -1741,9 +1764,11 @@ void do_delete_account (Account* account, Account* saa, Account* sta, Account* t
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_renumber_accounts (GtkAction *action,
-        GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_renumber_accounts (GSimpleAction *simple,
+                                                    GVariant      *paramter,
+                                                    gpointer       user_data)
 {
+    GncPluginPageAccountTree *page = user_data;
     Account *account;
     GtkWidget *window;
 
@@ -1756,9 +1781,11 @@ gnc_plugin_page_account_tree_cmd_renumber_accounts (GtkAction *action,
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_refresh (GtkAction *action,
-        GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_refresh (GSimpleAction *simple,
+                                          GVariant      *paramter,
+                                          gpointer       user_data)
 {
+    GncPluginPageAccountTree *page = user_data;
     GncPluginPageAccountTreePrivate *priv;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page));
@@ -1772,13 +1799,15 @@ gnc_plugin_page_account_tree_cmd_refresh (GtkAction *action,
 /*********************/
 
 static void
-gnc_plugin_page_account_tree_cmd_view_filter_by (GtkAction *action,
-        GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_view_filter_by (GSimpleAction *simple,
+                                                 GVariant      *paramter,
+                                                 gpointer       user_data)
 {
+    GncPluginPageAccountTree *page = user_data;
     GncPluginPageAccountTreePrivate *priv;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page));
-    ENTER("(action %p, page %p)", action, page);
+    ENTER("(action %p, page %p)", simple, page);
 
     priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
     account_filter_dialog_create(&priv->fd, GNC_PLUGIN_PAGE(page));
@@ -1786,9 +1815,11 @@ gnc_plugin_page_account_tree_cmd_view_filter_by (GtkAction *action,
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_reconcile (GtkAction *action,
-        GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_reconcile (GSimpleAction *simple,
+                                            GVariant      *paramter,
+                                            gpointer       user_data)
 {
+    GncPluginPageAccountTree *page = user_data;
     GtkWidget *window;
     Account *account;
     RecnWindow *recnData;
@@ -1802,9 +1833,11 @@ gnc_plugin_page_account_tree_cmd_reconcile (GtkAction *action,
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_autoclear (GtkAction *action,
-        GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_autoclear (GSimpleAction *simple,
+                                            GVariant      *paramter,
+                                            gpointer       user_data)
 {
+    GncPluginPageAccountTree *page = user_data;
     GtkWidget *window;
     Account *account;
     AutoClearWindow *autoClearData;
@@ -1818,9 +1851,11 @@ gnc_plugin_page_account_tree_cmd_autoclear (GtkAction *action,
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_transfer (GtkAction *action,
-        GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_transfer (GSimpleAction *simple,
+                                           GVariant      *paramter,
+                                           gpointer       user_data)
 {
+    GncPluginPageAccountTree *page = user_data;
     GtkWidget *window;
     Account *account;
 
@@ -1830,9 +1865,11 @@ gnc_plugin_page_account_tree_cmd_transfer (GtkAction *action,
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_stock_split (GtkAction *action,
-        GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_stock_split (GSimpleAction *simple,
+                                              GVariant      *paramter,
+                                              gpointer       user_data)
 {
+    GncPluginPageAccountTree *page = user_data;
     GtkWidget *window;
     Account *account;
 
@@ -1842,9 +1879,11 @@ gnc_plugin_page_account_tree_cmd_stock_split (GtkAction *action,
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_edit_tax_options (GtkAction *action,
-        GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_edit_tax_options (GSimpleAction *simple,
+                                                   GVariant      *paramter,
+                                                   gpointer       user_data)
 {
+    GncPluginPageAccountTree *page = user_data;
     GtkWidget *window;
     Account *account;
 
@@ -1854,15 +1893,18 @@ gnc_plugin_page_account_tree_cmd_edit_tax_options (GtkAction *action,
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_lots (GtkAction *action,
-                                       GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_lots (GSimpleAction *simple,
+                                       GVariant      *paramter,
+                                       gpointer       user_data)
 {
+    GncPluginPageAccountTree *page = user_data;
     Account *account = gnc_plugin_page_account_tree_get_current_account (page);
     GtkWidget *window = GNC_PLUGIN_PAGE (page)->window;
     gnc_lot_viewer_dialog (GTK_WINDOW(window), account);
 }
 
-static gboolean scrub_kp_handler (GtkWidget *widget, GdkEventKey *event, gpointer data)
+static gboolean
+scrub_kp_handler (GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
     if (event->length == 0) return FALSE;
 
@@ -1885,8 +1927,11 @@ static gboolean scrub_kp_handler (GtkWidget *widget, GdkEventKey *event, gpointe
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_scrub (GtkAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_scrub (GSimpleAction *simple,
+                                        GVariant      *paramter,
+                                        gpointer       user_data)
 {
+    GncPluginPageAccountTree *page = user_data;
     Account *account = gnc_plugin_page_account_tree_get_current_account (page);
     GncWindow *window;
     gulong scrub_kp_handler_ID;
@@ -1913,8 +1958,11 @@ gnc_plugin_page_account_tree_cmd_scrub (GtkAction *action, GncPluginPageAccountT
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_scrub_sub (GtkAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_scrub_sub (GSimpleAction *simple,
+                                            GVariant      *paramter,
+                                            gpointer       user_data)
 {
+    GncPluginPageAccountTree *page = user_data;
     Account *account = gnc_plugin_page_account_tree_get_current_account (page);
     GncWindow *window;
     gulong scrub_kp_handler_ID;
@@ -1941,8 +1989,11 @@ gnc_plugin_page_account_tree_cmd_scrub_sub (GtkAction *action, GncPluginPageAcco
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_scrub_all (GtkAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_scrub_all (GSimpleAction *simple,
+                                            GVariant      *paramter,
+                                            gpointer       user_data)
 {
+    GncPluginPageAccountTree *page = user_data;
     Account *root = gnc_get_current_root_account ();
     GncWindow *window;
     gulong scrub_kp_handler_ID;

@@ -171,103 +171,59 @@ static gchar* gnc_plugin_page_register_filter_time2dmy (time64 raw_time);
 static gchar* gnc_plugin_page_register_get_filter (GncPluginPage* plugin_page);
 void gnc_plugin_page_register_set_filter (GncPluginPage* plugin_page,
                                           const gchar* filter);
-static void gnc_plugin_page_register_set_filter_tooltip (
-    GncPluginPageRegister* page);
+static void gnc_plugin_page_register_set_filter_tooltip (GncPluginPageRegister* page);
 
 static void gnc_ppr_update_status_query (GncPluginPageRegister* page);
 static void gnc_ppr_update_date_query (GncPluginPageRegister* page);
 
 /* Command callbacks */
-static void gnc_plugin_page_register_cmd_print_check (GtkAction* action,
-                                                      GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_cut (GtkAction* action,
-                                              GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_copy (GtkAction* action,
-                                               GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_paste (GtkAction* action,
-                                                GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_edit_account (GtkAction* action,
-                                                       GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_find_account (GtkAction* action,
-                                                       GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_find_transactions (GtkAction* action,
-                                                            GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_edit_tax_options (GtkAction* action,
-                                                            GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_cut_transaction (GtkAction* action,
-                                                          GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_copy_transaction (GtkAction* action,
-                                                           GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_paste_transaction (GtkAction* action,
-                                                            GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_void_transaction (GtkAction* action,
-                                                           GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_unvoid_transaction (GtkAction* action,
-        GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_reverse_transaction (
-    GtkAction* action, GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_view_sort_by (GtkAction* action,
-                                                       GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_view_filter_by (GtkAction* action,
-                                                         GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_style_changed (GtkAction* action,
-                                                        GtkRadioAction* current, GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_style_double_line (
-    GtkToggleAction* action, GncPluginPageRegister* plugin_page);
+static void gnc_plugin_page_register_cmd_print_check (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_cut (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_copy (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_paste (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_edit_account (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_find_account (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_find_transactions (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_edit_tax_options (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_cut_transaction (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_copy_transaction (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_paste_transaction (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_void_transaction (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_unvoid_transaction (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_reverse_transaction (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_view_sort_by (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_view_filter_by (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 
-static void gnc_plugin_page_register_cmd_reconcile (GtkAction* action,
-                                                    GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_stock_assistant (GtkAction* action,
-                                                          GncPluginPageRegister* page);
+static void gnc_plugin_page_register_cmd_style_changed (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_style_double_line (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_expand_transaction (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
-static void gnc_plugin_page_register_cmd_autoclear (GtkAction* action,
-                                                    GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_transfer (GtkAction* action,
-                                                   GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_stock_split (GtkAction* action,
-                                                      GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_lots (GtkAction* action,
-                                               GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_enter_transaction (GtkAction* action,
-                                                            GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_cancel_transaction (GtkAction* action,
-        GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_delete_transaction (GtkAction* action,
-        GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_blank_transaction (GtkAction* action,
-                                                            GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_goto_date (GtkAction* action,
-                                                    GncPluginPageRegister* page);
-static void gnc_plugin_page_register_cmd_duplicate_transaction (
-    GtkAction* action, GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_reinitialize_transaction (
-    GtkAction* action, GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_expand_transaction (
-    GtkToggleAction* action, GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_exchange_rate (GtkAction* action,
-                                                        GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_jump (GtkAction* action,
-                                               GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_reload (GtkAction* action,
-                                                 GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_schedule (GtkAction* action,
-                                                   GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_scrub_all (GtkAction* action,
-                                                    GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_scrub_current (GtkAction* action,
-                                                        GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_account_report (GtkAction* action,
-                                                         GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_transaction_report (GtkAction* action,
-        GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_linked_transaction (GtkAction *action,
-                                                                GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_linked_transaction_open (GtkAction *action,
-                                                                     GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_linked_transaction_remove (GtkAction *action,
-                                                                       GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_jump_linked_invoice (GtkAction* action,
-                                                                  GncPluginPageRegister* plugin_page);
+static void gnc_plugin_page_register_cmd_reconcile (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_stock_assistant (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_autoclear (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_transfer (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_stock_split (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_lots (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_enter_transaction (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_cancel_transaction (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_delete_transaction (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_blank_transaction (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_goto_date (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_duplicate_transaction (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_reinitialize_transaction (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_exchange_rate (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_jump (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_reload (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_schedule (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_scrub_all (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_scrub_current (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_account_report (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_transaction_report (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_linked_transaction (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_linked_transaction_open (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_linked_transaction_remove (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_register_cmd_jump_linked_invoice (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+
 static void gnc_plugin_page_help_changed_cb (GNCSplitReg* gsr,
                                              GncPluginPageRegister* register_page);
 static void gnc_plugin_page_popup_menu_cb (GNCSplitReg* gsr,
@@ -286,6 +242,22 @@ static void gnc_plugin_page_register_event_handler (QofInstance* entity,
 
 static GncInvoice* invoice_from_split (Split* split);
 static GList* invoices_from_transaction (Transaction* trans);
+
+static void
+change_toggle_state (GSimpleAction *simple,
+                     GVariant      *state,
+                     gpointer       user_data)
+{
+   g_simple_action_set_state (simple, state);
+}
+
+static void
+change_radio_state (GSimpleAction *simple,
+                    GVariant      *state,
+                    gpointer       user_data)
+{
+   g_simple_action_set_state (simple, state);
+}
 
 /************************************************************/
 /*                          Actions                         */
@@ -326,46 +298,85 @@ static GList* invoices_from_transaction (Transaction* trans);
 #define DUPLICATE_SPLIT_TIP              N_("Make a copy of the current split")
 #define DELETE_SPLIT_TIP                 N_("Delete the current split")
 
-static GtkActionEntry gnc_plugin_page_register_actions [] =
+static GActionEntry gnc_plugin_page_register_actions [] =
+{
+    { "FilePrintAction", gnc_plugin_page_register_cmd_print_check, NULL, NULL, NULL },
+    { "EditCutAction", gnc_plugin_page_register_cmd_cut, NULL, NULL, NULL },
+    { "EditCopyAction", gnc_plugin_page_register_cmd_copy, NULL, NULL, NULL },
+    { "EditPasteAction", gnc_plugin_page_register_cmd_paste, NULL, NULL, NULL },
+    { "EditEditAccountAction", gnc_plugin_page_register_cmd_edit_account, NULL, NULL, NULL },
+    { "EditFindAccountAction", gnc_plugin_page_register_cmd_find_account, NULL, NULL, NULL },
+    { "EditFindTransactionsAction", gnc_plugin_page_register_cmd_find_transactions, NULL, NULL, NULL },
+    { "EditTaxOptionsAction", gnc_plugin_page_register_cmd_edit_tax_options, NULL, NULL, NULL },
+    { "CutTransactionAction", gnc_plugin_page_register_cmd_cut_transaction, NULL, NULL, NULL },
+    { "CopyTransactionAction", gnc_plugin_page_register_cmd_copy_transaction, NULL, NULL, NULL },
+    { "PasteTransactionAction", gnc_plugin_page_register_cmd_paste_transaction, NULL, NULL, NULL },
+    { "DuplicateTransactionAction", gnc_plugin_page_register_cmd_duplicate_transaction, NULL, NULL, NULL },
+    { "DeleteTransactionAction", gnc_plugin_page_register_cmd_delete_transaction, NULL, NULL, NULL },
+    { "RemoveTransactionSplitsAction", gnc_plugin_page_register_cmd_reinitialize_transaction, NULL, NULL, NULL },
+    { "RecordTransactionAction", gnc_plugin_page_register_cmd_enter_transaction, NULL, NULL, NULL },
+    { "CancelTransactionAction", gnc_plugin_page_register_cmd_cancel_transaction, NULL, NULL, NULL },
+    { "VoidTransactionAction", gnc_plugin_page_register_cmd_void_transaction, NULL, NULL, NULL },
+    { "UnvoidTransactionAction", gnc_plugin_page_register_cmd_unvoid_transaction, NULL, NULL, NULL },
+    { "ReverseTransactionAction", gnc_plugin_page_register_cmd_reverse_transaction, NULL, NULL, NULL },
+    { "LinkTransactionAction", gnc_plugin_page_register_cmd_linked_transaction, NULL, NULL, NULL },
+    { "LinkedTransactionOpenAction", gnc_plugin_page_register_cmd_linked_transaction_open, NULL, NULL, NULL },
+    { "JumpLinkedInvoiceAction", gnc_plugin_page_register_cmd_jump_linked_invoice, NULL, NULL, NULL },
+    { "ViewSortByAction", gnc_plugin_page_register_cmd_view_sort_by, NULL, NULL, NULL },
+    { "ViewFilterByAction", gnc_plugin_page_register_cmd_view_filter_by, NULL, NULL, NULL },
+    { "ViewRefreshAction", gnc_plugin_page_register_cmd_reload, NULL, NULL, NULL },
+    { "ActionsTransferAction", gnc_plugin_page_register_cmd_transfer, NULL, NULL, NULL },
+    { "ActionsReconcileAction", gnc_plugin_page_register_cmd_reconcile, NULL, NULL, NULL },
+    { "ActionsAutoClearAction", gnc_plugin_page_register_cmd_autoclear, NULL, NULL, NULL },
+    { "ActionsStockAssistantAction", gnc_plugin_page_register_cmd_stock_assistant, NULL, NULL, NULL },
+    { "ActionsStockSplitAction", gnc_plugin_page_register_cmd_stock_split, NULL, NULL, NULL },
+    { "ActionsLotsAction", gnc_plugin_page_register_cmd_lots, NULL, NULL, NULL },
+    { "BlankTransactionAction", gnc_plugin_page_register_cmd_blank_transaction, NULL, NULL, NULL },
+    { "GotoDateAction", gnc_plugin_page_register_cmd_goto_date, NULL, NULL, NULL },
+    { "EditExchangeRateAction", gnc_plugin_page_register_cmd_exchange_rate, NULL, NULL, NULL },
+    { "JumpTransactionAction", gnc_plugin_page_register_cmd_jump, NULL, NULL, NULL },
+    { "ScheduleTransactionAction", gnc_plugin_page_register_cmd_schedule, NULL, NULL, NULL },
+    { "ScrubAllAction", gnc_plugin_page_register_cmd_scrub_all, NULL, NULL, NULL },
+    { "ScrubCurrentAction", gnc_plugin_page_register_cmd_scrub_current, NULL, NULL, NULL },
+    { "ReportsAccountReportAction", gnc_plugin_page_register_cmd_account_report, NULL, NULL, NULL },
+    { "ReportsAcctTransReportAction", gnc_plugin_page_register_cmd_transaction_report, NULL, NULL, NULL },
+
+    { "ViewStyleDoubleLineAction", gnc_plugin_page_register_cmd_style_double_line, NULL, "FALSE", change_toggle_state },
+    { "SplitTransactionAction", gnc_plugin_page_register_cmd_expand_transaction, NULL, "FALSE", change_toggle_state },
+    { "ViewStyleRadioAction", gnc_plugin_page_register_cmd_style_changed, "n", 0, change_radio_state },
+};
+static guint gnc_plugin_page_register_n_actions = G_N_ELEMENTS(gnc_plugin_page_register_actions);
+
+static GncDisplayItem gnc_plugin_page_register_display_items [] =
 {
     /* File menu */
-
     {
-        "FilePrintAction", "document-print", N_ ("_Print Checks..."), "<primary>p", NULL,
-        G_CALLBACK (gnc_plugin_page_register_cmd_print_check)
+        "FilePrintAction", "document-print", N_ ("_Print Checks..."), "<primary>p", NULL
     },
-
     /* Edit menu */
-
     {
         "EditCutAction", "edit-cut", N_ ("Cu_t"), "<primary>X",
-        N_ ("Cut the current selection and copy it to clipboard"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_cut)
+        N_ ("Cut the current selection and copy it to clipboard")
     },
     {
         "EditCopyAction", "edit-copy", N_ ("_Copy"), "<primary>C",
-        N_ ("Copy the current selection to clipboard"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_copy)
+        N_ ("Copy the current selection to clipboard")
     },
     {
         "EditPasteAction", "edit-paste", N_ ("_Paste"), "<primary>V",
-        N_ ("Paste the clipboard content at the cursor position"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_paste)
+        N_ ("Paste the clipboard content at the cursor position")
     },
     {
         "EditEditAccountAction", GNC_ICON_EDIT_ACCOUNT, N_ ("Edit _Account"), "<primary>e",
-        N_ ("Edit the selected account"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_edit_account)
+        N_ ("Edit the selected account")
     },
     {
         "EditFindAccountAction", "edit-find", N_ ("F_ind Account"), "<primary>i",
-        N_ ("Find an account"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_find_account)
+        N_ ("Find an account")
     },
     {
         "EditFindTransactionsAction", "edit-find", N_ ("_Find..."), "<primary>f",
-        N_ ("Find transactions with a search"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_find_transactions)
+        N_ ("Find transactions with a search")
     },
     {
         "EditTaxOptionsAction", NULL,
@@ -376,221 +387,141 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
            US: income tax and
            DE: VAT
            So adjust this string */
-        N_("Setup relevant accounts for tax reports, e.g. US income tax"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_edit_tax_options)
+        N_("Setup relevant accounts for tax reports, e.g. US income tax")
     },
-
     /* Transaction menu */
-
     {
         "CutTransactionAction", "edit-cut", CUT_TRANSACTION_LABEL, "",
-        CUT_TRANSACTION_TIP,
-        G_CALLBACK (gnc_plugin_page_register_cmd_cut_transaction)
+        CUT_TRANSACTION_TIP
     },
     {
         "CopyTransactionAction", "edit-copy", COPY_TRANSACTION_LABEL, "",
-        COPY_TRANSACTION_TIP,
-        G_CALLBACK (gnc_plugin_page_register_cmd_copy_transaction)
+        COPY_TRANSACTION_TIP
     },
     {
         "PasteTransactionAction", "edit-paste", PASTE_TRANSACTION_LABEL, "",
-        PASTE_TRANSACTION_TIP,
-        G_CALLBACK (gnc_plugin_page_register_cmd_paste_transaction)
+        PASTE_TRANSACTION_TIP
     },
     {
         "DuplicateTransactionAction", "edit-copy", DUPLICATE_TRANSACTION_LABEL, "",
-        DUPLICATE_TRANSACTION_TIP,
-        G_CALLBACK (gnc_plugin_page_register_cmd_duplicate_transaction)
+        DUPLICATE_TRANSACTION_TIP
     },
     {
         "DeleteTransactionAction", "edit-delete", DELETE_TRANSACTION_LABEL, NULL,
-        DELETE_TRANSACTION_TIP,
-        G_CALLBACK (gnc_plugin_page_register_cmd_delete_transaction)
+        DELETE_TRANSACTION_TIP
     },
     {
         "RemoveTransactionSplitsAction", "edit-clear", N_ ("Remo_ve Other Splits"), NULL,
-        N_ ("Remove all splits in the current transaction"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_reinitialize_transaction)
+        N_ ("Remove all splits in the current transaction")
     },
     {
         "RecordTransactionAction", "list-add", N_ ("_Enter Transaction"), NULL,
-        N_ ("Record the current transaction"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_enter_transaction)
+        N_ ("Record the current transaction")
     },
     {
         "CancelTransactionAction", "process-stop", N_ ("Ca_ncel Transaction"), NULL,
-        N_ ("Cancel the current transaction"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_cancel_transaction)
+        N_ ("Cancel the current transaction")
     },
     {
-        "VoidTransactionAction", NULL, N_ ("_Void Transaction"), NULL, NULL,
-        G_CALLBACK (gnc_plugin_page_register_cmd_void_transaction)
+        "VoidTransactionAction", NULL, N_ ("_Void Transaction"), NULL, NULL
     },
     {
-        "UnvoidTransactionAction", NULL, N_ ("_Unvoid Transaction"), NULL, NULL,
-        G_CALLBACK (gnc_plugin_page_register_cmd_unvoid_transaction)
+        "UnvoidTransactionAction", NULL, N_ ("_Unvoid Transaction"), NULL, NULL
     },
     {
-        "ReverseTransactionAction", NULL, N_ ("Add _Reversing Transaction"), NULL, NULL,
-        G_CALLBACK (gnc_plugin_page_register_cmd_reverse_transaction)
+        "ReverseTransactionAction", NULL, N_ ("Add _Reversing Transaction"), NULL, NULL
     },
     {
         "LinkTransactionAction", NULL, LINK_TRANSACTION_LABEL, NULL,
-        LINK_TRANSACTION_TIP,
-        G_CALLBACK (gnc_plugin_page_register_cmd_linked_transaction)
+        LINK_TRANSACTION_TIP
     },
     {
         "LinkedTransactionOpenAction", NULL, LINK_TRANSACTION_OPEN_LABEL, NULL,
-        LINK_TRANSACTION_OPEN_TIP,
-        G_CALLBACK (gnc_plugin_page_register_cmd_linked_transaction_open)
+        LINK_TRANSACTION_OPEN_TIP
     },
     {
         "JumpLinkedInvoiceAction", NULL, JUMP_LINKED_INVOICE_LABEL, NULL,
-        JUMP_LINKED_INVOICE_TIP,
-        G_CALLBACK (gnc_plugin_page_register_cmd_jump_linked_invoice)
+        JUMP_LINKED_INVOICE_TIP
     },
-
     /* View menu */
-
     {
-        "ViewSortByAction", NULL, N_ ("_Sort By..."), NULL, NULL,
-        G_CALLBACK (gnc_plugin_page_register_cmd_view_sort_by)
+        "ViewSortByAction", NULL, N_ ("_Sort By..."), NULL, NULL
     },
     {
-        "ViewFilterByAction", NULL, N_ ("_Filter By..."), NULL, NULL,
-        G_CALLBACK (gnc_plugin_page_register_cmd_view_filter_by)
+        "ViewFilterByAction", NULL, N_ ("_Filter By..."), NULL, NULL
     },
     {
         "ViewRefreshAction", "view-refresh", N_ ("_Refresh"), "<primary>r",
-        N_ ("Refresh this window"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_reload)
+        N_ ("Refresh this window")
     },
-
     /* Actions menu */
-
     {
         "ActionsTransferAction", GNC_ICON_TRANSFER, N_ ("_Transfer..."), "<primary>t",
-        N_ ("Transfer funds from one account to another"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_transfer)
+        N_ ("Transfer funds from one account to another")
     },
     {
         "ActionsReconcileAction", "edit-select-all", N_ ("_Reconcile..."), NULL,
-        N_ ("Reconcile the selected account"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_reconcile)
+        N_ ("Reconcile the selected account")
     },
     {
         "ActionsAutoClearAction", "edit-select-all", N_ ("_Auto-clear..."), NULL,
-        N_ ("Automatically clear individual transactions, so as to reach a certain cleared amount"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_autoclear)
+        N_ ("Automatically clear individual transactions, so as to reach a certain cleared amount")
     },
     {
         "ActionsStockAssistantAction", "applications-utilities",
-        N_ ("Stock Ass_istant"), NULL, N_ ("Stock Assistant"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_stock_assistant)
+        N_ ("Stock Ass_istant"), NULL, N_ ("Stock Assistant")
     },
     {
         "ActionsStockSplitAction", NULL, N_ ("Stoc_k Split..."), NULL,
-        N_ ("Record a stock split or a stock merger"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_stock_split)
+        N_ ("Record a stock split or a stock merger")
     },
     {
         "ActionsLotsAction", NULL, N_ ("View _Lots..."), NULL,
-        N_ ("Bring up the lot viewer/editor window"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_lots)
+        N_ ("Bring up the lot viewer/editor window")
     },
     {
         "BlankTransactionAction", "go-bottom", N_ ("_Blank Transaction"), "<primary>Page_Down",
-        N_ ("Move to the blank transaction at the bottom of the register"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_blank_transaction)
+        N_ ("Move to the blank transaction at the bottom of the register")
     },
     {
         "GotoDateAction", "x-office-calendar", N_ ("_Go to Date"), "<primary>G",
-        N_ ("Move to the split at the specified date"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_goto_date)
+        N_ ("Move to the split at the specified date")
     },
     {
         "EditExchangeRateAction", NULL, N_ ("Edit E_xchange Rate"), NULL,
-        N_ ("Edit the exchange rate for the current transaction"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_exchange_rate)
+        N_ ("Edit the exchange rate for the current transaction")
     },
     {
 /* Translators: This is a menu item that will open a register tab for the
    account of the first other account in the current transaction's split list
    with focus on the current transaction's entry in that register. */
         "JumpTransactionAction", GNC_ICON_JUMP_TO, N_ ("_Jump to the other account"), NULL,
-        N_ ("Open a new register tab for the other account with focus on this transaction."),
-        G_CALLBACK (gnc_plugin_page_register_cmd_jump)
+        N_ ("Open a new register tab for the other account with focus on this transaction.")
     },
     {
         "ScheduleTransactionAction", GNC_ICON_SCHEDULE, N_ ("Sche_dule..."), NULL,
-        N_ ("Create a Scheduled Transaction with the current transaction as a template"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_schedule)
+        N_ ("Create a Scheduled Transaction with the current transaction as a template")
     },
     {
         "ScrubAllAction", NULL,
         /* Translators: The following 2 are Scrub actions in register view */
-        N_ ("_All transactions"), NULL, NULL,
-        G_CALLBACK (gnc_plugin_page_register_cmd_scrub_all)
+        N_ ("_All transactions"), NULL, NULL
     },
     {
-        "ScrubCurrentAction", NULL, N_ ("_This transaction"), NULL, NULL,
-        G_CALLBACK (gnc_plugin_page_register_cmd_scrub_current)
+        "ScrubCurrentAction", NULL, N_ ("_This transaction"), NULL, NULL
     },
-
     /* Reports menu */
-
     {
         "ReportsAccountReportAction", NULL, N_ ("Account Report"), NULL,
-        N_ ("Open a register report for this Account"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_account_report)
+        N_ ("Open a register report for this Account")
     },
     {
         "ReportsAcctTransReportAction", NULL, N_ ("Account Report - Single Transaction"), NULL,
-        N_ ("Open a register report for the selected Transaction"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_transaction_report)
+        N_ ("Open a register report for the selected Transaction")
     },
 };
-
-static guint gnc_plugin_page_register_n_actions = G_N_ELEMENTS (
-                                                      gnc_plugin_page_register_actions);
-
-static GtkToggleActionEntry toggle_entries[] =
-{
-    {
-        "ViewStyleDoubleLineAction", NULL, N_ ("_Double Line"), NULL,
-        N_ ("Show a second line with \"Action\", \"Notes\", and \"Linked Document\" for each transaction."),
-        G_CALLBACK (gnc_plugin_page_register_cmd_style_double_line), FALSE
-    },
-
-    {
-        "SplitTransactionAction", GNC_ICON_SPLIT_TRANS, N_ ("S_plit Transaction"), NULL,
-        N_ ("Show all splits in the current transaction"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_expand_transaction), FALSE
-    },
-};
-
-static guint n_toggle_entries = G_N_ELEMENTS (toggle_entries);
-
-static GtkRadioActionEntry radio_entries_2 [] =
-{
-    /* Translators: This is a menu item in the View menu */
-    {
-        "ViewStyleBasicAction", NULL, N_ ("_Basic Ledger"), NULL,
-        N_ ("Show transactions on one or two lines"), REG_STYLE_LEDGER
-    },
-    /* Translators: This is a menu item in the View menu */
-    {
-        "ViewStyleAutoSplitAction", NULL, N_ ("_Auto-Split Ledger"), NULL,
-        N_ ("Show transactions on one or two lines and expand the current transaction"), REG_STYLE_AUTO_LEDGER
-    },
-    /* Translators: This is a menu item in the View menu */
-    {
-        "ViewStyleJournalAction", NULL, N_ ("Transaction _Journal"), NULL,
-        N_ ("Show expanded transactions with all splits"), REG_STYLE_JOURNAL
-    }
-};
-
-static guint n_radio_entries_2 = G_N_ELEMENTS (radio_entries_2);
+/** The number of display items provided by this plugin. */
+static guint gnc_plugin_page_register_n_display_items = G_N_ELEMENTS(gnc_plugin_page_register_display_items);
 
 /** These are the "important" actions provided by the register page.
  *  Their labels will appear when the toolbar is set to "Icons and
@@ -881,7 +812,8 @@ gnc_plugin_page_register_init (GncPluginPageRegister* plugin_page)
 {
     GncPluginPageRegisterPrivate* priv;
     GncPluginPage* parent;
-    GtkActionGroup* action_group;
+//    GtkActionGroup *action_group;
+    GSimpleActionGroup *simple_action_group;
     gboolean use_new;
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
@@ -893,27 +825,28 @@ gnc_plugin_page_register_init (GncPluginPageRegister* plugin_page)
     g_object_set (G_OBJECT (plugin_page),
                   "page-name",      _ ("General Journal"),
                   "page-uri",       "default:",
-                  "ui-description", "gnc-plugin-page-register-ui.xml",
+                  "ui-description", "gnc-plugin-page-register.ui",
                   "use-new-window", use_new,
                   NULL);
 
     /* Create menu and toolbar information */
-    action_group =
-        gnc_plugin_page_create_action_group (parent,
-                                             "GncPluginPageRegisterActions");
-    gtk_action_group_add_actions (action_group, gnc_plugin_page_register_actions,
-                                  gnc_plugin_page_register_n_actions, plugin_page);
-    gtk_action_group_add_toggle_actions (action_group,
-                                         toggle_entries, n_toggle_entries,
-                                         plugin_page);
-    gtk_action_group_add_radio_actions (action_group,
-                                        radio_entries_2, n_radio_entries_2,
-                                        REG_STYLE_LEDGER,
-                                        G_CALLBACK (gnc_plugin_page_register_cmd_style_changed),
-                                        plugin_page);
+    simple_action_group = gnc_plugin_page_create_action_groupb (parent, "GncPluginPageRegisterActions");
+    g_action_map_add_action_entries (G_ACTION_MAP(simple_action_group),
+                                     gnc_plugin_page_register_actions,
+                                     gnc_plugin_page_register_n_actions,
+                                     plugin_page);
 
-    gnc_plugin_init_short_names (action_group, toolbar_labels);
-    gnc_plugin_set_important_actions (action_group, important_actions);
+//FIXMEb    gtk_action_group_add_toggle_actions (action_group,
+//                                         toggle_entries, n_toggle_entries,
+//                                         plugin_page);
+//FIXMEb    gtk_action_group_add_radio_actions (action_group,
+//                                        radio_entries_2, n_radio_entries_2,
+//                                        REG_STYLE_LEDGER,
+//                                        G_CALLBACK (gnc_plugin_page_register_cmd_style_changed),
+//                                        plugin_page);
+
+//FIXMEb    gnc_plugin_init_short_names (action_group, toolbar_labels);
+//FIXMEb    gnc_plugin_set_important_actions (action_group, important_actions);
 
     priv->lines_default     = DEFAULT_LINES_AMOUNT;
     priv->read_only         = FALSE;
@@ -1266,24 +1199,24 @@ gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister* page)
                                "sensitive", ledger_type == LD_SINGLE);
 
     reg = gnc_ledger_display_get_split_register (priv->ledger);
-    for (i = n_radio_entries_2 - 1; i > 0; i--)
-    {
-        DEBUG (" index %d: comparing %x to %x", i, radio_entries_2[i].value,
-               reg->style);
-        if (radio_entries_2[i].value == reg->style)
-        {
-            DEBUG ("match");
-            break;
-        }
-    }
+//FIXMEb    for (i = n_radio_entries_2 - 1; i > 0; i--)
+//    {
+//        DEBUG (" index %d: comparing %x to %x", i, radio_entries_2[i].value,
+//               reg->style);
+//        if (radio_entries_2[i].value == reg->style)
+//        {
+//            DEBUG ("match");
+//            break;
+//        }
+//    }
 
     /* Either a match was found, or fell out with i = 0 */
-    action = gtk_action_group_get_action (action_group, radio_entries_2[i].name);
-    g_signal_handlers_block_by_func (action,
-                                     gnc_plugin_page_register_cmd_style_changed, page);
-    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
-    g_signal_handlers_unblock_by_func (action,
-                                       gnc_plugin_page_register_cmd_style_changed, page);
+//    action = gtk_action_group_get_action (action_group, radio_entries_2[i].name);
+//    g_signal_handlers_block_by_func (action,
+//                                     gnc_plugin_page_register_cmd_style_changed, page);
+//    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
+//    g_signal_handlers_unblock_by_func (action,
+//                                       gnc_plugin_page_register_cmd_style_changed, page);
 
     /* Set "double line" toggle button */
     action = gtk_action_group_get_action (action_group,
@@ -1793,16 +1726,16 @@ gnc_plugin_page_register_restore_edit_menu (GncPluginPage* page,
     if (i <= REG_STYLE_JOURNAL)
     {
         DEBUG ("Setting style: %d", i);
-        action = gnc_plugin_page_get_action (page, radio_entries_2[i].name);
-        gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
+//FIXMEb        action = gnc_plugin_page_get_action (page, radio_entries_2[i].name);
+//        gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
     }
 
     /* Update the  double line action on this page */
     use_double_line =
         g_key_file_get_boolean (key_file, group_name, KEY_DOUBLE_LINE, &error);
     DEBUG ("Setting double_line_mode: %d", use_double_line);
-    action = gnc_plugin_page_get_action (page, "ViewStyleDoubleLineAction");
-    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), use_double_line);
+//FIXMEb    action = gnc_plugin_page_get_action (page, "ViewStyleDoubleLineAction");
+//    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), use_double_line);
 
     LEAVE (" ");
 }
@@ -2101,7 +2034,8 @@ gnc_plugin_page_register_get_tab_color (GncPluginPage* plugin_page)
 }
 
 static void
-gnc_plugin_page_register_check_for_empty_group (GKeyFile *state_file, const gchar *state_section)
+gnc_plugin_page_register_check_for_empty_group (GKeyFile *state_file,
+                                                const gchar *state_section)
 {
     gsize num_keys;
     gchar **keys = g_key_file_get_keys (state_file, state_section, &num_keys, NULL);
@@ -2419,7 +2353,8 @@ gnc_plugin_page_register_get_long_name (GncPluginPage* plugin_page)
 
 static void
 gnc_plugin_page_register_summarybar_position_changed (gpointer prefs,
-                                                      gchar* pref, gpointer user_data)
+                                                      gchar* pref,
+                                                      gpointer user_data)
 {
     GncPluginPage* plugin_page;
     GncPluginPageRegister* page;
@@ -3631,9 +3566,11 @@ report_helper (GNCLedgerDisplay* ledger, Split* split, Query* query)
 /************************************************************/
 
 static void
-gnc_plugin_page_register_cmd_print_check (GtkAction* action,
-                                          GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_print_check (GSimpleAction *simple,
+                                          GVariant      *paramter,
+                                          gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
     Split*          split;
@@ -3643,17 +3580,17 @@ gnc_plugin_page_register_cmd_print_check (GtkAction* action,
     Account*        account;
     GtkWidget*      window;
 
-    ENTER ("(action %p, plugin_page %p)", action, plugin_page);
+    ENTER ("(action %p, page %p)", simple, page);
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     reg = gnc_ledger_display_get_split_register (priv->ledger);
     ledger_type = gnc_ledger_display_type (priv->ledger);
-    window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (plugin_page));
+    window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page));
     if (ledger_type == LD_SINGLE || ledger_type == LD_SUBACCOUNT)
     {
-        account  = gnc_plugin_page_register_get_account (plugin_page);
+        account  = gnc_plugin_page_register_get_account (page);
         split    = gnc_split_register_get_current_split (reg);
         trans    = xaccSplitGetParent (split);
 
@@ -3740,14 +3677,16 @@ gnc_plugin_page_register_cmd_print_check (GtkAction* action,
 
 
 static void
-gnc_plugin_page_register_cmd_cut (GtkAction* action,
-                                  GncPluginPageRegister* page)
+gnc_plugin_page_register_cmd_cut (GSimpleAction *simple,
+                                  GVariant      *paramter,
+                                  gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    ENTER ("(action %p, page %p)", action, page);
+    ENTER ("(action %p, page %p)", simple, page);
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     gnucash_register_cut_clipboard (priv->gsr->reg);
     LEAVE ("");
@@ -3755,14 +3694,16 @@ gnc_plugin_page_register_cmd_cut (GtkAction* action,
 
 
 static void
-gnc_plugin_page_register_cmd_copy (GtkAction* action,
-                                   GncPluginPageRegister* page)
+gnc_plugin_page_register_cmd_copy (GSimpleAction *simple,
+                                   GVariant      *paramter,
+                                   gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    ENTER ("(action %p, page %p)", action, page);
+    ENTER ("(action %p, page %p)", simple, page);
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     gnucash_register_copy_clipboard (priv->gsr->reg);
     LEAVE ("");
@@ -3770,14 +3711,16 @@ gnc_plugin_page_register_cmd_copy (GtkAction* action,
 
 
 static void
-gnc_plugin_page_register_cmd_paste (GtkAction* action,
-                                    GncPluginPageRegister* page)
+gnc_plugin_page_register_cmd_paste (GSimpleAction *simple,
+                                    GVariant      *paramter,
+                                    gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    ENTER ("(action %p, page %p)", action, page);
+    ENTER ("(action %p, page %p)", simple, page);
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     gnucash_register_paste_clipboard (priv->gsr->reg);
     LEAVE ("");
@@ -3785,15 +3728,16 @@ gnc_plugin_page_register_cmd_paste (GtkAction* action,
 
 
 static void
-gnc_plugin_page_register_cmd_edit_account (GtkAction* action,
-                                           GncPluginPageRegister* page)
+gnc_plugin_page_register_cmd_edit_account (GSimpleAction *simple,
+                                           GVariant      *paramter,
+                                           gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     Account* account;
-    GtkWindow* parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (
-            page)));
+    GtkWindow* parent = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page)));
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    ENTER ("(action %p, page %p)", action, page);
+    ENTER ("(action %p, page %p)", simple, page);
     account = gnc_plugin_page_register_get_account (page);
     if (account)
         gnc_ui_edit_account_window (parent, account);
@@ -3802,9 +3746,11 @@ gnc_plugin_page_register_cmd_edit_account (GtkAction* action,
 
 
 static void
-gnc_plugin_page_register_cmd_find_account (GtkAction* action,
-                                           GncPluginPageRegister* page)
+gnc_plugin_page_register_cmd_find_account (GSimpleAction *simple,
+                                           GVariant      *paramter,
+                                           gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GtkWidget* window;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
@@ -3815,15 +3761,17 @@ gnc_plugin_page_register_cmd_find_account (GtkAction* action,
 
 
 static void
-gnc_plugin_page_register_cmd_find_transactions (GtkAction* action,
-                                                GncPluginPageRegister* page)
+gnc_plugin_page_register_cmd_find_transactions (GSimpleAction *simple,
+                                                GVariant      *paramter,
+                                                gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     GtkWindow* window;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    ENTER ("(action %p, page %p)", action, page);
+    ENTER ("(action %p, page %p)", simple, page);
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     window = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
     gnc_ui_find_transactions_dialog_create (window, priv->ledger);
@@ -3832,16 +3780,18 @@ gnc_plugin_page_register_cmd_find_transactions (GtkAction* action,
 
 
 static void
-gnc_plugin_page_register_cmd_edit_tax_options (GtkAction* action,
-                                               GncPluginPageRegister* page)
+gnc_plugin_page_register_cmd_edit_tax_options (GSimpleAction *simple,
+                                               GVariant      *paramter,
+                                               gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     GtkWidget *window;
     Account* account;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    ENTER ("(action %p, page %p)", action, page);
+    ENTER ("(action %p, page %p)", simple, page);
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page));
     account = gnc_plugin_page_register_get_account (page);
@@ -3850,31 +3800,35 @@ gnc_plugin_page_register_cmd_edit_tax_options (GtkAction* action,
 }
 
 static void
-gnc_plugin_page_register_cmd_cut_transaction (GtkAction* action,
-                                              GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_cut_transaction (GSimpleAction *simple,
+                                              GVariant      *paramter,
+                                              gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
 
-    ENTER ("(action %p, plugin_page %p)", action, plugin_page);
+    ENTER ("(action %p, page %p)", simple, page);
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     gsr_default_cut_txn_handler (priv->gsr, NULL);
     LEAVE (" ");
 }
 
 
 static void
-gnc_plugin_page_register_cmd_copy_transaction (GtkAction* action,
-                                               GncPluginPageRegister* page)
+gnc_plugin_page_register_cmd_copy_transaction (GSimpleAction *simple,
+                                               GVariant      *paramter,
+                                               gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    ENTER ("(action %p, page %p)", action, page);
+    ENTER ("(action %p, page %p)", simple, page);
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     reg = gnc_ledger_display_get_split_register (priv->ledger);
     gnc_split_register_copy_current (reg);
@@ -3883,15 +3837,17 @@ gnc_plugin_page_register_cmd_copy_transaction (GtkAction* action,
 
 
 static void
-gnc_plugin_page_register_cmd_paste_transaction (GtkAction* action,
-                                                GncPluginPageRegister* page)
+gnc_plugin_page_register_cmd_paste_transaction (GSimpleAction *simple,
+                                                GVariant      *paramter,
+                                                gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    ENTER ("(action %p, page %p)", action, page);
+    ENTER ("(action %p, page %p)", simple, page);
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     reg = gnc_ledger_display_get_split_register (priv->ledger);
     gnc_split_register_paste_current (reg);
@@ -3900,9 +3856,11 @@ gnc_plugin_page_register_cmd_paste_transaction (GtkAction* action,
 
 
 static void
-gnc_plugin_page_register_cmd_void_transaction (GtkAction* action,
-                                               GncPluginPageRegister* page)
+gnc_plugin_page_register_cmd_void_transaction (GSimpleAction *simple,
+                                               GVariant      *paramter,
+                                               gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     GtkWidget* dialog, *entry;
     SplitRegister* reg;
@@ -3912,7 +3870,7 @@ gnc_plugin_page_register_cmd_void_transaction (GtkAction* action,
     gint result;
     GtkWindow* window;
 
-    ENTER ("(action %p, page %p)", action, page);
+    ENTER ("(action %p, page %p)", simple, page);
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
@@ -3967,14 +3925,16 @@ gnc_plugin_page_register_cmd_void_transaction (GtkAction* action,
 
 
 static void
-gnc_plugin_page_register_cmd_unvoid_transaction (GtkAction* action,
-                                                 GncPluginPageRegister* page)
+gnc_plugin_page_register_cmd_unvoid_transaction (GSimpleAction *simple,
+                                                 GVariant      *paramter,
+                                                 gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
     Transaction* trans;
 
-    ENTER ("(action %p, page %p)", action, page);
+    ENTER ("(action %p, page %p)", simple, page);
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
@@ -3989,9 +3949,11 @@ gnc_plugin_page_register_cmd_unvoid_transaction (GtkAction* action,
 
 
 static void
-gnc_plugin_page_register_cmd_reverse_transaction (GtkAction* action,
-                                                  GncPluginPageRegister* page)
+gnc_plugin_page_register_cmd_reverse_transaction (GSimpleAction *simple,
+                                                  GVariant      *paramter,
+                                                  gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
     GNCSplitReg* gsr;
@@ -4001,7 +3963,7 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction* action,
     Account *account;
     Split *split;
 
-    ENTER ("(action %p, page %p)", action, page);
+    ENTER ("(action %p, page %p)", simple, page);
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
@@ -4064,8 +4026,7 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction* action,
 static gboolean
 gnc_plugin_page_register_show_fs_save (GncPluginPageRegister* page)
 {
-    GncPluginPageRegisterPrivate* priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (
-                                             page);
+    GncPluginPageRegisterPrivate* priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     GNCLedgerDisplayType ledger_type = gnc_ledger_display_type (priv->ledger);
     SplitRegister* reg = gnc_ledger_display_get_split_register (priv->ledger);
 
@@ -4090,9 +4051,11 @@ gnc_plugin_page_register_show_fs_save (GncPluginPageRegister* page)
 }
 
 static void
-gnc_plugin_page_register_cmd_view_sort_by (GtkAction* action,
-                                           GncPluginPageRegister* page)
+gnc_plugin_page_register_cmd_view_sort_by (GSimpleAction *simple,
+                                           GVariant      *paramter,
+                                           gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
     GtkWidget* dialog, *button;
@@ -4102,7 +4065,7 @@ gnc_plugin_page_register_cmd_view_sort_by (GtkAction* action,
     gchar* title;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
-    ENTER ("(action %p, page %p)", action, page);
+    ENTER ("(action %p, page %p)", simple, page);
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     if (priv->sd.dialog)
@@ -4175,9 +4138,11 @@ gnc_plugin_page_register_cmd_view_sort_by (GtkAction* action,
 }
 
 static void
-gnc_plugin_page_register_cmd_view_filter_by (GtkAction* action,
-                                             GncPluginPageRegister* page)
+gnc_plugin_page_register_cmd_view_filter_by (GSimpleAction *simple,
+                                             GVariant      *paramter,
+                                             gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     GtkWidget* dialog, *toggle, *button, *table, *hbox;
     time64 start_time, end_time, time_val;
@@ -4188,7 +4153,7 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction* action,
     int i;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
-    ENTER ("(action %p, page %p)", action, page);
+    ENTER ("(action %p, page %p)", simple, page);
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     if (priv->fd.dialog)
@@ -4365,17 +4330,19 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction* action,
 }
 
 static void
-gnc_plugin_page_register_cmd_reload (GtkAction* action,
-                                     GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_reload (GSimpleAction *simple,
+                                     GVariant      *paramter,
+                                     gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
 
-    ENTER ("(action %p, page %p)", action, plugin_page);
+    ENTER ("(action %p, page %p)", simple, page);
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     reg = gnc_ledger_display_get_split_register (priv->ledger);
 
     /* Check for trans being edited */
@@ -4389,63 +4356,75 @@ gnc_plugin_page_register_cmd_reload (GtkAction* action,
 }
 
 static void
-gnc_plugin_page_register_cmd_style_changed (GtkAction* action,
-                                            GtkRadioAction* current,
-                                            GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_style_changed (GSimpleAction *simple,
+                                            GVariant      *parameter,
+                                            gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     SplitRegisterStyle value;
+    gint current;
 
-    ENTER ("(action %p, radio action %p, plugin_page %p)",
-           action, current, plugin_page);
+    ENTER ("(action %p, page %p)", simple, page);
 
-    g_return_if_fail (GTK_IS_ACTION (action));
-    g_return_if_fail (GTK_IS_RADIO_ACTION (current));
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
-    value = gtk_radio_action_get_current_value (current);
-    gnc_split_reg_change_style (priv->gsr, value, priv->enable_refresh);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
 
-    gnc_plugin_page_register_ui_update (NULL, plugin_page);
+    current = g_variant_get_int16 (parameter);
+
+//FIXMEb    value = gtk_radio_action_get_current_value (current);
+//    gnc_split_reg_change_style (priv->gsr, value, priv->enable_refresh);
+
+    gnc_plugin_page_register_ui_update (NULL, page);
     LEAVE (" ");
 }
 
 static void
-gnc_plugin_page_register_cmd_style_double_line (GtkToggleAction* action,
-                                                GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_style_double_line (GSimpleAction *simple,
+                                                GVariant      *parameter,
+                                                gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
     gboolean use_double_line;
+    GVariant *state;
 
-    ENTER ("(action %p, plugin_page %p)", action, plugin_page);
+    ENTER ("(action %p, page %p)", simple, page);
 
-    g_return_if_fail (GTK_IS_ACTION (action));
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     reg = gnc_ledger_display_get_split_register (priv->ledger);
 
-    use_double_line =  gtk_toggle_action_get_active (action);
+    state = g_action_get_state (G_ACTION(simple));
+
+    use_double_line =  g_variant_get_boolean (state);
+
+    g_action_change_state (G_ACTION(simple), g_variant_new_boolean (!g_variant_get_boolean (state)));
+
     if (use_double_line != reg->use_double_line)
     {
         gnc_split_register_config (reg, reg->type, reg->style, use_double_line);
         if (priv->enable_refresh)
             gnc_ledger_display_refresh (priv->ledger);
     }
+    g_variant_unref (state);
     LEAVE (" ");
 }
 
 static void
-gnc_plugin_page_register_cmd_transfer (GtkAction* action,
-                                       GncPluginPageRegister* page)
+gnc_plugin_page_register_cmd_transfer (GSimpleAction *simple,
+                                       GVariant      *paramter,
+                                       gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     Account* account;
     GncWindow* gnc_window;
     GtkWidget* window;
 
-    ENTER ("(action %p, plugin_page %p)", action, page);
+    ENTER ("(action %p, page %p)", simple, page);
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
@@ -4457,14 +4436,16 @@ gnc_plugin_page_register_cmd_transfer (GtkAction* action,
 }
 
 static void
-gnc_plugin_page_register_cmd_reconcile (GtkAction* action,
-                                        GncPluginPageRegister* page)
+gnc_plugin_page_register_cmd_reconcile (GSimpleAction *simple,
+                                        GVariant      *paramter,
+                                        gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     Account* account;
     GtkWindow* window;
     RecnWindow* recnData;
 
-    ENTER ("(action %p, plugin_page %p)", action, page);
+    ENTER ("(action %p, page %p)", simple, page);
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
@@ -4478,13 +4459,15 @@ gnc_plugin_page_register_cmd_reconcile (GtkAction* action,
 }
 
 static void
-gnc_plugin_page_register_cmd_stock_assistant (GtkAction* action,
-                                              GncPluginPageRegister* page)
+gnc_plugin_page_register_cmd_stock_assistant (GSimpleAction *simple,
+                                              GVariant      *paramter,
+                                              gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     Account *account;
     GtkWindow *window;
 
-    ENTER ("(action %p, plugin_page %p)", action, page);
+    ENTER ("(action %p, page %p)", simple, page);
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
     window = gnc_window_get_gtk_window (GNC_WINDOW (GNC_PLUGIN_PAGE (page)->window));
@@ -4495,14 +4478,16 @@ gnc_plugin_page_register_cmd_stock_assistant (GtkAction* action,
 }
 
 static void
-gnc_plugin_page_register_cmd_autoclear (GtkAction* action,
-                                        GncPluginPageRegister* page)
+gnc_plugin_page_register_cmd_autoclear (GSimpleAction *simple,
+                                        GVariant      *paramter,
+                                        gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     Account* account;
     GtkWindow* window;
     AutoClearWindow* autoClearData;
 
-    ENTER ("(action %p, plugin_page %p)", action, page);
+    ENTER ("(action %p, page %p)", simple, page);
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
@@ -4516,13 +4501,15 @@ gnc_plugin_page_register_cmd_autoclear (GtkAction* action,
 }
 
 static void
-gnc_plugin_page_register_cmd_stock_split (GtkAction* action,
-                                          GncPluginPageRegister* page)
+gnc_plugin_page_register_cmd_stock_split (GSimpleAction *simple,
+                                          GVariant      *paramter,
+                                          gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     Account* account;
     GtkWindow* window;
 
-    ENTER ("(action %p, plugin_page %p)", action, page);
+    ENTER ("(action %p, page %p)", simple, page);
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
@@ -4533,13 +4520,15 @@ gnc_plugin_page_register_cmd_stock_split (GtkAction* action,
 }
 
 static void
-gnc_plugin_page_register_cmd_lots (GtkAction* action,
-                                   GncPluginPageRegister* page)
+gnc_plugin_page_register_cmd_lots (GSimpleAction *simple,
+                                   GVariant      *paramter,
+                                   gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GtkWindow* window;
     Account* account;
 
-    ENTER ("(action %p, plugin_page %p)", action, page);
+    ENTER ("(action %p, page %p)", simple, page);
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
@@ -4551,96 +4540,108 @@ gnc_plugin_page_register_cmd_lots (GtkAction* action,
 }
 
 static void
-gnc_plugin_page_register_cmd_enter_transaction (GtkAction* action,
-                                                GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_enter_transaction (GSimpleAction *simple,
+                                                GVariant      *paramter,
+                                                gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
 
-    ENTER ("(action %p, plugin_page %p)", action, plugin_page);
+    ENTER ("(action %p, page %p)", simple, page);
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     gnc_split_reg_enter (priv->gsr, FALSE);
     LEAVE (" ");
 }
 
 static void
-gnc_plugin_page_register_cmd_cancel_transaction (GtkAction* action,
-                                                 GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_cancel_transaction (GSimpleAction *simple,
+                                                 GVariant      *paramter,
+                                                 gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
 
-    ENTER ("(action %p, plugin_page %p)", action, plugin_page);
+    ENTER ("(action %p, page %p)", simple, page);
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     gnc_split_register_cancel_cursor_trans_changes
     (gnc_ledger_display_get_split_register (priv->ledger));
     LEAVE (" ");
 }
 
 static void
-gnc_plugin_page_register_cmd_delete_transaction (GtkAction* action,
-                                                 GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_delete_transaction (GSimpleAction *simple,
+                                                 GVariant      *paramter,
+                                                 gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
 
-    ENTER ("(action %p, plugin_page %p)", action, plugin_page);
+    ENTER ("(action %p, page %p)", simple, page);
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     gsr_default_delete_handler (priv->gsr, NULL);
     LEAVE (" ");
 
 }
 
 static void
-gnc_plugin_page_register_cmd_linked_transaction (GtkAction *action,
-                                                 GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_linked_transaction (GSimpleAction *simple,
+                                                 GVariant      *paramter,
+                                                 gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
 
-    ENTER ("(action %p, plugin_page %p)", action, plugin_page);
+    ENTER ("(action %p, page %p)", simple, page);
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     gsr_default_doclink_handler (priv->gsr);
-    gnc_plugin_page_register_ui_update (NULL, plugin_page);
+    gnc_plugin_page_register_ui_update (NULL, page);
     LEAVE (" ");
 }
 
 static void
-gnc_plugin_page_register_cmd_linked_transaction_open (GtkAction *action,
-                                                      GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_linked_transaction_open (GSimpleAction *simple,
+                                                      GVariant      *paramter,
+                                                      gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
 
-    ENTER ("(action %p, plugin_page %p)", action, plugin_page);
+    ENTER ("(action %p, page %p)", simple, page);
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     gsr_default_doclink_open_handler (priv->gsr);
     LEAVE (" ");
 }
 
 static void
-gnc_plugin_page_register_cmd_linked_transaction_remove (GtkAction *action,
-                                                        GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_linked_transaction_remove (GSimpleAction *simple,
+                                                        GVariant      *paramter,
+                                                        gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
 
-    ENTER ("(action %p, plugin_page %p)", action, plugin_page);
+    ENTER ("(action %p, page %p)", simple, page);
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     gsr_default_doclink_remove_handler (priv->gsr);
-    gnc_plugin_page_register_ui_update (NULL, plugin_page);
+    gnc_plugin_page_register_ui_update (NULL, page);
     LEAVE (" ");
 
 }
@@ -4683,23 +4684,25 @@ GList* invoices_from_transaction (Transaction* trans)
 }
 
 static void
-gnc_plugin_page_register_cmd_jump_linked_invoice (GtkAction* action,
-                                                  GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_jump_linked_invoice (GSimpleAction *simple,
+                                                  GVariant      *paramter,
+                                                  gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
     GncInvoice* invoice;
     Transaction *txn;
     GtkWidget *window;
 
-    ENTER ("(action %p, plugin_page %p)", action, plugin_page);
+    ENTER ("(action %p, page %p)", simple, page);
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     reg = gnc_ledger_display_get_split_register (priv->gsr->ledger);
     txn = gnc_split_register_get_current_trans (reg);
     invoice = invoice_from_split (gnc_split_register_get_current_split (reg));
-    window = GNC_PLUGIN_PAGE(plugin_page)->window;
+    window = GNC_PLUGIN_PAGE(page)->window;
 
     if (!invoice)
     {
@@ -4754,17 +4757,19 @@ Please choose one:"), _("Select"), 0, details);
 }
 
 static void
-gnc_plugin_page_register_cmd_blank_transaction (GtkAction* action,
-                                                GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_blank_transaction (GSimpleAction *simple,
+                                                GVariant      *paramter,
+                                                gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
 
-    ENTER ("(action %p, plugin_page %p)", action, plugin_page);
+    ENTER ("(action %p, page %p)", simple, page);
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     reg = gnc_ledger_display_get_split_register (priv->ledger);
 
     if (gnc_split_register_save (reg, TRUE))
@@ -4775,15 +4780,17 @@ gnc_plugin_page_register_cmd_blank_transaction (GtkAction* action,
 }
 
 static void
-gnc_plugin_page_register_cmd_goto_date (GtkAction* action,
-                                        GncPluginPageRegister* page)
+gnc_plugin_page_register_cmd_goto_date (GSimpleAction *simple,
+                                        GVariant      *paramter,
+                                        gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GNCSplitReg* gsr;
     Query* query;
     time64 date = gnc_time (NULL);
     GList *splits;
 
-    ENTER ("(action %p, plugin_page %p)", action, page);
+    ENTER ("(action %p, page %p)", simple, page);
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
     if (!gnc_dup_time64_dialog (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)),
@@ -4812,69 +4819,85 @@ gnc_plugin_page_register_cmd_goto_date (GtkAction* action,
 }
 
 static void
-gnc_plugin_page_register_cmd_duplicate_transaction (GtkAction* action,
-                                                    GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_duplicate_transaction (GSimpleAction *simple,
+                                                    GVariant      *paramter,
+                                                    gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
 
-    ENTER ("(action %p, plugin_page %p)", action, plugin_page);
+    ENTER ("(action %p, page %p)", simple, page);
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     gnc_split_register_duplicate_current
     (gnc_ledger_display_get_split_register (priv->ledger));
     LEAVE (" ");
 }
 
 static void
-gnc_plugin_page_register_cmd_reinitialize_transaction (GtkAction* action,
-                                                       GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_reinitialize_transaction (GSimpleAction *simple,
+                                                       GVariant      *paramter,
+                                                       gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
 
-    ENTER ("(action %p, plugin_page %p)", action, plugin_page);
+    ENTER ("(action %p, page %p)", simple, page);
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     gsr_default_reinit_handler (priv->gsr, NULL);
     LEAVE (" ");
 }
 
 static void
-gnc_plugin_page_register_cmd_expand_transaction (GtkToggleAction* action,
-                                                 GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_expand_transaction (GSimpleAction *simple,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
     gboolean expand;
+    GVariant *state;
 
-    ENTER ("(action %p, plugin_page %p)", action, plugin_page);
+    ENTER ("(action %p, page %p)", simple, page);
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     reg = gnc_ledger_display_get_split_register (priv->ledger);
-    expand = gtk_toggle_action_get_active (action);
+
+    state = g_action_get_state (G_ACTION(simple));
+
+    g_action_change_state (G_ACTION(simple), g_variant_new_boolean (!g_variant_get_boolean (state)));
+
+    expand = g_variant_get_boolean (state);
+
     gnc_split_register_expand_current_trans (reg, expand);
+    g_variant_unref (state);
     LEAVE (" ");
 }
 
 /** Callback for "Edit Exchange Rate" menu item.
  */
 static void
-gnc_plugin_page_register_cmd_exchange_rate (GtkAction* action,
-                                            GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_exchange_rate (GSimpleAction *simple,
+                                            GVariant      *paramter,
+                                            gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
 
-    ENTER ("(action %p, plugin_page %p)", action, plugin_page);
+    ENTER ("(action %p, page %p)", simple, page);
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     reg = gnc_ledger_display_get_split_register (priv->ledger);
 
     /* XXX Ignore the return value -- we don't care if this succeeds */
@@ -4883,9 +4906,11 @@ gnc_plugin_page_register_cmd_exchange_rate (GtkAction* action,
 }
 
 static void
-gnc_plugin_page_register_cmd_jump (GtkAction* action,
-                                   GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_jump (GSimpleAction *simple,
+                                   GVariant      *paramter,
+                                   gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     GncPluginPage* new_page;
     GtkWidget* window;
@@ -4895,12 +4920,12 @@ gnc_plugin_page_register_cmd_jump (GtkAction* action,
     Account* leader;
     Split* split;
 
-    ENTER ("(action %p, plugin_page %p)", action, plugin_page);
+    ENTER ("(action %p, page %p)", simple, page);
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
-    window = GNC_PLUGIN_PAGE (plugin_page)->window;
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
+    window = GNC_PLUGIN_PAGE (page)->window;
     if (window == NULL)
     {
         LEAVE ("no window");
@@ -4965,19 +4990,21 @@ gnc_plugin_page_register_cmd_jump (GtkAction* action,
 }
 
 static void
-gnc_plugin_page_register_cmd_schedule (GtkAction* action,
-                                       GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_schedule (GSimpleAction *simple,
+                                       GVariant      *paramter,
+                                       gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     GtkWindow* window;
 
-    ENTER ("(action %p, plugin_page %p)", action, plugin_page);
+    ENTER ("(action %p, page %p)", simple, page);
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
     window = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (
-                                                         plugin_page)));
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+                                                         page)));
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     gsr_default_schedule_handler (priv->gsr, window);
     LEAVE (" ");
 }
@@ -5004,19 +5031,21 @@ static void scrub_split (Split *split)
 }
 
 static void
-gnc_plugin_page_register_cmd_scrub_current (GtkAction* action,
-                                            GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_scrub_current (GSimpleAction *simple,
+                                            GVariant      *paramter,
+                                            gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     Query* query;
     Split* split;
     SplitRegister* reg;
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    ENTER ("(action %p, plugin_page %p)", action, plugin_page);
+    ENTER ("(action %p, page %p)", simple, page);
 
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     query = gnc_ledger_display_get_query (priv->ledger);
     if (query == NULL)
     {
@@ -5056,9 +5085,11 @@ scrub_kp_handler (GtkWidget *widget, GdkEventKey *event, gpointer data)
 }
 
 static void
-gnc_plugin_page_register_cmd_scrub_all (GtkAction* action,
-                                        GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_scrub_all (GSimpleAction *simple,
+                                        GVariant      *paramter,
+                                        gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     Query* query;
     GncWindow* window;
@@ -5067,11 +5098,11 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction* action,
     gulong scrub_kp_handler_ID;
     const char* message = _ ("Checking splits in current register: %u of %u");
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    ENTER ("(action %p, plugin_page %p)", action, plugin_page);
+    ENTER ("(action %p, page %p)", simple, page);
 
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     query = gnc_ledger_display_get_query (priv->ledger);
     if (!query)
     {
@@ -5082,7 +5113,7 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction* action,
     gnc_suspend_gui_refresh();
     is_scrubbing = TRUE;
     gnc_set_abort_scrub (FALSE);
-    window = GNC_WINDOW (GNC_PLUGIN_PAGE (plugin_page)->window);
+    window = GNC_WINDOW (GNC_PLUGIN_PAGE (page)->window);
     scrub_kp_handler_ID = g_signal_connect (G_OBJECT (window), "key-press-event",
                                             G_CALLBACK (scrub_kp_handler), NULL);
     gnc_window_set_progressbar_window (window);
@@ -5122,19 +5153,21 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction* action,
 }
 
 static void
-gnc_plugin_page_register_cmd_account_report (GtkAction* action,
-                                             GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_account_report (GSimpleAction *simple,
+                                             GVariant      *paramter,
+                                             gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     GncMainWindow* window;
     int id;
 
-    ENTER ("(action %p, plugin_page %p)", action, plugin_page);
+    ENTER ("(action %p, page %p)", simple, page);
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    window = GNC_MAIN_WINDOW (GNC_PLUGIN_PAGE (plugin_page)->window);
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+    window = GNC_MAIN_WINDOW (GNC_PLUGIN_PAGE (page)->window);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     id = report_helper (priv->ledger, NULL, NULL);
     if (id >= 0)
         gnc_main_window_open_report (id, window);
@@ -5142,9 +5175,11 @@ gnc_plugin_page_register_cmd_account_report (GtkAction* action,
 }
 
 static void
-gnc_plugin_page_register_cmd_transaction_report (GtkAction* action,
-                                                 GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_transaction_report (GSimpleAction *simple,
+                                                 GVariant      *paramter,
+                                                 gpointer       user_data)
 {
+    GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     GncMainWindow* window;
     SplitRegister* reg;
@@ -5153,11 +5188,11 @@ gnc_plugin_page_register_cmd_transaction_report (GtkAction* action,
     int id;
 
 
-    ENTER ("(action %p, plugin_page %p)", action, plugin_page);
+    ENTER ("(action %p, page %p)", simple, page);
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     reg = gnc_ledger_display_get_split_register (priv->ledger);
 
     split = gnc_split_register_get_current_split (reg);
@@ -5171,7 +5206,7 @@ gnc_plugin_page_register_cmd_transaction_report (GtkAction* action,
     xaccQueryAddGUIDMatch (query, xaccSplitGetGUID (split),
                            GNC_ID_SPLIT, QOF_QUERY_AND);
 
-    window = GNC_MAIN_WINDOW (GNC_PLUGIN_PAGE (plugin_page)->window);
+    window = GNC_MAIN_WINDOW (GNC_PLUGIN_PAGE (page)->window);
     id = report_helper (priv->ledger, split, query);
     if (id >= 0)
         gnc_main_window_open_report (id, window);
@@ -5214,16 +5249,16 @@ gnc_plugin_page_register_get_gsr (GncPluginPage* plugin_page)
 
 static void
 gnc_plugin_page_help_changed_cb (GNCSplitReg* gsr,
-                                 GncPluginPageRegister* register_page)
+                                 GncPluginPageRegister* page)
 {
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
     GncWindow* window;
     char* help;
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (register_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    window = GNC_WINDOW (GNC_PLUGIN_PAGE (register_page)->window);
+    window = GNC_WINDOW (GNC_PLUGIN_PAGE (page)->window);
     if (!window)
     {
         // This routine can be called before the page is added to a
@@ -5232,22 +5267,22 @@ gnc_plugin_page_help_changed_cb (GNCSplitReg* gsr,
     }
 
     /* Get the text from the ledger */
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (register_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     reg = gnc_ledger_display_get_split_register (priv->ledger);
     help = gnc_table_get_help (reg->table);
-    gnc_window_set_status (window, GNC_PLUGIN_PAGE (register_page), help);
+    gnc_window_set_status (window, GNC_PLUGIN_PAGE (page), help);
     g_free (help);
 }
 
 static void
 gnc_plugin_page_popup_menu_cb (GNCSplitReg* gsr,
-                               GncPluginPageRegister* register_page)
+                               GncPluginPageRegister* page)
 {
     GncWindow* window;
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (register_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    window = GNC_WINDOW (GNC_PLUGIN_PAGE (register_page)->window);
+    window = GNC_WINDOW (GNC_PLUGIN_PAGE (page)->window);
     if (!window)
     {
         // This routine can be called before the page is added to a
@@ -5255,7 +5290,7 @@ gnc_plugin_page_popup_menu_cb (GNCSplitReg* gsr,
         return;
     }
     gnc_main_window_popup_menu_cb (GTK_WIDGET (window),
-                                   GNC_PLUGIN_PAGE (register_page));
+                                   GNC_PLUGIN_PAGE (page));
 }
 
 static void

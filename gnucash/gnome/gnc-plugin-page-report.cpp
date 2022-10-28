@@ -126,7 +126,7 @@ typedef struct GncPluginPageReportPrivate
     SCM          edited_reports;
 
     /* The page is in the process of reloading the html */
-    gboolean	reloading;
+    gboolean    reloading;
     gboolean    loaded;
 
     /// the gnc_html abstraction this PluginPage contains
@@ -176,17 +176,17 @@ void gnc_plugin_page_report_remove_edited_report(GncPluginPageReportPrivate *pri
 void gnc_plugin_page_report_add_edited_report(GncPluginPageReportPrivate *priv, SCM report);
 void gnc_plugin_page_report_raise_editor(SCM report);
 
-static void gnc_plugin_page_report_forw_cb(GtkAction *action, GncPluginPageReport *rep);
-static void gnc_plugin_page_report_back_cb(GtkAction *action, GncPluginPageReport *rep);
-static void gnc_plugin_page_report_reload_cb(GtkAction *action, GncPluginPageReport *rep);
-static void gnc_plugin_page_report_stop_cb(GtkAction *action, GncPluginPageReport *rep);
-static void gnc_plugin_page_report_save_cb(GtkAction *action, GncPluginPageReport *rep);
-static void gnc_plugin_page_report_save_as_cb(GtkAction *action, GncPluginPageReport *rep);
-static void gnc_plugin_page_report_export_cb(GtkAction *action, GncPluginPageReport *rep);
-static void gnc_plugin_page_report_options_cb(GtkAction *action, GncPluginPageReport *rep);
-static void gnc_plugin_page_report_print_cb(GtkAction *action, GncPluginPageReport *rep);
-static void gnc_plugin_page_report_exportpdf_cb(GtkAction *action, GncPluginPageReport *rep);
-static void gnc_plugin_page_report_copy_cb(GtkAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_forw_cb (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_page_report_back_cb (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_page_report_reload_cb (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_page_report_stop_cb (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_page_report_save_cb (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_page_report_save_as_cb (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_page_report_export_cb (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_page_report_options_cb (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_page_report_print_cb (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_page_report_exportpdf_cb (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_page_report_copy_cb (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 static void
 gnc_plugin_page_report_get_property( GObject *obj,
@@ -734,7 +734,7 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
         gnc_utf8_strip_invalid_and_controls(new_name);
         ENTER("Cleaned-up new report name: %s", new_name);
         main_window_update_page_name(GNC_PLUGIN_PAGE(report), new_name);
-	}
+    }
     g_free(new_name);
 
     /* it's probably already dirty, but make sure */
@@ -1127,7 +1127,7 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * priv)
 /** Short labels for use on the toolbar buttons. */
 static action_toolbar_labels toolbar_labels[] =
 {
-    { "FilePrintAction", 	    N_("Print") },
+    { "FilePrintAction",        N_("Print") },
     { "ReportExportAction",   N_("Export") },
     { "ReportOptionsAction",  N_("Options") },
     /* Translators: This string is meant to be a short alternative for "Save Report Configuration"
@@ -1181,7 +1181,8 @@ static void
 gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint reportId)
 {
     GncPluginPageReportPrivate *priv;
-    GtkActionGroup *action_group;
+//    GtkActionGroup *action_group;
+    GSimpleActionGroup *simple_action_group;
     GncPluginPage *parent;
     gboolean use_new;
     gchar *name;
@@ -1193,80 +1194,84 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
         _("Add the current report's configuration to the 'Reports->Saved Report Configurations' menu. "
           "The report configuration will be saved in the file %s."), saved_reports_path);
 
-    GtkActionEntry report_actions[] =
+    static GActionEntry report_actions[] =
+    {
+        { "FilePrintAction", gnc_plugin_page_report_print_cb, nullptr, nullptr, nullptr },
+        { "FilePrintPDFAction", gnc_plugin_page_report_exportpdf_cb, nullptr, nullptr, nullptr },
+        { "EditCopyAction", gnc_plugin_page_report_copy_cb, nullptr, nullptr, nullptr },
+        { "ViewRefreshAction", gnc_plugin_page_report_reload_cb, nullptr, nullptr, nullptr },
+        { "ReportSaveAction", gnc_plugin_page_report_save_cb, nullptr, nullptr, nullptr },
+        { "ReportSaveAsAction", gnc_plugin_page_report_save_as_cb, nullptr, nullptr, nullptr },
+        { "ReportExportAction", gnc_plugin_page_report_export_cb, nullptr, nullptr, nullptr },
+        { "ReportOptionsAction", gnc_plugin_page_report_options_cb, nullptr, nullptr, nullptr },
+        { "ReportBackAction", gnc_plugin_page_report_back_cb, nullptr, nullptr, nullptr },
+        { "ReportForwAction", gnc_plugin_page_report_forw_cb, nullptr, nullptr, nullptr },
+        { "ReportReloadAction", gnc_plugin_page_report_reload_cb, nullptr, nullptr, nullptr },
+        { "ReportStopAction", gnc_plugin_page_report_stop_cb, nullptr, nullptr, nullptr },
+    };
+    guint num_report_actions = G_N_ELEMENTS( report_actions );
+
+    static GncDisplayItem report_display_items [] =
     {
         {
             "FilePrintAction", "document-print", N_("_Print Report..."), "<primary>p",
-            N_("Print the current report"),
-            G_CALLBACK(gnc_plugin_page_report_print_cb)
+            N_("Print the current report")
         },
         {
             "FilePrintPDFAction", GNC_ICON_PDF_EXPORT, N_("Export as P_DF..."), nullptr,
-            N_("Export the current report as a PDF document"),
-            G_CALLBACK(gnc_plugin_page_report_exportpdf_cb)
+            N_("Export the current report as a PDF document")
         },
-
         {
             "EditCutAction", "edit-cut", N_("Cu_t"), "<primary>X",
-            N_("Cut the current selection and copy it to clipboard"),
-            nullptr
+            N_("Cut the current selection and copy it to clipboard")
         },
         {
             "EditCopyAction", "edit-copy", N_("_Copy"), "<primary>C",
-            N_("Copy the current selection to clipboard"),
-            G_CALLBACK(gnc_plugin_page_report_copy_cb)
+            N_("Copy the current selection to clipboard")
         },
         {
             "EditPasteAction", "edit-paste", N_("_Paste"), "<primary>V",
-            N_("Paste the clipboard content at the cursor position"),
-            nullptr
+            N_("Paste the clipboard content at the cursor position")
         },
         {
             "ViewRefreshAction", "view-refresh", N_("_Refresh"), "<primary>r",
-            N_("Refresh this window"),
-            G_CALLBACK (gnc_plugin_page_report_reload_cb)
+            N_("Refresh this window")
         },
         {
             "ReportSaveAction", "document-save", N_("Save _Report Configuration"), "<primary><alt>s",
-            report_save_str, G_CALLBACK(gnc_plugin_page_report_save_cb)
+            report_save_str
         },
         {
             "ReportSaveAsAction", "document-save-as", N_("Save Report Configuration As..."), "<primary><alt><shift>s",
-            report_saveas_str, G_CALLBACK(gnc_plugin_page_report_save_as_cb)
+            report_saveas_str
         },
         {
             "ReportExportAction", "go-next", N_("Export _Report"), nullptr,
-            N_("Export HTML-formatted report to file"),
-            G_CALLBACK(gnc_plugin_page_report_export_cb)
+            N_("Export HTML-formatted report to file")
         },
         {
             "ReportOptionsAction", "document-properties", N_("_Report Options"), nullptr,
-            N_("Edit report options"),
-            G_CALLBACK(gnc_plugin_page_report_options_cb)
+            N_("Edit report options")
         },
-
         {
             "ReportBackAction", "go-previous", N_("Back"), nullptr,
-            N_("Move back one step in the history"),
-            G_CALLBACK(gnc_plugin_page_report_back_cb)
+            N_("Move back one step in the history")
         },
         {
             "ReportForwAction", "go-next", N_("Forward"), nullptr,
-            N_("Move forward one step in the history"),
-            G_CALLBACK(gnc_plugin_page_report_forw_cb)
+            N_("Move forward one step in the history")
         },
         {
             "ReportReloadAction", "view-refresh", N_("Reload"), nullptr,
-            N_("Reload the current page"),
-            G_CALLBACK(gnc_plugin_page_report_reload_cb)
+            N_("Reload the current page")
         },
         {
             "ReportStopAction", "process-stop", N_("Stop"), nullptr,
-            N_("Cancel outstanding HTML requests"),
-            G_CALLBACK(gnc_plugin_page_report_stop_cb)
+            N_("Cancel outstanding HTML requests")
         },
     };
-    guint num_report_actions = G_N_ELEMENTS( report_actions );
+    /** The number of display items provided by this plugin. */
+    guint num_report_display_items = G_N_ELEMENTS(report_display_items);
 
     DEBUG( "property reportId=%d", reportId );
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(plugin_page);
@@ -1281,7 +1286,7 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
     g_object_set(G_OBJECT(plugin_page),
                  "page-name",      name,
                  "page-uri",       "default:",
-                 "ui-description", "gnc-plugin-page-report-ui.xml",
+                 "ui-description", "gnc-plugin-page-report.ui",
                  "use-new-window", use_new,
                  nullptr);
     g_free(name);
@@ -1290,17 +1295,25 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
     gnc_plugin_page_add_book(parent, gnc_get_current_book());
 
     /* Create menu and toolbar information */
-    action_group =
-        gnc_plugin_page_create_action_group(parent,
-                                            "GncPluginPageReportActions");
-    gtk_action_group_add_actions( action_group,
-                                  report_actions,
-                                  num_report_actions,
-                                  plugin_page );
-    gnc_plugin_update_actions(action_group,
-                              initially_insensitive_actions,
-                              "sensitive", FALSE);
-    gnc_plugin_init_short_names (action_group, toolbar_labels);
+    simple_action_group = gnc_plugin_page_create_action_groupb (parent, "GncPluginPageReportActions");
+    g_action_map_add_action_entries (G_ACTION_MAP(simple_action_group),
+                                     report_actions,
+                                     num_report_actions,
+                                     plugin_page);
+
+//    action_group =
+//        gnc_plugin_page_create_action_group(parent,
+//                                            "GncPluginPageReportActions");
+//    gtk_action_group_add_actions( action_group,
+//                                  report_actions,
+//                                  num_report_actions,
+//                                  plugin_page );
+
+//FIXMEb    gnc_plugin_update_actions(action_group,
+//                              initially_insensitive_actions,
+//                              "sensitive", FALSE);
+
+//FIXMEb    gnc_plugin_init_short_names (action_group, toolbar_labels);
 
     g_free (saved_reports_path);
     g_free (report_save_str);
@@ -1385,8 +1398,11 @@ gnc_plugin_page_report_set_back_button(GncPluginPageReport *report, int enabled)
 // GTK ACTION CALLBACKS
 
 static void
-gnc_plugin_page_report_forw_cb( GtkAction *action, GncPluginPageReport *report )
+gnc_plugin_page_report_forw_cb (GSimpleAction *simple,
+                                GVariant *parameter,
+                                gpointer user_data)
 {
+    GncPluginPageReport *report = (GncPluginPageReport*)user_data;
     GncPluginPageReportPrivate *priv;
     gnc_html_history_node * node = nullptr;
 
@@ -1402,8 +1418,11 @@ gnc_plugin_page_report_forw_cb( GtkAction *action, GncPluginPageReport *report )
 }
 
 static void
-gnc_plugin_page_report_back_cb( GtkAction *action, GncPluginPageReport *report )
+gnc_plugin_page_report_back_cb (GSimpleAction *simple,
+                                GVariant *parameter,
+                                gpointer user_data)
 {
+    GncPluginPageReport *report = (GncPluginPageReport*)user_data;
     GncPluginPageReportPrivate *priv;
     gnc_html_history_node * node;
 
@@ -1421,12 +1440,15 @@ gnc_plugin_page_report_back_cb( GtkAction *action, GncPluginPageReport *report )
 void
 gnc_plugin_page_report_reload (GncPluginPageReport *report)
 {
-    gnc_plugin_page_report_reload_cb (NULL, report);
+    gnc_plugin_page_report_reload_cb (nullptr, nullptr, report);
 }
 
 static void
-gnc_plugin_page_report_reload_cb( GtkAction *action, GncPluginPageReport *report )
+gnc_plugin_page_report_reload_cb (GSimpleAction *simple,
+                                  GVariant *parameter,
+                                  gpointer user_data)
 {
+    GncPluginPageReport *report = (GncPluginPageReport*)user_data;
     GncPluginPage *page;
     GncPluginPageReportPrivate *priv;
     SCM dirty_report;
@@ -1461,8 +1483,11 @@ gnc_plugin_page_report_reload_cb( GtkAction *action, GncPluginPageReport *report
 }
 
 static void
-gnc_plugin_page_report_stop_cb( GtkAction *action, GncPluginPageReport *report )
+gnc_plugin_page_report_stop_cb (GSimpleAction *simple,
+                                GVariant *parameter,
+                                gpointer user_data)
 {
+    GncPluginPageReport *report = (GncPluginPageReport*)user_data;
     GncPluginPageReportPrivate *priv;
 
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
@@ -1618,8 +1643,11 @@ gnc_get_export_filename (SCM choice, GtkWindow *parent)
 }
 
 static void
-gnc_plugin_page_report_save_as_cb( GtkAction *action, GncPluginPageReport *report )
+gnc_plugin_page_report_save_as_cb (GSimpleAction *simple,
+                                   GVariant *parameter,
+                                   gpointer user_data)
 {
+    GncPluginPageReport *report = (GncPluginPageReport*)user_data;
     GncPluginPageReportPrivate *priv;
     SCM save_func;
     SCM rpt_id;
@@ -1649,8 +1677,11 @@ gnc_plugin_page_report_save_as_cb( GtkAction *action, GncPluginPageReport *repor
 }
 
 static void
-gnc_plugin_page_report_save_cb( GtkAction *action, GncPluginPageReport *report )
+gnc_plugin_page_report_save_cb (GSimpleAction *simple,
+                                GVariant *parameter,
+                                gpointer user_data)
 {
+    GncPluginPageReport *report = (GncPluginPageReport*)user_data;
     GncPluginPageReportPrivate *priv;
     SCM check_func, save_func;
     SCM rpt_id;
@@ -1675,13 +1706,16 @@ gnc_plugin_page_report_save_cb( GtkAction *action, GncPluginPageReport *report )
          * So let's create a new report template based on this report
          * and allow the user to change the name.
          */
-        gnc_plugin_page_report_save_as_cb (action, report);
+        gnc_plugin_page_report_save_as_cb (simple, nullptr, report);
     }
 }
 
 static void
-gnc_plugin_page_report_export_cb( GtkAction *action, GncPluginPageReport *report )
+gnc_plugin_page_report_export_cb (GSimpleAction *simple,
+                                  GVariant *parameter,
+                                  gpointer user_data)
 {
+    GncPluginPageReport *report = (GncPluginPageReport*)user_data;
     GncPluginPageReportPrivate *priv;
     char * filepath;
     SCM export_types;
@@ -1745,10 +1779,10 @@ gnc_plugin_page_report_export_cb( GtkAction *action, GncPluginPageReport *report
                 g_free (str);
             }
             else
-	        gnc_error_dialog (parent, "%s",
-				  _("This report must be upgraded to return a "
-				    "document object with export-string or "
-				    "export-error."));
+            gnc_error_dialog (parent, "%s",
+                  _("This report must be upgraded to return a "
+                    "document object with export-string or "
+                    "export-error."));
         }
         result = TRUE;
     }
@@ -1768,8 +1802,11 @@ gnc_plugin_page_report_export_cb( GtkAction *action, GncPluginPageReport *report
 }
 
 static void
-gnc_plugin_page_report_options_cb( GtkAction *action, GncPluginPageReport *report )
+gnc_plugin_page_report_options_cb (GSimpleAction *simple,
+                                   GVariant *parameter,
+                                   gpointer user_data)
 {
+    GncPluginPageReport *report = (GncPluginPageReport*)user_data;
     GncPluginPageReportPrivate *priv;
     GtkWindow *parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (report)));
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
@@ -1934,8 +1971,11 @@ static gchar *report_create_jobname(GncPluginPageReportPrivate *priv)
 }
 
 static void
-gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report )
+gnc_plugin_page_report_print_cb (GSimpleAction *simple,
+                                 GVariant *parameter,
+                                 gpointer user_data)
 {
+    GncPluginPageReport *report = (GncPluginPageReport*)user_data;
     GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
     gchar *job_name = report_create_jobname(priv);
 
@@ -1951,8 +1991,11 @@ gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report 
 }
 
 static void
-gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *report )
+gnc_plugin_page_report_exportpdf_cb(GSimpleAction *simple,
+                                   GVariant *parameter,
+                                   gpointer user_data)
 {
+    GncPluginPageReport *report = (GncPluginPageReport*)user_data;
     GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
     gchar *job_name = report_create_jobname(priv);
     GncInvoice *invoice;
@@ -1966,19 +2009,19 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
         owner = (GncOwner*) gncInvoiceGetOwner(invoice);
         if (owner)
         {
-	    QofInstance *inst = qofOwnerGetOwner (owner);
-	    gchar *dirname = nullptr;
-	    qof_instance_get (inst, "export-pdf-dir", &dirname, nullptr);
+        QofInstance *inst = qofOwnerGetOwner (owner);
+        gchar *dirname = nullptr;
+        qof_instance_get (inst, "export-pdf-dir", &dirname, nullptr);
             // Yes. In the kvp, look up the key for the Export-PDF output
             // directory. If it exists, prepend this to the job name so that
             // we can export to PDF.
-	    if (dirname && g_file_test(dirname,
-				       (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)))
-	    {
-		gchar *tmp = g_build_filename(dirname, job_name, nullptr);
-		g_free(job_name);
-		job_name = tmp;
-	    }
+        if (dirname && g_file_test(dirname,
+                       (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)))
+        {
+        gchar *tmp = g_build_filename(dirname, job_name, nullptr);
+        g_free(job_name);
+        job_name = tmp;
+        }
         }
     }
 
@@ -1992,14 +2035,14 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
 
     if (owner)
     {
-	/* As this is an invoice report with some owner, we will try
-	 * to look up the chosen output directory from the print
-	 * settings and store it again in the owner kvp.
-	 */
+    /* As this is an invoice report with some owner, we will try
+     * to look up the chosen output directory from the print
+     * settings and store it again in the owner kvp.
+     */
         GtkPrintSettings *print_settings = gnc_print_get_settings();
         if (print_settings &&
-	    gtk_print_settings_has_key(print_settings,
-				       GNC_GTK_PRINT_SETTINGS_EXPORT_DIR))
+        gtk_print_settings_has_key(print_settings,
+                       GNC_GTK_PRINT_SETTINGS_EXPORT_DIR))
         {
             const char* dirname = gtk_print_settings_get(print_settings,
                                   GNC_GTK_PRINT_SETTINGS_EXPORT_DIR);
@@ -2009,8 +2052,8 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
             {
                 QofInstance *inst = qofOwnerGetOwner(owner);
                 gncOwnerBeginEdit(owner);
-		qof_instance_set (inst, "export-pdf-dir", dirname);
-		gncOwnerCommitEdit(owner);
+        qof_instance_set (inst, "export-pdf-dir", dirname);
+        gncOwnerCommitEdit(owner);
             }
         }
     }
@@ -2019,8 +2062,11 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
 }
 
 static void
-gnc_plugin_page_report_copy_cb(GtkAction *action, GncPluginPageReport *report)
+gnc_plugin_page_report_copy_cb (GSimpleAction *simple,
+                                GVariant *parameter,
+                                gpointer user_data)
 {
+    GncPluginPageReport *report = (GncPluginPageReport*)user_data;
     GncPluginPageReportPrivate *priv;
 
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);

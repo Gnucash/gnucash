@@ -62,6 +62,7 @@
 #include "gnc-glib-utils.h"
 #include "gnc-icons.h"
 #include "gnc-main-window.h"
+#include "gnc-plugin.h"
 #include "gnc-plugin-page-sx-list.h"
 #include "gnc-session.h"
 #include "gnc-sx-instance-dense-cal-adapter.h"
@@ -119,37 +120,46 @@ static GncPluginPage *gnc_plugin_page_sx_list_recreate_page (GtkWidget *window, 
 
 static void gppsl_row_activated_cb (GtkTreeView *tree_view, GtkTreePath *path, GtkTreeViewColumn *column, gpointer user_data);
 
-static void gnc_plugin_page_sx_list_cmd_new (GtkAction *action, GncPluginPageSxList *page);
-static void gnc_plugin_page_sx_list_cmd_edit (GtkAction *action, GncPluginPageSxList *page);
-static void gnc_plugin_page_sx_list_cmd_delete (GtkAction *action, GncPluginPageSxList *page);
-static void gnc_plugin_page_sx_list_cmd_refresh (GtkAction *action, GncPluginPageSxList *page);
+static void gnc_plugin_page_sx_list_cmd_new (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_sx_list_cmd_edit (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_sx_list_cmd_delete (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_sx_list_cmd_refresh (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 
 /* Command callbacks */
-static GtkActionEntry gnc_plugin_page_sx_list_actions [] =
+static GActionEntry gnc_plugin_page_sx_list_actions [] =
 {
-    { "SxListAction", NULL, N_("_Scheduled"), NULL, NULL, NULL },
-    {
-        "SxListNewAction", GNC_ICON_NEW_ACCOUNT, N_("_New"), NULL,
-        N_("Create a new scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_new)
-    },
-    {
-        "SxListEditAction", GNC_ICON_EDIT_ACCOUNT, N_("_Edit"), NULL,
-        N_("Edit the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_edit)
-    },
-    {
-        "SxListDeleteAction", GNC_ICON_DELETE_ACCOUNT, N_("_Delete"), NULL,
-        N_("Delete the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_delete)
-    },
-
-    /* View menu */
-
-    {
-        "ViewRefreshAction", "view-refresh", N_("_Refresh"), "<primary>r",
-        N_("Refresh this window"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_refresh)
-    },
+    { "SxListAction", NULL, NULL, NULL, NULL },
+    { "SxListNewAction", gnc_plugin_page_sx_list_cmd_new, NULL, NULL, NULL },
+    { "SxListEditAction", gnc_plugin_page_sx_list_cmd_edit, NULL, NULL, NULL },
+    { "SxListDeleteAction", gnc_plugin_page_sx_list_cmd_delete, NULL, NULL, NULL },
+    { "ViewRefreshAction", gnc_plugin_page_sx_list_cmd_refresh, NULL, NULL, NULL },
 };
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_page_sx_list_n_actions = G_N_ELEMENTS(gnc_plugin_page_sx_list_actions);
+
+static GncDisplayItem gnc_plugin_page_sx_list_display_items [] =
+{
+    { "SxListAction", NULL, N_("_Scheduled"), NULL, NULL },
+    {
+        "SxListNewAction", GNC_ICON_NEW_ACCOUNT, N_("_New"), NULL,
+        N_("Create a new scheduled transaction")
+    },
+    {
+        "SxListEditAction", GNC_ICON_EDIT_ACCOUNT, N_("_Edit"), NULL,
+        N_("Edit the selected scheduled transaction")
+    },
+    {
+        "SxListDeleteAction", GNC_ICON_DELETE_ACCOUNT, N_("_Delete"), NULL,
+        N_("Delete the selected scheduled transaction")
+    },
+    /* View menu */
+    {
+        "ViewRefreshAction", "view-refresh", N_("_Refresh"), "<primary>r",
+        N_("Refresh this window")
+    },
+};
+/** The number of display items provided by this plugin. */
+static guint gnc_plugin_page_sx_list_n_display_items = G_N_ELEMENTS(gnc_plugin_page_sx_list_display_items);
 
 GncPluginPage *
 gnc_plugin_page_sx_list_new (void)
@@ -211,7 +221,8 @@ gnc_plugin_page_sx_list_class_init (GncPluginPageSxListClass *klass)
 static void
 gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page)
 {
-    GtkActionGroup *action_group;
+//    GtkActionGroup *action_group;
+    GSimpleActionGroup *simple_action_group;
     GncPluginPage *parent;
 
     /* Init parent declared variables */
@@ -219,17 +230,15 @@ gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page)
     g_object_set(G_OBJECT(plugin_page),
                  "page-name",      _("Scheduled Transactions"),
                  "page-uri",       "default:",
-                 "ui-description", "gnc-plugin-page-sx-list-ui.xml",
+                 "ui-description", "gnc-plugin-page-sx-list.ui",
                  NULL);
 
     gnc_plugin_page_add_book (parent, gnc_get_current_book());
-    action_group =
-        gnc_plugin_page_create_action_group (parent,
-                                             "GncPluginPageSxListActions");
-    gtk_action_group_add_actions (action_group,
-                                  gnc_plugin_page_sx_list_actions,
-                                  gnc_plugin_page_sx_list_n_actions,
-                                  plugin_page);
+    simple_action_group = gnc_plugin_page_create_action_groupb (parent, "GncPluginPageSxListActions");
+    g_action_map_add_action_entries (G_ACTION_MAP(simple_action_group),
+                                     gnc_plugin_page_sx_list_actions,
+                                     gnc_plugin_page_sx_list_n_actions,
+                                     plugin_page);
     /* gnc_plugin_init_short_names (action_group, toolbar_labels); */
 }
 
@@ -379,21 +388,21 @@ gppsl_model_populated_cb (GtkTreeModel *tree_model, GncPluginPageSxList *page)
 static void
 gpps_new_cb (GtkMenuItem *menuitem, GncPluginPageSxList *page)
 {
-    gnc_plugin_page_sx_list_cmd_new (NULL, page);
+    gnc_plugin_page_sx_list_cmd_new (NULL, NULL, page);
     return;
 }
 
 static void
 gpps_edit_cb (GtkMenuItem *menuitem, GncPluginPageSxList *page)
 {
-    gnc_plugin_page_sx_list_cmd_edit (NULL, page);
+    gnc_plugin_page_sx_list_cmd_edit (NULL, NULL, page);
     return;
 }
 
 static void
 gpps_delete_cb (GtkMenuItem *menuitem, GncPluginPageSxList *page)
 {
-    gnc_plugin_page_sx_list_cmd_delete (NULL, page);
+    gnc_plugin_page_sx_list_cmd_delete (NULL, NULL, page);
     return;
 }
 
@@ -702,9 +711,12 @@ gnc_plugin_page_sx_list_recreate_page (GtkWidget *window,
 
 
 static void
-gnc_plugin_page_sx_list_cmd_new (GtkAction *action, GncPluginPageSxList *page)
+gnc_plugin_page_sx_list_cmd_new (GSimpleAction *simple,
+                                 GVariant      *parameter,
+                                 gpointer       user_data)
 {
-    GtkWindow *window = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page)));
+    GncPluginPageSxList *plugin_page = user_data;
+    GtkWindow *window = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(plugin_page)));
     SchedXaction *new_sx;
     gboolean new_sx_flag = TRUE;
 
@@ -722,17 +734,20 @@ gnc_plugin_page_sx_list_cmd_new (GtkAction *action, GncPluginPageSxList *page)
         gnc_sx_set_schedule (new_sx, schedule);
     }
     gnc_ui_scheduled_xaction_editor_dialog_create (window, new_sx, new_sx_flag);
-    gppsl_update_selected_list (page, TRUE, new_sx);
+    gppsl_update_selected_list (plugin_page, TRUE, new_sx);
 }
 
 static void
-gnc_plugin_page_sx_list_cmd_refresh (GtkAction *action, GncPluginPageSxList *page)
+gnc_plugin_page_sx_list_cmd_refresh (GSimpleAction *simple,
+                                     GVariant      *parameter,
+                                     gpointer       user_data)
 {
+    GncPluginPageSxList *plugin_page = user_data;
     GncPluginPageSxListPrivate *priv;
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_SX_LIST(page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_SX_LIST(plugin_page));
 
-    priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
+    priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(plugin_page);
     gtk_widget_queue_draw (priv->widget);
 }
 
@@ -751,10 +766,13 @@ _argument_reorder_fn (GtkTreePath* list_path_data, GncTreeViewSxList* user_tree_
 
 
 static void
-gnc_plugin_page_sx_list_cmd_edit (GtkAction *action, GncPluginPageSxList *page)
+gnc_plugin_page_sx_list_cmd_edit (GSimpleAction *simple,
+                                  GVariant      *parameter,
+                                  gpointer       user_data)
 {
-    GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
-    GtkWindow *window = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page)));
+    GncPluginPageSxList *plugin_page = user_data;
+    GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(plugin_page);
+    GtkWindow *window = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(plugin_page)));
     GtkTreeSelection *selection;
     GList *selected_paths, *to_edit;
     GtkTreeModel *model;
@@ -771,11 +789,11 @@ gnc_plugin_page_sx_list_cmd_edit (GtkAction *action, GncPluginPageSxList *page)
                               (GncGMapFunc)_argument_reorder_fn,
                               priv->tree_view);
 
-    gppsl_update_selected_list (page, TRUE, NULL);
+    gppsl_update_selected_list (plugin_page, TRUE, NULL);
     for (GList *list = to_edit; list != NULL; list = list->next)
     {
         DEBUG ("to-edit [%s]\n", xaccSchedXactionGetName ((SchedXaction*)list->data));
-        gppsl_update_selected_list (page, FALSE, list->data);
+        gppsl_update_selected_list (plugin_page, FALSE, list->data);
     }
 
     g_list_foreach (to_edit, (GFunc)_edit_sx, window);
@@ -816,9 +834,12 @@ _destroy_sx(gpointer data, gpointer user_data)
 
 
 static void
-gnc_plugin_page_sx_list_cmd_delete (GtkAction *action, GncPluginPageSxList *page)
+gnc_plugin_page_sx_list_cmd_delete (GSimpleAction *simple,
+                                    GVariant      *parameter,
+                                    gpointer       user_data)
 {
-    GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
+    GncPluginPageSxList *plugin_page = user_data;
+    GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(plugin_page);
     GtkTreeSelection *selection;
     GList *selected_paths, *to_delete = NULL;
     GtkTreeModel *model;
@@ -838,7 +859,7 @@ gnc_plugin_page_sx_list_cmd_delete (GtkAction *action, GncPluginPageSxList *page
                                 (GncGMapFunc)_argument_reorder_fn,
                                  priv->tree_view);
 
-    window = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page)));
+    window = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(plugin_page)));
 
     length = g_list_length (to_delete);
 
@@ -849,11 +870,11 @@ gnc_plugin_page_sx_list_cmd_delete (GtkAction *action, GncPluginPageSxList *page
 
     if (gnc_verify_dialog (window, FALSE, "%s", message))
     {
-        gppsl_update_selected_list (page, TRUE, NULL);
+        gppsl_update_selected_list (plugin_page, TRUE, NULL);
         for (GList *list = to_delete; list != NULL; list = list->next)
         {
             DEBUG("to-delete [%s]\n", xaccSchedXactionGetName ((SchedXaction*)list->data));
-            gppsl_update_selected_list (page, FALSE, list->data);
+            gppsl_update_selected_list (plugin_page, FALSE, list->data);
         }
         g_list_foreach (to_delete, (GFunc)_destroy_sx, NULL);
     }
