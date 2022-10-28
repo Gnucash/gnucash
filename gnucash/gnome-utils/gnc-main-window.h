@@ -173,12 +173,6 @@ void gnc_main_window_foreach_page (GncMainWindowPageFunc fn,
  */
 GncPluginPage *gnc_main_window_get_current_page (GncMainWindow *window);
 
-
-/** Returns the pointer to the GtkUIManager which is used for the menu
- * item merging. */
-GtkUIManager *gnc_main_window_get_uimanager (GncMainWindow *window);
-
-
 /** Update the name of the page in the main window.
  *
  *  @param page The page to be updated.
@@ -187,7 +181,6 @@ GtkUIManager *gnc_main_window_get_uimanager (GncMainWindow *window);
 void
 main_window_update_page_name (GncPluginPage *page,
                               const gchar *name_in);
-
 
 /** Update the color on the page tabs in the main window.
  *
@@ -433,6 +426,12 @@ void gnc_main_window_all_action_set_sensitive (const gchar *action_name, gboolea
  *  returned.
  */
 GAction *gnc_main_window_find_action (GncMainWindow *window, const gchar *name);
+
+GtkWidget *gnc_main_window_get_menu (GncMainWindow *window); //FIXMEb added
+
+GMenuModel *gnc_main_window_get_menu_model (GncMainWindow *window); //FIXMEb added
+
+void gnc_main_window_update_toolbar (GncMainWindow *window, GncPluginPage *page); //FIXMEb added
 
 /**
  * Shows all main windows.

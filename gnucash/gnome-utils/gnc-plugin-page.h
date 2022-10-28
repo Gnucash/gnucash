@@ -87,6 +87,11 @@ typedef struct
     /** The textual name of this plugin. */
     const gchar *plugin_name;
 
+    /** A name for the set of actions that will be added by this
+     *  plugin.  The actual name is irrelevant, as long as it is
+     *  unique within GnuCash. */
+    const gchar *actions_name; //FIXMEb added
+
     /* Signals */
     void (* inserted) (GncPluginPage *plugin_page);
     void (* removed) (GncPluginPage *plugin_page);
@@ -290,7 +295,8 @@ GncPluginPage *gnc_plugin_page_recreate_page (GtkWidget *window,
  */
 void gnc_plugin_page_merge_actions (GncPluginPage *plugin_page,
                                     GtkUIManager *merge);
-
+void gnc_plugin_page_merge_actionsb (GncPluginPage *plugin_page,
+                                     GtkWidget *window); //FIXMEb added
 
 /** Remove the actions for a content page from the specified window.
  *
@@ -510,6 +516,7 @@ void gnc_plugin_page_set_use_new_window (GncPluginPage *page,
  */
 const char *gnc_plugin_page_get_ui_description (GncPluginPage *page);
 
+const gchar *gnc_plugin_page_get_simple_action_group_name (GncPluginPage *page); //FIXMEb added
 
 /** Set an alternate UI for the specified page.  This alternate ui
  *  may only use actions specified in the source for the page.
@@ -530,7 +537,7 @@ void gnc_plugin_page_set_ui_description (GncPluginPage *page,
  *  @param page The page whose UI information should be retrieved.
  *
  *  @return A pointer to the GtkBuilder object for this page. */
-GtkBuilder *gnc_plugin_page_get_builder (GncPluginPage *page);
+GtkBuilder *gnc_plugin_page_get_builder (GncPluginPage *page); //FIXMEb added
 
 
 /** Retrieve the GtkActionGroup object associated with this page.
@@ -542,6 +549,10 @@ GtkBuilder *gnc_plugin_page_get_builder (GncPluginPage *page);
  */
 GtkActionGroup *gnc_plugin_page_get_action_group (GncPluginPage *page);
 GSimpleActionGroup *gnc_plugin_page_get_action_groupb (GncPluginPage *page); //FIXMEb added
+
+
+
+GtkAccelGroup *gnc_plugin_page_get_accel_group (GncPluginPage *page); //FIXMEb added
 
 /** Create the GtkActionGroup object associated with this page.
  *

@@ -301,26 +301,30 @@ gnc_plugin_update_actions (GtkActionGroup *action_group,
 }
 void
 gnc_plugin_update_actionsb (GSimpleActionGroup *simple_action_group,
-                           const gchar **action_names,
-                           const gchar *property_name,
-                           gboolean value)
+                            const gchar **action_names,
+                            const gchar *property_name,
+                            gboolean value)
 {
-    GAction    *action;
-    gint          i;
-
+    GAction *action;
+    gint     i;
 
     for (i = 0; action_names[i]; i++)
     {
         action = g_action_map_lookup_action (G_ACTION_MAP(simple_action_group), action_names[i]);
         if (action)
         {
-//FIXMEb            g_object_set (G_OBJECT(action), property_name, value, NULL);
+//FIXMEb property_name could be 'sensitive' or 'visible'
+             if (g_strcmp0 (property_name, "sensitive") == 0)
+                 g_simple_action_set_enabled (G_SIMPLE_ACTION(action), value);
+             else
+             {
+//FIXMEb visible is done on the menu item, could also be linked to the action being sensitive
+             }
         }
         else
         {
-//FIXMEb            g_warning("No such action with name '%s' in action group %s (size %d)",
-//                      action_names[i], gtk_action_group_get_name(simple_action_group),
-//                      g_list_length(gtk_action_group_list_actions(simple_action_group)));
+            g_warning ("No such action with name '%s' in action group %p)",
+                       action_names[i], simple_action_group);
         }
     }
 }
