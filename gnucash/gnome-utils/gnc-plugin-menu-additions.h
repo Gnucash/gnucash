@@ -22,7 +22,7 @@
 
 /** @addtogroup MenuPlugins
     @{ */
-/** @addtogroup PluginMenuAdditions Non-GtkAction Menu Support
+/** @addtogroup PluginMenuAdditions Non-GAction Menu Support
     @{ */
 /** @file gnc-plugin-menu-additions.h
     @brief Functions providing menu items from scheme code.

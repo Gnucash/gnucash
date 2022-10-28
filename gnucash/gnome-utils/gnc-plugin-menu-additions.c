@@ -26,7 +26,7 @@
 
 /** @addtogroup MenuPlugins
     @{ */
-/** @addtogroup PluginMenuAdditions Non-GtkAction Menu Support
+/** @addtogroup PluginMenuAdditions Non-GAction Menu Support
     @{ */
 /** @file gnc-plugin-menu-additions.c
     @brief Functions providing menu items from scheme code.
@@ -45,6 +45,7 @@
 #include "gnc-window.h"
 #include "gnc-ui.h"
 #include "gnc-menu-extensions.h"
+#include "gnc-gtk-utils.h"
 
 static GObjectClass *parent_class = NULL;
 
@@ -54,6 +55,7 @@ static void gnc_plugin_menu_additions_finalize (GObject *object);
 
 static void gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
 static void gnc_plugin_menu_additions_remove_from_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
+static void gnc_plugin_menu_additions_action_new_cb (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 /* Command callbacks */
 
@@ -65,7 +67,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 /** Private data for this plugin.  This data structure is unused. */
 typedef struct GncPluginMenuAdditionsPrivate
 {
-    gpointer dummy;
+    GHashTable *item_hash;
 } GncPluginMenuAdditionsPrivate;
 
 #define GNC_PLUGIN_MENU_ADDITIONS_GET_PRIVATE(o)  \
@@ -80,10 +82,20 @@ typedef struct _GncPluginMenuAdditionsPerWindow
         window.  This plugin must maintain its own data because of the
         way the menus are currently built. */
     GncMainWindow  *window;
-    GtkUIManager   *ui_manager;
-    GtkActionGroup *group;
-    gint merge_id;
+    GHashTable     *item_hash;
+    GHashTable     *build_menu_hash;
+    GMenu          *report_menu;
+    GMenu          *sub_menu;
 } GncPluginMenuAdditionsPerWindow;
+
+/** An array of all of the actions provided by the account tree
+ *  plugin. */
+static GActionEntry gnc_plugin_actions [] =
+{
+    { "AdditionsAction", gnc_plugin_menu_additions_action_new_cb, "s", NULL, NULL },
+};
+/** The number of actions provided by this plugin. */
+static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
 
 /************************************************************
  *                  Object Implementation                   *
@@ -105,8 +117,11 @@ gnc_plugin_menu_additions_class_init (GncPluginMenuAdditionsClass *klass)
     plugin_class->plugin_name   = GNC_PLUGIN_MENU_ADDITIONS_NAME;
 
     /* function overrides */
-    plugin_class->add_to_window = gnc_plugin_menu_additions_add_to_window;
+    plugin_class->add_to_window      = gnc_plugin_menu_additions_add_to_window;
     plugin_class->remove_from_window = gnc_plugin_menu_additions_remove_from_window;
+    plugin_class->actions_name       = PLUGIN_ACTIONS_NAME;
+    plugin_class->actionsb           = gnc_plugin_actions;
+    plugin_class->n_actionsb         = gnc_plugin_n_actions;
 }
 
 static void
@@ -119,9 +134,15 @@ gnc_plugin_menu_additions_init (GncPluginMenuAdditions *plugin)
 static void
 gnc_plugin_menu_additions_finalize (GObject *object)
 {
-    g_return_if_fail (GNC_IS_PLUGIN_MENU_ADDITIONS (object));
+    GncPluginMenuAdditionsPrivate *priv;
+    g_return_if_fail (GNC_IS_PLUGIN_MENU_ADDITIONS(object));
 
     ENTER("plugin %p", object);
+
+    priv = GNC_PLUGIN_MENU_ADDITIONS_GET_PRIVATE(object);
+    
+    g_hash_table_destroy (priv->item_hash);
+
     G_OBJECT_CLASS (parent_class)->finalize (object);
     LEAVE("");
 }
@@ -161,27 +182,34 @@ gnc_main_window_to_scm (GncMainWindow *window)
     return SWIG_NewPointerObj(window, main_window_type, 0);
 }
 
-
-/** The user has selected one of the items added by this plugin.
- *  Invoke the callback function that was registered along with the
- *  menu item.
- *
- *  @param action A pointer to the action selected by the user.  This
- *  action represents one of the items in the file history menu.
- *
- *  @param data A pointer to the gnc-main-window data to be used by
- *  this function.  This is mainly to find out which window it was
- *  that had a menu selected.
- */
 static void
-gnc_plugin_menu_additions_action_cb (GAction *action,
-                                     GncMainWindowActionData *data)
+gnc_plugin_menu_additions_action_new_cb (GSimpleAction *simple,
+                                         GVariant      *parameter,
+                                         gpointer       user_data)
 {
+    GncMainWindowActionData *data = user_data;
+    GncPluginMenuAdditionsPrivate *priv;
+    GncMainWindowActionData *cb_data;
+    gsize length;
+    const gchar *action_name;
 
-    g_return_if_fail (G_IS_SIMPLE_ACTION(action));
-    g_return_if_fail (data != NULL);
+    g_return_if_fail (G_IS_SIMPLE_ACTION(simple));
 
-    gnc_extension_invoke_cb (data->data, gnc_main_window_to_scm (data->window));
+    ENTER("");
+    priv = GNC_PLUGIN_MENU_ADDITIONS_GET_PRIVATE(data->data);
+
+    action_name = g_variant_get_string (parameter, &length);
+
+    PINFO("action name is '%s'", action_name);
+
+    cb_data = g_hash_table_lookup (priv->item_hash, action_name);
+
+    if (cb_data)
+    {
+        PINFO("Found action in table");
+        gnc_extension_invoke_cb (cb_data->data, gnc_main_window_to_scm (cb_data->window));
+    }
+    LEAVE("");
 }
 
 
@@ -201,9 +229,9 @@ gnc_menu_additions_sort (ExtensionInfo *a, ExtensionInfo *b)
 {
     if (a->type == b->type)
         return strcmp(a->sort_key, b->sort_key);
-    else if (a->type == GTK_UI_MANAGER_MENU)
+    else if (a->type == GNC_SUB_MENU_ITEM)
         return -1;
-    else if (b->type == GTK_UI_MANAGER_MENU)
+    else if (b->type == GNC_SUB_MENU_ITEM)
         return 1;
     else
         return 0;
@@ -238,23 +266,23 @@ gnc_menu_additions_do_preassigned_accel (ExtensionInfo *info, GHashTable *table)
     gchar *map, *new_map, *accel_key;
     const gchar *ptr;
 
-    ENTER("Checking %s/%s [%s]", info->path, info->ae.label, info->ae.name);
+    ENTER("Checking %s/%s [%s]", info->path, info->action_label, info->action_name);
     if (info->accel_assigned)
     {
         LEAVE("Already processed");
         return;
     }
 
-    if (!g_utf8_validate(info->ae.label, -1, NULL))
+    if (!g_utf8_validate(info->action_label, -1, NULL))
     {
-        g_warning("Extension menu label '%s' is not valid utf8.", info->ae.label);
+        g_warning ("Extension menu label '%s' is not valid utf8.", info->action_label);
         info->accel_assigned = TRUE;
         LEAVE("Label is invalid utf8");
         return;
     }
 
     /* Was an accelerator pre-assigned in the source? */
-    ptr = g_utf8_strchr(info->ae.label, -1, '_');
+    ptr = g_utf8_strchr (info->action_label, -1, '_');
     if (ptr == NULL)
     {
         LEAVE("not preassigned");
@@ -298,7 +326,7 @@ gnc_menu_additions_assign_accel (ExtensionInfo *info, GHashTable *table)
     gint len;
     gboolean map_allocated = FALSE;
 
-    ENTER("Checking %s/%s [%s]", info->path, info->ae.label, info->ae.name);
+    ENTER("Checking %s/%s [%s]", info->path, info->action_label, info->action_name);
     if (info->accel_assigned)
     {
         LEAVE("Already processed");
@@ -314,7 +342,7 @@ gnc_menu_additions_assign_accel (ExtensionInfo *info, GHashTable *table)
     }
     DEBUG("map '%s', path %s", map, info->path);
 
-    for (ptr = info->ae.label; *ptr; ptr = g_utf8_next_char(ptr))
+    for (ptr = info->action_label; *ptr; ptr = g_utf8_next_char(ptr))
     {
         uni = g_utf8_get_char(ptr);
         if (!g_unichar_isalpha(uni))
@@ -340,13 +368,13 @@ gnc_menu_additions_assign_accel (ExtensionInfo *info, GHashTable *table)
     }
 
     /* Now build a new string in the form "<start>_<end>". */
-    start = g_strndup(info->ae.label, ptr - info->ae.label);
+    start = g_strndup (info->action_label, ptr - info->action_label);
     DEBUG("start %p, len %ld, text '%s'", start, g_utf8_strlen(start, -1), start);
     new_label = g_strconcat(start, "_", ptr, (gchar *)NULL);
     g_free(start);
-    DEBUG("label '%s' -> '%s'", info->ae.label, new_label);
-    g_free((gchar *)info->ae.label);
-    info->ae.label = new_label;
+    DEBUG("label '%s' -> '%s'", info->action_label, new_label);
+    g_free((gchar *)info->action_label);
+    info->action_label = new_label;
 
     /* Now build a new map. Old one freed automatically. */
     new_map = g_strconcat(map, buf, (gchar *)NULL);
@@ -376,24 +404,76 @@ gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
                                    GncPluginMenuAdditionsPerWindow *per_window)
 {
     GncMainWindowActionData *cb_data;
+    GMenuItem *item_path, *item_with_full_path;
+    gchar *full_path = NULL;
+    GMenuItem *gmenu_item = NULL;
 
-    DEBUG( "Adding %s/%s [%s] as [%s]", ext_info->path, ext_info->ae.label,
-           ext_info->ae.name, ext_info->typeStr );
+    DEBUG("Adding %s/%s [%s] as [%s]", ext_info->path, ext_info->action_label,
+           ext_info->action_name, ext_info->typeStr );
 
     cb_data = g_new0 (GncMainWindowActionData, 1);
     cb_data->window = per_window->window;
     cb_data->data = ext_info->extension;
 
-    if (ext_info->type == GTK_UI_MANAGER_MENUITEM)
-        ext_info->ae.callback = (GCallback)gnc_plugin_menu_additions_action_cb;
+    g_hash_table_insert (per_window->item_hash, g_strdup (ext_info->action_name), cb_data);
 
-    gtk_action_group_add_actions_full(per_window->group, &ext_info->ae, 1,
-                                      cb_data, g_free);
-    gtk_ui_manager_add_ui(per_window->ui_manager, per_window->merge_id,
-                          ext_info->path, ext_info->ae.label, ext_info->ae.name,
-                          ext_info->type, FALSE);
-    gtk_ui_manager_ensure_update(per_window->ui_manager);
+    if (g_str_has_suffix (ext_info->path, "_Custom"))
+        return;
+
+    full_path = g_strconcat (ext_info->path, "/", ext_info->action_label, NULL);
+
+    item_path = g_hash_table_lookup (per_window->build_menu_hash, ext_info->path);
+    item_with_full_path = g_hash_table_lookup (per_window->build_menu_hash, full_path);
+//FIXMEb This needs refactoring
+
+    if (!item_path && !item_with_full_path)
+    {
+        if (g_strcmp0 (ext_info->typeStr, "menuitem") == 0)
+        {
+            gmenu_item = g_menu_item_new (ext_info->action_label, NULL);
+            g_menu_item_set_action_and_target_value (gmenu_item, "gnc-plugin-menu-additions-actions.AdditionsAction",
+                                                     g_variant_new_string (ext_info->action_name));
+
+            g_menu_item_set_attribute (gmenu_item, "tooltip", "s", ext_info->action_tooltip);
+        }
+
+        if (g_strcmp0 (ext_info->typeStr, "menu") == 0)
+        {
+            GMenuModel *sub_menu = G_MENU_MODEL(g_menu_new ());
+
+            gmenu_item = g_menu_item_new_submenu (ext_info->action_label, sub_menu);
+            g_object_set_data (G_OBJECT(gmenu_item), "sub-menu", sub_menu);
+        }
+        g_menu_append_item (G_MENU(per_window->report_menu), gmenu_item);
+    }
+
+    if (item_path && !item_with_full_path)
+    {
+        GMenuModel *sub_menu = G_MENU_MODEL(g_object_get_data (G_OBJECT(item_path), "sub-menu"));
+
+        if (g_strcmp0 (ext_info->typeStr, "menuitem") == 0)
+        {
+            gmenu_item = g_menu_item_new (ext_info->action_label, NULL);
+            g_menu_item_set_action_and_target_value (gmenu_item, "gnc-plugin-menu-additions-actions.AdditionsAction",
+                                                     g_variant_new_string (ext_info->action_name));
+
+            g_menu_item_set_attribute (gmenu_item, "tooltip", "s", ext_info->action_tooltip);
+        }
+
+        if (g_strcmp0 (ext_info->typeStr, "menu") == 0)
+        {
+            GMenuModel *sub_menu = G_MENU_MODEL(g_menu_new ());
+
+            gmenu_item = g_menu_item_new_submenu (ext_info->action_label, sub_menu);
+            g_object_set_data (G_OBJECT(gmenu_item), "sub-menu", sub_menu);
+        }
+        g_menu_append_item (G_MENU(sub_menu), gmenu_item);
+    }
+    g_hash_table_insert (per_window->build_menu_hash, g_strdup (full_path), gmenu_item);
+
+    g_free (full_path);
 }
+
 
 
 /** Initialize the report menu and other additional menus.  This
@@ -413,42 +493,54 @@ gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
                                          GncMainWindow *window,
                                          GQuark type)
 {
+    GncPluginMenuAdditionsPrivate *priv = GNC_PLUGIN_MENU_ADDITIONS_GET_PRIVATE(plugin);
     GncPluginMenuAdditionsPerWindow per_window;
     static GOnce accel_table_init = G_ONCE_INIT;
     static GHashTable *table;
     GSList *menu_list;
+    GMenuModel *menubar_model = gnc_main_window_get_menu_model (window);
+    GncMenuModelSearch *gsm = g_new0 (GncMenuModelSearch, 1);
 
     ENTER(" ");
 
-//FIXMEb
-#ifdef skip
     per_window.window = window;
-    per_window.ui_manager = window->ui_merge;
-    per_window.group = gtk_action_group_new ("MenuAdditions" );
-    gtk_action_group_set_translation_domain (per_window.group, PROJECT_NAME);
-    per_window.merge_id = gtk_ui_manager_new_merge_id(window->ui_merge);
-    gtk_ui_manager_insert_action_group(window->ui_merge, per_window.group, 0);
+    per_window.item_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
-    menu_list = g_slist_sort(gnc_extensions_get_menu_list(),
-                             (GCompareFunc)gnc_menu_additions_sort);
+    per_window.build_menu_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+    per_window.report_menu = g_menu_new ();
+
+    menu_list = g_slist_sort (gnc_extensions_get_menu_list(),
+                              (GCompareFunc)gnc_menu_additions_sort);
 
     /* Assign accelerators */
-    table = g_once(&accel_table_init, gnc_menu_additions_init_accel_table, NULL);
-    g_slist_foreach(menu_list,
+    table = g_once (&accel_table_init, gnc_menu_additions_init_accel_table, NULL);
+    g_slist_foreach (menu_list,
                     (GFunc)gnc_menu_additions_do_preassigned_accel, table);
-    g_slist_foreach(menu_list, (GFunc)gnc_menu_additions_assign_accel, table);
+    g_slist_foreach (menu_list, (GFunc)gnc_menu_additions_assign_accel, table);
 
     /* Add to window. */
-    g_slist_foreach(menu_list, (GFunc)gnc_menu_additions_menu_setup_one,
-                    &per_window);
+    g_slist_foreach (menu_list, (GFunc)gnc_menu_additions_menu_setup_one,
+                     &per_window);
 
-    /* Tell the window code about the actions that were just added
-     * behind its back (so to speak) */
-    gnc_main_window_manual_merge_actions (window, PLUGIN_ACTIONS_NAME,
-                                          per_window.group, per_window.merge_id);
+    priv->item_hash = per_window.item_hash;
 
-    g_slist_free(menu_list);
-#endif
+    // add the report menu to the window
+    gsm->search_action_label = NULL;
+    gsm->search_action_name = "ReportsPlaceholder0";
+
+    if (gnc_menubar_model_find_item (menubar_model, gsm))
+    {
+        g_menu_insert_section (G_MENU(gsm->model), gsm->index, NULL, G_MENU_MODEL(per_window.report_menu));
+    }
+    else
+        PERR("Could not find 'ReportsAction' in menu model");
+
+    g_hash_table_destroy (per_window.build_menu_hash);
+
+    g_slist_free (menu_list);
+
+    g_free (gsm);
+
     LEAVE(" ");
 }
 
@@ -477,12 +569,8 @@ gnc_plugin_menu_additions_remove_from_window (GncPlugin *plugin,
      * actions name is installed into the plugin class. */
     simple_action_group = gnc_main_window_get_action_group (window, PLUGIN_ACTIONS_NAME);
 
-//FIXMEb    if (group && !window->just_plugin_prefs)
-//        gtk_ui_manager_remove_action_group(window->ui_merge, simple_action_group);
-
-    /* Note: This code does not clean up the per-callback data structures
-     * that are created by the gnc_menu_additions_menu_setup_one()
-     * function. Its not much memory and shouldn't be a problem. */
+    if (simple_action_group && !window->just_plugin_prefs)
+        gtk_widget_insert_action_group (GTK_WIDGET(window), PLUGIN_ACTIONS_NAME, NULL);
 
     LEAVE(" ");
 }
