@@ -1228,6 +1228,8 @@ qof_book_get_features (QofBook *book)
     GHashTable *features = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                   NULL, g_free);
 
+    PWARN ("qof_book_get_features is now deprecated.");
+
     auto slot = frame->get_slot({GNC_FEATURES});
     if (slot != nullptr)
     {
