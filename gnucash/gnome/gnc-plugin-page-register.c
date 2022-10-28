@@ -1104,13 +1104,13 @@ gnc_plugin_page_register_ui_update (gpointer various,
 
     account = gnc_plugin_page_register_get_account (page);
 
-    gnc_plugin_update_actionsb (gnc_plugin_page_get_action_groupb (GNC_PLUGIN_PAGE(page)),
-                                actions_requiring_account, "sensitive",
-                                !read_only_reg && account != NULL);
+    gnc_plugin_update_actions (gnc_plugin_page_get_action_groupb (GNC_PLUGIN_PAGE(page)),
+                               actions_requiring_account, "sensitive",
+                               !read_only_reg && account != NULL);
 
-    gnc_plugin_update_actionsb (gnc_plugin_page_get_action_groupb (GNC_PLUGIN_PAGE(page)),
-                                actions_requiring_priced_account, "sensitive",
-                                account && xaccAccountIsPriced (account));
+    gnc_plugin_update_actions (gnc_plugin_page_get_action_groupb (GNC_PLUGIN_PAGE(page)),
+                               actions_requiring_priced_account, "sensitive",
+                               account && xaccAccountIsPriced (account));
 
     /* Set available actions based on read only */
     trans = gnc_split_register_get_current_trans (reg);
@@ -1299,10 +1299,10 @@ gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister* page)
     simple_action_group = gnc_plugin_page_get_action_groupb (GNC_PLUGIN_PAGE(page));
     g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(simple_action_group));
 
-    gnc_plugin_update_actionsb (simple_action_group, actions_requiring_account,
+    gnc_plugin_update_actions (simple_action_group, actions_requiring_account,
                                "sensitive", is_readwrite && account != NULL);
 
-    gnc_plugin_update_actionsb (simple_action_group, actions_requiring_priced_account,
+    gnc_plugin_update_actions (simple_action_group, actions_requiring_priced_account,
                                "visible", account &&
                                gnc_prefs_is_extra_enabled () &&
                                xaccAccountIsPriced (account));

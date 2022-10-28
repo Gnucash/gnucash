@@ -114,7 +114,7 @@ page_changed (GncMainWindow *window, GncPluginPage *page, gpointer user_data)
         gnc_main_window_get_action_group (window, PLUGIN_ACTIONS_NAME);
 
     if (qof_book_is_readonly (gnc_get_current_book()))
-        gnc_plugin_update_actionsb (simple_action_group, plugin_writeable_actions,
+        gnc_plugin_update_actions (simple_action_group, plugin_writeable_actions,
                                     "sensitive", FALSE);
 }
 
