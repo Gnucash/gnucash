@@ -64,6 +64,12 @@ typedef struct
     const gchar *tooltip;
 } GncDisplayItem;
 
+typedef struct
+{
+    const gchar *actions;
+    const gchar *update_type;
+} GncMenuUpdate;
+
 /** The instance data structure for a main window object. */
 typedef struct GncMainWindow
 {
@@ -259,7 +265,8 @@ void gnc_main_window_merge_actions (GncMainWindow *window,
                                     guint n_entries,
                                     GncDisplayItem *display_items,
                                     guint n_display_items,
-                                    const gchar *filename,
+                                    const gchar **ui_updates,
+                                    const gchar *ui_filename,
                                     gpointer user_data);
 
 

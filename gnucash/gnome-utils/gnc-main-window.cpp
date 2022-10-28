@@ -3470,6 +3470,53 @@ gnc_main_window_manual_merge_actions (GncMainWindow *window,
 }
 
 
+static void
+update_menu_model (GncMainWindow *window, const gchar *ui_filename,
+                   const gchar **ui_updates)
+{
+    GncMainWindowPrivate *priv;
+    GError *error = nullptr;
+    const gchar *resource = "/org/gnucash/";
+    gchar *res_name;
+    GtkBuilder *builder = gtk_builder_new ();
+    GMenuModel *menu_model_part;
+    GncMenuModelSearch *gsm = g_new0 (GncMenuModelSearch, 1);
+
+    g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
+    g_return_if_fail (ui_filename != nullptr);
+    g_return_if_fail (ui_updates != nullptr);
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+    gtk_builder_set_translation_domain (builder, PROJECT_NAME);
+    res_name = g_strconcat ("/org/gnucash/ui/", ui_filename, NULL);
+
+    gtk_builder_add_from_resource (builder, res_name, &error);
+
+    if (error)
+    {
+        g_critical ("Failed to load, Error %s", error->message);
+        g_error_free (error);
+        return; //FIXMEb this may need changing
+    }
+
+    for (gint i = 0; ui_updates[i]; i++)
+    {
+        menu_model_part = (GMenuModel *)gtk_builder_get_object (builder, ui_updates[i]);
+
+        gsm->search_action_label = nullptr;
+        gsm->search_action_name = ui_updates[i];
+
+        if (gnc_menubar_model_find_item (priv->menubar_model, gsm))
+            g_menu_insert_section (G_MENU(gsm->model), gsm->index, NULL, G_MENU_MODEL(menu_model_part));
+        else
+            PERR("Could not find '%s' in menu model", ui_updates[i]);
+    }
+    g_free (gsm);
+    g_object_unref (builder);
+}
+
+
 /*  Add a set of actions to the specified window.  This function
  *  should not need to be called directly by plugin implementors.
  *  Correctly assigning values to the GncPluginClass fields during
@@ -3483,24 +3530,17 @@ gnc_main_window_merge_actions (GncMainWindow *window,
                                guint n_actions,
                                GncDisplayItem *display_items,
                                guint n_display_items,
-                               const gchar *filename,
+                               const gchar **ui_updates,
+                               const gchar *ui_filename,
                                gpointer user_data)
 {
     GncMainWindowPrivate *priv;
     GncMainWindowActionData *data;
-    GError *error = nullptr;
-    const gchar *resource = "/org/gnucash/";
-    gchar *pathname;
 
     g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
     g_return_if_fail (group_name != nullptr);
     g_return_if_fail (actions != nullptr);
     g_return_if_fail (n_actions > 0);
-    g_return_if_fail (filename != nullptr);
-
-    pathname = g_strconcat (resource, filename, nullptr);
-    if (pathname == nullptr)
-        return;
 
     data = g_new0 (GncMainWindowActionData, 1);
     data->window = window;
@@ -3517,6 +3557,8 @@ gnc_main_window_merge_actions (GncMainWindow *window,
 
     gtk_widget_insert_action_group (GTK_WIDGET(window), group_name,
                                     G_ACTION_GROUP(entry->simple_action_group));
+
+    update_menu_model (window, ui_filename, ui_updates);
 
 
 //FIXMEb this is where I might need to add GtkBuilder????
@@ -3594,7 +3636,7 @@ gnc_main_window_actions_updated (GncMainWindow *window)
 //    g_object_unref(force);
 }
 
- 
+
 struct group_iterate
 {
     GAction *action;

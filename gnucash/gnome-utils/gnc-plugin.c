@@ -147,6 +147,7 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
         gnc_main_window_merge_actions (window, klass->actions_name,
                                        klass->actionsb, klass->n_actionsb,
                                        klass->display_items, klass->n_display_items,
+                                       klass->ui_updates,
                                        klass->ui_filename, plugin);
 
         if (klass->important_actions)
