@@ -19,6 +19,7 @@
     <file>ui/gnc-plugin-report-system.ui</file>
 
     <file>ui/gnc-plugin-page-account-tree.ui</file>
+    <file>ui/gnc-plugin-page-budget.ui</file>
     <file>ui/gnc-plugin-page-register.ui</file>
 
     <file>ui/gnc-plugin-ofx.ui</file>

@@ -120,6 +120,7 @@ static void gnc_plugin_page_budget_cmd_allperiods_budget (GSimpleAction *simple,
 static void gnc_plugin_page_budget_cmd_refresh (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_plugin_page_budget_cmd_budget_note (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_plugin_page_budget_cmd_budget_report (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_page_budget_cmd_edit_tax_options (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 static void allperiods_budget_helper (GtkTreeModel *model, GtkTreePath *path,
                                       GtkTreeIter *iter, gpointer data);
@@ -137,6 +138,7 @@ static GActionEntry gnc_plugin_page_budget_actions [] =
     { "BudgetReportAction", gnc_plugin_page_budget_cmd_budget_report, NULL, NULL, NULL },
     { "ViewFilterByAction", gnc_plugin_page_budget_cmd_view_filter_by, NULL, NULL, NULL },
     { "ViewRefreshAction", gnc_plugin_page_budget_cmd_refresh, NULL, NULL, NULL },
+    { "EditTaxOptionsAction", gnc_plugin_page_budget_cmd_edit_tax_options, NULL, NULL, NULL },
 };
 static guint gnc_plugin_page_budget_n_actions = G_N_ELEMENTS(gnc_plugin_page_budget_actions);
 
@@ -192,6 +194,18 @@ static GncDisplayItem gnc_plugin_page_budget_display_items [] =
 };
 /** The number of display items provided by this plugin. */
 static guint gnc_plugin_page_budget_n_display_items = G_N_ELEMENTS(gnc_plugin_page_budget_display_items);
+
+/** The default menu items that need to be add to the menu */
+static const gchar *gnc_plugin_load_ui_items [] =
+{
+    "EditPlaceholder1",
+    "EditPlaceholder3",
+    "EditPlaceholder5",
+    "EditPlaceholder6",
+    "ViewPlaceholder1",
+    "ViewPlaceholder4",
+    NULL,
+};
 
 static const gchar *writeable_actions[] =
 {
@@ -418,6 +432,16 @@ gnc_plugin_page_budget_focus_widget (GncPluginPage *budget_plugin_page)
         GncPluginPageBudgetPrivate *priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(budget_plugin_page);
         GncBudgetView *budget_view = priv->budget_view;
         GtkWidget *account_view = gnc_budget_view_get_account_tree_view (budget_view);
+
+        /* Disable the Transaction Menu */
+        GAction *action = gnc_main_window_find_action (GNC_MAIN_WINDOW(budget_plugin_page->window), "TransactionAction");
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
+        /* Disable the Schedule menu */
+        action = gnc_main_window_find_action (GNC_MAIN_WINDOW(budget_plugin_page->window), "ScheduledAction");
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
+
+        gnc_main_window_update_menu (GNC_MAIN_WINDOW(budget_plugin_page->window), budget_plugin_page,
+                                     gnc_plugin_load_ui_items);
 
         if (!gtk_widget_is_focus (GTK_WIDGET(account_view)))
             gtk_widget_grab_focus (GTK_WIDGET(account_view));
@@ -810,6 +834,38 @@ gnc_plugin_page_budget_cmd_delete_budget (GSimpleAction *simple,
 
 }
 
+
+static void
+gnc_plugin_page_budget_cmd_edit_tax_options (GSimpleAction *simple,
+                                             GVariant      *parameter,
+                                             gpointer       user_data)
+{
+    GncPluginPageBudget *page = user_data;
+    GncPluginPageBudgetPrivate *priv;
+    GtkTreeSelection *selection;
+    Account *account = NULL;
+    GtkWidget *window;
+
+    page = GNC_PLUGIN_PAGE_BUDGET(page);
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_BUDGET(page));
+
+    ENTER ("(action %p, page %p)", simple, page);
+    priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
+
+    selection = gnc_budget_view_get_selection (priv->budget_view);
+    window = GNC_PLUGIN_PAGE(page)->window;
+
+    if (gtk_tree_selection_count_selected_rows (selection) == 1)
+    {
+        GList *acc_list = gnc_budget_view_get_selected_accounts (priv->budget_view);
+        GList *node = g_list_first (acc_list);
+        account = acc_list->data;
+        g_list_free (acc_list);
+    }
+    gnc_tax_info_dialog (window, account);
+    LEAVE (" ");
+}
 
 /******************************/
 /*       Options Dialog       */
