@@ -23,7 +23,6 @@ set (app_utils_HEADERS
   gnc-accounting-period.h
   gnc-addr-quickfill.h
   gnc-entry-quickfill.h
-  gnc-euro.h
   gnc-exp-parser.h
   gnc-gsettings.h
   gnc-help-utils.h
@@ -60,7 +59,6 @@ set (app_utils_SOURCES
   gnc-accounting-period.c
   gnc-addr-quickfill.c
   gnc-entry-quickfill.c
-  gnc-euro.c
   gnc-exp-parser.c
   gnc-gsettings.cpp
   gnc-helpers.c
