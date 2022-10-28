@@ -482,7 +482,7 @@
         </item>
         <item>
           <attribute name="label" translatable="no">Window0Action</attribute>
-          <attribute name="action">mainwin.Window0Action</attribute>
+          <attribute name="action">mainwin.WindowAction</attribute>
           <attribute name="target" type="i">0</attribute>
           <attribute name="hidden-when">action-disabled</attribute>
         </item>

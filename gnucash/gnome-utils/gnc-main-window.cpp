@@ -119,7 +119,6 @@ enum
 #define GNC_PREF_TAB_OPEN_ADJACENT    "tab-open-adjacent"
 
 #define GNC_MAIN_WINDOW_NAME "GncMainWindow"
-#define GNC_MAIN_WINDOW_MAX_NUMBER 10
 
 #define DIALOG_BOOK_OPTIONS_CM_CLASS "dialog-book-options"
 
@@ -135,6 +134,9 @@ enum
  *  @return TRUE if gnc_gui_refresh_all should be called; otherwise FALSE.
  **/
 extern gboolean gnc_book_options_dialog_apply_helper(GncOptionDB * options);
+
+/** Max number of windows allowed */
+constexpr auto gnc_main_window_max_number {10};
 
 /* Static Globals *******************************************************/
 
@@ -348,7 +350,7 @@ static GActionEntry gnc_menu_actions [] =
     { "WindowNewAction", gnc_main_window_cmd_window_new, nullptr, nullptr, nullptr },
     { "WindowMovePageAction", gnc_main_window_cmd_window_move_page, nullptr, nullptr, nullptr },
 #ifndef MAC_INTEGRATION
-    { "Window0Action",  gnc_main_window_cmd_window_raise, "i", "@i 0", radio_change_state },
+    { "WindowAction",  gnc_main_window_cmd_window_raise, "i", "@i 0", radio_change_state },
 #endif
     { "HelpTutorialAction", gnc_main_window_cmd_help_tutorial, nullptr, nullptr, nullptr },
     { "HelpContentsAction", gnc_main_window_cmd_help_contents, nullptr, nullptr, nullptr },
@@ -1804,8 +1806,9 @@ gnc_main_window_update_one_menu_action (GncMainWindow *window,
     GMenuItem *item;
     gint pos;
 
-    ENTER("window %p, action %s, label %s, visible %d", window,
-          data->action_name, data->label, data->visible);
+    ENTER("window %p, action %s, label %s, index %d, visible %d", window,
+          data->action_name, data->label, data->index, data->visible);
+
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
     gsm->search_action_label = nullptr;
@@ -1830,7 +1833,7 @@ gnc_main_window_update_one_menu_action (GncMainWindow *window,
         return;
     }
 
-    item = g_menu_item_new (data->label, "mainwin.Window0Action");
+    item = g_menu_item_new (data->label, "mainwin.WindowAction");
     g_menu_item_set_attribute (item, "target", "i", data->index);
 
     if (pos < g_menu_model_get_n_items (gsm->model))
@@ -1866,16 +1869,16 @@ gnc_main_window_update_radio_button (GncMainWindow *window)
     /* Show the new entry in all windows. */
     index = g_list_index (active_windows, window);
 
-    if (index >= GNC_MAIN_WINDOW_MAX_NUMBER)
+    if (index >= gnc_main_window_max_number)
     {
-        LEAVE("window %" G_GSIZE_FORMAT ", only %d actions", index, GNC_MAIN_WINDOW_MAX_NUMBER);
+        LEAVE("window %" G_GSIZE_FORMAT ", only %d actions", index, gnc_main_window_max_number);
         return;
     }
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
     action = g_action_map_lookup_action (G_ACTION_MAP(priv->simple_action_group),
-                                         "Window0Action");
+                                         "WindowAction");
 
     /* Block the signal so as not to affect window ordering (top to
      * bottom) on the screen */
@@ -1915,9 +1918,9 @@ gnc_main_window_update_menu_item (GncMainWindow *window)
 
     index = g_list_index (active_windows, window);
 
-    if (index >= GNC_MAIN_WINDOW_MAX_NUMBER)
+    if (index >= gnc_main_window_max_number)
     {
-        LEAVE("skip window %" G_GSIZE_FORMAT " (only %d entries)", index, GNC_MAIN_WINDOW_MAX_NUMBER);
+        LEAVE("skip window %" G_GSIZE_FORMAT " (only %d entries)", index, gnc_main_window_max_number);
         return;
     }
 
@@ -1926,7 +1929,7 @@ gnc_main_window_update_menu_item (GncMainWindow *window)
     strings = g_strsplit (title, "_", 0);
     g_free (title);
     expanded = g_strjoinv ("__", strings);
-    if (index < GNC_MAIN_WINDOW_MAX_NUMBER)
+    if (index < gnc_main_window_max_number)
     {
         data.label = g_strdup_printf ("_%" G_GSIZE_FORMAT " %s", (index + 1) % 10, expanded);
         g_free (expanded);
@@ -1938,14 +1941,14 @@ gnc_main_window_update_menu_item (GncMainWindow *window)
     g_strfreev (strings);
 
     data.visible = TRUE;
-    data.action_name = g_strdup_printf ("Window%" G_GSIZE_FORMAT "Action", index);
+//    data.action_name = g_strdup_printf ("Window%" G_GSIZE_FORMAT "Action", index);
     data.index = index;
 
     g_list_foreach (active_windows,
                     (GFunc)gnc_main_window_update_one_menu_action,
                     &data);
 
-    g_free (data.action_name);
+//    g_free (data.action_name);
     g_free (data.label);
 
     LEAVE(" ");
@@ -1978,8 +1981,8 @@ gnc_main_window_update_all_menu_items (void)
 
     /* Now hide any entries that aren't being used. */
     data.visible = FALSE;
-    // need i to descend from GNC_MAIN_WINDOW_MAX_NUMBER
-    for (gsize i = GNC_MAIN_WINDOW_MAX_NUMBER - 1; i > 0 && i >= g_list_length (active_windows); i--)
+    // need i to descend from gnc_main_window_max_number
+    for (gsize i = gnc_main_window_max_number - 1; i > 0 && i >= g_list_length (active_windows); i--)
     {
         data.index = i;
         data.action_name = g_strdup_printf ("Window%dAction", data.index);
@@ -4987,6 +4990,12 @@ gnc_main_window_cmd_window_move_page (GSimpleAction *simple,
         LEAVE("invalid notebook_page");
         return;
     }
+
+#ifndef MAC_INTEGRATION
+    if (gnc_list_length_cmp (active_windows, gnc_main_window_max_number) == 0)
+        gnc_info_dialog (GTK_WINDOW(window), "%s",
+            _("The maximum number of window menu entries reached, no more entries will be added."));
+#endif /* !MAC_INTEGRATION */
 
     notebook = GTK_NOTEBOOK (priv->notebook);
     tab_widget = gtk_notebook_get_tab_label (notebook, page->notebook_page);
