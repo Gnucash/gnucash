@@ -765,14 +765,14 @@ gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, g
     g_simple_action_set_enabled (G_SIMPLE_ACTION(action), TRUE);
 
     simple_action_group = gnc_plugin_page_get_action_group (page);
-    gnc_plugin_update_actions (simple_action_group, posted_actions,
-                               "sensitive", is_posted);
-    gnc_plugin_update_actions (simple_action_group, unposted_actions,
-                               "sensitive", !is_posted);
-    gnc_plugin_update_actions (simple_action_group, can_unpost_actions,
-                               "sensitive", can_unpost);
-    gnc_plugin_update_actions (simple_action_group, invoice_book_readwrite_actions,
-                               "sensitive", !is_readonly);
+    gnc_plugin_set_actions_enabled (simple_action_group, posted_actions,
+                                    is_posted);
+    gnc_plugin_set_actions_enabled (simple_action_group, unposted_actions,
+                                    !is_posted);
+    gnc_plugin_set_actions_enabled (simple_action_group, can_unpost_actions,
+                                    can_unpost);
+    gnc_plugin_set_actions_enabled (simple_action_group, invoice_book_readwrite_actions,
+                                    !is_readonly);
 
     /* update the action labels and tooltips */
     gnc_plugin_page_invoice_action_update (page, label_list, tooltip_list);

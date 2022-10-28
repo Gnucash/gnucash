@@ -1385,8 +1385,8 @@ gnc_plugin_page_report_constr_init (GncPluginPageReport *plugin_page, gint repor
                                      num_report_actions,
                                      plugin_page);
 
-    gnc_plugin_update_actions (simple_action_group, initially_insensitive_actions,
-                               "sensitive", FALSE);
+    gnc_plugin_set_actions_enabled (simple_action_group, initially_insensitive_actions,
+                                    FALSE);
 }
 
 GncPluginPage*

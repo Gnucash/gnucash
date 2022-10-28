@@ -225,9 +225,9 @@ gnc_plugin_basic_commands_add_to_window (GncPlugin *plugin,
     GSimpleActionGroup *simple_action_group =
         gnc_main_window_get_action_group (window, PLUGIN_ACTIONS_NAME);
 
-    gnc_plugin_update_actions (simple_action_group,
-                               gnc_plugin_initially_insensitive_actions,
-                               "sensitive", FALSE);
+    gnc_plugin_set_actions_enabled (simple_action_group,
+                                    gnc_plugin_initially_insensitive_actions,
+                                    FALSE);
 
     g_signal_connect (window, "page_changed",
                       G_CALLBACK(gnc_plugin_basic_commands_main_window_page_changed),
@@ -255,10 +255,10 @@ static void update_inactive_actions (GncPluginPage *plugin_page)
     g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(simple_action_group));
 
     /* Set the action's sensitivity */
-    gnc_plugin_update_actions (simple_action_group, readwrite_only_active_actions,
-                               "sensitive", is_readwrite);
-    gnc_plugin_update_actions (simple_action_group, dirty_only_active_actions,
-                               "sensitive", is_dirty);
+    gnc_plugin_set_actions_enabled (simple_action_group, readwrite_only_active_actions,
+                                    is_readwrite);
+    gnc_plugin_set_actions_enabled (simple_action_group, dirty_only_active_actions,
+                                    is_dirty);
 }
 
 static void

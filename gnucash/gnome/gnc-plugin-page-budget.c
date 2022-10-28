@@ -376,8 +376,8 @@ gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page)
                                      plugin_page);
 
     if (qof_book_is_readonly (gnc_get_current_book()))
-        gnc_plugin_update_actions (simple_action_group, writeable_actions,
-                                   "sensitive", FALSE);
+        gnc_plugin_set_actions_enabled (simple_action_group, writeable_actions,
+                                        FALSE);
 
     /* Visible types */
     priv->fd.visible_types = -1; /* Start with all types */
@@ -755,8 +755,8 @@ gppb_selection_changed_cb (GtkTreeSelection *selection,
     }
 
     simple_action_group = gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE(page));
-    gnc_plugin_update_actions (simple_action_group, actions_requiring_account,
-                               "sensitive", sensitive);
+    gnc_plugin_set_actions_enabled (simple_action_group, actions_requiring_account,
+                                    sensitive);
 }
 #endif
 
