@@ -91,9 +91,6 @@ static guint signals[LAST_SIGNAL] = { 0 };
 typedef struct _GncPluginPagePrivate
 {
     /** The group of all actions provided by this plugin. */
-    GtkActionGroup *action_group;
-    GtkUIManager *ui_merge;
-    guint merge_id;
     char *ui_description;
 
     GtkBuilder *builder; //FIXMEb added
@@ -258,25 +255,8 @@ gnc_plugin_page_recreate_page(GtkWidget *window,
 }
 
 
-/*  Add the actions for a content page to the specified window. */
 void
 gnc_plugin_page_merge_actions (GncPluginPage *page,
-                               GtkUIManager *ui_merge)
-{
-    GncPluginPagePrivate *priv;
-
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
-
-    priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
-    priv->ui_merge = ui_merge;
-    gtk_action_group_set_sensitive (priv->action_group, TRUE);
-    priv->merge_id = gnc_plugin_add_actions (priv->ui_merge,
-                                             priv->action_group,
-                                             priv->ui_description);
-}
-
-void
-gnc_plugin_page_merge_actionsb (GncPluginPage *page,
                                 GtkWidget *window)
 {
     GncPluginPagePrivate *priv;
@@ -301,28 +281,6 @@ gnc_plugin_page_merge_actionsb (GncPluginPage *page,
         g_error_free (error);
     }
     g_free (resource);
-}
-
-
-/*  Remove the actions for a content page from the specified window. */
-void
-gnc_plugin_page_unmerge_actions (GncPluginPage *page,
-                                 GtkUIManager *ui_merge)
-{
-    GncPluginPagePrivate *priv;
-
-    priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
-
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
-    g_return_if_fail (priv->merge_id != 0);
-    g_return_if_fail (priv->action_group != NULL);
-
-    gtk_ui_manager_remove_ui (ui_merge, priv->merge_id);
-    gtk_action_group_set_sensitive (priv->action_group, FALSE);
-    gtk_ui_manager_remove_action_group (ui_merge, priv->action_group);
-
-    priv->ui_merge = NULL;
-    priv->merge_id = 0;
 }
 
 
@@ -472,28 +430,6 @@ gnc_plugin_page_class_init (GncPluginPageClass *klass)
                           "describes this pages menus and toolbars.",
                           NULL,
                           G_PARAM_READWRITE));
-
-    g_object_class_install_property
-    (gobject_class,
-     PROP_UI_MERGE,
-     g_param_spec_object ("ui-merge",
-                          "UI Merge",
-                          "A pointer to the GtkUIManager object that "
-                          "represents this pages menu hierarchy.",
-                          GTK_TYPE_UI_MANAGER,
-                          G_PARAM_READABLE));
-
-    g_object_class_install_property
-    (gobject_class,
-     PROP_ACTION_GROUP,
-     g_param_spec_object ("action-group",
-                          "Action Group",
-                          "A pointer to the GtkActionGroup object that "
-                          "represents this pages available menu/toolbar "
-                          "actions.",
-                          GTK_TYPE_ACTION_GROUP,
-                          G_PARAM_READABLE));
-
 
 
 
@@ -670,12 +606,6 @@ gnc_plugin_page_get_property (GObject     *object,
         break;
     case PROP_UI_DESCRIPTION:
         g_value_set_string (value, priv->ui_description);
-        break;
-    case PROP_UI_MERGE:
-        g_value_take_object (value, priv->ui_merge);
-        break;
-    case PROP_ACTION_GROUP:
-        g_value_take_object (value, priv->action_group);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);

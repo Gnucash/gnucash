@@ -268,24 +268,6 @@ void gnc_plugin_set_actions_enabled (GSimpleActionGroup *simple_action_group,
                                      const gchar **action_names,
                                      gboolean enable); //FIXMEb added
 
-/** Load a new set of actions into an existing UI.  The actions from
- *  the provided group will be merged into the pre-existing ui, as
- *  directed by the specified file.
- *
- *  @param ui_merge A pointer to the UI manager data structure for a
- *  window.
- *
- *  @param action_group The set of actions provided by a given plugin.
- *
- *  @param filename The name of the ui description file.  This file
- *  name will be searched for in the ui directory.
- *
- *  @return The merge_id number for the newly merged UI.  If an error
- *  occurred, the return value is 0.
- */
-gint gnc_plugin_add_actions (GtkUIManager *ui_merge,
-                             GtkActionGroup *action_group,
-                             const gchar *filename);
 G_END_DECLS
 
 #endif /* __GNC_PLUGIN_H */

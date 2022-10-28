@@ -128,8 +128,6 @@ gnc_embedded_window_open_page (GncEmbeddedWindow *window,
 
     gtk_box_pack_end(GTK_BOX(window), page->notebook_page, TRUE, TRUE, 2);
     gnc_plugin_page_inserted (page);
-
-//FIXMEb    gnc_plugin_page_merge_actions (page, window->ui_merge);
     LEAVE(" ");
 }
 
@@ -157,9 +155,6 @@ gnc_embedded_window_close_page (GncEmbeddedWindow *window,
     gtk_container_remove (GTK_CONTAINER(window), GTK_WIDGET(page->notebook_page));
     priv->page = NULL;
     gnc_plugin_page_removed (page);
-
-//FIXMEb    gnc_plugin_page_unmerge_actions (page, window->ui_merge);
-//    gtk_ui_manager_ensure_update (window->ui_merge);
 
     gnc_plugin_page_destroy_widget (page);
     g_object_unref(page);
