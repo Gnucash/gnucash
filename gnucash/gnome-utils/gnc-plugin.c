@@ -197,7 +197,7 @@ gnc_plugin_remove_from_window (GncPlugin *plugin,
     if (klass->actions_name && !window->just_plugin_prefs)
     {
         DEBUG ("%s: %d actions to unmerge",
-               klass->actions_name, (klass->n_actions + klass->n_toggle_actions));
+               klass->actions_name, (klass->n_actions));
         gnc_main_window_unmerge_actions (window, klass->actions_name);
     }
     LEAVE ("");

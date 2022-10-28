@@ -135,11 +135,6 @@ typedef struct
     GtkActionEntry *actions;
     /** The number of actions in the actions array. */
     guint n_actions;
-    /** An array of toggle actions that should automatically be added to
-     *  any GnuCash "main" content window that is opened. */
-    GtkToggleActionEntry *toggle_actions;
-    /** The number of toggle actions in the toggle actions array. */
-    guint n_toggle_actions;
     /** The relative name of the XML file describing the
      *  menu/toolbar action items. */
     const gchar *ui_filename;
