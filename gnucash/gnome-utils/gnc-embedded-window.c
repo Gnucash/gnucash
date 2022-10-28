@@ -311,10 +311,6 @@ gnc_embedded_window_setup_window (GncEmbeddedWindow *window)
     gtk_widget_show (priv->statusbar);
     gtk_box_pack_end (GTK_BOX (window), priv->statusbar, FALSE, TRUE, 0);
 
-    /* Use the "connect-proxy" signal for tooltip display in the status bar */
-//FIXMEb    g_signal_connect (G_OBJECT (window->ui_merge), "connect-proxy",
-//                      G_CALLBACK (gnc_window_connect_proxy), priv->statusbar);
-
     priv->simple_action_group = NULL;
     LEAVE(" ");
 }

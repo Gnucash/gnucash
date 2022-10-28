@@ -3793,6 +3793,9 @@ gnc_main_window_update_toolbar (GncMainWindow *window, GncPluginPage *page,
         gtk_widget_set_visible (priv->toolbar, g_variant_get_boolean (state));
         g_variant_unref (state);
     }
+
+    // add tooltip redirect call backs
+    gnc_plugin_add_toolbar_tooltip_callbacks (priv->toolbar, priv->statusbar);
 }
 
 

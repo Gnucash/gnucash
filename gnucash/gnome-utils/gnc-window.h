@@ -83,23 +83,8 @@ GtkWidget     *gnc_window_get_progressbar (GncWindow *window);
 void           gnc_window_show_progress (const char *message, double percentage);
 GtkWidget     *gnc_window_get_menubar (GncWindow *window);
 GtkWidget     *gnc_window_get_toolbar (GncWindow *window);
+GtkWidget     *gnc_window_get_statusbar (GncWindow *window);
 GMenuModel    *gnc_window_get_menubar_model (GncWindow *window);
-
-/** This callback functions will set the statusbar text to the
- * "tooltip" property of the currently selected GtkAction
- *
- *  @param merge A pointer to the ui manager
- *
- *  @param action A pointer to the action
- *
- *  @param proxy A pointer to the proxy
- *
- *  @param statusbar A pointer to the statusbar widget
- */
-//FIXMEbvoid           gnc_window_connect_proxy (GtkUIManager *merge,
-//                                         GAction      *action,
-//                                         GtkWidget    *proxy,
-//                                         GtkWidget    *statusbar);
 
 G_END_DECLS
 

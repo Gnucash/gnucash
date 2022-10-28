@@ -838,3 +838,68 @@ gnc_menubar_model_remove_items_with_attrib (GMenuModel *menu_model, const gchar 
     g_list_foreach (remove_list, (GFunc)remove_items, NULL);
     g_list_free (remove_list);
 }
+
+static void
+statusbar_push (GtkWidget *statusbar, const gchar *text)
+{
+    gtk_statusbar_push (GTK_STATUSBAR(statusbar), 0,
+                        text ? text : " ");
+}
+
+static void
+statusbar_pop (GtkWidget *statusbar)
+{
+    gtk_statusbar_pop (GTK_STATUSBAR(statusbar), 0);
+}
+
+static gboolean
+tool_item_enter_event (GtkWidget *button, GdkEvent *event,
+                       gpointer user_data)
+{
+    GtkWidget *tool_item = gtk_widget_get_parent (button);
+    gchar *tooltip = gtk_widget_get_tooltip_text (tool_item);
+    statusbar_push (user_data, tooltip);
+    g_free (tooltip);
+    return FALSE;
+}
+
+static gboolean
+tool_item_leave_event (GtkWidget *button, GdkEvent *event,
+                       gpointer user_data)
+{
+    statusbar_pop (user_data);
+    return FALSE;
+}
+
+/** Setup the callbacks for tool bar items so the tooltip can be
+ *  displayed in the status bar.
+ *
+ *  @param tool_item The toolbar tool item widget.
+ *
+ *  @param statusbar The statusbar widget to display the tooltip.
+ */
+void
+gnc_tool_item_setup_tooltip_to_statusbar_callback (GtkWidget *tool_item,
+                                                   GtkWidget *statusbar)
+{
+    GtkWidget *child;
+
+    g_return_if_fail (tool_item != NULL);
+    g_return_if_fail (statusbar != NULL);
+
+    child = gtk_bin_get_child (GTK_BIN(tool_item));
+
+    gtk_widget_add_events (GTK_WIDGET(child),
+                           GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK
+                           | GDK_FOCUS_CHANGE_MASK);
+
+    g_signal_connect (child, "enter-notify-event",
+                      G_CALLBACK (tool_item_enter_event),
+                      statusbar);
+
+    g_signal_connect (child, "leave-notify-event",
+                      G_CALLBACK (tool_item_leave_event),
+                      statusbar);
+
+    g_object_set (G_OBJECT(tool_item), "has-tooltip", FALSE, NULL);
+}

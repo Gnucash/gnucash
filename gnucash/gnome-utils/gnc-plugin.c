@@ -261,5 +261,22 @@ gnc_plugin_set_actions_enabled (GSimpleActionGroup *simple_action_group,
     }
 }
 
+void
+gnc_plugin_add_toolbar_tooltip_callbacks (GtkWidget *toolbar, GtkWidget *statusbar)
+{
+    g_return_if_fail (GTK_IS_TOOLBAR(toolbar));
+    g_return_if_fail (GTK_IS_STATUSBAR(statusbar));
+
+    for (gint i = 0; i < gtk_toolbar_get_n_items (GTK_TOOLBAR(toolbar)); i++)
+    {
+        GtkToolItem *item = gtk_toolbar_get_nth_item (GTK_TOOLBAR(toolbar), i);
+
+        if (GTK_IS_ACTIONABLE(item))
+            gnc_tool_item_setup_tooltip_to_statusbar_callback (GTK_WIDGET(item), statusbar);
+    }
+}
+
+
+
 /** @} */
 /** @} */

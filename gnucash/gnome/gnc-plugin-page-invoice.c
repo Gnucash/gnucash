@@ -537,14 +537,17 @@ gnc_plugin_page_invoice_action_update (GncPluginPage *plugin_page,
         menu_item = gnc_main_window_menu_find_menu_item (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window),
                                                          tooltip_list[i].action_name);
 
-       if (menu_item)
-           gtk_widget_set_tooltip_text (GTK_WIDGET(menu_item), _(tooltip_list[i].label));
+        if (menu_item)
+            gtk_widget_set_tooltip_text (GTK_WIDGET(menu_item), _(tooltip_list[i].label));
 
-       tool_item = gnc_main_window_toolbar_find_menu_item (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window),
-                                                           tooltip_list[i].action_name);
+        tool_item = gnc_main_window_toolbar_find_menu_item (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window),
+                                                            tooltip_list[i].action_name);
 
-       if (tool_item)
-           gtk_widget_set_tooltip_text (GTK_WIDGET(tool_item), _(tooltip_list[i].label));
+        if (tool_item)
+        {
+            gtk_widget_set_tooltip_text (GTK_WIDGET(tool_item), _(tooltip_list[i].label));
+            g_object_set (G_OBJECT(tool_item), "has-tooltip", FALSE, NULL);
+        }
     }
 }
 

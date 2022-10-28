@@ -747,6 +747,14 @@ gnc_plugin_page_register_focus_widget (GncPluginPage* register_plugin_page)
                                          register_plugin_page,
                                          gnc_plugin_load_ui_items);
         }
+        else
+        {
+            GtkWidget *toolbar = gnc_window_get_toolbar (gnc_window);
+            GtkWidget *statusbar = gnc_window_get_statusbar (gnc_window);            
+
+            // add tooltip redirect call backs
+            gnc_plugin_add_toolbar_tooltip_callbacks (toolbar, statusbar);
+        }
 
         // setup any short toolbar names
         gnc_plugin_init_short_names (gnc_window_get_toolbar (gnc_window), toolbar_labels);
