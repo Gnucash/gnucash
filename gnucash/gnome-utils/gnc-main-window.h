@@ -91,6 +91,8 @@ typedef struct
                           GncPluginPage *page);
     void (*page_changed) (GncMainWindow *window,
                           GncPluginPage *page);
+    void (*menu_changed) (GncMainWindow *window,
+                          GncPluginPage *page); //FIXMEb added
 } GncMainWindowClass;
 
 typedef struct
@@ -297,6 +299,15 @@ void gnc_main_window_unmerge_actions (GncMainWindow *window,
  */
 void gnc_main_window_actions_updated (GncMainWindow *window);
 
+void gnc_main_window_menu_item_vis_by_action (GncMainWindow *window,
+                                              const gchar **action_names,
+                                              gboolean vis); //FIXMEb added
+
+GtkWidget *gnc_main_window_menu_find_menu_item (GncMainWindow *window,
+                                                const gchar *action_name); //FIXMEb added
+
+GtkWidget * gnc_main_window_toolbar_find_menu_item (GncMainWindow *window,
+                                                    const gchar *action_name); //FIXMEb added
 
 /** Retrieve a specific set of user interface actions from a window.
  *  This function can be used to get an group of action to be
@@ -443,6 +454,9 @@ GtkWidget *gnc_main_window_get_menu (GncMainWindow *window); //FIXMEb added
 GMenuModel *gnc_main_window_get_menu_model (GncMainWindow *window); //FIXMEb added
 
 void gnc_main_window_update_toolbar (GncMainWindow *window, GncPluginPage *page); //FIXMEb added
+
+void gnc_main_window_update_menu (GncMainWindow *window, GncPluginPage *page,
+                                  const gchar **ui_updates); //FIXMEb added
 
 /**
  * Shows all main windows.

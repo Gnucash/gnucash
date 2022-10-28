@@ -371,6 +371,20 @@
           <attribute name="hidden-when">action-disabled</attribute>
         </item>
       </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.BusinessPlaceholder2</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.BusinessPlaceholder3</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
     </submenu>
 
     <submenu>

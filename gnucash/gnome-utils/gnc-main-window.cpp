@@ -95,6 +95,7 @@ enum
 {
     PAGE_ADDED,
     PAGE_CHANGED,
+    MENU_CHANGED, //FIXMEb added
     LAST_SIGNAL
 };
 
@@ -266,6 +267,13 @@ typedef struct GncMainWindowPrivate
     /** Set when restoring plugin pages */
     gboolean restoring_pages;
 
+    const gchar   *previous_plugin_page_name; //FIXMEb added
+    const gchar   *previous_menu_qualifier; //FIXMEb added
+    GtkAccelGroup *previous_plugin_page_accel_group; //FIXMEb added
+
+    GHashTable    *display_item_hash; //FIXMEb added
+    gint           num_item_q; //FIXMEb temp added
+
 } GncMainWindowPrivate;
 
 GNC_DEFINE_TYPE_WITH_CODE(GncMainWindow, gnc_main_window, GTK_TYPE_WINDOW,
@@ -329,6 +337,8 @@ static GActionEntry gnc_menu_actions [] =
     { "ActionsForgetWarningsAction", gnc_main_window_cmd_actions_reset_warnings, nullptr, nullptr, nullptr },
     { "ActionsRenamePageAction", gnc_main_window_cmd_actions_rename_page, nullptr, nullptr, nullptr },
 
+    { "TransactionAction", nullptr, nullptr, nullptr, nullptr },
+
     { "ViewSortByAction", nullptr, nullptr, nullptr, nullptr },
     { "ViewFilterByAction", nullptr, nullptr, nullptr, nullptr },
     { "ViewRefreshAction", gnc_main_window_cmd_view_refresh, nullptr, nullptr, nullptr },
@@ -336,6 +346,8 @@ static GActionEntry gnc_menu_actions [] =
     { "ViewSummaryAction", gnc_main_window_cmd_view_summary, nullptr, "true", toggle_change_state },
     { "ViewStatusbarAction", gnc_main_window_cmd_view_statusbar, nullptr, "true", toggle_change_state },
     { "ViewTabPositionAction",  gnc_main_window_cmd_view_tab_position, "i", "@i 0", radio_change_state },
+
+    { "ScheduledAction", nullptr, nullptr, nullptr, nullptr },
 
     { "WindowNewAction", gnc_main_window_cmd_window_new, nullptr, nullptr, nullptr },
     { "WindowMovePageAction", gnc_main_window_cmd_window_move_page, nullptr, nullptr, nullptr },
@@ -703,6 +715,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     gchar *window_group;
     gsize page_start, page_count, i;
     GError *error = nullptr;
+    GtkAccelGroup *accel_group = gtk_accel_group_new ();
 
     /* Setup */
     ENTER("window %p, data %p (key file %p, window %d)",
@@ -843,6 +856,11 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     {
         gtk_window_maximize(GTK_WINDOW(window));
     }
+
+//FIXMEb not sure if this is in the right place
+    // need to add the accelerator keys
+    gtk_window_add_accel_group (GTK_WINDOW(window), accel_group);
+    gnc_add_accelerator_keys_for_menu (GTK_WIDGET(priv->menubar), accel_group);
 
     /* Common view menu items */
     action = gnc_main_window_find_action (window, "ViewToolbarAction");
@@ -2814,6 +2832,24 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
                       G_TYPE_NONE, 1,
                       G_TYPE_OBJECT);
 
+    /**
+     * GncMainWindow::menu_changed:
+     * @param window: the #GncMainWindow
+     * @param page: the #GncPluginPage
+     *
+     * The "menu_changed" signal is emitted when the menu has been
+     * changed. This can be used to adjust other menu actions.
+     */
+    main_window_signals[MENU_CHANGED] =
+        g_signal_new ("menu_changed",
+                      G_OBJECT_CLASS_TYPE (object_class),
+                      G_SIGNAL_RUN_FIRST,
+                      G_STRUCT_OFFSET (GncMainWindowClass, menu_changed),
+                      nullptr, nullptr,
+                      g_cclosure_marshal_VOID__OBJECT,
+                      G_TYPE_NONE, 1,
+                      G_TYPE_OBJECT);
+
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
                            GNC_PREF_SHOW_CLOSE_BUTTON,
                            (gpointer)gnc_main_window_update_tab_close,
@@ -2857,6 +2893,14 @@ gnc_main_window_init (GncMainWindow *window, void *data)
         qof_event_register_handler(gnc_main_window_event_handler, window);
 
     priv->restoring_pages = FALSE;
+
+    priv->display_item_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, nullptr);
+    priv->num_item_q = 0; //FIXMEb temp addded
+
+
+    priv->previous_plugin_page_name = nullptr;
+    priv->previous_menu_qualifier = nullptr;
+    priv->previous_plugin_page_accel_group = nullptr;
 
     /* Get the show_color_tabs value preference */
     priv->show_color_tabs = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_COLOR);
@@ -2994,6 +3038,8 @@ gnc_main_window_destroy (GtkWidget *widget)
 
         g_hash_table_destroy (priv->merged_actions_table);
         priv->merged_actions_table = nullptr;
+
+        g_hash_table_destroy (priv->display_item_hash);
 
         /* GncPluginManager stuff */
         manager = gnc_plugin_manager_get ();
@@ -3621,8 +3667,8 @@ gnc_main_window_merge_actions (GncMainWindow *window,
     gtk_widget_insert_action_group (GTK_WIDGET(window), group_name,
                                     G_ACTION_GROUP(entry->simple_action_group));
 
-    update_menu_model (window, ui_filename, ui_updates);
-
+    if (ui_filename)
+        update_menu_model (window, ui_filename, ui_updates);
 
 //FIXMEb this is where I might need to add GtkBuilder????
 
@@ -3793,6 +3839,226 @@ gnc_main_window_get_action_group (GncMainWindow *window,
     return entry->simple_action_group;
 }
 
+//FIXMEb##
+
+
+GtkWidget *
+gnc_main_window_toolbar_find_menu_item (GncMainWindow *window, const gchar *action_name)
+{
+    GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+    return gnc_find_toolbar_item (priv->toolbar, action_name);
+}
+
+GtkWidget *
+gnc_main_window_menu_find_menu_item (GncMainWindow *window, const gchar *action_name)
+{
+    GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+    GncMenuModelSearch *gsm = g_new0 (GncMenuModelSearch, 1);
+    GtkWidget *menu_item = GTK_WIDGET(g_hash_table_lookup (priv->display_item_hash, action_name));
+
+    priv->num_item_q++; //FIXMEb temp added
+
+    if (!menu_item)
+    {
+        gsm->search_action_label = nullptr;
+        gsm->search_action_name = action_name;
+
+        if (gnc_menubar_model_find_item (priv->menubar_model, gsm))
+        {
+            menu_item = gnc_find_menu_item_by_action_label (priv->menubar,
+                                                            gsm->search_action_label);
+
+            g_hash_table_insert (priv->display_item_hash, g_strdup (action_name), menu_item);
+        }
+    }
+    g_free (gsm);
+    return menu_item;
+}
+
+
+void
+gnc_main_window_menu_item_vis_by_action (GncMainWindow *window,
+                                         const gchar **action_names,
+                                         gboolean vis)
+{
+    GncMainWindowPrivate *priv;
+
+    g_return_if_fail (GNC_IS_MAIN_WINDOW(window));
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+    for (gint i = 0; action_names[i]; i++)
+    {
+        GtkWidget *tool_item = gnc_find_toolbar_item (priv->toolbar, action_names[i]);
+        GtkWidget *menu_item = gnc_main_window_menu_find_menu_item (window, action_names[i]);
+
+        if (menu_item)
+        {
+            PINFO("Found menu_item %p with action name '%s', seting vis to '%s'",
+                    menu_item, action_names[i], vis ? "true" : "false");
+            gtk_widget_set_visible (menu_item, vis);
+        }
+        else
+        {
+            PINFO("Did not find menu_item with action name '%s' to set vis '%s'", action_names[i], vis ? "true" : "false");
+        }
+
+        if (tool_item)
+        {
+            PINFO("Found tool_item %p with action name '%s', seting vis to '%s'",
+                    tool_item, action_names[i], vis ? "true" : "false");
+            gtk_widget_set_visible (tool_item, vis);
+        }
+        else
+        {
+            PINFO("Did not find tool_item with action name '%s' to set vis '%s'\n", action_names[i], vis ? "true" : "false");
+        }
+    }
+}
+
+
+static void
+gnc_main_window_update_toolbar (GncMainWindow *window, GncPluginPage *page,
+                                const gchar *toolbar_qualifier)
+{
+    GncMainWindowPrivate *priv;
+    GtkBuilder *builder;
+    GAction *action = gnc_main_window_find_action (window, "ViewToolbarAction");
+
+    g_return_if_fail (GNC_IS_MAIN_WINDOW(window));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+    builder = gnc_plugin_page_get_builder (page);
+
+    if (builder)
+    {
+        gchar *toolbar_name;
+        gtk_container_remove (GTK_CONTAINER(priv->menu_dock), priv->toolbar);
+
+        if (toolbar_qualifier)
+            toolbar_name = g_strconcat ("mainwin-toolbar-", toolbar_qualifier, nullptr);
+        else
+            toolbar_name = g_strdup ("mainwin-toolbar");
+
+        priv->toolbar = (GtkWidget *)gtk_builder_get_object (builder, toolbar_name);
+
+        if (!priv->toolbar)
+            priv->toolbar = (GtkWidget *)gtk_builder_get_object (builder, "mainwin-toolbar");
+
+        g_object_set (priv->toolbar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
+        gtk_container_add (GTK_CONTAINER(priv->menu_dock), priv->toolbar);
+        g_free (toolbar_name);
+    }
+
+    // set visibility of toolbar
+    if (action)
+    {
+        GVariant *state = g_action_get_state (G_ACTION(action));
+        gtk_widget_set_visible (priv->toolbar, g_variant_get_boolean (state));
+        g_variant_unref (state);
+    }
+}
+
+
+void
+gnc_main_window_update_menu (GncMainWindow *window, GncPluginPage *page,
+                             const gchar **ui_updates)
+{
+    GncMainWindowPrivate *priv;
+    GtkAccelGroup *accel_group;
+    const gchar *plugin_page_actions_group_name;
+    GtkBuilder *builder;
+    const gchar *menu_qualifier;
+
+    GMenuModel *menu_model_part;
+    GncMenuModelSearch *gsm = g_new0 (GncMenuModelSearch, 1);
+
+
+    g_return_if_fail (GNC_IS_MAIN_WINDOW(window));
+    g_return_if_fail (page != nullptr);
+    g_return_if_fail (ui_updates != nullptr);
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+    builder = gnc_plugin_page_get_builder (page);
+
+    if (!builder)
+        return;
+
+    menu_qualifier = gnc_plugin_page_get_menu_qualifier (page);
+
+    plugin_page_actions_group_name = gnc_plugin_page_get_simple_action_group_name (page);
+
+    if (!plugin_page_actions_group_name)
+        return;
+
+    gtk_widget_insert_action_group (GTK_WIDGET(window), gnc_plugin_page_get_simple_action_group_name (page),
+                                    G_ACTION_GROUP(gnc_plugin_page_get_action_groupb (page)));
+
+    if ((g_strcmp0 (priv->previous_plugin_page_name,
+                    plugin_page_actions_group_name) == 0) &&
+        (g_strcmp0 (priv->previous_menu_qualifier,
+                    menu_qualifier) == 0))
+        return;
+
+    priv->previous_plugin_page_name = plugin_page_actions_group_name;
+    priv->previous_menu_qualifier = menu_qualifier;
+
+    gnc_main_window_update_toolbar (window, page, menu_qualifier);
+
+
+    PERR("Display Item Hash size %d", g_hash_table_size (priv->display_item_hash)); //FIXMEb temp added
+    PERR("Display Item Q %d", priv->num_item_q); //FIXMEb temp added
+
+    // reset hash table and remove added menu items
+    g_hash_table_remove_all (priv->display_item_hash);
+    gnc_menubar_model_remove_items_with_attrib (priv->menubar_model, "temp");
+    priv->num_item_q = 0; //FIXMEb temp added
+
+    for (gint i = 0; ui_updates[i]; i++)
+    {
+        gchar *menu_name;
+
+        if (menu_qualifier)
+            menu_name = g_strconcat (ui_updates[i], "-", menu_qualifier, nullptr);
+        else
+            menu_name = g_strdup (ui_updates[i]);
+
+        menu_model_part = (GMenuModel *)gtk_builder_get_object (builder, menu_name);
+
+        if (!menu_model_part)
+            menu_model_part = (GMenuModel *)gtk_builder_get_object (builder, ui_updates[i]);
+
+        gsm->search_action_label = nullptr;
+        gsm->search_action_name = ui_updates[i];
+
+        if (gnc_menubar_model_find_item (priv->menubar_model, gsm))
+        {
+            g_menu_insert_section (G_MENU(gsm->model), gsm->index, NULL, G_MENU_MODEL(menu_model_part));
+        }
+        else
+            PERR("Could not find '%s' in menu model", ui_updates[i]);
+
+        g_free (menu_name);
+    }
+
+    // remove existing accelerator group
+    if (priv->previous_plugin_page_accel_group)
+        gtk_window_remove_accel_group (GTK_WINDOW(window), priv->previous_plugin_page_accel_group);
+
+    priv->previous_plugin_page_accel_group = gnc_plugin_page_get_accel_group (page);
+
+    // need to add the accelerator keys
+    gnc_add_accelerator_keys_for_menu (priv->menubar, priv->previous_plugin_page_accel_group);
+    gtk_window_add_accel_group (GTK_WINDOW(window), priv->previous_plugin_page_accel_group);
+
+    // need to signal menu has been changed
+    g_signal_emit_by_name (window, "menu_changed", page);
+
+    g_free (gsm);
+}
 
 
 static void
@@ -3950,17 +4216,9 @@ static void
 gnc_main_window_init_menu_updaters (GncMainWindow *window)
 {
     GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-    GncMenuModelSearch *gsm = g_new0 (GncMenuModelSearch, 1);
     GtkWidget *edit_menu_item, *edit_menu;
 
-    gsm->search_action_label = nullptr;
-    gsm->search_action_name = "EditAction";
-
-    if (!gnc_menubar_model_find_item (priv->menubar_model, gsm))
-        return;
-
-    edit_menu_item = gnc_find_menu_item_by_action_label (priv->menubar,
-                                                         gsm->search_action_label);
+    edit_menu_item = gnc_main_window_menu_find_menu_item (window, "EditAction");
 
     edit_menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM(edit_menu_item));
 
@@ -3968,7 +4226,6 @@ gnc_main_window_init_menu_updaters (GncMainWindow *window)
                       G_CALLBACK(gnc_main_window_edit_menu_show_cb), window);
     g_signal_connect (edit_menu, "hide",
                       G_CALLBACK(gnc_main_window_edit_menu_hide_cb), window);
-    g_free (gsm);
 }
 
 static void
@@ -4149,9 +4406,9 @@ gnc_main_window_setup_window (GncMainWindow *window)
     gnc_plugin_update_actionsb (priv->simple_action_group,
                                always_insensitive_actions,
                                "sensitive", FALSE);
-    gnc_plugin_update_actionsb (priv->simple_action_group,
-                               always_hidden_actions,
-                               "visible", FALSE);
+
+    gnc_main_window_menu_item_vis_by_action (window,
+                                             always_hidden_actions, false);
 
 //FIXMEb    gnc_plugin_set_important_actions (priv->action_group,
 //                                      gnc_menu_important_actions);
@@ -5495,32 +5752,53 @@ gnc_main_window_set_progressbar_window (GncMainWindow *window)
  *  request).
  */
 static void
-do_popup_menu(GncPluginPage *page, GdkEventButton *event)
+do_popup_menu (GncPluginPage *page, GdkEventButton *event)
 {
-//    GtkUIManager *ui_merge;
     GtkBuilder *builder;
+    GMenuModel *menu_model;
     GtkWidget *menu;
+    const gchar *menu_qualifier;
+    gchar *popup_menu_name;
 
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE(page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
 
     ENTER("page %p, event %p", page, event);
-//FIXME    builder = gnc_plugin_page_get_builder (page);
-//I think this should be using builder here instaed of UIManager
-#ifdef skip
+
+    builder = gnc_plugin_page_get_builder (page);
+
+    menu_qualifier = gnc_plugin_page_get_menu_qualifier (page);
+
     if (builder == nullptr)
     {
         LEAVE("no builder");
         return;
     }
+    gtk_builder_set_translation_domain (builder, PROJECT_NAME);
 
-//    menu = gtk_ui_manager_get_widget(ui_merge, "/MainPopup");
+    if (menu_qualifier)
+        popup_menu_name = g_strconcat ("mainwin-popup-", menu_qualifier, NULL);
+    else
+        popup_menu_name = g_strdup ("mainwin-popup");
+
+    menu_model = (GMenuModel *)gtk_builder_get_object (builder, popup_menu_name);
+
+    if (!menu_model)
+        menu_model = (GMenuModel *)gtk_builder_get_object (builder, "mainwin-popup");
+
+    menu = gtk_menu_new_from_model (menu_model);
+
+//FIXMEb maybe i should save these once built to reuse
+
     if (!menu)
     {
         LEAVE("no menu");
         return;
     }
+    gtk_menu_attach_to_widget (GTK_MENU(menu), GTK_WIDGET(page->window), nullptr);
     gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *) event);
-#endif
+
+    g_free (popup_menu_name);
+
     LEAVE(" ");
 }
 
