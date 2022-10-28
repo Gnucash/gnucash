@@ -55,6 +55,35 @@ void gnc_style_context_get_border_color (GtkStyleContext *context,
 
 GtkWidget *gnc_get_dialog_widget_from_id (GtkDialog *dialog, const gchar *id);
 
+void gnc_disable_all_actions_in_group (GSimpleActionGroup *action_group);
+
+void gnc_add_accelerator_keys_for_menu (GtkWidget *menu, GtkAccelGroup *accel_group);
+
+GtkWidget *gnc_find_menu_item_by_action_name (GtkWidget *menu, const gchar *action_name);
+GtkWidget *gnc_find_menu_item_by_action_label (GtkWidget *menu, const gchar *action_label);
+GList *gnc_menu_get_items (GtkWidget *menu);
+
+GtkWidget *gnc_find_toolbar_item (GtkWidget *toolbar, const gchar *action_name);
+
+struct _GncMenuModelSearch
+{
+    const gchar *search_action_name;
+    const gchar *search_action_label;
+    const gchar *tooltip;
+    GMenuModel  *model;
+    gint         index;
+};
+
+typedef struct _GncMenuModelSearch GncMenuModelSearch;
+
+gboolean gnc_menubar_model_find_item (GMenuModel *menu_model, GncMenuModelSearch *gsm);
+GtkWidget *gnc_menubar_model_find_menu_item (GMenuModel *menu_model, GtkWidget *menu, const gchar *action_name);
+
+gboolean gnc_menubar_model_update_item (GMenuModel *menu_model, const gchar *action_name,
+                                        const gchar *label, const gchar *tooltip);
+
+void gnc_menubar_model_remove_items_with_attrib (GMenuModel *menu_model, const gchar *attrib);
+
 /** @} */
 
 #endif /* GNC_GTK_UTILS_H */
