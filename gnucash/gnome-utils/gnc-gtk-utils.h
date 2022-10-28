@@ -65,6 +65,9 @@ GList *gnc_menu_get_items (GtkWidget *menu);
 
 GtkWidget *gnc_find_toolbar_item (GtkWidget *toolbar, const gchar *action_name);
 
+void gnc_menu_item_setup_tooltip_to_statusbar_callback (GtkWidget *menu_item,
+                                                        GtkWidget *statusbar);
+
 void gnc_tool_item_setup_tooltip_to_statusbar_callback (GtkWidget *tool_item,
                                                         GtkWidget *statusbar);
 

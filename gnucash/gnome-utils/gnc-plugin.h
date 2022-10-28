@@ -263,6 +263,9 @@ void gnc_plugin_set_actions_enabled (GSimpleActionGroup *simple_action_group,
                                      const gchar **action_names,
                                      gboolean enable); //FIXMEb added
 
+void gnc_plugin_add_menu_tooltip_callbacks (GtkWidget *menubar,
+                                            GMenuModel *menubar_model,
+                                            GtkWidget *statusbar); //FIXMEb added
 
 void gnc_plugin_add_toolbar_tooltip_callbacks (GtkWidget *toolbar,
                                                GtkWidget *statusbar); //FIXMEb added

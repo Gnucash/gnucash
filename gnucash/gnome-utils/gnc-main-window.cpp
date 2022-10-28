@@ -3881,6 +3881,9 @@ gnc_main_window_update_menu (GncMainWindow *window, GncPluginPage *page,
         g_free (menu_name);
     }
 
+    // add tooltip redirect call backs
+    gnc_plugin_add_menu_tooltip_callbacks (priv->menubar, priv->menubar_model, priv->statusbar);
+
     // remove existing accelerator group
     if (priv->previous_plugin_page_accel_group)
         gtk_window_remove_accel_group (GTK_WINDOW(window), priv->previous_plugin_page_accel_group);

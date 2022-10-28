@@ -852,6 +852,65 @@ statusbar_pop (GtkWidget *statusbar)
     gtk_statusbar_pop (GTK_STATUSBAR(statusbar), 0);
 }
 
+static void
+menu_item_select_cb (GtkWidget *menu_item, gpointer user_data)
+{
+    GtkWidget *accel_label = gtk_bin_get_child (GTK_BIN(menu_item));
+    GMenuModel *menubar_model = g_object_get_data (G_OBJECT(user_data), "menu-model");
+
+    if (!menubar_model)
+        return;
+
+    if (accel_label)
+    {
+        GncMenuModelSearch *gsm = g_new0 (GncMenuModelSearch, 1);
+
+        gsm->search_action_label = gtk_label_get_label (GTK_LABEL(accel_label));
+        gsm->search_action_name = NULL;
+
+        if (gnc_menubar_model_find_item (menubar_model, gsm))
+        {
+            if (gsm->model)
+                statusbar_push (user_data, gsm->tooltip);
+        }
+        g_free (gsm);
+    }
+}
+
+static void
+menu_item_deselect_cb (GtkWidget *menu_item, gpointer user_data)
+{
+    statusbar_pop (user_data);
+}
+
+/** Setup the callbacks for menu bar items so the tooltip can be
+ *  displayed in the status bar.
+ *
+ *  @param menu_item The menubar menu item widget.
+ *
+ *  @param statusbar The statusbar widget to display the tooltip.
+ */
+void
+gnc_menu_item_setup_tooltip_to_statusbar_callback (GtkWidget *menu_item,
+                                                   GtkWidget *statusbar)
+{
+    g_return_if_fail (menu_item != NULL);
+    g_return_if_fail (statusbar != NULL);
+
+    if (GPOINTER_TO_INT(g_object_get_data(G_OBJECT(menu_item), "added-callbacks")))
+        return;
+
+    g_signal_connect (menu_item, "select",
+                      G_CALLBACK(menu_item_select_cb),
+                      statusbar);
+    g_signal_connect (menu_item, "deselect",
+                      G_CALLBACK(menu_item_deselect_cb),
+                      statusbar);
+    g_object_set (G_OBJECT(menu_item), "has-tooltip", FALSE, NULL);
+    g_object_set_data (G_OBJECT(menu_item), "added-callbacks", GINT_TO_POINTER(1));
+}
+
+
 static gboolean
 tool_item_enter_event (GtkWidget *button, GdkEvent *event,
                        gpointer user_data)
