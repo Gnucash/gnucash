@@ -121,8 +121,6 @@ static GncMainWindow *last_window = NULL;
 
 static GActionEntry gnc_plugin_actions [] =
 {
-    { "BusinessAction", NULL, NULL, NULL, NULL },
-    { "CustomerMenuAction", NULL, NULL, NULL, NULL },
     { "CustomerOverviewPageAction", gnc_plugin_business_cmd_customer_page, NULL, NULL, NULL },
     { "CustomerNewCustomerOpenAction", gnc_plugin_business_cmd_customer_new_customer, NULL, NULL, NULL },
     { "CustomerFindCustomerOpenAction", gnc_plugin_business_cmd_customer_find_customer, NULL, NULL, NULL },
@@ -132,7 +130,6 @@ static GActionEntry gnc_plugin_actions [] =
     { "CustomerFindJobOpenAction", gnc_plugin_business_cmd_customer_find_job, NULL, NULL, NULL },
     { "CustomerProcessPaymentAction", gnc_plugin_business_cmd_customer_process_payment, NULL, NULL, NULL },
 
-    { "VendorMenuAction", NULL, NULL, NULL, NULL },
     { "VendorOverviewPageAction", gnc_plugin_business_cmd_vendor_page, NULL, NULL, NULL },
     { "VendorNewVendorOpenAction", gnc_plugin_business_cmd_vendor_new_vendor, NULL, NULL, NULL },
     { "VendorFindVendorOpenAction", gnc_plugin_business_cmd_vendor_find_vendor, NULL, NULL, NULL },
@@ -142,7 +139,6 @@ static GActionEntry gnc_plugin_actions [] =
     { "VendorFindJobOpenAction", gnc_plugin_business_cmd_vendor_find_job, NULL, NULL, NULL },
     { "VendorProcessPaymentAction", gnc_plugin_business_cmd_vendor_process_payment, NULL, NULL, NULL },
 
-    { "EmployeeMenuAction", NULL, NULL, NULL, NULL },
     { "EmployeeOverviewPageAction", gnc_plugin_business_cmd_employee_page, NULL, NULL, NULL },
     { "EmployeeNewEmployeeOpenAction", gnc_plugin_business_cmd_employee_new_employee, NULL, NULL, NULL },
     { "EmployeeFindEmployeeOpenAction", gnc_plugin_business_cmd_employee_find_employee, NULL, NULL, NULL },
@@ -156,7 +152,6 @@ static GActionEntry gnc_plugin_actions [] =
     { "BillsDueReminderOpenAction", gnc_plugin_business_cmd_bills_due_reminder, NULL, NULL, NULL },
     { "InvoicesDueReminderOpenAction", gnc_plugin_business_cmd_invoices_due_reminder, NULL, NULL, NULL },
 
-    { "BusinessTestAction", NULL, NULL, NULL, NULL },
     { "BusinessTestSearchAction", gnc_plugin_business_cmd_test_search, NULL, NULL, NULL },
     { "BusinessTestInitDataAction", gnc_plugin_business_cmd_test_init_data, NULL, NULL, NULL },
     { "ToolbarNewInvoiceAction", gnc_plugin_business_cmd_customer_new_invoice, NULL, NULL, NULL },
@@ -792,7 +787,6 @@ static const gchar *register_bus_txn_actions[] =
 static void
 gnc_plugin_business_update_menus (GncPluginPage *plugin_page)
 {
-    GncMainWindow *window;
     GSimpleActionGroup *simple_action_group;
     gboolean is_txn_register, is_bus_txn = FALSE, is_bus_doc = FALSE;
 
@@ -805,9 +799,8 @@ gnc_plugin_business_update_menus (GncPluginPage *plugin_page)
         return;
 
     is_txn_register = GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page);
-    window = GNC_MAIN_WINDOW(plugin_page->window);
-    g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
-    simple_action_group = gnc_main_window_get_action_group (window, PLUGIN_ACTIONS_NAME);
+    simple_action_group = gnc_main_window_get_action_group (GNC_MAIN_WINDOW(plugin_page->window),
+                                                            PLUGIN_ACTIONS_NAME);
     g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(simple_action_group));
 
     if (is_txn_register)
