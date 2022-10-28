@@ -120,8 +120,8 @@ gnc_plugin_menu_additions_class_init (GncPluginMenuAdditionsClass *klass)
     plugin_class->add_to_window      = gnc_plugin_menu_additions_add_to_window;
     plugin_class->remove_from_window = gnc_plugin_menu_additions_remove_from_window;
     plugin_class->actions_name       = PLUGIN_ACTIONS_NAME;
-    plugin_class->actionsb           = gnc_plugin_actions;
-    plugin_class->n_actionsb         = gnc_plugin_n_actions;
+    plugin_class->actions            = gnc_plugin_actions;
+    plugin_class->n_actions          = gnc_plugin_n_actions;
 }
 
 static void

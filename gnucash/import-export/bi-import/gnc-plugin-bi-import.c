@@ -90,10 +90,10 @@ gnc_plugin_bi_import_class_init (GncPluginbi_importClass *klass)
 
     /* widget addition/removal */
     plugin_class->actions_name    = PLUGIN_ACTIONS_NAME;
-    plugin_class->actionsb        = gnc_plugin_actions;
-    plugin_class->n_actionsb      = gnc_plugin_n_actions;
+    plugin_class->actions         = gnc_plugin_actions;
+    plugin_class->n_actions       = gnc_plugin_n_actions;
     plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
-    plugin_class->ui_updates        = gnc_plugin_load_ui_items;
+    plugin_class->ui_updates      = gnc_plugin_load_ui_items;
 }
 
 static void

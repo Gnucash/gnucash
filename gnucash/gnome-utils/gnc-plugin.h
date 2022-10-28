@@ -119,9 +119,9 @@ typedef struct
     const gchar *actions_name;
     /** An array of actions that should automatically be added to
      *  any GnuCash "main" content window that is opened. */
-    GActionEntry   *actionsb; //FIXMEb added
+    GActionEntry   *actions; //FIXMEb added
     /** The number of actions in the actions array. */
-    guint           n_actionsb; //FIXMEb added
+    guint           n_actions; //FIXMEb added
 
     /** An array of display items (menu / toolbar entries) */
     GncDisplayItem *display_items; //FIXMEb added
@@ -131,10 +131,6 @@ typedef struct
     /** An array of ui updates for the menu model */
     const gchar **ui_updates; //FIXMEb added
 
-
-    GtkActionEntry *actions;
-    /** The number of actions in the actions array. */
-    guint n_actions;
     /** The relative name of the XML file describing the
      *  menu/toolbar action items. */
     const gchar *ui_filename;

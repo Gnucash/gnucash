@@ -146,7 +146,7 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
         DEBUG ("%s: %d actions to merge with gui from %s",
                klass->actions_name, klass->n_actions, klass->ui_filename);
         gnc_main_window_merge_actions (window, klass->actions_name,
-                                       klass->actionsb, klass->n_actionsb,
+                                       klass->actions, klass->n_actions,
                                        klass->display_items, klass->n_display_items,
                                        klass->ui_updates,
                                        klass->ui_filename, plugin);
