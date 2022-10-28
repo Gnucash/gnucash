@@ -487,16 +487,6 @@ static GncDisplayItem gnc_menu_display_items [] =
 /** The number of display items provided by the main window. */
 static guint gnc_menu_n_display_items = G_N_ELEMENTS(gnc_menu_display_items);
 
-/** These are the "important" actions provided by the main window.
- *  Their labels will appear when the toolbar is set to "Icons and
- *  important text" (e.g. GTK_TOOLBAR_BOTH_HORIZ) mode. */
-static const gchar *gnc_menu_important_actions[] =
-{
-    "FileCloseAction",
-    nullptr,
-};
-
-
 /** The following are in the main window so they will always be
  *  present in the menu structure, but they are never sensitive.
  *  These actions should be overridden in child windows where they
@@ -4417,8 +4407,6 @@ gnc_main_window_setup_window (GncMainWindow *window)
     gnc_main_window_menu_item_vis_by_action (window,
                                              always_hidden_actions, false);
 
-//FIXMEb    gnc_plugin_set_important_actions (priv->action_group,
-//                                      gnc_menu_important_actions);
 
 //    gtk_ui_manager_insert_action_group (window->ui_merge, priv->action_group, 0);
 

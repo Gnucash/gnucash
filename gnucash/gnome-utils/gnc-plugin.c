@@ -150,14 +150,6 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
                                        klass->display_items, klass->n_display_items,
                                        klass->ui_updates,
                                        klass->ui_filename, plugin);
-
-        if (klass->important_actions)
-        {
-            simple_action_group =
-                gnc_main_window_get_action_group (window, klass->actions_name);
-//FIXMEb            gnc_plugin_set_important_actions (simple_action_group,
-//                                              klass->important_actions);
-        }
     }
 
     /*
@@ -248,30 +240,6 @@ gnc_plugin_init_short_names (GtkWidget *toolbar,
         gtk_tool_button_set_label (GTK_TOOL_BUTTON(tool_item), _(toolbar_labels[i].short_label));
         gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON(tool_item), TRUE);
     }
-}
-
-
-/** Mark certain actions as "important".  This means that their labels
- *  will appear when the toolbar is set to "Icons and important text"
- *  (e.g. GTK_TOOLBAR_BOTH_HORIZ) mode.
- *
- *  See gnc-plugin.h for documentation on the function arguments. */
-void
-gnc_plugin_set_important_actions (GSimpleActionGroup *simple_action_group,
-                                  const gchar **name)
-{
-    GAction *action;
-    gint i;
-
-    for (i = 0; name[i]; i++)
-    {
-//FIXMEb        action = g_action_map_lookup_action (G_ACTION_MAP(simple_action_group), name[i]);
-//        g_object_set (G_OBJECT(action), "is_important", TRUE, NULL);
-    }
-
-    /* If this trips, you've got too many "important" actions.  That
-     * can't *all* be that important, can they? */
-    g_assert(i <= 3);
 }
 
 

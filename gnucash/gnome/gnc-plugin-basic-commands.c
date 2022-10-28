@@ -144,15 +144,6 @@ static const gchar *gnc_plugin_load_ui_items [] =
     NULL,
 };
 
-/** These are the "important" actions provided by the basic commands
- *  plugin.  Their labels will appear when the toolbar is set to
- *  "Icons and important text" (e.g. GTK_TOOLBAR_BOTH_HORIZ) mode. */
-static const gchar *gnc_plugin_important_actions[] =
-{
-    "FileSaveAction",
-    NULL,
-};
-
 /** The following items should be made insensitive at startup time.  The
  *  sensitivity will be changed by some later event. */
 static const gchar *gnc_plugin_initially_insensitive_actions[] =
@@ -312,7 +303,6 @@ gnc_plugin_basic_commands_class_init (GncPluginBasicCommandsClass *klass)
     plugin_class->actions_name      = PLUGIN_ACTIONS_NAME;
     plugin_class->actionsb          = gnc_plugin_actions;
     plugin_class->n_actionsb        = gnc_plugin_n_actions;
-    plugin_class->important_actions = gnc_plugin_important_actions;
     plugin_class->ui_filename       = PLUGIN_UI_FILENAME;
     plugin_class->ui_updates        = gnc_plugin_load_ui_items;
 }
