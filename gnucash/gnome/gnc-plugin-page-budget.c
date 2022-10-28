@@ -142,59 +142,6 @@ static GActionEntry gnc_plugin_page_budget_actions [] =
 };
 static guint gnc_plugin_page_budget_n_actions = G_N_ELEMENTS(gnc_plugin_page_budget_actions);
 
-static GncDisplayItem gnc_plugin_page_budget_display_items [] =
-{
-    /* File menu */
-    {
-        "OpenAccountAction", GNC_ICON_OPEN_ACCOUNT, N_("Open _Account"), NULL,
-        N_("Open the selected account.")
-    },
-    {
-        "OpenSubaccountsAction", GNC_ICON_OPEN_ACCOUNT,
-        N_("Open _Subaccounts"), NULL,
-        N_("Open the selected account and all its subaccounts.")
-    },
-    /* Edit menu */
-    {
-        "DeleteBudgetAction", GNC_ICON_DELETE_BUDGET, N_("_Delete Budget..."),
-        NULL, N_("Select this or another budget and delete it.")
-    },
-    {
-        "OptionsBudgetAction", "document-properties", N_("Budget _Options..."),
-        NULL, N_("Edit this budget's options.")
-    },
-    {
-        "EstimateBudgetAction", "system-run", N_("Esti_mate Budget..."),
-        NULL,
-        N_("Estimate a budget value for the selected accounts from past transactions.")
-    },
-    {
-        "AllPeriodsBudgetAction", "system-run", N_("_All Periods..."),
-        NULL,
-        N_("Edit budget for all periods for the selected accounts.")
-    },
-    {
-        "BudgetNoteAction", "text-x-generic", N_("Edit Note"),
-        NULL,
-        N_("Edit note for the selected account and period.")
-    },
-    {
-        "BudgetReportAction", "system-run", N_("Budget Report"),
-        NULL,
-        N_("Run the budget report.")
-    },
-    /* View menu */
-    {
-        "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL
-    },
-    {
-        "ViewRefreshAction", "view-refresh", N_("_Refresh"), "<primary>r",
-        N_("Refresh this window.")
-    },
-};
-/** The number of display items provided by this plugin. */
-static guint gnc_plugin_page_budget_n_display_items = G_N_ELEMENTS(gnc_plugin_page_budget_display_items);
-
 /** The default menu items that need to be add to the menu */
 static const gchar *gnc_plugin_load_ui_items [] =
 {

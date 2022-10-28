@@ -53,16 +53,6 @@ static GActionEntry gnc_plugin_actions [] =
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
 
-static GncDisplayItem gnc_plugin_display_items [] =
-{
-    /* Menu Items */
-    { "exampleAction", NULL, N_("example description..."), NULL,
-      N_("example tooltip")
-    },
-};
-/** The number of display items provided by this plugin. */
-static guint gnc_plugin_n_display_items = G_N_ELEMENTS(gnc_plugin_display_items);
-
 /************************************************************
  *                   Object Implementation                  *
  ************************************************************/
@@ -90,8 +80,6 @@ gnc_plugin_example_class_init (GncPluginexampleClass *klass)
     plugin_class->actions_name    = PLUGIN_ACTIONS_NAME;
     plugin_class->actions         = gnc_plugin_actions;
     plugin_class->n_actions       = gnc_plugin_n_actions;
-    plugin_class->display_items   = gnc_plugin_display_items;
-    plugin_class->n_display_items = gnc_plugin_n_display_items;
     plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
 }
 

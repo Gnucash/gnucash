@@ -209,68 +209,6 @@ static GActionEntry report_actions[] =
 };
 static guint num_report_actions = G_N_ELEMENTS(report_actions);
 
-static GncDisplayItem report_display_items [] =
-{
-    {
-        "FilePrintAction", "document-print", N_("_Print Report..."), "<primary>p",
-        N_("Print the current report")
-    },
-    {
-        "FilePrintPDFAction", GNC_ICON_PDF_EXPORT, N_("Export as P_DF..."), nullptr,
-        N_("Export the current report as a PDF document")
-    },
-    {
-        "EditCutAction", "edit-cut", N_("Cu_t"), "<primary>X",
-        N_("Cut the current selection and copy it to clipboard")
-    },
-    {
-        "EditCopyAction", "edit-copy", N_("_Copy"), "<primary>C",
-         N_("Copy the current selection to clipboard")
-    },
-    {
-        "EditPasteAction", "edit-paste", N_("_Paste"), "<primary>V",
-        N_("Paste the clipboard content at the cursor position")
-    },
-    {
-        "ViewRefreshAction", "view-refresh", N_("_Refresh"), "<primary>r",
-        N_("Refresh this window")
-    },
-    {
-        "ReportSaveAction", "document-save", N_("Save _Report Configuration"), "<primary><alt>s",
-        nullptr
-    },
-    {
-        "ReportSaveAsAction", "document-save-as", N_("Save Report Configuration As..."), "<primary><alt><shift>s",
-        nullptr
-    },
-    {
-        "ReportExportAction", "go-next", N_("Export _Report"), nullptr,
-        N_("Export HTML-formatted report to file")
-    },
-    {
-        "ReportOptionsAction", "document-properties", N_("_Report Options"), nullptr,
-        N_("Edit report options")
-    },
-    {
-        "ReportBackAction", "go-previous", N_("Back"), nullptr,
-        N_("Move back one step in the history")
-    },
-    {
-        "ReportForwAction", "go-next", N_("Forward"), nullptr,
-        N_("Move forward one step in the history")
-    },
-    {
-        "ReportReloadAction", "view-refresh", N_("Reload"), nullptr,
-        N_("Reload the current page")
-    },
-    {
-        "ReportStopAction", "process-stop", N_("Stop"), nullptr,
-        N_("Cancel outstanding HTML requests")
-    },
-};
-/** The number of display items provided by this plugin. */
-static guint report_n_display_items = G_N_ELEMENTS(report_display_items);
-
 /** The default menu items that need to be add to the menu */
 static const gchar *gnc_plugin_load_ui_items [] =
 {

@@ -139,30 +139,6 @@ static GActionEntry gnc_plugin_page_sx_list_actions [] =
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_page_sx_list_n_actions = G_N_ELEMENTS(gnc_plugin_page_sx_list_actions);
 
-static GncDisplayItem gnc_plugin_page_sx_list_display_items [] =
-{
-    { "SxListAction", NULL, N_("_Scheduled"), NULL, NULL },
-    {
-        "SxListNewAction", GNC_ICON_NEW_ACCOUNT, N_("_New"), NULL,
-        N_("Create a new scheduled transaction")
-    },
-    {
-        "SxListEditAction", GNC_ICON_EDIT_ACCOUNT, N_("_Edit"), NULL,
-        N_("Edit the selected scheduled transaction")
-    },
-    {
-        "SxListDeleteAction", GNC_ICON_DELETE_ACCOUNT, N_("_Delete"), NULL,
-        N_("Delete the selected scheduled transaction")
-    },
-    /* View menu */
-    {
-        "ViewRefreshAction", "view-refresh", N_("_Refresh"), "<primary>r",
-        N_("Refresh this window")
-    },
-};
-/** The number of display items provided by this plugin. */
-static guint gnc_plugin_page_sx_list_n_display_items = G_N_ELEMENTS(gnc_plugin_page_sx_list_display_items);
-
 /** The default menu items that need to be add to the menu */
 static const gchar *gnc_plugin_load_ui_items [] =
 {

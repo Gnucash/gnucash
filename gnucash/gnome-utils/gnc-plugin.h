@@ -123,11 +123,6 @@ typedef struct
     /** The number of actions in the actions array. */
     guint           n_actions; //FIXMEb added
 
-    /** An array of display items (menu / toolbar entries) */
-    GncDisplayItem *display_items; //FIXMEb added
-    /** The number of display_items in the display item array. */
-    guint           n_display_items; //FIXMEb added
-
     /** An array of ui updates for the menu model */
     const gchar **ui_updates; //FIXMEb added
 

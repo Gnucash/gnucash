@@ -57,15 +57,6 @@ extern "C"
 
 typedef struct
 {
-    const gchar *action_name;
-    const gchar *icon_name;
-    const gchar *label;
-    const gchar *accelerator;
-    const gchar *tooltip;
-} GncDisplayItem;
-
-typedef struct
-{
     const gchar *actions;
     const gchar *update_type;
 } GncMenuUpdate;
@@ -243,10 +234,6 @@ void gnc_main_window_manual_merge_actions (GncMainWindow *window,
  *
  *  @param n_entries The number of actions in the array.
  *
- *  @param display_items A pointer to an array of GncDisplayItem.
- *
- *  @param n_display_items The number of display items in the array.
- *
  *  @param filename The filename containing the user interface
  *  definition that goes with this set of actions.
  *
@@ -257,8 +244,6 @@ void gnc_main_window_merge_actions (GncMainWindow *window,
                                     const gchar *group_name,
                                     GActionEntry *entries,
                                     guint n_entries,
-                                    GncDisplayItem *display_items,
-                                    guint n_display_items,
                                     const gchar **ui_updates,
                                     const gchar *ui_filename,
                                     gpointer user_data);
