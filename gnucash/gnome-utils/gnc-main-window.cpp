@@ -4126,6 +4126,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
     GList *plugins;
     GError *error = nullptr;
     gchar *filename;
+    GAction *action;
 
     ENTER(" ");
 
@@ -4235,6 +4236,13 @@ gnc_main_window_setup_window (GncMainWindow *window)
     gnc_main_window_update_tab_position (nullptr, nullptr, window);
 
     gnc_main_window_init_menu_updaters (window);
+
+    /* Disable the Transaction menu */
+    action = gnc_main_window_find_action (window, "TransactionAction");
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
+    /* Disable the Schedule menu */
+    action = gnc_main_window_find_action (window, "ScheduledAction");
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
 
     /* Now update the "eXtensions" menu */
     if (!gnc_prefs_is_extra_enabled())
