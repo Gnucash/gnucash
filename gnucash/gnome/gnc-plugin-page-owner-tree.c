@@ -477,7 +477,7 @@ gnc_plugin_page_owner_tree_init (GncPluginPageOwnerTree *plugin_page)
     gnc_plugin_page_add_book (parent, gnc_get_current_book());
 
     /* Create menu and toolbar information */
-    simple_action_group = gnc_plugin_page_create_action_groupb (parent, "GncPluginPageOwnerTreeActions");
+    simple_action_group = gnc_plugin_page_create_action_group (parent, "GncPluginPageOwnerTreeActions");
     g_action_map_add_action_entries (G_ACTION_MAP(simple_action_group),
                                      gnc_plugin_page_owner_tree_actions,
                                      gnc_plugin_page_owner_tree_n_actions,
@@ -518,7 +518,7 @@ update_inactive_actions(GncPluginPage *plugin_page)
     g_return_if_fail(GNC_IS_PLUGIN_PAGE(plugin_page));
 
     /* Get the action group */
-    simple_action_group = gnc_plugin_page_get_action_groupb (plugin_page);
+    simple_action_group = gnc_plugin_page_get_action_group (plugin_page);
     g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(simple_action_group));
 
     /* Set the action's sensitivity */
@@ -933,7 +933,7 @@ gnc_plugin_page_owner_tree_selection_changed_cb (GtkTreeSelection *selection,
         sensitive = (owner != NULL);
     }
 
-    simple_action_group = gnc_plugin_page_get_action_groupb (GNC_PLUGIN_PAGE(page));
+    simple_action_group = gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE(page));
     gnc_plugin_update_actions (simple_action_group, actions_requiring_owner_always,
                                "sensitive", sensitive);
     gnc_plugin_update_actions (simple_action_group, actions_requiring_owner_rw,

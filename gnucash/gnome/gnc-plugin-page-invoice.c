@@ -593,7 +593,7 @@ gnc_plugin_page_invoice_init (GncPluginPageInvoice *plugin_page)
     gnc_plugin_page_add_book (parent, gnc_get_current_book());
 
     /* Create menu and toolbar information */
-    simple_action_group = gnc_plugin_page_create_action_groupb (parent,"GncPluginPageInvoiceActions");
+    simple_action_group = gnc_plugin_page_create_action_group (parent,"GncPluginPageInvoiceActions");
     g_action_map_add_action_entries (G_ACTION_MAP(simple_action_group),
                                      gnc_plugin_page_invoice_actions,
                                      gnc_plugin_page_invoice_n_actions,
@@ -764,7 +764,7 @@ gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, g
     action = gnc_main_window_find_action (window, "FilePrintAction");
     g_simple_action_set_enabled (G_SIMPLE_ACTION(action), TRUE);
 
-    simple_action_group = gnc_plugin_page_get_action_groupb (page);
+    simple_action_group = gnc_plugin_page_get_action_group (page);
     gnc_plugin_update_actions (simple_action_group, posted_actions,
                                "sensitive", is_posted);
     gnc_plugin_update_actions (simple_action_group, unposted_actions,

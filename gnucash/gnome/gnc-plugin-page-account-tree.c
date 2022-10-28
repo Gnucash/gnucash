@@ -522,7 +522,7 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
     }
 
     /* Create menu and toolbar information */
-    simple_action_group = gnc_plugin_page_create_action_groupb (parent, "GncPluginPageAccountTreeActions");
+    simple_action_group = gnc_plugin_page_create_action_group (parent, "GncPluginPageAccountTreeActions");
     g_action_map_add_action_entries (G_ACTION_MAP(simple_action_group),
                                      gnc_plugin_page_account_tree_actions,
                                      gnc_plugin_page_account_tree_n_actions,
@@ -901,7 +901,7 @@ update_inactive_actions (GncPluginPage *plugin_page)
     }
 
     /* Get the action group */
-    simple_action_group = gnc_plugin_page_get_action_groupb (plugin_page);
+    simple_action_group = gnc_plugin_page_get_action_group (plugin_page);
     g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP (simple_action_group));
 
     /* Set the action's sensitivity */

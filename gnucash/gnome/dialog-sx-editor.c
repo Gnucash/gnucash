@@ -1369,7 +1369,7 @@ schedXact_editor_create_ledger (GncSxEditorDialog *sxed)
 
     gtk_widget_insert_action_group (GTK_WIDGET(sxed->embed_window),
                                     gnc_plugin_page_get_simple_action_group_name (sxed->plugin_page),
-                                    G_ACTION_GROUP(gnc_plugin_page_get_action_groupb (sxed->plugin_page)));
+                                    G_ACTION_GROUP(gnc_plugin_page_get_action_group (sxed->plugin_page)));
 
     gnc_plugin_page_register_set_options (sxed->plugin_page,
                                           NUM_LEDGER_LINES_DEFAULT, FALSE);
