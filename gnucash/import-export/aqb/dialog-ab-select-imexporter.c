@@ -48,41 +48,28 @@ struct _GncABSelectImExDlg
 };
 
 // Expose the selection handlers to GtkBuilder.
-G_MODULE_EXPORT gboolean imexporter_changed(GtkTreeSelection* sel,
-                                            gpointer data);
-G_MODULE_EXPORT gboolean profile_changed(GtkTreeSelection* sel, gpointer data);
+static gboolean imexporter_changed(GtkTreeSelection* sel,
+                                   gpointer data);
+static gboolean profile_changed(GtkTreeSelection* sel, gpointer data);
 
-static gboolean
-clear_model_row (GtkTreeModel* model, GtkTreePath* path,
-                 GtkTreeIter* iter, gpointer data)
+enum
 {
-    char *name, *desc;
-    g_return_val_if_fail (model && iter, TRUE);
-    gtk_tree_model_get (model, iter, 0, &name, 1, &desc, -1);
-    g_free (name);
-    g_free (desc);
-    return FALSE;
-}
+    NAME_COL,
+    PROF_COL
+};
 
 static void
-clear_tree_model (GtkTreeModel* model)
+populate_list_store (GtkListStore* model, GList* entries)
 {
-    gtk_tree_model_foreach (model, clear_model_row, NULL);
-    gtk_list_store_clear (GTK_LIST_STORE (model));
-}
-
-static void
-populate_tree_model (GtkTreeModel* model, GList* entries)
-{
-    clear_tree_model (model);
+    gtk_list_store_clear (model);
     for (GList* node = entries; node; node = g_list_next (node))
     {
         AB_Node_Pair *pair = (AB_Node_Pair*)(node->data);
         GtkTreeIter iter;
         gtk_list_store_insert_with_values (GTK_LIST_STORE (model),
                                            &iter, -1,
-                                           0, pair->name,
-                                           1, pair->descr,
+                                           NAME_COL, pair->name,
+                                           PROF_COL, pair->descr,
                                            -1);
         g_slice_free1 (sizeof(AB_Node_Pair), pair);
     }
@@ -128,7 +115,7 @@ gnc_ab_select_imex_dlg_new (GtkWidget* parent, AB_BANKING* abi)
 
     imex_select = GTK_TREE_SELECTION (gtk_builder_get_object (builder, "imex-selection"));
     prof_select = GTK_TREE_SELECTION (gtk_builder_get_object (builder, "prof-selection"));
-    populate_tree_model (GTK_TREE_MODEL (imexd->imexporter_list),
+    populate_list_store (imexd->imexporter_list,
                          imexporters);
 
     g_signal_connect (imex_select, "changed", G_CALLBACK(imexporter_changed),
@@ -149,10 +136,10 @@ gnc_ab_select_imex_dlg_destroy (GncABSelectImExDlg* imexd)
 {
 
     if (imexd->imexporter_list)
-        clear_tree_model (GTK_TREE_MODEL (imexd->imexporter_list));
+        gtk_list_store_clear (imexd->imexporter_list);
 
     if (imexd->profile_list)
-        clear_tree_model (GTK_TREE_MODEL (imexd->profile_list));
+        gtk_list_store_clear (imexd->profile_list);
 
     if (imexd->dialog)
         gtk_widget_destroy (imexd->dialog);
@@ -174,16 +161,16 @@ imexporter_changed(GtkTreeSelection* sel, gpointer data)
         char* name = NULL;
         GList* profiles = NULL;
 
-        gtk_tree_model_get (model, &iter, 0, &name, -1);
+        gtk_tree_model_get (model, &iter, NAME_COL, &name, -1);
         if (name && *name)
-        {
-             profiles = gnc_ab_imexporter_profile_list (imexd->abi, name);
-             g_free (name);
-        }
-        clear_tree_model (GTK_TREE_MODEL (imexd->profile_list));
+            profiles = gnc_ab_imexporter_profile_list (imexd->abi, name);
+
+        g_free (name);
+        gtk_list_store_clear (imexd->profile_list);
+
         if (profiles)
         {
-             populate_tree_model (GTK_TREE_MODEL (imexd->profile_list), profiles);
+             populate_list_store (imexd->profile_list, profiles);
         }
         else
         {
@@ -197,6 +184,7 @@ imexporter_changed(GtkTreeSelection* sel, gpointer data)
             GtkTreeSelection* profile_sel =
                 gtk_tree_view_get_selection (GTK_TREE_VIEW (imexd->select_profile));
             gtk_tree_selection_select_path (profile_sel, path); //should call profile_changed
+            gtk_tree_path_free (path);
         }
         return FALSE;
     }
@@ -238,7 +226,7 @@ tree_view_get_name (GtkTreeView *tv)
     if (sel && gtk_tree_selection_get_selected (sel, &model, &iter))
     {
         char* name;
-        gtk_tree_model_get(model, &iter, 0, &name, -1);
+        gtk_tree_model_get(model, &iter, NAME_COL, &name, -1);
         return name;
     }
 

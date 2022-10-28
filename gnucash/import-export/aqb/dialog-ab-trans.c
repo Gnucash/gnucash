@@ -64,26 +64,26 @@ static void gnc_ab_trans_dialog_check_iban(const GncABTransDialog *td,
         const AB_TRANSACTION *trans);
 
 /* Callbacks - connected with GtkBuilder */
-G_MODULE_EXPORT void gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data);
-G_MODULE_EXPORT void gnc_ab_trans_dialog_moveup_templ_cb(GtkButton *button, gpointer user_data);
-G_MODULE_EXPORT void gnc_ab_trans_dialog_movedown_templ_cb(GtkButton *button, gpointer user_data);
-G_MODULE_EXPORT void gnc_ab_trans_dialog_sort_templ_cb(GtkButton *button, gpointer user_data);
-G_MODULE_EXPORT void gnc_ab_trans_dialog_del_templ_cb(GtkButton *button, gpointer user_data);
-G_MODULE_EXPORT void gnc_ab_trans_dialog_ibanentry_filter_cb (GtkEditable *editable,
+static void gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data);
+static void gnc_ab_trans_dialog_moveup_templ_cb(GtkButton *button, gpointer user_data);
+static void gnc_ab_trans_dialog_movedown_templ_cb(GtkButton *button, gpointer user_data);
+static void gnc_ab_trans_dialog_sort_templ_cb(GtkButton *button, gpointer user_data);
+static void gnc_ab_trans_dialog_del_templ_cb(GtkButton *button, gpointer user_data);
+static void gnc_ab_trans_dialog_ibanentry_filter_cb (GtkEditable *editable,
         const gchar *text,
         gint         length,
         gint        *position,
         gpointer     user_data);
-G_MODULE_EXPORT void gnc_ab_trans_dialog_bicentry_filter_cb (GtkEditable *editable,
+static void gnc_ab_trans_dialog_bicentry_filter_cb (GtkEditable *editable,
         const gchar *text,
         gint         length,
         gint        *position,
         gpointer     user_data);
-G_MODULE_EXPORT void gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkTreeView *view,
+static void gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkTreeView *view,
         GtkTreePath *path,
         GtkTreeViewColumn *column,
         gpointer user_data);
-G_MODULE_EXPORT void gnc_ab_trans_dialog_verify_values(GncABTransDialog *td);
+static void gnc_ab_trans_dialog_verify_values(GncABTransDialog *td);
 
 
 enum
