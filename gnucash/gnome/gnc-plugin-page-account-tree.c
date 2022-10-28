@@ -387,9 +387,9 @@ static const gchar* readonly_inactive_actions[] =
 };
 
 /** Short labels for use on the toolbar buttons. */
-static action_toolbar_labels toolbar_labels[] =
+static GncToolBarShortNames toolbar_labels[] =
 {
-    { "FileOpenAccountAction",          N_("Open") },
+    { "EditOpenAccountAction",          N_("Open") },
     { "EditEditAccountAction",          N_("Edit") },
     { "FileNewAccountAction",           N_("New") },
     { "EditDeleteAccountAction",        N_("Delete") },
@@ -527,7 +527,6 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
                                      gnc_plugin_page_account_tree_actions,
                                      gnc_plugin_page_account_tree_n_actions,
                                      plugin_page);
-//FIXMEb    gnc_plugin_init_short_names (action_group, toolbar_labels);
 
     /* Visible types */
     priv->fd.visible_types = -1; /* Start with all types */
@@ -655,6 +654,9 @@ gnc_plugin_page_account_tree_focus_widget (GncPluginPage *account_plugin_page)
 
         gnc_main_window_update_menu (GNC_MAIN_WINDOW(account_plugin_page->window), account_plugin_page,
                                      gnc_plugin_load_ui_items);
+
+        // setup any short toolbar names
+        gnc_main_window_init_short_names (GNC_MAIN_WINDOW(account_plugin_page->window), toolbar_labels);
 
         /* Disable the FilePrintAction */
         action = gnc_main_window_find_action (GNC_MAIN_WINDOW(account_plugin_page->window), "FilePrintAction");

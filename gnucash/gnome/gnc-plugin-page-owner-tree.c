@@ -301,7 +301,7 @@ static const gchar* readonly_inactive_actions[] =
 
 
 /** Short labels for use on the toolbar buttons. */
-static action_toolbar_labels toolbar_labels[] =
+static GncToolBarShortNames toolbar_labels[] =
 {
     { "OTEditVendorAction",             N_("Edit") },
     { "OTEditCustomerAction",           N_("Edit") },
@@ -412,6 +412,9 @@ gnc_plugin_page_owner_focus_widget (GncPluginPage *owner_plugin_page)
         gnc_main_window_update_menu (GNC_MAIN_WINDOW(owner_plugin_page->window), owner_plugin_page,
                                      gnc_plugin_load_ui_items);
 
+         // setup any short toolbar names
+        gnc_main_window_init_short_names (GNC_MAIN_WINDOW(owner_plugin_page->window), toolbar_labels);
+
         if (GTK_IS_TREE_VIEW(tree_view))
         {
             if (!gtk_widget_is_focus (GTK_WIDGET(tree_view)))
@@ -479,8 +482,6 @@ gnc_plugin_page_owner_tree_init (GncPluginPageOwnerTree *plugin_page)
                                      gnc_plugin_page_owner_tree_actions,
                                      gnc_plugin_page_owner_tree_n_actions,
                                      plugin_page);
-
-//FIXMEb    gnc_plugin_init_short_names (action_group, toolbar_labels);
 
     /* Init filter */
     priv->fd.show_inactive = TRUE;

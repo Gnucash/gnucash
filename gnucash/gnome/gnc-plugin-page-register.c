@@ -608,7 +608,7 @@ static const gchar* actions_requiring_priced_account[] =
 };
 
 /** Short labels for use on the toolbar buttons. */
-static action_toolbar_labels toolbar_labels[] =
+static GncToolBarShortNames toolbar_labels[] =
 {
     { "ActionsTransferAction",              N_ ("Transfer") },
     { "RecordTransactionAction",            N_ ("Enter") },
@@ -884,7 +884,6 @@ gnc_plugin_page_register_init (GncPluginPageRegister* plugin_page)
                                      gnc_plugin_page_register_n_actions,
                                      plugin_page);
 
-//FIXMEb    gnc_plugin_init_short_names (action_group, toolbar_labels);
 //FIXMEb    gnc_plugin_set_important_actions (action_group, important_actions);
 
     priv->lines_default     = DEFAULT_LINES_AMOUNT;
@@ -959,6 +958,9 @@ gnc_plugin_page_register_focus_widget (GncPluginPage* register_plugin_page)
                                          register_plugin_page,
                                          gnc_plugin_load_ui_items);
         }
+
+        // setup any short toolbar names
+        gnc_plugin_init_short_names (gnc_window_get_toolbar (gnc_window), toolbar_labels);
 
         gnc_plugin_page_register_ui_update (NULL, GNC_PLUGIN_PAGE_REGISTER(register_plugin_page));
 

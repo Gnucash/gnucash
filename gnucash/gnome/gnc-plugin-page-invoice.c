@@ -460,7 +460,8 @@ static action_toolbar_labels creditnote_action_tooltips[] = {
 };
 
 /** Short labels for use on the toolbar buttons. */
-static action_toolbar_labels toolbar_labels[] = {
+static GncToolBarShortNames toolbar_labels[] =
+{
     {"RecordEntryAction", N_("Enter")},
     {"CancelEntryAction", N_("Cancel")},
     {"DeleteEntryAction", N_("Delete")},
@@ -597,8 +598,6 @@ gnc_plugin_page_invoice_init (GncPluginPageInvoice *plugin_page)
                                      gnc_plugin_page_invoice_actions,
                                      gnc_plugin_page_invoice_n_actions,
                                      plugin_page);
-
-//FIXMEb    gnc_plugin_init_short_names (action_group, toolbar_labels);
 }
 
 static void
@@ -621,7 +620,8 @@ update_doclink_actions (GncPluginPage *plugin_page, gboolean has_uri)
 
 static void
 gnc_plugin_page_invoice_action_update (GncPluginPage *plugin_page,
-                                       action_toolbar_labels *action_list)
+                                       action_toolbar_labels *action_list,
+                                       action_toolbar_labels *tooltip_list)
 {
     GtkWidget *menu_item;
     GtkWidget *tool_item;
@@ -639,6 +639,21 @@ gnc_plugin_page_invoice_action_update (GncPluginPage *plugin_page,
 
        if (tool_item)
            gtk_tool_button_set_label (GTK_TOOL_BUTTON(tool_item), _(action_list[i].label));
+    }
+//FIXMEb this may need changing to update the menu model instead of the GtkMenuItem
+    for (gint i = 0; (tooltip_list[i].action_name != NULL); i++)
+    {
+        menu_item = gnc_main_window_menu_find_menu_item (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window),
+                                                         tooltip_list[i].action_name);
+
+       if (menu_item)
+           gtk_widget_set_tooltip_text (GTK_WIDGET(menu_item), _(tooltip_list[i].label));
+
+       tool_item = gnc_main_window_toolbar_find_menu_item (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window),
+                                                           tooltip_list[i].action_name);
+
+       if (tool_item)
+           gtk_widget_set_tooltip_text (GTK_WIDGET(tool_item), _(tooltip_list[i].label));
     }
 }
 
@@ -759,18 +774,14 @@ gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, g
     gnc_plugin_update_actionsb (simple_action_group, invoice_book_readwrite_actions,
                                "sensitive", !is_readonly);
 
-    /* update the action labels */
-    gnc_plugin_page_invoice_action_update (page, label_list);
-    /* update the action tooltips */
-//FIXMRb    gnc_plugin_page_invoice_action_update (simple_action_group, tooltip_list, (void*)gtk_action_set_tooltip);
+    /* update the action labels and tooltips */
+    gnc_plugin_page_invoice_action_update (page, label_list, tooltip_list);
 
     // if there is no default layout do not enable reset action
     gnc_plugin_page_update_reset_layout_action (page);
 
-    /* update the layout action labels */
-    gnc_plugin_page_invoice_action_update (page, label_layout_list);
-    /* update the layout action tooltips */
-//FIXMEb    gnc_plugin_page_invoice_action_update (simple_action_group, tooltip_layout_list, (void*)gtk_action_set_tooltip);
+    /* update the layout action labels and tooltips */
+    gnc_plugin_page_invoice_action_update (page, label_layout_list, tooltip_layout_list);
 
     // update doclink buttons
     invoice = gnc_invoice_window_get_invoice (priv->iw);
@@ -807,6 +818,9 @@ gnc_plugin_page_invoice_focus_widget (GncPluginPage *invoice_plugin_page)
                                      gnc_plugin_load_ui_items);
 
         gnc_plugin_page_invoice_update_menus (invoice_plugin_page, priv->is_posted, priv->can_unpost);
+
+        // setup any short toolbar names
+        gnc_main_window_init_short_names (GNC_MAIN_WINDOW(invoice_plugin_page->window), toolbar_labels);
 
         // if there is no default layout do not enable reset action
         gnc_plugin_page_update_reset_layout_action (invoice_plugin_page);

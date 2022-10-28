@@ -261,8 +261,6 @@ gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page)
                                      gnc_plugin_page_sx_list_actions,
                                      gnc_plugin_page_sx_list_n_actions,
                                      plugin_page);
-
-    /* gnc_plugin_init_short_names (action_group, toolbar_labels); */
 }
 
 

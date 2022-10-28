@@ -42,6 +42,7 @@
 #include "gnc-filepath-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
+#include "gnc-gtk-utils.h"
 
 /** The debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -231,18 +232,21 @@ gnc_plugin_get_name (GncPlugin *plugin)
  *
  *  See gnc-plugin.h for documentation on the function arguments. */
 void
-gnc_plugin_init_short_names (GSimpleActionGroup *simple_action_group,
-                             action_toolbar_labels *toolbar_labels)
+gnc_plugin_init_short_names (GtkWidget *toolbar,
+                             GncToolBarShortNames *toolbar_labels)
 {
-    GAction *action;
-    gint i;
+    g_return_if_fail (toolbar != NULL);
+    g_return_if_fail (toolbar_labels != NULL);
 
-    for (i = 0; toolbar_labels[i].action_name; i++)
+    for (gint i = 0; (toolbar_labels[i].action_name); i++)
     {
-        /* Add a couple of short labels for the toolbar */
-//FIXMEb        action = g_action_map_lookup_action (G_ACTION_MAP(simple_action_group),
-//                                              toolbar_labels[i].action_name);
-//        gtk_action_set_short_label (action, _(toolbar_labels[i].label));
+        GtkWidget *tool_item = gnc_find_toolbar_item (toolbar, toolbar_labels[i].action_name);
+
+        if (!tool_item)
+            continue;
+
+        gtk_tool_button_set_label (GTK_TOOL_BUTTON(tool_item), _(toolbar_labels[i].short_label));
+        gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON(tool_item), TRUE);
     }
 }
 

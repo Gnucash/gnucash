@@ -3908,6 +3908,22 @@ gnc_main_window_menu_item_vis_by_action (GncMainWindow *window,
 }
 
 
+void
+gnc_main_window_init_short_names (GncMainWindow *window,
+                                  GncToolBarShortNames *toolbar_labels)
+{
+    GncMainWindowPrivate *priv;
+
+    g_return_if_fail (GNC_IS_MAIN_WINDOW(window));
+    g_return_if_fail (toolbar_labels != nullptr);
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+    gnc_plugin_init_short_names (priv->toolbar,
+                                 toolbar_labels);
+}
+
+
 static void
 gnc_main_window_update_toolbar (GncMainWindow *window, GncPluginPage *page,
                                 const gchar *toolbar_qualifier)

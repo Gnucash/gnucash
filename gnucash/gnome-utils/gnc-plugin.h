@@ -260,10 +260,10 @@ typedef struct
  *  group.
  *
  *  @param toolbar_labels A pointer to a NULL terminated array of data
- *  action_toolbar_labels items.
+ *  GncToolBarShortNames items.
  */
-void gnc_plugin_init_short_names (GSimpleActionGroup *simple_action_group,
-                                  action_toolbar_labels *toolbar_labels);
+void gnc_plugin_init_short_names (GtkWidget *toolbar,
+                                  GncToolBarShortNames *toolbar_labels);
 
 
 /** Mark certain actions as "important".  This means that their labels

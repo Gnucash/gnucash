@@ -228,7 +228,7 @@ static const gchar *actions_requiring_account[] =
 #endif
 
 /** Short labels for use on the toolbar buttons. */
-static action_toolbar_labels toolbar_labels[] =
+static GncToolBarShortNames toolbar_labels[] =
 {
     { "OpenAccountAction",          N_("Open") },
     { "DeleteBudgetAction",         N_("Delete") },
@@ -375,8 +375,6 @@ gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page)
                                      gnc_plugin_page_budget_n_actions,
                                      plugin_page);
 
-//FIXMEb    gnc_plugin_init_short_names (action_group, toolbar_labels);
-
     if (qof_book_is_readonly (gnc_get_current_book()))
         gnc_plugin_update_actionsb (simple_action_group, writeable_actions,
                                    "sensitive", FALSE);
@@ -442,6 +440,9 @@ gnc_plugin_page_budget_focus_widget (GncPluginPage *budget_plugin_page)
 
         gnc_main_window_update_menu (GNC_MAIN_WINDOW(budget_plugin_page->window), budget_plugin_page,
                                      gnc_plugin_load_ui_items);
+
+        // setup any short toolbar names
+        gnc_main_window_init_short_names (GNC_MAIN_WINDOW(budget_plugin_page->window), toolbar_labels);
 
         if (!gtk_widget_is_focus (GTK_WIDGET(account_view)))
             gtk_widget_grab_focus (GTK_WIDGET(account_view));

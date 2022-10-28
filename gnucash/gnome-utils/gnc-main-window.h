@@ -309,6 +309,24 @@ GtkWidget *gnc_main_window_menu_find_menu_item (GncMainWindow *window,
 GtkWidget * gnc_main_window_toolbar_find_menu_item (GncMainWindow *window,
                                                     const gchar *action_name); //FIXMEb added
 
+/** A structure for defining alternate action names for use in the
+ *  toolbar.  All toolbar buttons are homogeneous in size and are sized
+ *  to fit the longest label.  Therefore, this structure should be
+ *  used if an action name is more than one word.  This way the menu
+ *  can have the label "Whizzy Feature", while the toolbar button only
+ *  has the label "Whizzy". */
+typedef struct
+{
+    /** The name of the action. */
+    const char *action_name;
+    /** The alternate toolbar label to use */
+    const char *short_label;
+} GncToolBarShortNames; //FIXMEb added
+
+void gnc_main_window_init_short_names (GncMainWindow *window,
+                                       GncToolBarShortNames *toolbar_labels); //FIXMEb added
+
+
 /** Retrieve a specific set of user interface actions from a window.
  *  This function can be used to get an group of action to be
  *  manipulated when the front page of a window has changed.

@@ -281,6 +281,22 @@ static const gchar *gnc_plugin_load_ui_items [] =
     NULL,
 };
 
+/** Short labels for use on the toolbar buttons. */
+static GncToolBarShortNames toolbar_labels[] =
+{
+    { "FilePrintAction",      N_("Print") },
+    { "ReportExportAction",   N_("Export") },
+    { "ReportOptionsAction",  N_("Options") },
+    /* Translators: This string is meant to be a short alternative for "Save Report Configuration"
+       to be used as toolbar button label. */
+    { "ReportSaveAction",     N_("Save Config") },
+    /* Translators: This string is meant to be a short alternative for "Save Report Configuration As..."
+       to be used as toolbar button label. */
+    { "ReportSaveAsAction",   N_("Save Config As...") },
+    { "FilePrintPDFAction",   N_("Make Pdf") },
+    { nullptr, nullptr },
+};
+
 static void
 gnc_plugin_page_report_get_property( GObject *obj,
                                      guint prop_id,
@@ -356,6 +372,9 @@ gnc_plugin_page_report_focus_widget (GncPluginPage *report_plugin_page)
 
         gnc_main_window_update_menu (GNC_MAIN_WINDOW(report_plugin_page->window), report_plugin_page,
                                      gnc_plugin_load_ui_items);
+
+        // setup any short toolbar names
+        gnc_main_window_init_short_names (GNC_MAIN_WINDOW(report_plugin_page->window), toolbar_labels);
 
         gnc_plugin_page_report_menu_updates (report_plugin_page);
 
@@ -1225,22 +1244,6 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * priv)
         scm_gc_unprotect_object(priv->edited_reports);
 }
 
-/** Short labels for use on the toolbar buttons. */
-static action_toolbar_labels toolbar_labels[] =
-{
-    { "FilePrintAction",        N_("Print") },
-    { "ReportExportAction",   N_("Export") },
-    { "ReportOptionsAction",  N_("Options") },
-    /* Translators: This string is meant to be a short alternative for "Save Report Configuration"
-       to be used as toolbar button label. */
-    { "ReportSaveAction", N_("Save Config") },
-    /* Translators: This string is meant to be a short alternative for "Save Report Configuration As..."
-       to be used as toolbar button label. */
-    { "ReportSaveAsAction", N_("Save Config As...") },
-    { "FilePrintPDFAction", N_("Make Pdf") },
-    { nullptr, nullptr },
-};
-
 static const gchar *initially_insensitive_actions[] =
 {
     nullptr
@@ -1278,12 +1281,37 @@ gnc_plugin_page_report_constructor(GType this_type, guint n_properties, GObjectC
     return obj;
 }
 
+
+
+static void
+gnc_plugin_page_report_menu_update (GncPluginPage *plugin_page,
+                                    action_toolbar_labels *tooltip_list)
+{
+    GtkWidget *menu_item;
+    GtkWidget *tool_item;
+//FIXMEb this may need changing to update the menu model instead of the GtkMenuItem
+    for (gint i = 0; (tooltip_list[i].action_name != NULL); i++)
+    {
+        menu_item = gnc_main_window_menu_find_menu_item (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window),
+                                                         tooltip_list[i].action_name);
+       if (menu_item)
+           gtk_widget_set_tooltip_text (GTK_WIDGET(menu_item), _(tooltip_list[i].label));
+
+       tool_item = gnc_main_window_toolbar_find_menu_item (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window),
+                                                           tooltip_list[i].action_name);
+       if (tool_item)
+           gtk_widget_set_tooltip_text (GTK_WIDGET(tool_item), _(tooltip_list[i].label));
+    }
+}
+
+
 static void
 gnc_plugin_page_report_menu_updates (GncPluginPage *plugin_page)
 {
     GncPluginPageReportPrivate *priv;
     GncPluginPageReport *report;
     GncMainWindow *window;
+    action_toolbar_labels tooltip_list[3];
     GAction *action;
 
     gchar *saved_reports_path = gnc_build_userdata_path (SAVED_REPORTS_FILE);
@@ -1299,8 +1327,11 @@ gnc_plugin_page_report_menu_updates (GncPluginPage *plugin_page)
 
     window = (GncMainWindow*)gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(plugin_page));
 
-//FIXMEb probably needs changing in model { "ReportSaveAction", N_("Save Report Configuration"), true, report_save_str };
-//FIXMEb probably needs changing in model { "ReportSaveAsAction", N_("Save Report Configuration As..."), true, report_saveas_str };
+    tooltip_list[0] = { "ReportSaveAction", report_save_str };
+    tooltip_list[1] = { "ReportSaveAsAction", report_saveas_str };
+    tooltip_list[2] = { nullptr, nullptr };
+
+    gnc_plugin_page_report_menu_update (plugin_page, tooltip_list);
 
     /* Enable the FilePrintAction */
     action = gnc_main_window_find_action (window, "FilePrintAction");
@@ -1356,8 +1387,6 @@ gnc_plugin_page_report_constr_init (GncPluginPageReport *plugin_page, gint repor
 
     gnc_plugin_update_actionsb (simple_action_group, initially_insensitive_actions,
                                 "sensitive", FALSE);
-
-//FIXMEb    gnc_plugin_init_short_names (action_group, toolbar_labels);
 }
 
 GncPluginPage*
