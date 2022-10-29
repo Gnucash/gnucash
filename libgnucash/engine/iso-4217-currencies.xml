@@ -1195,6 +1195,7 @@
   local-symbol="L"
 />
 <!-- "HRK" - "Croatian Kuna"
+     2023-01-01 "EUR" 7.53400
 -->
 <currency
   isocode="HRK"

@@ -132,6 +132,9 @@ set(test_qofsession_SOURCES
 gnc_add_test(test-qofsession "${test_qofsession_SOURCES}"
   gtest_engine_INCLUDES gtest_old_engine_LIBS)
 
+gnc_add_test(test-gnc-euro  gtest-gnc-euro.cpp
+  gtest_engine_INCLUDES gtest_old_engine_LIBS)
+
 set(test_gnc_int128_SOURCES
   ${MODULEPATH}/gnc-int128.cpp
   gtest-gnc-int128.cpp)
@@ -215,6 +218,7 @@ gnc_add_test(test-gnc-option "${gtest_gnc_option_SOURCES}" gtest_gnc_option_INCL
 
 set(test_engine_SOURCES_DIST
         dummy.cpp
+        gtest-gnc-euro.cpp
         gtest-gnc-int128.cpp
         gtest-gnc-rational.cpp
         gtest-gnc-numeric.cpp

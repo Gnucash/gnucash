@@ -144,7 +144,7 @@ gnc_style_sheet_options_close_cb (GncOptionsDialog *opt_dialog,
 {
     auto ssi{static_cast<ss_info*>(user_data)};
 
-    if (gtk_tree_row_reference_valid (ssi->row_ref))
+    if (gnc_style_sheet_dialog && gtk_tree_row_reference_valid (ssi->row_ref))
     {
         auto ss = gnc_style_sheet_dialog;
         auto path = gtk_tree_row_reference_get_path (ssi->row_ref);

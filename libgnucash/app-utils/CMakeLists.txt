@@ -13,7 +13,6 @@ set (app_utils_HEADERS
   gnc-account-merge.h
   gnc-addr-quickfill.h
   gnc-entry-quickfill.h
-  gnc-euro.h
   gnc-gsettings.h
   gnc-help-utils.h
   gnc-prefs-utils.h
@@ -29,7 +28,6 @@ set (app_utils_SOURCES
   gnc-account-merge.c
   gnc-addr-quickfill.c
   gnc-entry-quickfill.c
-  gnc-euro.c
   gnc-gsettings.cpp
   gnc-prefs-utils.c
   gnc-quotes.cpp

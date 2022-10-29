@@ -27,8 +27,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "gnc-ui-util.h"
+#include "gnc-session.h"
 
 /* local structs */
 typedef struct
@@ -39,39 +38,27 @@ typedef struct
 
 
 /* This array MUST be sorted ! */
-/* The rates are per EURO */
+/* The rates are per EURO and are converted to GncNumeric  */
 static gnc_euro_rate_struct gnc_euro_rates[] =
 {
     { "ATS",  13.7603 },  /* austrian schilling */
     { "BEF",  40.3399 },  /* belgian franc */
-    { "BFR",  40.3399 },  /* belgian franc */
     { "CYP",  .585274 },  /* cyprus pound */
     { "DEM",  1.95583 },  /* german mark */
-    { "DM",   1.95583 },  /* german mark */
     { "EEK",  15.6466 },  /* Estonian Kroon */
-    { "ESC",  200.482 },  /* portuguese escudo */
     { "ESP",  166.386 },  /* spanish peseta */
     { "EUR",  1.00000 },  /* euro */
-    { "EURO", 1.00000 },  /* euro */
-    { "FF",   6.55957 },  /* french franc */
     { "FIM",  5.94573 },  /* finnmark */
-    { "FMK",  5.94573 },  /* finnmark */
     { "FRF",  6.55957 },  /* french franc */
     { "GRD",  340.750 },  /* greek drachma */
-    { "HFL",  2.20371 },  /* netherland gulden */
+    { "HRK",  7.53450 },  /* Croatian kuna */
     { "IEP",  .787564 },  /* irish pound */
-    { "IRP",  .787564 },  /* irish pound */
     { "ITL",  1936.27 },  /* italian lira */
-    { "LFR",  40.3399 },  /* luxembourg franc */
-    { "LIT",  1936.27 },  /* italian lira */
     { "LUF",  40.3399 },  /* luxembourg franc */
     { "LVL",  .702804 },  /* latvian lats */
     { "MTL",  .429300 },  /* maltese lira */
     { "NLG",  2.20371 },  /* netherland gulden */
-    { "PTA",  166.386 },  /* spanish peseta */
     { "PTE",  200.482 },  /* portuguese escudo */
-    { "S",    13.7603 },  /* austrian schilling */
-    { "SCH",  13.7603 },  /* austrian schilling */
     { "SIT",  239.640 },  /* slovenian tolar */
     { "SKK",  30.1260 }   /* slovak koruna */
 };
@@ -156,7 +143,8 @@ gnc_convert_to_euro(const gnc_commodity * currency, gnc_numeric value)
         rate = double_to_gnc_numeric (result->rate, 100000, GNC_HOW_RND_ROUND_HALF_UP);
 
         /* EC Regulation 1103/97 states we should use "Round half away from zero"
-         * See http://europa.eu/legislation_summaries/economic_and_monetary_affairs/institutional_and_economic_framework/l25025_en.htm */
+         * See https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A31997R1103&qid=1662917247821
+         */
         return gnc_numeric_div (value, rate, 100, GNC_HOW_RND_ROUND_HALF_UP);
     }
 }
@@ -226,9 +214,8 @@ gnc_euro_currency_get_rate (const gnc_commodity *currency)
 gnc_commodity *
 gnc_get_euro (void)
 {
-    gnc_commodity_table *table;
-
-    table = gnc_commodity_table_get_table (gnc_get_current_book ());
+    QofBook* book = qof_session_get_book (gnc_get_current_session ());
+    gnc_commodity_table *table = gnc_commodity_table_get_table (book);
 
     return gnc_commodity_table_lookup (table, GNC_COMMODITY_NS_CURRENCY, "EUR");
 }

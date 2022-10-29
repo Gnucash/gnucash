@@ -677,6 +677,10 @@ test_book_features (Fixture *fixture, gconstpointer pData)
     g_assert_null (gnc_features_test_unknown (fixture->book));
     g_assert_true (gnc_features_check_used (fixture->book, "Credit Notes"));
 
+    gnc_features_set_unused (fixture->book, "Credit Notes");
+    g_assert_null (gnc_features_test_unknown (fixture->book));
+    g_assert_false (gnc_features_check_used (fixture->book, "Credit Notes"));
+
     /* cannot set an unknown feature: it bails out. */
     /* gnc_features_set_used (fixture->book, "Nanotech"); */
     /* g_assert_nonnull (gnc_features_test_unknown (fixture->book)); */
