@@ -945,8 +945,16 @@ gnc_budget_gui_delete_budget (GncBudget *budget)
 
     if (gnc_verify_dialog (NULL, FALSE, _("Delete %s?"), name))
     {
+        QofBook* book = gnc_get_current_book ();
+
         gnc_suspend_gui_refresh ();
         gnc_budget_destroy (budget);
+
+        if (qof_collection_count (qof_book_get_collection (book, GNC_ID_BUDGET)) == 0)
+        {
+            gnc_features_set_unused (book, GNC_FEATURE_BUDGET_UNREVERSED);
+            PWARN ("No budgets left. Removing feature BUDGET_UNREVERSED.");
+        }
         // Views should close themselves because the CM will notify them.
         gnc_resume_gui_refresh ();
     }

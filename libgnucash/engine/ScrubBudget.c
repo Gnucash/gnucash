@@ -193,18 +193,24 @@ maybe_scrub_budget (QofInstance* data, gpointer user_data)
 gboolean
 gnc_maybe_scrub_all_budget_signs (QofBook *book)
 {
-    Account* root = gnc_book_get_root_account (book);
-    gchar *retval = NULL;
+    QofCollection* collection = qof_book_get_collection (book, GNC_ID_BUDGET);
+    gboolean has_no_budgets = (qof_collection_count (collection) == 0);
+    gboolean featured = gnc_features_check_used (book, GNC_FEATURE_BUDGET_UNREVERSED);
 
-    if (gnc_features_check_used (book, GNC_FEATURE_BUDGET_UNREVERSED))
+    /* If there are no budgets, there shouldn't be feature! */
+    if (has_no_budgets && featured)
+    {
+        gnc_features_set_unused (book, GNC_FEATURE_BUDGET_UNREVERSED);
+        PWARN ("There are no budgets, removing feature BUDGET_UNREVERSED");
+    }
+
+    if (has_no_budgets || featured)
         return FALSE;
 
-    if (!gnc_budget_get_default (book))
-        return FALSE;
-
-    qof_collection_foreach (qof_book_get_collection (book, GNC_ID_BUDGET),
-                            maybe_scrub_budget, root);
-
+    /* There are budgets and feature is not set. Scrub, and set
+       feature. Return TRUE to show budget fix warning. */
+    qof_collection_foreach (collection, maybe_scrub_budget,
+                            gnc_book_get_root_account (book));
     gnc_features_set_used (book, GNC_FEATURE_BUDGET_UNREVERSED);
     return TRUE;
 }

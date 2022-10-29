@@ -301,14 +301,6 @@ gnc_plugin_budget_cmd_delete_budget (GtkAction *action,
     if (!bgt) return;
 
     gnc_budget_gui_delete_budget (bgt);
-
-    if (qof_collection_count (qof_book_get_collection (book, GNC_ID_BUDGET)) == 0)
-    {
-        gnc_features_set_unused (book, GNC_FEATURE_BUDGET_UNREVERSED);
-        PWARN ("Removing feature BUDGET_UNREVERSED. No budgets left.");
-    }
-
-
 }
 
 /************************************************************
