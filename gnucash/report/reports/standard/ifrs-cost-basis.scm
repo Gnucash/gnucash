@@ -382,7 +382,8 @@ the split action field to detect capitalized fees on stock activity")
                    "conv-proceeds-val" "conv-proceeds-cost"
                    "cumulative-average-cost-basis"
                    "average-cost-basis/unit-for-sale" "average-cost-basis-of-sale"
-                   "net-proceeds" "gain-post-commission" "gain-pre-commission"
+                   "net-proceeds" "gain-post-commission" "gain-pre-commission (calc)"
+                   "gain-pre-commission (register)" "gain-pre-commission variance"
                    "cumul-gross-profit" "cumul-net-profit" "cumul-tot-return"))
 
       (let lp ((splits splits)
@@ -458,6 +459,11 @@ the split action field to detect capitalized fees on stock activity")
                   (gain-pre-commission (M+ conv-proceeds-value
                                            average-cost-basis-of-sale))
 
+                  ;; difference between calculated (assuming acb) and
+                  ;; actual capgain. should be <1/SCU if all capgains
+                  ;; are recorded correctly.
+                  (gain-variance (M+ gain-pre-commission capgains-val))
+
                   (new-gross-profit (M+ cumul-gross-profit gain-pre-commission))
                   (new-net-profit (M+ cumul-net-profit gain-post-commission))
                   (new-tot-return (M+ cumul-tot-return gain-post-commission
@@ -505,6 +511,8 @@ the split action field to detect capitalized fees on stock activity")
                       (to-cell (to-report-currency net-proceeds))
                       (to-cell (to-report-currency gain-post-commission))
                       (to-cell (to-report-currency gain-pre-commission))
+                      (to-cell (to-report-currency capgains-val))
+                      (to-cell (to-report-currency gain-variance))
                       (to-cell (to-report-currency new-gross-profit))
                       (to-cell (to-report-currency new-net-profit))
                       (to-cell (to-report-currency new-tot-return))))

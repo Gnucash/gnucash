@@ -34,6 +34,7 @@ extern "C"
 #endif
 
 #include "../qof.h"
+#include "../gnc-features.h"
 #include "../qofbook-p.h"
 #include "../qofbookslots.h"
 /* For gnc_account_create_root() */
@@ -663,6 +664,25 @@ test_book_get_collection( Fixture *fixture, gconstpointer pData )
     g_assert( m_col == m_col2 );
 }
 
+
+static void
+test_book_features (Fixture *fixture, gconstpointer pData)
+{
+    g_test_message ("Testing book features");
+
+    g_assert_null (gnc_features_test_unknown (fixture->book));
+    g_assert_false (gnc_features_check_used (fixture->book, "Credit Notes"));
+
+    gnc_features_set_used (fixture->book, "Credit Notes");
+    g_assert_null (gnc_features_test_unknown (fixture->book));
+    g_assert_true (gnc_features_check_used (fixture->book, "Credit Notes"));
+
+    /* cannot set an unknown feature: it bails out. */
+    /* gnc_features_set_used (fixture->book, "Nanotech"); */
+    /* g_assert_nonnull (gnc_features_test_unknown (fixture->book)); */
+    g_assert_false (gnc_features_check_used (fixture->book, "Nanotech"));
+}
+
 static void
 test_book_foreach_collection( Fixture *fixture, gconstpointer pData )
 {
@@ -834,6 +854,7 @@ test_suite_qofbook ( void )
     GNC_TEST_ADD( suitename, "shutting down", Fixture, NULL, setup, test_book_shutting_down, teardown );
     GNC_TEST_ADD( suitename, "set get data", Fixture, NULL, setup, test_book_set_get_data, teardown );
     GNC_TEST_ADD( suitename, "get collection", Fixture, NULL, setup, test_book_get_collection, teardown );
+    GNC_TEST_ADD( suitename, "features", Fixture, NULL, setup, test_book_features, teardown );
     GNC_TEST_ADD( suitename, "foreach collection", Fixture, NULL, setup, test_book_foreach_collection, teardown );
     GNC_TEST_ADD_FUNC( suitename, "set data finalizers", test_book_set_data_fin );
     GNC_TEST_ADD( suitename, "mark closed", Fixture, NULL, setup, test_book_mark_closed, teardown );
