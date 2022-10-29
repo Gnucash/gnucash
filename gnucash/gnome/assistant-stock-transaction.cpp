@@ -292,7 +292,7 @@ static const TxnTypeVec short_types
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
         false,                  // fees_capitalize
         FieldMask::DISABLED,               // dividend_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE,          // capg_amt
+        FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE,          // capg_amt
         // Translators: this is a stock transaction describing cover
         // buying stock, and recording capital gain/loss
         N_("Buy to cover short"),

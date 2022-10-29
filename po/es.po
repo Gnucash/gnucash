@@ -83,7 +83,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-09-11 23:24+0200\n"
-"PO-Revision-Date: 2022-09-28 23:23+0000\n"
+"PO-Revision-Date: 2022-10-10 18:09+0000\n"
 "Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -16014,10 +16014,8 @@ msgstr "ISIN, CUSI_P u otro código"
 #: gnucash/gtkbuilder/dialog-commodity.glade:485
 #: gnucash/gtkbuilder/dialog-commodity.glade:767
 #: gnucash/gtkbuilder/dialog-price.glade:138
-#, fuzzy
-#| msgid "Namespace"
 msgid "Nam_espace"
-msgstr "Espacio de nombres"
+msgstr "_Espacio de nombres"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:500
 msgid "_Symbol/abbreviation"
@@ -22157,7 +22155,7 @@ msgstr "Deshabilitado"
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1314
 msgid "_Assign a transfer account to the selection"
-msgstr "_Asignar una cuenta a la selección para transferir."
+msgstr "_Asignar una cuenta a la selección para transferir"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1365

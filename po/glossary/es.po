@@ -11,14 +11,15 @@
 # Guille Lopez <willelopz@gmail.com>, 2021.
 # Francisco Serrador <fserrador@gmail.com>, 2021, 2022.
 # Cow <javier.fserrador@gmail.com>, 2022.
+# Pablo Fernandez <pfernandez@theansweris27.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-05-21 11:16+0000\n"
-"Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
+"PO-Revision-Date: 2022-10-10 18:09+0000\n"
+"Last-Translator: Pablo Fernandez <pfernandez@theansweris27.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "es/>\n"
 "Language: es\n"
@@ -26,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -110,7 +111,7 @@ msgstr "ahorro"
 
 #. "-"
 msgid "account type: Stock"
-msgstr "Existencias"
+msgstr "Acciones"
 
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
 msgid "account type: trading"

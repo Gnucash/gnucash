@@ -239,6 +239,12 @@ load_single_split (GncSqlBackend* sql_be, GncSqlRow& row)
         qof_backend_set_error ((QofBackend*)sql_be, ERR_BACKEND_DATA_CORRUPT);
         pSplit = NULL;
     }
+    if (!xaccSplitGetAccount(pSplit))
+    {
+        gchar guidstr[GUID_ENCODING_LENGTH + 1];
+        guid_to_string_buff (qof_instance_get_guid (pSplit), guidstr);
+        PERR("Split %s created with no account!", guidstr);
+    }
     return pSplit;
 }
 static void
