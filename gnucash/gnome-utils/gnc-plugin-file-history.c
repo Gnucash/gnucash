@@ -65,12 +65,12 @@ static void gnc_plugin_file_history_remove_from_window (GncPlugin *plugin, GncMa
 static QofLogModule log_module = GNC_MOD_GUI;
 
 /* Command callbacks */
-static void gnc_plugin_file_history_cmd_open_file (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_file_history_cmd_open_file (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 /** The label given to the main window for this plugin. */
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-file-history-actions"
 /** The name of the UI description file for this plugin. */
-#define PLUGIN_UI_FILENAME  "gnc-plugin-file-history-ui.xml"
+#define PLUGIN_UI_FILENAME  "gnc-plugin-file-history.ui"
 
 #define GNOME1_HISTORY "History"
 #define GNOME1_MAXFILES "MaxFiles"
@@ -80,21 +80,21 @@ static void gnc_plugin_file_history_cmd_open_file (GtkAction *action, GncMainWin
  *  will be updated to reflect the users recent choices.  This list is
  *  limited to ten actions, although there may be a smaller limit set
  *  by the user.  The typical limit is four. */
-static GtkActionEntry gnc_plugin_actions [] =
+static GActionEntry gnc_plugin_actions [] =
 {
-    { "RecentFile0Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
-    { "RecentFile1Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
-    { "RecentFile2Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
-    { "RecentFile3Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
-    { "RecentFile4Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
-    { "RecentFile5Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
-    { "RecentFile6Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
-    { "RecentFile7Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
-    { "RecentFile8Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
-    { "RecentFile9Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
+    { "RecentFile0Action", gnc_plugin_file_history_cmd_open_file, NULL, NULL, NULL },
+    { "RecentFile1Action", gnc_plugin_file_history_cmd_open_file, NULL, NULL, NULL },
+    { "RecentFile2Action", gnc_plugin_file_history_cmd_open_file, NULL, NULL, NULL },
+    { "RecentFile3Action", gnc_plugin_file_history_cmd_open_file, NULL, NULL, NULL },
+    { "RecentFile4Action", gnc_plugin_file_history_cmd_open_file, NULL, NULL, NULL },
+    { "RecentFile5Action", gnc_plugin_file_history_cmd_open_file, NULL, NULL, NULL },
+    { "RecentFile6Action", gnc_plugin_file_history_cmd_open_file, NULL, NULL, NULL },
+    { "RecentFile7Action", gnc_plugin_file_history_cmd_open_file, NULL, NULL, NULL },
+    { "RecentFile8Action", gnc_plugin_file_history_cmd_open_file, NULL, NULL, NULL },
+    { "RecentFile9Action", gnc_plugin_file_history_cmd_open_file, NULL, NULL, NULL },
 };
 /** The number of actions provided by this plugin. */
-static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
+static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
 
 
 /** The instance private data for a file history plugin.  This data
@@ -538,17 +538,16 @@ gnc_plugin_file_history_class_init (GncPluginFileHistoryClass *klass)
     object_class->finalize = gnc_plugin_file_history_finalize;
 
     /* plugin info */
-    plugin_class->plugin_name   = GNC_PLUGIN_FILE_HISTORY_NAME;
+    plugin_class->plugin_name = GNC_PLUGIN_FILE_HISTORY_NAME;
 
     /* function overrides */
     plugin_class->add_to_window = gnc_plugin_file_history_add_to_window;
-    plugin_class->remove_from_window =
-        gnc_plugin_file_history_remove_from_window;
+    plugin_class->remove_from_window = gnc_plugin_file_history_remove_from_window;
 
     /* widget addition/removal */
     plugin_class->actions_name  = PLUGIN_ACTIONS_NAME;
-    plugin_class->actions       = gnc_plugin_actions;
-    plugin_class->n_actions     = gnc_plugin_n_actions;
+    plugin_class->actionsb      = gnc_plugin_actions;
+    plugin_class->n_actionsb    = gnc_plugin_n_actions;
     plugin_class->ui_filename   = PLUGIN_UI_FILENAME;
 }
 
@@ -633,8 +632,8 @@ gnc_plugin_file_history_add_to_window (GncPlugin *plugin,
  */
 static void
 gnc_plugin_file_history_remove_from_window (GncPlugin *plugin,
-        GncMainWindow *window,
-        GQuark type)
+                                            GncMainWindow *window,
+                                            GQuark type)
 {
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_HISTORY, NULL,
                                  gnc_plugin_history_list_changed, window);
@@ -657,19 +656,22 @@ gnc_plugin_file_history_remove_from_window (GncPlugin *plugin,
  *  function and we're about to close all the windows anyway.
  */
 static void
-gnc_plugin_file_history_cmd_open_file (GtkAction *action,
-                                       GncMainWindowActionData *data)
+gnc_plugin_file_history_cmd_open_file (GSimpleAction *simple,
+                                       GVariant      *parameter,
+                                       gpointer       user_data)
+
 {
+    GncMainWindowActionData *data = user_data;
     gchar *filename;
 
-    g_return_if_fail(GTK_IS_ACTION(action));
+    g_return_if_fail(GTK_IS_ACTION(simple));
     g_return_if_fail(data != NULL);
 
     /* DRH - Do we need to close all open windows but the first?
      * Which progress bar should we be using? One in a window, or
      * in a new "file loading" dialog???
      */
-    filename = g_object_get_data(G_OBJECT(action), FILENAME_STRING);
+    filename = g_object_get_data(G_OBJECT(simple), FILENAME_STRING);
     gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
     /* also opens new account page */
     gnc_file_open_file (GTK_WINDOW (data->window),

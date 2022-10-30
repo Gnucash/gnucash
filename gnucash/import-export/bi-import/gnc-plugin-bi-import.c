@@ -46,19 +46,28 @@ static void gnc_plugin_bi_import_init               (GncPluginbi_import *plugin)
 static void gnc_plugin_bi_import_finalize           (GObject *object);
 
 /* Command callbacks */
-static void gnc_plugin_bi_import_cmd_test (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_bi_import_cmd_test (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-bi-import-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-bi-import-ui.xml"
+#define PLUGIN_UI_FILENAME  "gnc-plugin-bi-import.ui"
 
-static GtkActionEntry gnc_plugin_actions [] =
+static GActionEntry gnc_plugin_actions [] =
 {
-    /* Menu Items */
-    { "ImportMenuAction", NULL, N_("_Import"), NULL, NULL, NULL },
-    { "bi_importAction", "go-previous", N_("Import Bills & _Invoices..."), NULL, N_("Import bills and invoices from a CSV text file"),  G_CALLBACK(gnc_plugin_bi_import_cmd_test) },
+    { "bi_importAction", gnc_plugin_bi_import_cmd_test, NULL, NULL, NULL },
 };
+/** The number of actions provided by this plugin. */
 static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
 
+static GncDisplayItem gnc_plugin_display_items [] =
+{
+    /* Menu Items */
+    { "ImportMenuAction", NULL, N_("_Import"), NULL, NULL },
+    { "bi_importAction", "go-previous", N_("Import Bills & _Invoices..."),
+      NULL, N_("Import bills and invoices from a CSV text file")
+    },
+};
+/** The number of display items provided by this plugin. */
+static guint gnc_plugin_n_display_items = G_N_ELEMENTS(gnc_plugin_display_items);
 
 /************************************************************
  *                   Object Implementation                  *
@@ -84,10 +93,12 @@ gnc_plugin_bi_import_class_init (GncPluginbi_importClass *klass)
     plugin_class->plugin_name  = GNC_PLUGIN_BI_IMPORT_NAME;
 
     /* widget addition/removal */
-    plugin_class->actions_name       = PLUGIN_ACTIONS_NAME;
-    plugin_class->actions            = gnc_plugin_actions;
-    plugin_class->n_actions          = gnc_plugin_n_actions;
-    plugin_class->ui_filename        = PLUGIN_UI_FILENAME;
+    plugin_class->actions_name    = PLUGIN_ACTIONS_NAME;
+    plugin_class->actionsb        = gnc_plugin_actions;
+    plugin_class->n_actionsb      = gnc_plugin_n_actions;
+    plugin_class->display_items   = gnc_plugin_display_items;
+    plugin_class->n_display_items = gnc_plugin_n_display_items;
+    plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
 }
 
 static void
@@ -117,9 +128,13 @@ gnc_plugin_bi_import_create_plugin (void)
  ************************************************************/
 
 static void
-gnc_plugin_bi_import_cmd_test (GtkAction *action, GncMainWindowActionData *data)
+gnc_plugin_bi_import_cmd_test (GSimpleAction *simple,
+                               GVariant      *parameter,
+                               gpointer       user_data)
 {
-    ENTER ("action %p, main window data %p", action, data);
+    GncMainWindowActionData *data = user_data;
+
+    ENTER ("action %p, main window data %p", simple, data);
     PINFO ("bi_import");
 
     gnc_plugin_bi_import_showGUI(GTK_WINDOW(data->window));
