@@ -40,10 +40,8 @@
 #include "gnc-ab-utils.h" /* For version macros */
 
 #include <aqbanking/banking.h>
-#ifdef AQBANKING6
 #include <aqbanking/types/account_spec.h>
 #include <gwenhywfar/gui.h>
-#endif
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
@@ -65,9 +63,6 @@
 #include "gnc-session.h"
 #include "import-account-matcher.h"
 #include "import-utilities.h"
-#ifndef AQBANKING6
-# include <aqbanking/dlg_setup.h>
-#endif
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
@@ -92,10 +87,8 @@ void aai_page_prepare (GtkAssistant *assistant, gpointer user_data);
 void aai_button_clicked_cb(GtkButton *button, gpointer user_data);
 void aai_match_delete_button_clicked_cb(GtkButton *button, gpointer user_data);
 
-#ifdef AQBANKING6
 static guint aai_ab_account_hash(gconstpointer v);
 static gboolean aai_ab_account_equal(gconstpointer v1, gconstpointer v2);
-#endif
 void aai_match_page_prepare (GtkAssistant *assistant, gpointer user_data);
 
 static gboolean banking_has_accounts(AB_BANKING *banking);
@@ -207,9 +200,6 @@ aai_destroy_cb(GtkWidget *object, gpointer user_data)
 
     if (info->gnc_hash)
     {
-#ifndef AQBANKING6
-        AB_Banking_OnlineFini(info->api);
-#endif
         g_hash_table_destroy(info->gnc_hash);
         info->gnc_hash = NULL;
     }
@@ -268,16 +258,7 @@ aai_button_clicked_cb(GtkButton *button, gpointer user_data)
     }
 
     {
-#ifdef AQBANKING6
         GWEN_DIALOG *dlg = AB_Banking_CreateSetupDialog(banking);
-#else
-        GWEN_DIALOG *dlg = AB_SetupDialog_new(banking);
-
-        if (AB_Banking_OnlineInit(banking) != 0)
-        {
-            PERR("Got error on AB_Banking_OnlineInit!");
-        }
-#endif
         if (!dlg)
         {
             PERR("Could not lookup Setup Dialog of aqbanking!");
@@ -292,12 +273,6 @@ aai_button_clicked_cb(GtkButton *button, gpointer user_data)
             }
             GWEN_Dialog_free(dlg);
         }
-#ifndef AQBANKING6
-        if (AB_Banking_OnlineFini(banking) != 0)
-        {
-            PERR("Got error on AB_Banking_OnlineFini!");
-        }
-#endif
     }
 
     /* Enable the Assistant Buttons if we accounts */
@@ -369,7 +344,6 @@ aai_match_delete_button_clicked_cb(GtkButton *button, gpointer user_data)
     }
 }
 
-#ifdef AQBANKING6
 static guint
 aai_ab_account_hash (gconstpointer v)
 {
@@ -393,7 +367,6 @@ aai_ab_account_equal (gconstpointer v1, gconstpointer v2)
 		return uid1 == uid2;
 	}
 }
-#endif
 
 static void
 insert_acc_into_revhash_cb(gpointer ab_acc, gpointer gnc_acc, gpointer revhash)
@@ -424,17 +397,9 @@ aai_match_page_prepare (GtkAssistant *assistant, gpointer user_data)
     /* Do not run this twice */
     if (!info->match_page_prepared)
     {
-#ifndef AQBANKING6
-        /* Load aqbanking accounts */
-        AB_Banking_OnlineInit(info->api);
-#endif
         /* Determine current mapping */
         root = gnc_book_get_root_account(gnc_get_current_book());
-#ifdef AQBANKING6
         info->gnc_hash = g_hash_table_new(&aai_ab_account_hash, &aai_ab_account_equal);
-#else
-        info->gnc_hash = g_hash_table_new(&g_direct_hash, &g_direct_equal);
-#endif
         data.api = info->api;
         data.hash = info->gnc_hash;
         gnc_account_foreach_descendant(root, (AccountCb) hash_from_kvp_acc_cb, &data);
@@ -479,24 +444,11 @@ banking_has_accounts(AB_BANKING *banking)
 
     g_return_val_if_fail(banking, FALSE);
 
-#ifdef AQBANKING6
     if (AB_Banking_GetAccountSpecList (banking, &accl) >= 0 &&
         accl && AB_AccountSpec_List_GetCount (accl))
         result = TRUE;
     if (accl)
         AB_AccountSpec_List_free (accl);
-#else
-    AB_Banking_OnlineInit(banking);
-
-    accl = AB_Banking_GetAccounts(banking);
-    if (accl && (AB_Account_List2_GetSize(accl) > 0))
-        result = TRUE;
-
-    if (accl)
-        AB_Account_List2_free(accl);
-
-    AB_Banking_OnlineFini(banking);
-#endif
 
     return result;
 }
@@ -521,17 +473,9 @@ ab_account_longname(const GNC_AB_ACCOUNT_SPEC *ab_acc)
 
     g_return_val_if_fail(ab_acc, NULL);
 
-#ifdef AQBANKING6
     bankcode = AB_AccountSpec_GetBankCode(ab_acc);
     subAccountId = AB_AccountSpec_GetSubAccountNumber(ab_acc);
     account_number = AB_AccountSpec_GetAccountNumber (ab_acc);
-#else
-    ab_bankname = AB_Account_GetBankName(ab_acc);
-    bankname = ab_bankname ? gnc_utf8_strip_invalid_strdup(ab_bankname) : NULL;
-    bankcode = AB_Account_GetBankCode(ab_acc);
-    subAccountId = AB_Account_GetSubAccountId(ab_acc);
-    account_number = AB_Account_GetAccountNumber (ab_acc);
-#endif
     /* Translators: Strings are 1. Bank code, 2. Bank name,
        3. Account Number, 4. Subaccount ID                  */
     result = g_strdup_printf(_("Bank code %s (%s), Account %s (%s)"),
@@ -593,14 +537,8 @@ update_account_list(ABInitialInfo *info)
 
     /* Refill the list */
     gtk_list_store_clear(info->account_store);
-#ifdef AQBANKING6
     if (AB_Banking_GetAccountSpecList(info->api, &acclist) >= 0 && acclist)
         AB_AccountSpec_List_ForEach(acclist, update_account_list_acc_cb, info);
-#else
-    acclist = AB_Banking_GetAccounts(info->api);
-    if (acclist)
-        AB_Account_List2_ForEach(acclist, update_account_list_acc_cb, info);
-#endif
     else
         g_warning("update_account_list: Oops, account list from AB_Banking "
                   "is NULL");
@@ -639,11 +577,7 @@ clear_line_cb(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
 
     gtk_tree_model_get(model, iter, ACCOUNT_LIST_COL_AB_ACCT, &ab_acc, -1);
 
-#ifdef AQBANKING6
     if (aai_ab_account_equal(ab_acc, data->ab_acc))
-#else
-    if (ab_acc == data->ab_acc)
-#endif
     {
         gtk_list_store_set(store, iter, ACCOUNT_LIST_COL_GNC_NAME, "",
                            ACCOUNT_LIST_COL_CHECKED, TRUE, -1);
@@ -682,11 +616,7 @@ account_list_clicked_cb (GtkTreeView *view, GtkTreePath *path,
         old_value = g_hash_table_lookup(info->gnc_hash, ab_acc);
 
         longname = ab_account_longname(ab_acc);
-#ifdef AQBANKING6
         currency = AB_AccountSpec_GetCurrency(ab_acc);
-#else
-        currency = AB_Account_GetCurrency(ab_acc);
-#endif
         if (currency && *currency)
         {
             commodity = gnc_commodity_table_lookup(
@@ -753,51 +683,35 @@ save_kvp_acc_cb(gpointer key, gpointer value, gpointer user_data)
     guint32 ab_account_uid;
     const gchar *ab_accountid, *gnc_accountid;
     const gchar *ab_bankcode, *gnc_bankcode;
-#ifdef AQBANKING6
     gchar *ab_online_id;
     gchar *gnc_online_id;
-#endif
 
     g_return_if_fail(ab_acc && gnc_acc);
 
-#ifdef AQBANKING6
     ab_account_uid = AB_AccountSpec_GetUniqueId(ab_acc);
-#else
-    ab_account_uid = AB_Account_GetUniqueId(ab_acc);
-#endif
     if (gnc_ab_get_account_uid(gnc_acc) != ab_account_uid)
         gnc_ab_set_account_uid(gnc_acc, ab_account_uid);
 
-#ifdef AQBANKING6
     ab_accountid = AB_AccountSpec_GetAccountNumber(ab_acc);
-#else
-    ab_accountid = AB_Account_GetAccountNumber(ab_acc);
-#endif
     gnc_accountid = gnc_ab_get_account_accountid(gnc_acc);
     if (ab_accountid
             && (!gnc_accountid
                 || (strcmp(ab_accountid, gnc_accountid) != 0)))
         gnc_ab_set_account_accountid(gnc_acc, ab_accountid);
 
-#ifdef AQBANKING6
     ab_bankcode = AB_AccountSpec_GetBankCode(ab_acc);
-#else
-    ab_bankcode = AB_Account_GetBankCode(ab_acc);
-#endif
     gnc_bankcode = gnc_ab_get_account_bankcode(gnc_acc);
     if (ab_bankcode
             && (!gnc_bankcode
                 || (strcmp(gnc_bankcode, ab_bankcode) != 0)))
         gnc_ab_set_account_bankcode(gnc_acc, ab_bankcode);
 
-#ifdef AQBANKING6
     ab_online_id = gnc_ab_create_online_id(ab_bankcode, ab_accountid);
     gnc_online_id = gnc_import_get_acc_online_id(gnc_acc);
     if (ab_online_id && (!gnc_online_id || (strcmp(ab_online_id, gnc_online_id) != 0)))
         gnc_import_set_acc_online_id(gnc_acc, ab_online_id);
     g_free(ab_online_id);
     g_free (gnc_online_id);
-#endif
 }
 
 static void

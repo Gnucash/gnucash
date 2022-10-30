@@ -75,10 +75,7 @@ static void gnc_plugin_ab_cmd_issue_sepainternaltransaction(GtkAction *action, G
 static void gnc_plugin_ab_cmd_issue_inttransaction(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_ab_cmd_issue_sepa_direct_debit(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_ab_cmd_view_logwindow(GtkToggleAction *action, GncMainWindow *window);
-static void gnc_plugin_ab_cmd_mt940_import(GtkAction *action, GncMainWindowActionData *data);
-static void gnc_plugin_ab_cmd_mt942_import(GtkAction *action, GncMainWindowActionData *data);
-static void gnc_plugin_ab_cmd_dtaus_import(GtkAction *action, GncMainWindowActionData *data);
-static void gnc_plugin_ab_cmd_dtaus_importsend(GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_ab_cmd_aqb_import(GtkAction *action, GncMainWindowActionData *data);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-aqbanking-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-aqbanking-ui.xml"
@@ -133,38 +130,9 @@ static GtkActionEntry gnc_plugin_actions [] =
 
     /* File -> Import menu item */
     {
-        "Mt940ImportAction", "go-previous",
-		/* Translators: Message types MTxxxx are exchange formats used by the SWIFT network
-		   https://en.wikipedia.org/wiki/Society_for_Worldwide_Interbank_Financial_Telecommunication */
-		N_("Import _MT940"), NULL,
-        N_("Import an end-of-day account statement in SWIFT MT940 format into GnuCash."),
-        G_CALLBACK(gnc_plugin_ab_cmd_mt940_import)
-    },
-    {
-        "Mt942ImportAction", "go-previous", N_("Import MT94_2"), NULL,
-        N_("Import an interim account statement in SWIFT MT942 format into GnuCash."),
-        G_CALLBACK(gnc_plugin_ab_cmd_mt942_import)
-    },
-    {
-        "DtausImportAction", "go-previous",
-	/* Translators: DTAUS is a traditional german exchange format.
-           https://de.wikipedia.org/wiki/Datentr%C3%A4geraustauschverfahren */
-		N_("Import _DTAUS"), NULL,
-        N_("Import a traditional german DTAUS file into GnuCash."),
-        G_CALLBACK(gnc_plugin_ab_cmd_dtaus_import)
-    },
-    /* #ifdef CSV_IMPORT_FUNCTIONAL */
-    /*     { "CsvImportAction", "go-previous", N_("Import _CSV"), NULL, */
-    /*       N_("Import a CSV file into GnuCash"), */
-    /*       G_CALLBACK(gnc_plugin_ab_cmd_csv_import) }, */
-    /*     { "CsvImportSendAction", "go-previous", N_("Import CSV and s_end..."), NULL, */
-    /*       N_("Import a CSV file into GnuCash and send the transfers online through Online Banking"), */
-    /*       G_CALLBACK(gnc_plugin_ab_cmd_csv_importsend) }, */
-    /* #endif */
-    {
-        "DtausImportSendAction", "go-previous", N_("Import DTAUS and _send..."), NULL,
-        N_("Import a DTAUS file into GnuCash and transmit its orders by Online Banking."),
-        G_CALLBACK(gnc_plugin_ab_cmd_dtaus_importsend)
+        "AQBankingImportAction", "go-previous", N_("Import using AQBanking"),
+        NULL, N_("Import into GnuCash any file format supported by AQBanking."),
+        G_CALLBACK(gnc_plugin_ab_cmd_aqb_import)
     },
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
@@ -659,50 +627,13 @@ gnc_plugin_ab_cmd_view_logwindow(GtkToggleAction *action, GncMainWindow *window)
     }
 }
 
-
 static void
-gnc_plugin_ab_cmd_mt940_import(GtkAction *action, GncMainWindowActionData *data)
+gnc_plugin_ab_cmd_aqb_import(GtkAction *action,
+                             GncMainWindowActionData *data)
 {
-    gchar *format = gnc_prefs_get_string(GNC_PREFS_GROUP_AQBANKING,
-                                         GNC_PREF_FORMAT_SWIFT940);
     gnc_main_window = data->window;
-    gnc_file_aqbanking_import (GTK_WINDOW (gnc_main_window),
-                               "swift", format && *format ? format : "swift-mt940", FALSE);
-    g_free(format);
-}
+    gnc_file_aqbanking_import_dialog (GTK_WINDOW (gnc_main_window));
 
-static void
-gnc_plugin_ab_cmd_mt942_import(GtkAction *action, GncMainWindowActionData *data)
-{
-    gchar *format = gnc_prefs_get_string(GNC_PREFS_GROUP_AQBANKING,
-                                         GNC_PREF_FORMAT_SWIFT942);
-    gnc_main_window = data->window;
-    gnc_file_aqbanking_import (GTK_WINDOW (gnc_main_window),
-                               "swift", format && *format? format : "swift-mt942", FALSE);
-    g_free(format);
-}
-
-static void
-gnc_plugin_ab_cmd_dtaus_import(GtkAction *action, GncMainWindowActionData *data)
-{
-    gchar *format = gnc_prefs_get_string(GNC_PREFS_GROUP_AQBANKING,
-                                         GNC_PREF_FORMAT_DTAUS);
-    gnc_main_window = data->window;
-    gnc_file_aqbanking_import (GTK_WINDOW (gnc_main_window),
-                               "dtaus", format && *format ? format : "default", FALSE);
-    g_free(format);
-}
-
-static void
-gnc_plugin_ab_cmd_dtaus_importsend(GtkAction *action,
-                                   GncMainWindowActionData *data)
-{
-    gchar *format = gnc_prefs_get_string(GNC_PREFS_GROUP_AQBANKING,
-                                         GNC_PREF_FORMAT_DTAUS);
-    gnc_main_window = data->window;
-    gnc_file_aqbanking_import (GTK_WINDOW (gnc_main_window),
-                               "dtaus", format && *format ? format : "default", TRUE);
-    g_free(format);
 }
 
 /************************************************************

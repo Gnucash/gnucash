@@ -1,7 +1,7 @@
-cmake
-cmake-3.17
+cmake-3.20
 gettext
-gettext-0.20.2
+gettext-0.21
 guile
 itstool
+pkgconfig
 swig

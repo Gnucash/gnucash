@@ -25,9 +25,8 @@
  * @addtogroup AqBanking
  * @{
  * @file aqbanking/gnc-file-aqb-import.h
- * @brief DTAUS import module interface
- * @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>
- * @author Copyright (C) 2008 Andreas Koehler <andi5.py@gmx.net>
+ * @brief File import module interface
+ * @author Copyright (C) 2022 John Ralls <jralls@ceridwen.us>
  */
 
 #ifndef GNC_FILE_AQB_IMPORT_H
@@ -38,29 +37,12 @@
 G_BEGIN_DECLS
 
 /**
- * This routine will pop up a standard file selection dialog asking the user to
- * pick a file to import.  This file will be opened and read.  Its contents will
- * be imported into the current book, using the import matcher from
- * import-main-matcher.h.
- *
- * @param aqbanking_importername The aqbanking importer module that should be
- * used.  Possible values: "dtaus", "csv", "swift", or more.
- *
- * @param aqbanking_formatname In aqbanking, each importer has one or more data
- * formats available which define the actual data fields that should be used.
- * In aqbanking, such a different format is called a "profile".  Possible values
- * for swift: "swift-mt940" or "swift-mt942", but for all others: "default", or
- * more precisely: Look into $datadir/aqbanking/imexporters and look into the
- * "name" field of the foo.conf files.
- *
- * @param exec_as_aqbanking_jobs If TRUE, additionally queue the imported
- * transactions as online jobs over aqbanking/HBCI.  If FALSE, just import the
- * transactions and that's it.
+ * Import files via AQBanking's Import Dialog. This permits importing
+ * any file format that Aqbanking supports.
+ * @param parent A GtkWindow for setting the import dialog transient for.
  */
-void gnc_file_aqbanking_import (GtkWindow *parent,
-                                const gchar *aqbanking_importername,
-                                const gchar *aqbanking_formatname,
-                                gboolean exec_as_aqbanking_jobs);
+void gnc_file_aqbanking_import_dialog (GtkWindow *parent);
+
 
 G_END_DECLS
 

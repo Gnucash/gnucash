@@ -48,7 +48,7 @@ include (TestBigEndian)
 # SQL, put -D WITH_SQL=OFF on the command line.
 
 option (WITH_SQL "Build this project with SQL (libdbi) support" ON)
-option (WITH_AQBANKING "Build this project with aqbanking (online banking) support" ON)
+option (WITH_AQBANKING "Build this project with aqbanking (online banking and a variety of file import formats) support" ON)
 option (WITH_GNUCASH "Build all of GnuCash, not just the library" ON)
 option (WITH_OFX "compile with ofx support (needs LibOFX)" ON)
 option (WITH_PYTHON "enable python plugin and bindings" OFF)
@@ -358,8 +358,8 @@ find_guile_dirs()
 
 # ############################################################
 if (WITH_AQBANKING)
-  pkg_check_modules (GWENHYWFAR REQUIRED gwenhywfar>=4.20)
-  pkg_check_modules (AQBANKING REQUIRED aqbanking>=5.7.8)
+  pkg_check_modules (GWENHYWFAR REQUIRED gwenhywfar>=5.8.0)
+  pkg_check_modules (AQBANKING REQUIRED aqbanking>=6.4.0)
   set(CMAKE_REQUIRED_INCLUDES "${AQBANKING_INCLUDE_DIRS}"
     "${GWENHYWFAR_INCLUDE_DIRS}")
   set(CMAKE_REQUIRED_LIBRARIES "${AQBANKING_LD_FLAGS}")

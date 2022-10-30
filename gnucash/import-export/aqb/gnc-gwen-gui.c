@@ -110,16 +110,10 @@ static gboolean keep_alive(GncGWENGui *gui);
 static void cm_close_handler(gpointer user_data);
 static void erase_password(gchar *password);
 static gchar *strip_html(gchar *text);
-#ifndef AQBANKING6
-static void get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
-                      const gchar *text, gchar **input, gint min_len,
-                      gint max_len);
-#else
 static void get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
                       const gchar *text, const char *mimeType,
                       const char *pChallenge, uint32_t lChallenge,
                       gchar **input, gint min_len, gint max_len);
-#endif
 static gint GNC_GWENHYWFAR_CB messagebox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
                           const gchar *text, const gchar *b1, const gchar *b2,
                           const gchar *b3, guint32 guiid);
@@ -137,14 +131,6 @@ static gint GNC_GWENHYWFAR_CB progress_advance_cb(GWEN_GUI *gwen_gui, uint32_t i
 static gint GNC_GWENHYWFAR_CB progress_log_cb(GWEN_GUI *gwen_gui, guint32 id,
                             GWEN_LOGGER_LEVEL level, const gchar *text);
 static gint GNC_GWENHYWFAR_CB progress_end_cb(GWEN_GUI *gwen_gui, guint32 id);
-#ifndef AQBANKING6
-static gint GNC_GWENHYWFAR_CB getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags,
-                                             const gchar *token,
-                                             const gchar *title,
-                                             const gchar *text, gchar *buffer,
-                                             gint min_len, gint max_len,
-                                             guint32 guiid);
-#else
 static gint GNC_GWENHYWFAR_CB getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags,
                                              const gchar *token,
                                              const gchar *title,
@@ -153,7 +139,6 @@ static gint GNC_GWENHYWFAR_CB getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags,
                                              GWEN_GUI_PASSWORD_METHOD methodId,
                                              GWEN_DB_NODE *methodParams,
                                              guint32 guiid);
-#endif
 static gint GNC_GWENHYWFAR_CB setpasswordstatus_cb(GWEN_GUI *gwen_gui, const gchar *token,
         const gchar *pin,
         GWEN_GUI_PASSWORD_STATUS status, guint32 guiid);
@@ -912,15 +897,10 @@ strip_html(gchar *text)
 }
 
 static void
-#ifndef AQBANKING6
-get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
-          gchar **input, gint min_len, gint max_len)
-#else
 get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
                       const gchar *text, const char *mimeType,
                       const char *pChallenge, uint32_t lChallenge,
                       gchar **input, gint min_len, gint max_len)
-#endif
 {
     GtkBuilder *builder;
     GtkWidget *dialog;
@@ -968,7 +948,6 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
     gtk_widget_set_visible(GTK_WIDGET(flickergui->spin_barwidth), FALSE);
     gtk_widget_set_visible(GTK_WIDGET(flickergui->spin_delay), FALSE);
 
-    #ifdef AQBANKING6
     if (g_strcmp0(mimeType,"text/x-flickercode") == 0 && pChallenge != NULL)
     {
         /* Chiptan Optic (aka Flicker) */
@@ -983,7 +962,6 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
         /* Phototan or Chiptan QR */
         gtk_widget_set_visible(GTK_WIDGET(optical_challenge), TRUE);
     }
-    #endif
     if (is_tan)
     {
         gtk_widget_hide(remember_pin_checkbutton);
@@ -1022,7 +1000,6 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
         g_free(raw_text);
     }
 
-    #ifdef AQBANKING6
     /* Optical challenge. Flickercode sets the mimetype to
      * x-flickercode and doesn't set the challenge length */
     if (g_strcmp0(mimeType,"text/x-flickercode") == 0 && pChallenge != NULL)
@@ -1062,7 +1039,6 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
 
         gtk_image_set_from_pixbuf(optical_challenge, pixbuf);
     }
-#endif
 
     if (*input)
     {
@@ -1199,11 +1175,7 @@ inputbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
 
     ENTER("gui=%p, flags=%d", gui, flags);
 
-    #ifndef AQBANKING6
-    get_input(gui, flags, title, text, &input, min_len, max_len);
-    #else
     get_input(gui, flags, title, text, NULL, NULL, 0, &input, min_len, max_len);
-    #endif
 
     if (input)
     {
@@ -1439,31 +1411,22 @@ progress_end_cb(GWEN_GUI *gwen_gui, guint32 id)
 }
 
 static gint GNC_GWENHYWFAR_CB
-#ifndef AQBANKING6
-getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *token,
-               const gchar *title, const gchar *text, gchar *buffer,
-               gint min_len, gint max_len, guint32 guiid)
-#else
 getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *token,
                const gchar *title, const gchar *text, gchar *buffer,
                gint min_len, gint max_len, GWEN_GUI_PASSWORD_METHOD methodId,
                GWEN_DB_NODE *methodParams, guint32 guiid)
-#endif
 {
     GncGWENGui *gui = GETDATA_GUI(gwen_gui);
     gchar *password = NULL;
     gboolean is_tan = (flags & GWEN_GUI_INPUT_FLAGS_TAN) != 0;
 
-    #ifdef AQBANKING6
     int opticalMethodId;
     const char *mimeType = NULL;
     const char *pChallenge = NULL;
     uint32_t lChallenge = 0;
-    #endif
 
     g_return_val_if_fail(gui, -1);
 
-    #ifdef AQBANKING6
     // cf. https://www.aquamaniac.de/rdm/projects/aqbanking/wiki/ImplementTanMethods
     if(is_tan && methodId == GWEN_Gui_PasswordMethod_OpticalHHD)
     {
@@ -1507,7 +1470,6 @@ getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *token,
                 break;
         }
     }
-    #endif
 
     ENTER("gui=%p, flags=%d, token=%s", gui, flags, token ? token : "(null");
 
@@ -1536,11 +1498,7 @@ getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *token,
         }
     }
 
-    #ifndef AQBANKING6
-    get_input(gui, flags, title, text, &password, min_len, max_len);
-    #else
     get_input(gui, flags, title, text, mimeType, pChallenge, lChallenge, &password, min_len, max_len);
-    #endif
 
     if (password)
     {

@@ -32,16 +32,8 @@
 #include <config.h>
 
 #include <glib/gi18n.h>
-#include "gnc-ab-utils.h" /* for AQBANKING6 */
-#ifdef AQBANKING6
-# include <aqbanking/types/transaction.h>
-#else
-# include <aqbanking/jobsingletransfer.h>
-# include <aqbanking/jobsingledebitnote.h>
-# include <aqbanking/jobinternaltransfer.h>
-# include <aqbanking/jobsepatransfer.h>
-# include <aqbanking/jobsepadebitnote.h>
-#endif
+#include "gnc-ab-utils.h"
+#include <aqbanking/types/transaction.h>
 
 #include <gnc-aqbanking-templates.h>
 #include "dialog-ab-trans.h"
@@ -72,26 +64,26 @@ static void gnc_ab_trans_dialog_check_iban(const GncABTransDialog *td,
         const AB_TRANSACTION *trans);
 
 /* Callbacks - connected with GtkBuilder */
-G_MODULE_EXPORT void gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data);
-G_MODULE_EXPORT void gnc_ab_trans_dialog_moveup_templ_cb(GtkButton *button, gpointer user_data);
-G_MODULE_EXPORT void gnc_ab_trans_dialog_movedown_templ_cb(GtkButton *button, gpointer user_data);
-G_MODULE_EXPORT void gnc_ab_trans_dialog_sort_templ_cb(GtkButton *button, gpointer user_data);
-G_MODULE_EXPORT void gnc_ab_trans_dialog_del_templ_cb(GtkButton *button, gpointer user_data);
-G_MODULE_EXPORT void gnc_ab_trans_dialog_ibanentry_filter_cb (GtkEditable *editable,
+static void gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data);
+static void gnc_ab_trans_dialog_moveup_templ_cb(GtkButton *button, gpointer user_data);
+static void gnc_ab_trans_dialog_movedown_templ_cb(GtkButton *button, gpointer user_data);
+static void gnc_ab_trans_dialog_sort_templ_cb(GtkButton *button, gpointer user_data);
+static void gnc_ab_trans_dialog_del_templ_cb(GtkButton *button, gpointer user_data);
+static void gnc_ab_trans_dialog_ibanentry_filter_cb (GtkEditable *editable,
         const gchar *text,
         gint         length,
         gint        *position,
         gpointer     user_data);
-G_MODULE_EXPORT void gnc_ab_trans_dialog_bicentry_filter_cb (GtkEditable *editable,
+static void gnc_ab_trans_dialog_bicentry_filter_cb (GtkEditable *editable,
         const gchar *text,
         gint         length,
         gint        *position,
         gpointer     user_data);
-G_MODULE_EXPORT void gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkTreeView *view,
+static void gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkTreeView *view,
         GtkTreePath *path,
         GtkTreeViewColumn *column,
         gpointer user_data);
-G_MODULE_EXPORT void gnc_ab_trans_dialog_verify_values(GncABTransDialog *td);
+static void gnc_ab_trans_dialog_verify_values(GncABTransDialog *td);
 
 
 enum
@@ -189,11 +181,7 @@ gnc_ab_trans_dialog_fill_values(GncABTransDialog *td)
     AB_TRANSACTION *trans = AB_Transaction_new();
     AB_VALUE *value;
 
-#ifdef AQBANKING6
     AB_Banking_FillTransactionFromAccountSpec(trans, td->ab_acc);
-#else
-    AB_Transaction_FillLocalFromAccount(trans, td->ab_acc);
-#endif
 
     if (gnc_ab_trans_isSEPA(td->trans_type))
     {
@@ -212,7 +200,6 @@ gnc_ab_trans_dialog_fill_values(GncABTransDialog *td)
                     trans, gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry)));
     }
     AB_Transaction_SetRemoteCountry(trans, "DE");
-#ifdef AQBANKING6
     AB_Transaction_SetRemoteName(
         trans, gtk_entry_get_text(GTK_ENTRY(td->recp_name_entry)));
 
@@ -222,19 +209,6 @@ gnc_ab_trans_dialog_fill_values(GncABTransDialog *td)
         trans, gtk_entry_get_text(GTK_ENTRY(td->purpose_cont_entry)));
     AB_Transaction_AddPurposeLine(
         trans, gtk_entry_get_text(GTK_ENTRY(td->purpose_cont2_entry)));
-#else
-    AB_Transaction_AddRemoteName(
-        trans, gtk_entry_get_text(GTK_ENTRY(td->recp_name_entry)), FALSE);
-
-    AB_Transaction_AddPurpose(
-        trans, gtk_entry_get_text(GTK_ENTRY(td->purpose_entry)), FALSE);
-    AB_Transaction_AddPurpose(
-        trans, gtk_entry_get_text(GTK_ENTRY(td->purpose_cont_entry)), FALSE);
-    AB_Transaction_AddPurpose(
-        trans, gtk_entry_get_text(GTK_ENTRY(td->purpose_cont2_entry)), FALSE);
-    AB_Transaction_AddPurpose(
-        trans, gtk_entry_get_text(GTK_ENTRY(td->purpose_cont3_entry)), FALSE);
-#endif
     value = AB_Value_fromDouble(gnc_amount_edit_get_damount(
                                     GNC_AMOUNT_EDIT(td->amount_edit)));
     /* FIXME: Replace "EUR" by account-dependent string here. */
@@ -294,23 +268,12 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
 
     g_return_val_if_fail(ab_acc, NULL);
 
-#ifdef AQBANKING6
     ab_ownername = AB_AccountSpec_GetOwnerName(ab_acc);
     if (!ab_ownername)
         ab_ownername = "";
     ab_accountnumber = AB_AccountSpec_GetAccountNumber(ab_acc);
     ab_bankcode = AB_AccountSpec_GetBankCode(ab_acc);
     ab_bankname = _("(unknown)");
-#else
-    ab_ownername = AB_Account_GetOwnerName(ab_acc);
-    if (!ab_ownername)
-        ab_ownername = "";
-    ab_accountnumber = AB_Account_GetAccountNumber(ab_acc);
-    ab_bankcode = AB_Account_GetBankCode(ab_acc);
-    ab_bankname = AB_Account_GetBankName(ab_acc);
-    if (!ab_bankname || !*ab_bankname)
-        ab_bankname = _("(unknown)");
-#endif
 
     td = g_new0(GncABTransDialog, 1);
     td->parent = parent;
@@ -474,13 +437,8 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
     if (gnc_ab_trans_isSEPA(trans_type))
     {
         gtk_widget_set_sensitive(GTK_WIDGET(td->orig_name_entry), TRUE);
-#if AQBANKING6
         ab_accountnumber = AB_AccountSpec_GetIban(ab_acc);
         ab_bankcode = AB_AccountSpec_GetBic(ab_acc);
-#else
-        ab_accountnumber = AB_Account_GetIBAN(ab_acc);
-        ab_bankcode = AB_Account_GetBIC(ab_acc);
-#endif
         gtk_label_set_text(GTK_LABEL(orig_account_label), ab_accountnumber);
         gtk_label_set_text (GTK_LABEL (orig_bankcode_label), ab_bankcode);
     }
@@ -711,11 +669,7 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
     }
 
     /* Activate as many purpose entries as available for the job */
-#ifdef AQBANKING6
     joblimits = AB_AccountSpec_GetTransactionLimitsForCommand(td->ab_acc, AB_Transaction_GetCommand(job));
-#else
-    joblimits = AB_Job_GetFieldLimits (job);
-#endif
     max_purpose_lines = joblimits ?
                         AB_TransactionLimits_GetMaxLinesPurpose(joblimits) : 2;
     gtk_widget_set_sensitive(td->purpose_cont_entry, max_purpose_lines > 1);
@@ -855,7 +809,6 @@ static GNC_AB_JOB *
 gnc_ab_trans_dialog_get_available_empty_job(GNC_AB_ACCOUNT_SPEC *ab_acc, GncABTransType trans_type)
 {
     GNC_AB_JOB *job;
-#ifdef AQBANKING6
     AB_TRANSACTION_COMMAND cmd = AB_Transaction_CommandUnknown;
 
      switch (trans_type)
@@ -869,11 +822,9 @@ gnc_ab_trans_dialog_get_available_empty_job(GNC_AB_ACCOUNT_SPEC *ab_acc, GncABTr
      case SEPA_TRANSFER:
          cmd=AB_Transaction_CommandSepaTransfer;
          break;
-#if (AQBANKING_VERSION_INT >= 60400)
      case SEPA_INTERNAL_TRANSFER:
          cmd=AB_Transaction_CommandSepaInternalTransfer;
          break;
-#endif
      case SEPA_DEBITNOTE:
          cmd=AB_Transaction_CommandSepaDebitNote;
          break;
@@ -887,32 +838,6 @@ gnc_ab_trans_dialog_get_available_empty_job(GNC_AB_ACCOUNT_SPEC *ab_acc, GncABTr
      job = AB_Transaction_new();
      AB_Transaction_SetCommand(job, cmd);
      AB_Transaction_SetUniqueAccountId(job, AB_AccountSpec_GetUniqueId(ab_acc));
-#else
-    switch (trans_type)
-    {
-    case SINGLE_DEBITNOTE:
-        job = AB_JobSingleDebitNote_new(ab_acc);
-        break;
-    case SINGLE_INTERNAL_TRANSFER:
-        job = AB_JobInternalTransfer_new(ab_acc);
-        break;
-    case SINGLE_TRANSFER:
-        job = AB_JobSingleTransfer_new(ab_acc);
-        break;
-    case SEPA_DEBITNOTE:
-        job = AB_JobSepaDebitNote_new(ab_acc);
-        break;
-    case SEPA_TRANSFER:
-    default:
-        job = AB_JobSepaTransfer_new(ab_acc);
-        break;
-    };
-    if (!job || AB_Job_CheckAvailability(job))
-    {
-        if (job) AB_Job_free(job);
-        return NULL;
-    }
-#endif
     return job;
 }
 
@@ -932,7 +857,6 @@ gnc_ab_get_trans_job(GNC_AB_ACCOUNT_SPEC *ab_acc,
 
     g_return_val_if_fail(ab_acc && ab_trans, NULL);
 
-#ifdef AQBANKING6
     job = gnc_ab_trans_dialog_get_available_empty_job(ab_acc, trans_type);
     if (job)
     {
@@ -949,14 +873,6 @@ gnc_ab_get_trans_job(GNC_AB_ACCOUNT_SPEC *ab_acc,
     }
     return NULL;
 
-#else
-    job = gnc_ab_trans_dialog_get_available_empty_job(ab_acc, trans_type);
-    if (job)
-    {
-        AB_Job_SetTransaction(job, ab_trans);
-    }
-    return job;
-#endif
 }
 
 void

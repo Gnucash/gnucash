@@ -2,9 +2,9 @@ name: ci-tests
 on: [push, pull_request]
 permissions: {}
 jobs:
-  ci_tests_ubuntu-18:
-    runs-on: ubuntu-18.04
-    name: Ubuntu-18.04 CI Tests
+  ci_tests_ubuntu-22:
+    runs-on: ubuntu-22.04
+    name: Ubuntu-22.04 CI Tests
     env:
       TZ: America/Los_Angeles
     steps:
@@ -12,7 +12,7 @@ jobs:
       uses: actions/checkout@v2
     - run: sudo apt-get update
     - name: Install additional dependencies
-      run: sudo apt-get install -y cmake libxslt-dev xsltproc ninja-build libboost-all-dev libgtk-3-dev guile-2.2-dev libgwengui-gtk3-dev libaqbanking-dev libofx-dev libdbi-dev libdbd-sqlite3 libwebkit2gtk-4.0-dev  googletest
+      run: sudo apt-get install -y gettext cmake libxslt-dev xsltproc ninja-build libboost-all-dev libgtk-3-dev guile-2.2-dev libgwengui-gtk3-dev libaqbanking-dev libofx-dev libdbi-dev libdbd-sqlite3 libwebkit2gtk-4.0-dev  googletest
     - name: Install language packs.
       run: sudo apt-get --reinstall install -y language-pack-en language-pack-fr
     - run: |
@@ -33,47 +33,6 @@ jobs:
         ninja check
       env:
         CTEST_OUTPUT_ON_FAILURE: On
-    - uses: actions/upload-artifact@v2
-      if: failure()
-      with:
-        name: TestLog
-        path: ${{ github.workspace }}/build/Testing/Temporary/LastTest.log
-  ci_tests_ubuntu-20:
-    runs-on: ubuntu-20.04
-    name: Ubuntu-20.04 CI Tests
-    env:
-      TZ: America/Los_Angeles
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Install apt utils
-      run: sudo apt-get install -y --no-install-recommends apt-utils
-    - name: Update apt
-      run: |
-        sudo sed -i -e 's/^# deb-src/deb-src/' /etc/apt/sources.list
-        sudo apt-get update -y
-    - name: Install additional dependencies
-      run: |
-           sudo apt-get build-dep -y gnucash
-           sudo apt-get install ninja-build guile-3.0-dev libboost-program-options-dev
-    - name: Install language packs.
-      run: sudo apt-get --reinstall install -y language-pack-en language-pack-fr
-    - run: |
-        echo "ROOT_DIR=$GITHUB_WORKSPACE/.." >> $GITHUB_ENV
-    - name: Create Directories
-      run: |
-        pwd
-        mkdir $ROOT_DIR/inst
-        mkdir build
-    - name: Configure GnuCash
-      run: |
-        cd build
-        cmake -G Ninja -DWITH_PYTHON=ON -DCMAKE_INSTALL_PREFIX=$ROOT_DIR/inst $GITHUB_WORKSPACE
-    - name: Build and Test GnuCash
-      run: |
-        cd build
-        ninja
-        ninja check
     - uses: actions/upload-artifact@v2
       if: failure()
       with:

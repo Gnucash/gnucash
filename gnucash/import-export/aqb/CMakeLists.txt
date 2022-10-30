@@ -6,6 +6,7 @@ add_subdirectory(test)
 set (aqbanking_SOURCES
   dialog-ab-trans.c
   dialog-ab-daterange.c
+  dialog-ab-select-imexporter.c
   assistant-ab-initial.c
   gnc-ab-getbalance.c
   gnc-ab-gettrans.c
@@ -25,6 +26,7 @@ set_source_files_properties (${aqbanking_SOURCES} PROPERTIES OBJECT_DEPENDS ${CO
 set (aqbanking_noinst_HEADERS
   dialog-ab-trans.h
   dialog-ab-daterange.h
+  dialog-ab-select-imexporter.h
   assistant-ab-initial.h
   gnc-ab-getbalance.h
   gnc-ab-gettrans.h

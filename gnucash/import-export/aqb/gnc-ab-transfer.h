@@ -41,7 +41,7 @@
 G_BEGIN_DECLS
 
 /**
- * FIXME
+ * Create SEPA transfers.
  *
  * @param parent Widget to use as parent, may be NULL
  * @param gnc_acc GnuCash account to fetch balance for

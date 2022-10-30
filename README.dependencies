@@ -93,9 +93,8 @@ Libraries/Deps
 
   optional
   --------
-  aqbanking             5.7.8                    online banking; Note that 6.1.0
-  gwenhywfar            4.20.0                   or higher is needed for German
-                                                 FinTS.
+  aqbanking             6.4.0                    online banking and SWIFT
+  gwenhywfar            5.8.0                    file imports.
 
   python                3.6.0                    python bindings; headers
                                                  required, not just binaries.
