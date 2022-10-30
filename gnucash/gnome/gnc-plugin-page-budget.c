@@ -236,11 +236,8 @@ typedef enum allperiods_action
 
 typedef struct GncPluginPageBudgetPrivate
 {
-    GtkActionGroup *action_group;
-    guint merge_id;
-    GtkUIManager *ui_merge;
     GtkBuilder   *builder;
-    GSimpleActionGroup  *simple_action_group;
+    GSimpleActionGroup *simple_action_group;
 
     GncBudgetView* budget_view;
     GtkTreeView *tree_view;
@@ -339,7 +336,6 @@ gnc_plugin_page_budget_class_init (GncPluginPageBudgetClass *klass)
 static void
 gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page)
 {
-//    GtkActionGroup *action_group;
     GSimpleActionGroup *simple_action_group;
     GncPluginPageBudgetPrivate *priv;
     GncPluginPage *parent;
@@ -364,6 +360,7 @@ gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page)
                                      gnc_plugin_page_budget_actions,
                                      gnc_plugin_page_budget_n_actions,
                                      plugin_page);
+
 //FIXMEb    gnc_plugin_init_short_names (action_group, toolbar_labels);
 
     if (qof_book_is_readonly (gnc_get_current_book()))
@@ -711,7 +708,7 @@ static void
 gppb_selection_changed_cb (GtkTreeSelection *selection,
                            GncPluginPageBudget *page)
 {
-    GtkActionGroup *action_group;
+    GSimpleActionGroup *simple_action_group;
     GtkTreeView *view;
     GList *acct_list;
     gboolean sensitive;
@@ -732,8 +729,8 @@ gppb_selection_changed_cb (GtkTreeSelection *selection,
         g_list_free (acct_list);
     }
 
-    action_group = gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE(page));
-    gnc_plugin_update_actions (action_group, actions_requiring_account,
+    simple_action_group = gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE(page));
+    gnc_plugin_update_actionsb (simple_action_group, actions_requiring_account,
                                "sensitive", sensitive);
 }
 #endif

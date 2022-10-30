@@ -4,5 +4,6 @@
   <gresource prefix="/org/gnucash">
     <file>gnucash.css</file>
     <file>gnucash-fallback.css</file>
+    <file>ui/gnc-main-window.ui</file>
   </gresource>
 </gresources>

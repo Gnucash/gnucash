@@ -525,12 +525,12 @@ void gnc_plugin_page_set_ui_description (GncPluginPage *page,
         const char *ui_filename);
 
 
-/** Retrieve the GtkUIManager object associated with this page.
+/** Retrieve the GtkBuilder object associated with this page.
  *
  *  @param page The page whose UI information should be retrieved.
  *
- *  @return A pointer to the GtkUIManager object for this page. */
-GtkUIManager *gnc_plugin_page_get_ui_merge (GncPluginPage *page);
+ *  @return A pointer to the GtkBuilder object for this page. */
+GtkBuilder *gnc_plugin_page_get_builder (GncPluginPage *page);
 
 
 /** Retrieve the GtkActionGroup object associated with this page.
@@ -568,7 +568,7 @@ GSimpleActionGroup * gnc_plugin_page_create_action_groupb (GncPluginPage *page,
  *
  *  @return A pointer to the retuested GtkAction object or NULL.
  */
-GtkAction *gnc_plugin_page_get_action (GncPluginPage *page, const gchar *name);
+GAction *gnc_plugin_page_get_action (GncPluginPage *page, const gchar *name);
 
 /* Signals */
 void gnc_plugin_page_inserted (GncPluginPage *plugin_page);

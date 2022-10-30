@@ -940,8 +940,8 @@ static const gchar *register_bus_txn_actions[] =
 static void
 gnc_plugin_business_update_menus (GncPluginPage *plugin_page)
 {
-    GncMainWindow  *window;
-    GtkActionGroup *action_group;
+    GncMainWindow *window;
+    GSimpleActionGroup *simple_action_group;
     gboolean is_txn_register, is_bus_txn = FALSE, is_bus_doc = FALSE;
 
     // We continue only if the current page is a plugin page
@@ -955,8 +955,8 @@ gnc_plugin_business_update_menus (GncPluginPage *plugin_page)
     is_txn_register = GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page);
     window = GNC_MAIN_WINDOW(plugin_page->window);
     g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
-    action_group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
-    g_return_if_fail(GTK_IS_ACTION_GROUP(action_group));
+    simple_action_group = gnc_main_window_get_action_group (window, PLUGIN_ACTIONS_NAME);
+    g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(simple_action_group));
 
     if (is_txn_register)
     {
@@ -966,13 +966,13 @@ gnc_plugin_business_update_menus (GncPluginPage *plugin_page)
         is_bus_doc = (xaccTransGetTxnType (trans) == TXN_TYPE_INVOICE);
     }
     // Change visibility and also sensitivity according to whether we are in a txn register
-    gnc_plugin_update_actions (action_group, register_txn_actions,
+    gnc_plugin_update_actionsb (simple_action_group, register_txn_actions,
                                "sensitive", is_txn_register && !is_bus_txn && !is_bus_doc);
-    gnc_plugin_update_actions (action_group, register_txn_actions,
+    gnc_plugin_update_actionsb (simple_action_group, register_txn_actions,
                                "visible", is_txn_register && !is_bus_txn && !is_bus_doc);
-    gnc_plugin_update_actions (action_group, register_bus_txn_actions,
+    gnc_plugin_update_actionsb (simple_action_group, register_bus_txn_actions,
                                "sensitive", is_txn_register && is_bus_txn && !is_bus_doc);
-    gnc_plugin_update_actions (action_group, register_bus_txn_actions,
+    gnc_plugin_update_actionsb (simple_action_group, register_bus_txn_actions,
                                "visible", is_txn_register && is_bus_txn && !is_bus_doc);
 }
 
@@ -1090,8 +1090,8 @@ static const gchar* readonly_inactive_actions[] =
 static void
 update_inactive_actions (GncPluginPage *plugin_page)
 {
-    GncMainWindow  *window;
-    GtkActionGroup *action_group;
+    GncMainWindow *window;
+    GSimpleActionGroup *simple_action_group;
 
     // We are readonly - so we have to switch particular actions to inactive.
     gboolean is_readwrite = !qof_book_is_readonly(gnc_get_current_book());
@@ -1106,12 +1106,12 @@ update_inactive_actions (GncPluginPage *plugin_page)
 
     window = GNC_MAIN_WINDOW(plugin_page->window);
     g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
-    action_group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
-    g_return_if_fail(GTK_IS_ACTION_GROUP(action_group));
+    simple_action_group = gnc_main_window_get_action_group (window, PLUGIN_ACTIONS_NAME);
+    g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(simple_action_group));
 
     /* Set the action's sensitivity */
-    gnc_plugin_update_actions (action_group, readonly_inactive_actions,
-                               "sensitive", is_readwrite);
+    gnc_plugin_update_actionsb (simple_action_group, readonly_inactive_actions,
+                                "sensitive", is_readwrite);
 }
 
 /* This is the list of actions which are switched invisible or visible
@@ -1127,20 +1127,20 @@ static const char* extra_toolbar_actions[] =
 static void
 bind_toolbuttons_visibility (GncMainWindow *mainwindow)
 {
-    GtkActionGroup *action_group;
+    GSimpleActionGroup *simple_action_group;
     const char **iter;
 
     g_return_if_fail(mainwindow);
     g_return_if_fail(GNC_IS_MAIN_WINDOW(mainwindow));
 
     /* Get the action group */
-//FIXMEb    action_group = gnc_main_window_get_action_group (mainwindow, PLUGIN_ACTIONS_NAME);
-//    g_assert(action_group);
+    simple_action_group = gnc_main_window_get_action_group (mainwindow, PLUGIN_ACTIONS_NAME);
+    g_assert (simple_action_group);
 
-//    for (iter = extra_toolbar_actions; *iter; ++iter)
+//FIXMEb    for (iter = extra_toolbar_actions; *iter; ++iter)
 //    {
         /* Set the action's visibility */
-//        GtkAction *action = gtk_action_group_get_action (action_group, *iter);
+//        GAction *action = g_action_map_lookup_action (G_ACTION_MAP(simple_action_group), *iter);
 //        gnc_prefs_bind (GNC_PREFS_GROUP_INVOICE, GNC_PREF_EXTRA_TOOLBUTTONS, G_OBJECT (action), "visible");
 //    }
 }

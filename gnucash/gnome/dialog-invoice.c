@@ -2727,11 +2727,11 @@ gnc_invoice_update_doclink_for_window (GncInvoice *invoice, const gchar *uri)
 
         if (g_strcmp0 (uri, "") == 0) // deleted uri
         {
-            GtkAction *uri_action;
+            GAction *uri_action;
 
             // update the menu actions
             uri_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(iw->page), "BusinessLinkOpenAction");
-            gtk_action_set_sensitive (uri_action, FALSE);
+            g_simple_action_set_enabled (G_SIMPLE_ACTION(uri_action), FALSE);
 
             gtk_widget_hide (doclink_button);
         }

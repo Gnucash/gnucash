@@ -812,7 +812,6 @@ gnc_plugin_page_register_init (GncPluginPageRegister* plugin_page)
 {
     GncPluginPageRegisterPrivate* priv;
     GncPluginPage* parent;
-//    GtkActionGroup *action_group;
     GSimpleActionGroup *simple_action_group;
     gboolean use_new;
 
@@ -1006,7 +1005,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
 {
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
-    GtkAction* action;
+    GAction* action;
     gboolean expanded, voided, read_only = FALSE, read_only_reg = FALSE;
     Transaction* trans;
     GList* invoices;
@@ -1020,12 +1019,10 @@ gnc_plugin_page_register_ui_update (gpointer various,
     expanded = gnc_split_register_current_trans_expanded (reg);
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
                                          "SplitTransactionAction");
-    gtk_action_set_sensitive (action, reg->style == REG_STYLE_LEDGER);
-    g_signal_handlers_block_by_func
-    (action, gnc_plugin_page_register_cmd_expand_transaction, page);
-    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), expanded);
-    g_signal_handlers_unblock_by_func
-    (action, gnc_plugin_page_register_cmd_expand_transaction, page);
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), reg->style == REG_STYLE_LEDGER);
+    g_signal_handlers_block_by_func (action, gnc_plugin_page_register_cmd_expand_transaction, page);
+//FIXMEb    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), expanded);
+    g_signal_handlers_unblock_by_func (action, gnc_plugin_page_register_cmd_expand_transaction, page);
 
     /* If we are in a readonly book, or possibly a place holder
      * account register make any modifying action inactive */
@@ -1044,8 +1041,8 @@ gnc_plugin_page_register_ui_update (gpointer various,
         for (iter = readonly_inactive_actions; *iter; ++iter)
         {
             /* Set the action's sensitivity */
-            GtkAction* action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page), *iter);
-            gtk_action_set_sensitive (action, TRUE);
+            GAction* action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page), *iter);
+            g_simple_action_set_enabled (G_SIMPLE_ACTION(action), TRUE);
         }
         main_window_update_page_set_read_only_icon (GNC_PLUGIN_PAGE(page), FALSE);
 
@@ -1056,26 +1053,26 @@ gnc_plugin_page_register_ui_update (gpointer various,
 
         action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
                                              "CutTransactionAction");
-        gtk_action_set_sensitive (GTK_ACTION (action), !read_only & !voided);
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !read_only & !voided);
 
         action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
                                              "PasteTransactionAction");
-        gtk_action_set_sensitive (GTK_ACTION (action), !read_only & !voided);
+       g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !read_only & !voided);
 
         action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
                                              "DeleteTransactionAction");
-        gtk_action_set_sensitive (GTK_ACTION (action), !read_only & !voided);
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !read_only & !voided);
 
         if (cursor_class == CURSOR_CLASS_SPLIT)
         {
             action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
                                                  "DuplicateTransactionAction");
-            gtk_action_set_sensitive (GTK_ACTION (action), !read_only & !voided);
+            g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !read_only & !voided);
         }
 
         action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
                                              "RemoveTransactionSplitsAction");
-        gtk_action_set_sensitive (GTK_ACTION (action), !read_only & !voided);
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !read_only & !voided);
 
         /* Set 'Void' and 'Unvoid' */
         if (read_only)
@@ -1083,14 +1080,14 @@ gnc_plugin_page_register_ui_update (gpointer various,
 
         action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
                                              "VoidTransactionAction");
-        gtk_action_set_sensitive (GTK_ACTION (action), !voided);
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !voided);
 
         if (read_only)
             voided = FALSE;
 
         action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
                                              "UnvoidTransactionAction");
-        gtk_action_set_sensitive (GTK_ACTION (action), voided);
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), voided);
     }
 
     /* Set 'Open and Remove Linked Documents' */
@@ -1099,7 +1096,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
     if (trans)
     {
         uri = xaccTransGetDocLink (trans);
-        gtk_action_set_sensitive (GTK_ACTION(action), (uri ? TRUE:FALSE));
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), (uri ? TRUE:FALSE));
     }
     /* Set 'ExecAssociatedInvoice'
        We can determine an invoice from a txn if either
@@ -1111,7 +1108,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
     if (trans)
     {
         invoices = invoices_from_transaction (trans);
-        gtk_action_set_sensitive (GTK_ACTION (action), (invoices != NULL));
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), (invoices != NULL));
         g_list_free (invoices);
     }
 
@@ -1124,8 +1121,8 @@ gnc_plugin_page_register_ui_update (gpointer various,
         for (iter = readonly_inactive_actions; *iter; ++iter)
         {
             /* Set the action's sensitivity */
-            GtkAction* action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page), *iter);
-            gtk_action_set_sensitive (action, FALSE);
+            GAction* action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page), *iter);
+            g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
         }
         main_window_update_page_set_read_only_icon (GNC_PLUGIN_PAGE(page), TRUE);
     }
@@ -1137,8 +1134,8 @@ gnc_plugin_page_register_ui_update (gpointer various,
         iter = tran_vs_split_actions;
         action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page), *iter);
         label_iter = tran_action_labels;
-        if (g_strcmp0 (gtk_action_get_label (action), _ (*label_iter)) == 0)
-            curr_label_trans = TRUE;
+//FIXMEb        if (g_strcmp0 (gtk_action_get_label (action), _ (*label_iter)) == 0)
+//            curr_label_trans = TRUE;
         if ((cursor_class == CURSOR_CLASS_SPLIT) && curr_label_trans)
         {
             label_iter = split_action_labels;
@@ -1147,8 +1144,8 @@ gnc_plugin_page_register_ui_update (gpointer various,
             {
                 /* Adjust the action's label and tooltip */
                 action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page), *iter);
-                gtk_action_set_label (action, _ (*label_iter));
-                gtk_action_set_tooltip (action, _ (*tooltip_iter));
+//FIXMEb                gtk_action_set_label (action, _ (*label_iter));
+//FIXMEb                gtk_action_set_tooltip (action, _ (*tooltip_iter));
                 ++label_iter;
                 ++tooltip_iter;
             }
@@ -1161,8 +1158,8 @@ gnc_plugin_page_register_ui_update (gpointer various,
             {
                 /* Adjust the action's label and tooltip */
                 action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page), *iter);
-                gtk_action_set_label (action, _ (*label_iter));
-                gtk_action_set_tooltip (action, _ (*tooltip_iter));
+//FIXMEb                gtk_action_set_label (action, _ (*label_iter));
+//FIXMEb                gtk_action_set_tooltip (action, _ (*tooltip_iter));
                 ++label_iter;
                 ++tooltip_iter;
             }
@@ -1174,8 +1171,8 @@ static void
 gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister* page)
 {
     GncPluginPageRegisterPrivate* priv ;
-    GtkActionGroup* action_group;
-    GtkAction* action;
+    GSimpleActionGroup *simple_action_group;
+    GAction *action;
     Account* account;
     SplitRegister* reg;
     GNCLedgerDisplayType ledger_type;
@@ -1184,18 +1181,18 @@ gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister* page)
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     account = gnc_plugin_page_register_get_account (page);
-    action_group = gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE (page));
-    gnc_plugin_update_actions (action_group, actions_requiring_account,
+    simple_action_group = gnc_plugin_page_get_action_groupb (GNC_PLUGIN_PAGE (page));
+    gnc_plugin_update_actionsb (simple_action_group, actions_requiring_account,
                                "sensitive", is_readwrite && account != NULL);
 
-    gnc_plugin_update_actions (action_group, actions_requiring_priced_account,
+    gnc_plugin_update_actionsb (simple_action_group, actions_requiring_priced_account,
                                "visible", account &&
                                gnc_prefs_is_extra_enabled () &&
                                xaccAccountIsPriced (account));
 
     /* Set "style" radio button */
     ledger_type = gnc_ledger_display_type (priv->ledger);
-    gnc_plugin_update_actions (action_group, view_style_actions,
+    gnc_plugin_update_actionsb (simple_action_group, view_style_actions,
                                "sensitive", ledger_type == LD_SINGLE);
 
     reg = gnc_ledger_display_get_split_register (priv->ledger);
@@ -1211,20 +1208,19 @@ gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister* page)
 //    }
 
     /* Either a match was found, or fell out with i = 0 */
-//    action = gtk_action_group_get_action (action_group, radio_entries_2[i].name);
+//FIXMEb    action = g_action_map_lookup_action (G_ACTION_MAP(simple_action_group), radio_entries_2[i].name);
 //    g_signal_handlers_block_by_func (action,
 //                                     gnc_plugin_page_register_cmd_style_changed, page);
-//    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
+//FIXMEb    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
 //    g_signal_handlers_unblock_by_func (action,
 //                                       gnc_plugin_page_register_cmd_style_changed, page);
 
     /* Set "double line" toggle button */
-    action = gtk_action_group_get_action (action_group,
-                                          "ViewStyleDoubleLineAction");
+    action = g_action_map_lookup_action (G_ACTION_MAP(simple_action_group), "ViewStyleDoubleLineAction");
     g_signal_handlers_block_by_func (action,
                                      gnc_plugin_page_register_cmd_style_double_line, page);
-    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
-                                  reg->use_double_line);
+//FIXMEb    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
+//                                  reg->use_double_line);
     g_signal_handlers_unblock_by_func (action,
                                        gnc_plugin_page_register_cmd_style_double_line, page);
 }
@@ -1701,7 +1697,7 @@ gnc_plugin_page_register_restore_edit_menu (GncPluginPage* page,
                                             GKeyFile* key_file,
                                             const gchar* group_name)
 {
-    GtkAction* action;
+    GAction* action;
     GError* error = NULL;
     gchar* style_name;
     gint i;
@@ -1848,7 +1844,7 @@ gnc_plugin_page_register_update_edit_menu (GncPluginPage* page, gboolean hide)
 {
     GncPluginPageRegisterPrivate* priv;
     GncPluginPageRegister* reg_page;
-    GtkAction* action;
+    GAction* action;
     gboolean can_copy = FALSE, can_cut = FALSE, can_paste = FALSE;
     gboolean has_selection;
     gboolean is_readwrite = !qof_book_is_readonly (gnc_get_current_book());
@@ -1862,14 +1858,14 @@ gnc_plugin_page_register_update_edit_menu (GncPluginPage* page, gboolean hide)
     can_paste = is_readwrite;
 
     action = gnc_plugin_page_get_action (page, "EditCopyAction");
-    gtk_action_set_sensitive (action, can_copy);
-    gtk_action_set_visible (action, !hide || can_copy);
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), can_copy);
+//FIXMEb    gtk_action_set_visible (action, !hide || can_copy);
     action = gnc_plugin_page_get_action (page, "EditCutAction");
-    gtk_action_set_sensitive (action, can_cut);
-    gtk_action_set_visible (action, !hide || can_cut);
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), can_cut);
+//FIXMEb    gtk_action_set_visible (action, !hide || can_cut);
     action = gnc_plugin_page_get_action (page, "EditPasteAction");
-    gtk_action_set_sensitive (action, can_paste);
-    gtk_action_set_visible (action,  !hide || can_paste);
+    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), can_paste);
+//FIXMEb    gtk_action_set_visible (action,  !hide || can_paste);
 }
 
 static gboolean is_scrubbing = FALSE;

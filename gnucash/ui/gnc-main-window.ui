@@ -1,0 +1,542 @@
+<?xml version="1.0"?>
+<interface>
+
+<!-- menu starts here -->
+
+  <menu id="mainwin-menu">
+    <submenu>
+      <attribute name="label" translatable="yes">_File</attribute>
+      <attribute name="action">mainwin.FileAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.FilePlaceholder0</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <submenu>
+          <attribute name="label" translatable="yes">_Import</attribute>
+          <attribute name="action">mainwin.FileImportAction</attribute>
+          <item>
+            <attribute name="label" translatable="no">ImportPlaceholder</attribute>
+            <attribute name="action">mainwin.FilePlaceholder1</attribute>
+            <attribute name="hidden-when">action-disabled</attribute>
+          </item>
+        </submenu>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">SavePlaceholder</attribute>
+          <attribute name="action">mainwin.FilePlaceholder2</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">_Print</attribute>
+          <attribute name="action">mainwin.FilePrintAction</attribute>
+          <attribute name="accel">&lt;Primary&gt;p</attribute>
+          <attribute name="tooltip" translatable="yes">Print the currently active page</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Pa_ge Setup...</attribute>
+          <attribute name="action">mainwin.FilePageSetupAction</attribute>
+          <attribute name="accel">&lt;Primary&gt;&lt;Shift&gt;p</attribute>
+          <attribute name="tooltip" translatable="yes">Specify the page size and orientation for printing</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">PdfPlaceholder</attribute>
+          <attribute name="action">mainwin.FilePlaceholder3</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <submenu>
+          <attribute name="label" translatable="yes">_Export</attribute>
+          <attribute name="action">mainwin.FileExportAction</attribute>
+          <item>
+            <attribute name="label" translatable="no">ExportPlaceholder</attribute>
+            <attribute name="action">mainwin.FilePlaceholder4</attribute>
+            <attribute name="hidden-when">action-disabled</attribute>
+          </item>
+        </submenu>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">Proper_ties</attribute>
+          <attribute name="action">mainwin.FilePropertiesAction</attribute>
+          <attribute name="accel">&lt;Alt&gt;Return</attribute>
+          <attribute name="tooltip" translatable="yes">Edit the properties of the current file</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">RecentPlaceholder</attribute>
+          <attribute name="action">mainwin.FilePlaceholder5</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">_Close</attribute>
+          <attribute name="action">mainwin.FileCloseAction</attribute>
+          <attribute name="accel">&lt;Primary&gt;w</attribute>
+          <attribute name="tooltip" translatable="yes">Close the currently active page</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Quit</attribute>
+          <attribute name="action">mainwin.FileQuitAction</attribute>
+          <attribute name="accel">&lt;Primary&gt;q</attribute>
+          <attribute name="tooltip" translatable="yes">Quit this application</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+    </submenu>
+
+    <submenu>
+      <attribute name="label" translatable="yes">_Edit</attribute>
+      <attribute name="action">mainwin.EditAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.EditPlaceholder0</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Cu_t</attribute>
+          <attribute name="action">mainwin.EditCutAction</attribute>
+          <attribute name="accel">&lt;Primary&gt;x</attribute>
+          <attribute name="tooltip" translatable="yes">Cut the current selection and copy it to clipboard</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Copy</attribute>
+          <attribute name="action">mainwin.EditCopyAction</attribute>
+          <attribute name="accel">&lt;Primary&gt;c</attribute>
+          <attribute name="tooltip" translatable="yes">Copy the current selection to clipboard</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Paste</attribute>
+          <attribute name="action">mainwin.EditPasteAction</attribute>
+          <attribute name="accel">&lt;Primary&gt;v</attribute>
+          <attribute name="tooltip" translatable="yes">Paste the clipboard content at the cursor position</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.EditPlaceholder1</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.EditPlaceholder2</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">FindPlaceholder</attribute>
+          <attribute name="action">mainwin.EditPlaceholder3</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Pr_eferences</attribute>
+          <attribute name="action">mainwin.EditPreferencesAction</attribute>
+          <attribute name="tooltip" translatable="yes">Edit the global preferences of GnuCash</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">StylePlaceholder</attribute>
+          <attribute name="action">mainwin.EditPlaceholder4</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">TaxPlaceholder</attribute>
+          <attribute name="action">mainwin.EditPlaceholder5</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+    </submenu>
+
+    <submenu>
+      <attribute name="label" translatable="yes">_View</attribute>
+      <attribute name="action">mainwin.ViewAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.ViewPlaceholder0</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Toolbar</attribute>
+          <attribute name="action">mainwin.ViewToolbarAction</attribute>
+          <attribute name="tooltip" translatable="yes">Show/hide the toolbar on this window</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Su_mmary Bar</attribute>
+          <attribute name="action">mainwin.ViewSummaryAction</attribute>
+          <attribute name="tooltip" translatable="yes">Show/hide the summary bar on this window</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Stat_us Bar</attribute>
+          <attribute name="action">mainwin.ViewStatusbarAction</attribute>
+          <attribute name="tooltip" translatable="yes">Show/hide the status bar on this window</attribute>
+        </item>
+        <submenu>
+          <attribute name="label" translatable="yes">Tab P_osition</attribute>
+          <item>
+            <attribute name="label" translatable="yes">To_p</attribute>
+            <attribute name="action">mainwin.ViewTabPositionAction</attribute>
+            <attribute name="target" type="i">0</attribute>
+            <attribute name="tooltip" translatable="yes">Display the notebook tabs at the top of the window</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">B_ottom</attribute>
+            <attribute name="action">mainwin.ViewTabPositionAction</attribute>
+            <attribute name="target" type="i">1</attribute>
+            <attribute name="tooltip" translatable="yes">Display the notebook tabs at the bottom of the window</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">_Left</attribute>
+            <attribute name="action">mainwin.ViewTabPositionAction</attribute>
+            <attribute name="target" type="i">2</attribute>
+            <attribute name="tooltip" translatable="yes">Display the notebook tabs at the left of the window</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">_Right</attribute>
+            <attribute name="action">mainwin.ViewTabPositionAction</attribute>
+            <attribute name="target" type="i">3</attribute>
+            <attribute name="tooltip" translatable="yes">Display the notebook tabs at the right of the window</attribute>
+          </item>
+        </submenu>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.ViewPlaceholder1</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.ViewPlaceholder2</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">RefreshPlaceholder</attribute>
+          <attribute name="action">mainwin.ViewPlaceholder3</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">AccoutTreePlaceholder</attribute>
+          <attribute name="action">mainwin.ViewPlaceholder4</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+    </submenu>
+
+    <submenu>
+      <attribute name="label" translatable="yes">Tra_nsaction</attribute>
+      <attribute name="action">mainwin.TransactionAction</attribute>
+      <attribute name="hidden-when">action-disabled</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.TransPlaceholder0</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+    </submenu>
+
+    <submenu>
+      <attribute name="label" translatable="yes">_Actions</attribute>
+      <attribute name="action">mainwin.ActionsAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.ActionsPlaceholder0</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">OnlinePlaceholder</attribute>
+          <attribute name="action">mainwin.ActionsPlaceholder1</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">SchedPlaceholder</attribute>
+          <attribute name="action">mainwin.ActionsPlaceholder2</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">BudgetPlaceholder</attribute>
+          <attribute name="action">mainwin.ActionsPlaceholder3</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.ActionsPlaceholder4</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.ActionsPlaceholder5</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.ActionsPlaceholder6</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">Reset _Warnings...</attribute>
+          <attribute name="action">mainwin.ActionsForgetWarningsAction</attribute>
+          <attribute name="tooltip" translatable="yes">Reset the state of all warning messages so they will be shown again</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Re_name Page</attribute>
+          <attribute name="action">mainwin.ActionsRenamePageAction</attribute>
+          <attribute name="tooltip" translatable="yes">Rename this page</attribute>
+        </item>
+      </section>
+    </submenu>
+
+    <submenu>
+      <attribute name="label" translatable="yes">_Business</attribute>
+      <attribute name="action">mainwin.BusinessAction</attribute>
+      <attribute name="hidden-when">action-disabled</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.BusinessPlaceholder0</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+    </submenu>
+
+    <submenu>
+      <attribute name="label" translatable="yes">_Scheduled</attribute>
+      <attribute name="action">mainwin.ScheduledAction</attribute>
+      <attribute name="hidden-when">action-disabled</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.SchedulePlaceholder0</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+    </submenu>
+
+    <submenu>
+      <attribute name="label" translatable="yes">_Reports</attribute>
+      <attribute name="action">mainwin.ReportsAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.ReportsPlaceholder0</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.ReportsPlaceholder1</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+    </submenu>
+
+    <submenu>
+      <attribute name="label" translatable="yes">_Tools</attribute>
+      <attribute name="action">mainwin.ToolsAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">OnlinePlaceholder</attribute>
+          <attribute name="action">mainwin.ToolsPlaceholder0</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ToolsPlaceholder</attribute>
+          <attribute name="action">mainwin.ToolsPlaceholder1</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">JournalPlaceholder</attribute>
+          <attribute name="action">mainwin.ToolsPlaceholder2</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+    </submenu>
+
+    <submenu>
+      <attribute name="label" translatable="yes">E_xtensions</attribute>
+      <attribute name="action">mainwin.ExtensionsAction</attribute>
+      <attribute name="hidden-when">action-disabled</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.ExtensionsPlaceholder0</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+    </submenu>
+
+    <submenu>
+      <attribute name="label" translatable="yes">_Windows</attribute>
+      <attribute name="action">mainwin.WindowsAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.WindowsPlaceholder0</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_New Window</attribute>
+          <attribute name="action">mainwin.WindowNewAction</attribute>
+          <attribute name="tooltip" translatable="yes">Open a new top-level GnuCash window</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">New Window with _Page</attribute>
+          <attribute name="action">mainwin.WindowMovePageAction</attribute>
+          <attribute name="tooltip" translatable="yes">Move the current page to a new top-level GnuCash window</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">WinPlaceholder</attribute>
+          <attribute name="action">mainwin.WindowsPlaceholder1</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+    </submenu>
+
+    <submenu>
+      <attribute name="label" translatable="yes">_Help</attribute>
+      <attribute name="action">mainwin.HelpAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.HelpPlaceholder0</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Tutorial and Concepts _Guide</attribute>
+          <attribute name="action">mainwin.HelpTutorialAction</attribute>
+          <attribute name="accel">&lt;Primary&gt;h</attribute>
+          <attribute name="tooltip" translatable="yes">Open the GnuCash Tutorial</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">ToDPlaceholder</attribute>
+          <attribute name="action">mainwin.HelpPlaceholder1</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Contents</attribute>
+          <attribute name="action">mainwin.HelpContentsAction</attribute>
+          <attribute name="accel">F1</attribute>
+          <attribute name="tooltip" translatable="yes">Open the GnuCash Help</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="no">_About</attribute>
+          <attribute name="action">mainwin.HelpAboutAction</attribute>
+          <attribute name="tooltip" translatable="yes">About GnuCash</attribute>
+        </item>
+      </section>
+    </submenu>
+
+  </menu>
+
+<!-- menu ends here -->
+
+
+  <menu id="mainwin-popup">
+    <item>
+      <attribute name="label" translatable="no">TestAction</attribute>
+      <attribute name="action">mainwin.TestAction</attribute>
+    </item>
+  </menu>
+
+
+  <object class="GtkToolbar" id="mainwin-toolbar">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkToolButton" id="but1">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="tooltip-text" translatable="yes">Save the current file</property>
+        <property name="action-name">gnc-plugin-basic-commands-actions.FileSaveAction</property>
+        <property name="label" translatable="yes">_Save</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">document-save</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="tooltip-text" translatable="yes">Close the currently active page</property>
+        <property name="action-name">mainwin.FileCloseAction</property>
+        <property name="label" translatable="yes">_Close</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">window-close</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2a">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="tooltip-text" translatable="yes">Open the New Invoice dialog</property>
+        <property name="label" translatable="no">ToolbarNewInvoiceAction</property>
+        <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
+        <property name="label" translatable="yes">New _Invoice...</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-invoice-new</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem" id="extra_separator">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+  </object>
+
+</interface>

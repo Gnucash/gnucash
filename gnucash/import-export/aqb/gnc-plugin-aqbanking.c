@@ -104,7 +104,7 @@ static GActionEntry gnc_plugin_actions [] =
     { "Mt942ImportAction", gnc_plugin_ab_cmd_mt942_import, NULL, NULL, NULL },
     { "DtausImportAction", gnc_plugin_ab_cmd_dtaus_import, NULL, NULL, NULL },
     { "DtausImportSendAction", gnc_plugin_ab_cmd_dtaus_importsend, NULL, NULL, NULL },
-    { MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW, gnc_plugin_ab_cmd_view_logwindow, NULL, "TRUE", change_state_logwindow },
+    { MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW, gnc_plugin_ab_cmd_view_logwindow, NULL, "true", change_state_logwindow },
 };
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
@@ -236,20 +236,20 @@ static void
 gnc_plugin_aqbanking_add_to_window(GncPlugin *plugin, GncMainWindow *window,
                                    GQuark type)
 {
-    GtkAction *action;
+    GAction *action;
 
     gnc_main_window = window;
 
-    g_signal_connect(window, "page_added",
-                     G_CALLBACK(gnc_plugin_ab_main_window_page_added),
-                     plugin);
-    g_signal_connect(window, "page_changed",
-                     G_CALLBACK(gnc_plugin_ab_main_window_page_changed),
-                     plugin);
+    g_signal_connect (window, "page_added",
+                      G_CALLBACK(gnc_plugin_ab_main_window_page_added),
+                      plugin);
+    g_signal_connect (window, "page_changed",
+                      G_CALLBACK(gnc_plugin_ab_main_window_page_changed),
+                      plugin);
 
-    action = gnc_main_window_find_action(window, MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW);
+    action = gnc_main_window_find_action (window, MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW);
 
-    gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), FALSE);
+//FIXMEb    gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), FALSE);
 }
 
 static void
@@ -307,7 +307,7 @@ gnc_plugin_ab_main_window_page_added(GncMainWindow *window, GncPluginPage *page,
 static void update_inactive_actions(GncPluginPage *plugin_page)
 {
     GncMainWindow  *window;
-    GtkActionGroup *action_group;
+    GSimpleActionGroup *simple_action_group;
 
     // We are readonly - so we have to switch particular actions to inactive.
     gboolean is_readwrite = !qof_book_is_readonly(gnc_get_current_book());
@@ -318,11 +318,11 @@ static void update_inactive_actions(GncPluginPage *plugin_page)
 
     window = GNC_MAIN_WINDOW(plugin_page->window);
     g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
-    action_group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
-    g_return_if_fail(GTK_IS_ACTION_GROUP(action_group));
+    simple_action_group = gnc_main_window_get_action_group (window, PLUGIN_ACTIONS_NAME);
+    g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(simple_action_group));
 
     /* Set the action's sensitivity */
-    gnc_plugin_update_actions (action_group, readonly_inactive_actions,
+    gnc_plugin_update_actionsb (simple_action_group, readonly_inactive_actions,
                                "sensitive", is_readwrite);
 }
 
@@ -357,40 +357,40 @@ gnc_plugin_ab_account_selected(GncPluginPage *plugin_page, Account *account,
                                gpointer user_data)
 {
     GncMainWindow  *window;
-    GtkActionGroup *action_group;
+    GSimpleActionGroup *simple_action_group;
     const gchar *bankcode = NULL;
     const gchar *accountid = NULL;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE(plugin_page));
     window = GNC_MAIN_WINDOW(plugin_page->window);
     g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
-    action_group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
-    g_return_if_fail(GTK_IS_ACTION_GROUP(action_group));
+    simple_action_group = gnc_main_window_get_action_group (window, PLUGIN_ACTIONS_NAME);
+    g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(simple_action_group));
 
     if (account)
     {
         bankcode = gnc_ab_get_account_bankcode(account);
         accountid = gnc_ab_get_account_accountid(account);
 
-        gnc_plugin_update_actions(action_group, need_account_actions,
-                                  "sensitive",
-                                  (account && bankcode && *bankcode
-                                   && accountid && *accountid));
-        gnc_plugin_update_actions(action_group, need_account_actions,
-                                  "visible", TRUE);
+        gnc_plugin_update_actionsb (simple_action_group, need_account_actions,
+                                   "sensitive",
+                                   (account && bankcode && *bankcode
+                                    && accountid && *accountid));
+        gnc_plugin_update_actionsb (simple_action_group, need_account_actions,
+                                   "visible", TRUE);
 #if (AQBANKING_VERSION_INT < 60400)
-        gnc_plugin_update_actions(action_group, inactive_account_actions,
-                                  "sensitive", FALSE);
-        gnc_plugin_update_actions(action_group, inactive_account_actions,
-                                  "visible", FALSE);
+        gnc_plugin_update_actionsb (simple_action_group, inactive_account_actions,
+                                   "sensitive", FALSE);
+        gnc_plugin_update_actionsb (simple_action_group, inactive_account_actions,
+                                   "visible", FALSE);
 #endif
     }
     else
     {
-        gnc_plugin_update_actions(action_group, need_account_actions,
-                                  "sensitive", FALSE);
-        gnc_plugin_update_actions(action_group, need_account_actions,
-                                  "visible", FALSE);
+        gnc_plugin_update_actionsb (simple_action_group, need_account_actions,
+                                   "sensitive", FALSE);
+        gnc_plugin_update_actionsb (simple_action_group, need_account_actions,
+                                   "visible", FALSE);
     }
 
 }
@@ -462,14 +462,14 @@ main_window_to_account(GncMainWindow *window)
 void
 gnc_plugin_aqbanking_set_logwindow_visible(gboolean logwindow_visible)
 {
-    GtkAction *action;
+    GAction *action;
 
-    action = gnc_main_window_find_action(gnc_main_window,
-                                         MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW);
+    action = gnc_main_window_find_action (gnc_main_window,
+                                          MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW);
     if (action)
     {
-        gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action),
-                                     logwindow_visible);
+//FIXMEb        gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action),
+//                                     logwindow_visible);
     }
 }
 

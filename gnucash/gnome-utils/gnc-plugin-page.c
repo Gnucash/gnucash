@@ -97,7 +97,7 @@ typedef struct _GncPluginPagePrivate
     char *ui_description;
 
     GtkBuilder *builder; //FIXMEb added
-    GSimpleActionGroup  *simple_action_group; //FIXMEb added
+    GSimpleActionGroup *simple_action_group; //FIXMEb added
 
     GList *books;
 
@@ -295,7 +295,7 @@ gnc_plugin_page_unmerge_actions (GncPluginPage *page,
 }
 
 
-GtkAction *
+GAction *
 gnc_plugin_page_get_action (GncPluginPage *page, const gchar *name)
 {
     GncPluginPagePrivate *priv;
@@ -304,9 +304,9 @@ gnc_plugin_page_get_action (GncPluginPage *page, const gchar *name)
     g_return_val_if_fail (name != NULL, NULL);
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
-    if (!priv->action_group)
+    if (!priv->simple_action_group)
         return NULL;
-    return gtk_action_group_get_action (priv->action_group, name);
+    return g_action_map_lookup_action (G_ACTION_MAP(priv->simple_action_group), name);
 }
 
 
@@ -1092,16 +1092,16 @@ gnc_plugin_page_set_ui_description (GncPluginPage *page,
 }
 
 
-/*  Retrieve the GtkUIManager object associated with this page. */
-GtkUIManager *
-gnc_plugin_page_get_ui_merge (GncPluginPage *page)
+/*  Retrieve the GtkBuilder object associated with this page. */
+GtkBuilder *
+gnc_plugin_page_get_builder (GncPluginPage *page)
 {
     GncPluginPagePrivate *priv;
 
     g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), NULL);
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
-    return priv->ui_merge;
+    return priv->builder;
 }
 
 
@@ -1145,12 +1145,12 @@ GSimpleActionGroup *
 gnc_plugin_page_create_action_groupb (GncPluginPage *page, const gchar *group_name)
 {
     GncPluginPagePrivate *priv;
-    GSimpleActionGroup *group;
+    GSimpleActionGroup *simple_action_group;
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
-    group = g_simple_action_group_new ();
-    priv->simple_action_group = group;
-    return group;
+    simple_action_group = g_simple_action_group_new ();
+    priv->simple_action_group = simple_action_group;
+    return simple_action_group;
 }
 
 gboolean
