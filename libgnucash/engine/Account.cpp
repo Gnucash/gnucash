@@ -6259,6 +6259,8 @@ gboolean xaccAccountRegister (void)
 using AccountSet = std::unordered_set<Account*>;
 static void maybe_add_descendants (Account* acc, gpointer arg)
 {
+    g_return_if_fail (acc);
+
     if (static_cast <AccountSet*> (arg)->insert (acc).second)
         g_list_foreach (GET_PRIVATE(acc)->children, (GFunc) maybe_add_descendants, arg);
 };
