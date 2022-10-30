@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<interface>
+
+  <menu id="ToolsPlaceholder2">
+    <item>
+      <attribute name="label" translatable="yes">_General Journal</attribute>
+      <attribute name="action">gnc-plugin-register-actions.ToolsGeneralJournalAction</attribute>
+      <attribute name="tooltip" translatable="yes">Open general journal window</attribute>
+    </item>
+  </menu>
+
+</interface>

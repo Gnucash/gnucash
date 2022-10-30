@@ -1,0 +1,157 @@
+<?xml version="1.0"?>
+<interface>
+
+  <menu id="BusinessPlaceholder0">
+    <submenu>
+      <attribute name="label" translatable="yes">_Customer</attribute>
+      <attribute name="action">gnc-plugin-business-actions.CustomerMenuAction</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Customers Overview</attribute>
+        <attribute name="action">gnc-plugin-business-actions.CustomerOverviewPageAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open a Customer overview page</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_New Customer...</attribute>
+        <attribute name="action">gnc-plugin-business-actions.CustomerNewCustomerOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the New Customer dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Find Customer...</attribute>
+        <attribute name="action">gnc-plugin-business-actions.CustomerFindCustomerOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the Find Customer dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">New _Invoice...</attribute>
+        <attribute name="action">gnc-plugin-business-actions.CustomerNewInvoiceOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the New Invoice dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Find In_voice...</attribute>
+        <attribute name="action">gnc-plugin-business-actions.CustomerFindInvoiceOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the Find Invoice dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">New _Job...</attribute>
+        <attribute name="action">gnc-plugin-business-actions.CustomerNewJobOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the New Job dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Find Jo_b...</attribute>
+        <attribute name="action">gnc-plugin-business-actions.CustomerFindJobOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the Find Job dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Process Payment...</attribute>
+        <attribute name="action">gnc-plugin-business-actions.CustomerProcessPaymentAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the Process Payment dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Invoices _Due Reminder</attribute>
+        <attribute name="action">gnc-plugin-business-actions.InvoicesDueReminderOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the Invoices Due Reminder dialog</attribute>
+      </item>
+    </submenu>
+    <submenu>
+      <attribute name="label" translatable="yes">_Vendor</attribute>
+      <attribute name="action">gnc-plugin-business-actions.VendorMenuAction</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Vendors Overview</attribute>
+        <attribute name="action">gnc-plugin-business-actions.VendorOverviewPageAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open a Vendor overview page</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_New Vendor...</attribute>
+        <attribute name="action">gnc-plugin-business-actions.VendorNewVendorOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the New Vendor dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Find Vendor...</attribute>
+        <attribute name="action">gnc-plugin-business-actions.VendorFindVendorOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the Find Vendor dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">New _Bill...</attribute>
+        <attribute name="action">gnc-plugin-business-actions.VendorNewBillOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the New Bill dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Find Bi_ll...</attribute>
+        <attribute name="action">gnc-plugin-business-actions.VendorFindBillOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the Find Bill dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">New _Job...</attribute>
+        <attribute name="action">gnc-plugin-business-actions.VendorNewJobOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the New Job dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Find Jo_b...</attribute>
+        <attribute name="action">gnc-plugin-business-actions.VendorFindJobOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the Find Job dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Process Payment...</attribute>
+        <attribute name="action">gnc-plugin-business-actions.VendorProcessPaymentAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the Process Payment dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Bills _Due Reminder</attribute>
+        <attribute name="action">gnc-plugin-business-actions.BillsDueReminderOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the Bills Due Reminder dialog</attribute>
+      </item>
+    </submenu>
+    <submenu>
+      <attribute name="label" translatable="yes">_Employee</attribute>
+      <attribute name="action">gnc-plugin-business-actions.EmployeeMenuAction</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Employees Overview</attribute>
+        <attribute name="action">gnc-plugin-business-actions.EmployeeOverviewPageAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open a Employee overview page</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_New Employee...</attribute>
+        <attribute name="action">gnc-plugin-business-actions.EmployeeNewEmployeeOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the New Employee dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Find Employee...</attribute>
+        <attribute name="action">gnc-plugin-business-actions.EmployeeFindEmployeeOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the Find Employee dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">New _Expense Voucher...</attribute>
+        <attribute name="action">gnc-plugin-business-actions.EmployeeNewExpenseVoucherOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the New Voucher dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Find Expense _Voucher...</attribute>
+        <attribute name="action">gnc-plugin-business-actions.EmployeeFindExpenseVoucherOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the Find Expense Voucher dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Process Payment...</attribute>
+        <attribute name="action">gnc-plugin-business-actions.EmployeeProcessPaymentAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the Process Payment dialog</attribute>
+      </item>
+    </submenu>
+    <item>
+      <attribute name="label" translatable="yes">Business Linked Documents</attribute>
+      <attribute name="action">gnc-plugin-business-actions.BusinessLinkedDocsAction</attribute>
+      <attribute name="tooltip" translatable="yes">View all Linked Business Documents</attribute>
+    </item>
+  </menu>
+
+  <menu id="BusinessPlaceholder1">
+    <item>
+      <attribute name="label" translatable="yes">Sales _Tax Table</attribute>
+      <attribute name="action">gnc-plugin-business-actions.TaxTablesOpenAction</attribute>
+      <attribute name="tooltip" translatable="yes">View and edit the list of Sales Tax Tables (GST/VAT)</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Billing Terms Editor</attribute>
+      <attribute name="action">gnc-plugin-business-actions.BillingTermsOpenAction</attribute>
+      <attribute name="tooltip" translatable="yes">View and edit the list of Billing Terms</attribute>
+    </item>
+  </menu>
+
+</interface>

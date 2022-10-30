@@ -100,67 +100,20 @@ static GActionEntry gnc_plugin_actions [] =
     { "ABIssueSepaIntTransAction", gnc_plugin_ab_cmd_issue_sepainternaltransaction, NULL, NULL, NULL },
     { "ABIssueIntTransAction", gnc_plugin_ab_cmd_issue_inttransaction, NULL, NULL, NULL },
     { "ABIssueSepaDirectDebitAction", gnc_plugin_ab_cmd_issue_sepa_direct_debit, NULL, NULL, NULL },
-    { "Mt940ImportAction", gnc_plugin_ab_cmd_mt940_import, NULL, NULL, NULL },
-    { "Mt942ImportAction", gnc_plugin_ab_cmd_mt942_import, NULL, NULL, NULL },
-    { "DtausImportAction", gnc_plugin_ab_cmd_dtaus_import, NULL, NULL, NULL },
-    { "DtausImportSendAction", gnc_plugin_ab_cmd_dtaus_importsend, NULL, NULL, NULL },
+    { "AQBankingImportAction", gnc_plugin_ab_cmd_aqb_import, NULL, NULL, NULL },
     { MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW, gnc_plugin_ab_cmd_view_logwindow, NULL, "true", change_state_logwindow },
 };
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
 
-static GncDisplayItem gnc_plugin_display_items [] =
+/** The default menu items that need to be add to the menu */
+static const gchar *gnc_plugin_load_ui_items [] =
 {
-    /* Menus */
-    { "OnlineActionsAction", NULL, N_("_Online Actions"), NULL, NULL },
-
-    /* Menu Items */
-    {
-        "ABSetupAction", NULL, N_("_Online Banking Setup..."), NULL,
-        N_("Initial setup of Online Banking access (HBCI, or OFX DirectConnect, using AqBanking)")
-    },
-    {
-        "ABGetBalanceAction", NULL, N_("Get _Balance"), NULL,
-        N_("Get the account balance online through Online Banking")
-    },
-    {
-        "ABGetTransAction", NULL, N_("Get _Transactions..."), NULL,
-        N_("Get the transactions online through Online Banking")
-    },
-    {
-        "ABIssueSepaTransAction", NULL,
-        /* Translators: https://en.wikipedia.org/wiki/Single_Euro_Payments_Area */
-        N_("Issue _SEPA Transaction..."), NULL,
-        N_("Issue a new international European (SEPA) transaction online through Online Banking")
-    },
-    {
-        "ABIssueSepaIntTransAction", NULL,
-        N_("Issue SEPA I_nternal Transaction..."), NULL,
-        N_("Issue a new internal European (SEPA) transaction online through Online Banking")
-    },
-    {
-        "ABIssueIntTransAction", NULL, N_("_Internal Transaction..."), NULL,
-        N_("Issue a new bank-internal transaction online through Online Banking")
-    },
-    {
-        "ABIssueSepaDirectDebitAction", NULL, N_("Issue SEPA Direct _Debit..."), NULL,
-        N_("Issue a new international European (SEPA) direct debit note online through Online Banking")
-    },
-
-    /* File -> Import menu item */
-    {
-        "AQBankingImportAction", "go-previous", N_("Import using AQBanking"),
-        NULL, N_("Import into GnuCash any file format supported by AQBanking."),
-        G_CALLBACK(gnc_plugin_ab_cmd_aqb_import)
-    },
-    {
-        MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW, NULL,
-        N_("Show _log window"), NULL,
-        N_("Show the online banking log window.")
-    },
+    "FilePlaceholder1",
+    "ToolsPlaceholder0",
+    "ActionsPlaceholder1",
+    NULL,
 };
-/** The number of display items provided by this plugin. */
-static guint gnc_plugin_n_display_items = G_N_ELEMENTS(gnc_plugin_display_items);
 
 static const gchar *need_account_actions[] =
 {
@@ -216,9 +169,8 @@ gnc_plugin_aqbanking_class_init(GncPluginAqBankingClass *klass)
     plugin_class->actions_name       = PLUGIN_ACTIONS_NAME;
     plugin_class->actionsb           = gnc_plugin_actions;
     plugin_class->n_actionsb         = gnc_plugin_n_actions;
-    plugin_class->display_items      = gnc_plugin_display_items;
-    plugin_class->n_display_items    = gnc_plugin_n_display_items;
     plugin_class->ui_filename        = PLUGIN_UI_FILENAME;
+    plugin_class->ui_updates         = gnc_plugin_load_ui_items;
     plugin_class->add_to_window      = gnc_plugin_aqbanking_add_to_window;
     plugin_class->remove_from_window = gnc_plugin_aqbanking_remove_from_window;
 }

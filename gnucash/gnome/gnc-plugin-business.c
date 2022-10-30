@@ -161,165 +161,18 @@ static GActionEntry gnc_plugin_actions [] =
     { "BusinessTestInitDataAction", gnc_plugin_business_cmd_test_init_data, NULL, NULL, NULL },
     { "ToolbarNewInvoiceAction", gnc_plugin_business_cmd_customer_new_invoice, NULL, NULL, NULL },
     { "RegisterAssignPayment", gnc_plugin_business_cmd_assign_payment, NULL, NULL, NULL },
-//FIXMEb    { "RegisterEditPayment", gnc_plugin_business_cmd_assign_payment, NULL, NULL, NULL },
+    { "RegisterEditPayment", gnc_plugin_business_cmd_assign_payment, NULL, NULL, NULL },
 };
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
 
-static GncDisplayItem gnc_plugin_display_items [] =
+/** The default menu items that need to be add to the menu */
+static const gchar *gnc_plugin_load_ui_items [] =
 {
-    /* Toplevel */
-    { "BusinessAction", NULL, N_("_Business"), NULL, NULL },
-
-    /* Customer submenu */
-    { "CustomerMenuAction", NULL, N_("_Customer"), NULL, NULL },
-    {
-        "CustomerOverviewPageAction", NULL, N_("Customers Overview"), NULL,
-        N_("Open a Customer overview page")
-    },
-    {
-        "CustomerNewCustomerOpenAction", NULL, N_("_New Customer..."), NULL,
-        N_("Open the New Customer dialog")
-    },
-    {
-        "CustomerFindCustomerOpenAction", NULL, N_("_Find Customer..."), NULL,
-        N_("Open the Find Customer dialog")
-    },
-    {
-        "CustomerNewInvoiceOpenAction", NULL, N_("New _Invoice..."), NULL,
-        N_("Open the New Invoice dialog")
-    },
-    {
-        "CustomerFindInvoiceOpenAction", NULL, N_("Find In_voice..."), NULL,
-        N_("Open the Find Invoice dialog")
-    },
-    {
-        "CustomerNewJobOpenAction", NULL, N_("New _Job..."), NULL,
-        N_("Open the New Job dialog")
-    },
-    {
-        "CustomerFindJobOpenAction", NULL, N_("Find Jo_b..."), NULL,
-        N_("Open the Find Job dialog")
-    },
-    {
-        "CustomerProcessPaymentAction", NULL, N_("_Process Payment..."), NULL,
-        N_("Open the Process Payment dialog")
-    },
-
-    /* Vendor submenu */
-    {
-        "VendorOverviewPageAction", NULL, N_("Vendors Overview"), NULL,
-        N_("Open a Vendor overview page")
-    },
-    { "VendorMenuAction", NULL, N_("_Vendor"), NULL, NULL },
-    {
-        "VendorNewVendorOpenAction", NULL, N_("_New Vendor..."), NULL,
-        N_("Open the New Vendor dialog")
-    },
-    {
-        "VendorFindVendorOpenAction", NULL, N_("_Find Vendor..."), NULL,
-        N_("Open the Find Vendor dialog")
-    },
-    {
-        "VendorNewBillOpenAction", NULL, N_("New _Bill..."), NULL,
-        N_("Open the New Bill dialog")
-    },
-    {
-        "VendorFindBillOpenAction", NULL, N_("Find Bi_ll..."), NULL,
-        N_("Open the Find Bill dialog")
-    },
-    {
-        "VendorNewJobOpenAction", NULL, N_("New _Job..."), NULL,
-        N_("Open the New Job dialog")
-    },
-    {
-        "VendorFindJobOpenAction", NULL, N_("Find Jo_b..."), NULL,
-        N_("Open the Find Job dialog")
-    },
-    {
-        "VendorProcessPaymentAction", NULL, N_("_Process Payment..."), NULL,
-        N_("Open the Process Payment dialog")
-    },
-
-    /* Employee submenu */
-    {
-        "EmployeeOverviewPageAction", NULL, N_("Employees Overview"), NULL,
-        N_("Open a Employee overview page")
-    },
-    { "EmployeeMenuAction", NULL, N_("_Employee"), NULL, NULL },
-    {
-        "EmployeeNewEmployeeOpenAction", NULL, N_("_New Employee..."), NULL,
-        N_("Open the New Employee dialog")
-    },
-    {
-        "EmployeeFindEmployeeOpenAction", NULL, N_("_Find Employee..."), NULL,
-        N_("Open the Find Employee dialog")
-    },
-    {
-        "EmployeeNewExpenseVoucherOpenAction", NULL, N_("New _Expense Voucher..."), NULL,
-        N_("Open the New Expense Voucher dialog")
-    },
-    {
-        "EmployeeFindExpenseVoucherOpenAction", NULL, N_("Find Expense _Voucher..."), NULL,
-        N_("Open the Find Expense Voucher dialog")
-    },
-    {
-        "EmployeeProcessPaymentAction", NULL, N_("_Process Payment..."), NULL,
-        N_("Open the Process Payment dialog")
-    },
-
-    /* Other menu items */
-    {
-        "BusinessLinkedDocsAction", NULL, N_("Business Linked Documents"), NULL,
-        N_("View all Linked Business Documents")
-    },
-    {
-        "TaxTablesOpenAction", NULL, N_("Sales _Tax Table"), NULL,
-        N_("View and edit the list of Sales Tax Tables (GST/VAT)")
-    },
-    {
-        "BillingTermsOpenAction", NULL, N_("_Billing Terms Editor"), NULL,
-        N_("View and edit the list of Billing Terms")
-    },
-    {
-        "BillsDueReminderOpenAction", NULL, N_("Bills _Due Reminder"), NULL,
-        N_("Open the Bills Due Reminder dialog")
-    },
-    {
-        "InvoicesDueReminderOpenAction", NULL, N_("Invoices _Due Reminder"), NULL,
-        N_("Open the Invoices Due Reminder dialog")
-    },
-    { "ExportMenuAction", NULL, N_("E_xport"), NULL, NULL },
-
-    /* Extensions Menu */
-    { "BusinessTestAction", NULL, N_("_Business"), NULL, NULL },
-    {
-        "BusinessTestSearchAction", NULL, N_("Test Search Dialog"), NULL,
-        N_("Test Search Dialog")
-    },
-    {
-        "BusinessTestInitDataAction", NULL, N_("Initialize Test Data"), NULL,
-        N_("Initialize Test Data")
-    },
-
-    /* Toolbar */
-    {
-        "ToolbarNewInvoiceAction", GNC_ICON_INVOICE_NEW, N_("New _Invoice..."), NULL,
-        N_("Open the New Invoice dialog")
-    },
-
-    /* Register popup menu */
-    {
-        "RegisterAssignPayment", NULL, N_("Assign as payment..."), NULL,
-        N_("Assign the selected transaction as payment")
-    },
-    {
-        "RegisterEditPayment", NULL, N_("Edit payment..."), NULL,
-        N_("Edit the payment this transaction is a part of")
-    },
+    "BusinessPlaceholder0",
+    "BusinessPlaceholder1",
+    NULL,
 };
-/** The number of display items provided by this plugin. */
-static guint gnc_plugin_n_display_items = G_N_ELEMENTS(gnc_plugin_display_items);
 
 /************************************************************
  *              Plugin Function Implementation              *
@@ -375,9 +228,8 @@ gnc_plugin_business_class_init (GncPluginBusinessClass *klass)
     plugin_class->actions_name    = PLUGIN_ACTIONS_NAME;
     plugin_class->actionsb        = gnc_plugin_actions;
     plugin_class->n_actionsb      = gnc_plugin_n_actions;
-    plugin_class->display_items   = gnc_plugin_display_items;
-    plugin_class->n_display_items = gnc_plugin_n_display_items;
     plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
+    plugin_class->ui_updates        = gnc_plugin_load_ui_items;
 }
 
 static void

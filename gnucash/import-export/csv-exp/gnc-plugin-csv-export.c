@@ -54,24 +54,12 @@ static GActionEntry gnc_plugin_actions [] =
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
 
-static GncDisplayItem gnc_plugin_display_items [] =
+/** The default menu items that need to be add to the menu */
+static const gchar *gnc_plugin_load_ui_items [] =
 {
-    {
-        "CsvExportTreeAction", "go-next", N_("Export Account T_ree to CSV..."), NULL,
-        N_("Export the Account Tree to a CSV file")
-    },
-    {
-        "CsvExportTransAction", "go-next", N_("Export _Transactions to CSV..."), NULL,
-        N_("Export the Transactions to a CSV file")
-    },
-    {
-        "CsvExportRegisterAction", "go-next", N_("Export A_ctive Register to CSV...")
-    /* _A is already used by Export Accounts */, NULL,
-        N_("Export the Active Register to a CSV file")
-    },
+    "FilePlaceholder4",
+    NULL,
 };
-/** The number of display items provided by this plugin. */
-static guint gnc_plugin_n_display_items = G_N_ELEMENTS(gnc_plugin_display_items);
 
 typedef struct GncPluginCsvExportPrivate
 {
@@ -108,9 +96,8 @@ gnc_plugin_csv_export_class_init (GncPluginCsvExportClass *klass)
     plugin_class->actions_name    = PLUGIN_ACTIONS_NAME;
     plugin_class->actionsb        = gnc_plugin_actions;
     plugin_class->n_actionsb      = gnc_plugin_n_actions;
-    plugin_class->display_items   = gnc_plugin_display_items;
-    plugin_class->n_display_items = gnc_plugin_n_display_items;
     plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
+    plugin_class->ui_updates      = gnc_plugin_load_ui_items;
 }
 
 static void

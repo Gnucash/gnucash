@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<interface>
+
+  <menu id="ViewPlaceholder5">
+    <item>
+      <attribute name="label" translatable="yes">New Accounts _Page</attribute>
+      <attribute name="action">gnc-plugin-account-tree-actions.ViewAccountTreeAction</attribute>
+      <attribute name="tooltip" translatable="yes">Open a new Account Tree page</attribute>
+    </item>
+  </menu>
+
+</interface>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<interface>
+
+  <menu id="FilePlaceholder1">
+    <item>
+      <attribute name="label" translatable="yes">_Replay GnuCash .log file...</attribute>
+      <attribute name="action">gnc-plugin-log-replay-actions.LogReplayAction</attribute>
+      <attribute name="tooltip" translatable="yes">Replay a GnuCash log file after a crash. This cannot be undone</attribute>
+    </item>
+  </menu>
+
+</interface>

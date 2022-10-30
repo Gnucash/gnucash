@@ -49,15 +49,12 @@ static GActionEntry gnc_plugin_actions [] =
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
 
-static GncDisplayItem gnc_plugin_display_items [] =
+/** The default menu items that need to be add to the menu */
+static const gchar *gnc_plugin_load_ui_items [] =
 {
-    {
-        "LogReplayAction", "go-previous", N_("_Replay GnuCash .log file..."), NULL,
-        N_("Replay a GnuCash log file after a crash. This cannot be undone.")
-    },
+    "FilePlaceholder1",
+    NULL,
 };
-/** The number of display items provided by this plugin. */
-static guint gnc_plugin_n_display_items = G_N_ELEMENTS(gnc_plugin_display_items);
 
 typedef struct GncPluginLogreplayPrivate
 {
@@ -94,9 +91,8 @@ gnc_plugin_log_replay_class_init (GncPluginLogreplayClass *klass)
     plugin_class->actions_name    = PLUGIN_ACTIONS_NAME;
     plugin_class->actionsb        = gnc_plugin_actions;
     plugin_class->n_actionsb      = gnc_plugin_n_actions;
-    plugin_class->display_items   = gnc_plugin_display_items;
-    plugin_class->n_display_items = gnc_plugin_n_display_items;
     plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
+    plugin_class->ui_updates      = gnc_plugin_load_ui_items;
 }
 
 static void

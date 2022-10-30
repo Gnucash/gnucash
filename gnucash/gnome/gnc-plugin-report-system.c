@@ -56,16 +56,12 @@ static GActionEntry gnc_plugin_actions [] =
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
-static GncDisplayItem gnc_plugin_display_items [] =
+/** The default menu items that need to be add to the menu */
+static const gchar *gnc_plugin_load_ui_items [] =
 {
-    /* Menu Items */
-    {
-        "EditStyleSheetsAction", NULL, N_("St_yle Sheets"), NULL,
-        N_("Edit report style sheets")
-    },
+    "EditPlaceholder4",
+    NULL,
 };
-/** The number of display items provided by this plugin. */
-static guint gnc_plugin_n_display_items = G_N_ELEMENTS (gnc_plugin_display_items);
 
 typedef struct GncPluginReportSystemPrivate
 {
@@ -100,9 +96,8 @@ gnc_plugin_report_system_class_init (GncPluginReportSystemClass *klass)
     plugin_class->actions_name    = PLUGIN_ACTIONS_NAME;
     plugin_class->actionsb        = gnc_plugin_actions;
     plugin_class->n_actionsb      = gnc_plugin_n_actions;
-    plugin_class->display_items   = gnc_plugin_display_items;
-    plugin_class->n_display_items = gnc_plugin_n_display_items;
     plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
+    plugin_class->ui_updates      = gnc_plugin_load_ui_items;
 }
 
 static void

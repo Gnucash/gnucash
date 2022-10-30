@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<interface>
+
+  <menu id="FilePlaceholder4">
+    <item>
+      <attribute name="label" translatable="yes">Export Account T_ree to CSV...</attribute>
+      <attribute name="action">gnc-plugin-csv-export-actions.CsvExportTreeAction</attribute>
+      <attribute name="tooltip" translatable="yes">Export the Account Tree to a CSV file</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Export _Transactions to CSV...</attribute>
+      <attribute name="action">gnc-plugin-csv-export-actions.CsvExportTransAction</attribute>
+      <attribute name="tooltip" translatable="yes">Export the Transactions to a CSV file</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Export A_ctive Register to CSV...</attribute>
+      <attribute name="action">gnc-plugin-csv-export-actions.CsvExportRegisterAction</attribute>
+      <attribute name="tooltip" translatable="yes">Export the Active Register to a CSV file</attribute>
+    </item>
+  </menu>
+
+</interface>

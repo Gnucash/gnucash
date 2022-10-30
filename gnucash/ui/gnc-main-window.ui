@@ -158,6 +158,11 @@
           <attribute name="action">mainwin.EditPlaceholder5</attribute>
           <attribute name="hidden-when">action-disabled</attribute>
         </item>
+        <item>
+          <attribute name="label" translatable="no">OptionsPlaceholder</attribute>
+          <attribute name="action">mainwin.EditPlaceholder6</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
       </section>
     </submenu>
 
@@ -226,14 +231,23 @@
           <attribute name="action">mainwin.ViewPlaceholder2</attribute>
           <attribute name="hidden-when">action-disabled</attribute>
         </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.ViewPlaceholder3</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+      <section>
         <item>
           <attribute name="label" translatable="no">RefreshPlaceholder</attribute>
-          <attribute name="action">mainwin.ViewPlaceholder3</attribute>
+          <attribute name="action">mainwin.ViewPlaceholder4</attribute>
           <attribute name="hidden-when">action-disabled</attribute>
         </item>
         <item>
           <attribute name="label" translatable="no">AccoutTreePlaceholder</attribute>
-          <attribute name="action">mainwin.ViewPlaceholder4</attribute>
+          <attribute name="action">mainwin.ViewPlaceholder5</attribute>
           <attribute name="hidden-when">action-disabled</attribute>
         </item>
       </section>
@@ -247,6 +261,34 @@
         <item>
           <attribute name="label" translatable="no">Placeholder</attribute>
           <attribute name="action">mainwin.TransPlaceholder0</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.TransPlaceholder1</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.TransPlaceholder2</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.TransPlaceholder3</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.TransPlaceholder4</attribute>
           <attribute name="hidden-when">action-disabled</attribute>
         </item>
       </section>
@@ -315,11 +357,17 @@
     <submenu>
       <attribute name="label" translatable="yes">_Business</attribute>
       <attribute name="action">mainwin.BusinessAction</attribute>
-      <attribute name="hidden-when">action-disabled</attribute>
       <section>
         <item>
           <attribute name="label" translatable="no">Placeholder</attribute>
           <attribute name="action">mainwin.BusinessPlaceholder0</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="no">Placeholder</attribute>
+          <attribute name="action">mainwin.BusinessPlaceholder1</attribute>
           <attribute name="hidden-when">action-disabled</attribute>
         </item>
       </section>
