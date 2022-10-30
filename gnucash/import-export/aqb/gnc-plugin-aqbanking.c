@@ -199,9 +199,15 @@ gnc_plugin_aqbanking_add_to_window(GncPlugin *plugin, GncMainWindow *window,
                       G_CALLBACK(gnc_plugin_ab_main_window_page_changed),
                       plugin);
 
-    action = gnc_main_window_find_action (window, MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW);
+    action = gnc_main_window_find_action_in_group (window, PLUGIN_ACTIONS_NAME,
+                                                   MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW);
 
-//FIXMEb    gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), FALSE);
+    if (action)
+    {
+        GVariant *state = g_action_get_state (G_ACTION(action));
+        g_action_change_state (G_ACTION(action), g_variant_new_boolean (FALSE));
+        g_variant_unref (state);
+    }
 }
 
 static void
@@ -269,13 +275,13 @@ static void update_inactive_actions(GncPluginPage *plugin_page)
         return;
 
     window = GNC_MAIN_WINDOW(plugin_page->window);
-    g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
+    g_return_if_fail (GNC_IS_MAIN_WINDOW(window));
     simple_action_group = gnc_main_window_get_action_group (window, PLUGIN_ACTIONS_NAME);
     g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(simple_action_group));
 
     /* Set the action's sensitivity */
     gnc_plugin_update_actionsb (simple_action_group, readonly_inactive_actions,
-                               "sensitive", is_readwrite);
+                                "sensitive", is_readwrite);
 }
 
 
@@ -284,19 +290,19 @@ static void update_inactive_actions(GncPluginPage *plugin_page)
  * the page that is currently selected.
  */
 static void
-gnc_plugin_ab_main_window_page_changed(GncMainWindow *window,
-                                       GncPluginPage *page, gpointer user_data)
+gnc_plugin_ab_main_window_page_changed (GncMainWindow *window,
+                                        GncPluginPage *page, gpointer user_data)
 {
-    Account *account = main_window_to_account(window);
+    Account *account = main_window_to_account (window);
 
     /* Make sure not to call this with a NULL GncPluginPage */
     if (page)
     {
         // Update the menu items according to the selected account
-        gnc_plugin_ab_account_selected(page, account, user_data);
+        gnc_plugin_ab_account_selected (page, account, user_data);
 
         // Also update the action sensitivity due to read-only
-        update_inactive_actions(page);
+        update_inactive_actions (page);
     }
 }
 
@@ -305,8 +311,8 @@ gnc_plugin_ab_main_window_page_changed(GncMainWindow *window,
  * selecting another register page. Update the aqbanking menus appropriately.
  */
 static void
-gnc_plugin_ab_account_selected(GncPluginPage *plugin_page, Account *account,
-                               gpointer user_data)
+gnc_plugin_ab_account_selected (GncPluginPage *plugin_page, Account *account,
+                                gpointer user_data)
 {
     GncMainWindow  *window;
     GSimpleActionGroup *simple_action_group;
@@ -328,21 +334,19 @@ gnc_plugin_ab_account_selected(GncPluginPage *plugin_page, Account *account,
                                    "sensitive",
                                    (account && bankcode && *bankcode
                                     && accountid && *accountid));
-        gnc_plugin_update_actionsb (simple_action_group, need_account_actions,
-                                   "visible", TRUE);
+        gnc_main_window_menu_item_vis_by_action (window, need_account_actions, TRUE);
+
 #if (AQBANKING_VERSION_INT < 60400)
         gnc_plugin_update_actionsb (simple_action_group, inactive_account_actions,
                                    "sensitive", FALSE);
-        gnc_plugin_update_actionsb (simple_action_group, inactive_account_actions,
-                                   "visible", FALSE);
+        gnc_main_window_menu_item_vis_by_action (window, inactive_account_actions, FALSE);
 #endif
     }
     else
     {
         gnc_plugin_update_actionsb (simple_action_group, need_account_actions,
                                    "sensitive", FALSE);
-        gnc_plugin_update_actionsb (simple_action_group, need_account_actions,
-                                   "visible", FALSE);
+        gnc_main_window_menu_item_vis_by_action (window, need_account_actions, FALSE);
     }
 
 }
@@ -412,16 +416,15 @@ main_window_to_account(GncMainWindow *window)
 }
 
 void
-gnc_plugin_aqbanking_set_logwindow_visible(gboolean logwindow_visible)
+gnc_plugin_aqbanking_set_logwindow_visible (gboolean logwindow_visible)
 {
-    GAction *action;
-
-    action = gnc_main_window_find_action (gnc_main_window,
-                                          MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW);
+    GAction *action = gnc_main_window_find_action_in_group (gnc_main_window, PLUGIN_ACTIONS_NAME,
+                                                            MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW);
     if (action)
     {
-//FIXMEb        gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action),
-//                                     logwindow_visible);
+        GVariant *state = g_action_get_state (G_ACTION(action));
+        g_action_change_state (G_ACTION(action), g_variant_new_boolean (logwindow_visible));
+        g_variant_unref (state);
     }
 }
 
