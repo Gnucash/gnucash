@@ -41,8 +41,6 @@ set (aqbanking_noinst_HEADERS
 
 set(aqbanking_GLADE assistant-ab-initial.glade dialog-ab.glade dialog-ab-pref.glade)
 
-set(aqbanking_UI gnc-plugin-aqbanking-ui.xml)
-
 if(WITH_AQBANKING)
   add_library (gncmod-aqbanking
     ${aqbanking_SOURCES}
@@ -84,14 +82,7 @@ endif()
 
 # No headers to install
 
-
   install(FILES ${aqbanking_GLADE} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/gtkbuilder)
-
-  install(FILES ${aqbanking_UI} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/ui)
-
-  foreach(ui_file ${aqbanking_UI})
-      configure_file(${ui_file} ${DATADIR_BUILD}/gnucash/ui/${ui_file} COPYONLY)
-  endforeach()
 
   foreach(glade_file ${aqbanking_GLADE})
       configure_file(${glade_file} ${DATADIR_BUILD}/gnucash/gtkbuilder/${glade_file} COPYONLY)
