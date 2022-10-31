@@ -3601,9 +3601,9 @@ gnc_main_window_menu_find_menu_item (GncMainWindow *window, const gchar *action_
 
 
 void
-gnc_main_window_menu_item_vis_by_action (GncMainWindow *window,
-                                         const gchar **action_names,
-                                         gboolean vis)
+gnc_main_window_set_vis_of_items_by_action (GncMainWindow *window,
+                                            const gchar **action_names,
+                                            gboolean vis)
 {
     GncMainWindowPrivate *priv;
 
@@ -3623,9 +3623,8 @@ gnc_main_window_menu_item_vis_by_action (GncMainWindow *window,
             gtk_widget_set_visible (menu_item, vis);
         }
         else
-        {
-            PINFO("Did not find menu_item with action name '%s' to set vis '%s'", action_names[i], vis ? "true" : "false");
-        }
+            PINFO("Did not find menu_item with action name '%s' to set vis '%s'",
+                   action_names[i], vis ? "true" : "false");
 
         if (tool_item)
         {
@@ -3634,9 +3633,8 @@ gnc_main_window_menu_item_vis_by_action (GncMainWindow *window,
             gtk_widget_set_visible (tool_item, vis);
         }
         else
-        {
-            PINFO("Did not find tool_item with action name '%s' to set vis '%s'\n", action_names[i], vis ? "true" : "false");
-        }
+             PINFO("Did not find tool_item with action name '%s' to set vis '%s'",
+                    action_names[i], vis ? "true" : "false");
     }
 }
 
@@ -4115,8 +4113,8 @@ gnc_main_window_setup_window (GncMainWindow *window)
                                     always_insensitive_actions,
                                     FALSE);
 
-    gnc_main_window_menu_item_vis_by_action (window,
-                                             always_hidden_actions, false);
+    gnc_main_window_set_vis_of_items_by_action (window, always_hidden_actions,
+                                                false);
 
     gtk_widget_insert_action_group (GTK_WIDGET(window), "mainwin",
                                     G_ACTION_GROUP(window));

@@ -263,10 +263,20 @@ void gnc_main_window_merge_actions (GncMainWindow *window,
 void gnc_main_window_unmerge_actions (GncMainWindow *window,
                                       const gchar *group_name);
 
-
-void gnc_main_window_menu_item_vis_by_action (GncMainWindow *window,
-                                              const gchar **action_names,
-                                              gboolean vis); //FIXMEb added
+/** Show or hide menu and toolbar items based on a NULL terminated
+ *  list of action names
+ *
+ *  @param window A pointer to the window whose user interface should
+ *  be updated.
+ *
+ *  @param action_names A NULL terminated list of actions names that
+ *  should be modified.
+ *
+ *  @param vis Whether to show or hide the widget items
+ */
+void gnc_main_window_set_vis_of_items_by_action (GncMainWindow *window,
+                                                 const gchar **action_names,
+                                                 gboolean vis); //FIXMEb added
 
 /** Find the menu item with the given action name for the window
  *  specified.

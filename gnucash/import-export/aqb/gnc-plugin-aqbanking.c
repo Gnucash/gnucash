@@ -333,17 +333,22 @@ gnc_plugin_ab_account_selected (GncPluginPage *plugin_page, Account *account,
         gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), need_account_actions,
                                         (account && bankcode && *bankcode
                                          && accountid && *accountid));
-        gnc_main_window_menu_item_vis_by_action (window, need_account_actions, TRUE);
+        gnc_main_window_set_vis_of_items_by_action (window, need_account_actions,
+                                                    TRUE);
 
 #if (AQBANKING_VERSION_INT < 60400)
-        gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), inactive_account_actions, FALSE);
-        gnc_main_window_menu_item_vis_by_action (window, inactive_account_actions, FALSE);
+        gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group),
+                                        inactive_account_actions, FALSE);
+        gnc_main_window_set_vis_of_items_by_action (window, inactive_account_actions,
+                                                    FALSE);
 #endif
     }
     else
     {
-        gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), need_account_actions, FALSE);
-        gnc_main_window_menu_item_vis_by_action (window, need_account_actions, FALSE);
+        gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group),
+                                        need_account_actions, FALSE);
+        gnc_main_window_set_vis_of_items_by_action (window, need_account_actions,
+                                                    FALSE);
     }
 
 }
@@ -417,6 +422,7 @@ gnc_plugin_aqbanking_set_logwindow_visible (gboolean logwindow_visible)
 {
     GAction *action = gnc_main_window_find_action_in_group (gnc_main_window, PLUGIN_ACTIONS_NAME,
                                                             MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW);
+
     if (action)
     {
         GVariant *state = g_action_get_state (G_ACTION(action));
