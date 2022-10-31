@@ -773,6 +773,7 @@ test_book_get_collection( Fixture *fixture, gconstpointer pData )
 static void
 test_book_features (Fixture *fixture, gconstpointer pData)
 {
+    char* msg;
     g_test_message ("Testing book features");
 
     g_assert_null (gnc_features_test_unknown (fixture->book));
@@ -786,10 +787,18 @@ test_book_features (Fixture *fixture, gconstpointer pData)
     g_assert_null (gnc_features_test_unknown (fixture->book));
     g_assert_false (gnc_features_check_used (fixture->book, "Credit Notes"));
 
-    /* cannot set an unknown feature: it bails out. */
-    /* gnc_features_set_used (fixture->book, "Nanotech"); */
-    /* g_assert_nonnull (gnc_features_test_unknown (fixture->book)); */
-    g_assert_false (gnc_features_check_used (fixture->book, "Nanotech"));
+    /* cannot use gnc_features_set_used to set an unknown feature: it bails out.
+     * use qof_book_set_feature instead. */
+    qof_book_set_feature (fixture->book, "Nanotech", "With Quantum Computing");
+    g_assert_true (gnc_features_check_used (fixture->book, "Nanotech"));
+    msg = gnc_features_test_unknown (fixture->book);
+    g_assert_cmpstr (msg, ==, "This Dataset contains features not \
+supported by this version of GnuCash. You must use a newer version \
+of GnuCash in order to support the following features:\n* With Quantum Computing");
+    g_free (msg);
+
+    qof_book_unset_feature (fixture->book, "Nanotech");
+    g_assert_null (gnc_features_test_unknown (fixture->book));
 }
 
 static void
