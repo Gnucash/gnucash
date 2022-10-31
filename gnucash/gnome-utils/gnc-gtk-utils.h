@@ -41,6 +41,10 @@
  @{
 */
 
+#define GNC_MENU_ATTRIBUTE_ACCELERATOR  "accel"
+#define GNC_MENU_ATTRIBUTE_TOOLTIP      "tooltip"
+#define GNC_MENU_ATTRIBUTE_TEMPORARY    "temp"
+
 void gnc_cbwe_set_by_string(GtkComboBox *cbwe, const gchar *text);
 void gnc_cbwe_add_completion (GtkComboBox *cbwe);
 void gnc_cbwe_require_list_item (GtkComboBox *cbwe);
