@@ -27,15 +27,6 @@
 #include "qofevent.h"
 #include "qofid.h"
 
-/* for backwards compatibility - to be moved back to qofevent.c in libqof2 */
-typedef struct
-{
-    QofEventHandler handler;
-    gpointer user_data;
-
-    gint handler_id;
-} HandlerInfo;
-
 /* generates an event even when events are suspended! */
 void qof_event_force (QofInstance *entity, QofEventId event_id, gpointer event_data);
 
