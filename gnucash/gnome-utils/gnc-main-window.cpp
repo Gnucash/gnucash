@@ -3516,18 +3516,18 @@ gnc_main_window_unmerge_actions (GncMainWindow *window,
 }
 
 GAction *
-gnc_main_window_find_action (GncMainWindow *window, const gchar *name)
+gnc_main_window_find_action (GncMainWindow *window, const gchar *action_name)
 {
     GncMainWindowPrivate *priv;
     GAction *action = nullptr;
 
     g_return_val_if_fail (GNC_IS_MAIN_WINDOW(window), nullptr);
-    g_return_val_if_fail (name != nullptr, nullptr);
+    g_return_val_if_fail (action_name != nullptr, nullptr);
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
     action = g_action_map_lookup_action (G_ACTION_MAP(window),
-                                         name);
+                                         action_name);
 
     return action;
 }
@@ -3535,17 +3535,17 @@ gnc_main_window_find_action (GncMainWindow *window, const gchar *name)
 GAction *
 gnc_main_window_find_action_in_group (GncMainWindow *window,
                                       const gchar *group_name,
-                                      const gchar *name)
+                                      const gchar *action_name)
 {
     GAction *action = nullptr;
 
     g_return_val_if_fail (GNC_IS_MAIN_WINDOW(window), nullptr);
     g_return_val_if_fail (group_name != nullptr, nullptr);
-    g_return_val_if_fail (name != nullptr, nullptr);
+    g_return_val_if_fail (action_name != nullptr, nullptr);
 
     auto action_group = gtk_widget_get_action_group (GTK_WIDGET(window), group_name);
     if (action_group)
-        action = g_action_map_lookup_action (G_ACTION_MAP(window), name);
+        action = g_action_map_lookup_action (G_ACTION_MAP(window), action_name);
 
     return action;
 }
@@ -3585,8 +3585,15 @@ gnc_main_window_toolbar_find_tool_item (GncMainWindow *window, const gchar *acti
 GtkWidget *
 gnc_main_window_menu_find_menu_item (GncMainWindow *window, const gchar *action_name)
 {
-    GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-    GtkWidget *menu_item = GTK_WIDGET(g_hash_table_lookup (priv->display_item_hash, action_name));
+    GncMainWindowPrivate *priv;
+    GtkWidget *menu_item;
+
+    g_return_val_if_fail (GNC_IS_MAIN_WINDOW(window), nullptr);
+    g_return_val_if_fail (action_name != nullptr, nullptr);
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+    menu_item = GTK_WIDGET(g_hash_table_lookup (priv->display_item_hash, action_name));
 
     priv->num_item_q++; //FIXMEb temp added
 
@@ -3650,8 +3657,7 @@ gnc_main_window_init_short_names (GncMainWindow *window,
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-    gnc_plugin_init_short_names (priv->toolbar,
-                                 toolbar_labels);
+    gnc_plugin_init_short_names (priv->toolbar, toolbar_labels);
 }
 
 
@@ -3661,7 +3667,7 @@ gnc_main_window_update_toolbar (GncMainWindow *window, GncPluginPage *page,
 {
     GncMainWindowPrivate *priv;
     GtkBuilder *builder;
-    GAction *action = gnc_main_window_find_action (window, "ViewToolbarAction");
+    GAction *action;
 
     g_return_if_fail (GNC_IS_MAIN_WINDOW(window));
     g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
@@ -3690,6 +3696,8 @@ gnc_main_window_update_toolbar (GncMainWindow *window, GncPluginPage *page,
         g_free (toolbar_name);
     }
 
+    action = gnc_main_window_find_action (window, "ViewToolbarAction");
+
     // set visibility of toolbar
     if (action)
     {
@@ -3697,7 +3705,6 @@ gnc_main_window_update_toolbar (GncMainWindow *window, GncPluginPage *page,
         gtk_widget_set_visible (priv->toolbar, g_variant_get_boolean (state));
         g_variant_unref (state);
     }
-
     // add tooltip redirect call backs
     gnc_plugin_add_toolbar_tooltip_callbacks (priv->toolbar, priv->statusbar);
 }

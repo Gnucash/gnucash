@@ -209,7 +209,7 @@ main_window_update_page_set_read_only_icon (GncPluginPage *page,
  *  should be unique among all groups added to the window, and will be
  *  needed to remove the actions from this window.
  *
- *  @param group A pointer to the GSimpleActionGroup. 
+ *  @param group A pointer to the GSimpleActionGroup.
  */
 void gnc_main_window_manual_merge_actions (GncMainWindow *window,
                                            const gchar *group_name,
@@ -318,6 +318,14 @@ typedef struct
     const char *short_label;
 } GncToolBarShortNames; //FIXMEb added
 
+
+/** Update the labels of the toolbar items with short names.
+ *
+ *  @param window The window that conatins a tool bar to update.
+ *
+ *  @param toolbar_labels A pointer to a NULL terminated array of data
+ *  GncToolBarShortNames items.
+ */
 void gnc_main_window_init_short_names (GncMainWindow *window,
                                        GncToolBarShortNames *toolbar_labels); //FIXMEb added
 
@@ -446,21 +454,39 @@ gboolean gnc_main_window_all_finish_pending (void);
  *  this action. */
 void gnc_main_window_all_action_set_sensitive (const gchar *action_name, gboolean sensitive);
 
-/** Find action in main window.
+/** Find the GAction in the main window.
  *
  *  @param window The window which should be checked for the action.
  *
- *  @param name The name of the command to be retrieved.
+ *  @param action_name The name of the command to be retrieved.
  *
  *  @return A pointer to a GtkAction that was added with the
  *  specified name. If the name cannot be found, then NULL will be
  *  returned.
  */
-GAction *gnc_main_window_find_action (GncMainWindow *window, const gchar *name);
+GAction *gnc_main_window_find_action (GncMainWindow *window,
+                                      const gchar *action_name);
 
-GAction *gnc_main_window_find_action_in_group (GncMainWindow *window, 
+/** Find the GAction in a specific action group for window.
+ *
+ *  @param window The window which should be checked for the action.
+ *
+ *  @param group_name The name of the action group to search.
+ *
+ *  @param name The name of the command to be retrieved.
+ *
+ *  @return A pointer to the GAction if found or NULL will be returned.
+ */
+GAction *gnc_main_window_find_action_in_group (GncMainWindow *window,
                                                const gchar *group_name,
+                                               const gchar *action_name); //FIXMEb added
 
+/** Return the GMenuModel for the main window menu bar.
+ *
+ *  @param window The window for the menu bar.
+ *
+ *  @return The GMenuModel or NULL.
+ */
 GMenuModel *gnc_main_window_get_menu_model (GncMainWindow *window); //FIXMEb added
 
 /** Update the main window menu with the placeholders listed in
