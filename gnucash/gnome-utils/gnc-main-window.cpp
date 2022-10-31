@@ -5551,19 +5551,6 @@ gnc_main_window_all_action_set_sensitive (const gchar *action_name,
     }
 }
 
-GtkWidget *
-gnc_main_window_get_menu (GncMainWindow *window)
-{
-    GncMainWindowPrivate *priv;
-
-    g_return_val_if_fail (GNC_IS_MAIN_WINDOW(window), nullptr);
-
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-
-    return priv->menubar;
-}
-
-
 GMenuModel *
 gnc_main_window_get_menu_model (GncMainWindow *window)
 {
@@ -5574,28 +5561,6 @@ gnc_main_window_get_menu_model (GncMainWindow *window)
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
     return priv->menubar_model;
-}
-
-void
-gnc_main_window_update_toolbar (GncMainWindow *window, GncPluginPage *page)
-{
-    GncMainWindowPrivate *priv;
-    GtkBuilder *builder;
-
-    g_return_if_fail (GNC_IS_MAIN_WINDOW(window));
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
-
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-
-    builder = gnc_plugin_page_get_builder (page);
-
-    if (builder)
-    {
-        gtk_container_remove (GTK_CONTAINER(priv->menu_dock), priv->toolbar);
-        priv->toolbar = (GtkWidget *)gtk_builder_get_object (builder, "mainwin-toolbar");
-        g_object_set (priv->toolbar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
-        gtk_container_add (GTK_CONTAINER(priv->menu_dock), priv->toolbar);
-    }
 }
 
 /** @} */
