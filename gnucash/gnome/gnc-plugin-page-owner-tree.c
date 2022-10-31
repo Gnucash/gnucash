@@ -325,8 +325,9 @@ gnc_plugin_page_owner_focus_widget (GncPluginPage *owner_plugin_page)
 
         set_menu_and_toolbar_qualifier (owner_plugin_page);
 
-        gnc_main_window_update_menu (GNC_MAIN_WINDOW(owner_plugin_page->window), owner_plugin_page,
-                                     gnc_plugin_load_ui_items);
+        gnc_main_window_update_menu_and_toolbar (GNC_MAIN_WINDOW(owner_plugin_page->window),
+                                                 owner_plugin_page,
+                                                 gnc_plugin_load_ui_items);
 
          // setup any short toolbar names
         gnc_main_window_init_short_names (GNC_MAIN_WINDOW(owner_plugin_page->window), toolbar_labels);

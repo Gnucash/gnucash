@@ -3704,8 +3704,9 @@ gnc_main_window_update_toolbar (GncMainWindow *window, GncPluginPage *page,
 
 
 void
-gnc_main_window_update_menu (GncMainWindow *window, GncPluginPage *page,
-                             const gchar **ui_updates)
+gnc_main_window_update_menu_and_toolbar (GncMainWindow *window,
+                                         GncPluginPage *page,
+                                         const gchar **ui_updates)
 {
     GncMainWindowPrivate *priv;
     const gchar *plugin_page_actions_group_name;
@@ -3714,7 +3715,6 @@ gnc_main_window_update_menu (GncMainWindow *window, GncPluginPage *page,
 
     GMenuModel *menu_model_part;
     GncMenuModelSearch *gsm = g_new0 (GncMenuModelSearch, 1);
-
 
     g_return_if_fail (GNC_IS_MAIN_WINDOW(window));
     g_return_if_fail (page != nullptr);
@@ -3748,13 +3748,12 @@ gnc_main_window_update_menu (GncMainWindow *window, GncPluginPage *page,
 
     gnc_main_window_update_toolbar (window, page, menu_qualifier);
 
-
     PERR("Display Item Hash size %d", g_hash_table_size (priv->display_item_hash)); //FIXMEb temp added
     PERR("Display Item Q %d", priv->num_item_q); //FIXMEb temp added
 
     // reset hash table and remove added menu items
     g_hash_table_remove_all (priv->display_item_hash);
-    gnc_menubar_model_remove_items_with_attrib (priv->menubar_model, 
+    gnc_menubar_model_remove_items_with_attrib (priv->menubar_model,
                                                 GNC_MENU_ATTRIBUTE_TEMPORARY);
     priv->num_item_q = 0; //FIXMEb temp added
 
@@ -3776,9 +3775,8 @@ gnc_main_window_update_menu (GncMainWindow *window, GncPluginPage *page,
         gsm->search_action_name = ui_updates[i];
 
         if (gnc_menubar_model_find_item (priv->menubar_model, gsm))
-        {
-            g_menu_insert_section (G_MENU(gsm->model), gsm->index, NULL, G_MENU_MODEL(menu_model_part));
-        }
+            g_menu_insert_section (G_MENU(gsm->model), gsm->index,
+                                   nullptr, G_MENU_MODEL(menu_model_part));
         else
             PERR("Could not find '%s' in menu model", ui_updates[i]);
 

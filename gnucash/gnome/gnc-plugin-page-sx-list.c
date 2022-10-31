@@ -184,8 +184,9 @@ gnc_plugin_page_sx_list_focus_widget (GncPluginPage *sx_plugin_page)
         action = gnc_main_window_find_action (GNC_MAIN_WINDOW(sx_plugin_page->window), "ScheduledAction");
         g_simple_action_set_enabled (G_SIMPLE_ACTION(action), TRUE);
 
-        gnc_main_window_update_menu (GNC_MAIN_WINDOW(sx_plugin_page->window), sx_plugin_page,
-                                     gnc_plugin_load_ui_items);
+        gnc_main_window_update_menu_and_toolbar (GNC_MAIN_WINDOW(sx_plugin_page->window),
+                                                 sx_plugin_page,
+                                                 gnc_plugin_load_ui_items);
 
         if (GTK_IS_TREE_VIEW(tree_view))
         {

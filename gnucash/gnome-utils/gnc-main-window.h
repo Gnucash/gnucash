@@ -463,8 +463,18 @@ GAction *gnc_main_window_find_action_in_group (GncMainWindow *window,
 
 GMenuModel *gnc_main_window_get_menu_model (GncMainWindow *window); //FIXMEb added
 
-void gnc_main_window_update_menu (GncMainWindow *window, GncPluginPage *page,
-                                  const gchar **ui_updates); //FIXMEb added
+/** Update the main window menu with the placeholders listed in
+ *  ui_updates and load the page specific toolbar.
+ *
+ *  @param window The window which should be checked for the action.
+ *
+ *  @param page The plugin page calling this function.
+ *
+ *  @param ui_updates A NULL terminated list of placeholders to load
+ */
+void gnc_main_window_update_menu_and_toolbar (GncMainWindow *window,
+                                              GncPluginPage *page,
+                                              const gchar **ui_updates); //FIXMEb added
 
 /**
  * Shows all main windows.

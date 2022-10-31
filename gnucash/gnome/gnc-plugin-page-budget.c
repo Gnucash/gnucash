@@ -385,8 +385,9 @@ gnc_plugin_page_budget_focus_widget (GncPluginPage *budget_plugin_page)
         action = gnc_main_window_find_action (GNC_MAIN_WINDOW(budget_plugin_page->window), "ScheduledAction");
         g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
 
-        gnc_main_window_update_menu (GNC_MAIN_WINDOW(budget_plugin_page->window), budget_plugin_page,
-                                     gnc_plugin_load_ui_items);
+        gnc_main_window_update_menu_and_toolbar (GNC_MAIN_WINDOW(budget_plugin_page->window),
+                                                 budget_plugin_page,
+                                                 gnc_plugin_load_ui_items);
 
         // setup any short toolbar names
         gnc_main_window_init_short_names (GNC_MAIN_WINDOW(budget_plugin_page->window), toolbar_labels);

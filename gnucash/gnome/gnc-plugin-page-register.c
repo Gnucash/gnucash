@@ -743,14 +743,14 @@ gnc_plugin_page_register_focus_widget (GncPluginPage* register_plugin_page)
             action = gnc_main_window_find_action (GNC_MAIN_WINDOW(register_plugin_page->window), "ScheduledAction");
             g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
 
-            gnc_main_window_update_menu (GNC_MAIN_WINDOW(register_plugin_page->window),
-                                         register_plugin_page,
-                                         gnc_plugin_load_ui_items);
+            gnc_main_window_update_menu_and_toolbar (GNC_MAIN_WINDOW(register_plugin_page->window),
+                                                     register_plugin_page,
+                                                     gnc_plugin_load_ui_items);
         }
         else
         {
             GtkWidget *toolbar = gnc_window_get_toolbar (gnc_window);
-            GtkWidget *menubar = gnc_window_get_menubar (gnc_window);            
+            GtkWidget *menubar = gnc_window_get_menubar (gnc_window);
             GMenuModel *menubar_model = gnc_window_get_menubar_model (gnc_window);
             GtkWidget *statusbar = gnc_window_get_statusbar (gnc_window);
 
@@ -1066,7 +1066,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
                 found = gnc_menubar_model_update_item (gnc_window_get_menubar_model (gnc_window),
                                                        *iter, _(*label_iter), _(*tooltip_iter));
 
-                PINFO("split model_item action '%s', found is %d, iter label is '%s'", 
+                PINFO("split model_item action '%s', found is %d, iter label is '%s'",
                         *iter, found, _(*label_iter));
 
                 ++label_iter;
@@ -1084,7 +1084,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
                 found = gnc_menubar_model_update_item (gnc_window_get_menubar_model (gnc_window),
                                                        *iter, _(*label_iter), _(*tooltip_iter));
 
-                PINFO("trans model_item action '%s', found is %d, iter label is '%s'", 
+                PINFO("trans model_item action '%s', found is %d, iter label is '%s'",
                         *iter, found, _(*label_iter));
 
                 ++label_iter;
@@ -1093,7 +1093,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
         }
         // need to add the accelerator keys, currently there are none
 //FIXMEb
-//        gnc_add_accelerator_keys_for_menu (gnc_window_get_menubar (gnc_window), 
+//        gnc_add_accelerator_keys_for_menu (gnc_window_get_menubar (gnc_window),
 //                                           gnc_plugin_page_get_accel_group (GNC_PLUGIN_PAGE(page)));
     }
 }
