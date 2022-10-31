@@ -271,7 +271,17 @@ void gnc_main_window_menu_item_vis_by_action (GncMainWindow *window,
 GtkWidget *gnc_main_window_menu_find_menu_item (GncMainWindow *window,
                                                 const gchar *action_name); //FIXMEb added
 
-GtkWidget * gnc_main_window_toolbar_find_menu_item (GncMainWindow *window,
+/** Find the toolbar item with the given action name for the window
+ *  specified.
+ *
+ *  @param window A pointer to the window whose user interface should
+ *  be updated.
+ *
+ *  @param action_name The action name of the tool item to find.
+ *
+ *  @return The found tool item widget or NULL.
+ */
+GtkWidget * gnc_main_window_toolbar_find_tool_item (GncMainWindow *window,
                                                     const gchar *action_name); //FIXMEb added
 
 /** A structure for defining alternate action names for use in the

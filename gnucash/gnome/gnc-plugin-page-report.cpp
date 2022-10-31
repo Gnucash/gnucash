@@ -1235,7 +1235,7 @@ gnc_plugin_page_report_menu_update (GncPluginPage *plugin_page,
         if (menu_item)
             gtk_widget_set_tooltip_text (GTK_WIDGET(menu_item), _(tooltip_list[i].label));
 
-        tool_item = gnc_main_window_toolbar_find_menu_item (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window),
+        tool_item = gnc_main_window_toolbar_find_tool_item (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window),
                                                             tooltip_list[i].action_name);
         if (tool_item)
         {

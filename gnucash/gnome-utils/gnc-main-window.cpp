@@ -3570,9 +3570,15 @@ gnc_main_window_get_action_group (GncMainWindow *window,
 
 
 GtkWidget *
-gnc_main_window_toolbar_find_menu_item (GncMainWindow *window, const gchar *action_name)
+gnc_main_window_toolbar_find_tool_item (GncMainWindow *window, const gchar *action_name)
 {
-    GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+    GncMainWindowPrivate *priv;
+
+    g_return_val_if_fail (GNC_IS_MAIN_WINDOW(window), nullptr);
+    g_return_val_if_fail (action_name != nullptr, nullptr);
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
     return gnc_find_toolbar_item (priv->toolbar, action_name);
 }
 
