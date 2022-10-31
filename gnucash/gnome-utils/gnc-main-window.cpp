@@ -1814,7 +1814,7 @@ gnc_main_window_update_one_menu_action (GncMainWindow *window,
     }
 
     item = g_menu_item_new (data->label, "mainwin.WindowAction");
-    g_menu_item_set_attribute (item, "target", "i", data->index);
+    g_menu_item_set_attribute (item, G_MENU_ATTRIBUTE_TARGET, "i", data->index);
 
     if (pos < g_menu_model_get_n_items (gsm->model))
         g_menu_remove (G_MENU(gsm->model), pos);
@@ -3750,7 +3750,8 @@ gnc_main_window_update_menu (GncMainWindow *window, GncPluginPage *page,
 
     // reset hash table and remove added menu items
     g_hash_table_remove_all (priv->display_item_hash);
-    gnc_menubar_model_remove_items_with_attrib (priv->menubar_model, "temp");
+    gnc_menubar_model_remove_items_with_attrib (priv->menubar_model, 
+                                                GNC_MENU_ATTRIBUTE_TEMPORARY);
     priv->num_item_q = 0; //FIXMEb temp added
 
     for (gint i = 0; ui_updates[i]; i++)

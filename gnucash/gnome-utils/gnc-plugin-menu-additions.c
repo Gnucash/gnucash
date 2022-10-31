@@ -434,7 +434,7 @@ gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
             g_menu_item_set_action_and_target_value (gmenu_item, "gnc-plugin-menu-additions-actions.AdditionsAction",
                                                      g_variant_new_string (ext_info->action_name));
 
-            g_menu_item_set_attribute (gmenu_item, "tooltip", "s", ext_info->action_tooltip);
+            g_menu_item_set_attribute (gmenu_item, GNC_MENU_ATTRIBUTE_TOOLTIP, "s", ext_info->action_tooltip);
         }
 
         if (g_strcmp0 (ext_info->typeStr, "menu") == 0)
@@ -457,7 +457,7 @@ gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
             g_menu_item_set_action_and_target_value (gmenu_item, "gnc-plugin-menu-additions-actions.AdditionsAction",
                                                      g_variant_new_string (ext_info->action_name));
 
-            g_menu_item_set_attribute (gmenu_item, "tooltip", "s", ext_info->action_tooltip);
+            g_menu_item_set_attribute (gmenu_item, GNC_MENU_ATTRIBUTE_TOOLTIP, "s", ext_info->action_tooltip);
         }
 
         if (g_strcmp0 (ext_info->typeStr, "menu") == 0)

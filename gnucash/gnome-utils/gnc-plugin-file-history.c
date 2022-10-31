@@ -460,14 +460,12 @@ gnc_history_update_action (GncMainWindow *window,
 
         item = g_menu_item_new (label_name, full_action_name);
 
-        g_menu_item_set_attribute (item, "tooltip", "s", tooltip);
+        g_menu_item_set_attribute (item, GNC_MENU_ATTRIBUTE_TOOLTIP, "s", tooltip);
 
         if (!add_item)
             g_menu_remove (G_MENU(gsm->model), pos);
 
         g_menu_insert_item (G_MENU(gsm->model), pos, item);
-
-//FIXMEb tooltip needs fixing to status bar and accelerator ?
 
         g_free (full_action_name);
         g_free (label_name);
