@@ -197,6 +197,11 @@ gtest-qofquerycore.cpp)
 gnc_add_test(test-qofquerycore "${test_qofquerycore_SOURCES}"
   gtest_engine_INCLUDES gtest_old_engine_LIBS)
 
+set(test_qofevent_SOURCES
+gtest-qofevent.cpp)
+gnc_add_test(test-qofevent "${test_qofevent_SOURCES}"
+  gtest_engine_INCLUDES gtest_old_engine_LIBS)
+
 
 set(test_engine_SOURCES_DIST
         dummy.cpp
@@ -208,6 +213,7 @@ set(test_engine_SOURCES_DIST
         gtest-gnc-datetime.cpp
         gtest-import-map.cpp
         gtest-qofquerycore.cpp
+        gtest-qofevent.cpp
         test-account-object.cpp
         test-address.c
         test-business.c
