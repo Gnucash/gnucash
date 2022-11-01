@@ -99,7 +99,7 @@ TEST (qofevent, events)
 
     // note: uncommenting the following line seems to be crucial
     // for macos tests...
-    // qof_event_unregister_handler (id4);
+    qof_event_unregister_handler (id4);
 }
 
 static void
