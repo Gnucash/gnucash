@@ -1091,8 +1091,12 @@ gnc_plugin_page_register_ui_update (gpointer various,
                 ++tooltip_iter;
             }
         }
+        // now add the callbacks to the replaced menu items.
+        gnc_plugin_add_menu_tooltip_callbacks (gnc_window_get_menubar (gnc_window),
+                                               gnc_window_get_menubar_model (gnc_window),
+                                               gnc_window_get_statusbar (gnc_window));
+        
         // need to add the accelerator keys, currently there are none
-//FIXMEb
 //        gnc_add_accelerator_keys_for_menu (gnc_window_get_menubar (gnc_window),
 //                                           gnc_plugin_page_get_accel_group (GNC_PLUGIN_PAGE(page)));
     }
