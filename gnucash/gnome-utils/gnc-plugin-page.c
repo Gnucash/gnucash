@@ -96,7 +96,6 @@ typedef struct _GncPluginPagePrivate
     GtkBuilder *builder; //FIXMEb added
     GSimpleActionGroup *simple_action_group; //FIXMEb added
     const gchar *simple_action_group_name; //FIXMEb added
-    GtkAccelGroup *accel_group; //FIXMEb added
     const gchar *menu_qualifier; //FIXMEb added
 
     GList *books;
@@ -489,7 +488,6 @@ gnc_plugin_page_init (GncPluginPage *page, void *data)
     priv->uri         = NULL;
     priv->page_changed_id = 0;
     priv->focus_source_id = 0;
-    priv->accel_group = NULL;
     priv->menu_qualifier = NULL;
 
     page->window      = NULL;
@@ -1138,18 +1136,6 @@ gnc_plugin_page_create_action_group (GncPluginPage *page, const gchar *group_nam
 
     return priv->simple_action_group;
 }
-
-GtkAccelGroup *
-gnc_plugin_page_get_accel_group (GncPluginPage *page)
-{
-    GncPluginPagePrivate *priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
-
-    if (priv->accel_group == NULL)
-        priv->accel_group = gtk_accel_group_new ();
-
-    return priv->accel_group;
-}
-
 
 gboolean
 gnc_plugin_page_finish_pending (GncPluginPage *page)

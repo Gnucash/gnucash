@@ -538,10 +538,6 @@ void gnc_plugin_page_set_menu_qualifier (GncPluginPage *page,
  */
 GSimpleActionGroup *gnc_plugin_page_get_action_group (GncPluginPage *page); //FIXMEb added
 
-
-
-GtkAccelGroup *gnc_plugin_page_get_accel_group (GncPluginPage *page); //FIXMEb added
-
 /** Create the GSimpleActionGroup object associated with this page.
  *
  *  @param page The page whose menu/toolbar action group should be
