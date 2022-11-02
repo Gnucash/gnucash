@@ -87,11 +87,6 @@ typedef struct
     /** The textual name of this plugin. */
     const gchar *plugin_name;
 
-    /** A name for the set of actions that will be added by this
-     *  plugin.  The actual name is irrelevant, as long as it is
-     *  unique within GnuCash. */
-    const gchar *actions_name; //FIXMEb added
-
     /* Signals */
     void (* inserted) (GncPluginPage *plugin_page);
     void (* removed) (GncPluginPage *plugin_page);
