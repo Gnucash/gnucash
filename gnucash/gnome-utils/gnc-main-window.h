@@ -304,6 +304,34 @@ GtkWidget *gnc_main_window_menu_find_menu_item (GncMainWindow *window,
 GtkWidget * gnc_main_window_toolbar_find_tool_item (GncMainWindow *window,
                                                     const gchar *action_name); //FIXMEb added
 
+/** Find the GMenuModel item given the action name for the window
+ *  specified.
+ *
+ *  @param window A pointer to the window whose user interface should
+ *  be updated.
+ *
+ *  @param action_name The action name of the menu item to find.
+ *
+ *  @param label The new label for the menu item.
+ *
+ *  @param tooltip The new tooltip for the menu item, optional.
+ *
+ *  @return TRUE if menu item found and updated or FALSE.
+ */
+gboolean gnc_main_window_update_menu_for_action (GncMainWindow *window,
+                                                 const gchar *action_name,
+                                                 const gchar *label,
+                                                 const gchar *tooltip); //FIXMEb added
+
+/** Scan the main window menu and add accelerator keys to main window
+ *  accelerator group.
+ *
+ *  @param window A pointer to the window whose user interface should
+ *  be updated.
+ *
+ */
+void gnc_main_window_menu_add_accelerator_keys (GncMainWindow *window); //FIXMEb added
+
 /** A structure for defining alternate action names for use in the
  *  toolbar.  All toolbar buttons are homogeneous in size and are sized
  *  to fit the longest label.  Therefore, this structure should be

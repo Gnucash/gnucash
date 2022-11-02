@@ -61,6 +61,7 @@ extern "C"
 #include "gnc-html-factory.h"
 #include "gnc-file.h"
 #include "gnc-filepath-utils.h"
+#include "gnc-gtk-utils.h"
 #include "gnc-plugin.h"
 #include "gnc-plugin-page-report.h"
 #include "gnc-plugin-file-history.h"
@@ -1220,32 +1221,31 @@ gnc_plugin_page_report_constructor(GType this_type, guint n_properties, GObjectC
     return obj;
 }
 
-
-
 static void
 gnc_plugin_page_report_menu_update (GncPluginPage *plugin_page,
                                     action_toolbar_labels *tooltip_list)
 {
-    GtkWidget *menu_item;
+    GncMainWindow *window = GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window);
     GtkWidget *tool_item;
-//FIXMEb this may need changing to update the menu model instead of the GtkMenuItem
-    for (gint i = 0; (tooltip_list[i].action_name != NULL); i++)
-    {
-        menu_item = gnc_main_window_menu_find_menu_item (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window),
-                                                         tooltip_list[i].action_name);
-        if (menu_item)
-            gtk_widget_set_tooltip_text (GTK_WIDGET(menu_item), _(tooltip_list[i].label));
 
-        tool_item = gnc_main_window_toolbar_find_tool_item (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window),
+    for (gint i = 0; (tooltip_list[i].action_name != nullptr); i++)
+    {
+        gboolean found = gnc_main_window_update_menu_for_action (window,
+                                                                 tooltip_list[i].action_name,
+                                                                 _(tooltip_list[i].label),
+                                                                 _(tooltip_list[i].tooltip));
+
+        tool_item = gnc_main_window_toolbar_find_tool_item (window,
                                                             tooltip_list[i].action_name);
         if (tool_item)
-        {
-            gtk_widget_set_tooltip_text (GTK_WIDGET(tool_item), _(tooltip_list[i].label));
-            g_object_set (G_OBJECT(tool_item), "has-tooltip", FALSE, NULL);
+        {   // only need to update the tooltip here
+            gtk_widget_set_tooltip_text (GTK_WIDGET(tool_item), _(tooltip_list[i].tooltip));
+            g_object_set (G_OBJECT(tool_item), "has-tooltip", false, nullptr);
         }
     }
+    // need to add the accelerator keys for the updated menu items
+    gnc_main_window_menu_add_accelerator_keys (window);
 }
-
 
 static void
 gnc_plugin_page_report_menu_updates (GncPluginPage *plugin_page)
@@ -1269,9 +1269,9 @@ gnc_plugin_page_report_menu_updates (GncPluginPage *plugin_page)
 
     window = (GncMainWindow*)gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(plugin_page));
 
-    tooltip_list[0] = { "ReportSaveAction", report_save_str };
-    tooltip_list[1] = { "ReportSaveAsAction", report_saveas_str };
-    tooltip_list[2] = { nullptr, nullptr };
+    tooltip_list[0] = { "ReportSaveAction", N_("Save _Report Configuration"), report_save_str };
+    tooltip_list[1] = { "ReportSaveAsAction", N_("Save Report Configuration As..."), report_saveas_str };
+    tooltip_list[2] = { nullptr, nullptr, nullptr };
 
     gnc_plugin_page_report_menu_update (plugin_page, tooltip_list);
 

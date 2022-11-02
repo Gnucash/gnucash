@@ -3608,6 +3608,45 @@ gnc_main_window_menu_find_menu_item (GncMainWindow *window, const gchar *action_
 
 
 void
+gnc_main_window_menu_add_accelerator_keys (GncMainWindow *window)
+{
+    GncMainWindowPrivate *priv;
+
+    g_return_if_fail (GNC_IS_MAIN_WINDOW(window));
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+    gnc_add_accelerator_keys_for_menu (priv->menubar, priv->accel_group);
+}
+
+
+gboolean
+gnc_main_window_update_menu_for_action (GncMainWindow *window,
+                                        const gchar *action_name,
+                                        const gchar *label,
+                                        const gchar *tooltip)
+{
+    GncMainWindowPrivate *priv;
+    gboolean found = false;
+
+    g_return_val_if_fail (GNC_IS_MAIN_WINDOW(window), false);
+    g_return_val_if_fail (action_name != nullptr, false);
+    g_return_val_if_fail (label != nullptr, false);
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+    found =  gnc_menubar_model_update_item (priv->menubar_model, action_name,
+                                            _(label), _(tooltip));
+
+    // add tooltip redirect call backs
+    gnc_plugin_add_menu_tooltip_callbacks (priv->menubar,
+                                           priv->menubar_model,
+                                           priv->statusbar);
+
+    return found;
+}
+
+void
 gnc_main_window_set_vis_of_items_by_action (GncMainWindow *window,
                                             const gchar **action_names,
                                             gboolean vis)

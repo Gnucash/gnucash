@@ -225,6 +225,8 @@ typedef struct
     const char *action_name;
     /** The alternate toolbar label to use */
     const char *label;
+    /** The tooltip for the label */
+    const char *tooltip;
 } action_toolbar_labels;
 
 
