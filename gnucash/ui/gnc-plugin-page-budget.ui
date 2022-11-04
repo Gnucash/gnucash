@@ -1,6 +1,16 @@
 <?xml version="1.0"?>
 <interface>
 
+  <menu id="FilePlaceholder3">
+    <item>
+      <attribute name="label" translatable="yes">_Print</attribute>
+      <attribute name="action">mainwin.FilePrintAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;p</attribute>
+      <attribute name="tooltip" translatable="yes">Print the currently active page</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
   <menu id="EditPlaceholder1">
     <item>
       <attribute name="label" translatable="yes">Esti_mate Budget...</attribute>

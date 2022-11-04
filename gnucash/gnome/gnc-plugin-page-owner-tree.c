@@ -170,6 +170,7 @@ static guint gnc_plugin_page_owner_tree_n_actions = G_N_ELEMENTS(gnc_plugin_page
 /** The default menu items that need to be add to the menu */
 static const gchar *gnc_plugin_load_ui_items [] =
 {
+    "FilePlaceholder3",
     "EditPlaceholder2",
     "EditPlaceholder3",
     "EditPlaceholder5",

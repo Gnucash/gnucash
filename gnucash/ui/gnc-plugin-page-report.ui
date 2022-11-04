@@ -1,6 +1,16 @@
 <?xml version="1.0"?>
 <interface>
 
+  <menu id="FilePlaceholder3">
+    <item>
+      <attribute name="label" translatable="yes">_Print Report</attribute>
+      <attribute name="action">GncPluginPageReportActions.FilePrintAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;p</attribute>
+      <attribute name="tooltip" translatable="yes">Print the current report</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
   <menu id="EditPlaceholder6">
     <item>
       <attribute name="label" translatable="yes">_Report Options</attribute>
@@ -10,7 +20,7 @@
     </item>
   </menu>
 
-  <menu id="FilePlaceholder3">
+  <menu id="FilePlaceholder4">
     <item>
       <attribute name="label" translatable="yes">Export as P_DF...</attribute>
       <attribute name="action">GncPluginPageReportActions.FilePrintPDFAction</attribute>
@@ -19,7 +29,7 @@
     </item>
   </menu>
 
-  <menu id="FilePlaceholder4">
+  <menu id="FilePlaceholder5">
     <item>
       <attribute name="label" translatable="yes">Export _Report</attribute>
       <attribute name="action">GncPluginPageReportActions.ReportExportAction</attribute>

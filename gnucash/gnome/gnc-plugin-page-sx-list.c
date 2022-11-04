@@ -142,6 +142,7 @@ static guint gnc_plugin_page_sx_list_n_actions = G_N_ELEMENTS(gnc_plugin_page_sx
 /** The default menu items that need to be add to the menu */
 static const gchar *gnc_plugin_load_ui_items [] =
 {
+    "FilePlaceholder3",
     "EditPlaceholder3",
     "EditPlaceholder5",
     "ViewPlaceholder4",
@@ -183,6 +184,9 @@ gnc_plugin_page_sx_list_focus_widget (GncPluginPage *sx_plugin_page)
         /* Enable the Schedule Menu */
         action = gnc_main_window_find_action (GNC_MAIN_WINDOW(sx_plugin_page->window), "ScheduledAction");
         g_simple_action_set_enabled (G_SIMPLE_ACTION(action), TRUE);
+        /* Disable the FilePrintAction */
+        action = gnc_main_window_find_action (GNC_MAIN_WINDOW(sx_plugin_page->window), "FilePrintAction");
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
 
         gnc_main_window_update_menu_and_toolbar (GNC_MAIN_WINDOW(sx_plugin_page->window),
                                                  sx_plugin_page,

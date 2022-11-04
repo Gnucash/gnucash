@@ -1,6 +1,15 @@
 <?xml version="1.0"?>
 <interface>
 
+  <menu id="FilePlaceholder3">
+    <item>
+      <attribute name="label" translatable="yes">_Print Cheques</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.FilePrintAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;p</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
   <menu id="EditPlaceholder1">
     <item>
       <attribute name="label" translatable="yes">Assign as payment...</attribute>

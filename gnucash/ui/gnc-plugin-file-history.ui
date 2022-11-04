@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <interface>
 
-  <menu id="FilePlaceholder5">
+  <menu id="FilePlaceholder6">
     <item>
       <attribute name="label" translatable="no">RecentFile0Action</attribute>
       <attribute name="action">gnc-plugin-file-history-actions.RecentFile0Action</attribute>

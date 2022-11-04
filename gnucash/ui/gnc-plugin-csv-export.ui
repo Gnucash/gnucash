@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <interface>
 
-  <menu id="FilePlaceholder4">
+  <menu id="FilePlaceholder5">
     <item>
       <attribute name="label" translatable="yes">Export Account T_ree to CSV...</attribute>
       <attribute name="action">gnc-plugin-csv-export-actions.CsvExportTreeAction</attribute>

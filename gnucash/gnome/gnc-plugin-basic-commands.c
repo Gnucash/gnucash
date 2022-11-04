@@ -136,7 +136,9 @@ static const gchar *gnc_plugin_load_ui_items [] =
 {
     "FilePlaceholder0",
     "FilePlaceholder2",
-    "FilePlaceholder4",
+    "FilePlaceholder3",
+    "FilePlaceholder5",
+    "EditPlaceholder3",
     "EditPlaceholder5",
     "ActionsPlaceholder2",
     "ToolsPlaceholder1",

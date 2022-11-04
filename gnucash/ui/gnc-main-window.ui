@@ -32,10 +32,9 @@
       </section>
       <section>
         <item>
-          <attribute name="label" translatable="yes">_Print</attribute>
-          <attribute name="action">mainwin.FilePrintAction</attribute>
-          <attribute name="accel">&lt;Primary&gt;p</attribute>
-          <attribute name="tooltip" translatable="yes">Print the currently active page</attribute>
+          <attribute name="label" translatable="no">PrintPlaceholder</attribute>
+          <attribute name="action">mainwin.FilePlaceholder3</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">Pa_ge Setup...</attribute>
@@ -45,7 +44,7 @@
         </item>
         <item>
           <attribute name="label" translatable="no">PdfPlaceholder</attribute>
-          <attribute name="action">mainwin.FilePlaceholder3</attribute>
+          <attribute name="action">mainwin.FilePlaceholder4</attribute>
           <attribute name="hidden-when">action-disabled</attribute>
         </item>
         <submenu>
@@ -53,7 +52,7 @@
           <attribute name="action">mainwin.FileExportAction</attribute>
           <item>
             <attribute name="label" translatable="no">ExportPlaceholder</attribute>
-            <attribute name="action">mainwin.FilePlaceholder4</attribute>
+            <attribute name="action">mainwin.FilePlaceholder5</attribute>
             <attribute name="hidden-when">action-disabled</attribute>
           </item>
         </submenu>
@@ -69,7 +68,7 @@
       <section>
         <item>
           <attribute name="label" translatable="no">RecentPlaceholder</attribute>
-          <attribute name="action">mainwin.FilePlaceholder5</attribute>
+          <attribute name="action">mainwin.FilePlaceholder6</attribute>
           <attribute name="hidden-when">action-disabled</attribute>
         </item>
       </section>

@@ -100,7 +100,7 @@ static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
 /** The default menu items that need to be add to the menu */
 static const gchar *gnc_plugin_load_ui_items [] =
 {
-    "FilePlaceholder5",
+    "FilePlaceholder6",
     NULL,
 };
 
@@ -432,7 +432,7 @@ gnc_history_update_action (GncMainWindow *window,
     if (!gnc_menubar_model_find_item (gnc_main_window_get_menu_model(window), gsm)) // could not find action_name
     {
         add_item = TRUE;
-        gsm->search_action_name = "FilePlaceholder5"; // placeholder
+        gsm->search_action_name = "FilePlaceholder6"; // placeholder
 
         if (!gnc_menubar_model_find_item (gnc_main_window_get_menu_model(window), gsm))
         {

@@ -127,7 +127,6 @@ static void allperiods_budget_helper (GtkTreeModel *model, GtkTreePath *path,
 
 static GActionEntry gnc_plugin_page_budget_actions [] =
 {
-    { "FakeToplevel", NULL, NULL, NULL, NULL },
     { "OpenAccountAction", gnc_plugin_page_budget_cmd_open_account, NULL, NULL, NULL },
     { "OpenSubaccountsAction", gnc_plugin_page_budget_cmd_open_subaccounts, NULL, NULL, NULL },
     { "DeleteBudgetAction", gnc_plugin_page_budget_cmd_delete_budget, NULL, NULL, NULL },
@@ -145,6 +144,7 @@ static guint gnc_plugin_page_budget_n_actions = G_N_ELEMENTS(gnc_plugin_page_bud
 /** The default menu items that need to be add to the menu */
 static const gchar *gnc_plugin_load_ui_items [] =
 {
+    "FilePlaceholder3",
     "EditPlaceholder1",
     "EditPlaceholder3",
     "EditPlaceholder5",
@@ -383,6 +383,9 @@ gnc_plugin_page_budget_focus_widget (GncPluginPage *budget_plugin_page)
         g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
         /* Disable the Schedule menu */
         action = gnc_main_window_find_action (GNC_MAIN_WINDOW(budget_plugin_page->window), "ScheduledAction");
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
+        /* Disable the FilePrintAction */
+        action = gnc_main_window_find_action (GNC_MAIN_WINDOW(budget_plugin_page->window), "FilePrintAction");
         g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
 
         gnc_main_window_update_menu_and_toolbar (GNC_MAIN_WINDOW(budget_plugin_page->window),

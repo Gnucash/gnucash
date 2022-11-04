@@ -57,7 +57,7 @@ static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
 /** The default menu items that need to be add to the menu */
 static const gchar *gnc_plugin_load_ui_items [] =
 {
-    "FilePlaceholder4",
+    "FilePlaceholder5",
     NULL,
 };
 

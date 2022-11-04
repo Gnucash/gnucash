@@ -36,13 +36,33 @@
     </item>
   </menu>
 
-  <menu id="FilePlaceholder4">
+  <menu id="FilePlaceholder3">
+    <item>
+      <attribute name="label" translatable="yes">_Print</attribute>
+      <attribute name="action">mainwin.FilePrintAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;p</attribute>
+      <attribute name="tooltip" translatable="yes">Print the currently active page</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="FilePlaceholder5">
     <item>
       <attribute name="label" translatable="yes">Export _Accounts</attribute>
       <attribute name="action">gnc-plugin-basic-commands-actions.FileExportAccountsAction</attribute>
       <attribute name="tooltip" translatable="yes">Export the account hierarchy to a new GnuCash datafile</attribute>
     </item>
   </menu>
+
+  <menu id="EditPlaceholder3">
+    <item>
+      <attribute name="label" translatable="yes">_Find...</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.EditFindTransactionsAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;f</attribute>
+      <attribute name="tooltip" translatable="yes">Find transactions with a search</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+   </menu>
 
   <menu id="EditPlaceholder5">
     <item>
