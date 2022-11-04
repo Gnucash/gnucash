@@ -5205,10 +5205,6 @@ add_about_paths (GtkDialog *dialog)
 }
 
 /** Create and display the "about" dialog for gnucash.
- *
- *  @param action The GtkAction for the "about" menu item.
- *
- *  @param window The main window whose menu item was activated.
  */
 static void
 gnc_main_window_cmd_help_about (GSimpleAction *simple,

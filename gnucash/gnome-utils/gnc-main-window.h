@@ -367,7 +367,7 @@ void gnc_main_window_init_short_names (GncMainWindow *window,
  *  @param group_name The name of a set of actions.  This must be a
  *  name provided when the actions were installed.
  *
- *  @return A pointer to a GtkActionGroup that was added with the
+ *  @return A pointer to a GSimpleActionGroup that was added with the
  *  specified name.  If the name cannot be found, then NULL will be
  *  returned.
  */
@@ -488,7 +488,7 @@ void gnc_main_window_all_action_set_sensitive (const gchar *action_name, gboolea
  *
  *  @param action_name The name of the command to be retrieved.
  *
- *  @return A pointer to a GtkAction that was added with the
+ *  @return A pointer to a GAction that was added with the
  *  specified name. If the name cannot be found, then NULL will be
  *  returned.
  */

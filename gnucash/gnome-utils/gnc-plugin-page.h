@@ -497,7 +497,6 @@ void gnc_plugin_page_set_use_new_window (GncPluginPage *page,
  */
 const char *gnc_plugin_page_get_ui_description (GncPluginPage *page);
 
-const gchar *gnc_plugin_page_get_simple_action_group_name (GncPluginPage *page); //FIXMEb added
 
 /** Set an alternate UI for the specified page.  This alternate ui
  *  may only use actions specified in the source for the page.
@@ -510,7 +509,7 @@ const gchar *gnc_plugin_page_get_simple_action_group_name (GncPluginPage *page);
  *  @param ui_filename The filename (no path) of the alternate UI.
  */
 void gnc_plugin_page_set_ui_description (GncPluginPage *page,
-        const char *ui_filename);
+                                         const char *ui_filename);
 
 
 /** Retrieve the GtkBuilder object associated with this page.
@@ -520,7 +519,22 @@ void gnc_plugin_page_set_ui_description (GncPluginPage *page,
  *  @return A pointer to the GtkBuilder object for this page. */
 GtkBuilder *gnc_plugin_page_get_builder (GncPluginPage *page); //FIXMEb added
 
+
+/** Retrieve the menu qualifier for this page.
+ *
+ *  @param page The page whose quailifier string should be retrieved.
+ *
+ *  @return A qualifier string for this page.
+ */
 const gchar * gnc_plugin_page_get_menu_qualifier (GncPluginPage *page); //FIXMEb added
+
+/** Set a qualifier string for this page. This string is used when there
+ *  is more than one menu associated with the page.
+ *
+ *  @param page The page whose qualifier string should be updated.
+ *
+ *  @param menu_qualifier A string to be used as for the qualifier.
+ */
 void gnc_plugin_page_set_menu_qualifier (GncPluginPage *page,
                                          const char *menu_qualifier); //FIXMEb added
 
@@ -548,16 +562,27 @@ GSimpleActionGroup *gnc_plugin_page_get_action_group (GncPluginPage *page); //FI
 GSimpleActionGroup * gnc_plugin_page_create_action_group (GncPluginPage *page,
                                                           const gchar *group_name); //FIXMEb added
 
-/** Retrieve a GtkAction object associated with this page.
+/** Retrieve the simple action group name associated with this plugin
+ *  page.
+ *
+ *  @param page The page whose simple action group should be retrieved.
+ *
+ *  @return The simple action group name associated with this plugin.
+ */
+const gchar *gnc_plugin_page_get_simple_action_group_name (GncPluginPage *page); //FIXMEb added
+
+
+/** Retrieve a GAction object associated with this page.
  *
  *  @param page The page whose menu/toolbar action group should be
  *  retrieved.
  *
- *  @param name The name of the GtkAction to find.
+ *  @param action_name The name of the GAction to find.
  *
- *  @return A pointer to the retuested GtkAction object or NULL.
+ *  @return A pointer to the requested GAction object or NULL.
  */
-GAction *gnc_plugin_page_get_action (GncPluginPage *page, const gchar *name);
+GAction *gnc_plugin_page_get_action (GncPluginPage *page,
+                                     const gchar *action_name);
 
 /* Signals */
 void gnc_plugin_page_inserted (GncPluginPage *plugin_page);
