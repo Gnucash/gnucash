@@ -1866,7 +1866,10 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
         GtkAccelGroup *accel_group = gtk_accel_group_new ();
         const gchar *ui = "/org/gnucash/ui/gnc-reconcile-window.ui";
         GError *error = NULL;
-
+#ifdef MAC_INTEGRATION
+        GtkosxApplication *theApp = g_object_new (GTKOSX_TYPE_APPLICATION,
+                                                  NULL);
+#endif
         recnData->builder = gtk_builder_new ();
 
         gtk_builder_add_from_resource (recnData->builder, ui, &error);
@@ -1885,8 +1888,18 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
         menu_model = (GMenuModel *)gtk_builder_get_object (recnData->builder, "recwin-menu");
         menu_bar = gtk_menu_bar_new_from_model (menu_model);
         gtk_container_add (GTK_CONTAINER(vbox), menu_bar);
+#if MAC_INTEGRATION
+        gtk_widget_hide (menu_bar);
+        gtk_widget_set_no_show_all (menu_bar, TRUE);
+        if (GTK_IS_MENU_ITEM (menu_bar))
+            menu_bar = gtk_menu_item_get_submenu (GTK_MENU_ITEM (menu_bar));
 
+        gtkosx_application_set_menu_bar (theApp, GTK_MENU_SHELL (menu_bar));
+        g_object_unref (theApp);
+        theApp = NULL;
+#endif
         tool_bar = (GtkToolbar *)gtk_builder_get_object (recnData->builder, "recwin-toolbar");
+
         g_object_set (tool_bar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
 
         gtk_container_add (GTK_CONTAINER(vbox), GTK_WIDGET(tool_bar));
@@ -2105,19 +2118,6 @@ use Find Transactions to find them, unreconcile, and re-reconcile."));
 
     gnc_reconcile_window_set_titles(recnData);
 
-#ifdef MAC_INTEGRATION
-    {
-//FIXME        GtkWidget *menubar = gtk_ui_manager_get_widget (recnData->ui_merge,
-//                                                        "/menubar");
-//        GtkosxApplication *theApp = g_object_new (GTKOSX_TYPE_APPLICATION,
-//                                                  NULL);
-//        if (GTK_IS_MENU_ITEM (menubar))
-//            menubar = gtk_menu_item_get_submenu (GTK_MENU_ITEM (menubar));
-//        gtk_widget_hide (menubar);
-//        gtkosx_application_set_menu_bar (theApp, GTK_MENU_SHELL (menubar));
-//        g_object_unref (theApp);
-    }
-#endif
     recnRecalculateBalance(recnData);
 
     gnc_window_adjust_for_screen(GTK_WINDOW(recnData->window));
