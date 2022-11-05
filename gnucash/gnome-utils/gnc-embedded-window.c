@@ -365,6 +365,8 @@ gnc_embedded_window_new (const gchar *action_group_name,
     gtk_container_add (GTK_CONTAINER(priv->menu_dock), GTK_WIDGET(priv->toolbar)); //FIXMEb this may need changing
     gtk_widget_show (GTK_WIDGET(priv->toolbar));
 
+    g_object_unref (builder);
+
     priv->simple_action_group = g_simple_action_group_new ();
 
     g_action_map_add_action_entries (G_ACTION_MAP(priv->simple_action_group),

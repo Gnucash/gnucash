@@ -284,11 +284,8 @@ GncPluginPage *gnc_plugin_page_recreate_page (GtkWidget *window,
  *
  *  @param plugin_page A pointer to the page whose actions should be
  *  added to the user interface.
- *
- *  @param merge A pointer to the window.
  */
-void gnc_plugin_page_merge_actions (GncPluginPage *plugin_page,
-                                    GtkWidget *window); //FIXMEb added
+void gnc_plugin_page_merge_actions (GncPluginPage *plugin_page); //FIXMEb added
 
 
 /** Retrieve the textual name of a plugin.

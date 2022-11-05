@@ -253,8 +253,7 @@ gnc_plugin_page_recreate_page(GtkWidget *window,
 
 
 void
-gnc_plugin_page_merge_actions (GncPluginPage *page,
-                                GtkWidget *window)
+gnc_plugin_page_merge_actions (GncPluginPage *page)
 {
     GncPluginPagePrivate *priv;
     GError *error = NULL;
@@ -264,7 +263,8 @@ gnc_plugin_page_merge_actions (GncPluginPage *page,
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
 
-    priv->builder = gtk_builder_new ();
+    if (!priv->builder)
+        priv->builder = gtk_builder_new ();
 
     resource = g_strconcat ("/org/gnucash/ui/", priv->ui_description, NULL);
 
@@ -1128,7 +1128,7 @@ GSimpleActionGroup *
 gnc_plugin_page_create_action_group (GncPluginPage *page, const gchar *group_name)
 {
     GncPluginPagePrivate *priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
- 
+
     priv->simple_action_group = g_simple_action_group_new ();
     priv->simple_action_group_name = group_name;
 

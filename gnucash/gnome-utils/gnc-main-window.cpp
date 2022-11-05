@@ -4150,6 +4150,8 @@ gnc_main_window_setup_window (GncMainWindow *window)
     gtk_container_add (GTK_CONTAINER(priv->menu_dock), GTK_WIDGET(priv->toolbar)); //FIXMEb this may need changing
     gtk_widget_show (GTK_WIDGET(priv->toolbar));
 
+    g_object_unref (builder);
+
     gnc_plugin_set_actions_enabled (G_ACTION_MAP(window),
                                     initially_insensitive_actions,
                                     FALSE);
@@ -4375,7 +4377,7 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
     if (page != nullptr)
     {
         /* Update the user interface (e.g. menus and toolbars */
-        gnc_plugin_page_merge_actions (page, GTK_WIDGET(window));
+        gnc_plugin_page_merge_actions (page);
         visible = gnc_main_window_show_summarybar (window, nullptr);
         gnc_plugin_page_show_summarybar (page, visible);
 
@@ -5502,7 +5504,6 @@ do_popup_menu (GncPluginPage *page, GdkEventButton *event)
         LEAVE("no builder");
         return;
     }
-    gtk_builder_set_translation_domain (builder, PROJECT_NAME);
 
     if (menu_qualifier)
         popup_menu_name = g_strconcat ("mainwin-popup-", menu_qualifier, NULL);
@@ -5515,8 +5516,6 @@ do_popup_menu (GncPluginPage *page, GdkEventButton *event)
         menu_model = (GMenuModel *)gtk_builder_get_object (builder, "mainwin-popup");
 
     menu = gtk_menu_new_from_model (menu_model);
-
-//FIXMEb maybe i should save these once built to reuse
 
     if (!menu)
     {
