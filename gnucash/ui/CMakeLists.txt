@@ -1,5 +1,4 @@
 set (ui_SOURCES
-      gnc-reconcile-window-ui.xml
       osx_accel_map)
 
 foreach (ui_file ${ui_SOURCES})
