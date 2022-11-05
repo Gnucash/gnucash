@@ -232,7 +232,6 @@ gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page)
     parent = GNC_PLUGIN_PAGE(plugin_page);
     g_object_set(G_OBJECT(plugin_page),
                  "page-name",      _("Scheduled Transactions"),
-                 "page-uri",       "default:",
                  "ui-description", "gnc-plugin-page-sx-list.ui",
                  NULL);
 

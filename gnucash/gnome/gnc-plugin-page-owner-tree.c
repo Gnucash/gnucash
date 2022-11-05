@@ -385,7 +385,6 @@ gnc_plugin_page_owner_tree_init (GncPluginPageOwnerTree *plugin_page)
     parent = GNC_PLUGIN_PAGE(plugin_page);
     g_object_set(G_OBJECT(plugin_page),
                  "page-name",      _("Owners"),
-                 "page-uri",       "default:",
                  "ui-description", "gnc-plugin-page-owner-tree.ui",
                  NULL);
     g_signal_connect (G_OBJECT (plugin_page), "selected",

@@ -664,7 +664,6 @@ gnc_plugin_page_register_init (GncPluginPageRegister* plugin_page)
                                   GNC_PREF_USE_NEW);
     g_object_set (G_OBJECT (plugin_page),
                   "page-name",      _ ("General Journal"),
-                  "page-uri",       "default:",
                   "ui-description", "gnc-plugin-page-register.ui",
                   "use-new-window", use_new,
                   NULL);

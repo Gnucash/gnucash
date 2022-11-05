@@ -374,7 +374,6 @@ gnc_plugin_page_invoice_new (InvoiceWindow *iw)
 
     plugin_page = GNC_PLUGIN_PAGE(invoice_page);
     gnc_plugin_page_invoice_update_title(plugin_page);
-    gnc_plugin_page_set_uri(plugin_page, "default:");
 
     priv->component_manager_id = 0;
     return plugin_page;
@@ -412,7 +411,6 @@ gnc_plugin_page_invoice_init (GncPluginPageInvoice *plugin_page)
     use_new = gnc_prefs_get_bool (GNC_PREFS_GROUP_INVOICE, GNC_PREF_USE_NEW);
     g_object_set(G_OBJECT(plugin_page),
                  "page-name",      _("Invoice"),
-                 "page-uri",       "default:",
                  "ui-description", "gnc-plugin-page-invoice.ui",
                  "use-new-window", use_new,
                  (char *)NULL);

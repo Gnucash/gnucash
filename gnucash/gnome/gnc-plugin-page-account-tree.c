@@ -402,7 +402,6 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
     parent = GNC_PLUGIN_PAGE(plugin_page);
     g_object_set (G_OBJECT(plugin_page),
                   "page-name",      _("Accounts"),
-                  "page-uri",       "default:",
                   "ui-description", "gnc-plugin-page-account-tree.ui",
                   NULL);
     g_signal_connect (G_OBJECT (plugin_page), "selected",

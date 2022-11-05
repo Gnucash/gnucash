@@ -1312,7 +1312,6 @@ gnc_plugin_page_report_constr_init (GncPluginPageReport *plugin_page, gint repor
     name = gnc_report_name (priv->initial_report);
     g_object_set (G_OBJECT(plugin_page),
                   "page-name",      name,
-                  "page-uri",       "default:",
                   "ui-description", "gnc-plugin-page-report.ui",
                   "use-new-window", use_new,
                   nullptr);

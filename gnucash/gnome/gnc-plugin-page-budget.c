@@ -308,7 +308,6 @@ gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page)
     parent = GNC_PLUGIN_PAGE(plugin_page);
     g_object_set (G_OBJECT(plugin_page),
                   "page-name",      _("Budget"),
-                  "page-uri",       "default:",
                   "ui-description", "gnc-plugin-page-budget.ui",
                   NULL);
 

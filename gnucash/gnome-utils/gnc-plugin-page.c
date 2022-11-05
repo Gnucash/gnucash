@@ -75,7 +75,6 @@ enum
     PROP_0,
     PROP_PAGE_NAME,
     PROP_PAGE_COLOR,
-    PROP_PAGE_URI,
     PROP_BOOK,
     PROP_STATUSBAR_TEXT,
     PROP_USE_NEW_WINDOW,
@@ -390,15 +389,6 @@ gnc_plugin_page_class_init (GncPluginPageClass *klass)
 
     g_object_class_install_property
     (gobject_class,
-     PROP_PAGE_URI,
-     g_param_spec_string ("page-uri",
-                          "Page URI",
-                          "The uri for this page.",
-                          NULL,
-                          G_PARAM_READWRITE));
-
-    g_object_class_install_property
-    (gobject_class,
      PROP_STATUSBAR_TEXT,
      g_param_spec_string ("statusbar-text",
                           "Statusbar Text",
@@ -483,7 +473,6 @@ gnc_plugin_page_init (GncPluginPage *page, void *data)
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     priv->page_name   = NULL;
     priv->page_color  = NULL;
-    priv->uri         = NULL;
     priv->page_changed_id = 0;
     priv->focus_source_id = 0;
     priv->menu_qualifier = NULL;
@@ -524,9 +513,6 @@ gnc_plugin_page_finalize (GObject *object)
 
     if (priv->page_color)
         g_free (priv->page_color);
-
-    if (priv->uri)
-        g_free (priv->uri);
 
     if (priv->statusbar_text)
         g_free (priv->statusbar_text);
@@ -591,9 +577,6 @@ gnc_plugin_page_get_property (GObject     *object,
     case PROP_PAGE_COLOR:
         g_value_set_string (value, priv->page_color);
         break;
-    case PROP_PAGE_URI:
-        g_value_set_string (value, priv->uri);
-        break;
     case PROP_STATUSBAR_TEXT:
         g_value_set_string (value, priv->statusbar_text);
         break;
@@ -645,9 +628,6 @@ gnc_plugin_page_set_property (GObject      *object,
         break;
     case PROP_PAGE_COLOR:
         gnc_plugin_page_set_page_color (page, g_value_get_string (value));
-        break;
-    case PROP_PAGE_URI:
-        gnc_plugin_page_set_uri (page, g_value_get_string (value));
         break;
     case PROP_STATUSBAR_TEXT:
         gnc_plugin_page_set_statusbar_text (page, g_value_get_string (value));
@@ -930,35 +910,6 @@ gnc_plugin_page_disconnect_page_changed (GncPluginPage *page)
         g_signal_handler_disconnect (G_OBJECT(page->window), priv->page_changed_id);
         priv->page_changed_id = 0;
     }
-}
-
-
-/*  Retrieve the Uniform Resource Identifier for this page. */
-const gchar *
-gnc_plugin_page_get_uri (GncPluginPage *page)
-{
-    GncPluginPagePrivate *priv;
-
-    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), NULL);
-
-    priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
-    return priv->uri;
-}
-
-
-/*  Set the Uniform Resource Identifier for this page. */
-void
-gnc_plugin_page_set_uri (GncPluginPage *page, const gchar *name)
-{
-    GncPluginPagePrivate *priv;
-
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
-
-    priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
-    if (priv->uri)
-        g_free (priv->uri);
-
-    priv->uri = g_strdup (name);
 }
 
 
