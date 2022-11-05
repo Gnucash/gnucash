@@ -31,5 +31,7 @@
     <file>ui/gnc-plugin-aqbanking.ui</file>
 
     <file>ui/gnc-plugin-qif-import.ui</file>
+
+    <file>ui/gnc-reconcile-window.ui</file>
   </gresource>
 </gresources>
