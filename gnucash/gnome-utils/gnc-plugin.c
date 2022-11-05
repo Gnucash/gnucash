@@ -131,7 +131,6 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
                           GQuark type)
 {
     GncPluginClass *klass;
-    GSimpleActionGroup *simple_action_group;
 
     g_return_if_fail (GNC_IS_PLUGIN (plugin));
     klass = GNC_PLUGIN_GET_CLASS (plugin);

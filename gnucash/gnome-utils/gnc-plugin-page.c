@@ -80,8 +80,6 @@ enum
     PROP_STATUSBAR_TEXT,
     PROP_USE_NEW_WINDOW,
     PROP_UI_DESCRIPTION,
-    PROP_UI_MERGE,
-    PROP_ACTION_GROUP,
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
