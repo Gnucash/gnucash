@@ -1755,23 +1755,6 @@ recnWindow (GtkWidget *parent, Account *account)
 }
 
 
-static void
-recnWindow_add_widget (GtkUIManager *merge,
-                       GtkWidget *widget,
-                       GtkBox *dock)
-{
-    if (GTK_IS_TOOLBAR (widget))
-    {
-        gtk_toolbar_set_style (GTK_TOOLBAR(widget),
-                               GTK_TOOLBAR_BOTH);
-        gtk_toolbar_set_icon_size (GTK_TOOLBAR(widget),
-                                   GTK_ICON_SIZE_SMALL_TOOLBAR);
-    }
-    gtk_box_pack_start (GTK_BOX (dock), widget, FALSE, FALSE, 0);
-    gtk_widget_show (widget);
-}
-
-
 static GActionEntry recWindow_actions_entries [] =
 {
     { "RecnChangeInfoAction", gnc_ui_reconcile_window_change_cb, NULL, NULL, NULL },
@@ -1900,7 +1883,9 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
 #endif
         tool_bar = (GtkToolbar *)gtk_builder_get_object (recnData->builder, "recwin-toolbar");
 
-        g_object_set (tool_bar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
+        gtk_toolbar_set_style (GTK_TOOLBAR(tool_bar), GTK_TOOLBAR_BOTH);
+        gtk_toolbar_set_icon_size (GTK_TOOLBAR(tool_bar),
+                                   GTK_ICON_SIZE_SMALL_TOOLBAR);
 
         gtk_container_add (GTK_CONTAINER(vbox), GTK_WIDGET(tool_bar));
 
