@@ -265,16 +265,31 @@ gnc_plugin_add_menu_tooltip_callbacks (GtkWidget  *menubar,
                                        GMenuModel *menubar_model,
                                        GtkWidget  *statusbar)
 {
-    GList *menu_item_list = gnc_menu_get_items (menubar);
+    GList *menu_item_list;
+
+    g_return_if_fail (GTK_IS_MENU_BAR(menubar));
+    g_return_if_fail (G_IS_MENU_MODEL(menubar_model));
+    g_return_if_fail (GTK_IS_STATUSBAR(statusbar));
+
+    menu_item_list = gnc_menu_get_items (menubar);
 
     for (GList *node = menu_item_list; node; node = node->next)
     {
         GtkWidget *menu_item = node->data;
 
         gnc_menu_item_setup_tooltip_to_statusbar_callback (menu_item, statusbar);
-        g_object_set_data (G_OBJECT(statusbar), "menu-model", menubar_model);
     }
+    g_object_set_data (G_OBJECT(statusbar), "menu-model", menubar_model);
     g_list_free (menu_item_list);
+}
+
+static void
+for_each_tool_action (GtkWidget *widget, gpointer user_data)
+{
+    GtkWidget *statusbar = user_data;
+
+    if (GTK_IS_ACTIONABLE(widget))
+        gnc_tool_item_setup_tooltip_to_statusbar_callback (widget, statusbar);
 }
 
 void
@@ -283,16 +298,8 @@ gnc_plugin_add_toolbar_tooltip_callbacks (GtkWidget *toolbar, GtkWidget *statusb
     g_return_if_fail (GTK_IS_TOOLBAR(toolbar));
     g_return_if_fail (GTK_IS_STATUSBAR(statusbar));
 
-    for (gint i = 0; i < gtk_toolbar_get_n_items (GTK_TOOLBAR(toolbar)); i++)
-    {
-        GtkToolItem *item = gtk_toolbar_get_nth_item (GTK_TOOLBAR(toolbar), i);
-
-        if (GTK_IS_ACTIONABLE(item))
-            gnc_tool_item_setup_tooltip_to_statusbar_callback (GTK_WIDGET(item), statusbar);
-    }
+    gtk_container_foreach (GTK_CONTAINER(toolbar), for_each_tool_action, statusbar);
 }
-
-
 
 /** @} */
 /** @} */

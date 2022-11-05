@@ -264,10 +264,26 @@ void gnc_plugin_set_actions_enabled (GActionMap *action_map,
                                      const gchar **action_names,
                                      gboolean enable); //FIXMEb added
 
+/** This function adds the tooltip callbacks to make the tooltips
+ *  appear in the status bar.
+ *
+ *  @param menubar The main window menu bar widget.
+ *
+ *  @param menubar_model The GMenuModel used to create the menubar.
+ *
+ *  @param statusbar The status bar widget in the main window.
+ */
 void gnc_plugin_add_menu_tooltip_callbacks (GtkWidget *menubar,
                                             GMenuModel *menubar_model,
                                             GtkWidget *statusbar); //FIXMEb added
 
+/** This function adds the tooltip callbacks to make the tooltips
+ *  appear in the status bar.
+ *
+ *  @param toolbar The main window tool bar widget.
+ *
+ *  @param statusbar The status bar widget in the main window.
+ */
 void gnc_plugin_add_toolbar_tooltip_callbacks (GtkWidget *toolbar,
                                                GtkWidget *statusbar); //FIXMEb added
 
