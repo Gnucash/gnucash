@@ -984,29 +984,6 @@ gnc_plugin_page_get_ui_description (GncPluginPage *page)
 }
 
 
-const gchar *
-gnc_plugin_page_get_simple_action_group_name (GncPluginPage *page)
-{
-    GncPluginPagePrivate *priv;
-
-    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), NULL);
-
-    priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
-
-    return priv->simple_action_group_name;
-
-//    GncPluginPageClass *klass;
-
-//    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), NULL);
-//    klass = GNC_PLUGIN_PAGE_GET_CLASS(page);
-
-//    if (klass->actions_name)
-//        return klass->actions_name;
-//    else
-//        return NULL;
-}
-
-
 /*  Set an alternate UI for the specified page.  This alternate ui
  *  may only use actions specified in the source for the page. */
 void
@@ -1084,6 +1061,18 @@ gnc_plugin_page_create_action_group (GncPluginPage *page, const gchar *group_nam
     priv->simple_action_group_name = group_name;
 
     return priv->simple_action_group;
+}
+
+const gchar *
+gnc_plugin_page_get_simple_action_group_name (GncPluginPage *page)
+{
+    GncPluginPagePrivate *priv;
+
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), NULL);
+
+    priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
+
+    return priv->simple_action_group_name;
 }
 
 gboolean
