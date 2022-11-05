@@ -79,6 +79,7 @@
 (define optname-prime-subtotal (N_ "Primary Subtotal"))
 (define optname-prime-sortorder (N_ "Primary Sort Order"))
 (define optname-prime-date-subtotal (N_ "Primary Subtotal for Date Key"))
+(define optname-running-prime (N_ "Running Primary Subtotal"))
 (define optname-full-account-name (N_ "Show Full Account Name"))
 (define optname-show-account-code (N_ "Show Account Code"))
 (define optname-show-account-description (N_ "Show Account Description"))
@@ -90,6 +91,7 @@
 (define optname-sec-subtotal (N_ "Secondary Subtotal"))
 (define optname-sec-sortorder  (N_ "Secondary Sort Order"))
 (define optname-sec-date-subtotal (N_ "Secondary Subtotal for Date Key"))
+(define optname-running-sec (N_ "Running Secondary Subtotal"))
 
 ;;General
 (define optname-startdate (N_ "Start Date"))
@@ -730,6 +732,16 @@ be excluded from periodic reporting.")
          sec-sortkey-enabled)
 
         (gnc-option-db-set-option-selectable-by-name
+         options pagename-sorting optname-running-prime
+         (or (and prime-sortkey-subtotal-enabled prime-sortkey-subtotal-true)
+             (and prime-date-sortingtype-enabled (not (eq? 'none prime-date-subtotal)))))
+
+        (gnc-option-db-set-option-selectable-by-name
+         options pagename-sorting optname-running-sec
+         (or (and sec-sortkey-subtotal-enabled sec-sortkey-subtotal-true)
+             (and sec-date-sortingtype-enabled (not (eq? 'none sec-date-subtotal)))))
+
+        (gnc-option-db-set-option-selectable-by-name
          options pagename-sorting optname-full-account-name
          (or (and prime-sortkey-subtotal-enabled prime-sortkey-subtotal-true)
              (and sec-sortkey-subtotal-enabled sec-sortkey-subtotal-true)))
@@ -835,6 +847,13 @@ be excluded from periodic reporting.")
         (apply-selectable-by-name-sorting-options))))
 
     (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      pagename-sorting optname-running-prime
+      "e6"
+      (G_ "Display running subtotal as per the primary key and sort order?")
+      #f))
+
+    (gnc:register-trep-option
      (gnc:make-multichoice-callback-option
       pagename-sorting optname-prime-date-subtotal
       "e2" (G_ "Do a date subtotal.")
@@ -872,6 +891,13 @@ be excluded from periodic reporting.")
       (lambda (x)
         (set! sec-sortkey-subtotal-true x)
         (apply-selectable-by-name-sorting-options))))
+
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      pagename-sorting optname-running-sec
+      "i6"
+      (G_ "Display running subtotal as per the secondary key and sort order?")
+      #f))
 
     (gnc:register-trep-option
      (gnc:make-multichoice-callback-option
@@ -959,8 +985,9 @@ be excluded from periodic reporting.")
       (list (N_ "Price")                        "l"  (G_ "Display the shares price?") #f)
       ;; note the "Amount" multichoice option in between here
       (list optname-grid                        "m5" (G_ "Display a subtotal summary table.") #f)
-      (list (N_ "Running Balance")              "n"  (G_ "Display a running balance?") #f)
-      (list (N_ "Totals")                       "o"  (G_ "Display the totals?") #t)))
+      (list (N_ "Account Balance")              "n"  (G_ "Display the balance of the underlying account on each line?") #f)
+      (list (N_ "Grand Totals")                 "o"  (G_ "Display a grand totals section at the bottom of the report?") #t)
+      (list (N_ "Running Grand Totals")         "o2" (G_ "Display running grand totals as per report sort order?") #f)))
 
     (when BOOK-SPLIT-ACTION
       (gnc:register-trep-option
@@ -1087,7 +1114,12 @@ be excluded from periodic reporting.")
                 (and (opt-val pagename-sorting optname-show-subtotals-only)
                      (or (primary-get-info 'renderer-fn)
                          (secondary-get-info 'renderer-fn))))
-          (cons 'running-balance (opt-val gnc:pagename-display (N_ "Running Balance")))
+          (cons 'account-balance (opt-val gnc:pagename-display (N_ "Account Balance")))
+          (cons 'running-totals (opt-val gnc:pagename-display (N_ "Running Grand Totals")))
+          (cons 'running-prime (and (primary-get-info 'renderer-fn)
+                                    (opt-val pagename-sorting optname-running-prime)))
+          (cons 'running-sec (and (secondary-get-info 'renderer-fn)
+                                    (opt-val pagename-sorting optname-running-sec)))          
           (cons 'account-full-name
                 (opt-val gnc:pagename-display (N_ "Use Full Account Name")))
           (cons 'memo (opt-val gnc:pagename-display (N_ "Memo")))
@@ -1284,7 +1316,7 @@ be excluded from periodic reporting.")
 
         (if (or (column-uses? 'subtotals-only)
                 (and (null? left-cols-list)
-                     (or (opt-val gnc:pagename-display "Totals")
+                     (or (opt-val gnc:pagename-display "Grand Totals")
                          (primary-get-info 'renderer-fn)
                          (secondary-get-info 'renderer-fn))))
             (list (vector "" (lambda (s t) #f)))
@@ -1295,6 +1327,13 @@ be excluded from periodic reporting.")
     ;; calculated-cells
     ;;
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    (define running-total-converted-collector (gnc:make-commodity-collector))
+    (define running-total-original-collector (gnc:make-commodity-collector))
+    (define running-prime-converted-collector (gnc:make-commodity-collector))
+    (define running-prime-original-collector (gnc:make-commodity-collector))
+    (define running-sec-converted-collector (gnc:make-commodity-collector))
+    (define running-sec-original-collector (gnc:make-commodity-collector))
 
     (define default-calculated-cells
       (letrec
@@ -1332,6 +1371,31 @@ be excluded from periodic reporting.")
            (converted-credit-amount (lambda (s)
                                       (and (not (positive? (split-amount s)))
                                            (gnc:monetary-neg (converted-amount s)))))
+           (account-balance-converted (lambda (s)
+                                        (exchange-fn
+                                          (gnc:make-gnc-monetary (split-currency s)
+                                                                (xaccSplitGetBalance s))
+                                          (row-currency s)
+                                          (time64CanonicalDayTime
+                                          (xaccTransGetDate (xaccSplitGetParent s))))))                                          
+           (running-sec-converted (lambda (s)
+                                      (running-sec-converted-collector
+                                        'add (gnc:gnc-monetary-commodity (converted-amount s))
+                                              (gnc:gnc-monetary-amount (converted-amount s)))
+                                      (running-sec-converted-collector 'getmonetary 
+                                        (gnc:gnc-monetary-commodity (converted-amount s)) #f)))     
+           (running-prime-converted (lambda (s)
+                                      (running-prime-converted-collector
+                                        'add (gnc:gnc-monetary-commodity (converted-amount s))
+                                              (gnc:gnc-monetary-amount (converted-amount s)))
+                                      (running-prime-converted-collector 'getmonetary 
+                                        (gnc:gnc-monetary-commodity (converted-amount s)) #f)))       
+           (running-total-converted (lambda (s)
+                                      (running-total-converted-collector
+                                        'add (gnc:gnc-monetary-commodity (converted-amount s))
+                                              (gnc:gnc-monetary-amount (converted-amount s)))
+                                      (running-total-converted-collector 'getmonetary 
+                                        (gnc:gnc-monetary-commodity (converted-amount s)) #f)))                                    
            (original-amount (lambda (s)
                               (gnc:make-gnc-monetary
                                (split-currency s) (split-amount s))))
@@ -1341,22 +1405,39 @@ be excluded from periodic reporting.")
            (original-credit-amount (lambda (s)
                                      (and (not (positive? (split-amount s)))
                                           (gnc:monetary-neg (original-amount s)))))
-           (running-balance (lambda (s)
+           (account-balance-original (lambda (s)
                               (gnc:make-gnc-monetary
-                               (split-currency s) (xaccSplitGetBalance s)))))
+                               (split-currency s) (xaccSplitGetBalance s))))                                          
+           (running-sec-original (lambda (s)
+                                      (running-sec-original-collector 
+                                        'add (split-currency s) (split-amount s))
+                                      (running-sec-original-collector 'getmonetary
+                                        (split-currency s) #f)))
+           (running-prime-original (lambda (s)
+                                      (running-prime-original-collector 
+                                        'add (split-currency s) (split-amount s))
+                                      (running-prime-original-collector 'getmonetary
+                                        (split-currency s) #f)))
+           (running-total-original (lambda (s)
+                                      (running-total-original-collector 
+                                        'add (split-currency s) (split-amount s))
+                                      (running-total-original-collector 'getmonetary
+                                        (split-currency s) #f))))
         (append
          ;; each column will be a vector
          ;; (vector heading
          ;;         calculator-function (calculator-function split) to obtain amount
          ;;         reverse-column?     #t to allow reverse signs
          ;;         subtotal?           #t to allow subtotals (ie must be #f for
-         ;;                             running balance)
+         ;;                             account balance and running totals)
          ;;         start-dual-column?  #t for the debit side of a dual column
          ;;                             (i.e. debit/credit) which means the next
          ;;                             column must be the credit side
          ;;         friendly-heading-fn (friendly-heading-fn account) to retrieve
-         ;;                             friendly name for account debit/credit
-         ;;                             or 'bal-bf for balance-brought-forward
+         ;;                                 friendly name for account debit/credit
+         ;;                             OR 'bal-bf-converted or 'bal-bf-original
+         ;;                                 for balance-brought-forward 
+         ;;                                 in converted or original amount
          ;;         start-dual-column?  #t: merge with next cell for subtotal table.
 
          (if (column-uses? 'amount-single)
@@ -1372,6 +1453,30 @@ be excluded from periodic reporting.")
                    (vector (header-commodity (G_ "Credit"))
                            converted-credit-amount #f #t #f
                            friendly-credit #f))
+             '())
+
+         (if (column-uses? 'account-balance)
+             (list (vector (header-commodity (G_ "Account Balance"))
+                           account-balance-converted #t #f #f
+                           'bal-bf-converted #f))
+             '())
+
+         (if (column-uses? 'running-sec)
+             (list (vector (header-commodity (G_ "Secondary Subtotal"))
+                           running-sec-converted #t #f #f
+                           (lambda (a) "") #f))
+             '())
+
+         (if (column-uses? 'running-prime)
+             (list (vector (header-commodity (G_ "Primary Subtotal"))
+                           running-prime-converted #t #f #f
+                           (lambda (a) "") #f))
+             '())
+
+         (if (column-uses? 'running-totals)
+             (list (vector (header-commodity (G_ "Grand Total"))
+                           running-total-converted #t #f #f
+                           (lambda (a) "") #f))
              '())
 
          (if (and (column-uses? 'amount-original-currency)
@@ -1391,10 +1496,32 @@ be excluded from periodic reporting.")
                            friendly-credit #f))
              '())
 
-         (if (column-uses? 'running-balance)
-             (list (vector (G_ "Running Balance")
-                           running-balance #t #f #f
-                           'bal-bf #f))
+         (if (and (column-uses? 'amount-original-currency)
+                  (column-uses? 'account-balance))
+             (list (vector (G_ "Account Balance")
+                           account-balance-original #t #f #f
+                           'bal-bf-original #f))
+             '())
+
+         (if (and (column-uses? 'amount-original-currency)
+                  (column-uses? 'running-sec))
+             (list (vector (G_ "Secondary Subtotal")
+                           running-sec-original #t #f #f
+                           (lambda (a) "") #f))
+             '())
+
+         (if (and (column-uses? 'amount-original-currency)
+                  (column-uses? 'running-prime))
+             (list (vector (G_ "Primary Subtotal")
+                           running-prime-original #t #f #f
+                           (lambda (a) "") #f))
+             '())
+
+         (if (and (column-uses? 'amount-original-currency)
+                  (column-uses? 'running-totals))
+             (list (vector (G_ "Grand Total")
+                           running-total-original #t #f #f
+                           (lambda (a) "") #f))
              '()))))
 
     (define calculated-cells
@@ -1436,7 +1563,8 @@ be excluded from periodic reporting.")
                                (case level
                                  ((primary) optname-prime-sortkey)
                                  ((secondary) optname-sec-sortkey))))
-             (data (if (and (any (lambda (c) (eq? 'bal-bf (vector-ref c 5)))
+             (data (if (and (any (lambda (c) (or (eq? 'bal-bf-converted (vector-ref c 5))
+                                                 (eq? 'bal-bf-original (vector-ref c 5))))
                                  calculated-cells)
                             (memq sortkey ACCOUNT-SORTING-TYPES))
                        ;; Translators: Balance b/f stands for "Balance
@@ -1468,7 +1596,22 @@ be excluded from periodic reporting.")
              (lambda (cell)
                (match (vector-ref cell 5)
                  (#f #f)
-                 ('bal-bf
+                 ('bal-bf-converted
+                  (let* ((acc (xaccSplitGetAccount split))
+                         (bal (exchange-fn
+                                (gnc:make-gnc-monetary 
+                                      (xaccAccountGetCommodity acc)
+                                      (xaccAccountGetBalanceAsOfDate acc begindate))
+                                (if (column-uses? 'common-currency)
+                                      (opt-val pagename-currency optname-currency)
+                                      (xaccAccountGetCommodity acc))
+                                (time64CanonicalDayTime
+                                 (xaccTransGetDate (xaccSplitGetParent split))))))
+                    (and (memq sortkey ACCOUNT-SORTING-TYPES)
+                         (gnc:make-html-table-cell/markup
+                          "number-cell"
+                          (if (acc-reverse? acc) (gnc:monetary-neg bal) bal)))))
+                 ('bal-bf-original
                   (let* ((acc (xaccSplitGetAccount split))
                          (bal (xaccAccountGetBalanceAsOfDate acc begindate)))
                     (and (memq sortkey ACCOUNT-SORTING-TYPES)
@@ -1688,6 +1831,7 @@ be excluded from periodic reporting.")
             (map (lambda (cell)
                    (let* ((cell-monetary ((vector-ref cell 1) split))
                           (reverse? (and (vector-ref cell 2) reversible-account?))
+                          (subtotals? (vector-ref cell 3))
                           (cell-content (and cell-monetary
                                              (if reverse?
                                                  (gnc:monetary-neg cell-monetary)
@@ -1695,7 +1839,7 @@ be excluded from periodic reporting.")
                      (and cell-content
                           (gnc:make-html-table-cell/markup
                            "number-cell"
-                           (if opt-use-links?
+                           (if (and opt-use-links? subtotals?)
                                (gnc:html-split-anchor split cell-content)
                                cell-content)))))
                  cell-calculators))))
@@ -1744,7 +1888,7 @@ be excluded from periodic reporting.")
 
       (if (null? splits)
 
-          (when (opt-val gnc:pagename-display "Totals")
+          (when (opt-val gnc:pagename-display "Grand Totals")
             (gnc:html-table-append-row/markup!
              table def:grand-total-style
              (list
@@ -1825,7 +1969,11 @@ be excluded from periodic reporting.")
                 (when secondary-subtotal-comparator
                   (add-subheading (render-summary next 'secondary #t)
                                   def:secondary-subtotal-style next
-                                  'secondary))))
+                                  'secondary))
+                (running-prime-converted-collector 'reset #f #f)                                  
+                (running-prime-original-collector 'reset #f #f)
+                (running-sec-converted-collector 'reset #f #f)                                  
+                (running-sec-original-collector 'reset #f #f)))
 
              (else
               (when (and secondary-subtotal-comparator
@@ -1849,7 +1997,9 @@ be excluded from periodic reporting.")
                  secondary-subtotal-collectors)
                 (when next
                   (add-subheading (render-summary next 'secondary #t)
-                                  def:secondary-subtotal-style next 'secondary)))))
+                                  def:secondary-subtotal-style next 'secondary)
+                  (running-sec-converted-collector 'reset #f #f)                                  
+                  (running-sec-original-collector 'reset #f #f)))))
 
             (loop rest (not odd-row?) (1+ work-done)))))
 
