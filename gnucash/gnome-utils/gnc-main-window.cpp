@@ -3430,6 +3430,7 @@ update_menu_model (GncMainWindow *window, const gchar *ui_filename,
     res_name = g_strconcat ("/org/gnucash/ui/", ui_filename, NULL);
 
     gtk_builder_add_from_resource (builder, res_name, &error);
+    g_free (res_name);
 
     if (error)
     {
