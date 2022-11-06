@@ -140,7 +140,7 @@ gnc_plugin_menu_additions_finalize (GObject *object)
     ENTER("plugin %p", object);
 
     priv = GNC_PLUGIN_MENU_ADDITIONS_GET_PRIVATE(object);
-    
+
     g_hash_table_destroy (priv->item_hash);
 
     G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -389,6 +389,29 @@ gnc_menu_additions_assign_accel (ExtensionInfo *info, GHashTable *table)
     LEAVE("assigned");
 }
 
+static GMenuItem *
+setup_tooltip_for_gmenu_item (ExtensionInfo *ext_info)
+{
+    GMenuItem *gmenu_item = NULL;
+
+    if (g_strcmp0 (ext_info->typeStr, "menuitem") == 0)
+    {
+        gmenu_item = g_menu_item_new (ext_info->action_label, NULL);
+        g_menu_item_set_action_and_target_value (gmenu_item, "gnc-plugin-menu-additions-actions.AdditionsAction",
+                                                 g_variant_new_string (ext_info->action_name));
+
+        g_menu_item_set_attribute (gmenu_item, GNC_MENU_ATTRIBUTE_TOOLTIP, "s", ext_info->action_tooltip);
+    }
+
+    if (g_strcmp0 (ext_info->typeStr, "menu") == 0)
+    {
+        GMenuModel *sub_menu = G_MENU_MODEL(g_menu_new ());
+
+        gmenu_item = g_menu_item_new_submenu (ext_info->action_label, sub_menu);
+        g_object_set_data (G_OBJECT(gmenu_item), "sub-menu", sub_menu);
+    }
+    return gmenu_item;
+}
 
 /** Add one extension item to the UI manager.  This function creates a
  *  per-callback data structure for easy access to the opaque Scheme
@@ -424,26 +447,11 @@ gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
 
     item_path = g_hash_table_lookup (per_window->build_menu_hash, ext_info->path);
     item_with_full_path = g_hash_table_lookup (per_window->build_menu_hash, full_path);
-//FIXMEb This needs refactoring
 
     if (!item_path && !item_with_full_path)
     {
-        if (g_strcmp0 (ext_info->typeStr, "menuitem") == 0)
-        {
-            gmenu_item = g_menu_item_new (ext_info->action_label, NULL);
-            g_menu_item_set_action_and_target_value (gmenu_item, "gnc-plugin-menu-additions-actions.AdditionsAction",
-                                                     g_variant_new_string (ext_info->action_name));
+        gmenu_item = setup_tooltip_for_gmenu_item (ext_info);
 
-            g_menu_item_set_attribute (gmenu_item, GNC_MENU_ATTRIBUTE_TOOLTIP, "s", ext_info->action_tooltip);
-        }
-
-        if (g_strcmp0 (ext_info->typeStr, "menu") == 0)
-        {
-            GMenuModel *sub_menu = G_MENU_MODEL(g_menu_new ());
-
-            gmenu_item = g_menu_item_new_submenu (ext_info->action_label, sub_menu);
-            g_object_set_data (G_OBJECT(gmenu_item), "sub-menu", sub_menu);
-        }
         g_menu_append_item (G_MENU(per_window->report_menu), gmenu_item);
     }
 
@@ -451,29 +459,14 @@ gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
     {
         GMenuModel *sub_menu = G_MENU_MODEL(g_object_get_data (G_OBJECT(item_path), "sub-menu"));
 
-        if (g_strcmp0 (ext_info->typeStr, "menuitem") == 0)
-        {
-            gmenu_item = g_menu_item_new (ext_info->action_label, NULL);
-            g_menu_item_set_action_and_target_value (gmenu_item, "gnc-plugin-menu-additions-actions.AdditionsAction",
-                                                     g_variant_new_string (ext_info->action_name));
+        gmenu_item = setup_tooltip_for_gmenu_item (ext_info);
 
-            g_menu_item_set_attribute (gmenu_item, GNC_MENU_ATTRIBUTE_TOOLTIP, "s", ext_info->action_tooltip);
-        }
-
-        if (g_strcmp0 (ext_info->typeStr, "menu") == 0)
-        {
-            GMenuModel *sub_menu = G_MENU_MODEL(g_menu_new ());
-
-            gmenu_item = g_menu_item_new_submenu (ext_info->action_label, sub_menu);
-            g_object_set_data (G_OBJECT(gmenu_item), "sub-menu", sub_menu);
-        }
         g_menu_append_item (G_MENU(sub_menu), gmenu_item);
     }
     g_hash_table_insert (per_window->build_menu_hash, g_strdup (full_path), gmenu_item);
 
     g_free (full_path);
 }
-
 
 
 /** Initialize the report menu and other additional menus.  This
