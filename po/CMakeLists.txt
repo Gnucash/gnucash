@@ -1,7 +1,7 @@
 add_subdirectory(glossary)
 
 # Set of available languages:
-set (ALL_LINGUAS ar as az bg brx ca cs da de doi el en_AU en_GB en_NZ es es_NI et eu fa fi fr gu he hi hr hu id it ja kn ko kok kok@latin ks lt lv mai mni mni@bengali mr nb ne nl pl pt pt_BR ro rw sk sr sv ru ta te tr uk ur vi zh_CN zh_TW)
+set (ALL_LINGUAS ar as az bg brx ca cs da de doi el en_AU en_GB en_NZ es es_NI et eu fa fi fr gu he hi hr hu id it ja kn ko kok kok@latin ks lt lv mai mk mni mni@bengali mr nb ne nl pl pt pt_BR ro rw sk sr sv ru ta te tr uk ur vi zh_CN zh_TW)
 # LINGUAS is used to create localized destkop and appdata files
 string(REPLACE ";" " " LINGUAS "${ALL_LINGUAS}")
 file(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/LINGUAS "${LINGUAS}")
