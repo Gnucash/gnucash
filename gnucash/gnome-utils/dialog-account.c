@@ -1390,6 +1390,16 @@ opening_equity_cb (GtkWidget *w, gpointer data)
     gtk_widget_set_sensitive (aw->transfer_account_scroll, !use_equity);
 }
 
+static void
+gnc_name_entry_realize (GtkWidget *widget, gpointer user_data)
+{
+    GtkWidget *commodity_box = user_data;
+    GtkAllocation alloc;
+
+    gtk_widget_get_allocation (widget, &alloc);
+    gtk_widget_set_size_request (commodity_box, -1, alloc.height);
+}
+
 /********************************************************************\
  * gnc_account_window_create                                        *
  *   creates a window to create a new account.                      *
@@ -1454,11 +1464,18 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
     // If the account has transactions, prevent changes by displaying a label and tooltip
     if (xaccAccountGetSplitList (aw_get_account (aw)) != NULL)
     {
+        GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(box));
         const gchar *sec_name = gnc_commodity_get_printname (xaccAccountGetCommodity (
                                                              aw_get_account (aw)));
         GtkWidget *label = gtk_label_new (sec_name);
         gtk_widget_set_tooltip_text (label, tt);
         gtk_box_pack_start (GTK_BOX(box), label, FALSE, FALSE, 0);
+
+        g_signal_connect (G_OBJECT(aw->name_entry), "realize",
+                          G_CALLBACK(gnc_name_entry_realize), box);
+        gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_FRAME);
+        gtk_widget_set_margin_start (label, 6);
+        gtk_widget_set_margin_end (label, 6);
         gtk_widget_show (label);
     }
     else
