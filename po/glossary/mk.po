@@ -3,20 +3,23 @@
 # Copyright (C) 2022 by the GnuCash developers and the translators:
 # Automatically generated, 2022.
 #
+# Vesna Micajkova <vmicajkova@institutpraktikum.mk>, 2022.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.12 \n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 4.12\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-11-08 02:03+0100\n"
-"PO-Revision-Date: 2022-11-08 02:03+0100\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2022-11-08 09:03+0000\n"
+"Last-Translator: Vesna Micajkova <vmicajkova@institutpraktikum.mk>\n"
+"Language-Team: Macedonian <https://hosted.weblate.org/projects/gnucash/"
+"glossary/mk/>\n"
 "Language: mk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Plural-Forms: nplurals=2; plural=n==1 || n%10==1 ? 0 : 1;\n"
+"X-Generator: Weblate 4.14.2\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -28,19 +31,19 @@ msgstr ""
 
 #. "A detailed record of money spent and received"
 msgid "account"
-msgstr ""
+msgstr "конто"
 
 #. "An alphanumerical key of an account in GnuCash, not at the bank, can be used to sort. Some templates provide them or the user can enter them."
 msgid "account code"
-msgstr ""
+msgstr "шифра на конто"
 
 #. "the tree view of all accounts"
 msgid "account hierarchy"
-msgstr ""
+msgstr "хиерархија на конта"
 
 #. "-"
 msgid "account name"
-msgstr ""
+msgstr "Назив на конто"
 
 #. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
 msgid "account type: Active"
@@ -108,11 +111,11 @@ msgstr ""
 
 #. "-"
 msgid "account: parent account"
-msgstr ""
+msgstr "Конто: Родител"
 
 #. "-"
 msgid "account: subaccount"
-msgstr ""
+msgstr "Конто: Подконто"
 
 #. "-"
 msgid "account: top level account"
