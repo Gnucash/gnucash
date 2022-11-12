@@ -4,14 +4,15 @@
 # Updated to 2.2.x by nowak2000@poczta.onet.pl
 # Henio Szewczyk <henryk.szewczyk09@gmail.com>, 2021.
 # 154pinkchairs <ovehis@riseup.net>, 2022.
+# Kaligula <kaligula.dev@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-04-13 19:11+0000\n"
-"Last-Translator: 154pinkchairs <ovehis@riseup.net>\n"
+"PO-Revision-Date: 2022-11-11 23:50+0000\n"
+"Last-Translator: Kaligula <kaligula.dev@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "pl/>\n"
 "Language: pl\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.15-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -208,10 +209,8 @@ msgid "amount"
 msgstr "kwota"
 
 #. "The amount finally to pay, respecting discounts, billing terms…"
-#, fuzzy
-#| msgid "amount"
 msgid "amount due"
-msgstr "kwota"
+msgstr "należna kwota"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
@@ -395,7 +394,7 @@ msgstr "link do dokumentu"
 
 #. "The last day to pay an invoice in time."
 msgid "due date"
-msgstr ""
+msgstr "termin płatności"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
@@ -579,11 +578,11 @@ msgstr "opcje"
 
 #. "Watch out: Although this word exists in gnucash program code, all that program code in gnucash is currently not activated. In the future, it will be used in business accounting as follows: A particular request to make or supply goods, but belonging to a (larger) job. Such a request can come from a customer or be sent to a vendor. An order will probably generate one invoice or bill."
 msgid "order"
-msgstr "polecenie"
+msgstr "zamówienie"
 
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
-msgstr "osierocenie"
+msgstr "osierocone"
 
 #. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
 msgid "owner (of bill, invoice or expense voucher)"
@@ -755,13 +754,11 @@ msgstr "podział"
 
 #. "Alias of 'shares'"
 msgid "stocks"
-msgstr ""
+msgstr "akcje"
 
 #. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
-#, fuzzy
-#| msgid "split"
 msgid "stock split"
-msgstr "podział"
+msgstr "podział akcji"
 
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
@@ -876,10 +873,10 @@ msgid "withdraw (in the reconcile dialog)"
 msgstr "obciążenie"
 
 msgid "stock"
-msgstr ""
+msgstr "akcja"
 
 msgid "due"
-msgstr ""
+msgstr "należne"
 
 msgid "Online"
 msgstr "Online"
