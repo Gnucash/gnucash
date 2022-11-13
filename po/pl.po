@@ -4083,7 +4083,7 @@ msgstr "Usuń zaznaczone konto"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:258
 msgid "_Cascade Account Properties..."
-msgstr "Przenieś właściwości konta..."
+msgstr "Przenieś _właściwości konta..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:259
 msgid "Cascade selected properties for account"
@@ -19962,7 +19962,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab.glade:796
 msgid "Con_firm Password"
-msgstr "Potwierdź hasło"
+msgstr "_Potwierdź hasło"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:836
 msgid "_Remember the PIN in memory"
@@ -21697,7 +21697,7 @@ msgstr "Importuj transakcje z pliku CSV"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:60
 msgid "Import _Prices from a CSV file..."
-msgstr "Importuj ceny z pliku CSV…"
+msgstr "Importuj c_eny z pliku CSV…"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:61
 msgid "Import Prices from a CSV file"
