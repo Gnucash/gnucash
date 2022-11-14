@@ -1,6 +1,6 @@
 /********************************************************************
- * testmain.c: GLib g_test test execution file.			    *
- * Copyright 2011 John Ralls <jralls@ceridwen.us>		    *
+ * testmain.c: GLib g_test test execution file.	                    *
+ * Copyright 2011 John Ralls <jralls@ceridwen.us>                   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -89,7 +89,7 @@ main (int argc, char *argv[])
     /* Add test functions. See
      * http://library.gnome.org/devel/glib/stable/glib-Testing.html for
      * details. Unfortunately, GLib-Testing doesn't provide the automatic
-     * registration features of more sophisitcated frameworks. */
+     * registration features of more sophisticated frameworks. */
     g_test_add_func ("/TESTPROG/Test Case Name 1", example_without_fixture);
     g_test_add_data_func ("/TESTPROG/Test Case Name 2", NULL);
     g_test_add ("/TESTPROG/Test Case Name", Fixture, NULL, setup,
