@@ -1093,7 +1093,7 @@ static inline void
 maybe_add_string (GNCImportMainMatcher *info, GHashTable *hash, const char *str)
 {
     char *new_string;
-    if (!str || !str[0] || g_hash_table_lookup (info->desc_hash, str))
+    if (!str || !str[0] || g_hash_table_lookup (hash, str))
         return;
     new_string = g_strdup (str);
     info->new_strings = g_list_prepend (info->new_strings, new_string);

@@ -438,8 +438,8 @@ filter_test_and_move_next (ImapDialog *imap_dialog, GtkTreeIter *iter,
     GtkTreePath *tree_path;
     gint         depth;
     gboolean     valid;
-    const gchar *match_string;
-    const gchar *map_full_acc;
+    gchar       *match_string;
+    gchar       *map_full_acc;
 
     // Read the row
     gtk_tree_model_get (imap_dialog->model, iter, MATCH_STRING, &match_string, MAP_FULL_ACC, &map_full_acc, -1);
@@ -479,6 +479,8 @@ filter_test_and_move_next (ImapDialog *imap_dialog, GtkTreeIter *iter,
     valid = gtk_tree_model_get_iter (imap_dialog->model, iter, tree_path);
 
     gtk_tree_path_free (tree_path);
+    g_free (match_string);
+    g_free (map_full_acc);
 
     return valid;
 }
@@ -909,7 +911,7 @@ view_selection_function (GtkTreeSelection *selection,
     // do we have a valid row
     if (gtk_tree_model_get_iter (model, &iter, path))
     {
-        const gchar *match_string;
+        gchar *match_string;
 
         // read the row
         gtk_tree_model_get (model, &iter, MATCH_STRING, &match_string, -1);
@@ -917,6 +919,7 @@ view_selection_function (GtkTreeSelection *selection,
         // match_string NULL, top level can not be selected with a filter
         if (match_string == NULL)
             return FALSE;
+        g_free (match_string);
     }
     return TRUE;
 }

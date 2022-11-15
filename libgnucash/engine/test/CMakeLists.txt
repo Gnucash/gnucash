@@ -197,24 +197,11 @@ gtest-qofquerycore.cpp)
 gnc_add_test(test-qofquerycore "${test_qofquerycore_SOURCES}"
   gtest_engine_INCLUDES gtest_old_engine_LIBS)
 
-set(gtest_gnc_option_SOURCES
-        gtest-gnc-option.cpp
-        gtest-gnc-optiondb.cpp)
+set(test_qofevent_SOURCES
+gtest-qofevent.cpp)
+gnc_add_test(test-qofevent "${test_qofevent_SOURCES}"
+  gtest_engine_INCLUDES gtest_old_engine_LIBS)
 
-set(gtest_gnc_option_INCLUDES
-        ${MODULEPATH}
-        ${CMAKE_SOURCE_DIR}/libgnucash/engine
-        ${CMAKE_BINARY_DIR}/common # for config.h
-        ${GLIB2_INCLUDE_DIRS}
-        ${GUILE_INCLUDE_DIRS})
-
-set(gtest_gnc_option_LIBS
-        gnc-engine
-        ${GLIB2_LDFLAGS}
-        ${GUILE_LDFLAGS}
-        gtest)
-
-gnc_add_test(test-gnc-option "${gtest_gnc_option_SOURCES}" gtest_gnc_option_INCLUDES gtest_gnc_option_LIBS)
 
 set(test_engine_SOURCES_DIST
         dummy.cpp
@@ -228,6 +215,7 @@ set(test_engine_SOURCES_DIST
         gtest-gnc-optiondb.cpp
         gtest-import-map.cpp
         gtest-qofquerycore.cpp
+        gtest-qofevent.cpp
         test-account-object.cpp
         test-address.c
         test-business.c
