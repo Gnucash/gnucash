@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-11-08 02:03+0100\n"
-"PO-Revision-Date: 2022-11-08 09:03+0000\n"
+"PO-Revision-Date: 2022-11-15 13:47+0000\n"
 "Last-Translator: Vesna Micajkova <vmicajkova@institutpraktikum.mk>\n"
 "Language-Team: Macedonian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/mk/>\n"
@@ -19,11 +19,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n==1 || n%10==1 ? 0 : 1;\n"
-"X-Generator: Weblate 4.14.2\n"
+"X-Generator: Weblate 4.15-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
-msgstr ""
+msgstr "Услов"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
@@ -47,75 +47,75 @@ msgstr "Назив на конто"
 
 #. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
 msgid "account type: Active"
-msgstr ""
+msgstr "Активно"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 msgid "account type: Asset"
-msgstr ""
+msgstr "Средство"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
 msgid "account type: Assets & Liabilities"
-msgstr ""
+msgstr "Средства и обврски"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
-msgstr ""
+msgstr "Трансакциска сметка"
 
 #. "-"
 msgid "account type: currency"
-msgstr ""
+msgstr "Валута"
 
 #. "see: Equity, but see also 'account type: Passive'"
 msgid "account type: Equity"
-msgstr ""
+msgstr "Капитал"
 
 #. "-"
 msgid "account type: Expense"
-msgstr ""
+msgstr "Расходи"
 
 #. "-"
 msgid "account type: Income"
-msgstr ""
+msgstr "Приходи"
 
 #. "A debt, a financial obligation, but see also 'account type: Passive'"
 msgid "account type: Liability"
-msgstr ""
+msgstr "Обврски"
 
 #. "-"
 msgid "account type: money-market"
-msgstr ""
+msgstr "Пазар на пари"
 
 #. "-"
 msgid "account type: Mutual fund"
-msgstr ""
+msgstr "Заеднички фонд"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
 msgid "account type: Passive"
-msgstr ""
+msgstr "Пасивно"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
 msgid "account type: Profit & Loss"
-msgstr ""
+msgstr "Добивка&Загуба"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
-msgstr ""
+msgstr "Депозити"
 
 #. "-"
 msgid "account type: Stock"
-msgstr ""
+msgstr "Акции"
 
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
 msgid "account type: trading"
-msgstr ""
+msgstr "Валутна размена"
 
 #. "-"
 msgid "account: parent account"
-msgstr "Конто: Родител"
+msgstr "Родителско конто"
 
 #. "-"
 msgid "account: subaccount"
-msgstr "Конто: Подконто"
+msgstr "Подконто"
 
 #. "-"
 msgid "account: top level account"
@@ -123,63 +123,63 @@ msgstr ""
 
 #. "The process of doing something that caused a transaction to happen"
 msgid "Action (register)"
-msgstr ""
+msgstr "Акција"
 
 #. "Automated teller machine"
 msgid "action: ATM"
-msgstr ""
+msgstr "Банкомат"
 
 #. "Transaction was an auto deposit"
 msgid "action: autoDep"
-msgstr ""
+msgstr "АвтоДепозит"
 
 #. "-"
 msgid "action: buy"
-msgstr ""
+msgstr "Купи"
 
 #. "-"
 msgid "action: deposit"
-msgstr ""
+msgstr "Депонирај"
 
 #. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
 msgid "action: direct debit"
-msgstr ""
+msgstr "ДиректноПовлекување"
 
 #. "transaction is a distribution (???)"
 msgid "action: dist"
-msgstr ""
+msgstr "Акција: Дистрибуција"
 
 #. "transaction is a dividend"
 msgid "action: div"
-msgstr ""
+msgstr "Дивиденда"
 
 #. "-"
 msgid "action: fee"
-msgstr ""
+msgstr "Провизија"
 
 #. "transaction comes from interest"
 msgid "action: int"
-msgstr ""
+msgstr "Камата"
 
 #. "-"
 msgid "action: loan"
-msgstr ""
+msgstr "Кредит"
 
 #. "see: payment 1."
 msgid "action: payment"
-msgstr ""
+msgstr "Плаќање"
 
 #. "Point of sale"
 msgid "action: POS"
-msgstr ""
+msgstr "POS"
 
 #. "-"
 msgid "action: rebate"
-msgstr ""
+msgstr "Акција: Rebate"
 
 #. "-"
 msgid "action: sell"
-msgstr ""
+msgstr "Продавај"
 
 #. "-"
 msgid "action: Teller"
@@ -187,7 +187,7 @@ msgstr ""
 
 #. "see: transfer 2. (=credit transfer)"
 msgid "action: transfer"
-msgstr ""
+msgstr "трансфер"
 
 #. "-"
 msgid "action: wire"
@@ -195,51 +195,51 @@ msgstr ""
 
 #. "-"
 msgid "action: withdraw"
-msgstr ""
+msgstr "повлечи"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
-msgstr ""
+msgstr "доспевање"
 
 #. "A sum of money"
 msgid "amount"
-msgstr ""
+msgstr "износ"
 
 #. "The amount finally to pay, respecting discounts, billing terms…"
 msgid "amount due"
-msgstr ""
+msgstr "Износ доспеан за плаќање"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
-msgstr ""
+msgstr "просек"
 
 #. "The amount of money that is in one's account"
 msgid "balance (noun)"
-msgstr ""
+msgstr "салдо"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
 msgid "balance b/f"
-msgstr ""
+msgstr "почетна состојба"
 
 #. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
 msgid "balance c/f"
-msgstr ""
+msgstr "завршна состојба"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
-msgstr ""
+msgstr "Биланс на состојба"
 
 #. "To arrange for income and spending to be equal"
 msgid "balance, to"
-msgstr ""
+msgstr "балансирај"
 
 #. "-"
 msgid "bank"
-msgstr ""
+msgstr "банка"
 
 #. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received (from a vendor), whereas an 'invoice' is one that we sent out (to a customer)."
 msgid "bill"
-msgstr ""
+msgstr "влезна фактура"
 
 #. "see invoice owner"
 msgid "bill owner"
@@ -247,59 +247,59 @@ msgstr ""
 
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
-msgstr ""
+msgstr "услови за плаќање"
 
 #. "The dataset that encapsulates all the collections of entities (accounts etc.) in gnucash. The written records of the financial affairs of a business."
 msgid "Book"
-msgstr ""
+msgstr "Книга"
 
 #. "Completing the records of financial affairs for a specific time period, e.g. at the end of the year."
 msgid "book closing"
-msgstr ""
+msgstr "завршни книжења"
 
 #. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
 msgid "Budget"
-msgstr ""
+msgstr "Буџет/План"
 
 #. "-"
 msgid "business (adjective)"
-msgstr ""
+msgstr "деловно"
 
 #. "as Menu Item: Headline for features that are related to small business accounting"
 msgid "business (noun)"
-msgstr ""
+msgstr "бизнис"
 
 #. "Profits made from the sale of investments or property"
 msgid "capital gains"
-msgstr ""
+msgstr "капитална добивка"
 
 #. "Distinguishing the uppercase and lowercase letters"
 msgid "case sensitive"
-msgstr ""
+msgstr "case sensitive"
 
 #. "Money in coins or notes"
 msgid "cash"
-msgstr ""
+msgstr "Готовина"
 
 #. "(esp. US) (= cheque) A special printed form on which one writes an order to a bank to pay a sum of money from one's account to another person"
 msgid "check"
-msgstr ""
+msgstr "Чек"
 
 #. "To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Formerly known as 'to scrub'."
 msgid "check and repair, to"
-msgstr ""
+msgstr "Провери и поправи"
 
 #. "To end an application's relationship with an open file so that the application will no longer be able to access the file without opening it again. "
 msgid "close, to"
-msgstr ""
+msgstr "Затвори"
 
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
 msgid "commodity"
-msgstr ""
+msgstr "стока, производ"
 
 #. "e.g. NASDAQ"
 msgid "commodity listing"
-msgstr ""
+msgstr "листа на производи"
 
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
 msgid "commodity option: fraction"
@@ -319,7 +319,7 @@ msgstr ""
 
 #. "-"
 msgid "Credit Card"
-msgstr ""
+msgstr "Кредитна картичка"
 
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
@@ -331,7 +331,7 @@ msgstr ""
 
 #. "The system of money used in a country"
 msgid "currency"
-msgstr ""
+msgstr "валута"
 
 #. "Custom print format (i.e. according to the user's wishes) as opposed to a template choice."
 msgid "Custom"
@@ -339,23 +339,23 @@ msgstr ""
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
-msgstr ""
+msgstr "работна табла"
 
 #. "The backend where the data is stored."
 msgid "database"
-msgstr ""
+msgstr "база на податоци"
 
 #. "A specific numbered day of the month"
 msgid "Date"
-msgstr ""
+msgstr "Датум"
 
 #. "DD/MM/YY or MM/DD/YY or something else"
 msgid "date format"
-msgstr ""
+msgstr "Формат на датум"
 
 #. "A range in time that is delimited by two distinct dates."
 msgid "date range"
-msgstr ""
+msgstr "Времетраење"
 
 #. "(a) A written note in an account of a sum owed or paid out. (b) A sum withdrawn from an account."
 msgid "Debit (column in register)"
@@ -363,7 +363,7 @@ msgstr ""
 
 #. "Each option has a default setting that it is shipped with, until the user changes the setting."
 msgid "default"
-msgstr ""
+msgstr "Default"
 
 #. "see credit"
 msgid "deposit (in the reconcile dialog)"
@@ -371,43 +371,43 @@ msgstr ""
 
 #. "The process of something becoming less valuable"
 msgid "depreciation"
-msgstr ""
+msgstr "Депрецијација"
 
 #. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
 msgid "Description (column in register)"
-msgstr ""
+msgstr "Опис"
 
 #. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
 msgid "discount"
-msgstr ""
+msgstr "попуст"
 
 #. "Important Buzzword :)"
 msgid "double entry"
-msgstr ""
+msgstr "двојно книговодство"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
-msgstr ""
+msgstr "врска со документ"
 
 #. "The last day to pay an invoice in time."
 msgid "due date"
-msgstr ""
+msgstr "датум на доспевање"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
-msgstr ""
+msgstr "email"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
-msgstr ""
+msgstr "вработен"
 
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
 msgid "equity"
-msgstr ""
+msgstr "капитал"
 
 #. "Report that ... FIXME: Add description."
 msgid "equity statement"
-msgstr ""
+msgstr "Извештај за промени во капиталот"
 
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
 msgid "escrow (account)"
@@ -419,79 +419,79 @@ msgstr ""
 
 #. "in the account creation dialog??"
 msgid "field"
-msgstr ""
+msgstr "поле"
 
 #. "Any piece of information (text, graphics, executable) put together and given a name. All the information you have on the hard drive is arranged as a collection of  files."
 msgid "file"
-msgstr ""
+msgstr "датотека"
 
 #. "-"
 msgid "file type"
-msgstr ""
+msgstr "вид на датотека"
 
 #. "-"
 msgid "financial calculator: interest rate"
-msgstr ""
+msgstr "каматна стапка"
 
 #. "see: payment"
 msgid "financial calculator: payments"
-msgstr ""
+msgstr "плаќања"
 
 #. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
 msgid "financial statement"
-msgstr ""
+msgstr "финансиски извештај"
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 msgid "free software"
-msgstr ""
+msgstr "бесплатен софтвер"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
-msgstr ""
+msgstr "добивка"
 
 #. "Name of an automatically created account to get imbalanced transactions back in balance"
 msgid "imbalance"
-msgstr ""
+msgstr "нерамнотежа"
 
 #. "Process of extracting data from a non-Gnucash format into a Gnucash file. E.g. QIF Import."
 msgid "import"
-msgstr ""
+msgstr "увоз"
 
 #. "Report that ... FIXME: add description. This report used to be called the 'Profit & Loss', but it was renamed on 2004-07-13."
 msgid "income statement"
-msgstr ""
+msgstr "биланс на успех"
 
 #. "Money charged for borrowing money, or paid to somebody who invests money"
 msgid "interest"
-msgstr ""
+msgstr "камата"
 
 #. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out (to a customer), whereas a 'bill' is one that we received (from a vendor)."
 msgid "invoice"
-msgstr ""
+msgstr "излезна фактура"
 
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
-msgstr ""
+msgstr "работа"
 
 #. "A book in which a bank, business firm, etc. records its financial accounts"
 msgid "ledger"
-msgstr ""
+msgstr "Дневник"
 
 #. "The heading for the right side of the balance sheet. See also: Equity."
 msgid "liabilities/equity"
-msgstr ""
+msgstr "обврски/капитал"
 
 #. "A sum of money that is lent (by a bank), see also: financial calculator, Mortgage"
 msgid "loan"
-msgstr ""
+msgstr "кредит"
 
 #. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
 msgid "loan: APR"
-msgstr ""
+msgstr "ГКС (годишна каматна стапка)"
 
 #. "The money lost in business activity"
 msgid "loss"
-msgstr ""
+msgstr "загуба"
 
 #. "name of an automatically created account"
 msgid "Lost Accounts"
@@ -507,7 +507,7 @@ msgstr ""
 
 #. "The thing that the scatter plot uses to mark each data point"
 msgid "marker"
-msgstr ""
+msgstr "маркер"
 
 #. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
 msgid "markup"
@@ -523,7 +523,7 @@ msgstr ""
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
-msgstr ""
+msgstr "Хипотека"
 
 #. "Adjustable Rate Mortgage"
 msgid "mortgage: ARM"
@@ -535,31 +535,31 @@ msgstr ""
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
-msgstr ""
+msgstr "национална валута"
 
 #. "(of money) remaining when nothing more is to be taken away"
 msgid "net"
-msgstr ""
+msgstr "нето"
 
 #. "net total of all assets"
 msgid "net assets"
-msgstr ""
+msgstr "нето актива"
 
 #. "The total income minus the total expenses of a given time period."
 msgid "net profit"
-msgstr ""
+msgstr "нето добивка"
 
 #. "Your net worth is your assets minus your liabilities. If your accounts are balanced, your net worth should equal your equity plus your net profit."
 msgid "net worth"
-msgstr ""
+msgstr "нето вредност"
 
 #. "One textfield per transaction that can hold explanatory text about the transaction."
 msgid "notes (register)"
-msgstr ""
+msgstr "забелешки"
 
 #. "Abbreviation for: number; Field in a transaction. If this transaction was done by check, then the check number should be noted in this field."
 msgid "Num (column in register)"
-msgstr ""
+msgstr "Број"
 
 #. "to make accessible"
 msgid "open, to"
@@ -567,19 +567,19 @@ msgstr ""
 
 #. "If an account starts with a non-zero balance, then this amount is called the opening balance."
 msgid "opening balance"
-msgstr ""
+msgstr "Почетно салдо"
 
 #. "A menu choice in the graphical user interface that allows the user to specify how the application will act each time it is used. "
 msgid "options"
-msgstr ""
+msgstr "опции"
 
 #. "Watch out: Although this word exists in gnucash program code, all that program code in gnucash is currently not activated. In the future, it will be used in business accounting as follows: A particular request to make or supply goods, but belonging to a (larger) job. Such a request can come from a customer or be sent to a vendor. An order will probably generate one invoice or bill."
 msgid "order"
-msgstr ""
+msgstr "нарачка"
 
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
-msgstr ""
+msgstr "сираче"
 
 #. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
 msgid "owner (of bill, invoice or expense voucher)"
@@ -591,7 +591,7 @@ msgstr ""
 
 #. "An amount that must be paid / An amount for which money has not yet been received"
 msgid "Payables/Receivables"
-msgstr ""
+msgstr "Обврски кон добавувачите/Побарувања од купувачите"
 
 #. "A person to whom sth is paid"
 msgid "payee"
@@ -599,19 +599,19 @@ msgstr ""
 
 #. "A person who pays or who has to pay for sth"
 msgid "payer"
-msgstr ""
+msgstr "Плаќач"
 
 #. "1. The action of paying sb/sth or of being paid. 2. A sum of money paid."
 msgid "payment"
-msgstr ""
+msgstr "плаќање"
 
 #. "An account where no transactions may be posted to; transactions can only be posted to subaccounts of this account, so this account serves as a placeholder in the hierarchy"
 msgid "placeholder"
-msgstr ""
+msgstr "Главна сметка"
 
 #. "A set of investments owned by a person"
 msgid "portfolio"
-msgstr ""
+msgstr "портфолио"
 
 #. "Register invoice, voucher in account register"
 msgid "post, to"
@@ -619,7 +619,7 @@ msgstr ""
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
-msgstr ""
+msgstr "преференции"
 
 #. "Loan repayment calculator: your payments are split in interests payment and principal payment"
 msgid "principal payment"
@@ -627,7 +627,7 @@ msgstr ""
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
-msgstr ""
+msgstr "цена"
 
 #. "An ask is an offer to sell, and the price you want to sell at."
 msgid "price type: ask"
@@ -643,15 +643,15 @@ msgstr ""
 
 #. "Money gained in business, esp. the difference between the amount earned (sales) and the amount spent (expenses/cost): Profit is sales minus expenses/cost."
 msgid "profit"
-msgstr ""
+msgstr "добивка"
 
 #. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
-msgstr ""
+msgstr "Добивка&Загуба"
 
 #. "-"
 msgid "quick-fill"
-msgstr ""
+msgstr "брзо пополнување"
 
 #. "-"
 msgid "rebalance, to (a transaction)"
@@ -667,7 +667,7 @@ msgstr ""
 
 #. "A list of items; a book containing such a list"
 msgid "register"
-msgstr ""
+msgstr "регистер"
 
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
@@ -683,11 +683,11 @@ msgstr ""
 
 #. "another form of register"
 msgid "register: basic ledger"
-msgstr ""
+msgstr "основен дневник"
 
 #. "another form of register"
 msgid "register: general ledger"
-msgstr ""
+msgstr "дневник на книжење"
 
 #. "another form of register"
 msgid "register: transaction journal"
@@ -699,15 +699,15 @@ msgstr ""
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
 msgid "report form: T Account Form"
-msgstr ""
+msgstr "форма на т-сметка"
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
 msgid "report form: Vertical Form"
-msgstr ""
+msgstr "вертикална форма"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
-msgstr ""
+msgstr "Задржана добивка"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 msgid "reverse transaction, to (Action in the register)"
@@ -715,15 +715,15 @@ msgstr ""
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
-msgstr ""
+msgstr "Приходи од продажба"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
-msgstr ""
+msgstr "зачувај"
 
 #. "A transaction or reminder of a transaction that can be automatically executed at a specific time. It can be executed either once, or several times at regular intervals."
 msgid "Scheduled Transaction"
-msgstr ""
+msgstr "Закажана трансакција"
 
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
 msgid "scrub, to"
@@ -739,11 +739,11 @@ msgstr ""
 
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
 msgid "shares"
-msgstr ""
+msgstr "акции"
 
 #. "(often: of a quote) A place from which something comes or is obtained."
 msgid "source"
-msgstr ""
+msgstr "извор"
 
 #. "One of the two or several parts a transaction is divided into"
 msgid "split"
@@ -751,7 +751,7 @@ msgstr ""
 
 #. "Alias of 'shares'"
 msgid "stocks"
-msgstr ""
+msgstr "акции"
 
 #. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
 msgid "stock split"
@@ -763,7 +763,7 @@ msgstr ""
 
 #. "The total of a set of figures that are part of a larger group of figures"
 msgid "subtotal"
-msgstr ""
+msgstr "меѓузбир"
 
 #. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
 msgid "tax code"
@@ -775,7 +775,7 @@ msgstr ""
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
 msgid "tax type: income tax"
-msgstr ""
+msgstr "Данок на приход"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
@@ -787,27 +787,27 @@ msgstr ""
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr ""
+msgstr "ДДВ"
 
 #. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
-msgstr ""
+msgstr "урнек"
 
 #. "see: date range"
 msgid "time period"
-msgstr ""
+msgstr "временски период"
 
 #. "as abbreviation for Total"
 msgid "Tot"
-msgstr ""
+msgstr "Вкупно"
 
 #. "The full number or amount: total of some balances, of any account's running balance etc."
 msgid "total"
-msgstr ""
+msgstr "Вкупно"
 
 #. "A piece of business done; the transfer of money from one account to one or more other accounts. (see also: Scheduled Transaction)"
 msgid "transaction"
-msgstr ""
+msgstr "трансакција"
 
 #. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
@@ -815,19 +815,19 @@ msgstr ""
 
 #. "-"
 msgid "transaction state: frozen"
-msgstr ""
+msgstr "замрзната"
 
 #. "A transaction that was reconciled with the bank's statement."
 msgid "transaction state: reconciled"
-msgstr ""
+msgstr "усогласена"
 
 #. "A transaction that is void i.e. not valid (anymore)."
 msgid "transaction state: voided"
-msgstr ""
+msgstr "поништена"
 
 #. "1. The action of transferring sth. 2. see: credit transfer"
 msgid "transfer (noun)"
-msgstr ""
+msgstr "трансфер"
 
 #. "The account where an amount is transferred to"
 msgid "transfer account"
@@ -835,36 +835,36 @@ msgstr ""
 
 #. "To move money from one account to another. Will create a transaction."
 msgid "transfer, to (register toolbar)"
-msgstr ""
+msgstr "префрли"
 
 #. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
 msgid "trial balance (report)"
-msgstr ""
+msgstr "пробен биланс"
 
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
 msgid "type"
-msgstr ""
+msgstr "вид"
 
 #. "A fixed amount or number used as a standard of measurement; e.g. millimeters, inch; for absolute positioning in the custom check format."
 msgid "units"
-msgstr ""
+msgstr "единици"
 
 #. "Uniform Resource Locator, https://en.wikipedia.org/wiki/URL"
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #. "The worth of sth in terms of money or other commodities for which it can be exchanged"
 msgid "value (in a split)"
-msgstr ""
+msgstr "вредност"
 
 #. "In small business accounting: A person or company that sells items and is supplying goods"
 msgid "vendor"
-msgstr ""
+msgstr "добавувач"
 
 #. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
 msgid "voucher"
-msgstr ""
+msgstr "ваучер"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
-msgstr ""
+msgstr "повлекување"
