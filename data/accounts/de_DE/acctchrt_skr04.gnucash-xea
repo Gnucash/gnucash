@@ -10534,12 +10534,6 @@ und ähnlichen Verpflichtungen zum langfristigen Verbleib</act:name>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>4500</act:code>
-    <act:slots>
-      <slot>
-        <slot:key>placeholder</slot:key>
-        <slot:value type="string">true</slot:value>
-      </slot>
-    </act:slots>
     <act:parent type="new">7e85851b3d9f485baaa7e2b27e7e402c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
