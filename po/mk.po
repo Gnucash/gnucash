@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-11-08 02:22+0100\n"
-"PO-Revision-Date: 2022-11-15 15:48+0000\n"
+"PO-Revision-Date: 2022-11-17 10:47+0000\n"
 "Last-Translator: Vesna Micajkova <vmicajkova@institutpraktikum.mk>\n"
 "Language-Team: Macedonian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/mk/>\n"
@@ -2850,7 +2850,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-print-check.glade:290
 #: gnucash/gtkbuilder/gnc-date-format.glade:30
 msgid "Custom"
-msgstr ""
+msgstr "Прилагодена"
 
 #: gnucash/gnome/dialog-print-check.c:2602
 #: gnucash/gtkbuilder/dialog-preferences.glade:3984
@@ -25773,7 +25773,7 @@ msgstr ""
 #: gnucash/report/reports/standard/register.scm:388
 #: libgnucash/engine/gnc-lot.c:823
 msgid "Lot"
-msgstr ""
+msgstr "Лот"
 
 #: gnucash/report/reports/standard/register.scm:160
 msgid "Debit Value"

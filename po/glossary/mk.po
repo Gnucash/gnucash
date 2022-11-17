@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-11-08 02:03+0100\n"
-"PO-Revision-Date: 2022-11-15 13:47+0000\n"
+"PO-Revision-Date: 2022-11-17 10:47+0000\n"
 "Last-Translator: Vesna Micajkova <vmicajkova@institutpraktikum.mk>\n"
 "Language-Team: Macedonian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/mk/>\n"
@@ -27,7 +27,7 @@ msgstr "Услов"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
-msgstr ""
+msgstr "\"\""
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -119,7 +119,7 @@ msgstr "Подконто"
 
 #. "-"
 msgid "account: top level account"
-msgstr ""
+msgstr "Основни видови конта"
 
 #. "The process of doing something that caused a transaction to happen"
 msgid "Action (register)"
@@ -183,7 +183,7 @@ msgstr "Продавај"
 
 #. "-"
 msgid "action: Teller"
-msgstr ""
+msgstr "Раскажувач"
 
 #. "see: transfer 2. (=credit transfer)"
 msgid "action: transfer"
@@ -303,19 +303,19 @@ msgstr "листа на производи"
 
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
 msgid "commodity option: fraction"
-msgstr ""
+msgstr "единица"
 
 #. "e.g. USD, DEM"
 msgid "commodity option: Symbol"
-msgstr ""
+msgstr "симбол"
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
 msgid "compound interests"
-msgstr ""
+msgstr "здружена камата"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
-msgstr ""
+msgstr "Должи"
 
 #. "-"
 msgid "Credit Card"
@@ -323,11 +323,11 @@ msgstr "Кредитна картичка"
 
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
-msgstr ""
+msgstr "префрлање средства"
 
 #. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
 msgid "credit note"
-msgstr ""
+msgstr "Белешка за долг"
 
 #. "The system of money used in a country"
 msgid "currency"
@@ -335,7 +335,7 @@ msgstr "валута"
 
 #. "Custom print format (i.e. according to the user's wishes) as opposed to a template choice."
 msgid "Custom"
-msgstr ""
+msgstr "Прилагодена"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
@@ -359,7 +359,7 @@ msgstr "Времетраење"
 
 #. "(a) A written note in an account of a sum owed or paid out. (b) A sum withdrawn from an account."
 msgid "Debit (column in register)"
-msgstr ""
+msgstr "Побарува"
 
 #. "Each option has a default setting that it is shipped with, until the user changes the setting."
 msgid "default"
@@ -367,7 +367,7 @@ msgstr "Default"
 
 #. "see credit"
 msgid "deposit (in the reconcile dialog)"
-msgstr ""
+msgstr "депонирај"
 
 #. "The process of something becoming less valuable"
 msgid "depreciation"
@@ -411,11 +411,11 @@ msgstr "Извештај за промени во капиталот"
 
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
 msgid "escrow (account)"
-msgstr ""
+msgstr "трето лице (доверител)"
 
 #. "The relation in value between the money used in different countries"
 msgid "exchange rate"
-msgstr ""
+msgstr "валутен курс"
 
 #. "in the account creation dialog??"
 msgid "field"
@@ -495,11 +495,11 @@ msgstr "загуба"
 
 #. "name of an automatically created account"
 msgid "Lost Accounts"
-msgstr ""
+msgstr "Изгубено конто"
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
 msgid "Lot"
-msgstr ""
+msgstr "Лот"
 
 #. "Combine two books into one (see book)."
 msgid "merge, to"
@@ -511,7 +511,7 @@ msgstr "маркер"
 
 #. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
 msgid "markup"
-msgstr ""
+msgstr "маргина"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
