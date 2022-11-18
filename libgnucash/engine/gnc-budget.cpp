@@ -644,13 +644,13 @@ gnc_budget_set_account_period_note(GncBudget *budget, const Account *account,
 
 }
 
-gchar *
+const gchar *
 gnc_budget_get_account_period_note (const GncBudget *budget,
                                     const Account *account, guint period_num)
 {
     g_return_val_if_fail (period_num < GET_PRIVATE(budget)->num_periods, nullptr);
     auto& data = get_perioddata (budget, account, period_num);
-    return data.note.empty () ? nullptr : g_strdup (data.note.c_str());
+    return data.note.empty () ? nullptr : data.note.c_str();
 }
 
 time64

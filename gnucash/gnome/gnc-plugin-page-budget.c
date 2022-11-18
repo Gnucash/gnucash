@@ -1287,9 +1287,8 @@ gnc_plugin_page_budget_cmd_budget_note(GtkAction *action,
         GTK_WINDOW(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page))));
 
     note = GTK_WIDGET(gtk_builder_get_object(builder, "BudgetNote"));
-    txt  = gnc_budget_get_account_period_note(priv->budget, acc, period_num);
-    xxxgtk_textview_set_text(GTK_TEXT_VIEW(note), txt);
-    g_free (txt);
+    xxxgtk_textview_set_text(GTK_TEXT_VIEW(note),
+                             gnc_budget_get_account_period_note(priv->budget, acc, period_num));
 
     gtk_widget_show_all(dialog);
     result = gtk_dialog_run(GTK_DIALOG(dialog));
