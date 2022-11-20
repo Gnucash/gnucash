@@ -239,7 +239,7 @@ reinvested must be subsequently recorded as a regular stock purchase.")
         FieldMask::ENABLED_DEBIT,          // stock_amt
         true,                              // input_new_balance
         FieldMask::DISABLED,               // stock_val
-        FieldMask::DISABLED,               // cash_amt
+        FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
         true,                   // fees_capitalize
         FieldMask::DISABLED,               // dividend_amt
@@ -253,7 +253,7 @@ reinvested must be subsequently recorded as a regular stock purchase.")
         FieldMask::ENABLED_CREDIT,         // stock_amt
         true,                              // input_new_balance
         FieldMask::DISABLED,               // stock_val
-        FieldMask::DISABLED,               // cash_amt
+        FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
         true,                   // fees_capitalize
         FieldMask::DISABLED,               // dividend_amt
@@ -344,7 +344,7 @@ static const TxnTypeVec short_types
         FieldMask::ENABLED_CREDIT,         // stock_amt
         true,                              // input_new_balance
         FieldMask::DISABLED,               // stock_val
-        FieldMask::DISABLED,               // cash_amt
+        FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
         true,                   // fees_capitalize
         FieldMask::DISABLED,               // dividend_amt
@@ -358,7 +358,7 @@ static const TxnTypeVec short_types
         FieldMask::ENABLED_DEBIT,          // stock_amt
         true,                              // input_new_balance
         FieldMask::DISABLED,               // stock_val
-        FieldMask::DISABLED,               // cash_amt
+        FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
         true,                   // fees_capitalize
         FieldMask::DISABLED,               // dividend_amt
