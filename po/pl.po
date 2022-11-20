@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-09-11 23:24+0200\n"
-"PO-Revision-Date: 2022-11-19 21:47+0000\n"
+"PO-Revision-Date: 2022-11-20 11:48+0000\n"
 "Last-Translator: Kaligula <kaligula.dev@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
@@ -9381,7 +9381,7 @@ msgstr ""
 #. Translators: Return to the transaction to update
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1737
 msgid "_Return"
-msgstr "Wróć"
+msgstr "W_róć"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1780
 #: gnucash/register/ledger-core/split-register-control.c:1825
@@ -12137,6 +12137,11 @@ msgid ""
 "files is set so that the 'Num' cell on registers shows/updates the "
 "transaction 'num' field."
 msgstr ""
+"W przypadku wybrania tej opcji, domyślnie w nowych plikach komórka \"Num\" w "
+"rejestrach pokazuje/aktualizuje pole \"akcja\" podziału, a pole \"num\" "
+"transakcji jest widoczne w drugim wierszu w trybie dwuwierszowym (a nie jest "
+"widoczne w trybie jednowierszowym). W przeciwnym razie domyślnie komórka "
+"\"Num\" na rejestrach pokazuje/aktualizuje pole \"num\" transakcji."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:241
 #, fuzzy
@@ -12477,6 +12482,12 @@ msgid ""
 "in filenames, such as '/', will be replaced with underscores '_' in the "
 "resulting file name."
 msgstr ""
+"To ustawienie wybiera nazwę pliku do eksportu PDF. Jest to ciąg znaków "
+"sprintf(3) z trzema argumentami: \"%1$s\" to nazwa raportu, np. \"Faktura\". "
+"\"%2$s\" to numer raportu, który w raporcie faktury jest numerem faktury. \""
+"%3$s\" to data raportu sformatowana zgodnie z ustawieniem nazwapliku-data-"
+"format. Uwaga: Wszystkie znaki, które są niedozwolone w nazwach plików (np. "
+"\"/\") zostaną zastąpione podkreśleniami \"_\" w wynikowej nazwie pliku."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:384
 #, fuzzy
@@ -14564,6 +14575,12 @@ msgid ""
 "setting book options will not be shown a second time when you go forward. "
 "You can access it directly from the menu via File->Properties."
 msgstr ""
+"Ponieważ tworzysz nowy plik, w następnej kolejności zobaczysz okno dialogowe "
+"do ustawienia opcji księgi. Mogą one wpłynąć na sposób importowania "
+"transakcji przez GnuCash. Jeżeli wrócisz na tę stronę bez anulowania i "
+"rozpoczęcia od nowa, okno dialogowe do ustawiania opcji księgi nie zostanie "
+"pokazane po raz drugi przy przejściu dalej. Możesz uzyskać do niego dostęp "
+"bezpośrednio z menu poprzez Plik->Właściwości."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:969
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:2642
@@ -15364,7 +15381,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:91
 msgid "_Not cleared"
-msgstr "Nieprzejrzane"
+msgstr "_Nieprzejrzane"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:97
 msgid ""
@@ -16515,11 +16532,11 @@ msgstr "Pokaż kolumnę _Konto"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1080
 msgid "Show _Memo column"
-msgstr "Pokaż kolumnę Notatka"
+msgstr "Pokaż kolumnę N_otatka"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1096
 msgid "Show matched _information"
-msgstr "Pokaż dopasowane informacje"
+msgstr "Pokaż dopasowane _informacje"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1111
 msgid "A_ppend"
@@ -20364,6 +20381,14 @@ msgid ""
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
+"Backend znalazł błąd podczas przygotowywania zadania. Wykonanie tego zadania "
+"nie jest możliwe.\n"
+"\n"
+"Najprawdopodobniej bank nie obsługuje wybranego przez Ciebie zadania lub "
+"Twoje konto w Bankowości Internetowej nie ma uprawnień do wykonania tego "
+"zadania. Więcej komunikatów o błędach może być widocznych w logu konsoli.\n"
+"\n"
+"Czy chcesz wprowadzić zadanie ponownie?"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:232
 msgid "Online Banking Direct Debit Note"
@@ -21194,6 +21219,17 @@ msgid ""
 "Note: After import, you may need to use 'View / Filter By / Other' menu "
 "option and select to show unused Accounts.\n"
 msgstr ""
+"Konta zostaną zaimportowane z pliku \"%s\" po kliknięciu przycisku \"Zastosuj"
+"\".\n"
+"\n"
+"Możesz zweryfikować swoje wybory, klikając \"Wstecz\" lub przerwać import "
+"klikając \"Anuluj\".\n"
+"\n"
+"Jeśli jest to początkowy import do nowego pliku, najpierw zobaczysz okno "
+"dialogowe do ustawienia opcji księgowania, ponieważ mogą one wpłynąć na "
+"sposób konwersji importowanych danych na transakcje GnuCash.\n"
+"Uwaga: po zaimportowaniu może być konieczne użycie opcji menu \"Wyświetl / "
+"Filtruj według / Inne\" i wybranie opcji wyświetlania nieużywanych kont.\n"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:458
 #, c-format
@@ -21829,12 +21865,12 @@ msgstr "Aktywna"
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1314
 msgid "_Assign a transfer account to the selection"
-msgstr "Wybierz konto transferu dla obecnego zaznaczenia"
+msgstr "_Wybierz konto transferu dla obecnego zaznaczenia"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1365
 msgid "_Edit description, notes, or memo"
-msgstr "Edytuj opis, uwagi lub notatki"
+msgstr "_Edytuj opis, uwagi lub notatki"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1374
@@ -27016,6 +27052,12 @@ msgid ""
 "ASSET for taxes paid on expenses, and type LIABILITY for taxes collected on "
 "sales."
 msgstr ""
+"W opcjach raportu należy wybrać konta, na których będą przechowywane pobrane "
+"lub zapłacone podatki GST/VAT. Konta te muszą zawierać podziały, które "
+"dokumentują środki pieniężne, które są w całości wysyłane lub żądane od "
+"organów podatkowych podczas okresowych deklaracji GST/VAT. Konta te muszą "
+"być typu MAJĄTEK dla podatków zapłaconych od wydatków oraz typu "
+"WIERZYTELNOŚĆ dla podatków pobranych od sprzedaży."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:66
 msgid ""
