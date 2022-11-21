@@ -27,6 +27,7 @@
 (use-modules (gnucash core-utils))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
+(use-modules (gnucash json builder))
 (use-modules (srfi srfi-1))
 
 (define (date-col columns-used)
@@ -621,7 +622,41 @@
                 (not odd-row?))))))
     table))
 
-(define (reg-renderer report-obj)
+(define (make-json splits)
+  (define iso-date (qof-date-format-get-string QOF-DATE-FORMAT-ISO))
+  (scm->json-string
+   (let lp ((splits splits) (acc '()))
+     (cond
+      ((null? splits) (list->vector (reverse acc)))
+      ((null? (xaccSplitGetAccount (car splits))) (lp (cdr splits) acc))
+      (else
+       (let* ((split (car splits))
+              (txn (xaccSplitGetParent split)))
+         (lp (cdr splits)
+             (cons (list
+                    (cons 'date (gnc-print-time64 (xaccTransGetDate txn) iso-date))
+                    (cons 'description (xaccTransGetDescription txn))
+                    (cons 'notes (xaccTransGetNotes txn))
+                    (cons 'trans-guid (gncTransGetGUID txn))
+                    (cons 'splits (list->vector
+                                   (map
+                                    (lambda (s)
+                                      (let ((acc (xaccSplitGetAccount s)))
+                                        (list
+                                         (cons 'split-guid (gncSplitGetGUID s))
+                                         (cons 'account (gnc-account-get-full-name acc))
+                                         (cons 'account-guid (gncAccountGetGUID acc))
+                                         (cons 'amount (xaccSplitGetAmount s))
+                                         (cons 'value (xaccSplitGetValue s))
+                                         (cons 'memo (xaccSplitGetMemo s)))))
+                                    (xaccTransGetSplitList txn)))))
+                   acc))))))
+   #:pretty #t))
+
+(define (make-csv splits)
+  "csv")
+
+(define* (reg-renderer report-obj #:optional export-type)
   (define (opt-val section name)
     (gnc:option-value
      (gnc:lookup-option (gnc:report-options report-obj) section name)))
@@ -645,6 +680,10 @@
                                     (gnc:report-options report-obj)
                                     debit-string credit-string
                                     (G_ "Amount"))))
+      (case export-type
+        ((json) (gnc:html-document-set-export-string document (make-json splits)))
+        ((csv)  (gnc:html-document-set-export-string document (make-csv splits)))
+        (else #f))
       (gnc:html-document-set-title! document title)
       (gnc:html-document-add-object! document table)
       (qof-query-destroy query))
@@ -668,6 +707,8 @@
  'report-guid register-report-guid
  'options-generator options-generator
  'renderer reg-renderer
+ 'export-types '(("JSON" . json) ("CSV" . csv))
+ 'export-thunk reg-renderer
  'in-menu? #f)
 
 (define (gnc:register-report-create-internal invoice? query journal? ledger-type?

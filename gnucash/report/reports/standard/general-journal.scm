@@ -107,10 +107,10 @@
 
 ;; report renderer
 
-(define (general-journal-renderer report-obj)
+(define* (general-journal-renderer report-obj #:optional export-type)
   ;; just delegate rendering to the Register Report renderer...
   (let ((renderer (gnc:report-template-renderer/report-guid regrptguid #f)))
-    (renderer report-obj)))
+    (renderer report-obj export-type)))
 
 (gnc:define-report
  'version 1
@@ -118,6 +118,8 @@
  'report-guid "25455562bd234dd0b048ecc5a8af9e43"
  'menu-path (list gnc:menuname-asset-liability)
  'options-generator general-journal-options-generator
+ 'export-types '(("JSON" . json) ("CSV" . csv))
+ 'export-thunk general-journal-renderer
  'renderer general-journal-renderer
  )
 
