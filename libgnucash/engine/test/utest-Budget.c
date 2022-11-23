@@ -78,7 +78,7 @@ test_gnc_set_budget_num_periods_data_retention ()
     QofBook *book = qof_book_new();
     GncBudget* budget = gnc_budget_new(book);
     Account *acc = gnc_account_create_root(book);
-    gchar *note;
+    const gchar *note;
 
     /* initially has 20 periods */
     gnc_budget_set_num_periods(budget, 20);
@@ -100,7 +100,6 @@ test_gnc_set_budget_num_periods_data_retention ()
     g_assert (!gnc_budget_is_account_period_value_set(budget, acc, 15));
     note = gnc_budget_get_account_period_note (budget, acc, 11);
     g_assert_cmpstr (note, ==, NULL);
-    g_free (note);
 
     gnc_budget_destroy(budget);
     qof_book_destroy(book);
