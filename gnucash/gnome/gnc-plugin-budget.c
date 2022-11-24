@@ -336,7 +336,11 @@ gnc_budget_gui_select_budget (GtkWindow *parent, QofBook *book)
     bgt = gnc_budget_get_default (book);
 
     if (bgt && gnc_tree_model_budget_get_iter_for_budget (tm, &iter, bgt))
-        gtk_tree_view_set_cursor (tv, gtk_tree_model_get_path (tm, &iter), NULL, FALSE);
+    {
+        GtkTreePath *path = gtk_tree_model_get_path (tm, &iter);
+        gtk_tree_view_set_cursor (tv, path, NULL, FALSE);
+        gtk_tree_path_free (path);
+    }
 
     bgt = NULL;
     response = gtk_dialog_run (dlg);
