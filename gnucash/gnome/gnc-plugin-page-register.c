@@ -5259,6 +5259,11 @@ gnc_plugin_page_help_changed_cb (GNCSplitReg* gsr,
         return;
     }
 
+    // only update status text if on current page
+    if (GNC_IS_MAIN_WINDOW(window) && (gnc_main_window_get_current_page 
+       (GNC_MAIN_WINDOW(window)) != GNC_PLUGIN_PAGE(register_page)))
+       return;
+
     /* Get the text from the ledger */
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (register_page);
     reg = gnc_ledger_display_get_split_register (priv->ledger);
