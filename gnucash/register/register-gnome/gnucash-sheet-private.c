@@ -514,6 +514,26 @@ draw_cell (GnucashSheet *sheet, SheetBlock *block,
     }
 #endif
 
+    if ((text != NULL) && (*text != '\0') && g_strcmp0 (PRICE_CELL_TYPE_NAME,
+         gnc_table_get_cell_type_name (table, virt_loc)) == 0)
+    {
+        int text_width;
+        int text_border_padding;
+
+        pango_layout_get_pixel_size (layout, &text_width, NULL);
+
+        text_border_padding = gnc_item_edit_get_margin (item_edit, left_right) +
+                              gnc_item_edit_get_padding_border (item_edit, left_right);
+
+        if (text_width + text_border_padding > width)
+        {
+            int pango_width = (width - text_border_padding) * PANGO_SCALE;
+
+            pango_layout_set_width (layout, pango_width); //pango units
+            pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_END);
+        }
+    }
+
     /* If this is the currently open transaction and
        there is no text in this cell */
     if ((table->current_cursor_loc.vcell_loc.virt_row ==
