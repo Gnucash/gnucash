@@ -643,7 +643,7 @@ create_dbi_test_suite (const char* dbm_name, const char* url)
     GNC_TEST_ADD (subsuite, "version_control", Fixture, url, setup_memory,
                   test_dbi_version_control, teardown);
     GNC_TEST_ADD (subsuite, "business_store_and_reload", Fixture, url,
-                  setup_business, test_dbi_version_control, teardown);
+                  setup_business, test_dbi_business_store_and_reload, teardown);
     g_free (subsuite);
 
 }
