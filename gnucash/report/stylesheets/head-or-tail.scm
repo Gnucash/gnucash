@@ -38,6 +38,7 @@
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
 (use-modules (gnucash core-utils)) ; for gnc:version and (G_ ...)
+(use-modules (gnucash app-utils))
 (use-modules (gnucash report))
 (use-modules (gnucash html))
 
