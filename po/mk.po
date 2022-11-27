@@ -3,78 +3,81 @@
 # This file is distributed under the same license as the GnuCash package.
 # Automatically generated, 2022.
 #
+# Vesna Micajkova <vmicajkova@institutpraktikum.mk>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.12\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-11-08 02:22+0100\n"
-"PO-Revision-Date: 2022-11-08 02:22+0100\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2022-11-25 16:48+0000\n"
+"Last-Translator: Vesna Micajkova <vmicajkova@institutpraktikum.mk>\n"
+"Language-Team: Macedonian <https://hosted.weblate.org/projects/gnucash/"
+"gnucash/mk/>\n"
 "Language: mk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Plural-Forms: nplurals=2; plural=n==1 || n%10==1 ? 0 : 1;\n"
+"X-Generator: Weblate 4.15-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "Арапски"
 
 #: borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "Балтички"
 
 #: borrowed/goffice/go-charmap-sel.c:72
 msgid "Central European"
-msgstr ""
+msgstr "Централноевропски"
 
 #: borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "Кинески"
 
 #: borrowed/goffice/go-charmap-sel.c:74
 #: gnucash/gnome-utils/assistant-xml-encoding.c:242
 msgid "Cyrillic"
-msgstr ""
+msgstr "Кирилица"
 
 #: borrowed/goffice/go-charmap-sel.c:75
 msgid "Greek"
-msgstr ""
+msgstr "Грчки"
 
 #: borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "Еврејски"
 
 #: borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr ""
+msgstr "Индиски"
 
 #: borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "Јапонски"
 
 #: borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "Корејски"
 
 #: borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "турски"
 
 #: borrowed/goffice/go-charmap-sel.c:81
 #: gnucash/gnome-utils/assistant-xml-encoding.c:224
 msgid "Unicode"
-msgstr ""
+msgstr "Unicode"
 
 #: borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "виетнамски"
 
 #: borrowed/goffice/go-charmap-sel.c:83
 msgid "Western"
-msgstr ""
+msgstr "западен"
 
 #: borrowed/goffice/go-charmap-sel.c:84
 #: gnucash/gtkbuilder/assistant-loan.glade:966
@@ -82,343 +85,343 @@ msgstr ""
 #: gnucash/report/reports/standard/account-piecharts.scm:473
 #: gnucash/report/reports/standard/category-barchart.scm:564
 msgid "Other"
-msgstr ""
+msgstr "останато"
 
 #: borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "арапски (IBM-864)"
 
 #: borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "арапски (IBM-864-I)"
 
 #: borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "арапски (ISO-8859-6)"
 
 #: borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "арапски (ISO-8859-6-E)"
 
 #: borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "арапски (ISO-8859-6-I)"
 
 #: borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "арапски (MacArabic)"
 
 #: borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "арапски (Windows-1256)"
 
 #: borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
-msgstr ""
+msgstr "ерменски (ARMSCII-8)"
 
 #: borrowed/goffice/go-charmap-sel.c:124
 msgid "Baltic (ISO-8859-13)"
-msgstr ""
+msgstr "балтички (ISO-8859-13)"
 
 #: borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "балтички (ISO-8859-4)"
 
 #: borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "балтички (Windows-1257)"
 
 #: borrowed/goffice/go-charmap-sel.c:127
 msgid "Celtic (ISO-8859-14)"
-msgstr ""
+msgstr "целтички (ISO-8859-14)"
 
 #: borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "централно европски (IBM-852)"
 
 #: borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "централно европски (ISO-8859-2)"
 
 #: borrowed/goffice/go-charmap-sel.c:132
 msgid "Central European (MacCE)"
-msgstr ""
+msgstr "централно европски (MacCE)"
 
 #: borrowed/goffice/go-charmap-sel.c:134
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "централно европски (Windows-1250)"
 
 #: borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
-msgstr ""
+msgstr "кинески поедноставено (GB18030)"
 
 #: borrowed/goffice/go-charmap-sel.c:137
 msgid "Chinese Simplified (GB2312)"
-msgstr ""
+msgstr "кинески поедноставено (GB2312)"
 
 #: borrowed/goffice/go-charmap-sel.c:138
 msgid "Chinese Simplified (GBK)"
-msgstr ""
+msgstr "Кинески поедноставено (GBK)"
 
 #: borrowed/goffice/go-charmap-sel.c:139
 msgid "Chinese Simplified (HZ)"
-msgstr ""
+msgstr "Кинески поедноставено (HZ)"
 
 #: borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
-msgstr ""
+msgstr "Кинески поедноставено (Windows-936)"
 
 #: borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "Кинески традиционално (Big5)"
 
 #: borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "Традиционален кинески (Big5-HKSCS)"
 
 #: borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr ""
+msgstr "Традиционален кинески (EUC-TW)"
 
 #: borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"
-msgstr ""
+msgstr "хрватски (MacХрватски)"
 
 #: borrowed/goffice/go-charmap-sel.c:149
 msgid "Cyrillic (IBM-855)"
-msgstr ""
+msgstr "кирилица (IBM-855)"
 
 #: borrowed/goffice/go-charmap-sel.c:150
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "кирилица (ISO-8859-5)"
 
 #: borrowed/goffice/go-charmap-sel.c:152
 msgid "Cyrillic (ISO-IR-111)"
-msgstr ""
+msgstr "кирилица (ISO-IR-111)"
 
 #: borrowed/goffice/go-charmap-sel.c:154
 msgid "Cyrillic (KOI8-R)"
-msgstr ""
+msgstr "кирилица (KOI8-R)"
 
 #: borrowed/goffice/go-charmap-sel.c:155
 msgid "Cyrillic (MacCyrillic)"
-msgstr ""
+msgstr "кирилица  (MacCyrillic)"
 
 #: borrowed/goffice/go-charmap-sel.c:157
 msgid "Cyrillic (Windows-1251)"
-msgstr ""
+msgstr "кирилица (Windows-1251)"
 
 #: borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
-msgstr ""
+msgstr "руски (CP-866)"
 
 #: borrowed/goffice/go-charmap-sel.c:160
 msgid "Ukrainian (KOI8-U)"
-msgstr ""
+msgstr "украински (KOI8-U)"
 
 #: borrowed/goffice/go-charmap-sel.c:161
 msgid "Ukrainian (MacUkrainian)"
-msgstr ""
+msgstr "украински (MacUkrainian)"
 
 #: borrowed/goffice/go-charmap-sel.c:163
 msgid "English (ASCII)"
-msgstr ""
+msgstr "англиски (ASCII)"
 
 #: borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
-msgstr ""
+msgstr "фарси (MacFarsi)"
 
 #: borrowed/goffice/go-charmap-sel.c:166
 msgid "Georgian (GEOSTD8)"
-msgstr ""
+msgstr "естонски (GEOSTD8)"
 
 #: borrowed/goffice/go-charmap-sel.c:167
 msgid "Greek (ISO-8859-7)"
-msgstr ""
+msgstr "грчки (ISO-8859-7)"
 
 #: borrowed/goffice/go-charmap-sel.c:168
 msgid "Greek (MacGreek)"
-msgstr ""
+msgstr "грчки (MacGreek)"
 
 #: borrowed/goffice/go-charmap-sel.c:169
 msgid "Greek (Windows-1253)"
-msgstr ""
+msgstr "грчки (Windows-1253)"
 
 #: borrowed/goffice/go-charmap-sel.c:170
 msgid "Gujarati (MacGujarati)"
-msgstr ""
+msgstr "Гујарани (MacGujarati)"
 
 #: borrowed/goffice/go-charmap-sel.c:172
 msgid "Gurmukhi (MacGurmukhi)"
-msgstr ""
+msgstr "Гурмукхи (MacGurmukhi)"
 
 #: borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr ""
+msgstr "еврејски  (IBM-862)"
 
 #: borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr ""
+msgstr "еврејски (ISO-8859-8-E)"
 
 #: borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr ""
+msgstr "еврејски (ISO-8859-8-I)"
 
 #: borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr ""
+msgstr "еврејски (MacHebrew)"
 
 #: borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr ""
+msgstr "еврејски (Windows-1255)"
 
 #: borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
-msgstr ""
+msgstr "хинду (MacDevanagari)"
 
 #: borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
-msgstr ""
+msgstr "исландски (MacIcelandic)"
 
 #: borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
-msgstr ""
+msgstr "јапонски (EUC-JP)"
 
 #: borrowed/goffice/go-charmap-sel.c:187
 msgid "Japanese (ISO-2022-JP)"
-msgstr ""
+msgstr "јапонски (ISO-2022-JP)"
 
 #: borrowed/goffice/go-charmap-sel.c:189
 msgid "Japanese (Shift_JIS)"
-msgstr ""
+msgstr "јапонски (Shift_JIS)"
 
 #: borrowed/goffice/go-charmap-sel.c:190
 msgid "Korean (EUC-KR)"
-msgstr ""
+msgstr "корејски (EUC-KR)"
 
 #: borrowed/goffice/go-charmap-sel.c:191
 msgid "Korean (ISO-2022-KR)"
-msgstr ""
+msgstr "корејски (ISO-2022-KR)"
 
 #: borrowed/goffice/go-charmap-sel.c:192
 msgid "Korean (JOHAB)"
-msgstr ""
+msgstr "корејски (JOHAB)"
 
 #: borrowed/goffice/go-charmap-sel.c:193
 msgid "Korean (UHC)"
-msgstr ""
+msgstr "корејски (UHC)"
 
 #: borrowed/goffice/go-charmap-sel.c:194
 msgid "Nordic (ISO-8859-10)"
-msgstr ""
+msgstr "нордиски  (ISO-8859-10)"
 
 #: borrowed/goffice/go-charmap-sel.c:195
 msgid "Romanian (MacRomanian)"
-msgstr ""
+msgstr "романски (Macромански)"
 
 #: borrowed/goffice/go-charmap-sel.c:197
 msgid "Romanian (ISO-8859-16)"
-msgstr ""
+msgstr "романски (ISO-8859-16)"
 
 #: borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
-msgstr ""
+msgstr "јужно европски (ISO-8859-3)"
 
 #: borrowed/goffice/go-charmap-sel.c:201
 msgid "Thai (TIS-620)"
-msgstr ""
+msgstr "таи (TIS-620)"
 
 #: borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
-msgstr ""
+msgstr "турски (IBM-857)"
 
 #: borrowed/goffice/go-charmap-sel.c:203
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "турски (ISO-8859-9)"
 
 #: borrowed/goffice/go-charmap-sel.c:204
 msgid "Turkish (MacTurkish)"
-msgstr ""
+msgstr "турски (Macтурски)"
 
 #: borrowed/goffice/go-charmap-sel.c:206
 msgid "Turkish (Windows-1254)"
-msgstr ""
+msgstr "турски (Windows-1254)"
 
 #: borrowed/goffice/go-charmap-sel.c:208
 msgid "Unicode (UTF-7)"
-msgstr ""
+msgstr "Unicode (UTF-7)"
 
 #: borrowed/goffice/go-charmap-sel.c:209
 msgid "Unicode (UTF-8)"
-msgstr ""
+msgstr "Unicode (UTF-8)"
 
 #: borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
-msgstr ""
+msgstr "Unicode (UTF-16BE)"
 
 #: borrowed/goffice/go-charmap-sel.c:211
 msgid "Unicode (UTF-16LE)"
-msgstr ""
+msgstr "Unicode (UTF-16LE)"
 
 #: borrowed/goffice/go-charmap-sel.c:212
 msgid "Unicode (UTF-32BE)"
-msgstr ""
+msgstr "Unicode (UTF-32BE)"
 
 #: borrowed/goffice/go-charmap-sel.c:213
 msgid "Unicode (UTF-32LE)"
-msgstr ""
+msgstr "Unicode (UTF-32LE)"
 
 #: borrowed/goffice/go-charmap-sel.c:214
 msgid "User Defined"
-msgstr ""
+msgstr "Корисникот е дефиниран"
 
 #: borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
-msgstr ""
+msgstr "виетнамски (TCVN)"
 
 #: borrowed/goffice/go-charmap-sel.c:217
 msgid "Vietnamese (VISCII)"
-msgstr ""
+msgstr "виетнамски (VISCII)"
 
 #: borrowed/goffice/go-charmap-sel.c:218
 msgid "Vietnamese (VPS)"
-msgstr ""
+msgstr "виетнамски (VPS)"
 
 #: borrowed/goffice/go-charmap-sel.c:219
 msgid "Vietnamese (Windows-1258)"
-msgstr ""
+msgstr "виетнамски (Windows-1258)"
 
 #: borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "визуелен еврејски (ISO-8859-8)"
 
 #: borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
-msgstr ""
+msgstr "западен (IBM-850)"
 
 #: borrowed/goffice/go-charmap-sel.c:224
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "западен (ISO-8859-1)"
 
 #: borrowed/goffice/go-charmap-sel.c:225
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "западен (ISO-8859-15)"
 
 #: borrowed/goffice/go-charmap-sel.c:227
 msgid "Western (MacRoman)"
-msgstr ""
+msgstr "западен (Macромански)"
 
 #: borrowed/goffice/go-charmap-sel.c:228
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "западен (Windows-1252)"
 
 #: borrowed/goffice/go-charmap-sel.c:441
 msgid "Locale: "
-msgstr ""
+msgstr "Локален: "
 
 #: borrowed/goffice/go-charmap-sel.c:476
 msgid "Conversion Direction"
-msgstr ""
+msgstr "Насока на конверзија"
 
 #: borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
@@ -426,7 +429,7 @@ msgstr ""
 
 #: borrowed/goffice/go-optionmenu.c:339
 msgid "Menu"
-msgstr ""
+msgstr "Мени"
 
 #: borrowed/goffice/go-optionmenu.c:339
 msgid "The menu of options"
@@ -896,7 +899,7 @@ msgstr ""
 #: gnucash/report/trep-engine.scm:183 gnucash/report/trep-engine.scm:943
 #: gnucash/report/trep-engine.scm:1065 gnucash/report/trep-engine.scm:1161
 msgid "Date"
-msgstr ""
+msgstr "Датум"
 
 #: gnucash/gnome/assistant-loan.cpp:1888 gnucash/gnome/assistant-loan.cpp:2867
 #: gnucash/gnome/assistant-loan.cpp:2929 gnucash/gnome/assistant-loan.cpp:2942
@@ -1960,7 +1963,7 @@ msgstr ""
 #: gnucash/report/trep-engine.scm:1093 gnucash/report/trep-engine.scm:1223
 #: gnucash/report/trep-engine.scm:1224
 msgid "Memo"
-msgstr ""
+msgstr "Потсетник"
 
 #: gnucash/gnome/dialog-find-transactions2.c:155
 #: gnucash/gnome/dialog-find-transactions.c:155
@@ -2847,7 +2850,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-print-check.glade:290
 #: gnucash/gtkbuilder/gnc-date-format.glade:30
 msgid "Custom"
-msgstr ""
+msgstr "Прилагодена"
 
 #: gnucash/gnome/dialog-print-check.c:2602
 #: gnucash/gtkbuilder/dialog-preferences.glade:3984
@@ -4244,7 +4247,7 @@ msgstr ""
 #: gnucash/report/reports/standard/budget-income-statement.scm:58
 #: gnucash/report/reports/standard/budget.scm:93
 msgid "Budget"
-msgstr ""
+msgstr "Буџет/План"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:945
 #: libgnucash/engine/gnc-budget.cpp:111
@@ -20145,7 +20148,7 @@ msgstr ""
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:189
 #: libgnucash/app-utils/gnc-ui-util.c:955
 msgid "Retained Earnings"
-msgstr ""
+msgstr "Задржана добивка"
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:118
 msgid "Commissions"
@@ -24731,7 +24734,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/income-statement.scm:588
 msgid "Profit & Loss"
-msgstr ""
+msgstr "Добивка&Загуба"
 
 #: gnucash/report/reports/standard/invoice.scm:102
 #: gnucash/report/reports/standard/invoice.scm:234
@@ -25770,7 +25773,7 @@ msgstr ""
 #: gnucash/report/reports/standard/register.scm:388
 #: libgnucash/engine/gnc-lot.c:823
 msgid "Lot"
-msgstr ""
+msgstr "Лот"
 
 #: gnucash/report/reports/standard/register.scm:160
 msgid "Debit Value"
@@ -27838,7 +27841,7 @@ msgstr ""
 
 #: libgnucash/engine/Account.cpp:4497
 msgid "Credit Card"
-msgstr ""
+msgstr "Кредитна картичка"
 
 #: libgnucash/engine/Account.cpp:4499
 msgid "Stock"

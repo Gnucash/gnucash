@@ -379,7 +379,10 @@ GncInvoice *gncInvoiceCopy (const GncInvoice *from)
     // Oops. Do not forget to copy the pointer to the correct currency here.
     invoice->currency = from->currency;
 
-    invoice->doclink = from->doclink;
+    if (from->doclink == is_unset)
+        invoice->doclink = (char*)is_unset;
+    else
+        gncInvoiceSetDocLink (invoice, from->doclink);
 
     // Copy all invoice->entries
     for (node = from->entries; node; node = node->next)

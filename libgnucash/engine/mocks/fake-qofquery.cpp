@@ -59,8 +59,8 @@ public:
     {
         ASSERT_TRUE(query_used((QofQuery*)query));
         auto it = std::find(m_queriesUsed.begin(), m_queriesUsed.end(), query);
-        m_queriesUsed.erase(it);
         m_queriesConsumed.push_back(*it);
+        m_queriesUsed.erase(it);
     }
 
     /* Remove a formerly added QofFakeQueryObject from the pool */

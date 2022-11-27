@@ -1116,7 +1116,7 @@ also show overall period profit & loss."))
 
         (if (and common-currency show-rates?)
             (add-to-table multicol-table-right (G_ "Exchange Rates")
-                          asset-liability
+                          (append asset-liability equity-accounts)
                           #:get-col-header-fn get-exchange-rates-fn
                           #:show-accounts? #f
                           #:show-total? #f))

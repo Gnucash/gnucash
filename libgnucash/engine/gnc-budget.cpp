@@ -23,10 +23,6 @@
 \********************************************************************/
 
 #include <config.h>
-#include <glib.h>
-#include <glib/gprintf.h>
-#include <glib/gi18n.h>
-#include <time.h>
 #include <qof.h>
 #include <qofbookslots.h>
 #include <qofinstance-p.h>
@@ -67,6 +63,11 @@ struct PeriodData
     std::string note;
     bool value_is_set;
     gnc_numeric value;
+    PeriodData () = default;
+    PeriodData (const char* note, bool value_is_set, gnc_numeric value)
+        : note (note)
+        , value_is_set (value_is_set)
+        , value (value) {};
 };
 
 using PeriodDataVec = std::vector<PeriodData>;
@@ -470,6 +471,7 @@ gnc_budget_set_num_periods(GncBudget* budget, guint num_periods)
     GncBudgetPrivate* priv;
 
     g_return_if_fail(GNC_IS_BUDGET(budget));
+    g_return_if_fail(num_periods > 0);
 
     priv = GET_PRIVATE(budget);
     if ( priv->num_periods == num_periods ) return;
@@ -642,13 +644,13 @@ gnc_budget_set_account_period_note(GncBudget *budget, const Account *account,
 
 }
 
-gchar *
+const gchar *
 gnc_budget_get_account_period_note (const GncBudget *budget,
                                     const Account *account, guint period_num)
 {
     g_return_val_if_fail (period_num < GET_PRIVATE(budget)->num_periods, nullptr);
     auto& data = get_perioddata (budget, account, period_num);
-    return data.note.empty () ? nullptr : g_strdup (data.note.c_str());
+    return data.note.empty () ? nullptr : data.note.c_str();
 }
 
 time64
@@ -683,35 +685,27 @@ get_perioddata (const GncBudget *budget, const Account *account, guint period_nu
     if (period_num >= priv->num_periods)
         throw std::out_of_range("period_num >= num_periods");
 
-    auto& map = priv->acct_map;
-    auto map_iter = map->find (account);
+    auto& vec = priv->acct_map->operator[](account);
 
-    if (map_iter == map->end ())
+    if (vec.empty())
     {
         auto budget_kvp { QOF_INSTANCE (budget)->kvp_data };
-
-        PeriodDataVec vec {};
         vec.reserve (priv->num_periods);
 
         for (guint i = 0; i < priv->num_periods; i++)
         {
-            std::string note;
             auto kval1 { budget_kvp->get_slot (make_period_data_path (account, i)) };
             auto kval2 { budget_kvp->get_slot (make_period_note_path (account, i)) };
 
             auto is_set = kval1 && kval1->get_type() == KvpValue::Type::NUMERIC;
             auto num = is_set ? kval1->get<gnc_numeric>() : gnc_numeric_zero ();
+            auto note = (kval2 && kval2->get_type() == KvpValue::Type::STRING) ?
+                kval2->get<const char*>() : "";
 
-            if (kval2 && kval2->get_type() == KvpValue::Type::STRING)
-                note = kval2->get<const char*>();
-
-            PeriodData data { std::move (note), is_set, num };
-            vec.push_back (std::move(data));
+            vec.emplace_back (note, is_set, num);
         }
-        map_iter = map->insert_or_assign(account, std::move(vec)).first;
     }
 
-    auto& vec = map_iter->second;
     return vec.at(period_num);
 }
 

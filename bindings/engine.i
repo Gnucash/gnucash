@@ -154,8 +154,6 @@ functions. */
 %newobject gnc_localtime;
 %newobject gnc_gmtime;
 
-%newobject gnc_budget_get_account_period_note;
-
 /* Parse the header file to generate wrappers */
 %inline {
   static QofIdType QOF_ID_BOOK_SCM (void) { return QOF_ID_BOOK; }
