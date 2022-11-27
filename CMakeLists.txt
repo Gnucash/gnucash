@@ -634,33 +634,33 @@ add_custom_target(check
 
 set(gnucash_DOCS
     AUTHORS
-    ChangeLog.1999
-    ChangeLog.2000
-    ChangeLog.2001
-    ChangeLog.2002
-    ChangeLog.2003
-    ChangeLog.2004
-    ChangeLog.2005
-    ChangeLog.2006
-    ChangeLog.2007
-    ChangeLog.2008
-    ChangeLog.2009
-    ChangeLog.2010
-    ChangeLog.2011
-    ChangeLog.2012
-    ChangeLog.2013
-    ChangeLog.2014
-    ChangeLog.2015
-    ChangeLog.2016
-    ChangeLog.2017
-    ChangeLog.2018
-    ChangeLog.2019
-    ChangeLog.2020
-    ChangeLog.2021
-    DOCUMENTERS
-    HACKING
-    LICENSE
-    NEWS
+    doc/changelogs/ChangeLog.1999
+    doc/changelogs/ChangeLog.2000
+    doc/changelogs/ChangeLog.2001
+    doc/changelogs/ChangeLog.2002
+    doc/changelogs/ChangeLog.2003
+    doc/changelogs/ChangeLog.2004
+    doc/changelogs/ChangeLog.2005
+    doc/changelogs/ChangeLog.2006
+    doc/changelogs/ChangeLog.2007
+    doc/changelogs/ChangeLog.2008
+    doc/changelogs/ChangeLog.2009
+    doc/changelogs/ChangeLog.2010
+    doc/changelogs/ChangeLog.2011
+    doc/changelogs/ChangeLog.2012
+    doc/changelogs/ChangeLog.2013
+    doc/changelogs/ChangeLog.2014
+    doc/changelogs/ChangeLog.2015
+    doc/changelogs/ChangeLog.2016
+    doc/changelogs/ChangeLog.2017
+    doc/changelogs/ChangeLog.2018
+    doc/changelogs/ChangeLog.2019
+    doc/changelogs/ChangeLog.2020
+    doc/changelogs/ChangeLog.2021
+    doc/DOCUMENTERS
+    doc/HACKING
+    doc/LICENSE
+    doc/NEWS
     README.dependencies
 )
 
