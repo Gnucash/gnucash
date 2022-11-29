@@ -106,7 +106,7 @@ static GSettings * gnc_gsettings_get_settings_ptr (const gchar *schema_str)
     {
         auto schema_source {g_settings_schema_source_get_default()};
         auto schema {g_settings_schema_source_lookup(schema_source, full_name,
-                                                     FALSE)};
+                                                     TRUE)};
         gset = g_settings_new_full (schema, nullptr, nullptr);
         DEBUG ("Created gsettings object %p for schema %s", gset, full_name);
         if (G_IS_SETTINGS(gset))
