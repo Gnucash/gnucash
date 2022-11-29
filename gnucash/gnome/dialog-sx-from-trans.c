@@ -380,7 +380,8 @@ sxftd_init( SXFromTransInfo *sxfti )
 
         w = GTK_WIDGET(gtk_builder_get_object(sxfti->builder, "ex_cal_frame" ));
         sxfti->dense_cal_model = gnc_dense_cal_store_new(num_marks);
-        sxfti->example_cal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model(GNC_DENSE_CAL_MODEL(sxfti->dense_cal_model)));
+        sxfti->example_cal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model (GTK_WINDOW(sxfti->dialog),
+                                                                         GNC_DENSE_CAL_MODEL(sxfti->dense_cal_model)));
         g_object_ref_sink(sxfti->example_cal);
 
         g_assert(sxfti->example_cal);

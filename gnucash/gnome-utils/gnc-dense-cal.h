@@ -117,8 +117,9 @@ typedef struct _gdc_mark_data
     GList *ourMarks;
 } gdc_mark_data;
 
-GtkWidget*     gnc_dense_cal_new                    (void);
-GtkWidget*     gnc_dense_cal_new_with_model         (GncDenseCalModel *model);
+GtkWidget*     gnc_dense_cal_new                    (GtkWindow *parent);
+GtkWidget*     gnc_dense_cal_new_with_model         (GtkWindow *parent,
+                                                     GncDenseCalModel *model);
 GType          gnc_dense_cal_get_type               (void);
 
 void gnc_dense_cal_set_model(GncDenseCal *cal, GncDenseCalModel *model);
