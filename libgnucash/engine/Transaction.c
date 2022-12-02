@@ -2927,6 +2927,9 @@ xaccTransReverse (Transaction *orig)
 
     /* Make sure the reverse transaction is not read-only */
     xaccTransClearReadOnly(trans);
+	
+    /* Make sure the online id is unset in the reverse transaction */
+    qof_instance_set (QOF_INSTANCE(trans), "online-id", "", NULL);
 
     qof_instance_set_dirty(QOF_INSTANCE(trans));
     xaccTransCommitEdit(trans);
