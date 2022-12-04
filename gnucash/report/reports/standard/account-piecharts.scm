@@ -504,7 +504,7 @@ balance at a given time"))
                                              (list gnc:pagename-accounts optname-accounts
                                                    (cons acct subaccts))
                                              (list gnc:pagename-accounts optname-levels
-                                                   (+ 1 tree-depth))
+                                                   (min 6 (+ 1 tree-depth)))
                                              (list gnc:pagename-general
                                                    gnc:optname-reportname
                                                    ((if show-fullname?
