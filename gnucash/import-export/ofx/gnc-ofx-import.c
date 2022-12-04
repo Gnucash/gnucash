@@ -651,6 +651,26 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
             gboolean choosing_account = TRUE;
 	    gnc_utf8_strip_invalid (data.unique_id);
             /********* Process an investment transaction **********/
+
+            if (data.invtransactiontype_valid &&
+                    data.invtransactiontype == OFX_INCOME)
+            {
+                DEBUG("Adding investment split; Money flows from or to the cash account");
+                split = xaccMallocSplit(book);
+                xaccTransAppendSplit(transaction, split);
+                xaccAccountInsertSplit(account, split);
+
+                gnc_amount = gnc_ofx_numeric_from_double_txn(
+                                 -ofx_get_investment_amount(&data), transaction);
+                xaccSplitSetBaseValue(split, gnc_amount,
+                                      xaccTransGetCurrency(transaction));
+
+                // Set split memo from ofx transaction name or memo
+                gnc_ofx_set_split_memo(&data, split);
+                if (data.fi_id_valid)
+                    gnc_import_set_split_online_id (split, sanitize_string (data.fi_id));
+            }
+
             /* Note that the ACCT_TYPE_STOCK account type
                should be replaced with something derived from
                data.invtranstype*/
@@ -906,8 +926,9 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
                 }
             }
 
-            if (data.invtransactiontype_valid
-                    && data.invtransactiontype != OFX_REINVEST)
+            if (data.invtransactiontype_valid &&
+                    data.invtransactiontype != OFX_REINVEST &&
+                    data.invtransactiontype != OFX_INCOME)
             {
                 DEBUG("Adding investment split; Money flows from or to the cash account");
                 split = xaccMallocSplit(book);
