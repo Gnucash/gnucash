@@ -9,7 +9,7 @@
 # Sampo Harjula <sahtor.weblate@sahtor.net>, 2022.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.13-pre1\n
+"Project-Id-Version: GnuCash 4.13-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
