@@ -3,10 +3,10 @@
 # Minjae Isaac Kwon <minjae.isaac.kwon@gmail.com>, 2022.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.12-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2022-09-11 23:24+0200\n"
+"Project-Id-Version: GnuCash 4.13-pre1\n
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2022-12-04 19:47-0800\n"
 "PO-Revision-Date: 2022-10-23 08:02+0000\n"
 "Last-Translator: 이정희 <daemul72@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/gnucash/gnucash/"
@@ -600,8 +600,9 @@ msgstr ""
 msgid ""
 "To switch between multiple tabs in the main window, press Control+Page Up/"
 "Down."
-msgstr "주 윈도우의 여러 탭을 이동하려면, Control 과 Page Up/Down 을 동시에 "
-"입력하십시오."
+msgstr ""
+"주 윈도우의 여러 탭을 이동하려면, Control 과 Page Up/Down 을 동시에 입력하십"
+"시오."
 
 #: doc/tip_of_the_day.list.c:82
 msgid ""
@@ -638,9 +639,9 @@ msgid ""
 "financial information you want at a glance. To do so, use the Sample & "
 "Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
-"여러 보고서를 하나의 창에 압축하여 원하는 모든 재무 정보를 한 눈에 볼 수 "
-"있습니다. 이렇게 하려면 샘플 및 사용자 지정 >\"사용자 지정 다중 열 보고서\" "
-"보고서를 사용합니다."
+"여러 보고서를 하나의 창에 압축하여 원하는 모든 재무 정보를 한 눈에 볼 수 있습"
+"니다. 이렇게 하려면 샘플 및 사용자 지정 >\"사용자 지정 다중 열 보고서\" 보고"
+"서를 사용합니다."
 
 #: doc/tip_of_the_day.list.c:101
 msgid ""
@@ -925,7 +926,7 @@ msgstr "대출 상환 옵션: \"%s\""
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:623
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:63
-#: gnucash/import-export/import-main-matcher.c:1539
+#: gnucash/import-export/import-main-matcher.c:1542
 #: gnucash/import-export/import-match-picker.c:393
 #: gnucash/import-export/import-match-picker.c:433
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3700
@@ -1025,7 +1026,7 @@ msgstr "가격 더하는 중 오류."
 #: gnucash/import-export/aqb/gnc-ab-utils.c:565
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:147
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
-#: gnucash/import-export/import-main-matcher.c:1540
+#: gnucash/import-export/import-main-matcher.c:1543
 #: gnucash/import-export/import-match-picker.c:392
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
 #: gnucash/register/ledger-core/split-register-model.c:342
@@ -1090,7 +1091,7 @@ msgstr "편집..."
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3000
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:147
 #: gnucash/report/reports/standard/invoice.scm:774
-#: libgnucash/engine/Account.cpp:176 libgnucash/engine/gncInvoice.c:1116
+#: libgnucash/engine/Account.cpp:176 libgnucash/engine/gncInvoice.c:1119
 msgid "Bill"
 msgstr "계산서"
 
@@ -1103,7 +1104,7 @@ msgstr "내역서"
 #: gnucash/gnome/business-gnome-utils.c:225 gnucash/gnome/dialog-doclink.c:817
 #: gnucash/gnome/dialog-invoice.c:3586
 #: gnucash/gnome/gnc-plugin-page-invoice.c:570
-#: gnucash/gnome/gnc-plugin-page-register.c:655
+#: gnucash/gnome/gnc-plugin-page-register.c:649
 #: gnucash/gnome/gnc-plugin-page-report.c:1859
 #: gnucash/gnome-search/dialog-search.c:1092
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2898
@@ -1121,7 +1122,7 @@ msgstr "내역서"
 #: gnucash/report/reports/standard/taxinvoice.scm:165
 #: gnucash/report/reports/support/receipt.eguile.scm:91
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:106
-#: libgnucash/engine/Account.cpp:157 libgnucash/engine/gncInvoice.c:1114
+#: libgnucash/engine/Account.cpp:157 libgnucash/engine/gncInvoice.c:1117
 msgid "Invoice"
 msgstr "청구서"
 
@@ -1181,8 +1182,9 @@ msgstr "이 계산서 발부 조건 이름을 제공해야 합니다."
 msgid ""
 "You must provide a unique name for this Billing Term. Your choice \"%s\" is "
 "already in use."
-msgstr "이 계산서 발부 조건의 고유한 이름을 제공해야 합니다. 사용자의 \"%s\" 선택 "
-"항목이 이미 사용 중입니다."
+msgstr ""
+"이 계산서 발부 조건의 고유한 이름을 제공해야 합니다. 사용자의 \"%s\" 선택 항"
+"목이 이미 사용 중입니다."
 
 #: gnucash/gnome/dialog-billterms.c:531
 #: gnucash/gnome-utils/gnc-date-delta.c:222
@@ -1261,7 +1263,7 @@ msgstr "상품을 삭제할까요?"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:184
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1112
 #: gnucash/gnome/gnc-plugin-page-register2.c:1630
-#: gnucash/gnome/gnc-plugin-page-register.c:2042
+#: gnucash/gnome/gnc-plugin-page-register.c:2035
 #: gnucash/gnome/gnc-split-reg.c:976 gnucash/gnome/gnc-split-reg.c:1014
 #: gnucash/gnome/gnc-split-reg.c:1236 gnucash/gnome/gnc-split-reg.c:1504
 #: gnucash/gnome/gnc-split-reg.c:1544 gnucash/gnome/window-reconcile2.c:2150
@@ -1270,8 +1272,8 @@ msgstr "상품을 삭제할까요?"
 #: gnucash/gnome-utils/dialog-account.c:718
 #: gnucash/gnome-utils/dialog-options.c:223
 #: gnucash/gnome-utils/dialog-tax-table.c:667
-#: gnucash/gnome-utils/gnc-file.c:118 gnucash/gnome-utils/gnc-file.c:366
-#: gnucash/gnome-utils/gnc-file.c:664 gnucash/gnome-utils/gnc-gui-query.c:300
+#: gnucash/gnome-utils/gnc-file.c:117 gnucash/gnome-utils/gnc-file.c:365
+#: gnucash/gnome-utils/gnc-file.c:663 gnucash/gnome-utils/gnc-gui-query.c:300
 #: gnucash/gnome-utils/gnc-gui-query.c:332
 #: gnucash/gnome-utils/gnc-main-window.c:1341
 #: gnucash/gnome-utils/gnc-main-window.c:1498
@@ -1348,7 +1350,7 @@ msgstr "상품을 삭제할까요?"
 #: gnucash/import-export/aqb/dialog-ab.glade:583
 #: gnucash/import-export/aqb/dialog-ab.glade:891
 #: gnucash/import-export/aqb/dialog-ab.glade:1012
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2028
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2031
 #: gnucash/register/ledger-core/gncEntryLedger.c:920
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:896
 #: gnucash/register/ledger-core/split-register-control.c:1537
@@ -1377,7 +1379,8 @@ msgstr "삭제하기(_D)"
 msgid ""
 "The Company Name field cannot be left blank, please enter a company name or "
 "a person's name."
-msgstr "회사 이름 필드는 비워 둘 수 없습니다. 회사 이름이나 사람 이름을 입력하십시오."
+msgstr ""
+"회사 이름 필드는 비워 둘 수 없습니다. 회사 이름이나 사람 이름을 입력하십시오."
 
 #: gnucash/gnome/dialog-customer.c:322
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
@@ -1517,7 +1520,7 @@ msgid "Placeholder account selected. Please try again."
 msgstr "자리표시자 계정이 선택되었습니다. 다시 시도하십시오."
 
 #: gnucash/gnome/dialog-doclink.c:160
-#: gnucash/gnome/gnc-plugin-page-register.c:4772
+#: gnucash/gnome/gnc-plugin-page-register.c:4765
 msgid "Select document"
 msgstr "전표 선택하기"
 
@@ -1623,7 +1626,7 @@ msgstr "주소를 찾았습니다"
 msgid "Address Not Found"
 msgstr "주소를 찾을 수 없습니다"
 
-#: gnucash/gnome/dialog-doclink.c:597 gnucash/gnome/dialog-imap-editor.c:883
+#: gnucash/gnome/dialog-doclink.c:597 gnucash/gnome/dialog-imap-editor.c:885
 msgid "Total Entries"
 msgstr "전체 항목"
 
@@ -1636,7 +1639,7 @@ msgstr "비즈니스 항목은 수정할 수 없습니다."
 #: gnucash/gnome/gnc-plugin-page-invoice.c:403
 #: gnucash/gnome/gnc-plugin-page-invoice.c:424
 #: gnucash/gnome/gnc-plugin-page-invoice.c:1361
-#: gnucash/gnome/gnc-plugin-page-register.c:653
+#: gnucash/gnome/gnc-plugin-page-register.c:647
 msgid "Manage Document Link"
 msgstr "전표 링크 관리하기"
 
@@ -1671,7 +1674,7 @@ msgstr "거래 전표 링크"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:625
 #: gnucash/import-export/csv-exp/csv-tree-export.c:156
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:65
-#: gnucash/import-export/import-main-matcher.c:1543
+#: gnucash/import-export/import-main-matcher.c:1546
 #: gnucash/import-export/import-match-picker.c:395
 #: gnucash/import-export/import-match-picker.c:435
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3710
@@ -1752,8 +1755,8 @@ msgstr "사원 이름"
 msgid "Username"
 msgstr "사용자명"
 
-#: gnucash/gnome/dialog-employee.c:720 gnucash/gnome/dialog-sx-editor2.c:1755
-#: gnucash/gnome/dialog-sx-editor.c:1823 gnucash/gnome/dialog-tax-info.c:1200
+#: gnucash/gnome/dialog-employee.c:720 gnucash/gnome/dialog-sx-editor2.c:1756
+#: gnucash/gnome/dialog-sx-editor.c:1824 gnucash/gnome/dialog-tax-info.c:1200
 #: gnucash/gnome-utils/gnc-dense-cal.c:350
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:96
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:368
@@ -1860,7 +1863,7 @@ msgstr "마감 분개"
 #: gnucash/gnome/dialog-find-transactions2.c:120
 #: gnucash/gnome/dialog-find-transactions.c:118
 #: gnucash/gnome/gnc-plugin-page-register2.c:506
-#: gnucash/gnome/gnc-plugin-page-register.c:651
+#: gnucash/gnome/gnc-plugin-page-register.c:645
 #: gnucash/gnome/window-reconcile2.c:1270 gnucash/gnome/window-reconcile.c:1431
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:617
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:630
@@ -1883,7 +1886,7 @@ msgstr "주식 가격"
 #: gnucash/gtkbuilder/dialog-payment.glade:418
 #: gnucash/gtkbuilder/dialog-transfer.glade:102
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:54
-#: gnucash/import-export/import-main-matcher.c:1542
+#: gnucash/import-export/import-main-matcher.c:1545
 #: gnucash/import-export/import-match-picker.c:394
 #: gnucash/import-export/import-match-picker.c:434
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3721
@@ -1933,8 +1936,8 @@ msgstr "붙인 날짜"
 #: gnucash/gnome/dialog-find-transactions.c:132
 #: gnucash/gnome/dialog-find-transactions.c:171
 #: gnucash/gnome/dialog-find-transactions.c:177
-#: gnucash/gnome/gnc-plugin-page-register.c:2532
-#: gnucash/gnome/gnc-plugin-page-register.c:4196
+#: gnucash/gnome/gnc-plugin-page-register.c:2525
+#: gnucash/gnome/gnc-plugin-page-register.c:4189
 #: gnucash/gnome-search/dialog-search.c:878
 #: gnucash/gnome-search/dialog-search.c:884
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
@@ -1948,7 +1951,7 @@ msgstr "번호/작업"
 #: gnucash/gnome/dialog-find-transactions.c:133
 #: gnucash/gnome/dialog-find-transactions.c:170
 #: gnucash/gnome/dialog-find-transactions.c:178
-#: gnucash/gnome/gnc-plugin-page-register.c:2537
+#: gnucash/gnome/gnc-plugin-page-register.c:2530
 #: gnucash/gnome/gnc-split-reg.c:705 gnucash/gnome-search/dialog-search.c:877
 #: gnucash/gnome-search/dialog-search.c:885
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2751
@@ -1972,8 +1975,8 @@ msgstr "작업"
 #: gnucash/gnome/dialog-find-transactions.c:136
 #: gnucash/gnome/dialog-find-transactions.c:173
 #: gnucash/gnome/dialog-find-transactions.c:179
-#: gnucash/gnome/gnc-plugin-page-register.c:2531
-#: gnucash/gnome/gnc-plugin-page-register.c:4195
+#: gnucash/gnome/gnc-plugin-page-register.c:2524
+#: gnucash/gnome/gnc-plugin-page-register.c:4188
 #: gnucash/gnome-search/dialog-search.c:880
 #: gnucash/gnome-search/dialog-search.c:886
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:615
@@ -1988,7 +1991,7 @@ msgstr "거래 번호"
 #: gnucash/gnome/dialog-find-transactions.c:137
 #: gnucash/gnome/dialog-find-transactions.c:172
 #: gnucash/gnome/dialog-find-transactions.c:180
-#: gnucash/gnome/gnc-plugin-page-register.c:2536
+#: gnucash/gnome/gnc-plugin-page-register.c:2529
 #: gnucash/gnome/gnc-split-reg.c:693 gnucash/gnome-search/dialog-search.c:879
 #: gnucash/gnome-search/dialog-search.c:887
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2767
@@ -2017,7 +2020,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-transfer.glade:205
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:74
-#: gnucash/import-export/import-main-matcher.c:1544
+#: gnucash/import-export/import-main-matcher.c:1547
 #: gnucash/import-export/import-match-picker.c:396
 #: gnucash/import-export/import-match-picker.c:436
 #: gnucash/register/ledger-core/split-register-model.c:356
@@ -2101,7 +2104,7 @@ msgid "To see the invalid mappings, use a filter of '%s'"
 msgstr ""
 
 #: gnucash/gnome/dialog-imap-editor.c:368
-#: gnucash/gnome/dialog-imap-editor.c:605
+#: gnucash/gnome/dialog-imap-editor.c:607
 msgid "Map Account NOT found"
 msgstr "맵 계정을 찾을 수 없음"
 
@@ -2109,28 +2112,28 @@ msgstr "맵 계정을 찾을 수 없음"
 msgid "(Note, if there is a large number, it may take a while)"
 msgstr ""
 
-#: gnucash/gnome/dialog-imap-editor.c:704
+#: gnucash/gnome/dialog-imap-editor.c:706
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:123
 msgid "Bayesian"
 msgstr ""
 
-#: gnucash/gnome/dialog-imap-editor.c:719
+#: gnucash/gnome/dialog-imap-editor.c:721
 msgid "Description Field"
 msgstr "설명 필드"
 
-#: gnucash/gnome/dialog-imap-editor.c:722
+#: gnucash/gnome/dialog-imap-editor.c:724
 msgid "Memo Field"
 msgstr ""
 
-#: gnucash/gnome/dialog-imap-editor.c:725
+#: gnucash/gnome/dialog-imap-editor.c:727
 msgid "CSV Account Map"
 msgstr "CSV 계정 맵"
 
-#: gnucash/gnome/dialog-imap-editor.c:765
+#: gnucash/gnome/dialog-imap-editor.c:767
 msgid "Online Id"
 msgstr "온라인 ID"
 
-#: gnucash/gnome/dialog-imap-editor.c:791
+#: gnucash/gnome/dialog-imap-editor.c:793
 msgid "Online HBCI"
 msgstr "온라인 HBCI"
 
@@ -2226,7 +2229,7 @@ msgstr "총 청구금액:"
 #: gnucash/gnome/dialog-invoice.c:1904 gnucash/gnome/dialog-payment.c:1366
 #: gnucash/gtkbuilder/dialog-invoice.glade:857
 #: gnucash/report/reports/standard/invoice.scm:780
-#: libgnucash/engine/gncInvoice.c:1122
+#: libgnucash/engine/gncInvoice.c:1125
 msgid "Credit Note"
 msgstr "대변표"
 
@@ -2340,7 +2343,7 @@ msgstr "청구서 보기/편집"
 #: gnucash/gnome/dialog-invoice.c:3359
 #: gnucash/gnome/gnc-plugin-page-invoice.c:455
 #: gnucash/gnome/gnc-plugin-page-register2.c:501
-#: gnucash/gnome/gnc-plugin-page-register.c:646
+#: gnucash/gnome/gnc-plugin-page-register.c:640
 msgid "Duplicate"
 msgstr "복제"
 
@@ -2709,7 +2712,8 @@ msgstr "계정 구조에서 이체 계정을 선택해야 합니다."
 msgid ""
 "No documents were selected to assign this payment to. This may create an "
 "unattached payment."
-msgstr "이 지급을 할당할 전표가 선택되지 않았습니다. 이로 인해 첨부되지 않은 지불이 "
+msgstr ""
+"이 지급을 할당할 전표가 선택되지 않았습니다. 이로 인해 첨부되지 않은 지불이 "
 "발생할 수 있습니다."
 
 #: gnucash/gnome/dialog-payment.c:542 gnucash/gnome/dialog-payment.c:1361
@@ -2777,8 +2781,8 @@ msgid ""
 "\" before you continue to process this payment. Perhaps you want to create "
 "an Invoice or Bill first?"
 msgstr ""
-"유효한 \"기장 대상\" 계정과목이 없습니다. 이 지불을 계속 처리하기 전에 \"%s\""
-" 유형의 계정을 만드십시오. 청구서 또는 계산서를 먼저 만드시겠습니까?"
+"유효한 \"기장 대상\" 계정과목이 없습니다. 이 지불을 계속 처리하기 전에 \"%s"
+"\" 유형의 계정을 만드십시오. 청구서 또는 계산서를 먼저 만드시겠습니까?"
 
 #: gnucash/gnome/dialog-payment.c:1610
 msgid ""
@@ -2805,7 +2809,7 @@ msgstr "계속하기"
 #: gnucash/gnome/dialog-payment.c:1631
 #: gnucash/gnome/gnc-plugin-page-invoice.c:453
 #: gnucash/gnome/gnc-plugin-page-register2.c:499
-#: gnucash/gnome/gnc-plugin-page-register.c:644
+#: gnucash/gnome/gnc-plugin-page-register.c:638
 #: gnucash/gnome-utils/gnc-cell-renderer-date.c:160
 msgid "Cancel"
 msgstr "취소"
@@ -3065,23 +3069,23 @@ msgstr ""
 "실행되지 않을 예정된 거래를 생성하려고 시도했습니다. 정말 이 작업을 수행하겠"
 "습니까?"
 
-#: gnucash/gnome/dialog-sx-editor2.c:1301
+#: gnucash/gnome/dialog-sx-editor2.c:1302
 msgid ""
 "Note: If you have already accepted changes to the Template, Cancel will not "
 "revoke them."
 msgstr ""
 
-#: gnucash/gnome/dialog-sx-editor2.c:1347 gnucash/gnome/dialog-sx-editor.c:1412
+#: gnucash/gnome/dialog-sx-editor2.c:1348 gnucash/gnome/dialog-sx-editor.c:1413
 msgid "(never)"
 msgstr "(결코 아님)"
 
-#: gnucash/gnome/dialog-sx-editor2.c:1515 gnucash/gnome/dialog-sx-editor.c:1574
+#: gnucash/gnome/dialog-sx-editor2.c:1516 gnucash/gnome/dialog-sx-editor.c:1575
 msgid ""
 "The current template transaction has been changed. Would you like to record "
 "the changes?"
 msgstr ""
 
-#: gnucash/gnome/dialog-sx-editor2.c:1782 gnucash/gnome/dialog-sx-editor.c:1850
+#: gnucash/gnome/dialog-sx-editor2.c:1783 gnucash/gnome/dialog-sx-editor.c:1851
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:246
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:252
 msgid "Scheduled Transactions"
@@ -3091,7 +3095,8 @@ msgstr "표에 기입된 거래"
 msgid ""
 "Scheduled Transactions with variables or involving more than one commodity "
 "cannot be automatically created."
-msgstr "변수가 있거나 둘 이상의 상품을 포함하는 표에 기입된 거래는 자동으로 만들 수 "
+msgstr ""
+"변수가 있거나 둘 이상의 상품을 포함하는 표에 기입된 거래는 자동으로 만들 수 "
 "없습니다."
 
 #: gnucash/gnome/dialog-sx-editor.c:679
@@ -3122,13 +3127,13 @@ msgstr ""
 msgid "Split with memo %s has an unparsable Debit Formula."
 msgstr ""
 
-#: gnucash/gnome/dialog-sx-from-trans.c:557
+#: gnucash/gnome/dialog-sx-from-trans.c:558
 msgid ""
 "The Scheduled Transaction is unbalanced. You are strongly encouraged to "
 "correct this situation."
 msgstr "자동 이체가 수지가 맞지 않습니다. 이 상황을 조속히 정정하시오."
 
-#: gnucash/gnome/dialog-sx-from-trans.c:789
+#: gnucash/gnome/dialog-sx-from-trans.c:790
 msgid ""
 "Cannot create a Scheduled Transaction from a Transaction currently being "
 "edited. Please Enter the Transaction before Scheduling."
@@ -3180,7 +3185,8 @@ msgid ""
 msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transactions automatically created)"
-msgstr[0] "현재 입력할 표에 기입된 거래가 없습니다. (%d개 거래가 자동으로 만들어짐)"
+msgstr[0] ""
+"현재 입력할 표에 기입된 거래가 없습니다. (%d개 거래가 자동으로 만들어짐)"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1003
 #: gnucash/gnome-search/dialog-search.c:1104
@@ -3301,7 +3307,7 @@ msgstr "비용"
 
 #: gnucash/gnome/gnc-budget-view.c:508
 #: gnucash/gnome/gnc-plugin-page-register2.c:497
-#: gnucash/gnome/gnc-plugin-page-register.c:642
+#: gnucash/gnome/gnc-plugin-page-register.c:636
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2866
 #: gnucash/register/ledger-core/split-register.c:2561
 #: gnucash/register/ledger-core/split-register-layout.c:719
@@ -3314,7 +3320,7 @@ msgstr "이체"
 msgid "Remaining to Budget"
 msgstr "남은 예산"
 
-#: gnucash/gnome/gnc-budget-view.c:1662 gnucash/gnome/window-reconcile2.c:1094
+#: gnucash/gnome/gnc-budget-view.c:1660 gnucash/gnome/window-reconcile2.c:1094
 #: gnucash/gnome/window-reconcile.c:1167
 #: gnucash/gnome-utils/gnc-tree-view-account.c:924
 #: gnucash/report/html-acct-table.scm:803 gnucash/report/reports/aging.scm:544
@@ -3363,7 +3369,7 @@ msgid "Open an existing GnuCash file"
 msgstr "기존 GnuCash 파일 열기"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:122
-#: gnucash/gnome-utils/gnc-file.c:100 gnucash/gnome-utils/gnc-file.c:666
+#: gnucash/gnome-utils/gnc-file.c:99 gnucash/gnome-utils/gnc-file.c:665
 #: gnucash/gnome-utils/gnc-main-window.c:1342
 #: gnucash/html/gnc-html-webkit1.c:1198
 msgid "_Save"
@@ -3542,7 +3548,8 @@ msgid ""
 msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transactions automatically created)"
-msgstr[0] "현재 입력할 표에 기입된 거래가 없습니다. (%d개의 거래가 자동으로 만들어짐)"
+msgstr[0] ""
+"현재 입력할 표에 기입된 거래가 없습니다. (%d개의 거래가 자동으로 만들어짐)"
 
 #: gnucash/gnome/gnc-plugin-budget.c:63
 msgid "_New Budget"
@@ -4084,8 +4091,8 @@ msgstr "기록부2(_R)"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:412
 #: gnucash/gnome/gnc-plugin-page-budget.c:231
 #: gnucash/gnome/window-reconcile2.c:1659 gnucash/gnome/window-reconcile.c:1835
-#: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
-#: gnucash/gnome-utils/gnc-file.c:1141
+#: gnucash/gnome-utils/gnc-file.c:89 gnucash/gnome-utils/gnc-file.c:326
+#: gnucash/gnome-utils/gnc-file.c:1140
 msgid "Open"
 msgstr "열기"
 
@@ -4112,14 +4119,14 @@ msgstr "새로 만들기"
 #: gnucash/gnome/gnc-plugin-page-budget.c:232
 #: gnucash/gnome/gnc-plugin-page-invoice.c:454
 #: gnucash/gnome/gnc-plugin-page-register2.c:500
-#: gnucash/gnome/gnc-plugin-page-register.c:645
+#: gnucash/gnome/gnc-plugin-page-register.c:639
 msgid "Delete"
 msgstr "삭제하기"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:463
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1977
-#: gnucash/gnome/gnc-plugin-page-register.c:1990
-#: gnucash/gnome/gnc-plugin-page-register.c:5080
+#: gnucash/gnome/gnc-plugin-page-register.c:1983
+#: gnucash/gnome/gnc-plugin-page-register.c:5073
 msgid "'Check & Repair' is currently running, do you want to abort it?"
 msgstr ""
 
@@ -4347,7 +4354,7 @@ msgid "Budget"
 msgstr "예산"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:945
-#: libgnucash/engine/gnc-budget.cpp:111
+#: libgnucash/engine/gnc-budget.cpp:112
 msgid "Unnamed Budget"
 msgstr "미지정 예산"
 
@@ -4707,21 +4714,23 @@ msgstr "이 청구서의 소유주의 회사 보고서 창 열기"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:404
 #: gnucash/gnome/gnc-plugin-page-invoice.c:425
 #: gnucash/gnome/gnc-plugin-page-invoice.c:446
-#: gnucash/gnome/gnc-plugin-page-register.c:654
+#: gnucash/gnome/gnc-plugin-page-register.c:648
 msgid "Open Linked Document"
 msgstr "링크된 전표 열기"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:388
 msgid ""
 "Use the current layout as default for all customer invoices and credit notes"
-msgstr "모든 고객 청구서 및 대변표에 대해 현재 레이아웃을 기본값으로 사용합니다"
+msgstr ""
+"모든 고객 청구서 및 대변표에 대해 현재 레이아웃을 기본값으로 사용합니다"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:389
 msgid ""
 "Reset default layout for all customer invoices and credit notes back to "
 "built-in defaults and update the current page accordingly"
-msgstr "모든 고객 청구서 및 대변표에 대한 기본 레이아웃을 기본 설정으로 재설정하고 "
-"그에 따라 현재 페이지를 업데이트합니다"
+msgstr ""
+"모든 고객 청구서 및 대변표에 대한 기본 레이아웃을 기본 설정으로 재설정하고 그"
+"에 따라 현재 페이지를 업데이트합니다"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:394
 msgid "Make a printable bill"
@@ -4761,14 +4770,16 @@ msgstr "이 계산서 소유자에 대한 거래처 보고서 창 열기"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:409
 msgid "Use the current layout as default for all vendor bills and credit notes"
-msgstr "모든 거래처 계산서 및 대변표에 대해 현재 레이아웃을 기본값으로 사용합니다"
+msgstr ""
+"모든 거래처 계산서 및 대변표에 대해 현재 레이아웃을 기본값으로 사용합니다"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:410
 msgid ""
 "Reset default layout for all vendor bills and credit notes back to built-in "
 "defaults and update the current page accordingly"
-msgstr "모든 거래처 계산서 및 대변표의 기본 레이아웃을 기본 제공 기본값으로 "
-"재설정하고 그에 따라 현재 페이지를 업데이트합니다"
+msgstr ""
+"모든 거래처 계산서 및 대변표의 기본 레이아웃을 기본 제공 기본값으로 재설정하"
+"고 그에 따라 현재 페이지를 업데이트합니다"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:415
 msgid "Make a printable voucher"
@@ -4809,14 +4820,16 @@ msgstr "이 내역서 소유자에 대한 사원 보고서 창 열기"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:430
 msgid ""
 "Use the current layout as default for all employee vouchers and credit notes"
-msgstr "모든 사원 내역서 및 대변표에 대해 현재 레이아웃을 기본값으로 사용합니다"
+msgstr ""
+"모든 사원 내역서 및 대변표에 대해 현재 레이아웃을 기본값으로 사용합니다"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:431
 msgid ""
 "Reset default layout for all employee vouchers and credit notes back to "
 "built-in defaults and update the current page accordingly"
-msgstr "모든 사원 내역서 및 대변표에 대한 기본 레이아웃을 기본 설정으로 재설정하고 "
-"그에 따라 현재 페이지를 업데이트합니다"
+msgstr ""
+"모든 사원 내역서 및 대변표에 대한 기본 레이아웃을 기본 설정으로 재설정하고 그"
+"에 따라 현재 페이지를 업데이트합니다"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:436
 msgid "Make a printable credit note"
@@ -4860,7 +4873,7 @@ msgstr "전표 링크 관리하기..."
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:452
 #: gnucash/gnome/gnc-plugin-page-register2.c:498
-#: gnucash/gnome/gnc-plugin-page-register.c:643
+#: gnucash/gnome/gnc-plugin-page-register.c:637
 msgid "Enter"
 msgstr "입력하기"
 
@@ -4876,7 +4889,7 @@ msgstr "아래로"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:458
 #: gnucash/gnome/gnc-plugin-page-register2.c:505
-#: gnucash/gnome/gnc-plugin-page-register.c:650
+#: gnucash/gnome/gnc-plugin-page-register.c:644
 msgid "Blank"
 msgstr "공백"
 
@@ -5341,8 +5354,9 @@ msgstr "이중선(_D)"
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Document\" for "
 "each transaction."
-msgstr "각 거래에 대해 \"작업\", \"메모\" 및 \"링크된 전표\"가 있는 두 번째 줄을 "
-"표시합니다."
+msgstr ""
+"각 거래에 대해 \"작업\", \"메모\" 및 \"링크된 전표\"가 있는 두 번째 줄을 표시"
+"합니다."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:430
 msgid "Show _Extra Dates"
@@ -5395,23 +5409,23 @@ msgid "Show expanded transactions with all splits"
 msgstr "전체 스플릿의 확장 거래 보이기"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:502
-#: gnucash/gnome/gnc-plugin-page-register.c:647
+#: gnucash/gnome/gnc-plugin-page-register.c:641
 #: gnucash/gnome-search/dialog-search.c:1108
 msgid "Split"
 msgstr "분할"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:503
-#: gnucash/gnome/gnc-plugin-page-register.c:648
+#: gnucash/gnome/gnc-plugin-page-register.c:642
 msgid "Jump"
 msgstr "이동"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:504
-#: gnucash/gnome/gnc-plugin-page-register.c:649
+#: gnucash/gnome/gnc-plugin-page-register.c:643
 msgid "Schedule"
 msgstr "일정"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:507
-#: gnucash/gnome/gnc-plugin-page-register.c:652
+#: gnucash/gnome/gnc-plugin-page-register.c:646
 #: gnucash/gnome/window-autoclear.c:88
 msgid "Auto-clear"
 msgstr "자동 지우기"
@@ -5429,13 +5443,13 @@ msgstr "일반 분개장2"
 #. Translators: %s is the name
 #. of the tab page
 #: gnucash/gnome/gnc-plugin-page-register2.c:1620
-#: gnucash/gnome/gnc-plugin-page-register.c:2031
+#: gnucash/gnome/gnc-plugin-page-register.c:2024
 #, c-format
 msgid "Save changes to %s?"
 msgstr "%s에 변경 내용을 저장하시겠습니까?"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1624
-#: gnucash/gnome/gnc-plugin-page-register.c:2036
+#: gnucash/gnome/gnc-plugin-page-register.c:2029
 msgid ""
 "This register has pending changes to a transaction. Would you like to save "
 "the changes to this transaction, discard the transaction, or cancel the "
@@ -5445,12 +5459,12 @@ msgstr ""
 "을 저장하시겠습니까, 거래를 취소하시겠습니까, 아니면 작업을 취소하시겠습니까?"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1627
-#: gnucash/gnome/gnc-plugin-page-register.c:2039
+#: gnucash/gnome/gnc-plugin-page-register.c:2032
 msgid "_Discard Transaction"
 msgstr "거래 무시(_D)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1631
-#: gnucash/gnome/gnc-plugin-page-register.c:2043
+#: gnucash/gnome/gnc-plugin-page-register.c:2036
 msgid "_Save Transaction"
 msgstr "거래 저장하기(_S)"
 
@@ -5459,35 +5473,35 @@ msgstr "거래 저장하기(_S)"
 #: gnucash/gnome/gnc-plugin-page-register2.c:1707
 #: gnucash/gnome/gnc-plugin-page-register2.c:1730
 #: gnucash/gnome/gnc-plugin-page-register2.c:1778
-#: gnucash/gnome/gnc-plugin-page-register.c:2076
-#: gnucash/gnome/gnc-plugin-page-register.c:2111
-#: gnucash/gnome/gnc-plugin-page-register.c:2124
-#: gnucash/gnome/gnc-plugin-page-register.c:2183
-#: gnucash/gnome/gnc-plugin-page-register.c:2289
-#: gnucash/gnome/gnc-plugin-page-register.c:2428
+#: gnucash/gnome/gnc-plugin-page-register.c:2069
+#: gnucash/gnome/gnc-plugin-page-register.c:2104
+#: gnucash/gnome/gnc-plugin-page-register.c:2117
+#: gnucash/gnome/gnc-plugin-page-register.c:2176
+#: gnucash/gnome/gnc-plugin-page-register.c:2282
+#: gnucash/gnome/gnc-plugin-page-register.c:2421
 msgid "unknown"
 msgstr "알 수 없음"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1681
 #: gnucash/gnome/gnc-plugin-page-register2.c:2416
-#: gnucash/gnome/gnc-plugin-page-register.c:928
-#: gnucash/gnome/gnc-plugin-page-register.c:2097
-#: gnucash/gnome/gnc-plugin-page-register.c:3533
+#: gnucash/gnome/gnc-plugin-page-register.c:922
+#: gnucash/gnome/gnc-plugin-page-register.c:2090
+#: gnucash/gnome/gnc-plugin-page-register.c:3526
 #: gnucash/report/reports/standard/general-journal.scm:36
 msgid "General Journal"
 msgstr "일반 분개장"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1683
 #: gnucash/gnome/gnc-plugin-page-register2.c:2422
-#: gnucash/gnome/gnc-plugin-page-register.c:2099
-#: gnucash/gnome/gnc-plugin-page-register.c:3539
+#: gnucash/gnome/gnc-plugin-page-register.c:2092
+#: gnucash/gnome/gnc-plugin-page-register.c:3532
 msgid "Portfolio"
 msgstr "포트폴리오"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1685
 #: gnucash/gnome/gnc-plugin-page-register2.c:2428
-#: gnucash/gnome/gnc-plugin-page-register.c:2101
-#: gnucash/gnome/gnc-plugin-page-register.c:3545
+#: gnucash/gnome/gnc-plugin-page-register.c:2094
+#: gnucash/gnome/gnc-plugin-page-register.c:3538
 msgid "Search Results"
 msgstr "결과 찾기"
 
@@ -5496,17 +5510,17 @@ msgid "General Journal Report"
 msgstr "일반 분개장 보고서"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2424
-#: gnucash/gnome/gnc-plugin-page-register.c:3541
+#: gnucash/gnome/gnc-plugin-page-register.c:3534
 msgid "Portfolio Report"
 msgstr "포트폴리오 보고서"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2430
-#: gnucash/gnome/gnc-plugin-page-register.c:3547
+#: gnucash/gnome/gnc-plugin-page-register.c:3540
 msgid "Search Results Report"
 msgstr "결과 보고서 찾기"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2434
-#: gnucash/gnome/gnc-plugin-page-register.c:3551
+#: gnucash/gnome/gnc-plugin-page-register.c:3544
 #: gnucash/gtkbuilder/dialog-preferences.glade:3160
 #: gnucash/report/reports/standard/general-journal.scm:37
 #: gnucash/report/reports/standard/register.scm:64
@@ -5519,12 +5533,12 @@ msgid "Register Report"
 msgstr "등록 보고"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2452
-#: gnucash/gnome/gnc-plugin-page-register.c:3569
+#: gnucash/gnome/gnc-plugin-page-register.c:3562
 msgid "and subaccounts"
 msgstr "하위계정"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2484
-#: gnucash/gnome/gnc-plugin-page-register.c:3598
+#: gnucash/gnome/gnc-plugin-page-register.c:3591
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2864
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2883
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2901
@@ -5544,7 +5558,7 @@ msgid "Credit"
 msgstr "신용"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2487
-#: gnucash/gnome/gnc-plugin-page-register.c:3602
+#: gnucash/gnome/gnc-plugin-page-register.c:3595
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3101
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3106
 #: gnucash/gtkbuilder/dialog-payment.glade:300
@@ -5558,36 +5572,36 @@ msgid "Debit"
 msgstr "입금"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2653
-#: gnucash/gnome/gnc-plugin-page-register.c:3738
+#: gnucash/gnome/gnc-plugin-page-register.c:3731
 msgid "Print checks from multiple accounts?"
 msgstr "여러 계정과목에서 수표를 인쇄하시겠습니까?"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2655
-#: gnucash/gnome/gnc-plugin-page-register.c:3740
+#: gnucash/gnome/gnc-plugin-page-register.c:3733
 msgid ""
 "This search result contains splits from more than one account. Do you want "
 "to print the checks even though they are not all from the same account?"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2665
-#: gnucash/gnome/gnc-plugin-page-register.c:3750
+#: gnucash/gnome/gnc-plugin-page-register.c:3743
 msgid "_Print checks"
 msgstr "수표 인쇄하기(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2685
-#: gnucash/gnome/gnc-plugin-page-register.c:3769
+#: gnucash/gnome/gnc-plugin-page-register.c:3762
 msgid ""
 "You can only print checks from a bank account register or search results."
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2897
-#: gnucash/gnome/gnc-plugin-page-register.c:3966
+#: gnucash/gnome/gnc-plugin-page-register.c:3959
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr "통장정리된 또는 청산된 스플릿을 가진 거래를 비워둘 수 없습니다."
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register2.c:3040
-#: gnucash/gnome/gnc-plugin-page-register.c:4248
+#: gnucash/gnome/gnc-plugin-page-register.c:4241
 #: gnucash/gnome-utils/gnc-tree-view-account.c:2330
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1175
 #, c-format
@@ -5622,7 +5636,7 @@ msgstr "분리 제거(_R)"
 msgid "_Sort By..."
 msgstr "정렬(_S)..."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:490
+#: gnucash/gnome/gnc-plugin-page-register.c:491
 #, fuzzy
 msgid "Stock Ass_istant"
 msgstr "주식 분할 자세히"
@@ -5641,38 +5655,38 @@ msgstr "날짜로 가기(_G)"
 msgid "Move to the split at the specified date"
 msgstr "양 쪽 보이기( 합계에서 빈 거래 포함)"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:850
+#: gnucash/gnome/gnc-plugin-page-register.c:844
 msgid ""
 "You have tried to open an account in the old register while it is open in "
 "the new register."
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3411
+#: gnucash/gnome/gnc-plugin-page-register.c:3404
 msgid "Start Date:"
 msgstr "시작 날짜:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3418
+#: gnucash/gnome/gnc-plugin-page-register.c:3411
 msgid "Show previous number of days:"
 msgstr "이전 일 수 표시하기:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3426
+#: gnucash/gnome/gnc-plugin-page-register.c:3419
 msgid "End Date:"
 msgstr "종료 날짜:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3436
+#: gnucash/gnome/gnc-plugin-page-register.c:3429
 #: gnucash/report/trep-engine.scm:149
 #, fuzzy
 msgid "Unreconciled"
 msgstr "통장정리 안함(_U)"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3438
+#: gnucash/gnome/gnc-plugin-page-register.c:3431
 #: gnucash/gnome-search/search-reconciled.c:224
 #: gnucash/gnome-utils/gnc-tree-view-account.c:876
 #: gnucash/report/trep-engine.scm:150
 msgid "Cleared"
 msgstr "청산됨"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3440
+#: gnucash/gnome/gnc-plugin-page-register.c:3433
 #: gnucash/gnome-search/search-reconciled.c:227
 #: gnucash/gnome-utils/gnc-tree-view-account.c:890
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:75
@@ -5681,60 +5695,60 @@ msgstr "청산됨"
 msgid "Reconciled"
 msgstr "통장정리됨"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3442
+#: gnucash/gnome/gnc-plugin-page-register.c:3435
 #: gnucash/gnome-search/search-reconciled.c:230
 #: gnucash/report/trep-engine.scm:152
 msgid "Frozen"
 msgstr "동결"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3444
+#: gnucash/gnome/gnc-plugin-page-register.c:3437
 #: gnucash/gnome-search/search-reconciled.c:233
 #: gnucash/report/trep-engine.scm:153
 msgid "Voided"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3454
+#: gnucash/gnome/gnc-plugin-page-register.c:3447
 msgid "Show:"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3462
+#: gnucash/gnome/gnc-plugin-page-register.c:3455
 msgid "Hide:"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3473
+#: gnucash/gnome/gnc-plugin-page-register.c:3466
 msgid "Filter By:"
 msgstr "필터링 기준:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3535
-#: gnucash/gnome/gnc-plugin-page-register.c:3553
+#: gnucash/gnome/gnc-plugin-page-register.c:3528
+#: gnucash/gnome/gnc-plugin-page-register.c:3546
 #: gnucash/report/reports/standard/transaction.scm:33
 #, fuzzy
 msgid "Transaction Report"
 msgstr "거래 보고서(_R)"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3973
+#: gnucash/gnome/gnc-plugin-page-register.c:3966
 #: gnucash/gnome/gnc-split-reg.c:1161
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:68
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
 msgstr "이 거래는 주석이 달린 읽기만으로 표시됨: '%s'"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4062
+#: gnucash/gnome/gnc-plugin-page-register.c:4055
 #: gnucash/gnome/gnc-split-reg.c:1132
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1121
 msgid "A reversing entry has already been created for this transaction."
 msgstr "이 계정을 위하여 역 엔트리를 벌써 생성되었습니다."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4063
+#: gnucash/gnome/gnc-plugin-page-register.c:4056
 msgid "Jump to the transaction?"
 msgstr "거래로 건너뛰시겠습니까?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4070
+#: gnucash/gnome/gnc-plugin-page-register.c:4063
 #, fuzzy
 msgid "Reverse Transaction"
 msgstr "역거래 더하기(_R)"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4071
+#: gnucash/gnome/gnc-plugin-page-register.c:4064
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:73
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:625
 #, fuzzy
@@ -5742,7 +5756,7 @@ msgid "New Transaction Information"
 msgstr "<b>새 거래 정보</b>"
 
 #. Translators: The %s is the name of the plugin page
-#: gnucash/gnome/gnc-plugin-page-register.c:4160
+#: gnucash/gnome/gnc-plugin-page-register.c:4153
 #, c-format
 msgid "Sort %s by..."
 msgstr "%s 정렬 순서..."
@@ -5750,26 +5764,26 @@ msgstr "%s 정렬 순서..."
 #. Translators: %s refer to the following in
 #. order: invoice type, invoice ID, owner name,
 #. posted date, amount
-#: gnucash/gnome/gnc-plugin-page-register.c:4763
+#: gnucash/gnome/gnc-plugin-page-register.c:4756
 #, c-format
 msgid "%s %s from %s, posted %s, amount %s"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4773
+#: gnucash/gnome/gnc-plugin-page-register.c:4766
 msgid "Several documents are linked with this transaction. Please choose one:"
 msgstr "여러 전표가 이 거래와 링크되어 있습니다. 하나를 고르십시오:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4774
+#: gnucash/gnome/gnc-plugin-page-register.c:4767
 #: gnucash/gnome-search/dialog-search.c:323
 #: gnucash/gnome-utils/gnc-cell-renderer-date.c:172
 msgid "Select"
 msgstr "선택"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4825
+#: gnucash/gnome/gnc-plugin-page-register.c:4818
 msgid "Go to Date"
 msgstr "날짜로 가기"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:5103
+#: gnucash/gnome/gnc-plugin-page-register.c:5096
 #, c-format
 msgid "Checking splits in current register: %u of %u"
 msgstr ""
@@ -5785,7 +5799,7 @@ msgstr "인쇄하기"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1136
 #: gnucash/gnome-utils/dialog-file-access.c:319
-#: gnucash/gnome-utils/gnc-file.c:109 gnucash/gnome-utils/gnc-file.c:351
+#: gnucash/gnome-utils/gnc-file.c:108 gnucash/gnome-utils/gnc-file.c:350
 msgid "Export"
 msgstr "내보내기"
 
@@ -5930,7 +5944,7 @@ msgid "You cannot save to that file."
 msgstr "해당 파일에 저장할 수 없습니다."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1616
-#: gnucash/gnome-utils/gnc-file.c:1321 gnucash/gnome-utils/gnc-file.c:1568
+#: gnucash/gnome-utils/gnc-file.c:1320 gnucash/gnome-utils/gnc-file.c:1567
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:742
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
@@ -6029,18 +6043,18 @@ msgstr "선택된 자동 이체 편집"
 msgid "Delete the selected scheduled transaction"
 msgstr "선택된 자동 이체 삭제"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:441
+#: gnucash/gnome/gnc-plugin-page-sx-list.c:444
 #: gnucash/gtkbuilder/dialog-account.glade:553
 #, fuzzy
 msgid "Transactions"
 msgstr "거래"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:507
+#: gnucash/gnome/gnc-plugin-page-sx-list.c:504
 msgid "Upcoming Transactions"
 msgstr ""
 
 #. Translators: This is a ngettext(3) message, %d is the number of scheduled transactions deleted
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:871
+#: gnucash/gnome/gnc-plugin-page-sx-list.c:868
 #, c-format
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete %d scheduled transactions?"
@@ -6365,8 +6379,8 @@ msgid ""
 "have mismatched commodities or currencies.\n"
 "You need to open each account individually to edit transactions."
 msgstr ""
-"이 계정의 트랜잭션은 하위 계정의 상품 또는 통화가 일치하지 않기 때문에 "
-"편집할 수 없습니다.\n"
+"이 계정의 트랜잭션은 하위 계정의 상품 또는 통화가 일치하지 않기 때문에 편집"
+"할 수 없습니다.\n"
 "거래를 편집하려면 각 계정을 개별적으로 열어야 합니다."
 
 #: gnucash/gnome/gnc-split-reg.c:2525
@@ -6447,8 +6461,9 @@ msgstr "반복되는 데이터 입력을 피하기 위해 표에 기입된 거�
 msgid ""
 "Exchange by CSV/FinTS(former HBCI) or import SWIFT-MT9xx/QIF/OFX data "
 "including Transaction Matching"
-msgstr "CSV/FinTS(구 HBCI)로 교환하거나 트랜잭션 매칭을 포함한 SWIFT-MT9xx/QIF/OFX "
-"데이터 가져오기"
+msgstr ""
+"CSV/FinTS(구 HBCI)로 교환하거나 트랜잭션 매칭을 포함한 SWIFT-MT9xx/QIF/OFX 데"
+"이터 가져오기"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:23
 msgid "Perform financial calculations, such as a loan repayment"
@@ -6666,7 +6681,7 @@ msgstr "계정(_A)"
 #: gnucash/gtkbuilder/dialog-sx.glade:803
 #: gnucash/gtkbuilder/dialog-sx.glade:1494
 #: gnucash/gtkbuilder/dialog-vendor.glade:47
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2072
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2075
 msgid "_Help"
 msgstr "도움말(_H)"
 
@@ -7184,7 +7199,7 @@ msgid "There was an error parsing the file."
 msgstr "파일 분석 중 오류입니다."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1149
-#: gnucash/gnome-utils/gnc-file.c:1410 gnucash/gnome-utils/gnc-file.c:1649
+#: gnucash/gnome-utils/gnc-file.c:1409 gnucash/gnome-utils/gnc-file.c:1648
 msgid "Writing file..."
 msgstr "파일 쓰는 중..."
 
@@ -7472,7 +7487,7 @@ msgid "Open..."
 msgstr "열기(_O)..."
 
 #: gnucash/gnome-utils/dialog-file-access.c:304
-#: gnucash/gnome-utils/gnc-file.c:88
+#: gnucash/gnome-utils/gnc-file.c:87
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:103
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:106
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:784
@@ -8028,76 +8043,76 @@ msgstr "날짜: "
 msgid "Frequency"
 msgstr "주기"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:1238
+#: gnucash/gnome-utils/gnc-dense-cal.c:1241
 msgid "(unnamed)"
 msgstr "(미지정)"
 
-#: gnucash/gnome-utils/gnc-file.c:94 gnucash/gnome-utils/gnc-main-window.c:290
+#: gnucash/gnome-utils/gnc-file.c:93 gnucash/gnome-utils/gnc-main-window.c:290
 #: gnucash/import-export/bi-import/gnc-plugin-bi-import.c:57
 #: gnucash/import-export/customer-import/gnc-plugin-customer-import.c:57
 msgid "_Import"
 msgstr "가져오기(_I)"
 
-#: gnucash/gnome-utils/gnc-file.c:96 gnucash/gnome-utils/gnc-file.c:335
+#: gnucash/gnome-utils/gnc-file.c:95 gnucash/gnome-utils/gnc-file.c:334
 #: gnucash/gtkbuilder/dialog-preferences.glade:2620
 #: gnucash/import-export/qif-imp/gnc-plugin-qif-import.c:140
 msgid "Import"
 msgstr "가져오기"
 
-#: gnucash/gnome-utils/gnc-file.c:102 gnucash/gnome-utils/gnc-file.c:343
-#: gnucash/gnome-utils/gnc-file.c:1195 gnucash/gnome-utils/gnc-file.c:1467
+#: gnucash/gnome-utils/gnc-file.c:101 gnucash/gnome-utils/gnc-file.c:342
+#: gnucash/gnome-utils/gnc-file.c:1194 gnucash/gnome-utils/gnc-file.c:1466
 msgid "Save"
 msgstr "저장하기"
 
-#: gnucash/gnome-utils/gnc-file.c:106 gnucash/gnome-utils/gnc-main-window.c:291
+#: gnucash/gnome-utils/gnc-file.c:105 gnucash/gnome-utils/gnc-main-window.c:291
 msgid "_Export"
 msgstr "내보내기(_E)"
 
-#: gnucash/gnome-utils/gnc-file.c:147
+#: gnucash/gnome-utils/gnc-file.c:146
 msgid "All files"
 msgstr "모든 파일"
 
-#: gnucash/gnome-utils/gnc-file.c:261
+#: gnucash/gnome-utils/gnc-file.c:260
 msgid "(null)"
 msgstr "(null)"
 
-#: gnucash/gnome-utils/gnc-file.c:280
+#: gnucash/gnome-utils/gnc-file.c:279
 #, c-format
 msgid "No suitable backend was found for %s."
 msgstr "%s의 적당한 백엔드를 찾지 못했습니다."
 
-#: gnucash/gnome-utils/gnc-file.c:285
+#: gnucash/gnome-utils/gnc-file.c:284
 #, c-format
 msgid "The URL %s is not supported by this version of GnuCash."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-file.c:290
+#: gnucash/gnome-utils/gnc-file.c:289
 #, c-format
 msgid "Can't parse the URL %s."
 msgstr "URL %s를 파싱할 수 없습니다."
 
-#: gnucash/gnome-utils/gnc-file.c:295
+#: gnucash/gnome-utils/gnc-file.c:294
 #, c-format
 msgid "Can't connect to %s. The host, username or password were incorrect."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-file.c:301
+#: gnucash/gnome-utils/gnc-file.c:300
 #, c-format
 msgid "Can't connect to %s. Connection was lost, unable to send data."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-file.c:307
+#: gnucash/gnome-utils/gnc-file.c:306
 msgid ""
 "This file/URL appears to be from a newer version of GnuCash. You must "
 "upgrade your version of GnuCash to work with this data."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-file.c:314
+#: gnucash/gnome-utils/gnc-file.c:313
 #, c-format
 msgid "The database %s doesn't seem to exist. Do you want to create it?"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-file.c:328
+#: gnucash/gnome-utils/gnc-file.c:327
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -8105,7 +8120,7 @@ msgid ""
 "proceed with opening the database?"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-file.c:336
+#: gnucash/gnome-utils/gnc-file.c:335
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -8116,7 +8131,7 @@ msgstr ""
 "가 사용 중일 수 있으며, 이 경우 데이터베이스를 가져오면 안 됩니다. 데이터베이"
 "스 가져오기를 계속하시겠습니까?"
 
-#: gnucash/gnome-utils/gnc-file.c:344
+#: gnucash/gnome-utils/gnc-file.c:343
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -8127,7 +8142,7 @@ msgstr ""
 "자가 사용 중일 수 있으며 이 경우 데이터베이스를 저장해서는 안 됩니다. 데이터"
 "베이스 저장을 계속하시겠습니까?"
 
-#: gnucash/gnome-utils/gnc-file.c:352
+#: gnucash/gnome-utils/gnc-file.c:351
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -8138,7 +8153,7 @@ msgstr ""
 "가 사용 중일 수 있으며, 이 경우 데이터베이스를 가져가면 안 됩니다. 데이터베이"
 "스 내보내기를 계속하시겠습니까?"
 
-#: gnucash/gnome-utils/gnc-file.c:377
+#: gnucash/gnome-utils/gnc-file.c:376
 #, c-format
 msgid ""
 "GnuCash could not write to %s. That database may be on a read-only file "
@@ -8149,43 +8164,43 @@ msgstr ""
 "거나 디렉터리에 대한 쓰기 권한이 없거나 바이러스 백신 소프트웨어가 이 작업을 "
 "방지하고 있을 수 있습니다."
 
-#: gnucash/gnome-utils/gnc-file.c:385
+#: gnucash/gnome-utils/gnc-file.c:384
 #, c-format
 msgid "The file/URL %s does not contain GnuCash data or the data is corrupt."
 msgstr "파일/URL %s에 GnuCash 데이터가 없거나 데이터가 손상되었습니다."
 
-#: gnucash/gnome-utils/gnc-file.c:391
+#: gnucash/gnome-utils/gnc-file.c:390
 #, c-format
 msgid ""
 "The server at URL %s experienced an error or encountered bad or corrupt data."
 msgstr ""
 "URL %s의 서버에 오류가 발생했거나 데이터가 잘못되었거나 손상되었습니다."
 
-#: gnucash/gnome-utils/gnc-file.c:397
+#: gnucash/gnome-utils/gnc-file.c:396
 #, c-format
 msgid "You do not have permission to access %s."
 msgstr "%s에 접근할 수 있는 권한이 없습니다."
 
-#: gnucash/gnome-utils/gnc-file.c:402
+#: gnucash/gnome-utils/gnc-file.c:401
 #, c-format
 msgid "An error occurred while processing %s."
 msgstr "%s을(를) 처리하는 동안 오류가 발생했습니다."
 
-#: gnucash/gnome-utils/gnc-file.c:407
+#: gnucash/gnome-utils/gnc-file.c:406
 msgid "There was an error reading the file. Do you want to continue?"
 msgstr "파일을 읽는 동안 오류가 발생했습니다. 계속하시겠습니까?"
 
-#: gnucash/gnome-utils/gnc-file.c:416
+#: gnucash/gnome-utils/gnc-file.c:415
 #, c-format
 msgid "There was an error parsing the file %s."
 msgstr "%s 파일을 구문 분석하는 동안 오류가 발생했습니다."
 
-#: gnucash/gnome-utils/gnc-file.c:421
+#: gnucash/gnome-utils/gnc-file.c:420
 #, c-format
 msgid "The file %s is empty."
 msgstr "%s 파일이 비어 있습니다."
 
-#: gnucash/gnome-utils/gnc-file.c:434
+#: gnucash/gnome-utils/gnc-file.c:433
 #, c-format
 msgid ""
 "The file/URI %s could not be found.\n"
@@ -8196,26 +8211,26 @@ msgstr ""
 "\n"
 "파일이 기록 목록에 있습니다. 제거하시겠습니까?"
 
-#: gnucash/gnome-utils/gnc-file.c:440
+#: gnucash/gnome-utils/gnc-file.c:439
 #, c-format
 msgid "The file/URI %s could not be found."
 msgstr "파일/URI %s을(를) 찾을 수 없습니다."
 
-#: gnucash/gnome-utils/gnc-file.c:447
+#: gnucash/gnome-utils/gnc-file.c:446
 msgid "This file is from an older version of GnuCash. Do you want to continue?"
 msgstr "이 파일은 이전 버전의 GnuCash에서 가져온 것입니다. 계속하시겠습니까?"
 
-#: gnucash/gnome-utils/gnc-file.c:456
+#: gnucash/gnome-utils/gnc-file.c:455
 #, c-format
 msgid "The file type of file %s is unknown."
 msgstr "%s 파일의 파일 형식을 알 수 없습니다."
 
-#: gnucash/gnome-utils/gnc-file.c:461
+#: gnucash/gnome-utils/gnc-file.c:460
 #, c-format
 msgid "Could not make a backup of the file %s"
 msgstr "%s 파일을 백업할 수 없습니다"
 
-#: gnucash/gnome-utils/gnc-file.c:466
+#: gnucash/gnome-utils/gnc-file.c:465
 #, c-format
 msgid ""
 "Could not write to file %s. Check that you have permission to write to this "
@@ -8224,14 +8239,14 @@ msgstr ""
 "%s 파일에 쓸 수 없습니다. 이 파일에 쓸 수 있는 권한이 있는지, 파일을 만들 수 "
 "있는 공간이 충분한지 확인하십시오."
 
-#: gnucash/gnome-utils/gnc-file.c:473
+#: gnucash/gnome-utils/gnc-file.c:472
 #, c-format
 msgid "No read permission to read from file %s."
 msgstr "%s 파일에서 읽을 수 있는 읽기 권한이 없습니다."
 
 #. Translators: the first %s is a path in the filesystem,
 #. the second %s is PACKAGE_NAME, which by default is "GnuCash"
-#: gnucash/gnome-utils/gnc-file.c:480
+#: gnucash/gnome-utils/gnc-file.c:479
 #, c-format
 msgid ""
 "You attempted to save in\n"
@@ -8247,7 +8262,7 @@ msgstr ""
 "\n"
 "다른 디렉터리에서 다시 시도하십시오."
 
-#: gnucash/gnome-utils/gnc-file.c:487
+#: gnucash/gnome-utils/gnc-file.c:486
 msgid ""
 "This database is from an older version of GnuCash. Select OK to upgrade it "
 "to the current version, Cancel to mark it read-only."
@@ -8255,7 +8270,7 @@ msgstr ""
 "이 데이터베이스는 이전 버전의 GnuCash에서 가져온 것입니다. 확인을 선택하여 현"
 "재 버전으로 업그레이드하고 취소하기를 선택하여 읽기 전용으로 표시합니다."
 
-#: gnucash/gnome-utils/gnc-file.c:496
+#: gnucash/gnome-utils/gnc-file.c:495
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do File-"
@@ -8266,7 +8281,7 @@ msgstr ""
 "때까지 읽기 전용으로 표시되지만 이전 버전에 쓰는 경우 데이터가 손실될 수 있습"
 "니다."
 
-#: gnucash/gnome-utils/gnc-file.c:505
+#: gnucash/gnome-utils/gnc-file.c:504
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
 "performed until they logoff. If there are currently no other users, consult "
@@ -8276,7 +8291,7 @@ msgstr ""
 "수행할 수 없습니다. 현재 다른 사용자가 없는 경우 문서를 참조하여 대기 중인 로"
 "그인 세션을 지우는 방법에 대해 알아보십시오."
 
-#: gnucash/gnome-utils/gnc-file.c:515
+#: gnucash/gnome-utils/gnc-file.c:514
 msgid ""
 "The library \"libdbi\" installed on your system doesn't correctly store "
 "large numbers. This means GnuCash cannot use SQL databases correctly. "
@@ -8290,7 +8305,7 @@ msgstr ""
 "지 SQL 데이터베이스를 열거나 저장하지 않습니다. 자세한 내용은 https://bugs."
 "gnucash.org/show_bug.cgi?id=611936을 참조하십시오."
 
-#: gnucash/gnome-utils/gnc-file.c:527
+#: gnucash/gnome-utils/gnc-file.c:526
 msgid ""
 "GnuCash could not complete a critical test for the presence of a bug in the "
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
@@ -8302,7 +8317,7 @@ msgstr ""
 "있습니다. 자세한 내용은 https://bugs.gnucash.org/show_bug.cgi?id=645216을 참"
 "조하십시오."
 
-#: gnucash/gnome-utils/gnc-file.c:537
+#: gnucash/gnome-utils/gnc-file.c:536
 msgid ""
 "This file is from an older version of GnuCash and will be upgraded when "
 "saved by this version. You will not be able to read the saved file from the "
@@ -8313,16 +8328,16 @@ msgstr ""
 "드됩니다. 이전 버전의 Gnucash에서 저장된 파일을 읽을 수 없습니다(\"파일 구문 "
 "분석 오류\"가 보고됨). 이전 버전을 유지하려면 저장하지 않고 종료하십시오."
 
-#: gnucash/gnome-utils/gnc-file.c:548
+#: gnucash/gnome-utils/gnc-file.c:547
 #, c-format
 msgid "An unknown I/O error (%d) occurred."
 msgstr "알려지지 않은 I?O 오류 (%d) 발생함."
 
-#: gnucash/gnome-utils/gnc-file.c:643
+#: gnucash/gnome-utils/gnc-file.c:642
 msgid "Save changes to the file?"
 msgstr "파일에 변경 사항을 저장하시겠습니까?"
 
-#: gnucash/gnome-utils/gnc-file.c:656
+#: gnucash/gnome-utils/gnc-file.c:655
 #: gnucash/gnome-utils/gnc-main-window.c:1335
 #, c-format
 msgid "If you don't save, changes from the past %d minute will be discarded."
@@ -8330,22 +8345,22 @@ msgid_plural ""
 "If you don't save, changes from the past %d minutes will be discarded."
 msgstr[0] "저장하지 않으면 지나간 %d분 동안의 변경 내용이 삭제됩니다."
 
-#: gnucash/gnome-utils/gnc-file.c:660
+#: gnucash/gnome-utils/gnc-file.c:659
 msgid "Continue _Without Saving"
 msgstr "저장하지 않고 계속하기(_W)"
 
-#: gnucash/gnome-utils/gnc-file.c:822
+#: gnucash/gnome-utils/gnc-file.c:821
 #, c-format
 msgid "GnuCash could not obtain the lock for %s."
 msgstr "GunCash가 %s 잠금파일을 얻을 수 없습니다."
 
-#: gnucash/gnome-utils/gnc-file.c:824
+#: gnucash/gnome-utils/gnc-file.c:823
 msgid ""
 "That database may be in use by another user, in which case you should not "
 "open the database. What would you like to do?"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-file.c:827
+#: gnucash/gnome-utils/gnc-file.c:826
 msgid ""
 "That database may be on a read-only file system, you may not have write "
 "permission for the directory, or your anti-virus software is preventing this "
@@ -8356,40 +8371,40 @@ msgstr ""
 "이 없거나 바이러스 백신 소프트웨어가 이 작업을 방지할 수 있습니다. 계속하면 "
 "변경 사항을 저장하지 못할 수 있습니다. 무엇을 하고 싶으십니까?"
 
-#: gnucash/gnome-utils/gnc-file.c:850
+#: gnucash/gnome-utils/gnc-file.c:849
 #: gnucash/gtkbuilder/dialog-file-access.glade:98
 msgid "Open _Read-Only"
 msgstr "읽기 전용 열기(_R)"
 
-#: gnucash/gnome-utils/gnc-file.c:853
+#: gnucash/gnome-utils/gnc-file.c:852
 msgid "Create _New File"
 msgstr "새 파일 만들기(_N)"
 
-#: gnucash/gnome-utils/gnc-file.c:856
+#: gnucash/gnome-utils/gnc-file.c:855
 msgid "Open _Anyway"
 msgstr "어떻게 해서든지 열기(_O)"
 
-#: gnucash/gnome-utils/gnc-file.c:859
+#: gnucash/gnome-utils/gnc-file.c:858
 msgid "Open _Folder"
 msgstr "폴더 열기(_F)"
 
-#: gnucash/gnome-utils/gnc-file.c:865 gnucash/gnome-utils/gnc-main-window.c:315
+#: gnucash/gnome-utils/gnc-file.c:864 gnucash/gnome-utils/gnc-main-window.c:315
 msgid "_Quit"
 msgstr "종료(_Q)"
 
-#: gnucash/gnome-utils/gnc-file.c:951 gnucash/gnome-utils/gnc-file.c:971
+#: gnucash/gnome-utils/gnc-file.c:950 gnucash/gnome-utils/gnc-file.c:970
 msgid "Loading user data..."
 msgstr "사용자 데이터 불러오는 중..."
 
-#: gnucash/gnome-utils/gnc-file.c:987
+#: gnucash/gnome-utils/gnc-file.c:986
 msgid "Re-saving user data..."
 msgstr "사용자 데이터 다시 저장하는 중..."
 
-#: gnucash/gnome-utils/gnc-file.c:1350
+#: gnucash/gnome-utils/gnc-file.c:1349
 msgid "Exporting file..."
 msgstr "파일 내보내는 중..."
 
-#: gnucash/gnome-utils/gnc-file.c:1363
+#: gnucash/gnome-utils/gnc-file.c:1362
 #, c-format
 msgid ""
 "There was an error saving the file.\n"
@@ -8400,13 +8415,13 @@ msgstr ""
 "\n"
 "%s"
 
-#: gnucash/gnome-utils/gnc-file.c:1398
+#: gnucash/gnome-utils/gnc-file.c:1397
 msgid ""
 "The database was opened read-only. Do you want to save it to a different "
 "place?"
 msgstr "데이터베이스가 읽기 전용으로 열렸습니다. 다른 곳에 저장하시겠습니까?"
 
-#: gnucash/gnome-utils/gnc-file.c:1693
+#: gnucash/gnome-utils/gnc-file.c:1692
 #, c-format
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
@@ -8415,7 +8430,7 @@ msgstr ""
 "되돌리면 %s에 저장되지 않은 모든 변경 내용이 삭제됩니다. 계속 진행하시겠습니"
 "까?"
 
-#: gnucash/gnome-utils/gnc-file.c:1701
+#: gnucash/gnome-utils/gnc-file.c:1700
 #: gnucash/gnome-utils/gnc-main-window.c:1303
 msgid "<unknown>"
 msgstr "<알 수 없음>"
@@ -9348,9 +9363,9 @@ msgid "Dist"
 msgstr "분배"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:45
-#: gnucash/import-export/import-main-matcher.c:1860
+#: gnucash/import-export/import-main-matcher.c:1862
 #: gnucash/report/reports/standard/register.scm:218
-#: libgnucash/engine/Split.c:1614 libgnucash/engine/Split.c:1631
+#: libgnucash/engine/Split.c:1606 libgnucash/engine/Split.c:1623
 msgid "-- Split Transaction --"
 msgstr "-- 거래 분할 --"
 
@@ -9850,7 +9865,7 @@ msgstr "입금"
 #: gnucash/report/reports/standard/net-charts.scm:374
 #: gnucash/report/reports/standard/net-charts.scm:422
 #: libgnucash/engine/Account.cpp:155 libgnucash/engine/Account.cpp:4503
-#: libgnucash/engine/gncInvoice.c:1118
+#: libgnucash/engine/gncInvoice.c:1121
 msgid "Expense"
 msgstr "비용"
 
@@ -10257,7 +10272,8 @@ msgstr ""
 
 #: gnucash/gnucash.cpp:348
 msgid "Run '{1} --help' to see a full list of available command line options."
-msgstr "사용 가능한 명령줄 옵션의 전체 목록을 보려면 '{1} --help'를 실행합니다."
+msgstr ""
+"사용 가능한 명령줄 옵션의 전체 목록을 보려면 '{1} --help'를 실행합니다."
 
 #. Translators: Do not translate $DISPLAY! It is an environment variable for X11
 #: gnucash/gnucash.cpp:351
@@ -10498,10 +10514,10 @@ msgid ""
 "definition of \"soon\" is controlled by the \"Days in Advance\" setting. "
 "Otherwise GnuCash does not check for due bills."
 msgstr ""
-"활성화되면, 시작 시 GnuCash는 곧 만기가 도래할 계산서가 있는지 여부를 "
-"확인합니다. 이 경우 사용자에게 미리 알림 대화상자가 표시됩니다. \"soon\"의 "
-"정의는 \"사전 일수\" 설정에 의해 제어됩니다. 그렇지 않으면 GnuCash는 만기 "
-"계산서를 확인하지 않습니다."
+"활성화되면, 시작 시 GnuCash는 곧 만기가 도래할 계산서가 있는지 여부를 확인합"
+"니다. 이 경우 사용자에게 미리 알림 대화상자가 표시됩니다. \"soon\"의 정의는 "
+"\"사전 일수\" 설정에 의해 제어됩니다. 그렇지 않으면 GnuCash는 만기 계산서를 "
+"확인하지 않습니다."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:164
 msgid "Show bills due within this many days"
@@ -10783,8 +10799,9 @@ msgstr "가로 창 구분선의 위치입니다."
 msgid ""
 "This setting indicates whether to search in all items in the current class, "
 "or only in 'active' items in the current class."
-msgstr "이 설정은 현재 클래스의 모든 항목에서 검색할지 아니면 현재 클래스의 '활성' "
-"항목에서만 검색할지 나타냅니다."
+msgstr ""
+"이 설정은 현재 클래스의 모든 항목에서 검색할지 아니면 현재 클래스의 '활성' 항"
+"목에서만 검색할지 나타냅니다."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:189
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:190
@@ -10864,8 +10881,9 @@ msgstr "표시할 최소 점수"
 msgid ""
 "This field specifies the minimum matching score a potential matching "
 "transaction must have to be displayed in the match list."
-msgstr "이 필드는 일치 목록에 잠재적 일치 거래를 표시해야 하는 최소 일치 점수를 "
-"지정합니다."
+msgstr ""
+"이 필드는 일치 목록에 잠재적 일치 거래를 표시해야 하는 최소 일치 점수를 지정"
+"합니다."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:25
 msgid "Likely matching transaction within these days"
@@ -11046,9 +11064,9 @@ msgid ""
 "active, run the \"since last run\" process, otherwise it is not run."
 msgstr ""
 "이 설정은 데이터 파일을 열 때 \"마지막 실행 이후\" 처리가 표에 기입된 거래가 "
-"자동으로 실행되는지 여부를 제어합니다. 여기에는 GnuCash가 시작될 때 데이터 "
-"파일의 초기 열기가 포함됩니다. 이 설정이 활성 상태이면 \"마지막 실행 이후\" "
-"프로세스를 실행하고, 그렇지 않으면 실행되지 않습니다."
+"자동으로 실행되는지 여부를 제어합니다. 여기에는 GnuCash가 시작될 때 데이터 파"
+"일의 초기 열기가 포함됩니다. 이 설정이 활성 상태이면 \"마지막 실행 이후\" 프"
+"로세스를 실행하고, 그렇지 않으면 실행되지 않습니다."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:22
 msgid "Show \"since last run\" notification dialog when a file is opened."
@@ -11063,10 +11081,10 @@ msgid ""
 "show the dialog, otherwise it is not shown."
 msgstr ""
 "이 설정은 데이터 파일을 열 때(열려 있는 파일에서 \"마지막 실행 이후\" 처리를 "
-"사용하도록 설정한 경우) 표에 기입된 거래 알림 전용 \"마지막 실행 이후\" "
-"대화상자가 표시되는지 여부를 제어합니다. 여기에는 GnuCash가 시작될 때 데이터 "
-"파일의 초기 열기가 포함됩니다. 이 설정이 활성 상태이면 대화상자를 표시하고, "
-"그렇지 않으면 표시되지 않습니다."
+"사용하도록 설정한 경우) 표에 기입된 거래 알림 전용 \"마지막 실행 이후\" 대화"
+"상자가 표시되는지 여부를 제어합니다. 여기에는 GnuCash가 시작될 때 데이터 파일"
+"의 초기 열기가 포함됩니다. 이 설정이 활성 상태이면 대화상자를 표시하고, 그렇"
+"지 않으면 표시되지 않습니다."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:27
 msgid ""
@@ -11427,8 +11445,8 @@ msgid ""
 "tab is longer than this value (the test is approximate) then the tab label "
 "will have the middle cut and replaced with an ellipsis."
 msgstr ""
-"이 키는 기입장부 탭의 최대 너비를 지정합니다. 탭의 텍스트가 이 값보다 길면("
-"테스트는 근사치임) 탭 레이블이 잘리고 줄임표로 표시됩니다."
+"이 키는 기입장부 탭의 최대 너비를 지정합니다. 탭의 텍스트가 이 값보다 길면(테"
+"스트는 근사치임) 탭 레이블이 잘리고 줄임표로 표시됩니다."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:135
 msgid "Opens new tab adjacent to current tab instead of at the end"
@@ -11760,8 +11778,9 @@ msgstr ""
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Documents\" for "
 "each transaction."
-msgstr "각 거래에 대해 \"작업\", \"메모\" 및 \"링크된 전표\"가 있는 두 번째 줄을 "
-"표시합니다."
+msgstr ""
+"각 거래에 대해 \"작업\", \"메모\" 및 \"링크된 전표\"가 있는 두 번째 줄을 표시"
+"합니다."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:307
 msgid ""
@@ -11771,8 +11790,8 @@ msgid ""
 "\"View->Double Line\" menu item."
 msgstr ""
 "기입장의 각 거래에 대해 \"작업\", \"메모\" 및 \"링크된 전표\"가 있는 두 번째 "
-"줄을 표시합니다. 이것은 기입장이 처음 열릴 때의 기본 설정입니다. 설정은 "
-"\"보기->이중선\" 메뉴 항목을 통해 언제든지 변경할 수 있습니다."
+"줄을 표시합니다. 이것은 기입장이 처음 열릴 때의 기본 설정입니다. 설정은 \"보"
+"기->이중선\" 메뉴 항목을 통해 언제든지 변경할 수 있습니다."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:311
 msgid "Only display leaf account names."
@@ -11785,9 +11804,9 @@ msgid ""
 "including the path in the account tree. Activating this option implies that "
 "you use unique leaf names."
 msgstr ""
-"기입장 및 계정 선택 팝업에서 최하위 계정과목의 이름만 표시합니다. 기본 "
-"동작은 계정 트리의 경로를 포함하여 전체 이름을 표시하는 것입니다. 이 옵션을 "
-"활성화하면 고유한 최하위 계정과목 이름을 사용하게 됩니다."
+"기입장 및 계정 선택 팝업에서 최하위 계정과목의 이름만 표시합니다. 기본 동작"
+"은 계정 트리의 경로를 포함하여 전체 이름을 표시하는 것입니다. 이 옵션을 활성"
+"화하면 고유한 최하위 계정과목 이름을 사용하게 됩니다."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:316
 #, fuzzy
@@ -11918,11 +11937,11 @@ msgid ""
 "resulting file name."
 msgstr ""
 "이 설정은 PDF 내보내기를 위한 파일 이름을 선택합니다. 이것은 세 개의 인수가 "
-"있는 sprintf(3) 문자열입니다. \"%1$s\"는 \"청구서\"와 같은 보고서 "
-"이름입니다. \"%2$s\"는 보고서 번호이며, 청구서 보고서의 경우 청구서 "
-"번호입니다. \"%3$s\"는 파일 이름-날짜-형식 설정에 따라 형식이 지정된 보고서 "
-"날짜입니다. 참고: 파일 이름에 허용되지 않는 문자(예: '/')는 결과 파일 "
-"이름에서 밑줄 '_'로 바뀝니다."
+"있는 sprintf(3) 문자열입니다. \"%1$s\"는 \"청구서\"와 같은 보고서 이름입니"
+"다. \"%2$s\"는 보고서 번호이며, 청구서 보고서의 경우 청구서 번호입니다. "
+"\"%3$s\"는 파일 이름-날짜-형식 설정에 따라 형식이 지정된 보고서 날짜입니다. "
+"참고: 파일 이름에 허용되지 않는 문자(예: '/')는 결과 파일 이름에서 밑줄 "
+"'_'로 바뀝니다."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:384
 msgid "PDF export file name date format choice"
@@ -12036,8 +12055,9 @@ msgstr "청구서 입력 변경 허용"
 msgid ""
 "This dialog is presented when you attempt to move out of a modified invoice "
 "entry. The changed data must be either saved or discarded."
-msgstr "이 대화상자는 수정된 청구서 항목에서 벗어나려고 할 때 표시됩니다. 변경된 "
-"데이터는 저장하거나 폐기해야 합니다."
+msgstr ""
+"이 대화상자는 수정된 청구서 항목에서 벗어나려고 할 때 표시됩니다. 변경된 데이"
+"터는 저장하거나 폐기해야 합니다."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:24
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:147
@@ -12050,8 +12070,9 @@ msgstr "변경된 청구서 입력 복제 중"
 msgid ""
 "This dialog is presented when you attempt to duplicate a modified invoice "
 "entry. The changed data must be saved or the duplication canceled."
-msgstr "이 대화상자는 수정된 청구서 항목을 복제하려고 할 때 표시됩니다. 변경된 "
-"데이터를 저장하거나 복제를 취소해야 합니다."
+msgstr ""
+"이 대화상자는 수정된 청구서 항목을 복제하려고 할 때 표시됩니다. 변경된 데이터"
+"를 저장하거나 복제를 취소해야 합니다."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:29
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:152
@@ -12504,8 +12525,8 @@ msgstr ""
 "추가됩니다. 계정이 있는 경우 4개의 필드가 업데이트됩니다. 코드, 설명, 메모 "
 "및 색상입니다.\n"
 "\n"
-"계속하려면 \"다음\"을 클릭하고 가져오기를 중단하려면 \"취소하기\"를 "
-"클릭하십시오.\n"
+"계속하려면 \"다음\"을 클릭하고 가져오기를 중단하려면 \"취소하기\"를 클릭하십"
+"시오.\n"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:51
 msgid "Import Account Assistant"
@@ -13225,10 +13246,10 @@ msgstr ""
 "이 어시스턴트는 자산(예: 출자, 당좌예금 또는 저축예금), 부채(예: 대여금) 및 "
 "다양한 종류의 수익과 비용에 대한 GnuCash 계정 세트를 만듭니다.\n"
 "\n"
-"여기에서 귀하의 요구에 가장 가까운 계정 세트를 선택할 수 있습니다. "
-"어시스턴트가 완료되면 나중에 언제든지 계정을 추가, 이름 변경, 수정 및 제거할 "
-"수 있습니다. 또한 하위 계정을 추가하고 한 상위 계정에서 다른 상위 계정으로 "
-"계정(하위 계정과 함께)을 이동할 수도 있습니다.\n"
+"여기에서 귀하의 요구에 가장 가까운 계정 세트를 선택할 수 있습니다. 어시스턴트"
+"가 완료되면 나중에 언제든지 계정을 추가, 이름 변경, 수정 및 제거할 수 있습니"
+"다. 또한 하위 계정을 추가하고 한 상위 계정에서 다른 상위 계정으로 계정(하위 "
+"계정과 함께)을 이동할 수도 있습니다.\n"
 "\n"
 "지금 새 계정을 만들지 않으려면 '취소'를 클릭하십시오."
 
@@ -13278,8 +13299,9 @@ msgstr "%s의 계정과목"
 msgid ""
 "If not satisfied with the available templates, please read the wiki page "
 "linked below and share your new or improved template."
-msgstr "사용 가능한 템플릿이 마음에 들지 않으면, 아래 링크된 Wiki 페이지를 읽고 새 "
-"템플릿이나 개선된 템플릿을 공유하십시오."
+msgstr ""
+"사용 가능한 템플릿이 마음에 들지 않으면, 아래 링크된 Wiki 페이지를 읽고 새 템"
+"플릿이나 개선된 템플릿을 공유하십시오."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:484
 msgid ""
@@ -13421,9 +13443,9 @@ msgid ""
 "If you make a mistake or want to make changes later, you can edit the "
 "created Scheduled Transactions directly."
 msgstr ""
-"이것은 GnuCash 내에서 대출 상환을 만들기 위한 단계별 방법입니다. 이 "
-"어시스턴트에서 대출 및 상환의 세부 정보와 상환의 세부 정보를 입력할 수 "
-"있습니다. 해당 정보를 사용하여 적절한 표에 기입된 거래가 만들어집니다.\n"
+"이것은 GnuCash 내에서 대출 상환을 만들기 위한 단계별 방법입니다. 이 어시스턴"
+"트에서 대출 및 상환의 세부 정보와 상환의 세부 정보를 입력할 수 있습니다. 해"
+"당 정보를 사용하여 적절한 표에 기입된 거래가 만들어집니다.\n"
 "\n"
 "실수를 했거나 나중에 변경하려는 경우, 생성된 표에 기입된 거래를 직접 편집할 "
 "수 있습니다."
@@ -13709,14 +13731,14 @@ msgid ""
 "software are likely to be in \"d-m-y\" or day-month-year format, where US "
 "QIF files are likely to be \"m-d-y\" or month-day-year.\n"
 msgstr ""
-"QIF 파일 형식은 날짜의 일, 월 및 연도 구성 요소가 인쇄되는 순서를 지정하지 "
-"않습니다. 대부분의 경우 서면 정보 파일에서 사용 중인 형식을 자동으로 결정할 "
-"수 있습니다. 그러나 방금 가져온 파일에는 데이터에 맞는 가능한 형식이 두 개 "
-"이상 있습니다.\n"
+"QIF 파일 형식은 날짜의 일, 월 및 연도 구성 요소가 인쇄되는 순서를 지정하지 않"
+"습니다. 대부분의 경우 서면 정보 파일에서 사용 중인 형식을 자동으로 결정할 수 "
+"있습니다. 그러나 방금 가져온 파일에는 데이터에 맞는 가능한 형식이 두 개 이상 "
+"있습니다.\n"
 "\n"
-"파일의 날짜 형식을 선택하십시오. 유럽 소프트웨어로 생성된 QIF 파일은 \"d-m-"
-"y\" 또는 일-월-년 형식일 가능성이 높으며, 미국 QIF 파일은 \"m-d-y\" 또는 "
-"월-일-년일 가능성이 높습니다.\n"
+"파일의 날짜 형식을 선택하십시오. 유럽 소프트웨어로 생성된 QIF 파일은 \"d-m-y"
+"\" 또는 일-월-년 형식일 가능성이 높으며, 미국 QIF 파일은 \"m-d-y\" 또는 월-"
+"일-년일 가능성이 높습니다.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:304
 #: gnucash/gtkbuilder/assistant-qif-import.glade:389
@@ -14015,13 +14037,12 @@ msgid ""
 "\n"
 "Click \"Cancel\" to abort the QIF import process."
 msgstr ""
-"\"적용하기\"를 클릭하여 준비 영역에서 데이터를 가져오고 GnuCash 계정을 "
-"업데이트하십시오. 입력한 계정 및 범주 일치 정보는 저장되어 다음에 QIF "
-"가져오기 기능을 사용할 때 기본값으로 사용됩니다.\n"
+"\"적용하기\"를 클릭하여 준비 영역에서 데이터를 가져오고 GnuCash 계정을 업데이"
+"트하십시오. 입력한 계정 및 범주 일치 정보는 저장되어 다음에 QIF 가져오기 기능"
+"을 사용할 때 기본값으로 사용됩니다.\n"
 "\n"
-"\"뒤로\"를 클릭하여 사용자의 계정 및 번주 일치를 검토하고, 새 계정과목에 "
-"대한 통화 및 증권 설정을 변경하거나, 준비 영역에 더 많은 파일을 추가하십시오."
-"\n"
+"\"뒤로\"를 클릭하여 사용자의 계정 및 번주 일치를 검토하고, 새 계정과목에 대"
+"한 통화 및 증권 설정을 변경하거나, 준비 영역에 더 많은 파일을 추가하십시오.\n"
 "\n"
 "QIF 가져오기 프로세스를 중단하려면 \"취소하기\"를 클릭하십시오."
 
@@ -14287,7 +14308,8 @@ msgstr "세금 포함(_T)"
 msgid ""
 "Whether tax is included by default in entries on Bills. This setting is "
 "inherited by new customers and vendors."
-msgstr "계산서의 항목에 세금이 기본적으로 포함되는지 여부를 나타냅니다. 이 설정은 새 "
+msgstr ""
+"계산서의 항목에 세금이 기본적으로 포함되는지 여부를 나타냅니다. 이 설정은 새 "
 "고객과 거래처에 의해 승계됩니다."
 
 #. See the tooltip "At post time..." for details.
@@ -14311,7 +14333,8 @@ msgstr "포함 세금(_X)"
 msgid ""
 "Whether tax is included by default in entries on Invoices. This setting is "
 "inherited by new customers and vendors."
-msgstr "청구서의 항목에 세금이 기본적으로 포함되는지 여부를 나타냅니다. 이 설정은 새 "
+msgstr ""
+"청구서의 항목에 세금이 기본적으로 포함되는지 여부를 나타냅니다. 이 설정은 새 "
 "고객과 거래처에 의해 승계됩니다."
 
 #. See the tooltip "At post time..." for details.
@@ -14623,7 +14646,8 @@ msgstr "기간 수"
 msgid ""
 "This will replace the account code field of each child account with a newly "
 "generated code"
-msgstr "이렇게 하면 각 하위 계정의 계정 코드 필드가 새로 생성된 코드로 바뀝니다"
+msgstr ""
+"이렇게 하면 각 하위 계정의 계정 코드 필드가 새로 생성된 코드로 바뀝니다"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:34
 msgid "_Show documentation"
@@ -14796,8 +14820,9 @@ msgid ""
 "The cutoff day for applying bills to the next month. After the cutoff, bills "
 "are applied to the following month. Negative values count backwards from the "
 "end of the month."
-msgstr "다음 달 계산서를 적용하는 마감일입니다. 마감 후 계산서는 다음 달에 "
-"적용됩니다. 음수 값은 월말부터 거꾸로 계산됩니다."
+msgstr ""
+"다음 달 계산서를 적용하는 마감일입니다. 마감 후 계산서는 다음 달에 적용됩니"
+"다. 음수 값은 월말부터 거꾸로 계산됩니다."
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:287
 msgid "The discount percentage applied if paid early."
@@ -14939,8 +14964,8 @@ msgid ""
 "used by the quote source (including case)."
 msgstr ""
 "상품의 시세 표시기 기호를 입력합니다(예: CSCO 또는 AAPL). 온라인으로 시세를 "
-"검색하는 경우, 이 필드는 시세 소스(대소문자 포함)에서 사용하는 시세 표시기 "
-"기호와 정확히 일치해야 합니다."
+"검색하는 경우, 이 필드는 시세 소스(대소문자 포함)에서 사용하는 시세 표시기 기"
+"호와 정확히 일치해야 합니다."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:156
 msgid ""
@@ -15022,8 +15047,8 @@ msgid ""
 "the internet. If that site is unavailable, you will not be able to retrieve "
 "quotes."
 msgstr ""
-"이들은 인터넷의 단일 사이트에서 정보를 검색하는 F::Q 인용 소스입니다. 해당 "
-"사이트를 사용할 수 없는 경우 시세를 검색할 수 없습니다."
+"이들은 인터넷의 단일 사이트에서 정보를 검색하는 F::Q 인용 소스입니다. 해당 사"
+"이트를 사용할 수 없는 경우 시세를 검색할 수 없습니다."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:437
 msgid "_Get Online Quotes"
@@ -15943,14 +15968,15 @@ msgid ""
 "will be displayed again next time you start GnuCash. If you press the <i>No</"
 "i> button, it will not be displayed again."
 msgstr ""
-"<i>예</i> 버튼을 누르면, 다음에 GnuCash를 시작할 때 <i>GnuCash를 사용해 "
-"주셔서 감사합니다</i> 대화상자가 다시 표시됩니다. <i>아니요</i> 버튼을 "
-"누르면 다시 표시되지 않습니다."
+"<i>예</i> 버튼을 누르면, 다음에 GnuCash를 시작할 때 <i>GnuCash를 사용해 주셔"
+"서 감사합니다</i> 대화상자가 다시 표시됩니다. <i>아니요</i> 버튼을 누르면 다"
+"시 표시되지 않습니다."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:210
 msgid "<span size=\"larger\" weight=\"bold\">Welcome to GnuCash!</span>"
-msgstr "<span size=\"larger\" weight=\"bold\">GnuCash를 사용해 주셔서 "
-"감사합니다!</span>"
+msgstr ""
+"<span size=\"larger\" weight=\"bold\">GnuCash를 사용해 주셔서 감사합니다!</"
+"span>"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:230
 msgid ""
@@ -16803,9 +16829,9 @@ msgid ""
 "display the full name, including the path in the account tree. Checking this "
 "option implies that you use unique leaf names."
 msgstr ""
-"체크하면, 최하위 계정과목의 이름만 기입장과 계정 선택 팝업에 표시됩니다. "
-"기본 동작은 계정 트리의 경로를 포함하여 전체 이름을 표시하는 것입니다. 이 "
-"옵션을 선택하면 고유한 최하위 계정과목 이름을 사용한다는 의미입니다."
+"체크하면, 최하위 계정과목의 이름만 기입장과 계정 선택 팝업에 표시됩니다. 기"
+"본 동작은 계정 트리의 경로를 포함하여 전체 이름을 표시하는 것입니다. 이 옵션"
+"을 선택하면 고유한 최하위 계정과목 이름을 사용한다는 의미입니다."
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:3363
@@ -16912,8 +16938,9 @@ msgstr ""
 msgid ""
 "If the text in the tab is longer than this value (the test is approximate) "
 "then the tab label will have the middle cut and replaced with an ellipsis."
-msgstr "탭의 텍스트가 이 값보다 길면(테스트는 근사치임) 탭 레이블에 중간이 잘리고 "
-"줄임표로 바뀝니다."
+msgstr ""
+"탭의 텍스트가 이 값보다 길면(테스트는 근사치임) 탭 레이블에 중간이 잘리고 줄"
+"임표로 바뀝니다."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:4092
 msgid "characters"
@@ -17425,8 +17452,9 @@ msgstr "계정 삭제"
 msgid ""
 "The following Scheduled Transactions reference the deleted account and must "
 "now be corrected. Press OK to edit them."
-msgstr "다음 표에 기입된 거래는 삭제된 계정을 참조하므로 수정해야 합니다. [확인]을 "
-"눌러 편집합니다."
+msgstr ""
+"다음 표에 기입된 거래는 삭제된 계정을 참조하므로 수정해야 합니다. [확인]을 눌"
+"러 편집합니다."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:123
 #: gnucash/gtkbuilder/gnc-frequency.glade:171
@@ -18814,7 +18842,8 @@ msgstr "초기 온라인 뱅킹 설정"
 msgid ""
 "The Setup of your Online Banking connection is handled by the external "
 "program \"AqBanking Setup\"."
-msgstr "온라인 뱅킹 연결 설정은 외부 프로그램 \"AqBanking 설정\"에 의해 처리됩니다."
+msgstr ""
+"온라인 뱅킹 연결 설정은 외부 프로그램 \"AqBanking 설정\"에 의해 처리됩니다."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:125
 msgid ""
@@ -19337,9 +19366,9 @@ msgid ""
 "You might have mixed up decimal point and comma, compared to your locale "
 "settings. This does not result in a valid online transfer job."
 msgstr ""
-"금액이 0이거나 금액 필드를 올바르게 해석할 수 없습니다. 로케일 설정과 "
-"비교하여 소수점과 쉼표를 혼동했을 수 있습니다. 이것은 유효한 온라인 전송 "
-"묶음으로 이어지지 않습니다."
+"금액이 0이거나 금액 필드를 올바르게 해석할 수 없습니다. 로케일 설정과 비교하"
+"여 소수점과 쉼표를 혼동했을 수 있습니다. 이것은 유효한 온라인 전송 묶음으로 "
+"이어지지 않습니다."
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:681
 msgid ""
@@ -19435,12 +19464,12 @@ msgid ""
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
-"백엔드가 묶음 작업을 준비하는 동안 오류를 발견했습니다. 이 묶음 작업을 "
-"실행할 수 없습니다.\n"
+"백엔드가 묶음 작업을 준비하는 동안 오류를 발견했습니다. 이 묶음 작업을 실행"
+"할 수 없습니다.\n"
 "\n"
-"은행이 선택한 묶음 작업을 지원하지 않거나 사용자의 온라인 뱅킹 계정에 이 "
-"묶음을 실행할 권한이 없을 가능성이 높습니다. 콘솔 로그에 더 많은 오류 "
-"메시지가 표시될 수 있습니다.\n"
+"은행이 선택한 묶음 작업을 지원하지 않거나 사용자의 온라인 뱅킹 계정에 이 묶음"
+"을 실행할 권한이 없을 가능성이 높습니다. 콘솔 로그에 더 많은 오류 메시지가 표"
+"시될 수 있습니다.\n"
 "\n"
 "다시 묶음에 들어가시겠습니까?"
 
@@ -19477,8 +19506,8 @@ msgid ""
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
-"묶음 작업을 실행하는 동안 오류가 발생했습니다. 정확한 오류 메시지는 로그 "
-"창을 확인하십시오.\n"
+"묶음 작업을 실행하는 동안 오류가 발생했습니다. 정확한 오류 메시지는 로그 창"
+"을 확인하십시오.\n"
 "\n"
 "다시 묶음에 들어가시겠습니까?"
 
@@ -19503,8 +19532,8 @@ msgid ""
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
-"백엔드가 묶음 작업을 준비하는 동안 오류를 발견했습니다. 이 묶음 작업을 "
-"실행할 수 없습니다.\n"
+"백엔드가 묶음 작업을 준비하는 동안 오류를 발견했습니다. 이 묶음 작업을 실행"
+"할 수 없습니다.\n"
 "\n"
 "은행이 선택한 묶음 작업을 지원하지 않거나 온라인 뱅킹 계정에 이 묶음 작업을 "
 "실행할 권한이 없을 가능성이 큽니다. 콘솔 로그에 더 많은 오류 메시지가 표시될 "
@@ -19610,8 +19639,8 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"묶음을 실행하는 동안 오류가 발생했습니다. %d/%d이(가) 실패했습니다. 정확한 "
-"오류 메시지는 로그 창이나 gnucash.trace를 확인하십시오.\n"
+"묶음을 실행하는 동안 오류가 발생했습니다. %d/%d이(가) 실패했습니다. 정확한 오"
+"류 메시지는 로그 창이나 gnucash.trace를 확인하십시오.\n"
 "\n"
 "%s"
 
@@ -19627,8 +19656,9 @@ msgid ""
 msgid_plural ""
 "All %d jobs were executed successfully, but as a precaution please check the "
 "log window for potential errors."
-msgstr[0] "모든 %d개의 묶음이 성공적으로 실행되었지만 예방 차원에서 잠재적인 오류가 "
-"있는지 로그 창을 확인하십시오."
+msgstr[0] ""
+"모든 %d개의 묶음이 성공적으로 실행되었지만 예방 차원에서 잠재적인 오류가 있는"
+"지 로그 창을 확인하십시오."
 
 #: gnucash/import-export/aqb/gnc-gwen-gui.c:1113
 #, c-format
@@ -20306,8 +20336,8 @@ msgid ""
 "The number of Accounts added was %u and %u were updated.\n"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:884
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:849
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:887
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:852
 msgid ""
 "There were problems reading some saved settings, continuing to load.\n"
 "Please review and save again."
@@ -20315,82 +20345,82 @@ msgstr ""
 "저장된 일부 설정을 읽는 데 문제가 발생하여 계속 불러오기합니다.\n"
 "검토하고 다시 저장하십시오."
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:907
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:872
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:910
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:875
 #, fuzzy
 msgid "Delete the Import Settings."
 msgstr "내보내기 형식 선택"
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:941
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:906
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:944
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:909
 msgid "Setting name already exists, overwrite?"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:955
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:920
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:958
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:923
 msgid "The settings have been saved."
 msgstr "설정이 저장되었습니다."
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:980
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:945
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:983
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:948
 msgid "There was a problem saving the settings, please try again."
 msgstr "설정을 저장하는 동안 문제가 발생했습니다. 다시 해보십시오."
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1146
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1119
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1149
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1122
 #, fuzzy
 msgid "Invalid encoding selected"
 msgstr "선택된 유효한 청구서 없음"
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1307
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1229
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1310
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1232
 msgid "Merge with column on _left"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1311
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1233
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1314
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1236
 msgid "Merge with column on _right"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1316
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1238
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1319
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1241
 #, fuzzy
 msgid "_Split this column"
 msgstr "가격 열 보이기"
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1321
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1243
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1324
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1246
 msgid "_Widen this column"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1325
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1247
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1328
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1250
 #, fuzzy
 msgid "_Narrow this column"
 msgstr "가격 열 보이기"
 
 #. Translators: This is a ngettext(3) message, %d is the number of prices added
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1882
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1885
 #, c-format
 msgid "%d added price"
 msgid_plural "%d added prices"
 msgstr[0] "추가된 가격 %d개"
 
 #. Translators: This is a ngettext(3) message, %d is the number of duplicate prices
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1887
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1890
 #, c-format
 msgid "%d duplicate price"
 msgid_plural "%d duplicate prices"
 msgstr[0] "중복된 가격 %d개"
 
 #. Translators: This is a ngettext(3) message, %d is the number of replaced prices
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1892
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1895
 #, c-format
 msgid "%d replaced price"
 msgid_plural "%d replaced prices"
 msgstr[0] "대체된 가격 %d개"
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1897
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1900
 #, c-format
 msgid ""
 "The prices were imported from file '%s'.\n"
@@ -20407,7 +20437,7 @@ msgstr ""
 "- %s\n"
 "- %s"
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1941
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1944
 #, c-format
 msgid ""
 "An unexpected error has occurred while creating prices. Please report this "
@@ -20417,18 +20447,18 @@ msgid ""
 "%s"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1750
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1753
 #, fuzzy
 msgid "No Linked Account"
 msgstr "새 계정"
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1972
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1975
 msgid ""
 "To change mapping, double click on a row or select a row and press the "
 "button..."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2016
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2019
 #, c-format
 msgid ""
 "An unexpected error has occurred while mapping accounts. Please report this "
@@ -20438,7 +20468,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2058
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2061
 #, c-format
 msgid ""
 "An unexpected error has occurred while creating transactions. Please report "
@@ -20448,12 +20478,12 @@ msgid ""
 "%s"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2067
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2070
 msgid "Double click on rows to change, then click on Apply to Import"
 msgstr "변경할 행을 두 번 클릭한 다음, 가져오기에 적용하기를 클릭합니다"
 
 #. Translators: {1} will be replaced with a filename
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2122
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2125
 #, fuzzy
 msgid "The transactions were imported from file '{1}'."
 msgstr "파일 %s를 파싱 중 오류입니다."
@@ -20909,7 +20939,7 @@ msgstr "현재 거래가 수지가 맞지 않음."
 msgid "Destination account for the auto-balance split."
 msgstr ""
 
-#: gnucash/import-export/import-main-matcher.c:1023
+#: gnucash/import-export/import-main-matcher.c:1024
 #: gnucash/report/html-utilities.scm:338
 #: gnucash/report/reports/standard/balsheet-pnl.scm:154
 #: gnucash/report/reports/standard/new-owner-report.scm:942
@@ -20918,98 +20948,98 @@ msgid "Disabled"
 msgstr "가능"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.c:1314
+#: gnucash/import-export/import-main-matcher.c:1317
 #, fuzzy
 msgid "_Assign a transfer account to the selection"
 msgstr "계정 구조에서 이체 계정을 선택해야 합니다."
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.c:1365
+#: gnucash/import-export/import-main-matcher.c:1368
 #, fuzzy
 msgid "_Edit description, notes, or memo"
 msgstr "세부 항목"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.c:1374
+#: gnucash/import-export/import-main-matcher.c:1377
 #, fuzzy
 msgid "_Reset all edits"
 msgstr "기본값 등록"
 
-#: gnucash/import-export/import-main-matcher.c:1545
+#: gnucash/import-export/import-main-matcher.c:1548
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
 msgstr "A"
 
-#: gnucash/import-export/import-main-matcher.c:1548
+#: gnucash/import-export/import-main-matcher.c:1551
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
 msgstr ""
 
-#: gnucash/import-export/import-main-matcher.c:1552
+#: gnucash/import-export/import-main-matcher.c:1555
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
 msgstr ""
 
-#: gnucash/import-export/import-main-matcher.c:1559
+#: gnucash/import-export/import-main-matcher.c:1562
 msgid "Info"
 msgstr "정보"
 
-#: gnucash/import-export/import-main-matcher.c:1566
+#: gnucash/import-export/import-main-matcher.c:1569
 #: gnucash/report/stylesheets/head-or-tail.scm:102
 #, fuzzy
 msgid "Additional Comments"
 msgstr "추가 카드"
 
-#: gnucash/import-export/import-main-matcher.c:1986
+#: gnucash/import-export/import-main-matcher.c:1988
 msgid "New, already balanced"
 msgstr ""
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.c:2012
+#: gnucash/import-export/import-main-matcher.c:2014
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr ""
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.c:2020
+#: gnucash/import-export/import-main-matcher.c:2022
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr ""
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.c:2031
+#: gnucash/import-export/import-main-matcher.c:2033
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr ""
 
-#: gnucash/import-export/import-main-matcher.c:2049
+#: gnucash/import-export/import-main-matcher.c:2051
 #, c-format
 msgid "Reconcile (manual) match to %s"
 msgstr "%s에 대한 (수동) 짝 일치시키기"
 
-#: gnucash/import-export/import-main-matcher.c:2054
+#: gnucash/import-export/import-main-matcher.c:2056
 #, c-format
 msgid "Reconcile (auto) match to %s"
 msgstr "%s에 대한 (자동) 짝 일치시키기"
 
-#: gnucash/import-export/import-main-matcher.c:2063
-#: gnucash/import-export/import-main-matcher.c:2093
+#: gnucash/import-export/import-main-matcher.c:2065
+#: gnucash/import-export/import-main-matcher.c:2095
 msgid "Match missing!"
 msgstr "일치하는 것이 없음!"
 
-#: gnucash/import-export/import-main-matcher.c:2079
+#: gnucash/import-export/import-main-matcher.c:2081
 #, c-format
 msgid "Update and reconcile (manual) match to %s"
 msgstr "업데이트하고 %s에 대한 (수동) 짝 일치시키기"
 
-#: gnucash/import-export/import-main-matcher.c:2084
+#: gnucash/import-export/import-main-matcher.c:2086
 #, c-format
 msgid "Update and reconcile (auto) match to %s"
 msgstr "업데이트하고 %s에 대한 (자동) 짝 일치시키기"
 
-#: gnucash/import-export/import-main-matcher.c:2101
+#: gnucash/import-export/import-main-matcher.c:2103
 msgid "Do not import (no action selected)"
 msgstr "읽을 수 없습니다 ( 선택 작업 없음)"
 
@@ -21542,7 +21572,8 @@ msgstr "인식할 수 없는 작업 '~a' 입니다."
 #: gnucash/import-export/qif-imp/qif-parse.scm:254
 #, scheme-format
 msgid "Unrecognized status '~a'. Defaulting to uncleared."
-msgstr "인식할 수 없는 상태 '~a' 입니다. 기본값은 지워지지 않음으로 설정됩니다."
+msgstr ""
+"인식할 수 없는 상태 '~a' 입니다. 기본값은 지워지지 않음으로 설정됩니다."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:213
 msgid "QIF import: Name conflict with another account."
@@ -21590,7 +21621,8 @@ msgstr ""
 #: gnucash/price-quotes.scm:461
 #, scheme-format
 msgid "ERROR: ALPHAVANTAGE_API_KEY must be set for currency and quotes; see ~A"
-msgstr "오류: 통화 및 시세에 대해 ALPHAVANTAGE_API_KEY를 설정해야 합니다. ~A 참조"
+msgstr ""
+"오류: 통화 및 시세에 대해 ALPHAVANTAGE_API_KEY를 설정해야 합니다. ~A 참조"
 
 #: gnucash/price-quotes.scm:466
 msgid "There was a system error while retrieving the price quotes."
@@ -23393,9 +23425,9 @@ msgid ""
 "scm/report directory for details on writing your own reports, or extending "
 "existing reports."
 msgstr ""
-"이것은 샘플 GnuCash 보고서입니다. 자체 보고서 작성 또는 기존 보고서 확장에 "
-"대한 자세한 내용은 scm/report 디렉터리에 있는 guile(구성표) 소스 코드를 "
-"참조하십시오."
+"이것은 샘플 GnuCash 보고서입니다. 자체 보고서 작성 또는 기존 보고서 확장에 대"
+"한 자세한 내용은 scm/report 디렉터리에 있는 guile(구성표) 소스 코드를 참조하"
+"십시오."
 
 #: gnucash/report/reports/example/hello-world.scm:322
 #, scheme-format
@@ -24506,7 +24538,8 @@ msgstr "미래 최소값"
 msgid ""
 "The future minimum will add, for each date point, a projected minimum "
 "balance including scheduled transactions."
-msgstr "미래의 최소 금액은 각 날짜 지점에 대해, 표에 기입된 거래를 포함한 예상 최소 "
+msgstr ""
+"미래의 최소 금액은 각 날짜 지점에 대해, 표에 기입된 거래를 포함한 예상 최소 "
 "잔액을 추가합니다."
 
 #: gnucash/report/reports/standard/balance-forecast.scm:256
@@ -24891,9 +24924,9 @@ msgid ""
 "account. If this option is disabled, subtotals are displayed below parent "
 "and children groups."
 msgstr ""
-"이 옵션을 활성화하면, 상위 금액 내에 소계가 표시되고, 상위에 자체 금액이 "
-"있는 경우 다음 행에 하위 계정으로 표시됩니다. 이 옵션을 비활성화하면, 소계가 "
-"상위 및 하위 그룹 아래에 표시됩니다."
+"이 옵션을 활성화하면, 상위 금액 내에 소계가 표시되고, 상위에 자체 금액이 있"
+"는 경우 다음 행에 하위 계정으로 표시됩니다. 이 옵션을 비활성화하면, 소계가 상"
+"위 및 하위 그룹 아래에 표시됩니다."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:102
 #, fuzzy
@@ -26061,8 +26094,8 @@ msgid ""
 "from Business Invoices and Bills which will require Tax Tables to be set up "
 "correctly. Please see the documentation."
 msgstr ""
-"이러한 세금 계정은 표준 등록을 사용하거나 세율표를 올바르게 설정해야 하는 "
-"비즈니스 청구서 및 계산서에서 채울 수 있습니다. 문서를 참조하십시오."
+"이러한 세금 계정은 표준 등록을 사용하거나 세율표를 올바르게 설정해야 하는 비"
+"즈니스 청구서 및 계산서에서 채울 수 있습니다. 문서를 참조하십시오."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:60
 msgid ""
@@ -26073,11 +26106,11 @@ msgid ""
 "ASSET for taxes paid on expenses, and type LIABILITY for taxes collected on "
 "sales."
 msgstr ""
-"보고서 옵션에서 GST/VAT 세금을 징수하거나 납부할 계정을 선택해야 합니다. "
-"이러한 계정에는 정기 GST/VAT 신고 기간 동안 세무 당국으로부터 전액 송금 또는 "
-"청구된 금액을 전표화하는 분할이 포함되어야 합니다. 이러한 계정과목은 비용에 "
-"대해 지불된 세금에 대한 자산 유형이어야 하며, 판매에 대해 징수된 세금에 대한 "
-"부채 유형이어야 합니다."
+"보고서 옵션에서 GST/VAT 세금을 징수하거나 납부할 계정을 선택해야 합니다. 이러"
+"한 계정에는 정기 GST/VAT 신고 기간 동안 세무 당국으로부터 전액 송금 또는 청구"
+"된 금액을 전표화하는 분할이 포함되어야 합니다. 이러한 계정과목은 비용에 대해 "
+"지불된 세금에 대한 자산 유형이어야 하며, 판매에 대해 징수된 세금에 대한 부채 "
+"유형이어야 합니다."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:66
 msgid ""
@@ -26163,11 +26196,11 @@ msgid ""
 "These accounts must be of type ASSET for taxes paid on expenses, and type "
 "LIABILITY for taxes collected on sales."
 msgstr ""
-"징수 또는 납부한 세금을 보관할 계좌를 찾아 선택하십시오. 이러한 계정에는 "
-"정기 GST/VAT 신고 기간 동안 세무 당국으로부터 전액 송금 또는 청구된 금액을 "
-"전표화하는 분할이 포함되어야 합니다. 이러한 계정은 지출에 대해 납부한 세금에 "
-"대해서는 자산 유형이어야 하며, 매출에 대해 징수된 세금에 대해서는 부채 "
-"유형이어야 합니다."
+"징수 또는 납부한 세금을 보관할 계좌를 찾아 선택하십시오. 이러한 계정에는 정"
+"기 GST/VAT 신고 기간 동안 세무 당국으로부터 전액 송금 또는 청구된 금액을 전표"
+"화하는 분할이 포함되어야 합니다. 이러한 계정은 지출에 대해 납부한 세금에 대해"
+"서는 자산 유형이어야 하며, 매출에 대해 징수된 세금에 대해서는 부채 유형이어"
+"야 합니다."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:157
 #: gnucash/report/reports/standard/income-gst-statement.scm:161
@@ -26330,8 +26363,8 @@ msgid ""
 "CSS code. This field specifies the CSS code for styling the invoice. Please "
 "see the exported report for the CSS class names."
 msgstr ""
-"CSS 코드입니다. 이 필드는 청구서 스타일을 지정하기 위한 CSS 코드를 "
-"지정합니다. CSS 클래스 이름에 대해서는 내보낸 보고서를 참조하십시오."
+"CSS 코드입니다. 이 필드는 청구서 스타일을 지정하기 위한 CSS 코드를 지정합니"
+"다. CSS 클래스 이름에 대해서는 내보낸 보고서를 참조하십시오."
 
 #: gnucash/report/reports/standard/invoice.scm:194
 msgid "Picture Location"
@@ -26833,8 +26866,9 @@ msgstr "수익 및 비용 선차트"
 msgid ""
 "No valid A/Payable or A/Receivable account found. Please ensure valid AP/AR "
 "account exists."
-msgstr "유효한 지급 또는 수취 계정을 찾을 수 없습니다. 유효한 AP/AR 계정이 있는지 "
-"확인하십시오."
+msgstr ""
+"유효한 지급 또는 수취 계정을 찾을 수 없습니다. 유효한 AP/AR 계정이 있는지 확"
+"인하십시오."
 
 #: gnucash/report/reports/standard/new-aging.scm:64
 msgid ""
@@ -27910,8 +27944,8 @@ msgid ""
 "This report is designed for customer (sales) invoices only. Please use the "
 "Options menu to select an <em>Invoice</em>, not a Bill or Expense Voucher."
 msgstr ""
-"이 보고서는 고객(판매) 청구서 전용입니다. 옵션 메뉴를 사용하여 계산서 또는 "
-"비용 내역서가 아닌 <em>청구서</em>를 선택하십시오."
+"이 보고서는 고객(판매) 청구서 전용입니다. 옵션 메뉴를 사용하여 계산서 또는 비"
+"용 내역서가 아닌 <em>청구서</em>를 선택하십시오."
 
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:193
 msgid "Website"
@@ -28889,15 +28923,17 @@ msgstr "사원 번호"
 msgid ""
 "The format string to use for generating employee numbers. This is a printf-"
 "style format string."
-msgstr "사원 번호를 생성하는 데 사용할 형식 문자열입니다. 이것은 printf 스타일 형식 "
+msgstr ""
+"사원 번호를 생성하는 데 사용할 형식 문자열입니다. 이것은 printf 스타일 형식 "
 "문자열입니다."
 
 #: libgnucash/app-utils/business-prefs.scm:47
 msgid ""
 "The previous employee number generated. This number will be incremented to "
 "generate the next employee number."
-msgstr "이전 사원 번호가 생성되었습니다. 이 번호는 다음 사원 번호를 생성하기 위해 "
-"증가됩니다."
+msgstr ""
+"이전 사원 번호가 생성되었습니다. 이 번호는 다음 사원 번호를 생성하기 위해 증"
+"가됩니다."
 
 #: libgnucash/app-utils/business-prefs.scm:48
 msgid "Invoice number format"
@@ -28912,8 +28948,9 @@ msgstr "청구서 번호"
 msgid ""
 "The format string to use for generating invoice numbers. This is a printf-"
 "style format string."
-msgstr "청구서 번호를 생성하는 데 사용할 형식 문자열입니다. 이것은 printf 스타일 "
-"형식 문자열입니다."
+msgstr ""
+"청구서 번호를 생성하는 데 사용할 형식 문자열입니다. 이것은 printf 스타일 형"
+"식 문자열입니다."
 
 #: libgnucash/app-utils/business-prefs.scm:51
 msgid ""
@@ -28933,15 +28970,17 @@ msgstr "계산서 번호"
 msgid ""
 "The format string to use for generating bill numbers. This is a printf-style "
 "format string."
-msgstr "계산서 번호를 생성하는 데 사용할 형식 문자열입니다. 이것은 printf 스타일 "
-"형식 문자열입니다."
+msgstr ""
+"계산서 번호를 생성하는 데 사용할 형식 문자열입니다. 이것은 printf 스타일 형"
+"식 문자열입니다."
 
 #: libgnucash/app-utils/business-prefs.scm:55
 msgid ""
 "The previous bill number generated. This number will be incremented to "
 "generate the next bill number."
-msgstr "생성된 이전 계산서 번호입니다. 이 숫자는 다음 계산서 번호를 생성하기 위해 "
-"증가합니다."
+msgstr ""
+"생성된 이전 계산서 번호입니다. 이 숫자는 다음 계산서 번호를 생성하기 위해 증"
+"가합니다."
 
 #: libgnucash/app-utils/business-prefs.scm:56
 msgid "Expense voucher number format"
@@ -28955,15 +28994,17 @@ msgstr "비용 내역서 번호"
 msgid ""
 "The format string to use for generating expense voucher numbers. This is a "
 "printf-style format string."
-msgstr "비용 내역서 번호를 생성하는 데 사용할 형식 문자열입니다. 이것은 printf "
-"스타일 형식 문자열입니다."
+msgstr ""
+"비용 내역서 번호를 생성하는 데 사용할 형식 문자열입니다. 이것은 printf 스타"
+"일 형식 문자열입니다."
 
 #: libgnucash/app-utils/business-prefs.scm:59
 msgid ""
 "The previous expense voucher number generated. This number will be "
 "incremented to generate the next voucher number."
-msgstr "이전 비용 내역서 번호가 생성되었습니다. 이 번호는 다음 내역서 번호를 "
-"생성하기 위해 증가됩니다."
+msgstr ""
+"이전 비용 내역서 번호가 생성되었습니다. 이 번호는 다음 내역서 번호를 생성하"
+"기 위해 증가됩니다."
 
 #: libgnucash/app-utils/business-prefs.scm:60
 msgid "Job number format"
@@ -28977,15 +29018,17 @@ msgstr "묶음 번호"
 msgid ""
 "The format string to use for generating job numbers. This is a printf-style "
 "format string."
-msgstr "묶음 번호를 생성하는 데 사용할 형식 문자열입니다. 이것은 printf 스타일 형식 "
+msgstr ""
+"묶음 번호를 생성하는 데 사용할 형식 문자열입니다. 이것은 printf 스타일 형식 "
 "문자열입니다."
 
 #: libgnucash/app-utils/business-prefs.scm:63
 msgid ""
 "The previous job number generated. This number will be incremented to "
 "generate the next job number."
-msgstr "생성된 이전 묶음 번호입니다. 이 숫자는 다음 묶음 번호를 생성하기 위해 "
-"증가합니다."
+msgstr ""
+"생성된 이전 묶음 번호입니다. 이 숫자는 다음 묶음 번호를 생성하기 위해 증가합"
+"니다."
 
 #: libgnucash/app-utils/business-prefs.scm:64
 msgid "Order number format"
@@ -29728,26 +29771,27 @@ msgstr "선택한 날짜 형식을 사용하여 값을 날짜로 구문 분석�
 
 #: libgnucash/engine/gnc-datetime.cpp:582
 msgid "Value appears to contain a year while the selected format forbids this."
-msgstr "선택한 형식이 이를 금지하는 동안 값에 연도가 포함되어 있는 것으로 나타납니다."
+msgstr ""
+"선택한 형식이 이를 금지하는 동안 값에 연도가 포함되어 있는 것으로 나타납니다."
 
-#: libgnucash/engine/gnc-features.c:120
+#: libgnucash/engine/gnc-features.cpp:59
 msgid ""
 "This Dataset contains features not supported by this version of GnuCash. You "
 "must use a newer version of GnuCash in order to support the following "
 "features:"
 msgstr ""
-"이 데이터 세트에는 이 버전의 GnuCash에서 지원하지 않는 기능이 포함되어 "
-"있습니다. 다음 기능을 지원하려면 최신 버전의 GnuCash를 사용해야 합니다:"
+"이 데이터 세트에는 이 버전의 GnuCash에서 지원하지 않는 기능이 포함되어 있습니"
+"다. 다음 기능을 지원하려면 최신 버전의 GnuCash를 사용해야 합니다:"
 
-#: libgnucash/engine/gncInvoice.c:1746
+#: libgnucash/engine/gncInvoice.c:1749
 msgid "Extra to Charge Card"
 msgstr "추가 충전할 카드"
 
-#: libgnucash/engine/gncInvoice.c:1786
+#: libgnucash/engine/gncInvoice.c:1789
 msgid "Generated from an invoice. Try unposting the invoice."
 msgstr "청구서에서 생성됩니다. 청구서를 기장 취소해 보십시오."
 
-#: libgnucash/engine/gncInvoice.c:2216
+#: libgnucash/engine/gncInvoice.c:2219
 msgid " (posted)"
 msgstr " (기장됨)"
 
@@ -29892,7 +29936,7 @@ msgstr ""
 msgid "Looking for imbalances in account %s: %u of %u"
 msgstr ""
 
-#: libgnucash/engine/Split.c:1647
+#: libgnucash/engine/Split.c:1639
 #, fuzzy
 msgctxt ""
 "Displayed account code of the other account in a multi-split transaction"
