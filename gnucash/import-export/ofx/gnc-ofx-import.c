@@ -65,6 +65,9 @@ static QofLogModule log_module = GNC_MOD_IMPORT;
 
 static gboolean auto_create_commodity = FALSE;
 static Account *ofx_parent_account = NULL;
+
+typedef struct OfxTransactionData OfxTransactionData;
+
 // Structure we use to gather information about statement balance/account etc.
 typedef struct _ofx_info
 {
@@ -126,9 +129,9 @@ set_associated_income_account(Account* investment_account,
 
 int ofx_proc_statement_cb (struct OfxStatementData data, void * statement_user_data);
 int ofx_proc_security_cb (const struct OfxSecurityData data, void * security_user_data);
-int ofx_proc_transaction_cb (struct OfxTransactionData data, void *user_data);
+int ofx_proc_transaction_cb (OfxTransactionData data, void *user_data);
 int ofx_proc_account_cb (struct OfxAccountData data, void * account_user_data);
-static double ofx_get_investment_amount (const struct OfxTransactionData* data);
+static double ofx_get_investment_amount (const OfxTransactionData* data);
 
 static const gchar *gnc_ofx_ttype_to_string(TransactionType t)
 {
@@ -314,7 +317,7 @@ int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user
     return 0;
 }
 
-static void gnc_ofx_set_split_memo(const struct OfxTransactionData* data, Split *split)
+static void gnc_ofx_set_split_memo(const OfxTransactionData* data, Split *split)
 {
     g_assert(data);
     g_assert(split);
@@ -412,7 +415,7 @@ fix_ofx_bug_39 (time64 t)
     return t;
 }
 
-int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
+int ofx_proc_transaction_cb(OfxTransactionData data, void *user_data)
 {
     char dest_string[255];
     time64 current_time = gnc_time (NULL);
@@ -1079,7 +1082,7 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
     return 0;
 }
 
-double ofx_get_investment_amount(const struct OfxTransactionData* data)
+double ofx_get_investment_amount(const OfxTransactionData* data)
 {
     double amount = data->amount;
 #ifdef HAVE_LIBOFX_VERSION_0_10
