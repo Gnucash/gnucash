@@ -415,44 +415,550 @@ fix_ofx_bug_39 (time64 t)
     return t;
 }
 
-int ofx_proc_transaction_cb(OfxTransactionData data, void *user_data)
+static void
+set_transaction_dates(Transaction *transaction, OfxTransactionData *data)
 {
-    char dest_string[255];
+     /* Note: Unfortunately libofx <= 0.9.5 will not report a missing
+     * date field as an invalid one. Instead, it will report it as
+     * valid and return a completely bogus date. Starting with
+     * libofx-0.9.6 (not yet released as of 2012-09-09), it will still
+     * be reported as valid but at least the date integer itself is
+     * just plain zero. */
+
     time64 current_time = gnc_time (NULL);
-    Account *account;
+
+    if (data->date_posted_valid && (data->date_posted != 0))
+    {
+        /* The hopeful case: We have a posted_date */
+        data->date_posted = fix_ofx_bug_39 (data->date_posted);
+        xaccTransSetDatePostedSecsNormalized(transaction, data->date_posted);
+    }
+    else if (data->date_initiated_valid && (data->date_initiated != 0))
+    {
+        /* No posted date? Maybe we have an initiated_date */
+        data->date_initiated = fix_ofx_bug_39 (data->date_initiated);
+        xaccTransSetDatePostedSecsNormalized(transaction, data->date_initiated);
+    }
+    else
+    {
+        /* Uh no, no valid date. As a workaround use today's date */
+        xaccTransSetDatePostedSecsNormalized(transaction, current_time);
+    }
+
+    xaccTransSetDateEnteredSecs(transaction, current_time);
+}
+
+static void
+fill_transaction_description(Transaction *transaction, OfxTransactionData *data)
+{
+    /* Put transaction name in Description, or memo if name unavailable */
+    if (data->name_valid)
+    {
+        xaccTransSetDescription(transaction, data->name);
+    }
+    else if (data->memo_valid)
+    {
+        xaccTransSetDescription(transaction, data->memo);
+    }
+}
+
+static void
+fill_transaction_notes(Transaction *transaction, OfxTransactionData *data)
+{
+    /* Put everything else in the Notes field */
+    char *notes = g_strdup_printf("OFX ext. info: ");
+
+    if (data->transactiontype_valid)
+    {
+        char *tmp = notes;
+        notes = g_strdup_printf("%s%s%s", tmp, "|Trans type:",
+                                gnc_ofx_ttype_to_string(data->transactiontype));
+        g_free(tmp);
+    }
+
+    if (data->invtransactiontype_valid)
+    {
+        char *tmp = notes;
+        notes = g_strdup_printf("%s%s%s", tmp, "|Investment Trans type:",
+                                gnc_ofx_invttype_to_str(data->invtransactiontype));
+        g_free(tmp);
+    }
+    if (data->memo_valid && data->name_valid) /* Copy only if memo wasn't put in Description */
+    {
+        char *tmp = notes;
+        notes = g_strdup_printf("%s%s%s", tmp, "|Memo:", data->memo);
+        g_free(tmp);
+    }
+    if (data->date_funds_available_valid)
+    {
+        char dest_string[MAX_DATE_LENGTH];
+        time64 time = data->date_funds_available;
+        char *tmp = notes;
+
+        gnc_time64_to_iso8601_buff (time, dest_string);
+        notes = g_strdup_printf("%s%s%s", tmp,
+				"|Date funds available:", dest_string);
+        g_free(tmp);
+    }
+    if (data->server_transaction_id_valid)
+    {
+        char *tmp = notes;
+        notes = g_strdup_printf("%s%s%s", tmp,
+				"|Server trans ID (conf. number):",
+				sanitize_string (data->server_transaction_id));
+        g_free(tmp);
+    }
+    if (data->standard_industrial_code_valid)
+    {
+        char *tmp = notes;
+        notes = g_strdup_printf("%s%s%ld", tmp,
+				"|Standard Industrial Code:",
+                                data->standard_industrial_code);
+        g_free(tmp);
+
+    }
+    if (data->payee_id_valid)
+    {
+        char *tmp = notes;
+        notes = g_strdup_printf("%s%s%s", tmp, "|Payee ID:",
+				sanitize_string (data->payee_id));
+        g_free(tmp);
+    }
+    //PERR("WRITEME: GnuCash ofx_proc_transaction():Add PAYEE and ADDRESS here once supported by libofx! Notes=%s\n", notes);
+
+    /* Ideally, gnucash should process the corrected transactions */
+    if (data->fi_id_corrected_valid)
+    {
+        char *tmp = notes;
+        PERR("WRITEME: GnuCash ofx_proc_transaction(): WARNING: This transaction corrected a previous transaction, but we created a new one instead!\n");
+        notes = g_strdup_printf("%s%s%s%s", tmp,
+				"|This corrects transaction #",
+				sanitize_string (data->fi_id_corrected),
+				"but GnuCash didn't process the correction!");
+        g_free(tmp);
+    }
+    xaccTransSetNotes(transaction, notes);
+    g_free(notes);
+
+}
+
+static void
+process_bank_transaction(Transaction *transaction, Account *import_account,
+                         OfxTransactionData *data, ofx_info *info)
+{
+    Split *split;
+    gnc_numeric gnc_amount;
+    QofBook *book = qof_instance_get_book(QOF_INSTANCE(transaction));
+    double amount = data->amount;
+#ifdef HAVE_LIBOFX_VERSION_0_10
+    if (data->currency_ratio_valid && data->currency_ratio != 0)
+        amount *= data->currency_ratio;
+#endif
+    /***** Process a normal transaction ******/
+    DEBUG("Adding split; Ordinary banking transaction, money flows from or into the source account");
+    split = xaccMallocSplit(book);
+    xaccTransAppendSplit(transaction, split);
+    xaccAccountInsertSplit(import_account, split);
+    gnc_amount = gnc_ofx_numeric_from_double_txn(amount, transaction);
+    xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
+
+    /* set tran-num and/or split-action per book option */
+    if (data->check_number_valid)
+    {
+        /* SQL will correctly interpret the string "null", but
+         * the transaction num field is declared to be
+         * non-null so substitute the empty string.
+         */
+        const char *num_value =
+            strcasecmp (data->check_number, "null") == 0 ? "" :
+            data->check_number;
+        gnc_set_num_action(transaction, split, num_value, NULL);
+    }
+    else if (data->reference_number_valid)
+    {
+        const char *num_value =
+            strcasecmp (data->reference_number, "null") == 0 ? "" :
+            data->check_number;
+        gnc_set_num_action(transaction, split, num_value, NULL);
+    }
+    /* Also put the ofx transaction's memo in the
+     * split's memo field */
+    if (data->memo_valid)
+    {
+        xaccSplitSetMemo(split, data->memo);
+    }
+    if (data->fi_id_valid)
+    {
+        gnc_import_set_split_online_id(split,
+                                       sanitize_string (data->fi_id));
+    }
+}
+
+typedef struct
+{
+    gnc_commodity *commodity;
+    char *online_id;
+    char *acct_text;
+    gboolean choosing;
+} InvestmentAcctData;
+
+static Account*
+create_investment_subaccount(GtkWindow *parent, Account* parent_acct,
+                             InvestmentAcctData *inv_data)
+{
+
+    Account *investment_account =
+        gnc_ofx_new_account(parent,
+                            inv_data->acct_text,
+                            inv_data->commodity,
+                            parent_acct,
+                            ACCT_TYPE_STOCK);
+    if (investment_account)
+    {
+        gnc_import_set_acc_online_id(investment_account, inv_data->online_id);
+        inv_data->choosing = FALSE;
+        ofx_parent_account = parent_acct;
+    }
+    else
+    {
+        ofx_parent_account = NULL;
+    }
+    return investment_account;
+}
+
+static gboolean
+continue_account_selection(GNCImportMainMatcher* matcher, Account* account,
+                           gnc_commodity* commodity)
+{
+    gboolean keep_going =
+        gnc_verify_dialog(
+            GTK_WINDOW (gnc_gen_trans_list_widget(matcher)), TRUE,
+            "The chosen account \"%s\" does not have the correct "
+            "currency/security \"%s\" (it has \"%s\" instead). "
+            "This account cannot be used. "
+            "Do you want to choose again?",
+            xaccAccountGetName(account),
+            gnc_commodity_get_fullname(commodity),
+            gnc_commodity_get_fullname(xaccAccountGetCommodity(account)));
+    // We must also delete the online_id that was set in gnc_import_select_account()
+    gnc_import_set_acc_online_id(account, "");
+    return keep_going;
+}
+
+static Account*
+choose_investment_account_helper(OfxTransactionData *data, ofx_info *info,
+                                 InvestmentAcctData *inv_data)
+{
+    Account *investment_account = NULL;
+    // No account with correct commodity automatically found.
+
+    // But are we in auto-create mode and already know a parent?
+    if (auto_create_commodity && ofx_parent_account)
+    {
+        // Yes, so use that as parent when auto-creating the new account below.
+        investment_account = ofx_parent_account;
+    }
+    else
+    {
+        // Let the user choose an account
+        investment_account = gnc_import_select_account(
+            gnc_gen_trans_list_widget(info->gnc_ofx_importer_gui),
+            data->unique_id, TRUE, inv_data->acct_text,
+            inv_data->commodity, ACCT_TYPE_STOCK,
+            info->last_investment_account, &inv_data->choosing);
+        if (investment_account)
+            info->last_investment_account = investment_account;
+    }
+    // Does the chosen account have the right commodity?
+    if (investment_account &&
+        xaccAccountGetCommodity(investment_account) == inv_data->commodity)
+        return investment_account;
+
+    if (!investment_account) // Nothing more to try
+        return NULL;
+
+    if (auto_create_commodity &&
+        xaccAccountTypesCompatible(xaccAccountGetType(investment_account),
+                                   ACCT_TYPE_STOCK))
+    {
+        /* We have an account but the commodity doesn't match. Since
+         * auto_create_commodity is on and the account has a
+         * compatible type we can just create a sub-account with the
+         * right commodity.
+         */
+        investment_account =
+            create_investment_subaccount(GTK_WINDOW(info->parent),
+                                                    investment_account,
+                                                    inv_data);
+    }
+    else
+    {
+        // No account with matching commodity. Ask the user
+        // whether to continue or abort.
+        inv_data->choosing =
+            continue_account_selection(info->gnc_ofx_importer_gui,
+                                       investment_account,
+                                       inv_data->commodity);
+        investment_account = NULL;
+    }
+
+    return investment_account;
+}
+
+static Account*
+choose_investment_account(OfxTransactionData *data, ofx_info *info,
+                          gnc_commodity *commodity)
+{
+    Account* investment_account = NULL;
+    gnc_numeric gnc_amount, gnc_units;
+    InvestmentAcctData inv_data = {commodity, NULL, NULL, FALSE};
+    char *acct_online_id;
+     // As we now have the commodity, select the account with that commodity.
+
+     /* Translators: This string is a default account name. It MUST
+      * NOT contain the character ':' anywhere in it or in any
+      * translations.  */
+     inv_data.acct_text = g_strdup_printf(
+          _("Stock account for security \"%s\""),
+          sanitize_string (data->security_data_ptr->secname));
+     inv_data.online_id = data->unique_id;
+
+     acct_online_id = g_strdup_printf("%s%s", data->account_id, data->unique_id);
+     investment_account = gnc_import_select_account(
+          gnc_gen_trans_list_widget(info->gnc_ofx_importer_gui),
+          acct_online_id, TRUE, inv_data.acct_text, inv_data.commodity,
+          ACCT_TYPE_STOCK, info->last_investment_account, NULL);
+     if (investment_account)
+          info->last_investment_account = investment_account;
+
+     // but use it only if that's really the right commodity
+     if (investment_account
+         && xaccAccountGetCommodity(investment_account) != inv_data.commodity)
+          investment_account = NULL;
+
+     // Loop until we either have an account, or the user pressed Cancel
+     while (!investment_account && inv_data.choosing)
+         investment_account = choose_investment_account_helper(data, info,
+                                                               &inv_data);
+     if (!investment_account)
+     {
+          PERR("No investment account found for text: %s\n", inv_data.acct_text);
+     }
+     g_free (inv_data.acct_text);
+     g_free (acct_online_id);
+
+     return investment_account;
+}
+
+static Account*
+choose_income_account(Account* investment_account, Transaction *transaction,
+                      OfxTransactionData *data, ofx_info *info)
+{
+    Account *income_account = NULL;
+    DEBUG("Now let's find an account for the destination split");
+    income_account =
+        get_associated_income_account(investment_account);
+
+    if (income_account == NULL)
+    {
+        char *income_account_text;
+        gnc_commodity *currency = xaccTransGetCurrency(transaction);
+        DEBUG("Couldn't find an associated income account");
+        /* Translators: This string is a default account
+         * name. It MUST NOT contain the character ':' anywhere
+         * in it or in any translations.  */
+        income_account_text = g_strdup_printf(
+            _("Income account for security \"%s\""),
+            sanitize_string (data->security_data_ptr->secname));
+        income_account = gnc_import_select_account(
+            gnc_gen_trans_list_widget(info->gnc_ofx_importer_gui),
+            NULL, TRUE, income_account_text, currency,
+            ACCT_TYPE_INCOME, info->last_income_account, NULL);
+
+        if (income_account != NULL)
+        {
+            info->last_income_account = income_account;
+            set_associated_income_account(investment_account,
+                                          income_account);
+            DEBUG("KVP written");
+        }
+    }
+    else
+    {
+        DEBUG("Found at least one associated income account");
+    }
+
+    return income_account;
+}
+
+static void
+add_investment_split(Transaction* transaction, Account* account,
+                             OfxTransactionData *data)
+{
+    Split *split;
+    QofBook *book = gnc_account_get_book(account);
+    gnc_numeric gnc_amount, gnc_units;
+    gnc_commodity *commodity = xaccAccountGetCommodity(account);
+    DEBUG("Adding investment split; Money flows from or into the stock account");
+    split = xaccMallocSplit(book);
+    xaccTransAppendSplit(transaction, split);
+    xaccAccountInsertSplit(account, split);
+
+    gnc_amount = gnc_ofx_numeric_from_double_txn(ofx_get_investment_amount(data),
+                                                  transaction);
+    gnc_units = gnc_ofx_numeric_from_double (data->units, commodity);
+    xaccSplitSetAmount(split, gnc_units);
+    xaccSplitSetValue(split, gnc_amount);
+
+    /* set tran-num and/or split-action per book option */
+    if (data->check_number_valid)
+    {
+        gnc_set_num_action(transaction, split, data->check_number, NULL);
+    }
+    else if (data->reference_number_valid)
+    {
+        gnc_set_num_action(transaction, split,
+                           data->reference_number, NULL);
+    }
+    if (data->security_data_ptr->memo_valid)
+    {
+        xaccSplitSetMemo(split,
+                         sanitize_string (data->security_data_ptr->memo));
+    }
+    if (data->fi_id_valid)
+    {
+        gnc_import_set_split_online_id(split,
+                                       sanitize_string (data->fi_id));
+    }
+}
+
+static void
+add_currency_split(Transaction *transaction, Account* account,
+                 double amount, OfxTransactionData *data)
+{
+    Split *split;
+    QofBook *book = gnc_account_get_book(account);
+    gnc_numeric gnc_amount;
+
+    split = xaccMallocSplit(book);
+    xaccTransAppendSplit(transaction, split);
+    xaccAccountInsertSplit(account, split);
+    gnc_amount = gnc_ofx_numeric_from_double_txn(amount, transaction);
+    xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
+
+    // Set split memo from ofx transaction name or memo
+    gnc_ofx_set_split_memo(data, split);
+    if (data->fi_id_valid)
+        gnc_import_set_split_online_id (split, sanitize_string (data->fi_id));
+}
+
+static void
+process_investment_transaction(Transaction *transaction, Account *import_account,
+                               OfxTransactionData *data, ofx_info *info)
+{
+    Split *split;
+    gnc_numeric gnc_amount, gnc_units;
+    gnc_commodity *investment_commodity = NULL;
     Account *investment_account = NULL;
     Account *income_account = NULL;
-    gchar *investment_account_text, *investment_account_onlineid;
+    QofBook *book = qof_instance_get_book(QOF_INSTANCE(transaction));
+
+    gnc_utf8_strip_invalid (data->unique_id);
+
+    /********* Process an investment transaction **********/
+    /* Note that the ACCT_TYPE_STOCK account type
+       should be replaced with something derived from
+       data->invtranstype*/
+
+    // We have an investment transaction. First select the correct commodity.
+    investment_commodity = gnc_import_select_commodity(data->unique_id,
+                                                       FALSE,
+                                                       NULL,
+                                                       NULL);
+    if (investment_commodity != NULL)
+         investment_account = choose_investment_account(data, info,
+                                                        investment_commodity);
+    else
+    {
+        PERR("Commodity not found for the investment transaction");
+    }
+
+     if (investment_account != NULL &&
+         data->unitprice_valid &&
+         data->units_valid &&
+         ( data->invtransactiontype != OFX_INCOME ) )
+         add_investment_split(transaction, investment_account, data);
+     else
+         PERR("The investment account, units or unitprice was not found for the investment transaction");
+
+    if (data->invtransactiontype_valid && investment_account)
+    {
+        double amount = data->amount;
+#ifdef HAVE_LIBOFX_VERSION_0_10
+        if (data->currency_ratio_valid && data->currency_ratio != 0)
+            amount *= data->currency_ratio;
+#endif
+        if (data->invtransactiontype == OFX_REINVEST
+            || data->invtransactiontype == OFX_INCOME)
+            income_account = choose_income_account(investment_account,
+                                                   transaction, data, info);
+        if (income_account != NULL &&
+            data->invtransactiontype == OFX_REINVEST)
+        {
+            DEBUG("Adding investment split; Money flows from the income account");
+            add_currency_split(transaction, income_account, -amount, data);
+        }
+        if (income_account != NULL &&
+            data->invtransactiontype == OFX_INCOME)
+        {
+            DEBUG("Adding investment split; Money flows to the income account");
+            add_currency_split(transaction, income_account, amount, data);
+        }
+    }
+
+    if (data->invtransactiontype_valid
+        && data->invtransactiontype != OFX_REINVEST)
+    {
+        DEBUG("Adding investment split; Money flows from or to the cash account");
+        add_currency_split(transaction, import_account,
+                           -ofx_get_investment_amount(data), data);
+    }
+}
+
+int ofx_proc_transaction_cb(OfxTransactionData data, void *user_data)
+{
+    Account *import_account;
     gnc_commodity *currency = NULL;
-    gnc_commodity *investment_commodity = NULL;
-    gnc_numeric gnc_amount, gnc_units;
     QofBook *book;
     Transaction *transaction;
-    Split *split;
-    gchar *notes, *tmp;
     ofx_info* info = (ofx_info*) user_data;
-    GtkWindow *parent = GTK_WINDOW (info->parent);
 
     g_assert(info->gnc_ofx_importer_gui);
+
+    if (!data.amount_valid)
+    {
+        PERR("The transaction doesn't have a valid amount");
+        return 0;
+    }
 
     if (!data.account_id_valid)
     {
         PERR("account ID for this transaction is unavailable!");
         return 0;
     }
-    else
-	gnc_utf8_strip_invalid (data.account_id);
 
-    account = gnc_import_select_account(gnc_gen_trans_list_widget(info->gnc_ofx_importer_gui),
+    gnc_utf8_strip_invalid (data.account_id);
+
+    import_account = gnc_import_select_account(gnc_gen_trans_list_widget(info->gnc_ofx_importer_gui),
                                         data.account_id,
 					0, NULL, NULL, ACCT_TYPE_NONE,
 					info->last_import_account, NULL);
-    if (account == NULL)
+    if (import_account == NULL)
     {
         PERR("Unable to find account for id %s", data.account_id);
         return 0;
     }
-    info->last_import_account = account;
+    info->last_import_account = import_account;
     /***** Validate the input strings to ensure utf8 *****/
     if (data.name_valid)
         gnc_utf8_strip_invalid(data.name);
@@ -464,119 +970,13 @@ int ofx_proc_transaction_cb(OfxTransactionData data, void *user_data)
         gnc_utf8_strip_invalid(data.reference_number);
 
     /***** Create the transaction and setup transaction data *******/
-    book = gnc_account_get_book(account);
+    book = gnc_account_get_book(import_account);
     transaction = xaccMallocTransaction(book);
     xaccTransBeginEdit(transaction);
 
-    /* Note: Unfortunately libofx <= 0.9.5 will not report a missing
-     * date field as an invalid one. Instead, it will report it as
-     * valid and return a completely bogus date. Starting with
-     * libofx-0.9.6 (not yet released as of 2012-09-09), it will still
-     * be reported as valid but at least the date integer itself is
-     * just plain zero. */
-    if (data.date_posted_valid && (data.date_posted != 0))
-    {
-        /* The hopeful case: We have a posted_date */
-        data.date_posted = fix_ofx_bug_39 (data.date_posted);
-        xaccTransSetDatePostedSecsNormalized(transaction, data.date_posted);
-    }
-    else if (data.date_initiated_valid && (data.date_initiated != 0))
-    {
-        /* No posted date? Maybe we have an initiated_date */
-        data.date_initiated = fix_ofx_bug_39 (data.date_initiated);
-        xaccTransSetDatePostedSecsNormalized(transaction, data.date_initiated);
-    }
-    else
-    {
-        /* Uh no, no valid date. As a workaround use today's date */
-        xaccTransSetDatePostedSecsNormalized(transaction, current_time);
-    }
-
-    xaccTransSetDateEnteredSecs(transaction, current_time);
-
-    /* Put transaction name in Description, or memo if name unavailable */
-    if (data.name_valid)
-    {
-        xaccTransSetDescription(transaction, data.name);
-    }
-    else if (data.memo_valid)
-    {
-        xaccTransSetDescription(transaction, data.memo);
-    }
-
-    /* Put everything else in the Notes field */
-    notes = g_strdup_printf("OFX ext. info: ");
-
-    if (data.transactiontype_valid)
-    {
-        tmp = notes;
-        notes = g_strdup_printf("%s%s%s", tmp, "|Trans type:",
-                                gnc_ofx_ttype_to_string(data.transactiontype));
-        g_free(tmp);
-    }
-
-    if (data.invtransactiontype_valid)
-    {
-        tmp = notes;
-        notes = g_strdup_printf("%s%s%s", tmp, "|Investment Trans type:",
-                                gnc_ofx_invttype_to_str(data.invtransactiontype));
-        g_free(tmp);
-    }
-    if (data.memo_valid && data.name_valid) /* Copy only if memo wasn't put in Description */
-    {
-        tmp = notes;
-        notes = g_strdup_printf("%s%s%s", tmp, "|Memo:", data.memo);
-        g_free(tmp);
-    }
-    if (data.date_funds_available_valid)
-    {
-        time64 time = data.date_funds_available;
-        gnc_time64_to_iso8601_buff (time, dest_string);
-        tmp = notes;
-        notes = g_strdup_printf("%s%s%s", tmp,
-				"|Date funds available:", dest_string);
-        g_free(tmp);
-    }
-    if (data.server_transaction_id_valid)
-    {
-        tmp = notes;
-        notes = g_strdup_printf("%s%s%s", tmp,
-				"|Server trans ID (conf. number):",
-				sanitize_string (data.server_transaction_id));
-        g_free(tmp);
-    }
-    if (data.standard_industrial_code_valid)
-    {
-        tmp = notes;
-        notes = g_strdup_printf("%s%s%ld", tmp,
-				"|Standard Industrial Code:",
-                                data.standard_industrial_code);
-        g_free(tmp);
-
-    }
-    if (data.payee_id_valid)
-    {
-        tmp = notes;
-        notes = g_strdup_printf("%s%s%s", tmp, "|Payee ID:",
-				sanitize_string (data.payee_id));
-        g_free(tmp);
-    }
-
-    //PERR("WRITEME: GnuCash ofx_proc_transaction():Add PAYEE and ADDRESS here once supported by libofx! Notes=%s\n", notes);
-
-    /* Ideally, gnucash should process the corrected transactions */
-    if (data.fi_id_corrected_valid)
-    {
-        PERR("WRITEME: GnuCash ofx_proc_transaction(): WARNING: This transaction corrected a previous transaction, but we created a new one instead!\n");
-        tmp = notes;
-        notes = g_strdup_printf("%s%s%s%s", tmp,
-				"|This corrects transaction #",
-				sanitize_string (data.fi_id_corrected),
-				"but GnuCash didn't process the correction!");
-        g_free(tmp);
-    }
-    xaccTransSetNotes(transaction, notes);
-    g_free(notes);
+    set_transaction_dates(transaction, &data);
+    fill_transaction_description(transaction, &data);
+    fill_transaction_notes(transaction, &data);
 
     if (data.account_ptr && data.account_ptr->currency_valid)
     {
@@ -588,367 +988,45 @@ int ofx_proc_transaction_cb(OfxTransactionData data, void *user_data)
     else
     {
         DEBUG("Currency from libofx unavailable, defaulting to account's default");
-        currency = xaccAccountGetCommodity(account);
+        currency = xaccAccountGetCommodity(import_account);
     }
 
     xaccTransSetCurrency(transaction, currency);
-    if (data.amount_valid)
+
+    if (!data.invtransactiontype_valid
+#ifdef HAVE_LIBOFX_VERSION_0_10
+        || data.invtransactiontype == OFX_INVBANKTRAN
+#endif
+        )
+        process_bank_transaction(transaction, import_account, &data, info);
+    else if (data.unique_id_valid
+             && data.security_data_valid
+             && data.security_data_ptr != NULL
+             && data.security_data_ptr->secname_valid)
+        process_investment_transaction(transaction, import_account,
+                                       &data, info);
+    else
     {
-        if (!data.invtransactiontype_valid
-#ifdef HAVE_LIBOFX_VERSION_0_10
-            || data.invtransactiontype == OFX_INVBANKTRAN)
-#else
-             )
-#endif
-        {
-            double amount = data.amount;
-#ifdef HAVE_LIBOFX_VERSION_0_10
-            if (data.currency_ratio_valid && data.currency_ratio != 0)
-                amount *= data.currency_ratio;
-#endif
-            /***** Process a normal transaction ******/
-            DEBUG("Adding split; Ordinary banking transaction, money flows from or into the source account");
-            split = xaccMallocSplit(book);
-            xaccTransAppendSplit(transaction, split);
-            xaccAccountInsertSplit(account, split);
-            gnc_amount = gnc_ofx_numeric_from_double_txn(amount, transaction);
-            xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
+        PERR("Unsupported OFX transaction type.");
+        xaccTransDestroy(transaction);
+        xaccTransCommitEdit(transaction);
+        return 0;
+    }
 
-            /* set tran-num and/or split-action per book option */
-            if (data.check_number_valid)
-            {
-                /* SQL will correctly interpret the string "null", but
-                 * the transaction num field is declared to be
-                 * non-null so substitute the empty string.
-                 */
-                const char *num_value =
-                    strcasecmp (data.check_number, "null") == 0 ? "" :
-                    data.check_number;
-                gnc_set_num_action(transaction, split, num_value, NULL);
-            }
-            else if (data.reference_number_valid)
-            {
-                const char *num_value =
-                    strcasecmp (data.reference_number, "null") == 0 ? "" :
-                    data.check_number;
-                gnc_set_num_action(transaction, split, num_value, NULL);
-            }
-            /* Also put the ofx transaction's memo in the
-             * split's memo field */
-            if (data.memo_valid)
-            {
-                xaccSplitSetMemo(split, data.memo);
-            }
-            if (data.fi_id_valid)
-            {
-                gnc_import_set_split_online_id(split,
-					       sanitize_string (data.fi_id));
-            }
-        }
-
-        else if (data.unique_id_valid
-                 && data.security_data_valid
-                 && data.security_data_ptr != NULL
-                 && data.security_data_ptr->secname_valid)
-        {
-            gboolean choosing_account = TRUE;
-	    gnc_utf8_strip_invalid (data.unique_id);
-            /********* Process an investment transaction **********/
-            /* Note that the ACCT_TYPE_STOCK account type
-               should be replaced with something derived from
-               data.invtranstype*/
-
-            // We have an investment transaction. First select the correct commodity.
-            investment_commodity = gnc_import_select_commodity(data.unique_id,
-                                   FALSE,
-                                   NULL,
-                                   NULL);
-            if (investment_commodity != NULL)
-            {
-                // As we now have the commodity, select the account with that commodity.
-
-                /* Translators: This string is a default account name. It MUST
-                 * NOT contain the character ':' anywhere in it or in any
-                 * translations.  */
-                investment_account_text = g_strdup_printf(
-                                         _("Stock account for security \"%s\""),
-                             sanitize_string (data.security_data_ptr->secname));
-
-                investment_account_onlineid = g_strdup_printf( "%s%s",
-							       data.account_id,
-							       data.unique_id);
-                investment_account = gnc_import_select_account(
-                                     gnc_gen_trans_list_widget(info->gnc_ofx_importer_gui),
-                                     investment_account_onlineid,
-                                     1,
-                                     investment_account_text,
-                                     investment_commodity,
-                                     ACCT_TYPE_STOCK,
-                                     info->last_investment_account,
-                                     NULL);
-                if (investment_account)
-                    info->last_investment_account = investment_account;
-
-                // but use it only if that's really the right commodity
-                if (investment_account
-                        && xaccAccountGetCommodity(investment_account) != investment_commodity)
-                    investment_account = NULL;
-
-                // Loop until we either have an account, or the user pressed Cancel
-                while (!investment_account && choosing_account)
-                {
-                    // No account with correct commodity automatically found.
-
-                    // But are we in auto-create mode and already know a parent?
-                    if (auto_create_commodity && ofx_parent_account)
-                    {
-                        // Yes, so use that as parent when auto-creating the new account below.
-                        investment_account = ofx_parent_account;
-                    }
-                    else
-                    {
-                        // Let the user choose an account
-                        investment_account = gnc_import_select_account(
-                                                 gnc_gen_trans_list_widget(info->gnc_ofx_importer_gui),
-                                                 data.unique_id,
-                                                 TRUE,
-                                                 investment_account_text,
-                                                 investment_commodity,
-                                                 ACCT_TYPE_STOCK,
-                                                 info->last_investment_account,
-                                                 &choosing_account);
-                        if (investment_account)
-                            info->last_investment_account = investment_account;
-                    }
-                    // Does the chosen account have the right commodity?
-                    if (investment_account && xaccAccountGetCommodity(investment_account) != investment_commodity)
-                    {
-                        if (auto_create_commodity
-                                && xaccAccountTypesCompatible(xaccAccountGetType(investment_account),
-                                                              ACCT_TYPE_STOCK))
-                        {
-                            // The user chose an account, but it does
-                            // not have the right commodity. Also,
-                            // auto-creation is on. Hence, we create a
-                            // new child account of the selected one,
-                            // and this one will have the right
-                            // commodity.
-                            Account *parent_account = investment_account;
-                            investment_account =
-                                gnc_ofx_new_account(parent,
-                                                    investment_account_text,
-                                                    investment_commodity,
-                                                    parent_account,
-                                                    ACCT_TYPE_STOCK);
-                            if (investment_account)
-                            {
-                                gnc_import_set_acc_online_id(investment_account, data.unique_id);
-                                choosing_account = FALSE;
-                                ofx_parent_account = parent_account;
-                            }
-                            else
-                            {
-                                ofx_parent_account = NULL;
-                            }
-                        }
-                        else
-                        {
-                            // No account with matching commodity. Ask the user
-                            // whether to continue or abort.
-                            choosing_account =
-                                gnc_verify_dialog(
-                                    GTK_WINDOW (gnc_gen_trans_list_widget(info->gnc_ofx_importer_gui)), TRUE,
-                                    "The chosen account \"%s\" does not have the correct "
-                                    "currency/security \"%s\" (it has \"%s\" instead). "
-                                    "This account cannot be used. "
-                                    "Do you want to choose again?",
-                                    xaccAccountGetName(investment_account),
-                                    gnc_commodity_get_fullname(investment_commodity),
-                                    gnc_commodity_get_fullname(xaccAccountGetCommodity(investment_account)));
-                            // We must also delete the online_id that was set in gnc_import_select_account()
-                            gnc_import_set_acc_online_id(investment_account, "");
-                            investment_account = NULL;
-                        }
-                    }
-                }
-                if (!investment_account)
-                {
-                    PERR("No investment account found for text: %s\n", investment_account_text);
-                }
-                g_free (investment_account_text);
-                g_free (investment_account_onlineid);
-                investment_account_text = NULL;
-
-                if (investment_account != NULL &&
-                        data.unitprice_valid &&
-                        data.units_valid &&
-                        ( data.invtransactiontype != OFX_INCOME ) )
-                {
-                    DEBUG("Adding investment split; Money flows from or into the stock account");
-                    split = xaccMallocSplit(book);
-                    xaccTransAppendSplit(transaction, split);
-                    xaccAccountInsertSplit(investment_account, split);
-
-                    gnc_amount = gnc_ofx_numeric_from_double_txn (ofx_get_investment_amount(&data),
-                                 transaction);
-                    gnc_units = gnc_ofx_numeric_from_double (data.units, investment_commodity);
-                    xaccSplitSetAmount(split, gnc_units);
-                    xaccSplitSetValue(split, gnc_amount);
-
-                    /* set tran-num and/or split-action per book option */
-                    if (data.check_number_valid)
-                    {
-                        gnc_set_num_action(transaction, split, data.check_number, NULL);
-                    }
-                    else if (data.reference_number_valid)
-                    {
-                        gnc_set_num_action(transaction, split,
-                                           data.reference_number, NULL);
-                    }
-                    if (data.security_data_ptr->memo_valid)
-                    {
-                        xaccSplitSetMemo(split,
-                                sanitize_string (data.security_data_ptr->memo));
-                    }
-                    if (data.fi_id_valid)
-                    {
-                        gnc_import_set_split_online_id(split,
-                                                 sanitize_string (data.fi_id));
-                    }
-                }
-                else
-                {
-                    if (investment_account)
-                        PERR("The investment account, units or unitprice was not found for the investment transaction");
-                }
-            }
-            else
-            {
-                PERR("Commodity not found for the investment transaction");
-            }
-
-            if (data.invtransactiontype_valid && investment_account)
-            {
-                double amount = data.amount;
-#ifdef HAVE_LIBOFX_VERSION_0_10
-                if (data.currency_ratio_valid && data.currency_ratio != 0)
-                    amount *= data.currency_ratio;
-#endif
-                if (data.invtransactiontype == OFX_REINVEST
-                        || data.invtransactiontype == OFX_INCOME)
-                {
-                    DEBUG("Now let's find an account for the destination split");
-                    income_account =
-                        get_associated_income_account(investment_account);
-
-                    if (income_account == NULL)
-                    {
-                        DEBUG("Couldn't find an associated income account");
-                        /* Translators: This string is a default account
-                         * name. It MUST NOT contain the character ':' anywhere
-                         * in it or in any translations.  */
-                        investment_account_text = g_strdup_printf(
-                                                      _("Income account for security \"%s\""),
-                                                      sanitize_string (data.security_data_ptr->secname));
-                        income_account = gnc_import_select_account(
-                                             gnc_gen_trans_list_widget(info->gnc_ofx_importer_gui),
-                                             NULL,
-                                             1,
-                                             investment_account_text,
-                                             currency,
-                                             ACCT_TYPE_INCOME,
-                                             info->last_income_account,
-                                             NULL);
-                        if (income_account != NULL)
-                        {
-                            info->last_income_account = income_account;
-                            set_associated_income_account(investment_account,
-                                                          income_account);
-                            DEBUG("KVP written");
-                        }
-
-                    }
-                    else
-                    {
-                        DEBUG("Found at least one associated income account");
-                    }
-                }
-                if (income_account != NULL &&
-                        data.invtransactiontype == OFX_REINVEST)
-                {
-                    DEBUG("Adding investment split; Money flows from the income account");
-                    split = xaccMallocSplit(book);
-                    xaccTransAppendSplit(transaction, split);
-                    xaccAccountInsertSplit(income_account, split);
-                    gnc_amount = gnc_ofx_numeric_from_double_txn(amount,
-                                                                 transaction);
-                    xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
-
-                    // Set split memo from ofx transaction name or memo
-                    gnc_ofx_set_split_memo(&data, split);
-                    if (data.fi_id_valid)
-                        gnc_import_set_split_online_id (split, sanitize_string (data.fi_id));
-                }
-                if (income_account != NULL &&
-                        data.invtransactiontype == OFX_INCOME)
-                {
-                    DEBUG("Adding investment split; Money flows from the income account");
-                    split = xaccMallocSplit(book);
-                    xaccTransAppendSplit(transaction, split);
-                    xaccAccountInsertSplit(income_account, split);
-                    /*OFX_INCOME amounts come in as positive numbers*/
-                    gnc_amount = gnc_ofx_numeric_from_double_txn (-amount,
-                                                                  transaction);
-
-                    xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
-
-                    // Set split memo from ofx transaction name or memo
-                    gnc_ofx_set_split_memo(&data, split);
-                    if (data.fi_id_valid)
-                        gnc_import_set_split_online_id (split, sanitize_string (data.fi_id));
-                }
-            }
-
-            if (data.invtransactiontype_valid
-                    && data.invtransactiontype != OFX_REINVEST)
-            {
-                DEBUG("Adding investment split; Money flows from or to the cash account");
-                split = xaccMallocSplit(book);
-                xaccTransAppendSplit(transaction, split);
-                xaccAccountInsertSplit(account, split);
-
-                gnc_amount = gnc_ofx_numeric_from_double_txn(
-                                 -ofx_get_investment_amount(&data), transaction);
-                xaccSplitSetBaseValue(split, gnc_amount,
-                                      xaccTransGetCurrency(transaction));
-
-                // Set split memo from ofx transaction name or memo
-                gnc_ofx_set_split_memo(&data, split);
-                if (data.fi_id_valid)
-                    gnc_import_set_split_online_id (split, sanitize_string (data.fi_id));
-            }
-        }
-
-        /* Send transaction to importer GUI. */
-        if (xaccTransCountSplits(transaction) > 0)
-        {
-            DEBUG("%d splits sent to the importer gui",
-                  xaccTransCountSplits(transaction));
-            info->trans_list = g_list_prepend (info->trans_list, transaction);
-        }
-        else
-        {
-            PERR("No splits in transaction (missing account?), ignoring.");
-            xaccTransDestroy(transaction);
-            xaccTransCommitEdit(transaction);
-        }
+    /* Send transaction to importer GUI. */
+    if (xaccTransCountSplits(transaction) > 0)
+    {
+        DEBUG("%d splits sent to the importer gui",
+              xaccTransCountSplits(transaction));
+        info->trans_list = g_list_prepend (info->trans_list, transaction);
     }
     else
     {
-        PERR("The transaction doesn't have a valid amount");
+        PERR("No splits in transaction (missing account?), ignoring.");
         xaccTransDestroy(transaction);
         xaccTransCommitEdit(transaction);
     }
+
     info->num_trans_processed += 1;
     return 0;
 }//end ofx_proc_transaction()
