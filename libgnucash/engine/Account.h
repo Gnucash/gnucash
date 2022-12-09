@@ -1182,6 +1182,58 @@ typedef enum
     void xaccAccountClearReconcilePostpone (Account *account);
     /** @} */
 
+    /** @name Account Balance Limits
+     @{
+    */
+
+    /** Get the higher balance limit for the account.
+     *
+     *  @param account The account whose higher limit is to be retrieved
+     *
+     *  @param balance The placeholder to store the retrieved balance
+     *
+     *  @return True if the limit is valid. */
+    gboolean xaccAccountGetHigherBalanceLimit (const Account *account,
+                                               gnc_numeric *balance);
+
+    /** Set the higher balance limit for the account.
+     *
+     *  @param account The account whose higher limit is to be saved
+     *
+     *  @param balance The balance to be saved
+     */
+    void xaccAccountSetHigherBalanceLimit (Account *account, gnc_numeric balance);
+
+    /** Clear the higher balance limit for the account.
+     *
+     *  @param account The account to clear the limit on
+     */
+    void xaccAccountClearHigherBalanceLimit (Account *account);
+
+    /** Get the lower balance limit for the account.
+     *
+     *  @param account The account whose lower limit is to be retrieved
+     *
+     *  @param balance The placeholder to store the retrieved balance
+     *
+     *  @return True if the limit is valid. */
+    gboolean xaccAccountGetLowerBalanceLimit (const Account *account,
+                                              gnc_numeric *balance);
+
+    /** Set the lower balance limit for the account.
+     *
+     *  @param account The account whose lower limit is to be saved
+     *
+     *  @param balance The balance to be saved
+     */
+    void xaccAccountSetLowerBalanceLimit (Account *account, gnc_numeric balance);
+
+    /** Clear the lower balance limit for the account.
+     *
+     *  @param account The account to clear the limit on
+     */
+    void xaccAccountClearLowerBalanceLimit (Account *account);
+    /** @} */
 
     /** DOCUMENT ME! */
     typedef enum

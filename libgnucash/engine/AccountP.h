@@ -121,6 +121,11 @@ typedef struct AccountPrivate
     gnc_numeric cleared_balance;
     gnc_numeric reconciled_balance;
 
+    gnc_numeric higher_balance_limit;
+    gboolean    higher_balance_cached;
+    gnc_numeric lower_balance_limit;
+    gboolean    lower_balance_cached;
+
     gboolean balance_dirty;     /* balances in splits incorrect */
 
     GList *splits;              /* list of split pointers */
