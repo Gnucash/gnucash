@@ -14,17 +14,17 @@
 # Hiroto Kagotani <hiroto.kagotani@gmail.com>, 2007.
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2008-2009.
 # Yasuaki Taniguchi <yasuakit@gmail.com>, 2009-2017.
-# YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>, 2018, 2020, 2021.
+# YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>, 2018, 2020, 2021, 2022.
 # Takuro Onoue <kusanaginoturugi@gmail.com>, 2020, 2021.
 # TANIGUCHI Yasuaki <yasuakit+weblate@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.13-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2021-07-28 13:32+0000\n"
-"Last-Translator: TANIGUCHI Yasuaki <yasuakit+weblate@gmail.com>\n"
+"PO-Revision-Date: 2022-12-10 18:48+0000\n"
+"Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ja/>\n"
 "Language: ja\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -3193,8 +3193,7 @@ msgid "Invalid Account in Split"
 msgstr "スプリットに無効な勘定科目があります"
 
 #: gnucash/gnome/dialog-sx-editor.c:760
-#, fuzzy, c-format
-#| msgid "Split with memo %s has an unparseable Credit Formula."
+#, c-format
 msgid "Split with memo %s has an unparsable Credit Formula."
 msgstr "摘要 %s のスプリットに解析不能な貸方の数式があります。"
 
@@ -3203,8 +3202,7 @@ msgid "Unparsable Formula in Split"
 msgstr "スプリットに解析不能な数式があります"
 
 #: gnucash/gnome/dialog-sx-editor.c:776
-#, fuzzy, c-format
-#| msgid "Split with memo %s has an unparseable Debit Formula."
+#, c-format
 msgid "Split with memo %s has an unparsable Debit Formula."
 msgstr "摘要 %s のスプリットに解析不能な借方の数式があります。"
 
@@ -8645,10 +8643,8 @@ msgid "Edit the global preferences of GnuCash"
 msgstr "GnuCash全体の設定を編集します。"
 
 #: gnucash/gnome-utils/gnc-main-window.c:345
-#, fuzzy
-#| msgid "<b>Tab Position</b>"
 msgid "Tab P_osition"
-msgstr "<b>タブ位置</b>"
+msgstr "タブの位置(_O)"
 
 #: gnucash/gnome-utils/gnc-main-window.c:348
 msgid "Select sorting criteria for this page view"
@@ -15372,10 +15368,8 @@ msgstr "ISIN、証券コードまたはその他のコード(_P)"
 #: gnucash/gtkbuilder/dialog-commodity.glade:485
 #: gnucash/gtkbuilder/dialog-commodity.glade:767
 #: gnucash/gtkbuilder/dialog-price.glade:138
-#, fuzzy
-#| msgid "Namespace"
 msgid "Nam_espace"
-msgstr "名前空間"
+msgstr "名前空間(_E)"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:500
 msgid "_Symbol/abbreviation"
@@ -16104,16 +16098,12 @@ msgid "Show _Memo column"
 msgstr "摘要列を表示する(_M)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1096
-#, fuzzy
-#| msgid "Show _matched information"
 msgid "Show matched _information"
-msgstr "一致した情報を表示する(_M)"
+msgstr "一致した情報を表示する(_I)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1111
-#, fuzzy
-#| msgid "Spend"
 msgid "A_ppend"
-msgstr "消費"
+msgstr "追記する(_P)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1115
 msgid ""
@@ -16864,22 +16854,15 @@ msgid "Enable update match action"
 msgstr "一致処理で更新動作を有効にする"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2298
-#, fuzzy
-#| msgid ""
-#| "Enable the UPDATE AND RECONCILE action in the transaction matcher. If "
-#| "enabled, a transaction whose best match's score is above the Auto-CLEAR "
-#| "threshold and has a different date or amount than the matching existing "
-#| "transaction will cause the existing transaction to be updated and cleared "
-#| "by default."
 msgid ""
 "Enable the UPDATE AND CLEAR action in the transaction matcher. If enabled, a "
 "transaction whose best match's score is above the Auto-CLEAR threshold and "
 "has a different date or amount than the matching existing transaction will "
 "cause the existing transaction to be updated and cleared by default."
 msgstr ""
-"取引の一致処理で更新および照合動作を有効にします。選択した場合、一致処理のス"
-"コアが自動清算の閾値より上で、日付または金額が異なる既存の取引はデフォルトで"
-"更新および清算されます。"
+"取引の一致処理で「更新および清算」動作を有効にします。選択した場合、一致処理"
+"のスコアが自動清算の閾値より上で、日付または金額が異なる既存の取引はデフォル"
+"トで更新および清算されます。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2331
 msgid ""
@@ -17284,7 +17267,7 @@ msgstr "直近に使ったタブを前面に出す(_R)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3885
 msgid "<b>Tab Position</b>"
-msgstr "<b>タブ位置</b>"
+msgstr "<b>タブの位置</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3974
 msgid "<b>Summary Bar Position</b>"
@@ -21342,24 +21325,18 @@ msgstr "無効"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1317
-#, fuzzy
-#| msgid "Assign a transfer account to the selection."
 msgid "_Assign a transfer account to the selection"
-msgstr "選択した行の資金移動先勘定科目を割り当てる"
+msgstr "選択した行の資金移動先勘定科目を割り当てる(_A)"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1368
-#, fuzzy
-#| msgid "Description, Notes, or Memo"
 msgid "_Edit description, notes, or memo"
-msgstr "説明、備考、または摘要"
+msgstr "説明、備考、または摘要を編集(_E)"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1377
-#, fuzzy
-#| msgid "Reset defaults"
 msgid "_Reset all edits"
-msgstr "デフォルトに戻す"
+msgstr "すべての編集をリセット(_R)"
 
 #: gnucash/import-export/import-main-matcher.c:1548
 msgctxt "Column header for 'Adding transaction'"
