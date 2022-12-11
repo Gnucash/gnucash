@@ -825,7 +825,9 @@ add_investment_split(Transaction* transaction, Account* account,
         xaccSplitSetMemo(split,
                          sanitize_string (data->security_data_ptr->memo));
     }
-    if (data->fi_id_valid)
+    if (data->fi_id_valid &&
+        xaccAccountTypesCompatible(xaccAccountGetType(account),
+                                   ACCT_TYPE_ASSET))
     {
         gnc_import_set_split_online_id(split,
                                        sanitize_string (data->fi_id));
