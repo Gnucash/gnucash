@@ -2595,7 +2595,7 @@ unichar_is_cntrl (gunichar uc)
 gchar *
 gnc_filter_text_for_control_chars (const gchar *text)
 {
-    gchar *normal_text, *nt;
+    const char *ch;
     GString *filtered;
     gboolean cntrl = FALSE;
     gboolean text_found = FALSE;
@@ -2606,20 +2606,18 @@ gnc_filter_text_for_control_chars (const gchar *text)
     if (!g_utf8_validate (text, -1, NULL))
         return NULL;
 
-    normal_text = g_utf8_normalize (text, -1, G_NORMALIZE_ALL_COMPOSE);
+    filtered = g_string_sized_new (strlen (text) + 1);
 
-    filtered = g_string_sized_new (strlen (normal_text) + 1);
+    ch = text;
 
-    nt = normal_text;
-
-    while (*nt)
+    while (*ch)
     {
-        gunichar uc = g_utf8_get_char (nt);
+        gunichar uc = g_utf8_get_char (ch);
 
         // check for starting with control characters
         if (unichar_is_cntrl (uc) && !text_found)
         {
-            nt = g_utf8_next_char (nt);
+            ch = g_utf8_next_char (ch);
             continue;
         }
         // check for alpha, num and punctuation
@@ -2632,18 +2630,17 @@ gnc_filter_text_for_control_chars (const gchar *text)
         if (unichar_is_cntrl (uc))
             cntrl = TRUE;
 
-        nt = g_utf8_next_char (nt);
+        ch = g_utf8_next_char (ch);
 
         if (cntrl) // if control characters in text replace with space
         {
-            gunichar uc2 = g_utf8_get_char (nt);
+            gunichar uc2 = g_utf8_get_char (ch);
 
             if (!unichar_is_cntrl (uc2))
                 filtered = g_string_append_unichar (filtered, ' ');
         }
         cntrl = FALSE;
     }
-    g_free (normal_text);
     return g_string_free (filtered, FALSE);
 }
 
@@ -2684,6 +2681,7 @@ gnc_filter_text_for_currency_symbol (const gchar *incoming_text,
                                      const gchar *symbol)
 {
     gchar *ret_text = NULL;
+    gchar *normal_text, *normal_sym;
     gchar **split;
 
     if (!incoming_text)
@@ -2692,8 +2690,15 @@ gnc_filter_text_for_currency_symbol (const gchar *incoming_text,
     if (!symbol)
        return g_strdup (incoming_text);
 
-    if (g_strrstr (incoming_text, symbol) == NULL)
+    normal_sym = g_utf8_normalize (symbol, -1, G_NORMALIZE_ALL_COMPOSE);
+    normal_text =
+         g_utf8_normalize (incoming_text, -1, G_NORMALIZE_ALL_COMPOSE);
+    if (g_strrstr (normal_text, normal_sym) == NULL)
+    {
+        g_free(normal_sym);
+        g_free(normal_text);
         return g_strdup (incoming_text);
+    }
 
     split = g_strsplit (incoming_text, symbol, -1);
 
