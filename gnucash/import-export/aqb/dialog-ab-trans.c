@@ -33,9 +33,11 @@
 
 #include <glib/gi18n.h>
 #include "gnc-ab-utils.h"
+#if (AQBANKING_VERSION_INT >= 60400)
 #include <aqbanking/types/transaction.h>
 
 #include <gnc-aqbanking-templates.h>
+#endif
 #include "dialog-ab-trans.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
@@ -45,6 +47,7 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
 
+#if (AQBANKING_VERSION_INT >= 60400)
 /* Template handling */
 static void gnc_ab_trans_dialog_fill_templ_helper(gpointer data, gpointer user_data);
 static gboolean gnc_ab_trans_dialog_clear_templ_helper(GtkTreeModel *model,
@@ -55,7 +58,7 @@ static gboolean gnc_ab_trans_dialog_get_templ_helper(GtkTreeModel *model,
         GtkTreePath *path,
         GtkTreeIter *iter,
         gpointer data);
-
+#endif
 static AB_TRANSACTION *gnc_ab_trans_dialog_fill_values(GncABTransDialog *td);
 static GNC_AB_JOB *gnc_ab_trans_dialog_get_available_empty_job(GNC_AB_ACCOUNT_SPEC *ab_acc,
         GncABTransType trans_type);
@@ -155,6 +158,7 @@ gboolean gnc_ab_trans_isSEPA(GncABTransType t)
     }
 }
 
+#if (AQBANKING_VERSION_INT >= 60400)
 static void
 gnc_ab_trans_dialog_fill_templ_helper(gpointer data, gpointer user_data)
 {
@@ -169,7 +173,7 @@ gnc_ab_trans_dialog_fill_templ_helper(gpointer data, gpointer user_data)
                        TEMPLATE_POINTER, templ,
                        -1);
 }
-
+#endif
 /**
  * Create a new AB_TRANSACTION, fill the values from the entry fields into it
  * and return it.  The caller must AB_TRANSACTION_free() it when finished.
@@ -449,6 +453,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
         gtk_label_set_text (GTK_LABEL (orig_bankcode_label), ab_bankcode);
     }
 
+#if (AQBANKING_VERSION_INT >= 60400)
     /* Fill list for choosing a transaction template */
     td->template_list_store = gtk_list_store_new(TEMPLATE_NUM_COLUMNS,
                               G_TYPE_STRING, G_TYPE_POINTER);
@@ -457,7 +462,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
                             GTK_TREE_MODEL(td->template_list_store));
     td->templ_changed = FALSE;
     /* Keep a reference to the store */
-
+#endif
     /* Show this list */
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(
@@ -723,6 +728,7 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
     return result;
 }
 
+#if (AQBANKING_VERSION_INT >= 60400)
 static gboolean
 gnc_ab_trans_dialog_clear_templ_helper(GtkTreeModel *model,
                                        GtkTreePath *path,
@@ -737,7 +743,7 @@ gnc_ab_trans_dialog_clear_templ_helper(GtkTreeModel *model,
     gnc_ab_trans_templ_free(templ);
     return FALSE;
 }
-
+#endif
 void
 gnc_ab_trans_dialog_free(GncABTransDialog *td)
 {
@@ -746,15 +752,19 @@ gnc_ab_trans_dialog_free(GncABTransDialog *td)
         AB_Transaction_free(td->ab_trans);
     if (td->dialog)
         gtk_widget_destroy(td->dialog);
+
+#if (AQBANKING_VERSION_INT >= 60400)
     if (td->template_list_store)
     {
         gtk_tree_model_foreach(GTK_TREE_MODEL(td->template_list_store),
                                gnc_ab_trans_dialog_clear_templ_helper, NULL);
         g_object_unref(td->template_list_store);
     }
+#endif
     g_free(td);
 }
 
+#if (AQBANKING_VERSION_INT >= 60400)
 static gboolean
 gnc_ab_trans_dialog_get_templ_helper(GtkTreeModel *model,
                                      GtkTreePath *path,
@@ -790,6 +800,7 @@ gnc_ab_trans_dialog_get_templ(const GncABTransDialog *td, gboolean *changed)
     list = g_list_reverse(list);
     return list;
 }
+#endif
 
 GtkWidget *
 gnc_ab_trans_dialog_get_parent(const GncABTransDialog *td)
@@ -822,9 +833,11 @@ gnc_ab_trans_dialog_get_available_empty_job(GNC_AB_ACCOUNT_SPEC *ab_acc, GncABTr
      case SEPA_TRANSFER:
          cmd=AB_Transaction_CommandSepaTransfer;
          break;
+#if (AQBANKING_VERSION_INT >= 60400)
      case SEPA_INTERNAL_TRANSFER:
          cmd=AB_Transaction_CommandSepaInternalTransfer;
          break;
+#endif
      case SEPA_DEBITNOTE:
          cmd=AB_Transaction_CommandSepaDebitNote;
          break;
@@ -875,6 +888,7 @@ gnc_ab_get_trans_job(GNC_AB_ACCOUNT_SPEC *ab_acc,
 
 }
 
+#if (AQBANKING_VERSION_INT >= 60400)
 void
 gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkTreeView *view,
         GtkTreePath *path,
@@ -1053,6 +1067,7 @@ gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data)
 
     LEAVE(" ");
 }
+#endif
 
 void
 gnc_ab_trans_dialog_moveup_templ_cb(GtkButton *button, gpointer user_data)

@@ -35,8 +35,10 @@
 #include <gwenhywfar/gwenhywfar.h>
 #include <aqbanking/banking.h>
 #include <aqbanking/types/balance.h>
+#if (AQBANKING_VERSION_INT >= 60400)
 #include <aqbanking/types/refaccount.h>
 #include <gnc-aqbanking-templates.h>
+#endif
 #include "window-reconcile.h"
 #include "Transaction.h"
 #include "dialog-ab-trans.h"
@@ -1172,6 +1174,7 @@ gnc_ab_get_permanent_certs (void)
     return perm_certs;
 }
 
+#if (AQBANKING_VERSION_INT >= 60400)
 GList*
 gnc_ab_trans_templ_list_new_from_ref_accounts (GNC_AB_ACCOUNT_SPEC *ab_acc)
 {
@@ -1212,6 +1215,7 @@ gnc_ab_trans_templ_list_new_from_ref_accounts (GNC_AB_ACCOUNT_SPEC *ab_acc)
 
     return retval;
 }
+#endif
 static int
 ab_node_pair_compare (AB_Node_Pair* left, AB_Node_Pair* right)
 {

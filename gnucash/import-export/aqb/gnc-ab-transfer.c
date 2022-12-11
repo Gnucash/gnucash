@@ -106,6 +106,7 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         goto cleanup;
     }
 
+#if (AQBANKING_VERSION_INT >= 60400)
     if (trans_type == SEPA_INTERNAL_TRANSFER)
     {
         /* Generate list of template transactions from the reference accounts*/
@@ -118,6 +119,7 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         }
     }
     else
+#endif
     {
     /* Get list of template transactions */
         templates = gnc_ab_trans_templ_list_new_from_book(
@@ -153,7 +155,11 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         result = gnc_ab_trans_dialog_run_until_ok(td);
 				
         templates = gnc_ab_trans_dialog_get_templ(td, &changed);
+#if (AQBANKING_VERSION_INT >= 60400)
         if (trans_type != SEPA_INTERNAL_TRANSFER && changed)
+#else
+        if (changed)
+#endif
         {
            /* Save the templates */
             save_templates(parent, gnc_acc, templates,
