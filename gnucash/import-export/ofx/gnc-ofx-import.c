@@ -804,8 +804,9 @@ add_investment_split(Transaction* transaction, Account* account,
     xaccTransAppendSplit(transaction, split);
     xaccAccountInsertSplit(account, split);
 
-    gnc_amount = gnc_ofx_numeric_from_double_txn(ofx_get_investment_amount(data),
-                                                  transaction);
+    gnc_amount =
+        gnc_ofx_numeric_from_double_txn(ofx_get_investment_amount(data),
+                                        transaction);
     gnc_units = gnc_ofx_numeric_from_double (data->units, commodity);
     xaccSplitSetAmount(split, gnc_units);
     xaccSplitSetValue(split, gnc_amount);
@@ -854,77 +855,75 @@ add_currency_split(Transaction *transaction, Account* account,
         gnc_import_set_split_online_id (split, sanitize_string (data->fi_id));
 }
 
+/* ******** Process an investment transaction **********/
+/* Note that the ACCT_TYPE_STOCK account type
+   should be replaced with something derived from
+   data->invtranstype*/
+
 static void
 process_investment_transaction(Transaction *transaction, Account *import_account,
                                OfxTransactionData *data, ofx_info *info)
 {
-    Split *split;
-    gnc_numeric gnc_amount, gnc_units;
-    gnc_commodity *investment_commodity = NULL;
     Account *investment_account = NULL;
     Account *income_account = NULL;
-    QofBook *book = qof_instance_get_book(QOF_INSTANCE(transaction));
+    gnc_commodity *investment_commodity;
+    double amount = data->amount;
+
+    g_return_if_fail(data->invtransactiontype_valid);
 
     gnc_utf8_strip_invalid (data->unique_id);
 
-    /********* Process an investment transaction **********/
-    /* Note that the ACCT_TYPE_STOCK account type
-       should be replaced with something derived from
-       data->invtranstype*/
 
-    // We have an investment transaction. First select the correct commodity.
-    investment_commodity = gnc_import_select_commodity(data->unique_id,
-                                                       FALSE,
-                                                       NULL,
-                                                       NULL);
-    if (investment_commodity != NULL)
-         investment_account = choose_investment_account(data, info,
-                                                        investment_commodity);
-    else
+    // Set the cash split unless it's a reinvestment, which doesn't have one.
+    if (data->invtransactiontype != OFX_REINVEST)
     {
-        PERR("Commodity not found for the investment transaction");
-    }
-
-     if (investment_account != NULL &&
-         data->unitprice_valid &&
-         data->units_valid &&
-         ( data->invtransactiontype != OFX_INCOME ) )
-         add_investment_split(transaction, investment_account, data);
-     else
-         PERR("The investment account, units or unitprice was not found for the investment transaction");
-
-    if (data->invtransactiontype_valid && investment_account)
-    {
-        double amount = data->amount;
-#ifdef HAVE_LIBOFX_VERSION_0_10
-        if (data->currency_ratio_valid && data->currency_ratio != 0)
-            amount *= data->currency_ratio;
-#endif
-        if (data->invtransactiontype == OFX_REINVEST
-            || data->invtransactiontype == OFX_INCOME)
-            income_account = choose_income_account(investment_account,
-                                                   transaction, data, info);
-        if (income_account != NULL &&
-            data->invtransactiontype == OFX_REINVEST)
-        {
-            DEBUG("Adding investment split; Money flows from the income account");
-            add_currency_split(transaction, income_account, -amount, data);
-        }
-        if (income_account != NULL &&
-            data->invtransactiontype == OFX_INCOME)
-        {
-            DEBUG("Adding investment split; Money flows to the income account");
-            add_currency_split(transaction, income_account, amount, data);
-        }
-    }
-
-    if (data->invtransactiontype_valid
-        && data->invtransactiontype != OFX_REINVEST)
-    {
-        DEBUG("Adding investment split; Money flows from or to the cash account");
+        DEBUG("Adding investment cash split.");
         add_currency_split(transaction, import_account,
                            -ofx_get_investment_amount(data), data);
     }
+
+    investment_commodity = gnc_import_select_commodity(data->unique_id,
+                                                       FALSE, NULL, NULL);
+    if (!investment_commodity)
+    {
+        PERR("Commodity not found for the investment transaction");
+        return;
+    }
+    investment_account = choose_investment_account(data, info,
+                                                   investment_commodity);
+
+    if (!investment_account)
+    {
+        PERR("Failed to determine an investment asset account.");
+        return;
+    }
+
+    if (data->invtransactiontype != OFX_INCOME)
+    {
+        if (data->unitprice_valid && data->units_valid)
+            add_investment_split(transaction, investment_account, data);
+        else
+            PERR("Unable to add investment split, unit price or units were invalid.");
+    }
+
+    if (!(data->invtransactiontype == OFX_REINVEST
+          || data->invtransactiontype == OFX_INCOME))
+        //Done
+        return;
+
+#ifdef HAVE_LIBOFX_VERSION_0_10
+    if (data->currency_ratio_valid && data->currency_ratio != 0)
+        amount *= data->currency_ratio;
+#endif
+    income_account = choose_income_account(investment_account,
+                                           transaction, data, info);
+    g_return_if_fail(income_account);
+
+    DEBUG("Adding investment income split.");
+    if (data->invtransactiontype == OFX_REINVEST)
+        add_currency_split(transaction, income_account, amount, data);
+    else
+        add_currency_split(transaction, income_account, -amount, data);
 }
 
 int ofx_proc_transaction_cb(OfxTransactionData data, void *user_data)
