@@ -2681,7 +2681,6 @@ gnc_filter_text_for_currency_symbol (const gchar *incoming_text,
                                      const gchar *symbol)
 {
     gchar *ret_text = NULL;
-    gchar *normal_text, *normal_sym;
     gchar **split;
 
     if (!incoming_text)
@@ -2690,15 +2689,8 @@ gnc_filter_text_for_currency_symbol (const gchar *incoming_text,
     if (!symbol)
        return g_strdup (incoming_text);
 
-    normal_sym = g_utf8_normalize (symbol, -1, G_NORMALIZE_ALL_COMPOSE);
-    normal_text =
-         g_utf8_normalize (incoming_text, -1, G_NORMALIZE_ALL_COMPOSE);
-    if (g_strrstr (normal_text, normal_sym) == NULL)
-    {
-        g_free(normal_sym);
-        g_free(normal_text);
+    if (g_strrstr (incoming_text, symbol) == NULL)
         return g_strdup (incoming_text);
-    }
 
     split = g_strsplit (incoming_text, symbol, -1);
 
