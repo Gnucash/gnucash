@@ -38,6 +38,7 @@
 (define (test-account-get-trans-type-splits-interval)
   (test-group-with-cleanup "test-account-get-trans-type-splits-interval"
   (let* ((env (create-test-env))
+         (book (gnc-get-current-book))
          (ts-now (gnc-localtime (current-time)))
          (test-day (tm:mday ts-now))
          (test-month (+ 1 (tm:mon ts-now)))
@@ -287,6 +288,7 @@
 
 (define (create-test-data)
   (let* ((env (create-test-env))
+         (book (gnc-get-current-book))
          (account-alist (env-create-account-structure-alist env (structure)))
          (asset (cdr (assoc "Asset" account-alist)))
          (bank (cdr (assoc "Bank" account-alist)))
@@ -613,6 +615,7 @@
 (define (test-get-account-at-dates)
   (test-group-with-cleanup "test-get-balance-at-dates"
     (let* ((env (create-test-env))
+           (book (gnc-get-current-book))
            (structure (list "Root" (list (cons 'type ACCT-TYPE-ASSET))
                             (list "Asset"
                                   (list "Bank1")

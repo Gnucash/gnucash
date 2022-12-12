@@ -66,7 +66,7 @@
 
 (define (portfolio-tests)
   (test-group-with-cleanup "portfolio-tests"
-    (let* ((account-alist (create-stock-test-data))
+    (let ((account-alist (create-stock-test-data))
            (options (gnc:make-report-options portfolio-uuid)))
       (set-option! options "General" "Price Source" 'pricedb-latest)
       (let ((sxml (options->sxml portfolio-uuid options "latest")))
@@ -97,7 +97,8 @@
 
 (define (advanced-tests)
   (test-group-with-cleanup "advanced-portfolio-tests"
-    (let ((account-alist (create-stock-test-data))
+;; let* required here to ensure that the book is created before creating the options.
+    (let* ((account-alist (create-stock-test-data))
           (options (gnc:make-report-options advanced-uuid)))
       (let ((sxml (options->sxml advanced-uuid options "basic average")))
         (test-equal "advanced: average basis"

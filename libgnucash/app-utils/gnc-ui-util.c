@@ -565,7 +565,9 @@ gnc_get_current_root_account (void)
 gnc_commodity_table *
 gnc_get_current_commodities (void)
 {
-    return gnc_commodity_table_get_table (gnc_get_current_book ());
+     if (gnc_current_session_exist())
+          return gnc_commodity_table_get_table (gnc_get_current_book ());
+     return NULL;
 }
 
 gchar *
@@ -1170,10 +1172,13 @@ gnc_default_currency_common (gchar *requested_currency,
                                           GNC_COMMODITY_NS_CURRENCY,
                                           requested_currency);
 
-    if (gnc_book_use_book_currency (gnc_get_current_book ()))
+    if (gnc_current_session_exist() &&
+        gnc_book_use_book_currency (gnc_get_current_book ()))
         return gnc_book_get_book_currency (gnc_get_current_book ());
 
-    if (gnc_prefs_get_bool (section, GNC_PREF_CURRENCY_CHOICE_OTHER))
+
+    if (gnc_current_session_exist() &&
+        gnc_prefs_get_bool (section, GNC_PREF_CURRENCY_CHOICE_OTHER))
     {
         mnemonic = gnc_prefs_get_string(section, GNC_PREF_CURRENCY_OTHER);
         currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
@@ -1185,11 +1190,13 @@ gnc_default_currency_common (gchar *requested_currency,
 
     if (!currency)
         currency = gnc_locale_default_currency ();
+
     if (currency)
     {
         mnemonic = requested_currency;
         g_free(mnemonic);
     }
+
     return currency;
 }
 

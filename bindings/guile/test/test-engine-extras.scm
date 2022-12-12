@@ -1049,6 +1049,5 @@
      (list (vector bank   150  150)
            (vector aapl  -150    0))
      #:description "spin-off $150")
-
     account-alist))
 
