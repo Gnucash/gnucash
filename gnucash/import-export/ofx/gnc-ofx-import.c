@@ -627,12 +627,12 @@ create_investment_subaccount(GtkWindow *parent, Account* parent_acct,
 }
 
 static gboolean
-continue_account_selection(GNCImportMainMatcher* matcher, Account* account,
+continue_account_selection(GtkWidget* parent, Account* account,
                            gnc_commodity* commodity)
 {
     gboolean keep_going =
         gnc_verify_dialog(
-            GTK_WINDOW (gnc_gen_trans_list_widget(matcher)), TRUE,
+            GTK_WINDOW (parent), TRUE,
             "The chosen account \"%s\" does not have the correct "
             "currency/security \"%s\" (it has \"%s\" instead). "
             "This account cannot be used. "
@@ -661,11 +661,12 @@ choose_investment_account_helper(OfxTransactionData *data, ofx_info *info,
     else
     {
         // Let the user choose an account
-        investment_account = gnc_import_select_account(
-            gnc_gen_trans_list_widget(info->gnc_ofx_importer_gui),
-            data->unique_id, TRUE, inv_data->acct_text,
-            inv_data->commodity, ACCT_TYPE_STOCK,
-            info->last_investment_account, &inv_data->choosing);
+        investment_account =
+            gnc_import_select_account(GTK_WIDGET(info->parent), data->unique_id,
+                                      TRUE, inv_data->acct_text,
+                                      inv_data->commodity, ACCT_TYPE_STOCK,
+                                      info->last_investment_account,
+                                      &inv_data->choosing);
         if (investment_account)
             info->last_investment_account = investment_account;
     }
@@ -696,9 +697,8 @@ choose_investment_account_helper(OfxTransactionData *data, ofx_info *info,
         // No account with matching commodity. Ask the user
         // whether to continue or abort.
         inv_data->choosing =
-            continue_account_selection(info->gnc_ofx_importer_gui,
-                                       investment_account,
-                                       inv_data->commodity);
+            continue_account_selection(GTK_WIDGET(info->parent),
+                                       investment_account, inv_data->commodity);
         investment_account = NULL;
     }
 
@@ -724,10 +724,11 @@ choose_investment_account(OfxTransactionData *data, ofx_info *info,
      inv_data.online_id = data->unique_id;
 
      acct_online_id = g_strdup_printf("%s%s", data->account_id, data->unique_id);
-     investment_account = gnc_import_select_account(
-          gnc_gen_trans_list_widget(info->gnc_ofx_importer_gui),
-          acct_online_id, TRUE, inv_data.acct_text, inv_data.commodity,
-          ACCT_TYPE_STOCK, info->last_investment_account, NULL);
+     investment_account =
+         gnc_import_select_account(GTK_WIDGET(info->parent), acct_online_id,
+                                   TRUE, inv_data.acct_text,
+                                   inv_data.commodity, ACCT_TYPE_STOCK,
+                                   info->last_investment_account, NULL);
      if (investment_account)
           info->last_investment_account = investment_account;
 
@@ -770,10 +771,11 @@ choose_income_account(Account* investment_account, Transaction *transaction,
         income_account_text = g_strdup_printf(
             _("Income account for security \"%s\""),
             sanitize_string (data->security_data_ptr->secname));
-        income_account = gnc_import_select_account(
-            gnc_gen_trans_list_widget(info->gnc_ofx_importer_gui),
-            NULL, TRUE, income_account_text, currency,
-            ACCT_TYPE_INCOME, info->last_income_account, NULL);
+        income_account =
+            gnc_import_select_account(GTK_WIDGET(info->parent), NULL, TRUE,
+                                      income_account_text, currency,
+                                      ACCT_TYPE_INCOME,
+                                      info->last_income_account, NULL);
 
         if (income_account != NULL)
         {
@@ -934,7 +936,7 @@ int ofx_proc_transaction_cb(OfxTransactionData data, void *user_data)
     Transaction *transaction;
     ofx_info* info = (ofx_info*) user_data;
 
-    g_assert(info->gnc_ofx_importer_gui);
+    g_assert(info->parent);
 
     if (!data.amount_valid)
     {
@@ -950,7 +952,7 @@ int ofx_proc_transaction_cb(OfxTransactionData data, void *user_data)
 
     gnc_utf8_strip_invalid (data.account_id);
 
-    import_account = gnc_import_select_account(gnc_gen_trans_list_widget(info->gnc_ofx_importer_gui),
+    import_account = gnc_import_select_account(GTK_WIDGET(info->parent),
                                         data.account_id,
 					0, NULL, NULL, ACCT_TYPE_NONE,
 					info->last_import_account, NULL);
