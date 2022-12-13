@@ -253,9 +253,13 @@ gnc_ui_account_get_reconciled_balance_as_of_date (Account *account,
 static gint
 account_balance_limit_reached (const Account *account, gnc_numeric balance_limit)
 {
+    gboolean inc_sub = xaccAccountGetIncludeSubAccountBalances (account);
+
     // we use today's date because account may have future dated splits
-    gnc_numeric balance = xaccAccountGetBalanceAsOfDate ((Account*)account,
-                              gnc_time64_get_day_end (gnc_time (NULL)));
+    gnc_numeric balance = gnc_ui_account_get_balance_as_of_date (
+                              (Account*)account,
+                              gnc_time64_get_day_end (gnc_time (NULL)),
+                              inc_sub);
 
     if (gnc_numeric_zero_p (balance))
         return 0;

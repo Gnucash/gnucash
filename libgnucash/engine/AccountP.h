@@ -125,7 +125,8 @@ typedef struct AccountPrivate
     gboolean    higher_balance_cached;
     gnc_numeric lower_balance_limit;
     gboolean    lower_balance_cached;
-
+    TriState    include_sub_account_balances;
+ 
     gboolean balance_dirty;     /* balances in splits incorrect */
 
     GList *splits;              /* list of split pointers */

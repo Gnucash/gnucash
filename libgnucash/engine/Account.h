@@ -1233,6 +1233,22 @@ typedef enum
      *  @param account The account to clear the limit on
      */
     void xaccAccountClearLowerBalanceLimit (Account *account);
+
+    /** Get whether to include balances of sub accounts.
+     *
+     *  @param account The account to get setting on
+     *
+     *  @return TRUE to include, default is FALSE
+     */
+    gboolean xaccAccountGetIncludeSubAccountBalances (const Account *account);
+
+    /** Set whether to include balances of sub accounts.
+     *
+     *  @param account The account to set the setting on
+     *
+     *  @param include Set to TRUE for including sub account balances
+     */
+    void xaccAccountSetIncludeSubAccountBalances (Account *account, gboolean include);
     /** @} */
 
     /** DOCUMENT ME! */

@@ -76,6 +76,7 @@ static const std::string AB_TRANS_RETRIEVAL("trans-retrieval");
 static const std::string KEY_BALANCE_LIMIT("balance-limit");
 static const std::string KEY_BALANCE_HIGHER_LIMIT_VALUE("higher-value");
 static const std::string KEY_BALANCE_LOWER_LIMIT_VALUE("lower-value");
+static const std::string KEY_BALANCE_INCLUDE_SUB_ACCTS("inlude-sub-accts");
 
 static gnc_numeric GetBalanceAsOfDate (Account *acc, time64 date, gboolean ignclosing);
 
@@ -336,6 +337,7 @@ gnc_account_init(Account* acc)
     priv->higher_balance_cached = false;
     priv->lower_balance_limit = gnc_numeric_create (1,0);
     priv->lower_balance_cached = false;
+    priv->include_sub_account_balances = TriState::Unset;
 
     priv->last_num = (char*) is_unset;
     priv->tax_us_code = (char*) is_unset;
@@ -5139,6 +5141,47 @@ xaccAccountClearLowerBalanceLimit (Account *acc)
     g_return_if_fail (GNC_IS_ACCOUNT(acc));
 
     clear_balance_limits (acc, false);
+}
+
+gboolean
+xaccAccountGetIncludeSubAccountBalances (const Account *acc)
+{
+    g_return_val_if_fail (GNC_IS_ACCOUNT(acc), false);
+
+    if (GET_PRIVATE(acc)->include_sub_account_balances == TriState::Unset)
+    {
+        gboolean inc_sub = boolean_from_key (acc, {KEY_BALANCE_LIMIT,
+                                                   KEY_BALANCE_INCLUDE_SUB_ACCTS});
+
+        GET_PRIVATE(acc)->include_sub_account_balances = inc_sub ? TriState::True
+                                                                 : TriState::False;
+    }
+    return GET_PRIVATE(acc)->include_sub_account_balances == TriState::True;
+}
+
+void
+xaccAccountSetIncludeSubAccountBalances (Account *acc, gboolean inc_sub)
+{
+    g_return_if_fail (GNC_IS_ACCOUNT(acc));
+
+    if (inc_sub != xaccAccountGetIncludeSubAccountBalances (acc))
+    {
+        GValue v = G_VALUE_INIT;
+        g_value_init (&v, G_TYPE_BOOLEAN);
+        g_value_set_boolean (&v, inc_sub);
+        std::vector<std::string> path {KEY_BALANCE_LIMIT,
+                                       KEY_BALANCE_INCLUDE_SUB_ACCTS};
+        xaccAccountBeginEdit (acc);
+        if (inc_sub)
+            qof_instance_set_path_kvp (QOF_INSTANCE(acc), &v, path);
+        else
+            qof_instance_set_path_kvp (QOF_INSTANCE(acc), nullptr, path);
+        GET_PRIVATE(acc)->include_sub_account_balances =
+                              inc_sub ? TriState::True : TriState::False;
+        mark_account (acc);
+        xaccAccountCommitEdit (acc);
+        g_value_unset (&v);
+    }
 }
 
 /********************************************************************\

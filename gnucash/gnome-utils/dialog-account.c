@@ -111,6 +111,7 @@ typedef struct _AccountWindow
     GtkWidget *balance_grid;
     GtkWidget *higher_balance_limit_edit;
     GtkWidget *lower_balance_limit_edit;
+    GtkWidget *include_balance_sub_accts;
     gboolean   balance_is_reversed;
 
     GtkWidget *opening_balance_button;
@@ -336,6 +337,11 @@ gnc_account_to_ui (AccountWindow *aw)
 
     aw->balance_is_reversed = gnc_reverse_balance (account);
 
+    flag = xaccAccountGetIncludeSubAccountBalances (account);
+
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(aw->include_balance_sub_accts),
+                                  flag);
+
     balance_limit_valid = xaccAccountGetHigherBalanceLimit (account, &balance_limit);
     if (balance_limit_valid)
     {
@@ -433,7 +439,8 @@ gnc_ui_to_account (AccountWindow *aw)
     gboolean flag;
     gnc_numeric balance;
     gnc_numeric balance_limit;
-    gint balance_limit_valid;
+    gint higher_balance_limit_valid;
+    gint lower_balance_limit_valid;
     gboolean use_equity, nonstd;
     time64 date;
     gint index, old_scu, new_scu;
@@ -546,10 +553,16 @@ gnc_ui_to_account (AccountWindow *aw)
     if (parent_account != gnc_account_get_parent (account))
         gnc_account_append_child (parent_account, account);
 
-    balance_limit_valid = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT(aw->higher_balance_limit_edit),
-                                                         &balance_limit, TRUE, NULL);
+    flag = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(
+                                         aw->include_balance_sub_accts));
 
-    if (balance_limit_valid == 0)
+    xaccAccountSetIncludeSubAccountBalances (account, flag);
+
+    higher_balance_limit_valid = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT(
+                                                                aw->higher_balance_limit_edit),
+                                                                &balance_limit, TRUE, NULL);
+
+    if (higher_balance_limit_valid == 0)
     {
         if (aw->balance_is_reversed)
         {
@@ -560,7 +573,7 @@ gnc_ui_to_account (AccountWindow *aw)
             xaccAccountSetHigherBalanceLimit (account, balance_limit);
     }
 
-    if (balance_limit_valid == -1)
+    if (higher_balance_limit_valid == -1)
     {
         if (aw->balance_is_reversed)
             xaccAccountClearLowerBalanceLimit (account);
@@ -568,10 +581,11 @@ gnc_ui_to_account (AccountWindow *aw)
             xaccAccountClearHigherBalanceLimit (account);
     }
 
-    balance_limit_valid = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT(aw->lower_balance_limit_edit),
-                                                         &balance_limit, TRUE, NULL);
+    lower_balance_limit_valid = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT(
+                                                               aw->lower_balance_limit_edit),
+                                                               &balance_limit, TRUE, NULL);
 
-    if (balance_limit_valid == 0)
+    if (lower_balance_limit_valid == 0)
     {
         if (aw->balance_is_reversed)
         {
@@ -582,13 +596,16 @@ gnc_ui_to_account (AccountWindow *aw)
             xaccAccountSetLowerBalanceLimit (account, balance_limit);
     }
 
-    if (balance_limit_valid == -1)
+    if (lower_balance_limit_valid == -1)
     {
         if (aw->balance_is_reversed)
             xaccAccountClearHigherBalanceLimit (account);
         else
             xaccAccountClearLowerBalanceLimit (account);
     }
+
+    if ((higher_balance_limit_valid == -1) && (lower_balance_limit_valid == -1))
+        xaccAccountSetIncludeSubAccountBalances (account, FALSE);
 
     xaccAccountCommitEdit (account);
 
@@ -1618,6 +1635,8 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
     gnc_amount_edit_show_warning_symbol (GNC_AMOUNT_EDIT(aw->lower_balance_limit_edit), TRUE);
     gtk_widget_show (aw->lower_balance_limit_edit);
 
+    aw->include_balance_sub_accts = GTK_WIDGET(gtk_builder_get_object (builder, "include_sub_accts_tb"));
+
     aw->more_properties_page =
         gtk_notebook_get_nth_page (GTK_NOTEBOOK(aw->notebook), 1);
 
@@ -2102,14 +2121,6 @@ gnc_ui_edit_account_window (GtkWindow *parent, Account *account)
     gtk_widget_show_all (aw->dialog);
     if (xaccAccountGetSplitList (account) != NULL)
         gtk_widget_hide (aw->opening_balance_page);
-
-    // Note: we are hiding the notebook page here, when other items
-    // are added this will need adjusting.
-    if (gnc_account_n_children (account) > 0)
-    {
-        gtk_widget_hide (GTK_WIDGET(aw->balance_grid));
-        gtk_widget_hide (GTK_WIDGET(aw->more_properties_page));
-    }
 
     parent_acct = gnc_account_get_parent (account);
     if (parent_acct == NULL)
