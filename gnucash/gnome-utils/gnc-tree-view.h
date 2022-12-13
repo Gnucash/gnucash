@@ -246,6 +246,47 @@ gnc_tree_view_add_text_view_column (GncTreeView *view,
                                gint model_visibility_column,
                                GtkTreeIterCompareFunc column_sort_fn);
 
+/** This function adds a pixbuf view column to a GncTreeView base view.
+ *  It takes all the parameters necessary to hook a GtkTreeModel
+ *  column to a GtkTreeViewColumn.
+ *
+ *  @param view A pointer to a generic GncTreeView.
+ *
+ *  @param column_title The title for this column.
+ *
+ *  @param pref_name The internal name of this column.  This name is
+ *  used in several functions to look up the column, and it is also
+ *  used when saving/restoring the view's state.
+ *
+ *  @param sizing_text A string used to compute the default width of
+ *  the column.  This text is never displayed.
+ *
+ *  @param model_data_column The index of the GtkTreeModel data column
+ *  used to determine the data that will be displayed in this column
+ *  for each row in the view.  Use GNC_TREE_VIEW_COLUMN_DATA_NONE if
+ *  you plan on using a non-model data source for this column.  This
+ *  index is connected to the "icon-name" attribute of the cell renderer.
+ *
+ *  @param model_visibility_column The index of the GtkTreeModel data
+ *  column used to determine whether or not a checkbox for each row
+ *  will be displayed at all.  Use GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS
+ *  if the checkbox should be displayed in all rows.
+ *
+ *  @param column_sort_fn The function that GtkTreeModelSort
+ *  will call to compare two rows to determine their displayed
+ *  order.
+ *
+ *  @return The newly created GtkTreeViewColumn.
+ */
+GtkTreeViewColumn *
+gnc_tree_view_add_pix_column (GncTreeView *view,
+                              const gchar *column_title,
+                              const gchar *pref_name,
+                              const gchar *sizing_text,
+                              gint model_data_column,
+                              gint model_visibility_column,
+                              GtkTreeIterCompareFunc column_sort_fn);
+
 /** This function adds a new combobox column to a GncTreeView base
  *  view.  The parameters it takes in common with
  *  gnc_tree_view_add_text_column() behave the same as there.  In
