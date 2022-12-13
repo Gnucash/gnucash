@@ -1187,6 +1187,22 @@ static gint check_trans_online_id(Transaction *trans1, void *user_data)
     return retval;
 }
 
+static GHashTable*
+hash_account_online_ids (Account *account)
+{
+     GHashTable* acct_hash = g_hash_table_new_full
+          (g_str_hash, g_str_equal, g_free, NULL);
+     for (GList *n = xaccAccountGetSplitList (account) ; n; n = n->next)
+     {
+          if (gnc_import_split_has_online_id (n->data))
+          {
+               char *id = gnc_import_get_split_online_id (n->data);
+               g_hash_table_insert (acct_hash, (void*) id, GINT_TO_POINTER (1));
+          }
+     }
+     return acct_hash;
+}
+
 /** Checks whether the given transaction's online_id already exists in
   its parent account. */
 gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_hash)
@@ -1210,19 +1226,8 @@ gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_ha
     // test below will be fast if we have many transactions to import.
     dest_acct = xaccSplitGetAccount (source_split);
     if (!g_hash_table_contains (acct_id_hash, dest_acct))
-    {
-        GHashTable* new_hash = g_hash_table_new_full
-            (g_str_hash, g_str_equal, g_free, NULL);
-        g_hash_table_insert (acct_id_hash, dest_acct, new_hash);
-        for (GList *n = xaccAccountGetSplitList (dest_acct) ; n; n=n->next)
-        {
-            if (gnc_import_split_has_online_id (n->data))
-            {
-                char *id = gnc_import_get_split_online_id (n->data);
-                g_hash_table_insert (new_hash, (void*) id, GINT_TO_POINTER (1));
-            }
-        }
-    }
+         g_hash_table_insert (acct_id_hash, dest_acct,
+                              hash_account_online_ids (dest_acct));
     online_id_exists = g_hash_table_contains (g_hash_table_lookup (acct_id_hash, dest_acct),
                                               source_online_id);
     
