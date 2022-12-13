@@ -649,47 +649,34 @@ static Account*
 choose_investment_account_helper(OfxTransactionData *data, ofx_info *info,
                                  InvestmentAcctData *inv_data)
 {
-    Account *investment_account = NULL;
-    // No account with correct commodity automatically found.
-
-    // But are we in auto-create mode and already know a parent?
-    if (auto_create_commodity && ofx_parent_account)
-    {
-        // Yes, so use that as parent when auto-creating the new account below.
-        investment_account = ofx_parent_account;
-    }
-    else
-    {
-        // Let the user choose an account
-        investment_account =
-            gnc_import_select_account(GTK_WIDGET(info->parent), data->unique_id,
-                                      TRUE, inv_data->acct_text,
-                                      inv_data->commodity, ACCT_TYPE_STOCK,
-                                      info->last_investment_account,
-                                      &inv_data->choosing);
-        if (investment_account)
-            info->last_investment_account = investment_account;
-    }
-    // Does the chosen account have the right commodity?
+    Account *investment_account =
+        gnc_import_select_account(GTK_WIDGET(info->parent),
+                                  inv_data->online_id,
+                                  TRUE, inv_data->acct_text,
+                                  inv_data->commodity, ACCT_TYPE_STOCK,
+                                  info->last_investment_account,
+                                  &inv_data->choosing);
     if (investment_account &&
         xaccAccountGetCommodity(investment_account) == inv_data->commodity)
-        return investment_account;
-
-    if (!investment_account) // Nothing more to try
-        return NULL;
-
-    if (auto_create_commodity &&
-        xaccAccountTypesCompatible(xaccAccountGetType(investment_account),
-                                   ACCT_TYPE_STOCK))
     {
-        /* We have an account but the commodity doesn't match. Since
-         * auto_create_commodity is on and the account has a
-         * compatible type we can just create a sub-account with the
-         * right commodity.
-         */
+        Account *parent_account = gnc_account_get_parent(investment_account);
+
+        if (!ofx_parent_account && parent_account &&
+            !gnc_account_is_root(parent_account) &&
+            xaccAccountTypesCompatible(xaccAccountGetType(parent_account),
+                                       ACCT_TYPE_STOCK))
+            ofx_parent_account = parent_account;
+
+        info->last_investment_account = investment_account;
+        return investment_account;
+    }
+
+    /* That didn't work out. Create a subaccount if we can. */
+    if (auto_create_commodity && ofx_parent_account)
+    {
         investment_account =
             create_investment_subaccount(GTK_WINDOW(info->parent),
-                                                    investment_account,
+                                                    ofx_parent_account,
                                                     inv_data);
     }
     else
@@ -711,8 +698,8 @@ choose_investment_account(OfxTransactionData *data, ofx_info *info,
 {
     Account* investment_account = NULL;
     gnc_numeric gnc_amount, gnc_units;
-    InvestmentAcctData inv_data = {commodity, NULL, NULL, FALSE};
-    char *acct_online_id;
+    InvestmentAcctData inv_data = {commodity, NULL, NULL, TRUE};
+
      // As we now have the commodity, select the account with that commodity.
 
      /* Translators: This string is a default account name. It MUST
@@ -721,21 +708,9 @@ choose_investment_account(OfxTransactionData *data, ofx_info *info,
      inv_data.acct_text = g_strdup_printf(
           _("Stock account for security \"%s\""),
           sanitize_string (data->security_data_ptr->secname));
-     inv_data.online_id = data->unique_id;
 
-     acct_online_id = g_strdup_printf("%s%s", data->account_id, data->unique_id);
-     investment_account =
-         gnc_import_select_account(GTK_WIDGET(info->parent), acct_online_id,
-                                   TRUE, inv_data.acct_text,
-                                   inv_data.commodity, ACCT_TYPE_STOCK,
-                                   info->last_investment_account, NULL);
-     if (investment_account)
-          info->last_investment_account = investment_account;
-
-     // but use it only if that's really the right commodity
-     if (investment_account
-         && xaccAccountGetCommodity(investment_account) != inv_data.commodity)
-          investment_account = NULL;
+     inv_data.online_id =
+         g_strdup_printf("%s%s", data->account_id, data->unique_id);
 
      // Loop until we either have an account, or the user pressed Cancel
      while (!investment_account && inv_data.choosing)
@@ -746,7 +721,7 @@ choose_investment_account(OfxTransactionData *data, ofx_info *info,
           PERR("No investment account found for text: %s\n", inv_data.acct_text);
      }
      g_free (inv_data.acct_text);
-     g_free (acct_online_id);
+     g_free (inv_data.online_id);
 
      return investment_account;
 }
