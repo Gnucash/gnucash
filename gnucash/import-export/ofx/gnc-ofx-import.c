@@ -649,13 +649,19 @@ static Account*
 choose_investment_account_helper(OfxTransactionData *data, ofx_info *info,
                                  InvestmentAcctData *inv_data)
 {
-    Account *investment_account =
+    Account *investment_account, *parent_account;
+
+    if (xaccAccountGetCommodity(info->last_investment_account) == inv_data->commodity)
+        parent_account = info->last_investment_account;
+    else
+        parent_account = ofx_parent_account;
+
+    investment_account =
         gnc_import_select_account(GTK_WIDGET(info->parent),
                                   inv_data->online_id,
                                   TRUE, inv_data->acct_text,
                                   inv_data->commodity, ACCT_TYPE_STOCK,
-                                  info->last_investment_account,
-                                  &inv_data->choosing);
+                                  parent_account, &inv_data->choosing);
     if (investment_account &&
         xaccAccountGetCommodity(investment_account) == inv_data->commodity)
     {
