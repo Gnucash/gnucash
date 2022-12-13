@@ -250,6 +250,70 @@ gnc_ui_account_get_reconciled_balance_as_of_date (Account *account,
                                            xaccAccountGetReconciledBalanceAsOfDate);
 }
 
+static gint
+account_balance_limit_reached (const Account *account, gnc_numeric balance_limit)
+{
+    // we use today's date because account may have future dated splits
+    gnc_numeric balance = xaccAccountGetBalanceAsOfDate ((Account*)account,
+                              gnc_time64_get_day_end (gnc_time (NULL)));
+
+    if (gnc_numeric_zero_p (balance))
+        return 0;
+
+    if (gnc_reverse_balance (account))
+        balance_limit = gnc_numeric_neg (balance_limit);
+
+    // Returns 1 if a>b, -1 if b>a, 0 if a == b
+    return gnc_numeric_compare (balance, balance_limit);
+}
+
+gboolean
+gnc_ui_account_is_higher_balance_limit_reached (const Account *account)
+{
+    gnc_numeric balance_limit;
+    gboolean limit_valid = FALSE;
+    gboolean retval = FALSE;
+    gint compare_result;
+
+    g_return_val_if_fail (GNC_IS_ACCOUNT(account), FALSE);
+
+    if (gnc_reverse_balance (account))
+        limit_valid = xaccAccountGetLowerBalanceLimit (account, &balance_limit);
+    else
+        limit_valid = xaccAccountGetHigherBalanceLimit (account, &balance_limit);
+
+    if (!limit_valid)
+        return retval;
+
+    if (account_balance_limit_reached (account, balance_limit) == 1)
+        retval = TRUE;
+
+    return retval;
+}
+
+gboolean
+gnc_ui_account_is_lower_balance_limit_reached (const Account *account)
+{
+    gnc_numeric balance_limit;
+    gboolean limit_valid = FALSE;
+    gboolean retval = FALSE;
+    gint compare_result;
+
+    g_return_val_if_fail (GNC_IS_ACCOUNT(account), FALSE);
+
+    if (gnc_reverse_balance (account))
+        limit_valid = xaccAccountGetHigherBalanceLimit (account, &balance_limit);
+    else
+        limit_valid = xaccAccountGetLowerBalanceLimit (account, &balance_limit);
+
+    if (!limit_valid)
+        return retval;
+
+    if (account_balance_limit_reached (account, balance_limit) == -1)
+        retval = TRUE;
+
+    return retval;
+}
 
 /********************************************************************
  * Balance calculations related to owners

@@ -154,4 +154,24 @@ gchar * gnc_ui_owner_get_print_report_balance (GncOwner *owner,
  */
 GList * gnc_account_get_autoclear_splits (Account *account, gnc_numeric toclear_value,
                                           gchar **errmsg);
+
+/** Test the account balance as of today for it passing the
+ *  higher limit if set.
+ *
+ *  @param account A pointer to the account.
+ *
+ *  @return TRUE if account balance has passed limit.
+ */
+gboolean gnc_ui_account_is_higher_balance_limit_reached (const Account *account);
+
+/** Test the account balance as of today for it passing the
+ *  lower limit if set.
+ *
+ *  @param account A pointer to the account.
+ *
+ *  @return TRUE if account balance has passed limit.
+ */
+gboolean gnc_ui_account_is_lower_balance_limit_reached (const Account *account);
+
+
 #endif /* GNC_UI_BALANCES_H_ */
