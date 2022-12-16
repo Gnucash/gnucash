@@ -833,12 +833,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 
     case GNC_TREE_MODEL_ACCOUNT_COL_BALANCE_LIMIT:
         g_value_init (value, G_TYPE_STRING);
-        if (gnc_ui_account_is_higher_balance_limit_reached (account))
-            string = "go-top";
-        else if (gnc_ui_account_is_lower_balance_limit_reached (account))
-            string = "go-bottom";
-        else
-            string = "";
+        string = gnc_ui_account_get_balance_limit_icon_name (account);
         g_value_set_string (value, string);
         break;
 

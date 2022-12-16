@@ -272,7 +272,8 @@ account_balance_limit_reached (const Account *account, gnc_numeric balance_limit
 }
 
 gboolean
-gnc_ui_account_is_higher_balance_limit_reached (const Account *account)
+gnc_ui_account_is_higher_balance_limit_reached (const Account *account,
+                                                gboolean *is_zero)
 {
     gnc_numeric balance_limit;
     gboolean limit_valid = FALSE;
@@ -288,6 +289,9 @@ gnc_ui_account_is_higher_balance_limit_reached (const Account *account)
 
     if (!limit_valid)
         return retval;
+
+    if (gnc_numeric_zero_p (balance_limit))
+        *is_zero = TRUE;
 
     if (account_balance_limit_reached (account, balance_limit) == 1)
         retval = TRUE;
@@ -296,7 +300,8 @@ gnc_ui_account_is_higher_balance_limit_reached (const Account *account)
 }
 
 gboolean
-gnc_ui_account_is_lower_balance_limit_reached (const Account *account)
+gnc_ui_account_is_lower_balance_limit_reached (const Account *account,
+                                               gboolean *is_zero)
 {
     gnc_numeric balance_limit;
     gboolean limit_valid = FALSE;
@@ -313,10 +318,42 @@ gnc_ui_account_is_lower_balance_limit_reached (const Account *account)
     if (!limit_valid)
         return retval;
 
+    if (gnc_numeric_zero_p (balance_limit))
+        *is_zero = TRUE;
+
     if (account_balance_limit_reached (account, balance_limit) == -1)
         retval = TRUE;
 
     return retval;
+}
+
+gchar *
+gnc_ui_account_get_balance_limit_icon_name (const Account *account)
+{
+    gboolean lower_limit_reached, higher_limit_reached;
+    gboolean lower_is_zero = FALSE;
+    gboolean higher_is_zero = FALSE;
+
+    g_return_val_if_fail (GNC_IS_ACCOUNT(account), g_strdup (""));
+
+    higher_limit_reached = gnc_ui_account_is_higher_balance_limit_reached (account, &higher_is_zero);
+
+    // assume the higher value will be set mostly so test that first
+    if (higher_limit_reached && !higher_is_zero)
+        return g_strdup ("go-top");
+
+    lower_limit_reached = gnc_ui_account_is_lower_balance_limit_reached (account, &lower_is_zero);
+
+    if (lower_limit_reached && (!lower_is_zero || !higher_is_zero))
+        return g_strdup ("go-bottom");
+
+    if (higher_limit_reached && !lower_is_zero)
+        return g_strdup ("go-top");
+
+    if ((lower_limit_reached || higher_limit_reached ) && lower_is_zero && higher_is_zero)
+        return g_strdup ("dialog-warning");
+
+    return g_strdup ("");
 }
 
 /********************************************************************

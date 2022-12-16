@@ -160,18 +160,30 @@ GList * gnc_account_get_autoclear_splits (Account *account, gnc_numeric toclear_
  *
  *  @param account A pointer to the account.
  *
+ *  @param is_zero A return value, set to TRUE if limit is zero
+ *
  *  @return TRUE if account balance has passed limit.
  */
-gboolean gnc_ui_account_is_higher_balance_limit_reached (const Account *account);
+gboolean gnc_ui_account_is_higher_balance_limit_reached (const Account *account, gboolean *is_zero);
 
 /** Test the account balance as of today for it passing the
  *  lower limit if set.
  *
  *  @param account A pointer to the account.
  *
+ *  @param is_zero A return value, set to TRUE if limit is zero
+ *
  *  @return TRUE if account balance has passed limit.
  */
-gboolean gnc_ui_account_is_lower_balance_limit_reached (const Account *account);
+gboolean gnc_ui_account_is_lower_balance_limit_reached (const Account *account, gboolean *is_zero);
 
+/** Test the account balance as of today for it passing the
+ *  lower and higher limits if set.
+ *
+ *  @param account A pointer to the account.
+ *
+ *  @return The icon name to be displayed.
+ */
+gchar * gnc_ui_account_get_balance_limit_icon_name (const Account *account);
 
 #endif /* GNC_UI_BALANCES_H_ */
