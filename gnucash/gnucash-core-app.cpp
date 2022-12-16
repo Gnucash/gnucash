@@ -223,7 +223,7 @@ Gnucash::CoreApp::CoreApp (const char* app_name)
     // Now that gettext is properly initialized, set our help tagline.
     m_tagline = bl::translate("- GnuCash, accounting for personal and small business finance").str(gnc_get_boost_locale());
     m_opt_desc_display = std::make_unique<bpo::options_description>
-        ((bl::format (bl::gettext ("{1} [options] [datafile]")) % m_app_name).str() + std::string(" ") + m_tagline);
+        ((bl::format (bl::gettext ("{1} [options] [datafile]", gnc_get_boost_locale())) % m_app_name).str() + std::string(" ") + m_tagline);
     add_common_program_options();
 }
 
