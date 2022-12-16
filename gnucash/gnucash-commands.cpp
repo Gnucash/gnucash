@@ -89,7 +89,7 @@ scm_add_quotes(void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **ar
 
     if (!gnc_quote_source_fq_installed())
     {
-        std::cerr << bl::translate ("No quotes retrieved. Finance::Quote isn't "
+        std::cerr << _("No quotes retrieved. Finance::Quote isn't "
                                     "installed properly.") << "\n";
         scm_cleanup_and_exit_with_failure (nullptr);
     }

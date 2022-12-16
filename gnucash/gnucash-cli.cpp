@@ -129,14 +129,14 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
     {
         if (*m_quotes_cmd != "get")
         {
-            std::cerr << bl::format (bl::translate("Unknown quotes command '{1}'")) % *m_quotes_cmd << "\n\n"
+            std::cerr << bl::format (std::string{_("Unknown quotes command '{1}'")}) % *m_quotes_cmd << "\n\n"
             << *m_opt_desc_display.get();
             return 1;
         }
 
         if (!m_file_to_load || m_file_to_load->empty())
         {
-            std::cerr << bl::translate("Missing data file parameter") << "\n\n"
+            std::cerr << _("Missing data file parameter") << "\n\n"
                       << *m_opt_desc_display.get();
             return 1;
         }
@@ -150,7 +150,7 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
         {
             if (!m_file_to_load || m_file_to_load->empty())
             {
-                std::cerr << bl::translate("Missing data file parameter") << "\n\n"
+                std::cerr << _("Missing data file parameter") << "\n\n"
                           << *m_opt_desc_display.get();
                 return 1;
             }
@@ -174,7 +174,7 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
         else if (*m_report_cmd == "show")
             if (!m_report_name || m_report_name->empty())
             {
-                std::cerr << bl::translate("Missing --name parameter") << "\n\n"
+                std::cerr << _("Missing --name parameter") << "\n\n"
                           << *m_opt_desc_display.get();
                 return 1;
             }
@@ -182,13 +182,13 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
                 return Gnucash::report_show (m_file_to_load, m_report_name);
         else
         {
-            std::cerr << bl::format (bl::translate("Unknown report command '{1}'")) % *m_report_cmd << "\n\n"
+            std::cerr << bl::format (std::string{_("Unknown report command '{1}'")}) % *m_report_cmd << "\n\n"
                       << *m_opt_desc_display.get();
             return 1;
         }
     }
 
-    std::cerr << bl::translate("Missing command or option") << "\n\n"
+    std::cerr << _("Missing command or option") << "\n\n"
               << *m_opt_desc_display.get();
 
     return 1;
