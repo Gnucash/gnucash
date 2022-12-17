@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2022-12-10 18:48+0000\n"
+"PO-Revision-Date: 2022-12-17 01:43+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ja/>\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 4.15\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -496,6 +496,11 @@ msgid ""
 "(File[->Most Recently Used-List]).\n"
 "The full path is displayed in the status bar."
 msgstr ""
+"最近使った GnuCash "
+"のファイルがどのディレクトリに保存されているか知りたいときは、"
+"履歴のメニュー\n"
+"(ファイル[->最近使った一覧]) のエントリにカーソルを合わせましょう。\n"
+"その完全パスがステータスバーに表示されます。"
 
 #: doc/tip_of_the_day.list.c:24
 msgid ""
@@ -705,11 +710,11 @@ msgstr ""
 "単位、週単位および月単位の取引を予定することができます。より高度な手法も設定"
 "できます。例えば、\n"
 "\n"
-"3 週間毎に取引を予定するためには、頻度のパターンを毎週にし、次に '3 週間"
-"毎。' に設定します。\n"
+"3 週毎に取引を予定するためには、頻度のパターンを毎週にし、次に '3 週毎。' "
+"に設定します。\n"
 "\n"
-"毎年の取引を予定するためには、頻度のパターンを毎月にし、次に '12 月毎。' に設"
-"定します。"
+"毎年の取引を予定するためには、頻度のパターンを毎月にし、次に '12 月毎。' "
+"に設定します。"
 
 #: doc/tip_of_the_day.list.c:117
 msgid ""
@@ -752,8 +757,10 @@ msgid ""
 msgstr ""
 "この宇宙の目的がなんであり、なぜ宇宙が存在するのか---その答えをあやまちなく見"
 "いだした者あらば、宇宙はたちまち消え去ってはるかに奇怪で不可解なものにとって"
-"かわられるだろう---そういう理論がある。それはすでに起こってしまった---という"
-"理論もある。ダグラス・アダムス著「宇宙の果てのレストラン」より。"
+"かわられるだろう---そういう理論がある。\n"
+"それはすでに起こってしまった---という理論もある。\n"
+"\n"
+"ダグラス・アダムス著「宇宙の果てのレストラン」より"
 
 #: gnucash/gnome/assistant-acct-period.c:188
 msgid "The book was closed successfully."
@@ -1769,10 +1776,8 @@ msgid "Business Document Links"
 msgstr "ビジネスの文書リンク"
 
 #: gnucash/gnome/dialog-employee.c:201
-#, fuzzy
-#| msgid "You must enter a payment address."
 msgid "You must enter a Payment-Address Name."
-msgstr "支払の住所を入力してください。"
+msgstr "支払先住所の名前を入力してください。"
 
 #: gnucash/gnome/dialog-employee.c:296
 msgid "Edit Employee"
@@ -6132,11 +6137,10 @@ msgstr "今後の取引"
 
 #. Translators: This is a ngettext(3) message, %d is the number of scheduled transactions deleted
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:868
-#, fuzzy, c-format
-#| msgid "Do you really want to delete this scheduled transaction?"
+#, c-format
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete %d scheduled transactions?"
-msgstr[0] "本当にこの予定取引を削除してもいいですか?"
+msgstr[0] "本当に %d 個の予定取引を削除してもいいですか?"
 
 #: gnucash/gnome/gnc-plugin-register2.c:57
 #: gnucash/gnome/gnc-plugin-register.c:58
@@ -7570,10 +7574,8 @@ msgid "Existing"
 msgstr "既存"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:150
-#, fuzzy
-#| msgid "Use +- keys to increment/decrement number"
 msgid "You can type '+' or '-' to increment or decrement the number."
-msgstr "+- キーを使って番号を増減させることができます。"
+msgstr "'+' または '-' を入力すると番号を増減させることができます。"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:299
 msgid "Action/Number"
@@ -7906,7 +7908,7 @@ msgstr "有効な価格を入力してください。"
 
 #: gnucash/gnome-utils/dialog-transfer.c:1498
 msgid "You must enter a valid 'to' amount."
-msgstr "有効な資金移動先金額を入力してください"
+msgstr "有効な資金移動先金額を入力してください。"
 
 #: gnucash/gnome-utils/dialog-transfer.c:1726
 msgid "You must enter an amount to transfer."
@@ -7975,16 +7977,14 @@ msgstr "新規..."
 #: gnucash/gnome-utils/gnc-amount-edit.c:411
 #: gnucash/register/register-core/formulacell.c:121
 #: gnucash/register/register-core/pricecell.c:161
-#, fuzzy, c-format
-#| msgid "An error occurred while processing %s."
+#, c-format
 msgid "An error occurred while processing '%s' at position %d"
-msgstr "%s を処理中にエラーが発生しました。"
+msgstr "'%s' を処理中に位置 %d でエラーが発生しました"
 
 #: gnucash/gnome-utils/gnc-amount-edit.c:417
-#, fuzzy, c-format
-#| msgid "An error occurred while processing %s."
+#, c-format
 msgid "An error occurred while processing '%s'"
-msgstr "%s を処理中にエラーが発生しました。"
+msgstr "'%s' を処理中にエラーが発生しました"
 
 #: gnucash/gnome-utils/gnc-autoclear.c:100
 msgid "Account is already at Auto-Clear Balance."
@@ -8029,10 +8029,11 @@ msgid_plural ""
 "Should your file be saved automatically?"
 msgstr[0] ""
 "変更を保存するにはデータファイルをハードディスクに保存する必要があります。"
-"GnuCash は %d 分ごとに \"保存\" ボタンを押したのと同じように、自動的にこの"
-"ファイルを保存する機能を持っています。\n"
-"この間隔の変更やこの機能の無効化は、編集->設定->全般->自動保存間隔 で行うこと"
-"ができます。\n"
+"GnuCash は %d 分ごとに \"保存\" ボタンを押したのと同じように、自動的にこのフ"
+"ァイルを保存する機能を持っています。\n"
+"\n"
+"この間隔の変更やこの機能の無効化は、編集->設定->全般->自動保存間隔 "
+"で行うことができます。\n"
 "\n"
 "ファイルを自動的に保存しますか?"
 
@@ -8640,7 +8641,7 @@ msgstr "設定(_E)"
 
 #: gnucash/gnome-utils/gnc-main-window.c:339
 msgid "Edit the global preferences of GnuCash"
-msgstr "GnuCash全体の設定を編集します。"
+msgstr "GnuCash 全体の設定を編集します。"
 
 #: gnucash/gnome-utils/gnc-main-window.c:345
 msgid "Tab P_osition"
@@ -8693,7 +8694,7 @@ msgstr "チュートリアル・コンセプトガイド(_G)"
 
 #: gnucash/gnome-utils/gnc-main-window.c:391
 msgid "Open the GnuCash Tutorial"
-msgstr "GnuCashのチュートリアルを開きます。"
+msgstr "GnuCash のチュートリアルを開きます。"
 
 #: gnucash/gnome-utils/gnc-main-window.c:395
 msgid "_Contents"
@@ -8701,7 +8702,7 @@ msgstr "目次(_C)"
 
 #: gnucash/gnome-utils/gnc-main-window.c:396
 msgid "Open the GnuCash Help"
-msgstr "GnuCashのヘルプを開きます。"
+msgstr "GnuCash のヘルプを開きます。"
 
 #: gnucash/gnome-utils/gnc-main-window.c:400
 msgid "_About"
@@ -8890,7 +8891,7 @@ msgstr "帳簿オプション"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4897 gnucash/gnucash-core-app.cpp:261
 msgid "(user modifiable)"
-msgstr ""
+msgstr "(ユーザーによる変更可能)"
 
 #. Translators: %s will be replaced with the current year
 #: gnucash/gnome-utils/gnc-main-window.c:4924
@@ -10152,8 +10153,8 @@ msgstr ""
 "帳票関連のコマンドを実行する。 次のコマンドをサポート。\n"
 "\n"
 "  list: \t利用可能な帳票を一覧出力する。\n"
-"  show: \t指定の名前の帳票の中で変更されるオプションを詳細表示する。データ"
-"ファイルを指定すると保存されたオプションを詳細表示可能。\n"
+"  show: \t指定の名前の帳票の中で 変更されるオプションを 詳細表示する。"
+"データファイルを 指定すると 保存された オプションを 詳細表示可能。\n"
 "  run: \t指定の GnuCash データファイルで 指定の名前の帳票を作成する。\n"
 
 #: gnucash/gnucash-cli.cpp:113
@@ -10215,11 +10216,11 @@ msgstr "最新の安定版に関しては、{1} を参照してください。"
 #. Translators: Guile is the programming language of the reports
 #: gnucash/gnucash-core-app.cpp:103
 msgid "Loading system wide Guile extensions…"
-msgstr ""
+msgstr "システム全体の Guile 拡張をロード中…"
 
 #: gnucash/gnucash-core-app.cpp:115
 msgid "Loading user specific Guile extensions…"
-msgstr ""
+msgstr "ユーザー指定の Guile 拡張をロード中…"
 
 #: gnucash/gnucash-core-app.cpp:224
 msgid "- GnuCash, accounting for personal and small business finance"
@@ -10230,10 +10231,8 @@ msgid "{1} [options] [datafile]"
 msgstr "{1} [オプション] [データファイル]"
 
 #: gnucash/gnucash-core-app.cpp:255
-#, fuzzy
-#| msgid "GnuCash "
 msgid "GnuCash Paths"
-msgstr "GnuCash "
+msgstr "GnuCash のパス"
 
 #: gnucash/gnucash-core-app.cpp:270
 msgid "GnuCash {1}"
@@ -10265,7 +10264,7 @@ msgstr ""
 
 #: gnucash/gnucash-core-app.cpp:305
 msgid "Enable extra/development/debugging features."
-msgstr "拡張/開発用/デバッグ用機能を有効にする。"
+msgstr "拡張/開発用/デバッグ用機能を 有効にする。"
 
 #: gnucash/gnucash-core-app.cpp:307
 msgid ""
@@ -10280,10 +10279,8 @@ msgstr ""
 "これは複数回呼び出し可能。"
 
 #: gnucash/gnucash-core-app.cpp:309
-#, fuzzy
-#| msgid "Show plot"
 msgid "Show paths"
-msgstr "プロットを表示する"
+msgstr "パスを表示する"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
@@ -10416,9 +10413,8 @@ msgstr ""
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.flicker.gschema.xml.in:6
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:5
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:64
-#, fuzzy
 msgid "Last window position and size"
-msgstr "ウィンドウの位置とサイズ"
+msgstr "最後のウィンドウの位置とサイズ"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:18
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:33
@@ -11952,10 +11948,8 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:291
 #: gnucash/gtkbuilder/dialog-preferences.glade:3219
-#, fuzzy
-#| msgid "Show all transactions on one line. (Two in double line mode.)"
 msgid "Show all transactions on one line or in double line mode on two."
-msgstr "すべての取引を1行（2行モードなら2行）で表示します。"
+msgstr "すべての取引を1行、または2行モードなら2行で表示します。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:292
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:297
@@ -11976,16 +11970,11 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:296
 #: gnucash/gtkbuilder/dialog-preferences.glade:3238
-#, fuzzy
-#| msgid ""
-#| "Automatically expand the current transaction to show all splits. All "
-#| "other transactions are shown on one line. (Two in double line mode.)"
 msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line or in double line mode on two."
-msgstr ""
-"自動的に現在の取引を展開してスプリットを表示します。他の取引は1行（2行モード"
-"なら2行）で表示されます。"
+msgstr "自動的に現在の取引を展開してスプリットを表示します。他の取引は1行、または2行"
+"モードなら2行で表示されます。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:301
 #: gnucash/gtkbuilder/dialog-preferences.glade:3257
@@ -12973,38 +12962,6 @@ msgstr "CSV 価格インポート"
 
 #. You should localize the (british) examples to your region.
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:53
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you import Prices from a CSV file.\n"
-#| "\n"
-#| "There is a minimum number of columns that have to be present for a "
-#| "successful import, these are Date, Amount, From Namespace, From Symbol "
-#| "and Currency To. If all entries are for the same Commodity / Currency "
-#| "then you can select them and then the columns will be Date and Amount.\n"
-#| "\n"
-#| "Various options exist for specifying the delimiter as well as a fixed "
-#| "width option. With the fixed width option, double click on the table of "
-#| "rows displayed to set a column width, then right mouse to change if "
-#| "required.\n"
-#| "\n"
-#| "Examples are \"FTSE\",\"RR.L\",\"21/11/2016\",5.345,\"GBP\" and CURRENCY;"
-#| "USD;2016-11-21;1.56;GBP\n"
-#| "\n"
-#| "There is an option for specifying the start row, end row and an option to "
-#| "skip alternate rows beginning from the start row which can be used if you "
-#| "have some header text. Also there is an option to overwrite existing "
-#| "prices for that day if required.\n"
-#| "\n"
-#| "Lastly, for repeated imports the preview page has buttons to Load and "
-#| "Save the settings. To save the settings, tweak the settings to your "
-#| "preferences (optionally starting from an existing preset), then "
-#| "(optionally change the settings name and press the Save Settings button. "
-#| "Note you can't save to built-in presets.\n"
-#| "\n"
-#| "This operation is not reversible, so make sure you have a working "
-#| "backup.\n"
-#| "\n"
-#| "Click on \"Next\" to proceed or \"Cancel\" to Abort Import."
 msgid ""
 "This assistant will help you import Prices from a CSV file.\n"
 "\n"
@@ -13045,18 +13002,17 @@ msgstr ""
 "プションを使うと、行が表示された表の中でダブルクリックすると列幅を設定でき、"
 "その後で必要であれば右クリックすると変更できます。\n"
 "\n"
-"例: \"FTSE\",\"RR.L\",\"21/11/2016\",5.345,\"GBP\" や CURRENCY;"
-"USD;2016-11-21;1.56;GBP\n"
+"例: \"TSE\",\"9432\",\"2016/11/21\",4282,\"JPY\" や "
+"CURRENCY;USD;2016-11-21;110.79;JPY\n"
 "\n"
-"先頭行、末尾行を指定するオプションや、先頭行から一行おきにスキップするオプ"
-"ションがあり、ヘッダー行のあるファイルに使えます。また、必要に応じて、既存の"
-"価格を今だけ上書きするオプションもあります。\n"
+"先頭行、末尾行を指定するオプションや、先頭行から一行おきにスキップするオプシ"
+"ョンがあり、ヘッダー行のあるファイルに使えます。また、必要に応じて、既存の価"
+"格を今だけ上書きするオプションもあります。\n"
 "\n"
 "最後に、繰り返しインポートしやすいように、プレビューページには設定の読み込み"
-"と保存ができるボタンがあります。設定を保存するには、お好みで設定に手を加え"
-"（既存のプリセットをもとに変更することもできます）、それからご自由に設定名を"
-"変更して設定を保存するボタンを押します。なお組み込みのプリセットには保存でき"
-"ません。\n"
+"と保存ができるボタンがあります。調整した設定を保存すると後のインポート時に再"
+"利用できます。設定を読み込んだ後で似たようなインポートのためにまた手を加えて"
+"別名で保存することもできます。なお組み込みのプリセットには保存できません。\n"
 "\n"
 "この操作は元に戻せません。バックアップを用意してください。\n"
 "\n"
@@ -13262,34 +13218,6 @@ msgid "CSV Transaction Import"
 msgstr "CSV 取引インポート"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:44
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you import a delimited file containing a list of "
-#| "transactions. It supports both token separated files (such as comma "
-#| "separated or semi-colon separated) and fixed width data.\n"
-#| "\n"
-#| "For a successful import three columns have to be available in the import "
-#| "data:\n"
-#| "• a Date column\n"
-#| "• a Description column\n"
-#| "• a Deposit or Withdrawal column\n"
-#| "\n"
-#| "If there is no Account data available, a base account can be selected to "
-#| "which all data will be imported.\n"
-#| "\n"
-#| "Apart from a choice of delimiter, there are several options to tweak the "
-#| "importer. For example a number of lines can be skipped at the start or "
-#| "the end of the data, as well as odd rows. Several date and number formats "
-#| "are supported. The file encoding can be defined.\n"
-#| "\n"
-#| "The importer can handle files where transactions are split over multiple "
-#| "lines, with each line representing one split.\n"
-#| "\n"
-#| "Lastly, for repeated imports the preview page has buttons to Load and "
-#| "Save the settings. To save the settings, tweak the settings to your "
-#| "preferences (optionally starting from an existing preset), then "
-#| "(optionally change the settings name and press the Save Settings button. "
-#| "Note you can't save to built-in presets."
 msgid ""
 "This assistant will help you import a delimited file containing a list of "
 "transactions. It supports both token separated files (such as comma "
@@ -13321,8 +13249,8 @@ msgstr ""
 "いをします。（カンマ区切りやセミコロン区切りなど）トークンで区切られたファイ"
 "ルと固定幅データの両方をサポートします。\n"
 "\n"
-"うまくインポートするために、インポートするデータには 3 つの列が必要となりま"
-"す:\n"
+"うまくインポートするために、インポートするデータには 3 "
+"つの列が必要となります:\n"
 "• 日付の列\n"
 "• 説明の列\n"
 "• 入金もしくは出金の列\n"
@@ -13332,17 +13260,16 @@ msgstr ""
 "\n"
 "区切り文字を選べるほか、このインポート機能ではいくつかのオプションを設定でき"
 "ます。例えば、データの先頭、末尾や奇数行を何行もスキップできます。様々な日付"
-"や数値の書式をサポートしています。ファイルのエンコーディングを指定できま"
-"す。\n"
+"や数値の書式をサポートしています。ファイルのエンコーディングを指定できます。"
+"\n"
 "\n"
 "このインポート機能は、各行が一つのスプリットを表す、複数行にまたがった取引を"
 "含むファイルを扱えます。\n"
 "\n"
 "最後に、繰り返しインポートしやすいように、プレビューページには設定の読み込み"
-"と保存ができるボタンがあります。設定を保存するには、お好みで設定に手を加え"
-"（既存のプリセットをもとに変更することもできます）、それからご自由に設定名を"
-"変更して設定を保存するボタンを押します。なお組み込みのプリセットには保存でき"
-"ません。"
+"と保存ができるボタンがあります。調整した設定を保存すると後のインポート時に再"
+"利用できます。設定を読み込んだ後で似たようなインポートのためにまた手を加えて"
+"別名で保存することもできます。"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:62
 msgid "Transaction Import Assistant"
@@ -16071,10 +15998,8 @@ msgid "Green"
 msgstr "青"
 
 #: gnucash/gtkbuilder/dialog-import.glade:871
-#, fuzzy
-#| msgid "Do not print transaction detail"
 msgid "Edit imported transaction details"
-msgstr "取引の詳細を印刷しない"
+msgstr "インポートされた取引の詳細を編集"
 
 #: gnucash/gtkbuilder/dialog-import.glade:944
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:151
@@ -16110,12 +16035,12 @@ msgid ""
 "When Updating and Clearing a matched transaction, append the imported "
 "Description and Notes to the matched Description and Notes instead of "
 "replacing them."
-msgstr ""
+msgstr "一致した取引を更新および清算するとき、インポートされた説明や備考を一致した説"
+"明や備考に対して置換するのではなく追記します。"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1127
-#, fuzzy
 msgid "_Reconcile after match"
-msgstr "(自動) 合致を照合"
+msgstr "合致後に照合する(_R)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1150
 msgid "Generic import transaction matcher"
@@ -16940,29 +16865,27 @@ msgstr ""
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2512
-#, fuzzy
-#| msgid "Match _display threshold"
 msgid "Likely match _day threshold"
-msgstr "一致表示の閾値(_D)"
+msgstr "おそらく一致する日数の閾値(_D)"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2525
-#, fuzzy
-#| msgid "Match _display threshold"
 msgid "_Unlikely match day threshold"
-msgstr "一致表示の閾値(_D)"
+msgstr "おそらく一致しない日数の閾値(_U)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2539
 msgid ""
 "A transaction whose date is within the threshold is likely to be a match. "
 "Default is 4 days."
-msgstr ""
+msgstr "日付がこの閾値以内の取引はおそらく一致するものとします。デフォルトは 4 "
+"日です。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2561
 msgid ""
 "A transaction whose date is outside the threshold is unlikely to be a match. "
 "Default is 14 days."
-msgstr ""
+msgstr "日付がこの閾値を外れた取引はおそらく一致しないものとします。デフォルトは 14 "
+"日です。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2640
 msgid "<b>Checks</b>"
@@ -17312,11 +17235,11 @@ msgstr "幅(_W)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:4122
 msgid "Open new tabs _adjacent to current tab"
-msgstr ""
+msgstr "新しいタブを現在のタブの隣に開く(_A)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:4128
 msgid "Opens new tab adjacent to current tab instead of at the end."
-msgstr ""
+msgstr "新しいタブを末尾ではなく現在のタブの隣に開きます。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:4209
 msgid "Windows"
@@ -17912,18 +17835,15 @@ msgid "R_emind in advance"
 msgstr "前もって通知する(_E)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:720
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "Re_view created transactions"
-msgstr "作成された取引を確認する(_R)"
+msgstr "作成された取引を確認する(_V)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:724
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid ""
 "Set 'Review created transactions' as the default in the \"since last run\" "
 "dialog."
-msgstr "作成された取引を確認する(_R)"
+msgstr "\"前回起動時以降\" ダイアログ内で '作成された取引を確認する' "
+"をデフォルトで設定します。"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:788
 msgid "Edit Scheduled Transaction"
@@ -17967,7 +17887,7 @@ msgstr "終了日"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1278
 msgid "occurrences"
-msgstr "回の全繰り返し回数　"
+msgstr "回の全繰り返し回数"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1290
 msgid "remaining"
@@ -19142,7 +19062,7 @@ msgstr ""
 msgid ""
 "This assistant helps you setting up your Online Banking connection with your "
 "bank."
-msgstr "このウィザードではインターネットバンキングの設定の手助けを行います。"
+msgstr "このアシスタントではインターネットバンキングの設定の手助けを行います。"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:39
 msgid ""
@@ -19178,24 +19098,21 @@ msgid ""
 "Online Banking, because sometimes the bank does not give you correct "
 "feedback when a transfer is rejected."
 msgstr ""
+"注意: ★★一切、無保証です★★ 銀行によってはインターネットバンキングのサーバの運"
+"用が貧弱です。時間的にギリギリの振込等をインターネットバンキング経由では実行"
+"しないでください。時折、銀行が振込等を拒絶時に正しく応答しないことがあります"
+"。"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:89
 msgid "Initial Online Banking Setup"
 msgstr "インターネットバンキング初期設定"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:111
-#, fuzzy
-#| msgid ""
-#| "The Setup of your Online Banking connection is handled by the external "
-#| "program \"AqBanking Setup Wizard\". Please press the button below to "
-#| "start this program."
 msgid ""
 "The Setup of your Online Banking connection is handled by the external "
 "program \"AqBanking Setup\"."
-msgstr ""
-"インターネットバンキングの接続設定は \"AqBanking 設定ウィザード\" という外部"
-"のプログラムで実行されます。下のボタンを押して、そのプログラムを起動してくだ"
-"さい。"
+msgstr "インターネットバンキングの接続設定は \"AqBanking 設定\" "
+"という外部のプログラムで実行されます。"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:125
 msgid ""
@@ -19203,6 +19120,9 @@ msgid ""
 "* It ignores GnuCash's preferences like \"Close log window when finished\".\n"
 "* To report issues read"
 msgstr ""
+"これはつまり:\n"
+"* GnuCash の「終了時にログウィンドウを閉じる」のような設定は無視されます。\n"
+"* 問題を報告するには以下をお読みください。"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:141
 msgid ""
@@ -19211,31 +19131,22 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:157
-#, fuzzy
-#| msgid ""
-#| "The Setup of your Online Banking connection is handled by the external "
-#| "program \"AqBanking Setup Wizard\". Please press the button below to "
-#| "start this program."
 msgid ""
 "You have to set up at least one connection before you can continue.\n"
 "\n"
 "Please press the button below to start it."
 msgstr ""
-"インターネットバンキングの接続設定は \"AqBanking 設定ウィザード\" という外部"
-"のプログラムで実行されます。下のボタンを押して、そのプログラムを起動してくだ"
-"さい。"
+"続けるには少なくとも一つの接続設定が必要です。\n"
+"\n"
+"下のボタンを押して開始してください。"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:170
-#, fuzzy
-#| msgid "Start AqBanking Setup Wizard"
 msgid "_Start AqBanking Setup"
-msgstr "AqBanking設定ウィザードを開始"
+msgstr "AqBanking 設定を開始(_S)"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:186
-#, fuzzy
-#| msgid "Initial Online Banking Setup"
 msgid "Start Online Banking Setup"
-msgstr "インターネットバンキング初期設定"
+msgstr "インターネットバンキング設定開始"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:204
 #, fuzzy
@@ -19270,8 +19181,8 @@ msgstr ""
 "インターネットバンキングの口座と GnuCash の勘定科目の対応付けが終了しました。"
 "もうインターネットバンキングの処理を実行できます。\n"
 "\n"
-"他の銀行、ユーザー、口座を追加したい場合は、またいつでもこのウィザードを起動"
-"できます。\n"
+"他の銀行、ユーザー、口座を追加したい場合は、またいつでもこのアシスタントを起"
+"動できます。\n"
 "\n"
 "「適用」を押してください。"
 
@@ -20034,27 +19945,18 @@ msgstr "SEPA 取引を作成(_S)..."
 msgid ""
 "Issue a new international European (SEPA) transaction online through Online "
 "Banking"
-msgstr ""
-"インターネットバンキングを通して国際的なヨーロッパ (SEPA) の取引を新規作成し"
-"ます。"
+msgstr "インターネットバンキングを通してヨーロッパ (SEPA) "
+"の国際間取引を新規作成します。"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:120
-#, fuzzy
-#| msgid "Issue _SEPA Transaction..."
 msgid "Issue SEPA I_nternal Transaction..."
-msgstr "SEPA 取引を作成(_S)..."
+msgstr "SEPA 内取引を作成(_N)..."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:121
-#, fuzzy
-#| msgid ""
-#| "Issue a new international European (SEPA) transaction online through "
-#| "Online Banking"
 msgid ""
 "Issue a new internal European (SEPA) transaction online through Online "
 "Banking"
-msgstr ""
-"インターネットバンキングを通して国際的なヨーロッパ (SEPA) の取引を新規作成し"
-"ます。"
+msgstr "インターネットバンキングを通してヨーロッパ (SEPA) 内の取引を新規作成します。"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:125
 msgid "_Internal Transaction..."
@@ -20065,17 +19967,15 @@ msgid "Issue a new bank-internal transaction online through Online Banking"
 msgstr "インターネットバンキングを通して銀行内部取引を新規作成します。"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:130
-#, fuzzy
 msgid "Issue SEPA Direct _Debit..."
-msgstr "SEPA 口座振替を作成(_I)..."
+msgstr "SEPA 口座振替を作成(_D)..."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:131
 msgid ""
 "Issue a new international European (SEPA) direct debit note online through "
 "Online Banking"
-msgstr ""
-"インターネットバンキングを通して国際的なヨーロッパ (SEPA) の口座振替メモを新"
-"規作成します。"
+msgstr "インターネットバンキングを通してヨーロッパ (SEPA) "
+"の国際間口座振替メモを新規作成します。"
 
 #. Translators: Message types MTxxxx are exchange formats used by the SWIFT network
 #. https://en.wikipedia.org/wiki/Society_for_Worldwide_Interbank_Financial_Telecommunication
@@ -20425,13 +20325,6 @@ msgid "Import bills and invoices from a CSV text file"
 msgstr "CSV テキストファイルから得意先および仕入先請求書をインポートします。"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:80
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you export the Account Tree to a file\n"
-#| "with the separator specified below.\n"
-#| "\n"
-#| "Select the settings you require for the file and then click \"Next\" to "
-#| "proceed or \"Cancel\" to abort the export.\n"
 msgid ""
 "This assistant will help you export the Account Tree to a file with the "
 "separator specified below.\n"
@@ -20439,31 +20332,16 @@ msgid ""
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
 msgstr ""
-"このアシスタントは勘定科目階層をファイルにエクスポートするお手伝いをしま"
-"す。\n"
-"以下で指定された区切り文字を使ってエクスポートします。\n"
+"このアシスタントは勘定科目階層を以下で指定された区切り文字を使ってファイルに"
+"エクスポートするお手伝いをします。\n"
 "\n"
-"ファイルに必要な設定を選択し、処理を行う場合は \"進む\" をクリックしてくださ"
-"い。エクスポートを中止する場合は \"キャンセル\" をクリックしてください。\n"
+"ファイルに必要な設定を選択し、処理を行う場合は \"進む\" "
+"をクリックしてください。エクスポートを中止する場合は \"キャンセル\" "
+"をクリックしてください。\n"
 
 #. Translators: %s is one of the following paragraphs about rows/transaction.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:87
-#, fuzzy, c-format
-#| msgid ""
-#| "This assistant will help you export the Transactions to a file\n"
-#| "with the separator specified below.\n"
-#| "\n"
-#| "There will be multiple rows for each transaction and may require further "
-#| "manipulation to get them in a format you can use.\n"
-#| "\n"
-#| "Each Transaction will appear once in the export and will be listed in the "
-#| "order the accounts were processed\n"
-#| "\n"
-#| "Price/Rate output format is controlled by the Preference setting,\n"
-#| "General->Force Prices to display as decimals\n"
-#| "\n"
-#| "Select the settings you require for the file and then click \"Next\" to "
-#| "proceed or \"Cancel\" to abort the export.\n"
+#, c-format
 msgid ""
 "This assistant will help you export the Transactions to a file with the "
 "separator specified below.\n"
@@ -20480,31 +20358,34 @@ msgid ""
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
 msgstr ""
-"このアシスタントは取引をファイルにエクスポートするお手伝いをします。\n"
-"下で指定した区切り文字でエクスポートします。\n"
+"このアシスタントは取引を以下で指定した区切り文字でファイルにエクスポートする"
+"お手伝いをします。\n"
 "\n"
-"各取引は複数行にわたって出力されるので、この取引情報を使いたい書式で読み取る"
-"には追加の編集作業をする必要があるかもしれません。\n"
+"%s\n"
 "\n"
-"各取引はエクスポート時に一度だけ、勘定科目の処理順に出力されます。\n"
+"一つの取引に複数のスプリットがあり選択された勘定科目のいくつかに含まれる場合"
+"でも一度だけエクスポートされます。そのスプリットを含む最初に処理された勘定科"
+"目の中で出力されます。\n"
 "\n"
-"価格・レートの出力形式は設定ダイアログでの次の設定で制御できます:\n"
-"全般->価格を強制的に小数点で表示する\n"
+"価格・レートの出力形式は設定\n"
+"\"数値・日付・時刻\"->\"価格を強制的に小数点で表示する\" で制御できます。\n"
 "\n"
-"ファイルに必要な設定を選択し、処理を行う場合は \"進む\" をクリックしてくださ"
-"い。エクスポートを中止する場合は \"キャンセル\" をクリックしてください。\n"
+"ファイルに必要な設定を選択し、処理を行う場合は \"進む\" "
+"をクリックしてください。エクスポートを中止する場合は \"キャンセル\" "
+"をクリックしてください。\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:99
 msgid ""
 "There will be multiple rows for each transaction with each row representing "
 "one split."
-msgstr ""
+msgstr "各取引は複数行にわたって出力され、各行は一つのスプリットを表します。"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:103
 msgid ""
 "There will be one row for each transaction, equivalent to a single row in a "
 "register in 'Basic Ledger' mode. As such some transfer detail could be lost."
-msgstr ""
+msgstr "各取引は一行に出力され、「基本元帳」モードの記録簿の一つの行と同等のものにな"
+"ります。そのため取引の詳細の一部が欠落するかもしれません。"
 
 #. Translators: %s is the file name.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:109
@@ -21306,10 +21187,8 @@ msgid "y/d/m"
 msgstr "年/日/月"
 
 #: gnucash/import-export/import-main-matcher.c:518
-#, fuzzy
-#| msgid "No transactions were found associated with the ~a."
 msgid "No new transactions were found in this import."
-msgstr "この~aと関連付けられた取引がありませんでした。"
+msgstr "このインポートに新しい取引はありませんでした。"
 
 #: gnucash/import-export/import-main-matcher.c:687
 #: gnucash/import-export/import-main-matcher.c:840
@@ -21387,16 +21266,14 @@ msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "新規、貸借不一致 (%s を資金移動する勘定科目が必要)!"
 
 #: gnucash/import-export/import-main-matcher.c:2051
-#, fuzzy, c-format
-#| msgid "Reconcile (manual) match"
+#, c-format
 msgid "Reconcile (manual) match to %s"
-msgstr "(手動) 合致を照合"
+msgstr "%s への (手動) 合致を照合"
 
 #: gnucash/import-export/import-main-matcher.c:2056
-#, fuzzy, c-format
-#| msgid "Reconcile (auto) match"
+#, c-format
 msgid "Reconcile (auto) match to %s"
-msgstr "(自動) 合致を照合"
+msgstr "%s への (自動) 合致を照合"
 
 #: gnucash/import-export/import-main-matcher.c:2065
 #: gnucash/import-export/import-main-matcher.c:2095
@@ -21404,16 +21281,14 @@ msgid "Match missing!"
 msgstr "合致するものがありません!"
 
 #: gnucash/import-export/import-main-matcher.c:2081
-#, fuzzy, c-format
-#| msgid "Update and reconcile (manual) match"
+#, c-format
 msgid "Update and reconcile (manual) match to %s"
-msgstr "(手動) 合致を更新して照合"
+msgstr "%s への (手動) 合致を更新して照合"
 
 #: gnucash/import-export/import-main-matcher.c:2086
-#, fuzzy, c-format
-#| msgid "Update and reconcile (auto) match"
+#, c-format
 msgid "Update and reconcile (auto) match to %s"
-msgstr "(自動) 合致を更新して照合"
+msgstr "%s への (自動) 合致を更新して照合"
 
 #: gnucash/import-export/import-main-matcher.c:2103
 msgid "Do not import (no action selected)"
@@ -21570,10 +21445,8 @@ msgstr ""
 "きます。"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:906
-#, fuzzy
-#| msgid "_Name or description"
 msgid "Name or _description"
-msgstr "名前または説明(_N)"
+msgstr "名前または説明(_D)"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:930
 msgid "_Ticker symbol or other abbreviation"
@@ -22833,27 +22706,25 @@ msgstr "データ点間の時間間隔です。"
 
 #: gnucash/report/options-utilities.scm:66
 msgid "One Day"
-msgstr "1 日です"
+msgstr "1 日"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:160
 msgid "One Week"
-msgstr "1 週間です"
+msgstr "1 週間"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:159
 msgid "Two Weeks"
-msgstr "2 週間です"
+msgstr "2 週間"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:158
 msgid "One Month"
-msgstr "1 ヶ月です"
+msgstr "1 ヶ月"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-#, fuzzy
-#| msgid "Quarter"
 msgid "Quarter Year"
 msgstr "四半期"
 
@@ -22865,7 +22736,7 @@ msgstr "半年"
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:155
 msgid "One Year"
-msgstr "1 年です"
+msgstr "1 年"
 
 #: gnucash/report/options-utilities.scm:84
 msgid "All"
@@ -22904,38 +22775,32 @@ msgstr "価格情報の情報源です。"
 
 #: gnucash/report/options-utilities.scm:144
 msgid "Average cost of purchases weighted by volume"
-msgstr ""
+msgstr "購入費用の取引量による加重平均"
 
 #: gnucash/report/options-utilities.scm:145
-#, fuzzy
-#| msgid "The weighted average of all currency transactions of the past."
 msgid "Weighted average of all transactions in the past"
-msgstr "過去のすべての通貨の取引の加重平均を使用します。"
+msgstr "過去のすべての取引の加重平均"
 
 #: gnucash/report/options-utilities.scm:146
-#, fuzzy
-#| msgid "Use nearest to report date."
 msgid "Last up through report date"
-msgstr "帳票の日付にもっとも近いものを使用します。"
+msgstr "帳票の日付までの最後の値"
 
 #: gnucash/report/options-utilities.scm:147
-#, fuzzy
-#| msgid "Use nearest to report date."
 msgid "Closest to report date"
-msgstr "帳票の日付にもっとも近いものを使用します。"
+msgstr "帳票の日付にもっとも近い値"
 
 #: gnucash/report/options-utilities.scm:148
 #: gnucash/report/reports/standard/advanced-portfolio.scm:82
 msgid "Most recent"
-msgstr "最近"
+msgstr "最新"
 
 #: gnucash/report/options-utilities.scm:160
 msgid "Width of plot in pixels."
-msgstr "プロットする幅のドット数"
+msgstr "プロットする幅のドット数です。"
 
 #: gnucash/report/options-utilities.scm:168
 msgid "Height of plot in pixels."
-msgstr "プロットする高さのドット数"
+msgstr "プロットする高さのドット数です。"
 
 #: gnucash/report/options-utilities.scm:179
 msgid "Choose the marker for each data point."
@@ -22983,30 +22848,27 @@ msgstr "勘定科目のソート方法を選択してください。"
 
 #: gnucash/report/options-utilities.scm:203
 msgid "Alphabetical by account code"
-msgstr "勘定科目コードのアルファベット順です"
+msgstr "勘定科目コードのアルファベット順"
 
 #: gnucash/report/options-utilities.scm:204
 msgid "Alphabetical by account name"
-msgstr "勘定科目名のアルファベット順です"
+msgstr "勘定科目名のアルファベット順"
 
 #: gnucash/report/options-utilities.scm:205
 msgid "Numerical by descending amount"
-msgstr ""
+msgstr "金額の降順"
 
 #: gnucash/report/options-utilities.scm:223
 msgid "How to show the balances of parent accounts."
 msgstr "親勘定科目残高の表示方法です。"
 
 #: gnucash/report/options-utilities.scm:224
-#, fuzzy
-#| msgid ""
-#| "Show only the balance in the parent account, excluding any subaccounts."
 msgid "Account Balance in the parent account, excluding any subaccounts."
-msgstr "子勘定科目は除外し、親勘定科目内の残高のみを表示します。"
+msgstr "勘定科目残高 - 子勘定科目は除外した親勘定科目内の残高です。"
 
 #: gnucash/report/options-utilities.scm:225
 msgid "Do not show any balances of parent accounts."
-msgstr "親勘定科目の残高を表示しません。"
+msgstr "表示しない - 親勘定科目の残高を表示しません。"
 
 #: gnucash/report/options-utilities.scm:228
 #: gnucash/report/reports/standard/account-summary.scm:118
@@ -23014,10 +22876,8 @@ msgid "Account Balance"
 msgstr "勘定科目残高"
 
 #: gnucash/report/options-utilities.scm:229
-#, fuzzy
-#| msgid "Calculate"
 msgid "Calculate Subtotal"
-msgstr "計算"
+msgstr "小計を計算する"
 
 #: gnucash/report/options-utilities.scm:230
 #: gnucash/report/options-utilities.scm:246
@@ -23030,11 +22890,11 @@ msgstr "親勘定科目の勘定科目小計の表示方法です。"
 
 #: gnucash/report/options-utilities.scm:241
 msgid "Show subtotals for selected parent accounts which have subaccounts."
-msgstr "子勘定科目をもつ選択した親勘定科目の小計を表示します。"
+msgstr "小計を表示する - 子勘定科目をもつ選択した親勘定科目の小計を表示します。"
 
 #: gnucash/report/options-utilities.scm:242
 msgid "Do not show any subtotals for parent accounts."
-msgstr "親勘定科目の小計を表示しません。"
+msgstr "表示しない - 親勘定科目の小計を表示しません。"
 
 #: gnucash/report/options-utilities.scm:245
 msgid "Show subtotals"
@@ -23952,34 +23812,26 @@ msgstr "上の開始日と終了日を使用"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
-#, fuzzy
-#| msgid "1st Est Tax Quarter"
 msgid "1st Est Tax Quarter (Jan 1 - Mar 31)"
-msgstr "予定納税第 1 四半期"
+msgstr "予定納税第 1 四半期（1 月 1 日 ～ 3 月 31 日）"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
-#, fuzzy
-#| msgid "2nd Est Tax Quarter"
 msgid "2nd Est Tax Quarter (Apr 1 - May 31)"
-msgstr "予定納税第 2 四半期"
+msgstr "予定納税第 2 四半期（4 月 1 日 ～ 5 月 31 日）"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:190
-#, fuzzy
-#| msgid "3rd Est Tax Quarter"
 msgid "3rd Est Tax Quarter (Jun 1 - Aug 31)"
-msgstr "予定納税第 3 四半期"
+msgstr "予定納税第 3 四半期（6 月 1 日 ～ 8 月 31 日）"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
-#, fuzzy
-#| msgid "4th Est Tax Quarter"
 msgid "4th Est Tax Quarter (Sep 1 - Dec 31)"
-msgstr "予定納税第 4 四半期"
+msgstr "予定納税第 4 四半期（9 月 1 日 ～ 12 月 31 日）"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:192
@@ -23988,34 +23840,26 @@ msgstr "前年"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:160
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:193
-#, fuzzy
-#| msgid "Last Yr 1st Est Tax Qtr"
 msgid "Last Yr 1st Est Tax Qtr (Jan 1 - Mar 31)"
-msgstr "前年の予定納税第 1 四半期"
+msgstr "前年の予定納税第 1 四半期（1 月 1 日 ～ 3 月 31 日）"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:161
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:194
-#, fuzzy
-#| msgid "Last Yr 2nd Est Tax Qtr"
 msgid "Last Yr 2nd Est Tax Qtr (Apr 1 - May 31)"
-msgstr "前年の予定納税第 2 四半期"
+msgstr "前年の予定納税第 2 四半期（4 月 1 日 ～ 5 月 31 日）"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:162
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:198
-#, fuzzy
-#| msgid "Last Yr 3rd Est Tax Qtr"
 msgid "Last Yr 3rd Est Tax Qtr (Jun 1 - Aug 31)"
-msgstr "前年の予定納税第 3 四半期"
+msgstr "前年の予定納税第 3 四半期（6 月 1 日 ～ 8 月 31 日）"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:163
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:199
-#, fuzzy
-#| msgid "Last Yr 4th Est Tax Qtr"
 msgid "Last Yr 4th Est Tax Qtr (Sep 1 - Dec 31)"
-msgstr "前年の予定納税第 4 四半期"
+msgstr "前年の予定納税第 4 四半期（9 月 1 日 ～ 12 月 31 日）"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:167
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:203
@@ -24155,17 +23999,13 @@ msgid "Select date to use for PriceDB lookups."
 msgstr "価格データベースを検索するのに使う日付を選択します。"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:254
-#, fuzzy
-#| msgid "Nearest transaction date"
 msgid "Nearest to transaction date"
-msgstr "取引日時にもっとも近い"
+msgstr "取引の日付にもっとも近い"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:256
 #: gnucash/report/reports/standard/advanced-portfolio.scm:83
-#, fuzzy
-#| msgid "Nearest report date"
 msgid "Nearest to report date"
-msgstr "帳票日時にもっとも近い"
+msgstr "帳票の日付にもっとも近い"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3326
 msgid "Tax Schedule Report & TXF Export"
@@ -24418,16 +24258,12 @@ msgstr ""
 "します。"
 
 #: gnucash/report/reports/standard/account-summary.scm:97
-#, fuzzy
-#| msgid "Shows accounts deeper than the depth limit at the depth limit."
 msgid "Raise accounts deeper than the depth limit to the depth limit."
-msgstr "深さ限界より深い勘定科目を深さ限界の階層に表示します。"
+msgstr "深さ限界より深い勘定科目を深さ限界の階層まで引き上げます。"
 
 #: gnucash/report/reports/standard/account-summary.scm:98
-#, fuzzy
-#| msgid "Disregard completely any accounts deeper than the depth limit."
 msgid "Omit any accounts deeper than the depth limit."
-msgstr "深さ限界より深い勘定科目を完全に無視します。"
+msgstr "深さ限界より深い勘定科目を無視します。"
 
 #: gnucash/report/reports/standard/account-summary.scm:100
 #: gnucash/report/reports/standard/balance-sheet.scm:96
@@ -24681,20 +24517,14 @@ msgid "Basis calculation method."
 msgstr "原価の計算方法です。"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:89
-#, fuzzy
-#| msgid "Use average cost of all shares for basis."
 msgid "Average cost of all shares"
-msgstr "原価に全株式数・持分の平均費用を使います。"
+msgstr "全株式数・持分の平均費用"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:90
-#, fuzzy
-#| msgid "First In, First Out"
 msgid "First-in first-out"
 msgstr "先入先出"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:91
-#, fuzzy
-#| msgid "Last In, First Out"
 msgid "Last-in first-out"
 msgstr "後入先出"
 
@@ -24712,16 +24542,12 @@ msgid "Include in basis"
 msgstr "原価に含める"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:104
-#, fuzzy
-#| msgid "Include in gain"
 msgid "Include in gain/loss"
 msgstr "損益に含める"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:105
-#, fuzzy
-#| msgid "Title for this report."
 msgid "Omit from report"
-msgstr "この帳票のタイトルです。"
+msgstr "帳票から除外する"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:111
 msgid "Display the ticker symbols."
@@ -25538,36 +25364,28 @@ msgstr "帳票範囲の終了期間そのものを選択してください。"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:65
 #: gnucash/report/reports/standard/budget.scm:111
-#, fuzzy
-#| msgid "Last budget period"
 msgid "First budget period"
-msgstr "最後の予算期間です。"
+msgstr "最初の予算期間"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:66
 #: gnucash/report/reports/standard/budget.scm:112
-#, fuzzy
-#| msgid "Last budget period"
 msgid "Previous budget period"
-msgstr "最後の予算期間です。"
+msgstr "前の予算期間"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:67
 #: gnucash/report/reports/standard/budget.scm:113
-#, fuzzy
-#| msgid "Last budget period"
 msgid "Current budget period"
-msgstr "最後の予算期間です。"
+msgstr "現在の予算期間"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:68
 #: gnucash/report/reports/standard/budget.scm:114
-#, fuzzy
-#| msgid "Last budget period"
 msgid "Next budget period"
-msgstr "最後の予算期間です。"
+msgstr "次の予算期間"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:69
 #: gnucash/report/reports/standard/budget.scm:115
 msgid "Last budget period"
-msgstr "最後の予算期間です。"
+msgstr "最後の予算期間"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:70
 #: gnucash/report/reports/standard/budget.scm:116
@@ -25580,7 +25398,7 @@ msgstr "現在の合計を計算しますか?"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:142
 msgid "Select which chart type to use."
-msgstr ""
+msgstr "どのチャートの種類を使うか選択してください。"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:144
 #: gnucash/report/reports/standard/category-barchart.scm:160
@@ -25802,7 +25620,7 @@ msgstr "累計の金額を使う"
 
 #: gnucash/report/reports/standard/budget.scm:58
 msgid "Values are accumulated across periods."
-msgstr ""
+msgstr "値は期間を越えて累計されます。"
 
 #: gnucash/report/reports/standard/budget.scm:59
 msgid "Show Column with Totals"
@@ -25866,9 +25684,8 @@ msgstr "差額"
 #. amounts from the beginning of budget, instead
 #. of only using the budget-period amounts.
 #: gnucash/report/reports/standard/budget.scm:764
-#, fuzzy
 msgid "using accumulated amounts"
-msgstr "勘定科目を解析中..."
+msgstr "累計金額使用"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:40
 msgid "Cash Flow Barchart"
@@ -26029,15 +25846,14 @@ msgstr "チャート内の積み上げの最大数です。"
 
 #: gnucash/report/reports/standard/category-barchart.scm:188
 #: gnucash/report/reports/standard/category-barchart.scm:262
-#, fuzzy
 msgid "Percentage chart"
-msgstr "折れ線グラフ"
+msgstr "割合グラフ"
 
 #: gnucash/report/reports/standard/category-barchart.scm:189
 msgid ""
 "Display account contributions as a percentage of the total value for the "
 "period."
-msgstr ""
+msgstr "勘定科目の寄与度を期間内合計のパーセントで表示します。"
 
 #: gnucash/report/reports/standard/category-barchart.scm:292
 msgid "Invalid dates"
@@ -26634,7 +26450,7 @@ msgstr "画像"
 #. Translators: "Empty space" refers to invoice header section being left blank
 #: gnucash/report/reports/standard/invoice.scm:119
 msgid "Empty space"
-msgstr "空のスペースです。"
+msgstr "空のスペース"
 
 #: gnucash/report/reports/standard/invoice.scm:182
 msgid "Custom Title"
@@ -27326,14 +27142,12 @@ msgid "Display document link?"
 msgstr "文書リンクを表示するかどうかを指定します。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1068
-#, fuzzy
 msgid "No valid account found"
-msgstr "有効な勘定科目が選択されていません"
+msgstr "有効な勘定科目がありません"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1069
-#, fuzzy
 msgid "This report requires a valid AP/AR account to be available."
-msgstr "この帳票を出力するには有効な勘定科目を選択する必要があります。"
+msgstr "この帳票を出力するには利用できる有効な買掛金・売掛金勘定科目が必要です。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1092
 msgid "No transactions found."
