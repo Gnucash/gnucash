@@ -862,22 +862,25 @@ notes_append (Transaction* selected_match_trans, gchar* new_notes)
 static char*
 maybe_append_string (const char* match_string, const char* imp_string)
 {
-    char *norm_match_string, *norm_imp_string;
+    char *norm_match_string, *norm_imp_string, *retval = NULL;
 
     if (!(match_string && *match_string))
         return g_strdup(imp_string);
 
     if (!(imp_string && *imp_string))
-        return NULL;
+        return retval;
 
     norm_match_string = g_utf8_normalize (match_string, -1, G_NORMALIZE_ALL);
     norm_imp_string = g_utf8_normalize (imp_string, -1, G_NORMALIZE_ALL);
 
     if (g_utf8_strlen (norm_imp_string, -1) > g_utf8_strlen (norm_match_string, -1) ||
          !strstr (norm_match_string, norm_imp_string))
-        return g_strconcat(match_string, "|", imp_string, NULL);
+        retval = g_strconcat(match_string, "|", imp_string, NULL);
 
-    return NULL;
+    g_free (norm_match_string);
+    g_free (norm_imp_string);
+    return retval;
+
 }
 
 /* Append or replace transaction description and notes
