@@ -307,7 +307,7 @@
   (gnc-make-qofinstance-option section name key docstring default (GncOptionUIType-TAX_TABLE)))
 (define-public (gnc:make-counter-option section name key docstring default)
   (issue-deprecation-warning "gnc:make-number-range-option is deprecated. Make and register the option in one command with gnc-register-number-range-option.")
-  (gnc-make-range-value-option section name key docstring default 0.0 999999999.0, 1.0))
+  (gnc-make-range-value-option section name key docstring default 0.0 999999999.0 1.0))
 
 (define-public (gnc:make-counter-format-option section name key docstring default)
   (issue-deprecation-warning "gnc:make-counter-format-option is deprecated. Make and register the option in one command with gnc-register-counter-format-option.")
