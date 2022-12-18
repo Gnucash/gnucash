@@ -1833,11 +1833,13 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
     /* Followed by the input method */
     if (gtk_entry_im_context_filter_keypress (GTK_ENTRY(sheet->entry), event))
     {
+#if !(defined(__APPLE__) || defined(__WIN32__))
         /* There's sometimes a timing issue when running under KDE
          * Plasma where this call removes the selection. This 1ms
          * sleep prevents it.
          */
         usleep(1000);
+#endif
         /* Restore the saved cursor position in case GtkEntry's IMContext
          * handlers messed with it after we set it in our insert_cb.
          */
