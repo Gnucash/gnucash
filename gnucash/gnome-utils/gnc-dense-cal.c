@@ -494,17 +494,20 @@ _gdc_set_cal_min_size_req(GncDenseCal *dcal)
 }
 
 GtkWidget*
-gnc_dense_cal_new(void)
+gnc_dense_cal_new (GtkWindow *parent)
 {
-    GncDenseCal *dcal;
-    dcal = g_object_new(GNC_TYPE_DENSE_CAL, NULL);
+    GncDenseCal *dcal = g_object_new (GNC_TYPE_DENSE_CAL, NULL);
+
+    gtk_window_set_transient_for (GTK_WINDOW(dcal->transPopup),
+                                  GTK_WINDOW(parent));
+
     return GTK_WIDGET(dcal);
 }
 
 GtkWidget*
-gnc_dense_cal_new_with_model(GncDenseCalModel *model)
+gnc_dense_cal_new_with_model (GtkWindow *parent, GncDenseCalModel *model)
 {
-    GncDenseCal *cal = GNC_DENSE_CAL(gnc_dense_cal_new());
+    GncDenseCal *cal = GNC_DENSE_CAL(gnc_dense_cal_new (parent));
     gnc_dense_cal_set_model(cal, model);
     return GTK_WIDGET(cal);
 }

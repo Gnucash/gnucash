@@ -48,11 +48,13 @@
 
 ;; Just prove that the report exists.
 (define (null-test uuid)
-  (let ((options (gnc:make-report-options uuid)))
+  (let* ((book (gnc-get-current-book))
+         (options (gnc:make-report-options uuid)))
     (gnc:options->render uuid options "test-standard-net-linechart" "null-test")))
 
 (define (single-txn-test uuid)
-  (let* ((options (gnc:make-report-options uuid))
+  (let* ((book (gnc-get-current-book))
+         (options (gnc:make-report-options uuid))
          (env (create-test-env))
          (my-asset-account (env-create-root-account env ACCT-TYPE-ASSET
                                                     (gnc-default-report-currency)))
@@ -94,7 +96,8 @@
 
 
 (define (two-txn-test uuid)
-  (let* ((options (gnc:make-report-options uuid))
+  (let* ((book (gnc-get-current-book))
+         (options (gnc:make-report-options uuid))
          (env (create-test-env))
          (my-asset-account (env-create-root-account env ACCT-TYPE-ASSET
                                                     (gnc-default-report-currency)))
@@ -147,7 +150,8 @@
 
 
 (define (two-txn-test-2 uuid)
-  (let* ((options (gnc:make-report-options uuid))
+  (let* ((book (gnc-get-current-book))
+         (options (gnc:make-report-options uuid))
          (env (create-test-env))
          (my-asset-account (env-create-root-account env ACCT-TYPE-ASSET
                                                     (gnc-default-report-currency)))

@@ -693,6 +693,9 @@ xaccTransClone (const Transaction *from)
     xaccTransBeginEdit (to);
     qof_instance_copy_kvp (QOF_INSTANCE (to), QOF_INSTANCE (from));
 
+    /* But not the online-id! */
+    qof_instance_set (QOF_INSTANCE (to), "online-id", NULL, NULL);
+
     for (GList* lfrom = from->splits, *lto = to->splits; lfrom && lto;
          lfrom = g_list_next (lfrom), lto = g_list_next (lto))
         xaccSplitCopyKvp (lfrom->data, lto->data);

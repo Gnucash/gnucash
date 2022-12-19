@@ -5,10 +5,10 @@
 # Pedro Albuquerque <pmra@gmx.com>, 2021, 2022.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.12-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2022-09-11 23:24+0200\n"
+"Project-Id-Version: GnuCash 4.13-pre1\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2022-12-04 19:47-0800\n"
 "PO-Revision-Date: 2022-09-13 06:22+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
@@ -986,7 +986,7 @@ msgstr "Opção de pagamento de empréstimo: \"%s\""
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:623
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:63
-#: gnucash/import-export/import-main-matcher.c:1539
+#: gnucash/import-export/import-main-matcher.c:1542
 #: gnucash/import-export/import-match-picker.c:393
 #: gnucash/import-export/import-match-picker.c:433
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3700
@@ -1086,7 +1086,7 @@ msgstr "Erro ao adicionar cotação."
 #: gnucash/import-export/aqb/gnc-ab-utils.c:565
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:147
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
-#: gnucash/import-export/import-main-matcher.c:1540
+#: gnucash/import-export/import-main-matcher.c:1543
 #: gnucash/import-export/import-match-picker.c:392
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
 #: gnucash/register/ledger-core/split-register-model.c:342
@@ -1151,7 +1151,7 @@ msgstr "Editar..."
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3000
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:147
 #: gnucash/report/reports/standard/invoice.scm:774
-#: libgnucash/engine/Account.cpp:176 libgnucash/engine/gncInvoice.c:1116
+#: libgnucash/engine/Account.cpp:176 libgnucash/engine/gncInvoice.c:1119
 msgid "Bill"
 msgstr "Pagamento"
 
@@ -1164,7 +1164,7 @@ msgstr "Vale"
 #: gnucash/gnome/business-gnome-utils.c:225 gnucash/gnome/dialog-doclink.c:817
 #: gnucash/gnome/dialog-invoice.c:3586
 #: gnucash/gnome/gnc-plugin-page-invoice.c:570
-#: gnucash/gnome/gnc-plugin-page-register.c:655
+#: gnucash/gnome/gnc-plugin-page-register.c:649
 #: gnucash/gnome/gnc-plugin-page-report.c:1859
 #: gnucash/gnome-search/dialog-search.c:1092
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2898
@@ -1182,7 +1182,7 @@ msgstr "Vale"
 #: gnucash/report/reports/standard/taxinvoice.scm:165
 #: gnucash/report/reports/support/receipt.eguile.scm:91
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:106
-#: libgnucash/engine/Account.cpp:157 libgnucash/engine/gncInvoice.c:1114
+#: libgnucash/engine/Account.cpp:157 libgnucash/engine/gncInvoice.c:1117
 msgid "Invoice"
 msgstr "Factura"
 
@@ -1331,7 +1331,7 @@ msgstr "Eliminar mercadoria?"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:184
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1112
 #: gnucash/gnome/gnc-plugin-page-register2.c:1630
-#: gnucash/gnome/gnc-plugin-page-register.c:2042
+#: gnucash/gnome/gnc-plugin-page-register.c:2035
 #: gnucash/gnome/gnc-split-reg.c:976 gnucash/gnome/gnc-split-reg.c:1014
 #: gnucash/gnome/gnc-split-reg.c:1236 gnucash/gnome/gnc-split-reg.c:1504
 #: gnucash/gnome/gnc-split-reg.c:1544 gnucash/gnome/window-reconcile2.c:2150
@@ -1340,8 +1340,8 @@ msgstr "Eliminar mercadoria?"
 #: gnucash/gnome-utils/dialog-account.c:718
 #: gnucash/gnome-utils/dialog-options.c:223
 #: gnucash/gnome-utils/dialog-tax-table.c:667
-#: gnucash/gnome-utils/gnc-file.c:118 gnucash/gnome-utils/gnc-file.c:366
-#: gnucash/gnome-utils/gnc-file.c:664 gnucash/gnome-utils/gnc-gui-query.c:300
+#: gnucash/gnome-utils/gnc-file.c:117 gnucash/gnome-utils/gnc-file.c:365
+#: gnucash/gnome-utils/gnc-file.c:663 gnucash/gnome-utils/gnc-gui-query.c:300
 #: gnucash/gnome-utils/gnc-gui-query.c:332
 #: gnucash/gnome-utils/gnc-main-window.c:1341
 #: gnucash/gnome-utils/gnc-main-window.c:1498
@@ -1418,7 +1418,7 @@ msgstr "Eliminar mercadoria?"
 #: gnucash/import-export/aqb/dialog-ab.glade:583
 #: gnucash/import-export/aqb/dialog-ab.glade:891
 #: gnucash/import-export/aqb/dialog-ab.glade:1012
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2028
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2031
 #: gnucash/register/ledger-core/gncEntryLedger.c:920
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:896
 #: gnucash/register/ledger-core/split-register-control.c:1537
@@ -1591,7 +1591,7 @@ msgid "Placeholder account selected. Please try again."
 msgstr "Conta marcadora de posição seleccionada. Tente novamente."
 
 #: gnucash/gnome/dialog-doclink.c:160
-#: gnucash/gnome/gnc-plugin-page-register.c:4772
+#: gnucash/gnome/gnc-plugin-page-register.c:4765
 msgid "Select document"
 msgstr "Seleccionar documento"
 
@@ -1697,7 +1697,7 @@ msgstr "Endereço encontrado"
 msgid "Address Not Found"
 msgstr "Endereço não encontrado"
 
-#: gnucash/gnome/dialog-doclink.c:597 gnucash/gnome/dialog-imap-editor.c:883
+#: gnucash/gnome/dialog-doclink.c:597 gnucash/gnome/dialog-imap-editor.c:885
 msgid "Total Entries"
 msgstr "Total de entradas"
 
@@ -1710,7 +1710,7 @@ msgstr "O item de negócios não pode ser modificado."
 #: gnucash/gnome/gnc-plugin-page-invoice.c:403
 #: gnucash/gnome/gnc-plugin-page-invoice.c:424
 #: gnucash/gnome/gnc-plugin-page-invoice.c:1361
-#: gnucash/gnome/gnc-plugin-page-register.c:653
+#: gnucash/gnome/gnc-plugin-page-register.c:647
 msgid "Manage Document Link"
 msgstr "Gerir ligação do documento"
 
@@ -1745,7 +1745,7 @@ msgstr "Transacções com ligações a documentos"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:625
 #: gnucash/import-export/csv-exp/csv-tree-export.c:156
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:65
-#: gnucash/import-export/import-main-matcher.c:1543
+#: gnucash/import-export/import-main-matcher.c:1546
 #: gnucash/import-export/import-match-picker.c:395
 #: gnucash/import-export/import-match-picker.c:435
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3710
@@ -1828,8 +1828,8 @@ msgstr "Nome do empregado"
 msgid "Username"
 msgstr "Utilizador"
 
-#: gnucash/gnome/dialog-employee.c:720 gnucash/gnome/dialog-sx-editor2.c:1755
-#: gnucash/gnome/dialog-sx-editor.c:1823 gnucash/gnome/dialog-tax-info.c:1200
+#: gnucash/gnome/dialog-employee.c:720 gnucash/gnome/dialog-sx-editor2.c:1756
+#: gnucash/gnome/dialog-sx-editor.c:1824 gnucash/gnome/dialog-tax-info.c:1200
 #: gnucash/gnome-utils/gnc-dense-cal.c:350
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:96
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:368
@@ -1938,7 +1938,7 @@ msgstr "Transacções de fecho"
 #: gnucash/gnome/dialog-find-transactions2.c:120
 #: gnucash/gnome/dialog-find-transactions.c:118
 #: gnucash/gnome/gnc-plugin-page-register2.c:506
-#: gnucash/gnome/gnc-plugin-page-register.c:651
+#: gnucash/gnome/gnc-plugin-page-register.c:645
 #: gnucash/gnome/window-reconcile2.c:1270 gnucash/gnome/window-reconcile.c:1431
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:617
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:630
@@ -1961,7 +1961,7 @@ msgstr "Cotação de acção"
 #: gnucash/gtkbuilder/dialog-payment.glade:418
 #: gnucash/gtkbuilder/dialog-transfer.glade:102
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:54
-#: gnucash/import-export/import-main-matcher.c:1542
+#: gnucash/import-export/import-main-matcher.c:1545
 #: gnucash/import-export/import-match-picker.c:394
 #: gnucash/import-export/import-match-picker.c:434
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3721
@@ -2011,8 +2011,8 @@ msgstr "Data de emissão"
 #: gnucash/gnome/dialog-find-transactions.c:132
 #: gnucash/gnome/dialog-find-transactions.c:171
 #: gnucash/gnome/dialog-find-transactions.c:177
-#: gnucash/gnome/gnc-plugin-page-register.c:2532
-#: gnucash/gnome/gnc-plugin-page-register.c:4196
+#: gnucash/gnome/gnc-plugin-page-register.c:2525
+#: gnucash/gnome/gnc-plugin-page-register.c:4189
 #: gnucash/gnome-search/dialog-search.c:878
 #: gnucash/gnome-search/dialog-search.c:884
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
@@ -2026,7 +2026,7 @@ msgstr "Número/Acção"
 #: gnucash/gnome/dialog-find-transactions.c:133
 #: gnucash/gnome/dialog-find-transactions.c:170
 #: gnucash/gnome/dialog-find-transactions.c:178
-#: gnucash/gnome/gnc-plugin-page-register.c:2537
+#: gnucash/gnome/gnc-plugin-page-register.c:2530
 #: gnucash/gnome/gnc-split-reg.c:705 gnucash/gnome-search/dialog-search.c:877
 #: gnucash/gnome-search/dialog-search.c:885
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2751
@@ -2050,8 +2050,8 @@ msgstr "Acção"
 #: gnucash/gnome/dialog-find-transactions.c:136
 #: gnucash/gnome/dialog-find-transactions.c:173
 #: gnucash/gnome/dialog-find-transactions.c:179
-#: gnucash/gnome/gnc-plugin-page-register.c:2531
-#: gnucash/gnome/gnc-plugin-page-register.c:4195
+#: gnucash/gnome/gnc-plugin-page-register.c:2524
+#: gnucash/gnome/gnc-plugin-page-register.c:4188
 #: gnucash/gnome-search/dialog-search.c:880
 #: gnucash/gnome-search/dialog-search.c:886
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:615
@@ -2066,7 +2066,7 @@ msgstr "Número de transacção"
 #: gnucash/gnome/dialog-find-transactions.c:137
 #: gnucash/gnome/dialog-find-transactions.c:172
 #: gnucash/gnome/dialog-find-transactions.c:180
-#: gnucash/gnome/gnc-plugin-page-register.c:2536
+#: gnucash/gnome/gnc-plugin-page-register.c:2529
 #: gnucash/gnome/gnc-split-reg.c:693 gnucash/gnome-search/dialog-search.c:879
 #: gnucash/gnome-search/dialog-search.c:887
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2767
@@ -2095,7 +2095,7 @@ msgstr "Descrição, notas ou memorando"
 #: gnucash/gtkbuilder/dialog-transfer.glade:205
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:74
-#: gnucash/import-export/import-main-matcher.c:1544
+#: gnucash/import-export/import-main-matcher.c:1547
 #: gnucash/import-export/import-match-picker.c:396
 #: gnucash/import-export/import-match-picker.c:436
 #: gnucash/register/ledger-core/split-register-model.c:356
@@ -2183,7 +2183,7 @@ msgid "To see the invalid mappings, use a filter of '%s'"
 msgstr "Para ver mapeamentos inválidos, use um filtro de \"%s\""
 
 #: gnucash/gnome/dialog-imap-editor.c:368
-#: gnucash/gnome/dialog-imap-editor.c:605
+#: gnucash/gnome/dialog-imap-editor.c:607
 msgid "Map Account NOT found"
 msgstr "Conta mapeada NÃO encontrada"
 
@@ -2191,28 +2191,28 @@ msgstr "Conta mapeada NÃO encontrada"
 msgid "(Note, if there is a large number, it may take a while)"
 msgstr "(note que se houver um número grande, pode ser demorado)"
 
-#: gnucash/gnome/dialog-imap-editor.c:704
+#: gnucash/gnome/dialog-imap-editor.c:706
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:123
 msgid "Bayesian"
 msgstr "Bayesiana"
 
-#: gnucash/gnome/dialog-imap-editor.c:719
+#: gnucash/gnome/dialog-imap-editor.c:721
 msgid "Description Field"
 msgstr "Campo Descrição"
 
-#: gnucash/gnome/dialog-imap-editor.c:722
+#: gnucash/gnome/dialog-imap-editor.c:724
 msgid "Memo Field"
 msgstr "Campo Memorando"
 
-#: gnucash/gnome/dialog-imap-editor.c:725
+#: gnucash/gnome/dialog-imap-editor.c:727
 msgid "CSV Account Map"
 msgstr "Mapa CSV da conta"
 
-#: gnucash/gnome/dialog-imap-editor.c:765
+#: gnucash/gnome/dialog-imap-editor.c:767
 msgid "Online Id"
 msgstr "Id em linha"
 
-#: gnucash/gnome/dialog-imap-editor.c:791
+#: gnucash/gnome/dialog-imap-editor.c:793
 msgid "Online HBCI"
 msgstr "HBCI em linha"
 
@@ -2312,7 +2312,7 @@ msgstr "Total de gastos:"
 #: gnucash/gnome/dialog-invoice.c:1904 gnucash/gnome/dialog-payment.c:1366
 #: gnucash/gtkbuilder/dialog-invoice.glade:857
 #: gnucash/report/reports/standard/invoice.scm:780
-#: libgnucash/engine/gncInvoice.c:1122
+#: libgnucash/engine/gncInvoice.c:1125
 msgid "Credit Note"
 msgstr "Nota de crédito"
 
@@ -2428,7 +2428,7 @@ msgstr "Ver/Editar factura"
 #: gnucash/gnome/dialog-invoice.c:3359
 #: gnucash/gnome/gnc-plugin-page-invoice.c:455
 #: gnucash/gnome/gnc-plugin-page-register2.c:501
-#: gnucash/gnome/gnc-plugin-page-register.c:646
+#: gnucash/gnome/gnc-plugin-page-register.c:640
 msgid "Duplicate"
 msgstr "Duplicar"
 
@@ -2906,7 +2906,7 @@ msgstr "Continuar"
 #: gnucash/gnome/dialog-payment.c:1631
 #: gnucash/gnome/gnc-plugin-page-invoice.c:453
 #: gnucash/gnome/gnc-plugin-page-register2.c:499
-#: gnucash/gnome/gnc-plugin-page-register.c:644
+#: gnucash/gnome/gnc-plugin-page-register.c:638
 #: gnucash/gnome-utils/gnc-cell-renderer-date.c:160
 msgid "Cancel"
 msgstr "Cancelar"
@@ -3180,25 +3180,25 @@ msgstr ""
 "Está a tentar criar uma transacção agendada que nunca será executada. Deseja "
 "realmente fazer isto?"
 
-#: gnucash/gnome/dialog-sx-editor2.c:1301
+#: gnucash/gnome/dialog-sx-editor2.c:1302
 msgid ""
 "Note: If you have already accepted changes to the Template, Cancel will not "
 "revoke them."
 msgstr ""
 "Nota: se já aceitou alterações ao modelo, Cancelar não as vai reverter."
 
-#: gnucash/gnome/dialog-sx-editor2.c:1347 gnucash/gnome/dialog-sx-editor.c:1412
+#: gnucash/gnome/dialog-sx-editor2.c:1348 gnucash/gnome/dialog-sx-editor.c:1413
 msgid "(never)"
 msgstr "(nunca)"
 
-#: gnucash/gnome/dialog-sx-editor2.c:1515 gnucash/gnome/dialog-sx-editor.c:1574
+#: gnucash/gnome/dialog-sx-editor2.c:1516 gnucash/gnome/dialog-sx-editor.c:1575
 msgid ""
 "The current template transaction has been changed. Would you like to record "
 "the changes?"
 msgstr ""
 "O modelo de transacção actual foi modificado. Deseja gravar as alterações?"
 
-#: gnucash/gnome/dialog-sx-editor2.c:1782 gnucash/gnome/dialog-sx-editor.c:1850
+#: gnucash/gnome/dialog-sx-editor2.c:1783 gnucash/gnome/dialog-sx-editor.c:1851
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:246
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:252
 msgid "Scheduled Transactions"
@@ -3240,7 +3240,7 @@ msgstr "Fórmula de crédito inválida na parcela"
 msgid "Split with memo %s has an unparsable Debit Formula."
 msgstr "Parcela com a nota %s tem uma fórmula de débito inválida."
 
-#: gnucash/gnome/dialog-sx-from-trans.c:557
+#: gnucash/gnome/dialog-sx-from-trans.c:558
 msgid ""
 "The Scheduled Transaction is unbalanced. You are strongly encouraged to "
 "correct this situation."
@@ -3248,7 +3248,7 @@ msgstr ""
 "A transacção agendada não está saldada. Sugerimos veementemente que corrija "
 "esta situação."
 
-#: gnucash/gnome/dialog-sx-from-trans.c:789
+#: gnucash/gnome/dialog-sx-from-trans.c:790
 msgid ""
 "Cannot create a Scheduled Transaction from a Transaction currently being "
 "edited. Please Enter the Transaction before Scheduling."
@@ -3427,7 +3427,7 @@ msgstr "Despesa"
 
 #: gnucash/gnome/gnc-budget-view.c:508
 #: gnucash/gnome/gnc-plugin-page-register2.c:497
-#: gnucash/gnome/gnc-plugin-page-register.c:642
+#: gnucash/gnome/gnc-plugin-page-register.c:636
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2866
 #: gnucash/register/ledger-core/split-register.c:2561
 #: gnucash/register/ledger-core/split-register-layout.c:719
@@ -3440,7 +3440,7 @@ msgstr "Transferência"
 msgid "Remaining to Budget"
 msgstr "Restante até ao orçamento"
 
-#: gnucash/gnome/gnc-budget-view.c:1662 gnucash/gnome/window-reconcile2.c:1094
+#: gnucash/gnome/gnc-budget-view.c:1660 gnucash/gnome/window-reconcile2.c:1094
 #: gnucash/gnome/window-reconcile.c:1167
 #: gnucash/gnome-utils/gnc-tree-view-account.c:924
 #: gnucash/report/html-acct-table.scm:803 gnucash/report/reports/aging.scm:544
@@ -3489,7 +3489,7 @@ msgid "Open an existing GnuCash file"
 msgstr "Abrir um ficheiro existente do GnuCash"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:122
-#: gnucash/gnome-utils/gnc-file.c:100 gnucash/gnome-utils/gnc-file.c:666
+#: gnucash/gnome-utils/gnc-file.c:99 gnucash/gnome-utils/gnc-file.c:665
 #: gnucash/gnome-utils/gnc-main-window.c:1342
 #: gnucash/html/gnc-html-webkit1.c:1198
 msgid "_Save"
@@ -4210,8 +4210,8 @@ msgstr "_Registo2"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:412
 #: gnucash/gnome/gnc-plugin-page-budget.c:231
 #: gnucash/gnome/window-reconcile2.c:1659 gnucash/gnome/window-reconcile.c:1835
-#: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
-#: gnucash/gnome-utils/gnc-file.c:1141
+#: gnucash/gnome-utils/gnc-file.c:89 gnucash/gnome-utils/gnc-file.c:326
+#: gnucash/gnome-utils/gnc-file.c:1140
 msgid "Open"
 msgstr "Abrir"
 
@@ -4238,14 +4238,14 @@ msgstr "Nova"
 #: gnucash/gnome/gnc-plugin-page-budget.c:232
 #: gnucash/gnome/gnc-plugin-page-invoice.c:454
 #: gnucash/gnome/gnc-plugin-page-register2.c:500
-#: gnucash/gnome/gnc-plugin-page-register.c:645
+#: gnucash/gnome/gnc-plugin-page-register.c:639
 msgid "Delete"
 msgstr "Eliminar"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:463
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1977
-#: gnucash/gnome/gnc-plugin-page-register.c:1990
-#: gnucash/gnome/gnc-plugin-page-register.c:5080
+#: gnucash/gnome/gnc-plugin-page-register.c:1983
+#: gnucash/gnome/gnc-plugin-page-register.c:5073
 msgid "'Check & Repair' is currently running, do you want to abort it?"
 msgstr "\"Verificar e corrigir\" actualmente em curso, deseja abortar?"
 
@@ -4482,7 +4482,7 @@ msgid "Budget"
 msgstr "Orçamento"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:945
-#: libgnucash/engine/gnc-budget.cpp:111
+#: libgnucash/engine/gnc-budget.cpp:112
 msgid "Unnamed Budget"
 msgstr "Orçamento sem nome"
 
@@ -4835,7 +4835,7 @@ msgstr "Abrir uma janela de relatório de cliente para o titular desta factura"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:404
 #: gnucash/gnome/gnc-plugin-page-invoice.c:425
 #: gnucash/gnome/gnc-plugin-page-invoice.c:446
-#: gnucash/gnome/gnc-plugin-page-register.c:654
+#: gnucash/gnome/gnc-plugin-page-register.c:648
 msgid "Open Linked Document"
 msgstr "Abrir documento ligado"
 
@@ -4999,7 +4999,7 @@ msgstr "Gerir ligação do documento..."
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:452
 #: gnucash/gnome/gnc-plugin-page-register2.c:498
-#: gnucash/gnome/gnc-plugin-page-register.c:643
+#: gnucash/gnome/gnc-plugin-page-register.c:637
 msgid "Enter"
 msgstr "Registar"
 
@@ -5015,7 +5015,7 @@ msgstr "Abaixo"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:458
 #: gnucash/gnome/gnc-plugin-page-register2.c:505
-#: gnucash/gnome/gnc-plugin-page-register.c:650
+#: gnucash/gnome/gnc-plugin-page-register.c:644
 msgid "Blank"
 msgstr "Em branco"
 
@@ -5536,23 +5536,23 @@ msgid "Show expanded transactions with all splits"
 msgstr "Mostrar transacções expandidas com todas as parcelas"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:502
-#: gnucash/gnome/gnc-plugin-page-register.c:647
+#: gnucash/gnome/gnc-plugin-page-register.c:641
 #: gnucash/gnome-search/dialog-search.c:1108
 msgid "Split"
 msgstr "Parcelas"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:503
-#: gnucash/gnome/gnc-plugin-page-register.c:648
+#: gnucash/gnome/gnc-plugin-page-register.c:642
 msgid "Jump"
 msgstr "Ir"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:504
-#: gnucash/gnome/gnc-plugin-page-register.c:649
+#: gnucash/gnome/gnc-plugin-page-register.c:643
 msgid "Schedule"
 msgstr "Agendar"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:507
-#: gnucash/gnome/gnc-plugin-page-register.c:652
+#: gnucash/gnome/gnc-plugin-page-register.c:646
 #: gnucash/gnome/window-autoclear.c:88
 msgid "Auto-clear"
 msgstr "Auto-confirmar"
@@ -5570,13 +5570,13 @@ msgstr "Diário geral 2"
 #. Translators: %s is the name
 #. of the tab page
 #: gnucash/gnome/gnc-plugin-page-register2.c:1620
-#: gnucash/gnome/gnc-plugin-page-register.c:2031
+#: gnucash/gnome/gnc-plugin-page-register.c:2024
 #, c-format
 msgid "Save changes to %s?"
 msgstr "Gravar alterações em %s?"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1624
-#: gnucash/gnome/gnc-plugin-page-register.c:2036
+#: gnucash/gnome/gnc-plugin-page-register.c:2029
 msgid ""
 "This register has pending changes to a transaction. Would you like to save "
 "the changes to this transaction, discard the transaction, or cancel the "
@@ -5586,12 +5586,12 @@ msgstr ""
 "alterações a esta transacção, descartar a transacção ou cancelar a operação?"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1627
-#: gnucash/gnome/gnc-plugin-page-register.c:2039
+#: gnucash/gnome/gnc-plugin-page-register.c:2032
 msgid "_Discard Transaction"
 msgstr "_Descartar transacção"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1631
-#: gnucash/gnome/gnc-plugin-page-register.c:2043
+#: gnucash/gnome/gnc-plugin-page-register.c:2036
 msgid "_Save Transaction"
 msgstr "_Gravar transacção"
 
@@ -5600,35 +5600,35 @@ msgstr "_Gravar transacção"
 #: gnucash/gnome/gnc-plugin-page-register2.c:1707
 #: gnucash/gnome/gnc-plugin-page-register2.c:1730
 #: gnucash/gnome/gnc-plugin-page-register2.c:1778
-#: gnucash/gnome/gnc-plugin-page-register.c:2076
-#: gnucash/gnome/gnc-plugin-page-register.c:2111
-#: gnucash/gnome/gnc-plugin-page-register.c:2124
-#: gnucash/gnome/gnc-plugin-page-register.c:2183
-#: gnucash/gnome/gnc-plugin-page-register.c:2289
-#: gnucash/gnome/gnc-plugin-page-register.c:2428
+#: gnucash/gnome/gnc-plugin-page-register.c:2069
+#: gnucash/gnome/gnc-plugin-page-register.c:2104
+#: gnucash/gnome/gnc-plugin-page-register.c:2117
+#: gnucash/gnome/gnc-plugin-page-register.c:2176
+#: gnucash/gnome/gnc-plugin-page-register.c:2282
+#: gnucash/gnome/gnc-plugin-page-register.c:2421
 msgid "unknown"
 msgstr "desconhecido"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1681
 #: gnucash/gnome/gnc-plugin-page-register2.c:2416
-#: gnucash/gnome/gnc-plugin-page-register.c:928
-#: gnucash/gnome/gnc-plugin-page-register.c:2097
-#: gnucash/gnome/gnc-plugin-page-register.c:3533
+#: gnucash/gnome/gnc-plugin-page-register.c:922
+#: gnucash/gnome/gnc-plugin-page-register.c:2090
+#: gnucash/gnome/gnc-plugin-page-register.c:3526
 #: gnucash/report/reports/standard/general-journal.scm:36
 msgid "General Journal"
 msgstr "Diário geral"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1683
 #: gnucash/gnome/gnc-plugin-page-register2.c:2422
-#: gnucash/gnome/gnc-plugin-page-register.c:2099
-#: gnucash/gnome/gnc-plugin-page-register.c:3539
+#: gnucash/gnome/gnc-plugin-page-register.c:2092
+#: gnucash/gnome/gnc-plugin-page-register.c:3532
 msgid "Portfolio"
 msgstr "Portefólio"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1685
 #: gnucash/gnome/gnc-plugin-page-register2.c:2428
-#: gnucash/gnome/gnc-plugin-page-register.c:2101
-#: gnucash/gnome/gnc-plugin-page-register.c:3545
+#: gnucash/gnome/gnc-plugin-page-register.c:2094
+#: gnucash/gnome/gnc-plugin-page-register.c:3538
 msgid "Search Results"
 msgstr "Resultados da procura"
 
@@ -5637,17 +5637,17 @@ msgid "General Journal Report"
 msgstr "Relatório do diário geral"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2424
-#: gnucash/gnome/gnc-plugin-page-register.c:3541
+#: gnucash/gnome/gnc-plugin-page-register.c:3534
 msgid "Portfolio Report"
 msgstr "Relatório de portefólio"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2430
-#: gnucash/gnome/gnc-plugin-page-register.c:3547
+#: gnucash/gnome/gnc-plugin-page-register.c:3540
 msgid "Search Results Report"
 msgstr "Relatório de resultados da procura"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2434
-#: gnucash/gnome/gnc-plugin-page-register.c:3551
+#: gnucash/gnome/gnc-plugin-page-register.c:3544
 #: gnucash/gtkbuilder/dialog-preferences.glade:3160
 #: gnucash/report/reports/standard/general-journal.scm:37
 #: gnucash/report/reports/standard/register.scm:64
@@ -5660,12 +5660,12 @@ msgid "Register Report"
 msgstr "Relatório de diário"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2452
-#: gnucash/gnome/gnc-plugin-page-register.c:3569
+#: gnucash/gnome/gnc-plugin-page-register.c:3562
 msgid "and subaccounts"
 msgstr "e sub-contas"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2484
-#: gnucash/gnome/gnc-plugin-page-register.c:3598
+#: gnucash/gnome/gnc-plugin-page-register.c:3591
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2864
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2883
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2901
@@ -5685,7 +5685,7 @@ msgid "Credit"
 msgstr "Crédito"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2487
-#: gnucash/gnome/gnc-plugin-page-register.c:3602
+#: gnucash/gnome/gnc-plugin-page-register.c:3595
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3101
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3106
 #: gnucash/gtkbuilder/dialog-payment.glade:300
@@ -5699,12 +5699,12 @@ msgid "Debit"
 msgstr "Débito"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2653
-#: gnucash/gnome/gnc-plugin-page-register.c:3738
+#: gnucash/gnome/gnc-plugin-page-register.c:3731
 msgid "Print checks from multiple accounts?"
 msgstr "Imprimir cheques de múltiplas contas?"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2655
-#: gnucash/gnome/gnc-plugin-page-register.c:3740
+#: gnucash/gnome/gnc-plugin-page-register.c:3733
 msgid ""
 "This search result contains splits from more than one account. Do you want "
 "to print the checks even though they are not all from the same account?"
@@ -5713,12 +5713,12 @@ msgstr ""
 "imprimir os cheques, mesmo que não sejam todos da mesma conta?"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2665
-#: gnucash/gnome/gnc-plugin-page-register.c:3750
+#: gnucash/gnome/gnc-plugin-page-register.c:3743
 msgid "_Print checks"
 msgstr "Im_primir cheques"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2685
-#: gnucash/gnome/gnc-plugin-page-register.c:3769
+#: gnucash/gnome/gnc-plugin-page-register.c:3762
 msgid ""
 "You can only print checks from a bank account register or search results."
 msgstr ""
@@ -5726,14 +5726,14 @@ msgstr ""
 "procura."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2897
-#: gnucash/gnome/gnc-plugin-page-register.c:3966
+#: gnucash/gnome/gnc-plugin-page-register.c:3959
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr ""
 "Não pode anular uma transacção com parcelas reconciliadas ou confirmadas."
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register2.c:3040
-#: gnucash/gnome/gnc-plugin-page-register.c:4248
+#: gnucash/gnome/gnc-plugin-page-register.c:4241
 #: gnucash/gnome-utils/gnc-tree-view-account.c:2330
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1175
 #, c-format
@@ -5767,7 +5767,7 @@ msgstr "Remo_ver outras parcelas"
 msgid "_Sort By..."
 msgstr "_Ordenar por..."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:490
+#: gnucash/gnome/gnc-plugin-page-register.c:491
 msgid "Stock Ass_istant"
 msgstr "Assistente de acções"
 
@@ -5783,38 +5783,38 @@ msgstr "_Ir para data"
 msgid "Move to the split at the specified date"
 msgstr "Mover para a parcela na data especificada"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:850
+#: gnucash/gnome/gnc-plugin-page-register.c:844
 msgid ""
 "You have tried to open an account in the old register while it is open in "
 "the new register."
 msgstr ""
 "Tentou abrir uma conta no diário antigo enquanto está aberta no novo diário."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3411
+#: gnucash/gnome/gnc-plugin-page-register.c:3404
 msgid "Start Date:"
 msgstr "Data inicial:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3418
+#: gnucash/gnome/gnc-plugin-page-register.c:3411
 msgid "Show previous number of days:"
 msgstr "Mostrar número prévio de dias:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3426
+#: gnucash/gnome/gnc-plugin-page-register.c:3419
 msgid "End Date:"
 msgstr "Data final:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3436
+#: gnucash/gnome/gnc-plugin-page-register.c:3429
 #: gnucash/report/trep-engine.scm:149
 msgid "Unreconciled"
 msgstr "Não reconciliada"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3438
+#: gnucash/gnome/gnc-plugin-page-register.c:3431
 #: gnucash/gnome-search/search-reconciled.c:224
 #: gnucash/gnome-utils/gnc-tree-view-account.c:876
 #: gnucash/report/trep-engine.scm:150
 msgid "Cleared"
 msgstr "Confirmada"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3440
+#: gnucash/gnome/gnc-plugin-page-register.c:3433
 #: gnucash/gnome-search/search-reconciled.c:227
 #: gnucash/gnome-utils/gnc-tree-view-account.c:890
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:75
@@ -5823,37 +5823,37 @@ msgstr "Confirmada"
 msgid "Reconciled"
 msgstr "Reconciliada"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3442
+#: gnucash/gnome/gnc-plugin-page-register.c:3435
 #: gnucash/gnome-search/search-reconciled.c:230
 #: gnucash/report/trep-engine.scm:152
 msgid "Frozen"
 msgstr "Congelada"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3444
+#: gnucash/gnome/gnc-plugin-page-register.c:3437
 #: gnucash/gnome-search/search-reconciled.c:233
 #: gnucash/report/trep-engine.scm:153
 msgid "Voided"
 msgstr "Anulada"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3454
+#: gnucash/gnome/gnc-plugin-page-register.c:3447
 msgid "Show:"
 msgstr "Mostrar:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3462
+#: gnucash/gnome/gnc-plugin-page-register.c:3455
 msgid "Hide:"
 msgstr "Ocultar:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3473
+#: gnucash/gnome/gnc-plugin-page-register.c:3466
 msgid "Filter By:"
 msgstr "Filtrar por:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3535
-#: gnucash/gnome/gnc-plugin-page-register.c:3553
+#: gnucash/gnome/gnc-plugin-page-register.c:3528
+#: gnucash/gnome/gnc-plugin-page-register.c:3546
 #: gnucash/report/reports/standard/transaction.scm:33
 msgid "Transaction Report"
 msgstr "Relatório de transacções"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3973
+#: gnucash/gnome/gnc-plugin-page-register.c:3966
 #: gnucash/gnome/gnc-split-reg.c:1161
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:68
 #, c-format
@@ -5861,28 +5861,28 @@ msgid "This transaction is marked read-only with the comment: '%s'"
 msgstr ""
 "Esta transacção está marcada como só de leitura com o comentário: \"%s\""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4062
+#: gnucash/gnome/gnc-plugin-page-register.c:4055
 #: gnucash/gnome/gnc-split-reg.c:1132
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1121
 msgid "A reversing entry has already been created for this transaction."
 msgstr "Já foi criada uma entrada reversa para esta transacção."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4063
+#: gnucash/gnome/gnc-plugin-page-register.c:4056
 msgid "Jump to the transaction?"
 msgstr "Saltar para a transacção?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4070
+#: gnucash/gnome/gnc-plugin-page-register.c:4063
 msgid "Reverse Transaction"
 msgstr "Reverter transacção"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4071
+#: gnucash/gnome/gnc-plugin-page-register.c:4064
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:73
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:625
 msgid "New Transaction Information"
 msgstr "Informação da nova transacção"
 
 #. Translators: The %s is the name of the plugin page
-#: gnucash/gnome/gnc-plugin-page-register.c:4160
+#: gnucash/gnome/gnc-plugin-page-register.c:4153
 #, c-format
 msgid "Sort %s by..."
 msgstr "Ordenar %s por..."
@@ -5890,26 +5890,26 @@ msgstr "Ordenar %s por..."
 #. Translators: %s refer to the following in
 #. order: invoice type, invoice ID, owner name,
 #. posted date, amount
-#: gnucash/gnome/gnc-plugin-page-register.c:4763
+#: gnucash/gnome/gnc-plugin-page-register.c:4756
 #, c-format
 msgid "%s %s from %s, posted %s, amount %s"
 msgstr "%s %s de %s, publicada a %s, com o montante de %s"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4773
+#: gnucash/gnome/gnc-plugin-page-register.c:4766
 msgid "Several documents are linked with this transaction. Please choose one:"
 msgstr "Há vários documentos ligados a esta transacção. Por favor, escolha um:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4774
+#: gnucash/gnome/gnc-plugin-page-register.c:4767
 #: gnucash/gnome-search/dialog-search.c:323
 #: gnucash/gnome-utils/gnc-cell-renderer-date.c:172
 msgid "Select"
 msgstr "Seleccionar"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4825
+#: gnucash/gnome/gnc-plugin-page-register.c:4818
 msgid "Go to Date"
 msgstr "Ir para data"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:5103
+#: gnucash/gnome/gnc-plugin-page-register.c:5096
 #, c-format
 msgid "Checking splits in current register: %u of %u"
 msgstr "A verificar divisões no diário actual: %u de %u"
@@ -5925,7 +5925,7 @@ msgstr "Imprimir"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1136
 #: gnucash/gnome-utils/dialog-file-access.c:319
-#: gnucash/gnome-utils/gnc-file.c:109 gnucash/gnome-utils/gnc-file.c:351
+#: gnucash/gnome-utils/gnc-file.c:108 gnucash/gnome-utils/gnc-file.c:350
 msgid "Export"
 msgstr "Exportar"
 
@@ -6071,7 +6071,7 @@ msgid "You cannot save to that file."
 msgstr "Não pode gravar nesse ficheiro."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1616
-#: gnucash/gnome-utils/gnc-file.c:1321 gnucash/gnome-utils/gnc-file.c:1568
+#: gnucash/gnome-utils/gnc-file.c:1320 gnucash/gnome-utils/gnc-file.c:1567
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:742
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
@@ -6165,17 +6165,17 @@ msgstr "Editar a transacção agendada seleccionada 2"
 msgid "Delete the selected scheduled transaction"
 msgstr "Eliminar a transacção agendada seleccionada"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:441
+#: gnucash/gnome/gnc-plugin-page-sx-list.c:444
 #: gnucash/gtkbuilder/dialog-account.glade:553
 msgid "Transactions"
 msgstr "Transacções"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:507
+#: gnucash/gnome/gnc-plugin-page-sx-list.c:504
 msgid "Upcoming Transactions"
 msgstr "Próximas transacções"
 
 #. Translators: This is a ngettext(3) message, %d is the number of scheduled transactions deleted
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:871
+#: gnucash/gnome/gnc-plugin-page-sx-list.c:868
 #, c-format
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete %d scheduled transactions?"
@@ -6819,7 +6819,7 @@ msgstr "Cont_a"
 #: gnucash/gtkbuilder/dialog-sx.glade:803
 #: gnucash/gtkbuilder/dialog-sx.glade:1494
 #: gnucash/gtkbuilder/dialog-vendor.glade:47
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2072
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2075
 msgid "_Help"
 msgstr "A_juda"
 
@@ -7358,7 +7358,7 @@ msgid "There was an error parsing the file."
 msgstr "Ocorreu um erro ao processar o ficheiro."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1149
-#: gnucash/gnome-utils/gnc-file.c:1410 gnucash/gnome-utils/gnc-file.c:1649
+#: gnucash/gnome-utils/gnc-file.c:1409 gnucash/gnome-utils/gnc-file.c:1648
 msgid "Writing file..."
 msgstr "A escrever o ficheiro..."
 
@@ -7658,7 +7658,7 @@ msgid "Open..."
 msgstr "Abrir..."
 
 #: gnucash/gnome-utils/dialog-file-access.c:304
-#: gnucash/gnome-utils/gnc-file.c:88
+#: gnucash/gnome-utils/gnc-file.c:87
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:103
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:106
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:784
@@ -8227,65 +8227,65 @@ msgstr "Data: "
 msgid "Frequency"
 msgstr "Frequência"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:1238
+#: gnucash/gnome-utils/gnc-dense-cal.c:1241
 msgid "(unnamed)"
 msgstr "(sem nome)"
 
-#: gnucash/gnome-utils/gnc-file.c:94 gnucash/gnome-utils/gnc-main-window.c:290
+#: gnucash/gnome-utils/gnc-file.c:93 gnucash/gnome-utils/gnc-main-window.c:290
 #: gnucash/import-export/bi-import/gnc-plugin-bi-import.c:57
 #: gnucash/import-export/customer-import/gnc-plugin-customer-import.c:57
 msgid "_Import"
 msgstr "_Importar"
 
-#: gnucash/gnome-utils/gnc-file.c:96 gnucash/gnome-utils/gnc-file.c:335
+#: gnucash/gnome-utils/gnc-file.c:95 gnucash/gnome-utils/gnc-file.c:334
 #: gnucash/gtkbuilder/dialog-preferences.glade:2620
 #: gnucash/import-export/qif-imp/gnc-plugin-qif-import.c:140
 msgid "Import"
 msgstr "Importar"
 
-#: gnucash/gnome-utils/gnc-file.c:102 gnucash/gnome-utils/gnc-file.c:343
-#: gnucash/gnome-utils/gnc-file.c:1195 gnucash/gnome-utils/gnc-file.c:1467
+#: gnucash/gnome-utils/gnc-file.c:101 gnucash/gnome-utils/gnc-file.c:342
+#: gnucash/gnome-utils/gnc-file.c:1194 gnucash/gnome-utils/gnc-file.c:1466
 msgid "Save"
 msgstr "Gravar"
 
-#: gnucash/gnome-utils/gnc-file.c:106 gnucash/gnome-utils/gnc-main-window.c:291
+#: gnucash/gnome-utils/gnc-file.c:105 gnucash/gnome-utils/gnc-main-window.c:291
 msgid "_Export"
 msgstr "_Exportar"
 
-#: gnucash/gnome-utils/gnc-file.c:147
+#: gnucash/gnome-utils/gnc-file.c:146
 msgid "All files"
 msgstr "Todos os ficheiros"
 
-#: gnucash/gnome-utils/gnc-file.c:261
+#: gnucash/gnome-utils/gnc-file.c:260
 msgid "(null)"
 msgstr "(nula)"
 
-#: gnucash/gnome-utils/gnc-file.c:280
+#: gnucash/gnome-utils/gnc-file.c:279
 #, c-format
 msgid "No suitable backend was found for %s."
 msgstr "Nenhum motor adequado encontrado para %s."
 
-#: gnucash/gnome-utils/gnc-file.c:285
+#: gnucash/gnome-utils/gnc-file.c:284
 #, c-format
 msgid "The URL %s is not supported by this version of GnuCash."
 msgstr "O URL %s não é suportado por esta versão do GnuCash."
 
-#: gnucash/gnome-utils/gnc-file.c:290
+#: gnucash/gnome-utils/gnc-file.c:289
 #, c-format
 msgid "Can't parse the URL %s."
 msgstr "Impossível processar o URL %s."
 
-#: gnucash/gnome-utils/gnc-file.c:295
+#: gnucash/gnome-utils/gnc-file.c:294
 #, c-format
 msgid "Can't connect to %s. The host, username or password were incorrect."
 msgstr "Impossível ligar a %s. Servidor, utilizador ou senha incorrectos."
 
-#: gnucash/gnome-utils/gnc-file.c:301
+#: gnucash/gnome-utils/gnc-file.c:300
 #, c-format
 msgid "Can't connect to %s. Connection was lost, unable to send data."
 msgstr "Impossível ligar a %s. A ligação perdeu-se, impossível enviar dados."
 
-#: gnucash/gnome-utils/gnc-file.c:307
+#: gnucash/gnome-utils/gnc-file.c:306
 msgid ""
 "This file/URL appears to be from a newer version of GnuCash. You must "
 "upgrade your version of GnuCash to work with this data."
@@ -8293,12 +8293,12 @@ msgstr ""
 "Este ficheiro/URL aparenta pertencer a uma versão mais recente do GnuCash. "
 "Tem de actualizar o GnuCash para trabalhar com estes dados."
 
-#: gnucash/gnome-utils/gnc-file.c:314
+#: gnucash/gnome-utils/gnc-file.c:313
 #, c-format
 msgid "The database %s doesn't seem to exist. Do you want to create it?"
 msgstr "A base de dados %s parece não existir. Quer criá-la?"
 
-#: gnucash/gnome-utils/gnc-file.c:328
+#: gnucash/gnome-utils/gnc-file.c:327
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -8309,7 +8309,7 @@ msgstr ""
 "outro utilizador e, neste caso, não deverá tentar abri-lo. Quer continuar "
 "com a abertura da base de dados?"
 
-#: gnucash/gnome-utils/gnc-file.c:336
+#: gnucash/gnome-utils/gnc-file.c:335
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -8320,7 +8320,7 @@ msgstr ""
 "outro utilizador e, nesse caso, não deverá tentar importá-la. Quer continuar "
 "com a importação da base de dados?"
 
-#: gnucash/gnome-utils/gnc-file.c:344
+#: gnucash/gnome-utils/gnc-file.c:343
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -8331,7 +8331,7 @@ msgstr ""
 "outro utilizador e, nesse caso, não deverá tentar gravá-la. Quer continuar "
 "com a gravação da base de dados?"
 
-#: gnucash/gnome-utils/gnc-file.c:352
+#: gnucash/gnome-utils/gnc-file.c:351
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -8342,7 +8342,7 @@ msgstr ""
 "outro utilizador e, nesse caso, não deverá tentar exportá-la. Quer continuar "
 "com a exportação da base de dados?"
 
-#: gnucash/gnome-utils/gnc-file.c:377
+#: gnucash/gnome-utils/gnc-file.c:376
 #, c-format
 msgid ""
 "GnuCash could not write to %s. That database may be on a read-only file "
@@ -8353,43 +8353,43 @@ msgstr ""
 "leitura, pode não ter permissões de escrita nessa pasta ou o seu antivírus "
 "está a impedir a acção."
 
-#: gnucash/gnome-utils/gnc-file.c:385
+#: gnucash/gnome-utils/gnc-file.c:384
 #, c-format
 msgid "The file/URL %s does not contain GnuCash data or the data is corrupt."
 msgstr ""
 "O ficheiro/URL %s não contém dados do GnuCash ou os dados estão corrompidos."
 
-#: gnucash/gnome-utils/gnc-file.c:391
+#: gnucash/gnome-utils/gnc-file.c:390
 #, c-format
 msgid ""
 "The server at URL %s experienced an error or encountered bad or corrupt data."
 msgstr "O servidor no URL %s encontrou um erro ou dados corrompidos."
 
-#: gnucash/gnome-utils/gnc-file.c:397
+#: gnucash/gnome-utils/gnc-file.c:396
 #, c-format
 msgid "You do not have permission to access %s."
 msgstr "Não tem permissões para aceder a %s."
 
-#: gnucash/gnome-utils/gnc-file.c:402
+#: gnucash/gnome-utils/gnc-file.c:401
 #, c-format
 msgid "An error occurred while processing %s."
 msgstr "Ocorreu um erro ao processar %s."
 
-#: gnucash/gnome-utils/gnc-file.c:407
+#: gnucash/gnome-utils/gnc-file.c:406
 msgid "There was an error reading the file. Do you want to continue?"
 msgstr "Ocorreu um erro na leitura do ficheiro. Quer continuar?"
 
-#: gnucash/gnome-utils/gnc-file.c:416
+#: gnucash/gnome-utils/gnc-file.c:415
 #, c-format
 msgid "There was an error parsing the file %s."
 msgstr "Ocorreu um erro ao analisar o ficheiro %s."
 
-#: gnucash/gnome-utils/gnc-file.c:421
+#: gnucash/gnome-utils/gnc-file.c:420
 #, c-format
 msgid "The file %s is empty."
 msgstr "O ficheiro %s está vazio."
 
-#: gnucash/gnome-utils/gnc-file.c:434
+#: gnucash/gnome-utils/gnc-file.c:433
 #, c-format
 msgid ""
 "The file/URI %s could not be found.\n"
@@ -8400,26 +8400,26 @@ msgstr ""
 "\n"
 "O ficheiro está no histórico, deseja removê-lo?"
 
-#: gnucash/gnome-utils/gnc-file.c:440
+#: gnucash/gnome-utils/gnc-file.c:439
 #, c-format
 msgid "The file/URI %s could not be found."
 msgstr "O ficheiro/URI %s não pôde ser encontrado."
 
-#: gnucash/gnome-utils/gnc-file.c:447
+#: gnucash/gnome-utils/gnc-file.c:446
 msgid "This file is from an older version of GnuCash. Do you want to continue?"
 msgstr "Este ficheiro é de uma versão anterior do GnuCash. Quer continuar?"
 
-#: gnucash/gnome-utils/gnc-file.c:456
+#: gnucash/gnome-utils/gnc-file.c:455
 #, c-format
 msgid "The file type of file %s is unknown."
 msgstr "O tipo do ficheiro %s é desconhecido."
 
-#: gnucash/gnome-utils/gnc-file.c:461
+#: gnucash/gnome-utils/gnc-file.c:460
 #, c-format
 msgid "Could not make a backup of the file %s"
 msgstr "Impossível criar uma salvaguarda do ficheiro %s"
 
-#: gnucash/gnome-utils/gnc-file.c:466
+#: gnucash/gnome-utils/gnc-file.c:465
 #, c-format
 msgid ""
 "Could not write to file %s. Check that you have permission to write to this "
@@ -8428,14 +8428,14 @@ msgstr ""
 "Impossível escrever em %s. Verifique se tem permissões para escrever neste "
 "ficheiro e se há espaço suficiente para o criar."
 
-#: gnucash/gnome-utils/gnc-file.c:473
+#: gnucash/gnome-utils/gnc-file.c:472
 #, c-format
 msgid "No read permission to read from file %s."
 msgstr "Sem permissões para ler o ficheiro %s."
 
 #. Translators: the first %s is a path in the filesystem,
 #. the second %s is PACKAGE_NAME, which by default is "GnuCash"
-#: gnucash/gnome-utils/gnc-file.c:480
+#: gnucash/gnome-utils/gnc-file.c:479
 #, c-format
 msgid ""
 "You attempted to save in\n"
@@ -8452,7 +8452,7 @@ msgstr ""
 "\n"
 "Por favor, tente novamente numa pasta diferente."
 
-#: gnucash/gnome-utils/gnc-file.c:487
+#: gnucash/gnome-utils/gnc-file.c:486
 msgid ""
 "This database is from an older version of GnuCash. Select OK to upgrade it "
 "to the current version, Cancel to mark it read-only."
@@ -8461,7 +8461,7 @@ msgstr ""
 "para a actualizar para a versão actual ou Cancelar para a marcar como só de "
 "leitura."
 
-#: gnucash/gnome-utils/gnc-file.c:496
+#: gnucash/gnome-utils/gnc-file.c:495
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do File-"
@@ -8472,7 +8472,7 @@ msgstr ""
 "de leitura até que escolha Ficheiro -> Gravar como, mas poderá perder dados "
 "ao gravar numa versão anterior."
 
-#: gnucash/gnome-utils/gnc-file.c:505
+#: gnucash/gnome-utils/gnc-file.c:504
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
 "performed until they logoff. If there are currently no other users, consult "
@@ -8483,7 +8483,7 @@ msgstr ""
 "utilizadores, consulte a documentação para ver como limpar sessões "
 "penduradas."
 
-#: gnucash/gnome-utils/gnc-file.c:515
+#: gnucash/gnome-utils/gnc-file.c:514
 msgid ""
 "The library \"libdbi\" installed on your system doesn't correctly store "
 "large numbers. This means GnuCash cannot use SQL databases correctly. "
@@ -8497,7 +8497,7 @@ msgstr ""
 "uma versão diferente da \"libdbi\". Por favor, veja https://bugs.gnucash.org/"
 "show_bug.cgi?id=611936 para mais informação."
 
-#: gnucash/gnome-utils/gnc-file.c:527
+#: gnucash/gnome-utils/gnc-file.c:526
 msgid ""
 "GnuCash could not complete a critical test for the presence of a bug in the "
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
@@ -8509,7 +8509,7 @@ msgstr ""
 "permissões na sua base de dados SQL. Por favor, veja https://bugzilla.gnome."
 "org/show_bug.cgi?id=645216 para mais informação."
 
-#: gnucash/gnome-utils/gnc-file.c:537
+#: gnucash/gnome-utils/gnc-file.c:536
 msgid ""
 "This file is from an older version of GnuCash and will be upgraded when "
 "saved by this version. You will not be able to read the saved file from the "
@@ -8521,16 +8521,16 @@ msgstr ""
 "do GnuCash (devolverá \"Erro ao processar o ficheiro\"). Se quiser preservar "
 "a versão antiga, saia sem gravar."
 
-#: gnucash/gnome-utils/gnc-file.c:548
+#: gnucash/gnome-utils/gnc-file.c:547
 #, c-format
 msgid "An unknown I/O error (%d) occurred."
 msgstr "Ocorreu um erro desconhecido (%d) de E/S."
 
-#: gnucash/gnome-utils/gnc-file.c:643
+#: gnucash/gnome-utils/gnc-file.c:642
 msgid "Save changes to the file?"
 msgstr "Gravar alterações ao ficheiro?"
 
-#: gnucash/gnome-utils/gnc-file.c:656
+#: gnucash/gnome-utils/gnc-file.c:655
 #: gnucash/gnome-utils/gnc-main-window.c:1335
 #, c-format
 msgid "If you don't save, changes from the past %d minute will be discarded."
@@ -8540,16 +8540,16 @@ msgstr[0] "Se não gravar, as alterações do último minuto serão descartadas.
 msgstr[1] ""
 "Se não gravar, as alterações dos últimos %d minutos serão descartadas."
 
-#: gnucash/gnome-utils/gnc-file.c:660
+#: gnucash/gnome-utils/gnc-file.c:659
 msgid "Continue _Without Saving"
 msgstr "Continuar sem gra_var"
 
-#: gnucash/gnome-utils/gnc-file.c:822
+#: gnucash/gnome-utils/gnc-file.c:821
 #, c-format
 msgid "GnuCash could not obtain the lock for %s."
 msgstr "O GnuCash não conseguiu trancar %s."
 
-#: gnucash/gnome-utils/gnc-file.c:824
+#: gnucash/gnome-utils/gnc-file.c:823
 msgid ""
 "That database may be in use by another user, in which case you should not "
 "open the database. What would you like to do?"
@@ -8557,7 +8557,7 @@ msgstr ""
 "Essa base de dados pode estar aberta por outro utilizador e, nesse caso, não "
 "deverá tentar abri-la. O que quer fazer?"
 
-#: gnucash/gnome-utils/gnc-file.c:827
+#: gnucash/gnome-utils/gnc-file.c:826
 msgid ""
 "That database may be on a read-only file system, you may not have write "
 "permission for the directory, or your anti-virus software is preventing this "
@@ -8568,40 +8568,40 @@ msgstr ""
 "escrever nessa pasta ou o seu antivírus pode estar a impedir a acção. Se "
 "continuar, não poderá gravar nenhumas alterações. O que quer fazer?"
 
-#: gnucash/gnome-utils/gnc-file.c:850
+#: gnucash/gnome-utils/gnc-file.c:849
 #: gnucash/gtkbuilder/dialog-file-access.glade:98
 msgid "Open _Read-Only"
 msgstr "Ab_rir só para leitura"
 
-#: gnucash/gnome-utils/gnc-file.c:853
+#: gnucash/gnome-utils/gnc-file.c:852
 msgid "Create _New File"
 msgstr "Criar _novo ficheiro"
 
-#: gnucash/gnome-utils/gnc-file.c:856
+#: gnucash/gnome-utils/gnc-file.c:855
 msgid "Open _Anyway"
 msgstr "_Abrir mesmo assim"
 
-#: gnucash/gnome-utils/gnc-file.c:859
+#: gnucash/gnome-utils/gnc-file.c:858
 msgid "Open _Folder"
 msgstr "Abrir _pasta"
 
-#: gnucash/gnome-utils/gnc-file.c:865 gnucash/gnome-utils/gnc-main-window.c:315
+#: gnucash/gnome-utils/gnc-file.c:864 gnucash/gnome-utils/gnc-main-window.c:315
 msgid "_Quit"
 msgstr "_Sair"
 
-#: gnucash/gnome-utils/gnc-file.c:951 gnucash/gnome-utils/gnc-file.c:971
+#: gnucash/gnome-utils/gnc-file.c:950 gnucash/gnome-utils/gnc-file.c:970
 msgid "Loading user data..."
 msgstr "A carregar dados..."
 
-#: gnucash/gnome-utils/gnc-file.c:987
+#: gnucash/gnome-utils/gnc-file.c:986
 msgid "Re-saving user data..."
 msgstr "A regravar dados..."
 
-#: gnucash/gnome-utils/gnc-file.c:1350
+#: gnucash/gnome-utils/gnc-file.c:1349
 msgid "Exporting file..."
 msgstr "A exportar o ficheiro..."
 
-#: gnucash/gnome-utils/gnc-file.c:1363
+#: gnucash/gnome-utils/gnc-file.c:1362
 #, c-format
 msgid ""
 "There was an error saving the file.\n"
@@ -8612,7 +8612,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: gnucash/gnome-utils/gnc-file.c:1398
+#: gnucash/gnome-utils/gnc-file.c:1397
 msgid ""
 "The database was opened read-only. Do you want to save it to a different "
 "place?"
@@ -8620,7 +8620,7 @@ msgstr ""
 "A base de dados foi aberta só para leitura. Quer gravá-la num local "
 "diferente?"
 
-#: gnucash/gnome-utils/gnc-file.c:1693
+#: gnucash/gnome-utils/gnc-file.c:1692
 #, c-format
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
@@ -8628,7 +8628,7 @@ msgid ""
 msgstr ""
 "Reverter vai descartar todas as alterações a %s. Deseja realmente continuar?"
 
-#: gnucash/gnome-utils/gnc-file.c:1701
+#: gnucash/gnome-utils/gnc-file.c:1700
 #: gnucash/gnome-utils/gnc-main-window.c:1303
 msgid "<unknown>"
 msgstr "<desconhecido>"
@@ -9560,9 +9560,9 @@ msgid "Dist"
 msgstr "Dist"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:45
-#: gnucash/import-export/import-main-matcher.c:1860
+#: gnucash/import-export/import-main-matcher.c:1862
 #: gnucash/report/reports/standard/register.scm:218
-#: libgnucash/engine/Split.c:1614 libgnucash/engine/Split.c:1631
+#: libgnucash/engine/Split.c:1606 libgnucash/engine/Split.c:1623
 msgid "-- Split Transaction --"
 msgstr "-- Transacção com parcelas --"
 
@@ -10056,7 +10056,7 @@ msgstr "Recebimento"
 #: gnucash/report/reports/standard/net-charts.scm:374
 #: gnucash/report/reports/standard/net-charts.scm:422
 #: libgnucash/engine/Account.cpp:155 libgnucash/engine/Account.cpp:4503
-#: libgnucash/engine/gncInvoice.c:1118
+#: libgnucash/engine/gncInvoice.c:1121
 msgid "Expense"
 msgstr "Despesa"
 
@@ -21044,8 +21044,8 @@ msgstr ""
 "\n"
 "O número de contas adicionadas foi %u e foram actualizadas %u.\n"
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:884
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:849
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:887
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:852
 msgid ""
 "There were problems reading some saved settings, continuing to load.\n"
 "Please review and save again."
@@ -21053,58 +21053,58 @@ msgstr ""
 "Houve problemas ao ler algumas definições, a continuar o carregamento.\n"
 "Por favor, reveja e grave de novo."
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:907
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:872
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:910
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:875
 msgid "Delete the Import Settings."
 msgstr "Eliminar definições de importação."
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:941
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:906
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:944
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:909
 msgid "Setting name already exists, overwrite?"
 msgstr "O nome das definições já existe, sobrescrever?"
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:955
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:920
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:958
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:923
 msgid "The settings have been saved."
 msgstr "As definições foram gravadas."
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:980
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:945
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:983
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:948
 msgid "There was a problem saving the settings, please try again."
 msgstr "Houve um problema ao gravar as definições, por favor tente de novo."
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1146
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1119
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1149
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1122
 msgid "Invalid encoding selected"
 msgstr "Codificação seleccionada inválida"
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1307
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1229
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1310
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1232
 msgid "Merge with column on _left"
 msgstr "Unir com a coluna à _esquerda"
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1311
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1233
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1314
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1236
 msgid "Merge with column on _right"
 msgstr "Unir com a coluna à _direita"
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1316
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1238
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1319
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1241
 msgid "_Split this column"
 msgstr "_Dividir esta coluna"
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1321
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1243
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1324
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1246
 msgid "_Widen this column"
 msgstr "_Alargar esta coluna"
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1325
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1247
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1328
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1250
 msgid "_Narrow this column"
 msgstr "_Estreitar esta coluna"
 
 #. Translators: This is a ngettext(3) message, %d is the number of prices added
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1882
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1885
 #, c-format
 msgid "%d added price"
 msgid_plural "%d added prices"
@@ -21112,7 +21112,7 @@ msgstr[0] "%d cotação adicionada"
 msgstr[1] "%d cotações adicionadas"
 
 #. Translators: This is a ngettext(3) message, %d is the number of duplicate prices
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1887
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1890
 #, c-format
 msgid "%d duplicate price"
 msgid_plural "%d duplicate prices"
@@ -21120,14 +21120,14 @@ msgstr[0] "%d cotação duplicada"
 msgstr[1] "%d cotações duplicadas"
 
 #. Translators: This is a ngettext(3) message, %d is the number of replaced prices
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1892
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1895
 #, c-format
 msgid "%d replaced price"
 msgid_plural "%d replaced prices"
 msgstr[0] "%d cotação substituída"
 msgstr[1] "%d cotações substituídas"
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1897
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1900
 #, c-format
 msgid ""
 "The prices were imported from file '%s'.\n"
@@ -21144,7 +21144,7 @@ msgstr ""
 "- %s\n"
 "- %s"
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1941
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1944
 #, c-format
 msgid ""
 "An unexpected error has occurred while creating prices. Please report this "
@@ -21159,11 +21159,11 @@ msgstr ""
 "Mensagem de erro:\n"
 "%s"
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1750
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1753
 msgid "No Linked Account"
 msgstr "Sem conta ligada"
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1972
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1975
 msgid ""
 "To change mapping, double click on a row or select a row and press the "
 "button..."
@@ -21171,7 +21171,7 @@ msgstr ""
 "Para alterar o mapeamento, duplo clique numa linha ou seleccione uma linha e "
 "prima o botão..."
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2016
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2019
 #, c-format
 msgid ""
 "An unexpected error has occurred while mapping accounts. Please report this "
@@ -21186,7 +21186,7 @@ msgstr ""
 "Mensagem de erro:\n"
 "%s"
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2058
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2061
 #, c-format
 msgid ""
 "An unexpected error has occurred while creating transactions. Please report "
@@ -21201,13 +21201,13 @@ msgstr ""
 "Mensagem de erro:\n"
 "%s"
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2067
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2070
 msgid "Double click on rows to change, then click on Apply to Import"
 msgstr ""
 "Faça duplo clique nas linhas a alterar e clique em Aplicar para importar"
 
 #. Translators: {1} will be replaced with a filename
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2122
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2125
 msgid "The transactions were imported from file '{1}'."
 msgstr "As transacções foram importadas do ficheiro \"{1}\"."
 
@@ -21669,7 +21669,7 @@ msgstr "Nenhuma transacção nova nesta importação."
 msgid "Destination account for the auto-balance split."
 msgstr "Conta destino da parcela de saldo automático."
 
-#: gnucash/import-export/import-main-matcher.c:1023
+#: gnucash/import-export/import-main-matcher.c:1024
 #: gnucash/report/html-utilities.scm:338
 #: gnucash/report/reports/standard/balsheet-pnl.scm:154
 #: gnucash/report/reports/standard/new-owner-report.scm:942
@@ -21677,94 +21677,94 @@ msgid "Disabled"
 msgstr "Desactivado"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.c:1314
+#: gnucash/import-export/import-main-matcher.c:1317
 msgid "_Assign a transfer account to the selection"
 msgstr "_Atribuir uma conta de transferência à selecção"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.c:1365
+#: gnucash/import-export/import-main-matcher.c:1368
 msgid "_Edit description, notes, or memo"
 msgstr "_Editar descrição, notas ou memorando"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.c:1374
+#: gnucash/import-export/import-main-matcher.c:1377
 msgid "_Reset all edits"
 msgstr "_Repor todas as modificações"
 
-#: gnucash/import-export/import-main-matcher.c:1545
+#: gnucash/import-export/import-main-matcher.c:1548
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
 msgstr "A"
 
-#: gnucash/import-export/import-main-matcher.c:1548
+#: gnucash/import-export/import-main-matcher.c:1551
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
 msgstr "A+C"
 
-#: gnucash/import-export/import-main-matcher.c:1552
+#: gnucash/import-export/import-main-matcher.c:1555
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
 msgstr "C"
 
-#: gnucash/import-export/import-main-matcher.c:1559
+#: gnucash/import-export/import-main-matcher.c:1562
 msgid "Info"
 msgstr "Informação"
 
-#: gnucash/import-export/import-main-matcher.c:1566
+#: gnucash/import-export/import-main-matcher.c:1569
 #: gnucash/report/stylesheets/head-or-tail.scm:102
 msgid "Additional Comments"
 msgstr "Comentários adicionais"
 
-#: gnucash/import-export/import-main-matcher.c:1986
+#: gnucash/import-export/import-main-matcher.c:1988
 msgid "New, already balanced"
 msgstr "Nova, já saldada"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.c:2012
+#: gnucash/import-export/import-main-matcher.c:2014
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "Nova, transferir %s para \"%s\" (manual)"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.c:2020
+#: gnucash/import-export/import-main-matcher.c:2022
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "Nova, transferir %s para \"%s\" (automático)"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.c:2031
+#: gnucash/import-export/import-main-matcher.c:2033
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "Nova, NÃO SALDADA (precisa de conta para transferir %s)!"
 
-#: gnucash/import-export/import-main-matcher.c:2049
+#: gnucash/import-export/import-main-matcher.c:2051
 #, c-format
 msgid "Reconcile (manual) match to %s"
 msgstr "Reconciliar correspondência (manual) com %s"
 
-#: gnucash/import-export/import-main-matcher.c:2054
+#: gnucash/import-export/import-main-matcher.c:2056
 #, c-format
 msgid "Reconcile (auto) match to %s"
 msgstr "Reconciliar correspondência (automático) com %s"
 
-#: gnucash/import-export/import-main-matcher.c:2063
-#: gnucash/import-export/import-main-matcher.c:2093
+#: gnucash/import-export/import-main-matcher.c:2065
+#: gnucash/import-export/import-main-matcher.c:2095
 msgid "Match missing!"
 msgstr "Correspondência em falta!"
 
-#: gnucash/import-export/import-main-matcher.c:2079
+#: gnucash/import-export/import-main-matcher.c:2081
 #, c-format
 msgid "Update and reconcile (manual) match to %s"
 msgstr "Actualizar e reconciliar correspondência (manual) com %s"
 
-#: gnucash/import-export/import-main-matcher.c:2084
+#: gnucash/import-export/import-main-matcher.c:2086
 #, c-format
 msgid "Update and reconcile (auto) match to %s"
 msgstr "Actualizar e reconciliar correspondência (automático) com %s"
 
-#: gnucash/import-export/import-main-matcher.c:2101
+#: gnucash/import-export/import-main-matcher.c:2103
 msgid "Do not import (no action selected)"
 msgstr "Não importar (sem acção seleccionada)"
 
@@ -30289,7 +30289,7 @@ msgstr ""
 msgid "Value appears to contain a year while the selected format forbids this."
 msgstr "O valor parece conter um ano enquanto o formato seleccionado o proíbe."
 
-#: libgnucash/engine/gnc-features.c:120
+#: libgnucash/engine/gnc-features.cpp:59
 msgid ""
 "This Dataset contains features not supported by this version of GnuCash. You "
 "must use a newer version of GnuCash in order to support the following "
@@ -30299,15 +30299,15 @@ msgstr ""
 "do GnuCash. Tem de instalar uma versão mais recente para suportar as "
 "seguintes funcionalidades:"
 
-#: libgnucash/engine/gncInvoice.c:1746
+#: libgnucash/engine/gncInvoice.c:1749
 msgid "Extra to Charge Card"
 msgstr "Extra para creditar o cartão"
 
-#: libgnucash/engine/gncInvoice.c:1786
+#: libgnucash/engine/gncInvoice.c:1789
 msgid "Generated from an invoice. Try unposting the invoice."
 msgstr "Criado a partir de uma factura. Experimente suspender a factura."
 
-#: libgnucash/engine/gncInvoice.c:2216
+#: libgnucash/engine/gncInvoice.c:2219
 msgid " (posted)"
 msgstr " (emitido)"
 
@@ -30455,7 +30455,7 @@ msgstr "A procurar órfãs na conta %s: %u de %u"
 msgid "Looking for imbalances in account %s: %u of %u"
 msgstr "A procurar desequilíbrios na conta %s: %u de %u"
 
-#: libgnucash/engine/Split.c:1647
+#: libgnucash/engine/Split.c:1639
 msgctxt ""
 "Displayed account code of the other account in a multi-split transaction"
 msgid "Split"

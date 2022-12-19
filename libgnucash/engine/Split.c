@@ -624,6 +624,8 @@ void
 xaccSplitCopyKvp (const Split *from, Split *to)
 {
     qof_instance_copy_kvp (QOF_INSTANCE (to), QOF_INSTANCE (from));
+    /* But not the online-id */
+    qof_instance_set (QOF_INSTANCE (to), "online-id", NULL, NULL);
 }
 
 /*################## Added for Reg2 #################*/

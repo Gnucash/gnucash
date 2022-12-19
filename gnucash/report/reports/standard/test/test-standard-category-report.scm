@@ -74,11 +74,13 @@
 
 ;; No real test here, just confirm that no exceptions are thrown
 (define (null-test uuid)
-  (let ((options (gnc:make-report-options uuid)))
+  (let* ((book (gnc-get-current-book))
+        (options (gnc:make-report-options uuid)))
     (gnc:options->render uuid options "test-standard-category-report" "null-test")))
 
 (define (single-txn-test uuid)
-  (let* ((income-options (gnc:make-report-options uuid))
+  (let* ((book (gnc-get-current-book))
+         (income-options (gnc:make-report-options uuid))
          (env (create-test-env))
          (my-asset-account (env-create-root-account env ACCT-TYPE-ASSET
                                                     (gnc-default-report-currency)))
@@ -113,7 +115,8 @@
     (teardown)))
 
 (define (single-txn-test-average uuid)
-  (let* ((income-options (gnc:make-report-options uuid))
+  (let* ((book (gnc-get-current-book))
+         (income-options (gnc:make-report-options uuid))
          (env (create-test-env))
          (curr (gnc-default-report-currency))
          (my-asset-account (env-create-root-account env ACCT-TYPE-ASSET curr))
@@ -206,7 +209,8 @@
   (teardown))
 
 (define (multi-acct-test expense-report-uuid)
-  (let* ((expense-options (gnc:make-report-options expense-report-uuid))
+  (let* ((book (gnc-get-current-book))
+         (expense-options (gnc:make-report-options expense-report-uuid))
          (env (create-test-env))
          (expense-accounts (env-expense-account-structure env))
          (asset-accounts (env-create-account-structure

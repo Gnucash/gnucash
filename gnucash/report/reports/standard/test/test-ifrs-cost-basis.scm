@@ -34,7 +34,8 @@
 
 (define (null-test)
   ;; This null-test tests for the presence of report.
-  (let ((options (gnc:make-report-options uuid)))
+  (let* ((book (gnc-get-current-book))
+         (options (gnc:make-report-options uuid)))
     (test-assert "null-test"
       (options->sxml uuid options "null-test"))))
 

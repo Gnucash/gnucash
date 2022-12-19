@@ -75,6 +75,7 @@
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
+#include <gnc-session.h>
 #include "gnc-component-manager.h"
 #include "dialog-preferences.h"
 #include "dialog-doclink-utils.h"
@@ -122,10 +123,14 @@ GSList *add_ins = NULL;
 static gchar *gnc_account_separator_is_valid (const gchar *separator,
                                               gchar **normalized_separator)
 {
-    QofBook *book = gnc_get_current_book ();
+    QofBook *book;
     GList *conflict_accts = NULL;
     gchar *message = NULL;
 
+    if (!gnc_current_session_exist())
+        return NULL;
+
+    book = gnc_get_current_book ();
     *normalized_separator = gnc_normalize_account_separator (separator);
     conflict_accts = gnc_account_list_name_violations (book, *normalized_separator);
     if (conflict_accts)
@@ -151,7 +156,7 @@ gnc_account_separator_pref_changed_cb (GtkEntry *entry, GtkWidget *dialog)
 {
     GtkWidget *label, *image;
     gchar *sample;
-    gchar *separator;
+    gchar *separator = NULL;
 
     gchar *conflict_msg = gnc_account_separator_is_valid (gtk_entry_get_text (entry), &separator);
 
@@ -200,7 +205,7 @@ gnc_account_separator_validate (GtkWidget *dialog)
 {
     GtkWidget *entry = g_object_get_data (G_OBJECT(dialog), "account-separator");
     gboolean ret = TRUE;
-    gchar *separator;
+    gchar *separator = NULL;
     gchar *conflict_msg = gnc_account_separator_is_valid (gtk_entry_get_text (GTK_ENTRY(entry)), &separator);
 
     /* Check if the new separator clashes with existing account names */
@@ -1337,7 +1342,6 @@ gnc_preferences_dialog_create (GtkWindow *parent)
     GtkTreeIter iter;
     gnc_commodity *locale_currency;
     const gchar *currency_name;
-    QofBook *book;
     GDate fy_end;
     gboolean date_is_valid = FALSE;
 
@@ -1396,11 +1400,14 @@ gnc_preferences_dialog_create (GtkWindow *parent)
                             prefs_table, (GDestroyNotify)g_hash_table_destroy);
 
 
-    book = gnc_get_current_book ();
-    g_date_clear (&fy_end, 1);
-    qof_instance_get (QOF_INSTANCE(book),
-                      "fy-end", &fy_end,
-                      NULL);
+    if (gnc_current_session_exist())
+    {
+        QofBook *book = gnc_get_current_book ();
+        g_date_clear (&fy_end, 1);
+        qof_instance_get (QOF_INSTANCE(book),
+                          "fy-end", &fy_end,
+                          NULL);
+    }
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_START_PERIOD));
     period = gnc_period_select_new (TRUE);

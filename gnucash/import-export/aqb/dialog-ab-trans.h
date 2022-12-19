@@ -101,6 +101,8 @@ gint gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td);
  */
 void gnc_ab_trans_dialog_free(GncABTransDialog *td);
 
+#if (AQBANKING_VERSION_INT >= 60400)
+
 /**
  * Retrieve the current list of transaction templates from the dialog @a
  * td, unless @a changed is a specified location and the templates have
@@ -114,7 +116,7 @@ void gnc_ab_trans_dialog_free(GncABTransDialog *td);
  */
 GList *gnc_ab_trans_dialog_get_templ(const GncABTransDialog *td,
                                      gboolean *changed);
-
+#endif
 /**
  * Retrieve the widget used as parent.
  *

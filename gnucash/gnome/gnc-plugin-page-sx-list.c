@@ -463,11 +463,14 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     GtkWidget *vbox;
     GtkWidget *label;
     GtkWidget *swin;
+    GtkWindow *window;
 
     page = GNC_PLUGIN_PAGE_SX_LIST(plugin_page);
     priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
     if (priv->widget != NULL)
         return priv->widget;
+
+    window = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page)));
 
     /* Create Vpaned widget for top level */
     widget = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
@@ -566,7 +569,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
 
     {
         priv->dense_cal_model = gnc_sx_instance_dense_cal_adapter_new (GNC_SX_INSTANCE_MODEL(priv->instances));
-        priv->gdcal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model (GNC_DENSE_CAL_MODEL(priv->dense_cal_model)));
+        priv->gdcal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model (window, GNC_DENSE_CAL_MODEL(priv->dense_cal_model)));
         g_object_ref_sink (priv->gdcal);
 
         gnc_dense_cal_set_months_per_col (priv->gdcal, 4);

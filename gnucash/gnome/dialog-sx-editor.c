@@ -1329,7 +1329,8 @@ schedXact_editor_create_freq_sel (GncSxEditorDialog *sxed)
     gtk_box_pack_start (GTK_BOX (b), example_cal_scrolled_win, TRUE, TRUE, 0);
 
     sxed->dense_cal_model = gnc_dense_cal_store_new (EX_CAL_NUM_MONTHS * 31);
-    sxed->example_cal = GNC_DENSE_CAL (gnc_dense_cal_new_with_model (GNC_DENSE_CAL_MODEL (sxed->dense_cal_model)));
+    sxed->example_cal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model (GTK_WINDOW(sxed->dialog),
+                                                                    GNC_DENSE_CAL_MODEL(sxed->dense_cal_model)));
     g_assert (sxed->example_cal);
     gnc_dense_cal_set_num_months (sxed->example_cal, EX_CAL_NUM_MONTHS);
     gnc_dense_cal_set_months_per_col (sxed->example_cal, EX_CAL_MO_PER_COL);

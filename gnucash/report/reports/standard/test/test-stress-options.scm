@@ -64,7 +64,8 @@
   (define optionslist '())
   (gnc:report-templates-for-each
    (lambda (report-id template)
-     (let* ((options-generator (gnc:report-template-options-generator template))
+     (let* ((book (gnc-get-current-book))
+            (options-generator (gnc:report-template-options-generator template))
             (options (options-generator))
             (report-options-tested '()))
        (gnc:options-for-each
@@ -115,7 +116,8 @@
       (format #t "[pass] ~a\n" (string-join option-summary ","))))))
 
 (define (simple-stress-test report-name uuid report-options)
-  (let ((options (gnc:make-report-options uuid)))
+  (let* ((book (gnc-get-current-book))
+         (options (gnc:make-report-options uuid)))
     (test-assert (format #f "basic test ~a" report-name)
       (gnc:options->render uuid options (string-append "stress-" report-name) "test"))
     (format #t "Testing SIMPLE combinations for:\n~a" report-name)
@@ -153,7 +155,8 @@
                                    report-options)))))))
 
 (define (combinatorial-stress-test report-name uuid report-options)
-  (let* ((options (gnc:make-report-options uuid))
+  (let* ((book (gnc-get-current-book))
+         (options (gnc:make-report-options uuid))
          (render #f))
 
     (test-assert (format #f "basic test ~a" report-name)
@@ -265,8 +268,9 @@
   (run-tests "on a populated book" optionslist stress-test-runner))
 
 (define (run-test)
-  (let ((optionslist (generate-optionslist))
-        (stress-test-runner (get-stress-test-runner)))
+  (let* ((book (gnc-get-current-book))
+         (optionslist (generate-optionslist))
+         (stress-test-runner (get-stress-test-runner)))
     (test-runner-factory gnc:test-runner)
     (test-begin "stress options")
     (tests optionslist stress-test-runner)

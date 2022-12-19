@@ -60,7 +60,8 @@
 
 (define (null-test variant uuid)
   ;; This null-test tests for the presence of report.
-  (let ((options (gnc:make-report-options uuid)))
+  (let* ((book (gnc-get-current-book))
+         (options (gnc:make-report-options uuid)))
     (test-assert (format #f "null-test ~a" variant)
       (options->sxml uuid options "null-test"))))
 
@@ -97,6 +98,7 @@
 
 (define (advanced-tests)
   (test-group-with-cleanup "advanced-portfolio-tests"
+;; let* required here to ensure that the book is created before creating the options.
     (let* ((account-alist (create-stock-test-data))
            (options (gnc:make-report-options advanced-uuid)))
       (let ((sxml (options->sxml advanced-uuid options "basic average")))

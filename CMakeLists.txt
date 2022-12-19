@@ -358,8 +358,8 @@ find_guile_dirs()
 
 # ############################################################
 if (WITH_AQBANKING)
-  pkg_check_modules (GWENHYWFAR REQUIRED gwenhywfar>=5.8.0)
-  pkg_check_modules (AQBANKING REQUIRED aqbanking>=6.4.0)
+  pkg_check_modules (GWENHYWFAR REQUIRED gwenhywfar>=5.6.0)
+  pkg_check_modules (AQBANKING REQUIRED aqbanking>=6.2.0)
   set(CMAKE_REQUIRED_INCLUDES "${AQBANKING_INCLUDE_DIRS}"
     "${GWENHYWFAR_INCLUDE_DIRS}")
   set(CMAKE_REQUIRED_LIBRARIES "${AQBANKING_LD_FLAGS}")

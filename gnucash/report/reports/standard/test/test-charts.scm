@@ -71,6 +71,7 @@
 (define (null-test variant)
   ;; This null-test tests for the presence of report.
   (let* ((uuid (variant->uuid variant))
+         (book (gnc-get-current-book))
          (options (gnc:make-report-options uuid)))
     (test-assert (format #f "null-test: ~a" variant)
       (options->render uuid options "null-test"))))
@@ -112,7 +113,8 @@
     (let ((txn (env-transfer env 03 01 1970 equity income 25)))
       (xaccTransSetIsClosingTxn txn #t))
 
-    (let* ((options (gnc:make-report-options (variant->uuid variant))))
+    (let* ((book (gnc-get-current-book))
+           (options (gnc:make-report-options (variant->uuid variant))))
       (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 1 1 1970)))
       (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 15 4 1970)))
       (set-option! options "Accounts" "Accounts" (list income bank1 bank2 bank3))
@@ -160,7 +162,8 @@
          (YEAR (gnc:time64-get-year (gnc:get-today))))
 
     (define (default-testing-options)
-      (let ((options (gnc:make-report-options (variant->uuid variant))))
+      (let* ((book (gnc-get-current-book))
+             (options (gnc:make-report-options (variant->uuid variant))))
 
         (unless (memq variant '(liability-piechart asset-piechart stock-piechart))
           (set-option! options "General" "Start Date" '(relative . start-cal-year)))
@@ -182,7 +185,8 @@
     (env-transfer env 10 07 YEAR expense bank  11)
     (env-transfer env 10 09 YEAR income bank    8)
 
-    (let* ((options (default-testing-options)))
+    (let* ((book (gnc-get-current-book))
+           (options (default-testing-options)))
       (test-assert (format #f "basic report exists: ~a" variant)
         (options->render uuid options (format #f "test-null ~a default options" variant))))
 
@@ -196,7 +200,8 @@
           (env-create-transaction env date bank income idx)
           (loop (incdate date DayDelta) (1+ idx))))
       (when (eq? variant 'net-worth-barchart)
-        (let* ((options (default-testing-options)))
+        (let* ((book (gnc-get-current-book))
+               (options (default-testing-options)))
         (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 15 1 1970)))
         (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 15 3 1970)))
         (set-option! options "General" "Step Size" 'DayDelta)
@@ -214,7 +219,8 @@
             (sxml->table-row-col sxml 1 -1 #f)))))
 
       (when (eq? variant 'income-expense-barchart)
-        (let* ((options (default-testing-options)))
+        (let* ((book (gnc-get-current-book))
+               (options (default-testing-options)))
         (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 15 1 1970)))
         (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 15 3 1970)))
         (set-option! options "General" "Step Size" 'DayDelta)

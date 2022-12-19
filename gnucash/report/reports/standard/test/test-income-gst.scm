@@ -76,6 +76,7 @@
           (list "Expenses" (list (cons 'type ACCT-TYPE-EXPENSE)))))
   ;; This function will perform implementation testing on the GST report.
   (let* ((env (create-test-env))
+         (book (gnc-get-current-book))
          (account-alist (env-create-account-structure-alist env structure))
          (bank (cdr (assoc "Bank" account-alist)))
          (income (cdr (assoc "Income" account-alist)))
@@ -224,6 +225,7 @@
                 (list "EU Reverse VAT Expenses"))))
   ;; This function will perform implementation testing on the VAT report.
   (let* ((env (create-test-env))
+         (book (gnc-get-current-book))
          (account-alist (env-create-account-structure-alist env structure))
          (YEAR (gnc:time64-get-year (gnc:get-today))))
 

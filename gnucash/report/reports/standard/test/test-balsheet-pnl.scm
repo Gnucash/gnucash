@@ -49,7 +49,9 @@
    (gnc-commodity-get-namespace (gnc-default-report-currency))
    sym))
 
-(define USD (gnc-default-report-currency)) ;default currency should be USD because LC_ALL="C"
+(define USD
+  (let ((book (gnc-get-current-book))) ; ensure the book is set 
+        (gnc-default-report-currency))) ;default currency should be USD because LC_ALL="C"
 (define GBP (mnemonic->commodity "GBP"))
 (define FUNDS (gnc-commodity-new (gnc-get-current-book)
                                  "Funds"            ;fullname
@@ -91,6 +93,7 @@
 (define (create-test-data)
   ;; This function will perform implementation testing on the transaction report.
   (let* ((env (create-test-env))
+         (book (gnc-get-current-book))
          (account-alist (env-create-account-structure-alist env structure))
          (bank1savings (cdr (assoc "Savings" account-alist)))
          (bank1bonds (cdr (assoc "Bonds" account-alist)))

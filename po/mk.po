@@ -6,10 +6,10 @@
 # Vesna Micajkova <vmicajkova@institutpraktikum.mk>, 2022.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.12\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2022-11-08 02:22+0100\n"
+"Project-Id-Version: GnuCash 4.13-pre1\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2022-12-04 19:47-0800\n"
 "PO-Revision-Date: 2022-11-25 16:48+0000\n"
 "Last-Translator: Vesna Micajkova <vmicajkova@institutpraktikum.mk>\n"
 "Language-Team: Macedonian <https://hosted.weblate.org/projects/gnucash/"
@@ -1031,7 +1031,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3000
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:147
 #: gnucash/report/reports/standard/invoice.scm:774
-#: libgnucash/engine/Account.cpp:176 libgnucash/engine/gncInvoice.c:1116
+#: libgnucash/engine/Account.cpp:176 libgnucash/engine/gncInvoice.c:1119
 msgid "Bill"
 msgstr ""
 
@@ -1062,7 +1062,7 @@ msgstr ""
 #: gnucash/report/reports/standard/taxinvoice.scm:165
 #: gnucash/report/reports/support/receipt.eguile.scm:91
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:106
-#: libgnucash/engine/Account.cpp:157 libgnucash/engine/gncInvoice.c:1114
+#: libgnucash/engine/Account.cpp:157 libgnucash/engine/gncInvoice.c:1117
 msgid "Invoice"
 msgstr ""
 
@@ -1562,7 +1562,7 @@ msgstr ""
 msgid "Address Not Found"
 msgstr ""
 
-#: gnucash/gnome/dialog-doclink.c:597 gnucash/gnome/dialog-imap-editor.c:883
+#: gnucash/gnome/dialog-doclink.c:597 gnucash/gnome/dialog-imap-editor.c:885
 msgid "Total Entries"
 msgstr ""
 
@@ -1688,8 +1688,8 @@ msgstr ""
 msgid "Username"
 msgstr ""
 
-#: gnucash/gnome/dialog-employee.c:720 gnucash/gnome/dialog-sx-editor2.c:1755
-#: gnucash/gnome/dialog-sx-editor.c:1823 gnucash/gnome/dialog-tax-info.c:1200
+#: gnucash/gnome/dialog-employee.c:720 gnucash/gnome/dialog-sx-editor2.c:1756
+#: gnucash/gnome/dialog-sx-editor.c:1824 gnucash/gnome/dialog-tax-info.c:1200
 #: gnucash/gnome-utils/gnc-dense-cal.c:350
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:96
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:368
@@ -2033,7 +2033,7 @@ msgid "To see the invalid mappings, use a filter of '%s'"
 msgstr ""
 
 #: gnucash/gnome/dialog-imap-editor.c:368
-#: gnucash/gnome/dialog-imap-editor.c:605
+#: gnucash/gnome/dialog-imap-editor.c:607
 msgid "Map Account NOT found"
 msgstr ""
 
@@ -2041,28 +2041,28 @@ msgstr ""
 msgid "(Note, if there is a large number, it may take a while)"
 msgstr ""
 
-#: gnucash/gnome/dialog-imap-editor.c:704
+#: gnucash/gnome/dialog-imap-editor.c:706
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:123
 msgid "Bayesian"
 msgstr ""
 
-#: gnucash/gnome/dialog-imap-editor.c:719
+#: gnucash/gnome/dialog-imap-editor.c:721
 msgid "Description Field"
 msgstr ""
 
-#: gnucash/gnome/dialog-imap-editor.c:722
+#: gnucash/gnome/dialog-imap-editor.c:724
 msgid "Memo Field"
 msgstr ""
 
-#: gnucash/gnome/dialog-imap-editor.c:725
+#: gnucash/gnome/dialog-imap-editor.c:727
 msgid "CSV Account Map"
 msgstr ""
 
-#: gnucash/gnome/dialog-imap-editor.c:765
+#: gnucash/gnome/dialog-imap-editor.c:767
 msgid "Online Id"
 msgstr ""
 
-#: gnucash/gnome/dialog-imap-editor.c:791
+#: gnucash/gnome/dialog-imap-editor.c:793
 msgid "Online HBCI"
 msgstr ""
 
@@ -2158,7 +2158,7 @@ msgstr ""
 #: gnucash/gnome/dialog-invoice.c:1904 gnucash/gnome/dialog-payment.c:1366
 #: gnucash/gtkbuilder/dialog-invoice.glade:857
 #: gnucash/report/reports/standard/invoice.scm:780
-#: libgnucash/engine/gncInvoice.c:1122
+#: libgnucash/engine/gncInvoice.c:1125
 msgid "Credit Note"
 msgstr ""
 
@@ -2705,9 +2705,9 @@ msgstr ""
 #: gnucash/gnome/dialog-payment.c:1457
 #, c-format
 msgid ""
-"You have no valid \"Post To\" accounts. Please create an account of type "
-"\"%s\" before you continue to process this payment. Perhaps you want to "
-"create an Invoice or Bill first?"
+"You have no valid \"Post To\" accounts. Please create an account of type \"%s"
+"\" before you continue to process this payment. Perhaps you want to create "
+"an Invoice or Bill first?"
 msgstr ""
 
 #: gnucash/gnome/dialog-payment.c:1610
@@ -2990,23 +2990,23 @@ msgid ""
 "Do you really want to do this?"
 msgstr ""
 
-#: gnucash/gnome/dialog-sx-editor2.c:1301
+#: gnucash/gnome/dialog-sx-editor2.c:1302
 msgid ""
 "Note: If you have already accepted changes to the Template, Cancel will not "
 "revoke them."
 msgstr ""
 
-#: gnucash/gnome/dialog-sx-editor2.c:1347 gnucash/gnome/dialog-sx-editor.c:1412
+#: gnucash/gnome/dialog-sx-editor2.c:1348 gnucash/gnome/dialog-sx-editor.c:1413
 msgid "(never)"
 msgstr ""
 
-#: gnucash/gnome/dialog-sx-editor2.c:1515 gnucash/gnome/dialog-sx-editor.c:1574
+#: gnucash/gnome/dialog-sx-editor2.c:1516 gnucash/gnome/dialog-sx-editor.c:1575
 msgid ""
 "The current template transaction has been changed. Would you like to record "
 "the changes?"
 msgstr ""
 
-#: gnucash/gnome/dialog-sx-editor2.c:1782 gnucash/gnome/dialog-sx-editor.c:1850
+#: gnucash/gnome/dialog-sx-editor2.c:1783 gnucash/gnome/dialog-sx-editor.c:1851
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:246
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:252
 msgid "Scheduled Transactions"
@@ -3046,13 +3046,13 @@ msgstr ""
 msgid "Split with memo %s has an unparsable Debit Formula."
 msgstr ""
 
-#: gnucash/gnome/dialog-sx-from-trans.c:557
+#: gnucash/gnome/dialog-sx-from-trans.c:558
 msgid ""
 "The Scheduled Transaction is unbalanced. You are strongly encouraged to "
 "correct this situation."
 msgstr ""
 
-#: gnucash/gnome/dialog-sx-from-trans.c:789
+#: gnucash/gnome/dialog-sx-from-trans.c:790
 msgid ""
 "Cannot create a Scheduled Transaction from a Transaction currently being "
 "edited. Please Enter the Transaction before Scheduling."
@@ -3236,7 +3236,7 @@ msgstr ""
 msgid "Remaining to Budget"
 msgstr ""
 
-#: gnucash/gnome/gnc-budget-view.c:1662 gnucash/gnome/window-reconcile2.c:1094
+#: gnucash/gnome/gnc-budget-view.c:1660 gnucash/gnome/window-reconcile2.c:1094
 #: gnucash/gnome/window-reconcile.c:1167
 #: gnucash/gnome-utils/gnc-tree-view-account.c:924
 #: gnucash/report/html-acct-table.scm:803 gnucash/report/reports/aging.scm:544
@@ -4250,7 +4250,7 @@ msgid "Budget"
 msgstr "Буџет/План"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:945
-#: libgnucash/engine/gnc-budget.cpp:111
+#: libgnucash/engine/gnc-budget.cpp:112
 msgid "Unnamed Budget"
 msgstr ""
 
@@ -5887,17 +5887,17 @@ msgstr ""
 msgid "Delete the selected scheduled transaction"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:441
+#: gnucash/gnome/gnc-plugin-page-sx-list.c:444
 #: gnucash/gtkbuilder/dialog-account.glade:553
 msgid "Transactions"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:501
+#: gnucash/gnome/gnc-plugin-page-sx-list.c:504
 msgid "Upcoming Transactions"
 msgstr ""
 
 #. Translators: This is a ngettext(3) message, %d is the number of scheduled transactions deleted
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:865
+#: gnucash/gnome/gnc-plugin-page-sx-list.c:868
 #, c-format
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete %d scheduled transactions?"
@@ -7226,8 +7226,8 @@ msgstr ""
 
 #: gnucash/gnome-utils/dialog-commodity.c:1345
 msgid ""
-"You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and "
-"\"Type\" for the commodity."
+"You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and \"Type"
+"\" for the commodity."
 msgstr ""
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:237
@@ -7786,7 +7786,7 @@ msgstr ""
 msgid "Frequency"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:1238
+#: gnucash/gnome-utils/gnc-dense-cal.c:1241
 msgid "(unnamed)"
 msgstr ""
 
@@ -9519,7 +9519,7 @@ msgstr ""
 #: gnucash/report/reports/standard/net-charts.scm:374
 #: gnucash/report/reports/standard/net-charts.scm:422
 #: libgnucash/engine/Account.cpp:155 libgnucash/engine/Account.cpp:4503
-#: libgnucash/engine/gncInvoice.c:1118
+#: libgnucash/engine/gncInvoice.c:1121
 msgid "Expense"
 msgstr ""
 
@@ -10420,8 +10420,8 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:220
 msgid ""
-"If active, the \"New Hierarchy\" window will be shown whenever the \"New "
-"File\" menu item is chosen. Otherwise it will not be shown."
+"If active, the \"New Hierarchy\" window will be shown whenever the \"New File"
+"\" menu item is chosen. Otherwise it will not be shown."
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:227
@@ -10658,8 +10658,8 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:27
 msgid ""
-"Set \"Review Created Transactions\" as the default for the \"since last "
-"run\" dialog."
+"Set \"Review Created Transactions\" as the default for the \"since last run"
+"\" dialog."
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:28
@@ -10759,8 +10759,8 @@ msgstr ""
 msgid ""
 "This setting determines the character that will be used between components "
 "of an account name. Possible values are any single non-alphanumeric unicode "
-"character, or any of the following strings: \"colon\", \"slash\", "
-"\"backslash\", \"dash\" and \"period\"."
+"character, or any of the following strings: \"colon\", \"slash\", \"backslash"
+"\", \"dash\" and \"period\"."
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:25
@@ -11126,8 +11126,8 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:221
 msgid ""
 "This setting determines the edge at which the summary bar for various pages "
-"is drawn. Possible values are \"top\" and \"bottom\". It defaults to "
-"\"bottom\"."
+"is drawn. Possible values are \"top\" and \"bottom\". It defaults to \"bottom"
+"\"."
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:220
@@ -11436,14 +11436,15 @@ msgid "PDF export file name format"
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:380
+#, c-format
 msgid ""
 "This setting chooses the file name for PDF export. This is a sprintf(3) "
-"string with three arguments: \"%1$s\" is the report name such as "
-"\"Invoice\". \"%2$s\" is the number of the report, which for an invoice "
-"report is the invoice number. \"%3$s\" is the date of the report, formatted "
-"according to the filename-date-format setting. Note: Any characters that are "
-"not allowed in filenames, such as '/', will be replaced with underscores '_' "
-"in the resulting file name."
+"string with three arguments: \"%1$s\" is the report name such as \"Invoice"
+"\". \"%2$s\" is the number of the report, which for an invoice report is the "
+"invoice number. \"%3$s\" is the date of the report, formatted according to "
+"the filename-date-format setting. Note: Any characters that are not allowed "
+"in filenames, such as '/', will be replaced with underscores '_' in the "
+"resulting file name."
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:384
@@ -12588,6 +12589,7 @@ msgstr ""
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:377
+#, c-format
 msgid "Accounts in %s"
 msgstr ""
 
@@ -19014,8 +19016,8 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:109
 #, c-format
 msgid ""
-"The account tree will be exported to the file '%s' when you click "
-"\"Apply\".\n"
+"The account tree will be exported to the file '%s' when you click \"Apply"
+"\".\n"
 "\n"
 "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to "
 "abort the export.\n"
@@ -20997,9 +20999,9 @@ msgstr ""
 
 #: gnucash/register/register-gnome/datecell-gnome.c:104
 msgid ""
-"The entered date of the transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File-"
-">Properties->Accounts, resetting to the threshold."
+"The entered date of the transaction is older than the \"Read-Only Threshold"
+"\" set for this book. This setting can be changed in File->Properties-"
+">Accounts, resetting to the threshold."
 msgstr ""
 
 #: gnucash/register/register-gnome/gnucash-item-list.c:534
@@ -27936,15 +27938,15 @@ msgid ""
 "features:"
 msgstr ""
 
-#: libgnucash/engine/gncInvoice.c:1746
+#: libgnucash/engine/gncInvoice.c:1749
 msgid "Extra to Charge Card"
 msgstr ""
 
-#: libgnucash/engine/gncInvoice.c:1786
+#: libgnucash/engine/gncInvoice.c:1789
 msgid "Generated from an invoice. Try unposting the invoice."
 msgstr ""
 
-#: libgnucash/engine/gncInvoice.c:2216
+#: libgnucash/engine/gncInvoice.c:2219
 msgid " (posted)"
 msgstr ""
 

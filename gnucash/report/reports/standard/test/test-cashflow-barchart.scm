@@ -58,7 +58,8 @@
 
 ;; Test two transactions from income to two different assets in two different days
 (define (test-in-txn)
-  (let* ((options (gnc:make-report-options cashflow-barchart-uuid))
+  (let* ((book (gnc-get-current-book))
+         (options (gnc:make-report-options cashflow-barchart-uuid))
          (env (create-test-env))
          (account-alist (env-create-account-structure-alist env structure))
          (bank-account (cdr (assoc "Bank" account-alist)))
@@ -100,7 +101,8 @@
 
 ;; Test two transactions from two different assets to expense in two different days
 (define (test-out-txn)
-  (let* ((options (gnc:make-report-options cashflow-barchart-uuid))
+  (let* ((book (gnc-get-current-book))
+         (options (gnc:make-report-options cashflow-barchart-uuid))
          (env (create-test-env))
          (account-alist (env-create-account-structure-alist env structure))
          (bank-account (cdr (assoc "Bank" account-alist)))
@@ -149,7 +151,8 @@
 ;; Test null transaction (transaction between assets)
 ;; This test is identical to test-in-txn but with an extra transaction between assets
 (define (test-null-txn)
-  (let* ((options (gnc:make-report-options cashflow-barchart-uuid))
+  (let* ((book (gnc-get-current-book))
+         (options (gnc:make-report-options cashflow-barchart-uuid))
          (env (create-test-env))
          (account-alist (env-create-account-structure-alist env structure))
          (bank-account (cdr (assoc "Bank" account-alist)))

@@ -177,28 +177,29 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
 
     try
     {
-        auto msg = bl::translate ("Checking Finance::Quote...").str(gnc_get_boost_locale());
+        const auto checking = _("Checking Finance::Quote...");
+        gnc_update_splash_screen (checking, GNC_SPLASH_PERCENTAGE_UNKNOWN);
         GncQuotes quotes;
-        msg = (bl::format (bl::translate("Found Finance::Quote version {1}.")) % quotes.version()).str(gnc_get_boost_locale());
+        auto found = (bl::format (std::string{_("Found Finance::Quote version {1}.")}) % quotes.version()).str().c_str();
         auto quote_sources = quotes.sources_as_glist();
         gnc_quote_source_set_fq_installed (quotes.version().c_str(), quote_sources);
         g_list_free (quote_sources);
-        gnc_update_splash_screen (msg.c_str(), GNC_SPLASH_PERCENTAGE_UNKNOWN);
+        gnc_update_splash_screen (found, GNC_SPLASH_PERCENTAGE_UNKNOWN);
     }
     catch (const GncQuoteException& err)
     {
-        auto msg = bl::translate("Unable to load Finance::Quote.").str(gnc_get_boost_locale());
+        auto msg = _("Unable to load Finance::Quote.");
         PINFO ("Attempt to load Finance::Quote returned this error message:\n");
         PINFO ("%s", err.what());
-        gnc_update_splash_screen (msg.c_str(), GNC_SPLASH_PERCENTAGE_UNKNOWN);
+        gnc_update_splash_screen (msg, GNC_SPLASH_PERCENTAGE_UNKNOWN);
     }
 
     gnc_hook_run(HOOK_STARTUP, NULL);
 
     if (!user_file_spec->nofile && (fn = get_file_to_load (user_file_spec->file_to_load)) && *fn )
     {
-        auto msg = bl::translate ("Loading data...").str(gnc_get_boost_locale());
-        gnc_update_splash_screen (msg.c_str(), GNC_SPLASH_PERCENTAGE_UNKNOWN);
+        auto msg = _("Loading data...");
+        gnc_update_splash_screen (msg, GNC_SPLASH_PERCENTAGE_UNKNOWN);
         gnc_file_open_file(gnc_get_splash_screen(), fn, /*open_readonly*/ FALSE);
         g_free(fn);
     }
@@ -327,11 +328,11 @@ Gnucash::Gnucash::start ([[maybe_unused]] int argc, [[maybe_unused]] char **argv
     // Will be removed in 5.0
     if (m_add_quotes)
     {
-        std::cerr << bl::translate ("The '--add-price-quotes' option to gnucash has been deprecated and will be removed in GnuCash 5.0. "
-                                    "Please use 'gnucash-cli --quotes get <datafile>' instead.") << "\n";
+        std::cerr << _("The '--add-price-quotes' option to gnucash has been deprecated and will be removed in GnuCash 5.0. "
+                       "Please use 'gnucash-cli --quotes get <datafile>' instead.") << "\n";
         if (!m_file_to_load || m_file_to_load->empty())
         {
-            std::cerr << bl::translate("Missing data file parameter") << "\n\n"
+            std::cerr << _("Missing data file parameter") << "\n\n"
             << *m_opt_desc_display.get();
             return 1;
         }
@@ -363,10 +364,10 @@ main(int argc, char ** argv)
     /* We need to initialize gtk before looking up all modules */
     if(!gtk_init_check (&argc, &argv))
     {
-        std::cerr << bl::format (bl::translate ("Run '{1} --help' to see a full list of available command line options.")) % *argv[0]
+        std::cerr << bl::format (std::string{("Run '{1} --help' to see a full list of available command line options.")}) % *argv[0]
         << "\n"
         // Translators: Do not translate $DISPLAY! It is an environment variable for X11
-        << bl::translate ("Error: could not initialize graphical user interface and option add-price-quotes was not set.\n"
+        << _("Error: could not initialize graphical user interface and option add-price-quotes was not set.\n"
         "Perhaps you need to set the $DISPLAY environment variable?");
         return 1;
     }

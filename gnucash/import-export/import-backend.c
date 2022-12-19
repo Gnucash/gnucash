@@ -859,6 +859,30 @@ notes_append (Transaction* selected_match_trans, gchar* new_notes)
     g_free (tmp);
 }
 
+static char*
+maybe_append_string (const char* match_string, const char* imp_string)
+{
+    char *norm_match_string, *norm_imp_string, *retval = NULL;
+
+    if (!(match_string && *match_string))
+        return g_strdup(imp_string);
+
+    if (!(imp_string && *imp_string))
+        return retval;
+
+    norm_match_string = g_utf8_normalize (match_string, -1, G_NORMALIZE_ALL);
+    norm_imp_string = g_utf8_normalize (imp_string, -1, G_NORMALIZE_ALL);
+
+    if (g_utf8_strlen (norm_imp_string, -1) > g_utf8_strlen (norm_match_string, -1) ||
+         !strstr (norm_match_string, norm_imp_string))
+        retval = g_strconcat(match_string, "|", imp_string, NULL);
+
+    g_free (norm_match_string);
+    g_free (norm_imp_string);
+    return retval;
+
+}
+
 /* Append or replace transaction description and notes
  * depending on the Append checkbox
  */
@@ -868,52 +892,25 @@ update_desc_and_notes (const GNCImportTransInfo* trans_info)
     GNCImportMatchInfo* selected_match =
             gnc_import_TransInfo_get_selected_match (trans_info);
     Transaction* imp_trans = gnc_import_TransInfo_get_trans (trans_info);
+    Transaction* match_trans = selected_match->trans;
 
     if (trans_info->append_text)
     {
-        gchar *desc_imported, *desc_matched, *note_imported, *note_matched;
-        const gchar* raw_str = xaccTransGetDescription (imp_trans);
+        gchar *repl_str;
 
-        desc_imported =
-            raw_str ? g_utf8_normalize (raw_str, -1, G_NORMALIZE_ALL) : NULL;
-        raw_str = xaccTransGetDescription (selected_match->trans);
-        desc_matched =
-            raw_str ? g_utf8_normalize (raw_str, -1, G_NORMALIZE_ALL) : NULL;
-        raw_str = xaccTransGetNotes (imp_trans);
-        note_imported =
-            raw_str ? g_utf8_normalize (raw_str, -1, G_NORMALIZE_ALL) : NULL;
-        raw_str = xaccTransGetNotes (selected_match->trans);
-        note_matched =
-           raw_str ? g_utf8_normalize (raw_str, -1, G_NORMALIZE_ALL) : NULL;
+        repl_str =
+            maybe_append_string (xaccTransGetDescription(match_trans),
+                                 xaccTransGetDescription(imp_trans));
+        if (repl_str)
+            xaccTransSetDescription(match_trans, repl_str);
+        g_free (repl_str);
 
-        // Append if desc_imported not already in desc_matched
-        if (desc_imported &&
-            (!desc_matched ||
-             g_utf8_strlen (desc_imported, -1) > g_utf8_strlen (desc_matched, -1) ||
-             !strstr (desc_matched, desc_imported)))
-        {
-            if (desc_matched && *desc_matched)
-                desc_append (selected_match->trans, desc_imported);
-            else
-                xaccTransSetDescription (selected_match->trans, desc_imported);
-        }
-
-        // Append if note_imported not already in note_matched
-        if (note_imported &&
-            (!note_matched ||
-             g_utf8_strlen (note_imported, -1) > g_utf8_strlen (note_matched, -1) ||
-             !strstr (note_matched, note_imported)))
-        {
-            if (note_matched && *note_matched)
-                notes_append (selected_match->trans, note_imported);
-            else
-                xaccTransSetNotes (selected_match->trans, note_imported);
-        }
-
-        g_free(desc_imported);
-        g_free(desc_matched);
-        g_free(note_imported);
-        g_free(note_matched);
+        repl_str =
+            maybe_append_string (xaccTransGetNotes(match_trans),
+                                 xaccTransGetNotes(imp_trans));
+        if (repl_str)
+            xaccTransSetNotes (match_trans, repl_str);
+        g_free (repl_str);
     }
     else
     {
@@ -1187,6 +1184,22 @@ static gint check_trans_online_id(Transaction *trans1, void *user_data)
     return retval;
 }
 
+static GHashTable*
+hash_account_online_ids (Account *account)
+{
+     GHashTable* acct_hash = g_hash_table_new_full
+          (g_str_hash, g_str_equal, g_free, NULL);
+     for (GList *n = xaccAccountGetSplitList (account) ; n; n = n->next)
+     {
+          if (gnc_import_split_has_online_id (n->data))
+          {
+               char *id = gnc_import_get_split_online_id (n->data);
+               g_hash_table_insert (acct_hash, (void*) id, GINT_TO_POINTER (1));
+          }
+     }
+     return acct_hash;
+}
+
 /** Checks whether the given transaction's online_id already exists in
   its parent account. */
 gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_hash)
@@ -1210,19 +1223,8 @@ gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_ha
     // test below will be fast if we have many transactions to import.
     dest_acct = xaccSplitGetAccount (source_split);
     if (!g_hash_table_contains (acct_id_hash, dest_acct))
-    {
-        GHashTable* new_hash = g_hash_table_new_full
-            (g_str_hash, g_str_equal, g_free, NULL);
-        g_hash_table_insert (acct_id_hash, dest_acct, new_hash);
-        for (GList *n = xaccAccountGetSplitList (dest_acct) ; n; n=n->next)
-        {
-            if (gnc_import_split_has_online_id (n->data))
-            {
-                char *id = gnc_import_get_split_online_id (n->data);
-                g_hash_table_insert (new_hash, (void*) id, GINT_TO_POINTER (1));
-            }
-        }
-    }
+         g_hash_table_insert (acct_id_hash, dest_acct,
+                              hash_account_online_ids (dest_acct));
     online_id_exists = g_hash_table_contains (g_hash_table_lookup (acct_id_hash, dest_acct),
                                               source_online_id);
     

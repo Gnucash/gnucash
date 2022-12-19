@@ -153,21 +153,19 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
 
         /* Let the user enter the values */
         result = gnc_ab_trans_dialog_run_until_ok(td);
-				
-        templates = gnc_ab_trans_dialog_get_templ(td, &changed);
+
 #if (AQBANKING_VERSION_INT >= 60400)
+        templates = gnc_ab_trans_dialog_get_templ(td, &changed);
         if (trans_type != SEPA_INTERNAL_TRANSFER && changed)
-#else
-        if (changed)
-#endif
         {
            /* Save the templates */
             save_templates(parent, gnc_acc, templates,
                            (result == GNC_RESPONSE_NOW));
         }
         g_list_free(templates);
-        templates = NULL;        
-        
+        templates = NULL;
+#endif
+
         if (result != GNC_RESPONSE_NOW && result != GNC_RESPONSE_LATER)
         {
             aborted = TRUE;
