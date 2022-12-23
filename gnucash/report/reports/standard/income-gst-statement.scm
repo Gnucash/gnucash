@@ -72,8 +72,8 @@ accounts may be tagged with *EUGOODS* in the account description."))
 
 (define* (gst-statement-renderer rpt #:optional export-type)
   (define (opt-val section name)
-    (gnc:option-value
-     (gnc:lookup-option (gnc:report-options rpt) section name)))
+    (gnc-optiondb-lookup-value
+     (gnc:report-options rpt) section name))
   (define sales-purch-accounts
     (append (opt-val "Accounts" "Sales") (opt-val "Accounts" "Purchases")))
   (define document
@@ -118,42 +118,32 @@ accounts may be tagged with *EUGOODS* in the account description."))
            (N_ "Display the tax payable (tax on sales - tax on purchases)") #f)))
 
   ;; Delete Accounts selector
-  (gnc:unregister-option options gnc:pagename-accounts (N_ "Accounts"))
+  (GncOptionDBPtr-unregister-option
+   options gnc:pagename-accounts (N_ "Accounts"))
 
   ;;  and recreate with limited account types
-  (gnc:register-option
-   options
-   (gnc:make-account-list-option
+  (gnc-register-account-list-option options
     gnc:pagename-accounts (N_ "Sales") "a" (N_ "Report on these accounts.")
-    (lambda ()
-      (gnc:filter-accountlist-type
+    (gnc:filter-accountlist-type
        (list ACCT-TYPE-INCOME)
        all-accounts))
-    #f #t))
 
-  (gnc:register-option
-   options
-   (gnc:make-account-list-option
+  (gnc-register-account-list-option options
     gnc:pagename-accounts (N_ "Purchases") "b" (N_ "Report on these accounts.")
-    (lambda ()
-      (gnc:filter-accountlist-type
+    (gnc:filter-accountlist-type
        (list ACCT-TYPE-EXPENSE)
-       all-accounts)) #f #t))
+       all-accounts))
 
-  (gnc:register-option
-   options
-   (gnc:make-account-list-limited-option
+  (gnc-register-account-list-limited-option options
     gnc:pagename-accounts (N_ "Tax Accounts")
     "b17" (N_ "Please find and select the accounts which will hold the tax collected or paid. \
 These accounts must contain splits which document the monies which are wholly sent or claimed \
 from tax authorities during periodic GST/VAT returns. These accounts must be of type ASSET \
 for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
-    (lambda () '()) #f #t
-    (list ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY)))
+    '()
+    (list ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY))
 
-  (gnc:register-option
-   options
-   (gnc:make-multichoice-callback-option
+  (gnc-register-multichoice-callback-option options
     pagename-format (N_ "Report Format")
     "a"
     (string-join
@@ -167,76 +157,74 @@ accounts. EU rules may be used. Denote EU VAT accounts *EUVAT* in \
 account description, and denote EU goods sales and purchases accounts \
 with *EUGOODS* in the account description."))
      "\n* ")
-    'default
+    "default"
     (list (vector 'default (G_ "Default Format"))
           (vector 'au-bas (G_ "Australia BAS"))
           (vector 'uk-vat (G_ "UK VAT Return")))
-     #f
     (lambda (x)
       (for-each
        (match-lambda
          ((name . _)
-          (gnc-option-db-set-option-selectable-by-name
+          (gnc-optiondb-set-option-selectable-by-name
            options pagename-format name (eq? x 'default))))
-       format-options))))
+       format-options)))
 
   (for-each
    (match-lambda
      ((name sort help default)
-      (gnc:register-option options
-                           (gnc:make-simple-boolean-option
-                            pagename-format name sort help default))))
+      (gnc-register-simple-boolean-option
+       options pagename-format name sort help default)))
    format-options)
 
   ;; Enable option to retrieve unique transactions only
-  (gnc:option-set-default-value
-   (gnc:lookup-option options "__trep" "unique-transactions") #t)
+  (GncOption-set-default-value
+   (gnc-lookup-option options "__trep" "unique-transactions") #t)
   ;; Disable account filtering
-  (gnc:option-make-internal! options gnc:pagename-accounts "Filter Type")
-  (gnc:option-make-internal! options gnc:pagename-accounts "Filter By...")
-  (gnc:option-make-internal! options "Currency" "Show original currency amount")
+  (GncOptionDBPtr-make-internal options gnc:pagename-accounts "Filter Type")
+  (GncOptionDBPtr-make-internal options gnc:pagename-accounts "Filter By...")
+  (GncOptionDBPtr-make-internal options "Currency" "Show original currency amount")
 
   ;; Enforce compulsory common-currency. It's senseless to allow
   ;; multiple currencies in a government report. Plus, single currency
   ;; means only 1 amount per heading for CSV output.
-  (gnc:option-set-default-value
-   (gnc:lookup-option options "Currency" "Common Currency") #t)
-  (gnc:option-make-internal! options "Currency" "Common Currency")
+  (GncOption-set-default-value
+   (gnc-lookup-option options "Currency" "Common Currency") #t)
+  (GncOptionDBPtr-make-internal options "Currency" "Common Currency")
 
   ;; Set default dates to report on last quarter.
-  (gnc:option-set-default-value
-   (gnc:lookup-option options gnc:pagename-general "Start Date")
+  (GncOption-set-default-value
+   (gnc-lookup-option options gnc:pagename-general "Start Date")
    '(relative . start-prev-quarter))
-  (gnc:option-set-default-value
-   (gnc:lookup-option options gnc:pagename-general "End Date")
+  (GncOption-set-default-value
+   (gnc-lookup-option options gnc:pagename-general "End Date")
    '(relative . end-prev-quarter))
 
   ;; Disallow closing transactions
-  (gnc:option-make-internal! options pagename-filter "Closing transactions")
-  (gnc:option-set-default-value
-   (gnc:lookup-option options pagename-filter "Closing transactions")
+  (GncOptionDBPtr-make-internal options pagename-filter "Closing transactions")
+  (GncOption-set-default-value
+   (gnc-lookup-option options pagename-filter "Closing transactions")
    'exclude-closing)
 
   ;; Set good sorting options
-  (gnc:option-set-default-value
-   (gnc:lookup-option options pagename-sorting "Primary Key")
+  (GncOption-set-default-value
+   (gnc-lookup-option options pagename-sorting "Primary Key")
    'date)
-  (gnc:option-set-default-value
-   (gnc:lookup-option options pagename-sorting "Primary Subtotal for Date Key")
+  (GncOption-set-default-value
+   (gnc-lookup-option options pagename-sorting "Primary Subtotal for Date Key")
    'none)
-  (gnc:option-set-default-value
-   (gnc:lookup-option options pagename-sorting "Secondary Key")
+  (GncOption-set-default-value
+   (gnc-lookup-option options pagename-sorting "Secondary Key")
    'none)
 
   ;; Disable display options not being used anymore
-  (gnc:option-make-internal! options gnc:pagename-display "Shares")
-  (gnc:option-make-internal! options gnc:pagename-display "Price")
-  (gnc:option-make-internal! options gnc:pagename-display "Amount")
-  (gnc:option-make-internal! options gnc:pagename-display "Sign Reverses")
-  (gnc:option-make-internal! options gnc:pagename-display "Running Balance")
+  (GncOptionDBPtr-make-internal options gnc:pagename-display "Shares")
+  (GncOptionDBPtr-make-internal options gnc:pagename-display "Price")
+  (GncOptionDBPtr-make-internal options gnc:pagename-display "Amount")
+  (GncOptionDBPtr-make-internal options gnc:pagename-display "Sign Reverses")
+  (GncOptionDBPtr-make-internal options gnc:pagename-display "Running Balance")
   ;; No multilines allowed
-  (gnc:option-make-internal! options gnc:pagename-display "Detail Level")
-  (gnc:option-make-internal! options pagename-sorting "Show Informal Debit/Credit Headers")
+  (GncOptionDBPtr-make-internal options gnc:pagename-display "Detail Level")
+  (GncOptionDBPtr-make-internal options pagename-sorting "Show Informal Debit/Credit Headers")
   options)
 
 (define (myadd a b)
@@ -253,7 +241,7 @@ with *EUGOODS* in the account description."))
 
 (define (gst-calculated-cells options)
   (define (opt-val section name)
-    (gnc:option-value (gnc:lookup-option options section name)))
+    (gnc-optiondb-lookup-value options section name))
   (let* ((tax-accounts (opt-val gnc:pagename-accounts "Tax Accounts"))
          (accounts-tax-collected (accfilter tax-accounts ACCT-TYPE-LIABILITY))
          (accounts-tax-paid      (accfilter tax-accounts ACCT-TYPE-ASSET))
