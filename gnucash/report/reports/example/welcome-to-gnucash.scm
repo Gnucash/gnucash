@@ -30,7 +30,7 @@
 (use-modules (gnucash report))
 
 (define (options)
-  (gnc:new-options))
+  (gnc-new-optiondb))
 
 (define (renderer report-obj)
   (let ((doc (gnc:make-html-document)))

@@ -37,14 +37,10 @@
 ;; This function will generate a set of options that GnuCash
 ;; will use to display a dialog where the user can select
 ;; values for your report's parameters.
-(define (options-generator)    
-  (let* ((options (gnc:new-options)) 
-         ;; This is just a helper function for making options.
-         ;; See libgnucash/app-utils/options.scm for details.
-         (add-option 
-          (lambda (new-option)
-            (gnc:register-option options new-option))))
-    
+(define (options-generator)
+  (let* ((options (gnc:new-options))
+         (optiondb (options #t))) ;; Hack to get the optiondb from options
+
     ;; This is a boolean option. It is in Section 'Hello, World!'
     ;; and is named 'Boolean Option'. Its sorting key is 'a',
     ;; thus it will come before options with sorting keys
@@ -52,155 +48,123 @@
     ;; is #t (true). The phrase 'This is a boolean option'
     ;; will be displayed as help text when the user puts
     ;; the mouse pointer over the option.
-    (add-option
-     (gnc:make-simple-boolean-option
-      (N_ "Hello, World!") (N_ "Boolean Option")
-      "a" (N_ "This is a boolean option.") #t))
-    
-    ;; This is a multichoice option. The user can choose between
-    ;; the values 'first, 'second, 'third, or 'fourth. These are guile
-    ;; symbols. The value 'first will be displayed as "First Option"
-    ;; and have a help string of "Help for first option.". The default
-    ;; value is 'third.
-    (add-option
-     (gnc:make-multichoice-option
+    (gnc-register-simple-boolean-option optiondb
+     (N_ "Hello, World!") (N_ "Boolean Option")
+     "a" (N_ "This is a boolean option.") #t)
+
+    ;; This is a multichoice option. The user can choose between the
+    ;; values 'first, 'second, 'third, or 'fourth. These are guile
+    ;; symbols. The value 'first will be displayed as "First Option".
+    ;; The default value is 'third.  Note that multichoice option is a
+    ;; special case where we need an intermediate scheme function to
+    ;; interpret the default value--'third in this case--because it
+    ;; can be either a symbol or a number.
+    (gnc-register-multichoice-option optiondb
       (N_ "Hello, World!") (N_ "Multi Choice Option")
-      "b" (N_ "This is a multi choice option.") 'third
+      "b" (N_ "This is a multi choice option.") "third"
       (list (vector 'first (N_ "First Option"))
             (vector 'second (N_ "Second Option"))
             (vector 'third (N_ "Third Option"))
-            (vector 'fourth (N_ "Fourth Options")))))
-    
+            (vector 'fourth (N_ "Fourth Options"))))
+
     ;; This is a string option. Users can type anything they want
     ;; as a value. The default value is "Hello, World". This is
     ;; in the same section as the option above. It will be shown
     ;; after the option above because its key is 'b' while the
     ;; other key is 'a'.
-    (add-option
-     (gnc:make-string-option
+    (gnc-register-string-option optiondb
       (N_ "Hello, World!") (N_ "String Option")
-      "c" (N_ "This is a string option.") (N_ "Hello, World")))
-    
-    ;; This is a date/time option. The user can pick a date and,
-    ;; possibly, a time. Times are stored as an integer specifying
-    ;; number of seconds measured from Jan 1, 1970, i.e.,
-    ;; Unix time. The last option is false, so the user can only
-    ;; select a date, not a time. The default value is the current
-    ;; time.
-    (add-option
-     (gnc:make-date-option
+      "c" (N_ "This is a string option.") (N_ "Hello, World"))
+
+    ;; The following are date options. There are three here reflecting
+    ;; the trhee types of date controls that can be displayed in the
+    ;; options dialog: Absolute, Relative, or Both. You'll usually
+    ;; want to use Both, which is the middle example. Other than the
+    ;; usual strings the two paramters are a list of relative date
+    ;; types and a boolean to indicate whether you want a Both date
+    ;; control. Note that to get an absolute control you pass a
+    ;; one-item list containing 'absolute and #f. If you pass (list
+    ;; 'absolute) #t you'll get a Both but the relative listbox will
+    ;; be empty. That will irritate users so avoid doing that.
+    (gnc-register-date-option-set optiondb
       (N_ "Hello, World!") (N_ "Just a Date Option")
       "d" (N_ "This is a date option.")
-      (lambda () (cons 'absolute (current-time)))
-      #f 'absolute #f ))
-    
-    (add-option
-     (gnc:make-date-option
+      (list 'absolute) #f )
+
+    (gnc-register-date-option-set optiondb
       (N_ "Hello, World!") (N_ "Combo Date Option")
       "y" (N_ "This is a combination date option.")
-      (lambda () (cons 'relative 'start-cal-year))
-      #f 'both '(start-cal-year start-prev-year end-prev-year) ))
-    
-    (add-option
-     (gnc:make-date-option
+      '(start-cal-year start-prev-year end-prev-year) #t)
+
+    (gnc-register-date-option-set optiondb
       (N_ "Hello, World!") (N_ "Relative Date Option")
       "x" (N_ "This is a relative date option.")
-      (lambda () (cons 'relative 'start-cal-year))
-      #f 'relative '(start-cal-year start-prev-year end-prev-year) ))
-    
+      '(start-cal-year start-prev-year end-prev-year) #f)
+
     ;; This is a number range option. The user can enter a number
     ;; between a lower and upper bound given below. There are also
-    ;; arrows the user can click to go up or down, the amount changed
-    ;; by a single click is given by the step size.
-    (add-option
-     (gnc:make-number-range-option
+    ;; arrows or + and - buttons depending on the icon theme that the
+    ;; user can click to go up or down, the amount changed by a single
+    ;; click is given by the step size.
+    (gnc-register-number-range-option optiondb
       (N_ "Hello, World!") (N_ "Number Option")
       "ee" (N_ "This is a number option.")
       1500.0  ;; default
       0.0     ;; lower bound
       10000.0 ;; upper bound
-      2.0     ;; number of decimals
       0.01    ;; step size
-      ))
-    
-    ;; This is a color option, defined by rgba values. A color value
-    ;; is a list where the elements are the red, green, blue, and
-    ;; alpha channel values respectively. The penultimate argument
-    ;; (255) is the allowed range of rgba values. The final argument
-    ;; (#f) indicates the alpha value should be ignored. You can get
-    ;; a color string from a color option with gnc:color-option->html,
-    ;; which will scale the values appropriately according the range.
-    (add-option
-     (gnc:make-color-option
+      )
+
+    ;; This is a color option, defined by rgb values. A color value is
+    ;; a string representing a 3-byte hex number with the bytes
+    ;; representing red, blue, and green values.
+    (gnc-register-color-option optiondb
       (N_ "Hello, World!") (N_ "Background Color")
       "f" (N_ "This is a color option.")
-      (list #xf6 #xff #xdb #xff)
-      255
-      #f))
-    
-    ;; This is an account list option. The user can select one
-    ;; or (possibly) more accounts from the list of accounts
-    ;; in the current file. Values are scheme handles to actual
-    ;; C pointers to accounts. 
-    ;; The #f value indicates that any account will be accepted.
-    ;; Instead of a #f values, you could provide a function that
-    ;; accepts a list of account values and returns a pair. If
-    ;; the first element is #t, the second element is the list
-    ;; of accounts actually accepted. If the first element is
-    ;; #f, the accounts are rejected and the second element is
-    ;; and error string. The last argument is #t which means
-    ;; the user is allowed to select more than one account.
-    ;; The default value for this option is the currently
-    ;; selected account in the main window, if any.
-    (add-option
-     (gnc:make-account-list-option
+      "f6ffdb")
+
+    ;; This is an account list option. The user can select one or more
+    ;; accounts from the list of accounts in the current file. Values
+    ;; are GUIDs of the selected accounts. Since those depend on the
+    ;; book in use you'll probably want to create a list from the
+    ;; account types as we've done here.  There's another function
+    ;; gnc-register-account-list-limited-option which takes as a
+    ;; second argument a list of account types; only accounts of the
+    ;; types in the list, similar to the list passed to
+    ;; gnc-account-list-from-types in this example, will be available
+    ;; for selection.
+
+    (gnc-register-account-list-option optiondb
       (N_ "Hello Again") (N_ "An account list option")
       "g" (N_ "This is an account list option.")
-      ;; FIXME : this used to be gnc:get-current-accounts, but 
-      ;; that doesn't exist any more.
-      (lambda () '())
-      #f #t))
-    
+      (gnc-account-list-from-types
+       (gnc-get-current-book)
+       (list ACCT-TYPE-ASSET ACCT-TYPE-EQUITY ACCT-TYPE-LIABILITY)))
+
     ;; This is a list option. The user can select one or (possibly)
     ;; more values from a list. The list of acceptable values is
     ;; the same format as a multichoice option. The value of the
     ;; option is a list of symbols.
-    (add-option
-     (gnc:make-list-option
+    (gnc-register-list-option optiondb
       (N_ "Hello Again") (N_ "A list option")
       "h" (N_ "This is a list option.")
-      '(good)
+      (symbol->string 'good)
       (list (vector 'good (N_ "The Good"))
             (vector 'bad (N_ "The Bad"))
-            (vector 'ugly (N_ "The Ugly")))))
-    
+            (vector 'ugly (N_ "The Ugly"))))
+
     ;; This option is for testing. When true, the report generates
     ;; an exception.
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option optiondb
       (N_ "Testing") (N_ "Crash the report")
-      "a" 
+      "a"
       (N_ "This is for testing. \
 Your reports probably shouldn't have an \
-option like this.") 
-      #f))
+option like this.")
+      #f)
 
-    ;; This is a Radio Button option. The user can only select one 
-    ;; value from the list of buttons.
-    (add-option
-     (gnc:make-radiobutton-option
-      (N_ "Hello Again") "A Radio Button option" "z" (N_ "This is a Radio Button option.") 'good
-      (list (vector 'good
-                    (N_ "The Good")
-                    (N_ "Good option."))
-            (vector 'bad
-                    (N_ "The Bad")
-                    (N_ "Bad option."))
-            (vector 'ugly
-                    (N_ "The Ugly")
-                    (N_ "Ugly option.")))))
-
-    (gnc:options-set-default-section options "Hello, World!")      
+    (GncOptionDBPtr-set-default-section optiondb "Hello, World!")
+ ;; We still need to return the function wrapper instead of the GncOptionDBPtr bfor all of the options functions in the reports system.
     options))
 
 ;; This is the rendering function. It accepts a database of options
@@ -210,12 +174,10 @@ option like this.")
 ;; to the function is one created by the options-generator function
 ;; defined above.
 (define (hello-world-renderer report-obj)
-  ;; These are some helper functions for looking up option values.
-  (define (get-op section name)
-    (gnc:lookup-option (gnc:report-options report-obj) section name))
-  
+  ;; Helper function for looking up option values.
   (define (op-value section name)
-    (gnc:option-value (get-op section name)))
+    (gnc-optiondb-lookup-value ((gnc:report-options report-obj) 'lookup)
+                                section name))
 
   ;; The first thing we do is make local variables for all the specific
   ;; options in the set of options given to the function. This set will
@@ -230,7 +192,7 @@ option like this.")
         (combo-date-val (gnc:date-option-absolute-time
                          (op-value "Hello, World!" "Combo Date Option")))
         (num-val      (op-value "Hello, World!" "Number Option"))
-        (bg-color-op  (get-op   "Hello, World!" "Background Color"))
+        (bg-color     (op-value "Hello, World!" "Background Color"))
         (accounts     (op-value "Hello Again"   "An account list option"))
         (list-val     (op-value "Hello Again"   "A list option"))
         (radio-val    (op-value "Hello Again"   "A Radio Button option"))
@@ -287,7 +249,7 @@ option like this.")
       
       (gnc:html-document-set-style!
        document "body" 
-       'attribute (list "bgcolor" (gnc:color-option->html bg-color-op)))
+       'attribute (list "bgcolor" (format #f "#~a" bg-color)))
       
       ;; the title of the report will be rendered by the 
       ;; selected style sheet.  All we have to do is set it in the

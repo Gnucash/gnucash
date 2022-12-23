@@ -72,8 +72,7 @@
 
 (define (build-column-used options)
   (define (opt-val section name)
-    (gnc:option-value
-     (gnc:lookup-option options section name)))
+    (gnc-optiondb-lookup-value options section name))
   (define (make-set-col col-vector)
     (let ((col 0))
       (lambda (used? index)
@@ -86,7 +85,7 @@
   (let* ((col-vector (make-vector columns-used-size #f))
          (set-col (make-set-col col-vector)))
     (set-col (opt-val "Display" "Date") 0)
-    (set-col (if (gnc:lookup-option options "Display" "Num")
+    (set-col (if (gnc-lookup-option options "Display" "Num")
                  (opt-val "Display" "Num")
                  (opt-val "Display" "Num/Action")) 1)
     (set-col
@@ -323,104 +322,86 @@
 
 
 (define (options-generator)
+  (let ((options (gnc-new-optiondb)))
 
-  (define gnc:*report-options* (gnc:new-options))
+  (gnc-register-query-option options
+    "__reg" "query" '())
+  (gnc-register-internal-option options
+    "__reg" "journal" #f)
+  (gnc-register-internal-option options
+    "__reg" "ledger-type" #f)
+  (gnc-register-internal-option options
+    "__reg" "double" #f)
+  (gnc-register-internal-option options
+    "__reg" "debit-string" (G_ "Debit"))
+  (gnc-register-internal-option options
+    "__reg" "credit-string" (G_ "Credit"))
 
-  (define (gnc:register-reg-option new-option)
-    (gnc:register-option gnc:*report-options* new-option))
-
-  (gnc:register-reg-option
-   (gnc:make-query-option "__reg" "query" '()))
-  (gnc:register-reg-option
-   (gnc:make-internal-option "__reg" "journal" #f))
-  (gnc:register-reg-option
-   (gnc:make-internal-option "__reg" "ledger-type" #f))
-  (gnc:register-reg-option
-   (gnc:make-internal-option "__reg" "double" #f))
-  (gnc:register-reg-option
-   (gnc:make-internal-option "__reg" "debit-string" (G_ "Debit")))
-  (gnc:register-reg-option
-   (gnc:make-internal-option "__reg" "credit-string" (G_ "Credit")))
-
-  (gnc:register-reg-option
-   (gnc:make-string-option
+  (gnc-register-string-option options
     (N_ "General") (N_ "Title")
     "a" (N_ "The title of the report.")
-    (N_ "Register Report")))
+    (N_ "Register Report"))
 
-  (gnc:register-reg-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display") (N_ "Date")
-    "b" (N_ "Display the date?") #t))
+    "b" (N_ "Display the date?") #t)
 
   (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
-      (gnc:register-reg-option
-       (gnc:make-simple-boolean-option
+      (gnc-register-simple-boolean-option options
         (N_ "Display") (N_ "Num/Action")
-        "c" (N_ "Display the check number/action?") #t))
-      (gnc:register-reg-option
-       (gnc:make-simple-boolean-option
+        "c" (N_ "Display the check number/action?") #t)
+      (gnc-register-simple-boolean-option options
         (N_ "Display") (N_ "Num")
-        "c" (N_ "Display the check number?") #t)))
+        "c" (N_ "Display the check number?") #t))
 
-  (gnc:register-reg-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display") (N_ "Description")
-    "d" (N_ "Display the description?") #t))
+    "d" (N_ "Display the description?") #t)
 
-  (gnc:register-reg-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display") (N_ "Memo")
-    "e" (N_ "Display the memo?") #t))
+    "e" (N_ "Display the memo?") #t)
 
-  (gnc:register-reg-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display") (N_ "Account")
-    "g" (N_ "Display the account?") #t))
+    "g" (N_ "Display the account?") #t)
 
-  (gnc:register-reg-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display") (N_ "Shares")
-    "ha" (N_ "Display the number of shares?") #f))
+    "ha" (N_ "Display the number of shares?") #f)
 
-  (gnc:register-reg-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display") (N_ "Lot")
-    "hb" (N_ "Display the name of lot the shares are in?") #f))
+    "hb" (N_ "Display the name of lot the shares are in?") #f)
 
-  (gnc:register-reg-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display") (N_ "Price")
-    "hc" (N_ "Display the shares price?") #f))
+    "hc" (N_ "Display the shares price?") #f)
 
-  (gnc:register-reg-option
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option options
     (N_ "Display") (N_ "Amount")
     "ia" (N_ "Display the amount?")
-    'double
+    "double"
     (list
      (vector 'single (N_ "Single Column"))
-     (vector 'double (N_ "Two Columns")))))
+     (vector 'double (N_ "Two Columns"))))
 
-  (gnc:register-reg-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display") (N_ "Value")
-    "ib" (N_ "Display the value in transaction currency?") #f))
+    "ib" (N_ "Display the value in transaction currency?") #f)
 
-  (gnc:register-reg-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display") (N_ "Running Balance")
-    "k" (N_ "Display a running balance?") #t))
+    "k" (N_ "Display a running balance?") #t)
 
-  (gnc:register-reg-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display") (N_ "Totals")
-    "l" (N_ "Display the totals?") #t))
+    "l" (N_ "Display the totals?") #t)
 
 
-  (gnc:options-set-default-section gnc:*report-options* "General")
+  (gnc:options-set-default-section options "General")
 
-  gnc:*report-options*)
+  options))
 
 ;; -----------------------------------------------------------------
 ;; create the report result
@@ -432,7 +413,7 @@
   ;; local helper
   ;; ----------------------------------
   (define (opt-val section name)
-    (gnc:option-value (gnc:lookup-option options section name)))
+    (gnc-optiondb-lookup-value options section name))
   (define (reg-report-journal?)
     (opt-val "__reg" "journal"))
   (define (reg-report-ledger-type?)
@@ -623,8 +604,7 @@
 
 (define (reg-renderer report-obj)
   (define (opt-val section name)
-    (gnc:option-value
-     (gnc:lookup-option (gnc:report-options report-obj) section name)))
+    (gnc-optiondb-lookup-value (gnc:report-options report-obj) section name))
 
   (let* ((document (gnc:make-html-document))
          (query-scm (opt-val "__reg" "query"))
@@ -674,7 +654,7 @@
                                              double? title debit-string credit-string)
   (define options (gnc:make-report-options register-report-guid))
   (define (set-option section name val)
-    (gnc:option-set-value (gnc:lookup-option options section name) val))
+    (gnc-set-option options section name val))
 
   (when invoice?
     (issue-deprecation-warning "gnc:register-report-create-internal: invoice \

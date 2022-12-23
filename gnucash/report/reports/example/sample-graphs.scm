@@ -117,7 +117,7 @@
     chart))
 
 (define (options-generator)
-  (gnc:new-options))
+  (gnc-new-optiondb))
 
 ;; This is the rendering function. It accepts a database of options
 ;; and generates an object of type <html-document>.  See the file
@@ -126,13 +126,6 @@
 ;; to the function is one created by the options-generator function
 ;; defined above.
 (define (test-graphing-renderer report-obj)
-  ;; These are some helper functions for looking up option values.
-  (define options (gnc:report-options report-obj))
-  (define (get-op section name)
-    (gnc:lookup-option options section name))
-  (define (op-value section name)
-    (gnc:option-value (get-op section name)))
-
   (let ((document (gnc:make-html-document)))
 
     (gnc:html-document-set-title! document (G_ reportname))

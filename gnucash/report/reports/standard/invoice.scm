@@ -69,8 +69,7 @@
 
 (define (build-column-used options)
   (define (opt-val section name)
-    (gnc:option-value
-     (gnc:lookup-option options section name)))
+    (gnc-optiondb-lookup-value options section name))
   (vector
    (opt-val "Display Columns" "Date")
    (opt-val "Display Columns" "Description")
@@ -167,218 +166,178 @@
   (gnc:multiline-to-html-text str))
 
 (define (options-generator variant)
+  (let ((options (gnc-new-optiondb)))
 
-  (define gnc:*report-options* (gnc:new-options))
+    (gnc-register-invoice-option options
+                                 gnc:pagename-general
+                                 gnc:optname-invoice-number "x" "" '())
 
-  (define (gnc:register-inv-option new-option)
-    (gnc:register-option gnc:*report-options* new-option))
-
-  (gnc:register-inv-option
-   (gnc:make-invoice-option gnc:pagename-general gnc:optname-invoice-number "x" ""
-                            (lambda () '()) #f))
-
-  (gnc:register-inv-option
-   (gnc:make-string-option
+  (gnc-register-string-option options
     gnc:pagename-general (N_ "Custom Title")
     "z" (N_ "A custom string to replace Invoice, Bill or Expense Voucher.")
-    ""))
+    "")
 
-  (gnc:register-inv-option
-   (gnc:make-text-option
+  (gnc-register-text-option options
     (N_ "Layout") (N_ "CSS") "zz" (N_ "CSS code. This field specifies the CSS code \
 for styling the invoice. Please see the exported report for the CSS class names.")
-    (keylist-get-info variant-list variant 'css)))
+    (keylist-get-info variant-list variant 'css))
 
-  (gnc:register-inv-option
-   (gnc:make-pixmap-option
+  (gnc-register-pixmap-option options
     (N_ "Layout") (N_ "Picture Location") "zy" (N_ "Location for Picture")
-    ""))
+    "")
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display Columns") (N_ "Date")
-    "b" (N_ "Display the date?") #t))
+    "b" (N_ "Display the date?") #t)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display Columns") (N_ "Description")
-    "d" (N_ "Display the description?") #t))
+    "d" (N_ "Display the description?") #t)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display Columns") (N_ "Action")
-    "g" (N_ "Display the action?") #t))
+    "g" (N_ "Display the action?") #t)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display Columns") (N_ "Quantity")
-    "ha" (N_ "Display the quantity of items?") #t))
+    "ha" (N_ "Display the quantity of items?") #t)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display Columns") (N_ "Price")
-    "hb" (N_ "Display the price per item?") #t))
+    "hb" (N_ "Display the price per item?") #t)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display Columns") (N_ "Discount")
-    "k" (N_ "Display the entry's discount?") #t))
+    "k" (N_ "Display the entry's discount?") #t)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display Columns") (N_ "Taxable")
-    "l" (N_ "Display the entry's taxable status?") #t))
+    "l" (N_ "Display the entry's taxable status?") #t)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display Columns") (N_ "Tax Amount")
-    "m" (N_ "Display each entry's total total tax?") #f))
+    "m" (N_ "Display each entry's total total tax?") #f)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display Columns") (N_ "Total")
-    "n" (N_ "Display the entry's value?") #t))
+    "n" (N_ "Display the entry's value?") #t)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display") (N_ "Due Date")
-    "c" (N_ "Display due date?") #t))
+    "c" (N_ "Display due date?") #t)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display") (N_ "Subtotal")
-    "d" (N_ "Display the subtotals?") #t))
+    "d" (N_ "Display the subtotals?") #t)
 
-  (gnc:register-inv-option
-   (gnc:make-complex-boolean-option
+  (gnc-register-complex-boolean-option options
     (N_ "Display") (N_ "Payable to")
-    "ua1" (N_ "Display the Payable to: information.") #f #f
+    "ua1" (N_ "Display the Payable to: information.") #f
     (lambda (x)
-      (gnc-option-db-set-option-selectable-by-name
-       gnc:*report-options* "Display" "Payable to string" x))))
+      (gnc-optiondb-set-option-selectable-by-name
+       options "Display" "Payable to string" x)))
 
-  (gnc:register-inv-option
-   (gnc:make-text-option
+  (gnc-register-text-option options
     (N_ "Display") (N_ "Payable to string")
     "ua2" (N_ "The phrase for specifying to whom payments should be made.")
-    (G_ "Please make all checks payable to")))
+    (G_ "Please make all checks payable to"))
 
-  (gnc:register-inv-option
-   (gnc:make-complex-boolean-option
+  (gnc-register-complex-boolean-option options
     (N_ "Display") (N_ "Company contact")
-    "ub1" (N_ "Display the Company contact information.") #f #f
-    (lambda (x) (gnc-option-db-set-option-selectable-by-name
-                 gnc:*report-options* "Display" "Company contact string" x))))
+    "ub1" (N_ "Display the Company contact information.") #f
+    (lambda (x) (gnc-optiondb-set-option-selectable-by-name
+                 options "Display" "Company contact string" x)))
 
-  (gnc:register-inv-option
-   (gnc:make-text-option
+  (gnc-register-text-option options
     (N_ "Display") (N_ "Company contact string")
     "ub2" (N_ "The phrase used to introduce the company contact.")
-    (G_ "Please direct all enquiries to")))
+    (G_ "Please direct all enquiries to"))
 
-  (gnc:register-inv-option
-   (gnc:make-number-range-option
+  (gnc-register-number-range-option options
     (N_ "Display") (N_ "Minimum # of entries")
     "zz" (N_ "The minimum number of invoice entries to display.") 1
-    0 23 0 1))
+    0 23 1)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display") (N_ "Use Detailed Tax Summary")
-    "o" (N_ "Display all tax categories separately (one per line) instead of one single tax line.?") #f))
+    "o" (N_ "Display all tax categories separately (one per line) instead of one single tax line.?") #f)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display") (N_ "References")
-    "s" (N_ "Display the invoice references?") #t))
+    "s" (N_ "Display the invoice references?") #t)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display") (N_ "Billing Terms")
-    "t" (N_ "Display the invoice billing terms?") #t))
+    "t" (N_ "Display the invoice billing terms?") #t)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display") (N_ "Billing ID")
-    "ta" (N_ "Display the billing id?") #t))
+    "ta" (N_ "Display the billing id?") #t)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display") (N_ "Invoice owner ID")
-    "tam" (N_ "Display the customer/vendor id?") #f))
+    "tam" (N_ "Display the customer/vendor id?") #f)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display") (N_ "Invoice Notes")
-    "tb" (N_ "Display the invoice notes?") #f))
+    "tb" (N_ "Display the invoice notes?") #f)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display") (N_ "Payments")
-    "tc" (N_ "Display the payments applied to this invoice?") #t))
+    "tc" (N_ "Display the payments applied to this invoice?") #t)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display") (N_ "Job Details")
-    "td" (N_ "Display the job name for this invoice?") #f))
+    "td" (N_ "Display the job name for this invoice?") #f)
 
-  (gnc:register-inv-option
-   (gnc:make-text-option
+  (gnc-register-text-option options
     (N_ "Display") (N_ "Extra Notes")
     "u" (N_ "Extra notes to put on the invoice.")
-    (G_ "Thank you for your patronage!")))
+    (G_ "Thank you for your patronage!"))
 
-  (gnc:register-inv-option
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option options
     (N_ "Layout") (N_ "Row 1 Left")
     "1a" "1st row, left"
-    (keylist-get-info variant-list variant '1a)
-    (keylist->vectorlist layout-key-list)))
+    (symbol->string (keylist-get-info variant-list variant '1a))
+    (keylist->vectorlist layout-key-list))
 
-  (gnc:register-inv-option
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option options
     (N_ "Layout") (N_ "Row 1 Right")
     "1b" "1st row, right"
-    (keylist-get-info variant-list variant '1b)
-    (keylist->vectorlist layout-key-list)))
+    (symbol->string (keylist-get-info variant-list variant '1b))
+    (keylist->vectorlist layout-key-list))
 
-  (gnc:register-inv-option
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option options
     (N_ "Layout") (N_ "Row 2 Left")
     "2a" "2nd row, left"
-    (keylist-get-info variant-list variant '2a)
-    (keylist->vectorlist layout-key-list)))
+    (symbol->string (keylist-get-info variant-list variant '2a))
+    (keylist->vectorlist layout-key-list))
 
-  (gnc:register-inv-option
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option options
     (N_ "Layout") (N_ "Row 2 Right")
     "2b" "2nd row, right"
-    (keylist-get-info variant-list variant '2b)
-    (keylist->vectorlist layout-key-list)))
+    (symbol->string (keylist-get-info variant-list variant '2b))
+    (keylist->vectorlist layout-key-list))
 
-  (gnc:register-inv-option
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option options
     (N_ "Layout") (N_ "Row 3 Left")
     "3a" "3rd row, left"
-    (keylist-get-info variant-list variant '3a)
-    (keylist->vectorlist layout-key-list)))
+    (symbol->string (keylist-get-info variant-list variant '3a))
+    (keylist->vectorlist layout-key-list))
 
-  (gnc:register-inv-option
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option options
     (N_ "Layout") (N_ "Row 3 Right")
     "3b" "3rd row, right"
-    (keylist-get-info variant-list variant '3b)
-    (keylist->vectorlist layout-key-list)))
+    (symbol->string (keylist-get-info variant-list variant '3b))
+    (keylist->vectorlist layout-key-list))
 
-  (gnc:options-set-default-section gnc:*report-options* "General")
+  (gnc:options-set-default-section options "General")
 
-  gnc:*report-options*)
-
+  options))
 
 (define (make-entry-table invoice options cust-doc? credit-note?)
   (define (opt-val section name)
-    (gnc:option-value
-     (gnc:lookup-option options section name)))
+    (gnc-optiondb-lookup-value options section name))
 
   (let ((show-payments (opt-val "Display" "Payments"))
         (display-all-taxes (opt-val "Display" "Use Detailed Tax Summary"))
@@ -574,8 +533,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
 (define (make-invoice-details-table invoice options)
   ;; dual-column. invoice date/due, billingID, terms, job name/number
   (define (opt-val section name)
-    (gnc:option-value
-     (gnc:lookup-option options section name)))
+    (gnc-optiondb-lookup-value options section name))
   (let* ((invoice-details-table (gnc:make-html-table))
          (book (gncInvoiceGetBook invoice))
          (date-format (gnc:options-fancy-date book))
@@ -648,8 +606,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
 
 (define (make-client-table owner orders options)
   (define (opt-val section name)
-    (gnc:option-value
-     (gnc:lookup-option options section name)))
+    (gnc-optiondb-lookup-value options section name))
   ;; this is a single-column table.
   (let ((table (gnc:make-html-table)))
 
@@ -702,7 +659,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
          (fax (gnc:company-info book gnc:*company-fax*))
          (email (gnc:company-info book gnc:*company-email*))
          (url (gnc:company-info book gnc:*company-url*))
-         (taxnr (gnc:option-get-value book gnc:*tax-label* gnc:*tax-nr-label*))
+         (taxnr (gnc:book-get-option-value book gnc:*tax-label* gnc:*tax-nr-label*))
          (taxid (gnc:company-info book gnc:*company-id*)))
 
     (if (and name (not (string-null? name)))
@@ -750,7 +707,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
 (define (reg-renderer report-obj)
   (let* ((document (gnc:make-html-document))
          (options (gnc:report-options report-obj))
-         (opt-val (lambda (section name) (gnc:option-value (gnc:lookup-option options section name))))
+         (opt-val (lambda (section name) (gnc-optiondb-lookup-value options section name)))
          (invoice (opt-val gnc:pagename-general gnc:optname-invoice-number))
          (references? (opt-val "Display" "References"))
          (custom-title (opt-val gnc:pagename-general "Custom Title")))

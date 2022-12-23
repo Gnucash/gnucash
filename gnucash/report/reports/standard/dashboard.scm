@@ -46,8 +46,7 @@
          (options (gnc:report-options (gnc-report-find view))))
 
     (define (set-option! section name value)
-      (gnc:option-set-value
-       (gnc:lookup-option options section name) value))
+      (gnc-set-option (gnc:optiondb options) section name value))
 
     (set-option! "General" "Report name" (G_ "Dashboard"))
     (set-option! "General" "Number of columns" 2)

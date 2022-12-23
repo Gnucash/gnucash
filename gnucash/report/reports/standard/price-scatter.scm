@@ -49,11 +49,7 @@
 (define optname-plot-height (N_ "Plot Height"))
 
 (define (options-generator)
-  (let* ((options (gnc:new-options)) 
-         ;; This is just a helper function for making options.
-         (add-option 
-          (lambda (new-option)
-            (gnc:register-option options new-option))))
+  (let* ((options (gnc-new-optiondb)))
 
     (gnc:options-add-date-interval!
      options gnc:pagename-general
@@ -65,28 +61,25 @@
     (gnc:options-add-currency! 
      options pagename-price optname-report-currency "d")
 
-    (add-option
-     (gnc:make-commodity-option 
+    (gnc-register-commodity-option  options
       pagename-price optname-price-commodity
       "e"
       (N_ "Calculate the price of this commodity.")
-      (gnc-locale-default-iso-currency-code)))
+      (gnc-locale-default-iso-currency-code))
 
-    (add-option
-     (gnc:make-multichoice-option
+    (gnc-register-multichoice-option options
       pagename-price optname-price-source
       "f" (N_ "The source of price information.") 
-      'actual-transactions
+      "actual-transactions"
       (list (vector 'weighted-average (N_ "Weighted Average"))
             (vector 'actual-transactions (N_ "Actual Transactions"))
-            (vector 'pricedb (N_ "Price Database")))))
+            (vector 'pricedb (N_ "Price Database"))))
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       pagename-price optname-invert
       "g"
       (N_ "Plot commodity per currency rather than currency per commodity.")
-      #f))
+      #f)
 
     
     (gnc:options-add-plot-size! 
@@ -97,13 +90,11 @@
      options gnc:pagename-display 
      optname-marker "a" 'filledsquare)
 
-    (add-option
-     (gnc:make-color-option
+    (gnc-register-color-option options
       gnc:pagename-display optname-markercolor
       "b"
       (N_ "Color of the marker.")
-      (list #xb2 #x22 #x22 #xff)
-      255 #f))
+      "b22222")
 
     (gnc:options-set-default-section options gnc:pagename-general)
 
@@ -115,8 +106,7 @@
 
   ;; This is a helper function for looking up option values.
   (define (get-option section name)
-    (gnc:option-value 
-     (gnc:lookup-option (gnc:report-options report-obj) section name)))
+    (gnc-optiondb-lookup-value (gnc:report-options report-obj) section name))
 
   (define intervals
     (list (list 'DayDelta (G_ "Days") 86400)

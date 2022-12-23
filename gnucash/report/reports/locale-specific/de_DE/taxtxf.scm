@@ -137,20 +137,17 @@
 (define tax-qtr-real-qtr-year 0)
 
 (define (tax-options-generator)
-  (define options (gnc:new-options))
-  (define (gnc:register-tax-option new-option)
-    (gnc:register-option options new-option))
+  (define options (gnc-new-optiondb))
 
   ;; date at which to report 
   (gnc:options-add-date-interval!
    options gnc:pagename-general 
    (N_ "From") (N_ "To") "a")
 
-  (gnc:register-tax-option
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option options
     gnc:pagename-general (N_ "Alternate Period")
     "c" (N_ "Override or modify From: & To:.")
-    (if after-tax-day 'from-to 'last-year)
+    (if after-tax-day "from-to" "last-year")
     (list (vector 'from-to (N_ "Use From - To"))
           (vector '1st-est (N_ "1st Est Tax Quarter (Jan 1 - Mar 31)"))
           (vector '2nd-est (N_ "2nd Est Tax Quarter (Apr 1 - May 31)"))
@@ -160,24 +157,20 @@
           (vector '1st-last (N_ "Last Yr 1st Est Tax Qtr (Jan 1 - Mar 31)"))
           (vector '2nd-last (N_ "Last Yr 2nd Est Tax Qtr (Apr 1 - May 31)"))
           (vector '3rd-last (N_ "Last Yr 3rd Est Tax Qtr (Jun 1 - Aug 31)"))
-          (vector '4th-last (N_ "Last Yr 4th Est Tax Qtr (Sep 1 - Dec 31)")))))
+          (vector '4th-last (N_ "Last Yr 4th Est Tax Qtr (Sep 1 - Dec 31)"))))
 
-  (gnc:register-tax-option
-   (gnc:make-account-list-option
+  (gnc-register-account-list-option options
     gnc:pagename-accounts (N_ "Select Accounts (none = all)")
     "d" (N_ "Select accounts.")
-    (lambda () '())
-    #f #t))
+    '())
   
-  (gnc:register-tax-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     gnc:pagename-display (N_ "Suppress $0.00 values")
-    "f" (N_ "$0.00 valued Accounts won't be printed.") #t))
+    "f" (N_ "$0.00 valued Accounts won't be printed.") #t)
 
-  (gnc:register-tax-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     gnc:pagename-display (N_ "Print Full account names")
-    "g" (N_ "Print all Parent account names.") #f))
+    "g" (N_ "Print all Parent account names.") #f)
 
   (gnc:options-set-default-section options gnc:pagename-general)
 
@@ -451,9 +444,8 @@
                              tax-mode?)
 
   (define (get-option pagename optname)
-    (gnc:option-value
-     (gnc:lookup-option 
-      (gnc:report-options report-obj) pagename optname)))
+    (gnc-optiondb-lookup-value
+      (gnc:report-options report-obj) pagename optname))
 
   ;; the number of account generations: children, grandchildren etc.
   (define (num-generations account gen)
@@ -748,7 +740,7 @@
 	  (to-year    (gnc-print-time64 to-value "%Y"))
           (today-date (gnc-print-time64 (time64CanonicalDayTime (current-time))
                                         "%d.%m.%Y"))
-	  (tax-nr (gnc:option-get-value book gnc:*tax-label* gnc:*tax-nr-label*)))
+	  (tax-nr (gnc:book-get-option-value book gnc:*tax-label* gnc:*tax-nr-label*)))
 
       ;; Now, the main body
       ;; Reset all the balance collectors

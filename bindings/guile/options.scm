@@ -82,7 +82,7 @@
 (define-public (gnc:color-option->hex-string opt)
   (format #f "~a" (GncOption-get-value opt)))
 
-(define-public (gnc:option-get-value book category key)
+(define-public (gnc:book-get-option-value book category key)
   (define acc (if (pair? key) cons list))
   (qof-book-get-option book (acc category key)))
 
@@ -408,11 +408,11 @@
 
 (define (gnc:company-info book key)
   ;; Access company info from key-value pairs for current book
- (gnc:option-get-value book gnc:*business-label* key))
+ (gnc:book-get-option-value book gnc:*business-label* key))
 
 (define (gnc:fancy-date-info book key)
   ;; Access fancy date info from key-value pairs for current book
- (gnc:option-get-value book gnc:*business-label* (list gnc:*fancy-date-label* key)))
+ (gnc:book-get-option-value book gnc:*business-label* (list gnc:*fancy-date-label* key)))
 
 
 

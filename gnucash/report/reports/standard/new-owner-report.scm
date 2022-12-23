@@ -186,8 +186,7 @@
 
 (define (build-column-used options)
   (define (opt-val name)
-    (gnc:option-value
-     (gnc:lookup-option options "Display Columns" name)))
+    (gnc-optiondb-lookup-value options "Display Columns" name))
   (list->vector
    (map opt-val
         (list date-header due-date-header reference-header type-header
@@ -856,79 +855,62 @@ and do not match the transaction."))))))))
             sale))))))
 
 (define (options-generator owner-type)
+  (let ((options (gnc-new-optiondb)))
 
-  (define gnc:*report-options* (gnc:new-options))
-
-  (define (gnc:register-inv-option new-option)
-    (gnc:register-option gnc:*report-options* new-option))
-
-  (gnc:register-inv-option
-   (gnc:make-owner-option
+  (gnc-register-owner-option options
     owner-page (owner-string owner-type) "v"
-    (N_ "The company for this report.")
-    (lambda () '()) #f owner-type))
+    (N_ "The company for this report.") '() owner-type)
 
   (gnc:options-add-date-interval!
-   gnc:*report-options* gnc:pagename-general
+   options gnc:pagename-general
    optname-from-date optname-to-date "a")
 
   ;; Use a default report date of 'today'
-  (gnc:option-set-default-value
-   (gnc:lookup-option gnc:*report-options* gnc:pagename-general optname-to-date)
+  (GncOption-set-default-value
+   (gnc-lookup-option options gnc:pagename-general optname-to-date)
    (cons 'relative 'today))
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display Columns") date-header
-    "b" (N_ "Display the transaction date?") #t))
+    "b" (N_ "Display the transaction date?") #t)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display Columns") due-date-header
-    "c" (N_ "Display the transaction date?") #t))
+    "c" (N_ "Display the transaction date?") #t)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display Columns") reference-header
-    "d" (N_ "Display the transaction reference?") #t))
+    "d" (N_ "Display the transaction reference?") #t)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display Columns") type-header
-    "g" (N_ "Display the transaction type?") #t))
+    "g" (N_ "Display the transaction type?") #t)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display Columns") desc-header
-    "ha" (N_ "Display the transaction description?") #t))
+    "ha" (N_ "Display the transaction description?") #t)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display Columns") sale-header
-    "haa" (N_ "Display the sale amount column?") #f))
+    "haa" (N_ "Display the sale amount column?") #f)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display Columns") tax-header
-    "hab" (N_ "Display the tax column?") #f))
+    "hab" (N_ "Display the tax column?") #f)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display Columns") debit-header
-    "hac" (N_ "Display the period debits column?") #t))
+    "hac" (N_ "Display the period debits column?") #t)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display Columns") credit-header
-    "had" (N_ "Display the period credits column?") #t))
+    "had" (N_ "Display the period credits column?") #t)
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display Columns") balance-header
-    "hb" (N_ "Display a running balance?") #t))
+    "hb" (N_ "Display a running balance?") #t)
 
-  (gnc:register-inv-option
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option options
     (N_ "Display Columns") linked-txns-header
     "hc"
     (string-join
@@ -938,27 +920,25 @@ and do not match the transaction."))))))))
       (G_ "Invoices show if paid, payments show invoice numbers.")
       (G_ "Invoices show list of payments, payments show list of invoices and amounts."))
       "\n* ")
-    'none
+    "none"
     (list (vector 'none (N_ "Disabled"))
           (vector 'simple (N_ "Simple"))
-          (vector 'detailed (N_ "Detailed")))))
+          (vector 'detailed (N_ "Detailed"))))
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     (N_ "Display Columns") doclink-header
-    "hd" (N_ "Display document link?") #f))
+    "hd" (N_ "Display document link?") #f)
 
-  (gnc:register-inv-option
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option options
     gnc:pagename-general optname-date-driver "k"
-    (N_ "Leading date.") 'duedate
+    (N_ "Leading date.") "duedate"
     (list
      (vector 'duedate (N_ "Due Date"))
-     (vector 'postdate (N_ "Post Date")))))
+     (vector 'postdate (N_ "Post Date"))))
 
-  (gnc:options-set-default-section gnc:*report-options* "General")
+  (gnc:options-set-default-section options "General")
 
-  gnc:*report-options*)
+  options))
 
 (define (setup-query q owner accounts end-date job?)
   (let ((guid (gncOwnerReturnGUID (if job? owner (gncOwnerGetEndOwner owner))))
@@ -1020,8 +1000,7 @@ and do not match the transaction."))))))))
 (define (reg-renderer report-obj type)
   (define options (gnc:report-options report-obj))
   (define (opt-val section name)
-    (gnc:option-value
-     (gnc:lookup-option options section name)))
+    (gnc-optiondb-lookup-value options section name))
 
   (let* ((start-date (gnc:time64-start-day-time
                       (gnc:date-option-absolute-time
@@ -1032,9 +1011,7 @@ and do not match the transaction."))))))))
          (book (gnc-get-current-book))
          (date-format (gnc:options-fancy-date (gnc-get-current-book)))
          (used-columns (build-column-used options))
-         (link-option
-          (gnc:option-value
-           (gnc:lookup-option options "Display Columns" linked-txns-header)))
+         (link-option (opt-val "Display Columns" linked-txns-header))
          (owner-descr (owner-string type))
          (date-type (opt-val gnc:pagename-general optname-date-driver))
          (owner (opt-val owner-page owner-descr))
@@ -1221,13 +1198,12 @@ and do not match the transaction."))))))))
 
 
 (define (owner-report-create-internal report-guid owner owner-type enddate)
-  (let* ((options (gnc:make-report-options report-guid))
-         (owner-op (gnc:lookup-option options owner-page (owner-string owner-type)))
-         (date-op (gnc:lookup-option options gnc:pagename-general optname-to-date)))
+  (let* ((options (gnc:make-report-options report-guid)))
 
-    (gnc:option-set-value owner-op owner)
+    (gnc-set-option options owner-page (owner-string owner-type) owner)
     (when enddate
-      (gnc:option-set-value date-op (cons 'absolute enddate)))
+      (gnc-set-option options gnc:pagename-general optname-to-date
+                      (cons 'absolute enddate)))
     (gnc:make-report report-guid options)))
 
 (define (owner-report-create-with-enddate owner account enddate)

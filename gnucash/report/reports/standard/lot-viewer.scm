@@ -44,25 +44,20 @@
         (cons TXN-TYPE-LINK "Link")))
 
 (define (options-generator)
-  (let ((options (gnc:new-options)))
-
-    (define (add-option new-option)
-      (gnc:register-option options new-option))
+  (let ((options (gnc-new-optiondb)))
 
     ;; General tab
     (gnc:options-add-date-interval!
      options gnc:pagename-general
      optname-from-date optname-to-date "a")
 
-    (add-option
-     (gnc:make-account-sel-option
+    (gnc-register-account-sel-limited-option options
       gnc:pagename-general optname-account "b"
       (N_ "The account to search for lots.")
-      #f #f))
+      '() '())
 
-    (add-option
-     (gnc:make-string-option
-      gnc:pagename-general optname-desc-filter "b" "Description Filter" ""))
+    (gnc-register-string-option options
+      gnc:pagename-general optname-desc-filter "b" "Description Filter" "")
 
     options))
 
@@ -70,8 +65,7 @@
 
   ;; This is a helper function for looking up option values.
   (define (get-option section name)
-    (gnc:option-value
-     (gnc:lookup-option (gnc:report-options report-obj) section name)))
+    (gnc-optiondb-lookup-value (gnc:report-options report-obj) section name))
 
   (define (get-all-lots splits)
     (define lots-seen (make-hash-table))

@@ -46,19 +46,16 @@
 
 ;; options generator
 (define (budget-report-options-generator)
-  (let ((options (gnc:new-options)))
+  (let ((options (gnc-new-optiondb)))
 
     ;; Option to select Budget
-    (gnc:register-option
-     options
-     (gnc:make-budget-option
+    (gnc-register-budget-option options
       gnc:pagename-general optname-budget
-      "a" (N_ "Budget to use.")))
+      "a" (N_ "Budget to use.")
+      (gnc-budget-get-default (gnc-get-current-book)))
 
     ;; Option to select Period of selected Budget
-    (gnc:register-option
-     options
-     (gnc:make-number-range-option
+    (gnc-register-number-range-option options
       gnc:pagename-general optname-periods
       ;; FIXME: It would be nice if the max number of budget periods (60) was
       ;; defined globally somewhere so we could reference it here.  However, it
@@ -67,7 +64,7 @@
       ;; FIXME: It would be even nicer if the max number of budget
       ;; periods was determined by the number of periods in the
       ;; currently selected budget
-      "b" (N_ "Period number.") 1 1 60 0 1))
+      "b" (N_ "Period number.") 1 1 60 1)
 
     ;; Option to select the currency the report will be shown in
     (gnc:options-add-currency!
@@ -79,15 +76,11 @@
      options gnc:pagename-general optname-price-source "c" 'pricedb-latest)
 
     ;;Option to select the accounts to that will be displayed
-    (gnc:register-option
-     options
-     (gnc:make-account-list-option
+    (gnc-register-account-list-option options
       gnc:pagename-accounts optname-accounts
       (string-append "a" "c")
       (N_ "Report on these accounts.")
-      (lambda ()
-        (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
-      #f #t))
+      (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
 
     ;; Set the general page as default option tab
     (gnc:options-set-default-section options gnc:pagename-general)
@@ -255,9 +248,8 @@
 
   ;; Helper function retrieves options
   (define (get-option pagename optname)
-    (gnc:option-value
-     (gnc:lookup-option
-      (gnc:report-options report-obj) pagename optname)))
+    (gnc-optiondb-lookup-value
+      (gnc:report-options report-obj) pagename optname))
 
   ;; Update progress bar
   (gnc:report-starting reportname)

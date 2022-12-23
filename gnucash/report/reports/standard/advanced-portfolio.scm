@@ -59,12 +59,7 @@ by preventing negative stock balances.<br/>")
 (define units-denom 100000000)
 
 (define (options-generator)
-  (let* ((options (gnc:new-options))
-         ;; This is just a helper function for making options.
-         ;; See libgnucash/scm/options.scm for details.
-         (add-option
-          (lambda (new-option)
-            (gnc:register-option options new-option))))
+  (let* ((options (gnc-new-optiondb)))
 
     ;; General Tab
     ;; date at which to report balance
@@ -75,88 +70,71 @@ by preventing negative stock balances.<br/>")
     (gnc:options-add-currency!
      options gnc:pagename-general (N_ "Report's currency") "c")
 
-    (add-option
-     (gnc:make-multichoice-option
+    (gnc-register-multichoice-option options
       gnc:pagename-general optname-price-source
-      "d" (N_ "The source of price information.") 'pricedb-nearest
+      "d" (N_ "The source of price information.") "pricedb-nearest"
       (list (vector 'pricedb-latest (N_ "Most recent"))
-            (vector 'pricedb-nearest (N_ "Nearest to report date")))))
+            (vector 'pricedb-nearest (N_ "Nearest to report date"))))
 
-    (add-option
-     (gnc:make-multichoice-option
+    (gnc-register-multichoice-option options
       gnc:pagename-general optname-basis-method
-      "e" (N_ "Basis calculation method.") 'average-basis
+      "e" (N_ "Basis calculation method.") "average-basis"
       (list (vector 'average-basis (N_ "Average cost of all shares"))
             (vector 'fifo-basis (N_ "First-in first-out"))
-            (vector 'filo-basis (N_ "Last-in first-out")))))
+            (vector 'filo-basis (N_ "Last-in first-out"))))
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-general optname-prefer-pricelist "f"
       (N_ "Prefer use of price editor pricing over transactions, where applicable.")
-      #t))
+      #t)
 
-    (add-option
-     (gnc:make-multichoice-option
+    (gnc-register-multichoice-option options
       gnc:pagename-general optname-brokerage-fees
-      "g" (N_ "How to report commissions and other brokerage fees.") 'include-in-basis
+      "g" (N_ "How to report commissions and other brokerage fees.")
+      "include-in-basis"
       (list (vector 'include-in-basis (N_ "Include in basis"))
             (vector 'include-in-gain (N_ "Include in gain/loss"))
-            (vector 'ignore-brokerage (N_ "Omit from report")))))
+            (vector 'ignore-brokerage (N_ "Omit from report"))))
 
-    (gnc:register-option
-      options
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
 	gnc:pagename-display optname-show-symbol "a"
 	(N_ "Display the ticker symbols.")
-	#t))
+	#t)
 
-    (gnc:register-option
-      options
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
 	gnc:pagename-display optname-show-listing "b"
 	(N_ "Display exchange listings.")
-	#t))
+	#t)
 
-    (gnc:register-option
-      options
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
 	gnc:pagename-display optname-show-shares "c"
 	(N_ "Display numbers of shares in accounts.")
-	#t))
+	#t)
 
-    (add-option
-     (gnc:make-number-range-option
+    (gnc-register-number-range-option options
       gnc:pagename-display optname-shares-digits
       "d" (N_ "The number of decimal places to use for share numbers.") 2
-      0 9 0 1))
+      0 9 1)
 
-    (gnc:register-option
-      options
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
 	gnc:pagename-display optname-show-price "e"
 	(N_ "Display share prices.")
-	#t))
+	#t)
 
     ;; Account tab
-    (add-option
-     (gnc:make-account-list-option
+    (gnc-register-account-list-limited-option options
       gnc:pagename-accounts (N_ "Accounts")
       "b"
       (N_ "Stock Accounts to report on.")
-      (lambda () (filter gnc:account-is-stock?
-                         (gnc-account-get-descendants-sorted
-                          (gnc-get-current-root-account))))
-      (lambda (accounts) (list  #t
-                                (filter gnc:account-is-stock? accounts)))
-      #t))
+      (filter gnc:account-is-stock?
+              (gnc-account-get-descendants-sorted
+               (gnc-get-current-root-account)))
+      (list ACCT-TYPE-STOCK))
 
-    (gnc:register-option
-     options
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-accounts optname-zero-shares "e"
       (N_ "Include accounts that have a zero share balances.")
-      #f))
+      #f)
 
     (gnc:options-set-default-section options gnc:pagename-general)
     options))
@@ -176,11 +154,8 @@ by preventing negative stock balances.<br/>")
        (warn-price-dirty #f))
 
   ;; These are some helper functions for looking up option values.
-  (define (get-op section name)
-    (gnc:lookup-option (gnc:report-options report-obj) section name))
-
   (define (get-option section name)
-    (gnc:option-value (get-op section name)))
+    (gnc-optiondb-lookup-value (gnc:report-options report-obj) section name))
 
   (define (split-account-type? split type)
     (eq? type (xaccAccountGetType (xaccSplitGetAccount split))))

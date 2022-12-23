@@ -70,79 +70,69 @@
         (vector 'manual (N_ "Manual period selection"))))
 
 (define (options-generator)
-  (let ((options (gnc:new-options))
+  (let ((options (gnc-new-optiondb))
+        (book (gnc-get-current-book))
         (ui-start-period-type 'current)
         (ui-end-period-type 'next))
 
-    (define (add-option new-option)
-      (gnc:register-option options new-option))
-
     (define (set-option-enabled options page opt-name enabled)
-      (gnc-option-db-set-option-selectable-by-name options page opt-name enabled))
+      (gnc-optiondb-set-option-selectable-by-name options page opt-name enabled))
 
     ;; Option to select Budget
-    (add-option
-     (gnc:make-budget-option
-      gnc:pagename-general optname-budget "a" (N_ "Budget to use.")))
+    (gnc-register-budget-option options
+                                gnc:pagename-general optname-budget "a"
+                                (N_ "Budget to use.")
+                                (gnc-budget-get-default book))
 
-    (add-option
-     (gnc:make-multichoice-callback-option
+    (gnc-register-multichoice-callback-option options
       gnc:pagename-general optname-budget-period-start
-      "g1.1" opthelp-budget-period-start 'current period-options #f
+      "g1.1" opthelp-budget-period-start "current" period-options
       (lambda (new-val)
         (set-option-enabled options gnc:pagename-general
                             optname-budget-period-start-exact (eq? 'manual new-val))
-        (set! ui-start-period-type new-val))))
+        (set! ui-start-period-type new-val)))
 
-    (add-option
-     (gnc:make-number-range-option
+    (gnc-register-number-range-option options
       gnc:pagename-general optname-budget-period-start-exact
       "g1.2" opthelp-budget-period-start-exact
-      1 1 60 0 1))
+      1 1 60 1)
 
-    (add-option
-     (gnc:make-multichoice-callback-option
+    (gnc-register-multichoice-callback-option options
       gnc:pagename-general optname-budget-period-end
-      "g2.1" opthelp-budget-period-end 'next period-options #f
+      "g2.1" opthelp-budget-period-end "next" period-options
       (lambda (new-val)
         (set-option-enabled options gnc:pagename-general
                             optname-budget-period-end-exact (eq? 'manual new-val))
-        (set! ui-end-period-type new-val))))
+        (set! ui-end-period-type new-val)))
 
-    (add-option
-     (gnc:make-number-range-option
+    (gnc-register-number-range-option options
       gnc:pagename-general optname-budget-period-end-exact
       "g2.2" opthelp-budget-period-end-exact
-      1 1 60 0 1))
+      1 1 60 1)
 
     ;; Option to select the accounts to that will be displayed
-    (add-option
-     (gnc:make-account-list-option
+    (gnc-register-account-list-option options
       gnc:pagename-accounts optname-accounts
       "c" (N_ "Report on these accounts.")
-      (lambda ()
-        (gnc:filter-accountlist-type
+      (gnc:filter-accountlist-type
          (list ACCT-TYPE-BANK ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY)
          (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
-      #f #t))
 
     (gnc:options-add-account-levels!
      options gnc:pagename-accounts optname-depth-limit "d" opthelp-depth-limit 6)
 
     ;; Display tab
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-running-sum "a"
-      (N_ "Calculate as running sum?")  #t))
+      (N_ "Calculate as running sum?")  #t)
 
     ;; Display tab
-    (add-option
-     (gnc:make-multichoice-option
+    (gnc-register-multichoice-option options
       gnc:pagename-display optname-chart-type "b"
-      (N_ "Select which chart type to use.") 'bars
+      (N_ "Select which chart type to use.") "bars"
       (list
        (vector 'bars (N_ "Bar Chart"))
-       (vector 'lines (N_ "Line Chart")))))
+       (vector 'lines (N_ "Line Chart"))))
 
     (gnc:options-add-plot-size!
      options gnc:pagename-display
@@ -242,8 +232,8 @@
 
   ;; This is a helper function for looking up option values.
   (define (get-option section name)
-    (gnc:option-value
-     (gnc:lookup-option (gnc:report-options report-obj) section name)))
+    (gnc-optiondb-lookup-value
+     (gnc:report-options report-obj) section name))
 
   ;; This is a helper function to find out the level of the account
   ;; with in the account tree

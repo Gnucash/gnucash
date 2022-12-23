@@ -52,91 +52,78 @@
   ;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (options-generator)
-  (let* ((options (gnc:new-options))
-         ;; register a configuration option for the report
-         (register-option
-          (lambda (new-option)
-            (gnc:register-option options new-option))))      
+  (let ((options (gnc-new-optiondb)))
 
     ;; General tab
     (gnc:options-add-date-interval!
      options gnc:pagename-general optname-from-date optname-to-date "a")
 
-    (gnc:options-add-interval-choice! 
+    (gnc:options-add-interval-choice!
      options gnc:pagename-general optname-stepsize "b" 'MonthDelta)
 
     ;; Report's currency
-    (gnc:options-add-currency! 
+    (gnc:options-add-currency!
      options gnc:pagename-general optname-report-currency "c")
-    
-    (gnc:options-add-price-source! 
+
+    (gnc:options-add-price-source!
      options gnc:pagename-general
      optname-price-source "d" 'weighted-average)
 
     ;; Account tab
-    (register-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-accounts optname-subacct
-      "a" (N_ "Include sub-accounts of all selected accounts.") #t))
+      "a" (N_ "Include sub-accounts of all selected accounts.") #t)
 
-    (register-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-accounts optname-internal
       "b"
       (N_ "Exclude transactions that only involve two accounts, both of which are selected below. This only affects the profit and loss columns of the table.")
-      #f))
+      #f)
 
     ;; account(s) to do report on
-    (register-option
-     (gnc:make-account-list-option
+    (gnc-register-account-list-option options
       gnc:pagename-accounts (N_ "Accounts")
       "c" (N_ "Do transaction report on this account.")
-      (lambda ()
-        ;; FIXME : gnc:get-current-accounts disappeared
-        (let ((current-accounts '()))
-          ;; If some accounts were selected, use those
-          (cond ((not (null? current-accounts)) 
-                 current-accounts)
-                (else
-                 ;; otherwise get some accounts -- here as an
-                 ;; example we get the asset and liability stuff
-                 (gnc:filter-accountlist-type
-                  (list ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CREDIT
-                        ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY
-                        ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE)
-                  ;; or: (list ACCT-TYPE-BANK ACCT-TYPE-CASH
-                  ;; ACCT-TYPE-CHECKING ACCT-TYPE-SAVINGS ACCT-TYPE-STOCK
-                  ;; ACCT-TYPE-MUTUAL ACCT-TYPE-MONEYMRKT)
-                  (gnc-account-get-children-sorted (gnc-get-current-root-account)))))))
-      #f #t))
+      (let ((current-accounts '()))
+        ;; If some accounts were selected, use those
+        (cond ((not (null? current-accounts)) 
+               current-accounts)
+              (else
+               ;; otherwise get some accounts -- here as an
+               ;; example we get the asset and liability stuff
+               (gnc-account-list-from-types (gnc-get-current-book)
+                (list ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CREDIT
+                      ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY
+                      ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE)
+                ;; or: (list ACCT-TYPE-BANK ACCT-TYPE-CASH
+                ;; ACCT-TYPE-CHECKING ACCT-TYPE-SAVINGS ACCT-TYPE-STOCK
+                ;; ACCT-TYPE-MUTUAL ACCT-TYPE-MONEYMRKT)
+                )))))
 
     ;; Display tab
-    (register-option
-     (gnc:make-simple-boolean-option
+     (gnc-register-simple-boolean-option options
       gnc:pagename-display (N_ "Show table")
-      "a" (N_ "Display a table of the selected data.") #f))
+      "a" (N_ "Display a table of the selected data.") #f)
 
-    (register-option
-     (gnc:make-simple-boolean-option
+     (gnc-register-simple-boolean-option options
       gnc:pagename-display (N_ "Show plot")
-      "b" (N_ "Display a graph of the selected data.") #t))
+      "b" (N_ "Display a graph of the selected data.") #t)
 
-    (register-option
-     (gnc:make-list-option
+     (gnc-register-list-option options
       gnc:pagename-display (N_ "Plot Type")
-      "c" (N_ "The type of graph to generate.") (list 'AvgBalPlot)
+      "c" (N_ "The type of graph to generate.") "AvgBalPlot"
       (list 
        (vector 'AvgBalPlot (N_ "Average"))
        (vector 'GainPlot (N_ "Profit"))
-       (vector 'GLPlot (N_ "Gain/Loss")))))
+       (vector 'GLPlot (N_ "Gain/Loss"))))
 
-    (gnc:options-add-plot-size! 
-     options gnc:pagename-display 
+    (gnc:options-add-plot-size!
+     options gnc:pagename-display
      optname-plot-width optname-plot-height "d" (cons 'percent 100.0) (cons 'percent 100.0))
 
     ;; Set the general page as default option tab
-    (gnc:options-set-default-section options gnc:pagename-general)      
-    
+    (GncOptionDBPtr-set-default-section options gnc:pagename-general)
+
     options))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -273,8 +260,7 @@
 (define (renderer report-obj)
 
   (define (get-option section name)
-    (gnc:option-value 
-     (gnc:lookup-option (gnc:report-options report-obj) section name)))
+    (gnc-optiondb-lookup-value (gnc:report-options report-obj) section name))
 
   (gnc:report-starting reportname)
   (let* ((report-title (get-option gnc:pagename-general 

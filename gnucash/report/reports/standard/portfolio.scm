@@ -37,12 +37,7 @@
 (define optname-zero-shares (N_ "Include accounts with no shares"))
 
 (define (options-generator)
-  (let* ((options (gnc:new-options))
-         ;; This is just a helper function for making options.
-         ;; See libgnucash/scm/options.scm for details.
-         (add-option
-          (lambda (new-option)
-            (gnc:register-option options new-option))))
+  (let* ((options (gnc-new-optiondb)))
 
     ;; General Tab
     ;; date at which to report balance
@@ -57,31 +52,25 @@
      options gnc:pagename-general
      optname-price-source "d" 'pricedb-latest)
 
-    (add-option
-     (gnc:make-number-range-option
+    (gnc-register-number-range-option options
       gnc:pagename-general optname-shares-digits
       "e" (N_ "The number of decimal places to use for share numbers.") 2
-      0 9 0 1))
+      0 9 1)
 
     ;; Account tab
-    (add-option
-     (gnc:make-account-list-option
+    (gnc-register-account-list-limited-option options
       gnc:pagename-accounts (N_ "Accounts")
       "b"
       (N_ "Stock Accounts to report on.")
-      (lambda () (filter gnc:account-is-stock?
-                         (gnc-account-get-descendants-sorted
-                          (gnc-get-current-root-account))))
-      (lambda (accounts) (list  #t
-                                (filter gnc:account-is-stock? accounts)))
-      #t))
+      (gnc:filter-accountlist-type
+       (list ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL)
+       (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
+      (list ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL))
 
-    (gnc:register-option
-     options
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-accounts optname-zero-shares "e"
       (N_ "Include accounts that have a zero share balances.")
-      #f))
+      #f)
 
     (gnc:options-set-default-section options gnc:pagename-general)
     options))
@@ -98,11 +87,9 @@
        (work-to-do 0))
 
   ;; These are some helper functions for looking up option values.
-  (define (get-op section name)
-    (gnc:lookup-option (gnc:report-options report-obj) section name))
 
   (define (get-option section name)
-    (gnc:option-value (get-op section name)))
+    (gnc-optiondb-lookup-value  (gnc:report-options report-obj) section name))
 
   (define (table-add-stock-rows table accounts to-date currency
                                 exchange-fn price-fn include-empty collector)

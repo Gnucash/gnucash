@@ -136,20 +136,16 @@ also show overall period profit & loss."))
 
 ;; options generator
 (define (multicol-report-options-generator report-type)
-  (let* ((options (gnc:new-options))
-         (add-option
-          (lambda (new-option)
-            (gnc:register-option options new-option))))
+  (let* ((options (gnc-new-optiondb)))
 
     ;; date at which to report balance
     (gnc:options-add-date-interval!
      options gnc:pagename-general optname-startdate optname-enddate "c")
 
-    (add-option
-     (gnc:make-multichoice-callback-option
+    (gnc-register-multichoice-callback-option options
       gnc:pagename-general optname-period
       "c2" opthelp-period
-      'disabled
+      "disabled"
       (list
        (vector 'disabled (G_ "Disabled"))
        (vector 'YearDelta (G_ "One Year"))
@@ -158,67 +154,59 @@ also show overall period profit & loss."))
        (vector 'MonthDelta (G_ "One Month"))
        (vector 'TwoWeekDelta (G_ "Two Weeks"))
        (vector 'WeekDelta (G_ "One Week")))
-      #f
       (lambda (x)
         (let ((x (not (eq? x 'disabled))))
-          (gnc-option-db-set-option-selectable-by-name
+          (gnc-optiondb-set-option-selectable-by-name
            options
            gnc:pagename-general optname-disable-amount-indent
            (not x))
-          (gnc-option-db-set-option-selectable-by-name
+          (gnc-optiondb-set-option-selectable-by-name
            options
            gnc:pagename-general optname-dual-columns
            (not x))
-          (gnc-option-db-set-option-selectable-by-name
+          (gnc-optiondb-set-option-selectable-by-name
            options gnc:pagename-general optname-reverse-chrono x)
           (case report-type
             ((balsheet)
-             (gnc-option-db-set-option-selectable-by-name
+             (gnc-optiondb-set-option-selectable-by-name
               options gnc:pagename-general optname-include-chart x)
 
-             (gnc-option-db-set-option-selectable-by-name
+             (gnc-optiondb-set-option-selectable-by-name
               options gnc:pagename-general optname-startdate x))
 
             ((pnl)
-             (gnc-option-db-set-option-selectable-by-name
-              options gnc:pagename-general optname-include-overall-period x)))))))
+             (gnc-optiondb-set-option-selectable-by-name
+              options gnc:pagename-general optname-include-overall-period x))))))
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-general optname-disable-amount-indent
-      "c3" opthelp-disable-amount-indent #f))
+      "c3" opthelp-disable-amount-indent #f)
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-general optname-include-chart
-      "c5" opthelp-include-chart #f))
+      "c5" opthelp-include-chart #f)
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-general optname-dual-columns
-      "c4" opthelp-dual-columns #t))
+      "c4" opthelp-dual-columns #t)
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-general optname-reverse-chrono
-      "c5" opthelp-reverse-chrono #t))
+      "c5" opthelp-reverse-chrono #t)
 
-    (add-option
-     (gnc:make-multichoice-option
+    (gnc-register-multichoice-option options
       gnc:pagename-general optname-options-summary
       "d" opthelp-options-summary
-      'never
+      "never"
       (list (vector 'always (G_ "Always"))
-            (vector 'never (G_ "Never")))))
+            (vector 'never (G_ "Never"))))
 
     ;; accounts to work on
-    (add-option
-     (gnc:make-account-list-option
+    (gnc-register-account-list-option options
       gnc:pagename-accounts optname-accounts
       "a"
       opthelp-accounts
-      (lambda ()
-        (gnc:filter-accountlist-type
+      (gnc:filter-accountlist-type
          (list ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CREDIT
                ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY
                ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
@@ -226,7 +214,6 @@ also show overall period profit & loss."))
                ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE
                ACCT-TYPE-TRADING)
          (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
-      #f #t))
 
     ;; the depth-limit option is not well debugged; it may be better
     ;; to disable it altogether
@@ -235,19 +222,18 @@ also show overall period profit & loss."))
      "b" opthelp-depth-limit 'all)
 
     ;; all about currencies
-    (add-option
-     (gnc:make-complex-boolean-option
+    (gnc-register-complex-boolean-option options
       pagename-commodities optname-common-currency
-      "b" opthelp-common-currency #f #f
+      "b" opthelp-common-currency #f
       (lambda (x)
         (for-each
          (lambda (optname)
-           (gnc-option-db-set-option-selectable-by-name
+           (gnc-optiondb-set-option-selectable-by-name
             options pagename-commodities optname x))
          (list optname-report-commodity
                optname-show-rates
                optname-show-foreign
-               optname-price-source)))))
+               optname-price-source))))
 
     (gnc:options-add-currency!
      options pagename-commodities
@@ -257,62 +243,51 @@ also show overall period profit & loss."))
      options pagename-commodities
      optname-price-source "d" 'pricedb-nearest)
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       pagename-commodities optname-show-foreign
-      "e" opthelp-show-foreign #t))
+      "e" opthelp-show-foreign #t)
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       pagename-commodities optname-show-rates
-      "f" opthelp-show-rates #t))
+      "f" opthelp-show-rates #t)
 
     ;; what to show for zero-balance accounts
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-show-zb-accts
-      "a" opthelp-show-zb-accts #t))
+      "a" opthelp-show-zb-accts #t)
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-omit-zb-bals
-      "b" opthelp-omit-zb-bals #f))
+      "b" opthelp-omit-zb-bals #f)
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-parent-balance-mode
-      "c" opthelp-parent-balance-mode #t))
+      "c" opthelp-parent-balance-mode #t)
 
     ;; some detailed formatting options
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-account-links
-      "e" opthelp-account-links #t))
+      "e" opthelp-account-links #t)
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-amount-links
-      "e5" opthelp-amount-links #t))
+      "e5" opthelp-amount-links #t)
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-account-full-name
-      "f" opthelp-account-full-name #f))
+      "f" opthelp-account-full-name #f)
 
-    (add-option
-     (gnc:make-simple-boolean-option
-      gnc:pagename-display optname-label-sections "g" opthelp-label-sections #t))
+    (gnc-register-simple-boolean-option options
+      gnc:pagename-display optname-label-sections "g" opthelp-label-sections #t)
 
-    (add-option
-     (gnc:make-simple-boolean-option
-      gnc:pagename-display optname-total-sections "h" opthelp-total-sections #t))
+    (gnc-register-simple-boolean-option options
+      gnc:pagename-display optname-total-sections "h" opthelp-total-sections #t)
 
     (when (eq? report-type 'pnl)
       ;; include overall period column?
-      (add-option
-       (gnc:make-simple-boolean-option
+      (gnc-register-simple-boolean-option options
         gnc:pagename-general optname-include-overall-period
-        "c6" opthelp-include-overall-period #f)))
+        "c6" opthelp-include-overall-period #f))
 
     (gnc:options-set-default-section options gnc:pagename-general)
 
@@ -651,9 +626,8 @@ also show overall period profit & loss."))
 
 (define (multicol-report-renderer report-obj report-type)
   (define (get-option pagename optname)
-    (gnc:option-value
-     (gnc:lookup-option
-      (gnc:report-options report-obj) pagename optname)))
+    (gnc-optiondb-lookup-value
+      (gnc:report-options report-obj) pagename optname))
 
   (gnc:report-starting (get-option gnc:pagename-general gnc:optname-reportname))
 
