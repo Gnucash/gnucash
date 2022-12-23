@@ -42,7 +42,7 @@
   (test-end "register"))
 
 (define (set-option options page tag value)
-  ((gnc:option-setter (gnc:lookup-option options page tag)) value))
+  (gnc-set-option (gnc:optiondb options) page tag value))
 
 (define (teardown)
   (gnc-clear-current-session))

@@ -36,10 +36,9 @@
   (gnc:options->sxml uuid options "test-accsum" test-title))
 
 (define (set-option! options section name value)
-  (let ((option (gnc:lookup-option options section name)))
-    (if option
-        (gnc:option-set-value option value)
-        (test-assert (format #f "wrong-option ~a ~a" section name) #f))))
+  (if (gnc-lookup-option options section name)
+      (gnc-set-option options section name value)
+      (test-assert (format #f "wrong-option ~a ~a" section name) #f)))
 
 (define (accsum-tests)
   (let* ((account-alist (create-test-data))

@@ -77,9 +77,9 @@
                   (else #f))
             (set! report-options-tested
               (cons (make-combo
-                     (gnc:option-section option)
-                     (gnc:option-name option)
-                     (case (gnc:option-type option)
+                     (GncOption-get-section option)
+                     (GncOption-get-name option)
+                     (case (GncOption-get-type option)
                        ((multichoice)
                         (map (cut GncOption-permissible-value option <>)
                              (iota (GncOption-num-permissible-values option))))
@@ -97,9 +97,8 @@
   (get-environment-variable "COMBINATORICS"))
 
 (define (set-option! options section name value)
-  (let ((option (gnc:lookup-option options section name)))
-    (if option
-        (gnc:option-set-value option value))))
+  (if (gnc-lookup-option (gnc:optiondb options) section name)
+      (gnc-set-option (gnc:optiondb options) section name value)))
 
 ;; code snippet to run report uuid, with options object
 (define (try-run-report uuid options option-summary)
@@ -130,10 +129,10 @@
     (newline)
     (for-each
      (lambda (idx)
-       (when (gnc:lookup-option options "General" "Start Date")
+       (when (gnc-lookup-option (gnc:optiondb options) "General" "Start Date")
          (set-option! options "General" "Start Date"
                       (cons 'absolute (gnc-dmy2time64 1 12 1969))))
-       (when (gnc:lookup-option options "General" "End Date")
+       (when (gnc-lookup-option (gnc:optiondb options) "General" "End Date")
          (set-option! options "General" "End Date"
                       (cons 'absolute (gnc-dmy2time64 1 1 1972))))
        (let loop ((report-options report-options)
@@ -174,10 +173,10 @@
                  (get-name option)))
        report-options)
       (newline)
-      (when (gnc:lookup-option options "General" "Start Date")
+      (when (gnc-lookup-option (gnc:optiondb options) "General" "Start Date")
         (set-option! options "General" "Start Date"
                      (cons 'absolute (gnc-dmy2time64 1 12 1969))))
-      (when (gnc:lookup-option options "General" "End Date")
+      (when (gnc-lookup-option (gnc:optiondb options) "General" "End Date")
         (set-option! options "General" "End Date"
                      (cons 'absolute (gnc-dmy2time64 1 1 1972))))
       ;; generate combinatorics
