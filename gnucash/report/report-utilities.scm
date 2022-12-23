@@ -636,13 +636,13 @@
 
 (define (gnc:report-starting report-name)
   (gnc-window-show-progress (format #f
-				     (G_ "Building '~a' report ...")
+				     (G_ "Building '~a' report …")
 				     (G_ report-name))
 			    0))
 
 (define (gnc:report-render-starting report-name)
   (gnc-window-show-progress (format #f
-				     (G_ "Rendering '~a' report ...")
+				     (G_ "Rendering '~a' report …")
 				     (if (string-null? report-name)
 					 (G_ "Untitled")
 					 (G_ report-name)))
@@ -1258,7 +1258,7 @@
     (define (maybe-date time64)         ;handle INT-MAX differently
       (if (= 9223372036854775807 time64) "?" (qof-print-date time64)))
     (define (maybe-trunc str)
-      (if (> (string-length str) 20) (string-append (substring str 0 17) "...") str))
+      (if (> (string-length str) 20) (string-append (substring str 0 17) "…") str))
     (define (inv-amt->string inv amt)
       (gnc:monetary->string
        (gnc:make-gnc-monetary

@@ -1604,7 +1604,7 @@ gnc_account_window_set_name (AccountWindow *aw)
         char *prefix = g_strdup_printf (format,
                                         g_strv_length (aw->next_name) + 1);
 
-        title = g_strconcat (prefix, " - ", fullname, " ...", NULL);
+        title = g_strconcat (prefix, " - ", fullname, " …", NULL);
         g_free (prefix);
     }
     else

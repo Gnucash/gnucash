@@ -9,7 +9,7 @@
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
-    <property name="title" translatable="yes">Working...</property>
+    <property name="title" translatable="yes">Working…</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="type-hint">dialog</property>

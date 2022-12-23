@@ -181,7 +181,7 @@ with *EUGOODS* in the account description."))
    (gnc-lookup-option options "__trep" "unique-transactions") #t)
   ;; Disable account filtering
   (GncOptionDBPtr-make-internal options gnc:pagename-accounts "Filter Type")
-  (GncOptionDBPtr-make-internal options gnc:pagename-accounts "Filter By...")
+  (GncOptionDBPtr-make-internal options gnc:pagename-accounts "Filter By…")
   (GncOptionDBPtr-make-internal options "Currency" "Show original currency amount")
 
   ;; Enforce compulsory common-currency. It's senseless to allow

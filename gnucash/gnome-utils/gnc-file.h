@@ -22,7 +22,7 @@
  *
  * FUNCTION:
  * A set of file-handling utilities for GnuCash applications.
- * These utilities will "do the right thing" when used in the "File..."
+ * These utilities will "do the right thing" when used in the "File…"
  * pulldown menu, for the "New", "Open", "Save", "SaveAs", etc. menu entries.
  * In particular, they will verify that old files don't get clobbered,
  * they'll put up dialogue boxes to ask the user to confirm their actions,

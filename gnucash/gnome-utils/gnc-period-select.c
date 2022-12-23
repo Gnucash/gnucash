@@ -630,7 +630,7 @@ gnc_period_select_finalize (GObject *object)
  *  accounting period like "previous month" or "this year".
  *
  *  @param starting_labels If set to TRUE then all the labels will
- *  refer to the "Start of...".  If FALSE, labels will refer to "End
+ *  refer to the "Start of…".  If FALSE, labels will refer to "End
  *  of...".
  *
  *  @return A GncPeriodSelect widget.

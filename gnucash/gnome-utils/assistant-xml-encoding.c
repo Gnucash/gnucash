@@ -1091,7 +1091,7 @@ gxi_parse_file (GncXmlImportData *data)
     }
 
     xaccLogDisable ();
-    gxi_update_progress_bar (_("Reading file..."), 0.0);
+    gxi_update_progress_bar (_("Reading file…"), 0.0);
     qof_session_load (session, gxi_update_progress_bar);
     gxi_update_progress_bar (NULL, -1.0);
     xaccLogEnable ();
@@ -1114,7 +1114,7 @@ gxi_parse_file (GncXmlImportData *data)
     book = qof_session_get_book (session);
     backend = qof_book_get_backend (book);
 
-    gxi_update_progress_bar (_("Parsing file..."), 0.0);
+    gxi_update_progress_bar (_("Parsing file…"), 0.0);
     success = gnc_xml2_parse_with_subst (backend, book, data->subst);
     gxi_update_progress_bar (NULL, -1.0);
 
@@ -1146,7 +1146,7 @@ gxi_save_file (GncXmlImportData *data)
     QofBackendError io_err;
     g_return_val_if_fail (data && data->session, FALSE);
 
-    gxi_update_progress_bar (_("Writing file..."), 0.0);
+    gxi_update_progress_bar (_("Writing file…"), 0.0);
     qof_session_save (data->session, gxi_update_progress_bar);
     gxi_update_progress_bar (NULL, -1.0);
 

@@ -968,7 +968,7 @@ RESTART:
                                        path, username, password );
 
         xaccLogDisable();
-        gnc_window_show_progress(_("Loading user data..."), 0.0);
+        gnc_window_show_progress(_("Loading user data…"), 0.0);
         qof_session_load (new_session, gnc_window_show_progress);
         gnc_window_show_progress(NULL, -1.0);
         xaccLogEnable();
@@ -988,7 +988,7 @@ RESTART:
             if (gnc_xml_convert_single_file (newfile))
             {
                 /* try to load once again */
-                gnc_window_show_progress(_("Loading user data..."), 0.0);
+                gnc_window_show_progress(_("Loading user data…"), 0.0);
                 qof_session_load (new_session, gnc_window_show_progress);
                 gnc_window_show_progress(NULL, -1.0);
                 xaccLogEnable();
@@ -1004,7 +1004,7 @@ RESTART:
         /* Attempt to update the database if it's too old */
         if ( !uh_oh && io_err == ERR_SQL_DB_TOO_OLD )
         {
-            gnc_window_show_progress(_("Re-saving user data..."), 0.0);
+            gnc_window_show_progress(_("Re-saving user data…"), 0.0);
             qof_session_safe_save(new_session, gnc_window_show_progress);
             io_err = qof_session_get_error(new_session);
             uh_oh = show_session_error(parent, io_err, newfile, GNC_FILE_DIALOG_SAVE);
@@ -1364,7 +1364,7 @@ gnc_file_do_export(GtkWindow *parent, const char * filename)
 
     /* use the current session to save to file */
     gnc_set_busy_cursor (NULL, TRUE);
-    gnc_window_show_progress(_("Exporting file..."), 0.0);
+    gnc_window_show_progress(_("Exporting file…"), 0.0);
     ok = qof_session_export (new_session, current_session,
                              gnc_window_show_progress);
     gnc_window_show_progress(NULL, -1.0);
@@ -1424,7 +1424,7 @@ gnc_file_save (GtkWindow *parent)
     /* use the current session to save to file */
     save_in_progress++;
     gnc_set_busy_cursor (NULL, TRUE);
-    gnc_window_show_progress(_("Writing file..."), 0.0);
+    gnc_window_show_progress(_("Writing file…"), 0.0);
     qof_session_save (session, gnc_window_show_progress);
     gnc_window_show_progress(NULL, -1.0);
     gnc_unset_busy_cursor (NULL);
@@ -1663,7 +1663,7 @@ gnc_file_do_save_as (GtkWindow *parent, const char* filename)
 
 
     gnc_set_busy_cursor (NULL, TRUE);
-    gnc_window_show_progress(_("Writing file..."), 0.0);
+    gnc_window_show_progress(_("Writing file…"), 0.0);
     qof_session_save (new_session, gnc_window_show_progress);
     gnc_window_show_progress(NULL, -1.0);
     gnc_unset_busy_cursor (NULL);

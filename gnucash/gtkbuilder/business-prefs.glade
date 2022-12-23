@@ -190,7 +190,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.business.invoice/auto-pay">
-            <property name="label" translatable="yes" comments="See the tooltip &quot;At post time...&quot; for details.">_Process payments on posting</property>
+            <property name="label" translatable="yes" comments="See the tooltip &quot;At post time…&quot; for details.">_Process payments on posting</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -267,7 +267,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.business.bill/auto-pay">
-            <property name="label" translatable="yes" comments="See the tooltip &quot;At post time...&quot; for details.">Pro_cess payments on posting</property>
+            <property name="label" translatable="yes" comments="See the tooltip &quot;At post time…&quot; for details.">Pro_cess payments on posting</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>

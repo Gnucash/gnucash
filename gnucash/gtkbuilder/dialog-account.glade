@@ -798,7 +798,7 @@
   <object class="GtkDialog" id="account_filter_by_dialog">
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
-    <property name="title" translatable="yes">Filter By...</property>
+    <property name="title" translatable="yes">Filter By…</property>
     <property name="type-hint">dialog</property>
     <signal name="response" handler="gppat_filter_response_cb" swapped="no"/>
     <child internal-child="vbox">
@@ -1469,7 +1469,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
-                            <property name="tooltip-text" translatable="yes">This account (and any sub-accounts) will be hidden in the account tree and will not appear in the popup account list in the register. To reset this option, you will first need to open the "Filter By..." dialog for the account tree and check the "show hidden accounts" option. Doing so will allow you to select the account and reopen this dialog.</property>
+                            <property name="tooltip-text" translatable="yes">This account (and any sub-accounts) will be hidden in the account tree and will not appear in the popup account list in the register. To reset this option, you will first need to open the "Filter By…" dialog for the account tree and check the "show hidden accounts" option. Doing so will allow you to select the account and reopen this dialog.</property>
                             <property name="halign">start</property>
                             <property name="use-underline">True</property>
                             <property name="draw-indicator">True</property>

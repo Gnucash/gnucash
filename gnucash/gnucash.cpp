@@ -173,7 +173,7 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
 
     try
     {
-        const auto checking = _("Checking Finance::Quote...");
+        const auto checking = _("Checking Finance::Quote…");
         gnc_update_splash_screen (checking, GNC_SPLASH_PERCENTAGE_UNKNOWN);
         GncQuotes quotes;
         auto found = (bl::format (std::string{_("Found Finance::Quote version {1}.")}) % quotes.version()).str();
@@ -195,7 +195,7 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
     char* fn = nullptr;
     if (!user_file_spec->nofile && (fn = get_file_to_load (user_file_spec->file_to_load)) && *fn )
     {
-        auto msg = _("Loading data...");
+        auto msg = _("Loading data…");
         gnc_update_splash_screen (msg, GNC_SPLASH_PERCENTAGE_UNKNOWN);
         gnc_file_open_file(gnc_get_splash_screen(), fn, /*open_readonly*/ FALSE);
         g_free(fn);

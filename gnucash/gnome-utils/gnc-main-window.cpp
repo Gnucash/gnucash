@@ -306,14 +306,14 @@ static GtkActionEntry gnc_menu_actions [] =
     { "FileImportAction", nullptr, N_("_Import"), nullptr, nullptr, nullptr },
     { "FileExportAction", nullptr, N_("_Export"), nullptr, nullptr, nullptr },
     {
-        "FilePrintAction", "document-print", N_("_Print..."), "<primary>p",
+        "FilePrintAction", "document-print", N_("_Print…"), "<primary>p",
         N_("Print the currently active page"), nullptr
     },
 #ifndef GTK_STOCK_PAGE_SETUP
 #    define GTK_STOCK_PAGE_SETUP nullptr
 #endif
     {
-        "FilePageSetupAction", "document-page-setup", N_("Pa_ge Setup..."), "<primary><shift>p",
+        "FilePageSetupAction", "document-page-setup", N_("Pa_ge Setup…"), "<primary><shift>p",
         N_("Specify the page size and orientation for printing"),
         G_CALLBACK (gnc_main_window_cmd_page_setup)
     },
@@ -360,11 +360,11 @@ static GtkActionEntry gnc_menu_actions [] =
 
     { "ViewTabPositionAction", NULL, N_("Tab P_osition"), NULL, NULL, NULL },
     {
-        "ViewSortByAction", nullptr, N_("_Sort By..."), nullptr,
+        "ViewSortByAction", nullptr, N_("_Sort By…"), nullptr,
         N_("Select sorting criteria for this page view"), nullptr
     },
     {
-        "ViewFilterByAction", nullptr, N_("_Filter By..."), nullptr,
+        "ViewFilterByAction", nullptr, N_("_Filter By…"), nullptr,
         N_("Select the account types that should be displayed."), nullptr
     },
     {
@@ -377,7 +377,7 @@ static GtkActionEntry gnc_menu_actions [] =
 
     { "ScrubMenuAction", nullptr, N_("_Check & Repair"), nullptr, nullptr, nullptr },
     {
-        "ActionsForgetWarningsAction", nullptr, N_("Reset _Warnings..."), nullptr,
+        "ActionsForgetWarningsAction", nullptr, N_("Reset _Warnings…"), nullptr,
         N_("Reset the state of all warning messages so they will be shown again."),
         G_CALLBACK (gnc_main_window_cmd_actions_reset_warnings)
     },

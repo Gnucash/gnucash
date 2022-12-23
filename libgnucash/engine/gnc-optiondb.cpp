@@ -67,7 +67,7 @@ const OptionAliases Aliases::c_option_aliases
     {"Accounts to include", {nullptr, "Accounts"}},
     {"Exclude transactions between selected accounts?",
         {nullptr, "Exclude transactions between selected accounts"}},
-    {"Filter Accounts", {nullptr, "Filter By..."}},
+    {"Filter Accounts", {nullptr, "Filter By…"}},
     {"Flatten list to depth limit?",
         {nullptr, "Flatten list to depth limit"}},
     {"From", {nullptr, "Start Date"}},

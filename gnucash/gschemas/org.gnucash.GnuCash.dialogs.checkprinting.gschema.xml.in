@@ -28,7 +28,7 @@
     <key name="custom-units" type="i">
       <default>0</default>
       <summary>Units in which the custom coordinates are expressed</summary>
-      <description>Units in which the custom coordinates are expressed (inches, mm, ...).</description>
+      <description>Units in which the custom coordinates are expressed (inches, mm, …).</description>
     </key>
     <key name="custom-payee" type="(dd)">
       <default>(0,0)</default>

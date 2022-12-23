@@ -26,7 +26,7 @@
             <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="newbutton">
-                <property name="label" translatable="yes">New _Account...</property>
+                <property name="label" translatable="yes">New _Account…</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="can-default">True</property>
@@ -96,7 +96,7 @@
           <object class="GtkLabel" id="online_id_label">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Online account ID here...</property>
+            <property name="label" translatable="yes">Online account ID here…</property>
             <property name="justify">center</property>
           </object>
           <packing>

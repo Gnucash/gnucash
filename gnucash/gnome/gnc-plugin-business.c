@@ -162,37 +162,37 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK (gnc_plugin_business_cmd_customer_page)
     },
     {
-        "CustomerNewCustomerOpenAction", NULL, N_("_New Customer..."), NULL,
+        "CustomerNewCustomerOpenAction", NULL, N_("_New Customer…"), NULL,
         N_("Open the New Customer dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_customer_new_customer)
     },
     {
-        "CustomerFindCustomerOpenAction", NULL, N_("_Find Customer..."), NULL,
+        "CustomerFindCustomerOpenAction", NULL, N_("_Find Customer…"), NULL,
         N_("Open the Find Customer dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_customer_find_customer)
     },
     {
-        "CustomerNewInvoiceOpenAction", NULL, N_("New _Invoice..."), NULL,
+        "CustomerNewInvoiceOpenAction", NULL, N_("New _Invoice…"), NULL,
         N_("Open the New Invoice dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_customer_new_invoice)
     },
     {
-        "CustomerFindInvoiceOpenAction", NULL, N_("Find In_voice..."), NULL,
+        "CustomerFindInvoiceOpenAction", NULL, N_("Find In_voice…"), NULL,
         N_("Open the Find Invoice dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_customer_find_invoice)
     },
     {
-        "CustomerNewJobOpenAction", NULL, N_("New _Job..."), NULL,
+        "CustomerNewJobOpenAction", NULL, N_("New _Job…"), NULL,
         N_("Open the New Job dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_customer_new_job)
     },
     {
-        "CustomerFindJobOpenAction", NULL, N_("Find Jo_b..."), NULL,
+        "CustomerFindJobOpenAction", NULL, N_("Find Jo_b…"), NULL,
         N_("Open the Find Job dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_customer_find_job)
     },
     {
-        "CustomerProcessPaymentAction", NULL, N_("_Process Payment..."), NULL,
+        "CustomerProcessPaymentAction", NULL, N_("_Process Payment…"), NULL,
         N_("Open the Process Payment dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_customer_process_payment)
     },
@@ -205,37 +205,37 @@ static GtkActionEntry gnc_plugin_actions [] =
     },
     { "VendorMenuAction", NULL, N_("_Vendor"), NULL, NULL, NULL },
     {
-        "VendorNewVendorOpenAction", NULL, N_("_New Vendor..."), NULL,
+        "VendorNewVendorOpenAction", NULL, N_("_New Vendor…"), NULL,
         N_("Open the New Vendor dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_vendor_new_vendor)
     },
     {
-        "VendorFindVendorOpenAction", NULL, N_("_Find Vendor..."), NULL,
+        "VendorFindVendorOpenAction", NULL, N_("_Find Vendor…"), NULL,
         N_("Open the Find Vendor dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_vendor_find_vendor)
     },
     {
-        "VendorNewBillOpenAction", NULL, N_("New _Bill..."), NULL,
+        "VendorNewBillOpenAction", NULL, N_("New _Bill…"), NULL,
         N_("Open the New Bill dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_vendor_new_bill)
     },
     {
-        "VendorFindBillOpenAction", NULL, N_("Find Bi_ll..."), NULL,
+        "VendorFindBillOpenAction", NULL, N_("Find Bi_ll…"), NULL,
         N_("Open the Find Bill dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_vendor_find_bill)
     },
     {
-        "VendorNewJobOpenAction", NULL, N_("New _Job..."), NULL,
+        "VendorNewJobOpenAction", NULL, N_("New _Job…"), NULL,
         N_("Open the New Job dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_vendor_new_job)
     },
     {
-        "VendorFindJobOpenAction", NULL, N_("Find Jo_b..."), NULL,
+        "VendorFindJobOpenAction", NULL, N_("Find Jo_b…"), NULL,
         N_("Open the Find Job dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_vendor_find_job)
     },
     {
-        "VendorProcessPaymentAction", NULL, N_("_Process Payment..."), NULL,
+        "VendorProcessPaymentAction", NULL, N_("_Process Payment…"), NULL,
         N_("Open the Process Payment dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_vendor_process_payment)
     },
@@ -248,27 +248,27 @@ static GtkActionEntry gnc_plugin_actions [] =
     },
     { "EmployeeMenuAction", NULL, N_("_Employee"), NULL, NULL, NULL },
     {
-        "EmployeeNewEmployeeOpenAction", NULL, N_("_New Employee..."), NULL,
+        "EmployeeNewEmployeeOpenAction", NULL, N_("_New Employee…"), NULL,
         N_("Open the New Employee dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_employee_new_employee)
     },
     {
-        "EmployeeFindEmployeeOpenAction", NULL, N_("_Find Employee..."), NULL,
+        "EmployeeFindEmployeeOpenAction", NULL, N_("_Find Employee…"), NULL,
         N_("Open the Find Employee dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_employee_find_employee)
     },
     {
-        "EmployeeNewExpenseVoucherOpenAction", NULL, N_("New _Expense Voucher..."), NULL,
+        "EmployeeNewExpenseVoucherOpenAction", NULL, N_("New _Expense Voucher…"), NULL,
         N_("Open the New Expense Voucher dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_employee_new_expense_voucher)
     },
     {
-        "EmployeeFindExpenseVoucherOpenAction", NULL, N_("Find Expense _Voucher..."), NULL,
+        "EmployeeFindExpenseVoucherOpenAction", NULL, N_("Find Expense _Voucher…"), NULL,
         N_("Open the Find Expense Voucher dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_employee_find_expense_voucher)
     },
     {
-        "EmployeeProcessPaymentAction", NULL, N_("_Process Payment..."), NULL,
+        "EmployeeProcessPaymentAction", NULL, N_("_Process Payment…"), NULL,
         N_("Open the Process Payment dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_employee_process_payment)
     },
@@ -316,19 +316,19 @@ static GtkActionEntry gnc_plugin_actions [] =
 
     /* Toolbar */
     {
-        "ToolbarNewInvoiceAction", GNC_ICON_INVOICE_NEW, N_("New _Invoice..."), NULL,
+        "ToolbarNewInvoiceAction", GNC_ICON_INVOICE_NEW, N_("New _Invoice…"), NULL,
         N_("Open the New Invoice dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_customer_new_invoice)
     },
 
     /* Register popup menu */
     {
-        "RegisterAssignPayment", NULL, N_("Assign as payment..."), NULL,
+        "RegisterAssignPayment", NULL, N_("Assign as payment…"), NULL,
         N_("Assign the selected transaction as payment"),
         G_CALLBACK (gnc_plugin_business_cmd_assign_payment)
     },
     {
-        "RegisterEditPayment", NULL, N_("Edit payment..."), NULL,
+        "RegisterEditPayment", NULL, N_("Edit payment…"), NULL,
         N_("Edit the payment this transaction is a part of"),
         G_CALLBACK (gnc_plugin_business_cmd_assign_payment)
     },

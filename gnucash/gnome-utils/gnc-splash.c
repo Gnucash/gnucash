@@ -110,7 +110,7 @@ gnc_show_splash_screen (void)
        presumably it would be better to inhibit size change of the
        top level container, but I don't know how to do this */
     gtk_label_set_max_width_chars(GTK_LABEL(progress), 34);
-    markup = g_markup_printf_escaped(MARKUP_STRING, _("Loading..."));
+    markup = g_markup_printf_escaped(MARKUP_STRING, _("Loading…"));
     gtk_label_set_markup(GTK_LABEL(progress), markup);
     g_free(markup);
 

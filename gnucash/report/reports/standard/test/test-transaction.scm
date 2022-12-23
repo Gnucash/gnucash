@@ -414,7 +414,7 @@
       (set! options (default-testing-options))
       (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 01 01 1969)))
       (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 31 12 1970)))      
-      (set-option! options "Accounts" "Filter By..." (list income))
+      (set-option! options "Accounts" "Filter By…" (list income))
       (set-option! options "Accounts" "Filter Type" 'include)
       (let ((sxml (options->sxml options "including bank-income accts only")))
         (test-equal "filter includes bank-income, sum = -$29.00"
@@ -577,7 +577,7 @@
           (apply + (map str->num ((sxpath '(// (table 1) // tr // (td -1) // a // *text*)) sxml)))))
 
       ;; Remove expense multisplit, transaction is not shown
-      (set-option! options "Accounts" "Filter By..." (list expense))
+      (set-option! options "Accounts" "Filter By…" (list expense))
       (set-option! options "Accounts" "Filter Type" 'exclude)
       (let* ((sxml (options->sxml options "multiline, filtered out")))
         (test-equal "multi-line has been excluded"

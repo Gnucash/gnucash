@@ -1972,7 +1972,7 @@ CsvImpTransAssist::assist_account_match_page_prepare ()
     gnc_csv_account_map_load_mappings (store);
 
     auto text = std::string ("<span size=\"medium\" color=\"red\"><b>");
-    text += _("To change mapping, double click on a row or select a row and press the button...");
+    text += _("To change mapping, double click on a row or select a row and press the button…");
     text += "</b></span>";
     gtk_label_set_markup (GTK_LABEL(account_match_label), text.c_str());
 

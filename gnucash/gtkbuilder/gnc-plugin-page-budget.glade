@@ -672,7 +672,7 @@
           <object class="GtkLabel" id="budget_note">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Note: Use View-&gt;'Filter By...' to control visible accounts.</property>
+            <property name="label" translatable="yes">Note: Use View-&gt;'Filter By…' to control visible accounts.</property>
           </object>
           <packing>
             <property name="expand">False</property>

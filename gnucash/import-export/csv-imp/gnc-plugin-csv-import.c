@@ -47,17 +47,17 @@ static void gnc_plugin_csv_import_price_cmd (GtkAction *action, GncMainWindowAct
 static GtkActionEntry gnc_plugin_actions [] =
 {
     {
-        "CsvImportAccountAction", "go-previous", N_("Import _Accounts from CSV..."), NULL,
+        "CsvImportAccountAction", "go-previous", N_("Import _Accounts from CSV…"), NULL,
         N_("Import Accounts from a CSV file"),
         G_CALLBACK (gnc_plugin_csv_import_tree_cmd)
     },
     {
-        "CsvImportTransAction", "go-previous", N_("Import _Transactions from CSV..."), NULL,
+        "CsvImportTransAction", "go-previous", N_("Import _Transactions from CSV…"), NULL,
         N_("Import Transactions from a CSV file"),
         G_CALLBACK (gnc_plugin_csv_import_trans_cmd)
     },
     {
-        "CsvImportPriceAction", "go-previous", N_("Import _Prices from a CSV file..."), NULL,
+        "CsvImportPriceAction", "go-previous", N_("Import _Prices from a CSV file…"), NULL,
         N_("Import Prices from a CSV file"),
         G_CALLBACK (gnc_plugin_csv_import_price_cmd)
     },

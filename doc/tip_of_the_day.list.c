@@ -119,7 +119,7 @@ registers after midnight, to get the new date as default for new \
 transactions. It is not necessary to restart GnuCash.")
 
  N_( "To search through all your transactions, start a search (Edit->\
-Find...) from the main accounts hierarchy page. To limit your search \
+Find…) from the main accounts hierarchy page. To limit your search \
 to a single account, start the search from that account's register.")
 
  N_( "To visually compare on screen the contents of 2 tabs, \

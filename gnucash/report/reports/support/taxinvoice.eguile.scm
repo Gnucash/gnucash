@@ -222,7 +222,7 @@
       <?scm )) ?>
       <?scm (if (not isposted) (begin ?>
         <tr>
-           <td colspan="2" align="right"><?scm:d (G_ "Invoice in progress...") ?></td>
+           <td colspan="2" align="right"><?scm:d (G_ "Invoice in progress…") ?></td>
         </tr>
       <?scm ) (begin ?>
         <tr>

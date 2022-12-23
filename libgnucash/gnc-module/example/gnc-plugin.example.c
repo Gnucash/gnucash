@@ -47,7 +47,7 @@ static void gnc_plugin_example_cmd_test (GtkAction *action, GncMainWindowActionD
 
 static GtkActionEntry gnc_plugin_actions [] = {
     /* Menu Items */
-    { "exampleAction", NULL, N_("example description..."), NULL,
+    { "exampleAction", NULL, N_("example description…"), NULL,
       N_("example tooltip"),
       G_CALLBACK(gnc_plugin_example_cmd_test) },
 };

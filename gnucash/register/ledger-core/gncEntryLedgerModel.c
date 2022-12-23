@@ -606,7 +606,7 @@ static char * get_disc_help (VirtualLocation virt_loc, gpointer user_data)
         help = _("Enter the Discount Percent");
         break;
     default:
-        help = _("Enter the Discount ... unknown type");
+        help = _("Enter the Discount … unknown type");
         break;
     }
 

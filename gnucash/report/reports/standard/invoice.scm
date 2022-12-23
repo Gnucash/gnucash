@@ -557,7 +557,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
                                      1 2 (gnc:make-html-span/markup
                                           "invoice-in-progress"
                                           (gnc:make-html-text
-                                           (G_ "Invoice in progress..."))))))
+                                           (G_ "Invoice in progress…"))))))
 
     (if (opt-val "Display" "Billing ID")
         (let ((billing-id (gncInvoiceGetBillingID invoice)))
@@ -738,9 +738,11 @@ for styling the invoice. Please see the exported report for the CSS class names.
                                (else
                                 (G_ "Invoice"))))
                (title (if (string-null? custom-title) default-title custom-title))
-               ;; Translators: This is the format of the invoice title.
-               ;; The first ~a is "Invoice", "Credit Note"... and the second the number.
-               ;; Replace " #" by whatever is common as number abbreviation, i.e. "~a Nr. ~a"
+               ;; Translators: This is the format of the invoice
+               ;; title.  The first ~a is one of "Invoice", "Credit
+               ;; Note", and so on and the second the number.  Replace
+               ;; " #" by whatever is common as number abbreviation,
+               ;; i.e. "~a Nr. ~a"
                (invoice-title (format #f (G_"~a #~a") title (gncInvoiceGetID invoice)))
                (layout-lookup-table (list (cons 'none #f)
                                           (cons 'picture (gnc:make-html-div/markup

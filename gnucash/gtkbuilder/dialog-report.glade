@@ -186,7 +186,7 @@
             </child>
             <child>
               <object class="GtkButton" id="size_button1">
-                <property name="label" translatable="yes">Si_ze...</property>
+                <property name="label" translatable="yes">Si_ze…</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can-focus">True</property>

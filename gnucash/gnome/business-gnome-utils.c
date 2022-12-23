@@ -70,11 +70,11 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
     switch (type)
     {
     case GNCSEARCH_TYPE_SELECT:
-        text = _("Select...");
+        text = _("Select…");
         text_editable = TRUE;
         break;
     case GNCSEARCH_TYPE_EDIT:
-        text = _("Edit...");
+        text = _("Edit…");
         text_editable = FALSE;
         break;
     };
@@ -257,7 +257,7 @@ GtkWidget * gnc_invoice_select_create (GtkWidget *hbox, QofBook *book,
     isi->book = book;
     isi->label = label;
 
-    edit = gnc_general_search_new (GNC_INVOICE_MODULE_NAME, _("Select..."),
+    edit = gnc_general_search_new (GNC_INVOICE_MODULE_NAME, _("Select…"),
                                    TRUE, gnc_invoice_select_search_cb, isi, isi->book);
     if (!edit)
     {

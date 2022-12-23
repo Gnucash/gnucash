@@ -767,7 +767,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
 
                 /* Translators: %s is "Taxes",
                    "Insurance", or similar. */
-                g_string_printf( str, _("... pay \"%s\"?"),
+                g_string_printf( str, _("… pay \"%s\"?"),
                                  rouid->optData->name );
                 rouid->optCb =
                     GTK_CHECK_BUTTON(

@@ -34,7 +34,7 @@
             </child>
             <child>
               <object class="GtkButton" id="new_item_button">
-                <property name="label" translatable="yes">_New item...</property>
+                <property name="label" translatable="yes">_New item…</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="can-default">True</property>

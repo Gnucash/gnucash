@@ -294,7 +294,7 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * n_rows_fixed, guint * n_row
     ignore_invoice = FALSE;
     on_first_row_of_invoice = TRUE;
     
-    g_string_append_printf (info, _("Validation...\n") );
+    g_string_append_printf (info, _("Validation…\n") );
 
     // Walk through the list, reading each row.
     valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
@@ -644,7 +644,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     on_first_row_of_invoice = TRUE;
     running_id = g_string_new("");
     
-    g_string_append_printf (info, _("\nProcessing...\n") );
+    g_string_append_printf (info, _("\nProcessing…\n") );
     
     valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
     while (valid)

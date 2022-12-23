@@ -66,7 +66,7 @@
 
 ;;Accounts
 (define optname-accounts (N_ "Accounts"))
-(define optname-filterby (N_ "Filter By..."))
+(define optname-filterby (N_ "Filter By…"))
 (define optname-filtertype (N_ "Filter Type"))
 
 ;;Display
@@ -525,7 +525,7 @@ in the Options panel."))
 
   (gnc-register-multichoice-option options
     gnc:pagename-general optname-date-source
-    "a5" (G_ "Specify date to filter by...")
+    "a5" (G_ "Specify date to filter by…")
     "posted"
     (list (vector 'posted (G_ "Date Posted"))
           (vector 'reconciled (G_ "Reconciled Date"))
