@@ -462,7 +462,7 @@ balance at a given time"))
                       (gnc:options-copy-values (gnc:report-options report-obj)
                                                options)
                       ;; and set the destination accounts
-                      (gnc-option-set-value
+                      (gnc-set-option
                        options gnc:pagename-accounts optname-accounts
                        (map cadr finish))
                       (set! id (gnc:make-report report-guid options))

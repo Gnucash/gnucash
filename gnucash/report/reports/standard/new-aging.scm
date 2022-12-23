@@ -428,7 +428,7 @@ exist but have no suitable transactions."))
 
 (define (receivables-report-create-internal acct title show-zeros?)
   (let* ((options (gnc:make-report-options receivables-aging-guid)))
-    (when title (gnc-set-option-set-value
+    (when title (gnc-set-option
                  options gnc:pagename-general gnc:optname-reportname title))
     (gnc-set-option options gnc:pagename-general optname-show-zeros show-zeros?)
     (gnc:make-report receivables-aging-guid options)))

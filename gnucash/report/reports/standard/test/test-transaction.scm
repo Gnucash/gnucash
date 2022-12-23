@@ -107,7 +107,7 @@
       (test-assert (format #f "wrong-option ~a ~a" section name) #f)))
 (define (opt-val options section name)
   (if (gnc-lookup-option options section name)
-      (gnc-get-option options section name value)
+      (gnc-optiondb-lookup-value options section name)
       (test-assert (format #f "wrong-option ~a ~a" section name) #f)))
 
 (define structure

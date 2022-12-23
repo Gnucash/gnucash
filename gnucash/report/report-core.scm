@@ -433,7 +433,7 @@ not found.")))
                      gnc:optname-stylesheet))))
 
 (define (gnc:report-set-stylesheet! report stylesheet)
-  (gnc-set-value
+  (gnc-set-option
    (gnc:optiondb (gnc:report-options report))
    gnc:pagename-general gnc:optname-stylesheet
    (string->symbol (gnc:html-style-sheet-name stylesheet))))
