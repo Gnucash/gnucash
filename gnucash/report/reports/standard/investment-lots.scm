@@ -135,73 +135,59 @@
 ;; will use to display a dialog where the user can select
 ;; values for the report's parameters.
 (define (options-generator)
-  (let* ((options (gnc:new-options)))
-
-    ;; This is just a helper function for making options.
-    ;; See libgnucash/app-utils/options.scm for details.
-    (define (add-option new-option)
-      (gnc:register-option options new-option))
+  (let* ((options (gnc-new-optiondb)))
 
     ;; Accounts tab
-    (add-option
-     (gnc:make-account-list-option
+    (gnc-register-account-list-limited-option options
       gnc:pagename-accounts
       optname-accounts
       "a"
       (N_ "Stock Accounts to report on.")
       ;; default-getter
-      (lambda () (filter gnc:account-is-stock?
-                         (gnc-account-get-descendants-sorted
-                          (gnc-get-current-root-account))))
-      ;; value-validator
-      (lambda (accounts) (list  #t
-                                (filter gnc:account-is-stock? accounts)))
-      #t)) ;; multiple-selection
+      (filter gnc:account-is-stock?
+              (gnc-account-get-descendants-sorted
+               (gnc-get-current-root-account)))
+    (list ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL))
 
-    (add-option
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
         gnc:pagename-accounts
         optname-zero-shares
         "b"
         (N_ "Include accounts that have a zero share balances.")
-        #t))
+        #t)
 
-    (add-option
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
         gnc:pagename-accounts
         optname-include-lotless-accounts
         "c"
         (N_ "Include accounts with no lots")
-        #f))
+        #f)
 
     ;; Chart tab
-    (add-option
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
         pagename-chart
         optname-show-chart
         "a"
         (N_ "Include a chart that shows lot gains, grouped by account and gain type")
-        #t))
+        #t)
 
-    (add-option
-      (gnc:make-multichoice-option  
+    (gnc-register-multichoice-option options
         pagename-chart
         optname-chart-type
         "b"
         (N_ "What kind of chart to include")
-        'bar-stacked
+        "bar-stacked"
         (list (vector 'bar (N_ "Bar Chart"))
-              (vector 'bar-stacked (N_ "Stacked Bar Chart")))))
+              (vector 'bar-stacked (N_ "Stacked Bar Chart"))))
 
-    (add-option
-      (gnc:make-multichoice-option  
+    (gnc-register-multichoice-option options
         pagename-chart
         optname-chart-location
         "c"
         (N_ "Where to place the chart")
-        'top
+        "top"
         (list (vector 'top (N_ "Top"))
-              (vector 'bottom (N_ "Bottom")))))
+              (vector 'bottom (N_ "Bottom"))))
 
     (gnc:options-add-plot-size!
       options
@@ -213,79 +199,70 @@
       (cons 'percent 50.0))
 
     ;; Columns tab
-    (add-option
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
         pagename-columns
         optname-show-lot-guid-column
         "a"
         (N_ "Show the lot GUID table column")
-        #f))
+        #f)
 
-    (add-option
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
         pagename-columns
         optname-show-date-columns
         "b"
         (N_ "Show the lot open and close table columns")
-        #t))
+        #t)
 
-    (add-option
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
         pagename-columns
         optname-show-bought-columns
         "c"
         (N_ "Show purchase-related table columns")
-        #t))
+        #t)
 
-    (add-option
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
         pagename-columns
         optname-show-sold-columns
         "d"
         (N_ "Show sale-related table columns")
-        #t))
+        #t)
 
-    (add-option
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
         pagename-columns
         optname-show-end-columns
         "e"
         (N_ "Show end date amount and value table columns")
-        #t))
+        #t)
 
-    (add-option
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
         pagename-columns
         optname-show-realized-gain-columns
         "f"
         (N_ "Show realized gain table column(s) for sold shares")
-        #t))
+        #t)
 
-    (add-option
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
         pagename-columns
         optname-show-unrealized-gain-columns
         "g"
         (N_ "Show unrealized gain table column(s) for unsold shares")
-        #t))
+        #t)
 
-    (add-option
-      (gnc:make-multichoice-option
+    (gnc-register-multichoice-option options
         pagename-columns
         optname-group-gains-by-age
         "h"
         (N_ "Group gains (and sales?) by long-term (LT) and short-term (ST)")
-        'gains-only
+        "gains-only"
         (list (vector 'no (N_ "No"))
               (vector 'gains-only (N_ "Gains Only"))
-              (vector 'gains-and-sales (N_ "Gains and Sales")))))
+              (vector 'gains-and-sales (N_ "Gains and Sales"))))
 
     ;; Note: Different governments may have different rules regarding how long
     ;; shares must be held to qualify for different tax treatment. So make
     ;; configurable the boundary between short-term and long-term capital
     ;; gains.
-    (add-option
-     (gnc:make-number-range-option
+    (gnc-register-number-range-option options
       pagename-columns
       optname-long-term-years
       "i"
@@ -294,49 +271,43 @@
         ;; year are long-term.
       0 ;; lower-bound
       10E9 ;; upper-bound
-      0 ;; num-decimals
-      1)) ;; step-size
+      1) ;; step-size
 
     ;; Display tab
-    (add-option
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
         gnc:pagename-display
         optname-show-long-account-names
         "a"
         (N_ "Show long (instead of short) account names")
-        #t))
+        #t)
 
-    (add-option
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
         gnc:pagename-display
         optname-show-mnemonics
         "b"
         (N_ "Show mnemonics with commodity amounts")
-        #t))
+        #t)
 
-    (add-option
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
         gnc:pagename-display
         optname-include-closed-lots
         "c"
         (N_ "Include closed lots in addition to open lots")
-        #t))
+        #t)
 
-    (add-option
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
         gnc:pagename-display
         optname-show-blanks-for-zeros
         "d"
         (N_ "Show blank text instead of zero values for inner table cells. Does not apply to footer rows.")
-        #t))
+        #t)
 
-    (add-option
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
         gnc:pagename-display
         optname-show-split-rows
         "e"
         (N_ "Add a row for each split belonging to a lot, under the lot row.")
-        #f))
+        #f)
 
     ;; General tab
     (gnc:options-add-date-interval!
@@ -348,72 +319,64 @@
       optname-report-currency
       "b")
 
-    (add-option
-     (gnc:make-multichoice-option
+    (gnc-register-multichoice-option options
       gnc:pagename-general
       optname-price-source
-      "c" (N_ "The source of price information.") 'pricedb-before
+      "c" (N_ "The source of price information.") "pricedb-before"
       (list (vector 'pricedb-before (N_ "Last up through report date"))
             (vector 'pricedb-nearest (N_ "Closest to report date"))
-            (vector 'pricedb-latest (N_ "Most recent")))))
+            (vector 'pricedb-latest (N_ "Most recent"))))
 
     ;; Validation tab
-    (add-option
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
         pagename-validation
         optname-include-only-accounts-with-warnings
         "a"
         (N_ "Only show accounts that contain warnings. This is useful for quickly finding potential lot errors.")
-        #f))
+        #f)
 
-    (add-option
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
         pagename-validation
         optname-warn-if-multiple-bought-splits
         "b"
         (N_ "Lots with more than one purchase split are not well formed. It may make ambiguous the capital gains age")
-        #t))
+        #t)
 
-    (add-option
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
         pagename-validation
         optname-warn-if-balance-negative
         "c"
         (N_ "Lots with a negative balance are not well formed.")
-        #t))
+        #t)
 
-    (add-option
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
         pagename-validation
         optname-warn-if-lot-title-blank
         "d"
         (N_ "Lot titles are optional. This warning applies to titles that are empty or only whitespace.")
-        #f)) ;; Defaulting to false, since lot titles are not required.
+        #f) ;; Defaulting to false, since lot titles are not required.
 
-    (add-option
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
         pagename-validation
         optname-warn-if-gains-mismatch
         "e"
         (N_ "Detect possible errors in 'Realized Gain/Loss' splits that are created when adding a sale split to a lot")
-        #t))
+        #t)
 
-    (add-option
-     (gnc:make-multichoice-option
+    (gnc-register-multichoice-option options
       pagename-validation
       optname-warn-type-if-split-not-in-lot
-      "f" (N_ "Detect splits that have not been assigned to a lot.") 'count
+      "f" (N_ "Detect splits that have not been assigned to a lot.") "count"
       (list (vector 'no (N_ "No"))
             (vector 'count (N_ "Count"))
-            (vector 'list (N_ "List")))))
+            (vector 'list (N_ "List"))))
 
-    (add-option
-      (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
         pagename-validation
         optname-warn-if-balance-mismatch
         "g"
         (N_ "Balance mismatches may indicate a split that is not yet included in a lot")
-        #t))
+        #t)
 
     options))
 
