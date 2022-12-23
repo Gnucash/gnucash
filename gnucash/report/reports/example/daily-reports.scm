@@ -66,47 +66,35 @@
 ;; is the list of account types that the account selection option
 ;; accepts.
 (define (options-generator account-types)
-  (let* ((options (gnc:new-options))
-         (add-option 
-          (lambda (new-option)
-            (gnc:register-option options new-option))))
+  (let* ((options (gnc-new-optiondb)))
 
     (gnc:options-add-date-interval!
      options gnc:pagename-general
      optname-from-date optname-to-date "a")
 
-    (gnc:options-add-currency! 
+    (gnc:options-add-currency!
      options gnc:pagename-general optname-report-currency "b")
-    
-    (gnc:options-add-price-source! 
+
+    (gnc:options-add-price-source!
      options gnc:pagename-general
      optname-price-source "c" 'weighted-average)
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-accounts optname-subacct
-      "a" (N_ "Include sub-accounts of all selected accounts.") #t))
+      "a" (N_ "Include sub-accounts of all selected accounts.") #t)
 
-    (add-option
-     (gnc:make-account-list-option
+    (gnc-register-account-list-limited-option options
       gnc:pagename-accounts optname-accounts
       "a"
       (N_ "Report on these accounts, if chosen account level allows.")
-      (lambda ()
-        (gnc:filter-accountlist-type 
-         account-types
-         (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
-      (lambda (accounts)
-        (list #t
-              (gnc:filter-accountlist-type
-               account-types
-               accounts)))
-      #t))
+      (gnc:filter-accountlist-type
+       account-types
+       (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
+      account-types)
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-show-total
-      "b" (N_ "Show the total balance in legend?") #t))
+      "b" (N_ "Show the total balance in legend?") #t)
 
     (gnc:options-add-plot-size!
      options gnc:pagename-display
@@ -126,9 +114,8 @@
                            account-types)
   ;; This is a helper function for looking up option values.
   (define (get-option section name)
-    (gnc:option-value
-     (gnc:lookup-option
-      (gnc:report-options report-obj) section name)))
+    (gnc-optiondb-lookup-value
+      (gnc:report-options report-obj) section name))
 
   (gnc:report-starting reportname)
 

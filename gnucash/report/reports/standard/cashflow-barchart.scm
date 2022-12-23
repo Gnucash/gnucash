@@ -61,10 +61,7 @@
 
 ;; options generator function
 (define (cashflow-barchart-options-generator)
-  (let* ((options (gnc:new-options))
-         (add-option
-          (lambda (new-option)
-            (gnc:register-option options new-option))))
+  (let* ((options (gnc-new-optiondb)))
 
     ;; General tab
     (gnc:options-add-date-interval!
@@ -82,47 +79,34 @@
      optname-price-source "d" 'pricedb-nearest)
 
     ;; Accounts tab
-    (add-option
-     (gnc:make-account-list-option
+    (gnc-register-account-list-option options
       gnc:pagename-accounts optname-accounts
       "a" (N_ "Report on these accounts.")
-      (lambda ()     ; account getter
-        (gnc:filter-accountlist-type
+      (gnc:filter-accountlist-type
          (list ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-ASSET
                ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL)
          (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
-      #f #t))
 
-    (gnc:register-option
-     options
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-accounts optname-include-trading-accounts
-      "b" (N_ "Include transfers to and from Trading Accounts in the report.")  #f))
+      "b" (N_ "Include transfers to and from Trading Accounts in the report.")  #f)
 
     ;; Display tab
-    (gnc:register-option
-     options
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-show-in
-      "a" (N_ "Show money in?") #t))
+      "a" (N_ "Show money in?") #t)
 
-    (gnc:register-option
-     options
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-show-out
-      "b" (N_ "Show money out?") #t))
+      "b" (N_ "Show money out?") #t)
 
-    (gnc:register-option
-     options
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-show-net
-      "c" (N_ "Show net money flow?") #t))
+      "c" (N_ "Show net money flow?") #t)
 
-    (gnc:register-option
-     options
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-show-table
-      "d" (N_ "Display a table of the selected data.") #f))
+      "d" (N_ "Display a table of the selected data.") #f)
 
     ;; Plot size options
     (gnc:options-add-plot-size!
@@ -141,9 +125,8 @@
 
 (define (cashflow-barchart-renderer report-obj)
   (define (get-option pagename optname)
-    (gnc:option-value
-     (gnc:lookup-option
-      (gnc:report-options report-obj) pagename optname)))
+    (gnc-optiondb-lookup-value
+      (gnc:report-options report-obj) pagename optname))
 
   (gnc:report-starting reportname)
 

@@ -83,10 +83,9 @@
 
 (define (test-net-chart-variant variant)
   (define (set-option! options section name value)
-    (let ((option (gnc:lookup-option options section name)))
-      (if option
-          (gnc:option-set-value option value)
-          (test-assert (format #f "[~a] wrong-option ~a ~a" variant section name) #f))))
+    (if (gnc-lookup-option (gnc:optiondb options) section name)
+        (gnc-set-option (gnc:optiondb options) section name value)
+        (test-assert (format #f "[~a] wrong-option ~a ~a" variant section name) #f)))
   (let* ((uuid (variant->uuid variant))
          (inc-exp? (memq variant '(income-expense-barchart income-expense-linechart)))
          (env (create-test-env))
@@ -147,10 +146,9 @@
 
 (define (test-chart-variant variant)
   (define (set-option! options section name value)
-    (let ((option (gnc:lookup-option options section name)))
-      (if option
-          (gnc:option-set-value option value)
-          (test-assert (format #f "[~a] wrong-option ~a ~a" variant section name) #f))))
+    (if (gnc-lookup-option (gnc:optiondb options) section name)
+        (gnc-set-option (gnc:optiondb options) section name value)
+        (test-assert (format #f "[~a] wrong-option ~a ~a" variant section name) #f)))
   (let* ((uuid (variant->uuid variant))
          (env (create-test-env))
          (account-alist (env-create-account-structure-alist env structure))
@@ -254,4 +252,3 @@
 
       ((net-worth-barchart income-expense-barchart net-worth-linechart income-expense-linechart)
        (test-net-chart-variant variant)))))
-

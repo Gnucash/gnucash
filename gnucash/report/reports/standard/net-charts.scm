@@ -62,12 +62,7 @@
 (define optname-y-grid (N_ "Grid"))
 
 (define (options-generator inc-exp? linechart?)
-  (let* ((options (gnc:new-options))
-         ;; This is just a helper function for making options.
-         ;; See libgnucash/scm/options.scm for details.
-         (add-option
-          (lambda (new-option)
-            (gnc:register-option options new-option))))
+  (let* ((options (gnc-new-optiondb)))
 
     ;; General tab
     (gnc:options-add-date-interval!
@@ -85,54 +80,44 @@
      optname-price-source "d" 'weighted-average)
 
     ;; Account tab
-    (add-option
-     (gnc:make-account-list-option
-      gnc:pagename-accounts optname-accounts
-      "a"
-      (N_ "Report on these accounts, if chosen account level allows.")
-      (lambda ()
-        (filter
-         (if inc-exp?
-             gnc:account-is-inc-exp?
-             (lambda (account) (not (gnc:account-is-inc-exp? account))))
-         (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
-      (lambda (accounts)
-        (list #t
-              (filter
-               (if inc-exp?
-                   gnc:account-is-inc-exp?
-                   (lambda (account)
-                     (not (gnc:account-is-inc-exp? account))))
-               accounts)))
-      #t))
+
+    (gnc-register-account-list-option
+     options gnc:pagename-accounts optname-accounts
+     "a"
+     (N_ "Report on these accounts, if chosen account level allows.")
+     (if inc-exp?
+         (gnc:filter-accountlist-type
+          (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
+          (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
+
+         (filter
+          (lambda (account) (not (gnc:account-is-inc-exp? account)))
+          (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))))
 
     ;; Display tab
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display
       (if inc-exp? optname-inc-exp optname-sep-bars)
       "a"
       (if inc-exp?
           (N_ "Show Income and Expenses?")
           (N_ "Show the Asset and the Liability bars?"))
-      #t))
+      #t)
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display
       (if inc-exp? optname-show-profit optname-net-bars)
       "b"
       (if inc-exp?
           (N_ "Show the net profit?")
           (N_ "Show a Net Worth bar?"))
-      #t))
+      #t)
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display
       (N_ "Show table")
       "c" (N_ "Display a table of the selected data.")
-      #f))
+      #f)
 
     (gnc:options-add-plot-size!
      options gnc:pagename-display
@@ -141,30 +126,25 @@
     (if linechart?
         (begin
 
-          (add-option
-           (gnc:make-number-range-option
+          (gnc-register-number-range-option options
             gnc:pagename-display optname-line-width
             "e" opthelp-line-width
-            1.5 0.5 5 1 0.1 ))
+            1.5 0.5 5 0.1 )
 
-          (add-option
-           (gnc:make-simple-boolean-option
+          (gnc-register-simple-boolean-option options
             gnc:pagename-display optname-y-grid
             "f" (N_ "Add grid lines.")
-            #t))
+            #t)
 
-          ;;(add-option
-          ;; (gnc:make-simple-boolean-option
+          ;;(gnc-register-simple-boolean-option options
           ;;  gnc:pagename-display optname-x-grid
           ;;  "g" (N_ "Add vertical grid lines.")
           ;;  #f))
 
-          (add-option
-           (gnc:make-simple-boolean-option
+          (gnc-register-simple-boolean-option options
             gnc:pagename-display optname-markers
             "g" (N_ "Display a mark for each data point.")
-            #t))
-
+            #t)
           ))
 
     (gnc:options-set-default-section options gnc:pagename-general)
@@ -181,8 +161,7 @@
 
   ;; This is a helper function for looking up option values.
   (define (get-option section name)
-    (gnc:option-value
-     (gnc:lookup-option (gnc:report-options report-obj) section name)))
+    (gnc-optiondb-lookup-value (gnc:report-options report-obj) section name))
 
   (gnc:report-starting "INC/EXP & A/L Charts")
   (let* ((to-date-t64 (gnc:time64-end-day-time

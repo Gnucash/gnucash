@@ -70,17 +70,14 @@ date point, a projected minimum balance including scheduled transactions."))
 
 ; Options generator
 (define (options-generator)
-  (let* ((options (gnc:new-options)))
+  (let* ((options (gnc-new-optiondb)))
     ; Account selector
-    (gnc:register-option options
-      (gnc:make-account-list-option
+    (gnc-register-account-list-option options
         gnc:pagename-accounts optname-accounts "a" opthelp-accounts
-        (lambda ()
-          (gnc:filter-accountlist-type
-            (list ACCT-TYPE-BANK ACCT-TYPE-CASH)
-            (gnc-account-get-descendants-sorted
-              (gnc-get-current-root-account))))
-        #f #t))
+        (gnc:filter-accountlist-type
+         (list ACCT-TYPE-BANK ACCT-TYPE-CASH)
+         (gnc-account-get-descendants-sorted
+          (gnc-get-current-root-account))))
 
     ; Date range
     (gnc:options-add-date-interval! options
@@ -100,29 +97,29 @@ date point, a projected minimum balance including scheduled transactions."))
       optname-plot-width optname-plot-height "a"
       (cons 'percent 100.0) (cons 'percent 100.0))
     ; Markers
-    (gnc:register-option options (gnc:make-simple-boolean-option
-      gnc:pagename-display optname-show-markers "b" opthelp-show-markers #f))
+    (gnc-register-simple-boolean-option options
+      gnc:pagename-display optname-show-markers "b" opthelp-show-markers #f)
     ; Reserve line
-    (gnc:register-option options (gnc:make-complex-boolean-option
-      gnc:pagename-display optname-show-reserve "c" opthelp-show-reserve #f #f
+    (gnc-register-complex-boolean-option options
+      gnc:pagename-display optname-show-reserve "c" opthelp-show-reserve #f
       (lambda (x)
-        (gnc-option-db-set-option-selectable-by-name
-         options gnc:pagename-display optname-reserve x))))
-    (gnc:register-option options (gnc:make-number-range-option
+        (gnc-optiondb-set-option-selectable-by-name
+         options gnc:pagename-display optname-reserve x)))
+    (gnc-register-number-range-option options
       gnc:pagename-display optname-reserve "d" opthelp-reserve
-      0 -10E9 10E9 2 0.01))
+      0 -10E9 10E9 0.01)
     ; Purchasing power target
-    (gnc:register-option options (gnc:make-complex-boolean-option
-      gnc:pagename-display optname-show-target "e" opthelp-show-target #f #f
+    (gnc-register-complex-boolean-option options
+      gnc:pagename-display optname-show-target "e" opthelp-show-target #f
       (lambda (x)
-        (gnc-option-db-set-option-selectable-by-name
-         options gnc:pagename-display optname-target x))))
-    (gnc:register-option options (gnc:make-number-range-option
+        (gnc-optiondb-set-option-selectable-by-name
+         options gnc:pagename-display optname-target x)))
+    (gnc-register-number-range-option options
       gnc:pagename-display optname-target "f" opthelp-target
-      0 -10E9 10E9 2 0.01))
+      0 -10E9 10E9 0.01)
     ; Future minimum
-    (gnc:register-option options (gnc:make-simple-boolean-option
-      gnc:pagename-display optname-show-minimum "g" opthelp-show-minimum #f))
+    (gnc-register-simple-boolean-option options
+      gnc:pagename-display optname-show-minimum "g" opthelp-show-minimum #f)
     (gnc:options-set-default-section options gnc:pagename-general)
     options)
 )
@@ -131,8 +128,8 @@ date point, a projected minimum balance including scheduled transactions."))
 (define (document-renderer report-obj)
   ; Option-getting helper function.
   (define (get-option pagename optname)
-    (gnc:option-value
-      (gnc:lookup-option (gnc:report-options report-obj) pagename optname)))
+    (gnc-optiondb-lookup-value
+      (gnc:report-options report-obj) pagename optname))
   (define report-title
     (get-option gnc:pagename-general gnc:optname-reportname))
 

@@ -421,27 +421,22 @@ not found.")))
              (gnc:report-name report)))))
 
 (define (gnc:report-name report)
-  (let* ((opt (gnc:report-options report)))
+  (let* ((opt (gnc:optiondb (gnc:report-options report))))
     (and opt
-         (gnc:option-value
-          (gnc:lookup-option opt gnc:pagename-general gnc:optname-reportname)))))
+         (gnc-optiondb-lookup-value opt gnc:pagename-general gnc:optname-reportname))))
 
 (define (gnc:report-stylesheet report)
   (gnc:html-style-sheet-find
-   (symbol->string (gnc:option-value
-                    (gnc:lookup-option
-                     (gnc:report-options report)
+   (symbol->string (gnc-optiondb-lookup-value
+                    (gnc:optiondb (gnc:report-options report))
                      gnc:pagename-general
-                     gnc:optname-stylesheet)))))
+                     gnc:optname-stylesheet))))
 
 (define (gnc:report-set-stylesheet! report stylesheet)
-  (gnc:option-set-value
-   (gnc:lookup-option
-    (gnc:report-options report)
-    gnc:pagename-general
-    gnc:optname-stylesheet)
-   (string->symbol
-    (gnc:html-style-sheet-name stylesheet))))
+  (gnc-set-value
+   (gnc:optiondb (gnc:report-options report))
+   gnc:pagename-general gnc:optname-stylesheet
+   (string->symbol (gnc:html-style-sheet-name stylesheet))))
 
 
 ;; Load and save helper functions
@@ -566,8 +561,8 @@ not found.")))
              "      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
              "      (let*\n"
              "        (\n"
-             "          (option (gnc:lookup-option options \"__general\" \"report-list\"))\n"
-             "          (saved-report-list (gnc:option-value option))\n"
+             "          (option (gnc-lookup-option (gnc:optiondb options) \"__general\" \"report-list\"))\n"
+             "          (saved-report-list (GncOption-set-value option))\n"
              "        )\n"
              "        (\n"
              "          (lambda (option)\n"
@@ -753,9 +748,9 @@ not found.")))
 
 ;; return the list of reports embedded in the specified report
 (define (gnc:report-embedded-list options)
-  (let* ((option (gnc:lookup-option options "__general" "report-list")))
+  (let* ((option (gnc-lookup-option (gnc:optiondb options) "__general" "report-list")))
     (and option
-         (let ((opt-value (gnc:option-value option)))
+         (let ((opt-value (GncOption-get-value option)))
            (map car opt-value)))))
 
 ;; delete an existing report from the hash table and then call to

@@ -142,13 +142,12 @@
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (accsum-options-generator sx? reportname)
-  (let* ((options (gnc:new-options))
-         (odb (gnc:optiondb options)))
+  (let* ((options (gnc-new-optiondb)))
 
-   (gnc-register-string-option odb
+   (gnc-register-string-option options
       gnc:pagename-general optname-report-title
       "a" opthelp-report-title (G_ reportname))
-   (gnc-register-string-option odb
+   (gnc-register-string-option options
       gnc:pagename-general optname-party-name
       "b" opthelp-party-name "")
     ;; this should default to company name in (gnc-get-current-book)
@@ -163,7 +162,7 @@
          options gnc:pagename-general optname-date "c"))
 
     ;; accounts to work on
-   (gnc-register-account-list-option odb
+   (gnc-register-account-list-option options
       gnc:pagename-accounts optname-accounts
       "a"
       opthelp-accounts
@@ -179,7 +178,7 @@
      options gnc:pagename-accounts optname-depth-limit
      "b" opthelp-depth-limit 3)
 
-   (gnc-register-multichoice-option odb
+   (gnc-register-multichoice-option options
       gnc:pagename-accounts optname-bottom-behavior
       "c" opthelp-bottom-behavior "summarize"
       (list
@@ -196,19 +195,19 @@
      options pagename-commodities
      optname-price-source "b" 'pricedb-nearest)
 
-   (gnc-register-simple-boolean-option odb
+   (gnc-register-simple-boolean-option options
       pagename-commodities optname-show-foreign
       "c" opthelp-show-foreign #t)
 
-   (gnc-register-simple-boolean-option odb
+   (gnc-register-simple-boolean-option options
       pagename-commodities optname-show-rates
       "d" opthelp-show-rates #f)
 
     ;; what to show for zero-balance accounts
-   (gnc-register-simple-boolean-option odb
+   (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-show-zb-accts
       "a" opthelp-show-zb-accts #t)
-   (gnc-register-simple-boolean-option odb
+   (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-omit-zb-bals
       "b" opthelp-omit-zb-bals #f)
     ;; what to show for non-leaf accounts
@@ -218,26 +217,26 @@
      "c")
 
     ;; some detailed formatting options
-    (gnc-register-simple-boolean-option odb
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-account-links
       "e" opthelp-account-links #t)
-    (gnc-register-simple-boolean-option odb
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-use-rules
       "f" opthelp-use-rules #f)
 
-    (gnc-register-simple-boolean-option odb
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-show-bals
       "g" opthelp-show-bals #t)
-    (gnc-register-simple-boolean-option odb
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-show-code
       "h" opthelp-show-code #t)
-    (gnc-register-simple-boolean-option odb
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-show-desc
       "i" opthelp-show-desc #f)
-    (gnc-register-simple-boolean-option odb
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-show-type
       "j" opthelp-show-type #f)
-    (gnc-register-simple-boolean-option odb
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-show-notes
       "k" opthelp-show-notes #f)
 
@@ -252,9 +251,8 @@
 
 (define (accsum-renderer report-obj sx? reportname)
   (define (get-option pagename optname)
-    (gnc:option-value
-     (gnc:lookup-option
-      (gnc:report-options report-obj) pagename optname)))
+    (gnc-optiondb-lookup-value
+      (gnc:report-options report-obj) pagename optname))
 
   (gnc:report-starting reportname)
 

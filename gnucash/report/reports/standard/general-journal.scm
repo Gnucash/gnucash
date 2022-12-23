@@ -46,8 +46,8 @@
          (query (qof-query-create-for-splits)))
 
     (define (set-option! section name value)
-      (gnc:option-set-default-value
-       (gnc:lookup-option options section name) value))
+      (GncOption-set-default-value
+       (gnc-lookup-option (gnc:optiondb options) section name) value))
 
     ;; Match, by default, all non-void transactions ever recorded in
     ;; all accounts....  Whether or not to match void transactions,

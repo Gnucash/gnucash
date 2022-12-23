@@ -98,20 +98,15 @@
 
 ;; options generator
 (define (equity-statement-options-generator)
-  (let* ((options (gnc:new-options))
-         (book (gnc-get-current-book)) ; XXX Find a way to get the book that opened the report
-         (add-option 
-          (lambda (new-option)
-            (gnc:register-option options new-option))))
+  (let* ((options (gnc-new-optiondb))
+         (book (gnc-get-current-book)))
     
-    (add-option
-      (gnc:make-string-option
+    (gnc-register-string-option options
       (N_ "General") optname-report-title
-      "a" opthelp-report-title (G_ reportname)))
-    (add-option
-      (gnc:make-string-option
+      "a" opthelp-report-title (G_ reportname))
+    (gnc-register-string-option options
       (N_ "General") optname-party-name
-      "b" opthelp-party-name (or (gnc:company-info book gnc:*company-name*) "")))
+      "b" opthelp-party-name (or (gnc:company-info book gnc:*company-name*) ""))
     
     ;; date at which to report balance
     (gnc:options-add-date-interval!
@@ -119,13 +114,11 @@
      optname-start-date optname-end-date "c")
     
     ;; accounts to work on
-    (add-option
-     (gnc:make-account-list-option
+    (gnc-register-account-list-option options
       gnc:pagename-accounts optname-accounts
       "a"
       opthelp-accounts
-      (lambda ()
-	(gnc:filter-accountlist-type 
+      (gnc:filter-accountlist-type 
          (list ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CREDIT
                ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY
                ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
@@ -133,7 +126,6 @@
                ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE
                ACCT-TYPE-TRADING)
          (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
-      #f #t))
     
     ;; all about currencies
     (gnc:options-add-currency!
@@ -144,38 +136,32 @@
      options pagename-commodities
      optname-price-source "b" 'pricedb-nearest)
     
-    (add-option 
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       pagename-commodities optname-show-foreign 
-      "c" opthelp-show-foreign #t))
+      "c" opthelp-show-foreign #t)
     
-    (add-option 
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       pagename-commodities optname-show-rates
-      "d" opthelp-show-rates #f))
+      "d" opthelp-show-rates #f)
     
     ;; some detailed formatting options
-    (add-option 
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-use-rules
-      "f" opthelp-use-rules #f))
+      "f" opthelp-use-rules #f)
     
     ;; closing entry match criteria
     ;; 
     ;; N.B.: transactions really should have a field where we can put
     ;; transaction types like "Adjusting/Closing/Correcting Entries"
-    (add-option
-      (gnc:make-string-option
+    (gnc-register-string-option options
       pagename-entries optname-closing-pattern
-      "a" opthelp-closing-pattern (G_ "Closing Entries")))
-    (add-option
-     (gnc:make-simple-boolean-option
+      "a" opthelp-closing-pattern (G_ "Closing Entries"))
+    (gnc-register-simple-boolean-option options
       pagename-entries optname-closing-casing
-      "b" opthelp-closing-casing #f))
-    (add-option
-     (gnc:make-simple-boolean-option
+      "b" opthelp-closing-casing #f)
+    (gnc-register-simple-boolean-option options
       pagename-entries optname-closing-regexp
-      "c" opthelp-closing-regexp #f))
+      "c" opthelp-closing-regexp #f)
     
     ;; Set the accounts page as default option tab
     (gnc:options-set-default-section options gnc:pagename-accounts)
@@ -209,9 +195,8 @@
 
 (define (equity-statement-renderer report-obj)
   (define (get-option pagename optname)
-    (gnc:option-value
-     (gnc:lookup-option 
-      (gnc:report-options report-obj) pagename optname)))
+    (gnc-optiondb-lookup-value
+      (gnc:report-options report-obj) pagename optname))
   
   (gnc:report-starting reportname)
   

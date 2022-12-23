@@ -77,10 +77,7 @@ commissions in cumulative average cost and gain/loss after commission")
 the split action field to detect capitalized fees on stock activity")
 
 (define (options-generator)
-  (let ((options (gnc:new-options)))
-
-    (define (add-option new-option)
-      (gnc:register-option options new-option))
+  (let ((options (gnc-new-optiondb)))
 
     (gnc:options-add-date-interval!
      options gnc:pagename-general optname-startdate optname-enddate " ")
@@ -88,46 +85,37 @@ the split action field to detect capitalized fees on stock activity")
     (gnc:options-add-currency!
      options gnc:pagename-general optname-report-currency "a")
 
-    (add-option
-     (gnc:make-account-sel-limited-option
+    (gnc-register-account-sel-limited-option options
       gnc:pagename-general optname-stock-acct "b" "Stock Account"
-      #f #f (list ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL)))
+      '() (list ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL))
 
-    (add-option
-     (gnc:make-account-sel-limited-option
+    (gnc-register-account-sel-limited-option options
       gnc:pagename-general optname-proceeds-acct "c" "Proceeds Account"
-      #f #f (list ACCT-TYPE-ASSET ACCT-TYPE-BANK)))
+      '() (list ACCT-TYPE-ASSET ACCT-TYPE-BANK))
 
-    (add-option
-     (gnc:make-account-sel-limited-option
+    (gnc-register-account-sel-limited-option options
       gnc:pagename-general optname-dividend-acct "c" "Dividend Account"
-      #f #f (list ACCT-TYPE-INCOME)))
+      '() (list ACCT-TYPE-INCOME))
 
-    (add-option
-     (gnc:make-account-sel-limited-option
+    (gnc-register-account-sel-limited-option options
       gnc:pagename-general optname-capgains-acct "d" "Cap Gains Account"
-      #f #f (list ACCT-TYPE-INCOME)))
+      '() (list ACCT-TYPE-INCOME))
 
-    (add-option
-     (gnc:make-account-sel-limited-option
+    (gnc-register-account-sel-limited-option options
       gnc:pagename-general optname-fees-acct "c5" "Fees Account"
-      #f #f (list ACCT-TYPE-EXPENSE)))
+      '() (list ACCT-TYPE-EXPENSE))
 
-    (add-option
-     (gnc:make-string-option
-      gnc:pagename-general optname-cap-fee-action "d5" opthelp-cap-fee-action "Fee"))
+    (gnc-register-string-option options
+      gnc:pagename-general optname-cap-fee-action "d5" opthelp-cap-fee-action "Fee")
 
-    (add-option
-     (gnc:make-simple-boolean-option
-      gnc:pagename-general optname-format-cells "e" opthelp-format-cells #t))
+    (gnc-register-simple-boolean-option options
+      gnc:pagename-general optname-format-cells "e" opthelp-format-cells #t)
 
-    (add-option
-     (gnc:make-simple-boolean-option
-      gnc:pagename-general optname-format-short "f" opthelp-format-short #t))
+    (gnc-register-simple-boolean-option options
+      gnc:pagename-general optname-format-short "f" opthelp-format-short #t)
 
-    (add-option
-     (gnc:make-simple-boolean-option
-      gnc:pagename-general optname-cap-purch-costs "g" opthelp-cap-purch-costs #t))
+    (gnc-register-simple-boolean-option options
+      gnc:pagename-general optname-cap-purch-costs "g" opthelp-cap-purch-costs #t)
 
     options))
 
@@ -297,8 +285,8 @@ the split action field to detect capitalized fees on stock activity")
 
 (define (ifrs-cost-basis-renderer report-obj)
   (define (opt-val section name)
-    (gnc:option-value
-     (gnc:lookup-option (gnc:report-options report-obj) section name)))
+    (gnc-optiondb-lookup-value
+     (gnc:report-options report-obj) section name))
 
   (define opt-startdate (opt-val gnc:pagename-general optname-startdate))
   (define opt-enddate   (opt-val gnc:pagename-general optname-enddate))

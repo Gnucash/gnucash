@@ -94,10 +94,7 @@ developing over time"))
 (define opthelp-averaging (N_ "Select whether the amounts should be shown over the full time period or rather as the average e.g. per month."))
 
 (define (options-generator account-types do-intervals?)
-  (let* ((options (gnc:new-options))
-         (add-option
-          (lambda (new-option)
-            (gnc:register-option options new-option))))
+  (let* ((options (gnc-new-optiondb)))
 
     ;; General tab
     (gnc:options-add-date-interval!
@@ -115,31 +112,25 @@ developing over time"))
      optname-price-source "d" 'weighted-average)
 
     (if do-intervals?
-        (add-option
-         (gnc:make-multichoice-option
+        (gnc-register-multichoice-option options
           gnc:pagename-general optname-averaging
           "e" opthelp-averaging
-          'None
+          "None"
           (list (vector 'None (N_ "No Averaging"))
                 (vector 'MonthDelta (N_ "Monthly"))
                 (vector 'WeekDelta (N_ "Weekly"))
-                (vector 'DayDelta (N_ "Daily"))))))
+                (vector 'DayDelta (N_ "Daily")))))
 
 
     ;; Accounts tab
-    (add-option
-     (gnc:make-account-list-option
+    (gnc-register-account-list-limited-option options
       gnc:pagename-accounts optname-accounts
       "a"
       (N_ "Report on these accounts, if chosen account level allows.")
-      (lambda ()
-        (gnc:filter-accountlist-type
+      (gnc:filter-accountlist-type
          account-types
-         (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
-      (lambda (accounts)
-        (list #t
-              (gnc:filter-accountlist-type account-types accounts)))
-      #t))
+         (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
+      account-types)
 
     (gnc:options-add-account-levels!
      options gnc:pagename-accounts optname-levels "c"
@@ -147,47 +138,41 @@ developing over time"))
      2)
 
     ;; Display tab
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-fullname
-      "a" (N_ "Show the full account name in legend?") #f))
+      "a" (N_ "Show the full account name in legend?") #f)
 
-    (add-option
-     (gnc:make-multichoice-option
+    (gnc-register-multichoice-option options
       gnc:pagename-display optname-chart-type
       "b" "Select which chart type to use."
-      'barchart
+      "barchart"
       (list (vector 'barchart (N_ "Bar Chart"))
-            (vector 'linechart (N_ "Line Chart")))))
+            (vector 'linechart (N_ "Line Chart"))))
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-stacked
       "c"
       (N_ "Show charts as stacked charts?")
-      #t))
+      #t)
 
-    (add-option
-     (gnc:make-number-range-option
+    (gnc-register-number-range-option options
       gnc:pagename-display optname-slices
       "d" (N_ "Maximum number of stacks in the chart.") 8
-      2 24 0 1))
+      2 24 1)
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display
       (N_ "Show table")
       "e" (N_ "Display a table of the selected data.")
-      #f))
+      #f)
 
     ;; contributed by https://github.com/exxus
     ;; https://github.com/Gnucash/gnucash/pull/1272
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display
       (N_ "Percentage chart")
       "e1" (N_ "Display account contributions as a percentage of the total value for the period.")
-      #f))
+      #f)
 
     (gnc:options-add-plot-size!
      options gnc:pagename-display
@@ -218,9 +203,7 @@ developing over time"))
                                     export-type)
   ;; A helper functions for looking up option values.
   (define (get-option section name)
-    (gnc:option-value
-     (gnc:lookup-option
-      (gnc:report-options report-obj) section name)))
+    (gnc-option-value (gnc:report-options report-obj) section name))
 
   (gnc:report-starting reportname)
   (let* ((to-date-t64 (gnc:time64-end-day-time
@@ -567,10 +550,9 @@ Please deselect the accounts with negative balances."))
                     (gnc:options-copy-values
                      (gnc:report-options report-obj) options)
                     ;; and set the destination accounts
-                    (gnc:option-set-value
-                     (gnc:lookup-option options gnc:pagename-accounts
-                                        optname-accounts)
-                     (map car finish))
+                    (gnc-set-option options gnc:pagename-accounts
+                                    optname-accounts
+                                    (map car finish))
                     ;; Set the URL to point to this report.
                     (set! other-anchor
                       (gnc:report-anchor-text
@@ -745,4 +727,3 @@ Please deselect the accounts with negative balances."))
         (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE ACCT-TYPE-CREDIT
               ACCT-TYPE-CREDITLINE)
         #f menuname-liabilities menutip-liabilities #t category-barchart-liability-uuid)))
-

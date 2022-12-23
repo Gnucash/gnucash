@@ -189,59 +189,66 @@
 
 ;; options generator
 (define (balsheet-options-generator)
-  (let* ((options (gnc:new-options))
-         (add-option
-           (lambda (new-option)
-             (gnc:register-option options new-option))))
+  (let* ((options (gnc-new-optiondb)))
 
     ;; Accounts options
-    (add-option (gnc:make-simple-boolean-option accounts-page optname-omit-zb-accts
-                                                "a" opthelp-omit-zb-accts #f))
-    (add-option (gnc:make-simple-boolean-option accounts-page optname-account-links
-                                                "b" opthelp-account-links #t))
+    (gnc-register-simple-boolean-option options
+                                        accounts-page optname-omit-zb-accts
+                                        "a" opthelp-omit-zb-accts #f)
+    (gnc-register-simple-boolean-option  options
+                                         accounts-page optname-account-links
+                                         "b" opthelp-account-links #t)
     (gnc:options-add-account-levels!  options accounts-page optname-depth-limit
                                       "c" opthelp-depth-limit 'all)
-    (add-option (gnc:make-simple-boolean-option accounts-page optname-flatten?
-                                                "d" opthelp-flatten? #f))
+    (gnc-register-simple-boolean-option options
+                                        accounts-page optname-flatten?
+                                        "d" opthelp-flatten? #f)
 
     ;; Commodity options
     (gnc:options-add-currency! options commodities-page optname-report-commodity "a")
     (gnc:options-add-price-source!  options commodities-page
                                     optname-price-source "b" 'average-cost)
-    (add-option (gnc:make-simple-boolean-option commodities-page optname-show-foreign
-                                                "c" opthelp-show-foreign #t))
+    (gnc-register-simple-boolean-option options
+                                        commodities-page optname-show-foreign
+                                        "c" opthelp-show-foreign #t)
 
     ;; Display options
-    (add-option (gnc:make-multichoice-option
-                  display-page optname-columns
-                  "a" opthelp-columns 'onecol
-                  (list (vector 'autocols (N_ "Adjust the layout to fit the width of the screen or page"))
-                        (vector 'onecol (N_ "Display liabilities and equity below assets"))
-                        (vector 'twocols (N_ "Display assets on the left, liabilities and equity on the right")))))
-    (add-option (gnc:make-multichoice-option
-                  display-page optname-neg-format
-                  "b" opthelp-neg-format 'negsign
-                  (list (vector 'negsign (N_ "Sign: -$10.00"))
-                        (vector 'negbrackets (N_ "Brackets: ($10.00)")))))
+    (gnc-register-multichoice-option options
+                                     display-page optname-columns
+                                     "a" opthelp-columns "onecol"
+                                     (list (vector 'autocols (N_ "Adjust the layout to fit the width of the screen or page"))
+                                           (vector 'onecol (N_ "Display liabilities and equity below assets"))
+                                           (vector 'twocols (N_ "Display assets on the left, liabilities and equity on the right"))))
+    (gnc-register-multichoice-option options
+                                     display-page optname-neg-format
+                                     "b" opthelp-neg-format "negsign"
+                                     (list (vector 'negsign (N_ "Sign: -$10.00"))
+                                           (vector 'negbrackets (N_ "Brackets: ($10.00)"))))
 
-    (add-option (gnc:make-string-option display-page optname-font-family "c"
-                                        opthelp-font-family "sans"))
-    (add-option (gnc:make-string-option display-page optname-font-size "d"
-                                        opthelp-font-size "medium"))
-    (add-option (gnc:make-string-option display-page optname-template-file "e"
-                                        opthelp-template-file "balsheet-eg.eguile.scm"))
-    (add-option (gnc:make-string-option display-page optname-css-file "f"
-                                        opthelp-css-file "balsheet-eg.css"))
+    (gnc-register-string-option options
+                                display-page optname-font-family "c"
+                                opthelp-font-family "sans")
+    (gnc-register-string-option options
+                                display-page optname-font-size "d"
+                                opthelp-font-size "medium")
+    (gnc-register-string-option options
+                                display-page optname-template-file "e"
+                                opthelp-template-file "balsheet-eg.eguile.scm")
+    (gnc-register-string-option options
+                                display-page optname-css-file "f"
+                                opthelp-css-file "balsheet-eg.css")
 
     ;; General options
-    (add-option (gnc:make-string-option general-page optname-report-title
-                                        "a" opthelp-report-title reportname))
+    (gnc-register-string-option options
+                                general-page optname-report-title
+                                "a" opthelp-report-title reportname)
     (gnc:options-add-report-date!  options general-page optname-date "b")
 
     ;; Notes options
-    (add-option (gnc:make-text-option notes-page optname-extra-notes
-                                      "a" opthelp-extra-notes
-                                      (N_ "(Development version -- don't rely on the numbers on this report without double-checking them.<br>Change the 'Extra Notes' option to get rid of this message)")))
+    (gnc-register-text-option options
+                              notes-page optname-extra-notes
+                              "a" opthelp-extra-notes
+                              (N_ "(Development version -- don't rely on the numbers on this report without double-checking them.<br>Change the 'Extra Notes' option to get rid of this message)"))
 
     ;; Set the accounts page as default option tab
     (gnc:options-set-default-section options general-page)
@@ -253,9 +260,8 @@
 (define (balsheet-renderer report-obj)
 
   (define (get-option pagename optname)
-    (gnc:option-value
-      (gnc:lookup-option
-        (gnc:report-options report-obj) pagename optname)))
+    (gnc-optiondb-lookup-value
+        (gnc:report-options report-obj) pagename optname))
 
   (gnc:report-starting reportname)
   (let* (

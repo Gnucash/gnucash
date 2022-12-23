@@ -66,88 +66,85 @@
 
 (define (options-generator)
   ;; Options
-  (define report-options (gnc:new-options))
-  (define (add-option new-option)
-    (gnc:register-option report-options new-option))
+  (let ((options (gnc-new-optiondb)))
 
-  (add-option
-    (gnc:make-invoice-option ; defined in gnucash/scm/business-options.scm
-      generalpage gnc:optname-invoice-number
-      "a" "" (lambda () '()) #f))
+  (gnc-register-invoice-option
+   options generalpage gnc:optname-invoice-number "a" ""  '())
 
   ;; Display options
-  (add-option (gnc:make-string-option displaypage optname-template-file "a"
-    (N_ "The file name of the eguile template part of this report. This file should either be in your .gnucash directory, or else in its proper place within the GnuCash installation directories.")
-    "receipt.eguile.scm"))
-  (add-option (gnc:make-string-option displaypage optname-css-file "b"
+  (gnc-register-string-option
+   options displaypage optname-template-file "a"
+   (N_ "The file name of the eguile template part of this report. This file should either be in your .gnucash directory, or else in its proper place within the GnuCash installation directories.")
+    "receipt.eguile.scm")
+  (gnc-register-string-option options
+    displaypage optname-css-file "b"
     (N_ "The file name of the CSS stylesheet to use with this report. This file should either be in your .gnucash directory, or else in its proper place within the GnuCash installation directories.")
-    "receipt.css"))
-  (add-option (gnc:make-font-option
+    "receipt.css")
+  (gnc-register-font-option options
                 displaypage optname-heading-font "c"
-                (N_ "Font to use for the main heading.") "Sans Bold 14"))
-  (add-option (gnc:make-font-option
+                (N_ "Font to use for the main heading.") "Sans Bold 14")
+  (gnc-register-font-option options
                 displaypage optname-text-font "d"
-                (N_ "Font to use for everything else.") "Sans 10"))
-  (add-option (gnc:make-pixmap-option
+                (N_ "Font to use for everything else.") "Sans 10")
+  (gnc-register-pixmap-option options
                 displaypage optname-logofile-header "e"
                 (N_ "Name of a file containing a logo to be used on the header of the report")
-                "Receipt_header.jpg"))
-  (add-option (gnc:make-string-option
-                displaypage optname-logo-width-header "f" (N_ "Width of the header logo in CSS format, e.g. 10% or 32px. Leave blank to display the logo at its natural width. The height of the logo will be scaled accordingly.") "72mm"))
-  (add-option (gnc:make-pixmap-option
+                "Receipt_header.jpg")
+  (gnc-register-string-option options
+                displaypage optname-logo-width-header "f" (N_ "Width of the header logo in CSS format, e.g. 10% or 32px. Leave blank to display the logo at its natural width. The height of the logo will be scaled accordingly.") "72mm")
+  (gnc-register-pixmap-option options
                 displaypage optname-logofile-footer "g"
                 (N_ "Name of a file containing a logo to be used on the footer of the report")
-                "Receipt_footer.jpg"))
-  (add-option (gnc:make-string-option
-                displaypage optname-logo-width-footer "h" (N_ "Width of the footer logo in CSS format, e.g. 10% or 32px. Leave blank to display the logo at its natural width. The height of the logo will be scaled accordingly.") "72mm"))
+                "Receipt_footer.jpg")
+  (gnc-register-string-option options
+                displaypage optname-logo-width-footer "h" (N_ "Width of the footer logo in CSS format, e.g. 10% or 32px. Leave blank to display the logo at its natural width. The height of the logo will be scaled accordingly.") "72mm")
 
-  (add-option (gnc:make-string-option
+  (gnc-register-string-option options
                displaypage  optname-date-format "i"
                (N_ "The format for the date->string conversion for today's date.")
                ;; Translators: Boost::date_time format string
                ;; "%l:%M %P, %e %B %Y" means " 9:56 pm, 19 June 2019"
-               (G_ "%l:%M %P, %e %B %Y")))
+               (G_ "%l:%M %P, %e %B %Y"))
 
   ;; Heading options
-  (add-option (gnc:make-string-option
+  (gnc-register-string-option options
                 ; page / name / orderkey / tooltip / default
-                headingpage optname-report-title "a" "" (G_ "Invoice")))
-  (add-option (gnc:make-string-option
-                headingpage optname-units "b" "" (G_ "Units")))
-  (add-option (gnc:make-string-option
-                headingpage optname-qty "c" "" (G_ "Qty")))
-  (add-option (gnc:make-string-option
-                headingpage optname-unit-price "d" "" (G_ "Unit Price")))
-  (add-option (gnc:make-string-option
-                headingpage optname-disc-rate "e" "" (G_ "Discount Rate")))
-  (add-option (gnc:make-string-option
-                headingpage optname-disc-amount "f" "" (G_ "Discount Amount")))
-  (add-option (gnc:make-string-option
-                headingpage optname-net-price "g" "" (G_ "Net Price")))
-  (add-option (gnc:make-string-option
-                headingpage optname-tax-rate "h" "" (G_ "Tax Rate")))
-  (add-option (gnc:make-string-option
-                headingpage optname-tax-amount "i" "" (G_ "Tax Amount")))
-  (add-option (gnc:make-string-option
-                headingpage optname-total-price "j" "" (G_ "Total Price")))
-  (add-option (gnc:make-string-option
-                headingpage2 optname-subtotal "a" "" (G_ "Sub-total")))
-  (add-option (gnc:make-string-option
-                headingpage2 optname-amount-due "b" "" (G_ "Amount Due")))
-  (add-option (gnc:make-string-option
+                headingpage optname-report-title "a" "" (G_ "Invoice"))
+  (gnc-register-string-option options
+                headingpage optname-units "b" "" (G_ "Units"))
+  (gnc-register-string-option options
+                headingpage optname-qty "c" "" (G_ "Qty"))
+  (gnc-register-string-option options
+                headingpage optname-unit-price "d" "" (G_ "Unit Price"))
+  (gnc-register-string-option options
+                headingpage optname-disc-rate "e" "" (G_ "Discount Rate"))
+  (gnc-register-string-option options
+                headingpage optname-disc-amount "f" "" (G_ "Discount Amount"))
+  (gnc-register-string-option options
+                headingpage optname-net-price "g" "" (G_ "Net Price"))
+  (gnc-register-string-option options
+                headingpage optname-tax-rate "h" "" (G_ "Tax Rate"))
+  (gnc-register-string-option options
+                headingpage optname-tax-amount "i" "" (G_ "Tax Amount"))
+  (gnc-register-string-option options
+                headingpage optname-total-price "j" "" (G_ "Total Price"))
+  (gnc-register-string-option options
+                headingpage2 optname-subtotal "a" "" (G_ "Sub-total"))
+  (gnc-register-string-option options
+                headingpage2 optname-amount-due "b" "" (G_ "Amount Due"))
+  (gnc-register-string-option options
                 headingpage2 optname-payment-recd "c" ""
-                (G_ "Payment received, thank you!")))
+                (G_ "Payment received, thank you!"))
 
-  (add-option (gnc:make-text-option
+  (gnc-register-text-option options
                 notespage optname-extra-notes "a"
                 (N_ "Notes added at end of invoice -- may contain HTML markup")
-                ""))
+                "")
                 ;(N_ "(Development version -- don't rely on the numbers on this report without double-checking them.<br/>Change the 'Extra Notes' option to get rid of this message)")))
 
-  (gnc:options-set-default-section
-    report-options generalpage)
+  (gnc:options-set-default-section options generalpage)
 
-  report-options)
+  options))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Create the report
@@ -156,10 +153,7 @@
   ;; Create and return the report as either an HTML string
   ;; or an <html-document>
   (define (opt-value section name)
-    ; wrapper for option routines
-    (define (get-opt section name)
-      (gnc:lookup-option (gnc:report-options report-obj) section name))
-    (gnc:option-value (get-opt section name)))
+    (gnc-optiondb-lookup-value  (gnc:report-options report-obj) section name))
 
   ; Get all the options
   (let* ((document                  (gnc:make-html-document))

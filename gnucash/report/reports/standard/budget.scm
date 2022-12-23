@@ -94,19 +94,15 @@
 
 ;;List of common helper functions, that is not bound only to options generation or report evaluation
 (define (get-option-val options pagename optname)
-  (gnc:option-value
-   (gnc:lookup-option options pagename optname)))
+  (gnc-optiondb-lookup-value options pagename optname))
 
 (define (set-option-enabled options page opt-name enabled)
-  (gnc-option-db-set-option-selectable-by-name
+  (gnc-optiondb-set-option-selectable-by-name
    options page opt-name enabled))
 
 ;; options generator
 (define (budget-report-options-generator)
-  (let* ((options (gnc:new-options))
-         (add-option
-          (lambda (new-option)
-            (gnc:register-option options new-option)))
+  (let* ((options (gnc-new-optiondb))
          (period-options
           (list (vector 'first (N_ "First budget period"))
                 (vector 'previous (N_ "Previous budget period"))
@@ -118,21 +114,18 @@
          (ui-start-period-type 'current)
          (ui-end-period-type 'next))
 
-    (gnc:register-option
-     options
-     (gnc:make-budget-option
+    (gnc-register-budget-option options
       gnc:pagename-general optname-budget
-      "a" (N_ "Budget to use.")))
+      "a" (N_ "Budget to use.")
+      (gnc-budget-get-default (gnc-get-current-book)))
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-general optname-accumulate
-      "b" opthelp-accumulate #f))
+      "b" opthelp-accumulate #f)
 
-    (add-option
-     (gnc:make-complex-boolean-option
+    (gnc-register-complex-boolean-option options
       gnc:pagename-general optname-use-budget-period-range
-      "f" opthelp-use-budget-period-range #f #f
+      "f" opthelp-use-budget-period-range #f
       (lambda (value)
         (for-each
          (lambda (opt)
@@ -148,56 +141,50 @@
                             optname-budget-period-end-exact
                             (and value (eq? 'manual ui-end-period-type)))
 
-        (set! ui-use-periods value))))
+        (set! ui-use-periods value)))
 
-    (add-option
-     (gnc:make-multichoice-callback-option
+    (gnc-register-multichoice-callback-option options
       gnc:pagename-general optname-budget-period-start
-      "g1.1" opthelp-budget-period-start 'current period-options #f
+      "g1.1" opthelp-budget-period-start "current" period-options
       (lambda (new-val)
         (set-option-enabled options gnc:pagename-general
                             optname-budget-period-start-exact
                             (and ui-use-periods (eq? 'manual new-val)))
-        (set! ui-start-period-type new-val))))
+        (set! ui-start-period-type new-val)))
 
-    (add-option
-     (gnc:make-number-range-option
+    (gnc-register-number-range-option options
       gnc:pagename-general optname-budget-period-start-exact
       "g1.2" opthelp-budget-period-start-exact
       ;; FIXME: It would be nice if the max number of budget periods (60) was
       ;; defined globally somewhere so we could reference it here.  However, it
       ;; only appears to be defined currently in src/gnome/glade/budget.glade.
-      1 1 60 0 1))
+      1 1 60 1)
 
-    (add-option
-     (gnc:make-multichoice-callback-option
+    (gnc-register-multichoice-callback-option options
       gnc:pagename-general optname-budget-period-end
-      "g2.1" opthelp-budget-period-end 'next period-options #f
+      "g2.1" opthelp-budget-period-end "next" period-options
       (lambda (new-val)
         (set-option-enabled options gnc:pagename-general
                             optname-budget-period-end-exact
                             (and ui-use-periods (eq? 'manual new-val)))
-        (set! ui-end-period-type new-val))))
+        (set! ui-end-period-type new-val)))
 
-    (add-option
-     (gnc:make-number-range-option
+    (gnc-register-number-range-option options
       gnc:pagename-general optname-budget-period-end-exact
       "g2.2" opthelp-budget-period-end-exact
       ;; FIXME: It would be nice if the max number of budget periods (60) was
       ;; defined globally somewhere so we could reference it here.  However, it
       ;; only appears to be defined currently in src/gnome/glade/budget.glade.
-      1 1 60 0 1))
+      1 1 60 1)
     ;; accounts to work on
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-general optname-period-collapse-before
-      "g3" opthelp-period-collapse-before #t))
+      "g3" opthelp-period-collapse-before #t)
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-general optname-period-collapse-after
-      "g4" opthelp-period-collapse-after #t))
+      "g4" opthelp-period-collapse-after #t)
 
     (gnc:options-add-account-selection!
      options gnc:pagename-accounts optname-display-depth
@@ -209,38 +196,31 @@
         (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
      #f)
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-accounts optname-bottom-behavior
-      "c" opthelp-bottom-behavior #f))
+      "c" opthelp-bottom-behavior #f)
 
     ;; columns to display
-    (add-option
-     (gnc:make-complex-boolean-option
+    (gnc-register-complex-boolean-option options
       gnc:pagename-display optname-show-budget
-      "s1" opthelp-show-budget #t #f
+      "s1" opthelp-show-budget #t
       (lambda (x)
-        (set-option-enabled options gnc:pagename-display optname-show-notes x))))
-    (add-option
-     (gnc:make-simple-boolean-option
+        (set-option-enabled options gnc:pagename-display optname-show-notes x)))
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-show-notes
-      "s15" opthelp-show-notes #t))
-    (add-option
-     (gnc:make-simple-boolean-option
+      "s15" opthelp-show-notes #t)
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-show-actual
-      "s2" opthelp-show-actual #t))
-    (add-option
-     (gnc:make-simple-boolean-option
+      "s2" opthelp-show-actual #t)
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-show-difference
-      "s3" opthelp-show-difference #f))
-    (add-option
-     (gnc:make-simple-boolean-option
+      "s3" opthelp-show-difference #f)
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-show-totalcol
-      "s4" opthelp-show-totalcol #f))
-    (add-option
-     (gnc:make-simple-boolean-option
+      "s4" opthelp-show-totalcol #f)
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-show-zb-accounts
-      "s5" opthelp-show-zb-accounts #t))
+      "s5" opthelp-show-zb-accounts #t)
 
     ;; Set the general page as default option tab
     (gnc:options-set-default-section options gnc:pagename-general)

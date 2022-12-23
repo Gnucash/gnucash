@@ -79,74 +79,59 @@
 
 
 (define (options-generator)
-  (define options (gnc:new-options))
-
-  (define (add-option new-option)
-    (gnc:register-option options new-option))
+  (define options (gnc-new-optiondb))
 
   (gnc:options-add-date-interval!
    options gnc:pagename-general optname-from-date optname-to-date "b")
 
-  (add-option
-   (gnc:make-account-list-option
+  (gnc-register-account-list-option options
     pagename-incomeaccounts optname-incomeaccounts
     "b" opthelp-incomeaccounts
-    (lambda ()
-      (gnc:filter-accountlist-type
-       (list ACCT-TYPE-INCOME)
-       (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
-    #f #t))
+    (gnc:filter-accountlist-type
+     (list ACCT-TYPE-INCOME)
+     (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
 
-  (add-option
-   (gnc:make-account-list-option
+  (gnc-register-account-list-option options
     pagename-expenseaccounts optname-expenseaccounts
     "b" opthelp-expenseaccounts
-    (lambda ()
-      (gnc:filter-accountlist-type
-       (list ACCT-TYPE-EXPENSE)
-       (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
-    #f #t))
+    (gnc:filter-accountlist-type
+     (list ACCT-TYPE-EXPENSE)
+     (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
 
-  (add-option
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option options
     gnc:pagename-display optname-sortkey
     "a" opthelp-sortkey
-    'customername
+    "customername"
     (list
      (vector 'customername (N_ "Customer Name"))
      (vector 'profit (N_ "Profit"))
      (vector 'markup (N_ "Markup (which is profit amount divided by sales)"))
      (vector 'sales (N_ "Sales"))
-     (vector 'expense (N_ "Expense")))))
+     (vector 'expense (N_ "Expense"))))
 
-  (add-option
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option options
     gnc:pagename-display optname-sortascending
     "b" opthelp-sortascending
-    'ascend
+    "ascend"
     (list
      (vector 'ascend (N_ "Ascending"))
-     (vector 'descend (N_ "Descending")))))
+     (vector 'descend (N_ "Descending"))))
 
-  (add-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     gnc:pagename-display optname-show-own-address
-    "d" opthelp-show-own-address #t))
+    "d" opthelp-show-own-address #t)
 
-  (add-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     gnc:pagename-display optname-show-zero-lines
-    "e" opthelp-show-zero-lines #f))
+    "e" opthelp-show-zero-lines #f)
 
-  (add-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     gnc:pagename-display optname-show-inactive
-    "f" opthelp-show-inactive #f))
+    "f" opthelp-show-inactive #f)
 
-  (add-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     gnc:pagename-display optname-show-column-expense
-    "g" opthelp-show-column-expense #t))
+    "g" opthelp-show-column-expense #t)
 
   (gnc:options-set-default-section options gnc:pagename-general)
 
@@ -231,8 +216,7 @@
 
 (define (reg-renderer report-obj)
   (define (opt-val section name)
-    (gnc:option-value
-     (gnc:lookup-option (gnc:report-options report-obj) section name)))
+    (gnc-optiondb-lookup-value (gnc:report-options report-obj) section name))
 
   (let* ((document (gnc:make-html-document))
          (report-title (opt-val gnc:pagename-general gnc:optname-reportname))

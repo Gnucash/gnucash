@@ -85,10 +85,7 @@ balance at a given time"))
 ;; is the list of account types that the account selection option
 ;; accepts.
 (define (options-generator account-types do-intervals? depth-based?)
-  (let* ((options (gnc:new-options)) 
-         (add-option 
-          (lambda (new-option)
-            (gnc:register-option options new-option))))
+  (let* ((options (gnc-new-optiondb)))
 
     (if do-intervals?
         (gnc:options-add-date-interval!
@@ -98,39 +95,31 @@ balance at a given time"))
          options gnc:pagename-general
          optname-to-date "a"))
 
-    (gnc:options-add-currency! 
+    (gnc:options-add-currency!
      options gnc:pagename-general optname-report-currency "b")
-    
-    (gnc:options-add-price-source! 
+
+    (gnc:options-add-price-source!
      options gnc:pagename-general
      optname-price-source "c" 'pricedb-nearest)
 
     (if do-intervals?
-        (add-option
-         (gnc:make-multichoice-option
+        (gnc-register-multichoice-option options
           gnc:pagename-general optname-averaging
           "f" opthelp-averaging
-          'None
+          "None"
           (list (vector 'None (N_ "No Averaging"))
                 (vector 'YearDelta (N_ "Yearly"))
                 (vector 'MonthDelta (N_ "Monthly"))
-                (vector 'WeekDelta (N_ "Weekly"))))))
+                (vector 'WeekDelta (N_ "Weekly")))))
 
-    (add-option
-     (gnc:make-account-list-option
+    (gnc-register-account-list-limited-option options
       gnc:pagename-accounts optname-accounts
       "a"
       (N_ "Report on these accounts, if chosen account level allows.")
-      (lambda ()
-        (gnc:filter-accountlist-type 
-         account-types
-         (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
-      (lambda (accounts)
-        (list #t
-              (gnc:filter-accountlist-type
-               account-types
-               accounts)))
-      #t))
+      (gnc:filter-accountlist-type
+       account-types
+         (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
+      account-types)
 
     (if depth-based?
       (gnc:options-add-account-levels!
@@ -138,38 +127,34 @@ balance at a given time"))
        (N_ "Maximum number of levels in the account tree displayed.")
        2))
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-fullname
       "a"
       (if depth-based?
         (N_ "Show the full account name in legend?")
         (N_ "Show the full security name in the legend?"))
-      #f))
+      #f)
 
-    (add-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-show-total
-      "b" (N_ "Show the total balance in legend?") #t))
+      "b" (N_ "Show the total balance in legend?") #t)
 
 
-     (add-option
-      (gnc:make-simple-boolean-option
+     (gnc-register-simple-boolean-option options
        gnc:pagename-display optname-show-percent
-       "b" (N_ "Show the percentage in legend?") #t))
+       "b" (N_ "Show the percentage in legend?") #t)
 
 
-    (add-option
-     (gnc:make-number-range-option
+    (gnc-register-number-range-option options
       gnc:pagename-display optname-slices
       "c" (N_ "Maximum number of slices in pie.") 7
-      2 24 0 1))
+      2 24 1)
 
-    (gnc:options-add-plot-size! 
-     options gnc:pagename-display 
+    (gnc:options-add-plot-size!
+     options gnc:pagename-display
      optname-plot-width optname-plot-height "d" (cons 'percent 100.0) (cons 'percent 100.0))
 
-    (gnc:options-add-sort-method! 
+    (gnc:options-add-sort-method!
      options gnc:pagename-display
      optname-sort-method "e" 'amount)
 
@@ -307,10 +292,9 @@ balance at a given time"))
 
   ;; This is a helper function for looking up option values.
   (define (get-option section name)
-    (gnc:option-value 
-     (gnc:lookup-option 
-      (gnc:report-options report-obj) section name)))
-  
+    (gnc-optiondb-lookup-value
+      (gnc:report-options report-obj) section name))
+
   (gnc:report-starting reportname)
 
   ;; Get all options
@@ -478,9 +462,8 @@ balance at a given time"))
                       (gnc:options-copy-values (gnc:report-options report-obj)
                                                options)
                       ;; and set the destination accounts
-                      (gnc:option-set-value
-                       (gnc:lookup-option options gnc:pagename-accounts
-                                          optname-accounts)
+                      (gnc-option-set-value
+                       options gnc:pagename-accounts optname-accounts
                        (map cadr finish))
                       (set! id (gnc:make-report report-guid options))
                       ;; set the URL.

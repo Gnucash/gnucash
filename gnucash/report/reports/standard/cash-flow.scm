@@ -54,7 +54,7 @@
 
 ;; options generator
 (define (cash-flow-options-generator)
-  (let ((options (gnc:new-options)))
+  (let ((options (gnc-new-optiondb)))
 
     ;; date interval
     (gnc:options-add-date-interval!
@@ -70,17 +70,13 @@
      options gnc:pagename-general
      optname-price-source "c" 'pricedb-nearest)
 
-    (gnc:register-option
-     options
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-general optname-show-rates
-      "d" (N_ "Show the exchange rates used.") #f))
+      "d" (N_ "Show the exchange rates used.") #f)
 
-    (gnc:register-option
-     options
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-general optname-show-full-names
-      "e" (N_ "Show full account names (including parent accounts).") #t))
+      "e" (N_ "Show full account names (including parent accounts).") #t)
 
     ;; accounts to work on
     (gnc:options-add-account-selection!
@@ -95,11 +91,9 @@
      #f)
 
     ;; Trading accounts?
-    (gnc:register-option
-     options
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-accounts optname-include-trading-accounts
-      "b" (N_ "Include transfers to and from Trading Accounts in the report.")  #f))
+      "b" (N_ "Include transfers to and from Trading Accounts in the report.")  #f)
 
     ;; Set the general page as default option tab
     (gnc:options-set-default-section options gnc:pagename-general)
@@ -113,9 +107,8 @@
 
 (define (cash-flow-renderer report-obj)
   (define (get-option pagename optname)
-    (gnc:option-value
-     (gnc:lookup-option
-      (gnc:report-options report-obj) pagename optname)))
+    (gnc-optiondb-lookup-value
+      (gnc:report-options report-obj) pagename optname))
 
   (gnc:report-starting reportname)
 

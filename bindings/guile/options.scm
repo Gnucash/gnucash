@@ -82,7 +82,7 @@
 (define-public (gnc:color-option->hex-string opt)
   (format #f "~a" (GncOption-get-value opt)))
 
-(define-public (gnc:option-get-value book category key)
+(define-public (gnc:book-get-option-value book category key)
   (define acc (if (pair? key) cons list))
   (qof-book-get-option book (acc category key)))
 
@@ -339,6 +339,14 @@
               (gnc-relative-date-to-time64 (cdr option-value)))
           option-value))
 
+(define-public (gnc:register-multichoice-callback-option options section name key docstring default multichoice widget-changed-cb)
+  (let ((defval (cond ((symbol? default)
+                       (symbol->string default))
+                      ((number? default)
+                       (number->string default))
+                     (else default))))
+  (gnc-register-multichoice-callback-option (gnc:optiondb options) section name key docstring defval multichoice widget-changed-cb)))
+
 ;; Scheme code for supporting options for the business modules
 ;;
 ;; Created by:	Derek Atkins <derek@ihtfp.com>
@@ -400,11 +408,11 @@
 
 (define (gnc:company-info book key)
   ;; Access company info from key-value pairs for current book
- (gnc:option-get-value book gnc:*business-label* key))
+ (gnc:book-get-option-value book gnc:*business-label* key))
 
 (define (gnc:fancy-date-info book key)
   ;; Access fancy date info from key-value pairs for current book
- (gnc:option-get-value book gnc:*business-label* (list gnc:*fancy-date-label* key)))
+ (gnc:book-get-option-value book gnc:*business-label* (list gnc:*fancy-date-label* key)))
 
 
 

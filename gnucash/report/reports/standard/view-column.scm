@@ -36,31 +36,24 @@
 (use-modules (gnucash html))
 
 (define (make-options)
-  (let* ((options (gnc:new-options))
-	 (opt-register
-	  (lambda (opt)
-	    (gnc:register-option options opt))))
+  (let* ((options (gnc-new-optiondb)))
     ;; the report-list is edited by a special add-on page for the
     ;; options editor.
-    (gnc-register-report-placement-option (gnc:optiondb options) "__general" "report-list")
+    (gnc-register-report-placement-option options "__general" "report-list")
     
-    (opt-register
-     (gnc:make-number-range-option 
+    (gnc-register-number-range-option options
       (N_ "General") (N_ "Number of columns") "a"
       (N_ "Number of columns before wrapping to a new row.")
-      1 0 20 0 1))
+      1 0 20 1)
     
     options))
 
 (define (render-view report)
   (let* ((view-doc (gnc:make-html-document))
 	 (options (gnc:report-options report))
-	 (report-opt (gnc:lookup-option options "__general" "report-list"))
-	 (reports (gnc:option-value report-opt))
+	 (reports (gnc-optiondb-lookup-value options "__general" "report-list"))
 	 (table-width 
-	  (gnc:option-value
-	   (gnc:lookup-option 
-	    options (N_ "General") (N_ "Number of columns"))))
+	  (gnc-optiondb-lookup-value options (N_ "General") (N_ "Number of columns")))
 	 (column-allocs (make-hash-table 11))
 	 (column-tab (gnc:make-html-table))
 	 (current-row '())
@@ -168,8 +161,7 @@
 (define (options-changed-cb report)
   (let* ((options (gnc:report-options report))
 	 (reports
-	  (gnc:option-value
-	   (gnc:lookup-option options "__general" "report-list"))))
+	  (gnc-optiondb-lookup-value options "__general" "report-list")))
     (for-each 
      (lambda (child)
        (gnc:report-set-dirty?! (gnc-report-find (car child)) #t))
@@ -177,10 +169,10 @@
 
 (define (cleanup-options report)
   (let* ((options (gnc:report-options report))
-	 (report-opt (gnc:lookup-option options "__general" "report-list")))
-    (let loop ((reports (gnc:option-value report-opt)) (new-reports '()))
+	 (report-opt (gnc-lookup-option options "__general" "report-list")))
+    (let loop ((reports (GncOption-get-value report-opt)) (new-reports '()))
       (match reports
-        (() (gnc:option-set-value report-opt (reverse new-reports)))
+        (() (GncOption-set-value report-opt (reverse new-reports)))
         (((child rowspan colspan _) . rest)
          (loop rest (cons (list child rowspan colspan #f) new-reports)))))))
 

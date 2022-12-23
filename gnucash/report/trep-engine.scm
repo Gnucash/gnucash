@@ -504,11 +504,8 @@ in the Options panel."))
 ;; Default Transaction Report
 ;;
 (define (gnc:trep-options-generator)
-  (define options (gnc:new-options))
   (define BOOK-SPLIT-ACTION
     (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
-  (define (gnc:register-trep-option new-option)
-    (gnc:register-option options new-option))
 
   ;; (Feb 2018) Note to future hackers - this gnc:trep-options-generator
   ;; defines a long set of options to be assigned as an object in
@@ -516,39 +513,38 @@ in the Options panel."))
   ;; may be modified in a derived report (see income-gst-statement.scm)
   ;; via gnc:make-internal! and gnc-unregister-option to hide
   ;; and remove options, respectively. If an option is unregistered,
-  ;; don't forget to re-register them via gnc:register-option, unless
+  ;; don't forget to re-register them via gnc-register-option, unless
   ;; your derived report truly does not require them.
+
+  (let ((options (gnc-new-optiondb)))
 
   ;; General options
 
   (gnc:options-add-date-interval!
    options gnc:pagename-general optname-startdate optname-enddate "a")
 
-  (gnc:register-trep-option
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option options
     gnc:pagename-general optname-date-source
     "a5" (G_ "Specify date to filter by...")
-    'posted
+    "posted"
     (list (vector 'posted (G_ "Date Posted"))
           (vector 'reconciled (G_ "Reconciled Date"))
-          (vector 'entered (G_ "Date Entered")))))
+          (vector 'entered (G_ "Date Entered"))))
 
-  (gnc:register-trep-option
-   (gnc:make-complex-boolean-option
+  (gnc-register-complex-boolean-option  options
     pagename-currency optname-common-currency
-    "a" (G_ "Convert all transactions into a common currency.") #f #f
+    "a" (G_ "Convert all transactions into a common currency.") #f
     (lambda (x)
-      (gnc-option-db-set-option-selectable-by-name
+      (gnc-optiondb-set-option-selectable-by-name
        options pagename-currency optname-currency x)
-      (gnc-option-db-set-option-selectable-by-name
+      (gnc-optiondb-set-option-selectable-by-name
        options pagename-currency optname-orig-currency x)
-      (gnc-option-db-set-option-selectable-by-name
-       options pagename-currency optname-price-source x))))
+      (gnc-optiondb-set-option-selectable-by-name
+       options pagename-currency optname-price-source x)))
 
-  (gnc:register-trep-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     pagename-currency optname-orig-currency
-    "b" (G_ "Also show original currency amounts") #f))
+    "b" (G_ "Also show original currency amounts") #f)
 
   (gnc:options-add-currency!
    options pagename-currency optname-currency "c")
@@ -556,110 +552,97 @@ in the Options panel."))
   (gnc:options-add-price-source!
    options pagename-currency optname-price-source "d" 'pricedb-nearest)
 
-  (gnc:register-trep-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     gnc:pagename-general optname-table-export
     "g" (G_ "Formats the table suitable for cut & paste exporting with extra cells.")
-    #f))
+    #f)
 
-  (gnc:register-trep-option
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option options
     gnc:pagename-general optname-infobox-display
     "h" (G_ "Add summary of options.")
-    'no-match
+    "no-match"
     ;; This is an alist of conditions for displaying the infobox
     ;; 'no-match for empty-report
     ;; 'match for generated report
     (list (vector 'no-match (G_ "If no transactions matched"))
           (vector 'always (G_ "Always"))
-          (vector 'never (G_ "Never")))))
+          (vector 'never (G_ "Never"))))
 
   ;; Filtering Options
 
-  (gnc:register-trep-option
-   (gnc:make-string-option
+  (gnc-register-string-option options
     pagename-filter optname-account-matcher
     "a5" (G_ "Show only accounts whose full name matches this filter e.g. ':Travel' will match \
 Expenses:Travel:Holiday and Expenses:Business:Travel. It can be left blank, which will \
 disable the filter.")
-    ""))
+    "")
 
-  (gnc:register-trep-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     pagename-filter optname-account-matcher-regex
     "a6"
     (G_ "By default the account filter will search substring only. Set this to true to \
 enable full POSIX regular expressions capabilities. 'Car|Flights' will match both \
 Expenses:Car and Expenses:Flights. Use a period (.) to match a single character e.g. \
 '20../.' will match 'Travel 2017/1 London'. ")
-    #f))
+    #f)
 
-  (gnc:register-trep-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     pagename-filter optname-account-matcher-exclude "a7"
     (G_ "If this option is selected, accounts matching filter are excluded.")
-    #f))
+    #f)
 
-  (gnc:register-trep-option
-   (gnc:make-string-option
+  (gnc-register-string-option options
     pagename-filter optname-transaction-matcher
     "i1" (G_ "Show only transactions where description, notes, or memo matches this filter.
 e.g. '#gift' will find all transactions with #gift in description, notes or memo. It can be left \
 blank, which will disable the filter.")
-    ""))
+    "")
 
-  (gnc:register-trep-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     pagename-filter optname-transaction-matcher-regex
     "i2"
     (G_ "By default the transaction filter will search substring only. Set this to true to \
 enable full POSIX regular expressions capabilities. '#work|#family' will match both \
 tags within description, notes or memo.")
-    #f))
+    #f)
 
-  (gnc:register-trep-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     pagename-filter optname-transaction-matcher-exclude
     "i3"
     (G_ "If this option is selected, transactions matching filter are excluded.")
-    #f))
+    #f)
 
-  (gnc:register-trep-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     pagename-filter optname-transaction-matcher-caseinsensitive
     "i4"
     (G_ "If this option is selected, transactions matching filter is not case sensitive.")
-    #f))
+    #f)
 
-  (gnc:register-trep-option
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option options
     pagename-filter optname-reconcile-status
     "j1" (G_ "Filter by reconcile status.")
-    'all
-    (keylist->vectorlist reconcile-status-list)))
+    "all"
+    (keylist->vectorlist reconcile-status-list))
 
-  (gnc:register-trep-option
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option options
     pagename-filter optname-void-transactions
     "k" (N_ "How to handle void transactions.")
-    'non-void-only
-    (keylist->vectorlist show-void-list)))
+    "non-void-only"
+    (keylist->vectorlist show-void-list))
 
-  (gnc:register-trep-option
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option options
     pagename-filter optname-closing-transactions
     "l" (G_ "By default most users should not include closing \
 transactions in a transaction report. Closing transactions are \
 transfers from income and expense accounts to equity, and must usually \
 be excluded from periodic reporting.")
-    'exclude-closing
-    (keylist->vectorlist show-closing-list)))
+    "exclude-closing"
+    (keylist->vectorlist show-closing-list))
 
   ;; Accounts options
 
   ;; account to do report on
-  (gnc:register-trep-option
-   (gnc:make-account-list-option
+  (gnc-register-account-list-option options
     gnc:pagename-accounts optname-accounts
     "a" (G_ "Report on these accounts.")
     ;; select, by default, no accounts! Selecting all accounts will
@@ -667,29 +650,22 @@ be excluded from periodic reporting.")
     ;; is almost never useful. So we instead display the normal error
     ;; message saying "Click here", and the user knows how to
     ;; continue.
-    (lambda ()
-      '())
-    #f #t))
+    '())
 
-  (gnc:register-trep-option
-   (gnc:make-account-list-option
+  (gnc-register-account-list-option options
     gnc:pagename-accounts optname-filterby
     "c1" (G_ "Filter on these accounts.")
-    (lambda ()
-      '())
-    #f #t))
+    '())
 
-  (gnc:register-trep-option
-   (gnc:make-multichoice-callback-option
+  (gnc-register-multichoice-callback-option options
     gnc:pagename-accounts optname-filtertype
     "c" (G_ "Filter account.")
-    'none
+    "none"
     (keylist->vectorlist filter-list)
-    #f
     (lambda (x)
-      (gnc-option-db-set-option-selectable-by-name
+      (gnc-optiondb-set-option-selectable-by-name
        options gnc:pagename-accounts optname-filterby
-       (not (eq? x 'none))))))
+       (not (eq? x 'none)))))
 
   ;; Sorting options
 
@@ -713,182 +689,166 @@ be excluded from periodic reporting.")
               (SUBTOTAL-ENABLED? sec-sortkey BOOK-SPLIT-ACTION))
              (sec-date-sortingtype-enabled (memq sec-sortkey DATE-SORTING-TYPES)))
 
-        (gnc-option-db-set-option-selectable-by-name
+        (gnc-optiondb-set-option-selectable-by-name
          options pagename-sorting optname-prime-subtotal
          prime-sortkey-subtotal-enabled)
 
-        (gnc-option-db-set-option-selectable-by-name
+        (gnc-optiondb-set-option-selectable-by-name
          options pagename-sorting optname-prime-sortorder
          prime-sortkey-enabled)
 
-        (gnc-option-db-set-option-selectable-by-name
+        (gnc-optiondb-set-option-selectable-by-name
          options pagename-sorting optname-sec-subtotal
          sec-sortkey-subtotal-enabled)
 
-        (gnc-option-db-set-option-selectable-by-name
+        (gnc-optiondb-set-option-selectable-by-name
          options pagename-sorting optname-sec-sortorder
          sec-sortkey-enabled)
 
-        (gnc-option-db-set-option-selectable-by-name
+        (gnc-optiondb-set-option-selectable-by-name
          options pagename-sorting optname-full-account-name
          (or (and prime-sortkey-subtotal-enabled prime-sortkey-subtotal-true)
              (and sec-sortkey-subtotal-enabled sec-sortkey-subtotal-true)))
 
-        (gnc-option-db-set-option-selectable-by-name
+        (gnc-optiondb-set-option-selectable-by-name
          options pagename-sorting optname-show-account-code
          (or (and prime-sortkey-subtotal-enabled prime-sortkey-subtotal-true)
              (and sec-sortkey-subtotal-enabled sec-sortkey-subtotal-true)))
 
-        (gnc-option-db-set-option-selectable-by-name
+        (gnc-optiondb-set-option-selectable-by-name
          options pagename-sorting optname-show-account-description
          (or (and prime-sortkey-subtotal-enabled prime-sortkey-subtotal-true)
              (and sec-sortkey-subtotal-enabled sec-sortkey-subtotal-true)))
 
-        (gnc-option-db-set-option-selectable-by-name
+        (gnc-optiondb-set-option-selectable-by-name
          options pagename-sorting optname-indenting
          (or (and prime-sortkey-subtotal-enabled prime-sortkey-subtotal-true)
              (and sec-sortkey-subtotal-enabled sec-sortkey-subtotal-true)
              (and prime-date-sortingtype-enabled (not (eq? 'none prime-date-subtotal)))
              (and sec-date-sortingtype-enabled (not (eq? 'none sec-date-subtotal)))))
 
-        (gnc-option-db-set-option-selectable-by-name
+        (gnc-optiondb-set-option-selectable-by-name
          options pagename-sorting optname-show-subtotals-only
          (or (and prime-sortkey-subtotal-enabled prime-sortkey-subtotal-true)
              (and sec-sortkey-subtotal-enabled sec-sortkey-subtotal-true)
              (and prime-date-sortingtype-enabled (not (eq? 'none prime-date-subtotal)))
              (and sec-date-sortingtype-enabled (not (eq? 'none sec-date-subtotal)))))
 
-        (gnc-option-db-set-option-selectable-by-name
+        (gnc-optiondb-set-option-selectable-by-name
          options pagename-sorting optname-show-informal-headers
          (or (memq prime-sortkey (list 'account-name 'account-code))
              (memq sec-sortkey (list 'account-name 'account-code))))
 
-        (gnc-option-db-set-option-selectable-by-name
+        (gnc-optiondb-set-option-selectable-by-name
          options pagename-sorting optname-prime-date-subtotal
          prime-date-sortingtype-enabled)
 
-        (gnc-option-db-set-option-selectable-by-name
+        (gnc-optiondb-set-option-selectable-by-name
          options pagename-sorting optname-sec-date-subtotal
          sec-date-sortingtype-enabled)))
 
     ;; primary sorting criterion
-    (gnc:register-trep-option
-     (gnc:make-multichoice-callback-option
+    (gnc-register-multichoice-callback-option options
       pagename-sorting optname-prime-sortkey
       "a" (G_ "Sort by this criterion first.")
-      prime-sortkey
-      key-choice-list #f
+      (symbol->string prime-sortkey)
+      key-choice-list
       (lambda (x)
         (set! prime-sortkey x)
-        (apply-selectable-by-name-sorting-options))))
+        (apply-selectable-by-name-sorting-options)))
 
-    (gnc:register-trep-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       pagename-sorting optname-full-account-name
       "j1"
       (G_ "Show the full account name for subtotals and subheadings?")
-      #f))
+      #f)
 
-    (gnc:register-trep-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       pagename-sorting optname-show-account-code
       "j2"
       (G_ "Show the account code for subtotals and subheadings?")
-      #f))
+      #f)
 
-    (gnc:register-trep-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       pagename-sorting optname-show-account-description
       "j3"
       (G_ "Show the account description for subheadings?")
-      #f))
+      #f)
 
-    (gnc:register-trep-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       pagename-sorting optname-show-informal-headers
       "j4"
       (G_ "Show the informal headers for debit/credit accounts?")
-      #f))
+      #f)
 
-    (gnc:register-trep-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       pagename-sorting optname-indenting
       "j5"
       (G_ "Add indenting columns with grouping and subtotals?")
-      #t))
+      #t)
 
-    (gnc:register-trep-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       pagename-sorting optname-show-subtotals-only
       "j6"
       (G_ "Show subtotals only, hiding transactional detail?")
-      #f))
+      #f)
 
-    (gnc:register-trep-option
-     (gnc:make-complex-boolean-option
+    (gnc-register-complex-boolean-option options
       pagename-sorting optname-prime-subtotal
       "e5"
-      (G_ "Subtotal according to the primary key?")
-      prime-sortkey-subtotal-true #f
+      (G_ "Subtotal according to the primary key?") prime-sortkey-subtotal-true
       (lambda (x)
         (set! prime-sortkey-subtotal-true x)
-        (apply-selectable-by-name-sorting-options))))
+        (apply-selectable-by-name-sorting-options)))
 
-    (gnc:register-trep-option
-     (gnc:make-multichoice-callback-option
+     (gnc-register-multichoice-callback-option options
       pagename-sorting optname-prime-date-subtotal
       "e2" (G_ "Do a date subtotal.")
-      prime-date-subtotal
-      date-subtotal-choice-list #f
+      (symbol->string prime-date-subtotal)
+      date-subtotal-choice-list
       (lambda (x)
         (set! prime-date-subtotal x)
-        (apply-selectable-by-name-sorting-options))))
+        (apply-selectable-by-name-sorting-options)))
 
-    (gnc:register-trep-option
-     (gnc:make-multichoice-option
+    (gnc-register-multichoice-option options
       pagename-sorting optname-prime-sortorder
       "e" (G_ "Order of primary sorting.")
-      'ascend
-      ascending-choice-list))
+      "ascend"
+      ascending-choice-list)
 
     ;; Secondary sorting criterion
-    (gnc:register-trep-option
-     (gnc:make-multichoice-callback-option
+    (gnc:register-multichoice-callback-option options
       pagename-sorting optname-sec-sortkey
       "f"
       (G_ "Sort by this criterion second.")
-      sec-sortkey
-      key-choice-list #f
+      (symbol->string sec-sortkey)
+      key-choice-list
       (lambda (x)
         (set! sec-sortkey x)
-        (apply-selectable-by-name-sorting-options))))
+        (apply-selectable-by-name-sorting-options)))
 
-    (gnc:register-trep-option
-     (gnc:make-complex-boolean-option
+    (gnc-register-complex-boolean-option options
       pagename-sorting optname-sec-subtotal
       "i5"
-      (G_ "Subtotal according to the secondary key?")
-      sec-sortkey-subtotal-true #f
+      (G_ "Subtotal according to the secondary key?") sec-sortkey-subtotal-true
       (lambda (x)
         (set! sec-sortkey-subtotal-true x)
-        (apply-selectable-by-name-sorting-options))))
+        (apply-selectable-by-name-sorting-options)))
 
-    (gnc:register-trep-option
-     (gnc:make-multichoice-callback-option
+    (gnc-register-multichoice-callback-option options
       pagename-sorting optname-sec-date-subtotal
       "i2" (G_ "Do a date subtotal.")
-      sec-date-subtotal
-      date-subtotal-choice-list #f
+      (symbol->string sec-date-subtotal)
+      date-subtotal-choice-list
       (lambda (x)
         (set! sec-date-subtotal x)
-        (apply-selectable-by-name-sorting-options))))
+        (apply-selectable-by-name-sorting-options)))
 
-    (gnc:register-trep-option
-     (gnc:make-multichoice-option
+    (gnc-register-multichoice-option options
       pagename-sorting optname-sec-sortorder
       "i" (G_ "Order of Secondary sorting.")
-      'ascend
-      ascending-choice-list)))
+      "ascend"
+      ascending-choice-list))
 
   ;; Display options
 
@@ -900,43 +860,42 @@ be excluded from periodic reporting.")
 
     (define (apply-selectable-by-name-display-options)
       (define detail-is-single? (eq? disp-detail-level? 'single))
-      (gnc-option-db-set-option-selectable-by-name
+      (gnc-optiondb-set-option-selectable-by-name
        options gnc:pagename-display (N_ "Use Full Account Name")
        disp-accname?)
 
-      (gnc-option-db-set-option-selectable-by-name
+      (gnc-optiondb-set-option-selectable-by-name
        options gnc:pagename-display (N_ "Other Account Name")
        detail-is-single?)
 
-      (gnc-option-db-set-option-selectable-by-name
+      (gnc-optiondb-set-option-selectable-by-name
        options gnc:pagename-display (N_ "Sign Reverses")
        (eq? amount-value 'single))
 
-      (gnc-option-db-set-option-selectable-by-name
+      (gnc-optiondb-set-option-selectable-by-name
        options gnc:pagename-display optname-grid
        (not (eq? amount-value 'none)))
 
-      (gnc-option-db-set-option-selectable-by-name
+      (gnc-optiondb-set-option-selectable-by-name
        options gnc:pagename-display "Enable Links"
        (not (eq? amount-value 'none)))
 
-      (gnc-option-db-set-option-selectable-by-name
+      (gnc-optiondb-set-option-selectable-by-name
        options gnc:pagename-display (N_ "Use Full Other Account Name")
        (and disp-other-accname? detail-is-single?))
 
-      (gnc-option-db-set-option-selectable-by-name
+      (gnc-optiondb-set-option-selectable-by-name
        options gnc:pagename-display (N_ "Other Account Code")
        detail-is-single?)
 
-      (gnc-option-db-set-option-selectable-by-name
+      (gnc-optiondb-set-option-selectable-by-name
        options gnc:pagename-display (N_ "Notes")
        disp-memo?))
 
     (for-each
      (lambda (l)
-       (gnc:register-trep-option
-        (gnc:make-simple-boolean-option
-         gnc:pagename-display (car l) (cadr l) (caddr l) (cadddr l))))
+       (gnc-register-simple-boolean-option options
+         gnc:pagename-display (car l) (cadr l) (caddr l) (cadddr l)))
      ;; One list per option here with: option-name, sort-tag,
      ;; help-string, default-value
      (list
@@ -963,86 +922,75 @@ be excluded from periodic reporting.")
       (list (N_ "Totals")                       "o"  (G_ "Display the totals?") #t)))
 
     (when BOOK-SPLIT-ACTION
-      (gnc:register-trep-option
-       (gnc:make-simple-boolean-option
+      (gnc-register-simple-boolean-option options
         gnc:pagename-display (N_ "Trans Number")
-        "b2" (G_ "Display the trans number?") #f)))
+        "b2" (G_ "Display the trans number?") #f))
 
     ;; Add an option to display the memo, and disable the notes option
     ;; when memos are not included.
-    (gnc:register-trep-option
-     (gnc:make-complex-boolean-option
+    (gnc-register-complex-boolean-option options
       gnc:pagename-display (N_ "Memo")
-      "d"  (G_ "Display the memo?") disp-memo? #f
+      "d"  (G_ "Display the memo?") disp-memo?
       (lambda (x)
         (set! disp-memo? x)
-        (apply-selectable-by-name-display-options))))
+        (apply-selectable-by-name-display-options)))
 
     ;; Ditto for Account Name #t -> Use Full Account Name is selectable
-    (gnc:register-trep-option
-     (gnc:make-complex-boolean-option
+    (gnc-register-complex-boolean-option options
       gnc:pagename-display (N_ "Account Name")
-      "e"  (G_ "Display the account name?") disp-accname? #f
+      "e"  (G_ "Display the account name?") disp-accname?
       (lambda (x)
         (set! disp-accname? x)
-        (apply-selectable-by-name-display-options))))
+        (apply-selectable-by-name-display-options)))
 
     ;; Ditto for Other Account Name #t -> Use Full Other Account Name is selectable
-    (gnc:register-trep-option
-     (gnc:make-complex-boolean-option
+    (gnc-register-complex-boolean-option options
       gnc:pagename-display (N_ "Other Account Name")
-      "h5"  (G_ "Display the other account name? (if this is a split transaction, this parameter is guessed).") disp-other-accname? #f
+      "h5"  (G_ "Display the other account name? (if this is a split transaction, this parameter is guessed).") disp-other-accname?
       (lambda (x)
         (set! disp-other-accname? x)
-        (apply-selectable-by-name-display-options))))
+        (apply-selectable-by-name-display-options)))
 
-    (gnc:register-trep-option
-     (gnc:make-multichoice-callback-option
+    (gnc-register-multichoice-callback-option options
       gnc:pagename-display optname-detail-level
       "h" (G_ "Amount of detail to display per transaction.")
-      disp-detail-level?
+      (symbol->string disp-detail-level?)
       (list (vector 'multi-line (G_ "One split per line"))
             (vector 'single (G_ "One transaction per line")))
-      #f
       (lambda (x)
         (set! disp-detail-level? x)
-        (apply-selectable-by-name-display-options))))
+        (apply-selectable-by-name-display-options)))
 
-    (gnc:register-trep-option
-     (gnc:make-multichoice-callback-option
+    (gnc-register-multichoice-callback-option options
       gnc:pagename-display (N_ "Amount")
       "m" (G_ "Display the amount?")
-      amount-value
+      (symbol->string amount-value)
       (list
        (vector 'none   (G_ "Hide"))
        (vector 'single (G_ "Single Column"))
        (vector 'double (G_ "Two Columns")))
-      #f
       (lambda (x)
         (set! amount-value x)
-        (apply-selectable-by-name-display-options))))
+        (apply-selectable-by-name-display-options)))
 
-    (gnc:register-trep-option
-     (gnc:make-simple-boolean-option
+    (gnc-register-simple-boolean-option options
       gnc:pagename-display (N_ "Enable Links")
-      "m2" (G_ "Enable hyperlinks in amounts.") #t))
+      "m2" (G_ "Enable hyperlinks in amounts.") #t)
 
-    (gnc:register-trep-option
-     (gnc:make-multichoice-option
+    (gnc-register-multichoice-option options
       gnc:pagename-display (N_ "Sign Reverses")
       "m1" (G_ "Reverse amount display for certain account types.")
-      'global
-      (keylist->vectorlist sign-reverse-list))))
+      "global"
+      (keylist->vectorlist sign-reverse-list)))
 
   ;; this hidden option will toggle whether the default
   ;; qof-query is run, or a different query which ensures
   ;; no transaction is duplicated. It can be enabled in
   ;; a derived report (eg income-gst-statement.scm)
-  (gnc:register-trep-option
-   (gnc:make-internal-option "__trep" "unique-transactions" #f))
+  (gnc-register-internal-option options "__trep" "unique-transactions" #f)
 
-  (gnc:options-set-default-section options gnc:pagename-general)
-  options)
+  (GncOptionDBPtr-set-default-section options gnc:pagename-general)
+    options))
 
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the big function that builds the whole table.
@@ -1051,10 +999,8 @@ be excluded from periodic reporting.")
                           begindate enddate c_account_1)
 
   (define (opt-val section name)
-    (let ((option (gnc:lookup-option options section name)))
-      (if option
-          (gnc:option-value option)
-          (gnc:error "gnc:lookup-option error: " section "/" name))))
+    (gnc-optiondb-lookup-value (gnc:optiondb options) section name))
+
   (define BOOK-SPLIT-ACTION
     (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
 
@@ -1977,7 +1923,7 @@ be excluded from periodic reporting.")
 
   (define options (gnc:report-options report-obj))
   (define (opt-val section name)
-    (gnc:option-value (gnc:lookup-option options section name)))
+    (gnc-optiondb-lookup-value (gnc:optiondb options) section name))
   (define BOOK-SPLIT-ACTION
     (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
   (define (is-filter-member split account-list)

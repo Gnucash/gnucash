@@ -36,64 +36,51 @@
 ;; this should generally be the default style sheet for most reports.
 ;; it's supposed to be lightweight and unobtrusive.
 (define (plain-options)
-  (let* ((options (gnc:new-options))
-         (opt-register
-          (lambda (opt)
-            (gnc:register-option options opt))))
-    (opt-register
-     (gnc:make-color-option
+  (let* ((options (gnc-new-optiondb)))
+    (gnc-register-color-option options
       (N_ "General")
       (N_ "Background Color") "a" (N_ "Background color for reports.")
-      (list #xff #xff #xff #xff)
-      255 #f))
-    (opt-register
-     (gnc:make-pixmap-option
+      "ffffff")
+    (gnc-register-pixmap-option options
       (N_ "General")
       (N_ "Background Pixmap") "b" (N_ "Background tile for reports.")
-      ""))
-    (opt-register
-     (gnc:make-simple-boolean-option
+      "")
+    (gnc-register-simple-boolean-option options
       (N_ "General")
       (N_ "Enable Links") "c" (N_ "Enable hyperlinks in reports.")
-      #t))
-    (opt-register
-     (gnc:make-color-option
+      #t)
+    (gnc-register-color-option options
       (N_ "Colors")
       (N_ "Alternate Table Cell Color") "a" (N_ "Background color for alternate lines.")
-      (list #xff #xff #xff #xff)
-      255 #f))
-    (opt-register
-     (gnc:make-number-range-option
+      "ffffff")
+    (gnc-register-number-range-option options
       (N_ "Tables")
       (N_ "Table cell spacing") "a" (N_ "Space between table cells.")
-      0 0 20 0 1))
-    (opt-register
-     (gnc:make-number-range-option
+      0 0 20 1)
+    (gnc-register-number-range-option options
       (N_ "Tables")
       (N_ "Table cell padding") "b" (N_ "Space between table cell edge and content.")
-      4 0 20 0 1))
-    (opt-register
-     (gnc:make-number-range-option
+      4 0 20 1)
+    (gnc-register-number-range-option options
       (N_ "Tables")
       (N_ "Table border width") "c" (N_ "Bevel depth on tables.")
-      0 0 20 0 1))
+      0 0 20 1)
     (register-font-options options)
 
     options))
 
 (define (plain-renderer options doc)
   (define (opt-val section name)
-    (gnc:option-value
-     (gnc:lookup-option options section name)))
+    (gnc-optiondb-lookup-value options section name))
   (let* ((ssdoc (gnc:make-html-document))
          (bgcolor
-          (gnc:color-option->html
-           (gnc:lookup-option options "General" "Background Color")))
+          (gnc:color->html
+           (gnc-optiondb-lookup-value options "General" "Background Color")))
          (bgpixmap (opt-val "General" "Background Pixmap"))
          (links? (opt-val "General" "Enable Links"))
          (alternate-row-color
-          (gnc:color-option->html
-           (gnc:lookup-option options "Colors" "Alternate Table Cell Color")))
+          (gnc:color->html
+           (gnc-optiondb-lookup-value options "Colors" "Alternate Table Cell Color")))
          (spacing (opt-val "Tables" "Table cell spacing"))
          (padding (opt-val "Tables" "Table cell padding"))
          (border (opt-val "Tables" "Table border width")))

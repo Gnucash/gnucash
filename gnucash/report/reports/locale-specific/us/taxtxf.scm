@@ -167,20 +167,17 @@
 (define tax-qtr-real-qtr-year 10000)
 
 (define (tax-options-generator)
-  (define options (gnc:new-options))
-  (define (gnc:register-tax-option new-option)
-    (gnc:register-option options new-option))
+  (define options (gnc-new-optiondb))
 
   ;; date at which to report
   (gnc:options-add-date-interval!
    options gnc:pagename-general
    (N_ "From") (N_ "To") "a")
 
-  (gnc:register-tax-option
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option options
     gnc:pagename-general (N_ "Alternate Period")
     "c" (N_ "Override or modify From: & To:.")
-    (if after-tax-day 'from-to 'last-year)
+    (if after-tax-day "from-to" "last-year")
     (list (vector 'from-to (N_ "Use From - To"))
           (vector '1st-est (N_ "1st Est Tax Quarter (Jan 1 - Mar 31)"))
           (vector '2nd-est (N_ "2nd Est Tax Quarter (Apr 1 - May 31)"))
@@ -196,65 +193,53 @@
           ;; actual year's quarters! See the definition of
           ;; tax-qtr-real-qtr-year variable above.
           (vector '3rd-last (N_ "Last Yr 3rd Est Tax Qtr (Jun 1 - Aug 31)"))
-          (vector '4th-last (N_ "Last Yr 4th Est Tax Qtr (Sep 1 - Dec 31)")))))
+          (vector '4th-last (N_ "Last Yr 4th Est Tax Qtr (Sep 1 - Dec 31)"))))
 
-  (gnc:register-tax-option
-   (gnc:make-account-list-option
+  (gnc-register-account-list-option options
     gnc:pagename-accounts (N_ "Select Accounts (none = all)")
     "d" (N_ "Select accounts.")
-    (lambda () '())
-    #f #t))
-
-  (gnc:register-tax-option
-   (gnc:make-simple-boolean-option
+    '())
+  (gnc-register-simple-boolean-option options
     gnc:pagename-display (N_ "Suppress $0.00 values")
-    "f" (N_ "$0.00 valued Tax codes won't be printed.") #f))
+    "f" (N_ "$0.00 valued Tax codes won't be printed.") #f)
 
-  (gnc:register-tax-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     gnc:pagename-display (N_ "Do not print full account names")
-    "g" (N_ "Do not print all Parent account names.") #f))
+    "g" (N_ "Do not print all Parent account names.") #f)
 
-  (gnc:register-tax-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     gnc:pagename-display (N_ "Print all Transfer To/From Accounts")
-    "h" (N_ "Print all split details for multi-split transactions.") #f))
+    "h" (N_ "Print all split details for multi-split transactions.") #f)
 
-  (gnc:register-tax-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     gnc:pagename-display (N_ "Print TXF export parameters")
-    "i" (N_ "Show TXF export parameters for each TXF code/account on report.") #f))
+    "i" (N_ "Show TXF export parameters for each TXF code/account on report.") #f)
 
   (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
-      (gnc:register-tax-option
-       (gnc:make-simple-boolean-option
+      (gnc-register-simple-boolean-option options
         gnc:pagename-display (N_ "Do not print T-Num:Memo data")
-        "j" (N_ "Do not print T-Num:Memo data for transactions.") #f))
-      (gnc:register-tax-option
-       (gnc:make-simple-boolean-option
+        "j" (N_ "Do not print T-Num:Memo data for transactions.") #f)
+      (gnc-register-simple-boolean-option options
         gnc:pagename-display (N_ "Do not print Action:Memo data")
-        "j" (N_ "Do not print Action:Memo data for transactions.") #f)))
+        "j" (N_ "Do not print Action:Memo data for transactions.") #f))
 
-  (gnc:register-tax-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     gnc:pagename-display (N_ "Do not print transaction detail")
-    "k" (N_ "Do not print transaction detail for accounts.") #f))
+    "k" (N_ "Do not print transaction detail for accounts.") #f)
 
-  (gnc:register-tax-option
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option options
     gnc:pagename-display (N_ "Do not use special date processing")
-    "l" (N_ "Do not print transactions out of specified dates.") #f))
+    "l" (N_ "Do not print transactions out of specified dates.") #f)
 
-  (gnc:register-tax-option
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option options
     gnc:pagename-display (N_ "Currency conversion date")
     "m" (N_ "Select date to use for PriceDB lookups.")
-    'conv-to-tran-date
+    "conv-to-tran-date"
     (list (list->vector
            (list 'conv-to-tran-date (N_ "Nearest to transaction date")))
           (list->vector
            (list 'conv-to-report-date (N_ "Nearest to report date")))
-    )))
+    ))
 
   #t
 
@@ -1658,9 +1643,8 @@
                              tax-mode?)
 
   (define (get-option pagename optname)
-    (gnc:option-value
-     (gnc:lookup-option
-      (gnc:report-options report-obj) pagename optname)))
+    (gnc-optiondb-lookup-value
+      (gnc:report-options report-obj) pagename optname))
 
   (define tax-entity-type (gnc-get-current-book-tax-type))
 

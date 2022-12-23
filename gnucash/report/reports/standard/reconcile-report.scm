@@ -33,28 +33,28 @@
 
 (define (reconcile-report-options-generator)
   (let ((options (gnc:trep-options-generator)))
-    (gnc:option-set-value
-     (gnc:lookup-option options "Sorting" "Primary Key") 'reconciled-status)
-    (gnc:option-set-value
-     (gnc:lookup-option options "Sorting" "Secondary Key")   'date)
-    (gnc:option-set-value
-     (gnc:lookup-option options "Sorting" "Secondary Subtotal for Date Key") 'none)
-    (gnc:option-set-value
-     (gnc:lookup-option options gnc:pagename-general "Start Date")
+    (GncOption-set-value
+     (gnc-lookup-option options "Sorting" "Primary Key") 'reconciled-status)
+    (GncOption-set-value
+     (gnc-lookup-option options "Sorting" "Secondary Key")   'date)
+    (GncOption-set-value
+     (gnc-lookup-option options "Sorting" "Secondary Subtotal for Date Key") 'none)
+    (GncOption-set-value
+     (gnc-lookup-option options gnc:pagename-general "Start Date")
      (cons 'relative 'start-prev-quarter))
-    (gnc:option-set-value
-     (gnc:lookup-option options gnc:pagename-general "End Date")
+    (GncOption-set-value
+     (gnc-lookup-option options gnc:pagename-general "End Date")
      (cons 'relative 'today))
-    (gnc:option-set-value
-     (gnc:lookup-option options gnc:pagename-general "Date Filter")
+    (GncOption-set-value
+     (gnc-lookup-option options gnc:pagename-general "Date Filter")
      'reconciled)
-    (gnc:option-set-value
-     (gnc:lookup-option options gnc:pagename-display "Reconciled Date") #t)
-    (gnc:option-set-value
-     (gnc:lookup-option options gnc:pagename-display "Running Balance") #f)
-    (gnc:option-set-value
-     (gnc:lookup-option options gnc:pagename-display "Memo") #f)
-    (gnc:option-make-internal! options gnc:pagename-display "Running Balance")
+    (GncOption-set-value
+     (gnc-lookup-option options gnc:pagename-display "Reconciled Date") #t)
+    (GncOption-set-value
+     (gnc-lookup-option options gnc:pagename-display "Running Balance") #f)
+    (GncOption-set-value
+     (gnc-lookup-option options gnc:pagename-display "Memo") #f)
+    (GncOptionDBPtr-make-internal options gnc:pagename-display "Running Balance")
     options))
 
 (define reconcile-report-instructions
