@@ -990,9 +990,7 @@ be excluded from periodic reporting.")
   (gnc-register-internal-option options "__trep" "unique-transactions" #f)
 
   (GncOptionDBPtr-set-default-section options gnc:pagename-general)
-;; A temporary hack so that trep users will get the options type they expect.
-  (lambda (key)
-    options)))
+    options))
 
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the big function that builds the whole table.
