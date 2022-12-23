@@ -480,6 +480,7 @@ gnucash/report/reports/standard/general-ledger.scm
 gnucash/report/reports/standard/ifrs-cost-basis.scm
 gnucash/report/reports/standard/income-gst-statement.scm
 gnucash/report/reports/standard/income-statement.scm
+gnucash/report/reports/standard/investment-lots.scm
 gnucash/report/reports/standard/invoice.scm
 gnucash/report/reports/standard/lot-viewer.scm
 gnucash/report/reports/standard/net-charts.scm

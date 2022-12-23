@@ -37,6 +37,7 @@ set (reports_standard_SCHEME
     standard/ifrs-cost-basis.scm
     standard/income-gst-statement.scm
     standard/income-statement.scm
+    standard/investment-lots.scm
     standard/lot-viewer.scm
     standard/net-charts.scm
     standard/portfolio.scm
