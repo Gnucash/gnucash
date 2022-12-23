@@ -25,7 +25,7 @@
 
 (use-modules (gnucash core-utils))
 (use-modules (gnucash app-utils))
-(use-modules (gnucash options))
+(use-modules (gnucash report report-core))
 
 (export gnc:options-add-report-date!)
 (export gnc:options-add-date-interval!)
@@ -41,11 +41,13 @@
 
 ;; These are just a bunch of options which were useful in several
 ;; reports and hence they got defined in a separate function.
+(define (evaluate arg)
+  (if (procedure? arg) (arg) arg))
 
 ;; This is one single end-date of a report.
 (define (gnc:options-add-report-date!
 	 options pagename optname sort-tag)
-  (gnc:options-make-end-date! options pagename optname sort-tag
+  (gnc-register-end-date-option (gnc:optiondb options) pagename optname sort-tag
 			      (N_ "Select a date to report on.")))
 
 ;; This is a date-interval for a report.
@@ -59,18 +61,17 @@
 ;; A date interval multichoice option.
 (define (gnc:options-add-interval-choice! 
 	 options pagename optname sort-tag default)
-  (gnc:register-option 
-   options
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option (gnc:optiondb options)
     pagename optname
-    sort-tag (N_ "The amount of time between data points.") default
+    sort-tag (N_ "The amount of time between data points.")
+    (symbol->string (evaluate default))
     (list (vector 'DayDelta (N_ "One Day"))
           (vector 'WeekDelta (N_ "One Week"))
           (vector 'TwoWeekDelta (N_ "Two Weeks"))
           (vector 'MonthDelta (N_ "One Month"))
           (vector 'QuarterDelta (N_ "Quarter Year"))
           (vector 'HalfYearDelta (N_ "Half Year"))
-          (vector 'YearDelta (N_ "One Year"))))))
+          (vector 'YearDelta (N_ "One Year")))))
 
 ;; A multichoice option intended to chose the account level. Different
 ;; from the other functions the help string can still be given. Used
@@ -78,17 +79,18 @@
 (define (gnc:options-add-account-levels! 
 	 options pagename name-display-depth 
 	 sort-tag help-string default-depth)
-  (gnc:register-option 
-   options  
-   (gnc:make-multichoice-option
-    pagename name-display-depth sort-tag help-string default-depth
+  (gnc-register-multichoice-option
+   (gnc:optiondb options)
+   pagename name-display-depth sort-tag help-string
+   (let ((default (evaluate default-depth)))
+     (if (number? default) (number->string default) (symbol->string default)))
     (list (vector 'all (N_ "All"))
           (vector 1 "1")
           (vector 2 "2")
           (vector 3 "3")
           (vector 4 "4")
           (vector 5 "5")
-          (vector 6 "6")))))
+          (vector 6 "6"))))
 
 ;; These help for selecting a bunch of accounts.
 (define (gnc:options-add-account-selection! 
@@ -101,84 +103,75 @@
    (N_ "Show accounts to this depth, overriding any other option.") 
    default-depth)
     
-  (gnc:register-option 
-   options  
-   (gnc:make-simple-boolean-option
+  (gnc-register-simple-boolean-option (gnc:optiondb options)
     pagename name-show-subaccounts
     (string-append sort-tag "b")
     (N_ "Override account-selection and show sub-accounts of all selected accounts?") 
-    default-show-subaccounts))
+    default-show-subaccounts)
 
   ;; Semantics of the account selection, as used in the
   ;; gnc:html-build-acct-table: An account shows up if ( the
   ;; tree-depth is large enough AND ( it is selected in the account
   ;; selector OR ( always show sub-accounts is selected AND one of
   ;; the parents is selected in the account selector. )))
-  (gnc:register-option 
-   options  
-   (gnc:make-account-list-option
+  (gnc-register-account-list-option (gnc:optiondb options)
     pagename name-accounts
     (string-append sort-tag "c")
     (N_ "Report on these accounts, if display depth allows.")
-    default-accounts
-    #f #t)))
+    (evaluate default-accounts)))
 
 ;; To let the user select a currency for the report.
 (define (gnc:options-add-currency!
 	 options pagename name-report-currency sort-tag)
-  (gnc:register-option 
-   options 
-   (gnc:make-currency-option 
+  (gnc-register-currency-option (gnc:optiondb options)
     pagename name-report-currency
-    sort-tag 
+    sort-tag
     (N_ "Select the currency to display the values of this report in.")
-    (gnc-default-report-currency))))
+    (gnc-default-report-currency)))
 
 ;; A multichoice option for the source of prices
-(define (gnc:options-add-price-source! 
+(define (gnc:options-add-price-source!
 	 options pagename optname sort-tag default)
-  (gnc:register-option 
-   options
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option
+   (gnc:optiondb options)
     pagename optname
-    sort-tag (N_ "The source of price information.") default
+    sort-tag (N_ "The source of price information.")
+    (symbol->string (evaluate default))
     (list (vector 'average-cost (N_ "Average cost of purchases weighted by volume"))
           (vector 'weighted-average (N_ "Weighted average of all transactions in the past"))
           (vector 'pricedb-before (N_ "Last up through report date"))
           (vector 'pricedb-nearest (N_ "Closest to report date"))
-          (vector 'pricedb-latest (N_ "Most recent"))))))
+          (vector 'pricedb-latest (N_ "Most recent")))))
 
 ;; The width- and height- options for charts
 (define (gnc:options-add-plot-size!
 	 options pagename 
 	 name-width name-height sort-tag 
 	 default-width default-height)
-  (gnc:register-option
-   options
-   (gnc:make-number-plot-size-option
+  (let* ((widthv (evaluate default-width))
+         (heightv (evaluate default-height))
+         (width (if (pair? widthv) (cdr widthv) widthv))
+         (height (if (pair? heightv) (cdr heightv) heightv)))
+  (gnc-register-number-plot-size-option (gnc:optiondb options)
     pagename name-width
     (string-append sort-tag "a")
-    (N_ "Width of plot, 10 - 100 in percent, above in pixels.") default-width
-    100 20000 0 5))
+    (N_ "Width of plot, 10 - 100 in percent, above in pixels.")
+    width)
 
-  (gnc:register-option
-   options
-   (gnc:make-number-plot-size-option
+  (gnc-register-number-plot-size-option (gnc:optiondb options)
     pagename name-height
     (string-append sort-tag "b")
-    (N_ "Height of plot, 10 - 100 in percent, above in pixels.") default-height
-    100 20000 0 5)))
+    (N_ "Height of plot, 10 - 100 in percent, above in pixels.")
+    height)))
 
 ;; A multicoice option for the marker of a scatter plot.
 (define (gnc:options-add-marker-choice!
 	 options pagename optname sort-tag default)
-  (gnc:register-option
-   options
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option (gnc:optiondb options)
     pagename optname 
     sort-tag
     (N_ "Choose the marker for each data point.")
-    default
+    (symbol->string (evaluate default))
     (list
      (vector 'diamond (N_ "Diamond"))
      (vector 'circle (N_ "Circle"))
@@ -188,22 +181,19 @@
      (vector 'dash (N_ "Dash"))
      (vector 'filleddiamond (N_ "Filled diamond"))
      (vector 'filledcircle (N_ "Filled circle"))
-     (vector 'filledsquare (N_ "Filled square"))))))
-
+     (vector 'filledsquare (N_ "Filled square")))))
 
 (define (gnc:options-add-sort-method!
 	 options pagename optname sort-tag default)
-  (gnc:register-option
-   options
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option (gnc:optiondb options)
     pagename optname 
     sort-tag
     (N_ "Choose the method for sorting accounts.")
-    default
+    (symbol->string (evaluate default))
     (list
      (vector 'acct-code (N_ "Alphabetical by account code"))
      (vector 'alphabetical (N_ "Alphabetical by account name"))
-     (vector 'amount (N_ "Numerical by descending amount"))))))
+     (vector 'amount (N_ "Numerical by descending amount")))))
 
 
 ;; These control the calculation and view mode of subtotal balances
@@ -212,9 +202,7 @@
 	 optname-parent-balance-mode optname-parent-total-mode
 	 sort-tag)
   ;; what to show for non-leaf accounts
-  (gnc:register-option
-   options
-   (gnc:make-multichoice-option
+  (gnc-register-multichoice-option (gnc:optiondb options)
     pagename 
     ;; usually the option name is: (N_ "Parent account balances")
     optname-parent-balance-mode
@@ -225,13 +213,12 @@
       (G_ "Account Balance in the parent account, excluding any subaccounts.")
       (G_ "Do not show any balances of parent accounts."))
       "\n* ")
-    'immediate-bal
+    "immediate-bal"
     (list (vector 'immediate-bal (N_ "Account Balance"))
           (vector 'recursive-bal (N_ "Calculate Subtotal"))
-          (vector 'omit-bal (N_ "Do not show")))))
-  (gnc:register-option
-   options
-   (gnc:make-multichoice-option
+          (vector 'omit-bal (N_ "Do not show"))))
+
+  (gnc-register-multichoice-option (gnc:optiondb options)
     pagename
     ;; usually the option name is: (N_ "Parent account subtotals")
     optname-parent-total-mode
@@ -242,6 +229,6 @@
       (G_ "Show subtotals for selected parent accounts which have subaccounts.")
       (G_ "Do not show any subtotals for parent accounts."))
       "\n* ")
-    'f
+    "f"
     (list (vector 't (N_ "Show subtotals"))
-          (vector 'f (N_ "Do not show"))))))
+          (vector 'f (N_ "Do not show")))))

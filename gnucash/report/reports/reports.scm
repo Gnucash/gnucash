@@ -69,10 +69,11 @@
     (if (gnc:find-report-template report-template-id)
         ;; We found the report template id, so instantiate a report
         ;; and set the invoice option accordingly.
-        (let* ((options (gnc:make-report-options report-template-id))
-               (invoice-op (gnc:lookup-option options gnc:pagename-general gnc:optname-invoice-number)))
-
-          (gnc:option-set-value invoice-op invoice)
+        (let* ((options (gnc:make-report-options report-template-id)))
+          (gnc-set-option
+           (gnc:optiondb options)
+           gnc:pagename-general gnc:optname-invoice-number
+           invoice)
           (gnc:make-report report-template-id options))
         ;; Invalid report-template-id, so let's return zero as an invalid report id.
         0
@@ -81,9 +82,8 @@
 (define budget-ID "810ed4b25ef0486ea43bbd3dddb32b11")
 (define (gnc:budget-report-create budget)
   (if (gnc:find-report-template budget-ID)
-      (let* ((options (gnc:make-report-options budget-ID))
-             (bgt-op (gnc:lookup-option options gnc:pagename-general "Budget")))
-        (gnc:option-set-value bgt-op budget)
+      (let* ((options (gnc:make-report-options budget-ID)))
+        (gnc-set-option options gnc:pagename-general "Budget" budget)
         (gnc:make-report budget-ID options))
       -1))
 

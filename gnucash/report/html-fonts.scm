@@ -28,11 +28,13 @@
 
 (eval-when (compile load eval expand)
   (load-extension "libgnc-report" "scm_init_sw_report_module"))
+
 (use-modules (sw_report))
 
 (use-modules (gnucash core-utils))
-(use-modules (gnucash options))
+(use-modules (gnucash report report-core))
 (use-modules (gnucash report html-document))
+
 (use-modules (ice-9 regex))
 
 ;; html-fonts.scm
@@ -97,66 +99,57 @@
 
 ;; Registers font options
 (define (register-font-options options)
-  (define (opt-register opt)
-    (gnc:register-option options opt))
-  (let ((font-family (gnc-get-default-report-font-family)))
-    (opt-register
-     (gnc:make-font-option
+  (let ((font-family (gnc-get-default-report-font-family))
+        (odb (gnc:optiondb options)))
+     (gnc-register-font-option odb
       (N_ "Fonts")
       (N_ "Title") "a" (N_ "Font info for the report title.")
-      (string-append font-family " Bold 15")))
-    (opt-register
-     (gnc:make-font-option
+      (string-append font-family " Bold 15"))
+    (gnc-register-font-option odb
       (N_ "Fonts")
       (N_ "Account link") "b" (N_ "Font info for account name.")
-      (string-append font-family " Italic 10")))
-    (opt-register
-     (gnc:make-font-option
+      (string-append font-family " Italic 10"))
+    (gnc-register-font-option odb
       (N_ "Fonts")
       (N_ "Number cell") "c" (N_ "Font info for regular number cells.")
-      (string-append font-family " 10")))
-    (opt-register
-     (gnc:make-simple-boolean-option
+      (string-append font-family " 10"))
+    (gnc-register-simple-boolean-option odb
       (N_ "Fonts")
       (N_ "Negative Values in Red") "d" (N_ "Display negative values in red.")
-      #t))
-    (opt-register
-     (gnc:make-font-option
+      #t)
+    (gnc-register-font-option odb
       (N_ "Fonts")
       (N_ "Number header") "e" (N_ "Font info for number headers.")
-      (string-append font-family " 10")))
-    (opt-register
-     (gnc:make-font-option
+      (string-append font-family " 10"))
+    (gnc-register-font-option odb
       (N_ "Fonts")
       (N_ "Text cell") "f" (N_ "Font info for regular text cells.")
-      (string-append font-family " 10")))
-    (opt-register
-     (gnc:make-font-option
+      (string-append font-family " 10"))
+    (gnc-register-font-option odb
       (N_ "Fonts")
       (N_ "Total number cell") "g"
       (N_ "Font info for number cells containing a total.")
-      (string-append font-family " Bold 12")))
-    (opt-register
-     (gnc:make-font-option
+      (string-append font-family " Bold 12"))
+    (gnc-register-font-option odb
       (N_ "Fonts")
       (N_ "Total label cell") "h"
       (N_ "Font info for cells containing total labels.")
-      (string-append font-family " Bold 12")))
-    (opt-register
-     (gnc:make-font-option
+      (string-append font-family " Bold 12"))
+    (gnc-register-font-option odb
       (N_ "Fonts")
       (N_ "Centered label cell") "i" (N_ "Font info for centered label cells.")
-      (string-append font-family " Bold 12")))))
+      (string-append font-family " Bold 12"))))
 
 ;; Adds CSS style information to an html document
 (define (add-css-information-to-doc options ssdoc doc)
   (define (opt-font-val name)
-    (gnc:option-value (gnc:lookup-option options "Fonts" name)))
+    (gnc-optiondb-lookup-value (gnc:optiondb options) "Fonts" name))
   (define (opt-style-info name) (font-name-to-style-info (opt-font-val name)))
   (let* ((negative-red? (opt-font-val "Negative Values in Red"))
          (alternate-row-color
-          (gnc:color-option->html
-           (gnc:lookup-option options "Colors" "Alternate Table Cell Color")))
+          (gnc:color->html
+           (gnc-optiondb-lookup-value (gnc:optiondb options)
+                              "Colors" "Alternate Table Cell Color")))
          (title-info (opt-style-info "Title"))
          (account-link-info (opt-style-info "Account link"))
          (number-cell-info (opt-style-info "Number cell"))

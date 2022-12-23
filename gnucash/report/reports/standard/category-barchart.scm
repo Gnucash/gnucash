@@ -218,9 +218,9 @@ developing over time"))
                                     export-type)
   ;; A helper functions for looking up option values.
   (define (get-option section name)
-    (gnc:option-value
-     (gnc:lookup-option
-      (gnc:report-options report-obj) section name)))
+    (gnc-option-value
+     (gnc:optiondb
+      (gnc:report-options report-obj)) section name))
 
   (gnc:report-starting reportname)
   (let* ((to-date-t64 (gnc:time64-end-day-time
