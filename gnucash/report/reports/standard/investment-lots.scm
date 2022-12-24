@@ -248,7 +248,7 @@
         (N_ "Show unrealized gain table column(s) for unsold shares")
         #t)
 
-    (gnc-register-multichoice-option options
+    (gnc-register-multichoice-callback-option options
         pagename-columns
         optname-group-gains-by-age
         "h"
@@ -256,7 +256,11 @@
         "gains-only"
         (list (vector 'no (N_ "No"))
               (vector 'gains-only (N_ "Gains Only"))
-              (vector 'gains-and-sales (N_ "Gains and Sales"))))
+              (vector 'gains-and-sales (N_ "Gains and Sales")))
+        (lambda (x)
+          (gnc-optiondb-set-option-selectable-by-name
+           options pagename-columns optname-long-term-years
+           (not (eq? x 'no)))))
 
     ;; Note: Different governments may have different rules regarding how long
     ;; shares must be held to qualify for different tax treatment. So make
