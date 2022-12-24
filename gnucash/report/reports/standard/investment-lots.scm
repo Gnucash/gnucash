@@ -1855,9 +1855,7 @@
             (gnc:html-chart-add-data-series!
                 chart
                 (account->name account)
-                (map (lambda (value)
-                          (gnc:gnc-monetary-amount (value->monetary value)))
-                    gain-values)
+                (map (compose gnc:gnc-monetary-amount value->monetary) gain-values)
                 (car colors))
             (set! colors (cdr colors)))))
 
@@ -2000,9 +1998,7 @@
             (gnc:html-chart-set-stacking?! chart
               (eq? chart-type 'bar-stacked)))))
 
-        (for-each
-          (lambda (account) (add-account-report account))
-          accounts)
+        (for-each add-account-report accounts)
 
         (add-padding-rows 3)
         (gnc:html-table-append-ruler! table column-count)
