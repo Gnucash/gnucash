@@ -113,6 +113,9 @@ const OptionAliases Aliases::c_option_aliases
     // income-gst-statement.scm
     {"default format", {nullptr, "Default Format"}},
     {"Report format", {nullptr, "Report Format"}},
+    // ... replaced to …, Dec 2022
+    {"Filter By...", {nullptr, "Filter By…"}},
+    {"Specify date to filter by...", {nullptr, "Specify date to filter by…"}},
 };
 
 static bool
