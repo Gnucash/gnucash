@@ -2011,22 +2011,15 @@
 
         (all-accounts-info 'add-to-table table #t)))
 
-    ;; Add table to top of doc (if chart goes on bottom).
-    (if (eq? chart-location 'bottom)
-      (gnc:html-document-add-object! document table))
-
-    ;; Maybe add chart to doc.
-    (cond
-      (show-chart
-        (if (eq? chart-location 'bottom)
-          (add-padding-rows 3))
+    (when (and show-chart (eq? chart-location 'top))
         (gnc:html-document-add-object! document chart)
-        (if (eq? chart-location 'top)
-          (add-padding-rows 3))))
+        (add-padding-rows 3))
 
-    ;; Add table to bottom of doc (if chart goes on top).
-    (if (eq? chart-location 'top)
-      (gnc:html-document-add-object! document table))
+    (gnc:html-document-add-object! document table)
+
+    (when (and show-chart (eq? chart-location 'bottom))
+      (add-padding-rows 3)
+      (gnc:html-document-add-object! document chart))
 
     document))
 
