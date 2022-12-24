@@ -1396,10 +1396,8 @@
                             unassigned-split-count)))
 
                   ((list)
-                    (append
-                      (list
-                        (format #f (G_ "Warning: The following ~a split(s) are not assigned to a lot. Do lots need to be scrubbed?")
-                            unassigned-split-count))
+                   (cons
+                    (format #f (G_ "Warning: The following ~a split(s) are not assigned to a lot. Do lots need to be scrubbed?") unassigned-split-count)
 
                       ;; Also list out the unassigned splits.
                       (map (lambda (split)
