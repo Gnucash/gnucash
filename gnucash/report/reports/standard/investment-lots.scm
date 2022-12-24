@@ -311,9 +311,9 @@
 
     ;; General tab
     (gnc:options-add-date-interval!
-	    options gnc:pagename-general optname-from-date optname-to-date "a")
+     options gnc:pagename-general optname-from-date optname-to-date "a")
 
-    (gnc:options-add-currency! 
+    (gnc:options-add-currency!
       options
       gnc:pagename-general
       optname-report-currency
@@ -408,7 +408,7 @@
                   price)
               ((gnc-commodity-equiv currency (gnc-price-get-commodity price))
                   (gnc-price-invert price))
-              (else 
+              (else
                   (loop rest first-price))))))))
 
   (let* (;; Accounts options
@@ -426,11 +426,11 @@
          (chart-height (get-option pagename-chart optname-plot-height))
          (chart-width (get-option pagename-chart optname-plot-width))
 
-         ;; Column options 
+         ;; Column options
          (show-lot-guid-column
             (get-option pagename-columns optname-show-lot-guid-column))
          (show-date-columns
-            (get-option pagename-columns optname-show-date-columns))         
+            (get-option pagename-columns optname-show-date-columns))
          (show-bought-columns
             (get-option pagename-columns optname-show-bought-columns))
          (show-sold-columns
@@ -446,7 +446,7 @@
             (get-option pagename-columns optname-group-gains-by-age))
          (long-term-years
             (get-option pagename-columns optname-long-term-years))
-         
+
          ;; Display options
          (include-closed-lots
             (get-option gnc:pagename-display optname-include-closed-lots))
@@ -468,7 +468,7 @@
                     (get-option gnc:pagename-general optname-to-date))))
          (report-currency (get-option gnc:pagename-general
                                       optname-report-currency))
-         (price-source (get-option gnc:pagename-general 
+         (price-source (get-option gnc:pagename-general
                                     optname-price-source))
 
          ;; Validation options
@@ -522,7 +522,7 @@
                             price-db commodity
                             (time64CanonicalDayTime to-date))
                       report-currency)))))
-         (exchange-fn (gnc:case-exchange-fn 
+         (exchange-fn (gnc:case-exchange-fn
                         price-source
                         report-currency
                         to-date))
@@ -542,7 +542,7 @@
          (colors (gnc:assign-colors (length accounts)))
 
          (document (gnc:make-html-document)))
-    
+
     ;; Returns whether a commodity purchased on bought-date and sold on
     ;; sold-date qualifies for long-term capital gains treatment. The boundary
     ;; between short and long term is configurable, but otherwise this logic
@@ -568,7 +568,7 @@
 
     ;; Gets the account name.
     (define (account->name account)
-      (if show-long-account-names 
+      (if show-long-account-names
         (gnc-account-get-full-name account)
         (xaccAccountGetName account)))
 
@@ -601,12 +601,12 @@
       (xaccTransGetDate (xaccSplitGetParent split)))
 
     ;; Gets an html table cell containing the value, formatted as a number
-    ;; (i.e. right justified, etc.) 
+    ;; (i.e. right justified, etc.)
     ;; is-total determines whether total cell styling (i.e. bold) is used.
     (define (to-number-cell value is-total)
-      (gnc:make-html-table-cell/markup 
+      (gnc:make-html-table-cell/markup
         (if is-total "total-number-cell" "number-cell")
-        (cond 
+        (cond
           ((integer? value)
             (format #f "~d" value)) ;; convert to string to not show decimals.
           (else value))))
@@ -620,9 +620,9 @@
     ;; and that links to the specified split.
     (define (to-split-cell text split)
       (if text
-        (to-number-cell 
-          (if split 
-            (gnc:html-split-anchor split text)         
+        (to-number-cell
+          (if split
+            (gnc:html-split-anchor split text)
             text)
           #f) ;; is-total
         #f))
@@ -631,8 +631,8 @@
     ;; report's currency.
     (define (value->report-currency-value value currency)
       (gnc:gnc-monetary-amount
-        (exchange-fn 
-          (gnc:make-gnc-monetary 
+        (exchange-fn
+          (gnc:make-gnc-monetary
             currency
             value) ;; foreign
           report-currency))) ;; domestic
@@ -650,14 +650,14 @@
 
     ;; Gets all splits for the given account, bounded by to-date. Splits
     ;; before from-date are also included (needed to calculate running
-    ;; balance and basis during the report date window). 
+    ;; balance and basis during the report date window).
     (define (get-all-splits account)
       (let ((query (qof-query-create-for-splits)))
         (qof-query-set-book query (gnc-get-current-book))
         (xaccQueryAddClearedMatch query
           (logand CLEARED-ALL (lognot CLEARED-VOIDED)) QOF-QUERY-AND)
         (xaccQueryAddSingleAccountMatch query account QOF-QUERY-AND)
-        (xaccQueryAddDateMatchTT query 
+        (xaccQueryAddDateMatchTT query
             #f ; use_start.
             0  ; start. Note: Intentionally not using from-date.
             #t ; use-end
@@ -676,7 +676,7 @@
                  (lots '())
                  (unassigned-splits '()))
         (match splits
-          (() 
+          (()
             (gnc:debug (format #f "Found ~a lots and ~a unassigned splits"
                                   (length lots)
                                   (length unassigned-splits)))
@@ -695,7 +695,7 @@
                     ((null? lot)
                       (cons split unassigned-splits))
                     (else unassigned-splits))))))))
-                  
+
     ;; Returns the lot splits, ordered first by transaction date and then
     ;; ordering purchases before sales.
     (define (lot->splits lot)
@@ -735,7 +735,7 @@
                     (is-purchase-s2
                         (gnc-numeric-positive-p (xaccSplitGetAmount s2))))
                 (cond
-                  ((and is-purchase-s1 is-purchase-s2) 
+                  ((and is-purchase-s1 is-purchase-s2)
                     ;; They are both purchases and on the same date. So go
                     ;; ahead and let xaccTransOrder be the tiebreaker (not
                     ;; that it matters much).
@@ -765,14 +765,14 @@
           (price->currency price)
           (price->value price)))
 
-      ;; Returns the given price's value, converted to the 
+      ;; Returns the given price's value, converted to the
       ;; report's currency, if different.
       (define (price->report-currency-value price)
         (value->report-currency-value
           (price->value price)
           (price->currency price)))
 
-      ;; Returns the given price as a formatted string, in the report's 
+      ;; Returns the given price as a formatted string, in the report's
       ;; currency.
       (define (price->report-currency-monetary-string price)
         (value->monetary-string (price->report-currency-value price)))
@@ -785,7 +785,7 @@
                  (price->guid price))
           (gnc:html-markup/format
             (N_ "  End price: ~a~a on ~a")
-            (gnc:html-markup-anchor 
+            (gnc:html-markup-anchor
               (gnc-build-url URL-TYPE-PRICE
                 (string-append "price-guid=" (price->guid price))
                 "")
@@ -815,7 +815,7 @@
     ;; Gets a list of visible table column headers. Note that report options
     ;; control which columns to show. Also, some column headers will be blank
     ;; for the grand total header (such as amount columns, since multiple
-    ;; accounts may have different commodities, so combining their amounts 
+    ;; accounts may have different commodities, so combining their amounts
     ;; would not make sense).
     (define (get-column-header-list is-grand-total)
       (append
@@ -859,7 +859,7 @@
             colname-end-value)
           '())
         (if show-realized-gain-columns
-          (if group-gains-by-age 
+          (if group-gains-by-age
             (list
               colname-short-term-realized-gain
               colname-long-term-realized-gain
@@ -869,7 +869,7 @@
               colname-realized-roi))
           '())
         (if show-unrealized-gain-columns
-          (if group-gains-by-age 
+          (if group-gains-by-age
             (list
               colname-short-term-unrealized-gain
               colname-long-term-unrealized-gain
@@ -891,16 +891,16 @@
       (gnc:html-table-append-row/markup!
         table
         "normal-row"
-        (map to-header-cell 
+        (map to-header-cell
           (get-column-header-list is-grand-total))))
 
     ;; Adds a warning row to table.
     (define (add-warning-row table warning)
-      (let ((cell 
+      (let ((cell
               (gnc:make-html-table-cell/size
                 1 ;; rowspan
                 column-count ;; colspan
-                ;; If the warning is a string then convert it to html text. 
+                ;; If the warning is a string then convert it to html text.
                 ;; Otherwise, use it as-is.
                 (if (string? warning)
                   (gnc:make-html-text warning)
@@ -914,7 +914,7 @@
                           "total-label-cell neg" ;; bold, red, left justified
                           (if indent? " indented" ""))))
         (gnc:html-table-append-row! table (list cell))))
-    
+
     ;; Copies the rows (with their styles) from one table to another
     ;; table. If row-style is provided, it is used instead of copying the
     ;; source row's style.
@@ -962,7 +962,7 @@
                   show-blanks-for-zeros
                   (= val 0)))
           #f ;; show a blank cell
-          (to-number-cell 
+          (to-number-cell
             (format-val-fn)
             is-bold)))
 
@@ -970,7 +970,7 @@
       ;; table cell.
       (define (amount->cell amount)
         (to-cell
-          amount 
+          amount
           (lambda ()
             (amount->monetary-string amount-currency amount))))
 
@@ -1010,22 +1010,22 @@
             (value->monetary value))))
 
       ;; Helper function for adding capital gains columns
-      (define (get-gains-fn show-columns basis short-gain long-gain) 
+      (define (get-gains-fn show-columns basis short-gain long-gain)
         (append
           (if show-columns
-            (let* ((total-gain (gnc-numeric-add-fixed 
+            (let* ((total-gain (gnc-numeric-add-fixed
                                     short-gain
                                     long-gain))
                     (roi (percentage->cell
-                            (cond 
+                            (cond
                               ((or (not basis)
                                    (not total-gain))
                                  #f)
                               ((gnc-numeric-zero-p basis)
                                 0)
-                              (else 
+                              (else
                                 (* 100 (/ total-gain basis)))))))
-              (if group-gains-by-age 
+              (if group-gains-by-age
                 (list
                   (value->cell short-gain)
                   (value->cell long-gain)
@@ -1037,14 +1037,14 @@
 
       (if is-bold
         (gnc:html-table-append-ruler!
-          table 
+          table
           column-count)) ;; colspan
 
       (let* ((sold-basis (gnc-numeric-add-fixed
                             short-term-sold-basis
                             long-term-sold-basis))
-             (cells 
-        (append 
+             (cells
+        (append
           (list
             (if is-bold
               (gnc:make-html-table-cell/markup
@@ -1054,7 +1054,7 @@
             (list (lot->guid lot))
             '())
           (if show-date-columns
-            (list 
+            (list
               open-date-cell
               close-date-cell)
             '())
@@ -1065,7 +1065,7 @@
               (value->cell (get-average-price bought-amount bought-value)))
             '())
           (if show-sold-columns
-            (let ((sold-amount 
+            (let ((sold-amount
                     (gnc-numeric-add-fixed
                       short-term-sold-amount
                       long-term-sold-amount))
@@ -1108,7 +1108,7 @@
             short-term-unrealized-gain
             long-term-unrealized-gain))))
       (gnc:html-table-append-row/markup!
-        table 
+        table
         (if is-bold "grand-total" (get-row-style is-odd-row))
         cells)))
 
@@ -1142,7 +1142,7 @@
              (old-bought-value (get-report-value-zero))
              (bought-amount (get-amount-zero))
              (bought-value (get-report-value-zero))
-             (sold-split-count 0)          
+             (sold-split-count 0)
              (short-term-sold-amount (get-amount-zero))
              (short-term-sold-basis (get-report-value-zero))
              (short-term-sold-value (get-report-value-zero))
@@ -1156,7 +1156,7 @@
              (end-value (get-report-value-zero))
              (unrealized-gain (get-report-value-zero))
              (short-term-unrealized-gain (get-report-value-zero))
-             (long-term-unrealized-gain (get-report-value-zero))          
+             (long-term-unrealized-gain (get-report-value-zero))
              (has-warnings #f)
              (is-active-in-window #f)
              (currency '())
@@ -1191,7 +1191,7 @@
         ;; accounts (i.e. the grand total).
         (define (get-is-grand-total-stats)
           (not (or (get-is-lot-stats)
-                   (get-is-account-stats))))        
+                   (get-is-account-stats))))
 
         ;; Initializes the instance with an account's context.
         (define (init-for-account accnt unassigned-splts)
@@ -1231,14 +1231,14 @@
                 title-cell
                 #f ;; lot
                 (if bought-amount date-cell #f) ;; open-date
-                (if sold-amount date-cell #f)  ;; close-date  
+                (if sold-amount date-cell #f)  ;; close-date
                 bought-amount
                 bought-value
                 #f ;; sold-split-count
-                (if (and is-long-term sold-amount) 0 sold-amount) 
+                (if (and is-long-term sold-amount) 0 sold-amount)
                 (if (and is-long-term sold-basis) 0 sold-basis)
                 (if (and is-long-term sold-value) 0 sold-value)
-                (if (and is-long-term sold-amount) sold-amount 0) 
+                (if (and is-long-term sold-amount) sold-amount 0)
                 (if (and is-long-term sold-basis) sold-basis 0)
                 (if (and is-long-term sold-value) sold-value 0)
                 end-amount
@@ -1256,10 +1256,10 @@
           (let* ((is-lot-row (get-is-lot-stats))
                  (is-account-row (get-is-account-stats))
                  (is-grand-total-row (get-is-grand-total-stats))
-                 (open-date-cell 
-                    (cond ((and is-lot-row 
+                 (open-date-cell
+                    (cond ((and is-lot-row
                                 (not (null? earliest-bought-split-date)))
-                            (to-split-cell 
+                            (to-split-cell
                               (qof-print-date earliest-bought-split-date)
                               earliest-bought-split))
                           (else #f)))
@@ -1267,7 +1267,7 @@
                     (cond ((and is-lot-row
                                 (gnc-numeric-zero-p end-amount)
                                 (not (null? last-sold-split)))
-                            (to-split-cell 
+                            (to-split-cell
                               (qof-print-date (split->date last-sold-split))
                               last-sold-split))
                           (else #f)))
@@ -1306,7 +1306,7 @@
               (copy-table-rows splits-table table (get-row-style is-odd-row)))
 
             (add-warnings-to-table table)
-            
+
             (not is-odd-row)))
 
         ;; Checks for warnings and, if found, adds them to the given table
@@ -1328,7 +1328,7 @@
 
         ;; Gets lot validation warnings.
         (define (get-lot-warnings)
-          (append 
+          (append
             ;; Multiple bought splits in the same lot may make
             ;; ambiguous the lot's age, for distinguishing between
             ;; long-term and short-term capital gains.
@@ -1341,7 +1341,7 @@
               '())
 
             ;; Warn for negative balances.
-            (if (and 
+            (if (and
                   warn-if-balance-negative
                   (not (null? first-negative-split)))
               (list (format #f
@@ -1351,7 +1351,7 @@
               '())
 
             ;; Warn for blank (empty or only whitespace) lot titles.
-            (if (and 
+            (if (and
                   warn-if-lot-title-blank
                   (string-null? (string-trim (lot->title lot))))
               (list (G_ "Warning: Above lot's title is blank."))
@@ -1367,7 +1367,7 @@
                                         all-terms-realized-gain
                                         splits-realized-gain)))
                 (if (not (gnc-numeric-zero-p gain-discrepancy))
-                  (list 
+                  (list
                     (format #f
                       (G_ "Warning: Above lot's computed gain ~a is not equal to the \"Realized Gain/Loss\" split(s) sum ~a. Difference: ~a")
                       (value->monetary-string all-terms-realized-gain)
@@ -1381,7 +1381,7 @@
           (let ((account-end-balance
                   (xaccAccountGetBalanceAsOfDate account to-date))
                 (unassigned-split-count (length unassigned-splits)))
-            (append 
+            (append
               ;; Warn for splits that are not assigned to a lot.
               (if (and warn-if-split-not-in-lot
                       (> unassigned-split-count 0))
@@ -1392,7 +1392,7 @@
                             unassigned-split-count)))
 
                   ((list)
-                    (append 
+                    (append
                       (list
                         (format #f (G_ "Warning: The following ~a split(s) are not assigned to a lot. Do lots need to be scrubbed?")
                             unassigned-split-count))
@@ -1404,19 +1404,19 @@
                                    ; Convert split value to the report's
                                    ; currency.
                                    (value
-                                      (value->report-currency-value 
+                                      (value->report-currency-value
                                         (xaccSplitGetValue split)
                                         (xaccTransGetCurrency trans)))
                                    (amount (xaccSplitGetAmount split)))
                               (gnc:make-html-span
                                 (gnc:html-split-anchor
-                                  split 
+                                  split
                                   (qof-print-date date))
                                 (format #f (G_ ": amount ~a, value ~a")
                                   (amount->monetary-string currency amount)
                                   (value->monetary-string value)))))
                             unassigned-splits)))
-                  (else 
+                  (else
                     (gnc:error (format #f
                                 "Bad warn-type-if-split-not-in-lot value: ~a"
                                 warn-type-if-split-not-in-lot))
@@ -1430,7 +1430,7 @@
                                             end-amount
                                             account-end-balance)))
                 (if (not (gnc-numeric-zero-p amount-discrepancy))
-                  (list 
+                  (list
                     (format #f
                       (G_ "Warning: End amount ~a is not equal to actual account balance ~a. Difference: ~a. Do lots need to be scrubbed?")
                       (amount->monetary-string currency end-amount)
@@ -1446,7 +1446,7 @@
           (gnc:debug (format #f "Merging lot '~a'" (lot->title lot)))
 
           ;; Merge in each of the lot's splits.
-          (for-each 
+          (for-each
             (lambda (split)
               (let* ((trans (xaccSplitGetParent split))
                      (trans-date (xaccTransGetDate trans)))
@@ -1456,20 +1456,20 @@
                     (xaccTransGetCurrency trans))))
             (lot->splits lot))
 
-          (set! end-value 
+          (set! end-value
             (if price
               (gnc-numeric-mul
-                  end-amount 
+                  end-amount
                   ;; Ensure the price is in the report's
                   ;; currency.
-                  (price->report-currency-value price) 
+                  (price->report-currency-value price)
                   report-currency-fraction
                   GNC-RND-ROUND)
               (get-report-value-zero)))
           (set! unrealized-gain (gnc-numeric-sub-fixed
                                   end-value
                                   end-basis))
-          
+
           ;; Whether the lot shares have been held long enough (as of
           ;; the report end date) to qualify as long term.
           (let ((is-lot-long-term?
@@ -1481,12 +1481,12 @@
             (set! long-term-unrealized-gain
               (if is-lot-long-term?
                 unrealized-gain
-                (get-report-value-zero)))) ;; zero if short term  
+                (get-report-value-zero)))) ;; zero if short term
 
           ;; A lot is active in the report's date window if the window
           ;; contains any lot sold splits, or if the lot has any shares on the
           ;; end date. Inactive lots are not included in the report.
-          (set! is-active-in-window   
+          (set! is-active-in-window
             (or (> sold-split-count 0)
                 (gnc-numeric-positive-p end-amount)
                 has-warnings))
@@ -1499,7 +1499,7 @@
         (define (merge-split split trans-date trans-currency)
           (let* (; Convert split value to the report's currency.
                  (value
-                    (value->report-currency-value 
+                    (value->report-currency-value
                       (xaccSplitGetValue split)
                       trans-currency))
                  (amount (xaccSplitGetAmount split))
@@ -1518,10 +1518,10 @@
                   ;; Covert amount and value to positive numbers.
                   (gnc-numeric-neg amount)
                   (gnc-numeric-neg value)))
-              
+
               ;; A "Realized Gain/Loss" split has zero amount. Sum its value
               ;; to validate against the report-computed gain value.
-              ((and is-realized-gain 
+              ((and is-realized-gain
                     (>= trans-date from-date))
                 (set! splits-realized-gain
                     (gnc-numeric-add-fixed splits-realized-gain value))))))
@@ -1542,7 +1542,7 @@
                  ;; sale split, rather than per lot. This may compound
                  ;; rounding errors at the lot level, but is more consistent
                  ;; with capital gains tax granularity: Each sale is a
-                 ;; potentially taxable event. 
+                 ;; potentially taxable event.
                  (gain (gnc-numeric-sub
                           value
                           basis
@@ -1550,7 +1550,7 @@
                           GNC-RND-ROUND))
                  (is-long-term
                     (long-term? latest-bought-split-date trans-date)))
-            (gnc:debug 
+            (gnc:debug
               (format #f
                 "sold-amount: [~0,5f], sold-value: [~0,5f], gain: [~0,5f]"
                 (gnc-numeric-to-double amount)
@@ -1560,7 +1560,7 @@
             (set! end-basis (gnc-numeric-sub-fixed end-basis basis))
             (set! end-amount (gnc-numeric-sub-fixed end-amount amount))
 
-          (cond 
+          (cond
             ((>= trans-date from-date)
               ;; Remember if a sale within the report window causes the
               ;; lot's balance to go negative.
@@ -1568,7 +1568,7 @@
                       (gnc-numeric-negative-p end-amount))
               (set! first-negative-split split))
 
-              (cond 
+              (cond
                 (is-long-term
                   (set! long-term-sold-amount
                     (gnc-numeric-add-fixed long-term-sold-amount amount))
@@ -1578,7 +1578,7 @@
                     (gnc-numeric-add-fixed long-term-sold-value value))
                   (set! long-term-realized-gain
                     (gnc-numeric-add-fixed long-term-realized-gain gain)))
-                (else 
+                (else
                   (set! short-term-sold-amount
                     (gnc-numeric-add-fixed short-term-sold-amount amount))
                   (set! short-term-sold-basis
@@ -1598,7 +1598,7 @@
                 value   ;; sold-value
                 gain    ;; sold-gain
                 is-long-term)
-            
+
               (set! sold-split-count (+ sold-split-count 1))
               (set! last-sold-split split)))))
 
@@ -1608,7 +1608,7 @@
           ;; gnc-lot-get-earliest-split, but that would do another loop though
           ;; the split list. And it could return a sale split, if the lot is
           ;; malformed.
-          (if (or (null? earliest-bought-split) 
+          (if (or (null? earliest-bought-split)
                   (< trans-date earliest-bought-split-date))
             (begin
               (set! earliest-bought-split split)
@@ -1616,14 +1616,14 @@
           ;; Also track the latest bought split date. If the lot contains
           ;; multiple purchase splits, then the latest date will be used to
           ;; determine whether the lot is long or short term.
-          (if (or (null? latest-bought-split-date) 
+          (if (or (null? latest-bought-split-date)
                   (> trans-date latest-bought-split-date))
             (set! latest-bought-split-date trans-date))
           (set! end-basis (gnc-numeric-add-fixed end-basis value))
           (set! end-amount (gnc-numeric-add-fixed end-amount amount))
-          (cond 
+          (cond
             ((>= trans-date from-date)
-              (set! bought-amount 
+              (set! bought-amount
                 (gnc-numeric-add-fixed bought-amount amount))
               (set! bought-value
                 (gnc-numeric-add-fixed bought-value value))
@@ -1666,21 +1666,21 @@
             (set! bought-split-count
               (+ bought-split-count (stats 'get-bought-split-count)))
             (set! old-bought-value
-              (gnc-numeric-add-fixed 
+              (gnc-numeric-add-fixed
                 old-bought-value
                 (stats 'get-old-bought-value)))
             (set! bought-value
               (gnc-numeric-add-fixed bought-value (stats 'get-bought-value)))
             (set! sold-split-count
-              (gnc-numeric-add-fixed 
+              (gnc-numeric-add-fixed
                 sold-split-count
                 (stats 'get-sold-split-count)))
             (set! short-term-sold-basis
-              (gnc-numeric-add-fixed 
+              (gnc-numeric-add-fixed
                 short-term-sold-basis
                 (stats 'get-short-term-sold-basis)))
             (set! short-term-sold-value
-              (gnc-numeric-add-fixed 
+              (gnc-numeric-add-fixed
                 short-term-sold-value
                 (stats 'get-short-term-sold-value)))
             (set! short-term-realized-gain
@@ -1704,7 +1704,7 @@
             (set! end-value
               (gnc-numeric-add-fixed end-value (stats 'get-end-value)))
             (set! unrealized-gain
-              (gnc-numeric-add-fixed 
+              (gnc-numeric-add-fixed
                 unrealized-gain
                 (stats 'get-unrealized-gain)))
             (set! short-term-unrealized-gain
@@ -1723,13 +1723,13 @@
                   (stats 'get-is-active-in-window)))
 
             (if include-amounts
-              (begin 
+              (begin
                 (set! old-bought-amount
                   (gnc-numeric-add-fixed
                     old-bought-amount
                     (stats 'get-old-bought-amount)))
                 (set! bought-amount
-                  (gnc-numeric-add-fixed 
+                  (gnc-numeric-add-fixed
                     bought-amount
                     (stats 'get-bought-amount)))
                 (set! short-term-sold-amount
@@ -1757,7 +1757,7 @@
               ((add-to-table) add-to-table)
 
               ((get-bought-split-count) (lambda () bought-split-count))
-              ((get-old-bought-amount) (lambda () old-bought-amount))            
+              ((get-old-bought-amount) (lambda () old-bought-amount))
               ((get-old-bought-value) (lambda () old-bought-value))
               ((get-bought-amount) (lambda () bought-amount))
               ((get-bought-value) (lambda () bought-value))
@@ -1793,9 +1793,9 @@
     (define (add-account-report account)
       (let* ((currency (xaccAccountGetCommodity account))
              (currency-fraction (gnc-commodity-get-fraction currency))
-             ;; Note that this price may not be in the report-currency. Use 
+             ;; Note that this price may not be in the report-currency. Use
              ;; (price->report-currency-value price) to convert.
-             (price (price-fn currency))           
+             (price (price-fn currency))
              (splits (get-all-splits account))
              (lot-pair (get-all-lots splits))
              (lots (car lot-pair))
@@ -1810,8 +1810,8 @@
              ;; Gets whether the account should be included in the report,
              ;; based on the account balance and the option to ignore empty
              ;; accounts.
-             (check-account-balance (lambda() 
-                (or 
+             (check-account-balance (lambda()
+                (or
                   include-empty-accounts
                   (not (gnc-numeric-zero-p (get-account-balance))))))
              ;; Gets whether the account should be included in the report,
@@ -1828,8 +1828,8 @@
                 short-term-unrealized-gain
                 long-term-unrealized-gain)
         (if show-chart
-          (let ((gain-values 
-                  (append 
+          (let ((gain-values
+                  (append
                     (if show-realized-gain-columns
                       (if group-gains-by-age
                         (list
@@ -1856,14 +1856,14 @@
                     gain-values)
                 (car colors))
             (set! colors (cdr colors)))))
-    
+
       ;; Adds to the given table rows for the given lots.
       (define (add-lots-rows table lots)
         (if (not lots) (gnc:error "lots is not specified"))
         (let* (;; Add rows at first to a temp table. Later, it may be copied
                ;; to the visible table.
                (account-table (gnc:make-html-table))
-               (account-lots-info 
+               (account-lots-info
                 (create-lot-stats-collector currency-fraction)))
 
           (account-lots-info 'init-for-account account unassigned-splits)
@@ -1900,21 +1900,21 @@
                                     currency-fraction)))
                   (lot-info 'merge-lot lot currency price)
 
-                  (loop rest 
+                  (loop rest
                     ;; Determine whether the lot should be included in the
                     ;; report.
                     (if (and (lot-info 'get-is-active-in-window)
                               (or include-closed-lots
                                   (not (gnc-numeric-zero-p
                                         (lot-info 'get-end-amount)))))
-                      (let ((next-is-odd-row 
+                      (let ((next-is-odd-row
                         ;; Add lot totals row, followed by any lot warnings.
                         (lot-info 'add-to-table account-table is-odd-row)))
 
                         ;; Merge the lot stats into the account stats
                         ;; collector.
                         (account-lots-info 'merge-stats lot-info)
-                        
+
                         next-is-odd-row)
                       is-odd-row))))))
 
@@ -1922,7 +1922,7 @@
           ;; warnings.
           (account-lots-info 'add-to-table account-table #t)
 
-          (if (and 
+          (if (and
                 (account-lots-info 'get-is-active-in-window)
                 (or (not include-only-accounts-with-warnings)
                     (account-lots-info 'get-has-warnings)))
@@ -1951,7 +1951,7 @@
 
     (gnc:html-document-set-title!
       document
-      (format #f 
+      (format #f
         (G_ "~a, ~a to ~a")
         (get-option gnc:pagename-general gnc:optname-reportname)
         (qof-print-date from-date)
@@ -1977,9 +1977,9 @@
                               colname-long-term-unrealized-gain)
                           (list colname-unrealized-gain))
                         '()))))
-            (gnc:html-chart-set-title! chart 
+            (gnc:html-chart-set-title! chart
               (list (N_ "Account Lot Gains")
-                (format #f 
+                (format #f
                   (G_ "~a to ~a")
                   (qof-print-date from-date)
                   (qof-print-date to-date))))
@@ -1987,7 +1987,7 @@
             (gnc:html-chart-set-width! chart chart-width)
             (gnc:html-chart-set-height! chart chart-height)
             (gnc:html-chart-set-data-labels! chart labels)
-            (gnc:html-chart-set-y-axis-label!  
+            (gnc:html-chart-set-y-axis-label!
               chart (gnc-commodity-get-mnemonic report-currency))
             (gnc:html-chart-set-currency-iso!
               chart (gnc-commodity-get-mnemonic report-currency))
@@ -1995,8 +1995,8 @@
               chart (gnc-commodity-get-nice-symbol report-currency))
             (gnc:html-chart-set-stacking?! chart
               (eq? chart-type 'bar-stacked)))))
-        
-        (for-each 
+
+        (for-each
           (lambda (account) (add-account-report account))
           accounts)
 
@@ -2012,7 +2012,7 @@
       (gnc:html-document-add-object! document table))
 
     ;; Maybe add chart to doc.
-    (cond 
+    (cond
       (show-chart
         (if (eq? chart-location 'bottom)
           (add-padding-rows 3))
