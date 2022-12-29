@@ -169,6 +169,15 @@ sub parse_currencies {
                 $inverted = 1;
             }
         }
+        # If quotes aren't directly available, try a detour via EUR
+        # TODO reverse direction as above, detour via USD etc...
+        unless (defined($price)) {
+            my $eur_price_from = $quoter->currency($from_currency, "EUR");
+            my $eur_price_to = $quoter->currency($to_currency, "EUR");
+            if (defined($eur_price_from) and defined($eur_price_to)) {
+                $price = $eur_price_from / $eur_price_to;
+            }
+        }
 
         $results{$from_currency}{"success"} = defined($price);
         $results{$from_currency}{"inverted"} = $inverted;
