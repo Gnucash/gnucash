@@ -198,6 +198,16 @@ if ($exchange eq "currency") {
             $result = $inv_res;
         }
     }
+    # If quotes aren't directly available, try a detour via EUR
+    # TODO reverse direction as above, detour via USD etc...
+    unless (defined($result)) {
+        my $eur_res_from = $q->currency($from, "EUR");
+        my $eur_res_to = $q->currency($to, "EUR");
+        if (defined($eur_res_from) and defined($eur_res_to)) {
+            $result = $eur_res_from / $eur_res_to;
+        }
+    }
+    # end
     if (defined($result)) {
       printf "1 $from = $result $to\n";
     } else {
