@@ -1683,11 +1683,13 @@ void CsvImpPriceAssist::preview_refresh_table ()
         preview_style_column (i, combostore);
 
     auto column_types = price_imp->column_types_price();
+    GncPricePropType req_column_type;
+    auto is_req_column_type = [&req_column_type] (GncPricePropType column_type)->bool
+                                { return column_type == req_column_type; };
 
     // look for a namespace column, clear the commodity combo
-    auto col_type_name = std::find (column_types.begin(),
-                column_types.end(), GncPricePropType::FROM_NAMESPACE);
-    if (col_type_name != column_types.end())
+    req_column_type = GncPricePropType::FROM_NAMESPACE;     // Used by is_column_type()
+    if (std::any_of (column_types.begin(), column_types.end(), is_req_column_type))
     {
         g_signal_handlers_block_by_func (commodity_selector, (gpointer) csv_price_imp_preview_commodity_sel_cb, this);
         set_commodity_for_combo (GTK_COMBO_BOX(commodity_selector), nullptr);
@@ -1695,9 +1697,8 @@ void CsvImpPriceAssist::preview_refresh_table ()
     }
 
     // look for a symbol column, clear the commodity combo
-    auto col_type_sym = std::find (column_types.begin(),
-                column_types.end(), GncPricePropType::FROM_SYMBOL);
-    if (col_type_sym != column_types.end())
+    req_column_type = GncPricePropType::FROM_SYMBOL;     // Used by is_column_type()
+    if (std::any_of (column_types.begin(), column_types.end(), is_req_column_type))
     {
         g_signal_handlers_block_by_func (commodity_selector, (gpointer) csv_price_imp_preview_commodity_sel_cb, this);
         set_commodity_for_combo (GTK_COMBO_BOX(commodity_selector), nullptr);
@@ -1705,9 +1706,8 @@ void CsvImpPriceAssist::preview_refresh_table ()
     }
 
     // look for a currency column, clear the currency combo
-    auto col_type_curr = std::find (column_types.begin(),
-                column_types.end(), GncPricePropType::TO_CURRENCY);
-    if (col_type_curr != column_types.end())
+    req_column_type = GncPricePropType::TO_CURRENCY;     // Used by is_column_type()
+    if (std::any_of (column_types.begin(), column_types.end(), is_req_column_type))
     {
         g_signal_handlers_block_by_func (currency_selector, (gpointer) csv_price_imp_preview_currency_sel_cb, this);
         set_commodity_for_combo (GTK_COMBO_BOX(currency_selector), nullptr);
