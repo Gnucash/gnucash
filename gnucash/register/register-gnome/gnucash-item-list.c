@@ -247,7 +247,7 @@ gnc_item_list_autosize (GncItemList* item_list)
     g_return_val_if_fail (item_list != NULL, 0);
     g_return_val_if_fail (IS_GNC_ITEM_LIST (item_list), 0);
 
-    return 100;
+    return 150;
 }
 
 void

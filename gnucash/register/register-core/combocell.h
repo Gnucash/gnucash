@@ -63,6 +63,10 @@ void         gnc_combo_cell_clear_menu (ComboCell* cell);
 void         gnc_combo_cell_add_menu_item (ComboCell* cell,
                                            const char* menustr);
 
+/** Add a unique menu item to the list. */
+void gnc_combo_cell_add_menu_item_unique (ComboCell* cell,
+                                          const char* menustr);
+
 /** Add a 'account name' menu item to the list. When testing for
  *  equality with the currently selected item, this function will
  *  ignore the characters normally used to separate account names. */
@@ -103,6 +107,10 @@ void         gnc_combo_cell_set_autosize (ComboCell* cell, gboolean autosize);
 void gnc_combo_cell_use_quickfill_cache (ComboCell* cell,
                                          QuickFill* shared_qf);
 void gnc_combo_cell_use_list_store_cache (ComboCell* cell, gpointer data);
+
+/** Set the combocell to use only type ahead search. This will make the
+ *  search to be more like a modified entry completion. */
+void gnc_combo_cell_use_type_ahead_only (ComboCell* cell);
 
 /** @} */
 #endif
