@@ -899,20 +899,24 @@ to ensure proper recording."), new_date_str, last_split_date_str);
 
     // generate final summary message. Collates a header, the errors
     // and warnings. Then allow completion if errors is empty.
-    auto header = errors.empty() ?
-        N_("No errors found. Click Apply to create transaction.") :
-        N_("The following errors must be fixed:");
-    auto summary = std::string { _(header) };
-    auto summary_add = [&summary](auto a) { summary += "\n• "; summary += a; };
-    std::for_each (errors.begin(), errors.end(), summary_add);
+    auto add_bullet_item = [](std::string& a, std::string& b)->std::string { return std::move(a) + "\n• " + b; };
+    auto summary = std::string{};
     if (errors.empty())
-        std::for_each (infos.begin(), infos.end(), summary_add);
+    {
+        summary = _("No errors found. Click Apply to create transaction.");
+        summary = std::accumulate (infos.begin(), infos.end(), std::move (summary), add_bullet_item);
+    }
+    else
+    {
+        summary = _("The following errors must be fixed:");
+        summary = std::accumulate (errors.begin(), errors.end(), std::move (summary), add_bullet_item);
+    }
+
     if (!warnings.empty())
     {
-        auto warnings_header = N_ ("The following warnings exist:");
         summary += "\n\n";
-        summary += _(warnings_header);
-        std::for_each (warnings.begin(), warnings.end(), summary_add);
+        summary += _("The following warnings exist:");
+        summary = std::accumulate (warnings.begin(), warnings.end(), std::move (summary), add_bullet_item);
     }
     gtk_label_set_text (GTK_LABEL (info->finish_summary), summary.c_str());
     gtk_assistant_set_page_complete (GTK_ASSISTANT (info->window),
