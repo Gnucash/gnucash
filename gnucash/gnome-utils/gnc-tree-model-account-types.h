@@ -131,11 +131,21 @@ guint32 gnc_tree_model_account_types_get_selection(GtkTreeSelection *sel);
 GNCAccountType
 gnc_tree_model_account_types_get_selection_single(GtkTreeSelection *sel);
 
+/* Gets the selected account type.  If no types are active, returns
+   ACCT_TYPE_NONE. */
+GNCAccountType
+gnc_tree_model_account_types_get_active_combo (GtkComboBox *combo);
+
 /* Set the selection state of the tree selection to match the bitmask
    of account-type enums in 'selected'.  This will also scroll to a
    selected row in the TreeView.*/
 void gnc_tree_model_account_types_set_selection(GtkTreeSelection *sel,
         guint32 selected);
+
+/* Set the active entry to match the bitmask of account-type enums in
+   'selected' */
+void gnc_tree_model_account_types_set_active_combo (GtkComboBox *combo,
+                                                    guint32 selected);
 
 
 /**************** Method 2 functions **************/

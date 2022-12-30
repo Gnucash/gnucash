@@ -217,11 +217,54 @@ gnc_tree_model_account_types_get_selection_single(GtkTreeSelection *sel)
     return ACCT_TYPE_NONE;
 }
 
+GNCAccountType
+gnc_tree_model_account_types_get_active_combo (GtkComboBox *combo)
+{
+    GtkTreeModelSort   *s_model;
+    GtkTreeModelFilter *f_model;
+    GtkTreeIter iter;
+    guint32 bits = 0;
+    gint i;
+
+    g_return_val_if_fail (GTK_IS_COMBO_BOX(combo), 0);
+
+    if (gtk_combo_box_get_active_iter (combo, &iter))
+    {
+        s_model = GTK_TREE_MODEL_SORT(gtk_combo_box_get_model (combo));
+        f_model = GTK_TREE_MODEL_FILTER(gtk_tree_model_sort_get_model (s_model));
+
+        if (gtk_tree_model_filter_get_model (f_model) != account_types_tree_model)
+            PERR("TreeSelection's TreeModel is not the account-types Model");
+        else
+        {
+            GtkTreePath *s_path = gtk_tree_model_get_path (GTK_TREE_MODEL(s_model), &iter);
+            GtkTreePath *f_path = gtk_tree_model_sort_convert_path_to_child_path (s_model, s_path);
+            GtkTreePath *path = gtk_tree_model_filter_convert_path_to_child_path (f_model, f_path);
+
+            gtk_tree_path_free (f_path);
+            gtk_tree_path_free (s_path);
+
+            if (!path || gtk_tree_path_get_depth (path) != 1)
+            {
+                PERR("Invalid Account-types TreePath.");
+                gtk_tree_path_free (path);
+                return ACCT_TYPE_NONE;
+            }
+            bits |= (1 << gtk_tree_path_get_indices (path)[0]);
+            gtk_tree_path_free (path);
+        }
+    }
+    for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
+        if (bits & (1 << i))
+            return i;
+    return ACCT_TYPE_NONE;
+}
+
 void
 gnc_tree_model_account_types_set_selection (GtkTreeSelection *sel,
         guint32 selected)
 {
-    GtkTreePath *path, *f_path;
+    GtkTreePath *path;
     GtkTreeModelFilter *f_model;
     gint i;
     GtkTreeView *view;
@@ -239,16 +282,54 @@ gnc_tree_model_account_types_set_selection (GtkTreeSelection *sel,
     {
         if (selected & (1 << i))
         {
-            f_path = gtk_tree_model_filter_convert_child_path_to_path(
-                         f_model, path);
+            GtkTreePath *f_path = gtk_tree_model_filter_convert_child_path_to_path(
+                                      f_model, path);
             gtk_tree_selection_select_path(sel, f_path);
             gtk_tree_view_scroll_to_cell(view, f_path, NULL, FALSE, 0.0, 0.0);
+            gtk_tree_path_free(f_path);
         }
         gtk_tree_path_next(path);
     }
     gtk_tree_path_free(path);
 }
 
+void
+gnc_tree_model_account_types_set_active_combo (GtkComboBox *combo,
+                                               guint32 selected)
+{
+    GtkTreePath *path;
+    GtkTreeModelFilter *f_model;
+    GtkTreeModelSort   *s_model;
+    gint i;
+
+    g_return_if_fail (GTK_IS_COMBO_BOX(combo));
+
+    s_model = GTK_TREE_MODEL_SORT(gtk_combo_box_get_model (combo));
+    f_model = GTK_TREE_MODEL_FILTER(gtk_tree_model_sort_get_model (s_model));
+    g_return_if_fail (gtk_tree_model_filter_get_model (f_model) ==
+                      account_types_tree_model);
+
+    gtk_combo_box_set_active (combo, -1);
+
+    path = gtk_tree_path_new_first ();
+
+    for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
+    {
+        if (selected & (1 << i))
+        {
+            GtkTreeIter iter;
+            GtkTreePath *f_path = gtk_tree_model_filter_convert_child_path_to_path (f_model, path);
+            GtkTreePath *s_path = gtk_tree_model_sort_convert_child_path_to_path (s_model, f_path);
+
+            gtk_tree_model_get_iter (GTK_TREE_MODEL(s_model), &iter, s_path);
+            gtk_combo_box_set_active_iter (combo, &iter);
+            gtk_tree_path_free (f_path);
+            gtk_tree_path_free (s_path);
+        }
+        gtk_tree_path_next (path);
+    }
+    gtk_tree_path_free (path);
+}
 
 /* Static functions implementing GtkTreeModel */
 
