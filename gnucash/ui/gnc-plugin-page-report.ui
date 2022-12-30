@@ -22,7 +22,7 @@
 
   <menu id="FilePlaceholder4">
     <item>
-      <attribute name="label" translatable="yes">Export as P_DF...</attribute>
+      <attribute name="label" translatable="yes">Export as P_DF…</attribute>
       <attribute name="action">GncPluginPageReportActions.FilePrintPDFAction</attribute>
       <attribute name="tooltip" translatable="yes">Export the current report as a PDF document</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
@@ -47,7 +47,7 @@
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="no">Save Report Configuration As...</attribute>
+      <attribute name="label" translatable="no">Save Report Configuration As…</attribute>
       <attribute name="action">GncPluginPageReportActions.ReportSaveAsAction</attribute>
       <attribute name="accel">&lt;Primary&gt;&lt;Alt&gt;&lt;Shift&gt;s</attribute>
       <attribute name="tooltip" translatable="yes">Add the current report's configuration to the 'Reports->Saved Report Configurations' menu</attribute>
@@ -111,7 +111,7 @@
       <object class="GtkToolButton" id="but2a">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">New _Invoice...</property>
+        <property name="label" translatable="yes">New _Invoice…</property>
         <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
         <property name="tooltip-text" translatable="yes">Open the New Invoice dialog</property>
         <property name="use-underline">True</property>
@@ -236,7 +236,7 @@
       <object class="GtkToolButton" id="but9">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Save Report Configuration As...</property>
+        <property name="label" translatable="yes">Save Report Configuration As…</property>
         <property name="action-name">GncPluginPageReportActions.ReportSaveAsAction</property>
         <property name="tooltip-text" translatable="yes">Add the current report's configuration to the 'Reports->Saved Report Configurations' menu</property>
         <property name="use-underline">True</property>
@@ -266,7 +266,7 @@
       <object class="GtkToolButton" id="but11">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_Print Report...</property>
+        <property name="label" translatable="yes">_Print Report…</property>
         <property name="action-name">GncPluginPageReportActions.FilePrintAction</property>
         <property name="tooltip-text" translatable="yes">Print the current report</property>
         <property name="use-underline">True</property>
@@ -281,7 +281,7 @@
       <object class="GtkToolButton" id="but12">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Export as P_DF...</property>
+        <property name="label" translatable="yes">Export as P_DF…</property>
         <property name="action-name">GncPluginPageReportActions.FilePrintPDFAction</property>
         <property name="tooltip-text" translatable="yes">Export the current report as a PDF document</property>
         <property name="use-underline">True</property>

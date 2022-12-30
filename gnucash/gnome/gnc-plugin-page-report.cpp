@@ -230,9 +230,9 @@ static GncToolBarShortNames toolbar_labels[] =
     /* Translators: This string is meant to be a short alternative for "Save Report Configuration"
        to be used as toolbar button label. */
     { "ReportSaveAction",     N_("Save Config") },
-    /* Translators: This string is meant to be a short alternative for "Save Report Configuration As..."
+    /* Translators: This string is meant to be a short alternative for "Save Report Configuration As…"
        to be used as toolbar button label. */
-    { "ReportSaveAsAction",   N_("Save Config As...") },
+    { "ReportSaveAsAction",   N_("Save Config As…") },
     { "FilePrintPDFAction",   N_("Make Pdf") },
     { nullptr, nullptr },
 };
@@ -1271,7 +1271,7 @@ gnc_plugin_page_report_menu_updates (GncPluginPage *plugin_page)
     window = (GncMainWindow*)gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(plugin_page));
 
     tooltip_list[0] = { "ReportSaveAction", N_("Save _Report Configuration"), report_save_str };
-    tooltip_list[1] = { "ReportSaveAsAction", N_("Save Report Configuration As..."), report_saveas_str };
+    tooltip_list[1] = { "ReportSaveAsAction", N_("Save Report Configuration As…"), report_saveas_str };
     tooltip_list[2] = { nullptr, nullptr, nullptr };
 
     gnc_plugin_page_report_menu_update (plugin_page, tooltip_list);

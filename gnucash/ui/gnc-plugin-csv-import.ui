@@ -3,17 +3,17 @@
 
   <menu id="FilePlaceholder1">
     <item>
-      <attribute name="label" translatable="yes">Import _Accounts from CSV...</attribute>
+      <attribute name="label" translatable="yes">Import _Accounts from CSV…</attribute>
       <attribute name="action">gnc-plugin-csv-import-actions.CsvImportAccountAction</attribute>
       <attribute name="tooltip" translatable="yes">Import Accounts from a CSV file</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="yes">Import _Transactions from CSV...</attribute>
+      <attribute name="label" translatable="yes">Import _Transactions from CSV…</attribute>
       <attribute name="action">gnc-plugin-csv-import-actions.CsvImportTransAction</attribute>
       <attribute name="tooltip" translatable="yes">Import Transactions from a CSV file</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="yes">Import _Prices from a CSV file...</attribute>
+      <attribute name="label" translatable="yes">Import _Prices from a CSV file…</attribute>
       <attribute name="action">gnc-plugin-csv-import-actions.CsvImportPriceAction</attribute>
       <attribute name="tooltip" translatable="yes">Import Prices from a CSV file</attribute>
     </item>

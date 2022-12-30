@@ -37,7 +37,7 @@
           <attribute name="hidden-when">action-disabled</attribute>
         </item>
         <item>
-          <attribute name="label" translatable="yes">Pa_ge Setup...</attribute>
+          <attribute name="label" translatable="yes">Pa_ge Setup…</attribute>
           <attribute name="action">mainwin.FilePageSetupAction</attribute>
           <attribute name="accel">&lt;Primary&gt;&lt;Shift&gt;p</attribute>
           <attribute name="tooltip" translatable="yes">Specify the page size and orientation for printing</attribute>
@@ -341,7 +341,7 @@
       </section>
       <section>
         <item>
-          <attribute name="label" translatable="yes">Reset _Warnings...</attribute>
+          <attribute name="label" translatable="yes">Reset _Warnings…</attribute>
           <attribute name="action">mainwin.ActionsForgetWarningsAction</attribute>
           <attribute name="tooltip" translatable="yes">Reset the state of all warning messages so they will be shown again</attribute>
         </item>
@@ -585,7 +585,7 @@
         <property name="tooltip-text" translatable="yes">Open the New Invoice dialog</property>
         <property name="label" translatable="no">ToolbarNewInvoiceAction</property>
         <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
-        <property name="label" translatable="yes">New _Invoice...</property>
+        <property name="label" translatable="yes">New _Invoice…</property>
         <property name="use-underline">True</property>
         <property name="icon-name">gnc-invoice-new</property>
       </object>

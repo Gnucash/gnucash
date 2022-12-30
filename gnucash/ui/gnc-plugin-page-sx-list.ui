@@ -13,7 +13,7 @@
 
   <menu id="EditPlaceholder3">
     <item>
-      <attribute name="label" translatable="yes">_Find...</attribute>
+      <attribute name="label" translatable="yes">_Find…</attribute>
       <attribute name="action">gnc-plugin-basic-commands-actions.EditFindTransactionsAction</attribute>
       <attribute name="accel">&lt;Primary&gt;f</attribute>
       <attribute name="tooltip" translatable="yes">Find transactions with a search</attribute>
@@ -119,7 +119,7 @@
       <object class="GtkToolButton" id="but2a">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">New _Invoice...</property>
+        <property name="label" translatable="yes">New _Invoice…</property>
         <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
         <property name="tooltip-text" translatable="yes">Open the New Invoice dialog</property>
         <property name="use-underline">True</property>

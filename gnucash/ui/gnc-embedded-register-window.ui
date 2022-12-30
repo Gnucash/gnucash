@@ -89,7 +89,7 @@
       <attribute name="action">membeddedwin.ActionsAction</attribute>
       <section>
         <item>
-          <attribute name="label" translatable="yes">_Transfer...</attribute>
+          <attribute name="label" translatable="yes">_Transfer…</attribute>
           <attribute name="action">GncPluginPageRegisterActions.ActionsTransferAction</attribute>
           <attribute name="accel">&lt;Primary&gt;t</attribute>
           <attribute name="tooltip" translatable="yes">Transfer funds from one account to another</attribute>

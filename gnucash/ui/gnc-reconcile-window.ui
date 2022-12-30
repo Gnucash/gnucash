@@ -5,7 +5,7 @@
       <attribute name="label" translatable="yes">_Reconcile</attribute>
       <section>
         <item>
-          <attribute name="label" translatable="yes">_Reconcile Information...</attribute>
+          <attribute name="label" translatable="yes">_Reconcile Information…</attribute>
           <attribute name="action">recwin.RecnChangeInfoAction</attribute>
         </item>
       </section>
@@ -40,7 +40,7 @@
       </section>
       <section>
         <item>
-          <attribute name="label" translatable="yes">_Transfer...</attribute>
+          <attribute name="label" translatable="yes">_Transfer…</attribute>
           <attribute name="action">recwin.AccountTransferAction</attribute>
         </item>
       </section>

@@ -3,7 +3,7 @@
 
   <menu id="FilePlaceholder1">
     <item>
-      <attribute name="label" translatable="yes">Import Bills &amp; _Invoices...</attribute>
+      <attribute name="label" translatable="yes">Import Bills &amp; _Invoices…</attribute>
       <attribute name="action">gnc-plugin-bi-import-actions.bi_importAction</attribute>
       <attribute name="tooltip" translatable="yes">Import bills and invoices from a CSV text file</attribute>
     </item>

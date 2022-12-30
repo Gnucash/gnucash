@@ -207,7 +207,7 @@ static action_toolbar_labels invoice_action_labels[] =
     {"BlankEntryAction", N_("Blank"), N_("Move to the blank entry at the bottom of the invoice")},
     {"ToolsProcessPaymentAction", N_("_Pay Invoice"), N_("Enter a payment for the owner of this invoice") },
     {"ReportsCompanyReportAction", N_("_Company Report"), N_("Open a customer report window for the owner of this invoice") },
-    {"BusinessLinkAction", N_("_Manage Document Link..."), N_("Manage Document Link")},
+    {"BusinessLinkAction", N_("_Manage Document Link…"), N_("Manage Document Link")},
     {"BusinessLinkOpenAction", N_("_Open Linked Document"), N_("Open Linked Document")},
     {NULL, NULL, NULL},
 };
@@ -232,7 +232,7 @@ static action_toolbar_labels bill_action_labels[] =
     {"BlankEntryAction", N_("Blank"), N_("Move to the blank entry at the bottom of the bill")},
     {"ToolsProcessPaymentAction", N_("_Pay Bill"), N_("Enter a payment for the owner of this bill") },
     {"ReportsCompanyReportAction", N_("_Company Report"), N_("Open a vendor report window for the owner of this bill") },
-    {"BusinessLinkAction", N_("_Manage Document Link..."), N_("Manage Document Link")},
+    {"BusinessLinkAction", N_("_Manage Document Link…"), N_("Manage Document Link")},
     {"BusinessLinkOpenAction", N_("_Open Linked Document"), N_("Open Linked Document")},
     {NULL, NULL, NULL},
 };
@@ -257,7 +257,7 @@ static action_toolbar_labels voucher_action_labels[] =
     {"BlankEntryAction", N_("Blank"), N_("Move to the blank entry at the bottom of the voucher")},
     {"ToolsProcessPaymentAction", N_("_Pay Voucher"), N_("Enter a payment for the owner of this voucher") },
     {"ReportsCompanyReportAction", N_("_Company Report"), N_("Open a employee report window for the owner of this voucher") },
-    {"BusinessLinkAction", N_("_Manage Document Link..."), N_("Manage Document Link")},
+    {"BusinessLinkAction", N_("_Manage Document Link…"), N_("Manage Document Link")},
     {"BusinessLinkOpenAction", N_("_Open Linked Document"), N_("Open Linked Document")},
     {NULL, NULL, NULL},
 };
@@ -282,7 +282,7 @@ static action_toolbar_labels creditnote_action_labels[] =
     {"BlankEntryAction", N_("Blank"), N_("Move to the blank entry at the bottom of the credit note")},
     {"ToolsProcessPaymentAction", N_("_Pay Credit Note"), N_("Enter a payment for the owner of this credit note") },
     {"ReportsCompanyReportAction", N_("_Company Report"), N_("Open a company report window for the owner of this credit note") },
-    {"BusinessLinkAction", N_("_Manage Document Link..."), N_("Manage Document Link...")},
+    {"BusinessLinkAction", N_("_Manage Document Link…"), N_("Manage Document Link…")},
     {"BusinessLinkOpenAction", N_("_Open Linked Document"), N_("Open Linked Document")},
     {NULL, NULL, NULL},
 };

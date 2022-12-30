@@ -12,14 +12,14 @@
 
   <menu id="EditPlaceholder1">
     <item>
-      <attribute name="label" translatable="yes">Assign as payment...</attribute>
+      <attribute name="label" translatable="yes">Assign as payment…</attribute>
       <attribute name="action">gnc-plugin-business-actions.RegisterAssignPayment</attribute>
       <attribute name="tooltip" translatable="yes">Assign the selected transaction as payment</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
       <attribute name="hidden-when">action-disabled</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="yes">Edit payment...</attribute>
+      <attribute name="label" translatable="yes">Edit payment…</attribute>
       <attribute name="action">gnc-plugin-business-actions.RegisterEditPayment</attribute>
       <attribute name="tooltip" translatable="yes">Edit the payment this transaction is a part of</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
@@ -46,7 +46,7 @@
 
   <menu id="EditPlaceholder3">
     <item>
-      <attribute name="label" translatable="yes">_Find...</attribute>
+      <attribute name="label" translatable="yes">_Find…</attribute>
       <attribute name="action">gnc-plugin-basic-commands-actions.EditFindTransactionsAction</attribute>
       <attribute name="accel">&lt;Primary&gt;f</attribute>
       <attribute name="tooltip" translatable="yes">Find transactions with a search</attribute>
@@ -104,12 +104,12 @@
 
   <menu id="ViewPlaceholder3">
     <item>
-      <attribute name="label" translatable="no">_Sort By...</attribute>
+      <attribute name="label" translatable="no">_Sort By…</attribute>
       <attribute name="action">GncPluginPageRegisterActions.ViewSortByAction</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="no">_Filter By...</attribute>
+      <attribute name="label" translatable="no">_Filter By…</attribute>
       <attribute name="action">GncPluginPageRegisterActions.ViewFilterByAction</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
@@ -202,7 +202,7 @@
 
   <menu id="TransPlaceholder3">
       <item>
-        <attribute name="label" translatable="yes">Manage Document Link...</attribute>
+        <attribute name="label" translatable="yes">Manage Document Link…</attribute>
         <attribute name="action">GncPluginPageRegisterActions.LinkTransactionAction</attribute>
         <attribute name="tooltip" translatable="yes">Add, change, or unlink the document linked with the current transaction</attribute>
         <attribute name="temp" translatable="no">yes</attribute>
@@ -226,20 +226,20 @@
 
   <menu id="ActionsPlaceholder4">
     <item>
-      <attribute name="label" translatable="yes">_Transfer...</attribute>
+      <attribute name="label" translatable="yes">_Transfer…</attribute>
       <attribute name="action">GncPluginPageRegisterActions.ActionsTransferAction</attribute>
       <attribute name="accel">&lt;Primary&gt;t</attribute>
       <attribute name="tooltip" translatable="yes">Transfer funds from one account to another</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="yes">_Reconcile...</attribute>
+      <attribute name="label" translatable="yes">_Reconcile…</attribute>
       <attribute name="action">GncPluginPageRegisterActions.ActionsReconcileAction</attribute>
       <attribute name="tooltip" translatable="yes">Reconcile the selected account</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="yes">_Auto-clear...</attribute>
+      <attribute name="label" translatable="yes">_Auto-clear…</attribute>
       <attribute name="action">GncPluginPageRegisterActions.ActionsAutoClearAction</attribute>
       <attribute name="tooltip" translatable="yes">Automatically clear individual transactions, so as to reach a certain cleared amount</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
@@ -251,13 +251,13 @@
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="yes">Stoc_k Split...</attribute>
+      <attribute name="label" translatable="yes">Stoc_k Split…</attribute>
       <attribute name="action">GncPluginPageRegisterActions.ActionsStockSplitAction</attribute>
       <attribute name="tooltip" translatable="yes">Record a stock split or a stock merger</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="yes">View _Lots...</attribute>
+      <attribute name="label" translatable="yes">View _Lots…</attribute>
       <attribute name="action">GncPluginPageRegisterActions.ActionsLotsAction</attribute>
       <attribute name="tooltip" translatable="yes">Bring up the lot viewer/editor window</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
@@ -292,7 +292,7 @@
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="yes">Sche_dule...</attribute>
+      <attribute name="label" translatable="yes">Sche_dule…</attribute>
       <attribute name="action">GncPluginPageRegisterActions.ScheduleTransactionAction</attribute>
       <attribute name="tooltip" translatable="yes">Create a Scheduled Transaction with the current transaction as a template</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
@@ -345,12 +345,12 @@
   <menu id="mainwin-popup">
     <section>
       <item>
-        <attribute name="label" translatable="yes">_Sort By...</attribute>
+        <attribute name="label" translatable="yes">_Sort By…</attribute>
         <attribute name="action">GncPluginPageRegisterActions.ViewSortByAction</attribute>
         <attribute name="tooltip" translatable="yes">Filter accounts</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">_Filter By...</attribute>
+        <attribute name="label" translatable="yes">_Filter By…</attribute>
         <attribute name="action">GncPluginPageRegisterActions.ViewFilterByAction</attribute>
         <attribute name="tooltip" translatable="yes">Filter accounts</attribute>
       </item>
@@ -391,7 +391,7 @@
     </section>
     <section>
       <item>
-        <attribute name="label" translatable="yes">_Manage Document Link...</attribute>
+        <attribute name="label" translatable="yes">_Manage Document Link…</attribute>
         <attribute name="action">GncPluginPageRegisterActions.LinkTransactionAction</attribute>
         <attribute name="tooltip" translatable="yes">Add, change, or unlink the document linked with the current transaction</attribute>
       </item>
@@ -430,7 +430,7 @@
         <attribute name="tooltip" translatable="yes">Edit the exchange rate for the current transaction</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Sche_dule...</attribute>
+        <attribute name="label" translatable="yes">Sche_dule…</attribute>
         <attribute name="action">GncPluginPageRegisterActions.ScheduleTransactionAction</attribute>
         <attribute name="tooltip" translatable="yes">Create a Scheduled Transaction with the current transaction as a template</attribute>
       </item>
@@ -442,13 +442,13 @@
     </section>
     <section>
         <item>
-          <attribute name="label" translatable="yes">Assign as payment...</attribute>
+          <attribute name="label" translatable="yes">Assign as payment…</attribute>
           <attribute name="action">gnc-plugin-business-actions.RegisterAssignPayment</attribute>
           <attribute name="tooltip" translatable="yes">Assign the selected transaction as payment</attribute>
           <attribute name="hidden-when">action-disabled</attribute>
         </item>
         <item>
-          <attribute name="label" translatable="yes">Edit payment...</attribute>
+          <attribute name="label" translatable="yes">Edit payment…</attribute>
           <attribute name="action">gnc-plugin-business-actions.RegisterEditPayment</attribute>
           <attribute name="tooltip" translatable="yes">Edit the payment this transaction is a part of</attribute>
           <attribute name="hidden-when">action-disabled</attribute>
@@ -504,7 +504,7 @@
       <object class="GtkToolButton" id="but2a">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">New _Invoice...</property>
+        <property name="label" translatable="yes">New _Invoice…</property>
         <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
         <property name="tooltip-text" translatable="yes">Open the New Invoice dialog</property>
         <property name="use-underline">True</property>
@@ -654,7 +654,7 @@
       <object class="GtkToolButton" id="but10">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Sche_dule...</property>
+        <property name="label" translatable="yes">Sche_dule…</property>
         <property name="action-name">GncPluginPageRegisterActions.ScheduleTransactionAction</property>
         <property name="tooltip-text" translatable="yes">Create a Scheduled Transaction with the current transaction as a template</property>
         <property name="use-underline">True</property>
@@ -679,7 +679,7 @@
       <object class="GtkToolButton" id="but11">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_Transfer...</property>
+        <property name="label" translatable="yes">_Transfer…</property>
         <property name="action-name">GncPluginPageRegisterActions.ActionsTransferAction</property>
         <property name="tooltip-text" translatable="yes">Transfer funds from one account to another</property>
         <property name="use-underline">True</property>
@@ -694,7 +694,7 @@
       <object class="GtkToolButton" id="but12">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_Reconcile...</property>
+        <property name="label" translatable="yes">_Reconcile…</property>
         <property name="action-name">GncPluginPageRegisterActions.ActionsReconcileAction</property>
         <property name="tooltip-text" translatable="yes">Reconcile the selected account</property>
         <property name="use-underline">True</property>
@@ -709,7 +709,7 @@
       <object class="GtkToolButton" id="but13">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Stoc_k Split...</property>
+        <property name="label" translatable="yes">Stoc_k Split…</property>
         <property name="action-name">GncPluginPageRegisterActions.ActionsStockAssistantAction</property>
         <property name="tooltip-text" translatable="yes">Stock Assistant</property>
         <property name="use-underline">True</property>

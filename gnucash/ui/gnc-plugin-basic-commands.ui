@@ -9,7 +9,7 @@
       <attribute name="tooltip" translatable="yes">Create a new file</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="yes">_Open...</attribute>
+      <attribute name="label" translatable="yes">_Open…</attribute>
       <attribute name="action">gnc-plugin-basic-commands-actions.FileOpenAction</attribute>
       <attribute name="accel">&lt;Primary&gt;o</attribute>
       <attribute name="tooltip" translatable="yes">Open an existing GnuCash file</attribute>
@@ -24,7 +24,7 @@
        <attribute name="tooltip" translatable="yes">Save the current file</attribute>
     </item>
     <item>
-       <attribute name="label" translatable="yes">Save _As...</attribute>
+       <attribute name="label" translatable="yes">Save _As…</attribute>
        <attribute name="action">gnc-plugin-basic-commands-actions.FileSaveAsAction</attribute>
        <attribute name="accel">&lt;Primary&gt;&lt;Shift&gt;s</attribute>
        <attribute name="tooltip" translatable="yes">Save this file with a different name</attribute>
@@ -56,7 +56,7 @@
 
   <menu id="EditPlaceholder3">
     <item>
-      <attribute name="label" translatable="yes">_Find...</attribute>
+      <attribute name="label" translatable="yes">_Find…</attribute>
       <attribute name="action">gnc-plugin-basic-commands-actions.EditFindTransactionsAction</attribute>
       <attribute name="accel">&lt;Primary&gt;f</attribute>
       <attribute name="tooltip" translatable="yes">Find transactions with a search</attribute>
@@ -86,12 +86,12 @@
           <attribute name="tooltip" translatable="yes">The list of Scheduled Transactions</attribute>
         </item>
         <item>
-          <attribute name="label" translatable="yes">Since _Last Run...</attribute>
+          <attribute name="label" translatable="yes">Since _Last Run…</attribute>
           <attribute name="action">gnc-plugin-basic-commands-actions.ActionsSinceLastRunAction</attribute>
           <attribute name="tooltip" translatable="yes">Create Scheduled Transactions since the last time run</attribute>
         </item>
         <item>
-          <attribute name="label" translatable="yes">_Mortgage &amp; Loan Repayment...</attribute>
+          <attribute name="label" translatable="yes">_Mortgage &amp; Loan Repayment…</attribute>
           <attribute name="action">gnc-plugin-basic-commands-actions.ActionsMortgageLoanAction</attribute>
           <attribute name="tooltip" translatable="yes">Setup scheduled transactions for repayment of a loan</attribute>
         </item>

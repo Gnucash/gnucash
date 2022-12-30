@@ -3,7 +3,7 @@
 
   <menu id="FilePlaceholder1">
     <item>
-      <attribute name="label" translatable="yes">Import _OFX/QFX...</attribute>
+      <attribute name="label" translatable="yes">Import _OFX/QFX…</attribute>
       <attribute name="action">gnc-plugin-ofx-actions.OfxImportAction</attribute>
       <attribute name="tooltip" translatable="yes">Process an OFX/QFX response file</attribute>
     </item>

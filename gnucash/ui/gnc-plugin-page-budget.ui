@@ -13,19 +13,19 @@
 
   <menu id="EditPlaceholder1">
     <item>
-      <attribute name="label" translatable="yes">Esti_mate Budget...</attribute>
+      <attribute name="label" translatable="yes">Esti_mate Budget…</attribute>
       <attribute name="action">GncPluginPageBudgetActions.EstimateBudgetAction</attribute>
       <attribute name="tooltip" translatable="yes">Edit the selected account</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="yes">_All Periods...</attribute>
+      <attribute name="label" translatable="yes">_All Periods…</attribute>
       <attribute name="action">GncPluginPageBudgetActions.AllPeriodsBudgetAction</attribute>
       <attribute name="tooltip" translatable="yes">Estimate a budget value for the selected accounts from past transactions</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="yes">_Delete Budget...</attribute>
+      <attribute name="label" translatable="yes">_Delete Budget…</attribute>
       <attribute name="action">GncPluginPageBudgetActions.DeleteBudgetAction</attribute>
       <attribute name="tooltip" translatable="yes">Select this or another budget and delete it</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
@@ -46,7 +46,7 @@
 
   <menu id="EditPlaceholder3">
     <item>
-      <attribute name="label" translatable="yes">_Find...</attribute>
+      <attribute name="label" translatable="yes">_Find…</attribute>
       <attribute name="action">gnc-plugin-basic-commands-actions.EditFindTransactionsAction</attribute>
       <attribute name="accel">&lt;Primary&gt;f</attribute>
       <attribute name="tooltip" translatable="yes">Find transactions with a search</attribute>
@@ -67,7 +67,7 @@
 
   <menu id="EditPlaceholder6">
     <item>
-      <attribute name="label" translatable="yes">Budget _Options...</attribute>
+      <attribute name="label" translatable="yes">Budget _Options…</attribute>
       <attribute name="action">GncPluginPageBudgetActions.OptionsBudgetAction</attribute>
       <attribute name="tooltip" translatable="yes">Edit this budget's options</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
@@ -76,7 +76,7 @@
 
   <menu id="ViewPlaceholder1">
     <item>
-      <attribute name="label" translatable="yes">_Filter By...</attribute>
+      <attribute name="label" translatable="yes">_Filter By…</attribute>
       <attribute name="action">GncPluginPageBudgetActions.ViewFilterByAction</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
@@ -147,7 +147,7 @@
       <object class="GtkToolButton" id="but2a">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">New _Invoice...</property>
+        <property name="label" translatable="yes">New _Invoice…</property>
         <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
         <property name="tooltip-text" translatable="yes">Open the New Invoice dialog</property>
         <property name="use-underline">True</property>
@@ -197,7 +197,7 @@
       <object class="GtkToolButton" id="but4">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Budget _Options...</property>
+        <property name="label" translatable="yes">Budget _Options…</property>
         <property name="action-name">GncPluginPageBudgetActions.OptionsBudgetAction</property>
         <property name="tooltip-text" translatable="yes">Edit this budget's options</property>
         <property name="use-underline">True</property>
@@ -222,7 +222,7 @@
       <object class="GtkToolButton" id="but5">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Esti_mate Budget...</property>
+        <property name="label" translatable="yes">Esti_mate Budget…</property>
         <property name="action-name">GncPluginPageBudgetActions.EstimateBudgetAction</property>
         <property name="tooltip-text" translatable="yes">Estimate a budget value for the selected accounts from past transactions</property>
         <property name="use-underline">True</property>
@@ -237,7 +237,7 @@
       <object class="GtkToolButton" id="but6">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_All Periods...</property>
+        <property name="label" translatable="yes">_All Periods…</property>
         <property name="action-name">GncPluginPageBudgetActions.AllPeriodsBudgetAction</property>
         <property name="tooltip-text" translatable="yes">Edit budget for all periods for the selected accounts</property>
         <property name="use-underline">True</property>
@@ -252,7 +252,7 @@
       <object class="GtkToolButton" id="but7">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_Delete Budget...</property>
+        <property name="label" translatable="yes">_Delete Budget…</property>
         <property name="action-name">GncPluginPageBudgetActions.DeleteBudgetAction</property>
         <property name="tooltip-text" translatable="yes">Select this or another budget and delete it</property>
         <property name="use-underline">True</property>

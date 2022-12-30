@@ -3,7 +3,7 @@
 
   <menu id="FilePlaceholder1">
     <item>
-      <attribute name="label" translatable="yes">Import _Customers &amp; Vendors...</attribute>
+      <attribute name="label" translatable="yes">Import _Customers &amp; Vendors…</attribute>
       <attribute name="action">gnc-plugin-customer-import-actions.customer_importAction</attribute>
       <attribute name="tooltip" translatable="yes">Import Customers and Vendors from a CSV text file</attribute>
     </item>

@@ -20,7 +20,7 @@
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="yes">_New Customer...</attribute>
+      <attribute name="label" translatable="yes">_New Customer…</attribute>
       <attribute name="action">GncPluginPageOwnerTreeActions.OTNewCustomerAction</attribute>
       <attribute name="tooltip" translatable="yes">Create a new customer</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
@@ -36,7 +36,7 @@
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="yes">_New Vendor...</attribute>
+      <attribute name="label" translatable="yes">_New Vendor…</attribute>
       <attribute name="action">GncPluginPageOwnerTreeActions.OTNewVendorAction</attribute>
       <attribute name="tooltip" translatable="yes">Create a new vendor</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
@@ -52,7 +52,7 @@
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="yes">_New Employee...</attribute>
+      <attribute name="label" translatable="yes">_New Employee…</attribute>
       <attribute name="action">GncPluginPageOwnerTreeActions.OTNewEmployeeAction</attribute>
       <attribute name="tooltip" translatable="yes">Create a new employee</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
@@ -62,7 +62,7 @@
 
   <menu id="EditPlaceholder3">
     <item>
-      <attribute name="label" translatable="yes">_Find...</attribute>
+      <attribute name="label" translatable="yes">_Find…</attribute>
       <attribute name="action">gnc-plugin-basic-commands-actions.EditFindTransactionsAction</attribute>
       <attribute name="accel">&lt;Primary&gt;f</attribute>
       <attribute name="tooltip" translatable="yes">Find transactions with a search</attribute>
@@ -83,7 +83,7 @@
 
   <menu id="ViewPlaceholder1">
     <item>
-      <attribute name="label" translatable="yes">_Filter By...</attribute>
+      <attribute name="label" translatable="yes">_Filter By…</attribute>
       <attribute name="action">GncPluginPageOwnerTreeActions.ViewFilterByAction</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
@@ -156,7 +156,7 @@
     </section>
     <section>
       <item>
-        <attribute name="label" translatable="yes">New _Invoice...</attribute>
+        <attribute name="label" translatable="yes">New _Invoice…</attribute>
         <attribute name="action">GncPluginPageOwnerTreeActions.OTNewInvoiceAction</attribute>
         <attribute name="tooltip" translatable="yes">Create a new invoice</attribute>
       </item>
@@ -190,7 +190,7 @@
     </section>
     <section>
       <item>
-        <attribute name="label" translatable="yes">New _Bill...</attribute>
+        <attribute name="label" translatable="yes">New _Bill…</attribute>
         <attribute name="action">GncPluginPageOwnerTreeActions.OTNewBillAction</attribute>
         <attribute name="tooltip" translatable="yes">Create a new bill</attribute>
       </item>
@@ -224,7 +224,7 @@
     </section>
     <section>
       <item>
-        <attribute name="label" translatable="yes">New _Voucher...</attribute>
+        <attribute name="label" translatable="yes">New _Voucher…</attribute>
         <attribute name="action">GncPluginPageOwnerTreeActions.OTNewVoucherAction</attribute>
         <attribute name="tooltip" translatable="yes">Create a new voucher</attribute>
       </item>
@@ -289,7 +289,7 @@
       <object class="GtkToolButton" id="but2ca">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">New _Invoice...</property>
+        <property name="label" translatable="yes">New _Invoice…</property>
         <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
         <property name="tooltip-text" translatable="yes">Open the New Invoice dialog</property>
         <property name="use-underline">True</property>
@@ -314,7 +314,7 @@
       <object class="GtkToolButton" id="but3c">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_New Customer...</property>
+        <property name="label" translatable="yes">_New Customer…</property>
         <property name="action-name">GncPluginPageOwnerTreeActions.OTNewCustomerAction</property>
         <property name="tooltip-text" translatable="yes">Create a new customer</property>
         <property name="use-underline">True</property>
@@ -354,7 +354,7 @@
       <object class="GtkToolButton" id="but5c">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">New _Invoice...</property>
+        <property name="label" translatable="yes">New _Invoice…</property>
         <property name="action-name">GncPluginPageOwnerTreeActions.OTNewInvoiceAction</property>
         <property name="tooltip-text" translatable="yes">Create a new invoice</property>
         <property name="use-underline">True</property>
@@ -444,7 +444,7 @@
       <object class="GtkToolButton" id="but2va">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">New _Invoice...</property>
+        <property name="label" translatable="yes">New _Invoice…</property>
         <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
         <property name="tooltip-text" translatable="yes">Open the New Invoice dialog</property>
         <property name="use-underline">True</property>
@@ -469,7 +469,7 @@
       <object class="GtkToolButton" id="but3v">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_New Vendor...</property>
+        <property name="label" translatable="yes">_New Vendor…</property>
         <property name="action-name">GncPluginPageOwnerTreeActions.OTNewVendorAction</property>
         <property name="tooltip-text" translatable="yes">Create a new vendor</property>
         <property name="use-underline">True</property>
@@ -509,7 +509,7 @@
       <object class="GtkToolButton" id="but5v">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">New _Bill...</property>
+        <property name="label" translatable="yes">New _Bill…</property>
         <property name="action-name">GncPluginPageOwnerTreeActions.OTNewBillAction</property>
         <property name="tooltip-text" translatable="yes">Create a new bill</property>
         <property name="use-underline">True</property>
@@ -599,7 +599,7 @@
       <object class="GtkToolButton" id="but2ea">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">New _Invoice...</property>
+        <property name="label" translatable="yes">New _Invoice…</property>
         <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
         <property name="tooltip-text" translatable="yes">Open the New Invoice dialog</property>
         <property name="use-underline">True</property>
@@ -624,7 +624,7 @@
       <object class="GtkToolButton" id="but3e">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_New Employee...</property>
+        <property name="label" translatable="yes">_New Employee…</property>
         <property name="action-name">GncPluginPageOwnerTreeActions.OTNewEmployeeAction</property>
         <property name="tooltip-text" translatable="yes">Create a new employee</property>
         <property name="use-underline">True</property>
@@ -664,7 +664,7 @@
       <object class="GtkToolButton" id="but5e">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">New _Voucher...</property>
+        <property name="label" translatable="yes">New _Voucher…</property>
         <property name="action-name">GncPluginPageOwnerTreeActions.OTNewVoucherAction</property>
         <property name="tooltip-text" translatable="yes">Create a new voucher</property>
         <property name="use-underline">True</property>
