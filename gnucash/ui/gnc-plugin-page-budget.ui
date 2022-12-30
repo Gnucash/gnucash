@@ -1,0 +1,298 @@
+<?xml version="1.0"?>
+<interface>
+
+  <menu id="FilePlaceholder3">
+    <item>
+      <attribute name="label" translatable="yes">_Print</attribute>
+      <attribute name="action">mainwin.FilePrintAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;p</attribute>
+      <attribute name="tooltip" translatable="yes">Print the currently active page</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="EditPlaceholder1">
+    <item>
+      <attribute name="label" translatable="yes">Esti_mate Budget...</attribute>
+      <attribute name="action">GncPluginPageBudgetActions.EstimateBudgetAction</attribute>
+      <attribute name="tooltip" translatable="yes">Edit the selected account</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_All Periods...</attribute>
+      <attribute name="action">GncPluginPageBudgetActions.AllPeriodsBudgetAction</attribute>
+      <attribute name="tooltip" translatable="yes">Estimate a budget value for the selected accounts from past transactions</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Delete Budget...</attribute>
+      <attribute name="action">GncPluginPageBudgetActions.DeleteBudgetAction</attribute>
+      <attribute name="tooltip" translatable="yes">Select this or another budget and delete it</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Edit Note</attribute>
+      <attribute name="action">GncPluginPageBudgetActions.BudgetNoteAction</attribute>
+      <attribute name="tooltip" translatable="yes">Edit note for the selected account and period</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Budget Report</attribute>
+      <attribute name="action">GncPluginPageBudgetActions.BudgetReportAction</attribute>
+      <attribute name="tooltip" translatable="yes">Run the budget report</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="EditPlaceholder3">
+    <item>
+      <attribute name="label" translatable="yes">_Find...</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.EditFindTransactionsAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;f</attribute>
+      <attribute name="tooltip" translatable="yes">Find transactions with a search</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="EditPlaceholder5">
+    <item>
+<!-- Translators: remember to reuse this translation in dialog-account.glade -->
+      <attribute name="label" translatable="yes">Ta_x Report Options</attribute>
+      <attribute name="action">GncPluginPageBudgetActions.EditTaxOptionsAction</attribute>
+<!-- Translators: currently implemented are, US: income tax and DE: VAT, So adjust this string -->
+      <attribute name="tooltip" translatable="yes">Setup relevant accounts for tax reports, e.g. US income tax</attribute>
+        <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="EditPlaceholder6">
+    <item>
+      <attribute name="label" translatable="yes">Budget _Options...</attribute>
+      <attribute name="action">GncPluginPageBudgetActions.OptionsBudgetAction</attribute>
+      <attribute name="tooltip" translatable="yes">Edit this budget's options</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="ViewPlaceholder1">
+    <item>
+      <attribute name="label" translatable="yes">_Filter By...</attribute>
+      <attribute name="action">GncPluginPageBudgetActions.ViewFilterByAction</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="ViewPlaceholder4">
+    <item>
+      <attribute name="label" translatable="yes">_Refresh</attribute>
+      <attribute name="action">GncPluginPageBudgetActions.ViewRefreshAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;r</attribute>
+      <attribute name="tooltip" translatable="yes">Refresh this window</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="mainwin-popup">
+    <item>
+      <attribute name="label" translatable="no">_Test</attribute>
+      <attribute name="action">mainwin.TestAction</attribute>
+    </item>
+  </menu>
+
+
+  <object class="GtkToolbar" id="mainwin-toolbar">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkToolButton" id="but1">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Save</property>
+        <property name="action-name">gnc-plugin-basic-commands-actions.FileSaveAction</property>
+        <property name="tooltip-text" translatable="yes">Save the current file</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">document-save</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Close</property>
+        <property name="action-name">mainwin.FileCloseAction</property>
+        <property name="tooltip-text" translatable="yes">Close the currently active page</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">window-close</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2a">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">New _Invoice...</property>
+        <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
+        <property name="tooltip-text" translatable="yes">Open the New Invoice dialog</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-invoice-new</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem" id="extra_separator">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but3">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Open _Account</property>
+        <property name="action-name">GncPluginPageBudgetActions.EditOpenAccountAction</property>
+        <property name="tooltip-text" translatable="yes">Open the selected account</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-account-open</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but4">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Budget _Options...</property>
+        <property name="action-name">GncPluginPageBudgetActions.OptionsBudgetAction</property>
+        <property name="tooltip-text" translatable="yes">Edit this budget's options</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">document-properties</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but5">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Esti_mate Budget...</property>
+        <property name="action-name">GncPluginPageBudgetActions.EstimateBudgetAction</property>
+        <property name="tooltip-text" translatable="yes">Estimate a budget value for the selected accounts from past transactions</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">system-run</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but6">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_All Periods...</property>
+        <property name="action-name">GncPluginPageBudgetActions.AllPeriodsBudgetAction</property>
+        <property name="tooltip-text" translatable="yes">Edit budget for all periods for the selected accounts</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">system-run</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but7">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Delete Budget...</property>
+        <property name="action-name">GncPluginPageBudgetActions.DeleteBudgetAction</property>
+        <property name="tooltip-text" translatable="yes">Select this or another budget and delete it</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-account-delete</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but8">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Edit Note</property>
+        <property name="action-name">GncPluginPageBudgetActions.BudgetNoteAction</property>
+        <property name="tooltip-text" translatable="yes">Edit note for the selected account and period</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">text-x-generic</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but9">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Budget Report</property>
+        <property name="action-name">GncPluginPageBudgetActions.BudgetReportAction</property>
+        <property name="tooltip-text" translatable="yes">Run the budget report</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">system-run</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+  </object>
+
+</interface>

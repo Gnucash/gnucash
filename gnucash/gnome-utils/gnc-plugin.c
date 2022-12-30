@@ -42,6 +42,7 @@
 #include "gnc-filepath-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
+#include "gnc-gtk-utils.h"
 
 /** The debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -130,7 +131,6 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
                           GQuark type)
 {
     GncPluginClass *klass;
-    GtkActionGroup *action_group;
 
     g_return_if_fail (GNC_IS_PLUGIN (plugin));
     klass = GNC_PLUGIN_GET_CLASS (plugin);
@@ -143,20 +143,11 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
     if (klass->actions_name)
     {
         DEBUG ("%s: %d actions to merge with gui from %s",
-               klass->actions_name, (klass->n_actions + klass->n_toggle_actions), klass->ui_filename);
+               klass->actions_name, klass->n_actions, klass->ui_filename);
         gnc_main_window_merge_actions (window, klass->actions_name,
                                        klass->actions, klass->n_actions,
-                                       klass->toggle_actions, klass->n_toggle_actions,
+                                       klass->ui_updates,
                                        klass->ui_filename, plugin);
-
-
-        if (klass->important_actions)
-        {
-            action_group =
-                gnc_main_window_get_action_group(window, klass->actions_name);
-            gnc_plugin_set_important_actions(action_group,
-                                             klass->important_actions);
-        }
     }
 
     /*
@@ -204,7 +195,7 @@ gnc_plugin_remove_from_window (GncPlugin *plugin,
     if (klass->actions_name && !window->just_plugin_prefs)
     {
         DEBUG ("%s: %d actions to unmerge",
-               klass->actions_name, (klass->n_actions + klass->n_toggle_actions));
+               klass->actions_name, (klass->n_actions));
         gnc_main_window_unmerge_actions (window, klass->actions_name);
     }
     LEAVE ("");
@@ -231,155 +222,84 @@ gnc_plugin_get_name (GncPlugin *plugin)
  *
  *  See gnc-plugin.h for documentation on the function arguments. */
 void
-gnc_plugin_init_short_names (GtkActionGroup *action_group,
-                             action_toolbar_labels *toolbar_labels)
+gnc_plugin_init_short_names (GtkWidget *toolbar,
+                             GncToolBarShortNames *toolbar_labels)
 {
-    GtkAction *action;
-    gint i;
+    g_return_if_fail (toolbar != NULL);
+    g_return_if_fail (toolbar_labels != NULL);
 
-    for (i = 0; toolbar_labels[i].action_name; i++)
+    for (gint i = 0; (toolbar_labels[i].action_name); i++)
     {
-        /* Add a couple of short labels for the toolbar */
-        action = gtk_action_group_get_action (action_group,
-                                              toolbar_labels[i].action_name);
-        gtk_action_set_short_label (action, _(toolbar_labels[i].label));
+        GtkWidget *tool_item = gnc_find_toolbar_item (toolbar, toolbar_labels[i].action_name);
+
+        if (!tool_item)
+            continue;
+
+        gtk_tool_button_set_label (GTK_TOOL_BUTTON(tool_item), _(toolbar_labels[i].short_label));
+        gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON(tool_item), TRUE);
     }
 }
 
 
-/** Mark certain actions as "important".  This means that their labels
- *  will appear when the toolbar is set to "Icons and important text"
- *  (e.g. GTK_TOOLBAR_BOTH_HORIZ) mode.
- *
- *  See gnc-plugin.h for documentation on the function arguments. */
+/*  Update the sensitivity of an action */
 void
-gnc_plugin_set_important_actions (GtkActionGroup *action_group,
-                                  const gchar **name)
+gnc_plugin_set_actions_enabled (GActionMap *action_map,
+                                const gchar **action_names, gboolean enable)
 {
-    GtkAction *action;
-    gint i;
+    g_return_if_fail (action_map != NULL);
 
-    for (i = 0; name[i]; i++)
+    for (gint i = 0; action_names[i]; i++)
     {
-        action = gtk_action_group_get_action (action_group, name[i]);
-        g_object_set (G_OBJECT(action), "is_important", TRUE, NULL);
-    }
-
-    /* If this trips, you've got too many "important" actions.  That
-     * can't *all* be that important, can they? */
-    g_assert(i <= 3);
-}
-
-
-/*  Update a property of existing UI actions.  This function can
- *  modify actions making them visible, invisible, sensitive, or
- *  insensitive.
- *
- *  See gnc-plugin.h for documentation on the function arguments. */
-void
-gnc_plugin_update_actions (GtkActionGroup *action_group,
-                           const gchar **action_names,
-                           const gchar *property_name,
-                           gboolean value)
-{
-    GtkAction    *action;
-    gint          i;
-
-    for (i = 0; action_names[i]; i++)
-    {
-        action = gtk_action_group_get_action (action_group, action_names[i]);
+        GAction *action = g_action_map_lookup_action (G_ACTION_MAP(action_map),
+                                                      action_names[i]);
         if (action)
-        {
-            g_object_set (G_OBJECT(action), property_name, value, NULL);
-        }
+             g_simple_action_set_enabled (G_SIMPLE_ACTION(action), enable);
         else
-        {
-            g_warning("No such action with name '%s' in action group %s (size %d)",
-                      action_names[i], gtk_action_group_get_name(action_group),
-                      g_list_length(gtk_action_group_list_actions(action_group)));
-        }
+            PERR("No such action with name '%s' in action group %p)",
+                  action_names[i], action_map);
     }
 }
 
-
-/** Load a new set of actions into an existing UI.
- *
- *  See gnc-plugin.h for documentation on the function arguments. */
-gint
-gnc_plugin_add_actions (GtkUIManager *ui_merge,
-                        GtkActionGroup *action_group,
-                        const gchar *filename)
+void
+gnc_plugin_add_menu_tooltip_callbacks (GtkWidget  *menubar,
+                                       GMenuModel *menubar_model,
+                                       GtkWidget  *statusbar)
 {
-    GError *error = NULL;
-    gchar *pathname;
-    gint merge_id;
+    GList *menu_item_list;
 
-    g_return_val_if_fail (ui_merge, 0);
-    g_return_val_if_fail (action_group, 0);
-    g_return_val_if_fail (filename, 0);
+    g_return_if_fail (GTK_IS_MENU_BAR(menubar));
+    g_return_if_fail (G_IS_MENU_MODEL(menubar_model));
+    g_return_if_fail (GTK_IS_STATUSBAR(statusbar));
 
-    ENTER("ui_merge %p, action_group %p, filename %s",
-          ui_merge, action_group, filename);
-    gtk_ui_manager_insert_action_group (ui_merge, action_group, 0);
+    menu_item_list = gnc_menu_get_items (menubar);
 
-    pathname = gnc_filepath_locate_ui_file (filename);
-    if (pathname == NULL)
+    for (GList *node = menu_item_list; node; node = node->next)
     {
-        LEAVE("fail");
-        return 0;
-    }
+        GtkWidget *menu_item = node->data;
 
-    merge_id = gtk_ui_manager_add_ui_from_file (ui_merge, pathname, &error);
-    DEBUG("merge_id is %d", merge_id);
-
-    g_assert(merge_id || error);
-    if (merge_id)
-    {
-        gtk_ui_manager_ensure_update (ui_merge);
+        gnc_menu_item_setup_tooltip_to_statusbar_callback (menu_item, statusbar);
     }
-    else
-    {
-        g_critical("Failed to load ui file.\n  Filename %s\n  Error %s",
-                   filename, error->message);
-        g_error_free(error);
-    }
-
-    g_free(pathname);
-    LEAVE(" ");
-    return merge_id;
+    g_object_set_data (G_OBJECT(statusbar), "menu-model", menubar_model);
+    g_list_free (menu_item_list);
 }
 
-#if 0
 static void
-gnc_plugin_base_init (gpointer klass)
+for_each_tool_action (GtkWidget *widget, gpointer user_data)
 {
-    static gboolean initialized = FALSE;
+    GtkWidget *statusbar = user_data;
 
-    if (!initialized)
-    {
-        initialized = TRUE;
-
-        signals[MERGE_ACTIONS] = g_signal_new ("merge-actions",
-                                               G_OBJECT_CLASS_TYPE (klass),
-                                               G_SIGNAL_RUN_FIRST,
-                                               G_STRUCT_OFFSET (GncPluginClass, merge_actions),
-                                               NULL, NULL,
-                                               g_cclosure_marshal_VOID__POINTER,
-                                               G_TYPE_NONE,
-                                               1,
-                                               GTK_TYPE_MENU_MERGE);
-        signals[UNMERGE_ACTIONS] = g_signal_new ("unmerge-actions",
-                                   G_OBJECT_CLASS_TYPE (klass),
-                                   G_SIGNAL_RUN_FIRST,
-                                   G_STRUCT_OFFSET (GncPluginClass, unmerge_actions),
-                                   NULL, NULL,
-                                   g_cclosure_marshal_VOID__POINTER,
-                                   G_TYPE_NONE,
-                                   1,
-                                   GTK_TYPE_MENU_MERGE);
-    }
+    if (GTK_IS_ACTIONABLE(widget))
+        gnc_tool_item_setup_tooltip_to_statusbar_callback (widget, statusbar);
 }
-#endif
+
+void
+gnc_plugin_add_toolbar_tooltip_callbacks (GtkWidget *toolbar, GtkWidget *statusbar)
+{
+    g_return_if_fail (GTK_IS_TOOLBAR(toolbar));
+    g_return_if_fail (GTK_IS_STATUSBAR(statusbar));
+
+    gtk_container_foreach (GTK_CONTAINER(toolbar), for_each_tool_action, statusbar);
+}
 
 /** @} */
 /** @} */

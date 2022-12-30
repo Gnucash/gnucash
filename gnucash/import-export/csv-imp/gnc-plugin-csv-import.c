@@ -37,32 +37,28 @@ static void gnc_plugin_csv_import_init (GncPluginCsvImport *plugin);
 static void gnc_plugin_csv_import_finalize (GObject *object);
 
 /* Command callbacks */
-static void gnc_plugin_csv_import_tree_cmd (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_plugin_csv_import_trans_cmd (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_plugin_csv_import_price_cmd (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_csv_import_tree_cmd (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_csv_import_trans_cmd (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_csv_import_price_cmd (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-csv-import-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-csv-import-ui.xml"
+#define PLUGIN_UI_FILENAME  "gnc-plugin-csv-import.ui"
 
-static GtkActionEntry gnc_plugin_actions [] =
+static GActionEntry gnc_plugin_actions [] =
 {
-    {
-        "CsvImportAccountAction", "go-previous", N_("Import _Accounts from CSV…"), NULL,
-        N_("Import Accounts from a CSV file"),
-        G_CALLBACK (gnc_plugin_csv_import_tree_cmd)
-    },
-    {
-        "CsvImportTransAction", "go-previous", N_("Import _Transactions from CSV…"), NULL,
-        N_("Import Transactions from a CSV file"),
-        G_CALLBACK (gnc_plugin_csv_import_trans_cmd)
-    },
-    {
-        "CsvImportPriceAction", "go-previous", N_("Import _Prices from a CSV file…"), NULL,
-        N_("Import Prices from a CSV file"),
-        G_CALLBACK (gnc_plugin_csv_import_price_cmd)
-    },
+    { "CsvImportAccountAction", gnc_plugin_csv_import_tree_cmd, NULL, NULL, NULL },
+    { "CsvImportTransAction", gnc_plugin_csv_import_trans_cmd, NULL, NULL, NULL },
+    { "CsvImportPriceAction", gnc_plugin_csv_import_price_cmd, NULL, NULL, NULL },
 };
-static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
+/** The number of actions provided by this plugin. */
+static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
+
+/** The default menu items that need to be add to the menu */
+static const gchar *gnc_plugin_load_ui_items [] =
+{
+    "FilePlaceholder1",
+    NULL,
+};
 
 typedef struct GncPluginCsvImportPrivate
 {
@@ -96,10 +92,11 @@ gnc_plugin_csv_import_class_init (GncPluginCsvImportClass *klass)
     plugin_class->plugin_name  = GNC_PLUGIN_CSV_IMPORT_NAME;
 
     /* widget addition/removal */
-    plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
-    plugin_class->actions      = gnc_plugin_actions;
-    plugin_class->n_actions    = gnc_plugin_n_actions;
-    plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
+    plugin_class->actions_name    = PLUGIN_ACTIONS_NAME;
+    plugin_class->actions         = gnc_plugin_actions;
+    plugin_class->n_actions       = gnc_plugin_n_actions;
+    plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
+    plugin_class->ui_updates      = gnc_plugin_load_ui_items;
 }
 
 static void
@@ -123,22 +120,25 @@ gnc_plugin_csv_import_finalize (GObject *object)
  *                    Command Callbacks                     *
  ************************************************************/
 static void
-gnc_plugin_csv_import_tree_cmd (GtkAction *action,
-                                GncMainWindowActionData *data)
+gnc_plugin_csv_import_tree_cmd (GSimpleAction *simple,
+                                GVariant      *parameter,
+                                gpointer       user_data)
 {
     gnc_file_csv_account_import ();
 }
 
 static void
-gnc_plugin_csv_import_trans_cmd (GtkAction *action,
-                                 GncMainWindowActionData *data)
+gnc_plugin_csv_import_trans_cmd (GSimpleAction *simple,
+                                 GVariant      *parameter,
+                                 gpointer       user_data)
 {
     gnc_file_csv_trans_import ();
 }
 
 static void
-gnc_plugin_csv_import_price_cmd (GtkAction *action,
-                                 GncMainWindowActionData *data)
+gnc_plugin_csv_import_price_cmd (GSimpleAction *simple,
+                                 GVariant      *parameter,
+                                 gpointer       user_data)
 {
     gnc_file_csv_price_import ();
 }

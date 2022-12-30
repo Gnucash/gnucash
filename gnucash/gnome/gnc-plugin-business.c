@@ -52,6 +52,8 @@
 
 #include "gnc-prefs.h"
 #include "gnc-main-window.h"
+#include "gnc-window.h"
+#include "gnc-gtk-utils.h"
 
 #include "gnc-plugin-page-register.h"
 
@@ -63,80 +65,51 @@ static void gnc_plugin_business_class_init (GncPluginBusinessClass *klass);
 static void gnc_plugin_business_init (GncPluginBusiness *plugin);
 static void gnc_plugin_business_finalize (GObject *object);
 static void gnc_plugin_business_add_to_window (GncPlugin *plugin,
-        GncMainWindow *window,
-        GQuark type);
+                                               GncMainWindow *window,
+                                               GQuark type);
 
 /* Command callbacks */
-static void gnc_plugin_business_cmd_customer_page            (GtkAction *action,
-        GncMainWindowActionData *data);
-static void gnc_plugin_business_cmd_customer_new_customer    (GtkAction *action,
-        GncMainWindowActionData *data);
-static void gnc_plugin_business_cmd_customer_find_customer   (GtkAction *action,
-        GncMainWindowActionData *data);
-static void gnc_plugin_business_cmd_customer_new_invoice     (GtkAction *action,
-        GncMainWindowActionData *data);
-static void gnc_plugin_business_cmd_customer_find_invoice    (GtkAction *action,
-        GncMainWindowActionData *data);
-static void gnc_plugin_business_cmd_customer_new_job         (GtkAction *action,
-        GncMainWindowActionData *data);
-static void gnc_plugin_business_cmd_customer_find_job        (GtkAction *action,
-        GncMainWindowActionData *data);
-static void gnc_plugin_business_cmd_customer_process_payment (GtkAction *action,
-        GncMainWindowActionData *data);
+static void gnc_plugin_business_cmd_customer_page (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_customer_new_customer (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_customer_find_customer (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_customer_new_invoice (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_customer_find_invoice (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_customer_new_job (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_customer_find_job (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_customer_process_payment (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
-static void gnc_plugin_business_cmd_vendor_page            (GtkAction *action,
-        GncMainWindowActionData *data);
-static void gnc_plugin_business_cmd_vendor_new_vendor      (GtkAction *action,
-        GncMainWindowActionData *data);
-static void gnc_plugin_business_cmd_vendor_find_vendor     (GtkAction *action,
-        GncMainWindowActionData *data);
-static void gnc_plugin_business_cmd_vendor_new_bill        (GtkAction *action,
-        GncMainWindowActionData *data);
-static void gnc_plugin_business_cmd_vendor_find_bill       (GtkAction *action,
-        GncMainWindowActionData *data);
-static void gnc_plugin_business_cmd_vendor_new_job         (GtkAction *action,
-        GncMainWindowActionData *data);
-static void gnc_plugin_business_cmd_vendor_find_job        (GtkAction *action,
-        GncMainWindowActionData *data);
-static void gnc_plugin_business_cmd_vendor_process_payment (GtkAction *action,
-        GncMainWindowActionData *data);
+static void gnc_plugin_business_cmd_vendor_page (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_vendor_new_vendor (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_vendor_find_vendor (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_vendor_new_bill (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_vendor_find_bill (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_vendor_new_job (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_vendor_find_job (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_vendor_process_payment (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
-static void gnc_plugin_business_cmd_employee_page                 (GtkAction *action,
-        GncMainWindowActionData *data);
-static void gnc_plugin_business_cmd_employee_new_employee         (GtkAction *action,
-        GncMainWindowActionData *data);
-static void gnc_plugin_business_cmd_employee_find_employee        (GtkAction *action,
-        GncMainWindowActionData *data);
-static void gnc_plugin_business_cmd_employee_new_expense_voucher  (GtkAction *action,
-        GncMainWindowActionData *data);
-static void gnc_plugin_business_cmd_employee_find_expense_voucher (GtkAction *action,
-        GncMainWindowActionData *data);
-static void gnc_plugin_business_cmd_employee_process_payment      (GtkAction *action,
-        GncMainWindowActionData *data);
+static void gnc_plugin_business_cmd_employee_page (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_employee_new_employee (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_employee_find_employee (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_employee_new_expense_voucher (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_employee_find_expense_voucher (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_employee_process_payment (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
-static void gnc_plugin_business_cmd_doclink            (GtkAction *action,
-        GncMainWindowActionData *data);
-static void gnc_plugin_business_cmd_tax_tables         (GtkAction *action,
-        GncMainWindowActionData *data);
-static void gnc_plugin_business_cmd_billing_terms      (GtkAction *action,
-        GncMainWindowActionData *data);
-static void gnc_plugin_business_cmd_bills_due_reminder (GtkAction *action,
-        GncMainWindowActionData *data);
-static void gnc_plugin_business_cmd_invoices_due_reminder (GtkAction *action,
-        GncMainWindowActionData *data);
+static void gnc_plugin_business_cmd_doclink (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_tax_tables (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_billing_terms (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_bills_due_reminder (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_invoices_due_reminder (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
-static void gnc_plugin_business_cmd_test_search (GtkAction *action,
-        GncMainWindowActionData *data);
+static void gnc_plugin_business_cmd_test_search (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_test_init_data (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
-static void gnc_plugin_business_cmd_test_init_data (GtkAction *action,
-        GncMainWindowActionData *data);
+static void gnc_plugin_business_cmd_assign_payment (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
-static void gnc_plugin_business_cmd_assign_payment (GtkAction *action,
-        GncMainWindowActionData *data);
-static void update_inactive_actions(GncPluginPage *page);
+static void update_inactive_actions (GncPluginPage *page);
+static void bind_extra_toolbuttons_visibility (GncMainWindow *mainwindow);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-business-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-business-ui.xml"
+#define PLUGIN_UI_FILENAME  "gnc-plugin-business.ui"
 
 #define GNC_PREF_EXTRA_TOOLBUTTONS "enable-toolbuttons"
 #define GNC_PREF_INV_PRINT_RPT     "invoice-printreport"
@@ -149,192 +122,56 @@ static void update_inactive_actions(GncPluginPage *page);
  */
 static GncMainWindow *last_window = NULL;
 
-static GtkActionEntry gnc_plugin_actions [] =
+static GActionEntry gnc_plugin_actions [] =
 {
-    /* Toplevel */
-    { "BusinessAction", NULL, N_("_Business"), NULL, NULL, NULL },
+    { "CustomerOverviewPageAction", gnc_plugin_business_cmd_customer_page, NULL, NULL, NULL },
+    { "CustomerNewCustomerOpenAction", gnc_plugin_business_cmd_customer_new_customer, NULL, NULL, NULL },
+    { "CustomerFindCustomerOpenAction", gnc_plugin_business_cmd_customer_find_customer, NULL, NULL, NULL },
+    { "CustomerNewInvoiceOpenAction", gnc_plugin_business_cmd_customer_new_invoice, NULL, NULL, NULL },
+    { "CustomerFindInvoiceOpenAction", gnc_plugin_business_cmd_customer_find_invoice, NULL, NULL, NULL },
+    { "CustomerNewJobOpenAction", gnc_plugin_business_cmd_customer_new_job, NULL, NULL, NULL },
+    { "CustomerFindJobOpenAction", gnc_plugin_business_cmd_customer_find_job, NULL, NULL, NULL },
+    { "CustomerProcessPaymentAction", gnc_plugin_business_cmd_customer_process_payment, NULL, NULL, NULL },
 
-    /* Customer submenu */
-    { "CustomerMenuAction", NULL, N_("_Customer"), NULL, NULL, NULL },
-    {
-        "CustomerOverviewPageAction", NULL, N_("Customers Overview"), NULL,
-        N_("Open a Customer overview page"),
-        G_CALLBACK (gnc_plugin_business_cmd_customer_page)
-    },
-    {
-        "CustomerNewCustomerOpenAction", NULL, N_("_New Customer…"), NULL,
-        N_("Open the New Customer dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_customer_new_customer)
-    },
-    {
-        "CustomerFindCustomerOpenAction", NULL, N_("_Find Customer…"), NULL,
-        N_("Open the Find Customer dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_customer_find_customer)
-    },
-    {
-        "CustomerNewInvoiceOpenAction", NULL, N_("New _Invoice…"), NULL,
-        N_("Open the New Invoice dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_customer_new_invoice)
-    },
-    {
-        "CustomerFindInvoiceOpenAction", NULL, N_("Find In_voice…"), NULL,
-        N_("Open the Find Invoice dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_customer_find_invoice)
-    },
-    {
-        "CustomerNewJobOpenAction", NULL, N_("New _Job…"), NULL,
-        N_("Open the New Job dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_customer_new_job)
-    },
-    {
-        "CustomerFindJobOpenAction", NULL, N_("Find Jo_b…"), NULL,
-        N_("Open the Find Job dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_customer_find_job)
-    },
-    {
-        "CustomerProcessPaymentAction", NULL, N_("_Process Payment…"), NULL,
-        N_("Open the Process Payment dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_customer_process_payment)
-    },
+    { "VendorOverviewPageAction", gnc_plugin_business_cmd_vendor_page, NULL, NULL, NULL },
+    { "VendorNewVendorOpenAction", gnc_plugin_business_cmd_vendor_new_vendor, NULL, NULL, NULL },
+    { "VendorFindVendorOpenAction", gnc_plugin_business_cmd_vendor_find_vendor, NULL, NULL, NULL },
+    { "VendorNewBillOpenAction", gnc_plugin_business_cmd_vendor_new_bill, NULL, NULL, NULL },
+    { "VendorFindBillOpenAction", gnc_plugin_business_cmd_vendor_find_bill, NULL, NULL, NULL },
+    { "VendorNewJobOpenAction", gnc_plugin_business_cmd_vendor_new_job, NULL, NULL, NULL },
+    { "VendorFindJobOpenAction", gnc_plugin_business_cmd_vendor_find_job, NULL, NULL, NULL },
+    { "VendorProcessPaymentAction", gnc_plugin_business_cmd_vendor_process_payment, NULL, NULL, NULL },
 
-    /* Vendor submenu */
-    {
-        "VendorOverviewPageAction", NULL, N_("Vendors Overview"), NULL,
-        N_("Open a Vendor overview page"),
-        G_CALLBACK (gnc_plugin_business_cmd_vendor_page)
-    },
-    { "VendorMenuAction", NULL, N_("_Vendor"), NULL, NULL, NULL },
-    {
-        "VendorNewVendorOpenAction", NULL, N_("_New Vendor…"), NULL,
-        N_("Open the New Vendor dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_vendor_new_vendor)
-    },
-    {
-        "VendorFindVendorOpenAction", NULL, N_("_Find Vendor…"), NULL,
-        N_("Open the Find Vendor dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_vendor_find_vendor)
-    },
-    {
-        "VendorNewBillOpenAction", NULL, N_("New _Bill…"), NULL,
-        N_("Open the New Bill dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_vendor_new_bill)
-    },
-    {
-        "VendorFindBillOpenAction", NULL, N_("Find Bi_ll…"), NULL,
-        N_("Open the Find Bill dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_vendor_find_bill)
-    },
-    {
-        "VendorNewJobOpenAction", NULL, N_("New _Job…"), NULL,
-        N_("Open the New Job dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_vendor_new_job)
-    },
-    {
-        "VendorFindJobOpenAction", NULL, N_("Find Jo_b…"), NULL,
-        N_("Open the Find Job dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_vendor_find_job)
-    },
-    {
-        "VendorProcessPaymentAction", NULL, N_("_Process Payment…"), NULL,
-        N_("Open the Process Payment dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_vendor_process_payment)
-    },
+    { "EmployeeOverviewPageAction", gnc_plugin_business_cmd_employee_page, NULL, NULL, NULL },
+    { "EmployeeNewEmployeeOpenAction", gnc_plugin_business_cmd_employee_new_employee, NULL, NULL, NULL },
+    { "EmployeeFindEmployeeOpenAction", gnc_plugin_business_cmd_employee_find_employee, NULL, NULL, NULL },
+    { "EmployeeNewExpenseVoucherOpenAction", gnc_plugin_business_cmd_employee_new_expense_voucher, NULL, NULL, NULL },
+    { "EmployeeFindExpenseVoucherOpenAction", gnc_plugin_business_cmd_employee_find_expense_voucher, NULL, NULL, NULL },
+    { "EmployeeProcessPaymentAction", gnc_plugin_business_cmd_employee_process_payment, NULL, NULL, NULL },
 
-    /* Employee submenu */
-    {
-        "EmployeeOverviewPageAction", NULL, N_("Employees Overview"), NULL,
-        N_("Open a Employee overview page"),
-        G_CALLBACK (gnc_plugin_business_cmd_employee_page)
-    },
-    { "EmployeeMenuAction", NULL, N_("_Employee"), NULL, NULL, NULL },
-    {
-        "EmployeeNewEmployeeOpenAction", NULL, N_("_New Employee…"), NULL,
-        N_("Open the New Employee dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_employee_new_employee)
-    },
-    {
-        "EmployeeFindEmployeeOpenAction", NULL, N_("_Find Employee…"), NULL,
-        N_("Open the Find Employee dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_employee_find_employee)
-    },
-    {
-        "EmployeeNewExpenseVoucherOpenAction", NULL, N_("New _Expense Voucher…"), NULL,
-        N_("Open the New Expense Voucher dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_employee_new_expense_voucher)
-    },
-    {
-        "EmployeeFindExpenseVoucherOpenAction", NULL, N_("Find Expense _Voucher…"), NULL,
-        N_("Open the Find Expense Voucher dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_employee_find_expense_voucher)
-    },
-    {
-        "EmployeeProcessPaymentAction", NULL, N_("_Process Payment…"), NULL,
-        N_("Open the Process Payment dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_employee_process_payment)
-    },
+    { "BusinessLinkedDocsAction", gnc_plugin_business_cmd_doclink, NULL, NULL, NULL },
+    { "TaxTablesOpenAction", gnc_plugin_business_cmd_tax_tables, NULL, NULL, NULL },
+    { "BillingTermsOpenAction", gnc_plugin_business_cmd_billing_terms, NULL, NULL, NULL },
+    { "BillsDueReminderOpenAction", gnc_plugin_business_cmd_bills_due_reminder, NULL, NULL, NULL },
+    { "InvoicesDueReminderOpenAction", gnc_plugin_business_cmd_invoices_due_reminder, NULL, NULL, NULL },
 
-    /* Other menu items */
-    {
-        "BusinessLinkedDocsAction", NULL, N_("Business Linked Documents"), NULL,
-        N_("View all Linked Business Documents"),
-        G_CALLBACK (gnc_plugin_business_cmd_doclink)
-    },
-    {
-        "TaxTablesOpenAction", NULL, N_("Sales _Tax Table"), NULL,
-        N_("View and edit the list of Sales Tax Tables (GST/VAT)"),
-        G_CALLBACK (gnc_plugin_business_cmd_tax_tables)
-    },
-    {
-        "BillingTermsOpenAction", NULL, N_("_Billing Terms Editor"), NULL,
-        N_("View and edit the list of Billing Terms"),
-        G_CALLBACK (gnc_plugin_business_cmd_billing_terms)
-    },
-    {
-        "BillsDueReminderOpenAction", NULL, N_("Bills _Due Reminder"), NULL,
-        N_("Open the Bills Due Reminder dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_bills_due_reminder)
-    },
-    {
-        "InvoicesDueReminderOpenAction", NULL, N_("Invoices _Due Reminder"), NULL,
-        N_("Open the Invoices Due Reminder dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_invoices_due_reminder)
-    },
-    { "ExportMenuAction", NULL, N_("E_xport"), NULL, NULL, NULL },
-
-    /* Extensions Menu */
-    { "BusinessTestAction", NULL, N_("_Business"), NULL, NULL, NULL },
-    {
-        "BusinessTestSearchAction", NULL, N_("Test Search Dialog"), NULL,
-        N_("Test Search Dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_test_search)
-    },
-    {
-        "BusinessTestInitDataAction", NULL, N_("Initialize Test Data"), NULL,
-        N_("Initialize Test Data"),
-        G_CALLBACK (gnc_plugin_business_cmd_test_init_data)
-    },
-
-    /* Toolbar */
-    {
-        "ToolbarNewInvoiceAction", GNC_ICON_INVOICE_NEW, N_("New _Invoice…"), NULL,
-        N_("Open the New Invoice dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_customer_new_invoice)
-    },
-
-    /* Register popup menu */
-    {
-        "RegisterAssignPayment", NULL, N_("Assign as payment…"), NULL,
-        N_("Assign the selected transaction as payment"),
-        G_CALLBACK (gnc_plugin_business_cmd_assign_payment)
-    },
-    {
-        "RegisterEditPayment", NULL, N_("Edit payment…"), NULL,
-        N_("Edit the payment this transaction is a part of"),
-        G_CALLBACK (gnc_plugin_business_cmd_assign_payment)
-    },
+    { "BusinessTestSearchAction", gnc_plugin_business_cmd_test_search, NULL, NULL, NULL },
+    { "BusinessTestInitDataAction", gnc_plugin_business_cmd_test_init_data, NULL, NULL, NULL },
+    { "ToolbarNewInvoiceAction", gnc_plugin_business_cmd_customer_new_invoice, NULL, NULL, NULL },
+    { "RegisterAssignPayment", gnc_plugin_business_cmd_assign_payment, NULL, NULL, NULL },
+    { "RegisterEditPayment", gnc_plugin_business_cmd_assign_payment, NULL, NULL, NULL },
 };
-static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
+/** The number of actions provided by this plugin. */
+static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
 
+/** The default menu items that need to be add to the menu */
+static const gchar *gnc_plugin_load_ui_items [] =
+{
+    "BusinessPlaceholder0",
+    "BusinessPlaceholder1",
+    "ExtensionsPlaceholder0",
+    NULL,
+};
 
 /************************************************************
  *              Plugin Function Implementation              *
@@ -387,10 +224,11 @@ gnc_plugin_business_class_init (GncPluginBusinessClass *klass)
     plugin_class->add_to_window = gnc_plugin_business_add_to_window;
 
     /* widget addition/removal */
-    plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
-    plugin_class->actions      = gnc_plugin_actions;
-    plugin_class->n_actions    = gnc_plugin_n_actions;
-    plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
+    plugin_class->actions_name    = PLUGIN_ACTIONS_NAME;
+    plugin_class->actions         = gnc_plugin_actions;
+    plugin_class->n_actions       = gnc_plugin_n_actions;
+    plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
+    plugin_class->ui_updates      = gnc_plugin_load_ui_items;
 }
 
 static void
@@ -432,9 +270,11 @@ gnc_plugin_business_get_window()
  ************************************************************/
 
 static void
-gnc_plugin_business_cmd_customer_page (GtkAction *action,
-                                       GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_customer_page (GSimpleAction *simple,
+                                       GVariant      *parameter,
+                                       gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     GncPluginPage *page;
 
     g_return_if_fail (mw != NULL);
@@ -445,9 +285,12 @@ gnc_plugin_business_cmd_customer_page (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_customer_new_customer (GtkAction *action,
-        GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_customer_new_customer (GSimpleAction *simple,
+                                               GVariant      *parameter,
+                                               gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
+
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
@@ -455,9 +298,11 @@ gnc_plugin_business_cmd_customer_new_customer (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_customer_find_customer (GtkAction *action,
-        GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_customer_find_customer (GSimpleAction *simple,
+                                                GVariant      *parameter,
+                                                gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
     GncPluginBusinessPrivate *priv;
     GncCustomer*customer;
@@ -472,9 +317,11 @@ gnc_plugin_business_cmd_customer_find_customer (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_customer_new_invoice (GtkAction *action,
-        GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_customer_new_invoice (GSimpleAction *simple,
+                                              GVariant      *parameter,
+                                              gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
     GncPluginBusinessPrivate *priv;
 
@@ -488,9 +335,11 @@ gnc_plugin_business_cmd_customer_new_invoice (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_customer_find_invoice (GtkAction *action,
-        GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_customer_find_invoice (GSimpleAction *simple,
+                                               GVariant      *parameter,
+                                               gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
     GncPluginBusinessPrivate *priv;
 
@@ -504,9 +353,11 @@ gnc_plugin_business_cmd_customer_find_invoice (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_customer_new_job (GtkAction *action,
-        GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_customer_new_job (GSimpleAction *simple,
+                                          GVariant      *parameter,
+                                          gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
     GncPluginBusinessPrivate *priv;
 
@@ -519,9 +370,11 @@ gnc_plugin_business_cmd_customer_new_job (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_customer_find_job (GtkAction *action,
-        GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_customer_find_job (GSimpleAction *simple,
+                                           GVariant      *parameter,
+                                           gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
     GncPluginBusinessPrivate *priv;
 
@@ -534,9 +387,11 @@ gnc_plugin_business_cmd_customer_find_job (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_customer_process_payment (GtkAction *action,
-        GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_customer_process_payment (GSimpleAction *simple,
+                                                  GVariant      *parameter,
+                                                  gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
     GncPluginBusinessPrivate *priv;
 
@@ -549,9 +404,11 @@ gnc_plugin_business_cmd_customer_process_payment (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_vendor_page (GtkAction *action,
-                                     GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_vendor_page (GSimpleAction *simple,
+                                     GVariant      *parameter,
+                                     gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     GncPluginPage *page;
 
     g_return_if_fail (mw != NULL);
@@ -562,9 +419,11 @@ gnc_plugin_business_cmd_vendor_page (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_vendor_new_vendor (GtkAction *action,
-        GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_vendor_new_vendor (GSimpleAction *simple,
+                                           GVariant      *parameter,
+                                           gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
@@ -572,9 +431,11 @@ gnc_plugin_business_cmd_vendor_new_vendor (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_vendor_find_vendor (GtkAction *action,
-        GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_vendor_find_vendor (GSimpleAction *simple,
+                                            GVariant      *parameter,
+                                            gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
     GncPluginBusinessPrivate *priv;
     GncVendor *vendor;
@@ -589,9 +450,11 @@ gnc_plugin_business_cmd_vendor_find_vendor (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_vendor_new_bill (GtkAction *action,
-        GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_vendor_new_bill (GSimpleAction *simple,
+                                         GVariant      *parameter,
+                                         gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
     GncPluginBusinessPrivate *priv;
 
@@ -605,9 +468,11 @@ gnc_plugin_business_cmd_vendor_new_bill (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_vendor_find_bill (GtkAction *action,
-        GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_vendor_find_bill (GSimpleAction *simple,
+                                          GVariant      *parameter,
+                                          gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
     GncPluginBusinessPrivate *priv;
 
@@ -621,9 +486,11 @@ gnc_plugin_business_cmd_vendor_find_bill (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_vendor_new_job (GtkAction *action,
-                                        GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_vendor_new_job (GSimpleAction *simple,
+                                        GVariant      *parameter,
+                                        gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
     GncPluginBusinessPrivate *priv;
 
@@ -636,9 +503,11 @@ gnc_plugin_business_cmd_vendor_new_job (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_vendor_find_job (GtkAction *action,
-        GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_vendor_find_job (GSimpleAction *simple,
+                                         GVariant      *parameter,
+                                         gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
     GncPluginBusinessPrivate *priv;
 
@@ -651,9 +520,11 @@ gnc_plugin_business_cmd_vendor_find_job (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_vendor_process_payment (GtkAction *action,
-        GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_vendor_process_payment (GSimpleAction *simple,
+                                                GVariant      *parameter,
+                                                gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
     GncPluginBusinessPrivate *priv;
 
@@ -666,9 +537,11 @@ gnc_plugin_business_cmd_vendor_process_payment (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_employee_page (GtkAction *action,
-                                       GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_employee_page (GSimpleAction *simple,
+                                       GVariant      *parameter,
+                                       gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     GncPluginPage *page;
 
     g_return_if_fail (mw != NULL);
@@ -679,9 +552,11 @@ gnc_plugin_business_cmd_employee_page (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_employee_new_employee (GtkAction *action,
-        GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_employee_new_employee (GSimpleAction *simple,
+                                               GVariant      *parameter,
+                                               gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
@@ -689,9 +564,11 @@ gnc_plugin_business_cmd_employee_new_employee (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_employee_find_employee (GtkAction *action,
-        GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_employee_find_employee (GSimpleAction *simple,
+                                                GVariant      *parameter,
+                                                gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
     GncPluginBusinessPrivate *priv;
     GncEmployee *employee;
@@ -706,9 +583,11 @@ gnc_plugin_business_cmd_employee_find_employee (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_employee_new_expense_voucher (GtkAction *action,
-        GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_employee_new_expense_voucher (GSimpleAction *simple,
+                                                      GVariant      *parameter,
+                                                      gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
     GncPluginBusinessPrivate *priv;
 
@@ -722,9 +601,11 @@ gnc_plugin_business_cmd_employee_new_expense_voucher (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_employee_find_expense_voucher (GtkAction *action,
-        GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_employee_find_expense_voucher (GSimpleAction *simple,
+                                                       GVariant      *parameter,
+                                                       gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
     GncPluginBusinessPrivate *priv;
 
@@ -738,9 +619,11 @@ gnc_plugin_business_cmd_employee_find_expense_voucher (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_employee_process_payment (GtkAction *action,
-        GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_employee_process_payment (GSimpleAction *simple,
+                                                  GVariant      *parameter,
+                                                  gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
     GncPluginBusinessPrivate *priv;
 
@@ -753,9 +636,11 @@ gnc_plugin_business_cmd_employee_process_payment (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_doclink (GtkAction *action,
-                                 GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_doclink (GSimpleAction *simple,
+                                 GVariant      *parameter,
+                                 gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
@@ -763,9 +648,11 @@ gnc_plugin_business_cmd_doclink (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_tax_tables (GtkAction *action,
-                                    GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_tax_tables (GSimpleAction *simple,
+                                    GVariant      *parameter,
+                                    gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
@@ -773,9 +660,11 @@ gnc_plugin_business_cmd_tax_tables (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_billing_terms (GtkAction *action,
-                                       GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_billing_terms (GSimpleAction *simple,
+                                       GVariant      *parameter,
+                                       gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
@@ -784,9 +673,11 @@ gnc_plugin_business_cmd_billing_terms (GtkAction *action,
 
 
 static void
-gnc_plugin_business_cmd_bills_due_reminder (GtkAction *action,
-        GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_bills_due_reminder (GSimpleAction *simple,
+                                            GVariant      *parameter,
+                                            gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
@@ -795,9 +686,11 @@ gnc_plugin_business_cmd_bills_due_reminder (GtkAction *action,
 
 
 static void
-gnc_plugin_business_cmd_invoices_due_reminder (GtkAction *action,
-        GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_invoices_due_reminder (GSimpleAction *simple,
+                                               GVariant      *parameter,
+                                               gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
@@ -805,15 +698,18 @@ gnc_plugin_business_cmd_invoices_due_reminder (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_test_search (GtkAction *action,
-                                     GncMainWindowActionData *data)
+gnc_plugin_business_cmd_test_search (GSimpleAction *simple,
+                                     GVariant      *parameter,
+                                     gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     gnc_search_dialog_test();
 }
 
-static void gnc_business_assign_payment (GtkWindow *parent,
-        Transaction *trans,
-        GncOwner *owner)
+static void
+gnc_business_assign_payment (GtkWindow *parent,
+                             Transaction *trans,
+                             GncOwner *owner)
 {
     g_return_if_fail(trans);
 
@@ -825,9 +721,12 @@ static void gnc_business_assign_payment (GtkWindow *parent,
     gnc_ui_payment_new_with_txn(parent, owner, trans);
 }
 
-static void gnc_plugin_business_cmd_assign_payment (GtkAction *action,
-        GncMainWindowActionData *mw)
+static void
+gnc_plugin_business_cmd_assign_payment (GSimpleAction *simple,
+                                        GVariant      *parameter,
+                                        gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin_business;
     GncPluginBusinessPrivate *plugin_business_priv;
     GncPluginPage *plugin_page;
@@ -892,8 +791,7 @@ static const gchar *register_bus_txn_actions[] =
 static void
 gnc_plugin_business_update_menus (GncPluginPage *plugin_page)
 {
-    GncMainWindow  *window;
-    GtkActionGroup *action_group;
+    GSimpleActionGroup *simple_action_group;
     gboolean is_txn_register, is_bus_txn = FALSE, is_bus_doc = FALSE;
 
     // We continue only if the current page is a plugin page
@@ -904,11 +802,14 @@ gnc_plugin_business_update_menus (GncPluginPage *plugin_page)
     if (!GNC_IS_MAIN_WINDOW(plugin_page->window))
         return;
 
+    // We are readonly - we have already set particular actions to inactive.
+    if (qof_book_is_readonly (gnc_get_current_book()))
+        return;
+
     is_txn_register = GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page);
-    window = GNC_MAIN_WINDOW(plugin_page->window);
-    g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
-    action_group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
-    g_return_if_fail(GTK_IS_ACTION_GROUP(action_group));
+    simple_action_group = gnc_main_window_get_action_group (GNC_MAIN_WINDOW(plugin_page->window),
+                                                            PLUGIN_ACTIONS_NAME);
+    g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(simple_action_group));
 
     if (is_txn_register)
     {
@@ -918,35 +819,48 @@ gnc_plugin_business_update_menus (GncPluginPage *plugin_page)
         is_bus_doc = (xaccTransGetTxnType (trans) == TXN_TYPE_INVOICE);
     }
     // Change visibility and also sensitivity according to whether we are in a txn register
-    gnc_plugin_update_actions (action_group, register_txn_actions,
-                               "sensitive", is_txn_register && !is_bus_txn && !is_bus_doc);
-    gnc_plugin_update_actions (action_group, register_txn_actions,
-                               "visible", is_txn_register && !is_bus_txn && !is_bus_doc);
-    gnc_plugin_update_actions (action_group, register_bus_txn_actions,
-                               "sensitive", is_txn_register && is_bus_txn && !is_bus_doc);
-    gnc_plugin_update_actions (action_group, register_bus_txn_actions,
-                               "visible", is_txn_register && is_bus_txn && !is_bus_doc);
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), register_txn_actions,
+                                    is_txn_register && !is_bus_txn && !is_bus_doc);
+
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), register_bus_txn_actions,
+                                    is_txn_register && is_bus_txn && !is_bus_doc);
 }
 
-
-static void gnc_plugin_business_main_window_page_changed(GncMainWindow *window,
-        GncPluginPage *page,
-        gpointer user_data)
+static void
+gnc_plugin_business_main_window_page_changed (GncMainWindow *window,
+                                              GncPluginPage *page,
+                                              gpointer user_data)
 {
-    gnc_plugin_business_update_menus(page);
     update_inactive_actions(page);
+    gnc_plugin_business_update_menus(page);
 }
 
+static void
+gnc_plugin_business_main_window_menu_changed (GncMainWindow *window,
+                                              GncPluginPage *page,
+                                              gpointer user_data)
+{
+    // page could be NULL when gnucash started with --nofile
+    if (page == gnc_main_window_get_current_page (window))
+    {
+        if (page)
+            gnc_plugin_business_main_window_page_changed (window, page, user_data);
+        bind_extra_toolbuttons_visibility (window);
+    }
+}
 
-void gnc_plugin_business_split_reg_ui_update (GncPluginPage *plugin_page)
+void
+gnc_plugin_business_split_reg_ui_update (GncPluginPage *plugin_page)
 {
     gnc_plugin_business_main_window_page_changed(NULL, plugin_page, NULL);
 }
 
 static void
-gnc_plugin_business_cmd_test_init_data (GtkAction *action,
-                                        GncMainWindowActionData *data)
+gnc_plugin_business_cmd_test_init_data (GSimpleAction *simple,
+                                        GVariant      *parameter,
+                                        gpointer       user_data)
 {
+    GncMainWindowActionData *mw = user_data;
     QofBook *book           = gnc_get_current_book();
     GncCustomer *customer   = gncCustomerCreate(book);
     GncAddress *address     = gncCustomerGetAddr(customer);
@@ -1011,7 +925,7 @@ gnc_plugin_business_cmd_test_init_data (GtkAction *action,
     gnc_account_append_child(root, tax_acct);
 
     // Launch the invoice editor
-    gnc_ui_invoice_edit (GTK_WINDOW (data->window), invoice);
+    gnc_ui_invoice_edit (GTK_WINDOW (mw->window), invoice);
 }
 
 /* This is the list of actions which are switched inactive in a read-only book. */
@@ -1035,10 +949,11 @@ static const gchar* readonly_inactive_actions[] =
     NULL
 };
 
-static void update_inactive_actions(GncPluginPage *plugin_page)
+static void
+update_inactive_actions (GncPluginPage *plugin_page)
 {
-    GncMainWindow  *window;
-    GtkActionGroup *action_group;
+    GncMainWindow *window;
+    GSimpleActionGroup *simple_action_group;
 
     // We are readonly - so we have to switch particular actions to inactive.
     gboolean is_readwrite = !qof_book_is_readonly(gnc_get_current_book());
@@ -1053,12 +968,12 @@ static void update_inactive_actions(GncPluginPage *plugin_page)
 
     window = GNC_MAIN_WINDOW(plugin_page->window);
     g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
-    action_group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
-    g_return_if_fail(GTK_IS_ACTION_GROUP(action_group));
+    simple_action_group = gnc_main_window_get_action_group (window, PLUGIN_ACTIONS_NAME);
+    g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(simple_action_group));
 
     /* Set the action's sensitivity */
-    gnc_plugin_update_actions (action_group, readonly_inactive_actions,
-                               "sensitive", is_readwrite);
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), readonly_inactive_actions,
+                                    is_readwrite);
 }
 
 /* This is the list of actions which are switched invisible or visible
@@ -1071,24 +986,48 @@ static const char* extra_toolbar_actions[] =
 
 /* Bind the visibility of the extra toolbar buttons to the
  * enable_toolbuttons preference. */
-static void bind_toolbuttons_visibility (GncMainWindow *mainwindow)
+static void
+bind_extra_toolbuttons_visibility (GncMainWindow *mainwindow)
 {
-    GtkActionGroup *action_group;
+    GtkWidget *toolbar;
     const char **iter;
 
-    g_return_if_fail(mainwindow);
-    g_return_if_fail(GNC_IS_MAIN_WINDOW(mainwindow));
+    g_return_if_fail (mainwindow);
+    g_return_if_fail (GNC_IS_MAIN_WINDOW(mainwindow));
 
-    /* Get the action group */
-    action_group =
-        gnc_main_window_get_action_group(mainwindow, PLUGIN_ACTIONS_NAME);
-    g_assert(action_group);
+    toolbar = gnc_window_get_toolbar (GNC_WINDOW(mainwindow));
 
+    if (!toolbar)
+        return;
+
+    // Set the 'extra' tool items visibility
     for (iter = extra_toolbar_actions; *iter; ++iter)
     {
-        /* Set the action's visibility */
-        GtkAction *action = gtk_action_group_get_action (action_group, *iter);
-        gnc_prefs_bind (GNC_PREFS_GROUP_INVOICE, GNC_PREF_EXTRA_TOOLBUTTONS, G_OBJECT (action), "visible");
+        GtkWidget *tool_item = gnc_find_toolbar_item (toolbar, *iter);
+
+        if (tool_item)
+        {
+            gnc_prefs_bind (GNC_PREFS_GROUP_INVOICE,
+                            GNC_PREF_EXTRA_TOOLBUTTONS,
+                            G_OBJECT(tool_item), "visible");
+        }
+    }
+
+    // Set the 'extra' tool item separator visibility
+    for (gint i = 0; i < gtk_toolbar_get_n_items (GTK_TOOLBAR(toolbar)); i++)
+    {
+        GtkToolItem *tool_item = gtk_toolbar_get_nth_item (GTK_TOOLBAR(toolbar), i);
+
+        if (GTK_IS_SEPARATOR_TOOL_ITEM(tool_item))
+        {
+            if (g_str_has_prefix (gtk_buildable_get_name (GTK_BUILDABLE(tool_item)),
+                           "extra_separator"))
+            {
+                gnc_prefs_bind (GNC_PREFS_GROUP_INVOICE,
+                                GNC_PREF_EXTRA_TOOLBUTTONS,
+                                G_OBJECT(tool_item), "visible");
+            }
+        }
     }
 }
 
@@ -1098,15 +1037,18 @@ static void bind_toolbuttons_visibility (GncMainWindow *mainwindow)
  *
  * Update the toolbar button visibility each time our plugin is added
  * to a new GncMainWindow. */
-static void gnc_plugin_business_add_to_window (GncPlugin *plugin,
-        GncMainWindow *mainwindow,
-        GQuark type)
+static void
+gnc_plugin_business_add_to_window (GncPlugin *plugin,
+                                   GncMainWindow *mainwindow,
+                                   GQuark type)
 {
-    bind_toolbuttons_visibility (mainwindow);
+    g_signal_connect (mainwindow, "page_changed",
+                      G_CALLBACK(gnc_plugin_business_main_window_page_changed),
+                      plugin);
 
-    g_signal_connect(mainwindow, "page_changed",
-                     G_CALLBACK(gnc_plugin_business_main_window_page_changed),
-                     plugin);
+    g_signal_connect (mainwindow, "menu_changed",
+                      G_CALLBACK(gnc_plugin_business_main_window_menu_changed),
+                      plugin);
 }
 
 static const char* invoice_printreport_values[] =
@@ -1123,7 +1065,8 @@ static const char* invoice_printreport_values[] =
     NULL
 };
 
-const char *gnc_plugin_business_get_invoice_printreport(void)
+const char *
+gnc_plugin_business_get_invoice_printreport (void)
 {
     int value = gnc_prefs_get_int (GNC_PREFS_GROUP_INVOICE, GNC_PREF_INV_PRINT_RPT);
     if (value >= 0 && value < 4)

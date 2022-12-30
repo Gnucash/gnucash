@@ -119,19 +119,13 @@ typedef struct
     const gchar *actions_name;
     /** An array of actions that should automatically be added to
      *  any GnuCash "main" content window that is opened. */
-    GtkActionEntry *actions;
+    GActionEntry   *actions; //FIXMEb added
     /** The number of actions in the actions array. */
-    guint n_actions;
-    /** An array of toggle actions that should automatically be added to
-     *  any GnuCash "main" content window that is opened. */
-    GtkToggleActionEntry *toggle_actions;
-    /** The number of toggle actions in the toggle actions array. */
-    guint n_toggle_actions;
-    /** A NULL terminated list of actions that should be considered
-     *  important.  In the toolbar, these actions will display the
-     *  action name when the toolbar is in "text beside icons"
-     *  mode. */
-    const gchar **important_actions;
+    guint           n_actions; //FIXMEb added
+
+    /** An array of ui updates for the menu model */
+    const gchar **ui_updates; //FIXMEb added
+
     /** The relative name of the XML file describing the
      *  menu/toolbar action items. */
     const gchar *ui_filename;
@@ -231,6 +225,8 @@ typedef struct
     const char *action_name;
     /** The alternate toolbar label to use */
     const char *label;
+    /** The tooltip for the label */
+    const char *tooltip;
 } action_toolbar_labels;
 
 
@@ -247,69 +243,50 @@ typedef struct
  *  group.
  *
  *  @param toolbar_labels A pointer to a NULL terminated array of data
- *  action_toolbar_labels items.
+ *  GncToolBarShortNames items.
  */
-void gnc_plugin_init_short_names (GtkActionGroup *action_group,
-                                  action_toolbar_labels *toolbar_labels);
+void gnc_plugin_init_short_names (GtkWidget *toolbar,
+                                  GncToolBarShortNames *toolbar_labels);
 
 
-/** Mark certain actions as "important".  This means that their labels
- *  will appear when the toolbar is set to "Icons and important text"
- *  (e.g. GTK_TOOLBAR_BOTH_HORIZ) mode.
- *
- *  @param action_group The group of all actions associated with a
- *  plugin or plugin page.  All actions to me modified must be in this
+/** This function sets the sensitivity of a GAction in a specific
  *  group.
  *
- *  @param name A list of actions names to be marked important.  This
- *  list must be NULL terminated.
- */
-void gnc_plugin_set_important_actions (GtkActionGroup *action_group,
-                                       const gchar **names);
-
-
-/** Update a property on a set of existing GtkActions.  This function
- *  can be easily used to make a list of actions visible, invisible,
- *  sensitive, or insensitive.
- *
- *  @param action_group The group of all actions associated with a
- *  plugin or plugin page.  All actions to be modified must be
- *  contained in this group.
+ *  @param action_map The action map associated with the window.
  *
  *  @param action_names A NULL terminated list of actions names that
  *  should be modified.
  *
- *  @param property_name The property name to be changed on the
- *  specified actions. The only two GtkAction properties that it makes
- *  sense to modify are "visible" and "sensitive".
- *
- *  @param value A boolean specifying the new state for the specified
+ *  @param enable A boolean specifying the new state for the specified
  *  property.
  */
-void gnc_plugin_update_actions (GtkActionGroup *action_group,
-                                const gchar **action_names,
-                                const gchar *property_name,
-                                gboolean value);
+void gnc_plugin_set_actions_enabled (GActionMap *action_map,
+                                     const gchar **action_names,
+                                     gboolean enable); //FIXMEb added
 
-
-/** Load a new set of actions into an existing UI.  The actions from
- *  the provided group will be merged into the pre-existing ui, as
- *  directed by the specified file.
+/** This function adds the tooltip callbacks to make the tooltips
+ *  appear in the status bar.
  *
- *  @param ui_merge A pointer to the UI manager data structure for a
- *  window.
+ *  @param menubar The main window menu bar widget.
  *
- *  @param action_group The set of actions provided by a given plugin.
+ *  @param menubar_model The GMenuModel used to create the menubar.
  *
- *  @param filename The name of the ui description file.  This file
- *  name will be searched for in the ui directory.
- *
- *  @return The merge_id number for the newly merged UI.  If an error
- *  occurred, the return value is 0.
+ *  @param statusbar The status bar widget in the main window.
  */
-gint gnc_plugin_add_actions (GtkUIManager *ui_merge,
-                             GtkActionGroup *action_group,
-                             const gchar *filename);
+void gnc_plugin_add_menu_tooltip_callbacks (GtkWidget *menubar,
+                                            GMenuModel *menubar_model,
+                                            GtkWidget *statusbar); //FIXMEb added
+
+/** This function adds the tooltip callbacks to make the tooltips
+ *  appear in the status bar.
+ *
+ *  @param toolbar The main window tool bar widget.
+ *
+ *  @param statusbar The status bar widget in the main window.
+ */
+void gnc_plugin_add_toolbar_tooltip_callbacks (GtkWidget *toolbar,
+                                               GtkWidget *statusbar); //FIXMEb added
+
 G_END_DECLS
 
 #endif /* __GNC_PLUGIN_H */

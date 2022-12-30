@@ -71,171 +71,78 @@ static void gnc_plugin_basic_commands_add_to_window (GncPlugin *plugin, GncMainW
 static void gnc_plugin_basic_commands_main_window_page_changed(GncMainWindow *window, GncPluginPage *page, gpointer user_data);
 
 /* Command callbacks */
-static void gnc_main_window_cmd_file_new (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_main_window_cmd_file_open (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_main_window_cmd_file_save (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_main_window_cmd_file_save_as (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_main_window_cmd_file_revert (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_main_window_cmd_file_export_accounts (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_main_window_cmd_edit_tax_options (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_main_window_cmd_actions_mortgage_loan (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_main_window_cmd_actions_scheduled_transaction_editor (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_main_window_cmd_file_new (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_main_window_cmd_file_open (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_main_window_cmd_file_save (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_main_window_cmd_file_save_as (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_main_window_cmd_file_revert (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_main_window_cmd_file_export_accounts (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_main_window_cmd_edit_tax_options (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_main_window_cmd_actions_mortgage_loan (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_main_window_cmd_actions_scheduled_transaction_editor (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_main_window_cmd_actions_since_last_run (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 #if CLOSE_BOOKS_ACTUALLY_WORKS
-static void gnc_main_window_cmd_actions_close_books (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_main_window_cmd_actions_close_books (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 #endif /* CLOSE_BOOKS_ACTUALLY_WORKS */
 
-static void gnc_main_window_cmd_tools_financial_calculator (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_main_window_cmd_tools_close_book (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_main_window_cmd_tools_find_transactions (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_main_window_cmd_tools_price_editor (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_main_window_cmd_tools_imap_editor (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_main_window_cmd_tools_trans_doclink (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_main_window_cmd_tools_commodity_editor (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_main_window_cmd_help_totd (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_main_window_cmd_tools_financial_calculator (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_main_window_cmd_tools_close_book (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_main_window_cmd_tools_find_transactions (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_main_window_cmd_tools_price_editor (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_main_window_cmd_tools_imap_editor (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_main_window_cmd_tools_trans_doclink (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_main_window_cmd_tools_commodity_editor (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_main_window_cmd_help_totd (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-basic-commands-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-basic-commands-ui.xml"
+#define PLUGIN_UI_FILENAME  "gnc-plugin-basic-commands.ui"
 
 /** An array of all of the actions provided by the basic commands
  *  plugin. */
-static GtkActionEntry gnc_plugin_actions [] =
+static GActionEntry gnc_plugin_actions [] =
 {
-
-    /* File menu */
-
-    {
-        "FileNewAction", "document-new", N_("New _File"), "<primary>n",
-        N_("Create a new file"),
-        G_CALLBACK (gnc_main_window_cmd_file_new)
-    },
-    {
-        "FileOpenAction", "document-open", N_("_Open…"), "<primary>o",
-        N_("Open an existing GnuCash file"),
-        G_CALLBACK (gnc_main_window_cmd_file_open)
-    },
-    {
-        "FileSaveAction", "document-save", N_("_Save"), "<primary>s",
-        N_("Save the current file"),
-        G_CALLBACK (gnc_main_window_cmd_file_save)
-    },
-    {
-        "FileSaveAsAction", "document-save-as", N_("Save _As…"), "<shift><primary>s",
-        N_("Save this file with a different name"),
-        G_CALLBACK (gnc_main_window_cmd_file_save_as)
-    },
-    {
-        "FileRevertAction", "document-revert", N_("Re_vert"), NULL,
-        N_("Reload the current database, reverting all unsaved changes"),
-        G_CALLBACK (gnc_main_window_cmd_file_revert)
-    },
-    {
-        "FileExportAccountsAction", "go-next",
-        N_("Export _Accounts"), NULL,
-        N_("Export the account hierarchy to a new GnuCash datafile"),
-        G_CALLBACK (gnc_main_window_cmd_file_export_accounts)
-    },
-
-    /* Edit menu */
-
-    {
-        "EditFindTransactionsAction", "edit-find", N_("_Find…"), "<primary>f",
-        N_("Find transactions with a search"),
-        G_CALLBACK (gnc_main_window_cmd_tools_find_transactions)
-    },
-    {
-        "EditTaxOptionsAction", NULL,
-        /* Translators: remember to reuse this
-           translation in dialog-account.glade */
-        N_("Ta_x Report Options"), NULL,
-        /* Translators: currently implemented are
-           US: income tax and
-           DE: VAT
-           So adjust this string                  */
-        N_("Setup relevant accounts for tax reports, e.g. US income tax"),
-        G_CALLBACK (gnc_main_window_cmd_edit_tax_options)
-    },
-
-    /* Actions menu */
-
-    { "ActionsScheduledTransactionsAction", NULL, N_("_Scheduled Transactions"), NULL, NULL, NULL },
-    {
-        "ActionsScheduledTransactionEditorAction", NULL, N_("_Scheduled Transaction Editor"), NULL,
-        N_("The list of Scheduled Transactions"),
-        G_CALLBACK (gnc_main_window_cmd_actions_scheduled_transaction_editor)
-    },
-    {
-        "ActionsSinceLastRunAction", NULL, N_("Since _Last Run…"), NULL,
-        N_("Create Scheduled Transactions since the last time run"),
-        G_CALLBACK (gnc_main_window_cmd_actions_since_last_run)
-    },
-    {
-        "ActionsMortgageLoanAction", NULL, N_("_Mortgage & Loan Repayment…"), NULL,
-        N_("Setup scheduled transactions for repayment of a loan"),
-        G_CALLBACK (gnc_main_window_cmd_actions_mortgage_loan)
-    },
-    { "ActionsBudgetAction", NULL, N_("B_udget"), NULL, NULL, NULL },
+    { "FileNewAction", gnc_main_window_cmd_file_new, NULL, NULL, NULL },
+    { "FileOpenAction", gnc_main_window_cmd_file_open, NULL, NULL, NULL },
+    { "FileSaveAction", gnc_main_window_cmd_file_save, NULL, NULL, NULL },
+    { "FileSaveAsAction", gnc_main_window_cmd_file_save_as, NULL, NULL, NULL },
+    { "FileRevertAction", gnc_main_window_cmd_file_revert, NULL, NULL, NULL },
+    { "FileExportAccountsAction", gnc_main_window_cmd_file_export_accounts, NULL, NULL, NULL },
+    { "EditFindTransactionsAction", gnc_main_window_cmd_tools_find_transactions, NULL, NULL, NULL },
+    { "EditTaxOptionsAction", gnc_main_window_cmd_edit_tax_options, NULL, NULL, NULL },
+    { "ActionsScheduledTransactionsAction", NULL, NULL, NULL, NULL },
+    { "ActionsScheduledTransactionEditorAction", gnc_main_window_cmd_actions_scheduled_transaction_editor, NULL, NULL, NULL },
+    { "ActionsSinceLastRunAction", gnc_main_window_cmd_actions_since_last_run, NULL, NULL, NULL },
+    { "ActionsMortgageLoanAction", gnc_main_window_cmd_actions_mortgage_loan, NULL, NULL, NULL },
+    { "ActionsBudgetAction", NULL, NULL, NULL, NULL },
 #ifdef CLOSE_BOOKS_ACTUALLY_WORKS
-    {
-        "ActionsCloseBooksAction", NULL, N_("Close _Books"), NULL,
-        N_("Archive old data using accounting periods"),
-        G_CALLBACK (gnc_main_window_cmd_actions_close_books)
-    },
+    { "ActionsCloseBooksAction", gnc_main_window_cmd_actions_close_books, NULL, NULL, NULL },
 #endif // CLOSE_BOOKS_ACTUALLY_WORKS
-
-    /* Tools menu */
-    {
-        "ToolsPriceEditorAction", NULL, N_("_Price Database"), NULL,
-        N_("View and edit the prices for stocks and mutual funds"),
-        G_CALLBACK (gnc_main_window_cmd_tools_price_editor)
-    },
-    {
-        "ToolsCommodityEditorAction", NULL, N_("_Security Editor"), NULL,
-        N_("View and edit the commodities for stocks and mutual funds"),
-        G_CALLBACK (gnc_main_window_cmd_tools_commodity_editor)
-    },
-    {
-        "ToolsFinancialCalculatorAction", NULL, N_("_Loan Repayment Calculator"), NULL,
-        N_("Use the loan/mortgage repayment calculator"),
-        G_CALLBACK (gnc_main_window_cmd_tools_financial_calculator)
-    },
-    {
-        "ToolsBookCloseAction", NULL, N_("_Close Book"), NULL,
-        N_("Close the Book at the end of the Period"),
-        G_CALLBACK (gnc_main_window_cmd_tools_close_book)
-    },
-    {
-        "ToolsImapEditorAction", NULL, N_("_Import Map Editor"), NULL,
-        N_("View and Delete Bayesian and non-Bayesian information"),
-        G_CALLBACK (gnc_main_window_cmd_tools_imap_editor)
-    },
-    {
-        "ToolsTransLinkedDocsAction", NULL, N_("_Transaction Linked Documents"), NULL,
-        N_("View all Transaction Linked Documents"),
-        G_CALLBACK (gnc_main_window_cmd_tools_trans_doclink)
-    },
-
-    /* Help menu */
-
-    {
-        "HelpTipsOfTheDayAction", NULL, N_("_Tips Of The Day"), NULL,
-        N_("View the Tips of the Day"),
-        G_CALLBACK (gnc_main_window_cmd_help_totd)
-    },
+    { "ToolsPriceEditorAction", gnc_main_window_cmd_tools_price_editor, NULL, NULL, NULL },
+    { "ToolsCommodityEditorAction", gnc_main_window_cmd_tools_commodity_editor, NULL, NULL, NULL },
+    { "ToolsFinancialCalculatorAction", gnc_main_window_cmd_tools_financial_calculator, NULL, NULL, NULL },
+    { "ToolsBookCloseAction", gnc_main_window_cmd_tools_close_book, NULL, NULL, NULL },
+    { "ToolsImapEditorAction", gnc_main_window_cmd_tools_imap_editor, NULL, NULL, NULL },
+    { "ToolsTransLinkedDocsAction", gnc_main_window_cmd_tools_trans_doclink, NULL, NULL, NULL },
+    { "HelpTipsOfTheDayAction", gnc_main_window_cmd_help_totd, NULL, NULL, NULL },
 };
 /** The number of actions provided by this plugin. */
-static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
+static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
 
-
-/** These are the "important" actions provided by the basic commands
- *  plugin.  Their labels will appear when the toolbar is set to
- *  "Icons and important text" (e.g. GTK_TOOLBAR_BOTH_HORIZ) mode. */
-static const gchar *gnc_plugin_important_actions[] =
+/** The default menu items that need to be add to the menu */
+static const gchar *gnc_plugin_load_ui_items [] =
 {
-    "FileSaveAction",
+    "FilePlaceholder0",
+    "FilePlaceholder2",
+    "FilePlaceholder3",
+    "FilePlaceholder5",
+    "EditPlaceholder3",
+    "EditPlaceholder5",
+    "ActionsPlaceholder2",
+    "ToolsPlaceholder1",
+    "HelpPlaceholder1",
     NULL,
 };
 
@@ -278,7 +185,7 @@ typedef struct GncPluginBasicCommandsPrivate
 } GncPluginBasicCommandsPrivate;
 
 #define GNC_PLUGIN_BASIC_COMMANDS_GET_PRIVATE(o)  \
-   ((GncPluginBasicCommandsPrivate*)gnc_plugin_basic_commands_get_instance_private((GncPluginBasicCommands*)o))
+   ((GncPluginBasicCommandsPrivate*)gnc_plugin_basic_commands_get_instance_private ((GncPluginBasicCommands*)o))
 
 /** A pointer to the parent class of a plugin page. */
 static GObjectClass *parent_class = NULL;
@@ -314,25 +221,27 @@ gnc_plugin_basic_commands_new (void)
  */
 static void
 gnc_plugin_basic_commands_add_to_window (GncPlugin *plugin,
-        GncMainWindow *window,
-        GQuark type)
+                                         GncMainWindow *window,
+                                         GQuark type)
 {
-    GtkActionGroup *action_group =
-        gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
-    gnc_plugin_update_actions(action_group,
-                              gnc_plugin_initially_insensitive_actions,
-                              "sensitive", FALSE);
-    g_signal_connect(window, "page_changed",
-                     G_CALLBACK(gnc_plugin_basic_commands_main_window_page_changed),
-                     plugin);
+    GSimpleActionGroup *simple_action_group =
+        gnc_main_window_get_action_group (window, PLUGIN_ACTIONS_NAME);
+
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group),
+                                    gnc_plugin_initially_insensitive_actions,
+                                    FALSE);
+
+    g_signal_connect (window, "page_changed",
+                      G_CALLBACK(gnc_plugin_basic_commands_main_window_page_changed),
+                      plugin);
 }
 
 /** Update the actions sensitivity
 */
-static void update_inactive_actions(GncPluginPage *plugin_page)
+static void update_inactive_actions (GncPluginPage *plugin_page)
 {
-    GncMainWindow  *window;
-    GtkActionGroup *action_group;
+    GncMainWindow *window;
+    GSimpleActionGroup *simple_action_group;
 
     // We are readonly - so we have to switch particular actions to inactive.
     gboolean is_readwrite = !qof_book_is_readonly(gnc_get_current_book());
@@ -344,26 +253,26 @@ static void update_inactive_actions(GncPluginPage *plugin_page)
 
     window = GNC_MAIN_WINDOW(plugin_page->window);
     g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
-    action_group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
-    g_return_if_fail(GTK_IS_ACTION_GROUP(action_group));
+    simple_action_group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
+    g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(simple_action_group));
 
     /* Set the action's sensitivity */
-    gnc_plugin_update_actions (action_group, readwrite_only_active_actions,
-                               "sensitive", is_readwrite);
-    gnc_plugin_update_actions (action_group, dirty_only_active_actions,
-                               "sensitive", is_dirty);
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), readwrite_only_active_actions,
+                                    is_readwrite);
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), dirty_only_active_actions,
+                                    is_dirty);
 }
 
 static void
-gnc_plugin_basic_commands_main_window_page_changed(GncMainWindow *window,
-        GncPluginPage *page,
-        gpointer user_data)
+gnc_plugin_basic_commands_main_window_page_changed (GncMainWindow *window,
+                                                    GncPluginPage *plugin_page,
+                                                    gpointer user_data)
 {
     /* Make sure not to call this with a NULL GncPluginPage */
-    if (page)
+    if (plugin_page)
     {
         // Update the action sensitivity due to read-only
-        update_inactive_actions(page);
+        update_inactive_actions (plugin_page);
     }
 }
 
@@ -393,11 +302,11 @@ gnc_plugin_basic_commands_class_init (GncPluginBasicCommandsClass *klass)
     plugin_class->add_to_window = gnc_plugin_basic_commands_add_to_window;
 
     /* widget addition/removal */
-    plugin_class->actions_name 	  = PLUGIN_ACTIONS_NAME;
-    plugin_class->actions      	  = gnc_plugin_actions;
-    plugin_class->n_actions    	  = gnc_plugin_n_actions;
-    plugin_class->important_actions = gnc_plugin_important_actions;
+    plugin_class->actions_name      = PLUGIN_ACTIONS_NAME;
+    plugin_class->actions           = gnc_plugin_actions;
+    plugin_class->n_actions         = gnc_plugin_n_actions;
     plugin_class->ui_filename       = PLUGIN_UI_FILENAME;
+    plugin_class->ui_updates        = gnc_plugin_load_ui_items;
 }
 
 
@@ -423,9 +332,9 @@ gnc_plugin_basic_commands_init (GncPluginBasicCommands *plugin)
 static void
 gnc_plugin_basic_commands_finalize (GObject *object)
 {
-    g_return_if_fail (GNC_IS_PLUGIN_BASIC_COMMANDS (object));
+    g_return_if_fail (GNC_IS_PLUGIN_BASIC_COMMANDS(object));
 
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS(parent_class)->finalize (object);
 }
 
 /************************************************************
@@ -433,20 +342,28 @@ gnc_plugin_basic_commands_finalize (GObject *object)
  ************************************************************/
 
 static void
-gnc_main_window_cmd_file_new (GtkAction *action, GncMainWindowActionData *data)
+gnc_main_window_cmd_file_new (GSimpleAction *simple,
+                              GVariant      *parameter,
+                              gpointer       user_data)
 {
-    if (!gnc_main_window_all_finish_pending())
+    GncMainWindowActionData *data = user_data;
+
+    if (!gnc_main_window_all_finish_pending ())
         return;
 
-    gnc_file_new (GTK_WINDOW (data->window));
+    gnc_file_new (GTK_WINDOW(data->window));
 }
 
 static void
-gnc_main_window_cmd_file_open (GtkAction *action, GncMainWindowActionData *data)
+gnc_main_window_cmd_file_open (GSimpleAction *simple,
+                               GVariant      *parameter,
+                               gpointer       user_data)
 {
+    GncMainWindowActionData *data = user_data;
+
     g_return_if_fail (data != NULL);
 
-    if (!gnc_main_window_all_finish_pending())
+    if (!gnc_main_window_all_finish_pending ())
         return;
 
     /* Reset the flag that indicates the conversion of the bayes KVP
@@ -455,88 +372,114 @@ gnc_main_window_cmd_file_open (GtkAction *action, GncMainWindowActionData *data)
 
     gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
 #ifdef HAVE_DBI_DBI_H
-    gnc_ui_file_access_for_open (GTK_WINDOW (data->window));
+    gnc_ui_file_access_for_open (GTK_WINDOW(data->window));
 #else
-    gnc_file_open (GTK_WINDOW (data->window));
+    gnc_file_open (GTK_WINDOW(data->window));
 #endif
     gnc_window_set_progressbar_window (NULL);
 }
 
 static void
-gnc_main_window_cmd_file_save (GtkAction *action, GncMainWindowActionData *data)
+gnc_main_window_cmd_file_save (GSimpleAction *simple,
+                               GVariant      *parameter,
+                               gpointer       user_data)
 {
+    GncMainWindowActionData *data = user_data;
+
     g_return_if_fail (data != NULL);
 
-    if (!gnc_main_window_all_finish_pending())
+    if (!gnc_main_window_all_finish_pending ())
         return;
 
     gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
-    gnc_file_save (GTK_WINDOW (data->window));
+    gnc_file_save (GTK_WINDOW(data->window));
     gnc_window_set_progressbar_window (NULL);
 }
 
 static void
-gnc_main_window_cmd_file_save_as (GtkAction *action, GncMainWindowActionData *data)
+gnc_main_window_cmd_file_save_as (GSimpleAction *simple,
+                                  GVariant      *parameter,
+                                  gpointer       user_data)
 {
+    GncMainWindowActionData *data = user_data;
+
     g_return_if_fail (data != NULL);
 
-    if (!gnc_main_window_all_finish_pending())
+    if (!gnc_main_window_all_finish_pending ())
         return;
 
     gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
 #ifdef HAVE_DBI_DBI_H
-    gnc_ui_file_access_for_save_as (GTK_WINDOW (data->window));
+    gnc_ui_file_access_for_save_as (GTK_WINDOW(data->window));
 #else
-    gnc_file_save_as (GTK_WINDOW (data->window));
+    gnc_file_save_as (GTK_WINDOW(data->window));
 #endif
     gnc_window_set_progressbar_window (NULL);
 }
 
 static void
-gnc_main_window_cmd_file_revert (GtkAction *action, GncMainWindowActionData *data)
+gnc_main_window_cmd_file_revert (GSimpleAction *simple,
+                                 GVariant      *parameter,
+                                 gpointer       user_data)
 {
+    GncMainWindowActionData *data = user_data;
+
     g_return_if_fail (data != NULL);
 
-    if (!gnc_main_window_all_finish_pending())
+    if (!gnc_main_window_all_finish_pending ())
         return;
 
     gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
-    gnc_file_revert(GTK_WINDOW (data->window));
+    gnc_file_revert (GTK_WINDOW(data->window));
     gnc_window_set_progressbar_window (NULL);
 }
 
 static void
-gnc_main_window_cmd_file_export_accounts (GtkAction *action, GncMainWindowActionData *data)
+gnc_main_window_cmd_file_export_accounts (GSimpleAction *simple,
+                                          GVariant      *parameter,
+                                          gpointer       user_data)
 {
+    GncMainWindowActionData *data = user_data;
+
     g_return_if_fail (data != NULL);
 
     gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
 #ifdef HAVE_DBI_DBI_H
-    gnc_ui_file_access_for_export (GTK_WINDOW (data->window));
+    gnc_ui_file_access_for_export (GTK_WINDOW(data->window));
 #else
-    gnc_file_export (GTK_WINDOW (data->window));
+    gnc_file_export (GTK_WINDOW(data->window));
 #endif
     gnc_window_set_progressbar_window (NULL);
 }
 
 static void
-gnc_main_window_cmd_edit_tax_options (GtkAction *action, GncMainWindowActionData *data)
+gnc_main_window_cmd_edit_tax_options (GSimpleAction *simple,
+                                      GVariant      *parameter,
+                                      gpointer       user_data)
 {
+    GncMainWindowActionData *data = user_data;
+
     g_return_if_fail (data != NULL);
 
-    gnc_tax_info_dialog (GTK_WIDGET (data->window), NULL);
+    gnc_tax_info_dialog (GTK_WIDGET(data->window), NULL);
 }
 
 static void
-gnc_main_window_cmd_actions_scheduled_transaction_editor (GtkAction *action, GncMainWindowActionData *data)
+gnc_main_window_cmd_actions_scheduled_transaction_editor (GSimpleAction *simple,
+                                                          GVariant      *parameter,
+                                                          gpointer       user_data)
 {
-    GncPluginPage *page = gnc_plugin_page_sx_list_new();
-    gnc_main_window_open_page(NULL, page);
+    GncMainWindowActionData *data = user_data;
+    GncPluginPage *page = gnc_plugin_page_sx_list_new ();
+    gnc_main_window_open_page (NULL, page);
 }
 
 static void
-gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActionData *data)
+gnc_main_window_cmd_actions_since_last_run (GSimpleAction *simple,
+                                            GVariant      *parameter,
+                                            gpointer       user_data)
 {
+    GncMainWindowActionData *data = user_data;
     GtkWindow *window;
     GncSxInstanceModel *sx_instances;
     GncSxSummary summary;
@@ -546,9 +489,9 @@ gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActi
 
     g_return_if_fail (data != NULL);
 
-    window = GTK_WINDOW (data->window);
+    window = GTK_WINDOW(data->window);
 
-    if (qof_book_is_readonly(gnc_get_current_book()))
+    if (qof_book_is_readonly (gnc_get_current_book()))
     {
         /* Is the book read-only? Then don't change anything here. */
         return;
@@ -574,97 +517,122 @@ gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActi
         }
         else
         {
-            gnc_info_dialog(window, ngettext
-                            /* Translators: %d is the number of transactions. This is a
-                               ngettext(3) message. */
-                            ("There are no Scheduled Transactions to be entered at this time. "
-                             "(%d transaction automatically created)",
-                             "There are no Scheduled Transactions to be entered at this time. "
-                             "(%d transactions automatically created)",
-                             summary.num_auto_create_no_notify_instances),
-                            summary.num_auto_create_no_notify_instances);
+            gnc_info_dialog (window, ngettext
+                             /* Translators: %d is the number of transactions. This is a
+                                ngettext(3) message. */
+                             ("There are no Scheduled Transactions to be entered at this time. "
+                              "(%d transaction automatically created)",
+                              "There are no Scheduled Transactions to be entered at this time. "
+                              "(%d transactions automatically created)",
+                              summary.num_auto_create_no_notify_instances),
+                              summary.num_auto_create_no_notify_instances);
         }
     }
-    g_list_free(auto_created_txns);
-    g_object_unref(G_OBJECT(sx_instances));
+    g_list_free (auto_created_txns);
+    g_object_unref (G_OBJECT(sx_instances));
 }
 
 static void
-gnc_main_window_cmd_actions_mortgage_loan (GtkAction *action, GncMainWindowActionData *data)
+gnc_main_window_cmd_actions_mortgage_loan (GSimpleAction *simple,
+                                           GVariant      *parameter,
+                                           gpointer       user_data)
 {
+    GncMainWindowActionData *data = user_data;
     gnc_ui_sx_loan_assistant_create ();
 }
 #ifdef CLOSE_BOOKS_ACTUALLY_WORKS
 static void
-gnc_main_window_cmd_actions_close_books (GtkAction *action, GncMainWindowActionData *data)
+gnc_main_window_cmd_actions_close_books (GSimpleAction *simple,
+                                         GVariant      *parameter,
+                                         gpointer       user_data)
 {
-    gnc_acct_period_dialog();
+    GncMainWindowActionData *data = user_data;
+    gnc_acct_period_dialog ();
 }
 #endif /* CLOSE_BOOKS_ACTUALLY_WORKS */
 
 static void
-gnc_main_window_cmd_tools_imap_editor (GtkAction *action, GncMainWindowActionData *data)
+gnc_main_window_cmd_tools_imap_editor (GSimpleAction *simple,
+                                       GVariant      *parameter,
+                                       gpointer       user_data)
 {
-    gnc_set_busy_cursor(NULL, TRUE);
-    gnc_imap_dialog (GTK_WIDGET (data->window));
-    gnc_unset_busy_cursor(NULL);
-}
-
-static void
-gnc_main_window_cmd_tools_trans_doclink (GtkAction *action, GncMainWindowActionData *data)
-{
+    GncMainWindowActionData *data = user_data;
     gnc_set_busy_cursor (NULL, TRUE);
-    gnc_doclink_trans_dialog (GTK_WINDOW (data->window));
+    gnc_imap_dialog (GTK_WIDGET(data->window));
     gnc_unset_busy_cursor (NULL);
 }
 
 static void
-gnc_main_window_cmd_tools_price_editor (GtkAction *action, GncMainWindowActionData *data)
+gnc_main_window_cmd_tools_trans_doclink (GSimpleAction *simple,
+                                         GVariant      *parameter,
+                                         gpointer       user_data)
 {
-    gnc_set_busy_cursor(NULL, TRUE);
-    gnc_prices_dialog (GTK_WIDGET (data->window));
-    gnc_unset_busy_cursor(NULL);
+    GncMainWindowActionData *data = user_data;
+    gnc_set_busy_cursor (NULL, TRUE);
+    gnc_doclink_trans_dialog (GTK_WINDOW(data->window));
+    gnc_unset_busy_cursor (NULL);
 }
 
 static void
-gnc_main_window_cmd_tools_commodity_editor (GtkAction *action, GncMainWindowActionData *data)
+gnc_main_window_cmd_tools_price_editor (GSimpleAction *simple,
+                                        GVariant      *parameter,
+                                        gpointer       user_data)
 {
-    gnc_set_busy_cursor(NULL, TRUE);
-    gnc_commodities_dialog (GTK_WIDGET (data->window));
-    gnc_unset_busy_cursor(NULL);
+    GncMainWindowActionData *data = user_data;
+    gnc_set_busy_cursor (NULL, TRUE);
+    gnc_prices_dialog (GTK_WIDGET(data->window));
+    gnc_unset_busy_cursor (NULL);
 }
 
 static void
-gnc_main_window_cmd_tools_financial_calculator (GtkAction *action, GncMainWindowActionData *data)
+gnc_main_window_cmd_tools_commodity_editor (GSimpleAction *simple,
+                                            GVariant      *parameter,
+                                            gpointer       user_data)
 {
-    gnc_ui_fincalc_dialog_create(GTK_WINDOW (data->window));
+    GncMainWindowActionData *data = user_data;
+    gnc_set_busy_cursor (NULL, TRUE);
+    gnc_commodities_dialog (GTK_WIDGET(data->window));
+    gnc_unset_busy_cursor (NULL);
 }
 
 static void
-gnc_main_window_cmd_tools_close_book (GtkAction *action, GncMainWindowActionData *data)
+gnc_main_window_cmd_tools_financial_calculator (GSimpleAction *simple,
+                                                GVariant      *parameter,
+                                                gpointer       user_data)
 {
-    gnc_ui_close_book(gnc_get_current_book(), GTK_WINDOW (data->window));
+    GncMainWindowActionData *data = user_data;
+    gnc_ui_fincalc_dialog_create (GTK_WINDOW(data->window));
 }
 
 static void
-gnc_main_window_cmd_tools_find_transactions (GtkAction *action, GncMainWindowActionData *data)
+gnc_main_window_cmd_tools_close_book (GSimpleAction *simple,
+                                      GVariant      *parameter,
+                                      gpointer       user_data)
 {
+    GncMainWindowActionData *data = user_data;
+    gnc_ui_close_book (gnc_get_current_book(), GTK_WINDOW(data->window));
+}
 
-#ifdef REGISTER2_ENABLED
-    /*################## Added for Reg2 #################*/
-    gnc_ui_find_transactions_dialog_create2 (NULL);
-    /*################## Added for Reg2 #################*/
-#else
+static void
+gnc_main_window_cmd_tools_find_transactions (GSimpleAction *simple,
+                                             GVariant      *parameter,
+                                             gpointer       user_data)
+{
+    GncMainWindowActionData *data = user_data;
+
     gnc_ui_find_transactions_dialog_create (GTK_WINDOW(data->window), NULL);
-#endif
 }
 
 static void
-gnc_main_window_cmd_help_totd (GtkAction *action, GncMainWindowActionData *data)
+gnc_main_window_cmd_help_totd (GSimpleAction *simple,
+                               GVariant      *parameter,
+                               gpointer       user_data)
 {
+    GncMainWindowActionData *data = user_data;
+
     g_return_if_fail (data != NULL);
 
-    gnc_totd_dialog(GTK_WINDOW(data->window), FALSE);
+    gnc_totd_dialog (GTK_WINDOW(data->window), FALSE);
 }
 
 /** @} */

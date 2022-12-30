@@ -46,20 +46,24 @@ static void gnc_plugin_customer_import_init               (GncPlugincustomer_imp
 static void gnc_plugin_customer_import_finalize           (GObject *object);
 
 /* Command callbacks */
-static void gnc_plugin_customer_import_cmd_test (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_customer_import_cmd_test (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-customer-import-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-customer-import-ui.xml"
+#define PLUGIN_UI_FILENAME  "gnc-plugin-customer-import.ui"
 
-static GtkActionEntry gnc_plugin_actions [] =
+static GActionEntry gnc_plugin_actions [] =
 {
-    /* Menu Items */
-    { "ImportMenuAction", NULL, N_("_Import"), NULL, NULL, NULL },
-    /* Menu entry with label and tooltip */
-    { "customer_importAction", "go-previous", N_("Import _Customers & Vendors…"), NULL, N_("Import Customers and Vendors from a CSV text file."),  G_CALLBACK(gnc_plugin_customer_import_cmd_test) },
+    { "customer_importAction", gnc_plugin_customer_import_cmd_test, NULL, NULL, NULL },
 };
+/** The number of actions provided by this plugin. */
 static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
 
+/** The default menu items that need to be add to the menu */
+static const gchar *gnc_plugin_load_ui_items [] =
+{
+    "FilePlaceholder1",
+    NULL,
+};
 
 /************************************************************
  *                   Object Implementation                  *
@@ -85,10 +89,11 @@ gnc_plugin_customer_import_class_init (GncPlugincustomer_importClass *klass)
     plugin_class->plugin_name  = GNC_PLUGIN_customer_import_NAME;
 
     /* widget addition/removal */
-    plugin_class->actions_name       = PLUGIN_ACTIONS_NAME;
-    plugin_class->actions            = gnc_plugin_actions;
-    plugin_class->n_actions          = gnc_plugin_n_actions;
-    plugin_class->ui_filename        = PLUGIN_UI_FILENAME;
+    plugin_class->actions_name    = PLUGIN_ACTIONS_NAME;
+    plugin_class->actions         = gnc_plugin_actions;
+    plugin_class->n_actions       = gnc_plugin_n_actions;
+    plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
+    plugin_class->ui_updates      = gnc_plugin_load_ui_items;
 }
 
 static void
@@ -118,9 +123,13 @@ gnc_plugin_customer_import_create_plugin (void)
  ************************************************************/
 
 static void
-gnc_plugin_customer_import_cmd_test (GtkAction *action, GncMainWindowActionData *data)
+gnc_plugin_customer_import_cmd_test (GSimpleAction *simple,
+                                     GVariant      *parameter,
+                                     gpointer       user_data)
 {
-    ENTER ("action %p, main window data %p", action, data);
+    GncMainWindowActionData *data = user_data;
+
+    ENTER ("action %p, main window data %p", simple, data);
     PINFO ("customer_import");
 
     gnc_plugin_customer_import_showGUI (GTK_WINDOW(data->window));

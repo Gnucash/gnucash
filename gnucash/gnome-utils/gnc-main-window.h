@@ -55,27 +55,32 @@ extern "C"
 
 /* typedefs & structures */
 
+typedef struct
+{
+    const gchar *actions;
+    const gchar *update_type;
+} GncMenuUpdate;
+
 /** The instance data structure for a main window object. */
 typedef struct GncMainWindow
 {
-    GtkWindow gtk_window;	/**< The parent object for a main window. */
-    GtkUIManager *ui_merge; /**< A pointer to the UI Manager data
-                                 structure for the whole window. */
-    gboolean window_quitting; /**< Set to TRUE when quitting from this window. */
-    gboolean just_plugin_prefs; /**< Just remove preferences only from plugins */
+    GtkApplicationWindow gtk_application_window;  /**< The parent object for a main window. */
+    gboolean window_quitting;                     /**< Set to TRUE when quitting from this window. */
+    gboolean just_plugin_prefs;                   /**< Just remove preferences only from plugins */
 } GncMainWindow;
 
 /** The class data structure for a main window object. */
 typedef struct
 {
-    GtkWindowClass gtk_window;	/**< The parent class for a
-					   main window. */
+    GtkApplicationWindowClass gtk_application_window; /**< The parent class for a main window. */
 
     /* callbacks */
     void (*page_added)   (GncMainWindow *window,
                           GncPluginPage *page);
     void (*page_changed) (GncMainWindow *window,
                           GncPluginPage *page);
+    void (*menu_changed) (GncMainWindow *window,
+                          GncPluginPage *page); //FIXMEb added
 } GncMainWindowClass;
 
 typedef struct
@@ -137,12 +142,12 @@ void gnc_main_window_open_page (GncMainWindow *window,
 void gnc_main_window_close_page (GncPluginPage *page);
 
 
-/*  Iterator function to walk all pages in all windows, calling the
- *  specified function for each page.
+/**  Iterator function to walk all pages in all windows, calling the
+ *   specified function for each page.
  *
- *  @param entry A pointer to the function to be called.
+ *   @param entry A pointer to the function to be called.
  *
- *  @param user_data A data pointer passed to each call of the function.
+ *   @param user_data A data pointer passed to each call of the function.
  */
 void gnc_main_window_foreach_page (GncMainWindowPageFunc fn,
                                    gpointer user_data);
@@ -164,12 +169,6 @@ void gnc_main_window_foreach_page (GncMainWindowPageFunc fn,
  */
 GncPluginPage *gnc_main_window_get_current_page (GncMainWindow *window);
 
-
-/** Returns the pointer to the GtkUIManager which is used for the menu
- * item merging. */
-GtkUIManager *gnc_main_window_get_uimanager (GncMainWindow *window);
-
-
 /** Update the name of the page in the main window.
  *
  *  @param page The page to be updated.
@@ -178,7 +177,6 @@ GtkUIManager *gnc_main_window_get_uimanager (GncMainWindow *window);
 void
 main_window_update_page_name (GncPluginPage *page,
                               const gchar *name_in);
-
 
 /** Update the color on the page tabs in the main window.
  *
@@ -211,16 +209,11 @@ main_window_update_page_set_read_only_icon (GncPluginPage *page,
  *  should be unique among all groups added to the window, and will be
  *  needed to remove the actions from this window.
  *
- *  @param group A pointer to an array of GtkActions.  These are the
- *  actions that will be added to the user interface.
- *
- *  @param merge_id A merge identifier retrieved from a call to
- *  gtk_ui_manager_new_merge_id().
+ *  @param group A pointer to the GSimpleActionGroup.
  */
 void gnc_main_window_manual_merge_actions (GncMainWindow *window,
-        const gchar *group_name,
-        GtkActionGroup *group,
-        guint merge_id);
+                                           const gchar *group_name,
+                                           GSimpleActionGroup *group);
 
 
 /** Add a set of actions to the specified window.  This function
@@ -236,15 +229,10 @@ void gnc_main_window_manual_merge_actions (GncMainWindow *window,
  *  should be unique among all groups added to the window, and will be
  *  needed to remove the actions from this window.
  *
- *  @param entries A pointer to an array of GtkActionEntry.  These
+ *  @param entries A pointer to an array of GActionEntry.  These
  *  are the actions that will be added to the user interface.
  *
  *  @param n_entries The number of actions in the array.
- *
- *  @param toggle_entries A pointer to an array of GtkToggleActionEntry.
- *  These are the toggle actions that will be added to the user interface.
- *
- *  @param n_toggle_entries The number of toggle actions in the array.
  *
  *  @param filename The filename containing the user interface
  *  definition that goes with this set of actions.
@@ -254,11 +242,10 @@ void gnc_main_window_manual_merge_actions (GncMainWindow *window,
  */
 void gnc_main_window_merge_actions (GncMainWindow *window,
                                     const gchar *group_name,
-                                    GtkActionEntry *entries,
+                                    GActionEntry *entries,
                                     guint n_entries,
-                                    GtkToggleActionEntry *toggle_entries,
-                                    guint n_toggle_entries,
-                                    const gchar *filename,
+                                    const gchar **ui_updates,
+                                    const gchar *ui_filename,
                                     gpointer user_data);
 
 
@@ -276,18 +263,99 @@ void gnc_main_window_merge_actions (GncMainWindow *window,
 void gnc_main_window_unmerge_actions (GncMainWindow *window,
                                       const gchar *group_name);
 
-
-/** Force a full update of the user interface for the specified
- *  window.  This can be an expensive function, but is needed because
- *  the gtk ui manager doesn't always seem to update properly when
- *  actions are changed.
+/** Show or hide menu and toolbar items based on a NULL terminated
+ *  list of action names
  *
  *  @param window A pointer to the window whose user interface should
  *  be updated.
  *
- *  @attention Is this function still needed?
+ *  @param action_names A NULL terminated list of actions names that
+ *  should be modified.
+ *
+ *  @param vis Whether to show or hide the widget items
  */
-void gnc_main_window_actions_updated (GncMainWindow *window);
+void gnc_main_window_set_vis_of_items_by_action (GncMainWindow *window,
+                                                 const gchar **action_names,
+                                                 gboolean vis); //FIXMEb added
+
+/** Find the menu item with the given action name for the window
+ *  specified.
+ *
+ *  @param window A pointer to the window whose user interface should
+ *  be updated.
+ *
+ *  @param action_name The action name of the tool item to find.
+ *
+ *  @return The found menu item widget or NULL.
+ */
+GtkWidget *gnc_main_window_menu_find_menu_item (GncMainWindow *window,
+                                                const gchar *action_name); //FIXMEb added
+
+/** Find the toolbar item with the given action name for the window
+ *  specified.
+ *
+ *  @param window A pointer to the window whose user interface should
+ *  be updated.
+ *
+ *  @param action_name The action name of the tool item to find.
+ *
+ *  @return The found tool item widget or NULL.
+ */
+GtkWidget * gnc_main_window_toolbar_find_tool_item (GncMainWindow *window,
+                                                    const gchar *action_name); //FIXMEb added
+
+/** Find the GMenuModel item given the action name for the window
+ *  specified.
+ *
+ *  @param window A pointer to the window whose user interface should
+ *  be updated.
+ *
+ *  @param action_name The action name of the menu item to find.
+ *
+ *  @param label The new label for the menu item.
+ *
+ *  @param tooltip The new tooltip for the menu item, optional.
+ *
+ *  @return TRUE if menu item found and updated or FALSE.
+ */
+gboolean gnc_main_window_update_menu_for_action (GncMainWindow *window,
+                                                 const gchar *action_name,
+                                                 const gchar *label,
+                                                 const gchar *tooltip); //FIXMEb added
+
+/** Scan the main window menu and add accelerator keys to main window
+ *  accelerator group.
+ *
+ *  @param window A pointer to the window whose user interface should
+ *  be updated.
+ *
+ */
+void gnc_main_window_menu_add_accelerator_keys (GncMainWindow *window); //FIXMEb added
+
+/** A structure for defining alternate action names for use in the
+ *  toolbar.  All toolbar buttons are homogeneous in size and are sized
+ *  to fit the longest label.  Therefore, this structure should be
+ *  used if an action name is more than one word.  This way the menu
+ *  can have the label "Whizzy Feature", while the toolbar button only
+ *  has the label "Whizzy". */
+typedef struct
+{
+    /** The name of the action. */
+    const char *action_name;
+    /** The alternate toolbar label to use */
+    const char *short_label;
+} GncToolBarShortNames; //FIXMEb added
+
+
+/** Update the labels of the toolbar items with short names.
+ *
+ *  @param window The window that conatins a tool bar to update.
+ *
+ *  @param toolbar_labels A pointer to a NULL terminated array of data
+ *  GncToolBarShortNames items.
+ */
+void gnc_main_window_init_short_names (GncMainWindow *window,
+                                       GncToolBarShortNames *toolbar_labels); //FIXMEb added
 
 
 /** Retrieve a specific set of user interface actions from a window.
@@ -299,12 +367,12 @@ void gnc_main_window_actions_updated (GncMainWindow *window);
  *  @param group_name The name of a set of actions.  This must be a
  *  name provided when the actions were installed.
  *
- *  @return A pointer to a GtkActionGroup that was added with the
+ *  @return A pointer to a GSimpleActionGroup that was added with the
  *  specified name.  If the name cannot be found, then NULL will be
  *  returned.
  */
-GtkActionGroup *gnc_main_window_get_action_group (GncMainWindow *window,
-        const gchar *group_name);
+GSimpleActionGroup *gnc_main_window_get_action_group (GncMainWindow *window,
+                                                      const gchar *group_name);
 
 
 /** Set the window where all progressbar updates should occur.  This
@@ -414,17 +482,53 @@ gboolean gnc_main_window_all_finish_pending (void);
  *  this action. */
 void gnc_main_window_all_action_set_sensitive (const gchar *action_name, gboolean sensitive);
 
-/** Find action in main window.
+/** Find the GAction in the main window.
  *
  *  @param window The window which should be checked for the action.
  *
- *  @param name The name of the command to be retrieved.
+ *  @param action_name The name of the command to be retrieved.
  *
- *  @return A pointer to a GtkAction that was added with the
+ *  @return A pointer to a GAction that was added with the
  *  specified name. If the name cannot be found, then NULL will be
  *  returned.
  */
-GtkAction *gnc_main_window_find_action (GncMainWindow *window, const gchar *name);
+GAction *gnc_main_window_find_action (GncMainWindow *window,
+                                      const gchar *action_name);
+
+/** Find the GAction in a specific action group for window.
+ *
+ *  @param window The window which should be checked for the action.
+ *
+ *  @param group_name The name of the action group to search.
+ *
+ *  @param name The name of the command to be retrieved.
+ *
+ *  @return A pointer to the GAction if found or NULL will be returned.
+ */
+GAction *gnc_main_window_find_action_in_group (GncMainWindow *window,
+                                               const gchar *group_name,
+                                               const gchar *action_name); //FIXMEb added
+
+/** Return the GMenuModel for the main window menu bar.
+ *
+ *  @param window The window for the menu bar.
+ *
+ *  @return The GMenuModel or NULL.
+ */
+GMenuModel *gnc_main_window_get_menu_model (GncMainWindow *window); //FIXMEb added
+
+/** Update the main window menu with the placeholders listed in
+ *  ui_updates and load the page specific toolbar.
+ *
+ *  @param window The window which should be checked for the action.
+ *
+ *  @param page The plugin page calling this function.
+ *
+ *  @param ui_updates A NULL terminated list of placeholders to load
+ */
+void gnc_main_window_update_menu_and_toolbar (GncMainWindow *window,
+                                              GncPluginPage *page,
+                                              const gchar **ui_updates); //FIXMEb added
 
 /**
  * Shows all main windows.

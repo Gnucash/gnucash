@@ -332,3 +332,698 @@ gnc_get_dialog_widget_from_id (GtkDialog *dialog, const gchar *id)
     GtkWidget *content_area = gtk_dialog_get_content_area (dialog);
     return find_widget_func (content_area, id);
 }
+
+
+/** Disable all the actions in a simple action group
+ *
+ *  @param action_group The GSimpleActionGroup
+ */
+void
+gnc_disable_all_actions_in_group (GSimpleActionGroup *action_group)
+{
+    gchar **actions;
+    gint num_actions;
+
+    g_return_if_fail (action_group != NULL);
+
+    actions = g_action_group_list_actions (G_ACTION_GROUP(action_group));
+    num_actions = g_strv_length (actions);
+
+    // Disable the actions
+    for (gint i = 0; i < num_actions; i++)
+    {
+        GAction *action = g_action_map_lookup_action (G_ACTION_MAP(action_group),
+                                                      actions[i]);
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
+    }
+    g_strfreev (actions);
+}
+
+
+static void
+add_accel_for_menu_lookup (GtkWidget *widget, gpointer user_data)
+{
+    if (GTK_IS_MENU_ITEM(widget))
+    {
+        GtkMenuItem* menuItem = GTK_MENU_ITEM(widget);
+        GtkWidget* subMenu = gtk_menu_item_get_submenu (menuItem);
+        GtkWidget *accel_label = gtk_bin_get_child (GTK_BIN(widget));
+
+        if (accel_label)
+        {
+            guint key;
+            GdkModifierType mods;
+
+            gtk_accel_label_get_accel (GTK_ACCEL_LABEL(accel_label), &key, &mods);
+
+            if (key > 0)
+                gtk_widget_add_accelerator (GTK_WIDGET(widget), "activate",
+                                            GTK_ACCEL_GROUP(user_data),
+                                            key, mods, GTK_ACCEL_VISIBLE);
+        }
+        if (GTK_IS_CONTAINER(subMenu))
+            gtk_container_foreach (GTK_CONTAINER(subMenu),
+                                   add_accel_for_menu_lookup, user_data);
+    }
+}
+
+/** Add accelerator keys for menu item widgets
+ *
+ *  @param menu The menu widget.
+ *
+ *  @param accel_group The accelerator group to use.
+ */
+void
+gnc_add_accelerator_keys_for_menu (GtkWidget *menu, GtkAccelGroup *accel_group)
+{
+    g_return_if_fail (GTK_IS_WIDGET(menu));
+    g_return_if_fail (accel_group != NULL);
+
+    gtk_container_foreach (GTK_CONTAINER(menu), add_accel_for_menu_lookup, accel_group);
+}
+
+
+static gpointer
+find_menu_item_func (GtkWidget *widget, const gchar *action_name, const gchar *action_label)
+{
+    GtkWidget *ret = NULL;
+
+    if (GTK_IS_MENU_ITEM(widget))
+    {
+        GtkWidget* subMenu;
+
+        if (action_name)
+        {
+            if (GTK_IS_ACTIONABLE(widget))
+            {
+                const gchar *a_name = gtk_actionable_get_action_name (GTK_ACTIONABLE(widget));
+
+                if (g_strcmp0 (a_name, action_name) == 0)
+                    return widget;
+            }
+        }
+
+        if (action_label)
+        {
+            GtkWidget *accel_label = gtk_bin_get_child (GTK_BIN(widget));
+
+            if (accel_label)
+            {
+                // use gtk_label_get_text to get text with no underlines
+                const gchar *al_name = gtk_label_get_label (GTK_LABEL(accel_label));
+
+                if (g_strcmp0 (al_name, action_label) == 0)
+                    return widget;
+             }
+        }
+
+        subMenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM(widget));
+
+        if (GTK_IS_CONTAINER(subMenu))
+        {
+            GList *container_list = gtk_container_get_children (GTK_CONTAINER(subMenu));
+            for (GList *n = container_list; !ret && n; n = n->next)
+                ret = find_menu_item_func (n->data, action_name, action_label);
+            g_list_free (container_list);
+        }
+    }
+    return ret;
+}
+
+/** Search the menu for the menu item based on action name
+ *
+ *  @param menu The menu widget.
+ *
+ *  @param action_name The GAction name.
+ *
+ *  @return The menu item widget or NULL.
+ */
+GtkWidget *
+gnc_find_menu_item_by_action_name (GtkWidget *menu, const gchar *action_name)
+{
+    GtkWidget *ret = NULL;
+    const gchar *action_label = NULL;
+
+    g_return_val_if_fail (GTK_IS_WIDGET(menu), NULL);
+    g_return_val_if_fail (action_name != NULL, NULL);
+
+    if (GTK_IS_CONTAINER(menu))
+    {
+        GList *container_list = gtk_container_get_children (GTK_CONTAINER(menu));
+        for (GList *n = container_list; !ret && n; n = n->next)
+            ret = find_menu_item_func (n->data, action_name, action_label);
+        g_list_free (container_list);
+    }
+    return ret;
+}
+
+
+/** Search the menu for the menu item based on the action label
+ *
+ *  @param menu The menu widget.
+ *
+ *  @param action_label The GtkMenuItem label.
+ *
+ *  @return The menu item widget or NULL.
+ */
+GtkWidget *
+gnc_find_menu_item_by_action_label (GtkWidget *menu, const gchar *action_label)
+{
+    GtkWidget *ret = NULL;
+    const gchar *action_name = NULL;
+
+    g_return_val_if_fail (GTK_IS_WIDGET(menu), NULL);
+    g_return_val_if_fail (action_label != NULL, NULL);
+
+    if (GTK_IS_CONTAINER(menu))
+    {
+        GList *container_list = gtk_container_get_children (GTK_CONTAINER(menu));
+        for (GList *n = container_list; !ret && n; n = n->next)
+            ret = find_menu_item_func (n->data, action_name, action_label);
+        g_list_free (container_list);
+    }
+    return ret;
+}
+
+
+static void
+menu_item_list (GtkWidget *widget, gpointer user_data)
+{
+    GList **list = user_data;
+
+    if (GTK_IS_MENU_ITEM(widget))
+    {
+        GtkWidget* subMenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM(widget));
+
+        *list = g_list_prepend (*list, widget);
+
+        if (GTK_IS_CONTAINER(subMenu))
+            gtk_container_foreach (GTK_CONTAINER(subMenu),
+                                   menu_item_list, user_data);
+    }
+}
+
+/** Return a list of GtkMenuItems
+ *
+ *  @param menu The menu widget.
+ *
+ *  @return A GList of menu items or NULL.
+ */
+GList *
+gnc_menu_get_items (GtkWidget *menu)
+{
+    GList *list = NULL;
+
+    g_return_val_if_fail (GTK_IS_WIDGET(menu), NULL);
+
+    gtk_container_foreach (GTK_CONTAINER(menu), menu_item_list, &list);
+
+    return list;
+}
+
+
+struct find_tool_item_struct
+{
+    GtkWidget   *found_tool_item;
+    const gchar *action_name;
+};
+
+static void
+find_tool_action (GtkWidget *widget, gpointer user_data)
+{
+    struct find_tool_item_struct *ftis = user_data;
+
+    if (GTK_IS_ACTIONABLE(widget))
+    {
+        // this returns the full action name
+        const gchar *item_action_name = gtk_actionable_get_action_name (GTK_ACTIONABLE(widget));
+
+        if (g_str_has_suffix (item_action_name, ftis->action_name))
+            ftis->found_tool_item = GTK_WIDGET(widget);
+    }
+}
+
+/** Search the toolbar for the tool item based on the action name
+ *
+ *  @param toolbar The toolbar widget.
+ *
+ *  @param action_name The GAction name.
+ *
+ *  @return The tool item widget or NULL.
+ */
+GtkWidget *
+gnc_find_toolbar_item (GtkWidget *toolbar, const gchar *action_name)
+{
+    struct find_tool_item_struct ftis;
+
+    g_return_val_if_fail (GTK_IS_TOOLBAR(toolbar), NULL);
+    g_return_val_if_fail (action_name != NULL, NULL);
+
+    ftis.action_name = action_name;
+    ftis.found_tool_item = NULL;
+
+    gtk_container_foreach (GTK_CONTAINER(toolbar), find_tool_action, &ftis);
+
+    return ftis.found_tool_item;
+}
+
+
+static void
+extract_items_from_model (GMenuModel *model,
+                          gint        item,
+                          gpointer    user_data)
+{
+    GMenuAttributeIter *iter;
+    const gchar *key;
+    GVariant *value;
+    GncMenuModelSearch *gsm = user_data;
+    const gchar *action = NULL;
+    const gchar *label = NULL;
+    const gchar *tooltip = NULL;
+
+    iter = g_menu_model_iterate_item_attributes (model, item);
+    while (g_menu_attribute_iter_get_next (iter, &key, &value))
+    {
+        if (g_str_equal (key, GNC_MENU_ATTRIBUTE_TOOLTIP) &&
+            g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
+            tooltip = g_variant_get_string (value, NULL);
+        else if (g_str_equal (key, G_MENU_ATTRIBUTE_LABEL) &&
+                 g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
+            label = g_variant_get_string (value, NULL);
+        else if (g_str_equal (key, G_MENU_ATTRIBUTE_ACTION) &&
+                 g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
+            action = g_variant_get_string (value, NULL);
+
+        g_variant_unref (value);
+    }
+
+    if (action && gsm->search_action_name)
+    {
+        if (g_str_has_suffix (action, gsm->search_action_name))
+        {
+            gsm->model = model;
+            gsm->index = item;
+            gsm->tooltip = tooltip;
+            gsm->search_action_label = label;
+        }
+    }
+    if (label && gsm->search_action_label)
+    {
+        if (g_strcmp0 (label, gsm->search_action_label) == 0)
+        {
+            gsm->model = model;
+            gsm->index = item;
+            gsm->tooltip = tooltip;
+            gsm->search_action_name = action;
+        }
+    }
+    g_object_unref (iter);
+}
+
+static void
+items_from_model (GMenuModel *model,
+                  gpointer user_data)
+{
+    GncMenuModelSearch *gsm = user_data;
+
+    for (gint i = 0; i < g_menu_model_get_n_items (model); i++)
+    {
+        GMenuLinkIter *iter;
+        GMenuModel *sub_model;
+
+        if (gsm->model)
+            return;
+
+        extract_items_from_model (model, i, user_data);
+
+        iter = g_menu_model_iterate_item_links (model, i);
+        while (g_menu_link_iter_get_next (iter, NULL, &sub_model))
+        {
+            items_from_model (sub_model, user_data);
+            g_object_unref (sub_model);
+        }
+        g_object_unref (iter);
+    }
+}
+
+/** Find a GtkMenu item from the action name. This is done by first finding
+ *  the action name in the GMenuModel and then doing a search for the
+ *  label text in the GtkMenu.
+ *
+ *  NOTE: This is done this way as the action_name field of the GtkMenuItem
+ *  is not populated from the model.
+ *
+ *  @param menu_model The GMenuModel of the menu.
+ *
+ *  @param gsm The GncMenuModelSearch structure.
+ *
+ *  @return TRUE if GMenuModel item found or FALSE if not.
+ */
+gboolean
+gnc_menubar_model_find_item (GMenuModel *menu_model, GncMenuModelSearch *gsm)
+{
+
+    g_return_val_if_fail (menu_model != NULL, FALSE);
+    g_return_val_if_fail (gsm != NULL, FALSE);
+
+    gsm->model = NULL;
+
+    items_from_model (menu_model, gsm);
+
+    if (gsm->model)
+       return TRUE;
+
+    return FALSE;
+}
+
+
+/** Find a GtkMenu item from the action name. This is done by first finding
+ *  the action name in the GMenuModel and then doing a search for the
+ *  label text in the GtkMenu.
+ *
+ *  NOTE: This is done this way as the action_name field of the GtkMenuItem
+ *  is not populated from the model.
+ *
+ *  @param menu_model The GMenuModel of the menu.
+ *
+ *  @param menu The GtkMenu built from the model.
+ *
+ *  @param action_name The action name of the menu item to find.
+ *
+ *  @return The GtkMenuItem if found or NULL
+ */
+GtkWidget *
+gnc_menubar_model_find_menu_item (GMenuModel *menu_model, GtkWidget *menu, const gchar *action_name)
+{
+    GncMenuModelSearch *gsm;
+    GtkWidget *menu_item = NULL;
+
+    g_return_val_if_fail (menu_model != NULL, NULL);
+    g_return_val_if_fail (menu != NULL, NULL);
+    g_return_val_if_fail (action_name != NULL, NULL);
+
+    gsm = g_new0 (GncMenuModelSearch, 1);
+
+    gsm->search_action_label = NULL;
+    gsm->search_action_name = action_name;
+
+    if (gnc_menubar_model_find_item (menu_model, gsm))
+        menu_item = gnc_find_menu_item_by_action_label (menu, gsm->search_action_label);
+
+    g_free (gsm);
+    return menu_item;
+}
+
+
+/** Update the GMenuModel item based on the action name by copying
+ *  existing item, removing it and inserting a new one in same location.
+ *
+ *  @param menu_model The GMenuModel of the menu.
+ *
+ *  @param action_name The action name to update.
+ *
+ *  @param label The new menu label text.
+ *
+ *  @param tooltip The new tooltip text if any.
+ *
+ *  @return TRUE if item found and updated or FALSE if not.
+ */
+gboolean
+gnc_menubar_model_update_item (GMenuModel *menu_model, const gchar *action_name,
+                               const gchar *label, const gchar *tooltip)
+{
+    GncMenuModelSearch *gsm;
+    GtkWidget *menu_item = NULL;
+    gboolean found = FALSE;
+
+    g_return_val_if_fail (menu_model != NULL, FALSE);
+    g_return_val_if_fail (action_name != NULL, FALSE);
+    g_return_val_if_fail (label != NULL, FALSE);
+
+    gsm = g_new0 (GncMenuModelSearch, 1);
+
+    gsm->search_action_label = NULL;
+    gsm->search_action_name = action_name;
+
+    if (gnc_menubar_model_find_item (menu_model, gsm))
+    {
+        GMenuAttributeIter *iter;
+        const gchar *key;
+        GVariant *value;
+        GVariant *old_target = NULL;
+        const gchar *old_action = NULL;
+        const gchar *old_label = NULL;
+        const gchar *old_temp = NULL;
+        const gchar *old_accel = NULL;
+        GMenuItem *item;
+
+        iter = g_menu_model_iterate_item_attributes (gsm->model, gsm->index);
+        while (g_menu_attribute_iter_get_next (iter, &key, &value))
+        {
+            if (g_str_equal (key, GNC_MENU_ATTRIBUTE_TEMPORARY) &&
+                g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
+                old_temp = g_variant_get_string (value, NULL);
+            else if (g_str_equal (key, G_MENU_ATTRIBUTE_LABEL) &&
+                     g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
+                old_label = g_variant_get_string (value, NULL);
+            else if (g_str_equal (key, G_MENU_ATTRIBUTE_ACTION) &&
+                     g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
+                old_action = g_variant_get_string (value, NULL);
+            else if (g_str_equal (key, GNC_MENU_ATTRIBUTE_ACCELERATOR) &&
+                     g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
+                old_accel = g_variant_get_string (value, NULL);
+            else if (g_str_equal (key, G_MENU_ATTRIBUTE_TARGET))
+                old_target = g_variant_ref (value);
+
+            g_variant_unref (value);
+        }
+
+        item = g_menu_item_new (label, old_action);
+
+        if (tooltip)
+            g_menu_item_set_attribute (item, GNC_MENU_ATTRIBUTE_TOOLTIP, "s", tooltip);
+
+        if (old_temp)
+            g_menu_item_set_attribute (item, GNC_MENU_ATTRIBUTE_TEMPORARY, "s", old_temp);
+
+        if (old_accel)
+            g_menu_item_set_attribute (item, GNC_MENU_ATTRIBUTE_ACCELERATOR, "s", old_accel);
+
+        if (old_target)
+        {
+            g_menu_item_set_attribute_value (item, G_MENU_ATTRIBUTE_TARGET, old_target);
+            g_variant_unref (old_target);
+        }
+        g_menu_remove (G_MENU(gsm->model), gsm->index);
+        g_menu_insert_item (G_MENU(gsm->model), gsm->index, item);
+        found = TRUE;
+    }
+    g_free (gsm);
+    return found;
+}
+
+
+typedef struct
+{
+    GMenuModel *model;
+    gint        index;
+} to_remove;
+
+static void
+item_to_remove_from_model (GMenuModel  *model,
+                           gint         item,
+                           GList      **remove_list,
+                           const gchar *attrib)
+{
+    GVariant *value = g_menu_model_get_item_attribute_value (model, item,
+                                                             attrib, NULL);
+
+    if (value && g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
+    {
+        to_remove *tr = g_new0 (to_remove, 1);
+        tr->model = model;
+        tr->index = item;
+
+        // to keep the order append
+        *remove_list = g_list_append (*remove_list, tr);
+        g_variant_unref (value);
+    }
+}
+
+static void
+remove_items_from_model (GMenuModel *model,
+                         GList **remove_list,
+                         const gchar *attrib)
+{
+    // Note: item high to low
+    for (gint i = g_menu_model_get_n_items (model) -1; i >= 0; i--)
+    {
+        GMenuLinkIter *iter;
+        GMenuModel *sub_model;
+
+        item_to_remove_from_model (model, i, remove_list, attrib);
+
+        iter = g_menu_model_iterate_item_links (model, i);
+        while (g_menu_link_iter_get_next (iter, NULL, &sub_model))
+        {
+            remove_items_from_model (sub_model, remove_list, attrib);
+            g_object_unref (sub_model);
+        }
+        g_object_unref (iter);
+    }
+}
+
+static void
+remove_items (gpointer data, gpointer user_data)
+{
+    to_remove *tr = (to_remove*)data;
+    g_menu_remove (G_MENU(tr->model), tr->index);
+    g_free (tr);
+}
+
+/** Remove GMenuModel entries based on having an attribute value equal
+ *  to attrib, it does not matter what the value is.
+ *
+ *  @param menu_model The GMenuModel of the menu.
+ *
+ *  @param attrib The attribute to look for.
+ */
+void
+gnc_menubar_model_remove_items_with_attrib (GMenuModel *menu_model, const gchar *attrib)
+{
+    GList *remove_list = NULL;
+
+    g_return_if_fail (menu_model != NULL);
+    g_return_if_fail (attrib != NULL);
+
+    remove_items_from_model (menu_model, &remove_list, attrib);
+
+    g_list_foreach (remove_list, (GFunc)remove_items, NULL);
+    g_list_free (remove_list);
+}
+
+
+static void
+statusbar_push (GtkWidget *statusbar, const gchar *text)
+{
+    gtk_statusbar_push (GTK_STATUSBAR(statusbar), 0,
+                        text ? text : " ");
+}
+
+static void
+statusbar_pop (GtkWidget *statusbar)
+{
+    gtk_statusbar_pop (GTK_STATUSBAR(statusbar), 0);
+}
+
+static void
+menu_item_select_cb (GtkWidget *menu_item, GtkWidget *statusbar)
+{
+    GtkWidget *accel_label = gtk_bin_get_child (GTK_BIN(menu_item));
+    GMenuModel *menubar_model = g_object_get_data (G_OBJECT(statusbar), "menu-model");
+
+    if (!menubar_model)
+        return;
+
+    if (accel_label)
+    {
+        GncMenuModelSearch *gsm = g_new0 (GncMenuModelSearch, 1);
+
+        gsm->search_action_label = gtk_label_get_label (GTK_LABEL(accel_label));
+        gsm->search_action_name = NULL;
+
+        if (gnc_menubar_model_find_item (menubar_model, gsm))
+        {
+            if (gsm->model)
+                statusbar_push (statusbar, gsm->tooltip);
+        }
+        g_free (gsm);
+    }
+}
+
+static void
+menu_item_deselect_cb (GtkWidget *menu_item, GtkWidget *statusbar)
+{
+    statusbar_pop (statusbar);
+}
+
+/** Setup the callbacks for menu bar items so the tooltip can be
+ *  displayed in the status bar.
+ *
+ *  @param menu_item The menubar menu item widget.
+ *
+ *  @param statusbar The statusbar widget to display the tooltip.
+ */
+void
+gnc_menu_item_setup_tooltip_to_statusbar_callback (GtkWidget *menu_item,
+                                                   GtkWidget *statusbar)
+{
+    g_return_if_fail (menu_item != NULL);
+    g_return_if_fail (statusbar != NULL);
+
+    if (GPOINTER_TO_INT(g_object_get_data(G_OBJECT(menu_item), "added-callbacks")))
+        return;
+
+    g_signal_connect (menu_item, "select",
+                      G_CALLBACK(menu_item_select_cb),
+                      statusbar);
+    g_signal_connect (menu_item, "deselect",
+                      G_CALLBACK(menu_item_deselect_cb),
+                      statusbar);
+    g_object_set (G_OBJECT(menu_item), "has-tooltip", FALSE, NULL);
+
+    g_object_set_data (G_OBJECT(menu_item), "added-callbacks", GINT_TO_POINTER(1));
+}
+
+
+static gboolean
+tool_item_enter_event (GtkWidget *button, GdkEvent *event,
+                       gpointer user_data)
+{
+    GtkWidget *tool_item = gtk_widget_get_parent (button);
+    gchar *tooltip = gtk_widget_get_tooltip_text (tool_item);
+    statusbar_push (user_data, tooltip);
+    g_free (tooltip);
+    return FALSE;
+}
+
+static gboolean
+tool_item_leave_event (GtkWidget *button, GdkEvent *event,
+                       gpointer user_data)
+{
+    statusbar_pop (user_data);
+    return FALSE;
+}
+
+/** Setup the callbacks for tool bar items so the tooltip can be
+ *  displayed in the status bar.
+ *
+ *  @param tool_item The toolbar tool item widget.
+ *
+ *  @param statusbar The statusbar widget to display the tooltip.
+ */
+void
+gnc_tool_item_setup_tooltip_to_statusbar_callback (GtkWidget *tool_item,
+                                                   GtkWidget *statusbar)
+{
+    GtkWidget *child;
+
+    g_return_if_fail (tool_item != NULL);
+    g_return_if_fail (statusbar != NULL);
+
+    child = gtk_bin_get_child (GTK_BIN(tool_item));
+
+    gtk_widget_add_events (GTK_WIDGET(child),
+                           GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK
+                           | GDK_FOCUS_CHANGE_MASK);
+
+    g_signal_connect (child, "enter-notify-event",
+                      G_CALLBACK (tool_item_enter_event),
+                      statusbar);
+
+    g_signal_connect (child, "leave-notify-event",
+                      G_CALLBACK (tool_item_leave_event),
+                      statusbar);
+
+    g_object_set (G_OBJECT(tool_item), "has-tooltip", FALSE, NULL);
+}

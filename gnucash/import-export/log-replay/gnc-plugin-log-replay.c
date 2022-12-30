@@ -36,21 +36,25 @@ static void gnc_plugin_log_replay_init (GncPluginLogreplay *plugin);
 static void gnc_plugin_log_replay_finalize (GObject *object);
 
 /* Command callbacks */
-static void gnc_plugin_log_replay_cmd_new_log_replay (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_log_replay_cmd_new_log_replay (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-log-replay-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-log-replay-ui.xml"
+#define PLUGIN_UI_FILENAME  "gnc-plugin-log-replay.ui"
 
-static GtkActionEntry gnc_plugin_actions [] =
+static GActionEntry gnc_plugin_actions [] =
 {
-    {
-        "LogReplayAction", "go-previous", N_("_Replay GnuCash .log file…"), NULL,
-        N_("Replay a GnuCash log file after a crash. This cannot be undone."),
-        G_CALLBACK (gnc_plugin_log_replay_cmd_new_log_replay)
-    },
+    { "LogReplayAction", gnc_plugin_log_replay_cmd_new_log_replay, NULL, NULL, NULL },
 };
-static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
+/** The number of actions provided by this plugin. */
+static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
+
+/** The default menu items that need to be add to the menu */
+static const gchar *gnc_plugin_load_ui_items [] =
+{
+    "FilePlaceholder1",
+    NULL,
+};
 
 typedef struct GncPluginLogreplayPrivate
 {
@@ -84,10 +88,11 @@ gnc_plugin_log_replay_class_init (GncPluginLogreplayClass *klass)
     plugin_class->plugin_name  = GNC_PLUGIN_LOG_REPLAY_NAME;
 
     /* widget addition/removal */
-    plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
-    plugin_class->actions      = gnc_plugin_actions;
-    plugin_class->n_actions    = gnc_plugin_n_actions;
-    plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
+    plugin_class->actions_name    = PLUGIN_ACTIONS_NAME;
+    plugin_class->actions         = gnc_plugin_actions;
+    plugin_class->n_actions       = gnc_plugin_n_actions;
+    plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
+    plugin_class->ui_updates      = gnc_plugin_load_ui_items;
 }
 
 static void
@@ -112,9 +117,11 @@ gnc_plugin_log_replay_finalize (GObject *object)
  ************************************************************/
 
 static void
-gnc_plugin_log_replay_cmd_new_log_replay (GtkAction *action,
-        GncMainWindowActionData *data)
+gnc_plugin_log_replay_cmd_new_log_replay (GSimpleAction *simple,
+                                          GVariant      *parameter,
+                                          gpointer       user_data)
 {
+    GncMainWindowActionData *data = user_data;
     gnc_suspend_gui_refresh();
     gnc_file_log_replay (GTK_WINDOW (data->window));
     gnc_resume_gui_refresh();

@@ -4,5 +4,34 @@
   <gresource prefix="/org/gnucash">
     <file>gnucash.css</file>
     <file>gnucash-fallback.css</file>
+    <file>ui/gnc-embedded-register-window.ui</file>
+    <file>ui/gnc-main-window.ui</file>
+     <file>ui/gnc-plugin-account-tree.ui</file>
+    <file>ui/gnc-plugin-basic-commands.ui</file>
+    <file>ui/gnc-plugin-bi-import.ui</file>
+    <file>ui/gnc-plugin-budget.ui</file>
+    <file>ui/gnc-plugin-business.ui</file>
+    <file>ui/gnc-plugin-csv-export.ui</file>
+    <file>ui/gnc-plugin-csv-import.ui</file>
+    <file>ui/gnc-plugin-customer-import.ui</file>
+    <file>ui/gnc-plugin-file-history.ui</file>
+    <file>ui/gnc-plugin-log-replay.ui</file>
+    <file>ui/gnc-plugin-register.ui</file>
+    <file>ui/gnc-plugin-report-system.ui</file>
+
+    <file>ui/gnc-plugin-page-account-tree.ui</file>
+    <file>ui/gnc-plugin-page-budget.ui</file>
+    <file>ui/gnc-plugin-page-invoice.ui</file>
+    <file>ui/gnc-plugin-page-owner-tree.ui</file>
+    <file>ui/gnc-plugin-page-register.ui</file>
+    <file>ui/gnc-plugin-page-report.ui</file>
+    <file>ui/gnc-plugin-page-sx-list.ui</file>
+
+    <file>ui/gnc-plugin-ofx.ui</file>
+    <file>ui/gnc-plugin-aqbanking.ui</file>
+
+    <file>ui/gnc-plugin-qif-import.ui</file>
+
+    <file>ui/gnc-reconcile-window.ui</file>
   </gresource>
 </gresources>

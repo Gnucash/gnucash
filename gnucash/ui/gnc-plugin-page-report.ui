@@ -1,0 +1,297 @@
+<?xml version="1.0"?>
+<interface>
+
+  <menu id="FilePlaceholder3">
+    <item>
+      <attribute name="label" translatable="yes">_Print Report</attribute>
+      <attribute name="action">GncPluginPageReportActions.FilePrintAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;p</attribute>
+      <attribute name="tooltip" translatable="yes">Print the current report</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="EditPlaceholder6">
+    <item>
+      <attribute name="label" translatable="yes">_Report Options</attribute>
+      <attribute name="action">GncPluginPageReportActions.ReportOptionsAction</attribute>
+      <attribute name="tooltip" translatable="yes">Edit report style sheets</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="FilePlaceholder4">
+    <item>
+      <attribute name="label" translatable="yes">Export as P_DF...</attribute>
+      <attribute name="action">GncPluginPageReportActions.FilePrintPDFAction</attribute>
+      <attribute name="tooltip" translatable="yes">Export the current report as a PDF document</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="FilePlaceholder5">
+    <item>
+      <attribute name="label" translatable="yes">Export _Report</attribute>
+      <attribute name="action">GncPluginPageReportActions.ReportExportAction</attribute>
+      <attribute name="tooltip" translatable="yes">Export HTML-formatted report to file</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="ReportsPlaceholder1">
+    <item>
+      <attribute name="label" translatable="no">Save _Report Configuration</attribute>
+      <attribute name="action">GncPluginPageReportActions.ReportSaveAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;&lt;Alt&gt;s</attribute>
+      <attribute name="tooltip" translatable="yes">Update the current report's saved configuration</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="no">Save Report Configuration As...</attribute>
+      <attribute name="action">GncPluginPageReportActions.ReportSaveAsAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;&lt;Alt&gt;&lt;Shift&gt;s</attribute>
+      <attribute name="tooltip" translatable="yes">Add the current report's configuration to the 'Reports->Saved Report Configurations' menu</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+
+  <menu id="mainwin-popup">
+    <item>
+      <attribute name="label" translatable="no">_Test</attribute>
+      <attribute name="action">mainwin.TestAction</attribute>
+    </item>
+  </menu>
+
+
+  <object class="GtkToolbar" id="mainwin-toolbar">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkToolButton" id="but1">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Save</property>
+        <property name="action-name">gnc-plugin-basic-commands-actions.FileSaveAction</property>
+        <property name="tooltip-text" translatable="yes">Save the current file</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">document-save</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Close</property>
+        <property name="action-name">mainwin.FileCloseAction</property>
+        <property name="tooltip-text" translatable="yes">Close the currently active page</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">window-close</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2a">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">New _Invoice...</property>
+        <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
+        <property name="tooltip-text" translatable="yes">Open the New Invoice dialog</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-invoice-new</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem" id="extra_separator">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but3">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Back</property>
+        <property name="action-name">GncPluginPageReportActions.ReportBackAction</property>
+        <property name="tooltip-text" translatable="yes">Move back one step in the history</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">go-previous</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but4">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Forward</property>
+        <property name="action-name">GncPluginPageReportActions.ReportForwAction</property>
+        <property name="tooltip-text" translatable="yes">Move forward one step in the history</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">go-next</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but5">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Reload</property>
+        <property name="action-name">GncPluginPageReportActions.ReportReloadAction</property>
+        <property name="tooltip-text" translatable="yes">Reload the current page</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">view-refresh</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but6">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Stop</property>
+        <property name="action-name">GncPluginPageReportActions.ReportStopAction</property>
+        <property name="tooltip-text" translatable="yes">Cancel outstanding HTML requests</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">process-stop</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but7">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Report Options</property>
+        <property name="action-name">GncPluginPageReportActions.ReportOptionsAction</property>
+        <property name="tooltip-text" translatable="yes">Edit report options</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">document-properties</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToggleToolButton" id="but8">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Save _Report Configuration</property>
+        <property name="action-name">GncPluginPageReportActions.ReportSaveAction</property>
+        <property name="tooltip-text" translatable="yes">Update the current report's saved configuration</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">document-save</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but9">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Save Report Configuration As...</property>
+        <property name="action-name">GncPluginPageReportActions.ReportSaveAsAction</property>
+        <property name="tooltip-text" translatable="yes">Add the current report's configuration to the 'Reports->Saved Report Configurations' menu</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">document-save-as</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but10">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Export _Report</property>
+        <property name="action-name">GncPluginPageReportActions.ReportExportAction</property>
+        <property name="tooltip-text" translatable="yes">Export HTML-formatted report to file</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">go-next</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but11">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Print Report...</property>
+        <property name="action-name">GncPluginPageReportActions.FilePrintAction</property>
+        <property name="tooltip-text" translatable="yes">Print the current report</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">document-print</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but12">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Export as P_DF...</property>
+        <property name="action-name">GncPluginPageReportActions.FilePrintPDFAction</property>
+        <property name="tooltip-text" translatable="yes">Export the current report as a PDF document</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-gnome-pdf</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+  </object>
+
+</interface>

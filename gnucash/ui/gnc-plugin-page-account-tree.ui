@@ -1,0 +1,444 @@
+<?xml version="1.0"?>
+<interface>
+
+  <menu id="FilePlaceholder3">
+    <item>
+      <attribute name="label" translatable="yes">_Print</attribute>
+      <attribute name="action">mainwin.FilePrintAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;p</attribute>
+      <attribute name="tooltip" translatable="yes">Print the currently active page</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="EditPlaceholder1">
+    <item>
+      <attribute name="label" translatable="yes">_Edit Account</attribute>
+      <attribute name="action">GncPluginPageAccountTreeActions.EditEditAccountAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;e</attribute>
+      <attribute name="tooltip" translatable="yes">Edit the selected account</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Delete Account</attribute>
+      <attribute name="action">GncPluginPageAccountTreeActions.EditDeleteAccountAction</attribute>
+      <attribute name="accel">Delete</attribute>
+      <attribute name="tooltip" translatable="yes">Edit the selected account</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">F_ind Account</attribute>
+      <attribute name="action">GncPluginPageAccountTreeActions.EditFindAccountAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;i</attribute>
+      <attribute name="tooltip" translatable="yes">Find an account</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Cascade Account Properties...</attribute>
+      <attribute name="action">GncPluginPageAccountTreeActions.EditCascadeAccountAction</attribute>
+      <attribute name="tooltip" translatable="yes">Cascade selected properties for account</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Renumber Subaccounts...</attribute>
+      <attribute name="action">GncPluginPageAccountTreeActions.EditRenumberSubaccountsAction</attribute>
+      <attribute name="tooltip" translatable="yes">Renumber the children of the selected account</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="EditPlaceholder2">
+    <item>
+      <attribute name="label" translatable="yes">Open _Account</attribute>
+      <attribute name="action">GncPluginPageAccountTreeActions.EditOpenAccountAction</attribute>
+      <attribute name="tooltip" translatable="yes">Open the selected account</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Open _SubAccounts</attribute>
+      <attribute name="action">GncPluginPageAccountTreeActions.EditOpenSubaccountsAction</attribute>
+      <attribute name="tooltip" translatable="yes">Open the selected account and all its subaccounts</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="EditPlaceholder3">
+    <item>
+      <attribute name="label" translatable="yes">_Find...</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.EditFindTransactionsAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;f</attribute>
+      <attribute name="tooltip" translatable="yes">Find transactions with a search</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="EditPlaceholder5">
+    <item>
+<!-- Translators: remember to reuse this translation in dialog-account.glade -->
+      <attribute name="label" translatable="yes">Ta_x Report Options</attribute>
+      <attribute name="action">GncPluginPageAccountTreeActions.EditTaxOptionsAction</attribute>
+<!-- Translators: currently implemented are, US: income tax and DE: VAT, So adjust this string -->
+      <attribute name="tooltip" translatable="yes">Setup relevant accounts for tax reports, e.g. US income tax</attribute>
+        <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+
+
+  <menu id="ViewPlaceholder1">
+    <item>
+      <attribute name="label" translatable="yes">_Filter By...</attribute>
+      <attribute name="action">GncPluginPageAccountTreeActions.ViewFilterByAction</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="ViewPlaceholder4">
+    <item>
+      <attribute name="label" translatable="yes">_Refresh</attribute>
+      <attribute name="action">GncPluginPageAccountTreeActions.ViewRefreshAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;r</attribute>
+      <attribute name="tooltip" translatable="yes">Refresh this window</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+
+
+  <menu id="ActionsPlaceholder4">
+    <item>
+      <attribute name="label" translatable="yes">New _Account...</attribute>
+      <attribute name="action">GncPluginPageAccountTreeActions.FileNewAccountAction</attribute>
+      <attribute name="tooltip" translatable="yes">Create a new Account</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">New Account _Hierarchy...</attribute>
+      <attribute name="action">GncPluginPageAccountTreeActions.FileAddAccountHierarchyAssistantAction</attribute>
+      <attribute name="tooltip" translatable="yes">Extend the current book by merging with new account type categories</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="ActionsPlaceholder5">
+    <item>
+      <attribute name="label" translatable="yes">_Transfer...</attribute>
+      <attribute name="action">GncPluginPageAccountTreeActions.ActionsTransferAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;t</attribute>
+      <attribute name="tooltip" translatable="yes">Transfer funds from one account to another</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Reconcile...</attribute>
+      <attribute name="action">GncPluginPageAccountTreeActions.ActionsReconcileAction</attribute>
+      <attribute name="tooltip" translatable="yes">Reconcile the selected account</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Auto-clear...</attribute>
+      <attribute name="action">GncPluginPageAccountTreeActions.ActionsAutoClearAction</attribute>
+      <attribute name="tooltip" translatable="yes">Automatically clear individual transactions, so as to reach a certain cleared amount</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="no">Stock Ass_istant</attribute>
+      <attribute name="action">GncPluginPageAccountTreeActions.ActionsStockAssistantAction</attribute>
+      <attribute name="tooltip" translatable="yes">Stock Assistant</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Stoc_k Split...</attribute>
+      <attribute name="action">GncPluginPageAccountTreeActions.ActionsStockSplitAction</attribute>
+      <attribute name="tooltip" translatable="yes">Record a stock split or a stock merger</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">View _Lots...</attribute>
+      <attribute name="action">GncPluginPageAccountTreeActions.ActionsLotsAction</attribute>
+      <attribute name="tooltip" translatable="yes">Bring up the lot viewer/editor window</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="ActionsPlaceholder6">
+    <submenu>
+      <attribute name="label" translatable="yes">_Check &amp; Repair</attribute>
+      <attribute name="action">mainwin.ScrubMenuAction</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Check &amp; Repair A_ccount</attribute>
+        <attribute name="action">GncPluginPageAccountTreeActions.ScrubAction</attribute>
+        <attribute name="tooltip" translatable="yes">Check for and repair unbalanced transactions and orphan splits in this account</attribute>
+        <attribute name="tempx" translatable="no">yes</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Check &amp; Repair Su_baccounts</attribute>
+        <attribute name="action">GncPluginPageAccountTreeActions.ScrubSubAction</attribute>
+        <attribute name="tooltip" translatable="yes">Check for and repair unbalanced transactions and orphan splits in this account and its subaccounts</attribute>
+        <attribute name="tempx" translatable="no">yes</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">Check &amp; Repair A_ll</attribute>
+        <attribute name="action">GncPluginPageAccountTreeActions.ScrubAllAction</attribute>
+        <attribute name="tooltip" translatable="yes">Check for and repair unbalanced transactions and orphan splits in all accounts</attribute>
+        <attribute name="tempx" translatable="no">yes</attribute>
+      </item>
+    </submenu>
+  </menu>
+
+
+
+
+  <menu id="mainwin-popup">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Filter By...</attribute>
+        <attribute name="action">GncPluginPageAccountTreeActions.ViewFilterByAction</attribute>
+        <attribute name="tooltip" translatable="yes">Filter accounts</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Re_name Page</attribute>
+        <attribute name="action">mainwin.ActionsRenamePageAction</attribute>
+        <attribute name="tooltip" translatable="yes">Rename this page</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Open _Account</attribute>
+        <attribute name="action">GncPluginPageAccountTreeActions.EditOpenAccountAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the selected account</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Open _SubAccounts</attribute>
+        <attribute name="action">GncPluginPageAccountTreeActions.EditOpenSubaccountsAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the selected account and all its subaccounts</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Edit _Account</attribute>
+        <attribute name="action">GncPluginPageAccountTreeActions.EditEditAccountAction</attribute>
+        <attribute name="tooltip" translatable="yes">Edit the selected account</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Cascade Account Properties...</attribute>
+        <attribute name="action">GncPluginPageAccountTreeActions.EditCascadeAccountAction</attribute>
+        <attribute name="tooltip" translatable="yes">Cascade selected properties for account</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">F_ind Account</attribute>
+        <attribute name="action">GncPluginPageAccountTreeActions.EditFindAccountPopupAction</attribute>
+        <attribute name="tooltip" translatable="yes">Find an account</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Reconcile...</attribute>
+        <attribute name="action">GncPluginPageAccountTreeActions.ActionsReconcileAction</attribute>
+        <attribute name="tooltip" translatable="yes">Reconcile the selected account</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Auto-clear...</attribute>
+        <attribute name="action">GncPluginPageAccountTreeActions.ActionsAutoClearAction</attribute>
+        <attribute name="tooltip" translatable="yes">Automatically clear individual transactions, given a cleared amount</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Transfer...</attribute>
+        <attribute name="action">GncPluginPageAccountTreeActions.ActionsTransferAction</attribute>
+        <attribute name="tooltip" translatable="yes">Transfer funds from one account to another</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Stoc_k Split...</attribute>
+        <attribute name="action">GncPluginPageAccountTreeActions.ActionsStockSplitAction</attribute>
+        <attribute name="tooltip" translatable="yes">Record a stock split or a stock merger</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">View _Lots...</attribute>
+        <attribute name="action">GncPluginPageAccountTreeActions.ActionsLotsAction</attribute>
+        <attribute name="tooltip" translatable="yes">Bring up the lot viewer/editor window</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">New _Account...</attribute>
+        <attribute name="action">GncPluginPageAccountTreeActions.FileNewAccountAction</attribute>
+        <attribute name="tooltip" translatable="yes">Create a new Account</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Delete Account...</attribute>
+        <attribute name="action">GncPluginPageAccountTreeActions.EditDeleteAccountAction</attribute>
+        <attribute name="tooltip" translatable="yes">Delete selected account</attribute>
+      </item>
+    </section>
+    <section>
+      <submenu>
+        <attribute name="label" translatable="yes">_Check &amp; Repair</attribute>
+        <attribute name="action">GncPluginPageAccountTreeActions.ScrubMenuAction</attribute>
+        <item>
+          <attribute name="label" translatable="yes">_Check &amp; Repair A_ccount</attribute>
+          <attribute name="action">GncPluginPageAccountTreeActions.ScrubAction</attribute>
+          <attribute name="tooltip" translatable="yes">Check for and repair unbalanced transactions and orphan splits in this account</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Check &amp; Repair Su_baccounts</attribute>
+          <attribute name="action">GncPluginPageAccountTreeActions.ScrubSubAction</attribute>
+          <attribute name="tooltip" translatable="yes">Check for and repair unbalanced transactions and orphan splits in this account and its subaccounts</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Check &amp; Repair A_ll</attribute>
+          <attribute name="action">GncPluginPageAccountTreeActions.ScrubAllAction</attribute>
+          <attribute name="tooltip" translatable="yes">Check for and repair unbalanced transactions and orphan splits in all accounts</attribute>
+        </item>
+      </submenu>
+    </section>
+  </menu>
+
+
+  <object class="GtkToolbar" id="mainwin-toolbar">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkToolButton" id="but1">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Save</property>
+        <property name="action-name">gnc-plugin-basic-commands-actions.FileSaveAction</property>
+        <property name="tooltip-text" translatable="yes">Save the current file</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">document-save</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Close</property>
+        <property name="action-name">mainwin.FileCloseAction</property>
+        <property name="tooltip-text" translatable="yes">Close the currently active page</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">window-close</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2a">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">New _Invoice...</property>
+        <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
+        <property name="tooltip-text" translatable="yes">Open the New Invoice dialog</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-invoice-new</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem" id="extra_separator">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but3">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Open _Account</property>
+        <property name="action-name">GncPluginPageAccountTreeActions.EditOpenAccountAction</property>
+        <property name="tooltip-text" translatable="yes">Open the selected account</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-account-open</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but4">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Edit _Account</property>
+        <property name="action-name">GncPluginPageAccountTreeActions.EditEditAccountAction</property>
+        <property name="tooltip-text" translatable="yes">Edit the selected account</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-account-edit</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but5">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">New _Account...</property>
+        <property name="action-name">GncPluginPageAccountTreeActions.FileNewAccountAction</property>
+        <property name="tooltip-text" translatable="yes">Create a new Account</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-account-new</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but6">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Delete Account...</property>
+        <property name="action-name">GncPluginPageAccountTreeActions.EditDeleteAccountAction</property>
+        <property name="tooltip-text" translatable="yes">Delete selected account</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-account-delete</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+  </object>
+
+
+
+
+
+
+
+
+
+
+</interface>

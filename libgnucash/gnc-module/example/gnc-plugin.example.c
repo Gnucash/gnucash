@@ -40,19 +40,18 @@ static void gnc_plugin_example_init               (GncPluginexample *plugin);
 static void gnc_plugin_example_finalize           (GObject *object);
 
 /* Command callbacks */
-static void gnc_plugin_example_cmd_test (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_example_cmd_test (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
++{
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-example-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-example-ui.xml"
+#define PLUGIN_UI_FILENAME  "gnc-plugin-example.ui"
 
-static GtkActionEntry gnc_plugin_actions [] = {
-    /* Menu Items */
-    { "exampleAction", NULL, N_("example description…"), NULL,
-      N_("example tooltip"),
-      G_CALLBACK(gnc_plugin_example_cmd_test) },
+static GActionEntry gnc_plugin_actions [] =
+{
+    { "exampleAction", gnc_plugin_example_cmd_test, NULL, NULL, NULL },
 };
+/** The number of actions provided by this plugin. */
 static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
-
 
 /************************************************************
  *                   Object Implementation                  *
@@ -69,7 +68,7 @@ gnc_plugin_example_new (void)
 static void
 gnc_plugin_example_class_init (GncPluginexampleClass *klass)
 {
-    GObjectClass *object_class = G_OBJECT_CLASS (klass);
+    GObjectClass *object_class = G_OBJECT_CLASS(klass);
     GncPluginClass *plugin_class = GNC_PLUGIN_CLASS(klass);
 
     object_class->finalize = gnc_plugin_example_finalize;
@@ -78,10 +77,10 @@ gnc_plugin_example_class_init (GncPluginexampleClass *klass)
     plugin_class->plugin_name  = GNC_PLUGIN_example_NAME;
 
     /* widget addition/removal */
-    plugin_class->actions_name       = PLUGIN_ACTIONS_NAME;
-    plugin_class->actions            = gnc_plugin_actions;
-    plugin_class->n_actions          = gnc_plugin_n_actions;
-    plugin_class->ui_filename        = PLUGIN_UI_FILENAME;
+    plugin_class->actions_name    = PLUGIN_ACTIONS_NAME;
+    plugin_class->actions         = gnc_plugin_actions;
+    plugin_class->n_actions       = gnc_plugin_n_actions;
+    plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
 }
 
 static void
@@ -99,9 +98,12 @@ gnc_plugin_example_finalize (GObject *object)
  ************************************************************/
 
 static void
-gnc_plugin_example_cmd_test (GtkAction *action, GncMainWindowActionData *data)
+gnc_plugin_example_cmd_test (GSimpleAction *simple,
+                             GVariant      *parameter,
+                             gpointer       user_data)
 {
-    ENTER ("action %p, main window data %p", action, data);
-    PINFO ("example");
-    LEAVE (" ");
+    GncMainWindowActionData *data = user_data;
+    ENTER("action %p, main window data %p", simple, data);
+    PINFO("example");
+    LEAVE(" ");
 }

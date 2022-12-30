@@ -34,21 +34,25 @@ static void gnc_plugin_ofx_init (GncPluginOfx *plugin);
 static void gnc_plugin_ofx_finalize (GObject *object);
 
 /* Command callbacks */
-static void gnc_plugin_ofx_cmd_import (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_ofx_cmd_import (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-ofx-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-ofx-ui.xml"
+#define PLUGIN_UI_FILENAME  "gnc-plugin-ofx.ui"
 
-static GtkActionEntry gnc_plugin_actions [] =
+static GActionEntry gnc_plugin_actions [] =
 {
-    {
-        "OfxImportAction", "go-previous", N_("Import _OFX/QFX…"), NULL,
-        N_("Process an OFX/QFX response file"),
-        G_CALLBACK (gnc_plugin_ofx_cmd_import)
-    },
+    { "OfxImportAction", gnc_plugin_ofx_cmd_import, NULL, NULL, NULL },
 };
-static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
+/** The number of actions provided by this plugin. */
+static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
+
+/** The default menu items that need to be add to the menu */
+static const gchar *gnc_plugin_load_ui_items [] =
+{
+    "FilePlaceholder1",
+    NULL,
+};
 
 typedef struct GncPluginOfxPrivate
 {
@@ -82,10 +86,11 @@ gnc_plugin_ofx_class_init (GncPluginOfxClass *klass)
     plugin_class->plugin_name  = GNC_PLUGIN_OFX_NAME;
 
     /* widget addition/removal */
-    plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
-    plugin_class->actions      = gnc_plugin_actions;
-    plugin_class->n_actions    = gnc_plugin_n_actions;
-    plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
+    plugin_class->actions_name    = PLUGIN_ACTIONS_NAME;
+    plugin_class->actions         = gnc_plugin_actions;
+    plugin_class->n_actions       = gnc_plugin_n_actions;
+    plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
+    plugin_class->ui_updates      = gnc_plugin_load_ui_items;
 }
 
 static void
@@ -110,9 +115,11 @@ gnc_plugin_ofx_finalize (GObject *object)
  ************************************************************/
 
 static void
-gnc_plugin_ofx_cmd_import (GtkAction *action,
-                           GncMainWindowActionData *data)
+gnc_plugin_ofx_cmd_import (GSimpleAction *simple,
+                           GVariant      *parameter,
+                           gpointer       user_data)
 {
+    GncMainWindowActionData *data = user_data;
     gnc_file_ofx_import (GTK_WINDOW (data->window));
 }
 

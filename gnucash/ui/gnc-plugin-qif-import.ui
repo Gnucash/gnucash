@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<interface>
+
+  <menu id="FilePlaceholder1">
+    <item>
+      <attribute name="label" translatable="yes">Import _QIF...</attribute>
+      <attribute name="action">gnc-plugin-qif-import-actions.QIFImportAction</attribute>
+      <attribute name="tooltip" translatable="yes">Import a Quicken QIF file</attribute>
+    </item>
+  </menu>
+
+</interface>

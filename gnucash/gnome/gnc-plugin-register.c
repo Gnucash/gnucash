@@ -42,20 +42,24 @@ static void gnc_plugin_register_add_to_window (GncPlugin *plugin, GncMainWindow 
 static void gnc_plugin_register_remove_from_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
 
 /* Command callbacks */
-static void gnc_plugin_register_cmd_general_ledger (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_register_cmd_general_ledger (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-register-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-register-ui.xml"
+#define PLUGIN_UI_FILENAME  "gnc-plugin-register.ui"
 
-static GtkActionEntry gnc_plugin_actions [] =
+static GActionEntry gnc_plugin_actions [] =
 {
-    {
-        "ToolsGeneralJournalAction", NULL, N_("_General Journal"), NULL,
-        N_("Open general journal window"),
-        G_CALLBACK (gnc_plugin_register_cmd_general_ledger)
-    },
+    { "ToolsGeneralJournalAction", gnc_plugin_register_cmd_general_ledger, NULL, NULL, NULL },
 };
-static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
+/** The number of actions provided by this plugin. */
+static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
+
+/** The default menu items that need to be add to the menu */
+static const gchar *gnc_plugin_load_ui_items [] =
+{
+    "ToolsPlaceholder2",
+    NULL,
+};
 
 typedef struct GncPluginRegisterPrivate
 {
@@ -133,10 +137,11 @@ gnc_plugin_register_class_init (GncPluginRegisterClass *klass)
         gnc_plugin_register_remove_from_window;
 
     /* widget addition/removal */
-    plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
-    plugin_class->actions      = gnc_plugin_actions;
-    plugin_class->n_actions    = gnc_plugin_n_actions;
-    plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
+    plugin_class->actions_name    = PLUGIN_ACTIONS_NAME;
+    plugin_class->actions         = gnc_plugin_actions;
+    plugin_class->n_actions       = gnc_plugin_n_actions;
+    plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
+    plugin_class->ui_updates      = gnc_plugin_load_ui_items;
 }
 
 static void
@@ -206,9 +211,11 @@ gnc_plugin_register_remove_from_window (GncPlugin *plugin,
  ************************************************************/
 
 static void
-gnc_plugin_register_cmd_general_ledger (GtkAction *action,
-                                        GncMainWindowActionData *data)
+gnc_plugin_register_cmd_general_ledger (GSimpleAction *simple,
+                                        GVariant *parameter,
+                                        gpointer user_data)
 {
+    GncMainWindowActionData *data = user_data;
     GncPluginPage *page;
 
     g_return_if_fail (data != NULL);

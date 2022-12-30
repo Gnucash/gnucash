@@ -54,6 +54,7 @@ function(make_gnucash_potfiles)
     ${CMAKE_SOURCE_DIR}/*.keys.in ${CMAKE_SOURCE_DIR}/*.scm
     ${CMAKE_SOURCE_DIR}/*.py ${CMAKE_SOURCE_DIR}/*/qofbookslots.h
     ${CMAKE_SOURCE_DIR}/*/gnc-commodity.h
+    ${CMAKE_SOURCE_DIR}/*.ui
   )
 
   # Only consider files in a selection of the source directories and

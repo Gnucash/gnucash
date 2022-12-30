@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<interface>
+
+  <menu id="ActionsPlaceholder3">
+    <submenu>
+      <attribute name="label" translatable="yes">B_udget</attribute>
+      <attribute name="action">gnc-plugin-budget-actions.ActionsBudgetAction</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">_New Budget</attribute>
+          <attribute name="action">gnc-plugin-budget-actions.NewBudgetAction</attribute>
+          <attribute name="tooltip" translatable="yes">Create a new Budget</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Open Budget</attribute>
+          <attribute name="action">gnc-plugin-budget-actions.OpenBudgetAction</attribute>
+          <attribute name="tooltip" translatable="yes">Open an existing Budget in a new tab. If none exists a new budget will be created</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Copy Budget</attribute>
+          <attribute name="action">gnc-plugin-budget-actions.CopyBudgetAction</attribute>
+          <attribute name="tooltip" translatable="yes">Copy an existing Budget</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Delete Budget</attribute>
+          <attribute name="action">gnc-plugin-budget-actions.DeleteBudgetAction</attribute>
+          <attribute name="tooltip" translatable="yes">Delete an existing Budget</attribute>
+        </item>
+      </section>
+    </submenu>
+  </menu>
+
+</interface>

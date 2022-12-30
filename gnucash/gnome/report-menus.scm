@@ -90,7 +90,7 @@
     (N_ "Saved Report Configurations")
     "4d3dcdc8890b11df99dd94cddfd72085"
     (N_ "Manage and run saved report configurations")
-    (list "Reports/SavedReportConfigs")
+    (list "Reports/ZSavedReportConfigs") ;; Added Z so it is last in list
     (lambda (window)
       (gnc:debug "called into custom report dialog, window is " window)
       (gnc-ui-custom-report window))))

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<interface>
+
+  <menu id="EditPlaceholder4">
+    <item>
+      <attribute name="label" translatable="yes">St_yle Sheets</attribute>
+      <attribute name="action">gnc-plugin-report-system-actions.EditStyleSheetsAction</attribute>
+      <attribute name="tooltip" translatable="yes">Edit report style sheets</attribute>
+    </item>
+  </menu>
+
+</interface>

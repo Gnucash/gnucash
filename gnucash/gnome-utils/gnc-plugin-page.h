@@ -284,24 +284,8 @@ GncPluginPage *gnc_plugin_page_recreate_page (GtkWidget *window,
  *
  *  @param plugin_page A pointer to the page whose actions should be
  *  added to the user interface.
- *
- *  @param merge A pointer to the UI manager data structure for a
- *  window.
  */
-void gnc_plugin_page_merge_actions (GncPluginPage *plugin_page,
-                                    GtkUIManager *merge);
-
-
-/** Remove the actions for a content page from the specified window.
- *
- *  @param plugin_page A pointer to the page whose actions should be
- *  removed from the user interface.
- *
- *  @param merge A pointer to the UI manager data structure for a
- *  window.
- */
-void gnc_plugin_page_unmerge_actions (GncPluginPage *plugin_page,
-                                      GtkUIManager *merge);
+void gnc_plugin_page_merge_actions (GncPluginPage *plugin_page); //FIXMEb added
 
 
 /** Retrieve the textual name of a plugin.
@@ -440,25 +424,6 @@ void gnc_plugin_page_inserted_cb (GncPluginPage *page, gpointer user_data);
 void gnc_plugin_page_disconnect_page_changed (GncPluginPage *page);
 
 
-/** Retrieve the Uniform Resource Identifier for this page.
- *
- *  @param page The page whose URI should be retrieved.
- *
- *  @return The URI for this page.  This string is owned by the page and
- *  should not be freed by the caller.
- */
-const gchar *gnc_plugin_page_get_uri (GncPluginPage *page);
-
-
-/** Set the Uniform Resource Identifier for this page.
- *
- *  @param page The page whose URI should be set.
- *
- *  @param name The new URI for the page.
- */
-void gnc_plugin_page_set_uri (GncPluginPage *page, const char *name);
-
-
 /** Retrieve the statusbar text associated with this page.
  *
  *  @param page The page whose statusbar should text be retrieved.
@@ -522,28 +487,45 @@ const char *gnc_plugin_page_get_ui_description (GncPluginPage *page);
  *  @param ui_filename The filename (no path) of the alternate UI.
  */
 void gnc_plugin_page_set_ui_description (GncPluginPage *page,
-        const char *ui_filename);
+                                         const char *ui_filename);
 
 
-/** Retrieve the GtkUIManager object associated with this page.
+/** Retrieve the GtkBuilder object associated with this page.
  *
  *  @param page The page whose UI information should be retrieved.
  *
- *  @return A pointer to the GtkUIManager object for this page. */
-GtkUIManager *gnc_plugin_page_get_ui_merge (GncPluginPage *page);
+ *  @return A pointer to the GtkBuilder object for this page. */
+GtkBuilder *gnc_plugin_page_get_builder (GncPluginPage *page); //FIXMEb added
 
 
-/** Retrieve the GtkActionGroup object associated with this page.
+/** Retrieve the menu qualifier for this page.
+ *
+ *  @param page The page whose quailifier string should be retrieved.
+ *
+ *  @return A qualifier string for this page.
+ */
+const gchar * gnc_plugin_page_get_menu_qualifier (GncPluginPage *page); //FIXMEb added
+
+/** Set a qualifier string for this page. This string is used when there
+ *  is more than one menu associated with the page.
+ *
+ *  @param page The page whose qualifier string should be updated.
+ *
+ *  @param menu_qualifier A string to be used as for the qualifier.
+ */
+void gnc_plugin_page_set_menu_qualifier (GncPluginPage *page,
+                                         const char *menu_qualifier); //FIXMEb added
+
+/** Retrieve the GSimpleActionGroup object associated with this page.
  *
  *  @param page The page whose menu/toolbar action group should be
  *  retrieved.
  *
- *  @return A pointer to the GtkActionGroup object for this page.
+ *  @return A pointer to the GSimpleActionGroup object for this page.
  */
-GtkActionGroup *gnc_plugin_page_get_action_group (GncPluginPage *page);
+GSimpleActionGroup *gnc_plugin_page_get_action_group (GncPluginPage *page); //FIXMEb added
 
-
-/** Create the GtkActionGroup object associated with this page.
+/** Create the GSimpleActionGroup object associated with this page.
  *
  *  @param page The page whose menu/toolbar action group should be
  *  created.
@@ -552,22 +534,33 @@ GtkActionGroup *gnc_plugin_page_get_action_group (GncPluginPage *page);
  *  name is used to associate key bindings with actions, so it should
  *  be consistent across all pages of the same type.
  *
- *  @return A pointer to the newly created GtkActionGroup object for
+ *  @return A pointer to the newly created GSimpleActionGroup object for
  *  this page.
  */
-GtkActionGroup * gnc_plugin_page_create_action_group (GncPluginPage *page,
-                                                      const gchar *group_name);
+GSimpleActionGroup * gnc_plugin_page_create_action_group (GncPluginPage *page,
+                                                          const gchar *group_name); //FIXMEb added
 
-/** Retrieve a GtkAction object associated with this page.
+/** Retrieve the simple action group name associated with this plugin
+ *  page.
+ *
+ *  @param page The page whose simple action group should be retrieved.
+ *
+ *  @return The simple action group name associated with this plugin.
+ */
+const gchar *gnc_plugin_page_get_simple_action_group_name (GncPluginPage *page); //FIXMEb added
+
+
+/** Retrieve a GAction object associated with this page.
  *
  *  @param page The page whose menu/toolbar action group should be
  *  retrieved.
  *
- *  @param name The name of the GtkAction to find.
+ *  @param action_name The name of the GAction to find.
  *
- *  @return A pointer to the retuested GtkAction object or NULL.
+ *  @return A pointer to the requested GAction object or NULL.
  */
-GtkAction *gnc_plugin_page_get_action (GncPluginPage *page, const gchar *name);
+GAction *gnc_plugin_page_get_action (GncPluginPage *page,
+                                     const gchar *action_name);
 
 /* Signals */
 void gnc_plugin_page_inserted (GncPluginPage *plugin_page);

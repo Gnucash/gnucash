@@ -46,24 +46,26 @@ static void gnc_plugin_account_tree_init (GncPluginAccountTree *plugin);
 static void gnc_plugin_account_tree_finalize (GObject *object);
 
 /* Command callbacks */
-static void gnc_plugin_account_tree_cmd_new_account_tree (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_account_tree_cmd_new_account_tree (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-account-tree-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-account-tree-ui.xml"
+#define PLUGIN_UI_FILENAME  "gnc-plugin-account-tree.ui"
 
 /** An array of all of the actions provided by the account tree
  *  plugin. */
-static GtkActionEntry gnc_plugin_actions [] =
+static GActionEntry gnc_plugin_actions [] =
 {
-    {
-        "ViewAccountTreeAction", NULL, N_("New Accounts _Page"), NULL,
-        N_("Open a new Account Tree page"),
-        G_CALLBACK (gnc_plugin_account_tree_cmd_new_account_tree)
-    },
+    { "ViewAccountTreeAction", gnc_plugin_account_tree_cmd_new_account_tree, NULL, NULL, NULL },
 };
 /** The number of actions provided by this plugin. */
-static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
+static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
 
+/** The default menu items that need to be add to the menu */
+static const gchar *gnc_plugin_load_ui_items [] =
+{
+    "ViewPlaceholder5",
+    NULL,
+};
 
 /** The instance private data structure for an account tree plugin. */
 typedef struct GncPluginAccountTreePrivate
@@ -117,10 +119,11 @@ gnc_plugin_account_tree_class_init (GncPluginAccountTreeClass *klass)
     plugin_class->plugin_name  = GNC_PLUGIN_ACCOUNT_TREE_NAME;
 
     /* widget addition/removal */
-    plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
-    plugin_class->actions      = gnc_plugin_actions;
-    plugin_class->n_actions    = gnc_plugin_n_actions;
-    plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
+    plugin_class->actions_name    = PLUGIN_ACTIONS_NAME;
+    plugin_class->actions         = gnc_plugin_actions;
+    plugin_class->n_actions       = gnc_plugin_n_actions;
+    plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
+    plugin_class->ui_updates      = gnc_plugin_load_ui_items;
 }
 
 
@@ -156,9 +159,11 @@ gnc_plugin_account_tree_finalize (GObject *object)
  ************************************************************/
 
 static void
-gnc_plugin_account_tree_cmd_new_account_tree (GtkAction *action,
-        GncMainWindowActionData *data)
+gnc_plugin_account_tree_cmd_new_account_tree (GSimpleAction *simple,
+                                              GVariant *parameter,
+                                              gpointer user_data)
 {
+    GncMainWindowActionData *data = user_data;
     GncPluginPage *page;
 
     g_return_if_fail (data != NULL);

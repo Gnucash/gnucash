@@ -1,0 +1,725 @@
+<?xml version="1.0"?>
+<interface>
+
+  <menu id="FilePlaceholder3">
+    <item>
+      <attribute name="label" translatable="yes">_Print Cheques</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.FilePrintAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;p</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="EditPlaceholder1">
+    <item>
+      <attribute name="label" translatable="yes">Assign as payment...</attribute>
+      <attribute name="action">gnc-plugin-business-actions.RegisterAssignPayment</attribute>
+      <attribute name="tooltip" translatable="yes">Assign the selected transaction as payment</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+      <attribute name="hidden-when">action-disabled</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Edit payment...</attribute>
+      <attribute name="action">gnc-plugin-business-actions.RegisterEditPayment</attribute>
+      <attribute name="tooltip" translatable="yes">Edit the payment this transaction is a part of</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+      <attribute name="hidden-when">action-disabled</attribute>
+    </item>
+  </menu>
+
+  <menu id="EditPlaceholder2">
+    <item>
+      <attribute name="label" translatable="yes">_Edit Account</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.EditEditAccountAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;e</attribute>
+      <attribute name="tooltip" translatable="yes">Edit the selected account</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">F_ind Account</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.EditFindAccountAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;i</attribute>
+      <attribute name="tooltip" translatable="yes">Find an account</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="EditPlaceholder3">
+    <item>
+      <attribute name="label" translatable="yes">_Find...</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.EditFindTransactionsAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;f</attribute>
+      <attribute name="tooltip" translatable="yes">Find transactions with a search</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+   </menu>
+
+  <menu id="EditPlaceholder5">
+    <item>
+<!-- Translators: remember to reuse this translation in dialog-account.glade -->
+      <attribute name="label" translatable="yes">Ta_x Report Options</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.EditTaxOptionsAction</attribute>
+<!-- Translators: currently implemented are, US: income tax and DE: VAT, So adjust this string -->
+      <attribute name="tooltip" translatable="yes">Setup relevant accounts for tax reports, e.g. US income tax</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="ViewPlaceholder1">
+    <item>
+<!--  Translators: This is a menu item in the View menu -->
+      <attribute name="label" translatable="yes">_Basic Ledger</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.ViewStyleRadioAction</attribute>
+      <attribute name="target" type="i">0</attribute>
+      <attribute name="tooltip" translatable="yes">Show transactions on one or two lines</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+<!--  Translators: This is a menu item in the View menu -->
+      <attribute name="label" translatable="yes">_Auto-Split Ledger</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.ViewStyleRadioAction</attribute>
+      <attribute name="target" type="i">1</attribute>
+      <attribute name="tooltip" translatable="yes">Show transactions on one or two lines and expand the current transaction</attribute>
+       <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+<!--  Translators: This is a menu item in the View menu -->
+      <attribute name="label" translatable="yes">Transaction _Journal</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.ViewStyleRadioAction</attribute>
+      <attribute name="target" type="i">2</attribute>
+      <attribute name="tooltip" translatable="yes">Show expanded transactions with all splits</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="ViewPlaceholder2">
+    <item>
+       <attribute name="label" translatable="yes">_Double Line</attribute>
+       <attribute name="action">GncPluginPageRegisterActions.ViewStyleDoubleLineAction</attribute>
+       <attribute name="tooltip" translatable="yes">Show a second line with \"Action\", \"Notes\", and \"Linked Document\" for each transaction</attribute>
+       <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+
+  </menu>
+
+  <menu id="ViewPlaceholder3">
+    <item>
+      <attribute name="label" translatable="no">_Sort By...</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.ViewSortByAction</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="no">_Filter By...</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.ViewFilterByAction</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+   </menu>
+
+  <menu id="ViewPlaceholder4">
+    <item>
+      <attribute name="label" translatable="yes">_Refresh</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.ViewRefreshAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;r</attribute>
+      <attribute name="tooltip" translatable="yes">Refresh this window</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="TransPlaceholder0">
+    <item>
+      <attribute name="label" translatable="yes">Cu_t Transaction</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.CutTransactionAction</attribute>
+      <attribute name="tooltip" translatable="yes">Cut the selected transaction into clipboard</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Copy Transaction</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.CopyTransactionAction</attribute>
+      <attribute name="tooltip" translatable="yes">Copy the selected transaction into clipboard</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Paste Transaction</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.PasteTransactionAction</attribute>
+      <attribute name="tooltip" translatable="yes">Paste the transaction from the clipboard</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Dup_licate Transaction</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.DuplicateTransactionAction</attribute>
+      <attribute name="tooltip" translatable="yes">Make a copy of the current transaction</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Delete Transaction</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.DeleteTransactionAction</attribute>
+      <attribute name="tooltip" translatable="yes">Delete the current transaction</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Remo_ve Other Splits</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.RemoveTransactionSplitsAction</attribute>
+      <attribute name="tooltip" translatable="yes">Remove all splits in the current transaction</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="TransPlaceholder1">
+    <item>
+      <attribute name="label" translatable="yes">_Enter Transaction</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.RecordTransactionAction</attribute>
+      <attribute name="tooltip" translatable="yes">Record the current transaction</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Ca_ncel Transaction</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.CancelTransactionAction</attribute>
+      <attribute name="tooltip" translatable="yes">Cancel the current transaction</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>  
+
+  <menu id="TransPlaceholder2">
+    <item>
+      <attribute name="label" translatable="yes">_Void Transaction</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.VoidTransactionAction</attribute>
+      <attribute name="tooltip" translatable="yes">Void the current transaction</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Unvoid Transaction</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.UnvoidTransactionAction</attribute>
+      <attribute name="tooltip" translatable="yes">Unvoid the current transaction</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Add _Reversing Transaction</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.ReverseTransactionAction</attribute>
+      <attribute name="tooltip" translatable="yes">Add a reversing transaction</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="TransPlaceholder3">
+      <item>
+        <attribute name="label" translatable="yes">Manage Document Link...</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.LinkTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Add, change, or unlink the document linked with the current transaction</attribute>
+        <attribute name="temp" translatable="no">yes</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Open Linked Document</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.LinkedTransactionOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the linked document for the current transaction</attribute>
+        <attribute name="temp" translatable="no">yes</attribute>
+      </item>
+  </menu>
+
+  <menu id="TransPlaceholder4">
+    <item>
+      <attribute name="label" translatable="yes">Jump to Invoice</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.JumpLinkedInvoiceAction</attribute>
+      <attribute name="tooltip" translatable="yes">Jump to the linked bill, invoice, or voucher</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="ActionsPlaceholder4">
+    <item>
+      <attribute name="label" translatable="yes">_Transfer...</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.ActionsTransferAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;t</attribute>
+      <attribute name="tooltip" translatable="yes">Transfer funds from one account to another</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Reconcile...</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.ActionsReconcileAction</attribute>
+      <attribute name="tooltip" translatable="yes">Reconcile the selected account</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Auto-clear...</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.ActionsAutoClearAction</attribute>
+      <attribute name="tooltip" translatable="yes">Automatically clear individual transactions, so as to reach a certain cleared amount</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Stock Ass_istant</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.ActionsStockAssistantAction</attribute>
+      <attribute name="tooltip" translatable="yes">Stock Assistant</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Stoc_k Split...</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.ActionsStockSplitAction</attribute>
+      <attribute name="tooltip" translatable="yes">Record a stock split or a stock merger</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">View _Lots...</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.ActionsLotsAction</attribute>
+      <attribute name="tooltip" translatable="yes">Bring up the lot viewer/editor window</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+   </menu>
+
+  <menu id="ActionsPlaceholder5">
+    <item>
+      <attribute name="label" translatable="yes">_Blank Transaction</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.BlankTransactionAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;Page_Down</attribute>
+      <attribute name="tooltip" translatable="yes">Move to the blank transaction at the bottom of the register</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Got to Date</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.GotoDateAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;g</attribute>
+      <attribute name="tooltip" translatable="yes">Move to the split at the specified date</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">S_plit Transaction</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.SplitTransactionAction</attribute>
+      <attribute name="tooltip" translatable="yes">Show all splits in the current transaction</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Edit E_xchange Rate</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.EditExchangeRateAction</attribute>
+      <attribute name="tooltip" translatable="yes">Edit the exchange rate for the current transaction</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Sche_dule...</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.ScheduleTransactionAction</attribute>
+      <attribute name="tooltip" translatable="yes">Create a Scheduled Transaction with the current transaction as a template</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+<!-- Translators: This is a menu item that will open a register tab for the
+     account of the first other account in the current transaction's split list
+     with focus on the current transaction's entry in that register. -->
+      <attribute name="label" translatable="yes">_Jump to the other account</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.JumpTransactionAction</attribute>
+      <attribute name="tooltip" translatable="yes">Open a new register tab for the other account with focus on this transaction</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="ActionsPlaceholder6">
+    <submenu>
+<!-- Translators: The following 2 are Scrub actions in register view -->
+      <attribute name="label" translatable="yes">_Check &amp; Repair</attribute>
+      <attribute name="action">mainwin.ScrubMenuAction</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+      <item>
+        <attribute name="label" translatable="yes">All Transactions</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.ScrubAllAction</attribute>
+        <attribute name="tempx" translatable="no">yes</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">This transaction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.ScrubCurrentAction</attribute>
+        <attribute name="tempx" translatable="no">yes</attribute>
+      </item>
+    </submenu>
+  </menu>
+
+  <menu id="ReportsPlaceholder1">
+    <item>
+      <attribute name="label" translatable="yes">Account Report</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.ReportsAccountReportAction</attribute>
+      <attribute name="tooltip" translatable="yes">Open a register report for this Account</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Account Report - Single Transaction</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.ReportsAcctTransReportAction</attribute>
+      <attribute name="tooltip" translatable="yes">Open a register report for the selected Transaction</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="mainwin-popup">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Sort By...</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.ViewSortByAction</attribute>
+        <attribute name="tooltip" translatable="yes">Filter accounts</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Filter By...</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.ViewFilterByAction</attribute>
+        <attribute name="tooltip" translatable="yes">Filter accounts</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Re_name Page</attribute>
+        <attribute name="action">mainwin.ActionsRenamePageAction</attribute>
+        <attribute name="tooltip" translatable="yes">Rename this page</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Dup_licate Transaction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.DuplicateTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Make a copy of the current transaction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Delete Transaction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.DeleteTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Delete the current transaction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Remo_ve Other Splits</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.RemoveTransactionSplitsAction</attribute>
+        <attribute name="tooltip" translatable="yes">Remove all splits in the current transaction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Enter Transaction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.RecordTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Record the current transaction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Ca_ncel Transaction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.CancelTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Cancel the current transaction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Manage Document Link...</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.LinkTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Add, change, or unlink the document linked with the current transaction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Open Linked Document</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.LinkedTransactionOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the linked document for the current transaction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Jump to Invoice</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.JumpLinkedInvoiceAction</attribute>
+        <attribute name="tooltip" translatable="yes">Jump to the linked bill, invoice, or voucher</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Blank Transaction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.BlankTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Move to the blank transaction at the bottom of the register</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Go to Date</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.GotoDateAction</attribute>
+        <attribute name="tooltip" translatable="yes">Move to the split at the specified date</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">S_plit Transaction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.SplitTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Show all splits in the current transaction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Edit E_xchange Rate</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.EditExchangeRateAction</attribute>
+        <attribute name="tooltip" translatable="yes">Edit the exchange rate for the current transaction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Sche_dule...</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.ScheduleTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Create a Scheduled Transaction with the current transaction as a template</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Jump to the other account</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.JumpTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open a new register tab for the other account with focus on this transaction</attribute>
+      </item>
+    </section>
+    <section>
+        <item>
+          <attribute name="label" translatable="yes">Assign as payment...</attribute>
+          <attribute name="action">gnc-plugin-business-actions.RegisterAssignPayment</attribute>
+          <attribute name="tooltip" translatable="yes">Assign the selected transaction as payment</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Edit payment...</attribute>
+          <attribute name="action">gnc-plugin-business-actions.RegisterEditPayment</attribute>
+          <attribute name="tooltip" translatable="yes">Edit the payment this transaction is a part of</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+    </section>
+  </menu>
+
+
+  <object class="GtkToolbar" id="mainwin-toolbar">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkToolButton" id="but1">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Save</property>
+        <property name="action-name">gnc-plugin-basic-commands-actions.FileSaveAction</property>
+        <property name="tooltip-text" translatable="yes">Save the current file</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">document-save</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Close</property>
+        <property name="action-name">mainwin.FileCloseAction</property>
+        <property name="tooltip-text" translatable="yes">Close the currently active page</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">window-close</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but2a">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">New _Invoice...</property>
+        <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
+        <property name="tooltip-text" translatable="yes">Open the New Invoice dialog</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-invoice-new</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem" id="extra_separator">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but3">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Dup_licate Transaction</property>
+        <property name="action-name">GncPluginPageRegisterActions.DuplicateTransactionAction</property>
+        <property name="tooltip-text" translatable="yes">Make a copy of the current transaction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">edit-copy</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but4">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Delete Transaction</property>
+        <property name="action-name">GncPluginPageRegisterActions.DeleteTransactionAction</property>
+        <property name="tooltip-text" translatable="yes">Delete the current transaction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">edit-delete</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but5">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Enter Transaction</property>
+        <property name="action-name">GncPluginPageRegisterActions.RecordTransactionAction</property>
+        <property name="tooltip-text" translatable="yes">Record the current transaction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">list-add</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but6">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Ca_ncel Transaction</property>
+        <property name="action-name">GncPluginPageRegisterActions.CancelTransactionAction</property>
+        <property name="tooltip-text" translatable="yes">Cancel the current transaction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">process-stop</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but7">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Blank Transaction</property>
+        <property name="action-name">GncPluginPageRegisterActions.BlankTransactionAction</property>
+        <property name="tooltip-text" translatable="yes">Move to the blank transaction at the bottom of the register</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">go-bottom</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToggleToolButton" id="but8">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">S_plit Transaction</property>
+        <property name="action-name">GncPluginPageRegisterActions.SplitTransactionAction</property>
+        <property name="tooltip-text" translatable="yes">Show all splits in the current transaction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-split-trans</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but9">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Jump to the other account</property>
+        <property name="action-name">GncPluginPageRegisterActions.JumpTransactionAction</property>
+        <property name="tooltip-text" translatable="yes">Open a new register tab for the other account with focus on this transaction</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-jumpto</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but10">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Sche_dule...</property>
+        <property name="action-name">GncPluginPageRegisterActions.ScheduleTransactionAction</property>
+        <property name="tooltip-text" translatable="yes">Create a Scheduled Transaction with the current transaction as a template</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-sx-new</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but11">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Transfer...</property>
+        <property name="action-name">GncPluginPageRegisterActions.ActionsTransferAction</property>
+        <property name="tooltip-text" translatable="yes">Transfer funds from one account to another</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">gnc-transfer</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but12">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">_Reconcile...</property>
+        <property name="action-name">GncPluginPageRegisterActions.ActionsReconcileAction</property>
+        <property name="tooltip-text" translatable="yes">Reconcile the selected account</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">edit-select-all</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="but13">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Stoc_k Split...</property>
+        <property name="action-name">GncPluginPageRegisterActions.ActionsStockAssistantAction</property>
+        <property name="tooltip-text" translatable="yes">Stock Assistant</property>
+        <property name="use-underline">True</property>
+        <property name="icon-name">applications-utilities</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+  </object>
+
+</interface>

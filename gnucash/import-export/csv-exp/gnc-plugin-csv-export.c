@@ -38,33 +38,28 @@ static void gnc_plugin_csv_export_init (GncPluginCsvExport *plugin);
 static void gnc_plugin_csv_export_finalize (GObject *object);
 
 /* Command callbacks */
-static void gnc_plugin_csv_export_tree_cmd (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_plugin_csv_export_trans_cmd (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_plugin_csv_export_register_cmd (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_csv_export_tree_cmd (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_csv_export_trans_cmd (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_csv_export_register_cmd (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-csv-export-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-csv-export-ui.xml"
+#define PLUGIN_UI_FILENAME  "gnc-plugin-csv-export.ui"
 
-static GtkActionEntry gnc_plugin_actions [] =
+static GActionEntry gnc_plugin_actions [] =
 {
-    {
-        "CsvExportTreeAction", "go-next", N_("Export Account T_ree to CSV…"), NULL,
-        N_("Export the Account Tree to a CSV file"),
-        G_CALLBACK (gnc_plugin_csv_export_tree_cmd)
-    },
-    {
-        "CsvExportTransAction", "go-next", N_("Export _Transactions to CSV…"), NULL,
-        N_("Export the Transactions to a CSV file"),
-        G_CALLBACK (gnc_plugin_csv_export_trans_cmd)
-    },
-    {
-        "CsvExportRegisterAction", "go-next", N_("Export A_ctive Register to CSV…")
-	/* _A is already used by Export Accounts */, NULL,
-        N_("Export the Active Register to a CSV file"),
-        G_CALLBACK (gnc_plugin_csv_export_register_cmd)
-    },
+    { "CsvExportTreeAction", gnc_plugin_csv_export_tree_cmd, NULL, NULL, NULL },
+    { "CsvExportTransAction", gnc_plugin_csv_export_trans_cmd, NULL, NULL, NULL },
+    { "CsvExportRegisterAction", gnc_plugin_csv_export_register_cmd, NULL, NULL, NULL },
 };
-static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
+/** The number of actions provided by this plugin. */
+static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
+
+/** The default menu items that need to be add to the menu */
+static const gchar *gnc_plugin_load_ui_items [] =
+{
+    "FilePlaceholder5",
+    NULL,
+};
 
 typedef struct GncPluginCsvExportPrivate
 {
@@ -98,10 +93,11 @@ gnc_plugin_csv_export_class_init (GncPluginCsvExportClass *klass)
     plugin_class->plugin_name  = GNC_PLUGIN_CSV_EXPORT_NAME;
 
     /* widget addition/removal */
-    plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
-    plugin_class->actions      = gnc_plugin_actions;
-    plugin_class->n_actions    = gnc_plugin_n_actions;
-    plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
+    plugin_class->actions_name    = PLUGIN_ACTIONS_NAME;
+    plugin_class->actions         = gnc_plugin_actions;
+    plugin_class->n_actions       = gnc_plugin_n_actions;
+    plugin_class->ui_filename     = PLUGIN_UI_FILENAME;
+    plugin_class->ui_updates      = gnc_plugin_load_ui_items;
 }
 
 static void
@@ -125,23 +121,27 @@ gnc_plugin_csv_export_finalize (GObject *object)
  *                    Command Callbacks                     *
  ************************************************************/
 static void
-gnc_plugin_csv_export_tree_cmd (GtkAction *action,
-                                GncMainWindowActionData *data)
+gnc_plugin_csv_export_tree_cmd (GSimpleAction *simple,
+                                GVariant *parameter,
+                                gpointer user_data)
 {
     gnc_file_csv_export(XML_EXPORT_TREE);
 }
 
 static void
-gnc_plugin_csv_export_trans_cmd (GtkAction *action,
-                                 GncMainWindowActionData *data)
+gnc_plugin_csv_export_trans_cmd (GSimpleAction *simple,
+                                 GVariant *parameter,
+                                 gpointer user_data)
 {
     gnc_file_csv_export(XML_EXPORT_TRANS);
 }
 
 static void
-gnc_plugin_csv_export_register_cmd (GtkAction *action,
-                                 GncMainWindowActionData *data)
+gnc_plugin_csv_export_register_cmd (GSimpleAction *simple,
+                                    GVariant *parameter,
+                                    gpointer user_data)
 {
+    GncMainWindowActionData *data = user_data;
     Query   *query;
     Account *acc;
 
