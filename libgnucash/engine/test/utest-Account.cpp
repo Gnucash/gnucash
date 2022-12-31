@@ -1089,6 +1089,9 @@ test_gnc_account_kvp_setters_getters (Fixture *fixture, gconstpointer pData)
 {
     Account *account = xaccMallocAccount (gnc_account_get_book (fixture->acct));
     xaccAccountSetType (account, ACCT_TYPE_EQUITY);
+    gnc_numeric h_balance = gnc_numeric_create (1700, 100);
+    gnc_numeric l_balance = gnc_numeric_create (1000, 100);
+    gnc_numeric balance_limit;
 
     // equity_type getter/setter
     g_assert (xaccAccountGetIsOpeningBalance (account) == FALSE);
@@ -1230,6 +1233,32 @@ test_gnc_account_kvp_setters_getters (Fixture *fixture, gconstpointer pData)
 
     xaccAccountSetNotes (account, nullptr);
     g_assert_cmpstr (xaccAccountGetNotes (account), ==, nullptr);
+
+    // Balance Limits getter/setter
+    g_assert (xaccAccountGetHigherBalanceLimit (account, &balance_limit) == false);
+    g_assert (xaccAccountGetLowerBalanceLimit (account, &balance_limit) == false);
+    g_assert (xaccAccountGetIncludeSubAccountBalances (account) == false);
+
+    xaccAccountSetHigherBalanceLimit (account, h_balance);
+    xaccAccountSetLowerBalanceLimit (account, l_balance);
+    xaccAccountSetIncludeSubAccountBalances (account, true);
+
+    g_assert (xaccAccountGetHigherBalanceLimit (account, &balance_limit) == true);
+    g_assert_cmpint (gnc_numeric_compare (h_balance, balance_limit), ==, 0);
+
+    g_assert (xaccAccountGetLowerBalanceLimit (account, &balance_limit) == true);
+    g_assert_cmpint (gnc_numeric_compare (l_balance, balance_limit), ==, 0);
+
+    g_assert (xaccAccountGetIncludeSubAccountBalances (account) == true);
+
+    xaccAccountSetIncludeSubAccountBalances (account, false);
+
+    xaccAccountClearHigherBalanceLimit (account);
+    xaccAccountClearLowerBalanceLimit (account);
+
+    g_assert (xaccAccountGetHigherBalanceLimit (account, &balance_limit) == false);
+    g_assert (xaccAccountGetLowerBalanceLimit (account, &balance_limit) == false);
+    g_assert (xaccAccountGetIncludeSubAccountBalances (account) == false);
 
     // STOCK_ACCOUNT tests from now on
     xaccAccountSetType (account, ACCT_TYPE_STOCK);

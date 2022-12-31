@@ -73,6 +73,11 @@ static const std::string AB_ACCOUNT_UID("account-uid");
 static const std::string AB_BANK_CODE("bank-code");
 static const std::string AB_TRANS_RETRIEVAL("trans-retrieval");
 
+static const std::string KEY_BALANCE_LIMIT("balance-limit");
+static const std::string KEY_BALANCE_HIGHER_LIMIT_VALUE("higher-value");
+static const std::string KEY_BALANCE_LOWER_LIMIT_VALUE("lower-value");
+static const std::string KEY_BALANCE_INCLUDE_SUB_ACCTS("inlude-sub-accts");
+
 static gnc_numeric GetBalanceAsOfDate (Account *acc, time64 date, gboolean ignclosing);
 
 using FinalProbabilityVec=std::vector<std::pair<std::string, int32_t>>;
@@ -327,6 +332,12 @@ gnc_account_init(Account* acc)
     priv->starting_cleared_balance = gnc_numeric_zero();
     priv->starting_reconciled_balance = gnc_numeric_zero();
     priv->balance_dirty = FALSE;
+
+    priv->higher_balance_limit = gnc_numeric_create (1,0);
+    priv->higher_balance_cached = false;
+    priv->lower_balance_limit = gnc_numeric_create (1,0);
+    priv->lower_balance_cached = false;
+    priv->include_sub_account_balances = TriState::Unset;
 
     priv->last_num = (char*) is_unset;
     priv->tax_us_code = (char*) is_unset;
@@ -4929,6 +4940,252 @@ xaccAccountSetLastNum (Account *acc, const char *num)
     priv->last_num = g_strdup (num);
     set_kvp_string_tag (acc, "last-num", priv->last_num);
 }
+
+
+/********************************************************************\
+\********************************************************************/
+
+gboolean
+xaccAccountGetHigherBalanceLimit (const Account *acc,
+                                  gnc_numeric *balance)
+{
+    g_return_val_if_fail (GNC_IS_ACCOUNT(acc), false);
+
+    if (GET_PRIVATE(acc)->higher_balance_cached)
+    {
+        *balance = GET_PRIVATE(acc)->higher_balance_limit;
+
+        if (gnc_numeric_check (*balance) == 0)
+            return true;
+        else
+            return false;
+    }
+    else
+    {
+        gnc_numeric bal = gnc_numeric_create (1,0);
+        GValue v = G_VALUE_INIT;
+        gboolean retval = false;
+
+        qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {KEY_BALANCE_LIMIT,
+                                                           KEY_BALANCE_HIGHER_LIMIT_VALUE});
+        if (G_VALUE_HOLDS_BOXED(&v))
+        {
+            bal = *(gnc_numeric*)g_value_get_boxed (&v);
+            if (bal.denom)
+            {
+                if (balance)
+                   *balance = bal;
+                retval = true;
+            }
+        }
+        g_value_unset (&v);
+
+        GET_PRIVATE(acc)->higher_balance_limit = bal;
+        GET_PRIVATE(acc)->higher_balance_cached = true;
+        return retval;
+    }
+}
+
+gboolean
+xaccAccountGetLowerBalanceLimit (const Account *acc,
+                                 gnc_numeric *balance)
+{
+    g_return_val_if_fail (GNC_IS_ACCOUNT(acc), false);
+
+    if (GET_PRIVATE(acc)->lower_balance_cached)
+    {
+        *balance = GET_PRIVATE(acc)->lower_balance_limit;
+
+        if (gnc_numeric_check (*balance) == 0)
+            return true;
+        else
+            return false;
+    }
+    else
+    {
+        gnc_numeric bal = gnc_numeric_create (1,0);
+        GValue v = G_VALUE_INIT;
+        gboolean retval = false;
+
+        qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {KEY_BALANCE_LIMIT,
+                                                           KEY_BALANCE_LOWER_LIMIT_VALUE});
+        if (G_VALUE_HOLDS_BOXED(&v))
+        {
+            bal = *(gnc_numeric*)g_value_get_boxed (&v);
+            if (bal.denom)
+            {
+                if (balance)
+                   *balance = bal;
+                retval = true;
+            }
+        }
+        g_value_unset (&v);
+
+        GET_PRIVATE(acc)->lower_balance_limit = bal;
+        GET_PRIVATE(acc)->lower_balance_cached = true;
+        return retval;
+    }
+}
+
+
+static void
+set_balance_limits (Account *acc, gnc_numeric balance, gboolean higher)
+{
+    gnc_numeric balance_limit;
+    gboolean balance_limit_valid;
+    std::vector<std::string> path {KEY_BALANCE_LIMIT};
+
+    if (higher)
+    {
+        path.push_back (KEY_BALANCE_HIGHER_LIMIT_VALUE);
+        balance_limit_valid = xaccAccountGetHigherBalanceLimit (acc, &balance_limit);
+    }
+    else
+    {
+        path.push_back (KEY_BALANCE_LOWER_LIMIT_VALUE);
+        balance_limit_valid = xaccAccountGetLowerBalanceLimit (acc, &balance_limit);
+    }
+
+    if (!balance_limit_valid  || gnc_numeric_compare (balance, balance_limit) != 0)
+    {
+        GValue v = G_VALUE_INIT;
+        g_value_init (&v, GNC_TYPE_NUMERIC);
+        g_value_set_boxed (&v, &balance);
+        xaccAccountBeginEdit (acc);
+
+        qof_instance_set_path_kvp (QOF_INSTANCE(acc), &v, path);
+        if (higher)
+        {
+            GET_PRIVATE(acc)->higher_balance_limit.denom = balance.denom;
+            GET_PRIVATE(acc)->higher_balance_limit.num = balance.num;
+            GET_PRIVATE(acc)->higher_balance_cached = true;
+        }
+        else
+        {
+            GET_PRIVATE(acc)->lower_balance_limit.denom = balance.denom;
+            GET_PRIVATE(acc)->lower_balance_limit.num = balance.num;
+            GET_PRIVATE(acc)->lower_balance_cached = true;
+        }
+        mark_account (acc);
+        xaccAccountCommitEdit (acc);
+        g_value_unset (&v);
+    }
+}
+
+void
+xaccAccountSetHigherBalanceLimit (Account *acc, gnc_numeric balance)
+{
+    g_return_if_fail (GNC_IS_ACCOUNT(acc));
+
+    if (gnc_numeric_check (balance) != 0)
+        return;
+
+    set_balance_limits (acc, balance, true);
+}
+
+void
+xaccAccountSetLowerBalanceLimit (Account *acc, gnc_numeric balance)
+{
+    g_return_if_fail (GNC_IS_ACCOUNT(acc));
+
+    if (gnc_numeric_check (balance) != 0)
+        return;
+
+    set_balance_limits (acc, balance, false);
+}
+
+
+static void
+clear_balance_limits (Account *acc, gboolean higher)
+{
+    gnc_numeric balance_limit;
+    gboolean balance_limit_valid;
+    std::vector<std::string> path {KEY_BALANCE_LIMIT};
+
+    if (higher)
+    {
+        path.push_back (KEY_BALANCE_HIGHER_LIMIT_VALUE);
+        balance_limit_valid = xaccAccountGetHigherBalanceLimit (acc, &balance_limit);
+    }
+    else
+    {
+        path.push_back (KEY_BALANCE_LOWER_LIMIT_VALUE);
+        balance_limit_valid = xaccAccountGetLowerBalanceLimit (acc, &balance_limit);
+    }
+
+    if (balance_limit_valid)
+    {
+        xaccAccountBeginEdit (acc);
+        qof_instance_set_path_kvp (QOF_INSTANCE(acc), nullptr, path);
+        qof_instance_slot_path_delete_if_empty (QOF_INSTANCE(acc), {KEY_BALANCE_LIMIT});
+        if (higher)
+            GET_PRIVATE(acc)->higher_balance_cached = false;
+        else
+            GET_PRIVATE(acc)->lower_balance_cached = false;
+        mark_account (acc);
+        xaccAccountCommitEdit (acc);
+    }
+}
+
+void
+xaccAccountClearHigherBalanceLimit (Account *acc)
+{
+    g_return_if_fail (GNC_IS_ACCOUNT(acc));
+
+    clear_balance_limits (acc, true);
+}
+
+void
+xaccAccountClearLowerBalanceLimit (Account *acc)
+{
+    g_return_if_fail (GNC_IS_ACCOUNT(acc));
+
+    clear_balance_limits (acc, false);
+}
+
+gboolean
+xaccAccountGetIncludeSubAccountBalances (const Account *acc)
+{
+    g_return_val_if_fail (GNC_IS_ACCOUNT(acc), false);
+
+    if (GET_PRIVATE(acc)->include_sub_account_balances == TriState::Unset)
+    {
+        gboolean inc_sub = boolean_from_key (acc, {KEY_BALANCE_LIMIT,
+                                                   KEY_BALANCE_INCLUDE_SUB_ACCTS});
+
+        GET_PRIVATE(acc)->include_sub_account_balances = inc_sub ? TriState::True
+                                                                 : TriState::False;
+    }
+    return GET_PRIVATE(acc)->include_sub_account_balances == TriState::True;
+}
+
+void
+xaccAccountSetIncludeSubAccountBalances (Account *acc, gboolean inc_sub)
+{
+    g_return_if_fail (GNC_IS_ACCOUNT(acc));
+
+    if (inc_sub != xaccAccountGetIncludeSubAccountBalances (acc))
+    {
+        GValue v = G_VALUE_INIT;
+        g_value_init (&v, G_TYPE_BOOLEAN);
+        g_value_set_boolean (&v, inc_sub);
+        std::vector<std::string> path {KEY_BALANCE_LIMIT,
+                                       KEY_BALANCE_INCLUDE_SUB_ACCTS};
+        xaccAccountBeginEdit (acc);
+        if (inc_sub)
+            qof_instance_set_path_kvp (QOF_INSTANCE(acc), &v, path);
+        else
+            qof_instance_set_path_kvp (QOF_INSTANCE(acc), nullptr, path);
+        GET_PRIVATE(acc)->include_sub_account_balances =
+                              inc_sub ? TriState::True : TriState::False;
+        mark_account (acc);
+        xaccAccountCommitEdit (acc);
+        g_value_unset (&v);
+    }
+}
+
+/********************************************************************\
+\********************************************************************/
 
 static Account *
 GetOrMakeOrphanAccount (Account *root, gnc_commodity * currency)

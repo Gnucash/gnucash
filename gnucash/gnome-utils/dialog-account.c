@@ -106,6 +106,14 @@ typedef struct _AccountWindow
     GtkTreeView   *parent_tree;
     GtkWidget     *parent_scroll;
 
+    GtkWidget *more_properties_page;
+
+    GtkWidget *balance_grid;
+    GtkWidget *higher_balance_limit_edit;
+    GtkWidget *lower_balance_limit_edit;
+    GtkWidget *include_balance_sub_accts;
+    gboolean   balance_is_reversed;
+
     GtkWidget *opening_balance_button;
     GtkWidget *opening_balance_edit;
     GtkWidget *opening_balance_date_edit;
@@ -250,6 +258,8 @@ gnc_account_to_ui (AccountWindow *aw)
     GdkRGBA color;
     gboolean flag, nonstd_scu;
     gint index;
+    gnc_numeric balance_limit;
+    gboolean    balance_limit_valid;
 
     ENTER("%p", aw);
     account = aw_get_account (aw);
@@ -325,6 +335,41 @@ gnc_account_to_ui (AccountWindow *aw)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(aw->hidden_button),
                                   flag);
 
+    aw->balance_is_reversed = gnc_reverse_balance (account);
+
+    flag = xaccAccountGetIncludeSubAccountBalances (account);
+
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(aw->include_balance_sub_accts),
+                                  flag);
+
+    balance_limit_valid = xaccAccountGetHigherBalanceLimit (account, &balance_limit);
+    if (balance_limit_valid)
+    {
+        if (aw->balance_is_reversed)
+        {
+            balance_limit = gnc_numeric_neg (balance_limit);
+            gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(aw->lower_balance_limit_edit),
+                                                        balance_limit);
+        }
+        else
+            gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(aw->higher_balance_limit_edit),
+                                                        balance_limit);
+    }
+
+    balance_limit_valid = xaccAccountGetLowerBalanceLimit (account, &balance_limit);
+    if (balance_limit_valid)
+    {
+        if (aw->balance_is_reversed)
+        {
+            balance_limit = gnc_numeric_neg (balance_limit);
+            gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(aw->higher_balance_limit_edit),
+                                                        balance_limit);
+        }
+        else
+            gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(aw->lower_balance_limit_edit),
+                                                        balance_limit);
+    }
+
     set_auto_interest_box (aw);
     LEAVE(" ");
 }
@@ -393,6 +438,9 @@ gnc_ui_to_account (AccountWindow *aw)
     GdkRGBA color;
     gboolean flag;
     gnc_numeric balance;
+    gnc_numeric balance_limit;
+    gint higher_balance_limit_valid;
+    gint lower_balance_limit_valid;
     gboolean use_equity, nonstd;
     time64 date;
     gint index, old_scu, new_scu;
@@ -504,6 +552,60 @@ gnc_ui_to_account (AccountWindow *aw)
         parent_account = gnc_book_get_root_account (aw->book);
     if (parent_account != gnc_account_get_parent (account))
         gnc_account_append_child (parent_account, account);
+
+    flag = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(
+                                         aw->include_balance_sub_accts));
+
+    xaccAccountSetIncludeSubAccountBalances (account, flag);
+
+    higher_balance_limit_valid = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT(
+                                                                aw->higher_balance_limit_edit),
+                                                                &balance_limit, TRUE, NULL);
+
+    if (higher_balance_limit_valid == 0)
+    {
+        if (aw->balance_is_reversed)
+        {
+            balance_limit = gnc_numeric_neg (balance_limit);
+            xaccAccountSetLowerBalanceLimit (account, balance_limit);
+        }
+        else
+            xaccAccountSetHigherBalanceLimit (account, balance_limit);
+    }
+
+    if (higher_balance_limit_valid == -1)
+    {
+        if (aw->balance_is_reversed)
+            xaccAccountClearLowerBalanceLimit (account);
+        else
+            xaccAccountClearHigherBalanceLimit (account);
+    }
+
+    lower_balance_limit_valid = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT(
+                                                               aw->lower_balance_limit_edit),
+                                                               &balance_limit, TRUE, NULL);
+
+    if (lower_balance_limit_valid == 0)
+    {
+        if (aw->balance_is_reversed)
+        {
+            balance_limit = gnc_numeric_neg (balance_limit);
+            xaccAccountSetHigherBalanceLimit (account, balance_limit);
+        }
+        else
+            xaccAccountSetLowerBalanceLimit (account, balance_limit);
+    }
+
+    if (lower_balance_limit_valid == -1)
+    {
+        if (aw->balance_is_reversed)
+            xaccAccountClearHigherBalanceLimit (account);
+        else
+            xaccAccountClearLowerBalanceLimit (account);
+    }
+
+    if ((higher_balance_limit_valid == -1) && (lower_balance_limit_valid == -1))
+        xaccAccountSetIncludeSubAccountBalances (account, FALSE);
 
     xaccAccountCommitEdit (account);
 
@@ -811,6 +913,10 @@ gnc_common_ok (AccountWindow *aw)
     gnc_commodity * commodity;
     gchar *fullname, *fullname_parent;
     const gchar *name, *separator;
+    gboolean higher_limit_valid;
+    gnc_numeric higher_balance_limit;
+    gboolean lower_limit_valid;
+    gnc_numeric lower_balance_limit;
 
     ENTER("aw %p", aw);
     root = gnc_book_get_root_account (aw->book);
@@ -890,6 +996,34 @@ gnc_common_ok (AccountWindow *aw)
         gnc_error_dialog (GTK_WINDOW(aw->dialog), "%s", message);
         LEAVE("invalid commodity");
         return FALSE;
+    }
+
+    /* check for higher balance limit greater than lower */
+    higher_limit_valid = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT(aw->higher_balance_limit_edit),
+                                                        &higher_balance_limit, TRUE, NULL);
+
+    lower_limit_valid = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT(aw->lower_balance_limit_edit),
+                                                       &lower_balance_limit, TRUE, NULL);
+
+    if ((lower_limit_valid == 0) && (higher_limit_valid == 0))
+    {
+        gint compare = gnc_numeric_compare (higher_balance_limit,
+                                            lower_balance_limit);
+
+        if ((compare == 0) && (!gnc_numeric_zero_p (higher_balance_limit)))
+        {
+            const char *message = _("Balance limits must be different unless they are both zero.");
+            gnc_error_dialog (GTK_WINDOW(aw->dialog), "%s", message);
+            LEAVE("invalid balance limit, both the same but not zero");
+            return FALSE;
+        }
+        else if (compare == -1)
+        {
+            const char *message = _("The lower balance limit must be less than the higher limit.");
+            gnc_error_dialog (GTK_WINDOW(aw->dialog), "%s", message);
+            LEAVE("invalid balance limit, lower limit not less than upper");
+            return FALSE;
+        }
     }
 
     LEAVE("passed");
@@ -1488,6 +1622,29 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
     g_signal_connect (G_OBJECT(selection), "changed",
                       G_CALLBACK(gnc_account_parent_changed_cb), aw);
 
+    aw->balance_grid = GTK_WIDGET(gtk_builder_get_object (builder, "balance_grid"));
+
+    box  = GTK_WIDGET(gtk_builder_get_object (builder, "higher_balance_limit_hbox"));
+    aw->higher_balance_limit_edit = gnc_amount_edit_new ();
+    gtk_box_pack_start (GTK_BOX(box), aw->higher_balance_limit_edit, TRUE, TRUE, 0);
+    gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT(aw->higher_balance_limit_edit), TRUE);
+    gnc_amount_edit_set_validate_on_change (GNC_AMOUNT_EDIT(aw->higher_balance_limit_edit), TRUE);
+    gnc_amount_edit_show_warning_symbol (GNC_AMOUNT_EDIT(aw->higher_balance_limit_edit), TRUE);
+    gtk_widget_show (aw->higher_balance_limit_edit);
+
+    box  = GTK_WIDGET(gtk_builder_get_object (builder, "lower_balance_limit_hbox"));
+    aw->lower_balance_limit_edit = gnc_amount_edit_new ();
+    gtk_box_pack_start (GTK_BOX(box), aw->lower_balance_limit_edit, TRUE, TRUE, 0);
+    gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT(aw->lower_balance_limit_edit), TRUE);
+    gnc_amount_edit_set_validate_on_change (GNC_AMOUNT_EDIT(aw->lower_balance_limit_edit), TRUE);
+    gnc_amount_edit_show_warning_symbol (GNC_AMOUNT_EDIT(aw->lower_balance_limit_edit), TRUE);
+    gtk_widget_show (aw->lower_balance_limit_edit);
+
+    aw->include_balance_sub_accts = GTK_WIDGET(gtk_builder_get_object (builder, "include_sub_accts_tb"));
+
+    aw->more_properties_page =
+        gtk_notebook_get_nth_page (GTK_NOTEBOOK(aw->notebook), 1);
+
     aw->opening_balance_button = GTK_WIDGET(gtk_builder_get_object (builder, "opening_balance_button"));
     aw->tax_related_button = GTK_WIDGET(gtk_builder_get_object (builder, "tax_related_button"));
     aw->placeholder_button = GTK_WIDGET(gtk_builder_get_object (builder, "placeholder_button"));
@@ -1515,7 +1672,7 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
     gtk_widget_show (date_edit);
 
     aw->opening_balance_page =
-        gtk_notebook_get_nth_page (GTK_NOTEBOOK(aw->notebook), 1);
+        gtk_notebook_get_nth_page (GTK_NOTEBOOK(aw->notebook), 2);
 
     aw->opening_equity_radio = GTK_WIDGET(gtk_builder_get_object (builder,
                                           "opening_equity_radio"));
