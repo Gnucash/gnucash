@@ -15,23 +15,11 @@ set(ofx_noinst_HEADERS
   gnc-plugin-ofx.h
 )
 
-set(ofx_UI gnc-plugin-ofx.ui)
+set(ofx_UI ui/gnc-plugin-ofx.ui)
 
 if (WITH_OFX)
 
-  add_custom_command(
-    OUTPUT ofx-gresources.c
-    COMMAND
-      "${GLIB_COMPILE_RESOURCES_EXECUTABLE}"
-      --target=ofx-gresources.c
-      --sourcedir=${CMAKE_CURRENT_SOURCE_DIR}
-      --generate-source
-      ${CMAKE_CURRENT_SOURCE_DIR}/ofx-gresources.xml
-    DEPENDS
-      ${CMAKE_CURRENT_SOURCE_DIR}/ofx-gresources.xml ${ofx_UI}
-    WORKING_DIRECTORY
-      ${CMAKE_CURRENT_BINARY_DIR}
-  )
+  gnc_generate_gresources(BASE ofx-gresources RESOURCE_FILES ${ofx_UI})
 
   add_library(gncmod-ofx
     ${ofx_SOURCES}

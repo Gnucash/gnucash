@@ -315,9 +315,9 @@ gnucash/import-export/aqb/gnc-flicker-gui.c
 gnucash/import-export/aqb/gnc-gwen-gui.c
 gnucash/import-export/aqb/gncmod-aqbanking.c
 gnucash/import-export/aqb/gnc-plugin-aqbanking.c
-gnucash/import-export/aqb/gnc-plugin-aqbanking.ui
 gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.flicker.gschema.xml.in
 gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in
+gnucash/import-export/aqb/ui/gnc-plugin-aqbanking.ui
 gnucash/import-export/bi-import/dialog-bi-import.c
 gnucash/import-export/bi-import/dialog-bi-import-gui.c
 gnucash/import-export/bi-import/dialog-bi-import-helper.c
@@ -362,8 +362,8 @@ gnucash/import-export/log-replay/gnc-plugin-log-replay.c
 gnucash/import-export/ofx/gncmod-ofx-import.c
 gnucash/import-export/ofx/gnc-ofx-import.c
 gnucash/import-export/ofx/gnc-plugin-ofx.c
-gnucash/import-export/ofx/gnc-plugin-ofx.ui
 gnucash/import-export/ofx/gschemas/org.gnucash.GnuCash.dialogs.import.ofx.gschema.xml.in
+gnucash/import-export/ofx/ui/gnc-plugin-ofx.ui
 gnucash/import-export/qif-imp/assistant-qif-import.c
 gnucash/import-export/qif-imp/dialog-account-picker.c
 gnucash/import-export/qif-imp/gnc-plugin-qif-import.c

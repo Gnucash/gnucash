@@ -5,6 +5,18 @@ set(SCHEMADIR_BUILD ${DATADIR_BUILD}/glib-2.0/schemas)
 file(MAKE_DIRECTORY ${SCHEMADIR_BUILD})
 unset(gschema_depends CACHE)
 unset(gschema_preftrans_files CACHE)
+
+# Get glib executable for generating the gresource file
+execute_process(
+  COMMAND
+  ${PKG_CONFIG_EXECUTABLE} gio-2.0 --variable glib_compile_resources
+  OUTPUT_VARIABLE
+  GLIB_COMPILE_RESOURCES_NAME
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+find_program(GLIB_COMPILE_RESOURCES_EXECUTABLE ${GLIB_COMPILE_RESOURCES_NAME})
+
 # The subdirectories
 add_subdirectory (gnome)
 add_subdirectory (gnome-utils)
@@ -40,13 +52,44 @@ set(gnucash_noinst_HEADERS
     gnucash-locale-platform.h
 )
 
+set(gnucash_GRESOURCES
+  gnucash.css
+  gnucash-fallback.css
+  ui/gnc-embedded-register-window.ui
+  ui/gnc-main-window.ui
+  ui/gnc-plugin-account-tree.ui
+  ui/gnc-plugin-basic-commands.ui
+  ui/gnc-plugin-bi-import.ui
+  ui/gnc-plugin-budget.ui
+  ui/gnc-plugin-business.ui
+  ui/gnc-plugin-csv-export.ui
+  ui/gnc-plugin-csv-import.ui
+  ui/gnc-plugin-customer-import.ui
+  ui/gnc-plugin-file-history.ui
+  ui/gnc-plugin-log-replay.ui
+  ui/gnc-plugin-register.ui
+  ui/gnc-plugin-report-system.ui
+  ui/gnc-plugin-page-account-tree.ui
+  ui/gnc-plugin-page-budget.ui
+  ui/gnc-plugin-page-invoice.ui
+  ui/gnc-plugin-page-owner-tree.ui
+  ui/gnc-plugin-page-register.ui
+  ui/gnc-plugin-page-report.ui
+  ui/gnc-plugin-page-sx-list.ui
+  ui/gnc-plugin-qif-import.ui
+  ui/gnc-reconcile-window.ui
+)
+
+# Generate the gresource file
+gnc_generate_gresources(BASE gnucash-gresources RESOURCE_FILES ${gnucash_GRESOURCES})
+
 set (gnucash_SOURCES
   gnucash.cpp
   gnucash-commands.cpp
   gnucash-core-app.cpp
-  gnucash-gresources.c
+  ${CMAKE_CURRENT_BINARY_DIR}/gnucash-gresources.c
   ${GNUCASH_RESOURCE_FILE}
-  )
+)
 
 if (MINGW)
   list(APPEND gnucash_SOURCES "gnucash-locale-windows.c")
@@ -108,43 +151,6 @@ if (BUILDING_FROM_VCS)
     target_compile_definitions(gnucash-cli PRIVATE -DGNC_VCS=\"git\")
     target_compile_definitions(gnc-gnome-utils PRIVATE -DGNC_VCS=\"git\")
 endif()
-
-# Get glib executable for generating the gresource file
-execute_process(
-   COMMAND
-       ${PKG_CONFIG_EXECUTABLE} gio-2.0 --variable glib_compile_resources
-   OUTPUT_VARIABLE
-       GLIB_COMPILE_RESOURCES_NAME
-   OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-
-find_program(GLIB_COMPILE_RESOURCES_EXECUTABLE ${GLIB_COMPILE_RESOURCES_NAME})
-
-# Get the dependencies of the gresource
-
-execute_process(
-  OUTPUT_VARIABLE
-      gr_files
-  COMMAND "${GLIB_COMPILE_RESOURCES_EXECUTABLE}"
-     --generate-dependencies
-     ${CMAKE_CURRENT_SOURCE_DIR}/gnucash-gresources.xml
-)
-
-string (REPLACE "\n" ";" gresource_files ${gr_files})
-
-add_custom_command(
-   OUTPUT gnucash-gresources.c
-   COMMAND
-    "${GLIB_COMPILE_RESOURCES_EXECUTABLE}"
-    --target=gnucash-gresources.c
-    --sourcedir=${CMAKE_CURRENT_SOURCE_DIR}
-    --generate-source
-    ${CMAKE_CURRENT_SOURCE_DIR}/gnucash-gresources.xml
-   DEPENDS
-    gnucash-gresources.xml ${gresource_files}
-   WORKING_DIRECTORY
-    ${CMAKE_CURRENT_BINARY_DIR}
-)
 
 if (MAC_INTEGRATION)
   target_compile_options(gnucash PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
@@ -261,7 +267,7 @@ install(FILES ${ENVIRONMENT_FILE_DIR}/environment DESTINATION
 set_local_dist(gnucash_DIST_local CMakeLists.txt environment.in generate-gnc-script
     gnucash.cpp gnucash-commands.cpp gnucash-cli.cpp gnucash-core-app.cpp
     gnucash-locale-macos.mm gnucash-locale-windows.c gnucash.rc.in gnucash-valgrind.in
-    gnucash-gresources.xml ${gresource_files}
+    ${gnucash_GRESOURCES}
     ${gnucash_noinst_HEADERS} ${gnucash_EXTRA_DIST})
 
 set (gnucash_DIST ${gnucash_DIST_local} ${gnome_DIST} ${gnome_search_DIST} ${gnome_utils_DIST}
