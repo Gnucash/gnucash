@@ -27,9 +27,6 @@
     <file>ui/gnc-plugin-page-report.ui</file>
     <file>ui/gnc-plugin-page-sx-list.ui</file>
 
-    <file>ui/gnc-plugin-ofx.ui</file>
-    <file>ui/gnc-plugin-aqbanking.ui</file>
-
     <file>ui/gnc-plugin-qif-import.ui</file>
 
     <file>ui/gnc-reconcile-window.ui</file>

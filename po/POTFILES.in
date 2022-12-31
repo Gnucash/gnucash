@@ -315,6 +315,7 @@ gnucash/import-export/aqb/gnc-flicker-gui.c
 gnucash/import-export/aqb/gnc-gwen-gui.c
 gnucash/import-export/aqb/gncmod-aqbanking.c
 gnucash/import-export/aqb/gnc-plugin-aqbanking.c
+gnucash/import-export/aqb/gnc-plugin-aqbanking.ui
 gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.flicker.gschema.xml.in
 gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in
 gnucash/import-export/bi-import/dialog-bi-import.c
@@ -361,6 +362,7 @@ gnucash/import-export/log-replay/gnc-plugin-log-replay.c
 gnucash/import-export/ofx/gncmod-ofx-import.c
 gnucash/import-export/ofx/gnc-ofx-import.c
 gnucash/import-export/ofx/gnc-plugin-ofx.c
+gnucash/import-export/ofx/gnc-plugin-ofx.ui
 gnucash/import-export/ofx/gschemas/org.gnucash.GnuCash.dialogs.import.ofx.gschema.xml.in
 gnucash/import-export/qif-imp/assistant-qif-import.c
 gnucash/import-export/qif-imp/dialog-account-picker.c
@@ -508,7 +510,6 @@ gnucash/report/trep-engine.scm
 gnucash/ui/gnc-embedded-register-window.ui
 gnucash/ui/gnc-main-window.ui
 gnucash/ui/gnc-plugin-account-tree.ui
-gnucash/ui/gnc-plugin-aqbanking.ui
 gnucash/ui/gnc-plugin-basic-commands.ui
 gnucash/ui/gnc-plugin-bi-import.ui
 gnucash/ui/gnc-plugin-budget.ui
@@ -518,7 +519,6 @@ gnucash/ui/gnc-plugin-csv-import.ui
 gnucash/ui/gnc-plugin-customer-import.ui
 gnucash/ui/gnc-plugin-file-history.ui
 gnucash/ui/gnc-plugin-log-replay.ui
-gnucash/ui/gnc-plugin-ofx.ui
 gnucash/ui/gnc-plugin-page-account-tree.ui
 gnucash/ui/gnc-plugin-page-budget.ui
 gnucash/ui/gnc-plugin-page-invoice.ui

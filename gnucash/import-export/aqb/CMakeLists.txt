@@ -41,9 +41,27 @@ set (aqbanking_noinst_HEADERS
 
 set(aqbanking_GLADE assistant-ab-initial.glade dialog-ab.glade dialog-ab-pref.glade)
 
+set(aqbanking_UI gnc-plugin-aqbanking.ui)
+
 if(WITH_AQBANKING)
+
+  add_custom_command(
+    OUTPUT aqb-gresources.c
+    COMMAND
+      "${GLIB_COMPILE_RESOURCES_EXECUTABLE}"
+      --target=aqb-gresources.c
+      --sourcedir=${CMAKE_CURRENT_SOURCE_DIR}
+      --generate-source
+      ${CMAKE_CURRENT_SOURCE_DIR}/aqb-gresources.xml
+    DEPENDS
+      ${CMAKE_CURRENT_SOURCE_DIR}/aqb-gresources.xml ${aqbanking_UI}
+    WORKING_DIRECTORY
+      ${CMAKE_CURRENT_BINARY_DIR}
+  )
+
   add_library (gncmod-aqbanking
     ${aqbanking_SOURCES}
+    ${CMAKE_CURRENT_BINARY_DIR}/aqb-gresources.c
     ${aqbanking_noinst_HEADERS}
   )
 
