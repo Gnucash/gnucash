@@ -126,7 +126,6 @@ execute_process(
   OUTPUT_VARIABLE
       gr_files
   COMMAND "${GLIB_COMPILE_RESOURCES_EXECUTABLE}"
-     --sourcedir=${CMAKE_CURRENT_SOURCE_DIR}
      --generate-dependencies
      ${CMAKE_CURRENT_SOURCE_DIR}/gnucash-gresources.xml
 )
@@ -142,7 +141,7 @@ add_custom_command(
     --generate-source
     ${CMAKE_CURRENT_SOURCE_DIR}/gnucash-gresources.xml
    DEPENDS
-    ${CMAKE_CURRENT_SOURCE_DIR}/gnucash-gresources.xml ${gresource_files}
+    gnucash-gresources.xml ${gresource_files}
    WORKING_DIRECTORY
     ${CMAKE_CURRENT_BINARY_DIR}
 )
@@ -257,15 +256,6 @@ file(COPY ${ENV_FILE_OUT}
 install(FILES ${SCRIPT_LIST} ${VALGRIND_OUTDIR}/gnucash-valgrind DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(FILES ${ENVIRONMENT_FILE_DIR}/environment DESTINATION
   ${CMAKE_INSTALL_FULL_SYSCONFDIR}/gnucash)
-
-
-# The GResource Files are absolute paths but set_local_dist requires
-# relative paths.
-foreach(gres_file ${gresource_files})
-  file(RELATIVE_PATH rel_file ${CMAKE_CURRENT_SOURCE_DIR} ${gres_file})
-  list(REMOVE_ITEM gresource_files ${gres_file})
-  list(APPEND gresource_files ${rel_file})
-endforeach()
 
 
 set_local_dist(gnucash_DIST_local CMakeLists.txt environment.in generate-gnc-script
