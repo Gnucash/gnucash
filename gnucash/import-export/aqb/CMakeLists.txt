@@ -89,16 +89,16 @@ if(WITH_AQBANKING)
     ${GWENHYWFAR_INCLUDE_DIRS}
     ${GWEN_GTK3_INCLUDE_DIRS})
 
-if (APPLE)
-  set_target_properties (gncmod-aqbanking PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
-endif()
+  if (APPLE)
+    set_target_properties (gncmod-aqbanking PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+  endif()
 
   install(TARGETS gncmod-aqbanking
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-# No headers to install
+  # No headers to install
 
   install(FILES ${aqbanking_GLADE} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/gtkbuilder)
 

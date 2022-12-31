@@ -46,9 +46,9 @@ if (WITH_OFX)
 
   target_include_directories(gncmod-ofx PRIVATE ${LIBOFX_INCLUDE_DIRS})
 
-if (APPLE)
-  set_target_properties (gncmod-ofx PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
-endif()
+  if (APPLE)
+    set_target_properties (gncmod-ofx PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+  endif()
 
   install(TARGETS gncmod-ofx
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash

@@ -6,7 +6,7 @@
     <file>gnucash-fallback.css</file>
     <file>ui/gnc-embedded-register-window.ui</file>
     <file>ui/gnc-main-window.ui</file>
-     <file>ui/gnc-plugin-account-tree.ui</file>
+    <file>ui/gnc-plugin-account-tree.ui</file>
     <file>ui/gnc-plugin-basic-commands.ui</file>
     <file>ui/gnc-plugin-bi-import.ui</file>
     <file>ui/gnc-plugin-budget.ui</file>
