@@ -3427,7 +3427,7 @@ update_menu_model (GncMainWindow *window, const gchar *ui_filename,
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
     gtk_builder_set_translation_domain (builder, PROJECT_NAME);
-    res_name = g_strconcat ("/org/gnucash/ui/", ui_filename, NULL);
+    res_name = g_strconcat ("/org/gnucash/", ui_filename, NULL);
 
     gtk_builder_add_from_resource (builder, res_name, &error);
     g_free (res_name);
@@ -4127,7 +4127,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 
     builder = gtk_builder_new ();
     gtk_builder_set_translation_domain (builder, PROJECT_NAME);
-    gtk_builder_add_from_resource (builder, "/org/gnucash/ui/gnc-main-window.ui", &error);
+    gtk_builder_add_from_resource (builder, "/org/gnucash/gnc-main-window.ui", &error);
 
     if (error)
     {

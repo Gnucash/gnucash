@@ -15,7 +15,7 @@ set(ofx_noinst_HEADERS
   gnc-plugin-ofx.h
 )
 
-set(ofx_UI ui/gnc-plugin-ofx.ui)
+set(ofx_UI gnc-plugin-ofx.ui)
 
 if (WITH_OFX)
 

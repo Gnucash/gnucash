@@ -41,7 +41,7 @@ set (aqbanking_noinst_HEADERS
 
 set(aqbanking_GLADE assistant-ab-initial.glade dialog-ab.glade dialog-ab-pref.glade)
 
-set(aqbanking_UI ui/gnc-plugin-aqbanking.ui)
+set(aqbanking_UI gnc-plugin-aqbanking.ui)
 
 if(WITH_AQBANKING)
 
