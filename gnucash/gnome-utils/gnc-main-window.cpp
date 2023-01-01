@@ -3795,9 +3795,6 @@ gnc_main_window_update_menu_and_toolbar (GncMainWindow *window,
 
     gnc_main_window_update_toolbar (window, page, menu_qualifier);
 
-    PERR("Display Item Hash size %d", g_hash_table_size (priv->display_item_hash)); //FIXMEb temp added
-    PERR("Display Item Q %d", priv->num_item_q); //FIXMEb temp added
-
     // reset hash table and remove added menu items
     g_hash_table_remove_all (priv->display_item_hash);
     gnc_menubar_model_remove_items_with_attrib (priv->menubar_model,
