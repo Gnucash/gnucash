@@ -343,7 +343,7 @@ gnc_embedded_window_new (const gchar *action_group_name,
     builder = gtk_builder_new ();
     gtk_builder_set_translation_domain (builder, PROJECT_NAME);
 
-    ui_fullname = g_strconcat ("/org/gnucash/", ui_filename, NULL);
+    ui_fullname = g_strconcat (GNUCASH_RESOURCE_PREFIX "/", ui_filename, NULL);
 
     gtk_builder_add_from_resource (builder, ui_fullname, &error);
 

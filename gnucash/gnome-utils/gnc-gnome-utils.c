@@ -153,8 +153,8 @@ gnc_add_css_file (void)
     gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider_app), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider_user), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
-    gtk_css_provider_load_from_resource (provider_app, "/org/gnucash/gnucash.css");
-    gtk_css_provider_load_from_resource (provider_fallback,  "/org/gnucash/gnucash-fallback.css");
+    gtk_css_provider_load_from_resource (provider_app, GNUCASH_RESOURCE_PREFIX "/gnucash.css");
+    gtk_css_provider_load_from_resource (provider_fallback,  GNUCASH_RESOURCE_PREFIX "/gnucash-fallback.css");
 
     var = gnc_userconfig_dir ();
     if (var)

@@ -72,6 +72,8 @@ set(GNUCASH_BUILD_ID "" CACHE STRING "Overrides the GnuCash build identification
 # gnucash/gnome/gnucash.releases.xml with (package) release details to be included
 # in the appdata file. It should follow appdata <release> node conventions.
 
+# Common prefix to use for GLib resources related to GnuCash
+set (GNUCASH_RESOURCE_PREFIX "/org/${PROJECT_NAME}/${PACKAGE_NAME}")
 
 # Check that all of the absolute install paths are inside
 # ${CMAKE_INSTALL_PREFIX}. If they're not, disable binreloc as it

@@ -1847,7 +1847,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
         GMenuModel *menu_model;
         GtkWidget *menu_bar;
         GtkAccelGroup *accel_group = gtk_accel_group_new ();
-        const gchar *ui = "/org/gnucash/gnc-reconcile-window.ui";
+        const gchar *ui = GNUCASH_RESOURCE_PREFIX "/gnc-reconcile-window.ui";
         GError *error = NULL;
 #ifdef MAC_INTEGRATION
         GtkosxApplication *theApp = g_object_new (GTKOSX_TYPE_APPLICATION,

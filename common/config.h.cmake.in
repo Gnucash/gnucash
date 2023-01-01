@@ -60,6 +60,9 @@
 /* GnuCash earliest compatible databaseversion number */
 #define GNUCASH_RESAVE_VERSION @GNUCASH_RESAVE_VERSION@
 
+/* GnuCash prefix to use for GLib resources */
+#define GNUCASH_RESOURCE_PREFIX "@GNUCASH_RESOURCE_PREFIX@"
+
 /* Don't use deprecated gtk functions */
 #cmakedefine GTK_DISABLE_DEPRECATED 1
 

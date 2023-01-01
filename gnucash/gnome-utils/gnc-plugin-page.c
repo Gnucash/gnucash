@@ -265,7 +265,7 @@ gnc_plugin_page_merge_actions (GncPluginPage *page)
     if (!priv->builder)
         priv->builder = gtk_builder_new ();
 
-    resource = g_strconcat ("/org/gnucash/", priv->ui_description, NULL);
+    resource = g_strconcat (GNUCASH_RESOURCE_PREFIX "/", priv->ui_description, NULL);
 
     gtk_builder_set_translation_domain (priv->builder, PROJECT_NAME);
 

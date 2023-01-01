@@ -35,7 +35,7 @@ function(gnc_generate_gresources)
 
     file(WRITE ${TMP_FILE} "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
     file(APPEND ${TMP_FILE} "<gresources>\n")
-    file(APPEND ${TMP_FILE} "  <gresource prefix=\"/org/gnucash\">\n")
+    file(APPEND ${TMP_FILE} "  <gresource prefix=\"${GNUCASH_RESOURCE_PREFIX}\">\n")
 
     foreach(res_file ${GR_RESOURCE_FILES})
         get_filename_component(res_file_short ${res_file} NAME)
