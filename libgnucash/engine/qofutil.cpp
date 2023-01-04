@@ -61,11 +61,11 @@ qof_utf8_substr_nocase (const gchar *haystack, const gchar *needle)
 
     haystack_casefold = g_utf8_casefold (haystack, -1);
     haystack_normalized = g_utf8_normalize (haystack_casefold, -1,
-                                            G_NORMALIZE_ALL);
+                                            G_NORMALIZE_NFC);
     g_free (haystack_casefold);
 
     needle_casefold = g_utf8_casefold (needle, -1);
-    needle_normalized = g_utf8_normalize (needle_casefold, -1, G_NORMALIZE_ALL);
+    needle_normalized = g_utf8_normalize (needle_casefold, -1, G_NORMALIZE_NFC);
     g_free (needle_casefold);
 
     p = strstr (haystack_normalized, needle_normalized);
