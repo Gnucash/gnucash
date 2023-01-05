@@ -862,7 +862,11 @@ gnc_sxed_check_consistent (GncSxEditorDialog *sxed)
         xaccAccountForEachTransaction (tmpl_acct, check_transaction_splits, &sd);
 
         if (sd.err)
+        {
+            g_hash_table_destroy (vars);
+            g_hash_table_destroy (txns);
             return FALSE;
+        }
 
         g_hash_table_foreach (txns, check_credit_debit_balance, &unbalanceable);
     }
