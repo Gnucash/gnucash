@@ -80,23 +80,23 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.13-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2022-10-10 18:09+0000\n"
-"Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
-"Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
-"es/>\n"
+"PO-Revision-Date: 2023-01-05 21:51+0000\n"
+"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
+"program-beta/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\">;</"
-"span>;<span size=\"larger\" weight=\"bold\">\n"
+"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\""
+">;</span>;<span size=\"larger\" weight=\"bold\">\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -3153,7 +3153,7 @@ msgstr "Filas"
 
 #: gnucash/gnome/dialog-report-column-view.c:424
 msgid "Cols"
-msgstr "Cols"
+msgstr "Columnas"
 
 #: gnucash/gnome/dialog-report-style-sheet.c:172
 #, c-format
@@ -9843,7 +9843,7 @@ msgstr "GCCP"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2943
 #: gnucash/register/ledger-core/split-register.c:2638
 msgid "Dist"
-msgstr "Dist"
+msgstr "Distribución"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:45
 #: gnucash/import-export/import-main-matcher.c:1862
@@ -23349,7 +23349,7 @@ msgstr ""
 
 #: gnucash/register/ledger-core/split-register-model.c:254
 msgid "Ref"
-msgstr "Ref"
+msgstr "Referencia"
 
 #: gnucash/register/ledger-core/split-register-model.c:270
 msgid "T-Ref"
@@ -23372,7 +23372,7 @@ msgstr "Otr. Mone."
 #: gnucash/register/ledger-core/split-register-model.c:463
 #, c-format
 msgid "Tot %s"
-msgstr "Tot %s"
+msgstr "Total %s"
 
 #: gnucash/register/ledger-core/split-register-model.c:445
 msgid "Tot Credit"
@@ -29038,7 +29038,7 @@ msgstr "Factura Nº."
 
 #: gnucash/report/reports/support/receipt.eguile.scm:144
 msgid "Descr."
-msgstr "Descr."
+msgstr "Descripción"
 
 #: gnucash/report/reports/support/receipt.eguile.scm:279
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:424
