@@ -411,6 +411,7 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
 {
     GncPluginPageReport *report;
     GncPluginPageReportPrivate *priv;
+    GncPluginPage *weak_page = page;
     URLType type;
     char * id_name;
     char * child_name;
@@ -434,6 +435,7 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
     g_free(id_name);
     g_free(child_name);
 
+    g_object_add_weak_pointer(G_OBJECT(page), (gpointer*)(&weak_page));
     gtk_widget_show_all( GTK_WIDGET(priv->container) );
 
     priv->loaded = TRUE;
@@ -447,7 +449,11 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
     gnc_html_show_url(priv->html, type, url_location, url_label, 0);
     g_free(url_location);
 
-    gnc_plugin_page_report_set_progressbar( page, FALSE );
+    if (weak_page)
+    {
+        gnc_plugin_page_report_set_progressbar( page, FALSE );
+        g_object_remove_weak_pointer(G_OBJECT(page), (gpointer*)(&weak_page));
+    }
 
     // this resets the window for the progressbar to nullptr
     gnc_window_set_progressbar_window( nullptr );

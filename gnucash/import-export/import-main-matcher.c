@@ -986,7 +986,7 @@ static void populate_list (gpointer key, gpointer value, GtkListStore *list)
 {
     GtkTreeIter iter;
     const char *original = key;
-    char *normalized = g_utf8_normalize (original, -1, G_NORMALIZE_ALL);
+    char *normalized = g_utf8_normalize (original, -1, G_NORMALIZE_NFC);
     char *normalized_folded = normalized ? g_utf8_casefold (normalized, -1) : NULL;
     gtk_list_store_append (list, &iter);
     gtk_list_store_set (list, &iter,

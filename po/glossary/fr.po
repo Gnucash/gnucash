@@ -11,14 +11,15 @@
 # Thomas Jungers <thomasjungers@gmail.com>, 2021.
 # Maxime Leroy <lisacintosh@gmail.com>, 2021.
 # Sébastien Ray <sebastien.ray@normalesup.org>, 2022.
+# aleksej0R <omolice@hotmail.fr>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-03-09 20:11+0000\n"
-"Last-Translator: Sébastien Ray <sebastien.ray@normalesup.org>\n"
+"PO-Revision-Date: 2022-12-19 23:55+0000\n"
+"Last-Translator: aleksej0R <omolice@hotmail.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/glossary/"
 "fr/>\n"
 "Language: fr\n"
@@ -26,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -48,7 +49,7 @@ msgstr "code du compte"
 
 #. "the tree view of all accounts"
 msgid "account hierarchy"
-msgstr "hiérarchie du compte"
+msgstr "plan de comptes"
 
 #. "-"
 msgid "account name"
@@ -100,7 +101,7 @@ msgstr "type de compte : fond mutuel"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
 msgid "account type: Passive"
-msgstr "passif"
+msgstr "type de compte : passif"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
 msgid "account type: Profit & Loss"

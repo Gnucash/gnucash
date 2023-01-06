@@ -11,14 +11,14 @@
 # LL Magical <lolayami2004@gmail.com>, 2020.
 # Fábio Rodrigues Ribeiro <farribeiro@gmail.com>, 2021.
 # José Lemos Neto <lemosjosex@protonmail.com>, 2021.
-# Wellington Terumi Uemura <wellingtonuemura@gmail.com>, 2021, 2022.
+# Wellington Terumi Uemura <wellingtonuemura@gmail.com>, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.13-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2022-09-13 10:21+0000\n"
+"PO-Revision-Date: 2023-01-02 15:48+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -9728,7 +9728,7 @@ msgstr "Nome da conta"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2918
 #: gnucash/gtkbuilder/dialog-price.glade:580
 msgid "Commodity"
-msgstr "Commodity"
+msgstr "Mercadoria"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:823
 #: gnucash/import-export/csv-exp/csv-tree-export.c:156
@@ -13727,7 +13727,7 @@ msgstr "Assistente de importação de transação"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:520
 msgid "Multi-split"
-msgstr "Multi-split"
+msgstr "Multi-divisão"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:524
 msgid ""
@@ -14823,7 +14823,7 @@ msgstr "_Quantia"
 #: gnucash/gtkbuilder/dialog-print-check.glade:1129
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:957
 msgid "_Memo"
-msgstr "_Memo"
+msgstr "_Memorando"
 
 #. Default memo text for the remains of a stock split
 #: gnucash/gtkbuilder/assistant-stock-split.glade:309

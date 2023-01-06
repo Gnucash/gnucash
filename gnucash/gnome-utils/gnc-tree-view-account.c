@@ -2844,7 +2844,7 @@ gboolean gnc_tree_view_search_compare (GtkTreeModel *model, gint column,
     gchar *case_normalized_key = NULL;
     gboolean match = FALSE;
 
-    normalized_key = g_utf8_normalize (key, -1, G_NORMALIZE_ALL);
+    normalized_key = g_utf8_normalize (key, -1, G_NORMALIZE_NFC);
     if (normalized_key)
         case_normalized_key = g_utf8_casefold (normalized_key, -1);
     if (case_normalized_key)
@@ -2873,7 +2873,7 @@ gboolean gnc_tree_view_search_compare (GtkTreeModel *model, gint column,
             if (!str)
                 continue;
 
-            normalized_string = g_utf8_normalize (str, -1, G_NORMALIZE_ALL);
+            normalized_string = g_utf8_normalize (str, -1, G_NORMALIZE_NFC);
             if (normalized_string)
                 case_normalized_string = g_utf8_casefold (normalized_string, -1);
             if (case_normalized_string&&NULL!=strstr(case_normalized_string,case_normalized_key))

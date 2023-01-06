@@ -17,7 +17,7 @@
 # TianXing_Yi <ytx.cash@gmail.com>, 2021.
 # cjh <cjh@cjh0613.com>, 2021.
 # Eric <spice2wolf@gmail.com>, 2021.
-# J0kWang <lianjiefly@gmail.com>, 2021, 2022.
+# J0kWang <lianjiefly@gmail.com>, 2021, 2022, 2023.
 # YTX <ytx.cash@gmail.com>, 2021, 2022.
 # 李元基 <lovedebushiu@qq.com>, 2022.
 # Eric <alchemillatruth@purelymail.com>, 2022.
@@ -31,8 +31,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2022-12-17 16:20+0000\n"
-"Last-Translator: 帅是我2 <a1173522112@163.com>\n"
+"PO-Revision-Date: 2023-01-02 04:51+0000\n"
+"Last-Translator: J0kWang <lianjiefly@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -18623,6 +18623,8 @@ msgid ""
 "See <a href=\"https://wiki.gnucash.org/wiki/AqBanking\">https://wiki.gnucash."
 "org/wiki/AqBanking</a> for more details"
 msgstr ""
+"查看 <a href=\"https://wiki.gnucash.org/wiki/AqBanking\">https://wiki.gnucash"
+".org/wiki/AqBanking</a> 更多详情"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:78
 msgid ""
@@ -18630,7 +18632,8 @@ msgid ""
 "Banking server. You should not rely on time-critical transfers through "
 "Online Banking, because sometimes the bank does not give you correct "
 "feedback when a transfer is rejected."
-msgstr ""
+msgstr "注意：没有任何保障。有些银行的服务器设备很差。你不应该通过网上银行来进行紧急"
+"转账，因为当你的转账被拒绝时这些银行是不会给你正确的反馈的。"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:89
 msgid "Initial Online Banking Setup"
@@ -18657,6 +18660,8 @@ msgid ""
 "<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
 "\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 msgstr ""
+"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/\""
+">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:157
 msgid ""
@@ -25227,7 +25232,7 @@ msgstr "百分比图"
 msgid ""
 "Display account contributions as a percentage of the total value for the "
 "period."
-msgstr ""
+msgstr "显示账户缴款占本期总金额的百分比。"
 
 #: gnucash/report/reports/standard/category-barchart.scm:292
 msgid "Invalid dates"

@@ -465,7 +465,7 @@ handle_embedded_object( GncHtmlWebkit* self, gchar* html_str )
  * widget.
  ********************************************************************/
 
-static void
+static gboolean
 load_to_stream( GncHtmlWebkit* self, URLType type,
                 const gchar* location, const gchar* label )
 {
@@ -485,30 +485,45 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
         stream_handler = g_hash_table_lookup( gnc_html_stream_handlers, type );
         if ( stream_handler )
         {
-            gboolean ok = stream_handler( location, &fdata, &fdata_len );
+            GncHtml *weak_html = GNC_HTML(self);
+            gboolean ok;
 
-            if ( ok )
-            {
-                fdata = fdata ? fdata : g_strdup( "" );
+            g_object_add_weak_pointer(G_OBJECT(self), (gpointer *)(&weak_html));
 
-                // Until webkitgtk supports download requests, look for "<object classid="
-                // indicating the beginning of an embedded graph.  If found, handle it
-                if ( g_strstr_len( fdata, -1, "<object classid=" ) != NULL )
-                {
-                    gchar* new_fdata;
-                    new_fdata = handle_embedded_object( self, fdata );
-                    g_free( fdata );
-                    fdata = new_fdata;
-                }
+            ok = stream_handler(location, &fdata, &fdata_len);
 
-                // Save a copy for export purposes
-                if ( priv->html_string != NULL )
-                {
-                    g_free( priv->html_string );
-                }
-                priv->html_string = g_strdup( fdata );
-                impl_webkit_show_data( GNC_HTML(self), fdata, strlen(fdata) );
-//                webkit_web_view_load_html_string( priv->web_view, fdata, BASE_URI_NAME );
+              if (!weak_html) // will be NULL if self has been destroyed
+              {
+                  g_free (fdata);
+                  return FALSE;
+              }
+              else
+              {
+                  g_object_remove_weak_pointer(G_OBJECT(self),
+                                               (gpointer*)(&weak_html));
+              }
+
+            if (ok) {
+                fdata = fdata ? fdata : g_strdup("");
+
+            // Until webkitgtk supports download requests, look for "<object
+            // classid=" indicating the beginning of an embedded graph.  If
+            // found, handle it
+            if (g_strstr_len(fdata, -1, "<object classid=") != NULL) {
+              gchar *new_fdata;
+              new_fdata = handle_embedded_object(self, fdata);
+              g_free(fdata);
+              fdata = new_fdata;
+            }
+
+            // Save a copy for export purposes
+            if (priv->html_string != NULL) {
+              g_free(priv->html_string);
+            }
+            priv->html_string = g_strdup(fdata);
+            impl_webkit_show_data(GNC_HTML(self), fdata, strlen(fdata));
+            //                webkit_web_view_load_html_string( priv->web_view,
+            //                fdata, BASE_URI_NAME );
             }
             else
             {
@@ -529,7 +544,7 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
                 /* No action required: Webkit jumps to the anchor on its own. */
             }
 
-            return;
+            return TRUE;
         }
     }
 
@@ -578,6 +593,7 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
 
     }
     while ( FALSE );
+    return TRUE;
 }
 
 #if 0
@@ -831,6 +847,7 @@ impl_webkit_show_url( GncHtml* self, URLType type,
     GncHTMLUrlCB url_handler;
     gboolean new_window;
     GncHtmlWebkitPrivate* priv;
+    gboolean stream_loaded = FALSE;
 
     g_return_if_fail( self != NULL );
     g_return_if_fail( GNC_IS_HTML_WEBKIT(self) );
@@ -921,10 +938,11 @@ impl_webkit_show_url( GncHtml* self, URLType type,
             DEBUG( "resetting base location to %s",
                    priv->base.base_location ? priv->base.base_location : "(null)" );
 
-            load_to_stream( GNC_HTML_WEBKIT(self), result.url_type,
-                            new_location, new_label );
+            stream_loaded = load_to_stream( GNC_HTML_WEBKIT(self),
+                                            result.url_type,
+                                            new_location, new_label );
 
-            if ( priv->base.load_cb != NULL )
+            if ( stream_loaded && priv->base.load_cb != NULL )
             {
                 priv->base.load_cb( GNC_HTML(self), result.url_type,
                                     new_location, new_label, priv->base.load_cb_data );
@@ -987,7 +1005,8 @@ impl_webkit_show_url( GncHtml* self, URLType type,
             /* FIXME : handle new_window = 1 */
             gnc_html_history_append( priv->base.history,
                                      gnc_html_history_node_new( type, location, label ) );
-            load_to_stream( GNC_HTML_WEBKIT(self), type, location, label );
+            stream_loaded = load_to_stream( GNC_HTML_WEBKIT(self), type,
+                                            location, label );
 
         }
         while ( FALSE );
@@ -998,7 +1017,7 @@ impl_webkit_show_url( GncHtml* self, URLType type,
         PERR( "URLType %s not supported.", type );
     }
 
-    if ( priv->base.load_cb != NULL )
+    if ( stream_loaded && priv->base.load_cb != NULL )
     {
         (priv->base.load_cb)( GNC_HTML(self), type, location, label, priv->base.load_cb_data );
     }

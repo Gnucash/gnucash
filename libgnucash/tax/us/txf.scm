@@ -157,7 +157,7 @@
     (cons 'N266 #(none "F1040" "Soc. Sec. income" 1 #f "Social Security" ((2020 "6a") (2018 "5a") (1994 "20a") (1988 "21a") (1987 "20a") (1984 "21a"))))
     (cons 'N483 #(none "F1040" "Soc. Sec. income, spouse" 1 #f "Social Security" ((2020 "6a") (2018 "5a") (1994 "20a") (1988 "21a") (1987 "20a") (1984 "21a"))))
     (cons 'N257 #(none "F1040" "Other income-misc." 1 #f "Other income, m" ((2019 "Schedule 1, 8") (2018 "Schedule 1, 21") (1994 "21") (1988 "22") (1987 "21") (1984 "22") (1982 "21") (1981 "20") (1980 "21"))))
-    (cons 'N259 #(none "F1040" "Prizes, awards" 1 #f "Prizes, awards" ((2021 "Schedule 1, 8h") (2019 "Schedule 1, 8") (2018 "Schedule 1, 21") (1994 "21") (1988 "22") (1987 "21") (1984 "22") (1982 "21") (1981 "20") (1980 "21"))))
+    (cons 'N259 #(none "F1040" "Prizes, awards" 1 #f "Prizes, awards" ((2022 "Schedule 1, 8i") (2021 "Schedule 1, 8h") (2019 "Schedule 1, 8") (2018 "Schedule 1, 21") (1994 "21") (1988 "22") (1987 "21") (1984 "22") (1982 "21") (1981 "20") (1980 "21"))))
 
     (cons 'N285 #(not-impl "Sched B" "Schedule B" 1 #f ""))
     (cons 'N287 #(current "Sched B" "Interest income" 3 #f "_IntInc" ((1990 "1") (1982 "2") (1981 "1a") (1980 "1"))))

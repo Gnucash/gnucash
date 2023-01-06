@@ -605,7 +605,7 @@ gnc_combo_cell_type_ahead_search (const gchar* newval,
     GRegex* regex0 = g_regex_new (escaped_sep, 0, 0, NULL);
     char* rep_str = g_regex_replace_literal (regex0, escaped_newval, -1, 0,
                                              newval_rep, 0, NULL);
-    char* normal_rep_str = g_utf8_normalize (rep_str, -1, G_NORMALIZE_ALL);
+    char* normal_rep_str = g_utf8_normalize (rep_str, -1, G_NORMALIZE_NFC);
     GRegex *regex = g_regex_new (normal_rep_str, G_REGEX_CASELESS, 0, NULL);
 
     gboolean valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (full_store),
@@ -634,7 +634,7 @@ gnc_combo_cell_type_ahead_search (const gchar* newval,
         gchar* normalized_str_data = NULL;
         gtk_tree_model_get (GTK_TREE_MODEL (full_store), &iter, 0,
                             &str_data, -1);
-        normalized_str_data = g_utf8_normalize (str_data, -1, G_NORMALIZE_ALL);
+        normalized_str_data = g_utf8_normalize (str_data, -1, G_NORMALIZE_NFC);
 
         if (g_regex_match (regex, normalized_str_data, 0, NULL))
         {

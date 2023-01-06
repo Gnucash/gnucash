@@ -870,8 +870,8 @@ maybe_append_string (const char* match_string, const char* imp_string)
     if (!(imp_string && *imp_string))
         return retval;
 
-    norm_match_string = g_utf8_normalize (match_string, -1, G_NORMALIZE_ALL);
-    norm_imp_string = g_utf8_normalize (imp_string, -1, G_NORMALIZE_ALL);
+    norm_match_string = g_utf8_normalize (match_string, -1, G_NORMALIZE_NFC);
+    norm_imp_string = g_utf8_normalize (imp_string, -1, G_NORMALIZE_NFC);
 
     if (g_utf8_strlen (norm_imp_string, -1) > g_utf8_strlen (norm_match_string, -1) ||
          !strstr (norm_match_string, norm_imp_string))

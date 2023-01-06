@@ -9,10 +9,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.13-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2022-11-20 11:48+0000\n"
+"PO-Revision-Date: 2022-12-31 21:51+0000\n"
 "Last-Translator: Kaligula <kaligula.dev@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 "X-Poedit-Bookmarks: 2255,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -8179,7 +8179,7 @@ msgstr "W trakcie przetwarzania '%s' wystąpił błąd"
 
 #: gnucash/gnome-utils/gnc-autoclear.c:100
 msgid "Account is already at Auto-Clear Balance."
-msgstr "Konto ma już bilans Auto-przeglądania."
+msgstr "Bilans przejrzanych transakcji już się zgadza."
 
 #: gnucash/gnome-utils/gnc-autoclear.c:146
 msgid "Too many uncleared splits"
@@ -16481,7 +16481,7 @@ msgid ""
 "Select \"U+C\" to update a matching transaction and mark it as cleared (c)."
 msgstr ""
 "Wybierz \"A+P\", aby aktualizować pasującą transakcję i oznaczyć jako "
-"przejrzeaną (p)."
+"przejrzaną (p)."
 
 #: gnucash/gtkbuilder/dialog-import.glade:706
 msgid "Select \"C\" to mark a matching transaction as cleared (c)."
@@ -16489,9 +16489,7 @@ msgstr "Wybierz \"P\", aby oznaczyć pasującą transakcję jako przejrzaną (p)
 
 #: gnucash/gtkbuilder/dialog-import.glade:718
 msgid "Select neither to skip the transaction (it won't be imported at all)."
-msgstr ""
-"Wybierz, aby transakcja została pominięta (nie będzie wtedy w ogóle "
-"importowana)."
+msgstr "Aby pominąć transakcję (nie importować) pozostaw wszystkie pola puste."
 
 #: gnucash/gtkbuilder/dialog-import.glade:729
 msgid "(none)"
