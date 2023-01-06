@@ -75,7 +75,7 @@ Lastly, for repeated imports the preview page has buttons to Load and Save the s
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="label" translatable="yes">
-Select location and file name for the Import, then click "Next"...
+Select location and file name for the Import, then click "Next"…
 </property>
             <property name="wrap">True</property>
           </object>
