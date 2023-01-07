@@ -1316,17 +1316,13 @@ be excluded from periodic reporting.")
                                              (opt-val pagename-currency
                                                       optname-currency)))
                                     ""))))
-           ;; For conversion to row-currency. Use midday as the
-           ;; transaction time so it matches a price on the same day.
-           ;; Otherwise it uses midnight which will likely match a
-           ;; price on the previous day
+           ;; For conversion to row-currency.
            (converted-amount (lambda (s)
                                (exchange-fn
                                 (gnc:make-gnc-monetary (split-currency s)
                                                        (split-amount s))
                                 (row-currency s)
-                                (time64CanonicalDayTime
-                                 (xaccTransGetDate (xaccSplitGetParent s))))))
+                                (xaccTransGetDate (xaccSplitGetParent s)))))
            (converted-debit-amount (lambda (s) (and (positive? (split-amount s))
                                                     (converted-amount s))))
            (converted-credit-amount (lambda (s)
