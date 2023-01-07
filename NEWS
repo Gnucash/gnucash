@@ -1,5 +1,94 @@
 Version history:
 ------- -------
+4.900 - 8 January 2023
+New Features
+
+    A new Stock Transaction Assistant to guide you through entering
+        most investment transactions for stocks, bonds, and mutual
+        funds. You can access it from Actions>Stock Assistant when you
+        have the Accounts page ora Stock or Fund account register open.
+    A new Investment Lots report showing a graph of capital gains and
+        losses in a period by investment lot. Note that if you don't
+        use the View Lots dialog to manage capital gains and losses
+        this report won't have anything to show you. Use
+        Reports>Assets & Liabilities>Investment Lots to see the
+        report.
+    A new tab on the New/Edit Account dialog called More Properties
+        includes entries to set a high and low limit on an
+        account. That's coupled to a new column that's available on
+        the Accounts Page, Balance Limit. If you set a high or low
+        limit and the account balance falls above or below the
+        respective limit an indicator will be shown in the Balance
+        Limit column.
+    The description field quickfill in the register now displays a
+        drop-down list of possible completions instead of just one
+        inline completion.
+    File import menu items for the MT940, MT942, and DTAUS formats is
+        replaced with a single Import from AQBanking that supports
+        importing any file format supported by AQBanking, including
+        the frequently requested CAMT.
+
+Between 4.13 and 4.900, the following bugfixes were accomplished:
+The following fixes will also appear in GnuCash 4.14:
+
+    Bug 798588 - sx scrubbing was using incorrect free function
+    Bug 798625 - "Last up through report date" changed in 4.12
+    Bug 798679 - Unicode normalization should be used for comparison but
+                 not stored.
+    Bug 798702 - Crash in gnc_plugin_page_focus_idle_destroy() closing a
+                 report before it completes.
+    Bug 798705 - New: UI string mismatch: OK vs. Next
+    Bug 798717 - Reports > Business > Fancy Invoice duplicates company details
+
+The following additional bug fixes are in unstable only:
+
+    Bug 403979 - Balance column shows only low order digits when too narrow
+                 If the column is too narrow to display the whole number it
+                 will display the leading digits with an ellipsis (…).
+    Bug 769256 - Change New Account Dialog
+                 Rearrange the New and Edit Account dialog to move the
+                 parent selector under the description field followed by the
+                 account type as a combo (i.e. drop down) list.
+
+The following fixes and improvements were not associated with bug reports:
+
+    Unicode normalization for string matches is changed from NFKC to
+        NFC. This means that font and positional variants will no
+        longer match and is unlikely to affect most users. See Unicode
+        Normalization Forms:Canonical and Compatibility Equivalence
+        for the technical details.
+    The Gtk menu structure has been rewritten to use the newer
+       GMenu/GMenuModel system. This change is mostly invisible to
+       users, except that to keep menu accelerators (like <cmd>Q to
+       quit) working on macOS we had to let macOS handle the
+       events. That will affect using cut, copy, and paste in dialog
+       boxes because the menu will intercept them. That's temporary,
+       we hope to have it fixed for GnuCash 4.901.
+    The Finance::Quote interface is rewritten in C++. This new design
+        will allow much better capture of diagnostics from
+        Finance::Quote making troubleshooting problems much easier.
+    The perl Finance::Quote utilities gnc-fq-check, gnc-fq-dump, and
+        gnc-fq-helper are removed and new commands added to
+        gnucash-cli: --quotes info replaces gnc-fq-check and --quotes
+        dump replaces gnc-fq-dump.
+    New API: The options system has been rewritten in C++ with Scheme
+        wrappers for report options. While this is invisible to most
+        users, those who have written custom reports should look for
+        deprecation warnings when the custom reports are
+        reconciled. The main difference is that option creation and
+        registration is now done in a single function call. Note that
+        gnc:new-options is now gnc-new-options. There are several
+        similar changes. All of these are wrapped in
+        bindings/guile/options.scm with the old names, but are marked
+        to raise deprecation warnings to encourage you to change. The
+        wrappers will be removed in GnuCash 6.0.
+
+Deprecations: See the deprecation warnings in options.scm as noted above.
+
+New and Updated Translations: Chinese (Simplified), Croatian, Hungarian,
+    Polish, Portuguese (Brazil)
+
+
 4.13 - 18 December 2022
 Between 4.12 and 4.13, the following bugfixes were accomplished:
 
