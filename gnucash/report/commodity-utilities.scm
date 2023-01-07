@@ -739,7 +739,7 @@
              (gnc-pricedb-get-db (gnc-get-current-book))
              (gnc:gnc-monetary-amount foreign)
              (gnc:gnc-monetary-commodity foreign)
-             domestic (time64CanonicalDayTime date))))))
+             domestic date)))))
 
 (define (gnc:exchange-by-pricedb-nearest-before foreign domestic date)
   (and (gnc:gnc-monetary? foreign) date
@@ -751,7 +751,7 @@
              (gnc-pricedb-get-db (gnc-get-current-book))
              (gnc:gnc-monetary-amount foreign)
              (gnc:gnc-monetary-commodity foreign)
-             domestic (time64CanonicalDayTime date))))))
+             domestic date)))))
 
 ;; Exchange by the nearest price from pricelist. This function takes
 ;; the <gnc-monetary> 'foreign' amount, the <gnc:commodity*>
@@ -817,9 +817,9 @@
   (define pdb (gnc-pricedb-get-db (gnc-get-current-book)))
   (case source
     ((pricedb-nearest) (cut gnc-pricedb-get-nearest-price pdb <> target-curr
-                            (time64CanonicalDayTime date)))
+                            date))
     ((pricedb-before) (cut gnc-pricedb-get-nearest-before-price pdb <> target-curr
-                           (time64CanonicalDayTime date)))
+                           date))
     ((pricedb-latest)  (cut gnc-pricedb-get-latest-price pdb <> target-curr))
     (else
      (lambda (commodity)

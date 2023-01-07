@@ -141,7 +141,7 @@
 .invoice-notes { margin-top: 20px }
 .entries-table > table { min-width: 600px }"))))
 
-   (cons 'fancy-invoice (list (cons '1a 'company)
+   (cons 'fancy-invoice (list (cons '1a 'none)
                               (cons '1b 'invoice)
                               (cons '2a 'client)
                               (cons '2b 'company)

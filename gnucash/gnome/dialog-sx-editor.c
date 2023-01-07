@@ -83,7 +83,7 @@ static gint _sx_engine_event_handler_id = -1;
 
 #define NUM_LEDGER_LINES_DEFAULT 6
 
-#define EX_CAL_NUM_MONTHS 6
+#define EX_CAL_NUM_MONTHS 12
 #define EX_CAL_MO_PER_COL 3
 
 #define GNC_D_WIDTH 25
@@ -862,7 +862,11 @@ gnc_sxed_check_consistent (GncSxEditorDialog *sxed)
         xaccAccountForEachTransaction (tmpl_acct, check_transaction_splits, &sd);
 
         if (sd.err)
+        {
+            g_hash_table_destroy (vars);
+            g_hash_table_destroy (txns);
             return FALSE;
+        }
 
         g_hash_table_foreach (txns, check_credit_debit_balance, &unbalanceable);
     }
