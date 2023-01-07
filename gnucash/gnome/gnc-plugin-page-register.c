@@ -912,7 +912,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
         /* Set the vis of the StockAssistant */
         gnc_main_window_set_vis_of_items_by_action (GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window),
                                                     actions_requiring_priced_account,
-                                                    account && gnc_prefs_is_extra_enabled () &&
+                                                    account &&
                                                     xaccAccountIsPriced (account));
     }
 
