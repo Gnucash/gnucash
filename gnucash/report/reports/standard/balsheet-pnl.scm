@@ -47,13 +47,6 @@
   (split-balance-with-closing col-datum-get-split-balance-with-closing)
   (split-value-balance col-datum-get-split-value-balance))
 
-(define FOOTER-TEXT
-  (gnc:make-html-text
-   (G_ "WARNING: Foreign currency conversions, and unrealized gains
-calculations are not confirmed correct. This report may be modified
-without notice. Bug reports are very welcome at
-https://bugs.gnucash.org/")))
-
 ;; define all option's names and help text so that they are properly
 
 (define optname-startdate (N_ "Start Date"))
@@ -1285,9 +1278,6 @@ also show overall period profit & loss."))
       (gnc:html-document-add-object!
        doc multicol-table))
 
-    (gnc:html-document-add-object!
-     doc FOOTER-TEXT)
-
     (gnc:report-finished)
     ;; (gnc:html-document-set-style-text!
     ;;  doc " table, td{ border-width: 1px; border-style:solid; border-color: lightgray; border-collapse: collapse}")
@@ -1300,7 +1290,7 @@ also show overall period profit & loss."))
  'version 1
  'name balsheet-reportname
  'report-guid "065d5d5a77ba11e8b31e83ada73c5eea"
- 'menu-path (list gnc:menuname-experimental)
+ 'menu-path (list gnc:menuname-asset-liability)
  'options-generator (lambda () (multicol-report-options-generator 'balsheet))
  'renderer (lambda (rpt) (multicol-report-renderer rpt 'balsheet)))
 
@@ -1308,7 +1298,7 @@ also show overall period profit & loss."))
  'version 1
  'name pnl-reportname
  'report-guid "0e94fd0277ba11e8825d43e27232c9d4"
- 'menu-path (list gnc:menuname-experimental)
+ 'menu-path (list gnc:menuname-income-expense)
  'options-generator (lambda () (multicol-report-options-generator 'pnl))
  'renderer (lambda (rpt) (multicol-report-renderer rpt 'pnl)))
 
