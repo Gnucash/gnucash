@@ -9,15 +9,15 @@
 # Christian Rose <menthos@menthos.com>, 2001, 2002.
 # Jonas Norling <norling@lysator.liu.se>, 2004, 2006.
 # Erik Johansson <erik@ejohansson.se>, 2014, 2016.
-# Arve Eriksson <031299870@telia.com>, 2021, 2022.
+# Arve Eriksson <031299870@telia.com>, 2021, 2022, 2023.
 # Luna Jernberg <droidbittin@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.13-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2022-09-17 17:19+0000\n"
+"PO-Revision-Date: 2023-01-08 15:49+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sv/>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -6504,13 +6504,13 @@ msgid ""
 "Select OK to temporarily clear filter and proceed,\n"
 "otherwise the last active cell will be selected."
 msgstr ""
-"Destinationsdelningen döljs för närvarande i det\n"
+"Destinations-spliten döljs för närvarande i det\n"
 "här registret.\n"
 "\n"
 "%s\n"
 "\n"
-"Välj OK för att tillfälligt stänga av filtrering\n"
-"och fortsätt, annars kommer den senast aktiva cellen\n"
+"Välj OK för att tillfälligt stänga av filtrering och\n"
+"fortsätta, annars kommer den senast aktiva cellen\n"
 "att väljas."
 
 #: gnucash/gnome/gnc-split-reg.c:2372
@@ -29668,7 +29668,7 @@ msgid ""
 "register. Has corresponding effect on business features, reporting and "
 "imports/exports."
 msgstr ""
-"Kryssa för för att använda delningsåtgärdsfältet i register för \"Num\"-fält "
+"Kryssa för för att använda split-åtgärdsfältet i register för \"Num\"-fält "
 "istället för transaktionsnummer; transaktionsnummer visas som \"T-Num\" på "
 "registrets andra rad. Har motsvarande effekt på företagsfunktioner, "
 "rapporter och importer/exporter."
