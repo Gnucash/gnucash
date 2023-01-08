@@ -769,11 +769,17 @@ also show overall period profit & loss."))
               (cons acc (map col-datum-get-split-balance-with-closing cols-data))))
            accounts-cols-data))
 
-         (exchange-fn (and common-currency
-                           (gnc:case-exchange-time-fn
-                            price-source common-currency
-                            (map xaccAccountGetCommodity accounts) enddate
-                            #f #f)))
+         ;; generate an exchange-fn for date, and cache its result.
+         (get-date-exchange-fn
+          (let ((h (make-hash-table)))
+            (lambda (date)
+              (or (hashv-ref h date)
+                  (let ((exchangefn (gnc:case-exchange-time-fn
+                                     price-source common-currency
+                                     (map xaccAccountGetCommodity accounts)
+                                     date #f #f)))
+                    (hashv-set! h date exchangefn)
+                    exchangefn)))))
 
          ;; from col-idx, find effective date to retrieve pricedb
          ;; entry or to limit transactions to calculate average-cost
@@ -799,9 +805,9 @@ also show overall period profit & loss."))
                        (gnc:gnc-monetary-commodity monetary)
                        common-currency))
                  (has-price? (gnc:gnc-monetary-commodity monetary))
-                 (exchange-fn
-                  monetary common-currency
-                  (col-idx->price-date col-idx)))))
+                 (let* ((col-date (col-idx->price-date col-idx))
+                        (exchange-fn (get-date-exchange-fn col-date)))
+                   (exchange-fn monetary common-currency col-date)))))
 
          ;; the following function generates an gnc:html-text object
          ;; to dump exchange rate for a particular column. From the
