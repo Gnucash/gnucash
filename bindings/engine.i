@@ -66,8 +66,6 @@ extern "C"
 %{
 extern "C"
 {
-#include "guile-mappings.h"
-
 SCM scm_init_sw_engine_module (void);
 }
 %}

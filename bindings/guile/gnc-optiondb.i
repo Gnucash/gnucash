@@ -62,18 +62,32 @@ namespace std {
 %typemap(in) std::size_t "$1 = scm_to_ulong($input);";
 %typemap(out) std::size_t "$result = scm_from_ulong($1);";
 
+%begin
 %{
-#include "gnc-optiondb.h"
-#include "gnc-optiondb.hpp"
-#include "gnc-optiondb-impl.hpp"
-#include "gnc-option-date.hpp"
+#include <gnc-optiondb.h>
+#include <gnc-optiondb.hpp>
+#include <gnc-optiondb-impl.hpp>
+#include <gnc-option-date.hpp>
 #include <array>
 #include <sstream>
 #include <iomanip>
-
+#include <guile-mappings.h>
+  %}
+%{
 static const QofLogModule log_module = "gnc.optiondb";
 
 SCM scm_init_sw_gnc_optiondb_module(void);
+/*Windows.h defines ERROR but SWIG needs it to, so undef it. */
+#ifdef ERROR
+#undef ERROR
+#endif
+/*Something somewhere in windows.h defines ABSOLUTE to something and
+ *that contaminates using it in RelativeDateType.  Undef it.
+ */
+#ifdef ABSOLUTE
+#undef ABSOLUTE
+#endif
+
 %}
 
 %ignore gnc_get_current_session(void);
