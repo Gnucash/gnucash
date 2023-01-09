@@ -851,7 +851,7 @@ set_local_dist(toplvl_DIST ${toplvl_DIST_local})
 
 set(ALL_DIST ${bindings_DIST} ${borrowed_DIST} ${cmake_DIST} ${common_DIST} ${data_DIST}
     ${doc_DIST} ${gnucash_DIST} ${libgnucash_DIST} ${packaging_DIST}
-    ${po_DIST} ${test_templates_DIST} ${toplvl_DIST} ${util_DIST})
+    ${po_DIST} ${test_templates_DIST} ${toplvl_DIST} ${util_DIST} Info.plist)
 
 
 if (BUILDING_FROM_VCS)
