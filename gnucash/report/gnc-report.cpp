@@ -26,6 +26,7 @@
 #ifdef __MINGW32__
 #define _GL_UNISTD_H //Deflect poisonous define in Guile's GnuLib
 #endif
+#include <gnc-optiondb.hpp>
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>

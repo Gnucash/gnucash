@@ -24,9 +24,11 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  ********************************************************************/
-#include <libguile.h>
 #include <glib/gi18n.h>
 #include <memory>
+#include "dialog-options.hpp"
+#include "dialog-report-column-view.hpp"
+#include <libguile.h>
 
 extern "C"
 {
@@ -44,8 +46,6 @@ extern "C"
 #include "gnc-plugin-page-report.h"
 }
 #include "gnc-report.h"
-#include "dialog-options.hpp"
-#include "dialog-report-column-view.hpp"
 
 /********************************************************************
  *

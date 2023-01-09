@@ -20,9 +20,9 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#include "gnc-option-gtk-ui.hpp"
 #include <gnc-option.hpp>
 #include <gnc-option-impl.hpp>
+#include "gnc-option-gtk-ui.hpp"
 extern "C"
 {
 #include <config.h>  // for scanf format string
@@ -39,6 +39,14 @@ extern "C"
 #include "gnc-tree-model-budget.h" // for gnc_tree_model_budget
 #include "misc-gnome-utils.h" // for xxxgtk_textview_set_text
 }
+
+/*Something somewhere in windows.h defines ABSOLUTE to something and
+ *that contaminates using it in RelativeDateType.  Undef it.
+ */
+#ifdef ABSOLUTE
+#undef ABSOLUTE
+#endif
+
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 

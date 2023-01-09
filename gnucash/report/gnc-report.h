@@ -28,7 +28,6 @@
 #include <glib.h>
 #include <libguile.h>
 #ifdef __cplusplus
-#include "gnc-optiondb.hpp"
 extern "C"
 {
 #endif

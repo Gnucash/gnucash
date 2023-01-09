@@ -21,10 +21,12 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-#include <libguile.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <algorithm>
+#include <dialog-options.hpp>
+#include <gnc-optiondb-impl.hpp>
+#include <libguile.h>
 
 extern "C"
 {
@@ -40,9 +42,7 @@ extern "C"
 }
 
 #include "dialog-report-column-view.hpp"
-#include <dialog-options.hpp>
 #include <gnc-report.h>
-#include "gnc-optiondb-impl.hpp"
 
 enum available_cols
 {

@@ -29,10 +29,13 @@ extern "C"
 }
 
 #include <Account.h> // To include as C++ overriding later indirect includes
-#include <libguile.h>
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 #include <glib/gi18n.h>
+#include <gnc-optiondb.hpp>
+#include <gnc-optiondb-impl.hpp>
+#include "dialog-options.hpp"
+#include <libguile.h>
 
 extern "C"
 {
@@ -48,10 +51,7 @@ extern "C"
 #include <iostream>
 #include <sstream>
 
-#include "dialog-options.hpp"
 #include "gnc-option-gtk-ui.hpp"
-#include <gnc-optiondb.hpp>
-#include <gnc-optiondb-impl.hpp>
 
 #define GNC_PREF_CLOCK_24H "clock-24h"
 

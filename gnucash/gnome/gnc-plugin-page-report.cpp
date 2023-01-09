@@ -36,10 +36,11 @@
     @author Copyright (C) 2004 Joshua Sled <jsled@asynchronous.org>
     @author Copyright (C) 2005 David Hampton <hampton@employees.org>
 */
-#include <libguile.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
+#include <gnc-optiondb-impl.hpp>
+#include <libguile.h>
 
 extern "C"
 {
@@ -80,7 +81,6 @@ extern "C"
 
 #include <memory>
 #include <gnc-report.h>
-#include "gnc-optiondb-impl.hpp"
 
 /* NW: you can add GNC_MOD_REPORT to gnc-engine.h
 or simply define it locally. Any unique string with

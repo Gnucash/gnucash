@@ -34,6 +34,8 @@
 
 #include "gnc-option-uitype.hpp"
 #include <gnc-option-ui.hpp>
+#include <gnc-optiondb.hpp>
+#include <gtk/gtk.h>
 
 class GncOptionsDialog;
 

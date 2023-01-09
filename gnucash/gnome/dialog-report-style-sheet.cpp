@@ -22,9 +22,11 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-#include <libguile.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <dialog-options.hpp>
+#include <gnc-optiondb.h>
+#include <libguile.h>
 
 extern "C"
 {
@@ -41,8 +43,6 @@ extern "C"
 #include <guile-mappings.h>
 }
 #include "gnc-report.h"
-#include <dialog-options.hpp>
-#include "gnc-optiondb.h"
 
 #define DIALOG_STYLE_SHEETS_CM_CLASS "style-sheets-dialog"
 #define GNC_PREFS_GROUP              "dialogs.style-sheet"

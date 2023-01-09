@@ -23,13 +23,13 @@
 #ifndef GNC_OPTION_GTK_UI_HPP
 #define GNC_OPTION_GTK_UI_HPP
 
-#include <libguile.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <vector>
 #include <gnc-option.hpp>
 #include <gnc-option-uitype.hpp>
 #include <gnc-option-ui.hpp>
+#include <libguile.h>
 
 /** @fn WidgetCreateFunc
 *  Function pointer for per-option-type GtkWidget constructors.

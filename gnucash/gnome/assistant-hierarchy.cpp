@@ -22,10 +22,12 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#include <libguile.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
+#include <dialog-options.hpp>
+#include <gnc-optiondb.h>
+#include <libguile.h>
 
 extern "C"
 {
@@ -67,8 +69,6 @@ extern "C"
 
 #include "gnc-engine.h"
 }
-#include <dialog-options.hpp>
-#include "gnc-optiondb.h"
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
