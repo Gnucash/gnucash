@@ -1,7 +1,7 @@
 # Italian translation for GnuCash package (Glossary)
 # Copyright (C) 2020 Giuseppe Foti <foti.giuseppe@gmail.com>.
 # This file is distributed under the same license as the GnuCash package.
-# Giuseppe Foti <foti.giuseppe@gmail.com>, 2020, 2021.
+# Giuseppe Foti <foti.giuseppe@gmail.com>, 2020, 2021, 2023.
 # Cristian Marchi <cri79@libero.it>, 2008;
 # Lorenzo Cappelletti <lorenzo.cappelletti@email.it>, 2003;
 # Lorenzo Cappelletti <L.Cappelletti@mail.com>, 2002 2003;
@@ -18,11 +18,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-01-02 22:54+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2023-01-09 07:49+0000\n"
+"Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/glossary/"
 "it/>\n"
 "Language: it\n"
@@ -30,7 +30,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -894,4 +894,4 @@ msgid "Online"
 msgstr ""
 
 msgid "Direct Debit"
-msgstr ""
+msgstr "Addebito diretto"

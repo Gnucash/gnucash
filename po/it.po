@@ -1,7 +1,7 @@
 # Italian translation of Gnucash.
 # Copyright (C) 2020 by the GnuCash developers and the translators below.
 # This file is distributed under the same license as the Gnucash package.
-# Giuseppe Foti <foti.giuseppe@gmail.com>, 2020;, 2021, 2022.
+# Giuseppe Foti <foti.giuseppe@gmail.com>, 2020;, 2021, 2022, 2023.
 # Cristian Marchi <cri79@libero.it>, 2008, 2009, 2010;
 # Simone Zinanni <simone@develer.com>, 2008;
 # Lorenzo Cappelletti <lorenzo.cappelletti@email.com>, 2003-2005.
@@ -52,10 +52,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.13-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2022-09-08 09:22+0000\n"
+"PO-Revision-Date: 2023-01-09 07:49+0000\n"
 "Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "it/>\n"
@@ -64,7 +64,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -2745,8 +2745,6 @@ msgid "Empty"
 msgstr "Vuoto"
 
 #: gnucash/gnome/dialog-lot-viewer.c:829
-#, fuzzy
-#| msgid "Open"
 msgctxt "Adjective"
 msgid "Open"
 msgstr "Aperto"
@@ -9253,7 +9251,7 @@ msgstr "Contabilità delle finanze personali e per piccole imprese."
 #: gnucash/gnome-utils/gnc-main-window.c:4954
 msgid "translator-credits"
 msgstr ""
-"Giuseppe Foti (2020, 2021, 2022)\n"
+"Giuseppe Foti (2020, 2021, 2022, 2023)\n"
 "Cristian Marchi (2008, 2009, 2010, 2014)\n"
 "Simone Zinanni (2008)\n"
 "Lorenzo Cappelletti (2002, 2003-2005)\n"
@@ -22422,7 +22420,7 @@ msgstr "Disabilitato"
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1317
 msgid "_Assign a transfer account to the selection"
-msgstr "_Assegnare un conto di trasferimento alla selezione."
+msgstr "_Assegna un conto di trasferimento alla selezione"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1368
