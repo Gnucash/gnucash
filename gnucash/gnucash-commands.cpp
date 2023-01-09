@@ -44,6 +44,7 @@ extern "C" {
 #include <boost/locale.hpp>
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 #include <gnc-report.h>
 #include <gnc-quotes.hpp>
 
