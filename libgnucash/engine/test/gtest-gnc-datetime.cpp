@@ -340,7 +340,7 @@ TEST(gnc_datetime_constructors, test_struct_tm_constructor)
 
 TEST(gnc_datetime_constructors, test_gncdate_start_constructor)
 {
-    const ymd aymd = { 2017, 04, 20 };
+    const gnc_ymd aymd = { 2017, 04, 20 };
     GncDateTime atime(GncDate(aymd.year, aymd.month, aymd.day), DayPart::start);
     //Skipping timezone information as this can't be controlled.
     EXPECT_EQ(atime.format("%d-%m-%Y %H:%M:%S"), "20-04-2017 00:00:00");
@@ -358,8 +358,8 @@ TEST(gnc_datetime_constructors, test_gncdate_start_constructor)
  */
 TEST(gnc_datetime_constructors, test_gncdate_BST_transition)
 {
-    const ymd begins = {2018, 03, 25};
-    const ymd ends = {2018, 10, 28};
+    const gnc_ymd begins = {2018, 03, 25};
+    const gnc_ymd ends = {2018, 10, 28};
 #ifdef __MINGW32__
     TimeZoneProvider tzp{"GMT Standard Time"};
 #else
@@ -375,7 +375,7 @@ TEST(gnc_datetime_constructors, test_gncdate_BST_transition)
 
 TEST(gnc_datetime_constructors, test_gncdate_end_constructor)
 {
-    const ymd aymd = { 2046, 11, 06 };
+    const gnc_ymd aymd = { 2046, 11, 06 };
     GncDateTime atime(GncDate(aymd.year, aymd.month, aymd.day), DayPart::end);
     //Skipping timezone information as this can't be controlled.
     EXPECT_EQ(atime.format("%d-%m-%Y %H:%M:%S"), "06-11-2046 23:59:59");
@@ -486,11 +486,11 @@ TEST(gnc_datetime_constructors, test_gncdate_neutral_constructor)
     TimeZoneProvider tzp_la("America/Los_Angeles");
 #endif
     _set_tzp(tzp_la);
-    const ymd aymd = { 2017, 04, 20 };
+    const gnc_ymd aymd = { 2017, 04, 20 };
     GncDateTime atime(GncDate(aymd.year, aymd.month, aymd.day), DayPart::neutral);
     time64 date{1492685940};
     GncDateTime gncdt(date); /* 20 Apr 2017 10:59:00 Z */
-    /* The ymd constructor sets the time of day at 10:59:00 for
+    /* The gnc_ymd constructor sets the time of day at 10:59:00 for
      * timezones between UTC-10 and UTC+13. For other timezones the
      * time of day is adjusted to ensure a consistent date and the
      * adjustment invalidates the test, so skip it.
@@ -509,8 +509,8 @@ TEST(gnc_datetime_constructors, test_gncdate_neutral_constructor)
 
 TEST(gnc_datetime_constructors, test_neutral_across_timezones)
 {
-    const ymd begins = {2018, 03, 05};
-    const ymd ends = {2018, 03, 15};
+    const gnc_ymd begins = {2018, 03, 05};
+    const gnc_ymd ends = {2018, 03, 15};
     const time64 ten_days = 864000;
 #ifdef __MINGW32__
     TimeZoneProvider tzp_lon{"GMT Standard Time"};

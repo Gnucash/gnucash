@@ -35,7 +35,7 @@ typedef struct
     int year;  //1400-9999
     int month; //1-12
     int day; //1-31
-} ymd;
+} gnc_ymd;
 
 enum class DayPart {
     start,    // 00:00 local
@@ -272,10 +272,10 @@ class GncDate
         GncDate& operator=(GncDate&&);
         /** Set the date object to the computer clock's current day. */
         void today();
-        /** Get the year, month, and day from the date as a ymd.
-         *  @return ymd struct
+        /** Get the year, month, and day from the date as a gnc_ymd.
+         *  @return gnc_ymd struct
          */
-        ymd year_month_day() const;
+        gnc_ymd year_month_day() const;
         /** Format the GncDate into a std::string
          *  @param format A cstr describing the way the date and time are
          *  presented. Code letters preceded with % stand in for arguments;

@@ -318,7 +318,7 @@ public:
     GncDateImpl(const std::string str, const std::string fmt);
 
     void today() { m_greg = boost::gregorian::day_clock::local_day(); }
-    ymd year_month_day() const;
+    gnc_ymd year_month_day() const;
     std::string format(const char* format) const;
     std::string format_zulu(const char* format) const {
 	return this->format(format);
@@ -601,7 +601,7 @@ GncDateImpl::GncDateImpl(const std::string str, const std::string fmt) :
                   std::stoi (what.str("DAY")));
 }
 
-ymd
+gnc_ymd
 GncDateImpl::year_month_day() const
 {
     auto boost_ymd = m_greg.year_month_day();
@@ -738,7 +738,7 @@ GncDate::format(const char* format)
     return m_impl->format(format);
 }
 
-ymd
+gnc_ymd
 GncDate::year_month_day() const
 {
     return m_impl->year_month_day();
