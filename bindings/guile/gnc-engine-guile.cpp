@@ -39,11 +39,11 @@ extern "C"
 #include "gnc-guile-utils.h"
 #include <qof.h>
 #include <qofbookslots.h>
-}
 
 #ifndef HAVE_STRPTIME
 #    include "strptime.h"
 #endif
+}
 
 /** \todo Code dependent on the private query headers
 qofquery-p.h and qofquerycore-p.h may need to be modified.
