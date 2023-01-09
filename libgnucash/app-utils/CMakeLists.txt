@@ -65,7 +65,7 @@ set(app_utils_ALL_INCLUDES
 
 if (WIN32)
   list(APPEND app_utils_ALL_SOURCES gnc-help-utils.c)
-  list(APPEND app_utils_ALL_LIBRARIES ${HTMLHELP_LIBRARY})
+  list(APPEND app_utils_ALL_LIBRARIES ${HTMLHELP_LIBRARY} "-lwsock32")
   list(APPEND app_utils_ALL_INCLUDES ${HTMLHELP_INCLUDE_PATH})
 endif()
 
