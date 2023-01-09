@@ -2343,8 +2343,8 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
     gtk_window_set_transient_for(GTK_WINDOW(dialog),
                                  GTK_WINDOW(GNC_PLUGIN_PAGE(page)->window));
     /* Translators: The %s is the name of the plugin page */
-    title = g_strdup_printf(_("Filter %s by…"),
-                            gnc_plugin_page_get_page_name(GNC_PLUGIN_PAGE(page)));
+    title = g_strdup_printf(_("Filter %s by..."),
+                            _(gnc_plugin_page_get_page_name(GNC_PLUGIN_PAGE(page))));
     gtk_window_set_title(GTK_WINDOW(dialog), title);
     g_free(title);
 
