@@ -8,19 +8,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.13-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2022-09-12 09:23+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
-"Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
-"he/>\n"
+"PO-Revision-Date: 2023-01-10 08:51+0000\n"
+"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
+"Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/"
+"program-beta/he/>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 "X-Poedit-Basepath: .\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -1195,7 +1195,7 @@ msgstr "שימוש בגלובלי"
 #: gnucash/gnome/top-level.c:258
 #, c-format
 msgid "Badly formed URL %s"
-msgstr "תצורת מען URL שגויה %s"
+msgstr "מבנה מען URL שגוי %s"
 
 #: gnucash/gnome/business-urls.c:74 gnucash/gnome/top-level.c:99
 #, c-format
@@ -1527,33 +1527,33 @@ msgstr "האם למחוק את %s?"
 
 #: gnucash/gnome/dialog-custom-report.c:436
 msgid "You must select a report configuration to load."
-msgstr "נדרש לבחור תצורת דוח לטעינה."
+msgstr "נדרש לבחור תצורת־דוח לטעינה."
 
 #: gnucash/gnome/dialog-custom-report.c:451
 msgid "You must select a report configuration to delete."
-msgstr "נדרש לבחור תצורת דוח למחיקה."
+msgstr "נדרש לבחור תצורת־דוח למחיקה."
 
 #: gnucash/gnome/dialog-custom-report.c:465
 msgid "Unable to change report configuration name."
-msgstr "לא ניתן לשנות שם תצורת דוח."
+msgstr "לא ניתן לשנות שם תצורת־דוח."
 
 #: gnucash/gnome/dialog-custom-report.c:477
 msgid ""
 "A saved report configuration with this name already exists, please choose "
 "another name."
-msgstr "תצורת דוח שמורה בשם זהה קיימת כבר, נא לבחור שם אחר."
+msgstr "קיימת כבר תצורת־דוח שמורה בשם זהה , נא לבחור שם אחר."
 
 #: gnucash/gnome/dialog-custom-report.c:503
 msgid "Load report configuration"
-msgstr "טעינת תצורת דוח"
+msgstr "טעינת תצורת־דוח"
 
 #: gnucash/gnome/dialog-custom-report.c:505
 msgid "Edit report configuration name"
-msgstr "עריכת שם תצורת דוח"
+msgstr "עריכת שם תצורת־דוח"
 
 #: gnucash/gnome/dialog-custom-report.c:507
 msgid "Delete report configuration"
-msgstr "מחיקת תצורת דוח"
+msgstr "מחיקת תצורת־דוח"
 
 #: gnucash/gnome/dialog-date-close.c:75
 msgid "No Account selected. Please try again."
@@ -5836,7 +5836,7 @@ msgstr "‮יצוא‬"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.c:1140
 msgid "Save Config"
-msgstr "שמירת תצורת דוח"
+msgstr "שמירת תצורת־דוח"
 
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As..."
 #. to be used as toolbar button label.
@@ -5861,7 +5861,7 @@ msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
-"הוספת תצורת הדוח הנוכחי לתפריט 'דוחותlarr;תצורות דוחות שנשמרו'. תצורת הדוח "
+"הוספת תצורת־הדוח הנוכחי לתפריט 'דוחותlarr;תצורות־דוחות שמורים'. תצורת־הדוח "
 "תשמר לקובץ %s."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1205
@@ -5882,11 +5882,11 @@ msgstr "יצוא דוח נוכחי כקובץ PDF"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1236
 msgid "Save _Report Configuration"
-msgstr "שמירת _תצורת דוח"
+msgstr "שמירת _תצורת־דוח"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1240
 msgid "Save Report Configuration As..."
-msgstr "שמירת תצורת דוח בשם…"
+msgstr "שמירת תצורת־דוח בשם…"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1244
 msgid "Export _Report"
@@ -6522,11 +6522,11 @@ msgstr "הצגת דוח ~a"
 #: gnucash/gnome/report-menus.scm:90
 #: gnucash/gtkbuilder/dialog-custom-report.glade:8
 msgid "Saved Report Configurations"
-msgstr "תצורות דוחות שנשמרו"
+msgstr "תצורות־דוחות שמורים"
 
 #: gnucash/gnome/report-menus.scm:92
 msgid "Manage and run saved report configurations"
-msgstr "ניהול והפקת תצורות דוחות שמורים"
+msgstr "ניהול והפקת תצורות־דוחות שמורים"
 
 #: gnucash/gnome/report-menus.scm:116
 #: gnucash/report/reports/standard/dashboard.scm:52
@@ -8852,7 +8852,7 @@ msgstr "חשבונאות לאנשים פרטיים ועסקים קטנים."
 #: gnucash/gnome-utils/gnc-main-window.c:4954
 msgid "translator-credits"
 msgstr ""
-"אבי מרקוביץ avi.markovitz@gmail.com 2022 ,2021, 2020, 2019\n"
+"אבי מרקוביץ avi.markovitz@gmail.com 2023-2019\n"
 "ירון שהרבני 2021, 2022\n"
 "אורי הוך 2006"
 
@@ -15346,7 +15346,7 @@ msgid ""
 "the Reports menu or tool bar."
 msgstr ""
 "לתצור דוחות שמורים, תחילה יש לפתוח דוח מתפריט הדוחות,\n"
-"לשנות את אפשרויות הדוח. לסיום, בחירה ב'שמירת תצורת דוח' מתפריט\n"
+"לשנות את אפשרויות הדוח. לסיום, בחירה ב'שמירת תצורת־דוח' מתפריט\n"
 "הדוחות או מסרגל הכלים."
 
 #: gnucash/gtkbuilder/dialog-date-close.glade:7
