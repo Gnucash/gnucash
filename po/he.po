@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-01-10 08:51+0000\n"
+"PO-Revision-Date: 2023-01-10 10:51+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/he/>\n"
@@ -610,8 +610,8 @@ msgid ""
 "selected date. You can use '+' and '-' to increment and decrement check "
 "numbers as well."
 msgstr ""
-"כאשר מזינים תאריך, ניתן להשתמש במקשי ה־'+' וה־'-' בכדי לקדם או להסיג את "
-"התאריך. באותו אופן ניתן גם לקדם או להסיג מספרי המחאה."
+"בעת הזנת תאריך, ניתן להשתמש במקשי ה־'+' וה־'-' בכדי לקדם או להסיג את התאריך. "
+"באותו אופן ניתן גם לקדם או להסיג מספרי המחאה."
 
 #: doc/tip_of_the_day.list.c:79
 msgid ""
@@ -3117,14 +3117,14 @@ msgstr "נא לספק בחירה תקינה."
 
 #: gnucash/gnome/dialog-sx-editor2.c:810 gnucash/gnome/dialog-sx-editor.c:557
 msgid "There must be some number of occurrences."
-msgstr "חייב להכיל לפחות מופע אחד."
+msgstr "חייב להכיל מספר מופעים."
 
 #: gnucash/gnome/dialog-sx-editor2.c:819 gnucash/gnome/dialog-sx-editor.c:565
 #, c-format
 msgid ""
 "The number of remaining occurrences (%d) is greater than the number of total "
 "occurrences (%d)."
-msgstr "מספר המופעים שנותרו (%d) גדול מהמספר הכולל של מופעים (%d)."
+msgstr "מספר המופעים שנותרו (%d) גדול מהמספר הכולל של המופעים (%d)."
 
 #: gnucash/gnome/dialog-sx-editor2.c:851 gnucash/gnome/dialog-sx-editor.c:594
 msgid ""
@@ -3881,7 +3881,7 @@ msgstr "אתחול נתוני בדיקה"
 
 #: gnucash/gnome/gnc-plugin-business.c:326
 msgid "Assign as payment..."
-msgstr "הקצאה כתשלום..."
+msgstr "הקצאת תשלום..."
 
 #: gnucash/gnome/gnc-plugin-business.c:327
 msgid "Assign the selected transaction as payment"
@@ -3998,11 +3998,11 @@ msgstr "חיפוש חשבון"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:273
 msgid "_Renumber Subaccounts..."
-msgstr "_מספור חשבונות משנה מחדש..."
+msgstr "_מספור מחדש חשבונות־משנה..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:274
 msgid "Renumber the children of the selected account"
-msgstr "מספור חשבונות המשנה של החשבון שנבחר מחדש"
+msgstr "מספור מחדש חשבונות־משנה של החשבון שנבחר"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:291
 #: gnucash/gnome/gnc-plugin-page-budget.c:194
@@ -5295,8 +5295,8 @@ msgid ""
 "and number of both rows are identical and the register window is sorted by "
 "date."
 msgstr ""
-"העברת התנועה הנוכחית שורה אחת מטה. אפשרי רק כאשר התאריכים והסימוכין בשתי "
-"השורות זהים והיומן ממוין לפי תאריך."
+"העברת התנועה הנוכחית שורה אחת מטה. מתאפשר רק כאשר התאריך והסימוכין בשתי "
+"השורות זהים וחלון היומן מוין לפי תאריך."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:363
 #: gnucash/gnome/gnc-plugin-page-register.c:486
@@ -7341,7 +7341,7 @@ msgstr "חשבון חדש"
 #: gnucash/gnome-utils/dialog-account.c:2193
 #, c-format
 msgid "Renumber the immediate sub-accounts of '%s'?"
-msgstr "למספר מחדש את חשבונות המשנה המיידיים של ‚%s’?"
+msgstr "מספור מחדש של חשבונות־המשנה־המיידיים של '%s'?"
 
 #: gnucash/gnome-utils/dialog-account.c:2299
 #, c-format
@@ -7511,7 +7511,7 @@ msgstr "נוכחי"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:150
 msgid "You can type '+' or '-' to increment or decrement the number."
-msgstr "ניתן להקיש על '+' או '-' כדי להגדיל/להקטין את המספר."
+msgstr "ניתן להקיש על '+' או '-' להגדלת/הקטנת המספר."
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:299
 msgid "Action/Number"
@@ -9662,7 +9662,7 @@ msgstr "אזור זמן"
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:353
 #: gnucash/gtkbuilder/dialog-customer.glade:133
 msgid "Customer Number"
-msgstr "מזהה לקוח"
+msgstr "מספר לקוח"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:361
 #: gnucash/gtkbuilder/dialog-vendor.glade:134
@@ -9907,7 +9907,7 @@ msgstr "נא להזין תאריך פרעון"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3176
 msgid "Enter the transaction reference, such as the invoice or check number"
-msgstr "נא להזין סימוכין לתנועה, כמו למשל מספר חשבונית או המחאה"
+msgstr "נא להזין סימוכין לתנועה, כגון מספר חשבונית או המחאה"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3178
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3185
@@ -9916,7 +9916,7 @@ msgstr "נא להזין סוג תנועה, או בחירת סוג תנועה מ�
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3183
 msgid "Enter the transaction number, such as the check number"
-msgstr "נא להזין מספר סימוכין לתנועה, כמו מספר המחאה"
+msgstr "נא להזין מספר סימוכין לתנועה, כגון מספר המחאה"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3195
 #: gnucash/register/ledger-core/split-register-model.c:1137
@@ -9976,7 +9976,7 @@ msgstr "נא להזין ערך המניות שנקנו או נמכרו"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3283
 #: gnucash/register/ledger-core/split-register-model.c:1445
 msgid "Enter the number of shares bought or sold"
-msgstr "נא להזין מספר המניות שנקנו או נמכרו"
+msgstr "נא להזין כמות (מספר) המניות שנקנו או נמכרו"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3293
 msgid "* Indicates the transaction Commodity."
@@ -10590,9 +10590,9 @@ msgid ""
 "specifies which check position to print. The possible values are 0, 1 and 2, "
 "corresponding to the top, middle and bottom checks on the page."
 msgstr ""
-"הגדרה זו קובעת את מיקום ההמחאה על גבי דפי המחאות מודפסות מראש והמכילות "
-"המחאות מרובות בכל דף. הערכים האפשריים הם 0, 1 ו־2 בהתאמה, להמחאה העליונה, "
-"האמצעית והתחתונה."
+"הגדרה זו קובעת את מיקום ההמחאה, על גבי דפי המחאות שהודפסו מראש ומכילים "
+"המחאות מרובות בכל דף. הערכים האפשריים הם 0, 1 ו־2 בהתאמה, להמחאה עליונה, "
+"אמצעית ותחתונה."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:15
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:16
@@ -10957,7 +10957,8 @@ msgstr "סביר שתנועה בטווח הימים הזה תותאם"
 msgid ""
 "This field specifies the maximum number of days a transaction is likely to "
 "be a match in the list."
-msgstr "שדה זה מציין את מספר הימים המרבי בהן, סביר שתנועה ברשימה, תותאם."
+msgstr ""
+"שדה זה מציין את מספר הימים המרבי במסגרתן סביר יהיה שתנועה מהרשימה תותאם."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:30
 msgid "UnLikely matching a transaction outside of these days"
@@ -29595,7 +29596,7 @@ msgstr "סף ימים לתנועות לקריאה בלבד (קו אדום)"
 
 #: libgnucash/engine/qofbookslots.h:72
 msgid "Use Split Action Field for Number"
-msgstr "שימוש בשדה פעולת פיצול עבור סימוכין"
+msgstr "להשתמש בשדה פעולת־פיצול עבור סימוכין"
 
 #: libgnucash/engine/qofbookslots.h:74
 msgid "Budgeting"
