@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-01-10 10:51+0000\n"
+"PO-Revision-Date: 2023-01-10 12:51+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/he/>\n"
@@ -5866,7 +5866,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1205
 msgid "_Print Report..."
-msgstr "_הדפסת דוח..."
+msgstr "ה_דפסת דוח…"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1206
 msgid "Print the current report"
