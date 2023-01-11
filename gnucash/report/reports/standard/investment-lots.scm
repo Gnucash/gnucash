@@ -164,12 +164,20 @@
         #f)
 
     ;; Chart tab
-    (gnc-register-simple-boolean-option options
+    (gnc-register-complex-boolean-option options
         pagename-chart
         optname-show-chart
         "a"
         (N_ "Include a chart that shows lot gains, grouped by account and gain type")
-        #t)
+        #t (lambda (x)
+             (for-each
+              (lambda (name)
+                (gnc-optiondb-set-option-selectable-by-name
+                 options pagename-chart name x))
+              (list optname-chart-type
+                    optname-chart-location
+                    optname-plot-width
+                    optname-plot-height))))
 
     (gnc-register-multichoice-option options
         pagename-chart
