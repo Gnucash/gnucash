@@ -3,15 +3,15 @@
 # Copyright (C) 2008 - 2020 by the respective translator
 # Avi Markovitz <avi.markovitz@gmail.com, 2019 - 2020
 # Ori Hoch <ori@uumpa.com>, 2008 http://www.uumpa.com/gnucash-he/
-# Yaron Shahrabani <sh.yaron@gmail.com>, 2020, 2021, 2022.
-# Avi Markovitz <avi.markovitz@gmail.com>, 2020, 2021, 2022.
+# Yaron Shahrabani <sh.yaron@gmail.com>, 2020, 2021, 2022, 2023.
+# Avi Markovitz <avi.markovitz@gmail.com>, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.13-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2022-09-12 09:23+0000\n"
+"PO-Revision-Date: 2023-01-10 12:51+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 "X-Poedit-Basepath: .\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -610,8 +610,8 @@ msgid ""
 "selected date. You can use '+' and '-' to increment and decrement check "
 "numbers as well."
 msgstr ""
-"כאשר מזינים תאריך, ניתן להשתמש במקשי ה־'+' וה־'-' בכדי לקדם או להסיג את "
-"התאריך. באותו אופן ניתן גם לקדם או להסיג מספרי המחאה."
+"בעת הזנת תאריך, ניתן להשתמש במקשי ה־'+' וה־'-' בכדי לקדם או להסיג את התאריך. "
+"באותו אופן ניתן גם לקדם או להסיג מספרי המחאה."
 
 #: doc/tip_of_the_day.list.c:79
 msgid ""
@@ -1195,7 +1195,7 @@ msgstr "שימוש בגלובלי"
 #: gnucash/gnome/top-level.c:258
 #, c-format
 msgid "Badly formed URL %s"
-msgstr "תצורת מען URL שגויה %s"
+msgstr "מבנה מען URL שגוי %s"
 
 #: gnucash/gnome/business-urls.c:74 gnucash/gnome/top-level.c:99
 #, c-format
@@ -1527,33 +1527,33 @@ msgstr "האם למחוק את %s?"
 
 #: gnucash/gnome/dialog-custom-report.c:436
 msgid "You must select a report configuration to load."
-msgstr "נדרש לבחור תצורת דוח לטעינה."
+msgstr "נדרש לבחור תצורת־דוח לטעינה."
 
 #: gnucash/gnome/dialog-custom-report.c:451
 msgid "You must select a report configuration to delete."
-msgstr "נדרש לבחור תצורת דוח למחיקה."
+msgstr "נדרש לבחור תצורת־דוח למחיקה."
 
 #: gnucash/gnome/dialog-custom-report.c:465
 msgid "Unable to change report configuration name."
-msgstr "לא ניתן לשנות שם תצורת דוח."
+msgstr "לא ניתן לשנות שם תצורת־דוח."
 
 #: gnucash/gnome/dialog-custom-report.c:477
 msgid ""
 "A saved report configuration with this name already exists, please choose "
 "another name."
-msgstr "תצורת דוח שמורה בשם זהה קיימת כבר, נא לבחור שם אחר."
+msgstr "קיימת כבר תצורת־דוח שמורה בשם זהה, נא לבחור שם אחר."
 
 #: gnucash/gnome/dialog-custom-report.c:503
 msgid "Load report configuration"
-msgstr "טעינת תצורת דוח"
+msgstr "טעינת תצורת־דוח"
 
 #: gnucash/gnome/dialog-custom-report.c:505
 msgid "Edit report configuration name"
-msgstr "עריכת שם תצורת דוח"
+msgstr "עריכת שם תצורת־דוח"
 
 #: gnucash/gnome/dialog-custom-report.c:507
 msgid "Delete report configuration"
-msgstr "מחיקת תצורת דוח"
+msgstr "מחיקת תצורת־דוח"
 
 #: gnucash/gnome/dialog-date-close.c:75
 msgid "No Account selected. Please try again."
@@ -3117,14 +3117,14 @@ msgstr "נא לספק בחירה תקינה."
 
 #: gnucash/gnome/dialog-sx-editor2.c:810 gnucash/gnome/dialog-sx-editor.c:557
 msgid "There must be some number of occurrences."
-msgstr "חייב להכיל לפחות מופע אחד."
+msgstr "חייב להכיל מספר מופעים."
 
 #: gnucash/gnome/dialog-sx-editor2.c:819 gnucash/gnome/dialog-sx-editor.c:565
 #, c-format
 msgid ""
 "The number of remaining occurrences (%d) is greater than the number of total "
 "occurrences (%d)."
-msgstr "מספר המופעים שנותרו (%d) גדול מהמספר הכולל של מופעים (%d)."
+msgstr "מספר המופעים שנותרו (%d) גדול מהמספר הכולל של המופעים (%d)."
 
 #: gnucash/gnome/dialog-sx-editor2.c:851 gnucash/gnome/dialog-sx-editor.c:594
 msgid ""
@@ -3881,7 +3881,7 @@ msgstr "אתחול נתוני בדיקה"
 
 #: gnucash/gnome/gnc-plugin-business.c:326
 msgid "Assign as payment..."
-msgstr "הקצאה כתשלום..."
+msgstr "הקצאת תשלום..."
 
 #: gnucash/gnome/gnc-plugin-business.c:327
 msgid "Assign the selected transaction as payment"
@@ -3998,11 +3998,11 @@ msgstr "חיפוש חשבון"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:273
 msgid "_Renumber Subaccounts..."
-msgstr "_מספור חשבונות משנה מחדש..."
+msgstr "_מספור מחדש חשבונות־משנה..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:274
 msgid "Renumber the children of the selected account"
-msgstr "מספור חשבונות המשנה של החשבון שנבחר מחדש"
+msgstr "מספור מחדש חשבונות־משנה של החשבון שנבחר"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:291
 #: gnucash/gnome/gnc-plugin-page-budget.c:194
@@ -5295,8 +5295,8 @@ msgid ""
 "and number of both rows are identical and the register window is sorted by "
 "date."
 msgstr ""
-"העברת התנועה הנוכחית שורה אחת מטה. אפשרי רק כאשר התאריכים והסימוכין בשתי "
-"השורות זהים והיומן ממוין לפי תאריך."
+"העברת התנועה הנוכחית שורה אחת מטה. מתאפשר רק כאשר התאריך והסימוכין בשתי "
+"השורות זהים וחלון היומן מוין לפי תאריך."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:363
 #: gnucash/gnome/gnc-plugin-page-register.c:486
@@ -5836,7 +5836,7 @@ msgstr "‮יצוא‬"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.c:1140
 msgid "Save Config"
-msgstr "שמירת תצורת דוח"
+msgstr "שמירת תצורת־דוח"
 
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As..."
 #. to be used as toolbar button label.
@@ -5861,12 +5861,12 @@ msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
-"הוספת תצורת הדוח הנוכחי לתפריט 'דוחותlarr;תצורות דוחות שנשמרו'. תצורת הדוח "
+"הוספת תצורת־הדוח הנוכחי לתפריט 'דוחותlarr;תצורות־דוחות שמורים'. תצורת־הדוח "
 "תשמר לקובץ %s."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1205
 msgid "_Print Report..."
-msgstr "_הדפסת דוח..."
+msgstr "ה_דפסת דוח…"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1206
 msgid "Print the current report"
@@ -5882,11 +5882,11 @@ msgstr "יצוא דוח נוכחי כקובץ PDF"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1236
 msgid "Save _Report Configuration"
-msgstr "שמירת _תצורת דוח"
+msgstr "שמירת _תצורת־דוח"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1240
 msgid "Save Report Configuration As..."
-msgstr "שמירת תצורת דוח בשם…"
+msgstr "שמירת תצורת־דוח בשם…"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1244
 msgid "Export _Report"
@@ -6522,11 +6522,11 @@ msgstr "הצגת דוח ~a"
 #: gnucash/gnome/report-menus.scm:90
 #: gnucash/gtkbuilder/dialog-custom-report.glade:8
 msgid "Saved Report Configurations"
-msgstr "תצורות דוחות שנשמרו"
+msgstr "תצורות־דוחות שמורים"
 
 #: gnucash/gnome/report-menus.scm:92
 msgid "Manage and run saved report configurations"
-msgstr "ניהול והפקת תצורות דוחות שמורים"
+msgstr "ניהול והפקת תצורות־דוחות שמורים"
 
 #: gnucash/gnome/report-menus.scm:116
 #: gnucash/report/reports/standard/dashboard.scm:52
@@ -7341,7 +7341,7 @@ msgstr "חשבון חדש"
 #: gnucash/gnome-utils/dialog-account.c:2193
 #, c-format
 msgid "Renumber the immediate sub-accounts of '%s'?"
-msgstr "למספר מחדש את חשבונות המשנה המיידיים של ‚%s’?"
+msgstr "מספור מחדש של חשבונות־המשנה־המיידיים של '%s'?"
 
 #: gnucash/gnome-utils/dialog-account.c:2299
 #, c-format
@@ -7511,7 +7511,7 @@ msgstr "נוכחי"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:150
 msgid "You can type '+' or '-' to increment or decrement the number."
-msgstr "ניתן להקיש על '+' או '-' כדי להגדיל/להקטין את המספר."
+msgstr "ניתן להקיש על '+' או '-' להגדלת/הקטנת המספר."
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:299
 msgid "Action/Number"
@@ -8852,7 +8852,7 @@ msgstr "חשבונאות לאנשים פרטיים ועסקים קטנים."
 #: gnucash/gnome-utils/gnc-main-window.c:4954
 msgid "translator-credits"
 msgstr ""
-"אבי מרקוביץ avi.markovitz@gmail.com 2022 ,2021, 2020, 2019\n"
+"אבי מרקוביץ avi.markovitz@gmail.com 2023-2019\n"
 "ירון שהרבני 2021, 2022\n"
 "אורי הוך 2006"
 
@@ -9662,7 +9662,7 @@ msgstr "אזור זמן"
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:353
 #: gnucash/gtkbuilder/dialog-customer.glade:133
 msgid "Customer Number"
-msgstr "מזהה לקוח"
+msgstr "מספר לקוח"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:361
 #: gnucash/gtkbuilder/dialog-vendor.glade:134
@@ -9907,7 +9907,7 @@ msgstr "נא להזין תאריך פרעון"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3176
 msgid "Enter the transaction reference, such as the invoice or check number"
-msgstr "נא להזין סימוכין לתנועה, כמו למשל מספר חשבונית או המחאה"
+msgstr "נא להזין סימוכין לתנועה, כגון מספר חשבונית או המחאה"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3178
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3185
@@ -9916,7 +9916,7 @@ msgstr "נא להזין סוג תנועה, או בחירת סוג תנועה מ�
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3183
 msgid "Enter the transaction number, such as the check number"
-msgstr "נא להזין מספר סימוכין לתנועה, כמו מספר המחאה"
+msgstr "נא להזין מספר סימוכין לתנועה, כגון מספר המחאה"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3195
 #: gnucash/register/ledger-core/split-register-model.c:1137
@@ -9976,7 +9976,7 @@ msgstr "נא להזין ערך המניות שנקנו או נמכרו"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3283
 #: gnucash/register/ledger-core/split-register-model.c:1445
 msgid "Enter the number of shares bought or sold"
-msgstr "נא להזין מספר המניות שנקנו או נמכרו"
+msgstr "נא להזין כמות (מספר) המניות שנקנו או נמכרו"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3293
 msgid "* Indicates the transaction Commodity."
@@ -10590,9 +10590,9 @@ msgid ""
 "specifies which check position to print. The possible values are 0, 1 and 2, "
 "corresponding to the top, middle and bottom checks on the page."
 msgstr ""
-"הגדרה זו קובעת את מיקום ההמחאה על גבי דפי המחאות מודפסות מראש והמכילות "
-"המחאות מרובות בכל דף. הערכים האפשריים הם 0, 1 ו־2 בהתאמה, להמחאה העליונה, "
-"האמצעית והתחתונה."
+"הגדרה זו קובעת את מיקום ההמחאה, על גבי דפי המחאות שהודפסו מראש ומכילים "
+"המחאות מרובות בכל דף. הערכים האפשריים הם 0, 1 ו־2 בהתאמה, להמחאה עליונה, "
+"אמצעית ותחתונה."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:15
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:16
@@ -10957,7 +10957,8 @@ msgstr "סביר שתנועה בטווח הימים הזה תותאם"
 msgid ""
 "This field specifies the maximum number of days a transaction is likely to "
 "be a match in the list."
-msgstr "שדה זה מציין את מספר הימים המרבי בהן, סביר שתנועה ברשימה, תותאם."
+msgstr ""
+"שדה זה מציין את מספר הימים המרבי במסגרתן סביר יהיה שתנועה מהרשימה תותאם."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:30
 msgid "UnLikely matching a transaction outside of these days"
@@ -15346,7 +15347,7 @@ msgid ""
 "the Reports menu or tool bar."
 msgstr ""
 "לתצור דוחות שמורים, תחילה יש לפתוח דוח מתפריט הדוחות,\n"
-"לשנות את אפשרויות הדוח. לסיום, בחירה ב'שמירת תצורת דוח' מתפריט\n"
+"לשנות את אפשרויות הדוח. לסיום, בחירה ב'שמירת תצורת־דוח' מתפריט\n"
 "הדוחות או מסרגל הכלים."
 
 #: gnucash/gtkbuilder/dialog-date-close.glade:7
@@ -29595,7 +29596,7 @@ msgstr "סף ימים לתנועות לקריאה בלבד (קו אדום)"
 
 #: libgnucash/engine/qofbookslots.h:72
 msgid "Use Split Action Field for Number"
-msgstr "שימוש בשדה פעולת פיצול עבור סימוכין"
+msgstr "להשתמש בשדה פעולת־פיצול עבור סימוכין"
 
 #: libgnucash/engine/qofbookslots.h:74
 msgid "Budgeting"
