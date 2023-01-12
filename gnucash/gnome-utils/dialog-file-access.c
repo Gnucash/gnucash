@@ -338,7 +338,7 @@ gnc_ui_file_access (GtkWindow *parent, int type)
     if (type == FILE_ACCESS_OPEN || type == FILE_ACCESS_SAVE_AS)
     {
         last = gnc_history_get_last();
-        if ( last && gnc_uri_targets_local_fs (last))
+        if ( last && *last && gnc_uri_targets_local_fs (last))
         {
             gchar *filepath = gnc_uri_get_path ( last );
             faw->starting_dir = g_path_get_dirname( filepath );
