@@ -1092,6 +1092,11 @@ test_gnc_account_kvp_setters_getters (Fixture *fixture, gconstpointer pData)
     gnc_numeric h_balance = gnc_numeric_create (1700, 100);
     gnc_numeric l_balance = gnc_numeric_create (1000, 100);
     gnc_numeric balance_limit;
+    gnc_numeric post_balance = gnc_numeric_create (2345, 100);
+    gnc_numeric returned_post_balance;
+    time64 date = gnc_time (nullptr);
+    time64 returned_date;
+    int prev_months, prev_days;
 
     // equity_type getter/setter
     g_assert (xaccAccountGetIsOpeningBalance (account) == FALSE);
@@ -1259,6 +1264,35 @@ test_gnc_account_kvp_setters_getters (Fixture *fixture, gconstpointer pData)
     g_assert (xaccAccountGetHigherBalanceLimit (account, &balance_limit) == false);
     g_assert (xaccAccountGetLowerBalanceLimit (account, &balance_limit) == false);
     g_assert (xaccAccountGetIncludeSubAccountBalances (account) == false);
+
+    // Reconcile getter/setter
+    date = date - (60*60*24*7); // -7 days
+    xaccAccountSetReconcileLastDate (account, date);
+    xaccAccountGetReconcileLastDate (account, &returned_date);
+    g_assert (date == returned_date);
+
+    date = date + (60*60*24*2); // +2 days
+    xaccAccountSetReconcilePostponeDate (account, date);
+    xaccAccountGetReconcilePostponeDate (account, &returned_date);
+    g_assert (date == returned_date);
+
+    g_assert (xaccAccountGetReconcilePostponeBalance (account, &returned_post_balance) == false);
+    xaccAccountSetReconcilePostponeBalance (account, post_balance);
+    g_assert (xaccAccountGetReconcilePostponeBalance (account, &returned_post_balance) == true);
+    g_assert_cmpint (gnc_numeric_compare (post_balance, returned_post_balance), ==, 0);
+
+    xaccAccountClearReconcilePostpone (account);
+    g_assert (xaccAccountGetReconcilePostponeBalance (account, &returned_post_balance) == false);
+
+    g_assert (xaccAccountGetReconcileLastInterval (account, &prev_months, &prev_days) == false);
+    xaccAccountSetReconcileLastInterval (account, 2, 6);
+    g_assert (xaccAccountGetReconcileLastInterval (account, &prev_months, &prev_days) == true);
+    g_assert (prev_months == 2);
+    g_assert (prev_days == 6);
+
+    g_assert (xaccAccountGetReconcileChildrenStatus (account) == false); //default
+    xaccAccountSetReconcileChildrenStatus (account, true);
+    g_assert (xaccAccountGetReconcileChildrenStatus (account) == true);
 
     // STOCK_ACCOUNT tests from now on
     xaccAccountSetType (account, ACCT_TYPE_STOCK);
@@ -2584,26 +2618,7 @@ test_xaccAccountType_Compatibility (void)
     g_assert_cmpint (check2->hits, ==, 1);
     g_free (msg2);
 }
-/* More KVP getters & setters
- * xaccAccountGetReconcileLastDate
- * xaccAccountSetReconcileLastDate
- * xaccAccountGetReconcilePostponeDate
- * xaccAccountSetReconcilePostponeDate
- * xaccAccountGetReconcilePostponeBalance
- * xaccAccountSetReconcilePostponeBalance
- * xaccAccountClearReconcilePostpone
- * xaccAccountGetAutoInterestXfer
- * xaccAccountSetAutoInterestXfer
- * xaccAccountGetLastNum
- * xaccAccountSetLastNum
- * xaccAccountSetReconcileChildrenStatus
- * xaccAccountGetReconcileChildrenStatus
- * xaccAccountGetReconcileLastInterval
- * xaccAccountSetReconcileLastInterval
- * dxaccAccountSetPriceSrc
- * dxaccAccountSetQuoteTZ
- * dxaccAccountGetQuoteTZ
- */
+
 /* finder_help_function
 static void
 finder_help_function (const Account *acc, const char *description,// 3
