@@ -74,9 +74,9 @@ typedef struct GncEmbeddedWindowPrivate
      *  window. */
     GtkWidget *menu_dock;
     /** The menubar */
-    GtkWidget *menubar; //FIXMEb added
+    GtkWidget *menubar;
     /** The menubar_model */
-    GMenuModel *menubar_model; //FIXMEb added
+    GMenuModel *menubar_model;
     /** The toolbar. This pointer provides easy access for
      * showing/hiding the toolbar. */
     GtkWidget *toolbar;
@@ -88,7 +88,7 @@ typedef struct GncEmbeddedWindowPrivate
     /** The group of all actions provided by the main window itself.
      *  This does not include any action provided by menu or content
      *  plugins. */
-    GSimpleActionGroup *simple_action_group; //FIXMEb added
+    GSimpleActionGroup *simple_action_group;
 
     /** The currently selected page. */
     GncPluginPage *page;
@@ -351,18 +351,18 @@ gnc_embedded_window_new (const gchar *action_group_name,
     {
         g_critical ("Failed to load, Error %s", error->message);
         g_error_free (error);
-        return NULL; //FIXMEb this may need changing
+        return NULL;
     }
 
     priv->menubar_model = (GMenuModel *)gtk_builder_get_object (builder, "embeddedwin-menu");
 
     priv->menubar = gtk_menu_bar_new_from_model (priv->menubar_model);
-    gtk_container_add (GTK_CONTAINER(priv->menu_dock), priv->menubar); //FIXMEb this may need changing
+    gtk_container_add (GTK_CONTAINER(priv->menu_dock), priv->menubar);
     gtk_widget_show (GTK_WIDGET(priv->menubar));
 
     priv->toolbar = (GtkWidget *)gtk_builder_get_object (builder, "embeddedwin-toolbar");
     g_object_set (priv->toolbar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
-    gtk_container_add (GTK_CONTAINER(priv->menu_dock), GTK_WIDGET(priv->toolbar)); //FIXMEb this may need changing
+    gtk_container_add (GTK_CONTAINER(priv->menu_dock), GTK_WIDGET(priv->toolbar));
     gtk_widget_show (GTK_WIDGET(priv->toolbar));
 
     g_object_unref (builder);

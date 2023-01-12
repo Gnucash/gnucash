@@ -119,12 +119,12 @@ typedef struct
     const gchar *actions_name;
     /** An array of actions that should automatically be added to
      *  any GnuCash "main" content window that is opened. */
-    GActionEntry   *actions; //FIXMEb added
+    GActionEntry   *actions;
     /** The number of actions in the actions array. */
-    guint           n_actions; //FIXMEb added
+    guint           n_actions;
 
     /** An array of ui updates for the menu model */
-    const gchar **ui_updates; //FIXMEb added
+    const gchar **ui_updates;
 
     /** The relative name of the XML file describing the
      *  menu/toolbar action items. */
@@ -262,7 +262,7 @@ void gnc_plugin_init_short_names (GtkWidget *toolbar,
  */
 void gnc_plugin_set_actions_enabled (GActionMap *action_map,
                                      const gchar **action_names,
-                                     gboolean enable); //FIXMEb added
+                                     gboolean enable);
 
 /** This function adds the tooltip callbacks to make the tooltips
  *  appear in the status bar.
@@ -275,7 +275,7 @@ void gnc_plugin_set_actions_enabled (GActionMap *action_map,
  */
 void gnc_plugin_add_menu_tooltip_callbacks (GtkWidget *menubar,
                                             GMenuModel *menubar_model,
-                                            GtkWidget *statusbar); //FIXMEb added
+                                            GtkWidget *statusbar);
 
 /** This function adds the tooltip callbacks to make the tooltips
  *  appear in the status bar.
@@ -285,7 +285,7 @@ void gnc_plugin_add_menu_tooltip_callbacks (GtkWidget *menubar,
  *  @param statusbar The status bar widget in the main window.
  */
 void gnc_plugin_add_toolbar_tooltip_callbacks (GtkWidget *toolbar,
-                                               GtkWidget *statusbar); //FIXMEb added
+                                               GtkWidget *statusbar);
 
 G_END_DECLS
 

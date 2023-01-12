@@ -95,7 +95,7 @@ enum
 {
     PAGE_ADDED,
     PAGE_CHANGED,
-    MENU_CHANGED, //FIXMEb added
+    MENU_CHANGED,
     LAST_SIGNAL
 };
 
@@ -226,9 +226,9 @@ typedef struct GncMainWindowPrivate
      *  to the main window. */
     GtkWidget *menu_dock;
     /** The menubar */
-    GtkWidget *menubar; //FIXMEb added
+    GtkWidget *menubar;
     /** The menubar_model */
-    GMenuModel *menubar_model; //FIXMEb added
+    GMenuModel *menubar_model;
     /** The toolbar. This pointer provides easy access for
      * showing/hiding the toolbar. */
     GtkWidget *toolbar;
@@ -257,13 +257,13 @@ typedef struct GncMainWindowPrivate
     /** Set when restoring plugin pages */
     gboolean restoring_pages;
 
-    const gchar   *previous_plugin_page_name; //FIXMEb added
-    const gchar   *previous_menu_qualifier; //FIXMEb added
+    const gchar   *previous_plugin_page_name;
+    const gchar   *previous_menu_qualifier;
 
     /** The accelerator group for the window */
-    GtkAccelGroup *accel_group; //FIXMEb added
+    GtkAccelGroup *accel_group;
 
-    GHashTable    *display_item_hash; //FIXMEb added
+    GHashTable    *display_item_hash;
 
 } GncMainWindowPrivate;
 
@@ -3434,7 +3434,7 @@ update_menu_model (GncMainWindow *window, const gchar *ui_filename,
     {
         g_critical ("Failed to load, Error %s", error->message);
         g_error_free (error);
-        return; //FIXMEb this may need changing
+        return;
     }
 
     for (gint i = 0; ui_updates[i]; i++)
@@ -3564,9 +3564,6 @@ gnc_main_window_get_action_group (GncMainWindow *window,
     auto action_group = gtk_widget_get_action_group (GTK_WIDGET(window), group_name);
     return (GSimpleActionGroup*)action_group;
 }
-
-//FIXMEb##
-
 
 GtkWidget *
 gnc_main_window_toolbar_find_tool_item (GncMainWindow *window, const gchar *action_name)
@@ -4125,7 +4122,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
     {
         g_critical ("Failed to load, Error %s", error->message);
         g_error_free (error);
-        return; //FIXMEb this may need changing
+        return;
     }
 
     g_action_map_add_action_entries (G_ACTION_MAP(window),
@@ -4135,12 +4132,12 @@ gnc_main_window_setup_window (GncMainWindow *window)
 
     priv->menubar_model = (GMenuModel *)gtk_builder_get_object (builder, "mainwin-menu");
     priv->menubar = gtk_menu_bar_new_from_model (priv->menubar_model);
-    gtk_container_add (GTK_CONTAINER(priv->menu_dock), priv->menubar); //FIXMEb this may need changing
+    gtk_container_add (GTK_CONTAINER(priv->menu_dock), priv->menubar);
     gtk_widget_show (GTK_WIDGET(priv->menubar));
 
     priv->toolbar = (GtkWidget *)gtk_builder_get_object (builder, "mainwin-toolbar");
     g_object_set (priv->toolbar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
-    gtk_container_add (GTK_CONTAINER(priv->menu_dock), GTK_WIDGET(priv->toolbar)); //FIXMEb this may need changing
+    gtk_container_add (GTK_CONTAINER(priv->menu_dock), GTK_WIDGET(priv->toolbar));
     gtk_widget_show (GTK_WIDGET(priv->toolbar));
 
     g_object_unref (builder);

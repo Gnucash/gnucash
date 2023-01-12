@@ -80,7 +80,7 @@ typedef struct
     void (*page_changed) (GncMainWindow *window,
                           GncPluginPage *page);
     void (*menu_changed) (GncMainWindow *window,
-                          GncPluginPage *page); //FIXMEb added
+                          GncPluginPage *page);
 } GncMainWindowClass;
 
 typedef struct
@@ -276,7 +276,7 @@ void gnc_main_window_unmerge_actions (GncMainWindow *window,
  */
 void gnc_main_window_set_vis_of_items_by_action (GncMainWindow *window,
                                                  const gchar **action_names,
-                                                 gboolean vis); //FIXMEb added
+                                                 gboolean vis);
 
 /** Find the menu item with the given action name for the window
  *  specified.
@@ -289,7 +289,7 @@ void gnc_main_window_set_vis_of_items_by_action (GncMainWindow *window,
  *  @return The found menu item widget or NULL.
  */
 GtkWidget *gnc_main_window_menu_find_menu_item (GncMainWindow *window,
-                                                const gchar *action_name); //FIXMEb added
+                                                const gchar *action_name);
 
 /** Find the toolbar item with the given action name for the window
  *  specified.
@@ -302,7 +302,7 @@ GtkWidget *gnc_main_window_menu_find_menu_item (GncMainWindow *window,
  *  @return The found tool item widget or NULL.
  */
 GtkWidget * gnc_main_window_toolbar_find_tool_item (GncMainWindow *window,
-                                                    const gchar *action_name); //FIXMEb added
+                                                    const gchar *action_name);
 
 /** Find the GMenuModel item given the action name for the window
  *  specified.
@@ -321,7 +321,7 @@ GtkWidget * gnc_main_window_toolbar_find_tool_item (GncMainWindow *window,
 gboolean gnc_main_window_update_menu_for_action (GncMainWindow *window,
                                                  const gchar *action_name,
                                                  const gchar *label,
-                                                 const gchar *tooltip); //FIXMEb added
+                                                 const gchar *tooltip);
 
 /** Scan the main window menu and add accelerator keys to main window
  *  accelerator group.
@@ -330,7 +330,7 @@ gboolean gnc_main_window_update_menu_for_action (GncMainWindow *window,
  *  be updated.
  *
  */
-void gnc_main_window_menu_add_accelerator_keys (GncMainWindow *window); //FIXMEb added
+void gnc_main_window_menu_add_accelerator_keys (GncMainWindow *window);
 
 /** A structure for defining alternate action names for use in the
  *  toolbar.  All toolbar buttons are homogeneous in size and are sized
@@ -344,7 +344,7 @@ typedef struct
     const char *action_name;
     /** The alternate toolbar label to use */
     const char *short_label;
-} GncToolBarShortNames; //FIXMEb added
+} GncToolBarShortNames;
 
 
 /** Update the labels of the toolbar items with short names.
@@ -355,7 +355,7 @@ typedef struct
  *  GncToolBarShortNames items.
  */
 void gnc_main_window_init_short_names (GncMainWindow *window,
-                                       GncToolBarShortNames *toolbar_labels); //FIXMEb added
+                                       GncToolBarShortNames *toolbar_labels);
 
 
 /** Retrieve a specific set of user interface actions from a window.
@@ -507,7 +507,7 @@ GAction *gnc_main_window_find_action (GncMainWindow *window,
  */
 GAction *gnc_main_window_find_action_in_group (GncMainWindow *window,
                                                const gchar *group_name,
-                                               const gchar *action_name); //FIXMEb added
+                                               const gchar *action_name);
 
 /** Return the GMenuModel for the main window menu bar.
  *
@@ -515,7 +515,7 @@ GAction *gnc_main_window_find_action_in_group (GncMainWindow *window,
  *
  *  @return The GMenuModel or NULL.
  */
-GMenuModel *gnc_main_window_get_menu_model (GncMainWindow *window); //FIXMEb added
+GMenuModel *gnc_main_window_get_menu_model (GncMainWindow *window);
 
 /** Update the main window menu with the placeholders listed in
  *  ui_updates and load the page specific toolbar.
@@ -528,7 +528,7 @@ GMenuModel *gnc_main_window_get_menu_model (GncMainWindow *window); //FIXMEb add
  */
 void gnc_main_window_update_menu_and_toolbar (GncMainWindow *window,
                                               GncPluginPage *page,
-                                              const gchar **ui_updates); //FIXMEb added
+                                              const gchar **ui_updates);
 
 /**
  * Shows all main windows.

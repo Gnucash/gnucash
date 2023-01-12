@@ -285,7 +285,7 @@ GncPluginPage *gnc_plugin_page_recreate_page (GtkWidget *window,
  *  @param plugin_page A pointer to the page whose actions should be
  *  added to the user interface.
  */
-void gnc_plugin_page_merge_actions (GncPluginPage *plugin_page); //FIXMEb added
+void gnc_plugin_page_merge_actions (GncPluginPage *plugin_page);
 
 
 /** Retrieve the textual name of a plugin.
@@ -495,7 +495,7 @@ void gnc_plugin_page_set_ui_description (GncPluginPage *page,
  *  @param page The page whose UI information should be retrieved.
  *
  *  @return A pointer to the GtkBuilder object for this page. */
-GtkBuilder *gnc_plugin_page_get_builder (GncPluginPage *page); //FIXMEb added
+GtkBuilder *gnc_plugin_page_get_builder (GncPluginPage *page);
 
 
 /** Retrieve the menu qualifier for this page.
@@ -504,7 +504,7 @@ GtkBuilder *gnc_plugin_page_get_builder (GncPluginPage *page); //FIXMEb added
  *
  *  @return A qualifier string for this page.
  */
-const gchar * gnc_plugin_page_get_menu_qualifier (GncPluginPage *page); //FIXMEb added
+const gchar * gnc_plugin_page_get_menu_qualifier (GncPluginPage *page);
 
 /** Set a qualifier string for this page. This string is used when there
  *  is more than one menu associated with the page.
@@ -514,7 +514,7 @@ const gchar * gnc_plugin_page_get_menu_qualifier (GncPluginPage *page); //FIXMEb
  *  @param menu_qualifier A string to be used as for the qualifier.
  */
 void gnc_plugin_page_set_menu_qualifier (GncPluginPage *page,
-                                         const char *menu_qualifier); //FIXMEb added
+                                         const char *menu_qualifier);
 
 /** Retrieve the GSimpleActionGroup object associated with this page.
  *
@@ -523,7 +523,7 @@ void gnc_plugin_page_set_menu_qualifier (GncPluginPage *page,
  *
  *  @return A pointer to the GSimpleActionGroup object for this page.
  */
-GSimpleActionGroup *gnc_plugin_page_get_action_group (GncPluginPage *page); //FIXMEb added
+GSimpleActionGroup *gnc_plugin_page_get_action_group (GncPluginPage *page);
 
 /** Create the GSimpleActionGroup object associated with this page.
  *
@@ -538,7 +538,7 @@ GSimpleActionGroup *gnc_plugin_page_get_action_group (GncPluginPage *page); //FI
  *  this page.
  */
 GSimpleActionGroup * gnc_plugin_page_create_action_group (GncPluginPage *page,
-                                                          const gchar *group_name); //FIXMEb added
+                                                          const gchar *group_name);
 
 /** Retrieve the simple action group name associated with this plugin
  *  page.
@@ -547,7 +547,7 @@ GSimpleActionGroup * gnc_plugin_page_create_action_group (GncPluginPage *page,
  *
  *  @return The simple action group name associated with this plugin.
  */
-const gchar *gnc_plugin_page_get_simple_action_group_name (GncPluginPage *page); //FIXMEb added
+const gchar *gnc_plugin_page_get_simple_action_group_name (GncPluginPage *page);
 
 
 /** Retrieve a GAction object associated with this page.

@@ -90,10 +90,10 @@ typedef struct _GncPluginPagePrivate
     /** The group of all actions provided by this plugin. */
     char *ui_description;
 
-    GtkBuilder *builder; //FIXMEb added
-    GSimpleActionGroup *simple_action_group; //FIXMEb added
-    const gchar *simple_action_group_name; //FIXMEb added
-    const gchar *menu_qualifier; //FIXMEb added
+    GtkBuilder *builder;
+    GSimpleActionGroup *simple_action_group;
+    const gchar *simple_action_group_name;
+    const gchar *menu_qualifier;
 
     GList *books;
 
