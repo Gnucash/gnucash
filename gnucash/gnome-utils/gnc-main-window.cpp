@@ -264,7 +264,6 @@ typedef struct GncMainWindowPrivate
     GtkAccelGroup *accel_group; //FIXMEb added
 
     GHashTable    *display_item_hash; //FIXMEb added
-    gint           num_item_q; //FIXMEb temp added
 
 } GncMainWindowPrivate;
 
@@ -2737,7 +2736,6 @@ gnc_main_window_init (GncMainWindow *window, void *data)
     priv->restoring_pages = FALSE;
 
     priv->display_item_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, nullptr);
-    priv->num_item_q = 0; //FIXMEb temp addded
 
     priv->previous_plugin_page_name = nullptr;
     priv->previous_menu_qualifier = nullptr;
@@ -3596,8 +3594,6 @@ gnc_main_window_menu_find_menu_item (GncMainWindow *window, const gchar *action_
 
     menu_item = GTK_WIDGET(g_hash_table_lookup (priv->display_item_hash, action_name));
 
-    priv->num_item_q++; //FIXMEb temp added
-
     if (!menu_item)
     {
         menu_item = gnc_menubar_model_find_menu_item (priv->menubar_model, priv->menubar, action_name);
@@ -3799,7 +3795,6 @@ gnc_main_window_update_menu_and_toolbar (GncMainWindow *window,
     g_hash_table_remove_all (priv->display_item_hash);
     gnc_menubar_model_remove_items_with_attrib (priv->menubar_model,
                                                 GNC_MENU_ATTRIBUTE_TEMPORARY);
-    priv->num_item_q = 0; //FIXMEb temp added
 
     for (gint i = 0; ui_updates[i]; i++)
     {
