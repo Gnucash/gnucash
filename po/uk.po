@@ -4,7 +4,7 @@
 # The last version has some new strings translated and some mistakes fixed.
 # Yuri Syrota <rasta@renome.rovno.ua>, 2000.
 # Maxim V. Dziumanenko <dziumanenko@gmail.com>, 2007.
-# Yuri Chornoivan <yurchor@ukr.net>, 2011, 2018, 2019, 2020, 2021, 2022.
+# Yuri Chornoivan <yurchor@ukr.net>, 2011, 2018, 2019, 2020, 2021, 2022, 2023.
 # Maksym Kobieliev <maximaximums@gmail.com>, 2013.
 # Artem <artem@molotov.work>, 2022.
 # Dan <denqwerta@gmail.com>, 2023.
@@ -14,8 +14,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-01-13 01:53+0000\n"
-"Last-Translator: Dan <denqwerta@gmail.com>\n"
+"PO-Revision-Date: 2023-01-13 06:47+0000\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/uk/>\n"
 "Language: uk\n"
@@ -3039,7 +3039,7 @@ msgstr ""
 #. * gnucash application.
 #: gnucash/gnome/dialog-print-check.c:1564
 msgid "application"
-msgstr "застосунок"
+msgstr "програма"
 
 #. Translators: This is a directory name. It may be presented to
 #. * the user to indicate that some data file was defined by a
@@ -7302,7 +7302,7 @@ msgid ""
 "You can also go back and verify your selections by clicking on \"Back\"."
 msgstr ""
 "Файл успішно завантажено. Якщо ви натиснете кнопку «Застосувати», його буде "
-"збережено і перезавантажено до основного застосунку. Таким чином, у вас буде "
+"збережено і перезавантажено до основної програми. Таким чином, у вас буде "
 "працездатний файл, резервна копія, у тому самому каталозі.\n"
 "\n"
 "Крім того, ви можете повернутися до попередніх налаштувань і змінити "
@@ -8831,7 +8831,7 @@ msgstr "Закрити поточну сторінку"
 
 #: gnucash/gnome-utils/gnc-main-window.c:316
 msgid "Quit this application"
-msgstr "Закрити цей застосунок"
+msgstr "Завершити виконання програми"
 
 #: gnucash/gnome-utils/gnc-main-window.c:338
 msgid "Pr_eferences"
@@ -8904,11 +8904,11 @@ msgstr "Відкрити довідку з GnuCash"
 
 #: gnucash/gnome-utils/gnc-main-window.c:400
 msgid "_About"
-msgstr "_Про застосунок"
+msgstr "_Про програму"
 
 #: gnucash/gnome-utils/gnc-main-window.c:401
 msgid "About GnuCash"
-msgstr "Про застосунок GnuCash"
+msgstr "Про програму GnuCash"
 
 #: gnucash/gnome-utils/gnc-main-window.c:413
 msgid "_Toolbar"
@@ -10529,7 +10529,7 @@ msgstr "Завантажуються дані…"
 
 #: gnucash/gnucash.cpp:281
 msgid "Application Options"
-msgstr "Параметри застосунку"
+msgstr "Параметри програми"
 
 #: gnucash/gnucash.cpp:284
 msgid "Do not load the last file opened"
@@ -17957,7 +17957,7 @@ msgid ""
 "are able to correctly report values so removing them may make this less "
 "reliable."
 msgstr ""
-"Якщо активовано, включати ціни на додаткові застосунки.\n"
+"Якщо позначено, включити додані програмою ціни.\n"
 "\n"
 "Ці ціни було додано для того, щоб завжди була, «найближча у часі» ціна для "
 "будь-якої транзакції із декількома товарами. Таким чином, на сторінках "
