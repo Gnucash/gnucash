@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-01-13 13:48+0000\n"
+"PO-Revision-Date: 2023-01-13 18:47+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -4593,11 +4593,11 @@ msgstr "A kiválasztott folyószámlák és időszakok megjegyzésének szerkesz
 #: gnucash/gnome/gnc-plugin-page-budget.c:187
 #: gnucash/report/reports/standard/budget.scm:39
 msgid "Budget Report"
-msgstr "Költségvetési jelentés"
+msgstr "Költségvetési kimutatás"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:189
 msgid "Run the budget report."
-msgstr "Költségvetési jelentés futtatása."
+msgstr "Költségvetési kimutatás futtatása."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:199
 msgid "Refresh this window."
@@ -4626,10 +4626,8 @@ msgid "Note"
 msgstr "Megjegyzések"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:237
-#, fuzzy
-#| msgid "Account Report"
 msgid "Run Report"
-msgstr "Folyószámlajelentés"
+msgstr "Kimutatás elkészítése"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:321
 #: gnucash/gnome/gnc-plugin-page-budget.c:362
@@ -15061,6 +15059,8 @@ msgid ""
 "Use Edit->Tax Report Options to set the tax-related flag and assign a tax "
 "code to this account."
 msgstr ""
+"Az adórelevancia bekapcsolása és az adónem számlához rendelése a Szerkesztés-"
+">Adókimutatás beállítások menüpontban végezhető el."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1517
 #, fuzzy
