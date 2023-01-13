@@ -72,14 +72,14 @@
             (vector 'fourth (N_ "Fourth Options")))))
     
     ;; This is a string option. Users can type anything they want
-    ;; as a value. The default value is "Hello, World". This is
+    ;; as a value. The default value is "Hello String". This is
     ;; in the same section as the option above. It will be shown
     ;; after the option above because its key is 'b' while the
     ;; other key is 'a'.
     (add-option
      (gnc:make-string-option
       (N_ "Hello, World!") (N_ "String Option")
-      "c" (N_ "This is a string option.") (N_ "Hello, World")))
+      "c" (N_ "This is a string option.") (N_ "Hello String")))
     
     ;; This is a date/time option. The user can pick a date and,
     ;; possibly, a time. Times are stored as an integer specifying
@@ -298,7 +298,7 @@ option like this.")
       ;; translation of the given string is available for the
       ;; current locale, then the translation is returned,
       ;; otherwise the original string is returned.
-      (gnc:html-document-set-title! document (G_ "Hello, World"))
+      (gnc:html-document-set-title! document (G_ "Hello Example"))
 
       ;; we make a "text object" to add a bunch of text to.
       ;; the function gnc:make-html-text can take any number of 
@@ -467,7 +467,7 @@ new, totally cool report, consult the mailing list ~a.")
  ;; The name of this report. This will be used, among other things,
  ;; for making its menu item in the main menu. You need to use the
  ;; untranslated value here!
- 'name (N_ "Hello, World")
+ 'name (N_ "Sample Report")
 
  ;; The GUID for this report. This string should be unique, set once
  ;; and left alone forever after that. In theory, you could use any
