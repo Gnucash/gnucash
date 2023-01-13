@@ -5,7 +5,7 @@
 # SULYOK Péter <peti@sulyok.hu>, 2003-2006.
 # Kornel Tako <takokornel@gmail.com>, 2007.
 # Kárász Attila <cult.edie@gmail.com>, 2022.
-# Szia Tomi <sziatomi01@gmail.com>, 2022.
+# Szia Tomi <sziatomi01@gmail.com>, 2022, 2023.
 # mocsa <csaba@feltoltve.hu>, 2022, 2023.
 # ovari <ovari123@zoho.com>, 2022, 2023.
 msgid ""
@@ -14,8 +14,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-01-13 18:47+0000\n"
-"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
+"PO-Revision-Date: 2023-01-13 23:56+0000\n"
+"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -963,7 +963,7 @@ msgstr "Folyószámlatípusok"
 #: gnucash/gnome/assistant-hierarchy.c:872
 #, c-format
 msgid "Accounts in '%s'"
-msgstr "<b>Számlák '%s'-ban</b>"
+msgstr "Számlák a(z) '%s'-ban(-ben)"
 
 #: gnucash/gnome/assistant-hierarchy.c:880
 msgid "No description provided."
@@ -971,7 +971,7 @@ msgstr "Nincs magyarázat."
 
 #: gnucash/gnome/assistant-hierarchy.c:895
 msgid "Accounts in Category"
-msgstr "<b>Számlák Kategóriában</b>"
+msgstr "Számlák a kategóriában"
 
 #: gnucash/gnome/assistant-hierarchy.c:1107
 msgid "zero"
@@ -1017,10 +1017,11 @@ msgid ""
 "new accounts. Accounts in other currencies must be\n"
 "added manually."
 msgstr ""
-"A főkönyvhöz új pénznemet választott, ezért\n"
-"ez lesz az újonnan létrehozott számlák pénzneme.\n"
-"A más pénznemet használó számlákat manuálisan\n"
-"kell hozzáadni."
+"Kiválasztott egy főkönyvi pénznemet és\n"
+"ez lesz\n"
+"az újonnan létrehozott számlák pénzneme.\n"
+"A más pénznemet használó számlákat\n"
+"manuálisan kell hozzáadni."
 
 #: gnucash/gnome/assistant-hierarchy.c:1495
 #, fuzzy
@@ -11597,7 +11598,8 @@ msgid ""
 "Enables the \"Tip Of The Day\" when GnuCash starts up. If active, the dialog "
 "will be shown. Otherwise it will not be shown."
 msgstr ""
-"Ha aktív, indításkor megjelenik „A nap tippje”. Különben nem jelenik meg."
+"Engedélyezi a GnuCash indításakor „A nap tippje” megjelenítését. Ha aktív, "
+"megjelenik a tipp. Egyébként nem jelenik meg."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:5
 #: gnucash/gtkbuilder/dialog-preferences.glade:4229
