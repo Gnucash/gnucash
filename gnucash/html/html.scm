@@ -26,14 +26,13 @@
 
 (define-module (gnucash html))
 
+(use-modules (gnucash core-utils))
+
 ;; Guile 2 needs to find the symbols from the extension at compile time already
 (eval-when
       (compile load eval expand)
       (load-extension "libgnc-html" "scm_init_sw_gnc_html_module"))
-(use-modules (sw_gnc_html))
 
-; Export the swig-wrapped symbols in the public interface of this module
-(let ((i (module-public-interface (current-module))))
-     (module-use! i (resolve-interface '(sw_gnc_html))))
+(load-and-reexport (sw_gnc_html))
 
 (gnc-html-initialize)
