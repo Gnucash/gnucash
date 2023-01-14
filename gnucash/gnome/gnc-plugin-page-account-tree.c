@@ -1374,7 +1374,8 @@ account_delete_dialog (Account *account, GtkWindow *parent, Adopters* adopt)
     gtk_window_set_transient_for(GTK_WINDOW(dialog), parent);
 
     /* FIXME: Same account type used for subaccount. */
-    g_object_set_data(G_OBJECT(dialog), DELETE_DIALOG_FILTER, filter);
+    g_object_set_data_full (G_OBJECT(dialog), DELETE_DIALOG_FILTER, filter,
+                            (GDestroyNotify) g_list_free);
     g_object_set_data(G_OBJECT(dialog), DELETE_DIALOG_ACCOUNT, account);
     widget = GTK_WIDGET(gtk_builder_get_object (builder, "header"));
     title = g_strdup_printf(_("Deleting account %s"), acct_name);
@@ -1531,11 +1532,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GSimpleAction *simple,
 
         if (response != GTK_RESPONSE_ACCEPT)
         {
-            /* Account deletion is cancelled, so clean up and return. */
-            filter = g_object_get_data (G_OBJECT (dialog),
-                                        DELETE_DIALOG_FILTER);
             gtk_widget_destroy(dialog);
-            g_list_free(filter);
             return;
         }
         adopter_set_account_and_match (&adopt.trans);
@@ -1547,9 +1544,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GSimpleAction *simple,
             adopter_match (&adopt.subtrans, GTK_WINDOW (window)))
             break;
     }
-    filter = g_object_get_data (G_OBJECT (dialog), DELETE_DIALOG_FILTER);
     gtk_widget_destroy(dialog);
-    g_list_free(filter);
     if (confirm_delete_account (simple, page, adopt.trans.new_account,
                                 adopt.subtrans.new_account,
                                 adopt.subacct.new_account,
