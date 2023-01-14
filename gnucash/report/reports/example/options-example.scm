@@ -1,5 +1,10 @@
 ;; -*-scheme-*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; options-example.scm : Options Example Report
+;;
+;; Originally hello-world.scm report
+;; refactored by flywire January 2023
+
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
 ;; published by the Free Software Foundation; either version 2 of
@@ -23,7 +28,7 @@
 ;; It illustrates the basic techniques used to create
 ;; new reports for GnuCash.
 
-(define-module (gnucash reports example sample-report))
+(define-module (gnucash reports example options-example))
 
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities)) 
@@ -54,7 +59,7 @@
     ;; the mouse pointer over the option.
     (add-option
      (gnc:make-simple-boolean-option
-      (N_ "Sample!") (N_ "Boolean Option")
+      (N_ "Tab B") (N_ "Boolean Option")
       "a" (N_ "This is a boolean option.") #t))
     
     ;; This is a multichoice option. The user can choose between
@@ -64,7 +69,7 @@
     ;; value is 'third.
     (add-option
      (gnc:make-multichoice-option
-      (N_ "Sample!") (N_ "Multi Choice Option")
+      (N_ "Tab B") (N_ "Multi Choice Option")
       "b" (N_ "This is a multi choice option.") 'third
       (list (vector 'first (N_ "First Option"))
             (vector 'second (N_ "Second Option"))
@@ -72,14 +77,14 @@
             (vector 'fourth (N_ "Fourth Options")))))
     
     ;; This is a string option. Users can type anything they want
-    ;; as a value. The default value is "Sample String". This is
+    ;; as a value. The default value is "String Option Default". This is
     ;; in the same section as the option above. It will be shown
     ;; after the option above because its key is 'b' while the
     ;; other key is 'a'.
     (add-option
      (gnc:make-string-option
-      (N_ "Sample!") (N_ "String Option")
-      "c" (N_ "This is a string option.") (N_ "Sample String")))
+      (N_ "Tab B") (N_ "String Option")
+      "c" (N_ "This is a string option.") (N_ "String Option Default")))
     
     ;; This is a date/time option. The user can pick a date and,
     ;; possibly, a time. Times are stored as an integer specifying
@@ -89,21 +94,21 @@
     ;; time.
     (add-option
      (gnc:make-date-option
-      (N_ "Sample!") (N_ "Just a Date Option")
+      (N_ "Tab B") (N_ "Just a Date Option")
       "d" (N_ "This is a date option.")
       (lambda () (cons 'absolute (current-time)))
       #f 'absolute #f ))
     
     (add-option
      (gnc:make-date-option
-      (N_ "Sample!") (N_ "Combo Date Option")
+      (N_ "Tab B") (N_ "Combo Date Option")
       "y" (N_ "This is a combination date option.")
       (lambda () (cons 'relative 'start-cal-year))
       #f 'both '(start-cal-year start-prev-year end-prev-year) ))
     
     (add-option
      (gnc:make-date-option
-      (N_ "Sample!") (N_ "Relative Date Option")
+      (N_ "Tab B") (N_ "Relative Date Option")
       "x" (N_ "This is a relative date option.")
       (lambda () (cons 'relative 'start-cal-year))
       #f 'relative '(start-cal-year start-prev-year end-prev-year) ))
@@ -114,7 +119,7 @@
     ;; by a single click is given by the step size.
     (add-option
      (gnc:make-number-range-option
-      (N_ "Sample!") (N_ "Number Option")
+      (N_ "Tab B") (N_ "Number Option")
       "ee" (N_ "This is a number option.")
       1500.0  ;; default
       0.0     ;; lower bound
@@ -132,7 +137,7 @@
     ;; which will scale the values appropriately according the range.
     (add-option
      (gnc:make-color-option
-      (N_ "Sample!") (N_ "Background Color")
+      (N_ "Tab B") (N_ "Background Color")
       "f" (N_ "This is a color option.")
       (list #xf6 #xff #xdb #xff)
       255
@@ -154,7 +159,7 @@
     ;; selected account in the main window, if any.
     (add-option
      (gnc:make-account-list-option
-      (N_ "Hello Again") (N_ "An account list option")
+      (N_ "Tab A") (N_ "An account list option")
       "g" (N_ "This is an account list option.")
       ;; FIXME : this used to be gnc:get-current-accounts, but 
       ;; that doesn't exist any more.
@@ -167,7 +172,7 @@
     ;; option is a list of symbols.
     (add-option
      (gnc:make-list-option
-      (N_ "Hello Again") (N_ "A list option")
+      (N_ "Tab A") (N_ "A list option")
       "h" (N_ "This is a list option.")
       '(good)
       (list (vector 'good (N_ "The Good"))
@@ -189,7 +194,7 @@ option like this.")
     ;; value from the list of buttons.
     (add-option
      (gnc:make-radiobutton-option
-      (N_ "Hello Again") "A Radio Button option" "z" (N_ "This is a Radio Button option.") 'good
+      (N_ "Tab A") "A Radio Button option" "z" (N_ "This is a Radio Button option.") 'good
       (list (vector 'good
                     (N_ "The Good")
                     (N_ "Good option."))
@@ -200,7 +205,7 @@ option like this.")
                     (N_ "The Ugly")
                     (N_ "Ugly option.")))))
 
-    (gnc:options-set-default-section options "Sample!")      
+    (gnc:options-set-default-section options "Tab B")      
     options))
 
 ;; This is the rendering function. It accepts a database of options
@@ -209,7 +214,7 @@ option like this.")
 ;; includes all the relevant Scheme code. The option database passed
 ;; to the function is one created by the options-generator function
 ;; defined above.
-(define (sample-report-renderer report-obj)
+(define (options-example-renderer report-obj)
   ;; These are some helper functions for looking up option values.
   (define (get-op section name)
     (gnc:lookup-option (gnc:report-options report-obj) section name))
@@ -220,20 +225,20 @@ option like this.")
   ;; The first thing we do is make local variables for all the specific
   ;; options in the set of options given to the function. This set will
   ;; be generated by the options generator above.
-  (let ((bool-val     (op-value "Sample!" "Boolean Option"))
-        (mult-val     (op-value "Sample!" "Multi Choice Option"))
-        (string-val   (op-value "Sample!" "String Option"))
+  (let ((bool-val     (op-value "Tab B" "Boolean Option"))
+        (mult-val     (op-value "Tab B" "Multi Choice Option"))
+        (string-val   (op-value "Tab B" "String Option"))
         (date-val     (gnc:date-option-absolute-time
-                       (op-value "Sample!" "Just a Date Option")))
+                       (op-value "Tab B" "Just a Date Option")))
         (rel-date-val (gnc:date-option-absolute-time
-                       (op-value "Sample!" "Relative Date Option")))
+                       (op-value "Tab B" "Relative Date Option")))
         (combo-date-val (gnc:date-option-absolute-time
-                         (op-value "Sample!" "Combo Date Option")))
-        (num-val      (op-value "Sample!" "Number Option"))
-        (bg-color-op  (get-op   "Sample!" "Background Color"))
-        (accounts     (op-value "Hello Again"   "An account list option"))
-        (list-val     (op-value "Hello Again"   "A list option"))
-        (radio-val    (op-value "Hello Again"   "A Radio Button option"))
+                         (op-value "Tab B" "Combo Date Option")))
+        (num-val      (op-value "Tab B" "Number Option"))
+        (bg-color-op  (get-op   "Tab B" "Background Color"))
+        (accounts     (op-value "Tab A"   "An account list option"))
+        (list-val     (op-value "Tab A"   "A list option"))
+        (radio-val    (op-value "Tab A"   "A Radio Button option"))
         (crash-val    (op-value "Testing"       "Crash the report"))
         
         ;; document will be the HTML document that we return.
@@ -464,10 +469,15 @@ new, totally cool report, consult the mailing list ~a.")
  ;; The version of this report.
  'version 1
  
- ;; The name of this report. This will be used, among other things,
- ;; for making its menu item in the main menu. You need to use the
- ;; untranslated value here!
- 'name (N_ "Sample Report")
+ ;; A skeleton General section is added by
+ ;; gnc:report-template-new-options providing the name (but reports must
+ ;; add title themselves) and stylesheet options.
+
+ ;; The name of this report. This sets the name on the options dialog's
+ ;; title bar and the default value for the General section's Report
+ ;; Name option. Changing the report name option will change the value
+ ;; of the report's window or tab title but not its options dialog title.
+ 'name (N_ "Options Example Report")
 
  ;; The GUID for this report. This string should be unique, set once
  ;; and left alone forever after that. In theory, you could use any
@@ -478,11 +488,11 @@ new, totally cool report, consult the mailing list ~a.")
 
  ;; The name in the menu
  ;; (only necessary if it differs from the name)
- 'menu-name (N_ "Sample Report with Examples")
+ 'menu-name (N_ "Options Example")
 
  ;; A tip that is used to provide additional information about the
  ;; report to the user.
- 'menu-tip (N_ "A sample report with examples.")
+ 'menu-tip (N_ "A Options Example.")
 
  ;; A path describing where to put the report in the menu system.
  ;; In this case, it's going under the utility menu.
@@ -492,4 +502,4 @@ new, totally cool report, consult the mailing list ~a.")
  'options-generator options-generator
  
  ;; The rendering function defined above.
- 'renderer sample-report-renderer)
+ 'renderer options-example-renderer)
