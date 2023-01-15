@@ -28,6 +28,9 @@
 ;; It illustrates the basic techniques used to create
 ;; new reports for GnuCash.
 
+;; ------------------------------------------------------------------
+;; Top-level definitions
+;; ------------------------------------------------------------------
 (define-module (gnucash reports example options-example))
 
 (use-modules (gnucash engine))
@@ -39,9 +42,11 @@
 
 (debug-enable 'backtrace)
 
+;; ------------------------------------------------------------------
 ;; This function will generate a set of options that GnuCash
 ;; will use to display a dialog where the user can select
 ;; values for your report's parameters.
+;; ------------------------------------------------------------------
 (define (options-generator)    
   (let* ((options (gnc:new-options)) 
          ;; This is just a helper function for making options.
@@ -50,7 +55,7 @@
           (lambda (new-option)
             (gnc:register-option options new-option))))
     
-    ;; This is a boolean option. It is in Section 'Sample!'
+    ;; This is a boolean option. It is in Section "Tab B"
     ;; and is named 'Boolean Option'. Its sorting key is 'a',
     ;; thus it will come before options with sorting keys
     ;; 'b', 'c', etc. in the same section. The default value
@@ -77,9 +82,9 @@
             (vector 'fourth (N_ "Fourth Options")))))
     
     ;; This is a string option. Users can type anything they want
-    ;; as a value. The default value is "String Option Default". This is
-    ;; in the same section as the option above. It will be shown
-    ;; after the option above because its key is 'b' while the
+    ;; as a value. The default value is "String Option Default".
+    ;; This is in the same section as the option above. It will be
+    ;; shown after the option above because its key is 'b' while the
     ;; other key is 'a'.
     (add-option
      (gnc:make-string-option
@@ -208,12 +213,14 @@ option like this.")
     (gnc:options-set-default-section options "Tab B")      
     options))
 
+;; ------------------------------------------------------------------
 ;; This is the rendering function. It accepts a database of options
 ;; and generates an object of type <html-document>.  See the file
 ;; report-html.txt for documentation; the file report-html.scm
 ;; includes all the relevant Scheme code. The option database passed
 ;; to the function is one created by the options-generator function
 ;; defined above.
+;; ------------------------------------------------------------------
 (define (options-example-renderer report-obj)
   ;; These are some helper functions for looking up option values.
   (define (get-op section name)
@@ -329,8 +336,8 @@ new, totally cool report, consult the mailing list ~a.")
           (gnc:html-markup-anchor 
            "mailto:gnucash-devel@gnucash.org"
            (gnc:html-markup-tt "gnucash-devel@gnucash.org")))
-         (G_ "For details on subscribing to that list, see &lt;https://www.gnucash.org/&gt;.")
-         (G_ "You can learn more about writing scheme at &lt;https://www.scheme.com/tspl2d/&gt;."))
+         (G_ " For details on subscribing to that list, see &lt;https://www.gnucash.org/&gt;.")
+         (G_ " You can learn more about writing scheme at &lt;https://www.scheme.com/tspl2d/&gt;."))
 
         (gnc:html-markup-p
          (gnc:html-markup/format
@@ -463,7 +470,9 @@ new, totally cool report, consult the mailing list ~a.")
       
       document)))
 
+;; ------------------------------------------------------------------
 ;; Here we define the actual report with gnc:define-report
+;; ------------------------------------------------------------------
 (gnc:define-report
  
  ;; The version of this report.
@@ -492,7 +501,7 @@ new, totally cool report, consult the mailing list ~a.")
 
  ;; A tip that is used to provide additional information about the
  ;; report to the user.
- 'menu-tip (N_ "A Options Example.")
+ 'menu-tip (N_ "An options report example.")
 
  ;; A path describing where to put the report in the menu system.
  ;; In this case, it's going under the utility menu.
