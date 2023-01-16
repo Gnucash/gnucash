@@ -546,7 +546,7 @@ set (Boost_FIND_QUIETLY ON)
 if (NOT DEFINED ${BOOST_ROOT})
   set(BOOST_ROOT $ENV{BOOST_ROOT})
 endif()
-find_package (Boost 1.67.0 COMPONENTS algorithm asio date_time filesystem iostreams locale process program_options property_tree regex system)
+find_package (Boost 1.67.0 COMPONENTS date_time filesystem locale program_options regex system)
 
 if (Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIRS})
