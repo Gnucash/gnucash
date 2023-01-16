@@ -222,7 +222,10 @@ option like this.")
                     (N_ "The Ugly")
                     (N_ "Ugly option.")))))
 
+    ;; Setting a default section is optional but set in most reports.
+	;; If not set, the default section will be the first section.
     (gnc:options-set-default-section options "Tab B")      
+
     options))
 
 ;; ------------------------------------------------------------------
