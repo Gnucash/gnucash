@@ -99,6 +99,7 @@ enum class FieldMask : unsigned
     ALLOW_NEGATIVE = 8,
     INPUT_NEW_BALANCE = 16,     // stock_amt only: instead of amount, get new balance
     CAPITALIZE_DEFAULT = 32,    // fees only: capitalize by default into stock acct
+    CAPGAINS_IN_STOCK = 64,     // capg only: add a balancing split in stock acct
 };
 
 FieldMask operator |(FieldMask lhs, FieldMask rhs)
@@ -182,7 +183,7 @@ static const TxnTypeVec long_types
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
         FieldMask::DISABLED,               // dividend_amt
-        FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE, // capgains_amt
+        FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE | FieldMask::CAPGAINS_IN_STOCK, // capgains_amt
         // Translators: this is a stock transaction describing new
         // sale of stock, and recording capital gain/loss
         N_("Sell"),
@@ -215,15 +216,39 @@ reinvested must be subsequently recorded as a regular stock purchase.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
+        FieldMask::ENABLED_CREDIT,         // stock_val
+        FieldMask::DISABLED,               // cash_amt
+        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::CAPITALIZE_DEFAULT,          // fees_amt
+        FieldMask::ENABLED_DEBIT,          // dividend_amt
+        FieldMask::DISABLED,               // capg_amt
+        // Translators: this is a stock transaction describing return
+        // of capital, reclassifying a dividend into return of capital
+        N_("Return of capital (reclassification)"),
+        N_("Company returns capital, reducing the cost basis without affecting # units. A distribution previously recorded as a dividend is reclassified to return of capital, often due to end-of-year tax information.")
+    },
+    {
+        FieldMask::DISABLED,               // stock_amt
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
         FieldMask::ENABLED_CREDIT,         // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing a
-        // notional distribution
-        N_("Notional distribution"),
+        // notional distribution recorded as dividend
+        N_("Notional distribution (dividend)"),
         N_("Company issues a notional distribution, which is recorded as dividend income and increases the cost basis without affecting # units.")
+    },
+    {
+        FieldMask::DISABLED,               // stock_amt
+        FieldMask::ENABLED_DEBIT,          // stock_val
+        FieldMask::DISABLED,               // cash_amt
+        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
+        FieldMask::DISABLED,               // dividend_amt
+        FieldMask::ENABLED_CREDIT,         // capg_amt
+        // Translators: this is a stock transaction describing a
+        // notional distribution recorded as capital gain
+        N_("Notional distribution (capital gain)"),
+        N_("Company issues a notional distribution, which is recorded as capital gain and increases the cost basis without affecting # units.")
     },
     {
         FieldMask::ENABLED_DEBIT | FieldMask::INPUT_NEW_BALANCE,          // stock_amt
@@ -274,7 +299,7 @@ static const TxnTypeVec short_types
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
         FieldMask::DISABLED,               // dividend_amt
-        FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE,          // capg_amt
+        FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE | FieldMask::CAPGAINS_IN_STOCK,          // capg_amt
         // Translators: this is a stock transaction describing cover
         // buying stock, and recording capital gain/loss
         N_("Buy to cover short"),
@@ -306,15 +331,42 @@ static const TxnTypeVec short_types
     },
     {
         FieldMask::DISABLED,               // stock_amt
+        FieldMask::ENABLED_DEBIT,          // stock_val
+        FieldMask::DISABLED,               // cash_amt
+        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::CAPITALIZE_DEFAULT,          // fees_amt
+        FieldMask::ENABLED_CREDIT,         // dividend_amt
+        FieldMask::DISABLED,               // capg_amt
+        // Translators: this is a stock transaction describing
+        // reclassifying a compensatory dividend into compensatory
+        // return of capital when shorting stock
+        N_("Compensatory return of capital (reclassification)"),
+        N_("Company returns capital, and the short stock holder must make a compensatory payment for the returned capital. This reduces the cost basis (less negative, towards 0.00 value) without affecting # units. A distribution previously recorded as a compensatory dividend is reclassified to compensatory return of capital, often due to end-of-year tax information.")
+    },
+    {
+        FieldMask::DISABLED,               // stock_amt
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
         FieldMask::ENABLED_DEBIT,          // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing a
-        // notional distribution when shorting stock
-        N_("Compensatory notional distribution"),
+        // notional distribution recorded as dividend when shorting
+        // stock
+        N_("Compensatory notional distribution (dividend)"),
         N_("Company issues a notional distribution, and the short stock holder must make a compensatory payment for the notional distribution. This is recorded as a loss/negative dividend income amount, and increases the cost basis (more negative, away from 0.00 value) without affecting # units.")
+    },
+    {
+        FieldMask::DISABLED,               // stock_amt
+        FieldMask::ENABLED_CREDIT,         // stock_val
+        FieldMask::DISABLED,               // cash_amt
+        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
+        FieldMask::DISABLED,               // dividend_amt
+        FieldMask::ENABLED_DEBIT,          // capg_amt
+        // Translators: this is a stock transaction describing a
+        // notional distribution recorded as capital gain when
+        // shorting stock
+        N_("Compensatory notional distribution (capital gain)"),
+        N_("Company issues a notional distribution, and the short stock holder must make a compensatory payment for the notional distribution. This is recorded as a capital loss amount, and increases the cost basis (more negative, away from 0.00 value) without affecting # units.")
     },
     {
         FieldMask::ENABLED_CREDIT | FieldMask::INPUT_NEW_BALANCE,         // stock_amt
@@ -756,19 +808,22 @@ to ensure proper recording."), new_date_str, last_split_date_str);
         // swap the debit/credit flags.
         if (this->capgains_enabled)
         {
+            if (this->txn_type->capgains_value & FieldMask::CAPGAINS_IN_STOCK)
+            {
+                line = check_page (debit, credit, errors, this->txn_type->capgains_value ^
+                                   (FieldMask::ENABLED_CREDIT | FieldMask::ENABLED_DEBIT),
+                                   this->acct, this->capgains_memo, this->capgains_value,
+                                   NC_ ("Stock Assistant: Page name", "capital gains"),
+                                   this->curr_pinfo);
+                line.units_numeric = gnc_numeric_zero();
+                this->list_of_splits.push_back (std::move (line));
+            }
+
             line = check_page (debit, credit, errors, this->txn_type->capgains_value,
                                this->capgains_account, this->capgains_memo,
                                this->capgains_value,
                                NC_ ("Stock Assistant: Page name", "capital gains"),
                                this->curr_pinfo);
-            this->list_of_splits.push_back (std::move (line));
-
-            line = check_page (debit, credit, errors, this->txn_type->capgains_value ^
-                               (FieldMask::ENABLED_CREDIT | FieldMask::ENABLED_DEBIT),
-                               this->acct, this->capgains_memo, this->capgains_value,
-                               NC_ ("Stock Assistant: Page name", "capital gains"),
-                               this->curr_pinfo);
-            line.units_numeric = gnc_numeric_zero();
             this->list_of_splits.push_back (std::move (line));
         }
 
