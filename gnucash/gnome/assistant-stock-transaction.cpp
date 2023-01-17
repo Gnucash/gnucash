@@ -98,6 +98,7 @@ enum class FieldMask : unsigned
     ALLOW_ZERO = 4,
     ALLOW_NEGATIVE = 8,
     INPUT_NEW_BALANCE = 16,     // stock_amt only: instead of amount, get new balance
+    CAPITALIZE_DEFAULT = 32,    // fees only: capitalize by default into stock acct
 };
 
 FieldMask operator |(FieldMask lhs, FieldMask rhs)
@@ -123,7 +124,6 @@ struct TxnTypeInfo
     FieldMask stock_value;
     FieldMask cash_value;
     FieldMask fees_value;
-    bool fees_capitalize;
     FieldMask dividend_value;
     FieldMask capgains_value;
     const char* friendly_name;
@@ -140,8 +140,7 @@ static const TxnTypeVec starting_types
         FieldMask::ENABLED_DEBIT,          // stock_amt
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        true,                   // fees_capitalize
+        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::CAPITALIZE_DEFAULT,          // fees_amt
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing an
@@ -153,8 +152,7 @@ static const TxnTypeVec starting_types
         FieldMask::ENABLED_CREDIT,         // stock_amt
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        true,                   // fees_capitalize
+        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::CAPITALIZE_DEFAULT,          // fees_amt
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing an
@@ -170,8 +168,7 @@ static const TxnTypeVec long_types
         FieldMask::ENABLED_DEBIT,          // stock_amt
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        true,                   // fees_capitalize
+        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::CAPITALIZE_DEFAULT,          // fees_amt
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing
@@ -184,7 +181,6 @@ static const TxnTypeVec long_types
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        false,                  // fees_capitalize
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE, // capgains_amt
         // Translators: this is a stock transaction describing new
@@ -197,7 +193,6 @@ static const TxnTypeVec long_types
         FieldMask::DISABLED,               // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        false,                  // fees_capitalize
         FieldMask::ENABLED_CREDIT,         // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing
@@ -210,8 +205,7 @@ reinvested must be subsequently recorded as a regular stock purchase.")
         FieldMask::DISABLED,               // stock_amt
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        true,                   // fees_capitalize
+        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::CAPITALIZE_DEFAULT,          // fees_amt
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing return
@@ -224,7 +218,6 @@ reinvested must be subsequently recorded as a regular stock purchase.")
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        false,                  // fees_capitalize
         FieldMask::ENABLED_CREDIT,         // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing a
@@ -236,8 +229,7 @@ reinvested must be subsequently recorded as a regular stock purchase.")
         FieldMask::ENABLED_DEBIT | FieldMask::INPUT_NEW_BALANCE,          // stock_amt
         FieldMask::DISABLED,               // stock_val
         FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO,          // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        true,                   // fees_capitalize
+        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::CAPITALIZE_DEFAULT,          // fees_amt
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing a stock
@@ -249,8 +241,7 @@ reinvested must be subsequently recorded as a regular stock purchase.")
         FieldMask::ENABLED_CREDIT | FieldMask::INPUT_NEW_BALANCE,         // stock_amt
         FieldMask::DISABLED,               // stock_val
         FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO,          // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        true,                   // fees_capitalize
+        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::CAPITALIZE_DEFAULT,          // fees_amt
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing a reverse split
@@ -269,8 +260,7 @@ static const TxnTypeVec short_types
         FieldMask::ENABLED_CREDIT,         // stock_amt
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        true,                   // fees_capitalize
+        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::CAPITALIZE_DEFAULT,          // fees_amt
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing
@@ -283,7 +273,6 @@ static const TxnTypeVec short_types
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        false,                  // fees_capitalize
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO | FieldMask::ALLOW_NEGATIVE,          // capg_amt
         // Translators: this is a stock transaction describing cover
@@ -296,7 +285,6 @@ static const TxnTypeVec short_types
         FieldMask::DISABLED,               // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        false,                  // fees_capitalize
         FieldMask::ENABLED_DEBIT,          // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing
@@ -308,8 +296,7 @@ static const TxnTypeVec short_types
         FieldMask::DISABLED,               // stock_amt
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        true,                   // fees_capitalize
+        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::CAPITALIZE_DEFAULT,          // fees_amt
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing return
@@ -322,7 +309,6 @@ static const TxnTypeVec short_types
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        false,                  // fees_capitalize
         FieldMask::ENABLED_DEBIT,          // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing a
@@ -334,8 +320,7 @@ static const TxnTypeVec short_types
         FieldMask::ENABLED_CREDIT | FieldMask::INPUT_NEW_BALANCE,         // stock_amt
         FieldMask::DISABLED,               // stock_val
         FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO,          // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        true,                   // fees_capitalize
+        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::CAPITALIZE_DEFAULT,          // fees_amt
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing a stock
@@ -347,8 +332,7 @@ static const TxnTypeVec short_types
         FieldMask::ENABLED_DEBIT | FieldMask::INPUT_NEW_BALANCE,          // stock_amt
         FieldMask::DISABLED,               // stock_val
         FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO,          // cash_amt
-        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
-        true,                   // fees_capitalize
+        FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::CAPITALIZE_DEFAULT,          // fees_amt
         FieldMask::DISABLED,               // dividend_amt
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing a
@@ -567,7 +551,7 @@ struct StockAssistantModel
         this->input_new_balance = this->txn_type->stock_amount & FieldMask::INPUT_NEW_BALANCE;
         this->stock_amount_enabled = this->txn_type->stock_amount != FieldMask::DISABLED;
         this->stock_value_enabled = this->txn_type->stock_value != FieldMask::DISABLED;
-        this->fees_capitalize = this->txn_type->fees_capitalize;
+        this->fees_capitalize = this->txn_type->fees_value & FieldMask::CAPITALIZE_DEFAULT;
         this->fees_enabled = this->txn_type->fees_value != FieldMask::DISABLED;
         this->capgains_enabled = this->txn_type->capgains_value != FieldMask::DISABLED;
         this->dividend_enabled = this->txn_type->dividend_value != FieldMask::DISABLED;
