@@ -96,7 +96,8 @@ enum class FieldMask : unsigned
     ENABLED_DEBIT,
     ENABLED_CREDIT,
     ALLOW_ZERO = 4,
-    ALLOW_NEGATIVE = 8
+    ALLOW_NEGATIVE = 8,
+    INPUT_NEW_BALANCE = 16,     // stock_amt only: instead of amount, get new balance
 };
 
 FieldMask operator |(FieldMask lhs, FieldMask rhs)
@@ -119,7 +120,6 @@ FieldMask operator ^(FieldMask lhs, FieldMask rhs)
 struct TxnTypeInfo
 {
     FieldMask stock_amount;
-    bool input_new_balance;
     FieldMask stock_value;
     FieldMask cash_value;
     FieldMask fees_value;
@@ -138,7 +138,6 @@ static const TxnTypeVec starting_types
 {
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
-        false,                             // input_new_balance
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -152,7 +151,6 @@ static const TxnTypeVec starting_types
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
-        false,                             // input_new_balance
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -170,7 +168,6 @@ static const TxnTypeVec long_types
 {
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
-        false,                             // input_new_balance
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -184,7 +181,6 @@ static const TxnTypeVec long_types
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
-        false,                             // input_new_balance
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -198,7 +194,6 @@ static const TxnTypeVec long_types
     },
     {
         FieldMask::DISABLED,               // stock_amt
-        false,                             // input_new_balance
         FieldMask::DISABLED,               // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -213,7 +208,6 @@ reinvested must be subsequently recorded as a regular stock purchase.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
-        false,                             // input_new_balance
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -227,7 +221,6 @@ reinvested must be subsequently recorded as a regular stock purchase.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
-        false,                             // input_new_balance
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -240,8 +233,7 @@ reinvested must be subsequently recorded as a regular stock purchase.")
         N_("Company issues a notional distribution, which is recorded as dividend income and increases the cost basis without affecting # units.")
     },
     {
-        FieldMask::ENABLED_DEBIT,          // stock_amt
-        true,                              // input_new_balance
+        FieldMask::ENABLED_DEBIT | FieldMask::INPUT_NEW_BALANCE,          // stock_amt
         FieldMask::DISABLED,               // stock_val
         FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -254,8 +246,7 @@ reinvested must be subsequently recorded as a regular stock purchase.")
         N_("Company issues additional units, thereby reducing the stock price by a divisor, while keeping the total monetary value of the overall investment constant.")
     },
     {
-        FieldMask::ENABLED_CREDIT,         // stock_amt
-        true,                              // input_new_balance
+        FieldMask::ENABLED_CREDIT | FieldMask::INPUT_NEW_BALANCE,         // stock_amt
         FieldMask::DISABLED,               // stock_val
         FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -276,7 +267,6 @@ static const TxnTypeVec short_types
 {
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
-        false,                             // input_new_balance
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -290,7 +280,6 @@ static const TxnTypeVec short_types
     },
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
-        false,                             // input_new_balance
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -304,7 +293,6 @@ static const TxnTypeVec short_types
     },
     {
         FieldMask::DISABLED,               // stock_amt
-        false,                             // input_new_balance
         FieldMask::DISABLED,               // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -318,7 +306,6 @@ static const TxnTypeVec short_types
     },
     {
         FieldMask::DISABLED,               // stock_amt
-        false,                             // input_new_balance
         FieldMask::ENABLED_DEBIT,          // stock_val
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -332,7 +319,6 @@ static const TxnTypeVec short_types
     },
     {
         FieldMask::DISABLED,               // stock_amt
-        false,                             // input_new_balance
         FieldMask::ENABLED_CREDIT,         // stock_val
         FieldMask::DISABLED,               // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -345,8 +331,7 @@ static const TxnTypeVec short_types
         N_("Company issues a notional distribution, and the short stock holder must make a compensatory payment for the notional distribution. This is recorded as a loss/negative dividend income amount, and increases the cost basis (more negative, away from 0.00 value) without affecting # units.")
     },
     {
-        FieldMask::ENABLED_CREDIT,         // stock_amt
-        true,                              // input_new_balance
+        FieldMask::ENABLED_CREDIT | FieldMask::INPUT_NEW_BALANCE,         // stock_amt
         FieldMask::DISABLED,               // stock_val
         FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -359,8 +344,7 @@ static const TxnTypeVec short_types
         N_("Company issues additional units, thereby reducing the stock price by a divisor, while keeping the total monetary value of the overall investment constant.")
     },
     {
-        FieldMask::ENABLED_DEBIT,          // stock_amt
-        true,                              // input_new_balance
+        FieldMask::ENABLED_DEBIT | FieldMask::INPUT_NEW_BALANCE,          // stock_amt
         FieldMask::DISABLED,               // stock_val
         FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
@@ -580,7 +564,7 @@ struct StockAssistantModel
             PERR ("out of range type_idx=%d", type_idx);
             return false;
         }
-        this->input_new_balance = this->txn_type->input_new_balance;
+        this->input_new_balance = this->txn_type->stock_amount & FieldMask::INPUT_NEW_BALANCE;
         this->stock_amount_enabled = this->txn_type->stock_amount != FieldMask::DISABLED;
         this->stock_value_enabled = this->txn_type->stock_value != FieldMask::DISABLED;
         this->fees_capitalize = this->txn_type->fees_capitalize;
