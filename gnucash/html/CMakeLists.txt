@@ -36,7 +36,7 @@ endif()
 set (gnc_html_SCHEME html.scm)
 
 set(GUILE_OUTPUT_DIR   gnucash)
-set(GUILE_DEPENDS      gnc-html gnucash-guile)
+set(GUILE_DEPENDS      gnc-html gnucash-guile scm-core-utils)
 
 gnc_add_scheme_targets(scm-gnc-html
     SOURCES "${gnc_html_SCHEME}"
