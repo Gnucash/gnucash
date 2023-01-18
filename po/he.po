@@ -5861,8 +5861,8 @@ msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
-"הוספת תצורת־הדוח הנוכחי לתפריט 'דוחותlarr;תצורות־דוחות שמורים'. תצורת־הדוח "
-"תשמר לקובץ %s."
+"הוספת תצורת־הדוח הנוכחי לתפריט 'דוחות&larr;תצורות־דוחות שמורים'. תצורת־הדוח "
+"תישמר לקובץ %s."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1205
 msgid "_Print Report..."
