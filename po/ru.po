@@ -15,14 +15,15 @@
 # МАН69К <weblate@mah69k.net>, 2022.
 # Nikita Samoilov <n.p.samoilov@gmail.com>, 2022.
 # Vik <xasertop@gmail.com>, 2022.
+# Vin <k3kelm4vw@mozmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.13-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2022-08-27 13:17+0000\n"
-"Last-Translator: Vik <xasertop@gmail.com>\n"
+"PO-Revision-Date: 2023-01-20 19:01+0000\n"
+"Last-Translator: Vin <k3kelm4vw@mozmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ru/>\n"
 "Language: ru\n"
@@ -31,7 +32,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.15.1\n"
 "X-Source-Language: C\n"
 
 # For the translation in '../borrowed/goffice/go-charmap-sel.c' see 
@@ -16211,10 +16212,8 @@ msgid "All _accounts"
 msgstr "Все счета"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:165
-#, fuzzy
-#| msgid " Search "
 msgid "Search scope"
-msgstr " Поиск "
+msgstr "Область поиска"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:191
 msgid "Account Full Name"
@@ -25992,9 +25991,8 @@ msgid "Barchart"
 msgstr "Гистограмма активов"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1191
-#, fuzzy
 msgid " to "
-msgstr "%s по %s"
+msgstr " по "
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1254
 #: gnucash/report/reports/standard/trial-balance.scm:855
