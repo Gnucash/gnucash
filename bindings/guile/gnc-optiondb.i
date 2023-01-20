@@ -468,19 +468,15 @@ scm_to_value<GncOptionAccountList>(SCM new_value)
     GncOptionAccountList retval{};
     if (scm_is_false(scm_list_p(new_value)) || scm_is_null(new_value))
         return retval;
+    auto book{get_current_book()};
     auto next{new_value};
-    while (auto node{scm_car(next)})
+    while (!scm_is_null(next) && scm_car(next))
     {
-        void* account{};
-        SWIG_ConvertPtr(node, &account, SWIGTYPE_p_Account, 0);
-        if (account)
-        {
-            auto guid{qof_entity_get_guid(static_cast<Account*>(account))};
-            retval.push_back(*guid);
-        }
+        auto guid_str{scm_to_utf8_string(scm_car(next))};
+        GncGUID guid;
+        string_to_guid(guid_str, &guid);
+        retval.push_back(guid);
         next = scm_cdr(next);
-        if (scm_is_null(next))
-            break;
     }
     return retval;
 }
