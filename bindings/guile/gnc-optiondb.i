@@ -472,10 +472,26 @@ scm_to_value<GncOptionAccountList>(SCM new_value)
     auto next{new_value};
     while (!scm_is_null(next) && scm_car(next))
     {
-        auto guid_str{scm_to_utf8_string(scm_car(next))};
-        GncGUID guid;
-        string_to_guid(guid_str, &guid);
-        retval.push_back(guid);
+/* If the incoming scheme is from a report then it will contain an Account*, if
+ * it's from restoring a saved report config it will be a guid.
+ */
+        if (scm_is_string(scm_car(next)))
+        {
+            auto guid_str{scm_to_utf8_string(scm_car(next))};
+            GncGUID guid;
+            string_to_guid(guid_str, &guid);
+            retval.push_back(guid);
+        }
+        else
+        {
+            void *account{};
+            SWIG_ConvertPtr(scm_car(next), &account, SWIGTYPE_p_Account, 0);
+            if (account)
+            {
+                auto guid{qof_entity_get_guid(static_cast<Account *>(account))};
+                retval.push_back(*guid);
+            }
+        }
         next = scm_cdr(next);
     }
     return retval;
