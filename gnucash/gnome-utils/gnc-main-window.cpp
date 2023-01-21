@@ -4233,6 +4233,13 @@ gnc_quartz_should_quit (GtkosxApplication *theApp, GncMainWindow *window)
         gnc_main_window_quit (window);
     return TRUE;
 }
+/* Enable GtkMenuItem accelerators */
+static gboolean
+can_activate_cb(GtkWidget *widget, guint signal_id, gpointer data)
+{
+    //return gtk_widget_is_sensitive (widget);
+    return TRUE;
+}
 
 static void
 gnc_quartz_set_menu (GncMainWindow* window)
@@ -4240,7 +4247,7 @@ gnc_quartz_set_menu (GncMainWindow* window)
     GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     auto theApp{static_cast<GtkosxApplication *>(g_object_new(GTKOSX_TYPE_APPLICATION, nullptr))};
     GtkWidget       *item = nullptr;
-    GAction         *action;
+    GClosure *quit_closure;
 
     gtk_widget_hide (priv->menubar);
     gtk_widget_set_no_show_all (priv->menubar, true);
@@ -4251,6 +4258,12 @@ gnc_quartz_set_menu (GncMainWindow* window)
     item = gnc_main_window_menu_find_menu_item (window, "FileQuitAction");
     if (item)
         gtk_widget_hide (GTK_WIDGET(item));
+
+    quit_closure = g_cclosure_new (G_CALLBACK (gnc_quartz_should_quit),
+                                   window, NULL);
+    gtk_accel_group_connect (priv->accel_group, 'q', GDK_META_MASK,
+                             GTK_ACCEL_MASK, quit_closure);
+
 
     // Help About
     item = gnc_main_window_menu_find_menu_item (window, "HelpAboutAction");
@@ -4280,7 +4293,10 @@ gnc_quartz_set_menu (GncMainWindow* window)
     g_signal_connect (theApp, "NSApplicationBlockTermination",
                       G_CALLBACK(gnc_quartz_should_quit), window);
 
-    gtkosx_application_set_use_quartz_accelerators (theApp, TRUE);
+    g_signal_connect (priv->menubar, "can-activate-accel",
+                      G_CALLBACK (can_activate_cb), nullptr);
+
+    gtkosx_application_set_use_quartz_accelerators (theApp, FALSE);
     g_object_unref (theApp);
 }
 #endif //MAC_INTEGRATION
