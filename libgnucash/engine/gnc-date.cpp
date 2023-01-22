@@ -1234,8 +1234,9 @@ GDate* gnc_g_date_new_today ()
     auto result = g_date_new_dmy (ymd.day, month, ymd.year);
     g_assert(g_date_valid (result));
     return result;
-}void
+}
 
+void
 gnc_gdate_set_today (GDate* gd)
 {
     GDate *today = gnc_g_date_new_today ();
