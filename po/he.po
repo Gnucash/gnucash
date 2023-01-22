@@ -8,13 +8,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.13-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-01-10 12:51+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
-"Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/"
-"program-beta/he/>\n"
+"PO-Revision-Date: 2023-01-18 17:04+0000\n"
+"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
+"Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"he/>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5861,8 +5861,8 @@ msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
-"הוספת תצורת־הדוח הנוכחי לתפריט 'דוחותlarr;תצורות־דוחות שמורים'. תצורת־הדוח "
-"תשמר לקובץ %s."
+"הוספת תצורת־הדוח הנוכחי לתפריט 'דוחות&larr;תצורות־דוחות שמורים'. תצורת־הדוח "
+"תישמר לקובץ %s."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1205
 msgid "_Print Report..."
@@ -8882,7 +8882,7 @@ msgstr "תחילת רבעון קודם"
 #: gnucash/gnome-utils/gnc-period-select.c:75
 #: libgnucash/app-utils/date-utilities.scm:930
 msgid "Start of this year"
-msgstr "תחילת השנה הנוכחית"
+msgstr "תחילת שנה נוכחית"
 
 #: gnucash/gnome-utils/gnc-period-select.c:76
 #: libgnucash/app-utils/date-utilities.scm:944
@@ -8919,7 +8919,7 @@ msgstr "סוף רבעון קודם"
 #: gnucash/gnome-utils/gnc-period-select.c:91
 #: libgnucash/app-utils/date-utilities.scm:937
 msgid "End of this year"
-msgstr "סוף השנה הנוכחית"
+msgstr "סוף שנה נוכחית"
 
 #: gnucash/gnome-utils/gnc-period-select.c:92
 #: libgnucash/app-utils/date-utilities.scm:951
@@ -11631,7 +11631,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:165
 #: gnucash/gtkbuilder/dialog-preferences.glade:1212
 msgid "In the current calendar year"
-msgstr "השנה האזרחית הנוכחית"
+msgstr "בשנה האזרחית הנוכחית"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:166
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:171
@@ -16473,7 +16473,7 @@ msgstr "<b>השלמת נתונים</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1202
 msgid "When a date is entered without year, it should be taken"
-msgstr "כאשר תאריך מוזן ללא שנה, השנה תושלם"
+msgstr "אם בעת הזנת תאריך, לא הוזנה השנה, ההזנה אמורה להתקבל"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1218
 msgid ""
@@ -28957,23 +28957,23 @@ msgstr "היום הראשון, בלוח השנה האזרחית הקודמת."
 
 #: libgnucash/app-utils/date-utilities.scm:954
 msgid "Last day of the previous calendar year."
-msgstr "היום האחרון, בלוח השנה האזרחית הקודמת."
+msgstr "יום אחרון, בלוח השנה האזרחית הקודמת."
 
 #: libgnucash/app-utils/date-utilities.scm:958
 msgid "Start of next year"
-msgstr "תחילת השנה הבאה"
+msgstr "תחילת שנה הבאה"
 
 #: libgnucash/app-utils/date-utilities.scm:961
 msgid "First day of the next calendar year."
-msgstr "היום הראשון, בבלוח השנה האזרחית הבאה."
+msgstr "יום ראשון, בלוח השנה האזרחית הבאה."
 
 #: libgnucash/app-utils/date-utilities.scm:965
 msgid "End of next year"
-msgstr "סוף השנה הבאה"
+msgstr "סוף שנה הבאה"
 
 #: libgnucash/app-utils/date-utilities.scm:968
 msgid "Last day of the next calendar year."
-msgstr "היום האחרון, בלוח השנה הבאה."
+msgstr "יום אחרון, בלוח השנה האזרחית הבאה."
 
 #: libgnucash/app-utils/date-utilities.scm:972
 msgid "Start of accounting period"

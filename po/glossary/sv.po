@@ -3,17 +3,17 @@
 # Christian Rose <menthos@menthos.com>, 2001, 2002, 2003.
 # Jonas Norling <norling@lysator.liu.se>, 2006.
 # Kristoffer Grundström <swedishsailfishosuser@tutanota.com>, 2021.
-# Arve Eriksson <031299870@telia.com>, 2021, 2022.
+# Arve Eriksson <031299870@telia.com>, 2021, 2022, 2023.
 #
 # $Id$
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-01-03 03:41+0000\n"
+"PO-Revision-Date: 2023-01-18 09:51+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "sv/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -791,11 +791,11 @@ msgstr "skattetyp: försäljningsskatt"
 
 #. "'Goods and Service Tax' is one form of sales tax."
 msgid "tax type: GST"
-msgstr "skattetyp: GST"
+msgstr "skattetyp: moms"
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr "skattetyp: mervärdesskatt (moms)"
+msgstr "skattetyp: mervärdesskatt"
 
 #. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
