@@ -756,9 +756,7 @@ sxftd_update_excal_adapt( GObject *o, gpointer ud )
 void
 gnc_sx_create_from_trans( GtkWindow *parent, Transaction *trans )
 {
-#ifndef __MINGW32__
-    int errno;
-#endif
+    int sx_error;
     SXFromTransInfo *sxfti = g_new0( SXFromTransInfo, 1);
     GtkBuilder *builder;
     GtkWidget *dialog;
@@ -782,9 +780,9 @@ gnc_sx_create_from_trans( GtkWindow *parent, Transaction *trans )
 
     sxfti->sx = xaccSchedXactionMalloc(gnc_get_current_book ());
 
-    if ( (errno = sxftd_init( sxfti )) < 0 )
+    if ( (sx_error = sxftd_init( sxfti )) < 0 )
     {
-        if ( errno == SXFTD_ERRNO_OPEN_XACTION )
+        if ( sx_error == SXFTD_ERRNO_OPEN_XACTION )
         {
             gnc_error_dialog (NULL, "%s",
                               _( "Cannot create a Scheduled Transaction "
@@ -796,7 +794,7 @@ gnc_sx_create_from_trans( GtkWindow *parent, Transaction *trans )
         }
         else
         {
-            g_error("sxftd_init: %d", errno);
+            g_error("sxftd_init: %d", sx_error);
         }
     }
 
