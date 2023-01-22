@@ -27,6 +27,11 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <boost/version.hpp>
+#if BOOST_VERSION < 107600
+// json_parser uses a deprecated version of bind.hpp
+#define BOOST_BIND_GLOBAL_PLACEHOLDERS
+#endif
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/process.hpp>
