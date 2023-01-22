@@ -444,7 +444,7 @@ dialog_destroy_cb (GtkWidget *object, GncOptionsDialog *win)
 }
 
 // "key_press_event" signal handler
-static bool
+static int
 dialog_window_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
     GncOptionsDialog *win = static_cast<decltype(win)>(data);
