@@ -229,6 +229,12 @@
           (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
          (all-splits (get-all-splits currency-accounts end-date))
          (interesting-splits (sort (filter interesting-split? all-splits) date<?))
+         (commodity-list (sort-and-delete-duplicates
+                          commodity-list
+                          (lambda (a b)
+                            (gnc:string-locale<? (gnc-commodity-get-unique-name a)
+                                                 (gnc-commodity-get-unique-name b)))
+                          gnc-commodity-equal))
          (work-to-do (length commodity-list)))
     (map
      (lambda (c work-done)
