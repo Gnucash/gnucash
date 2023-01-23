@@ -1311,7 +1311,10 @@ gnc_option_db_lookup_qofinstance_value(GncOptionDB* odb, const char* section,
                                        const char* name)
 {
     auto option{odb->find_option(section, name)};
-    return option->get_value<const QofInstance*>();
+    if (option)
+        return option->get_value<const QofInstance*>();
+    else
+        return nullptr;
 }
 
 // Force creation of templates
