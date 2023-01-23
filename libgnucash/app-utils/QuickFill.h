@@ -71,7 +71,7 @@ void         gnc_quickfill_purge (QuickFill *qf);
  */
 const char * gnc_quickfill_string (QuickFill *qf);
 
-/** Return the subnode of the tree whose strings all hold 'wc' as
+/** Return the subnode of the tree whose strings all hold 'c' as
  *  the next letter.  That is, if 'qf' holds all strings starting
  *  with the letter 'a', and we ask for the letter 'b', then this
  *  routine will return the node holding all strings that start

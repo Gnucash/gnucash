@@ -76,7 +76,7 @@ public:
         set_error(ERR_BACKEND_NO_ERR, 0, false);
     }
     /** Check if the dbi connection is valid. If not attempt to re-establish it
-     * Returns TRUE is there is a valid connection in the end or FALSE otherwise
+     * Returns TRUE if there is a valid connection in the end or FALSE otherwise
      */
     bool verify() noexcept override;
     bool retry_connection(const char* msg) noexcept override;

@@ -103,7 +103,7 @@ gnc_new_tip_number (TotdDialog *totd_dialog, gint offset)
      */
     if (tip_list[current_tip_number])
         tip_components = g_strsplit(tip_list[current_tip_number], "|", 0);
-    /* If the tip is empty, g_strisplit will return an empty list. This
+    /* If the tip is empty, g_strsplit will return an empty list. This
      * shouldn't normally happen, but make sure we don't crash just in
      * case */
     if (tip_components == NULL)

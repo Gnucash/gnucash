@@ -1057,7 +1057,7 @@ gnc_date_edit_get_date_internal (GNCDateEdit *gde)
 
     if (!date_was_valid)
     {
-        /* Hm... no valid date. What should we do not? As a hacky workaround we
+        /* Hm... no valid date. What should we do now? As a hacky workaround we
         revert to today's date. Alternatively we can return some value that
         signals that we don't get a valid date, but all callers of this
         function will have to check this. Alas, I'm too lazy to do this here. */
