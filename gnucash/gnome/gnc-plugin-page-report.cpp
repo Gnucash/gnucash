@@ -1927,7 +1927,7 @@ static gchar *report_create_jobname(GncPluginPageReportPrivate *priv)
 
     if (report_name && job_date)
     {
-        // Look up the sprintf format of the output name from the preferences database
+        // Look up the printf format of the output name from the preferences database
         char* format = gnc_prefs_get_string(GNC_PREFS_GROUP_REPORT_PDFEXPORT, GNC_PREF_FILENAME_FMT);
 
         if (format && *format)

@@ -1214,10 +1214,11 @@
 static double
 rnd (double x, unsigned places)
 {
+    static const size_t buflen = 50; /* make buffer large enough */
     double r;
-    char buf[50];			/* make buffer large enough */
+    char buf[buflen];
 
-    sprintf (buf, "%.*f", (int) places, x);
+    snprintf (buf, buflen, "%.*f", (int) places, x);
     r = strtod(buf, NULL);
 
     return r;

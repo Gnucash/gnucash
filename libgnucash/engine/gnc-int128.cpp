@@ -916,21 +916,21 @@ decimal_from_binary (uint64_t d[dec_array_size], uint64_t hi, uint64_t lo)
 static const uint8_t char_buf_size {41}; //39 digits plus sign and trailing null
 
 char*
-GncInt128::asCharBufR(char* buf) const noexcept
+GncInt128::asCharBufR(char* buf, uint32_t size) const noexcept
 {
     if (isOverflow())
     {
-        sprintf (buf, "%s", "Overflow");
+        snprintf (buf, size, "%s", "Overflow");
         return buf;
     }
     if (isNan())
     {
-        sprintf (buf, "%s", "NaN");
+        snprintf (buf, size, "%s", "NaN");
         return buf;
     }
     if (isZero())
     {
-        sprintf (buf, "%d", 0);
+        snprintf (buf, size, "%d", 0);
         return buf;
     }
     uint64_t d[dec_array_size] {};
@@ -943,10 +943,11 @@ GncInt128::asCharBufR(char* buf) const noexcept
     for (unsigned int i {dec_array_size}; i; --i)
         if (d[i - 1] || trailing)
         {
+            uint32_t new_size = size - (next - buf);
             if (trailing)
-                next += sprintf (next, "%8.8" PRIu64, d[i - 1]);
+                next += snprintf (next, new_size, "%8.8" PRIu64, d[i - 1]);
             else
-                next += sprintf (next, "%" PRIu64, d[i - 1]);
+                next += snprintf (next, new_size, "%" PRIu64, d[i - 1]);
 
             trailing = true;
         }
@@ -958,7 +959,7 @@ std::ostream&
 operator<< (std::ostream& stream, const GncInt128& a) noexcept
 {
     char buf[char_buf_size] {};
-    stream << a.asCharBufR (buf);
+    stream << a.asCharBufR (buf, char_buf_size - 1);
     return stream;
 }
 

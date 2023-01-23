@@ -1105,7 +1105,8 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
 {
     struct lconv *lc = gnc_localeconv();
     int num_whole_digits;
-    char temp_buf[128];
+    static const size_t buf_size = 128;
+    char temp_buf[buf_size];
     gnc_numeric whole, rounding;
     int min_dp, max_dp;
     gboolean value_is_negative, value_is_decimal;
@@ -1180,7 +1181,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     // Value may now be decimal, for example if the factional part is zero
     value_is_decimal = gnc_numeric_to_decimal(&val, NULL);
     /* print the integer part without separators */
-    sprintf(temp_buf, "%" G_GINT64_FORMAT, whole.num);
+    snprintf(temp_buf, buf_size, "%" G_GINT64_FORMAT, whole.num);
     num_whole_digits = strlen (temp_buf);
 
     if (!info->use_separators)
@@ -1257,10 +1258,10 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
         val = gnc_numeric_reduce (val);
 
         if (val.denom > 0)
-            sprintf (temp_buf, "%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT,
+            snprintf (temp_buf, buf_size, "%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT,
                      val.num, val.denom);
         else
-            sprintf (temp_buf, "%" G_GINT64_FORMAT " * %" G_GINT64_FORMAT,
+            snprintf (temp_buf, buf_size, "%" G_GINT64_FORMAT " * %" G_GINT64_FORMAT,
                      val.num, -val.denom);
 
         if (whole.num == 0)

@@ -38,9 +38,9 @@ main (int argc, char** argv)
         directory = "test-files/xml2";
     }
 
-    char* filename = static_cast<decltype (filename)> (malloc (strlen (
-            directory) + 1 + strlen (FILENAME) + 1));
-    sprintf (filename, "%s/%s", directory, FILENAME);
+    auto size{strlen (directory) + 1 + strlen (FILENAME) + 1};
+    char* filename = static_cast<decltype (filename)> (malloc (size));
+    snprintf (filename, size, "%s/%s", directory, FILENAME);
     do_test (gnc_is_xml_data_file_v2 (filename, NULL), "gnc_is_xml_data_file_v2");
 
     print_test_results ();

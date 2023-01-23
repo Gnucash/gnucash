@@ -215,7 +215,7 @@ enum // Values for m_flags
  * @param buf char[41], 39 digits plus sign and trailing 0.
  * @return pointer to the buffer for convenience
  */
-    char* asCharBufR(char* buf) const noexcept;
+    char* asCharBufR(char* buf, uint32_t size) const noexcept;
 
     GncInt128 abs() const noexcept;
 

@@ -318,13 +318,13 @@ TEST(GncInt128_functions, stream_output)
     static const uint8_t char_buf_size {41};
     char buf[char_buf_size] {};
 
-    EXPECT_STREQ("567894392130486207", small.asCharBufR (buf));
-    EXPECT_STREQ("-567894392130486207", neg_small.asCharBufR (buf));
-    EXPECT_STREQ("5237901256262967342410779070006542271", really_big.asCharBufR (buf));
-    EXPECT_STREQ("-5237901256262967342410779070006542271", neg_really_big.asCharBufR (buf));
-    EXPECT_STREQ("36893488147419103231", boundary_value.asCharBufR (buf));
-    EXPECT_STREQ("Overflow", overflowed.asCharBufR (buf));
-    EXPECT_STREQ("NaN", not_a_number.asCharBufR (buf));
+    EXPECT_STREQ("567894392130486207", small.asCharBufR (buf, char_buf_size));
+    EXPECT_STREQ("-567894392130486207", neg_small.asCharBufR (buf, char_buf_size));
+    EXPECT_STREQ("5237901256262967342410779070006542271", really_big.asCharBufR (buf, char_buf_size));
+    EXPECT_STREQ("-5237901256262967342410779070006542271", neg_really_big.asCharBufR (buf, char_buf_size));
+    EXPECT_STREQ("36893488147419103231", boundary_value.asCharBufR (buf, char_buf_size));
+    EXPECT_STREQ("Overflow", overflowed.asCharBufR (buf, char_buf_size));
+    EXPECT_STREQ("NaN", not_a_number.asCharBufR (buf, char_buf_size));
 }
 
 TEST(GncInt128_functions, add_and_subtract)
