@@ -23,8 +23,6 @@
  ********************************************************************/
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include <string.h>
 #include <unittest-support.h>
@@ -42,8 +40,7 @@ extern "C"
 #endif
 
 static const gchar *suitename = "/engine/Split";
-void test_suite_split ( void );
-}
+extern "C" void test_suite_split ( void );
 
 #include <qofinstance-p.h>
 #include <kvp-frame.hpp>

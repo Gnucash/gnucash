@@ -25,8 +25,6 @@
 #ifndef GNCINT128_H
 #define GNCINT128_H
 
-extern "C"
-{
 #ifndef __STDC_LIMIT_MACROS
 #define  __STDC_LIMIT_MACROS 1
 #endif
@@ -37,7 +35,6 @@ extern "C"
 #define  __STDC_FORMAT_MACROS 1
 #endif
 #include <inttypes.h>
-}
 
 #include <stdexcept>
 #include <string>

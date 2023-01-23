@@ -30,8 +30,6 @@
 #include "dialog-report-column-view.hpp"
 #include <libguile.h>
 
-extern "C"
-{
 #include <config.h>
 
 #include <errno.h>
@@ -44,7 +42,6 @@ extern "C"
 #include "guile-mappings.h"
 
 #include "gnc-plugin-page-report.h"
-}
 #include "gnc-report.h"
 
 /********************************************************************

@@ -25,6 +25,10 @@
 
 #include <glib.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** Returns the installation prefix path, usually
  * "$prefix".
  *
@@ -118,5 +122,8 @@ gchar *gnc_path_get_reportsdir(void);
 gchar *gnc_path_get_stdreportsdir(void);
 
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_PATH_H */

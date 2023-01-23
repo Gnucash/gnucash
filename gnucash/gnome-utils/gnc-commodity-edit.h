@@ -34,6 +34,10 @@
 
 #include "gnc-commodity.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Callback function to return the printable string of a commodity */
 const char * gnc_commodity_edit_get_string (gpointer ptr);
 
@@ -44,5 +48,9 @@ const char * gnc_commodity_edit_get_string (gpointer ptr);
  */
 gpointer gnc_commodity_edit_new_select (gpointer arg, gpointer ptr,
                                         GtkWidget *toplevel);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

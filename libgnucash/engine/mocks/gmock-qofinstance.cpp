@@ -2,10 +2,7 @@
 
 #include <gmock/gmock.h>
 
-extern "C"
-{
 #include <qofinstance.h>
-}
 #include <qofinstance-p.h>
 
 
@@ -23,8 +20,6 @@ qof_instance_class_init(QofInstanceClass *klass)
     // function is unused, class functions are defined in C++ code
 }
 
-extern "C"
-{
 // This is a reimplementation of the function from qofinstance.cpp
 void
 qof_instance_get (const QofInstance *inst, const gchar *first_prop, ...)
@@ -50,4 +45,3 @@ qof_instance_set (QofInstance *inst, const gchar *first_prop, ...)
     va_end (ap);
 }
 
-} // extern "C"

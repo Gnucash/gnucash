@@ -23,12 +23,10 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 
-extern "C" {
 #include <platform.h>
 #if PLATFORM(WINDOWS)
 #include <windows.h>
 #endif
-
 
 #include "engine-helpers.h"
 #include "gnc-csv-account-map.h"
@@ -37,8 +35,6 @@ extern "C" {
 #include "Transaction.h"
 #include "gnc-pricedb.h"
 #include <gnc-exp-parser.h>
-
-}
 
 #include <algorithm>
 #include <exception>

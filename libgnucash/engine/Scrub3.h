@@ -34,6 +34,10 @@
 
 #include "gnc-engine.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** @name High-Level Lot Constraint
  * Provides the high-level API for checking and repairing ('scrubbing
  * clean') the usage of Lots and Cap Gains transactions in stock and
@@ -70,6 +74,11 @@ void xaccAccountScrubLots (Account *acc);
 void xaccAccountTreeScrubLots (Account *acc);
 
 /** @} */
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* XACC_SCRUB3_H */
 /** @} */
 /** @} */

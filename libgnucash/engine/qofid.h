@@ -23,11 +23,6 @@
 #ifndef QOF_ID_H
 #define QOF_ID_H
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 /** @addtogroup Entity
     @{ */
 /** @addtogroup Entities
@@ -80,6 +75,11 @@ extern "C"
 
 #include <string.h>
 #include "guid.h"
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 /** QofIdType declaration */
 typedef const gchar * QofIdType;

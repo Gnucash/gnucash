@@ -28,6 +28,10 @@
 
 #include <glib.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef void * GNCModule;
 
 #define DEFAULT_MODULE_PATH "/usr/local/gnucash/lib/modules"
@@ -46,5 +50,9 @@ GList         * gnc_module_system_modinfo(void);
 GNCModule       gnc_module_load(const gchar * module_name, gint iface);
 GNCModule       gnc_module_load_optional(const gchar * module_name, gint iface);
 int             gnc_module_unload(GNCModule mod);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

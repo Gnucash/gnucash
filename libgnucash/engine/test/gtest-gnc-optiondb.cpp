@@ -28,10 +28,7 @@
 #include "kvp-value.hpp"
 #include <glib-2.0/glib.h>
 
-extern "C"
-{
 #include "gnc-session.h"
-}
 
 using GncOptionDBPtr = std::unique_ptr<GncOptionDB>;
 

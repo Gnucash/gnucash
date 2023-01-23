@@ -33,9 +33,6 @@
    */
 #include <glib.h>
 
-extern "C"
-{
-
 #include <config.h>
 
 #include <stdlib.h>
@@ -53,7 +50,6 @@ extern "C"
 #include "qofobject-p.h"
 
 static QofLogModule log_module = QOF_MOD_SESSION;
-} //extern 'C'
 
 #include "qofbook-p.h"
 #include "qof-backend.hpp"

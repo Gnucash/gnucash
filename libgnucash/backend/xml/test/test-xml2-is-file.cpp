@@ -17,12 +17,9 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-extern "C"
-{
 #include <config.h>
 #include <stdlib.h>
 #include <string.h>
-}
 
 #include "test-engine-stuff.h"
 #include "io-gncxml-v2.h"

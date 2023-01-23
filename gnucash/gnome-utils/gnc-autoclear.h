@@ -27,6 +27,10 @@
 #include <glib.h>
 #include <Account.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** Account splits are analysed; attempts to find a unique combination
  *  of uncleared splits which would set cleared balance to
  *  toclear_value. If this is not possible, *errmsg will be error
@@ -35,5 +39,9 @@
  */
 GList * gnc_account_get_autoclear_splits (Account *account, gnc_numeric toclear_value,
                                           gchar **errmsg);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

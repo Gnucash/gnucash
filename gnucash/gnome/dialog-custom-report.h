@@ -30,6 +30,10 @@
 
 #include "gnc-main-window.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** @addtogroup Reports
     @{ */
 /** @file dialog-custom-report.h
@@ -44,6 +48,10 @@ void
 gnc_ui_custom_report_edit_name(GncMainWindow * window, SCM scm_guid);
 
 /** @} */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* DIALOG_CUSTOM_REPORT_H */
 

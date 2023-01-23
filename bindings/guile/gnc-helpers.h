@@ -28,7 +28,15 @@
 
 #include "gnc-ui-util.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 SCM  gnc_printinfo2scm(GNCPrintAmountInfo info);
 GNCPrintAmountInfo gnc_scm2printinfo(SCM info_scm);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

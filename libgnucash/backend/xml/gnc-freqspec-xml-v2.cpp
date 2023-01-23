@@ -24,14 +24,11 @@
 
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include <string.h>
 #include "qof.h"
 #include "SchedXaction.h"
 #include "FreqSpec.h"
-}
 
 #include "gnc-xml-helper.h"
 #include "sixtp.h"

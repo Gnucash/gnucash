@@ -23,15 +23,12 @@
  *******************************************************************/
 
 #include <gtest/gtest.h>
-extern "C"
-{
 #include <config.h>
 #include <import-account-matcher.h>
 #include <gnc-session.h>
 #include <qofbook.h>
 #include <Account.h>
 #include <gtk/gtk.h>
-}
 #include <vector>
 
 using AccountV = std::vector<const Account*>;

@@ -28,9 +28,17 @@
 #ifndef GNC_ASSISTANT_CSV_IMPORT_PRICE_H
 #define GNC_ASSISTANT_CSV_IMPORT_PRICE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /** The gnc_file_csv_price_import() will let the user import the
  *  commodity prices from a file.
  */
 void gnc_file_csv_price_import (void);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

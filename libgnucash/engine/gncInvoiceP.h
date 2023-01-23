@@ -34,6 +34,10 @@
 #include "gnc-lot.h"
 #include "gncOwner.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 gboolean gncInvoiceRegister (void);
 gchar *gncInvoiceNextID (QofBook *book, const GncOwner *owner);
 void gncInvoiceSetPostedAcc (GncInvoice *invoice, Account *acc);
@@ -46,4 +50,9 @@ void gncInvoiceDetachFromLot (GNCLot *lot);
 void gncInvoiceAttachToTxn (GncInvoice *invoice, Transaction *txn);
 
 #define gncInvoiceSetGUID(I,G) qof_instance_set_guid(QOF_INSTANCE(I),(G))
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* GNC_INVOICEP_H_ */

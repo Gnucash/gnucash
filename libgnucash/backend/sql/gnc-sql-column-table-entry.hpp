@@ -24,10 +24,7 @@
 #ifndef __GNC_SQL_COLUMN_TABLE_ENTRY_HPP__
 #define __GNC_SQL_COLUMN_TABLE_ENTRY_HPP__
 
-extern "C"
-{
 #include <qof.h>
-}
 #include <memory>
 #include <vector>
 #include <iostream>

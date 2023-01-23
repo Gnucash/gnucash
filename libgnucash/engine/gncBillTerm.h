@@ -37,6 +37,10 @@ typedef struct _gncBillTermClass GncBillTermClass;
 #include "qof.h"
 #include "gncBusiness.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define GNC_ID_BILLTERM       "gncBillTerm"
 
 /* --- type macros --- */
@@ -167,6 +171,10 @@ time64 gncBillTermComputeDueDate (const GncBillTerm *term, time64 post_date);
 
 /* deprecated */
 #define gncBillTermGetGUID(x) qof_instance_get_guid (QOF_INSTANCE(x))
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_BILLTERM_H_ */
 /** @} */

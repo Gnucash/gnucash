@@ -44,6 +44,10 @@ typedef struct _SchedXactionClass SchedXactionClass;
 #include "Recurrence.h"
 #include "gnc-engine.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* --- type macros --- */
 #define GNC_TYPE_SCHEDXACTION            (gnc_schedxaction_get_type ())
 #define GNC_SCHEDXACTION(o)              \
@@ -321,6 +325,10 @@ gboolean SXRegister (void);
 #define xaccSchedXactionIsDirty(X) qof_instance_is_dirty (QOF_INSTANCE(X))
 /** \deprecated */
 #define xaccSchedXactionGetGUID(X) qof_entity_get_guid(QOF_INSTANCE(X))
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* XACC_SCHEDXACTION_H */
 

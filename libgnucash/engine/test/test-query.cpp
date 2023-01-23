@@ -22,8 +22,6 @@
  */
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include "qof.h"
 #include "cashobjects.h"
@@ -32,7 +30,6 @@ extern "C"
 #include "gnc-engine.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
-}
 
 static int
 test_trans_query (Transaction *trans, gpointer data)

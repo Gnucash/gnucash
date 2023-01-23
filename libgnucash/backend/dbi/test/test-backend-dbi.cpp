@@ -21,12 +21,9 @@
 \********************************************************************/
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include "qof.h"
 #include "cashobjects.h"
-}
 extern void test_suite_gnc_backend_dbi ();
 
 #define GNC_LIB_NAME_1 "gncmod-backend-dbi"

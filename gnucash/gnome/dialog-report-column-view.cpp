@@ -28,8 +28,6 @@
 #include <gnc-optiondb-impl.hpp>
 #include <libguile.h>
 
-extern "C"
-{
 #include <config.h>
 
 #include "swig-runtime.h"
@@ -39,7 +37,6 @@ extern "C"
 #include "guile-mappings.h"
 #include "gnc-guile-utils.h"
 #include "gnc-ui.h"
-}
 
 #include "dialog-report-column-view.hpp"
 #include <gnc-report.h>

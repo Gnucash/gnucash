@@ -1,7 +1,5 @@
 #include <kvp-frame.hpp>
 
-extern "C"
-{
 #include <config.h>
 
 #include <stdlib.h>
@@ -10,7 +8,6 @@ extern "C"
 #include "test-engine-stuff.h"
 
 #include "qof.h"
-}
 
 #include "test-file-stuff.h"
 #include "sixtp-dom-generators.h"

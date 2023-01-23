@@ -28,14 +28,12 @@
 #include <gio/gio.h>
 #include <glib.h>
 
-extern "C" {
 #include <stdio.h>
 #include <string.h>
 #include "gnc-gsettings.h"
 #include "gnc-path.h"
 #include "qof.h"
 #include "gnc-prefs-p.h"
-}
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>

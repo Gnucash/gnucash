@@ -29,8 +29,6 @@
  */
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 
 #include <stdlib.h>
@@ -39,7 +37,6 @@ extern "C"
 #include "gncBillTermP.h"
 #include "gncCustomerP.h"
 #include "gncTaxTableP.h"
-}
 
 #include "gnc-sql-connection.hpp"
 #include "gnc-sql-backend.hpp"

@@ -22,13 +22,10 @@
  */
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include <string.h>
 #include "qof.h"
 #include "Recurrence.h"
-}
 
 #include "gnc-xml.h"
 #include "gnc-xml-helper.h"

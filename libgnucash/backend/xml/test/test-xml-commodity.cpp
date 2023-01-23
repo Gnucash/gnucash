@@ -20,8 +20,6 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 
-extern "C"
-{
 #include <config.h>
 
 #include <unistd.h>
@@ -30,7 +28,6 @@ extern "C"
 #include "test-engine-stuff.h"
 
 #include "Account.h"
-}
 
 #include <cstdlib>
 

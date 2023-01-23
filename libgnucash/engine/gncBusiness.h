@@ -34,11 +34,8 @@
 #ifndef GNC_BUSINESS_H_
 #define GNC_BUSINESS_H_
 
-#ifdef __cplusplus
-extern "C++" {
 #include <glib.h>
-}
-#endif
+
 #include "qof.h"
 #include "Account.h"
 

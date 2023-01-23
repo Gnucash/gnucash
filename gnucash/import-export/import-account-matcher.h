@@ -35,6 +35,10 @@
 
 #include "gnc-tree-view-account.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct
 {
     GtkWidget           *dialog;                         /* Dialog Widget */
@@ -124,6 +128,10 @@ Account * gnc_import_select_account(GtkWidget *parent,
                                     Account * default_selection,
                                     gboolean * ok_pressed
                                    );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /**@}*/

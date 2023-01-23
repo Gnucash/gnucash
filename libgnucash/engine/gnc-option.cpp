@@ -28,10 +28,7 @@
 
 static const char* log_module{"gnc.app-utils.gnc-option"};
 
-extern "C"
-{
 #include "qoflog.h"
-}
 
 template <typename ValueType,
           typename std::enable_if_t<!is_OptionClassifier_v<ValueType>,

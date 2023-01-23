@@ -23,8 +23,6 @@
 \********************************************************************/
 
 #include "guid.hpp"
-extern "C"
-{
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
@@ -52,7 +50,6 @@ extern "C"
 #endif
 #include "qof.h"
 
-}
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>

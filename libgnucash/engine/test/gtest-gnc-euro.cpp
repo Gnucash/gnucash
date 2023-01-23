@@ -22,13 +22,10 @@
 
 #include <gtest/gtest.h>
 #include "../gnc-numeric.hpp"
-extern "C"
-{
 #include <config.h>
 #include "../gnc-euro.h"
 #include "../gnc-commodity.h"
 #include "../gnc-session.h"
-}
 
 class Currencies : public ::testing::Test
 {

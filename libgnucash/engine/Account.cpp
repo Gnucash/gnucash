@@ -25,9 +25,7 @@
 
 #include <config.h>
 
-extern "C" {
 #include "gnc-prefs.h"
-}
 
 #include <glib.h>
 #include <glib/gi18n.h>

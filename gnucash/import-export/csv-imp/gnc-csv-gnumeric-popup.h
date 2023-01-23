@@ -72,6 +72,10 @@
 
 #include <gtk/gtk.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct
 {
     char const *name;
@@ -94,6 +98,10 @@ void gnumeric_create_popup_menu (GnumericPopupMenuElement const *elements,
                                  int display_filter,
                                  int sensitive_filter,
                                  GdkEventButton *event);
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif

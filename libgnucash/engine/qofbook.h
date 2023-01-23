@@ -40,8 +40,8 @@
 #ifndef QOF_BOOK_H
 #define QOF_BOOK_H
 
+#include <glib.h>
 #ifdef __cplusplus
-#include <glib.h> //To preempt it being included extern "C" in a later header.
 class GncOptionDB;
 #else
 typedef struct GncOptionDB GncOptionDB;

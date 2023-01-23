@@ -27,8 +27,6 @@
 
 #define __EXTENSIONS__
 #include <glib.h>
-extern "C"
-{
 
 #include <config.h>
 #include <libintl.h>
@@ -45,7 +43,6 @@ extern "C"
 #ifdef G_OS_WIN32
 #  include <windows.h>
 #endif
-}
 
 #include <cinttypes>
 #include <unicode/calendar.h>

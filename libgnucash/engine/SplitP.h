@@ -52,6 +52,10 @@
 #include "qof.h"
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** STRUCTS *********************************************************/
 /* A "split" is more commonly referred to as an "entry" in a "transaction".
  */
@@ -231,6 +235,10 @@ typedef struct
 } SplitTestFunctions;
 
 SplitTestFunctions* _utest_split_fill_functions (void);
+
+#ifdef __cplusplus
+}
+#endif
 
 
 /*@}*/

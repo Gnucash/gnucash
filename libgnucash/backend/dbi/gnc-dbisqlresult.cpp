@@ -22,14 +22,11 @@
 \********************************************************************/
 
 #include <guid.hpp>
-extern "C"
-{
 #include <config.h>
 #include <gnc-locale-utils.h>
 #include <dbi/dbi.h>
 /* For direct access to dbi data structs, sadly needed for datetime */
 #include <dbi/dbi-dev.h>
-}
 #include <cmath>
 #include <gnc-datetime.hpp>
 #include "gnc-dbisqlresult.hpp"

@@ -33,6 +33,11 @@
 #ifndef GNC_OWNER_H_
 #define GNC_OWNER_H_
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct _gncOwner GncOwner;
 
 #define GNC_ID_OWNER   "gncOwner"
@@ -345,6 +350,10 @@ void gncOwnerFree (GncOwner *owner);
 void gncOwnerBeginEdit (GncOwner *owner);
 void gncOwnerCommitEdit (GncOwner *owner);
 void gncOwnerDestroy (GncOwner *owner);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_OWNER_H_ */
 /** @} */

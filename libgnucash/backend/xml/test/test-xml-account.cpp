@@ -24,8 +24,6 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 
-extern "C"
-{
 #include <config.h>
 
 #include <unistd.h>
@@ -37,7 +35,6 @@ extern "C"
 
 #include "Account.h"
 #include "Scrub.h"
-}
 
 #include <cstdlib>
 

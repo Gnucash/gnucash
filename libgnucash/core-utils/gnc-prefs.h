@@ -45,11 +45,7 @@
 #ifndef GNC_PREFS_H
 #define GNC_PREFS_H
 
-#ifdef __cplusplus
-extern "C++" {
 #include <glib.h>
-}
-#endif
 
 /* Preference groups used across multiple modules */
 #define GNC_PREFS_GROUP_GENERAL           "general"
@@ -96,6 +92,10 @@ extern "C++" {
 #define GNC_PREF_CURRENCY_OTHER      "currency-other"
 #define GNC_PREF_CURRENCY_CHOICE_LOCALE "currency-choice-locale"
 #define GNC_PREF_CURRENCY_CHOICE_OTHER  "currency-choice-other"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /** @name Early bird functions, needed before any backend has been set up
  @{
@@ -568,6 +568,10 @@ gulong gnc_prefs_get_reg_negative_color_pref_id (void);
 void gnc_prefs_set_reg_negative_color_pref_id (gulong id);
 
 /** @} */
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif /* GNC_PREFS_H */

@@ -20,8 +20,16 @@
 #ifndef __GTT_UTIL_H__
 #define __GTT_UTIL_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Some gtk-like utilities */
 void xxxgtk_textview_set_text (GtkTextView *text, const char *str);
 char * xxxgtk_textview_get_text (GtkTextView *text);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __GTT_UTIL_H__ */

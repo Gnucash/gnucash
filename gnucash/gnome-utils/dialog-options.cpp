@@ -23,10 +23,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-extern "C"
-{
 #include <config.h> // Need this to include Account.h
-}
 
 #include <Account.h> // To include as C++ overriding later indirect includes
 #include <gtk/gtk.h>
@@ -37,8 +34,6 @@ extern "C"
 #include "dialog-options.hpp"
 #include <libguile.h>
 
-extern "C"
-{
 #include <qofbookslots.h> // for OPTION_SECTION_ACCOUNTS
 
 #include "dialog-utils.h"
@@ -46,7 +41,6 @@ extern "C"
 #include <gnc-prefs.h> // for GNC_PREFS_NUM_SOURCE
 #include "gnc-session.h" // for gnc_get_current_session
 #include "gnc-ui.h" // for DF_MANUAL
-}
 
 #include <iostream>
 #include <sstream>

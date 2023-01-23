@@ -23,8 +23,6 @@
  */
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 
 #include <string.h>
@@ -33,7 +31,6 @@ extern "C"
 #include "cashobjects.h"
 #include "gnc-engine.h"
 #include "gnc-commodity.h"
-}
 
 #include <cstdlib>
 

@@ -33,11 +33,8 @@
 #include <boost/regex.hpp>
 #include <boost/locale/encoding_utf.hpp>
 
-extern "C"
-{
 #include <config.h>
 #include "qof.h"
-}
 
 #include "gnc-numeric.hpp"
 #include "gnc-rational.hpp"

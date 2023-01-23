@@ -27,8 +27,6 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 
-extern "C"
-{
 #include <config.h>
 
 #include <platform.h>
@@ -47,8 +45,6 @@ extern "C"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-
-}
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "qof.log"

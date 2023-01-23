@@ -32,7 +32,6 @@
 #include "gnucash-commands.hpp"
 #include "gnucash-core-app.hpp"
 
-extern "C" {
 #include <glib/gi18n.h>
 #include <dialog-new-user.h>
 #include <gfec.h>
@@ -59,7 +58,6 @@ extern "C" {
 #include <gnucash-register.h>
 #include <search-core-type.h>
 #include <top-level.h>
-}
 
 #include <boost/locale.hpp>
 #include <boost/optional.hpp>

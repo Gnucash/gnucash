@@ -23,12 +23,9 @@
 #include <glib.h>
 #include <guid.hpp>
 
-extern "C"
-{
 #include <config.h>
 #include <unittest-support.h>
 #include "../qof.h"
-}
 #include "../qof-backend.hpp"
 #include "../kvp-frame.hpp"
 static const gchar *suitename = "/qof/qofinstance";

@@ -23,8 +23,6 @@
 #include <gnc-option.hpp>
 #include <gnc-option-impl.hpp>
 #include "gnc-option-gtk-ui.hpp"
-extern "C"
-{
 #include <config.h>  // for scanf format string
 #include <qof.h>
 #include <gnc-engine.h> // for GNC_MOD_GUI
@@ -38,7 +36,6 @@ extern "C"
 #include "gnc-tree-view-account.h" // for GNC_TREE_VIEW_ACCOUNT
 #include "gnc-tree-model-budget.h" // for gnc_tree_model_budget
 #include "misc-gnome-utils.h" // for xxxgtk_textview_set_text
-}
 
 /*Something somewhere in windows.h defines ABSOLUTE to something and
  *that contaminates using it in RelativeDateType.  Undef it.

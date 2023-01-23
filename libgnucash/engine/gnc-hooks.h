@@ -25,6 +25,10 @@
 #ifndef GNC_HOOKS_H
 #define GNC_HOOKS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * Create a new hook.  Not a common occurrence, but...
  * The returned string is just the 'name' argument,
@@ -72,5 +76,9 @@ void gnc_hooks_init(void);
 #define HOOK_BOOK_OPENED	"hook_book_opened"
 #define HOOK_BOOK_CLOSED	"hook_book_closed"
 #define HOOK_BOOK_SAVED		"hook_book_saved"
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_HOOKS_H */

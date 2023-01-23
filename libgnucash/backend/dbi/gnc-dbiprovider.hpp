@@ -24,10 +24,7 @@
 #ifndef __GNC_DBIPROVIDER_HPP__
 #define __GNC_DBIPROVIDER_HPP__
 
-extern "C"
-{
 #include <dbi/dbi.h>
-}
 #include <string>
 #include <vector>
 

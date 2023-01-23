@@ -27,15 +27,15 @@
 
 #include <glib.h>
 #include <libguile.h>
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
 #include "gnc-engine.h"
 #include <gncTaxTable.h>    /* for GncAccountValue */
 #include "gnc-hooks.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 /* Helpers for various conversions to and from guile */
 
 GDate gnc_time64_to_GDate(SCM x);

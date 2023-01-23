@@ -24,10 +24,18 @@
 #define GNC_SPLASH_H
 #include <gtk/gtk.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void gnc_show_splash_screen (void);
 void gnc_destroy_splash_screen (void);
 void gnc_update_splash_screen (const gchar *string, double percentage);
 GtkWindow *gnc_get_splash_screen (void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #define GNC_SPLASH_PERCENTAGE_UNKNOWN 101
 

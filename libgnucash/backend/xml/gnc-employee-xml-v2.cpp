@@ -23,13 +23,10 @@
 \********************************************************************/
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include <stdlib.h>
 #include <string.h>
 #include "gncEmployeeP.h"
-}
 #include "gnc-xml-helper.h"
 #include "sixtp.h"
 #include "sixtp-utils.h"

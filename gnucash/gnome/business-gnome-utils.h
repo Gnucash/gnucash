@@ -30,6 +30,10 @@
 #include "gncTaxTable.h"
 #include "gncInvoice.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 #define GNC_PREFS_GROUP_INVOICE "dialogs.business.invoice"
 #define GNC_PREFS_GROUP_BILL    "dialogs.business.bill"
@@ -105,5 +109,9 @@ gpointer gnc_simple_combo_get_value (GtkComboBox *cbox);
  *  and make it the active item. */
 void gnc_simple_combo_set_value (GtkComboBox *cbox, gpointer data);
 
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_BUSINESS_GNOME_UTILS_H_ */

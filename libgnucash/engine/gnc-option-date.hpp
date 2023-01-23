@@ -31,10 +31,7 @@
 #ifndef GNC_OPTION_DATE_HPP_
 #define GNC_OPTION_DATE_HPP_
 
-extern "C"
-{
 #include "gnc-date.h"
-}
 
 #include <vector>
 #include <iostream>

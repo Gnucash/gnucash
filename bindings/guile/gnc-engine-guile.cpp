@@ -27,8 +27,7 @@
 #include "swig-runtime.h"
 #include <libguile.h>
 #include <cstring>
-extern "C"
-{
+
 #include "Account.h"
 #include "engine-helpers.h"
 #include "gnc-engine-guile.h"
@@ -43,7 +42,6 @@ extern "C"
 #ifndef HAVE_STRPTIME
 #    include "strptime.h"
 #endif
-}
 
 /** \todo Code dependent on the private query headers
 qofquery-p.h and qofquerycore-p.h may need to be modified.

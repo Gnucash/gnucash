@@ -21,16 +21,12 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  ********************************************************************/
-
-extern "C"
-{
 #include <config.h>
 #include "qof.h"
 #include <glib.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
-}
 
 #include "kvp-value.hpp"
 #include "kvp-frame.hpp"

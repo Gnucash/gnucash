@@ -18,10 +18,7 @@
 #ifndef __GNC_XML_BACKEND_HPP__
 #define __GNC_XML_BACKEND_HPP__
 
-extern "C"
-{
 #include <qof.h>
-}
 
 #include <string>
 #include <qof-backend.hpp>

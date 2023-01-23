@@ -28,8 +28,6 @@
  * restoring data to/from an SQL database
  */
 #include <guid.hpp>
-extern "C"
-{
 #include <config.h>
 #include <qof.h>
 #include <glib.h>
@@ -37,7 +35,6 @@ extern "C"
 #include "gncJobP.h"
 #include "gncEmployeeP.h"
 #include "gncVendorP.h"
-}
 #include <cstdlib>
 #include <cstring>
 #include <sstream>

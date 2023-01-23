@@ -30,6 +30,14 @@
 
 #include <glib.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 gboolean cashobjects_register(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _CASHOBJECTS_H */

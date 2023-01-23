@@ -3,8 +3,6 @@
 #include <libguile.h>
 #include <numeric>
 
-extern "C"
-{
 #include <config.h>
 
 #include <qof.h>
@@ -13,7 +11,6 @@ extern "C"
 #include "gnc-engine-guile.h"
 #include "gnc-guile-utils.h"
 #include "gnc-kvp-guile.h"
-}
 
 /* NOTE: There are some problems with this approach. Currently,
  *       guids are stored simply as strings in scheme, so some

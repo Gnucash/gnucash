@@ -23,8 +23,6 @@
 \********************************************************************/
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include <stdlib.h>
 #include <string.h>
@@ -32,7 +30,6 @@ extern "C"
 #include "gncBillTermP.h"
 #include "gncCustomerP.h"
 #include "gncTaxTableP.h"
-}
 
 #include "gnc-xml-helper.h"
 #include "gnc-customer-xml-v2.h"

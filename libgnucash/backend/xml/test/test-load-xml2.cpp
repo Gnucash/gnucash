@@ -29,8 +29,6 @@
 #include <glib-object.h>
 #include <glib/gstdio.h>
 
-extern "C"
-{
 #include <config.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -48,7 +46,6 @@ extern "C"
 
 #include <unittest-support.h>
 #include <test-engine-stuff.h>
-}
 
 #include "../gnc-backend-xml.h"
 #include "../io-gncxml-v2.h"

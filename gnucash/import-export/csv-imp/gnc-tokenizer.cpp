@@ -14,11 +14,9 @@
 #include <boost/locale.hpp>
 #include <boost/algorithm/string.hpp>
 
-extern "C" {
 #include <go-glib-extras.h>
 #include <glib.h>
 #include <glib/gstdio.h>
-}
 
 std::unique_ptr<GncTokenizer> gnc_tokenizer_factory(GncImpFileFormat fmt)
 {

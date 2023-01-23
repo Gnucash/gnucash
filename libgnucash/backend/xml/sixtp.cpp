@@ -23,8 +23,6 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 
-extern "C"
-{
 #include <config.h>
 #include <string.h>
 #include <ctype.h>
@@ -36,7 +34,6 @@ extern "C"
     typedef int ssize_t;
 # define g_fopen fopen
 #endif
-}
 
 #include "sixtp.h"
 #include "sixtp-parsers.h"
