@@ -49,12 +49,13 @@ See \ref gncnumericexample
 
 #ifndef GNC_NUMERIC_H
 #define GNC_NUMERIC_H
+
+#include <glib-object.h>
+
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-
-#include <glib-object.h>
 
 struct _gnc_numeric
 {

@@ -26,8 +26,6 @@
  */
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include <ctype.h>
 #include "qof.h"
@@ -38,7 +36,6 @@ extern "C"
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
 #include "Transaction.h"
-}
 
 static gint transaction_num = 32;
 static gint	max_iterate = 1;

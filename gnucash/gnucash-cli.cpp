@@ -30,11 +30,9 @@
 #include "gnucash-commands.hpp"
 #include "gnucash-core-app.hpp"
 
-extern "C" {
 #include <glib/gi18n.h>
 #include <gnc-engine.h>
 #include <gnc-prefs.h>
-}
 
 #include <boost/locale.hpp>
 #include <boost/optional.hpp>

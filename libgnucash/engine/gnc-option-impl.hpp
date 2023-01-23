@@ -34,14 +34,12 @@
 #define GNC_OPTION_IMPL_HPP_
 
 #include "gnc-option.hpp"
-extern "C"
-{
+
 #include <config.h>
 #include "qof.h"
 #include "Account.h"
 #include "gnc-budget.h"
 #include "gnc-commodity.h"
-}
 #include "gnc-datetime.hpp"
 #include <string>
 #include <utility>

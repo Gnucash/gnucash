@@ -23,8 +23,6 @@
  */
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include "qof.h"
 #include "cashobjects.h"
@@ -34,7 +32,6 @@ extern "C"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 #include "Transaction.h"
-}
 
 static void
 run_test (void)

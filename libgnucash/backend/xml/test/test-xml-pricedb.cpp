@@ -24,8 +24,6 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 
-extern "C"
-{
 #include <config.h>
 
 #include <stdlib.h>
@@ -36,7 +34,6 @@ extern "C"
 #include "gnc-pricedb.h"
 
 #include "test-engine-stuff.h"
-}
 
 #include "gnc-xml-helper.h"
 #include "gnc-xml.h"

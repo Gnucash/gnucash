@@ -34,9 +34,6 @@
  */
 #include <glib.h>
 
-extern "C"
-{
-
 #include <config.h>
 
 #include <stdlib.h>
@@ -47,8 +44,6 @@ extern "C"
 #define __STDC_FORMAT_MACROS = 1
 #endif
 #include <inttypes.h>
-
-}
 
 #include "qof.h"
 #include "qofevent-p.h"

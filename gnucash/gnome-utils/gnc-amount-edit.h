@@ -32,6 +32,10 @@
 
 #include <gtk/gtk.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define GNC_TYPE_AMOUNT_EDIT          (gnc_amount_edit_get_type ())
 #define GNC_AMOUNT_EDIT(obj)          G_TYPE_CHECK_INSTANCE_CAST(obj, GNC_TYPE_AMOUNT_EDIT, GNCAmountEdit)
 #define GNC_AMOUNT_EDIT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST(klass, GNC_TYPE_AMOUNT_EDIT, GNCAmountEditClass)
@@ -244,5 +248,9 @@ void gnc_amount_edit_show_warning_symbol (GNCAmountEdit *gae, gboolean show);
  * Returns nothing.
  */
 void gnc_amount_edit_make_mnemonic_target (GNCAmountEdit *gae, GtkWidget *label);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

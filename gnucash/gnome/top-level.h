@@ -25,6 +25,14 @@
 
 #include <glib.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void gnc_main_gui_init(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

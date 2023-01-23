@@ -42,6 +42,10 @@
 #define GNC_PREFS_UTILS_H_
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** This function is called early in the load process
  *  to preload a number of preferences from the settings backend
  */
@@ -51,6 +55,10 @@ void gnc_prefs_init (void);
  *  call backs setup in this file
  */
 void gnc_prefs_remove_registered (void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_PREFS_UTILS_H_ */
 /** @} */

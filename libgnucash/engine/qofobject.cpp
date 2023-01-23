@@ -40,18 +40,13 @@ static GList *book_list = NULL;
  * They should be removed when no longer needed
  */
 
-#ifdef __cplusplus
 extern "C"
 {
-#endif
 
 gboolean get_object_is_initialized( void );
 GList* get_object_modules( void );
 GList* get_book_list( void );
-
-#ifdef __cplusplus
 }
-#endif
 
 gboolean
 get_object_is_initialized( void )

@@ -30,6 +30,10 @@
 #include "gnc-engine.h"
 #include "gnc-pricedb.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct gnc_price_s
 {
     /* 'public' data fields */
@@ -95,5 +99,9 @@ void     gnc_pricedb_substitute_commodity(GNCPriceDB *db,
 gboolean gnc_pricedb_register (void);
 
 QofBackend * xaccPriceDBGetBackend (GNCPriceDB *prdb);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

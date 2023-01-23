@@ -21,10 +21,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                      *
 \***********************************************************************/
 
-extern "C"
-{
 #include <config.h>
-}
 #include <sstream>
 #include "gnc-sql-column-table-entry.hpp"
 

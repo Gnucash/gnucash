@@ -24,7 +24,6 @@
 #ifndef GNC_PRICE_PROPS_HPP
 #define GNC_PRICE_PROPS_HPP
 
-extern "C" {
 #include <platform.h>
 #if PLATFORM(WINDOWS)
 #include <windows.h>
@@ -33,7 +32,6 @@ extern "C" {
 #include <glib/gi18n.h>
 #include "gnc-pricedb.h"
 #include "gnc-commodity.h"
-}
 
 #include <string>
 #include <map>

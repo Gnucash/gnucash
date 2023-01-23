@@ -27,6 +27,10 @@
 #include <glib.h>
 #include <libguile.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** Helper function to get the string representation of
  *  a guile string.
  *
@@ -73,5 +77,9 @@ SCM    gnc_scm_call_1_to_vector(SCM func, SCM arg);
  *  at the end of a line. Fortunately there aren't any such
  *  comments. */
 gchar *gnc_scm_strip_comments (SCM scm_text);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

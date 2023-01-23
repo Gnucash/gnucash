@@ -25,6 +25,10 @@
 
 #include "Account.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /********************************************************************\
  * gnc_stock_transaction_assistant                                  *
  *   opens up a assistant to record a stock transaction             *
@@ -34,5 +38,9 @@
  * Return: nothing                                                  *
 \********************************************************************/
 void gnc_stock_transaction_assistant (GtkWidget *parent, Account * account);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

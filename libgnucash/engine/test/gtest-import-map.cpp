@@ -20,12 +20,9 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-extern "C"
-{
 #include <config.h>
 #include "../Account.h"
 #include <qof.h>
-}
 
 #include <qofinstance-p.h>
 #include <kvp-frame.hpp>

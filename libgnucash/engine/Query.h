@@ -30,6 +30,10 @@
 #include "qof.h"
 #include "Account.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * This function defines a compatibility API from the old Query API to
  * the new Query API.  Note that it is not a 100% complete equivalent.
@@ -185,5 +189,9 @@ void xaccQueryAddGUIDMatch(QofQuery * q, const GncGUID *guid,
  *******************************************************************/
 time64 xaccQueryGetEarliestDateFound(QofQuery * q);
 time64 xaccQueryGetLatestDateFound(QofQuery * q);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

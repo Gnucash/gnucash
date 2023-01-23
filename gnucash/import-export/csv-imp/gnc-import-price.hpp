@@ -30,10 +30,8 @@
 #ifndef GNC_PRICE_IMPORT_HPP
 #define GNC_PRICE_IMPORT_HPP
 
-extern "C" {
 #include "config.h"
 #include "gnc-commodity.h"
-}
 
 #include <vector>
 #include <set>

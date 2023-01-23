@@ -31,8 +31,6 @@
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 
-extern "C"
-{
 #include <config.h>
 
 
@@ -75,7 +73,6 @@ extern "C"
 #ifndef HAVE_STRPTIME
 # include "strptime.h"
 #endif
-}
 
 #include <gnc-backend-prov.hpp>
 #include "gnc-backend-xml.h"

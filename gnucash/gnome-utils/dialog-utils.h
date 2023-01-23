@@ -29,6 +29,10 @@
 #include <gtk/gtk.h>
 #include "qof.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define GNC_PREF_GRID_LINES_HORIZONTAL "grid-lines-horizontal"
 #define GNC_PREF_GRID_LINES_VERTICAL   "grid-lines-vertical"
 
@@ -164,5 +168,9 @@ gnc_cost_policy_select_new (void);
  *  the returned value must be freed.
  */
 gchar* gnc_get_negative_color (void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* DIALOG_UTILS_H */

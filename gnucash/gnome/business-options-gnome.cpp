@@ -26,15 +26,12 @@
 #include <glib/gi18n.h>
 #include "business-options-gnome.h"
 
-extern "C"
-{
 #include <config.h> // for scanf format string
 #include <qof.h>
 #include <business-gnome-utils.h>
 #include <gnc-ui-util.h> // for gnc_get_current_book
 #include <gnc-general-search.h> // for GNC_GENERAL_SEARCH
 #include "dialog-utils.h" // for gnc_builder_add_from_file
-}
 
 
 #include <iostream>

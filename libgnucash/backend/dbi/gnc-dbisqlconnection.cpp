@@ -22,12 +22,9 @@
 \********************************************************************/
 
 #include <guid.hpp>
-extern "C"
-{
 #include <config.h>
 #include <platform.h>
 #include <gnc-locale-utils.h>
-}
 
 #include <string>
 #include <regex>

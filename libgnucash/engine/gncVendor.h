@@ -31,6 +31,10 @@
 #ifndef GNC_VENDOR_H_
 #define GNC_VENDOR_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct _gncVendor GncVendor;
 typedef struct _gncVendorClass GncVendorClass;
 
@@ -134,6 +138,11 @@ static inline GncVendor * gncVendorLookup (const QofBook *book, const GncGUID *g
 /** Test support function, used by test-dbi-business-stuff.c */
 gboolean gncVendorEqual(const GncVendor *a, const GncVendor *b);
 gboolean gncVendorIsDirty (const GncVendor *vendor);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* GNC_VENDOR_H_ */
 /** @} */
 /** @} */

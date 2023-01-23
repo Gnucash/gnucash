@@ -17,15 +17,12 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-extern "C"
-{
 #include <config.h>
 
 #include <stdlib.h>
 #include "gnc-engine.h"
 
 #include "test-engine-stuff.h"
-}
 
 #include "test-file-stuff.h"
 #include "sixtp-dom-parsers.h"

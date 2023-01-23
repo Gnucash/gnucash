@@ -22,10 +22,6 @@
 %{
 /* Includes the header in the wrapper code */
 #include <glib.h>
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 #include <config.h>
 #include <gnc-euro.h>
 #include <gnc-ui-util.h>
@@ -36,18 +32,14 @@ extern "C"
 #endif
 #include <gnc-accounting-period.h>
 #include <gnc-session.h>
-
-#ifdef __cplusplus
-}
-#endif
 %}
 
 #if defined(SWIGGUILE) //Always C++
 %{
-extern "C"
-{
 #include "guile-mappings.h"
 
+extern "C"
+{
 SCM scm_init_sw_app_utils_module (void);
 }
 %}

@@ -27,8 +27,6 @@
  */
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 
 #include "qof.h"
@@ -37,7 +35,6 @@ extern "C"
 #if defined( S_SPLINT_S )
 #include "splint-defs.h"
 #endif
-}
 
 #include "gnc-sql-connection.hpp"
 #include "gnc-sql-backend.hpp"

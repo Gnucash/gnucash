@@ -24,6 +24,10 @@
 
 #include "qof.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 #define NO_COMPONENT (-1)
 
@@ -332,5 +336,9 @@ gpointer gnc_find_first_gui_component (const char *component_class,
 gint gnc_forall_gui_components (const char *component_class,
                                 GNCComponentHandler handler,
                                 gpointer iter_data);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

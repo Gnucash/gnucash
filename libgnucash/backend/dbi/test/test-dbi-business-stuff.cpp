@@ -22,8 +22,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
-extern "C"
-{
 #include <config.h>
 #include "qof.h"
 #include "cashobjects.h"
@@ -39,7 +37,6 @@ extern "C"
 #include "gncInvoice.h"
 #include "gncEmployee.h"
 #include "gncVendor.h"
-}
 
 #include "test-dbi-stuff.h"
 #include "test-dbi-business-stuff.h"

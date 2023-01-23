@@ -26,8 +26,6 @@
 
 #include <kvp-frame.hpp>
 
-extern "C"
-{
 #include <config.h>
 
 #include <sys/types.h>
@@ -50,15 +48,11 @@ extern "C"
 #include "gncInvoice.h"
     /* For version_control */
 #include <gnc-prefs.h>
-}
 /* For test_conn_index_functions */
 #include "../gnc-backend-dbi.hpp"
 #include "../gnc-backend-dbi.h"
-extern "C"
-{
 #include <unittest-support.h>
 #include <test-stuff.h>
-}
 
 #include <string>
 #include <vector>

@@ -22,14 +22,11 @@
  ********************************************************************/
 #include <glib.h>
 
-extern "C"
-{
 #define __EXTENSIONS__
 
 #include <config.h>
 
 #include <gnc-date.h>
-}
 
 #include "gnc-xml-helper.h"
 #include "sixtp-dom-generators.h"

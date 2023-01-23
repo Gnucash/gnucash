@@ -22,15 +22,12 @@
 #include <libguile.h>
 #include <glib.h>
 
-extern "C"
-{
 
 #include "gnc-engine-guile.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 #include "Query.h"
 #include "TransLog.h"
-}
 
 static void
 test_query (QofQuery *q)

@@ -24,11 +24,8 @@
 
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include <string.h>
-}
 
 #include "qof.h"
 #include "qofid-p.h"

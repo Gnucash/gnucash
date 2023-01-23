@@ -24,7 +24,6 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 
-extern "C" {
 #include <platform.h>
 #if PLATFORM(WINDOWS)
 #include <windows.h>
@@ -32,7 +31,6 @@ extern "C" {
 
 #include "engine-helpers.h"
 #include "gnc-ui-util.h"
-}
 
 #include <exception>
 #include <map>

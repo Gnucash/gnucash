@@ -31,7 +31,6 @@
 
 #include "gnucash-core-app.hpp"
 
-extern "C" {
 #include <glib/gi18n.h>
 #include <binreloc.h>
 #include <gnc-engine.h>
@@ -45,7 +44,6 @@ extern "C" {
 #include <gnc-splash.h>
 #include <gnc-version.h>
 #include "gnucash-locale-platform.h"
-}
 
 #include <boost/algorithm/string.hpp>
 #include <boost/locale.hpp>

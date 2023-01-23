@@ -23,6 +23,10 @@
 #ifndef DIALOG_DOCLINK_UTILS_H
 #define DIALOG_DOCLINK_UTILS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define GNC_DOC_LINK_PATH_HEAD "assoc-head"
 /* Note, assoc-head is the old name for the document link head which has been
    kept for compatibility */
@@ -119,5 +123,9 @@ gchar * gnc_doclink_get_unescaped_just_uri (const gchar *uri);
  *  @param old_path_head_uri The old path head uri
  */
 void gnc_doclink_pref_path_head_changed (GtkWindow *parent, const gchar *old_path_head_uri);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

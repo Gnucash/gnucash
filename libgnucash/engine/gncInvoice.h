@@ -36,6 +36,10 @@ transaction and lot for the posted invoice.
 #ifndef GNC_INVOICE_H_
 #define GNC_INVOICE_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct _gncInvoice;
 typedef struct _gncInvoice GncInvoice;
 typedef struct _gncInvoiceClass GncInvoiceClass;
@@ -315,6 +319,10 @@ QofBook *gncInvoiceGetBook (GncInvoice *x);
 
 /** Test support function used by test-dbi-business-stuff.c */
 gboolean gncInvoiceEqual (const GncInvoice *a, const GncInvoice *b);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_INVOICE_H_ */
 /** @} */

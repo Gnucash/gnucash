@@ -23,6 +23,10 @@
 #ifndef DIALOG_NEW_USER_H
 #define DIALOG_NEW_USER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define GNC_PREFS_GROUP_NEW_USER "dialogs.new-user"
 #define GNC_PREF_FIRST_STARTUP "first-startup"
 
@@ -38,5 +42,9 @@ void gnc_new_user_dialog_register_qif_assistant (void (*cb_fcn)(void));
 
 /* private */
 void gncp_new_user_finish (void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

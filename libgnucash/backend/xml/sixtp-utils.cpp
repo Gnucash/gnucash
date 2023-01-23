@@ -23,8 +23,6 @@
 
 #define __EXTENSIONS__
 #include <guid.hpp>
-extern "C"
-{
 #include <config.h>
 
 #include <ctype.h>
@@ -40,7 +38,6 @@ extern "C"
 #include "strptime.h"
 #endif
 #include <gnc-date.h>
-}
 
 #include "sixtp.h"
 #include "sixtp-utils.h"

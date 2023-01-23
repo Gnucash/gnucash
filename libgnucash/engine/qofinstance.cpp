@@ -30,11 +30,8 @@
  */
 
 #include "guid.hpp"
-extern "C"
-{
 #include <config.h>
 #include <glib.h>
-}
 
 #include <utility>
 #include "qof.h"

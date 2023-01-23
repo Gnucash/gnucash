@@ -28,6 +28,10 @@
 #include <glib.h>
 #include <libguile.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 SCM gnc_glist_to_scm_list(GList *glist, const gchar *wct);
 GList* gnc_scm_list_to_glist(SCM wcp_list);
 
@@ -36,5 +40,9 @@ GList * gnc_scm_to_glist_string(SCM list);
 int     gnc_glist_string_p(SCM list);
 
 GSList * gnc_scm_to_gslist_string(SCM list);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

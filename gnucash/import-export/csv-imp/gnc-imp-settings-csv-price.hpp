@@ -28,11 +28,9 @@
 #ifndef GNC_CSV_PRICE_IMPORT_SETTINGS_H
 #define GNC_CSV_PRICE_IMPORT_SETTINGS_H
 
-extern "C" {
 #include <config.h>
 #include "Account.h"
 #include "gnc-commodity.h"
-}
 
 #include <string>
 #include <vector>

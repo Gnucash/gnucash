@@ -22,12 +22,9 @@
 ********************************************************************/
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include <string.h>
 #include <unittest-support.h>
-}
 /* Add specific headers for this class */
 #include "../gnc-sql-connection.hpp"
 #include "../gnc-sql-backend.hpp"

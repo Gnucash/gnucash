@@ -27,10 +27,7 @@
 
 #include <string>
 
-extern "C"
-{
 #include "gnc-aqbanking-templates.h"
-}
 
 #include "qofinstance-p.h"
 #include "kvp-frame.hpp"

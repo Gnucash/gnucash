@@ -26,15 +26,12 @@
  */
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include <unistd.h>
 #include "qof.h"
 #include "Account.h"
 #include "cashobjects.h"
 #include "test-engine-stuff.h"
-}
 #include <qofinstance-p.h>
 #include "test-stuff.h"
 

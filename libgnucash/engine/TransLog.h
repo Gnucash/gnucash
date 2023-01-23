@@ -46,6 +46,10 @@
 #include "Account.h"
 #include "Transaction.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void    xaccOpenLog (void);
 void    xaccCloseLog (void);
 void    xaccReopenLog (void);
@@ -80,6 +84,10 @@ void    xaccLogSetBaseName (const char *);
 
 /** Test a filename to see if it is the name of the current logfile */
 gboolean xaccFileIsCurrentLog (const gchar *name);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* XACC_TRANS_LOG_H */
 /** @} */

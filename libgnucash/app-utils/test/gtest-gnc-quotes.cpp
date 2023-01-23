@@ -22,8 +22,6 @@
  *                                                                  *
 \********************************************************************/
 
-extern "C"
-{
 #include <config.h>
 #include <gnc-session.h>
 #include <gnc-commodity.h>
@@ -31,6 +29,7 @@ extern "C"
 #include <qof.h>
 
 /* gnc-quotes normally gets this from gnc-ui-util, but let's avoid the dependency. */
+extern "C" {
 static gnc_commodity*
 gnc_default_currency(void)
 {
@@ -38,8 +37,8 @@ gnc_default_currency(void)
     auto table{gnc_commodity_table_get_table(book)};
     return gnc_commodity_table_lookup(table, GNC_COMMODITY_NS_CURRENCY, "USD");
 }
+}
 
-} // extern "C"
 #include <gtest/gtest.h>
 #include "../gnc-quotes.cpp"
 

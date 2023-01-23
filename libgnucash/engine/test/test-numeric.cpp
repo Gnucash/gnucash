@@ -23,15 +23,12 @@
  */
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include <ctype.h>
 #include "cashobjects.h"
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
 #include "gnc-numeric.h"
-}
 
 #define NREPS 2
 

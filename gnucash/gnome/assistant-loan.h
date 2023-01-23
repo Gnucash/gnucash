@@ -22,4 +22,13 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void gnc_ui_sx_loan_assistant_create(void);
+
+#ifdef __cplusplus
+}
+#endif
+

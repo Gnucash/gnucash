@@ -21,11 +21,8 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-extern "C"
-{
 #include <config.h>
 #include <qof.h>
-}
 #include <sstream>
 #include <iomanip>
 #include <gnc-datetime.hpp>

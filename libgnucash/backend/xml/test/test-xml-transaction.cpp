@@ -24,8 +24,6 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 
-extern "C"
-{
 #include <config.h>
 
 #include <stdlib.h>
@@ -45,7 +43,6 @@ extern "C"
 #include <AccountP.h>
 #include <Transaction.h>
 #include <TransactionP.h>
-}
 
 #include "../gnc-xml-helper.h"
 #include "../gnc-xml.h"

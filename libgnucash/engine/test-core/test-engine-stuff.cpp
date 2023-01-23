@@ -38,8 +38,6 @@
 #include <guid.hpp>
 #include <kvp-frame.hpp>
 
-extern "C"
-{
 #include <platform.h>
 #if PLATFORM(WINDOWS)
 #define __STDC_FORMAT_MACROS
@@ -69,7 +67,6 @@ extern "C"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 #include "test-engine-strings.h"
-}
 #include <qofinstance-p.h>
 
 static gboolean glist_strings_only = FALSE;

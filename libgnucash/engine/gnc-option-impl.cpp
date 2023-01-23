@@ -29,12 +29,9 @@
 #include <sstream>
 #include <numeric>
 
-extern "C"
-{
 #include "gnc-accounting-period.h"
 #include "gnc-session.h"
 #include "gncOwner.h"
-}
 
 static const QofLogModule log_module{"gnc.options"};
 

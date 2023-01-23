@@ -25,6 +25,11 @@
 
 #include <glib.h>
 #include <qof.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** @file unittest-support.h
  * @brief Macros and logging-capture functions to ease writing GLib-testing
  *  based unit tests.
@@ -355,5 +360,9 @@ void gnc_log_init_filename_special (gchar *filename);
 void gnc_log_shutdown (void);
 void gnc_log_set_handler (guint logdomain, gchar *logdomain, GLogFunc * func, gpointer data);
 */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /*UNITTEST_SUPPORT_H*/

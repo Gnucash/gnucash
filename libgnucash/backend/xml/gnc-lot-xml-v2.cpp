@@ -24,14 +24,11 @@
 \********************************************************************/
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include <stdlib.h>
 #include <string.h>
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
-}
 
 #include "gnc-xml-helper.h"
 #include "sixtp.h"

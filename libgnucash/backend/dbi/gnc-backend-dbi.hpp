@@ -22,8 +22,7 @@
 /* Private structures and variables for gnc-backend-dbi.c and its unit tests */
 #ifndef GNC_BACKEND_DBI_HPP
 #define GNC_BACKEND_DBI_HPP
-extern "C"
-{
+
 #include <dbi/dbi.h>
 #ifdef G_OS_WIN32
 #include <winsock2.h>
@@ -33,7 +32,7 @@ extern "C"
 #include <unistd.h>
 #define GETPID() getpid()
 #endif
-}
+
 #include <gnc-sql-backend.hpp>
 #include <gnc-sql-connection.hpp>
 

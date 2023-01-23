@@ -39,8 +39,7 @@
 #include <exception>
 #include <optional>
 #include <iostream>
-extern "C"
-{
+
 #include <config.h>
 #include "qof.h"
 #include "gncInvoice.h"
@@ -49,7 +48,6 @@ extern "C"
 #include "gncJob.h"
 #include "gncVendor.h"
 #include "gncTaxTable.h"
-}
 
 using GncOptionVec = std::vector<GncOption>;
 

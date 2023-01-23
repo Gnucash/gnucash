@@ -28,8 +28,6 @@
 #include <gnc-optiondb.h>
 #include <libguile.h>
 
-extern "C"
-{
 #include <config.h>
 
 #include "dialog-report-style-sheet.h"
@@ -41,7 +39,6 @@ extern "C"
 #include "gnc-guile-utils.h"
 #include "gnc-ui.h"
 #include <guile-mappings.h>
-}
 #include "gnc-report.h"
 
 #define DIALOG_STYLE_SHEETS_CM_CLASS "style-sheets-dialog"

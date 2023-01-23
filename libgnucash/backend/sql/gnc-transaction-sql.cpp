@@ -26,8 +26,6 @@
  * restoring data to/from an SQL db
  */
 #include <guid.hpp>
-extern "C"
-{
 #include <config.h>
 
 #include <glib/gi18n.h>
@@ -47,7 +45,6 @@ extern "C"
 #ifdef S_SPLINT_S
 #include "splint-defs.h"
 #endif
-}
 
 #include <string>
 #include <sstream>

@@ -23,15 +23,11 @@
 #include <libguile.h>
 #include "guile-mappings.h"
 
-extern "C"
-{
-
 #include "gnc-engine-guile.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 #include "Query.h"
 #include "TransLog.h"
-}
 
 static void
 test_query (Query *q, SCM val2str)

@@ -22,14 +22,11 @@
  *                                                                  *
 \********************************************************************/
 
-extern "C"
-{
 
 #include <config.h>
 #include "qof.h"
 #include <gnc-path.h>
 #include "gncla-dir.h"
-}
 
 #include <string>
 #include <algorithm>

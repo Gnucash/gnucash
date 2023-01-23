@@ -25,6 +25,14 @@
 
 #include "gnc-html.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 GncHtml* gnc_html_factory_create_html( void );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

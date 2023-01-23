@@ -31,6 +31,10 @@
 #ifndef GNC_GENERAL_SELECT_H
 #define GNC_GENERAL_SELECT_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define GNC_TYPE_GENERAL_SELECT          (gnc_general_select_get_type ())
 #define GNC_GENERAL_SELECT(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_general_select_get_type(), GNCGeneralSelect)
 #define GNC_GENERAL_SELECT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gnc_general_select_get_type(), \ GNCGeneralSelectClass)
@@ -82,6 +86,10 @@ const char *gnc_general_select_get_printname (GNCGeneralSelect *gsl,
 GType      gnc_general_select_get_type       (void);
 
 void       gnc_general_select_make_mnemonic_target (GNCGeneralSelect *gsl, GtkWidget *label);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

@@ -33,10 +33,7 @@
 #include "gnc-optiondb-impl.hpp"
 #include "gnc-option-ui.hpp"
 
-extern "C"
-{
 #include "gnc-session.h"
-}
 constexpr const char* log_module{G_LOG_DOMAIN};
 
 constexpr auto stream_max = std::numeric_limits<std::streamsize>::max();

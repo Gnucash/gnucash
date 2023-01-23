@@ -28,8 +28,6 @@
  * restoring data to/from an SQL database
  */
 #include <guid.hpp>
-extern "C"
-{
 #include <config.h>
 
 #include <glib.h>
@@ -40,7 +38,6 @@ extern "C"
 
 #include "gncBillTermP.h"
 #include "gncInvoiceP.h"
-}
 
 #include "gnc-sql-connection.hpp"
 #include "gnc-sql-backend.hpp"

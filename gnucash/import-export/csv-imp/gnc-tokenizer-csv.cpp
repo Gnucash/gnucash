@@ -11,9 +11,7 @@
 #include <boost/locale.hpp>
 #include <boost/algorithm/string.hpp>
 
-extern "C" {
-    #include <glib/gi18n.h>
-}
+#include <glib/gi18n.h>
 
 void
 GncCsvTokenizer::set_separators(const std::string& separators)

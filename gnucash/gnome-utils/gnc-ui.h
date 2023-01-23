@@ -37,6 +37,10 @@
 #include "gnc-pricedb.h"
 #include <gtk/gtk.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 /** Documentation references ****************************************/
 #ifdef G_OS_WIN32
@@ -190,6 +194,10 @@ GtkWindow *gnc_ui_get_main_window (GtkWidget *widget);
 
 void gnc_set_busy_cursor(GtkWidget *w, gboolean update_now);
 void gnc_unset_busy_cursor(GtkWidget *w);
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif

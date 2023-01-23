@@ -35,9 +35,7 @@
 #ifndef GNC_TOKENIZER_HPP
 #define GNC_TOKENIZER_HPP
 
-extern "C" {
 #include <config.h>
-}
 
 #include <iostream>
 #include <fstream>      // fstream

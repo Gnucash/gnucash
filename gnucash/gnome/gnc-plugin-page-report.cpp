@@ -42,8 +42,6 @@
 #include <gnc-optiondb-impl.hpp>
 #include <libguile.h>
 
-extern "C"
-{
 #include <config.h>
 
 #include <sys/stat.h>
@@ -76,8 +74,6 @@ extern "C"
 #include "guile-mappings.h"
 #include "gnc-icons.h"
 #include "print-session.h"
-}
-
 
 #include <memory>
 #include <gnc-report.h>

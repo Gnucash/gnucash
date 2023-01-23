@@ -52,6 +52,10 @@
 
 #include <glib.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef enum
 {
     QUICKFILL_LIFO,
@@ -127,4 +131,8 @@ void         gnc_quickfill_remove (QuickFill *root, const gchar *text,
 
 /** @} */
 /** @} */
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* QUICKFILL_H */

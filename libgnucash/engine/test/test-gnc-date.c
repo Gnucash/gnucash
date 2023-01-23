@@ -21,11 +21,6 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #include <config.h>
 #include "platform.h"
 #include <string.h>
@@ -35,9 +30,6 @@ extern "C"
 #include <unittest-support.h>
 /* Add specific headers for this class */
 
-#ifdef __cplusplus
-}
-#endif
 #include "../gnc-date.h"
 #include "../gnc-date-p.h"
 #include <locale.h>

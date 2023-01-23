@@ -31,11 +31,8 @@
 //We'd prefer to use std::codecvt, but it's not supported by gcc until 5.0.
 #include <boost/locale/encoding_utf.hpp>
 #endif
-extern "C"
-{
 #include "qoflog.h"
 static const QofLogModule log_module = "gnc-timezone";
-}
 
 using namespace gnc::date;
 

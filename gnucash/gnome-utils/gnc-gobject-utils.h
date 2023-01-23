@@ -41,6 +41,10 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** @name Gobject Tracking Functions
  *  @{
  *
@@ -164,6 +168,10 @@ type_name##_get_type (void) \
     }                                   \
   return g_define_type_id_static;    \
 } /* closes type_name##_get_type() */
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif /* GNC_GOBJECT_UTILS_H */

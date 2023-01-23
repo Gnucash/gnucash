@@ -28,6 +28,10 @@ typedef struct _gnc_html_history gnc_html_history;
 
 #include "gnc-html.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct _gnc_html_history_node
 {
     char* type;
@@ -58,6 +62,10 @@ gnc_html_history_node * gnc_html_history_node_new(URLType type,
 
 void                    gnc_html_history_node_destroy(gnc_html_history_node *
         node);
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif

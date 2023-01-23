@@ -22,8 +22,6 @@
  */
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include <string.h>
 #include <stdio.h>
@@ -34,7 +32,6 @@ extern "C"
 
 #include "gnc-engine.h"
 #include "test-engine-stuff.h"
-}
 
 #include <cstdlib>
 

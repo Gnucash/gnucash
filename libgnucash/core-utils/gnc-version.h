@@ -44,11 +44,19 @@
  *  <prefix>/etc/gnucash/environment for more details.
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 const char *gnc_version(void);
 const char *gnc_build_id(void);
 const char *gnc_vcs_rev(void);
 const char *gnc_vcs_rev_date(void);
 const int gnc_gnucash_major_version(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_VERSION_H */
 

@@ -22,8 +22,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
-extern "C"
-{
 #include <config.h>
 #include <qof.h>
 #include <cashobjects.h>
@@ -36,7 +34,6 @@ extern "C"
 #include <gnc-commodity.h>
 #include <SX-book.h>
 #include <gnc-lot.h>
-}
 
 #include <kvp-frame.hpp>
 #include "../gnc-backend-dbi.hpp"

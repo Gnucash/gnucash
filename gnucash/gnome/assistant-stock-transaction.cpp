@@ -31,7 +31,6 @@
 #include <optional>
 #include <stdexcept>
 
-extern "C" {
 #include "Transaction.h"
 #include "engine-helpers.h"
 #include "dialog-utils.h"
@@ -49,7 +48,6 @@ void stock_assistant_prepare (GtkAssistant  *assistant, GtkWidget *page,
                               gpointer user_data);
 void stock_assistant_finish  (GtkAssistant *assistant, gpointer user_data);
 void stock_assistant_cancel  (GtkAssistant *gtkassistant, gpointer user_data);
-}
 
 enum class FieldMask : unsigned;
 bool operator &(FieldMask lhs, FieldMask rhs);

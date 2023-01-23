@@ -63,16 +63,17 @@ typedef struct GncOption GncOption;
 typedef struct GncOptionDB GncOptionDB;
 #endif
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 #include <config.h>
 #include "Account.h"
 #include "gnc-budget.h"
 #include "gnc-commodity.h"
 #include "gncInvoice.h"
 #include "gncTaxTable.h"
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 /**
  * Create an empty option database.

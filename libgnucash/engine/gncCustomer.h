@@ -31,6 +31,10 @@
 #ifndef GNC_CUSTOMER_H_
 #define GNC_CUSTOMER_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** @struct GncCustomer
 
 credit, discount and shipaddr are unique to GncCustomer\n
@@ -163,6 +167,11 @@ gboolean gncCustomerEqual(const GncCustomer *a, const GncCustomer *b);
 
 GList * gncCustomerGetJoblist (const GncCustomer *customer, gboolean show_all);
 gboolean gncCustomerIsDirty (GncCustomer *customer);
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif /* GNC_CUSTOMER_H_ */
 /** @} */

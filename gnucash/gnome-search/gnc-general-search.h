@@ -34,6 +34,10 @@
 
 #include "dialog-search.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define GNC_TYPE_GENERAL_SEARCH \
 	(gnc_general_search_get_type ())
 
@@ -90,5 +94,9 @@ GType      gnc_general_search_get_type       (void);
 
 void	   gnc_general_search_grab_focus (GNCGeneralSearch *gsl);
 
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

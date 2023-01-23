@@ -29,8 +29,17 @@
 #define GNC_ASSISTANT_CSV_IMPORT_TRANS_H
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** The gnc_file_csv_trans_import() will let the user import the
  *  account tree or transactions to a delimited file.
  */
 void gnc_file_csv_trans_import (void);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

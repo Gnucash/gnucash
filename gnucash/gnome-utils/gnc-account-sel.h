@@ -33,6 +33,10 @@
 
 #include "Account.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define GNC_TYPE_ACCOUNT_SEL          (gnc_account_sel_get_type())
 #define GNC_ACCOUNT_SEL(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, GNC_TYPE_ACCOUNT_SEL, GNCAccountSel)
 #define GNC_ACCOUNT_SEL_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, GNC_TYPE_ACCOUNT_SEL, GNCAccountSelClass)
@@ -107,5 +111,9 @@ void gnc_account_sel_set_new_account_modal (GNCAccountSel *gas, gboolean state);
 gint gnc_account_sel_get_num_account (GNCAccountSel *gas);
 void gnc_account_sel_purge_account (GNCAccountSel *gas, Account *acc, gboolean recursive);
 void gnc_account_sel_set_hexpand (GNCAccountSel *gas, gboolean expand);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_ACCOUNT_SEL_H */

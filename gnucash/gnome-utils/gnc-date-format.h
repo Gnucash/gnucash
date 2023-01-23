@@ -31,6 +31,10 @@
 
 #include "qof.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define GNC_TYPE_DATE_FORMAT          (gnc_date_format_get_type ())
 #define GNC_DATE_FORMAT(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_date_format_get_type(), GNCDateFormat)
 #define GNC_DATE_FORMAT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gnc_date_format_get_type(), GNCDateFormatClass)
@@ -70,5 +74,9 @@ void      gnc_date_format_set_custom      (GNCDateFormat *gdf, const char *forma
 const char* gnc_date_format_get_custom    (GNCDateFormat *gdf);
 
 void      gnc_date_format_refresh         (GNCDateFormat *gdf);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

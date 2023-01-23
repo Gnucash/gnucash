@@ -24,13 +24,10 @@
 \********************************************************************/
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include <stdlib.h>
 #include <string.h>
 #include "qof.h"
-}
 
 #include "gnc-xml-helper.h"
 

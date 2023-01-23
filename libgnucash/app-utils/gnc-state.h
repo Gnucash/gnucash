@@ -54,6 +54,10 @@
 
 #include "qof.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Definitions shared by file-utils.c and gnc-main-window.c */
 #define STATE_FILE_TOP           "Top"
 #define STATE_FILE_BOOK_GUID     "BookGuid"
@@ -101,6 +105,10 @@ GKeyFile *gnc_state_get_current (void);
  * @return The number of successfully dropped sections.
  */
 gint gnc_state_drop_sections_for (const gchar *partial_name);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_STATE_H */
 /** @} */

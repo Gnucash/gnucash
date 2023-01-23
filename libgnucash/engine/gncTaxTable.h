@@ -31,6 +31,10 @@
 #ifndef GNC_TAXTABLE_H_
 #define GNC_TAXTABLE_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** @struct GncTaxTable
 
 modtime is the internal date of the last modtime\n
@@ -205,6 +209,10 @@ void gncAccountValueDestroy (GList *list);
 #define gncTaxTableGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
 #define gncTaxTableRetGUID(x) (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null()))
 #define gncTaxTableLookupDirect(G,B) gncTaxTableLookup((B), &(G))
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_TAXTABLE_H_ */
 /** @} */

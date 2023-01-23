@@ -22,15 +22,12 @@
 \********************************************************************/
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 
 #include <sys/types.h>
 #include <time.h>
 #include <regex.h>
 #include <string.h>
-}
 
 #include "qof.h"
 #include "qof-backend.hpp"
