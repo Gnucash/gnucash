@@ -57,6 +57,8 @@
 
 #include "gnc-commodity.h"
 
+G_BEGIN_DECLS
+
 /** @name Basic Object Implementation */
 /** @{ */
 
@@ -125,6 +127,8 @@ gnc_commodity *gnc_currency_edit_get_currency (GNCCurrencyEdit *gce);
 void gnc_currency_edit_clear_display (GNCCurrencyEdit *gce);
 
 /** @} */
+
+G_END_DECLS
 
 #endif
 

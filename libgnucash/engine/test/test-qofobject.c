@@ -19,18 +19,10 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 ********************************************************************/
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #include <config.h>
 #include <string.h>
 #include <glib.h>
 #include <unittest-support.h>
-#ifdef __cplusplus
-}
-#endif
 
 #include "../qof.h"
 #include "../qofobject-p.h"
@@ -85,18 +77,9 @@ new_object( QofIdType e_type, const char *type_label, MockFields field)
     return object;
 }
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 extern gboolean get_object_is_initialized( void );
 extern GList* get_object_modules( void );
 extern GList* get_book_list( void );
-
-#ifdef __cplusplus
-}
-#endif
 
 static void
 setup( Fixture *fixture, gconstpointer pData )

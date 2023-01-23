@@ -50,9 +50,9 @@ using GncOptionUIItemPtr = std::unique_ptr<GncOptionUIItem>;
 #ifndef SWIG //SWIG pulls in GncOwner from swig-engine.
 struct _gncOwner;
 using GncOwner = _gncOwner;
-#endif
 struct _QofQuery;
 using QofQuery = _QofQuery;
+#endif
 struct QofInstance_s;
 using QofInstance = QofInstance_s;
 template <typename ValueType> class GncOptionValue;

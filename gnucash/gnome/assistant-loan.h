@@ -22,4 +22,9 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+G_BEGIN_DECLS
+
 void gnc_ui_sx_loan_assistant_create(void);
+
+G_END_DECLS
+

@@ -47,6 +47,8 @@
 #include <glib.h>
 #include <gnc-date.h>
 
+G_BEGIN_DECLS
+
 /**
  * This specifies a time interval.
  */
@@ -124,6 +126,8 @@ time64 gnc_accounting_period_fiscal_start (void);
 time64 gnc_accounting_period_fiscal_end (void);
 
 /** @} */
+
+G_END_DECLS
 
 #endif /* GNC_ACCOUNTING_PERIOD_H */
 

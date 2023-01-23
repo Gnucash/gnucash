@@ -31,6 +31,8 @@
 
 #include "gncTaxTable.h"
 
+G_BEGIN_DECLS
+
 gboolean gncTaxTableRegister (void);
 
 void gncTaxTableSetParent (GncTaxTable *table, GncTaxTable *parent);
@@ -43,5 +45,7 @@ gboolean gncTaxTableGetInvisible (const GncTaxTable *table);
 GncTaxTable* gncTaxTableEntryGetTable( const GncTaxTableEntry* entry );
 
 #define gncTaxTableSetGUID(E,G) qof_instance_set_guid(QOF_INSTANCE(E),(G))
+
+G_END_DECLS
 
 #endif /* GNC_TAXTABLEP_H_ */

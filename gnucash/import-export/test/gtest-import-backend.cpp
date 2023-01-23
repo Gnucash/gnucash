@@ -6,12 +6,9 @@
 
 #include <gnc-datetime.hpp>
 
-extern "C"
-{
 #include <import-backend.h>
 #include <engine-helpers.h>
 #include <gnc-ui-util.h>
-}
 
 #include "gmock-gnc-prefs.h"
 #include "gmock-qofbook.h"

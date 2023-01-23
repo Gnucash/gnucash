@@ -29,12 +29,10 @@
 #ifndef GNC_TX_IMPORT_HPP
 #define GNC_TX_IMPORT_HPP
 
-extern "C" {
 #include <config.h>
 
 #include "Account.h"
 #include "Transaction.h"
-}
 
 #include <vector>
 #include <set>

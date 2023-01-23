@@ -31,6 +31,8 @@
 
 #include "gncBillTerm.h"
 
+G_BEGIN_DECLS
+
 gboolean gncBillTermRegister (void);
 
 void gncBillTermSetParent (GncBillTerm *term, GncBillTerm *parent);
@@ -41,6 +43,8 @@ void gncBillTermMakeInvisible (GncBillTerm *term);
 gboolean gncBillTermGetInvisible (const GncBillTerm *term);
 
 #define gncBillTermSetGUID(E,G) qof_instance_set_guid(QOF_INSTANCE(E),(G))
+
+G_END_DECLS
 
 
 #endif /* GNC_BILLTERMP_H_ */

@@ -25,6 +25,8 @@
 #include "qof.h"
 #include "search-param.h"
 
+G_BEGIN_DECLS
+
 #define GNC_TYPE_SEARCH_CORE_TYPE		(gnc_search_core_type_get_type ())
 #define GNC_SEARCH_CORE_TYPE(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_SEARCH_CORE_TYPE, GNCSearchCoreType))
 #define GNC_SEARCH_CORE_TYPE_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_SEARCH_CORE_TYPE, GNCSearchCoreTypeClass))
@@ -81,5 +83,6 @@ void gnc_search_core_register_type (const char *type_name,
 void gnc_search_core_initialize (void);
 void gnc_search_core_finalize (void);
 
+G_END_DECLS
 
 #endif /* ! _GNCSEARCH_CORE_TYPE_H */

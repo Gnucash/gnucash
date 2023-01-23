@@ -21,8 +21,6 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 
-extern "C"
-{
 #include <config.h>
 
 #include <platform.h>
@@ -65,7 +63,6 @@ extern "C"
 # define g_fopen fopen
 # define g_open _open
 #endif
-}
 
 #include "gnc-xml-backend.hpp"
 #include "sixtp-parsers.h"

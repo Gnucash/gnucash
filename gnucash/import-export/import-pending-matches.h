@@ -29,6 +29,8 @@
 #include <glib.h>
 #include "import-backend.h"
 
+G_BEGIN_DECLS
+
 typedef GHashTable GNCImportPendingMatches;
 
 typedef enum _import_match_type {
@@ -57,6 +59,8 @@ gnc_import_PendingMatches_get_match_type(GNCImportPendingMatches *map,
 
 const char *
 gnc_import_PendingMatches_get_type_str(GNCImportPendingMatchType type);
+
+G_END_DECLS
 
 #endif
 /** @} */

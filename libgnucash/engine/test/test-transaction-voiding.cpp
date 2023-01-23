@@ -22,8 +22,6 @@
  */
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include <string.h>
 #include "cashobjects.h"
@@ -32,7 +30,6 @@ extern "C"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 #include "Transaction.h"
-}
 
 #define print_gnc_numeric(num) fprintf(stderr, "%s\n", gnc_numeric_to_string(num))
 

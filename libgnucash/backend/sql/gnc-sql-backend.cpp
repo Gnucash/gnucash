@@ -20,8 +20,6 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
-extern "C"
-{
 #include <config.h>
 #include <gnc-prefs.h>
 #include <gnc-engine.h>
@@ -32,7 +30,6 @@ extern "C"
 #include <gncTaxTable.h>
 #include <gncInvoice.h>
 #include <gnc-pricedb.h>
-}
 
 #include <algorithm>
 #include <cassert>

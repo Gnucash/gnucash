@@ -31,6 +31,8 @@
 #include "Account.h"
 #include "gnc-commodity.h"
 
+G_BEGIN_DECLS
+
 typedef struct TTInfo_s TTInfo;
 typedef struct TTSplitInfo_s TTSplitInfo;
 
@@ -86,5 +88,7 @@ const char *gnc_ttsplitinfo_get_debit_formula(TTSplitInfo *split_i);
 
 void gnc_ttsplitinfo_set_account(TTSplitInfo *split_i, Account *acc);
 Account *gnc_ttsplitinfo_get_account(TTSplitInfo *split_i);
+
+G_END_DECLS
 
 #endif

@@ -28,7 +28,11 @@
 
 #include "gnc-ui-util.h"
 
+G_BEGIN_DECLS
+
 SCM  gnc_printinfo2scm(GNCPrintAmountInfo info);
 GNCPrintAmountInfo gnc_scm2printinfo(SCM info_scm);
+
+G_END_DECLS
 
 #endif

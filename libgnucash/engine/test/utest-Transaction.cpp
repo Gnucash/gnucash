@@ -23,8 +23,6 @@
  ********************************************************************/
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include <string.h>
 #include <unittest-support.h>
@@ -42,8 +40,7 @@ extern "C"
 #endif
 
 static const gchar *suitename = "/engine/Transaction";
-void test_suite_transaction ( void );
-}
+extern "C" void test_suite_transaction ( void );
 
 #include <qof-backend.hpp>
 #include <kvp-frame.hpp>

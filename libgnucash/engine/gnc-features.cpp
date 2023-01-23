@@ -29,10 +29,7 @@
 #include <glib/gi18n.h>
 #include "qofbook.hpp"
 
-extern "C"
-{
 #include "gnc-features.h"
-}
 
 static const FeaturesTable features_table
 {

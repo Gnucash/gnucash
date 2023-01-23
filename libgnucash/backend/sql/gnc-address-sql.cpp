@@ -29,14 +29,11 @@
  */
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 
 #include "gnc-engine.h"
 
 #include "gncAddress.h"
-}
 #include <cstdlib>
 #include <cstring>
 #include <sstream>

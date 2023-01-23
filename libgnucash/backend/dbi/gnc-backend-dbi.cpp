@@ -28,8 +28,6 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 
-extern "C"
-{
 #include "config.h"
 
 #include <platform.h>
@@ -59,8 +57,6 @@ extern "C"
 #ifdef S_SPLINT_S
 #include "splint-defs.h"
 #endif
-
-}
 
 #include <boost/regex.hpp>
 #include <string>

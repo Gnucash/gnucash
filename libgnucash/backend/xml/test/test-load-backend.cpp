@@ -24,13 +24,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
-extern "C"
-{
 #include <config.h>
 #include "qof.h"
 #include "cashobjects.h"
 #include "test-stuff.h"
-}
 
 #define GNC_LIB_NAME "gncmod-backend-xml"
 #define GNC_LIB_REL_PATH "xml"

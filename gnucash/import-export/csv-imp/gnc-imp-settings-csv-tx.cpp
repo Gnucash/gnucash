@@ -34,8 +34,6 @@
 #include <string>
 #include <vector>
 
-extern "C"
-{
 #include <config.h>
 
 #include <gtk/gtk.h>
@@ -44,7 +42,6 @@ extern "C"
 #include "Account.h"
 #include "gnc-state.h"
 #include "gnc-ui-util.h"
-}
 
 constexpr auto group_prefix = "Import csv,transaction - ";
 

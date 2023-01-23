@@ -22,13 +22,11 @@
 
 #ifndef __GNC_TIMEZONE_HPP__
 #define __GNC_TIMEZONE_HPP__
-extern "C"
-{
+
 #include <platform.h>
 #if PLATFORM(WINDOWS)
 #include <windows.h>
 #endif
-}
 
 #define BOOST_ERROR_CODE_HEADER_ONLY
 #include <boost/date_time/local_time/local_time.hpp>

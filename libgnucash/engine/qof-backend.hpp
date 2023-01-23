@@ -41,14 +41,12 @@
 
 #ifndef __QOF_BACKEND_HPP__
 #define __QOF_BACKEND_HPP__
-extern "C"
-{
+
 #include "qofbackend.h"
 #include "qofbook.h"
 #include "qofquery.h"
 #include "qofsession.h"
 #include <gmodule.h>
-}
 
 #include "qofinstance-p.h"
 #include <string>

@@ -48,7 +48,6 @@
 #include <gnc-numeric.hpp>
 #include "gnc-quotes.hpp"
 
-extern "C" {
 #include <gnc-commodity.h>
 #include <gnc-path.h>
 #include "gnc-ui-util.h"
@@ -56,7 +55,6 @@ extern "C" {
 #include <gnc-session.h>
 #include <regex.h>
 #include <qofbook.h>
-}
 
 static const QofLogModule log_module = "gnc.price-quotes";
 

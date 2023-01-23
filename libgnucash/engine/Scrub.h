@@ -52,6 +52,8 @@
 
 #include "gnc-engine.h"
 
+G_BEGIN_DECLS
+
 /** @name Double-Entry Scrubbing
     Convert single-entry accounts to clean double-entry
 
@@ -169,6 +171,8 @@ void xaccAccountScrubColorNotSet (QofBook *book);
  * change was made for v2.6.14 to partially resolve bug 137017.
  */
 void xaccTransScrubPostedDate (Transaction *trans);
+
+G_END_DECLS
 
 #endif /* XACC_SCRUB_H */
 /** @} */

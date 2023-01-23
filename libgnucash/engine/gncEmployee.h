@@ -31,6 +31,10 @@
 #ifndef GNC_EMPLOYEE_H_
 #define GNC_EMPLOYEE_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct _gncEmployee GncEmployee;
 typedef struct _gncEmployeeClass GncEmployeeClass;
 
@@ -136,6 +140,10 @@ static inline GncEmployee * gncEmployeeLookup (const QofBook *book, const GncGUI
 /** Test support function, used by test-dbi-business-stuff.c */
 gboolean gncEmployeeEqual(const GncEmployee* e1, const GncEmployee* e2);
 gboolean gncEmployeeIsDirty (const GncEmployee *employee);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_EMPLOYEE_H_ */
 /** @} */

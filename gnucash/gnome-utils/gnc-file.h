@@ -119,6 +119,8 @@
 #include "qof.h"
 #include <gtk/gtk.h>
 
+G_BEGIN_DECLS
+
 typedef enum
 {
     GNC_FILE_DIALOG_OPEN,
@@ -167,5 +169,7 @@ void gnc_file_quit (void);
 typedef void (*GNCShutdownCB) (int);
 void gnc_file_set_shutdown_callback (GNCShutdownCB cb);
 gboolean gnc_file_save_in_progress (void);
+
+G_END_DECLS
 
 #endif /* GNC_FILE_H */

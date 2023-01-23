@@ -19,19 +19,11 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #include <config.h>
 #include <string.h>
 #include <glib.h>
 #include <inttypes.h>
 #include <unittest-support.h>
-#ifdef __cplusplus
-}
-#endif
 
 #include "../qof.h"
 #include "../gnc-features.h"

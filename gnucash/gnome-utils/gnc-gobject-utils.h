@@ -41,6 +41,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
+G_BEGIN_DECLS
+
 /** @name Gobject Tracking Functions
  *  @{
  *
@@ -164,6 +166,8 @@ type_name##_get_type (void) \
     }                                   \
   return g_define_type_id_static;    \
 } /* closes type_name##_get_type() */
+
+G_END_DECLS
 
 
 #endif /* GNC_GOBJECT_UTILS_H */

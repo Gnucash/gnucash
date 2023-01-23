@@ -34,9 +34,13 @@
  *  loading/open and for saving.
  */
 
+G_BEGIN_DECLS
+
 void gnc_ui_file_access_for_open (GtkWindow *parent);
 void gnc_ui_file_access_for_save_as (GtkWindow *parent);
 void gnc_ui_file_access_for_export (GtkWindow *parent);
+
+G_END_DECLS
 
 /** @} */
 

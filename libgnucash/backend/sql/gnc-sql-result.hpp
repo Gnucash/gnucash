@@ -24,10 +24,8 @@
 #ifndef __GNC_SQL_RESULT_HPP__
 #define __GNC_SQL_RESULT_HPP__
 
-extern "C"
-{
 #include <qof.h>
-}
+
 #include <cstdint>
 #include <string>
 #include <vector>

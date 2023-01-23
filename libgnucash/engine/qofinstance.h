@@ -48,6 +48,8 @@ typedef struct _QofBook       QofBook;
 #include "gnc-date.h"
 #include "qof-gobject.h"
 
+G_BEGIN_DECLS
+
 /* --- type macros --- */
 #define QOF_TYPE_INSTANCE            (qof_instance_get_type ())
 #define QOF_INSTANCE(o)              \
@@ -205,6 +207,8 @@ GList* qof_instance_get_typed_referring_object_list(const QofInstance* inst, con
     freed by the caller but the objects on the list must not.
  */
 GList* qof_instance_get_referring_object_list_from_collection(const QofCollection* coll, const QofInstance* ref);
+
+G_END_DECLS
 
 /* @} */
 /* @} */

@@ -30,7 +30,6 @@
 #include <time.h>
 #include <gnc-quotes.hpp>
 
-extern "C" {
 #include "dialog-utils.h"
 #include "gnc-accounting-period.h"
 #include "gnc-amount-edit.h"
@@ -48,7 +47,6 @@ extern "C" {
 #include "gnc-ui-util.h"
 #include "gnc-warnings.h"
 #include <gnc-glib-utils.h>
-}
 
 
 #define DIALOG_PRICE_DB_CM_CLASS "dialog-price-edit-db"

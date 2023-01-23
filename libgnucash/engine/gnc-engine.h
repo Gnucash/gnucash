@@ -36,11 +36,7 @@
 #ifndef GNC_ENGINE_H
 #define GNC_ENGINE_H
 
-#ifdef __cplusplus
-extern "C++" {
 #include <glib.h>
-}
-#endif
 
 #include "qof.h"
 

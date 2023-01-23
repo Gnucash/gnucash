@@ -30,6 +30,8 @@
 #include <gtk/gtk.h>
 #include "Account.h"
 
+G_BEGIN_DECLS
+
 /** Enumeration for the mappings liststore */
 enum GncImportColumn {MAPPING_STRING, MAPPING_FULLPATH, MAPPING_ACCOUNT};
 
@@ -48,5 +50,7 @@ void gnc_csv_account_map_change_mappings (Account *old_account, Account *new_acc
  * @return A pointer to an account.
  */
 Account * gnc_csv_account_map_search (const gchar *map_string);
+
+G_END_DECLS
 
 #endif

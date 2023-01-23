@@ -34,6 +34,8 @@
 
 #include "gnc-budget.h"
 
+G_BEGIN_DECLS
+
 /* The budget list columns. */
 enum
 {
@@ -54,4 +56,6 @@ gboolean gnc_tree_model_budget_get_iter_for_budget(GtkTreeModel *tm,
         GtkTreeIter *iter,
         GncBudget *bgt);
 /** @} */
+G_END_DECLS
+
 #endif // __GNC_TREE_MODEL_BUDGET_H__

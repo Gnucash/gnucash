@@ -29,8 +29,6 @@
 #include <gnc-optiondb.h>
 #include <libguile.h>
 
-extern "C"
-{
 #include <config.h>
 
 #include <platform.h>
@@ -68,7 +66,6 @@ extern "C"
 #include "gnc-plugin-page-account-tree.h"
 
 #include "gnc-engine.h"
-}
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
 

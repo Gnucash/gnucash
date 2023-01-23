@@ -25,8 +25,6 @@
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 
-extern "C"
-{
 #include <config.h>
 
 #include <platform.h>
@@ -52,7 +50,6 @@ extern "C"
 #if COMPILER(MSVC)
 # define g_fopen fopen
 #endif
-}
 
 #include "sixtp.h"
 

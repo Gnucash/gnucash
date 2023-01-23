@@ -1,13 +1,10 @@
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include <gncla-dir.h>
 #include <gnc-path.h>
 #include <binreloc.h>
 #include <gnc-filepath-utils.h>
-}
 
 #include <gtest/gtest.h>
 

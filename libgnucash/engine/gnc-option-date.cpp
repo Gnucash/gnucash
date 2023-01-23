@@ -27,10 +27,7 @@
 #include <cassert>
 #include <algorithm>
 
-extern "C"
-{
 #include "gnc-accounting-period.h"
-}
 
 #define N_(string) string //So that xgettext will find it
 

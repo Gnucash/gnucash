@@ -37,6 +37,8 @@
 
 #include <gnc-main-window.h>
 
+G_BEGIN_DECLS
+
 /** Initialize the gnome-utils library
  *  Should be run once before using any gnome-utils features.
  */
@@ -100,6 +102,8 @@ void gnc_shutdown (int exit_status);
 GncMainWindow *gnc_gui_init (void);
 int gnc_ui_start_event_loop (void);
 gboolean gnucash_ui_is_running (void);
+
+G_END_DECLS
 
 #endif
 /** @} */

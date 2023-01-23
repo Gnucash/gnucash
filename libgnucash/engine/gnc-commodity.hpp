@@ -35,9 +35,7 @@
 
 #include <vector>
 
-extern "C" {
 #include <gnc-commodity.h>
-}
 
 using CommVec = std::vector<gnc_commodity*>;
 

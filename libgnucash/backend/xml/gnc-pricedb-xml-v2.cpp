@@ -20,14 +20,11 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  *******************************************************************/
-extern "C"
-{
 #include <config.h>
 
 #include <string.h>
 #include "gnc-pricedb.h"
 #include "gnc-pricedb-p.h"
-}
 
 #include "gnc-xml.h"
 #include "sixtp.h"

@@ -22,7 +22,6 @@
 
 #include <guid.hpp>
 
-extern "C" {
 #include <platform.h>
 #if PLATFORM(WINDOWS)
 #include <windows.h>
@@ -33,7 +32,6 @@ extern "C" {
 #include "gnc-ui-util.h" //get book
 #include "gnc-commodity.h"
 #include "gnc-pricedb.h"
-}
 
 #include <algorithm>
 #include <exception>

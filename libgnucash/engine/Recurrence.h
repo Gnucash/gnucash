@@ -44,6 +44,8 @@
 #include "Account.h"
 #include "gnc-numeric.h"
 
+G_BEGIN_DECLS
+
 typedef enum
 {
     PERIOD_ONCE,         /* Not a true period at all, but convenient here. */
@@ -184,5 +186,7 @@ int recurrenceCmp(Recurrence *a, Recurrence *b);
 int recurrenceListCmp(GList *a, GList *b);
 
 void recurrenceListFree(GList **recurrence);
+
+G_END_DECLS
 
 #endif  /* RECURRENCE_H */

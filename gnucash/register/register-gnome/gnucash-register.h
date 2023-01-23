@@ -26,6 +26,8 @@
 #include "table-allgui.h"
 #include "gnucash-sheet.h"
 
+G_BEGIN_DECLS
+
 /** @ingroup Register
  * @addtogroup Gnome
  * @{
@@ -87,4 +89,7 @@ void gnucash_register_set_open_doclink_cb (GnucashRegister *reg,
 GnucashSheet *gnucash_register_get_sheet (GnucashRegister *reg);
 void gnucash_register_reset_sheet_layout (GnucashRegister *reg);
 /** @} */
+
+G_END_DECLS
+
 #endif

@@ -41,6 +41,10 @@ typedef struct _gncOrderClass GncOrderClass;
 #include "gncOwner.h"
 #include "qof.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define GNC_ID_ORDER "gncOrder"
 
 /* --- type macros --- */
@@ -117,6 +121,10 @@ static inline GncOrder * gncOrderLookup (const QofBook *book, const GncGUID *gui
 /** deprecated functions */
 #define gncOrderGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
 #define gncOrderGetBook(x) qof_instance_get_book(QOF_INSTANCE(x))
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_ORDER_H_ */
 /** @} */

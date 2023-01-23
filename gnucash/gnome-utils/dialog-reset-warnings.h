@@ -22,4 +22,9 @@
  *                                                                     *
  **********************************************************************/
 
+G_BEGIN_DECLS
+
 void gnc_reset_warnings_dialog (GtkWindow *parent);
+
+G_END_DECLS
+

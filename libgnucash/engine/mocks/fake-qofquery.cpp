@@ -124,8 +124,6 @@ qof_query_set_book (QofQuery *query, QofBook *book)
     ((QofFakeQuery*)query)->set_book(book);
 }
 
-extern "C"
-{
 void
 xaccQueryAddDateMatchTT (
         QofQuery *query,
@@ -146,7 +144,6 @@ xaccQueryAddSingleAccountMatch(QofQuery *query, Account *acc, QofQueryOp op)
     ((QofFakeQuery*)query)->add_single_account_match(acc, op);
 }
 
-} // extern "C"
 
 GList *
 qof_query_run (QofQuery *query)

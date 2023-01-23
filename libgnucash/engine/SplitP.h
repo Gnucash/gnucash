@@ -52,6 +52,8 @@
 #include "qof.h"
 
 
+G_BEGIN_DECLS
+
 /** STRUCTS *********************************************************/
 /* A "split" is more commonly referred to as an "entry" in a "transaction".
  */
@@ -231,6 +233,8 @@ typedef struct
 } SplitTestFunctions;
 
 SplitTestFunctions* _utest_split_fill_functions (void);
+
+G_END_DECLS
 
 
 /*@}*/

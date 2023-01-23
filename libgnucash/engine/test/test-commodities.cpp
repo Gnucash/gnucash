@@ -24,14 +24,11 @@
  */
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include "gnc-commodity.h"
 #include "qof.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
-}
 
 static void
 test_commodity(void)

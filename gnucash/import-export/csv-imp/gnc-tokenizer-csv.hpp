@@ -34,9 +34,7 @@
 #ifndef GNC_CSV_TOKENIZER_HPP
 #define GNC_CSV_TOKENIZER_HPP
 
-extern "C" {
 #include <config.h>
-}
 
 #include <iostream>
 #include <fstream>      // fstream

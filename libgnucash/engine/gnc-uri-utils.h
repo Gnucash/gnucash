@@ -63,6 +63,8 @@
 
 #include "platform.h"
 
+G_BEGIN_DECLS
+
 /** Checks if the given uri is a valid uri
  *
  *  A valid uri is defined by having at least a scheme and a path.
@@ -309,6 +311,8 @@ gboolean gnc_uri_is_file_protocol (const gchar *protocol)
     GNC_DEPRECATED("Please use gnc_uri_is_file_scheme instead (since 3.4)");
 
 /** @} */
+
+G_END_DECLS
 
 #endif /* GNCURIUTILS_H_ */
 /** @} */

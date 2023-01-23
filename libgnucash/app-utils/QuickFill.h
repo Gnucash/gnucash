@@ -52,6 +52,8 @@
 
 #include <glib.h>
 
+G_BEGIN_DECLS
+
 typedef enum
 {
     QUICKFILL_LIFO,
@@ -127,4 +129,6 @@ void         gnc_quickfill_remove (QuickFill *root, const gchar *text,
 
 /** @} */
 /** @} */
+G_END_DECLS
+
 #endif /* QUICKFILL_H */

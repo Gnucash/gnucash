@@ -29,15 +29,12 @@
  */
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 
 #include <stdlib.h>
 #include <string.h>
 
 #include "gncJobP.h"
-}
 
 #include "gnc-sql-connection.hpp"
 #include "gnc-sql-backend.hpp"

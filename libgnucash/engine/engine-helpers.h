@@ -25,16 +25,16 @@
 #ifndef ENGINE_HELPERS_H
 #define ENGINE_HELPERS_H
 
-#ifdef __cplusplus
-extern "C++" {
 #include <glib.h>
-}
-#endif
 
 #include "gnc-engine.h"
 #include "Account.h"
 #include "Query.h"
 #include "Transaction.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef void (*GncBOCb)    (gpointer new_val, gpointer user_data);
 
@@ -82,5 +82,9 @@ gnc_book_option_register_cb (gchar *key, GncBOCb func, gpointer user_data);
 /** Removes previously registered callbacks for the specified book option key */
 void
 gnc_book_option_remove_cb (gchar *key, GncBOCb func, gpointer user_data);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

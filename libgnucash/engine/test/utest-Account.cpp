@@ -21,8 +21,6 @@
  ********************************************************************/
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include <string.h>
 #include <unittest-support.h>
@@ -40,8 +38,7 @@ extern "C"
 #define USE_CLANG_FUNC_SIG 1
 #endif
 static const gchar *suitename = "/engine/Account";
-void test_suite_account (void);
-}
+extern "C" void test_suite_account (void);
 
 #include <qofinstance-p.h>
 #include <kvp-frame.hpp>

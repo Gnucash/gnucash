@@ -25,6 +25,10 @@
 
 #include <glib.h>
 
+G_BEGIN_DECLS
+
 void gnc_main_gui_init(void);
+
+G_END_DECLS
 
 #endif

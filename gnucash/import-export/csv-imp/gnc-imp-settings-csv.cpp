@@ -29,8 +29,6 @@
 #include "gnc-imp-settings-csv.hpp"
 #include <sstream>
 
-extern "C"
-{
 #include <config.h>
 
 #include <gtk/gtk.h>
@@ -39,7 +37,6 @@ extern "C"
 #include "Account.h"
 #include "gnc-state.h"
 #include "gnc-ui-util.h"
-}
 
 #include <algorithm>
 #include <iostream>

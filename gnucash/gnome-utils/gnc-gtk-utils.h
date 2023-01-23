@@ -37,6 +37,8 @@
 
 #include <gtk/gtk.h>
 
+G_BEGIN_DECLS
+
 /** @name gtk Miscellaneous Functions
  @{
 */
@@ -95,6 +97,8 @@ gboolean gnc_menubar_model_update_item (GMenuModel *menu_model, const gchar *act
 void gnc_menubar_model_remove_items_with_attrib (GMenuModel *menu_model, const gchar *attrib);
 
 /** @} */
+
+G_END_DECLS
 
 #endif /* GNC_GTK_UTILS_H */
 /** @} */

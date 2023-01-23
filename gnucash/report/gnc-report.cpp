@@ -31,8 +31,6 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include <libguile.h>
-extern "C"
-{
 #include <stdio.h>
 #include <string.h>
 #include <string.h>
@@ -43,7 +41,6 @@ extern "C"
 #include <gnc-filepath-utils.h>
 #include <gnc-guile-utils.h>
 #include <gnc-engine.h>
-}
 #include "gnc-report.h"
 
 extern "C" SCM scm_init_sw_report_module(void);

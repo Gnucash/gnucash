@@ -31,10 +31,10 @@
 #ifndef GNC_ENTRY_H_
 #define GNC_ENTRY_H_
 
-#ifdef __cplusplus
-extern "C++" {
 #include <glib.h>
-}
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 typedef struct _gncEntry GncEntry;
@@ -334,6 +334,10 @@ int gncEntryCompare (const GncEntry *a, const GncEntry *b);
 
 /* deprecated functions, should be removed */
 #define gncEntryGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_ENTRY_H_ */
 /** @} */

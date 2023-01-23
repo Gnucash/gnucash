@@ -25,6 +25,10 @@
 
 #include "gnc-html.h"
 
+G_BEGIN_DECLS
+
 GncHtml* gnc_html_factory_create_html( void );
+
+G_END_DECLS
 
 #endif

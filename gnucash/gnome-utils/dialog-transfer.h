@@ -26,6 +26,8 @@
 
 #include "Account.h"
 
+G_BEGIN_DECLS
+
 typedef struct _xferDialog XferDialog;
 
 /** Opens up a window to do an automatic transfer between accounts
@@ -220,5 +222,7 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
     XferDialog *xfer, gnc_numeric *exch_rate, gnc_numeric amount,
     Account *reg_acc, Transaction *txn, gnc_commodity *xfer_com,
     gboolean expanded);
+
+G_END_DECLS
 
 #endif

@@ -32,14 +32,12 @@
 #include "gnucash-commands.hpp"
 #include "gnucash-core-app.hpp"
 
-extern "C" {
 #include <gnc-engine-guile.h>
 #include <gnc-prefs.h>
 #include <gnc-prefs-utils.h>
 #include <gnc-gnome-utils.h>
 #include <gnc-session.h>
 #include <qoflog.h>
-}
 
 #include <boost/locale.hpp>
 #include <fstream>

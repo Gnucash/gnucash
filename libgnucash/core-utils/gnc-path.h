@@ -25,6 +25,8 @@
 
 #include <glib.h>
 
+G_BEGIN_DECLS
+
 /** Returns the installation prefix path, usually
  * "$prefix".
  *
@@ -118,5 +120,6 @@ gchar *gnc_path_get_reportsdir(void);
 gchar *gnc_path_get_stdreportsdir(void);
 
 
+G_END_DECLS
 
 #endif /* GNC_PATH_H */

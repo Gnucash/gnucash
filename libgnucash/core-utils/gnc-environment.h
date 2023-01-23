@@ -46,11 +46,19 @@
 #ifndef GNC_ENVIRONMENT_H
 #define GNC_ENVIRONMENT_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** Parse <prefix>/etc/gnucash/environment and set environment variables
  *  based on the contents of that file. Read the comments in
  *  <prefix>/etc/gnucash/environment for more details.
  */
 void gnc_environment_setup (void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_ENVIRONMENT_H */
 

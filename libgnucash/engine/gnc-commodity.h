@@ -49,12 +49,8 @@
 typedef struct _GncCommodityClass gnc_commodityClass;
 typedef struct _GncCommodityNamespaceClass gnc_commodity_namespaceClass;
 
-#ifdef __cplusplus
-extern "C++" {
 #include <glib.h>
 #include <glib/gi18n.h>
-}
-#endif
 
 #include "gnc-engine.h"
 

@@ -52,6 +52,8 @@
 #include "SplitP.h"
 #include "qof.h"
 
+G_BEGIN_DECLS
+
 
 /** STRUCTS *********************************************************/
 /*
@@ -204,6 +206,8 @@ typedef struct
 TransTestFunctions* _utest_trans_fill_functions (void);
 
 /*@}*/
+
+G_END_DECLS
 
 
 #endif /* XACC_TRANSACTION_P_H */

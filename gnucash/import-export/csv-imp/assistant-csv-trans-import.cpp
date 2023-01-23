@@ -30,8 +30,6 @@
 
 #include <guid.hpp>
 
-extern "C"
-{
 #include <config.h>
 
 #include <gtk/gtk.h>
@@ -57,7 +55,6 @@ extern "C"
 
 #include "gnc-csv-gnumeric-popup.h"
 #include "go-charmap-sel.h"
-}
 
 #include "gnc-imp-settings-csv-tx.hpp"
 #include "gnc-import-tx.hpp"

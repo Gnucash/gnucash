@@ -24,7 +24,6 @@
 #ifndef GNC_TRANS_PROPS_HPP
 #define GNC_TRANS_PROPS_HPP
 
-extern "C" {
 #include <platform.h>
 #if PLATFORM(WINDOWS)
 #include <windows.h>
@@ -35,7 +34,6 @@ extern "C" {
 #include "Account.h"
 #include "Transaction.h"
 #include "gnc-commodity.h"
-}
 
 #include <string>
 #include <map>

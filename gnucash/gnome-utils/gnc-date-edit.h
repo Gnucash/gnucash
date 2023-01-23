@@ -35,6 +35,8 @@
 #include <time.h>
 #include "gnc-date.h"
 
+G_BEGIN_DECLS
+
 typedef enum
 {
     GNC_DATE_EDIT_SHOW_TIME             = 1 << 0,
@@ -135,4 +137,7 @@ void      gnc_date_activates_default    (GNCDateEdit *gde, gboolean state);
 void      gnc_date_grab_focus           (GNCDateEdit *gde);
 
 void      gnc_date_make_mnemonic_target (GNCDateEdit *gde, GtkWidget *label);
+
+G_END_DECLS
+
 #endif

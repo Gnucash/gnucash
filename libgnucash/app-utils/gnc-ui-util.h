@@ -39,6 +39,8 @@
 #include "gncOwner.h"
 #include "qof.h"
 
+G_BEGIN_DECLS
+
 
 typedef QofSession * (*QofSessionCB) (void);
 
@@ -433,6 +435,8 @@ gchar * gnc_filter_text_for_currency_symbol (const gchar *incoming_text,
 gchar * gnc_filter_text_for_currency_commodity (const gnc_commodity *comm,
                                                 const gchar *incoming_text,
                                                 const gchar **symbol);
+
+G_END_DECLS
 
 #endif
 /** @} */

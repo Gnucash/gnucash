@@ -23,12 +23,16 @@
 #ifndef QUERY_USER_H
 #define QUERY_USER_H
 
+G_BEGIN_DECLS
+
 extern void
 gnc_info_dialog (GtkWindow *parent,
                  const char *format, ...) G_GNUC_PRINTF (2, 3);
 
 
 void gnc_error_dialog (GtkWindow* parent, const char* format, ...) G_GNUC_PRINTF (2, 3);
+
+G_END_DECLS
 
 
 #endif

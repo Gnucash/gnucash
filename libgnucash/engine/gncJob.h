@@ -37,6 +37,10 @@ typedef struct _gncJobClass GncJobClass;
 #include "gncAddress.h"
 #include "gncOwner.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define GNC_ID_JOB "gncJob"
 
 /* --- type macros --- */
@@ -115,6 +119,10 @@ gboolean gncJobEqual(const GncJob *a, const GncJob *b);
 #define gncJobGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
 #define gncJobRetGUID(x) (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null()))
 #define gncJobLookupDirect(G,B) gncJobLookup((B),&(G))
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_JOB_H_ */
 /** @} */

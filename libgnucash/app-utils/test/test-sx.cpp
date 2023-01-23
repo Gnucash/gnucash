@@ -22,8 +22,6 @@
 #include <glib.h>
 #include <libguile.h>
 
-extern "C"
-{
 #include <stdlib.h>
 #include "SX-book.h"
 #include "SX-ttinfo.h"
@@ -34,7 +32,6 @@ extern "C"
 
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
-}
 
 static void
 test_basic()

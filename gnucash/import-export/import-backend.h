@@ -31,6 +31,8 @@
 #include "Transaction.h"
 #include "import-settings.h"
 
+G_BEGIN_DECLS
+
 typedef struct _transactioninfo GNCImportTransInfo;
 typedef struct _selected_match_info GNCImportSelectedMatchInfo;
 typedef struct _matchinfo
@@ -258,6 +260,8 @@ gnc_import_MatchInfo_get_split (const GNCImportMatchInfo * info);
 gint
 gnc_import_MatchInfo_get_probability (const GNCImportMatchInfo * info);
 /**@}*/
+
+G_END_DECLS
 
 #endif
 /** @} */

@@ -29,6 +29,8 @@
 #ifndef GNC_FILEPATH_UTILS_H
 #define GNC_FILEPATH_UTILS_H
 
+G_BEGIN_DECLS
+
 /** The gnc_resolve_file_path() routine is a utility that will accept
  *    a fragmentary filename as input, and resolve it into a fully
  *    qualified path in the file system, i.e. a path that begins with
@@ -189,5 +191,7 @@ typedef struct
  *  g_list_free_full (paths, g_free)
  */
 GList *gnc_list_all_paths (void);
+
+G_END_DECLS
 
 #endif /* GNC_FILEPATH_UTILS_H */

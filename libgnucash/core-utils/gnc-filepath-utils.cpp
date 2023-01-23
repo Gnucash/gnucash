@@ -31,7 +31,6 @@
 #include <glib/gprintf.h>
 #include <glib/gstdio.h>
 
-extern "C" {
 #include <config.h>
 
 #include <platform.h>
@@ -63,7 +62,6 @@ extern "C" {
 #ifdef MAC_INTEGRATION
 #include <Foundation/Foundation.h>
 #endif
-}
 
 #include "gnc-locale-utils.hpp"
 #include <boost/filesystem.hpp>

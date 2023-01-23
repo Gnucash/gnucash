@@ -23,10 +23,8 @@
 #ifndef __GNC_DBISQLPROVIDERIMPL_HPP__
 #define __GNC_DBISQLPROVIDERIMPL_HPP__
 #include <guid.hpp>
-extern "C"
-{
 #include <config.h>
-}
+
 #include <string>
 #include <algorithm>
 #include <vector>

@@ -27,11 +27,15 @@
 #include <gtk/gtk.h>
 #include "qof.h"
 
+G_BEGIN_DECLS
+
 /** Callback that is used to notify the autosave subsystem when the
     QofBook changed its dirty state. */
 void gnc_autosave_dirty_handler (QofBook *book, gboolean dirty);
 
 /** Removes any still existing autosave timer from the event loop. */
 void gnc_autosave_remove_timer(QofBook *book);
+
+G_END_DECLS
 
 #endif

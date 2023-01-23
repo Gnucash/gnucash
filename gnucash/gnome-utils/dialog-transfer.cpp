@@ -29,7 +29,6 @@
 #include <glib/gi18n.h>
 #include <gnc-quotes.hpp>
 
-extern "C" {
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "gnc-amount-edit.h"
@@ -48,7 +47,6 @@ extern "C" {
 #include "engine-helpers.h"
 #include "QuickFill.h"
 #include <gnc-commodity.h>
-}
 
 
 #define DIALOG_TRANSFER_CM_CLASS "dialog-transfer"

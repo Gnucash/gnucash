@@ -23,12 +23,9 @@
 \********************************************************************/
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 
 #include <stdio.h>
-}
 
 #include "gnc-xml.h"
 #include "io-utils.h"

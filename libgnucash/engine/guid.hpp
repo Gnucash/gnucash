@@ -24,9 +24,8 @@
 
 #include <boost/uuid/uuid.hpp>
 #include <stdexcept>
-extern "C" {
+
 #include "guid.h"
-}
 
 namespace gnc {
 struct guid_syntax_exception : public std::invalid_argument

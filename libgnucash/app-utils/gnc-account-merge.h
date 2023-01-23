@@ -23,6 +23,8 @@
 
 #include "Account.h"
 
+G_BEGIN_DECLS
+
 typedef enum
 {
     GNC_ACCOUNT_MERGE_DISPOSITION_USE_EXISTING,
@@ -40,5 +42,7 @@ GncAccountMergeDisposition determine_account_merge_disposition(Account *existing
 GncAccountMergeDisposition determine_merge_disposition(Account *existing_root, Account *new_acct);
 
 void account_trees_merge(Account *existing_root, Account *new_accts_root);
+
+G_END_DECLS
 
 #endif /* GNC_ACCOUNT_MERGE_H */

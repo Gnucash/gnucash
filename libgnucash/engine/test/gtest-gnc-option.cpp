@@ -26,8 +26,6 @@
 #include "gnc-option-impl.hpp"
 #include "gnc-option-ui.hpp"
 #include "guid.hpp"
-extern "C"
-{
 #include <config.h>
 #include "qof.h"
 #include "Account.h"
@@ -36,7 +34,6 @@ extern "C"
 #include "gnc-date.h"
 #include <time.h>
 #include "gnc-session.h"
-}
 
 TEST(GncOption, test_string_ctor)
 {

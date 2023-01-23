@@ -29,6 +29,8 @@
 #include "FreqSpec.h"
 #include "Recurrence.h"
 
+G_BEGIN_DECLS
+
 #define GNC_TYPE_FREQUENCY	  (gnc_frequency_get_type())
 #define GNC_FREQUENCY(obj)	  G_TYPE_CHECK_INSTANCE_CAST (obj, GNC_TYPE_FREQUENCY, GncFrequency)
 #define GNC_FREQENCY_CLASS(klass) G_TYPE_CHECK_CLASS_CAST (klass, GNC_TYPE_FREQUENCY, GncFrequency)
@@ -100,5 +102,7 @@ void gnc_frequency_set_frequency_label_text (GncFrequency *gf, const gchar *txt)
  * implementation, the default label text is "Start Date"
  */
 void gnc_frequency_set_date_label_text (GncFrequency *gf, const gchar *txt);
+
+G_END_DECLS
 
 #endif /* !defined( GNC_FREQUENCY_H ) */

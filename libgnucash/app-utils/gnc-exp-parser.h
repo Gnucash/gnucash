@@ -24,6 +24,8 @@
 
 #include "qof.h"
 
+G_BEGIN_DECLS
+
 /**
  * The errors which can be determined at the gnc-exp-parser level.
  **/
@@ -88,5 +90,7 @@ gboolean gnc_exp_parser_parse_separate_vars (const char * expression,
 /* If the last parse returned FALSE, return an error string describing
  * the problem. Otherwise, return NULL. */
 const char * gnc_exp_parser_error_string (void);
+
+G_END_DECLS
 
 #endif

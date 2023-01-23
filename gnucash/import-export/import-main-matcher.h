@@ -36,6 +36,8 @@
 #include "Transaction.h"
 #include "import-backend.h"
 
+G_BEGIN_DECLS
+
 typedef struct _main_matcher_info GNCImportMainMatcher;
 
 typedef void (*GNCTransactionProcessedCB) (GNCImportTransInfo *trans_info,
@@ -220,6 +222,8 @@ void gnc_gen_trans_list_show_reconcile_after_close_button (GNCImportMainMatcher 
  * @return The check button.
  */
 GtkWidget* gnc_gen_trans_list_get_reconcile_after_close_button (GNCImportMainMatcher *info);
+
+G_END_DECLS
 
 #endif
 /**@}*/

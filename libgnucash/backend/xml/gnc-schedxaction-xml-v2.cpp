@@ -22,13 +22,10 @@
  *******************************************************************/
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include <string.h>
 
 #include "SX-book.h"
-}
 
 #include "gnc-xml-helper.h"
 #include "sixtp.h"

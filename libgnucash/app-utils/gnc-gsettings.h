@@ -52,6 +52,8 @@
 
 #include <glib.h>
 
+G_BEGIN_DECLS
+
 /** Convert a partial schema name into a complete gsettings schema name.
  *
  *  This function takes a partial gsettings schema name and converts
@@ -604,6 +606,8 @@ void gnc_gsettings_load_backend (void);
  * steps to convert old settings to new (when possible).
  */
 void gnc_gsettings_version_upgrade (void);
+
+G_END_DECLS
 
 #endif /* GNC_GSETTINGS_H */
 /** @} */

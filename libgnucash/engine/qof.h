@@ -68,11 +68,8 @@
 */
 /** @} */
 
-#ifdef __cplusplus
-extern "C++" {
 #include <glib.h>
-}
-#endif
+
 #include "qofid.h"
 #include "qoflog.h"
 #include "gnc-date.h"

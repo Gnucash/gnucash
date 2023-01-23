@@ -30,6 +30,10 @@
 
 #include <glib.h>
 
+G_BEGIN_DECLS
+
 gboolean cashobjects_register(void);
+
+G_END_DECLS
 
 #endif /* _CASHOBJECTS_H */

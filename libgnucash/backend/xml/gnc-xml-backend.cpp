@@ -17,8 +17,6 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 
-extern "C"
-{
 #include <config.h>
 #include <platform.h>
 #if PLATFORM(WINDOWS)
@@ -35,8 +33,6 @@ extern "C"
 #include <gnc-uri-utils.h>
 #include <TransLog.h>
 #include <gnc-prefs.h>
-
-}
 
 #include <sstream>
 

@@ -25,6 +25,14 @@
 #ifndef GNUCASH_LOCALE_PLATFORM_H
 #define GNUCASH_LOCALE_PLATFORM_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 char *set_platform_locale(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -23,16 +23,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
-extern "C"
-{
 #include <config.h>
 #include "qof.h"
-}
-extern "C"
-{
 #include "cashobjects.h"
 #include "test-stuff.h"
-}
 
 int main (int argc, char** argv)
 {

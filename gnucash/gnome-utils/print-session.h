@@ -36,6 +36,8 @@
 
 #include <gtk/gtk.h>
 
+G_BEGIN_DECLS
+
 /**
  * Retrieve the print settings from the GtkPrintOperation @a op and save them in
  * a static variable.
@@ -68,6 +70,8 @@ GtkPrintSettings *gnc_print_get_settings(void);
 
 /** Key for saving the PDF-export directory in the print settings */
 #define GNC_GTK_PRINT_SETTINGS_EXPORT_DIR "gnc-pdf-export-directory"
+
+G_END_DECLS
 
 
 /** @} */

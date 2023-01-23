@@ -23,11 +23,6 @@
 /* Includes the header in the wrapper code */
 #include <glib.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #include <config.h>
 #include "qof.h"
 #include "qoflog.h"
@@ -58,9 +53,6 @@ extern "C"
 #include "gncTaxTable.h"
 #include "gncVendor.h"
 
-#ifdef __cplusplus
-}
-#endif
 %}
 #if defined(SWIGGUILE) //Always C++
 %{

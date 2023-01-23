@@ -57,6 +57,10 @@ up to you to pass a suitable entity.
 #include "qof.h"
 #include "gncBusiness.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define GNC_ADDRESS_MODULE_NAME        "gncAddress"
 #define GNC_ID_ADDRESS GNC_ADDRESS_MODULE_NAME
 /** \struct GncAddress
@@ -151,6 +155,10 @@ gboolean gncAddressEqual(const GncAddress *a, const GncAddress *b);
 #define ADDRESS_FAX     "fax"
 #define ADDRESS_EMAIL   "email"
 #define ADDRESS_OWNER   "owner"
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_ADDRESS_H_ */
 /** @} */

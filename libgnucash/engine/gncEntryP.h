@@ -31,6 +31,8 @@
 
 #include "gncEntry.h"
 
+G_BEGIN_DECLS
+
 gboolean gncEntryRegister (void);
 void gncEntrySetGUID (GncEntry *entry, const GncGUID *guid);
 void gncEntrySetOrder (GncEntry *entry, GncOrder *order);
@@ -39,5 +41,7 @@ void gncEntrySetBill (GncEntry *entry, GncInvoice *bill);
 void gncEntrySetDirty (GncEntry *entry, gboolean dirty);
 
 #define gncEntrySetGUID(E,G) qof_instance_set_guid(QOF_INSTANCE(E),(G))
+
+G_END_DECLS
 
 #endif /* GNC_ENTRYP_H_ */

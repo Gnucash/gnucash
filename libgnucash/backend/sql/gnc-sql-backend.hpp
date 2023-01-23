@@ -24,11 +24,9 @@
 #ifndef __GNC_SQL_BACKEND_HPP__
 #define __GNC_SQL_BACKEND_HPP__
 
-extern "C"
-{
 #include <qof.h>
 #include <Account.h>
-}
+
 #include <memory>
 #include <exception>
 #include <sstream>

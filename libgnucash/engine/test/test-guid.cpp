@@ -28,15 +28,12 @@
 #include <guid.hpp>
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include <ctype.h>
 #include "cashobjects.h"
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
 #include "qof.h"
-}
 #define NENT 50123
 
 static void test_null_guid(void)
