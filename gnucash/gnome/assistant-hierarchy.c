@@ -1428,6 +1428,9 @@ on_finish (GtkAssistant  *gtkassistant,
     ENTER (" ");
     com = gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT(data->currency_selector));
 
+    if (!gnc_using_equity_type_opening_balance_account (gnc_get_current_book()))
+        gnc_set_use_equity_type_opening_balance_account (gnc_get_current_book());
+
     if (data->our_account_tree)
     {
         gnc_account_foreach_descendant (data->our_account_tree,
