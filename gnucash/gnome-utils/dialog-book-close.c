@@ -351,7 +351,6 @@ void gnc_ui_close_book (QofBook* book, GtkWindow *parent)
     equity_list = g_list_prepend(equity_list, GINT_TO_POINTER(ACCT_TYPE_EQUITY));
     box = GTK_WIDGET(gtk_builder_get_object (builder, "income_acct_box"));
     cbw->income_acct_widget = gnc_account_sel_new();
-    gnc_account_sel_set_hexpand (GNC_ACCOUNT_SEL(cbw->income_acct_widget), TRUE);
     gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(cbw->income_acct_widget),
                                      equity_list, NULL);
     gnc_account_sel_set_new_account_ability(GNC_ACCOUNT_SEL(cbw->income_acct_widget), TRUE);
@@ -360,7 +359,6 @@ void gnc_ui_close_book (QofBook* book, GtkWindow *parent)
     /* expense acct */
     box = GTK_WIDGET(gtk_builder_get_object (builder, "expense_acct_box"));
     cbw->expense_acct_widget = gnc_account_sel_new();
-    gnc_account_sel_set_hexpand (GNC_ACCOUNT_SEL(cbw->expense_acct_widget), TRUE);
     gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(cbw->expense_acct_widget),
                                      equity_list, NULL);
     gnc_account_sel_set_new_account_ability(GNC_ACCOUNT_SEL(cbw->expense_acct_widget), TRUE);

@@ -1178,8 +1178,8 @@ set_ok_sensitivity(GtkWidget *dialog)
 
     sa_mas = g_object_get_data(G_OBJECT(dialog), DELETE_DIALOG_SA_MAS);
     trans_mas = g_object_get_data(G_OBJECT(dialog), DELETE_DIALOG_TRANS_MAS);
-    sa_mas_cnt = gnc_account_sel_get_num_account(GNC_ACCOUNT_SEL(sa_mas));
-    trans_mas_cnt = gnc_account_sel_get_num_account(GNC_ACCOUNT_SEL(trans_mas));
+    sa_mas_cnt = gnc_account_sel_get_visible_account_num(GNC_ACCOUNT_SEL(sa_mas));
+    trans_mas_cnt = gnc_account_sel_get_visible_account_num(GNC_ACCOUNT_SEL(trans_mas));
 
     sensitive = (((NULL == sa_mas) ||
                   (!gtk_widget_is_sensitive(sa_mas) || sa_mas_cnt)) &&
@@ -1190,6 +1190,19 @@ set_ok_sensitivity(GtkWidget *dialog)
     gtk_widget_set_sensitive(button, sensitive);
 }
 
+static GList *
+gppat_get_exclude_list (Account *acc, gboolean exclude_subaccounts)
+{
+    GList *acct_list = NULL;
+
+    if (exclude_subaccounts)
+        acct_list = gnc_account_get_descendants (acc);
+
+    acct_list = g_list_prepend (acct_list, acc);
+
+    return acct_list;
+}
+
 static void
 gppat_populate_gas_list(GtkWidget *dialog,
                         GNCAccountSel *gas,
@@ -1197,6 +1210,7 @@ gppat_populate_gas_list(GtkWidget *dialog,
 {
     Account *account;
     GList *filter;
+    GList *exclude;
 
     g_return_if_fail(GTK_IS_DIALOG(dialog));
     if (gas == NULL)
@@ -1207,8 +1221,12 @@ gppat_populate_gas_list(GtkWidget *dialog,
     /* Setting the account type filter triggers GNCAccountSel population. */
     gnc_account_sel_set_acct_filters (gas, filter, NULL);
 
-    /* Accounts to be deleted must be removed. */
-    gnc_account_sel_purge_account( gas, account, exclude_subaccounts);
+    /* Accounts to be deleted must be excluded from GAS. */
+    exclude = gppat_get_exclude_list (account, exclude_subaccounts);
+    gnc_account_sel_set_acct_exclude_filter (gas, exclude);
+    g_list_free (exclude);
+
+    gnc_account_sel_set_account (gas, NULL, TRUE);
 
     /* The sensitivity of the OK button needs to be reevaluated. */
     set_ok_sensitivity(dialog);
@@ -1259,7 +1277,11 @@ gppat_setup_account_selector (GtkBuilder *builder, GtkWidget *dialog,
     GtkWidget *box = GTK_WIDGET(gtk_builder_get_object (builder, hbox));
 
     gtk_box_pack_start (GTK_BOX(box), selector, TRUE, TRUE, 0);
-    gnc_account_sel_set_hexpand (GNC_ACCOUNT_SEL(selector), TRUE);
+
+    // placeholder accounts are OK for this GAS
+    if (g_strcmp0 (sel_name, DELETE_DIALOG_SA_MAS) == 0)
+        g_object_set (selector, "hide-placeholder", FALSE, NULL);
+
     g_object_set_data(G_OBJECT(dialog), sel_name, selector);
 
     gppat_populate_gas_list(dialog, GNC_ACCOUNT_SEL(selector), TRUE);

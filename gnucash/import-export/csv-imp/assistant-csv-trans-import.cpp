@@ -569,7 +569,6 @@ CsvImpTransAssist::CsvImpTransAssist ()
         acct_selector = gnc_account_sel_new();
         auto account_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "account_hbox"));
         gtk_box_pack_start (GTK_BOX(account_hbox), acct_selector, TRUE, TRUE, 6);
-        gnc_account_sel_set_hexpand (GNC_ACCOUNT_SEL(acct_selector), true);
         gtk_widget_show (acct_selector);
 
         g_signal_connect(G_OBJECT(acct_selector), "account_sel_changed",
