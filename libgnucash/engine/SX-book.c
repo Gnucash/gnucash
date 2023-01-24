@@ -180,7 +180,7 @@ static QofObject sxtg_object_def =
 {
     DI(.interface_version = ) QOF_OBJECT_VERSION,
     DI(.e_type            = ) GNC_ID_SXTG,
-    DI(.type_label        = ) "Scheduled Transaction Templates",
+    DI(.type_label        = ) "Scheduled Transaction Group",
     DI(.create            = ) NULL,
     DI(.book_begin        = ) sxtg_book_begin,
     DI(.book_end          = ) sxtg_book_end,
@@ -281,7 +281,7 @@ book_sxes_end(QofBook* book)
     sxes = qof_collection_get_data(col);
     if (sxes != NULL)
     {
-        g_list_free (sxes->sx_list);
+        g_list_free(sxes->sx_list);
         g_object_unref(sxes);
         qof_collection_set_data(col, NULL);
     }

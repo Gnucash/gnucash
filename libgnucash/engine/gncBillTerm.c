@@ -839,13 +839,27 @@ static void _gncBillTermCreate (QofBook *book)
     qof_book_set_data (book, _GNC_MOD_NAME, bi);
 }
 
+
+static void
+destroy_billterm_on_book_close (QofInstance *ent, gpointer data)
+{
+    GncBillTerm *term = GNC_BILLTERM(ent);
+
+    gncBillTermBeginEdit (term);
+    gncBillTermDestroy (term);
+}
+
 static void _gncBillTermDestroy (QofBook *book)
 {
     struct _book_info *bi;
+    QofCollection *col;
 
     if (!book) return;
 
     bi = qof_book_get_data (book, _GNC_MOD_NAME);
+
+    col = qof_book_get_collection (book, GNC_ID_BILLTERM);
+    qof_collection_foreach (col, destroy_billterm_on_book_close, NULL);
 
     g_list_free (bi->terms);
     g_free (bi);

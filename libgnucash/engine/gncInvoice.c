@@ -435,10 +435,14 @@ static void gncInvoiceFree (GncInvoice *invoice)
     g_list_free (invoice->entries);
     g_list_free (invoice->prices);
 
-    if (invoice->printname) g_free (invoice->printname);
+    if (invoice->printname)
+        g_free (invoice->printname);
 
-    if (invoice->terms)
-        gncBillTermDecRef (invoice->terms);
+    if (!qof_book_shutting_down (qof_instance_get_book (QOF_INSTANCE(invoice))))
+    {
+        if (invoice->terms)
+            gncBillTermDecRef (invoice->terms);
+    }
 
     if (invoice->doclink != is_unset)
         g_free (invoice->doclink);

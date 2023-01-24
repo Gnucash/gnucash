@@ -2493,6 +2493,9 @@ convert_price (const gnc_commodity *from, const gnc_commodity *to, PriceTuple tu
 
     price = gnc_numeric_div (to_val, from_val, GNC_DENOM_AUTO, no_round);
 
+    gnc_price_unref (tuple.from);
+    gnc_price_unref (tuple.to);
+
     if (from_cur == from && to_cur == to)
         return price;
 
