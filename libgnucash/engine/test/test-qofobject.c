@@ -90,7 +90,6 @@ extern "C"
 {
 #endif
 
-extern gboolean get_object_is_initialized( void );
 extern GList* get_object_modules( void );
 extern GList* get_book_list( void );
 
