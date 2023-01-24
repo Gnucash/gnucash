@@ -109,9 +109,7 @@ static char *olds;
    returning a 0 length valid string between two consecutive ocurence of delim.
    It will also return a 0 length string instead of NULL when it reaches the end of s
 */
-static char * my_strtok (s, delim)
-char *s;
-const char *delim;
+static char * my_strtok (char *s, const char *delim)
 {
     char *token;
     /*DEBUG("strtok(): Start...");*/
