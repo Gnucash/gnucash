@@ -9,7 +9,7 @@ struct _MockAccountClass
 };
 typedef struct _MockAccountClass MockAccountClass;
 
-G_DEFINE_TYPE(MockAccount, gnc_mockaccount, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(MockAccount, gnc_mockaccount, QOF_TYPE_INSTANCE)
 
 static void
 gnc_mockaccount_init (MockAccount *inst)

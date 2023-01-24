@@ -654,7 +654,7 @@ reset_unique_name(gnc_commodityPrivate *priv)
 }
 
 /* GObject Initialization */
-G_DEFINE_TYPE_WITH_PRIVATE(gnc_commodity, gnc_commodity, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE_WITH_PRIVATE(gnc_commodity, gnc_commodity, QOF_TYPE_INSTANCE)
 
 static void
 gnc_commodity_init(gnc_commodity* com)
@@ -2306,7 +2306,7 @@ gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table)
  ********************************************************************/
 
 /* GObject Initialization */
-QOF_GOBJECT_IMPL(gnc_commodity_namespace, gnc_commodity_namespace, QOF_TYPE_INSTANCE);
+QOF_GOBJECT_IMPL(gnc_commodity_namespace, gnc_commodity_namespace, QOF_TYPE_INSTANCE)
 
 static void
 gnc_commodity_namespace_init(gnc_commodity_namespace* ns)

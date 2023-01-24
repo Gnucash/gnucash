@@ -13,7 +13,7 @@ struct _MockSplitClass
 };
 typedef struct _MockSplitClass MockSplitClass;
 
-G_DEFINE_TYPE(MockSplit, gnc_mocksplit, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(MockSplit, gnc_mocksplit, QOF_TYPE_INSTANCE)
 
 static void
 gnc_mocksplit_init (MockSplit *inst)

@@ -61,7 +61,7 @@ enum
 };
 
 /* GObject initialization */
-G_DEFINE_TYPE(SchedXaction, gnc_schedxaction, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(SchedXaction, gnc_schedxaction, QOF_TYPE_INSTANCE)
 
 static void
 gnc_schedxaction_init(SchedXaction* sx)

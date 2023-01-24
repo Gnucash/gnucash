@@ -6,7 +6,7 @@
 #include <qofinstance-p.h>
 
 
-G_DEFINE_TYPE(QofInstance, qof_instance, G_TYPE_OBJECT);
+G_DEFINE_TYPE(QofInstance, qof_instance, G_TYPE_OBJECT)
 
 static void
 qof_instance_init (QofInstance *inst)

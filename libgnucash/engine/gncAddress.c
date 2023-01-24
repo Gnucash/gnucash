@@ -86,7 +86,7 @@ enum
 };
 
 /* GObject Initialization */
-G_DEFINE_TYPE(GncAddress, gnc_address, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(GncAddress, gnc_address, QOF_TYPE_INSTANCE)
 
 static void
 gnc_address_init(GncAddress* addr)

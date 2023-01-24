@@ -238,7 +238,7 @@ enum
 };
 
 /* GObject Initialization */
-G_DEFINE_TYPE(GncEntry, gnc_entry, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(GncEntry, gnc_entry, QOF_TYPE_INSTANCE)
 
 static void
 gnc_entry_init(GncEntry* entry)

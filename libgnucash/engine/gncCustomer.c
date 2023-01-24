@@ -103,7 +103,7 @@ enum
 };
 
 /* GObject Initialization */
-G_DEFINE_TYPE(GncCustomer, gnc_customer, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(GncCustomer, gnc_customer, QOF_TYPE_INSTANCE)
 
 static void
 gnc_customer_init(GncCustomer* cust)

@@ -132,7 +132,7 @@ enum
 };
 
 /* GObject Initialization */
-G_DEFINE_TYPE(GncInvoice, gnc_invoice, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(GncInvoice, gnc_invoice, QOF_TYPE_INSTANCE)
 
 static void
 gnc_invoice_init (GncInvoice* inv)

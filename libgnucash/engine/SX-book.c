@@ -232,7 +232,7 @@ gnc_sxes_del_sx(SchedXactions *sxes, SchedXaction *sx)
 /* SX-trans stuff */
 
 /* GObject initialization */
-QOF_GOBJECT_IMPL(gnc_schedxactions, SchedXactions, QOF_TYPE_INSTANCE);
+QOF_GOBJECT_IMPL(gnc_schedxactions, SchedXactions, QOF_TYPE_INSTANCE)
 
 static void
 gnc_schedxactions_init(SchedXactions* sxs)

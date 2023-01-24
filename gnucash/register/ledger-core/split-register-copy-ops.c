@@ -86,57 +86,57 @@ void gnc_float_split_set_split(FloatingSplit *fs, Split *split)
 {
     g_return_if_fail (fs);
     fs->m_split = split;
-};
+}
 
 void gnc_float_split_set_account (FloatingSplit *fs, Account *account) /* direct account pointer rather than account guid */
 {
     g_return_if_fail (fs);
     fs->m_account = account;
-};
+}
 
 void gnc_float_split_set_transaction (FloatingSplit *fs, Transaction *transaction) /* direct transaction pointer rather than transaction guid */
 {
     g_return_if_fail (fs);
     fs->m_transaction = transaction;
-};
+}
 
 void gnc_float_split_set_memo (FloatingSplit *fs, const char *memo)
 {
     g_return_if_fail (fs);
     CACHE_REPLACE (fs->m_memo, memo);
-};
+}
 
 void gnc_float_split_set_action (FloatingSplit *fs, const char *action)
 {
     g_return_if_fail (fs);
     CACHE_REPLACE (fs->m_action, action);
-};
+}
 
 void gnc_float_split_set_reconcile_state (FloatingSplit *fs, char reconcile_state)
 {
     g_return_if_fail (fs);
     fs->m_reconcile_state = reconcile_state;
-};
+}
 
 void gnc_float_split_set_reconcile_date (FloatingSplit *fs, time64 reconcile_date)
 {
     g_return_if_fail (fs);
     fs->m_reconcile_date = reconcile_date;
-};
+}
 
 void gnc_float_split_set_amount (FloatingSplit *fs, const gnc_numeric amount)
 {
     g_return_if_fail (fs);
 
     fs->m_amount = amount;
-};
+}
 
 void gnc_float_split_set_value (FloatingSplit *fs, const gnc_numeric value)
 {
     g_return_if_fail (fs);
 
     fs->m_value = value;
-};
+}
 
 /* This function takes a split and returns a representation
    of it as a floating_split structure. Assumes the transaction is open
@@ -280,55 +280,55 @@ void gnc_float_txn_set_txn (FloatingTxn *ft, Transaction *txn)
 {
     g_return_if_fail (ft);
     ft->m_txn = txn;
-};
+}
 
 void gnc_float_txn_set_currency (FloatingTxn *ft, gnc_commodity *currency)
 {
     g_return_if_fail (ft);
     ft->m_currency = currency;
-};
+}
 
 void gnc_float_txn_set_date_entered (FloatingTxn *ft, time64 date_entered)
 {
     g_return_if_fail (ft);
     ft->m_date_entered = date_entered;
-};
+}
 
 void gnc_float_txn_set_date_posted (FloatingTxn *ft, time64 date_posted)
 {
     g_return_if_fail (ft);
     ft->m_date_posted = date_posted;
-};
+}
 
 void gnc_float_txn_set_num (FloatingTxn *ft, const char *num)
 {
     g_return_if_fail (ft);
     CACHE_REPLACE (ft->m_num, num);
-};
+}
 
 void gnc_float_txn_set_description (FloatingTxn *ft, const char *description)
 {
     g_return_if_fail (ft);
     CACHE_REPLACE (ft->m_description, description);
-};
+}
 
 void gnc_float_txn_set_notes (FloatingTxn *ft, const char *notes)
 {
     g_return_if_fail (ft);
     CACHE_REPLACE (ft->m_notes, notes);
-};
+}
 
 void gnc_float_txn_set_doclink (FloatingTxn *ft, const char *doclink)
 {
     g_return_if_fail (ft);
     CACHE_REPLACE (ft->m_doclink, doclink);
-};
+}
 
 void gnc_float_txn_set_splits (FloatingTxn *ft, SplitList *splits)
 {
     g_return_if_fail (ft);
     ft->m_splits = splits;
-};
+}
 
 void gnc_float_txn_append_float_split (FloatingTxn *ft, FloatingSplit *fs)
 {

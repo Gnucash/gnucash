@@ -93,7 +93,7 @@ enum
 };
 
 /* GObject Initialization */
-G_DEFINE_TYPE(GncOrder, gnc_order, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(GncOrder, gnc_order, QOF_TYPE_INSTANCE)
 
 static void
 gnc_order_init(GncOrder* order)

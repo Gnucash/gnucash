@@ -57,7 +57,7 @@ typedef struct _GNCSearchOwnerPrivate
     GtkWidget * owner_choice;
 } GNCSearchOwnerPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchOwner, gnc_search_owner, GNC_TYPE_SEARCH_CORE_TYPE);
+G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchOwner, gnc_search_owner, GNC_TYPE_SEARCH_CORE_TYPE)
 
 #define _PRIVATE(o)  \
    ((GNCSearchOwnerPrivate*)gnc_search_owner_get_instance_private((GNCSearchOwner*)o))
