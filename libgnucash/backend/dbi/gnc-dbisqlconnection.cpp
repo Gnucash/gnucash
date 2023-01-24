@@ -553,7 +553,7 @@ GncDbiSqlConnection::quote_string (const std::string& unquoted_str)
 
 
 /** Check if the dbi connection is valid. If not attempt to re-establish it
- * Returns TRUE is there is a valid connection in the end or FALSE otherwise
+ * Returns TRUE if there is a valid connection in the end or FALSE otherwise
  */
 bool
 GncDbiSqlConnection::verify () noexcept

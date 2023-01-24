@@ -77,7 +77,6 @@ new_object( QofIdType e_type, const char *type_label, MockFields field)
     return object;
 }
 
-extern gboolean get_object_is_initialized( void );
 extern GList* get_object_modules( void );
 extern GList* get_book_list( void );
 

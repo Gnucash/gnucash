@@ -93,8 +93,6 @@ gboolean     gncJobGetActive (const GncJob *job);
 /** Return a pointer to the instance gncJob that is identified
  *  by the guid, and is residing in the book. Returns NULL if the
  *  instance can't be found.
- *  Equivalent function prototype is
- *  GncJob * gncJobLookup (QofBook *book, const GncGUID *guid);
  */
 static inline GncJob * gncJobLookup (const QofBook *book, const GncGUID *guid)
 {

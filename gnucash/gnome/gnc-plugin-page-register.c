@@ -527,6 +527,10 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay* ledger)
     if (!gnc_features_check_used (gnc_get_current_book(), GNC_FEATURE_REG_SORT_FILTER))
         gnc_features_set_used (gnc_get_current_book(), GNC_FEATURE_REG_SORT_FILTER);
 
+    // added for version 4.14 onwards
+    if (!gnc_using_equity_type_opening_balance_account (gnc_get_current_book()))
+        gnc_set_use_equity_type_opening_balance_account (gnc_get_current_book());
+
     /* Is there an existing page? */
     gsr = gnc_ledger_display_get_user_data (ledger);
     if (gsr)

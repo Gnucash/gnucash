@@ -102,8 +102,6 @@ gboolean gncOrderIsClosed (const GncOrder *order);
 /** Return a pointer to the instance gncOrder that is identified
  *  by the guid, and is residing in the book. Returns NULL if the
  *  instance can't be found.
- *  Equivalent function prototype is
- *  GncOrder * gncOrderLookup (QofBook *book, const GncGUID *guid);
  */
 static inline GncOrder * gncOrderLookup (const QofBook *book, const GncGUID *guid)
 {

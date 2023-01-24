@@ -43,15 +43,8 @@ static GList *book_list = NULL;
 extern "C"
 {
 
-gboolean get_object_is_initialized( void );
 GList* get_object_modules( void );
 GList* get_book_list( void );
-}
-
-gboolean
-get_object_is_initialized( void )
-{
-    return object_is_initialized;
 }
 
 GList*

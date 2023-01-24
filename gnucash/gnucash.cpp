@@ -280,7 +280,7 @@ Gnucash::Gnucash::start ([[maybe_unused]] int argc, [[maybe_unused]] char **argv
     Gnucash::CoreApp::start();
 
     /* Now the module files are looked up, which might cause some library
-     initialization to be run, hence gtk must be initialized b*eforehand. */
+     initialization to be run, hence gtk must be initialized beforehand. */
     gnc_module_system_init();
 
     gnc_gui_init();

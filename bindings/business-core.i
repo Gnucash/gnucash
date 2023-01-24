@@ -18,19 +18,6 @@
  *                                                                  *
 \********************************************************************/
 
-#if defined(SWIGGUILE)
-%{
-/* Disable -Waddress.  GCC 4.2 warns (and fails to compile with -Werror) when
- * passing the address of a guid on the stack to QOF_BOOK_LOOKUP_ENTITY via
- * gncInvoiceLookup and friends.  When the macro gets inlined, the compiler
- * emits a warning that the guid null pointer test is always true.
- */
-#if (__GNUC__ >= 4 && __GNUC_MINOR__ >= 2)
-#    pragma GCC diagnostic warning "-Waddress"
-#endif
-%}
-#endif
-
 %rename(gncOwnerReturnGUID) gncOwnerRetGUID;
 
 %inline %{

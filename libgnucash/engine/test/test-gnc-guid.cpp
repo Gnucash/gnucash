@@ -82,7 +82,7 @@ TEST (GncGUID, from_string)
         fail = true;
     }
     /* Currently, boost uuid string parsing is mostly very permissive, but it has some
-     * odd pet peves. See https://svn.boost.org/trac/boost/ticket/12253 for more.*/
+     * odd pet peeves. See https://svn.boost.org/trac/boost/ticket/12253 for more.*/
     if (BOOST_VERSION >= 106600)
         EXPECT_TRUE (fail) << "Parsing the bogus string should throw";
     else

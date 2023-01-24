@@ -233,7 +233,7 @@ qof_log_init_filename(const gchar* log_filename)
             g_assert(g_strcmp0(log_filename, "/dev/null") != 0);
 
             /* Windows prevents renaming of open files, so the next command silently fails there
-             * No problem, the filename on Winows will simply have the random characters */
+             * No problem, the filename on Windows will simply have the random characters */
             g_rename(fname, log_filename);
             fout = fdopen(fd, "w");
 #endif

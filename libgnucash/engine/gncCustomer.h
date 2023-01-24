@@ -116,8 +116,6 @@ void gncCustomerRemoveJob (GncCustomer *customer, GncJob *job);
 /** Return a pointer to the instance gncCustomer that is identified
  *  by the guid, and is residing in the book. Returns NULL if the
  *  instance can't be found.
- *  Equivalent function prototype is
- *  GncCustomer * gncCustomerLookup (QofBook *book, const GncGUID *guid);
  */
 static inline GncCustomer * gncCustomerLookup (const QofBook *book, const GncGUID *guid)
 {
