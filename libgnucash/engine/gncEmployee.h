@@ -108,8 +108,6 @@ Account * gncEmployeeGetCCard (const GncEmployee *employee);
 /** Return a pointer to the instance gncEmployee that is identified
  *  by the guid, and is residing in the book. Returns NULL if the
  *  instance can't be found.
- *  Equivalent function prototype is
- *  GncEmployee * gncEmployeeLookup (QofBook *book, const GncGUID *guid);
  */
 static inline GncEmployee * gncEmployeeLookup (const QofBook *book, const GncGUID *guid)
 {

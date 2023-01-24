@@ -115,8 +115,6 @@ void gncBillTermSetCutoff (GncBillTerm *term, gint cutoff);
 /** Return a pointer to the instance gncBillTerm that is identified
  *  by the guid, and is residing in the book. Returns NULL if the
  *  instance can't be found.
- *  Equivalent function prototype is
- *  GncBillTerm * gncBillTermLookup (QofBook *book, const GncGUID *guid);
  */
 static inline GncBillTerm * gncBillTermLookup (const QofBook *book, const GncGUID *guid)
 {

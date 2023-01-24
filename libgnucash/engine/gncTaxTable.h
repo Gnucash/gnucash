@@ -142,8 +142,6 @@ gboolean gncTaxTableEqual(const GncTaxTable *a, const GncTaxTable *b);
 /** Return a pointer to the instance gncTaxTable that is identified
  *  by the guid, and is residing in the book. Returns NULL if the
  *  instance can't be found.
- *  Equivalent function prototype is
- *  GncTaxTable * gncTaxTableLookup (QofBook *book, const GncGUID *guid);
  */
 static inline GncTaxTable *gncTaxTableLookup (const QofBook* book, const GncGUID *guid)
 {
