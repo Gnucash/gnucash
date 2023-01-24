@@ -615,7 +615,6 @@ libgnucash/core-utils/gnc-environment.c
 libgnucash/core-utils/gnc-filepath-utils.cpp
 libgnucash/core-utils/gnc-gkeyfile-utils.c
 libgnucash/core-utils/gnc-glib-utils.c
-libgnucash/core-utils/gnc-jalali.c
 libgnucash/core-utils/gnc-locale-utils.c
 libgnucash/core-utils/gnc-locale-utils.cpp
 libgnucash/core-utils/gnc-path.c
