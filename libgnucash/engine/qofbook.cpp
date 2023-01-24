@@ -89,7 +89,7 @@ qof_book_option_num_autoreadonly_changed_cb (GObject *gobject,
 #define PARAM_NAME_NUM_FIELD_SOURCE "split-action-num-field"
 #define PARAM_NAME_NUM_AUTOREAD_ONLY "autoreadonly-days"
 
-G_DEFINE_TYPE(QofBook, qof_book, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(QofBook, qof_book, QOF_TYPE_INSTANCE)
 QOF_GOBJECT_DISPOSE(qof_book);
 QOF_GOBJECT_FINALIZE(qof_book);
 

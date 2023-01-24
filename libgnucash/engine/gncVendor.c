@@ -107,7 +107,7 @@ enum
 };
 
 /* GObject Initialization */
-G_DEFINE_TYPE(GncVendor, gnc_vendor, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(GncVendor, gnc_vendor, QOF_TYPE_INSTANCE)
 
 static void
 gnc_vendor_init(GncVendor* vendor)

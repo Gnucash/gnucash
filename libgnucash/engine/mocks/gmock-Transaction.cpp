@@ -11,7 +11,7 @@ struct _MockTransactionClass
 };
 typedef struct _MockTransactionClass MockTransactionClass;
 
-G_DEFINE_TYPE(MockTransaction, gnc_mocktransaction, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(MockTransaction, gnc_mocktransaction, QOF_TYPE_INSTANCE)
 
 static void
 gnc_mocktransaction_init (MockTransaction *inst)

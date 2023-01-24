@@ -6,7 +6,7 @@ struct _QofMockBookClass
 };
 typedef struct _QofMockBookClass QofMockBookClass;
 
-G_DEFINE_TYPE(QofMockBook, qof_mockbook, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(QofMockBook, qof_mockbook, QOF_TYPE_INSTANCE)
 
 static void
 qof_mockbook_init (QofMockBook *inst)

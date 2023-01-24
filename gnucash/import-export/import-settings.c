@@ -123,49 +123,49 @@ gnc_import_Settings_get_fuzzy_amount (GNCImportSettings *settings)
 {
     g_assert (settings);
     return settings->fuzzy_amount;
-};
+}
 
 gboolean gnc_import_Settings_get_action_skip_enabled (GNCImportSettings *settings)
 {
     g_assert (settings);
     return settings->action_skip_enabled;
-};
+}
 
 gboolean gnc_import_Settings_get_action_add_enabled (GNCImportSettings *settings)
 {
     g_assert (settings);
     return settings->action_add_enabled;
-};
+}
 
 gboolean gnc_import_Settings_get_action_update_enabled (GNCImportSettings *settings)
 {
     g_assert (settings);
     return settings->action_update_enabled;
-};
+}
 
 gboolean gnc_import_Settings_get_action_clear_enabled (GNCImportSettings *settings)
 {
     g_assert (settings);
     return settings->action_clear_enabled;
-};
+}
 
 gint gnc_import_Settings_get_clear_threshold (GNCImportSettings *settings)
 {
     g_assert (settings);
     return settings->clear_threshold;
-};
+}
 
 gint gnc_import_Settings_get_add_threshold (GNCImportSettings *settings)
 {
     g_assert (settings);
     return settings->add_threshold;
-};
+}
 
 gint gnc_import_Settings_get_display_threshold (GNCImportSettings *settings)
 {
     g_assert (settings);
     return settings->display_threshold;
-};
+}
 
 gint gnc_import_Settings_get_date_threshold (GNCImportSettings *settings)
 {

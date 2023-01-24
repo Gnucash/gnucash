@@ -76,7 +76,7 @@ void gnc_invoice_window_sort (InvoiceWindow *iw, invoice_sort_type_t sort_code);
 
 GtkWidget * gnc_invoice_window_create_summary_bar (InvoiceWindow *iw);
 
-void gnc_invoice_window_changed (InvoiceWindow *iw, GtkWidget *window);;
+void gnc_invoice_window_changed (InvoiceWindow *iw, GtkWidget *window);
 
 gchar *gnc_invoice_get_help (InvoiceWindow *iw);
 

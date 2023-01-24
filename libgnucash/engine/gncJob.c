@@ -83,7 +83,7 @@ enum
 };
 
 /* GObject Initialization */
-G_DEFINE_TYPE(GncJob, gnc_job, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(GncJob, gnc_job, QOF_TYPE_INSTANCE)
 
 static void
 gnc_job_init(GncJob* job)

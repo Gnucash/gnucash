@@ -212,7 +212,7 @@ enum
 };
 
 /* GObject Initialization */
-G_DEFINE_TYPE(GncTaxTable, gnc_taxtable, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(GncTaxTable, gnc_taxtable, QOF_TYPE_INSTANCE)
 
 static void
 gnc_taxtable_init(GncTaxTable* tt)

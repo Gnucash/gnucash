@@ -111,7 +111,7 @@ typedef struct QofInstancePrivate
 #define GET_PRIVATE(o)  \
     ((QofInstancePrivate*)qof_instance_get_instance_private((QofInstance*)o))
 
-G_DEFINE_TYPE_WITH_PRIVATE(QofInstance, qof_instance, G_TYPE_OBJECT);
+G_DEFINE_TYPE_WITH_PRIVATE(QofInstance, qof_instance, G_TYPE_OBJECT)
 QOF_GOBJECT_FINALIZE(qof_instance);
 #undef G_PARAM_READWRITE
 #define G_PARAM_READWRITE static_cast<GParamFlags>(G_PARAM_READABLE | G_PARAM_WRITABLE)

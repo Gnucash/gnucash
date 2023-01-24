@@ -96,7 +96,7 @@ hash_entry_free_gfunc(gpointer data, G_GNUC_UNUSED gpointer user_data)
 }
 
 /* GObject Initialization */
-G_DEFINE_TYPE(GNCPrice, gnc_price, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(GNCPrice, gnc_price, QOF_TYPE_INSTANCE)
 
 static void
 gnc_price_init(GNCPrice* price)
@@ -835,7 +835,7 @@ gnc_price_list_equal(PriceList *prices1, PriceList *prices2)
  */
 
 /* GObject Initialization */
-QOF_GOBJECT_IMPL(gnc_pricedb, GNCPriceDB, QOF_TYPE_INSTANCE);
+QOF_GOBJECT_IMPL(gnc_pricedb, GNCPriceDB, QOF_TYPE_INSTANCE)
 
 static void
 gnc_pricedb_init(GNCPriceDB* pdb)

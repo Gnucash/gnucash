@@ -913,7 +913,7 @@ stock_assistant_prepare (GtkAssistant  *assistant, GtkWidget *page,
 
     switch (currentpage)
     {
-    case PAGE_TRANSACTION_TYPE:;
+    case PAGE_TRANSACTION_TYPE:
         // initialize transaction types.
         gnc_numeric balance;
         time64 date;

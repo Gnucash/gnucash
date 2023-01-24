@@ -140,5 +140,5 @@ gnc_commodity * gnc_import_select_commodity(const char * cusip,
         gnc_commodity_set_cusip(retval, cusip);
     }
     return retval;
-};
+}
 /**@}*/
