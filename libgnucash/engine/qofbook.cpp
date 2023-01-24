@@ -158,7 +158,6 @@ qof_book_get_property (GObject* object,
                GParamSpec* pspec)
 {
     QofBook *book;
-    gchar *key;
 
     g_return_if_fail (QOF_IS_BOOK (object));
     book = QOF_BOOK (object);
@@ -199,7 +198,6 @@ qof_book_set_property (GObject      *object,
                GParamSpec   *pspec)
 {
     QofBook *book;
-    gchar *key;
 
     g_return_if_fail (QOF_IS_BOOK (object));
     book = QOF_BOOK (object);

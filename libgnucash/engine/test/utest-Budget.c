@@ -167,7 +167,6 @@ test_gnc_set_budget_account_period_value()
     guint log_level = G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL;
     gchar *log_domain = "gnc.engine";
     gchar *msg = "[gnc_budget_set_account_period_value()] Period 12 does not exist";
-    guint hdlr;
     TestErrorStruct check = { log_level, log_domain, msg, 0 };
     GLogFunc oldlogger;
 

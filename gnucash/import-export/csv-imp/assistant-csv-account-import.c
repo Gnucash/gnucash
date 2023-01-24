@@ -562,7 +562,6 @@ static GtkWidget *
 csv_import_assistant_create (CsvImportInfo *info)
 {
     GtkBuilder *builder;
-    GtkWidget *button;
     GtkCellRenderer *renderer;
     GtkTreeViewColumn *column;
     gchar *mnemonic_desc = NULL;

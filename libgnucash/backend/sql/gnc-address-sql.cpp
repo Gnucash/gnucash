@@ -77,9 +77,6 @@ GncSqlColumnTableEntryImpl<CT_ADDRESS>::load (const GncSqlBackend* sql_be,
                                               QofIdTypeConst obj_name,
                                               gpointer pObject) const noexcept
 {
-    const gchar* s;
-
-
     g_return_if_fail (sql_be != NULL);
     g_return_if_fail (pObject != NULL);
 

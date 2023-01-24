@@ -40,7 +40,6 @@
 #endif
 
 static const gchar *suitename = "/qof/gnc-date";
-static const time64 secs_per_year = INT64_C(3600) * (INT64_C(24) * INT64_C(365) + 6);
 static const time64 max_secs = (INT64_C(3600) * (INT64_C(24) * INT64_C(365) + 6)) * (INT64_C(9999) - INT64_C(1970));
 
 typedef struct

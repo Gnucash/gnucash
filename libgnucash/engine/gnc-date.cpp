@@ -1113,7 +1113,6 @@ gnc_date_timestamp (void)
 time64
 gnc_iso8601_to_time64_gmt(const char *cstr)
 {
-    time64 time;
     if (!cstr) return INT64_MAX;
     try
     {
@@ -1138,8 +1137,6 @@ gnc_iso8601_to_time64_gmt(const char *cstr)
 char *
 gnc_time64_to_iso8601_buff (time64 time, char * buff)
 {
-    constexpr size_t max_iso_date_length = 32;
-
     if (! buff) return NULL;
     try
     {

@@ -1159,7 +1159,7 @@ gnc_plugin_page_budget_cmd_allperiods_budget (GSimpleAction *simple,
     GncPluginPageBudget *page = user_data;
     GncPluginPageBudgetPrivate *priv;
     GtkTreeSelection *sel;
-    GtkWidget *dialog, *gde, *val, *dtr, *add, *mult;
+    GtkWidget *dialog, *val, *dtr, *add, *mult;
     gint result;
     GtkBuilder *builder;
     const gchar *txt;

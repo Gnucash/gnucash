@@ -308,7 +308,6 @@ gnc_transaction_get_property(GObject* object,
                              GParamSpec* pspec)
 {
     Transaction* tx;
-    gchar *key;
     Time64 time;
 
     g_return_if_fail(GNC_IS_TRANSACTION(object));
@@ -355,7 +354,6 @@ gnc_transaction_set_property(GObject* object,
                              GParamSpec* pspec)
 {
     Transaction* tx;
-    gchar *key;
     Time64 *t;
 
     g_return_if_fail(GNC_IS_TRANSACTION(object));
@@ -1940,7 +1938,6 @@ xaccTransOrder_num_action (const Transaction *ta, const char *actna,
 {
     const char *da, *db;
     int retval;
-    int64_t na, nb;
 
     if ( ta && !tb ) return -1;
     if ( !ta && tb ) return +1;

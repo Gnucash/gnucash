@@ -411,7 +411,6 @@ static void
 gsr_move_sort_and_filter_to_state_file (GNCSplitReg *gsr, GKeyFile* state_file, const gchar *state_section)
 {
     GNCLedgerDisplayType ledger_type;
-    GNCLedgerDisplay* ld;
 
     // Look for any old kvp entries and add them to .gcm file
     ledger_type = gnc_ledger_display_type (gsr->ledger);
@@ -1368,7 +1367,6 @@ gsr_default_doclink_remove_handler (GNCSplitReg *gsr)
 static void
 gsr_default_doclink_from_sheet_handler (GNCSplitReg *gsr)
 {
-    CursorClass cursor_class;
     SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
     Transaction *trans;
     Split *split;
@@ -2452,7 +2450,6 @@ gtk_callback_bug_workaround (gpointer argp)
     GNCLedgerDisplayType ledger_type = gnc_ledger_display_type (args->gsr->ledger);
     Account *acc = gnc_ledger_display_leader (args->gsr->ledger);
     const gchar *acc_name = NULL;
-    gchar *tmp = NULL;
 
     if (acc)
     {

@@ -703,7 +703,6 @@ load( state *s, char *testfile)
   while (fgets(buf, BUFSIZE, f) && (buf[0] != '.')) {
     ub4   curr = 0;                               /* current offset into buf */
     ub4   value;                                              /* token value */
-    token_type token;                                          /* token type */
     ub4   i;
     test *t;
 
@@ -836,7 +835,7 @@ parse_w( state *s, sb1 *myarg)
   ub4        dimension_number;
   ub4        curr = 0;
   ub4        fe_len, value;
-  ub4        i, j, k;
+  ub4        i, j;
   size_t     len = strlen(myarg);
   token_type t = parse_token(myarg, len, &curr, &value);
 
@@ -1186,7 +1185,6 @@ build_tuples( state *s, ub2 d, ub2 f)
   feature  tuple[MAX_N];                      /* n-tuples that include (d,f) */
   sb4      i, j, n;
   ub8      count = 0;
-  test    *t;
   tu_iter  ctx;
 
   if (s->tc[d][f] > 0 || s->n[d][f] == s->n_final) {
@@ -1282,7 +1280,6 @@ test  *t,                                                /* test being built */
 ub1   *mut)              /* mut[i] = 1 if I am allowed to adjust dimension i */
 {
   ub4      i;
-  without *w;                               /* one of the disobeyed withouts */
   ub4      count;                        /* number of withouts currently hit */
   ub2      ndim;                                         /* size of dimord[] */
   ub2      temp;
@@ -1552,7 +1549,6 @@ cover_tuples( state *s)
 
     /* find a good test */
     for (i=0; i<GROUP_SIZE; ++i) {
-      tu_iter  ctx;
       sb4      this_count;
 
       /* generate a test that covers the first tuple */

@@ -97,7 +97,6 @@ void
 gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
 {
     AB_BANKING *api;
-    gboolean online = FALSE;
     GNC_AB_ACCOUNT_SPEC *ab_acc;
     GWEN_TIME *from_date = NULL, *to_date = NULL;
     time64 until;

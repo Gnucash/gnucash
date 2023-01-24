@@ -1873,7 +1873,6 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
         }
         else
         {
-            gboolean currency_match;
             switch (reg->type)
             {
             case STOCK_REGISTER:

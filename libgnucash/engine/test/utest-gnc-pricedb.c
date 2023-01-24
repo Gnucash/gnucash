@@ -582,7 +582,6 @@ static void
 setup(PriceDBFixture *fixture, gconstpointer data)
 {
     QofBook *book = NULL;
-    GNCPrice *price = NULL;
     gnc_pricedb_register();
     book = qof_book_new();
     fixture->com = setup_commodities(book);

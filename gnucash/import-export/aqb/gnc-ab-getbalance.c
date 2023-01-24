@@ -47,7 +47,6 @@ void
 gnc_ab_getbalance(GtkWidget *parent, Account *gnc_acc)
 {
     AB_BANKING *api;
-    gboolean online = FALSE;
     GNC_AB_ACCOUNT_SPEC *ab_acc;
     GNC_AB_JOB *job = NULL;
     GNC_AB_JOB_LIST2 *job_list = NULL;

@@ -195,8 +195,6 @@ setup_with_invoice_and_payment (Fixture *fixture, gconstpointer pData)
 static void
 setup_with_invoice_and_CN (Fixture *fixture, gconstpointer pData)
 {
-    const InvoiceData *data = (InvoiceData*) pData;
-
     time64 ts1 = gnc_time(NULL);
     time64 ts2 = ts1;
     const char *desc = "Test description";

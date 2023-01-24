@@ -83,10 +83,6 @@
 
 static QofLogModule log_module = GNC_MOD_IO;
 
-/* map pointers, e.g. of type FILE*, to GThreads */
-static GHashTable* threads = NULL;
-G_LOCK_DEFINE_STATIC (threads);
-
 typedef struct
 {
     gint fd;

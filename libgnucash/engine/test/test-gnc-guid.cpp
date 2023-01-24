@@ -36,8 +36,6 @@ TEST (GncGUID, creation)
 {
     auto guid = gnc::GUID::create_random ();
     EXPECT_NE (guid, gnc::GUID::null_guid ());
-    // There should be a default constructor.
-    GncGUID other;
 }
 
 TEST (GncGUID, copy)

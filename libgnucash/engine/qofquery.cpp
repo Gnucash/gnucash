@@ -507,7 +507,7 @@ compile_sort (QofQuerySort *sort, QofIdType obj)
 
 static void compile_terms (QofQuery *q)
 {
-    GList *or_ptr, *and_ptr, *node;
+    GList *or_ptr, *and_ptr;
 
     ENTER (" query=%p", q);
     /* Find the specific functions for this Query.  Note that the

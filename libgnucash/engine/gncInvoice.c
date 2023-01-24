@@ -962,7 +962,7 @@ static gnc_numeric gncInvoiceGetNetAndTaxesInternal (GncInvoice *invoice, gboole
     for (node = gncInvoiceGetEntries (invoice); node; node = node->next)
     {
         GncEntry *entry = node->data;
-        gnc_numeric value, tax;
+        gnc_numeric value;
 
         if (use_payment_type && gncEntryGetBillPayment (entry) != type)
             continue;
@@ -1010,7 +1010,6 @@ static gnc_numeric gncInvoiceGetTotalInternal (GncInvoice *invoice, gboolean use
 {
     AccountValueList *taxes;
     gnc_numeric total;
-    int denom;
 
     if (!invoice) return gnc_numeric_zero ();
 
@@ -1056,7 +1055,6 @@ gnc_numeric gncInvoiceGetTotalOf (GncInvoice *invoice, GncEntryPaymentType type)
 
 AccountValueList *gncInvoiceGetTotalTaxList (GncInvoice *invoice)
 {
-    gnc_numeric unused;
     AccountValueList *taxes;
     if (!invoice) return NULL;
 

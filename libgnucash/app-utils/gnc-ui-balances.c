@@ -278,7 +278,6 @@ gnc_ui_account_is_higher_balance_limit_reached (const Account *account,
     gnc_numeric balance_limit;
     gboolean limit_valid = FALSE;
     gboolean retval = FALSE;
-    gint compare_result;
 
     g_return_val_if_fail (GNC_IS_ACCOUNT(account), FALSE);
 
@@ -306,7 +305,6 @@ gnc_ui_account_is_lower_balance_limit_reached (const Account *account,
     gnc_numeric balance_limit;
     gboolean limit_valid = FALSE;
     gboolean retval = FALSE;
-    gint compare_result;
 
     g_return_val_if_fail (GNC_IS_ACCOUNT(account), FALSE);
 

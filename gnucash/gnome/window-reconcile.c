@@ -1378,7 +1378,7 @@ gnc_ui_reconcile_window_delete_cb (GSimpleAction *simple,
 {
     RecnWindow *recnData = user_data;
     Transaction *trans;
-    Split *split, *next_split;
+    Split *split;
 
     split = gnc_reconcile_window_get_current_split(recnData);
     /* This should never be true, but be paranoid */

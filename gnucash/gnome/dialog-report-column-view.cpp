@@ -513,8 +513,6 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data)
     GtkWidget * colspin;
     GtkWidget * dlg;
     GtkBuilder *builder;
-    SCM current;
-    int length;
     int dlg_ret;
 
     builder = gtk_builder_new();

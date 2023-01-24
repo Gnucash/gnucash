@@ -30,7 +30,6 @@ test_kvp_get_slot (int run,
     }
     else
     {
-        gchar* tmp;
         failure_args (msg, __FILE__, __LINE__, "run=%d", run);
         printf ("    Value is %s\n", test_val2->to_string ().c_str ());
     }
@@ -52,7 +51,6 @@ test_kvp_copy_compare (int run,
     }
     else
     {
-        gchar* tmp;
         failure_args (msg, __FILE__, __LINE__, "run=%d", run);
         printf ("Frame1 is %s\n", test_frame1->to_string ().c_str ());
         printf ("Frame2 is %s\n", test_frame2->to_string ().c_str ());
@@ -75,7 +73,6 @@ test_kvp_copy_get_slot (int run,
     }
     else
     {
-        gchar* tmp;
         failure_args (msg, __FILE__, __LINE__, "run=%d", run);
         printf ("Frame1 is %s\n", test_frame1->to_string ().c_str ());
         printf ("Frame2 is %s\n", test_frame2->to_string ().c_str ());

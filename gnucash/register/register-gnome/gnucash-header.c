@@ -121,7 +121,6 @@ gnc_header_draw_offscreen (GncHeader *header)
         for (j = 0; j < style->ncols; j++)
         {
             CellDimensions *cd;
-            double text_x, text_y, text_w, text_h;
             BasicCell *cell;
             const char *text;
             int width;

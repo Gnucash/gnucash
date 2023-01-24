@@ -421,7 +421,6 @@ gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
             GdkRectangle rect;
             gint x, y, width, height;
             gint index = 0, trailing = 0;
-            gboolean result;
             gint x_offset = 0;
 
             if (text && *text)
@@ -1811,7 +1810,6 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
     VirtualLocation cur_virt_loc;
     VirtualLocation new_virt_loc;
     gncTableTraversalDir direction = 0;
-    int distance;
     GdkModifierType modifiers = gtk_accelerator_get_default_mod_mask ();
 
     g_return_val_if_fail (widget != NULL, TRUE);
@@ -1917,8 +1915,6 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 static gint
 gnucash_sheet_key_release_event (GtkWidget *widget, GdkEventKey *event)
 {
-    GnucashSheet *sheet;
-
     g_return_val_if_fail (widget != NULL, TRUE);
     g_return_val_if_fail (GNUCASH_IS_SHEET(widget), TRUE);
     g_return_val_if_fail (event != NULL, TRUE);

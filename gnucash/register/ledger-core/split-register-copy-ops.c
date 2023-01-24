@@ -252,9 +252,6 @@ SplitList *gnc_float_txn_get_splits (const FloatingTxn *ft)
 
 FloatingSplit *gnc_float_txn_get_float_split (const FloatingTxn *ft, guint index)
 {
-    FloatingSplit *fs = NULL;
-    guint size = 0;
-
     g_return_val_if_fail (ft, NULL);
     g_return_val_if_fail (ft->m_splits, NULL);
     g_return_val_if_fail (index < g_list_length (ft->m_splits) , NULL);
@@ -263,7 +260,7 @@ FloatingSplit *gnc_float_txn_get_float_split (const FloatingTxn *ft, guint index
 
 FloatingSplit *gnc_float_txn_get_other_float_split (const FloatingTxn *ft, FloatingSplit *fs)
 {
-    guint size = 0, other = 0;
+    guint other = 0;
 
     g_return_val_if_fail (ft, NULL);
     g_return_val_if_fail (ft->m_splits, NULL);

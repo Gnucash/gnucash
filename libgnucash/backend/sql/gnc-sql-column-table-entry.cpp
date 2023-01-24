@@ -323,7 +323,6 @@ GncSqlColumnTableEntryImpl<CT_GUID>::load (const GncSqlBackend* sql_be,
 {
 
     GncGUID guid;
-    const GncGUID* pGuid;
 
     g_return_if_fail (pObject != NULL);
     g_return_if_fail (m_gobj_param_name != nullptr || get_setter(obj_name) != nullptr);

@@ -383,16 +383,6 @@ static const gchar* actions_requiring_account[] =
     NULL
 };
 
-/** View Style actions */
-static const gchar* view_style_actions[] =
-{
-    "ViewStyleBasicAction",
-    "ViewStyleAutoSplitAction",
-    "ViewStyleJournalAction",
-    "ViewStyleRadioAction",
-    NULL
-};
-
 static const gchar* actions_requiring_priced_account[] =
 {
     "ActionsStockAssistantAction",
@@ -1035,7 +1025,6 @@ gnc_plugin_page_register_ui_update (gpointer various,
     /* Modifying action descriptions based on cursor class */
     {
         GncMenuModelSearch *gsm = g_new0 (GncMenuModelSearch, 1);
-        GtkWidget *menu_item = NULL;
         gboolean found = FALSE;
         const char** iter, **label_iter, **tooltip_iter;
         gboolean curr_label_trans = FALSE;
@@ -1112,7 +1101,6 @@ gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister* page)
     Account* account;
     SplitRegister* reg;
     GNCLedgerDisplayType ledger_type;
-    int i;
     gboolean is_readwrite = !qof_book_is_readonly (gnc_get_current_book());
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
@@ -4961,7 +4949,6 @@ gnc_plugin_page_register_cmd_scrub_current (GSimpleAction *simple,
     GncPluginPageRegister* page = user_data;
     GncPluginPageRegisterPrivate* priv;
     Query* query;
-    Split* split;
     SplitRegister* reg;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));

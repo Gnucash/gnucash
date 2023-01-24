@@ -498,7 +498,7 @@ gnc_ab_trans_to_gnc (const AB_TRANSACTION *ab_trans, Account *gnc_acc)
     Transaction *gnc_trans;
     const gchar *fitid;
     const GNC_GWEN_DATE *value_date, *post_date;
-    time64 current_time, post_time;
+    time64 post_time;
     const char *custref;
     gchar *description;
     Split *split;

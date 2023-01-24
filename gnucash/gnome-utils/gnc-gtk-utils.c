@@ -753,7 +753,6 @@ gnc_menubar_model_update_item (GMenuModel *menu_model, const gchar *action_name,
                                const gchar *label, const gchar *tooltip)
 {
     GncMenuModelSearch *gsm;
-    GtkWidget *menu_item = NULL;
     gboolean found = FALSE;
 
     g_return_val_if_fail (menu_model != NULL, FALSE);

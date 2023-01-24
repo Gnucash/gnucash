@@ -514,7 +514,6 @@ static void
 set_numeric_val (gpointer pObject, gnc_numeric value)
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
-    KvpValue* pValue = NULL;
 
     g_return_if_fail (pObject != NULL);
 
@@ -545,7 +544,6 @@ static void
 set_gdate_val (gpointer pObject, GDate* value)
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
-    KvpValue* pValue = NULL;
 
     g_return_if_fail (pObject != NULL);
 

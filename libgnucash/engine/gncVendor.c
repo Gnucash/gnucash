@@ -139,7 +139,6 @@ gnc_vendor_get_property (GObject         *object,
                          GParamSpec      *pspec)
 {
     GncVendor *vendor;
-    gchar *key;
 
     g_return_if_fail(GNC_IS_VENDOR(object));
 
@@ -201,7 +200,6 @@ gnc_vendor_set_property (GObject         *object,
                          GParamSpec      *pspec)
 {
     GncVendor *vendor;
-    gchar *key;
 
     g_return_if_fail(GNC_IS_VENDOR(object));
 

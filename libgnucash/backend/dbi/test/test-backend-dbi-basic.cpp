@@ -246,7 +246,6 @@ destroy_database (gchar* url)
     gchar* dbname = NULL;
     gchar* username = NULL;
     gchar* password = NULL;
-    gchar* basename = NULL;
     gint portnum = 0;
     gchar* port = NULL;
     auto pgsql = "pgsql";

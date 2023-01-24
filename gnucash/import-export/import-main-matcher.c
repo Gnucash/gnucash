@@ -246,7 +246,6 @@ gnc_gen_trans_list_empty (GNCImportMainMatcher *info)
 {
     GtkTreeModel *model;
     GtkTreeIter iter;
-    GNCImportTransInfo *trans_info;
     g_assert (info);
     model = gtk_tree_view_get_model (info->view);
     // Check that both the tree model and the temporary list are empty.
@@ -258,7 +257,6 @@ gnc_gen_trans_list_show_accounts_column (GNCImportMainMatcher *info)
 {
     GtkTreeModel *model;
     GtkTreeIter iter;
-    GNCImportTransInfo *trans_info;
     gboolean multiple_accounts = FALSE;
     gboolean valid;
 
@@ -539,7 +537,6 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
     GNCImportTransInfo *trans_info;
     gboolean append_text = gtk_toggle_button_get_active ((GtkToggleButton*) info->append_text);
     gboolean first_tran = TRUE;
-    gpointer user_data = info->user_data;
 
     g_assert (info);
 
@@ -879,8 +876,6 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
     GtkTreeView *treeview;
     GtkTreeSelection *selection;
     GtkTreeModel *model;
-    GtkTreeIter iter;
-    GNCImportTransInfo *trans_info;
     Account *assigned_account;
     GList *selected_rows, *l;
     gboolean first, is_selection;
@@ -1050,7 +1045,7 @@ static gboolean
 input_new_fields (GNCImportMainMatcher *info, RowInfo *rowinfo,
                   char **new_desc, char **new_notes, char **new_memo)
 {
-    GtkWidget  *desc_entry, *notes_entry, *memo_entry, *label;
+    GtkWidget  *desc_entry, *notes_entry, *memo_entry;
     GtkWidget  *dialog;
     GtkBuilder *builder;
     gboolean    retval = FALSE;
@@ -1184,7 +1179,7 @@ gnc_gen_trans_reset_edits_cb (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
     GtkTreeModel *model;
     GtkTreeStore *store;
     GtkTreeSelection *selection;
-    GList *selected_rows, *row_info_list;
+    GList *selected_rows;
 
     g_return_if_fail (info != NULL);
     ENTER("gnc_gen_trans_reset_edits_cb");

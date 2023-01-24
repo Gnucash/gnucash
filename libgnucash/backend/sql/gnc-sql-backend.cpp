@@ -565,7 +565,6 @@ GncSqlBackend::get_object_backend(const std::string& type) const noexcept
 void
 GncSqlBackend::commit (QofInstance* inst)
 {
-    sql_backend be_data;
     gboolean is_dirty;
     gboolean is_destroying;
     gboolean is_infant;
@@ -821,7 +820,6 @@ bool
 GncSqlBackend::object_in_db (const char* table_name, QofIdTypeConst obj_name,
                              const gpointer pObject, const EntryVec& table) const noexcept
 {
-    guint count;
     g_return_val_if_fail (table_name != nullptr, false);
     g_return_val_if_fail (obj_name != nullptr, false);
     g_return_val_if_fail (pObject != nullptr, false);

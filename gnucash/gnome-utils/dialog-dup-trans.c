@@ -118,7 +118,6 @@ gnc_dup_key_press_event_cb (GtkWidget *widget, GdkEventKey *event, gpointer user
     {
         GdkModifierType modifiers = gtk_accelerator_get_default_mod_mask ();
         gint increment;
-        long int num;
 
         if ((event->state & modifiers) == GDK_CONTROL_MASK ||
             (event->state & modifiers) == GDK_MOD1_MASK)

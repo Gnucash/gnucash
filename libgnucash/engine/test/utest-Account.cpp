@@ -440,7 +440,7 @@ gchar *gnc_account_name_violations_errmsg (const gchar *separator, GList* invali
 static void
 test_gnc_account_name_violations_errmsg ()
 {
-    GList *badnames = NULL, *nonames = NULL, *node = NULL;
+    GList *badnames = NULL, *nonames = NULL;
     auto separator = ":";
     /* FUT wants to free the strings, so we alloc them */
     badnames = g_list_prepend (badnames, g_strdup ("Foo:bar"));

@@ -48,7 +48,6 @@ namespace bpt = boost::property_tree;
 #define NOTIFY_TAG  "%s-%s-notify_id"
 
 static GHashTable *schema_hash = NULL;
-static const gchar *gsettings_prefix;
 
 static GHashTable *registered_handlers_hash = NULL;
 

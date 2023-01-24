@@ -394,7 +394,6 @@ gnc_doclink_pref_path_head_changed (GtkWindow *parent, const gchar *old_path_hea
     GtkBuilder *builder;
     GtkWidget  *use_old_path_head, *use_new_path_head;
     GtkWidget  *old_head_label, *new_head_label;
-    GtkWidget  *old_hbox, *new_hbox;
     gint        result;
     gchar      *new_path_head_uri = gnc_doclink_get_path_head ();
 

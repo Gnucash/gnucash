@@ -174,7 +174,6 @@ protected:
 //! Test for function gnc_import_TransInfo_new()
 TEST_F(ImportBackendTest, CreateTransInfo)
 {
-    gchar* online_id;
 
     using namespace testing;
 

@@ -540,7 +540,6 @@ GncDbiSqlConnection::quote_string (const std::string& unquoted_str)
     const noexcept
 {
     char* quoted_str;
-    size_t size;
 
     dbi_conn_quote_string_copy (m_conn, unquoted_str.c_str(),
                                 &quoted_str);

@@ -1565,7 +1565,7 @@ checkcert_cb(GWEN_GUI *gwen_gui, const GWEN_SSLCERTDESCR *cert,
     const gchar *hash, *status;
     GChecksum *gcheck = g_checksum_new (G_CHECKSUM_MD5);
     gchar cert_hash[16];
-    gint retval, i;
+    gint retval;
     gsize hashlen = 0;
 
     g_return_val_if_fail(gui && gui->accepted_certs, -1);

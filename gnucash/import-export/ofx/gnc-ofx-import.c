@@ -244,8 +244,6 @@ int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user
     char* default_fullname = NULL;
     char* default_mnemonic = NULL;
 
-    ofx_info* info = (ofx_info*) security_user_data;
-
     if (data.unique_id_valid)
     {
         cusip = gnc_utf8_strip_invalid_strdup (data.unique_id);
@@ -703,7 +701,6 @@ choose_investment_account(OfxTransactionData *data, ofx_info *info,
                           gnc_commodity *commodity)
 {
     Account* investment_account = NULL;
-    gnc_numeric gnc_amount, gnc_units;
     InvestmentAcctData inv_data = {commodity, NULL, NULL, TRUE};
 
      // As we now have the commodity, select the account with that commodity.
@@ -1295,7 +1292,6 @@ runMatcher (ofx_info* info, char * selected_filename, gboolean go_to_next_file)
 {
     GtkWindow *parent = info->parent;
     GList* trans_list_remain = NULL;
-    Account* first_account = NULL;
 
     /* If we have multiple accounts in the ofx file, we need to
      * avoid processing transfers between accounts together because this will
@@ -1441,7 +1437,6 @@ void gnc_file_ofx_import (GtkWindow *parent)
     GSList* selected_filenames = NULL;
     char *default_dir;
     GList *filters = NULL;
-    GSList* iter = NULL;
     ofx_info* info = NULL;
     GtkFileFilter* filter = gtk_file_filter_new ();
 

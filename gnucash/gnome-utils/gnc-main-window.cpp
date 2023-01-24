@@ -1102,7 +1102,6 @@ gnc_main_window_all_finish_pending (void)
 static gboolean
 gnc_main_window_page_exists (GncPluginPage *page)
 {
-    GncMainWindow *window;
     GncMainWindowPrivate *priv;
     GList *walker;
 
@@ -1837,7 +1836,6 @@ gnc_main_window_update_radio_button (GncMainWindow *window)
 {
     GncMainWindowPrivate *priv;
     GAction *action;
-    GSList *action_list;
     gsize index;
 
     ENTER("window %p", window);
@@ -3409,7 +3407,6 @@ update_menu_model (GncMainWindow *window, const gchar *ui_filename,
 {
     GncMainWindowPrivate *priv;
     GError *error = nullptr;
-    const gchar *resource = GNUCASH_RESOURCE_PREFIX "/";
     gchar *res_name;
     GtkBuilder *builder = gtk_builder_new ();
     GMenuModel *menu_model_part;
@@ -4057,10 +4054,8 @@ gnc_main_window_setup_window (GncMainWindow *window)
     GtkWidget *main_vbox;
     GtkBuilder *builder;
     GncPluginManager *manager;
-    GtkWidget *extra_item;
     GList *plugins;
     GError *error = nullptr;
-    gchar *filename;
     GAction *action;
 
     ENTER(" ");
@@ -4797,7 +4792,6 @@ gnc_main_window_cmd_view_refresh (GSimpleAction *simple,
                                   GVariant      *parameter,
                                   gpointer       user_data)
 {
-    GncMainWindow *window = (GncMainWindow*)user_data;
 }
 
 static void
@@ -4910,7 +4904,6 @@ gnc_main_window_cmd_window_new (GSimpleAction *simple,
                                 GVariant      *paramter,
                                 gpointer       user_data)
 {
-    GncMainWindow *window = (GncMainWindow*)user_data;
     GncMainWindow *new_window;
 
     /* Create the new window */
@@ -4995,7 +4988,6 @@ gnc_main_window_cmd_view_tab_position (GSimpleAction *simple,
                                        GVariant      *parameter,
                                        gpointer       user_data)
 {
-    GncMainWindow *window = (GncMainWindow*)user_data;
     gint item = g_variant_get_int32 (parameter);
 
     g_action_change_state (G_ACTION(simple), parameter);

@@ -144,7 +144,6 @@ gnc_lot_get_property(GObject* object, guint prop_id, GValue* value, GParamSpec* 
 {
     GNCLot* lot;
     GNCLotPrivate* priv;
-    gchar *key;
 
     g_return_if_fail(GNC_IS_LOT(object));
 
@@ -181,7 +180,6 @@ gnc_lot_set_property (GObject* object,
 {
     GNCLot* lot;
     GNCLotPrivate* priv;
-    gchar *key = NULL;
 
     g_return_if_fail(GNC_IS_LOT(object));
 

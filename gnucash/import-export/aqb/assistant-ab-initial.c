@@ -299,7 +299,6 @@ static void delete_account_match(ABInitialInfo *info, RevLookupData *data)
 static void
 delete_selected_match_cb(gpointer data, gpointer user_data)
 {
-    GNC_AB_ACCOUNT_SPEC *ab_acc = NULL;
     GtkTreeIter iter;
     GtkTreeModel *model = NULL;
     RevLookupData revLookupData = {NULL, NULL};
@@ -469,7 +468,7 @@ ab_account_longname(const GNC_AB_ACCOUNT_SPEC *ab_acc)
 {
     gchar *bankname = NULL;
     gchar *result = NULL;
-    const char *ab_bankname, *bankcode, *subAccountId, *account_number;
+    const char *bankcode, *subAccountId, *account_number;
 
     g_return_val_if_fail(ab_acc, NULL);
 

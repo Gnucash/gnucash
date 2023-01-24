@@ -83,17 +83,6 @@ enum
     PAGE_MONTHLY
 };
 
-static const struct pageDataTuple PAGES[] =
-{
-    { PAGE_NONE,         UIFREQ_NONE,         "None" },
-    { PAGE_ONCE,         UIFREQ_ONCE,         "Once" },
-    { PAGE_DAILY,        UIFREQ_DAILY,        "Daily" },
-    { PAGE_WEEKLY,       UIFREQ_WEEKLY,       "Weekly" },
-    { PAGE_SEMI_MONTHLY, UIFREQ_SEMI_MONTHLY, "Semi-Monthly" },
-    { PAGE_MONTHLY,      UIFREQ_MONTHLY,      "Monthly" },
-    { 0, 0, 0 }
-};
-
 static const char *CHECKBOX_NAMES[] =
 {
     "wd_check_sun",

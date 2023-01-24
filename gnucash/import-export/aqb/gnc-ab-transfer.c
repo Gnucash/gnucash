@@ -81,7 +81,6 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
                  GncABTransType trans_type)
 {
     AB_BANKING *api;
-    gboolean online = FALSE;
     GNC_AB_ACCOUNT_SPEC *ab_acc;
     GList *templates = NULL;
     GncABTransDialog *td = NULL;

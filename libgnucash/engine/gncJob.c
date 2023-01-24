@@ -109,7 +109,6 @@ gnc_job_get_property (GObject         *object,
                       GParamSpec      *pspec)
 {
     GncJob *job;
-    gchar *key;
 
     g_return_if_fail(GNC_IS_JOB(object));
 
@@ -135,7 +134,6 @@ gnc_job_set_property (GObject         *object,
                       GParamSpec      *pspec)
 {
     GncJob *job;
-    gchar *key;
 
     g_return_if_fail(GNC_IS_JOB(object));
 

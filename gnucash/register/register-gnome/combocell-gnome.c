@@ -332,8 +332,6 @@ gnc_combo_cell_destroy (BasicCell* bcell)
 
     if (box != NULL)
     {
-        GList* node;
-
         /* Don't destroy the qf if its not ours to destroy */
         if (FALSE == box->use_quickfill_cache)
         {

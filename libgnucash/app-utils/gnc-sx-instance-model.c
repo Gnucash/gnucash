@@ -1271,7 +1271,7 @@ static gboolean
 create_each_transaction_helper(Transaction *template_txn, void *user_data)
 {
     Transaction *new_txn;
-    GList *txn_splits, *template_splits, *node;
+    GList *txn_splits, *template_splits;
     Split *copying_split;
     SxTxnCreationData *creation_data = (SxTxnCreationData*)user_data;
     SchedXaction *sx = creation_data->instance->parent->sx;

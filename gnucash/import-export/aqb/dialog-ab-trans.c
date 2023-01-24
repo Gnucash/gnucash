@@ -903,8 +903,7 @@ gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkTreeView *view,
     const gchar *new_bankcode;
     const gchar *new_purpose;
     const gchar *new_purpose_cont;
-    const gchar *old_amount_text;
-    gnc_numeric old_amount, new_amount;
+    gnc_numeric new_amount;
 
     g_return_if_fail(td);
 

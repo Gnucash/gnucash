@@ -501,7 +501,6 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     GncPluginPageReport *report;
     GncPluginPageReportPrivate *priv;
     GtkWindow *topLvl;
-    GAction *action;
     GtkWidget *webview;
     URLType type;
     char * id_name;

@@ -72,7 +72,6 @@ geturl( FileAccessWindow* faw )
 {
     gchar* url = NULL;
     const gchar* host = NULL;
-    const gchar* database = NULL;
     const gchar* username = NULL;
     const gchar* password = NULL;
     /* Not const as return value of gtk_combo_box_text_get_active_text must be freed */

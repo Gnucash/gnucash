@@ -605,7 +605,6 @@ gnc_plugin_ab_cmd_view_logwindow (GSimpleAction *simple,
                                   GVariant *parameter,
                                   gpointer user_data)
 {
-    GncMainWindowActionData *data = user_data;
     GVariant *state;
 
     state = g_action_get_state (G_ACTION(simple));
