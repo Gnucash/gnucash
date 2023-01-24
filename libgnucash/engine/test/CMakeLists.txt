@@ -204,7 +204,6 @@ gnc_add_test(test-qofevent "${test_qofevent_SOURCES}"
 
 
 set(test_engine_SOURCES_DIST
-        dummy.cpp
         gtest-gnc-euro.cpp
         gtest-gnc-int128.cpp
         gtest-gnc-rational.cpp
