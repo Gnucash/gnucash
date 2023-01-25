@@ -56,8 +56,6 @@
 #include "gnc-html-webkit.h"
 #include "gnc-html-history.h"
 #include "print-session.h"
-#include "gnc-state.h"
-#include "print-session.h"
 
 
 G_DEFINE_TYPE(GncHtmlWebkit, gnc_html_webkit, GNC_TYPE_HTML )
@@ -1127,8 +1125,7 @@ impl_webkit_print (GncHtml* self,const gchar* jobname)
      gchar *export_dirname = NULL;
      gchar *export_filename = NULL;
      gchar* basename = NULL;
-     GKeyFile *state_file = gnc_state_get_current();
-     
+
      g_return_if_fail (self != NULL);
      g_return_if_fail (GNC_IS_HTML_WEBKIT (self));
      priv = GNC_HTML_WEBKIT_GET_PRIVATE (self);

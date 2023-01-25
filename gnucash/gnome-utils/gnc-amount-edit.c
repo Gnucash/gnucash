@@ -104,7 +104,6 @@ static void
 gnc_amount_edit_class_init (GNCAmountEditClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(klass);
-    GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
 
     object_class->dispose = gnc_amount_edit_dispose;
     object_class->finalize = gnc_amount_edit_finalize;

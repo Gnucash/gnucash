@@ -314,7 +314,6 @@ TEST_F(ImapBayesTest, AddAccountBayes)
 TEST_F(ImapBayesTest, ConvertBayesData)
 {
     auto root = qof_instance_get_slots(QOF_INSTANCE(t_bank_account));
-    auto book = qof_instance_get_slots(QOF_INSTANCE(gnc_account_get_book(this->t_acc)));
     auto acct1_guid = guid_to_string (xaccAccountGetGUID(t_expense_account1)); //Food
     auto acct2_guid = guid_to_string (xaccAccountGetGUID(t_expense_account2)); //Drink
     auto acct3_guid = guid_to_string (xaccAccountGetGUID(t_asset_account2)); //Asset-Bank

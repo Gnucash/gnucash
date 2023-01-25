@@ -93,7 +93,6 @@ static void
 gnc_cell_view_class_init (GncCellViewClass *klass)
 {
     GObjectClass  *gobject_class = G_OBJECT_CLASS(klass);
-    GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
 
     gobject_class->dispose = gnc_cell_view_dispose;
 

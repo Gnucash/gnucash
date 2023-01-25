@@ -810,7 +810,6 @@ gnc_plugin_page_budget_cmd_edit_tax_options (GSimpleAction *simple,
     if (gtk_tree_selection_count_selected_rows (selection) == 1)
     {
         GList *acc_list = gnc_budget_view_get_selected_accounts (priv->budget_view);
-        GList *node = g_list_first (acc_list);
         account = acc_list->data;
         g_list_free (acc_list);
     }

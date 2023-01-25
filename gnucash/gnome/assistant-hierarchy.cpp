@@ -321,7 +321,6 @@ region_combo_changed_cb (GtkComboBox *widget, hierarchy_data  *data)
     if (gtk_combo_box_get_active_iter (widget, &filter_iter))
     {
         GtkListStore *cat_list = GTK_LIST_STORE(gtk_tree_view_get_model (data->categories_tree));
-        GtkTreeModel *cat_model = gtk_tree_view_get_model (data->categories_tree);
         GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(data->categories_tree));
         GSList *list;
         GtkTreePath *path;
@@ -394,7 +393,6 @@ region_combo_change_filter_cb (GtkComboBox *widget, hierarchy_data  *data)
     {
         GtkTreeModel *sort_model = gtk_combo_box_get_model (GTK_COMBO_BOX(data->language_combo));
         GtkTreeModel *language_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT(sort_model));
-        GtkListStore *cat_list = GTK_LIST_STORE(gtk_tree_view_get_model (data->categories_tree));
         GtkTreeIter *iter = nullptr;
         gchar *language = nullptr;
         gint count = 0;

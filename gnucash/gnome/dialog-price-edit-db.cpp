@@ -451,7 +451,6 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
         {
             time64 last;
             GDate fiscal_end_date = get_fiscal_end_date ();
-            PriceRemoveSourceFlags source = PRICE_REMOVE_SOURCE_FQ;
             PriceRemoveKeepOptions keep = PRICE_REMOVE_KEEP_NONE;
 
             // disconnect the model to the price treeview

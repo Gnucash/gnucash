@@ -73,7 +73,6 @@ static void
 gnc_cell_renderer_text_flag_init(GncCellRendererTextFlag *celltext)
 {
     GncCellRendererTextFlagPrivate *priv;
-    GtkCellRendererText *cell = GTK_CELL_RENDERER_TEXT(celltext);
 
     celltext->priv =
         gnc_cell_renderer_text_flag_get_instance_private(celltext);

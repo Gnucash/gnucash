@@ -490,7 +490,6 @@ get_trading_split (Transaction *trans, Account *base,
     Account *ns_account;
     Account *account;
     Account* root = gnc_book_get_root_account (xaccTransGetBook (trans));
-    gnc_commodity *root_currency = find_root_currency ();
 
     trading_account = xaccScrubUtilityGetOrMakeAccount (root,
                                                         NULL,

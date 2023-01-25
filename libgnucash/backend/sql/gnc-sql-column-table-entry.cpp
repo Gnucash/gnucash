@@ -673,8 +673,6 @@ gnc_sql_load_object (const GncSqlBackend* sql_be, GncSqlRow& row,
                      QofIdTypeConst obj_name, gpointer pObject,
                      const EntryVec& table)
 {
-    QofSetterFunc setter;
-
     g_return_if_fail (sql_be != NULL);
     g_return_if_fail (pObject != NULL);
 

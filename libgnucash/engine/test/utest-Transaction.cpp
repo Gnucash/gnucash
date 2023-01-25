@@ -747,7 +747,6 @@ static void
 test_xaccTransEqual (Fixture *fixture, gconstpointer pData)
 {
 
-    QofBook *book = qof_instance_get_book (QOF_INSTANCE (fixture->txn));
     QofBook *book2 = qof_book_new ();
     Transaction *txn0 = fixture->txn;
     Transaction *clone = xaccTransClone (txn0);
@@ -1248,7 +1247,6 @@ test_xaccTransGetAccountBalance (Fixture *fixture, gconstpointer pData)
 #undef _func
     auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     auto check = test_error_struct_new ("gnc.engine", loglevel, msg1);
-    auto split1 = xaccTransFindSplitByAccount(fixture->txn, fixture->acc1);
     gnc_numeric rate;
 
     fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check,
@@ -1410,7 +1408,6 @@ test_do_destroy (GainsFixture *fixture, gconstpointer pData)
 {
     Fixture *base = &(fixture->base);
     auto base_split =  static_cast<Split*>(g_list_nth_data (base->txn->splits, 1));
-    QofBook *book = qof_instance_get_book (base->txn);
     TestSignal sig = test_signal_new (QOF_INSTANCE (base->txn),
                                       QOF_EVENT_DESTROY, NULL);
     g_object_add_weak_pointer (G_OBJECT (base->txn->splits->data),

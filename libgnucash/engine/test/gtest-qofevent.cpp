@@ -104,7 +104,6 @@ static void
 compound_handler (QofInstance *ent,  QofEventId event_type,
                   gpointer handler_data, gpointer event_data)
 {
-    QofInstance entity;
     int *data = static_cast<int*>(handler_data);
     int increment = GPOINTER_TO_INT(event_data);
 

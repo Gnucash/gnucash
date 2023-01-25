@@ -3980,7 +3980,6 @@ gnc_main_window_edit_menu_hide_cb (GtkWidget *menu,
 static void
 gnc_main_window_init_menu_updaters (GncMainWindow *window)
 {
-    GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     GtkWidget *edit_menu_item, *edit_menu;
 
     edit_menu_item = gnc_main_window_menu_find_menu_item (window, "EditAction");
@@ -4310,7 +4309,6 @@ gnc_quartz_set_menu (GncMainWindow* window)
 static gboolean
 gnc_main_window_show_summarybar (GncMainWindow *window, GAction *action)
 {
-    GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     GVariant *state;
     gboolean visible;
 
