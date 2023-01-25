@@ -219,7 +219,7 @@ GncDbiBackend<Type>::set_standard_connection_options (dbi_conn conn,
         {
             const char *msg = nullptr;
             auto err = dbi_conn_error(conn, &msg);
-            PERR("Error setting port option to %d: %s", uri.m_portnum, msg);
+            PERR("Error (%d) setting port option to %d: %s", err, uri.m_portnum, msg);
             throw std::runtime_error(msg);
         }
     }

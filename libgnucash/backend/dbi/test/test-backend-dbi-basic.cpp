@@ -250,7 +250,6 @@ destroy_database (gchar* url)
     gchar* port = NULL;
     auto pgsql = "pgsql";
     dbi_conn conn = NULL;
-    auto errfmt = "Unable to delete tables in %s: %s";
     gint fail = 0;
     dbi_result tables;
     StrVec tblnames;
@@ -272,7 +271,7 @@ destroy_database (gchar* url)
     port = g_strdup_printf ("%d", portnum);
     if (conn == NULL)
     {
-        g_printf (errfmt, url, "failed to create connection");
+        g_printf ("delete tables in %s: failed to create connection", url);
         return;
     }
     fail = dbi_conn_set_option (conn, "host", host);
@@ -289,7 +288,7 @@ destroy_database (gchar* url)
     g_free (port);
     if (fail != 0)
     {
-        g_printf (errfmt, url, "failed to set an option");
+        g_printf ("delete tables in %s: failed to set an option", url);
         dbi_conn_close (conn);
         return;
     }
@@ -298,7 +297,7 @@ destroy_database (gchar* url)
     {
         const gchar* error;
         gint errnum = dbi_conn_error (conn, &error);
-        g_printf (errfmt, url, error);
+        g_printf ("delete tables in %s: failed to connect (error %d): %s", url, errnum, error);
         dbi_conn_close (conn);
         return;
     }
@@ -314,6 +313,7 @@ destroy_database (gchar* url)
                      std::string query{"DROP TABLE "};
                      query += table;
                      dbi_result rslt = dbi_conn_query (conn, query.c_str());
+                     dbi_result_free(rslt);
                   });
 }
 
