@@ -1238,6 +1238,12 @@ gnc_option_db_book_options(GncOptionDB* odb)
                                      OPTION_NAME_DEFAULT_INVOICE_REPORT_TIMEOUT, "e2",
                                      N_("Length of time to change the used invoice report. A value of 0 means disabled."),
                                      0.0, 0.0, 20.0, 1.0);
+    gnc_register_string_option (odb, business_section, N_("Company IBAN"), "c7",
+                                N_ ("The International Bank Account Number for receiving payments."),
+                                empty_string);
+    gnc_register_string_option (odb, business_section, N_("Company BIC"), "c8",
+                                N_ ("The Business Identifier Codes (or SWIFT) for your bank."),
+                                empty_string);
     gnc_register_taxtable_option(odb, business_section,
                                  N_("Default Customer TaxTable"), "f1",
                                  N_("The default tax table to apply to customers."),
