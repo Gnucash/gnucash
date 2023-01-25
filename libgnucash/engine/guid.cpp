@@ -360,7 +360,7 @@ GUID::is_valid_guid (std::string const & str)
     try
     {
         static boost::uuids::string_generator strgen;
-        auto a = strgen (str);
+        strgen (str);
         return true;
     }
     catch (...)

@@ -452,10 +452,10 @@ gnc_plugin_page_invoice_action_update (GncPluginPage *plugin_page,
 
     for (gint i = 0; (action_list[i].action_name != NULL); i++)
     {
-        gboolean found = gnc_main_window_update_menu_for_action (window,
-                                                                 action_list[i].action_name,
-                                                                 _(action_list[i].label),
-                                                                 _(action_list[i].tooltip));
+        gnc_main_window_update_menu_for_action (window,
+                                                action_list[i].action_name,
+                                                _(action_list[i].label),
+                                                _(action_list[i].tooltip));
 
         tool_item = gnc_main_window_toolbar_find_tool_item (window,
                                                             action_list[i].action_name);

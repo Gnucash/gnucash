@@ -73,7 +73,7 @@ TEST (GncGUID, from_string)
     bool fail = false;
     try
     {
-        auto guid = gnc::GUID::from_string (bogus);
+        gnc::GUID::from_string (bogus);
     }
     catch (gnc::guid_syntax_exception const &)
     {
