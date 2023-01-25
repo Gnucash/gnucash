@@ -71,7 +71,7 @@ returned.
 
 Simple/ad-hoc lazy evaluation works well when data dependencies are 
 simple, but it breaks down when there are too many/circular
-relationships.  It becomes all too easy to get trapped in inifinite
+relationships.  It becomes all too easy to get trapped in infinite
 loops of corrections.   The goal of moving to a formal constraint
 system is to introduce specific, well-defined sync points where 
 constraint checking can be done, without incuring circular

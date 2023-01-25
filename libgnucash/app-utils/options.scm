@@ -455,7 +455,7 @@ the option '~a'."))
       #f #f #f #f)))
 
 ;; budget option
-;; TODO: need to double-check this proc (dates back to r11545 or eariler)
+;; TODO: need to double-check this proc (dates back to r11545 or earlier)
 ;;
 ;; Always takes/returns a budget
 ;; Stores the GUID in the KVP
