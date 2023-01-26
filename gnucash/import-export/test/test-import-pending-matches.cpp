@@ -129,4 +129,6 @@ main (int argc, char *argv[])
     result =  g_test_run();
 
     qof_close();
+
+    return result;
 }
