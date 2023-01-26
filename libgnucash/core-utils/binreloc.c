@@ -195,6 +195,7 @@ _br_find_exe (Gnc_GbrInitError *error)
 
     result = g_strdup (result);
     fclose (f);
+    g_free (line);
     return result;
 #endif /* ENABLE_BINRELOC */
 }
