@@ -2412,7 +2412,6 @@ test_xaccAccountHasAncestor (Fixture *fixture, gconstpointer pData)
 }
 inline GNCAccountType& operator++(GNCAccountType& x)
 {
-    using AcctTypeType = std::underlying_type<GNCAccountType>;
     if (x < ACCT_TYPE_LAST)
         x = static_cast<GNCAccountType>(x + 1);
     return x;
