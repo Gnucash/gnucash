@@ -1239,7 +1239,6 @@ gnc_ab_imexporter_list (AB_BANKING* api)
          pd = GWEN_PluginDescription_List2Iterator_Next(ilit))
     {
         AB_Node_Pair *node = NULL;
-        GWEN_BUFFER *tbuf = GWEN_Buffer_new(0, 256, 0, 1);
 
         node = g_slice_new (AB_Node_Pair);
         node->name = g_strdup(GWEN_PluginDescription_GetName(pd));
