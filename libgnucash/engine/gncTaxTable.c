@@ -1015,13 +1015,26 @@ static void _gncTaxTableCreate (QofBook *book)
     qof_book_set_data (book, _GNC_MOD_NAME, bi);
 }
 
+static void
+destroy_taxtable_on_book_close (QofInstance *ent, gpointer data)
+{
+    GncTaxTable *table = GNC_TAXTABLE(ent);
+
+    gncTaxTableBeginEdit (table);
+    gncTaxTableDestroy (table);
+}
+
 static void _gncTaxTableDestroy (QofBook *book)
 {
     struct _book_info *bi;
+    QofCollection *col;
 
     if (!book) return;
 
     bi = qof_book_get_data (book, _GNC_MOD_NAME);
+
+    col = qof_book_get_collection (book, GNC_ID_TAXTABLE);
+    qof_collection_foreach (col, destroy_taxtable_on_book_close, NULL);
 
     g_list_free (bi->tables);
     g_free (bi);
