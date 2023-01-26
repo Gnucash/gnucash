@@ -832,7 +832,7 @@ gnc_gen_trans_assign_transfer_account (GtkTreeView *treeview,
                 old_acc  = gnc_import_TransInfo_get_destacc (trans_info);
                 if (*first)
                 {
-                    gchar *acc_full_name = gnc_account_get_full_name (*new_acc);
+                    gchar *acc_full_name;
                     ok_pressed = FALSE;
                     *new_acc = gnc_import_select_account (info->main_widget,
                         NULL,

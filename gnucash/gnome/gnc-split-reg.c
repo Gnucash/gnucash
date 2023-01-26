@@ -2502,7 +2502,6 @@ gnc_split_reg_determine_read_only( GNCSplitReg *gsr, gboolean show_dialog )
 
     if ( !gsr->read_only )
     {
-        dialog_args *args;
         char *string = NULL;
         reg = gnc_ledger_display_get_split_register( gsr->ledger );
         if(reg->mismatched_commodities)
@@ -2539,12 +2538,15 @@ gnc_split_reg_determine_read_only( GNCSplitReg *gsr, gboolean show_dialog )
             }
         }
         gsr->read_only = TRUE;
-        /* Put up a warning dialog */
-        args = g_malloc(sizeof(dialog_args));
-        args->string = string;
-        args->gsr = gsr;
         if (show_dialog)
+        {
+            /* Put up a warning dialog */
+            dialog_args *args = g_malloc(sizeof(dialog_args));
+            args->string = string;
+            args->gsr = gsr;
+
             g_timeout_add (250, gtk_callback_bug_workaround, args); /* 0.25 seconds */
+        }
     }
 
     /* Make the contents immutable */
