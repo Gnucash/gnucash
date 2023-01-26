@@ -48,10 +48,12 @@ static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
 extern "C"
 {
-void stock_assistant_prepare (GtkAssistant  *assistant, GtkWidget *page,
-                              gpointer user_data);
-void stock_assistant_finish  (GtkAssistant *assistant, gpointer user_data);
-void stock_assistant_cancel  (GtkAssistant *gtkassistant, gpointer user_data);
+// These functions are the GtkAssistant primary button callbacks. They're
+// connected to their signals in assistant-stock-transaction.glade.
+void stock_assistant_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
+                                 gpointer user_data);
+void stock_assistant_finish_cb  (GtkAssistant *assistant, gpointer user_data);
+void stock_assistant_cancel_cb  (GtkAssistant *gtkassistant, gpointer user_data);
 }
 
 enum class FieldMask : unsigned;
@@ -1337,7 +1339,7 @@ controller_capitalize_fees (GtkWidget *widget, StockAssistantController* info)
 }
 
 void
-stock_assistant_prepare (GtkAssistant  *assistant, GtkWidget *page,
+stock_assistant_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
                          gpointer user_data)
 {
     auto info = static_cast<StockAssistantController*>(user_data);
@@ -1434,7 +1436,7 @@ forward_page_func (gint current_page, StockAssistantController* info)
 }
 
 void
-stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
+stock_assistant_finish_cb (GtkAssistant *assistant, gpointer user_data)
 {
     auto info = static_cast<StockAssistantController*>(user_data);
     g_return_if_fail (info->model->txn_type);
@@ -1447,7 +1449,7 @@ stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
 
 
 void
-stock_assistant_cancel (GtkAssistant *assistant, gpointer user_data)
+stock_assistant_cancel_cb (GtkAssistant *assistant, gpointer user_data)
 {
     auto info = static_cast<StockAssistantController*>(user_data);
     gnc_close_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, info);
