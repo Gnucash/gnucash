@@ -462,7 +462,7 @@ GncQuotesImpl::query_fq (const char* source, const StrVec& commodities)
 
     std::for_each(is_currency ? ++commodities.cbegin() : commodities.cbegin(),
                   commodities.cend(),
-                  [this, source, &pt](auto sym)
+                  [source, &pt](auto sym)
                       {
                           std::string key{source};
                           key += "." + sym;

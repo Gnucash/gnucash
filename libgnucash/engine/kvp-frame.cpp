@@ -166,7 +166,7 @@ KvpFrameImpl::to_string(std::string const & prefix) const noexcept
         return prefix;
     std::ostringstream ret;
     std::for_each(m_valuemap.begin(), m_valuemap.end(),
-        [this,&ret,&prefix](const map_type::value_type &a)
+        [&ret,&prefix](const map_type::value_type &a)
         {
             std::string new_prefix {prefix};
             if (a.first)
