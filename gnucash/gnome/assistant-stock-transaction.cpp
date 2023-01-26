@@ -402,50 +402,49 @@ then record the reverse split.")
 
 struct StockTransactionSplitInfo
 {
-    bool debit_side;
-    std::string account_str;
-    std::string memo_str;
-    std::string action_str;
-    std::string value_str;
-    std::string units_str;
-    bool units_in_red = false;
-    Account* account = nullptr;
-    gnc_numeric value_numeric = gnc_numeric_create (1, 0); // invalid gnc_numerics
-    gnc_numeric units_numeric = gnc_numeric_create (1, 0);
+    bool m_debit_side;
+    std::string m_account_str;
+    std::string m_memo_str;
+    std::string m_action_str;
+    std::string m_value_str;
+    std::string m_units_str;
+    bool m_units_in_red = false;
+    Account* m_account = nullptr;
+    gnc_numeric m_value_numeric = gnc_numeric_create (1, 0); // invalid gnc_numerics
+    gnc_numeric m_units_numeric = gnc_numeric_create (1, 0);
 
-    void create_split(Transaction *trans, AccountVec& account_commits)
-    {
-        g_return_if_fail (trans);
-        if (!this->account ||
-            gnc_numeric_check (this->value_numeric) ||
-            gnc_numeric_check (this->units_numeric))
-            return;
-        auto split = xaccMallocSplit (qof_instance_get_book (trans));
-        xaccSplitSetParent (split, trans);
-        xaccAccountBeginEdit (this->account);
-        account_commits.emplace_back (this->account);
-        xaccSplitSetAccount (split, this->account);
-        xaccSplitSetMemo (split, this->memo_str.c_str());
-        xaccSplitSetValue (split, this->value_numeric);
-        xaccSplitSetAmount (split, this->units_numeric);
-        DEBUG ("creating %s split in Acct(%s): Val(%s), Amt(%s) => Val(%s), Amt(%s)",
-               this->action_str.c_str(), this->account_str.c_str(),
-               gnc_num_dbg_to_string (this->value_numeric),
-               gnc_num_dbg_to_string (this->units_numeric),
-               gnc_num_dbg_to_string (xaccSplitGetValue (split)),
-               gnc_num_dbg_to_string (xaccSplitGetAmount (split)));
-        gnc_set_num_action (nullptr, split,
-                            nullptr, g_dpgettext2 (nullptr, "Stock Assistant: Action field", this->action_str.c_str()));
-    }
     StockTransactionSplitInfo () { DEBUG ("StockTransactionSplitInfo constructor\n"); };
     StockTransactionSplitInfo (Account *acct, gnc_numeric val)
-        : account_str (xaccAccountGetName (acct))
-        , account (acct)
-        , value_numeric (val)
-    { DEBUG ("StockTransactionSplitInfo constructor\n"); };
-    ~StockTransactionSplitInfo () { DEBUG ("StockTransactionSplitInfo destructor\n"); };
+        : m_account_str{xaccAccountGetName (acct)} , m_account{acct} , m_value_numeric{val}
+    { DEBUG ("StockTransactionSplitInfo constructor\n"); }
+    ~StockTransactionSplitInfo () { DEBUG ("StockTransactionSplitInfo destructor\n"); }
+    void create_split(Transaction *trans, AccountVec &account_commits);
 };
 
+void
+StockTransactionSplitInfo::create_split(Transaction *trans, AccountVec &account_commits) {
+  g_return_if_fail(trans);
+  if (!m_account || gnc_numeric_check(m_value_numeric) ||
+      gnc_numeric_check(m_units_numeric))
+    return;
+  auto split = xaccMallocSplit(qof_instance_get_book(trans));
+  xaccSplitSetParent(split, trans);
+  xaccAccountBeginEdit(m_account);
+  account_commits.emplace_back(m_account);
+  xaccSplitSetAccount(split, m_account);
+  xaccSplitSetMemo(split, m_memo_str.c_str());
+  xaccSplitSetValue(split, m_value_numeric);
+  xaccSplitSetAmount(split, m_units_numeric);
+  DEBUG("creating %s split in Acct(%s): Val(%s), Amt(%s) => Val(%s), Amt(%s)",
+        m_action_str.c_str(), m_account_str.c_str(),
+        gnc_num_dbg_to_string(m_value_numeric),
+        gnc_num_dbg_to_string(m_units_numeric),
+        gnc_num_dbg_to_string(xaccSplitGetValue(split)),
+        gnc_num_dbg_to_string(xaccSplitGetAmount(split)));
+  gnc_set_num_action(nullptr, split, nullptr,
+                     g_dpgettext2(nullptr, "Stock Assistant: Action field",
+                                  m_action_str.c_str()));
+}
 
 static StockTransactionSplitInfo
 check_page (gnc_numeric& debit, gnc_numeric& credit, StringVec& errors,
@@ -466,20 +465,20 @@ check_page (gnc_numeric& debit, gnc_numeric& credit, StringVec& errors,
 
     DEBUG ("page=%s, amount=%s", page, gnc_num_dbg_to_string (amount));
     if (memo)
-        line.memo_str = memo;
-    line.debit_side = (splitfield & FieldMask::ENABLED_DEBIT);
+        line.m_memo_str = memo;
+    line.m_debit_side = (splitfield & FieldMask::ENABLED_DEBIT);
     if (page)
-        line.action_str = page;
+        line.m_action_str = page;
 
     if (gnc_numeric_check (amount))
     {
         if (splitfield & FieldMask::ALLOW_ZERO)
             // line.value_numeric contains an invalid gnc_numeric
-            line.value_str = "";
+            line.m_value_str = "";
         else
         {
             add_error (N_("Amount for %s is missing."), page);
-            line.value_str = _(missing_str);
+            line.m_value_str = _(missing_str);
         }
     }
     else
@@ -494,29 +493,29 @@ check_page (gnc_numeric& debit, gnc_numeric& credit, StringVec& errors,
         if (gnc_numeric_negative_p (amount))
         {
             amount = gnc_numeric_neg (amount);
-            line.debit_side = !line.debit_side;
+            line.m_debit_side = !line.m_debit_side;
         }
-        if (line.debit_side)
+        if (line.m_debit_side)
             debit = gnc_numeric_add_fixed (debit, amount);
         else
             credit = gnc_numeric_add_fixed (credit, amount);
-        line.units_numeric = line.debit_side ? amount : gnc_numeric_neg (amount);
-        line.value_numeric = line.debit_side ? amount : gnc_numeric_neg (amount);
-        line.value_str = xaccPrintAmount (amount, curr_pinfo);
+        line.m_units_numeric = line.m_debit_side ? amount : gnc_numeric_neg (amount);
+        line.m_value_numeric = line.m_debit_side ? amount : gnc_numeric_neg (amount);
+        line.m_value_str = xaccPrintAmount (amount, curr_pinfo);
     }
 
     if (acct)
     {
-        line.account = acct;
-        line.account_str = xaccAccountGetName (acct);
+        line.m_account = acct;
+        line.m_account_str = xaccAccountGetName (acct);
     }
     else if ((splitfield & FieldMask::ALLOW_ZERO) &&
              (gnc_numeric_check (amount) || gnc_numeric_zero_p (amount)))
-        line.account_str = "";
+        line.m_account_str = "";
     else
     {
         add_error (N_("Account for %s is missing."), page);
-        line.account_str = _(missing_str);
+        line.m_account_str = _(missing_str);
     }
     return line;
 }
@@ -712,11 +711,11 @@ to ensure proper recording."), new_date_str, last_split_date_str);
 
 
         if (!this->stock_amount_enabled)
-            line.units_numeric = gnc_numeric_zero();
+            line.m_units_numeric = gnc_numeric_zero();
         else if (gnc_numeric_check (this->stock_amount))
         {
-            line.units_str = _("(missing)");
-            line.units_numeric = gnc_numeric_zero();
+            line.m_units_str = _("(missing)");
+            line.m_units_numeric = gnc_numeric_zero();
             add_error_str (N_("Amount for stock units is missing"));
         }
         else if (this->input_new_balance)
@@ -727,9 +726,9 @@ to ensure proper recording."), new_date_str, last_split_date_str);
             auto ratio = gnc_numeric_div (stock_amount, this->balance_at_date,
                                           GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
             stock_amount = gnc_numeric_sub_fixed (stock_amount, this->balance_at_date);
-            line.units_numeric = stock_amount;
-            line.units_str = xaccPrintAmount (stock_amount, this->stock_pinfo);
-            line.units_in_red = negative_in_red && gnc_numeric_negative_p (stock_amount);
+            line.m_units_numeric = stock_amount;
+            line.m_units_str = xaccPrintAmount (stock_amount, this->stock_pinfo);
+            line.m_units_in_red = negative_in_red && gnc_numeric_negative_p (stock_amount);
             if (gnc_numeric_check (ratio) || !gnc_numeric_positive_p (ratio))
                 add_error_str (N_("Invalid stock new balance."));
             else if (gnc_numeric_negative_p (delta) && !credit_side)
@@ -744,9 +743,9 @@ to ensure proper recording."), new_date_str, last_split_date_str);
                 add_error_str (N_("Stock amount must be positive."));
             if (this->txn_type->stock_amount & FieldMask::ENABLED_CREDIT)
                 stock_amount = gnc_numeric_neg (stock_amount);
-            line.units_numeric = stock_amount;
-            line.units_str = xaccPrintAmount (stock_amount, this->stock_pinfo);
-            line.units_in_red = negative_in_red && gnc_numeric_negative_p (stock_amount);
+            line.m_units_numeric = stock_amount;
+            line.m_units_str = xaccPrintAmount (stock_amount, this->stock_pinfo);
+            line.m_units_in_red = negative_in_red && gnc_numeric_negative_p (stock_amount);
             auto new_bal = gnc_numeric_add_fixed (this->balance_at_date, stock_amount);
             if (gnc_numeric_positive_p (this->balance_at_date) &&
                 gnc_numeric_negative_p (new_bal))
@@ -790,7 +789,7 @@ to ensure proper recording."), new_date_str, last_split_date_str);
                                NC_ ("Stock Assistant: Page name", "fees"),
                                this->curr_pinfo);
             if (this->fees_capitalize)
-                line.units_numeric = gnc_numeric_zero();
+                line.m_units_numeric = gnc_numeric_zero();
             this->list_of_splits.push_back (std::move (line));
         }
 
@@ -817,7 +816,7 @@ to ensure proper recording."), new_date_str, last_split_date_str);
                                    this->acct, this->capgains_memo, this->capgains_value,
                                    NC_ ("Stock Assistant: Page name", "capital gains"),
                                    this->curr_pinfo);
-                line.units_numeric = gnc_numeric_zero();
+                line.m_units_numeric = gnc_numeric_zero();
                 this->list_of_splits.push_back (std::move (line));
             }
 
@@ -1053,16 +1052,16 @@ struct StockAssistantView
         for (const auto& line : list_of_splits)
         {
             GtkTreeIter iter;
-            auto tooltip = g_markup_escape_text (line.memo_str.c_str(), -1);
+            auto tooltip = g_markup_escape_text (line.m_memo_str.c_str(), -1);
             gtk_list_store_append (list, &iter);
             gtk_list_store_set (list, &iter,
-                                SPLIT_COL_ACCOUNT, line.account_str.c_str(),
-                                SPLIT_COL_MEMO, line.memo_str.c_str(),
+                                SPLIT_COL_ACCOUNT, line.m_account_str.c_str(),
+                                SPLIT_COL_MEMO, line.m_memo_str.c_str(),
                                 SPLIT_COL_TOOLTIP, tooltip,
-                                SPLIT_COL_DEBIT, line.debit_side ? line.value_str.c_str() : nullptr,
-                                SPLIT_COL_CREDIT, line.debit_side ? nullptr : line.value_str.c_str(),
-                                SPLIT_COL_UNITS, line.units_str.c_str(),
-                                SPLIT_COL_UNITS_COLOR, line.units_in_red ? "red" : nullptr,
+                                SPLIT_COL_DEBIT, line.m_debit_side ? line.m_value_str.c_str() : nullptr,
+                                SPLIT_COL_CREDIT, line.m_debit_side ? nullptr : line.m_value_str.c_str(),
+                                SPLIT_COL_UNITS, line.m_units_str.c_str(),
+                                SPLIT_COL_UNITS_COLOR, line.m_units_in_red ? "red" : nullptr,
                                 -1);
             g_free (tooltip);
         }
