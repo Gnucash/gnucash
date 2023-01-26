@@ -25,6 +25,10 @@
 #ifndef __STRPTIME_H__
 #define __STRPTIME_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 /*
  * Version of "strptime()", for the benefit of OSes that don't have it.
  */
@@ -34,5 +38,7 @@ extern char *strptime(const char *, const char *, struct tm *);
 extern char *get_win32_locale_string(int lctype);
 extern char *translate_win32_picture(const char *);
 #endif
-
+#ifdef __cplusplus
+}
+#endif
 #endif
