@@ -35,7 +35,7 @@ extern "C"
 #include <gnc-pricedb-p.h>
 }
 
-struct Tests
+struct ASTTestCase
 {
     unsigned int type_idx, dd, mm, yy;
     const char *desc;
@@ -44,123 +44,162 @@ struct Tests
     int fees_val, divi_val, capg_val, new_bal;
 };
 
-struct TestCase {
-    std::vector<Tests> tests;
+ASTTestCase easyTestCases[] = {
+    //t, dd, mm, yyyy, desc               , stk.amt, stk.val , cash    , capitalize, fees, divi , capg  , new_bal
+
+    // bal=0. next line is "open long".
+    { 0, 1 , 7 , 2019, "Buy"              , 100    , 2000000 , 2000995 , true      , 995 , 0    , 0     , 100 },
+
+    // bal>0. next lines are long_types
+    { 0, 11, 12, 2019, "Buy"              , 50     , 1600000 , 1600995 , true      , 995 , 0    , 0     , 150 },
+    { 1, 18, 3 , 2020, "Sell"             , 75     , 1200000 , 1199005 , false     , 995 , 0    ,-600995, 75 },
+    { 0, 1 , 4 , 2020, "Buy"              , 250    , 4200000 , 4200995 , true      , 995 , 0    , 0     , 325 },
+    { 3, 16, 4 , 2020, "ROC"              , 0      , 250000  , 250000  , true      , 0   , 0    , 0     , 325 },
+    { 0, 2 , 5 , 2020, "Buy"              , 125    , 4750000 , 4750000 , true      , 0   , 0    , 0     , 450 },
+    { 7, 11, 5 , 2020, "Split 2:1"        , 900    , 0       , 0       , true      , 0   , 0    , 0     , 900 },
+    { 1, 21, 5 , 2020, "Sell"             , 135    , 2150000 , 2149005 , false     , 995 , 0    , 574702, 765 },
+    { 0, 3 , 6 , 2020, "Buy"              , 150    , 2100000 , 2100000 , true      , 0   , 0    , 0     , 915 },
+    { 1, 10, 6 , 2020, "Sell"             , 915    , 12810000, 12809005, false     , 995 , 0    , 1783309, 0 },
+
+    // bal=0. next line is "open short".
+    { 1, 10, 6 , 2020, "Short Sell"       , 85     , 1190000 , 1189005 , true      , 995 , 0    , 0     , -85 },
+
+    // bal<0. next lines are short_types
+    { 0, 15, 6 , 2020, "Short Sell"       , 65     , 1105000 , 1104005 , true      , 995 , 0    , 0     , -150 },
+    { 1, 16, 6 , 2020, "Cover Buy"        , 50     , 500000  , 500995  , false     , 995 , 0    ,-264337, -100 },
+    { 7, 17, 6 , 2020, "Split 2:1"        , -200   , 0       , 0       , false     , 0   , 0    , 0     , -200 },
+    { 8, 18, 6 , 2020, "Reverse Split"    , -100   , 0       , 0       , false     , 0   , 0    , 0     , -100 },
+    { 2, 19, 6 , 2020, "Comp Dividend"    , 0      , 0       , 50000   , false     , 0   , 50000, 0     , -100 },
+    { 3, 19, 6 , 2020, "Comp ROC"         , 0      , 250000  , 250000  , false     , 0   , 0    , 0     , -100 },
+    { 5, 19, 6 , 2020, "Comp ND"          , 0      , 20000   , 0       , false     , 0   , 20000, 0     , -100 },
+    { 1, 20, 6 , 2020, "Cover Buy"        , 100    , 800000  , 800498  , false     , 498 , 0    ,-498673, 0 },
+
+    // bal=0. next line is "open long".
+    { 0, 20, 6 , 2020, "Buy"              , 100    , 800000  , 800498  , true      , 498 , 0    , 0     , 100 },
+
+    // bal>0. next lines are long_types
+    { 2, 21, 6 , 2020, "Dividend"         , 0      , 0       , 7000    , false     , 0   , 7000 , 0     , 100 },
+    { 2, 25, 6 , 2020, "Dividend"         , 0      , 0       , 11000   , false     , 0   , 11000, 0     , 100 },
+    { 0, 25, 6 , 2020, "+ Reinv"          , 1      , 10000   , 10000   , false     , 0   , 0    , 0     , 101 },
+    { 1, 26, 6 , 2020, "Sell remainder"   , 1      , 10000   , 10000   , false     , 0   , 0    , 1975  , 100 },
+    { 8, 26, 6 , 2020, "Reverse Split 1:2", 50     , 0       , 0       , false     , 0   , 0    , 0     , 50 },
+    { 5, 27, 6 , 2020, "ND"               , 0      , 10000   , 0       , false     , 0   , 10000, 0     , 50 }
 };
 
-TestCase easyTestCase = {
-    .tests =
+struct DestroyBook
+{
+    void operator()(QofBook* book)
     {
-        //t, dd, mm, yyyy, desc               , stk.amt, stk.val , cash    , capitalize, fees, divi , capg  , new_bal
-
-        // bal=0. next line is "open long".
-        { 0, 1 , 7 , 2019, "Buy"              , 100    , 2000000 , 2000995 , true      , 995 , 0    , 0     , 100 },
-
-        // bal>0. next lines are long_types
-        { 0, 11, 12, 2019, "Buy"              , 50     , 1600000 , 1600995 , true      , 995 , 0    , 0     , 150 },
-        { 1, 18, 3 , 2020, "Sell"             , 75     , 1200000 , 1199005 , false     , 995 , 0    ,-600995, 75 },
-        { 0, 1 , 4 , 2020, "Buy"              , 250    , 4200000 , 4200995 , true      , 995 , 0    , 0     , 325 },
-        { 3, 16, 4 , 2020, "ROC"              , 0      , 250000  , 250000  , true      , 0   , 0    , 0     , 325 },
-        { 0, 2 , 5 , 2020, "Buy"              , 125    , 4750000 , 4750000 , true      , 0   , 0    , 0     , 450 },
-        { 7, 11, 5 , 2020, "Split 2:1"        , 900    , 0       , 0       , true      , 0   , 0    , 0     , 900 },
-        { 1, 21, 5 , 2020, "Sell"             , 135    , 2150000 , 2149005 , false     , 995 , 0    , 574702, 765 },
-        { 0, 3 , 6 , 2020, "Buy"              , 150    , 2100000 , 2100000 , true      , 0   , 0    , 0     , 915 },
-        { 1, 10, 6 , 2020, "Sell"             , 915    , 12810000, 12809005, false     , 995 , 0    , 1783309, 0 },
-
-        // bal=0. next line is "open short".
-        { 1, 10, 6 , 2020, "Short Sell"       , 85     , 1190000 , 1189005 , true      , 995 , 0    , 0     , -85 },
-
-        // bal<0. next lines are short_types
-        { 0, 15, 6 , 2020, "Short Sell"       , 65     , 1105000 , 1104005 , true      , 995 , 0    , 0     , -150 },
-        { 1, 16, 6 , 2020, "Cover Buy"        , 50     , 500000  , 500995  , false     , 995 , 0    ,-264337, -100 },
-        { 7, 17, 6 , 2020, "Split 2:1"        , -200   , 0       , 0       , false     , 0   , 0    , 0     , -200 },
-        { 8, 18, 6 , 2020, "Reverse Split"    , -100   , 0       , 0       , false     , 0   , 0    , 0     , -100 },
-        { 2, 19, 6 , 2020, "Comp Dividend"    , 0      , 0       , 50000   , false     , 0   , 50000, 0     , -100 },
-        { 3, 19, 6 , 2020, "Comp ROC"         , 0      , 250000  , 250000  , false     , 0   , 0    , 0     , -100 },
-        { 5, 19, 6 , 2020, "Comp ND"          , 0      , 20000   , 0       , false     , 0   , 20000, 0     , -100 },
-        { 1, 20, 6 , 2020, "Cover Buy"        , 100    , 800000  , 800498  , false     , 498 , 0    ,-498673, 0 },
-
-        // bal=0. next line is "open long".
-        { 0, 20, 6 , 2020, "Buy"              , 100    , 800000  , 800498  , true      , 498 , 0    , 0     , 100 },
-
-        // bal>0. next lines are long_types
-        { 2, 21, 6 , 2020, "Dividend"         , 0      , 0       , 7000    , false     , 0   , 7000 , 0     , 100 },
-        { 2, 25, 6 , 2020, "Dividend"         , 0      , 0       , 11000   , false     , 0   , 11000, 0     , 100 },
-        { 0, 25, 6 , 2020, "+ Reinv"          , 1      , 10000   , 10000   , false     , 0   , 0    , 0     , 101 },
-        { 1, 26, 6 , 2020, "Sell remainder"   , 1      , 10000   , 10000   , false     , 0   , 0    , 1975  , 100 },
-        { 8, 26, 6 , 2020, "Reverse Split 1:2", 50     , 0       , 0       , false     , 0   , 0    , 0     , 50 },
-        { 5, 27, 6 , 2020, "ND"               , 0      , 10000   , 0       , false     , 0   , 10000, 0     , 50 }
+        qof_book_destroy(book);
     }
 };
 
-class Stock_AssistantTest : public ::testing::TestWithParam<TestCase *> {
+using QofBookPtr = std::unique_ptr<QofBook, DestroyBook>;
+
+class StockAssistantTest : public ::testing::Test{
 protected:
-    std::shared_ptr<QofBook> m_book;
+    QofBookPtr m_book;
     gnc_commodity *stock_commodity, *USD;
     Account *broker_account, *stock_account, *cash_account, *dividend_account,
         *capgains_account, *fees_account;
-    TestCase &m_testCase;
 
-public:
-    Stock_AssistantTest() :
-        m_book (qof_book_new (), qof_book_destroy),
+    StockAssistantTest();
+    void instantiate_model(StockAssistantModel &model, const ASTTestCase &t);
+};
+
+StockAssistantTest::StockAssistantTest() :
+        m_book (qof_book_new ()),
         broker_account (xaccMallocAccount (m_book.get ())),
         stock_account (xaccMallocAccount (m_book.get ())),
         cash_account (xaccMallocAccount (m_book.get ())),
         dividend_account (xaccMallocAccount (m_book.get ())),
         capgains_account (xaccMallocAccount (m_book.get ())),
-        fees_account (xaccMallocAccount (m_book.get ())),
-        m_testCase (*GetParam ())
+        fees_account (xaccMallocAccount (m_book.get ()))
+{
+    qof_init();
+    qof_book_register ();
+    gnc_pricedb_register();
+    gnc_commodity_table_register ();
+
+    stock_commodity = gnc_commodity_new (m_book.get(), "SPY", "", "SPY", "", 100);
+    USD = gnc_commodity_table_lookup (gnc_commodity_table_get_table (m_book.get()),
+                                      "CURRENCY", "USD");
+
+    xaccAccountBeginEdit (broker_account);
+    xaccAccountSetName (broker_account, "Broker Account");
+    xaccAccountSetType (broker_account, ACCT_TYPE_CASH);
+    xaccAccountSetCommodity (broker_account, USD);
+
+    xaccAccountBeginEdit (stock_account);
+    xaccAccountSetName (stock_account, "Stock Account");
+    xaccAccountSetType (stock_account, ACCT_TYPE_STOCK);
+    xaccAccountSetCommodity (stock_account, stock_commodity);
+    gnc_account_append_child (broker_account, stock_account);
+    xaccAccountCommitEdit (broker_account);
+    xaccAccountCommitEdit (stock_account);
+
+    xaccAccountBeginEdit (cash_account);
+    xaccAccountSetName (cash_account, "Cash Account");
+    xaccAccountSetType (cash_account, ACCT_TYPE_BANK);
+    xaccAccountSetCommodity (cash_account, USD);
+    xaccAccountCommitEdit (cash_account);
+
+    xaccAccountBeginEdit (dividend_account);
+    xaccAccountSetName (dividend_account, "Dividend Account");
+    xaccAccountSetType (dividend_account, ACCT_TYPE_INCOME);
+    xaccAccountSetCommodity (dividend_account, USD);
+    xaccAccountCommitEdit (dividend_account);
+
+    xaccAccountBeginEdit (capgains_account);
+    xaccAccountSetName (capgains_account, "Capgains Account");
+    xaccAccountSetType (capgains_account, ACCT_TYPE_INCOME);
+    xaccAccountSetCommodity (capgains_account, USD);
+    xaccAccountCommitEdit (capgains_account);
+
+    xaccAccountBeginEdit (fees_account);
+    xaccAccountSetName (fees_account, "Fees Account");
+    xaccAccountSetType (fees_account, ACCT_TYPE_EXPENSE);
+    xaccAccountSetCommodity (fees_account, USD);
+    xaccAccountCommitEdit (fees_account);
+}
+
+void
+StockAssistantTest::instantiate_model(StockAssistantModel &model, const ASTTestCase &t)
+{
+    model.transaction_date = gnc_dmy2time64 (t.dd, t.mm, t.yy);
+    model.maybe_reset_txn_types ();
+
+    model.set_txn_type (t.type_idx);
+    model.transaction_description = t.desc;
+    model.stock_amount = gnc_numeric_create (t.stock_amt * 100, 100);
+    model.stock_value = gnc_numeric_create (t.stock_val, 100);
+    model.cash_value = gnc_numeric_create (t.cash_val, 100);
+    model.cash_account = cash_account;
+    model.fees_account = fees_account;
+    model.fees_capitalize = t.capitalize;
+    model.fees_value = gnc_numeric_create (t.fees_val, 100);
+    model.capgains_account = capgains_account;
+    model.capgains_value = gnc_numeric_create (t.capg_val, 100);
+    model.dividend_account = dividend_account;
+    model.dividend_value = gnc_numeric_create (t.divi_val, 100);
+}
+
+class StockAssistantTestParameterized :
+    public StockAssistantTest,
+    public ::testing::WithParamInterface<ASTTestCase>
+{
+protected:
+    StockAssistantModel model;
+    const ASTTestCase &t;
+
+    StockAssistantTestParameterized() :
+        model(stock_account), t{GetParam()}
     {
-        qof_init();
-        qof_book_register ();
-        gnc_pricedb_register();
-        gnc_commodity_table_register ();
-
-        stock_commodity = gnc_commodity_new (m_book.get(), "SPY", "", "SPY", "", 100);
-        USD = gnc_commodity_table_lookup (gnc_commodity_table_get_table (m_book.get()),
-                                          "CURRENCY", "USD");
-
-        xaccAccountBeginEdit (broker_account);
-        xaccAccountSetName (broker_account, "Broker Account");
-        xaccAccountSetType (broker_account, ACCT_TYPE_CASH);
-        xaccAccountSetCommodity (broker_account, USD);
-
-        xaccAccountBeginEdit (stock_account);
-        xaccAccountSetName (stock_account, "Stock Account");
-        xaccAccountSetType (stock_account, ACCT_TYPE_STOCK);
-        xaccAccountSetCommodity (stock_account, stock_commodity);
-        gnc_account_append_child (broker_account, stock_account);
-        xaccAccountCommitEdit (broker_account);
-        xaccAccountCommitEdit (stock_account);
-
-        xaccAccountBeginEdit (cash_account);
-        xaccAccountSetName (cash_account, "Cash Account");
-        xaccAccountSetType (cash_account, ACCT_TYPE_BANK);
-        xaccAccountSetCommodity (cash_account, USD);
-        xaccAccountCommitEdit (cash_account);
-
-        xaccAccountBeginEdit (dividend_account);
-        xaccAccountSetName (dividend_account, "Dividend Account");
-        xaccAccountSetType (dividend_account, ACCT_TYPE_INCOME);
-        xaccAccountSetCommodity (dividend_account, USD);
-        xaccAccountCommitEdit (dividend_account);
-
-        xaccAccountBeginEdit (capgains_account);
-        xaccAccountSetName (capgains_account, "Capgains Account");
-        xaccAccountSetType (capgains_account, ACCT_TYPE_INCOME);
-        xaccAccountSetCommodity (capgains_account, USD);
-        xaccAccountCommitEdit (capgains_account);
-
-        xaccAccountBeginEdit (fees_account);
-        xaccAccountSetName (fees_account, "Fees Account");
-        xaccAccountSetType (fees_account, ACCT_TYPE_EXPENSE);
-        xaccAccountSetCommodity (fees_account, USD);
-        xaccAccountCommitEdit (fees_account);
+        instantiate_model (model, t);
     }
 };
 
-static void test_failure_modes (Account *stock_account)
+TEST_F(StockAssistantTest, testFailureModes)
 {
     StockAssistantModel model (stock_account);
     model.transaction_date = gnc_dmy2time64 (1, 1, 2022);
@@ -203,29 +242,12 @@ static void dump_acct (Account *acct)
     }
 }
 
-TEST_P(Stock_AssistantTest, DoesStock_Assistant)
+TEST_F(StockAssistantTest, testAggregateResults)
 {
-    test_failure_modes (stock_account);
-    for (const auto& t : m_testCase.tests)
+    for (const auto& t : easyTestCases)
     {
         StockAssistantModel model (stock_account);
-        model.transaction_date = gnc_dmy2time64 (t.dd, t.mm, t.yy);
-        model.maybe_reset_txn_types ();
-
-        model.set_txn_type (t.type_idx);
-        model.transaction_description = t.desc;
-        model.stock_amount = gnc_numeric_create (t.stock_amt * 100, 100);
-        model.stock_value = gnc_numeric_create (t.stock_val, 100);
-        model.cash_value = gnc_numeric_create (t.cash_val, 100);
-        model.cash_account = cash_account;
-        model.fees_account = fees_account;
-        model.fees_capitalize = t.capitalize;
-        model.fees_value = gnc_numeric_create (t.fees_val, 100);
-        model.capgains_account = capgains_account;
-        model.capgains_value = gnc_numeric_create (t.capg_val, 100);
-        model.dividend_account = dividend_account;
-        model.dividend_value = gnc_numeric_create (t.divi_val, 100);
-
+        instantiate_model (model, t);
         auto [success_splits, summary, splitinfos] = model.generate_list_of_splits ();
         EXPECT_TRUE (success_splits) << t.dd << '/' << t.mm << '/' << t.yy << ": "
                                      << t.desc << '='
@@ -248,20 +270,3 @@ TEST_P(Stock_AssistantTest, DoesStock_Assistant)
     EXPECT_EQ (xaccAccountGetBalance (fees_account).num, 4478);
     EXPECT_EQ (xaccAccountGetBalance (cash_account).num, 1663049);
 }
-
-#ifndef INSTANTIATE_TEST_SUITE_P
-// Silence "no previous declaration for" (treated as error due to -Werror) when building with GoogleTest < 1.8.1
-static testing::internal::ParamGenerator<TestCase*>
-gtest_InstantiationStock_AssistantTestStock_AssistantTest_EvalGenerator_();
-static std::string gtest_InstantiationStock_AssistantTestStock_AssistantTest_EvalGenerateName_(const testing::TestParamInfo<TestCase*>&);
-
-INSTANTIATE_TEST_CASE_P(
-#else // INSTANTIATE_TEST_SUITE_P
-INSTANTIATE_TEST_SUITE_P(
-#endif // INSTANTIATE_TEST_SUITE_P
-    InstantiationStock_AssistantTest,
-    Stock_AssistantTest,
-    ::testing::Values(
-        &easyTestCase
-    )
-);
