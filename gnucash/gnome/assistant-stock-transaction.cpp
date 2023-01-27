@@ -413,13 +413,99 @@ struct StockTransactionSplitInfo
     gnc_numeric m_value_numeric = gnc_numeric_create (1, 0); // invalid gnc_numerics
     gnc_numeric m_units_numeric = gnc_numeric_create (1, 0);
 
+    static const char* s_missing_str;
+
     StockTransactionSplitInfo () { DEBUG ("StockTransactionSplitInfo constructor\n"); };
     StockTransactionSplitInfo (Account *acct, gnc_numeric val)
         : m_account_str{xaccAccountGetName (acct)} , m_account{acct} , m_value_numeric{val}
     { DEBUG ("StockTransactionSplitInfo constructor\n"); }
+    StockTransactionSplitInfo(gnc_numeric& debit, gnc_numeric& credit, StringVec& errors,
+                              FieldMask splitfield, Account *acct, const char *memo,
+                              gnc_numeric amount, const char* page, GNCPrintAmountInfo curr_pinfo);
     ~StockTransactionSplitInfo () { DEBUG ("StockTransactionSplitInfo destructor\n"); }
     void create_split(Transaction *trans, AccountVec &account_commits);
 };
+
+// Translators: (missing) denotes that the amount or account is
+// not provided, or incorrect, in the Stock Transaction Assistant.
+const char* StockTransactionSplitInfo::s_missing_str = N_("(missing)");
+
+StockTransactionSplitInfo::StockTransactionSplitInfo (gnc_numeric& debit, gnc_numeric& credit,
+                                                      StringVec& errors, FieldMask splitfield,
+                                                      Account *acct, const char *memo,
+                                                      gnc_numeric amount, const char* page,
+                                                      GNCPrintAmountInfo curr_pinfo) :
+    m_debit_side{splitfield & FieldMask::ENABLED_DEBIT},
+    m_account_str{acct ? xaccAccountGetName (acct) : ""},
+    m_memo_str{memo ? memo : ""},
+    m_action_str{page ? page : ""},
+    m_value_str{gnc_numeric_check(amount) ? "" : xaccPrintAmount (amount, curr_pinfo)},
+    m_account{acct}
+
+{
+    auto add_error = [&errors](const char* format_str, const char* arg)
+    {
+        gchar *buf = g_strdup_printf (_(format_str),
+                                      g_dpgettext2 (nullptr, "Stock Assistant: Page name", arg));
+        errors.emplace_back (buf);
+        g_free (buf);
+    };
+
+    DEBUG ("page=%s, amount=%s", page, gnc_num_dbg_to_string (amount));
+    if (memo)
+        m_memo_str = memo;
+    m_debit_side = (splitfield & FieldMask::ENABLED_DEBIT);
+    if (page)
+        m_action_str = page;
+
+    if (gnc_numeric_check (amount))
+    {
+        if (splitfield & FieldMask::ALLOW_ZERO)
+            // m_value_numeric contains an invalid gnc_numeric
+            m_value_str = "";
+        else
+        {
+            add_error (N_("Amount for %s is missing."), page);
+            m_value_str = _(s_missing_str);
+        }
+    }
+    else
+    {
+        if (!(splitfield & FieldMask::ALLOW_NEGATIVE))
+        {
+            if ((splitfield & FieldMask::ALLOW_ZERO) && gnc_numeric_negative_p (amount))
+                add_error (N_("Amount for %s must not be negative."), page);
+            else if (!(splitfield & FieldMask::ALLOW_ZERO) && !gnc_numeric_positive_p (amount))
+                add_error (N_("Amount for %s must be positive."), page);
+        }
+        if (gnc_numeric_negative_p (amount))
+        {
+            amount = gnc_numeric_neg (amount);
+            m_debit_side = !m_debit_side;
+        }
+        if (m_debit_side)
+            debit = gnc_numeric_add_fixed (debit, amount);
+        else
+            credit = gnc_numeric_add_fixed (credit, amount);
+        m_units_numeric = m_debit_side ? amount : gnc_numeric_neg (amount);
+        m_value_numeric = m_debit_side ? amount : gnc_numeric_neg (amount);
+        m_value_str = xaccPrintAmount (amount, curr_pinfo);
+    }
+
+    if (acct)
+    {
+        m_account = acct;
+        m_account_str = xaccAccountGetName (acct);
+    }
+    else if ((splitfield & FieldMask::ALLOW_ZERO) &&
+             (gnc_numeric_check (amount) || gnc_numeric_zero_p (amount)))
+        m_account_str = "";
+    else
+    {
+        add_error (N_("Account for %s is missing."), page);
+        m_account_str = _(s_missing_str);
+    }
+}
 
 void
 StockTransactionSplitInfo::create_split(Transaction *trans, AccountVec &account_commits) {
@@ -444,80 +530,6 @@ StockTransactionSplitInfo::create_split(Transaction *trans, AccountVec &account_
   gnc_set_num_action(nullptr, split, nullptr,
                      g_dpgettext2(nullptr, "Stock Assistant: Action field",
                                   m_action_str.c_str()));
-}
-
-static StockTransactionSplitInfo
-check_page (gnc_numeric& debit, gnc_numeric& credit, StringVec& errors,
-            FieldMask splitfield, Account *acct, const char *memo,
-            gnc_numeric amount, const char* page, GNCPrintAmountInfo curr_pinfo)
-{
-    // Translators: (missing) denotes that the amount or account is
-    // not provided, or incorrect, in the Stock Transaction Assistant.
-    const char* missing_str = N_("(missing)");
-    auto line = StockTransactionSplitInfo ();
-    auto add_error = [&errors](const char* format_str, const char* arg)
-    {
-        gchar *buf = g_strdup_printf (_(format_str),
-                                      g_dpgettext2 (nullptr, "Stock Assistant: Page name", arg));
-        errors.emplace_back (buf);
-        g_free (buf);
-    };
-
-    DEBUG ("page=%s, amount=%s", page, gnc_num_dbg_to_string (amount));
-    if (memo)
-        line.m_memo_str = memo;
-    line.m_debit_side = (splitfield & FieldMask::ENABLED_DEBIT);
-    if (page)
-        line.m_action_str = page;
-
-    if (gnc_numeric_check (amount))
-    {
-        if (splitfield & FieldMask::ALLOW_ZERO)
-            // line.value_numeric contains an invalid gnc_numeric
-            line.m_value_str = "";
-        else
-        {
-            add_error (N_("Amount for %s is missing."), page);
-            line.m_value_str = _(missing_str);
-        }
-    }
-    else
-    {
-        if (!(splitfield & FieldMask::ALLOW_NEGATIVE))
-        {
-            if ((splitfield & FieldMask::ALLOW_ZERO) && gnc_numeric_negative_p (amount))
-                add_error (N_("Amount for %s must not be negative."), page);
-            else if (!(splitfield & FieldMask::ALLOW_ZERO) && !gnc_numeric_positive_p (amount))
-                add_error (N_("Amount for %s must be positive."), page);
-        }
-        if (gnc_numeric_negative_p (amount))
-        {
-            amount = gnc_numeric_neg (amount);
-            line.m_debit_side = !line.m_debit_side;
-        }
-        if (line.m_debit_side)
-            debit = gnc_numeric_add_fixed (debit, amount);
-        else
-            credit = gnc_numeric_add_fixed (credit, amount);
-        line.m_units_numeric = line.m_debit_side ? amount : gnc_numeric_neg (amount);
-        line.m_value_numeric = line.m_debit_side ? amount : gnc_numeric_neg (amount);
-        line.m_value_str = xaccPrintAmount (amount, curr_pinfo);
-    }
-
-    if (acct)
-    {
-        line.m_account = acct;
-        line.m_account_str = xaccAccountGetName (acct);
-    }
-    else if ((splitfield & FieldMask::ALLOW_ZERO) &&
-             (gnc_numeric_check (amount) || gnc_numeric_zero_p (amount)))
-        line.m_account_str = "";
-    else
-    {
-        add_error (N_("Account for %s is missing."), page);
-        line.m_account_str = _(missing_str);
-    }
-    return line;
 }
 
 using SplitInfoVec = std::vector<StockTransactionSplitInfo>;
@@ -704,10 +716,10 @@ to ensure proper recording."), new_date_str, last_split_date_str);
         if (!this->stock_value_enabled)
             line = StockTransactionSplitInfo (this->acct, gnc_numeric_zero());
         else
-            line = check_page (debit, credit, errors, this->txn_type->stock_value,
-                               this->acct, this->stock_memo, this->stock_value,
-                               NC_ ("Stock Assistant: Page name", "stock value"),
-                               this->curr_pinfo);
+            line = StockTransactionSplitInfo(debit, credit, errors, this->txn_type->stock_value,
+                                             this->acct, this->stock_memo, this->stock_value,
+                                             NC_ ("Stock Assistant: Page name", "stock value"),
+                                             this->curr_pinfo);
 
 
         if (!this->stock_amount_enabled)
@@ -774,20 +786,20 @@ to ensure proper recording."), new_date_str, last_split_date_str);
 
         if (this->cash_enabled)
         {
-            line = check_page (debit, credit, errors, this->txn_type->cash_value,
-                               this->cash_account, this->cash_memo, this->cash_value,
-                               NC_ ("Stock Assistant: Page name", "cash"),
-                               this->curr_pinfo);
+            line = StockTransactionSplitInfo (debit, credit, errors, this->txn_type->cash_value,
+                                              this->cash_account, this->cash_memo, this->cash_value,
+                                              NC_ ("Stock Assistant: Page name", "cash"),
+                                              this->curr_pinfo);
             this->list_of_splits.push_back (std::move (line));
         }
 
         if (this->fees_enabled)
         {
-            line = check_page (debit, credit, errors, this->txn_type->fees_value,
-                               this->fees_capitalize ? this->acct : this->fees_account,
-                               this->fees_memo, this->fees_value,
-                               NC_ ("Stock Assistant: Page name", "fees"),
-                               this->curr_pinfo);
+            line = StockTransactionSplitInfo (debit, credit, errors, this->txn_type->fees_value,
+                                              this->fees_capitalize ? this->acct : this->fees_account,
+                                              this->fees_memo, this->fees_value,
+                                              NC_ ("Stock Assistant: Page name", "fees"),
+                                              this->curr_pinfo);
             if (this->fees_capitalize)
                 line.m_units_numeric = gnc_numeric_zero();
             this->list_of_splits.push_back (std::move (line));
@@ -795,11 +807,11 @@ to ensure proper recording."), new_date_str, last_split_date_str);
 
         if (this->dividend_enabled)
         {
-            line = check_page (debit, credit, errors, this->txn_type->dividend_value,
-                               this->dividend_account, this->dividend_memo,
-                               this->dividend_value,
-                               NC_ ("Stock Assistant: Page name", "dividend"),
-                               this->curr_pinfo);
+            line = StockTransactionSplitInfo (debit, credit, errors, this->txn_type->dividend_value,
+                                              this->dividend_account, this->dividend_memo,
+                                              this->dividend_value,
+                                              NC_ ("Stock Assistant: Page name", "dividend"),
+                                              this->curr_pinfo);
             this->list_of_splits.push_back (std::move (line));
         }
 
@@ -811,20 +823,20 @@ to ensure proper recording."), new_date_str, last_split_date_str);
         {
             if (this->txn_type->capgains_value & FieldMask::CAPGAINS_IN_STOCK)
             {
-                line = check_page (debit, credit, errors, this->txn_type->capgains_value ^
-                                   (FieldMask::ENABLED_CREDIT | FieldMask::ENABLED_DEBIT),
-                                   this->acct, this->capgains_memo, this->capgains_value,
-                                   NC_ ("Stock Assistant: Page name", "capital gains"),
+                line = StockTransactionSplitInfo (debit, credit, errors, this->txn_type->capgains_value ^
+                                                  (FieldMask::ENABLED_CREDIT | FieldMask::ENABLED_DEBIT),
+                                                  this->acct, this->capgains_memo, this->capgains_value,
+                                                  NC_ ("Stock Assistant: Page name", "capital gains"),
                                    this->curr_pinfo);
                 line.m_units_numeric = gnc_numeric_zero();
                 this->list_of_splits.push_back (std::move (line));
             }
 
-            line = check_page (debit, credit, errors, this->txn_type->capgains_value,
-                               this->capgains_account, this->capgains_memo,
-                               this->capgains_value,
-                               NC_ ("Stock Assistant: Page name", "capital gains"),
-                               this->curr_pinfo);
+            line = StockTransactionSplitInfo(debit, credit, errors, this->txn_type->capgains_value,
+                                             this->capgains_account, this->capgains_memo,
+                                             this->capgains_value,
+                                             NC_ ("Stock Assistant: Page name", "capital gains"),
+                                             this->curr_pinfo);
             this->list_of_splits.push_back (std::move (line));
         }
 
