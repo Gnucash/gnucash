@@ -137,6 +137,10 @@
   PyObject *tp;
   struct tm t;
 
+  // SWIG 4.02 (maybe others?) generates a redundant variable "time64 secs20"
+  // This line avoids the unused-variable warning
+  (void) secs;
+
   // directly access return value (result) of function
   // only return datetime if TRUE
   if(result) {
