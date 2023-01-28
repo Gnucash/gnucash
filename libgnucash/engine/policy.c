@@ -202,42 +202,5 @@ xaccGetFIFOPolicy (void)
     return pcy;
 }
 
-static GNCLot *
-LIFOPolicyGetLot (GNCPolicy *pcy, Split *split)
-{
-    if (!split) return NULL;
-    return xaccAccountFindLatestOpenLot (split->acc, split->amount,
-                                         split->parent->common_currency);
-}
-
-static Split *
-LIFOPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot)
-{
-    return DirectionPolicyGetSplit (pcy, lot, 1);
-}
-
-/* This routine is actually identical to FIFO... */
-static void
-LIFOPolicyGetLotOpening (GNCPolicy *pcy,
-                         GNCLot *lot,
-                         gnc_numeric *ret_amount, gnc_numeric *ret_value,
-                         gnc_commodity **ret_currency)
-{
-    Split *opening_split;
-    opening_split = gnc_lot_get_earliest_split(lot);
-
-    if (ret_amount) *ret_amount = opening_split->amount;
-    if (ret_value) *ret_value = opening_split->value;
-    if (ret_currency) *ret_currency = opening_split->parent->common_currency;
-}
-
-/* This routine is actually identical to FIFO... */
-static gboolean
-LIFOPolicyIsOpeningSplit (GNCPolicy *pcy, GNCLot *lot, Split *split)
-{
-    Split *opening_split;
-    opening_split = gnc_lot_get_earliest_split(lot);
-    return (split == opening_split);
-}
 
 /* =========================== END OF FILE ======================= */

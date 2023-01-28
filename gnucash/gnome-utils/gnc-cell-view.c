@@ -30,8 +30,6 @@
 static void     gnc_cell_view_init          (GncCellView          *cv);
 static void     gnc_cell_view_class_init    (GncCellViewClass     *klass);
 static void     gnc_cell_view_editable_init (GtkCellEditableIface *iface);
-static gboolean gcv_key_press_event         (GtkWidget            *box,
-                                             GdkEventKey          *key_event);
 
 static void     gnc_cell_view_set_property  (GObject              *object,
                                              guint                 param_id,

@@ -1700,34 +1700,6 @@ create_option_widget<GncOptionUIType::DATE_FORMAT> (GncOption& option,
 }
 
 static void
-gnc_plot_size_option_set_select_method(GncOption& option, bool set_buttons)
-{
-    GList* widget_list;
-    GtkWidget *px_widget, *p_widget;
-    GtkWidget *widget;
-
-    widget = option_get_gtk_widget(&option);
-
-    widget_list = gtk_container_get_children(GTK_CONTAINER(widget));
-    // px_button item 0
-    px_widget = static_cast<decltype(px_widget)>(g_list_nth_data(widget_list, 1));
-    // p_button item 2
-    p_widget = static_cast<decltype(p_widget)>(g_list_nth_data(widget_list, 3));
-    g_list_free(widget_list);
-
-    if (set_buttons)
-    {
-        gtk_widget_set_sensitive(px_widget, TRUE);
-        gtk_widget_set_sensitive(p_widget, FALSE);
-    }
-    else
-    {
-        gtk_widget_set_sensitive(p_widget, TRUE);
-        gtk_widget_set_sensitive(px_widget, FALSE);
-    }
-}
-
-static void
 gnc_rd_option_px_set_cb(GtkWidget *widget, GncOption* option)
 {
     option->set_alternate(true);

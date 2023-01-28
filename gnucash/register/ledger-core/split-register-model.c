@@ -507,15 +507,6 @@ gnc_split_register_get_fcredit_label (VirtualLocation virt_loc,
 }
 
 
-static char*
-gnc_split_register_get_default_tooltip (VirtualLocation virt_loc,
-                                        gpointer user_data)
-{
-    SplitRegister* reg = user_data;
-    const char* tooltip = gnc_table_get_entry (reg->table, virt_loc);
-
-    return g_strdup (tooltip);
-}
 
 static char*
 gnc_split_register_get_recn_tooltip (VirtualLocation virt_loc,
@@ -2706,8 +2697,6 @@ gnc_split_register_model_new (void)
                                        RBALN_CELL);
 
     // tooltip handlers
-//    gnc_table_model_set_default_tooltip_handler(
-//        model, gnc_split_register_get_default_tooltip);
 
     gnc_table_model_set_tooltip_handler (model,
                                          gnc_split_register_get_recn_tooltip,

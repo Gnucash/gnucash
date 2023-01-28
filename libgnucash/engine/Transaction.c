@@ -2060,25 +2060,6 @@ xaccTransSetDateEnteredSecs (Transaction *trans, time64 secs)
     xaccTransSetDateInternal(trans, &trans->date_entered, secs);
 }
 
-static void
-qofTransSetDatePosted (Transaction *trans, time64 time)
-{
-    if (!trans) return;
-    if (!qof_begin_edit(&trans->inst)) return;
-    xaccTransSetDateInternal(trans, &trans->date_posted, time);
-    set_gains_date_dirty(trans);
-    qof_commit_edit(&trans->inst);
-}
-
-static void
-qofTransSetDateEntered (Transaction *trans, time64 time)
-{
-    if (!trans) return;
-    if (!qof_begin_edit(&trans->inst)) return;
-    xaccTransSetDateInternal(trans, &trans->date_entered, time);
-    qof_commit_edit(&trans->inst);
-}
-
 void
 xaccTransSetDate (Transaction *trans, int day, int mon, int year)
 {

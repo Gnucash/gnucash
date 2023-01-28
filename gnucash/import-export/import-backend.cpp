@@ -742,26 +742,6 @@ void split_find_match (GNCImportTransInfo * trans_info,
 /***********************************************************************
  */
 
-/* append the imported transaction description to the matched transaction description */
-static void
-desc_append (Transaction* selected_match_trans, gchar *new_desc)
-{
-    auto curr_desc = xaccTransGetDescription (selected_match_trans);
-    auto tmp = g_strconcat(curr_desc, "|", new_desc, nullptr);
-    xaccTransSetDescription (selected_match_trans, tmp);
-    g_free (tmp);
-}
-
-/* append the imported transaction notes to the matched transaction notes */
-static void
-notes_append (Transaction* selected_match_trans, gchar* new_notes)
-{
-    auto curr_notes = xaccTransGetNotes (selected_match_trans);
-    auto tmp = g_strconcat (curr_notes, "|", new_notes, nullptr);
-    xaccTransSetNotes (selected_match_trans, tmp );
-    g_free (tmp);
-}
-
 static char*
 maybe_append_string (const char* match_string, const char* imp_string)
 {
@@ -1003,44 +983,6 @@ gnc_import_process_trans_item (Account *base_acc,
     }
     /*DEBUG("End");*/
     return false;
-}
-
-/********************************************************************\
- * check_trans_online_id() Callback function used by
- * gnc_import_exists_online_id.  Takes pointers to transaction and split,
- * returns 0 if their online_ids  do NOT match, or if the split
- * belongs to the transaction
-\********************************************************************/
-static gint check_trans_online_id(Transaction *trans1, void *user_data)
-{
-    gchar *online_id1, *online_id2;
-    gint retval;
-
-    auto split2 = static_cast<Split*>(user_data);
-    auto account = xaccSplitGetAccount(split2);
-    auto split1 = xaccTransFindSplitByAccount(trans1, account);
-    if (split1 == split2)
-        return 0;
-
-    /* hack - we really want to iterate over the _splits_ of the account
-       instead of the transactions */
-    g_assert(split1);
-
-    online_id1 = gnc_import_get_split_online_id (split1);
-
-    if (!online_id1 || !*online_id1)
-    {
-        g_free (online_id1);
-        online_id1 = gnc_import_get_trans_online_id (trans1);
-    }
-
-    online_id2 = gnc_import_get_split_online_id(split2);
-
-    retval = (!online_id1 || !online_id2 || strcmp (online_id1, online_id2)) ? 0 : 1;
-
-    g_free (online_id1);
-    g_free (online_id2);
-    return retval;
 }
 
 static GHashTable*

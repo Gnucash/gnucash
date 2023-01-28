@@ -57,17 +57,6 @@ typedef struct
     const char* online_id;
 } AccountOnlineMatch;
 
-static Account*
-partial_match_if_valid (AccountOnlineMatch *match)
-{
-    if (match->partial_match && match->count == 1)
-        return match->partial_match;
-    else
-        PERR("Online ID %s partially matches %d accounts and fully matches none",
-             match->online_id, match->count);
-    return NULL;
-}
-
 /*-******************************************************************\
  * Functions needed by gnc_import_select_account
  *

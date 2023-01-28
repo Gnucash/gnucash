@@ -731,13 +731,6 @@ gnc_payment_dialog_remember_account (PaymentWindow *pw, Account *acc)
 
 
 static void
-gnc_payment_set_owner (PaymentWindow *pw, GncOwner *owner)
-{
-    gnc_owner_set_owner (pw->owner_choice, owner);
-    gnc_payment_dialog_owner_changed(pw);
-}
-
-static void
 gnc_payment_update_style_classes (PaymentWindow *pw)
 {
     GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(pw->dialog));

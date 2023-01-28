@@ -146,19 +146,6 @@ gnucash_sheet_set_position (GnucashSheet* sheet, int pos)
 }
 
 static inline void
-gnucash_sheet_get_selection (GnucashSheet *sheet, int *start, int *end)
-{
-    *start = sheet->pos;
-    *end = sheet->bound;
-}
-
-static inline void
-gnucash_sheet_clear_selection (GnucashSheet *sheet)
-{
-    gnucash_sheet_set_selection (sheet, sheet->pos, sheet->pos);
-}
-
-static inline void
 gnucash_sheet_set_entry_value (GnucashSheet *sheet, const char* value)
 {
     g_signal_handler_block (G_OBJECT(sheet->entry),

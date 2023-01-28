@@ -75,11 +75,6 @@ static void dialog_reset_cb(GtkWidget * w, gpointer data);
 static void dialog_list_select_cb (GtkTreeSelection *selection, gpointer data);
 static void component_close_handler (gpointer data);
 
-static void
-section_reset_widgets(GncOptionSection* section)
-{
-}
-
 static inline GtkWidget* const
 option_get_gtk_widget (const GncOption* option)
 {
@@ -647,12 +642,6 @@ void
 GncOptionsDialog::set_book_help_cb() noexcept
 {
     set_help_cb((GncOptionsDialogCallback)gnc_book_options_help_cb, nullptr);
-}
-
-static void
-gnc_global_options_help_cb (GncOptionsDialog *win, gpointer dat)
-{
-    gnc_gnome_help (GTK_WINDOW(win->get_widget()), DF_MANUAL, DL_GLOBPREFS);
 }
 
 static void

@@ -1524,16 +1524,6 @@ opening_equity_cb (GtkWidget *w, gpointer data)
     gtk_widget_set_sensitive (aw->transfer_account_scroll, !use_equity);
 }
 
-static void
-gnc_name_entry_realize (GtkWidget *widget, gpointer user_data)
-{
-    GtkWidget *commodity_box = user_data;
-    GtkAllocation alloc;
-
-    gtk_widget_get_allocation (widget, &alloc);
-    gtk_widget_set_size_request (commodity_box, -1, alloc.height);
-}
-
 /********************************************************************\
  * gnc_account_window_create                                        *
  *   creates a window to create a new account.                      *

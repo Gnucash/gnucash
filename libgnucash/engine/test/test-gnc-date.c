@@ -61,18 +61,6 @@ typedef struct
     time64 t5;
 } FixtureA;
 
-static int
-offset_secs (TZOffset tz)
-{
-    return 3600 * tz.hours + 60 * tz.minutes;
-}
-
-static char*
-offset_string (TZOffset tz)
-{
-    return g_strdup_printf("%+02d%02d", tz.hours, tz.minutes);
-}
-
 static void setup (FixtureA *f, gconstpointer pData)
 {
     f->t0 = gnc_time(NULL);
@@ -1348,15 +1336,6 @@ test_gnc_date_timestamp (void)
 
     g_free (timestr);
 }
-/* gnc_iso8601_to_time64_gmt
-time64
-gnc_iso8601_to_time64_gmt(const char *str)// C: 6 in 3  Local: 0:0:0
-*/
-static gint
-get_nanoseconds (GDateTime *gdt)
-{
-    return g_date_time_get_microsecond (gdt) * 1000;
-}
 
 static void
 test_gnc_iso8601_to_time64_gmt (FixtureA *f, gconstpointer pData)
@@ -1382,18 +1361,6 @@ test_gnc_iso8601_to_time64_gmt (FixtureA *f, gconstpointer pData)
     t = gnc_iso8601_to_time64_gmt ("2061-01-25 23:21:19.0 -05:00");
     g_assert_cmpint (t, ==, f->t5);
 }
-/* gnc_time64_to_iso8601_buff
-char *
-gnc_time64_to_iso8601_buff (time64 t, char * buff)// C: 18 in 7  Local: 0:0:0
-*/
-static time64
-g_date_time_to_time64 (GDateTime *gdt)
-{
-    time64 t;
-    t = g_date_time_to_unix (gdt);
-    return t;
-}
-
 #define ISO8601_SIZE MAX_DATE_LENGTH + 4
 static gchar*
 format_timestring (time64 t, TZOffset tz)
@@ -1534,22 +1501,6 @@ test_gnc_dmy2time64_end (FixtureB *f, gconstpointer pData)
             g_assert_cmpint (r_t, ==, f->test[i].secs - offset);
     }
     g_log_set_default_handler (hdlr, 0);
-}
-
-static GDateTime*
-offset_adjust(GDateTime *gdt)
-{
-     Testfuncs *tf = gnc_date_load_funcs();
-     GTimeZone *zone = tf->timezone_new_local();
-     int interval = g_time_zone_find_interval(zone, G_TIME_TYPE_STANDARD,
-					      g_date_time_to_unix(gdt));
-     int offset = g_time_zone_get_offset(zone, interval) / 60;
-     int off_hr = (offset / 60) + (offset % 60 ? (offset < 0 ? -1 : 1) : 0);
-     int correction = off_hr < -10 ? -10 - off_hr : off_hr > 13 ? 13 - off_hr : 0;
-     GDateTime* new_gdt = g_date_time_add_hours(gdt, correction);
-     g_date_time_unref(gdt);
-     g_slice_free(Testfuncs, tf);
-     return new_gdt;
 }
 
 /*gnc_dmy2time64_neutral*/

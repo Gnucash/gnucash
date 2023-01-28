@@ -651,33 +651,6 @@ on_matcher_help_clicked (GtkButton *button, gpointer user_data)
 }
 
 static void
-run_account_picker_dialog (GNCImportMainMatcher *info,
-                           GtkTreeModel *model,
-                           GtkTreeIter *iter,
-                           GNCImportTransInfo *trans_info)
-{
-    g_assert (trans_info);
-
-    Account *old_acc = gnc_import_TransInfo_get_destacc (trans_info);
-
-    gboolean ok_pressed;
-    Account *new_acc = gnc_import_select_account (
-             info->main_widget,
-             NULL,
-             true,
-             _("Destination account for the auto-balance split."),
-             xaccTransGetCurrency (gnc_import_TransInfo_get_trans (trans_info)),
-             ACCT_TYPE_NONE,
-             old_acc,
-             &ok_pressed);
-    if (ok_pressed)
-    {
-        gnc_import_TransInfo_set_destacc (trans_info, new_acc, true);
-        defer_bal_computation (info, new_acc);
-    }
-}
-
-static void
 run_match_dialog (GNCImportMainMatcher *info,
                   GNCImportTransInfo *trans_info)
 {

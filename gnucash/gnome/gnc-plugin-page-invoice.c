@@ -87,7 +87,6 @@ static void gnc_plugin_page_invoice_cmd_pay_invoice (GSimpleAction *simple, GVar
 static void gnc_plugin_page_invoice_cmd_save_layout (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_plugin_page_invoice_cmd_reset_layout (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_plugin_page_invoice_cmd_link (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
-static void gnc_plugin_page_invoice_cmd_link_remove (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_plugin_page_invoice_cmd_link_open (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_plugin_page_invoice_cmd_company_report (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_plugin_page_invoice_cmd_entryUp (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
@@ -1308,34 +1307,6 @@ gnc_plugin_page_invoice_cmd_link (GSimpleAction *simple,
     update_doclink_actions (GNC_PLUGIN_PAGE(plugin_page), has_uri);
 
     g_free (ret_uri);
-    LEAVE(" ");
-}
-
-static void
-gnc_plugin_page_invoice_cmd_link_remove (GSimpleAction *simple,
-                                         GVariant *paramter,
-                                         gpointer user_data)
-{
-    GncPluginPageInvoice *plugin_page = user_data;
-    GncPluginPageInvoicePrivate *priv;
-    GncInvoice *invoice;
-    GtkWidget *doclink_button;
-
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
-    ENTER("(action %p, plugin_page %p)", simple, plugin_page);
-    priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
-
-    invoice = gnc_invoice_window_get_invoice (priv->iw);
-    gncInvoiceSetDocLink (invoice, "");
-
-    doclink_button = gnc_invoice_window_get_doclink_button (priv->iw);
-
-    if (doclink_button)
-        gtk_widget_hide (GTK_WIDGET(doclink_button));
-
-    // update the menu actions
-    update_doclink_actions (GNC_PLUGIN_PAGE(plugin_page), FALSE);
-
     LEAVE(" ");
 }
 
