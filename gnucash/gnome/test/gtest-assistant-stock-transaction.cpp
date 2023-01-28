@@ -166,22 +166,22 @@ StockAssistantTest::StockAssistantTest() :
 void
 StockAssistantTest::instantiate_model(StockAssistantModel &model, const ASTTestCase &t)
 {
-    model.transaction_date = gnc_dmy2time64 (t.dd, t.mm, t.yy);
+    model.m_transaction_date = gnc_dmy2time64 (t.dd, t.mm, t.yy);
     model.maybe_reset_txn_types ();
 
     model.set_txn_type (t.type_idx);
-    model.transaction_description = t.desc;
-    model.stock_amount = gnc_numeric_create (t.stock_amt * 100, 100);
-    model.stock_value = gnc_numeric_create (t.stock_val, 100);
-    model.cash_value = gnc_numeric_create (t.cash_val, 100);
-    model.cash_account = cash_account;
-    model.fees_account = fees_account;
-    model.fees_capitalize = t.capitalize;
-    model.fees_value = gnc_numeric_create (t.fees_val, 100);
-    model.capgains_account = capgains_account;
-    model.capgains_value = gnc_numeric_create (t.capg_val, 100);
-    model.dividend_account = dividend_account;
-    model.dividend_value = gnc_numeric_create (t.divi_val, 100);
+    model.m_transaction_description = t.desc;
+    model.m_stock_amount = gnc_numeric_create (t.stock_amt * 100, 100);
+    model.m_stock_value = gnc_numeric_create (t.stock_val, 100);
+    model.m_cash_value = gnc_numeric_create (t.cash_val, 100);
+    model.m_cash_account = cash_account;
+    model.m_fees_account = fees_account;
+    model.m_fees_capitalize = t.capitalize;
+    model.m_fees_value = gnc_numeric_create (t.fees_val, 100);
+    model.m_capgains_account = capgains_account;
+    model.m_capgains_value = gnc_numeric_create (t.capg_val, 100);
+    model.m_dividend_account = dividend_account;
+    model.m_dividend_value = gnc_numeric_create (t.divi_val, 100);
 }
 
 class StockAssistantTestParameterized :
@@ -202,7 +202,7 @@ protected:
 TEST_F(StockAssistantTest, testFailureModes)
 {
     StockAssistantModel model (stock_account);
-    model.transaction_date = gnc_dmy2time64 (1, 1, 2022);
+    model.m_transaction_date = gnc_dmy2time64 (1, 1, 2022);
 
     // resetting txn_types will work the first time
     EXPECT_TRUE (model.maybe_reset_txn_types ());
@@ -211,7 +211,7 @@ TEST_F(StockAssistantTest, testFailureModes)
     EXPECT_FALSE (model.maybe_reset_txn_types ());
 
     // set transaction-date to a different date.
-    model.transaction_date = gnc_dmy2time64 (1, 2, 2022);
+    model.m_transaction_date = gnc_dmy2time64 (1, 2, 2022);
 
     // resetting txn_types will now work.
     EXPECT_TRUE (model.maybe_reset_txn_types ());
