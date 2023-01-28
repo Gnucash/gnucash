@@ -1002,7 +1002,7 @@ query instead.")
     (match splits
       (() (vector invoices opposing-splits overpayment))
       (((? not-APAR? split) . rest)
-       (lp rest invoices (+ overpayment (xaccSplitGetAmount split))
+       (lp rest invoices (+ overpayment (xaccSplitGetValue split))
            opposing-splits))
       ((split . rest)
        (let* ((lot (xaccSplitGetLot split))
@@ -1017,13 +1017,13 @@ query instead.")
                    (((? split=?) . tail) (lp1 tail overpayment opposing-splits))
                    ((s . tail)
                     (let* ((lot-bal (gnc-lot-get-balance lot))
-                           (lot-bal (if (sign-equal? lot-bal (xaccSplitGetAmount s))
+                           (lot-bal (if (sign-equal? lot-bal (xaccSplitGetValue s))
                                         0 lot-bal))
                            (derived? (not (zero? lot-bal)))
                            (partial-amount
                             (fold
                              (lambda (a b)
-                               (if (equal? s a) b (+ b (xaccSplitGetAmount a))))
+                               (if (equal? s a) b (+ b (xaccSplitGetValue a))))
                              (- lot-bal) lot-all-splits)))
                       (lp1 tail (+ overpayment partial-amount)
                            (cons (list s partial-amount derived?)
@@ -1031,7 +1031,7 @@ query instead.")
            (inv
             (lp rest
                 (cons (cons inv split) invoices)
-                (+ overpayment (xaccSplitGetAmount split))
+                (+ overpayment (xaccSplitGetValue split))
                 opposing-splits))))))))
 
 ;; create a stepped list, then add a date in the infinite future for
@@ -1067,7 +1067,7 @@ query instead.")
                (bal (fold
                      (lambda (a b)
                        (if (<= (xaccTransGetDate (xaccSplitGetParent a)) to-date)
-                           (+ (xaccSplitGetAmount a) b)
+                           (+ (xaccSplitGetValue a) b)
                            b))
                      0 lot-splits))
                (bal (if receivable? bal (- bal)))
