@@ -1161,7 +1161,7 @@ next_builder( state *s, feature *tuple, ub1 n)
     return FALSE;
   else if (tuple[i].f < s->dim[tuple[i].d]-1) {
     ++tuple[i].f;                                       /* increment feature */
-    for (i; i<n-1; ++i) {            /* reset all less significant positions */
+    for (; i<n-1; ++i) {            /* reset all less significant positions */
       tuple[i+1].d = tuple[i].d+1;
       tuple[i+1].f = 0;
     }
@@ -1169,7 +1169,7 @@ next_builder( state *s, feature *tuple, ub1 n)
   else {
     ++tuple[i].d;      /* increment least significant non-maxed-out position */
     tuple[i].f = (ub2)0;                                /* reset its feature */
-    for (i; i<n-1; ++i) {            /* reset all less significant positions */
+    for (; i<n-1; ++i) {            /* reset all less significant positions */
       tuple[i+1].d = tuple[i].d+1;
       tuple[i+1].f = 0;
     }
@@ -1792,7 +1792,7 @@ confirm( state *s)
       break;                                                         /* done */
     else if (offset[i].f < s->dim[offset[i].d]-1) {
       ++offset[i].f;                                    /* increment feature */
-      for (i; i<n-1; ++i) {          /* reset all less significant positions */
+      for (; i<n-1; ++i) {          /* reset all less significant positions */
         offset[i+1].d = offset[i].d+1;
         offset[i+1].f = 0;
       }
@@ -1800,7 +1800,7 @@ confirm( state *s)
     else {
       ++offset[i].d;   /* increment least significant non-maxed-out position */
       offset[i].f = (ub2)0;                             /* reset its feature */
-      for (i; i<n-1; ++i) {          /* reset all less significant positions */
+      for (; i<n-1; ++i) {          /* reset all less significant positions */
         offset[i+1].d = offset[i].d+1;
         offset[i+1].f = 0;
       }
