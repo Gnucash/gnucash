@@ -580,333 +580,33 @@ struct StockAssistantModel
     const gchar* capgains_memo = nullptr;
     gnc_numeric capgains_value = gnc_numeric_create (1, 0);
 
+    StockAssistantModel (Account *account) :
+     acct (account), currency (gnc_account_get_currency_or_parent (account)),
+     curr_pinfo (gnc_commodity_print_info (this->currency, true)),
+     price_pinfo (gnc_price_print_info (this->currency, true)),
+     stock_pinfo (gnc_commodity_print_info (xaccAccountGetCommodity (account), true))
+    {
+        DEBUG ("StockAssistantModel constructor\n");
+    };
+
+    ~StockAssistantModel()
+    {
+        DEBUG ("StockAssistantModel destructor\n");
+    };
+
     // consider reset txn_types. return false if txn_types are still
     // current (i.e. transaction_date hasn't changed).
-    bool maybe_reset_txn_types ()
-    {
-        auto new_bal = xaccAccountGetBalanceAsOfDate
-            (this->acct, gnc_time64_get_day_end (this->transaction_date));
-        if (this->txn_types_date && this->txn_types_date == this->transaction_date &&
-            gnc_numeric_equal (this->balance_at_date, new_bal))
-            return false;
-        this->balance_at_date = new_bal;
-        this->txn_types_date = this->transaction_date;
-        this->txn_types = gnc_numeric_zero_p (this->balance_at_date) ? starting_types
-            : gnc_numeric_positive_p (this->balance_at_date) ? long_types
-            : short_types;
-        return true;
-    };
-
-    bool set_txn_type (guint type_idx)
-    {
-        if (!this->txn_types_date || this->txn_types_date != this->transaction_date)
-        {
-            PERR ("transaction_date has changed. rerun maybe_reset_txn_types!");
-            return false;
-        }
-        try
-        {
-            this->txn_type = this->txn_types->at (type_idx);
-        }
-        catch (const std::out_of_range&)
-        {
-            PERR ("out of range type_idx=%d", type_idx);
-            return false;
-        }
-        this->input_new_balance = this->txn_type->stock_amount & FieldMask::INPUT_NEW_BALANCE;
-        this->stock_amount_enabled = this->txn_type->stock_amount != FieldMask::DISABLED;
-        this->stock_value_enabled = this->txn_type->stock_value != FieldMask::DISABLED;
-        this->fees_capitalize = this->txn_type->fees_value & FieldMask::CAPITALIZE_DEFAULT;
-        this->fees_enabled = this->txn_type->fees_value != FieldMask::DISABLED;
-        this->capgains_enabled = this->txn_type->capgains_value != FieldMask::DISABLED;
-        this->dividend_enabled = this->txn_type->dividend_value != FieldMask::DISABLED;
-        this->cash_enabled = this->txn_type->cash_value != FieldMask::DISABLED;
-        return true;
-    };
-
+    bool maybe_reset_txn_types ();
+    bool set_txn_type (guint type_idx);
     std::string get_stock_balance_str ()
     {
         return xaccPrintAmount (this->balance_at_date, this->stock_pinfo);
     };
 
-    std::string get_new_amount_str ()
-    {
-        if (gnc_numeric_check (this->stock_amount))
-            return "";
-
-        if (this->input_new_balance)
-        {
-            auto ratio = gnc_numeric_div (this->stock_amount, this->balance_at_date,
-                                          GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
-            if (gnc_numeric_check (ratio) || !gnc_numeric_positive_p (ratio))
-                return "";
-
-            std::ostringstream ret;
-            ret << ratio.num << ':' << ratio.denom;
-            return ret.str();
-        }
-        else
-        {
-            auto amount = (this->txn_type->stock_amount & FieldMask::ENABLED_CREDIT) ?
-                gnc_numeric_neg (this->stock_amount) : this->stock_amount;
-            amount = gnc_numeric_add_fixed (amount, this->balance_at_date);
-            return xaccPrintAmount (amount, stock_pinfo);
-        }
-    };
-
-    std::tuple<bool, gnc_numeric, const char*> calculate_price ()
-    {
-        if (this->input_new_balance ||
-            !this->stock_amount_enabled || gnc_numeric_check (this->stock_amount) ||
-            !this->stock_value_enabled || gnc_numeric_check (this->stock_value) ||
-            gnc_numeric_zero_p (this->stock_amount) ||
-            gnc_numeric_zero_p (this->stock_value))
-            return { false, gnc_numeric_create (1, 0), nullptr };
-
-        auto price = gnc_numeric_div (this->stock_value, this->stock_amount,
-                                      GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
-        return {true, price, xaccPrintAmount (price, this->price_pinfo)};
-    }
-
-
-    std::tuple<bool, std::string, SplitInfoVec> generate_list_of_splits ()
-    {
-        if (!this->txn_types || !this->txn_type)
-            return { false, "Error: txn_type not initialized", {} };
-
-        this->list_of_splits.clear();
-
-        gnc_numeric debit = gnc_numeric_zero ();
-        gnc_numeric credit = gnc_numeric_zero ();
-        StringVec errors, warnings, infos;
-        StockTransactionSplitInfo line;
-        bool negative_in_red = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL,
-                                                   GNC_PREF_NEGATIVE_IN_RED);
-        auto add_error_str = [&errors]
-            (const char* str) { errors.emplace_back (_(str)); };
-
-        // check the stock transaction date. If there are existing stock
-        // transactions dated after the date specified, it is very likely
-        // the later stock transactions will be invalidated. warn the user
-        // to review them.
-        auto last_split_node = g_list_last (xaccAccountGetSplitList (this->acct));
-        if (last_split_node)
-        {
-            auto last_split = static_cast<const Split*> (last_split_node->data);
-            auto last_split_date = xaccTransGetDate (xaccSplitGetParent (last_split));
-            if (this->transaction_date <= last_split_date)
-            {
-                auto last_split_date_str = qof_print_date (last_split_date);
-                auto new_date_str = qof_print_date (this->transaction_date);
-                // Translators: the first %s is the new transaction date;
-                // the second %s is the current stock account's latest
-                // transaction date.
-                auto warn_txt =  g_strdup_printf (_("You will enter a transaction \
-with date %s which is earlier than the latest transaction in this account, \
-dated %s. Doing so may affect the cost basis, and therefore capital gains, \
-of transactions dated after the new entry. Please review all transactions \
-to ensure proper recording."), new_date_str, last_split_date_str);
-                warnings.push_back (warn_txt);
-                g_free (warn_txt);
-                g_free (new_date_str);
-                g_free (last_split_date_str);
-            }
-        }
-
-        if (!this->stock_value_enabled)
-            line = StockTransactionSplitInfo (this->acct, gnc_numeric_zero());
-        else
-            line = StockTransactionSplitInfo(debit, credit, errors, this->txn_type->stock_value,
-                                             this->acct, this->stock_memo, this->stock_value,
-                                             NC_ ("Stock Assistant: Page name", "stock value"),
-                                             this->curr_pinfo);
-
-
-        if (!this->stock_amount_enabled)
-            line.m_units_numeric = gnc_numeric_zero();
-        else if (gnc_numeric_check (this->stock_amount))
-        {
-            line.m_units_str = _("(missing)");
-            line.m_units_numeric = gnc_numeric_zero();
-            add_error_str (N_("Amount for stock units is missing"));
-        }
-        else if (this->input_new_balance)
-        {
-            auto stock_amount = this->stock_amount;
-            auto credit_side = (this->txn_type->stock_amount & FieldMask::ENABLED_CREDIT);
-            auto delta = gnc_numeric_sub_fixed (stock_amount, this->balance_at_date);
-            auto ratio = gnc_numeric_div (stock_amount, this->balance_at_date,
-                                          GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
-            stock_amount = gnc_numeric_sub_fixed (stock_amount, this->balance_at_date);
-            line.m_units_numeric = stock_amount;
-            line.m_units_str = xaccPrintAmount (stock_amount, this->stock_pinfo);
-            line.m_units_in_red = negative_in_red && gnc_numeric_negative_p (stock_amount);
-            if (gnc_numeric_check (ratio) || !gnc_numeric_positive_p (ratio))
-                add_error_str (N_("Invalid stock new balance."));
-            else if (gnc_numeric_negative_p (delta) && !credit_side)
-                add_error_str (N_("New balance must be higher than old balance."));
-            else if (gnc_numeric_positive_p (delta) && credit_side)
-                add_error_str (N_("New balance must be lower than old balance."));
-        }
-        else
-        {
-            auto stock_amount = this->stock_amount;
-            if (!gnc_numeric_positive_p (stock_amount))
-                add_error_str (N_("Stock amount must be positive."));
-            if (this->txn_type->stock_amount & FieldMask::ENABLED_CREDIT)
-                stock_amount = gnc_numeric_neg (stock_amount);
-            line.m_units_numeric = stock_amount;
-            line.m_units_str = xaccPrintAmount (stock_amount, this->stock_pinfo);
-            line.m_units_in_red = negative_in_red && gnc_numeric_negative_p (stock_amount);
-            auto new_bal = gnc_numeric_add_fixed (this->balance_at_date, stock_amount);
-            if (gnc_numeric_positive_p (this->balance_at_date) &&
-                gnc_numeric_negative_p (new_bal))
-                add_error_str (N_("Cannot sell more units than owned."));
-            else if (gnc_numeric_negative_p (this->balance_at_date) &&
-                     gnc_numeric_positive_p (new_bal))
-                add_error_str (N_("Cannot cover buy more units than owed."));
-        }
-
-        this->list_of_splits.push_back (std::move (line));
-
-        auto [has_price, price, price_str] = this->calculate_price ();
-        if (has_price)
-        {
-            // Translators: %s refer to: stock mnemonic, broker currency,
-            // date of transaction.
-            auto tmpl = N_("A price of 1 %s = %s on %s will be recorded.");
-            auto date_str = qof_print_date (this->transaction_date);
-            auto price_msg = g_strdup_printf
-                (_(tmpl),
-                 gnc_commodity_get_mnemonic (xaccAccountGetCommodity (this->acct)),
-                 price_str, date_str);
-            infos.emplace_back (price_msg);
-            g_free (date_str);
-        }
-
-        if (this->cash_enabled)
-        {
-            line = StockTransactionSplitInfo (debit, credit, errors, this->txn_type->cash_value,
-                                              this->cash_account, this->cash_memo, this->cash_value,
-                                              NC_ ("Stock Assistant: Page name", "cash"),
-                                              this->curr_pinfo);
-            this->list_of_splits.push_back (std::move (line));
-        }
-
-        if (this->fees_enabled)
-        {
-            line = StockTransactionSplitInfo (debit, credit, errors, this->txn_type->fees_value,
-                                              this->fees_capitalize ? this->acct : this->fees_account,
-                                              this->fees_memo, this->fees_value,
-                                              NC_ ("Stock Assistant: Page name", "fees"),
-                                              this->curr_pinfo);
-            if (this->fees_capitalize)
-                line.m_units_numeric = gnc_numeric_zero();
-            this->list_of_splits.push_back (std::move (line));
-        }
-
-        if (this->dividend_enabled)
-        {
-            line = StockTransactionSplitInfo (debit, credit, errors, this->txn_type->dividend_value,
-                                              this->dividend_account, this->dividend_memo,
-                                              this->dividend_value,
-                                              NC_ ("Stock Assistant: Page name", "dividend"),
-                                              this->curr_pinfo);
-            this->list_of_splits.push_back (std::move (line));
-        }
-
-        // the next two checks will involve the two capgains splits:
-        // income side and stock side. The capgains_value ^
-        // (FieldMask::ENABLED_CREDIT | FieldMask::ENABLED_DEBIT) will
-        // swap the debit/credit flags.
-        if (this->capgains_enabled)
-        {
-            if (this->txn_type->capgains_value & FieldMask::CAPGAINS_IN_STOCK)
-            {
-                line = StockTransactionSplitInfo (debit, credit, errors, this->txn_type->capgains_value ^
-                                                  (FieldMask::ENABLED_CREDIT | FieldMask::ENABLED_DEBIT),
-                                                  this->acct, this->capgains_memo, this->capgains_value,
-                                                  NC_ ("Stock Assistant: Page name", "capital gains"),
-                                   this->curr_pinfo);
-                line.m_units_numeric = gnc_numeric_zero();
-                this->list_of_splits.push_back (std::move (line));
-            }
-
-            line = StockTransactionSplitInfo(debit, credit, errors, this->txn_type->capgains_value,
-                                             this->capgains_account, this->capgains_memo,
-                                             this->capgains_value,
-                                             NC_ ("Stock Assistant: Page name", "capital gains"),
-                                             this->curr_pinfo);
-            this->list_of_splits.push_back (std::move (line));
-        }
-
-        if (!gnc_numeric_equal (debit, credit))
-        {
-            auto imbalance_str = N_("Total Debits of %s does not balance with total Credits of %s.");
-            auto debit_str = g_strdup (xaccPrintAmount (debit, this->curr_pinfo));
-            auto credit_str = g_strdup (xaccPrintAmount (credit, this->curr_pinfo));
-            auto error_str = g_strdup_printf (_(imbalance_str), debit_str, credit_str);
-            errors.emplace_back (error_str);
-            g_free (error_str);
-            g_free (credit_str);
-            g_free (debit_str);
-        }
-
-        // generate final summary message. Collates a header, the errors
-        // and warnings. Then allow completion if errors is empty.
-        std::ostringstream summary;
-        auto summary_add = [&summary](auto a) { summary << "\n• " << a; };
-        if (errors.empty())
-        {
-            summary << _("No errors found. Click Apply to create transaction.");
-            std::for_each (infos.begin(), infos.end(), summary_add);
-        }
-        else
-        {
-            summary << _("The following errors must be fixed:");
-            std::for_each (errors.begin(), errors.end(), summary_add);
-        }
-        if (!warnings.empty())
-        {
-            summary << "\n\n" << _("The following warnings exist:");
-            std::for_each (warnings.begin(), warnings.end(), summary_add);
-        }
-        this->ready_to_create = errors.empty();
-        return { this->ready_to_create, summary.str(), this->list_of_splits };
-    }
-
-    std::tuple<bool, Transaction*> create_transaction ()
-    {
-        if (!this->ready_to_create)
-        {
-            PERR ("errors exist. cannot create transaction.");
-            return { false, nullptr };
-        }
-        auto book = qof_instance_get_book (acct);
-        auto trans = xaccMallocTransaction (book);
-        xaccTransBeginEdit (trans);
-        xaccTransSetCurrency (trans, this->currency);
-        xaccTransSetDescription (trans, this->transaction_description);
-        xaccTransSetDatePostedSecsNormalized (trans, this->transaction_date);
-        AccountVec accounts;
-        std::for_each (this->list_of_splits.begin(), this->list_of_splits.end(),
-                       [&](auto& line){ line.create_split (trans, accounts); });
-        this->add_price (book);
-        xaccTransCommitEdit (trans);
-        std::for_each (accounts.begin(), accounts.end(), xaccAccountCommitEdit);
-        this->ready_to_create = false;
-        return { true, trans };
-    }
-
-    StockAssistantModel (Account *account)
-        : acct (account)
-        , currency (gnc_account_get_currency_or_parent (account))
-        , curr_pinfo (gnc_commodity_print_info (this->currency, true))
-        , price_pinfo (gnc_price_print_info (this->currency, true))
-        , stock_pinfo (gnc_commodity_print_info (xaccAccountGetCommodity (account), true))
-    { DEBUG ("StockAssistantModel constructor\n"); };
-
-    ~StockAssistantModel(){ DEBUG ("StockAssistantModel destructor\n"); };
+    std::string get_new_amount_str ();
+    std::tuple<bool, gnc_numeric, const char*> calculate_price ();
+    std::tuple<bool, std::string, SplitInfoVec> generate_list_of_splits ();
+    std::tuple<bool, Transaction*> create_transaction ();
 
 private:
     std::optional<time64>     txn_types_date;
@@ -914,29 +614,348 @@ private:
 
     SplitInfoVec list_of_splits;
 
-    void add_price (QofBook *book)
+    void add_price (QofBook *book);
+};
+
+bool
+StockAssistantModel::maybe_reset_txn_types ()
+{
+    auto new_bal = xaccAccountGetBalanceAsOfDate
+        (this->acct, gnc_time64_get_day_end (this->transaction_date));
+    if (this->txn_types_date && this->txn_types_date == this->transaction_date &&
+        gnc_numeric_equal (this->balance_at_date, new_bal))
+        return false;
+    this->balance_at_date = new_bal;
+    this->txn_types_date = this->transaction_date;
+    this->txn_types = gnc_numeric_zero_p (this->balance_at_date) ? starting_types
+        : gnc_numeric_positive_p (this->balance_at_date) ? long_types
+        : short_types;
+    return true;
+};
+
+bool
+StockAssistantModel::set_txn_type (guint type_idx)
+{
+    if (!this->txn_types_date || this->txn_types_date != this->transaction_date)
     {
-        auto [has_price, p, price_str] = this->calculate_price ();
-        if (!has_price)
-            return;
+        PERR ("transaction_date has changed. rerun maybe_reset_txn_types!");
+        return false;
+    }
+    try
+    {
+        this->txn_type = this->txn_types->at (type_idx);
+    }
+    catch (const std::out_of_range&)
+    {
+        PERR ("out of range type_idx=%d", type_idx);
+        return false;
+    }
+    this->input_new_balance = this->txn_type->stock_amount & FieldMask::INPUT_NEW_BALANCE;
+    this->stock_amount_enabled = this->txn_type->stock_amount != FieldMask::DISABLED;
+    this->stock_value_enabled = this->txn_type->stock_value != FieldMask::DISABLED;
+    this->fees_capitalize = this->txn_type->fees_value & FieldMask::CAPITALIZE_DEFAULT;
+    this->fees_enabled = this->txn_type->fees_value != FieldMask::DISABLED;
+    this->capgains_enabled = this->txn_type->capgains_value != FieldMask::DISABLED;
+    this->dividend_enabled = this->txn_type->dividend_value != FieldMask::DISABLED;
+    this->cash_enabled = this->txn_type->cash_value != FieldMask::DISABLED;
+    return true;
+};
 
-        auto price = gnc_price_create (book);
-        gnc_price_begin_edit (price);
-        gnc_price_set_commodity (price, xaccAccountGetCommodity (this->acct));
-        gnc_price_set_currency (price, this->currency);
-        gnc_price_set_time64 (price, this->transaction_date);
-        gnc_price_set_source (price, PRICE_SOURCE_STOCK_TRANSACTION);
-        gnc_price_set_typestr (price, PRICE_TYPE_UNK);
-        gnc_price_set_value (price, p);
-        gnc_price_commit_edit (price);
+std::string
+StockAssistantModel::get_new_amount_str ()
+{
+    if (gnc_numeric_check (this->stock_amount))
+        return "";
 
-        auto pdb = gnc_pricedb_get_db (book);
-        if (!gnc_pricedb_add_price (pdb, price))
-            PWARN ("error adding price");
+    if (this->input_new_balance)
+    {
+        auto ratio = gnc_numeric_div (this->stock_amount, this->balance_at_date,
+                                      GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+        if (gnc_numeric_check (ratio) || !gnc_numeric_positive_p (ratio))
+            return "";
 
-        gnc_price_unref (price);
+        std::ostringstream ret;
+        ret << ratio.num << ':' << ratio.denom;
+        return ret.str();
+    }
+    else
+    {
+        auto amount = (this->txn_type->stock_amount & FieldMask::ENABLED_CREDIT) ?
+            gnc_numeric_neg (this->stock_amount) : this->stock_amount;
+        amount = gnc_numeric_add_fixed (amount, this->balance_at_date);
+        return xaccPrintAmount (amount, stock_pinfo);
     }
 };
+
+std::tuple<bool, gnc_numeric, const char*>
+StockAssistantModel::calculate_price ()
+{
+    if (this->input_new_balance ||
+        !this->stock_amount_enabled || gnc_numeric_check (this->stock_amount) ||
+        !this->stock_value_enabled || gnc_numeric_check (this->stock_value) ||
+        gnc_numeric_zero_p (this->stock_amount) ||
+        gnc_numeric_zero_p (this->stock_value))
+        return { false, gnc_numeric_create (1, 0), nullptr };
+
+    auto price = gnc_numeric_div (this->stock_value, this->stock_amount,
+                                  GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+    return {true, price, xaccPrintAmount (price, this->price_pinfo)};
+}
+
+std::tuple<bool, std::string, SplitInfoVec>
+StockAssistantModel::generate_list_of_splits ()
+{
+    if (!this->txn_types || !this->txn_type)
+        return { false, "Error: txn_type not initialized", {} };
+
+    this->list_of_splits.clear();
+
+    gnc_numeric debit = gnc_numeric_zero ();
+    gnc_numeric credit = gnc_numeric_zero ();
+    StringVec errors, warnings, infos;
+    StockTransactionSplitInfo line;
+    bool negative_in_red = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL,
+                                               GNC_PREF_NEGATIVE_IN_RED);
+    auto add_error_str = [&errors]
+        (const char* str) { errors.emplace_back (_(str)); };
+
+    // check the stock transaction date. If there are existing stock
+    // transactions dated after the date specified, it is very likely
+    // the later stock transactions will be invalidated. warn the user
+    // to review them.
+    auto last_split_node = g_list_last (xaccAccountGetSplitList (this->acct));
+    if (last_split_node)
+    {
+        auto last_split = static_cast<const Split*> (last_split_node->data);
+        auto last_split_date = xaccTransGetDate (xaccSplitGetParent (last_split));
+        if (this->transaction_date <= last_split_date)
+        {
+            auto last_split_date_str = qof_print_date (last_split_date);
+            auto new_date_str = qof_print_date (this->transaction_date);
+            // Translators: the first %s is the new transaction date;
+            // the second %s is the current stock account's latest
+            // transaction date.
+            auto warn_txt =  g_strdup_printf (_("You will enter a transaction \
+with date %s which is earlier than the latest transaction in this account, \
+dated %s. Doing so may affect the cost basis, and therefore capital gains, \
+of transactions dated after the new entry. Please review all transactions \
+to ensure proper recording."), new_date_str, last_split_date_str);
+            warnings.push_back (warn_txt);
+            g_free (warn_txt);
+            g_free (new_date_str);
+            g_free (last_split_date_str);
+        }
+    }
+
+    if (!this->stock_value_enabled)
+        line = StockTransactionSplitInfo (this->acct, gnc_numeric_zero());
+    else
+        line = StockTransactionSplitInfo(debit, credit, errors, this->txn_type->stock_value,
+                                         this->acct, this->stock_memo, this->stock_value,
+                                         NC_ ("Stock Assistant: Page name", "stock value"),
+                                         this->curr_pinfo);
+
+
+    if (!this->stock_amount_enabled)
+        line.m_units_numeric = gnc_numeric_zero();
+    else if (gnc_numeric_check (this->stock_amount))
+    {
+        line.m_units_str = _("(missing)");
+        line.m_units_numeric = gnc_numeric_zero();
+        add_error_str (N_("Amount for stock units is missing"));
+    }
+    else if (this->input_new_balance)
+    {
+        auto stock_amount = this->stock_amount;
+        auto credit_side = (this->txn_type->stock_amount & FieldMask::ENABLED_CREDIT);
+        auto delta = gnc_numeric_sub_fixed (stock_amount, this->balance_at_date);
+        auto ratio = gnc_numeric_div (stock_amount, this->balance_at_date,
+                                      GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+        stock_amount = gnc_numeric_sub_fixed (stock_amount, this->balance_at_date);
+        line.m_units_numeric = stock_amount;
+        line.m_units_str = xaccPrintAmount (stock_amount, this->stock_pinfo);
+        line.m_units_in_red = negative_in_red && gnc_numeric_negative_p (stock_amount);
+        if (gnc_numeric_check (ratio) || !gnc_numeric_positive_p (ratio))
+            add_error_str (N_("Invalid stock new balance."));
+        else if (gnc_numeric_negative_p (delta) && !credit_side)
+            add_error_str (N_("New balance must be higher than old balance."));
+        else if (gnc_numeric_positive_p (delta) && credit_side)
+            add_error_str (N_("New balance must be lower than old balance."));
+    }
+    else
+    {
+        auto stock_amount = this->stock_amount;
+        if (!gnc_numeric_positive_p (stock_amount))
+            add_error_str (N_("Stock amount must be positive."));
+        if (this->txn_type->stock_amount & FieldMask::ENABLED_CREDIT)
+            stock_amount = gnc_numeric_neg (stock_amount);
+        line.m_units_numeric = stock_amount;
+        line.m_units_str = xaccPrintAmount (stock_amount, this->stock_pinfo);
+        line.m_units_in_red = negative_in_red && gnc_numeric_negative_p (stock_amount);
+        auto new_bal = gnc_numeric_add_fixed (this->balance_at_date, stock_amount);
+        if (gnc_numeric_positive_p (this->balance_at_date) &&
+            gnc_numeric_negative_p (new_bal))
+            add_error_str (N_("Cannot sell more units than owned."));
+        else if (gnc_numeric_negative_p (this->balance_at_date) &&
+                 gnc_numeric_positive_p (new_bal))
+            add_error_str (N_("Cannot cover buy more units than owed."));
+    }
+
+    this->list_of_splits.push_back (std::move (line));
+
+    auto [has_price, price, price_str] = this->calculate_price ();
+    if (has_price)
+    {
+        // Translators: %s refer to: stock mnemonic, broker currency,
+        // date of transaction.
+        auto tmpl = N_("A price of 1 %s = %s on %s will be recorded.");
+        auto date_str = qof_print_date (this->transaction_date);
+        auto price_msg = g_strdup_printf
+            (_(tmpl),
+             gnc_commodity_get_mnemonic (xaccAccountGetCommodity (this->acct)),
+             price_str, date_str);
+        infos.emplace_back (price_msg);
+        g_free (date_str);
+    }
+
+    if (this->cash_enabled)
+    {
+        line = StockTransactionSplitInfo (debit, credit, errors, this->txn_type->cash_value,
+                                          this->cash_account, this->cash_memo, this->cash_value,
+                                          NC_ ("Stock Assistant: Page name", "cash"),
+                                          this->curr_pinfo);
+        this->list_of_splits.push_back (std::move (line));
+    }
+
+    if (this->fees_enabled)
+    {
+        line = StockTransactionSplitInfo (debit, credit, errors, this->txn_type->fees_value,
+                                          this->fees_capitalize ? this->acct : this->fees_account,
+                                          this->fees_memo, this->fees_value,
+                                          NC_ ("Stock Assistant: Page name", "fees"),
+                                          this->curr_pinfo);
+        if (this->fees_capitalize)
+            line.m_units_numeric = gnc_numeric_zero();
+        this->list_of_splits.push_back (std::move (line));
+    }
+
+    if (this->dividend_enabled)
+    {
+        line = StockTransactionSplitInfo (debit, credit, errors, this->txn_type->dividend_value,
+                                          this->dividend_account, this->dividend_memo,
+                                          this->dividend_value,
+                                          NC_ ("Stock Assistant: Page name", "dividend"),
+                                          this->curr_pinfo);
+        this->list_of_splits.push_back (std::move (line));
+    }
+
+    // the next two checks will involve the two capgains splits:
+    // income side and stock side. The capgains_value ^
+    // (FieldMask::ENABLED_CREDIT | FieldMask::ENABLED_DEBIT) will
+    // swap the debit/credit flags.
+    if (this->capgains_enabled)
+    {
+        if (this->txn_type->capgains_value & FieldMask::CAPGAINS_IN_STOCK)
+        {
+            line = StockTransactionSplitInfo (debit, credit, errors, this->txn_type->capgains_value ^
+                                              (FieldMask::ENABLED_CREDIT | FieldMask::ENABLED_DEBIT),
+                                              this->acct, this->capgains_memo, this->capgains_value,
+                                              NC_ ("Stock Assistant: Page name", "capital gains"),
+                                              this->curr_pinfo);
+            line.m_units_numeric = gnc_numeric_zero();
+            this->list_of_splits.push_back (std::move (line));
+        }
+
+        line = StockTransactionSplitInfo(debit, credit, errors, this->txn_type->capgains_value,
+                                         this->capgains_account, this->capgains_memo,
+                                         this->capgains_value,
+                                         NC_ ("Stock Assistant: Page name", "capital gains"),
+                                         this->curr_pinfo);
+        this->list_of_splits.push_back (std::move (line));
+    }
+
+    if (!gnc_numeric_equal (debit, credit))
+    {
+        auto imbalance_str = N_("Total Debits of %s does not balance with total Credits of %s.");
+        auto debit_str = g_strdup (xaccPrintAmount (debit, this->curr_pinfo));
+        auto credit_str = g_strdup (xaccPrintAmount (credit, this->curr_pinfo));
+        auto error_str = g_strdup_printf (_(imbalance_str), debit_str, credit_str);
+        errors.emplace_back (error_str);
+        g_free (error_str);
+        g_free (credit_str);
+        g_free (debit_str);
+    }
+
+    // generate final summary message. Collates a header, the errors
+    // and warnings. Then allow completion if errors is empty.
+    std::ostringstream summary;
+    auto summary_add = [&summary](auto a) { summary << "\n• " << a; };
+    if (errors.empty())
+    {
+        summary << _("No errors found. Click Apply to create transaction.");
+        std::for_each (infos.begin(), infos.end(), summary_add);
+    }
+    else
+    {
+        summary << _("The following errors must be fixed:");
+        std::for_each (errors.begin(), errors.end(), summary_add);
+    }
+    if (!warnings.empty())
+    {
+        summary << "\n\n" << _("The following warnings exist:");
+        std::for_each (warnings.begin(), warnings.end(), summary_add);
+    }
+    this->ready_to_create = errors.empty();
+    return { this->ready_to_create, summary.str(), this->list_of_splits };
+}
+
+std::tuple<bool, Transaction*>
+StockAssistantModel::create_transaction ()
+{
+    if (!this->ready_to_create)
+    {
+        PERR ("errors exist. cannot create transaction.");
+        return { false, nullptr };
+    }
+    auto book = qof_instance_get_book (acct);
+    auto trans = xaccMallocTransaction (book);
+    xaccTransBeginEdit (trans);
+    xaccTransSetCurrency (trans, this->currency);
+    xaccTransSetDescription (trans, this->transaction_description);
+    xaccTransSetDatePostedSecsNormalized (trans, this->transaction_date);
+    AccountVec accounts;
+    std::for_each (this->list_of_splits.begin(), this->list_of_splits.end(),
+                   [&](auto& line){ line.create_split (trans, accounts); });
+    this->add_price (book);
+    xaccTransCommitEdit (trans);
+    std::for_each (accounts.begin(), accounts.end(), xaccAccountCommitEdit);
+    this->ready_to_create = false;
+    return { true, trans };
+}
+
+void
+StockAssistantModel::add_price (QofBook *book)
+{
+    auto [has_price, p, price_str] = this->calculate_price ();
+    if (!has_price)
+        return;
+
+    auto price = gnc_price_create (book);
+    gnc_price_begin_edit (price);
+    gnc_price_set_commodity (price, xaccAccountGetCommodity (this->acct));
+    gnc_price_set_currency (price, this->currency);
+    gnc_price_set_time64 (price, this->transaction_date);
+    gnc_price_set_source (price, PRICE_SOURCE_STOCK_TRANSACTION);
+    gnc_price_set_typestr (price, PRICE_TYPE_UNK);
+    gnc_price_set_value (price, p);
+    gnc_price_commit_edit (price);
+
+    auto pdb = gnc_pricedb_get_db (book);
+    if (!gnc_pricedb_add_price (pdb, price))
+        PWARN ("error adding price");
+
+    gnc_price_unref (price);
+}
 
 
 struct StockAssistantView
