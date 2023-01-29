@@ -741,7 +741,7 @@ query instead.")
 
 ;; function to count the total number of splits to be iterated
 (define (gnc:accounts-count-splits accounts)
-  (apply + (map length (map xaccAccountGetSplitList accounts))))
+  (fold (lambda (a b) (+ b (length (xaccAccountGetSplitList a)))) 0 accounts))
 
 ;; Sums up any splits of a certain type affecting a set of accounts.
 ;; the type is an alist '((str "match me") (cased #f) (regexp #f))
