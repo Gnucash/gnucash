@@ -1573,18 +1573,29 @@ static char *gen_split_desc (Transaction *txn, Split *split)
     char *acct_name = gnc_account_get_full_name (xfer_acct);
     const char *action = gnc_get_action_num (txn, split);
     const char *memo = xaccSplitGetMemo (split);
+    char rec_state = xaccSplitGetReconcile (split);
     const char *print_amt = xaccPrintAmount(value, gnc_account_print_info (xfer_acct, TRUE));
     char *split_str = NULL;
+    char *rec_str = NULL;
+
+    if (rec_state == CREC)
+        rec_str = g_strdup_printf("[%s] ", _("Cleared"));
+    else if (rec_state == YREC)
+        rec_str = g_strdup_printf("[%s] ", _("Reconciled"));
+    else
+        rec_str = g_strdup("");
 
     if (action && *action && memo && *memo)
-        split_str = g_strdup_printf ("%s: %s (%s, %s)", acct_name, print_amt,
+        split_str = g_strdup_printf ("%s%s: %s (%s, %s)", rec_str, acct_name, print_amt,
                                         action, memo);
     else if((action && *action) || (memo && *memo))
-        split_str = g_strdup_printf ("%s: %s (%s)", acct_name, print_amt,
+        split_str = g_strdup_printf ("%s%s: %s (%s)", rec_str, acct_name, print_amt,
                                         action ? action : memo);
     else
-        split_str = g_strdup_printf ("%s: %s", acct_name, print_amt);
+        split_str = g_strdup_printf ("%s%s: %s", rec_str, acct_name, print_amt);
+
     g_free (acct_name);
+    g_free (rec_str);
 
     return split_str;
 }
@@ -1621,8 +1632,8 @@ static Split *select_payment_split (GtkWindow *parent, Transaction *txn)
         GList *node;
         GtkWidget *first_rb = NULL;
         int answer = GTK_BUTTONS_OK;
-        const char *message = _("While this transaction has multiple splits that can be considered\nas 'the payment split', gnucash only knows how to handle one.\n"
-                                "Please select one, the others will be ignored.\n\n");
+        const char *message = _("While this transaction has multiple splits that can be considered\nas 'the payment split', GnuCash only knows how to handle one.\n"
+                                "Please select one, the others will be discarded.\n\n");
         GtkDialog *dialog = GTK_DIALOG(
                             gtk_dialog_new_with_buttons (_("Warning"),
                                                          parent,
