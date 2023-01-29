@@ -1694,10 +1694,11 @@ static Split *select_payment_split (GtkWindow *parent, Transaction *txn)
 
 static GList *select_txn_lots (GtkWindow *parent, Transaction *txn, Account **post_acct, gboolean *abort)
 {
-    gboolean has_no_lot_apar_splits = FALSE;
-    SplitList *post_splits = NULL, *no_lot_post_splits = NULL;
+    SplitList *apar_splits = NULL; /* all spits in txn that are APAR type */
+    SplitList *apar_splits_no_lot = NULL; /* all splits in txn that are APAR type, but not tied to a lot */
     SplitList *iter;
     GList *txn_lots = NULL;
+    GList *unique_apar_accts = NULL;
 
     /* There's no use in continuing if I can't set the post_acct or abort variables */
     if (!post_acct || !abort)
@@ -1706,11 +1707,20 @@ static GList *select_txn_lots (GtkWindow *parent, Transaction *txn, Account **po
     *abort = FALSE;
     *post_acct = NULL;
 
-    post_splits = xaccTransGetAPARAcctSplitList (txn, FALSE);
-    for (iter = post_splits; iter; iter = iter->next)
+    /* Start by filtering out all APAR splits that have lots. Those are the ones we can
+       display as invoices and pre-payments in the payment window. */
+    apar_splits = xaccTransGetAPARAcctSplitList (txn, FALSE);
+    for (iter = apar_splits; iter; iter = iter->next)
     {
         GNCLot *postlot = NULL;
         Split *post_split = iter->data;
+        Account *apar_acct = xaccSplitGetAccount (post_split);
+
+        /* Store found apar_acct in our list of unique_apar_accts
+         * for later processing */
+        if (!g_list_find (unique_apar_accts, apar_acct))
+            unique_apar_accts = g_list_prepend (unique_apar_accts, apar_acct);
+
         postlot = xaccSplitGetLot (post_split);
         if (postlot)
         {
@@ -1718,59 +1728,55 @@ static GList *select_txn_lots (GtkWindow *parent, Transaction *txn, Account **po
             lot_info->lot = postlot;
             lot_info->amount = xaccSplitGetValue (post_split);
             txn_lots = g_list_prepend (txn_lots, lot_info);
-            *post_acct = xaccSplitGetAccount (post_split);
+            *post_acct = apar_acct;
         }
         else
-        {
-            /* Make sure not to override post_acct if it was set above from a lot split */
-            if (!*post_acct)
-                *post_acct = xaccSplitGetAccount (post_split);
-            no_lot_post_splits = g_list_prepend (no_lot_post_splits, post_split);
-            has_no_lot_apar_splits = TRUE;
-        }
+            apar_splits_no_lot = g_list_prepend (apar_splits_no_lot, post_split);
     }
+    g_list_free (apar_splits);
 
-    g_list_free (post_splits);
+    /* If no post_acct was selected from the postlots, fall back to the first apar split's
+     * account if there is one. */
+    if (!*post_acct && apar_splits_no_lot)
+        *post_acct = xaccSplitGetAccount (apar_splits_no_lot->data);
+    g_list_free (apar_splits_no_lot);
 
-    /* If the txn has both APAR splits linked to a business lot and
-     * splits that are not, issue a warning some will be discarded.
+    /* Abort if the txn has splits in more than one APAR account
+     * GnuCash can only handle one post account per payment transaction.
      */
-    if (has_no_lot_apar_splits && gnc_list_length_cmp (txn_lots, 0))
+    if (g_list_length (unique_apar_accts) > 1)
     {
         GtkWidget *dialog;
         char *split_str = g_strdup ("");
-        for (iter = no_lot_post_splits; iter; iter = iter->next)
+
+        for (iter = unique_apar_accts; iter; iter = iter->next)
         {
-            Split *post_split = iter->data;
-            char *tmp_str = gen_split_desc (txn, post_split);
-            char *tmp_str2 = g_strconcat(split_str, "• ", tmp_str, "\n", NULL);
-            g_free (tmp_str);
+            Account *acct = iter->data;
+            char *acct_name = gnc_account_get_full_name (acct);
+            char *tmp_str = g_strconcat(split_str, "• ", acct_name, "\n", NULL);
+            g_free (acct_name);
             g_free (split_str);
-            split_str = tmp_str2;
+            split_str = tmp_str;
         }
 
         dialog = gtk_message_dialog_new (parent,
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_MESSAGE_WARNING,
-                                         GTK_BUTTONS_CANCEL,
-                                         _("The transaction has at least one split in a business account that is not part of a business transaction.\n"
-                                         "If you continue these splits will be ignored:\n\n%s\n"
-                                         "Do you wish to continue and ignore these splits?"),
+                                         GTK_MESSAGE_INFO,
+                                         GTK_BUTTONS_CLOSE,
+                                         _("This transaction has splits in multiple business accounts:\n\n%s\n"
+                                         "GnuCash can only handle transactions that post to a single account.\n\n"
+                                         "Please correct this manually by editing the transaction directly and then try again."),
                                          split_str);
-        gtk_dialog_add_buttons (GTK_DIALOG(dialog),
-                                _("Continue"), GTK_BUTTONS_OK, NULL);
-        gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_BUTTONS_CANCEL);
-        if (gtk_dialog_run (GTK_DIALOG(dialog)) != GTK_BUTTONS_OK)
-        {
-            *abort = TRUE;
-            g_list_free_full (txn_lots, g_free);
-            txn_lots = NULL;
-        }
+        gtk_dialog_run (GTK_DIALOG(dialog));
         gtk_widget_destroy (dialog);
+        PINFO("Multiple asset accounts in splits of txn \"%s\"; cannot use this for assigning a payment.",
+              xaccTransGetDescription(txn));
         g_free (split_str);
-    }
 
-    g_list_free (no_lot_post_splits);
+        *abort = TRUE;
+        g_list_free_full (txn_lots, g_free);
+        txn_lots = NULL;
+    }
 
     return txn_lots;
 }
