@@ -1722,25 +1722,34 @@ void CsvImpPriceAssist::preview_refresh_table ()
 void
 CsvImpPriceAssist::preview_refresh ()
 {
+    // Cache skip settings. Updating the widgets one by one
+    // triggers a callback that transfers all skip widgets'
+    // values to settings. So by the time the next widget value
+    // is to be set, that widget's 'new' setting has already been
+    // replaced by its old setting preveneting us from using it
+    // here sensibly.
+
+    auto skip_start_lines = price_imp->skip_start_lines();
+    auto skip_end_lines = price_imp->skip_end_lines();
+    auto skip_alt_lines = price_imp->skip_alt_lines();
+
     // Set start row
     auto adj = gtk_spin_button_get_adjustment (start_row_spin);
     gtk_adjustment_set_upper (adj, price_imp->m_parsed_lines.size());
-    gtk_spin_button_set_value (start_row_spin,
-            price_imp->skip_start_lines());
+    gtk_spin_button_set_value (start_row_spin, skip_start_lines);
 
     // Set end row
     adj = gtk_spin_button_get_adjustment (end_row_spin);
     gtk_adjustment_set_upper (adj, price_imp->m_parsed_lines.size());
-    gtk_spin_button_set_value (end_row_spin,
-            price_imp->skip_end_lines());
+    gtk_spin_button_set_value (end_row_spin, skip_end_lines);
 
     // Set Alternate rows
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(skip_alt_rows_button),
-            price_imp->skip_alt_lines());
+                                  skip_alt_lines);
 
     // Set over-write indicator
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(over_write_cbutton),
-            price_imp->over_write());
+                                  price_imp->over_write());
 
     // Set Import Format
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(csv_button),
