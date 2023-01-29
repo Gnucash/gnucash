@@ -1568,7 +1568,7 @@ gboolean gnc_ui_payment_is_customer_payment(const Transaction *txn)
 // ///////////////
 static char *gen_split_desc (Transaction *txn, Split *split)
 {
-    gnc_numeric value = xaccSplitGetValue(split);
+    gnc_numeric value = xaccSplitGetAmount(split);
     Account *xfer_acct = xaccSplitGetAccount(split);
     char *acct_name = gnc_account_get_full_name (xfer_acct);
     const char *action = gnc_get_action_num (txn, split);
