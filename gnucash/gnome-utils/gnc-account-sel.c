@@ -292,7 +292,7 @@ normalize_and_fold (char* utf8_string)
     char *normalized, *folded;
     g_return_val_if_fail (utf8_string && *utf8_string, NULL);
 
-    normalized = g_utf8_normalize (utf8_string, -1, G_NORMALIZE_ALL);
+    normalized = g_utf8_normalize (utf8_string, -1, G_NORMALIZE_NFC);
     if (!normalized)
         return NULL;
     folded = g_utf8_casefold (normalized, -1);
@@ -331,7 +331,7 @@ normalize_and_lower (char* utf8_string)
     char *normalized, *lowered;
     g_return_val_if_fail (utf8_string && *utf8_string, NULL);
 
-    normalized = g_utf8_normalize (utf8_string, -1, G_NORMALIZE_ALL);
+    normalized = g_utf8_normalize (utf8_string, -1, G_NORMALIZE_NFC);
     if (!normalized)
         return NULL;
     lowered = g_utf8_strdown (normalized, -1);

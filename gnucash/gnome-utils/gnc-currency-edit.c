@@ -303,7 +303,7 @@ add_item(gnc_commodity *commodity, GNCCurrencyEdit *gce)
     model = gtk_combo_box_get_model(GTK_COMBO_BOX(gce));
 
     string = gnc_commodity_get_printname(commodity);
-    normalized = g_utf8_normalize (string, -1, G_NORMALIZE_ALL);
+    normalized = g_utf8_normalize (string, -1, G_NORMALIZE_NFC);
     normalized_folded = normalized ? g_utf8_casefold (normalized, -1) : NULL;
 
     gtk_list_store_append(GTK_LIST_STORE(model), &iter);
