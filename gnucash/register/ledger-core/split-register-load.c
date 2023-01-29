@@ -422,8 +422,12 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
     ((PriceCell*) gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL),
      gnc_commodity_print_info (account_comm, FALSE));
 
-    gnc_doclink_cell_set_use_glyphs
-    ((Doclinkcell *) gnc_table_layout_get_cell (table->layout, DOCLINK_CELL));
+    /* Only test for linked document glyths once */
+    if (info->first_pass)
+    {
+        gnc_doclink_cell_set_use_glyphs
+        ((Doclinkcell *) gnc_table_layout_get_cell (table->layout, DOCLINK_CELL));
+    }
 
     /* make sure we have a blank split */
     if (blank_split == NULL)
