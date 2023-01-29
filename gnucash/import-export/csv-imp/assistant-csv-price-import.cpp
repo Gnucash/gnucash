@@ -1911,17 +1911,17 @@ CsvImpPriceAssist::assist_summary_page_prepare ()
     auto added_str = g_strdup_printf (ngettext ("%d added price",
                                                 "%d added prices",
                                                 price_imp->m_prices_added),
-                                      price_imp->m_prices_added);
+                                                price_imp->m_prices_added);
     /* Translators: This is a ngettext(3) message, %d is the number of duplicate prices */
     auto dupl_str = g_strdup_printf (ngettext ("%d duplicate price",
                                                "%d duplicate prices",
                                                price_imp->m_prices_duplicated),
-                                     price_imp->m_prices_duplicated);
+                                               price_imp->m_prices_duplicated);
     /* Translators: This is a ngettext(3) message, %d is the number of replaced prices */
     auto repl_str = g_strdup_printf (ngettext ("%d replaced price",
                                                "%d replaced prices",
                                                price_imp->m_prices_replaced),
-                                     price_imp->m_prices_replaced);
+                                               price_imp->m_prices_replaced);
     auto msg = g_strdup_printf (
         _("The prices were imported from file '%s'.\n\n"
           "Import summary:\n"
