@@ -245,7 +245,7 @@
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="yes">Stock Ass_istant</attribute>
+      <attribute name="label" translatable="yes">Stock Ass_istant…</attribute>
       <attribute name="action">GncPluginPageRegisterActions.ActionsStockAssistantAction</attribute>
       <attribute name="tooltip" translatable="yes">Stock Assistant</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
@@ -709,7 +709,7 @@
       <object class="GtkToolButton" id="but13">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Stoc_k Split…</property>
+        <property name="label" translatable="yes">Stock Ass_istant…</property>
         <property name="action-name">GncPluginPageRegisterActions.ActionsStockAssistantAction</property>
         <property name="tooltip-text" translatable="yes">Stock Assistant</property>
         <property name="use-underline">True</property>

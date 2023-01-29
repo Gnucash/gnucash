@@ -416,6 +416,7 @@ static GncToolBarShortNames toolbar_labels[] =
     { "LinkTransactionAction",              N_ ("Manage Document Link") },
     { "LinkedTransactionOpenAction",        N_ ("Open Linked Document") },
     { "JumpLinkedInvoiceAction",            N_ ("Invoice") },
+    { "ActionsStockAssistantAction",        N_ ("Stock Assistant") }, 
     { NULL, NULL },
 };
 

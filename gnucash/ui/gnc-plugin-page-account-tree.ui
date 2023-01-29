@@ -141,7 +141,7 @@
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="no">Stock Ass_istant</attribute>
+      <attribute name="label" translatable="no">Stock Ass_istant…</attribute>
       <attribute name="action">GncPluginPageAccountTreeActions.ActionsStockAssistantAction</attribute>
       <attribute name="tooltip" translatable="yes">Stock Assistant</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
@@ -244,6 +244,11 @@
         <attribute name="label" translatable="yes">_Transfer…</attribute>
         <attribute name="action">GncPluginPageAccountTreeActions.ActionsTransferAction</attribute>
         <attribute name="tooltip" translatable="yes">Transfer funds from one account to another</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="no">Stock Ass_istant…</attribute>
+        <attribute name="action">GncPluginPageAccountTreeActions.ActionsStockAssistantAction</attribute>
+        <attribute name="tooltip" translatable="yes">Stock Assistant</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Stoc_k Split…</attribute>
