@@ -1825,7 +1825,8 @@ PaymentWindow * gnc_ui_payment_new_with_txn (GtkWindow* parent, GncOwner *owner,
         GDate txn_date = xaccTransGetDatePostedGDate (txn);
         gnc_ui_payment_window_set_date(pw, &txn_date);
     }
-    gnc_ui_payment_window_set_amount(pw, xaccSplitGetValue(payment_split));
+
+    gnc_ui_payment_window_set_amount(pw, xaccSplitConvertAmount (payment_split, post_acct));
     if (payment_split)
         gnc_ui_payment_window_set_xferaccount(pw, xaccSplitGetAccount(payment_split));
     return pw;
