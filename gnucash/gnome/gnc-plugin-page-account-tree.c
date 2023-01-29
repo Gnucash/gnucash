@@ -1852,7 +1852,6 @@ gnc_plugin_page_account_tree_cmd_stock_assistant (GSimpleAction *simple,
 
     ENTER ("(action %p, page %p)", simple, page);
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
     account = gnc_plugin_page_account_tree_get_current_account (page);
     window = GNC_PLUGIN_PAGE(page)->window;
     gnc_stock_transaction_assistant (window, account);
