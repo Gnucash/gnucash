@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkAssistant" id="stock_transaction_assistant">
@@ -26,6 +26,7 @@
         <property name="page-type">intro</property>
         <property name="title" translatable="yes">Stock Transaction Assistant</property>
         <property name="complete">True</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
@@ -35,6 +36,7 @@
         <property name="margin-start">12</property>
         <property name="border-width">6</property>
         <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
         <child>
           <object class="GtkLabel" id="transaction_details_label">
             <property name="visible">True</property>
@@ -54,12 +56,14 @@
           <object class="GtkGrid" id="transaction_details_table">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
             <property name="row-spacing">3</property>
             <property name="column-spacing">6</property>
             <child>
               <object class="GtkLabel" id="transaction_date_label">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">Date</property>
               </object>
               <packing>
@@ -71,6 +75,7 @@
               <object class="GtkLabel" id="transaction_description_label">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">Description</property>
               </object>
               <packing>
@@ -82,6 +87,7 @@
               <object class="GtkEntry" id="transaction_description_entry">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -102,6 +108,7 @@
       <packing>
         <property name="title" translatable="yes">Transaction Details</property>
         <property name="complete">True</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
@@ -111,6 +118,7 @@
         <property name="margin-start">12</property>
         <property name="border-width">6</property>
         <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
         <child>
           <object class="GtkLabel" id="transaction_type_page_label">
             <property name="visible">True</property>
@@ -136,6 +144,7 @@
               <object class="GtkLabel" id="transaction_type_combo_label">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">Type</property>
               </object>
               <packing>
@@ -147,6 +156,7 @@
               <object class="GtkComboBoxText" id="transaction_type_page_combobox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
                 <items>
                   <item>a1</item>
                   <item>b2</item>
@@ -184,6 +194,7 @@
       <packing>
         <property name="title" translatable="yes">Transaction Type</property>
         <property name="complete">True</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
@@ -192,6 +203,7 @@
         <property name="can-focus">False</property>
         <property name="border-width">6</property>
         <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
         <child>
           <object class="GtkLabel" id="stock_amount_title">
             <property name="visible">True</property>
@@ -212,7 +224,7 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="border-width">6</property>
-            <property name="row-spacing">6</property>
+            <property name="row-spacing">3</property>
             <property name="column-spacing">6</property>
             <child>
               <object class="GtkLabel" id="stock_amount_label">
@@ -247,6 +259,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">end</property>
+                <property name="hexpand">True</property>
                 <property name="label">(Previous Balance)</property>
                 <property name="use-underline">True</property>
                 <property name="justify">center</property>
@@ -298,6 +311,7 @@
       <packing>
         <property name="title" translatable="yes">Stock Amount</property>
         <property name="complete">True</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
@@ -306,6 +320,7 @@
         <property name="can-focus">False</property>
         <property name="border-width">6</property>
         <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
         <child>
           <object class="GtkLabel" id="stock_value_title">
             <property name="visible">True</property>
@@ -326,7 +341,7 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="border-width">6</property>
-            <property name="row-spacing">6</property>
+            <property name="row-spacing">3</property>
             <property name="column-spacing">6</property>
             <child>
               <object class="GtkLabel" id="stock_price_amount">
@@ -360,6 +375,7 @@
               <object class="GtkEntry" id="stock_memo_entry">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -408,6 +424,7 @@
       <packing>
         <property name="title" translatable="yes">Stock Value</property>
         <property name="complete">True</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
@@ -520,6 +537,7 @@
       <packing>
         <property name="title" translatable="yes">Cash</property>
         <property name="complete">True</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
@@ -646,6 +664,7 @@
       <packing>
         <property name="title" translatable="yes">Fees</property>
         <property name="complete">True</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
@@ -758,6 +777,7 @@
       <packing>
         <property name="title" translatable="yes">Dividend</property>
         <property name="complete">True</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
@@ -870,6 +890,7 @@
       <packing>
         <property name="title" translatable="yes">Capital Gains</property>
         <property name="complete">True</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
@@ -933,6 +954,7 @@
       <packing>
         <property name="page-type">confirm</property>
         <property name="title" translatable="yes">Finish</property>
+        <property name="has-padding">False</property>
       </packing>
     </child>
     <child internal-child="action_area">
