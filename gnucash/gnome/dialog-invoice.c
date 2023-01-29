@@ -999,7 +999,7 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
     gncInvoiceSetCurrency (invoice, gncOwnerGetCurrency (gncInvoiceGetOwner (invoice)));
 
     /* Fill in the conversion prices with feedback from the user */
-    text = _("One or more of the entries are for accounts different from the invoice/bill currency. You will be asked a conversion rate for each.");
+    text = _("One or more of the entries are for accounts different from the invoice/bill currency. You will be asked to enter a conversion rate for each.");
 
     /* Ask the user for conversion rates for all foreign currencies
      * (relative to the invoice currency) */
