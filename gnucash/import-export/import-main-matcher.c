@@ -657,6 +657,10 @@ on_matcher_help_clicked (GtkButton *button, gpointer user_data)
     help_dialog = GTK_WIDGET(gtk_builder_get_object (builder, "matcher_help_dialog"));
     gtk_window_set_transient_for (GTK_WINDOW(help_dialog), GTK_WINDOW(info->main_widget));
 
+    // Set the name for this dialog so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(help_dialog), "gnc-id-import-matcher-help");
+    gnc_widget_style_context_add_class (GTK_WIDGET(help_dialog), "gnc-class-imports");
+
     /* Connect the signals */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, help_dialog);
 
@@ -1058,6 +1062,10 @@ input_new_fields (GNCImportMainMatcher *info, RowInfo *rowinfo,
     gnc_builder_add_from_file (builder, "dialog-import.glade", "transaction_edit_dialog");
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_edit_dialog"));
+
+    // Set the name for this dialog so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-import-matcher-edits");
+    gnc_widget_style_context_add_class (GTK_WIDGET(dialog), "gnc-class-imports");
 
     desc_entry = GTK_WIDGET(gtk_builder_get_object (builder, "desc_entry"));
     memo_entry = GTK_WIDGET(gtk_builder_get_object (builder, "memo_entry"));
@@ -1718,6 +1726,11 @@ gnc_gen_trans_list_new (GtkWidget *parent,
     box = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher_content"));
     gtk_box_pack_start (GTK_BOX(pbox), box, TRUE, TRUE, 0);
 
+    // Set the name for this dialog so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(info->main_widget), "gnc-id-import-matcher-transactions");
+    gtk_widget_set_name (GTK_WIDGET(box), "gnc-id-import-transaction-content");
+    gnc_widget_style_context_add_class (GTK_WIDGET(info->main_widget), "gnc-class-imports");
+
     /* setup the common parts */
     gnc_gen_trans_common_setup (info, parent, builder, heading,
                                 all_from_same_account, match_date_hardlimit);
@@ -1767,6 +1780,9 @@ gnc_gen_trans_assist_new (GtkWidget *parent,
     box = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher_content"));
     g_assert (box != NULL);
     gtk_box_pack_start (GTK_BOX(assistant_page), box, TRUE, TRUE, 6);
+
+    // Set the name for this dialog so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(box), "gnc-id-import-transaction-content");
 
     /* setup the common parts */
     gnc_gen_trans_common_setup (info, parent, builder, heading,

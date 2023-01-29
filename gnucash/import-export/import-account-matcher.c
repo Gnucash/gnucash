@@ -457,6 +457,10 @@ Account * gnc_import_select_account(GtkWidget *parent,
         picker->warning = GTK_WIDGET(gtk_builder_get_object (builder, "warning_label"));
         picker->ok_button = GTK_WIDGET(gtk_builder_get_object (builder, "okbutton"));
 
+        // Set the name for this dialog so it can be easily manipulated with css
+        gtk_widget_set_name (GTK_WIDGET(picker->dialog), "gnc-id-import-account-picker");
+        gnc_widget_style_context_add_class (GTK_WIDGET(picker->dialog), "gnc-class-imports");
+
         if (parent)
             gtk_window_set_transient_for (GTK_WINDOW (picker->dialog),
                                           GTK_WINDOW (parent));
