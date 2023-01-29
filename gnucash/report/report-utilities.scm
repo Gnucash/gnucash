@@ -987,7 +987,7 @@ query instead.")
 (define (not-APAR? s)
   (not (xaccAccountIsAPARType (xaccAccountGetType (xaccSplitGetAccount s)))))
 ;; analyse a payment transaction and return a 3-element vector:
-;; (vector invoices opposing-splits overpayment)
+;; (vector invoices overpayment opposing-splits)
 ;;
 ;; invoices: a list of (cons invoice inv-APAR-split)
 ;; opposing-splits: a list of (list pmt-APAR-split partial-amount derived?)
@@ -995,6 +995,8 @@ query instead.")
 ;;                 amount does not match the transaction amount
 ;; overpayment: a number indicating overpayment amount
 (define (gnc:payment-txn->payment-info txn)
+(let* ((apar-split (xaccTransGetFirstAPARAcctSplit txn #t))
+       (apar-acct (xaccSplitGetAccount apar-split)))
   (let lp ((splits (xaccTransGetSplitList txn))
            (invoices '())
            (overpayment 0)
@@ -1002,7 +1004,8 @@ query instead.")
     (match splits
       (() (vector invoices opposing-splits overpayment))
       (((? not-APAR? split) . rest)
-       (lp rest invoices (+ overpayment (xaccSplitGetValue split))
+       (gnc:msg "next " (gnc:strify split) " overpayment " (+ overpayment (xaccSplitConvertAmount split apar-acct)))
+       (lp rest invoices (+ overpayment (xaccSplitConvertAmount split apar-acct))
            opposing-splits))
       ((split . rest)
        (let* ((lot (xaccSplitGetLot split))
@@ -1017,22 +1020,24 @@ query instead.")
                    (((? split=?) . tail) (lp1 tail overpayment opposing-splits))
                    ((s . tail)
                     (let* ((lot-bal (gnc-lot-get-balance lot))
-                           (lot-bal (if (sign-equal? lot-bal (xaccSplitGetValue s))
+                           (lot-bal (if (sign-equal? lot-bal (xaccSplitConvertAmount s apar-acct))
                                         0 lot-bal))
                            (derived? (not (zero? lot-bal)))
                            (partial-amount
                             (fold
                              (lambda (a b)
-                               (if (equal? s a) b (+ b (xaccSplitGetValue a))))
+                               (if (equal? s a) b (+ b (xaccSplitConvertAmount a apar-acct))))
                              (- lot-bal) lot-all-splits)))
+                      (gnc:msg "next " (gnc:strify s) " overpayment " (+ overpayment partial-amount))
                       (lp1 tail (+ overpayment partial-amount)
                            (cons (list s partial-amount derived?)
                                  opposing-splits)))))))
            (inv
+            (gnc:msg "next " (gnc:strify split) " overpayment " (+ overpayment (xaccSplitConvertAmount split apar-acct)))
             (lp rest
                 (cons (cons inv split) invoices)
-                (+ overpayment (xaccSplitGetValue split))
-                opposing-splits))))))))
+                (+ overpayment (xaccSplitConvertAmount split apar-acct))
+                opposing-splits)))))))))
 
 ;; create a stepped list, then add a date in the infinite future for
 ;; the "current" bucket
@@ -1046,7 +1051,7 @@ query instead.")
 (define-public (gnc:owner-splits->aging-list splits num-buckets
                                              to-date date-type receivable?)
   (gnc:msg "processing " (qof-print-date to-date) " date-type " date-type
-           "receivable? " receivable?)
+           " receivable? " receivable?)
   (let ((bucket-dates (make-extended-interval-list to-date (- num-buckets 3)))
         (buckets (make-vector num-buckets 0)))
     (define (addbucket! idx amt)
@@ -1064,10 +1069,11 @@ query instead.")
                          (xaccSplitGetParent (car splits))))
                (lot (gncInvoiceGetPostedLot invoice))
                (lot-splits (gnc-lot-get-split-list lot))
+               (apar-acct (gncInvoiceGetPostedAcc invoice))
                (bal (fold
                      (lambda (a b)
                        (if (<= (xaccTransGetDate (xaccSplitGetParent a)) to-date)
-                           (+ (xaccSplitGetValue a) b)
+                           (+ (xaccSplitConvertAmount a apar-acct) b)
                            b))
                      0 lot-splits))
                (bal (if receivable? bal (- bal)))
