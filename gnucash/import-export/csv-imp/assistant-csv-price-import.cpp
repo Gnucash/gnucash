@@ -1044,6 +1044,11 @@ void CsvImpPriceAssist::preview_update_separators (GtkWidget* widget)
     /* Set the parse options using the checked_separators list. */
     price_imp->separators (checked_separators);
 
+    /* if there are no separators, there will only be one column
+     * so make sure column header is NONE */
+    if (checked_separators.empty())
+        price_imp->set_column_type_price (0, GncPricePropType::NONE);
+
     /* Parse the data using the new options. We don't want to reguess
      * the column types because we want to leave the user's
      * configurations intact. */
@@ -1772,13 +1777,21 @@ CsvImpPriceAssist::preview_refresh ()
             price_imp->to_currency());
 
     // Handle separator checkboxes and custom field, only relevant if the file format is csv
+    // Note we defer the change signal until all buttons have been updated
+    // An early update may result in an incomplete tokenize run that would
+    // cause our list of saved column types to be truncated
     if (price_imp->file_format() == GncImpFileFormat::CSV)
     {
         auto separators = price_imp->separators();
         const auto stock_sep_chars = std::string (" \t,:;-");
+
         for (int i = 0; i < SEP_NUM_OF_TYPES; i++)
+        {
+            g_signal_handlers_block_by_func (sep_button[i], (gpointer) csv_price_imp_preview_sep_button_cb, this);
             gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(sep_button[i]),
                 separators.find (stock_sep_chars[i]) != std::string::npos);
+            g_signal_handlers_unblock_by_func (sep_button[i], (gpointer) csv_price_imp_preview_sep_button_cb, this);
+        }
 
         // If there are any other separators in the separators string,
         // add them as custom separators
@@ -1788,9 +1801,16 @@ CsvImpPriceAssist::preview_refresh ()
             separators.erase(pos);
             pos = separators.find_first_of (stock_sep_chars);
         }
+        g_signal_handlers_block_by_func (custom_cbutton, (gpointer) csv_price_imp_preview_sep_button_cb, this);
+        g_signal_handlers_block_by_func (custom_entry, (gpointer) csv_price_imp_preview_sep_button_cb, this);
+
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(custom_cbutton),
-                !separators.empty());
+                                      !separators.empty());
         gtk_entry_set_text (GTK_ENTRY(custom_entry), separators.c_str());
+
+        g_signal_handlers_unblock_by_func (custom_cbutton, (gpointer) csv_price_imp_preview_sep_button_cb, this);
+        g_signal_handlers_unblock_by_func (custom_entry, (gpointer) csv_price_imp_preview_sep_button_cb, this);
+        csv_price_imp_preview_sep_button_cb (GTK_WIDGET(custom_cbutton), this);
     }
     // Repopulate the parsed data table
     g_idle_add ((GSourceFunc)csv_imp_preview_queue_rebuild_table, this);
