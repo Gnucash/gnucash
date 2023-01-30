@@ -1680,13 +1680,13 @@ gnc_split_reg_has_rate_cell (SplitRegisterType type)
     case GENERAL_JOURNAL:
     case INCOME_LEDGER:
     case SEARCH_LEDGER:
+    case RECEIVABLE_REGISTER:
+    case PAYABLE_REGISTER:
         return TRUE;
 
     case STOCK_REGISTER:
     case CURRENCY_REGISTER:
     case PORTFOLIO_LEDGER:
-    case RECEIVABLE_REGISTER:
-    case PAYABLE_REGISTER:
     default:
         return FALSE;
     }

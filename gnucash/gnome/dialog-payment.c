@@ -215,7 +215,7 @@ gnc_payment_window_refresh_handler (G_GNUC_UNUSED GHashTable *changes, gpointer 
     PaymentWindow *pw = data;
 
     gnc_payment_window_fill_docs_list (pw);
-    pw->post_acct = gnc_account_select_combo_fill (pw->post_combo, pw->book, pw->acct_types, pw->acct_commodities);
+    pw->post_acct = gnc_account_select_combo_fill (pw->post_combo, pw->book, pw->acct_types, NULL);
 }
 
 static gboolean
@@ -629,7 +629,7 @@ gnc_payment_dialog_owner_changed (PaymentWindow *pw)
     if (gncOwnerIsValid(owner))
         pw->acct_commodities = gncOwnerGetCommoditiesList (owner);
 
-    pw->post_acct = gnc_account_select_combo_fill (pw->post_combo, pw->book, pw->acct_types, pw->acct_commodities);
+    pw->post_acct = gnc_account_select_combo_fill (pw->post_combo, pw->book, pw->acct_types, NULL);
     if (gncOwnerEqual(&pw->owner, &pw->tx_info->owner) && pw->tx_info->post_acct)
     {
         pw->post_acct = pw->tx_info->post_acct;

@@ -197,6 +197,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
         gnc_table_layout_set_cell (layout, curs, DEBT_CELL,  0, 6);
         gnc_table_layout_set_cell (layout, curs, CRED_CELL,  0, 7);
         gnc_table_layout_set_cell (layout, curs, BALN_CELL,  0, 8);
+        gnc_table_layout_set_cell (layout, curs, RATE_CELL,  0, 9);
 
         curs_last = curs;
         curs = gnc_table_layout_get_cursor (layout,
@@ -229,6 +230,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
         gnc_table_layout_set_cell (layout, curs, TDEBT_CELL, 0, 6);
         gnc_table_layout_set_cell (layout, curs, TCRED_CELL, 0, 7);
         gnc_table_layout_set_cell (layout, curs, TBALN_CELL, 0, 8);
+        gnc_table_layout_set_cell (layout, curs, RATE_CELL,  0, 9);
 
         curs_last = curs;
         curs = gnc_table_layout_get_cursor (layout,
@@ -575,7 +577,7 @@ gnc_split_register_layout_add_cursors (SplitRegister* reg,
 
     case PAYABLE_REGISTER:
     case RECEIVABLE_REGISTER:
-        num_cols = 9;
+        num_cols = 10;
         break;
 
     case INCOME_LEDGER:
