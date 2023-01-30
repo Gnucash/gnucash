@@ -124,6 +124,7 @@ set_name_label(const GncOption& option, GtkGrid* page_box, int row, bool align)
         auto label{gtk_label_new(_(name))};
         if (align)
             align_label(GTK_LABEL(label));
+        gtk_widget_set_halign (GTK_WIDGET(label), GTK_ALIGN_END);
         gtk_grid_attach(GTK_GRID(page_box), label, 0, row, 1, 1);
     }
 }
