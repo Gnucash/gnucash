@@ -756,10 +756,12 @@ gncOwnerCreatePaymentLotSecs (const GncOwner *owner, Transaction **preset_txn,
     QofBook *book;
     Split *split;
     const char *name;
-    gnc_commodity *commodity;
+    gnc_commodity *post_comm, *xfer_comm;
     Split *xfer_split = NULL;
     Transaction *txn = NULL;
     GNCLot *payment_lot;
+    gnc_numeric xfer_amount = gnc_numeric_zero();
+    gnc_numeric txn_value = gnc_numeric_zero();
 
     /* Verify our arguments */
     if (!owner || !posted_acc || !xfer_acc) return NULL;
@@ -768,7 +770,9 @@ gncOwnerCreatePaymentLotSecs (const GncOwner *owner, Transaction **preset_txn,
     /* Compute the ancillary data */
     book = gnc_account_get_book (posted_acc);
     name = gncOwnerGetName (gncOwnerGetEndOwner ((GncOwner*)owner));
-    commodity = gncOwnerGetCurrency (owner);
+    post_comm = xaccAccountGetCommodity (posted_acc);
+    xfer_comm = xaccAccountGetCommodity (xfer_acc);
+
 //    reverse = use_reversed_payment_amounts(owner);
 
     if (preset_txn && *preset_txn)
@@ -776,110 +780,90 @@ gncOwnerCreatePaymentLotSecs (const GncOwner *owner, Transaction **preset_txn,
 
     if (txn)
     {
-        xaccTransSetDescription (txn, name ? name : "");
+        int i = 0;
 
         /* Pre-existing transaction was specified. We completely clear it,
-         * except for the split in the transfer account, unless the
-         * transaction can't be reused (wrong currency, wrong transfer account).
-         * In that case, the transaction is simply removed and an new
-         * one created. */
-
+         * except for a pre-existing transfer split. We're very conservative
+         * in preserving that one as it may have been reconciled already. */
         xfer_split = xaccTransFindSplitByAccount(txn, xfer_acc);
-
-        if (xaccTransGetCurrency(txn) != gncOwnerGetCurrency (owner))
+        xaccTransBeginEdit (txn);
+        while (i < xaccTransCountSplits(txn))
         {
-            PINFO("Uh oh, mismatching currency/commodity between selected transaction and owner. We fall back to manual creation of a new transaction.");
-            xfer_split = NULL;
+            Split *split = xaccTransGetSplit (txn, i);
+            if (split == xfer_split)
+                ++i;
+            else
+                xaccSplitDestroy(split);
         }
-
-        if (!xfer_split)
-        {
-            PINFO("Huh? Asset account not found anymore. Fully deleting old txn and now creating a new one.");
-
-            xaccTransBeginEdit (txn);
-            xaccTransDestroy (txn);
-            xaccTransCommitEdit (txn);
-
-            txn = NULL;
-        }
-        else
-        {
-            int i = 0;
-            xaccTransBeginEdit (txn);
-            while (i < xaccTransCountSplits(txn))
-            {
-                Split *split = xaccTransGetSplit (txn, i);
-                if (split == xfer_split)
-                {
-                    gnc_set_num_action (NULL, split, num, _("Payment"));
-                    ++i;
-                }
-                else
-                {
-                    xaccSplitDestroy(split);
-                }
-            }
-            /* Note: don't commit transaction now - that would insert an imbalance split.*/
-        }
+        /* Note: don't commit transaction now - that would insert an imbalance split.*/
     }
-
-    /* Create the transaction if we don't have one yet */
-    if (!txn)
+    else
     {
         txn = xaccMallocTransaction (book);
         xaccTransBeginEdit (txn);
     }
 
+    /* Complete transaction setup */
+    xaccTransSetDescription (txn, name ? name : "");
+    if (!gnc_commodity_equal(xaccTransGetCurrency (txn), post_comm) &&
+        !gnc_commodity_equal (xaccTransGetCurrency (txn), xfer_comm))
+        xaccTransSetCurrency (txn, xfer_comm);
+
+    /* With all commodities involved known, define split amounts and txn value.
+     * - post amount (amount passed in as parameter) is always in post_acct commodity,
+     * - xfer amount requires conversion if the xfer account has a different
+     *   commodity than the post account.
+     * - txn value requires conversion if the post account has a different
+     *   commodity than the transaction */
+    if (gnc_commodity_equal(post_comm, xfer_comm))
+        xfer_amount = amount;
+    else
+        xfer_amount = gnc_numeric_mul (amount, exch, GNC_DENOM_AUTO,
+                                       GNC_HOW_RND_ROUND_HALF_UP);
+
+    if (gnc_commodity_equal(post_comm, xaccTransGetCurrency (txn)))
+        txn_value = amount;
+    else
+        txn_value = gnc_numeric_mul (amount, exch, GNC_DENOM_AUTO,
+                                      GNC_HOW_RND_ROUND_HALF_UP);
+
     /* Insert a split for the transfer account if we don't have one yet */
     if (!xfer_split)
     {
-
-        /* Set up the transaction */
-        xaccTransSetDescription (txn, name ? name : "");
-        /* set per book option */
-        xaccTransSetCurrency (txn, commodity);
-
-
         /* The split for the transfer account */
-        split = xaccMallocSplit (book);
-        xaccSplitSetMemo (split, memo);
+        xfer_split = xaccMallocSplit (book);
+        xaccSplitSetMemo (xfer_split, memo);
         /* set per book option */
-        gnc_set_num_action (NULL, split, num, _("Payment"));
+        gnc_set_num_action (NULL, xfer_split, num, _("Payment"));
         xaccAccountBeginEdit (xfer_acc);
-        xaccAccountInsertSplit (xfer_acc, split);
+        xaccAccountInsertSplit (xfer_acc, xfer_split);
         xaccAccountCommitEdit (xfer_acc);
-        xaccTransAppendSplit (txn, split);
+        xaccTransAppendSplit (txn, xfer_split);
 
-        if (gnc_commodity_equal(xaccAccountGetCommodity(xfer_acc), commodity))
-        {
-            xaccSplitSetBaseValue (split, amount, commodity);
-        }
-        else
-        {
-            /* This will be a multi-currency transaction. The amount passed to this
-             * function is in the owner commodity (also used by the post account).
-             * For the xfer split we also need to value the payment in the xfer account's
-             * commodity.
-             * exch is from post account to xfer account so that can be used directly
-             * to calculate the equivalent amount in the xfer account's commodity. */
-            gnc_numeric xfer_amount = gnc_numeric_mul (amount, exch, GNC_DENOM_AUTO,
-                                                 GNC_HOW_RND_ROUND_HALF_UP);
-
-            xaccSplitSetAmount(split, xfer_amount); /* Payment in xfer account currency */
-            xaccSplitSetValue(split, amount); /* Payment in transaction currency */
-        }
+        xaccSplitSetAmount(xfer_split, xfer_amount); /* Payment in xfer account currency */
+        xaccSplitSetValue(xfer_split, txn_value); /* Payment in transaction currency */
+    }
+    /* For a pre-existing xfer split, let's check if the amount and value
+     * have changed. If so, update them and unreconcile. */
+    else if (!gnc_numeric_equal (xaccSplitGetAmount (xfer_split), xfer_amount) ||
+             !gnc_numeric_equal (xaccSplitGetValue (xfer_split), txn_value))
+    {
+        xaccSplitSetAmount (xfer_split, xfer_amount);
+        xaccSplitSetValue (xfer_split, txn_value);
+        xaccSplitSetReconcile (xfer_split, NREC);
     }
 
     /* Add a split in the post account */
     split = xaccMallocSplit (book);
     xaccSplitSetMemo (split, memo);
     /* set per book option */
-    gnc_set_num_action (NULL, split, num, _("Payment"));
+    xaccSplitSetAction (split, _("Payment"));
     xaccAccountBeginEdit (posted_acc);
     xaccAccountInsertSplit (posted_acc, split);
     xaccAccountCommitEdit (posted_acc);
     xaccTransAppendSplit (txn, split);
-    xaccSplitSetBaseValue (split, gnc_numeric_neg (amount), commodity);
+    xaccSplitSetAmount (split, gnc_numeric_neg (amount));
+    xaccSplitSetValue (split, gnc_numeric_neg (txn_value));
 
     /* Create a new lot for the payment */
     payment_lot = gnc_lot_new (book);
@@ -887,7 +871,7 @@ gncOwnerCreatePaymentLotSecs (const GncOwner *owner, Transaction **preset_txn,
     gnc_lot_add_split (payment_lot, split);
 
     /* Mark the transaction as a payment */
-    gnc_set_num_action (txn, NULL, num, _("Payment"));
+    xaccTransSetNum (txn, num);
     xaccTransSetTxnType (txn, TXN_TYPE_PAYMENT);
 
     /* Set date for transaction */

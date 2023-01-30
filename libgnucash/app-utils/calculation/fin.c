@@ -103,7 +103,7 @@
  * interest only loan), or large enough  to fully repay both the interest  and
  * principal during the term of the loan (a fully amoritized loan). Many loans
  * fall somewhere between, with payments that do not fully cover repayment  of
- * both the principal and interst. These loans require a larger final  payment
+ * both the principal and interest. These loans require a larger final payment
  * (balloon)  to  complete  their  amortization.  Payments  may  occur  at the
  * beginning or end of a payment period. If you and your friend had agreed  on
  * monthly repayment of  the $800 loan  at 12% NAR  compounded monthly, twelve
@@ -220,7 +220,7 @@
  *   compounding Frequency, CF, is simply the number of times per
  *   year, the monies in the financial transaction are compounded. In
  *   the U.S., monies are usually compounded daily on bank deposits,
- *   and monthly on loans. Somtimes Long term deposits are compounded
+ *   and monthly on loans. Sometimes Long term deposits are compounded
  *   quarterly or weekly.
  *
  *   The Payment Frequency, PF, is simply how often during a year
@@ -596,7 +596,7 @@
  *       T[n] = -i*n*(PV + C) - i*C*n(n+1)/2
  *       T[n] = -i*n*(PV + (C*(n - 1)/2))
  *
- * Note: substituing for C = -PV/N, in the equations for PV[n], I[n],
+ * Note: substituting for C = -PV/N, in the equations for PV[n], I[n],
  *   P[n], and T[n] would give the following equations:
  *
  *       PV[n] = PV*(1 - n/N)
@@ -739,12 +739,12 @@
  *   1. The payment *, interest paid, principal paid and remaining PV
  *   for each payment period are computed and displayed. At the end of
  *   each year a summary is computed and displayed and the total
- *   interest paid is diplayed at the end.
+ *   interest paid is displayed at the end.
  *
  *   2. A summary is computed and displayed for each year. The
  *   interest paid during the year is computed and displayed as well
  *   as the remaining balance at years end.  The total interest paid
- *   is diplayed at the end.
+ *   is displayed at the end.
  *
  *   3. An amortization schedule is computed for a common method of
  *   advanced payment of principal is computed and displayed. In this
@@ -1016,7 +1016,7 @@
  * Example 6: Balloon Payment
  * On long term loans, small changes in the periodic payments can generate
  * large changes in the future value. If the monthly payment in example 5 is
- * rounded down to $1125, how much addtional (balloon) payment will be due
+ * rounded down to $1125, how much additional (balloon) payment will be due
  * with the final regular payment.
  * <>pmt=-1125
  * -1,125
@@ -2035,7 +2035,7 @@ Amortization_Schedule (amort_sched_ptr amortsched)
                 else
                 {
                     /* remaining pv less than advanced principal payment reduce
-                     * advanced pricipal payment to remaining pv and set
+                     * advanced principal payment to remaining pv and set
                      * remaining pv to fv */
                     adv_pmt = -pv;
                     pv = fv;
@@ -2138,7 +2138,7 @@ Amortization_Schedule (amort_sched_ptr amortsched)
     case 'o':
         /* Constant payment to principal use constant payment equal to
          * original pv divided by number of periods.  constant payment to
-         * pricipal could be amount specified by user.  */
+         * principal could be amount specified by user.  */
         amortsched->schedule.first_yr =
             amortyr = (amort_sched_yr_ptr) calloc (1, sizeof (amort_sched_yr));
         amortsched->total_periods = n;

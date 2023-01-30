@@ -453,6 +453,10 @@
         44
         (gnc:accounts-count-splits (list expense income)))
 
+      (test-equal "gnc:accounts-count-splits null"
+        0
+        (gnc:accounts-count-splits '()))
+
       (let ((account-balances (gnc:get-assoc-account-balances
                                (list bank gbp-bank)
                                (lambda (acct)

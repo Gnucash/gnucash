@@ -173,7 +173,7 @@ static void qof_instance_class_init(QofInstanceClass *klass)
                            "Object Last Update",
                            "A pointer to the last time this object was "
                            "updated.  This value is present for use by "
-                           "backends and shouldnot be written by other "
+                           "backends and shouldn't be written by other "
                            "code.",
                            G_PARAM_READWRITE));
 
