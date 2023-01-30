@@ -229,7 +229,6 @@ void GncPreTrans::set (GncTransPropType prop_type, const std::string& value)
         // Drop any existing error for the prop_type we're about to set
         m_errors.erase(prop_type);
 
-        gnc_commodity *comm = nullptr;
         switch (prop_type)
         {
             case GncTransPropType::UNIQUE_ID:
@@ -397,7 +396,6 @@ bool GncPreTrans::is_multi_currency()
 
 void GncPreSplit::UpdateCrossSplitCounters ()
 {
-    auto acct = static_cast<Account *> (nullptr);
     if (m_account && *m_account)
     {
         auto acct = *m_account;

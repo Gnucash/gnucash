@@ -1771,13 +1771,11 @@ public:
         if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(px_button)))
         {
             option.set_alternate(false);
-            auto spin{g_list_nth_data(widgets, 1)};
             option.set_value(gtk_spin_button_get_value(GTK_SPIN_BUTTON(get_widget())));
         }
         else
         {
             option.set_alternate(true);
-            auto spin{g_list_nth_data(widgets, 3)};
             option.set_value(gtk_spin_button_get_value(GTK_SPIN_BUTTON(get_widget())));
         }
     }

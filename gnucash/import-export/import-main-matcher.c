@@ -1047,7 +1047,6 @@ gnc_gen_trans_set_price_to_selection_cb (GtkMenuItem *menuitem,
 
     GtkTreeView *treeview = GTK_TREE_VIEW(info->view);
     GtkTreeModel *model = gtk_tree_view_get_model (treeview);
-    GtkTreeStore *store  = GTK_TREE_STORE (model);
     GtkTreeSelection *selection = gtk_tree_view_get_selection (treeview);
     GList *selected_rows = gtk_tree_selection_get_selected_rows (selection, &model);
 
@@ -1065,9 +1064,7 @@ gnc_gen_trans_set_price_to_selection_cb (GtkMenuItem *menuitem,
         time64 post_date = xaccTransGetDate(trans);
         Split *split = gnc_import_TransInfo_get_fsplit (row->trans_info);
         Account *src_acc = xaccSplitGetAccount (split);
-        gnc_commodity *trans_curr = xaccTransGetCurrency (trans);
         Account *dest_acc = gnc_import_TransInfo_get_destacc (row->trans_info);
-        gnc_commodity *acc_comm = xaccAccountGetCommodity (dest_acc);
         gnc_numeric dest_value = gnc_import_TransInfo_get_dest_value (row->trans_info);
 
         XferDialog *xfer = gnc_xfer_dialog(GTK_WIDGET (info->main_widget), src_acc);

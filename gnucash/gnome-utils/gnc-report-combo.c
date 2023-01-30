@@ -119,7 +119,6 @@ static void
 gnc_report_combo_class_init (GncReportComboClass *klass)
 {
     GObjectClass   *object_class = G_OBJECT_CLASS(klass);
-    GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
 
     object_class->get_property = gnc_report_combo_get_property;
     object_class->dispose  = gnc_report_combo_dispose;
@@ -237,7 +236,6 @@ select_active_and_check_exists (GncReportCombo *grc)
     GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX(priv->combo));
     GtkTreeIter iter;
     gboolean valid_iter = gtk_tree_model_get_iter_first (model, &iter);
-    QofBook *book = gnc_get_current_book ();
     gchar *tmp;
 
     while (valid_iter)
@@ -446,7 +444,6 @@ gboolean
 gnc_report_combo_is_warning_visible_for_active (GncReportCombo *grc)
 {
     GncReportComboPrivate *priv;
-    gboolean missing = FALSE;
 
     g_return_val_if_fail (grc != NULL, FALSE);
     g_return_val_if_fail (GNC_IS_REPORT_COMBO(grc), FALSE);
