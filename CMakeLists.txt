@@ -11,9 +11,6 @@ project (gnucash
 
 enable_testing()
 
-# Version number of gnucash
-set (GNUCASH_LATEST_STABLE_SERIES 3.x)
-
 set (PACKAGE_NAME GnuCash)
 set (PACKAGE_BUGREPORT "https://bugs.gnucash.org")
 set (PACKAGE_STRING "${PACKAGE_NAME} ${PROJECT_VERSION}")

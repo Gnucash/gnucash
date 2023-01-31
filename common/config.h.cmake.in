@@ -54,9 +54,6 @@
    package management based version string instead. */
 #define GNUCASH_BUILD_ID "@GNUCASH_BUILD_ID@"
 
-/* Most recent stable GnuCash series */
-#define GNUCASH_LATEST_STABLE_SERIES "@GNUCASH_LATEST_STABLE_SERIES@"
-
 /* GnuCash earliest compatible databaseversion number */
 #define GNUCASH_RESAVE_VERSION @GNUCASH_RESAVE_VERSION@
 
