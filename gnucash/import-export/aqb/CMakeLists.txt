@@ -69,8 +69,8 @@ if(WITH_AQBANKING)
          ${GWENHYWFAR_LDFLAGS} ${GWEN_GTK3_LDFLAGS}
          ${AQB_LIBSTDCXX})
 
-  target_compile_definitions(gncmod-aqbanking PRIVATE -DG_LOG_DOMAIN=\"gnc.import.aqbanking\")
-  target_compile_options(gncmod-aqbanking PRIVATE -Wno-deprecated-declarations)
+  target_compile_definitions(gncmod-aqbanking PRIVATE G_LOG_DOMAIN=\"gnc.import.aqbanking\")
+  target_compile_definitions(gncmod-aqbanking PRIVATE AQBANKING_NOWARN_DEPRECATED)
 
   target_include_directories(gncmod-aqbanking PRIVATE
     ${AQBANKING_INCLUDE_DIRS}
