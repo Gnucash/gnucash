@@ -2176,7 +2176,7 @@ recn_destroy_cb (GtkWidget *w, gpointer data)
     //Disable the actions, the handlers try to access recnData
     for (gint i = 0; i < num_actions; i++)
     {
-        GAction *action = g_simple_action_group_lookup (recnData->simple_action_group, actions[i]);
+        GAction *action = g_action_map_lookup_action (G_ACTION_MAP(recnData->simple_action_group), actions[i]);
         g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
     }
     g_strfreev (actions);
