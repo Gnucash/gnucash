@@ -427,8 +427,8 @@ void GncPreSplit::set (GncTransPropType prop_type, const std::string& value)
                 m_account = boost::none;
                 if (value.empty())
                     throw std::invalid_argument (_("Account value can't be empty."));
-                acct = gnc_csv_account_map_search (value.c_str());
-                if (acct)
+                if ((acct = gnc_csv_account_map_search (value.c_str())) ||
+                    (acct = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), value.c_str())))
                     m_account = acct;
                 else
                     throw std::invalid_argument (_(bad_acct));
@@ -439,8 +439,8 @@ void GncPreSplit::set (GncTransPropType prop_type, const std::string& value)
                 if (value.empty())
                     throw std::invalid_argument (_("Transfer account value can't be empty."));
 
-                acct = gnc_csv_account_map_search (value.c_str());
-                if (acct)
+                if ((acct = gnc_csv_account_map_search (value.c_str())) ||
+                    (acct = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), value.c_str())))
                     m_taccount = acct;
                 else
                     throw std::invalid_argument (_(bad_tacct));

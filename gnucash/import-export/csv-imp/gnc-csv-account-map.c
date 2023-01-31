@@ -118,21 +118,19 @@ gnc_csv_account_map_load_mappings (GtkTreeModel *mappings_store)
         // Walk through the list, reading each row
         gtk_tree_model_get (GTK_TREE_MODEL(mappings_store), &iter, MAPPING_STRING, &map_string, MAPPING_ACCOUNT, &account, -1);
 
-        if (account == NULL) // if account is NULL, store has not been updated
+        // Look for an account matching the map_string
+        // It may already be set in the tree model. If not we try to match the map_string with
+        // - an entry in our saved account maps
+        // - a full name of any of our existing accounts
+        if (account ||
+            (account = gnc_csv_account_map_search (map_string)) ||
+            (account = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), map_string)))
         {
-            account = gnc_csv_account_map_search (map_string); //search the account list for the map_string
-
-            if (account == NULL) // account still NULL, we have no map
-            {
-                g_free (map_string);
-                valid = gtk_tree_model_iter_next (mappings_store, &iter);
-                continue;
-            }
+            fullpath = gnc_account_get_full_name (account);
+            gtk_list_store_set (GTK_LIST_STORE(mappings_store), &iter, MAPPING_FULLPATH, fullpath, -1);
+            gtk_list_store_set (GTK_LIST_STORE(mappings_store), &iter, MAPPING_ACCOUNT, account, -1);
+            g_free (fullpath);
         }
-        fullpath = gnc_account_get_full_name (account);
-        gtk_list_store_set (GTK_LIST_STORE(mappings_store), &iter, MAPPING_FULLPATH, fullpath, -1);
-        gtk_list_store_set (GTK_LIST_STORE(mappings_store), &iter, MAPPING_ACCOUNT, account, -1);
-        g_free (fullpath);
 
         g_free (map_string);
         valid = gtk_tree_model_iter_next (mappings_store, &iter);
