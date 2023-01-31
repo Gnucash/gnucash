@@ -103,7 +103,7 @@ GncTransPropType sanitize_trans_prop (GncTransPropType prop, bool multi_split);
 
 
 gnc_commodity* parse_commodity (const std::string& comm_str);
-GncNumeric parse_amount (const std::string &str, int currency_format);
+GncNumeric parse_monetary (const std::string &str, int currency_format);
 
 struct GncPreTrans
 {
