@@ -66,7 +66,7 @@ typedef enum
 typedef struct AccountPrivate
 {
     /* The accountName is an arbitrary string assigned by the user.
-     * It is intended to a short, 5 to 30 character long string that
+     * It is intended to be a short, 5 to 30 character long string that
      * is displayed by the GUI as the account mnemonic.
      */
     const char *accountName;

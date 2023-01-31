@@ -2129,7 +2129,7 @@ gnc_register_multichoice_callback_option(GncOptionDBPtr& db,
             });
     }
 
-    /** Tailred for gnc:generate-restore-forms.
+    /** Tailored for gnc:generate-restore-forms.
      * @param section_op A function to be called on each section name
      * @param option_op a function to be called on each option
      */
