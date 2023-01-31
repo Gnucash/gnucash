@@ -914,7 +914,7 @@ typedef enum
     */
     /** The gnc_account_lookup_by_name() subroutine fetches the account by
      *  name from the descendants of the specified account.  The immediate
-     *  children are searched first.  If there is no match,, then a
+     *  children are searched first.  If there is no match, then a
      *  recursive search of all descendants is performed looking for a
      *  match.
      *

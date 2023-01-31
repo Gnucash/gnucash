@@ -113,7 +113,7 @@ GncNumeric parse_amount (const std::string &str, int currency_format)
     if (str.empty())
         return GncNumeric{};
 
-    /* Strings otherwise containing not digits will be considered invalid */
+    /* Strings otherwise containing no digits will be considered invalid */
     if(!boost::regex_search(str, boost::regex("[0-9]")))
         throw std::invalid_argument (_("Value doesn't appear to contain a valid number."));
 

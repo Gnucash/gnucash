@@ -1732,8 +1732,6 @@ void CsvImpTransAssist::preview_validate_settings ()
 
 /* Populates the account match view with all potential
  * account names found in the parse data.
- *
- * @param info The data being previewed
  */
 void CsvImpTransAssist::acct_match_set_accounts ()
 {
@@ -1963,7 +1961,7 @@ CsvImpTransAssist::assist_account_match_page_prepare ()
     // Load the account strings into the store
     acct_match_set_accounts ();
 
-    // Match the account strings to the mappings
+    // Match the account strings to account maps from previous imports
     auto store = gtk_tree_view_get_model (GTK_TREE_VIEW(account_match_view));
     gnc_csv_account_map_load_mappings (store);
 
