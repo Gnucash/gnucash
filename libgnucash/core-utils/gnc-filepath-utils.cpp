@@ -701,7 +701,7 @@ static std::string migrate_gnc_datahome()
                                          % gnc_userconfig_home.string().c_str();
 
         migration_msg << std::endl;
-        for (auto success_file : succeeded)
+        for (const auto& success_file : succeeded)
             migration_msg << "- " << success_file << std::endl;
     }
     if (!conf_exist_vec.empty())
@@ -711,7 +711,7 @@ static std::string migrate_gnc_datahome()
                                         "The following files have become obsolete and will be ignored:",
                                         conf_exist_vec.size())
                       << std::endl;
-        for (auto obs_file : conf_exist_vec)
+        for (const auto& obs_file : conf_exist_vec)
             migration_msg << "- " << obs_file << std::endl;
     }
     if (!failed.empty())
@@ -721,7 +721,7 @@ static std::string migrate_gnc_datahome()
                                                     "The following files could not be moved to {1}:",
                                                           failed.size())}) % gnc_userconfig_home.string().c_str()
                       << std::endl;
-        for (auto failed_file : failed)
+        for (const auto& failed_file : failed)
             migration_msg << "- " << failed_file << std::endl;
     }
 

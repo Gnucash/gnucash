@@ -801,7 +801,7 @@ void CsvImpPriceAssist::preview_populate_settings_combo()
 
     // Append the default entry
     auto presets = get_import_presets_price ();
-    for (auto preset : presets)
+    for (const auto& preset : presets)
     {
         GtkTreeIter iter;
         gtk_list_store_append (GTK_LIST_STORE(model), &iter);

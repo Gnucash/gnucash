@@ -146,7 +146,7 @@ update_available_lists(gnc_column_view_edit * view)
     auto store = GTK_LIST_STORE(model);
     gtk_list_store_clear(store);
 
-    for (auto guid : view->available_list)
+    for (const auto& guid : view->available_list)
     {
        auto rpt_guid{scm_from_utf8_string(guid.c_str())};
        auto name =

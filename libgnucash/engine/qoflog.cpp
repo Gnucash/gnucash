@@ -338,7 +338,7 @@ qof_log_check(QofLogModule domain, QofLogLevel level)
 
     auto domain_vec = split_domain(domain);
 
-    for (auto part : domain_vec)
+    for (const auto& part : domain_vec)
     {
         auto iter = std::find_if(module->m_children.begin(),
                                module->m_children.end(),

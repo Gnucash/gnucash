@@ -178,7 +178,7 @@ UriStrings::quote_dbname(DbType t) const noexcept
 static void
 set_options(dbi_conn conn, const PairVec& options)
 {
-    for (auto option : options)
+    for (const auto& option : options)
     {
         auto opt = option.first.c_str();
         auto val = option.second.c_str();

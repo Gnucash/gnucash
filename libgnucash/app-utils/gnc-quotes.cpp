@@ -154,7 +154,7 @@ m_version{}, m_sources{}, m_api_key{}
     if (rv)
     {
         std::string err{bl::translate("Failed to initialize Finance::Quote: ")};
-        for (auto err_line : errors)
+        for (const auto& err_line : errors)
             err += err_line.empty() ? "" : err_line + "\n";
         throw(GncQuoteSourceError(err));
     }
@@ -427,13 +427,13 @@ get_quotes(const std::string& json_str, const std::unique_ptr<GncQuoteSource>& q
 
     if (rv == 0)
     {
-        for (auto line : quotes)
+        for (const auto& line : quotes)
             answer.append(line + "\n");
     }
     else
     {
         std::string err_str;
-        for (auto line: errors)
+        for (const auto& line: errors)
         {
             if (line == "invalid_json\n")
                 PERR("Finanace Quote Wrapper was unable to parse %s",
@@ -831,7 +831,7 @@ get_commodity_data(const bpt::ptree& pt, const std::string& comm)
 static void
 show_quotes(const bpt::ptree& pt, const StrVec& commodities, bool verbose)
 {
-    for (auto comm : commodities)
+    for (const auto& comm : commodities)
     {
         auto comm_pt{get_commodity_data(pt, comm)};
 
@@ -854,7 +854,7 @@ static void
 show_currency_quotes(const bpt::ptree& pt, const StrVec& commodities, bool verbose)
 {
     auto to_cur{commodities.front()};
-    for (auto comm : commodities)
+    for (const auto& comm : commodities)
     {
         if (comm == to_cur)
             continue;
