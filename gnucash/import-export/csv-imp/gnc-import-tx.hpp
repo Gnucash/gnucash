@@ -181,11 +181,10 @@ private:
      */
     std::shared_ptr<DraftTransaction> trans_properties_to_trans (std::vector<parse_line_t>::iterator& parsed_line);
 
-    /* Two internal helper functions that should only be called from within
+    /* Internal helper function that should only be called from within
      * set_column_type for consistency (otherwise error messages may not be (re)set)
      */
-    void update_pre_trans_props (uint32_t row, uint32_t col, GncTransPropType prop_type);
-    void update_pre_split_props (uint32_t row, uint32_t col, GncTransPropType prop_type);
+    void update_pre_trans_split_props (uint32_t row, uint32_t col, GncTransPropType old_type, GncTransPropType new_type);
 
     struct CsvTranImpSettings; //FIXME do we need this line
     CsvTransImpSettings m_settings;

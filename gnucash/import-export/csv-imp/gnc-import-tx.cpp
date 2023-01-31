@@ -737,93 +737,55 @@ GncTxImport::check_for_column_type (GncTransPropType type)
 }
 
 /* A helper function intended to be called only from set_column_type */
-void GncTxImport::update_pre_trans_props (uint32_t row, uint32_t col, GncTransPropType prop_type)
+void GncTxImport::update_pre_trans_split_props (uint32_t row, uint32_t col, GncTransPropType old_type, GncTransPropType new_type)
 {
-    if ((prop_type == GncTransPropType::NONE) || (prop_type > GncTransPropType::TRANS_PROPS))
-        return; /* Only deal with transaction related properties. */
-
     /* Deliberately make a copy of the GncPreTrans. It may be the original one was shared
-     * with a previous line and should no longer be after the transprop is changed. */
+     * with a previous line and should no longer be after the transprop is changed.
+     * This doesn't apply for the GncPreSplit so we just get a pointer to it for easier processing.
+     */
     auto trans_props = std::make_shared<GncPreTrans> (*(std::get<PL_PRETRANS>(m_parsed_lines[row])).get());
-    auto value = std::string();
-
-    if (col < std::get<PL_INPUT>(m_parsed_lines[row]).size())
-        value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col);
-
-    if (value.empty())
-        trans_props->reset (prop_type);
-    else
-    {
-        try
-        {
-            trans_props->set(prop_type, value);
-        }
-        catch (const std::exception& e)
-        {
-            /* Do nothing, just prevent the exception from escalating up
-             * However log the error if it happens on a row that's not skipped
-             */
-            if (!std::get<PL_SKIP>(m_parsed_lines[row]))
-                PINFO("User warning: %s", e.what());
-        }
-    }
-
-    /* Store the result */
-    std::get<PL_PRETRANS>(m_parsed_lines[row]) = trans_props;
-
-    /* For multi-split input data, we need to check whether this line is part of
-     * a transaction that has already been started by a previous line. */
-    if (m_settings.m_multi_split)
-    {
-        if (trans_props->is_part_of(m_parent))
-        {
-            /* This line is part of an already started transaction
-             * continue with that one instead to make sure the split from this line
-             * gets added to the proper transaction */
-            std::get<PL_PRETRANS>(m_parsed_lines[row]) = m_parent;
-        }
-        else
-        {
-            /* This line starts a new transaction, set it as parent for
-             * subsequent lines. */
-            m_parent = trans_props;
-        }
-    }
-}
-
-/* A helper function intended to be called only from set_column_type */
-void GncTxImport::update_pre_split_props (uint32_t row, uint32_t col, GncTransPropType prop_type)
-{
-    if ((prop_type > GncTransPropType::SPLIT_PROPS) || (prop_type <= GncTransPropType::TRANS_PROPS))
-        return; /* Only deal with split related properties. */
-
     auto split_props = std::get<PL_PRESPLIT>(m_parsed_lines[row]);
 
-    split_props->reset (prop_type);
+    /* Start by resetting the value of the old_type. */
+    if ((old_type > GncTransPropType::NONE) && (old_type <= GncTransPropType::TRANS_PROPS))
+        trans_props->reset (old_type);
+    if ((old_type > GncTransPropType::TRANS_PROPS) && (old_type <= GncTransPropType::SPLIT_PROPS))
+        split_props->reset (old_type);
+
+    /* Next attempt to set the value for new_type (may throw!) */
     try
     {
-        // Except for Deposit or Withdrawal lines there can only be
-        // one column with a given property type.
-        if ((prop_type != GncTransPropType::DEPOSIT) &&
-            (prop_type != GncTransPropType::WITHDRAWAL))
+        if ((new_type > GncTransPropType::NONE) && (new_type <= GncTransPropType::TRANS_PROPS))
         {
-            auto value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col);
-            split_props->set(prop_type, value);
+            auto value = std::string();
+
+            if (col < std::get<PL_INPUT>(m_parsed_lines[row]).size())
+                value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col);
+
+            trans_props->set(new_type, value);
         }
-        else
+
+        if ((new_type > GncTransPropType::TRANS_PROPS) && (new_type <= GncTransPropType::SPLIT_PROPS))
         {
-            // For Deposits and Withdrawal we have to sum all columns with this property
-            for (auto col_it = m_settings.m_column_types.cbegin();
-                      col_it < m_settings.m_column_types.cend();
-                      col_it++)
+            /* Except for Deposit or Withdrawal lines there can only be
+             * one column with a given property type. */
+            if ((new_type != GncTransPropType::DEPOSIT) &&
+                (new_type != GncTransPropType::WITHDRAWAL))
             {
-                if (*col_it == prop_type)
-                {
-                    auto col_num = col_it - m_settings.m_column_types.cbegin();
-                    auto value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col_num);
-                    split_props->add (prop_type, value);
-                }
+                auto value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col);
+                split_props->set(new_type, value);
             }
+            else
+                /* For Deposits and Withdrawal we have to sum all columns with this property */
+                for (auto col_it = m_settings.m_column_types.cbegin();
+                          col_it < m_settings.m_column_types.cend();
+                          col_it++)
+                         if (*col_it == new_type)
+                         {
+                             auto col_num = col_it - m_settings.m_column_types.cbegin();
+                             auto value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col_num);
+                             split_props->add (new_type, value);
+                         }
         }
     }
     catch (const std::exception& e)
@@ -833,6 +795,24 @@ void GncTxImport::update_pre_split_props (uint32_t row, uint32_t col, GncTransPr
             */
         if (!std::get<PL_SKIP>(m_parsed_lines[row]))
             PINFO("User warning: %s", e.what());
+    }
+
+    /* All value updates are finished by now, time to determine
+     * what to do with the updated GncPreTrans copy.
+     *
+     * For multi-split input data this line may be part of a transaction
+     * that has already been started by a previous line. In that case
+     * reuse the GncPreTrans from that previous line (which we track
+     * in m_parent).
+     * In all other cases our new GncPreTrans should be used for this line
+     * and be marked as the new potential m_parent for subsequent lines.
+     */
+    if (m_settings.m_multi_split && trans_props->is_part_of(m_parent))
+        std::get<PL_PRETRANS>(m_parsed_lines[row]) = m_parent;
+    else
+    {
+        std::get<PL_PRETRANS>(m_parsed_lines[row]) = trans_props;
+        m_parent = trans_props;
     }
 }
 
@@ -875,27 +855,8 @@ GncTxImport::set_column_type (uint32_t position, GncTransPropType type, bool for
 
         uint32_t row = parsed_lines_it - m_parsed_lines.begin();
 
-        /* If the column type actually changed, first reset the property
-         * represented by the old column type
-         */
-        if (old_type != type)
-        {
-            auto old_col = std::get<PL_INPUT>(*parsed_lines_it).size(); // Deliberately out of bounds to trigger a reset!
-            if ((old_type > GncTransPropType::NONE)
-                    && (old_type <= GncTransPropType::TRANS_PROPS))
-                update_pre_trans_props (row, old_col, old_type);
-            else if ((old_type > GncTransPropType::TRANS_PROPS)
-                    && (old_type <= GncTransPropType::SPLIT_PROPS))
-                update_pre_split_props (row, old_col, old_type);
-        }
-
-        /* Then set the property represented by the new column type */
-        if ((type > GncTransPropType::NONE)
-                && (type <= GncTransPropType::TRANS_PROPS))
-            update_pre_trans_props (row, position, type);
-        else if ((type > GncTransPropType::TRANS_PROPS)
-                && (type <= GncTransPropType::SPLIT_PROPS))
-            update_pre_split_props (row, position, type);
+        /* Update the property represented by the new column type */
+        update_pre_trans_split_props (row, position, old_type, type);
 
         /* Report errors if there are any */
         auto trans_errors = std::get<PL_PRETRANS>(*parsed_lines_it)->errors();
@@ -904,7 +865,6 @@ GncTxImport::set_column_type (uint32_t position, GncTransPropType type, bool for
                 trans_errors +
                 (trans_errors.empty() && split_errors.empty() ? std::string() : "\n") +
                 split_errors;
-
     }
 }
 
