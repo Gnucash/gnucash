@@ -108,10 +108,12 @@ GncNumeric parse_monetary (const std::string &str, int currency_format);
 struct GncPreTrans
 {
 public:
-    GncPreTrans(int date_format) : m_date_format{date_format} {};
+    GncPreTrans(int date_format, bool multi_split)
+        : m_date_format{date_format}, m_multi_split{multi_split} {};
 
     void set (GncTransPropType prop_type, const std::string& value);
     void set_date_format (int date_format) { m_date_format = date_format ;}
+    void set_multi_split (bool multi_split) { m_multi_split = multi_split ;}
     void reset (GncTransPropType prop_type);
     std::string verify_essentials (void);
     Transaction *create_trans (QofBook* book, gnc_commodity* currency);
@@ -136,6 +138,7 @@ public:
 
 private:
     int m_date_format;
+    bool m_multi_split;
     boost::optional<std::string> m_differ;
     boost::optional<GncDate> m_date;
     boost::optional<std::string> m_num;

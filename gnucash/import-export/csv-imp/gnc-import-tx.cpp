@@ -402,7 +402,7 @@ void GncTxImport::tokenize (bool guessColTypes)
         auto length = tokenized_line.size();
         if (length > 0)
             m_parsed_lines.push_back (std::make_tuple (tokenized_line, std::string(),
-                    std::make_shared<GncPreTrans>(date_format()),
+                    std::make_shared<GncPreTrans>(date_format(), m_settings.m_multi_split),
                     std::make_shared<GncPreSplit>(date_format(), currency_format()),
                     false));
         if (length > max_cols)
@@ -850,6 +850,7 @@ GncTxImport::set_column_type (uint32_t position, GncTransPropType type, bool for
          * to ensure column updates use the most recent one
          */
         std::get<PL_PRETRANS>(*parsed_lines_it)->set_date_format (m_settings.m_date_format);
+        std::get<PL_PRETRANS>(*parsed_lines_it)->set_multi_split (m_settings.m_multi_split);
         std::get<PL_PRESPLIT>(*parsed_lines_it)->set_date_format (m_settings.m_date_format);
         std::get<PL_PRESPLIT>(*parsed_lines_it)->set_currency_format (m_settings.m_currency_format);
 

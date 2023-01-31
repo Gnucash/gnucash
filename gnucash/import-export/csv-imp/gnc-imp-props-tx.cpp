@@ -218,7 +218,12 @@ void GncPreTrans::set (GncTransPropType prop_type, const std::string& value)
 
             case GncTransPropType::DATE:
                 m_date = boost::none;
-                m_date = GncDate(value, GncDate::c_formats[m_date_format].m_fmt); // Throws if parsing fails
+                if (!value.empty())
+                    m_date = GncDate(value, GncDate::c_formats[m_date_format].m_fmt); // Throws if parsing fails
+                else if (!m_multi_split)
+                    throw std::invalid_argument (
+                        (bl::format (std::string{_("Date field can not be empty if 'Multi-split' option is unset.\n")}) %
+                                     std::string{_(gnc_csv_col_type_strs[prop_type])}).str());
                 break;
 
             case GncTransPropType::NUM:
@@ -231,6 +236,10 @@ void GncPreTrans::set (GncTransPropType prop_type, const std::string& value)
                 m_desc = boost::none;
                 if (!value.empty())
                     m_desc = value;
+                else if (!m_multi_split)
+                    throw std::invalid_argument (
+                        (bl::format (std::string{_("Description field can not be empty if 'Multi-split' option is unset.\n")}) %
+                                     std::string{_(gnc_csv_col_type_strs[prop_type])}).str());
                 break;
 
             case GncTransPropType::NOTES:
