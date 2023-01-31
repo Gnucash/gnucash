@@ -314,7 +314,6 @@ typedef struct GncPluginPageInvoicePrivate
     GtkWidget *widget;
     gboolean is_posted;
     gboolean can_unpost;
-    gboolean is_readonly;
 
     gint component_manager_id;
 } GncPluginPageInvoicePrivate;
@@ -507,18 +506,17 @@ gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, g
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_INVOICE(page));
 
-    window = (GncMainWindow*)gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page));
-
-    if (gnc_main_window_get_current_page (window) != page)
-        return;
-
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(page);
-    invoice_type = gnc_invoice_get_type_from_window(priv->iw);
 
     // lets remember these settings
     priv->is_posted = is_posted;
     priv->can_unpost = can_unpost;
-    priv->is_readonly = is_readonly;
+
+    window = (GncMainWindow*)gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page));
+    if (gnc_main_window_get_current_page (window) != page)
+        return;
+
+    invoice_type = gnc_invoice_get_type_from_window(priv->iw);
 
     switch (invoice_type) {
         case GNC_INVOICE_CUST_INVOICE:
