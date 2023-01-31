@@ -43,12 +43,6 @@
 /* Microsoft Windows OS */
 #cmakedefine GNC_PLATFORM_WINDOWS 1
 
-/* using GNOME */
-#cmakedefine GNOME
-
-/* Don't use deprecated gnome functions */
-#cmakedefine GNOME_DISABLE_DEPRECATED
-
 /* GnuCash build identification, which defaults to a description of the vcs
    commit from which gnucash is built. Distributions may want to insert a
    package management based version string instead. */
