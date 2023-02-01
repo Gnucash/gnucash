@@ -1098,6 +1098,21 @@ qof_book_get_default_invoice_report_name (const QofBook *book)
     return report_name;
 }
 
+gdouble
+qof_book_get_default_invoice_report_timeout (const QofBook *book)
+{
+    double ret = 0;
+    KvpFrame *root = qof_instance_get_slots (QOF_INSTANCE(book));
+    KvpValue *value = root->get_slot ({KVP_OPTION_PATH,
+                                       OPTION_SECTION_BUSINESS,
+                                       OPTION_NAME_DEFAULT_INVOICE_REPORT_TIMEOUT});
+
+    if (value)
+        ret = {value->get<double>()};
+
+    return ret;
+}
+
 /* Note: this will fail if the book slots we're looking for here are flattened at some point !
  * When that happens, this function can be removed. */
 static Path opt_name_to_path (const char* opt_name)

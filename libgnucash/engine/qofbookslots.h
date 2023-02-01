@@ -72,6 +72,7 @@
 #define OPTION_SECTION_BUSINESS        N_("Business")
 
 #define OPTION_NAME_DEFAULT_INVOICE_REPORT  N_("Default Invoice Report")
+#define OPTION_NAME_DEFAULT_INVOICE_REPORT_TIMEOUT N_("Default Invoice Report Timeout")
 
 /** @} */
 

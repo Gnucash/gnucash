@@ -305,6 +305,11 @@ gchar * qof_book_get_default_invoice_report_guid (const QofBook *book);
  */
 gchar * qof_book_get_default_invoice_report_name (const QofBook *book);
 
+/** Get the length of time available to change the used Invoice Report
+ *  when printing Invoices
+ */
+gdouble qof_book_get_default_invoice_report_timeout (const QofBook *book);
+
 /** Returns TRUE if this book uses split action field as the 'Num' field, FALSE
  *  if it uses transaction number field */
 gboolean qof_book_use_split_action_for_num_field (const QofBook *book);

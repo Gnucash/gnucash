@@ -1277,9 +1277,13 @@ gnc_option_db_book_options(GncOptionDB* odb)
                                N_("The ID for your company (eg 'Tax-ID: 00-000000)."),
                                empty_string);
     gnc_register_invoice_print_report_option(odb, business_section,
-                                 OPTION_NAME_DEFAULT_INVOICE_REPORT, "e",
+                                 OPTION_NAME_DEFAULT_INVOICE_REPORT, "e1",
                                  N_("The invoice report to be used for printing."),
                                  empty_string);
+    gnc_register_number_range_option<double>(odb, business_section,
+                                     OPTION_NAME_DEFAULT_INVOICE_REPORT_TIMEOUT, "e2",
+                                     N_("Length of time to change the used invoice report. A value of 0 means disabled."),
+                                     0.0, 0.0, 10.0, 1.0);
     gnc_register_taxtable_option(odb, business_section,
                                  N_("Default Customer TaxTable"), "f1",
                                  N_("The default tax table to apply to customers."),
