@@ -2320,6 +2320,10 @@ create_hash_of_potential_matches (GList *candidate_txns,
         GSList* split_list;
         if (gnc_import_split_has_online_id (candidate->data))
             continue;
+        /* In this context an open transaction represents a freshly
+         * downloaded one. That can't possibly be a match yet */
+        if (xaccTransIsOpen(xaccSplitGetParent(candidate->data)))
+            continue;
         split_account = xaccSplitGetAccount (candidate->data);
         /* g_hash_table_steal_extended would do the two calls in one shot but is
          * not available until GLib 2.58.

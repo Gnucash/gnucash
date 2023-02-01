@@ -633,207 +633,202 @@ void split_find_match (GNCImportTransInfo * trans_info,
 {
     /* DEBUG("Begin"); */
 
-    /*Ignore the split if the transaction is open for edit, meaning it
-      was just downloaded. */
-    if (xaccTransIsOpen(xaccSplitGetParent(split)) == FALSE)
+    GNCImportMatchInfo * match_info;
+    gint prob = 0;
+    gboolean update_proposed;
+    double downloaded_split_amount, match_split_amount;
+    time64 match_time, download_time;
+    int datediff_day;
+    Transaction *new_trans = gnc_import_TransInfo_get_trans (trans_info);
+    Split *new_trans_fsplit = gnc_import_TransInfo_get_fsplit (trans_info);
+
+    /* Matching heuristics */
+
+    /* Amount heuristics */
+    downloaded_split_amount =
+        gnc_numeric_to_double (xaccSplitGetAmount(new_trans_fsplit));
+    /*DEBUG(" downloaded_split_amount=%f", downloaded_split_amount);*/
+    match_split_amount = gnc_numeric_to_double(xaccSplitGetAmount(split));
+    /*DEBUG(" match_split_amount=%f", match_split_amount);*/
+    if (fabs(downloaded_split_amount - match_split_amount) < 1e-6)
+        /* bug#347791: Double type shouldn't be compared for exact
+            equality, so we're using fabs() instead. */
+        /*if (gnc_numeric_equal(xaccSplitGetAmount
+            (new_trans_fsplit),
+            xaccSplitGetAmount(split)))
+            -- gnc_numeric_equal is an expensive function call */
     {
-        GNCImportMatchInfo * match_info;
-        gint prob = 0;
-        gboolean update_proposed;
-        double downloaded_split_amount, match_split_amount;
-        time64 match_time, download_time;
-        int datediff_day;
-        Transaction *new_trans = gnc_import_TransInfo_get_trans (trans_info);
-        Split *new_trans_fsplit = gnc_import_TransInfo_get_fsplit (trans_info);
-
-        /* Matching heuristics */
-
-        /* Amount heuristics */
-        downloaded_split_amount =
-            gnc_numeric_to_double (xaccSplitGetAmount(new_trans_fsplit));
-        /*DEBUG(" downloaded_split_amount=%f", downloaded_split_amount);*/
-        match_split_amount = gnc_numeric_to_double(xaccSplitGetAmount(split));
-        /*DEBUG(" match_split_amount=%f", match_split_amount);*/
-        if (fabs(downloaded_split_amount - match_split_amount) < 1e-6)
-            /* bug#347791: Double type shouldn't be compared for exact
-               equality, so we're using fabs() instead. */
-            /*if (gnc_numeric_equal(xaccSplitGetAmount
-              (new_trans_fsplit),
-              xaccSplitGetAmount(split)))
-              -- gnc_numeric_equal is an expensive function call */
-        {
-            prob = prob + 3;
-            /*DEBUG("heuristics:  probability + 3 (amount)");*/
-        }
-        else if (fabs (downloaded_split_amount - match_split_amount) <=
-                 fuzzy_amount_difference)
-        {
-            /* ATM fees are sometimes added directly in the transaction.
-               So you withdraw 100$ and get charged 101,25$ in the same
-               transaction */
-            prob = prob + 2;
-            /*DEBUG("heuristics:  probability + 2 (amount)");*/
-        }
-        else
-        {
-            /* If a transaction's amount doesn't match within the
-               threshold, it's very unlikely to be the same transaction
-               so we give it an extra -5 penalty */
-            prob = prob - 5;
-            /* DEBUG("heuristics:  probability - 1 (amount)"); */
-        }
-
-        /* Date heuristics */
-        match_time = xaccTransGetDate (xaccSplitGetParent (split));
-        download_time = xaccTransGetDate (new_trans);
-        datediff_day = llabs(match_time - download_time) / 86400;
-        /* Sorry, there are not really functions around at all that
-        	 provide for less hacky calculation of days of date
-        	 differences. Whatever. On the other hand, the difference
-        	 calculation itself will work regardless of month/year
-        	 turnarounds. */
-        /*DEBUG("diff day %d", datediff_day);*/
-        if (datediff_day == 0)
-        {
-            prob = prob + 3;
-            /*DEBUG("heuristics:  probability + 3 (date)");*/
-        }
-        else if (datediff_day <= date_threshold)
-        {
-            prob = prob + 2;
-            /*DEBUG("heuristics:  probability + 2 (date)");*/
-        }
-        else if (datediff_day > date_not_threshold)
-        {
-            /* Extra penalty if that split lies awfully far away from
-               the given one. */
-            prob = prob - 5;
-            /*DEBUG("heuristics:  probability - 5 (date)"); */
-            /* Changed 2005-02-21: Revert the hard-limiting behaviour
-               back to the previous large penalty. (Changed 2004-11-27:
-               The penalty is so high that we can forget about this
-               split anyway and skip the rest of the tests.) */
-        }
-
-        /* Check if date and amount are identical */
-        update_proposed = (prob < 6);
-
-        /* Check number heuristics */
-        {
-            const char *new_trans_str = gnc_get_num_action(new_trans, new_trans_fsplit);
-            if (new_trans_str && strlen(new_trans_str) != 0)
-            {
-                long new_trans_number, split_number;
-                const gchar *split_str;
-                char *endptr;
-                gboolean conversion_ok = TRUE;
-
-                /* To distinguish success/failure after strtol call */
-                errno = 0;
-                new_trans_number = strtol(new_trans_str, &endptr, 10);
-                /* Possible addressed problems: over/underflow, only non
-                	     numbers on string and string empty */
-                if (errno || endptr == new_trans_str)
-                    conversion_ok = FALSE;
-
-                split_str = gnc_get_num_action (xaccSplitGetParent (split), split);
-                errno = 0;
-                split_number = strtol(split_str, &endptr, 10);
-                if (errno || endptr == split_str)
-                    conversion_ok = FALSE;
-
-                if ( (conversion_ok && (split_number == new_trans_number)) ||
-                        (g_strcmp0(new_trans_str, split_str) == 0) )
-                {
-                    /* An exact match of the Check number gives a +4 */
-                    prob += 4;
-                    /*DEBUG("heuristics:  probability + 4 (Check number)");*/
-                }
-                else if (strlen(new_trans_str) > 0 && strlen(split_str) > 0)
-                {
-                    /* If both number are not empty yet do not match, add a
-                    		 little extra penalty */
-                    prob -= 2;
-                }
-            }
-        }
-
-        /* Memo heuristics */
-        {
-            const char *memo = xaccSplitGetMemo(new_trans_fsplit);
-            if (memo && strlen(memo) != 0)
-            {
-                if (safe_strcasecmp(memo, xaccSplitGetMemo(split)) == 0)
-                {
-                    /* An exact match of memo gives a +2 */
-                    prob = prob + 2;
-                    /* DEBUG("heuristics:  probability + 2 (memo)"); */
-                }
-                else if ((strncasecmp(memo, xaccSplitGetMemo(split),
-                                      strlen(xaccSplitGetMemo(split)) / 2)
-                          == 0))
-                {
-                    /* Very primitive fuzzy match worth +1.  This matches the
-                    		 first 50% of the strings to skip annoying transaction
-                    		 number some banks seem to include in the memo but someone
-                    		 should write something more sophisticated */
-                    prob = prob + 1;
-                    /*DEBUG("heuristics:  probability + 1 (memo)");	*/
-                }
-            }
-        }
-
-        /* Description heuristics */
-        {
-            const char *descr = xaccTransGetDescription(new_trans);
-            if (descr && strlen(descr) != 0)
-            {
-                if (safe_strcasecmp(descr,
-                                    xaccTransGetDescription(xaccSplitGetParent(split)))
-                        == 0)
-                {
-                    /*An exact match of Description gives a +2 */
-                    prob = prob + 2;
-                    /*DEBUG("heuristics:  probability + 2 (description)");*/
-                }
-                else if ((strncasecmp(descr,
-                                      xaccTransGetDescription (xaccSplitGetParent(split)),
-                                      strlen(xaccTransGetDescription (new_trans)) / 2)
-                          == 0))
-                {
-                    /* Very primitive fuzzy match worth +1.  This matches the
-                    		 first 50% of the strings to skip annoying transaction
-                    		 number some banks seem to include in the memo but someone
-                    		 should write something more sophisticated */
-                    prob = prob + 1;
-                    /*DEBUG("heuristics:  probability + 1 (description)");	*/
-                }
-            }
-        }
-
-        /* Is the probability high enough? Otherwise do nothing and return. */
-        if (prob < display_threshold)
-        {
-            return;
-        }
-
-        /* The probability is high enough, so allocate an object
-        	 here. Allocating it only when it's actually being used is
-        	 probably quite some performance gain. */
-        match_info = g_new0(GNCImportMatchInfo, 1);
-
-        match_info->probability = prob;
-        match_info->update_proposed = update_proposed;
-        match_info->split = split;
-        match_info->trans = xaccSplitGetParent(split);
-
-
-        /* Append that to the list. Do not use g_list_append because
-        	   it is slow. The list is sorted afterwards anyway. */
-        trans_info->match_list =
-            g_list_prepend(trans_info->match_list,
-                           match_info);
+        prob = prob + 3;
+        /*DEBUG("heuristics:  probability + 3 (amount)");*/
     }
+    else if (fabs (downloaded_split_amount - match_split_amount) <=
+                fuzzy_amount_difference)
+    {
+        /* ATM fees are sometimes added directly in the transaction.
+            So you withdraw 100$ and get charged 101,25$ in the same
+            transaction */
+        prob = prob + 2;
+        /*DEBUG("heuristics:  probability + 2 (amount)");*/
+    }
+    else
+    {
+        /* If a transaction's amount doesn't match within the
+            threshold, it's very unlikely to be the same transaction
+            so we give it an extra -5 penalty */
+        prob = prob - 5;
+        /* DEBUG("heuristics:  probability - 1 (amount)"); */
+    }
+
+    /* Date heuristics */
+    match_time = xaccTransGetDate (xaccSplitGetParent (split));
+    download_time = xaccTransGetDate (new_trans);
+    datediff_day = llabs(match_time - download_time) / 86400;
+    /* Sorry, there are not really functions around at all that
+                provide for less hacky calculation of days of date
+                differences. Whatever. On the other hand, the difference
+                calculation itself will work regardless of month/year
+                turnarounds. */
+    /*DEBUG("diff day %d", datediff_day);*/
+    if (datediff_day == 0)
+    {
+        prob = prob + 3;
+        /*DEBUG("heuristics:  probability + 3 (date)");*/
+    }
+    else if (datediff_day <= date_threshold)
+    {
+        prob = prob + 2;
+        /*DEBUG("heuristics:  probability + 2 (date)");*/
+    }
+    else if (datediff_day > date_not_threshold)
+    {
+        /* Extra penalty if that split lies awfully far away from
+            the given one. */
+        prob = prob - 5;
+        /*DEBUG("heuristics:  probability - 5 (date)"); */
+        /* Changed 2005-02-21: Revert the hard-limiting behaviour
+            back to the previous large penalty. (Changed 2004-11-27:
+            The penalty is so high that we can forget about this
+            split anyway and skip the rest of the tests.) */
+    }
+
+    /* Check if date and amount are identical */
+    update_proposed = (prob < 6);
+
+    /* Check number heuristics */
+    {
+        const char *new_trans_str = gnc_get_num_action(new_trans, new_trans_fsplit);
+        if (new_trans_str && strlen(new_trans_str) != 0)
+        {
+            long new_trans_number, split_number;
+            const gchar *split_str;
+            char *endptr;
+            gboolean conversion_ok = TRUE;
+
+            /* To distinguish success/failure after strtol call */
+            errno = 0;
+            new_trans_number = strtol(new_trans_str, &endptr, 10);
+            /* Possible addressed problems: over/underflow, only non
+                            numbers on string and string empty */
+            if (errno || endptr == new_trans_str)
+                conversion_ok = FALSE;
+
+            split_str = gnc_get_num_action (xaccSplitGetParent (split), split);
+            errno = 0;
+            split_number = strtol(split_str, &endptr, 10);
+            if (errno || endptr == split_str)
+                conversion_ok = FALSE;
+
+            if ( (conversion_ok && (split_number == new_trans_number)) ||
+                    (g_strcmp0(new_trans_str, split_str) == 0) )
+            {
+                /* An exact match of the Check number gives a +4 */
+                prob += 4;
+                /*DEBUG("heuristics:  probability + 4 (Check number)");*/
+            }
+            else if (strlen(new_trans_str) > 0 && strlen(split_str) > 0)
+            {
+                /* If both number are not empty yet do not match, add a
+                                little extra penalty */
+                prob -= 2;
+            }
+        }
+    }
+
+    /* Memo heuristics */
+    {
+        const char *memo = xaccSplitGetMemo(new_trans_fsplit);
+        if (memo && strlen(memo) != 0)
+        {
+            if (safe_strcasecmp(memo, xaccSplitGetMemo(split)) == 0)
+            {
+                /* An exact match of memo gives a +2 */
+                prob = prob + 2;
+                /* DEBUG("heuristics:  probability + 2 (memo)"); */
+            }
+            else if ((strncasecmp(memo, xaccSplitGetMemo(split),
+                                    strlen(xaccSplitGetMemo(split)) / 2)
+                        == 0))
+            {
+                /* Very primitive fuzzy match worth +1.  This matches the
+                                first 50% of the strings to skip annoying transaction
+                                number some banks seem to include in the memo but someone
+                                should write something more sophisticated */
+                prob = prob + 1;
+                /*DEBUG("heuristics:  probability + 1 (memo)");	*/
+            }
+        }
+    }
+
+    /* Description heuristics */
+    {
+        const char *descr = xaccTransGetDescription(new_trans);
+        if (descr && strlen(descr) != 0)
+        {
+            if (safe_strcasecmp(descr,
+                                xaccTransGetDescription(xaccSplitGetParent(split)))
+                    == 0)
+            {
+                /*An exact match of Description gives a +2 */
+                prob = prob + 2;
+                /*DEBUG("heuristics:  probability + 2 (description)");*/
+            }
+            else if ((strncasecmp(descr,
+                                    xaccTransGetDescription (xaccSplitGetParent(split)),
+                                    strlen(xaccTransGetDescription (new_trans)) / 2)
+                        == 0))
+            {
+                /* Very primitive fuzzy match worth +1.  This matches the
+                                first 50% of the strings to skip annoying transaction
+                                number some banks seem to include in the memo but someone
+                                should write something more sophisticated */
+                prob = prob + 1;
+                /*DEBUG("heuristics:  probability + 1 (description)");	*/
+            }
+        }
+    }
+
+    /* Is the probability high enough? Otherwise do nothing and return. */
+    if (prob < display_threshold)
+    {
+        return;
+    }
+
+    /* The probability is high enough, so allocate an object
+                here. Allocating it only when it's actually being used is
+                probably quite some performance gain. */
+    match_info = g_new0(GNCImportMatchInfo, 1);
+
+    match_info->probability = prob;
+    match_info->update_proposed = update_proposed;
+    match_info->split = split;
+    match_info->trans = xaccSplitGetParent(split);
+
+
+    /* Append that to the list. Do not use g_list_append because
+                it is slow. The list is sorted afterwards anyway. */
+    trans_info->match_list =
+        g_list_prepend(trans_info->match_list,
+                        match_info);
 }/* end split_find_match */
 
 /***********************************************************************
