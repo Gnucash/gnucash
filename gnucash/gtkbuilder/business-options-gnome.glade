@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkListStore" id="liststore_print_invoice">
@@ -11,46 +11,6 @@
       <!-- column-name missing -->
       <column type="gboolean"/>
     </columns>
-  </object>
-  <object class="GtkWindow" id="dummy_toplevel_window2">
-    <property name="can-focus">False</property>
-    <child>
-      <object class="GtkBox" id="invoice_report_hbox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="spacing">6</property>
-        <child>
-          <object class="GtkComboBox" id="invoice_report_combo">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="model">liststore_print_invoice</property>
-            <child>
-              <object class="GtkCellRendererText" id="cell_renderer_text"/>
-              <attributes>
-                <attribute name="text">0</attribute>
-              </attributes>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkImage" id="invoice_warning_image">
-            <property name="can-focus">False</property>
-            <property name="no-show-all">True</property>
-            <property name="icon-name">dialog-warning</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-    </child>
   </object>
   <object class="GtkListStore" id="taxtable_store">
     <columns>

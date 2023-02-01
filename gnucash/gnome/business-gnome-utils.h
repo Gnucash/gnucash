@@ -50,7 +50,7 @@ const char *gnc_get_builtin_default_invoice_print_report (void);
 
 /** Migrate the Default Invoice Report from prefs to book properties
  *  used to print Invoices
- * 
+ *
  * @return The guid of the saved Invoice Report
  */
 const char * gnc_migrate_default_invoice_print_report (void);
@@ -71,24 +71,14 @@ char *gnc_get_default_invoice_print_report (void);
  */
 void gnc_default_print_report_list (GtkWidget *combo, GtkWidget *warning);
 
-/** Retrieve the string representing the Invoice Report used as the default
- *  to print Invoices. This is a concatination of report name and guid
+/** Create a report combo to show a list of Invoice reports so that
+ *  a default Invoice Report can be selected.
  *
- *  @param combo The GtkComboBox that presents the list.
- * 
- *  @return The string used to represent the selected Invoice Report
- */
-gchar *gnc_default_print_report_list_combo_get_report (GtkComboBox *cbox);
-
-/** Set the active report to the guid string
+ *  @param guid_scm_function The SCM function to create the report list
  *
- *  @param combo The GtkComboBox that presents the list.
- * 
- *  @param guid The guid of the Invoice Report
+ *  @return The Widget for the report combo
  */
-void gnc_default_print_report_list_combo_set_report (GtkComboBox *cbox,
-                                                     const gchar *guid);
-
+GtkWidget * gnc_default_invoice_report_combo (const char* guid_scm_function);
 
 GtkWidget * gnc_owner_select_create (GtkWidget *label, GtkWidget *hbox,
                                      QofBook *book, GncOwner *owner);

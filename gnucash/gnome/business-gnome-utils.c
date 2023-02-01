@@ -54,6 +54,7 @@
 #include "gnc-guile-utils.h"
 #include "gnc-prefs.h"
 #include "gnc-commodity.h"
+#include "gnc-report-combo.h"
 
 typedef enum
 {
@@ -106,7 +107,7 @@ gnc_get_builtin_default_invoice_print_report (void)
     return PRINTABLE_INVOICE_GUID;
 }
 
-const char * 
+const char *
 gnc_migrate_default_invoice_print_report (void)
 {
     QofBook *book = gnc_get_current_book ();
@@ -136,171 +137,41 @@ gnc_get_default_invoice_print_report (void)
     return default_guid;
 }
 
-static gboolean
-select_default (GtkWidget *combo, const gchar *default_guid)
+GtkWidget *
+gnc_default_invoice_report_combo (const char* guid_scm_function)
 {
-    GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX(combo));
-    GtkTreeIter iter;
-    gboolean found = FALSE;
-    gboolean valid_iter = gtk_tree_model_get_iter_first (model, &iter);
-
-    while (valid_iter)
-    {
-        gchar *guid;
-        gtk_tree_model_get (model, &iter, COL_INV_GUID, &guid, -1);
-
-        if (g_strcmp0 (default_guid, guid) == 0)
-        {
-            gtk_combo_box_set_active_iter (GTK_COMBO_BOX(combo), &iter);
-            g_free (guid);
-            found = TRUE;
-            break;
-        }
-        g_free (guid);
-        valid_iter = gtk_tree_model_iter_next (model, &iter);
-    }
-    return found;
-}
-
-/********************************************************************
- * update_invoice_list
- *
- * this procedure does the real work of displaying a sorted list of
- * available invoice reports
- ********************************************************************/
-static gchar *
-update_invoice_list (GtkWidget *combo)
-{
-    SCM get_rpt_guids = scm_c_eval_string ("gnc:custom-report-invoice-template-guids");
+    GSList *invoice_list = NULL;
     SCM template_menu_name = scm_c_eval_string ("gnc:report-template-menu-name/report-guid");
+    SCM get_rpt_guids = scm_c_eval_string (guid_scm_function);
     SCM reportlist;
     SCM rpt_guids;
 
-    GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX(combo));
-    GtkListStore *store = GTK_LIST_STORE(model);
-    gchar *default_guid = gnc_get_default_invoice_print_report ();
-    gchar *default_name = NULL;
-    gboolean have_default = FALSE;
-
-    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(model),
-                                          COL_INV_NAME, GTK_SORT_ASCENDING);
+    if (!scm_is_procedure (get_rpt_guids))
+        return NULL;
 
     reportlist = scm_call_0 (get_rpt_guids);
     rpt_guids = reportlist;
 
-    gtk_list_store_clear (store);
-
     if (scm_is_list (rpt_guids))
     {
-        int i;
-        GtkTreeIter iter;
-
-        for (i = 0; !scm_is_null (rpt_guids); i++)
+        for (int i = 0; !scm_is_null (rpt_guids); i++)
         {
             gchar *guid_str = scm_to_utf8_string (SCM_CAR(rpt_guids));
             gchar *name = gnc_scm_to_utf8_string (scm_call_2(template_menu_name,
                                                   SCM_CAR(rpt_guids), SCM_BOOL_F));
 
-            gtk_list_store_append (store, &iter);
-            gtk_list_store_set (store, &iter,
-                                COL_INV_NAME, name,
-                                COL_INV_GUID, guid_str,
-                                COL_INV_MISSING, FALSE,
-                                -1);
-            g_free (name);
-            g_free (guid_str);
+            // Note: invoice_list and entries freed in report combo
+            ReportListEntry *rle = g_new0 (ReportListEntry, 1);
+
+            rle->report_guid = guid_str;
+            rle->report_name = name;
+
+            invoice_list = g_slist_append (invoice_list, rle);
 
             rpt_guids = SCM_CDR(rpt_guids);
         }
     }
-
-    have_default = select_default (combo, default_guid);
-
-    if (!have_default)
-    {
-        GtkTreeIter iter;
-        QofBook *book = gnc_get_current_book ();
-        default_name = qof_book_get_default_invoice_report_name (book);
-
-        gtk_list_store_prepend (store, &iter);
-        gtk_list_store_set (store, &iter,
-                            COL_INV_NAME, default_name,
-                            COL_INV_GUID, default_guid,
-                            COL_INV_MISSING, TRUE,
-                            -1);
-
-        gtk_combo_box_set_active_iter (GTK_COMBO_BOX(combo), &iter);
-    }
-    g_free (default_guid);
-    return default_name;
-}
-
-static void
-combo_changed_cb (GtkComboBox *widget, gpointer user_data)
-{
-    GtkTreeIter iter;
-
-    if (gtk_combo_box_get_active_iter (widget, &iter))
-    {
-        GtkTreeModel *model = gtk_combo_box_get_model (widget);
-        gboolean missing;
-        gtk_tree_model_get (model, &iter, COL_INV_MISSING, &missing, -1);
-        // set visibility of the warning image
-        gtk_widget_set_visible (GTK_WIDGET(user_data), missing);
-        gtk_widget_queue_resize (GTK_WIDGET(widget));
-    }
-}
-
-void
-gnc_default_print_report_list (GtkWidget *combo, GtkWidget *warning)
-{
-    gchar *default_name = update_invoice_list (combo);
-
-    if (default_name)
-    {
-        /* Translators: %s is the default invoice report name. */
-        gchar *tool_tip = g_strdup_printf (_("'%s' is missing"),
-                                           default_name);
-        gtk_widget_show (warning);
-
-        gtk_widget_set_tooltip_text (warning, tool_tip);
-        g_free (tool_tip);
-    }
-    g_free (default_name);
-    g_signal_connect (G_OBJECT(combo), "changed",
-                      G_CALLBACK(combo_changed_cb), warning);
-}
-
-void
-gnc_default_print_report_list_combo_set_report (GtkComboBox *cbox,
-                                                const gchar *guid)
-{
-    if (guid && *guid)
-        select_default (GTK_WIDGET(cbox), guid);
-    else
-        select_default (GTK_WIDGET(cbox), gnc_get_builtin_default_invoice_print_report ());
-}
-
-gchar*
-gnc_default_print_report_list_combo_get_report (GtkComboBox *cbox)
-{
-    GtkTreeModel *model = gtk_combo_box_get_model (cbox);
-    GtkTreeIter iter;
-    gchar *report = NULL;
-
-    if (gtk_combo_box_get_active_iter (cbox, &iter))
-    {
-        gchar *report_guid;
-        gchar *report_name;
-        gtk_tree_model_get (model, &iter, COL_INV_NAME, &report_name,
-                                          COL_INV_GUID, &report_guid,
-                                          -1);
-
-        report = g_strconcat (report_guid, "/", report_name, NULL);
-        g_free (report_guid);
-        g_free (report_name);
-    }
-    return report;
+    return gnc_report_combo_new (invoice_list);
 }
 
 static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,

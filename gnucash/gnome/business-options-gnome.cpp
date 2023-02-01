@@ -33,6 +33,10 @@
 #include <gnc-general-search.h> // for GNC_GENERAL_SEARCH
 #include "dialog-utils.h" // for gnc_builder_add_from_file
 
+extern "C"
+{
+#include "gnc-report-combo.h"
+}
 
 #include <iostream>
 #include <sstream>
@@ -190,13 +194,23 @@ public:
         GncOptionGtkUIItem(widget, GncOptionUIType::INV_REPORT) {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
-        auto guid_string{option.get_value<std::string>()};
-        gnc_default_print_report_list_combo_set_report (GTK_COMBO_BOX(get_widget()),
-                                                        guid_string.c_str());
+        std::string guid_string;
+        auto str{option.get_value<std::string>()};
+
+        if (str.empty())
+        {
+            static const std::string default_guid_string(gnc_get_builtin_default_invoice_print_report ());
+            guid_string = default_guid_string + "/ ";
+        }
+        else
+            guid_string = str;
+
+        gnc_report_combo_set_active_guid_name (GNC_REPORT_COMBO(get_widget()),
+                                               guid_string.c_str());
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
-        auto report_guid_name = gnc_default_print_report_list_combo_get_report (GTK_COMBO_BOX(get_widget()));
+        auto report_guid_name = gnc_report_combo_get_active_guid_name (GNC_REPORT_COMBO(get_widget()));
         option.set_value(std::string{report_guid_name});
         g_free (report_guid_name);
     }
@@ -207,28 +221,15 @@ create_option_widget<GncOptionUIType::INV_REPORT>(GncOption& option,
                                                   GtkGrid *page_box,
                                                   int row)
 {
-    constexpr const char* glade_file{"business-options-gnome.glade"};
-    constexpr const char* glade_store{"liststore_print_invoice"};
-    constexpr const char* glade_hbox{"invoice_report_hbox"};
-    constexpr const char* glade_menu{"invoice_report_combo"};
-    constexpr const char* glade_warning{"invoice_warning_image"};
-    auto builder{gtk_builder_new()};
-
-    gnc_builder_add_from_file(builder, glade_file, glade_store);
-    gnc_builder_add_from_file(builder, glade_file, glade_hbox);
-    auto widget{GTK_WIDGET(gtk_builder_get_object(builder, glade_menu))};
-    auto widget_hbox{GTK_WIDGET(gtk_builder_get_object(builder, glade_hbox))};
-    auto widget_warning{GTK_WIDGET(gtk_builder_get_object(builder, glade_warning))};
-    g_object_set_data(G_OBJECT(widget), "warning-image", widget_warning);
-    gnc_default_print_report_list (GTK_WIDGET(widget), GTK_WIDGET(widget_warning));
+    constexpr const char* inv_report{"gnc:custom-report-invoice-template-guids"};
+    auto widget = gnc_default_invoice_report_combo (inv_report);
     option.set_ui_item(std::make_unique<GncGtkInvReportUIItem>(widget));
     option.set_ui_item_from_option();
 
     g_signal_connect (G_OBJECT (widget), "changed",
                       G_CALLBACK (gnc_option_changed_widget_cb), &option);
 
-    wrap_widget (option, widget_hbox, page_box, row);
-    g_object_unref(builder); // Needs to wait until after widget has been reffed.
+    wrap_widget (option, widget, page_box, row);
 }
 
 void
