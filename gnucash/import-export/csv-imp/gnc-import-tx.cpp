@@ -216,8 +216,8 @@ void GncTxImport::currency_format (int currency_format)
     m_settings.m_currency_format = currency_format;
 
     /* Reparse all currency related columns */
-    std::vector<GncTransPropType> commodities = { GncTransPropType::DEPOSIT,
-            GncTransPropType::WITHDRAWAL,
+    std::vector<GncTransPropType> commodities = { GncTransPropType::AMOUNT,
+            GncTransPropType::AMOUNT_NEG,
             GncTransPropType::PRICE};
     reset_formatted_column (commodities);
 }
@@ -485,11 +485,11 @@ void GncTxImport::verify_column_selections (ErrorList& error_msg)
     if (!check_for_column_type(GncTransPropType::DESCRIPTION))
         error_msg.add_error( _("Please select a description column."));
 
-    /* Verify at least one amount column (deposit or withdrawal) column is selected.
+    /* Verify at least one amount column (amount or amount_neg) column is selected.
      */
-    if (!check_for_column_type(GncTransPropType::DEPOSIT) &&
-        !check_for_column_type(GncTransPropType::WITHDRAWAL))
-        error_msg.add_error( _("Please select a deposit or withdrawal column."));
+    if (!check_for_column_type(GncTransPropType::AMOUNT) &&
+        !check_for_column_type(GncTransPropType::AMOUNT_NEG))
+        error_msg.add_error( _("Please select a amount or negated amount column."));
 
     /* Verify a transfer account is selected if any of the other transfer properties
      * are selected.
@@ -769,8 +769,8 @@ void GncTxImport::update_pre_trans_split_props (uint32_t row, uint32_t col, GncT
         {
             /* Except for Deposit or Withdrawal lines there can only be
              * one column with a given property type. */
-            if ((new_type != GncTransPropType::DEPOSIT) &&
-                (new_type != GncTransPropType::WITHDRAWAL))
+            if ((new_type != GncTransPropType::AMOUNT) &&
+                (new_type != GncTransPropType::AMOUNT_NEG))
             {
                 auto value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col);
                 split_props->set(new_type, value);
@@ -827,10 +827,10 @@ GncTxImport::set_column_type (uint32_t position, GncTransPropType type, bool for
     if ((type == old_type) && !force)
         return; /* Nothing to do */
 
-    // Column types except deposit and withdrawal should be unique,
+    // Column types except amount and negated amount should be unique,
     // so remove any previous occurrence of the new type
-    if ((type != GncTransPropType::DEPOSIT) &&
-        (type != GncTransPropType::WITHDRAWAL))
+    if ((type != GncTransPropType::AMOUNT) &&
+        (type != GncTransPropType::AMOUNT_NEG))
         std::replace(m_settings.m_column_types.begin(), m_settings.m_column_types.end(),
             type, GncTransPropType::NONE);
 

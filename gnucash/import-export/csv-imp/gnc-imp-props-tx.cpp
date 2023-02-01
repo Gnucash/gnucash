@@ -57,15 +57,15 @@ std::map<GncTransPropType, const char*> gnc_csv_col_type_strs = {
         { GncTransPropType::NONE, N_("None") },
         { GncTransPropType::UNIQUE_ID, N_("Transaction ID") },
         { GncTransPropType::DATE, N_("Date") },
-        { GncTransPropType::NUM, N_("Num") },
+        { GncTransPropType::NUM, N_("Number") },
         { GncTransPropType::DESCRIPTION, N_("Description") },
         { GncTransPropType::NOTES, N_("Notes") },
         { GncTransPropType::COMMODITY, N_("Transaction Commodity") },
         { GncTransPropType::VOID_REASON, N_("Void Reason") },
         { GncTransPropType::ACTION, N_("Action") },
         { GncTransPropType::ACCOUNT, N_("Account") },
-        { GncTransPropType::DEPOSIT, N_("Deposit") },
-        { GncTransPropType::WITHDRAWAL, N_("Withdrawal") },
+        { GncTransPropType::AMOUNT, N_("Amount") },
+        { GncTransPropType::AMOUNT_NEG, N_("Amount (Negated)") },
         { GncTransPropType::PRICE, N_("Price") },
         { GncTransPropType::MEMO, N_("Memo") },
         { GncTransPropType::REC_STATE, N_("Reconciled") },
@@ -442,13 +442,13 @@ void GncPreSplit::set (GncTransPropType prop_type, const std::string& value)
                     m_tmemo = value;
                 break;
 
-            case GncTransPropType::DEPOSIT:
-                m_deposit = boost::none;
-                m_deposit = parse_monetary (value, m_currency_format); // Will throw if parsing fails
+            case GncTransPropType::AMOUNT:
+                m_amount = boost::none;
+                m_amount = parse_monetary (value, m_currency_format); // Will throw if parsing fails
                 break;
-            case GncTransPropType::WITHDRAWAL:
-                m_withdrawal = boost::none;
-                m_withdrawal = parse_monetary (value, m_currency_format); // Will throw if parsing fails
+            case GncTransPropType::AMOUNT_NEG:
+                m_amount_neg = boost::none;
+                m_amount_neg = parse_monetary (value, m_currency_format); // Will throw if parsing fails
                 break;
 
             case GncTransPropType::PRICE:
@@ -532,18 +532,18 @@ void GncPreSplit::add (GncTransPropType prop_type, const std::string& value)
         auto num_val = GncNumeric();
         switch (prop_type)
         {
-            case GncTransPropType::DEPOSIT:
+            case GncTransPropType::AMOUNT:
                 num_val = parse_monetary (value, m_currency_format); // Will throw if parsing fails
-                if (m_deposit)
-                    num_val += *m_deposit;
-                m_deposit = num_val;
+                if (m_amount)
+                    num_val += *m_amount;
+                m_amount = num_val;
                 break;
 
-            case GncTransPropType::WITHDRAWAL:
+            case GncTransPropType::AMOUNT_NEG:
                 num_val = parse_monetary (value, m_currency_format); // Will throw if parsing fails
-                if (m_withdrawal)
-                    num_val += *m_withdrawal;
-                m_withdrawal = num_val;
+                if (m_amount_neg)
+                    num_val += *m_amount_neg;
+                m_amount_neg = num_val;
                 break;
 
             default:
@@ -574,8 +574,8 @@ std::string GncPreSplit::verify_essentials (void)
 {
     auto err_msg = std::string();
     /* Make sure this split has the minimum required set of properties defined. */
-    if (!m_deposit && !m_withdrawal)
-        err_msg = _("No deposit or withdrawal column.");
+    if (!m_amount && !m_amount_neg)
+        err_msg = _("No amount or negated amount column.");
 
     if (m_rec_state && *m_rec_state == YREC && !m_rec_date)
     {
@@ -679,20 +679,16 @@ void GncPreSplit::create_split (Transaction* trans)
 
     Account *account = nullptr;
     Account *taccount = nullptr;
-    auto deposit = GncNumeric();
-    auto withdrawal = GncNumeric();
     auto amount = GncNumeric();
 
     if (m_account)
         account = *m_account;
     if (m_taccount)
         taccount = *m_taccount;
-    if (m_deposit)
-        deposit = *m_deposit;
-    if (m_withdrawal)
-        withdrawal = *m_withdrawal;
-
-    amount = deposit - withdrawal;
+    if (m_amount)
+        amount += *m_amount;
+    if (m_amount_neg)
+        amount -= *m_amount_neg;
 
     /* Add a split with the cumulative amount value. */
     trans_add_split (trans, account, amount, m_action, m_memo, m_rec_state, m_rec_date, m_price);
