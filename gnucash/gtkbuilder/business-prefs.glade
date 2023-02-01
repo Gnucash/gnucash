@@ -16,26 +16,6 @@
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
-  <object class="GtkListStore" id="liststore_printinvoice">
-    <columns>
-      <!-- column-name item -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Printable Invoice</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Tax Invoice</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Easy Invoice</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Fancy Invoice</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkWindow" id="preferences_window">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -159,18 +139,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">start</property>
-            <property name="label" translatable="yes">Report for printing</property>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">7</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkCheckButton" id="pref/dialogs.business.invoice/tax-included">
             <property name="label" translatable="yes">_Tax included</property>
             <property name="visible">True</property>
@@ -185,7 +153,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">8</property>
+            <property name="top-attach">7</property>
           </packing>
         </child>
         <child>
@@ -203,7 +171,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">9</property>
+            <property name="top-attach">8</property>
           </packing>
         </child>
         <child>
@@ -312,27 +280,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkComboBox" id="pref/dialogs.business.invoice/invoice-printreport">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="has-tooltip">True</property>
-            <property name="tooltip-markup">The invoice report to be used for printing.</property>
-            <property name="tooltip-text" translatable="yes">The invoice report to be used for printing.</property>
-            <property name="model">liststore_printinvoice</property>
-            <child>
-              <object class="GtkCellRendererText" id="cellrenderertext2"/>
-              <attributes>
-                <attribute name="text">0</attribute>
-              </attributes>
-            </child>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">7</property>
-            <property name="width">2</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkSpinButton" id="pref/dialogs.business.invoice/days-in-advance">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
@@ -358,6 +305,15 @@
             <property name="left-attach">1</property>
             <property name="top-attach">6</property>
           </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
         </child>
         <child>
           <placeholder/>
