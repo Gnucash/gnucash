@@ -1,5 +1,8 @@
 ;; -*-scheme-*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; sample-report.scm : Options Example Report
+;; refactored from hello-world by flywire January 2023
+;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
 ;; published by the Free Software Foundation; either version 2 of
@@ -23,6 +26,9 @@
 ;; It illustrates the basic techniques used to create
 ;; new reports for GnuCash.
 
+;; ------------------------------------------------------------------
+;; Top-level definitions
+;; ------------------------------------------------------------------
 (define-module (gnucash reports example sample-report))
 
 (use-modules (gnucash engine))
@@ -38,9 +44,11 @@
 (define optname-report-title (N_ "Report Title"))
 (define opthelp-report-title (N_ "Title for this report."))
 
+;; ------------------------------------------------------------------
 ;; This function will generate a set of options that GnuCash
 ;; will use to display a dialog where the user can select
 ;; values for your report's parameters.
+;; ------------------------------------------------------------------
 (define (options-generator)
   (let* ((options (gnc:new-options))
          (optiondb (options #t))) ;; Hack to get the optiondb from options
@@ -81,10 +89,10 @@
       "c" (N_ "This is a string option.") (N_ "String Option Default"))
 
     ;; The following are date options. There are three here reflecting
-    ;; the trhee types of date controls that can be displayed in the
+    ;; the three types of date controls that can be displayed in the
     ;; options dialog: Absolute, Relative, or Both. You'll usually
     ;; want to use Both, which is the middle example. Other than the
-    ;; usual strings the two paramters are a list of relative date
+    ;; usual strings the two parameters are a list of relative date
     ;; types and a boolean to indicate whether you want a Both date
     ;; control. Note that to get an absolute control you pass a
     ;; one-item list containing 'absolute and #f. If you pass (list
@@ -174,16 +182,21 @@ option like this.")
       "c" opthelp-report-title (N_ "Report Title Default"))
 
 
+    ;; Setting a default section is optional but set in most reports.
+	;; If not set, the default section will be the first section.
+    (gnc:options-set-default-section options "Tab B")      
     (GncOptionDBPtr-set-default-section optiondb "Tab B")
- ;; We still need to return the function wrapper instead of the GncOptionDBPtr bfor all of the options functions in the reports system.
+ ;; We still need to return the function wrapper instead of the GncOptionDBPtr for all of the options functions in the reports system.
     options))
 
+;; ------------------------------------------------------------------
 ;; This is the rendering function. It accepts a database of options
 ;; and generates an object of type <html-document>.  See the file
 ;; report-html.txt for documentation; the file report-html.scm
 ;; includes all the relevant Scheme code. The option database passed
 ;; to the function is one created by the options-generator function
 ;; defined above.
+;; ------------------------------------------------------------------
 (define (options-example-renderer report-obj)
   ;; Helper function for looking up option values.
   (define (op-value section name)
@@ -433,7 +446,9 @@ new, totally cool report, consult the mailing list ~a.")
       
       document)))
 
+;; ------------------------------------------------------------------
 ;; Here we define the actual report with gnc:define-report
+;; ------------------------------------------------------------------
 (gnc:define-report
  
  ;; The version of this report.
