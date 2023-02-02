@@ -232,7 +232,7 @@ GncSqlBackend::ObjectBackendRegistry::load_remaining(GncSqlBackend* sql_be)
     auto num_types = m_registry.size();
     auto num_done = fixed_load_order.size() + business_fixed_load_order.size();
 
-    for (auto entry : m_registry)
+    for (const auto& entry : m_registry)
     {
         std::string type;
         GncSqlObjectBackendPtr obe = nullptr;
@@ -292,7 +292,7 @@ GncSqlBackend::load (QofBook* book, QofBackendLoadType loadType)
         auto num_done = 0;
 
         /* Load any initial stuff. Some of this needs to happen in a certain order */
-        for (auto type : fixed_load_order)
+        for (const auto& type : fixed_load_order)
         {
             num_done++;
             auto obe = m_backend_registry.get_object_backend(type);
@@ -302,7 +302,7 @@ GncSqlBackend::load (QofBook* book, QofBackendLoadType loadType)
                 obe->load_all(this);
             }
         }
-        for (auto type : business_fixed_load_order)
+        for (const auto& type : business_fixed_load_order)
         {
             num_done++;
             auto obe = m_backend_registry.get_object_backend(type);
@@ -903,7 +903,7 @@ GncSqlBackend::build_insert_statement (const char* table_name,
     }
 
     sql << ") VALUES(";
-    for (auto col_value : values)
+    for (const auto& col_value : values)
     {
         if (col_value != *values.begin())
             sql << ",";
