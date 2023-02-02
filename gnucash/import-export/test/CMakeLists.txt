@@ -59,7 +59,7 @@ set(gtest_import_backend_LIBS
 
 set(gtest_import_backend_SOURCES
   gtest-import-backend.cpp
-  ${CMAKE_SOURCE_DIR}/gnucash/import-export/import-backend.c
+  ${CMAKE_SOURCE_DIR}/gnucash/import-export/import-backend.cpp
   ${CMAKE_SOURCE_DIR}/gnucash/import-export/import-settings.c
   ${CMAKE_SOURCE_DIR}/gnucash/import-export/import-utilities.c
   ${CMAKE_SOURCE_DIR}/libgnucash/engine/mocks/gmock-qofinstance.cpp

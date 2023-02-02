@@ -348,7 +348,7 @@ gnucash/import-export/customer-import/dialog-customer-import.c
 gnucash/import-export/customer-import/dialog-customer-import-gui.c
 gnucash/import-export/customer-import/gnc-plugin-customer-import.c
 gnucash/import-export/import-account-matcher.c
-gnucash/import-export/import-backend.c
+gnucash/import-export/import-backend.cpp
 gnucash/import-export/import-commodity-matcher.c
 gnucash/import-export/import-format-dialog.c
 gnucash/import-export/import-main-matcher.c

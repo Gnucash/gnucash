@@ -35,6 +35,7 @@
 
 #include <errno.h>
 
+extern "C" {
 #include "import-backend.h"
 #include "import-utilities.h"
 #include "Account.h"
@@ -43,6 +44,9 @@
 #include "engine-helpers.h"
 #include "gnc-prefs.h"
 #include "gnc-ui-util.h"
+}
+
+#include <algorithm>
 
 #define GNCIMPORT_DESC    "desc"
 #define GNCIMPORT_MEMO    "memo"
@@ -115,12 +119,10 @@ gnc_import_TransInfo_set_match_list (GNCImportTransInfo *info, GList* match_list
     g_assert (info);
     info->match_list = match_list;
     if (match_list)
-    {
-        info->selected_match_info.selected_match = match_list->data;
-    }
+        info->selected_match_info.selected_match = static_cast<GNCImportMatchInfo*>(match_list->data);
     else
     {
-        info->selected_match_info.selected_match = NULL;
+        info->selected_match_info.selected_match = nullptr;
         gnc_import_TransInfo_set_action (info, GNCImport_ADD);
     }
 }
@@ -208,7 +210,7 @@ void gnc_import_TransInfo_set_destacc (GNCImportTransInfo *info,
 
     /* Store the mapping to the other account in the MatchMap. */
     if (selected_manually)
-        matchmap_store_destination (NULL, info, FALSE);
+        matchmap_store_destination (nullptr, info, false);
 }
 
 gboolean
@@ -263,92 +265,64 @@ void gnc_import_TransInfo_delete (GNCImportTransInfo *info)
 {
     if (info)
     {
-        GList *node;
         g_list_free (info->match_list);
         /*If the transaction exists and is still open, it must be destroyed*/
-        if ( xaccTransIsOpen(info->trans))
+        if (xaccTransIsOpen(info->trans))
         {
             xaccTransDestroy(info->trans);
             xaccTransCommitEdit(info->trans);
         }
-        for (node = info->match_tokens; node; node = node->next)
-            g_free (node->data);
-        g_list_free (info->match_tokens);
+        g_list_free_full (info->match_tokens, g_free);
         g_free(info);
     }
 }
 
 GdkPixbuf* gen_probability_pixbuf(gint score_original, GNCImportSettings *settings, GtkWidget * widget)
 {
-    GdkPixbuf* retval = NULL;
-    gint i, j;
-    gint score;
-    const gint height = 15;
-    const gint width_each_bar = 7;
-    gchar * green_bar = ("bggggb ");
-    gchar * yellow_bar = ("byyyyb ");
-    gchar * red_bar = ("brrrrb ");
-    gchar * black_bar = ("bbbbbb ");
-    const gint width_first_bar = 1;
-    gchar * black_first_bar = ("b");
-    const gint num_colors = 5;
-    gchar * size_str;
-    gchar * none_color_str = g_strdup_printf("  c None");
-    gchar * green_color_str = g_strdup_printf("g c green");
-    gchar * yellow_color_str = g_strdup_printf("y c yellow");
-    gchar * red_color_str = g_strdup_printf("r c red");
-    gchar * black_color_str = g_strdup_printf("b c black");
-    gchar * xpm[2+num_colors+height];
-    gint add_threshold, clear_threshold;
+    constexpr gint height = 15;
+    constexpr gint width_each_bar = 7;
+    constexpr gint width_first_bar = 1;
+    constexpr gint num_colors = 5;
+    gchar * xpm[2 + num_colors + height];
 
     g_assert(settings);
     g_assert(widget);
-    if (score_original < 0)
-        score = 0;
-    else
-        score = score_original;
 
-    size_str = g_strdup_printf("%d%s%d%s%d%s", (width_each_bar * score) + width_first_bar/*width*/, " ", height, " ", num_colors, " 1"/*characters per pixel*/);
+    auto score = std::max (0, score_original);
 
-    /*DEBUG("Begin");*/
-    xpm[0] = size_str;
-    xpm[1] = none_color_str;
-    xpm[2] = green_color_str;
-    xpm[3] = yellow_color_str;
-    xpm[4] = red_color_str;
-    xpm[5] = black_color_str;
-    add_threshold = gnc_import_Settings_get_add_threshold(settings);
-    clear_threshold = gnc_import_Settings_get_clear_threshold(settings);
+    /* Add size definition to xpm */
+    xpm[0] = g_strdup_printf("%d%s%d%s%d%s", (width_each_bar * score) + width_first_bar/*width*/, " ", height, " ", num_colors, " 1"/*characters per pixel*/);
 
-    for (i = 0; i < height; i++)
+    /* Define used colors */
+    xpm[1] = g_strdup("  c None");
+    xpm[2] = g_strdup("g c green");
+    xpm[3] = g_strdup("y c yellow");
+    xpm[4] = g_strdup("r c red");
+    xpm[5] = g_strdup("b c black");
+
+    auto add_threshold = gnc_import_Settings_get_add_threshold(settings);
+    auto clear_threshold = gnc_import_Settings_get_clear_threshold(settings);
+    for (int i = 0; i < height; i++)
     {
         xpm[num_colors+1+i] = g_new0(char, (width_each_bar * score) + width_first_bar + 1);
-        for (j = 0; j <= score; j++)
+        for (int j = 0; j <= score; j++)
         {
-            if (i == 0 || i == height - 1)
-            {
-                if (j == 0)
-                    strcat(xpm[num_colors+1+i], black_first_bar);
-                else
-                    strcat(xpm[num_colors+1+i], black_bar);
-            }
-            else if (j == 0)
-                strcat(xpm[num_colors+1+i], black_first_bar);
+            if (j == 0)
+                strcat(xpm[num_colors+1+i], "b");
+            else if (i == 0 || i == height - 1)
+                strcat(xpm[num_colors+1+i], "bbbbbb ");
             else if (j <= add_threshold)
-                strcat(xpm[num_colors+1+i], red_bar);
+                strcat(xpm[num_colors+1+i], "brrrrb ");
             else if (j >= clear_threshold)
-                strcat(xpm[num_colors+1+i], green_bar);
+                strcat(xpm[num_colors+1+i], "bggggb ");
             else
-                strcat(xpm[num_colors+1+i], yellow_bar);
+                strcat(xpm[num_colors+1+i], "byyyyb ");
         }
     }
 
-    retval =  gdk_pixbuf_new_from_xpm_data((const gchar **)xpm);
-    for (i = 0; i <= num_colors + height; i++)
-    {
-        /*DEBUG("free_loop i=%d%s%s",i,": ",xpm[i]);*/
+    auto retval = gdk_pixbuf_new_from_xpm_data((const gchar **)xpm);
+    for (int i = 0; i <= num_colors + height; i++)
         g_free(xpm[i]);
-    }
 
     return retval;
 }
@@ -386,29 +360,25 @@ tokenize_string(GList* existing_tokens, const char *string)
 static GList*
 TransactionGetTokens(GNCImportTransInfo *info)
 {
-    Transaction* transaction;
-    GList* tokens = NULL;
-    const char* text;
-    time64 transtime;
-    struct tm *tm_struct;
-    char local_day_of_week[16];
 
-    g_return_val_if_fail (info, NULL);
+    g_return_val_if_fail (info, nullptr);
     if (info->match_tokens) return info->match_tokens;
 
-    transaction = gnc_import_TransInfo_get_trans(info);
+    auto transaction = gnc_import_TransInfo_get_trans(info);
     g_assert(transaction);
 
     /* make tokens from the transaction description */
-    text = xaccTransGetDescription(transaction);
+    auto text = xaccTransGetDescription(transaction);
+    GList *tokens = nullptr;
     tokens = tokenize_string(tokens, text);
 
     /* The day of week the transaction occurred is a good indicator of
      * what account this transaction belongs in.  Get the date and convert
      * it to day of week as a token
      */
-    transtime = xaccTransGetDate(transaction);
-    tm_struct = gnc_gmtime(&transtime);
+    auto transtime = xaccTransGetDate(transaction);
+    auto tm_struct = gnc_gmtime(&transtime);
+    char local_day_of_week[16];
     if (!qof_strftime(local_day_of_week, sizeof(local_day_of_week), "%A", tm_struct))
         PERR("TransactionGetTokens: error, strftime failed\n");
     gnc_tm_free (tm_struct);
@@ -418,9 +388,9 @@ TransactionGetTokens(GNCImportTransInfo *info)
     tokens = g_list_prepend(tokens, g_strdup(local_day_of_week));
 
     /* make tokens from the memo of each split of this transaction */
-    for (GList *split=xaccTransGetSplitList (transaction); split; split=split->next)
+    for (GList *node=xaccTransGetSplitList (transaction); node; node=node->next)
     {
-        text = xaccSplitGetMemo(split->data);
+        text = xaccSplitGetMemo(static_cast<Split*>(node->data));
         tokens = tokenize_string(tokens, text);
     }
 
@@ -437,15 +407,12 @@ TransactionGetTokens(GNCImportTransInfo *info)
 static Account *
 matchmap_find_destination (GncImportMatchMap *matchmap, GNCImportTransInfo *info)
 {
-    GncImportMatchMap *tmp_map;
-    Account *result;
-
     g_assert (info);
-    tmp_map = (matchmap ? matchmap :
-               gnc_account_imap_create_imap
-               (xaccSplitGetAccount
-                (gnc_import_TransInfo_get_fsplit (info))));
+    auto tmp_map = (matchmap ? matchmap : gnc_account_imap_create_imap
+                    (xaccSplitGetAccount
+                        (gnc_import_TransInfo_get_fsplit (info))));
 
+    Account *result = nullptr;
     if (gnc_prefs_get_bool (GNC_PREFS_GROUP_IMPORT, GNC_PREF_USE_BAYES))
     {
         /* get the tokens for this transaction* */
@@ -475,13 +442,11 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
                             GNCImportTransInfo *trans_info,
                             gboolean use_match)
 {
-    GncImportMatchMap *tmp_matchmap = NULL;
-    Account *dest = NULL;
-
     g_assert (trans_info);
 
     /* This will store the destination account of the selected match if
        the reconcile match selected has only two splits. */
+    Account *dest = nullptr;
     if (use_match)
         dest = xaccSplitGetAccount
             (xaccSplitGetOtherSplit
@@ -492,24 +457,24 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
     if (!dest)
         return;
 
-    tmp_matchmap = ((matchmap) ? matchmap :
-                    gnc_account_imap_create_imap
-                    (xaccSplitGetAccount
-                     (gnc_import_TransInfo_get_fsplit (trans_info))));
+    auto tmp_matchmap = ((matchmap) ? matchmap :
+                            gnc_account_imap_create_imap
+                            (xaccSplitGetAccount
+                            (gnc_import_TransInfo_get_fsplit (trans_info))));
 
     if (gnc_prefs_get_bool (GNC_PREFS_GROUP_IMPORT, GNC_PREF_USE_BAYES))
     {
         /* tokenize this transaction */
-        GList *tokens = TransactionGetTokens(trans_info);
+        auto tokens = TransactionGetTokens(trans_info);
 
         /* add the tokens to the imap with the given destination account */
         gnc_account_imap_add_account_bayes(tmp_matchmap, tokens, dest);
     }
     else
     {
-        const char *desc = xaccTransGetDescription
+        auto desc = xaccTransGetDescription
                             (gnc_import_TransInfo_get_trans (trans_info));
-        const char *memo = xaccSplitGetMemo
+        auto memo = xaccSplitGetMemo
                             (gnc_import_TransInfo_get_fsplit (trans_info));
 
         if (desc && *desc)
@@ -533,23 +498,18 @@ void split_find_match (GNCImportTransInfo * trans_info,
                               gint date_not_threshold,
                               double fuzzy_amount_difference)
 {
-    /* DEBUG("Begin"); */
-
-    GNCImportMatchInfo * match_info;
     gint prob = 0;
-    gboolean update_proposed;
-    time64 match_time, download_time;
-    int datediff_day;
-    Transaction *new_trans = gnc_import_TransInfo_get_trans (trans_info);
-    Split *new_trans_fsplit = gnc_import_TransInfo_get_fsplit (trans_info);
+
+    auto new_trans = gnc_import_TransInfo_get_trans (trans_info);
+    auto new_trans_fsplit = gnc_import_TransInfo_get_fsplit (trans_info);
 
     /* Matching heuristics */
 
     /* Amount heuristics */
-    double downloaded_split_amount =
+    auto downloaded_split_amount =
         gnc_numeric_to_double (xaccSplitGetAmount(new_trans_fsplit));
     /*DEBUG(" downloaded_split_amount=%f", downloaded_split_amount);*/
-    double match_split_amount = gnc_numeric_to_double(xaccSplitGetAmount(split));
+    auto match_split_amount = gnc_numeric_to_double(xaccSplitGetAmount(split));
     /*DEBUG(" match_split_amount=%f", match_split_amount);*/
     if (fabs(downloaded_split_amount - match_split_amount) < 1e-6)
         /* bug#347791: Double type shouldn't be compared for exact
@@ -581,9 +541,9 @@ void split_find_match (GNCImportTransInfo * trans_info,
     }
 
     /* Date heuristics */
-    match_time = xaccTransGetDate (xaccSplitGetParent (split));
-    download_time = xaccTransGetDate (new_trans);
-    datediff_day = llabs(match_time - download_time) / 86400;
+    auto match_time = xaccTransGetDate (xaccSplitGetParent (split));
+    auto download_time = xaccTransGetDate (new_trans);
+    auto datediff_day = llabs(match_time - download_time) / 86400;
     /* Sorry, there are not really functions around at all that
                 provide for less hacky calculation of days of date
                 differences. Whatever. On the other hand, the difference
@@ -613,111 +573,96 @@ void split_find_match (GNCImportTransInfo * trans_info,
     }
 
     /* Check if date and amount are identical */
-    update_proposed = (prob < 6);
+    auto update_proposed = (prob < 6);
 
     /* Check number heuristics */
+    auto new_trans_str = gnc_get_num_action(new_trans, new_trans_fsplit);
+    if (new_trans_str && *new_trans_str)
     {
-        const char *new_trans_str = gnc_get_num_action(new_trans, new_trans_fsplit);
-        if (new_trans_str && *new_trans_str)
+        char *endptr;
+        auto conversion_ok = true;
+
+        /* To distinguish success/failure after strtol call */
+        errno = 0;
+        auto new_trans_number = strtol(new_trans_str, &endptr, 10);
+        /* Possible addressed problems: over/underflow, only non
+                        numbers on string and string empty */
+        conversion_ok = !(errno || endptr == new_trans_str);
+
+        auto split_str = gnc_get_num_action (xaccSplitGetParent (split), split);
+        errno = 0;
+        auto split_number = strtol(split_str, &endptr, 10);
+        conversion_ok =  !(errno || endptr == split_str);
+
+        if ( (conversion_ok && (split_number == new_trans_number)) ||
+                (g_strcmp0(new_trans_str, split_str) == 0) )
         {
-            long new_trans_number, split_number;
-            const gchar *split_str;
-            char *endptr;
-            gboolean conversion_ok = TRUE;
-
-            /* To distinguish success/failure after strtol call */
-            errno = 0;
-            new_trans_number = strtol(new_trans_str, &endptr, 10);
-            /* Possible addressed problems: over/underflow, only non
-                            numbers on string and string empty */
-            if (errno || endptr == new_trans_str)
-                conversion_ok = FALSE;
-
-            split_str = gnc_get_num_action (xaccSplitGetParent (split), split);
-            errno = 0;
-            split_number = strtol(split_str, &endptr, 10);
-            if (errno || endptr == split_str)
-                conversion_ok = FALSE;
-
-            if ( (conversion_ok && (split_number == new_trans_number)) ||
-                    (g_strcmp0(new_trans_str, split_str) == 0) )
-            {
-                /* An exact match of the Check number gives a +4 */
-                prob += 4;
-                /*DEBUG("heuristics:  probability + 4 (Check number)");*/
-            }
-            else if (strlen(new_trans_str) > 0 && strlen(split_str) > 0)
-            {
-                /* If both number are not empty yet do not match, add a
-                                little extra penalty */
-                prob -= 2;
-            }
+            /* An exact match of the Check number gives a +4 */
+            prob += 4;
+            /*DEBUG("heuristics:  probability + 4 (Check number)");*/
+        }
+        else if (strlen(new_trans_str) > 0 && strlen(split_str) > 0)
+        {
+            /* If both number are not empty yet do not match, add a
+                            little extra penalty */
+            prob -= 2;
         }
     }
 
     /* Memo heuristics */
+    auto memo = xaccSplitGetMemo(new_trans_fsplit);
+    if (memo && *memo)
     {
-        const char *memo = xaccSplitGetMemo(new_trans_fsplit);
-        if (memo && *memo)
+        if (safe_strcasecmp(memo, xaccSplitGetMemo(split)) == 0)
         {
-            if (safe_strcasecmp(memo, xaccSplitGetMemo(split)) == 0)
-            {
-                /* An exact match of memo gives a +2 */
-                prob = prob + 2;
-                /* DEBUG("heuristics:  probability + 2 (memo)"); */
-            }
-            else if ((strncasecmp(memo, xaccSplitGetMemo(split),
-                                    strlen(xaccSplitGetMemo(split)) / 2)
-                        == 0))
-            {
-                /* Very primitive fuzzy match worth +1.  This matches the
-                                first 50% of the strings to skip annoying transaction
-                                number some banks seem to include in the memo but someone
-                                should write something more sophisticated */
-                prob = prob + 1;
-                /*DEBUG("heuristics:  probability + 1 (memo)");	*/
-            }
+            /* An exact match of memo gives a +2 */
+            prob = prob + 2;
+            /* DEBUG("heuristics:  probability + 2 (memo)"); */
+        }
+        else if ((strncasecmp(memo, xaccSplitGetMemo(split),
+                    strlen(xaccSplitGetMemo(split)) / 2) == 0))
+        {
+            /* Very primitive fuzzy match worth +1.  This matches the
+                            first 50% of the strings to skip annoying transaction
+                            number some banks seem to include in the memo but someone
+                            should write something more sophisticated */
+            prob = prob + 1;
+            /*DEBUG("heuristics:  probability + 1 (memo)");	*/
         }
     }
 
     /* Description heuristics */
+    auto descr = xaccTransGetDescription(new_trans);
+    if (descr && *descr)
     {
-        const char *descr = xaccTransGetDescription(new_trans);
-        if (descr && *descr)
+        if (safe_strcasecmp(descr,
+                xaccTransGetDescription(xaccSplitGetParent(split))) == 0)
         {
-            if (safe_strcasecmp(descr,
-                                xaccTransGetDescription(xaccSplitGetParent(split)))
-                    == 0)
-            {
-                /*An exact match of Description gives a +2 */
-                prob = prob + 2;
-                /*DEBUG("heuristics:  probability + 2 (description)");*/
-            }
-            else if ((strncasecmp(descr,
-                                    xaccTransGetDescription (xaccSplitGetParent(split)),
-                                    strlen(xaccTransGetDescription (new_trans)) / 2)
-                        == 0))
-            {
-                /* Very primitive fuzzy match worth +1.  This matches the
-                                first 50% of the strings to skip annoying transaction
-                                number some banks seem to include in the description but someone
-                                should write something more sophisticated */
-                prob = prob + 1;
-                /*DEBUG("heuristics:  probability + 1 (description)");	*/
-            }
+            /*An exact match of Description gives a +2 */
+            prob = prob + 2;
+            /*DEBUG("heuristics:  probability + 2 (description)");*/
+        }
+        else if ((strncasecmp(descr,
+                    xaccTransGetDescription (xaccSplitGetParent(split)),
+                    strlen(xaccTransGetDescription (new_trans)) / 2) == 0))
+        {
+            /* Very primitive fuzzy match worth +1.  This matches the
+                            first 50% of the strings to skip annoying transaction
+                            number some banks seem to include in the description but someone
+                            should write something more sophisticated */
+            prob = prob + 1;
+            /*DEBUG("heuristics:  probability + 1 (description)");	*/
         }
     }
 
     /* Is the probability high enough? Otherwise do nothing and return. */
     if (prob < display_threshold)
-    {
         return;
-    }
 
     /* The probability is high enough, so allocate an object
                 here. Allocating it only when it's actually being used is
                 probably quite some performance gain. */
-    match_info = g_new0(GNCImportMatchInfo, 1);
+    auto match_info = g_new0(GNCImportMatchInfo, 1);
 
     match_info->probability = prob;
     match_info->update_proposed = update_proposed;
@@ -737,8 +682,8 @@ void split_find_match (GNCImportTransInfo * trans_info,
 static void
 desc_append (Transaction* selected_match_trans, gchar *new_desc)
 {
-    const gchar* curr_desc = xaccTransGetDescription (selected_match_trans);
-    gchar* tmp = g_strconcat(curr_desc, "|", new_desc, NULL);
+    auto curr_desc = xaccTransGetDescription (selected_match_trans);
+    auto tmp = g_strconcat(curr_desc, "|", new_desc, nullptr);
     xaccTransSetDescription (selected_match_trans, tmp);
     g_free (tmp);
 }
@@ -747,8 +692,8 @@ desc_append (Transaction* selected_match_trans, gchar *new_desc)
 static void
 notes_append (Transaction* selected_match_trans, gchar* new_notes)
 {
-    const gchar* curr_notes = xaccTransGetNotes (selected_match_trans);
-    gchar* tmp = g_strconcat (curr_notes, "|", new_notes, NULL);
+    auto curr_notes = xaccTransGetNotes (selected_match_trans);
+    auto tmp = g_strconcat (curr_notes, "|", new_notes, nullptr);
     xaccTransSetNotes (selected_match_trans, tmp );
     g_free (tmp);
 }
@@ -756,20 +701,19 @@ notes_append (Transaction* selected_match_trans, gchar* new_notes)
 static char*
 maybe_append_string (const char* match_string, const char* imp_string)
 {
-    char *norm_match_string, *norm_imp_string, *retval = NULL;
-
     if (!(match_string && *match_string))
         return g_strdup(imp_string);
 
     if (!(imp_string && *imp_string))
-        return retval;
+        return nullptr;
 
-    norm_match_string = g_utf8_normalize (match_string, -1, G_NORMALIZE_NFC);
-    norm_imp_string = g_utf8_normalize (imp_string, -1, G_NORMALIZE_NFC);
+    auto norm_match_string = g_utf8_normalize (match_string, -1, G_NORMALIZE_NFC);
+    auto norm_imp_string = g_utf8_normalize (imp_string, -1, G_NORMALIZE_NFC);
 
+    char *retval = nullptr;
     if (g_utf8_strlen (norm_imp_string, -1) > g_utf8_strlen (norm_match_string, -1) ||
          !strstr (norm_match_string, norm_imp_string))
-        retval = g_strconcat(match_string, "|", imp_string, NULL);
+        retval = g_strconcat(match_string, "|", imp_string, nullptr);
 
     g_free (norm_match_string);
     g_free (norm_imp_string);
@@ -783,14 +727,13 @@ maybe_append_string (const char* match_string, const char* imp_string)
 static void
 update_desc_and_notes (const GNCImportTransInfo* trans_info)
 {
-    GNCImportMatchInfo* selected_match =
-            gnc_import_TransInfo_get_selected_match (trans_info);
-    Transaction* imp_trans = gnc_import_TransInfo_get_trans (trans_info);
-    Transaction* match_trans = selected_match->trans;
+    auto selected_match = gnc_import_TransInfo_get_selected_match (trans_info);
+    auto imp_trans = gnc_import_TransInfo_get_trans (trans_info);
 
     if (trans_info->append_text)
     {
-        gchar *repl_str =
+        auto match_trans = selected_match->trans;
+        auto repl_str =
             maybe_append_string (xaccTransGetDescription(match_trans),
                                  xaccTransGetDescription(imp_trans));
         if (repl_str)
@@ -813,14 +756,50 @@ update_desc_and_notes (const GNCImportTransInfo* trans_info)
     }
 }
 
+static void
+process_reconcile(GncImportMatchMap *matchmap,
+                  GNCImportTransInfo *trans_info,
+                  GNCImportMatchInfo *selected_match)
+{
+    /* Reconcile the matching transaction */
+    /*DEBUG("BeginEdit selected_match")*/
+    xaccTransBeginEdit(selected_match->trans);
+
+    if (xaccSplitGetReconcile(selected_match->split) == NREC)
+        xaccSplitSetReconcile(selected_match->split, CREC);
+
+    /* Set reconcile date to today */
+    xaccSplitSetDateReconciledSecs(selected_match->split, gnc_time (nullptr));
+
+    /* Copy the online id to the reconciled transaction, so
+     *      the match will be remembered */
+    auto online_id = gnc_import_get_split_online_id(trans_info->first_split);
+    if (online_id && *online_id)
+        gnc_import_set_split_online_id(selected_match->split, online_id);
+
+    g_free (online_id);
+
+    /* Done editing. */
+    /*DEBUG("CommitEdit selected_match")*/
+    xaccTransCommitEdit(selected_match->trans);
+
+    /* Store the mapping to the other account in the MatchMap. */
+    matchmap_store_destination(matchmap, trans_info, true);
+
+    /* Erase the downloaded transaction */
+    xaccTransDestroy(trans_info->trans);
+    /*DEBUG("CommitEdit trans")*/
+    xaccTransCommitEdit(trans_info->trans);
+    /* Very important: Make sure the freed transaction is not freed again! */
+    trans_info->trans = nullptr;
+}
+
 /** /brief -- Processes one match
    according to its selected action.  */
 gboolean
 gnc_import_process_trans_item (GncImportMatchMap *matchmap,
                                GNCImportTransInfo *trans_info)
 {
-    /* DEBUG("Begin"); */
-
     g_assert (trans_info);
     /*DEBUG("Iteration %d, action %d, split %s", i,
     	trans_info->action,
@@ -829,203 +808,115 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
     switch (gnc_import_TransInfo_get_action (trans_info))
     {
     case GNCImport_SKIP:
-        return FALSE;
+        return false;
     case GNCImport_ADD:
         /* Transaction gets imported. */
-
-        /* Is the transaction not balanced and there is a non-NULL destination account? */
         if (!gnc_import_TransInfo_is_balanced(trans_info)
                 && gnc_import_TransInfo_get_destacc(trans_info))
         {
             /* Create the 'other' split. */
-            Transaction *trans;
-            Split *split =
-                xaccMallocSplit
-                (gnc_account_get_book
-                 (gnc_import_TransInfo_get_destacc (trans_info)));
-            xaccTransAppendSplit
-            (gnc_import_TransInfo_get_trans (trans_info), split);
-            xaccAccountInsertSplit
-            (gnc_import_TransInfo_get_destacc (trans_info), split);
-            /*xaccSplitSetBaseValue
-              (split,
-               gnc_numeric_neg(xaccTransGetImbalance
-            	       (gnc_import_TransInfo_get_trans (trans_info))),
-               xaccTransGetCurrency
-               (gnc_import_TransInfo_get_trans (trans_info)));*/
-            {
-                /* This is a quick workaround for the bug described in
-                		 http://lists.gnucash.org/pipermail/gnucash-devel/2003-August/009982.html
-                       Assume that importers won't create transactions involving two or more
-                       currencies so we can use xaccTransGetImbalanceValue. */
-                gnc_numeric imbalance_value =
-                    gnc_numeric_neg (xaccTransGetImbalanceValue
-                                     (gnc_import_TransInfo_get_trans (trans_info)));
-                xaccSplitSetValue (split, imbalance_value);
-                xaccSplitSetAmount (split, imbalance_value);
-            }
-            /*xaccSplitSetMemo (split, _("Auto-Balance split"));
-              -- disabled due to popular request */
+            auto trans = gnc_import_TransInfo_get_trans (trans_info);
+            auto acct = gnc_import_TransInfo_get_destacc (trans_info);
+            auto split = xaccMallocSplit (gnc_account_get_book (acct));
+            xaccTransAppendSplit (trans, split);
+            xaccAccountInsertSplit (acct, split);
+            /* This is a quick workaround for the bug described in
+                                http://lists.gnucash.org/pipermail/gnucash-devel/2003-August/009982.html
+                    Assume that importers won't create transactions involving two or more
+                    currencies so we can use xaccTransGetImbalanceValue. */
+            auto imbalance_value = gnc_numeric_neg (xaccTransGetImbalanceValue (trans));
+            xaccSplitSetValue (split, imbalance_value);
+            xaccSplitSetAmount (split, imbalance_value);
         }
 
         xaccSplitSetReconcile(gnc_import_TransInfo_get_fsplit (trans_info), CREC);
         /*Set reconcile date to today*/
         xaccSplitSetDateReconciledSecs(gnc_import_TransInfo_get_fsplit (trans_info),
-                                       gnc_time (NULL));
+                                       gnc_time (nullptr));
         /* Done editing. */
-        {
-            Transaction *trans = gnc_import_TransInfo_get_trans (trans_info);
-            xaccTransCommitEdit(trans);
-            xaccTransRecordPrice(trans, PRICE_SOURCE_SPLIT_IMPORT);
-        }
-        return TRUE;
+        xaccTransCommitEdit(trans_info->trans);
+        xaccTransRecordPrice(trans_info->trans, PRICE_SOURCE_SPLIT_IMPORT);
+        return true;
     case GNCImport_UPDATE:
-    {
-        GNCImportMatchInfo *selected_match =
-            gnc_import_TransInfo_get_selected_match(trans_info);
-
-        /* If there is no selection, ignore this transaction. */
-        if (!selected_match)
         {
-            PWARN("No matching translaction to be cleared was chosen. Imported transaction will be ignored.");
-            break;
-        }
+            auto selected_match = gnc_import_TransInfo_get_selected_match(trans_info);
 
-        /* Transaction gets not imported but the matching one gets
-           updated and reconciled. */
-        if (gnc_import_MatchInfo_get_split(selected_match) == NULL)
-        {
-            PERR("The split I am trying to update and reconcile is NULL, shouldn't happen!");
-        }
-        else
-        {
-            /* Update and reconcile the matching transaction */
-            /*DEBUG("BeginEdit selected_match")*/
-            Split * other_split;
-            gnc_numeric imbalance_value;
-
-            xaccTransBeginEdit(selected_match->trans);
-
-            xaccTransSetDatePostedSecsNormalized(selected_match->trans,
-                                                 xaccTransGetDate(xaccSplitGetParent(
-                                                         gnc_import_TransInfo_get_fsplit(trans_info))));
-
-            xaccSplitSetAmount(selected_match->split,
-                               xaccSplitGetAmount(
-                                   gnc_import_TransInfo_get_fsplit(trans_info)));
-            xaccSplitSetValue(selected_match->split,
-                              xaccSplitGetValue(
-                                  gnc_import_TransInfo_get_fsplit(trans_info)));
-
-            imbalance_value = xaccTransGetImbalanceValue(
-                                  gnc_import_TransInfo_get_trans(trans_info));
-            other_split = xaccSplitGetOtherSplit(selected_match->split);
-            if (!gnc_numeric_zero_p(imbalance_value) && other_split)
+            /* If there is no selection, ignore this transaction. */
+            if (!selected_match)
             {
-                if (xaccSplitGetReconcile(other_split) == NREC)
+                PWARN("No matching translaction to be cleared was chosen. Imported transaction will be ignored.");
+                break;
+            }
+
+            /* Transaction gets not imported but the matching one gets
+            updated and reconciled. */
+            if (!gnc_import_MatchInfo_get_split(selected_match))
+                PERR("The split I am trying to update and reconcile is nullptr, shouldn't happen!");
+            else
+            {
+                /* Update and reconcile the matching transaction */
+                /*DEBUG("BeginEdit selected_match")*/
+                xaccTransBeginEdit(selected_match->trans);
+
+                auto fsplit = gnc_import_TransInfo_get_fsplit(trans_info);
+                xaccTransSetDatePostedSecsNormalized(selected_match->trans,
+                                    xaccTransGetDate(xaccSplitGetParent(fsplit)));
+
+                xaccSplitSetAmount(selected_match->split, xaccSplitGetAmount(fsplit));
+                xaccSplitSetValue(selected_match->split, xaccSplitGetValue(fsplit));
+
+                auto imbalance_value = xaccTransGetImbalanceValue(
+                                    gnc_import_TransInfo_get_trans(trans_info));
+                auto other_split = xaccSplitGetOtherSplit(selected_match->split);
+                if (!gnc_numeric_zero_p(imbalance_value) && other_split)
                 {
-                    imbalance_value = gnc_numeric_neg(imbalance_value);
-                    xaccSplitSetValue(other_split, imbalance_value);
-                    xaccSplitSetAmount(other_split, imbalance_value);
+                    if (xaccSplitGetReconcile(other_split) == NREC)
+                    {
+                        imbalance_value = gnc_numeric_neg(imbalance_value);
+                        xaccSplitSetValue(other_split, imbalance_value);
+                        xaccSplitSetAmount(other_split, imbalance_value);
+                    }
+                    /* else GC will automatically insert a split to equity
+                    to balance the transaction */
                 }
-                /* else GC will automatically insert a split to equity
-                   to balance the transaction */
+
+                update_desc_and_notes(trans_info);
+
+                /*DEBUG("CommitEdit selected_match")*/
+                xaccTransCommitEdit(selected_match->trans);
+
+                process_reconcile (matchmap, trans_info, selected_match);
             }
-
-            update_desc_and_notes( trans_info);
-
-            if (xaccSplitGetReconcile(selected_match->split) == NREC)
-                xaccSplitSetReconcile(selected_match->split, CREC);
-
-            /* Set reconcile date to today */
-            xaccSplitSetDateReconciledSecs(selected_match->split, gnc_time (NULL));
-
-            /* Copy the online id to the reconciled transaction, so
-               the match will be remembered */
-            if (gnc_import_split_has_online_id(trans_info->first_split))
-            {
-                char *online_id = gnc_import_get_split_online_id
-                    (trans_info->first_split);
-                gnc_import_set_split_online_id(selected_match->split, online_id);
-                g_free (online_id);
-            }
-
-            /* Done editing. */
-            /*DEBUG("CommitEdit selected_match")*/
-            xaccTransCommitEdit(selected_match->trans);
-
-            /* Store the mapping to the other account in the MatchMap. */
-            matchmap_store_destination(matchmap, trans_info, TRUE);
-
-            /* Erase the downloaded transaction */
-            xaccTransDestroy(trans_info->trans);
-            /*DEBUG("CommitEdit trans")*/
-            xaccTransCommitEdit(trans_info->trans);
-            /* Very important: Make sure the freed transaction is not freed again! */
-            trans_info->trans = NULL;
         }
-    }
-    return TRUE;
+        return true;
     case GNCImport_CLEAR:
-    {
-        GNCImportMatchInfo *selected_match =
-            gnc_import_TransInfo_get_selected_match (trans_info);
-
-        /* If there is no selection, ignore this transaction. */
-        if (!selected_match)
         {
-            PWARN("No matching translaction to be cleared was chosen. Imported transaction will be ignored.");
-            break;
-        }
+            auto selected_match = gnc_import_TransInfo_get_selected_match (trans_info);
 
-        /* Transaction gets not imported but the matching one gets
-           reconciled. */
-        if (!gnc_import_MatchInfo_get_split (selected_match))
-            PERR("The split I am trying to reconcile is NULL, shouldn't happen!");
-        else
-        {
-            /* Reconcile the matching transaction */
-            /*DEBUG("BeginEdit selected_match")*/
-            xaccTransBeginEdit(selected_match->trans);
-
-            if (xaccSplitGetReconcile (selected_match->split) == NREC)
-                xaccSplitSetReconcile (selected_match->split, CREC);
-            /* Set reconcile date to today */
-            xaccSplitSetDateReconciledSecs
-            (selected_match->split, gnc_time (NULL));
-
-            /* Copy the online id to the reconciled transaction, so
-            		 the match will be remembered */
-            if (gnc_import_split_has_online_id(trans_info->first_split))
+            /* If there is no selection, ignore this transaction. */
+            if (!selected_match)
             {
-                char *online_id = gnc_import_get_split_online_id
-                    (trans_info->first_split);
-                gnc_import_set_split_online_id (selected_match->split, online_id);
-                g_free (online_id);
+                PWARN("No matching translaction to be cleared was chosen. Imported transaction will be ignored.");
+                break;
             }
 
-            /* Done editing. */
-            /*DEBUG("CommitEdit selected_match")*/
-            xaccTransCommitEdit (selected_match->trans);
-
-            /* Store the mapping to the other account in the MatchMap. */
-            matchmap_store_destination (matchmap, trans_info, TRUE);
-
-            /* Erase the downloaded transaction */
-            xaccTransDestroy(trans_info->trans);
-            /*DEBUG("CommitEdit trans")*/
-            xaccTransCommitEdit(trans_info->trans);
-            /* Very important: Make sure the freed transaction is not freed again! */
-            trans_info->trans = NULL;
+            /* Transaction gets not imported but the matching one gets
+            reconciled. */
+            if (!gnc_import_MatchInfo_get_split (selected_match))
+                PERR("The split I am trying to reconcile is nullptr, shouldn't happen!");
+            else
+            {
+                /* Reconcile the matching transaction */
+                process_reconcile(matchmap, trans_info, selected_match);
+            }
         }
-    }
-    return TRUE;
+        return true;
     default:
         DEBUG("Invalid GNCImportAction for this imported transaction.");
         break;
     }
     /*DEBUG("End");*/
-    return FALSE;
+    return false;
 }
 
 /********************************************************************\
@@ -1039,9 +930,9 @@ static gint check_trans_online_id(Transaction *trans1, void *user_data)
     gchar *online_id1, *online_id2;
     gint retval;
 
-    Split *split2 = user_data;
-    Account *account = xaccSplitGetAccount(split2);
-    Split *split1 = xaccTransFindSplitByAccount(trans1, account);
+    auto split2 = static_cast<Split*>(user_data);
+    auto account = xaccSplitGetAccount(split2);
+    auto split1 = xaccTransFindSplitByAccount(trans1, account);
     if (split1 == split2)
         return 0;
 
@@ -1053,8 +944,7 @@ static gint check_trans_online_id(Transaction *trans1, void *user_data)
 
     if (!online_id1 || !*online_id1)
     {
-        if (online_id1)
-            g_free (online_id1);
+        g_free (online_id1);
         online_id1 = gnc_import_get_trans_online_id (trans1);
     }
 
@@ -1070,11 +960,11 @@ static gint check_trans_online_id(Transaction *trans1, void *user_data)
 static GHashTable*
 hash_account_online_ids (Account *account)
 {
-     GHashTable* acct_hash = g_hash_table_new_full
-          (g_str_hash, g_str_equal, g_free, NULL);
+     auto acct_hash = g_hash_table_new_full
+          (g_str_hash, g_str_equal, g_free, nullptr);
      for (GList *n = xaccAccountGetSplitList (account) ; n; n = n->next)
      {
-        char *id = gnc_import_get_split_online_id (n->data);
+        auto id = gnc_import_get_split_online_id (static_cast<Split *>(n->data));
         if (id && *id)
             g_hash_table_insert (acct_hash, (void*) id, GINT_TO_POINTER (1));
      }
@@ -1085,28 +975,26 @@ hash_account_online_ids (Account *account)
   its parent account. */
 gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_hash)
 {
-    gboolean online_id_exists = FALSE;
-    Account *dest_acct;
-    char *source_online_id;
 
     /* Look for an online_id in the first split */
-    Split *source_split = xaccTransGetSplit(trans, 0);
+    auto source_split = xaccTransGetSplit(trans, 0);
     g_assert(source_split);
 
-    source_online_id = gnc_import_get_split_online_id (source_split);
+    auto source_online_id = gnc_import_get_split_online_id (source_split);
 
     // No online id, no point in continuing. We'd crash if we tried.
     if (!source_online_id)
-        return FALSE;
+        return false;
 
     // Create a hash per account of a hash of all split IDs. Then the
     // test below will be fast if we have many transactions to import.
-    dest_acct = xaccSplitGetAccount (source_split);
+    auto dest_acct = xaccSplitGetAccount (source_split);
     if (!g_hash_table_contains (acct_id_hash, dest_acct))
          g_hash_table_insert (acct_id_hash, dest_acct,
                               hash_account_online_ids (dest_acct));
-    online_id_exists = g_hash_table_contains (g_hash_table_lookup (acct_id_hash, dest_acct),
-                                              source_online_id);
+    auto online_id_exists = g_hash_table_contains (
+                static_cast<GHashTable*>(g_hash_table_lookup (acct_id_hash, dest_acct)),
+                source_online_id);
     
     /* If it does, abort the process for this transaction, since it is
        already in the system. */
@@ -1128,15 +1016,13 @@ gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_ha
 GNCImportTransInfo *
 gnc_import_TransInfo_new (Transaction *trans, GncImportMatchMap *matchmap)
 {
-    GNCImportTransInfo *transaction_info;
-    Split *split;
     g_assert (trans);
 
-    transaction_info = g_new0(GNCImportTransInfo, 1);
+    auto transaction_info = g_new0(GNCImportTransInfo, 1);
 
     transaction_info->trans = trans;
     /* Only use first split, the source split */
-    split = xaccTransGetSplit(trans, 0);
+    auto split = xaccTransGetSplit(trans, 0);
     g_assert(split);
     transaction_info->first_split = split;
 
@@ -1144,7 +1030,7 @@ gnc_import_TransInfo_new (Transaction *trans, GncImportMatchMap *matchmap)
        string match for the ADD action */
     gnc_import_TransInfo_set_destacc (transaction_info,
                                       matchmap_find_destination (matchmap, transaction_info),
-                                      FALSE);
+                                      false);
     return transaction_info;
 }
 
@@ -1165,16 +1051,14 @@ void
 gnc_import_TransInfo_init_matches (GNCImportTransInfo *trans_info,
                                    GNCImportSettings *settings)
 {
-    GNCImportMatchInfo * best_match = NULL;
     g_assert (trans_info);
 
     if (trans_info->match_list)
     {
         trans_info->match_list = g_list_sort(trans_info->match_list,
                                              compare_probability);
-        best_match = g_list_nth_data(trans_info->match_list, 0);
-        gnc_import_TransInfo_set_selected_match_info (trans_info,
-                best_match, FALSE);
+        auto best_match = static_cast<GNCImportMatchInfo*>(g_list_nth_data(trans_info->match_list, 0));
+        gnc_import_TransInfo_set_selected_match_info (trans_info, best_match, false);
         if (best_match &&
                 best_match->probability >= gnc_import_Settings_get_clear_threshold(settings))
         {
@@ -1209,22 +1093,20 @@ gboolean
 gnc_import_TransInfo_refresh_destacc (GNCImportTransInfo *transaction_info,
                                       GncImportMatchMap *matchmap)
 {
-    Account *orig_destacc;
-    Account *new_destacc = NULL;
     g_assert(transaction_info);
 
-    orig_destacc = gnc_import_TransInfo_get_destacc(transaction_info);
+    auto orig_destacc = gnc_import_TransInfo_get_destacc(transaction_info);
 
     /* if we haven't manually selected a destination account for this transaction */
     if (!gnc_import_TransInfo_get_destacc_selected_manually(transaction_info))
     {
         /* Try to find the destination account for this transaction based on prior ones */
-        new_destacc = matchmap_find_destination(matchmap, transaction_info);
-        gnc_import_TransInfo_set_destacc(transaction_info, new_destacc, FALSE);
+        auto new_destacc = matchmap_find_destination(matchmap, transaction_info);
+        gnc_import_TransInfo_set_destacc(transaction_info, new_destacc, false);
         return (new_destacc != orig_destacc);
     }
 
-    return FALSE;
+    return false;
 }
 
 
