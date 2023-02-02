@@ -64,8 +64,6 @@ void gnc_invoice_remind_bills_due (GtkWindow *parent);
 void gnc_invoice_remind_invoices_due (GtkWindow *parent);
 void gnc_invoice_remind_bills_due_cb (void);
 void gnc_invoice_remind_invoices_due_cb (void);
-const char *gnc_plugin_business_get_invoice_printreport(void);
-
 
 void gnc_plugin_business_split_reg_ui_update (GncPluginPage *plugin_page);
 

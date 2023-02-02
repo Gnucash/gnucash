@@ -884,6 +884,16 @@ gnc_register_taxtable_option(GncOptionDB* db, const char* section,
 }
 
 void
+gnc_register_invoice_print_report_option(GncOptionDB* db, const char* section,
+                                         const char* name, const char* key,
+                                         const char* doc_string, std::string value)
+{
+    GncOption option{section, name, key, doc_string,
+                     value, GncOptionUIType::INV_REPORT};
+    db->register_option(section, std::move(option));
+}
+
+void
 gnc_register_counter_option(GncOptionDB* db, const char* section,
                             const char* name, const char* key,
                             const char* doc_string, double value)
@@ -1266,13 +1276,20 @@ gnc_option_db_book_options(GncOptionDB* odb)
     gnc_register_string_option(odb, business_section, N_("Company ID"), "c5",
                                N_("The ID for your company (eg 'Tax-ID: 00-000000)."),
                                empty_string);
-
+    gnc_register_invoice_print_report_option(odb, business_section,
+                                 OPTION_NAME_DEFAULT_INVOICE_REPORT, "e1",
+                                 N_("The invoice report to be used for printing."),
+                                 empty_string);
+    gnc_register_number_range_option<double>(odb, business_section,
+                                     OPTION_NAME_DEFAULT_INVOICE_REPORT_TIMEOUT, "e2",
+                                     N_("Length of time to change the used invoice report. A value of 0 means disabled."),
+                                     0.0, 0.0, 10.0, 1.0);
     gnc_register_taxtable_option(odb, business_section,
-                                 N_("Default Customer TaxTable"), "e",
+                                 N_("Default Customer TaxTable"), "f1",
                                  N_("The default tax table to apply to customers."),
                                  nullptr);
     gnc_register_taxtable_option(odb, business_section,
-                                 N_("Default Vendor TaxTable"), "f",
+                                 N_("Default Vendor TaxTable"), "f2",
                                  N_("The default tax table to apply to vendors."),
                                  nullptr);
     gnc_register_dateformat_option(odb, business_section,

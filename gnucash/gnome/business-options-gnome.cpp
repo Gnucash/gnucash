@@ -33,6 +33,10 @@
 #include <gnc-general-search.h> // for GNC_GENERAL_SEARCH
 #include "dialog-utils.h" // for gnc_builder_add_from_file
 
+extern "C"
+{
+#include "gnc-report-combo.h"
+}
 
 #include <iostream>
 #include <sstream>
@@ -183,6 +187,51 @@ create_option_widget<GncOptionUIType::TAX_TABLE>(GncOption& option,
     wrap_widget(option, widget, page_box, row);
 }
 
+class GncGtkInvReportUIItem : public GncOptionGtkUIItem
+{
+public:
+    GncGtkInvReportUIItem(GtkWidget* widget) :
+        GncOptionGtkUIItem(widget, GncOptionUIType::INV_REPORT) {}
+    void set_ui_item_from_option(GncOption& option) noexcept override
+    {
+        std::string guid_string;
+        auto str{option.get_value<std::string>()};
+
+        if (str.empty())
+        {
+            static const std::string default_guid_string(gnc_get_builtin_default_invoice_print_report ());
+            guid_string = default_guid_string + "/ ";
+        }
+        else
+            guid_string = str;
+
+        gnc_report_combo_set_active_guid_name (GNC_REPORT_COMBO(get_widget()),
+                                               guid_string.c_str());
+    }
+    void set_option_from_ui_item(GncOption& option) noexcept override
+    {
+        auto report_guid_name = gnc_report_combo_get_active_guid_name (GNC_REPORT_COMBO(get_widget()));
+        option.set_value(std::string{report_guid_name});
+        g_free (report_guid_name);
+    }
+};
+
+template<> void
+create_option_widget<GncOptionUIType::INV_REPORT>(GncOption& option,
+                                                  GtkGrid *page_box,
+                                                  int row)
+{
+    constexpr const char* inv_report{"gnc:custom-report-invoice-template-guids"};
+    auto widget = gnc_default_invoice_report_combo (inv_report);
+    option.set_ui_item(std::make_unique<GncGtkInvReportUIItem>(widget));
+    option.set_ui_item_from_option();
+
+    g_signal_connect (G_OBJECT (widget), "changed",
+                      G_CALLBACK (gnc_option_changed_widget_cb), &option);
+
+    wrap_widget (option, widget, page_box, row);
+}
+
 void
 gnc_business_options_gnome_initialize(void)
 {
@@ -198,4 +247,6 @@ gnc_business_options_gnome_initialize(void)
                                  create_option_widget<GncOptionUIType::INVOICE>);
     GncOptionUIFactory::set_func(GncOptionUIType::TAX_TABLE,
                                  create_option_widget<GncOptionUIType::TAX_TABLE>);
+    GncOptionUIFactory::set_func(GncOptionUIType::INV_REPORT,
+                                 create_option_widget<GncOptionUIType::INV_REPORT>);
 }

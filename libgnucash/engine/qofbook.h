@@ -289,6 +289,27 @@ gint qof_book_get_num_days_autoreadonly (const QofBook *book);
  * g_date_free() the object afterwards. */
 GDate* qof_book_get_autoreadonly_gdate (const QofBook *book);
 
+/** Save the Invoice Report name / guid to be used as the default for printing
+ *  Invoices
+ */
+void qof_book_set_default_invoice_report (QofBook *book, const gchar *guid,
+                                          const gchar *name);
+
+/** Get the guid of the Invoice Report to be used as the default for printing
+ *  Invoices
+ */
+gchar * qof_book_get_default_invoice_report_guid (const QofBook *book);
+
+/** Get the name of the Invoice Report to be used as the default for printing
+ *  Invoices
+ */
+gchar * qof_book_get_default_invoice_report_name (const QofBook *book);
+
+/** Get the length of time available to change the used Invoice Report
+ *  when printing Invoices
+ */
+gdouble qof_book_get_default_invoice_report_timeout (const QofBook *book);
+
 /** Returns TRUE if this book uses split action field as the 'Num' field, FALSE
  *  if it uses transaction number field */
 gboolean qof_book_use_split_action_for_num_field (const QofBook *book);

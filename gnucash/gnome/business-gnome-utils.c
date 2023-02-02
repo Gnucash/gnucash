@@ -42,6 +42,7 @@
 
 #include "gnc-general-search.h"
 #include "qof.h"
+#include "qofbook.h"
 #include "business-gnome-utils.h"
 #include "dialog-customer.h"
 #include "dialog-job.h"
@@ -49,13 +50,129 @@
 #include "dialog-employee.h"
 #include "dialog-invoice.h"
 
+#include "guile-mappings.h"
+#include "gnc-guile-utils.h"
+#include "gnc-prefs.h"
 #include "gnc-commodity.h"
+#include "gnc-report-combo.h"
 
 typedef enum
 {
     GNCSEARCH_TYPE_SELECT,
     GNCSEARCH_TYPE_EDIT
 } GNCSearchType;
+
+enum
+{
+    COL_INV_NAME = 0,
+    COL_INV_GUID,
+    COL_INV_MISSING,
+    NUM_INV_COLS
+};
+
+#define PRINTABLE_INVOICE_GUID "5123a759ceb9483abf2182d01c140e8d"
+#define TAX_INVOICE_GUID       "0769e242be474010b4acf264a5512e6e"
+#define EASY_INVOICE_GUID      "67112f318bef4fc496bdc27d106bbda4"
+#define FANCY_INVOICE_GUID     "3ce293441e894423a2425d7a22dd1ac6"
+
+enum
+{
+    PRINTABLE_INVOICE_PREF_NUM = 0,
+    TAX_INVOICE_PREF_NUM,
+    EASY_INVOICE_PREF_NUM,
+    FANCY_INVOICE_PREF_NUM,
+};
+
+static const char* invoice_printreport_values[] =
+{
+    /* The list below are the guids of reports that can
+     * be used to print an invoice.
+     *
+     * Important: This list matches the order of existing saved
+     * preference entries.
+     */
+    PRINTABLE_INVOICE_GUID,
+    TAX_INVOICE_GUID,
+    EASY_INVOICE_GUID,
+    FANCY_INVOICE_GUID,
+    NULL
+};
+
+#define GNC_PREFS_GROUP_INVOICE    "dialogs.business.invoice"
+#define GNC_PREF_INV_PRINT_RPT     "invoice-printreport"
+
+const char *
+gnc_get_builtin_default_invoice_print_report (void)
+{
+    return PRINTABLE_INVOICE_GUID;
+}
+
+const char *
+gnc_migrate_default_invoice_print_report (void)
+{
+    QofBook *book = gnc_get_current_book ();
+    int old_style_value = gnc_prefs_get_int (GNC_PREFS_GROUP_INVOICE,
+                                             GNC_PREF_INV_PRINT_RPT);
+
+    if (old_style_value >= TAX_INVOICE_PREF_NUM &&
+        old_style_value <= FANCY_INVOICE_PREF_NUM)
+    {
+        const gchar *ret = invoice_printreport_values[old_style_value];
+        qof_book_set_default_invoice_report (book, ret, " ");
+        return ret;
+    }
+    else
+        return gnc_get_builtin_default_invoice_print_report ();
+}
+
+char *
+gnc_get_default_invoice_print_report (void)
+{
+    QofBook *book = gnc_get_current_book ();
+    gchar *default_guid = qof_book_get_default_invoice_report_guid (book);
+
+    if (!default_guid)
+        return g_strdup (gnc_migrate_default_invoice_print_report ());
+
+    return default_guid;
+}
+
+GtkWidget *
+gnc_default_invoice_report_combo (const char* guid_scm_function)
+{
+    GSList *invoice_list = NULL;
+    SCM template_menu_name = scm_c_eval_string ("gnc:report-template-menu-name/report-guid");
+    SCM get_rpt_guids = scm_c_eval_string (guid_scm_function);
+    SCM reportlist;
+    SCM rpt_guids;
+
+    if (!scm_is_procedure (get_rpt_guids))
+        return NULL;
+
+    reportlist = scm_call_0 (get_rpt_guids);
+    rpt_guids = reportlist;
+
+    if (scm_is_list (rpt_guids))
+    {
+        for (int i = 0; !scm_is_null (rpt_guids); i++)
+        {
+            gchar *guid_str = scm_to_utf8_string (SCM_CAR(rpt_guids));
+            gchar *name = gnc_scm_to_utf8_string (scm_call_2(template_menu_name,
+                                                  SCM_CAR(rpt_guids), SCM_BOOL_F));
+
+            // Note: invoice_list and entries freed in report combo
+            ReportListEntry *rle = g_new0 (ReportListEntry, 1);
+
+            rle->report_guid = guid_str;
+            rle->report_name = name;
+
+            invoice_list = g_slist_append (invoice_list, rle);
+
+            rpt_guids = SCM_CDR(rpt_guids);
+        }
+    }
+    return gnc_report_combo_new (invoice_list);
+}
 
 static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
                                   QofBook *book, GncOwner *owner,

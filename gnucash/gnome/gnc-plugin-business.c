@@ -112,7 +112,6 @@ static void bind_extra_toolbuttons_visibility (GncMainWindow *mainwindow);
 #define PLUGIN_UI_FILENAME  "gnc-plugin-business.ui"
 
 #define GNC_PREF_EXTRA_TOOLBUTTONS "enable-toolbuttons"
-#define GNC_PREF_INV_PRINT_RPT     "invoice-printreport"
 
 /** This variable maintains a pointer to the last window where a
  *  Business command was executed.  It is used to determine where new
@@ -1049,28 +1048,4 @@ gnc_plugin_business_add_to_window (GncPlugin *plugin,
     g_signal_connect (mainwindow, "menu_changed",
                       G_CALLBACK(gnc_plugin_business_main_window_menu_changed),
                       plugin);
-}
-
-static const char* invoice_printreport_values[] =
-{
-    /* The list below are the guids of reports that can
-     * be used to print an invoice.
-     * Important: this list must be kept in sync with the one at the end
-     * of business-prefs.glade
-     */
-    "5123a759ceb9483abf2182d01c140e8d", // "Printable Invoice"
-    "0769e242be474010b4acf264a5512e6e", // "Tax Invoice"
-    "67112f318bef4fc496bdc27d106bbda4", // "Easy Invoice"
-    "3ce293441e894423a2425d7a22dd1ac6", // "Fancy Invoice"
-    NULL
-};
-
-const char *
-gnc_plugin_business_get_invoice_printreport (void)
-{
-    int value = gnc_prefs_get_int (GNC_PREFS_GROUP_INVOICE, GNC_PREF_INV_PRINT_RPT);
-    if (value >= 0 && value < 4)
-        return invoice_printreport_values[value];
-    else
-        return NULL;
 }

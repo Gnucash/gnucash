@@ -1014,6 +1014,105 @@ qof_book_option_num_autoreadonly_changed_cb (GObject *gobject,
     book->cached_num_days_autoreadonly_isvalid = FALSE;
 }
 
+static KvpValue*
+get_option_default_invoice_report_value (QofBook *book)
+{
+    KvpFrame *root = qof_instance_get_slots (QOF_INSTANCE(book));
+    return root->get_slot ({KVP_OPTION_PATH,
+                            OPTION_SECTION_BUSINESS,
+                            OPTION_NAME_DEFAULT_INVOICE_REPORT});
+}
+
+void
+qof_book_set_default_invoice_report (QofBook *book, const gchar *guid,
+                                     const gchar *name)
+{
+    const gchar *existing_guid_name = nullptr;
+    gchar *new_guid_name;
+
+    if (!guid)
+        return;
+
+    KvpValue *value = get_option_default_invoice_report_value (book);
+
+    if (value)
+        existing_guid_name = {value->get<const char*>()};
+
+    new_guid_name = g_strconcat (guid, "/", name, nullptr);
+
+    if (g_strcmp0 (existing_guid_name, new_guid_name) != 0)
+    {
+        auto value = new KvpValue {g_strdup(new_guid_name)};
+        KvpFrame *root = qof_instance_get_slots (QOF_INSTANCE(book));
+        qof_book_begin_edit (book);
+        delete root->set_path ({KVP_OPTION_PATH,
+                                OPTION_SECTION_BUSINESS,
+                                OPTION_NAME_DEFAULT_INVOICE_REPORT}, value);
+        qof_instance_set_dirty (QOF_INSTANCE(book));
+        qof_book_commit_edit (book);
+    }
+    g_free (new_guid_name);
+}
+
+gchar *
+qof_book_get_default_invoice_report_guid (const QofBook *book)
+{
+    KvpValue *value = get_option_default_invoice_report_value (const_cast<QofBook*>(book));
+    gchar *report_guid = nullptr;
+
+    if (value)
+    {
+        auto str {value->get<const char*>()};
+        auto ptr = strchr (str, '/');
+        if (ptr)
+        {
+            if (ptr - str == GUID_ENCODING_LENGTH)
+            {
+                if (strlen (str) > GUID_ENCODING_LENGTH + 1)
+                    report_guid = g_strndup (&str[0], GUID_ENCODING_LENGTH);
+            }
+        }
+    }
+    return report_guid;
+}
+
+gchar *
+qof_book_get_default_invoice_report_name (const QofBook *book)
+{
+    KvpValue *value = get_option_default_invoice_report_value (const_cast<QofBook*>(book));
+    gchar *report_name = nullptr;
+
+    if (value)
+    {
+        auto str {value->get<const char*>()};
+        auto ptr = strchr (str, '/');
+        if (ptr)
+        {
+            if (ptr - str == GUID_ENCODING_LENGTH)
+            {
+                if (strlen (str) > GUID_ENCODING_LENGTH + 1)
+                    report_name = g_strdup (&str[GUID_ENCODING_LENGTH + 1]);
+            }
+        }
+    }
+    return report_name;
+}
+
+gdouble
+qof_book_get_default_invoice_report_timeout (const QofBook *book)
+{
+    double ret = 0;
+    KvpFrame *root = qof_instance_get_slots (QOF_INSTANCE(book));
+    KvpValue *value = root->get_slot ({KVP_OPTION_PATH,
+                                       OPTION_SECTION_BUSINESS,
+                                       OPTION_NAME_DEFAULT_INVOICE_REPORT_TIMEOUT});
+
+    if (value)
+        ret = {value->get<double>()};
+
+    return ret;
+}
+
 /* Note: this will fail if the book slots we're looking for here are flattened at some point !
  * When that happens, this function can be removed. */
 static Path opt_name_to_path (const char* opt_name)

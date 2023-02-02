@@ -185,6 +185,7 @@ gnucash/gnome-utils/gnc-plugin-menu-additions.c
 gnucash/gnome-utils/gnc-plugin-page.c
 gnucash/gnome-utils/gnc-query-view.c
 gnucash/gnome-utils/gnc-recurrence.c
+gnucash/gnome-utils/gnc-report-combo.c
 gnucash/gnome-utils/gnc-splash.c
 gnucash/gnome-utils/gnc-sx-instance-dense-cal-adapter.c
 gnucash/gnome-utils/gnc-sx-list-tree-model-adapter.c
