@@ -81,15 +81,6 @@ protected:
     Account *t_expense_account {};
 };
 
-TEST_F(ImapTest, CreateImap) {
-    GncImportMatchMap *imap = gnc_account_imap_create_imap (t_bank_account);
-    EXPECT_NE(nullptr, imap);
-    EXPECT_EQ(t_bank_account, imap->acc);
-    EXPECT_EQ(gnc_account_get_book(t_bank_account), imap->book);
-
-    g_free(imap);
-}
-
 static const char* IMAP_FRAME = "import-map";
 static const char* IMAP_FRAME_BAYES = "import-map-bayes";
 
@@ -98,15 +89,14 @@ class ImapPlainTest : public ImapTest
 protected:
     void SetUp() {
         ImapTest::SetUp();
-        t_imap = gnc_account_imap_create_imap (t_bank_account);
+        t_acc = t_bank_account;
     }
 
     void TearDown() {
-        g_free(t_imap);
         ImapTest::TearDown();
     }
 
-    GncImportMatchMap *t_imap {};
+    Account *t_acc {};
 };
 
 TEST_F(ImapPlainTest, FindAccount)
@@ -119,11 +109,11 @@ TEST_F(ImapPlainTest, FindAccount)
     root->set_path({IMAP_FRAME, "pepper"}, new KvpValue{*acc1_val});
     root->set_path({IMAP_FRAME, "salt"}, new KvpValue{*acc2_val});
 
-    EXPECT_EQ(t_expense_account1, gnc_account_imap_find_account(t_imap, "foo", "bar"));
-    EXPECT_EQ(t_expense_account2, gnc_account_imap_find_account(t_imap, "baz", "waldo"));
-    EXPECT_EQ(t_expense_account1, gnc_account_imap_find_account(t_imap, NULL, "pepper"));
-    EXPECT_EQ(t_expense_account2, gnc_account_imap_find_account(t_imap, NULL, "salt"));
-    EXPECT_EQ(nullptr, gnc_account_imap_find_account(t_imap, "salt", NULL));
+    EXPECT_EQ(t_expense_account1, gnc_account_imap_find_account(t_acc, "foo", "bar"));
+    EXPECT_EQ(t_expense_account2, gnc_account_imap_find_account(t_acc, "baz", "waldo"));
+    EXPECT_EQ(t_expense_account1, gnc_account_imap_find_account(t_acc, NULL, "pepper"));
+    EXPECT_EQ(t_expense_account2, gnc_account_imap_find_account(t_acc, NULL, "salt"));
+    EXPECT_EQ(nullptr, gnc_account_imap_find_account(t_acc, "salt", NULL));
 }
 
 TEST_F(ImapPlainTest, AddAccount)
@@ -131,23 +121,23 @@ TEST_F(ImapPlainTest, AddAccount)
 // prevent the embedded beginedit/committedit from doing anything
     qof_instance_increase_editlevel(QOF_INSTANCE(t_bank_account));
     qof_instance_mark_clean(QOF_INSTANCE(t_bank_account));
-    gnc_account_imap_add_account(t_imap, "foo", "bar", t_expense_account1);
-    gnc_account_imap_add_account(t_imap, "baz", "waldo", t_expense_account2);
-    gnc_account_imap_add_account(t_imap, NULL, "pepper", t_expense_account1);
-    gnc_account_imap_add_account(t_imap, NULL, "salt", t_expense_account2);
+    gnc_account_imap_add_account(t_acc, "foo", "bar", t_expense_account1);
+    gnc_account_imap_add_account(t_acc, "baz", "waldo", t_expense_account2);
+    gnc_account_imap_add_account(t_acc, NULL, "pepper", t_expense_account1);
+    gnc_account_imap_add_account(t_acc, NULL, "salt", t_expense_account2);
     EXPECT_EQ(1, qof_instance_get_editlevel(QOF_INSTANCE(t_bank_account)));
     EXPECT_TRUE(qof_instance_get_dirty_flag(QOF_INSTANCE(t_bank_account)));
     qof_instance_mark_clean(QOF_INSTANCE(t_bank_account));
-    gnc_account_imap_add_account(t_imap, NULL, NULL, t_expense_account2);
+    gnc_account_imap_add_account(t_acc, NULL, NULL, t_expense_account2);
     EXPECT_FALSE(qof_instance_get_dirty_flag(QOF_INSTANCE(t_bank_account)));
-    gnc_account_imap_add_account(t_imap, "pork", "sausage", NULL);
+    gnc_account_imap_add_account(t_acc, "pork", "sausage", NULL);
     EXPECT_FALSE(qof_instance_get_dirty_flag(QOF_INSTANCE(t_bank_account)));
     qof_instance_reset_editlevel(QOF_INSTANCE(t_bank_account));
 
     auto root = qof_instance_get_slots(QOF_INSTANCE(t_bank_account));
     auto value = root->get_slot({IMAP_FRAME, "foo", "bar"});
     auto check_account = [this](KvpValue* v) {
-        return xaccAccountLookup(v->get<GncGUID*>(), this->t_imap->book); };
+        return xaccAccountLookup(v->get<GncGUID*>(), gnc_account_get_book(this->t_acc)); };
     EXPECT_EQ(t_expense_account1, check_account(value));
     value = root->get_slot({IMAP_FRAME, "baz", "waldo"});
     EXPECT_EQ(t_expense_account2, check_account(value));
@@ -168,30 +158,30 @@ TEST_F(ImapPlainTest, DeleteAccount)
 // prevent the embedded beginedit/committedit from doing anything
     qof_instance_increase_editlevel(QOF_INSTANCE(t_bank_account));
     qof_instance_mark_clean(QOF_INSTANCE(t_bank_account));
-    gnc_account_imap_add_account(t_imap, "foo", "bar", t_expense_account1);
-    gnc_account_imap_add_account(t_imap, "foo", "waldo", t_expense_account2);
-    gnc_account_imap_add_account(t_imap, NULL, "pepper", t_expense_account1);
+    gnc_account_imap_add_account(t_acc, "foo", "bar", t_expense_account1);
+    gnc_account_imap_add_account(t_acc, "foo", "waldo", t_expense_account2);
+    gnc_account_imap_add_account(t_acc, NULL, "pepper", t_expense_account1);
     EXPECT_EQ(1, qof_instance_get_editlevel(QOF_INSTANCE(t_bank_account)));
     EXPECT_TRUE(qof_instance_get_dirty_flag(QOF_INSTANCE(t_bank_account)));
     qof_instance_mark_clean(QOF_INSTANCE(t_bank_account));
 
-    gnc_account_imap_delete_account(t_imap, NULL, NULL);
+    gnc_account_imap_delete_account(t_acc, NULL, NULL);
     EXPECT_FALSE(qof_instance_get_dirty_flag(QOF_INSTANCE(t_bank_account)));
 
-    gnc_account_imap_delete_account(t_imap, "foo", "waldo");
+    gnc_account_imap_delete_account(t_acc, "foo", "waldo");
     EXPECT_TRUE(qof_instance_get_dirty_flag(QOF_INSTANCE(t_bank_account)));
     qof_instance_mark_clean(QOF_INSTANCE(t_bank_account));
-    EXPECT_EQ(t_expense_account1, gnc_account_imap_find_account(t_imap, "foo", "bar"));
-    EXPECT_EQ(nullptr, gnc_account_imap_find_account(t_imap, "foo", "waldo"));
+    EXPECT_EQ(t_expense_account1, gnc_account_imap_find_account(t_acc, "foo", "bar"));
+    EXPECT_EQ(nullptr, gnc_account_imap_find_account(t_acc, "foo", "waldo"));
     auto root = qof_instance_get_slots(QOF_INSTANCE(t_bank_account));
     EXPECT_EQ(nullptr, root->get_slot(path1));
 
-    gnc_account_imap_delete_account(t_imap, "foo", "bar");
+    gnc_account_imap_delete_account(t_acc, "foo", "bar");
     EXPECT_TRUE(qof_instance_get_dirty_flag(QOF_INSTANCE(t_bank_account)));
     qof_instance_mark_clean(QOF_INSTANCE(t_bank_account));
     EXPECT_EQ(nullptr, root->get_slot(path2));
 
-    gnc_account_imap_delete_account(t_imap, NULL, "pepper");
+    gnc_account_imap_delete_account(t_acc, NULL, "pepper");
     EXPECT_TRUE(qof_instance_get_dirty_flag(QOF_INSTANCE(t_bank_account)));
     qof_instance_mark_clean(QOF_INSTANCE(t_bank_account));
     EXPECT_EQ(nullptr, root->get_slot(path3));
@@ -258,23 +248,23 @@ TEST_F(ImapBayesTest, FindAccountBayes)
     root->set_path({std::string{IMAP_FRAME_BAYES} + "/" + pepper + "/" + acct1_guid}, new KvpValue{*value});
     root->set_path({std::string{IMAP_FRAME_BAYES} + "/" + salt + "/" + acct2_guid}, new KvpValue{*value});
 
-    auto account = gnc_account_imap_find_account_bayes(t_imap, t_list1);
+    auto account = gnc_account_imap_find_account_bayes(t_acc, t_list1);
     EXPECT_EQ(t_expense_account1, account);
-    account = gnc_account_imap_find_account_bayes(t_imap, t_list2);
+    account = gnc_account_imap_find_account_bayes(t_acc, t_list2);
     EXPECT_EQ(t_expense_account2, account);
-    account = gnc_account_imap_find_account_bayes(t_imap, t_list3);
+    account = gnc_account_imap_find_account_bayes(t_acc, t_list3);
     EXPECT_EQ(t_expense_account1, account);
-    account = gnc_account_imap_find_account_bayes(t_imap, t_list4);
+    account = gnc_account_imap_find_account_bayes(t_acc, t_list4);
     EXPECT_EQ(t_expense_account2, account);
-    account = gnc_account_imap_find_account_bayes(t_imap, t_list5);
+    account = gnc_account_imap_find_account_bayes(t_acc, t_list5);
     EXPECT_EQ(nullptr, account);
 
     // only imap entries with exact token matching should be considered
     root->set_path({std::string{IMAP_FRAME_BAYES} + "/" + pepper + waldo + "/" + acct2_guid}, new KvpValue{*value});
-    account = gnc_account_imap_find_account_bayes(t_imap, t_list3);
+    account = gnc_account_imap_find_account_bayes(t_acc, t_list3);
     EXPECT_EQ(t_expense_account1, account);
     root->set_path({std::string{IMAP_FRAME_BAYES} + "/" + pepper + "/" + waldo + "/" + acct2_guid}, new KvpValue{*value});
-    account = gnc_account_imap_find_account_bayes(t_imap, t_list3);
+    account = gnc_account_imap_find_account_bayes(t_acc, t_list3);
     EXPECT_EQ(t_expense_account1, account);
 }
 
@@ -283,14 +273,14 @@ TEST_F(ImapBayesTest, AddAccountBayes)
     // prevent the embedded beginedit/committedit from doing anything
     qof_instance_increase_editlevel(QOF_INSTANCE(t_bank_account));
     qof_instance_mark_clean(QOF_INSTANCE(t_bank_account));
-    gnc_account_imap_add_account_bayes(t_imap, t_list1, t_expense_account1);
-    gnc_account_imap_add_account_bayes(t_imap, t_list2, t_expense_account2);
-    gnc_account_imap_add_account_bayes(t_imap, t_list3, t_expense_account1);
-    gnc_account_imap_add_account_bayes(t_imap, t_list4, t_expense_account2);
+    gnc_account_imap_add_account_bayes(t_acc, t_list1, t_expense_account1);
+    gnc_account_imap_add_account_bayes(t_acc, t_list2, t_expense_account2);
+    gnc_account_imap_add_account_bayes(t_acc, t_list3, t_expense_account1);
+    gnc_account_imap_add_account_bayes(t_acc, t_list4, t_expense_account2);
     EXPECT_EQ(1, qof_instance_get_editlevel(QOF_INSTANCE(t_bank_account)));
     EXPECT_TRUE(qof_instance_get_dirty_flag(QOF_INSTANCE(t_bank_account)));
     qof_instance_mark_clean(QOF_INSTANCE(t_bank_account));
-    gnc_account_imap_add_account_bayes(t_imap, t_list5, NULL);
+    gnc_account_imap_add_account_bayes(t_acc, t_list5, NULL);
     EXPECT_FALSE(qof_instance_get_dirty_flag(QOF_INSTANCE(t_bank_account)));
     qof_instance_reset_editlevel(QOF_INSTANCE(t_bank_account));
 
@@ -299,7 +289,7 @@ TEST_F(ImapBayesTest, AddAccountBayes)
     auto acct2_guid = guid_to_string (xaccAccountGetGUID(t_expense_account2));
     auto value = root->get_slot({std::string{IMAP_FRAME_BAYES} + "/foo/bar"});
     auto check_account = [this](KvpValue* v) {
-        return (v->get<const char*>(), this->t_imap->book); };
+        return (v->get<const char*>(), gnc_account_get_book(this->t_acc)); };
     value = root->get_slot({std::string{IMAP_FRAME_BAYES} + "/" + foo + "/" + acct1_guid});
     EXPECT_EQ(1, value->get<int64_t>());
     value = root->get_slot({std::string{IMAP_FRAME_BAYES} + "/" + bar + "/" + acct1_guid});
@@ -316,7 +306,7 @@ TEST_F(ImapBayesTest, AddAccountBayes)
     EXPECT_EQ(nullptr, value);
 
     qof_instance_increase_editlevel(QOF_INSTANCE(t_bank_account));
-    gnc_account_imap_add_account_bayes(t_imap, t_list2, t_expense_account2);
+    gnc_account_imap_add_account_bayes(t_acc, t_list2, t_expense_account2);
     qof_instance_mark_clean(QOF_INSTANCE(t_bank_account));
     qof_instance_reset_editlevel(QOF_INSTANCE(t_bank_account));
     value = root->get_slot({std::string{IMAP_FRAME_BAYES} + "/" + baz + "/" + acct2_guid});
@@ -326,7 +316,7 @@ TEST_F(ImapBayesTest, AddAccountBayes)
 TEST_F(ImapBayesTest, ConvertBayesData)
 {
     auto root = qof_instance_get_slots(QOF_INSTANCE(t_bank_account));
-    auto book = qof_instance_get_slots(QOF_INSTANCE(t_imap->book));
+    auto book = qof_instance_get_slots(QOF_INSTANCE(gnc_account_get_book(this->t_acc)));
     auto acct1_guid = guid_to_string (xaccAccountGetGUID(t_expense_account1)); //Food
     auto acct2_guid = guid_to_string (xaccAccountGetGUID(t_expense_account2)); //Drink
     auto acct3_guid = guid_to_string (xaccAccountGetGUID(t_asset_account2)); //Asset-Bank
@@ -345,7 +335,7 @@ TEST_F(ImapBayesTest, ConvertBayesData)
     /* make sure to reset the conversion has been run flag */
     gnc_account_reset_convert_bayes_to_flat ();
     /*Calling into the imap functions should trigger a conversion.*/
-    gnc_account_imap_add_account_bayes(t_imap, t_list5, t_expense_account2); //pork and sausage; account Food
+    gnc_account_imap_add_account_bayes(t_acc, t_list5, t_expense_account2); //pork and sausage; account Food
     // convert from 'Asset-Bank' to 'Asset-Bank' guid
     auto value = root->get_slot({std::string{IMAP_FRAME_BAYES} + "/severely/divided/token/" + acct3_guid});
     EXPECT_EQ(10, value->get<int64_t>());
@@ -373,10 +363,10 @@ TEST_F (ImapBayesTest, import_map_with_delimiters)
 {
     GList * tokens {nullptr};
     tokens = g_list_prepend (tokens, const_cast<char*> ("one/two/three"));
-    gnc_account_imap_add_account_bayes (t_imap, tokens, t_expense_account1);
-    gnc_account_imap_add_account_bayes (t_imap, tokens, t_expense_account1);
-    gnc_account_imap_add_account_bayes (t_imap, tokens, t_expense_account1);
-    auto account = gnc_account_imap_find_account_bayes (t_imap, tokens);
+    gnc_account_imap_add_account_bayes (t_acc, tokens, t_expense_account1);
+    gnc_account_imap_add_account_bayes (t_acc, tokens, t_expense_account1);
+    gnc_account_imap_add_account_bayes (t_acc, tokens, t_expense_account1);
+    auto account = gnc_account_imap_find_account_bayes (t_acc, tokens);
     EXPECT_EQ (account, t_expense_account1);
 }
 
@@ -384,8 +374,8 @@ TEST_F (ImapBayesTest, get_bayes_info)
 {
     GList * tokens {nullptr};
     tokens = g_list_prepend (tokens, const_cast <char*> ("one/two/three"));
-    gnc_account_imap_add_account_bayes(t_imap, tokens, t_expense_account1);
-    auto account = gnc_account_imap_find_account_bayes (t_imap, tokens);
+    gnc_account_imap_add_account_bayes(t_acc, tokens, t_expense_account1);
+    auto account = gnc_account_imap_find_account_bayes (t_acc, tokens);
     EXPECT_EQ (account, t_expense_account1);
     auto infos = gnc_account_imap_get_info_bayes (t_bank_account);
     EXPECT_EQ (g_list_first (infos), g_list_last (infos));

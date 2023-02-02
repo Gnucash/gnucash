@@ -69,36 +69,30 @@ xaccAccountGetSplitList (const Account *account)
 }
 
 
-GncImportMatchMap *
-gnc_account_imap_create_imap (Account *acc)
-{
-    SCOPED_TRACE("");
-    auto mockaccount = gnc_mockaccount(acc);
-    return mockaccount ? mockaccount->create_imap() : nullptr;
-}
-
 Account*
 gnc_account_imap_find_account (
-        GncImportMatchMap *imap,
+        Account *acc,
         const char* category,
         const char *key)
 {
-    return ((GncMockImportMatchMap*)imap)->find_account(category, key);
+    auto mockaccount = gnc_mockaccount(acc);
+    return mockaccount->find_account(category, key);
 }
 
 void
 gnc_account_imap_add_account (
-        GncImportMatchMap *imap,
+        Account *acc,
         const char *category,
         const char *key,
-        Account *acc)
+        Account *dest_acc)
 {
-    ((GncMockImportMatchMap*)imap)->add_account(category, key, acc);
+    auto mockaccount = gnc_mockaccount(acc);
+    mockaccount->add_account(category, key, dest_acc);
 }
 
 Account*
 gnc_account_imap_find_account_bayes (
-        GncImportMatchMap *imap,
+        Account *acc,
         GList *tokens)
 {
     std::vector<const char*> tokenVec;
@@ -108,14 +102,15 @@ gnc_account_imap_find_account_bayes (
         tokenVec.push_back(static_cast <char const *> (token->data));
     }
 
-    return ((GncMockImportMatchMap*)imap)->find_account_bayes(tokenVec);
+    auto mockaccount = gnc_mockaccount(acc);
+    return mockaccount->find_account_bayes(tokenVec);
 }
 
 void
 gnc_account_imap_add_account_bayes (
-        GncImportMatchMap *imap,
+        Account *acc,
         GList *tokens,
-        Account *acc)
+        Account *added_acc)
 {
     std::vector<const char*> tokenVec;
 
@@ -124,6 +119,7 @@ gnc_account_imap_add_account_bayes (
         tokenVec.push_back(static_cast <char const *> (token->data));
     }
 
-    ((GncMockImportMatchMap*)imap)->add_account_bayes(tokenVec, acc);
+    auto mockaccount = gnc_mockaccount(acc);
+    mockaccount->add_account_bayes(tokenVec, added_acc);
 }
 

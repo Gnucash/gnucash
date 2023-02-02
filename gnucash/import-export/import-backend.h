@@ -109,20 +109,20 @@ gnc_import_TransInfo_init_matches (GNCImportTransInfo *trans_info,
  * and processes each ImportTransInfo according to its selected action:
  * For GNCImport_ADD, the transaction is added etc. etc.
  *
- * Each successful match is also stored in the given ImportMatchMap,
- * or, if that argument is NULL, in the ImportMatchMap of each
+ * Each successful match is also stored in the match map of the given
+ * account, or if that argument is NULL, in the match map of each
  * originating account.
  *
- * @param matchmap The ImportMatchMap where each match should be
- * stored. May be NULL, in which case the ImportMatchMap of each
- * account will be used.
+ * @param base_acc The account where each match should be
+ * stored. May be NULL, in which case each originating account
+ * will be used.
  *
  * @param trans_info The ImportTransInfo item to process.
  *
  * @return TRUE if the item has been processed.
  */
 gboolean
-gnc_import_process_trans_item (GncImportMatchMap *matchmap,
+gnc_import_process_trans_item (Account *base_acc,
                                GNCImportTransInfo *trans_info);
 
 /** This function generates a new pixmap representing a match score.
@@ -154,17 +154,16 @@ GdkPixbuf* gen_probability_pixbuf (gint score,
 
 /** Allocates a new TransInfo object, with the Transaction 'trans'
  * already stored in there. Also, this already checks the
- * ImportMatchMap for automated destination account matching. The
- * given MatchMap may be NULL, in which case the ImportMatchMap of the
+ * account's match map for automated destination account matching. The
+ * given account may be NULL, in which case the match map of the
  * originating account will be used.
  *
  * @param trans The transaction that this TransInfo should work with.
  *
- * @param matchmap MatchMap used for automated destination account
- * choosing. This may be NULL, in which case the MatchMap of the
+ * @param base_acc Account that will provide the match map to lookup a destination
+ * account. This may be NULL, in which case the match map of the
  * originating account will be used. */
-GNCImportTransInfo *
-gnc_import_TransInfo_new (Transaction *trans, GncImportMatchMap *matchmap);
+GNCImportTransInfo* gnc_import_TransInfo_new(Transaction* trans, Account* base_acc);
 
 /** Destructor */
 void gnc_import_TransInfo_delete (GNCImportTransInfo *info);
@@ -226,7 +225,7 @@ gnc_import_TransInfo_set_destacc (GNCImportTransInfo *info,
 /** Try to automatch a given transaction to a destination account */
 gboolean
 gnc_import_TransInfo_refresh_destacc (GNCImportTransInfo *transaction_info,
-                                      GncImportMatchMap *matchmap);
+                                      Account *base_acc);
 
 /** Returns if the currently selected destination account for auto-matching was selected by the user. */
 gboolean

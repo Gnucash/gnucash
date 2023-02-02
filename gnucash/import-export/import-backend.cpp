@@ -62,10 +62,9 @@ static QofLogModule log_module = GNC_MOD_IMPORT;
  *   Forward declared prototypes                                    *
 \********************************************************************/
 
-static void
-matchmap_store_destination (GncImportMatchMap *matchmap,
-                            GNCImportTransInfo *trans_info,
-                            gboolean use_match);
+static void matchmap_store_destination(Account* base_acc,
+                                       GNCImportTransInfo* trans_info,
+                                       gboolean use_match);
 
 
 /********************************************************************\
@@ -331,8 +330,8 @@ GdkPixbuf* gen_probability_pixbuf(gint score_original, GNCImportSettings *settin
  * MatchMap related functions (storing and retrieving)
  */
 
-/* Tokenize a string and append to an existing GList(or an empty GList)
- * the tokens
+/* Tokenize a string and append the tokens to an existing GList
+ * (or an empty GList)
  */
 static GList*
 tokenize_string(GList* existing_tokens, const char *string)
@@ -394,10 +393,7 @@ TransactionGetTokens(GNCImportTransInfo *info)
         tokens = tokenize_string(tokens, text);
     }
 
-    /* remember the list of tokens for later.. */
     info->match_tokens = tokens;
-
-    /* return the pointer to the GList */
     return tokens;
 }
 
@@ -405,12 +401,11 @@ TransactionGetTokens(GNCImportTransInfo *info)
  * if there is an exact match of the description and memo
  */
 static Account *
-matchmap_find_destination (GncImportMatchMap *matchmap, GNCImportTransInfo *info)
+matchmap_find_destination (Account *base_acc, GNCImportTransInfo *info)
 {
     g_assert (info);
-    auto tmp_map = (matchmap ? matchmap : gnc_account_imap_create_imap
-                    (xaccSplitGetAccount
-                        (gnc_import_TransInfo_get_fsplit (info))));
+    auto orig_acc = (base_acc ? base_acc : xaccSplitGetAccount
+                        (gnc_import_TransInfo_get_fsplit (info)));
 
     Account *result = nullptr;
     if (gnc_prefs_get_bool (GNC_PREFS_GROUP_IMPORT, GNC_PREF_USE_BAYES))
@@ -419,16 +414,13 @@ matchmap_find_destination (GncImportMatchMap *matchmap, GNCImportTransInfo *info
         GList* tokens = TransactionGetTokens(info);
 
         /* try to find the destination account for this transaction from its tokens */
-        result = gnc_account_imap_find_account_bayes(tmp_map, tokens);
+        result = gnc_account_imap_find_account_bayes(orig_acc, tokens);
 
     }
     else
         result = gnc_account_imap_find_account
-                 (tmp_map, GNCIMPORT_DESC,
+                 (orig_acc, GNCIMPORT_DESC,
                   xaccTransGetDescription (gnc_import_TransInfo_get_trans (info)));
-
-    if (!matchmap)
-        g_free (tmp_map);
 
     return result;
 }
@@ -438,7 +430,7 @@ matchmap_find_destination (GncImportMatchMap *matchmap, GNCImportTransInfo *info
     matching/duplicate transaction is used; otherwise, the stored
     destination_acc pointer is used. */
 static void
-matchmap_store_destination (GncImportMatchMap *matchmap,
+matchmap_store_destination (Account *base_acc,
                             GNCImportTransInfo *trans_info,
                             gboolean use_match)
 {
@@ -457,10 +449,8 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
     if (!dest)
         return;
 
-    auto tmp_matchmap = ((matchmap) ? matchmap :
-                            gnc_account_imap_create_imap
-                            (xaccSplitGetAccount
-                            (gnc_import_TransInfo_get_fsplit (trans_info))));
+    auto orig_acc = (base_acc ? base_acc : xaccSplitGetAccount
+                            (gnc_import_TransInfo_get_fsplit (trans_info)));
 
     if (gnc_prefs_get_bool (GNC_PREFS_GROUP_IMPORT, GNC_PREF_USE_BAYES))
     {
@@ -468,7 +458,7 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
         auto tokens = TransactionGetTokens(trans_info);
 
         /* add the tokens to the imap with the given destination account */
-        gnc_account_imap_add_account_bayes(tmp_matchmap, tokens, dest);
+        gnc_account_imap_add_account_bayes(orig_acc, tokens, dest);
     }
     else
     {
@@ -478,13 +468,10 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
                             (gnc_import_TransInfo_get_fsplit (trans_info));
 
         if (desc && *desc)
-            gnc_account_imap_add_account (tmp_matchmap, GNCIMPORT_DESC, desc, dest);
+            gnc_account_imap_add_account (orig_acc, GNCIMPORT_DESC, desc, dest);
         if (memo && *memo)
-            gnc_account_imap_add_account (tmp_matchmap, GNCIMPORT_MEMO, memo, dest);
+            gnc_account_imap_add_account (orig_acc, GNCIMPORT_MEMO, memo, dest);
     }
-
-    if (!matchmap)
-        g_free (tmp_matchmap);
 }
 
 
@@ -492,11 +479,11 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
 /** @brief The transaction matching heuristics are here.
  */
 void split_find_match (GNCImportTransInfo * trans_info,
-                              Split * split,
-                              gint display_threshold,
-                              gint date_threshold,
-                              gint date_not_threshold,
-                              double fuzzy_amount_difference)
+                       Split * split,
+                       gint display_threshold,
+                       gint date_threshold,
+                       gint date_not_threshold,
+                       double fuzzy_amount_difference)
 {
     gint prob = 0;
 
@@ -757,7 +744,7 @@ update_desc_and_notes (const GNCImportTransInfo* trans_info)
 }
 
 static void
-process_reconcile(GncImportMatchMap *matchmap,
+process_reconcile(Account *base_acc,
                   GNCImportTransInfo *trans_info,
                   GNCImportMatchInfo *selected_match)
 {
@@ -784,7 +771,7 @@ process_reconcile(GncImportMatchMap *matchmap,
     xaccTransCommitEdit(selected_match->trans);
 
     /* Store the mapping to the other account in the MatchMap. */
-    matchmap_store_destination(matchmap, trans_info, true);
+    matchmap_store_destination(base_acc, trans_info, true);
 
     /* Erase the downloaded transaction */
     xaccTransDestroy(trans_info->trans);
@@ -797,7 +784,7 @@ process_reconcile(GncImportMatchMap *matchmap,
 /** /brief -- Processes one match
    according to its selected action.  */
 gboolean
-gnc_import_process_trans_item (GncImportMatchMap *matchmap,
+gnc_import_process_trans_item (Account *base_acc,
                                GNCImportTransInfo *trans_info)
 {
     g_assert (trans_info);
@@ -885,7 +872,7 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
                 /*DEBUG("CommitEdit selected_match")*/
                 xaccTransCommitEdit(selected_match->trans);
 
-                process_reconcile (matchmap, trans_info, selected_match);
+                process_reconcile (base_acc, trans_info, selected_match);
             }
         }
         return true;
@@ -907,7 +894,7 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
             else
             {
                 /* Reconcile the matching transaction */
-                process_reconcile(matchmap, trans_info, selected_match);
+                process_reconcile(base_acc, trans_info, selected_match);
             }
         }
         return true;
@@ -1014,7 +1001,7 @@ gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_ha
 
 /** Create a new object of GNCImportTransInfo here. */
 GNCImportTransInfo *
-gnc_import_TransInfo_new (Transaction *trans, GncImportMatchMap *matchmap)
+gnc_import_TransInfo_new (Transaction *trans, Account *base_acc)
 {
     g_assert (trans);
 
@@ -1029,7 +1016,7 @@ gnc_import_TransInfo_new (Transaction *trans, GncImportMatchMap *matchmap)
     /* Try to find a previously selected destination account
        string match for the ADD action */
     gnc_import_TransInfo_set_destacc (transaction_info,
-                                      matchmap_find_destination (matchmap, transaction_info),
+                                      matchmap_find_destination (base_acc, transaction_info),
                                       false);
     return transaction_info;
 }
@@ -1091,17 +1078,17 @@ gnc_import_TransInfo_init_matches (GNCImportTransInfo *trans_info,
  * Return whether a new destination account was effectively set */
 gboolean
 gnc_import_TransInfo_refresh_destacc (GNCImportTransInfo *transaction_info,
-                                      GncImportMatchMap *matchmap)
+                                      Account *base_acc)
 {
     g_assert(transaction_info);
 
-    auto orig_destacc = gnc_import_TransInfo_get_destacc(transaction_info);
 
     /* if we haven't manually selected a destination account for this transaction */
     if (!gnc_import_TransInfo_get_destacc_selected_manually(transaction_info))
     {
         /* Try to find the destination account for this transaction based on prior ones */
-        auto new_destacc = matchmap_find_destination(matchmap, transaction_info);
+        auto orig_destacc = gnc_import_TransInfo_get_destacc(transaction_info);
+        auto new_destacc = matchmap_find_destination(base_acc, transaction_info);
         gnc_import_TransInfo_set_destacc(transaction_info, new_destacc, false);
         return (new_destacc != orig_destacc);
     }
