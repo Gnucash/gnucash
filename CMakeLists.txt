@@ -11,9 +11,6 @@ project (gnucash
 
 enable_testing()
 
-# Version number of gnucash
-set (GNUCASH_LATEST_STABLE_SERIES 3.x)
-
 set (PACKAGE_NAME GnuCash)
 set (PACKAGE_BUGREPORT "https://bugs.gnucash.org")
 set (PACKAGE_STRING "${PACKAGE_NAME} ${PROJECT_VERSION}")
@@ -57,7 +54,6 @@ option (ENABLE_BINRELOC "compile with binary relocation support" ON)
 option (DISABLE_NLS "do not use Native Language Support" OFF)
 option (DISABLE_DEPRECATED_GLIB "don't use deprecated glib functions" OFF)
 option (DISABLE_DEPRECATED_GTK "don't use deprecated gtk, gdk or gdk-pixbuf functions" OFF)
-option (DISABLE_DEPRECATED_GNOME "don't use deprecated gnome functions" OFF)
 # ############################################################
 
 # These are also settable from the command line in a similar way.
@@ -776,9 +772,6 @@ set(PLATFORM_OSX 1)
 set(HAVE_OSX_KEYCHAIN 1)
 endif()
 
-if(DISABLE_DEPRECATED_GNOME)
-set(GNOME_DISABLE_DEPRECATED 1)
-endif()
 
 if(DISABLE_DEPRECATED_GTK)
 set(GTK_DISABLE_DEPRECATED 1)

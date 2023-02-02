@@ -8,7 +8,7 @@ set(test_core_noinst_HEADERS
   unittest-support.h
 )
 
-INCLUDE_DIRECTORIES(
+include_directories(
   ${CMAKE_BINARY_DIR}/common
   ${CMAKE_SOURCE_DIR}/common
   ${CMAKE_SOURCE_DIR}/libgnucash/engine
