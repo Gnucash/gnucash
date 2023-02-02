@@ -70,7 +70,7 @@ enum class GncTransPropType {
     TMEMO,
     TREC_STATE,
     TREC_DATE,
-    SPLIT_PROPS = TMEMO
+    SPLIT_PROPS = TREC_DATE
 };
 
 /** Maps all column types to a string representation.
