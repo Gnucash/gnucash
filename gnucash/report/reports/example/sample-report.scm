@@ -454,7 +454,7 @@ new, totally cool report, consult the mailing list ~a.")
  ;; The name of this report. This will be used, among other things,
  ;; for making its menu item in the main menu. You need to use the
  ;; untranslated value here!
- 'name (N_ "Options Report")
+ 'name (N_ "Sample Report")
 
  ;; The GUID for this report. This string should be unique, set once
  ;; and left alone forever after that. In theory, you could use any
