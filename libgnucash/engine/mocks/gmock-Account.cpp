@@ -51,6 +51,14 @@ gnc_account_get_book(const Account *account)
     return mockaccount ? mockaccount->get_book() : nullptr;
 }
 
+gnc_commodity *
+xaccAccountGetCommodity(const Account *account)
+{
+    SCOPED_TRACE("");
+    auto mockaccount = gnc_mockaccount(account);
+    return mockaccount ? mockaccount->get_commodity() : nullptr;
+}
+
 gint
 xaccAccountForEachTransaction(const Account *acc, TransactionCallback proc,
                               void *data)

@@ -256,24 +256,6 @@ show_placeholder_warning (AccountPickerDialog *picker, const gchar *name)
 }
 
 
-/***********************************************************
- * show_commodity_warning
- *
- * show the warning when account is a different commodity to that
- * required
- ************************************************************/
-static void
-show_commodity_warning (AccountPickerDialog *picker, const gchar *name)
-{
-    const gchar *com_name = gnc_commodity_get_fullname (picker->new_account_default_commodity);
-    gchar *text = g_strdup_printf (_("The account '%s' has a different commodity to the "
-                                     "one required, '%s'. Please choose a different account."),
-                                      name, com_name);
-
-    show_warning (picker, text);
-}
-
-
 /*******************************************************
  * account_tree_row_changed_cb
  *
@@ -285,31 +267,16 @@ account_tree_row_changed_cb (GtkTreeSelection *selection,
 {
     Account *sel_account = gnc_tree_view_account_get_selected_account (picker->account_tree);
 
-    if (!sel_account)
-    {
-        gtk_widget_hide (GTK_WIDGET(picker->whbox)); // hide the warning
-        gtk_widget_set_sensitive (picker->ok_button, FALSE); // disable OK button
-        return;
-    }
-
-    gtk_widget_set_sensitive (picker->ok_button, TRUE); // enable OK button
+    /* Reset buttons and warnings */
+    gtk_widget_hide (GTK_WIDGET(picker->whbox));
+    gtk_widget_set_sensitive (picker->ok_button, (sel_account != NULL));
 
     /* See if the selected account is a placeholder. */
     if (sel_account && xaccAccountGetPlaceholder (sel_account))
     {
         const gchar *retval_name = xaccAccountGetName (sel_account);
-
         show_placeholder_warning (picker, retval_name);
     }
-    else if (picker->new_account_default_commodity &&
-                (!gnc_commodity_equal (xaccAccountGetCommodity (sel_account),
-                 picker->new_account_default_commodity))) // check commodity
-    {
-        const gchar *retval_name = xaccAccountGetName (sel_account);
-        show_commodity_warning (picker, retval_name);
-    }
-    else
-        gtk_widget_hide (GTK_WIDGET(picker->whbox)); // hide the warning
 }
 
 static gboolean
@@ -409,7 +376,7 @@ Account * gnc_import_select_account(GtkWidget *parent,
     picker->new_account_default_type = new_account_default_type;
 
     /*DEBUG("Looking for account with online_id: \"%s\"", account_online_id_value);*/
-    if (account_online_id_value != NULL)
+    if (account_online_id_value)
     {
         AccountOnlineMatch match = {NULL, 0, account_online_id_value};
         retval =
@@ -508,14 +475,6 @@ Account * gnc_import_select_account(GtkWidget *parent,
                 if (retval && xaccAccountGetPlaceholder (retval))
                 {
                     show_placeholder_warning (picker, retval_name);
-                    response = GNC_RESPONSE_NEW;
-                    break;
-                }
-                else if (picker->new_account_default_commodity &&
-                            (!gnc_commodity_equal (xaccAccountGetCommodity (retval),
-                             picker->new_account_default_commodity))) // check commodity
-                {
-                    show_commodity_warning (picker, retval_name);
                     response = GNC_RESPONSE_NEW;
                     break;
                 }

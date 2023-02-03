@@ -309,7 +309,7 @@ std::string GncPreTrans::verify_essentials (void)
         return std::string();
 }
 
-Transaction* GncPreTrans::create_trans (QofBook* book, gnc_commodity* currency)
+std::shared_ptr<DraftTransaction> GncPreTrans::create_trans (QofBook* book, gnc_commodity* currency)
 {
     if (created)
         return nullptr;
@@ -341,7 +341,7 @@ Transaction* GncPreTrans::create_trans (QofBook* book, gnc_commodity* currency)
 
 
     created = true;
-    return trans;
+    return std::make_shared<DraftTransaction>(trans);
 }
 
 bool GncPreTrans::is_part_of (std::shared_ptr<GncPreTrans> parent)
@@ -662,7 +662,7 @@ static void trans_add_split (Transaction* trans, Account* account, GncNumeric am
 
 }
 
-void GncPreSplit::create_split (Transaction* trans)
+void GncPreSplit::create_split (std::shared_ptr<DraftTransaction> draft_trans)
 {
     if (created)
         return;
@@ -691,7 +691,7 @@ void GncPreSplit::create_split (Transaction* trans)
         amount -= *m_amount_neg;
 
     /* Add a split with the cumulative amount value. */
-    trans_add_split (trans, account, amount, m_action, m_memo, m_rec_state, m_rec_date, m_price);
+    trans_add_split (draft_trans->trans, account, amount, m_action, m_memo, m_rec_state, m_rec_date, m_price);
 
     if (taccount)
     {
@@ -701,7 +701,15 @@ void GncPreSplit::create_split (Transaction* trans)
         auto inv_price = m_price;
         if (m_price)
             inv_price = m_price->inv();
-        trans_add_split (trans, taccount, -amount, m_taction, m_tmemo, m_trec_state, m_trec_date, inv_price);
+        trans_add_split (draft_trans->trans, taccount, -amount, m_taction, m_tmemo, m_trec_state, m_trec_date, inv_price);
+    }
+    else
+    {
+        draft_trans->m_price = m_price;
+        draft_trans->m_taction = m_taction;
+        draft_trans->m_tmemo = m_tmemo;
+        draft_trans->m_trec_state = m_trec_state;
+        draft_trans->m_trec_date = m_trec_date;
     }
 
     created = true;

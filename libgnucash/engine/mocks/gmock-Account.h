@@ -42,6 +42,7 @@ public:
     MOCK_METHOD0(begin_edit, void());
     MOCK_METHOD0(commit_edit, void());
     MOCK_CONST_METHOD0(get_book, QofBook*());
+    MOCK_CONST_METHOD0(get_commodity, gnc_commodity*());
     MOCK_CONST_METHOD2(for_each_transaction, gint(TransactionCallback, void*));
     MOCK_CONST_METHOD0(xaccAccountGetSplitList, SplitList*());
     MOCK_METHOD2(find_account, Account *(const char*, const char*));

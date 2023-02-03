@@ -86,6 +86,17 @@ gnc_get_num_action (const Transaction *trans, const Split *split)
     else return NULL;
 }
 
+// fake function from gnc-commodity.c
+// this is a simplified version of the original function
+gboolean
+gnc_commodity_equiv(const gnc_commodity * a, const gnc_commodity * b)
+{
+    if (a == b) return TRUE;
+    if (!a || !b) return FALSE;
+
+    return TRUE;
+}
+
 
 /* required fake functions from app-utils sources, which should not be linked to the test application */
 

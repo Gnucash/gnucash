@@ -159,6 +159,25 @@ void gnc_gen_trans_list_delete (GNCImportMainMatcher *info);
 void gnc_gen_trans_list_add_trans (GNCImportMainMatcher *gui, Transaction *trans);
 
 
+/** Add a newly imported Transaction to the Transaction Importer.
+ *  The Importer takes over ownership of the passed transaction.
+ *
+ * @param gui The Transaction Importer to use.
+ *
+ * @param trans The Transaction to add.  The must contain at least one
+ * split, and this split must have been associated with an account
+ * Only the first split will be used for matching.  The transaction
+ * must NOT be committed. The Importer takes over ownership of the
+ * passed transaction.
+ *
+ * @param lsplit Struct with additional parameters that may be used to
+ * generate the final split.
+ */
+void gnc_gen_trans_list_add_trans_with_split_data (GNCImportMainMatcher *gui,
+                                                   Transaction *trans,
+                                                   GNCImportLastSplitInfo *lsplit);
+
+
 /** Add a newly imported Transaction to the Transaction Importer and provide an
  * external reference id for it.
  * The Importer takes over ownership of the passed transaction.

@@ -45,19 +45,6 @@
 #include <boost/optional.hpp>
 
 
-/** This struct stores a possibly incomplete transaction
- *  optionally together with its intended balance in case
- *  the user had selected a balance column. */
-struct DraftTransaction
-{
-    DraftTransaction (Transaction* tx) : trans(tx), balance(gnc_numeric_zero()), balance_set(false) {}
-    ~DraftTransaction () { if (trans) { xaccTransDestroy (trans); trans = nullptr; } }
-    Transaction* trans;
-    gnc_numeric balance;  /**< The expected balance after this transaction takes place */
-    bool balance_set;     /**< true if balance has been set from user data, false otherwise */
-    boost::optional<std::string> void_reason;
-};
-
 /* A set of currency formats that the user sees. */
 extern const int num_currency_formats;
 extern const gchar* currency_format_user[];

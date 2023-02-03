@@ -66,6 +66,8 @@ static void matchmap_store_destination(Account* base_acc,
                                        GNCImportTransInfo* trans_info,
                                        gboolean use_match);
 
+static void trans_info_calculate_dest_amount (GNCImportTransInfo *info);
+
 
 /********************************************************************\
  *               Structures passed between the functions            *
@@ -101,6 +103,20 @@ struct _transactioninfo
 
     /* When updating a matched transaction, append Description and Notes instead of replacing */
     gboolean append_text;
+
+    /* Extra data we can use to build the balancing split. It may passed on by the
+        * code that calls the generic importer */
+    gnc_numeric lsplit_price;
+    char *lsplit_action;
+    char *lsplit_memo;
+    char lsplit_rec_state;
+    time64 lsplit_rec_date;
+
+    gnc_numeric lsplit_value;
+    /* Amount for the balancing split. This can only be calculated when
+     * the destination account is known and may require an exchange rate
+     * if that account is not in the same commodity as the transaction. */
+    gnc_numeric lsplit_amount;
 };
 
 /* Some simple getters and setters for the above data types. */
@@ -137,9 +153,6 @@ gboolean
 gnc_import_TransInfo_is_balanced (const GNCImportTransInfo *info)
 {
     g_assert (info);
-    /* Assume that the importer won't create a transaction that involves two or more
-       currencies and no non-currency commodity.  In that case can use the simpler
-       value imbalance check. */
     return gnc_numeric_zero_p(xaccTransGetImbalanceValue(gnc_import_TransInfo_get_trans(info)));
 }
 
@@ -210,6 +223,8 @@ void gnc_import_TransInfo_set_destacc (GNCImportTransInfo *info,
     /* Store the mapping to the other account in the MatchMap. */
     if (selected_manually)
         matchmap_store_destination (nullptr, info, false);
+
+    trans_info_calculate_dest_amount (info);
 }
 
 gboolean
@@ -234,6 +249,49 @@ gnc_import_TransInfo_set_ref_id (GNCImportTransInfo *info,
     info->ref_id = ref_id;
 }
 
+gnc_numeric
+gnc_import_TransInfo_get_price (const GNCImportTransInfo *info)
+{
+    g_assert (info);
+    return info->lsplit_price;
+}
+
+void
+gnc_import_TransInfo_set_price (GNCImportTransInfo *info,
+                                 gnc_numeric lprice)
+{
+    g_assert (info);
+    info->lsplit_price = lprice;
+}
+
+gnc_numeric
+gnc_import_TransInfo_get_dest_amount (const GNCImportTransInfo *info)
+{
+    g_assert (info);
+    return info->lsplit_amount;
+}
+
+gnc_numeric
+gnc_import_TransInfo_get_dest_value (const GNCImportTransInfo *info)
+{
+    g_assert (info);
+    return info->lsplit_value;
+}
+
+void
+gnc_import_TransInfo_set_last_split_info (GNCImportTransInfo *info,
+                                          GNCImportLastSplitInfo *lsplit)
+{
+    g_assert (info);
+    if (lsplit)
+    {
+        info->lsplit_price = lsplit->price;
+        info->lsplit_action = g_strdup(lsplit->action);
+        info->lsplit_memo = g_strdup(lsplit->memo);
+        info->lsplit_rec_state = lsplit->rec_state;
+        info->lsplit_rec_date = lsplit->rec_date;
+    }
+}
 
 void
 gnc_import_TransInfo_set_append_text (GNCImportTransInfo *info,
@@ -272,6 +330,9 @@ void gnc_import_TransInfo_delete (GNCImportTransInfo *info)
             xaccTransCommitEdit(info->trans);
         }
         g_list_free_full (info->match_tokens, g_free);
+        g_free(info->lsplit_action);
+        g_free(info->lsplit_memo);
+
         g_free(info);
     }
 }
@@ -807,13 +868,20 @@ gnc_import_process_trans_item (Account *base_acc,
             auto split = xaccMallocSplit (gnc_account_get_book (acct));
             xaccTransAppendSplit (trans, split);
             xaccAccountInsertSplit (acct, split);
-            /* This is a quick workaround for the bug described in
-                                http://lists.gnucash.org/pipermail/gnucash-devel/2003-August/009982.html
-                    Assume that importers won't create transactions involving two or more
-                    currencies so we can use xaccTransGetImbalanceValue. */
             auto imbalance_value = gnc_numeric_neg (xaccTransGetImbalanceValue (trans));
-            xaccSplitSetValue (split, imbalance_value);
-            xaccSplitSetAmount (split, imbalance_value);
+            xaccSplitSetValue (split, trans_info->lsplit_value);
+            if (!gnc_numeric_zero_p (trans_info->lsplit_amount))
+                xaccSplitSetAmount (split, trans_info->lsplit_amount);
+            else
+            {
+                /* Bad! user asked to create a balancing split in an account with
+                 * different currency/commodit than the transaction but didn't provide
+                 * an exchange rate.
+                 * Continue anyway pretenting split is in transaction currency. */
+                xaccSplitSetAmount (split, trans_info->lsplit_value);
+                PWARN("Missing exchange rate while adding transaction '%s', will assume rate of 1",
+                      xaccTransGetDescription (gnc_import_TransInfo_get_trans (trans_info)));
+            }
         }
 
         xaccSplitSetReconcile(gnc_import_TransInfo_get_fsplit (trans_info), CREC);
@@ -831,7 +899,7 @@ gnc_import_process_trans_item (Account *base_acc,
             /* If there is no selection, ignore this transaction. */
             if (!selected_match)
             {
-                PWARN("No matching translaction to be cleared was chosen. Imported transaction will be ignored.");
+                PWARN("No matching transaction to be cleared was chosen. Imported transaction will be ignored.");
                 break;
             }
 
@@ -849,22 +917,38 @@ gnc_import_process_trans_item (Account *base_acc,
                 xaccTransSetDatePostedSecsNormalized(selected_match->trans,
                                     xaccTransGetDate(xaccSplitGetParent(fsplit)));
 
+                auto match_split_amount = xaccSplitGetAmount(selected_match->split);
                 xaccSplitSetAmount(selected_match->split, xaccSplitGetAmount(fsplit));
                 xaccSplitSetValue(selected_match->split, xaccSplitGetValue(fsplit));
 
-                auto imbalance_value = xaccTransGetImbalanceValue(
-                                    gnc_import_TransInfo_get_trans(trans_info));
+                auto imbalance_value = gnc_import_TransInfo_get_dest_value(trans_info);
                 auto other_split = xaccSplitGetOtherSplit(selected_match->split);
                 if (!gnc_numeric_zero_p(imbalance_value) && other_split)
                 {
                     if (xaccSplitGetReconcile(other_split) == NREC)
                     {
-                        imbalance_value = gnc_numeric_neg(imbalance_value);
                         xaccSplitSetValue(other_split, imbalance_value);
-                        xaccSplitSetAmount(other_split, imbalance_value);
+                        auto new_amt = gnc_import_TransInfo_get_dest_value(trans_info);
+                        if (gnc_numeric_zero_p(new_amt))
+                        {
+                            auto other_split_amount = xaccSplitGetAmount(other_split);
+                            auto price = gnc_numeric_div(match_split_amount, other_split_amount,
+                                                         GNC_DENOM_AUTO,
+                                                         GNC_HOW_RND_ROUND_HALF_UP);
+
+                            new_amt = gnc_numeric_mul(xaccSplitGetAmount(fsplit), price,
+                                                      GNC_DENOM_AUTO,
+                                                      GNC_HOW_RND_ROUND_HALF_UP);;
+                        }
+                        xaccSplitSetAmount(other_split, new_amt);
                     }
-                    /* else GC will automatically insert a split to equity
-                    to balance the transaction */
+                    else
+                    {
+                        /* else GC will automatically insert a split to equity
+                        to balance the transaction */
+                        PWARN("Updated transaction '%s', but not other split.",
+                              xaccTransGetDescription(selected_match->trans));
+                    }
                 }
 
                 update_desc_and_notes(trans_info);
@@ -999,26 +1083,55 @@ gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_ha
 /* ******************************************************************
  */
 
+/* Calculate lsplit_amount based on knowledge gathered so far
+ * If insufficient info is available (eg multi currency transaction with missing
+ * exchange rate provided), set amount to 0 */
+static void trans_info_calculate_dest_amount (GNCImportTransInfo *info)
+{
+    info->lsplit_value = gnc_numeric_neg (xaccTransGetImbalanceValue (info->trans));
+    info->lsplit_amount = {0, 1};
+    if (info->dest_acc)
+    {
+        auto tcurr = xaccTransGetCurrency(info->trans);
+        auto dcurr = xaccAccountGetCommodity(info->dest_acc);
+
+        if (gnc_numeric_zero_p(info->lsplit_value))
+            return;
+
+        if (gnc_commodity_equiv(tcurr, dcurr))
+            info->lsplit_amount = info->lsplit_value;
+        else if (gnc_numeric_check(info->lsplit_price) == 0)
+        {
+            /* We are in a multi currency situation and have a valid price */
+            info->lsplit_amount = gnc_numeric_mul (info->lsplit_value,
+                                                   info->lsplit_price,
+                                                   GNC_DENOM_AUTO,
+                                                   GNC_HOW_RND_ROUND_HALF_UP);
+        }
+    }
+}
+
 /** Create a new object of GNCImportTransInfo here. */
 GNCImportTransInfo *
 gnc_import_TransInfo_new (Transaction *trans, Account *base_acc)
 {
     g_assert (trans);
 
-    auto transaction_info = g_new0(GNCImportTransInfo, 1);
+    auto t_info = g_new0(GNCImportTransInfo, 1);
 
-    transaction_info->trans = trans;
+    t_info->trans = trans;
     /* Only use first split, the source split */
     auto split = xaccTransGetSplit(trans, 0);
     g_assert(split);
-    transaction_info->first_split = split;
+    t_info->first_split = split;
 
     /* Try to find a previously selected destination account
        string match for the ADD action */
-    gnc_import_TransInfo_set_destacc (transaction_info,
-                                      matchmap_find_destination (base_acc, transaction_info),
+    gnc_import_TransInfo_set_destacc (t_info,
+                                      matchmap_find_destination (base_acc, t_info),
                                       false);
-    return transaction_info;
+
+    return t_info;
 }
 
 
@@ -1030,8 +1143,8 @@ static gint compare_probability (gconstpointer a,
            ((GNCImportMatchInfo *)a)->probability);
 }
 
-/** Iterates through all splits of the originating account of
- * trans_info. Sorts the resulting list and sets the selected_match
+/** Iterates through all splits of trans_info's originating account
+ * match list. Sorts the resulting list and sets the selected_match
  * and action fields in the trans_info.
  */
 void
@@ -1070,30 +1183,6 @@ gnc_import_TransInfo_init_matches (GNCImportTransInfo *trans_info,
 
 
     trans_info->previous_action = trans_info->action;
-}
-
-
-/* Try to automatch a transaction to a destination account if the */
-/* transaction hasn't already been manually assigned to another account
- * Return whether a new destination account was effectively set */
-gboolean
-gnc_import_TransInfo_refresh_destacc (GNCImportTransInfo *transaction_info,
-                                      Account *base_acc)
-{
-    g_assert(transaction_info);
-
-
-    /* if we haven't manually selected a destination account for this transaction */
-    if (!gnc_import_TransInfo_get_destacc_selected_manually(transaction_info))
-    {
-        /* Try to find the destination account for this transaction based on prior ones */
-        auto orig_destacc = gnc_import_TransInfo_get_destacc(transaction_info);
-        auto new_destacc = matchmap_find_destination(base_acc, transaction_info);
-        gnc_import_TransInfo_set_destacc(transaction_info, new_destacc, false);
-        return (new_destacc != orig_destacc);
-    }
-
-    return false;
 }
 
 

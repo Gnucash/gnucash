@@ -604,9 +604,9 @@ std::shared_ptr<DraftTransaction> GncTxImport::trans_properties_to_trans (std::v
     QofBook* book = gnc_account_get_book (account);
     gnc_commodity* currency = xaccAccountGetCommodity (account);
 
-    auto trans = trans_props->create_trans (book, currency);
+    auto draft_trans = trans_props->create_trans (book, currency);
 
-    if (trans)
+    if (draft_trans)
     {
         /* We're about to continue with a new transaction
          * Time to do some closing actions on the previous one
@@ -621,19 +621,22 @@ std::shared_ptr<DraftTransaction> GncTxImport::trans_properties_to_trans (std::v
             xaccTransCommitEdit (m_current_draft->trans);
             xaccTransVoid (m_current_draft->trans, m_current_draft->void_reason->c_str());
         }
-        m_current_draft = std::make_shared<DraftTransaction>(trans);
+        m_current_draft = draft_trans;
         m_current_draft->void_reason = trans_props->get_void_reason();
         created_trans = true;
     }
     else if (m_settings.m_multi_split)  // in multi_split mode create_trans will return a nullptr for all but the first split
-        trans = m_current_draft->trans;
+        draft_trans = m_current_draft;
     else // in non-multi-split mode each line should be a transaction, so not having one here is an error
         throw std::invalid_argument ("Failed to create transaction from selected columns.");
 
-    if (!trans)
+    if (!draft_trans)
         return nullptr;
 
-    split_props->create_split(trans);
+    split_props->create_split (draft_trans);
+
+    // With the added split information, we may have to revisit the transaction's commodity here
+    // TBD
 
     /* Only return the draft transaction if we really created a new one
      * The return value will be added to a list for further processing,

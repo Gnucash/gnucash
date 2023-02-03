@@ -59,6 +59,7 @@ public:
     MOCK_METHOD1(set_date_posted_secs_normalized, void(time64));
     MOCK_CONST_METHOD0(get_description, const char *());
     MOCK_METHOD1(set_description, void(const char*));
+    MOCK_CONST_METHOD0(get_currency, gnc_commodity *());
     MOCK_CONST_METHOD0(get_notes, const char *());
     MOCK_METHOD1(set_notes, void(const char*));
     MOCK_CONST_METHOD0(get_imbalance_value, gnc_numeric());

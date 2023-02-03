@@ -105,6 +105,35 @@ GncTransPropType sanitize_trans_prop (GncTransPropType prop, bool multi_split);
 gnc_commodity* parse_commodity (const std::string& comm_str);
 GncNumeric parse_monetary (const std::string &str, int currency_format);
 
+
+/** The final form of a transaction to import before it is passed on to the
+ *  generic importer.
+ *
+ *  @param trans a possibly incomplete transaction created based on the data
+ *         collected from the PreTrans and PreSplit records
+ *
+ *  @param m_price... values harvested from the import data in single
+ *         line mode and for which the transfer split could not yet
+ *         be created (due to a missing transfer account value). These
+ *         parameters will be passed on to the generic importer
+ *         which can use this to complete information on the balancing
+ *         split for an incomplete transaction
+ */
+struct DraftTransaction
+{
+    DraftTransaction (Transaction* tx) : trans(tx) {}
+    ~DraftTransaction () { if (trans) { xaccTransDestroy (trans); trans = nullptr; } }
+    Transaction* trans;
+
+    boost::optional<GncNumeric> m_price;
+    boost::optional<std::string> m_taction;
+    boost::optional<std::string> m_tmemo;
+    boost::optional<char> m_trec_state;
+    boost::optional<GncDate> m_trec_date;
+
+    boost::optional<std::string> void_reason;
+};
+
 struct GncPreTrans
 {
 public:
@@ -116,7 +145,7 @@ public:
     void set_multi_split (bool multi_split) { m_multi_split = multi_split ;}
     void reset (GncTransPropType prop_type);
     std::string verify_essentials (void);
-    Transaction *create_trans (QofBook* book, gnc_commodity* currency);
+    std::shared_ptr<DraftTransaction> create_trans (QofBook* book, gnc_commodity* currency);
 
     /** Check whether the harvested transaction properties for this instance
      *  match those of another one (the "parent"). Note this function is *not*
@@ -162,7 +191,7 @@ public:
     void set_date_format (int date_format) { m_date_format = date_format ;}
     void set_currency_format (int currency_format) { m_currency_format = currency_format; }
     std::string verify_essentials (void);
-    void create_split(Transaction* trans);
+    void create_split(std::shared_ptr<DraftTransaction> draft_trans);
 
     Account* get_account () { if (m_account) return *m_account; else return nullptr; }
     void set_account (Account* acct) { if (acct) m_account = acct; else m_account = boost::none; }

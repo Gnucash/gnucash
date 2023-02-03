@@ -46,6 +46,15 @@ typedef struct _matchinfo
     gboolean update_proposed;
 } GNCImportMatchInfo;
 
+typedef struct _lsplitinfo
+{
+    gnc_numeric price;
+    const char *action;
+    const char *memo;
+    char rec_state;
+    time64 rec_date;
+} GNCImportLastSplitInfo;
+
 typedef enum _action
 {
     GNCImport_SKIP,
@@ -222,11 +231,6 @@ gnc_import_TransInfo_set_destacc (GNCImportTransInfo *info,
                                   Account *acc,
                                   gboolean selected_manually);
 
-/** Try to automatch a given transaction to a destination account */
-gboolean
-gnc_import_TransInfo_refresh_destacc (GNCImportTransInfo *transaction_info,
-                                      Account *base_acc);
-
 /** Returns if the currently selected destination account for auto-matching was selected by the user. */
 gboolean
 gnc_import_TransInfo_get_destacc_selected_manually (const GNCImportTransInfo *info);
@@ -240,6 +244,28 @@ gnc_import_TransInfo_get_ref_id (const GNCImportTransInfo *info);
 void
 gnc_import_TransInfo_set_ref_id (GNCImportTransInfo *info,
                                  guint32 ref_id);
+
+/** Returns the exchange rate for this TransInfo. */
+gnc_numeric
+gnc_import_TransInfo_get_price (const GNCImportTransInfo *info);
+
+/** Set the exchange rate for this TransInfo. */
+void
+gnc_import_TransInfo_set_price (GNCImportTransInfo *info,
+                                gnc_numeric lprice);
+
+/** Returns the destination split amount for this TransInfo. */
+gnc_numeric
+gnc_import_TransInfo_get_dest_amount (const GNCImportTransInfo *info);
+
+/** Returns the destination split value for this TransInfo. */
+gnc_numeric
+gnc_import_TransInfo_get_dest_value (const GNCImportTransInfo *info);
+
+/** Sets additional parameters to be used to generate the closing split */
+void
+gnc_import_TransInfo_set_last_split_info (GNCImportTransInfo *info,
+                                          GNCImportLastSplitInfo *lsplit);
 
 /** Set the append_text for this TransInfo. */
 void
