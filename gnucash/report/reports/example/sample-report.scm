@@ -1,8 +1,5 @@
 ;; -*-scheme-*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; sample-report.scm : Options Example Report
-;; refactored from hello-world by flywire January 2023
-;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
 ;; published by the Free Software Foundation; either version 2 of
@@ -457,7 +454,7 @@ new, totally cool report, consult the mailing list ~a.")
  ;; The name of this report. This will be used, among other things,
  ;; for making its menu item in the main menu. You need to use the
  ;; untranslated value here!
- 'name (N_ "Options Example Report")
+ 'name (N_ "Options Report")
 
  ;; The GUID for this report. This string should be unique, set once
  ;; and left alone forever after that. In theory, you could use any
@@ -468,7 +465,7 @@ new, totally cool report, consult the mailing list ~a.")
 
  ;; The name in the menu
  ;; (only necessary if it differs from the name)
- 'menu-name (N_ "Options Example")
+ 'menu-name (N_ "Sample Report")
 
  ;; A tip that is used to provide additional information about the
  ;; report to the user.
