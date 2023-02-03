@@ -175,8 +175,8 @@ Your reports probably shouldn't have an \
 option like this.")
       #f)
 
-    ;; This is a Report Title option using options defined before
-    ;; the generator.
+    ;; This is a Report Title option using constants defined at the
+    ;; beginning of the file.
     (gnc-register-string-option optiondb
       (N_ "Testing") optname-report-title
       "c" opthelp-report-title (N_ "Report Title Default"))
