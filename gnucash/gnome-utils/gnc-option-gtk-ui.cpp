@@ -948,7 +948,8 @@ create_account_widget(GncOption& option, char *name)
         for (node = acct_type_list; node; node = node->next)
         {
             GNCAccountType type = static_cast<decltype(type)>(GPOINTER_TO_INT (node->data));
-            avi.include_type[type] = TRUE;
+            if (type < NUM_ACCOUNT_TYPES)
+                avi.include_type[type] = TRUE;
         }
 
         gnc_tree_view_account_set_view_info (GNC_TREE_VIEW_ACCOUNT (tree), &avi);
