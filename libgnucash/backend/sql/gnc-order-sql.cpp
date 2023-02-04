@@ -45,7 +45,7 @@
 
 #define _GNC_MOD_NAME   GNC_ID_ORDER
 
-static QofLogModule log_module = G_LOG_DOMAIN;
+[[maybe_unused]] static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "orders"
 #define TABLE_VERSION 1

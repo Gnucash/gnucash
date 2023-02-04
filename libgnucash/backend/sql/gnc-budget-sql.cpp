@@ -51,7 +51,7 @@
 #define AMOUNTS_TABLE "budget_amounts"
 #define AMOUNTS_TABLE_VERSION 1
 
-static QofLogModule log_module = G_LOG_DOMAIN;
+[[maybe_unused]] static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define BUDGET_MAX_NAME_LEN 2048
 #define BUDGET_MAX_DESCRIPTION_LEN 2048

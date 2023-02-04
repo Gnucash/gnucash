@@ -32,7 +32,7 @@
 #include "dialog-ab-select-imexporter.h"
 #include <dialog-utils.h>
 
-static QofLogModule log_module = G_LOG_DOMAIN;
+__attribute__((unused)) static QofLogModule log_module = G_LOG_DOMAIN;
 
 struct _GncABSelectImExDlg
 {

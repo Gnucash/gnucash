@@ -45,7 +45,7 @@
 namespace bl = boost::locale;
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = GNC_MOD_GUI;
+[[maybe_unused]] static QofLogModule log_module = GNC_MOD_GUI;
 
 namespace Gnucash {
 

@@ -93,7 +93,7 @@ static unsigned int periods[] =
 };
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = GNC_MOD_GUI;
+__attribute__((unused)) static QofLogModule log_module = GNC_MOD_GUI;
 
 
 /** Prototypes **********************************************************/

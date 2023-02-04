@@ -37,7 +37,7 @@
 
 #define WINDOW_AUTOCLEAR_CM_CLASS "window-autoclear"
 
-static QofLogModule log_module = GNC_MOD_GUI;
+__attribute__((unused)) static QofLogModule log_module = GNC_MOD_GUI;
 
 /** STRUCTS *********************************************************/
 struct _AutoClearWindow

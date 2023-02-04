@@ -44,7 +44,7 @@
 #include "splint-defs.h"
 #endif
 
-static QofLogModule log_module = G_LOG_DOMAIN;
+[[maybe_unused]] static QofLogModule log_module = G_LOG_DOMAIN;
 
 static  gpointer get_quote_source_name (gpointer pObject);
 static void set_quote_source_name (gpointer pObject,  gpointer pValue);
