@@ -781,9 +781,9 @@
                   (plist (assoc-ref pricealist foreign-comm))
                   (price (and plist
                               (gnc:pricelist-price-find-nearest plist date))))
-             (gnc-numeric_mul (gnc:make-gnc-monetary domestic)
-                              (gnc:make-gnc-monetary foreign-amt (or price 0))
-                              GNC-DENOM-AUTO GNC-RND-ROUND)))))
+             (gnc:make-gnc-monetary domestic
+                              (gnc-numeric-mul foreign-amt (or price 0)
+                              GNC-DENOM-AUTO GNC-RND-ROUND))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
