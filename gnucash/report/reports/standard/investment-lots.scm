@@ -147,7 +147,7 @@
       (filter gnc:account-is-stock?
               (gnc-account-get-descendants-sorted
                (gnc-get-current-root-account)))
-    (list ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL))
+    (list ACCT-TYPE-ASSET ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL))
 
     (gnc-register-simple-boolean-option options
         gnc:pagename-accounts
