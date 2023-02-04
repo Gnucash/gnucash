@@ -127,8 +127,9 @@ GncOptionsDialog::changed() noexcept
 void
 gnc_option_changed_widget_cb(GtkWidget *widget, GncOption* option)
 {
-    if (!option) return;
+    if (!option || option->is_internal()) return;
     auto ui_item{option->get_ui_item()};
+    g_return_if_fail(ui_item);
     auto widget_changed_cb{option->get_widget_changed()};
     auto gtk_ui_item{dynamic_cast<GncOptionGtkUIItem*>(ui_item)};
     if (widget_changed_cb && gtk_ui_item)
