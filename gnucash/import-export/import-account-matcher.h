@@ -42,18 +42,12 @@ extern "C" {
 typedef struct
 {
     GtkWidget           *dialog;                         /* Dialog Widget */
-    GtkWidget           *new_button;                     /* new account button Widget */
     GtkWidget           *ok_button;                      /* ok button Widget */
     GncTreeViewAccount  *account_tree;                   /* Account tree */
     GtkWidget           *account_tree_sw;                /* Scroll Window for Account tree */
-    gboolean             auto_create;                    /* Auto create retAccount, can be used to step over this stage */
     const gchar         *account_human_description;      /* description for on line id, incoming */
-    const gchar         *account_online_id_value;        /* On line id value, incoming */
-    GtkWidget           *account_online_id_label;        /* the label Widget for the on line id, incoming */
     const gnc_commodity *new_account_default_commodity;  /* new account default commodity, incoming */
     GNCAccountType       new_account_default_type;       /* new account default type, incoming */
-    Account             *default_account;                /* default account for selection, incoming */
-    Account             *retAccount;                     /* Account value returned to caller */
     GtkWidget           *whbox;                          /* Warning HBox */
     GtkWidget           *warning;                        /* Warning Label */
 } AccountPickerDialog;
@@ -78,7 +72,7 @@ typedef struct
     remembered elsewhere.  You would fill account_human_description to tell
     the user what he is looking for.  In this mode, the  online_id
     field of the found account will not be touched.  To use this mode,
-    auto_create must NOT be set to 0.
+    prompt_on_no_match must NOT be set to 0.
 
     @param account_human_description
 	 A human-readable description of
@@ -100,11 +94,10 @@ typedef struct
     ACCT_TYPE_NONE, the function will also warn the user if the found
     or created account's commodity doesn't match.
 
-    @param auto_create
-         Only active if no account with the
+    @param prompt_on_no_match Only active if no account with the
     account_online_id_value could be found in gnucash, or if online-id
-    was NULL. In that case, if auto_create is TRUE (nonzero), the user
-    will be asked to create a new account. If auto_create is FALSE
+    was NULL. In that case, if prompt_on_no_match is TRUE (nonzero), the user
+    will be asked to create a new account. If prompt_on_no_match is FALSE
     (zero), this function will simply return NULL but will neither
     select nor create any account.
 
@@ -121,7 +114,7 @@ typedef struct
 */
 Account * gnc_import_select_account(GtkWidget *parent,
                                     const gchar * account_online_id_value,
-                                    gboolean auto_create,
+                                    gboolean prompt_on_no_match,
                                     const gchar * account_human_description,
                                     const gnc_commodity * new_account_default_commodity,
                                     GNCAccountType new_account_default_type,

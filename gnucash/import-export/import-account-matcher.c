@@ -72,26 +72,6 @@ partial_match_if_valid (AccountOnlineMatch *match)
  * Functions needed by gnc_import_select_account
  *
 \********************************************************************/
-/** Constructor for AccountPickerDialog.
- * @return Pointer to a new AccountPickerDialog
- */
-static AccountPickerDialog* gnc_import_new_account_picker(void)
-{
-    AccountPickerDialog* picker = g_new(AccountPickerDialog, 1);
-    picker->dialog = NULL;
-    picker->account_tree = NULL;
-    picker->account_tree_sw = NULL;
-    picker->auto_create = TRUE;
-    picker->account_human_description = NULL;
-    picker->account_online_id_value = NULL;
-    picker->account_online_id_label = NULL;
-    picker->new_account_default_commodity = NULL;
-    picker->new_account_default_type = 0;
-    picker->default_account = NULL;
-    picker->retAccount = NULL;
-    return picker;
-}
-
 
 /**************************************************
  * test_acct_online_id_match
@@ -402,7 +382,7 @@ account_tree_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
  *******************************************************/
 Account * gnc_import_select_account(GtkWidget *parent,
                                     const gchar * account_online_id_value,
-                                    gboolean auto_create,
+                                    gboolean prompt_on_no_match,
                                     const gchar * account_human_description,
                                     const gnc_commodity * new_account_default_commodity,
                                     GNCAccountType new_account_default_type,
@@ -424,7 +404,6 @@ Account * gnc_import_select_account(GtkWidget *parent,
     DEBUG("Default account type received: %s", xaccAccountGetTypeStr( new_account_default_type));
     picker = g_new0(AccountPickerDialog, 1);
 
-    picker->account_online_id_value = account_online_id_value;
     picker->account_human_description =  account_human_description;
     picker->new_account_default_commodity = new_account_default_commodity;
     picker->new_account_default_type = new_account_default_type;
@@ -441,7 +420,7 @@ Account * gnc_import_select_account(GtkWidget *parent,
             new_account_default_type == ACCT_TYPE_NONE)
             retval = match.partial_match;
     }
-    if (retval == NULL && auto_create != 0)
+    if (!retval && prompt_on_no_match)
     {
         /* load the interface */
         builder = gtk_builder_new();
@@ -517,16 +496,13 @@ Account * gnc_import_select_account(GtkWidget *parent,
 
             case GTK_RESPONSE_OK:
                 retval = gnc_tree_view_account_get_selected_account(picker->account_tree);
-                if (retval == NULL)
+                if (!retval)
                 {
                     response = GNC_RESPONSE_NEW;
                     break;
                 }
-                if (retval)
-                    retval_name = xaccAccountGetName(retval);
-                if (!retval_name)
-                    retval_name = "(null)";
-                DEBUG("Selected account %p, %s", retval, retval_name);
+                retval_name = xaccAccountGetName(retval);
+                DEBUG("Selected account %p, %s", retval, retval_name ? retval_name : "(null)");
 
                 /* See if the selected account is a placeholder. */
                 if (retval && xaccAccountGetPlaceholder (retval))
@@ -544,7 +520,7 @@ Account * gnc_import_select_account(GtkWidget *parent,
                     break;
                 }
 
-                if ( account_online_id_value != NULL)
+                if (account_online_id_value)
                 {
                     gnc_import_set_acc_online_id(retval, account_online_id_value);
                 }
