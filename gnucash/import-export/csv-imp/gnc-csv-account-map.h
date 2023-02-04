@@ -39,6 +39,15 @@ enum GncImportColumn {MAPPING_STRING, MAPPING_FULLPATH, MAPPING_ACCOUNT};
 
 /** Load the import mappings.
  *
+ * For each mapping string in the tree model, try to find a
+ * corresponding account and account full path.
+ *
+ * - if the account was already set, just update the full path
+ * - if the mapping string matches an account in the account maps,
+ *   use that account and its corresponding full name
+ * - otherwise search for an existing account whose full name matches the
+ *   mapping string
+ *
  */
 void gnc_csv_account_map_load_mappings (GtkTreeModel *mappings_store);
 

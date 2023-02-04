@@ -806,7 +806,6 @@ gnc_gen_trans_assign_transfer_account (GtkTreeView *treeview,
     GtkTreeIter iter;
     GNCImportTransInfo *trans_info;
     Account *old_acc;
-    gboolean ok_pressed;
     gchar *path_str = gtk_tree_path_to_string (path);
     gchar *acct_str = gnc_get_account_name_for_register (*new_acc);
 
@@ -832,12 +831,10 @@ gnc_gen_trans_assign_transfer_account (GtkTreeView *treeview,
         case GNCImport_ADD:
             if (gnc_import_TransInfo_is_balanced (trans_info) == FALSE)
             {
-                ok_pressed = TRUE;
                 old_acc  = gnc_import_TransInfo_get_destacc (trans_info);
                 if (*first)
                 {
                     gchar *acc_full_name;
-                    ok_pressed = FALSE;
                     *new_acc = gnc_import_select_account (info->main_widget,
                         NULL,
                         TRUE,
@@ -846,13 +843,13 @@ gnc_gen_trans_assign_transfer_account (GtkTreeView *treeview,
                               gnc_import_TransInfo_get_trans (trans_info)),
                         ACCT_TYPE_NONE,
                         old_acc,
-                        &ok_pressed);
+                        NULL);
                     *first = FALSE;
                     acc_full_name = gnc_account_get_full_name (*new_acc);
                     DEBUG("account selected = %s", acc_full_name);
                     g_free (acc_full_name);
                 }
-                if (ok_pressed)
+                if (*new_acc)
                 {
                     gnc_import_TransInfo_set_destacc (trans_info, *new_acc, TRUE);
                     defer_bal_computation (info, *new_acc);
@@ -1228,14 +1225,12 @@ gnc_gen_trans_row_activated_cb (GtkTreeView *treeview,
                                 GtkTreeViewColumn *column,
                                 GNCImportMainMatcher *info)
 {
-    Account *assigned_account;
-    gboolean first, is_selection;
+    Account *assigned_account = NULL;
+    gboolean first = TRUE;
+    gboolean is_selection = FALSE;
     gchar *namestr;
 
     ENTER("");
-    assigned_account = NULL;
-    first = TRUE;
-    is_selection = FALSE;
     gnc_gen_trans_assign_transfer_account (treeview,
                                            &first, is_selection, path,
                                            &assigned_account, info);
@@ -1595,9 +1590,6 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
                       G_CALLBACK(gnc_gen_trans_onButtonPressed_cb), info);
     g_signal_connect (view, "popup-menu",
                       G_CALLBACK(gnc_gen_trans_onPopupMenu_cb), info);
-
-    info->acct_id_hash = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL,
-                                                (GDestroyNotify)g_hash_table_destroy);
 }
 
 static void
@@ -1679,14 +1671,16 @@ gnc_gen_trans_common_setup (GNCImportMainMatcher *info,
     // Create the checkbox, but do not show it unless there are transactions
     info->reconcile_after_close = GTK_WIDGET(gtk_builder_get_object (builder, "reconcile_after_close_button"));
 
-    show_update = gnc_import_Settings_get_action_update_enabled (info->user_settings);
-    gnc_gen_trans_init_view (info, all_from_same_account, show_update);
-    heading_label = GTK_WIDGET(gtk_builder_get_object (builder, "heading_label"));
-    g_assert (heading_label != NULL);
 
+    heading_label = GTK_WIDGET(gtk_builder_get_object (builder, "heading_label"));
     if (heading)
         gtk_label_set_text (GTK_LABEL(heading_label), heading);
 
+    show_update = gnc_import_Settings_get_action_update_enabled (info->user_settings);
+    gnc_gen_trans_init_view (info, all_from_same_account, show_update);
+
+    info->acct_id_hash = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL,
+                                                (GDestroyNotify)g_hash_table_destroy);
     info->desc_hash = g_hash_table_new (g_str_hash, g_str_equal);
     info->notes_hash = g_hash_table_new (g_str_hash, g_str_equal);
     info->memo_hash = g_hash_table_new (g_str_hash, g_str_equal);
@@ -1930,7 +1924,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
 {
     GtkTreeStore *store;
     GtkTreeSelection *selection;
-    gchar *tmp, *imbalance, *text;
+    gchar *text;
     const gchar *ro_text, *color = NULL;
     gchar *int_required_class, *int_prob_required_class, *int_not_required_class;
     gchar *class_extension = NULL;
@@ -1999,55 +1993,69 @@ refresh_model_row (GNCImportMainMatcher *gui,
     switch (gnc_import_TransInfo_get_action (info))
     {
     case GNCImport_ADD:
-        if (gnc_import_TransInfo_is_balanced (info) == TRUE)
+        if (gnc_import_TransInfo_is_balanced (info))
         {
             ro_text = _("New, already balanced");
             color = get_required_color (int_not_required_class);
         }
         else
         {
-            /* Assume that importers won't create transactions in two or more
-               currencies so we can use xaccTransGetImbalanceValue */
-            imbalance =
-                g_strdup
-                (xaccPrintAmount
-                 (gnc_numeric_neg (xaccTransGetImbalanceValue
-                                  (gnc_import_TransInfo_get_trans (info))),
-                  gnc_commodity_print_info
-                  (xaccTransGetCurrency (gnc_import_TransInfo_get_trans (info)),
-                   TRUE)));
-            if (gnc_import_TransInfo_get_destacc (info) != NULL)
+            Account *dest_acc = gnc_import_TransInfo_get_destacc (info);
+            char *imbalance = NULL;
+            if (dest_acc)
             {
-                color = get_required_color (int_not_required_class);
-                tmp = gnc_account_get_full_name
-                      (gnc_import_TransInfo_get_destacc (info));
-                if (gnc_import_TransInfo_get_destacc_selected_manually (info)
-                        == TRUE)
+                char *acct_full_name = gnc_account_get_full_name (dest_acc);
+                gnc_numeric bal_amt = gnc_import_TransInfo_get_dest_amount (info);
+                if (!gnc_numeric_zero_p (bal_amt))
                 {
-                    text =
-                        /* Translators: %1$s is the amount to be transferred,
-                           %2$s the destination account. */
-                        g_strdup_printf (_("New, transfer %s to (manual) \"%s\""),
-                                         imbalance, tmp);
+                    GNCPrintAmountInfo pinfo = gnc_commodity_print_info (
+                        xaccAccountGetCommodity (dest_acc), TRUE);
+                    imbalance = g_strdup (xaccPrintAmount (bal_amt, pinfo));
+                    color = get_required_color (int_not_required_class);
+                    if (gnc_import_TransInfo_get_destacc_selected_manually (info))
+                    {
+                        text =
+                            /* Translators: %1$s is the amount to be transferred,
+                            %2$s the destination account. */
+                            g_strdup_printf (_("New, transfer %s to (manual) \"%s\""),
+                                            imbalance, acct_full_name);
+                    }
+                    else
+                    {
+                        text =
+                            /* Translators: %1$s is the amount to be transferred,
+                            %2$s the destination account. */
+                            g_strdup_printf (_("New, transfer %s to (auto) \"%s\""),
+                                            imbalance, acct_full_name);
+                    }
                 }
                 else
                 {
+                    GNCPrintAmountInfo pinfo = gnc_commodity_print_info (
+                        xaccTransGetCurrency (gnc_import_TransInfo_get_trans (info)), TRUE);
+                    gnc_numeric bal_val = gnc_import_TransInfo_get_dest_value (info);
+                    imbalance = g_strdup (xaccPrintAmount (bal_val, pinfo));
+                    color = get_required_color (int_required_class);
                     text =
-                        /* Translators: %1$s is the amount to be transferred,
-                           %2$s the destination account. */
-                        g_strdup_printf (_("New, transfer %s to (auto) \"%s\""),
-                                         imbalance, tmp);
-                }
-                g_free (tmp);
+                    /* Translators: %s is the amount to be transferred. */
+                    g_strdup_printf (_("New, UNBALANCED (need price to transfer %s to acct %s)!"),
+                                     imbalance, acct_full_name);
 
+                }
+
+                g_free (acct_full_name);
             }
             else
             {
-                color = get_required_color (int_prob_required_class);
+                GNCPrintAmountInfo pinfo = gnc_commodity_print_info (
+                    xaccTransGetCurrency (gnc_import_TransInfo_get_trans (info)), TRUE);
+                gnc_numeric bal_val = gnc_import_TransInfo_get_dest_value (info);
+                imbalance = g_strdup (xaccPrintAmount (bal_val, pinfo));
+                color = get_required_color (int_required_class);
                 text =
                     /* Translators: %s is the amount to be transferred. */
                     g_strdup_printf (_("New, UNBALANCED (need acct to transfer %s)!"),
-                                     imbalance);
+                                    imbalance);
             }
             remove_child_row (model, iter);
 
@@ -2221,41 +2229,49 @@ gnc_gen_trans_list_get_reconcile_after_close_button (GNCImportMainMatcher *info)
 }
 
 
-void
-gnc_gen_trans_list_add_trans (GNCImportMainMatcher *gui, Transaction *trans)
-{
-    Account* acc = NULL;
-    Split* split = NULL;
-    int i=0;
-
-    split = xaccTransGetSplit (trans, 0);
-    acc = xaccSplitGetAccount (split);
-    defer_bal_computation (gui, acc);
-
-    gnc_gen_trans_list_add_trans_with_ref_id (gui, trans, 0);
-    return;
-}/* end gnc_import_add_trans() */
-
-void
-gnc_gen_trans_list_add_trans_with_ref_id (GNCImportMainMatcher *gui, Transaction *trans, guint32 ref_id)
+static void
+gnc_gen_trans_list_add_trans_internal (GNCImportMainMatcher *gui, Transaction *trans,
+                                       guint32 ref_id, GNCImportLastSplitInfo* lsplit)
 {
     GNCImportTransInfo * transaction_info = NULL;
-    GtkTreeModel *model;
-    GtkTreeIter iter;
+    Account* acc = NULL;
+    Split* split = NULL;
+
     g_assert (gui);
     g_assert (trans);
 
     if (gnc_import_exists_online_id (trans, gui->acct_id_hash))
         return;
-    else
-    {
-        transaction_info = gnc_import_TransInfo_new (trans, NULL);
-        gnc_import_TransInfo_set_ref_id (transaction_info, ref_id);
-        // It's much faster to gather the imported transactions into a GSList than directly into the
-        // treeview.
-        gui->temp_trans_list = g_slist_prepend (gui->temp_trans_list, transaction_info);
-    }
-    return;
+
+    split = xaccTransGetSplit (trans, 0);
+    acc = xaccSplitGetAccount (split);
+    defer_bal_computation (gui, acc);
+
+    transaction_info = gnc_import_TransInfo_new (trans, NULL);
+    gnc_import_TransInfo_set_ref_id (transaction_info, ref_id);
+    gnc_import_TransInfo_set_last_split_info (transaction_info, lsplit);
+    // It's much faster to gather the imported transactions into a GSList than
+    // directly into the treeview.
+    gui->temp_trans_list = g_slist_prepend (gui->temp_trans_list, transaction_info);
+}
+
+void
+gnc_gen_trans_list_add_trans (GNCImportMainMatcher *gui, Transaction *trans)
+{
+    gnc_gen_trans_list_add_trans_internal (gui, trans, 0, NULL);
+}
+
+void
+gnc_gen_trans_list_add_trans_with_ref_id (GNCImportMainMatcher *gui, Transaction *trans, guint32 ref_id)
+{
+    gnc_gen_trans_list_add_trans_internal (gui, trans, ref_id, NULL);
+}
+
+void gnc_gen_trans_list_add_trans_with_split_data (GNCImportMainMatcher *gui,
+                                                   Transaction *trans,
+                                                   GNCImportLastSplitInfo *lsplit)
+{
+    gnc_gen_trans_list_add_trans_internal (gui, trans, 0, lsplit);
 }
 
 /* Query the accounts used by the imported transactions to find a list of
@@ -2319,6 +2335,10 @@ create_hash_of_potential_matches (GList *candidate_txns,
         Account* split_account;
         GSList* split_list;
         if (gnc_import_split_has_online_id (candidate->data))
+            continue;
+        /* In this context an open transaction represents a freshly
+         * downloaded one. That can't possibly be a match yet */
+        if (xaccTransIsOpen(xaccSplitGetParent(candidate->data)))
             continue;
         split_account = xaccSplitGetAccount (candidate->data);
         /* g_hash_table_steal_extended would do the two calls in one shot but is

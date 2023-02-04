@@ -89,7 +89,7 @@ static std::shared_ptr<CsvTransImpSettings> create_int_gnc_exp_preset(void)
             GncTransPropType::ACCOUNT,
             GncTransPropType::NONE,
             GncTransPropType::NONE,
-            GncTransPropType::DEPOSIT,
+            GncTransPropType::AMOUNT,
             GncTransPropType::REC_STATE,
             GncTransPropType::REC_DATE,
             GncTransPropType::PRICE
@@ -214,8 +214,16 @@ CsvTransImpSettings::load (void)
             &list_len, &key_error);
     for (uint32_t i = 0; i < list_len; i++)
     {
+        /* Special case a few legacy column names */
+        const char *col_type_str = col_types_str[i];
+        if (!g_strcmp0(col_type_str, "Deposit"))  // -> "Amount"
+            col_type_str = gnc_csv_col_type_strs[GncTransPropType::AMOUNT];
+        if (!g_strcmp0(col_type_str, "Withdrawal"))  // -> "Amount (Negated)"
+            col_type_str = gnc_csv_col_type_strs[GncTransPropType::AMOUNT_NEG];
+        if (!g_strcmp0(col_type_str, "Num"))  // -> "Number"
+            col_type_str = gnc_csv_col_type_strs[GncTransPropType::NUM];
         auto col_types_it = std::find_if (gnc_csv_col_type_strs.begin(),
-                gnc_csv_col_type_strs.end(), test_prop_type_str (col_types_str[i]));
+                gnc_csv_col_type_strs.end(), test_prop_type_str (col_type_str));
         if (col_types_it != gnc_csv_col_type_strs.end())
         {
             /* Found a valid column type. Now check whether it is allowed

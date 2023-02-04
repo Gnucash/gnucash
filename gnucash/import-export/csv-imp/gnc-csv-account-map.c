@@ -45,20 +45,6 @@
 static QofLogModule UNUSED_VAR log_module = G_LOG_DOMAIN;
 
 /**************************************************
- * account_imap_destroy
- *
- * Destroy an import map. But all stored entries will
- * still continue to exist in the underlying kvp frame
- * of the account.
- **************************************************/
-static void
-account_imap_destroy (GncImportMatchMap *imap)
-{
-    if (!imap) return;
-    g_free (imap);
-}
-
-/**************************************************
  * gnc_csv_account_map_search
  *
  * search the existing mappings for the account
@@ -76,17 +62,13 @@ Account * gnc_csv_account_map_search (const gchar *map_string)
     /* Go through list of accounts */
     for (ptr = accts; ptr; ptr = g_list_next (ptr))
     {
-        GncImportMatchMap *tmp_imap;
+        Account *tmp_acc = ptr->data;
 
-        tmp_imap = gnc_account_imap_create_imap (ptr->data);
-
-        if (gnc_account_imap_find_account (tmp_imap, CSV_CATEGORY, map_string) != NULL)
+        if (gnc_account_imap_find_account (tmp_acc, CSV_CATEGORY, map_string))
         {
-            account = ptr->data;
-            account_imap_destroy (tmp_imap);
+            account = tmp_acc;
             break;
         }
-        account_imap_destroy (tmp_imap);
     }
     g_list_free (accts);
 
@@ -118,21 +100,19 @@ gnc_csv_account_map_load_mappings (GtkTreeModel *mappings_store)
         // Walk through the list, reading each row
         gtk_tree_model_get (GTK_TREE_MODEL(mappings_store), &iter, MAPPING_STRING, &map_string, MAPPING_ACCOUNT, &account, -1);
 
-        if (account == NULL) // if account is NULL, store has not been updated
+        // Look for an account matching the map_string
+        // It may already be set in the tree model. If not we try to match the map_string with
+        // - an entry in our saved account maps
+        // - a full name of any of our existing accounts
+        if (account ||
+            (account = gnc_csv_account_map_search (map_string)) ||
+            (account = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), map_string)))
         {
-            account = gnc_csv_account_map_search (map_string); //search the account list for the map_string
-
-            if (account == NULL) // account still NULL, we have no map
-            {
-                g_free (map_string);
-                valid = gtk_tree_model_iter_next (mappings_store, &iter);
-                continue;
-            }
+            fullpath = gnc_account_get_full_name (account);
+            gtk_list_store_set (GTK_LIST_STORE(mappings_store), &iter, MAPPING_FULLPATH, fullpath, -1);
+            gtk_list_store_set (GTK_LIST_STORE(mappings_store), &iter, MAPPING_ACCOUNT, account, -1);
+            g_free (fullpath);
         }
-        fullpath = gnc_account_get_full_name (account);
-        gtk_list_store_set (GTK_LIST_STORE(mappings_store), &iter, MAPPING_FULLPATH, fullpath, -1);
-        gtk_list_store_set (GTK_LIST_STORE(mappings_store), &iter, MAPPING_ACCOUNT, account, -1);
-        g_free (fullpath);
 
         g_free (map_string);
         valid = gtk_tree_model_iter_next (mappings_store, &iter);
@@ -148,22 +128,12 @@ gnc_csv_account_map_load_mappings (GtkTreeModel *mappings_store)
 void
 gnc_csv_account_map_change_mappings (Account *old_account, Account *new_account, const gchar *map_string)
 {
-    GncImportMatchMap *tmp_imap;
-
     if (strlen (map_string) == 0)
         return;
 
-    if (old_account != NULL)
-    {
-        tmp_imap = gnc_account_imap_create_imap (old_account);
-        gnc_account_imap_delete_account (tmp_imap, CSV_CATEGORY, map_string);
-        account_imap_destroy (tmp_imap);
-    }
+    if (old_account)
+        gnc_account_imap_delete_account (old_account, CSV_CATEGORY, map_string);
 
-    if (new_account != NULL)
-    {
-        tmp_imap = gnc_account_imap_create_imap (new_account);
-	gnc_account_imap_add_account (tmp_imap, CSV_CATEGORY, map_string, new_account);
-        account_imap_destroy (tmp_imap);
-    }
+    if (new_account)
+	gnc_account_imap_add_account (new_account, CSV_CATEGORY, map_string, new_account);
 }

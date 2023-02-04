@@ -86,6 +86,17 @@ gnc_get_num_action (const Transaction *trans, const Split *split)
     else return NULL;
 }
 
+// fake function from gnc-commodity.c
+// this is a simplified version of the original function
+gboolean
+gnc_commodity_equiv(const gnc_commodity * a, const gnc_commodity * b)
+{
+    if (a == b) return TRUE;
+    if (!a || !b) return FALSE;
+
+    return TRUE;
+}
+
 
 /* required fake functions from app-utils sources, which should not be linked to the test application */
 
@@ -163,7 +174,6 @@ protected:
 //! Test for function gnc_import_TransInfo_new()
 TEST_F(ImportBackendTest, CreateTransInfo)
 {
-    GncMockImportMatchMap imap(m_import_acc);
     gchar* online_id;
 
     using namespace testing;
@@ -180,11 +190,11 @@ TEST_F(ImportBackendTest, CreateTransInfo)
         .WillByDefault(Return("This is the description"));
 
     // function gnc_import_TransInfo_new() should try to find account using the description from the transaction
-    EXPECT_CALL(imap, find_account(_, StrEq("This is the description")))
+    EXPECT_CALL(*m_import_acc, find_account(_, StrEq("This is the description")))
         .WillOnce(Return(m_dest_acc));
 
     // call function to be tested
-    GNCImportTransInfo *trans_info = gnc_import_TransInfo_new(m_trans, &imap);
+    GNCImportTransInfo *trans_info = gnc_import_TransInfo_new(m_trans, m_import_acc);
 
     // check 'trans_info'
     EXPECT_EQ(gnc_import_TransInfo_get_fsplit(trans_info),  m_split);
@@ -230,7 +240,6 @@ TEST_F(ImportBackendBayesTest, CreateTransInfo)
 {
     using namespace testing;
 
-    GncMockImportMatchMap imap(m_import_acc);
     time64 date(GncDateTime(GncDate(2020, 3, 18)));
     struct tm *tm_struct;
     char local_day_of_week[16];
@@ -264,7 +273,7 @@ TEST_F(ImportBackendBayesTest, CreateTransInfo)
         .WillByDefault(Return(date));
 
     // check tokens created from transaction
-    EXPECT_CALL(imap, find_account_bayes(AllOf(
+    EXPECT_CALL(*m_import_acc, find_account_bayes(AllOf(
             Each(Not(StrEq(""))),                // tokens must not be empty strings
             Each(Not(HasSubstr(" "))),           // tokens must not contain separator
             Not(HasDuplicates()),                // tokens must be unique
@@ -275,7 +284,7 @@ TEST_F(ImportBackendBayesTest, CreateTransInfo)
         .WillOnce(Return(m_dest_acc));
 
     // call function to be tested
-    GNCImportTransInfo *trans_info = gnc_import_TransInfo_new(m_trans, &imap);
+    GNCImportTransInfo *trans_info = gnc_import_TransInfo_new(m_trans, m_import_acc);
 
     // check 'trans_info'
     EXPECT_EQ(gnc_import_TransInfo_get_fsplit(trans_info),  m_split);

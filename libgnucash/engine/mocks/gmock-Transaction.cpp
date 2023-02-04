@@ -130,6 +130,14 @@ xaccTransGetNum (const Transaction *trans)
     return mocktrans ? mocktrans->get_num() : "";
 }
 
+gnc_commodity *
+xaccTransGetCurrency (const Transaction *trans)
+{
+    SCOPED_TRACE("");
+    auto mocktrans = gnc_mocktransaction(trans);
+    return mocktrans ? mocktrans->get_currency() : nullptr;
+}
+
 gboolean
 xaccTransIsOpen (const Transaction *trans)
 {

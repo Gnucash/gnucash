@@ -50,6 +50,7 @@
 
 #include "import-account-matcher.h"
 #include "import-main-matcher.h"
+#include "import-backend.h"
 #include "gnc-csv-account-map.h"
 #include "gnc-account-sel.h"
 
@@ -1732,8 +1733,6 @@ void CsvImpTransAssist::preview_validate_settings ()
 
 /* Populates the account match view with all potential
  * account names found in the parse data.
- *
- * @param info The data being previewed
  */
 void CsvImpTransAssist::acct_match_set_accounts ()
 {
@@ -1963,7 +1962,7 @@ CsvImpTransAssist::assist_account_match_page_prepare ()
     // Load the account strings into the store
     acct_match_set_accounts ();
 
-    // Match the account strings to the mappings
+    // Match the account strings to account maps from previous imports
     auto store = gtk_tree_view_get_model (GTK_TREE_VIEW(account_match_view));
     gnc_csv_account_map_load_mappings (store);
 
@@ -2098,7 +2097,15 @@ CsvImpTransAssist::assist_match_page_prepare ()
         auto draft_trans = trans_it.second;
         if (draft_trans->trans)
         {
-            gnc_gen_trans_list_add_trans (gnc_csv_importer_gui, draft_trans->trans);
+            auto lsplit = GNCImportLastSplitInfo {
+                draft_trans->m_price ? static_cast<gnc_numeric>(*draft_trans->m_price) : gnc_numeric{0, 0},
+                draft_trans->m_taction ? draft_trans->m_taction->c_str() : nullptr,
+                draft_trans->m_tmemo ? draft_trans->m_tmemo->c_str() : nullptr,
+                draft_trans->m_trec_state ? *draft_trans->m_trec_state : '\0',
+                draft_trans->m_trec_date ? static_cast<time64>(GncDateTime(*draft_trans->m_trec_date, DayPart::neutral)) : 0,
+            };
+
+            gnc_gen_trans_list_add_trans_with_split_data (gnc_csv_importer_gui, std::move (draft_trans->trans), &lsplit);
             draft_trans->trans = nullptr;
         }
     }

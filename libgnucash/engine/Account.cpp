@@ -5706,90 +5706,71 @@ xaccAccountForEachTransaction(const Account *acc, TransactionCallback proc,
 #define IMAP_FRAME              "import-map"
 #define IMAP_FRAME_BAYES        "import-map-bayes"
 
-/* Obtain an ImportMatchMap object from an Account or a Book */
-GncImportMatchMap *
-gnc_account_imap_create_imap (Account *acc)
-{
-    GncImportMatchMap *imap;
-
-    if (!acc) return NULL;
-
-    imap = g_new0(GncImportMatchMap, 1);
-
-    /* Cache the book for easy lookups; store the account/book for
-     * marking dirtiness
-     */
-    imap->acc = acc;
-    imap->book = gnc_account_get_book (acc);
-
-    return imap;
-}
-
 /* Look up an Account in the map */
 Account*
-gnc_account_imap_find_account (GncImportMatchMap *imap,
+gnc_account_imap_find_account (Account *acc,
                                const char *category,
                                const char *key)
 {
     GValue v = G_VALUE_INIT;
     GncGUID * guid = NULL;
     Account *retval;
-    if (!imap || !key) return NULL;
+    if (!acc || !key) return NULL;
     std::vector<std::string> path {IMAP_FRAME};
     if (category)
         path.push_back (category);
     path.push_back (key);
-    qof_instance_get_path_kvp (QOF_INSTANCE (imap->acc), &v, path);
+    qof_instance_get_path_kvp (QOF_INSTANCE (acc), &v, path);
     if (G_VALUE_HOLDS_BOXED (&v))
         guid = (GncGUID*)g_value_get_boxed (&v);
-    retval = xaccAccountLookup (guid, imap->book);
+    retval = xaccAccountLookup (guid, gnc_account_get_book(acc));
     g_value_unset (&v);
     return retval;
 }
 
 /* Store an Account in the map */
 void
-gnc_account_imap_add_account (GncImportMatchMap *imap,
+gnc_account_imap_add_account (Account *acc,
                               const char *category,
                               const char *key,
-                              Account *acc)
+                              Account *added_acc)
 {
     GValue v = G_VALUE_INIT;
-    if (!imap || !key || !acc || (strlen (key) == 0)) return;
+    if (!acc || !key || !added_acc || (strlen (key) == 0)) return;
     std::vector<std::string> path {IMAP_FRAME};
     if (category)
         path.emplace_back (category);
     path.emplace_back (key);
     g_value_init (&v, GNC_TYPE_GUID);
-    g_value_set_boxed (&v, xaccAccountGetGUID (acc));
-    xaccAccountBeginEdit (imap->acc);
-    qof_instance_set_path_kvp (QOF_INSTANCE (imap->acc), &v, path);
-    qof_instance_set_dirty (QOF_INSTANCE (imap->acc));
-    xaccAccountCommitEdit (imap->acc);
+    g_value_set_boxed (&v, xaccAccountGetGUID (added_acc));
+    xaccAccountBeginEdit (acc);
+    qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, path);
+    qof_instance_set_dirty (QOF_INSTANCE (acc));
+    xaccAccountCommitEdit (acc);
     g_value_unset (&v);
 }
 
 /* Remove a reference to an Account in the map */
 void
-gnc_account_imap_delete_account (GncImportMatchMap *imap,
+gnc_account_imap_delete_account (Account *acc,
                                  const char *category,
                                  const char *key)
 {
-    if (!imap || !key) return;
+    if (!acc || !key) return;
     std::vector<std::string> path {IMAP_FRAME};
     if (category)
         path.emplace_back (category);
     path.emplace_back (key);
-    xaccAccountBeginEdit (imap->acc);
-    if (qof_instance_has_path_slot (QOF_INSTANCE (imap->acc), path))
+    xaccAccountBeginEdit (acc);
+    if (qof_instance_has_path_slot (QOF_INSTANCE (acc), path))
     {
-        qof_instance_slot_path_delete (QOF_INSTANCE (imap->acc), path);
+        qof_instance_slot_path_delete (QOF_INSTANCE (acc), path);
         if (category)
-            qof_instance_slot_path_delete_if_empty (QOF_INSTANCE (imap->acc), {IMAP_FRAME, category});
-        qof_instance_slot_path_delete_if_empty (QOF_INSTANCE (imap->acc), {IMAP_FRAME});
+            qof_instance_slot_path_delete_if_empty (QOF_INSTANCE (acc), {IMAP_FRAME, category});
+        qof_instance_slot_path_delete_if_empty (QOF_INSTANCE (acc), {IMAP_FRAME});
     }
-    qof_instance_set_dirty (QOF_INSTANCE (imap->acc));
-    xaccAccountCommitEdit (imap->acc);
+    qof_instance_set_dirty (QOF_INSTANCE (acc));
+    xaccAccountCommitEdit (acc);
 }
 
 /*--------------------------------------------------------------------------
@@ -5876,7 +5857,7 @@ highest_probability(FinalProbabilityVec const & probabilities)
 }
 
 static ProbabilityVec
-get_first_pass_probabilities(GncImportMatchMap * imap, GList * tokens)
+get_first_pass_probabilities(Account* acc, GList * tokens)
 {
     ProbabilityVec ret;
     /* find the probability for each account that contains any of the tokens
@@ -5885,7 +5866,7 @@ get_first_pass_probabilities(GncImportMatchMap * imap, GList * tokens)
     {
         TokenAccountsInfo tokenInfo{};
         auto path = std::string{IMAP_FRAME_BAYES "/"} + static_cast <char const *> (current_token->data) + "/";
-        qof_instance_foreach_slot_prefix (QOF_INSTANCE (imap->acc), path, &build_token_info, tokenInfo);
+        qof_instance_foreach_slot_prefix (QOF_INSTANCE (acc), path, &build_token_info, tokenInfo);
         for (auto const & current_account_token : tokenInfo.accounts)
         {
             auto item = std::find_if(ret.begin(), ret.end(), [&current_account_token]
@@ -6078,12 +6059,13 @@ static constexpr double threshold = .90 * probability_factor; /* 90% */
 
 /** Look up an Account in the map */
 Account*
-gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
+gnc_account_imap_find_account_bayes (Account *acc, GList *tokens)
 {
-    if (!imap)
+    if (!acc)
         return nullptr;
-    check_import_map_data (imap->book);
-    auto first_pass = get_first_pass_probabilities(imap, tokens);
+    auto book = gnc_account_get_book(acc);
+    check_import_map_data (book);
+    auto first_pass = get_first_pass_probabilities(acc, tokens);
     if (!first_pass.size())
         return nullptr;
     auto final_probabilities = build_probabilities(first_pass);
@@ -6100,25 +6082,25 @@ gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
     } catch (gnc::guid_syntax_exception&) {
         return nullptr;
     }
-    auto account = xaccAccountLookup (reinterpret_cast<GncGUID*>(&guid), imap->book);
+    auto account = xaccAccountLookup (reinterpret_cast<GncGUID*>(&guid), book);
     return account;
 }
 
 static void
-change_imap_entry (GncImportMatchMap *imap, std::string const & path, int64_t token_count)
+change_imap_entry (Account *acc, std::string const & path, int64_t token_count)
 {
     GValue value = G_VALUE_INIT;
 
     PINFO("Source Account is '%s', Count is '%" G_GINT64_FORMAT "'",
-           xaccAccountGetName (imap->acc), token_count);
+           xaccAccountGetName (acc), token_count);
 
     // check for existing guid entry
-    if (qof_instance_has_slot (QOF_INSTANCE(imap->acc), path.c_str ()))
+    if (qof_instance_has_slot (QOF_INSTANCE(acc), path.c_str ()))
     {
         int64_t  existing_token_count = 0;
 
         // get the existing_token_count value
-        qof_instance_get_path_kvp (QOF_INSTANCE (imap->acc), &value, {path});
+        qof_instance_get_path_kvp (QOF_INSTANCE (acc), &value, {path});
 
         if (G_VALUE_HOLDS_INT64 (&value))
             existing_token_count = g_value_get_int64 (&value);
@@ -6134,16 +6116,16 @@ change_imap_entry (GncImportMatchMap *imap, std::string const & path, int64_t to
     g_value_set_int64 (&value, token_count);
 
     // Add or Update the entry based on guid
-    qof_instance_set_path_kvp (QOF_INSTANCE (imap->acc), &value, {path});
-    gnc_features_set_used (imap->book, GNC_FEATURE_GUID_FLAT_BAYESIAN);
+    qof_instance_set_path_kvp (QOF_INSTANCE (acc), &value, {path});
+    gnc_features_set_used (gnc_account_get_book(acc), GNC_FEATURE_GUID_FLAT_BAYESIAN);
     g_value_unset (&value);
 }
 
 /** Updates the imap for a given account using a list of tokens */
 void
-gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
+gnc_account_imap_add_account_bayes (Account *acc,
                                     GList *tokens,
-                                    Account *acc)
+                                    Account *added_acc)
 {
     GList *current_token;
     gint64 token_count;
@@ -6151,20 +6133,20 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
     char *guid_string;
 
     ENTER(" ");
-    if (!imap)
+    if (!acc)
     {
         LEAVE(" ");
         return;
     }
-    check_import_map_data (imap->book);
+    check_import_map_data (gnc_account_get_book(acc));
 
-    g_return_if_fail (acc != NULL);
-    account_fullname = gnc_account_get_full_name(acc);
-    xaccAccountBeginEdit (imap->acc);
+    g_return_if_fail (added_acc != NULL);
+    account_fullname = gnc_account_get_full_name(added_acc);
+    xaccAccountBeginEdit (acc);
 
     PINFO("account name: '%s'", account_fullname);
 
-    guid_string = guid_to_string (xaccAccountGetGUID (acc));
+    guid_string = guid_to_string (xaccAccountGetGUID (added_acc));
 
     /* process each token in the list */
     for (current_token = g_list_first(tokens); current_token;
@@ -6181,11 +6163,11 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
         PINFO("adding token '%s'", (char*)current_token->data);
         auto path = std::string {IMAP_FRAME_BAYES} + '/' + static_cast<char*>(current_token->data) + '/' + guid_string;
         /* change the imap entry for the account */
-        change_imap_entry (imap, path, token_count);
+        change_imap_entry (acc, path, token_count);
     }
     /* free up the account fullname and guid string */
-    qof_instance_set_dirty (QOF_INSTANCE (imap->acc));
-    xaccAccountCommitEdit (imap->acc);
+    qof_instance_set_dirty (QOF_INSTANCE (acc));
+    xaccAccountCommitEdit (acc);
     g_free (account_fullname);
     g_free (guid_string);
     LEAVE(" ");
