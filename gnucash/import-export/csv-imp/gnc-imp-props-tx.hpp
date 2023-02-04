@@ -67,6 +67,8 @@ enum class GncTransPropType {
     REC_DATE,
     TACTION,
     TACCOUNT,
+    T_AMOUNT,
+    T_AMOUNT_NEG,
     TMEMO,
     TREC_STATE,
     TREC_DATE,
@@ -210,6 +212,8 @@ private:
     boost::optional<GncDate> m_rec_date;
     boost::optional<std::string> m_taction;
     boost::optional<Account*> m_taccount;
+    boost::optional<GncNumeric> m_tamount;
+    boost::optional<GncNumeric> m_tamount_neg;
     boost::optional<std::string> m_tmemo;
     boost::optional<char> m_trec_state;
     boost::optional<GncDate> m_trec_date;
