@@ -235,13 +235,7 @@
                              (gnc-pricedb-lookup-nearest-in-time-any-currency-t64
                               pricedb foreign (time64CanonicalDayTime date)))
                             (fn (if (and price (> (length price) 0))
-                                    (let* ((the_price
-                                            (if (gnc-commodity-equiv
-                                                 foreign
-                                                 (gnc-price-get-commodity (car price)))
-                                                (car price)
-                                                (gnc-price-invert (car price))))
-                                           (v (gnc-price-get-value (car price))))
+                                    (let* ((v (gnc-price-get-value (car price))))
                                            (gnc-price-ref (car price))
                                            (cons (car price) v))
                                          (cons #f (gnc-numeric-zero)))))
