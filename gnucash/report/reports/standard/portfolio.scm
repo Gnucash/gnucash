@@ -229,6 +229,16 @@
                                         (cons #f (gnc-numeric-zero)))))
                        (if price (gnc-price-list-destroy price))
                        fn)))
+                  ((pricedb-before)
+                   (lambda (foreign date)
+                     (let ((price (gnc-pricedb-lookup-nearest-before-any-currency-t64
+                                   pricedb foreign (time64CanonicalDayTime date))))
+                       (cond
+                        ((null? price) (cons #f 0))
+                        (else (let ((p (car price)))
+                                (gnc-price-ref p)
+                                (gnc-price-list-destroy price)
+                                (cons p (gnc-price-get-value p))))))))
                   ((pricedb-nearest)
                    (lambda (foreign date)
                      (let*  ((price
