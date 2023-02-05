@@ -62,7 +62,7 @@ gncReadFile (const char * filename, char ** data)
 {
     char *buf = NULL;
     char  *fullname;
-    int   size = 0;
+    off_t   size = 0;
     int   fd;
 
     if (!filename || filename[0] == '\0') return 0;
@@ -89,18 +89,25 @@ gncReadFile (const char * filename, char ** data)
     size = lseek( fd, 0, SEEK_END );
     lseek( fd, 0, SEEK_SET );
 
+    if (size < 0)
+    {
+        int norr = errno;
+        PERR ("file seek-to-end %s: (%d) %s\n", filename, norr, strerror(norr));
+        return 0;
+    }
+    
     /* Allocate memory */
-    buf = g_new(char, size + 1);
+    buf = g_new(char, (size_t)size + 1);
 
     /* read in file */
-    if ( read(fd, buf, size) == -1 )
+    if ( read(fd, buf, (size_t)size) == -1 )
     {
         g_free(buf);
         buf = NULL;
     }
     else
     {
-        buf[size] = '\0';
+        buf[(size_t)size] = '\0';
     }
 
     close(fd);

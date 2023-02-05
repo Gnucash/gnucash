@@ -1001,6 +1001,11 @@ by preventing negative stock balances.<br/>")
                    (lambda (foreign domestic date)
                     (find-price (gnc-pricedb-lookup-latest-any-currency pricedb foreign)
                                 domestic)))
+                  ((pricedb-before)
+                   (lambda (foreign domestic date)
+                    (find-price (gnc-pricedb-lookup-nearest-before-any-currency-t64
+		                 pricedb foreign (time64CanonicalDayTime date))
+                                domestic)))
                   ((pricedb-nearest)
                    (lambda (foreign domestic date)
                     (find-price (gnc-pricedb-lookup-nearest-in-time-any-currency-t64
