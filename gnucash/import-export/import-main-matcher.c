@@ -837,7 +837,7 @@ static void
 gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
                                                        GNCImportMainMatcher *info)
 {
-    ENTER("assign_transfer_account_to_selection_cb");
+    ENTER("");
 
     GtkTreeView *treeview = GTK_TREE_VIEW(info->view);
     GtkTreeModel *model = gtk_tree_view_get_model (treeview);
@@ -849,40 +849,31 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
 
     DEBUG("Rows in selection = %i",
           gtk_tree_selection_count_selected_rows (selection));
-    DEBUG("Entering loop over selection");
 
     GList *refs = NULL;
-    if (gtk_tree_selection_count_selected_rows (selection) > 0)
+    for (GList *l = selected_rows; l; l = l->next)
     {
-        for (GList *l = selected_rows; l != NULL; l = l->next)
-        {
-            gchar *path_str = gtk_tree_path_to_string (l->data);
-            GtkTreeRowReference *ref = gtk_tree_row_reference_new (model, l->data);
-            gchar *fullname;
-            DEBUG("passing first = %s", first ? "true" : "false");
-            DEBUG("passing is_selection = %s", is_selection ? "true" : "false");
-            DEBUG("passing path = %s", path_str);
-            g_free (path_str);
-            refs = g_list_prepend (refs, ref);
-            fullname = gnc_account_get_full_name (assigned_account);
-            DEBUG("passing account value = %s", fullname);
-            g_free (fullname);
-            gnc_gen_trans_assign_transfer_account (treeview,
-                                                   &first, is_selection, l->data,
-                                                   &assigned_account, info);
-            fullname = gnc_account_get_full_name (assigned_account);
-            DEBUG("returned value of account = %s", fullname);
-            DEBUG("returned value of first = %s", first ? "true" : "false");
-            g_free (fullname);
-            if (assigned_account == NULL)
-                break;
-
-        }
+        gchar *path_str = gtk_tree_path_to_string (l->data);
+        GtkTreeRowReference *ref = gtk_tree_row_reference_new (model, l->data);
+        DEBUG("passing first = %s", first ? "true" : "false");
+        DEBUG("passing is_selection = %s", is_selection ? "true" : "false");
+        DEBUG("passing path = %s", path_str);
+        g_free (path_str);
+        refs = g_list_prepend (refs, ref);
+        gnc_gen_trans_assign_transfer_account (treeview,
+                                                &first, is_selection, l->data,
+                                                &assigned_account, info);
+        gchar *fullname = gnc_account_get_full_name (assigned_account);
+        DEBUG("returned value of account = %s", fullname);
+        DEBUG("returned value of first = %s", first ? "true" : "false");
+        g_free (fullname);
+        if (!assigned_account)
+            break;
     }
     g_list_free_full (selected_rows, (GDestroyNotify)gtk_tree_path_free);
 
     // now reselect the transaction rows. This is very slow if there are lots of transactions.
-    for (GList *l = refs; l != NULL; l = l->next)
+    for (GList *l = refs; l; l = l->next)
     {
         GtkTreePath *path = gtk_tree_row_reference_get_path (l->data);
         gtk_tree_selection_select_path (selection, path);
@@ -1052,8 +1043,8 @@ static void
 gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
 {
 
-    g_return_if_fail (info != NULL);
-    ENTER("assign_transfer_account_to_selection_cb");
+    ENTER("");
+    g_return_if_fail (info);
 
     GtkTreeView *treeview = GTK_TREE_VIEW(info->view);
     GtkTreeModel *model = gtk_tree_view_get_model (treeview);
