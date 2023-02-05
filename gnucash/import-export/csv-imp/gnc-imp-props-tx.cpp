@@ -674,6 +674,7 @@ void GncPreSplit::create_split (std::shared_ptr<DraftTransaction> draft_trans)
         return;
     }
 
+    auto splits_created = 0;
     Account *account = nullptr;
     Account *taccount = nullptr;
     auto amount = GncNumeric();
@@ -687,6 +688,16 @@ void GncPreSplit::create_split (std::shared_ptr<DraftTransaction> draft_trans)
     if (m_amount_neg)
         amount -= *m_amount_neg;
 
+    boost::optional<GncNumeric> tamount;
+    if (m_tamount || m_tamount_neg)
+    {
+        tamount = GncNumeric();
+        if (m_tamount)
+            *tamount += *m_tamount;
+        if (m_tamount_neg)
+            *tamount -= *m_tamount_neg;
+    }
+
     /* Add a split with the cumulative amount value. */
     // FIXME The first split is always assumed to be in the transaction currency, but this assumption
     //       may not hold in case of stock transactions.
@@ -695,23 +706,16 @@ void GncPreSplit::create_split (std::shared_ptr<DraftTransaction> draft_trans)
     if (m_price)
         inv_price = m_price->inv();
     trans_add_split (draft_trans->trans, account, amount, amount, m_action, m_memo, m_rec_state, m_rec_date);
+    splits_created++;
 
     if (taccount)
     {
         /* If a taccount is set that forcibly means we're processing a single-line transaction
          * Determine the transfer amount. If the csv data had columns for it, use those, otherwise
-         * assume transfer amount is */
-        auto tamount = GncNumeric();
-        auto tvalue = -tamount;
-        if (m_tamount || m_tamount_neg)
-        {
-            if (m_tamount)
-                tamount += *m_tamount;
-            if (m_tamount_neg)
-                tamount -= *m_tamount_neg;
-            tvalue = -amount;
-        }
-        else
+         * try to calculate it. The easiest is the single-currency case: just use the negated
+         * amount. In case of multi-currency, attempt to get a price and work from there. */
+        auto tvalue = -amount;
+        if (!tamount)
         {
             auto trans_curr = xaccTransGetCurrency(draft_trans->trans);
             auto acct_comm = xaccAccountGetCommodity(taccount);
@@ -739,24 +743,31 @@ void GncPreSplit::create_split (std::shared_ptr<DraftTransaction> draft_trans)
                     tamount = -amount * rate;
                 }
                 else
-                {
-                    PWARN("No price found, not creating second split.");
-                    /* Set bogus value for tamount so we can skip creation further down */
-                    // FIXME should somehow pass the account to generic import matcher
-                    //       so it can have a shot a asking for an exchange rate and
-                    //       creating the split properly
-                    tamount = -tvalue;
-                }
+                    PWARN("No price found, defer creation of second split to generic import matcher.");
             }
         }
-        if (tamount != -tvalue)
-            trans_add_split (draft_trans->trans, taccount, tamount, tvalue, m_taction, m_tmemo, m_trec_state, m_trec_date);
+        if (tamount)
+        {
+            trans_add_split (draft_trans->trans, taccount, *tamount, tvalue, m_taction, m_tmemo, m_trec_state, m_trec_date);
+            splits_created++;
+        }
     }
-    else
+
+    if (splits_created == 1)
     {
+        /* If we get here, we're either
+         * - in multi-line mode
+         * - or single-line mode but didn't have enough details to create the
+         *   transfer split.
+         * For the latter we will pass what we know about the transfer split to
+         * allow the generic import matcher to ask the user for the final
+         * details before creating this split.
+         */
         draft_trans->m_price = m_price;
         draft_trans->m_taction = m_taction;
         draft_trans->m_tmemo = m_tmemo;
+        draft_trans->m_tamount = tamount;
+        draft_trans->m_taccount = m_taccount;
         draft_trans->m_trec_state = m_trec_state;
         draft_trans->m_trec_date = m_trec_date;
     }

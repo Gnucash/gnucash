@@ -51,6 +51,8 @@ typedef struct _lsplitinfo
     gnc_numeric price;
     const char *action;
     const char *memo;
+    gnc_numeric amount;
+    Account *account;
     char rec_state;
     time64 rec_date;
 } GNCImportLastSplitInfo;

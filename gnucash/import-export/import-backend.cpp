@@ -104,8 +104,8 @@ struct _transactioninfo
     /* When updating a matched transaction, append Description and Notes instead of replacing */
     gboolean append_text;
 
-    /* Extra data we can use to build the balancing split. It may passed on by the
-        * code that calls the generic importer */
+    /* Extra data we can use to build the balancing split. It may be passed on by the
+     * code that calls the generic importer */
     gnc_numeric lsplit_price;
     char *lsplit_action;
     char *lsplit_memo;
@@ -113,10 +113,12 @@ struct _transactioninfo
     time64 lsplit_rec_date;
 
     gnc_numeric lsplit_value;
-    /* Amount for the balancing split. This can only be calculated when
+    /* Amount for the balancing split. This may be passed by the import front-
+     * ends or calculated. The latter is only possible when
      * the destination account is known and may require an exchange rate
      * if that account is not in the same commodity as the transaction. */
     gnc_numeric lsplit_amount;
+    gboolean lsplit_amount_selected_manually;
 };
 
 /* Some simple getters and setters for the above data types. */
@@ -288,6 +290,12 @@ gnc_import_TransInfo_set_last_split_info (GNCImportTransInfo *info,
         info->lsplit_price = lsplit->price;
         info->lsplit_action = g_strdup(lsplit->action);
         info->lsplit_memo = g_strdup(lsplit->memo);
+        if (gnc_numeric_check (lsplit->amount) == 0)
+        {
+            info->lsplit_amount = lsplit->amount;
+            info->lsplit_amount_selected_manually = true;
+        }
+        info->dest_acc = lsplit->account;
         info->lsplit_rec_state = lsplit->rec_state;
         info->lsplit_rec_date = lsplit->rec_date;
     }
@@ -1089,7 +1097,9 @@ gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_ha
 static void trans_info_calculate_dest_amount (GNCImportTransInfo *info)
 {
     info->lsplit_value = gnc_numeric_neg (xaccTransGetImbalanceValue (info->trans));
-    info->lsplit_amount = {0, 1};
+    if (!info->lsplit_amount_selected_manually)
+        info->lsplit_amount = {0, 1};
+
     if (info->dest_acc)
     {
         auto tcurr = xaccTransGetCurrency(info->trans);
@@ -1100,6 +1110,11 @@ static void trans_info_calculate_dest_amount (GNCImportTransInfo *info)
 
         if (gnc_commodity_equiv(tcurr, dcurr))
             info->lsplit_amount = info->lsplit_value;
+        else if (info->lsplit_amount_selected_manually &&
+                 gnc_numeric_check(info->lsplit_amount) == 0)
+        {
+            /* Nothing to do, user has provided amount already */
+        }
         else if (gnc_numeric_check(info->lsplit_price) == 0)
         {
             /* We are in a multi currency situation and have a valid price */

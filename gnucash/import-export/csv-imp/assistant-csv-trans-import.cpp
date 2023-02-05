@@ -2101,6 +2101,8 @@ CsvImpTransAssist::assist_match_page_prepare ()
                 draft_trans->m_price ? static_cast<gnc_numeric>(*draft_trans->m_price) : gnc_numeric{0, 0},
                 draft_trans->m_taction ? draft_trans->m_taction->c_str() : nullptr,
                 draft_trans->m_tmemo ? draft_trans->m_tmemo->c_str() : nullptr,
+                draft_trans->m_tamount ? static_cast<gnc_numeric>(*draft_trans->m_tamount) : gnc_numeric{0, 0},
+                draft_trans->m_taccount ? *draft_trans->m_taccount : nullptr,
                 draft_trans->m_trec_state ? *draft_trans->m_trec_state : '\0',
                 draft_trans->m_trec_date ? static_cast<time64>(GncDateTime(*draft_trans->m_trec_date, DayPart::neutral)) : 0,
             };

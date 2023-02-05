@@ -130,6 +130,8 @@ struct DraftTransaction
     boost::optional<GncNumeric> m_price;
     boost::optional<std::string> m_taction;
     boost::optional<std::string> m_tmemo;
+    boost::optional<GncNumeric> m_tamount;
+    boost::optional<Account*> m_taccount;
     boost::optional<char> m_trec_state;
     boost::optional<GncDate> m_trec_date;
 
