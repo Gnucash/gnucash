@@ -1283,7 +1283,7 @@ gnc_option_db_book_options(GncOptionDB* odb)
     gnc_register_number_range_option<double>(odb, business_section,
                                      OPTION_NAME_DEFAULT_INVOICE_REPORT_TIMEOUT, "e2",
                                      N_("Length of time to change the used invoice report. A value of 0 means disabled."),
-                                     0.0, 0.0, 10.0, 1.0);
+                                     0.0, 0.0, 20.0, 1.0);
     gnc_register_taxtable_option(odb, business_section,
                                  N_("Default Customer TaxTable"), "f1",
                                  N_("The default tax table to apply to customers."),
