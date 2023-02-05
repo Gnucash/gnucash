@@ -446,6 +446,20 @@ gnc_report_combo_set_active_guid_name (GncReportCombo *grc,
     }
 }
 
+gboolean
+gnc_report_combo_is_warning_visible_for_active (GncReportCombo *grc)
+{
+    GncReportComboPrivate *priv;
+    gboolean missing = FALSE;
+
+    g_return_val_if_fail (grc != NULL, FALSE);
+    g_return_val_if_fail (GNC_IS_REPORT_COMBO(grc), FALSE);
+
+    priv = GET_PRIVATE(grc);
+
+    return gtk_widget_is_visible (GTK_WIDGET(priv->warning_image));
+}
+
 static void
 combo_changed_cb (GtkComboBox *widget, gpointer user_data)
 {

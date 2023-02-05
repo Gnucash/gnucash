@@ -104,7 +104,7 @@ gchar * gnc_report_combo_get_active_name (GncReportCombo *grc);
 
 /** Set the active report to the guid string
  *
- *  @param combo The GtkComboBox that presents the list.
+ *  @param grc The report combo widget.
  *
  *  @param guid_name The concatination of the guid/name of the Invoice Report
  */
@@ -119,5 +119,13 @@ void gnc_report_combo_set_active_guid_name (GncReportCombo *grc,
  *          report or NULL if none active
  */
 gchar * gnc_report_combo_get_active_guid_name (GncReportCombo *grc);
+
+/** Is the warning displayed for active entry.
+ *
+ *  @param grc The report combo widget.
+ *
+ *  @return TRUE is warning is displayed, else FALSE
+ */
+gboolean gnc_report_combo_is_warning_visible_for_active (GncReportCombo *grc);
 
 #endif /* __GNC_REPORT_COMBO_H__ */

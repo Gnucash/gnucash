@@ -834,8 +834,8 @@ combo_changed_cb (GtkComboBox *widget, gpointer user_data)
 
 /* This function will return the selected invoice report guid if
  * the countdown times out or a selection is made and OK pressed.
- * 
- * If cancel is pressed then it return a NULL 
+ *
+ * If cancel is pressed then it will return NULL
  */
 static char*
 use_default_report_template_or_change (GtkWindow *parent)
@@ -847,19 +847,33 @@ use_default_report_template_or_change (GtkWindow *parent)
     GtkWidget   *ok_button;
     GtkWidget   *report_combo_hbox;
     GtkWidget   *progress_bar;
+    GtkWidget   *label;
     gchar       *ret_guid = NULL;
     gchar       *rep_guid = NULL;
     gchar       *rep_name = NULL;
+    gboolean     warning_visible = FALSE;
     gint         result;
     gdouble      timeout;
     dialog_args *args;
 
     timeout = qof_book_get_default_invoice_report_timeout (book);
 
-    if (timeout == 0)
-        return gnc_get_default_invoice_print_report ();
-
     combo = gnc_default_invoice_report_combo ("gnc:custom-report-invoice-template-guids");
+
+    rep_name = qof_book_get_default_invoice_report_name (book);
+    rep_guid = gnc_get_default_invoice_print_report ();
+
+    gnc_report_combo_set_active (GNC_REPORT_COMBO(combo),
+                                 rep_guid,
+                                 rep_name);
+    g_free (rep_guid);
+    g_free (rep_name);
+
+    warning_visible = gnc_report_combo_is_warning_visible_for_active (GNC_REPORT_COMBO(combo));
+
+    // When timeout is 0, only return if warning not visible
+    if (timeout == 0 && !warning_visible)
+        return gnc_get_default_invoice_print_report ();
 
     builder = gtk_builder_new ();
     gnc_builder_add_from_file (builder, "dialog-invoice.glade", "invoice_print_dialog");
@@ -873,19 +887,11 @@ use_default_report_template_or_change (GtkWindow *parent)
     ok_button = GTK_WIDGET(gtk_builder_get_object (builder, "ok_button"));
     report_combo_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "report_combo_hbox"));
     progress_bar = GTK_WIDGET(gtk_builder_get_object (builder, "progress_bar"));
+    label = GTK_WIDGET(gtk_builder_get_object (builder, "label"));
 
     gtk_box_pack_start (GTK_BOX(report_combo_hbox), GTK_WIDGET(combo), TRUE, TRUE, 0);
 
     gtk_widget_grab_focus (ok_button);
-
-    rep_name = qof_book_get_default_invoice_report_name (book);
-    rep_guid = gnc_get_default_invoice_print_report ();
-
-    gnc_report_combo_set_active (GNC_REPORT_COMBO(combo),
-                                 rep_guid,
-                                 rep_name);
-    g_free (rep_guid);
-    g_free (rep_name);
 
     gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress_bar), 1);
 
@@ -907,7 +913,15 @@ use_default_report_template_or_change (GtkWindow *parent)
     g_signal_connect (G_OBJECT(combo), "notify::popup-shown",
                       G_CALLBACK (combo_popped_cb), args);
 
-    g_timeout_add (100, update_progress_bar, args);
+    // if warning visible, do not add args timeout, wait for user
+    if (warning_visible)
+    {
+        gtk_label_set_text (GTK_LABEL(label),
+                            N_("Choose a different report template or Printable Invoice will be used"));
+        gtk_widget_hide (GTK_WIDGET(progress_bar));
+    }
+    else
+        g_timeout_add (100, update_progress_bar, args);
 
     result = gtk_dialog_run (GTK_DIALOG(dialog));
 
