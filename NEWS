@@ -1,5 +1,77 @@
 Version history:
 ------- -------
+4.901 - 5 February 2023
+Between 4.900 and 4.901, the following bugfixes were accomplished:
+The following fixes will also appear in GnuCash 4.14:
+
+    Bug 797477 - Manual foreign transaction from APAR to another doesn't
+                 trigger price input
+    Bug 797725 - Untranslatable string "For Period Covering ~a to ~a"
+    Bug 798734 - Aging Reports don't handle mixed currency payments and
+                 invoices without Trading Accounts
+    Bug 798737 - Minor grammatical error - 'for' missing in 'You will be asked
+                 a conversion rate for each.'
+    Bug 798740 - Build fails with gcc 13
+    Bug 798747 - Crash in Investment Portfolio report.
+
+The following additional bug fixes are in unstable only:
+
+    Bug 753307 - Custom Report be selectable as default Report for Printing
+        Change the preference in Business->'Report for Printing' to be saved as
+        a book property and allow the selection of any Invoice Report to be
+        used as the default.
+    Bug 794028 - CSV import, default to matching full account name
+        If the account map doesn't yield a result, try to map the import
+        string against existing accounts' full names
+    Bug 796955 - Import CSV - Single-line two-currency transactions can't be
+                 imported
+        Use a provided price if the transfer account uses a different commodity
+        from the base account's; apply it as
+             transfer amount = base amount * price.
+        Add a transfer amount column option to avoid the rounding that might
+        arise from having an inexact price.
+    Bug 797756 - Currency format setting is ignored
+    Bug 798292 - csv Import Transactions Ignores Multi-Splits
+    Bug 798475 - GNCAccountSel could have shortcuts
+    Bug 798730 - Open report doesn't remember selected accounts over restart
+    Bug 798739 - Advanced Portfolio report fails
+
+The following fixes and improvements were not associated with bug reports:
+
+    Move the Balance Sheet P&L Report out of experimental into regular menu.
+    Rename the Deposit and Withdrawal column labels in the CSV import assistant
+        to Amount and Amount(Negated) for clarity when importing into something
+        other than a bank account.
+    Improve muti-currency invoice payment:
+        * Show proper amount in dialog when applying or editing an existing
+          transaction as payment.
+        * Be more careful not to waste the existing payment split
+        * If the user changed the payment amount while starting from an
+          existing transaction unreconcile the changed payment split
+        * Avoid needlessly changing transaction currency (only do so if the
+          user chose a new transfer account and the old currency is neither
+          the new transfer account's currency nor the post account's currency)
+          Payment dialog - always list all possible post accounts instead of
+          only those in the currency of the selected vendor or customer
+        * Refuse to continue when a transaction has splits in more than one
+          AP/AR account to avoid losing data.
+    Add widget names to import dialogs so they can be manipulated with css
+    Fix some memory leaks
+    Ensure original splits are freed in xaccTransRollbackEdit
+    Add ability to show placeholder and hidden accounts in the GNCAccountSel
+        widget to hide placeholder and hidden accounts. By default these
+        accounts are hidden, but with the use of a secondary icon a popup menu
+        is presented where the list can be configured to show them. Also when
+        the GNCAccountSel is set to a specific account with with
+        gnc_account_sel_set_account, the placeholder and hidden properties are
+        checked and appropriate changes made so the account will be visible.
+    Activate feature GNC_FEATURE_EQUITY_TYPE_OPENING_BALANCE
+    Wrap function decls in extern "C" in all headers so that they can be
+        included without wrapping the include statements.
+
+New and Updated Translations: French, Hebrew, Hungarian, Italian,
+Russian, Ukrainian
+
 4.900 - 8 January 2023
 New Features
 
