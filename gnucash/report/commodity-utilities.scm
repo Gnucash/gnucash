@@ -700,7 +700,8 @@
                (gnc:make-gnc-monetary
                 domestic
                 (if pair
-                    (* (gnc:gnc-monetary-amount foreign) (cadr pair))
+                    (gnc-numeric-mul (gnc:gnc-monetary-amount foreign) (cadr pair)
+                                     GNC-DENOM-AUTO GNC-RND-ROUND)
                     0)))))))
 
 ;; This is another ready-to-use function for calculation of exchange
@@ -780,7 +781,9 @@
                   (plist (assoc-ref pricealist foreign-comm))
                   (price (and plist
                               (gnc:pricelist-price-find-nearest plist date))))
-             (gnc:make-gnc-monetary domestic (* foreign-amt (or price 0)))))))
+             (gnc:make-gnc-monetary domestic
+                              (gnc-numeric-mul foreign-amt (or price 0)
+                              GNC-DENOM-AUTO GNC-RND-ROUND))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
