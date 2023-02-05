@@ -34,6 +34,10 @@
 
 (debug-enable 'backtrace)
 
+;; initialise values
+(define optname-report-title (N_ "Report Title"))
+(define opthelp-report-title (N_ "Title for this report."))
+
 ;; This function will generate a set of options that GnuCash
 ;; will use to display a dialog where the user can select
 ;; values for your report's parameters.
@@ -163,6 +167,12 @@ Your reports probably shouldn't have an \
 option like this.")
       #f)
 
+    ;; This is a Report Title option using constants defined at the
+    ;; beginning of the file.
+    (gnc-register-string-option optiondb
+      (N_ "Testing") optname-report-title
+      "c" opthelp-report-title (N_ "Report Title Default"))
+
     ;; Setting a default section is optional but set in most reports.
 	;; If not set, the default section will be the first section.
     (gnc:options-set-default-section options "Tab B")      
@@ -200,6 +210,7 @@ option like this.")
         (list-val     (op-value "Tab A"   "A list option"))
         (radio-val    (op-value "Tab A"   "A Radio Button option"))
         (crash-val    (op-value "Testing"       "Crash the report"))
+        (report-title (op-value "Testing" optname-report-title))
         
         ;; document will be the HTML document that we return.
         (document (gnc:make-html-document)))
@@ -263,7 +274,7 @@ option like this.")
       ;; translation of the given string is available for the
       ;; current locale, then the translation is returned,
       ;; otherwise the original string is returned.
-      (gnc:html-document-set-title! document (G_ "Report Title"))
+      (gnc:html-document-set-title! document report-title)
 
       ;; we make a "text object" to add a bunch of text to.
       ;; the function gnc:make-html-text can take any number of 
