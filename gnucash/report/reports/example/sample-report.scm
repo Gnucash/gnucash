@@ -23,6 +23,9 @@
 ;; It illustrates the basic techniques used to create
 ;; new reports for GnuCash.
 
+;; ------------------------------------------------------------------
+;; Top-level definitions
+;; ------------------------------------------------------------------
 (define-module (gnucash reports example sample-report))
 
 (use-modules (gnucash engine))
@@ -38,9 +41,11 @@
 (define optname-report-title (N_ "Report Title"))
 (define opthelp-report-title (N_ "Title for this report."))
 
+;; ------------------------------------------------------------------
 ;; This function will generate a set of options that GnuCash
 ;; will use to display a dialog where the user can select
 ;; values for your report's parameters.
+;; ------------------------------------------------------------------
 (define (options-generator)
   (let* ((options (gnc:new-options))
          (optiondb (options #t))) ;; Hack to get the optiondb from options
@@ -180,12 +185,14 @@ option like this.")
  ;; We still need to return the function wrapper instead of the GncOptionDBPtr for all of the options functions in the reports system.
     options))
 
+;; ------------------------------------------------------------------
 ;; This is the rendering function. It accepts a database of options
 ;; and generates an object of type <html-document>.  See the file
 ;; report-html.txt for documentation; the file report-html.scm
 ;; includes all the relevant Scheme code. The option database passed
 ;; to the function is one created by the options-generator function
 ;; defined above.
+;; ------------------------------------------------------------------
 (define (sample-report-renderer report-obj)
   ;; Helper function for looking up option values.
   (define (op-value section name)
@@ -435,7 +442,9 @@ new, totally cool report, consult the mailing list ~a.")
       
       document)))
 
+;; ------------------------------------------------------------------
 ;; Here we define the actual report with gnc:define-report
+;; ------------------------------------------------------------------
 (gnc:define-report
  
  ;; The version of this report.
