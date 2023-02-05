@@ -40,6 +40,8 @@
 extern "C" {
 #endif
 
+#include <stdbool.h>
+
 typedef struct _main_matcher_info GNCImportMainMatcher;
 
 typedef void (*GNCTransactionProcessedCB) (GNCImportTransInfo *trans_info,
@@ -72,9 +74,9 @@ typedef void (*GNCTransactionProcessedCB) (GNCImportTransInfo *trans_info,
 */
 GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
                                               const gchar* heading,
-                                              gboolean all_from_same_account,
+                                              bool all_from_same_account,
                                               gint match_date_hardlimit,
-                                              gboolean show_all);
+                                              bool show_all);
 
 
 
@@ -109,7 +111,7 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
 GNCImportMainMatcher * gnc_gen_trans_assist_new (GtkWidget *parent,
                                                  GtkWidget *assistant_page,
                                                  const gchar* heading,
-                                                 gboolean all_from_same_account,
+                                                 bool all_from_same_account,
                                                  gint match_date_hardlimit);
 
 
@@ -203,7 +205,7 @@ void gnc_gen_trans_list_add_trans_with_ref_id (GNCImportMainMatcher *gui,
  * @param info A pointer to the GNCImportMainMatcher structure.
  * @return The boolean return value of the dialog run.
 */
-gboolean gnc_gen_trans_list_run (GNCImportMainMatcher *info);
+bool gnc_gen_trans_list_run (GNCImportMainMatcher *info);
 
 
 /** Returns the widget of this dialog.
@@ -223,7 +225,7 @@ gnc_gen_trans_list_append_text_widget (GNCImportMainMatcher *info);
  * @param info A pointer to the GNCImportMainMatcher structure.
  * @return A boolean indicating whether the transaction list is empty.
  */
-gboolean gnc_gen_trans_list_empty (GNCImportMainMatcher *info);
+bool gnc_gen_trans_list_empty (GNCImportMainMatcher *info);
 
 /** Shows widgets.
  * @param info A pointer to the GNCImportMainMatcher structure.
@@ -232,12 +234,12 @@ void gnc_gen_trans_list_show_all (GNCImportMainMatcher *info);
 
 /** Show and set the reconcile after close check button.
  * @param info A pointer to the GNCImportMainMatcher structure.
- * @param reconcile_after_close A gboolean that shows or hides the button.
- * @param active A gboolean to set or clear the check button.
+ * @param reconcile_after_close A bool that shows or hides the button.
+ * @param active A bool to set or clear the check button.
  */
 void gnc_gen_trans_list_show_reconcile_after_close_button (GNCImportMainMatcher *info,
-                                                           gboolean reconcile_after_close,
-                                                           gboolean active);
+                                                           bool reconcile_after_close,
+                                                           bool active);
 /** Returns the reconcile after close check button.
  * @param info A pointer to the GNCImportMainMatcher structure.
  * @return The check button.
