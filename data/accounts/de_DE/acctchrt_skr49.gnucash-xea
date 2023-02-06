@@ -14290,7 +14290,7 @@ Den Bereich habe ich mit „9999“ bezeichet, damit er unterhalb der regulären
 <gnc:account version="2.0.0">
   <act:name>9000 Saldenvorträge Sachkonten</act:name>
   <act:id type="new">597b9a70754011ac40c2a5a55eed5292</act:id>
-  <act:type>ASSET</act:type>
+  <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
@@ -14315,7 +14315,7 @@ Den Bereich habe ich mit „9999“ bezeichet, damit er unterhalb der regulären
 <gnc:account version="2.0.0">
   <act:name>9001-9007 Saldenvorträge, Sachkonten</act:name>
   <act:id type="new">c7d8aaca5031405857793ef2c808290b</act:id>
-  <act:type>ASSET</act:type>
+  <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
@@ -14334,7 +14334,7 @@ Den Bereich habe ich mit „9999“ bezeichet, damit er unterhalb der regulären
 <gnc:account version="2.0.0">
   <act:name>9008 Saldenvorträge Debitoren</act:name>
   <act:id type="new">555217da6afbf698e623fc357eb86107</act:id>
-  <act:type>ASSET</act:type>
+  <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
@@ -14353,7 +14353,7 @@ Den Bereich habe ich mit „9999“ bezeichet, damit er unterhalb der regulären
 <gnc:account version="2.0.0">
   <act:name>9009 Saldenvorträge Kreditoren</act:name>
   <act:id type="new">4c6390004e3d8e69309135cee0745b23</act:id>
-  <act:type>ASSET</act:type>
+  <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
