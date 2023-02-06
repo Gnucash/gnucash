@@ -162,16 +162,6 @@
             (vector 'bad (N_ "The Bad"))
             (vector 'ugly (N_ "The Ugly"))))
 
-    ;; This option is for testing. When true, the report generates
-    ;; an exception.
-    (gnc-register-simple-boolean-option optiondb
-      (N_ "Testing") (N_ "Crash the report")
-      "a"
-      (N_ "This is for testing. \
-Your reports probably shouldn't have an \
-option like this.")
-      #f)
-
     ;; This is a Report Title option using constants defined at the
     ;; beginning of the file.
     (gnc-register-string-option optiondb
@@ -216,14 +206,10 @@ option like this.")
         (accounts     (op-value "Tab A"   "An account list option"))
         (list-val     (op-value "Tab A"   "A list option"))
         (radio-val    (op-value "Tab A"   "A Radio Button option"))
-        (crash-val    (op-value "Testing"       "Crash the report"))
         (report-title (op-value "Testing" optname-report-title))
         
         ;; document will be the HTML document that we return.
         (document (gnc:make-html-document)))
-
-    ;; Crash if asked to.
-    (if crash-val (string-length #f)) ;; string-length needs a string
 
     ;; these are samples of different date options. for a simple
     ;; date with day, month, and year but no time you should use

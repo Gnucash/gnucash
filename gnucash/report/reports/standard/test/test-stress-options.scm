@@ -248,9 +248,6 @@
                      "Receipt"
                      "Australian Tax Invoice"
                      "Balance Sheet (eguile)"
-
-                     ;; skip Sample Report which is designed to crash...
-                     "Sample Report"
                      ))
            (format #t "\nSkipping ~a ~a...\n" report-name prefix)
            (begin
