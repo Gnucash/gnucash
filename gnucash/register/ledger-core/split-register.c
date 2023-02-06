@@ -1009,7 +1009,6 @@ gnc_split_register_paste_current (SplitRegister* reg)
                                 "Are you sure you want to do that?");
         Account * copied_leader;
         Account * default_account;
-        const GncGUID *new_guid;
         int trans_split_index;
         int split_index;
         int num_splits;

@@ -288,8 +288,6 @@ TEST_F(ImapBayesTest, AddAccountBayes)
     auto acct1_guid = guid_to_string (xaccAccountGetGUID(t_expense_account1));
     auto acct2_guid = guid_to_string (xaccAccountGetGUID(t_expense_account2));
     auto value = root->get_slot({std::string{IMAP_FRAME_BAYES} + "/foo/bar"});
-    auto check_account = [this](KvpValue* v) {
-        return (v->get<const char*>(), gnc_account_get_book(this->t_acc)); };
     value = root->get_slot({std::string{IMAP_FRAME_BAYES} + "/" + foo + "/" + acct1_guid});
     EXPECT_EQ(1, value->get<int64_t>());
     value = root->get_slot({std::string{IMAP_FRAME_BAYES} + "/" + bar + "/" + acct1_guid});
@@ -316,7 +314,6 @@ TEST_F(ImapBayesTest, AddAccountBayes)
 TEST_F(ImapBayesTest, ConvertBayesData)
 {
     auto root = qof_instance_get_slots(QOF_INSTANCE(t_bank_account));
-    auto book = qof_instance_get_slots(QOF_INSTANCE(gnc_account_get_book(this->t_acc)));
     auto acct1_guid = guid_to_string (xaccAccountGetGUID(t_expense_account1)); //Food
     auto acct2_guid = guid_to_string (xaccAccountGetGUID(t_expense_account2)); //Drink
     auto acct3_guid = guid_to_string (xaccAccountGetGUID(t_asset_account2)); //Asset-Bank

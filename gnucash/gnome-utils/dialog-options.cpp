@@ -323,7 +323,6 @@ GncOptionsDialog::build_contents(GncOptionDB  *odb, bool show_dialog)
 
     m_option_db = odb;
 
-    auto num_sections = odb->num_sections();
     auto default_section = odb->get_default_section();
 
     PINFO("Default Section name is %s",

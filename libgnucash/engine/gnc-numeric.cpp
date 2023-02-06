@@ -656,8 +656,6 @@ gnc_numeric_positive_p(gnc_numeric a)
 int
 gnc_numeric_compare(gnc_numeric a, gnc_numeric b)
 {
-    gint64 aa, bb;
-
     if (gnc_numeric_check(a) || gnc_numeric_check(b))
     {
         return 0;
@@ -803,7 +801,6 @@ gnc_numeric
 gnc_numeric_sub(gnc_numeric a, gnc_numeric b,
                 gint64 denom, gint how)
 {
-    gnc_numeric nb;
     if (gnc_numeric_check(a) || gnc_numeric_check(b))
     {
         return gnc_numeric_error(GNC_ERROR_ARG);

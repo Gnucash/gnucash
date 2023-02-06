@@ -311,7 +311,6 @@ TEST_F(GncQuotesTest, no_currency)
     StrVec err_vec;
     auto commtable{gnc_commodity_table_get_table(m_book)};
     auto hpe{gnc_commodity_table_lookup(commtable, "NYSE", "HPE")};
-    auto usd{gnc_commodity_table_lookup(commtable, "ISO4217", "USD")};
     GncQuotesImpl quotes(m_book, std::make_unique<GncMockQuoteSource>(std::move(quote_vec), std::move(err_vec)));
     quotes.fetch(hpe);
     auto failures{quotes.failures()};
@@ -331,7 +330,6 @@ TEST_F(GncQuotesTest, bad_currency)
     StrVec err_vec;
     auto commtable{gnc_commodity_table_get_table(m_book)};
     auto hpe{gnc_commodity_table_lookup(commtable, "NYSE", "HPE")};
-    auto usd{gnc_commodity_table_lookup(commtable, "ISO4217", "USD")};
     GncQuotesImpl quotes(m_book, std::make_unique<GncMockQuoteSource>(std::move(quote_vec), std::move(err_vec)));
     quotes.fetch(hpe);
     auto failures{quotes.failures()};

@@ -440,7 +440,6 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
     GtkListStore *store;
     GtkTreeSelection *selection;
     GList *list = NULL, *node;
-    GNCLot *tx_lot = NULL;
 
     g_return_if_fail (pw->docs_list_tree_view && GTK_IS_TREE_VIEW(pw->docs_list_tree_view));
 

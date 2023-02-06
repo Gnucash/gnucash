@@ -137,10 +137,8 @@ gnc_ui_new_user_window_present (GtkWindow *window)
 static void
 gnc_ui_new_user_dialog_create (GNCNewUserDialog *new_user)
 {
-    GtkWidget  *window;
     GtkBuilder *builder;
     GtkWidget  *button;
-    gint result;
 
     ENTER(" ");
     builder = gtk_builder_new();

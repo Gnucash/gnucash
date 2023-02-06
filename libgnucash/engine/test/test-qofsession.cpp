@@ -63,7 +63,7 @@ void QofSessionMockBackend::load (QofBook *book, QofBackendLoadType)
     if (load_error)
         set_error(ERR_BACKEND_NO_BACKEND);
     else
-        auto root = gnc_account_create_root (book);
+        gnc_account_create_root (book);
     data_loaded = true;
 }
 

@@ -43,9 +43,6 @@
 #include <gnc-locale-utils.hpp>
 #include "gnc-timezone.hpp"
 #include "gnc-datetime.hpp"
-#include "qoflog.h"
-
-static const char* log_module = "gnc.engine";
 
 #define N_(string) string //So that xgettext will find it
 

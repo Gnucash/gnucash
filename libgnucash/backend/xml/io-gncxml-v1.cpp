@@ -761,8 +761,6 @@ kvp_frame_slot_end_handler (gpointer data_for_children,
                             gpointer* result, const gchar* tag)
 {
     KvpFrame* f = (KvpFrame*) parent_data;
-    GSList* lp;
-    gboolean first = TRUE;
     gchar* key = NULL;
     KvpValue* value = NULL;
     gboolean delete_value = FALSE;

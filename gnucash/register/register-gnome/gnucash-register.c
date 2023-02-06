@@ -552,7 +552,6 @@ gnucash_register_create_widget (Table *table)
     GtkWidget *widget;
     GtkWidget *sheet;
     GtkWidget *scrollbar;
-    GtkWidget *box;
 
     reg = g_object_new (GNUCASH_TYPE_REGISTER, NULL);
     widget = GTK_WIDGET(reg);

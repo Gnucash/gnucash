@@ -129,7 +129,6 @@ gnc_customer_get_property (GObject         *object,
                            GParamSpec      *pspec)
 {
     GncCustomer *cust;
-    gchar *key;
     g_return_if_fail(GNC_IS_CUSTOMER(object));
 
     cust = GNC_CUSTOMER(object);
@@ -160,7 +159,6 @@ gnc_customer_set_property (GObject         *object,
                            GParamSpec      *pspec)
 {
     GncCustomer *cust;
-    gchar *key;
 
     g_return_if_fail(GNC_IS_CUSTOMER(object));
 

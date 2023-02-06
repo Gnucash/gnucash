@@ -543,7 +543,6 @@ void GncPreSplit::add (GncTransPropType prop_type, const std::string& value)
         // Drop any existing error for the prop_type we're about to add to
         m_errors.erase(prop_type);
 
-        Account *acct = nullptr;
         auto num_val = GncNumeric();
         switch (prop_type)
         {

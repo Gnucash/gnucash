@@ -69,8 +69,6 @@
 #include "test-engine-strings.h"
 #include <qofinstance-p.h>
 
-static gboolean glist_strings_only = FALSE;
-
 static GHashTable *exclude_kvp_types = NULL;
 static gint kvp_max_depth = 5;
 static gint kvp_frame_max_elements = 10;
@@ -151,8 +149,6 @@ kvp_type_excluded (KvpValue::Type kvp_type)
 
     return FALSE;
 }
-
-static gboolean zero_nsec = FALSE;
 
 /* ========================================================== */
 
@@ -1702,11 +1698,9 @@ get_random_query(void)
     while (num_terms-- > 0)
     {
         gint pr_type;
-        KvpValue *value;
         time64 start;
         time64 end;
         GList *guids;
-        GSList *path;
         char *string;
         GncGUID *guid;
 

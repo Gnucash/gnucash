@@ -2714,7 +2714,6 @@ gnc_ui_qif_import_commodity_notebook_update_combos (QIFImportWindow * wind, gboo
     GList               *pageptr;
     GtkWidget           *notebook_page;
     QIFCommNotebookPage *comm_nb_page;
-    gboolean             pages_complete = TRUE;
 
     for (pageptr = wind->commodity_notebook_pages; pageptr; pageptr = pageptr->next)
     {

@@ -251,7 +251,6 @@ listen_for_account_events (QofInstance* entity, QofEventId event_type,
     find_data data = { 0 };
     GtkTreePath* path;
     GList* tmp;
-    gboolean valid;
 
     if (0 == (event_type & (QOF_EVENT_MODIFY | QOF_EVENT_ADD | QOF_EVENT_REMOVE)))
         return;

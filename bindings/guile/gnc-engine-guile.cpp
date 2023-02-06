@@ -810,7 +810,6 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
         {
             QofQueryCompare how;
             QofNumericMatch amt_sgn;
-            double amount;
             gnc_numeric val;
 
             /* how */
@@ -1882,7 +1881,6 @@ scm_hook_cb (gpointer data, GncScmDangler *scm)
 void
 gnc_hook_add_scm_dangler (const gchar *name, SCM proc)
 {
-    GHook *hook;
     GncScmDangler *scm;
     int num_args;
 

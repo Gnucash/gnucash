@@ -31,8 +31,6 @@
 #include "qof.h"
 #include "gnc-autoclear.h"
 
-static QofLogModule log_module = GNC_MOD_GUI;
-
 /* the following functions are used in window-autoclear: */
 
 #define MAXIMUM_SACK_SIZE 1000000

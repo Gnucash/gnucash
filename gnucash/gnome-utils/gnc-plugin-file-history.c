@@ -414,7 +414,6 @@ gnc_history_update_action (GncMainWindow *window,
                            const gchar *filename)
 {
     GncMenuModelSearch *gsm = g_new0 (GncMenuModelSearch, 1);
-    GtkWidget *menu_item = NULL;
     gchar *action_name;
     gint limit;
     gboolean add_item = FALSE;

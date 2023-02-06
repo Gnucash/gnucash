@@ -469,7 +469,6 @@ gnc_main_window_cmd_actions_scheduled_transaction_editor (GSimpleAction *simple,
                                                           GVariant      *parameter,
                                                           gpointer       user_data)
 {
-    GncMainWindowActionData *data = user_data;
     GncPluginPage *page = gnc_plugin_page_sx_list_new ();
     gnc_main_window_open_page (NULL, page);
 }
@@ -537,7 +536,6 @@ gnc_main_window_cmd_actions_mortgage_loan (GSimpleAction *simple,
                                            GVariant      *parameter,
                                            gpointer       user_data)
 {
-    GncMainWindowActionData *data = user_data;
     gnc_ui_sx_loan_assistant_create ();
 }
 #ifdef CLOSE_BOOKS_ACTUALLY_WORKS

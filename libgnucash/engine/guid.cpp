@@ -233,7 +233,6 @@ guid_hash_to_guint (gconstpointer ptr)
     gnc::GUID const & temp {guid};
 
     guint hash {0};
-    unsigned retspot {0};
     std::for_each (temp.begin (), temp.end (), [&hash] (unsigned char a) {
         hash <<=4;
         hash |= a;
@@ -361,7 +360,7 @@ GUID::is_valid_guid (std::string const & str)
     try
     {
         static boost::uuids::string_generator strgen;
-        auto a = strgen (str);
+        strgen (str);
         return true;
     }
     catch (...)

@@ -111,7 +111,6 @@ gnc_ui_account_get_tax_info_string (const Account *account)
 
         if (get_form == SCM_UNDEFINED)
         {
-            const gchar *tax_module;
             /* load the tax info */
             gnc_locale_tax_init ();
 

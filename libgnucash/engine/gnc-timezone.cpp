@@ -356,8 +356,8 @@ namespace IANAParser
 	std::ifstream ifs;
         auto tzname = name;
         if (tzname.empty())
-            if (auto tzenv = getenv("TZ"))
-                tzname = std::string(std::getenv("TZ"));
+            if (auto tzenv = std::getenv("TZ"))
+                tzname = std::string(tzenv);
         //std::cout << "Testing tzname " << tzname << "\n";
         if (!tzname.empty())
         {

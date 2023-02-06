@@ -196,9 +196,6 @@ test_instance_new_destroy( void )
     /* test var */
     Time64 *time_priv;
     const char *msg1 = "qof_instance_get_collection: assertion 'QOF_IS_INSTANCE(ptr)' failed";
-    const char *msg2 = "qof_instance_get_editlevel: assertion 'QOF_IS_INSTANCE(ptr)' failed";
-    const char *msg3 = "qof_instance_get_destroying: assertion 'QOF_IS_INSTANCE(ptr)' failed";
-    const char *msg4 = "qof_instance_get_dirty_flag: assertion 'QOF_IS_INSTANCE(ptr)' failed";
     const char *log_domain = "qof";
     auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     auto check = test_error_struct_new(log_domain, loglevel, msg1);

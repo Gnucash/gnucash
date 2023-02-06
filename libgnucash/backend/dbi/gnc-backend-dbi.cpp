@@ -205,7 +205,6 @@ GncDbiBackend<Type>::set_standard_connection_options (dbi_conn conn,
                                                 const UriStrings& uri)
 
 {
-    gint result;
     PairVec options;
     options.push_back(std::make_pair("host", uri.m_host));
     options.push_back(std::make_pair("dbname", uri.m_dbname));
@@ -220,7 +219,7 @@ GncDbiBackend<Type>::set_standard_connection_options (dbi_conn conn,
         {
             const char *msg = nullptr;
             auto err = dbi_conn_error(conn, &msg);
-            PERR("Error setting port option to %d: %s", uri.m_portnum, msg);
+            PERR("Error (%d) setting port option to %d: %s", err, uri.m_portnum, msg);
             throw std::runtime_error(msg);
         }
     }
@@ -638,7 +637,6 @@ template <DbType Type> void
 GncDbiBackend<Type>::session_begin (QofSession* session, const char* new_uri,
                                     SessionOpenMode mode)
 {
-    GncDbiTestResult dbi_test_result = GNC_DBI_PASS;
     PairVec options;
 
     g_return_if_fail (session != nullptr);

@@ -697,7 +697,6 @@ div_single_leg (uint64_t* u, size_t m, uint64_t v,
                 GncInt128& q, GncInt128& r) noexcept
 {
     uint64_t qv[sublegs] {};
-    uint64_t carry {};
     bool negative {q.isNeg()};
     bool rnegative {r.isNeg()};
     for (int i = m - 1; i >= 0; --i)

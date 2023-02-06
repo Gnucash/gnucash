@@ -286,7 +286,6 @@ void mark_trans (Transaction *trans)// Local: 3:0:0
 static void
 test_mark_trans (Fixture *fixture, gconstpointer pData)
 {
-    gboolean dirty_split = FALSE;
     GList *splits = NULL;
 
     for (splits = (fixture->txn)->splits; splits; splits = splits->next)
@@ -357,7 +356,7 @@ test_gnc_transaction_dispose ()
     auto split = static_cast<Split*>(g_object_new (GNC_TYPE_SPLIT, "book", book, NULL));
     auto s_ref = split;
     gnc_commodity *curr = gnc_commodity_new (book, "Gnu Rand", "CURRENCY",
-                          "GNR", "", 240), *t_curr = NULL;
+                          "GNR", "", 240);
     gnc_commodity *c_ref = curr;
     g_object_add_weak_pointer (G_OBJECT (split), (gpointer*) &s_ref);
     g_object_add_weak_pointer (G_OBJECT (curr), (gpointer*) &c_ref);
@@ -464,7 +463,6 @@ test_xaccMallocTransaction (Fixture *fixture, gconstpointer pData)
 #endif
     auto msg = _func ": assertion 'book' failed";
 #undef _func
-    auto logdomain = "gnc.engine";
     auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     auto check = test_error_struct_new ("gnc.engine", loglevel, msg);
     fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check,
@@ -597,7 +595,6 @@ test_xaccTransClone (Fixture *fixture, gconstpointer pData)
     Transaction *newtxn = NULL, *oldtxn = fixture->txn;
     QofBook *old_book = qof_instance_get_book (QOF_INSTANCE (oldtxn));
     GList *newnode, *oldnode;
-    int foo, bar;
 
     oldtxn->date_posted = posted;
     oldtxn->date_entered = entered;
@@ -658,8 +655,6 @@ test_xaccTransCopyFromClipBoard (Fixture *fixture, gconstpointer pData)
     Account *acc1 = xaccMallocAccount (book);
     Transaction *to_txn = xaccMallocTransaction (book);
     time64 now = gnc_time (nullptr);
-    time64 never = 0;
-    auto to_frame = to_txn->inst.kvp_data;
 
     xaccAccountSetCommodity (acc1, fixture->comm);
     xaccTransCopyFromClipBoard (txn, to_txn, fixture->acc1, acc1, FALSE);
@@ -752,7 +747,6 @@ static void
 test_xaccTransEqual (Fixture *fixture, gconstpointer pData)
 {
 
-    QofBook *book = qof_instance_get_book (QOF_INSTANCE (fixture->txn));
     QofBook *book2 = qof_book_new ();
     Transaction *txn0 = fixture->txn;
     Transaction *clone = xaccTransClone (txn0);
@@ -1020,7 +1014,6 @@ test_xaccTransGetImbalance_trading (Fixture *fixture,
     auto split2 = xaccMallocSplit (book);
     Account *acc1 = xaccMallocAccount (book);
     Account *acc2 = xaccMallocAccount (book);
-    gnc_numeric value;
     MonetaryList *mlist;
     qof_book_begin_edit (book);
     qof_instance_set (QOF_INSTANCE (book),
@@ -1254,7 +1247,6 @@ test_xaccTransGetAccountBalance (Fixture *fixture, gconstpointer pData)
 #undef _func
     auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     auto check = test_error_struct_new ("gnc.engine", loglevel, msg1);
-    auto split1 = xaccTransFindSplitByAccount(fixture->txn, fixture->acc1);
     gnc_numeric rate;
 
     fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check,
@@ -1416,7 +1408,6 @@ test_do_destroy (GainsFixture *fixture, gconstpointer pData)
 {
     Fixture *base = &(fixture->base);
     auto base_split =  static_cast<Split*>(g_list_nth_data (base->txn->splits, 1));
-    QofBook *book = qof_instance_get_book (base->txn);
     TestSignal sig = test_signal_new (QOF_INSTANCE (base->txn),
                                       QOF_EVENT_DESTROY, NULL);
     g_object_add_weak_pointer (G_OBJECT (base->txn->splits->data),

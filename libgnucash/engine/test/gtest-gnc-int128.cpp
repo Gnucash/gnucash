@@ -24,8 +24,6 @@
 #include <gtest/gtest.h>
 #include "../gnc-int128.hpp"
 
-static constexpr uint64_t UPPER_MAX{2305843009213693951};
-
 TEST(GncInt128_constructors, test_default_constructor)
 {
     GncInt128 value {};
@@ -194,33 +192,33 @@ TEST(GncInt128_functions, test_int_functions)
         });
 
     GncInt128 value2 (UINT64_C(0), uarg);
-    EXPECT_THROW (auto v = static_cast<int64_t>(value2), std::overflow_error);
+    EXPECT_THROW (auto v GTEST_ATTRIBUTE_UNUSED_ = static_cast<int64_t>(value2), std::overflow_error);
     EXPECT_EQ (uarg, static_cast<uint64_t>(value2));
 
     GncInt128 value3 (UINT64_C(0), uarg, GncInt128::neg);
-    EXPECT_THROW (auto v = static_cast<int64_t>(value3), std::underflow_error);
-    EXPECT_THROW (auto v = static_cast<uint64_t>(value3), std::underflow_error);
+    EXPECT_THROW (auto v GTEST_ATTRIBUTE_UNUSED_ = static_cast<int64_t>(value3), std::underflow_error);
+    EXPECT_THROW (auto v GTEST_ATTRIBUTE_UNUSED_ = static_cast<uint64_t>(value3), std::underflow_error);
 
     GncInt128 value4 (UINT64_C(0), uarg, GncInt128::overflow);
-    EXPECT_THROW (auto v = static_cast<int64_t>(value4), std::overflow_error);
-    EXPECT_THROW (auto v = static_cast<uint64_t>(value4), std::overflow_error);
+    EXPECT_THROW (auto v GTEST_ATTRIBUTE_UNUSED_ = static_cast<int64_t>(value4), std::overflow_error);
+    EXPECT_THROW (auto v GTEST_ATTRIBUTE_UNUSED_ = static_cast<uint64_t>(value4), std::overflow_error);
 
     GncInt128 value5 (UINT64_C(0), uarg, GncInt128::NaN);
-    EXPECT_THROW (auto v = static_cast<int64_t>(value5), std::overflow_error);
-    EXPECT_THROW (auto v = static_cast<uint64_t>(value5), std::overflow_error);
+    EXPECT_THROW (auto v GTEST_ATTRIBUTE_UNUSED_ = static_cast<int64_t>(value5), std::overflow_error);
+    EXPECT_THROW (auto v GTEST_ATTRIBUTE_UNUSED_ = static_cast<uint64_t>(value5), std::overflow_error);
 
     GncInt128 value6 (INT64_C(1), arg);
-    EXPECT_THROW (auto v = static_cast<int64_t>(value6), std::overflow_error);
+    EXPECT_THROW (auto v GTEST_ATTRIBUTE_UNUSED_ = static_cast<int64_t>(value6), std::overflow_error);
     EXPECT_EQ (arg + (UINT64_C(0x1) << 63), static_cast<uint64_t>(value6));
 
     GncInt128 value7 (INT64_C(-1), arg);
     EXPECT_EQ (-static_cast<int64_t>((UINT64_C(0x1) << 63) - arg),
                static_cast<int64_t>(value7));
-    EXPECT_THROW (auto v = static_cast<uint64_t>(value7), std::underflow_error);
+    EXPECT_THROW (auto v GTEST_ATTRIBUTE_UNUSED_ = static_cast<uint64_t>(value7), std::underflow_error);
 
     GncInt128 value8 (INT64_C(0), narg);
     EXPECT_EQ (narg, static_cast<int64_t>(value8));
-    EXPECT_THROW (auto v = static_cast<uint64_t>(value8), std::underflow_error);
+    EXPECT_THROW (auto v GTEST_ATTRIBUTE_UNUSED_ = static_cast<uint64_t>(value8), std::underflow_error);
 
     GncInt128 value9 (INT64_C(1), narg);
     EXPECT_EQ (static_cast<int64_t>((UINT64_C(0x1) << 63) + narg),
@@ -228,8 +226,8 @@ TEST(GncInt128_functions, test_int_functions)
     EXPECT_EQ ((UINT64_C(0x1) << 63) + narg, static_cast<uint64_t>(value9));
 
     GncInt128 value10 (INT64_C(-2), arg);
-    EXPECT_THROW (auto v = static_cast<int64_t>(value10), std::underflow_error);
-    EXPECT_THROW (auto v = static_cast<uint64_t>(value10),
+    EXPECT_THROW (auto v GTEST_ATTRIBUTE_UNUSED_ = static_cast<int64_t>(value10), std::underflow_error);
+    EXPECT_THROW (auto v GTEST_ATTRIBUTE_UNUSED_ = static_cast<uint64_t>(value10),
                   std::underflow_error);
 
 }
@@ -563,7 +561,6 @@ TEST(GncInt128_functions, GCD)
     int64_t barg {INT64_C(4878849681579065407)};
     int64_t marg {INT64_C(4344522355275710400)};
     int64_t sarg {INT64_C(267163663151677502)};
-    uint64_t uarg {UINT64_C(13567894392130486208)};
 
     GncInt128 one (INT64_C(1));
     GncInt128 smallest (sarg);
@@ -596,7 +593,7 @@ TEST(GncInt128_functions, pow)
     EXPECT_EQ (GncInt128(1), little.pow(0));
     EXPECT_EQ (GncInt128(0), GncInt128(0).pow(123));
     auto really_big = big * big;
-    EXPECT_EQ (big * big, big.pow(2));
+    EXPECT_EQ (really_big, big.pow(2));
     EXPECT_EQ (GncInt128(UINT64_C(66326033898754),
                          UINT64_C(10251549987585143605)), little.pow(7));
     EXPECT_EQ (GncInt128(UINT64_C(66326033898754),

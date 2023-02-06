@@ -320,7 +320,6 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
             BasicCell *cell;
             const char *text;
             int sample_width;
-            int old_width;
             PangoLayout *layout;
 
             cell = gnc_cellblock_get_cell (cursor, 0, col);

@@ -561,7 +561,6 @@ test_xaccSplitCommitEdit (Fixture *fixture, gconstpointer pData)
     gchar *msg2 = "[xaccSplitCommitEdit()] Account grabbed split prematurely.";
     gchar *logdomain = "gnc.engine";
     GLogLevelFlags loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
-    guint infolevel = G_LOG_LEVEL_INFO;
     guint hdlr;
     TestErrorStruct checkA = { loglevel, logdomain, msg1, 0 };
     TestErrorStruct checkB = { loglevel, logdomain, msg2, 0 };
@@ -1104,7 +1103,6 @@ xaccSplitOrder (const Split *sa, const Split *sb)// C: 5 in 3
 static void
 test_xaccSplitOrder (Fixture *fixture, gconstpointer pData)
 {
-    const char *slot_path;
     Split *split = fixture->split;
     QofBook *book = xaccSplitGetBook (split);
     Split *o_split = xaccMallocSplit (book);

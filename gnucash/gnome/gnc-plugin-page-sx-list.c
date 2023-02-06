@@ -390,9 +390,6 @@ static void
 treeview_popup (GtkTreeView *treeview, GdkEvent *event, GncPluginPageSxList *page)
 {
     GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE (page);
-    GtkTreeView *tree_view = GTK_TREE_VIEW (priv->tree_view);
-    GtkTreeSelection *selection = gtk_tree_view_get_selection (tree_view);
-    gint count_selection = gtk_tree_selection_count_selected_rows (selection);
     GtkWidget *menu, *menuitem;
     gchar *full_action_name;
     const gchar *group_name = gnc_plugin_page_get_simple_action_group_name (GNC_PLUGIN_PAGE(page));
@@ -428,7 +425,6 @@ treeview_button_press (GtkTreeView *treeview, GdkEvent *event,
 {
     GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE (page);
     GtkTreeView *tree_view = GTK_TREE_VIEW (priv->tree_view);
-    GtkTreeSelection *selection = gtk_tree_view_get_selection (tree_view);
 
     if (event->type == GDK_BUTTON_PRESS)
     {

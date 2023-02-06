@@ -377,7 +377,6 @@ gnc_account_get_property (GObject         *object,
 {
     Account *account;
     AccountPrivate *priv;
-    const gchar *key;
 
     g_return_if_fail(GNC_IS_ACCOUNT(object));
 
@@ -2372,9 +2371,7 @@ xaccAccountOrder (const Account *aa, const Account *ab)
 {
     AccountPrivate *priv_aa, *priv_ab;
     const char *da, *db;
-    char *endptr = NULL;
     int ta, tb, result;
-    long la, lb;
 
     if ( aa && !ab ) return -1;
     if ( !aa && ab ) return +1;

@@ -93,7 +93,7 @@ static unsigned int periods[] =
 };
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = GNC_MOD_GUI;
+__attribute__((unused)) static QofLogModule log_module = GNC_MOD_GUI;
 
 
 /** Prototypes **********************************************************/
@@ -196,7 +196,10 @@ gui_to_fi (FinCalcDialog *fcd)
     {
         gnc_numeric out;
         gboolean result = string_to_gnc_numeric (text, &out);
-        npp = gnc_numeric_convert (out, 1, GNC_HOW_RND_TRUNC);
+        if (result)
+            npp = gnc_numeric_convert (out, 1, GNC_HOW_RND_TRUNC);
+        else
+            npp = gnc_numeric_zero ();
     }
     else
         npp = gnc_numeric_zero ();

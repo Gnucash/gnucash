@@ -398,7 +398,6 @@ void
 GncSqlRecurrenceBackend::create_tables (GncSqlBackend* sql_be)
 {
     gint version;
-    gboolean ok;
 
     g_return_if_fail (sql_be != NULL);
 

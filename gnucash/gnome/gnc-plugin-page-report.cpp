@@ -501,7 +501,6 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     GncPluginPageReport *report;
     GncPluginPageReportPrivate *priv;
     GtkWindow *topLvl;
-    GAction *action;
     GtkWidget *webview;
     URLType type;
     char * id_name;
@@ -1233,10 +1232,10 @@ gnc_plugin_page_report_menu_update (GncPluginPage *plugin_page,
 
     for (gint i = 0; (tooltip_list[i].action_name != nullptr); i++)
     {
-        gboolean found = gnc_main_window_update_menu_for_action (window,
-                                                                 tooltip_list[i].action_name,
-                                                                 _(tooltip_list[i].label),
-                                                                 _(tooltip_list[i].tooltip));
+        gnc_main_window_update_menu_for_action (window,
+                                                tooltip_list[i].action_name,
+                                                _(tooltip_list[i].label),
+                                                _(tooltip_list[i].tooltip));
 
         tool_item = gnc_main_window_toolbar_find_tool_item (window,
                                                             tooltip_list[i].action_name);

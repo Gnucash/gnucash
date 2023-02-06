@@ -452,10 +452,10 @@ gnc_plugin_page_invoice_action_update (GncPluginPage *plugin_page,
 
     for (gint i = 0; (action_list[i].action_name != NULL); i++)
     {
-        gboolean found = gnc_main_window_update_menu_for_action (window,
-                                                                 action_list[i].action_name,
-                                                                 _(action_list[i].label),
-                                                                 _(action_list[i].tooltip));
+        gnc_main_window_update_menu_for_action (window,
+                                                action_list[i].action_name,
+                                                _(action_list[i].label),
+                                                _(action_list[i].tooltip));
 
         tool_item = gnc_main_window_toolbar_find_tool_item (window,
                                                             action_list[i].action_name);
@@ -497,7 +497,6 @@ gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, g
     GncPluginPageInvoicePrivate *priv;
     GncInvoiceType invoice_type;
     GncInvoice *invoice;
-    gint i, j;
     action_toolbar_labels *label_list;
     action_toolbar_labels *label_layout_list;
     gboolean has_uri = FALSE;
@@ -1049,7 +1048,6 @@ gnc_plugin_page_invoice_cmd_sort_changed (GSimpleAction *simple,
                                           gpointer user_data)
 {
     GncPluginPageInvoicePrivate *priv;
-    invoice_sort_type_t value;
     GncPluginPageInvoice *plugin_page = user_data;
     gint item;
 
@@ -1218,7 +1216,6 @@ gnc_plugin_page_invoice_cmd_save_layout (GSimpleAction *simple,
 {
     GncPluginPageInvoice *plugin_page = user_data;
     GncPluginPageInvoicePrivate *priv;
-    GtkWindow *parent;
     GAction *layout_action;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
@@ -1241,7 +1238,6 @@ gnc_plugin_page_invoice_cmd_reset_layout (GSimpleAction *simple,
 {
     GncPluginPageInvoice *plugin_page = user_data;
     GncPluginPageInvoicePrivate *priv;
-    GtkWindow *parent;
     GAction *layout_action;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));

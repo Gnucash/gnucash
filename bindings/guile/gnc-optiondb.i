@@ -386,8 +386,6 @@ scm_to_value<const QofInstance*>(SCM new_value)
     if (new_value == SCM_BOOL_F)
         return nullptr;
 
-    auto info = SWIG_PointerType(new_value);
-
     static const std::array<swig_type_info*, 10> types{
         SWIGTYPE_p_QofInstance_s, SWIGTYPE_p_gnc_commodity,
         SWIGTYPE_p_budget_s, SWIGTYPE_p__gncInvoice,
@@ -468,7 +466,6 @@ scm_to_value<GncOptionAccountList>(SCM new_value)
     GncOptionAccountList retval{};
     if (scm_is_false(scm_list_p(new_value)) || scm_is_null(new_value))
         return retval;
-    auto book{get_current_book()};
     auto next{new_value};
     while (!scm_is_null(next) && scm_car(next))
     {
@@ -524,7 +521,6 @@ void gnc_option_test_book_destroy(QofBook*);
 QofBook*
 gnc_option_test_book_new()
 {
-    auto session = gnc_get_current_session();
     return get_current_book();
 }
 
@@ -896,11 +892,6 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
             assert(reldate_index >= static_cast<int>(RelativeDatePeriod::ABSOLUTE) && reldate_index < static_cast<int>(relative_date_periods - 1));
             return static_cast<RelativeDatePeriod>(reldate_index);
         }
-        const char* reldate_str;
-        if (scm_is_symbol(reldate_scm))
-            reldate_str = scm_to_utf8_string(scm_symbol_to_string(reldate_scm));
-        else
-            reldate_str = scm_to_utf8_string(reldate_scm);
 
         auto date_iter =
             std::find_if(reldate_values.begin(), reldate_values.end(),
@@ -925,7 +916,6 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
             if (scm_is_symbol(scm_car(date)))
             {
                 auto car{scm_to_utf8_string(scm_symbol_to_string(scm_car(date)))};
-                auto cdr{scm_cdr(date)};
                 if (strcmp(car, "relative") == 0)
                     return false;
                 if (strcmp(car, "absolute") == 0)
@@ -1212,7 +1202,6 @@ inline SCM return_scm_value(ValueType value)
                 }
                 if constexpr (is_QofInstanceValue_v<decltype(option)>)
                 {
-                    auto uitype{$self->get_ui_type()};
                     auto serial{option.serialize()};
                     if (serial.empty())
                         return no_value;
@@ -1769,7 +1758,6 @@ gnc_register_multichoice_callback_option(GncOptionDBPtr& db,
                                                              value)}};
                 return retval;
             }
-            auto value{scm_relative_date_get_period(default_val)};
             auto retval{new GncOption{GncOptionDateValue(section, name, key,
                                                          doc_string, ui_type,
                                                          period_set)}};

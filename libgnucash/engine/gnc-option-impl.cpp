@@ -328,7 +328,6 @@ GncOptionAccountListValue::get_default_value() const
     if (!account_list)
         return retval;
 
-    auto book{get_current_book()};
     for (auto node = account_list; node; node = g_list_next (node))
     {
         if (std::find(m_allowed.begin(), m_allowed.end(),

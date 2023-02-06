@@ -155,7 +155,6 @@ gnc_split_get_property(GObject         *object,
                        GParamSpec      *pspec)
 {
     Split *split;
-    gchar *key;
     Time64 t;
 
     g_return_if_fail(GNC_IS_SPLIT(object));
@@ -229,7 +228,6 @@ gnc_split_set_property(GObject         *object,
 {
     Split *split;
     gnc_numeric* number;
-    gchar *key;
     Time64 *t;
     g_return_if_fail(GNC_IS_SPLIT(object));
 

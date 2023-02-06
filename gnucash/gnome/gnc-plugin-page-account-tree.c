@@ -1035,7 +1035,6 @@ gnc_plugin_page_account_tree_cmd_file_new_hierarchy (GSimpleAction *simple,
                                                      GVariant      *paramter,
                                                      gpointer       user_data)
 {
-    GncPluginPageAccountTree *page = user_data;
     gnc_ui_hierarchy_assistant(FALSE);
 }
 
@@ -1506,7 +1505,6 @@ gnc_plugin_page_account_tree_cmd_delete_account (GSimpleAction *simple,
     Adopters adopt;
     GList* list;
     gint response;
-    GList *filter = NULL;
     GtkWidget *dialog = NULL;
 
     if (account == NULL)

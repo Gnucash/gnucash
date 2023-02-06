@@ -39,8 +39,6 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = "qof.kvp";
 
-static const char delim = '/';
-
 KvpFrameImpl::KvpFrameImpl(const KvpFrameImpl & rhs) noexcept
 {
     std::for_each(rhs.m_valuemap.begin(), rhs.m_valuemap.end(),

@@ -59,8 +59,6 @@ protected:
         };
         auto assets = create_account(m_root, ACCT_TYPE_ASSET,
                                      "Assets", nullptr);
-        auto liabilities = create_account(m_root, ACCT_TYPE_LIABILITY,
-                                          "Liabilities", nullptr);
         auto expenses = create_account(m_root, ACCT_TYPE_EXPENSE,
                                        "Expenses", nullptr);
         create_account(assets, ACCT_TYPE_BANK, "Bank", "Bank");

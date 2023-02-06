@@ -593,7 +593,6 @@ gnc_query_view_get_selected_entry_list (GNCQueryView *qview)
 {
     GtkTreeSelection *selection;
     acc_data acc_entries;
-    GList *entries = NULL;
 
     g_return_val_if_fail (qview != NULL, NULL);
     g_return_val_if_fail (GNC_IS_QUERY_VIEW(qview), NULL);

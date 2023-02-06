@@ -244,7 +244,6 @@ xaccTransWriteLog (Transaction *trans, char flag)
 
     for (node = trans->splits; node; node = node->next)
     {
-        time64 time;
         Split *split = node->data;
         const char * accname = "";
         char acc_guid_str[GUID_ENCODING_LENGTH + 1];

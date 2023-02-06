@@ -701,7 +701,6 @@ gnc_plugin_business_cmd_test_search (GSimpleAction *simple,
                                      GVariant      *parameter,
                                      gpointer       user_data)
 {
-    GncMainWindowActionData *mw = user_data;
     gnc_search_dialog_test();
 }
 

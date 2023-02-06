@@ -852,7 +852,6 @@ static GtkWidget *
 csv_export_assistant_create (CsvExportInfo *info)
 {
     GtkBuilder *builder;
-    GtkWidget *h_box;
     GtkWidget *button;
     GtkWidget *table, *hbox;
 

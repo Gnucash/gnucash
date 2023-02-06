@@ -46,7 +46,7 @@
 
 #include "sixtp-dom-parsers.h"
 
-static const QofLogModule log_module = G_LOG_DOMAIN;
+[[maybe_unused]] static const QofLogModule log_module = G_LOG_DOMAIN;
 const gchar* transaction_version_string = "2.0.0";
 
 static void

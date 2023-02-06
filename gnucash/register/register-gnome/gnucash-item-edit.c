@@ -561,7 +561,6 @@ draw_background_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
 static void
 preedit_changed_cb (GtkEntry* entry, gchar *preedit, GncItemEdit* item_edit)
 {
-    int pos, bound;
     item_edit->preedit_length = g_utf8_strlen (preedit, -1); // Note codepoints not bytes
     DEBUG("%s %lu", preedit, item_edit->preedit_length);
 }
@@ -1032,7 +1031,7 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
     gint popup_x, popup_y;
     gint popup_w = -1, popup_h = -1;
     gint popup_max_width, popup_max_height;
-    gint view_width, view_height;
+    gint view_height;
     gint down_height, up_height;
     gint sheet_width;
 

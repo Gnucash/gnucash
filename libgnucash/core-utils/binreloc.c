@@ -106,7 +106,6 @@ _br_find_exe (Gnc_GbrInitError *error)
     char *line, *result;
     size_t buf_size = PATH_MAX + 1;
     FILE *f;
-    uint32_t size2;
 
 #ifdef MAC_INTEGRATION
     result = gtkosx_application_get_executable_path();
@@ -115,7 +114,7 @@ _br_find_exe (Gnc_GbrInitError *error)
     g_print ("Application Path %s\n", path2);
 #elif defined GNC_PLATFORM_OSX
     /* Native Mac, but not Aqua */
-    size2 = buf_size;
+    uint32_t size2 = buf_size;
     if (_NSGetExecutablePath (path2, &size2) != 0)
     {
         /* buffer not big enough or some other error */

@@ -584,7 +584,6 @@ get_userconfig_home(void)
 
 static std::string migrate_gnc_datahome()
 {
-    auto success = false;
     // Specify location of dictionaries
     bfs::path old_dir(g_get_home_dir(), cvt);
     old_dir /= ".gnucash";

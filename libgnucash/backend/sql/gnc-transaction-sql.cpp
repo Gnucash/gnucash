@@ -204,7 +204,6 @@ load_single_split (GncSqlBackend* sql_be, GncSqlRow& row)
     const GncGUID* guid;
     GncGUID split_guid;
     Split* pSplit = NULL;
-    gboolean bad_guid = FALSE;
 
     g_return_val_if_fail (sql_be != NULL, NULL);
 
@@ -689,8 +688,6 @@ void gnc_sql_transaction_load_tx_for_account (GncSqlBackend* sql_be,
                                               Account* account)
 {
     const GncGUID* guid;
-    gchar guid_buf[GUID_ENCODING_LENGTH + 1];
-    gchar* query_sql;
 
     g_return_if_fail (sql_be != NULL);
     g_return_if_fail (account != NULL);
@@ -954,8 +951,6 @@ GncSqlColumnTableEntryImpl<CT_TXREF>::load (const GncSqlBackend* sql_be,
                                             QofIdTypeConst obj_name,
                                             gpointer pObject) const noexcept
 {
-    const gchar* guid_str;
-
     g_return_if_fail (sql_be != NULL);
     g_return_if_fail (pObject != NULL);
 

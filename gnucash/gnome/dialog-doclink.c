@@ -635,7 +635,6 @@ row_selected_bus_cb (GtkTreeView *view, GtkTreePath *path,
     if (gtk_tree_view_get_column (GTK_TREE_VIEW (doclink_dialog->view),
                                   DESC_ID - 1) == col)
     {
-        GncPluginPage *page;
         InvoiceWindow *iw;
 
         iw =  gnc_ui_invoice_edit (GTK_WINDOW (doclink_dialog->window),

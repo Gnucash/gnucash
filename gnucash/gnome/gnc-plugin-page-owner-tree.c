@@ -247,34 +247,12 @@ typedef struct
     GncOwnerType owner_type;
 } action_owners_struct;
 
-static action_owners_struct action_owners[] =
-{
-    { "OTEditVendorAction",            GNC_OWNER_VENDOR },
-    { "OTEditCustomerAction",          GNC_OWNER_CUSTOMER },
-    { "OTEditEmployeeAction",          GNC_OWNER_EMPLOYEE },
-    { "OTNewVendorAction",             GNC_OWNER_VENDOR },
-    { "OTNewCustomerAction",           GNC_OWNER_CUSTOMER },
-    { "OTNewEmployeeAction",           GNC_OWNER_EMPLOYEE },
-    { "OTNewBillAction",               GNC_OWNER_VENDOR },
-    { "OTNewInvoiceAction",            GNC_OWNER_CUSTOMER },
-    { "OTNewVoucherAction",            GNC_OWNER_EMPLOYEE },
-    { "OTVendorListingReportAction",   GNC_OWNER_VENDOR },
-    { "OTCustomerListingReportAction", GNC_OWNER_CUSTOMER },
-    { "OTVendorReportAction",          GNC_OWNER_VENDOR },
-    { "OTCustomerReportAction",        GNC_OWNER_CUSTOMER },
-    { "OTEmployeeReportAction",        GNC_OWNER_EMPLOYEE },
-    { NULL, GNC_OWNER_NONE },
-};
-
 GncPluginPage *
 gnc_plugin_page_owner_tree_new (GncOwnerType owner_type)
 {
     GncPluginPageOwnerTree *plugin_page;
     GncPluginPageOwnerTreePrivate *priv;
     const GList *item;
-    GSimpleActionGroup *simple_action_group;
-    GAction *action;
-    gint i;
 
     g_return_val_if_fail( (owner_type != GNC_OWNER_UNDEFINED)
                           && (owner_type != GNC_OWNER_NONE), NULL);

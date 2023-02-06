@@ -362,7 +362,7 @@ test_gnc_txn_to_float_txn (Fixture *fixture, gconstpointer pData)
 {
     FloatingTxn *ft = NULL;
     SplitList *sl = xaccTransGetSplitList(fixture->txn), *siter;
-    SplitList *fsl, *fsiter;
+    SplitList *fsiter;
     FloatingSplit *fs;
     Split *s;
 
@@ -419,7 +419,7 @@ test_gnc_txn_to_float_txn_cut_semantics (Fixture *fixture, gconstpointer pData)
 {
     FloatingTxn *ft = NULL;
     SplitList *sl = xaccTransGetSplitList(fixture->txn), *siter;
-    SplitList *fsl, *fsiter;
+    SplitList *fsiter;
     FloatingSplit *fs;
     Split *s;
 
@@ -536,7 +536,6 @@ test_gnc_float_txn_to_txn_swap_accounts (FlFixture *fixture, gconstpointer pData
     Account *exp_acct1 = fixture->acc1, *exp_acct2 = fixture->acc2;
     SplitList *siter;
     Split *s;
-    gnc_numeric amt;
 
     if (prefs->swap_accts)
     {

@@ -73,7 +73,6 @@ enum
     PROP_OPT_DEFAULT_BUDGET,                /* KVP */
     PROP_OPT_FY_END,                        /* KVP */
     PROP_AB_TEMPLATES,                      /* KVP */
-    N_PROPERTIES                            /* Just a counter */
 };
 
 static void
@@ -93,7 +92,6 @@ G_DEFINE_TYPE(QofBook, qof_book, QOF_TYPE_INSTANCE)
 QOF_GOBJECT_DISPOSE(qof_book);
 QOF_GOBJECT_FINALIZE(qof_book);
 
-static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
 #undef G_PARAM_READWRITE
 #define G_PARAM_READWRITE static_cast<GParamFlags>(G_PARAM_READABLE | G_PARAM_WRITABLE)
 /* ====================================================================== */
@@ -158,7 +156,6 @@ qof_book_get_property (GObject* object,
                GParamSpec* pspec)
 {
     QofBook *book;
-    gchar *key;
 
     g_return_if_fail (QOF_IS_BOOK (object));
     book = QOF_BOOK (object);
@@ -199,7 +196,6 @@ qof_book_set_property (GObject      *object,
                GParamSpec   *pspec)
 {
     QofBook *book;
-    gchar *key;
 
     g_return_if_fail (QOF_IS_BOOK (object));
     book = QOF_BOOK (object);

@@ -690,7 +690,6 @@ gboolean
 qof_instance_get_dirty (QofInstance *inst)
 {
     QofInstancePrivate *priv;
-    QofCollection *coll;
 
     if (!inst)
     {
@@ -705,7 +704,6 @@ void
 qof_instance_set_dirty(QofInstance* inst)
 {
     QofInstancePrivate *priv;
-    QofCollection *coll;
 
     priv = GET_PRIVATE(inst);
     priv->dirty = TRUE;
