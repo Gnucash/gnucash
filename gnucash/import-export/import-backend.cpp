@@ -264,6 +264,14 @@ gnc_import_TransInfo_set_price (GNCImportTransInfo *info,
 {
     g_assert (info);
     info->lsplit_price = lprice;
+    /* if a valid price is explicitly set, assume the user wants to
+     * use it to calculate balance split amount.
+     * Ensure this gets recalculated */
+    if (gnc_numeric_check (lprice) == 0)
+    {
+        info->lsplit_amount_selected_manually = false;
+        trans_info_calculate_dest_amount(info);
+    }
 }
 
 gnc_numeric

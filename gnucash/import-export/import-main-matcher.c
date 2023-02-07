@@ -40,6 +40,7 @@
 
 #include "import-main-matcher.h"
 
+#include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "gnc-glib-utils.h"
 #include "gnc-ui.h"
@@ -83,9 +84,9 @@ struct _main_matcher_info
     GSList* edited_accounts;  // List of accounts currently edited.
 
     /* only when editing fields */
-    bool edit_desc;
-    bool edit_notes;
-    bool edit_memo;
+    bool can_edit_desc;
+    bool can_edit_notes;
+    bool can_edit_memo;
 
     GHashTable *desc_hash;
     GHashTable *notes_hash;
@@ -887,8 +888,7 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
 
 typedef struct
 {
-    Split *split;
-    Transaction *trans;
+    GNCImportTransInfo *trans_info;
     GtkTreeIter iter;
     char *orig_desc, *orig_notes, *orig_memo;
 } RowInfo;
@@ -903,18 +903,15 @@ static void rowinfo_free (RowInfo* info)
 
 static RowInfo * row_get_info (gpointer row, GNCImportMainMatcher *info)
 {
-    GNCImportTransInfo *trans_info;
     GtkTreeModel *model = gtk_tree_view_get_model (info->view);
     RowInfo *retval = g_new (RowInfo, 1);
     gtk_tree_model_get_iter (model, &retval->iter, row);
     gtk_tree_model_get (model, &retval->iter,
-                        DOWNLOADED_COL_DATA, &trans_info,
+                        DOWNLOADED_COL_DATA, &retval->trans_info,
                         DOWNLOADED_COL_DESCRIPTION_ORIGINAL, &retval->orig_desc,
                         DOWNLOADED_COL_NOTES_ORIGINAL, &retval->orig_notes,
                         DOWNLOADED_COL_MEMO_ORIGINAL, &retval->orig_memo,
                         -1);
-    retval->trans = gnc_import_TransInfo_get_trans (trans_info);
-    retval->split = gnc_import_TransInfo_get_fsplit (trans_info);
     return retval;
 }
 
@@ -960,13 +957,14 @@ static void
 setup_entry (GtkWidget *entry, bool sensitive, GHashTable *hash,
              const char *initial)
 {
-    if (!sensitive)
-        gtk_entry_set_text (GTK_ENTRY (entry), _("Disabled"));
-    else if (initial && *initial)
-        gtk_entry_set_text (GTK_ENTRY (entry), initial);
     gtk_widget_set_sensitive (entry, sensitive);
-    if (!sensitive)
+    if (sensitive && initial && *initial)
+        gtk_entry_set_text (GTK_ENTRY (entry), initial);
+    else if (!sensitive)
+    {
+        gtk_entry_set_text (GTK_ENTRY (entry), _("Disabled"));
         return;
+    }
 
     GtkListStore *list = gtk_list_store_new (NUM_COMPLETION_COLS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
     g_hash_table_foreach (hash, (GHFunc)populate_list, list);
@@ -1002,9 +1000,11 @@ input_new_fields (GNCImportMainMatcher *info, RowInfo *rowinfo,
     GtkWidget *memo_entry = GTK_WIDGET(gtk_builder_get_object (builder, "memo_entry"));
     GtkWidget *notes_entry = GTK_WIDGET(gtk_builder_get_object (builder, "notes_entry"));
 
-    setup_entry (desc_entry, info->edit_desc, info->desc_hash, xaccTransGetDescription (rowinfo->trans));
-    setup_entry (notes_entry, info->edit_notes, info->notes_hash, xaccTransGetNotes (rowinfo->trans));
-    setup_entry (memo_entry, info->edit_memo, info->memo_hash, xaccSplitGetMemo (rowinfo->split));
+    Transaction *trans = gnc_import_TransInfo_get_trans (rowinfo->trans_info);
+    Split *split = gnc_import_TransInfo_get_fsplit (rowinfo->trans_info);
+    setup_entry (desc_entry, info->can_edit_desc, info->desc_hash, xaccTransGetDescription (trans));
+    setup_entry (notes_entry, info->can_edit_notes, info->notes_hash, xaccTransGetNotes (trans));
+    setup_entry (memo_entry, info->can_edit_memo, info->memo_hash, xaccSplitGetMemo (split));
 
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (info->main_widget));
 
@@ -1040,6 +1040,62 @@ maybe_add_string (GNCImportMainMatcher *info, GHashTable *hash, const char *str)
 }
 
 static void
+gnc_gen_trans_set_price_to_selection_cb (GtkMenuItem *menuitem,
+                                         GNCImportMainMatcher *info)
+{
+    ENTER("");
+    g_return_if_fail (info);
+
+    GtkTreeView *treeview = GTK_TREE_VIEW(info->view);
+    GtkTreeModel *model = gtk_tree_view_get_model (treeview);
+    GtkTreeStore *store  = GTK_TREE_STORE (model);
+    GtkTreeSelection *selection = gtk_tree_view_get_selection (treeview);
+    GList *selected_rows = gtk_tree_selection_get_selected_rows (selection, &model);
+
+    if (!selected_rows)
+    {
+        LEAVE ("No selected rows");
+        return;
+    }
+
+    GList *row_info_list = gnc_g_list_map (selected_rows, (GncGMapFunc) row_get_info, info);
+    for (GList *n = row_info_list; n; n = g_list_next (n))
+    {
+        RowInfo *row = n->data;
+        Transaction *trans = gnc_import_TransInfo_get_trans (row->trans_info);
+        time64 post_date = xaccTransGetDate(trans);
+        Split *split = gnc_import_TransInfo_get_fsplit (row->trans_info);
+        Account *src_acc = xaccSplitGetAccount (split);
+        gnc_commodity *trans_curr = xaccTransGetCurrency (trans);
+        Account *dest_acc = gnc_import_TransInfo_get_destacc (row->trans_info);
+        gnc_commodity *acc_comm = xaccAccountGetCommodity (dest_acc);
+        gnc_numeric dest_value = gnc_import_TransInfo_get_dest_value (row->trans_info);
+
+        XferDialog *xfer = gnc_xfer_dialog(GTK_WIDGET (info->main_widget), src_acc);
+        gnc_xfer_dialog_select_to_account(xfer, dest_acc);
+        gnc_xfer_dialog_set_amount(xfer, dest_value);
+        gnc_xfer_dialog_set_date (xfer, post_date);
+
+        /* All we want is the exchange rate so prevent the user from thinking
+            *      it makes sense to mess with other stuff */
+        gnc_xfer_dialog_set_from_show_button_active(xfer, false);
+        gnc_xfer_dialog_set_to_show_button_active(xfer, false);
+        gnc_xfer_dialog_hide_from_account_tree(xfer);
+        gnc_xfer_dialog_hide_to_account_tree(xfer);
+        gnc_numeric exch = gnc_import_TransInfo_get_price (row->trans_info);
+        gnc_xfer_dialog_is_exchange_dialog(xfer, &exch);
+
+        if (!gnc_xfer_dialog_run_until_done(xfer))
+            break; /* If the user cancels, return to the payment dialog without changes */
+
+        gnc_import_TransInfo_set_price (row->trans_info, exch);
+    }
+    g_list_free_full (row_info_list, (GDestroyNotify)rowinfo_free);
+    g_list_free_full (selected_rows, (GDestroyNotify)gtk_tree_path_free);
+    LEAVE("");
+}
+
+static void
 gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
 {
 
@@ -1066,7 +1122,9 @@ gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
         for (GList *n = row_info_list; n; n = g_list_next (n))
         {
             RowInfo *row = n->data;
-            if (info->edit_desc)
+            Transaction *trans = gnc_import_TransInfo_get_trans (row->trans_info);
+            Split *split = gnc_import_TransInfo_get_fsplit (row->trans_info);
+            if (info->can_edit_desc)
             {
                 gint style = g_strcmp0 (new_desc, row->orig_desc) ?
                     PANGO_STYLE_ITALIC : PANGO_STYLE_NORMAL;
@@ -1074,17 +1132,17 @@ gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
                                     DOWNLOADED_COL_DESCRIPTION, new_desc,
                                     DOWNLOADED_COL_DESCRIPTION_STYLE, style,
                                     -1);
-                xaccTransSetDescription (row->trans, new_desc);
+                xaccTransSetDescription (trans, new_desc);
                 maybe_add_string (info, info->desc_hash, new_desc);
             }
 
-            if (info->edit_notes)
+            if (info->can_edit_notes)
             {
-                xaccTransSetNotes (row->trans, new_notes);
+                xaccTransSetNotes (trans, new_notes);
                 maybe_add_string (info, info->notes_hash, new_notes);
             }
 
-            if (info->edit_memo)
+            if (info->can_edit_memo)
             {
                 gint style = g_strcmp0 (new_memo, row->orig_memo) ?
                     PANGO_STYLE_ITALIC : PANGO_STYLE_NORMAL;
@@ -1092,7 +1150,7 @@ gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
                                     DOWNLOADED_COL_MEMO, new_memo,
                                     DOWNLOADED_COL_MEMO_STYLE, style,
                                     -1);
-                xaccSplitSetMemo (row->split, new_memo);
+                xaccSplitSetMemo (split, new_memo);
                 maybe_add_string (info, info->memo_hash, new_memo);
             }
         }
@@ -1126,9 +1184,11 @@ gnc_gen_trans_reset_edits_cb (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
     for (GList *n = selected_rows; n; n = g_list_next (n))
     {
         RowInfo *rowinfo = row_get_info (n->data, info);
-        xaccTransSetDescription (rowinfo->trans, rowinfo->orig_desc);
-        xaccTransSetNotes (rowinfo->trans, rowinfo->orig_notes);
-        xaccSplitSetMemo (rowinfo->split, rowinfo->orig_memo);
+        Transaction *trans = gnc_import_TransInfo_get_trans (rowinfo->trans_info);
+        Split *split = gnc_import_TransInfo_get_fsplit (rowinfo->trans_info);
+        xaccTransSetDescription (trans, rowinfo->orig_desc);
+        xaccTransSetNotes (trans, rowinfo->orig_notes);
+        xaccSplitSetMemo (split, rowinfo->orig_memo);
         gtk_tree_store_set (store, &rowinfo->iter,
                             DOWNLOADED_COL_DESCRIPTION, rowinfo->orig_desc,
                             DOWNLOADED_COL_MEMO, rowinfo->orig_memo,
@@ -1228,17 +1288,6 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
 {
     ENTER ("");
 
-    GtkWidget *menu = gtk_menu_new();
-    GtkWidget *menuitem = gtk_menu_item_new_with_mnemonic (
-                   /* Translators: Menu entry, no full stop */
-                   _("_Assign a transfer account to the selection"));
-    g_signal_connect (menuitem, "activate",
-                      G_CALLBACK(
-                      gnc_gen_trans_assign_transfer_account_to_selection_cb),
-                      info);
-    DEBUG("Callback to assign destination account to selection connected");
-    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-
     GtkTreeModel *model = gtk_tree_view_get_model (treeview);
     GtkTreeSelection *selection = gtk_tree_view_get_selection (treeview);
     GList *selected_rows = gtk_tree_selection_get_selected_rows (selection, &model);
@@ -1248,45 +1297,89 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
     if (row_info_list)          /* should never be NULL. collect from first row. */
     {
         RowInfo* first_rowinfo = row_info_list->data;
-        desc = xaccTransGetDescription (first_rowinfo->trans);
-        notes = xaccTransGetNotes (first_rowinfo->trans);
-        memo = xaccSplitGetMemo (first_rowinfo->split);
+        Transaction *trans = gnc_import_TransInfo_get_trans (first_rowinfo->trans_info);
+        Split *split = gnc_import_TransInfo_get_fsplit (first_rowinfo->trans_info);
+        desc = xaccTransGetDescription (trans);
+        notes = xaccTransGetNotes (trans);
+        memo = xaccSplitGetMemo (split);
     }
 
-    /* initialise */
-    info->edit_desc = true;
-    info->edit_notes = true;
-    info->edit_memo = true;
-
-    /* determine whether to enable editing fields (if all rows have
-       same field string) and resetting fields (if any row differs from
-       imported data) */
-    bool has_edits = false;
+    /* determine which context menu items to enable */
+    info->can_edit_desc = true;
+    info->can_edit_notes = true;
+    info->can_edit_memo = true;
+    bool can_undo_edits = false;
+    bool can_update_prices = true;
+    bool can_assign_acct = true;
     for (GList *n = row_info_list; n; n = g_list_next(n))
     {
         RowInfo *rowinfo = n->data;
-        if (!has_edits &&
-            (g_strcmp0 (xaccSplitGetMemo (rowinfo->split), rowinfo->orig_memo) ||
-             g_strcmp0 (xaccTransGetNotes (rowinfo->trans), rowinfo->orig_notes) ||
-             g_strcmp0 (xaccTransGetDescription (rowinfo->trans), rowinfo->orig_desc)))
-            has_edits = true;
 
-        if (info->edit_desc && g_strcmp0 (desc, xaccTransGetDescription (rowinfo->trans)))
-            info->edit_desc = false;
-        if (info->edit_notes && g_strcmp0 (notes, xaccTransGetNotes (rowinfo->trans)))
-            info->edit_notes = false;
-        if (info->edit_memo && g_strcmp0 (memo, xaccSplitGetMemo (rowinfo->split)))
-            info->edit_memo = false;
+        /* Only allow assigning a destination account for unbalanced transactions */
+        if (can_assign_acct)
+            can_assign_acct = !gnc_import_TransInfo_is_balanced (rowinfo->trans_info);
+
+        /* Only allow updating prices for transactions with a destinatin account set
+         * and for which the destination account commodity is different from the
+         * transaction currency */
+        Transaction *trans = gnc_import_TransInfo_get_trans (rowinfo->trans_info);
+        if (can_update_prices)
+        {
+            gnc_commodity *trans_curr = xaccTransGetCurrency (trans);
+            Account *dest_acc = gnc_import_TransInfo_get_destacc (rowinfo->trans_info);
+            gnc_commodity *acc_comm = xaccAccountGetCommodity (dest_acc);
+            if (!dest_acc || gnc_commodity_equiv (trans_curr, acc_comm))
+                can_update_prices = false;
+        }
+
+        /* Only allow editing desc/notes/memo if they are equal for all selected
+         * transactions */
+        Split *split = gnc_import_TransInfo_get_fsplit (rowinfo->trans_info);
+        if (info->can_edit_desc)
+            info->can_edit_desc = !g_strcmp0 (desc, xaccTransGetDescription (trans));
+        if (info->can_edit_notes)
+            info->can_edit_notes = !g_strcmp0 (notes, xaccTransGetNotes (trans));
+        if (info->can_edit_memo)
+            info->can_edit_memo = !g_strcmp0 (memo, xaccSplitGetMemo (split));
+
+        /* Only allow undoing desc/notes/memo edits if all selected transactions
+         * have been edited */
+        if (!can_undo_edits)
+            can_undo_edits = (g_strcmp0 (xaccSplitGetMemo (split), rowinfo->orig_memo) ||
+                              g_strcmp0 (xaccTransGetNotes (trans), rowinfo->orig_notes) ||
+                              g_strcmp0 (xaccTransGetDescription (trans), rowinfo->orig_desc));
 
         /* all flags were switched. no need to scan remaining rows. */
-        if (has_edits && !info->edit_desc && !info->edit_notes && !info->edit_memo)
+        if (!can_assign_acct && !can_update_prices &&
+            !info->can_edit_desc && !info->can_edit_notes && !info->can_edit_memo &&
+            can_undo_edits)
             break;
     }
+
+    GtkWidget *menu = gtk_menu_new();
+    GtkWidget *menuitem = gtk_menu_item_new_with_mnemonic (
+        /* Translators: Menu entry, no full stop */
+        _("_Assign transfer account"));
+    gtk_widget_set_sensitive (menuitem, can_assign_acct);
+    g_signal_connect (menuitem, "activate",
+                      G_CALLBACK(
+                          gnc_gen_trans_assign_transfer_account_to_selection_cb),
+                      info);
+    DEBUG("Callback to assign destination account to selection connected");
+    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+
+    /* Translators: Menu entry, no full stop */
+    menuitem = gtk_menu_item_new_with_mnemonic (_("Assign e_xchange rate"));
+    gtk_widget_set_sensitive (menuitem, can_update_prices);
+    g_signal_connect (menuitem, "activate",
+                      G_CALLBACK (gnc_gen_trans_set_price_to_selection_cb),
+                      info);
+    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
     /* Translators: Menu entry, no full stop */
     menuitem = gtk_menu_item_new_with_mnemonic (_("_Edit description, notes, or memo"));
     gtk_widget_set_sensitive (menuitem,
-                              info->edit_desc || info->edit_notes || info->edit_memo);
+                              info->can_edit_desc || info->can_edit_notes || info->can_edit_memo);
     g_signal_connect (menuitem, "activate",
                       G_CALLBACK (gnc_gen_trans_edit_fields),
                       info);
@@ -1294,7 +1387,7 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
 
     /* Translators: Menu entry, no full stop */
     menuitem = gtk_menu_item_new_with_mnemonic (_("_Reset all edits"));
-    gtk_widget_set_sensitive (menuitem, has_edits);
+    gtk_widget_set_sensitive (menuitem, can_undo_edits);
     g_signal_connect (menuitem, "activate",
                       G_CALLBACK (gnc_gen_trans_reset_edits_cb),
                       info);
