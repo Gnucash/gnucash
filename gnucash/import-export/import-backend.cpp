@@ -1017,12 +1017,16 @@ gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_ha
     // Create a hash per account of a hash of all split IDs. Then the
     // test below will be fast if we have many transactions to import.
     auto dest_acct = xaccSplitGetAccount (source_split);
-    if (!g_hash_table_contains (acct_id_hash, dest_acct))
-         g_hash_table_insert (acct_id_hash, dest_acct,
-                              hash_account_online_ids (dest_acct));
-    auto online_id_exists = g_hash_table_contains (
-                static_cast<GHashTable*>(g_hash_table_lookup (acct_id_hash, dest_acct)),
-                source_online_id);
+
+    auto online_id_hash = static_cast<GHashTable*>(g_hash_table_lookup (acct_id_hash, dest_acct));
+
+    if (!online_id_hash)
+    {
+        online_id_hash = hash_account_online_ids (dest_acct);
+        g_hash_table_insert (acct_id_hash, dest_acct, online_id_hash);
+    }
+
+    auto online_id_exists = g_hash_table_contains (online_id_hash, source_online_id);
     
     /* If it does, abort the process for this transaction, since it is
        already in the system. */
