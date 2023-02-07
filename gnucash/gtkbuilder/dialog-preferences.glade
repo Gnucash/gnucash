@@ -805,7 +805,7 @@ Press 'Close' to return to the preference window
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
-                    <property name="top-attach">14</property>
+                    <property name="top-attach">15</property>
                   </packing>
                 </child>
                 <child>
@@ -820,7 +820,7 @@ Press 'Close' to return to the preference window
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">16</property>
+                    <property name="top-attach">17</property>
                   </packing>
                 </child>
                 <child>
@@ -837,7 +837,7 @@ Press 'Close' to return to the preference window
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">17</property>
+                    <property name="top-attach">18</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
@@ -865,7 +865,7 @@ Press 'Close' to return to the preference window
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">18</property>
+                    <property name="top-attach">19</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
@@ -912,15 +912,55 @@ Press 'Close' to return to the preference window
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="pref/general/currency-choice-other">
-                    <property name="label" translatable="yes">Ch_oose</property>
+                  <object class="GtkRadioButton" id="pref/general/currency-choice-locale">
+                    <property name="label" translatable="yes">Loc_ale:</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="has-tooltip">True</property>
-                    <property name="tooltip-markup">Use the specified currency for all newly created accounts.</property>
-                    <property name="tooltip-text" translatable="yes">Use the specified currency for all newly created accounts.</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">Use the system locale currency for all newly created accounts.</property>
+                    <property name="tooltip_text" translatable="yes">Use the system locale currency for all newly created accounts.</property>
                     <property name="halign">start</property>
+                    <property name="margin_left">12</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">13</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="pref/general/currency-choice-other">
+                    <property name="label" translatable="yes">Ch_oose:</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">Use the specified currency for all newly created accounts.</property>
+                    <property name="tooltip_text" translatable="yes">Use the specified currency for all newly created accounts.</property>
+                    <property name="halign">start</property>
+                    <property name="margin-left">12</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <property name="group">pref/general/currency-choice-locale</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">15</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="pref/general/currency-choice-root">
+                    <property name="label" translatable="yes">Roo_t Account:</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip-markup">Use the root account currency for all newly created accounts.</property>
+                    <property name="tooltip-text" translatable="yes">Use the root account currency for all newly created accounts.</property>
+                    <property name="halign">start</property>
+                    <property name="margin-left">12</property>
                     <property name="use-underline">True</property>
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
@@ -932,22 +972,25 @@ Press 'Close' to return to the preference window
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="pref/general/currency-choice-locale">
-                    <property name="label" translatable="yes">Loc_ale</property>
+                  <object class="GtkLabel">
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="has-tooltip">True</property>
-                    <property name="tooltip-markup">Use the system locale currency for all newly created accounts.</property>
-                    <property name="tooltip-text" translatable="yes">Use the system locale currency for all newly created accounts.</property>
-                    <property name="halign">start</property>
-                    <property name="use-underline">True</property>
-                    <property name="active">True</property>
-                    <property name="draw-indicator">True</property>
+                    <property name="can-focus">False</property>
                   </object>
                   <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">13</property>
+                    <property name="left_attach">0</property>
+                    <property name="top-attach">16</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="root_currency">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">US Dollars (USD)</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">14</property>
                   </packing>
                 </child>
                 <child>
@@ -3113,7 +3156,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">4</property>
+                    <property name="top-attach">5</property>
                   </packing>
                 </child>
                 <child>
@@ -3131,7 +3174,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">5</property>
+                    <property name="top-attach">6</property>
                   </packing>
                 </child>
                 <child>
@@ -3144,7 +3187,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
-                    <property name="top-attach">2</property>
+                    <property name="top-attach">3</property>
                   </packing>
                 </child>
                 <child>
@@ -3159,7 +3202,34 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">7</property>
+                    <property name="top-attach">8</property>
+                  </packing>
+                </child>
+
+                <child>
+                  <object class="GtkBox" id="hbox5">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkSpinButton" id="pref/general.report/default-zoom">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="tooltip-text" translatable="yes">On high resolution screens reports tend to be hard to read. This option allows you to scale reports up by the set factor. For example setting this to 2.0 will display reports at twice their typical size.</property>
+                        <property name="halign">start</property>
+                        <property name="margin-left">12</property>
+                        <property name="adjustment">default_zoom_adj</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">9</property>
                   </packing>
                 </child>
                 <child>
@@ -3169,12 +3239,32 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">6</property>
+                    <property name="top-attach">7</property>
+                  </packing>
+                </child>
+
+                <child>
+                  <object class="GtkRadioButton" id="pref/general.report/currency-choice-locale">
+                    <property name="label" translatable="yes">Loc_ale:</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="has-tooltip">True</property>
+                    <property name="tooltip-markup">Use the system locale currency for all newly created reports.</property>
+                    <property name="tooltip-text" translatable="yes">Use the system locale currency for all newly created reports.</property>
+                    <property name="halign">start</property>
+                    <property name="margin-left">12</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="pref/general.report/currency-choice-other">
-                    <property name="label" translatable="yes">Ch_oose</property>
+                    <property name="label" translatable="yes">Ch_oose:</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
@@ -3182,6 +3272,28 @@ many months before the current month</property>
                     <property name="tooltip-markup">Use the specified currency for all newly created reports.</property>
                     <property name="tooltip-text" translatable="yes">Use the specified currency for all newly created reports.</property>
                     <property name="halign">start</property>
+                    <property name="margin-left">12</property>
+                    <property name="use-underline">True</property>
+                    <property name="active">True</property>
+                    <property name="draw-indicator">True</property>
+                    <property name="group">pref/general.report/currency-choice-locale</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="pref/general.report/currency-choice-root">
+                    <property name="label" translatable="yes">Roo_t Account:</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="has-tooltip">True</property>
+                    <property name="tooltip-markup">Use the root account currency for all newly created reports.</property>
+                    <property name="tooltip-text" translatable="yes">Use the root account currency for all newly created reports.</property>
+                    <property name="halign">start</property>
+                    <property name="margin-left">12</property>
                     <property name="use-underline">True</property>
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
@@ -3193,50 +3305,25 @@ many months before the current month</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="pref/general.report/currency-choice-locale">
-                    <property name="label" translatable="yes">Loc_ale</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="has-tooltip">True</property>
-                    <property name="tooltip-markup">Use the system locale currency for all newly created reports.</property>
-                    <property name="tooltip-text" translatable="yes">Use the system locale currency for all newly created reports.</property>
-                    <property name="halign">start</property>
-                    <property name="use-underline">True</property>
-                    <property name="active">True</property>
-                    <property name="draw-indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="pref/general.report/default-zoom">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="tooltip-text" translatable="yes">On high resolution screens reports tend to be hard to read. This option allows you to scale reports up by the set factor. For example setting this to 2.0 will display reports at twice their typical size.</property>
-                    <property name="halign">start</property>
-                    <property name="text">1</property>
-                    <property name="adjustment">default_zoom_adj</property>
-                    <property name="digits">1</property>
-                    <property name="value">1</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">8</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">Default zoom level</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">8</property>
+                    <property name="top-attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="root_currency2">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">US Dollars (USD)</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>

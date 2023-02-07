@@ -1341,6 +1341,7 @@ gnc_preferences_dialog_create (GtkWindow *parent)
     GtkTreePath *path;
     GtkTreeIter iter;
     gnc_commodity *locale_currency;
+    gnc_commodity *root_currency;
     const gchar *currency_name;
     GDate fy_end;
     gboolean date_is_valid = FALSE;
@@ -1494,6 +1495,13 @@ gnc_preferences_dialog_create (GtkWindow *parent)
     label = GTK_WIDGET(gtk_builder_get_object (builder, "locale_currency"));
     gtk_label_set_label (GTK_LABEL(label), currency_name);
     label = GTK_WIDGET(gtk_builder_get_object (builder, "locale_currency2"));
+    gtk_label_set_label (GTK_LABEL(label), currency_name);
+
+    root_currency = xaccAccountGetCommodity (gnc_get_current_root_account ());
+    currency_name = gnc_commodity_get_printname (root_currency);
+    label = GTK_WIDGET(gtk_builder_get_object (builder, "root_currency"));
+    gtk_label_set_label (GTK_LABEL(label), currency_name);
+    label = GTK_WIDGET(gtk_builder_get_object (builder, "root_currency2"));
     gtk_label_set_label (GTK_LABEL(label), currency_name);
 
     button = GTK_WIDGET(gtk_builder_get_object (builder, "pref/general/save-on-close-expires"));
