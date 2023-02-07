@@ -216,7 +216,8 @@ private:
 
     GtkWidget       *file_page;                     /**< Assistant file page widget */
     GtkWidget       *file_chooser;                  /**< The widget for the file chooser */
-    std::string      m_file_name;                     /**< The import file name */
+    std::string      m_fc_file_name;                /**< The file name currently selected in the file chooser */
+    std::string      m_final_file_name;             /**< The name of the import file effectively to use */
 
     GtkWidget       *preview_page;                  /**< Assistant preview page widget */
     GtkComboBox     *settings_combo;                /**< The Settings Combo */
@@ -707,10 +708,10 @@ CsvImpTransAssist::check_for_valid_filename ()
     auto filepath = gnc_uri_get_path (file_name);
     auto starting_dir = g_path_get_dirname (filepath);
 
-    m_file_name = file_name;
+    m_fc_file_name = file_name;
     gnc_set_default_directory (GNC_PREFS_GROUP, starting_dir);
 
-    DEBUG("file_name selected is %s", m_file_name.c_str());
+    DEBUG("file_name selected is %s", m_fc_file_name.c_str());
     DEBUG("starting directory is %s", starting_dir);
 
     g_free (filepath);
@@ -1891,11 +1892,17 @@ void
 CsvImpTransAssist::assist_file_page_prepare ()
 {
     /* Set the default directory */
-    auto starting_dir = gnc_get_default_directory (GNC_PREFS_GROUP);
-    if (starting_dir)
+    if (!m_final_file_name.empty())
+        gtk_file_chooser_set_filename (GTK_FILE_CHOOSER(file_chooser),
+                                       m_final_file_name.c_str());
+    else
     {
-        gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(file_chooser), starting_dir);
-        g_free (starting_dir);
+        auto starting_dir = gnc_get_default_directory (GNC_PREFS_GROUP);
+        if (starting_dir)
+        {
+            gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(file_chooser), starting_dir);
+            g_free (starting_dir);
+        }
     }
 
     /* Disable the "Next" Assistant Button */
@@ -1908,46 +1915,45 @@ CsvImpTransAssist::assist_preview_page_prepare ()
 {
     auto go_back = false;
 
-    /* Load the file into parse_data, reset if already loaded. */
-    if (tx_imp)
-        tx_imp.reset();
+    if (m_final_file_name != m_fc_file_name)
+    {
+        tx_imp = std::unique_ptr<GncTxImport>(new GncTxImport);
 
-    tx_imp = std::unique_ptr<GncTxImport>(new GncTxImport);
+        /* Assume data is CSV. User can later override to Fixed Width if needed */
+        try
+        {
+            tx_imp->file_format (GncImpFileFormat::CSV);
+            tx_imp->load_file (m_fc_file_name);
+            tx_imp->tokenize (true);
+            tx_imp->req_mapped_accts (false);
 
-    /* Assume data is CSV. User can later override to Fixed Width if needed */
-    try
-    {
-        tx_imp->file_format (GncImpFileFormat::CSV);
-        tx_imp->load_file (m_file_name);
-        tx_imp->tokenize (true);
-    }
-    catch (std::ifstream::failure& e)
-    {
-        /* File loading failed ... */
-        gnc_error_dialog (GTK_WINDOW (csv_imp_asst), "%s", e.what());
-        go_back = true;
-    }
-    catch (std::range_error &e)
-    {
-        /* Parsing failed ... */
-        gnc_error_dialog (GTK_WINDOW (csv_imp_asst), "%s", _(e.what()));
-        go_back = true;
+            /* Get settings store and populate */
+            preview_populate_settings_combo();
+            gtk_combo_box_set_active (settings_combo, 0);
+
+            /* Disable the "Next" Assistant Button */
+            gtk_assistant_set_page_complete (csv_imp_asst, preview_page, false);
+        }
+        catch (std::ifstream::failure& e)
+        {
+            /* File loading failed ... */
+            gnc_error_dialog (GTK_WINDOW (csv_imp_asst), "%s", e.what());
+            go_back = true;
+        }
+        catch (std::range_error &e)
+        {
+            /* Parsing failed ... */
+            gnc_error_dialog (GTK_WINDOW (csv_imp_asst), "%s", _(e.what()));
+            go_back = true;
+        }
     }
 
     if (go_back)
         gtk_assistant_previous_page (csv_imp_asst);
     else
     {
+        m_final_file_name = m_fc_file_name;
         preview_refresh ();
-
-        /* Get settings store and populate */
-        preview_populate_settings_combo();
-        gtk_combo_box_set_active (settings_combo, 0);
-
-        tx_imp->req_mapped_accts (false);
-
-        /* Disable the "Next" Assistant Button */
-        gtk_assistant_set_page_complete (csv_imp_asst, preview_page, false);
 
         /* Load the data into the treeview. */
         g_idle_add ((GSourceFunc)csv_imp_preview_queue_rebuild_table, this);
@@ -2127,7 +2133,7 @@ CsvImpTransAssist::assist_summary_page_prepare ()
     try
     {
     /* Translators: {1} will be replaced with a filename */
-        text += (bl::format (std::string{_("The transactions were imported from file '{1}'.")}) % m_file_name).str();
+        text += (bl::format (std::string{_("The transactions were imported from file '{1}'.")}) % m_final_file_name).str();
         text += "</b></span>";
     }
     catch (const bl::conv::conversion_error& err)

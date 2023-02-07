@@ -145,7 +145,8 @@ private:
 
     GtkWidget       *file_page;                     /**< Assistant file page widget */
     GtkWidget       *file_chooser;                  /**< The widget for the file chooser */
-    std::string      m_file_name;                   /**< The import file name */
+    std::string      m_fc_file_name;                /**< The file name currently selected in the file chooser */
+    std::string      m_final_file_name;             /**< The name of the import file effectively to use */
 
     GtkWidget       *preview_page;                  /**< Assistant preview page widget */
     GtkComboBox     *settings_combo;                /**< The Settings Combo */
@@ -744,10 +745,10 @@ CsvImpPriceAssist::check_for_valid_filename ()
     auto filepath = gnc_uri_get_path (file_name);
     auto starting_dir = g_path_get_dirname (filepath);
 
-    m_file_name = file_name;
+    m_fc_file_name = file_name;
     gnc_set_default_directory (GNC_PREFS_GROUP, starting_dir);
 
-    DEBUG("file_name selected is %s", m_file_name.c_str());
+    DEBUG("file_name selected is %s", m_fc_file_name.c_str());
     DEBUG("starting directory is %s", starting_dir);
 
     g_free (filepath);
@@ -1839,11 +1840,17 @@ CsvImpPriceAssist::assist_file_page_prepare ()
     gtk_assistant_set_page_complete (csv_imp_asst, preview_page, false);
 
     /* Set the default directory */
-    auto starting_dir = gnc_get_default_directory (GNC_PREFS_GROUP);
-    if (starting_dir)
+    if (!m_final_file_name.empty())
+        gtk_file_chooser_set_filename (GTK_FILE_CHOOSER(file_chooser),
+                                       m_final_file_name.c_str());
+    else
     {
-        gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(file_chooser), starting_dir);
-        g_free (starting_dir);
+        auto starting_dir = gnc_get_default_directory (GNC_PREFS_GROUP);
+        if (starting_dir)
+        {
+            gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(file_chooser), starting_dir);
+            g_free (starting_dir);
+        }
     }
 }
 
@@ -1852,43 +1859,43 @@ CsvImpPriceAssist::assist_preview_page_prepare ()
 {
     auto go_back = false;
 
-    /* Load the file into parse_data, reset it if altrady loaded. */
-    if (price_imp)
-        price_imp.reset();
 
-    /* Load the file into parse_data. */
-    price_imp = std::unique_ptr<GncPriceImport>(new GncPriceImport);
-    /* Assume data is CSV. User can later override to Fixed Width if needed */
-    try
+    if (m_final_file_name != m_fc_file_name)
     {
-        price_imp->file_format (GncImpFileFormat::CSV);
-        price_imp->load_file (m_file_name);
-        price_imp->tokenize (true);
-    }
-    catch (std::ifstream::failure& e)
-    {
-        /* File loading failed ... */
-        gnc_error_dialog (GTK_WINDOW(csv_imp_asst), "%s", e.what());
-        go_back = true;
-    }
-    catch (std::range_error &e)
-    {
-        /* Parsing failed ... */
-        gnc_error_dialog (GTK_WINDOW(csv_imp_asst), "%s", _(e.what()));
-        go_back = true;
+        /* Load the file into parse_data. */
+        price_imp = std::unique_ptr<GncPriceImport>(new GncPriceImport);
+        /* Assume data is CSV. User can later override to Fixed Width if needed */
+        try
+        {
+            price_imp->file_format (GncImpFileFormat::CSV);
+            price_imp->load_file (m_final_file_name);
+            price_imp->tokenize (true);
+
+            /* Get settings store and populate */
+            preview_populate_settings_combo();
+            gtk_combo_box_set_active (settings_combo, 0);
+
+            // set over_write to false as default
+            price_imp->over_write (false);
+        }
+        catch (std::ifstream::failure& e)
+        {
+            /* File loading failed ... */
+            gnc_error_dialog (GTK_WINDOW(csv_imp_asst), "%s", e.what());
+            go_back = true;
+        }
+        catch (std::range_error &e)
+        {
+            /* Parsing failed ... */
+            gnc_error_dialog (GTK_WINDOW(csv_imp_asst), "%s", _(e.what()));
+            go_back = true;
+        }
     }
 
     if (go_back)
         gtk_assistant_previous_page (csv_imp_asst);
     else
     {
-        /* Get settings store and populate */
-        preview_populate_settings_combo();
-        gtk_combo_box_set_active (settings_combo, 0);
-
-        // set over_write to false as default
-        price_imp->over_write (false);
-
         /* Disable the "Next" Assistant Button */
         gtk_assistant_set_page_complete (csv_imp_asst, preview_page, false);
 
@@ -1928,7 +1935,7 @@ CsvImpPriceAssist::assist_summary_page_prepare ()
           "- %s\n"
           "- %s\n"
           "- %s"),
-          m_file_name.c_str(), added_str, dupl_str,repl_str);
+          m_final_file_name.c_str(), added_str, dupl_str,repl_str);
     text += msg;
     text += "</b></span>";
 
