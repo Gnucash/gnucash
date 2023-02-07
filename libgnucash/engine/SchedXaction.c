@@ -1118,8 +1118,8 @@ gnc_sx_clone_temporal_state (SXTmpStateData *tsd)
 
     if(tsd)
     {
-        toRet = g_malloc(sizeof(SXTmpStateData));
-        toRet = memcpy (toRet, tsd, sizeof (SXTmpStateData));
+        toRet = g_new(SXTmpStateData, 1);
+        *toRet = *tsd;
     }
 
     return toRet;

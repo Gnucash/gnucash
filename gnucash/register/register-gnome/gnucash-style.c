@@ -56,12 +56,10 @@ style_get_key (SheetBlockStyle *style)
 static gpointer
 style_create_key (SheetBlockStyle *style)
 {
-    static gint key;
-    gpointer new_key;
+    gint key = style->cursor->num_rows;
 
-    key = style->cursor->num_rows;
-    new_key = g_malloc(sizeof(key));
-    new_key = memcpy(new_key, &key, sizeof(key));
+    gint *new_key = g_new(gint, 1);
+    *new_key = key;
 
     return new_key;
 }

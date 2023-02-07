@@ -188,7 +188,7 @@ static QofQueryTerm * copy_query_term (const QofQueryTerm *qt)
     if (!qt) return NULL;
 
     new_qt = g_new0 (QofQueryTerm, 1);
-    memcpy (new_qt, qt, sizeof(QofQueryTerm));
+    *new_qt = *qt;
     new_qt->param_list = g_slist_copy (qt->param_list);
     new_qt->param_fcns = g_slist_copy (qt->param_fcns);
     new_qt->pdata = qof_query_core_predicate_copy (qt->pdata);
@@ -224,7 +224,7 @@ copy_or_terms(const GList * or_terms)
 
 static void copy_sort (QofQuerySort *dst, const QofQuerySort *src)
 {
-    memcpy (dst, src, sizeof (*dst));
+    *dst = *src;
     dst->param_list = g_slist_copy (src->param_list);
     dst->param_fcns = g_slist_copy (src->param_fcns);
 }
@@ -1006,7 +1006,7 @@ QofQuery * qof_query_copy (QofQuery *q)
     ht = copy->be_compiled;
     free_members (copy);
 
-    memcpy (copy, q, sizeof (QofQuery));
+    *copy = *q;
 
     copy->be_compiled = ht;
     copy->terms = copy_or_terms (q->terms);

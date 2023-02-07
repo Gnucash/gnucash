@@ -132,9 +132,6 @@
 /* Define to 1 if you have the <mcheck.h> header file. */
 #cmakedefine HAVE_MCHECK_H 1
 
-/* Define to 1 if you have the `memcpy' function. */
-#cmakedefine HAVE_MEMCPY 1
-
 /* Define to 1 if you have the <memory.h> header file. */
 #cmakedefine HAVE_MEMORY_H 1
 

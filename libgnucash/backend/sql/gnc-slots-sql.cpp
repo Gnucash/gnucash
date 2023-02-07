@@ -160,7 +160,7 @@ _retrieve_guid_ (gpointer pObject,  gpointer pValue)
     g_return_if_fail (pObject != NULL);
     g_return_if_fail (pValue != NULL);
 
-    memcpy (pGuid, guid, sizeof (GncGUID));
+    *pGuid = *guid;
 }
 
 /* Special column table because we need to be able to access the table by
