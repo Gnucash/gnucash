@@ -1877,6 +1877,9 @@ CsvImpPriceAssist::assist_preview_page_prepare ()
 
             // set over_write to false as default
             price_imp->over_write (false);
+
+            /* Disable the "Next" Assistant Button */
+            gtk_assistant_set_page_complete (csv_imp_asst, preview_page, false);
         }
         catch (std::ifstream::failure& e)
         {
@@ -1896,8 +1899,7 @@ CsvImpPriceAssist::assist_preview_page_prepare ()
         gtk_assistant_previous_page (csv_imp_asst);
     else
     {
-        /* Disable the "Next" Assistant Button */
-        gtk_assistant_set_page_complete (csv_imp_asst, preview_page, false);
+        m_final_file_name = m_fc_file_name;
 
         /* Load the data into the treeview. */
         g_idle_add ((GSourceFunc)csv_imp_preview_queue_rebuild_table, this);
