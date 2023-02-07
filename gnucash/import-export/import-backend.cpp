@@ -1117,9 +1117,11 @@ static void trans_info_calculate_dest_amount (GNCImportTransInfo *info)
         }
         else if (gnc_numeric_check(info->lsplit_price) == 0)
         {
-            /* We are in a multi currency situation and have a valid price */
+            /* We are in a multi currency situation and have a valid price
+             * Reminder: value = amount * price => amount = value / price */
+            gnc_numeric inv_price = gnc_numeric_invert (info->lsplit_price);
             info->lsplit_amount = gnc_numeric_mul (info->lsplit_value,
-                                                   info->lsplit_price,
+                                                   inv_price,
                                                    GNC_DENOM_AUTO,
                                                    GNC_HOW_RND_ROUND_HALF_UP);
         }

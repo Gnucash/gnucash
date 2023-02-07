@@ -720,9 +720,9 @@ void GncPreSplit::create_split (std::shared_ptr<DraftTransaction> draft_trans)
             auto trans_curr = xaccTransGetCurrency(draft_trans->trans);
             auto acct_comm = xaccAccountGetCommodity(taccount);
             if (gnc_commodity_equiv(trans_curr, acct_comm))
-                tamount = -amount;
+                tamount = tvalue;
             else if (m_price)
-                tamount = -amount * *m_price;
+                tamount = tvalue * m_price->inv();
             else
             {
                 QofBook* book = xaccTransGetBook (draft_trans->trans);
@@ -733,14 +733,13 @@ void GncPreSplit::create_split (std::shared_ptr<DraftTransaction> draft_trans)
                                                     acct_comm, trans_curr, time);
                 if (nprice)
                 {
-                    /* Found a usable price. Let's check if the conversion direction is right */
-                    GncNumeric rate;
+                    /* Found a usable price. Let's check if the conversion direction is right
+                     * Reminder: value = amount * price, or amount = value / price */
+                    GncNumeric rate = gnc_price_get_value(nprice);
                     if (gnc_commodity_equiv(gnc_price_get_currency(nprice), trans_curr))
-                        rate = gnc_price_get_value(nprice);
+                        tamount = tvalue * rate.inv();
                     else
-                        rate = static_cast<GncNumeric>(gnc_price_get_value(nprice)).inv();
-
-                    tamount = -amount * rate;
+                        tamount = tvalue * rate;
                 }
                 else
                     PWARN("No price found, defer creation of second split to generic import matcher.");
