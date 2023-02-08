@@ -817,9 +817,8 @@ gnc_register_number_plot_size_option(GncOptionDB* db,
                                      const char* key, const char* doc_string,
                                      int value)
 {
-    // Pixel values don't make much sense so always use percent.
     GncOption option{GncOptionRangeValue<int>{section, name, key, doc_string,
-                value, 10, 100, 1}};
+                value, 10, std::numeric_limits<int>::max(), 1}};
     db->register_option(section, std::move(option));
 }
 
