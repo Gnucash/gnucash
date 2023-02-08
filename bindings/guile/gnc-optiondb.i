@@ -1369,7 +1369,11 @@ inline SCM return_scm_value(ValueType value)
                                   GncOptionRangeValue<int>>)
                     {
                         if (scm_is_pair(new_value))
-                            option.set_value(scm_to_int(scm_cdr(new_value)));
+                        {
+                            // in Gnucash 4, the value might have been saved as floating point
+                            auto double_value = scm_to_double(scm_cdr(new_value));
+                            option.set_value(static_cast<int>(double_value));
+                        }
                         else
                             option.set_value(scm_to_int(new_value));
                         return;
