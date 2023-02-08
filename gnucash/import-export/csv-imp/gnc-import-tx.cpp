@@ -216,9 +216,12 @@ void GncTxImport::currency_format (int currency_format)
     m_settings.m_currency_format = currency_format;
 
     /* Reparse all currency related columns */
-    std::vector<GncTransPropType> commodities = { GncTransPropType::AMOUNT,
-            GncTransPropType::AMOUNT_NEG,
-            GncTransPropType::PRICE};
+    std::vector<GncTransPropType> commodities = {
+        GncTransPropType::AMOUNT,
+        GncTransPropType::AMOUNT_NEG,
+        GncTransPropType::T_AMOUNT,
+        GncTransPropType::T_AMOUNT_NEG,
+        GncTransPropType::PRICE};
     reset_formatted_column (commodities);
 }
 int GncTxImport::currency_format () { return m_settings.m_currency_format; }
@@ -751,15 +754,33 @@ void GncTxImport::update_pre_trans_split_props (uint32_t row, uint32_t col, GncT
     auto trans_props = std::make_shared<GncPreTrans> (*(std::get<PL_PRETRANS>(m_parsed_lines[row])).get());
     auto split_props = std::get<PL_PRESPLIT>(m_parsed_lines[row]);
 
-    /* Start by resetting the value of the old_type. */
-    if ((old_type > GncTransPropType::NONE) && (old_type <= GncTransPropType::TRANS_PROPS))
-        trans_props->reset (old_type);
-    if ((old_type > GncTransPropType::TRANS_PROPS) && (old_type <= GncTransPropType::SPLIT_PROPS))
-        split_props->reset (old_type);
-
-    /* Next attempt to set the value for new_type (may throw!) */
     try
     {
+        /* Start by resetting the value of the old_type (may throw!). */
+        if ((old_type > GncTransPropType::NONE) && (old_type <= GncTransPropType::TRANS_PROPS))
+            trans_props->reset (old_type);
+        if ((old_type > GncTransPropType::TRANS_PROPS) && (old_type <= GncTransPropType::SPLIT_PROPS))
+        {
+            split_props->reset (old_type);
+            if (is_multi_col_prop(old_type))
+            {
+
+                /* All amount columns may appear more than once. The net amount
+                * needs to be recalculated rather than just reset if one column
+                * is unset. */
+                for (auto col_it = m_settings.m_column_types.cbegin();
+                        col_it < m_settings.m_column_types.cend();
+                        col_it++)
+                    if (*col_it == old_type)
+                    {
+                        auto col_num = col_it - m_settings.m_column_types.cbegin();
+                        auto value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col_num);
+                        split_props->add (old_type, value);
+                    }
+            }
+        }
+
+        /* Next attempt to set the value for new_type (may throw!) */
         if ((new_type > GncTransPropType::NONE) && (new_type <= GncTransPropType::TRANS_PROPS))
         {
             auto value = std::string();
@@ -772,25 +793,28 @@ void GncTxImport::update_pre_trans_split_props (uint32_t row, uint32_t col, GncT
 
         if ((new_type > GncTransPropType::TRANS_PROPS) && (new_type <= GncTransPropType::SPLIT_PROPS))
         {
-            /* Except for Deposit or Withdrawal lines there can only be
-             * one column with a given property type. */
-            if ((new_type != GncTransPropType::AMOUNT) &&
-                (new_type != GncTransPropType::AMOUNT_NEG))
+            /* All amount columns may appear more than once. The net amount
+             * needs to be recalculated rather than just reset if one column
+             * is set. */
+            if (is_multi_col_prop(new_type))
+            {
+                split_props->reset(new_type);
+                /* For Deposits and Withdrawal we have to sum all columns with this property */
+                for (auto col_it = m_settings.m_column_types.cbegin();
+                     col_it < m_settings.m_column_types.cend();
+                col_it++)
+                     if (*col_it == new_type)
+                     {
+                         auto col_num = col_it - m_settings.m_column_types.cbegin();
+                         auto value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col_num);
+                         split_props->add (new_type, value);
+                     }
+            }
+            else
             {
                 auto value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col);
                 split_props->set(new_type, value);
             }
-            else
-                /* For Deposits and Withdrawal we have to sum all columns with this property */
-                for (auto col_it = m_settings.m_column_types.cbegin();
-                          col_it < m_settings.m_column_types.cend();
-                          col_it++)
-                         if (*col_it == new_type)
-                         {
-                             auto col_num = col_it - m_settings.m_column_types.cbegin();
-                             auto value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col_num);
-                             split_props->add (new_type, value);
-                         }
         }
     }
     catch (const std::exception& e)
@@ -834,8 +858,7 @@ GncTxImport::set_column_type (uint32_t position, GncTransPropType type, bool for
 
     // Column types except amount and negated amount should be unique,
     // so remove any previous occurrence of the new type
-    if ((type != GncTransPropType::AMOUNT) &&
-        (type != GncTransPropType::AMOUNT_NEG))
+    if (!is_multi_col_prop(type))
         std::replace(m_settings.m_column_types.begin(), m_settings.m_column_types.end(),
             type, GncTransPropType::NONE);
 

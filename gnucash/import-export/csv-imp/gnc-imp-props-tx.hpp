@@ -95,6 +95,11 @@ private:
     const char *m_name;
 };
 
+/** Some properties can be assigned to more than one column.
+ *  This function returns true if prop is such a property.
+ */
+bool is_multi_col_prop (GncTransPropType prop);
+
 /** Some properties only make sense in a multi-split context.
  *  Inversely some also only make sense in a two-split context.
  *  Below function will test a property against a given context

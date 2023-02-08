@@ -94,6 +94,19 @@ std::vector<GncTransPropType> multisplit_blacklist = {
         GncTransPropType::TREC_STATE,
         GncTransPropType::TREC_DATE
 };
+/* List of properties that can be assigned to multiple columns at once */
+std::vector<GncTransPropType> multi_col_props = {
+    GncTransPropType::AMOUNT,
+    GncTransPropType::AMOUNT_NEG,
+    GncTransPropType::T_AMOUNT,
+    GncTransPropType::T_AMOUNT_NEG
+};
+
+bool is_multi_col_prop (GncTransPropType prop)
+{
+    return (std::find (multi_col_props.cbegin(),
+                       multi_col_props.cend(), prop) != multi_col_props.cend());
+}
 
 GncTransPropType sanitize_trans_prop (GncTransPropType prop, bool multi_split)
 {
