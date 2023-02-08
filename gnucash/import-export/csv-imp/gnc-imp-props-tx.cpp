@@ -330,7 +330,11 @@ std::shared_ptr<DraftTransaction> GncPreTrans::create_trans (QofBook* book, gnc_
 
     auto trans = xaccMallocTransaction (book);
     xaccTransBeginEdit (trans);
-    xaccTransSetCurrency (trans, m_commodity ? *m_commodity : currency);
+
+    if (m_commodity && gnc_commodity_is_currency(*m_commodity))
+        xaccTransSetCurrency (trans, *m_commodity);
+    else
+        xaccTransSetCurrency (trans, currency);
     xaccTransSetDatePostedSecsNormalized (trans,
                         static_cast<time64>(GncDateTime(*m_date, DayPart::neutral)));
 
@@ -342,7 +346,6 @@ std::shared_ptr<DraftTransaction> GncPreTrans::create_trans (QofBook* book, gnc_
 
     if (m_notes)
         xaccTransSetNotes (trans, m_notes->c_str());
-
 
     created = true;
     return std::make_shared<DraftTransaction>(trans);
@@ -698,14 +701,41 @@ void GncPreSplit::create_split (std::shared_ptr<DraftTransaction> draft_trans)
             *tamount -= *m_tamount_neg;
     }
 
+    auto value = GncNumeric();
+    auto trans_curr = xaccTransGetCurrency(draft_trans->trans);
+    auto acct_comm = xaccAccountGetCommodity(account);
+    if (gnc_commodity_equiv(trans_curr, acct_comm))
+        value = amount;
+    else if ((m_tamount || m_tamount_neg) &&
+              m_taccount &&
+              gnc_commodity_equiv (trans_curr, xaccAccountGetCommodity( *m_taccount)))
+        value = -*tamount;
+    else if (m_price)
+        value = amount * *m_price;
+    else
+    {
+        QofBook* book = xaccTransGetBook (draft_trans->trans);
+        auto time = xaccTransRetDatePosted (draft_trans->trans);
+        /* Import data didn't specify price, let's lookup the nearest in time */
+        auto nprice =
+        gnc_pricedb_lookup_nearest_in_time64(gnc_pricedb_get_db(book),
+                                             acct_comm, trans_curr, time);
+        if (nprice)
+        {
+            /* Found a usable price. Let's check if the conversion direction is right
+             * Reminder: value = amount * price, or amount = value / price */
+            GncNumeric rate = gnc_price_get_value(nprice);
+            if (gnc_commodity_equiv(gnc_price_get_currency(nprice), trans_curr))
+                value = amount * rate;
+            else
+                value = amount * rate.inv();
+        }
+        else
+            PERR("No price found, can't create this split.");
+    }
+
     /* Add a split with the cumulative amount value. */
-    // FIXME The first split is always assumed to be in the transaction currency, but this assumption
-    //       may not hold in case of stock transactions.
-    //       Needs extra testing.
-    auto inv_price = m_price;
-    if (m_price)
-        inv_price = m_price->inv();
-    trans_add_split (draft_trans->trans, account, amount, amount, m_action, m_memo, m_rec_state, m_rec_date);
+    trans_add_split (draft_trans->trans, account, amount, value, m_action, m_memo, m_rec_state, m_rec_date);
     splits_created++;
 
     if (taccount)
@@ -714,7 +744,7 @@ void GncPreSplit::create_split (std::shared_ptr<DraftTransaction> draft_trans)
          * Determine the transfer amount. If the csv data had columns for it, use those, otherwise
          * try to calculate it. The easiest is the single-currency case: just use the negated
          * amount. In case of multi-currency, attempt to get a price and work from there. */
-        auto tvalue = -amount;
+        auto tvalue = -value;
         if (!tamount)
         {
             auto trans_curr = xaccTransGetCurrency(draft_trans->trans);

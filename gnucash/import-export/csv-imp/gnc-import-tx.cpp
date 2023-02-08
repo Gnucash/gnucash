@@ -603,6 +603,8 @@ std::shared_ptr<DraftTransaction> GncTxImport::trans_properties_to_trans (std::v
 
     QofBook* book = gnc_account_get_book (account);
     gnc_commodity* currency = xaccAccountGetCommodity (account);
+    if (!gnc_commodity_is_currency(currency))
+        currency = xaccAccountGetCommodity (gnc_account_get_parent (account));
 
     auto draft_trans = trans_props->create_trans (book, currency);
 
