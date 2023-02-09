@@ -197,66 +197,53 @@
                     (cons 'maintainAspectRatio #f)
                     (cons 'animation (list
                                       (cons 'duration 0)))
-                    (cons 'chartArea (list
-                                      (cons 'backgroundColor "#fffdf6")))
-                    (cons 'legend (list
-                                   (cons 'position 'right)
-                                   (cons 'reverse #f)
-                                   (cons 'labels (list
-                                                  (cons 'fontColor 'black)))))
-
                     (cons 'elements (list
                                      (cons 'line (list
                                                   (cons 'tension 0)))
                                      (cons 'point (list
-                                                   (cons 'pointStyle #f)))))
-                    (cons 'tooltips (list
-                                     (cons 'callbacks (list
-                                                       (cons 'label #f)))))
-
+                                                   (cons 'pointStyle 'circle)))))
                     (cons 'scales (list
-                                   (cons 'xAxes (vector
-                                                 (list
+                                   (cons 'x (list
+                                             (cons 'display #t)
+                                             (cons 'type 'category)
+                                             (cons 'distribution 'series)
+                                             (cons 'offset #t)
+                                             (cons 'grid (list
+                                                          (cons 'display #t)
+                                                          (cons 'lineWidth 1.5)))
+                                             (cons 'title (list
+                                                           (cons 'display #t)
+                                                           (cons 'text "")))
+                                             (cons 'ticks (list
+                                                           (cons 'maxRotation 30))))
+                                         )
+                                   (cons 'y (list
+                                             (cons 'stacked #f)
+                                             (cons 'display #t)
+                                             (cons 'grid (list
+                                                          (cons 'display #t)
+                                                          (cons 'lineWidth 1.5)))
+                                             (cons 'title (list
+                                                           (cons 'display 1.5)
+                                                           (cons 'text "")))
+                                             (cons 'ticks (list
+                                                          (cons 'callback #f)))
+                                             (cons 'beginAtZero #f)))))
+                    (cons 'plugins (list
+                                    (cons 'chartArea (list
+                                                      (cons 'backgroundColor "#fffdf6")))
+                                    (cons 'legend (list
+                                                   (cons 'position 'right)
+                                                   (cons 'reverse #f)
+                                                   (cons 'labels (list
+                                                                  (cons 'color 'black)))))
+                                    (cons 'title (list
                                                   (cons 'display #t)
-                                                  (cons 'type 'category)
-                                                  (cons 'distribution 'series)
-                                                  (cons 'offset #t)
-                                                  (cons 'gridLines (list
-                                                                    (cons 'display #t)
-                                                                    (cons 'lineWidth 1.5)))
-                                                  (cons 'scaleLabel (list
-                                                                     (cons 'display #t)
-                                                                     (cons 'labelString "")))
-                                                  (cons 'ticks (list
-                                                                (cons 'maxRotation 30))))
-                                                 ;; the following another xAxis at the top
-                                                 '((position . top)
-                                                   (ticks . ((display . #f)))
-                                                   (gridLines . ((display . #f)
-                                                                 (drawTicks . #f))))
-                                                 ))
-                                   (cons 'yAxes (vector
-                                                 (list
-                                                  (cons 'stacked #f)
-                                                  (cons 'display #t)
-                                                  (cons 'gridLines (list
-                                                                    (cons 'display #t)
-                                                                    (cons 'lineWidth 1.5)))
-                                                  (cons 'scaleLabel (list
-                                                                     (cons 'display 1.5)
-                                                                     (cons 'labelString "")))
-                                                  (cons 'ticks (list
-                                                                (cons 'beginAtZero #f))))
-                                                 ;; the following another yAxis on the right
-                                                 '((position . right)
-                                                   (ticks . ((display . #f)))
-                                                   (gridLines . ((display . #f)
-                                                                 (drawTicks . #f))))
-                                                 ))))
-                    (cons 'title (list
-                                  (cons 'display #t)
-                                  (cons 'fontStyle "")
-                                  (cons 'text ""))))))
+                                                  (cons 'font (list (cons 'style 'normal)))
+                                                  (cons 'text "")))
+                                    (cons 'tooltip (list
+                                                    (cons 'callbacks (list
+                                                                      (cons 'label #f))))))))))
    "XXX"     ;currency-iso
    "\u00A4"  ;currency-symbol
    "currency";format-style
@@ -271,17 +258,17 @@
   (gnc:html-chart-set! chart '(type) type))
 
 (define (gnc:html-chart-title chart)
-  (gnc:html-chart-get chart '(options title text)))
+  (gnc:html-chart-get chart '(options plugins title text)))
 
 (define (gnc:html-chart-set-title! chart title)
-  (gnc:html-chart-set! chart '(options title text) title))
+  (gnc:html-chart-set! chart '(options plugins title text) title))
 
 (define (gnc:html-chart-set-data-labels! chart labels)
   (gnc:html-chart-set! chart '(data labels) labels))
 
 (define (gnc:html-chart-set-axes-display! chart display?)
-  (gnc:html-chart-set! chart '(options scales xAxes (0) display) display?)
-  (gnc:html-chart-set! chart '(options scales yAxes (0) display) display?))
+  (gnc:html-chart-set! chart '(options scales x display) display?)
+  (gnc:html-chart-set! chart '(options scales y display) display?))
 
 ;; e.g.:
 ;; (gnc:html-chart-add-data-series! chart "label" list-of-numbers color
@@ -319,18 +306,18 @@
   (gnc:html-chart-set! chart '(data datasets) #()))
 
 (define (gnc:html-chart-set-x-axis-label! chart label)
-  (gnc:html-chart-set! chart '(options scales xAxes (0) scaleLabel labelString) label))
+  (gnc:html-chart-set! chart '(options scales x title text) label))
 
 (define (gnc:html-chart-set-stacking?! chart stack?)
-  (gnc:html-chart-set! chart '(options scales xAxes (0) stacked) stack?)
-  (gnc:html-chart-set! chart '(options scales yAxes (0) stacked) stack?))
+  (gnc:html-chart-set! chart '(options scales x stacked) stack?)
+  (gnc:html-chart-set! chart '(options scales y stacked) stack?))
 
 (define (gnc:html-chart-set-grid?! chart grid?)
-  (gnc:html-chart-set! chart '(options scales xAxes (0) gridLines display) grid?)
-  (gnc:html-chart-set! chart '(options scales yAxes (0) gridLines display) grid?))
+  (gnc:html-chart-set! chart '(options scales x grid display) grid?)
+  (gnc:html-chart-set! chart '(options scales y grid display) grid?))
 
 (define (gnc:html-chart-set-y-axis-label! chart label)
-  (gnc:html-chart-set! chart '(options scales yAxes (0) scaleLabel labelString) label))
+  (gnc:html-chart-set! chart '(options scales y title text) label))
 
 (define (gnc:html-chart-get chart path)
   (let ((options (gnc:html-chart-get-options-internal chart)))
@@ -363,9 +350,9 @@ function numformat(amount) {
 
 
 (define JS-setup "
-function tooltipLabel(tooltipItem,data) {
-  var datasetLabel = data.datasets[tooltipItem.datasetIndex].label || 'Other';
-  var label = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+function tooltipLabel(tooltipItemCtx) {
+  var datasetLabel = tooltipItemCtx.dataset.label || 'Other';
+  var label = tooltipItemCtx.dataset.data[tooltipItemCtx.dataIndex];
   switch (typeof(label)) {
     case 'number':
       return datasetLabel + ': ' + numformat(label);
@@ -374,36 +361,39 @@ function tooltipLabel(tooltipItem,data) {
   }
 }
 
-function tooltipTitle(array,data) {
-  return data.labels[array[0].index]; }
+function tooltipTitle(array) {
+  var tooltipItemCtx = array[0];
+  var label = tooltipItemCtx.chart.data.labels[tooltipItemCtx.dataIndex]
+  return label;
+}
 
 // draw the background color
-Chart.pluginService.register({
-  beforeDraw: function (chart, easing) {
-    if (chart.config.options.chartArea && chart.config.options.chartArea.backgroundColor) {
-      var ctx = chart.chart.ctx;
-      var chartArea = chart.chartArea;
-      ctx.save();
-      ctx.fillStyle = chart.config.options.chartArea.backgroundColor;
-      ctx.fillRect(chartArea.left, chartArea.top, chartArea.right - chartArea.left, chartArea.bottom - chartArea.top);
-      ctx.restore();
-    }
+Chart.register({
+  id: 'chartArea',
+  beforeDraw: function (chart, args, options) {
+    var ctx = chart.ctx;
+    var chartArea = chart.chartArea;
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-over';
+    ctx.fillStyle = options.backgroundColor;
+    ctx.fillRect(chartArea.left, chartArea.top, chartArea.width, chartArea.height);
+    ctx.restore();
   }
 })
 
 // copy font info from css into chartjs.
 bodyStyle = window.getComputedStyle (document.querySelector ('body'));
-Chart.defaults.global.defaultFontSize = parseInt (bodyStyle.fontSize);
-Chart.defaults.global.defaultFontFamily = bodyStyle.fontFamily;
-Chart.defaults.global.defaultFontStyle = bodyStyle.fontStyle;
+Chart.defaults.font.size = parseInt (bodyStyle.fontSize);
+Chart.defaults.font.family = bodyStyle.fontFamily;
+Chart.defaults.font.style = bodyStyle.fontStyle;
 
 titleStyle = window.getComputedStyle (document.querySelector ('h3'));
-chartjsoptions.options.title.fontSize = parseInt (titleStyle.fontSize);
-chartjsoptions.options.title.fontFamily = titleStyle.fontFamily;
-chartjsoptions.options.title.fontStyle = titleStyle.fontStyle;
+chartjsoptions.options.plugins.title.font.size = parseInt (titleStyle.fontSize);
+chartjsoptions.options.plugins.title.font.family = titleStyle.fontFamily;
+chartjsoptions.options.plugins.title.font.style = titleStyle.fontStyle;
 
 document.getElementById(chartid).onclick = function(evt) {
-  var activepoints = myChart.getElementAtEvent(evt);
+  var activepoints = myChart.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, false);
   var anchor = document.getElementById(jumpid);
   switch (activepoints.length)  {
     case 0:
@@ -412,8 +402,8 @@ document.getElementById(chartid).onclick = function(evt) {
       anchor.style = 'display: none';
       break;
     default:
-      var index = activepoints[0]['_index'];
-      var datasetIndex = activepoints[0]['_datasetIndex'];
+      var index = activepoints[0].index;
+      var datasetIndex = activepoints[0].datasetIndex;
       var datasetURLs = myChart.data.datasets[datasetIndex].urls;
       // console.log('index=',index,'datasetIndex=',datasetIndex);
       anchor.style = 'position:absolute; top:' + (evt.clientY - 30) + 'px; left:' + (evt.clientX - 20) + 'px; display: block; padding: 5px; border-radius: 5px; background: #4E9CAF; text-align:center; color:white; z-index: 999;';
@@ -454,7 +444,7 @@ document.getElementById(chartid).onclick = function(evt) {
          ;; clashing on multi-column reports
          (id (symbol->string (gensym "chart"))))
 
-    (push (gnc:html-js-include "chartjs/Chart.bundle.min.js"))
+    (push (gnc:html-js-include "chartjs/chart.umd.js"))
 
     ;; the following hidden h3 is used to query style and copy onto chartjs
     (push "<h3 style='display:none'></h3>")
@@ -476,14 +466,14 @@ document.getElementById(chartid).onclick = function(evt) {
 
     (push JS-Number-to-String)
     (when (gnc:html-chart-custom-y-axis-ticks? chart)
-      (push "chartjsoptions.options.scales.yAxes[0].ticks.callback = yAxisDisplay;\n")
+      (push "chartjsoptions.options.scales.y.ticks.callback = yAxisDisplay;\n")
       (push "function yAxisDisplay(value,index,values) { return numformat(value); };\n"))
     (when (gnc:html-chart-custom-x-axis-ticks? chart)
-      (push "chartjsoptions.options.scales.xAxes[0].ticks.callback = xAxisDisplay;\n")
+      (push "chartjsoptions.options.scales.x.ticks.callback = xAxisDisplay;\n")
       (push "function xAxisDisplay(value,index,values) { return chartjsoptions.data.labels[index]; };\n"))
 
-    (push "chartjsoptions.options.tooltips.callbacks.label = tooltipLabel;\n")
-    (push "chartjsoptions.options.tooltips.callbacks.title = tooltipTitle;\n")
+    (push "chartjsoptions.options.plugins.tooltip.callbacks.label = tooltipLabel;\n")
+    (push "chartjsoptions.options.plugins.tooltip.callbacks.title = tooltipTitle;\n")
     (push JS-setup)
 
     (push "var myChart = new Chart(chartid, chartjsoptions);\n")

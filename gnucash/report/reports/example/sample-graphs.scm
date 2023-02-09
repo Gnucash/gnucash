@@ -112,7 +112,7 @@
     ;; also illustrates how to precisely select chartjs options. The
     ;; second parameter is a list of symbols to target a particular
     ;; chartJS option. See chartJS documentation.
-    (gnc:html-chart-set! chart '(options scales xAxes (0) type) "linear")
+    (gnc:html-chart-set! chart '(options scales x type) "linear")
 
     chart))
 

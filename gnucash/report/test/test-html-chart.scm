@@ -33,21 +33,25 @@
     ;;
     ;; options are stored in a nested list of pairs, in which the car
     ;; is a symbol, the cdr is either a value (bool/string/number)
-    ;; another list of pairs, or another simple list
-
-    ;; (list (cons 'maintainAspectRatio #f)
-    ;;       (cons 'chartArea (list (cons 'backgroundColor "white")))
-    ;;       (cons 'scales (list (cons 'xAxes (list
-    ;;                                         (list (cons 'display #t)
-    ;;                                               (cons 'gridlines (list (cons 'display #t)
-    ;;                                                                      (cons 'lineWidth 1.5)))
-    ;;                                               (cons 'ticks (list (cons 'fontSize 12)))))))))
-
+    ;; another list of pairs, another simple list, or a vector
+    #|
+    '((maintainAspectRatio . #f)
+      (scales
+       ((x
+         ((display . #t)
+          (grid
+           ((display . #t)
+            (lineWidth . 1.5)))
+          (ticks
+           ((font
+             ((size . 12)))))))))
+      (plugins
+       ((chartArea
+         ((backgroundColor . "white")))))
+    |#
     ;; traversal is accomplished as a list of symbols or numbers
-    ;; e.g. '(maintainAspectRatio), '(chartArea backgroundColor),
-    ;; '(scales xAxes (0) display). NOTE: xAxes specifies a number to
-    ;; identify the kth element in the list. this is required as per
-    ;; chartjs specification.
+    ;; e.g. '(maintainAspectRatio), '(plugins chartArea backgroundColor),
+    ;; '(scales x display).
     ;;
     ;; syntax is: (gnc:html-chart-set! chart path newval) or
     ;; (gnc:html-chart-get chart path)
@@ -57,15 +61,15 @@
       'abc
       (gnc:html-chart-get chart '(options maintainAspectRatio)))
 
-    (gnc:html-chart-set! chart '(options legend position) 'de)
+    (gnc:html-chart-set! chart '(options plugins legend position) 'de)
     (test-equal "1st level option setter & getter"
       'de
-      (gnc:html-chart-get chart '(options legend position)))
+      (gnc:html-chart-get chart '(options plugins legend position)))
 
     (test-error
      "1st level option fails - cannot traverse through existing path"
      'invalid-path
-     (gnc:html-chart-set! chart '(options legend position invalid) 'de))
+     (gnc:html-chart-set! chart '(options plugins legend position invalid) 'de))
 
     (test-equal "deep nested new path - inexistent"
       #f
