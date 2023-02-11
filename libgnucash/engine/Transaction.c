@@ -2432,6 +2432,8 @@ xaccTransGetDocLink (const Transaction *trans)
     {
         GValue v = G_VALUE_INIT;
         Transaction *t = (Transaction*) trans;
+	if (!qof_instance_has_kvp(QOF_INSTANCE (trans)))
+            return NULL;
         qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, doclink_uri_str);
         t->doclink = G_VALUE_HOLDS_STRING (&v) ? g_value_dup_string (&v) : NULL;
         g_value_unset (&v);
@@ -2447,6 +2449,8 @@ xaccTransGetNotes (const Transaction *trans)
     {
         GValue v = G_VALUE_INIT;
         Transaction *t = (Transaction*) trans;
+	if (!qof_instance_has_kvp(QOF_INSTANCE (trans)))
+            return NULL;
         qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, trans_notes_str);
         t->notes = G_VALUE_HOLDS_STRING (&v) ? g_value_dup_string (&v) : NULL;
         g_value_unset (&v);
@@ -2462,6 +2466,8 @@ xaccTransGetIsClosingTxn (const Transaction *trans)
     {
         Transaction* trans_nonconst = (Transaction*) trans;
         GValue v = G_VALUE_INIT;
+	if (!qof_instance_has_kvp(QOF_INSTANCE (trans)))
+            return FALSE;
         qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, trans_is_closing_str);
         if (G_VALUE_HOLDS_INT64 (&v))
             trans_nonconst->isClosingTxn_cached = (g_value_get_int64 (&v) ? 1 : 0);
@@ -2604,6 +2610,8 @@ xaccTransGetReadOnly (Transaction *trans)
     if (trans->readonly_reason == is_unset)
     {
         GValue v = G_VALUE_INIT;
+	if (!qof_instance_has_kvp(QOF_INSTANCE (trans)))
+            return NULL;
         qof_instance_get_kvp (QOF_INSTANCE(trans), &v, 1, TRANS_READ_ONLY_REASON);
         trans->readonly_reason = G_VALUE_HOLDS_STRING (&v) ?
             g_value_dup_string (&v) : NULL;
@@ -2842,6 +2850,8 @@ xaccTransGetVoidReason(const Transaction *trans)
     {
         GValue v = G_VALUE_INIT;
         Transaction *t = (Transaction*) trans;
+	if (!qof_instance_has_kvp(QOF_INSTANCE (trans)))
+            return NULL;
         qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, void_reason_str);
         t->void_reason = G_VALUE_HOLDS_STRING (&v) ? g_value_dup_string (&v) : NULL;
         g_value_unset (&v);
