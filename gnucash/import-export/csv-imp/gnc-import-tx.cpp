@@ -219,8 +219,8 @@ void GncTxImport::currency_format (int currency_format)
     std::vector<GncTransPropType> commodities = {
         GncTransPropType::AMOUNT,
         GncTransPropType::AMOUNT_NEG,
-        GncTransPropType::T_AMOUNT,
-        GncTransPropType::T_AMOUNT_NEG,
+        GncTransPropType::TAMOUNT,
+        GncTransPropType::TAMOUNT_NEG,
         GncTransPropType::PRICE};
     reset_formatted_column (commodities);
 }

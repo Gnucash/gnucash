@@ -73,8 +73,8 @@ std::map<GncTransPropType, const char*> gnc_csv_col_type_strs = {
         { GncTransPropType::REC_DATE, N_("Reconcile Date") },
         { GncTransPropType::TACTION, N_("Transfer Action") },
         { GncTransPropType::TACCOUNT, N_("Transfer Account") },
-        { GncTransPropType::T_AMOUNT, N_("Transfer Amount") },
-        { GncTransPropType::T_AMOUNT_NEG, N_("Transfer Amount (Negated)") },
+        { GncTransPropType::TAMOUNT, N_("Transfer Amount") },
+        { GncTransPropType::TAMOUNT_NEG, N_("Transfer Amount (Negated)") },
         { GncTransPropType::TMEMO, N_("Transfer Memo") },
         { GncTransPropType::TREC_STATE, N_("Transfer Reconciled") },
         { GncTransPropType::TREC_DATE, N_("Transfer Reconcile Date") }
@@ -89,8 +89,8 @@ std::vector<GncTransPropType> twosplit_blacklist = {
 std::vector<GncTransPropType> multisplit_blacklist = {
         GncTransPropType::TACTION,
         GncTransPropType::TACCOUNT,
-        GncTransPropType::T_AMOUNT,
-        GncTransPropType::T_AMOUNT_NEG,
+        GncTransPropType::TAMOUNT,
+        GncTransPropType::TAMOUNT_NEG,
         GncTransPropType::TMEMO,
         GncTransPropType::TREC_STATE,
         GncTransPropType::TREC_DATE
@@ -99,8 +99,8 @@ std::vector<GncTransPropType> multisplit_blacklist = {
 std::vector<GncTransPropType> multi_col_props = {
     GncTransPropType::AMOUNT,
     GncTransPropType::AMOUNT_NEG,
-    GncTransPropType::T_AMOUNT,
-    GncTransPropType::T_AMOUNT_NEG
+    GncTransPropType::TAMOUNT,
+    GncTransPropType::TAMOUNT_NEG
 };
 
 bool is_multi_col_prop (GncTransPropType prop)
@@ -473,12 +473,12 @@ void GncPreSplit::set (GncTransPropType prop_type, const std::string& value)
                 m_amount_neg = parse_monetary (value, m_currency_format); // Will throw if parsing fails
                 break;
 
-            case GncTransPropType::T_AMOUNT:
+            case GncTransPropType::TAMOUNT:
                 m_tamount = boost::none;
                 m_tamount = parse_monetary (value, m_currency_format); // Will throw if parsing fails
                 break;
 
-            case GncTransPropType::T_AMOUNT_NEG:
+            case GncTransPropType::TAMOUNT_NEG:
                 m_tamount_neg = boost::none;
                 m_tamount_neg = parse_monetary (value, m_currency_format); // Will throw if parsing fails
                 break;
@@ -577,14 +577,14 @@ void GncPreSplit::add (GncTransPropType prop_type, const std::string& value)
                 m_amount_neg = num_val;
                 break;
 
-            case GncTransPropType::T_AMOUNT:
+            case GncTransPropType::TAMOUNT:
                 num_val = parse_monetary (value, m_currency_format); // Will throw if parsing fails
                 if (m_tamount)
                     num_val += *m_tamount;
                 m_tamount = num_val;
                 break;
 
-            case GncTransPropType::T_AMOUNT_NEG:
+            case GncTransPropType::TAMOUNT_NEG:
                 num_val = parse_monetary (value, m_currency_format); // Will throw if parsing fails
                 if (m_tamount_neg)
                     num_val += *m_tamount_neg;
