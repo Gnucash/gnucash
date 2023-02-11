@@ -63,16 +63,30 @@ enum parse_line_cols {
     PL_SKIP
 };
 
+using StrVec = std::vector<std::string>;
+
 /** Tuple to hold all internal state for one parsed line. The contents of each
  * column is described by the parse_line_cols enum. This enum should be used
  * with std::get to access the columns. */
 using parse_line_t = std::tuple<StrVec,
-                                std::string,
+                                ErrMap,
                                 std::shared_ptr<GncPreTrans>,
                                 std::shared_ptr<GncPreSplit>,
                                 bool>;
 
 struct ErrorList;
+
+/** Exception that will be thrown whenever a parsing error is encountered.
+ *  To get a full list of current errors, call member function parse_errors().
+ */
+struct GncCsvImpParseError : public std::runtime_error
+{
+    GncCsvImpParseError(const std::string& err, ErrMap err_vec) : std::runtime_error(err), m_errors{err_vec} {}
+    ErrMap errors() const {return m_errors;}
+
+private:
+    ErrMap m_errors;
+};
 
 /** The actual TxImport class
  * It's intended to use in the following sequence of actions:

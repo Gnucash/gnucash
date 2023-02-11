@@ -404,7 +404,7 @@ void GncTxImport::tokenize (bool guessColTypes)
     {
         auto length = tokenized_line.size();
         if (length > 0)
-            m_parsed_lines.push_back (std::make_tuple (tokenized_line, std::string(),
+            m_parsed_lines.push_back (std::make_tuple (tokenized_line, ErrMap(),
                     std::make_shared<GncPreTrans>(date_format(), m_settings.m_multi_split),
                     std::make_shared<GncPreSplit>(date_format(), currency_format()),
                     false));
@@ -555,40 +555,6 @@ std::string GncTxImport::verify ()
 }
 
 
-/** Checks whether the parsed line contains all essential properties.
- * Essential properties are
- * - "Date"
- * - at least one of "Deposit", or "Withdrawal"
- * - "Account"
- * Note account isn't checked for here as this has been done before
- * @param parsed_line The line we are checking
- * @exception std::invalid_argument in an essential property is missing
- */
-static void trans_properties_verify_essentials (std::vector<parse_line_t>::iterator& parsed_line)
-{
-    std::string error_message;
-    std::shared_ptr<GncPreTrans> trans_props;
-    std::shared_ptr<GncPreSplit> split_props;
-
-    std::tie(std::ignore, error_message, trans_props, split_props, std::ignore) = *parsed_line;
-
-    auto trans_error = trans_props->verify_essentials();
-    auto split_error = split_props->verify_essentials();
-
-    error_message.clear();
-    if (!trans_error.empty())
-    {
-        error_message += trans_error;
-        if (!split_error.empty())
-            error_message += "\n";
-    }
-    if (!split_error.empty())
-        error_message += split_error;
-
-    if (!error_message.empty())
-        throw std::invalid_argument(error_message);
-}
-
 /** Create a transaction and splits from a pair of trans and split property objects.
  * Note: this function assumes all properties have been verified
  *       to be valid and the required properties are available.
@@ -598,10 +564,9 @@ static void trans_properties_verify_essentials (std::vector<parse_line_t>::itera
 std::shared_ptr<DraftTransaction> GncTxImport::trans_properties_to_trans (std::vector<parse_line_t>::iterator& parsed_line)
 {
     auto created_trans = false;
-    std::string error_message;
     std::shared_ptr<GncPreTrans> trans_props;
     std::shared_ptr<GncPreSplit> split_props;
-    std::tie(std::ignore, error_message, trans_props, split_props, std::ignore) = *parsed_line;
+    std::tie(std::ignore, std::ignore, trans_props, split_props, std::ignore) = *parsed_line;
     auto account = split_props->get_account();
 
     QofBook* book = gnc_account_get_book (account);
@@ -640,9 +605,6 @@ std::shared_ptr<DraftTransaction> GncTxImport::trans_properties_to_trans (std::v
 
     split_props->create_split (draft_trans);
 
-    // With the added split information, we may have to revisit the transaction's commodity here
-    // TBD
-
     /* Only return the draft transaction if we really created a new one
      * The return value will be added to a list for further processing,
      * we want each transaction to appear only once in that list.
@@ -653,16 +615,22 @@ std::shared_ptr<DraftTransaction> GncTxImport::trans_properties_to_trans (std::v
 void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parsed_line)
 {
     StrVec line;
-    std::string error_message;
+    ErrMap errors;
     std::shared_ptr<GncPreTrans> trans_props = nullptr;
     std::shared_ptr<GncPreSplit> split_props = nullptr;
     bool skip_line = false;
-    std::tie(line, error_message, trans_props, split_props, skip_line) = *parsed_line;
+    std::tie(line, errors, trans_props, split_props, skip_line) = *parsed_line;
 
     if (skip_line)
         return;
 
-    error_message.clear();
+    // We still have errors for this line. That shouldn't happen!
+    if(!errors.empty())
+    {
+        auto error_message = _("Current line still has parse errors.\n"
+                               "This should never happen. Please report this as a bug.");
+        throw GncCsvImpParseError(error_message, errors);
+    }
 
     // Add an ACCOUNT property with the default account if no account column was set by the user
     auto line_acct = split_props->get_account();
@@ -674,18 +642,17 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
         {
             // Oops - the user didn't select an Account column *and* we didn't get a default value either!
             // Note if you get here this suggests a bug in the code!
-            error_message = _("No account column selected and no base account specified either.\n"
-                                       "This should never happen. Please report this as a bug.");
-            PINFO("User warning: %s", error_message.c_str());
-            throw std::invalid_argument(error_message);
+            auto error_message = _("No account column selected and no base account specified either.\n"
+                                   "This should never happen. Please report this as a bug.");
+            PINFO("User warning: %s", error_message);
+            auto errs = ErrMap { ErrPair { GncTransPropType::NONE, error_message},};
+            throw GncCsvImpParseError(_("Parse Error"), errs);
         }
     }
 
     /* If column parsing was successful, convert trans properties into a draft transaction. */
     try
     {
-        trans_properties_verify_essentials (parsed_line);
-
         /* If all went well, add this transaction to the list. */
         auto draft_trans = trans_properties_to_trans (parsed_line);
         if (draft_trans)
@@ -696,8 +663,10 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
     }
     catch (const std::invalid_argument& e)
     {
-        error_message = e.what();
-        PINFO("User warning: %s", error_message.c_str());
+        auto err_str = _("Problem creating preliminary transaction");
+        PINFO("%s: %s", err_str, e.what());
+        auto errs = ErrMap { ErrPair { GncTransPropType::NONE, err_str},};
+        throw (GncCsvImpParseError(err_str, errs));
     }
 }
 
@@ -888,12 +857,9 @@ GncTxImport::set_column_type (uint32_t position, GncTransPropType type, bool for
         update_pre_trans_split_props (row, position, old_type, type);
 
         /* Report errors if there are any */
-        auto trans_errors = std::get<PL_PRETRANS>(*parsed_lines_it)->errors();
-        auto split_errors = std::get<PL_PRESPLIT>(*parsed_lines_it)->errors(m_req_mapped_accts);
-        std::get<PL_ERROR>(*parsed_lines_it) =
-                trans_errors +
-                (trans_errors.empty() && split_errors.empty() ? std::string() : "\n") +
-                split_errors;
+        auto all_errors = std::get<PL_PRETRANS>(*parsed_lines_it)->errors();
+        all_errors.merge (std::get<PL_PRESPLIT>(*parsed_lines_it)->errors());
+        std::get<PL_ERROR>(*parsed_lines_it) = all_errors;
     }
 }
 

@@ -66,6 +66,7 @@
 #include <exception>
 #include <iostream>
 #include <memory>
+#include <numeric>
 #include <string>
 #include <tuple>
 
@@ -204,7 +205,7 @@ private:
     void fixed_context_menu (GdkEventButton *event, int col, int dx);
     /* helper function to calculate row colors for the preview table (to visualize status) */
     void preview_row_fill_state_cells (GtkListStore *store, GtkTreeIter *iter,
-            std::string& err_msg, bool skip);
+            ErrMap& err_msg, bool skip);
     /* helper function to create preview header cell combo boxes listing available column types */
     GtkWidget* preview_cbox_factory (GtkTreeModel* model, uint32_t colnum);
     /* helper function to set rendering parameters for preview data columns */
@@ -1403,25 +1404,43 @@ CsvImpTransAssist::preview_update_fw_columns (GtkTreeView* treeview, GdkEventBut
 /* Convert state info (errors/skipped) in visual feedback to decorate the preview table */
 void
 CsvImpTransAssist::preview_row_fill_state_cells (GtkListStore *store, GtkTreeIter *iter,
-        std::string& err_msg, bool skip)
+        ErrMap& err_msgs, bool skip)
 {
     /* Extract error status for all non-skipped lines */
-    const char *c_err_msg = nullptr;
+    auto err_msg = std::string();
     const char *icon_name = nullptr;
     const char *fcolor = nullptr;
     const char *bcolor = nullptr;
-    if (!skip && !err_msg.empty())
+    /* Skipped lines or issues with account resolution are not
+     * errors at this stage. */
+    auto non_acct_error = [](ErrPair curr_err)
+                {
+                    return !((curr_err.first == GncTransPropType::ACCOUNT) ||
+                             (curr_err.first == GncTransPropType::TACCOUNT));
+                };
+    if (!skip && std::any_of(err_msgs.cbegin(), err_msgs.cend(), non_acct_error))
     {
         fcolor = "black";
         bcolor = "pink";
-        c_err_msg = err_msg.c_str();
+        err_msg = std::string(_("This line has the following parse issues:"));
+        auto add_non_acct_err_bullet = [](std::string& a, ErrPair& b)->std::string
+                                {
+                                    if ((b.first == GncTransPropType::ACCOUNT) ||
+                                        (b.first == GncTransPropType::TACCOUNT))
+                                        return std::move(a);
+                                    else
+                                        return std::move(a) + "\n• " + b.second;
+
+                                };
+        err_msg = std::accumulate (err_msgs.begin(), err_msgs.end(),
+                                   std::move (err_msg), add_non_acct_err_bullet);
         icon_name = "dialog-error";
     }
     gtk_list_store_set (store, iter,
             PREV_COL_FCOLOR, fcolor,
             PREV_COL_BCOLOR, bcolor,
             PREV_COL_STRIKE, skip,
-            PREV_COL_ERROR, c_err_msg,
+            PREV_COL_ERROR, err_msg.c_str(),
             PREV_COL_ERR_ICON, icon_name, -1);
 }
 
@@ -1990,9 +2009,6 @@ CsvImpTransAssist::assist_account_match_page_prepare ()
 void
 CsvImpTransAssist::assist_doc_page_prepare ()
 {
-    /* Block going back */
-    gtk_assistant_commit (csv_imp_asst);
-
     /* At this stage in the assistant each account should be mapped so
      * complete the split properties with this information. If this triggers
      * an exception it indicates a logic error in the code.
@@ -2022,6 +2038,9 @@ CsvImpTransAssist::assist_doc_page_prepare ()
         gtk_assistant_set_current_page (csv_imp_asst, 2);
 
     }
+
+    /* Block going back */
+    gtk_assistant_commit (csv_imp_asst);
 
     /* Before creating transactions, if this is a new book, let user specify
      * book options, since they affect how transactions are created */
@@ -2053,14 +2072,19 @@ CsvImpTransAssist::assist_match_page_prepare ()
     {
         tx_imp->create_transactions ();
     }
-    catch (const std::invalid_argument& err)
+    catch (const GncCsvImpParseError& err)
     {
         /* Oops! This shouldn't happen when using the import assistant !
          * Inform the user and go back to the preview page.
          */
+        auto err_msg = std::string(err.what());
+        auto err_msgs = err.errors();
+        auto add_bullet_item = [](std::string& a, ErrPair& b)->std::string { return std::move(a) + "\n• " + b.second; };
+        err_msg = std::accumulate (err_msgs.begin(), err_msgs.end(), std::move (err_msg), add_bullet_item);
+
         gnc_error_dialog (GTK_WINDOW (csv_imp_asst),
             _("An unexpected error has occurred while creating transactions. Please report this as a bug.\n\n"
-              "Error message:\n%s"), err.what());
+              "Error message:\n%s"), err_msg.c_str());
         gtk_assistant_set_current_page (csv_imp_asst, 2);
     }
 

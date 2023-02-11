@@ -75,6 +75,10 @@ enum class GncTransPropType {
     SPLIT_PROPS = TREC_DATE
 };
 
+using StrVec = std::vector<std::string>;
+using ErrMap = std::map<const GncTransPropType, std::string>;
+using ErrPair = std::pair<const GncTransPropType, std::string>;
+
 /** Maps all column types to a string representation.
  *  The actual definition is in gnc-csv-imp-trans.cpp.
  *  Attention: that definition should be adjusted for any
@@ -153,7 +157,7 @@ public:
     void set_date_format (int date_format) { m_date_format = date_format ;}
     void set_multi_split (bool multi_split) { m_multi_split = multi_split ;}
     void reset (GncTransPropType prop_type);
-    std::string verify_essentials (void);
+    StrVec verify_essentials (void);
     std::shared_ptr<DraftTransaction> create_trans (QofBook* book, gnc_commodity* currency);
 
     /** Check whether the harvested transaction properties for this instance
@@ -172,7 +176,7 @@ public:
      */
     bool is_part_of (std::shared_ptr<GncPreTrans> parent);
     boost::optional<std::string> get_void_reason() { return m_void_reason; }
-    std::string errors();
+    ErrMap errors();
 
 private:
     int m_date_format;
@@ -186,7 +190,7 @@ private:
     boost::optional<std::string> m_void_reason;
     bool created = false;
 
-    std::map<GncTransPropType, std::string> m_errors;
+    ErrMap m_errors;
 };
 
 struct GncPreSplit
@@ -199,12 +203,12 @@ public:
     void add (GncTransPropType prop_type, const std::string& value);
     void set_date_format (int date_format) { m_date_format = date_format ;}
     void set_currency_format (int currency_format) { m_currency_format = currency_format; }
-    std::string verify_essentials (void);
+    StrVec verify_essentials (void);
     void create_split(std::shared_ptr<DraftTransaction> draft_trans);
 
     Account* get_account () { if (m_account) return *m_account; else return nullptr; }
     void set_account (Account* acct) { if (acct) m_account = acct; else m_account = boost::none; }
-    std::string errors(bool check_accts_mapped);
+    ErrMap errors();
 
 private:
     int m_date_format;
@@ -226,7 +230,7 @@ private:
     boost::optional<GncDate> m_trec_date;
     bool created = false;
 
-    std::map<GncTransPropType, std::string> m_errors;
+    ErrMap m_errors;
 };
 
 #endif

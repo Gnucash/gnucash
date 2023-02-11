@@ -39,6 +39,7 @@
 #include <algorithm>
 #include <exception>
 #include <map>
+#include <numeric>
 #include <string>
 #include <vector>
 
@@ -286,17 +287,17 @@ void GncPreTrans::set (GncTransPropType prop_type, const std::string& value)
     }
     catch (const std::invalid_argument& e)
     {
-        auto err_str = (bl::format (std::string{_("Column '{1}' could not be understood.\n")}) %
-                        std::string{_(gnc_csv_col_type_strs[prop_type])}).str() +
-                        e.what();
+        auto err_str = (bl::format (std::string{_("{1}: {2}")}) %
+                        std::string{_(gnc_csv_col_type_strs[prop_type])} %
+                        e.what()).str();
         m_errors.emplace(prop_type, err_str);
         throw std::invalid_argument (err_str);
     }
     catch (const std::out_of_range& e)
     {
-        auto err_str = (bl::format (std::string{_("Column '{1}' could not be understood.\n")}) %
-                        std::string{_(gnc_csv_col_type_strs[prop_type])}).str() +
-                        e.what();
+        auto err_str = (bl::format (std::string{_("{1}: {2}")}) %
+                        std::string{_(gnc_csv_col_type_strs[prop_type])} %
+                        e.what()).str();
         m_errors.emplace(prop_type, err_str);
         throw std::invalid_argument (err_str);
     }
@@ -317,13 +318,17 @@ void GncPreTrans::reset (GncTransPropType prop_type)
     }
 }
 
-std::string GncPreTrans::verify_essentials (void)
+StrVec GncPreTrans::verify_essentials (void)
 {
-    /* Make sure this transaction has the minimum required set of properties defined */
+    auto errors = StrVec();
+
     if (!m_date)
-        return _("No date column.");
-    else
-        return std::string();
+        errors.emplace_back(_("No valid date."));
+
+    if (!m_desc)
+        errors.emplace_back(_("No valid description."));
+
+    return errors;
 }
 
 std::shared_ptr<DraftTransaction> GncPreTrans::create_trans (QofBook* book, gnc_commodity* currency)
@@ -337,7 +342,10 @@ std::shared_ptr<DraftTransaction> GncPreTrans::create_trans (QofBook* book, gnc_
     auto check = verify_essentials();
     if (!check.empty())
     {
-        PWARN ("Refusing to create transaction because essentials not set properly: %s", check.c_str());
+        auto err_msg = std::string("Not creating transaction because essentials not set properly:");
+        auto add_bullet_item = [](std::string& a, std::string& b)->std::string { return std::move(a) + "\n• " + b; };
+        err_msg = std::accumulate (check.begin(), check.end(), std::move (err_msg), add_bullet_item);
+        PWARN ("%s", err_msg.c_str());
         return nullptr;
     }
 
@@ -379,30 +387,23 @@ bool GncPreTrans::is_part_of (std::shared_ptr<GncPreTrans> parent)
             parent->m_errors.empty(); // A GncPreTrans with errors can never be a parent
 }
 
-/* Declare two translatable error strings here as they will be used in several places */
-const char *bad_acct = N_("Account value can't be mapped back to an account.");
-const char *bad_tacct = N_("Transfer account value can't be mapped back to an account.");
-
-static std::string gen_err_str (std::map<GncTransPropType, std::string>& errors,
-        bool check_accts_mapped = false)
+static StrVec gen_err_strvec (ErrMap& errors, bool check_accts_mapped = false)
 {
-    auto full_error = std::string();
-    for (auto error : errors)
-    {
-        auto err_str = error.second;
-        if (!check_accts_mapped &&
-                ((err_str.find (_(bad_acct)) != std::string::npos) ||
-                 (err_str.find (_(bad_tacct)) != std::string::npos)))
-            continue;
-        full_error += (full_error.empty() ? "" : "\n") + error.second;
-    }
+    auto full_error = StrVec();
 
+    auto add_err = [check_accts_mapped](StrVec a, const ErrPair& b)->StrVec
+                              { if (!check_accts_mapped ||
+                                          ((b.first != GncTransPropType::ACCOUNT) &&
+                                           (b.first != GncTransPropType::TACCOUNT)))
+                                    a.emplace_back(b.second);
+                                return a; };
+    full_error = std::accumulate (errors.cbegin(), errors.cend(), full_error, add_err);
     return full_error;
 }
 
-std::string GncPreTrans::errors ()
+ErrMap GncPreTrans::errors ()
 {
-    return gen_err_str (m_errors);
+    return m_errors;
 }
 
 void GncPreSplit::set (GncTransPropType prop_type, const std::string& value)
@@ -435,7 +436,7 @@ void GncPreSplit::set (GncTransPropType prop_type, const std::string& value)
                     (acct = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), value.c_str())))
                     m_account = acct;
                 else
-                    throw std::invalid_argument (_(bad_acct));
+                    throw std::invalid_argument (_("Account value can't be mapped back to an account."));
                 break;
 
             case GncTransPropType::TACCOUNT:
@@ -447,7 +448,7 @@ void GncPreSplit::set (GncTransPropType prop_type, const std::string& value)
                     (acct = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), value.c_str())))
                     m_taccount = acct;
                 else
-                    throw std::invalid_argument (_(bad_tacct));
+                    throw std::invalid_argument (_("Transfer account value can't be mapped back to an account."));
                 break;
 
             case GncTransPropType::MEMO:
@@ -522,17 +523,17 @@ void GncPreSplit::set (GncTransPropType prop_type, const std::string& value)
     }
     catch (const std::invalid_argument& e)
     {
-        auto err_str = (bl::format (std::string{_("Column '{1}' could not be understood.\n")}) %
-                        std::string{_(gnc_csv_col_type_strs[prop_type])}).str() +
-                        e.what();
+        auto err_str = (bl::format (std::string{_("{1}: {2}")}) %
+                        std::string{_(gnc_csv_col_type_strs[prop_type])} %
+                        e.what()).str();
         m_errors.emplace(prop_type, err_str);
         throw std::invalid_argument (err_str);
     }
     catch (const std::out_of_range& e)
     {
-        auto err_str = (bl::format (std::string{_("Column '{1}' could not be understood.\n")}) %
-                        std::string{_(gnc_csv_col_type_strs[prop_type])}).str() +
-                        e.what();
+        auto err_str = (bl::format (std::string{_("{1}: {2}")}) %
+                        std::string{_(gnc_csv_col_type_strs[prop_type])} %
+                        e.what()).str();
         m_errors.emplace(prop_type, err_str);
         throw std::invalid_argument (err_str);
     }
@@ -598,42 +599,34 @@ void GncPreSplit::add (GncTransPropType prop_type, const std::string& value)
     }
     catch (const std::invalid_argument& e)
     {
-        auto err_str = (bl::format (std::string{_("Column '{1}' could not be understood.\n")}) %
-                        std::string{_(gnc_csv_col_type_strs[prop_type])}).str() +
-                        e.what();
+        auto err_str = (bl::format (std::string{_("{1}: {2}")}) %
+                        std::string{_(gnc_csv_col_type_strs[prop_type])} %
+                        e.what()).str();
         m_errors.emplace(prop_type, err_str);
         throw std::invalid_argument (err_str);
     }
     catch (const std::out_of_range& e)
     {
-        auto err_str = (bl::format (std::string{_("Column '{1}' could not be understood.\n")}) %
-                        std::string{_(gnc_csv_col_type_strs[prop_type])}).str() +
-                        e.what();
+        auto err_str = (bl::format (std::string{_("{1}: {2}")}) %
+                        std::string{_(gnc_csv_col_type_strs[prop_type])} %
+                        e.what()).str();
         m_errors.emplace(prop_type, err_str);
         throw std::invalid_argument (err_str);
     }
 }
 
-std::string GncPreSplit::verify_essentials (void)
+StrVec GncPreSplit::verify_essentials()
 {
-    auto err_msg = std::string();
+    auto err_msg = StrVec();
     /* Make sure this split has the minimum required set of properties defined. */
     if (!m_amount && !m_amount_neg)
-        err_msg = _("No amount or negated amount column.");
+        err_msg.emplace_back (_("No amount or negated amount column."));
 
     if (m_rec_state && *m_rec_state == YREC && !m_rec_date)
-    {
-        if (!err_msg.empty())
-            err_msg += "\n";
-        err_msg += _("Split is reconciled but reconcile date column is missing or invalid.");
-    }
+        err_msg.emplace_back (_("Split is reconciled but reconcile date column is missing or invalid."));
 
     if (m_trec_state && *m_trec_state == YREC && !m_trec_date)
-    {
-        if (!err_msg.empty())
-            err_msg += "\n";
-        err_msg += _("Transfer split is reconciled but transfer reconcile date column is missing or invalid.");
-    }
+        err_msg.emplace_back (_("Transfer split is reconciled but transfer reconcile date column is missing or invalid."));
 
     return err_msg;
 }
@@ -686,7 +679,10 @@ void GncPreSplit::create_split (std::shared_ptr<DraftTransaction> draft_trans)
     auto check = verify_essentials();
     if (!check.empty())
     {
-        PWARN ("Not creating split because essentials not set properly: %s", check.c_str());
+        auto err_msg = std::string("Not creating split because essentials not set properly:");
+        auto add_bullet_item = [](std::string& a, std::string& b)->std::string { return std::move(a) + "\n• " + b; };
+        err_msg = std::accumulate (check.begin(), check.end(), std::move (err_msg), add_bullet_item);
+        PWARN ("%s", err_msg.c_str());
         return;
     }
 
@@ -817,7 +813,7 @@ void GncPreSplit::create_split (std::shared_ptr<DraftTransaction> draft_trans)
     created = true;
 }
 
-std::string GncPreSplit::errors (bool check_accts_mapped)
+ErrMap GncPreSplit::errors (void)
 {
-    return gen_err_str (m_errors, check_accts_mapped);
+    return m_errors;
 }
