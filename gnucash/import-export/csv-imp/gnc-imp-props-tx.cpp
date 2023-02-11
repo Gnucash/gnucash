@@ -370,23 +370,12 @@ bool GncPreTrans::is_part_of (std::shared_ptr<GncPreTrans> parent)
             parent->m_errors.empty(); // A GncPreTrans with errors can never be a parent
 }
 
-static StrVec gen_err_strvec (ErrMap& errors, bool check_accts_mapped = false)
-{
-    auto full_error = StrVec();
-
-    auto add_err = [check_accts_mapped](StrVec a, const ErrPair& b)->StrVec
-                              { if (!check_accts_mapped ||
-                                          ((b.first != GncTransPropType::ACCOUNT) &&
-                                           (b.first != GncTransPropType::TACCOUNT)))
-                                    a.emplace_back(b.second);
-                                return a; };
-    full_error = std::accumulate (errors.cbegin(), errors.cend(), full_error, add_err);
-    return full_error;
-}
-
 ErrMap GncPreTrans::errors ()
 {
     return m_errors;
+}
+
+{
 }
 
 void GncPreSplit::set (GncTransPropType prop_type, const std::string& value)
