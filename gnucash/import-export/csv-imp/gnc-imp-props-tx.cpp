@@ -267,10 +267,8 @@ void GncPreTrans::set (GncTransPropType prop_type, const std::string& value)
                 break;
 
             case GncTransPropType::COMMODITY:
-                m_commodity = boost::none;
-                comm = parse_commodity (value); // Throws if parsing fails
-                if (comm)
-                    m_commodity = comm;
+                m_currency = nullptr;
+                m_currency = parse_commodity (value);
                 break;
 
             case GncTransPropType::VOID_REASON:
@@ -337,8 +335,8 @@ std::shared_ptr<DraftTransaction> GncPreTrans::create_trans (QofBook* book, gnc_
     auto trans = xaccMallocTransaction (book);
     xaccTransBeginEdit (trans);
 
-    if (m_commodity && gnc_commodity_is_currency(*m_commodity))
-        xaccTransSetCurrency (trans, *m_commodity);
+    if (gnc_commodity_is_currency(m_currency))
+        xaccTransSetCurrency (trans, m_currency);
     else
         xaccTransSetCurrency (trans, currency);
     xaccTransSetDatePostedSecsNormalized (trans,
@@ -367,7 +365,7 @@ bool GncPreTrans::is_part_of (std::shared_ptr<GncPreTrans> parent)
             (!m_num || m_num == parent->m_num) &&
             (!m_desc || m_desc == parent->m_desc) &&
             (!m_notes || m_notes == parent->m_notes) &&
-            (!m_commodity || m_commodity == parent->m_commodity) &&
+            (!m_currency || m_currency == parent->m_currency) &&
             (!m_void_reason || m_void_reason == parent->m_void_reason) &&
             parent->m_errors.empty(); // A GncPreTrans with errors can never be a parent
 }

@@ -147,7 +147,7 @@ struct DraftTransaction
     boost::optional<std::string> void_reason;
 };
 
-struct GncPreTrans
+class GncPreTrans
 {
 public:
     GncPreTrans(int date_format, bool multi_split)
@@ -186,14 +186,14 @@ private:
     boost::optional<std::string> m_num;
     boost::optional<std::string> m_desc;
     boost::optional<std::string> m_notes;
-    boost::optional<gnc_commodity*> m_commodity;
+    gnc_commodity *m_currency;
     boost::optional<std::string> m_void_reason;
     bool created = false;
 
     ErrMap m_errors;
 };
 
-struct GncPreSplit
+class GncPreSplit
 {
 public:
     GncPreSplit (int date_format, int currency_format) : m_date_format{date_format},
