@@ -636,18 +636,13 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
     auto line_acct = split_props->get_account();
     if (!line_acct)
     {
-        if (m_settings.m_base_account)
-            split_props->set_account(m_settings.m_base_account);
-        else
-        {
-            // Oops - the user didn't select an Account column *and* we didn't get a default value either!
-            // Note if you get here this suggests a bug in the code!
-            auto error_message = _("No account column selected and no base account specified either.\n"
-                                   "This should never happen. Please report this as a bug.");
-            PINFO("User warning: %s", error_message);
-            auto errs = ErrMap { ErrPair { GncTransPropType::NONE, error_message},};
-            throw GncCsvImpParseError(_("Parse Error"), errs);
-        }
+        // Oops - the user didn't select an Account column *and* we didn't get a default value either!
+        // Note if you get here this suggests a bug in the code!
+        auto error_message = _("No account column selected and no base account specified either.\n"
+                                "This should never happen. Please report this as a bug.");
+        PINFO("User warning: %s", error_message);
+        auto errs = ErrMap { ErrPair { GncTransPropType::NONE, error_message},};
+        throw GncCsvImpParseError(_("Parse Error"), errs);
     }
 
     /* If column parsing was successful, convert trans properties into a draft transaction. */
