@@ -285,37 +285,22 @@ void GncPreTrans::set (GncTransPropType prop_type, const std::string& value)
                 break;
         }
     }
-    catch (const std::invalid_argument& e)
+    catch (const std::exception& e)
     {
         auto err_str = (bl::format (std::string{_("{1}: {2}")}) %
                         std::string{_(gnc_csv_col_type_strs[prop_type])} %
                         e.what()).str();
         m_errors.emplace(prop_type, err_str);
-        throw std::invalid_argument (err_str);
-    }
-    catch (const std::out_of_range& e)
-    {
-        auto err_str = (bl::format (std::string{_("{1}: {2}")}) %
-                        std::string{_(gnc_csv_col_type_strs[prop_type])} %
-                        e.what()).str();
-        m_errors.emplace(prop_type, err_str);
-        throw std::invalid_argument (err_str);
     }
 
 }
 
 void GncPreTrans::reset (GncTransPropType prop_type)
 {
-    try
-    {
         set (prop_type, std::string());
-    }
-    catch (...)
-    {
         // Set with an empty string will effectively clear the property
         // but can also set an error for the property. Clear that error here.
         m_errors.erase(prop_type);
-    }
 }
 
 StrVec GncPreTrans::verify_essentials (void)
@@ -521,36 +506,21 @@ void GncPreSplit::set (GncTransPropType prop_type, const std::string& value)
                 break;
         }
     }
-    catch (const std::invalid_argument& e)
+    catch (const std::exception& e)
     {
         auto err_str = (bl::format (std::string{_("{1}: {2}")}) %
                         std::string{_(gnc_csv_col_type_strs[prop_type])} %
                         e.what()).str();
         m_errors.emplace(prop_type, err_str);
-        throw std::invalid_argument (err_str);
-    }
-    catch (const std::out_of_range& e)
-    {
-        auto err_str = (bl::format (std::string{_("{1}: {2}")}) %
-                        std::string{_(gnc_csv_col_type_strs[prop_type])} %
-                        e.what()).str();
-        m_errors.emplace(prop_type, err_str);
-        throw std::invalid_argument (err_str);
     }
 }
 
 void GncPreSplit::reset (GncTransPropType prop_type)
 {
-    try
-    {
         set (prop_type, std::string());
-    }
-    catch (...)
-    {
         // Set with an empty string will effectively clear the property
         // but can also set an error for the property. Clear that error here.
         m_errors.erase(prop_type);
-    }
 }
 
 void GncPreSplit::add (GncTransPropType prop_type, const std::string& value)
@@ -598,21 +568,12 @@ void GncPreSplit::add (GncTransPropType prop_type, const std::string& value)
                 break;
         }
     }
-    catch (const std::invalid_argument& e)
+    catch (const std::exception& e)
     {
         auto err_str = (bl::format (std::string{_("{1}: {2}")}) %
                         std::string{_(gnc_csv_col_type_strs[prop_type])} %
                         e.what()).str();
         m_errors.emplace(prop_type, err_str);
-        throw std::invalid_argument (err_str);
-    }
-    catch (const std::out_of_range& e)
-    {
-        auto err_str = (bl::format (std::string{_("{1}: {2}")}) %
-                        std::string{_(gnc_csv_col_type_strs[prop_type])} %
-                        e.what()).str();
-        m_errors.emplace(prop_type, err_str);
-        throw std::invalid_argument (err_str);
     }
 }
 
