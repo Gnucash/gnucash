@@ -557,8 +557,9 @@ void GncPreSplit::add (GncTransPropType prop_type, const std::string& value)
 {
     try
     {
-        // Drop any existing error for the prop_type we're about to add to
-        m_errors.erase(prop_type);
+        /* Don't try to add to a property that has an error already */
+        if (m_errors.find(prop_type) != m_errors.cend())
+            return;
 
         auto num_val = GncNumeric();
         switch (prop_type)
