@@ -185,7 +185,6 @@ private:
      */
     void update_pre_trans_split_props (uint32_t row, uint32_t col, GncTransPropType old_type, GncTransPropType new_type);
 
-    struct CsvTranImpSettings; //FIXME do we need this line
     CsvTransImpSettings m_settings;
     bool m_skip_errors;
     bool m_req_mapped_accts;
