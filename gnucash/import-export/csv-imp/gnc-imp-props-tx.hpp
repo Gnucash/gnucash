@@ -197,12 +197,14 @@ struct GncPreSplit
 {
 public:
     GncPreSplit (int date_format, int currency_format) : m_date_format{date_format},
-        m_currency_format{currency_format}{};
+        m_currency_format{currency_format} {};
     void set (GncTransPropType prop_type, const std::string& value);
     void reset (GncTransPropType prop_type);
     void add (GncTransPropType prop_type, const std::string& value);
     void set_date_format (int date_format) { m_date_format = date_format ;}
     void set_currency_format (int currency_format) { m_currency_format = currency_format; }
+    void set_pre_trans (std::shared_ptr<GncPreTrans> pre_trans) { m_pre_trans = pre_trans; }
+    std::shared_ptr<GncPreTrans> get_pre_trans (void) { return m_pre_trans; }
     StrVec verify_essentials (void);
     void create_split(std::shared_ptr<DraftTransaction> draft_trans);
 
@@ -211,6 +213,7 @@ public:
     ErrMap errors();
 
 private:
+    std::shared_ptr<GncPreTrans> m_pre_trans;
     int m_date_format;
     int m_currency_format;
     boost::optional<std::string> m_action;

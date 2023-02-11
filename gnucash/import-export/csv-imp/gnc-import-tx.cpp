@@ -404,10 +404,13 @@ void GncTxImport::tokenize (bool guessColTypes)
     {
         auto length = tokenized_line.size();
         if (length > 0)
+        {
+            auto pretrans = std::make_shared<GncPreTrans>(date_format(), m_settings.m_multi_split);
+            auto presplit = std::make_shared<GncPreSplit>(date_format(), currency_format());
+            presplit->set_pre_trans (std::move (pretrans));
             m_parsed_lines.push_back (std::make_tuple (tokenized_line, ErrMap(),
-                    std::make_shared<GncPreTrans>(date_format(), m_settings.m_multi_split),
-                    std::make_shared<GncPreSplit>(date_format(), currency_format()),
-                    false));
+                                      std::move (presplit), false));
+        }
         if (length > max_cols)
             max_cols = length;
     }
@@ -564,9 +567,9 @@ std::string GncTxImport::verify ()
 std::shared_ptr<DraftTransaction> GncTxImport::trans_properties_to_trans (std::vector<parse_line_t>::iterator& parsed_line)
 {
     auto created_trans = false;
-    std::shared_ptr<GncPreTrans> trans_props;
     std::shared_ptr<GncPreSplit> split_props;
-    std::tie(std::ignore, std::ignore, trans_props, split_props, std::ignore) = *parsed_line;
+    std::tie(std::ignore, std::ignore, split_props, std::ignore) = *parsed_line;
+    auto trans_props = split_props->get_pre_trans();
     auto account = split_props->get_account();
 
     QofBook* book = gnc_account_get_book (account);
@@ -616,10 +619,10 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
 {
     StrVec line;
     ErrMap errors;
-    std::shared_ptr<GncPreTrans> trans_props = nullptr;
     std::shared_ptr<GncPreSplit> split_props = nullptr;
     bool skip_line = false;
-    std::tie(line, errors, trans_props, split_props, skip_line) = *parsed_line;
+    std::tie(line, errors, split_props, skip_line) = *parsed_line;
+    auto trans_props = split_props->get_pre_trans();
 
     if (skip_line)
         return;
@@ -715,97 +718,87 @@ void GncTxImport::update_pre_trans_split_props (uint32_t row, uint32_t col, GncT
      * with a previous line and should no longer be after the transprop is changed.
      * This doesn't apply for the GncPreSplit so we just get a pointer to it for easier processing.
      */
-    auto trans_props = std::make_shared<GncPreTrans> (*(std::get<PL_PRETRANS>(m_parsed_lines[row])).get());
     auto split_props = std::get<PL_PRESPLIT>(m_parsed_lines[row]);
+    auto trans_props = std::make_shared<GncPreTrans> (*(split_props->get_pre_trans()).get());
 
-    try
+    /* Deal with trans properties first as this may change the trans->split relationships
+        * in case of multi-split imports */
+    if ((old_type > GncTransPropType::NONE) && (old_type <= GncTransPropType::TRANS_PROPS))
+        trans_props->reset (old_type);
+    if ((new_type > GncTransPropType::NONE) && (new_type <= GncTransPropType::TRANS_PROPS))
     {
-        /* Start by resetting the value of the old_type (may throw!). */
-        if ((old_type > GncTransPropType::NONE) && (old_type <= GncTransPropType::TRANS_PROPS))
-            trans_props->reset (old_type);
-        if ((old_type > GncTransPropType::TRANS_PROPS) && (old_type <= GncTransPropType::SPLIT_PROPS))
-        {
-            split_props->reset (old_type);
-            if (is_multi_col_prop(old_type))
-            {
+        auto value = std::string();
 
-                /* All amount columns may appear more than once. The net amount
-                * needs to be recalculated rather than just reset if one column
-                * is unset. */
-                for (auto col_it = m_settings.m_column_types.cbegin();
-                        col_it < m_settings.m_column_types.cend();
-                        col_it++)
-                    if (*col_it == old_type)
-                    {
-                        auto col_num = col_it - m_settings.m_column_types.cbegin();
-                        auto value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col_num);
-                        split_props->add (old_type, value);
-                    }
-            }
-        }
+        if (col < std::get<PL_INPUT>(m_parsed_lines[row]).size())
+            value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col);
 
-        /* Next attempt to set the value for new_type (may throw!) */
-        if ((new_type > GncTransPropType::NONE) && (new_type <= GncTransPropType::TRANS_PROPS))
-        {
-            auto value = std::string();
-
-            if (col < std::get<PL_INPUT>(m_parsed_lines[row]).size())
-                value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col);
-
-            trans_props->set(new_type, value);
-        }
-
-        if ((new_type > GncTransPropType::TRANS_PROPS) && (new_type <= GncTransPropType::SPLIT_PROPS))
-        {
-            /* All amount columns may appear more than once. The net amount
-             * needs to be recalculated rather than just reset if one column
-             * is set. */
-            if (is_multi_col_prop(new_type))
-            {
-                split_props->reset(new_type);
-                /* For Deposits and Withdrawal we have to sum all columns with this property */
-                for (auto col_it = m_settings.m_column_types.cbegin();
-                     col_it < m_settings.m_column_types.cend();
-                col_it++)
-                     if (*col_it == new_type)
-                     {
-                         auto col_num = col_it - m_settings.m_column_types.cbegin();
-                         auto value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col_num);
-                         split_props->add (new_type, value);
-                     }
-            }
-            else
-            {
-                auto value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col);
-                split_props->set(new_type, value);
-            }
-        }
-    }
-    catch (const std::exception& e)
-    {
-        /* Do nothing, just prevent the exception from escalating up
-            * However log the error if it happens on a row that's not skipped
-            */
-        if (!std::get<PL_SKIP>(m_parsed_lines[row]))
-            PINFO("User warning: %s", e.what());
+        trans_props->set(new_type, value);
     }
 
-    /* All value updates are finished by now, time to determine
-     * what to do with the updated GncPreTrans copy.
-     *
-     * For multi-split input data this line may be part of a transaction
-     * that has already been started by a previous line. In that case
-     * reuse the GncPreTrans from that previous line (which we track
-     * in m_parent).
-     * In all other cases our new GncPreTrans should be used for this line
-     * and be marked as the new potential m_parent for subsequent lines.
-     */
+
+    /* All transaction related value updates are finished now,
+        * time to determine what to do with the updated GncPreTrans copy.
+        *
+        * For multi-split input data this line may be part of a transaction
+        * that has already been started by a previous line. In that case
+        * reuse the GncPreTrans from that previous line (which we track
+        * in m_parent).
+        * In all other cases our new GncPreTrans should be used for this line
+        * and be marked as the new potential m_parent for subsequent lines.
+        */
     if (m_settings.m_multi_split && trans_props->is_part_of(m_parent))
-        std::get<PL_PRETRANS>(m_parsed_lines[row]) = m_parent;
+        split_props->set_pre_trans (m_parent);
     else
     {
-        std::get<PL_PRETRANS>(m_parsed_lines[row]) = trans_props;
+        split_props->set_pre_trans (trans_props);
         m_parent = trans_props;
+    }
+
+    /* Next handle any split related property changes */
+    if ((old_type > GncTransPropType::TRANS_PROPS) && (old_type <= GncTransPropType::SPLIT_PROPS))
+    {
+        split_props->reset (old_type);
+        if (is_multi_col_prop(old_type))
+        {
+
+            /* All amount columns may appear more than once. The net amount
+            * needs to be recalculated rather than just reset if one column
+            * is unset. */
+            for (auto col_it = m_settings.m_column_types.cbegin();
+                    col_it < m_settings.m_column_types.cend();
+                    col_it++)
+                if (*col_it == old_type)
+                {
+                    auto col_num = col_it - m_settings.m_column_types.cbegin();
+                    auto value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col_num);
+                    split_props->add (old_type, value);
+                }
+        }
+    }
+    if ((new_type > GncTransPropType::TRANS_PROPS) && (new_type <= GncTransPropType::SPLIT_PROPS))
+    {
+        /* All amount columns may appear more than once. The net amount
+            * needs to be recalculated rather than just reset if one column
+            * is set. */
+        if (is_multi_col_prop(new_type))
+        {
+            split_props->reset(new_type);
+            /* For Deposits and Withdrawal we have to sum all columns with this property */
+            for (auto col_it = m_settings.m_column_types.cbegin();
+                    col_it < m_settings.m_column_types.cend();
+                    col_it++)
+                if (*col_it == new_type)
+                {
+                    auto col_num = col_it - m_settings.m_column_types.cbegin();
+                    auto value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col_num);
+                    split_props->add (new_type, value);
+                }
+        }
+        else
+        {
+            auto value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col);
+            split_props->set(new_type, value);
+        }
     }
 }
 
@@ -841,10 +834,11 @@ GncTxImport::set_column_type (uint32_t position, GncTransPropType type, bool for
         /* Reset date and currency formats for each trans/split props object
          * to ensure column updates use the most recent one
          */
-        std::get<PL_PRETRANS>(*parsed_lines_it)->set_date_format (m_settings.m_date_format);
-        std::get<PL_PRETRANS>(*parsed_lines_it)->set_multi_split (m_settings.m_multi_split);
-        std::get<PL_PRESPLIT>(*parsed_lines_it)->set_date_format (m_settings.m_date_format);
-        std::get<PL_PRESPLIT>(*parsed_lines_it)->set_currency_format (m_settings.m_currency_format);
+        auto split_props = std::get<PL_PRESPLIT>(*parsed_lines_it);
+        split_props->get_pre_trans()->set_date_format (m_settings.m_date_format);
+        split_props->get_pre_trans()->set_multi_split (m_settings.m_multi_split);
+        split_props->set_date_format (m_settings.m_date_format);
+        split_props->set_currency_format (m_settings.m_currency_format);
 
         uint32_t row = parsed_lines_it - m_parsed_lines.begin();
 
@@ -852,8 +846,8 @@ GncTxImport::set_column_type (uint32_t position, GncTransPropType type, bool for
         update_pre_trans_split_props (row, position, old_type, type);
 
         /* Report errors if there are any */
-        auto all_errors = std::get<PL_PRETRANS>(*parsed_lines_it)->errors();
-        all_errors.merge (std::get<PL_PRESPLIT>(*parsed_lines_it)->errors());
+        auto all_errors = split_props->get_pre_trans()->errors();
+        all_errors.merge (split_props->errors());
         std::get<PL_ERROR>(*parsed_lines_it) = all_errors;
     }
 }

@@ -58,7 +58,6 @@ extern const gchar* currency_format_user[];
 enum parse_line_cols {
     PL_INPUT,
     PL_ERROR,
-    PL_PRETRANS,
     PL_PRESPLIT,
     PL_SKIP
 };
@@ -70,7 +69,6 @@ using StrVec = std::vector<std::string>;
  * with std::get to access the columns. */
 using parse_line_t = std::tuple<StrVec,
                                 ErrMap,
-                                std::shared_ptr<GncPreTrans>,
                                 std::shared_ptr<GncPreSplit>,
                                 bool>;
 
