@@ -120,9 +120,6 @@ Select location and file name for the Import, then click "Next"…
                     <property name="can-focus">False</property>
                     <property name="border-width">3</property>
                     <child>
-                      <placeholder/>
-                    </child>
-                    <child>
                       <object class="GtkButton" id="delete_settings">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
@@ -147,6 +144,9 @@ There are two reserved names which can never be deleted:
                         <property name="pack-type">end</property>
                         <property name="position">0</property>
                       </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                     <child>
                       <object class="GtkButton" id="save_settings">
@@ -957,6 +957,7 @@ For example
               <object class="GtkTreeView" id="account_match_view">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
+                <property name="tooltip-text" translatable="yes">To change mapping, double click on a row or select a row and press the button…</property>
                 <property name="model">account_match_store</property>
                 <property name="enable-search">False</property>
                 <property name="enable-tree-lines">True</property>
@@ -1007,6 +1008,7 @@ For example
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes">Error text.</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -1143,6 +1145,9 @@ More information can be displayed by using the help button.</property>
       <object class="GtkBox">
         <property name="can-focus">False</property>
       </object>
+      <packing>
+        <property name="has-padding">False</property>
+      </packing>
     </child>
   </object>
 </interface>

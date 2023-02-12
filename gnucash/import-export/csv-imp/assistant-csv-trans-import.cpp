@@ -268,6 +268,8 @@ private:
 
     bool                  new_book;                 /**< Are we importing into a new book?; if yes, call book options */
     std::unique_ptr<GncTxImport> tx_imp;            /**< The actual data we are previewing */
+
+    bool                  m_req_mapped_accts;
 };
 
 
@@ -1732,8 +1734,9 @@ CsvImpTransAssist::preview_refresh ()
 void CsvImpTransAssist::preview_validate_settings ()
 {
     /* Allow the user to proceed only if there are no inconsistencies in the settings */
-    auto error_msg = tx_imp->verify();
-    gtk_assistant_set_page_complete (csv_imp_asst, preview_page, error_msg.empty());
+    auto has_non_acct_errors = !tx_imp->verify (false).empty();
+    auto error_msg = tx_imp->verify (m_req_mapped_accts);
+    gtk_assistant_set_page_complete (csv_imp_asst, preview_page, !has_non_acct_errors);
     gtk_label_set_markup(GTK_LABEL(instructions_label), error_msg.c_str());
     gtk_widget_set_visible (GTK_WIDGET(instructions_image), !error_msg.empty());
 
@@ -1741,7 +1744,7 @@ void CsvImpTransAssist::preview_validate_settings ()
      * accounts in the user data according to the importer configuration
      * only if there are no errors
      */
-    if (error_msg.empty())
+    if (!has_non_acct_errors)
         gtk_widget_set_visible (GTK_WIDGET(account_match_page),
                 !tx_imp->accounts().empty());
 }
@@ -1852,13 +1855,33 @@ CsvImpTransAssist::acct_match_select(GtkTreeModel *model, GtkTreeIter* iter)
         // Update the account kvp mappings
         gnc_csv_account_map_change_mappings (account, gnc_acc, text);
 
+        // Force reparsing of account columns - may impact multi-currency mode
+        auto col_types = tx_imp->column_types();
+        auto col_type_it = std::find (col_types.cbegin(),
+                                      col_types.cend(), GncTransPropType::ACCOUNT);
+        if (col_type_it != col_types.cend())
+            tx_imp->set_column_type(col_type_it - col_types.cbegin(),
+                                    GncTransPropType::ACCOUNT, true);
+        col_type_it = std::find (col_types.cbegin(),
+                                 col_types.cend(), GncTransPropType::TACCOUNT);
+        if (col_type_it != col_types.cend())
+            tx_imp->set_column_type(col_type_it - col_types.cbegin(),
+                                    GncTransPropType::TACCOUNT, true);
+
         g_free (fullpath);
     }
     g_free (text);
 
-    gtk_assistant_set_page_complete (csv_imp_asst, account_match_page,
-            csv_tximp_acct_match_check_all (model));
 
+    /* Enable the "Next" Assistant Button */
+    auto all_checked = csv_tximp_acct_match_check_all (model);
+    gtk_assistant_set_page_complete (csv_imp_asst, account_match_page,
+                                     all_checked);
+
+    /* Update information message and whether to display account errors */
+    m_req_mapped_accts = all_checked;
+    auto errs = tx_imp->verify(m_req_mapped_accts);
+    gtk_label_set_text (GTK_LABEL(account_match_label), errs.c_str());
 }
 
 void
@@ -1944,7 +1967,7 @@ CsvImpTransAssist::assist_preview_page_prepare ()
             tx_imp->file_format (GncImpFileFormat::CSV);
             tx_imp->load_file (m_fc_file_name);
             tx_imp->tokenize (true);
-            tx_imp->req_mapped_accts (false);
+            m_req_mapped_accts = false;
 
             /* Get settings store and populate */
             preview_populate_settings_combo();
@@ -1982,7 +2005,6 @@ CsvImpTransAssist::assist_preview_page_prepare ()
 void
 CsvImpTransAssist::assist_account_match_page_prepare ()
 {
-    tx_imp->req_mapped_accts(true);
 
     // Load the account strings into the store
     acct_match_set_accounts ();
@@ -1991,52 +2013,32 @@ CsvImpTransAssist::assist_account_match_page_prepare ()
     auto store = gtk_tree_view_get_model (GTK_TREE_VIEW(account_match_view));
     gnc_csv_account_map_load_mappings (store);
 
-    auto text = std::string ("<span size=\"medium\" color=\"red\"><b>");
-    text += _("To change mapping, double click on a row or select a row and press the button…");
-    text += "</b></span>";
-    gtk_label_set_markup (GTK_LABEL(account_match_label), text.c_str());
-
     // Enable the view, possibly after an error
     gtk_widget_set_sensitive (account_match_view, true);
     gtk_widget_set_sensitive (account_match_btn, true);
 
     /* Enable the "Next" Assistant Button */
+    auto all_checked = csv_tximp_acct_match_check_all (store);
     gtk_assistant_set_page_complete (csv_imp_asst, account_match_page,
-               csv_tximp_acct_match_check_all (store));
+                                     all_checked);
+
+    /* Update information message and whether to display account errors */
+    m_req_mapped_accts = all_checked;
+    auto text = tx_imp->verify (m_req_mapped_accts);
+    gtk_label_set_text (GTK_LABEL(account_match_label), text.c_str());
 }
 
 
 void
 CsvImpTransAssist::assist_doc_page_prepare ()
 {
-    /* At this stage in the assistant each account should be mapped so
-     * complete the split properties with this information. If this triggers
-     * an exception it indicates a logic error in the code.
-     */
-    try
+    if (!tx_imp->verify (true).empty())
     {
-        auto col_types = tx_imp->column_types();
-        auto acct_col = std::find (col_types.begin(),
-                col_types.end(), GncTransPropType::ACCOUNT);
-        if (acct_col != col_types.end())
-            tx_imp->set_column_type (acct_col - col_types.begin(),
-                    GncTransPropType::ACCOUNT, true);
-        acct_col = std::find (col_types.begin(),
-                col_types.end(), GncTransPropType::TACCOUNT);
-        if (acct_col != col_types.end())
-            tx_imp->set_column_type (acct_col - col_types.begin(),
-                    GncTransPropType::TACCOUNT, true);
-    }
-    catch (const std::invalid_argument& err)
-    {
-        /* Oops! This shouldn't happen when using the import assistant !
-         * Inform the user and go back to the preview page.
+        /* New accounts can change the multi-currency situation and hence
+         * may require more column tweaks. If so
+         * inform the user and go back to the preview page.
          */
-        gnc_error_dialog (GTK_WINDOW (csv_imp_asst),
-            _("An unexpected error has occurred while mapping accounts. Please report this as a bug.\n\n"
-              "Error message:\n%s"), err.what());
         gtk_assistant_set_current_page (csv_imp_asst, 2);
-
     }
 
     /* Block going back */

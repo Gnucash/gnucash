@@ -34,6 +34,7 @@
 #include <exception>
 #include <iostream>
 #include <memory>
+#include <numeric>
 #include <string>
 #include <tuple>
 #include <utility>
@@ -65,7 +66,6 @@ GncTxImport::GncTxImport(GncImpFileFormat format)
      * gnc_csv_parse_data_free is called before all of the data is
      * initialized, only the data that needs to be freed is freed. */
     m_skip_errors = false;
-    m_req_mapped_accts = true;
     file_format(m_settings.m_file_format = format);
 }
 
@@ -447,19 +447,26 @@ struct ErrorList
 public:
     void add_error (std::string msg);
     std::string str();
-    bool empty() { return m_error.empty(); }
 private:
-    std::string m_error;
+    StrVec m_error;
 };
 
 void ErrorList::add_error (std::string msg)
 {
-    m_error += "- " + msg + "\n";
+    m_error.emplace_back (msg);
 }
 
 std::string ErrorList::str()
 {
-    return m_error.substr(0, m_error.size() - 1);
+    auto err_msg = std::string();
+    if (!m_error.empty())
+    {
+        auto add_bullet_item = [](std::string& a, std::string& b)->std::string { return std::move(a) + "\n• " + b; };
+        err_msg = std::accumulate (m_error.begin(), m_error.end(), std::move (err_msg), add_bullet_item);
+        err_msg.erase (0, 1);
+    }
+
+    return err_msg;
 }
 
 
@@ -495,7 +502,7 @@ void GncTxImport::verify_column_selections (ErrorList& error_msg)
      */
     if (!check_for_column_type(GncTransPropType::AMOUNT) &&
         !check_for_column_type(GncTransPropType::AMOUNT_NEG))
-        error_msg.add_error( _("Please select a amount or negated amount column."));
+        error_msg.add_error( _("Please select a (negated) amount column."));
 
     /* Verify a transfer account is selected if any of the other transfer properties
      * are selected.
@@ -506,6 +513,26 @@ void GncTxImport::verify_column_selections (ErrorList& error_msg)
          check_for_column_type(GncTransPropType::TREC_DATE)) &&
         !check_for_column_type(GncTransPropType::TACCOUNT))
         error_msg.add_error( _("Please select a transfer account column or remove the other transfer related columns."));
+
+    /* In multisplit mode and where current account selections imply multi-
+     * currency transactions, we require extra columns to ensure each split is
+     * fully defined.
+     * Note this check only involves splits created by the csv importer
+     * code. The generic import matcher may add a balancing split
+     * optionally using Transfer <something> properties. The generic
+     * import matcher has its own tools to balance that split so
+     * we won't concern ourselves with that one here.
+     */
+    if (m_multi_currency)
+    {
+        if (m_settings.m_multi_split && !check_for_column_type(GncTransPropType::PRICE))
+            error_msg.add_error( _("The current account selections will generate multi-currency transactions. Please select a price column."));
+        else if (!m_settings.m_multi_split &&
+            !check_for_column_type(GncTransPropType::PRICE) &&
+            !check_for_column_type(GncTransPropType::TAMOUNT) &&
+            !check_for_column_type(GncTransPropType::TAMOUNT_NEG))
+            error_msg.add_error( _("The current account selections will generate multi-currency transactions. Please select a price column or a (negated) transfer column."));
+    }
 }
 
 
@@ -517,7 +544,7 @@ void GncTxImport::verify_column_selections (ErrorList& error_msg)
  * @return An empty string if all checks passed or the reason
  *         verification failed otherwise.
  */
-std::string GncTxImport::verify ()
+std::string GncTxImport::verify (bool with_acct_errors)
 {
     auto newline = std::string();
     auto error_msg = ErrorList();
@@ -544,7 +571,21 @@ std::string GncTxImport::verify ()
     auto have_line_errors = false;
     for (auto line : m_parsed_lines)
     {
-        if (!std::get<PL_SKIP>(line) && !std::get<PL_ERROR>(line).empty())
+        auto errors = std::get<PL_ERROR>(line);
+        if (std::get<PL_SKIP>(line))
+            continue;
+        if (with_acct_errors && !errors.empty())
+        {
+            have_line_errors = true;
+            break;
+        }
+        auto non_acct_error = [with_acct_errors](ErrPair curr_err)
+        {
+            return !((curr_err.first == GncTransPropType::ACCOUNT) ||
+                     (curr_err.first == GncTransPropType::TACCOUNT));
+        };
+        if (!with_acct_errors &&
+            std::any_of(errors.cbegin(), errors.cend(), non_acct_error))
         {
             have_line_errors = true;
             break;
@@ -575,7 +616,7 @@ std::shared_ptr<DraftTransaction> GncTxImport::trans_properties_to_trans (std::v
     QofBook* book = gnc_account_get_book (account);
     gnc_commodity* currency = xaccAccountGetCommodity (account);
     if (!gnc_commodity_is_currency(currency))
-        currency = xaccAccountGetCommodity (gnc_account_get_parent (account));
+        currency = gnc_account_get_currency_or_parent (account);
 
     auto draft_trans = trans_props->create_trans (book, currency);
 
@@ -679,7 +720,7 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
 void GncTxImport::create_transactions ()
 {
     /* Start with verifying the current data. */
-    auto verify_result = verify();
+    auto verify_result = verify (true);
     if (!verify_result.empty())
         throw std::invalid_argument (verify_result);
 
@@ -735,18 +776,24 @@ void GncTxImport::update_pre_trans_split_props (uint32_t row, uint32_t col, GncT
         trans_props->set(new_type, value);
     }
 
+    /* In the trans_props we also keep track of currencies/commodities for further
+     * multi-currency checks. These come from a PreSplit's account property.
+     * If that's the property that we are about to modify, the current
+     * counters should be reset. */
+    if ((old_type == GncTransPropType::ACCOUNT) || (new_type == GncTransPropType::ACCOUNT))
+        trans_props->reset_cross_split_counters();
 
     /* All transaction related value updates are finished now,
-        * time to determine what to do with the updated GncPreTrans copy.
-        *
-        * For multi-split input data this line may be part of a transaction
-        * that has already been started by a previous line. In that case
-        * reuse the GncPreTrans from that previous line (which we track
-        * in m_parent).
-        * In all other cases our new GncPreTrans should be used for this line
-        * and be marked as the new potential m_parent for subsequent lines.
-        */
-    if (m_settings.m_multi_split && trans_props->is_part_of(m_parent))
+     * time to determine what to do with the updated GncPreTrans copy.
+     *
+     * For multi-split input data this line may be part of a transaction
+     * that has already been started by a previous line. In that case
+     * reuse the GncPreTrans from that previous line (which we track
+     * in m_parent).
+     * In all other cases our new GncPreTrans should be used for this line
+     * and be marked as the new potential m_parent for subsequent lines.
+     */
+    if (m_settings.m_multi_split && trans_props->is_part_of( m_parent))
         split_props->set_pre_trans (m_parent);
     else
     {
@@ -754,7 +801,7 @@ void GncTxImport::update_pre_trans_split_props (uint32_t row, uint32_t col, GncT
         m_parent = trans_props;
     }
 
-    /* Next handle any split related property changes */
+    /* Finally handle any split related property changes */
     if ((old_type > GncTransPropType::TRANS_PROPS) && (old_type <= GncTransPropType::SPLIT_PROPS))
     {
         split_props->reset (old_type);
@@ -800,6 +847,7 @@ void GncTxImport::update_pre_trans_split_props (uint32_t row, uint32_t col, GncT
             split_props->set(new_type, value);
         }
     }
+    m_multi_currency |= split_props->get_pre_trans()->is_multi_currency();
 }
 
 
@@ -827,6 +875,7 @@ GncTxImport::set_column_type (uint32_t position, GncTransPropType type, bool for
 
     /* Update the preparsed data */
     m_parent = nullptr;
+    m_multi_currency = false;
     for (auto parsed_lines_it = m_parsed_lines.begin();
             parsed_lines_it != m_parsed_lines.end();
             ++parsed_lines_it)

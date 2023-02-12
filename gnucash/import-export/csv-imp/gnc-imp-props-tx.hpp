@@ -151,7 +151,7 @@ class GncPreTrans
 {
 public:
     GncPreTrans(int date_format, bool multi_split)
-        : m_date_format{date_format}, m_multi_split{multi_split} {};
+        : m_date_format{date_format}, m_multi_split{multi_split}, m_currency{nullptr} {};
 
     void set (GncTransPropType prop_type, const std::string& value);
     void set_date_format (int date_format) { m_date_format = date_format ;}
@@ -176,7 +176,14 @@ public:
      */
     bool is_part_of (std::shared_ptr<GncPreTrans> parent);
     boost::optional<std::string> get_void_reason() { return m_void_reason; }
+
     ErrMap errors();
+    void reset_cross_split_counters();
+    /* Some import errors need info from multiple splits. This function
+     * will evaluate possible multi-line errors and set the proper error
+     * message(s) for them. */
+    bool is_multi_currency();
+
 
 private:
     int m_date_format;
@@ -190,7 +197,21 @@ private:
     boost::optional<std::string> m_void_reason;
     bool created = false;
 
+
     ErrMap m_errors;
+
+    /* m_alt_currencies will be filled with all PreSplit account's
+     * commodities that are currencies. If the account is denominated in a
+     * non-currency, its parent account currency is added instead.
+     * This list will be used to check for multi-currency inconsistencies
+     * and whether extra columns are required. */
+    std::vector<gnc_commodity*> m_alt_currencies;
+    /* m_acct_commodities will be filled with all PreSplit account's
+     * commodities that aren't currencies. The result will be used to check for
+     * a multi-currency situation (which requires extra columns to be set). */
+    std::vector<gnc_commodity*> m_acct_commodities;
+
+    friend class GncPreSplit;
 };
 
 class GncPreSplit
@@ -209,10 +230,12 @@ public:
     void create_split(std::shared_ptr<DraftTransaction> draft_trans);
 
     Account* get_account () { if (m_account) return *m_account; else return nullptr; }
-    void set_account (Account* acct) { if (acct) m_account = acct; else m_account = boost::none; }
+    void set_account (Account* acct);
     ErrMap errors();
 
 private:
+    void UpdateCrossSplitCounters ();
+
     std::shared_ptr<GncPreTrans> m_pre_trans;
     int m_date_format;
     int m_currency_format;

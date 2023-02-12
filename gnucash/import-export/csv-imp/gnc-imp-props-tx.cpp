@@ -375,7 +375,47 @@ ErrMap GncPreTrans::errors ()
     return m_errors;
 }
 
+void GncPreTrans::reset_cross_split_counters()
 {
+    m_alt_currencies.clear();
+    m_acct_commodities.clear();
+}
+
+
+bool GncPreTrans::is_multi_currency()
+{
+    auto num_comm = m_acct_commodities.size() + m_alt_currencies.size();
+    if (m_currency && (std::find (m_alt_currencies.cbegin(),m_alt_currencies.cend(), m_currency) == m_alt_currencies.cend()))
+        num_comm++;
+    return (num_comm > 1);
+}
+
+
+void GncPreSplit::UpdateCrossSplitCounters ()
+{
+    auto acct = static_cast<Account *> (nullptr);
+    if (m_account && *m_account)
+    {
+        auto acct = *m_account;
+        auto comm = xaccAccountGetCommodity (acct);
+        auto alt_currs = m_pre_trans->m_alt_currencies;
+        auto acct_comms = m_pre_trans->m_acct_commodities;
+        auto curr = static_cast<gnc_commodity*> (nullptr);
+        if (gnc_commodity_is_currency (comm))
+        {
+            curr = comm;
+            comm = nullptr;
+        }
+        else
+            curr = gnc_account_get_currency_or_parent (acct);
+
+        auto has_curr = [curr] (const gnc_commodity *vec_curr) { return gnc_commodity_equiv (curr, vec_curr); };
+        if (curr && std::none_of (alt_currs.cbegin(), alt_currs.cbegin(), has_curr))
+            m_pre_trans->m_alt_currencies.push_back(curr);
+        auto has_comm = [comm] (const gnc_commodity *vec_comm) { return gnc_commodity_equiv (comm, vec_comm); };
+        if (comm && std::none_of (acct_comms.cbegin(), acct_comms.cbegin(), has_comm))
+            m_pre_trans->m_alt_currencies.push_back(comm);
+    }
 }
 
 void GncPreSplit::set (GncTransPropType prop_type, const std::string& value)
@@ -500,6 +540,10 @@ void GncPreSplit::set (GncTransPropType prop_type, const std::string& value)
                         e.what()).str();
         m_errors.emplace(prop_type, err_str);
     }
+
+    /* Extra currency related postprocessing for account type */
+    if (prop_type == GncTransPropType::ACCOUNT)
+        UpdateCrossSplitCounters();
 }
 
 void GncPreSplit::reset (GncTransPropType prop_type)
@@ -576,6 +620,25 @@ StrVec GncPreSplit::verify_essentials()
 
     if (m_trec_state && *m_trec_state == YREC && !m_trec_date)
         err_msg.emplace_back (_("Transfer split is reconciled but transfer reconcile date column is missing or invalid."));
+
+
+    /* In multisplit mode and where current account selections imply multi-
+     * currency transactions, we require extra columns to ensure each split is
+     * fully defined.
+     * Note this check only involves splits created by the csv importer
+     * code. The generic import matcher may add a balancing split
+     * optionally using Transfer <something> properties. The generic
+     * import matcher has its own tools to balance that split so
+     * we won't concern ourselves with that one here.
+     */
+    if (m_pre_trans->is_multi_currency())
+    {
+        if (m_pre_trans->m_multi_split && !m_price)
+            err_msg.emplace_back( _("Choice of accounts makes this a multi-currency transaction but price column is missing or invalid."));
+        else if (!m_pre_trans->m_multi_split &&
+            !m_price && !m_tamount && !m_tamount_neg)
+            err_msg.emplace_back( _("Choice of account makes this a multi-currency transaction but price or (negated) transfer column is missing or invalid."));
+    }
 
     return err_msg;
 }
@@ -664,9 +727,7 @@ void GncPreSplit::create_split (std::shared_ptr<DraftTransaction> draft_trans)
     auto acct_comm = xaccAccountGetCommodity(account);
     if (gnc_commodity_equiv(trans_curr, acct_comm))
         value = amount;
-    else if ((m_tamount || m_tamount_neg) &&
-              m_taccount &&
-              gnc_commodity_equiv (trans_curr, xaccAccountGetCommodity( *m_taccount)))
+    else if (tamount)
         value = -*tamount;
     else if (m_price)
         value = amount * *m_price;
@@ -678,11 +739,11 @@ void GncPreSplit::create_split (std::shared_ptr<DraftTransaction> draft_trans)
         auto nprice =
         gnc_pricedb_lookup_nearest_in_time64(gnc_pricedb_get_db(book),
                                              acct_comm, trans_curr, time);
-        if (nprice)
+        GncNumeric rate = nprice ? gnc_price_get_value (nprice): gnc_numeric_zero();
+        if (!gnc_numeric_zero_p (rate))
         {
             /* Found a usable price. Let's check if the conversion direction is right
              * Reminder: value = amount * price, or amount = value / price */
-            GncNumeric rate = gnc_price_get_value(nprice);
             if (gnc_commodity_equiv(gnc_price_get_currency(nprice), trans_curr))
                 value = amount * rate;
             else
@@ -718,12 +779,12 @@ void GncPreSplit::create_split (std::shared_ptr<DraftTransaction> draft_trans)
                 /* Import data didn't specify price, let's lookup the nearest in time */
                 auto nprice =
                 gnc_pricedb_lookup_nearest_in_time64(gnc_pricedb_get_db(book),
-                                                    acct_comm, trans_curr, time);
-                if (nprice)
+                                                     acct_comm, trans_curr, time);
+                GncNumeric rate = nprice ? gnc_price_get_value (nprice): gnc_numeric_zero();
+                if (!gnc_numeric_zero_p (rate))
                 {
                     /* Found a usable price. Let's check if the conversion direction is right
                      * Reminder: value = amount * price, or amount = value / price */
-                    GncNumeric rate = gnc_price_get_value(nprice);
                     if (gnc_commodity_equiv(gnc_price_get_currency(nprice), trans_curr))
                         tamount = tvalue * rate.inv();
                     else
@@ -765,4 +826,15 @@ void GncPreSplit::create_split (std::shared_ptr<DraftTransaction> draft_trans)
 ErrMap GncPreSplit::errors (void)
 {
     return m_errors;
+}
+
+
+void GncPreSplit::set_account (Account* acct)
+{
+    if (acct)
+        m_account = acct;
+    else
+        m_account = boost::none;
+
+    UpdateCrossSplitCounters();
 }

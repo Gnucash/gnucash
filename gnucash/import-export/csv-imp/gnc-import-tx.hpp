@@ -128,8 +128,6 @@ public:
     bool skip_alt_lines ();
     bool skip_err_lines ();
 
-    void req_mapped_accts (bool val) {m_req_mapped_accts = val; }
-
     void separators (std::string separators);
     std::string separators ();
 
@@ -144,7 +142,7 @@ public:
 
     void tokenize (bool guessColTypes);
 
-    std::string verify();
+    std::string verify(bool with_acct_errors);
 
     /** This function will attempt to convert all tokenized lines into
      *  transactions using the column types the user has set.
@@ -187,7 +185,8 @@ private:
 
     CsvTransImpSettings m_settings;
     bool m_skip_errors;
-    bool m_req_mapped_accts;
+    /* Field used internally to track whether some transactions are multi-currency */
+    bool m_multi_currency;
 
     /* The parameters below are only used while creating
      * transactions. They keep state information while processing multi-split
