@@ -504,16 +504,6 @@ void GncTxImport::verify_column_selections (ErrorList& error_msg)
         !check_for_column_type(GncTransPropType::AMOUNT_NEG))
         error_msg.add_error( _("Please select a (negated) amount column."));
 
-    /* Verify a transfer account is selected if any of the other transfer properties
-     * are selected.
-     */
-    if ((check_for_column_type(GncTransPropType::TACTION) ||
-         check_for_column_type(GncTransPropType::TMEMO) ||
-         check_for_column_type(GncTransPropType::TREC_STATE) ||
-         check_for_column_type(GncTransPropType::TREC_DATE)) &&
-        !check_for_column_type(GncTransPropType::TACCOUNT))
-        error_msg.add_error( _("Please select a transfer account column or remove the other transfer related columns."));
-
     /* In multisplit mode and where current account selections imply multi-
      * currency transactions, we require extra columns to ensure each split is
      * fully defined.
