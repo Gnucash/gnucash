@@ -4,7 +4,7 @@
 # HOSSZÚ Péter <hosszu@web.de>, 2001-2003.
 # SULYOK Péter <peti@sulyok.hu>, 2003-2006.
 # Kornel Tako <takokornel@gmail.com>, 2007.
-# Kárász Attila <cult.edie@gmail.com>, 2022.
+# Kárász Attila <cult.edie@gmail.com>, 2022, 2023.
 # Szia Tomi <sziatomi01@gmail.com>, 2022, 2023.
 # mocsa <csaba@feltoltve.hu>, 2022, 2023.
 # ovari <ovari123@zoho.com>, 2022, 2023.
@@ -14,8 +14,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-01-30 22:36+0000\n"
-"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
+"PO-Revision-Date: 2023-02-08 19:38+0000\n"
+"Last-Translator: Kárász Attila <cult.edie@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -704,6 +704,7 @@ msgstr ""
 "a GnuCash online kézikönyvben található."
 
 #: doc/tip_of_the_day.list.c:44
+#, fuzzy
 msgid ""
 "Every transaction has a \"Notes\" field where you can put useful "
 "information.\n"
@@ -712,6 +713,13 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgstr ""
+"Minden tranzakcióhoz tartozik egy \"Megjegyzés\" mező, ahol hasznos "
+"információkat Írhat.\n"
+"\n"
+"Hogy látható legyen\n"
+"válassza a \"Nézet\" lehetőséget a menüsorban, és jelölje be a \"Double "
+"Line\" vagy a \"Double Line Mode\" lehetőséget a Beállítások:Regisztráció "
+"alapértelmezéseknél."
 
 #: doc/tip_of_the_day.list.c:50
 msgid ""
@@ -732,6 +740,10 @@ msgid ""
 "'+', '-','*', or '/'. Type the second value and press Enter to record the "
 "calculated amount."
 msgstr ""
+"Miközben összegeket ír be a könyvelésbe, a GnuCash kalkulátorral összeadhat, "
+"kivonhat, szorozhat és oszthat. Egyszerűen írja be az első értéket, majd "
+"válassza ki a „+”, „-”, „*” vagy „/” jelet. Írja be a második értéket, és "
+"nyomja meg az Entert a számított összeg rögzítéséhez."
 
 #: doc/tip_of_the_day.list.c:60
 msgid ""
@@ -752,6 +764,10 @@ msgid ""
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
 "Assets:Cash)."
 msgstr ""
+"Írja be egy meglévő számlanév első betűjét (betűit) az Átutalási jegyzék "
+"oszlopba, és a GnuCash kiegészíti a nevet a fiókok listájából. Alszámlák "
+"esetén írja be a szülőszámla első betűjét/betűit, majd a \":\" karaktert és "
+"az alszámla első betűjét (pl. E:K az Eszközök:Készpénz esetében)."
 
 #: doc/tip_of_the_day.list.c:71
 #, fuzzy
