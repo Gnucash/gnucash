@@ -14,8 +14,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-01-13 23:56+0000\n"
-"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"PO-Revision-Date: 2023-01-30 22:36+0000\n"
+"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.15.1-dev\n"
+"X-Generator: Weblate 4.16-dev\n"
 
 # #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
 # src/trans.h:283
@@ -15083,7 +15083,7 @@ msgstr "<b>Számla típ_us</b>"
 #: gnucash/gtkbuilder/dialog-account.glade:1595
 #: gnucash/gtkbuilder/dialog-tax-info.glade:646
 msgid "_Parent Account"
-msgstr "_Fő számla"
+msgstr "_Szülő számla"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1703
 msgid "<b>Balance Information</b>"
