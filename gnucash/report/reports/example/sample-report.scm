@@ -23,7 +23,10 @@
 ;; It illustrates the basic techniques used to create
 ;; new reports for GnuCash.
 
-(define-module (gnucash reports example hello-world))
+;; ------------------------------------------------------------------
+;; Top-level definitions
+;; ------------------------------------------------------------------
+(define-module (gnucash reports example sample-report))
 
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities)) 
@@ -34,14 +37,20 @@
 
 (debug-enable 'backtrace)
 
+;; initialise values
+(define optname-report-title (N_ "Report Title"))
+(define opthelp-report-title (N_ "Title for this report."))
+
+;; ------------------------------------------------------------------
 ;; This function will generate a set of options that GnuCash
 ;; will use to display a dialog where the user can select
 ;; values for your report's parameters.
+;; ------------------------------------------------------------------
 (define (options-generator)
   (let* ((options (gnc:new-options))
          (optiondb (options #t))) ;; Hack to get the optiondb from options
 
-    ;; This is a boolean option. It is in Section 'Hello, World!'
+    ;; This is a boolean option. It is in Section "Tab B"
     ;; and is named 'Boolean Option'. Its sorting key is 'a',
     ;; thus it will come before options with sorting keys
     ;; 'b', 'c', etc. in the same section. The default value
@@ -49,7 +58,7 @@
     ;; will be displayed as help text when the user puts
     ;; the mouse pointer over the option.
     (gnc-register-simple-boolean-option optiondb
-     (N_ "Hello, World!") (N_ "Boolean Option")
+     (N_ "Tab B") (N_ "Boolean Option")
      "a" (N_ "This is a boolean option.") #t)
 
     ;; This is a multichoice option. The user can choose between the
@@ -60,7 +69,7 @@
     ;; interpret the default value--'third in this case--because it
     ;; can be either a symbol or a number.
     (gnc-register-multichoice-option optiondb
-      (N_ "Hello, World!") (N_ "Multi Choice Option")
+      (N_ "Tab B") (N_ "Multi Choice Option")
       "b" (N_ "This is a multi choice option.") "third"
       (list (vector 'first (N_ "First Option"))
             (vector 'second (N_ "Second Option"))
@@ -68,36 +77,36 @@
             (vector 'fourth (N_ "Fourth Options"))))
 
     ;; This is a string option. Users can type anything they want
-    ;; as a value. The default value is "Hello, World". This is
+    ;; as a value. The default value is "String Option Default". This is
     ;; in the same section as the option above. It will be shown
     ;; after the option above because its key is 'b' while the
     ;; other key is 'a'.
     (gnc-register-string-option optiondb
-      (N_ "Hello, World!") (N_ "String Option")
-      "c" (N_ "This is a string option.") (N_ "Hello, World"))
+      (N_ "Tab B") (N_ "String Option")
+      "c" (N_ "This is a string option.") (N_ "String Option Default"))
 
     ;; The following are date options. There are three here reflecting
-    ;; the trhee types of date controls that can be displayed in the
+    ;; the three types of date controls that can be displayed in the
     ;; options dialog: Absolute, Relative, or Both. You'll usually
     ;; want to use Both, which is the middle example. Other than the
-    ;; usual strings the two paramters are a list of relative date
+    ;; usual strings the two parameters are a list of relative date
     ;; types and a boolean to indicate whether you want a Both date
     ;; control. Note that to get an absolute control you pass a
     ;; one-item list containing 'absolute and #f. If you pass (list
     ;; 'absolute) #t you'll get a Both but the relative listbox will
     ;; be empty. That will irritate users so avoid doing that.
     (gnc-register-date-option-set optiondb
-      (N_ "Hello, World!") (N_ "Just a Date Option")
+      (N_ "Tab B") (N_ "Just a Date Option")
       "d" (N_ "This is a date option.")
       (list 'absolute) #f )
 
     (gnc-register-date-option-set optiondb
-      (N_ "Hello, World!") (N_ "Combo Date Option")
+      (N_ "Tab B") (N_ "Combo Date Option")
       "y" (N_ "This is a combination date option.")
       '(start-cal-year start-prev-year end-prev-year) #t)
 
     (gnc-register-date-option-set optiondb
-      (N_ "Hello, World!") (N_ "Relative Date Option")
+      (N_ "Tab B") (N_ "Relative Date Option")
       "x" (N_ "This is a relative date option.")
       '(start-cal-year start-prev-year end-prev-year) #f)
 
@@ -107,7 +116,7 @@
     ;; user can click to go up or down, the amount changed by a single
     ;; click is given by the step size.
     (gnc-register-number-range-option optiondb
-      (N_ "Hello, World!") (N_ "Number Option")
+      (N_ "Tab B") (N_ "Number Option")
       "ee" (N_ "This is a number option.")
       1500.0  ;; default
       0.0     ;; lower bound
@@ -119,7 +128,7 @@
     ;; a string representing a 3-byte hex number with the bytes
     ;; representing red, blue, and green values.
     (gnc-register-color-option optiondb
-      (N_ "Hello, World!") (N_ "Background Color")
+      (N_ "Tab B") (N_ "Background Color")
       "f" (N_ "This is a color option.")
       "f6ffdb")
 
@@ -135,7 +144,7 @@
     ;; for selection.
 
     (gnc-register-account-list-option optiondb
-      (N_ "Hello Again") (N_ "An account list option")
+      (N_ "Tab A") (N_ "An account list option")
       "g" (N_ "This is an account list option.")
       (gnc-account-list-from-types
        (gnc-get-current-book)
@@ -146,34 +155,35 @@
     ;; the same format as a multichoice option. The value of the
     ;; option is a list of symbols.
     (gnc-register-list-option optiondb
-      (N_ "Hello Again") (N_ "A list option")
+      (N_ "Tab A") (N_ "A list option")
       "h" (N_ "This is a list option.")
       (symbol->string 'good)
       (list (vector 'good (N_ "The Good"))
             (vector 'bad (N_ "The Bad"))
             (vector 'ugly (N_ "The Ugly"))))
 
-    ;; This option is for testing. When true, the report generates
-    ;; an exception.
-    (gnc-register-simple-boolean-option optiondb
-      (N_ "Testing") (N_ "Crash the report")
-      "a"
-      (N_ "This is for testing. \
-Your reports probably shouldn't have an \
-option like this.")
-      #f)
+    ;; This is a Report Title option using constants defined at the
+    ;; beginning of the file.
+    (gnc-register-string-option optiondb
+      (N_ "Testing") optname-report-title
+      "c" opthelp-report-title (N_ "Report Title Default"))
 
-    (GncOptionDBPtr-set-default-section optiondb "Hello, World!")
- ;; We still need to return the function wrapper instead of the GncOptionDBPtr bfor all of the options functions in the reports system.
+    ;; Setting a default section is optional but set in most reports.
+	;; If not set, the default section will be the first section.
+    (gnc:options-set-default-section options "Tab B")      
+    (GncOptionDBPtr-set-default-section optiondb "Tab B")
+ ;; We still need to return the function wrapper instead of the GncOptionDBPtr for all of the options functions in the reports system.
     options))
 
+;; ------------------------------------------------------------------
 ;; This is the rendering function. It accepts a database of options
 ;; and generates an object of type <html-document>.  See the file
 ;; report-html.txt for documentation; the file report-html.scm
 ;; includes all the relevant Scheme code. The option database passed
 ;; to the function is one created by the options-generator function
 ;; defined above.
-(define (hello-world-renderer report-obj)
+;; ------------------------------------------------------------------
+(define (sample-report-renderer report-obj)
   ;; Helper function for looking up option values.
   (define (op-value section name)
     (gnc-optiondb-lookup-value ((gnc:report-options report-obj) 'lookup)
@@ -182,27 +192,24 @@ option like this.")
   ;; The first thing we do is make local variables for all the specific
   ;; options in the set of options given to the function. This set will
   ;; be generated by the options generator above.
-  (let ((bool-val     (op-value "Hello, World!" "Boolean Option"))
-        (mult-val     (op-value "Hello, World!" "Multi Choice Option"))
-        (string-val   (op-value "Hello, World!" "String Option"))
+  (let ((bool-val     (op-value "Tab B" "Boolean Option"))
+        (mult-val     (op-value "Tab B" "Multi Choice Option"))
+        (string-val   (op-value "Tab B" "String Option"))
         (date-val     (gnc:date-option-absolute-time
-                       (op-value "Hello, World!" "Just a Date Option")))
+                       (op-value "Tab B" "Just a Date Option")))
         (rel-date-val (gnc:date-option-absolute-time
-                       (op-value "Hello, World!" "Relative Date Option")))
+                       (op-value "Tab B" "Relative Date Option")))
         (combo-date-val (gnc:date-option-absolute-time
-                         (op-value "Hello, World!" "Combo Date Option")))
-        (num-val      (op-value "Hello, World!" "Number Option"))
-        (bg-color     (op-value "Hello, World!" "Background Color"))
-        (accounts     (op-value "Hello Again"   "An account list option"))
-        (list-val     (op-value "Hello Again"   "A list option"))
-        (radio-val    (op-value "Hello Again"   "A Radio Button option"))
-        (crash-val    (op-value "Testing"       "Crash the report"))
+                         (op-value "Tab B" "Combo Date Option")))
+        (num-val      (op-value "Tab B" "Number Option"))
+        (bg-color     (op-value "Tab B" "Background Color"))
+        (accounts     (op-value "Tab A"   "An account list option"))
+        (list-val     (op-value "Tab A"   "A list option"))
+        (radio-val    (op-value "Tab A"   "A Radio Button option"))
+        (report-title (op-value "Testing" optname-report-title))
         
         ;; document will be the HTML document that we return.
         (document (gnc:make-html-document)))
-
-    ;; Crash if asked to.
-    (if crash-val (string-length #f)) ;; string-length needs a string
 
     ;; these are samples of different date options. for a simple
     ;; date with day, month, and year but no time you should use
@@ -260,7 +267,7 @@ option like this.")
       ;; translation of the given string is available for the
       ;; current locale, then the translation is returned,
       ;; otherwise the original string is returned.
-      (gnc:html-document-set-title! document (G_ "Hello, World"))
+      (gnc:html-document-set-title! document report-title)
 
       ;; we make a "text object" to add a bunch of text to.
       ;; the function gnc:make-html-text can take any number of 
@@ -274,11 +281,12 @@ option like this.")
        document
        (gnc:make-html-text         
         (gnc:html-markup-p
-         (gnc:html-markup/format
-          (G_ "This is a sample GnuCash report. \
+         (gnc:html-markup/format (format #f
+          (G_ "This is a sample GnuCash ~a report. \
 See the guile (scheme) source code in the scm/report directory \
 for details on writing your own reports, \
-or extending existing reports.")))
+or extending existing reports.")
+           gnc:version)))
         (gnc:html-markup-p
          (gnc:html-markup/format
           (G_ "For help on writing reports, or to contribute your brand \
@@ -286,8 +294,8 @@ new, totally cool report, consult the mailing list ~a.")
           (gnc:html-markup-anchor 
            "mailto:gnucash-devel@gnucash.org"
            (gnc:html-markup-tt "gnucash-devel@gnucash.org")))
-         (G_ "For details on subscribing to that list, see &lt;https://www.gnucash.org/&gt;.")
-         (G_ "You can learn more about writing scheme at &lt;https://www.scheme.com/tspl2d/&gt;."))
+         (G_ " For details on subscribing to that list, see &lt;https://www.gnucash.org/&gt;.")
+         (G_ " You can learn more about writing scheme at &lt;https://www.scheme.com/tspl2d/&gt;."))
 
         (gnc:html-markup-p
          (gnc:html-markup/format
@@ -420,7 +428,9 @@ new, totally cool report, consult the mailing list ~a.")
       
       document)))
 
+;; ------------------------------------------------------------------
 ;; Here we define the actual report with gnc:define-report
+;; ------------------------------------------------------------------
 (gnc:define-report
  
  ;; The version of this report.
@@ -429,22 +439,22 @@ new, totally cool report, consult the mailing list ~a.")
  ;; The name of this report. This will be used, among other things,
  ;; for making its menu item in the main menu. You need to use the
  ;; untranslated value here!
- 'name (N_ "Hello, World")
+ 'name (N_ "Sample Report")
 
  ;; The GUID for this report. This string should be unique, set once
  ;; and left alone forever after that. In theory, you could use any
  ;; unique string, even a meaningful one (!) but its probably best to
  ;; use a true uuid. Get them from `uuidgen | sed -e s/-//g` and paste
  ;; the results in here. You must make a new guid for each report!
- 'report-guid "898d78ec92854402bf76e20a36d24ade"
+ 'report-guid "af02e925d0484745afb04f16e0524e87"
 
  ;; The name in the menu
  ;; (only necessary if it differs from the name)
- 'menu-name (N_ "Sample Report with Examples")
+ 'menu-name (N_ "Sample Report")
 
  ;; A tip that is used to provide additional information about the
  ;; report to the user.
- 'menu-tip (N_ "A sample report with examples.")
+ 'menu-tip (N_ "An options example report.")
 
  ;; A path describing where to put the report in the menu system.
  ;; In this case, it's going under the utility menu.
@@ -454,4 +464,5 @@ new, totally cool report, consult the mailing list ~a.")
  'options-generator options-generator
  
  ;; The rendering function defined above.
- 'renderer hello-world-renderer)
+ 'renderer sample-report-renderer)
+ 

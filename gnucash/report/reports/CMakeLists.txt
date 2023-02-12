@@ -61,9 +61,8 @@ set (reports_standard_SCHEME_2
 set(reports_example_SCHEME
   example/average-balance.scm
   example/daily-reports.scm
-  example/hello-world.scm
+  example/sample-report.scm
   example/sample-graphs.scm
-  example/welcome-to-gnucash.scm
 )
 
 set(reports_us_SCHEME
