@@ -4,23 +4,24 @@
 # Miloslav Trmac <mitr@volny.cz>, 2002, 2003, 2004, 2007.
 # Petr Pisar <petr.pisar@atlas.cz>, 2012.
 # Tomáš Václavík <t3vaclavik@gmail.com>, 2022.
+# Kryštof Černý <cleverline1mc@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.13-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2022-03-14 23:55+0000\n"
-"Last-Translator: Tomáš Václavík <t3vaclavik@gmail.com>\n"
+"PO-Revision-Date: 2023-02-04 21:01+0000\n"
+"Last-Translator: Kryštof Černý <cleverline1mc@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/gnucash/gnucash/cs/"
 ">\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 4.12-dev\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 4.16-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -7289,7 +7290,7 @@ msgstr "je menší než"
 #: gnucash/gnome-search/search-int64.c:188
 #: gnucash/gnome-search/search-numeric.c:221
 msgid "is less than or equal to"
-msgstr "je menší nebo rovný "
+msgstr "je menší nebo rovný"
 
 #: gnucash/gnome-search/search-double.c:187
 #: gnucash/gnome-search/search-int64.c:189
@@ -8048,7 +8049,7 @@ msgstr "Zvolte obrázek"
 
 #: gnucash/gnome-utils/dialog-options.c:2881
 msgid "Select an image file."
-msgstr "Zvolte soubor obrázku"
+msgstr "Zvolte soubor obrázku."
 
 #: gnucash/gnome-utils/dialog-options.c:3061
 msgid "Pixels"
@@ -10464,7 +10465,7 @@ msgstr "%s, Celkem neměnové komodity:"
 #: gnucash/gnome-utils/window-main-summarybar.c:315
 #, c-format
 msgid "%s, Grand Total:"
-msgstr "%s, Úplný součet"
+msgstr "%s, Úplný součet:"
 
 #: gnucash/gnome-utils/window-main-summarybar.c:319
 #, c-format
@@ -12487,7 +12488,7 @@ msgstr "Naposledy otevřený soubor"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:11
 msgid "This field contains the full path of the most recently opened file."
-msgstr "Toto pole obsahuje úplnou cestu k naposledy otevřenému souboru"
+msgstr "Toto pole obsahuje úplnou cestu k naposledy otevřenému souboru."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:15
 #: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:20
@@ -12512,7 +12513,7 @@ msgstr "Další naposledy otevřený soubor"
 #: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:56
 msgid ""
 "This field contains the full path of the next most recently opened file."
-msgstr "Toto pole obsahuje úplnou cestu k dalšímu naposledy otevřenému souboru"
+msgstr "Toto pole obsahuje úplnou cestu k dalšímu naposledy otevřenému souboru."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:9
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:132
@@ -13343,9 +13344,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:193
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:183
-#, fuzzy
 msgid "<b>Load and Save Settings</b>"
-msgstr "Spořicí účet"
+msgstr "<b>Načíst a uložit nastavení</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:242
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:231
@@ -15040,8 +15040,6 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:1517
-#, fuzzy
-#| msgid "Opening Balance"
 msgid "Opening balance"
 msgstr "Počáteční zůstatek"
 
@@ -17014,7 +17012,7 @@ msgstr "Zobrazovat _úvodní obrazovku"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1780
 msgid "Show splash screen at startup."
-msgstr "Zobrazovat úvodní obrazovku při spouštění"
+msgstr "Zobrazovat úvodní obrazovku při spouštění."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1795
 msgid "Auto-save time _interval"
@@ -17268,7 +17266,7 @@ msgstr "_Automaticky zvýšit seznamy"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2799
 msgid "Automatically raise the list of accounts or actions during input."
-msgstr "Automaticky při vstupu zvýšit seznam účtů nebo akcí"
+msgstr "Při vstupu automaticky zvýšit seznam účtů nebo akcí."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2811
 msgid "Tab order in_cludes Transfer on Memorised Transactions"
@@ -17521,7 +17519,7 @@ msgstr "Přesunout _nedávnou použitou záložku dopředu"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3885
 msgid "<b>Tab Position</b>"
-msgstr "<b>Umístění záložek</b>"
+msgstr "<b>Umístění karet</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3974
 #, fuzzy
@@ -17874,11 +17872,11 @@ msgstr "_Otočení"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:1031
 msgid "The origin point is the upper left-hand corner of the page."
-msgstr "Bod počátku je levý horní roh stránky"
+msgstr "Bod počátku je levý horní roh stránky."
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:1044
 msgid "The origin point is the lower left-hand corner of the page."
-msgstr "Bod počátku je levý dolní roh stránky"
+msgstr "Bod počátku je levý dolní roh stránky."
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:1057
 msgid "Degrees"
@@ -19282,9 +19280,8 @@ msgid "Save the sort order for this register."
 msgstr "Upravit hlavní účet této účetní knihy"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1069
-#, fuzzy
 msgid "_Reverse Order"
-msgstr "Pořadí účetní knihy"
+msgstr "_Obrátit pořadí"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1073
 msgid "Sort in descending order."
@@ -19310,7 +19307,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:50
 msgid "Every "
-msgstr "Každých"
+msgstr "Každých "
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:62
 msgid ""
@@ -21559,14 +21556,12 @@ msgid "Import Customers from csv"
 msgstr "Exportovat zákazníky do XML"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:188
-#, fuzzy
 msgid "customers"
-msgstr "Zákazník"
+msgstr "zákazníci"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:189
-#, fuzzy
 msgid "vendors"
-msgstr "Dodavatel"
+msgstr "dodavatelé"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:197
 #, c-format
@@ -21582,9 +21577,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/customer-import/gnc-plugin-customer-import.c:59
-#, fuzzy
 msgid "Import _Customers & Vendors..."
-msgstr "Exportovat zákazníky do XML"
+msgstr "Importovat _zákazníky a dodavatele..."
 
 #: gnucash/import-export/customer-import/gnc-plugin-customer-import.c:59
 #, fuzzy
@@ -22335,8 +22329,8 @@ msgid ""
 "You are missing some needed Perl libraries.\n"
 "Run 'gnc-fq-update' as root to install them."
 msgstr ""
-"Chybí vám některé potřebné knihovny Perlu. Nainstalujte je spuštěním 'gnc-fq-"
-"update' jako root."
+"Chybí vám některé potřebné knihovny Perlu.\n"
+"Nainstalujte je spuštěním 'gnc-fq-update' jako root."
 
 #: gnucash/price-quotes.scm:461
 #, scheme-format
@@ -23901,7 +23895,7 @@ msgstr "Zobrazit tabulku"
 #: gnucash/report/reports/standard/category-barchart.scm:180
 #: gnucash/report/reports/standard/net-charts.scm:134
 msgid "Display a table of the selected data."
-msgstr "Zobrazit tabulku vybraných dat"
+msgstr "Zobrazit tabulku vybraných dat."
 
 #: gnucash/report/reports/example/average-balance.scm:121
 #: gnucash/report/reports/example/average-balance.scm:302
@@ -23910,7 +23904,7 @@ msgstr "Zobrazit graf"
 
 #: gnucash/report/reports/example/average-balance.scm:122
 msgid "Display a graph of the selected data."
-msgstr "Zobrazit graf vybraných dat"
+msgstr "Zobrazit graf vybraných dat."
 
 #: gnucash/report/reports/example/average-balance.scm:126
 #: gnucash/report/reports/example/average-balance.scm:301
@@ -24976,7 +24970,7 @@ msgstr "Používat pod čáry pod sloupci sečtených čísel, jak to dělají �
 #: gnucash/report/reports/standard/income-statement.scm:85
 #: gnucash/report/reports/standard/trial-balance.scm:125
 msgid "Display accounts as hyperlinks"
-msgstr "Zobrazovat účty jako odkazy?"
+msgstr "Zobrazovat účty jako odkazy"
 
 #: gnucash/report/reports/standard/account-summary.scm:116
 #: gnucash/report/reports/standard/balance-sheet.scm:111
