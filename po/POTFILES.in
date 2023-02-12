@@ -454,9 +454,8 @@ gnucash/report/report-register-hooks.scm
 gnucash/report/reports/cash-flow-calc.scm
 gnucash/report/reports/example/average-balance.scm
 gnucash/report/reports/example/daily-reports.scm
-gnucash/report/reports/example/hello-world.scm
 gnucash/report/reports/example/sample-graphs.scm
-gnucash/report/reports/example/welcome-to-gnucash.scm
+gnucash/report/reports/example/sample-report.scm
 gnucash/report/reports/locale-specific/de_DE/taxtxf.scm
 gnucash/report/reports/locale-specific/us/taxtxf.scm
 gnucash/report/reports/reports.scm
