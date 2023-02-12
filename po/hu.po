@@ -14,8 +14,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-02-08 19:38+0000\n"
-"Last-Translator: Kárász Attila <cult.edie@gmail.com>\n"
+"PO-Revision-Date: 2023-02-12 15:35+0000\n"
+"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -704,7 +704,6 @@ msgstr ""
 "a GnuCash online kézikönyvben található."
 
 #: doc/tip_of_the_day.list.c:44
-#, fuzzy
 msgid ""
 "Every transaction has a \"Notes\" field where you can put useful "
 "information.\n"
@@ -713,13 +712,14 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgstr ""
-"Minden tranzakcióhoz tartozik egy \"Megjegyzés\" mező, ahol hasznos "
-"információkat Írhat.\n"
+"Minden tranzakcióhoz tartozik egy „Megjegyzés” mező ahol hasznos "
+"információkat adhat meg.\n"
 "\n"
-"Hogy látható legyen\n"
-"válassza a \"Nézet\" lehetőséget a menüsorban, és jelölje be a \"Double "
-"Line\" vagy a \"Double Line Mode\" lehetőséget a Beállítások:Regisztráció "
-"alapértelmezéseknél."
+"Láthatóvá tételéhez\n"
+"válassza a „Nézet” menüpontot a menüsorban és jelölje be a „Dupla sor” "
+"lehetőséget,\n"
+"vagy a Beállítások:Nyilvántartás alapértelmezéseinél jelölje be a „Dupla "
+"soros mód” lehetőséget."
 
 #: doc/tip_of_the_day.list.c:50
 msgid ""
@@ -15037,7 +15037,7 @@ msgstr "A pénznem legkisebb egysége, amit használni lehet."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1452
 msgid "Placeholde_r"
-msgstr "T_öltelék"
+msgstr "_Helykitöltő"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1456
 msgid ""
@@ -15094,7 +15094,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:1569
 msgid "<b>Acco_unt Type</b>"
-msgstr "<b>Számla típ_us</b>"
+msgstr "<b>Számlatíp_us</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1595
 #: gnucash/gtkbuilder/dialog-tax-info.glade:646
@@ -29582,11 +29582,11 @@ msgstr "Számlálók"
 
 #: libgnucash/app-utils/business-prefs.scm:40
 msgid "Customer number format"
-msgstr "Ügyfélszám formátuma: "
+msgstr "Ügyfélszám formátuma"
 
 #: libgnucash/app-utils/business-prefs.scm:41
 msgid "Customer number"
-msgstr "Ügyfélszám: "
+msgstr "Ügyfélszám"
 
 #: libgnucash/app-utils/business-prefs.scm:42
 msgid ""
