@@ -1246,8 +1246,8 @@ and do not match the transaction."))))))))
 
 (define (gnc:owner-report-create-internal
          account split query journal? double? title debit-string credit-string)
-  (let ((split->owner (gnc:make-split->owner))
-        (owner (split->owner split)))
+  (let* ((split->owner (gnc:make-split->owner))
+         (owner (split->owner split)))
     (if (gncOwnerIsValid owner)
         (owner-report-create-with-enddate owner account #f)
         -1)))
