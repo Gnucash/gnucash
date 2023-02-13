@@ -32,6 +32,7 @@
 (export gnc:owner-get-owner-id)
 (export gnc:owner-from-split)
 (export gnc:split->owner)
+(export gnc:make-split->owner)
 
 (define (gnc:owner-get-address owner)
   (let ((type (gncOwnerGetType owner)))
@@ -114,7 +115,7 @@
 (define (gnc:owner-from-split split result-owner)
   (define (notnull x) (and (not (null? x)) x))
   (issue-deprecation-warning
-   "gnc:owner-from-split is deprecated in 4.x. use gnc:split->owner instead.")
+   "gnc:owner-from-split is deprecated in 4.x. use gnc:make-split->owner instead.")
   (let* ((trans (xaccSplitGetParent split))
 	 (invoice (notnull (gncInvoiceGetInvoiceFromTxn trans)))
 	 (temp (gncOwnerNew))
@@ -139,6 +140,8 @@
 (define gnc:split->owner
   (let ((ht (make-hash-table)))
     (lambda (split)
+      (issue-deprecation-warning
+       "gnc:split->owner is deprecated in 4.x. use gnc:make-split->owner instead.")
       (cond
        ((not split)
         (hash-for-each (lambda (k v) (gncOwnerFree v)) ht)
@@ -154,3 +157,33 @@
                           owner))
           (hash-set! ht (gncSplitGetGUID split) owner)
           owner))))))
+
+(define owner-guardian (make-guardian))
+
+(define (reclaim-owners)
+  (let ((owner (owner-guardian)))
+    (when owner
+      (gncOwnerFree owner)
+      (reclaim-owners))))
+
+(add-hook! after-gc-hook reclaim-owners)
+
+;; Create a function which helps find a split's gncOwner. It will
+;; allocate and memoize the owners in a hash table because
+;; gncOwnerGetOwnerFromLot is slow. When the function is out of scope,
+;; and gc is run, the hash table is destroyed and the above hook will
+;; run, releasing the owners via gncOwnerFree.
+(define (gnc:make-split->owner)
+  (let ((ht (make-hash-table)))
+    (lambda (split)
+      (or (hash-ref ht (gncSplitGetGUID split))
+          (let ((lot (xaccSplitGetLot split))
+                (owner (gncOwnerNew)))
+            (unless (gncOwnerGetOwnerFromLot lot owner)
+              (gncOwnerCopy (gncOwnerGetEndOwner
+                             (gncInvoiceGetOwner
+                              (gncInvoiceGetInvoiceFromLot lot)))
+                            owner))
+            (hash-set! ht (gncSplitGetGUID split) owner)
+            (owner-guardian owner)
+            owner)))))

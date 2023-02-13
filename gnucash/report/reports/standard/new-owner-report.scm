@@ -1246,13 +1246,11 @@ and do not match the transaction."))))))))
 
 (define (gnc:owner-report-create-internal
          account split query journal? double? title debit-string credit-string)
-
-  (let* ((owner (gnc:split->owner split))
-         (res (if (gncOwnerIsValid owner)
-                  (owner-report-create-with-enddate owner account #f)
-                  -1)))
-    (gnc:split->owner #f)
-    res))
+  (let ((split->owner (gnc:make-split->owner))
+        (owner (split->owner split)))
+    (if (gncOwnerIsValid owner)
+        (owner-report-create-with-enddate owner account #f)
+        -1)))
 
 (gnc:register-report-hook ACCT-TYPE-RECEIVABLE #t gnc:owner-report-create-internal)
 (gnc:register-report-hook ACCT-TYPE-PAYABLE #t gnc:owner-report-create-internal)
