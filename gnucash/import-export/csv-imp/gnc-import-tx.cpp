@@ -515,13 +515,18 @@ void GncTxImport::verify_column_selections (ErrorList& error_msg)
      */
     if (m_multi_currency)
     {
-        if (m_settings.m_multi_split && !check_for_column_type(GncTransPropType::PRICE))
-            error_msg.add_error( _("The current account selections will generate multi-currency transactions. Please select a price column."));
+        if (m_settings.m_multi_split &&
+            !check_for_column_type(GncTransPropType::PRICE) &&
+            !check_for_column_type(GncTransPropType::VALUE) &&
+            !check_for_column_type(GncTransPropType::VALUE_NEG))
+            error_msg.add_error( _("The current account selections will generate multi-currency transactions. Please select one of the following columns: price, (negated) value."));
         else if (!m_settings.m_multi_split &&
             !check_for_column_type(GncTransPropType::PRICE) &&
             !check_for_column_type(GncTransPropType::TAMOUNT) &&
-            !check_for_column_type(GncTransPropType::TAMOUNT_NEG))
-            error_msg.add_error( _("The current account selections will generate multi-currency transactions. Please select a price column or a (negated) transfer column."));
+            !check_for_column_type(GncTransPropType::TAMOUNT_NEG) &&
+            !check_for_column_type(GncTransPropType::VALUE) &&
+            !check_for_column_type(GncTransPropType::VALUE_NEG))
+            error_msg.add_error( _("The current account selections will generate multi-currency transactions. Please select one of the following columns: price, (negated) value, (negated) transfer amount."));
     }
 }
 

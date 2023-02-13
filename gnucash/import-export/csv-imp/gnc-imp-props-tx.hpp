@@ -61,6 +61,8 @@ enum class GncTransPropType {
     ACCOUNT,
     AMOUNT,
     AMOUNT_NEG,
+    VALUE,
+    VALUE_NEG,
     PRICE,
     MEMO,
     REC_STATE,
@@ -243,6 +245,8 @@ private:
     boost::optional<Account*> m_account;
     boost::optional<GncNumeric> m_amount;
     boost::optional<GncNumeric> m_amount_neg;
+    boost::optional<GncNumeric> m_value;
+    boost::optional<GncNumeric> m_value_neg;
     boost::optional<GncNumeric> m_price;
     boost::optional<std::string> m_memo;
     boost::optional<char> m_rec_state;

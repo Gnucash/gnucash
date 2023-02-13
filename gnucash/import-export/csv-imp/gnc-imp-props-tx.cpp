@@ -67,6 +67,8 @@ std::map<GncTransPropType, const char*> gnc_csv_col_type_strs = {
         { GncTransPropType::ACCOUNT, N_("Account") },
         { GncTransPropType::AMOUNT, N_("Amount") },
         { GncTransPropType::AMOUNT_NEG, N_("Amount (Negated)") },
+        { GncTransPropType::VALUE, N_("Value") },
+        { GncTransPropType::VALUE_NEG, N_("Value (Negated)") },
         { GncTransPropType::PRICE, N_("Price") },
         { GncTransPropType::MEMO, N_("Memo") },
         { GncTransPropType::REC_STATE, N_("Reconciled") },
@@ -100,7 +102,9 @@ std::vector<GncTransPropType> multi_col_props = {
     GncTransPropType::AMOUNT,
     GncTransPropType::AMOUNT_NEG,
     GncTransPropType::TAMOUNT,
-    GncTransPropType::TAMOUNT_NEG
+    GncTransPropType::TAMOUNT_NEG,
+    GncTransPropType::VALUE,
+    GncTransPropType::VALUE_NEG
 };
 
 bool is_multi_col_prop (GncTransPropType prop)
@@ -485,6 +489,16 @@ void GncPreSplit::set (GncTransPropType prop_type, const std::string& value)
                 m_amount_neg = parse_monetary (value, m_currency_format); // Will throw if parsing fails
                 break;
 
+            case GncTransPropType::VALUE:
+                m_value = boost::none;
+                m_value = parse_monetary (value, m_currency_format); // Will throw if parsing fails
+                break;
+
+            case GncTransPropType::VALUE_NEG:
+                m_value_neg = boost::none;
+                m_value_neg = parse_monetary (value, m_currency_format); // Will throw if parsing fails
+                break;
+
             case GncTransPropType::TAMOUNT:
                 m_tamount = boost::none;
                 m_tamount = parse_monetary (value, m_currency_format); // Will throw if parsing fails
@@ -579,6 +593,20 @@ void GncPreSplit::add (GncTransPropType prop_type, const std::string& value)
                 m_amount_neg = num_val;
                 break;
 
+            case GncTransPropType::VALUE:
+                num_val = parse_monetary (value, m_currency_format); // Will throw if parsing fails
+                if (m_value)
+                    num_val += *m_value;
+            m_value = num_val;
+            break;
+
+            case GncTransPropType::VALUE_NEG:
+                num_val = parse_monetary (value, m_currency_format); // Will throw if parsing fails
+                if (m_value_neg)
+                    num_val += *m_value_neg;
+            m_value_neg = num_val;
+            break;
+
             case GncTransPropType::TAMOUNT:
                 num_val = parse_monetary (value, m_currency_format); // Will throw if parsing fails
                 if (m_tamount)
@@ -633,11 +661,11 @@ StrVec GncPreSplit::verify_essentials()
      */
     if (m_pre_trans->is_multi_currency())
     {
-        if (m_pre_trans->m_multi_split && !m_price)
-            err_msg.emplace_back( _("Choice of accounts makes this a multi-currency transaction but price column is missing or invalid."));
+        if (m_pre_trans->m_multi_split && !m_price && !m_value && !m_value_neg)
+            err_msg.emplace_back( _("Choice of accounts makes this a multi-currency transaction but price or (negated) value column is missing or invalid."));
         else if (!m_pre_trans->m_multi_split &&
-            !m_price && !m_tamount && !m_tamount_neg)
-            err_msg.emplace_back( _("Choice of account makes this a multi-currency transaction but price or (negated) transfer column is missing or invalid."));
+            !m_price && !m_value && !m_value_neg && !m_tamount && !m_tamount_neg )
+            err_msg.emplace_back( _("Choice of account makes this a multi-currency transaction but price, (negated) value or (negated) transfer column is missing or invalid."));
     }
 
     return err_msg;
@@ -722,11 +750,23 @@ void GncPreSplit::create_split (std::shared_ptr<DraftTransaction> draft_trans)
             *tamount -= *m_tamount_neg;
     }
 
+    /* Value can be calculated in several ways, depending on what
+     * data was available in the csv import file.
+     * Below code will prefer the method with the least
+     * risk on rounding errors.
+     * */
     auto value = GncNumeric();
     auto trans_curr = xaccTransGetCurrency(draft_trans->trans);
     auto acct_comm = xaccAccountGetCommodity(account);
     if (gnc_commodity_equiv(trans_curr, acct_comm))
         value = amount;
+    else if (m_value || m_value_neg)
+    {
+        if (m_value)
+            value += *m_value;
+        if (m_value_neg)
+            value -= *m_value_neg;
+    }
     else if (tamount)
         value = -*tamount;
     else if (m_price)
@@ -759,39 +799,39 @@ void GncPreSplit::create_split (std::shared_ptr<DraftTransaction> draft_trans)
 
     if (taccount)
     {
-        /* If a taccount is set that forcibly means we're processing a single-line transaction
-         * Determine the transfer amount. If the csv data had columns for it, use those, otherwise
-         * try to calculate it. The easiest is the single-currency case: just use the negated
-         * amount. In case of multi-currency, attempt to get a price and work from there. */
+        /* If a taccount is set that forcibly means we're processing a single-line
+         * transaction. The csv importer will assume this can only create a
+         * two-split transaction, so whatever transfer data is available, the
+         * transfer split's value must balance the first split value. Remains
+         * to determine: the transfer amount. As with value above, for single
+         * currency case use transfer value. Otherwise calculate from whatever
+         * is found in the csv data preferring minimal rounding calculations. */
         auto tvalue = -value;
-        if (!tamount)
+        auto trans_curr = xaccTransGetCurrency(draft_trans->trans);
+        auto acct_comm = xaccAccountGetCommodity(taccount);
+        if (gnc_commodity_equiv(trans_curr, acct_comm))
+            tamount = tvalue;
+        else if (tamount)
+            ; // Nothing to do, was already calculated
+        else if (m_price)
+            tamount = tvalue * m_price->inv();
+        else
         {
-            auto trans_curr = xaccTransGetCurrency(draft_trans->trans);
-            auto acct_comm = xaccAccountGetCommodity(taccount);
-            if (gnc_commodity_equiv(trans_curr, acct_comm))
-                tamount = tvalue;
-            else if (m_price)
-                tamount = tvalue * m_price->inv();
-            else
+            QofBook* book = xaccTransGetBook (draft_trans->trans);
+            auto time = xaccTransRetDatePosted (draft_trans->trans);
+            /* Import data didn't specify price, let's lookup the nearest in time */
+            auto nprice =
+            gnc_pricedb_lookup_nearest_in_time64(gnc_pricedb_get_db(book),
+                                                    acct_comm, trans_curr, time);
+            GncNumeric rate = nprice ? gnc_price_get_value (nprice): gnc_numeric_zero();
+            if (!gnc_numeric_zero_p (rate))
             {
-                QofBook* book = xaccTransGetBook (draft_trans->trans);
-                auto time = xaccTransRetDatePosted (draft_trans->trans);
-                /* Import data didn't specify price, let's lookup the nearest in time */
-                auto nprice =
-                gnc_pricedb_lookup_nearest_in_time64(gnc_pricedb_get_db(book),
-                                                     acct_comm, trans_curr, time);
-                GncNumeric rate = nprice ? gnc_price_get_value (nprice): gnc_numeric_zero();
-                if (!gnc_numeric_zero_p (rate))
-                {
-                    /* Found a usable price. Let's check if the conversion direction is right
-                     * Reminder: value = amount * price, or amount = value / price */
-                    if (gnc_commodity_equiv(gnc_price_get_currency(nprice), trans_curr))
-                        tamount = tvalue * rate.inv();
-                    else
-                        tamount = tvalue * rate;
-                }
+                /* Found a usable price. Let's check if the conversion direction is right
+                    * Reminder: value = amount * price, or amount = value / price */
+                if (gnc_commodity_equiv(gnc_price_get_currency(nprice), trans_curr))
+                    tamount = tvalue * rate.inv();
                 else
-                    PWARN("No price found, defer creation of second split to generic import matcher.");
+                    tamount = tvalue * rate;
             }
         }
         if (tamount)
@@ -799,6 +839,8 @@ void GncPreSplit::create_split (std::shared_ptr<DraftTransaction> draft_trans)
             trans_add_split (draft_trans->trans, taccount, *tamount, tvalue, m_taction, m_tmemo, m_trec_state, m_trec_date);
             splits_created++;
         }
+            else
+                PWARN("No price found, defer creation of second split to generic import matcher.");
     }
 
     if (splits_created == 1)
