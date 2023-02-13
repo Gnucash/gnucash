@@ -1375,7 +1375,6 @@ gnucash_scroll_event (GtkWidget *widget, GdkEventScroll *event)
     GnucashSheet *sheet;
     GtkAdjustment *vadj;
     gfloat h_value, v_value;
-    int direction;
 
     g_return_val_if_fail (widget != NULL, TRUE);
     g_return_val_if_fail (GNUCASH_IS_SHEET(widget), TRUE);
@@ -1406,7 +1405,7 @@ gnucash_scroll_event (GtkWidget *widget, GdkEventScroll *event)
 #if defined MAC_INTEGRATION
         v_value += event->delta_y;
 #else
-        direction = event->delta_y > 0 ? 1 : event->delta_y < 0 ? -1 : 0;
+        int direction = event->delta_y > 0 ? 1 : event->delta_y < 0 ? -1 : 0;
         v_value += gtk_adjustment_get_step_increment (vadj) * direction;
 #endif
         break;
