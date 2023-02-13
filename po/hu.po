@@ -14,8 +14,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-02-12 15:35+0000\n"
-"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"PO-Revision-Date: 2023-02-13 15:28+0000\n"
+"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hu/>\n"
 "Language: hu\n"
@@ -1033,11 +1033,9 @@ msgid ""
 "new accounts. Accounts in other currencies must be\n"
 "added manually."
 msgstr ""
-"Kiválasztott egy főkönyvi pénznemet és\n"
-"ez lesz\n"
-"az újonnan létrehozott számlák pénzneme.\n"
-"A más pénznemet használó számlákat\n"
-"manuálisan kell hozzáadni."
+"A főkönyvhöz új pénznemet választott, ezért ez lesz az\n"
+"újonnan létrehozott számlák pénzneme. A más pénznemet\n"
+"használó számlákat manuálisan kell hozzáadni."
 
 #: gnucash/gnome/assistant-hierarchy.c:1495
 #, fuzzy
@@ -3626,7 +3624,7 @@ msgstr "Összesen"
 
 #: gnucash/gnome/gnc-plugin-account-tree.c:59
 msgid "New Accounts _Page"
-msgstr "Új folyószámlák oldal"
+msgstr "_Új folyószámlák oldal"
 
 #: gnucash/gnome/gnc-plugin-account-tree.c:60
 msgid "Open a new Account Tree page"
@@ -3642,7 +3640,7 @@ msgstr "Új fájl létrehozása"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:117
 msgid "_Open..."
-msgstr "Megnyitás..."
+msgstr "_Megnyitás..."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:118
 msgid "Open an existing GnuCash file"
@@ -3661,7 +3659,7 @@ msgstr "A jelenlegi fájl mentése"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:127
 msgid "Save _As..."
-msgstr "Mentés másként..."
+msgstr "Mentés _másként..."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:128
 msgid "Save this file with a different name"
@@ -3669,7 +3667,7 @@ msgstr "Mentse el ezt a fájlt más néven"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:132
 msgid "Re_vert"
-msgstr "Változtatások visszavonása"
+msgstr "_Változtatások visszavonása"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:133
 msgid "Reload the current database, reverting all unsaved changes"
@@ -3719,7 +3717,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:165
 msgid "_Scheduled Transactions"
-msgstr "Ütemezett tranzakciók"
+msgstr "_Ütemezett tranzakciók"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:167
 msgid "_Scheduled Transaction Editor"
@@ -3739,7 +3737,7 @@ msgstr "Ütemezett tranzakciók létrehozása az utolsó futás óta"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:177
 msgid "_Mortgage & Loan Repayment..."
-msgstr "Jelzálog/kölcsön törlesztés..."
+msgstr "_Jelzálog/kölcsön törlesztés..."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:178
 msgid "Setup scheduled transactions for repayment of a loan"
@@ -3760,7 +3758,7 @@ msgstr "Régi adatok archíválása könyvelési időszakok használatával"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:192
 msgid "_Price Database"
-msgstr "Árfolyam-adatbázis"
+msgstr "_Árfolyam-adatbázis"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:193
 msgid "View and edit the prices for stocks and mutual funds"
@@ -3779,7 +3777,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:202
 msgid "_Loan Repayment Calculator"
-msgstr "Kölcsön visszafizetési kalkulátor"
+msgstr "Kölcsön _visszafizetési kalkulátor"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:203
 msgid "Use the loan/mortgage repayment calculator"
@@ -4148,7 +4146,7 @@ msgstr "Új számla létrehozása"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:204
 msgid "New Account _Hierarchy..."
-msgstr "Új számlakészlet..."
+msgstr "Új _számlakészlet..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:205
 msgid "Extend the current book by merging with new account type categories"
@@ -4221,7 +4219,7 @@ msgstr "A kiválasztott folyószámlák törlése"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:258
 msgid "_Cascade Account Properties..."
-msgstr "Számlatulajdonságok továbbörökítése..."
+msgstr "Számlatulajdonságok tovább_örökítése..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:259
 #, fuzzy
@@ -4334,7 +4332,7 @@ msgstr "Részvényfelaprózás vagy -összevonás rögzítése"
 #: gnucash/gnome/gnc-plugin-page-register2.c:372
 #: gnucash/gnome/gnc-plugin-page-register.c:500
 msgid "View _Lots..."
-msgstr "Tétel nézet..."
+msgstr "_Tétel nézet..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:323
 #: gnucash/gnome/gnc-plugin-page-register2.c:373
@@ -4736,7 +4734,7 @@ msgstr "Tétel másolata"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:204
 msgid "Move Entry _Up"
-msgstr "Bejegyzés mozgatása felfelé"
+msgstr "Bejegyzés mozgatása _felfelé"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:205
 msgid "Move the current entry one row upwards"
@@ -4744,7 +4742,7 @@ msgstr "Bejegyzés mozgatása felfelé egy sorral"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:209
 msgid "Move Entry Do_wn"
-msgstr "Bejegyzés mozgatása lefelé"
+msgstr "Bejegyzés mozgatása _lefelé"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:210
 msgid "Move the current entry one row downwards"
@@ -5282,7 +5280,7 @@ msgstr "Új alkalmazott létrehozása"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:179
 msgid "_Delete Owner..."
-msgstr "_Tulajdonos _törlése..."
+msgstr "_Tulajdonos törlése..."
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:180
 #, fuzzy
@@ -5411,7 +5409,7 @@ msgstr "Tranzak_ció másolása"
 #: gnucash/gnome/gnc-plugin-page-register2.c:196
 #: gnucash/gnome/gnc-plugin-page-register.c:299
 msgid "_Paste Transaction"
-msgstr "Tranzakció beillesztése"
+msgstr "Tranzakció _beillesztése"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:197
 #: gnucash/gnome/gnc-plugin-page-register.c:300
@@ -5511,7 +5509,7 @@ msgstr "Bejegyzés törlése"
 #: gnucash/gnome/gnc-plugin-page-register2.c:223
 #: gnucash/gnome/gnc-plugin-page-register.c:337
 msgid "_Print Checks..."
-msgstr "Csekkek nyomtatása..."
+msgstr "Csekkek _nyomtatása..."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:230
 #: gnucash/gnome/gnc-plugin-page-register.c:344
@@ -5586,7 +5584,7 @@ msgstr "Tranzakció ér_vénytelenítése"
 #: gnucash/gnome/gnc-plugin-page-register2.c:319
 #: gnucash/gnome/gnc-plugin-page-register.c:433
 msgid "_Unvoid Transaction"
-msgstr "Tranzakció érvényesítése"
+msgstr "Tranzakció _érvényesítése"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:323
 #: gnucash/gnome/gnc-plugin-page-register.c:437
@@ -5762,7 +5760,7 @@ msgstr "Tranzakciók egy vagy két sorban, és a jelenlegi tranzakció kifejtés
 #: gnucash/gnome/gnc-plugin-page-register.c:591
 #: gnucash/gtkbuilder/dialog-preferences.glade:3251
 msgid "Transaction _Journal"
-msgstr "Tranzakció napló"
+msgstr "Tranzakció_napló"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:459
 #: gnucash/gnome/gnc-plugin-page-register.c:592
@@ -5999,7 +5997,7 @@ msgstr "Másolat létrehozása a jelenlegi tranzakcióról"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:325
 msgid "Jump to the linked bill, invoice, or voucher"
-msgstr "Ugrás a kapcsolódó számlára, számlára vagy utalványra"
+msgstr "Ugrás a kapcsolódó szállítói vagy kimenő számlára, vagy utalványra"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:414
 #, fuzzy
@@ -6009,7 +6007,7 @@ msgstr "Kifejtések tö_rlése"
 #: gnucash/gnome/gnc-plugin-page-register.c:459
 #: gnucash/gnome-utils/gnc-main-window.c:347
 msgid "_Sort By..."
-msgstr "Rendezés..."
+msgstr "_Rendezés..."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:491
 #, fuzzy
@@ -6252,7 +6250,7 @@ msgstr "HTML-formátumú jelentés exportálása fájlba"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1249
 msgid "_Report Options"
-msgstr "Jelentés opciók"
+msgstr "Jelentés _opciók"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1250
 #: gnucash/report/html-utilities.scm:322
@@ -6387,7 +6385,7 @@ msgstr "_Ütemezett"
 #: gnucash/gtkbuilder/dialog-tax-table.glade:103
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:768
 msgid "_New"
-msgstr "Új"
+msgstr "_Új"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:142
 msgid "Create a new scheduled transaction"
@@ -6472,7 +6470,7 @@ msgstr "Főkönyvablak megnyitása"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:57
 msgid "St_yle Sheets"
-msgstr "Stíluslapok"
+msgstr "_Stíluslapok"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:58
 msgid "Edit report style sheets"
@@ -7114,7 +7112,7 @@ msgstr "E számlaegyeztetés félbehagyása"
 
 #: gnucash/gnome/window-reconcile2.c:2158 gnucash/gnome/window-reconcile.c:2420
 msgid "_Open Account"
-msgstr "Számla megnyitása"
+msgstr "Számla _megnyitása"
 
 #: gnucash/gnome/window-reconcile2.c:2159 gnucash/gnome/window-reconcile.c:2421
 msgid "Open the account"
@@ -7225,9 +7223,8 @@ msgstr "Ki kell választani egy tételt a listából"
 #: gnucash/gtkbuilder/dialog-commodities.glade:138
 #: gnucash/gtkbuilder/dialog-doclink.glade:215
 #: gnucash/gtkbuilder/dialog-price.glade:865
-#, fuzzy
 msgid "_Remove"
-msgstr "<< Eltávolítás"
+msgstr "<< El_távolítás"
 
 #: gnucash/gnome-search/dialog-search.c:1100
 #, fuzzy
@@ -7621,7 +7618,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/dialog-account.c:756
 msgid "_Show children accounts"
-msgstr "Alárendelt számlák megjelenítése"
+msgstr "_Alárendelt számlák megjelenítése"
 
 #: gnucash/gnome-utils/dialog-account.c:824
 msgid "The account must be given a name."
@@ -7892,7 +7889,7 @@ msgstr "Megnyitás..."
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:106
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:784
 msgid "_Open"
-msgstr "Megnyitás"
+msgstr "_Megnyitás"
 
 #: gnucash/gnome-utils/dialog-file-access.c:310
 msgid "Save As..."
@@ -7902,7 +7899,7 @@ msgstr "Mentés másként..."
 #: gnucash/gnome-utils/dialog-file-access.c:320
 #: gnucash/gtkbuilder/dialog-file-access.glade:40
 msgid "_Save As"
-msgstr "Mentés másként"
+msgstr "M_entés másként"
 
 #: gnucash/gnome-utils/dialog-options.c:225
 #: gnucash/gnome-utils/gnc-main-window.c:310
@@ -8256,7 +8253,7 @@ msgstr "Dátumtartomány"
 
 #: gnucash/gnome-utils/dialog-utils.c:766
 msgid "Remember and don't _ask me again."
-msgstr "Megjegyzés és ne kérdezze ismét."
+msgstr "Megjegyzés és ne _kérdezze ismét."
 
 #: gnucash/gnome-utils/dialog-utils.c:767
 msgid "Don't _tell me again."
@@ -8336,7 +8333,7 @@ msgstr "_Igen, ekkor"
 
 #: gnucash/gnome-utils/gnc-autosave.c:124
 msgid "Yes, _always"
-msgstr "Igen, mindig"
+msgstr "Igen, _mindig"
 
 #: gnucash/gnome-utils/gnc-autosave.c:125
 msgid "No, n_ever"
@@ -8761,7 +8758,7 @@ msgstr "_Új fájl létrehozása"
 
 #: gnucash/gnome-utils/gnc-file.c:855
 msgid "Open _Anyway"
-msgstr "Megnyitás mégis"
+msgstr "Megnyitás m_égis"
 
 #: gnucash/gnome-utils/gnc-file.c:858
 msgid "Open _Folder"
@@ -8769,7 +8766,7 @@ msgstr "_Mappa megnyitása"
 
 #: gnucash/gnome-utils/gnc-file.c:864 gnucash/gnome-utils/gnc-main-window.c:315
 msgid "_Quit"
-msgstr "Kilépés"
+msgstr "_Kilépés"
 
 #: gnucash/gnome-utils/gnc-file.c:950 gnucash/gnome-utils/gnc-file.c:970
 msgid "Loading user data..."
@@ -8827,8 +8824,8 @@ msgid ""
 "This is likely because the \"gnucash-docs\" package is not properly "
 "installed."
 msgstr ""
-"Ennek valószínűleg az az oka, hogy a \"gnucash-docs\" csomag nincs "
-"megfelelően telepítve."
+"Valószínűleg azért, mert a \"gnucash-docs\" csomag nincs megfelelően "
+"telepítve."
 
 #. Translators: URI of missing help files
 #: gnucash/gnome-utils/gnc-gnome-utils.c:74
@@ -8872,7 +8869,7 @@ msgstr "_Kimutatások"
 
 #: gnucash/gnome-utils/gnc-main-window.c:283
 msgid "_Tools"
-msgstr "Eszközök"
+msgstr "E_szközök"
 
 #: gnucash/gnome-utils/gnc-main-window.c:284
 msgid "E_xtensions"
@@ -8880,11 +8877,11 @@ msgstr "_Kiterjesztések"
 
 #: gnucash/gnome-utils/gnc-main-window.c:285
 msgid "_Windows"
-msgstr "Ablakok"
+msgstr "_Ablakok"
 
 #: gnucash/gnome-utils/gnc-main-window.c:293
 msgid "_Print..."
-msgstr "Nyomtatás..."
+msgstr "_Nyomtatás..."
 
 #: gnucash/gnome-utils/gnc-main-window.c:294
 msgid "Print the currently active page"
@@ -8892,7 +8889,7 @@ msgstr "A jelenleg aktív lap nyomtatása"
 
 #: gnucash/gnome-utils/gnc-main-window.c:300
 msgid "Pa_ge Setup..."
-msgstr "Lap beállítás..."
+msgstr "La_p beállítás..."
 
 #: gnucash/gnome-utils/gnc-main-window.c:301
 msgid "Specify the page size and orientation for printing"
@@ -8938,7 +8935,7 @@ msgstr "Megjelenítendő számlatípusok kiválasztása."
 
 #: gnucash/gnome-utils/gnc-main-window.c:364
 msgid "Reset _Warnings..."
-msgstr "Figyelmeztetések alaphelyzetbe..."
+msgstr "F_igyelmeztetések alaphelyzetbe..."
 
 #: gnucash/gnome-utils/gnc-main-window.c:365
 msgid "Reset the state of all warning messages so they will be shown again."
@@ -8955,7 +8952,7 @@ msgstr "E lap átnevezése."
 
 #: gnucash/gnome-utils/gnc-main-window.c:377
 msgid "_New Window"
-msgstr "Új ablak"
+msgstr "_Új ablak"
 
 #: gnucash/gnome-utils/gnc-main-window.c:378
 msgid "Open a new top-level GnuCash window."
@@ -9003,7 +9000,7 @@ msgstr "Eszköztár megjelenítése/elrejtése ebben az ablakban"
 
 #: gnucash/gnome-utils/gnc-main-window.c:418
 msgid "Su_mmary Bar"
-msgstr "Összegzősor"
+msgstr "Összegzőso_r"
 
 #: gnucash/gnome-utils/gnc-main-window.c:419
 msgid "Show/hide the summary bar on this window"
@@ -9011,7 +9008,7 @@ msgstr "Összegzősor megjelenítése/elrejtése ebben az ablakban"
 
 #: gnucash/gnome-utils/gnc-main-window.c:423
 msgid "Stat_us Bar"
-msgstr "Állapotsor"
+msgstr "Á_llapotsor"
 
 #: gnucash/gnome-utils/gnc-main-window.c:424
 msgid "Show/hide the status bar on this window"
@@ -9020,7 +9017,7 @@ msgstr "Állapotsor megjelenítése/elrejtése ez ablakban"
 #: gnucash/gnome-utils/gnc-main-window.c:436
 #: gnucash/gtkbuilder/dialog-preferences.glade:3895
 msgid "To_p"
-msgstr "Fennt"
+msgstr "_Fennt"
 
 #: gnucash/gnome-utils/gnc-main-window.c:437
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:195
@@ -9444,7 +9441,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1826
 #: gnucash/register/ledger-core/split-register-control.c:1844
 msgid "_Unreconcile"
-msgstr "Nem egyeztet"
+msgstr "Nem e_gyeztet"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1911
 #: gnucash/register/ledger-core/split-register-model.c:2221
@@ -9746,7 +9743,7 @@ msgstr "RTTJ"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2943
 #: gnucash/register/ledger-core/split-register.c:2638
 msgid "Dist"
-msgstr "Dist"
+msgstr ""
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:45
 #: gnucash/import-export/import-main-matcher.c:1862
@@ -9819,7 +9816,7 @@ msgstr "Módosítva"
 #: gnucash/register/ledger-core/split-register.c:2105
 #: gnucash/register/ledger-core/split-register.c:2108
 msgid "_Value"
-msgstr "Érték"
+msgstr "_Érték"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1166
 #: gnucash/register/ledger-core/split-register.c:2117
@@ -10352,9 +10349,8 @@ msgid "Enter the number of shares bought or sold"
 msgstr "Eladott vagy vásárolt részvények számának megadása"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3293
-#, fuzzy
 msgid "* Indicates the transaction Commodity."
-msgstr "Tranzakciódátum megjelenítése?"
+msgstr ""
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3303
 #, fuzzy
@@ -13187,7 +13183,7 @@ msgstr "M_indent kijelöl"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:456
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:141
 msgid "Select _Range"
-msgstr "Tartomány kiválasztása"
+msgstr "_Tartomány kiválasztása"
 
 #. Filter By Dialog, Date Tab, Start section
 #: gnucash/gtkbuilder/assistant-csv-export.glade:484
@@ -14397,7 +14393,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:915
 msgid "_Select the currency to use for all imported transactions:"
-msgstr "Válasszon devizát az importált tranzakcióknak:"
+msgstr "Válasszon _devizát az importált tranzakcióknak:"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:958
 msgid ""
@@ -14432,9 +14428,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1008
-#, fuzzy
 msgid "Enter Information about..."
-msgstr "Adja meg az információt \"%s\"-ról"
+msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1034
 msgid "All fields must be complete to continue..."
@@ -14972,9 +14967,8 @@ msgid "Show _hidden accounts"
 msgstr "Rej_tett számlák megjelenítése"
 
 #: gnucash/gtkbuilder/dialog-account.glade:972
-#, fuzzy
 msgid "Show accounts which have the option \"Hidden\" checked."
-msgstr "Rejtettnek megjelölt számlák megjelenítése"
+msgstr "Rejtettnek megjelölt számlák megjelenítése."
 
 #: gnucash/gtkbuilder/dialog-account.glade:986
 #, fuzzy
@@ -15146,16 +15140,12 @@ msgid "Number of Digits"
 msgstr "Időszakok száma"
 
 #: gnucash/gtkbuilder/dialog-account.glade:2126
-#, fuzzy
-#| msgid ""
-#| "Renumber the immediate sub-accounts of %s? This will replace the account "
-#| "code field of each child account with a newly generated code."
 msgid ""
 "This will replace the account code field of each child account with a newly "
 "generated code"
 msgstr ""
-"%s számla alszámláinak azonnali újraszámozása? Ez lecseréli a számlaszám "
-"mezőt minden egyes alszámlán egy újonnan készített kóddal."
+"Ez minden egyes alszámla számlakód mezőjét egy újonnan generált kóddal "
+"helyettesíti"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:34
 msgid "_Show documentation"
@@ -15179,7 +15169,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:91
 msgid "_Not cleared"
-msgstr "Igazolatlan"
+msgstr "Iga_zolatlan"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:97
 msgid ""
@@ -15522,7 +15512,7 @@ msgstr "Idő_zóna"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:374
 msgid "_Unknown"
-msgstr "Ismeretlen"
+msgstr "Is_meretlen"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:380
 msgid ""
@@ -15535,7 +15525,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:395
 msgid "_Multiple"
-msgstr "Többszörös"
+msgstr "T_öbbszörös"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:401
 msgid ""
@@ -15760,9 +15750,8 @@ msgid "Enter URL like http://www.gnucash.org"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:454
-#, fuzzy
 msgid "Location does not start with a valid scheme"
-msgstr "A jelenlegi tranzakció nincs kiegyenlítve."
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:530
 #, fuzzy
@@ -15981,9 +15970,8 @@ msgstr "Jövőbeni érték"
 #: gnucash/gtkbuilder/dialog-fincalc.glade:304
 #: gnucash/gtkbuilder/dialog-fincalc.glade:319
 #: gnucash/gtkbuilder/dialog-fincalc.glade:334
-#, fuzzy
 msgid "Clear the entry."
-msgstr "A tétel törlése"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:348
 #, fuzzy
@@ -16423,7 +16411,7 @@ msgstr "Tétel-néző"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:25
 msgid "_New Lot"
-msgstr "Új tétel"
+msgstr "Új _tétel"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:40
 msgid "Scrub _Account"
@@ -16541,9 +16529,8 @@ msgid "Apply changes but do not close dialog."
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-options.glade:78
-#, fuzzy
 msgid "Apply changes and close dialog."
-msgstr "Nyissa meg a munkatárs keresése párbeszédablakot"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-order.glade:8
 msgid "Order Entry"
@@ -16760,7 +16747,7 @@ msgstr "Számlázási időszak"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:639
 msgid "Use _formal accounting labels"
-msgstr "Hivatalos számlacímkék használata"
+msgstr "_Hivatalos számlacímkék használata"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:645
 msgid "Use only 'debit' and 'credit' instead of informal synonyms."
@@ -16811,9 +16798,8 @@ msgid "Show the Account Color as background"
 msgstr "Árfolyam oszlop megjelenítése"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:864
-#, fuzzy
 msgid "Show the Account Color as Account Name Background."
-msgstr "Teljes számlanév megjelenítése a magyarázatban?"
+msgstr "A számlanév háttere a számlaszín legyen."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:886
 #, fuzzy
@@ -16821,9 +16807,8 @@ msgid "Show the Account Color on tabs"
 msgstr "Számlakód megjelenítése"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:892
-#, fuzzy
 msgid "Show the Account Color as tab background."
-msgstr "Számlakód megjelenítése alösszegekhez és alcímekhez?"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:926
 msgid ""
@@ -16841,7 +16826,7 @@ msgstr "_Választás"
 #: gnucash/gtkbuilder/dialog-preferences.glade:966
 #: gnucash/gtkbuilder/dialog-preferences.glade:3694
 msgid "Loc_ale"
-msgstr "Helyi"
+msgstr "_Helyi"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1108
 #: libgnucash/app-utils/business-options.scm:76
@@ -16900,9 +16885,8 @@ msgid "Display ne_gative amounts in red"
 msgstr "Ne_gatív mennyiségek pirosan"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1336
-#, fuzzy
 msgid "Display negative amounts in red."
-msgstr "Negatív mennyiségeket pirosan"
+msgstr "Negatív mennyiségek megjelenítése pirossal."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1348
 msgid "_Automatic decimal point"
@@ -16931,7 +16915,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1562
 msgid "Perform account list _setup on new file"
-msgstr "Számlalista beállítása az új fájlban"
+msgstr "Szám_lalista beállítása az új fájlban"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1568
 msgid "Present the new account list dialog when you choose File->New File."
@@ -16942,9 +16926,8 @@ msgid "Display \"_tip of the day\" dialog"
 msgstr "„A nap _tippje” megjelenítése"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1605
-#, fuzzy
 msgid "Display hints for using GnuCash at startup."
-msgstr "Kezdéskor ötletek megjelenítése a GnuCash használatára"
+msgstr "A GnuCash használatára vonatkozó tanácsok megjelenítése indításkor."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1626
 msgid "How many days to keep old log/backup files."
@@ -16988,7 +16971,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1774
 msgid "Show splash scree_n"
-msgstr "Indító ablak mutatása"
+msgstr "Indító a_blak mutatása"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1780
 msgid "Show splash screen at startup."
@@ -17038,9 +17021,8 @@ msgid "Path head for Linked Files Relative Paths"
 msgstr "Tranzakciók importálása szöveges fájlból"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2065
-#, fuzzy
 msgid "Enable horizontal grid lines on table displays"
-msgstr "Vízszintes keretek megjelenítése cellákon."
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2069
 msgid ""
@@ -17159,12 +17141,12 @@ msgstr "_Auto-bővítés küszöb"
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2461
 msgid "Match _display threshold"
-msgstr "Illesztő kijelzés küszöb"
+msgstr "Illesztő _kijelzés küszöb"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2472
 msgid "Use _bayesian matching"
-msgstr "Bayes-i illesztés"
+msgstr "Ba_yes-i illesztés"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2478
 msgid ""
@@ -17397,7 +17379,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3324
 msgid "Register opens in a new _window"
-msgstr "Regiszter nyitása új ablakban"
+msgstr "Regiszter _nyitása új ablakban"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3330
 msgid ""
@@ -17409,7 +17391,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3342
 msgid "_Only display leaf account names"
-msgstr "CSak az utolsó számlanevek megjelenítése"
+msgstr "Csak az _utolsó számlanevek megjelenítése"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3348
 msgid ""
@@ -17460,7 +17442,7 @@ msgstr "<b>Földrajzi pozíció</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3618
 msgid "Report opens in a new _window"
-msgstr "Jelentés nyitása új ablakban"
+msgstr "Jelentés nyitása _új ablakban"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3624
 msgid ""
@@ -17489,9 +17471,8 @@ msgid "_Save window size and position"
 msgstr "Az ablak méretének é_s helyzetének elmentése"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3840
-#, fuzzy
 msgid "Save window size and location when it is closed."
-msgstr "Ablakméret és hely elmentése"
+msgstr "Ablakméret és hely elmentése bezáráskor."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3853
 msgid "Bring the most _recent tab to the front"
@@ -17594,9 +17575,8 @@ msgid "Delete prices that meet the following criteria:"
 msgstr "Minden részvényár törlése az alábbi feltétel szerint:"
 
 #: gnucash/gtkbuilder/dialog-price.glade:457
-#, fuzzy
 msgid "Remove all prices before date."
-msgstr "A megadott dátumnál régebbi árak eltávolítása"
+msgstr "A megadott dátumnál régebbi árak eltávolítása."
 
 #: gnucash/gtkbuilder/dialog-price.glade:471
 msgid "Last of _Week"
@@ -17676,9 +17656,8 @@ msgid "Include manually _Entered prices"
 msgstr "Kézi _bevitelű árak törlése"
 
 #: gnucash/gtkbuilder/dialog-price.glade:691
-#, fuzzy
 msgid "If activated, include manually entered prices."
-msgstr "Kézi _bevitelű árak törlése"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-price.glade:708
 msgid "_Added by the application"
@@ -17708,9 +17687,8 @@ msgid "Add a new price."
 msgstr "Új ár hozzáadása."
 
 #: gnucash/gtkbuilder/dialog-price.glade:871
-#, fuzzy
 msgid "Remove the current price."
-msgstr "A jelenlegi ár eltávolítása"
+msgstr "A jelenlegi ár eltávolítása."
 
 #: gnucash/gtkbuilder/dialog-price.glade:889
 msgid "Edit the current price."
@@ -17723,7 +17701,7 @@ msgstr "Régi eltáv_olítása"
 #: gnucash/gtkbuilder/dialog-price.glade:906
 #, fuzzy
 msgid "Remove prices older than a user-entered date."
-msgstr "A megadott dátumnál régebbi árak eltávolítása"
+msgstr "A felhasználó által megadott dátumnál régebbi árak eltávolítása."
 
 #: gnucash/gtkbuilder/dialog-price.glade:918
 msgid "_Get Quotes"
@@ -17893,19 +17871,19 @@ msgstr "_Hozzáadás >>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:117
 msgid "<< _Remove"
-msgstr "<< Eltávolítás"
+msgstr "<< El_távolítás"
 
 #: gnucash/gtkbuilder/dialog-report.glade:145
 msgid "Move _up"
-msgstr "Fel"
+msgstr "_Fel"
 
 #: gnucash/gtkbuilder/dialog-report.glade:161
 msgid "Move dow_n"
-msgstr "Le"
+msgstr "_Le"
 
 #: gnucash/gtkbuilder/dialog-report.glade:189
 msgid "Si_ze..."
-msgstr "Méret"
+msgstr "M_éret..."
 
 #: gnucash/gtkbuilder/dialog-report.glade:253
 msgid "HTML Style Sheets"
@@ -17949,7 +17927,7 @@ msgstr "<b>Új stíluslap-infó</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:795
 msgid "_Template"
-msgstr "Sablon"
+msgstr "Sa_blon"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:8
 msgid "Reset Warnings"
@@ -17967,7 +17945,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:120
 msgid "_Unselect All"
-msgstr "Semmit sem választ"
+msgstr "_Semmit sem választ"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:146
 msgid "No warnings to reset."
@@ -18147,7 +18125,7 @@ msgstr "Előzetes _létrehozás"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:709
 msgid "R_emind in advance"
-msgstr "Megelőző emlékeztetés"
+msgstr "M_egelőző emlékeztetés"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:720
 #, fuzzy
@@ -18365,12 +18343,12 @@ msgstr "Adja meg a felhasználói nevét és a jelszavát"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:85
 msgid "_Username"
-msgstr "Felhasználó"
+msgstr "Fel_használó"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:100
 #: gnucash/import-export/aqb/dialog-ab.glade:781
 msgid "_Password"
-msgstr "Jelszó"
+msgstr "_Jelszó"
 
 #: gnucash/gtkbuilder/dialog-vendor.glade:159
 msgid ""
@@ -19812,7 +19790,7 @@ msgstr "Sablon:"
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:22
 #: gnucash/import-export/aqb/gncmod-aqbanking.c:70
 msgid "Online Banking"
-msgstr "Online Banking"
+msgstr "Online bankolás"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:34
 msgid "_Close log window when finished"
@@ -19844,7 +19822,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:70
 msgid "_Verbose debug messages"
-msgstr "Bőbeszédű hibakereső üzenetek"
+msgstr "B_őbeszédű hibakereső üzenetek"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:76
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:31
@@ -20417,7 +20395,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:177
 msgid "Show _log window"
-msgstr "Mutassa a jelentés ablakot"
+msgstr "Mutassa a _jelentés ablakot"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:178
 msgid "Show the online banking log window."
@@ -21374,7 +21352,7 @@ msgstr "GnuCash Exportálási Formátum"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:50
 msgid "Import _Accounts from CSV..."
-msgstr "Számlák CSV-fájlból..."
+msgstr "Számlák _CSV-fájlból..."
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:51
 msgid "Import Accounts from a CSV file"
@@ -21687,7 +21665,7 @@ msgstr "A kiválasztott naplófájl nem olvasható. A fájl fejléce hibás."
 
 #: gnucash/import-export/log-replay/gnc-plugin-log-replay.c:48
 msgid "_Replay GnuCash .log file..."
-msgstr "GnuCash .log naplófájlok visszajátszása..."
+msgstr "GnuCash .log naplófájl _visszajátszása..."
 
 #: gnucash/import-export/log-replay/gnc-plugin-log-replay.c:49
 msgid "Replay a GnuCash log file after a crash. This cannot be undone."
@@ -21754,7 +21732,7 @@ msgstr "Válassza ki a feldolgozandó OFX/QFX-fájlt"
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.c:46
 msgid "Import _OFX/QFX..."
-msgstr "Import _OFX/QFX..."
+msgstr ""
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.c:47
 msgid "Process an OFX/QFX response file"
@@ -21789,7 +21767,7 @@ msgstr "_Név vagy magyarázat"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:930
 msgid "_Ticker symbol or other abbreviation"
-msgstr "_Ticker symbol or other abbreviation"
+msgstr "_Ticker szimbólum vagy más rövidítés"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:964
 msgid "_Exchange or abbreviation type"
@@ -22029,7 +22007,7 @@ msgstr ""
 
 #: gnucash/import-export/qif-imp/qif-file.scm:385
 msgid "Date required."
-msgstr "Dátum szükséges"
+msgstr "Dátum szükséges."
 
 #: gnucash/import-export/qif-imp/qif-file.scm:386
 msgid "Discarding this transaction."
@@ -22041,7 +22019,7 @@ msgstr ""
 
 #: gnucash/import-export/qif-imp/qif-file.scm:486
 msgid "Ignoring category line"
-msgstr "Ignoring category line"
+msgstr "Kategória sor kihagyása"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:517
 msgid "Ignoring security line"
@@ -22089,11 +22067,11 @@ msgstr "Adó osztály"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:710
 msgid "Category budget amount"
-msgstr "Category budget amount"
+msgstr ""
 
 #: gnucash/import-export/qif-imp/qif-file.scm:711
 msgid "Account budget amount"
-msgstr "Account budget amount"
+msgstr ""
 
 #: gnucash/import-export/qif-imp/qif-file.scm:712
 msgid "Credit limit"
@@ -22161,7 +22139,7 @@ msgstr "Számla létrehozás"
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:402
 msgid "Matching transfers between accounts"
-msgstr "Matching transfers between accounts"
+msgstr ""
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:420
 msgid "Converting"
@@ -22169,7 +22147,7 @@ msgstr "Konvertálás"
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:501
 msgid "Missing transaction date."
-msgstr "Tranzakciódátum hiányzik"
+msgstr "Tranzakciódátum hiányzik."
 
 #: gnucash/price-quotes.scm:448
 msgid "No commodities marked for quote retrieval."
@@ -22948,7 +22926,7 @@ msgstr "Font info for account name"
 
 #: gnucash/report/html-fonts.scm:116
 msgid "Number cell"
-msgstr "Number cell"
+msgstr ""
 
 #: gnucash/report/html-fonts.scm:116
 #, fuzzy
@@ -22961,7 +22939,7 @@ msgstr "Negatív mennyiségeket pirosan"
 
 #: gnucash/report/html-fonts.scm:121
 msgid "Display negative values in red."
-msgstr "Negatív mennyiségeket pirosan"
+msgstr "Negatív mennyiségek megjelenítése pirossal."
 
 #: gnucash/report/html-fonts.scm:126
 msgid "Number header"
@@ -22983,7 +22961,7 @@ msgstr "Font info for the report title"
 
 #: gnucash/report/html-fonts.scm:136
 msgid "Total number cell"
-msgstr "Total number cell"
+msgstr ""
 
 #: gnucash/report/html-fonts.scm:137
 #, fuzzy
@@ -22992,7 +22970,7 @@ msgstr "Font info for the report title"
 
 #: gnucash/report/html-fonts.scm:142
 msgid "Total label cell"
-msgstr "Total label cell"
+msgstr ""
 
 #: gnucash/report/html-fonts.scm:143
 #, fuzzy
@@ -23291,7 +23269,7 @@ msgstr "_Bevétel és költség"
 
 #: gnucash/report/report-core.scm:154
 msgid "_Taxes"
-msgstr "Adók"
+msgstr "A_dók"
 
 #: gnucash/report/report-core.scm:155
 msgid "E_xamples"
@@ -23447,12 +23425,12 @@ msgstr "Árak forrása"
 
 #: gnucash/report/reports/aging.scm:42
 msgid "Show Multi-currency Totals"
-msgstr "Összegek megjelenítése több pénznemben?"
+msgstr "Összegek megjelenítése több pénznemben"
 
 #: gnucash/report/reports/aging.scm:43
 #: gnucash/report/reports/standard/new-aging.scm:42
 msgid "Show zero balance items"
-msgstr "Nulla egyenlegű elemek feltüntetése?"
+msgstr "Nulla egyenlegű elemek feltüntetése"
 
 #: gnucash/report/reports/aging.scm:44
 #: gnucash/report/reports/standard/new-aging.scm:43
@@ -23677,7 +23655,7 @@ msgstr "Alszámlák beleértve"
 
 #: gnucash/report/reports/example/average-balance.scm:46
 msgid "Exclude transactions between selected accounts"
-msgstr "Exclude transactions between selected accounts"
+msgstr ""
 
 #: gnucash/report/reports/example/average-balance.scm:47
 #: gnucash/report/reports/example/daily-reports.scm:62
@@ -24345,11 +24323,11 @@ msgstr ""
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:119
 msgid "Tax Schedule Report/TXF Export"
-msgstr "Tax Schedule Report/TXF Export"
+msgstr ""
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:211
 msgid "$0.00 valued Tax codes won't be printed."
-msgstr "$0.00 valued Tax codes won't be printed."
+msgstr ""
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:215
 msgid "Do not print full account names"
@@ -24362,7 +24340,7 @@ msgstr "Összes szülő számla nevet ne nyomtassa"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:220
 msgid "Print all Transfer To/From Accounts"
-msgstr "Print all Transfer To/From Accounts"
+msgstr ""
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:221
 #, fuzzy
@@ -24398,7 +24376,7 @@ msgstr "Do not print Action:Memo data for transactions"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:240
 msgid "Do not print transaction detail"
-msgstr "Do not print transaction detail"
+msgstr ""
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:241
 #, fuzzy
@@ -24418,7 +24396,7 @@ msgstr ""
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:250
 msgid "Currency conversion date"
-msgstr "Currency conversion date"
+msgstr ""
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:251
 #, fuzzy
@@ -24460,12 +24438,10 @@ msgid ""
 "This report shows transaction detail for your accounts related to Income "
 "Taxes."
 msgstr ""
-"This report shows transaction detail for your accounts related to Income "
-"Taxes."
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3341
 msgid "This page shows transaction detail for relevant Income Tax accounts."
-msgstr "This page shows transaction detail for relevant Income Tax accounts."
+msgstr ""
 
 #: gnucash/report/reports/standard/account-piecharts.scm:36
 msgid "Income Piechart"
@@ -24546,7 +24522,7 @@ msgstr "Hosszú számlanevek megjelenítése"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:75
 msgid "Show Percents"
-msgstr "Show Percents"
+msgstr ""
 
 #: gnucash/report/reports/standard/account-piecharts.scm:76
 msgid "Maximum Slices"
@@ -24560,7 +24536,7 @@ msgstr "Rendezési mód"
 #: gnucash/report/reports/standard/account-piecharts.scm:81
 #: gnucash/report/reports/standard/category-barchart.scm:93
 msgid "Show Average"
-msgstr "Show Average"
+msgstr ""
 
 #: gnucash/report/reports/standard/account-piecharts.scm:82
 #: gnucash/report/reports/standard/category-barchart.scm:94
@@ -24572,7 +24548,7 @@ msgstr ""
 #: gnucash/report/reports/standard/account-piecharts.scm:114
 #: gnucash/report/reports/standard/category-barchart.scm:123
 msgid "No Averaging"
-msgstr "No Averaging"
+msgstr ""
 
 #: gnucash/report/reports/standard/account-piecharts.scm:138
 #: gnucash/report/reports/standard/account-summary.scm:90
@@ -24601,7 +24577,7 @@ msgstr "Teljes számlanév megjelenítése a magyarázatban?"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:159
 msgid "Show the percentage in legend?"
-msgstr "Show the percentage in legend?"
+msgstr ""
 
 #: gnucash/report/reports/standard/account-piecharts.scm:165
 #, fuzzy
@@ -24610,17 +24586,17 @@ msgstr "A tortadiagram szeleteinek maximális száma"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:399
 msgid "Yearly Average"
-msgstr "Yearly Average"
+msgstr "Éves átlag"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:400
 #: gnucash/report/reports/standard/category-barchart.scm:329
 msgid "Monthly Average"
-msgstr "Monthly Average"
+msgstr "Havi átlag"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:401
 #: gnucash/report/reports/standard/category-barchart.scm:330
 msgid "Weekly Average"
-msgstr "Weekly Average"
+msgstr "Heti átlag"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:535
 #, scheme-format
@@ -25333,11 +25309,11 @@ msgstr "Áthozott veszteségek"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:514
 msgid "Trading Gains"
-msgstr "Trading Gains"
+msgstr ""
 
 #: gnucash/report/reports/standard/balance-sheet.scm:515
 msgid "Trading Losses"
-msgstr "Trading Losses"
+msgstr ""
 
 #: gnucash/report/reports/standard/balance-sheet.scm:519
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1090
@@ -25365,7 +25341,7 @@ msgstr "Kötelezettségek és Saját tőke összesen"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:136
 msgid "Balance Sheet (eguile)"
-msgstr "Balance Sheet (eguile)"
+msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:144
 #, fuzzy
@@ -25390,7 +25366,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:161
 msgid "Negative amount format"
-msgstr "Negative amount format"
+msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:163
 msgid ""
@@ -25408,7 +25384,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:167
 msgid "Font size"
-msgstr "Font size"
+msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:168
 msgid "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\")."
@@ -25488,7 +25464,7 @@ msgstr "Egyedülálló"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:548
 msgid "Balance Sheet using eguile-gnc"
-msgstr "Balance Sheet using eguile-gnc"
+msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:549
 msgid "Display a balance sheet (using eguile template)"
@@ -25704,11 +25680,11 @@ msgstr "Bevételi kimutatás"
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:38
 msgid "Budget Balance Sheet"
-msgstr "Budget Balance Sheet"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:97
 msgid "Include new/existing totals"
-msgstr "Include new/existing totals"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:99
 #, fuzzy
@@ -25725,7 +25701,7 @@ msgstr ""
 #: gnucash/report/reports/standard/budget-income-statement.scm:59
 #: gnucash/report/reports/standard/budget.scm:125
 msgid "Budget to use."
-msgstr "Budget to use."
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:677
 msgid "Existing Assets"
@@ -25733,11 +25709,11 @@ msgstr ""
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:679
 msgid "Allocated Assets"
-msgstr "Allocated Assets"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:683
 msgid "Unallocated Assets"
-msgstr "Unallocated Assets"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:709
 msgid "Existing Liabilities"
@@ -25749,35 +25725,35 @@ msgstr "Új kötelezettségek"
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:740
 msgid "Existing Retained Earnings"
-msgstr "Existing Retained Earnings"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:741
 msgid "Existing Retained Losses"
-msgstr "Existing Retained Losses"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:746
 msgid "New Retained Earnings"
-msgstr "New Retained Earnings"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:747
 msgid "New Retained Losses"
-msgstr "New Retained Losses"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:752
 msgid "Total Retained Earnings"
-msgstr "Total Retained Earnings"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:753
 msgid "Total Retained Losses"
-msgstr "Total Retained Losses"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:769
 msgid "Existing Equity"
-msgstr "Existing Equity"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:772
 msgid "New Equity"
-msgstr "New Equity"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-barchart.scm:36
 #, fuzzy
@@ -25798,7 +25774,7 @@ msgstr "Fizetési mód"
 #: gnucash/report/reports/standard/budget-income-statement.scm:66
 #: gnucash/report/reports/standard/budget.scm:70
 msgid "Range start"
-msgstr "Range start"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-barchart.scm:52
 #: gnucash/report/reports/standard/budget.scm:72
@@ -25821,7 +25797,7 @@ msgstr "Select a budget period that ends the reporting range."
 #: gnucash/report/reports/standard/budget-income-statement.scm:70
 #: gnucash/report/reports/standard/budget.scm:77
 msgid "Range end"
-msgstr "Range end"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-barchart.scm:59
 #: gnucash/report/reports/standard/budget.scm:79
@@ -25909,7 +25885,7 @@ msgstr "Aktuális"
 
 #: gnucash/report/reports/standard/budget-flow.scm:36
 msgid "Budget Flow"
-msgstr "Budget Flow"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-flow.scm:70
 #, fuzzy
@@ -25937,7 +25913,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:72
 msgid "Select a budget period that ends the reporting range."
-msgstr "Select a budget period that ends the reporting range."
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:101
 #: gnucash/report/reports/standard/income-statement.scm:88
@@ -26058,11 +26034,11 @@ msgstr "Nettó veszteség"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:601
 msgid "Budget Income Statement"
-msgstr "Budget Income Statement"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:602
 msgid "Budget Profit & Loss"
-msgstr "Budget Profit & Loss"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget.scm:45
 #: gnucash/report/reports/standard/cash-flow.scm:45
@@ -26076,7 +26052,7 @@ msgstr "Alszámlák megjelenítése mindig"
 
 #: gnucash/report/reports/standard/budget.scm:49
 msgid "Show Budget"
-msgstr "Show Budget"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget.scm:50
 #, fuzzy
@@ -26095,7 +26071,7 @@ msgstr "Display a column for the budget values"
 
 #: gnucash/report/reports/standard/budget.scm:53
 msgid "Show Actual"
-msgstr "Show Actual"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget.scm:54
 #, fuzzy
@@ -26121,7 +26097,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/budget.scm:59
 msgid "Show Column with Totals"
-msgstr "Show Column with Totals"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget.scm:60
 #, fuzzy
@@ -26653,7 +26629,7 @@ msgstr "Másik számlanév"
 #: gnucash/report/trep-engine.scm:924 gnucash/report/trep-engine.scm:955
 #: gnucash/report/trep-engine.scm:1100
 msgid "Use Full Other Account Name"
-msgstr "Use Full Other Account Name"
+msgstr ""
 
 #: gnucash/report/reports/standard/general-ledger.scm:77
 #: gnucash/report/reports/standard/general-ledger.scm:97
@@ -26667,7 +26643,7 @@ msgstr "Másik számlakód"
 #: gnucash/report/trep-engine.scm:912 gnucash/report/trep-engine.scm:1032
 #: gnucash/report/trep-engine.scm:1134
 msgid "Sign Reverses"
-msgstr "Sign Reverses"
+msgstr ""
 
 #: gnucash/report/reports/standard/general-ledger.scm:111
 #: gnucash/report/trep-engine.scm:73
@@ -26919,7 +26895,7 @@ msgstr "Tegyen-e bele címkét az eszközök szakaszba"
 
 #: gnucash/report/reports/standard/income-statement.scm:97
 msgid "Include trading accounts total"
-msgstr "Include trading accounts total"
+msgstr ""
 
 #: gnucash/report/reports/standard/income-statement.scm:99
 #, fuzzy
@@ -27275,7 +27251,7 @@ msgstr "A"
 #: gnucash/report/reports/standard/taxinvoice.scm:106
 #: gnucash/report/reports/standard/taxinvoice.scm:177
 msgid "Net Price"
-msgstr "Nettó ár:"
+msgstr "Nettó ár"
 
 #: gnucash/report/reports/standard/invoice.scm:541
 #: gnucash/report/reports/standard/receipt.scm:60
@@ -27795,7 +27771,7 @@ msgstr "Az áru ára"
 
 #: gnucash/report/reports/standard/price-scatter.scm:44
 msgid "Invert prices"
-msgstr "Invert prices"
+msgstr ""
 
 #: gnucash/report/reports/standard/price-scatter.scm:46
 msgid "Marker"
@@ -28088,11 +28064,11 @@ msgstr "Köteg (Gyüjtemény)"
 
 #: gnucash/report/reports/standard/register.scm:160
 msgid "Debit Value"
-msgstr "Debit Value"
+msgstr ""
 
 #: gnucash/report/reports/standard/register.scm:162
 msgid "Credit Value"
-msgstr "Credit Value"
+msgstr ""
 
 #: gnucash/report/reports/standard/register.scm:348
 #, fuzzy
@@ -28125,7 +28101,7 @@ msgstr "Részvények számának megjelenítése?"
 
 #: gnucash/report/reports/standard/register.scm:389
 msgid "Display the name of lot the shares are in?"
-msgstr "Display the name of lot the shares are in?"
+msgstr ""
 
 #: gnucash/report/reports/standard/register.scm:394
 #: gnucash/report/trep-engine.scm:959
@@ -28151,7 +28127,7 @@ msgstr "Kétoszlopos ábrázolás"
 
 #: gnucash/report/reports/standard/register.scm:408
 msgid "Display the value in transaction currency?"
-msgstr "Display the value in transaction currency?"
+msgstr ""
 
 #: gnucash/report/reports/standard/register.scm:418
 #: gnucash/report/trep-engine.scm:963
@@ -28573,24 +28549,24 @@ msgstr "Egyedi többoszlopos jelentés"
 
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:167
 msgid "Assets Accounts"
-msgstr "Assets Accounts"
+msgstr ""
 
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:173
 msgid "Liability Accounts"
-msgstr "Liability Accounts"
+msgstr ""
 
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:179
 msgid "Equity Accounts"
-msgstr "Equity Accounts"
+msgstr ""
 
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:182
 #: gnucash/report/report-utilities.scm:214
 msgid "Trading Accounts"
-msgstr "Trading Accounts"
+msgstr ""
 
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:241
 msgid "Total Equity, Trading, and Liabilities"
-msgstr "Total Equity, Trading, and Liabilities"
+msgstr ""
 
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:250
 msgid "Imbalance Amount"
@@ -28649,7 +28625,7 @@ msgstr "Saját tőke"
 
 #: gnucash/report/report-utilities.scm:208
 msgid "Checking"
-msgstr "Checking"
+msgstr ""
 
 #: gnucash/report/report-utilities.scm:209
 msgid "Savings"
@@ -28971,7 +28947,7 @@ msgstr "Különleges"
 
 #: gnucash/report/stylesheets/footer.scm:430
 msgid "Technicolor"
-msgstr "Technicolor"
+msgstr ""
 
 #: gnucash/report/stylesheets/head-or-tail.scm:71
 #, fuzzy
@@ -29088,7 +29064,7 @@ msgstr "Háttérkép"
 
 #: gnucash/report/stylesheets/plain.scm:63
 msgid "Background color for alternate lines."
-msgstr "Background color for alternate lines."
+msgstr ""
 
 #: gnucash/report/stylesheets/plain.scm:227
 msgid "Plain"
@@ -29196,11 +29172,11 @@ msgstr "Ne szűrjön"
 
 #: gnucash/report/trep-engine.scm:345
 msgid "Include Transactions to/from Filter Accounts"
-msgstr "Include Transactions to/from Filter Accounts"
+msgstr ""
 
 #: gnucash/report/trep-engine.scm:348
 msgid "Exclude Transactions to/from Filter Accounts"
-msgstr "Exclude Transactions to/from Filter Accounts"
+msgstr ""
 
 #: gnucash/report/trep-engine.scm:354
 msgid "Non-void only"
@@ -29437,7 +29413,7 @@ msgstr "Egyeztetés dátumának megjelenítése?"
 
 #: gnucash/report/trep-engine.scm:950
 msgid "Display the notes if the memo is unavailable?"
-msgstr "Display the notes if the memo is unavailable?"
+msgstr ""
 
 #: gnucash/report/trep-engine.scm:952 gnucash/report/trep-engine.scm:955
 #, fuzzy
@@ -30491,7 +30467,7 @@ msgstr ""
 
 #: libgnucash/engine/qofbookslots.h:66
 msgid "Use Trading Accounts"
-msgstr "Use Trading Accounts"
+msgstr ""
 
 #: libgnucash/engine/qofbookslots.h:67
 #, fuzzy
