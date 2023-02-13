@@ -4,7 +4,7 @@
 # Kornel Tako <takokornel@gmail.com>, 2007.
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2020.
 # Kárász Attila <cult.edie@gmail.com>, 2022.
-# Szia Tomi <sziatomi01@gmail.com>, 2022.
+# Szia Tomi <sziatomi01@gmail.com>, 2022, 2023.
 # mocsa <csaba@feltoltve.hu>, 2023.
 msgid ""
 msgstr ""
@@ -12,8 +12,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2023-01-12 16:51+0000\n"
-"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
+"PO-Revision-Date: 2023-02-12 13:38+0000\n"
+"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/hu/>\n"
 "Language: hu\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.15.1-dev\n"
+"X-Generator: Weblate 4.16-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -38,7 +38,7 @@ msgstr "számla"
 
 #. "An alphanumerical key of an account in GnuCash, not at the bank, can be used to sort. Some templates provide them or the user can enter them."
 msgid "account code"
-msgstr "számlakód (belső)"
+msgstr "számlakód (GnuCash belső)"
 
 #. "the tree view of all accounts"
 msgid "account hierarchy"
@@ -114,7 +114,7 @@ msgstr "számlatípus: kereskedés"
 
 #. "-"
 msgid "account: parent account"
-msgstr "számla: szülőszámla"
+msgstr "számla: szülő számla"
 
 #. "-"
 msgid "account: subaccount"
@@ -526,7 +526,7 @@ msgstr "Feljegyzés, emlékeztető"
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
-msgstr "Jelzálog"
+msgstr "Jelzálogkölcsön"
 
 #. "Adjustable Rate Mortgage"
 msgid "mortgage: ARM"
@@ -873,7 +873,7 @@ msgstr "utalvány"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
-msgstr "visszavonás(az egyeztetési párbeszédpanelen)"
+msgstr "visszavonás(az egyeztető párbeszédpanelen)"
 
 msgid "stock"
 msgstr "készlet"

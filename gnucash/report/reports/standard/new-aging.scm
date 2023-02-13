@@ -152,12 +152,6 @@ exist but have no suitable transactions."))
     (not (or (eqv? type TXN-TYPE-INVOICE)
              (eqv? type TXN-TYPE-PAYMENT)))))
 
-(define (split-has-owner? split owner)
-  (gncOwnerEqual (gnc:split->owner split) owner))
-
-(define (split-owner-is-invalid? split)
-  (not (gncOwnerIsValid (gnc:split->owner split))))
-
 (define (split-from-acct? split acct)
   (equal? acct (xaccSplitGetAccount split)))
 
@@ -169,6 +163,14 @@ exist but have no suitable transactions."))
   (define options (gnc:report-options report-obj))
   (define (op-value section name)
     (gnc-optiondb-lookup-value options section name))
+
+  (define split->owner (gnc:make-split->owner))
+
+  (define (split-has-owner? split owner)
+    (gncOwnerEqual (split->owner split) owner))
+
+  (define (split-owner-is-invalid? split)
+    (not (gncOwnerIsValid (split->owner split))))
 
   (define make-heading-list
     (list (G_ "Company")
@@ -225,10 +227,6 @@ exist but have no suitable transactions."))
       (setup-query query accounts report-date)
       (let* ((splits (xaccQueryGetSplitsUniqueTrans query)))
         (qof-query-destroy query)
-
-        ;; split->owner hashtable should be empty at the start of
-        ;; report renderer. clear it anyway.
-        (gnc:split->owner #f)
 
         ;; loop into each APAR account
         (let loop ((accounts accounts)
@@ -311,7 +309,6 @@ exist but have no suitable transactions."))
                         acc-totals)))))
                  (reverse accounts-and-owners))
 
-                (gnc:split->owner #f)       ;free the gncOwners
                 (gnc:html-document-add-object! document table)
 
                 (unless (null? invalid-splits)
@@ -368,7 +365,7 @@ exist but have no suitable transactions."))
                        owners-and-aging))
 
                   ((this . _)
-                   (match-let* ((owner (gnc:split->owner this))
+                   (match-let* ((owner (split->owner this))
                                 ((owner-splits . other-owner-splits)
                                  (list-split acc-splits split-has-owner? owner))
                                 (aging (gnc:owner-splits->aging-list

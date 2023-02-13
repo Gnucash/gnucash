@@ -4,7 +4,7 @@
 # HOSSZÚ Péter <hosszu@web.de>, 2001-2003.
 # SULYOK Péter <peti@sulyok.hu>, 2003-2006.
 # Kornel Tako <takokornel@gmail.com>, 2007.
-# Kárász Attila <cult.edie@gmail.com>, 2022.
+# Kárász Attila <cult.edie@gmail.com>, 2022, 2023.
 # Szia Tomi <sziatomi01@gmail.com>, 2022, 2023.
 # mocsa <csaba@feltoltve.hu>, 2022, 2023.
 # ovari <ovari123@zoho.com>, 2022, 2023.
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-01-13 23:56+0000\n"
+"PO-Revision-Date: 2023-02-12 15:35+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hu/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.15.1-dev\n"
+"X-Generator: Weblate 4.16-dev\n"
 
 # #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
 # src/trans.h:283
@@ -712,6 +712,14 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgstr ""
+"Minden tranzakcióhoz tartozik egy „Megjegyzés” mező ahol hasznos "
+"információkat adhat meg.\n"
+"\n"
+"Láthatóvá tételéhez\n"
+"válassza a „Nézet” menüpontot a menüsorban és jelölje be a „Dupla sor” "
+"lehetőséget,\n"
+"vagy a Beállítások:Nyilvántartás alapértelmezéseinél jelölje be a „Dupla "
+"soros mód” lehetőséget."
 
 #: doc/tip_of_the_day.list.c:50
 msgid ""
@@ -732,6 +740,10 @@ msgid ""
 "'+', '-','*', or '/'. Type the second value and press Enter to record the "
 "calculated amount."
 msgstr ""
+"Miközben összegeket ír be a könyvelésbe, a GnuCash kalkulátorral összeadhat, "
+"kivonhat, szorozhat és oszthat. Egyszerűen írja be az első értéket, majd "
+"válassza ki a „+”, „-”, „*” vagy „/” jelet. Írja be a második értéket, és "
+"nyomja meg az Entert a számított összeg rögzítéséhez."
 
 #: doc/tip_of_the_day.list.c:60
 msgid ""
@@ -752,6 +764,10 @@ msgid ""
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
 "Assets:Cash)."
 msgstr ""
+"Írja be egy meglévő számlanév első betűjét (betűit) az Átutalási jegyzék "
+"oszlopba, és a GnuCash kiegészíti a nevet a fiókok listájából. Alszámlák "
+"esetén írja be a szülőszámla első betűjét/betűit, majd a \":\" karaktert és "
+"az alszámla első betűjét (pl. E:K az Eszközök:Készpénz esetében)."
 
 #: doc/tip_of_the_day.list.c:71
 #, fuzzy
@@ -15021,7 +15037,7 @@ msgstr "A pénznem legkisebb egysége, amit használni lehet."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1452
 msgid "Placeholde_r"
-msgstr "T_öltelék"
+msgstr "_Helykitöltő"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1456
 msgid ""
@@ -15078,12 +15094,12 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:1569
 msgid "<b>Acco_unt Type</b>"
-msgstr "<b>Számla típ_us</b>"
+msgstr "<b>Számlatíp_us</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1595
 #: gnucash/gtkbuilder/dialog-tax-info.glade:646
 msgid "_Parent Account"
-msgstr "_Fő számla"
+msgstr "_Szülő számla"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1703
 msgid "<b>Balance Information</b>"
@@ -29566,11 +29582,11 @@ msgstr "Számlálók"
 
 #: libgnucash/app-utils/business-prefs.scm:40
 msgid "Customer number format"
-msgstr "Ügyfélszám formátuma: "
+msgstr "Ügyfélszám formátuma"
 
 #: libgnucash/app-utils/business-prefs.scm:41
 msgid "Customer number"
-msgstr "Ügyfélszám: "
+msgstr "Ügyfélszám"
 
 #: libgnucash/app-utils/business-prefs.scm:42
 msgid ""
