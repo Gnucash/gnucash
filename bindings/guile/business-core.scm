@@ -30,7 +30,6 @@
 (export gnc:owner-get-address-dep)
 (export gnc:owner-get-name-and-address-dep)
 (export gnc:owner-get-owner-id)
-(export gnc:split->owner)
 (export gnc:make-split->owner)
 
 (define (gnc:owner-get-address owner)
@@ -104,30 +103,6 @@
       ((eqv? type GNC-OWNER-JOB)
        (gnc:owner-get-owner-id (gncJobGetOwner (gncOwnerGetJob owner))))
       (else ""))))
-
-;; this function aims to find a split's owner. It will allocate and
-;; memoize (cache) the owners because gncOwnerGetOwnerFromLot is
-;; slow. after use, it must be called with #f to free the owners.
-(define gnc:split->owner
-  (let ((ht (make-hash-table)))
-    (lambda (split)
-      (issue-deprecation-warning
-       "gnc:split->owner is deprecated in 4.x. use gnc:make-split->owner instead.")
-      (cond
-       ((not split)
-        (hash-for-each (lambda (k v) (gncOwnerFree v)) ht)
-        (hash-clear! ht))
-       ((hash-ref ht (gncSplitGetGUID split)) => identity)
-       (else
-        (let ((lot (xaccSplitGetLot split))
-              (owner (gncOwnerNew)))
-          (unless (gncOwnerGetOwnerFromLot lot owner)
-            (gncOwnerCopy (gncOwnerGetEndOwner
-                           (gncInvoiceGetOwner
-                            (gncInvoiceGetInvoiceFromLot lot)))
-                          owner))
-          (hash-set! ht (gncSplitGetGUID split) owner)
-          owner))))))
 
 (define owner-guardian (make-guardian))
 
