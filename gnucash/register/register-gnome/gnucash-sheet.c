@@ -362,7 +362,6 @@ gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
     Table *table = sheet->table;
     VirtualLocation virt_loc;
     SheetBlockStyle *style;
-    GtkEditable *editable;
     int cursor_pos, start_sel, end_sel;
     gboolean allow_edits;
 
@@ -383,8 +382,6 @@ gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
     style = gnucash_sheet_get_style (sheet, virt_loc.vcell_loc);
     if (strcmp (style->cursor->cursor_name, CURSOR_HEADER) == 0)
         return;
-
-    editable = GTK_EDITABLE(sheet->entry);
 
     cursor_pos = -1;
     start_sel = 0;
@@ -1887,14 +1884,12 @@ static gint
 gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 {
     GnucashSheet *sheet;
-    GtkEditable *editable = NULL;
 
     g_return_val_if_fail (widget != NULL, TRUE);
     g_return_val_if_fail (GNUCASH_IS_SHEET(widget), TRUE);
     g_return_val_if_fail (event != NULL, TRUE);
 
     sheet = GNUCASH_SHEET(widget);
-    editable = GTK_EDITABLE(sheet->entry);
     /* bug#60582 comment#27 2
            save shift state to enable <shift minus> and <shift equal>
        bug#618434

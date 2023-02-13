@@ -425,12 +425,8 @@ void
 gnc_report_combo_set_active_guid_name (GncReportCombo *grc,
                                        const gchar *guid_name)
 {
-    GncReportComboPrivate *priv;
-
     g_return_if_fail (grc != NULL);
     g_return_if_fail (GNC_IS_REPORT_COMBO(grc));
-
-    priv = GET_PRIVATE(grc);
 
     if (guid_name && *guid_name)
     {

@@ -168,10 +168,7 @@ gnc_quickfill_cell_modify_verify (BasicCell *_cell,
     QuickFill *match;
 
     glong newval_chars;
-    glong change_chars;
-
     newval_chars = g_utf8_strlen(newval, newval_len);
-    change_chars = g_utf8_strlen(change, change_len);
 
     /* If deleting, just accept */
     if (change == NULL)

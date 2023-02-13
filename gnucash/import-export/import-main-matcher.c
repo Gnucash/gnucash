@@ -401,7 +401,7 @@ static void
 resolve_conflicts (GNCImportMainMatcher *info)
 {
     GtkTreeModel* model = gtk_tree_view_get_model (info->view);
-    GtkTreeIter import_iter, best_import;
+    GtkTreeIter import_iter;
     gint best_match = 0;
 
     /* A greedy conflict resolution. Find all imported trans that vie for the same
@@ -420,7 +420,6 @@ resolve_conflicts (GNCImportMainMatcher *info)
         // The ID of the best current match for this imported trans
         GncGUID id = *get_top_trans_match_id (match_list);
         best_match = get_top_trans_match_score (match_list);
-        best_import = import_iter;
         /* Get a list of all imported transactions that have a conflict with this one.
          * The returned list excludes the best transaction. */
         GList *conflicts = get_conflict_list (model, import_iter, &id, best_match);

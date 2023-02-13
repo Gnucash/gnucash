@@ -3695,14 +3695,12 @@ gnc_plugin_page_register_cmd_edit_tax_options (GSimpleAction *simple,
                                                gpointer       user_data)
 {
     GncPluginPageRegister* page = user_data;
-    GncPluginPageRegisterPrivate* priv;
     GtkWidget *window;
     Account* account;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
     ENTER ("(action %p, page %p)", simple, page);
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page));
     account = gnc_plugin_page_register_get_account (page);
     gnc_tax_info_dialog (window, account);

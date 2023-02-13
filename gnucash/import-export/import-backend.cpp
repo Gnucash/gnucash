@@ -884,7 +884,6 @@ gnc_import_process_trans_item (Account *base_acc,
             auto split = xaccMallocSplit (gnc_account_get_book (acct));
             xaccTransAppendSplit (trans, split);
             xaccAccountInsertSplit (acct, split);
-            auto imbalance_value = gnc_numeric_neg (xaccTransGetImbalanceValue (trans));
             xaccSplitSetValue (split, trans_info->lsplit_value);
             if (!gnc_numeric_zero_p (trans_info->lsplit_amount))
                 xaccSplitSetAmount (split, trans_info->lsplit_amount);

@@ -1318,14 +1318,12 @@ gnc_plugin_page_invoice_cmd_link_remove (GSimpleAction *simple,
 {
     GncPluginPageInvoice *plugin_page = user_data;
     GncPluginPageInvoicePrivate *priv;
-    GtkWindow *parent;
     GncInvoice *invoice;
     GtkWidget *doclink_button;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
     ENTER("(action %p, plugin_page %p)", simple, plugin_page);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
-    parent = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(plugin_page)));
 
     invoice = gnc_invoice_window_get_invoice (priv->iw);
     gncInvoiceSetDocLink (invoice, "");

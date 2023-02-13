@@ -854,7 +854,6 @@ gnc_plugin_page_main_window_changed (GtkWindow *window,
 {
     GncPluginPage *current_plugin_page = GNC_PLUGIN_PAGE(object);
     GncPluginPage *plugin_page = GNC_PLUGIN_PAGE(user_data);
-    GncPluginPagePrivate *priv;
     gboolean on_current_page = FALSE;
 
     // Continue if current_plugin_page is valid
@@ -864,8 +863,6 @@ gnc_plugin_page_main_window_changed (GtkWindow *window,
     // Continue only if the plugin_page is valid
     if (!plugin_page || !GNC_IS_PLUGIN_PAGE(plugin_page))
         return;
-
-    priv = GNC_PLUGIN_PAGE_GET_PRIVATE(plugin_page);
 
     if (current_plugin_page == plugin_page)
         on_current_page = TRUE;
