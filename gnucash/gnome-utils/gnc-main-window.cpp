@@ -133,7 +133,7 @@ enum
 extern gboolean gnc_book_options_dialog_apply_helper(GncOptionDB * options);
 
 /** Max number of windows allowed */
-constexpr auto gnc_main_window_max_number {10};
+[[maybe_unused]] constexpr auto gnc_main_window_max_number {10};
 
 /* Static Globals *******************************************************/
 
