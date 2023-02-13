@@ -32,7 +32,7 @@
 #include "dialog-utils.h"
 
 /** The debugging module used by this file. */
-static QofLogModule log_module = GNC_MOD_GUI;
+__attribute__((unused)) static QofLogModule log_module = GNC_MOD_GUI;
 
 static void gnc_report_combo_init       (GncReportCombo      *grc);
 static void gnc_report_combo_class_init (GncReportComboClass *klass);
