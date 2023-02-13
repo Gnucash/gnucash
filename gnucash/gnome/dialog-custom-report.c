@@ -155,7 +155,6 @@ update_report_list(GtkListStore *store, CustomReportDialog *crd)
     SCM get_rpt_guids = scm_c_eval_string("gnc:custom-report-template-guids");
     SCM template_menu_name = scm_c_eval_string("gnc:report-template-menu-name/report-guid");
     SCM rpt_guids;
-    int i;
     GtkTreeIter iter;
     GtkTreeModel *model = GTK_TREE_MODEL (store);
 
@@ -170,7 +169,7 @@ update_report_list(GtkListStore *store, CustomReportDialog *crd)
     {
         /* for all the report guids in the list, store them, with a reference,
              in the gtkliststore */
-        for (i = 0; !scm_is_null(rpt_guids); i++)
+        while ( !scm_is_null(rpt_guids) )
         {
             GncGUID *guid = guid_malloc ();
             gchar *guid_str = scm_to_utf8_string (SCM_CAR(rpt_guids));

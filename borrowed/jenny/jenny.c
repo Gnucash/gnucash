@@ -1184,7 +1184,6 @@ build_tuples( state *s, ub2 d, ub2 f)
   feature  offset[MAX_N];                                      /* n-1-tuples */
   feature  tuple[MAX_N];                      /* n-tuples that include (d,f) */
   sb4      i, j, n;
-  ub8      count = 0;
   tu_iter  ctx;
 
   if (s->tc[d][f] > 0 || s->n[d][f] == s->n_final) {
@@ -1242,7 +1241,6 @@ build_tuples( state *s, ub2 d, ub2 f)
       printf("jenny: could not insert tuple\n");
       return;
     }
-    ++count;
 
     /* next tuple */
   make_next_tuple:

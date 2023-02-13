@@ -365,7 +365,6 @@ static void  process_trans_record(  FILE *log_file)
     const char * record_end_str = "===== END";
     int first_record = TRUE;
     int record_ended = FALSE;
-    int split_num = 0;
     split_record record;
     Transaction * trans = NULL;
     Split * split = NULL;
@@ -380,7 +379,6 @@ static void  process_trans_record(  FILE *log_file)
         if (read_retval != NULL &&
             strncmp(record_end_str, read_buf, strlen(record_end_str)) != 0) /* If we are not at the end of the record */
         {
-            split_num++;
             /*DEBUG("process_trans_record(): Line read: %s%s",read_buf ,"\n");*/
 
             record = interpret_split_record(g_strchomp(read_buf));

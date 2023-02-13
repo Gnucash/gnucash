@@ -1221,24 +1221,12 @@ gnc_tree_view_account_get_view_info (GncTreeViewAccount *account_view,
 /*
  * Set the account view info data in use by the specified tree to
  * match the callers request.
- *
- * DRH - COMPATIBILITY WARNING
- *
- * This function does not do anything with the 'include_type' field.
- * Should there be a automatic filter for backward compatibility
- * that uses these flags, or should all uses of this be converted to
- * a GtkTreeModelFilter?
- *
- * CAS - For now, I'll try the automatic filter approach by making
- * this function use GtkTreeModelFilter.
  */
 void
 gnc_tree_view_account_set_view_info (GncTreeViewAccount *account_view,
                                      AccountViewInfo *avi)
 {
     GncTreeViewAccountPrivate *priv;
-    gint i;
-    guint sel_bits = 0;
 
     ENTER("%p", account_view);
     g_return_if_fail(GNC_IS_TREE_VIEW_ACCOUNT(account_view));
@@ -1246,11 +1234,6 @@ gnc_tree_view_account_set_view_info (GncTreeViewAccount *account_view,
 
     priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(account_view);
     priv->avi = *avi;
-
-    for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
-    {
-        sel_bits |= avi->include_type[i] ? (1 << i) : 0;
-    }
 
     gnc_tree_view_account_set_filter(
         account_view, gnc_tree_view_account_filter_by_view_info,
