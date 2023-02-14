@@ -29,6 +29,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
+#include <stdbool.h>
 
 #include "gnc-commodity.h"
 #include "gnc-ui-util.h"
@@ -422,7 +423,7 @@ add_price (gchar *so_far, Split *split, gboolean t_void, CsvExportInfo *info)
 /******************************************************************************/
 
 static gchar*
-make_simple_trans_line (Account *acc, Transaction *trans, Split *split, CsvExportInfo *info)
+make_simple_trans_line (Transaction *trans, Split *split, CsvExportInfo *info)
 {
     gboolean t_void = xaccTransGetVoidStatus (trans);
 
@@ -459,7 +460,7 @@ make_split_part (gchar* exp_line, Split *split, gboolean t_void, CsvExportInfo *
 }
 
 static gchar*
-make_complex_trans_line (Account *acc, Transaction *trans, Split *split, CsvExportInfo *info)
+make_complex_trans_line (Transaction *trans, Split *split, CsvExportInfo *info)
 {
     gchar *exp_line = g_strdup("");
     exp_line = add_date (exp_line, trans, info);
@@ -493,21 +494,18 @@ make_complex_split_line (Transaction *trans, Split *split, CsvExportInfo *info)
 static
 void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
 {
-    GSList  *p1, *p2;
-    GList   *splits;
-    QofBook *book;
 
     // Setup the query for normal transaction export
     if (info->export_type == XML_EXPORT_TRANS)
     {
         info->query = qof_query_create_for (GNC_ID_SPLIT);
-        book = gnc_get_current_book();
+        QofBook *book = gnc_get_current_book();
         qof_query_set_book (info->query, book);
 
         /* Sort by transaction date */
-        p1 = g_slist_prepend (NULL, TRANS_DATE_POSTED);
+        GSList *p1 = g_slist_prepend (NULL, TRANS_DATE_POSTED);
         p1 = g_slist_prepend (p1, SPLIT_TRANS);
-        p2 = g_slist_prepend (NULL, QUERY_DEFAULT_SORT);
+        GSList *p2 = g_slist_prepend (NULL, QUERY_DEFAULT_SORT);
         qof_query_set_sort_order (info->query, p1, p2, NULL);
 
         xaccQueryAddSingleAccountMatch (info->query, acc, QOF_QUERY_AND);
@@ -515,83 +513,61 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
     }
 
     /* Run the query */
-    for (splits = qof_query_run (info->query); splits; splits = splits->next)
+    for (GList *splits = qof_query_run (info->query); splits; splits = splits->next)
     {
-        Split       *split;
-        Transaction *trans;
-        SplitList   *s_list;
-        GList       *node;
-        Split       *t_split;
-        int          nSplits;
-        int          cnt;
-        gchar       *line;
-
-        split = splits->data;
-        trans = xaccSplitGetParent (split);
-        nSplits = xaccTransCountSplits (trans);
-        s_list = xaccTransGetSplitList (trans);
+        Split *split = splits->data;
 
         // Look for trans already exported in trans_list
-        if (g_list_find (info->trans_list, trans) != NULL)
+        Transaction *trans = xaccSplitGetParent (split);
+        if (g_list_find (info->trans_list, trans))
             continue;
 
         // Look for blank split
-        if (xaccSplitGetAccount (split) == NULL)
+        Account *split_acc = xaccSplitGetAccount (split);
+        if (!split_acc)
             continue;
 
-        // This will be a simple layout equivalent to a single line register view.
         if (info->simple_layout)
         {
-            line = make_simple_trans_line (acc, trans, split, info);
-
-            /* Write to file */
-            if (!write_line_to_file (fh, line))
-            {
-                info->failed = TRUE;
-                break;
-            }
+            // Write line in simple layout, equivalent to a single line register view
+            gchar *line = make_simple_trans_line (trans, split, info);
+            info->failed = !write_line_to_file (fh, line);
             g_free (line);
+            if (info->failed)
+                break;
+
             continue;
         }
 
-        // Complex Transaction Line.
-        line = make_complex_trans_line (acc, trans, split, info);
-
-        /* Write to file */
-        if (!write_line_to_file (fh, line))
-        {
-            info->failed = TRUE;
-            break;
-        }
+        // Write complex Transaction Line.
+        gchar *line = make_complex_trans_line (trans, split, info);
+        info->failed = !write_line_to_file (fh, line);
         g_free (line);
+        if (info->failed)
+            break;
 
         /* Loop through the list of splits for the Transaction */
-        node = s_list;
-        cnt = 0;
-        while ((cnt < nSplits) && (info->failed == FALSE))
+        for (GList *node = xaccTransGetSplitList (trans); node; node = node->next)
         {
-            t_split = node->data;
+            Split *t_split = node->data;
 
             // base split is already written on the trans_line
-            if (split != t_split)
-            {
-            // Complex Split Line.
-                line = make_complex_split_line (trans, t_split, info);
+            if (split == t_split)
+                continue;
 
-                if (!write_line_to_file (fh, line))
-                    info->failed = TRUE;
 
-                g_free (line);
-            }
-
-            cnt++;
-            node = node->next;
+            // Write complex Split Line.
+            line = make_complex_split_line (trans, t_split, info);
+            info->failed = !write_line_to_file (fh, line);
+            g_free (line);
+            if (info->failed)
+                break;
         }
         info->trans_list = g_list_prepend (info->trans_list, trans); // add trans to trans_list
     }
+
     if (info->export_type == XML_EXPORT_TRANS)
         qof_query_destroy (info->query);
-    g_list_free (splits);
 }
 
 
