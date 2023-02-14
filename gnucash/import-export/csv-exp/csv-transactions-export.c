@@ -578,19 +578,13 @@ void csv_transactions_export (CsvExportInfo *info)
     if (info->failed)
         return;
 
-    if (info->export_type == XML_EXPORT_TRANS)
+    /* Go through list of accounts */
+    for (GList *ptr = info->csva.account_list; ptr; ptr = g_list_next(ptr))
     {
-        /* Go through list of accounts */
-        for (GList *ptr = info->csva.account_list; ptr; ptr = g_list_next(ptr))
-        {
-            Account *acc = ptr->data;
-            DEBUG("Account being processed is : %s", xaccAccountGetName (acc));
-            account_splits (info, acc, fh);
-        }
-        g_list_free (info->csva.account_list);
+        Account *acc = ptr->data;
+        DEBUG("Account being processed is : %s", xaccAccountGetName (acc));
+        account_splits (info, acc, fh);
     }
-    else
-        account_splits (info, info->account, fh);
 
     fclose (fh);
     LEAVE("");

@@ -62,7 +62,6 @@ typedef struct
     GtkWidget        *select_button;
     GtkWidget        *num_acct_label;
     GList            *account_list;
-    int               num_accounts;
     GNCAccountType    account_type;
 } CsvExportAcc;
 
