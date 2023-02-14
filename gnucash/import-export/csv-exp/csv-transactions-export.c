@@ -351,6 +351,28 @@ add_amount (gchar *so_far, Split *split, gboolean t_void, gboolean symbol, CsvEx
     return result;
 }
 
+// Value with Symbol or not
+static gchar*
+add_value (gchar *so_far, Split *split, gboolean t_void, gboolean symbol, CsvExportInfo *info)
+{
+    const gchar *amt;
+    gchar       *conv;
+    gchar       *result;
+
+    Transaction *trans = xaccSplitGetParent(split);
+    gnc_commodity *tcurr = xaccTransGetCurrency (trans);
+    GNCPrintAmountInfo pai = gnc_commodity_print_info (tcurr, symbol);
+    if (t_void)
+        amt = xaccPrintAmount (xaccSplitVoidFormerValue (split), pai);
+    else
+        amt = xaccPrintAmount (xaccSplitGetValue (split), pai);
+    conv = csv_txn_test_field_string (info, amt);
+    result = g_strconcat (so_far, conv, info->mid_sep, NULL);
+    g_free (conv);
+    g_free (so_far);
+    return result;
+}
+
 // Share Price / Conversion factor
 static gchar*
 add_rate (gchar *so_far, Split *split, gboolean t_void, CsvExportInfo *info)
@@ -413,6 +435,8 @@ make_simple_trans_line (Account *acc, Transaction *trans, Split *split, CsvExpor
     exp_line = add_reconcile (exp_line, split, info);
     exp_line = add_amount (exp_line, split, t_void, TRUE, info);
     exp_line = add_amount (exp_line, split, t_void, FALSE, info);
+    exp_line = add_value (exp_line, split, t_void, TRUE, info);
+    exp_line = add_value (exp_line, split, t_void, FALSE, info);
     exp_line = add_rate (exp_line, split, t_void, info);
     return exp_line;
 }
@@ -426,6 +450,8 @@ make_split_part (gchar* exp_line, Split *split, gboolean t_void, CsvExportInfo *
     exp_line = add_account_name (exp_line, split, FALSE, info);
     exp_line = add_amount (exp_line, split, t_void, TRUE, info);
     exp_line = add_amount (exp_line, split, t_void, FALSE, info);
+    exp_line = add_value (exp_line, split, t_void, TRUE, info);
+    exp_line = add_value (exp_line, split, t_void, FALSE, info);
     exp_line = add_reconcile (exp_line, split, info);
     exp_line = add_reconcile_date (exp_line, split, info);
     exp_line = add_price (exp_line, split, t_void, info);
@@ -614,8 +640,10 @@ void csv_transactions_export (CsvExportInfo *info)
                                   _("Date"), info->mid_sep, _("Account Name"),
                                   info->mid_sep, (num_action ? _("Transaction Number") : _("Number")),
                                   info->mid_sep, _("Description"), info->mid_sep, _("Full Category Path"),
-                                  info->mid_sep, _("Reconcile"), info->mid_sep, _("Amount With Sym"),
-                                  info->mid_sep, _("Amount Num."), info->mid_sep, _("Rate/Price"),
+                                  info->mid_sep, _("Reconcile"),
+                                  info->mid_sep, _("Amount With Sym"), info->mid_sep, _("Amount Num."),
+                                  info->mid_sep, _("Value With Sym"), info->mid_sep, _("Value Num."),
+                                  info->mid_sep, _("Rate/Price"),
                                   info->end_sep, EOLSTR, NULL);
         }
         else
@@ -627,6 +655,7 @@ void csv_transactions_export (CsvExportInfo *info)
                                   info->mid_sep, (num_action ? _("Number/Action") : _("Action")), info->mid_sep, _("Memo"),
                                   info->mid_sep, _("Full Account Name"), info->mid_sep, _("Account Name"),
                                   info->mid_sep, _("Amount With Sym"), info->mid_sep, _("Amount Num."),
+                                  info->mid_sep, _("Value With Sym"), info->mid_sep, _("Value Num."),
                                   info->mid_sep, _("Reconcile"), info->mid_sep, _("Reconcile Date"), info->mid_sep, _("Rate/Price"),
                                   info->end_sep, EOLSTR, NULL);
         }
