@@ -95,7 +95,7 @@ static const gchar *start_trans_common_string = N_(
             "Select the settings you require for the file and then click \"Next\" "
             "to proceed or \"Cancel\" to abort the export.\n");
 
-static const gchar *start_trans__multi_string = N_(
+static const gchar *start_trans_multi_string = N_(
             "There will be multiple rows for each transaction with each row "
             "representing one split.");
 
@@ -669,8 +669,9 @@ csv_export_assistant_start_page_prepare (GtkAssistant *assistant,
     {
         gchar *label_string = NULL;
         /* General Journal and search registers are always multi-line exported */
-        if ((info->export_type == XML_EXPORT_REGISTER) && (info->account == NULL))
-            label_string = g_strdup_printf (_(start_trans_common_string), _(start_trans__multi_string));
+        if ((info->export_type == XML_EXPORT_REGISTER) &&
+            (g_list_length (info->csva.account_list) == 0))
+            label_string = g_strdup_printf (_(start_trans_common_string), _(start_trans_multi_string));
         else
             label_string = g_strdup_printf (_(start_trans_common_string), _(start_trans_simple_string));
 
@@ -725,7 +726,8 @@ csv_export_assistant_finish_page_prepare (GtkAssistant *assistant,
         text = g_strdup_printf (gettext (finish_tree_string), info->file_name);
     else
     {
-        if ((info->export_type == XML_EXPORT_REGISTER) && (info->account == NULL))
+        if ((info->export_type == XML_EXPORT_REGISTER) &&
+            (g_list_length (info->csva.account_list) == 0))
             text = g_strdup_printf (gettext (finish_trans_search_gl_string), info->file_name);
         else
             text = g_strdup_printf (gettext (finish_trans_string),
@@ -880,7 +882,8 @@ csv_export_assistant_create (CsvExportInfo *info)
         GtkWidget *chkbox = GTK_WIDGET(gtk_builder_get_object(builder, "simple_layout"));
 
         // Don't provide simple export layout for search registers and General Journal
-        if ((info->export_type == XML_EXPORT_TREE) || (info->account == NULL))
+        if ((info->export_type == XML_EXPORT_TREE) ||
+            (g_list_length (info->csva.account_list) == 0))
             gtk_widget_destroy (chkbox);
         gtk_assistant_remove_page (GTK_ASSISTANT(info->assistant), 1); //remove accounts page
     }
@@ -1012,8 +1015,6 @@ gnc_file_csv_export_internal (CsvExportType export_type, Query *q, Account *acc)
     if (q)
         info->query = q;
     if (acc)
-        info->account = acc;
-    if ((export_type == XML_EXPORT_REGISTER) && acc)
         info->csva.account_list = g_list_prepend(info->csva.account_list, acc);
 
     csv_export_assistant_create (info);
