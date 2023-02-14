@@ -30,6 +30,7 @@
 
 #include "Account.h"
 #include "Query.h"
+#include <gtk/gtk.h>
 
 typedef enum
 {

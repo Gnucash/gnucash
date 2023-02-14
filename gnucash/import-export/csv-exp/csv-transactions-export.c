@@ -26,8 +26,6 @@
 */
 #include "config.h"
 
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <stdbool.h>
 
@@ -57,23 +55,19 @@ static QofLogModule log_module = GNC_MOD_ASSISTANT;
 /*******************************************************
  * write_line_to_file
  *
- * write a text string to a file pointer, return TRUE if
+ * write a text string to a file pointer, return true if
  * successful.
  *******************************************************/
 static
-gboolean write_line_to_file (FILE *fh, char * line)
+bool write_line_to_file (FILE *fh, char * line)
 {
-    int len, written;
     DEBUG("Account String: %s", line);
 
     /* Write account line */
-    len = strlen (line);
-    written = fwrite (line, 1, len, fh);
+    int len = strlen (line);
+    int written = fwrite (line, 1, len, fh);
 
-    if (written != len)
-        return FALSE;
-    else
-        return TRUE;
+    return (written == len);
 }
 
 
@@ -85,25 +79,18 @@ gboolean write_line_to_file (FILE *fh, char * line)
 static
 gchar *csv_txn_test_field_string (CsvExportInfo *info, const gchar *string_in)
 {
-    gboolean need_quote = FALSE;
-    gchar **parts;
-    gchar *string_parts;
-    gchar *string_out;
-
     /* Check for " and then "" them */
-    parts = g_strsplit (string_in, "\"", -1);
-    string_parts = g_strjoinv ("\"\"", parts);
+    gchar **parts = g_strsplit (string_in, "\"", -1);
+    gchar *string_parts = g_strjoinv ("\"\"", parts);
     g_strfreev (parts);
 
     /* Check for separator string and \n and " in field,
        if so quote field if not already quoted */
-    if (g_strrstr (string_parts, info->separator_str) != NULL)
-        need_quote = TRUE;
-    if (g_strrstr (string_parts, "\n") != NULL)
-        need_quote = TRUE;
-    if (g_strrstr (string_parts, "\"") != NULL)
-        need_quote = TRUE;
+    bool need_quote = !g_strrstr (string_parts, info->separator_str) ||
+                      !g_strrstr (string_parts, "\n") ||
+                      !g_strrstr (string_parts, "\"");
 
+    gchar *string_out;
     if (!info->use_quotes && need_quote)
         string_out = g_strconcat ("\"", string_parts, "\"", NULL);
     else
@@ -131,11 +118,8 @@ add_date (gchar *so_far, Transaction *trans, CsvExportInfo *info)
 static gchar*
 add_guid (gchar *so_far, Transaction *trans, CsvExportInfo *info)
 {
-    gchar *result;
-    gchar *guid;
-
-    guid = guid_to_string (xaccTransGetGUID (trans));
-    result = g_strconcat (so_far, guid, info->mid_sep, NULL);
+    gchar *guid = guid_to_string (xaccTransGetGUID (trans));
+    gchar *result = g_strconcat (so_far, guid, info->mid_sep, NULL);
     g_free (guid);
     g_free (so_far);
     return result;
@@ -146,7 +130,6 @@ static gchar*
 add_reconcile_date (gchar *so_far, Split *split, CsvExportInfo *info)
 {
     gchar *result;
-
     if (xaccSplitGetReconcile (split) == YREC)
     {
         time64 t = xaccSplitGetDateReconciled (split);
@@ -164,19 +147,16 @@ add_reconcile_date (gchar *so_far, Split *split, CsvExportInfo *info)
 
 // Account Name short or Long
 static gchar*
-add_account_name (gchar *so_far, Split *split, gboolean full, CsvExportInfo *info)
+add_account_name (gchar *so_far, Split *split, bool full, CsvExportInfo *info)
 {
-    gchar       *name = NULL;
-    gchar       *conv;
-    gchar       *result;
-
-    Account     *account = xaccSplitGetAccount (split);
+    Account *account = xaccSplitGetAccount (split);
+    gchar *name = NULL;
     if (full)
         name = gnc_account_get_full_name (account);
     else
         name = g_strdup (xaccAccountGetName (account));
-    conv = csv_txn_test_field_string (info, name);
-    result = g_strconcat (so_far, conv, info->mid_sep, NULL);
+    gchar *conv = csv_txn_test_field_string (info, name);
+    gchar *result = g_strconcat (so_far, conv, info->mid_sep, NULL);
     g_free (name);
     g_free (conv);
     g_free (so_far);
@@ -187,13 +167,10 @@ add_account_name (gchar *so_far, Split *split, gboolean full, CsvExportInfo *inf
 static gchar*
 add_number (gchar *so_far, Transaction *trans, CsvExportInfo *info)
 {
-    const gchar *num;
-    gchar       *conv;
-    gchar       *result;
-
-    num = xaccTransGetNum (trans) ? xaccTransGetNum (trans) : "" ;
-    conv = csv_txn_test_field_string (info, num);
-    result = g_strconcat (so_far, conv, info->mid_sep, NULL);
+    const gchar *num = xaccTransGetNum (trans);
+    num = num ? num : "";
+    gchar *conv = csv_txn_test_field_string (info, num);
+    gchar *result = g_strconcat (so_far, conv, info->mid_sep, NULL);
     g_free (conv);
     g_free (so_far);
     return result;
@@ -203,13 +180,10 @@ add_number (gchar *so_far, Transaction *trans, CsvExportInfo *info)
 static gchar*
 add_description (gchar *so_far, Transaction *trans, CsvExportInfo *info)
 {
-    const gchar *desc;
-    gchar       *conv;
-    gchar       *result;
-
-    desc = xaccTransGetDescription (trans) ? xaccTransGetDescription (trans) : "" ;
-    conv = csv_txn_test_field_string (info, desc);
-    result = g_strconcat (so_far, conv, info->mid_sep, NULL);
+    const gchar *desc = xaccTransGetDescription (trans);
+    desc = desc ? desc : "";
+    gchar *conv = csv_txn_test_field_string (info, desc);
+    gchar *result = g_strconcat (so_far, conv, info->mid_sep, NULL);
     g_free (conv);
     g_free (so_far);
     return result;
@@ -219,13 +193,10 @@ add_description (gchar *so_far, Transaction *trans, CsvExportInfo *info)
 static gchar*
 add_notes (gchar *so_far, Transaction *trans, CsvExportInfo *info)
 {
-    const gchar *notes;
-    gchar       *conv;
-    gchar       *result;
-
-    notes = xaccTransGetNotes (trans) ? xaccTransGetNotes (trans) : "" ;
-    conv = csv_txn_test_field_string (info, notes);
-    result = g_strconcat (so_far, conv, info->mid_sep, NULL);
+    const gchar *notes = xaccTransGetNotes (trans);
+    notes = notes ? notes : "" ;
+    gchar *conv = csv_txn_test_field_string (info, notes);
+    gchar *result = g_strconcat (so_far, conv, info->mid_sep, NULL);
     g_free (conv);
     g_free (so_far);
     return result;
@@ -235,18 +206,11 @@ add_notes (gchar *so_far, Transaction *trans, CsvExportInfo *info)
 static gchar*
 add_void_reason (gchar *so_far, Transaction *trans, CsvExportInfo *info)
 {
-    gchar       *result;
-
-    if (xaccTransGetVoidStatus (trans))
-    {
-        const gchar *void_reason = xaccTransGetVoidReason (trans);
-        gchar *conv = csv_txn_test_field_string (info, void_reason);
-        result = g_strconcat (so_far, conv, info->mid_sep, NULL);
-        g_free (conv);
-    }
-    else
-        result = g_strconcat (so_far, info->mid_sep, NULL);
-
+    const gchar *void_reason = xaccTransGetVoidReason (trans);
+    void_reason = void_reason ? void_reason : "";
+    gchar *conv = csv_txn_test_field_string (info, void_reason);
+    gchar *result = g_strconcat (so_far, conv, info->mid_sep, NULL);
+    g_free (conv);
     g_free (so_far);
     return result;
 }
@@ -255,13 +219,10 @@ add_void_reason (gchar *so_far, Transaction *trans, CsvExportInfo *info)
 static gchar*
 add_memo (gchar *so_far, Split *split, CsvExportInfo *info)
 {
-    const gchar *memo;
-    gchar       *conv;
-    gchar       *result;
-
-    memo = xaccSplitGetMemo (split) ? xaccSplitGetMemo (split) : "" ;
-    conv = csv_txn_test_field_string (info, memo);
-    result = g_strconcat (so_far, conv, info->mid_sep, NULL);
+    const gchar *memo = xaccSplitGetMemo (split);
+    memo = memo ? memo : "";
+    gchar *conv = csv_txn_test_field_string (info, memo);
+    gchar *result = g_strconcat (so_far, conv, info->mid_sep, NULL);
     g_free (conv);
     g_free (so_far);
     return result;
@@ -269,19 +230,16 @@ add_memo (gchar *so_far, Split *split, CsvExportInfo *info)
 
 // Full Category Path or Not
 static gchar*
-add_category (gchar *so_far, Split *split, gboolean full, CsvExportInfo *info)
+add_category (gchar *so_far, Split *split, bool full, CsvExportInfo *info)
 {
-    gchar       *cat;
-    gchar       *conv;
-    gchar       *result;
-
+    gchar *cat;
     if (full)
         cat = xaccSplitGetCorrAccountFullName (split);
     else
         cat = g_strdup(xaccSplitGetCorrAccountName (split));
 
-    conv = csv_txn_test_field_string (info, cat);
-    result = g_strconcat (so_far, conv, info->mid_sep, NULL);
+    gchar *conv = csv_txn_test_field_string (info, cat);
+    gchar *result = g_strconcat (so_far, conv, info->mid_sep, NULL);
     g_free (cat);
     g_free (conv);
     g_free (so_far);
@@ -304,13 +262,9 @@ add_action (gchar *so_far, Split *split, CsvExportInfo *info)
 static gchar*
 add_reconcile (gchar *so_far, Split *split, CsvExportInfo *info)
 {
-    const gchar *recon;
-    gchar       *conv;
-    gchar       *result;
-
-    recon = gnc_get_reconcile_str (xaccSplitGetReconcile (split));
-    conv = csv_txn_test_field_string (info, recon);
-    result = g_strconcat (so_far, conv, info->mid_sep, NULL);
+    const gchar *recon = gnc_get_reconcile_str (xaccSplitGetReconcile (split));
+    gchar *conv = csv_txn_test_field_string (info, recon);
+    gchar *result = g_strconcat (so_far, conv, info->mid_sep, NULL);
     g_free (conv);
     g_free (so_far);
     return result;
@@ -320,14 +274,9 @@ add_reconcile (gchar *so_far, Split *split, CsvExportInfo *info)
 static gchar*
 add_commodity (gchar *so_far, Transaction *trans, CsvExportInfo *info)
 {
-    const gchar *comm_m;
-    gchar       *conv;
-    gchar       *result;
-
-    comm_m = gnc_commodity_get_unique_name (xaccTransGetCurrency (trans));
-
-    conv = csv_txn_test_field_string (info, comm_m);
-    result = g_strconcat (so_far, conv, info->mid_sep, NULL);
+    const gchar *comm_m = gnc_commodity_get_unique_name (xaccTransGetCurrency (trans));
+    gchar *conv = csv_txn_test_field_string (info, comm_m);
+    gchar *result = g_strconcat (so_far, conv, info->mid_sep, NULL);
     g_free (conv);
     g_free (so_far);
     return result;
@@ -335,18 +284,15 @@ add_commodity (gchar *so_far, Transaction *trans, CsvExportInfo *info)
 
 // Amount with Symbol or not
 static gchar*
-add_amount (gchar *so_far, Split *split, gboolean t_void, gboolean symbol, CsvExportInfo *info)
+add_amount (gchar *so_far, Split *split, bool t_void, bool symbol, CsvExportInfo *info)
 {
     const gchar *amt;
-    gchar       *conv;
-    gchar       *result;
-
     if (t_void)
         amt = xaccPrintAmount (xaccSplitVoidFormerAmount (split), gnc_split_amount_print_info (split, symbol));
     else
         amt = xaccPrintAmount (xaccSplitGetAmount (split), gnc_split_amount_print_info (split, symbol));
-    conv = csv_txn_test_field_string (info, amt);
-    result = g_strconcat (so_far, conv, info->mid_sep, NULL);
+    gchar *conv = csv_txn_test_field_string (info, amt);
+    gchar *result = g_strconcat (so_far, conv, info->mid_sep, NULL);
     g_free (conv);
     g_free (so_far);
     return result;
@@ -354,21 +300,18 @@ add_amount (gchar *so_far, Split *split, gboolean t_void, gboolean symbol, CsvEx
 
 // Value with Symbol or not
 static gchar*
-add_value (gchar *so_far, Split *split, gboolean t_void, gboolean symbol, CsvExportInfo *info)
+add_value (gchar *so_far, Split *split, bool t_void, bool symbol, CsvExportInfo *info)
 {
-    const gchar *amt;
-    gchar       *conv;
-    gchar       *result;
-
     Transaction *trans = xaccSplitGetParent(split);
     gnc_commodity *tcurr = xaccTransGetCurrency (trans);
     GNCPrintAmountInfo pai = gnc_commodity_print_info (tcurr, symbol);
+    const gchar *amt;
     if (t_void)
         amt = xaccPrintAmount (xaccSplitVoidFormerValue (split), pai);
     else
         amt = xaccPrintAmount (xaccSplitGetValue (split), pai);
-    conv = csv_txn_test_field_string (info, amt);
-    result = g_strconcat (so_far, conv, info->mid_sep, NULL);
+    gchar *conv = csv_txn_test_field_string (info, amt);
+    gchar *result = g_strconcat (so_far, conv, info->mid_sep, NULL);
     g_free (conv);
     g_free (so_far);
     return result;
@@ -376,20 +319,16 @@ add_value (gchar *so_far, Split *split, gboolean t_void, gboolean symbol, CsvExp
 
 // Share Price / Conversion factor
 static gchar*
-add_rate (gchar *so_far, Split *split, gboolean t_void, CsvExportInfo *info)
+add_rate (gchar *so_far, Split *split, bool t_void, CsvExportInfo *info)
 {
-    const gchar *amt;
     gnc_commodity *curr = xaccAccountGetCommodity (xaccSplitGetAccount (split));
-    gchar       *conv;
-    gchar       *result;
-
+    const gchar *amt;
     if (t_void)
         amt = xaccPrintAmount (gnc_numeric_zero(), gnc_default_price_print_info (curr));
     else
         amt = xaccPrintAmount (xaccSplitGetSharePrice (split), gnc_default_price_print_info (curr));
-
-    conv = csv_txn_test_field_string (info, amt);
-    result = g_strconcat (so_far, conv, info->end_sep, EOLSTR, NULL);
+    gchar *conv = csv_txn_test_field_string (info, amt);
+    gchar *result = g_strconcat (so_far, conv, info->end_sep, EOLSTR, NULL);
     g_free (conv);
     g_free (so_far);
     return result;
@@ -397,13 +336,10 @@ add_rate (gchar *so_far, Split *split, gboolean t_void, CsvExportInfo *info)
 
 // Share Price / Conversion factor
 static gchar*
-add_price (gchar *so_far, Split *split, gboolean t_void, CsvExportInfo *info)
+add_price (gchar *so_far, Split *split, bool t_void, CsvExportInfo *info)
 {
-    const gchar *string_amount;
     gnc_commodity *curr = xaccAccountGetCommodity (xaccSplitGetAccount (split));
-    gchar       *conv;
-    gchar       *result;
-
+    const gchar *string_amount;
     if (t_void)
     {
         gnc_numeric cf = gnc_numeric_div (xaccSplitVoidFormerValue (split), xaccSplitVoidFormerAmount (split), GNC_DENOM_AUTO,
@@ -413,8 +349,8 @@ add_price (gchar *so_far, Split *split, gboolean t_void, CsvExportInfo *info)
     else
         string_amount = xaccPrintAmount (xaccSplitGetSharePrice (split), gnc_default_price_print_info (curr));
 
-    conv = csv_txn_test_field_string (info, string_amount);
-    result = g_strconcat (so_far, conv, info->end_sep, EOLSTR, NULL);
+    gchar *conv = csv_txn_test_field_string (info, string_amount);
+    gchar *result = g_strconcat (so_far, conv, info->end_sep, EOLSTR, NULL);
     g_free (conv);
     g_free (so_far);
     return result;
@@ -425,34 +361,34 @@ add_price (gchar *so_far, Split *split, gboolean t_void, CsvExportInfo *info)
 static gchar*
 make_simple_trans_line (Transaction *trans, Split *split, CsvExportInfo *info)
 {
-    gboolean t_void = xaccTransGetVoidStatus (trans);
+    bool t_void = xaccTransGetVoidStatus (trans);
 
     gchar *exp_line = g_strdup("");
     exp_line = add_date (exp_line, trans, info);
-    exp_line = add_account_name (exp_line, split, TRUE, info);
+    exp_line = add_account_name (exp_line, split, true, info);
     exp_line = add_number (exp_line, trans, info);
     exp_line = add_description (exp_line, trans, info);
-    exp_line = add_category (exp_line, split, TRUE, info);
+    exp_line = add_category (exp_line, split, true, info);
     exp_line = add_reconcile (exp_line, split, info);
-    exp_line = add_amount (exp_line, split, t_void, TRUE, info);
-    exp_line = add_amount (exp_line, split, t_void, FALSE, info);
-    exp_line = add_value (exp_line, split, t_void, TRUE, info);
-    exp_line = add_value (exp_line, split, t_void, FALSE, info);
+    exp_line = add_amount (exp_line, split, t_void, true, info);
+    exp_line = add_amount (exp_line, split, t_void, false, info);
+    exp_line = add_value (exp_line, split, t_void, true, info);
+    exp_line = add_value (exp_line, split, t_void, false, info);
     exp_line = add_rate (exp_line, split, t_void, info);
     return exp_line;
 }
 
 static gchar*
-make_split_part (gchar* exp_line, Split *split, gboolean t_void, CsvExportInfo *info)
+make_split_part (gchar* exp_line, Split *split, bool t_void, CsvExportInfo *info)
 {
     exp_line = add_action (exp_line, split, info);
     exp_line = add_memo (exp_line, split, info);
-    exp_line = add_account_name (exp_line, split, TRUE, info);
-    exp_line = add_account_name (exp_line, split, FALSE, info);
-    exp_line = add_amount (exp_line, split, t_void, TRUE, info);
-    exp_line = add_amount (exp_line, split, t_void, FALSE, info);
-    exp_line = add_value (exp_line, split, t_void, TRUE, info);
-    exp_line = add_value (exp_line, split, t_void, FALSE, info);
+    exp_line = add_account_name (exp_line, split, true, info);
+    exp_line = add_account_name (exp_line, split, false, info);
+    exp_line = add_amount (exp_line, split, t_void, true, info);
+    exp_line = add_amount (exp_line, split, t_void, false, info);
+    exp_line = add_value (exp_line, split, t_void, true, info);
+    exp_line = add_value (exp_line, split, t_void, false, info);
     exp_line = add_reconcile (exp_line, split, info);
     exp_line = add_reconcile_date (exp_line, split, info);
     exp_line = add_price (exp_line, split, t_void, info);
@@ -510,7 +446,7 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
         qof_query_set_sort_order (info->query, p1, p2, NULL);
 
         xaccQueryAddSingleAccountMatch (info->query, acc, QOF_QUERY_AND);
-        xaccQueryAddDateMatchTT (info->query, TRUE, info->csvd.start_time, TRUE, info->csvd.end_time, QOF_QUERY_AND);
+        xaccQueryAddDateMatchTT (info->query, true, info->csvd.start_time, true, info->csvd.end_time, QOF_QUERY_AND);
     }
 
     /* Run the query */
@@ -589,15 +525,10 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
  *******************************************************/
 void csv_transactions_export (CsvExportInfo *info)
 {
-    FILE    *fh;
-    Account *acc;
-    GList   *ptr;
-    gboolean num_action = qof_book_use_split_action_for_num_field (gnc_get_current_book());
-
     ENTER("");
     DEBUG("File name is : %s", info->file_name);
 
-    info->failed = FALSE;
+    info->failed = false;
 
     /* Set up separators */
     if (info->use_quotes)
@@ -612,71 +543,68 @@ void csv_transactions_export (CsvExportInfo *info)
     }
 
     /* Open File for writing */
-    fh = g_fopen (info->file_name, "w" );
-    if (fh != NULL)
+    FILE *fh = g_fopen (info->file_name, "w" );
+    if (!fh)
     {
-        gchar *header;
-        int i;
+        info->failed = true;
+        return;
+    }
 
-        /* Header string */
-        if (info->simple_layout)
-        {
-            header = g_strconcat (info->end_sep,
-                         /* Translators: The following symbols will build the *
-                          * header line of exported CSV files:                */
-                                  _("Date"), info->mid_sep, _("Account Name"),
-                                  info->mid_sep, (num_action ? _("Transaction Number") : _("Number")),
-                                  info->mid_sep, _("Description"), info->mid_sep, _("Full Category Path"),
-                                  info->mid_sep, _("Reconcile"),
-                                  info->mid_sep, _("Amount With Sym"), info->mid_sep, _("Amount Num."),
-                                  info->mid_sep, _("Value With Sym"), info->mid_sep, _("Value Num."),
-                                  info->mid_sep, _("Rate/Price"),
-                                  info->end_sep, EOLSTR, NULL);
-        }
-        else
-        {
-            header = g_strconcat (info->end_sep, _("Date"), info->mid_sep, _("Transaction ID"),
-                                  info->mid_sep, (num_action ? _("Transaction Number") : _("Number")),
-                                  info->mid_sep, _("Description"), info->mid_sep, _("Notes"),
-                                  info->mid_sep, _("Commodity/Currency"), info->mid_sep, _("Void Reason"),
-                                  info->mid_sep, (num_action ? _("Number/Action") : _("Action")), info->mid_sep, _("Memo"),
-                                  info->mid_sep, _("Full Account Name"), info->mid_sep, _("Account Name"),
-                                  info->mid_sep, _("Amount With Sym"), info->mid_sep, _("Amount Num."),
-                                  info->mid_sep, _("Value With Sym"), info->mid_sep, _("Value Num."),
-                                  info->mid_sep, _("Reconcile"), info->mid_sep, _("Reconcile Date"), info->mid_sep, _("Rate/Price"),
-                                  info->end_sep, EOLSTR, NULL);
-        }
-        DEBUG("Header String: %s", header);
-
-        /* Write header line */
-        if (!write_line_to_file (fh, header))
-        {
-            info->failed = TRUE;
-            g_free (header);
-            return;
-        }
-        g_free (header);
-
-        if (info->export_type == XML_EXPORT_TRANS)
-        {
-            /* Go through list of accounts */
-            for (ptr = info->csva.account_list, i = 0; ptr; ptr = g_list_next(ptr), i++)
-            {
-                acc = ptr->data;
-                DEBUG("Account being processed is : %s", xaccAccountGetName (acc));
-                account_splits (info, acc, fh);
-            }
-            g_list_free (info->csva.account_list);
-        }
-        else
-            account_splits (info, info->account, fh);
-
-        g_list_free (info->trans_list); // free trans_list
+    gchar *header;
+    bool num_action = qof_book_use_split_action_for_num_field (gnc_get_current_book());
+    /* Header string */
+    if (info->simple_layout)
+    {
+        header = g_strconcat (info->end_sep,
+                        /* Translators: The following symbols will build the *
+                        * header line of exported CSV files:                */
+                                _("Date"), info->mid_sep, _("Account Name"),
+                                info->mid_sep, (num_action ? _("Transaction Number") : _("Number")),
+                                info->mid_sep, _("Description"), info->mid_sep, _("Full Category Path"),
+                                info->mid_sep, _("Reconcile"),
+                                info->mid_sep, _("Amount With Sym"), info->mid_sep, _("Amount Num."),
+                                info->mid_sep, _("Value With Sym"), info->mid_sep, _("Value Num."),
+                                info->mid_sep, _("Rate/Price"),
+                                info->end_sep, EOLSTR, NULL);
     }
     else
-        info->failed = TRUE;
-    if (fh)
-        fclose (fh);
+    {
+        header = g_strconcat (info->end_sep, _("Date"), info->mid_sep, _("Transaction ID"),
+                                info->mid_sep, (num_action ? _("Transaction Number") : _("Number")),
+                                info->mid_sep, _("Description"), info->mid_sep, _("Notes"),
+                                info->mid_sep, _("Commodity/Currency"), info->mid_sep, _("Void Reason"),
+                                info->mid_sep, (num_action ? _("Number/Action") : _("Action")), info->mid_sep, _("Memo"),
+                                info->mid_sep, _("Full Account Name"), info->mid_sep, _("Account Name"),
+                                info->mid_sep, _("Amount With Sym"), info->mid_sep, _("Amount Num."),
+                                info->mid_sep, _("Value With Sym"), info->mid_sep, _("Value Num."),
+                                info->mid_sep, _("Reconcile"), info->mid_sep, _("Reconcile Date"), info->mid_sep, _("Rate/Price"),
+                                info->end_sep, EOLSTR, NULL);
+    }
+    DEBUG("Header String: %s", header);
+
+    /* Write header line */
+    info->failed = !write_line_to_file (fh, header);
+    g_free (header);
+    if (info->failed)
+        return;
+
+    if (info->export_type == XML_EXPORT_TRANS)
+    {
+        /* Go through list of accounts */
+        for (GList *ptr = info->csva.account_list; ptr; ptr = g_list_next(ptr))
+        {
+            Account *acc = ptr->data;
+            DEBUG("Account being processed is : %s", xaccAccountGetName (acc));
+            account_splits (info, acc, fh);
+        }
+        g_list_free (info->csva.account_list);
+    }
+    else
+        account_splits (info, info->account, fh);
+
+    g_list_free (info->trans_list); // free trans_list
+
+    fclose (fh);
     LEAVE("");
 }
 
