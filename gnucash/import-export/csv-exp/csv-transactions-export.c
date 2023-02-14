@@ -379,8 +379,20 @@ make_simple_trans_line (Transaction *trans, Split *split, CsvExportInfo *info)
 }
 
 static gchar*
-make_split_part (gchar* exp_line, Split *split, bool t_void, CsvExportInfo *info)
+make_complex_trans_line (Transaction *trans, Split *split, CsvExportInfo *info)
 {
+    // Transaction fields
+    gchar *exp_line = g_strdup("");
+    exp_line = add_date (exp_line, trans, info);
+    exp_line = add_guid (exp_line, trans, info);
+    exp_line = add_number (exp_line, trans, info);
+    exp_line = add_description (exp_line, trans, info);
+    exp_line = add_notes (exp_line, trans, info);
+    exp_line = add_commodity (exp_line, trans, info);
+    exp_line = add_void_reason (exp_line, trans, info);
+    bool t_void = xaccTransGetVoidStatus (trans);
+
+    //Split fields
     exp_line = add_action (exp_line, split, info);
     exp_line = add_memo (exp_line, split, info);
     exp_line = add_account_name (exp_line, split, true, info);
@@ -392,32 +404,8 @@ make_split_part (gchar* exp_line, Split *split, bool t_void, CsvExportInfo *info
     exp_line = add_reconcile (exp_line, split, info);
     exp_line = add_reconcile_date (exp_line, split, info);
     exp_line = add_price (exp_line, split, t_void, info);
+
     return exp_line;
-}
-
-static gchar*
-make_complex_trans_line (Transaction *trans, Split *split, CsvExportInfo *info)
-{
-    gchar *exp_line = g_strdup("");
-    exp_line = add_date (exp_line, trans, info);
-    exp_line = add_guid (exp_line, trans, info);
-    exp_line = add_number (exp_line, trans, info);
-    exp_line = add_description (exp_line, trans, info);
-    exp_line = add_notes (exp_line, trans, info);
-    exp_line = add_commodity (exp_line, trans, info);
-    exp_line = add_void_reason (exp_line, trans, info);
-    return make_split_part (exp_line, split, xaccTransGetVoidStatus (trans), info);
-}
-
-static gchar*
-make_complex_split_line (Transaction *trans, Split *split, CsvExportInfo *info)
-{
-    /* Pure split lines don't have any transaction information,
-     * so start with empty fields for all transaction columns.
-     */
-    gchar *result = g_strconcat (info->end_sep, info->mid_sep, info->mid_sep, info->mid_sep,
-            info->mid_sep, info->mid_sep, info->mid_sep, info->mid_sep, NULL);
-    return make_split_part (result, split, xaccTransGetVoidStatus (trans), info);
 }
 
 
@@ -504,7 +492,7 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
                 continue;
 
             // Write complex Split Line.
-            line = make_complex_split_line (trans, t_split, info);
+            line = make_complex_trans_line (trans, t_split, info);
             info->failed = !write_line_to_file (fh, line);
             g_free (line);
             if (info->failed)
