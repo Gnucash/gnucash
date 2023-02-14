@@ -72,7 +72,6 @@ typedef struct
     CsvExportType   export_type;
     CsvExportDate   csvd;
     CsvExportAcc    csva;
-    GList          *trans_list;
 
     Query          *query;
     Account        *account;

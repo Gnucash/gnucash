@@ -438,13 +438,14 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
     }
 
     /* Run the query */
+    GList *trans_list = NULL;
     for (GList *splits = qof_query_run (info->query); splits; splits = splits->next)
     {
         Split *split = splits->data;
 
         // Look for trans already exported in trans_list
         Transaction *trans = xaccSplitGetParent (split);
-        if (g_list_find (info->trans_list, trans))
+        if (g_list_find (trans_list, trans))
             continue;
 
         // Look for blank split
@@ -498,11 +499,12 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
             if (info->failed)
                 break;
         }
-        info->trans_list = g_list_prepend (info->trans_list, trans); // add trans to trans_list
+        trans_list = g_list_prepend (trans_list, trans);
     }
 
     if (info->export_type == XML_EXPORT_TRANS)
         qof_query_destroy (info->query);
+    g_list_free (trans_list);
 }
 
 
@@ -589,8 +591,6 @@ void csv_transactions_export (CsvExportInfo *info)
     }
     else
         account_splits (info, info->account, fh);
-
-    g_list_free (info->trans_list); // free trans_list
 
     fclose (fh);
     LEAVE("");

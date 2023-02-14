@@ -303,7 +303,6 @@ load_settings (CsvExportInfo *info)
     info->separator_str = ",";
     info->file_name = NULL;
     info->starting_dir = NULL;
-    info->trans_list = NULL;
 
     /* The default directory for the user to select files. */
     info->starting_dir = gnc_get_default_directory (GNC_PREFS_GROUP);
