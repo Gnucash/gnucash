@@ -90,9 +90,45 @@ static std::shared_ptr<CsvTransImpSettings> create_int_gnc_exp_preset(void)
             GncTransPropType::NONE,
             GncTransPropType::NONE,
             GncTransPropType::AMOUNT,
+            GncTransPropType::NONE,
+            GncTransPropType::VALUE,
             GncTransPropType::REC_STATE,
             GncTransPropType::REC_DATE,
             GncTransPropType::PRICE
+    };
+    return preset;
+}
+
+static std::shared_ptr<CsvTransImpSettings> create_int_gnc_exp_4_preset(void)
+{
+    auto preset = std::make_shared<CsvTransImpSettings>();
+    preset->m_name = get_gnc_exp_4();
+    preset->m_skip_start_lines = 1;
+    preset->m_multi_split = true;
+
+    /* FIXME date and currency format should still be aligned with export format!
+     * That's currently hard to do, because the export uses whatever the user
+     * had set as global preference.
+     *   preset->date_active = 0;
+     *   preset->currency_active = 0;
+     */
+    preset->m_column_types = {
+        GncTransPropType::DATE,
+        GncTransPropType::UNIQUE_ID,
+        GncTransPropType::NUM,
+        GncTransPropType::DESCRIPTION,
+        GncTransPropType::NOTES,
+        GncTransPropType::COMMODITY,
+        GncTransPropType::VOID_REASON,
+        GncTransPropType::ACTION,
+        GncTransPropType::MEMO,
+        GncTransPropType::ACCOUNT,
+        GncTransPropType::NONE,
+        GncTransPropType::NONE,
+        GncTransPropType::AMOUNT,
+        GncTransPropType::REC_STATE,
+        GncTransPropType::REC_DATE,
+        GncTransPropType::PRICE
     };
     return preset;
 }
@@ -134,6 +170,7 @@ const preset_vec_trans& get_import_presets_trans (void)
     /* Start with the internally generated ones */
     presets_trans.push_back(create_int_no_preset());
     presets_trans.push_back(create_int_gnc_exp_preset());
+    presets_trans.push_back(create_int_gnc_exp_4_preset());
 
     /* Then add all the ones we found in the state file */
     for (auto preset_name : preset_names)

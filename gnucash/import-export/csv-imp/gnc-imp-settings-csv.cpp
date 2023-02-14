@@ -45,6 +45,7 @@
 const std::string csv_group_prefix{"CSV-"};
 const std::string no_settings{N_("No Settings")};
 const std::string gnc_exp{N_("GnuCash Export Format")};
+const std::string gnc_exp_4{N_("GnuCash Export Format (4.x and older)")};
 
 #define CSV_NAME         "Name"
 #define CSV_FORMAT       "CsvFormat"
@@ -105,6 +106,11 @@ std::string get_no_settings (void)
 std::string get_gnc_exp (void)
 {
     return gnc_exp;
+}
+
+std::string get_gnc_exp_4 (void)
+{
+    return gnc_exp_4;
 }
 
 /**************************************************

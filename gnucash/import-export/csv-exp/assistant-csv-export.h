@@ -30,6 +30,7 @@
 
 #include "Account.h"
 #include "Query.h"
+#include <gtk/gtk.h>
 
 typedef enum
 {
@@ -61,7 +62,6 @@ typedef struct
     GtkWidget        *select_button;
     GtkWidget        *num_acct_label;
     GList            *account_list;
-    int               num_accounts;
     GNCAccountType    account_type;
 } CsvExportAcc;
 
@@ -71,10 +71,8 @@ typedef struct
     CsvExportType   export_type;
     CsvExportDate   csvd;
     CsvExportAcc    csva;
-    GList          *trans_list;
 
     Query          *query;
-    Account        *account;
 
     GtkWidget      *start_page;
     GtkWidget      *account_page;

@@ -90,6 +90,7 @@ protected:
 
 std::string get_no_settings (void);
 std::string get_gnc_exp (void);
+std::string get_gnc_exp_4 (void);
 
 /** Check whether name can be used as a preset name.
  *  The names of the internal presets are considered reserved.
