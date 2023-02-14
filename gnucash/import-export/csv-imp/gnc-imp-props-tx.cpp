@@ -758,15 +758,15 @@ void GncPreSplit::create_split (std::shared_ptr<DraftTransaction> draft_trans)
     auto value = GncNumeric();
     auto trans_curr = xaccTransGetCurrency(draft_trans->trans);
     auto acct_comm = xaccAccountGetCommodity(account);
-    if (gnc_commodity_equiv(trans_curr, acct_comm))
-        value = amount;
-    else if (m_value || m_value_neg)
+    if (m_value || m_value_neg)
     {
         if (m_value)
             value += *m_value;
         if (m_value_neg)
             value -= *m_value_neg;
     }
+    else if (gnc_commodity_equiv(trans_curr, acct_comm))
+            value = amount;
     else if (tamount)
         value = -*tamount;
     else if (m_price)
