@@ -73,7 +73,6 @@ typedef struct
     CsvExportAcc    csva;
 
     Query          *query;
-    Account        *account;
 
     GtkWidget      *start_page;
     GtkWidget      *account_page;

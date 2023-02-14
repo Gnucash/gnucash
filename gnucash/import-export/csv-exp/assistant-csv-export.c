@@ -262,10 +262,16 @@ csv_export_simple_cb (GtkToggleButton *button, gpointer user_data)
 {
     CsvExportInfo *info = user_data;
 
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(button)))
-        info->simple_layout = TRUE;
+    info->simple_layout = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(button));
+
+    gchar *msg = NULL;
+    if (info->simple_layout)
+        msg = g_strdup_printf (_(start_trans_common_string), _(start_trans_simple_string));
     else
-        info->simple_layout = FALSE;
+        msg = g_strdup_printf (_(start_trans_common_string), _(start_trans_multi_string));
+
+    gtk_label_set_text (GTK_LABEL(info->start_label), msg);
+    g_free (msg);
 }
 
 /*******************************************************
@@ -659,25 +665,15 @@ csv_export_assistant_start_page_prepare (GtkAssistant *assistant,
         gpointer user_data)
 {
     CsvExportInfo *info = user_data;
+    gchar *msg = NULL;
 
-
-
-    /* Set Start page text */
     if (info->export_type == XML_EXPORT_TREE)
-        gtk_label_set_text (GTK_LABEL(info->start_label), gettext (start_tree_string));
+        msg = g_strdup (_(start_tree_string));
     else
-    {
-        gchar *label_string = NULL;
-        /* General Journal and search registers are always multi-line exported */
-        if ((info->export_type == XML_EXPORT_REGISTER) &&
-            (g_list_length (info->csva.account_list) == 0))
-            label_string = g_strdup_printf (_(start_trans_common_string), _(start_trans_multi_string));
-        else
-            label_string = g_strdup_printf (_(start_trans_common_string), _(start_trans_simple_string));
+        msg = g_strdup_printf (_(start_trans_common_string), _(start_trans_multi_string));
 
-        gtk_label_set_text (GTK_LABEL(info->start_label), label_string);
-        g_free (label_string);
-    }
+    gtk_label_set_text (GTK_LABEL(info->start_label), msg);
+    g_free (msg);
 
     /* Enable the Assistant Buttons */
     gtk_assistant_set_page_complete (assistant, info->start_page, TRUE);
