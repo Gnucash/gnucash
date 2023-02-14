@@ -494,6 +494,7 @@ make_complex_split_line (Transaction *trans, Split *split, CsvExportInfo *info)
 static
 void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
 {
+    bool is_trading_acct = acc && (xaccAccountGetType (acc) == ACCT_TYPE_TRADING);
 
     // Setup the query for normal transaction export
     if (info->export_type == XML_EXPORT_TRANS)
@@ -527,6 +528,11 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
         if (!split_acc)
             continue;
 
+        // Only export trading splits when exporting a trading account
+        if (!is_trading_acct &&
+            (xaccAccountGetType (split_acc) == ACCT_TYPE_TRADING))
+            continue;
+
         if (info->simple_layout)
         {
             // Write line in simple layout, equivalent to a single line register view
@@ -555,6 +561,11 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
             if (split == t_split)
                 continue;
 
+            // Only export trading splits if exporting a trading account
+            Account *tsplit_acc = xaccSplitGetAccount (t_split);
+            if (!is_trading_acct &&
+                (xaccAccountGetType (tsplit_acc) == ACCT_TYPE_TRADING))
+                continue;
 
             // Write complex Split Line.
             line = make_complex_split_line (trans, t_split, info);
