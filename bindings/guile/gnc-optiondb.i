@@ -1736,7 +1736,7 @@ gnc_register_multichoice_callback_option(GncOptionDBPtr& db,
         }
         catch (const std::invalid_argument& err)
         {
-            std::cerr <<"Account Sel Limited Option, value failed validation, option not creted.\n";
+            std::cerr <<"Account Sel Limited Option, value failed validation, option not created.\n";
             return nullptr;
         }
     }
@@ -1778,7 +1778,7 @@ gnc_register_multichoice_callback_option(GncOptionDBPtr& db,
         }
         catch (const std::invalid_argument& err)
         {
-            std::cerr <<"Date Option, value failed validation, option not creted.\n";
+            std::cerr <<"Date Option, value failed validation, option not created.\n";
             return nullptr;
         }
     }

@@ -59,7 +59,7 @@ size_t constexpr sort_tag_size_max{10};
 #endif
 
 /** @struct OptionClassifier
- * This class is the parent of all option implmentations. It contains the
+ * This class is the parent of all option implementations. It contains the
  * elements that the optiondb uses to retrieve option values and that the
  * options dialog determines on which tab to place the option, in what order,
  * and what string to display as a tooltip.
@@ -150,7 +150,7 @@ private:
 };
 
 /** class GncOptionCommodityValue
- * Commodities are stored with their namespace and mnemonic instead of their gncGIUD
+ * Commodities are stored with their namespace and mnemonic instead of their gncGUID
  * so that they can be correctly retrieved even if they're deleted and recreated.
  * Additionally if GncOptionCommodityValue is created with GncOptionUIType::CURRENCY
  * it will throw std::invalid_argument if one attempts to set a value that isn't a
