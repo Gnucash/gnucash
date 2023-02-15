@@ -85,21 +85,21 @@ template <typename ValueType>
 class GncOptionValue : public OptionClassifier
 {
 public:
-    GncOptionValue<ValueType>(const char* section, const char* name,
-                              const char* key, const char* doc_string,
-                              ValueType value,
-                              GncOptionUIType ui_type = GncOptionUIType::INTERNAL) :
+    GncOptionValue(const char* section, const char* name,
+                   const char* key, const char* doc_string,
+                   ValueType value,
+                   GncOptionUIType ui_type = GncOptionUIType::INTERNAL) :
         OptionClassifier{section, name, key, doc_string},
         m_ui_type(ui_type), m_value{value}, m_default_value{value} { }
-    GncOptionValue<ValueType>(const GncOptionValue<ValueType>& from) :
+    GncOptionValue(const GncOptionValue& from) :
         OptionClassifier{from.m_section, from.m_name, from.m_sort_tag,
                          from.m_doc_string},
         m_ui_type(from.get_ui_type()), m_value{from.get_value()},
         m_default_value{from.get_default_value()}{}
-    GncOptionValue<ValueType>(GncOptionValue<ValueType>&&) = default;
-    GncOptionValue<ValueType>& operator=(const GncOptionValue<ValueType>&) = default;
-    GncOptionValue<ValueType>& operator=(GncOptionValue<ValueType>&&) = default;
-    ~GncOptionValue<ValueType>() = default;
+    GncOptionValue(GncOptionValue&&) = default;
+    GncOptionValue& operator=(const GncOptionValue&) = default;
+    GncOptionValue& operator=(GncOptionValue&&) = default;
+    ~GncOptionValue() = default;
     ValueType get_value() const { return m_value; }
     ValueType get_default_value() const { return m_default_value; }
     void set_value(ValueType new_value);
