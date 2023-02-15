@@ -91,11 +91,7 @@ public:
                    GncOptionUIType ui_type = GncOptionUIType::INTERNAL) :
         OptionClassifier{section, name, key, doc_string},
         m_ui_type(ui_type), m_value{value}, m_default_value{value} { }
-    GncOptionValue(const GncOptionValue& from) :
-        OptionClassifier{from.m_section, from.m_name, from.m_sort_tag,
-                         from.m_doc_string},
-        m_ui_type(from.get_ui_type()), m_value{from.get_value()},
-        m_default_value{from.get_default_value()}{}
+    GncOptionValue(const GncOptionValue&) = default;
     GncOptionValue(GncOptionValue&&) = default;
     GncOptionValue& operator=(const GncOptionValue&) = default;
     GncOptionValue& operator=(GncOptionValue&&) = default;
