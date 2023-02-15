@@ -33,6 +33,7 @@
 #include <algorithm>
 #include <exception>
 #include <iostream>
+#include <map>
 #include <memory>
 #include <numeric>
 #include <string>
