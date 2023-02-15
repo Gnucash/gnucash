@@ -892,7 +892,7 @@ GncTxImport::set_column_type (uint32_t position, GncTransPropType type, bool for
         /* Report errors if there are any */
         auto all_errors = split_props->get_pre_trans()->errors();
         all_errors.merge (split_props->errors());
-        std::get<PL_ERROR>(*parsed_lines_it) = all_errors;
+        std::get<PL_ERROR>(*parsed_lines_it) = std::move(all_errors);
     }
 }
 
