@@ -34,7 +34,7 @@
 
 #include <string>
 #include <vector>
-#include <boost/optional.hpp>
+#include <optional>
 #include <gnc-datetime.hpp>
 #include "gnc-tokenizer.hpp"
 

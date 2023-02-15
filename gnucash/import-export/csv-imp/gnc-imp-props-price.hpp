@@ -36,7 +36,7 @@
 #include <string>
 #include <map>
 #include <memory>
-#include <boost/optional.hpp>
+#include <optional>
 #include <gnc-datetime.hpp>
 #include <gnc-numeric.hpp>
 
@@ -94,22 +94,22 @@ public:
     Result create_price (QofBook* book, GNCPriceDB *pdb, bool over);
 
     gnc_commodity* get_from_commodity () { if (m_from_commodity) return *m_from_commodity; else return nullptr; }
-    void set_from_commodity (gnc_commodity* comm) { if (comm) m_from_commodity = comm; else m_from_commodity = boost::none; }
+    void set_from_commodity (gnc_commodity* comm) { if (comm) m_from_commodity = comm; else m_from_commodity.reset(); }
 
     gnc_commodity* get_to_currency () { if (m_to_currency) return *m_to_currency; else return nullptr; }
-    void set_to_currency (gnc_commodity* curr) { if (curr) m_to_currency = curr; else m_to_currency = boost::none; }
+    void set_to_currency (gnc_commodity* curr) { if (curr) m_to_currency = curr; else m_to_currency.reset(); }
 
     std::string errors();
 
 private:
     int m_date_format;
     int m_currency_format;
-    boost::optional<GncDate> m_date;
-    boost::optional<GncNumeric> m_amount;
-    boost::optional<gnc_commodity*> m_from_commodity;
-    boost::optional<std::string> m_from_namespace;
-    boost::optional<std::string> m_from_symbol;
-    boost::optional<gnc_commodity*> m_to_currency;
+    std::optional<GncDate> m_date;
+    std::optional<GncNumeric> m_amount;
+    std::optional<gnc_commodity*> m_from_commodity;
+    std::optional<std::string> m_from_namespace;
+    std::optional<std::string> m_from_symbol;
+    std::optional<gnc_commodity*> m_to_currency;
     bool created = false;
 
     std::map<GncPricePropType, std::string> m_errors;

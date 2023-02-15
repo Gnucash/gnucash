@@ -36,6 +36,7 @@
 #include <map>
 #include <memory>
 #include <numeric>
+#include <optional>
 #include <string>
 #include <tuple>
 #include <utility>
@@ -264,8 +265,8 @@ void GncTxImport::encoding (const std::string& encoding)
 
 std::string GncTxImport::encoding () { return m_settings.m_encoding; }
 
-void GncTxImport::update_skipped_lines(boost::optional<uint32_t> start, boost::optional<uint32_t> end,
-        boost::optional<bool> alt, boost::optional<bool> errors)
+void GncTxImport::update_skipped_lines(std::optional<uint32_t> start, std::optional<uint32_t> end,
+        std::optional<bool> alt, std::optional<bool> errors)
 {
     if (start)
         m_settings.m_skip_start_lines = *start;
@@ -562,7 +563,7 @@ std::string GncTxImport::verify (bool with_acct_errors)
 
     verify_column_selections (error_msg);
 
-    update_skipped_lines (boost::none, boost::none, boost::none, boost::none);
+    update_skipped_lines (std::nullopt, std::nullopt, std::nullopt, std::nullopt);
 
     auto have_line_errors = false;
     for (auto line : m_parsed_lines)

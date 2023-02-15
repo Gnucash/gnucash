@@ -233,13 +233,13 @@ void GncPreTrans::set (GncTransPropType prop_type, const std::string& value)
         switch (prop_type)
         {
             case GncTransPropType::UNIQUE_ID:
-                m_differ = boost::none;
+                m_differ.reset();
                 if (!value.empty())
                     m_differ = value;
                 break;
 
             case GncTransPropType::DATE:
-                m_date = boost::none;
+                m_date.reset();
                 if (!value.empty())
                     m_date = GncDate(value, GncDate::c_formats[m_date_format].m_fmt); // Throws if parsing fails
                 else if (!m_multi_split)
@@ -249,13 +249,13 @@ void GncPreTrans::set (GncTransPropType prop_type, const std::string& value)
                 break;
 
             case GncTransPropType::NUM:
-                m_num = boost::none;
+                m_num.reset();
                 if (!value.empty())
                     m_num = value;
                 break;
 
             case GncTransPropType::DESCRIPTION:
-                m_desc = boost::none;
+                m_desc.reset();
                 if (!value.empty())
                     m_desc = value;
                 else if (!m_multi_split)
@@ -265,7 +265,7 @@ void GncPreTrans::set (GncTransPropType prop_type, const std::string& value)
                 break;
 
             case GncTransPropType::NOTES:
-                m_notes = boost::none;
+                m_notes.reset();
                 if (!value.empty())
                     m_notes = value;
                 break;
@@ -276,7 +276,7 @@ void GncPreTrans::set (GncTransPropType prop_type, const std::string& value)
                 break;
 
             case GncTransPropType::VOID_REASON:
-                m_void_reason = boost::none;
+                m_void_reason.reset();
                 if (!value.empty())
                     m_void_reason = value;
                 break;
@@ -433,19 +433,19 @@ void GncPreSplit::set (GncTransPropType prop_type, const std::string& value)
         switch (prop_type)
         {
             case GncTransPropType::ACTION:
-                m_action = boost::none;
+                m_action.reset();
                 if (!value.empty())
                     m_action = value;
                 break;
 
             case GncTransPropType::TACTION:
-                m_taction = boost::none;
+                m_taction.reset();
                 if (!value.empty())
                     m_taction = value;
                 break;
 
             case GncTransPropType::ACCOUNT:
-                m_account = boost::none;
+                m_account.reset();
                 if (value.empty())
                     throw std::invalid_argument (_("Account value can't be empty."));
                 if ((acct = gnc_csv_account_map_search (value.c_str())) ||
@@ -456,7 +456,7 @@ void GncPreSplit::set (GncTransPropType prop_type, const std::string& value)
                 break;
 
             case GncTransPropType::TACCOUNT:
-                m_taccount = boost::none;
+                m_taccount.reset();
                 if (value.empty())
                     throw std::invalid_argument (_("Transfer account value can't be empty."));
 
@@ -468,44 +468,44 @@ void GncPreSplit::set (GncTransPropType prop_type, const std::string& value)
                 break;
 
             case GncTransPropType::MEMO:
-                m_memo = boost::none;
+                m_memo.reset();
                 if (!value.empty())
                     m_memo = value;
                 break;
 
             case GncTransPropType::TMEMO:
-                m_tmemo = boost::none;
+                m_tmemo.reset();
                 if (!value.empty())
                     m_tmemo = value;
                 break;
 
             case GncTransPropType::AMOUNT:
-                m_amount = boost::none;
+                m_amount.reset();
                 m_amount = parse_monetary (value, m_currency_format); // Will throw if parsing fails
                 break;
 
             case GncTransPropType::AMOUNT_NEG:
-                m_amount_neg = boost::none;
+                m_amount_neg.reset();
                 m_amount_neg = parse_monetary (value, m_currency_format); // Will throw if parsing fails
                 break;
 
             case GncTransPropType::VALUE:
-                m_value = boost::none;
+                m_value.reset();
                 m_value = parse_monetary (value, m_currency_format); // Will throw if parsing fails
                 break;
 
             case GncTransPropType::VALUE_NEG:
-                m_value_neg = boost::none;
+                m_value_neg.reset();
                 m_value_neg = parse_monetary (value, m_currency_format); // Will throw if parsing fails
                 break;
 
             case GncTransPropType::TAMOUNT:
-                m_tamount = boost::none;
+                m_tamount.reset();
                 m_tamount = parse_monetary (value, m_currency_format); // Will throw if parsing fails
                 break;
 
             case GncTransPropType::TAMOUNT_NEG:
-                m_tamount_neg = boost::none;
+                m_tamount_neg.reset();
                 m_tamount_neg = parse_monetary (value, m_currency_format); // Will throw if parsing fails
                 break;
 
@@ -513,29 +513,29 @@ void GncPreSplit::set (GncTransPropType prop_type, const std::string& value)
                 /* Note while a price is not stricly a currency, it will likely use
                  * the same decimal point as currencies in the csv file, so parse
                  * using the same parser */
-                m_price = boost::none;
+                m_price.reset();
                 m_price = parse_monetary (value, m_currency_format); // Will throw if parsing fails
                 break;
 
             case GncTransPropType::REC_STATE:
-                m_rec_state = boost::none;
+                m_rec_state.reset();
                 m_rec_state = parse_reconciled (value); // Throws if parsing fails
                 break;
 
             case GncTransPropType::TREC_STATE:
-                m_trec_state = boost::none;
+                m_trec_state.reset();
                 m_trec_state = parse_reconciled (value); // Throws if parsing fails
                 break;
 
             case GncTransPropType::REC_DATE:
-                m_rec_date = boost::none;
+                m_rec_date.reset();
                 if (!value.empty())
                     m_rec_date = GncDate (value,
                                           GncDate::c_formats[m_date_format].m_fmt); // Throws if parsing fails
                 break;
 
             case GncTransPropType::TREC_DATE:
-                m_trec_date = boost::none;
+                m_trec_date.reset();
                 if (!value.empty())
                     m_trec_date = GncDate (value,
                                            GncDate::c_formats[m_date_format].m_fmt); // Throws if parsing fails
@@ -681,10 +681,10 @@ StrVec GncPreSplit::verify_essentials()
  */
 static void trans_add_split (Transaction* trans, Account* account,
                             GncNumeric amount, GncNumeric value,
-                            const boost::optional<std::string>& action,
-                            const boost::optional<std::string>& memo,
-                            const boost::optional<char>& rec_state,
-                            const boost::optional<GncDate>& rec_date)
+                            const std::optional<std::string>& action,
+                            const std::optional<std::string>& memo,
+                            const std::optional<char>& rec_state,
+                            const std::optional<GncDate>& rec_date)
 {
     QofBook* book = xaccTransGetBook (trans);
     auto split = xaccMallocSplit (book);
@@ -740,7 +740,7 @@ void GncPreSplit::create_split (std::shared_ptr<DraftTransaction> draft_trans)
     if (m_amount_neg)
         amount -= *m_amount_neg;
 
-    boost::optional<GncNumeric> tamount;
+    std::optional<GncNumeric> tamount;
     if (m_tamount || m_tamount_neg)
     {
         tamount = GncNumeric();
@@ -876,7 +876,7 @@ void GncPreSplit::set_account (Account* acct)
     if (acct)
         m_account = acct;
     else
-        m_account = boost::none;
+        m_account.reset();
 
     UpdateCrossSplitCounters();
 }

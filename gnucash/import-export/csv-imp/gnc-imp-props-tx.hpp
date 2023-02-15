@@ -38,7 +38,7 @@
 #include <string>
 #include <map>
 #include <memory>
-#include <boost/optional.hpp>
+#include <optional>
 #include <gnc-datetime.hpp>
 #include <gnc-numeric.hpp>
 
@@ -138,15 +138,15 @@ struct DraftTransaction
     ~DraftTransaction () { if (trans) { xaccTransDestroy (trans); trans = nullptr; } }
     Transaction* trans;
 
-    boost::optional<GncNumeric> m_price;
-    boost::optional<std::string> m_taction;
-    boost::optional<std::string> m_tmemo;
-    boost::optional<GncNumeric> m_tamount;
-    boost::optional<Account*> m_taccount;
-    boost::optional<char> m_trec_state;
-    boost::optional<GncDate> m_trec_date;
+    std::optional<GncNumeric> m_price;
+    std::optional<std::string> m_taction;
+    std::optional<std::string> m_tmemo;
+    std::optional<GncNumeric> m_tamount;
+    std::optional<Account*> m_taccount;
+    std::optional<char> m_trec_state;
+    std::optional<GncDate> m_trec_date;
 
-    boost::optional<std::string> void_reason;
+    std::optional<std::string> void_reason;
 };
 
 class GncPreTrans
@@ -177,7 +177,7 @@ public:
      *  @returns true if this object is considered to be part of the parent, false otherwise.
      */
     bool is_part_of (std::shared_ptr<GncPreTrans> parent);
-    boost::optional<std::string> get_void_reason() { return m_void_reason; }
+    std::optional<std::string> get_void_reason() { return m_void_reason; }
 
     ErrMap errors();
     void reset_cross_split_counters();
@@ -190,13 +190,13 @@ public:
 private:
     int m_date_format;
     bool m_multi_split;
-    boost::optional<std::string> m_differ;
-    boost::optional<GncDate> m_date;
-    boost::optional<std::string> m_num;
-    boost::optional<std::string> m_desc;
-    boost::optional<std::string> m_notes;
+    std::optional<std::string> m_differ;
+    std::optional<GncDate> m_date;
+    std::optional<std::string> m_num;
+    std::optional<std::string> m_desc;
+    std::optional<std::string> m_notes;
     gnc_commodity *m_currency;
-    boost::optional<std::string> m_void_reason;
+    std::optional<std::string> m_void_reason;
     bool created = false;
 
 
@@ -241,23 +241,23 @@ private:
     std::shared_ptr<GncPreTrans> m_pre_trans;
     int m_date_format;
     int m_currency_format;
-    boost::optional<std::string> m_action;
-    boost::optional<Account*> m_account;
-    boost::optional<GncNumeric> m_amount;
-    boost::optional<GncNumeric> m_amount_neg;
-    boost::optional<GncNumeric> m_value;
-    boost::optional<GncNumeric> m_value_neg;
-    boost::optional<GncNumeric> m_price;
-    boost::optional<std::string> m_memo;
-    boost::optional<char> m_rec_state;
-    boost::optional<GncDate> m_rec_date;
-    boost::optional<std::string> m_taction;
-    boost::optional<Account*> m_taccount;
-    boost::optional<GncNumeric> m_tamount;
-    boost::optional<GncNumeric> m_tamount_neg;
-    boost::optional<std::string> m_tmemo;
-    boost::optional<char> m_trec_state;
-    boost::optional<GncDate> m_trec_date;
+    std::optional<std::string> m_action;
+    std::optional<Account*> m_account;
+    std::optional<GncNumeric> m_amount;
+    std::optional<GncNumeric> m_amount_neg;
+    std::optional<GncNumeric> m_value;
+    std::optional<GncNumeric> m_value_neg;
+    std::optional<GncNumeric> m_price;
+    std::optional<std::string> m_memo;
+    std::optional<char> m_rec_state;
+    std::optional<GncDate> m_rec_date;
+    std::optional<std::string> m_taction;
+    std::optional<Account*> m_taccount;
+    std::optional<GncNumeric> m_tamount;
+    std::optional<GncNumeric> m_tamount_neg;
+    std::optional<std::string> m_tmemo;
+    std::optional<char> m_trec_state;
+    std::optional<GncDate> m_trec_date;
     bool created = false;
 
     ErrMap m_errors;

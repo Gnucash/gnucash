@@ -38,11 +38,11 @@
 #include <set>
 #include <map>
 #include <memory>
+#include <optional>
 
 #include "gnc-tokenizer.hpp"
 #include "gnc-imp-props-tx.hpp"
 #include "gnc-imp-settings-csv-tx.hpp"
-#include <boost/optional.hpp>
 
 
 /* A set of currency formats that the user sees. */
@@ -121,8 +121,8 @@ public:
     void encoding (const std::string& encoding);
     std::string encoding ();
 
-    void update_skipped_lines (boost::optional<uint32_t> start, boost::optional<uint32_t> end,
-                               boost::optional<bool> alt, boost::optional<bool> errors);
+    void update_skipped_lines (std::optional<uint32_t> start, std::optional<uint32_t> end,
+                               std::optional<bool> alt, std::optional<bool> errors);
     uint32_t skip_start_lines ();
     uint32_t skip_end_lines ();
     bool skip_alt_lines ();

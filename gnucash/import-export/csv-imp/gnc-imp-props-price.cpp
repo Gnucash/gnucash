@@ -34,6 +34,7 @@
 
 #include <exception>
 #include <map>
+#include <optional>
 #include <string>
 #include <boost/locale.hpp>
 #include <boost/regex.hpp>
@@ -160,17 +161,17 @@ void GncImportPrice::set (GncPricePropType prop_type, const std::string& value, 
         switch (prop_type)
         {
             case GncPricePropType::DATE:
-                m_date = boost::none;
+                m_date.reset();
                 m_date = GncDate(value, GncDate::c_formats[m_date_format].m_fmt); // Throws if parsing fails
                 break;
 
             case GncPricePropType::AMOUNT:
-                m_amount = boost::none;
+                m_amount.reset();
                 m_amount = parse_amount_price (value, m_currency_format); // Throws if parsing fails
                 break;
 
             case GncPricePropType::FROM_SYMBOL:
-                m_from_symbol = boost::none;
+                m_from_symbol.reset();
 
                 if (value.empty())
                     throw std::invalid_argument (_("'From Symbol' can not be empty."));
@@ -190,7 +191,7 @@ void GncImportPrice::set (GncPricePropType prop_type, const std::string& value, 
                 break;
 
             case GncPricePropType::FROM_NAMESPACE:
-                m_from_namespace = boost::none;
+                m_from_namespace.reset();
 
                 if (value.empty())
                     throw std::invalid_argument (_("'From Namespace' can not be empty."));
@@ -213,7 +214,7 @@ void GncImportPrice::set (GncPricePropType prop_type, const std::string& value, 
                 break;
 
             case GncPricePropType::TO_CURRENCY:
-                m_to_currency = boost::none;
+                m_to_currency.reset();
                 comm = parse_commodity_price_comm (value, GNC_COMMODITY_NS_CURRENCY); // Throws if parsing fails
                 if (comm)
                 {
@@ -274,13 +275,13 @@ void GncImportPrice::reset (GncPricePropType prop_type)
 std::string GncImportPrice::verify_essentials (void)
 {
     /* Make sure this price has the minimum required set of properties defined */
-    if (m_date == boost::none)
+    if (!m_date)
         return _("No date column.");
-    else if (m_amount == boost::none)
+    else if (!m_amount)
         return _("No amount column.");
-    else if (m_to_currency == boost::none)
+    else if (!m_to_currency)
         return _("No 'Currency to'.");
-    else if (m_from_commodity == boost::none)
+    else if (!m_from_commodity)
         return _("No 'Commodity from'.");
     else if (gnc_commodity_equal (*m_from_commodity, *m_to_currency))
         return _("'Commodity From' can not be the same as 'Currency To'.");
