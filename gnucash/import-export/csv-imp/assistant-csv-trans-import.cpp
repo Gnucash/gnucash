@@ -1425,7 +1425,7 @@ CsvImpTransAssist::preview_row_fill_state_cells (GtkListStore *store, GtkTreeIte
         fcolor = "black";
         bcolor = "pink";
         err_msg = std::string(_("This line has the following parse issues:"));
-        auto add_non_acct_err_bullet = [](std::string& a, ErrPair& b)->std::string
+        auto add_non_acct_err_bullet = [](std::string& a, ErrMap::value_type& b)->std::string
                                 {
                                     if ((b.first == GncTransPropType::ACCOUNT) ||
                                         (b.first == GncTransPropType::TACCOUNT))
@@ -2081,7 +2081,7 @@ CsvImpTransAssist::assist_match_page_prepare ()
          */
         auto err_msg = std::string(err.what());
         auto err_msgs = err.errors();
-        auto add_bullet_item = [](std::string& a, ErrPair& b)->std::string { return std::move(a) + "\n• " + b.second; };
+        auto add_bullet_item = [](std::string& a, ErrMap::value_type& b)->std::string { return std::move(a) + "\n• " + b.second; };
         err_msg = std::accumulate (err_msgs.begin(), err_msgs.end(), std::move (err_msg), add_bullet_item);
 
         gnc_error_dialog (GTK_WINDOW (csv_imp_asst),

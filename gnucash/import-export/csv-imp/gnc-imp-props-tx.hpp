@@ -78,8 +78,8 @@ enum class GncTransPropType {
 };
 
 using StrVec = std::vector<std::string>;
-using ErrMap = std::map<const GncTransPropType, std::string>;
-using ErrPair = std::pair<const GncTransPropType, std::string>;
+using ErrMap = std::map<GncTransPropType, std::string>;
+using ErrPair = std::pair<GncTransPropType, std::string>;
 
 /** Maps all column types to a string representation.
  *  The actual definition is in gnc-csv-imp-trans.cpp.
