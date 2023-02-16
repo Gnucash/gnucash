@@ -2152,16 +2152,20 @@
 <obsolete old-path="org.gnucash.window.pages.account-tree.summary"
           old-key="end-period"/>
 
+</release>
+
+
+<release version="5000">
+
 <deprecate old-path="org.gnucash.GnuCash.dialogs.business.invoice"
            old-key="invoice-printreport" />
 
 </release>
 
-<!--
 <release version="6000">
 
 <obsolete old-path="org.gnucash.GnuCash.dialogs.business.invoice"
           old-key="invoice-printreport"/>
 
 </release>
--->
+
