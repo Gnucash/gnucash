@@ -688,7 +688,7 @@ void gnc_gsettings_load_backend (void)
 
 static GVariant *
 gnc_gsettings_get_user_value (const gchar *schema,
-                         const gchar *key)
+                              const gchar *key)
 {
     GSettings *settings_ptr = gnc_gsettings_get_settings_ptr (schema);
     g_return_val_if_fail (G_IS_SETTINGS (settings_ptr), NULL);
