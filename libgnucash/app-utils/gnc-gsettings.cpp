@@ -844,7 +844,7 @@ void gnc_gsettings_version_upgrade (void)
      * this version of GnuCash will be executed.
      *
      * Starting with GnuCash 4.7 the code expects all preferences to be stored
-     * under prefix org.gnucash instead of org.gnucash.GnuCash, including our
+     * under prefix org.gnucash.GnuCash instead of org.gnucash, including our
      * GNC_PREF_VERSION setting.
      * As the logic to determine whether or not settings conversions are needed
      * depends on this preference, we have to test for its value in two
