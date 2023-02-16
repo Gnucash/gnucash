@@ -34,7 +34,6 @@ static QofBook * exported_book {nullptr};
 static bool safe_sync_called {false};
 static bool sync_called {false};
 static bool load_error {true};
-static bool hook_called {false};
 static bool data_loaded {false};
 
 class QofSessionMockBackend : public QofBackend
@@ -51,12 +50,6 @@ public:
     void safe_sync(QofBook*);
     void export_coa(QofBook*);
 };
-
-static void
-example_hook (QofSession & session)
-{
-    hook_called = true;
-}
 
 void QofSessionMockBackend::load (QofBook *book, QofBackendLoadType)
 {

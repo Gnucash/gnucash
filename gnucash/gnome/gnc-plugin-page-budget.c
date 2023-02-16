@@ -1243,7 +1243,6 @@ gnc_plugin_page_budget_cmd_budget_note (GSimpleAction *simple,
 {
     GncPluginPageBudget *page = user_data;
     GncPluginPageBudgetPrivate *priv;
-    GtkTreeSelection *sel;
     GtkWidget *dialog, *note;
     gint result;
     GtkBuilder *builder;
@@ -1255,8 +1254,6 @@ gnc_plugin_page_budget_cmd_budget_note (GSimpleAction *simple,
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_BUDGET(page));
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
-    sel  = gnc_budget_view_get_selection(priv->budget_view);
-
     gtk_tree_view_get_cursor(
         GTK_TREE_VIEW(gnc_budget_view_get_account_tree_view(priv->budget_view)),
         &path, &col);

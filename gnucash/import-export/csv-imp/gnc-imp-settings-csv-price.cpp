@@ -62,28 +62,6 @@ static std::shared_ptr<CsvPriceImpSettings> create_int_no_preset(void)
     return preset;
 }
 
-static std::shared_ptr<CsvPriceImpSettings> create_int_gnc_exp_preset(void)
-{
-    auto preset = std::make_shared<CsvPriceImpSettings>();
-    preset->m_name = get_gnc_exp();
-    preset->m_skip_start_lines = 1;
-
-    /* FIXME date and currency format should still be aligned with export format!
-     * That's currently hard to do, because the export uses whatever the user
-     * had set as global preference.
-    preset->date_active = 0;
-    preset->currency_active = 0;
-    */
-    preset->m_column_types_price = {
-            GncPricePropType::DATE,
-            GncPricePropType::AMOUNT,
-            GncPricePropType::FROM_SYMBOL,
-            GncPricePropType::FROM_NAMESPACE,
-            GncPricePropType::TO_CURRENCY
-    };
-    return preset;
-}
-
 /**************************************************
  * find
  *

@@ -432,15 +432,6 @@ test_instance_display_name( Fixture *fixture, gconstpointer pData )
 }
 
 static void
-mock_backend_begin( QofBackend *be, QofInstance *inst )
-{
-    g_assert( be );
-    g_assert( inst );
-    g_assert_cmpstr( inst->e_type, == , "test type" );
-    is_called = TRUE;
-}
-
-static void
 test_instance_begin_edit( Fixture *fixture, gconstpointer pData )
 {
     QofBook *book;

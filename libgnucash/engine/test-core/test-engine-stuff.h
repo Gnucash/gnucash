@@ -62,7 +62,6 @@ KvpFrame* get_random_kvp_frame(void);
 gnc_numeric get_random_gnc_numeric(int64_t);
 GncGUID* get_random_guid(void);
 
-//void kvp_exclude_type (KvpValueType kvp_type);
 void set_max_kvp_depth (gint max_kvp_depth);
 void set_max_kvp_frame_elements (gint max_kvp_frame_elements);
 void set_max_account_tree_depth (gint max_tree_depth);

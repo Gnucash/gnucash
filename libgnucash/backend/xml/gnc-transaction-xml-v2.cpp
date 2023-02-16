@@ -433,16 +433,6 @@ set_tran_time64 (xmlNodePtr node, Transaction * trn,
     return TRUE;
 }
 
-static inline gboolean
-set_tran_date (xmlNodePtr node, Transaction* trn,
-               void (*func) (Transaction* trn, const time64 tm))
-{
-    time64 time = dom_tree_to_time64 (node);
-    if (!dom_tree_valid_time64 (time, node->name)) time = 0;
-    func (trn, time);
-    return TRUE;
-}
-
 static gboolean
 trn_id_handler (xmlNodePtr node, gpointer trans_pdata)
 {

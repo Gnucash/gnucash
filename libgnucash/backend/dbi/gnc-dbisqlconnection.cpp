@@ -43,14 +43,13 @@ const std::string lock_table = "gnclock";
 class GncDbiSqlStatement : public GncSqlStatement
 {
 public:
-    GncDbiSqlStatement(const GncSqlConnection* conn, const std::string& sql) :
-        m_conn{conn}, m_sql {sql} {}
+    GncDbiSqlStatement(const std::string& sql) :
+        m_sql {sql} {}
     ~GncDbiSqlStatement() {}
     const char* to_sql() const override;
     void add_where_cond(QofIdTypeConst, const PairVec&) override;
 
 private:
-    const GncSqlConnection* m_conn = nullptr;
     std::string m_sql;
 };
 
@@ -321,7 +320,7 @@ GncSqlStatementPtr
 GncDbiSqlConnection::create_statement_from_sql (const std::string& sql)
     const noexcept
 {
-    return std::unique_ptr<GncSqlStatement>{new GncDbiSqlStatement (this, sql)};
+    return std::unique_ptr<GncSqlStatement>{new GncDbiSqlStatement (sql)};
 }
 
 bool

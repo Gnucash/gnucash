@@ -66,26 +66,27 @@ static GNC_AB_JOB *gnc_ab_trans_dialog_get_available_empty_job(GNC_AB_ACCOUNT_SP
 static void gnc_ab_trans_dialog_check_iban(const GncABTransDialog *td,
         const AB_TRANSACTION *trans);
 
-/* Callbacks - connected with GtkBuilder */
-static void gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data);
-static void gnc_ab_trans_dialog_moveup_templ_cb(GtkButton *button, gpointer user_data);
-static void gnc_ab_trans_dialog_movedown_templ_cb(GtkButton *button, gpointer user_data);
-static void gnc_ab_trans_dialog_sort_templ_cb(GtkButton *button, gpointer user_data);
-static void gnc_ab_trans_dialog_del_templ_cb(GtkButton *button, gpointer user_data);
-static void gnc_ab_trans_dialog_ibanentry_filter_cb (GtkEditable *editable,
+/* Callbacks - connected with GtkBuilder - so should not be static */
+void gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data);
+void gnc_ab_trans_dialog_moveup_templ_cb(GtkButton *button, gpointer user_data);
+void gnc_ab_trans_dialog_movedown_templ_cb(GtkButton *button, gpointer user_data);
+void gnc_ab_trans_dialog_sort_templ_cb(GtkButton *button, gpointer user_data);
+void gnc_ab_trans_dialog_del_templ_cb(GtkButton *button, gpointer user_data);
+void gnc_ab_trans_dialog_ibanentry_filter_cb (GtkEditable *editable,
         const gchar *text,
         gint         length,
         gint        *position,
         gpointer     user_data);
-static void gnc_ab_trans_dialog_bicentry_filter_cb (GtkEditable *editable,
+void gnc_ab_trans_dialog_bicentry_filter_cb (GtkEditable *editable,
         const gchar *text,
         gint         length,
         gint        *position,
         gpointer     user_data);
-static void gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkTreeView *view,
+void gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkTreeView *view,
         GtkTreePath *path,
         GtkTreeViewColumn *column,
         gpointer user_data);
+
 static void gnc_ab_trans_dialog_verify_values(GncABTransDialog *td);
 
 

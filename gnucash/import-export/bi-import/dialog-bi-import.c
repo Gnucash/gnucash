@@ -621,8 +621,6 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     GtkWidget *dialog;
     time64 today;
     InvoiceWindow *iw;
-    gint64 denom = 0;
-    gnc_commodity *currency;
     GString *running_id;
 
     // these arguments are needed
@@ -771,8 +769,6 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         // Add entry to invoice/bill
         entry = gncEntryCreate (book);
         gncEntryBeginEdit(entry);
-        currency = gncInvoiceGetCurrency(invoice);
-        if (currency) denom = gnc_commodity_get_fraction(currency);
         qof_scan_date (date, &day, &month, &year);
         {
             GDate *date = g_date_new_dmy(day, month, year);

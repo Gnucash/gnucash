@@ -52,8 +52,6 @@ class GncOptionsDialog
     GtkButton  * m_apply_button;
     GtkButton  * m_ok_button;
 
-    bool toplevel;
-
     GncOptionsDialogCallback m_apply_cb;
     gpointer             m_apply_cb_data;
 

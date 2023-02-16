@@ -1413,9 +1413,7 @@ void gnc_tree_view_expand_columns (GncTreeView *view,
                                    gchar *first_column_name,
                                    ...)
 {
-    GncTreeViewPrivate *priv;
     GtkTreeViewColumn *column;
-    gboolean hide_spacer;
     GList *columns, *tmp;
     gchar *name, *pref_name;
     va_list args;
@@ -1423,9 +1421,7 @@ void gnc_tree_view_expand_columns (GncTreeView *view,
     g_return_if_fail (GNC_IS_TREE_VIEW(view));
     ENTER(" ");
     va_start (args, first_column_name);
-    priv = GNC_TREE_VIEW_GET_PRIVATE(view);
     name = first_column_name;
-    hide_spacer = FALSE;
 
     /* First disable the expand property on all (non-infrastructure) columns. */
     columns = gtk_tree_view_get_columns (GTK_TREE_VIEW(view));
@@ -1445,7 +1441,6 @@ void gnc_tree_view_expand_columns (GncTreeView *view,
         if (column != NULL)
         {
             gtk_tree_view_column_set_expand (column, TRUE);
-            hide_spacer = TRUE;
         }
         name = va_arg (args, gchar*);
     }

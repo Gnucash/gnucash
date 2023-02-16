@@ -1425,10 +1425,10 @@ xaccFreeAccount (Account *acc)
     priv->last_num = nullptr;
     priv->tax_us_code = nullptr;
     priv->tax_us_pns = nullptr;
-    priv->color == nullptr;
-    priv->sort_order == nullptr;
-    priv->notes == nullptr;
-    priv->filter == nullptr;
+    priv->color = nullptr;
+    priv->sort_order = nullptr;
+    priv->notes = nullptr;
+    priv->filter = nullptr;
 
     priv->parent = nullptr;
     priv->children = nullptr;

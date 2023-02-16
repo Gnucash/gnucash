@@ -576,7 +576,7 @@ std::string GncTxImport::verify (bool with_acct_errors)
             have_line_errors = true;
             break;
         }
-        auto non_acct_error = [with_acct_errors](ErrPair curr_err)
+        auto non_acct_error = [](ErrPair curr_err)
         {
             return !((curr_err.first == GncTransPropType::ACCOUNT) ||
                      (curr_err.first == GncTransPropType::TACCOUNT));

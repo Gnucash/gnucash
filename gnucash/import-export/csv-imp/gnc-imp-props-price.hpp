@@ -110,7 +110,6 @@ private:
     std::optional<std::string> m_from_namespace;
     std::optional<std::string> m_from_symbol;
     std::optional<gnc_commodity*> m_to_currency;
-    bool created = false;
 
     std::map<GncPricePropType, std::string> m_errors;
 };

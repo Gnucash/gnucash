@@ -265,55 +265,6 @@ GncOptionDB::make_internal(const char* section, const char* name)
         db_opt->make_internal();
 }
 
-static inline bool constexpr
-is_eol(char c)
-{
-    return c == '\n';
-}
-
-static inline bool constexpr
-is_whitespace(char c)
-{
-    return c == ' ' || c == '\n' || c == '\t';
-}
-
-static inline bool constexpr
-is_begin_paren(char c)
-{
-    return c == '(';
-}
-
-static inline bool constexpr
-is_end_paren(char c)
-{
-    return c == ')';
-}
-
-static inline bool constexpr
-is_double_quote(char c)
-{
-    return c == '"';
-}
-
-static inline bool constexpr
-is_single_quote(char c)
-{
-    return c == '\'';
-}
-
-static inline bool constexpr
-is_semicolon(char c)
-{
-    return c == ';';
-}
-
-static inline bool constexpr
-is_delim(char c)
-{
-    return is_begin_paren(c) || is_end_paren(c) || is_whitespace(c) ||
-        is_single_quote(c) || is_double_quote(c) || is_semicolon(c);
-}
-
 std::ostream&
 GncOptionDB::save_option_key_value(std::ostream& oss,
                                    const std::string& section,

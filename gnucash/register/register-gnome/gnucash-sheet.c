@@ -146,19 +146,6 @@ gnucash_sheet_set_position (GnucashSheet* sheet, int pos)
 }
 
 static inline void
-gnucash_sheet_get_selection (GnucashSheet *sheet, int *start, int *end)
-{
-    *start = sheet->pos;
-    *end = sheet->bound;
-}
-
-static inline void
-gnucash_sheet_clear_selection (GnucashSheet *sheet)
-{
-    gnucash_sheet_set_selection (sheet, sheet->pos, sheet->pos);
-}
-
-static inline void
 gnucash_sheet_set_entry_value (GnucashSheet *sheet, const char* value)
 {
     g_signal_handler_block (G_OBJECT(sheet->entry),
@@ -362,7 +349,6 @@ gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
     Table *table = sheet->table;
     VirtualLocation virt_loc;
     SheetBlockStyle *style;
-    GtkEditable *editable;
     int cursor_pos, start_sel, end_sel;
     gboolean allow_edits;
 
@@ -383,8 +369,6 @@ gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
     style = gnucash_sheet_get_style (sheet, virt_loc.vcell_loc);
     if (strcmp (style->cursor->cursor_name, CURSOR_HEADER) == 0)
         return;
-
-    editable = GTK_EDITABLE(sheet->entry);
 
     cursor_pos = -1;
     start_sel = 0;
@@ -1378,7 +1362,6 @@ gnucash_scroll_event (GtkWidget *widget, GdkEventScroll *event)
     GnucashSheet *sheet;
     GtkAdjustment *vadj;
     gfloat h_value, v_value;
-    int direction;
 
     g_return_val_if_fail (widget != NULL, TRUE);
     g_return_val_if_fail (GNUCASH_IS_SHEET(widget), TRUE);
@@ -1409,7 +1392,7 @@ gnucash_scroll_event (GtkWidget *widget, GdkEventScroll *event)
 #if defined MAC_INTEGRATION
         v_value += event->delta_y;
 #else
-        direction = event->delta_y > 0 ? 1 : event->delta_y < 0 ? -1 : 0;
+        int direction = event->delta_y > 0 ? 1 : event->delta_y < 0 ? -1 : 0;
         v_value += gtk_adjustment_get_step_increment (vadj) * direction;
 #endif
         break;
@@ -1887,14 +1870,12 @@ static gint
 gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 {
     GnucashSheet *sheet;
-    GtkEditable *editable = NULL;
 
     g_return_val_if_fail (widget != NULL, TRUE);
     g_return_val_if_fail (GNUCASH_IS_SHEET(widget), TRUE);
     g_return_val_if_fail (event != NULL, TRUE);
 
     sheet = GNUCASH_SHEET(widget);
-    editable = GTK_EDITABLE(sheet->entry);
     /* bug#60582 comment#27 2
            save shift state to enable <shift minus> and <shift equal>
        bug#618434

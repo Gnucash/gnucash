@@ -1161,7 +1161,7 @@ next_builder( state *s, feature *tuple, ub1 n)
     return FALSE;
   else if (tuple[i].f < s->dim[tuple[i].d]-1) {
     ++tuple[i].f;                                       /* increment feature */
-    for (i; i<n-1; ++i) {            /* reset all less significant positions */
+    for (; i<n-1; ++i) {            /* reset all less significant positions */
       tuple[i+1].d = tuple[i].d+1;
       tuple[i+1].f = 0;
     }
@@ -1169,7 +1169,7 @@ next_builder( state *s, feature *tuple, ub1 n)
   else {
     ++tuple[i].d;      /* increment least significant non-maxed-out position */
     tuple[i].f = (ub2)0;                                /* reset its feature */
-    for (i; i<n-1; ++i) {            /* reset all less significant positions */
+    for (; i<n-1; ++i) {            /* reset all less significant positions */
       tuple[i+1].d = tuple[i].d+1;
       tuple[i+1].f = 0;
     }
@@ -1184,7 +1184,6 @@ build_tuples( state *s, ub2 d, ub2 f)
   feature  offset[MAX_N];                                      /* n-1-tuples */
   feature  tuple[MAX_N];                      /* n-tuples that include (d,f) */
   sb4      i, j, n;
-  ub8      count = 0;
   tu_iter  ctx;
 
   if (s->tc[d][f] > 0 || s->n[d][f] == s->n_final) {
@@ -1242,7 +1241,6 @@ build_tuples( state *s, ub2 d, ub2 f)
       printf("jenny: could not insert tuple\n");
       return;
     }
-    ++count;
 
     /* next tuple */
   make_next_tuple:
@@ -1647,101 +1645,6 @@ cover_tuples( state *s)
   my_free((char *)curr_test);
 }
 
-static void
-prepare_reduce( state *s)
-{
-  feature tuple[MAX_N];
-  ub1     n = s->n_final;
-  ub4     t, d;
-
-  for (t=0; t<s->ntests; ++t) {
-    for (d=0; d<s->ndim; ++d) {
-      s->onec[t][d] = 0;
-    }
-  }
-
-  /* Iterate through all the tuples */
-  start_builder( s, tuple, n);
-
-  for (;;) {
-    sb4 i;
-    ub2 thistest;
-
-    for (i=0; i<n; ++i) {
-      s->tuple_tester->f[tuple[i].d] = tuple[i].f;
-    }
-    if (count_withouts(s->tuple_tester, s->wc2) ||
-        count_withouts(s->tuple_tester, s->wc3))
-      goto make_next_tuple;
-
-    for (i=0; i<s->ntests; ++i) {
-      ub1 j;
-      for (j=0; j<n; ++j)
-        if (s->t[i]->f[tuple[j].d] != tuple[j].f)
-          break;
-      if (j == n)
-        break;                              /* this test contains this tuple */
-    }
-
-    /* no tests cover this tuple */
-    if (i==s->ntests) {
-      printf("error: some tuple not covered at all\n");
-    } else {
-      thistest = i;
-      for (++i; i<s->ntests; ++i) {
-        ub1 j;
-        for (j=0; j<n; ++j)
-          if (s->t[i]->f[tuple[j].d] != tuple[j].f)
-            break;
-        if (j == n)
-          break;                            /* this test contains this tuple */
-      }
-      if (i == s->ntests) {
-        ub1 j;
-        for (j=0; j<n; ++j) {
-          tu_iter ctx;
-          (void)start_tuple(&ctx, &s->one[thistest][tuple[j].d], n,
-                            &s->onec[thistest][tuple[j].d]);
-          (void)insert_tuple(s, &ctx, tuple);
-        }
-      }
-    }
-
-  make_next_tuple:
-    for (i=0; i<n; ++i) {
-      s->tuple_tester->f[tuple[i].d] = (ub2)~0;
-    }
-    if (!next_builder( s, tuple, n))
-      break;
-  }
-}
-
-/* find a test to try to eliminate */
-static int
-which_test( state *s)
-{
-  ub4 t;
-  ub4 mincount = ~0;
-  ub4 mint = 0;                  /* test with the fewest once-covered tuples */
-  for (t=0; t<s->ntests; ++t) {
-    ub4 i, j=0;
-    for (i=0; i<s->ndim; ++i) {
-      j += s->onec[t][i];
-    }
-    if (j <= mincount) {
-      mincount = j;
-      mint = t;
-    }
-  }
-  return mint;
-}
-
-static void
-reduce_tests( state *s)
-{
-  prepare_reduce( s);
-}
-
 /* Confirm that every tuple is covered by either a testcase or a without */
 static int
 confirm( state *s)
@@ -1792,7 +1695,7 @@ confirm( state *s)
       break;                                                         /* done */
     else if (offset[i].f < s->dim[offset[i].d]-1) {
       ++offset[i].f;                                    /* increment feature */
-      for (i; i<n-1; ++i) {          /* reset all less significant positions */
+      for (; i<n-1; ++i) {          /* reset all less significant positions */
         offset[i+1].d = offset[i].d+1;
         offset[i+1].f = 0;
       }
@@ -1800,7 +1703,7 @@ confirm( state *s)
     else {
       ++offset[i].d;   /* increment least significant non-maxed-out position */
       offset[i].f = (ub2)0;                             /* reset its feature */
-      for (i; i<n-1; ++i) {          /* reset all less significant positions */
+      for (; i<n-1; ++i) {          /* reset all less significant positions */
         offset[i+1].d = offset[i].d+1;
         offset[i+1].f = 0;
       }
@@ -1820,7 +1723,6 @@ driver( int argc, char *argv[])
 
   if (parse(argc, argv, &s)) {               /* read the user's instructions */
     cover_tuples(&s);     /* generate testcases until all tuples are covered */
-    /* reduce_tests(&s); */         /* try to reduce the number of testcases */
     if (confirm(&s))       /* doublecheck that all tuples really are covered */
       report_all(&s);                                  /* report the results */
     else

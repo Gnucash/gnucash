@@ -895,7 +895,7 @@ decimal_from_binary (uint64_t d[dec_array_size], uint64_t hi, uint64_t lo)
     d[0] = lo & bin_mask;
     d[1] = (lo >> 32) & bin_mask;
     d[2] = hi & bin_mask;
-    d[3] = (hi >> 32) & bin_mask, 0;
+    d[3] = (hi >> 32) & bin_mask;
 
     d[0] += coeff_3[3] * d[3] + coeff_2[3] * d[2] + coeff_1[3] * d[1];
     uint64_t q {d[0] / dec_div};

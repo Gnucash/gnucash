@@ -40,11 +40,6 @@
 
 G_GNUC_UNUSED static QofLogModule log_module = "test-dbi";
 
-/* Placeholder for some old functions that need to be re-written and enabled */
-static void do_test (G_GNUC_UNUSED gboolean foo, G_GNUC_UNUSED gchar* bar)
-{
-}
-
 void
 do_compare (QofBook* book_1, QofBook* book_2, const gchar* id,
             QofInstanceForeachCB cb, const gchar* msg)

@@ -45,8 +45,6 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static void gnc_plugin_budget_class_init (GncPluginBudgetClass *klass);
 static void gnc_plugin_budget_init (GncPluginBudget *plugin);
 static void gnc_plugin_budget_finalize (GObject *object);
-static void gnc_plugin_budget_add_to_window (GncPlugin *plugin,
-                                             GncMainWindow *window, GQuark type);
 
 /* Command Callbacks */
 static void gnc_plugin_budget_cmd_new_budget (GSimpleAction *simple, GVariant *parameter, gpointer user_data);

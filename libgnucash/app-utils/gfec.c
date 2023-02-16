@@ -36,12 +36,6 @@ gfec_string_from_locale(void *data)
 }
 
 static SCM
-gfec_string_outer_handler(void *data, SCM key, SCM args)
-{
-    return SCM_UNDEFINED;
-}
-
-static SCM
 gfec_string_inner_handler(void *data, SCM key, SCM args)
 {
     char *str = (char*)data;

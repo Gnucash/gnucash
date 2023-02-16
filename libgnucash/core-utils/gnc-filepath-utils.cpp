@@ -500,7 +500,6 @@ get_user_data_dir ()
 static bfs::path
 get_user_data_dir()
 {
-    char *retval = NULL;
     NSFileManager*fm = [NSFileManager defaultManager];
     NSArray* appSupportDir = [fm URLsForDirectory:NSApplicationSupportDirectory
     inDomains:NSUserDomainMask];

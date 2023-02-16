@@ -154,7 +154,7 @@ gnc_default_invoice_report_combo (const char* guid_scm_function)
 
     if (scm_is_list (rpt_guids))
     {
-        for (int i = 0; !scm_is_null (rpt_guids); i++)
+        while (!scm_is_null (rpt_guids))
         {
             gchar *guid_str = scm_to_utf8_string (SCM_CAR(rpt_guids));
             gchar *name = gnc_scm_to_utf8_string (scm_call_2(template_menu_name,

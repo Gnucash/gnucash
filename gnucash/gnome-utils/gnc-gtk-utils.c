@@ -771,7 +771,6 @@ gnc_menubar_model_update_item (GMenuModel *menu_model, const gchar *action_name,
         GVariant *value;
         GVariant *old_target = NULL;
         const gchar *old_action = NULL;
-        const gchar *old_label = NULL;
         const gchar *old_temp = NULL;
         const gchar *old_accel = NULL;
         GMenuItem *item;
@@ -782,9 +781,6 @@ gnc_menubar_model_update_item (GMenuModel *menu_model, const gchar *action_name,
             if (g_str_equal (key, GNC_MENU_ATTRIBUTE_TEMPORARY) &&
                 g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
                 old_temp = g_variant_get_string (value, NULL);
-            else if (g_str_equal (key, G_MENU_ATTRIBUTE_LABEL) &&
-                     g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
-                old_label = g_variant_get_string (value, NULL);
             else if (g_str_equal (key, G_MENU_ATTRIBUTE_ACTION) &&
                      g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
                 old_action = g_variant_get_string (value, NULL);

@@ -401,7 +401,7 @@ static void
 resolve_conflicts (GNCImportMainMatcher *info)
 {
     GtkTreeModel* model = gtk_tree_view_get_model (info->view);
-    GtkTreeIter import_iter, best_import;
+    GtkTreeIter import_iter;
     gint best_match = 0;
 
     /* A greedy conflict resolution. Find all imported trans that vie for the same
@@ -420,7 +420,6 @@ resolve_conflicts (GNCImportMainMatcher *info)
         // The ID of the best current match for this imported trans
         GncGUID id = *get_top_trans_match_id (match_list);
         best_match = get_top_trans_match_score (match_list);
-        best_import = import_iter;
         /* Get a list of all imported transactions that have a conflict with this one.
          * The returned list excludes the best transaction. */
         GList *conflicts = get_conflict_list (model, import_iter, &id, best_match);
@@ -649,33 +648,6 @@ on_matcher_help_clicked (GtkButton *button, gpointer user_data)
     g_free (int_not_required_class);
 
     gtk_widget_show (help_dialog);
-}
-
-static void
-run_account_picker_dialog (GNCImportMainMatcher *info,
-                           GtkTreeModel *model,
-                           GtkTreeIter *iter,
-                           GNCImportTransInfo *trans_info)
-{
-    g_assert (trans_info);
-
-    Account *old_acc = gnc_import_TransInfo_get_destacc (trans_info);
-
-    gboolean ok_pressed;
-    Account *new_acc = gnc_import_select_account (
-             info->main_widget,
-             NULL,
-             true,
-             _("Destination account for the auto-balance split."),
-             xaccTransGetCurrency (gnc_import_TransInfo_get_trans (trans_info)),
-             ACCT_TYPE_NONE,
-             old_acc,
-             &ok_pressed);
-    if (ok_pressed)
-    {
-        gnc_import_TransInfo_set_destacc (trans_info, new_acc, true);
-        defer_bal_computation (info, new_acc);
-    }
 }
 
 static void
@@ -1048,7 +1020,6 @@ gnc_gen_trans_set_price_to_selection_cb (GtkMenuItem *menuitem,
 
     GtkTreeView *treeview = GTK_TREE_VIEW(info->view);
     GtkTreeModel *model = gtk_tree_view_get_model (treeview);
-    GtkTreeStore *store  = GTK_TREE_STORE (model);
     GtkTreeSelection *selection = gtk_tree_view_get_selection (treeview);
     GList *selected_rows = gtk_tree_selection_get_selected_rows (selection, &model);
 
@@ -1066,9 +1037,7 @@ gnc_gen_trans_set_price_to_selection_cb (GtkMenuItem *menuitem,
         time64 post_date = xaccTransGetDate(trans);
         Split *split = gnc_import_TransInfo_get_fsplit (row->trans_info);
         Account *src_acc = xaccSplitGetAccount (split);
-        gnc_commodity *trans_curr = xaccTransGetCurrency (trans);
         Account *dest_acc = gnc_import_TransInfo_get_destacc (row->trans_info);
-        gnc_commodity *acc_comm = xaccAccountGetCommodity (dest_acc);
         gnc_numeric dest_value = gnc_import_TransInfo_get_dest_value (row->trans_info);
 
         XferDialog *xfer = gnc_xfer_dialog(GTK_WIDGET (info->main_widget), src_acc);

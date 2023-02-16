@@ -257,30 +257,6 @@ static guint32 inc_intensity_10percent (guint32 argb)
 }
 #endif
 
-/** For a given byte value, multiply the value by a rational number,
-specified by numerator and denominator. This is some simple integer arithmetics
-for the case when we don't even need a conversion to floating point and
-backwards. */
-static guint8 dec_intensity_byte (guint8 input, int numerator, int denominator)
-{
-    guint8 result;
-    result = (input * numerator) / denominator;
-    return result;
-}
-
-/** For a given RGB value, decrease the color intensity for each of the three
-colors identically by 10 percent and return this changed RGB value. */
-static guint32 dec_intensity_10percent (guint32 argb)
-{
-    // Multiply each single byte by 9/10 i.e. by 0.9 which decreases the
-    // intensity by 10 percent.
-    guint32 result =
-            (dec_intensity_byte ((argb & 0x00FF0000) >> 16, 9, 10) << 16)
-            + (dec_intensity_byte ((argb & 0x0000FF00) >> 8, 9, 10) << 8)
-            + (dec_intensity_byte (argb & 0x000000FF, 9, 10));
-    return result;
-}
-
 /* Actual drawing routines */
 
 static inline void

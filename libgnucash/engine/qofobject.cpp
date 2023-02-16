@@ -272,12 +272,6 @@ const char * qof_object_get_type_label (QofIdTypeConst type_name)
     return (obj->type_label);
 }
 
-static gboolean clear_table (gpointer key, gpointer value, gpointer user_data)
-{
-    g_hash_table_destroy (static_cast<GHashTable*>(value));
-    return TRUE;
-}
-
 /* INITIALIZATION and PRIVATE FUNCTIONS */
 
 void qof_object_initialize (void)

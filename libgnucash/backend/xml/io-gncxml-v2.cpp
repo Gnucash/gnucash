@@ -803,7 +803,7 @@ qof_session_load_from_xml_file_v2_full (
                                        generic_callback, gd, book);
             fclose (file);
             if (thread)
-                g_thread_join (thread) != nullptr;
+                g_thread_join (thread);
         }
     }
 

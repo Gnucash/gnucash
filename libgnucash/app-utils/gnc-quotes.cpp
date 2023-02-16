@@ -462,7 +462,7 @@ GncQuotesImpl::query_fq (const char* source, const StrVec& commodities)
 
     std::for_each(is_currency ? ++commodities.cbegin() : commodities.cbegin(),
                   commodities.cend(),
-                  [this, source, &pt](auto sym)
+                  [source, &pt](auto sym)
                       {
                           std::string key{source};
                           key += "." + sym;
@@ -772,8 +772,6 @@ show_gnucash_quote(const bpt::ptree& comm_pt)
     const char* rec{C_("Finance::Quote", "recommended")};
     //Translators: Means that one of the indicated elements is required
     const char* oot{C_("Finance::Quote", "one of these")};
-    //Translators: Means that the preceding element is optional
-    const char* opt{C_("Finance::Quote", "optional")};
     //Translators: Means that a required element wasn't reported. The *s are for emphasis.
     const char* miss{C_("Finance::Quote", "**missing**")};
 

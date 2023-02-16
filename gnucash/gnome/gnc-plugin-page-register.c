@@ -222,7 +222,6 @@ static void gnc_plugin_page_register_cmd_account_report (GSimpleAction *simple, 
 static void gnc_plugin_page_register_cmd_transaction_report (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_plugin_page_register_cmd_linked_transaction (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_plugin_page_register_cmd_linked_transaction_open (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
-static void gnc_plugin_page_register_cmd_linked_transaction_remove (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_plugin_page_register_cmd_jump_linked_invoice (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 
 static void gnc_plugin_page_help_changed_cb (GNCSplitReg* gsr,
@@ -3695,14 +3694,12 @@ gnc_plugin_page_register_cmd_edit_tax_options (GSimpleAction *simple,
                                                gpointer       user_data)
 {
     GncPluginPageRegister* page = user_data;
-    GncPluginPageRegisterPrivate* priv;
     GtkWidget *window;
     Account* account;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
     ENTER ("(action %p, page %p)", simple, page);
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page));
     account = gnc_plugin_page_register_get_account (page);
     gnc_tax_info_dialog (window, account);
@@ -4535,25 +4532,6 @@ gnc_plugin_page_register_cmd_linked_transaction_open (GSimpleAction *simple,
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     gsr_default_doclink_open_handler (priv->gsr);
     LEAVE (" ");
-}
-
-static void
-gnc_plugin_page_register_cmd_linked_transaction_remove (GSimpleAction *simple,
-                                                        GVariant      *paramter,
-                                                        gpointer       user_data)
-{
-    GncPluginPageRegister* page = user_data;
-    GncPluginPageRegisterPrivate* priv;
-
-    ENTER ("(action %p, page %p)", simple, page);
-
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
-
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-    gsr_default_doclink_remove_handler (priv->gsr);
-    gnc_plugin_page_register_ui_update (NULL, page);
-    LEAVE (" ");
-
 }
 
 static GncInvoice* invoice_from_split (Split* split)

@@ -361,7 +361,6 @@ gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
     GNCReconcileView  *view;
     GtkListStore      *liststore;
     GtkTreeSortable   *sortable;
-    GtkTreeViewColumn *col;
     gboolean           include_children, auto_check;
     GList             *accounts = NULL;
     GList             *splits;
@@ -436,7 +435,6 @@ gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
     /* set up a separate sort function for the recn column as it is
      * derived from a search function */
     sortable = GTK_TREE_SORTABLE(gtk_tree_view_get_model (GTK_TREE_VIEW(view)));
-    col = gtk_tree_view_get_column (GTK_TREE_VIEW(view), REC_RECN -1);
     gtk_tree_sortable_set_sort_func (sortable, REC_RECN, sort_iter_compare_func,
                                      GINT_TO_POINTER (REC_RECN), NULL);
 

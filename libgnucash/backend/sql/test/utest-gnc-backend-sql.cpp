@@ -48,8 +48,8 @@ class GncMockSqlConnection;
 class GncMockSqlResult : public GncSqlResult
 {
 public:
-    GncMockSqlResult(const GncMockSqlConnection* conn) :
-        m_conn{conn}, m_iter{this}, m_row{&m_iter} {}
+    GncMockSqlResult() :
+        m_iter{this}, m_row{&m_iter} {}
     uint64_t size() const noexcept { return 1; }
     GncSqlRow& begin() { return m_row; }
     GncSqlRow& end() { return m_row; }
@@ -78,7 +78,6 @@ protected:
             GncMockSqlResult* m_inst;
         };
 private:
-    const GncMockSqlConnection* m_conn;
     IteratorImpl m_iter;
     GncSqlRow m_row;
 };
@@ -94,7 +93,6 @@ public:
 class GncMockSqlConnection : public GncSqlConnection
 {
 public:
-    GncMockSqlConnection() : m_result{this} {}
     GncSqlResultPtr execute_select_statement (const GncSqlStatementPtr&)
         noexcept override { return &m_result; }
     int execute_nonselect_statement (const GncSqlStatementPtr&)

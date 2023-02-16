@@ -1439,12 +1439,10 @@ gbv_renderer_add_padding (GtkCellRenderer *renderer)
 static GtkTreeViewColumn*
 gbv_create_totals_column (GncBudgetView *budget_view, gint period_num)
 {
-    GncBudgetViewPrivate *priv;
     GtkTreeViewColumn *col;
     GtkCellRenderer* renderer;
 
     g_return_val_if_fail (budget_view != NULL, NULL);
-    priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
 
     renderer = gtk_cell_renderer_text_new ();
     col = gtk_tree_view_column_new_with_attributes ("", renderer, NULL);

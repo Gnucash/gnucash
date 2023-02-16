@@ -133,7 +133,7 @@ enum
 extern gboolean gnc_book_options_dialog_apply_helper(GncOptionDB * options);
 
 /** Max number of windows allowed */
-constexpr auto gnc_main_window_max_number {10};
+[[maybe_unused]] constexpr auto gnc_main_window_max_number {10};
 
 /* Static Globals *******************************************************/
 
@@ -1834,7 +1834,6 @@ gnc_main_window_update_one_menu_action (GncMainWindow *window,
 static void
 gnc_main_window_update_radio_button (GncMainWindow *window)
 {
-    GncMainWindowPrivate *priv;
     GAction *action;
     gsize index;
 
@@ -1848,8 +1847,6 @@ gnc_main_window_update_radio_button (GncMainWindow *window)
         LEAVE("window %" G_GSIZE_FORMAT ", only %d actions", index, gnc_main_window_max_number);
         return;
     }
-
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
     action = g_action_map_lookup_action (G_ACTION_MAP(window),
                                          "WindowAction");
@@ -2456,7 +2453,6 @@ main_window_update_page_set_read_only_icon (GncPluginPage *page,
                                             gboolean read_only)
 {
     GncMainWindow *window;
-    GncMainWindowPrivate *priv;
     GtkWidget *tab_widget;
     GtkWidget *image = NULL;
     GList *children;
@@ -2474,7 +2470,6 @@ main_window_update_page_set_read_only_icon (GncPluginPage *page,
 
     /* Get the notebook tab widget */
     main_window_find_tab_widget (window, page, &tab_widget);
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
     if (!tab_widget)
     {
@@ -3463,7 +3458,6 @@ gnc_main_window_merge_actions (GncMainWindow *window,
                                const gchar *ui_filename,
                                gpointer user_data)
 {
-    GncMainWindowPrivate *priv;
     GncMainWindowActionData *data;
     GSimpleActionGroup *simple_action_group;
 
@@ -3475,8 +3469,6 @@ gnc_main_window_merge_actions (GncMainWindow *window,
     data = g_new0 (GncMainWindowActionData, 1);
     data->window = window;
     data->data = user_data;
-
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
     simple_action_group = g_simple_action_group_new ();
 
@@ -3511,13 +3503,10 @@ gnc_main_window_unmerge_actions (GncMainWindow *window,
 GAction *
 gnc_main_window_find_action (GncMainWindow *window, const gchar *action_name)
 {
-    GncMainWindowPrivate *priv;
     GAction *action = nullptr;
 
     g_return_val_if_fail (GNC_IS_MAIN_WINDOW(window), nullptr);
     g_return_val_if_fail (action_name != nullptr, nullptr);
-
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
     action = g_action_map_lookup_action (G_ACTION_MAP(window),
                                          action_name);

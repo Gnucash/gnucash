@@ -391,24 +391,6 @@ gnc_imap_invalid_maps_dialog (ImapDialog *imap_dialog)
     }
 }
 
-static void
-gnc_imap_invalid_maps (ImapDialog *imap_dialog)
-{
-    gboolean inv_dialog_shown = FALSE;
-
-    if ((imap_dialog->type == BAYES) && (imap_dialog->inv_dialog_shown.inv_dialog_shown_bayes))
-        inv_dialog_shown = TRUE;
-
-    if ((imap_dialog->type == NBAYES) && (imap_dialog->inv_dialog_shown.inv_dialog_shown_nbayes))
-        inv_dialog_shown = TRUE;
-
-    if ((imap_dialog->type == ONLINE) && (imap_dialog->inv_dialog_shown.inv_dialog_shown_online))
-        inv_dialog_shown = TRUE;
-
-    if (!inv_dialog_shown)
-        gnc_imap_invalid_maps_dialog (imap_dialog);
-}
-
 void
 gnc_imap_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data)
 {
