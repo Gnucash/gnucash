@@ -89,32 +89,19 @@ static gboolean gnc_gsettings_is_valid_key(GSettings *settings, const gchar *key
 
 static GSettings * gnc_gsettings_get_settings_ptr (const gchar *schema_str)
 {
-    GSettings *gset = NULL;
-    gchar *full_name = gnc_gsettings_normalize_schema_name (schema_str);
-
     ENTER("");
-    if (!schema_hash)
-        schema_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
-    gset = static_cast<GSettings*> (g_hash_table_lookup (schema_hash, full_name));
-    DEBUG ("Looking for schema %s returned gsettings %p", full_name, gset);
+    auto schema_source {g_settings_schema_source_get_default()};
+    auto full_name = gnc_gsettings_normalize_schema_name (schema_str);
+    auto schema {g_settings_schema_source_lookup(schema_source, full_name,
+                                                    TRUE)};
+    auto gset = g_settings_new_full (schema, nullptr, nullptr);
+    DEBUG ("Created gsettings object %p for schema %s", gset, full_name);
 
-    if (!gset)
-    {
-        auto schema_source {g_settings_schema_source_get_default()};
-        auto schema {g_settings_schema_source_lookup(schema_source, full_name,
-                                                     TRUE)};
-        gset = g_settings_new_full (schema, nullptr, nullptr);
-        DEBUG ("Created gsettings object %p for schema %s", gset, full_name);
-        if (G_IS_SETTINGS(gset))
-            g_hash_table_insert (schema_hash, full_name, gset);
-        else
-            PWARN ("Ignoring attempt to access unknown gsettings schema %s", full_name);
-    }
-    else
-    {
-        g_free(full_name);
-    }
+    if (!G_IS_SETTINGS(gset))
+        PWARN ("Ignoring attempt to access unknown gsettings schema %s", full_name);
+
+    g_free(full_name);
     LEAVE("");
     return gset;
 }
@@ -172,29 +159,35 @@ gnc_gsettings_register_cb (const gchar *schema,
                            gpointer func,
                            gpointer user_data)
 {
-    gulong retval = 0;
-    gchar *signal = NULL;
-
-    GSettings *settings_ptr = gnc_gsettings_get_settings_ptr (schema);
-
     ENTER("");
-    g_return_val_if_fail (G_IS_SETTINGS (settings_ptr), retval);
-    g_return_val_if_fail (func, retval);
+    g_return_val_if_fail (func, 0);
 
-    if ((!key) || (*key == '\0'))
-        signal = g_strdup ("changed");
-    else
-    {
-        if (gnc_gsettings_is_valid_key(settings_ptr, key))
-            signal = g_strconcat ("changed::", key, NULL);
-    }
 
-    retval = g_signal_connect (settings_ptr, signal, G_CALLBACK (func), user_data);
-
+    if (!schema_hash)
+        schema_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
     if (!registered_handlers_hash)
         registered_handlers_hash = g_hash_table_new (g_direct_hash, g_direct_equal);
 
-    if (retval != 0)
+    auto full_name = gnc_gsettings_normalize_schema_name (schema);
+    auto settings_ptr = static_cast<GSettings*> (g_hash_table_lookup (schema_hash, full_name));
+    if (!settings_ptr)
+    {
+        settings_ptr = gnc_gsettings_get_settings_ptr (schema);
+        if (G_IS_SETTINGS (settings_ptr))
+            g_hash_table_insert (schema_hash, full_name, settings_ptr);
+        else
+            PWARN ("Ignoring attempt to access unknown gsettings schema %s", full_name);
+    }
+    g_return_val_if_fail (G_IS_SETTINGS (settings_ptr), 0);
+
+    auto signal = static_cast<char *> (nullptr);
+    if (!key || !*key)
+        signal = g_strdup ("changed");
+    else if (gnc_gsettings_is_valid_key(settings_ptr, key))
+        signal = g_strconcat ("changed::", key, nullptr);
+
+    auto retval = g_signal_connect (settings_ptr, signal, G_CALLBACK (func), user_data);
+    if (retval)
     {
         g_hash_table_insert (registered_handlers_hash,
                              GINT_TO_POINTER(retval), settings_ptr); //key, value
@@ -209,26 +202,60 @@ gnc_gsettings_register_cb (const gchar *schema,
 }
 
 
+static void
+gnc_gsettings_remove_cb_by_id_internal (GSettings *settings_ptr,
+                                        guint handlerid)
+{
+    g_return_if_fail (G_IS_SETTINGS (settings_ptr));
+
+    ENTER ();
+
+    g_signal_handler_disconnect (settings_ptr, handlerid);
+
+    // remove the handlerid from the registerered_handlers_hash
+    g_hash_table_remove (registered_handlers_hash, GINT_TO_POINTER(handlerid));
+
+    // remove GSettings object if we're not using it any more for other handlers
+    auto used_settings_ptrs = g_hash_table_get_values (registered_handlers_hash);
+    if (!g_list_find (used_settings_ptrs, settings_ptr))
+    {
+        g_hash_table_remove(schema_hash, settings_ptr);
+        g_object_unref (settings_ptr);
+    }
+
+    // destroy hash table if size is 0
+    if (g_hash_table_size (registered_handlers_hash) == 0)
+    {
+        g_hash_table_destroy (registered_handlers_hash);
+        PINFO ("All registered preference callbacks removed");
+    }
+
+    LEAVE ("Schema: %p, handlerid: %d, hashtable size: %d - removed for handler",
+           settings_ptr, handlerid, g_hash_table_size (registered_handlers_hash));
+}
+
+
 void
 gnc_gsettings_remove_cb_by_func (const gchar *schema,
                                  const gchar *key,
                                  gpointer func,
                                  gpointer user_data)
 {
-    gint matched = 0;
-    GQuark quark = 0;
-    gulong handler_id = 0;
-
-    GSettings *settings_ptr = gnc_gsettings_get_settings_ptr (schema);
-    g_return_if_fail (G_IS_SETTINGS (settings_ptr));
+    ENTER ();
     g_return_if_fail (func);
 
-    ENTER ();
+    auto full_name = gnc_gsettings_normalize_schema_name (schema);
+    auto settings_ptr = static_cast<GSettings*> (g_hash_table_lookup (schema_hash, full_name));
+    g_free (full_name);
 
-    if ((key) && (gnc_gsettings_is_valid_key(settings_ptr, key)))
-        quark = g_quark_from_string (key);
+    if (!G_IS_SETTINGS (settings_ptr))
+    {
+        LEAVE ("No valid GSettings object retrieved from hash table");
+        return;
+    }
 
-    handler_id = g_signal_handler_find (
+    auto quark = g_quark_from_string (key);
+    auto handler_id = g_signal_handler_find (
                   settings_ptr,
                   static_cast<GSignalMatchType> (G_SIGNAL_MATCH_DETAIL | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA),
                   g_signal_lookup ("changed", G_TYPE_SETTINGS), /* signal_id */
@@ -237,10 +264,15 @@ gnc_gsettings_remove_cb_by_func (const gchar *schema,
                   func, /* callback function */
                   user_data);
 
+    auto matched = 0;
     while (handler_id)
     {
         matched ++;
-        gnc_gsettings_remove_cb_by_id (schema, handler_id);
+        gnc_gsettings_remove_cb_by_id_internal (settings_ptr, handler_id);
+
+        // Previous function will invalidate object if there is only one handler
+        if (!G_IS_SETTINGS (settings_ptr))
+            break;
 
         handler_id = g_signal_handler_find (
                       settings_ptr,
@@ -261,25 +293,22 @@ void
 gnc_gsettings_remove_cb_by_id (const gchar *schema,
                                guint handlerid)
 {
-    GSettings *settings_ptr = gnc_gsettings_get_settings_ptr (schema);
-    g_return_if_fail (G_IS_SETTINGS (settings_ptr));
-
     ENTER ();
 
-    g_signal_handler_disconnect (settings_ptr, handlerid);
+    auto full_name = gnc_gsettings_normalize_schema_name (schema);
+    auto settings_ptr = static_cast<GSettings*> (g_hash_table_lookup (schema_hash, full_name));
+    g_free (full_name);
 
-    // remove the handlerid from the registerered_handlers_hash
-    g_hash_table_remove (registered_handlers_hash, GINT_TO_POINTER(handlerid));
-
-    // destroy hash table if size is 0
-    if (g_hash_table_size (registered_handlers_hash) == 0)
+    if (!G_IS_SETTINGS (settings_ptr))
     {
-        g_hash_table_destroy (registered_handlers_hash);
-        PINFO ("All registered preference callbacks removed");
+        LEAVE ("No valid GSettings object retrieved from hash table");
+        return;
     }
 
-    LEAVE ("Schema: %s, handlerid: %d, hashtable size: %d - removed for handler",
-            schema, handlerid, g_hash_table_size (registered_handlers_hash));
+    gnc_gsettings_remove_cb_by_id_internal (settings_ptr, handlerid);
+
+    LEAVE ("Schema: %p, handlerid: %d, hashtable size: %d - removed for handler",
+            settings_ptr, handlerid, g_hash_table_size (registered_handlers_hash));
 }
 
 
@@ -312,9 +341,9 @@ void gnc_gsettings_bind (const gchar *schema,
     if (gnc_gsettings_is_valid_key (settings_ptr, key))
         g_settings_bind (settings_ptr, key, object, property, G_SETTINGS_BIND_DEFAULT);
     else
-    {
         PERR ("Invalid key %s for schema %s", key, schema);
-    }
+
+    g_object_unref (settings_ptr);
 }
 
 /************************************************************/
@@ -328,13 +357,14 @@ gnc_gsettings_get_bool (const gchar *schema,
     GSettings *settings_ptr = gnc_gsettings_get_settings_ptr (schema);
     g_return_val_if_fail (G_IS_SETTINGS (settings_ptr), FALSE);
 
+    auto val = false;
     if (gnc_gsettings_is_valid_key (settings_ptr, key))
-        return g_settings_get_boolean (settings_ptr, key);
+        val = g_settings_get_boolean (settings_ptr, key);
     else
-    {
         PERR ("Invalid key %s for schema %s", key, schema);
-        return FALSE;
-    }
+
+    g_object_unref (settings_ptr);
+    return val;
 }
 
 gboolean
@@ -356,6 +386,7 @@ gnc_gsettings_set_bool (const gchar *schema,
     else
         PERR ("Invalid key %s for schema %s", key, schema);
 
+    g_object_unref (settings_ptr);
     LEAVE("result %i", result);
     return result;
 }
@@ -367,13 +398,14 @@ gnc_gsettings_get_int (const gchar *schema,
     GSettings *settings_ptr = gnc_gsettings_get_settings_ptr (schema);
     g_return_val_if_fail (G_IS_SETTINGS (settings_ptr), 0);
 
+    auto val = static_cast<int> (0);
     if (gnc_gsettings_is_valid_key (settings_ptr, key))
-        return g_settings_get_int (settings_ptr, key);
+        val = g_settings_get_int (settings_ptr, key);
     else
-    {
         PERR ("Invalid key %s for schema %s", key, schema);
-        return 0;
-    }
+
+    g_object_unref (settings_ptr);
+    return val;
 }
 
 gboolean
@@ -394,6 +426,7 @@ gnc_gsettings_set_int (const gchar *schema,
     else
         PERR ("Invalid key %s for schema %s", key, schema);
 
+    g_object_unref (settings_ptr);
     return result;
 }
 
@@ -404,13 +437,14 @@ gnc_gsettings_get_float (const gchar *schema,
     GSettings *settings_ptr = gnc_gsettings_get_settings_ptr (schema);
     g_return_val_if_fail (G_IS_SETTINGS (settings_ptr), 0);
 
+    auto val = static_cast<double> (0);
     if (gnc_gsettings_is_valid_key (settings_ptr, key))
-        return g_settings_get_double (settings_ptr, key);
+        val = g_settings_get_double (settings_ptr, key);
     else
-    {
         PERR ("Invalid key %s for schema %s", key, schema);
-        return 0;
-    }
+
+    g_object_unref (settings_ptr);
+    return val;
 }
 
 gboolean
@@ -431,6 +465,7 @@ gnc_gsettings_set_float (const gchar *schema,
     else
         PERR ("Invalid key %s for schema %s", key, schema);
 
+    g_object_unref (settings_ptr);
     return result;
 }
 
@@ -441,13 +476,14 @@ gnc_gsettings_get_string (const gchar *schema,
     GSettings *settings_ptr = gnc_gsettings_get_settings_ptr (schema);
     g_return_val_if_fail (G_IS_SETTINGS (settings_ptr), NULL);
 
+    auto val = static_cast<gchar *> (nullptr);
     if (gnc_gsettings_is_valid_key (settings_ptr, key))
-        return g_settings_get_string (settings_ptr, key);
+        val = g_settings_get_string (settings_ptr, key);
     else
-    {
         PERR ("Invalid key %s for schema %s", key, schema);
-        return NULL;
-    }
+
+    g_object_unref (settings_ptr);
+    return val;
 }
 
 gboolean
@@ -469,6 +505,7 @@ gnc_gsettings_set_string (const gchar *schema,
     else
         PERR ("Invalid key %s for schema %s", key, schema);
 
+    g_object_unref (settings_ptr);
     LEAVE("result %i", result);
     return result;
 }
@@ -480,13 +517,14 @@ gnc_gsettings_get_enum (const gchar *schema,
     GSettings *settings_ptr = gnc_gsettings_get_settings_ptr (schema);
     g_return_val_if_fail (G_IS_SETTINGS (settings_ptr), 0);
 
+    auto val = static_cast<int> (0);
     if (gnc_gsettings_is_valid_key (settings_ptr, key))
-        return g_settings_get_enum (settings_ptr, key);
+        val = g_settings_get_enum (settings_ptr, key);
     else
-    {
         PERR ("Invalid key %s for schema %s", key, schema);
-        return 0;
-    }
+
+    g_object_unref (settings_ptr);
+    return val;
 }
 
 gboolean
@@ -507,6 +545,7 @@ gnc_gsettings_set_enum (const gchar *schema,
     else
         PERR ("Invalid key %s for schema %s", key, schema);
 
+    g_object_unref (settings_ptr);
     return result;
 }
 
@@ -517,13 +556,14 @@ gnc_gsettings_get_value (const gchar *schema,
     GSettings *settings_ptr = gnc_gsettings_get_settings_ptr (schema);
     g_return_val_if_fail (G_IS_SETTINGS (settings_ptr), NULL);
 
+    auto val = static_cast<GVariant *> (nullptr);
     if (gnc_gsettings_is_valid_key (settings_ptr, key))
-        return g_settings_get_value (settings_ptr, key);
+        val = g_settings_get_value (settings_ptr, key);
     else
-    {
         PERR ("Invalid key %s for schema %s", key, schema);
-        return NULL;
-    }
+
+    g_object_unref (settings_ptr);
+    return val;
 }
 
 gboolean
@@ -544,6 +584,7 @@ gnc_gsettings_set_value (const gchar *schema,
     else
         PERR ("Invalid key %s for schema %s", key, schema);
 
+    g_object_unref (settings_ptr);
     return result;
 }
 
@@ -558,6 +599,8 @@ gnc_gsettings_reset (const gchar *schema,
         g_settings_reset (settings_ptr, key);
     else
         PERR ("Invalid key %s for schema %s", key, schema);
+
+    g_object_unref (settings_ptr);
 }
 
 void
@@ -573,11 +616,17 @@ gnc_gsettings_reset_schema (const gchar *schema_str)
 
     g_object_get (settings, "settings-schema", &schema, NULL);
     if (!schema)
+    {
+        g_object_unref (settings);
         return;
+    }
 
     keys = g_settings_schema_list_keys (schema);
     if (!keys)
+    {
+        g_object_unref (settings);
         return;
+    }
 
     while (keys[counter])
     {
@@ -585,6 +634,7 @@ gnc_gsettings_reset_schema (const gchar *schema_str)
         counter++;
     }
 
+    g_object_unref (settings);
     g_strfreev (keys);
 }
 
@@ -643,13 +693,14 @@ gnc_gsettings_get_user_value (const gchar *schema,
     GSettings *settings_ptr = gnc_gsettings_get_settings_ptr (schema);
     g_return_val_if_fail (G_IS_SETTINGS (settings_ptr), NULL);
 
+    auto val = static_cast<GVariant *> (nullptr);
     if (gnc_gsettings_is_valid_key (settings_ptr, key))
-        return g_settings_get_user_value (settings_ptr, key);
+        val = g_settings_get_user_value (settings_ptr, key);
     else
-    {
         PERR ("Invalid key %s for schema %s", key, schema);
-        return NULL;
-    }
+
+    g_object_unref (settings_ptr);
+    return val;
 }
 
 using opt_str_vec = boost::optional<std::string>;
