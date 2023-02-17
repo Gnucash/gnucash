@@ -53,7 +53,7 @@ static QofLogModule log_module = "gnc.app-utils.gsettings";
 /************************************************************/
 /*               Internal helper functions                  */
 /************************************************************/
-static gboolean gnc_gsettings_is_valid_key(GSettings *settings, const gchar *key)
+static bool gnc_gsettings_is_valid_key(GSettings *settings, const gchar *key)
 {
     // Check if the key is valid key within settings
     if (!G_IS_SETTINGS(settings))
