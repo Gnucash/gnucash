@@ -870,9 +870,12 @@ void gnc_gsettings_version_upgrade (void)
     auto ogG_maj_min = gnc_gsettings_get_user_value (GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
     auto og_maj_min = gnc_gsettings_get_user_value (GSET_SCHEMA_OLD_PREFIX "." GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
 
+    auto cur_maj_min = PROJECT_VERSION_MAJOR * 1000 + PROJECT_VERSION_MINOR;
+
     if (!ogG_maj_min && !og_maj_min) // new install
     {
-        LEAVE("");
+        gnc_gsettings_set_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION, cur_maj_min);
+        LEAVE ("Setting Previous compatibility level to current version: %i", cur_maj_min);
         return;
     }
 
@@ -886,8 +889,6 @@ void gnc_gsettings_version_upgrade (void)
     }
     if (og_maj_min)
         g_variant_unref (og_maj_min);
-
-    auto cur_maj_min = PROJECT_VERSION_MAJOR * 1000 + PROJECT_VERSION_MINOR;
 
     PINFO ("Previous setting compatibility level: %i, Current version: %i", old_maj_min, cur_maj_min);
 
