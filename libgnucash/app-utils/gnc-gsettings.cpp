@@ -49,8 +49,6 @@ namespace bpt = boost::property_tree;
 
 static GHashTable *schema_hash = nullptr;
 
-static GHashTable *registered_handlers_hash = nullptr;
-
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = "gnc.app-utils.gsettings";
 
@@ -104,20 +102,6 @@ static GSettings * gnc_gsettings_get_settings_obj (const gchar *schema_str)
     return gset;
 }
 
-static void
-handlers_hash_block_helper (gpointer key, gpointer gs_obj, [[maybe_unused]] gpointer pointer)
-{
-    g_signal_handler_block (gs_obj, (gulong)key); // block signal_handler
-    PINFO("Block handler_id %ld for gs_obj %p", (gulong)key, gs_obj);
-}
-
-static void
-handlers_hash_unblock_helper (gpointer key, gpointer gs_obj, [[maybe_unused]] gpointer pointer)
-{
-    g_signal_handler_unblock (gs_obj, (gulong)key); // unblock signal_handler
-    PINFO("UnBlock handler_id %ld for gs_obj %p", (gulong)key, gs_obj);
-}
-
 /************************************************************/
 /*                      GSettings Utilities                 */
 /************************************************************/
@@ -147,19 +131,15 @@ gnc_gsettings_normalize_schema_name (const gchar *name)
 /************************************************************/
 
 gulong
-gnc_gsettings_register_cb (const gchar *schema,
-                           const gchar *key,
+gnc_gsettings_register_cb (const gchar *schema, const gchar *key,
                            gpointer func,
                            gpointer user_data)
 {
     ENTER("");
     g_return_val_if_fail (func, 0);
 
-
     if (!schema_hash)
-        schema_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, nullptr);
-    if (!registered_handlers_hash)
-        registered_handlers_hash = g_hash_table_new (g_direct_hash, g_direct_equal);
+        schema_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
 
     auto full_name = gnc_gsettings_normalize_schema_name (schema);
     auto gs_obj = static_cast<GSettings*> (g_hash_table_lookup (schema_hash, full_name));
@@ -182,7 +162,7 @@ gnc_gsettings_register_cb (const gchar *schema,
     auto handlerid = g_signal_connect (gs_obj, signal, G_CALLBACK (func), user_data);
     if (handlerid)
     {
-        g_hash_table_insert (registered_handlers_hash, GINT_TO_POINTER(handlerid), gs_obj);
+        g_object_ref (gs_obj);
 
         PINFO("schema: %s, key: %s, gs_obj: %p, handler_id: %ld",
                schema, key, gs_obj, handlerid);
@@ -195,42 +175,22 @@ gnc_gsettings_register_cb (const gchar *schema,
 
 
 static void
-gnc_gsettings_remove_cb_by_id_internal (GSettings *gs_obj,
-                                        guint handlerid)
+gnc_gsettings_remove_cb_by_id_internal (GSettings *gs_obj, guint handlerid)
 {
     ENTER ();
     g_return_if_fail (G_IS_SETTINGS (gs_obj));
 
     g_signal_handler_disconnect (gs_obj, handlerid);
+    g_object_unref (gs_obj);
 
-    // remove the handlerid from the registerered_handlers_hash
-    g_hash_table_remove (registered_handlers_hash, GINT_TO_POINTER(handlerid));
-
-    // remove GSettings object if we're not using it any more for other handlers
-    auto used_settings_objs = g_hash_table_get_values (registered_handlers_hash);
-    if (!g_list_find (used_settings_objs, gs_obj))
-    {
-        g_hash_table_remove(schema_hash, gs_obj);
-        g_object_unref (gs_obj);
-    }
-
-    // destroy hash table if size is 0
-    if (g_hash_table_size (registered_handlers_hash) == 0)
-    {
-        g_hash_table_destroy (registered_handlers_hash);
-        PINFO ("All registered preference callbacks removed");
-    }
-
-    LEAVE ("Schema: %p, handlerid: %d, hashtable size: %d - removed for handler",
-           gs_obj, handlerid, g_hash_table_size (registered_handlers_hash));
+    LEAVE ("Schema: %p, handlerid: %d - removed for handler",
+           gs_obj, handlerid);
 }
 
 
 void
-gnc_gsettings_remove_cb_by_func (const gchar *schema,
-                                 const gchar *key,
-                                 gpointer func,
-                                 gpointer user_data)
+gnc_gsettings_remove_cb_by_func (const gchar *schema, const gchar *key,
+                                 gpointer func, gpointer user_data)
 {
     ENTER ();
     g_return_if_fail (func);
@@ -267,14 +227,13 @@ gnc_gsettings_remove_cb_by_func (const gchar *schema,
         }
     } while (handler_id);
 
-    LEAVE ("Schema: %s, key: %s, hashtable size: %d - removed %d handlers for 'changed' signal",
-            schema, key, g_hash_table_size (registered_handlers_hash), matched);
+    LEAVE ("Schema: %s, key: %s - removed %d handlers for 'changed' signal",
+            schema, key, matched);
 }
 
 
 void
-gnc_gsettings_remove_cb_by_id (const gchar *schema,
-                               guint handlerid)
+gnc_gsettings_remove_cb_by_id (const gchar *schema, guint handlerid)
 {
     ENTER ();
 
@@ -290,8 +249,8 @@ gnc_gsettings_remove_cb_by_id (const gchar *schema,
 
     gnc_gsettings_remove_cb_by_id_internal (gs_obj, handlerid);
 
-    LEAVE ("Schema: %p, handlerid: %d, hashtable size: %d - removed for handler",
-            gs_obj, handlerid, g_hash_table_size (registered_handlers_hash));
+    LEAVE ("Schema: %p, handlerid: %d - removed for handler",
+            gs_obj, handlerid);
 }
 
 
@@ -326,6 +285,39 @@ void gnc_gsettings_bind (const gchar *schema,
     else
         PERR ("Invalid key %s for schema %s", key, schema);
 }
+
+
+static void
+gs_obj_block_handlers ([[maybe_unused]] gpointer key, gpointer gs_obj,
+                       [[maybe_unused]] gpointer pointer)
+{
+    g_signal_handlers_block_matched (gs_obj, G_SIGNAL_MATCH_CLOSURE, 0, 0, NULL, NULL, NULL);
+    PINFO("Block all handlers for GSettings object %p", gs_obj);
+}
+
+static void
+gs_obj_unblock_handlers ([[maybe_unused]] gpointer key, gpointer gs_obj,
+                         [[maybe_unused]] gpointer pointer)
+{
+    g_signal_handlers_unblock_matched (gs_obj, G_SIGNAL_MATCH_CLOSURE, 0, 0, NULL, NULL, NULL);
+    PINFO("Unblock all handlers for GSettings object %p", gs_obj);
+}
+
+void gnc_gsettings_block_all (void)
+{
+    ENTER ();
+    g_hash_table_foreach (schema_hash, gs_obj_block_handlers, nullptr);
+    LEAVE();
+}
+
+
+void gnc_gsettings_unblock_all (void)
+{
+    ENTER ();
+    g_hash_table_foreach (schema_hash, gs_obj_unblock_handlers, nullptr);
+    LEAVE();
+}
+
 
 /************************************************************/
 /* Getters                                                  */
@@ -773,22 +765,4 @@ void gnc_gsettings_version_upgrade (void)
         gnc_gsettings_set_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION, cur_maj_min);
 
     LEAVE("");
-}
-
-
-void gnc_gsettings_block_all (void)
-{
-    PINFO("block registered_handlers_hash list size is %d",
-           g_hash_table_size (registered_handlers_hash));
-    g_hash_table_foreach (registered_handlers_hash,
-                          handlers_hash_block_helper, nullptr);
-}
-
-
-void gnc_gsettings_unblock_all (void)
-{
-    PINFO("unblock registered_handlers_hash list size is %d",
-           g_hash_table_size (registered_handlers_hash));
-    g_hash_table_foreach (registered_handlers_hash,
-                          handlers_hash_unblock_helper, nullptr);
 }

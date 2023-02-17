@@ -278,8 +278,7 @@ gboolean gnc_gsettings_get_bool (const gchar *schema,
  *  processing, this function passed on the value of zero as returned
  *  by GSettings.
  */
-gint gnc_gsettings_get_int (const gchar *schema,
-                            const gchar *key);
+gint gnc_gsettings_get_int (const gchar *schema, const gchar *key);
 
 /** Get an float value from GSettings.
  *
@@ -304,8 +303,7 @@ gint gnc_gsettings_get_int (const gchar *schema,
  *  processing, this function passed on the value of zero as returned
  *  by GSettings.
  */
-gdouble gnc_gsettings_get_float (const gchar *schema,
-                                 const gchar *key);
+gdouble gnc_gsettings_get_float (const gchar *schema, const gchar *key);
 
 /** Get a string value from GSettings.
  *
@@ -331,8 +329,7 @@ gdouble gnc_gsettings_get_float (const gchar *schema,
  *  GSettings.  It is the callers responsibility to free any string
  *  returned by this function.
  */
-gchar *gnc_gsettings_get_string (const gchar *schema,
-                                 const gchar *key);
+gchar *gnc_gsettings_get_string (const gchar *schema, const gchar *key);
 
 /** Get an enum value from GSettings.
  *
@@ -357,8 +354,7 @@ gchar *gnc_gsettings_get_string (const gchar *schema,
  *  processing, this function passed on the value of zero as returned
  *  by GSettings.
  */
-gint gnc_gsettings_get_enum (const gchar *schema,
-                             const gchar *key);
+gint gnc_gsettings_get_enum (const gchar *schema, const gchar *key);
 
 /** Get an arbitrary combination of values from GSettings.
  *
@@ -387,8 +383,7 @@ gint gnc_gsettings_get_enum (const gchar *schema,
  *  It is the callers responsibility to free any GVariant data returned
  *  by this function.
  */
-GVariant *gnc_gsettings_get_value (const gchar *schema,
-                                   const gchar *key);
+GVariant *gnc_gsettings_get_value (const gchar *schema, const gchar *key);
 
 /** @} */
 
@@ -418,8 +413,7 @@ GVariant *gnc_gsettings_get_value (const gchar *schema,
  *  @return This function returns true if the value was set successfully
  *  on the key or false if not.
  */
-gboolean gnc_gsettings_set_bool (const gchar *schema,
-                                 const gchar *key,
+gboolean gnc_gsettings_set_bool (const gchar *schema, const gchar *key,
                                  gboolean value);
 
 /** Store an integer value into GSettings.
@@ -443,8 +437,7 @@ gboolean gnc_gsettings_set_bool (const gchar *schema,
  *  @return This function returns true if the value was set successfully
  *  on the key or false if not.
  */
-gboolean gnc_gsettings_set_int (const gchar *schema,
-                                const gchar *key,
+gboolean gnc_gsettings_set_int (const gchar *schema, const gchar *key,
                                 gint value);
 
 /** Store a float value into GSettings.
@@ -468,8 +461,7 @@ gboolean gnc_gsettings_set_int (const gchar *schema,
  *  @return This function returns true if the value was set successfully
  *  on the key or false if not.
  */
-gboolean gnc_gsettings_set_float (const gchar *schema,
-                                  const gchar *key,
+gboolean gnc_gsettings_set_float (const gchar *schema, const gchar *key,
                                   gdouble value);
 
 
@@ -496,8 +488,7 @@ gboolean gnc_gsettings_set_float (const gchar *schema,
  *  @return This function returns true if the value was set successfully
  *  on the key or false if not.
  */
-gboolean gnc_gsettings_set_string (const gchar *schema,
-                                   const gchar *key,
+gboolean gnc_gsettings_set_string (const gchar *schema, const gchar *key,
                                    const gchar *value);
 
 /** Store an enum value into GSettings.
@@ -521,8 +512,7 @@ gboolean gnc_gsettings_set_string (const gchar *schema,
  *  @return This function returns true if the value was set successfully
  *  on the key or false if not.
  */
-gboolean gnc_gsettings_set_enum (const gchar *schema,
-                                 const gchar *key,
+gboolean gnc_gsettings_set_enum (const gchar *schema, const gchar *key,
                                  gint value);
 
 /** Store an arbitrary combination of values into GSettings.
@@ -549,8 +539,7 @@ gboolean gnc_gsettings_set_enum (const gchar *schema,
  *  @return This function returns true if the value was set successfully
  *  on the key or false if not.
  */
-gboolean gnc_gsettings_set_value (const gchar *schema,
-                                  const gchar *key,
+gboolean gnc_gsettings_set_value (const gchar *schema, const gchar *key,
                                   GVariant *value);
 
 /** Reset a key to its default value in GSettings.
@@ -572,8 +561,7 @@ gboolean gnc_gsettings_set_value (const gchar *schema,
  *  @param key This string is the name of the particular key within
  *  the named schema of gsettings.
  */
-void gnc_gsettings_reset (const gchar *schema,
-                          const gchar *key);
+void gnc_gsettings_reset (const gchar *schema, const gchar *key);
 
 /** Reset all keys in a schema to their default values in GSettings.
  *
