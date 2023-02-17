@@ -279,7 +279,7 @@ static void
 gs_obj_block_handlers ([[maybe_unused]] gpointer key, gpointer gs_obj,
                        [[maybe_unused]] gpointer pointer)
 {
-    g_signal_handlers_block_matched (gs_obj, G_SIGNAL_MATCH_CLOSURE, 0, 0, NULL, NULL, NULL);
+    g_signal_handlers_block_matched (gs_obj, G_SIGNAL_MATCH_CLOSURE, 0, 0, nullptr, nullptr, nullptr);
     PINFO("Block all handlers for GSettings object %p", gs_obj);
 }
 
@@ -287,7 +287,7 @@ static void
 gs_obj_unblock_handlers ([[maybe_unused]] gpointer key, gpointer gs_obj,
                          [[maybe_unused]] gpointer pointer)
 {
-    g_signal_handlers_unblock_matched (gs_obj, G_SIGNAL_MATCH_CLOSURE, 0, 0, NULL, NULL, NULL);
+    g_signal_handlers_unblock_matched (gs_obj, G_SIGNAL_MATCH_CLOSURE, 0, 0, nullptr, nullptr, nullptr);
     PINFO("Unblock all handlers for GSettings object %p", gs_obj);
 }
 
