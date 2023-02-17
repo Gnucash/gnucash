@@ -779,7 +779,7 @@ parse_one_release_node (bpt::ptree &pt)
 }
 
 static void
-transform_settings (int old_maj_min)
+transform_settings (int old_maj_min, int cur_maj_min)
 {
     bpt::ptree pt;
 
@@ -811,7 +811,7 @@ transform_settings (int old_maj_min)
 
     /* loop over top-level property tree */
     std::for_each (pt.begin(), pt.end(),
-            [&old_maj_min] (std::pair<bpt::ptree::key_type, bpt::ptree> node)
+            [&old_maj_min, &cur_maj_min] (std::pair<bpt::ptree::key_type, bpt::ptree> node)
             {
                 if (node.first != "release")
                 {
@@ -827,6 +827,11 @@ transform_settings (int old_maj_min)
                 if (*version <= old_maj_min)
                 {
                     DEBUG ("Skipping <release> node - version %i is less than current compatibility level %i", *version, old_maj_min);
+                    return;
+                }
+                if (*version > cur_maj_min)
+                {
+                    DEBUG ("Skipping <release> node - version %i is greater than current version level %i", *version, cur_maj_min);
                     return;
                 }
                 DEBUG ("Retrieved version value '%i'", *version);
@@ -865,16 +870,16 @@ void gnc_gsettings_version_upgrade (void)
     auto ogG_maj_min = gnc_gsettings_get_user_value (GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
     auto og_maj_min = gnc_gsettings_get_user_value (GSET_SCHEMA_OLD_PREFIX "." GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
 
-    if (!ogG_maj_min && !og_maj_min)
+    if (!ogG_maj_min && !og_maj_min) // new install
     {
         LEAVE("");
         return;
     }
 
     auto old_maj_min = 0;
-    if (!ogG_maj_min)
+    if (!ogG_maj_min) // old preference location
         old_maj_min = gnc_gsettings_get_int (GSET_SCHEMA_OLD_PREFIX "." GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
-    else
+    else // new preference location
     {
         g_variant_unref (ogG_maj_min);
         old_maj_min = gnc_gsettings_get_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
@@ -882,12 +887,13 @@ void gnc_gsettings_version_upgrade (void)
     if (og_maj_min)
         g_variant_unref (og_maj_min);
 
-    PINFO ("Previous setting compatibility level: %i", old_maj_min);
+    auto cur_maj_min = PROJECT_VERSION_MAJOR * 1000 + PROJECT_VERSION_MINOR;
 
-    transform_settings (old_maj_min);
+    PINFO ("Previous setting compatibility level: %i, Current version: %i", old_maj_min, cur_maj_min);
+
+    transform_settings (old_maj_min, cur_maj_min);
 
     /* Only write current version if it's more recent than what was set */
-    auto cur_maj_min = PROJECT_VERSION_MAJOR * 1000 + PROJECT_VERSION_MINOR;
     if (cur_maj_min > old_maj_min)
         gnc_gsettings_set_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION, cur_maj_min);
 
