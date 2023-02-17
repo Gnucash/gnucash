@@ -638,6 +638,21 @@ gnc_gsettings_reset_schema (const gchar *schema_str)
     g_strfreev (keys);
 }
 
+static void
+gnc_settings_dump_schema_paths (void)
+{
+    gchar **non_relocatable;
+
+    auto schema_source {g_settings_schema_source_get_default()};
+    g_settings_schema_source_list_schemas (schema_source, true,
+                                           &non_relocatable, nullptr);
+
+    for (gint i = 0; non_relocatable[i] != nullptr; i++)
+        PINFO("Schema entry %d is '%s'", i, non_relocatable[i]);
+
+    g_strfreev (non_relocatable);
+}
+
 void gnc_gsettings_load_backend (void)
 {
     ENTER("");
@@ -676,6 +691,9 @@ void gnc_gsettings_load_backend (void)
     prefsbackend->reset_group = gnc_gsettings_reset_schema;
     prefsbackend->block_all = gnc_gsettings_block_all;
     prefsbackend->unblock_all = gnc_gsettings_unblock_all;
+
+    if (qof_log_check (log_module, QOF_LOG_DEBUG))
+        gnc_settings_dump_schema_paths ();
 
     /* Run any data model changes for the backend before it's used
      * by anyone */
