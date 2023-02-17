@@ -44,8 +44,6 @@ namespace bpt = boost::property_tree;
 
 #define GSET_SCHEMA_PREFIX "org.gnucash.GnuCash"
 #define GSET_SCHEMA_OLD_PREFIX "org.gnucash"
-#define CLIENT_TAG  "%s-%s-client"
-#define NOTIFY_TAG  "%s-%s-notify_id"
 
 static GHashTable *schema_hash = nullptr;
 
@@ -66,18 +64,8 @@ static gboolean gnc_gsettings_is_valid_key(GSettings *settings, const gchar *key
     if (!schema)
         return false;
 
-    gint i = 0;
-    gboolean found = false;
     auto keys = g_settings_schema_list_keys (schema);
-    while (keys && keys[i])
-    {
-        if (!g_strcmp0(key, keys[i]))
-        {
-            found = true;
-            break;
-        }
-        i++;
-    }
+    auto found = (keys && g_strv_contains(keys, key));
     g_strfreev (keys);
 
     return found;
@@ -474,12 +462,12 @@ gnc_gsettings_reset_schema (const gchar *schema_str)
         return;
     }
 
-    auto counter = 0;
     auto keys = g_settings_schema_list_keys (schema);
-    while (keys && keys[counter])
+    if (keys)
     {
-        gnc_gsettings_reset (schema_str, keys[counter]);
-        counter++;
+        auto fkeys = keys;
+        for (auto key = *fkeys; key; key = *++fkeys)
+            gnc_gsettings_reset (schema_str, key);
     }
 
     g_object_unref (gs_obj);
