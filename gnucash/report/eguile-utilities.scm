@@ -34,12 +34,13 @@
 (use-modules (gnucash report))
 
 (define-public (fmtnumber n)
+  (issue-deprecation-warning "fmtnumber is deprecated")
   ;; Format a number (integer or real) into something printable
   (number->string (if (integer? n) (inexact->exact n) n)))
 
-;; Format gnc-numeric n with as many decimal places as required
+;; Format gnc-numeric n with decimal places, or exact fraction
 (define-public fmtnumeric
-  (compose fmtnumber exact->inexact))
+  (lambda (n) (xaccPrintAmount n (gnc-default-print-info #f))))
 
 (define-public (gnc-monetary-neg? monetary)
   ;; return true if the monetary value is negative
