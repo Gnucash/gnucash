@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-02-04 21:01+0000\n"
+"PO-Revision-Date: 2023-02-18 19:39+0000\n"
 "Last-Translator: Kryštof Černý <cleverline1mc@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/gnucash/gnucash/cs/"
 ">\n"
@@ -593,14 +593,13 @@ msgstr ""
 "podúčtu (např. P:H pro Příjmy:Hotovost)."
 
 #: doc/tip_of_the_day.list.c:71
-#, fuzzy
 msgid ""
 "Want to see all your subaccount transactions in one register? From the "
 "Accounts tab in the main window, highlight the parent account and select "
 "Edit->Open Subaccounts from the menu."
 msgstr ""
 "Chcete vidět všechny účetní položky podúčtů v jedné účetní knize? Zvýrazněte "
-"rodičovský účet v hlavním menu a zvolte Účty -> Otevřít podúčty z menu."
+"rodičovský účet v hlavním okně a zvolte Upravit -> Otevřít podúčty z menu."
 
 #: doc/tip_of_the_day.list.c:75
 msgid ""
@@ -788,13 +787,13 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/assistant-acct-period.c:525
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s\n"
 "Congratulations! You are done closing books!\n"
 msgstr ""
 "%s\n"
-"Blahopřejeme! Dokončili jste uzavírání účetních knih!"
+"Blahopřejeme! Dokončili jste uzavírání účetních knih!\n"
 
 #: gnucash/gnome/assistant-acct-period.c:594
 #: gnucash/gtkbuilder/dialog-fincalc.glade:650
@@ -2159,7 +2158,7 @@ msgstr "Datum odsouhlasení"
 
 #. Translators: This is a ngettext(3) message, %d is the number of maps missing
 #: gnucash/gnome/dialog-imap-editor.c:363
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There is %d invalid mapping,\n"
 "\n"
@@ -2168,9 +2167,9 @@ msgid_plural ""
 "There are %d invalid mappings,\n"
 "\n"
 "Would you like to remove them now?"
-msgstr[0] "Daňová tabulka %s neexistuje. Chcete ji vytvořit?"
-msgstr[1] "Daňová tabulka %s neexistuje. Chcete ji vytvořit?"
-msgstr[2] "Daňová tabulka %s neexistuje. Chcete ji vytvořit?"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: gnucash/gnome/dialog-imap-editor.c:368
 #, c-format
@@ -3011,12 +3010,12 @@ msgstr "Existuje duplikát souboru formátu šeku."
 #. %3$s the type of the other check format; and
 #. %4$s the filename of that other format.
 #: gnucash/gnome/dialog-print-check.c:1522
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The GUIDs in the %s check format file '%s' and the %s check format file '%s' "
 "match."
 msgstr ""
-"Guid v souboru '%2$s' formátu šeku %1$s a souboru '%4$s' formátu šeku %3$s "
+"GUIDy v souboru '%s' formátu šeku %s a souboru '%s' formátu šeku %s "
 "odpovídají."
 
 #. Translators: This is a directory name. It may be presented to
@@ -3372,7 +3371,7 @@ msgstr "Výsledovka"
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:40
 #: gnucash/gtkbuilder/dialog-tax-info.glade:43
 msgid "_Apply"
-msgstr ""
+msgstr "_Použít"
 
 #: gnucash/gnome/dialog-tax-info.c:1240
 msgid ""
@@ -3526,15 +3525,15 @@ msgstr "Uložit _jako..."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:128
 msgid "Save this file with a different name"
-msgstr ""
+msgstr "Uložit tento soubor s jiným jménem"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:132
 msgid "Re_vert"
-msgstr ""
+msgstr "_Zvrátit"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:133
 msgid "Reload the current database, reverting all unsaved changes"
-msgstr ""
+msgstr "Obnovit současnou databázi, zruší všechny neuložené změny"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:138
 msgid "Export _Accounts"
@@ -4057,7 +4056,6 @@ msgstr "Otevřít vybraný účet"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:229
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:240
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:350
-#, fuzzy
 msgid "Open _SubAccounts"
 msgstr "Otevřít _podúčty"
 
@@ -4348,12 +4346,12 @@ msgid "Accounts"
 msgstr "Účty"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1415
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Account %s does not have the same currency as the one you're moving "
 "transactions from.\n"
 "Are you sure you want to do this?"
-msgstr "Hodláte změnit existující účetní položku. Opravdu to chcete udělat?"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1423
 #, fuzzy
@@ -4441,9 +4439,8 @@ msgid "Open _Subaccounts"
 msgstr "Otevřít _podúčty"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:153
-#, fuzzy
 msgid "Open the selected account and all its subaccounts."
-msgstr "Otevřít vybraný účet a všechny jeho podúčty"
+msgstr "Otevřít vybraný účet a všechny jeho podúčty."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:159
 #, fuzzy
@@ -4477,9 +4474,8 @@ msgstr ""
 "Odhadnout hodnotu rozpočtu pro vybrané účty podle dřívějších účetních položek"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:175
-#, fuzzy
 msgid "_All Periods..."
-msgstr "Období:"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:177
 #, fuzzy
@@ -5311,11 +5307,11 @@ msgid "Employees"
 msgstr "Zaměstnanec"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1103
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The owner %s will be deleted.\n"
 "Are you sure you want to do this?"
-msgstr "Účet není vyrovnaný. Opravdu chcete skončit?"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:194
 #: gnucash/gnome/gnc-plugin-page-register.c:297
@@ -5432,9 +5428,8 @@ msgstr "Odstranit aktuální položku"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:223
 #: gnucash/gnome/gnc-plugin-page-register.c:337
-#, fuzzy
 msgid "_Print Checks..."
-msgstr "Vy_tisknout šek..."
+msgstr "Vy_tisknout šeky..."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:230
 #: gnucash/gnome/gnc-plugin-page-register.c:344
@@ -5571,17 +5566,15 @@ msgstr "Upravit kurz pro aktuální účetní položku"
 #. with focus on the current transaction's entry in that register.
 #: gnucash/gnome/gnc-plugin-page-register2.c:387
 #: gnucash/gnome/gnc-plugin-page-register.c:523
-#, fuzzy
 msgid "_Jump to the other account"
-msgstr "Zobrazovat kód druhého účtu?"
+msgstr "Přes_kočit na druhý účet"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:388
 #: gnucash/gnome/gnc-plugin-page-register.c:524
-#, fuzzy
-#| msgid "Open a register report for the selected Transaction"
 msgid ""
 "Open a new register tab for the other account with focus on this transaction."
-msgstr "Otevřít sestavu účetní knihy pro vybranou účetní položku"
+msgstr ""
+"Otevřít novou kartu účetní knihy pro druhý účet s vybranou účetní položkou."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:392
 #: gnucash/gnome/gnc-plugin-page-register.c:528
@@ -5702,10 +5695,8 @@ msgstr "Rozdělení"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:503
 #: gnucash/gnome/gnc-plugin-page-register.c:642
-#, fuzzy
-#| msgid "_Jump"
 msgid "Jump"
-msgstr "_Skok"
+msgstr "Přeskočit"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:504
 #: gnucash/gnome/gnc-plugin-page-register.c:643
@@ -5907,10 +5898,8 @@ msgstr "Filtrovat %s podle..."
 #. Translators: This is a menu item that will open the bill, invoice, or voucher
 #. that is posted to the current transaction if there is one.
 #: gnucash/gnome/gnc-plugin-page-register.c:312
-#, fuzzy
-#| msgid "Edit Invoice"
 msgid "Jump to Invoice"
-msgstr "Upravit fakturu"
+msgstr "Přeskočit na fakturu"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:323
 #, fuzzy
@@ -6043,9 +6032,8 @@ msgid "A reversing entry has already been created for this transaction."
 msgstr "Obrácená položka již byla pro tuto účetní položku vytvořena."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4056
-#, fuzzy
 msgid "Jump to the transaction?"
-msgstr "Upravit aktuální účetní položku"
+msgstr "Přeskočit na účetní položku?"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4063
 #, fuzzy
@@ -6362,13 +6350,12 @@ msgstr "Neplatné účetní položky?"
 
 #. Translators: This is a ngettext(3) message, %d is the number of scheduled transactions deleted
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:868
-#, fuzzy, c-format
-#| msgid "Do you really want to delete this scheduled transaction?"
+#, c-format
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete %d scheduled transactions?"
 msgstr[0] "Opravdu chcete odstranit tuto plánovanou účetní položku?"
-msgstr[1] "Opravdu chcete odstranit tuto plánovanou účetní položku?"
-msgstr[2] "Opravdu chcete odstranit tuto plánovanou účetní položku?"
+msgstr[1] "Opravdu chcete odstranit %d plánované účetní položky?"
+msgstr[2] "Opravdu chcete odstranit %d plánovaných účetní položek?"
 
 #: gnucash/gnome/gnc-plugin-register2.c:57
 #: gnucash/gnome/gnc-plugin-register.c:58
@@ -6481,10 +6468,9 @@ msgid "This account register is read-only."
 msgstr "Tato účetní kniha je jen pro čtení."
 
 #: gnucash/gnome/gnc-split-reg2.c:938 gnucash/gnome/gnc-split-reg.c:2449
-#, fuzzy, c-format
-#| msgid "This account register is read-only."
+#, c-format
 msgid "The '%s' account register is read-only."
-msgstr "Tato účetní kniha je jen pro čtení."
+msgstr "Účetní kniha '%s' je jen pro čtení."
 
 #: gnucash/gnome/gnc-split-reg2.c:1003
 #, fuzzy
@@ -6716,6 +6702,9 @@ msgid ""
 "have mismatched commodities or currencies.\n"
 "You need to open each account individually to edit transactions."
 msgstr ""
+"Účetní položky v tomto účtu nemohou být upravovány, protože jeho podúčty "
+"mají rozdílné komodity nebo měny.\n"
+"Pro úpravu účetních položek musíte otevřít každý účet zvlášť."
 
 #: gnucash/gnome/gnc-split-reg.c:2525
 #, fuzzy
@@ -6754,7 +6743,7 @@ msgstr "Spravovat vaše finance, účty a investice"
 #: gnucash/gnome/gnucash.appdata.xml.in.in:8
 msgid ""
 "GnuCash is a program for personal and small-business financial-accounting."
-msgstr ""
+msgstr "GnuCash je program pro osobní a malofiremní finanční účetnictví."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:11
 msgid ""
@@ -7211,9 +7200,8 @@ msgstr "_Nová položka..."
 #: gnucash/gnome-utils/gnc-recurrence.c:544
 #: gnucash/gtkbuilder/dialog-commodities.glade:121
 #: gnucash/gtkbuilder/dialog-price.glade:848
-#, fuzzy
 msgid "_Add"
-msgstr "Adresa: "
+msgstr ""
 
 #: gnucash/gnome-search/dialog-search.c:1172
 msgid "all criteria are met"
@@ -7391,7 +7379,6 @@ msgid "Match case"
 msgstr ""
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:178
-#, fuzzy
 msgid ""
 "\n"
 "The file you are trying to load is from an older version of GnuCash. The "
@@ -7413,11 +7400,12 @@ msgid ""
 "Press \"Next\" now to select the correct character encoding for your data "
 "file.\n"
 msgstr ""
-"Soubor, který se pokousíte načíst, je ze starší verze GnuCash. Ve formátu "
+"\n"
+"Soubor, který se pokoušíte načíst, je ze starší verze GnuCash. Ve formátu "
 "souboru ve starších verzích chybí podrobné určení používaného kódování "
 "znaků. To znamená, že text ve vašem souboru dat lze číst několika "
 "nejednoznačnými způsoby. Tuto nejednoznačnost nelze automaticky vyřešit, ale "
-"nový formát souboru GnuCash 2.0.0 bude obsahoat všechny potřebné informace, "
+"nový formát souboru GnuCash 2.0.0 bude obsahovat všechny potřebné informace, "
 "abyste tento krok nemuseli provádět znovu.\n"
 "\n"
 "GnuCash se pokusí uhodnout správné kódování znaků vašeho souboru dat. Na "
@@ -7428,14 +7416,13 @@ msgstr ""
 "získání jiných výsledků. Možná budete muset upravit seznam kódování znaků "
 "kliknutím na odpovídající tlačítko.\n"
 "\n"
-"Zvolte správné kódování znaků vašeho souboru dat stiknutím 'Vpřed'."
+"Zvolte správné kódování znaků vašeho souboru dat stisknutím 'Vpřed'.\n"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:198
 msgid "Ambiguous character encoding"
 msgstr "Nejednoznačné kódování znaků"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:201
-#, fuzzy
 msgid ""
 "The file has been loaded successfully. If you click \"Apply\" it will be "
 "saved and reloaded into the main application. That way you will have a "
@@ -7443,11 +7430,11 @@ msgid ""
 "\n"
 "You can also go back and verify your selections by clicking on \"Back\"."
 msgstr ""
-"Soubor byl úspěšně načten. Pokud kliknete na 'Pokužít', bude uložen a znovu "
+"Soubor byl úspěšně načten. Pokud kliknete na \"Použít\", bude uložen a znovu "
 "načten do hlavní aplikace. Tak budete mít ve stejném adresáři fungující "
 "soubor jako zálohu.\n"
 "\n"
-"Můžete také jít zpět a zkontrolovat vaše volby kliknutím na 'Zpět'."
+"Můžete také jít zpět a zkontrolovat vaše volby kliknutím na \"Zpět\"."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:226
 msgid "European"
@@ -7856,7 +7843,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:299
 msgid "Action/Number"
-msgstr "_Číslo"
+msgstr ""
 
 #: gnucash/gnome-utils/dialog-file-access.c:303
 #, fuzzy
@@ -8118,9 +8105,9 @@ msgid "_Rename"
 msgstr "_Přečíslovat"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:705
-#, fuzzy, c-format
+#, c-format
 msgid "Tax table name \"%s\" already exists."
-msgstr "Tato komodita již existuje."
+msgstr ""
 
 #: gnucash/gnome-utils/dialog-tax-table.c:729
 #, fuzzy, c-format
@@ -8262,10 +8249,9 @@ msgstr "Nový..."
 #: gnucash/gnome-utils/gnc-amount-edit.c:411
 #: gnucash/register/register-core/formulacell.c:121
 #: gnucash/register/register-core/pricecell.c:161
-#, fuzzy, c-format
-#| msgid "An error occurred while processing %s."
+#, c-format
 msgid "An error occurred while processing '%s' at position %d"
-msgstr "Při zpracovávání %s došlo k chybě."
+msgstr "Při zpracovávání '%s' na pozici %d došlo k chybě"
 
 #: gnucash/gnome-utils/gnc-amount-edit.c:417
 #, fuzzy, c-format
@@ -8877,9 +8863,9 @@ msgstr "GnuCash nemohl získat zámek pro %s."
 #. Translators: %s is a path to a database or any other url,
 #. like mysql://user@server.somewhere/somedb, https://www.somequotes.com/thequotes
 #: gnucash/gnome-utils/gnc-keyring.c:356
-#, fuzzy, c-format
+#, c-format
 msgid "Enter a user name and password to connect to: %s"
-msgstr "Zadejte vaše jméno uživatele a heslo"
+msgstr "Zadejte uživatelské jméno a heslo pro připojení k %s"
 
 #: gnucash/gnome-utils/gnc-main-window.c:135
 #, c-format
@@ -8919,13 +8905,12 @@ msgid "Print the currently active page"
 msgstr "Vytisknout aktuální stránku"
 
 #: gnucash/gnome-utils/gnc-main-window.c:300
-#, fuzzy
 msgid "Pa_ge Setup..."
-msgstr "_Nastavit"
+msgstr "Nastav_ení stránky..."
 
 #: gnucash/gnome-utils/gnc-main-window.c:301
 msgid "Specify the page size and orientation for printing"
-msgstr ""
+msgstr "Určete velikost a orientaci stran pro tisk"
 
 #: gnucash/gnome-utils/gnc-main-window.c:305
 msgid "Proper_ties"
@@ -9182,9 +9167,9 @@ msgstr ""
 
 #. Translators: This message appears in the status bar after opening the file.
 #: gnucash/gnome-utils/gnc-main-window.c:1797
-#, fuzzy, c-format
+#, c-format
 msgid "File %s opened. %s"
-msgstr "Zpracovávání souboru QIF selhalo: %s"
+msgstr "Soubor %s otevřen. %s"
 
 #: gnucash/gnome-utils/gnc-main-window.c:2965
 msgctxt "lower case key for short cut to 'Accounts'"
@@ -9206,13 +9191,13 @@ msgstr "Možnosti knihy"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4897 gnucash/gnucash-core-app.cpp:261
 msgid "(user modifiable)"
-msgstr ""
+msgstr "(uživatelsky nastavitelné)"
 
 #. Translators: %s will be replaced with the current year
 #: gnucash/gnome-utils/gnc-main-window.c:4924
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
-msgstr ""
+msgstr "Copyright © 1997-%s přispěvatelé GnuCash."
 
 #: gnucash/gnome-utils/gnc-main-window.c:4936
 #: gnucash/gnome-utils/gnc-splash.c:98
@@ -9222,11 +9207,11 @@ msgstr "Verze"
 #: gnucash/gnome-utils/gnc-main-window.c:4937
 #: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:278
 msgid "Build ID"
-msgstr ""
+msgstr "Verze sestavení"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4945
 msgid "Accounting for personal and small business finance."
-msgstr ""
+msgstr "Účetnictví pro osobní a malofiremní finance."
 
 #. Translators: the following string will be shown in Help->About->Credits
 #. Enter your name or that of your team and an email contact for feedback.
@@ -9238,7 +9223,7 @@ msgstr "Miloslav Trmač <mitr@volny.cz>"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4957
 msgid "Visit the GnuCash website."
-msgstr ""
+msgstr "Navštivte webové stránky GnuCash."
 
 #: gnucash/gnome-utils/gnc-period-select.c:71
 #: libgnucash/app-utils/date-utilities.scm:986
@@ -10172,9 +10157,8 @@ msgstr "Nevyváženost"
 #. Translators: currently max 34 (ASCII) chars (= 17 or 8 UTF-8 chars depending on the block)
 #. See "MAX_DATE_LENGTH" in https://code.gnucash.org/docs/MAINT/group__Date.html
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:1489
-#, fuzzy
 msgid " Scheduled "
-msgstr "Plánováno"
+msgstr " Plánováno "
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2316
 #: gnucash/register/ledger-core/split-register-control.c:1521
@@ -10442,7 +10426,7 @@ msgstr "Povoleno"
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:141
 msgctxt "Single-character short column-title form of 'Enabled'"
 msgid "E"
-msgstr ""
+msgstr "P"
 
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:152
 msgid "Last Occur"
@@ -10517,19 +10501,16 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:113
-#, fuzzy
 msgid "Name of the report to run\n"
-msgstr "Název společnosti"
+msgstr ""
 
 #: gnucash/gnucash-cli.cpp:115
-#, fuzzy
 msgid "Specify export type\n"
-msgstr "Zvolte typ slevy"
+msgstr ""
 
 #: gnucash/gnucash-cli.cpp:117
-#, fuzzy
 msgid "Output file for report\n"
-msgstr "Tapeta na pozadí pro sestavy"
+msgstr ""
 
 #: gnucash/gnucash-cli.cpp:132
 msgid "Unknown quotes command '{1}'"
@@ -10554,28 +10535,21 @@ msgid "Missing command or option"
 msgstr "Toto je barevná možnost"
 
 #: gnucash/gnucash-commands.cpp:92
-#, fuzzy
 msgid "No quotes retrieved. Finance::Quote isn't installed properly."
-msgstr ""
-"Nebyly získány žádné ceny. Finance::Quote není nainstalováno správně.\n"
+msgstr "Nebyly získány žádné ceny. Finance::Quote není nainstalováno správně."
 
 #: gnucash/gnucash-core-app.cpp:81
-#, fuzzy
 msgid "This is a development version. It may or may not work."
-msgstr "Toto je vývojová verze. Může nebo nemusí fungovat.\n"
+msgstr "Toto je vývojová verze. Může nebo nemusí fungovat."
 
 #: gnucash/gnucash-core-app.cpp:82
-#, fuzzy
 msgid "Report bugs and other problems to gnucash-devel@gnucash.org"
-msgstr "Chyby a jiné problémy hlaste na gnucash-devel@gnucash.org.\n"
+msgstr "Chyby a jiné problémy hlaste na gnucash-devel@gnucash.org"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:84
-#, fuzzy
 msgid "You can also lookup and file bug reports at {1}"
-msgstr ""
-"Můžete také vyhledávat a zakládat hlášení o chybách na http://bugzilla.gnome."
-"org\n"
+msgstr "Můžete také vyhledávat a zakládat hlášení o chybách na {1}"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:86
@@ -10593,7 +10567,7 @@ msgstr ""
 
 #: gnucash/gnucash-core-app.cpp:224
 msgid "- GnuCash, accounting for personal and small business finance"
-msgstr ""
+msgstr "- GnuCash, účetnictví pro osobní a malofiremní finance"
 
 #: gnucash/gnucash-core-app.cpp:226
 msgid "{1} [options] [datafile]"
@@ -11799,20 +11773,19 @@ msgstr ""
 "Automaticky vložit desetinnou čáru do hodnot, které jsou vloženy bez ní."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:65
-#, fuzzy
 msgid "Number of automatic decimal places"
-msgstr "Kolik automatických desetinných míst bude vyplněno"
+msgstr "Počet automatických desetinných míst"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:66
-#, fuzzy
 msgid ""
 "This field specifies the number of automatic decimal places that will be "
 "filled in."
-msgstr "Kolik automatických desetinných míst bude vyplněno"
+msgstr "Toto pole určí, kolik automatických desetinných míst bude vyplněno."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:70
 msgid "Force prices to display as decimals even if they must be rounded."
 msgstr ""
+"Vynutit zobrazování cen jako desetinné číslo i když musí být zaokrouhleno."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:71
 #: gnucash/gtkbuilder/dialog-preferences.glade:1318
@@ -11821,12 +11794,14 @@ msgid ""
 "decimals instead of displaying the exact fraction if the fractional part "
 "cannot be exactly represented as a decimal."
 msgstr ""
+"Pokud je aktivní, GnuCash zaokrouhlí ceny pro jejich zobrazení jako "
+"desetinná čísla místo jejich zobrazení jako přesný zlomek, i když nebude "
+"možné zlomek přesně vyjádřit jako desetinné číslo."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:75
 #: gnucash/gtkbuilder/dialog-preferences.glade:1884
-#, fuzzy
 msgid "Do not create log/backup files."
-msgstr "Nemohu vytvořit počáteční zůstatek."
+msgstr "Nevytvářet soubory záznamů/záloh."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:76
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:81
@@ -11838,6 +11813,10 @@ msgid ""
 "keep old files for a number of days. How many days is defined in key 'retain-"
 "days'"
 msgstr ""
+"Toto nastavení určuje co dělat se starými soubory záznamů/záloh. \"Navždy\" "
+"uchová všechny soubory. \"Nikdy\" zabrání uchovávání souborů. Při každém "
+"uložení budou staré verze souboru smazány. Počet dní určí dobu pro ukládání "
+"starých souborů."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:80
 #: gnucash/gtkbuilder/dialog-preferences.glade:1902
@@ -11850,15 +11829,16 @@ msgid "Do not delete log/backup files."
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:90
-#, fuzzy
 msgid "Delete old log/backup files after this many days (0 = never)"
-msgstr "Smazat steré soubory záznamů/záloh po tolika dnech (0 = nikdy)."
+msgstr "Smazat staré soubory záznamů/záloh po tolika dnech (0 = nikdy)"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:91
 msgid ""
 "This setting specifies the number of days after which old log/backup files "
 "will be deleted (0 = never)."
 msgstr ""
+"Toto nastavení určí počet dní, po kolika budou smazány staré soubory záznamů/"
+"záloh (0 = nikdy)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:95
 #: gnucash/gtkbuilder/dialog-preferences.glade:686
@@ -13021,11 +13001,10 @@ msgstr "Účty sestavy"
 
 # nemá žádné možnosti :-)
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:66
-#, fuzzy
 msgid ""
 "\n"
 "Enter file name and location for the Import...\n"
-msgstr "Tato sestava nemá žádné volby."
+msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:79
 #, fuzzy
@@ -13180,7 +13159,7 @@ msgstr "Vybrat vš_e"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:456
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:141
 msgid "Select _Range"
-msgstr "Zvolte rozsah"
+msgstr "Zvolte _rozsah"
 
 #. Filter By Dialog, Date Tab, Start section
 #: gnucash/gtkbuilder/assistant-csv-export.glade:484
@@ -13239,11 +13218,10 @@ msgstr "Odstranění účtu"
 
 # nemá žádné možnosti :-)
 #: gnucash/gtkbuilder/assistant-csv-export.glade:687
-#, fuzzy
 msgid ""
 "\n"
 "Enter file name and location for the Export...\n"
-msgstr "Tato sestava nemá žádné volby."
+msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:700
 #, fuzzy
@@ -13398,9 +13376,8 @@ msgstr "<b>Formát času</b>"
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:587
 #: gnucash/gtkbuilder/dialog-preferences.glade:1133
 #: gnucash/gtkbuilder/gnc-date-format.glade:39
-#, fuzzy
 msgid "Date Format"
-msgstr "Formát data:"
+msgstr "Formát data"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:601
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:599
@@ -13652,11 +13629,12 @@ msgid "New Account Hierarchy Setup"
 msgstr "Nové nastavení hierarchie účtů"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:44
-#, fuzzy
 msgid ""
 "\n"
 "Please choose the currency to use for new accounts."
-msgstr "Zvolte prosím měnu, kterou použít pro nové účty."
+msgstr ""
+"\n"
+"Zvolte prosím měnu, která se bude používat pro nové účty."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:102
 msgid "Choose Currency"
@@ -14420,8 +14398,9 @@ msgid "Match existing transactions"
 msgstr "Zvolte odpovídající existující účetní položku"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1269
+#, fuzzy
 msgid "_Imported transactions needing review"
-msgstr "První část importované účetní položky"
+msgstr "_Importované položky potřebující revizi"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1307
 #, fuzzy
@@ -14581,8 +14560,8 @@ msgid ""
 "without making any changes."
 msgstr ""
 "Jestliže jste dokončili vytváření rozdělení nebo sloučení akcií, stiskněte "
-"'Dokončit'. Můžete také zkontrolovat své volby stisknutím 'Zpět' nebo "
-"skončit bez provedení změn stisknutím 'Zrušit'."
+"'Použít'. Můžete také zkontrolovat své volby stisknutím 'Zpět' nebo skončit "
+"bez provedení změn stisknutím 'Zrušit'."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:418
 #, fuzzy
@@ -14946,11 +14925,8 @@ msgid "Show accounts which have a zero total value."
 msgstr "Skrýt účty, které mají nulovou celkovou hodnotu."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1067
-#, fuzzy
 msgid "Use Commodity Value"
 msgstr ""
-"\n"
-"Komodita: "
 
 #: gnucash/gtkbuilder/dialog-account.glade:1199
 #: gnucash/gtkbuilder/dialog-customer.glade:214
@@ -15159,9 +15135,8 @@ msgid "_Select or add a GnuCash account:"
 msgstr "Zvolte nebo přidejte účet GnuCash"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:7
-#, fuzzy
 msgid "Import transactions from text file"
-msgstr "První část importované účetní položky:"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:123
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:126
@@ -15653,9 +15628,8 @@ msgstr "Dodací adresa"
 
 #. Title of dialog
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:9
-#, fuzzy
 msgid "Import customers or vendors from text file"
-msgstr "První část importované účetní položky:"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:157
 msgid "For importing customer lists."
@@ -15666,9 +15640,8 @@ msgid "For importing vendor lists."
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:192
-#, fuzzy
 msgid "<b>2. Select Import Type</b>"
-msgstr "Zvolte typ slevy"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:52
 #, fuzzy
@@ -16016,26 +15989,20 @@ msgid "Search the Account List"
 msgstr "Rodičovský účet"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:38
-#, fuzzy
 msgid "Close _on Jump"
-msgstr "Uzavřít účetní knihu"
+msgstr "Zavřít př_i přeskočení"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:55
-#, fuzzy
 msgid "_Jump To"
-msgstr "_Skok"
+msgstr "_Přeskočit"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:127
-#, fuzzy
-#| msgid "All accounts"
 msgid "All _accounts"
-msgstr "Všechny účty"
+msgstr "Všechny _účty"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:165
-#, fuzzy
-#| msgid " Search "
 msgid "Search scope"
-msgstr " Hledat "
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:191
 #, fuzzy
@@ -16074,24 +16041,20 @@ msgid "Non-Bayesian"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:193
-#, fuzzy
 msgid "Source Account Name"
-msgstr "Zobrazovat úplné názvy účtů"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:205
-#, fuzzy
 msgid "Based On"
-msgstr "Skončil dne"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:219
-#, fuzzy
 msgid "Match String"
-msgstr "Přiřazení chybí!"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:233
-#, fuzzy
 msgid "Mapped to Account Name"
-msgstr "Název účtu"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:247
 msgid "Count of Match String Usage"
@@ -16104,18 +16067,16 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:335
-#, fuzzy
 msgid "_Filter"
-msgstr "_Soubor"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:349
 msgid "_Expand All"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:363
-#, fuzzy
 msgid "Collapse _All"
-msgstr "Zrušit vše"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:399
 msgid ""
@@ -16147,9 +16108,8 @@ msgstr "Zvolte odpovídající existující účetní položku"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:313
-#, fuzzy
 msgid "Show Reconciled"
-msgstr "Odsouhlasena"
+msgstr ""
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:374
@@ -16311,10 +16271,8 @@ msgid "Show matched _information"
 msgstr "Informace o faktuře"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1111
-#, fuzzy
-#| msgid "Spend"
 msgid "A_ppend"
-msgstr "Utraceno"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-import.glade:1115
 msgid ""
@@ -16543,8 +16501,9 @@ msgid "Close dialog and make no changes."
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-options.glade:61
+#, fuzzy
 msgid "Apply changes but do not close dialog."
-msgstr ""
+msgstr "Použít změny, ale nezavírat  ."
 
 #: gnucash/gtkbuilder/dialog-options.glade:78
 #, fuzzy
@@ -16646,27 +16605,23 @@ msgstr "Cílový účet"
 
 #. Date format label for 07/31/2013
 #: gnucash/gtkbuilder/dialog-preferences.glade:50
-#, fuzzy
 msgid "US"
-msgstr "_USA:"
+msgstr "Americký"
 
 #. Date format label for 31/07/2013
 #: gnucash/gtkbuilder/dialog-preferences.glade:54
-#, fuzzy
 msgid "UK"
-msgstr "_VB:"
+msgstr "Britský"
 
 #. Date format label for 31.07.2013
 #: gnucash/gtkbuilder/dialog-preferences.glade:58
-#, fuzzy
 msgid "Europe"
-msgstr "Evropské"
+msgstr "Evropský"
 
 #. Date format label for 2013-07-31
 #: gnucash/gtkbuilder/dialog-preferences.glade:62
-#, fuzzy
 msgid "ISO"
-msgstr "_ISO:"
+msgstr "ISO"
 
 #. Label for locale settings of formats, …
 #: gnucash/gtkbuilder/dialog-preferences.glade:66
@@ -16674,7 +16629,7 @@ msgstr "_ISO:"
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:59
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:56
 msgid "Locale"
-msgstr ""
+msgstr "Dle prostředí"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:140
 msgid "_Reset"
@@ -16876,33 +16831,33 @@ msgid "Use a 24 hour (instead of a 12 hour) time format."
 msgstr "Používat 24 hodinový (místo 12 hodinového) formát času."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1189
-#, fuzzy
 msgid "<b>Date Completion</b>"
-msgstr "<b>Formát data</b>"
+msgstr "<b>Automatické doplňování dat</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1202
 msgid "When a date is entered without year, it should be taken"
-msgstr ""
+msgstr "Když je datum zadáno bez roku, mělo by být přijato"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1218
 msgid ""
 "Dates will be completed so that they are within the current calendar year."
-msgstr ""
+msgstr "Data budou doplněna, aby byla v současném kalendářním roce."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1231
 msgid ""
 "In a sliding 12-month window starting this\n"
 "many months before the current month"
 msgstr ""
+"V klouzavém 12měsíčním okně začínajícím tolika\n"
+"měsíci před současným měsícem"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1255
-#, fuzzy
 msgid "Enter number of months."
-msgstr "Zadejte jméno zákazníka"
+msgstr "Zadejte počet měsíců."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1276
 msgid "Use the date format specified by the system locale."
-msgstr "Používat formát data specifikovaný systémovým locale."
+msgstr "Používat formát data určený systémovým prostředím."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1302
 msgid "<b>Numbers</b>"
@@ -16917,9 +16872,8 @@ msgid "Display ne_gative amounts in red"
 msgstr "Zobrazovat záporné částky _červeně"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1336
-#, fuzzy
 msgid "Display negative amounts in red."
-msgstr "Zobrazovat záporné částky červeně"
+msgstr "Zobrazovat záporné částky červeně."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1348
 msgid "_Automatic decimal point"
@@ -16933,17 +16887,16 @@ msgstr ""
 "Automaticky vložit desetinnou čáru do hodnot, které jsou vloženy bez ní."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1369
-#, fuzzy
 msgid "_Decimal places"
-msgstr "_Desetinná místa:"
+msgstr "_Desetinná místa"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1384
 msgid "How many automatic decimal places will be filled in."
-msgstr "Kolik automatických desetinných míst bude vyplněno"
+msgstr "Kolik automatických desetinných míst bude vyplněno."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1530
 msgid "Numbers, Date, Time"
-msgstr ""
+msgstr "Čísla, data, časy"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1562
 msgid "Perform account list _setup on new file"
@@ -16958,7 +16911,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1599
 msgid "Display \"_tip of the day\" dialog"
-msgstr "Zobrazovat dialog \"Tip dne\""
+msgstr "Zobrazovat dialog \"_Tip dne\""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1605
 #, fuzzy
@@ -16967,7 +16920,7 @@ msgstr "Zobrazovat při startu nápovědu o používání GnuCash"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1626
 msgid "How many days to keep old log/backup files."
-msgstr ""
+msgstr "Kolik dní uchovávat staré soubory záznamů/záloh."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1645
 #: gnucash/gtkbuilder/dialog-sx.glade:615
@@ -16978,9 +16931,8 @@ msgid "days"
 msgstr "dnů"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1664
-#, fuzzy
 msgid "<b>_Retain log/backup files</b>"
-msgstr "Za_chovávat soubory záznamů:"
+msgstr "<b>Za_chovávat soubory záznamů/záloh</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1676
 msgid "Com_press files"
@@ -17035,9 +16987,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1896
 #: gnucash/gtkbuilder/dialog-sx.glade:1259
-#, fuzzy
 msgid "For"
-msgstr "Formulář"
+msgstr "Pro"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1914
 #: gnucash/gtkbuilder/dialog-sx.glade:1227
@@ -17080,10 +17031,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2102
-#, fuzzy
-#| msgid "<b>Files</b>"
 msgid "<b>Linked Files</b>"
-msgstr "<b>Soubory</b>"
+msgstr "<b>Připojené soubory</b>"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2273
@@ -18177,11 +18126,11 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-sx.glade:694
 msgid "Crea_te in advance"
-msgstr "Vytvářet předem"
+msgstr "Vytváře_t předem"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:709
 msgid "R_emind in advance"
-msgstr "Připomínat předem"
+msgstr "Připomínat př_edem"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:720
 #, fuzzy
@@ -18366,9 +18315,8 @@ msgid "_Next"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-totd.glade:95
-#, fuzzy
 msgid "<b>Tip of the Day</b>"
-msgstr "<b>Tip dne:</b>"
+msgstr "<b>Tip dne</b>"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:145
 msgid "_Show tips at startup"
@@ -18868,28 +18816,24 @@ msgid "Select occurrence date above."
 msgstr "Zvolte výše datum výskytu."
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:710
-#, fuzzy
 msgctxt "Daily"
 msgid "Every"
 msgstr "Každý"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:741
-#, fuzzy
 msgctxt "Daily"
 msgid "days."
-msgstr "dnů."
+msgstr "den."
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:787
-#, fuzzy
 msgctxt "Weekly"
 msgid "Every"
 msgstr "Každý"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:818
-#, fuzzy
 msgctxt "Weekly"
 msgid "weeks."
-msgstr "týdnů."
+msgstr "týden."
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:853
 #: gnucash/report/reports/example/daily-reports.scm:176
@@ -18927,16 +18871,14 @@ msgid "Tuesday"
 msgstr "Úterý"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1023
-#, fuzzy
 msgctxt "Semimonthly"
 msgid "Every"
 msgstr "Každý"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1053
-#, fuzzy
 msgctxt "Semimonthly"
 msgid "months."
-msgstr "měsíců."
+msgstr "měsíc."
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1078
 msgid "First on the"
@@ -18946,23 +18888,21 @@ msgstr "Poprvé dne"
 #: gnucash/gtkbuilder/gnc-frequency.glade:1188
 #: gnucash/gtkbuilder/gnc-frequency.glade:1358
 msgid "except on weekends"
-msgstr ""
+msgstr "kromě víkendů"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1155
 msgid "then on the"
 msgstr "pak dne"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1267
-#, fuzzy
 msgctxt "Monthly"
 msgid "Every"
 msgstr "Každý"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1299
-#, fuzzy
 msgctxt "Monthly"
 msgid "months."
-msgstr "měsíců."
+msgstr "měsíc."
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1325
 msgid "On the"
@@ -19352,9 +19292,8 @@ msgid "Show _zero balance owners"
 msgstr "Zobrazovat položky s nulovým zůstatkem?"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:71
-#, fuzzy
 msgid "About Auto-Clear"
-msgstr "Práh automatického _vymazání"
+msgstr ""
 
 #: gnucash/gtkbuilder/window-autoclear.glade:86
 msgid ""
@@ -19364,10 +19303,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/window-autoclear.glade:101
-#, fuzzy
-#| msgid "Fraction"
 msgid "Caution!"
-msgstr "Zlomek"
+msgstr "Pozor!"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:116
 msgid ""
@@ -19587,7 +19524,6 @@ msgid "Match Online accounts with GnuCash accounts"
 msgstr "Přiřadit účty online bankovnictví k účtům GnuCash"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:280
-#, fuzzy
 msgid ""
 "The setup for matching Online Banking accounts to GnuCash accounts is now "
 "finished. You can now invoke Online Banking actions on those accounts.\n"
@@ -19600,10 +19536,11 @@ msgstr ""
 "Nyní je dokončeno nastavení přiřazení účtů online bankovnictví účtům "
 "GnuCash. Nyní můžete na těchto účtech provádět akce online bankovnictví.\n"
 "\n"
+"\n"
 "Chcete-li přidat další banku, uživatele nebo účet, můžete kdykoli tohoto "
 "druida spustit znovu.\n"
 "\n"
-"Nyní stiskněte \"Dokončit\"."
+"Nyní stiskněte \"Použít\"."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:296
 msgid "Online Banking Setup Finished"
@@ -19614,9 +19551,8 @@ msgid "Online Banking Connection Window"
 msgstr "Okno spojení online bankovnictví"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:26
-#, fuzzy
 msgid "_Abort"
-msgstr "O _aplikaci"
+msgstr "_Zrušit"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:82
 #: gnucash/import-export/aqb/dialog-ab.glade:148
@@ -20044,37 +19980,27 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:610
-#, fuzzy
 msgid ""
 "You did not enter a recipient name. A recipient name is required for an "
 "online transfer.\n"
 msgstr ""
-"Nezadali jste jméno příjemce. Pro převod online je vyžadováno jméno "
-"příjemce.\n"
+"Nezadali jste jméno příjemce. Pro převod online je vyžadováno jméno příjemce."
 "\n"
-"Chcete úlohu zadat znovu?"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:630
-#, fuzzy
 msgid ""
 "You did not enter a recipient account. A recipient account is required for "
 "an online transfer.\n"
 msgstr ""
-"Nezadali jste jméno příjemce. Pro převod online je vyžadováno jméno "
-"příjemce.\n"
-"\n"
-"Chcete úlohu zadat znovu?"
+"Nezadali jste účet příjemce. Pro převod online je vyžadován účet příjemce.\n"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:646
-#, fuzzy
 msgid ""
 "You did not enter a recipient bank. A recipient bank is required for an "
 "online transfer.\n"
 msgstr ""
-"Nezadali jste jméno příjemce. Pro převod online je vyžadováno jméno "
-"příjemce.\n"
+"Nezadali jste banku příjemce. Pro převod online je vyžadována banka příjemce."
 "\n"
-"Chcete úlohu zadat znovu?"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:664
 #, fuzzy
@@ -20090,14 +20016,11 @@ msgstr ""
 "Chcete úlohu zadat znovu?"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:681
-#, fuzzy
 msgid ""
 "You did not enter any transaction purpose. A purpose is required for an "
 "online transfer.\n"
 msgstr ""
 "Nezadali jste účel účetní položky. Pro převod online je vyžadován účel.\n"
-"\n"
-"Chcete úlohu zadat znovu?"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:1098
 msgid ""
@@ -20590,9 +20513,9 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:297
-#, fuzzy, c-format
+#, c-format
 msgid "Validation...\n"
-msgstr "aplikace"
+msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:327
 #, c-format
@@ -20626,9 +20549,9 @@ msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:404
 #: gnucash/import-export/bi-import/dialog-bi-import.c:475
-#, fuzzy, c-format
+#, c-format
 msgid "Row %d, invoice %s/%u: account %s does not exist.\n"
-msgstr "Zobrazovat poznámky o účtu"
+msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:416
 #, c-format
@@ -20656,21 +20579,20 @@ msgid "Error(s) in invoice without id, all rows of this invoice ignored.\n"
 msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:647
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Processing...\n"
-msgstr "_Zpracovat platbu..."
+msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:716
-#, fuzzy, c-format
+#, c-format
 msgid "Invoice %s created.\n"
-msgstr "Poznámky o faktuře"
+msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:731
-#, fuzzy
 msgid "Do you want to update existing bills/invoices?"
-msgstr "Opravdu chcete vystavit fakturu?"
+msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:739
 #, c-format
@@ -20683,14 +20605,14 @@ msgid "Invoice %s not updated because it is already posted.\n"
 msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:767
-#, fuzzy, c-format
+#, c-format
 msgid "Invoice %s updated.\n"
-msgstr "Poznámky o faktuře"
+msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:885
-#, fuzzy, c-format
+#, c-format
 msgid "Invoice %s posted.\n"
-msgstr "Poznámky o faktuře"
+msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:890
 #, c-format
@@ -20703,9 +20625,9 @@ msgid "Invoice %s NOT posted because it requires currency conversion.\n"
 msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:920
-#, fuzzy, c-format
+#, c-format
 msgid "Nothing to process.\n"
-msgstr "Nelze zrušit žádná varování."
+msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:138
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:123
@@ -20970,9 +20892,8 @@ msgid "Export _Transactions to CSV..."
 msgstr "Získat _účetní položky..."
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:60
-#, fuzzy
 msgid "Export the Transactions to a CSV file"
-msgstr "První část importované účetní položky:"
+msgstr ""
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:64
 #, fuzzy
@@ -21177,9 +21098,8 @@ msgstr ""
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2125
-#, fuzzy
 msgid "The transactions were imported from file '{1}'."
-msgstr "První část importované účetní položky:"
+msgstr ""
 
 #: gnucash/import-export/csv-imp/csv-account-import.c:253
 #, c-format
@@ -21192,9 +21112,9 @@ msgid "Row %u, commodity %s / %s not found\n"
 msgstr ""
 
 #: gnucash/import-export/csv-imp/csv-account-import.c:314
-#, fuzzy, c-format
+#, c-format
 msgid "Row %u, account %s not in %s\n"
-msgstr "Zobrazovat poznámky o účtu"
+msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:60
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:57
@@ -21210,14 +21130,12 @@ msgstr "Čárka: 123.456,78"
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:446
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:472
-#, fuzzy
 msgid "Please select a date column."
-msgstr "Zvolte prosím platný účet půjčky."
+msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:451
-#, fuzzy
 msgid "Please select an amount column."
-msgstr "Zvolte prosím platný účet půjčky."
+msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:458
 msgid ""
@@ -21377,9 +21295,8 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:519
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:574
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:582
-#, fuzzy
 msgid "Column '{1}' could not be understood.\n"
-msgstr "Soubor %s nelze najít."
+msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:280
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:327
@@ -21486,9 +21403,8 @@ msgid "Import _Accounts from CSV..."
 msgstr "Exportovat _účty"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:51
-#, fuzzy
 msgid "Import Accounts from a CSV file"
-msgstr "První část importované účetní položky:"
+msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:55
 #, fuzzy
@@ -21496,19 +21412,16 @@ msgid "Import _Transactions from CSV..."
 msgstr "Importuji účetní položky"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:56
-#, fuzzy
 msgid "Import Transactions from a CSV file"
-msgstr "První část importované účetní položky:"
+msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:60
-#, fuzzy
 msgid "Import _Prices from a CSV file..."
-msgstr "První část importované účetní položky:"
+msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:61
-#, fuzzy
 msgid "Import Prices from a CSV file"
-msgstr "První část importované účetní položky:"
+msgstr ""
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:134
 #, fuzzy
@@ -21581,9 +21494,8 @@ msgid "Import _Customers & Vendors..."
 msgstr "Importovat _zákazníky a dodavatele..."
 
 #: gnucash/import-export/customer-import/gnc-plugin-customer-import.c:59
-#, fuzzy
 msgid "Import Customers and Vendors from a CSV text file."
-msgstr "První část importované účetní položky:"
+msgstr ""
 
 #: gnucash/import-export/import-account-matcher.c:272
 #, fuzzy, c-format
@@ -21717,16 +21629,14 @@ msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "Nová, NEVYROVNANÁ (pro převod %s potřebuji akci)!"
 
 #: gnucash/import-export/import-main-matcher.c:2051
-#, fuzzy, c-format
-#| msgid "Reconcile (manual) match"
+#, c-format
 msgid "Reconcile (manual) match to %s"
-msgstr "Odsouhlasit (ruční) přiřazení"
+msgstr "Odsouhlasit (ruční) přiřazení k %s"
 
 #: gnucash/import-export/import-main-matcher.c:2056
-#, fuzzy, c-format
-#| msgid "Reconcile (auto) match"
+#, c-format
 msgid "Reconcile (auto) match to %s"
-msgstr "Odsouhlasit (automatické) přiřazení"
+msgstr "Odsouhlasit (automatické) přiřazení k %s"
 
 #: gnucash/import-export/import-main-matcher.c:2065
 #: gnucash/import-export/import-main-matcher.c:2095
@@ -22029,11 +21939,9 @@ msgid "GnuCash was unable to save your mapping preferences."
 msgstr ""
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3447
-#, fuzzy, c-format
+#, c-format
 msgid "There was a problem with the import."
 msgstr ""
-"S přepínačem %s je probleém:%s.\n"
-"%s"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3449
 #, fuzzy, c-format
@@ -22806,10 +22714,9 @@ msgstr ""
 #. used to estimate widths.
 #: gnucash/register/ledger-core/split-register-layout.c:644
 #: gnucash/register/ledger-core/split-register-layout.c:652
-#, fuzzy
 msgctxt "sample"
 msgid "22/02/2000"
-msgstr "sample:12.12.2000"
+msgstr "22.02.2000"
 
 #. Translators: The 'sample' items are
 #. strings which are not displayed, but only
@@ -23103,9 +23010,8 @@ msgid "Negative Values in Red"
 msgstr "Zobrazovat záporné částky červeně"
 
 #: gnucash/report/html-fonts.scm:121
-#, fuzzy
 msgid "Display negative values in red."
-msgstr "Zobrazovat záporné částky červeně"
+msgstr "Zobrazovat záporné částky červeně."
 
 #: gnucash/report/html-fonts.scm:126
 #, fuzzy
@@ -25203,9 +25109,8 @@ msgstr "Zobrazovat počty podílů na účtech"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:131
 #: gnucash/report/reports/standard/portfolio.scm:63
-#, fuzzy
 msgid "The number of decimal places to use for share numbers."
-msgstr "Počet desetinných míst, které používat pro počty podílů"
+msgstr "Počet desetinných míst, které použít pro počty podílů."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:138
 #, fuzzy
@@ -25864,9 +25769,8 @@ msgid "Barchart"
 msgstr "Sloupcový graf aktiv"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1191
-#, fuzzy
 msgid " to "
-msgstr "%s do %s"
+msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1254
 #: gnucash/report/reports/standard/trial-balance.scm:855
@@ -27456,9 +27360,8 @@ msgstr "Další poznámky, které dát na fakturu"
 
 #: gnucash/report/reports/standard/invoice.scm:329
 #: gnucash/report/reports/standard/taxinvoice.scm:205
-#, fuzzy
 msgid "Thank you for your patronage!"
-msgstr "Děkujeme za Vaši přízeň"
+msgstr "Děkujeme za Vaši přízeň!"
 
 #: gnucash/report/reports/standard/invoice.scm:333
 msgid "Row 1 Left"
@@ -28294,9 +28197,8 @@ msgstr ""
 
 #: gnucash/report/reports/standard/receipt.scm:139
 #: gnucash/report/reports/standard/taxinvoice.scm:190
-#, fuzzy
 msgid "Payment received, thank you!"
-msgstr "Platba, děkujeme vám"
+msgstr "Platba přijata, děkujeme!"
 
 #: gnucash/report/reports/standard/receipt.scm:143
 msgid "Notes added at end of invoice -- may contain HTML markup"
@@ -30724,9 +30626,8 @@ msgid "m-d"
 msgstr "m-d-r"
 
 #: libgnucash/engine/gnc-datetime.cpp:572
-#, fuzzy
 msgid "Unknown date format specifier passed as argument."
-msgstr "Používat formát data specifikovaný systémovým locale."
+msgstr ""
 
 #: libgnucash/engine/gnc-datetime.cpp:577
 msgid "Value can't be parsed into a date using the selected date format."
