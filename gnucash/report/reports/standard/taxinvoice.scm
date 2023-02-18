@@ -58,7 +58,7 @@
                        (gnc:make-gnc-monetary curr amt) #f) acc)))
       (((= gncTaxTableEntryGetAmount percent) . rest)
        (lp rest
-           (cons (string-append (gnc:default-html-number-renderer percent #f) "%")
+           (cons (string-append (fmtnumeric percent) "%")
                  acc))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
