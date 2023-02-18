@@ -15,7 +15,6 @@ set(test_aqb_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/libgnucash/core-utils
   ${CMAKE_SOURCE_DIR}/libgnucash/gnc-module
   ${GLIB2_INCLUDE_DIRS}
-  ${GTK_INCLUDE_DIRS}
   ${AQBANKING_INCLUDE_DIRS}
 )
 
