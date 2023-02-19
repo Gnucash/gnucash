@@ -26,6 +26,8 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
+#include <stdbool.h>
+
 #include "dialog-utils.h"
 #include "gnc-amount-edit.h"
 #include "gnc-currency-edit.h"
@@ -311,16 +313,8 @@ gnc_employee_ccard_acct_toggled_cb (GtkToggleButton *button, gpointer data)
     if (!ew)
         return;
 
-    if (gtk_toggle_button_get_active (button))
-    {
-        gtk_widget_set_sensitive (ew->ccard_acct_sel, TRUE);
-        gtk_widget_show (ew->ccard_acct_sel);
-    }
-    else
-    {
-        gtk_widget_set_sensitive (ew->ccard_acct_sel, TRUE);
-        gtk_widget_hide (ew->ccard_acct_sel);
-    }
+    bool active = gtk_toggle_button_get_active (button);
+    gtk_widget_set_sensitive (ew->ccard_acct_sel, active);
 }
 
 static void
@@ -567,9 +561,6 @@ gnc_employee_new_window (GtkWindow *parent,
                                          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
     gtk_widget_show_all (ew->dialog);
-
-    if (ccard_acct == NULL)
-        gtk_widget_hide (ew->ccard_acct_sel);
 
     g_object_unref(G_OBJECT(builder));
 
