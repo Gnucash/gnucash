@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkListStore" id="tax_included_store">
@@ -182,6 +182,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="active_check">
+                            <property name="label" translatable="yes">Active</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
@@ -196,16 +197,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Active</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">2</property>
-                          </packing>
+                          <placeholder/>
                         </child>
                       </object>
                     </child>
@@ -542,19 +534,6 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="label35">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Tax Table</property>
-                            <property name="justify">right</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">3</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkComboBox" id="terms_menu">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
@@ -607,46 +586,34 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="hbox7">
+                          <object class="GtkCheckButton" id="taxtable_button">
+                            <property name="label" translatable="yes">Tax Table</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="tooltip-text" translatable="yes">Override the global Tax Table?</property>
+                            <property name="halign">start</property>
+                            <property name="margin-end">6</property>
+                            <property name="use-underline">True</property>
+                            <property name="draw-indicator">True</property>
+                            <signal name="toggled" handler="gnc_vendor_taxtable_check_cb" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBox" id="taxtable_menu">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="hexpand">True</property>
+                            <property name="model">taxtable_store</property>
+                            <signal name="changed" handler="gnc_vendor_taxtable_changed_cb" swapped="no"/>
                             <child>
-                              <object class="GtkCheckButton" id="taxtable_button">
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
-                                <property name="tooltip-text" translatable="yes">Override the global Tax Table?</property>
-                                <property name="halign">start</property>
-                                <property name="margin-end">6</property>
-                                <property name="use-underline">True</property>
-                                <property name="draw-indicator">True</property>
-                                <signal name="toggled" handler="gnc_vendor_taxtable_check_cb" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBox" id="taxtable_menu">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="model">taxtable_store</property>
-                                <signal name="changed" handler="gnc_vendor_taxtable_changed_cb" swapped="no"/>
-                                <child>
-                                  <object class="GtkCellRendererText" id="taxtable_cell_renderer_text"/>
-                                  <attributes>
-                                    <attribute name="text">0</attribute>
-                                  </attributes>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
+                              <object class="GtkCellRendererText" id="taxtable_cell_renderer_text"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
                             </child>
                           </object>
                           <packing>
