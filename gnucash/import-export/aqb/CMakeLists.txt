@@ -67,7 +67,7 @@ if(WITH_AQBANKING)
          gnc-register-gnome gnc-ledger-core gnc-engine gwengui-gtk3
          ${AQB_EXPORT_SYMBOLS} ${AQBANKING_LDFLAGS}
          ${GWENHYWFAR_LDFLAGS} ${GWEN_GTK3_LDFLAGS}
-         ${GNOME_LDFLAGS} ${AQB_LIBSTDCXX})
+         ${AQB_LIBSTDCXX})
 
   target_compile_definitions(gncmod-aqbanking PRIVATE -DG_LOG_DOMAIN=\"gnc.import.aqbanking\")
   target_compile_options(gncmod-aqbanking PRIVATE -Wno-deprecated-declarations)
