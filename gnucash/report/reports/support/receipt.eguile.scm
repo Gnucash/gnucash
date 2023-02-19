@@ -176,7 +176,6 @@
           <td align="right"><?scm:d (fmtnumeric qty) ?></td>
           <td align="right"><?scm:d (format #f "~4,2,,,'0f" (gnc-numeric-to-double each)) ?></td>
           <td align="right" nowrap><?scm:d (format #f "~4,2,,,'0f" (gnc-numeric-to-double rval)) ?>
-          <!-- <td align="right" nowrap><?scm:d (fmtnumeric rval) ?> -->
               <?scm (if tax? (begin ?>
                 &nbsp;T
               <?scm ) (begin ?>

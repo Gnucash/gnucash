@@ -298,7 +298,7 @@
       (let* ((inv-total (gncInvoiceGetTotal opt-invoice))
              (tax-total (gncInvoiceGetTotalTax opt-invoice))
              (sub-total (gncInvoiceGetTotalSubtotal opt-invoice))
-             (dsc-total (- inv-total tax-total sub-total))
+             (dsc-total (gnc:make-commodity-collector))
              (total-col (gnc:make-commodity-collector)))
         (total-col 'add currency inv-total)
         (for-each
@@ -314,6 +314,7 @@
                   (acc       (if cust-doc? (gncEntryGetInvAccount entry)(gncEntryGetBillAccount entry)))
                   (taxable   (if cust-doc? (gncEntryGetInvTaxable entry)(gncEntryGetBillTaxable entry)))
                   (taxtable  (if cust-doc? (gncEntryGetInvTaxTable entry)(gncEntryGetBillTaxTable entry))))
+              (dsc-total 'add currency rdiscval)
     ?>
     <tr valign="top">
       <?scm (if opt-col-date (begin ?>
@@ -362,7 +363,7 @@
                     (if (and discount?) 1 0)
         ) ?>"><strong><?scm:d opt-subtotal-heading ?></strong></td>
         <?scm (if discount? (begin ?>
-        <td align="right" class="subtotal"><strong><?scm:d (fmtmoney currency dsc-total) ?></strong></td>
+        <td align="right" class="subtotal"><strong><?scm (display-comm-coll-total dsc-total #f) ?></strong></td>
         <?scm )) ?>
         <?scm (if tax? (begin ?>
           <td align="right" class="subtotal"><strong><?scm:d (fmtmoney currency sub-total) ?></strong></td>
