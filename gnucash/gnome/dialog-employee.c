@@ -280,28 +280,26 @@ void
 gnc_employee_name_changed_cb (GtkWidget *widget, gpointer data)
 {
     EmployeeWindow *ew = data;
-    char *fullname, *title;
-    const char *name, *id;
+    char *title;
 
     if (!ew)
         return;
 
-    name = gtk_entry_get_text (GTK_ENTRY (ew->name_entry));
+    const char *header = (ew->dialog_type == EDIT_EMPLOYEE) ?
+        _("Edit Employee") : _("New Employee");
+
+    const char *name = gtk_entry_get_text (GTK_ENTRY (ew->name_entry));
     if (!name || *name == '\0')
         name = _("<No name>");
 
-    id = gtk_entry_get_text (GTK_ENTRY (ew->id_entry));
-
-    fullname = g_strconcat (name, " (", id, ")", (char *)NULL);
-
-    if (ew->dialog_type == EDIT_EMPLOYEE)
-        title = g_strconcat (_("Edit Employee"), " - ", fullname, (char *)NULL);
+    const char *id = gtk_entry_get_text (GTK_ENTRY (ew->id_entry));
+    if (id && *id)
+        title = g_strdup_printf ("%s - %s (%s)", header, name, id);
     else
-        title = g_strconcat (_("New Employee"), " - ", fullname, (char *)NULL);
+        title = g_strdup_printf ("%s - %s", header, name);
 
     gtk_window_set_title (GTK_WINDOW (ew->dialog), title);
 
-    g_free (fullname);
     g_free (title);
 }
 
