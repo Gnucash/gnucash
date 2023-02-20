@@ -46,8 +46,8 @@ typedef struct _GncDenseCalStoreClass GncDenseCalStoreClass;
 GType gnc_dense_cal_store_get_type(void);
 GncDenseCalStore* gnc_dense_cal_store_new(int num_marks);
 void gnc_dense_cal_store_clear(GncDenseCalStore *model);
-void gnc_dense_cal_store_update_name(GncDenseCalStore *model, gchar* name);
-void gnc_dense_cal_store_update_info(GncDenseCalStore *model, gchar* info);
+void gnc_dense_cal_store_update_name(GncDenseCalStore *model, const gchar* name);
+void gnc_dense_cal_store_update_info(GncDenseCalStore *model, const gchar* info);
 
 void gnc_dense_cal_store_update_recurrences_no_end(GncDenseCalStore *model, GDate *start, GList *recurrences);
 void gnc_dense_cal_store_update_recurrences_count_end(GncDenseCalStore *model, GDate *start, GList *recurrences, int num_occur);
