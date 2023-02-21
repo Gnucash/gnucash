@@ -69,7 +69,6 @@ target_include_directories(gnucash-guile
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${GUILE_INCLUDE_DIRS}
-        ${GLIB2_INCLUDE_DIRS}
     PRIVATE
         ${CMAKE_SOURCE_DIR}/common
         ${CMAKE_BINARY_DIR}/common)
@@ -81,7 +80,7 @@ target_link_libraries(gnucash-guile
         gnc-core-utils
         gnc-engine
         gnc-app-utils
-        ${GLIB2_LDFLAGS})
+        PkgConfig::GLIB2)
 
 install(TARGETS gnucash-guile
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -95,15 +94,14 @@ add_library(gnc-expressions-guile SHARED
 target_include_directories(gnc-expressions-guile
         PUBLIC
         ${CMAKE_SOURCE_DIR}/libgnucash/expressions
-        ${GUILE_INCLUDE_DIRS}
-        ${GLIB2_INCLUDE_DIRS})
+        ${GUILE_INCLUDE_DIRS})
 
 target_link_libraries(gnc-expressions-guile
         gnc-expressions
         gnc-engine
         gnc-app-utils
         ${GUILE_LDFLAGS}
-        ${GLIB2_LDFLAGS})
+        PkgConfig::GLIB2)
 
 install(TARGETS gnc-expressions-guile
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

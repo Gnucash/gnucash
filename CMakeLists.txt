@@ -196,7 +196,7 @@ if (NOT PKG_CONFIG_FOUND)
  endif()
 
 # glib et al.
-pkg_check_modules (GLIB2 REQUIRED glib-2.0>=2.56.1)
+pkg_check_modules (GLIB2 REQUIRED IMPORTED_TARGET glib-2.0>=2.56.1)
 pkg_check_modules (GIO REQUIRED gio-2.0)
 pkg_check_modules (GOBJECT REQUIRED gobject-2.0)
 pkg_check_modules (GMODULE REQUIRED gmodule-2.0)

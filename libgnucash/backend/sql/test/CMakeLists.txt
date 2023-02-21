@@ -4,7 +4,6 @@ set(BACKEND_SQL_TEST_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/libgnucash/backend/sql
   ${CMAKE_SOURCE_DIR}/libgnucash/engine
   ${CMAKE_SOURCE_DIR}/common/test-core
-  ${GLIB2_INCLUDE_DIRS}
 )
 
 set(test_backend_sql_SOURCES test-sqlbe.cpp utest-gnc-backend-sql.cpp)

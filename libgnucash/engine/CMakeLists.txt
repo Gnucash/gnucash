@@ -241,7 +241,7 @@ target_link_libraries(gnc-engine
     ${ICU4C_I18N_LDFLAGS}
     ${REGEX_LDFLAGS}
     ${GMODULE_LDFLAGS}
-    ${GLIB2_LDFLAGS}
+    PkgConfig::GLIB2
     ${GOBJECT_LDFLAGS}
     $<$<BOOL:${WIN32}>:bcrypt.lib>)
 
@@ -254,7 +254,6 @@ target_include_directories (gnc-engine
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_BINARY_DIR}/common # for config.h
         ${CMAKE_SOURCE_DIR}/common # for platform.h
-        ${GLIB2_INCLUDE_DIRS}
         ${LIBINTL_INCLUDE_PATH}
         ${REGEX_INCLUDE_PATH}
         ${CMAKE_SOURCE_DIR}/borrowed/libc # for strptime.h

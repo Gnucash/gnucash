@@ -3,7 +3,6 @@ set(GNOME_UTILS_GUI_TEST_INCLUDE_DIRS
   ${CMAKE_BINARY_DIR}/common
   ${CMAKE_SOURCE_DIR}/gnucash/gnome-utils
   ${CMAKE_SOURCE_DIR}/libgnucash/engine
-  ${GLIB2_INCLUDE_DIRS}
   ${GUILE_INCLUDE_DIRS}
 )
 set(GNOME_UTILS_GUI_TEST_LIBS
@@ -36,7 +35,6 @@ set(test_autoclear_SOURCES
 set(test_autoclear_INCLUDE_DIRS
   ${CMAKE_BINARY_DIR}/common
   ${CMAKE_SOURCE_DIR}/libgnucash/engine
-  ${GLIB2_INCLUDE_DIRS}
 )
 
 set(test_autoclear_LIBS

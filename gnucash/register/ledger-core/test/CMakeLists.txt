@@ -9,7 +9,6 @@ set(SPLIT_REG_TEST_INCLUDE_DIRS
     ${CMAKE_SOURCE_DIR}/gnucash/register/ledger-core
     ${CMAKE_BINARY_DIR}/common # for config.h
     ${CMAKE_SOURCE_DIR}/common/test-core  # for unittest-support.h
-    ${GLIB2_INCLUDE_DIRS}
 )
 
 set(SPLIT_REG_TEST_LIBS

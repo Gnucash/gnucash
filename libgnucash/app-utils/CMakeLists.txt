@@ -76,7 +76,6 @@ target_link_libraries(gnc-app-utils ${app_utils_ALL_LIBRARIES})
 target_include_directories (gnc-app-utils
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
-        ${GLIB2_INCLUDE_DIRS}
     PRIVATE
         ${app_utils_ALL_INCLUDES}
 )
@@ -127,7 +126,6 @@ target_include_directories(gnc-expressions
         ${CMAKE_SOURCE_DIR}/bindings/guile
         ${CMAKE_SOURCE_DIR}/libgnucash/app-utils
         ${GUILE_INCLUDE_DIRS}
-        ${GLIB2_INCLUDE_DIRS}
         PRIVATE
         ${CMAKE_SOURCE_DIR}/common
         ${CMAKE_BINARY_DIR}/common)
@@ -138,7 +136,7 @@ target_link_libraries(gnc-expressions
         gnc-app-utils
         gnucash-guile
         ${GUILE_LDFLAGS}
-        ${GLIB2_LDFLAGS})
+        PkgConfig::GLIB2)
 
 install(TARGETS gnc-expressions
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

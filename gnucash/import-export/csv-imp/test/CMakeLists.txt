@@ -4,14 +4,13 @@ set(CSV_IMP_TEST_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/common
   ${CMAKE_SOURCE_DIR}/libgnucash/engine
   ${CMAKE_SOURCE_DIR}/common/test-core
-  ${GLIB2_INCLUDE_DIRS}
 )
 set(CSV_IMP_TEST_LIBS gnc-csv-import gnc-engine test-core)
 
 # This test does not run in Win32
 if (NOT WIN32)
   set(MODULEPATH ${CMAKE_SOURCE_DIR}/gnucash/import-export/csv-imp)
-  set(gtest_csv_imp_LIBS gnc-csv-import ${GLIB2_LDFLAGS} gtest)
+  set(gtest_csv_imp_LIBS gnc-csv-import PkgConfig::GLIB2 gtest)
   set(gtest_csv_imp_INCLUDES
     ${MODULEPATH}
     ${CSV_IMP_TEST_INCLUDE_DIRS})

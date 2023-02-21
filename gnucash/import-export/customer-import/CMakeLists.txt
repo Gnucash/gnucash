@@ -22,7 +22,7 @@ target_link_libraries(gnc-customer-import
     gnc-app-utils
     gnc-engine
     gnc-core-utils
-    ${GLIB2_LDFLAGS})
+    PkgConfig::GLIB2)
 
 target_include_directories(gnc-customer-import
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}

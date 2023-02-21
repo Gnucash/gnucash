@@ -6,7 +6,6 @@ set(ENGINE_TEST_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/libgnucash/engine/test-core
   ${CMAKE_BINARY_DIR}/common # for config.h
   ${CMAKE_SOURCE_DIR}/common/test-core  # for unittest-support.h
-  ${GLIB2_INCLUDE_DIRS}
 )
 
 set(ENGINE_TEST_LIBS gnc-engine gnc-test-engine test-core ${LIBXML2_LDFLAGS} -lm)
@@ -83,12 +82,12 @@ add_engine_test(test-numeric "${test_numeric_SOURCES}")
 set(MODULEPATH ${CMAKE_SOURCE_DIR}/libgnucash/engine)
 set(gtest_old_engine_LIBS
   gnc-engine
-  ${GLIB2_LDFLAGS}
+  PkgConfig::GLIB2
   ${Boost_LIBRARIES}
   gtest)
 
 set(gtest_qof_LIBS
-  ${GLIB2_LDFLAGS}
+  PkgConfig::GLIB2
   ${GOBJECT_LDFLAGS}
   ${GMODULE_LDFLAGS}
   ${GTHREAD_LDFLAGS}
@@ -101,7 +100,6 @@ set(gtest_engine_INCLUDES
   ${CMAKE_SOURCE_DIR}/libgnucash/core-utils
   ${CMAKE_BINARY_DIR}/common # for config.h
   ${CMAKE_SOURCE_DIR}/common # for platform.h
-  ${GLIB2_INCLUDE_DIRS}
   ../../../borrowed/libc
 )
 
