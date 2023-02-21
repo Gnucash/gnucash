@@ -1026,8 +1026,23 @@ qof_book_set_default_invoice_report (QofBook *book, const gchar *guid,
     const gchar *existing_guid_name = nullptr;
     gchar *new_guid_name;
 
-    if (!guid)
+    if (!book)
+    {
+        PWARN ("No book!!!");
         return;
+    }
+
+    if (!guid)
+    {
+        PWARN ("No guid!!!");
+        return;
+    }
+
+    if (!name)
+    {
+        PWARN ("No name!!!");
+        return;
+    }
 
     KvpValue *value = get_option_default_invoice_report_value (book);
 
@@ -1053,8 +1068,15 @@ qof_book_set_default_invoice_report (QofBook *book, const gchar *guid,
 gchar *
 qof_book_get_default_invoice_report_guid (const QofBook *book)
 {
-    KvpValue *value = get_option_default_invoice_report_value (const_cast<QofBook*>(book));
     gchar *report_guid = nullptr;
+
+    if (!book)
+    {
+        PWARN ("No book!!!");
+        return report_guid;
+    }
+
+    KvpValue *value = get_option_default_invoice_report_value (const_cast<QofBook*>(book));
 
     if (value)
     {
@@ -1064,7 +1086,7 @@ qof_book_get_default_invoice_report_guid (const QofBook *book)
         {
             if (ptr - str == GUID_ENCODING_LENGTH)
             {
-                if (strlen (str) > GUID_ENCODING_LENGTH + 1)
+                if (strlen (str) > GUID_ENCODING_LENGTH)
                     report_guid = g_strndup (&str[0], GUID_ENCODING_LENGTH);
             }
         }
@@ -1075,8 +1097,15 @@ qof_book_get_default_invoice_report_guid (const QofBook *book)
 gchar *
 qof_book_get_default_invoice_report_name (const QofBook *book)
 {
-    KvpValue *value = get_option_default_invoice_report_value (const_cast<QofBook*>(book));
     gchar *report_name = nullptr;
+
+    if (!book)
+    {
+        PWARN ("No book!!!");
+        return report_name;
+    }
+
+    KvpValue *value = get_option_default_invoice_report_value (const_cast<QofBook*>(book));
 
     if (value)
     {
@@ -1088,6 +1117,8 @@ qof_book_get_default_invoice_report_name (const QofBook *book)
             {
                 if (strlen (str) > GUID_ENCODING_LENGTH + 1)
                     report_name = g_strdup (&str[GUID_ENCODING_LENGTH + 1]);
+                else
+                    report_name = g_strdup ("");
             }
         }
     }
@@ -1098,6 +1129,13 @@ gdouble
 qof_book_get_default_invoice_report_timeout (const QofBook *book)
 {
     double ret = 0;
+
+    if (!book)
+    {
+        PWARN ("No book!!!");
+        return ret;
+    }
+
     KvpFrame *root = qof_instance_get_slots (QOF_INSTANCE(book));
     KvpValue *value = root->get_slot ({KVP_OPTION_PATH,
                                        OPTION_SECTION_BUSINESS,
