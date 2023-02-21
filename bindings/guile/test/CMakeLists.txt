@@ -8,7 +8,6 @@ set(ENGINE_TEST_INCLUDE_DIRS
     ${CMAKE_SOURCE_DIR}/common/test-core  # for unittest-support.h
     ${CMAKE_SOURCE_DIR}/libgnucash/app-utils
     ${CMAKE_SOURCE_DIR}/bindings/guile # for gnc-engine-guile.h
-    ${GLIB2_INCLUDE_DIRS}
     ${GUILE_INCLUDE_DIRS}
 )
 

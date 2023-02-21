@@ -6,7 +6,6 @@ set(GNOME_TEST_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/gnucash/gnome/
   ${CMAKE_SOURCE_DIR}/gnucash/gnome-utils/
   ${GUILE_INCLUDE_DIRS}
-  ${GTK3_INCLUDE_DIRS}
 )
 
 set(GNOME_TEST_LIBS

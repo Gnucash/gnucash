@@ -8,7 +8,6 @@ set(XML_TEST_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/libgnucash/engine/test-core
   ${CMAKE_BINARY_DIR}/common # for config.h
   ${CMAKE_SOURCE_DIR}/common/test-core  # for unittest-support.h
-  ${GLIB2_INCLUDE_DIRS}
   ${LIBXML2_INCLUDE_DIRS}
   ${ZLIB_INCLUDE_DIRS}
 )

@@ -4,7 +4,6 @@ set(CORE_UTILS_TEST_INCLUDE_DIRS
   ${CMAKE_BINARY_DIR}/common # for config.h
   ${MODULEPATH}
   ${CMAKE_SOURCE_DIR}/common/test-core
-  ${GLIB2_INCLUDE_DIRS}
   ${GTK_MAC_INCLUDE_DIRS}
 )
 set(CORE_UTILS_TEST_LIBS gnc-core-utils test-core)
@@ -32,11 +31,10 @@ set(gtest_core_utils_INCLUDES
   ${CMAKE_BINARY_DIR}/common # for config.h
   ${CMAKE_SOURCE_DIR}/common # for platform.h
   ${CMAKE_BINARY_DIR}/libgnucash/core-utils # for gncla-dir.h
-  ${GLIB2_INCLUDE_DIRS}
   )
 
 set(gtest_core_utils_LIBS
-  ${GLIB2_LDFLAGS}
+  PkgConfig::GLIB2
   ${Boost_LIBRARIES}
   ${GTHREAD_LDFLAGS}
   gtest)

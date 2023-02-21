@@ -17,7 +17,7 @@ add_library	(gnc-module
   ${gnc_module_HEADERS}
 )
 
-target_link_libraries(gnc-module ${GMODULE_LDFLAGS} ${GLIB2_LDFLAGS})
+target_link_libraries(gnc-module ${GMODULE_LDFLAGS} PkgConfig::GLIB2)
 
 target_compile_definitions (gnc-module PRIVATE -DG_LOG_DOMAIN=\"gnc.module\")
 
@@ -25,7 +25,6 @@ target_include_directories (gnc-module
     PUBLIC  ${CMAKE_CURRENT_SOURCE_DIR}
             ${CMAKE_SOURCE_DIR}/common
             ${CMAKE_BINARY_DIR}/common # for config.h
-            ${GLIB2_INCLUDE_DIRS}
 )
 
 install(TARGETS gnc-module

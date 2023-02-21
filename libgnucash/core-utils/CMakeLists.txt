@@ -44,14 +44,14 @@ target_include_directories(gnc-core-utils
         ${CMAKE_BINARY_DIR}/common
         ${CMAKE_CURRENT_BINARY_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}
-        ${GLIB2_INCLUDE_DIRS}
     PRIVATE
         ${GTK_MAC_INCLUDE_DIRS})
 
 target_link_libraries(gnc-core-utils
+    PUBLIC
+	PkgConfig::GLIB2
     PRIVATE
         ${Boost_LIBRARIES}
-        ${GLIB2_LDFLAGS}
         ${GOBJECT_LDFLAGS}
         ${GTK_MAC_LDFLAGS}
         "$<$<BOOL:${MAC_INTEGRATION}>:${OSX_EXTRA_LIBRARIES}>")

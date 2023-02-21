@@ -15,12 +15,6 @@
 /* always defined to indicate that i18n is enabled */
 #cmakedefine ENABLE_NLS 1
 
-/* Don't use deprecated gdk functions */
-#cmakedefine GDK_DISABLE_DEPRECATED 1
-
-/* Don't use deprecated gdk-pixbuf functions */
-#cmakedefine GDK_PIXBUF_DISABLE_DEPRECATED 1
-
 /* Using GDK Quartz (not X11) */
 #cmakedefine GDK_QUARTZ
 
@@ -53,12 +47,6 @@
 
 /* GnuCash prefix to use for GLib resources */
 #define GNUCASH_RESOURCE_PREFIX "@GNUCASH_RESOURCE_PREFIX@"
-
-/* Don't use deprecated gtk functions */
-#cmakedefine GTK_DISABLE_DEPRECATED 1
-
-/* Don't use deprecated glib functions */
-#cmakedefine G_DISABLE_DEPRECATED 1
 
 /* define if the Boost library is available */
 #cmakedefine HAVE_BOOST

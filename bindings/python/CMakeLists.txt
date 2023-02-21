@@ -73,14 +73,13 @@ if(WITH_PYTHON)
     ${CMAKE_SOURCE_DIR}/libgnucash/app-utils
     ${CMAKE_SOURCE_DIR}/gnucash/gnome
     ${CMAKE_SOURCE_DIR}/libgnucash/core-utils
-    ${GLIB_INCLUDE_DIRS}
     ${PYTHON_INCLUDE_DIRS}
   )
 
   add_library(gnucash_core_c MODULE ${SWIG_GNUCASH_CORE_C})
   target_include_directories(gnucash_core_c PRIVATE ${gnucash_core_c_INCLUDE_DIRS})
 
-  target_link_libraries(gnucash_core_c gnc-app-utils gnc-engine ${GLIB_LIBS} ${PYTHON_LIBRARIES})
+  target_link_libraries(gnucash_core_c gnc-app-utils gnc-engine ${PYTHON_LIBRARIES})
   set_target_properties(gnucash_core_c PROPERTIES PREFIX "_")
   target_compile_options(gnucash_core_c PRIVATE -Wno-implicit -Wno-missing-prototypes -Wno-declaration-after-statement -Wno-missing-declarations)
   if (HAVE_STRINGOP_TRUNCATION)
@@ -88,7 +87,7 @@ if(WITH_PYTHON)
   endif()
 
   add_executable(sqlite3test EXCLUDE_FROM_ALL sqlite3test.c ${SWIG_GNUCASH_CORE_C})
-  target_link_libraries(sqlite3test gnc-app-utils gnc-engine ${GLIB_LIBS} ${PYTHON_LIBRARIES})
+  target_link_libraries(sqlite3test gnc-app-utils gnc-engine ${PYTHON_LIBRARIES})
   target_include_directories(sqlite3test PRIVATE ${gnucash_core_c_INCLUDE_DIRS})
   target_compile_options(sqlite3test PRIVATE -Wno-implicit -Wno-missing-prototypes -Wno-declaration-after-statement -Wno-missing-declarations)
   if (HAVE_STRINGOP_TRUNCATION)

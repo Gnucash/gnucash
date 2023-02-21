@@ -15,7 +15,6 @@ target_include_directories(gncmod-withdep PRIVATE
   ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_SOURCE_DIR}/common
   ${CMAKE_SOURCE_DIR}/libgnucash/gnc-module
-  ${GLIB2_INCLUDE_DIRS}
   ${GUILE_INCLUDE_DIRS}
 )
 

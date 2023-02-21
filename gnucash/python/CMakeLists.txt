@@ -15,7 +15,7 @@ if (WITH_PYTHON)
   add_library(gncmod-python ${gncmod_python_SOURCES})
   # target_link_libraries(gncmod-python gnc-module gnc-core-utils-python gnc-app-utils-python
   target_link_libraries(gncmod-python gnc-module gnc-core-utils
-   ${PYTHON_LIBRARIES} ${GLIB_LIBS})   # ${PYTHON_EXTRA_LIBS}
+   ${PYTHON_LIBRARIES})   # ${PYTHON_EXTRA_LIBS}
   target_include_directories(gncmod-python
     PRIVATE ${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/libgnucash/core-utils ${CMAKE_SOURCE_DIR}/gnc-module ${PYTHON_INCLUDE_DIR})
   target_compile_options(gncmod-python PRIVATE -DG_LOG_DOMAIN=\"gnc.python\")

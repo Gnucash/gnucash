@@ -220,7 +220,6 @@ target_link_libraries(gnc-gnome-utils
     ${LIBSECRET_LDFLAGS}
     ${GTK_MAC_LDFLAGS})
 
-target_compile_options(gnc-gnome-utils PRIVATE -Wno-deprecated-declarations)
 target_compile_definitions(gnc-gnome-utils PUBLIC ${GTK_MAC_CFLAGS_OTHER}
   PRIVATE -DG_LOG_DOMAIN=\"gnc.gui\")
 

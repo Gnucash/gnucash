@@ -10,15 +10,14 @@ target_link_libraries(gnc-locale-tax
     gnc-engine
     gnc-app-utils
     gnucash-guile
-    ${GLIB2_LDFLAGS}
+    PkgConfig::GLIB2
     ${GUILE_LDFLAGS})
 
 target_include_directories(gnc-locale-tax
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
     PRIVATE
         ${CMAKE_BINARY_DIR}/common
-        ${GUILE_INCLUDE_DIRS}
-        ${GLIB2_INCLUDE_DIRS})
+        ${GUILE_INCLUDE_DIRS})
 
 if (APPLE)
   set_target_properties (gnc-locale-tax PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}")
