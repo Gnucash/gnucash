@@ -40,6 +40,9 @@
 #include "assistant-stock-transaction.h"
 #include "gnc-account-sel.h"
 #include "gnc-amount-edit.h"
+#include "gnc-date.h"
+#include <gnc-date-edit.h>
+#include "gnc-engine.h"
 #include "gnc-numeric.h"
 #include "gnc-prefs.h"
 #include "gnc-component-manager.h"
@@ -405,7 +408,7 @@ struct StockTransactionEntry
 
     virtual void set_fieldmask(FieldMask mask);
     virtual void set_capitalize(bool capitalize) {}
-    virtual void set_value(gnc_numeric amount); //, const char* page, StringVec& errors);
+    virtual void set_value(gnc_numeric amount, const char* page, StringVec& errors);
     virtual gnc_numeric amount() { return m_value; }
     virtual void set_amount(gnc_numeric, StringVec&) {}
     virtual void create_split(Transaction* trans, const char* action,
@@ -428,9 +431,9 @@ StockTransactionEntry::set_fieldmask(FieldMask mask)
 
 
 void
-StockTransactionEntry::set_value(gnc_numeric amount) //, const char* page, StringVec& errors)
+StockTransactionEntry::set_value(gnc_numeric amount, const char* page, StringVec& errors)
 {
-#if 0    //FIXME, logging is broken for want of the page name
+
     auto add_error = [&errors](const char* format_str, const char* arg)
     {
         char *buf = g_strdup_printf (_(format_str),
@@ -445,7 +448,7 @@ StockTransactionEntry::set_value(gnc_numeric amount) //, const char* page, Strin
         add_error (N_("Amount for %s is missing."), page);
         return;
     }
-#endif
+
     if (gnc_numeric_negative_p (amount))
     {
         if (m_allow_negative)
@@ -453,8 +456,6 @@ StockTransactionEntry::set_value(gnc_numeric amount) //, const char* page, Strin
             m_value = gnc_numeric_neg(amount);
             m_debit_side = !m_debit_side;
         }
-    }
-#if 0
         else
         {
             if (m_allow_zero)
@@ -467,7 +468,7 @@ StockTransactionEntry::set_value(gnc_numeric amount) //, const char* page, Strin
         add_error (N_("Amount for %s must be positive."), page);
         return;
     }
-#endif
+
     m_value = m_debit_side ? amount : gnc_numeric_neg (amount);
 }
 
@@ -534,7 +535,6 @@ struct StockTransactionStockEntry : public StockTransactionEntry
 void
 StockTransactionStockEntry::set_fieldmask(FieldMask mask)
 {
-//FIXME, need to combine stock-value and stock-amt fieldmasks
     StockTransactionEntry::set_fieldmask(mask);
     m_enabled = mask & (FieldMask::ENABLED_CREDIT | FieldMask::ENABLED_DEBIT |
                         FieldMask::AMOUNT_CREDIT | FieldMask::AMOUNT_DEBIT);
@@ -662,6 +662,7 @@ struct StockAssistantModel
     StockTransactionEntryPtr m_dividend_entry;
     StockTransactionEntryPtr m_capgains_entry;
     StockTransactionEntryPtr m_stock_cg_entry; // Required at this level for lifetime management
+    StringVec m_errors, m_warnings, m_infos;
 
     StockAssistantModel (Account *account) :
         m_acct{account},
@@ -703,7 +704,8 @@ private:
     SplitInfoVec m_list_of_splits;
 
     void add_price (QofBook *book);
-    StockTransactionSplitInfo make_stock_split_info(StringVec& errors);
+    StockTransactionSplitInfo make_stock_split_info();
+    std::string summary_message();
 };
 
 bool
@@ -817,10 +819,10 @@ check_txn_date(GList* last_split_node, time64 txn_date, StringVec& warnings)
 }
 
 StockTransactionSplitInfo
-StockAssistantModel::make_stock_split_info(StringVec& errors)
+StockAssistantModel::make_stock_split_info()
 {
-    auto add_error_str = [&errors]
-        (const char* str) { errors.emplace_back (_(str)); };
+    auto add_error_str = [this]
+        (const char* str) { m_errors.emplace_back (_(str)); };
 
     StockTransactionSplitInfo line{m_stock_entry.get(),
         NC_ ("Stock Assistant: Page name", "stock value")};
@@ -836,7 +838,7 @@ StockAssistantModel::make_stock_split_info(StringVec& errors)
         auto ratio = gnc_numeric_div(stock_amount, m_balance_at_date,
                                      GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
         stock_amount = gnc_numeric_sub_fixed(stock_amount, m_balance_at_date);
-        line.m_entry->set_amount(stock_amount, errors);
+        line.m_entry->set_amount(stock_amount, m_errors);
         line.m_units_in_red =
             negative_in_red && gnc_numeric_negative_p(stock_amount);
         if (gnc_numeric_check(ratio) || !gnc_numeric_positive_p(ratio))
@@ -866,26 +868,25 @@ StockAssistantModel::make_stock_split_info(StringVec& errors)
     return line;
 }
 
-static inline std::string
-summary_message(const StringVec& infos, const StringVec& warnings,
-                const StringVec& errors)
+std::string
+StockAssistantModel::summary_message()
 {
     std::ostringstream summary;
     auto summary_add = [&summary](auto a) { summary << "\n• " << a; };
-    if (errors.empty())
+    if (m_errors.empty())
     {
         summary << _("No errors found. Click Apply to create transaction.");
-        std::for_each (infos.begin(), infos.end(), summary_add);
+        std::for_each (m_infos.begin(), m_infos.end(), summary_add);
     }
     else
     {
         summary << _("The following errors must be fixed:");
-        std::for_each (errors.begin(), errors.end(), summary_add);
+        std::for_each (m_errors.begin(), m_errors.end(), summary_add);
     }
-    if (!warnings.empty())
+    if (!m_warnings.empty())
     {
         summary << "\n\n" << _("The following warnings exist:");
-        std::for_each (warnings.begin(), warnings.end(), summary_add);
+        std::for_each (m_warnings.begin(), m_warnings.end(), summary_add);
     }
 
     return summary.str();
@@ -900,7 +901,6 @@ StockAssistantModel::generate_list_of_splits() {
 
     gnc_numeric debit = gnc_numeric_zero ();
     gnc_numeric credit = gnc_numeric_zero ();
-    StringVec errors, warnings, infos;
 
     // check the stock transaction date. If there are existing stock
     // transactions dated after the date specified, it is very likely
@@ -908,10 +908,10 @@ StockAssistantModel::generate_list_of_splits() {
     // to review them.
     auto last_split_node = g_list_last (xaccAccountGetSplitList (m_acct));
     if (last_split_node)
-        check_txn_date(last_split_node, m_transaction_date, warnings);
+        check_txn_date(last_split_node, m_transaction_date, m_warnings);
 
 
-    m_list_of_splits.push_back (make_stock_split_info(errors));
+    m_list_of_splits.push_back (make_stock_split_info());
 
     auto [has_price, price, price_str] = calculate_price ();
     if (has_price)
@@ -924,7 +924,7 @@ StockAssistantModel::generate_list_of_splits() {
             (_(tmpl),
              gnc_commodity_get_mnemonic (xaccAccountGetCommodity (m_acct)),
              price_str, date_str);
-        infos.emplace_back (price_msg);
+        m_infos.emplace_back (price_msg);
         g_free (date_str);
     }
 
@@ -978,7 +978,7 @@ StockAssistantModel::generate_list_of_splits() {
         if (err_act)
         {
             auto err_str = g_strdup_printf (N_("Transaction can't balance, %s is error value %s"), err_act, err_reason);
-            errors.emplace_back(err_str);
+            m_errors.emplace_back(err_str);
             g_free (err_str);
         }
         else
@@ -987,7 +987,7 @@ StockAssistantModel::generate_list_of_splits() {
             auto debit_str = g_strdup (xaccPrintAmount (debit, m_curr_pinfo));
             auto credit_str = g_strdup (xaccPrintAmount (credit, m_curr_pinfo));
             auto error_str = g_strdup_printf (_(imbalance_str), debit_str, credit_str);
-            errors.emplace_back (error_str);
+            m_errors.emplace_back (error_str);
             g_free (error_str);
             g_free (credit_str);
             g_free (debit_str);
@@ -996,8 +996,8 @@ StockAssistantModel::generate_list_of_splits() {
 
     // generate final summary message. Collates a header, the errors
     // and warnings. Then allow completion if errors is empty.
-    m_ready_to_create = errors.empty();
-    return { m_ready_to_create, summary_message(infos, warnings, errors), m_list_of_splits };
+    m_ready_to_create = m_errors.empty();
+    return { m_ready_to_create, summary_message(), m_list_of_splits };
 }
 
 std::tuple<bool, Transaction*>
@@ -1048,327 +1048,773 @@ StockAssistantModel::add_price (QofBook *book)
     gnc_price_unref (price);
 }
 
+/* ********************* View Classes ************************/
 
-struct StockAssistantView
+/* ***************** Generic Event Callbacks ****************/
+static void
+text_entry_changed_cb (GtkWidget *widget, const gchar **model_text)
 {
-    GtkWidget * window;
+    *model_text = gtk_entry_get_text (GTK_ENTRY (widget));
+}
 
+
+static inline GtkWidget*
+get_widget (GtkBuilder *builder, const gchar * ID)
+{
+    g_return_val_if_fail (builder && ID, nullptr);
+    auto obj = gtk_builder_get_object (builder, ID);
+    if (!obj)
+        PWARN ("get_widget ID '%s' not found. it may be a typo?", ID);
+    return GTK_WIDGET (obj);
+}
+
+struct GncDateEdit
+{
+    GtkWidget *m_edit;
+    GncDateEdit(GtkBuilder *builder) :
+        m_edit{gnc_date_edit_new(gnc_time(nullptr), FALSE, FALSE)} {}
+    void attach(GtkBuilder *builder, const char *table_ID, const char *label_ID,
+                int row);
+    time64 get_date_time() { return gnc_date_edit_get_date_end(GNC_DATE_EDIT(m_edit)); }
+    void connect(time64 *target);
+};
+
+static void
+gnc_date_edit_changed_cb (GtkWidget* widget, time64 *target)
+{
+    g_return_if_fail(GNC_IS_DATE_EDIT(widget));
+    *target = gnc_date_edit_get_date_end(GNC_DATE_EDIT(widget));
+}
+
+void
+GncDateEdit::attach(GtkBuilder *builder, const char *table_ID,
+                    const char *label_ID, int row)
+{
+    auto table = get_widget(builder, table_ID);
+    auto label = get_widget (builder, label_ID);
+    gtk_grid_attach(GTK_GRID(table), m_edit, 1, row, 1, 1);
+    gtk_widget_show(m_edit);
+    gnc_date_make_mnemonic_target (GNC_DATE_EDIT(m_edit), label);
+}
+
+void
+GncDateEdit::connect(time64 *time)
+{
+    g_signal_connect(m_edit, "date_changed", G_CALLBACK (gnc_date_edit_changed_cb), time);
+}
+
+struct GncAmountEdit
+{
+    GtkWidget *m_edit;
+
+    GncAmountEdit (GtkBuilder *builder, gnc_commodity *commodity);
+    void attach (GtkBuilder *builder, const char *table_id,
+                 const char *label_ID, int row);
+    gnc_numeric get ();
+    void connect (gnc_numeric *value);
+    void connect (GCallback cb, gpointer data);
+    void set_focus();
+    void set_owner (gpointer obj);
+};
+
+static void
+gnc_amount_edit_changed_cb (GtkWidget* widget, gnc_numeric *value)
+{
+    g_return_if_fail(GNC_IS_AMOUNT_EDIT(widget));
+    gnc_numeric amt;
+    if (!gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT(widget), &amt, true, nullptr))
+        *value =  amt;
+    else
+        *value = gnc_numeric_error(GNC_ERROR_ARG);
+}
+
+GncAmountEdit::GncAmountEdit (GtkBuilder *builder, gnc_commodity *commodity) :
+    m_edit{gnc_amount_edit_new()}
+{
+    // shares amount
+    auto info = gnc_commodity_print_info(commodity, true);
+    gnc_amount_edit_set_evaluate_on_enter(GNC_AMOUNT_EDIT(m_edit), TRUE);
+    gnc_amount_edit_set_print_info(GNC_AMOUNT_EDIT(m_edit), info);
+}
+
+void
+GncAmountEdit::attach (GtkBuilder *builder, const char *table_ID,
+                       const char* label_ID, int row)
+{
+    auto table = get_widget(builder, table_ID);
+    auto label = get_widget(builder, label_ID);
+    gtk_grid_attach(GTK_GRID(table), m_edit, 1, row, 1, 1);
+    gtk_widget_show(m_edit);
+    gnc_amount_edit_make_mnemonic_target(GNC_AMOUNT_EDIT(m_edit), label);
+}
+
+gnc_numeric
+GncAmountEdit::get ()
+{
+    gnc_numeric amt;
+    if (!gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT(m_edit), &amt, true, nullptr))
+        return amt;
+    return gnc_numeric_error(GNC_ERROR_ARG);
+}
+
+void
+GncAmountEdit::connect (gnc_numeric *value)
+{
+    g_signal_connect(m_edit, "changed", G_CALLBACK (gnc_amount_edit_changed_cb), value);
+}
+
+void
+GncAmountEdit::connect (GCallback cb, gpointer data)
+{
+    g_signal_connect(m_edit, "changed", cb, data);
+}
+
+void
+GncAmountEdit::set_focus()
+{
+    gtk_widget_grab_focus (GTK_WIDGET (gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (m_edit))));
+}
+
+void
+GncAmountEdit::set_owner(gpointer obj)
+{
+    g_object_set_data(G_OBJECT (m_edit), "owner", obj);
+}
+
+using AccountTypeList = std::vector<GNCAccountType>;
+
+struct GncAccountSelector
+{
+    GtkWidget* m_selector;
+
+    GncAccountSelector (GtkBuilder *builder, AccountTypeList types,
+                        gnc_commodity *currency);
+    void attach (GtkBuilder *builder, const char *table_id,
+                 const char *label_ID, int row);
+    void connect (Account **acct);
+    void set (Account *acct) { gnc_account_sel_set_account (GNC_ACCOUNT_SEL (m_selector), acct, TRUE); }
+    Account *get () { return gnc_account_sel_get_account (GNC_ACCOUNT_SEL (m_selector)); }
+};
+
+static void
+gnc_account_sel_changed_cb (GtkWidget* widget, Account **acct)
+{
+    g_return_if_fail (GNC_IS_ACCOUNT_SEL (widget));
+    *acct = gnc_account_sel_get_account (GNC_ACCOUNT_SEL (widget));
+}
+
+GncAccountSelector::GncAccountSelector (GtkBuilder *builder, AccountTypeList types,
+                                        gnc_commodity *currency) :
+    m_selector{gnc_account_sel_new ()}
+{
+    auto accum = [](auto a, auto b) { return g_list_prepend(a, (gpointer)b); };
+    auto null_glist = static_cast<GList *>(nullptr);
+    auto acct_list = std::accumulate(types.begin(), types.end(), null_glist, accum);
+    auto curr_list = accum(null_glist, currency);
+    gnc_account_sel_set_new_account_ability(GNC_ACCOUNT_SEL(m_selector), true);
+    gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(m_selector), acct_list, curr_list);
+    g_list_free(acct_list);
+    g_list_free(curr_list);
+}
+
+void
+GncAccountSelector::attach (GtkBuilder *builder, const char *table_ID,
+                            const char *label_ID, int row)
+{
+    auto table = get_widget(builder, table_ID);
+    auto label = get_widget(builder, label_ID);
+    gtk_grid_attach(GTK_GRID(table), m_selector, 1, row, 1, 1);
+    gtk_widget_show(m_selector);
+    gtk_label_set_mnemonic_widget(GTK_LABEL(label), m_selector);
+}
+
+void
+GncAccountSelector::connect (Account **acct)
+{
+    g_signal_connect(m_selector, "account_sel_changed", G_CALLBACK (gnc_account_sel_changed_cb), acct);
+}
+
+struct PageTransType {
     // transaction type page
-    GtkWidget * transaction_type_page;
-    GtkWidget * transaction_type_combo;
-    GtkWidget * transaction_type_explanation;
+    GtkWidget * m_page;
+    GtkWidget * m_type;
+    GtkWidget * m_explanation;
+    PageTransType(GtkBuilder *builder);
+    void prepare(StockAssistantModel* model);
+    int get_transaction_type_index ();
+    void set_transaction_types (const TxnTypeVec& txn_types);
+    void set_txn_type_explanation (const gchar *txt);
+    void set_focus() { gtk_widget_grab_focus (m_type); }
+    void connect (StockAssistantModel *model);
+    void change_txn_type (StockAssistantModel *model);
+};
 
+PageTransType::PageTransType(GtkBuilder *builder)
+    : m_page(get_widget(builder, "transaction_type_page")),
+      m_type(get_widget(builder, "transaction_type_page_combobox")),
+      m_explanation(get_widget(builder, "transaction_type_page_explanation"))
+{
+    g_object_set_data(G_OBJECT(m_type), "owner", this);
+}
+
+static void
+page_trans_type_changed_cb (GtkWidget* widget, StockAssistantModel *model)
+{
+    auto me = static_cast<PageTransType *>(g_object_get_data (G_OBJECT (widget), "owner"));
+    g_return_if_fail (me);
+    me->change_txn_type (model);
+}
+
+void
+PageTransType::prepare(StockAssistantModel *model)
+{
+    if (!model->m_txn_types)
+        return;
+
+    set_transaction_types(model->m_txn_types.value());
+    change_txn_type (model);
+}
+
+int
+PageTransType::get_transaction_type_index ()
+{
+    return gtk_combo_box_get_active (GTK_COMBO_BOX (m_type));
+}
+
+void
+PageTransType::set_transaction_types (const TxnTypeVec& txn_types)
+{
+    auto combo = GTK_COMBO_BOX_TEXT (m_type);
+    gtk_combo_box_text_remove_all (combo);
+    std::for_each (txn_types.begin(), txn_types.end(),
+                   [&combo](const auto& it)
+                   { gtk_combo_box_text_append_text (combo, _(it.friendly_name)); });
+    gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
+}
+
+void
+PageTransType::set_txn_type_explanation (const gchar *txt)
+{
+    gtk_label_set_text (GTK_LABEL (this->m_explanation), txt);
+}
+
+void
+PageTransType::change_txn_type (StockAssistantModel *model)
+{
+    auto type_idx = get_transaction_type_index();
+    if (type_idx < 0)           // combo isn't initialized yet.
+        return;
+
+    if (!model->set_txn_type (type_idx))
+        return;
+
+    set_txn_type_explanation (model->m_txn_type->explanation);
+}
+
+void
+PageTransType::connect(StockAssistantModel *model)
+{
+    g_signal_connect(m_type, "changed",
+                     G_CALLBACK (page_trans_type_changed_cb), model);
+}
+
+struct PageTransDeets
+{
     // transaction details page
-    GtkWidget * transaction_details_page;
-    GtkWidget * transaction_date;
-    GtkWidget * transaction_description;
+    GtkWidget *m_page;
+    GncDateEdit m_date;
+    GtkWidget *m_description;
+    PageTransDeets (GtkBuilder *builder);
+    time64 get_date_time () { return m_date.get_date_time(); }
+    const char* get_description () { return gtk_entry_get_text (GTK_ENTRY (m_description)); }
+    void set_focus () { gtk_widget_grab_focus (m_description); }
+    void connect (time64 *date, const char **description);
+};
 
+PageTransDeets::PageTransDeets (GtkBuilder *builder) :
+    m_page (get_widget (builder, "transaction_details_page")),
+    m_date (builder),
+    m_description (get_widget (builder, "transaction_description_entry"))
+{
+    m_date.attach(builder,  "transaction_details_table", "transaction_date_label", 0);
+}
+
+void
+PageTransDeets::connect(time64 *date, const char **description)
+{
+    m_date.connect(date);
+    g_signal_connect(m_description, "changed", G_CALLBACK (text_entry_changed_cb), description);
+}
+
+struct PageStockAmount
+{
     // stock amount page
-    GtkWidget * stock_amount_page;
-    GtkWidget * stock_amount_title;
-    GtkWidget * prev_amount;
-    GtkWidget * next_amount;
-    GtkWidget * next_amount_label;
-    GtkWidget * stock_amount_edit;
-    GtkWidget * stock_amount_label;
+    GtkWidget * m_page;
+    GtkWidget * m_title;
+    GtkWidget * m_prev_amount;
+    GtkWidget * m_next_amount;
+    GtkWidget * m_next_amount_label;
+    GncAmountEdit m_amount;
+    GtkWidget * m_amount_label;
+    PageStockAmount (GtkBuilder *builder, gnc_commodity *commodity);
+    void prepare (bool input_new_balance, const std::string prev_balance);
+    gnc_numeric get_stock_amount () { return m_amount.get(); }
+    void set_stock_amount (std::string new_amount_str);
+    void connect(StockAssistantModel *model);
+};
 
+PageStockAmount::PageStockAmount (GtkBuilder *builder, gnc_commodity *stock_commodity) :
+    m_page (get_widget (builder, "stock_amount_page")),
+    m_title (get_widget (builder, "stock_amount_title")),
+    m_prev_amount (get_widget (builder, "prev_balance_amount")),
+    m_next_amount (get_widget (builder, "next_balance_amount")),
+    m_next_amount_label (get_widget (builder, "next_balance_label")),
+    m_amount (builder, stock_commodity),
+    m_amount_label (get_widget (builder, "stock_amount_label"))
+{
+    m_amount.attach (builder, "stock_amount_table", "stock_amount_label", 1);
+}
+
+void
+PageStockAmount::prepare (bool input_new_balance, const std::string prev_balance)
+{
+    gtk_label_set_text_with_mnemonic
+        (GTK_LABEL (m_amount_label),
+         input_new_balance ? _("Ne_w Balance") : _("_Shares"));
+    gtk_label_set_text
+        (GTK_LABEL (m_next_amount_label),
+         input_new_balance ? _("Ratio") : _("Next Balance"));
+    gtk_label_set_text (GTK_LABEL (m_title),
+         input_new_balance ?
+         _("Enter the new balance of shares after the stock split.") :
+         _("Enter the number of shares you gained or lost in the transaction."));
+    gtk_label_set_text (GTK_LABEL (m_prev_amount), prev_balance.c_str());
+}
+
+static void
+page_stock_amount_changed_cb(GtkWidget *widget, StockAssistantModel *model)
+{
+    auto me = static_cast<PageStockAmount*>(g_object_get_data (G_OBJECT (widget), "owner"));
+    model->m_stock_entry->set_amount(me->m_amount.get(), model->m_errors);
+    me->set_stock_amount (model->get_new_amount_str());
+}
+
+void
+PageStockAmount::connect(StockAssistantModel *model)
+{
+    m_amount.connect(G_CALLBACK (page_stock_amount_changed_cb), model);
+    m_amount.set_owner(static_cast<gpointer>(this));
+}
+
+void
+PageStockAmount::set_stock_amount (std::string new_amount_str)
+{
+    gtk_label_set_text (GTK_LABEL(m_next_amount), new_amount_str.c_str());
+}
+
+struct PageStockValue
+{
     // stock value page
-    GtkWidget * stock_value_page;
-    GtkWidget * stock_value_edit;
-    GtkWidget * price_value;
-    GtkWidget * stock_memo_edit;
+    GtkWidget * m_page;
+    GncAmountEdit m_value;
+    GtkWidget * m_price;
+    GtkWidget * m_memo;
+    PageStockValue (GtkBuilder *builder, gnc_commodity *currency);
+    const char* get_memo ();
+    void connect (StockAssistantModel *model);
+    void set_price(const gchar *val);
+    void set_price (std::tuple<bool, gnc_numeric, const char*> price_tuple);
+};
 
+static void
+page_stock_value_changed_cb(GtkWidget *widget, StockAssistantModel *model)
+{
+    auto me = static_cast<PageStockValue*>(g_object_get_data (G_OBJECT (widget), "owner"));
+    auto value = me->m_value.get ();
+    model->m_stock_entry->set_value (value, "stocks", model->m_errors);
+    me->set_price (model->calculate_price());
+}
+
+PageStockValue::PageStockValue(GtkBuilder *builder, gnc_commodity *currency)
+    : m_page(get_widget(builder, "stock_value_page")),
+      m_value(builder, currency),
+      m_price(get_widget(builder, "stock_price_amount")),
+      m_memo(get_widget(builder, "stock_memo_entry"))
+{
+    m_value.attach(builder, "stock_value_table", "stock_value_label", 0);
+}
+
+void
+PageStockValue::connect(StockAssistantModel *model)
+{
+    m_value.connect(G_CALLBACK (page_stock_value_changed_cb), model);
+    m_value.set_owner (static_cast<gpointer>(this));
+    g_signal_connect (m_memo, "changed", G_CALLBACK(text_entry_changed_cb), &model->m_stock_entry->m_memo);
+}
+
+const char *
+PageStockValue::get_memo()
+{
+    return gtk_entry_get_text(GTK_ENTRY (m_memo));
+}
+
+void
+PageStockValue::set_price (const gchar *val)
+{
+    gtk_label_set_text(GTK_LABEL(this->m_price), val);
+};
+
+void
+PageStockValue::set_price (std::tuple<bool, gnc_numeric, const char*> price_tuple)
+{
+    auto [has_price, price, price_str] = price_tuple;
+    // Translators: StockAssistant: N/A denotes stock price is not computable
+    set_price(has_price ? price_str : _("N/A"));
+}
+
+struct PageCash
+{
     // cash page
-    GtkWidget * cash_page;
-    GtkWidget * cash_account;
-    GtkWidget * cash_memo_edit;
-    GtkWidget * cash_value;
+    GtkWidget * m_page;
+    GncAccountSelector m_account;
+    GtkWidget * m_memo;
+    GncAmountEdit m_value;
+    PageCash (GtkBuilder *builder, gnc_commodity *currency);
+    void connect(Account **account, const char **memo, gnc_numeric *value);
+    const char* get_memo();
+};
 
+PageCash::PageCash(GtkBuilder *builder, gnc_commodity *currency)
+    : m_page(get_widget(builder, "cash_details_page")),
+      m_account(builder, {ACCT_TYPE_ASSET, ACCT_TYPE_BANK},
+                   currency),
+      m_memo(get_widget(builder, "cash_memo_entry")),
+      m_value(builder, currency)
+{
+    m_account.attach (builder, "cash_table", "cash_account_label", 0);
+    m_value.attach (builder, "cash_table", "cash_label", 1);
+}
+
+void
+PageCash::connect(Account **account, const char **memo, gnc_numeric *value)
+{
+    m_account.connect(account);
+    g_signal_connect(m_memo, "changed", G_CALLBACK(text_entry_changed_cb), memo);
+    m_value.connect(value);
+}
+
+const char *
+PageCash::get_memo()
+{
+    return gtk_entry_get_text(GTK_ENTRY (m_memo));
+}
+
+struct PageFees
+{
     // fees page
-    GtkWidget * fees_page;
-    GtkWidget * capitalize_fees_checkbox;
-    GtkWidget * fees_account;
-    GtkWidget * fees_memo_edit;
-    GtkWidget * fees_value;
+    GtkWidget * m_page;
+    GtkWidget * m_capitalize;
+    GncAccountSelector m_account;
+    GtkWidget * m_memo;
+    GncAmountEdit m_value;
+    PageFees (GtkBuilder *builder, gnc_commodity *currency);
+    void connect(StockAssistantModel *model);
+    bool get_capitalize_fees ();
+    const char* get_memo();
+    void set_capitalize_fees (bool state);
+    void set_capitalize_fees (StockAssistantModel *model);
+    void set_account (Account *acct) { m_account.set(acct); }
+    void update_fees_acct_sensitive (bool sensitive);
+};
 
+PageFees::PageFees(GtkBuilder *builder, gnc_commodity *currency)
+    : m_page(get_widget(builder, "fees_details_page")),
+      m_capitalize(
+          get_widget(builder, "capitalize_fees_checkbutton")),
+      m_account(builder, {ACCT_TYPE_EXPENSE}, currency),
+      m_memo(get_widget(builder, "fees_memo_entry")),
+      m_value(builder, currency)
+{
+    m_account.attach (builder, "fees_table", "fees_account_label", 1);
+    m_value.attach(builder, "fees_table", "fees_label", 2);
+}
+
+bool
+PageFees::get_capitalize_fees()
+{
+    return gtk_toggle_button_get_active(
+        GTK_TOGGLE_BUTTON(m_capitalize));
+}
+
+const char *
+PageFees::get_memo()
+{
+    return gtk_entry_get_text(GTK_ENTRY (m_memo));
+}
+
+void
+PageFees::set_capitalize_fees(bool state)
+{
+    gtk_toggle_button_set_active(
+        GTK_TOGGLE_BUTTON(m_capitalize), state);
+}
+
+void
+PageFees::set_capitalize_fees(StockAssistantModel *model)
+{
+    auto fees_entry = dynamic_cast<StockTransactionFeesEntry*>(model->m_fees_entry.get());
+    set_capitalize_fees (fees_entry->m_capitalize);
+}
+
+void
+PageFees::update_fees_acct_sensitive(bool sensitive)
+{
+    gtk_widget_set_sensitive(m_account.m_selector, sensitive);
+}
+
+static void
+capitalize_fees_toggled_cb (GtkWidget *widget, StockAssistantModel *model)
+{
+    g_return_if_fail (model && model->m_txn_type);
+    auto me = static_cast<PageFees *>(g_object_get_data (G_OBJECT (widget), "owner"));
+    g_return_if_fail (me);
+    bool cap =  me->get_capitalize_fees();
+    model->m_fees_entry->set_capitalize(cap);
+    me->update_fees_acct_sensitive (!cap);
+}
+
+void
+PageFees::connect(StockAssistantModel *model)
+{
+    m_account.connect(&model->m_fees_entry->m_account);
+    g_signal_connect(m_memo, "changed", G_CALLBACK(text_entry_changed_cb),  &model->m_fees_entry->m_memo);
+    m_value.connect(&model->m_fees_entry->m_value);
+    g_object_set_data(G_OBJECT (m_capitalize), "owner", this);
+    g_signal_connect (m_capitalize, "toggled", G_CALLBACK (capitalize_fees_toggled_cb), model);
+}
+
+struct PageDividend
+{
     // dividend page
-    GtkWidget * dividend_page;
-    GtkWidget * dividend_account;
-    GtkWidget * dividend_memo_edit;
-    GtkWidget * dividend_value;
+    GtkWidget *m_page;
+    GncAccountSelector m_account;
+    GtkWidget *m_memo;
+    GncAmountEdit m_value;
+    PageDividend (GtkBuilder *builder, gnc_commodity *currency);
+    void connect(Account **account, const char **memo, gnc_numeric *value);
+    const char* get_memo();
+};
 
+PageDividend::PageDividend(GtkBuilder *builder, gnc_commodity *currency)
+    : m_page(get_widget(builder, "dividend_details_page")),
+      m_account(builder, {ACCT_TYPE_INCOME}, currency),
+      m_memo(get_widget(builder, "dividend_memo_entry")),
+      m_value(builder, currency)
+{
+    m_account.attach(builder, "dividend_table", "dividend_account_label", 0);
+    m_value.attach(builder, "dividend_table", "dividend_label", 1);
+}
+
+
+void
+PageDividend::connect(Account **account, const char **memo, gnc_numeric *value)
+{
+    m_account.connect(account);
+    g_signal_connect(m_memo, "changed", G_CALLBACK(text_entry_changed_cb), memo);
+    m_value.connect(value);
+}
+
+const char *
+PageDividend::get_memo()
+{
+    return gtk_entry_get_text(GTK_ENTRY (m_memo));
+}
+
+struct PageCapGain
+{
     // capgains page
-    GtkWidget * capgains_page;
-    GtkWidget * capgains_account;
-    GtkWidget * capgains_memo_edit;
-    GtkWidget * capgains_value;
+    GtkWidget * m_page;
+    GncAccountSelector m_account;
+    GtkWidget * m_memo;
+    GncAmountEdit m_value;
+    PageCapGain (GtkBuilder *builder, gnc_commodity *currency);
+    void connect(Account **account, const char **memo, gnc_numeric *value);
+    const char* get_memo();
+};
 
+PageCapGain::PageCapGain (GtkBuilder *builder, gnc_commodity *currency) :
+    m_page (get_widget (builder, "capgains_details_page")),
+    m_account (builder, { ACCT_TYPE_INCOME }, currency),
+    m_memo (get_widget (builder, "capgains_memo_entry")),
+    m_value (builder, currency)
+{
+    m_account.attach(builder, "capgains_table", "capgains_account_label", 0);
+    m_value.attach(builder, "capgains_table", "capgains_label", 1);
+}
+
+const char *
+PageCapGain::get_memo()
+{
+    return gtk_entry_get_text(GTK_ENTRY (m_memo));
+}
+
+
+void
+PageCapGain::connect(Account **account, const char **memo, gnc_numeric *value)
+{
+    m_account.connect(account);
+    g_signal_connect(m_memo, "changed", G_CALLBACK(text_entry_changed_cb), memo);
+    m_value.connect(value);
+}
+
+struct GncFinishTreeview
+{
+    GtkWidget *m_treeview;
+    GncFinishTreeview(GtkBuilder *builder);
+    void set_tooltip_column(int);
+};
+
+GncFinishTreeview::GncFinishTreeview (GtkBuilder *builder) :
+    m_treeview{get_widget (builder, "transaction_view")}
+{
+    auto view = GTK_TREE_VIEW (m_treeview);
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(view), gnc_tree_view_get_grid_lines_pref ());
+
+    auto store = gtk_list_store_new (NUM_SPLIT_COLS, G_TYPE_STRING, G_TYPE_STRING,
+                                     G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
+                                     G_TYPE_STRING, G_TYPE_STRING);
+    gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+    gtk_tree_selection_set_mode (gtk_tree_view_get_selection (view),
+                                     GTK_SELECTION_NONE);
+    g_object_unref(store);
+
+    auto renderer = gtk_cell_renderer_text_new();
+    auto column = gtk_tree_view_column_new_with_attributes
+        (_("Account"), renderer, "text", SPLIT_COL_ACCOUNT, nullptr);
+    gtk_tree_view_append_column(view, column);
+
+    renderer = gtk_cell_renderer_text_new();
+    g_object_set (renderer, "ellipsize", PANGO_ELLIPSIZE_END, nullptr);
+    column = gtk_tree_view_column_new_with_attributes
+        (_("Memo"), renderer, "text", SPLIT_COL_MEMO, nullptr);
+    gtk_tree_view_column_set_expand (column, true);
+    gtk_tree_view_append_column(view, column);
+
+    renderer = gtk_cell_renderer_text_new();
+    gtk_cell_renderer_set_alignment (renderer, 1.0, 0.5);
+    gtk_cell_renderer_set_padding (renderer, 5, 0);
+    column = gtk_tree_view_column_new_with_attributes
+        (_("Debit"), renderer, "text", SPLIT_COL_DEBIT, nullptr);
+    gtk_tree_view_append_column(view, column);
+
+    renderer = gtk_cell_renderer_text_new();
+    gtk_cell_renderer_set_alignment (renderer, 1.0, 0.5);
+    gtk_cell_renderer_set_padding (renderer, 5, 0);
+    column = gtk_tree_view_column_new_with_attributes
+        (_("Credit"), renderer, "text", SPLIT_COL_CREDIT, nullptr);
+    gtk_tree_view_append_column(view, column);
+
+    renderer = gtk_cell_renderer_text_new();
+    gtk_cell_renderer_set_alignment (renderer, 1.0, 0.5);
+    gtk_cell_renderer_set_padding (renderer, 5, 0);
+    column = gtk_tree_view_column_new_with_attributes
+        (_("Units"), renderer,
+         "text", SPLIT_COL_UNITS,
+         "foreground", SPLIT_COL_UNITS_COLOR,
+         nullptr);
+    gtk_tree_view_append_column(view, column);
+}
+
+void
+GncFinishTreeview::set_tooltip_column(int column)
+{
+    gtk_tree_view_set_tooltip_column(GTK_TREE_VIEW(m_treeview), column);
+}
+
+struct PageFinish
+{
     // finish page
-    GtkWidget * finish_page;
-    GtkWidget * finish_split_view;
-    GtkWidget * finish_summary;
+    GtkWidget * m_page;
+    GncFinishTreeview m_view;
+    GtkWidget * m_summary;
+    PageFinish (GtkBuilder *builder);
+    void prepare (GtkWidget *window, StockAssistantModel *model);
+};
 
+PageFinish::PageFinish (GtkBuilder *builder) :
+    m_page (get_widget (builder, "finish_page")), m_view (builder),
+    m_summary (get_widget (builder, "finish_summary")) {}
+
+
+void
+PageFinish::prepare (GtkWidget *window, StockAssistantModel *model)
+{
+    auto [success, summary, list_of_splits] = model->generate_list_of_splits ();
+    auto gtv = GTK_TREE_VIEW(m_view.m_treeview);
+    auto list = GTK_LIST_STORE(gtk_tree_view_get_model(gtv));
+    gtk_list_store_clear(list);
+    for (const auto &line : list_of_splits) {
+        GtkTreeIter iter;
+        auto tooltip = g_markup_escape_text(line.m_entry->m_memo, -1);
+        gtk_list_store_append(list, &iter);
+        gtk_list_store_set(
+            list, &iter, SPLIT_COL_ACCOUNT,
+            xaccAccountGetName(line.m_entry->m_account), SPLIT_COL_MEMO,
+            line.m_entry->m_memo, SPLIT_COL_TOOLTIP, tooltip, SPLIT_COL_DEBIT,
+            line.m_entry->m_debit_side ? line.m_entry->print_value(model->m_curr_pinfo) : nullptr,
+            SPLIT_COL_CREDIT,
+            line.m_entry->m_debit_side ? nullptr : line.m_entry->print_value(model->m_curr_pinfo),
+            SPLIT_COL_UNITS, line.m_entry->print_amount(line.m_entry->amount()),
+            SPLIT_COL_UNITS_COLOR, line.m_units_in_red ? "red" : nullptr, -1);
+        g_free(tooltip);
+    }
+    gtk_label_set_text(GTK_LABEL(m_summary), summary.c_str());
+    gtk_assistant_set_page_complete(GTK_ASSISTANT(window), m_page, success);
+ }
+
+struct StockAssistantView {
+    GtkWidget * m_window;
+
+    PageTransType m_type_page;
+    PageTransDeets m_deets_page;
+    PageStockAmount m_stock_amount_page;
+    PageStockValue m_stock_value_page;
+    PageCash m_cash_page;
+    PageFees m_fees_page;
+    PageDividend m_dividend_page;
+    PageCapGain m_capgain_page;
+    PageFinish m_finish_page;
+
+    StockAssistantView(GtkBuilder *builder, gnc_commodity *stock_commodity,
+                       gnc_commodity *currency, GtkWidget *parent);
+    ~StockAssistantView();
     void set_focus (GtkWidget *widget) { gtk_widget_grab_focus (widget); }
     void set_focus_gae (GtkWidget *gae) { set_focus (GTK_WIDGET (gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (gae)))); }
 
-    int get_transaction_type_index ()
-    {
-        return gtk_combo_box_get_active (GTK_COMBO_BOX (transaction_type_combo));
-    }
+};
 
-    void
-    set_transaction_types (const TxnTypeVec& txn_types)
-    {
-        auto combo = GTK_COMBO_BOX_TEXT (this->transaction_type_combo);
-        gtk_combo_box_text_remove_all (combo);
-        std::for_each (txn_types.begin(), txn_types.end(),
-                       [&combo](const auto& it)
-                       { gtk_combo_box_text_append_text (combo, _(it.friendly_name)); });
-        gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
-    }
+StockAssistantView::StockAssistantView (GtkBuilder *builder, gnc_commodity *stock_commodity,
+                                        gnc_commodity *currency, GtkWidget *parent) :
+    m_window (get_widget (builder, "stock_transaction_assistant")), m_type_page(builder), m_deets_page(builder),
+    m_stock_amount_page (builder, currency), m_stock_value_page (builder, currency), m_cash_page (builder, currency),
+    m_fees_page (builder, currency), m_dividend_page (builder, currency), m_capgain_page (builder, currency),
+    m_finish_page (builder)
+{
+    // Set the name for this assistant so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(m_window), "gnc-id-assistant-stock-transaction");
+    m_finish_page.m_view.set_tooltip_column(SPLIT_COL_TOOLTIP);
+    gtk_window_set_transient_for (GTK_WINDOW (m_window), GTK_WINDOW(parent));
+    gnc_window_adjust_for_screen (GTK_WINDOW(m_window));
+    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(m_window),
+                             GTK_WINDOW(parent));
+    gtk_widget_show_all (m_window);
+    DEBUG ("StockAssistantView constructor\n");
+};
 
-    void set_txn_type_explanation (const gchar *txt)
-    {
-        gtk_label_set_text (GTK_LABEL (this->transaction_type_explanation), txt);
-    }
-
-    void
-    prepare_stock_amount_page (bool input_new_balance, const std::string prev_balance)
-    {
-        gtk_label_set_text_with_mnemonic
-            (GTK_LABEL (this->stock_amount_label),
-             input_new_balance ? _("Ne_w Balance") : _("_Shares"));
-        gtk_label_set_text
-            (GTK_LABEL (this->next_amount_label),
-             input_new_balance ? _("Ratio") : _("Next Balance"));
-        gtk_label_set_text
-            (GTK_LABEL (this->stock_amount_title),
-             input_new_balance ?
-             _("Enter the new balance of shares after the stock split.") :
-             _("Enter the number of shares you gained or lost in the transaction."));
-        gtk_label_set_text (GTK_LABEL (this->prev_amount), prev_balance.c_str());
-    };
-
-    void
-    set_stock_amount (std::string new_amount_str)
-    {
-        gtk_label_set_text (GTK_LABEL(this->next_amount), new_amount_str.c_str());
-    };
-
-    void
-    set_price_value (const gchar *val)
-    { gtk_label_set_text (GTK_LABEL (this->price_value), val); };
-
-    bool
-    get_capitalize_fees ()
-    { return gtk_toggle_button_get_active
-            (GTK_TOGGLE_BUTTON (this->capitalize_fees_checkbox)); }
-
-    void
-    set_capitalize_fees (bool state)
-    {
-        gtk_toggle_button_set_active
-            (GTK_TOGGLE_BUTTON (this->capitalize_fees_checkbox), state);
-    }
-
-    void
-    update_fees_acct_sensitive (bool sensitive)
-    { gtk_widget_set_sensitive (this->fees_account, sensitive); }
-
-    void
-    prepare_finish_page (bool success, const std::string& summary,
-                         const SplitInfoVec& list_of_splits, GNCPrintAmountInfo& pinfo)
-    {
-        auto gtv = GTK_TREE_VIEW (this->finish_split_view);
-        auto list = GTK_LIST_STORE (gtk_tree_view_get_model (gtv));
-        gtk_list_store_clear (list);
-        for (const auto& line : list_of_splits)
-        {
-            GtkTreeIter iter;
-            auto tooltip = g_markup_escape_text (line.m_entry->m_memo, -1);
-            gtk_list_store_append (list, &iter);
-            gtk_list_store_set (list, &iter,
-                                SPLIT_COL_ACCOUNT, xaccAccountGetName(line.m_entry->m_account),
-                                SPLIT_COL_MEMO, line.m_entry->m_memo,
-                                SPLIT_COL_TOOLTIP, tooltip,
-                                SPLIT_COL_DEBIT, line.m_entry->m_debit_side ? line.m_entry->print_value(pinfo) : nullptr,
-                                SPLIT_COL_CREDIT, line.m_entry->m_debit_side ? nullptr : line.m_entry->print_value(pinfo),
-                                SPLIT_COL_UNITS, line.m_entry->print_amount(line.m_entry->amount()),
-                                SPLIT_COL_UNITS_COLOR, line.m_units_in_red ? "red" : nullptr,
-                                -1);
-            g_free (tooltip);
-        }
-        gtk_assistant_set_page_complete (GTK_ASSISTANT (this->window),
-                                         this->finish_page, success);
-        gtk_label_set_text (GTK_LABEL (this->finish_summary), summary.c_str());
-    }
-
-    StockAssistantView (GtkBuilder *builder, gnc_commodity *stock_commodity,
-                        gnc_commodity *currency, GtkWidget *parent)
-        : window (get_widget (builder, "stock_transaction_assistant"))
-        , transaction_type_page (get_widget (builder, "transaction_type_page"))
-        , transaction_type_combo (get_widget (builder, "transaction_type_page_combobox"))
-        , transaction_type_explanation (get_widget (builder, "transaction_type_page_explanation"))
-        , transaction_details_page (get_widget (builder, "transaction_details_page"))
-        , transaction_date (create_date (builder, 0, "transaction_date_label", "transaction_details_table"))
-        , transaction_description (get_widget (builder, "transaction_description_entry"))
-        , stock_amount_page (get_widget (builder, "stock_amount_page"))
-        , stock_amount_title (get_widget (builder, "stock_amount_title"))
-        , prev_amount (get_widget (builder, "prev_balance_amount"))
-        , next_amount (get_widget (builder, "next_balance_amount"))
-        , next_amount_label (get_widget (builder, "next_balance_label"))
-        , stock_amount_edit (create_gae (builder, 1, stock_commodity, "stock_amount_table", "stock_amount_label"))
-        , stock_amount_label (get_widget (builder, "stock_amount_label"))
-        , stock_value_page (get_widget (builder, "stock_value_page"))
-        , stock_value_edit (create_gae (builder, 0, currency, "stock_value_table", "stock_value_label"))
-        , price_value (get_widget (builder, "stock_price_amount"))
-        , stock_memo_edit (get_widget (builder, "stock_memo_entry"))
-        , cash_page (get_widget (builder, "cash_details_page"))
-        , cash_account (create_gas (builder, 0, { ACCT_TYPE_ASSET, ACCT_TYPE_BANK }, currency,  "cash_table", "cash_account_label"))
-        , cash_memo_edit (get_widget (builder, "cash_memo_entry"))
-        , cash_value (create_gae (builder, 1, currency, "cash_table", "cash_label"))
-        , fees_page (get_widget (builder, "fees_details_page"))
-        , capitalize_fees_checkbox (get_widget (builder, "capitalize_fees_checkbutton"))
-        , fees_account (create_gas (builder, 1, { ACCT_TYPE_EXPENSE }, currency, "fees_table", "fees_account_label"))
-        , fees_memo_edit (get_widget (builder, "fees_memo_entry"))
-        , fees_value (create_gae (builder, 2, currency, "fees_table", "fees_label"))
-        , dividend_page (get_widget (builder, "dividend_details_page"))
-        , dividend_account (create_gas (builder, 0, { ACCT_TYPE_INCOME }, currency, "dividend_table", "dividend_account_label"))
-        , dividend_memo_edit (get_widget (builder, "dividend_memo_entry"))
-        , dividend_value (create_gae (builder, 1, currency, "dividend_table", "dividend_label"))
-        , capgains_page (get_widget (builder, "capgains_details_page"))
-        , capgains_account (create_gas (builder, 0, { ACCT_TYPE_INCOME }, currency, "capgains_table", "capgains_account_label"))
-        , capgains_memo_edit (get_widget (builder, "capgains_memo_entry"))
-        , capgains_value (create_gae (builder, 1, currency, "capgains_table", "capgains_label"))
-        , finish_page (get_widget (builder, "finish_page"))
-        , finish_split_view (get_treeview (builder, "transaction_view"))
-        , finish_summary (get_widget (builder, "finish_summary"))
-    {
-        // Set the name for this assistant so it can be easily manipulated with css
-        gtk_widget_set_name (GTK_WIDGET(this->window), "gnc-id-assistant-stock-transaction");
-        gtk_tree_view_set_tooltip_column (GTK_TREE_VIEW (this->finish_split_view),
-                                          SPLIT_COL_TOOLTIP);
-        gtk_window_set_transient_for (GTK_WINDOW (this->window), GTK_WINDOW(parent));
-        gnc_window_adjust_for_screen (GTK_WINDOW(this->window));
-        gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(this->window),
-                                 GTK_WINDOW(parent));
-        gtk_widget_show_all (this->window);
-        DEBUG ("StockAssistantView constructor\n");
-    };
-    ~StockAssistantView(){
-        gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(this->window));
-        DEBUG ("StockAssistantView destructor\n");
-    };
-
-private:
-    GtkWidget* get_widget (GtkBuilder *builder, const gchar * ID)
-    {
-        g_return_val_if_fail (builder && ID, nullptr);
-        auto obj = gtk_builder_get_object (builder, ID);
-        if (!obj)
-            PWARN ("get_widget ID '%s' not found. it may be a typo?", ID);
-        return GTK_WIDGET (obj);
-    }
-
-    GtkWidget* create_gas (GtkBuilder *builder, gint row,
-                           std::vector<GNCAccountType> type, gnc_commodity *currency,
-                           const gchar *table_ID, const gchar *label_ID)
-    {
-        auto table = get_widget (builder, table_ID);
-        auto label = get_widget (builder, label_ID);
-        auto gas = gnc_account_sel_new ();
-        auto accum = [](auto a, auto b){ return g_list_prepend (a, (gpointer)b); };
-        auto null_glist = static_cast<GList*>(nullptr);
-        auto acct_list = std::accumulate (type.begin(), type.end(), null_glist, accum);
-        auto curr_list = accum (null_glist, currency);
-        gnc_account_sel_set_new_account_ability (GNC_ACCOUNT_SEL (gas), true);
-        gnc_account_sel_set_acct_filters (GNC_ACCOUNT_SEL (gas), acct_list, curr_list);
-        gtk_widget_show (gas);
-        gtk_grid_attach (GTK_GRID(table), gas, 1, row, 1, 1);
-        gtk_label_set_mnemonic_widget (GTK_LABEL(label), gas);
-        g_list_free (acct_list);
-        g_list_free (curr_list);
-        return gas;
-    }
-
-    GtkWidget* create_gae (GtkBuilder *builder, gint row, gnc_commodity *comm,
-                           const gchar *table_ID, const gchar *label_ID)
-    {
-        // shares amount
-        auto table = get_widget (builder, table_ID);
-        auto label = get_widget (builder, label_ID);
-        auto info = gnc_commodity_print_info (comm, true);
-        auto gae = gnc_amount_edit_new ();
-        gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (gae), TRUE);
-        gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (gae), info);
-        gtk_grid_attach (GTK_GRID(table), gae, 1, row, 1, 1);
-        gtk_widget_show (gae);
-        gnc_amount_edit_make_mnemonic_target (GNC_AMOUNT_EDIT (gae), label);
-        return gae;
-    }
-
-    GtkWidget* create_date (GtkBuilder *builder, guint row,
-                            const gchar *date_label, const gchar *table_label)
-    {
-        auto date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
-        auto label = get_widget (builder, date_label);
-        gtk_grid_attach (GTK_GRID(get_widget (builder, table_label)), date, 1, row, 1, 1);
-        gtk_widget_show (date);
-        gnc_date_make_mnemonic_target (GNC_DATE_EDIT(date), label);
-        return date;
-    }
-
-    GtkWidget* get_treeview (GtkBuilder *builder, const gchar *treeview_label)
-    {
-        auto view = GTK_TREE_VIEW (get_widget (builder, "transaction_view"));
-        gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(view), gnc_tree_view_get_grid_lines_pref ());
-
-        auto store = gtk_list_store_new (NUM_SPLIT_COLS, G_TYPE_STRING, G_TYPE_STRING,
-                                         G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
-                                         G_TYPE_STRING, G_TYPE_STRING);
-        gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
-        gtk_tree_selection_set_mode (gtk_tree_view_get_selection (view),
-                                     GTK_SELECTION_NONE);
-        g_object_unref(store);
-
-        auto renderer = gtk_cell_renderer_text_new();
-        auto column = gtk_tree_view_column_new_with_attributes
-            (_("Account"), renderer, "text", SPLIT_COL_ACCOUNT, nullptr);
-        gtk_tree_view_append_column(view, column);
-
-        renderer = gtk_cell_renderer_text_new();
-        g_object_set (renderer, "ellipsize", PANGO_ELLIPSIZE_END, nullptr);
-        column = gtk_tree_view_column_new_with_attributes
-            (_("Memo"), renderer, "text", SPLIT_COL_MEMO, nullptr);
-        gtk_tree_view_column_set_expand (column, true);
-        gtk_tree_view_append_column(view, column);
-
-        renderer = gtk_cell_renderer_text_new();
-        gtk_cell_renderer_set_alignment (renderer, 1.0, 0.5);
-        gtk_cell_renderer_set_padding (renderer, 5, 0);
-        column = gtk_tree_view_column_new_with_attributes
-            (_("Debit"), renderer, "text", SPLIT_COL_DEBIT, nullptr);
-        gtk_tree_view_append_column(view, column);
-
-        renderer = gtk_cell_renderer_text_new();
-        gtk_cell_renderer_set_alignment (renderer, 1.0, 0.5);
-        gtk_cell_renderer_set_padding (renderer, 5, 0);
-        column = gtk_tree_view_column_new_with_attributes
-            (_("Credit"), renderer, "text", SPLIT_COL_CREDIT, nullptr);
-        gtk_tree_view_append_column(view, column);
-
-        renderer = gtk_cell_renderer_text_new();
-        gtk_cell_renderer_set_alignment (renderer, 1.0, 0.5);
-        gtk_cell_renderer_set_padding (renderer, 5, 0);
-        column = gtk_tree_view_column_new_with_attributes
-            (_("Units"), renderer,
-             "text", SPLIT_COL_UNITS,
-             "foreground", SPLIT_COL_UNITS_COLOR,
-             nullptr);
-        gtk_tree_view_append_column(view, column);
-
-        return GTK_WIDGET (view);
-    }
+StockAssistantView::~StockAssistantView()
+{
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(m_window));
+    DEBUG ("StockAssistantView destructor\n");
 };
 
 static void connect_signals (gpointer, GtkBuilder*);
@@ -1401,84 +1847,6 @@ stock_assistant_window_destroy_cb (GtkWidget *object, gpointer user_data)
     delete info;
 }
 
-static void
-controller_transaction_type (GtkWidget *widget, StockAssistantController* info)
-{
-    if (!info->model->m_txn_types)
-        return;
-
-    auto type_idx = info->view->get_transaction_type_index();
-    if (type_idx < 0)           // combo isn't initialized yet.
-        return;
-
-    if (!info->model->set_txn_type (type_idx))
-        return;
-
-    info->view->set_txn_type_explanation (info->model->m_txn_type->explanation);
-    auto fees_entry = dynamic_cast<StockTransactionFeesEntry*>(info->model->m_fees_entry.get());
-    info->view->set_capitalize_fees (fees_entry->m_capitalize);
-}
-
-static void controller_gde (GtkWidget *widget, time64* date)
-{
-    *date = gnc_date_edit_get_date_end (GNC_DATE_EDIT (widget));
-}
-
-static void controller_gtk_entry (GtkWidget *widget, const gchar **model_text)
-{
-    *model_text = gtk_entry_get_text (GTK_ENTRY (widget));
-}
-
-static void controller_gae (GtkWidget *widget, gnc_numeric* num)
-{
-    gnc_numeric amt;
-    if (!gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT(widget), &amt, true, nullptr))
-        *num = amt;
-    else
-        *num = gnc_numeric_error(GNC_ERROR_ARG);
-}
-
-static void controller_gas (GtkWidget *widget, Account **acct)
-{
-    *acct = gnc_account_sel_get_account (GNC_ACCOUNT_SEL (widget));
-}
-
-static void
-controller_stock_amount (GtkWidget *widget, StockAssistantController* info)
-{
-    g_return_if_fail (info && info->model->m_txn_type);
-    StringVec errors;
-    auto amount = info->model->m_stock_entry->amount();
-    controller_gae (widget, &amount);
-    info->model->m_stock_entry->set_amount(amount, errors);
-    auto amount_str{info->model->m_stock_entry->print_amount(amount)};
-    if (amount_str)
-        info->view->set_stock_amount (amount_str);
-}
-
-static void
-controller_stock_value (GtkWidget *widget, StockAssistantController* info)
-{
-    g_return_if_fail (info && info->model->m_txn_type);
-
-    auto value = info->model->m_stock_entry->m_value;
-    controller_gae (widget, &value);
-    info->model->m_stock_entry->set_value(value);
-    auto [has_price, price, price_str] = info->model->calculate_price ();
-    // Translators: StockAssistant: N/A denotes stock price is not computable
-    info->view->set_price_value (has_price ? price_str : _("N/A"));
-}
-
-static void
-controller_capitalize_fees (GtkWidget *widget, StockAssistantController* info)
-{
-    g_return_if_fail (info && info->model->m_txn_type);
-
-    bool cap =  info->view->get_capitalize_fees();
-    info->model->m_fees_entry->set_capitalize(cap);
-    info->view->update_fees_acct_sensitive (!cap);
-}
-
 void
 stock_assistant_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
                          gpointer user_data)
@@ -1495,55 +1863,57 @@ stock_assistant_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
     case PAGE_TRANSACTION_TYPE:
         if (!model->maybe_reset_txn_types())
             break;
-        view->set_transaction_types (model->m_txn_types.value());
-        controller_transaction_type (view->transaction_type_combo, info);
-        view->set_focus (view->transaction_type_combo);
+        view->m_type_page.prepare(model);
+        view->m_type_page.set_focus();
+        view->m_fees_page.set_capitalize_fees(model);
         break;
     case PAGE_TRANSACTION_DETAILS:
-        controller_gde (view->transaction_date, &model->m_transaction_date);
-        controller_gtk_entry (view->transaction_description, &model->m_transaction_description);
-        view->set_focus (view->transaction_description);
+        model->m_transaction_date = view->m_deets_page.get_date_time();
+        model->m_transaction_description = view->m_deets_page.get_description();
+        view->m_deets_page.set_focus ();
         break;
     case PAGE_STOCK_AMOUNT:
-        view->prepare_stock_amount_page (model->m_input_new_balance,
-                                         model->get_stock_balance_str());
-        controller_stock_amount (view->stock_amount_edit, info);
-        view->set_focus_gae (view->stock_amount_edit);
+        view->m_stock_amount_page.prepare (model->m_input_new_balance,
+                                           model->get_stock_balance_str());
+
+        info->model->m_stock_entry->set_amount(view->m_stock_amount_page.get_stock_amount(), model->m_errors);
+        view->m_stock_amount_page.set_stock_amount(info->model->get_new_amount_str());
+        view->m_stock_amount_page.m_amount.set_focus();
         break;
     case PAGE_STOCK_VALUE:
-        controller_gtk_entry (view->stock_memo_edit, &model->m_stock_entry->m_memo);
-        controller_stock_value (view->stock_value_edit, info);
-        view->set_focus_gae (view->stock_value_edit);
+        model->m_stock_entry->m_memo = view->m_stock_value_page.get_memo();
+        model->m_stock_entry->set_value(view->m_stock_value_page.m_value.get(), "stock", model->m_errors);
+        view->m_stock_value_page.set_price(model->calculate_price());
+        view->m_stock_value_page.m_value.set_focus();
         break;
     case PAGE_CASH:
-        controller_gtk_entry (view->cash_memo_edit, &model->m_cash_entry->m_memo);
-        controller_gae (view->cash_value, &model->m_cash_entry->m_value);
-        controller_gas (view->cash_account, &model->m_cash_entry->m_account);
-        view->set_focus_gae (view->cash_value);
+        model->m_cash_entry->m_memo = view->m_cash_page.get_memo();
+        model->m_cash_entry->set_value (view->m_cash_page.m_value.get(), "cash", model->m_errors);
+        model->m_cash_entry->m_account = view->m_cash_page.m_account.get();
+        view->m_cash_page.m_value.set_focus();
         break;
     case PAGE_FEES:
-        controller_capitalize_fees (view->capitalize_fees_checkbox, info);
-        controller_gtk_entry (view->fees_memo_edit, &model->m_fees_entry->m_memo);
-        controller_gae (view->fees_value, &model->m_fees_entry->m_value);
-        controller_gas (view->fees_account, &model->m_fees_entry->m_account);
-        view->set_focus_gae (view->fees_value);
+        view->m_fees_page.set_capitalize_fees (info);
+        model->m_fees_entry->m_memo = view->m_fees_page.get_memo();
+        model->m_fees_entry->set_value (view->m_fees_page.m_value.get(), "fees", model->m_errors);
+        model->m_fees_entry->m_account = view->m_fees_page.m_account.get();
+        view->m_fees_page.m_value.set_focus();
         break;
     case PAGE_DIVIDEND:
-        controller_gtk_entry (view->dividend_memo_edit, &model->m_dividend_entry->m_memo);
-        controller_gae (view->dividend_value, &model->m_dividend_entry->m_value);
-        controller_gas (view->dividend_account, &model->m_dividend_entry->m_account);
-        view->set_focus_gae (view->dividend_value);
+        model->m_dividend_entry->m_memo = view->m_dividend_page.get_memo();
+        model->m_dividend_entry->set_value (view->m_dividend_page.m_value.get(), "dividend", model->m_errors);
+        model->m_dividend_entry->m_account = view->m_dividend_page.m_account.get();
+        view->m_dividend_page.m_value.set_focus();
         break;
     case PAGE_CAPGAINS:
-        controller_gtk_entry (view->capgains_memo_edit, &model->m_capgains_entry->m_memo);
-        controller_gae (view->capgains_value, &model->m_capgains_entry->m_value);
-        controller_gas (view->capgains_account, &model->m_capgains_entry->m_account);
-        view->set_focus_gae (view->capgains_value);
+        model->m_capgains_entry->m_memo = view->m_capgain_page.get_memo();
+        model->m_capgains_entry->set_value(view->m_capgain_page.m_value.get(), "capgains", model->m_errors);
+        model->m_capgains_entry->m_account = view->m_capgain_page.m_account.get();
+        view->m_capgain_page.m_value.set_focus();
         break;
     case PAGE_FINISH:
     {
-        auto [success, summary, list_of_splits] = model->generate_list_of_splits ();
-        view->prepare_finish_page (success, summary, list_of_splits, model->m_curr_pinfo);
+        view->m_finish_page.prepare (view->m_window, model);
         break;
     }
     default:
@@ -1614,7 +1984,7 @@ static void
 close_handler (gpointer user_data)
 {
     auto info = static_cast<StockAssistantController*>(user_data);
-    gtk_widget_destroy (info->view->window);
+    gtk_widget_destroy (info->view->m_window);
 }
 
 static void connect_signals (gpointer data, GtkBuilder *builder)
@@ -1623,36 +1993,21 @@ static void connect_signals (gpointer data, GtkBuilder *builder)
     auto model = info->model.get();
     auto view = info->view.get();
 
-    struct SignalData { GtkWidget* widget; const char* signal; GCallback callback; gpointer data; };
-    std::vector<SignalData> signals =
-    {
-        { view->transaction_type_combo  , "changed"            , G_CALLBACK (controller_transaction_type)      , info },
-        { view->transaction_date        , "date_changed"       , G_CALLBACK (controller_gde)                   , &model->m_transaction_date },
-        { view->transaction_description , "changed"            , G_CALLBACK (controller_gtk_entry)             , &model->m_transaction_description },
-        { view->stock_amount_edit       , "changed"            , G_CALLBACK (controller_stock_amount)          , info },
-        { view->stock_value_edit        , "changed"            , G_CALLBACK (controller_stock_value)           , info },
-        { view->stock_memo_edit         , "changed"            , G_CALLBACK (controller_gtk_entry)             , &model->m_stock_entry->m_memo },
-        { view->cash_account            , "account_sel_changed", G_CALLBACK (controller_gas)                   , &model->m_cash_entry->m_account },
-        { view->cash_memo_edit          , "changed"            , G_CALLBACK (controller_gtk_entry)             , &model->m_cash_entry->m_memo },
-        { view->cash_value              , "changed"            , G_CALLBACK (controller_gae)                   , &model->m_cash_entry->m_value },
-        { view->capitalize_fees_checkbox, "toggled"            , G_CALLBACK (controller_capitalize_fees)       , info },
-        { view->fees_account            , "account_sel_changed", G_CALLBACK (controller_gas)                   , &model->m_fees_entry->m_account },
-        { view->fees_memo_edit          , "changed"            , G_CALLBACK (controller_gtk_entry)             , &model->m_fees_entry->m_memo },
-        { view->fees_value              , "changed"            , G_CALLBACK (controller_gae)                   , &model->m_fees_entry->m_value },
-        { view->dividend_account        , "account_sel_changed", G_CALLBACK (controller_gas)                   , &model->m_dividend_entry->m_account },
-        { view->dividend_memo_edit      , "changed"            , G_CALLBACK (controller_gtk_entry)             , &model->m_dividend_entry->m_memo },
-        { view->dividend_value          , "changed"            , G_CALLBACK (controller_gae)                   , &model->m_dividend_entry->m_value },
-        { view->capgains_account        , "account_sel_changed", G_CALLBACK (controller_gas)                   , &model->m_capgains_entry->m_account },
-        { view->capgains_memo_edit      , "changed"            , G_CALLBACK (controller_gtk_entry)             , &model->m_capgains_entry->m_memo },
-        { view->capgains_value          , "changed"            , G_CALLBACK (controller_gae)                   , &model->m_capgains_entry->m_value },
-        { view->window                  , "destroy"            , G_CALLBACK (stock_assistant_window_destroy_cb), info }
-    };
-    for (const auto& [widget, signal, callback, data] : signals)
-        g_signal_connect (widget, signal, callback, data);
-    gtk_assistant_set_forward_page_func (GTK_ASSISTANT(view->window),
+    view->m_type_page.connect(model);
+    view->m_deets_page.connect(&model->m_transaction_date, &model->m_transaction_description);
+    view->m_stock_amount_page.connect(model);
+    view->m_stock_value_page.connect(model);
+    view->m_cash_page.connect(&model->m_cash_entry->m_account,  &model->m_cash_entry->m_memo, &model->m_cash_entry->m_value);
+    view->m_fees_page.connect(model);
+    view->m_dividend_page.connect(&model->m_dividend_entry->m_account, &model->m_dividend_entry->m_memo, &model->m_dividend_entry->m_value);
+    view->m_capgain_page.connect(&model->m_capgains_entry->m_account, &model->m_capgains_entry->m_memo,  &model->m_capgains_entry->m_value);
+
+    g_signal_connect (view->m_window, "destroy", G_CALLBACK (stock_assistant_window_destroy_cb), info);
+
+    gtk_assistant_set_forward_page_func (GTK_ASSISTANT(view->m_window),
                                          (GtkAssistantPageFunc)forward_page_func,
                                          info, nullptr);
-    gtk_builder_connect_signals (builder, info);
+    gtk_builder_connect_signals (builder, info); //Stock Assistant View: cancel, close, prepare
 
     auto component_id = gnc_register_gui_component
         (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, refresh_handler, close_handler, info);
