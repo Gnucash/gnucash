@@ -44,11 +44,10 @@ test_basic()
 static void
 test_list()
 {
-    GSList *invoice_list = nullptr;
     SCM template_menu_name = scm_c_eval_string ("gnc:report-template-menu-name/report-guid");
     SCM get_rpt_guids = scm_c_eval_string ("gnc:custom-report-invoice-template-guids");
     int number_of_defined_invoice_templates = 5;
-    int i = 0;
+    int number_of_found_invoice_templates = 0;
     gboolean printable_found = false;
     gboolean builtin_default_found = false;
     const char *builtin_default = gnc_get_builtin_default_invoice_print_report ();
@@ -60,7 +59,7 @@ test_list()
 
         if (scm_is_list (rpt_guids))
         {
-            for (i; !scm_is_null (rpt_guids); i++)
+            for (int i = 1; !scm_is_null (rpt_guids); i++)
             {
                 gchar *guid_str = scm_to_utf8_string (SCM_CAR(rpt_guids));
                 gchar *name = gnc_scm_to_utf8_string (scm_call_2(template_menu_name,
@@ -76,11 +75,12 @@ test_list()
                 g_free (guid_str);
                 g_free (name);
 
+                number_of_found_invoice_templates = i;
                 rpt_guids = SCM_CDR(rpt_guids);
             }
         }
     }
-    do_test(i == number_of_defined_invoice_templates, "number of built in invoice templates does not match");
+    do_test(number_of_found_invoice_templates == number_of_defined_invoice_templates, "number of built in invoice templates does not match");
     do_test(builtin_default_found == true, "built in default invoice guid not found");
     do_test(printable_found == true, "built in Printable Invoice not found with default guid");
 }
