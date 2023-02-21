@@ -40,6 +40,7 @@
 
 #include "gnc-tree-view.h"
 #include "gnc-engine.h"
+#include "gnc-glib-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-cell-renderer-date.h"
@@ -1287,6 +1288,21 @@ gnc_tree_view_create_menu_item (GtkTreeViewColumn *column,
     // LEAVE(" ");
 }
 
+static gint
+column_menu_sort (GtkTreeViewColumn *columna, GtkTreeViewColumn *columnb)
+{
+    const gchar *column_namea = g_object_get_data (G_OBJECT(columna), REAL_TITLE);
+    const gchar *column_nameb = g_object_get_data (G_OBJECT(columnb), REAL_TITLE);
+
+    if (!column_namea)
+        column_namea = gtk_tree_view_column_get_title (columna);
+
+    if (!column_nameb)
+        column_nameb = gtk_tree_view_column_get_title (columnb);
+
+    return safe_utf8_collate (column_namea, column_nameb);
+}
+
 /** This function is called to build the column selection menu.  It
  *  first destroys any old column selection menu, then checks to see
  *  if a new menu should be built.  If so, it calls the
@@ -1324,6 +1340,7 @@ gnc_tree_view_build_column_menu (GncTreeView *view)
 
         /* Now build a new menu */
         column_list = gtk_tree_view_get_columns (GTK_TREE_VIEW(view));
+        column_list = g_list_sort (column_list, (GCompareFunc)column_menu_sort);
         g_list_foreach (column_list, (GFunc)gnc_tree_view_create_menu_item, view);
         g_list_free (column_list);
     }
