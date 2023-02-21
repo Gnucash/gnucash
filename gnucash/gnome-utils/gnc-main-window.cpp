@@ -3526,8 +3526,9 @@ gnc_main_window_find_action_in_group (GncMainWindow *window,
     g_return_val_if_fail (action_name != nullptr, nullptr);
 
     auto action_group = gtk_widget_get_action_group (GTK_WIDGET(window), group_name);
+
     if (action_group)
-        action = g_action_map_lookup_action (G_ACTION_MAP(window), action_name);
+        action = g_action_map_lookup_action (G_ACTION_MAP(action_group), action_name);
 
     return action;
 }

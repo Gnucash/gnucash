@@ -598,9 +598,9 @@ static void
 gnc_plugin_page_account_editing_started_cd (gpointer various, GncPluginPageRegister *page)
 {
     GncPluginPage *plugin_page = GNC_PLUGIN_PAGE(page);
-    GAction *action = gnc_main_window_find_action (GNC_MAIN_WINDOW(plugin_page->window),
-                                                   "EditDeleteAccountAction");
-
+    GAction *action = gnc_main_window_find_action_in_group (GNC_MAIN_WINDOW(plugin_page->window),
+                                                            "GncPluginPageAccountTreeActions",
+                                                            "EditDeleteAccountAction");
     if (action != NULL)
         g_simple_action_set_enabled (G_SIMPLE_ACTION(action), FALSE);
 }
@@ -609,9 +609,9 @@ static void
 gnc_plugin_page_account_editing_finished_cb (gpointer various, GncPluginPageRegister *page)
 {
     GncPluginPage *plugin_page = GNC_PLUGIN_PAGE(page);
-    GAction *action = gnc_main_window_find_action (GNC_MAIN_WINDOW(plugin_page->window),
-                                                   "EditDeleteAccountAction");
-
+    GAction *action = gnc_main_window_find_action_in_group (GNC_MAIN_WINDOW(plugin_page->window),
+                                                            "GncPluginPageAccountTreeActions",
+                                                            "EditDeleteAccountAction");
     if (action != NULL)
         g_simple_action_set_enabled (G_SIMPLE_ACTION(action), TRUE);
 }
