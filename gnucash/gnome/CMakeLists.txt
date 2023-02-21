@@ -1,4 +1,6 @@
 
+add_subdirectory(test)
+
 set (gnc_gnome_noinst_HEADERS
   assistant-acct-period.h
   assistant-hierarchy.h
