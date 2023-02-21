@@ -62,15 +62,6 @@ const char * gnc_migrate_default_invoice_print_report (void);
  */
 char *gnc_get_default_invoice_print_report (void);
 
-/** Setup a combo used for displaying list of Invoice Reports.
- *
- *  @param combo The GtkComboBox that presents the list.
- *
- *  @param warning The warning image, displayed if the default guid is
- *                 not in the Invoice list.
- */
-void gnc_default_print_report_list (GtkWidget *combo, GtkWidget *warning);
-
 /** Create a report combo to show a list of Invoice reports so that
  *  a default Invoice Report can be selected.
  *
