@@ -436,14 +436,13 @@ int era_cnt;
     int have_mon, have_mday;
 #ifdef _NL_CURRENT
     size_t num_eras;
-#endif
     struct era_entry *era;
-
+    era = NULL;
+#endif
     have_I = is_pm = 0;
     century = -1;
     want_century = 0;
     want_era = 0;
-    era = NULL;
 
     have_wday = want_xday = have_yday = have_mon = have_mday = 0;
 
