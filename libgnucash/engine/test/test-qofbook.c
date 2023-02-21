@@ -426,6 +426,116 @@ test_book_increment_and_format_counter ( Fixture *fixture, gconstpointer pData )
 }
 
 static void
+test_book_get_default_report_guid ( Fixture *fixture, gconstpointer pData )
+{
+    const char *err_no_book = "No book";
+    const char *r;
+
+    /* need this as long as we have fatal warnings enabled */
+    g_test_log_set_fatal_handler ( ( GTestLogFatalFunc )handle_faults, NULL );
+
+    g_test_message( "Testing default report guid when book is null" );
+    r = qof_book_get_default_invoice_report_guid ( NULL );
+    g_assert_cmpstr( r, == , NULL );
+    g_assert( g_strrstr( test_struct.msg, err_no_book ) != NULL );
+    g_free( test_struct.msg );
+
+    g_test_message( "Testing default report guid for default value" );
+    r = qof_book_get_default_invoice_report_guid ( fixture->book );
+    g_assert_cmpstr( r, == , NULL );
+}
+
+static void
+test_book_get_default_report_name ( Fixture *fixture, gconstpointer pData )
+{
+    const char *err_no_book = "No book";
+    const char *r;
+
+    /* need this as long as we have fatal warnings enabled */
+    g_test_log_set_fatal_handler ( ( GTestLogFatalFunc )handle_faults, NULL );
+
+    g_test_message( "Testing default report name when book is null" );
+    r = qof_book_get_default_invoice_report_name ( NULL );
+    g_assert_cmpstr( r, == , NULL );
+    g_assert( g_strrstr( test_struct.msg, err_no_book ) != NULL );
+    g_free( test_struct.msg );
+
+    g_test_message( "Testing default report name for default value" );
+    r = qof_book_get_default_invoice_report_name ( fixture->book );
+    g_assert_cmpstr( r, == , NULL );
+}
+
+static void
+test_book_get_default_report_timeout ( Fixture *fixture, gconstpointer pData )
+{
+    const char *err_no_book = "No book";
+    int r;
+
+    /* need this as long as we have fatal warnings enabled */
+    g_test_log_set_fatal_handler ( ( GTestLogFatalFunc )handle_faults, NULL );
+
+    g_test_message( "Testing default report timeout when book is null" );
+    r = qof_book_get_default_invoice_report_timeout ( NULL );
+    g_assert_cmpint( r, == , 0 );
+    g_assert( g_strrstr( test_struct.msg, err_no_book ) != NULL );
+    g_free( test_struct.msg );
+
+    g_test_message( "Testing default report timeout for default value" );
+    r = qof_book_get_default_invoice_report_timeout ( fixture->book );
+    g_assert_cmpint( r, == , 0 );
+}
+
+static void
+test_book_set_default_report ( Fixture *fixture, gconstpointer pData )
+{
+    const char *err_no_book = "No book";
+    const char *err_no_guid = "No guid";
+    const char *err_no_name = "No name";
+    const char *test_guid1 = "5123a759ceb9483abf2182d01c140eff";
+    const char *test_guid2 = "5123a759ceb9483abf2182d01c140eee";
+    const char *test_name = "My Invoice Report";
+    const char *r;
+
+    /* need this as long as we have fatal warnings enabled */
+    g_test_log_set_fatal_handler ( ( GTestLogFatalFunc )handle_faults, NULL );
+
+    g_test_message( "Testing setting default report when book is null" );
+    qof_book_set_default_invoice_report ( NULL, test_guid1, test_name );
+    r = qof_book_get_default_invoice_report_guid ( fixture->book );
+    g_assert_cmpstr( r, == , NULL );
+    g_assert( g_strrstr( test_struct.msg, err_no_book ) != NULL );
+    g_free( test_struct.msg );
+
+    g_test_message( "Testing setting default report when guid is null" );
+    qof_book_set_default_invoice_report ( fixture->book, NULL, test_name );
+    r = qof_book_get_default_invoice_report_guid ( fixture->book );
+    g_assert_cmpstr( r, == , NULL );
+    g_assert( g_strrstr( test_struct.msg, err_no_guid ) != NULL );
+    g_free( test_struct.msg );
+
+    g_test_message( "Testing setting default report when name is null" );
+    qof_book_set_default_invoice_report ( fixture->book, test_guid1, NULL );
+    r = qof_book_get_default_invoice_report_guid ( fixture->book );
+    g_assert_cmpstr( r, == , NULL );
+    g_assert( g_strrstr( test_struct.msg, err_no_name ) != NULL );
+    g_free( test_struct.msg );
+
+    g_test_message( "Testing setting default report when name is empty string" );
+    qof_book_set_default_invoice_report ( fixture->book, test_guid1, "" );
+    r = qof_book_get_default_invoice_report_guid ( fixture->book );
+    g_assert_cmpstr( r, == , test_guid1 );
+    r = qof_book_get_default_invoice_report_name ( fixture->book );
+    g_assert_cmpstr( r, == , "" );
+
+    g_test_message( "Testing setting default report with guid and name" );
+    qof_book_set_default_invoice_report ( fixture->book, test_guid2, test_name );
+    r = qof_book_get_default_invoice_report_guid ( fixture->book );
+    g_assert_cmpstr( r, == , test_guid2 );
+    r = qof_book_get_default_invoice_report_name ( fixture->book );
+    g_assert_cmpstr( r, == , test_name );
+}
+
+static void
 test_book_use_trading_accounts( Fixture *fixture, gconstpointer pData )
 {
     g_assert( qof_book_use_trading_accounts( fixture-> book ) == FALSE );
@@ -850,6 +960,10 @@ test_suite_qofbook ( void )
     GNC_TEST_ADD( suitename, "get counter", Fixture, NULL, setup, test_book_get_counter, teardown );
     GNC_TEST_ADD( suitename, "get counter format", Fixture, NULL, setup, test_book_get_counter_format, teardown );
     GNC_TEST_ADD( suitename, "increment and format counter", Fixture, NULL, setup, test_book_increment_and_format_counter, teardown );
+    GNC_TEST_ADD( suitename, "get default report guid", Fixture, NULL, setup, test_book_get_default_report_guid, teardown );
+    GNC_TEST_ADD( suitename, "get default report name", Fixture, NULL, setup, test_book_get_default_report_name, teardown );
+    GNC_TEST_ADD( suitename, "get default report timeout", Fixture, NULL, setup, test_book_get_default_report_timeout, teardown );
+    GNC_TEST_ADD( suitename, "set default report", Fixture, NULL, setup, test_book_set_default_report, teardown );
     GNC_TEST_ADD( suitename, "use trading accounts", Fixture, NULL, setup, test_book_use_trading_accounts, teardown );
     GNC_TEST_ADD( suitename, "get autofreeze days", Fixture, NULL, setup, test_book_get_num_days_autofreeze, teardown );
     GNC_TEST_ADD( suitename, "use split action for num field", Fixture, NULL, setup, test_book_use_split_action_for_num_field, teardown );
