@@ -2196,14 +2196,13 @@ static void
 gnc_account_renumber_update_examples (RenumberDialog *data)
 {
     gchar *str;
-    gchar *prefix;
     gint   interval;
     gint   digits;
     unsigned int num_digits = 1;
 
     g_return_if_fail (data->num_children > 0);
 
-    prefix = gtk_editable_get_chars (GTK_EDITABLE(data->prefix), 0, -1);
+    const gchar *prefix = gtk_entry_get_text (GTK_ENTRY(data->prefix));
     interval = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(data->interval));
     digits = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(data->digits));
 
@@ -2225,7 +2224,7 @@ gnc_account_renumber_update_examples (RenumberDialog *data)
     else
         num_digits = digits;
 
-    if (strlen (prefix))
+    if (prefix && *prefix)
         str = g_strdup_printf ("%s-%0*d", prefix, num_digits, interval);
     else
         str = g_strdup_printf ("%0*d", num_digits, interval);
@@ -2243,7 +2242,6 @@ gnc_account_renumber_update_examples (RenumberDialog *data)
     gtk_label_set_text (GTK_LABEL(data->example2), str);
 
     g_free (str);
-    g_free (prefix);
 }
 
 void
@@ -2276,7 +2274,6 @@ gnc_account_renumber_response_cb (GtkDialog *dialog,
     {
         GList *children = gnc_account_get_children_sorted (data->parent);
         GList *tmp;
-        gchar *prefix;
         gint interval;
         unsigned int num_digits, i;
 
@@ -2288,7 +2285,7 @@ gnc_account_renumber_response_cb (GtkDialog *dialog,
             g_free (data);
             return;
         }
-        prefix = gtk_editable_get_chars (GTK_EDITABLE(data->prefix), 0, -1);
+        const gchar *prefix = gtk_entry_get_text (GTK_ENTRY(data->prefix));
         interval = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(data->interval));
         num_digits = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(data->digits));
 
@@ -2306,7 +2303,6 @@ gnc_account_renumber_response_cb (GtkDialog *dialog,
             g_free (str);
         }
         gnc_unset_busy_cursor (NULL);
-        g_free (prefix);
         g_list_free (children);
     }
     gtk_widget_destroy (data->dialog);

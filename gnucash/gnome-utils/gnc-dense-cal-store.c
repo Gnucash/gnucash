@@ -154,7 +154,7 @@ gnc_dense_cal_store_clear(GncDenseCalStore *model)
 }
 
 void
-gnc_dense_cal_store_update_name(GncDenseCalStore *model, gchar *name)
+gnc_dense_cal_store_update_name(GncDenseCalStore *model, const gchar *name)
 {
     if (model->name != NULL)
     {
@@ -165,7 +165,7 @@ gnc_dense_cal_store_update_name(GncDenseCalStore *model, gchar *name)
 }
 
 void
-gnc_dense_cal_store_update_info(GncDenseCalStore *model, gchar *info)
+gnc_dense_cal_store_update_info(GncDenseCalStore *model, const gchar *info)
 {
     if (model->info != NULL)
     {

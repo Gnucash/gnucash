@@ -399,28 +399,26 @@ void
 gnc_customer_name_changed_cb (GtkWidget *widget, gpointer data)
 {
     CustomerWindow *cw = data;
-    char *fullname, *title;
-    const char *id,  *name;
+    char *title;
 
     if (!cw)
         return;
 
-    name = gtk_entry_get_text (GTK_ENTRY (cw->company_entry));
+    const char *header = (cw->dialog_type == EDIT_CUSTOMER) ?
+        _("Edit Customer") : _("New Customer");
+
+    const char *name = gtk_entry_get_text (GTK_ENTRY (cw->company_entry));
     if (!name || *name == '\0')
         name = _("<No name>");
 
-    id = gtk_entry_get_text (GTK_ENTRY (cw->id_entry));
-
-    fullname = g_strconcat (name, " (", id, ")", (char *)NULL);
-
-    if (cw->dialog_type == EDIT_CUSTOMER)
-        title = g_strconcat (_("Edit Customer"), " - ", fullname, (char *)NULL);
+    const char *id = gtk_entry_get_text (GTK_ENTRY (cw->id_entry));
+    if (id && *id)
+        title = g_strdup_printf ("%s - %s (%s)", header, name, id);
     else
-        title = g_strconcat (_("New Customer"), " - ", fullname, (char *)NULL);
+        title = g_strdup_printf ("%s - %s", header, name);
 
     gtk_window_set_title (GTK_WINDOW (cw->dialog), title);
 
-    g_free (fullname);
     g_free (title);
 }
 
