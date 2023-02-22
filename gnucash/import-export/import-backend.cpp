@@ -946,6 +946,10 @@ gnc_import_process_trans_item (Account *base_acc,
                     }
                 }
 
+                auto fs_memo = xaccSplitGetMemo (trans_info->first_split);
+                if (fs_memo && *fs_memo)
+                    xaccSplitSetMemo(selected_match->split, fs_memo);
+
                 update_desc_and_notes(trans_info);
 
                 /*DEBUG("CommitEdit selected_match")*/
