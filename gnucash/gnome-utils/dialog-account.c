@@ -2293,7 +2293,7 @@ gnc_account_renumber_response_cb (GtkDialog *dialog,
         for (tmp = children, i = 1; tmp; tmp = g_list_next (tmp), i += 1)
         {
             gchar *str;
-            if (strlen (prefix))
+            if (prefix && *prefix)
                 str = g_strdup_printf ("%s-%0*d", prefix,
                                        num_digits, interval * i);
             else
