@@ -139,7 +139,7 @@ GncNumeric parse_monetary (const std::string &str, int currency_format)
     if(!boost::regex_search(str, boost::regex("[0-9]")))
         throw std::invalid_argument (_("Value doesn't appear to contain a valid number."));
 
-    auto expr = boost::make_u32regex("[[:Sc:]]");
+    auto expr = boost::make_u32regex("[[:Sc:][:blank:]]");
     std::string str_no_symbols = boost::u32regex_replace(str, expr, "");
 
     /* Convert based on user chosen currency format */
