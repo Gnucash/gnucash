@@ -1081,6 +1081,18 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     }
 
     static SCM
+    get_scm_value(const GncOptionRangeValue<double>& option)
+    {
+        return scm_from_double(option.get_value());
+    }
+
+    static SCM
+    get_scm_default_value(const GncOptionRangeValue<double>& option)
+    {
+        return scm_from_double(option.get_default_value());
+    }
+
+    static SCM
     get_scm_value(const GncOptionDateValue& option)
     {
         if (option.get_period() == RelativeDatePeriod::ABSOLUTE)
@@ -1285,14 +1297,14 @@ inline SCM return_scm_value(ValueType value)
                               is_same_decayed_v<decltype(option),
                               GncOptionRangeValue<double>>)
                 {
-                    auto serial{option.serialize()};
-                    if (serial.empty())
+                    auto serial{get_scm_value(option)};
+                    if (serial == SCM_BOOL_F)
                     {
                         return no_value;
                     }
                     else
                     {
-                        auto scm_str{scm_list_1(scm_from_utf8_string(serial.c_str()))};
+                        auto scm_str{scm_list_1(serial)};
                         return scm_simple_format(SCM_BOOL_F, ticked_format_str, scm_str);
                     }
                 }
@@ -1368,10 +1380,11 @@ inline SCM return_scm_value(ValueType value)
                     if constexpr (is_same_decayed_v<decltype(option),
                                   GncOptionRangeValue<int>>)
                     {
-                        if (scm_is_pair(new_value))
-                            option.set_value(scm_to_int(scm_cdr(new_value)));
-                        else
-                            option.set_value(scm_to_int(new_value));
+                        auto value_num{scm_is_pair(new_value) ? scm_cdr(new_value) : new_value};
+                        int value_int = scm_is_exact_integer(value_num) ?
+                            scm_to_int(value_num) :
+                            static_cast<int>(scm_to_double(value_num));
+                        option.set_value(value_int);
                         return;
                     }
                     if constexpr (is_same_decayed_v<decltype(option),

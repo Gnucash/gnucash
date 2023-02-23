@@ -127,6 +127,21 @@
 "
           (gncBudgetGetGUID value)))
 
+(define (test-number-range-output-template value)
+  (format #f "
+; Section: foo
+
+(let ((option (gnc:lookup-option options
+                                 \"foo\"
+                                 \"bar\")))
+  ((lambda (o) (if o (gnc:option-set-value o ~a))) option))
+
+" (if (exact-integer? value)
+      (if (< value 100)
+          (format #f "'(percent . ~d)" value)
+          (format #f "'(pixels . ~f)" value))
+      (format #f "'~f" value)
+      )))
 
 (define (test-option-scheme-output name make-option-func get-value-func test-template default value)
   (let ((odb (gnc:new-options))
@@ -438,10 +453,10 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
       (test-equal "number-range unchanged" test-unchanged-section-output-template
                   (gnc:generate-restore-forms odb "options"))
       (let ((option (gnc:lookup-option odb "foo" "bar"))
-            (test-template test-literal-output-template))
+            (test-template test-number-range-output-template))
         (gnc:option-set-value option 42.0)
         (test-equal "number-range form"
-                    (test-template (GncOption-serialize option))
+                    (test-template (string->number (GncOption-serialize option)))
                     (gnc:generate-restore-forms odb "options"))
         ))
     (test-end  "test-gnc-number-range-option-to-scheme"))
@@ -460,10 +475,10 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
       (test-equal "number-plot unchanged" test-unchanged-section-output-template
                   (gnc:generate-restore-forms odb "options"))
       (let ((option (gnc:lookup-option odb "foo" "bar"))
-            (test-template test-literal-output-template))
-        (gnc:option-set-value option 42)
+            (test-template test-number-range-output-template))
+        (gnc:option-set-value option 48)
         (test-equal "number-plot form"
-                    (test-template (GncOption-serialize option))
+                    (test-template (string->number (GncOption-serialize option)))
                     (gnc:generate-restore-forms odb "options"))
         ))
     (test-end  "test-gnc-number-plot-size-option-to-scheme"))
