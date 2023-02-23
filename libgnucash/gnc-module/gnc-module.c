@@ -108,7 +108,7 @@ gnc_module_system_search_dirs(void)
             if (!escchar)
             {
                 list = g_list_append(list, token->str);
-                g_string_free(token, FALSE);
+                g_string_free(token, TRUE);
                 token = g_string_new(NULL);
             }
             else
@@ -126,8 +126,8 @@ gnc_module_system_search_dirs(void)
     }
     if (token->len)
     {
-        list = g_list_append(list, token->str);
-        g_string_free(token, FALSE);
+        char *token_str = g_string_free (token, FALSE);
+        list = g_list_append(list, token_str);
     }
     else
     {
