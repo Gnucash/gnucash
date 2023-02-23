@@ -109,7 +109,17 @@ endfunction()
 
 function(gnc_add_scheme_test _TARGET _SOURCE_FILE)
   add_test(${_TARGET} ${CMAKE_COMMAND} -E env
-    ${GUILE_EXECUTABLE} --debug -c "(load-from-path \"${_TARGET}\")(exit (run-test))"
+    ${GUILE_EXECUTABLE} --debug -c "
+    (set! %load-hook
+          (lambda (filename)
+            (when (and filename
+                       (string-contains filename \"${GUILE_REL_SITEDIR}\")
+                       (not (string-prefix? \"${CMAKE_BINARY_DIR}\" filename)))
+                  (format #t \"%load-path = ~s~%\" %load-path)
+                  (format #t \"%load-compiled-path = ~s~%\" %load-compiled-path)
+                  (error \"Loading guile/site file from outside build tree!\" filename))))
+    (load-from-path \"${_TARGET}\")
+    (exit (run-test))"
   )
   get_guile_env()
   set_tests_properties(${_TARGET} PROPERTIES ENVIRONMENT "${GUILE_ENV};${ARGN}")
