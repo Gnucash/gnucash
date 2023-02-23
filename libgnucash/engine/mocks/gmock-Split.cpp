@@ -103,6 +103,13 @@ xaccSplitGetMemo (const Split *split)
     return mocksplit ? mocksplit->get_memo() : "";
 }
 
+void
+xaccSplitSetMemo (Split *split, const char *memo)
+{
+    ASSERT_TRUE(GNC_IS_MOCKSPLIT(split));
+    gnc_mocksplit(split)->set_memo(memo);
+}
+
 char
 xaccSplitGetReconcile (const Split *split)
 {

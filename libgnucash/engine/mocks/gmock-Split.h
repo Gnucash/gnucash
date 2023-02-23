@@ -71,6 +71,7 @@ public:
     MOCK_CONST_METHOD0(get_value, gnc_numeric());
     MOCK_METHOD1(set_value, void(gnc_numeric));
     MOCK_CONST_METHOD0(get_memo, const char *());
+    MOCK_METHOD1(set_memo, void(const char *));
     MOCK_CONST_METHOD0(get_reconcile, char());
     MOCK_METHOD1(set_reconcile, void(char));
     MOCK_METHOD1(set_date_reconciled_secs, void(time64));
