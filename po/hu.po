@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-02-18 23:42+0000\n"
+"PO-Revision-Date: 2023-02-22 19:38+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -966,22 +966,22 @@ msgstr "Záró dátum"
 
 #: gnucash/gnome/assistant-hierarchy.c:759
 msgid "Selected"
-msgstr "Kijelölt"
+msgstr "Kijelölve"
 
 #: gnucash/gnome/assistant-hierarchy.c:771
 #: gnucash/gnome-utils/gnc-tree-view-account.c:2369
 msgid "Account Types"
-msgstr "Folyószámlatípusok"
+msgstr "Kategórianév"
 
 #. Translators: '%s' is the name of the selected account hierarchy template.
 #: gnucash/gnome/assistant-hierarchy.c:872
 #, c-format
 msgid "Accounts in '%s'"
-msgstr "Számlák a(z) '%s'-ban(-ben)"
+msgstr "Számlák a(z) '%s' kategóriában"
 
 #: gnucash/gnome/assistant-hierarchy.c:880
 msgid "No description provided."
-msgstr "Nincs magyarázat."
+msgstr "Nincs megadva leírás."
 
 #: gnucash/gnome/assistant-hierarchy.c:895
 msgid "Accounts in Category"
@@ -1023,7 +1023,7 @@ msgstr "Nyitóegyenleg"
 
 #: gnucash/gnome/assistant-hierarchy.c:1370
 msgid "Use Existing"
-msgstr "Meglévő használat"
+msgstr "Meglévő használata"
 
 #: gnucash/gnome/assistant-hierarchy.c:1485
 msgid ""
@@ -1036,9 +1036,8 @@ msgstr ""
 "használó számlákat manuálisan kell hozzáadni."
 
 #: gnucash/gnome/assistant-hierarchy.c:1495
-#, fuzzy
 msgid "Please choose the currency to use for new accounts."
-msgstr "Válassza ki az új számlák pénznemét."
+msgstr "Válassza ki a létrehozandó számlák pénznemét."
 
 #: gnucash/gnome/assistant-hierarchy.c:1540
 #: gnucash/gnome/assistant-hierarchy.c:1559
@@ -1649,7 +1648,7 @@ msgstr "Ügyfél azonosítója"
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:149
 #: libgnucash/app-utils/business-options.scm:68
 msgid "Company Name"
-msgstr "Cégnév"
+msgstr "Cég neve"
 
 #: gnucash/gnome/dialog-customer.c:916 gnucash/gnome/dialog-vendor.c:717
 msgid "Contact"
@@ -3630,7 +3629,7 @@ msgstr "Új folyószámla-nézet oldal nyitása"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:112
 msgid "New _File"
-msgstr "Új _fájl"
+msgstr "_Új"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:113
 msgid "Create a new file"
@@ -3700,7 +3699,7 @@ msgstr "Tranzakció keresése"
 #: gnucash/gnome/gnc-plugin-page-register2.c:263
 #: gnucash/gnome/gnc-plugin-page-register.c:377
 msgid "Ta_x Report Options"
-msgstr "_Adó jelentés opciók"
+msgstr "_Adókimutatás beállítások"
 
 #. Translators: currently implemented are
 #. US: income tax and
@@ -4472,9 +4471,8 @@ msgstr ""
 "Biztosan meg akarod csinálni?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1423
-#, fuzzy
 msgid "_Pick another account"
-msgstr "Átvitel_számla kiválasztása"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1424
 msgid "_Do it anyway"
@@ -5263,9 +5261,8 @@ msgid "Edit the selected employee"
 msgstr "Kijelölt alkalmazott szerkesztése"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:163
-#, fuzzy
 msgid "Create a new vendor"
-msgstr "Új fájl létrehozása"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:168
 #, fuzzy
@@ -5286,9 +5283,8 @@ msgid "Delete selected owner"
 msgstr "A kiválasztott folyószámlák törlése"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:199
-#, fuzzy
 msgid "Create a new bill"
-msgstr "Új fájl létrehozása"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:204
 msgid "Create a new invoice"
@@ -6943,7 +6939,7 @@ msgstr "Nincs ilyen ár: %s"
 
 #: gnucash/gnome/top-level.c:467 libgnucash/app-utils/business-options.scm:67
 msgid "Business"
-msgstr "Üzlet"
+msgstr "Vállalkozás"
 
 #: gnucash/gnome/window-autoclear.c:115
 #, fuzzy
@@ -8171,7 +8167,7 @@ msgid ""
 "You must specify an account to transfer from, or to, or both, for this "
 "transaction. Otherwise, it will not be recorded."
 msgstr ""
-"Az átvitelhez szükséges egy forrásszámla vagy célszámla vagy mindkettő. "
+"Az átutaláshoz szükséges egy forrásszámla vagy célszámla vagy mindkettő. "
 "Különben a tranzakció nem kerül rögzítésre."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1441
@@ -8219,12 +8215,12 @@ msgstr "Terhelendő számla"
 #: gnucash/gnome-utils/dialog-transfer.c:1994
 #: gnucash/gtkbuilder/dialog-transfer.glade:273
 msgid "Transfer From"
-msgstr "Átvitel innen"
+msgstr "Átutalás innen"
 
 #: gnucash/gnome-utils/dialog-transfer.c:1998
 #: gnucash/gtkbuilder/dialog-transfer.glade:334
 msgid "Transfer To"
-msgstr "Átvitel ide"
+msgstr "Átutalás ide"
 
 #: gnucash/gnome-utils/dialog-transfer.c:2055
 msgid "Debit Amount"
@@ -8703,15 +8699,15 @@ msgstr "Ismeretlen I/O hiba (%d) történt."
 
 #: gnucash/gnome-utils/gnc-file.c:642
 msgid "Save changes to the file?"
-msgstr "Változások rögzítése a fájlba?"
+msgstr "Menti a változásokat?"
 
 #: gnucash/gnome-utils/gnc-file.c:655
 #: gnucash/gnome-utils/gnc-main-window.c:1335
-#, fuzzy, c-format
+#, c-format
 msgid "If you don't save, changes from the past %d minute will be discarded."
 msgid_plural ""
 "If you don't save, changes from the past %d minutes will be discarded."
-msgstr[0] "Ha nem rögzíti a változásokat az előző %d percből, azok elvesznek."
+msgstr[0] "Ha nem menti, az elmúlt %d percben történt változtatások elvesznek."
 
 #: gnucash/gnome-utils/gnc-file.c:659
 msgid "Continue _Without Saving"
@@ -9096,7 +9092,7 @@ msgstr "_0. ablak"
 #: gnucash/gnome-utils/gnc-main-window.c:1286
 #, c-format
 msgid "Save changes to file %s before closing?"
-msgstr "Változások rögzítése %s fájlba bezárás előtt?"
+msgstr "%s fájl mentése bezárás előtt?"
 
 #: gnucash/gnome-utils/gnc-main-window.c:1289
 #, c-format
@@ -9104,6 +9100,7 @@ msgid ""
 "If you don't save, changes from the past %d hours and %d minutes will be "
 "discarded."
 msgstr ""
+"Ha nem menti, az elmúlt %d óra %d percben történt változtatások elvesznek."
 
 #: gnucash/gnome-utils/gnc-main-window.c:1291
 #, c-format
@@ -9111,11 +9108,11 @@ msgid ""
 "If you don't save, changes from the past %d days and %d hours will be "
 "discarded."
 msgstr ""
-"Ha nem rögzíti a változásokat az előző %d nap és %d órából, azok elvesznek."
+"Ha nem menti, az elmúlt %d nap %d órában történt változtatások elvesznek."
 
 #: gnucash/gnome-utils/gnc-main-window.c:1340
 msgid "Close _Without Saving"
-msgstr "Bezárás _rögzítés nélkül"
+msgstr "Bezárás _mentés nélkül"
 
 #: gnucash/gnome-utils/gnc-main-window.c:1487
 msgid "This window is closing and will not be restored."
@@ -9137,13 +9134,13 @@ msgstr "Elmentetlen könyv"
 
 #: gnucash/gnome-utils/gnc-main-window.c:1794
 msgid "Last modified on %a, %b %d, %Y at %I:%M %p"
-msgstr ""
+msgstr "Utoljára módosítva %Y. %b %d., %A, %H:%M"
 
 #. Translators: This message appears in the status bar after opening the file.
 #: gnucash/gnome-utils/gnc-main-window.c:1797
 #, c-format
 msgid "File %s opened. %s"
-msgstr "A fájl %s megnyitva. %s"
+msgstr "%s fájl betöltve. %s"
 
 #: gnucash/gnome-utils/gnc-main-window.c:2965
 msgctxt "lower case key for short cut to 'Accounts'"
@@ -10118,12 +10115,10 @@ msgid "Save the changed transaction?"
 msgstr "A megváltozott tranzakció rögzítése?"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2318
-#, fuzzy
 msgid ""
 "The current transaction has changed. Would you like to record the changes, "
 "or discard the changes?"
 msgstr ""
-"A jelenlegi tranzakciósablon megváltozott. Kívánja rögzíteni a változásokat?"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2356
 #: gnucash/register/ledger-core/split-register-control.c:1536
@@ -11493,9 +11488,10 @@ msgid ""
 "only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and "
 "Liability accounts."
 msgstr ""
-"Kamatot felszámító vagy jóváíró számla egyeztetése előtt a kamattranzakció "
-"bevitelére való figyelmeztetés. Jelenleg a Bank, Hitel, Befektetés, Eszköz, "
-"Követelés, Fizetendő és Kötelezettség számlákon engedélyezett."
+"Kamatot terhelő vagy kamatot fizető számla egyeztetése előtt meg fog jelenni "
+"egy figyelmeztetés a kamattranzakció bevitelére. Jelenleg a Bank, Hitel, "
+"Befektetés, Eszköz, Követelés, Fizetendő és Kötelezettség típusú számlákon "
+"használható."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:15
 msgid "Prompt for credit card payment"
@@ -11636,6 +11632,7 @@ msgid "Save window sizes and locations"
 msgstr "Ablakméret és hely elmentése"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:16
+#, fuzzy
 msgid ""
 "If active, the size and location of each dialog window will be saved when it "
 "is closed. The sizes and locations of content windows will be remembered "
@@ -13176,7 +13173,7 @@ msgstr "Dátumtartomány"
 #: gnucash/gtkbuilder/dialog-account.glade:890
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:104
 msgid "_Select All"
-msgstr "M_indent kijelöl"
+msgstr "_Összes kijelölése"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:456
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:141
@@ -13708,29 +13705,30 @@ msgid ""
 "\n"
 "Click 'Cancel' if you do not wish to create any new accounts now."
 msgstr ""
-"A Varászló segíti a GnuCash-számlakészlet létrehozását,eszközökhöz (pl. "
-"befektetések, folyószámlák és betétszámlák), forrásokhoz (pl. kölcsönök), "
-"különféle bevételekhez és költségekhez.\n"
+"Ebben az ablakban a GnuCash segíteni fog létrehozni különböző eszközök (pl. "
+"befektetések, bankszámlák, megtakarítások), források (pl. kölcsönök), "
+"bevételek és költségek nyilvántartásához használható folyószámlákat.\n"
 "\n"
-"Itt kiválaszthat olyan fiókokat, amelyek megfelelnek az Ön igényeinek. Az "
-"asszisztens befejezése után a későbbiekben bármikor hozzáadhat, átnevezhet, "
-"módosíthat és eltávolíthat fiókokat. Alfiókokat is hozzáadhat, valamint "
-"áthelyezhet fiókokat (az alfiókjaikkal együtt) egyik szülőről a másikra.\n"
+"Hamarosan kiválaszthatja azt az előre elkészített számlakészletet, ami "
+"megfelel az Ön igényeinek. Természetesen az alábbi lépések befejezése után "
+"később is bármikor átnevezheti, módosíthatja vagy eltávolíthatja a "
+"létrehozott számlákat. Új számlákat vagy alszámlákat is hozzáadhat, valamint "
+"áthelyezhet számlákat (az alszámláikkal együtt) egy másik szülő számla alá.\n"
 "\n"
-"Kattintson a 'Megszakítás' -ra ha nem akar létrehozni új számlakészletet."
+"Ha most mégsem akar létrehozni új számlakészletet, akkor kattintson a \"Mégse"
+"\" gombra."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:30
 msgid "New Account Hierarchy Setup"
 msgstr "Új számlahierarchia beállítása"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:44
-#, fuzzy
 msgid ""
 "\n"
 "Please choose the currency to use for new accounts."
 msgstr ""
 "\n"
-"Válassza ki az új számlák pénznemét."
+"Válassza ki a létrehozandó számlák pénznemét."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:102
 msgid "Choose Currency"
@@ -13742,6 +13740,9 @@ msgid ""
 "that you foresee you will use GnuCash. Each category you select will cause "
 "several accounts to be created."
 msgstr ""
+"Jelölje ki azokat a nyelvre és régióra jellemző kategóriákat, amik "
+"legközelebb állnak ahhoz, ahogy használni szeretné a GnuCash-t. Minden "
+"kijelölt kategória több számlát is létre fog hozni."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:163
 msgid "<b>Categories</b>"
@@ -13750,7 +13751,7 @@ msgstr "<b>Kategóriák</b>"
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:273
 #: gnucash/gtkbuilder/dialog-account.glade:906
 msgid "C_lear All"
-msgstr "Minden tör_lése"
+msgstr "Kijelölések tör_lése"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:311
 msgid "<b>Category Description</b>"
@@ -13768,22 +13769,23 @@ msgid ""
 "If not satisfied with the available templates, please read the wiki page "
 "linked below and share your new or improved template."
 msgstr ""
+"Ha nem elégedett a fenti kategóriákkal, kattintson az alábbi linkre és a "
+"wiki oldalon ossza meg az Ön által készített új vagy javított "
+"számlakategóriákat."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:484
-#, fuzzy
 msgid ""
 "The selection you make here is only the starting point for your personalized "
 "account hierarchy. Accounts can be added, renamed, moved, or deleted by hand "
 "later at any time."
 msgstr ""
-"Válassza ki azokat a kategóriákat, amelyek szerint használni fogja GnuCash-"
-"t. Minden kiválasztott kategória néhány számla létrehozásával jár. Válassza "
-"ki a kívánt kategóriákat! Később bármikor létrehozhat további számlákat."
+"A fenti kijelölés csak a kiindulópontot jelenti a GnuCash használatában. A "
+"számlák később bármikor átnevezhetők, áthelyezhetők vagy törölhetők, és "
+"létrehozhat új számlákat is."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:501
-#, fuzzy
 msgid "GnuCash Account Template Wiki"
-msgstr "GnuCash-számla neve"
+msgstr "GnuCash Számlasablon Wiki"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:516
 msgid "Choose accounts to create"
@@ -13807,6 +13809,20 @@ msgid ""
 "<b>Note:</b> all accounts except Equity and placeholder accounts may have an "
 "opening balance.\n"
 msgstr ""
+"\n"
+"Ha át szeretne nevezni egy számlát, először kattintson a számla sorára, majd "
+"a nevére, és változtassa meg.\n"
+"\n"
+"Egyes számlák \"helykitöltő\"-ként vannak megjelölve. Ezek csak a hierarchia "
+"kialakítására szolgálnak és általában nem tartalmaznak tranzakciókat és "
+"nincs nyitóegyenlegük. Ha szeretne egy számlát helykitöltővé tenni, jelölje "
+"be a hozzá tartozó pipát a Töltelék oszlopban.\n"
+"\n"
+"Ha szeretne nyitóegyenleget adni egy számlához, először kattintson a számla "
+"sorára, majd a Nyitóegyenleg mezőre, és írja be a nyitóegyenleget.\n"
+"\n"
+"<b>Figyelem:</b> minden számlának lehet nyitóegyenlege, kivéve a Saját tőke "
+"és Töltelék számláknak.\n"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:566
 msgid "Setup selected accounts"
@@ -13821,13 +13837,12 @@ msgid ""
 "\n"
 "Press 'Cancel' to close this dialog without creating any new accounts."
 msgstr ""
-"Kattintson az 'Alkalmazás' -ra új számla létrehozásához. Ezután elmentheti "
-"fájlba vagy adatbázisba.\n"
+"Az új számlák létrehozásához kattintson az 'Alkalmaz' gombra. Ezután "
+"elmentheti őket egy fájlba vagy egy adatbázisba.\n"
 "\n"
-"Kattintson a 'Vissza' -ra az ellenőrzéshez.\n"
+"Ha szeretne visszatérni az előző oldalakra, kattintson a 'Vissza' gombra.\n"
 "\n"
-"Kattintson a 'Megszakítás' -ra a párbeszédablak bezárásához,új számlák "
-"létrehozása nélkül."
+"A 'Mégse' gombbal új számlák létrehozása nélkül bezárhatja az ablakot."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:585
 msgid "Finish Account Setup"
@@ -14985,11 +15000,11 @@ msgstr "Áruérték használata"
 #: gnucash/gtkbuilder/dialog-employee.glade:198
 #: gnucash/gtkbuilder/dialog-vendor.glade:216
 msgid "Identification"
-msgstr "Azonosítás"
+msgstr "Azonosítóadatok"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1222
 msgid "Account _name"
-msgstr "Számla _neve"
+msgstr "_Név"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1237
 msgid "_Account code"
@@ -15002,11 +15017,11 @@ msgstr "_Magyarázat"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1291
 msgid "Smallest _fraction"
-msgstr "Legkisebb _egység"
+msgstr "Tiz_edesjegyek száma"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1305
 msgid "Account _Color"
-msgstr "Számla _színe"
+msgstr "_Szín"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1358
 msgid "No_tes"
@@ -15014,7 +15029,7 @@ msgstr "Me_gjegyzések"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1430
 msgid "Smallest fraction of this commodity that can be referenced."
-msgstr "A pénznem legkisebb egysége, amit használni lehet."
+msgstr "Az áru legkisebb egysége, amit használni lehet."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1452
 msgid "Placeholde_r"
@@ -15041,10 +15056,13 @@ msgid ""
 "account tree and check the \"show hidden accounts\" option. Doing so will "
 "allow you to select the account and reopen this dialog."
 msgstr ""
+"Ez a számla és az alszámlái nem fognak megjelenni a számlafában és a "
+"regiszterben felugró számlalistában. Ezt a beállítás csak úgy törölheti, ha "
+"először megnyitja a számlafában a \"Szűrés...\" párbeszédpanelt, majd "
+"bejelöli a \"Rejtett fiókok megjelenítése\" lehetőséget. Így már ki tudja "
+"választani a számlát, és újra megnyithatja ezt a párbeszédpanelt."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1484
-#, fuzzy
-#| msgid "Automatic _interest transfer"
 msgid "Auto _interest transfer"
 msgstr "Automat_ikus kamatátutalás"
 
@@ -15062,8 +15080,6 @@ msgstr ""
 ">Adókimutatás beállítások menüpontban végezhető el."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1517
-#, fuzzy
-#| msgid "Opening Balance"
 msgid "Opening balance"
 msgstr "Nyitóegyenleg"
 
@@ -15072,6 +15088,8 @@ msgid ""
 "This account holds opening balance transactions. Only one account per "
 "commodity can hold opening balance transactions."
 msgstr ""
+"Ez a számla a nyitóegyenlegek átutalásait tartalmazza. Minden áruhoz csak "
+"egy nyitóegyenleg számla létezhet."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1569
 msgid "<b>Acco_unt Type</b>"
@@ -15084,19 +15102,19 @@ msgstr "_Szülő számla"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1703
 msgid "<b>Balance Information</b>"
-msgstr "<b>Egyenleg-információ</b>"
+msgstr "<b>Nyitóegyenleg adatai</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1717
 msgid "<b>Initial Balance Transfer</b>"
-msgstr "<b>Nyitóegyenleg átvitele</b>"
+msgstr "<b>Nyitóegyenleg átutalása</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1784
 msgid "_Use equity 'Opening Balances' account"
-msgstr "_Saját tőke számla használata nyitóegyenlegnek"
+msgstr "_Saját tőke \"Nyitóegyenlegek\" számlájáról"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1801
 msgid "_Select transfer account"
-msgstr "Átvitel_számla kiválasztása"
+msgstr "Az alább _kiválasztott számláról"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1909
 msgid "Renumber sub-accounts"
@@ -16812,7 +16830,7 @@ msgstr "_Helyi"
 #: gnucash/gtkbuilder/dialog-preferences.glade:1108
 #: libgnucash/app-utils/business-options.scm:76
 msgid "Fancy Date Format"
-msgstr "Különleges dátum-alak"
+msgstr "Bővített dátumformátum"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1148
 msgid "<b>Time Format</b>"
@@ -18285,21 +18303,21 @@ msgstr "_Tippek mutatása induláskor"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:8
 msgid "Transfer Funds"
-msgstr "Tőke átvitele"
+msgstr "Átutalás"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:80
 msgid "<b>Basic Information</b>"
-msgstr "<b>Alapvető információ</b>"
+msgstr "<b>Alapinformációk</b>"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:441
 #: gnucash/gtkbuilder/dialog-transfer.glade:457
 #: gnucash/report/reports/standard/net-charts.scm:47
 msgid "Show Income/Expense"
-msgstr "Bevétel/költség"
+msgstr "Bevétel és költségszámlák mutatása"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:491
 msgid "<b>Currency Transfer</b>"
-msgstr "<b>Valuta átvitele</b>"
+msgstr "<b>Pénznem átváltása</b>"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:520
 msgid "Exchange Rate"
@@ -22573,6 +22591,7 @@ msgid "The split's amount is zero, so no exchange rate is needed."
 msgstr ""
 
 #: gnucash/register/ledger-core/split-register-control.c:1523
+#, fuzzy
 msgid ""
 "The current transaction has been changed. Would you like to record the "
 "changes before moving to a new transaction, discard the changes, or return "
@@ -22974,19 +22993,16 @@ msgid "Select a date to report on."
 msgstr "Jelentés dátumának kiválasztása."
 
 #: gnucash/report/options-utilities.scm:54
-#, fuzzy
 msgid "Start of reporting period."
-msgstr "Jelentés időszakának kezdete"
+msgstr "Jelentés időszakának kezdete."
 
 #: gnucash/report/options-utilities.scm:55
-#, fuzzy
 msgid "End of reporting period."
-msgstr "Jelentés időszakának vége"
+msgstr "Jelentés időszakának vége."
 
 #: gnucash/report/options-utilities.scm:65
-#, fuzzy
 msgid "The amount of time between data points."
-msgstr "Adatpontok közti idő"
+msgstr "Adatpontok közti idő."
 
 #: gnucash/report/options-utilities.scm:66
 msgid "One Day"
@@ -29364,31 +29380,31 @@ msgstr "~a és ~a között"
 
 #: libgnucash/app-utils/business-options.scm:69
 msgid "Company Address"
-msgstr "Cég címe"
+msgstr "Cím"
 
 #: libgnucash/app-utils/business-options.scm:70
 msgid "Company ID"
-msgstr "Cég azonosítója"
+msgstr "Adószám"
 
 #: libgnucash/app-utils/business-options.scm:71
 msgid "Company Phone Number"
-msgstr "Cég telefonszáma"
+msgstr "Telefonszám"
 
 #: libgnucash/app-utils/business-options.scm:72
 msgid "Company Fax Number"
-msgstr "Cég faxszáma"
+msgstr "Fax"
 
 #: libgnucash/app-utils/business-options.scm:73
 msgid "Company Website URL"
-msgstr "Cégweblap URL"
+msgstr "Weboldalcím"
 
 #: libgnucash/app-utils/business-options.scm:74
 msgid "Company Email Address"
-msgstr "Cég email címe"
+msgstr "E-mail cím"
 
 #: libgnucash/app-utils/business-options.scm:75
 msgid "Company Contact Person"
-msgstr "Cég kapcsolattartó személy"
+msgstr "Kapcsolattartó"
 
 #: libgnucash/app-utils/business-options.scm:77
 msgid "custom"
@@ -29404,7 +29420,7 @@ msgstr "Számlálók"
 
 #: libgnucash/app-utils/business-prefs.scm:40
 msgid "Customer number format"
-msgstr "Ügyfélszám formátuma"
+msgstr "Ügyfélszámformátum"
 
 #: libgnucash/app-utils/business-prefs.scm:41
 msgid "Customer number"
@@ -29415,96 +29431,116 @@ msgid ""
 "The format string to use for generating customer numbers. This is a printf-"
 "style format string."
 msgstr ""
+"Az automatikusan generált ügyfélszámok formátuma. A printf formázási "
+"szabályai szerint kell megadni."
 
 #: libgnucash/app-utils/business-prefs.scm:43
 msgid ""
 "The previous customer number generated. This number will be incremented to "
 "generate the next customer number."
 msgstr ""
+"Adja meg az utoljára használt ügyfélszámot. Ez lesz megnövelve a következő "
+"ügyfélszám előállításához."
 
 #: libgnucash/app-utils/business-prefs.scm:44
 msgid "Employee number format"
-msgstr "Alkalmazott számának formátuma"
+msgstr "Alkalmazottszám-formátum"
 
 #: libgnucash/app-utils/business-prefs.scm:45
 msgid "Employee number"
-msgstr "Alkalmazott száma"
+msgstr "Alkalmazottszám"
 
 #: libgnucash/app-utils/business-prefs.scm:46
 msgid ""
 "The format string to use for generating employee numbers. This is a printf-"
 "style format string."
 msgstr ""
+"Az automatikusan generált alkalmazottszámok formátuma. A printf formázási "
+"szabályai szerint kell megadni."
 
 #: libgnucash/app-utils/business-prefs.scm:47
 msgid ""
 "The previous employee number generated. This number will be incremented to "
 "generate the next employee number."
 msgstr ""
+"Adja meg az utoljára generált alkalmazottszámot. Ez lesz megnövelve a "
+"következő szám előállításához."
 
 #: libgnucash/app-utils/business-prefs.scm:48
 msgid "Invoice number format"
-msgstr "Számlaszám formátuma"
+msgstr "Kimenő számlaszámformátum"
 
 #: libgnucash/app-utils/business-prefs.scm:49
 msgid "Invoice number"
-msgstr "Számlaszám"
+msgstr "Kimenő számlaszám"
 
 #: libgnucash/app-utils/business-prefs.scm:50
 msgid ""
 "The format string to use for generating invoice numbers. This is a printf-"
 "style format string."
 msgstr ""
+"Az automatikusan generált kimenő számlaszámok formátuma. A printf formázási "
+"szabályai szerint kell megadni."
 
 #: libgnucash/app-utils/business-prefs.scm:51
 msgid ""
 "The previous invoice number generated. This number will be incremented to "
 "generate the next invoice number."
 msgstr ""
+"Adja meg az utoljára használt kimenő számlaszámot. Ez lesz megnövelve a "
+"következő szám előállításához."
 
 #: libgnucash/app-utils/business-prefs.scm:52
 msgid "Bill number format"
-msgstr "Számlaszám formátuma"
+msgstr "Bejövő számlaszámformátum"
 
 #: libgnucash/app-utils/business-prefs.scm:53
 msgid "Bill number"
-msgstr "Számlaszám"
+msgstr "Bejövő számlaszám"
 
 #: libgnucash/app-utils/business-prefs.scm:54
 msgid ""
 "The format string to use for generating bill numbers. This is a printf-style "
 "format string."
 msgstr ""
+"Az automatikusan generált bejövő számlaszámok formátuma. A printf formázási "
+"szabályai szerint kell megadni."
 
 #: libgnucash/app-utils/business-prefs.scm:55
 msgid ""
 "The previous bill number generated. This number will be incremented to "
 "generate the next bill number."
 msgstr ""
+"Adja meg az utoljára használt bejövő számlaszámot. Ez lesz megnövelve a "
+"következő szám előállításához."
 
 #: libgnucash/app-utils/business-prefs.scm:56
 msgid "Expense voucher number format"
-msgstr "Költség bizonylatszám formátum"
+msgstr "Költségbizonylatszám-formátum"
 
 #: libgnucash/app-utils/business-prefs.scm:57
 msgid "Expense voucher number"
-msgstr "Költség bizonylatszám"
+msgstr "Költségbizonylatszám"
 
 #: libgnucash/app-utils/business-prefs.scm:58
 msgid ""
 "The format string to use for generating expense voucher numbers. This is a "
 "printf-style format string."
 msgstr ""
+"Az automatikusan generált költségbizonylatszámok formátuma. A printf "
+"formázási szabályai szerint kell megadni."
 
 #: libgnucash/app-utils/business-prefs.scm:59
 msgid ""
 "The previous expense voucher number generated. This number will be "
 "incremented to generate the next voucher number."
 msgstr ""
+"Adja meg az utoljára használt költségbizonylatszámot. Ez lesz megnövelve a "
+"következő szám előállításához."
 
 #: libgnucash/app-utils/business-prefs.scm:60
 msgid "Job number format"
-msgstr "Megbízásszám formátum"
+msgstr "Megbízásszám-formátum"
 
 #: libgnucash/app-utils/business-prefs.scm:61
 msgid "Job number"
@@ -29515,16 +29551,20 @@ msgid ""
 "The format string to use for generating job numbers. This is a printf-style "
 "format string."
 msgstr ""
+"Az automatikusan generált megbízásszámok formátuma. A printf formázási "
+"szabályai szerint kell megadni."
 
 #: libgnucash/app-utils/business-prefs.scm:63
 msgid ""
 "The previous job number generated. This number will be incremented to "
 "generate the next job number."
 msgstr ""
+"Adja meg az utoljára használt megbízásszámot. Ez lesz megnövelve a következő "
+"szám előállításához."
 
 #: libgnucash/app-utils/business-prefs.scm:64
 msgid "Order number format"
-msgstr "Rendelésszám formátum"
+msgstr "Rendelésszám-formátum"
 
 #: libgnucash/app-utils/business-prefs.scm:65
 msgid "Order number"
@@ -29535,16 +29575,20 @@ msgid ""
 "The format string to use for generating order numbers. This is a printf-"
 "style format string."
 msgstr ""
+"Az automatikusan generált rendelésszámok formátuma. A printf formázási "
+"szabályai szerint kell megadni."
 
 #: libgnucash/app-utils/business-prefs.scm:67
 msgid ""
 "The previous order number generated. This number will be incremented to "
 "generate the next order number."
 msgstr ""
+"Adja meg az utoljára használt rendelésszámot. Ez lesz megnövelve a következő "
+"szám előállításához."
 
 #: libgnucash/app-utils/business-prefs.scm:68
 msgid "Vendor number format"
-msgstr "Beszállítószám formátum"
+msgstr "Beszállítószám-formátum"
 
 #: libgnucash/app-utils/business-prefs.scm:69
 msgid "Vendor number"
@@ -29555,73 +29599,68 @@ msgid ""
 "The format string to use for generating vendor numbers. This is a printf-"
 "style format string."
 msgstr ""
+"Az automatikusan generált beszállítószámok formátuma. A printf formázási "
+"szabályai szerint kell megadni."
 
 #: libgnucash/app-utils/business-prefs.scm:71
 msgid ""
 "The previous vendor number generated. This number will be incremented to "
 "generate the next vendor number."
 msgstr ""
+"Adja meg az utoljára használt beszállítószámot. Ez lesz megnövelve a "
+"következő szám előállításához."
 
 #: libgnucash/app-utils/business-prefs.scm:81
-#, fuzzy
 msgid "The name of your business."
-msgstr "Az ön vállalkozásának neve"
+msgstr "Az ön vállalkozásának neve."
 
 #: libgnucash/app-utils/business-prefs.scm:86
-#, fuzzy
 msgid "The address of your business."
-msgstr "Az ön vállalkozásának címe"
+msgstr "Az ön vállalkozásának címe."
 
 #: libgnucash/app-utils/business-prefs.scm:91
-#, fuzzy
 msgid "The contact person to print on invoices."
-msgstr "A számlára nyomtatandó kapcsolattartó személy"
+msgstr "A számlákra nyomtatandó kapcsolattartó személy."
 
 #: libgnucash/app-utils/business-prefs.scm:96
-#, fuzzy
 msgid "The phone number of your business."
-msgstr "Az ön vállalkozásának telefonszáma"
+msgstr "Az ön vállalkozásának telefonszáma."
 
 #: libgnucash/app-utils/business-prefs.scm:101
-#, fuzzy
 msgid "The fax number of your business."
-msgstr "Az ön vállalkozásának faxszáma"
+msgstr "Az ön vállalkozásának faxszáma."
 
 #: libgnucash/app-utils/business-prefs.scm:106
-#, fuzzy
 msgid "The email address of your business."
-msgstr "Az ön vállalkozásának email címe"
+msgstr "Az ön vállalkozásának e-mail címe."
 
 #: libgnucash/app-utils/business-prefs.scm:111
-#, fuzzy
 msgid "The URL address of your website."
-msgstr "Az ön vállalkozása weblapjának URL-címe"
+msgstr "A vállalkozása weboldalának címe."
 
 #: libgnucash/app-utils/business-prefs.scm:116
-#, fuzzy
 msgid "The ID for your company (eg 'Tax-ID: 00-000000)."
-msgstr "Az ön cégének adószáma"
+msgstr "Az ön vállalkozásának adószáma (pl. 12345678-1-12)."
 
 #: libgnucash/app-utils/business-prefs.scm:121
 msgid "Default Customer TaxTable"
-msgstr "Alapértelmezett fogyasztói adótáblázat"
+msgstr "Alapértelmezett vevői adótáblázat"
 
 #: libgnucash/app-utils/business-prefs.scm:122
 msgid "The default tax table to apply to customers."
-msgstr "Az alapértelmezett fogyasztókra vonatkozó adótáblázat."
+msgstr "A vevőkre alapértelmezésként alkalmazandó adótáblázat."
 
 #: libgnucash/app-utils/business-prefs.scm:127
 msgid "Default Vendor TaxTable"
-msgstr "Alapértelmezett eladói adótáblázat"
+msgstr "Alapértelmezett beszállítói adótáblázat"
 
 #: libgnucash/app-utils/business-prefs.scm:128
 msgid "The default tax table to apply to vendors."
-msgstr "Az alapértelmezett eladókra vonatkozó adótáblázat."
+msgstr "A beszállítókra alapértelmezésként alkalmazandó adótáblázat."
 
 #: libgnucash/app-utils/business-prefs.scm:134
-#, fuzzy
 msgid "The default date format used for fancy printed dates."
-msgstr "A Különleges nyomtatott dátumokhoz használt alapértelmezett dátumalak"
+msgstr "Az alapértelmezett bővített dátumformátum."
 
 #: libgnucash/app-utils/business-prefs.scm:142
 msgid ""
@@ -29630,6 +29669,9 @@ msgid ""
 "account register windows. If zero, all transactions can be edited and none "
 "are read-only."
 msgstr ""
+"Adja meg, hány nap után váljanak írásvédetté a tranzakciók. A "
+"számlaregiszterben vörös vonal választja el őket a módosítható "
+"tranzakcióktól. Nullát megadva a tranzakciók soha nem lesznek írásvédettek."
 
 #: libgnucash/app-utils/business-prefs.scm:153
 msgid ""
@@ -29644,10 +29686,12 @@ msgid ""
 "Check to have trading accounts used for transactions involving more than one "
 "currency or commodity."
 msgstr ""
+"Jelölje be, ha devizakonverziós számlákat kíván használni egynél több "
+"valutát vagy árut érintő tranzakciókhoz."
 
 #: libgnucash/app-utils/business-prefs.scm:167
 msgid "Budget to be used when none has been otherwise specified."
-msgstr ""
+msgstr "Más utasítás hiányában ezt a költségvetést fogjuk használni."
 
 #: libgnucash/app-utils/business-prefs.scm:173
 msgid "The electronic tax number of your business"
@@ -30286,29 +30330,27 @@ msgstr ""
 
 #: libgnucash/engine/qofbookslots.h:66
 msgid "Use Trading Accounts"
-msgstr ""
+msgstr "Devizakonverziós számlák használata"
 
 #: libgnucash/engine/qofbookslots.h:67
 msgid "Currency Accounting"
 msgstr ""
 
 #: libgnucash/engine/qofbookslots.h:68
-#, fuzzy
 msgid "Book Currency"
-msgstr "Pénznem kiválasztása"
+msgstr "Főkönyv pénzneme"
 
 #: libgnucash/engine/qofbookslots.h:69
 msgid "Default Gains Policy"
 msgstr ""
 
 #: libgnucash/engine/qofbookslots.h:70
-#, fuzzy
 msgid "Default Gain or Loss Account"
-msgstr "Új számlák alapértelmezett pénzneme"
+msgstr ""
 
 #: libgnucash/engine/qofbookslots.h:71
 msgid "Day Threshold for Read-Only Transactions (red line)"
-msgstr ""
+msgstr "Ennyi nap után a tranzakciók írásvédetté válnak (vörös vonal jelzi)"
 
 #: libgnucash/engine/qofbookslots.h:72
 msgid "Use Split Action Field for Number"
