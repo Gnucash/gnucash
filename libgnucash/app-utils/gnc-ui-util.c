@@ -1759,56 +1759,11 @@ multiplier (int num_decimals)
     return 1;
 }
 
-gboolean
-xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
-                 char **endstr)
-{
-    return xaccParseAmountPosSign (in_str, monetary, result, endstr, FALSE);
-}
-
-gboolean
-xaccParseAmountPosSign (const char * in_str, gboolean monetary, gnc_numeric *result,
-                        char **endstr, gboolean skip)
-{
-    struct lconv *lc = gnc_localeconv();
-
-    gunichar negative_sign;
-    gunichar decimal_point;
-    gunichar group_separator;
-    gchar *ignore = NULL;
-    char *plus_sign = "+";
-
-    negative_sign = g_utf8_get_char(lc->negative_sign);
-    if (monetary)
-    {
-        group_separator = g_utf8_get_char(lc->mon_thousands_sep);
-        decimal_point = g_utf8_get_char(lc->mon_decimal_point);
-    }
-    else
-    {
-        group_separator = g_utf8_get_char(lc->thousands_sep);
-        decimal_point = g_utf8_get_char(lc->decimal_point);
-    }
-
-    if (skip)
-    {
-        /* We want the locale's positive sign to be ignored.
-        * If the locale doesn't specify one, we assume "+" as
-        * an optional positive sign and ignore that */
-        ignore = lc->positive_sign;
-        if (!ignore || !*ignore)
-            ignore = plus_sign;
-    }
-
-    return xaccParseAmountExtended(in_str, monetary, negative_sign,
-                                   decimal_point, group_separator,
-                                   ignore, result, endstr);
-}
-
-gboolean
-xaccParseAmountExtended (const char * in_str, gboolean monetary,
+static gboolean
+xaccParseAmountInternal (const char * in_str, gboolean monetary,
                          gunichar negative_sign, gunichar decimal_point,
                          gunichar group_separator, const char *ignore_list,
+                         gboolean use_auto_decimal,
                          gnc_numeric *result, char **endstr)
 {
     gboolean is_negative;
@@ -1874,137 +1829,137 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
         switch (state)
         {
             /* START_ST means we have parsed 0 or more whitespace characters */
-        case START_ST:
-            if (g_unichar_isdigit(uc))
-            {
-                count = g_unichar_to_utf8(uc, out);
-                out += count; /* we record the digits themselves in out_str
-                         * for later conversion by libc routines */
-                next_state = NUMER_ST;
-            }
-            else if (uc == decimal_point)
-            {
-                next_state = FRAC_ST;
-            }
-            else if (g_unichar_isspace(uc))
-            {
-            }
-            else if (uc == negative_sign)
-            {
-                is_negative = TRUE;
-                next_state = NEG_ST;
-            }
-            else if (uc == '(')
-            {
-                is_negative = TRUE;
-                need_paren = TRUE;
-                next_state = NEG_ST;
-            }
-            else
-            {
-                next_state = NO_NUM_ST;
-            }
-
-            break;
-
-            /* NEG_ST means we have just parsed a negative sign. For now,
-             * we only recognize formats where the negative sign comes first. */
-        case NEG_ST:
-            if (g_unichar_isdigit(uc))
-            {
-                count = g_unichar_to_utf8(uc, out);
-                out += count;
-                next_state = NUMER_ST;
-            }
-            else if (uc == decimal_point)
-            {
-                next_state = FRAC_ST;
-            }
-            else if (g_unichar_isspace(uc))
-            {
-            }
-            else
-            {
-                next_state = NO_NUM_ST;
-            }
-
-            break;
-
-            /* NUMER_ST means we have started parsing the number, but
-             * have not encountered a decimal separator. */
-        case NUMER_ST:
-            if (g_unichar_isdigit(uc))
-            {
-                count = g_unichar_to_utf8(uc, out);
-                out += count;
-            }
-            else if (uc == decimal_point)
-            {
-                next_state = FRAC_ST;
-            }
-            else if (uc == group_separator)
-            {
-                 ; //ignore it
-            }
-            else if (uc == ')' && need_paren)
-            {
-                next_state = DONE_ST;
-                need_paren = FALSE;
-            }
-            else
-            {
-                next_state = DONE_ST;
-            }
-
-            break;
-
-            /* FRAC_ST means we are now parsing fractional digits. */
-        case FRAC_ST:
-            if (g_unichar_isdigit(uc))
-            {
-                count = g_unichar_to_utf8(uc, out);
-                out += count;
-            }
-            else if (uc == decimal_point)
-            {
-                /* If a subsequent decimal point is also whitespace,
-                 * assume it was intended as such and stop parsing.
-                 * Otherwise, there is a problem. */
-                if (g_unichar_isspace(decimal_point))
-                    next_state = DONE_ST;
+            case START_ST:
+                if (g_unichar_isdigit(uc))
+                {
+                    count = g_unichar_to_utf8(uc, out);
+                    out += count; /* we record the digits themselves in out_str
+                    * for later conversion by libc routines */
+                    next_state = NUMER_ST;
+                }
+                else if (uc == decimal_point)
+                {
+                    next_state = FRAC_ST;
+                }
+                else if (g_unichar_isspace(uc))
+                {
+                }
+                else if (uc == negative_sign)
+                {
+                    is_negative = TRUE;
+                    next_state = NEG_ST;
+                }
+                else if (uc == '(')
+                {
+                    is_negative = TRUE;
+                    need_paren = TRUE;
+                    next_state = NEG_ST;
+                }
                 else
+                {
                     next_state = NO_NUM_ST;
-            }
-            else if (uc == group_separator)
-            {
-                /* If a subsequent group separator is also whitespace,
-                 * assume it was intended as such and stop parsing.
-                 * Otherwise ignore it. */
-                if (g_unichar_isspace(group_separator))
-                    next_state = DONE_ST;
-            }
-            else if (uc == ')' && need_paren)
-            {
-                next_state = DONE_ST;
-                need_paren = FALSE;
-            }
-            else
-            {
-                next_state = DONE_ST;
-            }
+                }
 
-            break;
+                break;
 
-        default:
-            PERR("bad state");
-            g_assert_not_reached();
-            break;
+                /* NEG_ST means we have just parsed a negative sign. For now,
+                 * we only recognize formats where the negative sign comes first. */
+                case NEG_ST:
+                    if (g_unichar_isdigit(uc))
+                    {
+                        count = g_unichar_to_utf8(uc, out);
+                        out += count;
+                        next_state = NUMER_ST;
+                    }
+                    else if (uc == decimal_point)
+                    {
+                        next_state = FRAC_ST;
+                    }
+                    else if (g_unichar_isspace(uc))
+                    {
+                    }
+                    else
+                    {
+                        next_state = NO_NUM_ST;
+                    }
+
+                    break;
+
+                    /* NUMER_ST means we have started parsing the number, but
+                     * have not encountered a decimal separator. */
+                    case NUMER_ST:
+                        if (g_unichar_isdigit(uc))
+                        {
+                            count = g_unichar_to_utf8(uc, out);
+                            out += count;
+                        }
+                        else if (uc == decimal_point)
+                        {
+                            next_state = FRAC_ST;
+                        }
+                        else if (uc == group_separator)
+                        {
+                            ; //ignore it
+                        }
+                        else if (uc == ')' && need_paren)
+                        {
+                            next_state = DONE_ST;
+                            need_paren = FALSE;
+                        }
+                        else
+                        {
+                            next_state = DONE_ST;
+                        }
+
+                        break;
+
+                        /* FRAC_ST means we are now parsing fractional digits. */
+                        case FRAC_ST:
+                            if (g_unichar_isdigit(uc))
+                            {
+                                count = g_unichar_to_utf8(uc, out);
+                                out += count;
+                            }
+                            else if (uc == decimal_point)
+                            {
+                                /* If a subsequent decimal point is also whitespace,
+                                 * assume it was intended as such and stop parsing.
+                                 * Otherwise, there is a problem. */
+                                if (g_unichar_isspace(decimal_point))
+                                    next_state = DONE_ST;
+                                else
+                                    next_state = NO_NUM_ST;
+                            }
+                            else if (uc == group_separator)
+                            {
+                                /* If a subsequent group separator is also whitespace,
+                                 * assume it was intended as such and stop parsing.
+                                 * Otherwise ignore it. */
+                                if (g_unichar_isspace(group_separator))
+                                    next_state = DONE_ST;
+                            }
+                            else if (uc == ')' && need_paren)
+                            {
+                                next_state = DONE_ST;
+                                need_paren = FALSE;
+                            }
+                            else
+                            {
+                                next_state = DONE_ST;
+                            }
+
+                            break;
+
+                        default:
+                            PERR("bad state");
+                            g_assert_not_reached();
+                            break;
         }
 
         /* If we're moving into the FRAC_ST or out of the machine
          * without going through FRAC_ST, record the integral value. */
         if (((next_state == FRAC_ST) && (state != FRAC_ST)) ||
-                ((next_state == DONE_ST) && !got_decimal))
+            ((next_state == DONE_ST) && !got_decimal))
         {
             *out = '\0';
 
@@ -2063,7 +2018,7 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
         numer *= denom;
         numer += fraction;
     }
-    else if (monetary && auto_decimal_enabled && !got_decimal)
+    else if (monetary && use_auto_decimal && !got_decimal)
     {
         if ((auto_decimal_places > 0) && (auto_decimal_places <= 12))
         {
@@ -2091,6 +2046,92 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
 
     return TRUE;
 }
+
+
+static gboolean
+xaccParseAmountBasicInternal (const char * in_str, gboolean monetary,
+                              gboolean use_auto_decimal, gnc_numeric *result,
+                              char **endstr, gboolean skip)
+{
+    struct lconv *lc = gnc_localeconv();
+
+    gunichar negative_sign;
+    gunichar decimal_point;
+    gunichar group_separator;
+    gchar *ignore = NULL;
+    char *plus_sign = "+";
+
+    negative_sign = g_utf8_get_char(lc->negative_sign);
+    if (monetary)
+    {
+        group_separator = g_utf8_get_char(lc->mon_thousands_sep);
+        decimal_point = g_utf8_get_char(lc->mon_decimal_point);
+    }
+    else
+    {
+        group_separator = g_utf8_get_char(lc->thousands_sep);
+        decimal_point = g_utf8_get_char(lc->decimal_point);
+    }
+
+    if (skip)
+    {
+        /* We want the locale's positive sign to be ignored.
+         * If the locale doesn't specify one, we assume "+" as
+         * an optional positive sign and ignore that */
+        ignore = lc->positive_sign;
+        if (!ignore || !*ignore)
+            ignore = plus_sign;
+    }
+
+    return xaccParseAmountInternal(in_str, monetary, negative_sign,
+                                   decimal_point, group_separator,
+                                   ignore, use_auto_decimal,
+                                   result, endstr);
+}
+
+
+gboolean
+xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
+                 char **endstr)
+{
+    return xaccParseAmountBasicInternal (in_str, monetary, auto_decimal_enabled,
+                                         result, endstr, FALSE);
+}
+
+gboolean
+xaccParseAmountImport (const char * in_str, gboolean monetary,
+                        gnc_numeric *result,
+                        char **endstr, gboolean skip)
+{
+    return xaccParseAmountBasicInternal (in_str, monetary, FALSE,
+                                         result, endstr, FALSE);
+}
+
+
+gboolean
+xaccParseAmountExtended (const char * in_str, gboolean monetary,
+                         gunichar negative_sign, gunichar decimal_point,
+                         gunichar group_separator, const char *ignore_list,
+                         gnc_numeric *result, char **endstr)
+{
+    return xaccParseAmountInternal (in_str, monetary, negative_sign,
+                                    decimal_point, group_separator,
+                                    ignore_list, auto_decimal_enabled,
+                                    result, endstr);
+}
+
+gboolean
+xaccParseAmountExtImport (const char * in_str, gboolean monetary,
+                             gunichar negative_sign, gunichar decimal_point,
+                             gunichar group_separator, const char *ignore_list,
+                             gnc_numeric *result, char **endstr)
+{
+    return xaccParseAmountInternal (in_str, monetary, negative_sign,
+                                    decimal_point, group_separator,
+                                    ignore_list, FALSE,
+                                    result, endstr);
+}
+
 
 /* enable/disable the auto_decimal_enabled option */
 static void

@@ -332,19 +332,6 @@ gboolean xaccParseAmount (const char * in_str, gboolean monetary,
                           gnc_numeric *result, char **endstr);
 
 /**
- * Parses in_str to a gnc_numeric, with a flag to indicate whether the
- * locale's positive sign (or in absence the '+') character is
- * ignored. Setting skip to TRUE will cause the function to ignore any
- * positive sign. Setting it to FALSE, and positive signs will be
- * treated as unrecognized characters.  xaccParseAmount will run as if
- * skip is FALSE for compatibility reasons (gnc-expression-parser
- * depends on this behaviour).
- */
-gboolean
-xaccParseAmountPosSign (const char * in_str, gboolean monetary, gnc_numeric *result,
-                        char **endstr, gboolean skip);
-
-/**
  * Converts a string to a gnc_numeric. The caller must provide all the
  * locale-specific information.
  *
@@ -357,6 +344,37 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
                          gunichar negative_sign, gunichar decimal_point,
                          gunichar group_separator, const char *ignore_list,
                          gnc_numeric *result, char **endstr);
+
+/**
+ * Similar to xaccParseAmount, but with two differences
+ * - it exposes a flag to indicate whether the
+ * locale's positive sign (or in absence the '+') character is
+ * ignored. Setting skip to TRUE will cause the function to ignore any
+ * positive sign. Setting it to FALSE, and positive signs will be
+ * treated as unrecognized characters.  xaccParseAmount will run as if
+ * skip is FALSE for compatibility reasons (gnc-expression-parser
+ * depends on this behaviour).
+ * - The other important difference with xaccParseAmount is that this
+ * function will never apply automatic decimal point logc, whereas
+ * xaccParseAmount will follow the automatic decimal point preference
+ * as set by the user.
+ */
+gboolean
+xaccParseAmountImport (const char * in_str, gboolean monetary,
+                       gnc_numeric *result,
+                       char **endstr, gboolean skip);
+
+/**
+ * Similar to xaccParseAmountExtended, but will not automatically
+ * set a decimal point, regardless of what the user has set for this
+ * option. Primarily meant for cases where numbers are coming into
+ * gnucash that are not typed in by the user (like via csv import).
+ */
+gboolean
+xaccParseAmountExtImport (const char * in_str, gboolean monetary,
+                             gunichar negative_sign, gunichar decimal_point,
+                             gunichar group_separator, const char *ignore_list,
+                             gnc_numeric *result, char **endstr);
 
 /**
  * Make a string representation of a gnc_numeric.  Warning, the

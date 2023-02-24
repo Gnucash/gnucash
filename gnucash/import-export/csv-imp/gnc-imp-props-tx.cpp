@@ -149,17 +149,17 @@ GncNumeric parse_monetary (const std::string &str, int currency_format)
     {
     case 0:
         /* Currency locale */
-        if (!(xaccParseAmountPosSign (str_no_symbols.c_str(), TRUE, &val, &endptr, TRUE)))
+        if (!(xaccParseAmountImport (str_no_symbols.c_str(), TRUE, &val, &endptr, TRUE)))
             throw std::invalid_argument (_("Value can't be parsed into a number using the selected currency format."));
         break;
     case 1:
         /* Currency decimal period */
-        if (!(xaccParseAmountExtended (str_no_symbols.c_str(), TRUE, '-', '.', ',', "$+", &val, &endptr)))
+        if (!(xaccParseAmountExtImport (str_no_symbols.c_str(), TRUE, '-', '.', ',', "$+", &val, &endptr)))
             throw std::invalid_argument (_("Value can't be parsed into a number using the selected currency format."));
         break;
     case 2:
         /* Currency decimal comma */
-        if (!(xaccParseAmountExtended (str_no_symbols.c_str(), TRUE, '-', ',', '.', "$+", &val, &endptr)))
+        if (!(xaccParseAmountExtImport (str_no_symbols.c_str(), TRUE, '-', ',', '.', "$+", &val, &endptr)))
             throw std::invalid_argument (_("Value can't be parsed into a number using the selected currency format."));
         break;
     }
