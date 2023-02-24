@@ -3,20 +3,23 @@
 # Copyright (C) 2023 by the GnuCash developers and the translators:
 # Automatically generated, 2023.
 #
+# Kryštof Černý <cleverline1mc@gmail.com>, 2023.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.13 \n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 4.13\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-02-19 12:35+0100\n"
-"PO-Revision-Date: 2023-02-19 12:35+0100\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2023-02-19 15:38+0000\n"
+"Last-Translator: Kryštof Černý <cleverline1mc@gmail.com>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/gnucash/glossary/"
+"cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 4.16-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -664,7 +667,7 @@ msgstr ""
 
 #. "A list of items; a book containing such a list"
 msgid "register"
-msgstr ""
+msgstr "účetní kniha"
 
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
@@ -804,7 +807,7 @@ msgstr ""
 
 #. "A piece of business done; the transfer of money from one account to one or more other accounts. (see also: Scheduled Transaction)"
 msgid "transaction"
-msgstr ""
+msgstr "účetní položka"
 
 #. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
