@@ -768,9 +768,7 @@ gnc_html_encode_string(const char * str)
         pos++;
     }
 
-    ptr = encoded->str;
-
-    g_string_free (encoded, FALSE);
+    ptr = g_string_free (encoded, FALSE);
 
     return (char *)ptr;
 }
@@ -818,8 +816,7 @@ gnc_html_decode_string(const char * str)
         }
         ptr++;
     }
-    ptr = decoded->str;
-    g_string_free (decoded, FALSE);
+    ptr = g_string_free (decoded, FALSE);
 
     return (char *)ptr;
 }
@@ -850,8 +847,7 @@ gnc_html_unescape_newlines(const gchar * in)
     }
 
     g_string_append_c(rv, 0);
-    cstr = rv->str;
-    g_string_free(rv, FALSE);
+    cstr = g_string_free (rv, FALSE);
     return cstr;
 }
 
@@ -874,8 +870,7 @@ gnc_html_escape_newlines(const gchar * in)
         }
     }
     g_string_append_c(escaped, 0);
-    out = escaped->str;
-    g_string_free(escaped, FALSE);
+    out = g_string_free (escaped, FALSE);
     return out;
 }
 

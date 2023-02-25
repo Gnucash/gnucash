@@ -1340,8 +1340,7 @@ loan_rep_prep( GtkAssistant *assistant, gpointer user_data )
 
     str = g_string_sized_new( 64 );
     loan_get_pmt_formula( ldd, str);
-    ldd->ld.repAmount = str->str;
-    g_string_free( str, FALSE );
+    ldd->ld.repAmount = g_string_free (str, false);
 
     if ( ldd->ld.repMemo )
         gtk_entry_set_text( ldd->repTxnName, ldd->ld.repMemo );
