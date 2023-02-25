@@ -177,7 +177,7 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
         auto found = (bl::format (std::string{_("Found Finance::Quote version {1}.")}) % quotes.version()).str();
         auto quote_sources = quotes.sources_as_glist();
         gnc_quote_source_set_fq_installed (quotes.version().c_str(), quote_sources);
-        g_list_free (quote_sources);
+        g_list_free_full (quote_sources, g_free);
         gnc_update_splash_screen (found.c_str(), GNC_SPLASH_PERCENTAGE_UNKNOWN);
     }
     catch (const GncQuoteException& err)
