@@ -1658,7 +1658,7 @@
   <object class="GtkDialog" id="aqbanking-select-imexporter-dialog">
     <property name="can-focus">False</property>
     <property name="border-width">5</property>
-    <property name="title" translatable="yes">Select File Importer/Exporter</property>
+    <property name="title" translatable="yes">Select File Import Format and Template</property>
     <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox3">
@@ -1727,9 +1727,10 @@
                     <property name="model">imexporter-list</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name='tooltip-text' translatable='yes'>This list contains the file formats that AQBanking knows how to import. The profile list contains specializations and is populated according to which format you select in this list.</property>
                     <child>
                       <object class="GtkTreeViewColumn" id="imexporter-name">
-                        <property name="title" translatable="yes">Name</property>
+                        <property name="title" translatable="yes">File Format</property>
                         <child>
                           <object class="GtkCellRendererText"/>
                           <attributes>
@@ -1768,12 +1769,14 @@
                 <property name="can-focus">True</property>
                 <property name="hscrollbar-policy">never</property>
                 <property name="shadow-type">in</property>
+                <!--property name="title" translatable="yes">Import Template</property-->
                 <property name="min-content-height">300</property>
                 <child>
                   <object class="GtkTreeView" id="profile-sel">
                     <property name="model">profile-list</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name='tooltip-text' translatable='yes'>This list one or more specialization templates that adjust the import for different banks uses of fields in the selected import format.</property>
                     <!-- Request the maximum width for the profile
                          list so that it doesn't change the dialog
                          width when an imexporter with long
@@ -1781,7 +1784,7 @@
                     <property name="width-request">400</property>
                     <child>
                       <object class="GtkTreeViewColumn" id="profile-name">
-                        <property name="title" translatable="yes">Name</property>
+                        <property name="title" translatable="yes">Profiles</property>
                         <child>
                           <object class="GtkCellRendererText"/>
                           <attributes>

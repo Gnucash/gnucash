@@ -28,6 +28,7 @@
 
 #include <config.h>
 
+#include <stdbool.h>
 #include <glib/gi18n.h>
 #include "dialog-ab-select-imexporter.h"
 #include <dialog-utils.h>
@@ -232,6 +233,35 @@ tree_view_get_name (GtkTreeView *tv)
 
     return NULL;
 }
+
+static void
+tree_view_set_name (GtkTreeView *tree, const char* name)
+{
+    GtkTreeIter iter;
+    GtkTreeModel* model = gtk_tree_view_get_model(tree);
+    bool found = false;
+
+    if (!gtk_tree_model_get_iter_first(model, &iter))
+        return;
+    do
+    {
+        char* row_name;
+        gtk_tree_model_get(model, &iter, NAME_COL, &row_name, -1);
+        if (!g_strcmp0(name, row_name))
+        {
+            found = true;
+            break;
+        }
+    }
+    while(gtk_tree_model_iter_next(model, &iter));
+
+    if (found)
+    {
+        GtkTreeSelection *sel = gtk_tree_view_get_selection(tree);
+        gtk_tree_selection_select_iter(sel, &iter);
+    }
+}
+
 char*
 gnc_ab_select_imex_dlg_get_imexporter_name (GncABSelectImExDlg* imexd)
 {
@@ -242,4 +272,18 @@ char*
 gnc_ab_select_imex_dlg_get_profile_name (GncABSelectImExDlg* imexd)
 {
     return tree_view_get_name (GTK_TREE_VIEW (imexd->select_profile));
+}
+
+void
+gnc_ab_select_imex_dlg_set_imexporter_name (GncABSelectImExDlg* imexd, const char* name)
+{
+    if (name)
+        tree_view_set_name (GTK_TREE_VIEW (imexd->select_imexporter), name);
+}
+
+void
+gnc_ab_select_imex_dlg_set_profile_name (GncABSelectImExDlg* imexd, const char* name)
+{
+    if (name)
+        tree_view_set_name (GTK_TREE_VIEW (imexd->select_profile), name);
 }

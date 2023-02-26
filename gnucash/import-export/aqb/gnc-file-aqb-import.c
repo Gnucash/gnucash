@@ -60,6 +60,7 @@ typedef GWEN_SYNCIO GWEN_IO_LAYER;
 #include "gnc-ui-util.h"
 #include "import-account-matcher.h"
 #include "import-main-matcher.h"
+#include <gnc-state.h>
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_IMPORT;
@@ -103,13 +104,38 @@ named_import_get_context (GtkWindow *parent, AB_BANKING *api,
     return context;
 }
 
+static const char *GNC_STATE_SECTION = "dialogs.aqb.file-import";
+static const char *STATE_KEY_LAST_FORMAT = "format";
+static const char *STATE_KEY_LAST_PROFILE = "profile";
+
+static void
+load_imexporter_and_profile(char** imexporter, char** profile)
+{
+    GKeyFile *state_file = gnc_state_get_current();
+
+    if (g_key_file_has_key(state_file, GNC_STATE_SECTION, STATE_KEY_LAST_FORMAT, NULL))
+        *imexporter = g_key_file_get_string (state_file, GNC_STATE_SECTION, STATE_KEY_LAST_FORMAT, NULL);
+
+    if (g_key_file_has_key(state_file, GNC_STATE_SECTION, STATE_KEY_LAST_PROFILE, NULL))
+        *profile = g_key_file_get_string (state_file, GNC_STATE_SECTION, STATE_KEY_LAST_PROFILE, NULL);
+}
+
+static void
+save_imexporter_and_profile(const char* imexporter, const char *profile)
+{
+    GKeyFile *state_file = gnc_state_get_current();
+
+    g_key_file_set_string(state_file, GNC_STATE_SECTION, STATE_KEY_LAST_FORMAT, imexporter);
+    g_key_file_set_string(state_file, GNC_STATE_SECTION, STATE_KEY_LAST_PROFILE, profile);
+}
+
 void
 gnc_file_aqbanking_import_dialog (GtkWindow *parent)
 {
      AB_BANKING* api = gnc_AB_BANKING_new ();
      GncABSelectImExDlg* imexd =
          gnc_ab_select_imex_dlg_new (GTK_WIDGET (parent), api);
-     char *imexporter, *profile;
+     char *imexporter = NULL, *profile = NULL;
      AB_IMEXPORTER_CONTEXT* ctx = NULL;
 
      if (!imexd)
@@ -119,6 +145,9 @@ gnc_file_aqbanking_import_dialog (GtkWindow *parent)
          gnc_AB_BANKING_fini(api);
          return;
      }
+     load_imexporter_and_profile(&imexporter, &profile);
+     gnc_ab_select_imex_dlg_set_imexporter_name(imexd, imexporter);
+     gnc_ab_select_imex_dlg_set_profile_name(imexd, profile);
 
      if (!gnc_ab_select_imex_dlg_run (imexd))
      {
@@ -137,10 +166,12 @@ gnc_file_aqbanking_import_dialog (GtkWindow *parent)
          if (ctx)
          {
              GncABImExContextImport* ieci = NULL;
-             ieci = gnc_ab_import_context (ctx, 0, FALSE, api, GTK_WIDGET(parent));
+             ieci = gnc_ab_import_context (ctx, AWAIT_TRANSACTIONS, FALSE, api, GTK_WIDGET(parent));
              g_free(ieci);
              AB_ImExporterContext_free(ctx);
          }
+
+         save_imexporter_and_profile(imexporter, profile);
          g_free (imexporter);
          g_free (profile);
      }
