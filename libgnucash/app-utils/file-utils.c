@@ -152,8 +152,7 @@ gnc_getline (gchar **line, FILE *file)
     }
 
     len = gs->len;
-    *line = gs->str;
-    g_string_free(gs, FALSE);
+    *line = g_string_free (gs, FALSE);
     return len;
 }
 
