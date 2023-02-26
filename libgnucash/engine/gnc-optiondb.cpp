@@ -21,10 +21,12 @@
  *                                                                  *
 \********************************************************************/
 
+#include <cstdint>
 #include <functional>
 #include <string>
 #include <limits>
 #include <sstream>
+#include "gnc-option-uitype.hpp"
 #include "kvp-value.hpp"
 #include "qofbookslots.h"
 #include "guid.hpp"
@@ -768,9 +770,9 @@ gnc_register_number_plot_size_option(GncOptionDB* db,
                                      const char* key, const char* doc_string,
                                      int value)
 {
-    // Pixel values don't make much sense so always use percent.
+//65K is 10x reasonable, but it's a convenient constant.
     GncOption option{GncOptionRangeValue<int>{section, name, key, doc_string,
-                value, 10, 100, 1}};
+            value, 10, UINT16_MAX, 1, GncOptionUIType::PLOT_SIZE}};
     db->register_option(section, std::move(option));
 }
 

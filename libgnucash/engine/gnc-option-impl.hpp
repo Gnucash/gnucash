@@ -332,7 +332,13 @@ public:
                                    const char* key, const char* doc_string,
                                    ValueType value, ValueType min,
                                    ValueType max, ValueType step) :
-        OptionClassifier{section, name, key, doc_string},
+        GncOptionRangeValue<ValueType>{section, name, key, doc_string, value, min,
+                                       max, step, GncOptionUIType::NUMBER_RANGE} {}
+    GncOptionRangeValue<ValueType>(const char* section, const char* name,
+                                   const char* key, const char* doc_string,
+                                   ValueType value, ValueType min,
+                                   ValueType max, ValueType step, GncOptionUIType ui) :
+        OptionClassifier{section, name, key, doc_string}, m_ui_type{ui},
         m_value{value >= min && value <= max ? value : min},
         m_default_value{value >= min && value <= max ? value : min},
         m_min{min}, m_max{max}, m_step{step} {

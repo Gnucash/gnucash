@@ -24,6 +24,7 @@
 #include <gnc-option-impl.hpp>
 #include "gnc-option-gtk-ui.hpp"
 #include <config.h>  // for scanf format string
+#include <memory>
 #include <qof.h>
 #include <gnc-engine.h> // for GNC_MOD_GUI
 #include <gnc-commodity.h> // for GNC_COMMODITY
@@ -33,6 +34,7 @@
 #include "gnc-date-edit.h" // for gnc_date_edit
 #include "gnc-date-format.h" //for GNC_DATE_FORMAT
 #include "gnc-general-select.h" // for GNC_GENERAL_SELECT
+#include "gnc-option-uitype.hpp"
 #include "gnc-tree-view-account.h" // for GNC_TREE_VIEW_ACCOUNT
 #include "gnc-tree-model-budget.h" // for gnc_tree_model_budget
 #include "misc-gnome-utils.h" // for xxxgtk_textview_set_text
@@ -1699,115 +1701,148 @@ create_option_widget<GncOptionUIType::DATE_FORMAT> (GncOption& option,
     grid_attach_widget(page_box, enclosing, row);
 }
 
-static void
-gnc_rd_option_px_set_cb(GtkWidget *widget, GncOption* option)
+class PlotSize;
+static void plot_size_set_pixels(GtkWidget*, PlotSize*);
+static void plot_size_set_percent(GtkWidget*, PlotSize*);
+
+class PlotSize
 {
-    option->set_alternate(true);
-    gnc_option_changed_option_cb(widget, option);
+    GtkWidget *m_widget;
+    GtkWidget *m_pixel_button;
+    GtkWidget *m_percent_button;
+    GtkWidget *m_range_spinner;
+    GtkAdjustment *m_adj_pct;
+    GtkAdjustment *m_adj_px;
+    unsigned long m_percent_handler;
+    unsigned long m_pixel_handler;
+public:
+    PlotSize(GncOption& option);
+    ~PlotSize();
+    void set_entry_from_option(GncOption& option);
+    void set_option_from_entry(GncOption& option);
+    GtkWidget* get_widget() { return m_widget; }
+    GtkWidget* get_spinner() { return m_range_spinner; }
+    void set_pixels() { gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(m_range_spinner), m_adj_px); }
+    void set_percent() { gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(m_range_spinner), m_adj_pct); }
+};
+
+PlotSize::PlotSize(GncOption& option) :
+    m_widget{gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 4)}, m_pixel_button{gtk_radio_button_new_with_label(nullptr, _("Pixels"))},
+    m_percent_button{gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(m_pixel_button), _("Percent"))},
+    m_range_spinner{GTK_WIDGET(create_range_spinner(option))},
+    m_adj_pct{GTK_ADJUSTMENT(g_object_ref(gtk_adjustment_new(100.0, 10.0, 100.0, 1.0, 5.0, 0.0)))},
+    m_adj_px{GTK_ADJUSTMENT(g_object_ref(gtk_adjustment_new(1000.0, 110.0, 10000.0, 10.0, 250.0, 0.0)))}
+{
+    gtk_box_set_homogeneous(GTK_BOX(m_widget), FALSE);
+    g_object_set (G_OBJECT(m_widget), "margin", 3, NULL);
+    set_tool_tip(option, m_widget);
+    gtk_box_pack_start(GTK_BOX(m_widget), GTK_WIDGET(m_pixel_button), FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(m_widget), GTK_WIDGET(m_percent_button), FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(m_widget), GTK_WIDGET(m_range_spinner),
+                       FALSE, FALSE, 0);
+
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(m_pixel_button), FALSE);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(m_percent_button), TRUE);
+
+    m_pixel_handler = g_signal_connect(m_pixel_button, "toggled", G_CALLBACK(plot_size_set_pixels), this);
+    m_percent_handler = g_signal_connect(m_percent_button, "toggled", G_CALLBACK(plot_size_set_percent), this);
 }
 
-static void
-gnc_rd_option_p_set_cb(GtkWidget *widget, GncOption* option)
+PlotSize::~PlotSize()
 {
-    option->set_alternate(false);
-    gnc_option_changed_option_cb(widget, option);
+    g_signal_handler_disconnect(m_pixel_button, m_pixel_handler);
+    g_signal_handler_disconnect(m_percent_button, m_percent_handler);
+    g_object_unref(m_adj_pct);
+    g_object_unref(m_adj_px);
 }
+
+void
+PlotSize::set_option_from_entry(GncOption& option)
+{
+    auto value{gtk_spin_button_get_value(GTK_SPIN_BUTTON(m_range_spinner))};
+    if (option.is_alternate())
+        option.set_value<int>(static_cast<int>(value));
+    else
+        option.set_value<double>(value);
+}
+
+void
+PlotSize::set_entry_from_option(GncOption& option)
+{
+    double value;
+    if (option.is_alternate())
+    {
+        auto int_value{option.get_value<int>()};
+        value = static_cast<double>(int_value);
+    }
+    else
+    {
+        value = option.get_value<double>();
+    }
+
+    if (value > 100.0)
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pixel_button), TRUE);
+    else
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_percent_button), TRUE);
+
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(m_range_spinner), value);
+}
+
+void
+plot_size_set_pixels(GtkWidget *widget, PlotSize *ps)
+{
+    ps->set_pixels();
+}
+
+void
+plot_size_set_percent(GtkWidget *widget, PlotSize *ps)
+{
+    ps->set_percent();
+}
+
+using PlotSizePtr = std::unique_ptr<PlotSize>;
 
 class GncGtkPlotSizeUIItem : public GncOptionGtkUIItem
 {
 public:
-    GncGtkPlotSizeUIItem(GtkWidget* widget) :
-        GncOptionGtkUIItem{widget, GncOptionUIType::PLOT_SIZE} {}
+    GncGtkPlotSizeUIItem(PlotSizePtr&& plot_size) :
+        GncOptionGtkUIItem{plot_size->get_widget(), GncOptionUIType::PLOT_SIZE},
+        m_plot_size{std::move(plot_size)} {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
-        auto widgets{gtk_container_get_children(GTK_CONTAINER(get_widget()))};
-        GtkWidget *button{}, *spin{};
-        if (option.is_alternate())
-        {
-            button = GTK_WIDGET(g_list_nth_data(widgets, 2));
-            spin = GTK_WIDGET(g_list_nth_data(widgets, 3));
-        }
-        else
-        {
-            button = GTK_WIDGET(g_list_nth_data(widgets, 2));
-            spin = GTK_WIDGET(g_list_nth_data(widgets, 3));
-        }
-        gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin),
-                                  option.get_value<double>());
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
+        m_plot_size->set_entry_from_option(option);
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
-        auto widgets{gtk_container_get_children(GTK_CONTAINER(get_widget()))};
-        auto px_button{GTK_BUTTON(g_list_nth_data(widgets, 0))};
-        if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(px_button)))
-        {
-            option.set_alternate(false);
-            option.set_value(gtk_spin_button_get_value(GTK_SPIN_BUTTON(get_widget())));
-        }
-        else
-        {
-            option.set_alternate(true);
-            option.set_value(gtk_spin_button_get_value(GTK_SPIN_BUTTON(get_widget())));
-        }
+        m_plot_size->set_option_from_entry(option);
     }
+    PlotSize* get_plot_size() { return m_plot_size.get(); }
+private:
+PlotSizePtr m_plot_size;
 };
-
 
 template<> void
 create_option_widget<GncOptionUIType::PLOT_SIZE> (GncOption& option,
                                                   GtkGrid *page_box, int row)
 {
-    GtkWidget *value_percent;
-    GtkWidget *px_butt, *p_butt;
-    GtkWidget *hbox;
-    GtkAdjustment *adj_percent;
 
     auto enclosing = gtk_frame_new(NULL);
     gtk_widget_set_halign (GTK_WIDGET(enclosing), GTK_ALIGN_START);
     set_name_label(option, page_box, row, false);
-    hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-    gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
-    g_object_set (G_OBJECT(hbox), "margin", 3, NULL);
-    set_tool_tip(option, hbox);
 
-    auto value_px = create_range_spinner(option);
-
-    adj_percent = GTK_ADJUSTMENT(gtk_adjustment_new(1, 10, 100, 1, 5.0, 0));
-    value_percent = gtk_spin_button_new(adj_percent, 1, 0);
-    gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(value_percent), TRUE);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(value_percent), 100); //default
-    gtk_entry_set_width_chars(GTK_ENTRY(value_percent), 3);
-    gtk_widget_set_sensitive(value_percent, FALSE);
-
-
-    px_butt = gtk_radio_button_new_with_label(NULL, _("Pixels"));
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(px_butt), TRUE);
-
-
-    p_butt = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(px_butt), _("Percent"));
-
-    gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(px_butt), FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(value_px), FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(p_butt), FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(value_percent),
-                       FALSE, FALSE, 0);
-
-    option.set_ui_item(std::make_unique<GncGtkPlotSizeUIItem>(static_cast<GtkWidget*>(hbox)));
+    option.set_ui_item(std::make_unique<GncGtkPlotSizeUIItem>(std::make_unique<PlotSize>(option)));
     option.set_ui_item_from_option();
 
-    g_signal_connect(G_OBJECT(value_px), "changed",
-                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
-    g_signal_connect(G_OBJECT(value_percent), "changed",
-                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
-    g_signal_connect(G_OBJECT(px_butt), "toggled",
-                     G_CALLBACK(gnc_rd_option_px_set_cb), &option);
-    g_signal_connect(G_OBJECT(p_butt), "toggled",
-                     G_CALLBACK(gnc_rd_option_p_set_cb), &option);
+    auto widget{option_get_gtk_widget(&option)};
+    gtk_container_add(GTK_CONTAINER(enclosing), widget);
 
-    gtk_container_add(GTK_CONTAINER(enclosing), hbox);
     gtk_widget_show_all(enclosing);
     grid_attach_widget(page_box, enclosing, row);
+
+    auto ui_item{dynamic_cast<GncGtkPlotSizeUIItem*>(option.get_ui_item())};
+    if (ui_item)
+        g_signal_connect(G_OBJECT(ui_item->get_plot_size()->get_spinner()), "changed",
+                         G_CALLBACK(gnc_option_changed_widget_cb), &option);
 }
 
 static GtkWidget *
