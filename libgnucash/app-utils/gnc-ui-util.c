@@ -1766,27 +1766,14 @@ xaccParseAmountInternal (const char * in_str, gboolean monetary,
                          gboolean use_auto_decimal,
                          gnc_numeric *result, char **endstr)
 {
-    gboolean is_negative;
-    gboolean got_decimal;
-    gboolean need_paren;
-    long long int numer;
-    long long int denom;
-    int count;
-
-    ParseState state;
-
-    const gchar *in;
-    gunichar uc;
-    gchar *out_str;
-    gchar *out;
-
     /* Initialize *endstr to in_str */
-    if (endstr != NULL)
+    if (endstr)
         *endstr = (char *) in_str;
 
-    if (in_str == NULL)
+    if (!in_str)
         return FALSE;
 
+    const gchar *in;
     if (!g_utf8_validate(in_str, -1, &in))
     {
         printf("Invalid utf8 string '%s'. Bad character at position %ld.\n",
@@ -1796,29 +1783,29 @@ xaccParseAmountInternal (const char * in_str, gboolean monetary,
 
     /* 'out_str' will be used to store digits for numeric conversion.
      * 'out' will be used to traverse out_str. */
-    out = out_str = g_new(gchar, strlen(in_str) + 128);
+    gchar *out_str = g_new(gchar, strlen(in_str) + 128);
+    gchar *out = out_str;
 
     /* 'in' is used to traverse 'in_str'. */
     in = in_str;
 
-    is_negative = FALSE;
-    got_decimal = FALSE;
-    need_paren = FALSE;
-    numer = 0;
-    denom = 1;
+    gboolean is_negative = FALSE;
+    gboolean got_decimal = FALSE;
+    gboolean need_paren = FALSE;
+    long long int numer = 0;
+    long long int denom = 1;
 
     /* Initialize the state machine */
-    state = START_ST;
+    ParseState state = START_ST;
 
     /* This while loop implements a state machine for parsing numbers. */
     while (TRUE)
     {
         ParseState next_state = state;
-
-        uc = g_utf8_get_char(in);
+        gunichar uc = g_utf8_get_char(in);
 
         /* Ignore anything in the 'ignore list' */
-        if (ignore_list && uc && g_utf8_strchr(ignore_list, -1, uc) != NULL)
+        if (ignore_list && uc && g_utf8_strchr(ignore_list, -1, uc))
         {
             in = g_utf8_next_char(in);
             continue;
@@ -1832,18 +1819,15 @@ xaccParseAmountInternal (const char * in_str, gboolean monetary,
             case START_ST:
                 if (g_unichar_isdigit(uc))
                 {
-                    count = g_unichar_to_utf8(uc, out);
+                    int count = g_unichar_to_utf8(uc, out);
                     out += count; /* we record the digits themselves in out_str
                     * for later conversion by libc routines */
                     next_state = NUMER_ST;
                 }
                 else if (uc == decimal_point)
-                {
                     next_state = FRAC_ST;
-                }
                 else if (g_unichar_isspace(uc))
-                {
-                }
+                    ;
                 else if (uc == negative_sign)
                 {
                     is_negative = TRUE;
@@ -1856,9 +1840,7 @@ xaccParseAmountInternal (const char * in_str, gboolean monetary,
                     next_state = NEG_ST;
                 }
                 else
-                {
                     next_state = NO_NUM_ST;
-                }
 
                 break;
 
@@ -1867,21 +1849,16 @@ xaccParseAmountInternal (const char * in_str, gboolean monetary,
             case NEG_ST:
                 if (g_unichar_isdigit(uc))
                 {
-                    count = g_unichar_to_utf8(uc, out);
+                    int count = g_unichar_to_utf8(uc, out);
                     out += count;
                     next_state = NUMER_ST;
                 }
                 else if (uc == decimal_point)
-                {
                     next_state = FRAC_ST;
-                }
                 else if (g_unichar_isspace(uc))
-                {
-                }
+                    ;
                 else
-                {
                     next_state = NO_NUM_ST;
-                }
 
                 break;
 
@@ -1890,26 +1867,20 @@ xaccParseAmountInternal (const char * in_str, gboolean monetary,
             case NUMER_ST:
                 if (g_unichar_isdigit(uc))
                 {
-                    count = g_unichar_to_utf8(uc, out);
+                    int count = g_unichar_to_utf8(uc, out);
                     out += count;
                 }
                 else if (uc == decimal_point)
-                {
                     next_state = FRAC_ST;
-                }
                 else if (uc == group_separator)
-                {
                     ; //ignore it
-                }
                 else if (uc == ')' && need_paren)
                 {
                     next_state = DONE_ST;
                     need_paren = FALSE;
                 }
                 else
-                {
                     next_state = DONE_ST;
-                }
 
                 break;
 
@@ -1917,7 +1888,7 @@ xaccParseAmountInternal (const char * in_str, gboolean monetary,
             case FRAC_ST:
                 if (g_unichar_isdigit(uc))
                 {
-                    count = g_unichar_to_utf8(uc, out);
+                    int count = g_unichar_to_utf8(uc, out);
                     out += count;
                 }
                 else if (uc == decimal_point)
@@ -1944,9 +1915,7 @@ xaccParseAmountInternal (const char * in_str, gboolean monetary,
                     need_paren = FALSE;
                 }
                 else
-                {
                     next_state = DONE_ST;
-                }
 
                 break;
 
@@ -1963,10 +1932,8 @@ xaccParseAmountInternal (const char * in_str, gboolean monetary,
         {
             *out = '\0';
 
-            if (*out_str != '\0' && sscanf(out_str, QOF_SCANF_LLD, &numer) < 1)
-            {
+            if (*out_str && sscanf(out_str, QOF_SCANF_LLD, &numer) < 1)
                 next_state = NO_NUM_ST;
-            }
             else if (next_state == FRAC_ST)
             {
                 /* reset the out pointer to record the fraction */
@@ -1995,12 +1962,10 @@ xaccParseAmountInternal (const char * in_str, gboolean monetary,
     *out = '\0';
 
     /* Add in fractional value */
-    if (got_decimal && (*out_str != '\0'))
+    if (got_decimal && *out_str)
     {
-        size_t len;
-        long long int fraction;
 
-        len = strlen(out_str);
+        size_t len = strlen(out_str);
 
         if (len > 12)
         {
@@ -2008,6 +1973,7 @@ xaccParseAmountInternal (const char * in_str, gboolean monetary,
             len = 12;
         }
 
+        long long int fraction;
         if (sscanf (out_str, QOF_SCANF_LLD, &fraction) < 1)
         {
             g_free(out_str);
@@ -2032,14 +1998,14 @@ xaccParseAmountInternal (const char * in_str, gboolean monetary,
         }
     }
 
-    if (result != NULL)
+    if (result)
     {
         *result = gnc_numeric_create (numer, denom);
         if (is_negative)
             *result = gnc_numeric_neg (*result);
     }
 
-    if (endstr != NULL)
+    if (endstr)
         *endstr = (char *) in;
 
     g_free (out_str);
@@ -2054,14 +2020,10 @@ xaccParseAmountBasicInternal (const char * in_str, gboolean monetary,
                               char **endstr, gboolean skip)
 {
     struct lconv *lc = gnc_localeconv();
+    gunichar negative_sign = g_utf8_get_char(lc->negative_sign);
 
-    gunichar negative_sign;
     gunichar decimal_point;
     gunichar group_separator;
-    gchar *ignore = NULL;
-    char *plus_sign = "+";
-
-    negative_sign = g_utf8_get_char(lc->negative_sign);
     if (monetary)
     {
         group_separator = g_utf8_get_char(lc->mon_thousands_sep);
@@ -2073,6 +2035,7 @@ xaccParseAmountBasicInternal (const char * in_str, gboolean monetary,
         decimal_point = g_utf8_get_char(lc->decimal_point);
     }
 
+    gchar *ignore = NULL;
     if (skip)
     {
         /* We want the locale's positive sign to be ignored.
@@ -2080,7 +2043,7 @@ xaccParseAmountBasicInternal (const char * in_str, gboolean monetary,
          * an optional positive sign and ignore that */
         ignore = lc->positive_sign;
         if (!ignore || !*ignore)
-            ignore = plus_sign;
+            ignore = "+";
     }
 
     return xaccParseAmountInternal(in_str, monetary, negative_sign,
