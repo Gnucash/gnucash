@@ -54,28 +54,28 @@ function(run_dist_check PACKAGE_PREFIX EXT)
 
     # Run ninja in the build directory
     execute_process_and_check_result(
-            COMMAND ${CMAKE_COMMAND} -E env ${NINJA_COMMAND}
+            COMMAND ${NINJA_COMMAND}
             WORKING_DIRECTORY ${BUILD_DIR}
             ERROR_MSG "Ninja build failed."
     )
 
     # Run ninja install
     execute_process_and_check_result(
-            COMMAND ${CMAKE_COMMAND} -E env ${NINJA_COMMAND} install
+            COMMAND ${NINJA_COMMAND} install
             WORKING_DIRECTORY ${BUILD_DIR}
             ERROR_MSG "Ninja install failed."
     )
 
     # Run ninja check in the build directory
     execute_process_and_check_result(
-            COMMAND ${CMAKE_COMMAND} -E env ${NINJA_COMMAND} check
+            COMMAND ${NINJA_COMMAND} check
             WORKING_DIRECTORY ${BUILD_DIR}
             ERROR_MSG "Ninja check failed."
     )
 
     # Run ninja dist
     execute_process_and_check_result(
-            COMMAND ${CMAKE_COMMAND} -E env ${NINJA_COMMAND} dist
+            COMMAND ${NINJA_COMMAND} dist
             WORKING_DIRECTORY ${BUILD_DIR}
             ERROR_MSG "Ninja dist failed."
     )

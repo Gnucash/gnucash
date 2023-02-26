@@ -44,7 +44,7 @@ if (COMPILE_GSCHEMAS)
 
     add_custom_command(
         OUTPUT ${SCHEMADIR_BUILD}/gschemas.compiled
-        COMMAND ${CMAKE_COMMAND} -E env ${GLIB_COMPILE_SCHEMAS} --strict ${SCHEMADIR_BUILD}
+        COMMAND ${GLIB_COMPILE_SCHEMAS} --strict ${SCHEMADIR_BUILD}
         DEPENDS ${gschema_depends}
     )
 

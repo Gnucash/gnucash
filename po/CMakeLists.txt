@@ -19,8 +19,7 @@ foreach (lingua ${ALL_LINGUAS})
 
   add_custom_command(
       OUTPUT ${_MO_FILE}
-      COMMAND ${CMAKE_COMMAND} -E env
-        ${GETTEXT_MSGFMT_EXECUTABLE}
+      COMMAND ${GETTEXT_MSGFMT_EXECUTABLE}
             -o ${_MO_FILE} ${CMAKE_CURRENT_SOURCE_DIR}/${lingua}.po
       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${lingua}.po
   )

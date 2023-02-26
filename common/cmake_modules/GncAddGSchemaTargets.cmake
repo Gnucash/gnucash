@@ -12,8 +12,7 @@ macro(add_gschema_targets _gschema_INPUTS)
     list(APPEND _gschema_VALIDS ${_VALID_FILE})
     add_custom_command(
         OUTPUT ${_VALID_FILE}
-        COMMAND ${CMAKE_COMMAND} -E env
-          ${GLIB_COMPILE_SCHEMAS} --strict --dry-run --schema-file=${_OUTPUT_FILE}
+        COMMAND ${GLIB_COMPILE_SCHEMAS} --strict --dry-run --schema-file=${_OUTPUT_FILE}
         COMMAND ${CMAKE_COMMAND} -E touch ${_VALID_FILE}
         DEPENDS ${_OUTPUT_FILE}
     )
