@@ -14,8 +14,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-02-23 16:38+0000\n"
-"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"PO-Revision-Date: 2023-02-26 20:44+0000\n"
+"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -903,7 +903,7 @@ msgstr "A könyv lezárása sikeres volt."
 #. that will be created. This is a ngettext(3) message (but
 #. only for the %d part).
 #: gnucash/gnome/assistant-acct-period.c:315
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The earliest transaction date found in this book is %s. Based on the "
 "selection made above, this book will be split into %d book."
@@ -911,9 +911,8 @@ msgid_plural ""
 "The earliest transaction date found in this book is %s. Based on the "
 "selection made above, this book will be split into %d books."
 msgstr[0] ""
-"A legkorábbi könyvelés dátuma a könyvben %s. A fenti kiválasztás alapján a "
-"könyvelés-megosztás a %d könyvekben megy végbe. Kattintson a \"Következő\"-"
-"re, hogy elkezdje bezárni az első könyvet."
+"Ebben a főkönyvben a legkorábbi tranzakció dátuma %s. A fenti választás "
+"alapján a könyv %d felé lesz szétosztva."
 
 #. Translators: Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gnome/assistant-acct-period.c:371
@@ -945,13 +944,13 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/assistant-acct-period.c:525
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s\n"
 "Congratulations! You are done closing books!\n"
 msgstr ""
 "%s\n"
-"Gratulálunk! Ön végzett a könyvek lezárásával!\n"
+"Gratulálunk! Befejezte a könyvek lezárását!\n"
 
 #: gnucash/gnome/assistant-acct-period.c:594
 #: gnucash/gtkbuilder/dialog-fincalc.glade:650
@@ -1725,10 +1724,8 @@ msgstr "Töltelék számla lett kiválasztva. Próbálja újra."
 
 #: gnucash/gnome/dialog-doclink.c:160
 #: gnucash/gnome/gnc-plugin-page-register.c:4765
-#, fuzzy
-#| msgid "Select Account"
 msgid "Select document"
-msgstr "Folyószámla kiválasztása"
+msgstr "Dokumentum kiválasztása"
 
 #: gnucash/gnome/dialog-doclink.c:163 gnucash/gnome/gnc-plugin-budget.c:323
 #: gnucash/gnome-search/search-account.c:238
@@ -15789,9 +15786,8 @@ msgid "Linked Document"
 msgstr "Megbízás párbeszédablak"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:697
-#, fuzzy
 msgid "Available"
-msgstr "Számlázható?"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:712
 msgid "Relative"
@@ -16475,8 +16471,8 @@ msgstr "_Igen"
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Display Welcome Dialog Again?</span>"
 msgstr ""
-"<span weight=\"bold\" size=\"larger\">Újból megjeleníti az "
-"üdvözlőablakot?</span>"
+"<span weight=\"bold\" size=\"larger\">Máskor is jelenjen meg az "
+"Üdvözlőablak?</span>"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:101
 msgid ""
@@ -16484,9 +16480,9 @@ msgid ""
 "will be displayed again next time you start GnuCash. If you press the <i>No</"
 "i> button, it will not be displayed again."
 msgstr ""
-"Ha az <i>Igen</i> gombot nyomja meg, az <i>Üdvözli a GnuCash</i> ablak a "
-"következő alkalommal is megjelenik, amikor elindítja GnuCash-t. Ha a <i>Nem</"
-"i> gombot nyomja meg, akkor nem jelenik meg újra."
+"Ha az <i>Igen</i> gombra kattint, az <i>Üdvözlőablak</i> a GnuCash következő "
+"indításakor is megjelenik. Ha a <i>Nem</i> gombra kattint, akkor nem jelenik "
+"meg újra."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:210
 msgid "<span size=\"larger\" weight=\"bold\">Welcome to GnuCash!</span>"
@@ -19257,9 +19253,8 @@ msgid "Only show _active owners"
 msgstr ""
 
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:79
-#, fuzzy
 msgid "Show _zero balance owners"
-msgstr "Nulla egyenlegű elemek feltüntetése?"
+msgstr ""
 
 #: gnucash/gtkbuilder/window-autoclear.glade:71
 #, fuzzy
@@ -21896,9 +21891,8 @@ msgid "Enter a name for the account"
 msgstr "Adjon meg egy folyószámlanevet"
 
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:443
-#, fuzzy
 msgid "Placeholder?"
-msgstr "Töltelék"
+msgstr "Töltelék?"
 
 #: gnucash/import-export/qif-imp/gnc-plugin-qif-import.c:48
 msgid "Import _QIF..."
@@ -22312,10 +22306,9 @@ msgstr "sample:Költségek:Autó:Üzemanyag"
 
 #. Translators: Abbreviation sample for Taxable?
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:132
-#, fuzzy
 msgctxt "sample for 'Taxable'"
 msgid "T?"
-msgstr "A"
+msgstr ""
 
 #. Translators: Abbreviation sample for Tax Included
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:137
@@ -23077,9 +23070,8 @@ msgstr "Pénznem kiválasztása, amelyben jelentés értékei megjelennek."
 #: gnucash/report/options-utilities.scm:143
 #: gnucash/report/reports/standard/advanced-portfolio.scm:81
 #: gnucash/report/reports/standard/price-scatter.scm:78
-#, fuzzy
 msgid "The source of price information."
-msgstr "Az árinformáció forrása"
+msgstr "Árfolyamok forrása."
 
 #: gnucash/report/options-utilities.scm:144
 msgid "Average cost of purchases weighted by volume"
@@ -23486,27 +23478,23 @@ msgstr ""
 
 #: gnucash/report/reports/aging.scm:410
 #: gnucash/report/reports/standard/new-aging.scm:52
-#, fuzzy
 msgid "Display Address 1."
-msgstr "Dátum megjelenítése?"
+msgstr ""
 
 #: gnucash/report/reports/aging.scm:418
 #: gnucash/report/reports/standard/new-aging.scm:53
-#, fuzzy
 msgid "Display Address 2."
-msgstr "Dátum megjelenítése?"
+msgstr ""
 
 #: gnucash/report/reports/aging.scm:426
 #: gnucash/report/reports/standard/new-aging.scm:54
-#, fuzzy
 msgid "Display Address 3."
-msgstr "Dátum megjelenítése?"
+msgstr ""
 
 #: gnucash/report/reports/aging.scm:434
 #: gnucash/report/reports/standard/new-aging.scm:55
-#, fuzzy
 msgid "Display Address 4."
-msgstr "Dátum megjelenítése?"
+msgstr ""
 
 #: gnucash/report/reports/aging.scm:442
 #: gnucash/report/reports/standard/new-aging.scm:56
@@ -23528,9 +23516,8 @@ msgstr "Rövid jelölések megjelenítése"
 
 #: gnucash/report/reports/aging.scm:466
 #: gnucash/report/reports/standard/new-aging.scm:59
-#, fuzzy
 msgid "Display Active status."
-msgstr "Dátum megjelenítése?"
+msgstr ""
 
 #: gnucash/report/reports/aging.scm:539
 #: gnucash/report/reports/standard/new-aging.scm:181
@@ -25530,9 +25517,8 @@ msgstr "Nem pénzjavak megjelenítése"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:124
 #: gnucash/report/trep-engine.scm:551
-#, fuzzy
 msgid "Also show original currency amounts"
-msgstr "A számla idegen pénznembeli összegeinek megjelenítése?"
+msgstr "Összegek megjelenítése eredeti pénznemben is"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:126
 msgid "If more than 1 period column, include overall period?"
@@ -26110,19 +26096,16 @@ msgid "Include transfers to and from Trading Accounts in the report."
 msgstr ""
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:107
-#, fuzzy
 msgid "Show money in?"
-msgstr "Rajz megjelenítése"
+msgstr ""
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:113
-#, fuzzy
 msgid "Show money out?"
-msgstr "Rajz megjelenítése"
+msgstr ""
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:119
-#, fuzzy
 msgid "Show net money flow?"
-msgstr "Rajz megjelenítése"
+msgstr "Nettó pénzáramlás megjelenítése?"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:303
 #: gnucash/report/reports/standard/cashflow-barchart.scm:339
@@ -26952,24 +26935,20 @@ msgid "Display the price per item?"
 msgstr "Elemenkénti ár megjelenítése?"
 
 #: gnucash/report/reports/standard/invoice.scm:225
-#, fuzzy
 msgid "Display the entry's discount?"
-msgstr "Tétel-kedvezmény megjelenítése"
+msgstr ""
 
 #: gnucash/report/reports/standard/invoice.scm:230
-#, fuzzy
 msgid "Display the entry's taxable status?"
-msgstr "Adókötelesség megjelenítése"
+msgstr ""
 
 #: gnucash/report/reports/standard/invoice.scm:235
-#, fuzzy
 msgid "Display each entry's total total tax?"
-msgstr "Minden tételösszeg összesített adója"
+msgstr ""
 
 #: gnucash/report/reports/standard/invoice.scm:240
-#, fuzzy
 msgid "Display the entry's value?"
-msgstr "Tétel értéke megjelenítése"
+msgstr ""
 
 #: gnucash/report/reports/standard/invoice.scm:245
 msgid "Display due date?"
@@ -27530,22 +27509,19 @@ msgstr "Számla megjelenítése?"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:918
 #: gnucash/report/reports/standard/owner-report.scm:597
-#, fuzzy
 msgid "Display the period debits column?"
-msgstr "Tétel-kedvezmény megjelenítése"
+msgstr ""
 
 #: gnucash/report/reports/standard/new-owner-report.scm:923
 #: gnucash/report/reports/standard/owner-report.scm:592
-#, fuzzy
 msgid "Display the period credits column?"
-msgstr "Tétel-kedvezmény megjelenítése"
+msgstr ""
 
 #: gnucash/report/reports/standard/new-owner-report.scm:928
 #: gnucash/report/reports/standard/register.scm:413
 #: gnucash/report/trep-engine.scm:962
-#, fuzzy
 msgid "Display a running balance?"
-msgstr "Futó egyenleg megjelenítése"
+msgstr "Folyó egyenleg megjelenítése?"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:936
 #, fuzzy
@@ -27575,9 +27551,8 @@ msgid "Detailed"
 msgstr "Sikertelen"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:949
-#, fuzzy
 msgid "Display document link?"
-msgstr "Számlanév megjelenítése hiperhivatkozásként"
+msgstr "Dokumentum hivatkozás megjelenítése?"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1068
 #, fuzzy
@@ -28169,9 +28144,8 @@ msgid "Display the Company Name?"
 msgstr "Számlanév megjelenítése?"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:134
-#, fuzzy
 msgid "Invoice Number next to title?"
-msgstr "Számlaszám"
+msgstr "Számlaszám a cím mellett?"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:135
 #, fuzzy
@@ -28179,14 +28153,12 @@ msgid "Display Job name?"
 msgstr "Számlanév megjelenítése?"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:136
-#, fuzzy
 msgid "Invoice Job number?"
-msgstr "Számlaszám"
+msgstr ""
 
 #: gnucash/report/reports/standard/taxinvoice.scm:137
-#, fuzzy
 msgid "Show net price?"
-msgstr "Árak feltüntetése"
+msgstr "Nettó ár megjelenítése?"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:154
 msgid "Name of a file containing a logo to be used on the report."
@@ -29176,9 +29148,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:637
-#, fuzzy
 msgid "Filter by reconcile status."
-msgstr "Tranzakciódátum megjelenítése?"
+msgstr ""
 
 #: gnucash/report/trep-engine.scm:644
 #, fuzzy
@@ -29224,18 +29195,16 @@ msgid "Show the account description for subheadings?"
 msgstr "Számlakód megjelenítése alösszegekhez és alcímekhez?"
 
 #: gnucash/report/trep-engine.scm:810
-#, fuzzy
 msgid "Show the informal headers for debit/credit accounts?"
-msgstr "Bevételi- és költségszámlák megjelenítése"
+msgstr ""
 
 #: gnucash/report/trep-engine.scm:817
 msgid "Add indenting columns with grouping and subtotals?"
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:824
-#, fuzzy
 msgid "Show subtotals only, hiding transactional detail?"
-msgstr "Do not print transaction detail"
+msgstr ""
 
 #: gnucash/report/trep-engine.scm:831
 msgid "Subtotal according to the primary key?"
@@ -29280,30 +29249,24 @@ msgid "Display the notes if the memo is unavailable?"
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:952 gnucash/report/trep-engine.scm:955
-#, fuzzy
 msgid "Display the full account name?"
-msgstr "Teljes számlanév megjelenítése"
+msgstr "Teljes számlanév megjelenítése?"
 
 #: gnucash/report/trep-engine.scm:953
-#, fuzzy
 msgid "Display the account code?"
-msgstr "Számlakód megjelenítése"
+msgstr "Számlakód megjelenítése?"
 
 #: gnucash/report/trep-engine.scm:956
-#, fuzzy
 msgid "Display the other account code?"
-msgstr "A másik számla kódjának megjelenítése"
+msgstr "A másik számla kódjának megjelenítése?"
 
 #: gnucash/report/trep-engine.scm:958
-#, fuzzy
-#| msgid "Display the transaction amount?"
 msgid "Display the transaction linked document"
-msgstr "Tranzakció összegének megjelenítése?"
+msgstr ""
 
 #: gnucash/report/trep-engine.scm:961
-#, fuzzy
 msgid "Display a subtotal summary table."
-msgstr "Feltüntessem a részletösszegeket?"
+msgstr "Részösszegek összefoglaló táblázatának megjelenítése."
 
 #: gnucash/report/trep-engine.scm:969
 #, fuzzy
