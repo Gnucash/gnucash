@@ -1862,98 +1862,98 @@ xaccParseAmountInternal (const char * in_str, gboolean monetary,
 
                 break;
 
-                /* NEG_ST means we have just parsed a negative sign. For now,
-                 * we only recognize formats where the negative sign comes first. */
-                case NEG_ST:
-                    if (g_unichar_isdigit(uc))
-                    {
-                        count = g_unichar_to_utf8(uc, out);
-                        out += count;
-                        next_state = NUMER_ST;
-                    }
-                    else if (uc == decimal_point)
-                    {
-                        next_state = FRAC_ST;
-                    }
-                    else if (g_unichar_isspace(uc))
-                    {
-                    }
+            /* NEG_ST means we have just parsed a negative sign. For now,
+             * we only recognize formats where the negative sign comes first. */
+            case NEG_ST:
+                if (g_unichar_isdigit(uc))
+                {
+                    count = g_unichar_to_utf8(uc, out);
+                    out += count;
+                    next_state = NUMER_ST;
+                }
+                else if (uc == decimal_point)
+                {
+                    next_state = FRAC_ST;
+                }
+                else if (g_unichar_isspace(uc))
+                {
+                }
+                else
+                {
+                    next_state = NO_NUM_ST;
+                }
+
+                break;
+
+            /* NUMER_ST means we have started parsing the number, but
+             * have not encountered a decimal separator. */
+            case NUMER_ST:
+                if (g_unichar_isdigit(uc))
+                {
+                    count = g_unichar_to_utf8(uc, out);
+                    out += count;
+                }
+                else if (uc == decimal_point)
+                {
+                    next_state = FRAC_ST;
+                }
+                else if (uc == group_separator)
+                {
+                    ; //ignore it
+                }
+                else if (uc == ')' && need_paren)
+                {
+                    next_state = DONE_ST;
+                    need_paren = FALSE;
+                }
+                else
+                {
+                    next_state = DONE_ST;
+                }
+
+                break;
+
+            /* FRAC_ST means we are now parsing fractional digits. */
+            case FRAC_ST:
+                if (g_unichar_isdigit(uc))
+                {
+                    count = g_unichar_to_utf8(uc, out);
+                    out += count;
+                }
+                else if (uc == decimal_point)
+                {
+                    /* If a subsequent decimal point is also whitespace,
+                        * assume it was intended as such and stop parsing.
+                        * Otherwise, there is a problem. */
+                    if (g_unichar_isspace(decimal_point))
+                        next_state = DONE_ST;
                     else
-                    {
                         next_state = NO_NUM_ST;
-                    }
+                }
+                else if (uc == group_separator)
+                {
+                    /* If a subsequent group separator is also whitespace,
+                        * assume it was intended as such and stop parsing.
+                        * Otherwise ignore it. */
+                    if (g_unichar_isspace(group_separator))
+                        next_state = DONE_ST;
+                }
+                else if (uc == ')' && need_paren)
+                {
+                    next_state = DONE_ST;
+                    need_paren = FALSE;
+                }
+                else
+                {
+                    next_state = DONE_ST;
+                }
 
-                    break;
+                break;
 
-                    /* NUMER_ST means we have started parsing the number, but
-                     * have not encountered a decimal separator. */
-                    case NUMER_ST:
-                        if (g_unichar_isdigit(uc))
-                        {
-                            count = g_unichar_to_utf8(uc, out);
-                            out += count;
-                        }
-                        else if (uc == decimal_point)
-                        {
-                            next_state = FRAC_ST;
-                        }
-                        else if (uc == group_separator)
-                        {
-                            ; //ignore it
-                        }
-                        else if (uc == ')' && need_paren)
-                        {
-                            next_state = DONE_ST;
-                            need_paren = FALSE;
-                        }
-                        else
-                        {
-                            next_state = DONE_ST;
-                        }
-
-                        break;
-
-                        /* FRAC_ST means we are now parsing fractional digits. */
-                        case FRAC_ST:
-                            if (g_unichar_isdigit(uc))
-                            {
-                                count = g_unichar_to_utf8(uc, out);
-                                out += count;
-                            }
-                            else if (uc == decimal_point)
-                            {
-                                /* If a subsequent decimal point is also whitespace,
-                                 * assume it was intended as such and stop parsing.
-                                 * Otherwise, there is a problem. */
-                                if (g_unichar_isspace(decimal_point))
-                                    next_state = DONE_ST;
-                                else
-                                    next_state = NO_NUM_ST;
-                            }
-                            else if (uc == group_separator)
-                            {
-                                /* If a subsequent group separator is also whitespace,
-                                 * assume it was intended as such and stop parsing.
-                                 * Otherwise ignore it. */
-                                if (g_unichar_isspace(group_separator))
-                                    next_state = DONE_ST;
-                            }
-                            else if (uc == ')' && need_paren)
-                            {
-                                next_state = DONE_ST;
-                                need_paren = FALSE;
-                            }
-                            else
-                            {
-                                next_state = DONE_ST;
-                            }
-
-                            break;
-
-                        default:
-                            PERR("bad state");
-                            g_assert_not_reached();
-                            break;
+            default:
+                PERR("bad state");
+                g_assert_not_reached();
+                break;
         }
 
         /* If we're moving into the FRAC_ST or out of the machine
