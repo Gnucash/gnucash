@@ -107,8 +107,8 @@ gnc_module_system_search_dirs(void)
         case G_SEARCHPATH_SEPARATOR:
             if (!escchar)
             {
-                list = g_list_append(list, token->str);
-                g_string_free(token, TRUE);
+                char *token_str = g_string_free (token, FALSE);
+                list = g_list_append (list, token_str);
                 token = g_string_new(NULL);
             }
             else
