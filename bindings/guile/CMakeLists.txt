@@ -127,7 +127,8 @@ endif()
 gnc_add_scheme_targets(scm-core-utils
     SOURCES "${core_utils_SCHEME}"
     OUTPUT_DIR ${GUILE_OUTPUT_DIR}
-    DEPENDS "${GUILE_DEPENDS}")
+    DEPENDS "${GUILE_DEPENDS}"
+    MAKE_LINKS)
 
 set (engine_SCHEME_0
     gnc-numeric.scm
@@ -162,12 +163,14 @@ gnc_add_scheme_targets(scm-engine-0
 gnc_add_scheme_targets(scm-engine-1
     SOURCES "${engine_SCHEME_1}"
     OUTPUT_DIR gnucash
-    DEPENDS "scm-core-utils;scm-engine-0;${GUILE_DEPENDS}")
+    DEPENDS "scm-core-utils;scm-engine-0;${GUILE_DEPENDS}"
+    MAKE_LINKS)
 
 gnc_add_scheme_targets(scm-engine-2
     SOURCES "${engine_SCHEME_2}"
     OUTPUT_DIR gnucash
-    DEPENDS "scm-engine-1;${GUILE_DEPENDS}")
+    DEPENDS "scm-engine-1;${GUILE_DEPENDS}"
+    MAKE_LINKS)
 
 
 gnc_add_scheme_targets(scm-options
