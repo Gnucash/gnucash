@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-02-26 20:44+0000\n"
+"PO-Revision-Date: 2023-02-27 18:39+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -1923,10 +1923,8 @@ msgid "Business Document Links"
 msgstr "<b>Új tranzakció-információ</b>"
 
 #: gnucash/gnome/dialog-employee.c:201
-#, fuzzy
-#| msgid "You must enter a payment address."
 msgid "You must enter a Payment-Address Name."
-msgstr "Meg kell adni egy teljesítési címet."
+msgstr ""
 
 #: gnucash/gnome/dialog-employee.c:296
 msgid "Edit Employee"
@@ -2053,10 +2051,9 @@ msgstr "A_dóvonatkozású"
 #. Translators: %s is a full account name.
 #. This is a label in Search Account from context menu.
 #: gnucash/gnome/dialog-find-account.c:491
-#, fuzzy, c-format
-#| msgid "Accounts in '%s'"
+#, c-format
 msgid "Su_b-accounts of '%s'"
-msgstr "<b>Számlák '%s'-ban</b>"
+msgstr ""
 
 #: gnucash/gnome/dialog-find-transactions2.c:107
 #: gnucash/gnome/dialog-find-transactions.c:105
@@ -2778,10 +2775,8 @@ msgid "You must choose an owner for this job."
 msgstr "Ki kell választani egy jelöltet a megbízásra."
 
 #: gnucash/gnome/dialog-job.c:154
-#, fuzzy
-#| msgid "Credit must be a positive amount or you must leave it blank."
 msgid "The rate amount must be valid or you must leave it blank."
-msgstr "A terhelés pozitív összeg lehet, vagy üresen kell hagyni."
+msgstr "Az árfolyamnak érvényes árnak vagy üresnek kell lennie."
 
 #: gnucash/gnome/dialog-job.c:255
 msgid "Edit Job"
@@ -2836,8 +2831,6 @@ msgid "Empty"
 msgstr "Névtér"
 
 #: gnucash/gnome/dialog-lot-viewer.c:829
-#, fuzzy
-#| msgid "Open"
 msgctxt "Adjective"
 msgid "Open"
 msgstr "Megnyitás"
@@ -3080,10 +3073,10 @@ msgstr ""
 
 #. Translators: %d is the number of prices. This is a ngettext(3) message.
 #: gnucash/gnome/dialog-price-edit-db.c:204
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete the selected price?"
 msgid_plural "Are you sure you want to delete the %d selected prices?"
-msgstr[0] "Biztosan törölni kívánja a %d kiválasztott árat?"
+msgstr[0] "Biztosan törölni kívánja a %d db kiválasztott árat?"
 
 #: gnucash/gnome/dialog-price-edit-db.c:212
 msgid "Delete prices?"
@@ -3796,10 +3789,8 @@ msgid "View and Delete Bayesian and non-Bayesian information"
 msgstr "Bayes-féle és nem Bayes-féle információk megtekintése és törlése"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:217
-#, fuzzy
-#| msgid "Transaction amount"
 msgid "_Transaction Linked Documents"
-msgstr "Tranzakció összeg"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:218
 #, fuzzy
