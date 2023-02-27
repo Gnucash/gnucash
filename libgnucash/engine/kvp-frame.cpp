@@ -261,15 +261,17 @@ kvp_value_list_from_gvalue (GValue *gval, gpointer pList)
 }
 
 GValue*
-gvalue_from_kvp_value (const KvpValue *kval)
+gvalue_from_kvp_value (const KvpValue *kval, GValue* val)
 {
-    GValue *val;
     gnc_numeric num;
     Time64 tm;
     GDate gdate;
 
     if (kval == NULL) return NULL;
-    val = g_slice_new0 (GValue);
+    if (!val)
+        val = g_slice_new0 (GValue);
+    else
+        g_value_unset(val);
 
     switch (kval->get_type())
     {
@@ -283,36 +285,28 @@ gvalue_from_kvp_value (const KvpValue *kval)
             break;
         case KvpValue::Type::NUMERIC:
             g_value_init (val, GNC_TYPE_NUMERIC);
-            num = kval->get<gnc_numeric>();
-            g_value_set_boxed (val, &num);
+            g_value_set_static_boxed (val, kval->get_ptr<gnc_numeric>());
             break;
         case KvpValue::Type::STRING:
             g_value_init (val, G_TYPE_STRING);
-            g_value_set_string (val, kval->get<const char*>());
+            g_value_set_static_string (val, kval->get<const char*>());
             break;
         case KvpValue::Type::GUID:
             g_value_init (val, GNC_TYPE_GUID);
-            g_value_set_boxed (val, kval->get<GncGUID*>());
+            g_value_set_static_boxed (val, kval->get<GncGUID*>());
             break;
         case KvpValue::Type::TIME64:
             g_value_init (val, GNC_TYPE_TIME64);
-            tm = kval->get<Time64>();
-            g_value_set_boxed (val, &tm);
+            g_value_set_boxed (val, kval->get_ptr<Time64>());
             break;
         case KvpValue::Type::GDATE:
             g_value_init (val, G_TYPE_DATE);
-            gdate = kval->get<GDate>();
-            g_value_set_boxed (val, &gdate);
+            g_value_set_static_boxed (val, kval->get_ptr<GDate>());
             break;
         case KvpValue::Type::GLIST:
         {
-            GList *gvalue_list = NULL;
-            GList *kvp_list = kval->get<GList*>();
-            g_list_foreach (kvp_list, (GFunc)gvalue_list_from_kvp_value,
-                            &gvalue_list);
             g_value_init (val, GNC_TYPE_VALUE_LIST);
-            gvalue_list = g_list_reverse (gvalue_list);
-            g_value_set_boxed (val, gvalue_list);
+            g_value_set_static_boxed (val, kval->get<GList*>());
             break;
         }
 /* No transfer of KVP frames outside of QofInstance-derived classes! */

@@ -1090,15 +1090,7 @@ qof_instance_get_kvp (QofInstance * inst, GValue * value, unsigned count, ...)
     for (unsigned i{0}; i < count; ++i)
         path.push_back (va_arg (args, char const *));
     va_end (args);
-    auto temp = gvalue_from_kvp_value (inst->kvp_data->get_slot (path));
-    if (G_IS_VALUE (temp))
-    {
-        if (G_IS_VALUE (value))
-            g_value_unset (value);
-        g_value_init (value, G_VALUE_TYPE (temp));
-        g_value_copy (temp, value);
-        gnc_gvalue_free (temp);
-    }
+    gvalue_from_kvp_value (inst->kvp_data->get_slot (path), value);
 }
 
 void
