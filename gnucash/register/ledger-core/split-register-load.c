@@ -25,7 +25,11 @@
 #include <config.h>
 
 #include <glib/gi18n.h>
+#include <stdbool.h>
+#include <stdio.h>
 
+#include "Account.h"
+#include "Transaction.h"
 #include "account-quickfill.h"
 #include "combocell.h"
 #include "gnc-component-manager.h"
@@ -373,6 +377,7 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
     gboolean need_divider_upper = FALSE;
     gboolean found_divider_upper = FALSE;
     gboolean found_divider = FALSE;
+    bool reverse_sort = xaccAccountGetSortReversed(default_account);
     gboolean has_last_num = FALSE;
     gboolean multi_line;
     gboolean dynamic;
@@ -605,7 +610,8 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
             use_autoreadonly &&
             !found_divider_upper)
         {
-            if (xaccTransGetDate (trans) >= autoreadonly_time)
+            if (((reverse_sort && xaccTransGetDate(trans) < autoreadonly_time) ||
+                 (!reverse_sort && xaccTransGetDate (trans) >= autoreadonly_time)))
             {
                 table->model->dividing_row_upper = vcell_loc.virt_row;
                 found_divider_upper = TRUE;
@@ -616,9 +622,9 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
             }
         }
 
-        if (info->show_present_divider &&
-            !found_divider &&
-            (xaccTransGetDate (trans) > present))
+        if (info->show_present_divider && !found_divider &&
+            ((reverse_sort && xaccTransGetDate(trans) < present) ||
+             (!reverse_sort && xaccTransGetDate (trans) > present)))
         {
             table->model->dividing_row = vcell_loc.virt_row;
             found_divider = TRUE;
@@ -649,7 +655,6 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
                                                     &vcell_loc);
 
                 table->model->dividing_row_lower = vcell_loc.virt_row;
-
                 if (!multi_line)
                     start_primary_color = !start_primary_color;
 
@@ -731,7 +736,9 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
                                             &vcell_loc);
 
         if (future_after_blank)
+        {
             table->model->dividing_row_lower = vcell_loc.virt_row;
+        }
     }
 
     /* go to blank on first pass */
