@@ -741,7 +741,7 @@ gnc_register_list_option(GncOptionDB* db, const char* section,
     db->register_option(section, std::move(option));
 }
 
-/* Only balance-forecast.scm, hello-world.scm, and net-charts.scm
+/* Only balance-forecast.scm, sample-report.scm, and net-charts.scm
  * use decimals and fractional steps and they can be worked around.
  */
 template <typename ValueType> void
