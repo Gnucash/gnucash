@@ -1383,6 +1383,7 @@ public:
 // Hello World uses an old HTML4 attribute that doesn't understand alpha.
         option.set_value(std::string{rgb_str});
         g_free(rgba_str);
+        g_free(rgb_str);
     }
 };
 
