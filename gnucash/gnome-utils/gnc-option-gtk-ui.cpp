@@ -1380,9 +1380,10 @@ public:
                                        (uint8_t)(color.red * 255),
                                        (uint8_t)(color.green * 255),
                                        (uint8_t)(color.blue * 255));
-// Hello World uses an old HTML4 attribute that doesn't understand alpha.
+// sample-report.scm uses an old HTML4 attribute that doesn't understand alpha.
         option.set_value(std::string{rgb_str});
         g_free(rgba_str);
+        g_free(rgb_str);
     }
 };
 

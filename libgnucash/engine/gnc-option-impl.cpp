@@ -912,20 +912,6 @@ operator>> (std::istream& iss, GncOptionCommodityValue& opt)
     return iss;
 }
 
-template GncOptionValue<bool>::GncOptionValue(const GncOptionValue<bool>&);
-template GncOptionValue<int>::GncOptionValue(const GncOptionValue<int>&);
-template GncOptionValue<int64_t>::GncOptionValue(const GncOptionValue<int64_t>&);
-template GncOptionValue<double>::GncOptionValue(const GncOptionValue<double>&);
-template GncOptionValue<char*>::GncOptionValue(const GncOptionValue<char*>&);
-template GncOptionValue<const char*>::GncOptionValue(const GncOptionValue<const char*>&);
-template GncOptionValue<std::string>::GncOptionValue(const GncOptionValue<std::string>&);
-template GncOptionValue<const QofQuery*>::GncOptionValue(const GncOptionValue<const QofQuery*>&);
-template GncOptionValue<const GncOwner*>::GncOptionValue(const GncOptionValue<const GncOwner*>&);
-template GncOptionValue<RelativeDatePeriod>::GncOptionValue(const GncOptionValue<RelativeDatePeriod>&);
-template GncOptionValue<uint16_t>::GncOptionValue(const GncOptionValue<uint16_t>&);
-template GncOptionValue<GncOptionAccountList>::GncOptionValue(const GncOptionValue<GncOptionAccountList>&);
-template GncOptionValue<GncMultichoiceOptionIndexVec>::GncOptionValue(const GncOptionValue<GncMultichoiceOptionIndexVec>&);
-template GncOptionValue<GncOptionReportPlacementVec>::GncOptionValue(const GncOptionValue<GncOptionReportPlacementVec>&);
 template void GncOptionValue<bool>::set_value(bool);
 template void GncOptionValue<int>::set_value(int);
 template void GncOptionValue<int64_t>::set_value(int64_t);

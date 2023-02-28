@@ -59,7 +59,7 @@ size_t constexpr sort_tag_size_max{10};
 #endif
 
 /** @struct OptionClassifier
- * This class is the parent of all option implmentations. It contains the
+ * This class is the parent of all option implementations. It contains the
  * elements that the optiondb uses to retrieve option values and that the
  * options dialog determines on which tab to place the option, in what order,
  * and what string to display as a tooltip.
@@ -85,21 +85,17 @@ template <typename ValueType>
 class GncOptionValue : public OptionClassifier
 {
 public:
-    GncOptionValue<ValueType>(const char* section, const char* name,
-                              const char* key, const char* doc_string,
-                              ValueType value,
-                              GncOptionUIType ui_type = GncOptionUIType::INTERNAL) :
+    GncOptionValue(const char* section, const char* name,
+                   const char* key, const char* doc_string,
+                   ValueType value,
+                   GncOptionUIType ui_type = GncOptionUIType::INTERNAL) :
         OptionClassifier{section, name, key, doc_string},
         m_ui_type(ui_type), m_value{value}, m_default_value{value} { }
-    GncOptionValue<ValueType>(const GncOptionValue<ValueType>& from) :
-        OptionClassifier{from.m_section, from.m_name, from.m_sort_tag,
-                         from.m_doc_string},
-        m_ui_type(from.get_ui_type()), m_value{from.get_value()},
-        m_default_value{from.get_default_value()}{}
-    GncOptionValue<ValueType>(GncOptionValue<ValueType>&&) = default;
-    GncOptionValue<ValueType>& operator=(const GncOptionValue<ValueType>&) = default;
-    GncOptionValue<ValueType>& operator=(GncOptionValue<ValueType>&&) = default;
-    ~GncOptionValue<ValueType>() = default;
+    GncOptionValue(const GncOptionValue&) = default;
+    GncOptionValue(GncOptionValue&&) = default;
+    GncOptionValue& operator=(const GncOptionValue&) = default;
+    GncOptionValue& operator=(GncOptionValue&&) = default;
+    ~GncOptionValue() = default;
     ValueType get_value() const { return m_value; }
     ValueType get_default_value() const { return m_default_value; }
     void set_value(ValueType new_value);
@@ -150,7 +146,7 @@ private:
 };
 
 /** class GncOptionCommodityValue
- * Commodities are stored with their namespace and mnemonic instead of their gncGIUD
+ * Commodities are stored with their namespace and mnemonic instead of their gncGUID
  * so that they can be correctly retrieved even if they're deleted and recreated.
  * Additionally if GncOptionCommodityValue is created with GncOptionUIType::CURRENCY
  * it will throw std::invalid_argument if one attempts to set a value that isn't a

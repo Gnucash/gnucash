@@ -52,7 +52,7 @@
 using GncOptionVec = std::vector<GncOption>;
 
 /** class GncOptionSection
- *  The upper-level classification implmentation. Contains the options for a
+ *  The upper-level classification implementation. Contains the options for a
  *  section; sections are displayed as separate tabs on the option dialog.
  */
 class GncOptionSection
