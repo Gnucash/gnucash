@@ -333,7 +333,6 @@ gnucash/import-export/csv-imp/assistant-csv-account-import.c
 gnucash/import-export/csv-imp/assistant-csv-price-import.cpp
 gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp
 gnucash/import-export/csv-imp/csv-account-import.c
-gnucash/import-export/csv-imp/gnc-csv-account-map.c
 gnucash/import-export/csv-imp/gnc-csv-gnumeric-popup.c
 gnucash/import-export/csv-imp/gnc-import-price.cpp
 gnucash/import-export/csv-imp/gnc-import-tx.cpp

@@ -77,6 +77,8 @@ enum class GncTransPropType {
     SPLIT_PROPS = TREC_DATE
 };
 
+#define IMAP_CAT_CSV "csv-account-map"
+
 using StrVec = std::vector<std::string>;
 using ErrMap = std::map<GncTransPropType, std::string>;
 using ErrPair = std::pair<GncTransPropType, std::string>;

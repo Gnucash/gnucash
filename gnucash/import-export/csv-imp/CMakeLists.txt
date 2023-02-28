@@ -12,7 +12,6 @@ set(csv_import_SOURCES
   assistant-csv-trans-import.cpp
   gnc-plugin-csv-import.c
   csv-account-import.c
-  gnc-csv-account-map.c
   gnc-csv-gnumeric-popup.c
   gnc-imp-props-price.cpp
   gnc-imp-props-tx.cpp
@@ -42,7 +41,6 @@ set(csv_import_noinst_HEADERS
   assistant-csv-trans-import.h
   gnc-plugin-csv-import.h
   csv-account-import.h
-  gnc-csv-account-map.h
   gnc-csv-gnumeric-popup.h
   gnc-imp-props-price.hpp
   gnc-imp-props-tx.hpp

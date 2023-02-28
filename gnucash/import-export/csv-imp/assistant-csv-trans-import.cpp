@@ -51,7 +51,6 @@
 #include "import-account-matcher.h"
 #include "import-main-matcher.h"
 #include "import-backend.h"
-#include "gnc-csv-account-map.h"
 #include "gnc-account-sel.h"
 
 #include "gnc-csv-gnumeric-popup.h"
@@ -82,6 +81,11 @@ namespace bl = boost::locale;
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
+enum GncImportColumn {
+    MAPPING_STRING,
+    MAPPING_FULLPATH,
+    MAPPING_ACCOUNT
+};
 
 /* A note on memory management
  *
@@ -1772,6 +1776,39 @@ void CsvImpTransAssist::acct_match_set_accounts ()
     }
 }
 
+static void
+csv_tximp_acct_match_load_mappings (GtkTreeModel *mappings_store)
+{
+    // Set iter to first entry of store
+    GtkTreeIter iter;
+    auto valid = gtk_tree_model_get_iter_first (mappings_store, &iter);
+
+    // Walk through the store trying to match to a map
+    while (valid)
+    {
+        // Walk through the list, reading each row
+        Account *account = nullptr;
+        gchar   *map_string;
+        gtk_tree_model_get (GTK_TREE_MODEL(mappings_store), &iter, MAPPING_STRING, &map_string, MAPPING_ACCOUNT, &account, -1);
+
+        // Look for an account matching the map_string
+        // It may already be set in the tree model. If not we try to match the map_string with
+        // - an entry in our saved account maps
+        // - a full name of any of our existing accounts
+        if (account ||
+            (account = gnc_account_imap_find_any (gnc_get_current_book(), IMAP_CAT_CSV, map_string)) ||
+            (account = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), map_string)))
+        {
+            auto fullpath = gnc_account_get_full_name (account);
+            gtk_list_store_set (GTK_LIST_STORE(mappings_store), &iter, MAPPING_FULLPATH, fullpath, -1);
+            gtk_list_store_set (GTK_LIST_STORE(mappings_store), &iter, MAPPING_ACCOUNT, account, -1);
+            g_free (fullpath);
+        }
+
+        g_free (map_string);
+        valid = gtk_tree_model_iter_next (mappings_store, &iter);
+    }
+}
 
 static bool
 csv_tximp_acct_match_check_all (GtkTreeModel *model)
@@ -1853,7 +1890,11 @@ CsvImpTransAssist::acct_match_select(GtkTreeModel *model, GtkTreeIter* iter)
                 MAPPING_FULLPATH, fullpath, -1);
 
         // Update the account kvp mappings
-        gnc_csv_account_map_change_mappings (account, gnc_acc, text);
+        if (text && *text)
+        {
+            gnc_account_imap_delete_account (account, IMAP_CAT_CSV, text);
+            gnc_account_imap_add_account (gnc_acc, IMAP_CAT_CSV, text, gnc_acc);
+        }
 
         // Force reparsing of account columns - may impact multi-currency mode
         auto col_types = tx_imp->column_types();
@@ -2001,7 +2042,6 @@ CsvImpTransAssist::assist_preview_page_prepare ()
         g_idle_add ((GSourceFunc)csv_imp_preview_queue_rebuild_table, this);
     }
 }
-
 void
 CsvImpTransAssist::assist_account_match_page_prepare ()
 {
@@ -2011,7 +2051,7 @@ CsvImpTransAssist::assist_account_match_page_prepare ()
 
     // Match the account strings to account maps from previous imports
     auto store = gtk_tree_view_get_model (GTK_TREE_VIEW(account_match_view));
-    gnc_csv_account_map_load_mappings (store);
+    csv_tximp_acct_match_load_mappings (store);
 
     // Enable the view, possibly after an error
     gtk_widget_set_sensitive (account_match_view, true);

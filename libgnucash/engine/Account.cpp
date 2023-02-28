@@ -5646,6 +5646,31 @@ gnc_account_imap_find_account (Account *acc,
     return retval;
 }
 
+Account*
+gnc_account_imap_find_any (QofBook *book, const char* category, const char *key)
+{
+    Account *account = NULL;
+
+    /* Get list of Accounts */
+    auto root = gnc_book_get_root_account (book);
+    auto accts = gnc_account_get_descendants_sorted (root);
+
+    /* Go through list of accounts */
+    for (auto ptr = accts; ptr; ptr = g_list_next (ptr))
+    {
+        auto tmp_acc = static_cast<Account*> (ptr->data);
+
+        if (gnc_account_imap_find_account (tmp_acc, category, key))
+        {
+            account = tmp_acc;
+            break;
+        }
+    }
+    g_list_free (accts);
+
+return account;
+}
+
 /* Store an Account in the map */
 void
 gnc_account_imap_add_account (Account *acc,

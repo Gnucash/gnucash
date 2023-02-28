@@ -29,7 +29,6 @@
 #endif
 
 #include "engine-helpers.h"
-#include "gnc-csv-account-map.h"
 #include "gnc-ui-util.h"
 #include "Account.h"
 #include "Transaction.h"
@@ -446,7 +445,7 @@ void GncPreSplit::set (GncTransPropType prop_type, const std::string& value)
                 m_account.reset();
                 if (value.empty())
                     throw std::invalid_argument (_("Account value can't be empty."));
-                if ((acct = gnc_csv_account_map_search (value.c_str())) ||
+                if ((acct = gnc_account_imap_find_any (gnc_get_current_book(), IMAP_CAT_CSV, value.c_str())) ||
                     (acct = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), value.c_str())))
                     m_account = acct;
                 else
@@ -458,7 +457,7 @@ void GncPreSplit::set (GncTransPropType prop_type, const std::string& value)
                 if (value.empty())
                     throw std::invalid_argument (_("Transfer account value can't be empty."));
 
-                if ((acct = gnc_csv_account_map_search (value.c_str())) ||
+                if ((acct = gnc_account_imap_find_any (gnc_get_current_book(), IMAP_CAT_CSV,value.c_str())) ||
                     (acct = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), value.c_str())))
                     m_taccount = acct;
                 else

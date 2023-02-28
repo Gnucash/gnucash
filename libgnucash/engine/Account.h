@@ -1575,6 +1575,11 @@ typedef enum
     Account* gnc_account_imap_find_account (Account* acc, const char* category,
                                             const char *key);
 
+    /* Look up an Account in the map non-Baysian, searching through the
+     * import map data of all accounts. Returns first match.
+     */
+    Account* gnc_account_imap_find_any (QofBook *book, const char* category, const char *key);
+
     /* Store an Account in the map non Baysian
      */
     void gnc_account_imap_add_account (Account* acc, const char *category,
