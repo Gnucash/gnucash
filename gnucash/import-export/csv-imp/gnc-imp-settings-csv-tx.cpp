@@ -261,12 +261,12 @@ CsvTransImpSettings::load (void)
             col_type_str = gnc_csv_col_type_strs[GncTransPropType::NUM];
         auto col_types_it = std::find_if (gnc_csv_col_type_strs.begin(),
                 gnc_csv_col_type_strs.end(), test_prop_type_str (col_type_str));
+        auto prop = GncTransPropType::NONE;
         if (col_types_it != gnc_csv_col_type_strs.end())
         {
             /* Found a valid column type. Now check whether it is allowed
              * in the selected mode (two-split vs multi-split) */
-            auto prop = sanitize_trans_prop (col_types_it->first, m_multi_split);
-                m_column_types.push_back(prop);
+            prop = sanitize_trans_prop (col_types_it->first, m_multi_split);
             if (prop != col_types_it->first)
                 PWARN("Found column type '%s', but this is blacklisted when multi-split mode is %s. "
                       "Inserting column type 'NONE' instead'.",
@@ -274,7 +274,8 @@ CsvTransImpSettings::load (void)
         }
         else
             PWARN("Found invalid column type '%s'. Inserting column type 'NONE' instead'.",
-                    col_types_str[i]);
+                  col_types_str[i]);
+        m_column_types.push_back(prop);
     }
     if (col_types_str)
         g_strfreev (col_types_str);

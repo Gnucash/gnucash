@@ -152,14 +152,14 @@ CsvPriceImpSettings::load (void)
     {
         auto col_types_it = std::find_if (gnc_price_col_type_strs.begin(),
                 gnc_price_col_type_strs.end(), test_price_prop_type_str (col_types_str_price[i]));
+        auto prop = GncPricePropType::NONE;
         if (col_types_it != gnc_price_col_type_strs.end())
-        {
             // Found a valid column type
-            m_column_types_price.push_back(col_types_it->first);
-        }
+            prop = col_types_it->first;
         else
             PWARN("Found invalid column type '%s' in group '%s'. Inserting column type 'NONE' instead'.",
                     col_types_str_price[i], group.c_str());
+        m_column_types_price.push_back(prop);
     }
     if (col_types_str_price)
         g_strfreev (col_types_str_price);
