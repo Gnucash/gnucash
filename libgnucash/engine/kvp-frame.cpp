@@ -238,17 +238,6 @@ int compare(const KvpFrameImpl & one, const KvpFrameImpl & two) noexcept
     return 0;
 }
 
-
-static void
-gvalue_list_from_kvp_value (KvpValue *kval, gpointer pList)
-{
-    GList **gvlist = NULL;
-    GValue *gval = gvalue_from_kvp_value (kval);
-    gvlist =  (GList**)pList;
-    if (G_VALUE_TYPE (gval))
-        *gvlist = g_list_prepend (*gvlist, gval);
-}
-
 static void
 kvp_value_list_from_gvalue (GValue *gval, gpointer pList)
 {
@@ -263,10 +252,6 @@ kvp_value_list_from_gvalue (GValue *gval, gpointer pList)
 GValue*
 gvalue_from_kvp_value (const KvpValue *kval, GValue* val)
 {
-    gnc_numeric num;
-    Time64 tm;
-    GDate gdate;
-
     if (kval == NULL) return NULL;
     if (!val)
         val = g_slice_new0 (GValue);

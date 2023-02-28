@@ -2385,7 +2385,6 @@ xaccTransGetDocLink (const Transaction *trans)
     g_return_val_if_fail (trans, NULL);
 
     GValue v = G_VALUE_INIT;
-    Transaction *t = (Transaction*) trans;
     qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, doclink_uri_str);
     const char* doclink = G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
     g_value_unset (&v);
@@ -2399,9 +2398,8 @@ xaccTransGetNotes (const Transaction *trans)
     g_return_val_if_fail (trans, NULL);
 
     GValue v = G_VALUE_INIT;
-    Transaction *t = (Transaction*) trans;
     qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, trans_notes_str);
-    const char *notes = G_VALUE_HOLDS_STRING (&v) ? g_value_dup_string (&v) : NULL;
+    const char *notes = G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
     g_value_unset (&v);
 
     return notes;
@@ -2412,7 +2410,6 @@ xaccTransGetIsClosingTxn (const Transaction *trans)
 {
     if (!trans) return FALSE;
 
-    Transaction* trans_nonconst = (Transaction*) trans;
     GValue v = G_VALUE_INIT;
     gboolean rv;
     qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, trans_is_closing_str);
