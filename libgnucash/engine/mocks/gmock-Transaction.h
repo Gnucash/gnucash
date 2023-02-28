@@ -32,8 +32,6 @@ public:
         date_posted         = 0;
         marker              = 0;
         orig                = nullptr;
-        readonly_reason     = nullptr;
-        isClosingTxn_cached = -1;
     }
     void* operator new(size_t size)
     {

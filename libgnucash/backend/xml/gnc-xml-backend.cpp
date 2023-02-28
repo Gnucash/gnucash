@@ -132,7 +132,10 @@ GncXmlBackend::session_begin(QofSession* session, const char* new_uri,
     if (!check_path(m_fullpath.c_str(),
                     mode == SESSION_NEW_STORE || mode == SESSION_NEW_OVERWRITE))
         return;
-    m_dirname = g_path_get_dirname (m_fullpath.c_str());
+
+    auto dirname = g_path_get_dirname (m_fullpath.c_str());
+    m_dirname = dirname;
+    g_free (dirname);
 
 
 

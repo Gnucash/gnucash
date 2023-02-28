@@ -139,6 +139,8 @@ struct KvpValueImpl
 
     template <typename T>
     T get() const noexcept;
+    template <typename T>
+    const T* get_ptr() const noexcept;
 
     template <typename T>
     void set(T) noexcept;
@@ -175,6 +177,13 @@ KvpValueImpl::get() const noexcept
     return boost::get<T>(datastore);
 }
 
+template <typename T> const T*
+KvpValueImpl::get_ptr() const noexcept
+{
+    if (this->datastore.type() != typeid(T)) return nullptr;
+    return boost::get<T>(&datastore);
+}
+
 template <typename T> void
 KvpValueImpl::set(T val) noexcept
 {
@@ -187,7 +196,7 @@ KvpValueImpl::set(T val) noexcept
  * @param kval: A KvpValue.
  * @return GValue*. Must be freed with g_free().
  */
-GValue* gvalue_from_kvp_value (const KvpValue *kval);
+GValue* gvalue_from_kvp_value (const KvpValue *kval, GValue* val = nullptr);
 
 /** Convert a gvalue into a kvpvalue.
  * @param gval: A GValue of a type KvpValue can digest.

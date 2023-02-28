@@ -255,9 +255,6 @@ void gen_event_trans (Transaction *trans)
     }
 }
 
-static const char*
-is_unset = "unset";
-
 /* GObject Initialization */
 G_DEFINE_TYPE(Transaction, gnc_transaction, QOF_TYPE_INSTANCE)
 
@@ -274,11 +271,6 @@ gnc_transaction_init(Transaction* trans)
     trans->date_posted  = 0;
     trans->marker = 0;
     trans->orig = NULL;
-    trans->readonly_reason = (char*) is_unset;
-    trans->isClosingTxn_cached = -1;
-    trans->notes = (char*) is_unset;
-    trans->doclink = (char*) is_unset;
-    trans->void_reason = (char*) is_unset;
     trans->txn_type = TXN_TYPE_UNCACHED;
     LEAVE (" ");
 }
@@ -819,24 +811,12 @@ xaccFreeTransaction (Transaction *trans)
     /* free up transaction strings */
     CACHE_REMOVE(trans->num);
     CACHE_REMOVE(trans->description);
-    if (trans->readonly_reason != is_unset)
-        g_free (trans->readonly_reason);
-    if (trans->doclink != is_unset)
-        g_free (trans->doclink);
-    if (trans->void_reason != is_unset)
-        g_free (trans->void_reason);
-    if (trans->notes != is_unset)
-        g_free (trans->notes);
 
     /* Just in case someone looks up freed memory ... */
     trans->num         = (char *) 1;
     trans->description = NULL;
     trans->date_entered = 0;
     trans->date_posted = 0;
-    trans->readonly_reason = NULL;
-    trans->doclink = NULL;
-    trans->notes = NULL;
-    trans->void_reason = NULL;
     if (trans->orig)
     {
         xaccFreeTransaction (trans->orig);
@@ -2044,7 +2024,7 @@ xaccTransSetDatePostedGDate (Transaction *trans, GDate date)
      * the future a date which was set as *date* (without time) can
      * clearly be distinguished from the time64. */
     g_value_init (&v, G_TYPE_DATE);
-    g_value_set_boxed (&v, &date);
+    g_value_set_static_boxed (&v, &date);
     qof_instance_set_kvp (QOF_INSTANCE(trans), &v, 1, TRANS_DATE_POSTED);
     g_value_unset (&v);
     /* mark dirty and commit handled by SetDateInternal */
@@ -2083,7 +2063,7 @@ xaccTransSetDateDue (Transaction * trans, time64 time)
     GValue v = G_VALUE_INIT;
     if (!trans) return;
     g_value_init (&v, GNC_TYPE_TIME64);
-    g_value_set_boxed (&v, &time);
+    g_value_set_static_boxed (&v, &time);
     xaccTransBeginEdit(trans);
     qof_instance_set_kvp (QOF_INSTANCE (trans), &v, 1, TRANS_DATE_DUE_KVP);
     qof_instance_set_dirty(QOF_INSTANCE(trans));
@@ -2104,7 +2084,7 @@ xaccTransSetTxnType (Transaction *trans, char type)
         g_value_unset (&v);
         return;
     }
-    g_value_set_string (&v, s);
+    g_value_set_static_string (&v, s);
     xaccTransBeginEdit(trans);
     qof_instance_set_kvp (QOF_INSTANCE (trans), &v, 1, TRANS_TXN_TYPE_KVP);
     qof_instance_set_dirty(QOF_INSTANCE(trans));
@@ -2120,10 +2100,6 @@ void xaccTransClearReadOnly (Transaction *trans)
         qof_instance_set_kvp (QOF_INSTANCE (trans), NULL, 1, TRANS_READ_ONLY_REASON);
         qof_instance_set_dirty(QOF_INSTANCE(trans));
         xaccTransCommitEdit(trans);
-
-        if (trans->readonly_reason != is_unset)
-            g_free (trans->readonly_reason);
-        trans->readonly_reason = NULL;
     }
 }
 
@@ -2134,16 +2110,12 @@ xaccTransSetReadOnly (Transaction *trans, const char *reason)
     {
         GValue v = G_VALUE_INIT;
         g_value_init (&v, G_TYPE_STRING);
-        g_value_set_string (&v, reason);
+        g_value_set_static_string (&v, reason);
         xaccTransBeginEdit(trans);
         qof_instance_set_kvp (QOF_INSTANCE (trans), &v, 1, TRANS_READ_ONLY_REASON);
         qof_instance_set_dirty(QOF_INSTANCE(trans));
         g_value_unset (&v);
         xaccTransCommitEdit(trans);
-
-        if (trans->readonly_reason != is_unset)
-            g_free (trans->readonly_reason);
-        trans->readonly_reason = g_strdup (reason);
     }
 }
 
@@ -2196,25 +2168,16 @@ xaccTransSetDocLink (Transaction *trans, const char *doclink)
 {
     if (!trans || !doclink) return;
 
-    if (trans->doclink != is_unset)
-    {
-        if (!g_strcmp0 (doclink, trans->doclink))
-            return;
-
-        g_free (trans->doclink);
-    }
     xaccTransBeginEdit(trans);
     if (doclink[0] == '\0')
     {
-        trans->doclink = NULL;
         qof_instance_set_kvp (QOF_INSTANCE (trans), NULL, 1, doclink_uri_str);
     }
     else
     {
         GValue v = G_VALUE_INIT;
-        trans->doclink = g_strdup (doclink);
         g_value_init (&v, G_TYPE_STRING);
-        g_value_set_string (&v, doclink);
+        g_value_set_static_string (&v, doclink); //Gets copied at the other end
         qof_instance_set_kvp (QOF_INSTANCE (trans), &v, 1, doclink_uri_str);
         g_value_unset (&v);
     }
@@ -2235,18 +2198,9 @@ xaccTransSetNotes (Transaction *trans, const char *notes)
 {
     GValue v = G_VALUE_INIT;
     if (!trans || !notes) return;
-    if (trans->notes != is_unset)
-    {
-        if (!g_strcmp0 (notes, trans->notes))
-            return;
-
-        g_free (trans->notes);
-    }
     g_value_init (&v, G_TYPE_STRING);
-    g_value_set_string (&v, notes);
+    g_value_set_static_string (&v, notes);
     xaccTransBeginEdit(trans);
-
-    trans->notes = g_strdup (notes);
     qof_instance_set_kvp (QOF_INSTANCE (trans), &v, 1, trans_notes_str);
     qof_instance_set_dirty(QOF_INSTANCE(trans));
     g_value_unset (&v);
@@ -2266,12 +2220,10 @@ xaccTransSetIsClosingTxn (Transaction *trans, gboolean is_closing)
         g_value_set_int64 (&v, 1);
         qof_instance_set_kvp (QOF_INSTANCE (trans), &v, 1, trans_is_closing_str);
         g_value_unset (&v);
-        trans->isClosingTxn_cached = 1;
     }
     else
     {
         qof_instance_set_kvp (QOF_INSTANCE (trans), NULL, 1, trans_is_closing_str);
-        trans->isClosingTxn_cached = 0;
     }
     qof_instance_set_dirty(QOF_INSTANCE(trans));
     xaccTransCommitEdit(trans);
@@ -2409,50 +2361,43 @@ const char *
 xaccTransGetDocLink (const Transaction *trans)
 {
     g_return_val_if_fail (trans, NULL);
-    if (trans->doclink == is_unset)
-    {
-        GValue v = G_VALUE_INIT;
-        Transaction *t = (Transaction*) trans;
-        qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, doclink_uri_str);
-        t->doclink = G_VALUE_HOLDS_STRING (&v) ? g_value_dup_string (&v) : NULL;
-        g_value_unset (&v);
-    }
-    return trans->doclink;
+
+    GValue v = G_VALUE_INIT;
+    qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, doclink_uri_str);
+    const char* doclink = G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
+    g_value_unset (&v);
+
+    return doclink;
 }
 
 const char *
 xaccTransGetNotes (const Transaction *trans)
 {
     g_return_val_if_fail (trans, NULL);
-    if (trans->notes == is_unset)
-    {
-        GValue v = G_VALUE_INIT;
-        Transaction *t = (Transaction*) trans;
-        qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, trans_notes_str);
-        t->notes = G_VALUE_HOLDS_STRING (&v) ? g_value_dup_string (&v) : NULL;
-        g_value_unset (&v);
-    }
-    return trans->notes;
+
+    GValue v = G_VALUE_INIT;
+    qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, trans_notes_str);
+    const char *notes = G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
+    g_value_unset (&v);
+
+    return notes;
 }
 
 gboolean
 xaccTransGetIsClosingTxn (const Transaction *trans)
 {
     if (!trans) return FALSE;
-    if (trans->isClosingTxn_cached == -1)
-    {
-        Transaction* trans_nonconst = (Transaction*) trans;
-        GValue v = G_VALUE_INIT;
-        qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, trans_is_closing_str);
-        if (G_VALUE_HOLDS_INT64 (&v))
-            trans_nonconst->isClosingTxn_cached = (g_value_get_int64 (&v) ? 1 : 0);
-        else
-            trans_nonconst->isClosingTxn_cached = 0;
-        g_value_unset (&v);
-    }
-    return (trans->isClosingTxn_cached == 1)
-            ? TRUE
-            : FALSE;
+
+    GValue v = G_VALUE_INIT;
+    gboolean rv;
+    qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, trans_is_closing_str);
+    if (G_VALUE_HOLDS_INT64 (&v))
+        rv = (g_value_get_int64 (&v) ? 1 : 0);
+    else
+        rv = 0;
+    g_value_unset (&v);
+
+    return rv;
 }
 
 /********************************************************************\
@@ -2582,15 +2527,12 @@ xaccTransGetReadOnly (Transaction *trans)
     if (!trans)
         return NULL;
 
-    if (trans->readonly_reason == is_unset)
-    {
-        GValue v = G_VALUE_INIT;
-        qof_instance_get_kvp (QOF_INSTANCE(trans), &v, 1, TRANS_READ_ONLY_REASON);
-        trans->readonly_reason = G_VALUE_HOLDS_STRING (&v) ?
-            g_value_dup_string (&v) : NULL;
-        g_value_unset (&v);
-    }
-    return trans->readonly_reason;
+    GValue v = G_VALUE_INIT;
+    qof_instance_get_kvp (QOF_INSTANCE(trans), &v, 1, TRANS_READ_ONLY_REASON);
+    const char *readonly_reason = G_VALUE_HOLDS_STRING (&v) ?
+        g_value_get_string (&v) : NULL;
+    g_value_unset (&v);
+    return readonly_reason;
 }
 
 static gboolean
@@ -2788,16 +2730,13 @@ xaccTransVoid(Transaction *trans, const char *reason)
     else
         g_value_init (&v, G_TYPE_STRING);
 
-    g_value_set_string (&v, _("Voided transaction"));
+    g_value_set_static_string (&v, _("Voided transaction"));
     qof_instance_set_kvp (QOF_INSTANCE (trans), &v, 1, trans_notes_str);
-    g_value_set_string (&v, reason);
+    g_value_set_static_string (&v, reason);
     qof_instance_set_kvp (QOF_INSTANCE (trans), &v, 1, void_reason_str);
-    if (trans->void_reason != is_unset)
-        g_free (trans->void_reason);
-    trans->void_reason = g_strdup (reason);
 
     gnc_time64_to_iso8601_buff (gnc_time(NULL), iso8601_str);
-    g_value_set_string (&v, iso8601_str);
+    g_value_set_static_string (&v, iso8601_str);
     qof_instance_set_kvp (QOF_INSTANCE (trans), &v, 1, void_time_str);
     g_value_unset (&v);
 
@@ -2819,15 +2758,13 @@ const char *
 xaccTransGetVoidReason(const Transaction *trans)
 {
     g_return_val_if_fail (trans, NULL);
-    if (trans->void_reason == is_unset)
-    {
-        GValue v = G_VALUE_INIT;
-        Transaction *t = (Transaction*) trans;
-        qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, void_reason_str);
-        t->void_reason = G_VALUE_HOLDS_STRING (&v) ? g_value_dup_string (&v) : NULL;
-        g_value_unset (&v);
-    }
-    return trans->void_reason;
+
+    GValue v = G_VALUE_INIT;
+    qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, void_reason_str);
+    const char *void_reason = G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
+    g_value_unset (&v);
+
+    return void_reason;
 }
 
 time64
@@ -2867,8 +2804,6 @@ xaccTransUnvoid (Transaction *trans)
     qof_instance_set_kvp (QOF_INSTANCE (trans), NULL, 1, void_reason_str);
     qof_instance_set_kvp (QOF_INSTANCE (trans), NULL, 1, void_time_str);
     g_value_unset (&v);
-    g_free (trans->void_reason);
-    trans->void_reason = NULL;
 
     FOR_EACH_SPLIT(trans, xaccSplitUnvoid(s));
 
@@ -2905,7 +2840,7 @@ xaccTransReverse (Transaction *orig)
 
     /* Now update the original with a pointer to the new one */
     g_value_init (&v, GNC_TYPE_GUID);
-    g_value_set_boxed (&v, xaccTransGetGUID(trans));
+    g_value_set_static_boxed (&v, xaccTransGetGUID(trans));
     qof_instance_set_kvp (QOF_INSTANCE (orig), &v, 1, TRANS_REVERSED_BY);
     g_value_unset (&v);
 
