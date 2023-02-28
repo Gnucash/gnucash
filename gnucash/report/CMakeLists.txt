@@ -108,12 +108,14 @@ gnc_add_scheme_targets(scm-report-2
 gnc_add_scheme_targets(scm-report-eguile-parts
     SOURCES "${report_eguile_parts_SCHEME}"
     OUTPUT_DIR "gnucash/eguile"
-    DEPENDS scm-report-2)
+    DEPENDS scm-report-2
+    MAKE_LINKS)
 
 gnc_add_scheme_targets(scm-report-eguile
     SOURCES "${report_eguile_SCHEME}"
     OUTPUT_DIR "gnucash"
-    DEPENDS scm-report-eguile-parts)
+    DEPENDS scm-report-eguile-parts
+    MAKE_LINKS)
 
 add_custom_target(scm-report ALL DEPENDS scm-report-2 scm-report-eguile)
 

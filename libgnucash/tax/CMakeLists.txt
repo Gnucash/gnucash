@@ -56,7 +56,8 @@ gnc_add_scheme_targets(scm-tax-us-2
 gnc_add_scheme_targets(scm-tax-us-3
     SOURCES "${gncmod_tax_us_SCHEME_3}"
     OUTPUT_DIR "gnucash/locale/us"
-    DEPENDS "scm-tax-us-2;${GUILE_DEPENDS}")
+    DEPENDS "scm-tax-us-2;${GUILE_DEPENDS}"
+    MAKE_LINKS)
 
 gnc_add_scheme_targets(scm-tax-de_DE-1
     SOURCES "${gncmod_tax_de_DE_SCHEME_1}"

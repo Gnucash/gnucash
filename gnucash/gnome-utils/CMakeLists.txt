@@ -267,7 +267,8 @@ gnc_add_scheme_targets(scm-gnome-utils-1
 gnc_add_scheme_targets(scm-gnome-utils-2
     SOURCES gnome-utils.scm
     OUTPUT_DIR gnucash
-    DEPENDS "scm-gnome-utils-1")
+    DEPENDS "scm-gnome-utils-1"
+    MAKE_LINKS)
 
 add_custom_target(scm-gnome-utils ALL DEPENDS scm-gnome-utils-2 scm-gnome-utils-1)
 
