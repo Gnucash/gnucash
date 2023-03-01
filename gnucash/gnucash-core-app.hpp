@@ -39,7 +39,6 @@ namespace bpo = boost::program_options;
 class CoreApp
 {
 public:
-    CoreApp ();
     CoreApp (const char* app_name);
 
     void parse_command_line (int argc, char **argv);
