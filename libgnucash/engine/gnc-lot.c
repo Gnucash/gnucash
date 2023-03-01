@@ -106,9 +106,6 @@ typedef struct GNCLotPrivate
 
 /* ============================================================= */
 
-static char*
-is_unset = "unset";
-
 /* GObject Initialization */
 G_DEFINE_TYPE_WITH_PRIVATE(GNCLot, gnc_lot, QOF_TYPE_INSTANCE)
 
@@ -122,8 +119,6 @@ gnc_lot_init(GNCLot* lot)
     priv->splits = NULL;
     priv->cached_invoice = NULL;
     priv->is_closed = LOT_CLOSED_UNKNOWN;
-    priv->title = is_unset;
-    priv->notes = is_unset;
     priv->marker = 0;
 }
 
@@ -303,14 +298,6 @@ gnc_lot_free(GNCLot* lot)
     if (priv->account && !qof_instance_get_destroying(priv->account))
         xaccAccountRemoveLot (priv->account, lot);
 
-    if (priv->notes != is_unset)
-        g_free (priv->notes);
-
-    if (priv->title != is_unset)
-        g_free (priv->title);
-
-    priv->notes = NULL;
-    priv->title = NULL;
     priv->account = NULL;
     priv->is_closed = TRUE;
     /* qof_instance_release (&lot->inst); */
@@ -459,50 +446,37 @@ gint gnc_lot_count_splits (const GNCLot *lot)
 const char *
 gnc_lot_get_title (const GNCLot *lot)
 {
-    GNCLotPrivate* priv;
     if (!lot) return NULL;
-    priv = GET_PRIVATE (lot);
-    if (priv->title == is_unset)
-    {
-        GNCLotPrivate* priv = GET_PRIVATE (lot);
-        GValue v = G_VALUE_INIT;
-        qof_instance_get_kvp (QOF_INSTANCE (lot), &v, 1, "title");
-        priv->title = G_VALUE_HOLDS_STRING (&v) ? g_value_dup_string (&v) : NULL;
-        g_value_unset (&v);
-    }
-    return priv->title;
+
+    GValue v = G_VALUE_INIT;
+    qof_instance_get_kvp (QOF_INSTANCE (lot), &v, 1, "title");
+    const char *rv = G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
+    g_value_unset (&v);
+
+    return rv;
 }
 
 const char *
 gnc_lot_get_notes (const GNCLot *lot)
 {
-    GNCLotPrivate* priv;
     if (!lot) return NULL;
-    priv = GET_PRIVATE (lot);
-    if (priv->notes == is_unset)
-    {
-        GValue v = G_VALUE_INIT;
-        qof_instance_get_kvp (QOF_INSTANCE (lot), &v, 1, "notes");
-        priv->notes = G_VALUE_HOLDS_STRING (&v) ? g_value_dup_string (&v) : NULL;
-        g_value_unset (&v);
-    }
-    return priv->notes;
+
+    GValue v = G_VALUE_INIT;
+    qof_instance_get_kvp (QOF_INSTANCE (lot), &v, 1, "notes");
+    const char *rv = G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
+    g_value_unset (&v);
+    return rv;
 }
 
 void
 gnc_lot_set_title (GNCLot *lot, const char *str)
 {
     GValue v = G_VALUE_INIT;
-    GNCLotPrivate* priv;
     if (!lot) return;
-    priv = GET_PRIVATE (lot);
-    if (priv->title != is_unset)
-        g_free (priv->title);
 
     qof_begin_edit(QOF_INSTANCE(lot));
     g_value_init (&v, G_TYPE_STRING);
-    g_value_set_string (&v, str);
-    priv->title = g_strdup (str);
+    g_value_set_static_string (&v, str);
     qof_instance_set_kvp (QOF_INSTANCE (lot), &v, 1, "title");
     qof_instance_set_dirty(QOF_INSTANCE(lot));
     gnc_lot_commit_edit(lot);
@@ -513,15 +487,11 @@ void
 gnc_lot_set_notes (GNCLot *lot, const char *str)
 {
     GValue v = G_VALUE_INIT;
-    GNCLotPrivate* priv;
     if (!lot) return;
-    priv = GET_PRIVATE (lot);
-    if (priv->notes != is_unset)
-        g_free (priv->notes);
+
     qof_begin_edit(QOF_INSTANCE(lot));
     g_value_init (&v, G_TYPE_STRING);
-    g_value_set_string (&v, str);
-    priv->notes = g_strdup (str);
+    g_value_set_static_string (&v, str);
     qof_instance_set_kvp (QOF_INSTANCE (lot), &v, 1, "notes");
     qof_instance_set_dirty(QOF_INSTANCE(lot));
     gnc_lot_commit_edit(lot);
