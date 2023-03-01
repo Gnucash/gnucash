@@ -1070,15 +1070,7 @@ qof_instance_set_kvp (QofInstance * inst, GValue const * value, unsigned count, 
 
 void qof_instance_get_path_kvp (QofInstance * inst, GValue * value, std::vector<std::string> const & path)
 {
-    auto temp = gvalue_from_kvp_value (inst->kvp_data->get_slot (path));
-    if (G_IS_VALUE (temp))
-    {
-        if (G_IS_VALUE (value))
-            g_value_unset (value);
-        g_value_init (value, G_VALUE_TYPE (temp));
-        g_value_copy (temp, value);
-        gnc_gvalue_free (temp);
-    }
+    gvalue_from_kvp_value (inst->kvp_data->get_slot (path), value);
 }
 
 void
