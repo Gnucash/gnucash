@@ -1575,8 +1575,8 @@ checkcert_cb(GWEN_GUI *gwen_gui, const GWEN_SSLCERTDESCR *cert,
     hash = GWEN_SslCertDescr_GetFingerPrint(cert);
     status = GWEN_SslCertDescr_GetStatusText(cert);
 
-    g_checksum_update (gcheck, hash, strlen (hash));
-    g_checksum_update (gcheck, status, strlen (status));
+    g_checksum_update (gcheck, (const guchar *)hash, strlen (hash));
+    g_checksum_update (gcheck, (const guchar *)status, strlen (status));
 
     /* Did we get the permanently accepted certs from AqBanking? */
     if (gui->permanently_accepted_certs)
@@ -1597,7 +1597,7 @@ checkcert_cb(GWEN_GUI *gwen_gui, const GWEN_SSLCERTDESCR *cert,
         g_warning("Can't check permanently accepted certs from invalid AqBanking cert store.");
     }
 
-    g_checksum_get_digest (gcheck, cert_hash, &hashlen);
+    g_checksum_get_digest (gcheck, (guint8 *)cert_hash, &hashlen);
     g_checksum_free (gcheck);
     g_assert (hashlen <= sizeof (cert_hash));
 
