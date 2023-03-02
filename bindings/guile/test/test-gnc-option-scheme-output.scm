@@ -139,7 +139,7 @@
 " (if (exact-integer? value)
       (if (< value 100)
           (format #f "'(percent . ~d)" value)
-          (format #f "'(pixels . ~f)" value))
+          (format #f "'(pixels . ~d)" value))
       (format #f "'~f" value)
       )))
 

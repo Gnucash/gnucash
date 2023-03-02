@@ -21,7 +21,6 @@
  *                                                                  *
 \********************************************************************/
 
-//#include "options.h"
 #include "gnc-option-impl.hpp"
 #include "gnc-datetime.hpp"
 #include "guid.hpp"
@@ -832,7 +831,13 @@ template <typename ValueType> std::string
 GncOptionRangeValue<ValueType>::serialize() const noexcept
 {
     if constexpr (std::is_arithmetic_v<ValueType>)
-        return std::to_string(m_value);
+    {
+        std::ostringstream ostr;
+        if constexpr(is_same_decayed_v<ValueType, double>)
+            ostr << std::showpoint << std::fixed;
+        ostr << m_value;
+        return ostr.str();
+    }
     return "";
 }
 
