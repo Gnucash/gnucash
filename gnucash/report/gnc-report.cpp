@@ -411,6 +411,9 @@ gnc_get_optiondb_from_dispatcher(SCM dispatcher)
         else
             c_ptr = reinterpret_cast<void*>(SCM_CELL_WORD_1(smob));
     }
+    else
+        return nullptr;
+
     auto u_ptr{static_cast<std::unique_ptr<GncOptionDB>*>(c_ptr)};
     return u_ptr->get();
 }

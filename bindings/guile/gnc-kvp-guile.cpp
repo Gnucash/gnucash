@@ -121,7 +121,7 @@ gnc_kvp_value_ptr_to_scm(KvpValue* val)
     case KvpValue::Type::GUID:
     {
         auto tempguid = val->get<GncGUID*>();
-        return gnc_guid2scm(*tempguid);
+        return tempguid ? gnc_guid2scm(*tempguid) : SCM_BOOL_F;
     }
     break;
     case KvpValue::Type::FRAME:
@@ -133,7 +133,7 @@ gnc_kvp_value_ptr_to_scm(KvpValue* val)
             auto val_scm { gnc_kvp_value_ptr_to_scm (iter.second) };
             return scm_acons (key_scm, val_scm, rv);
         };
-        return scm_reverse (std::accumulate (frame->begin(), frame->end(), SCM_EOL, acc));
+        return frame ? scm_reverse (std::accumulate (frame->begin(), frame->end(), SCM_EOL, acc)) : SCM_BOOL_F;
     }
     break;
     case KvpValue::Type::GLIST:

@@ -932,7 +932,11 @@ static int build_owner_report (GncOwner *owner, Account *acc)
         args = scm_cons (SCM_BOOL_F, args);
     }
 
-    arg = SWIG_NewPointerObj(owner, SWIG_TypeQuery("_p__gncOwner"), 0);
+    swig_type_info * qtype = SWIG_TypeQuery("_p__gncOwner");
+    g_return_val_if_fail (qtype, -1);
+
+    arg = SWIG_NewPointerObj(owner, qtype, 0);
+
     g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
     args = scm_cons (arg, args);
 

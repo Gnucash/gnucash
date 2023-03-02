@@ -230,7 +230,9 @@ editable_enters (GNCSearchCoreType *fe)
 void
 gnc_search_core_register_type (const char *type_name, GNCSearchCoreNew fcn)
 {
-    g_return_if_fail (type_name || *type_name || fcn);
+    g_return_if_fail (type_name);
+    g_return_if_fail (*type_name);
+    g_return_if_fail (fcn);
     g_return_if_fail (typeTable);
 
     g_hash_table_insert (typeTable, (char *) type_name, (gpointer) fcn);

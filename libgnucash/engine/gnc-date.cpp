@@ -731,6 +731,8 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
     /* today's date */
     gnc_time (&secs);
     now = gnc_localtime (&secs);
+    if (!now)
+        return FALSE;
     now_day = now->tm_mday;
     now_month = now->tm_mon + 1;
     now_year = now->tm_year + 1900;

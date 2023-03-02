@@ -612,8 +612,11 @@ parse_string (var_store_ptr value, const char *string, parser_env_ptr pe)
             var_store_ptr val;
 
             val = pop (pe);
-            pe->negate_numeric (val->value);
-            push (val, pe);
+            if (val)
+            {
+                pe->negate_numeric (val->value);
+                push (val, pe);
+            }
         }
     }
 
