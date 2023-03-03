@@ -60,9 +60,6 @@
 (define optname-report-title (N_ "Report Title"))
 (define opthelp-report-title (N_ "Title for this report."))
 
-(define optname-party-name (N_ "Company name"))
-(define opthelp-party-name (N_ "Name of company/individual."))
-
 (define optname-start-date (N_ "Start Date"))
 (define optname-end-date (N_ "End Date"))
 
@@ -98,15 +95,11 @@
 
 ;; options generator
 (define (equity-statement-options-generator)
-  (let* ((options (gnc-new-optiondb))
-         (book (gnc-get-current-book)))
+  (let* ((options (gnc-new-optiondb)))
     
     (gnc-register-string-option options
       (N_ "General") optname-report-title
       "a" opthelp-report-title (G_ reportname))
-    (gnc-register-string-option options
-      (N_ "General") optname-party-name
-      "b" opthelp-party-name (or (gnc:company-info book gnc:*company-name*) ""))
     
     ;; date at which to report balance
     (gnc:options-add-date-interval!
@@ -203,7 +196,7 @@
   ;; get all option's values
   (let* (
 	 (report-title (get-option gnc:pagename-general optname-report-title))
-	 (company-name (get-option gnc:pagename-general optname-party-name))
+	 (company-name (or (gnc:company-info (gnc-get-current-book) gnc:*company-name*) ""))
 	 ;; this code makes the assumption that you want your equity
 	 ;; statement to no more than daily resolution
          (start-date-printable (gnc:date-option-absolute-time

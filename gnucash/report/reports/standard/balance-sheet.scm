@@ -21,9 +21,6 @@
 ;;    This code makes the assumption that you want your balance
 ;;    sheet to no more than daily resolution.
 ;;    
-;;    The Company Name field does not currently default to the name
-;;    in (gnc-get-current-book).
-;;    
 ;;    Line & column alignments still do not conform with
 ;;    textbook accounting practice (they're close though!).
 ;;    
@@ -74,9 +71,6 @@
 ;; defined in *one* place.
 (define optname-report-title (N_ "Report Title"))
 (define opthelp-report-title (N_ "Title for this report."))
-
-(define optname-party-name (N_ "Company name"))
-(define opthelp-party-name (N_ "Name of company/individual."))
 
 (define optname-date (N_ "Balance Sheet Date"))
 (define optname-report-form (N_ "Single column Balance Sheet"))
@@ -144,15 +138,11 @@
 
 ;; options generator
 (define (balance-sheet-options-generator)
-  (let* ((options (gnc-new-optiondb))
-         (book (gnc-get-current-book)))
+  (let* ((options (gnc-new-optiondb)))
 
     (gnc-register-string-option options
       gnc:pagename-general optname-report-title
       "a" opthelp-report-title (G_ reportname))
-    (gnc-register-string-option options
-      gnc:pagename-general optname-party-name
-      "b" opthelp-party-name (or (gnc:company-info book gnc:*company-name*) ""))
 
     ;; date at which to report balance
     (gnc:options-add-report-date!
@@ -267,7 +257,7 @@
   ;; get all option's values
   (let* (
          (report-title (get-option gnc:pagename-general optname-report-title))
-         (company-name (get-option gnc:pagename-general optname-party-name))
+         (company-name (or (gnc:company-info (gnc-get-current-book) gnc:*company-name*) ""))
          (reportdate (gnc:time64-end-day-time
                       (gnc:date-option-absolute-time
                        (get-option gnc:pagename-general optname-date))))

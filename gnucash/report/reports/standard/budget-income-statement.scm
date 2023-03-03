@@ -8,9 +8,6 @@
 ;;
 ;;  * BUGS:
 ;;    
-;;    The Company Name field does not currently default to the name
-;;    in (gnc-get-current-book).
-;;    
 ;;    Line & column alignments may still not conform with
 ;;    textbook accounting practice (they're close though!).
 ;;    
@@ -51,9 +48,6 @@
 ;; defined in *one* place.
 (define optname-report-title (N_ "Report Title"))
 (define opthelp-report-title (N_ "Title for this report."))
-
-(define optname-party-name (N_ "Company name"))
-(define opthelp-party-name (N_ "Name of company/individual."))
 
 (define optname-budget (N_ "Budget"))
 (define opthelp-budget (N_ "Budget to use."))
@@ -131,20 +125,16 @@
 
 ;; options generator
 (define (budget-income-statement-options-generator-internal reportname)
-  (let* ((options (gnc-new-optiondb))
-         (book (gnc-get-current-book)))
+  (let* ((options (gnc-new-optiondb)))
 
     (gnc-register-string-option options
       gnc:pagename-general optname-report-title
       "a" opthelp-report-title (G_ reportname))
-    (gnc-register-string-option options
-      gnc:pagename-general optname-party-name
-      "b" opthelp-party-name (or (gnc:company-info book gnc:*company-name*) ""))
 
     (gnc-register-budget-option options
       gnc:pagename-general optname-budget
       "c" opthelp-budget
-      (gnc-budget-get-default book))
+      (gnc-budget-get-default (gnc-get-current-book)))
 
     (gnc-register-complex-boolean-option options
       gnc:pagename-general
@@ -290,7 +280,7 @@
   ;; get all option's values
   (let* (
 	 (report-title (get-option gnc:pagename-general optname-report-title))
-	 (company-name (get-option gnc:pagename-general optname-party-name))
+	 (company-name (or (gnc:company-info (gnc-get-current-book) gnc:*company-name*) ""))
          (budget (get-option gnc:pagename-general optname-budget))
          (budget-valid? (and budget (not (null? budget))))
          (use-budget-period-range?

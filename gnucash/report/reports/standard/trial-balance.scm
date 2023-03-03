@@ -15,9 +15,6 @@
 ;;    This code makes the assumption that you want your trial
 ;;    balance to no more than daily resolution.
 ;;    
-;;    The Company Name field does not currently default to the name
-;;    in (gnc-get-current-book).
-;;    
 ;;    Progress bar functionality is currently mostly broken.
 ;;    
 ;;    Unsure if the multi-currency support is correct.
@@ -64,9 +61,6 @@
 ;; defined in *one* place.
 (define optname-report-title (N_ "Report Title"))
 (define opthelp-report-title (N_ "Title for this report."))
-
-(define optname-party-name (N_ "Company name"))
-(define opthelp-party-name (N_ "Name of company/individual."))
 
 (define optname-start-date (N_ "Start of Adjusting/Closing"))
 (define optname-end-date (N_ "Date of Report"))
@@ -180,9 +174,6 @@
     (gnc-register-string-option options
       (N_ "General") optname-report-title
       "a" opthelp-report-title (G_ reportname))
-    (gnc-register-string-option options
-      (N_ "General") optname-party-name
-      "b" opthelp-party-name (or (gnc:company-info book gnc:*company-name*) ""))
 
     ;; the period over which to collect adjusting/closing entries and
     ;; date at which to report the balance
@@ -301,7 +292,7 @@
 
   ;; get all option's values
   (let* ((report-title (get-option gnc:pagename-general optname-report-title))
-         (company-name (get-option gnc:pagename-general optname-party-name))
+         (company-name (or (gnc:company-info (gnc-get-current-book) gnc:*company-name*) ""))
          (start-date-printable
           (gnc:date-option-absolute-time
            (get-option gnc:pagename-general optname-start-date)))

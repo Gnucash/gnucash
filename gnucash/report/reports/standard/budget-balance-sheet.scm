@@ -42,9 +42,6 @@
 (define optname-report-title (N_ "Report Title"))
 (define opthelp-report-title (N_ "Title for this report."))
 
-(define optname-party-name (N_ "Company name"))
-(define opthelp-party-name (N_ "Name of company/individual."))
-
 (define optname-report-form (N_ "Single column Balance Sheet"))
 (define opthelp-report-form
   (N_ "Print liability/equity section in the same column under the assets section as opposed to a second column right of the assets section."))
@@ -113,15 +110,11 @@
 
 ;; options generator
 (define (budget-balance-sheet-options-generator)
-  (let* ((options (gnc-new-optiondb))
-         (book (gnc-get-current-book)))
+  (let* ((options (gnc-new-optiondb)))
 
     (gnc-register-string-option options
       gnc:pagename-general optname-report-title
       "a" opthelp-report-title (G_ reportname))
-    (gnc-register-string-option options
-      gnc:pagename-general optname-party-name
-      "b" opthelp-party-name (or (gnc:company-info book gnc:*company-name*) ""))
     
     (gnc-register-simple-boolean-option options
       gnc:pagename-general optname-report-form
@@ -129,7 +122,7 @@
 
     (gnc-register-budget-option options
       gnc:pagename-general optname-budget
-      "d" opthelp-budget (gnc-budget-get-default book))
+      "d" opthelp-budget (gnc-budget-get-default (gnc-get-current-book)))
     
     ;; accounts to work on
     (gnc-register-account-list-option options
@@ -260,7 +253,7 @@
   ;; get all option's values
   (let* (
 	 (report-title (get-option gnc:pagename-general optname-report-title))
-	 (company-name (get-option gnc:pagename-general optname-party-name))
+	 (company-name (or (gnc:company-info (gnc-get-current-book) gnc:*company-name*) ""))
          (budget (get-option gnc:pagename-general optname-budget))
          (budget-valid? (and budget (not (null? budget))))
          (date-t64 (if budget-valid? (gnc:budget-get-start-date budget) #f))
