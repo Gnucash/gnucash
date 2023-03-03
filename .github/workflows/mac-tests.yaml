@@ -9,7 +9,7 @@ jobs:
       TZ: America/Los_Angeles
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - run: |
         echo "PATH=$PATH:$HOME/gnucash/inst/bin" >> $GITHUB_ENV
         echo "PREFIX=$HOME/gnucash/inst" >> $GITHUB_ENV

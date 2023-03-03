@@ -7,7 +7,7 @@ jobs:
     name: Arch Linux (via Docker) CI
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Test Action
       uses: ./util/ci/actions/archlinux-test
     - uses: actions/upload-artifact@v2
