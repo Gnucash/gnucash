@@ -2152,11 +2152,14 @@ gnc_split_reg_set_sort_reversed(GNCSplitReg *gsr, gboolean rev, gboolean refresh
      *       In other words, qof_query_set_sort_increasing should
      *       always use the inverse of rev.
      */
+    SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
     Query *query = gnc_ledger_display_get_query( gsr->ledger );
+
+    gnc_split_register_set_reverse_sort (reg, rev);
+
     qof_query_set_sort_increasing (query, !rev, !rev, !rev);
     gsr->sort_rev = rev;
-    Account *acct = gnc_ledger_display_leader (gsr->ledger);
-    xaccAccountSetSortReversed(acct, rev);
+
     if (refresh)
         gnc_ledger_display_refresh( gsr->ledger );
 }

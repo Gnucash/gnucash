@@ -200,6 +200,14 @@ gnc_table_model_read_only (TableModel *model)
 }
 
 void
+gnc_table_model_set_reverse_sort (TableModel *model,
+                                  gboolean reverse_sort)
+{
+    g_return_if_fail (model);
+    model->reverse_sort = reverse_sort;
+}
+
+void
 gnc_table_model_set_entry_handler (TableModel *model,
                                    TableGetEntryHandler entry_handler,
                                    const char * cell_name)

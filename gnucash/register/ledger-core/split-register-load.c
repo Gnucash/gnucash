@@ -377,7 +377,6 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
     gboolean need_divider_upper = FALSE;
     gboolean found_divider_upper = FALSE;
     gboolean found_divider = FALSE;
-    bool reverse_sort = xaccAccountGetSortReversed(default_account);
     gboolean has_last_num = FALSE;
     gboolean multi_line;
     gboolean dynamic;
@@ -610,8 +609,8 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
             use_autoreadonly &&
             !found_divider_upper)
         {
-            if (((reverse_sort && xaccTransGetDate(trans) < autoreadonly_time) ||
-                 (!reverse_sort && xaccTransGetDate (trans) >= autoreadonly_time)))
+            if (((table->model->reverse_sort && xaccTransGetDate(trans) < autoreadonly_time) ||
+                 (!table->model->reverse_sort && xaccTransGetDate (trans) >= autoreadonly_time)))
             {
                 table->model->dividing_row_upper = vcell_loc.virt_row;
                 found_divider_upper = TRUE;
@@ -623,8 +622,8 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
         }
 
         if (info->show_present_divider && !found_divider &&
-            ((reverse_sort && xaccTransGetDate(trans) < present) ||
-             (!reverse_sort && xaccTransGetDate (trans) > present)))
+            ((table->model->reverse_sort && xaccTransGetDate (trans) < present) ||
+             (!table->model->reverse_sort && xaccTransGetDate (trans) > present)))
         {
             table->model->dividing_row = vcell_loc.virt_row;
             found_divider = TRUE;
