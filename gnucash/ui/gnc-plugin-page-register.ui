@@ -202,7 +202,7 @@
 
   <menu id="TransPlaceholder3">
       <item>
-        <attribute name="label" translatable="yes">Manage Document Link…</attribute>
+        <attribute name="label" translatable="yes">_Manage Document Link…</attribute>
         <attribute name="action">GncPluginPageRegisterActions.LinkTransactionAction</attribute>
         <attribute name="tooltip" translatable="yes">Add, change, or unlink the document linked with the current transaction</attribute>
         <attribute name="temp" translatable="no">yes</attribute>
