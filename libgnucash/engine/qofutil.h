@@ -32,11 +32,6 @@
 #ifndef QOF_UTIL_H
 #define QOF_UTIL_H
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #include <stddef.h>
 #include "qof.h"
 #include "qoflog.h"
@@ -44,6 +39,11 @@ extern "C"
 #include "qofclass.h"
 #include "qofbook.h"
 #include "qofinstance.h"
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 /** Do not use these for printf, only scanf */
 #if HAVE_SCANF_LLD

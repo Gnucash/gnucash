@@ -35,13 +35,14 @@
 
 #ifndef __GNC_MAIN_WINDOW_H
 #define __GNC_MAIN_WINDOW_H
+
+#include <gtk/gtk.h>
+#include "gnc-plugin-page.h"
+
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-
-#include <gtk/gtk.h>
-#include "gnc-plugin-page.h"
 
 /* type macros */
 #define GNC_TYPE_MAIN_WINDOW            (gnc_main_window_get_type ())

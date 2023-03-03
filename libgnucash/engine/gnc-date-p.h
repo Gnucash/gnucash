@@ -23,13 +23,14 @@
 
 #ifndef __GNC_DATE_P_H__
 #define __GNC_DATE_P_H__
+
+#include <stdint.h>
+#include "gnc-date.h"
+
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-
-#include <stdint.h>
-#include "gnc-date.h"
 
 /** Convert a given date/time format from UTF-8 to an encoding suitable for the
  *  strftime system call.

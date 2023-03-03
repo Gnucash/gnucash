@@ -64,11 +64,6 @@
 #ifndef __GNC_BUDGET_H__
 #define __GNC_BUDGET_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #include <glib.h>
 
 /** The budget data.*/
@@ -78,6 +73,11 @@ typedef struct _GncBudgetClass GncBudgetClass;
 #include "qof.h"
 #include "Account.h"
 #include "Recurrence.h"
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 /* --- type macros --- */
 #define GNC_TYPE_BUDGET            (gnc_budget_get_type ())

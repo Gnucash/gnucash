@@ -40,6 +40,11 @@
 
 #include "Account.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /** @name Setter-getters
     Setter and getter functions for the online_id field for
     Accounts.
@@ -72,6 +77,10 @@ void gnc_import_set_split_online_id(Split * split,
 /** @} */
 
 gboolean gnc_import_split_has_online_id(Split * split);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /** @} */

@@ -24,11 +24,8 @@
 
 #ifndef TEST_ENGINE_STUFF_H
 #define TEST_ENGINE_STUFF_H
+
 #include <glib.h>
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 #include <stdlib.h>
 #include <stdint.h>
 
@@ -46,6 +43,10 @@ typedef struct KvpFrameImpl KvpFrame;
 #define __KVP_FRAME
 #endif
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 time64 get_random_time(void);
 
 KvpValue* get_random_kvp_value(int type);

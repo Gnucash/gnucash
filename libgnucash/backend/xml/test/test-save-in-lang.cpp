@@ -20,8 +20,6 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 
-extern "C"
-{
 #include <config.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -34,7 +32,6 @@ extern "C"
 
 #include "gnc-engine.h"
 #include "TransLog.h"
-}
 
 #include <cstdlib>
 

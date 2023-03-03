@@ -23,14 +23,14 @@
 #ifndef DIALOG_NEW_USER_H
 #define DIALOG_NEW_USER_H
 
+#include <glib.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #define GNC_PREFS_GROUP_NEW_USER "dialogs.new-user"
 #define GNC_PREF_FIRST_STARTUP "first-startup"
-
-#include <glib.h>
 
 typedef struct _GNCNewUserDialog GNCNewUserDialog;
 

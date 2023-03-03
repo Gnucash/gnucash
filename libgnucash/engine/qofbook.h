@@ -46,11 +46,6 @@ class GncOptionDB;
 #else
 typedef struct GncOptionDB GncOptionDB;
 #endif
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 /* We only want a few things exported to Guile */
 #ifndef SWIG
 
@@ -63,6 +58,11 @@ typedef struct KvpValueImpl KvpValue;
 #include "qofid.h"
 #include "qofinstance.h"
 #include "qofbackend.h"
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 /* --- type macros --- */
 #define QOF_TYPE_BOOK            (qof_book_get_type ())
@@ -440,11 +440,11 @@ void qof_book_options_delete (QofBook *book, GSList *path);
 /** deprecated */
 #define qof_book_get_guid(X) qof_entity_get_guid (QOF_INSTANCE(X))
 
-#endif /* SWIG */
 #ifdef __cplusplus
 }
 #endif
 
+#endif /* SWIG */
 #endif /* QOF_BOOK_H */
 /** @} */
 /** @} */

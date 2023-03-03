@@ -30,10 +30,7 @@
 
 #ifndef GNC_BACKEND_XML_H_
 #define GNC_BACKEND_XML_H_
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+
 #include <qof.h>
 #include <gmodule.h>
 
@@ -55,6 +52,10 @@ typedef enum
     GNC_BOOK_POST_XML2_0_0_FILE
 } QofBookFileType;
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 /** Initialization function which can be used when this module is
  * statically linked into the application. */
 void gnc_module_init_backend_xml (void);

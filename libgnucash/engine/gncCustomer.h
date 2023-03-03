@@ -31,10 +31,6 @@
 #ifndef GNC_CUSTOMER_H_
 #define GNC_CUSTOMER_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /** @struct GncCustomer
 
 credit, discount and shipaddr are unique to GncCustomer\n
@@ -65,6 +61,10 @@ typedef struct _gncCustomerClass GncCustomerClass;
 #include "gncBillTerm.h"
 #include "gncTaxTable.h"
 #include "gncJob.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define GNC_ID_CUSTOMER       "gncCustomer"
 

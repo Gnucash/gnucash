@@ -32,10 +32,7 @@
 #include "gnc-sql-backend.hpp"
 #include "gnc-sql-object-backend.hpp"
 
-extern "C"
-{
 #include "gnc-commodity.h"
-}
 
 class GncSqlCommodityBackend : public GncSqlObjectBackend
 {

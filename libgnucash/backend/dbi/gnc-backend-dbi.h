@@ -28,10 +28,11 @@
 
 #ifndef GNC_BACKEND_DBI_H_
 #define GNC_BACKEND_DBI_H_
-extern "C"
-{
+
 #include <gmodule.h>
 
+extern "C"
+{
 /** Initialization function which can be used when this module is
  * statically linked into the application. */
 void gnc_module_init_backend_dbi (void);

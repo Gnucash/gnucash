@@ -19,14 +19,11 @@
 \********************************************************************/
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 
 #include <string.h>
 
 #include "test-stuff.h"
-}
 
 #include <cstdlib>
 

@@ -3,10 +3,7 @@
 
 #include <gmock/gmock.h>
 
-extern "C"
-{
 #include <gnc-prefs.h>
-}
 
 
 // mock up class implementing preferences backend (see struct PrefBackend in gnc-prefs-p.h)

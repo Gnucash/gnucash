@@ -24,10 +24,6 @@
 
 #ifndef IO_EXAMPLE_ACCOUNT_H
 #define IO_EXAMPLE_ACCOUNT_H
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 #include <glib.h>
 
 #include "gnc-engine.h"
@@ -45,6 +41,10 @@ struct GncExampleAccount_struct
 };
 typedef struct GncExampleAccount_struct GncExampleAccount;
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 void gnc_destroy_example_account (GncExampleAccount* gea);
 
 gboolean gnc_write_example_account (GncExampleAccount* gea,

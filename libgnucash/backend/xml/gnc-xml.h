@@ -25,13 +25,10 @@
 #ifndef GNC_XML_H
 #define GNC_XML_H
 
-extern "C"
-{
 #include "SchedXaction.h"
 #include "gnc-engine.h"
 #include "gnc-pricedb.h"
 #include "gnc-budget.h"
-}
 
 #include "gnc-xml-helper.h"
 #include "sixtp.h"

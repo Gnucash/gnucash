@@ -23,11 +23,8 @@
 #include "../guid.hpp"
 #include <glib.h>
 
-extern "C"
-{
 #include <config.h>
 #include <unittest-support.h>
-}
 
 #include "../qof.h"
 #include "../qofbackend-p.h"

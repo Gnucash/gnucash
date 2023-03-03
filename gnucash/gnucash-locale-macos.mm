@@ -28,10 +28,8 @@
 #include <qoflog.h>
 #include <gnc-engine.h>
 
-extern "C" {
 #include <gnc-locale-utils.h>
 #include "gnucash-locale-platform.h"
-}
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;

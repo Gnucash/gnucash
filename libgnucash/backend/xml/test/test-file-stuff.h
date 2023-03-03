@@ -26,11 +26,8 @@
 #define TEST_FILE_STUFF_H
 #include <glib.h>
 
-extern "C"
-{
 #include <gnc-commodity.h>
 #include <gnc-engine.h>
-}
 #include <gnc-xml-helper.h>
 #include <io-gncxml-gen.h>
 #include <sixtp.h>

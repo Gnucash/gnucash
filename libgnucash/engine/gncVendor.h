@@ -31,10 +31,6 @@
 #ifndef GNC_VENDOR_H_
 #define GNC_VENDOR_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct _gncVendor GncVendor;
 typedef struct _gncVendorClass GncVendorClass;
 
@@ -42,6 +38,10 @@ typedef struct _gncVendorClass GncVendorClass;
 #include "gncBillTerm.h"
 #include "gncTaxTable.h"
 #include "gncJob.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define GNC_ID_VENDOR       "gncVendor"
 

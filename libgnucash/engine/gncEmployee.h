@@ -31,15 +31,15 @@
 #ifndef GNC_EMPLOYEE_H_
 #define GNC_EMPLOYEE_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct _gncEmployee GncEmployee;
 typedef struct _gncEmployeeClass GncEmployeeClass;
 
 #include "gncAddress.h"
 #include "Account.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define GNC_ID_EMPLOYEE "gncEmployee"
 
