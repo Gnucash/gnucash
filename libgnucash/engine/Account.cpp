@@ -2481,7 +2481,7 @@ set_kvp_string_path (Account *acc, std::vector<std::string> const & path,
     g_return_if_fail(GNC_IS_ACCOUNT(acc));
 
     xaccAccountBeginEdit(acc);
-    if (value)
+    if (value && *value)
     {
         GValue v = G_VALUE_INIT;
         g_value_init (&v, G_TYPE_STRING);
@@ -2510,7 +2510,7 @@ get_kvp_string_path (const Account *acc, std::vector<std::string> const & path,
     *v = G_VALUE_INIT;
     if (acc == NULL) return NULL; // how to check path is valid??
     qof_instance_get_path_kvp (QOF_INSTANCE (acc), v, path);
-    return G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (v) : NULL;
+    return G_VALUE_HOLDS_STRING (v) ? g_value_get_string (v) : NULL;
 }
 
 static const char*

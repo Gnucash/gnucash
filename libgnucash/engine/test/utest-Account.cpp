@@ -19,6 +19,7 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
+#include <cstddef>
 #include <glib.h>
 
 #include <config.h>
@@ -1153,7 +1154,7 @@ test_gnc_account_kvp_setters_getters (Fixture *fixture, gconstpointer pData)
     g_assert_cmpstr (xaccAccountGetTaxUSCode (account), ==, "red");
 
     xaccAccountSetTaxUSCode (account, "");
-    g_assert_cmpstr (xaccAccountGetTaxUSCode (account), ==, "");
+    g_assert_cmpstr (xaccAccountGetTaxUSCode (account), ==, nullptr);
 
     xaccAccountSetTaxUSCode (account, "  ");
     g_assert_cmpstr (xaccAccountGetTaxUSCode (account), ==, "  ");
@@ -1171,7 +1172,7 @@ test_gnc_account_kvp_setters_getters (Fixture *fixture, gconstpointer pData)
     g_assert_cmpstr (xaccAccountGetTaxUSPayerNameSource (account), ==, "red");
 
     xaccAccountSetTaxUSPayerNameSource (account, "");
-    g_assert_cmpstr (xaccAccountGetTaxUSPayerNameSource (account), ==, "");
+    g_assert_cmpstr (xaccAccountGetTaxUSPayerNameSource (account), ==, nullptr);
 
     xaccAccountSetTaxUSPayerNameSource (account, "  ");
     g_assert_cmpstr (xaccAccountGetTaxUSPayerNameSource (account), ==, "  ");
@@ -1192,7 +1193,7 @@ test_gnc_account_kvp_setters_getters (Fixture *fixture, gconstpointer pData)
     g_assert_cmpstr (xaccAccountGetFilter (account), ==, "unset");
 
     xaccAccountSetFilter (account, "   unset ");
-    g_assert_cmpstr (xaccAccountGetFilter (account), ==, "unset");
+    g_assert_cmpstr (xaccAccountGetFilter (account), ==, "   unset ");
 
     xaccAccountSetFilter (account, "");
     g_assert_cmpstr (xaccAccountGetFilter (account), ==, nullptr);
@@ -1210,7 +1211,7 @@ test_gnc_account_kvp_setters_getters (Fixture *fixture, gconstpointer pData)
     g_assert_cmpstr (xaccAccountGetSortOrder (account), ==, "unset");
 
     xaccAccountSetSortOrder (account, "  unset ");
-    g_assert_cmpstr (xaccAccountGetSortOrder (account), ==, "unset");
+    g_assert_cmpstr (xaccAccountGetSortOrder (account), ==, "  unset ");
 
     xaccAccountSetSortOrder (account, "");
     g_assert_cmpstr (xaccAccountGetSortOrder (account), ==, nullptr);
@@ -1228,7 +1229,7 @@ test_gnc_account_kvp_setters_getters (Fixture *fixture, gconstpointer pData)
     g_assert_cmpstr (xaccAccountGetNotes (account), ==, "unset");
 
     xaccAccountSetNotes (account, "    unset ");
-    g_assert_cmpstr (xaccAccountGetNotes (account), ==, "unset");
+    g_assert_cmpstr (xaccAccountGetNotes (account), ==, "    unset ");
 
     xaccAccountSetNotes (account, "");
     g_assert_cmpstr (xaccAccountGetNotes (account), ==, nullptr);
@@ -1301,7 +1302,7 @@ test_gnc_account_kvp_setters_getters (Fixture *fixture, gconstpointer pData)
     g_assert_cmpstr (dxaccAccountGetPriceSrc (account), ==, "boo");
 
     dxaccAccountSetPriceSrc (account, "");
-    g_assert_cmpstr (dxaccAccountGetPriceSrc (account), ==, "");
+    g_assert_cmpstr (dxaccAccountGetPriceSrc (account), ==, nullptr);
 
     dxaccAccountSetPriceSrc (account, nullptr);
     g_assert_cmpstr (dxaccAccountGetPriceSrc (account), ==, nullptr);
@@ -1313,7 +1314,7 @@ test_gnc_account_kvp_setters_getters (Fixture *fixture, gconstpointer pData)
     g_assert_cmpstr (dxaccAccountGetQuoteTZ (account), ==, "boo");
 
     dxaccAccountSetQuoteTZ (account, "");
-    g_assert_cmpstr (dxaccAccountGetQuoteTZ (account), ==, "");
+    g_assert_cmpstr (dxaccAccountGetQuoteTZ (account), ==, nullptr);
 
     dxaccAccountSetQuoteTZ (account, nullptr);
     g_assert_cmpstr (dxaccAccountGetQuoteTZ (account), ==, nullptr);
