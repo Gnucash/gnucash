@@ -2145,17 +2145,15 @@ gnc_plugin_page_register_check_for_empty_group (GKeyFile *state_file, const gcha
 }
 
 static gchar*
-gnc_plugin_page_register_get_filter_gcm (Account* leader)
+gnc_plugin_page_register_get_filter_gcm (GNCSplitReg *gsr)
 {
     GKeyFile* state_file = gnc_state_get_current();
     gchar* state_section;
-    gchar acct_guid[GUID_ENCODING_LENGTH + 1];
     GError* error = NULL;
     char* filter = NULL;
 
     // get the filter from the .gcm file
-    guid_to_string_buff (xaccAccountGetGUID (leader), acct_guid);
-    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", acct_guid, NULL);
+    state_section = gsr_get_register_state_section (gsr);
     filter = g_key_file_get_string (state_file, state_section,
                                     KEY_PAGE_FILTER, &error);
 
@@ -2173,7 +2171,6 @@ gnc_plugin_page_register_get_filter (GncPluginPage* plugin_page)
 {
     GncPluginPageRegisterPrivate* priv;
     GNCLedgerDisplayType ledger_type;
-    Account* leader;
     char* filter = NULL;
 
     g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page),
@@ -2182,10 +2179,9 @@ gnc_plugin_page_register_get_filter (GncPluginPage* plugin_page)
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
 
     ledger_type = gnc_ledger_display_type (priv->ledger);
-    leader = gnc_ledger_display_leader (priv->ledger);
 
     // load from gcm file
-    filter = gnc_plugin_page_register_get_filter_gcm (leader);
+    filter = gnc_plugin_page_register_get_filter_gcm (priv->gsr);
 
     if (filter)
         return filter;
@@ -2195,17 +2191,15 @@ gnc_plugin_page_register_get_filter (GncPluginPage* plugin_page)
 }
 
 static void
-gnc_plugin_page_register_set_filter_gcm (Account* leader, const gchar* filter,
+gnc_plugin_page_register_set_filter_gcm (GNCSplitReg *gsr, const gchar* filter,
                                          gchar* default_filter)
 {
     GKeyFile* state_file = gnc_state_get_current();
     gchar* state_section;
     gchar* filter_text;
-    gchar acct_guid[GUID_ENCODING_LENGTH + 1];
 
     // save the filter to the .gcm file also
-    guid_to_string_buff (xaccAccountGetGUID (leader), acct_guid);
-    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", acct_guid, NULL);
+    state_section = gsr_get_register_state_section (gsr);
     if (!filter || (g_strcmp0 (filter, default_filter) == 0))
     {
         if (g_key_file_has_key (state_file, state_section, KEY_PAGE_FILTER, NULL))
@@ -2230,37 +2224,33 @@ gnc_plugin_page_register_set_filter (GncPluginPage* plugin_page,
 {
     GncPluginPageRegisterPrivate* priv;
     GNCLedgerDisplayType ledger_type;
-    Account* leader;
     gchar* default_filter;
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
 
     ledger_type = gnc_ledger_display_type (priv->ledger);
-    leader = gnc_ledger_display_leader (priv->ledger);
 
     default_filter = g_strdup_printf ("%s,%s,%s,%s", DEFAULT_FILTER,
                                       "0", "0", get_filter_default_num_of_days (ledger_type));
 
     // save to gcm file
-    gnc_plugin_page_register_set_filter_gcm (leader, filter, default_filter);
+    gnc_plugin_page_register_set_filter_gcm (priv->gsr, filter, default_filter);
 
     g_free (default_filter);
     return;
 }
 
 static gchar*
-gnc_plugin_page_register_get_sort_order_gcm (Account* leader)
+gnc_plugin_page_register_get_sort_order_gcm (GNCSplitReg *gsr)
 {
     GKeyFile* state_file = gnc_state_get_current();
     gchar* state_section;
     gchar* sort_text;
-    gchar acct_guid[GUID_ENCODING_LENGTH + 1];
     GError* error = NULL;
     char* sort_order = NULL;
 
     // get the sort_order from the .gcm file
-    guid_to_string_buff (xaccAccountGetGUID (leader), acct_guid);
-    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", acct_guid, NULL);
+    state_section = gsr_get_register_state_section (gsr);
     sort_text = g_key_file_get_string (state_file, state_section, KEY_PAGE_SORT,
                                        &error);
 
@@ -2279,7 +2269,6 @@ static gchar*
 gnc_plugin_page_register_get_sort_order (GncPluginPage* plugin_page)
 {
     GncPluginPageRegisterPrivate* priv;
-    Account* leader;
     char* sort_order = NULL;
 
     g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page),
@@ -2287,26 +2276,21 @@ gnc_plugin_page_register_get_sort_order (GncPluginPage* plugin_page)
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
 
-    leader = gnc_ledger_display_leader (priv->ledger);
-
     // load from gcm file
-    sort_order = gnc_plugin_page_register_get_sort_order_gcm (leader);
-
+    sort_order = gnc_plugin_page_register_get_sort_order_gcm (priv->gsr);
 
     return sort_order ? sort_order : g_strdup (DEFAULT_SORT_ORDER);
 }
 
 static void
-gnc_plugin_page_register_set_sort_order_gcm (Account* leader,
+gnc_plugin_page_register_set_sort_order_gcm (GNCSplitReg *gsr,
                                              const gchar* sort_order)
 {
     GKeyFile* state_file = gnc_state_get_current();
     gchar* state_section;
-    gchar acct_guid[GUID_ENCODING_LENGTH + 1];
 
     // save sort_order to the .gcm file also
-    guid_to_string_buff (xaccAccountGetGUID (leader), acct_guid);
-    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", acct_guid, NULL);
+    state_section = gsr_get_register_state_section (gsr);
     if (!sort_order || (g_strcmp0 (sort_order, DEFAULT_SORT_ORDER) == 0))
     {
         if (g_key_file_has_key (state_file, state_section, KEY_PAGE_SORT, NULL))
@@ -2324,28 +2308,23 @@ gnc_plugin_page_register_set_sort_order (GncPluginPage* plugin_page,
                                          const gchar* sort_order)
 {
     GncPluginPageRegisterPrivate* priv;
-    Account* leader;
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
 
-    leader = gnc_ledger_display_leader (priv->ledger);
-
     // save to gcm file
-    gnc_plugin_page_register_set_sort_order_gcm (leader, sort_order);
+    gnc_plugin_page_register_set_sort_order_gcm (priv->gsr, sort_order);
 }
 
 static gboolean
-gnc_plugin_page_register_get_sort_reversed_gcm (Account* leader)
+gnc_plugin_page_register_get_sort_reversed_gcm (GNCSplitReg *gsr)
 {
     GKeyFile* state_file = gnc_state_get_current();
     gchar* state_section;
-    gchar acct_guid[GUID_ENCODING_LENGTH + 1];
     GError* error = NULL;
     gboolean sort_reversed = FALSE;
 
     // get the sort_reversed from the .gcm file
-    guid_to_string_buff (xaccAccountGetGUID (leader), acct_guid);
-    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", acct_guid, NULL);
+    state_section = gsr_get_register_state_section (gsr);
     sort_reversed = g_key_file_get_boolean (state_file, state_section,
                                             KEY_PAGE_SORT_REV, &error);
 
@@ -2360,31 +2339,27 @@ static gboolean
 gnc_plugin_page_register_get_sort_reversed (GncPluginPage* plugin_page)
 {
     GncPluginPageRegisterPrivate* priv;
-    Account* leader;
     gboolean sort_reversed = FALSE;
 
     g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page), FALSE);
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
 
-    leader = gnc_ledger_display_leader (priv->ledger);
-
     // load from gcm file
-    sort_reversed = gnc_plugin_page_register_get_sort_reversed_gcm (leader);
+    sort_reversed = gnc_plugin_page_register_get_sort_reversed_gcm (priv->gsr);
     return sort_reversed;
 }
 
 static void
-gnc_plugin_page_register_set_sort_reversed_gcm (Account* leader,
+gnc_plugin_page_register_set_sort_reversed_gcm (GNCSplitReg *gsr,
                                                 gboolean reverse_order)
 {
     GKeyFile* state_file = gnc_state_get_current();
     gchar* state_section;
-    gchar acct_guid[GUID_ENCODING_LENGTH + 1];
 
     // save reverse_order to the .gcm file also
-    guid_to_string_buff (xaccAccountGetGUID (leader), acct_guid);
-    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", acct_guid, NULL);
+    state_section = gsr_get_register_state_section (gsr);
+
     if (!reverse_order)
     {
         if (g_key_file_has_key (state_file, state_section, KEY_PAGE_SORT_REV, NULL))
@@ -2404,13 +2379,11 @@ gnc_plugin_page_register_set_sort_reversed (GncPluginPage* plugin_page,
                                             gboolean reverse_order)
 {
     GncPluginPageRegisterPrivate* priv;
-    Account* leader;
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
-    leader = gnc_ledger_display_leader (priv->ledger);
 
     // save to gcm file
-    gnc_plugin_page_register_set_sort_reversed_gcm (leader, reverse_order);
+    gnc_plugin_page_register_set_sort_reversed_gcm (priv->gsr, reverse_order);
 }
 
 static gchar*
@@ -5264,7 +5237,7 @@ gnc_plugin_page_help_changed_cb (GNCSplitReg* gsr,
     }
 
     // only update status text if on current page
-    if (GNC_IS_MAIN_WINDOW(window) && (gnc_main_window_get_current_page 
+    if (GNC_IS_MAIN_WINDOW(window) && (gnc_main_window_get_current_page
        (GNC_MAIN_WINDOW(window)) != GNC_PLUGIN_PAGE(register_page)))
        return;
 
