@@ -1624,7 +1624,8 @@ static Split *select_payment_split (GtkWindow *parent, Transaction *txn)
         GList *node;
         GtkWidget *first_rb = NULL;
         int answer = GTK_BUTTONS_OK;
-        const char *message = _("While this transaction has multiple splits that can be considered\nas 'the payment split', GnuCash only knows how to handle one.\n"
+        const char *message = _("While this transaction has multiple splits that can be considered\n"
+                                "as 'the payment split', GnuCash only knows how to handle one.\n"
                                 "Please select one, the others will be discarded.\n\n");
         GtkDialog *dialog = GTK_DIALOG(
                             gtk_dialog_new_with_buttons (_("Warning"),

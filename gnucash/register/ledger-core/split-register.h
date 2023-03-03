@@ -323,6 +323,15 @@ void gnc_split_register_config (SplitRegister* reg,
                                 SplitRegisterStyle style,
                                 gboolean use_double_line);
 
+/** Sets a split register's reverse sort order based on register
+ *
+ *  @param reg a ::SplitRegister
+ *
+ *  @param reverse_sort @c TRUE reverse sort order, @c FALSE default
+ */
+void gnc_split_register_set_reverse_sort (SplitRegister* reg,
+                                          gboolean reverse_sort);
+
 /** Sets whether a register uses auto-completion.
  *
  *  @param reg a ::SplitRegister

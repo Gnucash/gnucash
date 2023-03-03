@@ -37,7 +37,7 @@
           <attribute name="hidden-when">action-disabled</attribute>
         </item>
         <item>
-          <attribute name="label" translatable="yes">Pa_ge Setup…</attribute>
+          <attribute name="label" translatable="yes">Pa_ge Setup</attribute>
           <attribute name="action">mainwin.FilePageSetupAction</attribute>
           <attribute name="accel">&lt;Primary&gt;&lt;Shift&gt;p</attribute>
           <attribute name="tooltip" translatable="yes">Specify the page size and orientation for printing</attribute>

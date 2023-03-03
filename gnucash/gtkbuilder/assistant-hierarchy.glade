@@ -41,8 +41,7 @@ Click 'Cancel' if you do not wish to create any new accounts now.</property>
           <object class="GtkLabel" id="choose_currency_label">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">
-Please choose the currency to use for new accounts.</property>
+            <property name="label" translatable="yes">Please choose the currency to use for new accounts.</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -528,15 +527,13 @@ Please choose the currency to use for new accounts.</property>
             <property name="can-focus">False</property>
             <property name="margin-start">12</property>
             <property name="margin-end">12</property>
-            <property name="label" translatable="yes">
-If you would like to change an account's name, click on the row containing the account, then click on the account name and change it.
+            <property name="label" translatable="yes">If you would like to change an account's name, click on the row containing the account, then click on the account name and change it.
 
 Some accounts are marked as "Placeholder". Placeholder accounts are used to create a hierarchy of accounts and normally do not have transactions or opening balances. If you would like an account to be a placeholder account, click the checkbox for that account.
 
 If you would like an account to have an opening balance, click on the row containing the account, then click on the opening balance field and enter the starting balance.
 
-&lt;b&gt;Note:&lt;/b&gt; all accounts except Equity and placeholder accounts may have an opening balance.
-</property>
+&lt;b&gt;Note:&lt;/b&gt; all accounts except Equity and placeholder accounts may have an opening balance.</property>
             <property name="use-markup">True</property>
             <property name="wrap">True</property>
             <property name="width-chars">75</property>

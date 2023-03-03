@@ -3,7 +3,7 @@
 
   <menu id="FilePlaceholder3">
     <item>
-      <attribute name="label" translatable="yes">_Print Report</attribute>
+      <attribute name="label" translatable="yes">_Print Report…</attribute>
       <attribute name="action">GncPluginPageReportActions.FilePrintAction</attribute>
       <attribute name="accel">&lt;Primary&gt;p</attribute>
       <attribute name="tooltip" translatable="yes">Print the current report</attribute>
@@ -31,7 +31,7 @@
 
   <menu id="FilePlaceholder5">
     <item>
-      <attribute name="label" translatable="yes">Export _Report</attribute>
+      <attribute name="label" translatable="yes">Export _Report…</attribute>
       <attribute name="action">GncPluginPageReportActions.ReportExportAction</attribute>
       <attribute name="tooltip" translatable="yes">Export HTML-formatted report to file</attribute>
       <attribute name="temp" translatable="no">yes</attribute>

@@ -448,8 +448,7 @@ If you make a mistake or want to make changes later, you can edit the created Sc
             <property name="can-focus">False</property>
             <property name="halign">center</property>
             <property name="margin-bottom">12</property>
-            <property name="label" translatable="yes">
-Do you utilise an escrow account, if so an account must be specified…</property>
+            <property name="label" translatable="yes">Do you utilise an escrow account, if so an account must be specified…</property>
             <property name="justify">center</property>
             <property name="wrap">True</property>
           </object>
@@ -542,11 +541,12 @@ Do you utilise an escrow account, if so an account must be specified…</propert
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">
-All accounts must have valid entries to continue.
-</property>
+            <property name="label" translatable="yes">All accounts must have valid entries to continue.</property>
             <property name="justify">center</property>
             <property name="wrap">True</property>
+            <style>
+              <class name="gnc-class-highlight"/>
+            </style>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -724,9 +724,7 @@ All accounts must have valid entries to continue.
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">
-All enabled option pages must contain valid entries to continue.
-</property>
+            <property name="label" translatable="yes">All enabled option pages must contain valid entries to continue.</property>
             <property name="justify">center</property>
           </object>
           <packing>
@@ -1080,8 +1078,7 @@ All enabled option pages must contain valid entries to continue.
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">
-Review the details below and if correct press Apply to create the schedule.</property>
+            <property name="label" translatable="yes">Review the details below and if correct press "Apply"" to create the schedule.</property>
             <property name="justify">center</property>
           </object>
           <packing>

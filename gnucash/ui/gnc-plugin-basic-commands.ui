@@ -116,7 +116,7 @@
       <attribute name="tooltip" translatable="yes">Use the loan/mortgage repayment calculator</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="yes">_Close Book</attribute>
+      <attribute name="label" translatable="yes">_Close Book…</attribute>
       <attribute name="action">gnc-plugin-basic-commands-actions.ToolsBookCloseAction</attribute>
       <attribute name="tooltip" translatable="yes">Close the Book at the end of the Period</attribute>
     </item>

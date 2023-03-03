@@ -351,6 +351,13 @@ draw_divider_line (cairo_t *cr, VirtualLocation virt_loc,
 }
 
 static void
+set_cell_insensitive (GtkStyleContext *stylectxt)
+{
+    if (!gtk_style_context_has_class (stylectxt, GTK_STYLE_CLASS_BACKGROUND))
+        gtk_style_context_set_state (stylectxt, GTK_STATE_FLAG_INSENSITIVE);
+}
+
+static void
 draw_cell (GnucashSheet *sheet, SheetBlock *block,
            VirtualLocation virt_loc, cairo_t *cr,
            int x, int y, int width, int height)
@@ -385,10 +392,7 @@ draw_cell (GnucashSheet *sheet, SheetBlock *block,
     gnucash_get_style_classes (sheet, stylectxt, color_type, use_neg_class);
 
     if (sheet->read_only)
-    {
-        if (!gtk_style_context_has_class (stylectxt, GTK_STYLE_CLASS_BACKGROUND))
-            gtk_style_context_set_state (stylectxt, GTK_STATE_FLAG_INSENSITIVE);
-    }
+        set_cell_insensitive (stylectxt);
     else
     {
         if (gtk_style_context_has_class (stylectxt, GTK_STYLE_CLASS_BACKGROUND))
@@ -397,11 +401,27 @@ draw_cell (GnucashSheet *sheet, SheetBlock *block,
 
     // Are we in a read-only row? Then make the background color somewhat more grey.
     if ((virt_loc.phys_row_offset < block->style->nrows)
-                && (table->model->dividing_row_upper >= 0)
-                && (virt_loc.vcell_loc.virt_row < table->model->dividing_row_upper))
+         && (table->model->dividing_row_upper >= 0))
     {
-        if (!gtk_style_context_has_class (stylectxt, GTK_STYLE_CLASS_BACKGROUND))
-            gtk_style_context_set_state (stylectxt, GTK_STATE_FLAG_INSENSITIVE);
+        if (table->model->reverse_sort)
+        {
+            if ((table->model->blank_trans_row < table->model->dividing_row_upper)
+                 && (virt_loc.vcell_loc.virt_row >= table->model->dividing_row_upper))
+            {
+                set_cell_insensitive (stylectxt); // future trans after blank
+            }
+
+            if ((virt_loc.vcell_loc.virt_row >= table->model->dividing_row_upper)
+                 && (virt_loc.vcell_loc.virt_row < table->model->blank_trans_row))
+            {
+                set_cell_insensitive (stylectxt);
+            }
+        }
+        else // normal order
+        {
+            if (virt_loc.vcell_loc.virt_row < table->model->dividing_row_upper)
+                set_cell_insensitive (stylectxt);
+        }
     }
 
     gtk_render_background (stylectxt, cr, x, y, width, height);

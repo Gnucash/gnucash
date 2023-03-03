@@ -2952,6 +2952,13 @@ gnc_split_register_config (SplitRegister* reg,
 }
 
 void
+gnc_split_register_set_reverse_sort (SplitRegister* reg, gboolean reverse_sort)
+{
+    g_return_if_fail (reg);
+    gnc_table_model_set_reverse_sort (reg->table->model, reverse_sort);
+}
+
+void
 gnc_split_register_set_auto_complete (SplitRegister* reg,
                                       gboolean do_auto_complete)
 {

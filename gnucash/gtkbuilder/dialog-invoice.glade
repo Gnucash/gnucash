@@ -423,7 +423,7 @@
                             <property name="receives-default">True</property>
                             <property name="halign">start</property>
                             <property name="relief">none</property>
-                            <property name="uri">http://www.gnucash.org</property>
+                            <property name="uri">https://www.gnucash.org</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>

@@ -57,6 +57,7 @@ gnucash/gnome/assistant-acct-period.c
 gnucash/gnome/assistant-hierarchy.cpp
 gnucash/gnome/assistant-loan.cpp
 gnucash/gnome/assistant-stock-split.c
+gnucash/gnome/assistant-stock-transaction.cpp
 gnucash/gnome/business-gnome-utils.c
 gnucash/gnome/business-options-gnome.cpp
 gnucash/gnome/business-urls.c
@@ -240,6 +241,7 @@ gnucash/gtkbuilder/assistant-hierarchy.glade
 gnucash/gtkbuilder/assistant-loan.glade
 gnucash/gtkbuilder/assistant-qif-import.glade
 gnucash/gtkbuilder/assistant-stock-split.glade
+gnucash/gtkbuilder/assistant-stock-transaction.glade
 gnucash/gtkbuilder/assistant-xml-encoding.glade
 gnucash/gtkbuilder/business-options-gnome.glade
 gnucash/gtkbuilder/business-prefs.glade

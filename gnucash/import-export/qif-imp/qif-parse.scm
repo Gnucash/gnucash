@@ -169,7 +169,9 @@
           (list "oth s" GNC-ASSET-TYPE GNC-BANK-TYPE GNC-CASH-TYPE)
           (list "mutual" GNC-BANK-TYPE)))
   (or (assoc-ref string-map-alist (string-downcase! (string-trim-both read-value)))
-      (let ((msg (format #f (G_ "Unrecognized account type '~s'. Defaulting to Bank.")
+     ;; Translators: Mapping the QIF account type to a GnuCash account type.
+     ;; see https://en.wikipedia.org/wiki/Quicken_Interchange_Format#Detail_items
+     (let ((msg (format #f (G_ "The account type ~s is unknown, using 'bank' instead.")
                          read-value)))
         (errorproc errortype msg)
         (list GNC-BANK-TYPE))))
@@ -232,6 +234,7 @@
   (and read-value
        (let ((sym (string->symbol (string-downcase (string-trim-both read-value)))))
          (or (any (lambda (lst) (and (memq sym lst) (car lst))) action-map)
+             ;; Translators: This is an error message about actions like buy, sell …
              (let ((msg (format #f (G_ "Unrecognized action '~a'.") read-value)))
                (errorproc errortype msg))))))
 
@@ -251,7 +254,8 @@
    (not (string-null? read-value))
    (let* ((secondchar (string-ref read-value 0)))
      (or (any (lambda (m) (and (memq secondchar (cdr m)) (car m))) maplist)
-         (let ((msg (format #f (G_ "Unrecognized status '~a'. Defaulting to uncleared.")
+         ;; Translators: Error message about reconciliation status, see msgctxt "Reconciled flag …"
+         (let ((msg (format #f (G_ "The unknown reconciliation status '~a' will be replaced by 'uncleared'.")
                             read-value)))
            (errorproc errortype msg))))))
 

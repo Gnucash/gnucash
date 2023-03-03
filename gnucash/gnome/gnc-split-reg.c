@@ -453,22 +453,36 @@ gsr_move_sort_and_filter_to_state_file (GNCSplitReg *gsr, GKeyFile* state_file, 
     }
 }
 
+gchar *
+gsr_get_register_state_section (GNCSplitReg *gsr)
+{
+    GNCLedgerDisplayType ledger_type = gnc_ledger_display_type (gsr->ledger);
+    Account *account = gnc_ledger_display_leader (gsr->ledger);
+    const GncGUID *guid = xaccAccountGetGUID (account);
+    gchar guidstr[GUID_ENCODING_LENGTH+1];
+    gchar *register_state_section;
+
+    guid_to_string_buff (guid, guidstr);
+
+    if (ledger_type == LD_SUBACCOUNT)
+        register_state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", guidstr, "+", NULL);
+    else
+        register_state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", guidstr, NULL);
+
+    return register_state_section;
+}
+
 static
 void
 gsr_create_table( GNCSplitReg *gsr )
 {
     GtkWidget *register_widget = NULL;
     SplitRegister *sr = NULL;
-
-    Account * account = gnc_ledger_display_leader(gsr->ledger);
-    const GncGUID * guid = xaccAccountGetGUID(account);
-    gchar guidstr[GUID_ENCODING_LENGTH+1];
     GKeyFile* state_file = gnc_state_get_current();
     gchar *register_state_section;
 
-    guid_to_string_buff (guid, guidstr);
-
-    register_state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", guidstr, NULL);
+    /* register_state_section is used to store per register state: column widths, sort order,... */
+    register_state_section = gsr_get_register_state_section (gsr);
 
     ENTER("gsr=%p", gsr);
 
@@ -785,29 +799,22 @@ static void
 gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
 {
     GNCSplitReg *gsr = gnc_ledger_display_get_user_data( ledger );
-    Account * account = gnc_ledger_display_leader(ledger);
-    const GncGUID * guid = xaccAccountGetGUID(account);
-    gchar guidstr[GUID_ENCODING_LENGTH+1];
-    gchar *state_section;
-    guid_to_string_buff(guid, guidstr);
-
-    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", guidstr, NULL);
 
     if (gsr)
     {
-        SplitRegister *reg;
-
-        reg = gnc_ledger_display_get_split_register (ledger);
+        /* register_state_section is used to store per register state: column widths, sort order,... */
+        gchar *register_state_section = gsr_get_register_state_section (gsr);
+        SplitRegister *reg = gnc_ledger_display_get_split_register (ledger);
 
         if (reg && reg->table)
-            gnc_table_save_state (reg->table, state_section);
+            gnc_table_save_state (reg->table, register_state_section);
 
         /*
          * Don't destroy the window here any more.  The register no longer
          * owns it.
          */
+        g_free (register_state_section);
     }
-    g_free (state_section);
 
     gnc_ledger_display_set_user_data (ledger, NULL);
     g_object_unref (gsr);
@@ -2143,11 +2150,14 @@ gnc_split_reg_set_sort_reversed(GNCSplitReg *gsr, gboolean rev, gboolean refresh
      *       In other words, qof_query_set_sort_increasing should
      *       always use the inverse of rev.
      */
+    SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
     Query *query = gnc_ledger_display_get_query( gsr->ledger );
+
+    gnc_split_register_set_reverse_sort (reg, rev);
+
     qof_query_set_sort_increasing (query, !rev, !rev, !rev);
     gsr->sort_rev = rev;
-    Account *acct = gnc_ledger_display_leader (gsr->ledger);
-    xaccAccountSetSortReversed(acct, rev);
+
     if (refresh)
         gnc_ledger_display_refresh( gsr->ledger );
 }
