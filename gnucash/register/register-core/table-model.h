@@ -136,6 +136,9 @@ typedef struct
      * be visually distinguished. */
     int dividing_row_lower;
 
+    /* If positive, denotes the row position of the blank trans */
+    int blank_trans_row;
+
     VirtCellDataAllocator cell_data_allocator;
     VirtCellDataDeallocator cell_data_deallocator;
     VirtCellDataCopy cell_data_copy;

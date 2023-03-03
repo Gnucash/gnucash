@@ -644,6 +644,9 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
                     save_loc.phys_col_offset = 0;
                 }
 
+                // used in the setting the rows insensitive
+                table->model->blank_trans_row = vcell_loc.virt_row;
+
                 gnc_split_register_add_transaction (reg,
                                                     blank_trans, blank_split,
                                                     lead_cursor, split_cursor,
@@ -725,6 +728,9 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
             save_loc.phys_row_offset = 0;
             save_loc.phys_col_offset = 0;
         }
+
+        // used in the setting the rows insensitive
+        table->model->blank_trans_row = vcell_loc.virt_row;
 
         gnc_split_register_add_transaction (reg, blank_trans, blank_split,
                                             lead_cursor, split_cursor,

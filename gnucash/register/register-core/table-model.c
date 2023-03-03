@@ -145,6 +145,8 @@ gnc_table_model_new (void)
     model->dividing_row = -1;
     model->dividing_row_lower = -1;
 
+    model->blank_trans_row = -1;
+
     return model;
 }
 
