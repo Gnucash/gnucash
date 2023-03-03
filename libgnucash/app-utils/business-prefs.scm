@@ -118,13 +118,13 @@
  
   (reg-option
    (gnc:make-taxtable-option
-    gnc:*business-label* (N_ "Default Customer TaxTable")
+    gnc:*business-label* (N_ "Default Customer Tax Table")
     "e" (N_ "The default tax table to apply to customers.")
     (lambda () '()) #f))
 
   (reg-option
    (gnc:make-taxtable-option
-    gnc:*business-label* (N_ "Default Vendor TaxTable")
+    gnc:*business-label* (N_ "Default Vendor Tax Table")
     "f" (N_ "The default tax table to apply to vendors.")
     (lambda () '()) #f))
 

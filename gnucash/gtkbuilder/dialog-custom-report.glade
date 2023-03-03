@@ -97,9 +97,7 @@
         <child>
           <object class="GtkLabel" id="label2">
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">
-Currently you have no saved reports.
-</property>
+            <property name="label" translatable="yes">Currently you have no saved reports.</property>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -111,9 +109,11 @@ Currently you have no saved reports.
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Saved report configurations are created by first opening a report from the Reports menu,
-altering the report's options to your taste and then choosing "Save Report Configuration" from
-the Reports menu or tool bar.</property>
+            <property name="label" translatable="yes">Saved report configurations are created by
+1. opening a report from the Reports menu,
+2. altering the report's options to your taste,
+3. selecting "Save Report Configuration [As…]" from the Reports menu
+ or pressing a "Save Config [As…]" button on the tool bar.</property>
           </object>
           <packing>
             <property name="expand">False</property>

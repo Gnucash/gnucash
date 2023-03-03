@@ -169,7 +169,7 @@ gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel,
                         /* Translators: Replace here and later CUSIP by the name of your local
                            National Securities Identifying Number
                            like gb:SEDOL, de:WKN, ch:Valorennummer, fr:SICOVAM ...
-                           See http://en.wikipedia.org/wiki/ISIN and
+                           See https://en.wikipedia.org/wiki/ISIN and
                            https://en.wikipedia.org/wiki/National_numbering_agency for hints. */
                         cusip    ? _("\nExchange code (ISIN, CUSIP or similar): ") : "",
                         cusip    ? cusip : "",

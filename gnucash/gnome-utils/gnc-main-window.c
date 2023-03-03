@@ -297,7 +297,7 @@ static GtkActionEntry gnc_menu_actions [] =
 #    define GTK_STOCK_PAGE_SETUP NULL
 #endif
     {
-        "FilePageSetupAction", "document-page-setup", N_("Pa_ge Setup..."), "<primary><shift>p",
+        "FilePageSetupAction", "document-page-setup", N_("Pa_ge Setup"), "<primary><shift>p",
         N_("Specify the page size and orientation for printing"),
         G_CALLBACK (gnc_main_window_cmd_page_setup)
     },

@@ -601,7 +601,9 @@ static void
 add_error (StringVec& errors, const char* format_str, const char* arg)
 {
     gchar *buf = g_strdup_printf (_(format_str),
-                                  g_dpgettext2 (nullptr, "Stock Assistant: Page name", arg));
+                                  g_strcmp0("Cash", arg) ?
+                                  _(arg) :
+                                  g_dpgettext2 (nullptr, "Stock Assistant", arg));
     errors.emplace_back (buf);
     g_free (buf);
 }
@@ -756,7 +758,9 @@ to ensure proper recording."), new_date_str, last_split_date_str);
     else
         check_page (line, debit, credit, info->txn_type->stock_value, info->acct,
                     info->stock_memo_edit, info->stock_value_edit, info->currency,
-                    NC_ ("Stock Assistant: Page name", "stock value"), errors);
+        // Translators: Designates the page in the Stock Assistant for entering
+        // the currency value of a non-currency asset.
+                    N_ ("Stock Value"), errors);
 
 
     if (info->txn_type->stock_amount == FieldMask::DISABLED)
@@ -826,7 +830,9 @@ to ensure proper recording."), new_date_str, last_split_date_str);
         check_page (line, debit, credit, info->txn_type->cash_value,
                     gas_account (info->cash_account), info->cash_memo_edit,
                     info->cash_value, info->currency,
-                    NC_ ("Stock Assistant: Page name", "cash"), errors);
+// Translators: Designates a page in the stock assistant or inserts the value
+// into the non-currency asset split of an investment transaction.
+                    NC_ ("Stock Assistant", "Cash"), errors);
         add_to_summary_table (list, line);
     }
 
@@ -837,7 +843,9 @@ to ensure proper recording."), new_date_str, last_split_date_str);
         check_page (line, debit, credit, info->txn_type->fees_value,
                     capitalize_fees ? info->acct : gas_account (info->fees_account),
                     info->fees_memo_edit, info->fees_value, info->currency,
-                    NC_ ("Stock Assistant: Page name", "fees"), errors);
+// Translators: Designates a page in the stock assistant or inserts the value
+// into the fees split of an investment transaction.
+                    N_ ("Fees"), errors);
         if (!line.value_is_zero)
             add_to_summary_table (list, line);
     }
@@ -847,7 +855,9 @@ to ensure proper recording."), new_date_str, last_split_date_str);
         check_page (line, debit, credit, info->txn_type->dividend_value,
                     gas_account (info->dividend_account),
                     info->dividend_memo_edit, info->dividend_value, info->currency,
-                    NC_ ("Stock Assistant: Page name", "dividend"), errors);
+// Translators: Designates a page in the stock assistant or inserts the value
+// into the income split of an investment dividend transaction.
+                    N_ ("Dividend"), errors);
         add_to_summary_table (list, line);
     }
 
@@ -860,14 +870,16 @@ to ensure proper recording."), new_date_str, last_split_date_str);
         check_page (line, debit, credit, info->txn_type->capgains_value,
                     gas_account (info->capgains_account),
                     info->capgains_memo_edit, info->capgains_value, info->currency,
-                    NC_ ("Stock Assistant: Page name", "capital gains"), errors);
+// Translators: Designates a page in the stock assistant or inserts the value
+// into the capital gain/loss income split of an investment transaction.
+                    N_ ("Capital Gain"), errors);
         add_to_summary_table (list, line);
 
         check_page (line, debit, credit,
                     info->txn_type->capgains_value ^ (FieldMask::ENABLED_CREDIT | FieldMask::ENABLED_DEBIT),
                     info->acct, info->capgains_memo_edit, info->capgains_value,
                     info->currency,
-                    NC_ ("Stock Assistant: Page name", "capital gains"), errors);
+                    N_ ("Capital Gain"), errors);
         add_to_summary_table (list, line);
     }
 
@@ -1023,8 +1035,10 @@ create_split (Transaction *trans, const gchar *action, Account *account,
            gnc_num_dbg_to_string (amount_numeric),
            gnc_num_dbg_to_string (xaccSplitGetValue (split)),
            gnc_num_dbg_to_string (xaccSplitGetAmount (split)));
-    gnc_set_num_action (nullptr, split,
-                        nullptr, g_dpgettext2 (nullptr, "Stock Assistant: Action field", action));
+    auto action_str{ g_strcmp0(action, "Cash") ?
+        _(action) :
+        g_dpgettext2 (nullptr, "Stock Assistant: Action field", action)};
+    gnc_set_num_action (nullptr, split, nullptr, action_str);
 }
 
 static void
@@ -1093,7 +1107,9 @@ stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
             stock_value = gnc_numeric_neg (stock_value);
     }
 
-    create_split (trans, NC_ ("Stock Assistant: Action field", "Stock"),
+// Translators: Inserts the value into action field of the non-currency asset split of
+// an investment transaction.
+    create_split (trans, N_ ("Stock"),
                   info->acct, account_commits, info->stock_memo_edit,
                   stock_amount, stock_value);
 
@@ -1103,7 +1119,7 @@ stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
         if (info->txn_type->cash_value & FieldMask::ENABLED_CREDIT)
             cash = gnc_numeric_neg (cash);
 
-        create_split (trans, NC_ ("Stock Assistant: Action field", "Cash"),
+        create_split (trans, NC_ ("Stock Assistant:", "Cash"),
                       gas_account (info->cash_account), account_commits,
                       info->cash_memo_edit, cash, cash);
     }
@@ -1116,7 +1132,7 @@ stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
             auto capitalize = gtk_toggle_button_get_active
                 (GTK_TOGGLE_BUTTON (info->capitalize_fees_checkbox));
 
-            create_split (trans, NC_ ("Stock Assistant: Action field", "Fees"),
+            create_split (trans, N_ ("Fees"),
                           capitalize ? info->acct : gas_account (info->fees_account),
                           account_commits, info->fees_memo_edit,
                           capitalize ? gnc_numeric_zero () : fees, fees);
@@ -1129,7 +1145,7 @@ stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
         if (info->txn_type->dividend_value & FieldMask::ENABLED_CREDIT)
             dividend = gnc_numeric_neg (dividend);
 
-        create_split (trans, NC_ ("Stock Assistant: Action field", "Dividend"),
+        create_split (trans, N_ ("Dividend"),
                       gas_account (info->dividend_account), account_commits,
                       info->dividend_memo_edit, dividend, dividend);
     }
@@ -1137,12 +1153,12 @@ stock_assistant_finish (GtkAssistant *assistant, gpointer user_data)
     if (info->txn_type->capgains_value != FieldMask::DISABLED)
     {
         auto capgains = gae_amount (info->capgains_value);
-        create_split (trans, NC_ ("Stock Assistant: Action field", "Capital Gain"),
+        create_split (trans, N_ ("Capital Gain"),
                       info->acct, account_commits, info->capgains_memo_edit,
                       gnc_numeric_zero (), capgains);
 
         capgains = gnc_numeric_neg (capgains);
-        create_split (trans, NC_ ("Stock Assistant: Action field", "Capital Gain"),
+        create_split (trans, N_ ("Capital Gain"),
                       gas_account (info->capgains_account), account_commits,
                       info->capgains_memo_edit, capgains, capgains);
     }

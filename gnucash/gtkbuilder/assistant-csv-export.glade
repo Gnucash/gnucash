@@ -684,9 +684,7 @@ Select the type of Export required and the separator that will be used.
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">
-Enter file name and location for the Export...
-</property>
+            <property name="label" translatable="yes">Enter file name and location for the Export…</property>
             <property name="wrap">True</property>
           </object>
           <packing>

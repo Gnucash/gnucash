@@ -1,4 +1,2 @@
 # These are files that we don't want to translate, because they are
 # in experimental status.
-gnucash/gnome/assistant-stock-transaction.cpp
-gnucash/gtkbuilder/assistant-stock-transaction.glade

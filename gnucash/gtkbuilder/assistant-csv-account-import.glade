@@ -63,9 +63,7 @@ Click on "Next" to proceed or "Cancel" to Abort Import.
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">
-Enter file name and location for the Import...
-</property>
+            <property name="label" translatable="yes">Enter file name and location for the Import…</property>
             <property name="wrap">True</property>
           </object>
           <packing>

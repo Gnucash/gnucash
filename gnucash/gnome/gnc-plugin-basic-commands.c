@@ -135,7 +135,7 @@ static GtkActionEntry gnc_plugin_actions [] =
     },
     {
         "FileExportAccountsAction", "go-next",
-        N_("Export _Accounts"), NULL,
+        N_("Export _Accounts…"), NULL,
         N_("Export the account hierarchy to a new GnuCash datafile"),
         G_CALLBACK (gnc_main_window_cmd_file_export_accounts)
     },
@@ -204,7 +204,7 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK (gnc_main_window_cmd_tools_financial_calculator)
     },
     {
-        "ToolsBookCloseAction", NULL, N_("_Close Book"), NULL,
+        "ToolsBookCloseAction", NULL, N_("_Close Book…"), NULL,
         N_("Close the Book at the end of the Period"),
         G_CALLBACK (gnc_main_window_cmd_tools_close_book)
     },
