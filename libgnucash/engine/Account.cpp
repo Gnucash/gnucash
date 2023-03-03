@@ -292,8 +292,6 @@ mark_account (Account *acc)
 /********************************************************************\
 \********************************************************************/
 
-static constexpr const char* is_unset {"unset"};
-
 /* GObject Initialization */
 G_DEFINE_TYPE_WITH_PRIVATE(Account, gnc_account, QOF_TYPE_INSTANCE)
 
@@ -330,22 +328,6 @@ gnc_account_init(Account* acc)
     priv->starting_cleared_balance = gnc_numeric_zero();
     priv->starting_reconciled_balance = gnc_numeric_zero();
     priv->balance_dirty = FALSE;
-
-    priv->higher_balance_limit = gnc_numeric_create (1,0);
-    priv->higher_balance_cached = false;
-    priv->lower_balance_limit = gnc_numeric_create (1,0);
-    priv->lower_balance_cached = false;
-    priv->include_sub_account_balances = TriState::Unset;
-
-    priv->last_num = (char*) is_unset;
-    priv->tax_us_code = (char*) is_unset;
-    priv->tax_us_pns = (char*) is_unset;
-    priv->color = (char*) is_unset;
-    priv->sort_order = (char*) is_unset;
-    priv->notes = (char*) is_unset;
-    priv->filter = (char*) is_unset;
-    priv->equity_type = TriState::Unset;
-    priv->sort_reversed = TriState::Unset;
 
     priv->splits = NULL;
     priv->sort_dirty = FALSE;
@@ -1403,21 +1385,6 @@ xaccFreeAccount (Account *acc)
     qof_string_cache_remove(priv->accountCode);
     qof_string_cache_remove(priv->description);
     priv->accountName = priv->accountCode = priv->description = nullptr;
-
-    if (priv->last_num != is_unset)
-        g_free (priv->last_num);
-    if (priv->tax_us_code != is_unset)
-        g_free (priv->tax_us_code);
-    if (priv->tax_us_pns != is_unset)
-        g_free (priv->tax_us_pns);
-    if (priv->color != is_unset)
-        g_free (priv->color);
-    if (priv->sort_order != is_unset)
-        g_free (priv->sort_order);
-    if (priv->notes != is_unset)
-        g_free (priv->notes);
-    if (priv->filter != is_unset)
-        g_free (priv->filter);
 
     /* zero out values, just in case stray
      * pointers are pointing here. */
@@ -2507,21 +2474,6 @@ xaccAccountSetDescription (Account *acc, const char *str)
     xaccAccountCommitEdit(acc);
 }
 
-static char*
-stripdup_or_null (const char *value)
-{
-    if (value)
-    {
-        auto temp = g_strstrip (g_strdup (value));
-        if (*temp)
-            return temp;
-        g_free (temp);
-    }
-    return nullptr;
-}
-
-// note the *value argument is expected to be either a strstripped
-// char* or nullptr, as returned by stripdup_or_null above.
 static void
 set_kvp_string_path (Account *acc, std::vector<std::string> const & path,
                      const char *value)
@@ -2529,11 +2481,11 @@ set_kvp_string_path (Account *acc, std::vector<std::string> const & path,
     g_return_if_fail(GNC_IS_ACCOUNT(acc));
 
     xaccAccountBeginEdit(acc);
-    if (value)
+    if (value && *value)
     {
         GValue v = G_VALUE_INIT;
         g_value_init (&v, G_TYPE_STRING);
-        g_value_set_string (&v, value);
+        g_value_set_static_string (&v, value);
         qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, path);
         g_value_unset (&v);
     }
@@ -2551,58 +2503,43 @@ set_kvp_string_tag (Account *acc, const char *tag, const char *value)
     set_kvp_string_path (acc, {tag}, value);
 }
 
-static char*
-get_kvp_string_path (const Account *acc, std::vector<std::string> const & path)
+static const char*
+get_kvp_string_path (const Account *acc, std::vector<std::string> const & path,
+                     GValue *v)
 {
-    GValue v = G_VALUE_INIT;
+    *v = G_VALUE_INIT;
     if (acc == NULL) return NULL; // how to check path is valid??
-    qof_instance_get_path_kvp (QOF_INSTANCE (acc), &v, path);
-    auto retval = G_VALUE_HOLDS_STRING (&v) ? g_value_dup_string (&v) : NULL;
-    g_value_unset (&v);
-    return retval;
+    qof_instance_get_path_kvp (QOF_INSTANCE (acc), v, path);
+    return G_VALUE_HOLDS_STRING (v) ? g_value_get_string (v) : NULL;
 }
 
-static char*
-get_kvp_string_tag (const Account *acc, const char *tag)
+static const char*
+get_kvp_string_tag (const Account *acc, const char *tag, GValue *v)
 {
-    return get_kvp_string_path (acc, {tag});
+    return get_kvp_string_path (acc, {tag}, v);
 }
 
 void
 xaccAccountSetColor (Account *acc, const char *str)
 {
-    auto priv = GET_PRIVATE (acc);
-    if (priv->color != is_unset)
-        g_free (priv->color);
-    priv->color = stripdup_or_null (str);
-    set_kvp_string_tag (acc, "color", priv->color);
+    set_kvp_string_tag (acc, "color", str);
 }
 
 void
 xaccAccountSetFilter (Account *acc, const char *str)
 {
-    auto priv = GET_PRIVATE (acc);
-    if (priv->filter != is_unset)
-        g_free (priv->filter);
-    priv->filter = stripdup_or_null (str);
-    set_kvp_string_tag (acc, "filter", priv->filter);
+    set_kvp_string_tag (acc, "filter", str);
 }
 
 void
 xaccAccountSetSortOrder (Account *acc, const char *str)
 {
-    auto priv = GET_PRIVATE (acc);
-    if (priv->sort_order != is_unset)
-        g_free (priv->sort_order);
-    priv->sort_order = stripdup_or_null (str);
-    set_kvp_string_tag (acc, "sort-order", priv->sort_order);
+    set_kvp_string_tag (acc, "sort-order", str);
 }
 
 void
 xaccAccountSetSortReversed (Account *acc, gboolean sortreversed)
 {
-    auto priv = GET_PRIVATE (acc);
-    priv->sort_reversed = sortreversed ? TriState::True : TriState::False;
     set_kvp_string_tag (acc, "sort-reversed", sortreversed ? "true" : NULL);
 }
 
@@ -2627,11 +2564,7 @@ qofAccountSetParent (Account *acc, QofInstance *parent)
 void
 xaccAccountSetNotes (Account *acc, const char *str)
 {
-    auto priv = GET_PRIVATE (acc);
-    if (priv->notes != is_unset)
-        g_free (priv->notes);
-    priv->notes = stripdup_or_null (str);
-    set_kvp_string_tag (acc, "notes", priv->notes);
+    set_kvp_string_tag (acc, "notes", str);
 }
 
 void
@@ -2754,7 +2687,7 @@ DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency)
 
     if ((!acc) || (!currency)) return;
     g_value_init (&v, G_TYPE_STRING);
-    g_value_set_string (&v, s);
+    g_value_set_static_string (&v, s);
     qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {"old-currency"});
     mark_account (acc);
     xaccAccountCommitEdit(acc);
@@ -3375,57 +3308,51 @@ xaccAccountGetDescription (const Account *acc)
 const char *
 xaccAccountGetColor (const Account *acc)
 {
+    GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), NULL);
-    auto priv = GET_PRIVATE (acc);
-    if (priv->color == is_unset)
-        priv->color = get_kvp_string_tag (acc, "color");
-    return priv->color;
+    auto rv = get_kvp_string_tag (acc, "color", &v);
+    g_value_unset (&v);
+    return rv;
 }
 
 const char *
 xaccAccountGetFilter (const Account *acc)
 {
+    GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), 0);
-    auto priv = GET_PRIVATE (acc);
-    if (priv->filter == is_unset)
-        priv->filter = get_kvp_string_tag (acc, "filter");
-    return priv->filter;
+    auto rv = get_kvp_string_tag (acc, "filter", &v);
+    g_value_unset (&v);
+    return rv;
 }
 
 const char *
 xaccAccountGetSortOrder (const Account *acc)
 {
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), 0);
-    auto priv = GET_PRIVATE (acc);
-    if (priv->sort_order == is_unset)
-        priv->sort_order = get_kvp_string_tag (acc, "sort-order");
-    return priv->sort_order;
+    GValue v = G_VALUE_INIT;
+    auto rv = get_kvp_string_tag (acc, "sort-order", &v);
+    g_value_unset (&v);
+    return rv;
 }
 
 gboolean
 xaccAccountGetSortReversed (const Account *acc)
 {
-
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    auto priv = GET_PRIVATE (acc);
-    if (priv->sort_reversed == TriState::Unset)
-    {
-        auto sort_reversed = get_kvp_string_tag (acc, "sort-reversed");
-        priv->sort_reversed = g_strcmp0 (sort_reversed, "true") ?
-            TriState::False : TriState::True;
-        g_free (sort_reversed);
-    }
-    return (priv->sort_reversed == TriState::True);
+    GValue v = G_VALUE_INIT;
+    auto rv = !g_strcmp0 (get_kvp_string_tag (acc, "sort-reversed", &v), "true");
+    g_value_unset (&v);
+    return rv;
 }
 
 const char *
 xaccAccountGetNotes (const Account *acc)
 {
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), NULL);
-    auto priv = GET_PRIVATE (acc);
-    if (priv->notes == is_unset)
-        priv->notes = get_kvp_string_tag (acc, "notes");
-    return priv->notes;
+    GValue v = G_VALUE_INIT;
+    auto rv = get_kvp_string_tag (acc, "notes", &v);
+    g_value_unset (&v);
+    return rv;
 }
 
 gnc_commodity *
@@ -4142,39 +4069,31 @@ xaccAccountSetTaxRelated (Account *acc, gboolean tax_related)
 const char *
 xaccAccountGetTaxUSCode (const Account *acc)
 {
-    auto priv = GET_PRIVATE (acc);
-    if (priv->tax_us_code == is_unset)
-        priv->tax_us_code = get_kvp_string_path (acc, {"tax-US", "code"});
-    return priv->tax_us_code;
+    GValue v = G_VALUE_INIT;
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
+    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {"tax-US", "code"});
+    return G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
 }
 
 void
 xaccAccountSetTaxUSCode (Account *acc, const char *code)
 {
-    auto priv = GET_PRIVATE (acc);
-    if (priv->tax_us_code != is_unset)
-        g_free (priv->tax_us_code);
-    priv->tax_us_code = g_strdup (code);
-    set_kvp_string_path (acc, {"tax-US", "code"}, priv->tax_us_code);
+    set_kvp_string_path (acc, {"tax-US", "code"}, code);
 }
 
 const char *
 xaccAccountGetTaxUSPayerNameSource (const Account *acc)
 {
-    auto priv = GET_PRIVATE (acc);
-    if (priv->tax_us_pns == is_unset)
-        priv->tax_us_pns = get_kvp_string_path (acc, {"tax-US", "payer-name-source"});
-    return priv->tax_us_pns;
- }
+    GValue v = G_VALUE_INIT;
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
+    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {"tax-US", "payer-name-source"});
+    return G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
+}
 
 void
 xaccAccountSetTaxUSPayerNameSource (Account *acc, const char *source)
 {
-    auto priv = GET_PRIVATE (acc);
-    if (priv->tax_us_pns != is_unset)
-        g_free (priv->tax_us_pns);
-    priv->tax_us_pns = g_strdup (source);
-    set_kvp_string_path (acc, {"tax-US", "payer-name-source"}, priv->tax_us_pns);
+    set_kvp_string_path (acc, {"tax-US", "payer-name-source"}, source);
 }
 
 gint64
@@ -4272,15 +4191,12 @@ xaccAccountGetIsOpeningBalance (const Account *acc)
 {
     if (GET_PRIVATE(acc)->type != ACCT_TYPE_EQUITY)
         return false;
-    auto priv = GET_PRIVATE(acc);
-    if (priv->equity_type == TriState::Unset)
-    {
-        auto equity_type = get_kvp_string_tag (acc, "equity-type");
-        priv->equity_type = g_strcmp0 (equity_type, "opening-balance") ?
-            TriState::False : TriState::True;
-        g_free (equity_type);
-    }
-    return (priv->equity_type == TriState::True);
+
+    GValue v = G_VALUE_INIT;
+    auto rv = !g_strcmp0 (get_kvp_string_tag (acc, "equity-type", &v),
+                          "opening-balance");
+    g_value_unset (&v);
+    return rv;
 }
 
 void
@@ -4288,8 +4204,6 @@ xaccAccountSetIsOpeningBalance (Account *acc, gboolean val)
 {
     if (GET_PRIVATE(acc)->type != ACCT_TYPE_EQUITY)
         return;
-    auto priv = GET_PRIVATE (acc);
-    priv->equity_type = val ? TriState::True : TriState::False;
     set_kvp_string_tag(acc, "equity-type", val ? "opening-balance" : nullptr);
 }
 
@@ -4917,10 +4831,10 @@ xaccAccountClearReconcilePostpone (Account *acc)
 const char *
 xaccAccountGetLastNum (const Account *acc)
 {
-    auto priv = GET_PRIVATE (acc);
-    if (priv->last_num == is_unset)
-        priv->last_num = get_kvp_string_tag (acc, "last-num");
-    return priv->last_num;
+    GValue v = G_VALUE_INIT;
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
+    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {"last-num"});
+    return G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
 }
 
 /********************************************************************\
@@ -4929,11 +4843,15 @@ xaccAccountGetLastNum (const Account *acc)
 void
 xaccAccountSetLastNum (Account *acc, const char *num)
 {
-    auto priv = GET_PRIVATE (acc);
-    if (priv->last_num != is_unset)
-        g_free (priv->last_num);
-    priv->last_num = g_strdup (num);
-    set_kvp_string_tag (acc, "last-num", priv->last_num);
+    GValue v = G_VALUE_INIT;
+    g_return_if_fail(GNC_IS_ACCOUNT(acc));
+    g_value_init (&v, G_TYPE_STRING);
+
+    g_value_set_static_string (&v, num);
+    xaccAccountBeginEdit (acc);
+    qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {"last-num"});
+    mark_account (acc);
+    xaccAccountCommitEdit (acc);
 }
 
 
@@ -5288,8 +5206,11 @@ dxaccAccountGetPriceSrc(const Account *acc)
     if (!xaccAccountIsPriced(acc)) return NULL;
 
     g_free (source);
-    source = get_kvp_string_tag (acc, "old-price-source");
-    return source;
+
+    GValue v = G_VALUE_INIT;
+    auto rv = get_kvp_string_tag (acc, "old-price-source", &v);
+    g_value_unset (&v);
+    return rv;
 }
 
 /********************************************************************\
@@ -5309,12 +5230,12 @@ dxaccAccountSetQuoteTZ(Account *acc, const char *tz)
 const char*
 dxaccAccountGetQuoteTZ(const Account *acc)
 {
-    static char *quote_tz = nullptr;
     if (!acc) return NULL;
     if (!xaccAccountIsPriced(acc)) return NULL;
-    g_free (quote_tz);
-    quote_tz = get_kvp_string_tag (acc, "old-quote-tz");
-    return quote_tz;
+    GValue v = G_VALUE_INIT;
+    auto rv = get_kvp_string_tag (acc, "old-quote-tz", &v);
+    g_value_unset (&v);
+    return rv;
 }
 
 /********************************************************************\
@@ -6273,10 +6194,12 @@ gnc_account_imap_get_info (Account *acc, const char *category)
 gchar *
 gnc_account_get_map_entry (Account *acc, const char *head, const char *category)
 {
-    if (category)
-        return get_kvp_string_path (acc, {head, category});
-    else
-        return get_kvp_string_path (acc, {head});
+    GValue v = G_VALUE_INIT;
+    auto rv = g_strdup (category ?
+                        get_kvp_string_path (acc, {head, category}, &v) :
+                        get_kvp_string_path (acc, {head}, &v));
+    g_value_unset (&v);
+    return rv;
 }
 
 
