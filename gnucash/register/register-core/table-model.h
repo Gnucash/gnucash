@@ -122,6 +122,10 @@ typedef struct
      * and edits should not be allowed. */
     gboolean read_only;
 
+    /* If true, denotes that this table is being displayed
+     * in the reverse direction. */
+    gboolean reverse_sort;
+
     /* If positive, denotes a row that marks a boundary that should
      * be visually distinguished. */
     int dividing_row;
@@ -131,6 +135,9 @@ typedef struct
     /* If positive, denotes a row that marks a boundary that should
      * be visually distinguished. */
     int dividing_row_lower;
+
+    /* If positive, denotes the row position of the blank trans */
+    int blank_trans_row;
 
     VirtCellDataAllocator cell_data_allocator;
     VirtCellDataDeallocator cell_data_deallocator;
@@ -144,6 +151,9 @@ void         gnc_table_model_destroy (TableModel *model);
 void         gnc_table_model_set_read_only (TableModel *model,
         gboolean read_only);
 gboolean     gnc_table_model_read_only (TableModel *model);
+
+void         gnc_table_model_set_reverse_sort (TableModel *model,
+                                               gboolean read_only);
 
 void gnc_table_model_set_entry_handler
 (TableModel *model,

@@ -145,6 +145,8 @@ gnc_table_model_new (void)
     model->dividing_row = -1;
     model->dividing_row_lower = -1;
 
+    model->blank_trans_row = -1;
+
     return model;
 }
 
@@ -197,6 +199,14 @@ gnc_table_model_read_only (TableModel *model)
     g_return_val_if_fail (model, FALSE);
 
     return model->read_only;
+}
+
+void
+gnc_table_model_set_reverse_sort (TableModel *model,
+                                  gboolean reverse_sort)
+{
+    g_return_if_fail (model);
+    model->reverse_sort = reverse_sort;
 }
 
 void
