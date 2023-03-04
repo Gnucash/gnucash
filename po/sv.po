@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-03 11:31-0800\n"
-"PO-Revision-Date: 2023-03-04 11:39+0000\n"
+"PO-Revision-Date: 2023-03-04 14:39+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/sv/>\n"
@@ -12734,25 +12734,19 @@ msgid "Capital Gains"
 msgstr "Realisationsvinster"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:908
-#, fuzzy
-#| msgid ""
-#| "If you are finished creating the stock split or merger, press \"Apply\". "
-#| "You may also press \"Back\" to review your choices, or \"Cancel\" to quit "
-#| "without making any changes."
 msgid ""
 "A summary of splits is shown as follows. If the summary is correct, and "
 "there are no errors, please press \"Apply\". You may also press \"Back\" to "
 "review your choices, or \"Cancel\" to quit without making any changes. "
 msgstr ""
-"Om du är klar med aktiespliten eller -sammanslagningen, klicka på \"Verkställ"
-"\". Du kan också klicka på \"Bakåt\" för att kontrollera dina val, eller "
-"\"Avbryt\" för att avbryta utan att göra några ändringar."
+"En sammanfattning av delarna visas som följer. Om sammanfattningen stämmer, "
+"och inget är felaktigt, klicka på ”Verkställ”. Du kan också klicka på ”Bakåt”"
+" för att kontrollera dina val, eller ”Avbryt” för att avbryta utan att göra "
+"några ändringar. "
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:956
-#, fuzzy
-#| msgid "_Finish"
 msgid "Finish"
-msgstr "_Slutför"
+msgstr "Slutför"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:16
 msgid "Introduction placeholder"
@@ -13049,10 +13043,8 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-account.glade:801
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:8
 #: gnucash/report/trep-engine.scm:69
-#, fuzzy
-#| msgid "Filter By:"
 msgid "Filter By…"
-msgstr "Filtrera efter:"
+msgstr "Filtrera efter…"
 
 #: gnucash/gtkbuilder/dialog-account.glade:922
 msgid "_Default"
@@ -13165,7 +13157,7 @@ msgstr "Överli_ggande konto"
 #, fuzzy
 #| msgid "Account Type"
 msgid "Acco_unt Type"
-msgstr "Kontotyp"
+msgstr "K_ontotyp"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1514
 msgid "Placeholde_r"
@@ -13189,13 +13181,6 @@ msgid "H_idden"
 msgstr "_Dold"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1550
-#, fuzzy
-#| msgid ""
-#| "This account (and any sub-accounts) will be hidden in the account tree "
-#| "and will not appear in the popup account list in the register. To reset "
-#| "this option, you will first need to open the \"Filter By...\" dialog for "
-#| "the account tree and check the \"show hidden accounts\" option. Doing so "
-#| "will allow you to select the account and reopen this dialog."
 msgid ""
 "This account (and any sub-accounts) will be hidden in the account tree and "
 "will not appear in the popup account list in the register. To reset this "
@@ -13205,7 +13190,7 @@ msgid ""
 msgstr ""
 "Detta konto (och dess underkonton) kommer att döljas i kontoträdet och "
 "kommer inte att visas i popup-kontolistan i registret. För att återställa "
-"alternativet behöver du först öppna dialogrutan \"Filtrera efter...\" för "
+"alternativet behöver du först öppna dialogrutan \"Filtrera efter…\" för "
 "kontoträdet och kryssa för alternativet \"visa dolda konton\". Det låter dig "
 "välja kontot och öppna dialogrutan på nytt."
 
@@ -13235,10 +13220,8 @@ msgstr ""
 "och tilldela en skattekod till detta konto."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1636
-#, fuzzy
-#| msgid "_Ending Balance"
 msgid "_Higher Balance Limit"
-msgstr "_Slutsaldo"
+msgstr "_Högre saldogräns"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1649
 msgid ""
@@ -13251,6 +13234,14 @@ msgid ""
 "\n"
 "Clear the entry to have no warning."
 msgstr ""
+"Om ett värde finns kan en indikation visas i kontoöversikten när dagens "
+"saldo är mer än detta värde.\n"
+"\n"
+"Dvs.\n"
+"Dagens saldo på -90 skulle visa en ikon om gränsen sätts till -100\n"
+"Dagens saldo på 100 skulle visa en ikon om gränsen sätts till 90\n"
+"\n"
+"Rensa posten för att vara utan varningar."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1670
 msgid ""
@@ -13263,24 +13254,26 @@ msgid ""
 "\n"
 "Clear the entry to have no warning."
 msgstr ""
+"Om ett värde finns kan en indikation visas i kontoöversikten när dagens "
+"saldo är mindre än detta värde.\n"
+"\n"
+"Dvs.\n"
+"Dagens saldo på -100 visar ikon om gränsen sätts till -90\n"
+"Dagens saldo på 90 visar ikon om gränsen sätts till 100\n"
+"\n"
+"Rensa posten för att vara utan varningar."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1692
-#, fuzzy
-#| msgid "Show zero balance items"
 msgid "_Lower Balance Limit"
-msgstr "Visa saldon som är noll"
+msgstr "_Lägre saldogräns"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1718
-#, fuzzy
-#| msgid "Include _subaccounts"
 msgid "_Include sub accounts"
-msgstr "Inkludera _underkonton"
+msgstr "_Inkludera underkonton"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1755
-#, fuzzy
-#| msgid "Proper_ties"
 msgid "More Properties"
-msgstr "_Egenskaper"
+msgstr "Flera egenskaper"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1781
 msgid "<b>Balance Information</b>"
@@ -13777,10 +13770,8 @@ msgid "Warning: Finance::Quote not installed properly."
 msgstr "Varning: Finance::Quote är inte korrekt installerat."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:713
-#, fuzzy
-#| msgid "Select user information here..."
 msgid "Select user information here…"
-msgstr "Välj användarinformation här..."
+msgstr "Välj användarinformation här…"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:187
 msgid ""
@@ -13880,23 +13871,10 @@ msgid "Exit the saved report configurations dialog"
 msgstr "Avsluta dialogrutan för sparade rapportkonfigurationer"
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:100
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Currently you have no saved reports.\n"
 msgid "Currently you have no saved reports."
-msgstr ""
-"\n"
-"Du har för närvarande inga sparade rapporter.\n"
+msgstr "Du har för närvarande inga sparade rapporter."
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:112
-#, fuzzy
-#| msgid ""
-#| "Saved report configurations are created by first opening a report from "
-#| "the Reports menu,\n"
-#| "altering the report's options to your taste and then choosing \"Save "
-#| "Report Configuration\" from\n"
-#| "the Reports menu or tool bar."
 msgid ""
 "Saved report configurations are created by\n"
 "1. opening a report from the Reports menu,\n"
@@ -13904,11 +13882,11 @@ msgid ""
 "3. selecting \"Save Report Configuration [As…]\" from the Reports menu\n"
 " or pressing a \"Save Config [As…]\" button on the tool bar."
 msgstr ""
-"Sparade rapportkonfigurationer skapas genom att först öppna en rapport från "
-"Rapportmenyn,\n"
-"ändra rapportens alternativ efter dina behov och sedan välja \"Spara "
-"rapportkonfiguration\" från\n"
-"Rapportmenyn eller verktygsfältet."
+"Sparade rapportkonfigurationer skapas genom att\n"
+"1. öppna en rapport från Rapportmenyn,\n"
+"2. ändra rapportens alternativ efter dina behov,\n"
+"3. välj ”Spara rapportkonfiguration [som…]” från Rapportmenyn\n"
+" eller klicka på knappen ”Spara konfig [som…]” i verktygsfältet."
 
 #: gnucash/gtkbuilder/dialog-date-close.glade:7
 #: gnucash/gtkbuilder/dialog-date-close.glade:261
@@ -13956,10 +13934,8 @@ msgid "(none)"
 msgstr "(ingen)"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:409
-#, fuzzy
-#| msgid "Enter URL like http://www.gnucash.org"
 msgid "Enter an URL like \"https://www.gnucash.org\""
-msgstr "Mata in URL som http://www.gnucash.org"
+msgstr "Mata in en URL som ”http://www.gnucash.org”"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:454
 msgid "Location does not start with a valid scheme"
@@ -14340,17 +14316,15 @@ msgstr ""
 #, fuzzy
 #| msgid "New Account"
 msgid "New _Account…"
-msgstr "Nytt konto"
+msgstr "Nytt _konto…"
 
 #: gnucash/gtkbuilder/dialog-import.glade:86
 msgid "Please select or create an appropriate GnuCash account for:"
 msgstr "Välj eller lägg till ett GnuCash-konto för:"
 
 #: gnucash/gtkbuilder/dialog-import.glade:99
-#, fuzzy
-#| msgid "Online account ID here..."
 msgid "Online account ID here…"
-msgstr "Online konto-ID här..."
+msgstr "Online konto-ID här…"
 
 #: gnucash/gtkbuilder/dialog-import.glade:170
 #: gnucash/gtkbuilder/dialog-import.glade:278
@@ -14584,22 +14558,16 @@ msgid "Extra Payments"
 msgstr "Extra betalningar"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:633
-#, fuzzy
-#| msgid "Report Title"
 msgid "Report template"
-msgstr "Rapporttitel"
+msgstr "Rapportmall"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:695
-#, fuzzy
-#| msgid "Show employee report"
 msgid "Use template report"
-msgstr "Visa rapport över personal"
+msgstr "Använd mallrapport"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:723
-#, fuzzy
-#| msgid "Choose the export format for this report:"
 msgid "Choose a different report template before timeout"
-msgstr "Välj exportformat för den här rapporten:"
+msgstr "Välj en annan rapportmall innan tidsgränsen överskrids"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:915
 msgid ""
@@ -16133,10 +16101,8 @@ msgid "Custom format"
 msgstr "Eget format"
 
 #: gnucash/gtkbuilder/dialog-progress.glade:12
-#, fuzzy
-#| msgid "Working..."
 msgid "Working…"
-msgstr "Arbetar..."
+msgstr "Arbetar…"
 
 #: gnucash/gtkbuilder/dialog-report.glade:55
 msgid "<b>A_vailable reports</b>"
@@ -16163,10 +16129,8 @@ msgid "Move dow_n"
 msgstr "Flytta _ner"
 
 #: gnucash/gtkbuilder/dialog-report.glade:189
-#, fuzzy
-#| msgid "Si_ze..."
 msgid "Si_ze…"
-msgstr "_Storlek..."
+msgstr "_Storlek…"
 
 #: gnucash/gtkbuilder/dialog-report.glade:253
 msgid "HTML Style Sheets"
@@ -16243,13 +16207,8 @@ msgid "Temporary Warnings"
 msgstr "Tillfälliga varningar"
 
 #: gnucash/gtkbuilder/dialog-search.glade:37
-#, fuzzy
-#| msgctxt ""
-#| "Item represents an unknown object type (in the sense of bill, customer, "
-#| "invoice, transaction, split,...)!"
-#| msgid "New item"
 msgid "_New item…"
-msgstr "Ny post"
+msgstr "_Ny post…"
 
 #: gnucash/gtkbuilder/dialog-search.glade:82
 msgid "_Find"
@@ -16337,10 +16296,8 @@ msgid "Make Scheduled Transaction"
 msgstr "Skapa schemalagd transaktion"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:159
-#, fuzzy
-#| msgid "Advanced..."
 msgid "Advanced…"
-msgstr "Avancerat..."
+msgstr "Avancerat…"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:310
 msgid "Never End"
@@ -16480,10 +16437,8 @@ msgid "Template Transaction"
 msgstr "Transaktionsmallar"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1476
-#, fuzzy
-#| msgid "Since Last Run..."
 msgid "Since Last Run…"
-msgstr "Sedan senaste körningen..."
+msgstr "Sedan senaste körningen…"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1592
 msgid "_Review created transactions"
@@ -17268,11 +17223,9 @@ msgid "Show Description"
 msgstr "Visa beskrivning"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:675
-#, fuzzy
-#| msgid "Note: Use View->'Filter By...' to control visible accounts."
 msgid "Note: Use View->'Filter By…' to control visible accounts."
 msgstr ""
-"Obs: Använd Visa->\"Filtrera efter...\" för att styra vilka konton som syns."
+"Obs: Använd Visa->”Filtrera efter…” för att styra vilka konton som syns."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:693
 msgid "Budget List"
@@ -17304,10 +17257,8 @@ msgstr "Mata in anteckning"
 
 #. Filter register by… Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:13
-#, fuzzy
-#| msgid "Filter register by..."
 msgid "Filter register by…"
-msgstr "Filtrera register efter..."
+msgstr "Filtrera register efter…"
 
 #. Filter By Dialog, Date Tab
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:80
@@ -17371,10 +17322,8 @@ msgstr "Behåll länkat dokumentpost"
 
 #. Sort register by Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:770
-#, fuzzy
-#| msgid "Sort register by..."
 msgid "Sort register by…"
-msgstr "Sortera register efter..."
+msgstr "Sortera register efter…"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:833
 msgid "_Standard Order"
@@ -18060,10 +18009,8 @@ msgid "_Templates"
 msgstr "_Mallar"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1661
-#, fuzzy
-#| msgid "Select File for Import"
 msgid "Select File Import Format and Template"
-msgstr "Välj fil att importera"
+msgstr "Välj format och mall för filimport"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1730
 msgid ""
@@ -18071,24 +18018,25 @@ msgid ""
 "profile list contains specializations and is populated according to which "
 "format you select in this list."
 msgstr ""
+"Den här listan innehåller filformaten som AQBanking vet hur det ska "
+"importera. Profillistan innehåller specialiseringar och fylls i enligt "
+"formatet som du väljer i listan."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1733
-#, fuzzy
-#| msgid "<b>File Format</b>"
 msgid "File Format"
-msgstr "<b>Filformat</b>"
+msgstr "Filformat"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1779
 msgid ""
 "This list one or more specialization templates that adjust the import for "
 "different banks uses of fields in the selected import format."
 msgstr ""
+"Detta listar en eller flera specialiseringsmallar som justerar importen för "
+"olika bankers bruk av fält i det valda importformatet."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1787
-#, fuzzy
-#| msgid "Profits:"
 msgid "Profiles"
-msgstr "Förtjänst:"
+msgstr "Profiler"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:22
 #: gnucash/import-export/aqb/gncmod-aqbanking.c:70
@@ -18544,16 +18492,11 @@ msgstr ""
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:6
 msgid "Import using AQBanking"
-msgstr ""
+msgstr "Importera med AQBanking"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:8
-#, fuzzy
-#| msgid ""
-#| "Import a DTAUS file into GnuCash and transmit its orders by Online "
-#| "Banking."
 msgid "Import into GnuCash any file format supported by AQBanking"
-msgstr ""
-"Importera en DTAUS-fil till GnuCash och skicka dess ordrar via online-bank."
+msgstr "Importera till GnuCash alla filformat som stöds av AQBanking"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:14
 msgid "_Online Actions"
@@ -18569,10 +18512,8 @@ msgid "The list of Scheduled Transactions"
 msgstr "Listan med schemalagda transaktioner"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:23
-#, fuzzy
-#| msgid "Get _Transactions..."
 msgid "Get _Transactions…"
-msgstr "Hämta _transaktioner..."
+msgstr "Hämta _transaktioner…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:25
 msgid "Get the transactions online through Online Banking"
@@ -18580,10 +18521,8 @@ msgstr "Hämta transaktionerna online via online-bank"
 
 #. Translators: https://en.wikipedia.org/wiki/Single_Euro_Payments_Area
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:31
-#, fuzzy
-#| msgid "Issue _SEPA Transaction..."
 msgid "Issue _SEPA Transaction…"
-msgstr "Skicka _SEPA-transaktion..."
+msgstr "Skicka _SEPA-transaktion…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:33
 msgid ""
@@ -18594,10 +18533,8 @@ msgstr ""
 "bank"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:36
-#, fuzzy
-#| msgid "Issue SEPA I_nternal Transaction..."
 msgid "Issue SEPA I_nternal Transaction…"
-msgstr "Skicka SEPA i_ntern transaktion..."
+msgstr "Skicka SEPA i_ntern transaktion…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:38
 msgid ""
@@ -18607,20 +18544,16 @@ msgstr ""
 "Skicka en ny intern europeisk (SEPA) transaktion online via online-bank"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:41
-#, fuzzy
-#| msgid "_Internal Transaction..."
 msgid "_Internal Transaction…"
-msgstr "_Intern transaktion..."
+msgstr "_Intern transaktion…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:43
 msgid "Issue a new bank-internal transaction online through Online Banking"
 msgstr "Skicka en ny bankintern överföring online via online-bank"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:46
-#, fuzzy
-#| msgid "Issue SEPA Direct _Debit..."
 msgid "Issue SEPA Direct _Debit…"
-msgstr "Skicka SEPA _autogirering..."
+msgstr "Skicka SEPA _autogirering…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:48
 msgid ""
@@ -18635,16 +18568,12 @@ msgid "Show _log window"
 msgstr "Visa _loggfönster"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:55
-#, fuzzy
-#| msgid "Show the online banking log window."
 msgid "Show the online banking log window"
-msgstr "Visa online-bankens loggfönster."
+msgstr "Visa online-bankens loggfönster"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:63
-#, fuzzy
-#| msgid "_Online Banking Setup..."
 msgid "_Online Banking Setup…"
-msgstr "_Online-bankinställning..."
+msgstr "_Online-bankinställning…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:65
 msgid ""
@@ -18727,10 +18656,9 @@ msgstr ""
 "(kallas \"profiler\") som du kan välja bland här."
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:297
-#, fuzzy, c-format
-#| msgid "Validation...\n"
+#, c-format
 msgid "Validation…\n"
-msgstr "Validering...\n"
+msgstr "Validering…\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:327
 #, c-format
@@ -18795,14 +18723,8 @@ msgid "Error(s) in invoice without id, all rows of this invoice ignored.\n"
 msgstr "Fel i faktura utan ID, alla rader i fakturan ignoreras.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:645
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Processing...\n"
 msgid "Processing…"
-msgstr ""
-"\n"
-"Behandlar...\n"
+msgstr "Behandlar…"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:714
 #, c-format
@@ -19101,17 +19023,13 @@ msgstr "Belopp num."
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:556
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:569
-#, fuzzy
-#| msgid "Amount With Sym"
 msgid "Value With Sym"
-msgstr "Belopp med sym"
+msgstr "Värde med sym"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:556
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:569
-#, fuzzy
-#| msgid "Value $"
 msgid "Value Num."
-msgstr "Värde kr"
+msgstr "Värde num."
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:557
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:570
@@ -19181,13 +19099,7 @@ msgstr ""
 "efter / Övrigt\" och välja att visa ej använda konton.\n"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:458
-#, fuzzy, c-format
-#| msgid ""
-#| "Import completed but with errors!\n"
-#| "\n"
-#| "The number of Accounts added was %u and %u were updated.\n"
-#| "\n"
-#| "See below for errors..."
+#, c-format
 msgid ""
 "Import completed but with errors!\n"
 "\n"
@@ -19199,7 +19111,7 @@ msgstr ""
 "\n"
 "Antal konton som lades till var %u och %u uppdaterades.\n"
 "\n"
-"Se nedan för fel..."
+"Se nedan för fel…"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:466
 #, c-format
@@ -19330,7 +19242,7 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1427
 msgid "This line has the following parse issues:"
-msgstr ""
+msgstr "Den här raden har följande tolkningsproblem:"
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1771
 msgid "No Linked Account"
@@ -19486,16 +19398,16 @@ msgid "Please select a description column."
 msgstr "Välj en beskrivningskolumn."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:507
-#, fuzzy
-#| msgid "Please select an amount column."
 msgid "Please select a (negated) amount column."
-msgstr "Välj en beloppskolumn."
+msgstr "Välj en (negerad) beloppskolumn."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:524
 msgid ""
 "The current account selections will generate multi-currency transactions. "
 "Please select one of the following columns: price, (negated) value."
 msgstr ""
+"Aktuellt kontourval kommer att generera transaktioner i flera valutor. Välj "
+"en av följande kolumner: pris, (negerat) värde."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:531
 msgid ""
@@ -19503,19 +19415,15 @@ msgid ""
 "Please select one of the following columns: price, (negated) value, "
 "(negated) transfer amount."
 msgstr ""
+"Aktuella kontourval kommer att generera transaktioner i flera valutor. Välj "
+"en av följande kolumner: pris, (negerat) värde, (negerat) överföringsbelopp."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:671
-#, fuzzy
-#| msgid ""
-#| "No 'Currency to' column selected and no selected Currency specified "
-#| "either.\n"
-#| "This should never happen. Please report this as a bug."
 msgid ""
 "Current line still has parse errors.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
-"Ingen \"Valuta till\"-kolumn har valts och ingen valuta har specificerats "
-"heller.\n"
+"Aktuell rad har fortfarande tolkningsfel.\n"
 "Detta bör aldrig hända. Rapportera detta som ett fel."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:682
@@ -19527,16 +19435,12 @@ msgstr ""
 "Detta bör aldrig hända. Rapportera detta som ett fel."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:686
-#, fuzzy
-#| msgid "Error"
 msgid "Parse Error"
-msgstr "Fel"
+msgstr "Tolkningsfel"
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:702
-#, fuzzy
-#| msgid "Select matching existing transaction"
 msgid "Problem creating preliminary transaction"
-msgstr "Välj matchande befintlig transaktion"
+msgstr "Problem när preliminär transaktion skapades"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:54
 msgid "From Symbol"
@@ -19595,7 +19499,7 @@ msgstr "Värde tolkades till en ogiltig valuta från en valutakolumntyp."
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:550
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:630
 msgid "{1}: {2}"
-msgstr ""
+msgstr "{1}: {2}"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:279
 msgid "No date column."
@@ -19622,30 +19526,24 @@ msgid "Transaction Commodity"
 msgstr "Transaktionens produkt"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
-#, fuzzy
-#| msgid "Amount (_words)"
 msgid "Amount (Negated)"
-msgstr "Belopp (_ord)"
+msgstr "Belopp (Negerat)"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:71
 msgid "Value (Negated)"
-msgstr ""
+msgstr "Värde (Negerat)"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:76
 msgid "Transfer Action"
 msgstr "Överföringsåtgärd"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:78
-#, fuzzy
-#| msgid "Transfer Account"
 msgid "Transfer Amount"
-msgstr "Överföringskonto"
+msgstr "Överföringsbelopp"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:79
-#, fuzzy
-#| msgid "Transfer Account"
 msgid "Transfer Amount (Negated)"
-msgstr "Överföringskonto"
+msgstr "Överföringsbelopp (Negerat)"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:80
 msgid "Transfer Memo"
@@ -19666,22 +19564,21 @@ msgstr "Värdet kan inte tolkas till en giltig avstämningsstatus."
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:246
 msgid "Date field can not be empty if 'Multi-split' option is unset.\n"
 msgstr ""
+"Datumfält får inte vara tomt om alternativet ”Multi-split” inte är satt.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:262
 msgid "Description field can not be empty if 'Multi-split' option is unset.\n"
 msgstr ""
+"Beskrivningsfält får inte vara tomt om alternativet ”Multi-split” inte är "
+"satt.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:312
-#, fuzzy
-#| msgid "Invalid dates"
 msgid "No valid date."
-msgstr "Ogiltiga datum"
+msgstr "Inget giltigt datum."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:315
-#, fuzzy
-#| msgid "Sort by description."
 msgid "No valid description."
-msgstr "Sortera efter beskrivning."
+msgstr "Ingen giltig beskrivning."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:448
 msgid "Account value can't be empty."
@@ -19700,10 +19597,8 @@ msgid "Transfer account value can't be mapped back to an account."
 msgstr "Överföringskontots värde kan inte mappas tillbaka till ett konto."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:642
-#, fuzzy
-#| msgid "No amount column."
 msgid "No amount or negated amount column."
-msgstr "Ingen beloppskolumn."
+msgstr "Inga belopp eller negerad beloppskolumn."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:645
 msgid "Split is reconciled but reconcile date column is missing or invalid."
@@ -19723,12 +19618,16 @@ msgid ""
 "Choice of accounts makes this a multi-currency transaction but price or "
 "(negated) value column is missing or invalid."
 msgstr ""
+"Val av konton gör detta till en fler-valutatransaktion, men pris eller "
+"(negerat) värdekolumn saknas eller är ogiltig."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:666
 msgid ""
 "Choice of account makes this a multi-currency transaction but price, "
 "(negated) value or (negated) transfer column is missing or invalid."
 msgstr ""
+"Val av konto gör detta till en fler-valutatransaktion, men pris, (negerat) "
+"värde eller (negerad) överföringskolumn saknas eller är ogiltig."
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:46
 msgid "No Settings"
@@ -19739,10 +19638,8 @@ msgid "GnuCash Export Format"
 msgstr "GnuCash-exportformat"
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:48
-#, fuzzy
-#| msgid "GnuCash Export Format"
 msgid "GnuCash Export Format (4.x and older)"
-msgstr "GnuCash-exportformat"
+msgstr "GnuCash-exportformat (4.x och tidigare)"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:134
 msgid "Shipping Name"
@@ -19864,18 +19761,13 @@ msgstr "Avaktiverad"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1331
-#, fuzzy
-#| msgid "_Select transfer account"
 msgid "_Assign transfer account"
-msgstr "_Välj överföringskonto"
+msgstr "_Tilldela överföringskonto"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1341
-#, fuzzy
-#| msgid "Exchange rate"
-#| msgid_plural "Exchange rates"
 msgid "Assign e_xchange rate"
-msgstr "Växelkurs"
+msgstr "Tilldela vä_xelkurs"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1349
@@ -19937,10 +19829,9 @@ msgstr "Ny, överföring %s till (auto) \"%s\""
 
 #. Translators: %s is the amount to be transferred.
 #: gnucash/import-export/import-main-matcher.c:1976
-#, fuzzy, c-format
-#| msgid "New, UNBALANCED (need acct to transfer %s)!"
+#, c-format
 msgid "New, UNBALANCED (need price to transfer %s to acct %s)!"
-msgstr "Ny, OBALANSERAD (behöver konto för överföring %s)!"
+msgstr "Ny, OBALANSERAD (behöver pris för att föra över %s till konto %s)!"
 
 #. Translators: %s is the amount to be transferred.
 #: gnucash/import-export/import-main-matcher.c:1992
@@ -20078,10 +19969,8 @@ msgid "Select one or multiple OFX/QFX file(s) to process"
 msgstr "Välj en eller flera OFX/QFX-fil(er) att behandla"
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.ui:6
-#, fuzzy
-#| msgid "Import _OFX/QFX..."
 msgid "Import _OFX/QFX…"
-msgstr "Importera _OFX/QFX..."
+msgstr "Importera _OFX/QFX…"
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.ui:8
 msgid "Process an OFX/QFX response file"
@@ -20487,7 +20376,7 @@ msgstr "Letar efter transaktionsdubbletter"
 #: gnucash/import-export/qif-imp/qif-parse.scm:174
 #, scheme-format
 msgid "The account type ~s is unknown, using 'bank' instead."
-msgstr ""
+msgstr "Kontotypen ~s är okänd, använder ”bank” istället."
 
 #. Translators: This is an error message about actions like buy, sell …
 #: gnucash/import-export/qif-imp/qif-parse.scm:238
@@ -20500,6 +20389,7 @@ msgstr "Okänd åtgärd '~a'."
 #, scheme-format
 msgid "The unknown reconciliation status '~a' will be replaced by 'uncleared'."
 msgstr ""
+"Den okända avstämningsstatusen ”~a” kommer att ersättas av ”ej clearad”."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:213
 msgid "QIF import: Name conflict with another account."
@@ -20800,10 +20690,8 @@ msgid "Enter the Discount Percent"
 msgstr "Mata in rabatt i procent"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:609
-#, fuzzy
-#| msgid "Enter the Discount ... unknown type"
 msgid "Enter the Discount … unknown type"
-msgstr "Ange rabatten ... okänd typ"
+msgstr "Ange rabatten … okänd typ"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:627
 msgid "Discount Type: Monetary Value"
@@ -21729,16 +21617,12 @@ msgid "Most recent"
 msgstr "Mest nyligen"
 
 #: gnucash/report/options-utilities.scm:158
-#, fuzzy
-#| msgid "Width of plot in pixels."
 msgid "Width of plot, 10 - 100 in percent, above in pixels."
-msgstr "Bredd på graf i pixlar."
+msgstr "Bredd på graf, 10-100 i procent, högre i pixlar."
 
 #: gnucash/report/options-utilities.scm:164
-#, fuzzy
-#| msgid "Height of plot in pixels."
 msgid "Height of plot, 10 - 100 in percent, above in pixels."
-msgstr "Höjd på graf i pixlar."
+msgstr "Höjd på graf, 10-100 i procent, högre i pixlar."
 
 #: gnucash/report/options-utilities.scm:173
 msgid "Choose the marker for each data point."
@@ -22238,7 +22122,7 @@ msgstr "Titel för denna rapporten."
 #: gnucash/report/reports/example/sample-report.scm:119
 #: gnucash/report/reports/example/sample-report.scm:131
 msgid "Tab B"
-msgstr ""
+msgstr "Flik B"
 
 #: gnucash/report/reports/example/sample-report.scm:61
 msgid "Boolean Option"
@@ -22281,10 +22165,8 @@ msgid "This is a string option."
 msgstr "Detta är ett strängalternativ."
 
 #: gnucash/report/reports/example/sample-report.scm:86
-#, fuzzy
-#| msgid "String Option"
 msgid "String Option Default"
-msgstr "Strängalternativ"
+msgstr "Strängalternativ, förval"
 
 #: gnucash/report/reports/example/sample-report.scm:99
 msgid "Just a Date Option"
@@ -22332,7 +22214,7 @@ msgstr "Detta är ett färgalternativ."
 #: gnucash/report/reports/example/sample-report.scm:147
 #: gnucash/report/reports/example/sample-report.scm:158
 msgid "Tab A"
-msgstr ""
+msgstr "Flik A"
 
 #: gnucash/report/reports/example/sample-report.scm:147
 msgid "An account list option"
@@ -22367,25 +22249,19 @@ msgid "Testing"
 msgstr "Testar"
 
 #: gnucash/report/reports/example/sample-report.scm:169
-#, fuzzy
-#| msgid "Report Title"
 msgid "Report Title Default"
-msgstr "Rapporttitel"
+msgstr "Rapporttitel, förval"
 
 #: gnucash/report/reports/example/sample-report.scm:285
-#, fuzzy, scheme-format
-#| msgid ""
-#| "This is a sample GnuCash report. See the guile (scheme) source code in "
-#| "the scm/report directory for details on writing your own reports, or "
-#| "extending existing reports."
+#, scheme-format
 msgid ""
 "This is a sample GnuCash ~a report. See the guile (scheme) source code in "
 "the scm/report directory for details on writing your own reports, or "
 "extending existing reports."
 msgstr ""
-"Detta är ett exempel på en GnuCash-rapport. Titta på guilekällkoden (scheme) "
-"i katalogen scm/report för detaljer på hur du kan skriva dina egna "
-"rapporter, eller utöka existerande rapporter."
+"Detta är ett exempel på en GnuCash ~a-rapport. Titta på guile-källkoden "
+"(scheme) i katalogen scm/report för detaljer på hur du kan skriva dina egna "
+"rapporter, eller utöka befintliga rapporter."
 
 #: gnucash/report/reports/example/sample-report.scm:292
 #, scheme-format
@@ -22397,27 +22273,19 @@ msgstr ""
 "nya, helsköna rapport, kontakta sändlistan ~a."
 
 #: gnucash/report/reports/example/sample-report.scm:297
-#, fuzzy
-#| msgid ""
-#| "For details on subscribing to that list, see &lt;https://www.gnucash.org/"
-#| "&gt;."
 msgid ""
 " For details on subscribing to that list, see &lt;https://www.gnucash.org/"
 "&gt;."
 msgstr ""
-"För detaljer om hur du prenumererar på listan, se &lt;https://www.gnucash."
+" För detaljer om hur du prenumererar på listan, se &lt;https://www.gnucash."
 "org/&gt;."
 
 #: gnucash/report/reports/example/sample-report.scm:298
-#, fuzzy
-#| msgid ""
-#| "You can learn more about writing scheme at &lt;https://www.scheme.com/"
-#| "tspl2d/&gt;."
 msgid ""
 " You can learn more about writing scheme at &lt;https://www.scheme.com/"
 "tspl2d/&gt;."
 msgstr ""
-"Du kan läsa mer om hur du använder scheme på &lt;https://www.scheme.com/"
+" Du kan läsa mer om hur du använder scheme på &lt;https://www.scheme.com/"
 "tspl2d/&gt;."
 
 #: gnucash/report/reports/example/sample-report.scm:302
@@ -22500,16 +22368,12 @@ msgstr "Visa hjälp"
 
 #: gnucash/report/reports/example/sample-report.scm:442
 #: gnucash/report/reports/example/sample-report.scm:453
-#, fuzzy
-#| msgid "Employee Report"
 msgid "Sample Report"
-msgstr "Rapport över personal"
+msgstr "Exempelrapport"
 
 #: gnucash/report/reports/example/sample-report.scm:457
-#, fuzzy
-#| msgid "Show employee report"
 msgid "An options example report."
-msgstr "Visa rapport över personal"
+msgstr "En exempelrapport för alternativ."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:79
 msgid "Tax Report / TXF Export"
@@ -23164,12 +23028,12 @@ msgstr "Utelämna konton"
 #: gnucash/report/reports/standard/income-statement.scm:380
 #: gnucash/report/reports/standard/trial-balance.scm:383
 msgid "${company-name} ${report-title} For Period Covering ${start} to ${end}"
-msgstr ""
+msgstr "${company-name} ${report-title} för perioden från ${start} till ${end}"
 
 #: gnucash/report/reports/standard/account-summary.scm:307
 #: gnucash/report/reports/standard/trial-balance.scm:379
 msgid "${company-name} ${report-title} ${date}"
-msgstr ""
+msgstr "${company-name} ${report-title} ${date}"
 
 #: gnucash/report/reports/standard/account-summary.scm:392
 msgid "Account title"
@@ -25155,44 +25019,32 @@ msgstr "Vinst & förlust"
 #, fuzzy
 #| msgid "Charge"
 msgid "Chart"
-msgstr "Avgift"
+msgstr "Diagram"
 
 #: gnucash/report/reports/standard/investment-lots.scm:41
-#, fuzzy
-#| msgid "Two Columns"
 msgid "Columns"
-msgstr "Två kolumner"
+msgstr "Kolumner"
 
 #: gnucash/report/reports/standard/investment-lots.scm:42
-#, fuzzy
-#| msgid "Validation...\n"
 msgid "Validation"
-msgstr "Validering...\n"
+msgstr "Validering"
 
 #: gnucash/report/reports/standard/investment-lots.scm:47
 #: gnucash/report/reports/standard/investment-lots.scm:163
-#, fuzzy
-#| msgid "Include accounts with no shares"
 msgid "Include accounts with no lots"
-msgstr "Ta med konton utan andelar"
+msgstr "Ta med konton utan partier"
 
 #: gnucash/report/reports/standard/investment-lots.scm:50
-#, fuzzy
-#| msgid "Show date"
 msgid "Show Chart"
-msgstr "Visa datum"
+msgstr "Visa diagram"
 
 #: gnucash/report/reports/standard/investment-lots.scm:51
-#, fuzzy
-#| msgid "Chart Type"
 msgid "Chart type"
 msgstr "Diagramtyp"
 
 #: gnucash/report/reports/standard/investment-lots.scm:52
-#, fuzzy
-#| msgid "Old location:"
 msgid "Chart location"
-msgstr "Gammal plats:"
+msgstr "Diagramplats"
 
 #: gnucash/report/reports/standard/investment-lots.scm:53
 #, fuzzy
