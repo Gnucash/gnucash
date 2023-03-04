@@ -19,10 +19,10 @@
 # TANIGUCHI Yasuaki <yasuakit+weblate@gmail.com>, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash ${VERSION}-pot:${POTVERSION}\n"
+"Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-03-03 11:31-0800\n"
+"POT-Creation-Date: 2023-03-04 13:59-0800\n"
 "PO-Revision-Date: 2022-12-17 16:42+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
@@ -1234,7 +1234,7 @@ msgstr "ローン返済オプション: \"%s\""
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3750
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:62
 #: gnucash/register/ledger-core/split-register-model.c:233
-#: gnucash/report/reports/standard/account-summary.scm:83
+#: gnucash/report/reports/standard/account-summary.scm:77
 #: gnucash/report/reports/standard/advanced-portfolio.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1046
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1051
@@ -1768,7 +1768,7 @@ msgstr "購入または売却した株数を入力します。"
 #. Translators: Inserts the value into action field of the non-currency asset split of
 #. an investment transaction.
 #: gnucash/gnome/assistant-stock-transaction.cpp:1113
-#: libgnucash/engine/Account.cpp:4484
+#: libgnucash/engine/Account.cpp:4398
 msgid "Stock"
 msgstr "株式"
 
@@ -1806,7 +1806,7 @@ msgstr "摘要"
 #: gnucash/register/ledger-core/split-register.c:2440
 #: gnucash/report/reports/standard/general-journal.scm:82
 #: gnucash/report/reports/standard/register.scm:336
-#: gnucash/report/reports/standard/trial-balance.scm:564
+#: gnucash/report/reports/standard/trial-balance.scm:555
 #: gnucash/report/trep-engine.scm:1311 gnucash/report/trep-engine.scm:1328
 #: libgnucash/engine/Account.cpp:164
 msgid "Debit"
@@ -1821,7 +1821,7 @@ msgstr "借方"
 #: gnucash/register/ledger-core/split-register.c:2595
 #: gnucash/report/reports/standard/general-journal.scm:83
 #: gnucash/report/reports/standard/register.scm:338
-#: gnucash/report/reports/standard/trial-balance.scm:567
+#: gnucash/report/reports/standard/trial-balance.scm:558
 #: gnucash/report/trep-engine.scm:1314 gnucash/report/trep-engine.scm:1331
 #: libgnucash/engine/Account.cpp:184
 msgid "Credit"
@@ -1858,7 +1858,7 @@ msgstr "編集"
 #: gnucash/gnome-search/dialog-search.c:1076
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:147
 #: gnucash/report/reports/standard/invoice.scm:731
-#: libgnucash/engine/Account.cpp:179 libgnucash/engine/gncInvoice.c:1121
+#: libgnucash/engine/Account.cpp:179 libgnucash/engine/gncInvoice.c:1097
 msgid "Bill"
 msgstr "仕入先請求書"
 
@@ -1892,7 +1892,7 @@ msgstr "立替払請求書"
 #: gnucash/report/reports/standard/taxinvoice.scm:178
 #: gnucash/report/reports/support/receipt.eguile.scm:91
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:106
-#: libgnucash/engine/Account.cpp:160 libgnucash/engine/gncInvoice.c:1119
+#: libgnucash/engine/Account.cpp:160 libgnucash/engine/gncInvoice.c:1095
 msgid "Invoice"
 msgstr "請求書"
 
@@ -2456,7 +2456,7 @@ msgstr "取引の文書リンク"
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3760
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:67
 #: gnucash/register/ledger-core/split-register-model.c:296
-#: gnucash/report/reports/standard/account-summary.scm:391
+#: gnucash/report/reports/standard/account-summary.scm:380
 #: gnucash/report/reports/standard/general-journal.scm:96
 #: gnucash/report/reports/standard/general-ledger.scm:70
 #: gnucash/report/reports/standard/general-ledger.scm:90
@@ -2624,9 +2624,9 @@ msgstr "釣り合い"
 
 #: gnucash/gnome/dialog-find-transactions.c:115
 #: gnucash/report/html-acct-table.scm:602
-#: gnucash/report/reports/standard/equity-statement.scm:158
-#: gnucash/report/reports/standard/income-statement.scm:244
-#: gnucash/report/reports/standard/trial-balance.scm:265
+#: gnucash/report/reports/standard/equity-statement.scm:151
+#: gnucash/report/reports/standard/income-statement.scm:234
+#: gnucash/report/reports/standard/trial-balance.scm:256
 msgid "Closing Entries"
 msgstr "決算項目"
 
@@ -2753,7 +2753,7 @@ msgstr "説明、備考、または摘要"
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:63
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:133
 #: gnucash/register/ledger-core/split-register-model.c:492
-#: gnucash/report/reports/standard/account-summary.scm:419
+#: gnucash/report/reports/standard/account-summary.scm:408
 #: gnucash/report/reports/standard/balsheet-eg.scm:188
 #: gnucash/report/reports/standard/receipt.scm:38
 #: gnucash/report/reports/standard/taxinvoice.scm:70
@@ -2919,7 +2919,7 @@ msgstr "請求計:"
 #: gnucash/gnome/dialog-invoice.c:2069 gnucash/gnome/dialog-payment.c:1358
 #: gnucash/gtkbuilder/dialog-invoice.glade:984
 #: gnucash/report/reports/standard/invoice.scm:737
-#: libgnucash/engine/gncInvoice.c:1127
+#: libgnucash/engine/gncInvoice.c:1103
 msgid "Credit Note"
 msgstr "貸方票"
 
@@ -3137,7 +3137,7 @@ msgstr "立替払請求書備考"
 #: gnucash/import-export/csv-exp/csv-tree-export.c:155
 #: gnucash/import-export/csv-imp/csv-account-import.c:154
 #: gnucash/register/ledger-core/split-register-model.c:363
-#: gnucash/report/reports/standard/account-summary.scm:390
+#: gnucash/report/reports/standard/account-summary.scm:379
 #: gnucash/report/reports/standard/new-owner-report.scm:52
 #: gnucash/report/reports/standard/new-owner-report.scm:227
 msgid "Type"
@@ -3333,7 +3333,7 @@ msgstr "タイトル"
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:465
 #: gnucash/register/ledger-core/split-register-model.c:321
 #: gnucash/register/ledger-core/split-register-model.c:485
-#: gnucash/report/reports/standard/account-summary.scm:404
+#: gnucash/report/reports/standard/account-summary.scm:393
 #: gnucash/report/reports/standard/balance-forecast.scm:245
 #: gnucash/report/reports/standard/new-owner-report.scm:58
 #: gnucash/report/reports/standard/new-owner-report.scm:555
@@ -3576,9 +3576,9 @@ msgstr "価格を削除しますか?"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:416
 #: gnucash/gtkbuilder/dialog-invoice.glade:617
-#: gnucash/report/reports/standard/equity-statement.scm:86
-#: gnucash/report/reports/standard/income-statement.scm:116
-#: gnucash/report/reports/standard/trial-balance.scm:91
+#: gnucash/report/reports/standard/equity-statement.scm:83
+#: gnucash/report/reports/standard/income-statement.scm:110
+#: gnucash/report/reports/standard/trial-balance.scm:85
 msgid "Entries"
 msgstr "項目"
 
@@ -3988,15 +3988,15 @@ msgstr "仕入先を検索"
 #: gnucash/report/reports/standard/net-charts.scm:332
 #: gnucash/report/reports/standard/net-charts.scm:401
 #: gnucash/report/report-utilities.scm:205 libgnucash/engine/Account.cpp:177
-#: libgnucash/engine/Account.cpp:4487
+#: libgnucash/engine/Account.cpp:4401
 msgid "Income"
 msgstr "収益"
 
 #: gnucash/gnome/gnc-budget-view.c:503
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:117
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:122
-#: gnucash/report/reports/standard/budget-income-statement.scm:491
-#: gnucash/report/reports/standard/income-statement.scm:479
+#: gnucash/report/reports/standard/budget-income-statement.scm:481
+#: gnucash/report/reports/standard/income-statement.scm:469
 #: gnucash/report/report-utilities.scm:206
 msgid "Expenses"
 msgstr "費用"
@@ -4060,7 +4060,7 @@ msgstr "予算を選択する"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:291
 #: gnucash/gnome/gnc-plugin-page-budget.c:180 gnucash/gnome-utils/gnc-file.c:90
-#: gnucash/gnome-utils/gnc-file.c:327 gnucash/gnome-utils/gnc-file.c:1158
+#: gnucash/gnome-utils/gnc-file.c:327 gnucash/gnome-utils/gnc-file.c:1160
 msgid "Open"
 msgstr "開く"
 
@@ -4103,23 +4103,23 @@ msgstr "「検査・修復」は現在実行中ですが、中止しますか?"
 #: gnucash/report/reports/example/daily-reports.scm:57
 #: gnucash/report/reports/standard/account-piecharts.scm:70
 #: gnucash/report/reports/standard/account-piecharts.scm:532
-#: gnucash/report/reports/standard/account-summary.scm:85
+#: gnucash/report/reports/standard/account-summary.scm:79
 #: gnucash/report/reports/standard/advanced-portfolio.scm:126
 #: gnucash/report/reports/standard/balance-forecast.scm:37
-#: gnucash/report/reports/standard/balance-sheet.scm:86
+#: gnucash/report/reports/standard/balance-sheet.scm:80
 #: gnucash/report/reports/standard/balsheet-pnl.scm:74
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:52
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:49
 #: gnucash/report/reports/standard/budget-barchart.scm:38
-#: gnucash/report/reports/standard/budget-income-statement.scm:74
+#: gnucash/report/reports/standard/budget-income-statement.scm:68
 #: gnucash/report/reports/standard/cashflow-barchart.scm:45
 #: gnucash/report/reports/standard/category-barchart.scm:79
-#: gnucash/report/reports/standard/equity-statement.scm:69
+#: gnucash/report/reports/standard/equity-statement.scm:66
 #: gnucash/report/reports/standard/income-gst-statement.scm:122
-#: gnucash/report/reports/standard/income-statement.scm:61
+#: gnucash/report/reports/standard/income-statement.scm:55
 #: gnucash/report/reports/standard/investment-lots.scm:45
 #: gnucash/report/reports/standard/net-charts.scm:45
 #: gnucash/report/reports/standard/portfolio.scm:62
-#: gnucash/report/reports/standard/trial-balance.scm:76
+#: gnucash/report/reports/standard/trial-balance.scm:70
 #: gnucash/report/trep-engine.scm:68 libgnucash/engine/qofbookslots.h:64
 msgid "Accounts"
 msgstr "勘定科目"
@@ -4240,11 +4240,11 @@ msgstr "帳票作成"
 #: gnucash/gnome/gnc-plugin-page-budget.c:269
 #: gnucash/gnome/gnc-plugin-page-budget.c:310
 #: gnucash/gnome/gnc-plugin-page-budget.c:895
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:110
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:107
 #: gnucash/report/reports/standard/budget-barchart.scm:39
 #: gnucash/report/reports/standard/budget-barchart.scm:201
 #: gnucash/report/reports/standard/budget-flow.scm:43
-#: gnucash/report/reports/standard/budget-income-statement.scm:58
+#: gnucash/report/reports/standard/budget-income-statement.scm:52
 #: gnucash/report/reports/standard/budget.scm:93
 msgid "Budget"
 msgstr "予算"
@@ -5209,7 +5209,7 @@ msgid "You cannot save to that file."
 msgstr "そのファイルには保存できません"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1642
-#: gnucash/gnome-utils/gnc-file.c:1338 gnucash/gnome-utils/gnc-file.c:1585
+#: gnucash/gnome-utils/gnc-file.c:1340 gnucash/gnome-utils/gnc-file.c:1587
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:739
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
@@ -6235,7 +6235,7 @@ msgid "There was an error parsing the file."
 msgstr "ファイル解析中にエラーがありました。"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1149
-#: gnucash/gnome-utils/gnc-file.c:1427 gnucash/gnome-utils/gnc-file.c:1666
+#: gnucash/gnome-utils/gnc-file.c:1429 gnucash/gnome-utils/gnc-file.c:1668
 #, fuzzy
 #| msgid "Writing file..."
 msgid "Writing file…"
@@ -6455,7 +6455,7 @@ msgstr "通貨(_R)"
 #: gnucash/gtkbuilder/dialog-transfer.glade:418
 #: gnucash/gtkbuilder/dialog-transfer.glade:431
 #: gnucash/gtkbuilder/dialog-vendor.glade:502
-#: gnucash/report/trep-engine.scm:102 libgnucash/engine/Account.cpp:4486
+#: gnucash/report/trep-engine.scm:102 libgnucash/engine/Account.cpp:4400
 msgid "Currency"
 msgstr "通貨"
 
@@ -7016,7 +7016,7 @@ msgid "_Save"
 msgstr "保存(_S)"
 
 #: gnucash/gnome-utils/gnc-file.c:102 gnucash/gnome-utils/gnc-file.c:343
-#: gnucash/gnome-utils/gnc-file.c:1212 gnucash/gnome-utils/gnc-file.c:1484
+#: gnucash/gnome-utils/gnc-file.c:1214 gnucash/gnome-utils/gnc-file.c:1486
 msgid "Save"
 msgstr "保存"
 
@@ -7309,18 +7309,19 @@ msgstr[0] "保存しない場合、これまでの %d 分間の変更が失わ�
 msgid "Continue _Without Saving"
 msgstr "保存せずに続ける(_W)"
 
-#: gnucash/gnome-utils/gnc-file.c:714
+#: gnucash/gnome-utils/gnc-file.c:715
 msgid ""
-"This book has budgets. The internal representation of amounts is now fixed. "
-"Please review budgets and amend signs if necessary."
+"This book has budgets. The internal representation of budget amounts no "
+"longer depends on the Reverse Balanced Accounts preference. Please review "
+"the budgets and amend signs if necessary."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-file.c:842
+#: gnucash/gnome-utils/gnc-file.c:844
 #, c-format
 msgid "GnuCash could not obtain the lock for %s."
 msgstr "GnuCash は %s をロックすることができませんでした。"
 
-#: gnucash/gnome-utils/gnc-file.c:844
+#: gnucash/gnome-utils/gnc-file.c:846
 msgid ""
 "That database may be in use by another user, in which case you should not "
 "open the database. What would you like to do?"
@@ -7328,7 +7329,7 @@ msgstr ""
 "このデータベースは別のユーザーに使用されている可能性があり、その場合は、デー"
 "タベースを開くべきではありません。どうしますか?"
 
-#: gnucash/gnome-utils/gnc-file.c:847
+#: gnucash/gnome-utils/gnc-file.c:849
 msgid ""
 "That database may be on a read-only file system, you may not have write "
 "permission for the directory, or your anti-virus software is preventing this "
@@ -7340,46 +7341,46 @@ msgstr ""
 "能性があります。このまま続けると変更を保存できないかもしれません。どうします"
 "か?"
 
-#: gnucash/gnome-utils/gnc-file.c:870
+#: gnucash/gnome-utils/gnc-file.c:872
 #: gnucash/gtkbuilder/dialog-file-access.glade:98
 msgid "Open _Read-Only"
 msgstr "読み取り専用で開く(_R)"
 
-#: gnucash/gnome-utils/gnc-file.c:873
+#: gnucash/gnome-utils/gnc-file.c:875
 msgid "Create _New File"
 msgstr "ファイルを新規作成する(_N)"
 
-#: gnucash/gnome-utils/gnc-file.c:876
+#: gnucash/gnome-utils/gnc-file.c:878
 msgid "Open _Anyway"
 msgstr "構わずに開く(_A)"
 
-#: gnucash/gnome-utils/gnc-file.c:879
+#: gnucash/gnome-utils/gnc-file.c:881
 msgid "Open _Folder"
 msgstr "フォルダーを開く(_F)"
 
-#: gnucash/gnome-utils/gnc-file.c:885 gnucash/ui/gnc-main-window.ui:83
+#: gnucash/gnome-utils/gnc-file.c:887 gnucash/ui/gnc-main-window.ui:83
 msgid "_Quit"
 msgstr "終了(_Q)"
 
-#: gnucash/gnome-utils/gnc-file.c:971 gnucash/gnome-utils/gnc-file.c:991
+#: gnucash/gnome-utils/gnc-file.c:973 gnucash/gnome-utils/gnc-file.c:993
 #, fuzzy
 #| msgid "Loading user data..."
 msgid "Loading user data…"
 msgstr "ユーザーデータをロード中..."
 
-#: gnucash/gnome-utils/gnc-file.c:1007
+#: gnucash/gnome-utils/gnc-file.c:1009
 #, fuzzy
 #| msgid "Re-saving user data..."
 msgid "Re-saving user data…"
 msgstr "ユーザーデータを再保存中..."
 
-#: gnucash/gnome-utils/gnc-file.c:1367
+#: gnucash/gnome-utils/gnc-file.c:1369
 #, fuzzy
 #| msgid "Exporting file..."
 msgid "Exporting file…"
 msgstr "ファイルのエクスポート中..."
 
-#: gnucash/gnome-utils/gnc-file.c:1380
+#: gnucash/gnome-utils/gnc-file.c:1382
 #, c-format
 msgid ""
 "There was an error saving the file.\n"
@@ -7390,13 +7391,13 @@ msgstr ""
 "\n"
 "%s"
 
-#: gnucash/gnome-utils/gnc-file.c:1415
+#: gnucash/gnome-utils/gnc-file.c:1417
 msgid ""
 "The database was opened read-only. Do you want to save it to a different "
 "place?"
 msgstr "データベースは読み取り専用で開かれました。別の場所に保存しますか?"
 
-#: gnucash/gnome-utils/gnc-file.c:1710
+#: gnucash/gnome-utils/gnc-file.c:1712
 #, c-format
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
@@ -7405,7 +7406,7 @@ msgstr ""
 "元に戻すと、%s に対するすべての未保存の変更は破棄されます。本当に実行します"
 "か?"
 
-#: gnucash/gnome-utils/gnc-file.c:1718
+#: gnucash/gnome-utils/gnc-file.c:1720
 #: gnucash/gnome-utils/gnc-main-window.cpp:1189
 msgid "<unknown>"
 msgstr "<未知>"
@@ -7708,7 +7709,7 @@ msgstr "新規最上位勘定科目"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:276
 #: gnucash/report/reports/standard/general-ledger.scm:72
 #: gnucash/report/reports/standard/general-ledger.scm:92
-#: gnucash/report/reports/standard/trial-balance.scm:570
+#: gnucash/report/reports/standard/trial-balance.scm:561
 #: gnucash/report/trep-engine.scm:171 gnucash/report/trep-engine.scm:940
 #: gnucash/report/trep-engine.scm:1018
 msgid "Account Name"
@@ -7721,8 +7722,8 @@ msgstr "商品"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:823
 #: gnucash/import-export/csv-exp/csv-tree-export.c:156
-#: gnucash/report/reports/standard/account-summary.scm:120
-#: gnucash/report/reports/standard/account-summary.scm:389
+#: gnucash/report/reports/standard/account-summary.scm:114
+#: gnucash/report/reports/standard/account-summary.scm:378
 #: gnucash/report/reports/standard/general-ledger.scm:74
 #: gnucash/report/reports/standard/general-ledger.scm:94
 #: gnucash/report/trep-engine.scm:177 gnucash/report/trep-engine.scm:912
@@ -10614,8 +10615,8 @@ msgstr "会計期間を設定"
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:38
 msgid ""
-"Select an accounting period and the closing date which must not be in the "
-"future, but is greater than the closing date of the previous book.\n"
+"Select an accounting period and a closing date that is between the date of "
+"the previous close and today.\n"
 "\n"
 "Books will be closed at midnight on the selected date."
 msgstr ""
@@ -11647,15 +11648,15 @@ msgstr ""
 #: gnucash/report/reports/example/average-balance.scm:40
 #: gnucash/report/reports/example/daily-reports.scm:52
 #: gnucash/report/reports/standard/account-piecharts.scm:65
-#: gnucash/report/reports/standard/account-summary.scm:79
+#: gnucash/report/reports/standard/account-summary.scm:73
 #: gnucash/report/reports/standard/balance-forecast.scm:40
 #: gnucash/report/reports/standard/balsheet-pnl.scm:52
 #: gnucash/report/reports/standard/cashflow-barchart.scm:55
 #: gnucash/report/reports/standard/cash-flow.scm:42
 #: gnucash/report/reports/standard/category-barchart.scm:73
-#: gnucash/report/reports/standard/equity-statement.scm:66
+#: gnucash/report/reports/standard/equity-statement.scm:63
 #: gnucash/report/reports/standard/ifrs-cost-basis.scm:54
-#: gnucash/report/reports/standard/income-statement.scm:58
+#: gnucash/report/reports/standard/income-statement.scm:52
 #: gnucash/report/reports/standard/lot-viewer.scm:35
 #: gnucash/report/reports/standard/net-charts.scm:39
 #: gnucash/report/reports/standard/price-scatter.scm:36
@@ -11710,7 +11711,7 @@ msgstr "ローン詳細"
 #| msgid ""
 #| "\n"
 #| "Do you utilise an escrow account, if so an account must be specified..."
-msgid "Do you utilise an escrow account, if so an account must be specified…"
+msgid "Do you utilize an escrow account, if so an account must be specified…"
 msgstr ""
 "\n"
 "エスクロー勘定科目を使用しますか? 使用する場合は勘定科目を指定する必要があり"
@@ -11826,15 +11827,15 @@ msgstr "範囲"
 #: gnucash/report/reports/example/average-balance.scm:41
 #: gnucash/report/reports/example/daily-reports.scm:53
 #: gnucash/report/reports/standard/account-piecharts.scm:66
-#: gnucash/report/reports/standard/account-summary.scm:80
+#: gnucash/report/reports/standard/account-summary.scm:74
 #: gnucash/report/reports/standard/balance-forecast.scm:41
 #: gnucash/report/reports/standard/balsheet-pnl.scm:53
 #: gnucash/report/reports/standard/cashflow-barchart.scm:56
 #: gnucash/report/reports/standard/cash-flow.scm:43
 #: gnucash/report/reports/standard/category-barchart.scm:74
-#: gnucash/report/reports/standard/equity-statement.scm:67
+#: gnucash/report/reports/standard/equity-statement.scm:64
 #: gnucash/report/reports/standard/ifrs-cost-basis.scm:55
-#: gnucash/report/reports/standard/income-statement.scm:59
+#: gnucash/report/reports/standard/income-statement.scm:53
 #: gnucash/report/reports/standard/lot-viewer.scm:36
 #: gnucash/report/reports/standard/net-charts.scm:40
 #: gnucash/report/reports/standard/price-scatter.scm:37
@@ -12504,7 +12505,7 @@ msgstr ""
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:530
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1090
-#: gnucash/report/report-utilities.scm:198 libgnucash/engine/Account.cpp:4480
+#: gnucash/report/report-utilities.scm:198 libgnucash/engine/Account.cpp:4394
 msgid "Cash"
 msgstr "現金"
 
@@ -12640,11 +12641,9 @@ msgstr "設定"
 #: gnucash/gtkbuilder/dialog-preferences.glade:2040
 #: gnucash/gtkbuilder/dialog-preferences.glade:2098
 #: gnucash/report/report-core.scm:162
-#: gnucash/report/reports/standard/equity-statement.scm:105
-#: gnucash/report/reports/standard/equity-statement.scm:108
+#: gnucash/report/reports/standard/equity-statement.scm:101
 #: gnucash/report/reports/standard/register.scm:341
-#: gnucash/report/reports/standard/trial-balance.scm:181
-#: gnucash/report/reports/standard/trial-balance.scm:184
+#: gnucash/report/reports/standard/trial-balance.scm:175
 #: gnucash/report/reports/standard/view-column.scm:45
 #: gnucash/report/reports/standard/view-column.scm:56
 #: gnucash/report/stylesheets/css.scm:118
@@ -12882,7 +12881,7 @@ msgid "_Default"
 msgstr "デフォルト(_D)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:954
-#: gnucash/report/reports/standard/account-summary.scm:122
+#: gnucash/report/reports/standard/account-summary.scm:116
 msgid "Account Type"
 msgstr "勘定科目タイプ"
 
@@ -17836,8 +17835,8 @@ msgstr "<b>ファイルの書式</b>"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1779
 msgid ""
-"This list one or more specialization templates that adjust the import for "
-"different banks uses of fields in the selected import format."
+"This lists one or more specialization templates that adjust the import for "
+"different banks' uses of fields in the selected import format."
 msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1787
@@ -18146,7 +18145,7 @@ msgid "Unspecified"
 msgstr "指定なし"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:478
-#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4479
+#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4393
 msgid "Bank"
 msgstr "銀行"
 
@@ -19596,7 +19595,7 @@ msgstr "追加コメント"
 
 #: gnucash/import-export/import-main-matcher.c:1814
 #: gnucash/report/reports/standard/register.scm:217
-#: libgnucash/engine/Split.c:1606 libgnucash/engine/Split.c:1623
+#: libgnucash/engine/Split.c:1603 libgnucash/engine/Split.c:1620
 msgid "-- Split Transaction --"
 msgstr "-- スプリット取引 --"
 
@@ -20007,16 +20006,16 @@ msgstr "資本利得(短期)"
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:109
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:113
 #: gnucash/register/ledger-core/split-register.c:2619
-#: gnucash/report/reports/standard/balance-sheet.scm:478
+#: gnucash/report/reports/standard/balance-sheet.scm:468
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1064
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:699
-#: libgnucash/app-utils/gnc-ui-util.c:654 libgnucash/engine/Account.cpp:4489
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:692
+#: libgnucash/app-utils/gnc-ui-util.c:654 libgnucash/engine/Account.cpp:4403
 msgid "Equity"
 msgstr "純資産"
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:110
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:114
-#: gnucash/report/reports/standard/balance-sheet.scm:485
+#: gnucash/report/reports/standard/balance-sheet.scm:475
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1073
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1088
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:189
@@ -20171,7 +20170,7 @@ msgstr "重複した取引を検索中しています"
 #. see https://en.wikipedia.org/wiki/Quicken_Interchange_Format#Detail_items
 #: gnucash/import-export/qif-imp/qif-parse.scm:174
 #, scheme-format
-msgid "The account type ~s is unknown, using 'bank' instead."
+msgid "The account type ~s is unknown, using Bank instead."
 msgstr ""
 
 #. Translators: This is an error message about actions like buy, sell …
@@ -21359,12 +21358,12 @@ msgstr ""
 "しますか?"
 
 #: gnucash/report/options-utilities.scm:120
-#: gnucash/report/reports/standard/account-summary.scm:87
-#: gnucash/report/reports/standard/balance-sheet.scm:88
+#: gnucash/report/reports/standard/account-summary.scm:81
+#: gnucash/report/reports/standard/balance-sheet.scm:82
 #: gnucash/report/reports/standard/balsheet-pnl.scm:75
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:54
-#: gnucash/report/reports/standard/budget-income-statement.scm:76
-#: gnucash/report/reports/standard/income-statement.scm:63
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:51
+#: gnucash/report/reports/standard/budget-income-statement.scm:70
+#: gnucash/report/reports/standard/income-statement.scm:57
 msgid "Report on these accounts, if display depth allows."
 msgstr "表示の深さ以内なら、これらの勘定科目を帳票の対象とします。"
 
@@ -21484,7 +21483,7 @@ msgid "Do not show any balances of parent accounts."
 msgstr "表示しない - 親勘定科目の残高を表示しません。"
 
 #: gnucash/report/options-utilities.scm:217
-#: gnucash/report/reports/standard/account-summary.scm:118
+#: gnucash/report/reports/standard/account-summary.scm:112
 msgid "Account Balance"
 msgstr "勘定科目残高"
 
@@ -21638,25 +21637,25 @@ msgstr "ステップサイズ"
 #: gnucash/report/reports/example/average-balance.scm:43
 #: gnucash/report/reports/example/daily-reports.scm:54
 #: gnucash/report/reports/standard/account-piecharts.scm:67
-#: gnucash/report/reports/standard/account-summary.scm:130
+#: gnucash/report/reports/standard/account-summary.scm:124
 #: gnucash/report/reports/standard/advanced-portfolio.scm:71
 #: gnucash/report/reports/standard/balance-forecast.scm:44
-#: gnucash/report/reports/standard/balance-sheet.scm:136
+#: gnucash/report/reports/standard/balance-sheet.scm:130
 #: gnucash/report/reports/standard/balsheet-eg.scm:178
 #: gnucash/report/reports/standard/balsheet-pnl.scm:112
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:102
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:99
 #: gnucash/report/reports/standard/budget-flow.scm:45
-#: gnucash/report/reports/standard/budget-income-statement.scm:115
+#: gnucash/report/reports/standard/budget-income-statement.scm:109
 #: gnucash/report/reports/standard/cashflow-barchart.scm:58
 #: gnucash/report/reports/standard/cash-flow.scm:49
 #: gnucash/report/reports/standard/category-barchart.scm:76
-#: gnucash/report/reports/standard/equity-statement.scm:78
-#: gnucash/report/reports/standard/income-statement.scm:108
+#: gnucash/report/reports/standard/equity-statement.scm:75
+#: gnucash/report/reports/standard/income-statement.scm:102
 #: gnucash/report/reports/standard/investment-lots.scm:82
 #: gnucash/report/reports/standard/net-charts.scm:42
 #: gnucash/report/reports/standard/portfolio.scm:49
 #: gnucash/report/reports/standard/price-scatter.scm:41
-#: gnucash/report/reports/standard/trial-balance.scm:129
+#: gnucash/report/reports/standard/trial-balance.scm:123
 #: gnucash/report/trep-engine.scm:106
 msgid "Report's currency"
 msgstr "帳票の通貨"
@@ -21664,24 +21663,24 @@ msgstr "帳票の通貨"
 #: gnucash/report/reports/example/average-balance.scm:44
 #: gnucash/report/reports/example/daily-reports.scm:55
 #: gnucash/report/reports/standard/account-piecharts.scm:68
-#: gnucash/report/reports/standard/account-summary.scm:131
+#: gnucash/report/reports/standard/account-summary.scm:125
 #: gnucash/report/reports/standard/advanced-portfolio.scm:40
 #: gnucash/report/reports/standard/balance-forecast.scm:45
-#: gnucash/report/reports/standard/balance-sheet.scm:137
+#: gnucash/report/reports/standard/balance-sheet.scm:131
 #: gnucash/report/reports/standard/balsheet-eg.scm:179
 #: gnucash/report/reports/standard/balsheet-pnl.scm:114
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:103
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:100
 #: gnucash/report/reports/standard/budget-flow.scm:42
-#: gnucash/report/reports/standard/budget-income-statement.scm:116
+#: gnucash/report/reports/standard/budget-income-statement.scm:110
 #: gnucash/report/reports/standard/cashflow-barchart.scm:59
 #: gnucash/report/reports/standard/cash-flow.scm:50
 #: gnucash/report/reports/standard/category-barchart.scm:77
-#: gnucash/report/reports/standard/equity-statement.scm:79
-#: gnucash/report/reports/standard/income-statement.scm:109
+#: gnucash/report/reports/standard/equity-statement.scm:76
+#: gnucash/report/reports/standard/income-statement.scm:103
 #: gnucash/report/reports/standard/net-charts.scm:43
 #: gnucash/report/reports/standard/portfolio.scm:35
 #: gnucash/report/reports/standard/price-scatter.scm:43
-#: gnucash/report/reports/standard/trial-balance.scm:130
+#: gnucash/report/reports/standard/trial-balance.scm:124
 #: gnucash/report/trep-engine.scm:103
 msgid "Price Source"
 msgstr "価格の情報源"
@@ -21828,16 +21827,16 @@ msgstr "曜日ごとの合計費用を円グラフで表示します。"
 
 #: gnucash/report/reports/example/daily-reports.scm:58
 #: gnucash/report/reports/standard/account-piecharts.scm:71
-#: gnucash/report/reports/standard/account-summary.scm:88
-#: gnucash/report/reports/standard/balance-sheet.scm:89
+#: gnucash/report/reports/standard/account-summary.scm:82
+#: gnucash/report/reports/standard/balance-sheet.scm:83
 #: gnucash/report/reports/standard/balsheet-eg.scm:148
 #: gnucash/report/reports/standard/balsheet-pnl.scm:77
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:55
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:52
 #: gnucash/report/reports/standard/budget-barchart.scm:46
-#: gnucash/report/reports/standard/budget-income-statement.scm:77
+#: gnucash/report/reports/standard/budget-income-statement.scm:71
 #: gnucash/report/reports/standard/category-barchart.scm:80
-#: gnucash/report/reports/standard/income-statement.scm:64
-#: gnucash/report/reports/standard/trial-balance.scm:79
+#: gnucash/report/reports/standard/income-statement.scm:58
+#: gnucash/report/reports/standard/trial-balance.scm:73
 msgid "Levels of Subaccounts"
 msgstr "子勘定科目の階層"
 
@@ -21880,28 +21879,28 @@ msgid "Scatter:"
 msgstr "散布:"
 
 #: gnucash/report/reports/example/sample-report.scm:41
-#: gnucash/report/reports/standard/account-summary.scm:72
-#: gnucash/report/reports/standard/balance-sheet.scm:75
+#: gnucash/report/reports/standard/account-summary.scm:69
+#: gnucash/report/reports/standard/balance-sheet.scm:72
 #: gnucash/report/reports/standard/balsheet-eg.scm:140
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:42
-#: gnucash/report/reports/standard/budget-income-statement.scm:52
+#: gnucash/report/reports/standard/budget-income-statement.scm:49
 #: gnucash/report/reports/standard/equity-statement.scm:60
-#: gnucash/report/reports/standard/income-statement.scm:52
+#: gnucash/report/reports/standard/income-statement.scm:49
 #: gnucash/report/reports/standard/receipt.scm:43
 #: gnucash/report/reports/standard/taxinvoice.scm:94
-#: gnucash/report/reports/standard/trial-balance.scm:65
+#: gnucash/report/reports/standard/trial-balance.scm:62
 msgid "Report Title"
 msgstr "帳票タイトル"
 
 #: gnucash/report/reports/example/sample-report.scm:42
-#: gnucash/report/reports/standard/account-summary.scm:73
-#: gnucash/report/reports/standard/balance-sheet.scm:76
+#: gnucash/report/reports/standard/account-summary.scm:70
+#: gnucash/report/reports/standard/balance-sheet.scm:73
 #: gnucash/report/reports/standard/balsheet-eg.scm:141
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:43
-#: gnucash/report/reports/standard/budget-income-statement.scm:53
+#: gnucash/report/reports/standard/budget-income-statement.scm:50
 #: gnucash/report/reports/standard/equity-statement.scm:61
-#: gnucash/report/reports/standard/income-statement.scm:53
-#: gnucash/report/reports/standard/trial-balance.scm:66
+#: gnucash/report/reports/standard/income-statement.scm:50
+#: gnucash/report/reports/standard/trial-balance.scm:63
 msgid "Title for this report."
 msgstr "この帳票のタイトルです。"
 
@@ -22481,8 +22480,8 @@ msgid "Expense Accounts"
 msgstr "費用勘定科目"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:61
-#: gnucash/report/reports/standard/balance-sheet.scm:461
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:640
+#: gnucash/report/reports/standard/balance-sheet.scm:451
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:633
 #: gnucash/report/reports/standard/net-charts.scm:332
 #: gnucash/report/reports/standard/net-charts.scm:402
 #: gnucash/report/report-utilities.scm:200
@@ -22490,8 +22489,8 @@ msgid "Assets"
 msgstr "資産"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:63
-#: gnucash/report/reports/standard/balance-sheet.scm:362
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:670
+#: gnucash/report/reports/standard/balance-sheet.scm:352
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:663
 #: gnucash/report/reports/standard/net-charts.scm:353
 #: gnucash/report/reports/standard/net-charts.scm:402
 #: gnucash/report/report-utilities.scm:201
@@ -22534,16 +22533,16 @@ msgid "No Averaging"
 msgstr "平均を表示しない"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:127
-#: gnucash/report/reports/standard/account-summary.scm:90
-#: gnucash/report/reports/standard/balance-sheet.scm:91
+#: gnucash/report/reports/standard/account-summary.scm:84
+#: gnucash/report/reports/standard/balance-sheet.scm:85
 #: gnucash/report/reports/standard/balsheet-eg.scm:149
 #: gnucash/report/reports/standard/balsheet-pnl.scm:78
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:57
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:54
 #: gnucash/report/reports/standard/budget-barchart.scm:48
-#: gnucash/report/reports/standard/budget-income-statement.scm:79
+#: gnucash/report/reports/standard/budget-income-statement.scm:73
 #: gnucash/report/reports/standard/category-barchart.scm:137
-#: gnucash/report/reports/standard/income-statement.scm:66
-#: gnucash/report/reports/standard/trial-balance.scm:81
+#: gnucash/report/reports/standard/income-statement.scm:60
+#: gnucash/report/reports/standard/trial-balance.scm:75
 msgid "Maximum number of levels in the account tree displayed."
 msgstr "表示する勘定科目ツリー内の最大階層です。"
 
@@ -22583,45 +22582,25 @@ msgstr "週平均"
 msgid "Balance at ~a"
 msgstr "~a 現在の残高"
 
-#: gnucash/report/reports/standard/account-summary.scm:69
+#: gnucash/report/reports/standard/account-summary.scm:66
 msgid "Account Summary"
 msgstr "勘定科目集計"
 
-#: gnucash/report/reports/standard/account-summary.scm:70
+#: gnucash/report/reports/standard/account-summary.scm:67
 msgid "Future Scheduled Transactions Summary"
 msgstr "今後の予定取引の要約"
 
-#: gnucash/report/reports/standard/account-summary.scm:75
-#: gnucash/report/reports/standard/balance-sheet.scm:78
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:45
-#: gnucash/report/reports/standard/budget-income-statement.scm:55
-#: gnucash/report/reports/standard/equity-statement.scm:63
-#: gnucash/report/reports/standard/income-statement.scm:55
-#: gnucash/report/reports/standard/trial-balance.scm:68
-msgid "Company name"
-msgstr "会社名"
-
-#: gnucash/report/reports/standard/account-summary.scm:76
-#: gnucash/report/reports/standard/balance-sheet.scm:79
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:46
-#: gnucash/report/reports/standard/budget-income-statement.scm:56
-#: gnucash/report/reports/standard/equity-statement.scm:64
-#: gnucash/report/reports/standard/income-statement.scm:56
-#: gnucash/report/reports/standard/trial-balance.scm:69
-msgid "Name of company/individual."
-msgstr "会社/個人の名前です。"
-
-#: gnucash/report/reports/standard/account-summary.scm:91
+#: gnucash/report/reports/standard/account-summary.scm:85
 msgid "Depth limit behavior"
 msgstr "深さ限界の動作"
 
-#: gnucash/report/reports/standard/account-summary.scm:95
+#: gnucash/report/reports/standard/account-summary.scm:89
 msgid "How to treat accounts which exceed the specified depth limit (if any)."
 msgstr ""
 "指定した深さ限界を超える勘定科目（があれば、それら）をどう扱うかを指定しま"
 "す。"
 
-#: gnucash/report/reports/standard/account-summary.scm:96
+#: gnucash/report/reports/standard/account-summary.scm:90
 msgid ""
 "Show the total balance, including balances in subaccounts, of any account at "
 "the depth limit."
@@ -22629,219 +22608,219 @@ msgstr ""
 "深さ限界にあるいずれの勘定科目も、その子勘定科目の残高を含めた合計残高を表示"
 "します。"
 
-#: gnucash/report/reports/standard/account-summary.scm:97
+#: gnucash/report/reports/standard/account-summary.scm:91
 msgid "Raise accounts deeper than the depth limit to the depth limit."
 msgstr "深さ限界より深い勘定科目を深さ限界の階層まで引き上げます。"
 
-#: gnucash/report/reports/standard/account-summary.scm:98
+#: gnucash/report/reports/standard/account-summary.scm:92
 msgid "Omit any accounts deeper than the depth limit."
 msgstr "深さ限界より深い勘定科目を無視します。"
 
-#: gnucash/report/reports/standard/account-summary.scm:100
-#: gnucash/report/reports/standard/balance-sheet.scm:96
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:62
-#: gnucash/report/reports/standard/budget-income-statement.scm:84
-#: gnucash/report/reports/standard/income-statement.scm:71
+#: gnucash/report/reports/standard/account-summary.scm:94
+#: gnucash/report/reports/standard/balance-sheet.scm:90
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:59
+#: gnucash/report/reports/standard/budget-income-statement.scm:78
+#: gnucash/report/reports/standard/income-statement.scm:65
 msgid "Parent account balances"
 msgstr "親勘定科目残高"
 
-#: gnucash/report/reports/standard/account-summary.scm:101
-#: gnucash/report/reports/standard/balance-sheet.scm:97
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:63
-#: gnucash/report/reports/standard/budget-income-statement.scm:85
-#: gnucash/report/reports/standard/income-statement.scm:72
+#: gnucash/report/reports/standard/account-summary.scm:95
+#: gnucash/report/reports/standard/balance-sheet.scm:91
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:60
+#: gnucash/report/reports/standard/budget-income-statement.scm:79
+#: gnucash/report/reports/standard/income-statement.scm:66
 msgid "Parent account subtotals"
 msgstr "親勘定科目小計"
 
-#: gnucash/report/reports/standard/account-summary.scm:103
-#: gnucash/report/reports/standard/balance-sheet.scm:99
+#: gnucash/report/reports/standard/account-summary.scm:97
+#: gnucash/report/reports/standard/balance-sheet.scm:93
 #: gnucash/report/reports/standard/balsheet-pnl.scm:86
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:65
-#: gnucash/report/reports/standard/budget-income-statement.scm:87
-#: gnucash/report/reports/standard/income-statement.scm:74
-#: gnucash/report/reports/standard/trial-balance.scm:121
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:62
+#: gnucash/report/reports/standard/budget-income-statement.scm:81
+#: gnucash/report/reports/standard/income-statement.scm:68
+#: gnucash/report/reports/standard/trial-balance.scm:115
 msgid "Include accounts with zero total balances"
 msgstr "合計残高がゼロの勘定科目を含める"
 
-#: gnucash/report/reports/standard/account-summary.scm:105
-#: gnucash/report/reports/standard/balance-sheet.scm:101
+#: gnucash/report/reports/standard/account-summary.scm:99
+#: gnucash/report/reports/standard/balance-sheet.scm:95
 #: gnucash/report/reports/standard/balsheet-pnl.scm:87
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:67
-#: gnucash/report/reports/standard/budget-income-statement.scm:89
-#: gnucash/report/reports/standard/income-statement.scm:76
-#: gnucash/report/reports/standard/trial-balance.scm:123
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:64
+#: gnucash/report/reports/standard/budget-income-statement.scm:83
+#: gnucash/report/reports/standard/income-statement.scm:70
+#: gnucash/report/reports/standard/trial-balance.scm:117
 msgid "Include accounts with zero total (recursive) balances in this report."
 msgstr "帳票に (子勘定科目も含めた) 合計残高 0 の勘定科目を含めます。"
 
-#: gnucash/report/reports/standard/account-summary.scm:106
-#: gnucash/report/reports/standard/balance-sheet.scm:102
+#: gnucash/report/reports/standard/account-summary.scm:100
+#: gnucash/report/reports/standard/balance-sheet.scm:96
 #: gnucash/report/reports/standard/balsheet-pnl.scm:89
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:68
-#: gnucash/report/reports/standard/budget-income-statement.scm:90
-#: gnucash/report/reports/standard/income-statement.scm:77
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:65
+#: gnucash/report/reports/standard/budget-income-statement.scm:84
+#: gnucash/report/reports/standard/income-statement.scm:71
 msgid "Omit zero balance figures"
 msgstr "残高ゼロなら数字を表示しない"
 
-#: gnucash/report/reports/standard/account-summary.scm:108
-#: gnucash/report/reports/standard/balance-sheet.scm:104
+#: gnucash/report/reports/standard/account-summary.scm:102
+#: gnucash/report/reports/standard/balance-sheet.scm:98
 #: gnucash/report/reports/standard/balsheet-pnl.scm:90
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:70
-#: gnucash/report/reports/standard/budget-income-statement.scm:92
-#: gnucash/report/reports/standard/income-statement.scm:79
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:67
+#: gnucash/report/reports/standard/budget-income-statement.scm:86
+#: gnucash/report/reports/standard/income-statement.scm:73
 msgid "Show blank space in place of any zero balances which would be shown."
 msgstr "表示する残高が 0 の場合には空白を表示します。"
 
-#: gnucash/report/reports/standard/account-summary.scm:110
-#: gnucash/report/reports/standard/balance-sheet.scm:106
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:72
-#: gnucash/report/reports/standard/budget-income-statement.scm:94
-#: gnucash/report/reports/standard/equity-statement.scm:73
-#: gnucash/report/reports/standard/income-statement.scm:81
+#: gnucash/report/reports/standard/account-summary.scm:104
+#: gnucash/report/reports/standard/balance-sheet.scm:100
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:69
+#: gnucash/report/reports/standard/budget-income-statement.scm:88
+#: gnucash/report/reports/standard/equity-statement.scm:70
+#: gnucash/report/reports/standard/income-statement.scm:75
 msgid "Show accounting-style rules"
 msgstr "会計スタイルの罫線を表示する"
 
-#: gnucash/report/reports/standard/account-summary.scm:112
-#: gnucash/report/reports/standard/balance-sheet.scm:108
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:74
-#: gnucash/report/reports/standard/budget-income-statement.scm:96
-#: gnucash/report/reports/standard/equity-statement.scm:75
-#: gnucash/report/reports/standard/income-statement.scm:83
+#: gnucash/report/reports/standard/account-summary.scm:106
+#: gnucash/report/reports/standard/balance-sheet.scm:102
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:71
+#: gnucash/report/reports/standard/budget-income-statement.scm:90
+#: gnucash/report/reports/standard/equity-statement.scm:72
+#: gnucash/report/reports/standard/income-statement.scm:77
 msgid "Use rules beneath columns of added numbers like accountants do."
 msgstr "会計士がするように追加した数の列の下に罫線を引きます。"
 
-#: gnucash/report/reports/standard/account-summary.scm:114
-#: gnucash/report/reports/standard/balance-sheet.scm:110
+#: gnucash/report/reports/standard/account-summary.scm:108
+#: gnucash/report/reports/standard/balance-sheet.scm:104
 #: gnucash/report/reports/standard/balsheet-eg.scm:158
 #: gnucash/report/reports/standard/balsheet-pnl.scm:92
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:76
-#: gnucash/report/reports/standard/budget-income-statement.scm:98
-#: gnucash/report/reports/standard/income-statement.scm:85
-#: gnucash/report/reports/standard/trial-balance.scm:125
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:73
+#: gnucash/report/reports/standard/budget-income-statement.scm:92
+#: gnucash/report/reports/standard/income-statement.scm:79
+#: gnucash/report/reports/standard/trial-balance.scm:119
 msgid "Display accounts as hyperlinks"
 msgstr "勘定科目をハイパーリンクとして表示する"
 
-#: gnucash/report/reports/standard/account-summary.scm:116
-#: gnucash/report/reports/standard/balance-sheet.scm:111
+#: gnucash/report/reports/standard/account-summary.scm:110
+#: gnucash/report/reports/standard/balance-sheet.scm:105
 #: gnucash/report/reports/standard/balsheet-eg.scm:159
 #: gnucash/report/reports/standard/balsheet-pnl.scm:93
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:77
-#: gnucash/report/reports/standard/budget-income-statement.scm:99
-#: gnucash/report/reports/standard/income-statement.scm:86
-#: gnucash/report/reports/standard/trial-balance.scm:126
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:74
+#: gnucash/report/reports/standard/budget-income-statement.scm:93
+#: gnucash/report/reports/standard/income-statement.scm:80
+#: gnucash/report/reports/standard/trial-balance.scm:120
 msgid "Shows each account in the table as a hyperlink to its register window."
 msgstr "表内の各勘定科目を記録簿ウィンドウへのハイパーリンクとして表示します。"
 
-#: gnucash/report/reports/standard/account-summary.scm:119
+#: gnucash/report/reports/standard/account-summary.scm:113
 msgid "Show an account's balance."
 msgstr "勘定科目の残高を表示します。"
 
-#: gnucash/report/reports/standard/account-summary.scm:121
+#: gnucash/report/reports/standard/account-summary.scm:115
 msgid "Show an account's account code."
 msgstr "勘定科目の科目コードを表示します。"
 
-#: gnucash/report/reports/standard/account-summary.scm:123
+#: gnucash/report/reports/standard/account-summary.scm:117
 msgid "Show an account's account type."
 msgstr "勘定科目の科目タイプを表示します。"
 
-#: gnucash/report/reports/standard/account-summary.scm:124
+#: gnucash/report/reports/standard/account-summary.scm:118
 msgid "Account Description"
 msgstr "勘定科目の説明"
 
-#: gnucash/report/reports/standard/account-summary.scm:125
+#: gnucash/report/reports/standard/account-summary.scm:119
 msgid "Show an account's description."
 msgstr "勘定科目の説明を表示します。"
 
-#: gnucash/report/reports/standard/account-summary.scm:126
+#: gnucash/report/reports/standard/account-summary.scm:120
 msgid "Account Notes"
 msgstr "勘定科目の備考"
 
-#: gnucash/report/reports/standard/account-summary.scm:127
+#: gnucash/report/reports/standard/account-summary.scm:121
 msgid "Show an account's notes."
 msgstr "勘定科目の備考を表示します。"
 
-#: gnucash/report/reports/standard/account-summary.scm:129
-#: gnucash/report/reports/standard/balance-sheet.scm:135
+#: gnucash/report/reports/standard/account-summary.scm:123
+#: gnucash/report/reports/standard/balance-sheet.scm:129
 #: gnucash/report/reports/standard/balsheet-eg.scm:185
 #: gnucash/report/reports/standard/balsheet-pnl.scm:105
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:101
-#: gnucash/report/reports/standard/budget-income-statement.scm:114
-#: gnucash/report/reports/standard/equity-statement.scm:77
-#: gnucash/report/reports/standard/income-statement.scm:107
-#: gnucash/report/reports/standard/trial-balance.scm:128
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:98
+#: gnucash/report/reports/standard/budget-income-statement.scm:108
+#: gnucash/report/reports/standard/equity-statement.scm:74
+#: gnucash/report/reports/standard/income-statement.scm:101
+#: gnucash/report/reports/standard/trial-balance.scm:122
 msgid "Commodities"
 msgstr "商品"
 
-#: gnucash/report/reports/standard/account-summary.scm:132
-#: gnucash/report/reports/standard/balance-sheet.scm:138
+#: gnucash/report/reports/standard/account-summary.scm:126
+#: gnucash/report/reports/standard/balance-sheet.scm:132
 #: gnucash/report/reports/standard/balsheet-eg.scm:180
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:104
-#: gnucash/report/reports/standard/budget-income-statement.scm:117
-#: gnucash/report/reports/standard/equity-statement.scm:80
-#: gnucash/report/reports/standard/income-statement.scm:110
-#: gnucash/report/reports/standard/trial-balance.scm:131
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:101
+#: gnucash/report/reports/standard/budget-income-statement.scm:111
+#: gnucash/report/reports/standard/equity-statement.scm:77
+#: gnucash/report/reports/standard/income-statement.scm:104
+#: gnucash/report/reports/standard/trial-balance.scm:125
 msgid "Show Foreign Currencies"
 msgstr "海外通貨を表示"
 
-#: gnucash/report/reports/standard/account-summary.scm:134
-#: gnucash/report/reports/standard/balance-sheet.scm:140
+#: gnucash/report/reports/standard/account-summary.scm:128
+#: gnucash/report/reports/standard/balance-sheet.scm:134
 #: gnucash/report/reports/standard/balsheet-eg.scm:182
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:106
-#: gnucash/report/reports/standard/budget-income-statement.scm:119
-#: gnucash/report/reports/standard/equity-statement.scm:82
-#: gnucash/report/reports/standard/income-statement.scm:112
-#: gnucash/report/reports/standard/trial-balance.scm:133
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:103
+#: gnucash/report/reports/standard/budget-income-statement.scm:113
+#: gnucash/report/reports/standard/equity-statement.scm:79
+#: gnucash/report/reports/standard/income-statement.scm:106
+#: gnucash/report/reports/standard/trial-balance.scm:127
 msgid "Display any foreign currency amount in an account."
 msgstr "勘定科目に海外通貨での金額を表示します。"
 
-#: gnucash/report/reports/standard/account-summary.scm:135
-#: gnucash/report/reports/standard/balance-sheet.scm:141
+#: gnucash/report/reports/standard/account-summary.scm:129
+#: gnucash/report/reports/standard/balance-sheet.scm:135
 #: gnucash/report/reports/standard/balsheet-pnl.scm:123
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:107
-#: gnucash/report/reports/standard/budget-income-statement.scm:120
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:104
+#: gnucash/report/reports/standard/budget-income-statement.scm:114
 #: gnucash/report/reports/standard/cash-flow.scm:51
-#: gnucash/report/reports/standard/equity-statement.scm:83
-#: gnucash/report/reports/standard/income-statement.scm:113
-#: gnucash/report/reports/standard/trial-balance.scm:134
+#: gnucash/report/reports/standard/equity-statement.scm:80
+#: gnucash/report/reports/standard/income-statement.scm:107
+#: gnucash/report/reports/standard/trial-balance.scm:128
 msgid "Show Exchange Rates"
 msgstr "為替レートを表示"
 
-#: gnucash/report/reports/standard/account-summary.scm:136
-#: gnucash/report/reports/standard/balance-sheet.scm:142
+#: gnucash/report/reports/standard/account-summary.scm:130
+#: gnucash/report/reports/standard/balance-sheet.scm:136
 #: gnucash/report/reports/standard/balsheet-pnl.scm:124
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:108
-#: gnucash/report/reports/standard/budget-income-statement.scm:121
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:105
+#: gnucash/report/reports/standard/budget-income-statement.scm:115
 #: gnucash/report/reports/standard/cash-flow.scm:75
-#: gnucash/report/reports/standard/equity-statement.scm:84
-#: gnucash/report/reports/standard/income-statement.scm:114
-#: gnucash/report/reports/standard/trial-balance.scm:135
+#: gnucash/report/reports/standard/equity-statement.scm:81
+#: gnucash/report/reports/standard/income-statement.scm:108
+#: gnucash/report/reports/standard/trial-balance.scm:129
 msgid "Show the exchange rates used."
 msgstr "使用している為替レートを表示します。"
 
-#: gnucash/report/reports/standard/account-summary.scm:185
+#: gnucash/report/reports/standard/account-summary.scm:174
 msgid "Recursive Balance"
 msgstr "子勘定科目も含めた残高"
 
-#: gnucash/report/reports/standard/account-summary.scm:186
+#: gnucash/report/reports/standard/account-summary.scm:175
 msgid "Raise Accounts"
 msgstr "勘定科目を持ち上げる"
 
-#: gnucash/report/reports/standard/account-summary.scm:187
+#: gnucash/report/reports/standard/account-summary.scm:176
 msgid "Omit Accounts"
 msgstr "勘定科目を除外"
 
-#: gnucash/report/reports/standard/account-summary.scm:302
-#: gnucash/report/reports/standard/equity-statement.scm:286
-#: gnucash/report/reports/standard/income-statement.scm:380
-#: gnucash/report/reports/standard/trial-balance.scm:383
+#: gnucash/report/reports/standard/account-summary.scm:291
+#: gnucash/report/reports/standard/equity-statement.scm:279
+#: gnucash/report/reports/standard/income-statement.scm:370
+#: gnucash/report/reports/standard/trial-balance.scm:374
 msgid "${company-name} ${report-title} For Period Covering ${start} to ${end}"
 msgstr ""
 
-#: gnucash/report/reports/standard/account-summary.scm:307
-#: gnucash/report/reports/standard/trial-balance.scm:379
+#: gnucash/report/reports/standard/account-summary.scm:296
+#: gnucash/report/reports/standard/trial-balance.scm:370
 msgid "${company-name} ${report-title} ${date}"
 msgstr ""
 
-#: gnucash/report/reports/standard/account-summary.scm:392
+#: gnucash/report/reports/standard/account-summary.scm:381
 msgid "Account title"
 msgstr "勘定科目名"
 
@@ -23032,7 +23011,7 @@ msgstr "残高予測"
 #: gnucash/report/reports/standard/cashflow-barchart.scm:84
 #: gnucash/report/reports/standard/income-gst-statement.scm:126
 #: gnucash/report/reports/standard/income-gst-statement.scm:132
-#: gnucash/report/reports/standard/trial-balance.scm:78
+#: gnucash/report/reports/standard/trial-balance.scm:72
 #: gnucash/report/trep-engine.scm:647
 msgid "Report on these accounts."
 msgstr "帳票の対象とする勘定科目です。"
@@ -23095,162 +23074,162 @@ msgstr "目標"
 msgid "Reserve"
 msgstr "準備"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:71
-#: gnucash/report/reports/standard/trial-balance.scm:545
+#: gnucash/report/reports/standard/balance-sheet.scm:68
+#: gnucash/report/reports/standard/trial-balance.scm:536
 msgid "Balance Sheet"
 msgstr "貸借対照表"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:81
+#: gnucash/report/reports/standard/balance-sheet.scm:75
 #: gnucash/report/reports/standard/balsheet-eg.scm:143
 msgid "Balance Sheet Date"
 msgstr "貸借対照表日付"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:82
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:48
+#: gnucash/report/reports/standard/balance-sheet.scm:76
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:45
 msgid "Single column Balance Sheet"
 msgstr "1 列貸借対照表"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:84
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:50
+#: gnucash/report/reports/standard/balance-sheet.scm:78
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:47
 msgid ""
 "Print liability/equity section in the same column under the assets section "
 "as opposed to a second column right of the assets section."
 msgstr "負債/純資産の部を資産の部の右ではなくその下の同じ列に印刷します。"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:92
+#: gnucash/report/reports/standard/balance-sheet.scm:86
 #: gnucash/report/reports/standard/balsheet-eg.scm:150
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:58
-#: gnucash/report/reports/standard/budget-income-statement.scm:80
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:55
+#: gnucash/report/reports/standard/budget-income-statement.scm:74
 #: gnucash/report/reports/standard/budget.scm:89
-#: gnucash/report/reports/standard/income-statement.scm:67
+#: gnucash/report/reports/standard/income-statement.scm:61
 msgid "Flatten list to depth limit"
 msgstr "勘定科目表示の深さまでで平らにする"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:94
+#: gnucash/report/reports/standard/balance-sheet.scm:88
 #: gnucash/report/reports/standard/balsheet-eg.scm:152
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:60
-#: gnucash/report/reports/standard/budget-income-statement.scm:82
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:57
+#: gnucash/report/reports/standard/budget-income-statement.scm:76
 #: gnucash/report/reports/standard/budget.scm:91
-#: gnucash/report/reports/standard/income-statement.scm:69
+#: gnucash/report/reports/standard/income-statement.scm:63
 msgid "Displays accounts which exceed the depth limit at the depth limit."
 msgstr ""
 "勘定科目表示の深さの最大値を超える勘定科目は、最大値の深さまで引き上げて表示"
 "します。"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:113
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:79
+#: gnucash/report/reports/standard/balance-sheet.scm:107
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:76
 msgid "Label the assets section"
 msgstr "資産の部にラベルをつける"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:115
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:81
+#: gnucash/report/reports/standard/balance-sheet.scm:109
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:78
 msgid "Whether or not to include a label for the assets section."
 msgstr "資産の部のラベルを含めるかどうかを指定します。"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:116
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:82
+#: gnucash/report/reports/standard/balance-sheet.scm:110
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:79
 msgid "Include assets total"
 msgstr "資産の部合計を含める"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:118
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:84
+#: gnucash/report/reports/standard/balance-sheet.scm:112
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:81
 msgid "Whether or not to include a line indicating total assets."
 msgstr "資産の部合計を表す行を含めるかどうかを指定します。"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:119
+#: gnucash/report/reports/standard/balance-sheet.scm:113
 msgid "Use standard US layout"
 msgstr "米国標準の配置を使う"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:121
+#: gnucash/report/reports/standard/balance-sheet.scm:115
 msgid ""
 "Report section order is assets/liabilities/equity (rather than assets/equity/"
 "liabilities)."
 msgstr "帳票の部の順序を (資産/純資産/負債ではなく) 資産/負債/純資産にします。"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:122
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:85
+#: gnucash/report/reports/standard/balance-sheet.scm:116
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:82
 msgid "Label the liabilities section"
 msgstr "負債の部にラベルをつける"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:124
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:87
+#: gnucash/report/reports/standard/balance-sheet.scm:118
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:84
 msgid "Whether or not to include a label for the liabilities section."
 msgstr "負債の部のラベルを含めるかどうかを指定します。"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:125
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:88
+#: gnucash/report/reports/standard/balance-sheet.scm:119
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:85
 msgid "Include liabilities total"
 msgstr "負債の部合計を含める"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:127
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:90
+#: gnucash/report/reports/standard/balance-sheet.scm:121
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:87
 msgid "Whether or not to include a line indicating total liabilities."
 msgstr "負債の部合計を表す行を含めるかどうかを指定します。"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:128
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:91
+#: gnucash/report/reports/standard/balance-sheet.scm:122
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:88
 msgid "Label the equity section"
 msgstr "純資産の部にラベルをつける"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:130
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:93
+#: gnucash/report/reports/standard/balance-sheet.scm:124
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:90
 msgid "Whether or not to include a label for the equity section."
 msgstr "純資産の部のラベルを含めるかどうかを指定します。"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:131
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:94
+#: gnucash/report/reports/standard/balance-sheet.scm:125
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:91
 msgid "Include equity total"
 msgstr "純資産の部合計を含める"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:133
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:96
+#: gnucash/report/reports/standard/balance-sheet.scm:127
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:93
 msgid "Whether or not to include a line indicating total equity."
 msgstr "純資産の部合計を表す行を含めるかどうかを指定します。"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:366
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:692
+#: gnucash/report/reports/standard/balance-sheet.scm:356
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:685
 msgid "Total Liabilities"
 msgstr "負債の部合計"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:464
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:661
+#: gnucash/report/reports/standard/balance-sheet.scm:454
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:654
 msgid "Total Assets"
 msgstr "資産の部合計"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:486
+#: gnucash/report/reports/standard/balance-sheet.scm:476
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:188
 msgid "Retained Losses"
 msgstr "欠損金"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:490
+#: gnucash/report/reports/standard/balance-sheet.scm:480
 msgid "Trading Gains"
 msgstr "通貨取引利得"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:491
+#: gnucash/report/reports/standard/balance-sheet.scm:481
 msgid "Trading Losses"
 msgstr "通貨取引損失"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:495
+#: gnucash/report/reports/standard/balance-sheet.scm:485
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1068
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1083
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:734
-#: gnucash/report/reports/standard/trial-balance.scm:706
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:727
+#: gnucash/report/reports/standard/trial-balance.scm:697
 msgid "Unrealized Gains"
 msgstr "未実現利益"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:496
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:735
-#: gnucash/report/reports/standard/trial-balance.scm:707
+#: gnucash/report/reports/standard/balance-sheet.scm:486
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:728
+#: gnucash/report/reports/standard/trial-balance.scm:698
 msgid "Unrealized Losses"
 msgstr "未実現損失"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:500
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:750
+#: gnucash/report/reports/standard/balance-sheet.scm:490
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:743
 msgid "Total Equity"
 msgstr "純資産の部合計"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:510
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:756
+#: gnucash/report/reports/standard/balance-sheet.scm:500
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:749
 msgid "Total Liabilities & Equity"
 msgstr "負債および純資産の部合計"
 
@@ -23550,12 +23529,12 @@ msgid "missing"
 msgstr "不明"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1057
-#: libgnucash/engine/Account.cpp:4481
+#: libgnucash/engine/Account.cpp:4395
 msgid "Asset"
 msgstr "資産"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1060
-#: libgnucash/engine/Account.cpp:4483
+#: libgnucash/engine/Account.cpp:4397
 msgid "Liability"
 msgstr "負債"
 
@@ -23582,13 +23561,13 @@ msgstr "~a ～ ~a"
 #: gnucash/report/reports/standard/customer-summary.scm:286
 #: gnucash/report/reports/standard/net-charts.scm:353
 #: gnucash/report/reports/standard/net-charts.scm:401
-#: libgnucash/engine/Account.cpp:158 libgnucash/engine/Account.cpp:4488
-#: libgnucash/engine/gncInvoice.c:1123
+#: libgnucash/engine/Account.cpp:158 libgnucash/engine/Account.cpp:4402
+#: libgnucash/engine/gncInvoice.c:1099
 msgid "Expense"
 msgstr "費用"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1232
-#: gnucash/report/reports/standard/trial-balance.scm:832
+#: gnucash/report/reports/standard/trial-balance.scm:823
 msgid "Net Income"
 msgstr "純利益"
 
@@ -23604,73 +23583,73 @@ msgstr "損益計算書 (複数列)"
 msgid "Budget Balance Sheet"
 msgstr "予算貸借対照表"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:97
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:94
 msgid "Include new/existing totals"
 msgstr "新規・繰越合計を含める"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:99
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:96
 msgid ""
 "Whether or not to include lines indicating change in totals introduced by "
 "budget."
 msgstr "予算によって合計が変化する分を表す行を含めるかどうかです。"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:111
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:108
 #: gnucash/report/reports/standard/budget-barchart.scm:84
 #: gnucash/report/reports/standard/budget-flow.scm:54
-#: gnucash/report/reports/standard/budget-income-statement.scm:59
+#: gnucash/report/reports/standard/budget-income-statement.scm:53
 #: gnucash/report/reports/standard/budget.scm:119
 msgid "Budget to use."
 msgstr "使用する予算です。"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:652
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:645
 msgid "Existing Assets"
 msgstr "繰越資産"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:654
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:647
 msgid "Allocated Assets"
 msgstr "割当資産"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:658
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:651
 msgid "Unallocated Assets"
 msgstr "未割当資産"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:684
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:677
 msgid "Existing Liabilities"
 msgstr "繰越負債"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:689
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:682
 msgid "New Liabilities"
 msgstr "新規負債"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:715
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:708
 msgid "Existing Retained Earnings"
 msgstr "繰越利益剰余金"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:716
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:709
 msgid "Existing Retained Losses"
 msgstr "繰越欠損金"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:721
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:714
 msgid "New Retained Earnings"
 msgstr "新規利益剰余金"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:722
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:715
 msgid "New Retained Losses"
 msgstr "新規欠損金"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:727
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:720
 msgid "Total Retained Earnings"
 msgstr "利益剰余金合計"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:728
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:721
 msgid "Total Retained Losses"
 msgstr "欠損金合計"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:744
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:737
 msgid "Existing Equity"
 msgstr "繰越純資産"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:747
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:740
 msgid "New Equity"
 msgstr "新規純資産"
 
@@ -23688,7 +23667,7 @@ msgid "Chart Type"
 msgstr "チャートの種類"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:50
-#: gnucash/report/reports/standard/budget-income-statement.scm:66
+#: gnucash/report/reports/standard/budget-income-statement.scm:60
 #: gnucash/report/reports/standard/budget.scm:70
 msgid "Range start"
 msgstr "範囲開始"
@@ -23709,7 +23688,7 @@ msgid "Select exact period that starts the reporting range."
 msgstr "帳票範囲の開始期間そのものを選択してください。"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:57
-#: gnucash/report/reports/standard/budget-income-statement.scm:70
+#: gnucash/report/reports/standard/budget-income-statement.scm:64
 #: gnucash/report/reports/standard/budget.scm:77
 msgid "Range end"
 msgstr "範囲終了"
@@ -23802,141 +23781,141 @@ msgstr "期間の数です。"
 msgid "~a: ~a - ~a"
 msgstr "~a: ~a - ~a"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:62
+#: gnucash/report/reports/standard/budget-income-statement.scm:56
 #: gnucash/report/reports/standard/budget.scm:66
 msgid "Report for range of budget periods"
 msgstr "予算期間を範囲指定した帳票"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:64
+#: gnucash/report/reports/standard/budget-income-statement.scm:58
 #: gnucash/report/reports/standard/budget.scm:68
 msgid "Create report for a budget period range instead of the entire budget."
 msgstr "予算全体ではなく予算期間の範囲を指定した帳票を作成します。"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:68
+#: gnucash/report/reports/standard/budget-income-statement.scm:62
 msgid "Select a budget period that begins the reporting range."
 msgstr "帳票範囲の開始予算期間を選択してください。"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:72
+#: gnucash/report/reports/standard/budget-income-statement.scm:66
 msgid "Select a budget period that ends the reporting range."
 msgstr "帳票範囲の終了予算期間を選択してください。"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:101
-#: gnucash/report/reports/standard/income-statement.scm:88
+#: gnucash/report/reports/standard/budget-income-statement.scm:95
+#: gnucash/report/reports/standard/income-statement.scm:82
 msgid "Label the revenue section"
 msgstr "収益の部にラベルをつける"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:103
-#: gnucash/report/reports/standard/income-statement.scm:90
+#: gnucash/report/reports/standard/budget-income-statement.scm:97
+#: gnucash/report/reports/standard/income-statement.scm:84
 msgid "Whether or not to include a label for the revenue section."
 msgstr "収益の部のラベルを含めるかどうかを指定します。"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:104
-#: gnucash/report/reports/standard/income-statement.scm:91
+#: gnucash/report/reports/standard/budget-income-statement.scm:98
+#: gnucash/report/reports/standard/income-statement.scm:85
 msgid "Include revenue total"
 msgstr "収益の部合計を含める"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:106
-#: gnucash/report/reports/standard/income-statement.scm:93
+#: gnucash/report/reports/standard/budget-income-statement.scm:100
+#: gnucash/report/reports/standard/income-statement.scm:87
 msgid "Whether or not to include a line indicating total revenue."
 msgstr "収益の部合計を表す行を含めるかどうかを指定します。"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:107
-#: gnucash/report/reports/standard/income-statement.scm:100
+#: gnucash/report/reports/standard/budget-income-statement.scm:101
+#: gnucash/report/reports/standard/income-statement.scm:94
 msgid "Label the expense section"
 msgstr "費用の部にラベルをつける"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:109
-#: gnucash/report/reports/standard/income-statement.scm:102
+#: gnucash/report/reports/standard/budget-income-statement.scm:103
+#: gnucash/report/reports/standard/income-statement.scm:96
 msgid "Whether or not to include a label for the expense section."
 msgstr "費用の部のラベルを含めるかどうかを指定します。"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:110
-#: gnucash/report/reports/standard/income-statement.scm:103
+#: gnucash/report/reports/standard/budget-income-statement.scm:104
+#: gnucash/report/reports/standard/income-statement.scm:97
 msgid "Include expense total"
 msgstr "費用の部合計を含める"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:112
-#: gnucash/report/reports/standard/income-statement.scm:105
+#: gnucash/report/reports/standard/budget-income-statement.scm:106
+#: gnucash/report/reports/standard/income-statement.scm:99
 msgid "Whether or not to include a line indicating total expense."
 msgstr "費用の部合計を表す行を含めるかどうかを指定します。"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:124
-#: gnucash/report/reports/standard/income-statement.scm:129
+#: gnucash/report/reports/standard/budget-income-statement.scm:118
+#: gnucash/report/reports/standard/income-statement.scm:123
 msgid "Display as a two column report"
 msgstr "二列で帳票を表示する"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:126
-#: gnucash/report/reports/standard/income-statement.scm:131
+#: gnucash/report/reports/standard/budget-income-statement.scm:120
+#: gnucash/report/reports/standard/income-statement.scm:125
 msgid "Divides the report into an income column and an expense column."
 msgstr "帳票を収益の列と費用の列に分けます。"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:128
-#: gnucash/report/reports/standard/income-statement.scm:133
+#: gnucash/report/reports/standard/budget-income-statement.scm:122
+#: gnucash/report/reports/standard/income-statement.scm:127
 msgid "Display in standard, income first, order"
 msgstr "標準的な収益を先頭とする順番で表示する"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:130
-#: gnucash/report/reports/standard/income-statement.scm:135
+#: gnucash/report/reports/standard/budget-income-statement.scm:124
+#: gnucash/report/reports/standard/income-statement.scm:129
 msgid ""
 "Causes the report to display in the standard order, placing income before "
 "expenses."
 msgstr "標準的な順番、つまり、収益の次に費用、という順番で帳票を表示します。"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:413
+#: gnucash/report/reports/standard/budget-income-statement.scm:403
 msgid "Reporting range end period cannot be less than start period."
 msgstr "帳票範囲の終了期間を開始期間より前にすることはできません。"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:481
-#: gnucash/report/reports/standard/income-statement.scm:471
+#: gnucash/report/reports/standard/budget-income-statement.scm:471
+#: gnucash/report/reports/standard/income-statement.scm:461
 msgid "Revenues"
 msgstr "収益"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:484
-#: gnucash/report/reports/standard/income-statement.scm:474
+#: gnucash/report/reports/standard/budget-income-statement.scm:474
+#: gnucash/report/reports/standard/income-statement.scm:464
 msgid "Total Revenue"
 msgstr "収益の部合計"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:494
-#: gnucash/report/reports/standard/income-statement.scm:482
+#: gnucash/report/reports/standard/budget-income-statement.scm:484
+#: gnucash/report/reports/standard/income-statement.scm:472
 msgid "Total Expenses"
 msgstr "費用の部合計"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:502
+#: gnucash/report/reports/standard/budget-income-statement.scm:492
 #, scheme-format
 msgid "for Budget ~a"
 msgstr "予算 ~a"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:504
+#: gnucash/report/reports/standard/budget-income-statement.scm:494
 #, scheme-format
 msgid "for Budget ~a Period ~d"
 msgstr "予算 ~a 期間 ~d"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:507
+#: gnucash/report/reports/standard/budget-income-statement.scm:497
 #, scheme-format
 msgid "for Budget ~a Periods ~d - ~d"
 msgstr "予算 ~a 期間 ~d - ~d"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:535
-#: gnucash/report/reports/standard/equity-statement.scm:441
-#: gnucash/report/reports/standard/income-statement.scm:507
-#: gnucash/report/reports/standard/income-statement.scm:525
-#: gnucash/report/reports/standard/income-statement.scm:539
+#: gnucash/report/reports/standard/budget-income-statement.scm:525
+#: gnucash/report/reports/standard/equity-statement.scm:434
+#: gnucash/report/reports/standard/income-statement.scm:497
+#: gnucash/report/reports/standard/income-statement.scm:515
+#: gnucash/report/reports/standard/income-statement.scm:529
 msgid "Net income"
 msgstr "純利益"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:536
-#: gnucash/report/reports/standard/equity-statement.scm:442
-#: gnucash/report/reports/standard/income-statement.scm:508
-#: gnucash/report/reports/standard/income-statement.scm:526
-#: gnucash/report/reports/standard/income-statement.scm:540
+#: gnucash/report/reports/standard/budget-income-statement.scm:526
+#: gnucash/report/reports/standard/equity-statement.scm:435
+#: gnucash/report/reports/standard/income-statement.scm:498
+#: gnucash/report/reports/standard/income-statement.scm:516
+#: gnucash/report/reports/standard/income-statement.scm:530
 msgid "Net loss"
 msgstr "純損失"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:576
+#: gnucash/report/reports/standard/budget-income-statement.scm:566
 msgid "Budget Income Statement"
 msgstr "予算損益計算書 (Income Statement)"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:577
+#: gnucash/report/reports/standard/budget-income-statement.scm:567
 msgid "Budget Profit & Loss"
 msgstr "予算損益計算書 (Profit & Loss)"
 
@@ -24363,79 +24342,79 @@ msgstr "得意先の要約"
 msgid "Equity Statement"
 msgstr "純資産明細"
 
-#: gnucash/report/reports/standard/equity-statement.scm:71
+#: gnucash/report/reports/standard/equity-statement.scm:68
 msgid "Report only on these accounts."
 msgstr "これらの勘定科目についてのみ帳票の対象とします。"
 
-#: gnucash/report/reports/standard/equity-statement.scm:87
-#: gnucash/report/reports/standard/income-statement.scm:117
-#: gnucash/report/reports/standard/trial-balance.scm:104
+#: gnucash/report/reports/standard/equity-statement.scm:84
+#: gnucash/report/reports/standard/income-statement.scm:111
+#: gnucash/report/reports/standard/trial-balance.scm:98
 msgid "Closing Entries pattern"
 msgstr "決算項目のパターン"
 
-#: gnucash/report/reports/standard/equity-statement.scm:89
-#: gnucash/report/reports/standard/income-statement.scm:119
-#: gnucash/report/reports/standard/trial-balance.scm:106
+#: gnucash/report/reports/standard/equity-statement.scm:86
+#: gnucash/report/reports/standard/income-statement.scm:113
+#: gnucash/report/reports/standard/trial-balance.scm:100
 msgid "Any text in the Description column which identifies closing entries."
 msgstr "説明列を見て決算項目を特定するための任意のテキストです。"
 
-#: gnucash/report/reports/standard/equity-statement.scm:91
-#: gnucash/report/reports/standard/income-statement.scm:121
-#: gnucash/report/reports/standard/trial-balance.scm:108
+#: gnucash/report/reports/standard/equity-statement.scm:88
+#: gnucash/report/reports/standard/income-statement.scm:115
+#: gnucash/report/reports/standard/trial-balance.scm:102
 msgid "Closing Entries pattern is case-sensitive"
 msgstr "決算項目のパターンは大文字小文字を区別する"
 
-#: gnucash/report/reports/standard/equity-statement.scm:93
-#: gnucash/report/reports/standard/income-statement.scm:123
-#: gnucash/report/reports/standard/trial-balance.scm:110
+#: gnucash/report/reports/standard/equity-statement.scm:90
+#: gnucash/report/reports/standard/income-statement.scm:117
+#: gnucash/report/reports/standard/trial-balance.scm:104
 msgid "Causes the Closing Entries Pattern match to be case-sensitive."
 msgstr "決算項目のパターンの一致処理で大文字小文字を区別するようにします。"
 
-#: gnucash/report/reports/standard/equity-statement.scm:95
-#: gnucash/report/reports/standard/income-statement.scm:125
-#: gnucash/report/reports/standard/trial-balance.scm:112
+#: gnucash/report/reports/standard/equity-statement.scm:92
+#: gnucash/report/reports/standard/income-statement.scm:119
+#: gnucash/report/reports/standard/trial-balance.scm:106
 msgid "Closing Entries Pattern is regular expression"
 msgstr "決算項目のパターンは正規表現"
 
-#: gnucash/report/reports/standard/equity-statement.scm:97
-#: gnucash/report/reports/standard/income-statement.scm:127
-#: gnucash/report/reports/standard/trial-balance.scm:114
+#: gnucash/report/reports/standard/equity-statement.scm:94
+#: gnucash/report/reports/standard/income-statement.scm:121
+#: gnucash/report/reports/standard/trial-balance.scm:108
 msgid ""
 "Causes the Closing Entries Pattern to be treated as a regular expression."
 msgstr "決算項目のパターンを正規表現とみなします。"
 
-#: gnucash/report/reports/standard/equity-statement.scm:409
-#: gnucash/report/reports/standard/income-statement.scm:452
-#: gnucash/report/reports/standard/trial-balance.scm:374
+#: gnucash/report/reports/standard/equity-statement.scm:402
+#: gnucash/report/reports/standard/income-statement.scm:442
+#: gnucash/report/reports/standard/trial-balance.scm:365
 msgid "for Period"
 msgstr "（当期）"
 
-#: gnucash/report/reports/standard/equity-statement.scm:436
-#: gnucash/report/reports/standard/equity-statement.scm:472
+#: gnucash/report/reports/standard/equity-statement.scm:429
+#: gnucash/report/reports/standard/equity-statement.scm:465
 msgid "Capital"
 msgstr "純資産金"
 
-#: gnucash/report/reports/standard/equity-statement.scm:447
+#: gnucash/report/reports/standard/equity-statement.scm:440
 msgid "Investments"
 msgstr "投資"
 
-#: gnucash/report/reports/standard/equity-statement.scm:452
+#: gnucash/report/reports/standard/equity-statement.scm:445
 msgid "Withdrawals"
 msgstr "出金"
 
-#: gnucash/report/reports/standard/equity-statement.scm:458
+#: gnucash/report/reports/standard/equity-statement.scm:451
 msgid "Unrealized Gains for Period"
 msgstr "当期未実現利益"
 
-#: gnucash/report/reports/standard/equity-statement.scm:459
+#: gnucash/report/reports/standard/equity-statement.scm:452
 msgid "Unrealized Losses for Period"
 msgstr "当期未実現損失"
 
-#: gnucash/report/reports/standard/equity-statement.scm:465
+#: gnucash/report/reports/standard/equity-statement.scm:458
 msgid "Increase in capital"
 msgstr "増資"
 
-#: gnucash/report/reports/standard/equity-statement.scm:466
+#: gnucash/report/reports/standard/equity-statement.scm:459
 msgid "Decrease in capital"
 msgstr "減資"
 
@@ -24753,38 +24732,38 @@ msgstr "総額"
 msgid "Tax on Purchases"
 msgstr "税金のクラス"
 
-#: gnucash/report/reports/standard/income-statement.scm:94
+#: gnucash/report/reports/standard/income-statement.scm:88
 msgid "Label the trading accounts section"
 msgstr "通貨取引勘定科目の部にラベルをつける"
 
-#: gnucash/report/reports/standard/income-statement.scm:96
+#: gnucash/report/reports/standard/income-statement.scm:90
 msgid "Whether or not to include a label for the trading accounts section."
 msgstr "通貨取引勘定科目の部のラベルを含めるかどうかを指定します。"
 
-#: gnucash/report/reports/standard/income-statement.scm:97
+#: gnucash/report/reports/standard/income-statement.scm:91
 msgid "Include trading accounts total"
 msgstr "通貨取引勘定科目の部合計を含める"
 
-#: gnucash/report/reports/standard/income-statement.scm:99
+#: gnucash/report/reports/standard/income-statement.scm:93
 msgid ""
 "Whether or not to include a line indicating total trading accounts balance."
 msgstr "通貨取引勘定科目の部合計を表す行を含めるかどうかを指定します。"
 
-#: gnucash/report/reports/standard/income-statement.scm:487
-#: libgnucash/engine/Account.cpp:4493 libgnucash/engine/Scrub.c:496
+#: gnucash/report/reports/standard/income-statement.scm:477
+#: libgnucash/engine/Account.cpp:4407 libgnucash/engine/Scrub.c:496
 msgid "Trading"
 msgstr "通貨取引"
 
-#: gnucash/report/reports/standard/income-statement.scm:490
+#: gnucash/report/reports/standard/income-statement.scm:480
 msgid "Total Trading"
 msgstr "通貨取引の部合計"
 
-#: gnucash/report/reports/standard/income-statement.scm:562
-#: gnucash/report/reports/standard/trial-balance.scm:544
+#: gnucash/report/reports/standard/income-statement.scm:552
+#: gnucash/report/reports/standard/trial-balance.scm:535
 msgid "Income Statement"
 msgstr "損益計算書"
 
-#: gnucash/report/reports/standard/income-statement.scm:563
+#: gnucash/report/reports/standard/income-statement.scm:553
 msgid "Profit & Loss"
 msgstr "損益計算書 (P/L)"
 
@@ -24846,7 +24825,7 @@ msgstr "プロット高"
 #: gnucash/report/reports/standard/investment-lots.scm:57
 #, fuzzy
 #| msgid "Show _Memo column"
-msgid "Show lot guid column"
+msgid "Show lot GUID column"
 msgstr "摘要列を表示する(_M)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:58
@@ -26467,7 +26446,7 @@ msgstr "照合帳票"
 
 #: gnucash/report/reports/standard/register.scm:147
 #: gnucash/report/reports/standard/register.scm:374
-#: libgnucash/engine/gnc-lot.c:821
+#: libgnucash/engine/gnc-lot.c:791
 msgid "Lot"
 msgstr "ロット"
 
@@ -26788,36 +26767,36 @@ msgstr ""
 "税金欄を含めたオーストラリアの得意先請求書を表示します (eguile テンプレートを"
 "使用)。"
 
-#: gnucash/report/reports/standard/trial-balance.scm:61
-#: gnucash/report/reports/standard/trial-balance.scm:541
+#: gnucash/report/reports/standard/trial-balance.scm:58
+#: gnucash/report/reports/standard/trial-balance.scm:532
 msgid "Trial Balance"
 msgstr "試算表"
 
-#: gnucash/report/reports/standard/trial-balance.scm:71
+#: gnucash/report/reports/standard/trial-balance.scm:65
 msgid "Start of Adjusting/Closing"
 msgstr "整理・決算の開始日"
 
-#: gnucash/report/reports/standard/trial-balance.scm:72
+#: gnucash/report/reports/standard/trial-balance.scm:66
 msgid "Date of Report"
 msgstr "帳票の日付"
 
-#: gnucash/report/reports/standard/trial-balance.scm:73
+#: gnucash/report/reports/standard/trial-balance.scm:67
 msgid "Report variation"
 msgstr "帳票バリエーション"
 
-#: gnucash/report/reports/standard/trial-balance.scm:74
+#: gnucash/report/reports/standard/trial-balance.scm:68
 msgid "Kind of trial balance to generate."
 msgstr "生成する試算表の種類です。"
 
-#: gnucash/report/reports/standard/trial-balance.scm:83
+#: gnucash/report/reports/standard/trial-balance.scm:77
 msgid "Merchandising"
 msgstr "販売"
 
-#: gnucash/report/reports/standard/trial-balance.scm:84
+#: gnucash/report/reports/standard/trial-balance.scm:78
 msgid "Gross adjustment accounts."
 msgstr "総額整理勘定科目"
 
-#: gnucash/report/reports/standard/trial-balance.scm:86
+#: gnucash/report/reports/standard/trial-balance.scm:80
 msgid ""
 "Do not net, but show gross debit/credit adjustments to these accounts. "
 "Merchandising businesses will normally select their inventory accounts here."
@@ -26825,11 +26804,11 @@ msgstr ""
 "これらの勘定科目に対する借方・貸方の整理総額を表示します。販売業では通常ここ"
 "に棚卸勘定科目を選択します。"
 
-#: gnucash/report/reports/standard/trial-balance.scm:87
+#: gnucash/report/reports/standard/trial-balance.scm:81
 msgid "Income summary accounts"
 msgstr "収益集計勘定科目"
 
-#: gnucash/report/reports/standard/trial-balance.scm:89
+#: gnucash/report/reports/standard/trial-balance.scm:83
 msgid ""
 "Adjustments made to these accounts are gross adjusted (see above) in the "
 "Adjustments, Adjusted Trial Balance, and Income Statement columns. Mostly "
@@ -26838,56 +26817,56 @@ msgstr ""
 "これらの勘定科目は総額が整理されて (上をご覧ください) その内容が整理、決算整"
 "理後試算表、損益計算書の各列に表示されます。主に販売ビジネスに便利です。"
 
-#: gnucash/report/reports/standard/trial-balance.scm:92
+#: gnucash/report/reports/standard/trial-balance.scm:86
 msgid "Adjusting Entries pattern"
 msgstr "整理項目のパターン"
 
-#: gnucash/report/reports/standard/trial-balance.scm:94
+#: gnucash/report/reports/standard/trial-balance.scm:88
 msgid "Any text in the Description column which identifies adjusting entries."
 msgstr "説明列を見て整理項目を特定するための任意のテキストです。"
 
-#: gnucash/report/reports/standard/trial-balance.scm:96
+#: gnucash/report/reports/standard/trial-balance.scm:90
 msgid "Adjusting Entries pattern is case-sensitive"
 msgstr "整理項目のパターンは大文字小文字を区別する"
 
-#: gnucash/report/reports/standard/trial-balance.scm:98
+#: gnucash/report/reports/standard/trial-balance.scm:92
 msgid "Causes the Adjusting Entries Pattern match to be case-sensitive."
 msgstr "整理項目のパターンの一致処理で大文字小文字を区別するようにします。"
 
-#: gnucash/report/reports/standard/trial-balance.scm:100
+#: gnucash/report/reports/standard/trial-balance.scm:94
 msgid "Adjusting Entries Pattern is regular expression"
 msgstr "整理項目のパターンは正規表現"
 
-#: gnucash/report/reports/standard/trial-balance.scm:102
+#: gnucash/report/reports/standard/trial-balance.scm:96
 msgid ""
 "Causes the Adjusting Entries Pattern to be treated as a regular expression."
 msgstr "整理項目のパターンを正規表現とみなします。"
 
-#: gnucash/report/reports/standard/trial-balance.scm:197
+#: gnucash/report/reports/standard/trial-balance.scm:188
 msgid "General journal exact balances"
 msgstr "一般仕訳帳の正確な残高"
 
-#: gnucash/report/reports/standard/trial-balance.scm:198
+#: gnucash/report/reports/standard/trial-balance.scm:189
 msgid "No adjusting/closing entries"
 msgstr "整理・決算項目を除外"
 
-#: gnucash/report/reports/standard/trial-balance.scm:199
+#: gnucash/report/reports/standard/trial-balance.scm:190
 msgid "Full end-of-period work sheet"
 msgstr "完全な期末のワークシート"
 
-#: gnucash/report/reports/standard/trial-balance.scm:256
+#: gnucash/report/reports/standard/trial-balance.scm:247
 msgid "Adjusting Entries"
 msgstr "整理項目"
 
-#: gnucash/report/reports/standard/trial-balance.scm:542
+#: gnucash/report/reports/standard/trial-balance.scm:533
 msgid "Adjustments"
 msgstr "整理"
 
-#: gnucash/report/reports/standard/trial-balance.scm:543
+#: gnucash/report/reports/standard/trial-balance.scm:534
 msgid "Adjusted Trial Balance"
 msgstr "決算整理後試算表"
 
-#: gnucash/report/reports/standard/trial-balance.scm:832
+#: gnucash/report/reports/standard/trial-balance.scm:823
 msgid "Net Loss"
 msgstr "純損失"
 
@@ -27931,11 +27910,11 @@ msgstr "2 行(_D)"
 #: gnucash/ui/gnc-plugin-page-register.ui:99
 #, fuzzy
 #| msgid ""
-#| "Show a second line with \"Action\", \"Notes\", and \"Linked Document\" "
+#| "Show a second line with \"Action\", \"Notes\", and \"Linked Documents\" "
 #| "for each transaction."
 msgid ""
-"Show a second line with \\\"Action\\\", \\\"Notes\\\", and \\\"Linked "
-"Document\\\" for each transaction"
+"Show a second line with Action, Notes, and Linked Document fields for each "
+"transaction"
 msgstr ""
 "各取引の \"アクション\"、\"備考\"、および \"リンクされた文書\" を 2 行目に表"
 "示します。"
@@ -29425,9 +29404,8 @@ msgid "Stock Ass_istant…"
 msgstr "株式分割アシスタント"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:276
-#, fuzzy
-#| msgid "_Go to Date"
-msgid "_Got to Date"
+#: gnucash/ui/gnc-plugin-page-register.ui:418
+msgid "_Go to Date"
 msgstr "日付へ移動(_G)"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:279
@@ -29525,10 +29503,6 @@ msgstr "選択した取引の記録簿帳票を開きます。"
 #| msgid "Sort By"
 msgid "_Sort By…"
 msgstr "ソートキー"
-
-#: gnucash/ui/gnc-plugin-page-register.ui:418
-msgid "_Go to Date"
-msgstr "日付へ移動(_G)"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:269
@@ -30142,36 +30116,36 @@ msgstr ""
 "無効な科目名一覧は以下の通りです。\n"
 "%s"
 
-#: libgnucash/engine/Account.cpp:4482
+#: libgnucash/engine/Account.cpp:4396
 msgid "Credit Card"
 msgstr "クレジットカード"
 
-#: libgnucash/engine/Account.cpp:4485
+#: libgnucash/engine/Account.cpp:4399
 msgid "Mutual Fund"
 msgstr "投資信託"
 
-#: libgnucash/engine/Account.cpp:4490
+#: libgnucash/engine/Account.cpp:4404
 msgid "A/Receivable"
 msgstr "売掛金"
 
-#: libgnucash/engine/Account.cpp:4491
+#: libgnucash/engine/Account.cpp:4405
 msgid "A/Payable"
 msgstr "買掛金"
 
-#: libgnucash/engine/Account.cpp:4492
+#: libgnucash/engine/Account.cpp:4406
 msgid "Root"
 msgstr "ルート(/)"
 
-#: libgnucash/engine/Account.cpp:5200
+#: libgnucash/engine/Account.cpp:5118
 msgid "Orphaned Gains"
 msgstr "不明な利得"
 
-#: libgnucash/engine/Account.cpp:5214 libgnucash/engine/cap-gains.c:806
+#: libgnucash/engine/Account.cpp:5132 libgnucash/engine/cap-gains.c:806
 #: libgnucash/engine/cap-gains.c:811 libgnucash/engine/cap-gains.c:812
 msgid "Realized Gain/Loss"
 msgstr "実現損益"
 
-#: libgnucash/engine/Account.cpp:5216
+#: libgnucash/engine/Account.cpp:5134
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
@@ -30239,17 +30213,17 @@ msgstr ""
 "このデータセットには、このバージョンの GnuCash が対応していない機能が含まれま"
 "す。次の機能に対応するには新しいバージョンの GnuCash をご利用ください:"
 
-#: libgnucash/engine/gncInvoice.c:1751
+#: libgnucash/engine/gncInvoice.c:1727
 msgid "Extra to Charge Card"
 msgstr "クレジットカードへの追加支払"
 
-#: libgnucash/engine/gncInvoice.c:1791
+#: libgnucash/engine/gncInvoice.c:1767
 msgid "Generated from an invoice. Try unposting the invoice."
 msgstr ""
 "得意先請求書によって作成されています。得意先請求書の記帳を取り消してくださ"
 "い。"
 
-#: libgnucash/engine/gncInvoice.c:2221
+#: libgnucash/engine/gncInvoice.c:2197
 msgid " (posted)"
 msgstr " (記帳済) "
 
@@ -30804,7 +30778,7 @@ msgstr "勘定科目 %s 内のどの取引にも属さないものを探して�
 msgid "Looking for imbalances in account %s: %u of %u"
 msgstr "勘定科目 %s 内の貸借が一致しないものを探しています: %u 件、%u 件中"
 
-#: libgnucash/engine/Split.c:1639
+#: libgnucash/engine/Split.c:1636
 msgctxt ""
 "Displayed account code of the other account in a multi-split transaction"
 msgid "Split"

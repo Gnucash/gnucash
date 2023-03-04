@@ -4,10 +4,10 @@
 # Мирослав Николић <miroslavnikolic@rocketmail.com>, 2015—2017.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash ${VERSION}-pot:${POTVERSION}\n"
+"Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-03-03 11:31-0800\n"
+"POT-Creation-Date: 2023-03-04 13:59-0800\n"
 "PO-Revision-Date: 2017-11-05 08:54+0200\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <(nothing)>\n"
@@ -1227,7 +1227,7 @@ msgstr "Опције отплаћивања зајма: „%s“"
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3750
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:62
 #: gnucash/register/ledger-core/split-register-model.c:233
-#: gnucash/report/reports/standard/account-summary.scm:83
+#: gnucash/report/reports/standard/account-summary.scm:77
 #: gnucash/report/reports/standard/advanced-portfolio.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1046
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1051
@@ -1752,7 +1752,7 @@ msgstr "Унесите број купљених или продатих акц�
 #. Translators: Inserts the value into action field of the non-currency asset split of
 #. an investment transaction.
 #: gnucash/gnome/assistant-stock-transaction.cpp:1113
-#: libgnucash/engine/Account.cpp:4484
+#: libgnucash/engine/Account.cpp:4398
 msgid "Stock"
 msgstr "Деоница"
 
@@ -1790,7 +1790,7 @@ msgstr "Белешка"
 #: gnucash/register/ledger-core/split-register.c:2440
 #: gnucash/report/reports/standard/general-journal.scm:82
 #: gnucash/report/reports/standard/register.scm:336
-#: gnucash/report/reports/standard/trial-balance.scm:564
+#: gnucash/report/reports/standard/trial-balance.scm:555
 #: gnucash/report/trep-engine.scm:1311 gnucash/report/trep-engine.scm:1328
 #: libgnucash/engine/Account.cpp:164
 msgid "Debit"
@@ -1805,7 +1805,7 @@ msgstr "Дуг"
 #: gnucash/register/ledger-core/split-register.c:2595
 #: gnucash/report/reports/standard/general-journal.scm:83
 #: gnucash/report/reports/standard/register.scm:338
-#: gnucash/report/reports/standard/trial-balance.scm:567
+#: gnucash/report/reports/standard/trial-balance.scm:558
 #: gnucash/report/trep-engine.scm:1314 gnucash/report/trep-engine.scm:1331
 #: libgnucash/engine/Account.cpp:184
 msgid "Credit"
@@ -1842,7 +1842,7 @@ msgstr "Уреди"
 #: gnucash/gnome-search/dialog-search.c:1076
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:147
 #: gnucash/report/reports/standard/invoice.scm:731
-#: libgnucash/engine/Account.cpp:179 libgnucash/engine/gncInvoice.c:1121
+#: libgnucash/engine/Account.cpp:179 libgnucash/engine/gncInvoice.c:1097
 msgid "Bill"
 msgstr "Рачун"
 
@@ -1870,7 +1870,7 @@ msgstr "Ваучер"
 #: gnucash/report/reports/standard/taxinvoice.scm:178
 #: gnucash/report/reports/support/receipt.eguile.scm:91
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:106
-#: libgnucash/engine/Account.cpp:160 libgnucash/engine/gncInvoice.c:1119
+#: libgnucash/engine/Account.cpp:160 libgnucash/engine/gncInvoice.c:1095
 msgid "Invoice"
 msgstr "Фактура"
 
@@ -2445,7 +2445,7 @@ msgstr "Појединости о трансакцији"
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3760
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:67
 #: gnucash/register/ledger-core/split-register-model.c:296
-#: gnucash/report/reports/standard/account-summary.scm:391
+#: gnucash/report/reports/standard/account-summary.scm:380
 #: gnucash/report/reports/standard/general-journal.scm:96
 #: gnucash/report/reports/standard/general-ledger.scm:70
 #: gnucash/report/reports/standard/general-ledger.scm:90
@@ -2620,9 +2620,9 @@ msgstr "Салдирано"
 
 #: gnucash/gnome/dialog-find-transactions.c:115
 #: gnucash/report/html-acct-table.scm:602
-#: gnucash/report/reports/standard/equity-statement.scm:158
-#: gnucash/report/reports/standard/income-statement.scm:244
-#: gnucash/report/reports/standard/trial-balance.scm:265
+#: gnucash/report/reports/standard/equity-statement.scm:151
+#: gnucash/report/reports/standard/income-statement.scm:234
+#: gnucash/report/reports/standard/trial-balance.scm:256
 msgid "Closing Entries"
 msgstr "Завршни уноси"
 
@@ -2749,7 +2749,7 @@ msgstr "Опис, напомене или белешке"
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:63
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:133
 #: gnucash/register/ledger-core/split-register-model.c:492
-#: gnucash/report/reports/standard/account-summary.scm:419
+#: gnucash/report/reports/standard/account-summary.scm:408
 #: gnucash/report/reports/standard/balsheet-eg.scm:188
 #: gnucash/report/reports/standard/receipt.scm:38
 #: gnucash/report/reports/standard/taxinvoice.scm:70
@@ -2919,7 +2919,7 @@ msgstr "Укупни трошак:"
 #: gnucash/gnome/dialog-invoice.c:2069 gnucash/gnome/dialog-payment.c:1358
 #: gnucash/gtkbuilder/dialog-invoice.glade:984
 #: gnucash/report/reports/standard/invoice.scm:737
-#: libgnucash/engine/gncInvoice.c:1127
+#: libgnucash/engine/gncInvoice.c:1103
 msgid "Credit Note"
 msgstr "Белешка кредита"
 
@@ -3138,7 +3138,7 @@ msgstr "Белешке ваучера"
 #: gnucash/import-export/csv-exp/csv-tree-export.c:155
 #: gnucash/import-export/csv-imp/csv-account-import.c:154
 #: gnucash/register/ledger-core/split-register-model.c:363
-#: gnucash/report/reports/standard/account-summary.scm:390
+#: gnucash/report/reports/standard/account-summary.scm:379
 #: gnucash/report/reports/standard/new-owner-report.scm:52
 #: gnucash/report/reports/standard/new-owner-report.scm:227
 msgid "Type"
@@ -3342,7 +3342,7 @@ msgstr "Наслов"
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:465
 #: gnucash/register/ledger-core/split-register-model.c:321
 #: gnucash/register/ledger-core/split-register-model.c:485
-#: gnucash/report/reports/standard/account-summary.scm:404
+#: gnucash/report/reports/standard/account-summary.scm:393
 #: gnucash/report/reports/standard/balance-forecast.scm:245
 #: gnucash/report/reports/standard/new-owner-report.scm:58
 #: gnucash/report/reports/standard/new-owner-report.scm:555
@@ -3579,9 +3579,9 @@ msgstr "Да обришем цене?"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:416
 #: gnucash/gtkbuilder/dialog-invoice.glade:617
-#: gnucash/report/reports/standard/equity-statement.scm:86
-#: gnucash/report/reports/standard/income-statement.scm:116
-#: gnucash/report/reports/standard/trial-balance.scm:91
+#: gnucash/report/reports/standard/equity-statement.scm:83
+#: gnucash/report/reports/standard/income-statement.scm:110
+#: gnucash/report/reports/standard/trial-balance.scm:85
 msgid "Entries"
 msgstr "Уноси"
 
@@ -4008,15 +4008,15 @@ msgstr "Нађи продавца"
 #: gnucash/report/reports/standard/net-charts.scm:332
 #: gnucash/report/reports/standard/net-charts.scm:401
 #: gnucash/report/report-utilities.scm:205 libgnucash/engine/Account.cpp:177
-#: libgnucash/engine/Account.cpp:4487
+#: libgnucash/engine/Account.cpp:4401
 msgid "Income"
 msgstr "Приход"
 
 #: gnucash/gnome/gnc-budget-view.c:503
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:117
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:122
-#: gnucash/report/reports/standard/budget-income-statement.scm:491
-#: gnucash/report/reports/standard/income-statement.scm:479
+#: gnucash/report/reports/standard/budget-income-statement.scm:481
+#: gnucash/report/reports/standard/income-statement.scm:469
 #: gnucash/report/report-utilities.scm:206
 msgid "Expenses"
 msgstr "Расходи"
@@ -4087,7 +4087,7 @@ msgstr "Изаберите буџет"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:291
 #: gnucash/gnome/gnc-plugin-page-budget.c:180 gnucash/gnome-utils/gnc-file.c:90
-#: gnucash/gnome-utils/gnc-file.c:327 gnucash/gnome-utils/gnc-file.c:1158
+#: gnucash/gnome-utils/gnc-file.c:327 gnucash/gnome-utils/gnc-file.c:1160
 msgid "Open"
 msgstr "Отвори"
 
@@ -4130,23 +4130,23 @@ msgstr ""
 #: gnucash/report/reports/example/daily-reports.scm:57
 #: gnucash/report/reports/standard/account-piecharts.scm:70
 #: gnucash/report/reports/standard/account-piecharts.scm:532
-#: gnucash/report/reports/standard/account-summary.scm:85
+#: gnucash/report/reports/standard/account-summary.scm:79
 #: gnucash/report/reports/standard/advanced-portfolio.scm:126
 #: gnucash/report/reports/standard/balance-forecast.scm:37
-#: gnucash/report/reports/standard/balance-sheet.scm:86
+#: gnucash/report/reports/standard/balance-sheet.scm:80
 #: gnucash/report/reports/standard/balsheet-pnl.scm:74
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:52
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:49
 #: gnucash/report/reports/standard/budget-barchart.scm:38
-#: gnucash/report/reports/standard/budget-income-statement.scm:74
+#: gnucash/report/reports/standard/budget-income-statement.scm:68
 #: gnucash/report/reports/standard/cashflow-barchart.scm:45
 #: gnucash/report/reports/standard/category-barchart.scm:79
-#: gnucash/report/reports/standard/equity-statement.scm:69
+#: gnucash/report/reports/standard/equity-statement.scm:66
 #: gnucash/report/reports/standard/income-gst-statement.scm:122
-#: gnucash/report/reports/standard/income-statement.scm:61
+#: gnucash/report/reports/standard/income-statement.scm:55
 #: gnucash/report/reports/standard/investment-lots.scm:45
 #: gnucash/report/reports/standard/net-charts.scm:45
 #: gnucash/report/reports/standard/portfolio.scm:62
-#: gnucash/report/reports/standard/trial-balance.scm:76
+#: gnucash/report/reports/standard/trial-balance.scm:70
 #: gnucash/report/trep-engine.scm:68 libgnucash/engine/qofbookslots.h:64
 msgid "Accounts"
 msgstr "Налози"
@@ -4268,11 +4268,11 @@ msgstr "Извештај налога"
 #: gnucash/gnome/gnc-plugin-page-budget.c:269
 #: gnucash/gnome/gnc-plugin-page-budget.c:310
 #: gnucash/gnome/gnc-plugin-page-budget.c:895
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:110
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:107
 #: gnucash/report/reports/standard/budget-barchart.scm:39
 #: gnucash/report/reports/standard/budget-barchart.scm:201
 #: gnucash/report/reports/standard/budget-flow.scm:43
-#: gnucash/report/reports/standard/budget-income-statement.scm:58
+#: gnucash/report/reports/standard/budget-income-statement.scm:52
 #: gnucash/report/reports/standard/budget.scm:93
 msgid "Budget"
 msgstr "Буџет"
@@ -5303,7 +5303,7 @@ msgid "You cannot save to that file."
 msgstr "Не можете сачувати у ту датотеку."
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1642
-#: gnucash/gnome-utils/gnc-file.c:1338 gnucash/gnome-utils/gnc-file.c:1585
+#: gnucash/gnome-utils/gnc-file.c:1340 gnucash/gnome-utils/gnc-file.c:1587
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:739
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
@@ -6361,7 +6361,7 @@ msgid "There was an error parsing the file."
 msgstr "Дошло је до грешке обраде датотеке."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1149
-#: gnucash/gnome-utils/gnc-file.c:1427 gnucash/gnome-utils/gnc-file.c:1666
+#: gnucash/gnome-utils/gnc-file.c:1429 gnucash/gnome-utils/gnc-file.c:1668
 #, fuzzy
 #| msgid "Writing file..."
 msgid "Writing file…"
@@ -6585,7 +6585,7 @@ msgstr "_Валута"
 #: gnucash/gtkbuilder/dialog-transfer.glade:418
 #: gnucash/gtkbuilder/dialog-transfer.glade:431
 #: gnucash/gtkbuilder/dialog-vendor.glade:502
-#: gnucash/report/trep-engine.scm:102 libgnucash/engine/Account.cpp:4486
+#: gnucash/report/trep-engine.scm:102 libgnucash/engine/Account.cpp:4400
 msgid "Currency"
 msgstr "Валута"
 
@@ -7168,7 +7168,7 @@ msgid "_Save"
 msgstr "_Сачувај"
 
 #: gnucash/gnome-utils/gnc-file.c:102 gnucash/gnome-utils/gnc-file.c:343
-#: gnucash/gnome-utils/gnc-file.c:1212 gnucash/gnome-utils/gnc-file.c:1484
+#: gnucash/gnome-utils/gnc-file.c:1214 gnucash/gnome-utils/gnc-file.c:1486
 msgid "Save"
 msgstr "Сачувај"
 
@@ -7474,18 +7474,19 @@ msgstr[2] ""
 msgid "Continue _Without Saving"
 msgstr "Настави без _чувања"
 
-#: gnucash/gnome-utils/gnc-file.c:714
+#: gnucash/gnome-utils/gnc-file.c:715
 msgid ""
-"This book has budgets. The internal representation of amounts is now fixed. "
-"Please review budgets and amend signs if necessary."
+"This book has budgets. The internal representation of budget amounts no "
+"longer depends on the Reverse Balanced Accounts preference. Please review "
+"the budgets and amend signs if necessary."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-file.c:842
+#: gnucash/gnome-utils/gnc-file.c:844
 #, c-format
 msgid "GnuCash could not obtain the lock for %s."
 msgstr "Не могу да издејствујем закључавање за „%s“."
 
-#: gnucash/gnome-utils/gnc-file.c:844
+#: gnucash/gnome-utils/gnc-file.c:846
 msgid ""
 "That database may be in use by another user, in which case you should not "
 "open the database. What would you like to do?"
@@ -7493,7 +7494,7 @@ msgstr ""
 "Може бити да ту базу података користи неки други корисник, и у том случају "
 "не треба да је отварате. Шта бисте желели да урадите?"
 
-#: gnucash/gnome-utils/gnc-file.c:847
+#: gnucash/gnome-utils/gnc-file.c:849
 #, fuzzy
 msgid ""
 "That database may be on a read-only file system, you may not have write "
@@ -7505,50 +7506,50 @@ msgstr ""
 "моћда немате овлашћења за писање у директоријум. Ако наставите нећете моћи "
 "да сачувате никакве измене. Шта желите да урадите?"
 
-#: gnucash/gnome-utils/gnc-file.c:870
+#: gnucash/gnome-utils/gnc-file.c:872
 #: gnucash/gtkbuilder/dialog-file-access.glade:98
 msgid "Open _Read-Only"
 msgstr "Отвори _само за читање"
 
-#: gnucash/gnome-utils/gnc-file.c:873
+#: gnucash/gnome-utils/gnc-file.c:875
 #, fuzzy
 #| msgid "_Create New File"
 msgid "Create _New File"
 msgstr "_Направи нову датотеку"
 
-#: gnucash/gnome-utils/gnc-file.c:876
+#: gnucash/gnome-utils/gnc-file.c:878
 msgid "Open _Anyway"
 msgstr "_Ипак отвори"
 
-#: gnucash/gnome-utils/gnc-file.c:879
+#: gnucash/gnome-utils/gnc-file.c:881
 #, fuzzy
 #| msgid "placeholder"
 msgid "Open _Folder"
 msgstr "местодржач"
 
-#: gnucash/gnome-utils/gnc-file.c:885 gnucash/ui/gnc-main-window.ui:83
+#: gnucash/gnome-utils/gnc-file.c:887 gnucash/ui/gnc-main-window.ui:83
 msgid "_Quit"
 msgstr "_Изађи"
 
-#: gnucash/gnome-utils/gnc-file.c:971 gnucash/gnome-utils/gnc-file.c:991
+#: gnucash/gnome-utils/gnc-file.c:973 gnucash/gnome-utils/gnc-file.c:993
 #, fuzzy
 #| msgid "Loading user data..."
 msgid "Loading user data…"
 msgstr "Учитавам корисничке податке..."
 
-#: gnucash/gnome-utils/gnc-file.c:1007
+#: gnucash/gnome-utils/gnc-file.c:1009
 #, fuzzy
 #| msgid "Re-saving user data..."
 msgid "Re-saving user data…"
 msgstr "Поново чувам корисничке податке..."
 
-#: gnucash/gnome-utils/gnc-file.c:1367
+#: gnucash/gnome-utils/gnc-file.c:1369
 #, fuzzy
 #| msgid "Exporting file..."
 msgid "Exporting file…"
 msgstr "Извозим датотеку..."
 
-#: gnucash/gnome-utils/gnc-file.c:1380
+#: gnucash/gnome-utils/gnc-file.c:1382
 #, c-format
 msgid ""
 "There was an error saving the file.\n"
@@ -7559,7 +7560,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: gnucash/gnome-utils/gnc-file.c:1415
+#: gnucash/gnome-utils/gnc-file.c:1417
 msgid ""
 "The database was opened read-only. Do you want to save it to a different "
 "place?"
@@ -7567,7 +7568,7 @@ msgstr ""
 "База података је отворена само за читање. Да ли желите да је сачувате на "
 "другом месту?"
 
-#: gnucash/gnome-utils/gnc-file.c:1710
+#: gnucash/gnome-utils/gnc-file.c:1712
 #, fuzzy, c-format
 #| msgid ""
 #| "Reverting will discard all unsaved changes to %s. Are you sure you want "
@@ -7579,7 +7580,7 @@ msgstr ""
 "Враћање ће одбацити све несачуване измене у „%s“. Да ли сигурно желите да "
 "наставите?"
 
-#: gnucash/gnome-utils/gnc-file.c:1718
+#: gnucash/gnome-utils/gnc-file.c:1720
 #: gnucash/gnome-utils/gnc-main-window.cpp:1189
 msgid "<unknown>"
 msgstr "<непознато>"
@@ -7898,7 +7899,7 @@ msgstr "Нови налог највишег нивоа"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:276
 #: gnucash/report/reports/standard/general-ledger.scm:72
 #: gnucash/report/reports/standard/general-ledger.scm:92
-#: gnucash/report/reports/standard/trial-balance.scm:570
+#: gnucash/report/reports/standard/trial-balance.scm:561
 #: gnucash/report/trep-engine.scm:171 gnucash/report/trep-engine.scm:940
 #: gnucash/report/trep-engine.scm:1018
 msgid "Account Name"
@@ -7911,8 +7912,8 @@ msgstr "Роба"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:823
 #: gnucash/import-export/csv-exp/csv-tree-export.c:156
-#: gnucash/report/reports/standard/account-summary.scm:120
-#: gnucash/report/reports/standard/account-summary.scm:389
+#: gnucash/report/reports/standard/account-summary.scm:114
+#: gnucash/report/reports/standard/account-summary.scm:378
 #: gnucash/report/reports/standard/general-ledger.scm:74
 #: gnucash/report/reports/standard/general-ledger.scm:94
 #: gnucash/report/trep-engine.scm:177 gnucash/report/trep-engine.scm:912
@@ -11023,8 +11024,8 @@ msgstr "Подесите раздобље налога"
 #| "\n"
 #| "Books will be closed at midnight on the selected date."
 msgid ""
-"Select an accounting period and the closing date which must not be in the "
-"future, but is greater than the closing date of the previous book.\n"
+"Select an accounting period and a closing date that is between the date of "
+"the previous close and today.\n"
 "\n"
 "Books will be closed at midnight on the selected date."
 msgstr ""
@@ -11936,15 +11937,15 @@ msgstr ""
 #: gnucash/report/reports/example/average-balance.scm:40
 #: gnucash/report/reports/example/daily-reports.scm:52
 #: gnucash/report/reports/standard/account-piecharts.scm:65
-#: gnucash/report/reports/standard/account-summary.scm:79
+#: gnucash/report/reports/standard/account-summary.scm:73
 #: gnucash/report/reports/standard/balance-forecast.scm:40
 #: gnucash/report/reports/standard/balsheet-pnl.scm:52
 #: gnucash/report/reports/standard/cashflow-barchart.scm:55
 #: gnucash/report/reports/standard/cash-flow.scm:42
 #: gnucash/report/reports/standard/category-barchart.scm:73
-#: gnucash/report/reports/standard/equity-statement.scm:66
+#: gnucash/report/reports/standard/equity-statement.scm:63
 #: gnucash/report/reports/standard/ifrs-cost-basis.scm:54
-#: gnucash/report/reports/standard/income-statement.scm:58
+#: gnucash/report/reports/standard/income-statement.scm:52
 #: gnucash/report/reports/standard/lot-viewer.scm:35
 #: gnucash/report/reports/standard/net-charts.scm:39
 #: gnucash/report/reports/standard/price-scatter.scm:36
@@ -11999,7 +12000,7 @@ msgstr "Појединости о зајму"
 #| msgid ""
 #| "\n"
 #| "Do you utilise an escrow account, if so an account must be specified..."
-msgid "Do you utilise an escrow account, if so an account must be specified…"
+msgid "Do you utilize an escrow account, if so an account must be specified…"
 msgstr ""
 "\n"
 "Да ли користите налог залога, ако је тако онда налог мора бити наведен..."
@@ -12115,15 +12116,15 @@ msgstr "Опсег: "
 #: gnucash/report/reports/example/average-balance.scm:41
 #: gnucash/report/reports/example/daily-reports.scm:53
 #: gnucash/report/reports/standard/account-piecharts.scm:66
-#: gnucash/report/reports/standard/account-summary.scm:80
+#: gnucash/report/reports/standard/account-summary.scm:74
 #: gnucash/report/reports/standard/balance-forecast.scm:41
 #: gnucash/report/reports/standard/balsheet-pnl.scm:53
 #: gnucash/report/reports/standard/cashflow-barchart.scm:56
 #: gnucash/report/reports/standard/cash-flow.scm:43
 #: gnucash/report/reports/standard/category-barchart.scm:74
-#: gnucash/report/reports/standard/equity-statement.scm:67
+#: gnucash/report/reports/standard/equity-statement.scm:64
 #: gnucash/report/reports/standard/ifrs-cost-basis.scm:55
-#: gnucash/report/reports/standard/income-statement.scm:59
+#: gnucash/report/reports/standard/income-statement.scm:53
 #: gnucash/report/reports/standard/lot-viewer.scm:36
 #: gnucash/report/reports/standard/net-charts.scm:40
 #: gnucash/report/reports/standard/price-scatter.scm:37
@@ -12805,7 +12806,7 @@ msgstr ""
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:530
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1090
-#: gnucash/report/report-utilities.scm:198 libgnucash/engine/Account.cpp:4480
+#: gnucash/report/report-utilities.scm:198 libgnucash/engine/Account.cpp:4394
 msgid "Cash"
 msgstr "Готовина"
 
@@ -12934,11 +12935,9 @@ msgstr "Поставке"
 #: gnucash/gtkbuilder/dialog-preferences.glade:2040
 #: gnucash/gtkbuilder/dialog-preferences.glade:2098
 #: gnucash/report/report-core.scm:162
-#: gnucash/report/reports/standard/equity-statement.scm:105
-#: gnucash/report/reports/standard/equity-statement.scm:108
+#: gnucash/report/reports/standard/equity-statement.scm:101
 #: gnucash/report/reports/standard/register.scm:341
-#: gnucash/report/reports/standard/trial-balance.scm:181
-#: gnucash/report/reports/standard/trial-balance.scm:184
+#: gnucash/report/reports/standard/trial-balance.scm:175
 #: gnucash/report/reports/standard/view-column.scm:45
 #: gnucash/report/reports/standard/view-column.scm:56
 #: gnucash/report/stylesheets/css.scm:118
@@ -13189,7 +13188,7 @@ msgid "_Default"
 msgstr "_Основно"
 
 #: gnucash/gtkbuilder/dialog-account.glade:954
-#: gnucash/report/reports/standard/account-summary.scm:122
+#: gnucash/report/reports/standard/account-summary.scm:116
 msgid "Account Type"
 msgstr "Врста налога"
 
@@ -18246,8 +18245,8 @@ msgstr "<b>Запис времена</b>"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1779
 msgid ""
-"This list one or more specialization templates that adjust the import for "
-"different banks uses of fields in the selected import format."
+"This lists one or more specialization templates that adjust the import for "
+"different banks' uses of fields in the selected import format."
 msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1787
@@ -18586,7 +18585,7 @@ msgid "Unspecified"
 msgstr "Неодређено"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:478
-#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4479
+#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4393
 msgid "Bank"
 msgstr "Банка"
 
@@ -20051,7 +20050,7 @@ msgstr "Додатно за карту:"
 
 #: gnucash/import-export/import-main-matcher.c:1814
 #: gnucash/report/reports/standard/register.scm:217
-#: libgnucash/engine/Split.c:1606 libgnucash/engine/Split.c:1623
+#: libgnucash/engine/Split.c:1603 libgnucash/engine/Split.c:1620
 msgid "-- Split Transaction --"
 msgstr "-- Подели трансакцију --"
 
@@ -20465,16 +20464,16 @@ msgstr "Добит капитала (кратко)"
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:109
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:113
 #: gnucash/register/ledger-core/split-register.c:2619
-#: gnucash/report/reports/standard/balance-sheet.scm:478
+#: gnucash/report/reports/standard/balance-sheet.scm:468
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1064
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:699
-#: libgnucash/app-utils/gnc-ui-util.c:654 libgnucash/engine/Account.cpp:4489
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:692
+#: libgnucash/app-utils/gnc-ui-util.c:654 libgnucash/engine/Account.cpp:4403
 msgid "Equity"
 msgstr "Акција"
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:110
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:114
-#: gnucash/report/reports/standard/balance-sheet.scm:485
+#: gnucash/report/reports/standard/balance-sheet.scm:475
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1073
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1088
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:189
@@ -20629,7 +20628,7 @@ msgstr "Налазим удвостручене трансакције"
 #. see https://en.wikipedia.org/wiki/Quicken_Interchange_Format#Detail_items
 #: gnucash/import-export/qif-imp/qif-parse.scm:174
 #, scheme-format
-msgid "The account type ~s is unknown, using 'bank' instead."
+msgid "The account type ~s is unknown, using Bank instead."
 msgstr ""
 
 #. Translators: This is an error message about actions like buy, sell …
@@ -21857,12 +21856,12 @@ msgstr ""
 "налога?"
 
 #: gnucash/report/options-utilities.scm:120
-#: gnucash/report/reports/standard/account-summary.scm:87
-#: gnucash/report/reports/standard/balance-sheet.scm:88
+#: gnucash/report/reports/standard/account-summary.scm:81
+#: gnucash/report/reports/standard/balance-sheet.scm:82
 #: gnucash/report/reports/standard/balsheet-pnl.scm:75
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:54
-#: gnucash/report/reports/standard/budget-income-statement.scm:76
-#: gnucash/report/reports/standard/income-statement.scm:63
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:51
+#: gnucash/report/reports/standard/budget-income-statement.scm:70
+#: gnucash/report/reports/standard/income-statement.scm:57
 msgid "Report on these accounts, if display depth allows."
 msgstr "Известите о овим налозима, ако дубина приказа то дозвољава."
 
@@ -21993,7 +21992,7 @@ msgid "Do not show any balances of parent accounts."
 msgstr "Не приказујте билансе матичних налога."
 
 #: gnucash/report/options-utilities.scm:217
-#: gnucash/report/reports/standard/account-summary.scm:118
+#: gnucash/report/reports/standard/account-summary.scm:112
 msgid "Account Balance"
 msgstr "Биланс налога"
 
@@ -22153,25 +22152,25 @@ msgstr "Величина корака"
 #: gnucash/report/reports/example/average-balance.scm:43
 #: gnucash/report/reports/example/daily-reports.scm:54
 #: gnucash/report/reports/standard/account-piecharts.scm:67
-#: gnucash/report/reports/standard/account-summary.scm:130
+#: gnucash/report/reports/standard/account-summary.scm:124
 #: gnucash/report/reports/standard/advanced-portfolio.scm:71
 #: gnucash/report/reports/standard/balance-forecast.scm:44
-#: gnucash/report/reports/standard/balance-sheet.scm:136
+#: gnucash/report/reports/standard/balance-sheet.scm:130
 #: gnucash/report/reports/standard/balsheet-eg.scm:178
 #: gnucash/report/reports/standard/balsheet-pnl.scm:112
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:102
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:99
 #: gnucash/report/reports/standard/budget-flow.scm:45
-#: gnucash/report/reports/standard/budget-income-statement.scm:115
+#: gnucash/report/reports/standard/budget-income-statement.scm:109
 #: gnucash/report/reports/standard/cashflow-barchart.scm:58
 #: gnucash/report/reports/standard/cash-flow.scm:49
 #: gnucash/report/reports/standard/category-barchart.scm:76
-#: gnucash/report/reports/standard/equity-statement.scm:78
-#: gnucash/report/reports/standard/income-statement.scm:108
+#: gnucash/report/reports/standard/equity-statement.scm:75
+#: gnucash/report/reports/standard/income-statement.scm:102
 #: gnucash/report/reports/standard/investment-lots.scm:82
 #: gnucash/report/reports/standard/net-charts.scm:42
 #: gnucash/report/reports/standard/portfolio.scm:49
 #: gnucash/report/reports/standard/price-scatter.scm:41
-#: gnucash/report/reports/standard/trial-balance.scm:129
+#: gnucash/report/reports/standard/trial-balance.scm:123
 #: gnucash/report/trep-engine.scm:106
 msgid "Report's currency"
 msgstr "Валута извештаја"
@@ -22179,24 +22178,24 @@ msgstr "Валута извештаја"
 #: gnucash/report/reports/example/average-balance.scm:44
 #: gnucash/report/reports/example/daily-reports.scm:55
 #: gnucash/report/reports/standard/account-piecharts.scm:68
-#: gnucash/report/reports/standard/account-summary.scm:131
+#: gnucash/report/reports/standard/account-summary.scm:125
 #: gnucash/report/reports/standard/advanced-portfolio.scm:40
 #: gnucash/report/reports/standard/balance-forecast.scm:45
-#: gnucash/report/reports/standard/balance-sheet.scm:137
+#: gnucash/report/reports/standard/balance-sheet.scm:131
 #: gnucash/report/reports/standard/balsheet-eg.scm:179
 #: gnucash/report/reports/standard/balsheet-pnl.scm:114
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:103
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:100
 #: gnucash/report/reports/standard/budget-flow.scm:42
-#: gnucash/report/reports/standard/budget-income-statement.scm:116
+#: gnucash/report/reports/standard/budget-income-statement.scm:110
 #: gnucash/report/reports/standard/cashflow-barchart.scm:59
 #: gnucash/report/reports/standard/cash-flow.scm:50
 #: gnucash/report/reports/standard/category-barchart.scm:77
-#: gnucash/report/reports/standard/equity-statement.scm:79
-#: gnucash/report/reports/standard/income-statement.scm:109
+#: gnucash/report/reports/standard/equity-statement.scm:76
+#: gnucash/report/reports/standard/income-statement.scm:103
 #: gnucash/report/reports/standard/net-charts.scm:43
 #: gnucash/report/reports/standard/portfolio.scm:35
 #: gnucash/report/reports/standard/price-scatter.scm:43
-#: gnucash/report/reports/standard/trial-balance.scm:130
+#: gnucash/report/reports/standard/trial-balance.scm:124
 #: gnucash/report/trep-engine.scm:103
 msgid "Price Source"
 msgstr "Извор цене"
@@ -22343,16 +22342,16 @@ msgstr "Прикажите кружни график са укупним рас�
 
 #: gnucash/report/reports/example/daily-reports.scm:58
 #: gnucash/report/reports/standard/account-piecharts.scm:71
-#: gnucash/report/reports/standard/account-summary.scm:88
-#: gnucash/report/reports/standard/balance-sheet.scm:89
+#: gnucash/report/reports/standard/account-summary.scm:82
+#: gnucash/report/reports/standard/balance-sheet.scm:83
 #: gnucash/report/reports/standard/balsheet-eg.scm:148
 #: gnucash/report/reports/standard/balsheet-pnl.scm:77
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:55
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:52
 #: gnucash/report/reports/standard/budget-barchart.scm:46
-#: gnucash/report/reports/standard/budget-income-statement.scm:77
+#: gnucash/report/reports/standard/budget-income-statement.scm:71
 #: gnucash/report/reports/standard/category-barchart.scm:80
-#: gnucash/report/reports/standard/income-statement.scm:64
-#: gnucash/report/reports/standard/trial-balance.scm:79
+#: gnucash/report/reports/standard/income-statement.scm:58
+#: gnucash/report/reports/standard/trial-balance.scm:73
 msgid "Levels of Subaccounts"
 msgstr "Нивои подналога"
 
@@ -22395,28 +22394,28 @@ msgid "Scatter:"
 msgstr ""
 
 #: gnucash/report/reports/example/sample-report.scm:41
-#: gnucash/report/reports/standard/account-summary.scm:72
-#: gnucash/report/reports/standard/balance-sheet.scm:75
+#: gnucash/report/reports/standard/account-summary.scm:69
+#: gnucash/report/reports/standard/balance-sheet.scm:72
 #: gnucash/report/reports/standard/balsheet-eg.scm:140
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:42
-#: gnucash/report/reports/standard/budget-income-statement.scm:52
+#: gnucash/report/reports/standard/budget-income-statement.scm:49
 #: gnucash/report/reports/standard/equity-statement.scm:60
-#: gnucash/report/reports/standard/income-statement.scm:52
+#: gnucash/report/reports/standard/income-statement.scm:49
 #: gnucash/report/reports/standard/receipt.scm:43
 #: gnucash/report/reports/standard/taxinvoice.scm:94
-#: gnucash/report/reports/standard/trial-balance.scm:65
+#: gnucash/report/reports/standard/trial-balance.scm:62
 msgid "Report Title"
 msgstr "Наслов извештаја"
 
 #: gnucash/report/reports/example/sample-report.scm:42
-#: gnucash/report/reports/standard/account-summary.scm:73
-#: gnucash/report/reports/standard/balance-sheet.scm:76
+#: gnucash/report/reports/standard/account-summary.scm:70
+#: gnucash/report/reports/standard/balance-sheet.scm:73
 #: gnucash/report/reports/standard/balsheet-eg.scm:141
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:43
-#: gnucash/report/reports/standard/budget-income-statement.scm:53
+#: gnucash/report/reports/standard/budget-income-statement.scm:50
 #: gnucash/report/reports/standard/equity-statement.scm:61
-#: gnucash/report/reports/standard/income-statement.scm:53
-#: gnucash/report/reports/standard/trial-balance.scm:66
+#: gnucash/report/reports/standard/income-statement.scm:50
+#: gnucash/report/reports/standard/trial-balance.scm:63
 msgid "Title for this report."
 msgstr "Наслов за овај извештај."
 
@@ -23017,8 +23016,8 @@ msgid "Expense Accounts"
 msgstr "Налози расхода"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:61
-#: gnucash/report/reports/standard/balance-sheet.scm:461
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:640
+#: gnucash/report/reports/standard/balance-sheet.scm:451
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:633
 #: gnucash/report/reports/standard/net-charts.scm:332
 #: gnucash/report/reports/standard/net-charts.scm:402
 #: gnucash/report/report-utilities.scm:200
@@ -23026,8 +23025,8 @@ msgid "Assets"
 msgstr "Добра"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:63
-#: gnucash/report/reports/standard/balance-sheet.scm:362
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:670
+#: gnucash/report/reports/standard/balance-sheet.scm:352
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:663
 #: gnucash/report/reports/standard/net-charts.scm:353
 #: gnucash/report/reports/standard/net-charts.scm:402
 #: gnucash/report/report-utilities.scm:201
@@ -23072,16 +23071,16 @@ msgid "No Averaging"
 msgstr "Без просека"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:127
-#: gnucash/report/reports/standard/account-summary.scm:90
-#: gnucash/report/reports/standard/balance-sheet.scm:91
+#: gnucash/report/reports/standard/account-summary.scm:84
+#: gnucash/report/reports/standard/balance-sheet.scm:85
 #: gnucash/report/reports/standard/balsheet-eg.scm:149
 #: gnucash/report/reports/standard/balsheet-pnl.scm:78
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:57
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:54
 #: gnucash/report/reports/standard/budget-barchart.scm:48
-#: gnucash/report/reports/standard/budget-income-statement.scm:79
+#: gnucash/report/reports/standard/budget-income-statement.scm:73
 #: gnucash/report/reports/standard/category-barchart.scm:137
-#: gnucash/report/reports/standard/income-statement.scm:66
-#: gnucash/report/reports/standard/trial-balance.scm:81
+#: gnucash/report/reports/standard/income-statement.scm:60
+#: gnucash/report/reports/standard/trial-balance.scm:75
 msgid "Maximum number of levels in the account tree displayed."
 msgstr "Највећи број приказаних нивоа у стаблу налога."
 
@@ -23122,45 +23121,25 @@ msgstr "Недељни просек"
 msgid "Balance at ~a"
 msgstr "Салдо за „%s“"
 
-#: gnucash/report/reports/standard/account-summary.scm:69
+#: gnucash/report/reports/standard/account-summary.scm:66
 msgid "Account Summary"
 msgstr "Сажетак налога до"
 
-#: gnucash/report/reports/standard/account-summary.scm:70
+#: gnucash/report/reports/standard/account-summary.scm:67
 msgid "Future Scheduled Transactions Summary"
 msgstr "Сажетак будућих заказаних трансакција"
 
-#: gnucash/report/reports/standard/account-summary.scm:75
-#: gnucash/report/reports/standard/balance-sheet.scm:78
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:45
-#: gnucash/report/reports/standard/budget-income-statement.scm:55
-#: gnucash/report/reports/standard/equity-statement.scm:63
-#: gnucash/report/reports/standard/income-statement.scm:55
-#: gnucash/report/reports/standard/trial-balance.scm:68
-msgid "Company name"
-msgstr "Име компаније"
-
-#: gnucash/report/reports/standard/account-summary.scm:76
-#: gnucash/report/reports/standard/balance-sheet.scm:79
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:46
-#: gnucash/report/reports/standard/budget-income-statement.scm:56
-#: gnucash/report/reports/standard/equity-statement.scm:64
-#: gnucash/report/reports/standard/income-statement.scm:56
-#: gnucash/report/reports/standard/trial-balance.scm:69
-msgid "Name of company/individual."
-msgstr "Име предузећа/појединаца."
-
-#: gnucash/report/reports/standard/account-summary.scm:91
+#: gnucash/report/reports/standard/account-summary.scm:85
 msgid "Depth limit behavior"
 msgstr "Понашање ограничења дубине"
 
-#: gnucash/report/reports/standard/account-summary.scm:95
+#: gnucash/report/reports/standard/account-summary.scm:89
 msgid "How to treat accounts which exceed the specified depth limit (if any)."
 msgstr ""
 "Како ће се опходити с аналозима који превазилазе наведено ограничење дубине "
 "(ако постоји)."
 
-#: gnucash/report/reports/standard/account-summary.scm:96
+#: gnucash/report/reports/standard/account-summary.scm:90
 msgid ""
 "Show the total balance, including balances in subaccounts, of any account at "
 "the depth limit."
@@ -23168,227 +23147,227 @@ msgstr ""
 "Покажите укупно стање, укључујући салда у подналозима, било ког налога на "
 "ограничењу дубине."
 
-#: gnucash/report/reports/standard/account-summary.scm:97
+#: gnucash/report/reports/standard/account-summary.scm:91
 #, fuzzy
 #| msgid "Shows accounts deeper than the depth limit at the depth limit."
 msgid "Raise accounts deeper than the depth limit to the depth limit."
 msgstr "Прикажите налоге дубље од ограничења дубине на ограничењу дубине."
 
-#: gnucash/report/reports/standard/account-summary.scm:98
+#: gnucash/report/reports/standard/account-summary.scm:92
 #, fuzzy
 #| msgid "Disregard completely any accounts deeper than the depth limit."
 msgid "Omit any accounts deeper than the depth limit."
 msgstr "Занемарите у потпуности све налоге дубље од ограничења дубине."
 
-#: gnucash/report/reports/standard/account-summary.scm:100
-#: gnucash/report/reports/standard/balance-sheet.scm:96
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:62
-#: gnucash/report/reports/standard/budget-income-statement.scm:84
-#: gnucash/report/reports/standard/income-statement.scm:71
+#: gnucash/report/reports/standard/account-summary.scm:94
+#: gnucash/report/reports/standard/balance-sheet.scm:90
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:59
+#: gnucash/report/reports/standard/budget-income-statement.scm:78
+#: gnucash/report/reports/standard/income-statement.scm:65
 msgid "Parent account balances"
 msgstr "Биланси матичног налога"
 
-#: gnucash/report/reports/standard/account-summary.scm:101
-#: gnucash/report/reports/standard/balance-sheet.scm:97
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:63
-#: gnucash/report/reports/standard/budget-income-statement.scm:85
-#: gnucash/report/reports/standard/income-statement.scm:72
+#: gnucash/report/reports/standard/account-summary.scm:95
+#: gnucash/report/reports/standard/balance-sheet.scm:91
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:60
+#: gnucash/report/reports/standard/budget-income-statement.scm:79
+#: gnucash/report/reports/standard/income-statement.scm:66
 msgid "Parent account subtotals"
 msgstr "Подзбирови матичног налога"
 
-#: gnucash/report/reports/standard/account-summary.scm:103
-#: gnucash/report/reports/standard/balance-sheet.scm:99
+#: gnucash/report/reports/standard/account-summary.scm:97
+#: gnucash/report/reports/standard/balance-sheet.scm:93
 #: gnucash/report/reports/standard/balsheet-pnl.scm:86
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:65
-#: gnucash/report/reports/standard/budget-income-statement.scm:87
-#: gnucash/report/reports/standard/income-statement.scm:74
-#: gnucash/report/reports/standard/trial-balance.scm:121
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:62
+#: gnucash/report/reports/standard/budget-income-statement.scm:81
+#: gnucash/report/reports/standard/income-statement.scm:68
+#: gnucash/report/reports/standard/trial-balance.scm:115
 msgid "Include accounts with zero total balances"
 msgstr "Укључи налоге са билансима нултог збира"
 
-#: gnucash/report/reports/standard/account-summary.scm:105
-#: gnucash/report/reports/standard/balance-sheet.scm:101
+#: gnucash/report/reports/standard/account-summary.scm:99
+#: gnucash/report/reports/standard/balance-sheet.scm:95
 #: gnucash/report/reports/standard/balsheet-pnl.scm:87
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:67
-#: gnucash/report/reports/standard/budget-income-statement.scm:89
-#: gnucash/report/reports/standard/income-statement.scm:76
-#: gnucash/report/reports/standard/trial-balance.scm:123
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:64
+#: gnucash/report/reports/standard/budget-income-statement.scm:83
+#: gnucash/report/reports/standard/income-statement.scm:70
+#: gnucash/report/reports/standard/trial-balance.scm:117
 msgid "Include accounts with zero total (recursive) balances in this report."
 msgstr "Укључите налоге са салдима нултог збира (дубински) у овом извештају."
 
-#: gnucash/report/reports/standard/account-summary.scm:106
-#: gnucash/report/reports/standard/balance-sheet.scm:102
+#: gnucash/report/reports/standard/account-summary.scm:100
+#: gnucash/report/reports/standard/balance-sheet.scm:96
 #: gnucash/report/reports/standard/balsheet-pnl.scm:89
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:68
-#: gnucash/report/reports/standard/budget-income-statement.scm:90
-#: gnucash/report/reports/standard/income-statement.scm:77
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:65
+#: gnucash/report/reports/standard/budget-income-statement.scm:84
+#: gnucash/report/reports/standard/income-statement.scm:71
 msgid "Omit zero balance figures"
 msgstr "Изостави фигуре нултог биланса"
 
-#: gnucash/report/reports/standard/account-summary.scm:108
-#: gnucash/report/reports/standard/balance-sheet.scm:104
+#: gnucash/report/reports/standard/account-summary.scm:102
+#: gnucash/report/reports/standard/balance-sheet.scm:98
 #: gnucash/report/reports/standard/balsheet-pnl.scm:90
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:70
-#: gnucash/report/reports/standard/budget-income-statement.scm:92
-#: gnucash/report/reports/standard/income-statement.scm:79
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:67
+#: gnucash/report/reports/standard/budget-income-statement.scm:86
+#: gnucash/report/reports/standard/income-statement.scm:73
 msgid "Show blank space in place of any zero balances which would be shown."
 msgstr ""
 "Прикажите празан простор уместо било каквих нултих салда који ће бити "
 "приказани."
 
-#: gnucash/report/reports/standard/account-summary.scm:110
-#: gnucash/report/reports/standard/balance-sheet.scm:106
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:72
-#: gnucash/report/reports/standard/budget-income-statement.scm:94
-#: gnucash/report/reports/standard/equity-statement.scm:73
-#: gnucash/report/reports/standard/income-statement.scm:81
+#: gnucash/report/reports/standard/account-summary.scm:104
+#: gnucash/report/reports/standard/balance-sheet.scm:100
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:69
+#: gnucash/report/reports/standard/budget-income-statement.scm:88
+#: gnucash/report/reports/standard/equity-statement.scm:70
+#: gnucash/report/reports/standard/income-statement.scm:75
 msgid "Show accounting-style rules"
 msgstr "Прикажи правила у стилу рачуноводства"
 
-#: gnucash/report/reports/standard/account-summary.scm:112
-#: gnucash/report/reports/standard/balance-sheet.scm:108
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:74
-#: gnucash/report/reports/standard/budget-income-statement.scm:96
-#: gnucash/report/reports/standard/equity-statement.scm:75
-#: gnucash/report/reports/standard/income-statement.scm:83
+#: gnucash/report/reports/standard/account-summary.scm:106
+#: gnucash/report/reports/standard/balance-sheet.scm:102
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:71
+#: gnucash/report/reports/standard/budget-income-statement.scm:90
+#: gnucash/report/reports/standard/equity-statement.scm:72
+#: gnucash/report/reports/standard/income-statement.scm:77
 msgid "Use rules beneath columns of added numbers like accountants do."
 msgstr ""
 "Користите правила испод колона додатих бројева као што раде рачуновође."
 
-#: gnucash/report/reports/standard/account-summary.scm:114
-#: gnucash/report/reports/standard/balance-sheet.scm:110
+#: gnucash/report/reports/standard/account-summary.scm:108
+#: gnucash/report/reports/standard/balance-sheet.scm:104
 #: gnucash/report/reports/standard/balsheet-eg.scm:158
 #: gnucash/report/reports/standard/balsheet-pnl.scm:92
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:76
-#: gnucash/report/reports/standard/budget-income-statement.scm:98
-#: gnucash/report/reports/standard/income-statement.scm:85
-#: gnucash/report/reports/standard/trial-balance.scm:125
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:73
+#: gnucash/report/reports/standard/budget-income-statement.scm:92
+#: gnucash/report/reports/standard/income-statement.scm:79
+#: gnucash/report/reports/standard/trial-balance.scm:119
 msgid "Display accounts as hyperlinks"
 msgstr "Прикажи налоге као хипервезе"
 
-#: gnucash/report/reports/standard/account-summary.scm:116
-#: gnucash/report/reports/standard/balance-sheet.scm:111
+#: gnucash/report/reports/standard/account-summary.scm:110
+#: gnucash/report/reports/standard/balance-sheet.scm:105
 #: gnucash/report/reports/standard/balsheet-eg.scm:159
 #: gnucash/report/reports/standard/balsheet-pnl.scm:93
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:77
-#: gnucash/report/reports/standard/budget-income-statement.scm:99
-#: gnucash/report/reports/standard/income-statement.scm:86
-#: gnucash/report/reports/standard/trial-balance.scm:126
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:74
+#: gnucash/report/reports/standard/budget-income-statement.scm:93
+#: gnucash/report/reports/standard/income-statement.scm:80
+#: gnucash/report/reports/standard/trial-balance.scm:120
 msgid "Shows each account in the table as a hyperlink to its register window."
 msgstr ""
 "Прикажите сваки налог у табели као хипервезу ка његовом прозору регистра."
 
-#: gnucash/report/reports/standard/account-summary.scm:119
+#: gnucash/report/reports/standard/account-summary.scm:113
 msgid "Show an account's balance."
 msgstr "Прикажите биланс налога."
 
-#: gnucash/report/reports/standard/account-summary.scm:121
+#: gnucash/report/reports/standard/account-summary.scm:115
 msgid "Show an account's account code."
 msgstr "Прикажите шифру налога."
 
-#: gnucash/report/reports/standard/account-summary.scm:123
+#: gnucash/report/reports/standard/account-summary.scm:117
 msgid "Show an account's account type."
 msgstr "Прикажите врсту налога."
 
-#: gnucash/report/reports/standard/account-summary.scm:124
+#: gnucash/report/reports/standard/account-summary.scm:118
 msgid "Account Description"
 msgstr "Опис налога"
 
-#: gnucash/report/reports/standard/account-summary.scm:125
+#: gnucash/report/reports/standard/account-summary.scm:119
 msgid "Show an account's description."
 msgstr "Прикажите опис налога."
 
-#: gnucash/report/reports/standard/account-summary.scm:126
+#: gnucash/report/reports/standard/account-summary.scm:120
 msgid "Account Notes"
 msgstr "Белешке налога"
 
-#: gnucash/report/reports/standard/account-summary.scm:127
+#: gnucash/report/reports/standard/account-summary.scm:121
 msgid "Show an account's notes."
 msgstr "Прикажите белешке налога."
 
-#: gnucash/report/reports/standard/account-summary.scm:129
-#: gnucash/report/reports/standard/balance-sheet.scm:135
+#: gnucash/report/reports/standard/account-summary.scm:123
+#: gnucash/report/reports/standard/balance-sheet.scm:129
 #: gnucash/report/reports/standard/balsheet-eg.scm:185
 #: gnucash/report/reports/standard/balsheet-pnl.scm:105
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:101
-#: gnucash/report/reports/standard/budget-income-statement.scm:114
-#: gnucash/report/reports/standard/equity-statement.scm:77
-#: gnucash/report/reports/standard/income-statement.scm:107
-#: gnucash/report/reports/standard/trial-balance.scm:128
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:98
+#: gnucash/report/reports/standard/budget-income-statement.scm:108
+#: gnucash/report/reports/standard/equity-statement.scm:74
+#: gnucash/report/reports/standard/income-statement.scm:101
+#: gnucash/report/reports/standard/trial-balance.scm:122
 msgid "Commodities"
 msgstr "Робе"
 
-#: gnucash/report/reports/standard/account-summary.scm:132
-#: gnucash/report/reports/standard/balance-sheet.scm:138
+#: gnucash/report/reports/standard/account-summary.scm:126
+#: gnucash/report/reports/standard/balance-sheet.scm:132
 #: gnucash/report/reports/standard/balsheet-eg.scm:180
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:104
-#: gnucash/report/reports/standard/budget-income-statement.scm:117
-#: gnucash/report/reports/standard/equity-statement.scm:80
-#: gnucash/report/reports/standard/income-statement.scm:110
-#: gnucash/report/reports/standard/trial-balance.scm:131
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:101
+#: gnucash/report/reports/standard/budget-income-statement.scm:111
+#: gnucash/report/reports/standard/equity-statement.scm:77
+#: gnucash/report/reports/standard/income-statement.scm:104
+#: gnucash/report/reports/standard/trial-balance.scm:125
 msgid "Show Foreign Currencies"
 msgstr "Прикажи стране валуте"
 
-#: gnucash/report/reports/standard/account-summary.scm:134
-#: gnucash/report/reports/standard/balance-sheet.scm:140
+#: gnucash/report/reports/standard/account-summary.scm:128
+#: gnucash/report/reports/standard/balance-sheet.scm:134
 #: gnucash/report/reports/standard/balsheet-eg.scm:182
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:106
-#: gnucash/report/reports/standard/budget-income-statement.scm:119
-#: gnucash/report/reports/standard/equity-statement.scm:82
-#: gnucash/report/reports/standard/income-statement.scm:112
-#: gnucash/report/reports/standard/trial-balance.scm:133
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:103
+#: gnucash/report/reports/standard/budget-income-statement.scm:113
+#: gnucash/report/reports/standard/equity-statement.scm:79
+#: gnucash/report/reports/standard/income-statement.scm:106
+#: gnucash/report/reports/standard/trial-balance.scm:127
 msgid "Display any foreign currency amount in an account."
 msgstr "Прикажите износ било које стране валуте у неком налогу."
 
-#: gnucash/report/reports/standard/account-summary.scm:135
-#: gnucash/report/reports/standard/balance-sheet.scm:141
+#: gnucash/report/reports/standard/account-summary.scm:129
+#: gnucash/report/reports/standard/balance-sheet.scm:135
 #: gnucash/report/reports/standard/balsheet-pnl.scm:123
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:107
-#: gnucash/report/reports/standard/budget-income-statement.scm:120
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:104
+#: gnucash/report/reports/standard/budget-income-statement.scm:114
 #: gnucash/report/reports/standard/cash-flow.scm:51
-#: gnucash/report/reports/standard/equity-statement.scm:83
-#: gnucash/report/reports/standard/income-statement.scm:113
-#: gnucash/report/reports/standard/trial-balance.scm:134
+#: gnucash/report/reports/standard/equity-statement.scm:80
+#: gnucash/report/reports/standard/income-statement.scm:107
+#: gnucash/report/reports/standard/trial-balance.scm:128
 msgid "Show Exchange Rates"
 msgstr "Прикажи стопе размене"
 
-#: gnucash/report/reports/standard/account-summary.scm:136
-#: gnucash/report/reports/standard/balance-sheet.scm:142
+#: gnucash/report/reports/standard/account-summary.scm:130
+#: gnucash/report/reports/standard/balance-sheet.scm:136
 #: gnucash/report/reports/standard/balsheet-pnl.scm:124
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:108
-#: gnucash/report/reports/standard/budget-income-statement.scm:121
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:105
+#: gnucash/report/reports/standard/budget-income-statement.scm:115
 #: gnucash/report/reports/standard/cash-flow.scm:75
-#: gnucash/report/reports/standard/equity-statement.scm:84
-#: gnucash/report/reports/standard/income-statement.scm:114
-#: gnucash/report/reports/standard/trial-balance.scm:135
+#: gnucash/report/reports/standard/equity-statement.scm:81
+#: gnucash/report/reports/standard/income-statement.scm:108
+#: gnucash/report/reports/standard/trial-balance.scm:129
 msgid "Show the exchange rates used."
 msgstr "Прикажите коришћене стопе размене."
 
-#: gnucash/report/reports/standard/account-summary.scm:185
+#: gnucash/report/reports/standard/account-summary.scm:174
 msgid "Recursive Balance"
 msgstr "Дубински биланс"
 
-#: gnucash/report/reports/standard/account-summary.scm:186
+#: gnucash/report/reports/standard/account-summary.scm:175
 msgid "Raise Accounts"
 msgstr "Издигни налоге"
 
-#: gnucash/report/reports/standard/account-summary.scm:187
+#: gnucash/report/reports/standard/account-summary.scm:176
 msgid "Omit Accounts"
 msgstr "Изостави налоге"
 
-#: gnucash/report/reports/standard/account-summary.scm:302
-#: gnucash/report/reports/standard/equity-statement.scm:286
-#: gnucash/report/reports/standard/income-statement.scm:380
-#: gnucash/report/reports/standard/trial-balance.scm:383
+#: gnucash/report/reports/standard/account-summary.scm:291
+#: gnucash/report/reports/standard/equity-statement.scm:279
+#: gnucash/report/reports/standard/income-statement.scm:370
+#: gnucash/report/reports/standard/trial-balance.scm:374
 msgid "${company-name} ${report-title} For Period Covering ${start} to ${end}"
 msgstr ""
 
-#: gnucash/report/reports/standard/account-summary.scm:307
-#: gnucash/report/reports/standard/trial-balance.scm:379
+#: gnucash/report/reports/standard/account-summary.scm:296
+#: gnucash/report/reports/standard/trial-balance.scm:370
 msgid "${company-name} ${report-title} ${date}"
 msgstr ""
 
-#: gnucash/report/reports/standard/account-summary.scm:392
+#: gnucash/report/reports/standard/account-summary.scm:381
 msgid "Account title"
 msgstr "Наслов налога"
 
@@ -23589,7 +23568,7 @@ msgstr "Салдо за „%s“"
 #: gnucash/report/reports/standard/cashflow-barchart.scm:84
 #: gnucash/report/reports/standard/income-gst-statement.scm:126
 #: gnucash/report/reports/standard/income-gst-statement.scm:132
-#: gnucash/report/reports/standard/trial-balance.scm:78
+#: gnucash/report/reports/standard/trial-balance.scm:72
 #: gnucash/report/trep-engine.scm:647
 msgid "Report on these accounts."
 msgstr "Поднесите извештај о овим налозима."
@@ -23655,23 +23634,23 @@ msgstr "Напуњено"
 msgid "Reserve"
 msgstr ""
 
-#: gnucash/report/reports/standard/balance-sheet.scm:71
-#: gnucash/report/reports/standard/trial-balance.scm:545
+#: gnucash/report/reports/standard/balance-sheet.scm:68
+#: gnucash/report/reports/standard/trial-balance.scm:536
 msgid "Balance Sheet"
 msgstr "Лист биланса"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:81
+#: gnucash/report/reports/standard/balance-sheet.scm:75
 #: gnucash/report/reports/standard/balsheet-eg.scm:143
 msgid "Balance Sheet Date"
 msgstr "Датум листа салда"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:82
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:48
+#: gnucash/report/reports/standard/balance-sheet.scm:76
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:45
 msgid "Single column Balance Sheet"
 msgstr "Лист биланса са једном колоном"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:84
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:50
+#: gnucash/report/reports/standard/balance-sheet.scm:78
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:47
 msgid ""
 "Print liability/equity section in the same column under the assets section "
 "as opposed to a second column right of the assets section."
@@ -23679,50 +23658,50 @@ msgstr ""
 "Испишите одељак дуговања/акција у истој колони испод одељка добара наспрам "
 "друге колоне десно од одељка добара."
 
-#: gnucash/report/reports/standard/balance-sheet.scm:92
+#: gnucash/report/reports/standard/balance-sheet.scm:86
 #: gnucash/report/reports/standard/balsheet-eg.scm:150
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:58
-#: gnucash/report/reports/standard/budget-income-statement.scm:80
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:55
+#: gnucash/report/reports/standard/budget-income-statement.scm:74
 #: gnucash/report/reports/standard/budget.scm:89
-#: gnucash/report/reports/standard/income-statement.scm:67
+#: gnucash/report/reports/standard/income-statement.scm:61
 msgid "Flatten list to depth limit"
 msgstr "Сравнај списак на ограничење дубине"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:94
+#: gnucash/report/reports/standard/balance-sheet.scm:88
 #: gnucash/report/reports/standard/balsheet-eg.scm:152
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:60
-#: gnucash/report/reports/standard/budget-income-statement.scm:82
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:57
+#: gnucash/report/reports/standard/budget-income-statement.scm:76
 #: gnucash/report/reports/standard/budget.scm:91
-#: gnucash/report/reports/standard/income-statement.scm:69
+#: gnucash/report/reports/standard/income-statement.scm:63
 msgid "Displays accounts which exceed the depth limit at the depth limit."
 msgstr ""
 "Прикажите налоге који превазилазе ограничење дубине на то ограничење дубине."
 
-#: gnucash/report/reports/standard/balance-sheet.scm:113
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:79
+#: gnucash/report/reports/standard/balance-sheet.scm:107
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:76
 msgid "Label the assets section"
 msgstr "Постави натпис на одељак добара"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:115
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:81
+#: gnucash/report/reports/standard/balance-sheet.scm:109
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:78
 msgid "Whether or not to include a label for the assets section."
 msgstr "Да ли ће да укључи натпис за одељак добара."
 
-#: gnucash/report/reports/standard/balance-sheet.scm:116
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:82
+#: gnucash/report/reports/standard/balance-sheet.scm:110
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:79
 msgid "Include assets total"
 msgstr "Укључи укупност добара"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:118
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:84
+#: gnucash/report/reports/standard/balance-sheet.scm:112
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:81
 msgid "Whether or not to include a line indicating total assets."
 msgstr "Да ли ће да укључи ред који показује збир добара."
 
-#: gnucash/report/reports/standard/balance-sheet.scm:119
+#: gnucash/report/reports/standard/balance-sheet.scm:113
 msgid "Use standard US layout"
 msgstr "Користи уобичајени амерички распоред"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:121
+#: gnucash/report/reports/standard/balance-sheet.scm:115
 msgid ""
 "Report section order is assets/liabilities/equity (rather than assets/equity/"
 "liabilities)."
@@ -23730,90 +23709,90 @@ msgstr ""
 "Поредак одељка извештаја је добра/дуговања/акције (уместо добра/акције/"
 "дуговања)."
 
-#: gnucash/report/reports/standard/balance-sheet.scm:122
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:85
+#: gnucash/report/reports/standard/balance-sheet.scm:116
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:82
 msgid "Label the liabilities section"
 msgstr "Постави натпис на одељак дуговања"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:124
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:87
+#: gnucash/report/reports/standard/balance-sheet.scm:118
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:84
 msgid "Whether or not to include a label for the liabilities section."
 msgstr "Да ли ће да укључи натпис за одељак дуговања."
 
-#: gnucash/report/reports/standard/balance-sheet.scm:125
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:88
+#: gnucash/report/reports/standard/balance-sheet.scm:119
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:85
 msgid "Include liabilities total"
 msgstr "Укључи укупност дуговања"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:127
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:90
+#: gnucash/report/reports/standard/balance-sheet.scm:121
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:87
 msgid "Whether or not to include a line indicating total liabilities."
 msgstr "Да ли ће да укључи ред који показује збир дуговања."
 
-#: gnucash/report/reports/standard/balance-sheet.scm:128
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:91
+#: gnucash/report/reports/standard/balance-sheet.scm:122
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:88
 msgid "Label the equity section"
 msgstr "Постави натпис на одељак акција"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:130
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:93
+#: gnucash/report/reports/standard/balance-sheet.scm:124
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:90
 msgid "Whether or not to include a label for the equity section."
 msgstr "Да ли ће да укључи натпис за одељак акција."
 
-#: gnucash/report/reports/standard/balance-sheet.scm:131
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:94
+#: gnucash/report/reports/standard/balance-sheet.scm:125
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:91
 msgid "Include equity total"
 msgstr "Укључи укупност акција"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:133
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:96
+#: gnucash/report/reports/standard/balance-sheet.scm:127
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:93
 msgid "Whether or not to include a line indicating total equity."
 msgstr "Да ли ће да укључи ред који показује збир акција."
 
-#: gnucash/report/reports/standard/balance-sheet.scm:366
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:692
+#: gnucash/report/reports/standard/balance-sheet.scm:356
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:685
 msgid "Total Liabilities"
 msgstr "Укупно дуговања"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:464
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:661
+#: gnucash/report/reports/standard/balance-sheet.scm:454
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:654
 msgid "Total Assets"
 msgstr "Укупно добара"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:486
+#: gnucash/report/reports/standard/balance-sheet.scm:476
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:188
 msgid "Retained Losses"
 msgstr "Задржани губици"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:490
+#: gnucash/report/reports/standard/balance-sheet.scm:480
 msgid "Trading Gains"
 msgstr "Добици трговања"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:491
+#: gnucash/report/reports/standard/balance-sheet.scm:481
 msgid "Trading Losses"
 msgstr "Губици трговања"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:495
+#: gnucash/report/reports/standard/balance-sheet.scm:485
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1068
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1083
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:734
-#: gnucash/report/reports/standard/trial-balance.scm:706
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:727
+#: gnucash/report/reports/standard/trial-balance.scm:697
 msgid "Unrealized Gains"
 msgstr "Неостварени добици"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:496
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:735
-#: gnucash/report/reports/standard/trial-balance.scm:707
+#: gnucash/report/reports/standard/balance-sheet.scm:486
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:728
+#: gnucash/report/reports/standard/trial-balance.scm:698
 msgid "Unrealized Losses"
 msgstr "Неостварени губици"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:500
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:750
+#: gnucash/report/reports/standard/balance-sheet.scm:490
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:743
 msgid "Total Equity"
 msgstr "Укупно акција"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:510
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:756
+#: gnucash/report/reports/standard/balance-sheet.scm:500
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:749
 msgid "Total Liabilities & Equity"
 msgstr "Укупно дуговања и акција"
 
@@ -24135,12 +24114,12 @@ msgid "missing"
 msgstr "Провизија"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1057
-#: libgnucash/engine/Account.cpp:4481
+#: libgnucash/engine/Account.cpp:4395
 msgid "Asset"
 msgstr "Добро"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1060
-#: libgnucash/engine/Account.cpp:4483
+#: libgnucash/engine/Account.cpp:4397
 msgid "Liability"
 msgstr "Дуговање"
 
@@ -24170,13 +24149,13 @@ msgstr "%s у %s"
 #: gnucash/report/reports/standard/customer-summary.scm:286
 #: gnucash/report/reports/standard/net-charts.scm:353
 #: gnucash/report/reports/standard/net-charts.scm:401
-#: libgnucash/engine/Account.cpp:158 libgnucash/engine/Account.cpp:4488
-#: libgnucash/engine/gncInvoice.c:1123
+#: libgnucash/engine/Account.cpp:158 libgnucash/engine/Account.cpp:4402
+#: libgnucash/engine/gncInvoice.c:1099
 msgid "Expense"
 msgstr "Расход"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1232
-#: gnucash/report/reports/standard/trial-balance.scm:832
+#: gnucash/report/reports/standard/trial-balance.scm:823
 msgid "Net Income"
 msgstr "Нето приход"
 
@@ -24194,74 +24173,74 @@ msgstr "Стање прихода"
 msgid "Budget Balance Sheet"
 msgstr "Лист биланса буџета"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:97
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:94
 msgid "Include new/existing totals"
 msgstr "Укључи нове/постојеће збирове"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:99
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:96
 msgid ""
 "Whether or not to include lines indicating change in totals introduced by "
 "budget."
 msgstr ""
 "Да ли да укључи линије које указују на промену у износима уводене буџетом."
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:111
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:108
 #: gnucash/report/reports/standard/budget-barchart.scm:84
 #: gnucash/report/reports/standard/budget-flow.scm:54
-#: gnucash/report/reports/standard/budget-income-statement.scm:59
+#: gnucash/report/reports/standard/budget-income-statement.scm:53
 #: gnucash/report/reports/standard/budget.scm:119
 msgid "Budget to use."
 msgstr "Буџет за коришћење."
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:652
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:645
 msgid "Existing Assets"
 msgstr "Постојећа добра"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:654
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:647
 msgid "Allocated Assets"
 msgstr "Додељена добра"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:658
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:651
 msgid "Unallocated Assets"
 msgstr "Недодељена добра"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:684
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:677
 msgid "Existing Liabilities"
 msgstr "Постојећа дуговања"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:689
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:682
 msgid "New Liabilities"
 msgstr "Нова дуговања"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:715
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:708
 msgid "Existing Retained Earnings"
 msgstr "Постојеће задржане зараде"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:716
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:709
 msgid "Existing Retained Losses"
 msgstr "Постојећи задржани губици"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:721
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:714
 msgid "New Retained Earnings"
 msgstr "Нове задржане зараде"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:722
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:715
 msgid "New Retained Losses"
 msgstr "Нови задржани губици"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:727
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:720
 msgid "Total Retained Earnings"
 msgstr "Укупне задржане зараде"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:728
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:721
 msgid "Total Retained Losses"
 msgstr "Укупни задржани губици"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:744
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:737
 msgid "Existing Equity"
 msgstr "Постојеће акције"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:747
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:740
 msgid "New Equity"
 msgstr "Нова акција"
 
@@ -24281,7 +24260,7 @@ msgid "Chart Type"
 msgstr "Врста оптерећења"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:50
-#: gnucash/report/reports/standard/budget-income-statement.scm:66
+#: gnucash/report/reports/standard/budget-income-statement.scm:60
 #: gnucash/report/reports/standard/budget.scm:70
 msgid "Range start"
 msgstr "Почетак опсега"
@@ -24304,7 +24283,7 @@ msgid "Select exact period that starts the reporting range."
 msgstr "Изаберите раздобље бучета којим се завршава опсег извештавања."
 
 #: gnucash/report/reports/standard/budget-barchart.scm:57
-#: gnucash/report/reports/standard/budget-income-statement.scm:70
+#: gnucash/report/reports/standard/budget-income-statement.scm:64
 #: gnucash/report/reports/standard/budget.scm:77
 msgid "Range end"
 msgstr "Крај опсега"
@@ -24407,143 +24386,143 @@ msgstr "Број раздобља."
 msgid "~a: ~a - ~a"
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:62
+#: gnucash/report/reports/standard/budget-income-statement.scm:56
 #: gnucash/report/reports/standard/budget.scm:66
 msgid "Report for range of budget periods"
 msgstr "Извештај за опсег раздобља буџета"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:64
+#: gnucash/report/reports/standard/budget-income-statement.scm:58
 #: gnucash/report/reports/standard/budget.scm:68
 msgid "Create report for a budget period range instead of the entire budget."
 msgstr "Направите извештај за опсег раздобља буџета уместо за цео буџет."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:68
+#: gnucash/report/reports/standard/budget-income-statement.scm:62
 msgid "Select a budget period that begins the reporting range."
 msgstr "Изаберите раздобље бучета којим почиње опсег извештавања."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:72
+#: gnucash/report/reports/standard/budget-income-statement.scm:66
 msgid "Select a budget period that ends the reporting range."
 msgstr "Изаберите раздобље бучета којим се завршава опсег извештавања."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:101
-#: gnucash/report/reports/standard/income-statement.scm:88
+#: gnucash/report/reports/standard/budget-income-statement.scm:95
+#: gnucash/report/reports/standard/income-statement.scm:82
 msgid "Label the revenue section"
 msgstr "Постави натпис на одељак прихода"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:103
-#: gnucash/report/reports/standard/income-statement.scm:90
+#: gnucash/report/reports/standard/budget-income-statement.scm:97
+#: gnucash/report/reports/standard/income-statement.scm:84
 msgid "Whether or not to include a label for the revenue section."
 msgstr "Да ли ће да укључи натпис за одељак прихода."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:104
-#: gnucash/report/reports/standard/income-statement.scm:91
+#: gnucash/report/reports/standard/budget-income-statement.scm:98
+#: gnucash/report/reports/standard/income-statement.scm:85
 msgid "Include revenue total"
 msgstr "Укључи укупност прихода"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:106
-#: gnucash/report/reports/standard/income-statement.scm:93
+#: gnucash/report/reports/standard/budget-income-statement.scm:100
+#: gnucash/report/reports/standard/income-statement.scm:87
 msgid "Whether or not to include a line indicating total revenue."
 msgstr "Да ли ће да укључи ред који показује збир прихода."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:107
-#: gnucash/report/reports/standard/income-statement.scm:100
+#: gnucash/report/reports/standard/budget-income-statement.scm:101
+#: gnucash/report/reports/standard/income-statement.scm:94
 msgid "Label the expense section"
 msgstr "Постави натпис на одељак расхода"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:109
-#: gnucash/report/reports/standard/income-statement.scm:102
+#: gnucash/report/reports/standard/budget-income-statement.scm:103
+#: gnucash/report/reports/standard/income-statement.scm:96
 msgid "Whether or not to include a label for the expense section."
 msgstr "Да ли ће да укључи натпис за одељак расхода."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:110
-#: gnucash/report/reports/standard/income-statement.scm:103
+#: gnucash/report/reports/standard/budget-income-statement.scm:104
+#: gnucash/report/reports/standard/income-statement.scm:97
 msgid "Include expense total"
 msgstr "Укључи укупност расхода"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:112
-#: gnucash/report/reports/standard/income-statement.scm:105
+#: gnucash/report/reports/standard/budget-income-statement.scm:106
+#: gnucash/report/reports/standard/income-statement.scm:99
 msgid "Whether or not to include a line indicating total expense."
 msgstr "Да ли ће да укључи ред који показује збир расхода."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:124
-#: gnucash/report/reports/standard/income-statement.scm:129
+#: gnucash/report/reports/standard/budget-income-statement.scm:118
+#: gnucash/report/reports/standard/income-statement.scm:123
 msgid "Display as a two column report"
 msgstr "Прикажи као извештај са две колоне"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:126
-#: gnucash/report/reports/standard/income-statement.scm:131
+#: gnucash/report/reports/standard/budget-income-statement.scm:120
+#: gnucash/report/reports/standard/income-statement.scm:125
 msgid "Divides the report into an income column and an expense column."
 msgstr "Поделите извештај уколону прихода и колону расхода."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:128
-#: gnucash/report/reports/standard/income-statement.scm:133
+#: gnucash/report/reports/standard/budget-income-statement.scm:122
+#: gnucash/report/reports/standard/income-statement.scm:127
 msgid "Display in standard, income first, order"
 msgstr "Прикажи уобичајени поредак, прво приход"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:130
-#: gnucash/report/reports/standard/income-statement.scm:135
+#: gnucash/report/reports/standard/budget-income-statement.scm:124
+#: gnucash/report/reports/standard/income-statement.scm:129
 msgid ""
 "Causes the report to display in the standard order, placing income before "
 "expenses."
 msgstr ""
 "Прикажите извештај уобичајеним поретком, постављајући приход пре расхода."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:413
+#: gnucash/report/reports/standard/budget-income-statement.scm:403
 msgid "Reporting range end period cannot be less than start period."
 msgstr ""
 "Крајње раздобље опсега извештавања не може бити мање од почетног раздобља."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:481
-#: gnucash/report/reports/standard/income-statement.scm:471
+#: gnucash/report/reports/standard/budget-income-statement.scm:471
+#: gnucash/report/reports/standard/income-statement.scm:461
 msgid "Revenues"
 msgstr "Приходи"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:484
-#: gnucash/report/reports/standard/income-statement.scm:474
+#: gnucash/report/reports/standard/budget-income-statement.scm:474
+#: gnucash/report/reports/standard/income-statement.scm:464
 msgid "Total Revenue"
 msgstr "Укупни приход"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:494
-#: gnucash/report/reports/standard/income-statement.scm:482
+#: gnucash/report/reports/standard/budget-income-statement.scm:484
+#: gnucash/report/reports/standard/income-statement.scm:472
 msgid "Total Expenses"
 msgstr "Укупни трошкови"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:502
+#: gnucash/report/reports/standard/budget-income-statement.scm:492
 #, fuzzy, scheme-format
 msgid "for Budget ~a"
 msgstr "за „%s“"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:504
+#: gnucash/report/reports/standard/budget-income-statement.scm:494
 #, fuzzy, scheme-format
 msgid "for Budget ~a Period ~d"
 msgstr "за „%s“ у раздобљу %u"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:507
+#: gnucash/report/reports/standard/budget-income-statement.scm:497
 #, fuzzy, scheme-format
 msgid "for Budget ~a Periods ~d - ~d"
 msgstr "за „%s“ у раздобљу %u — %u"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:535
-#: gnucash/report/reports/standard/equity-statement.scm:441
-#: gnucash/report/reports/standard/income-statement.scm:507
-#: gnucash/report/reports/standard/income-statement.scm:525
-#: gnucash/report/reports/standard/income-statement.scm:539
+#: gnucash/report/reports/standard/budget-income-statement.scm:525
+#: gnucash/report/reports/standard/equity-statement.scm:434
+#: gnucash/report/reports/standard/income-statement.scm:497
+#: gnucash/report/reports/standard/income-statement.scm:515
+#: gnucash/report/reports/standard/income-statement.scm:529
 msgid "Net income"
 msgstr "Нето приход"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:536
-#: gnucash/report/reports/standard/equity-statement.scm:442
-#: gnucash/report/reports/standard/income-statement.scm:508
-#: gnucash/report/reports/standard/income-statement.scm:526
-#: gnucash/report/reports/standard/income-statement.scm:540
+#: gnucash/report/reports/standard/budget-income-statement.scm:526
+#: gnucash/report/reports/standard/equity-statement.scm:435
+#: gnucash/report/reports/standard/income-statement.scm:498
+#: gnucash/report/reports/standard/income-statement.scm:516
+#: gnucash/report/reports/standard/income-statement.scm:530
 msgid "Net loss"
 msgstr "Нето губитак"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:576
+#: gnucash/report/reports/standard/budget-income-statement.scm:566
 msgid "Budget Income Statement"
 msgstr "Стање прихода буџета"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:577
+#: gnucash/report/reports/standard/budget-income-statement.scm:567
 msgid "Budget Profit & Loss"
 msgstr "Вишак и мањак буџета"
 
@@ -25000,83 +24979,83 @@ msgstr "Извештај потрошача"
 msgid "Equity Statement"
 msgstr "Стање акција"
 
-#: gnucash/report/reports/standard/equity-statement.scm:71
+#: gnucash/report/reports/standard/equity-statement.scm:68
 msgid "Report only on these accounts."
 msgstr "Поднесите извештај само о овим налозима."
 
-#: gnucash/report/reports/standard/equity-statement.scm:87
-#: gnucash/report/reports/standard/income-statement.scm:117
-#: gnucash/report/reports/standard/trial-balance.scm:104
+#: gnucash/report/reports/standard/equity-statement.scm:84
+#: gnucash/report/reports/standard/income-statement.scm:111
+#: gnucash/report/reports/standard/trial-balance.scm:98
 msgid "Closing Entries pattern"
 msgstr "Шаблон завршних уноса"
 
-#: gnucash/report/reports/standard/equity-statement.scm:89
-#: gnucash/report/reports/standard/income-statement.scm:119
-#: gnucash/report/reports/standard/trial-balance.scm:106
+#: gnucash/report/reports/standard/equity-statement.scm:86
+#: gnucash/report/reports/standard/income-statement.scm:113
+#: gnucash/report/reports/standard/trial-balance.scm:100
 msgid "Any text in the Description column which identifies closing entries."
 msgstr "Било који текст у колони описа који одређује завршне уносе."
 
-#: gnucash/report/reports/standard/equity-statement.scm:91
-#: gnucash/report/reports/standard/income-statement.scm:121
-#: gnucash/report/reports/standard/trial-balance.scm:108
+#: gnucash/report/reports/standard/equity-statement.scm:88
+#: gnucash/report/reports/standard/income-statement.scm:115
+#: gnucash/report/reports/standard/trial-balance.scm:102
 msgid "Closing Entries pattern is case-sensitive"
 msgstr "Шаблон завршних уноса разликује величину слова"
 
-#: gnucash/report/reports/standard/equity-statement.scm:93
-#: gnucash/report/reports/standard/income-statement.scm:123
-#: gnucash/report/reports/standard/trial-balance.scm:110
+#: gnucash/report/reports/standard/equity-statement.scm:90
+#: gnucash/report/reports/standard/income-statement.scm:117
+#: gnucash/report/reports/standard/trial-balance.scm:104
 msgid "Causes the Closing Entries Pattern match to be case-sensitive."
 msgstr "Упоређивање шаблона завршних уноса разликоваће величину слова."
 
-#: gnucash/report/reports/standard/equity-statement.scm:95
-#: gnucash/report/reports/standard/income-statement.scm:125
-#: gnucash/report/reports/standard/trial-balance.scm:112
+#: gnucash/report/reports/standard/equity-statement.scm:92
+#: gnucash/report/reports/standard/income-statement.scm:119
+#: gnucash/report/reports/standard/trial-balance.scm:106
 msgid "Closing Entries Pattern is regular expression"
 msgstr "Шаблон завршних уноса је регуларни израз"
 
-#: gnucash/report/reports/standard/equity-statement.scm:97
-#: gnucash/report/reports/standard/income-statement.scm:127
-#: gnucash/report/reports/standard/trial-balance.scm:114
+#: gnucash/report/reports/standard/equity-statement.scm:94
+#: gnucash/report/reports/standard/income-statement.scm:121
+#: gnucash/report/reports/standard/trial-balance.scm:108
 msgid ""
 "Causes the Closing Entries Pattern to be treated as a regular expression."
 msgstr "Шаблон завршних уноса биће сматран регуларним изразом."
 
-#: gnucash/report/reports/standard/equity-statement.scm:409
-#: gnucash/report/reports/standard/income-statement.scm:452
-#: gnucash/report/reports/standard/trial-balance.scm:374
+#: gnucash/report/reports/standard/equity-statement.scm:402
+#: gnucash/report/reports/standard/income-statement.scm:442
+#: gnucash/report/reports/standard/trial-balance.scm:365
 msgid "for Period"
 msgstr "за раздобље"
 
-#: gnucash/report/reports/standard/equity-statement.scm:436
-#: gnucash/report/reports/standard/equity-statement.scm:472
+#: gnucash/report/reports/standard/equity-statement.scm:429
+#: gnucash/report/reports/standard/equity-statement.scm:465
 msgid "Capital"
 msgstr "Капитал"
 
-#: gnucash/report/reports/standard/equity-statement.scm:447
+#: gnucash/report/reports/standard/equity-statement.scm:440
 msgid "Investments"
 msgstr "Улагања"
 
-#: gnucash/report/reports/standard/equity-statement.scm:452
+#: gnucash/report/reports/standard/equity-statement.scm:445
 msgid "Withdrawals"
 msgstr "Подизања"
 
-#: gnucash/report/reports/standard/equity-statement.scm:458
+#: gnucash/report/reports/standard/equity-statement.scm:451
 #, fuzzy
 #| msgid "Unrealized Gains"
 msgid "Unrealized Gains for Period"
 msgstr "Неостварени добици"
 
-#: gnucash/report/reports/standard/equity-statement.scm:459
+#: gnucash/report/reports/standard/equity-statement.scm:452
 #, fuzzy
 #| msgid "Unrealized Losses"
 msgid "Unrealized Losses for Period"
 msgstr "Неостварени губици"
 
-#: gnucash/report/reports/standard/equity-statement.scm:465
+#: gnucash/report/reports/standard/equity-statement.scm:458
 msgid "Increase in capital"
 msgstr "Повећај у капиталу"
 
-#: gnucash/report/reports/standard/equity-statement.scm:466
+#: gnucash/report/reports/standard/equity-statement.scm:459
 msgid "Decrease in capital"
 msgstr "Смањи у капиталу"
 
@@ -25396,38 +25375,38 @@ msgstr "Нето цена"
 msgid "Tax on Purchases"
 msgstr "Разред пореза"
 
-#: gnucash/report/reports/standard/income-statement.scm:94
+#: gnucash/report/reports/standard/income-statement.scm:88
 msgid "Label the trading accounts section"
 msgstr "Постави натпис на одељак налога трговања"
 
-#: gnucash/report/reports/standard/income-statement.scm:96
+#: gnucash/report/reports/standard/income-statement.scm:90
 msgid "Whether or not to include a label for the trading accounts section."
 msgstr "Да ли ће да укључи натпис за одељак налога трговања."
 
-#: gnucash/report/reports/standard/income-statement.scm:97
+#: gnucash/report/reports/standard/income-statement.scm:91
 msgid "Include trading accounts total"
 msgstr "Укључи збир налога трговања"
 
-#: gnucash/report/reports/standard/income-statement.scm:99
+#: gnucash/report/reports/standard/income-statement.scm:93
 msgid ""
 "Whether or not to include a line indicating total trading accounts balance."
 msgstr "Да ли ће да укључи ред који показује збир салда налога трговања."
 
-#: gnucash/report/reports/standard/income-statement.scm:487
-#: libgnucash/engine/Account.cpp:4493 libgnucash/engine/Scrub.c:496
+#: gnucash/report/reports/standard/income-statement.scm:477
+#: libgnucash/engine/Account.cpp:4407 libgnucash/engine/Scrub.c:496
 msgid "Trading"
 msgstr "Трговачки"
 
-#: gnucash/report/reports/standard/income-statement.scm:490
+#: gnucash/report/reports/standard/income-statement.scm:480
 msgid "Total Trading"
 msgstr "Укупно трговање"
 
-#: gnucash/report/reports/standard/income-statement.scm:562
-#: gnucash/report/reports/standard/trial-balance.scm:544
+#: gnucash/report/reports/standard/income-statement.scm:552
+#: gnucash/report/reports/standard/trial-balance.scm:535
 msgid "Income Statement"
 msgstr "Стање прихода"
 
-#: gnucash/report/reports/standard/income-statement.scm:563
+#: gnucash/report/reports/standard/income-statement.scm:553
 msgid "Profit & Loss"
 msgstr "Зарада и губитак"
 
@@ -25484,7 +25463,7 @@ msgstr "Висина графика"
 
 #: gnucash/report/reports/standard/investment-lots.scm:57
 #, fuzzy
-msgid "Show lot guid column"
+msgid "Show lot GUID column"
 msgstr "Прикажи боју налога на језичцима"
 
 #: gnucash/report/reports/standard/investment-lots.scm:58
@@ -27154,7 +27133,7 @@ msgstr "Стање измирења"
 
 #: gnucash/report/reports/standard/register.scm:147
 #: gnucash/report/reports/standard/register.scm:374
-#: libgnucash/engine/gnc-lot.c:821
+#: libgnucash/engine/gnc-lot.c:791
 msgid "Lot"
 msgstr "Артикал"
 
@@ -27493,36 +27472,36 @@ msgid ""
 "template)"
 msgstr "Прикажи фактуру потрошача са колонама пореза (користећи егуиле шаблон)"
 
-#: gnucash/report/reports/standard/trial-balance.scm:61
-#: gnucash/report/reports/standard/trial-balance.scm:541
+#: gnucash/report/reports/standard/trial-balance.scm:58
+#: gnucash/report/reports/standard/trial-balance.scm:532
 msgid "Trial Balance"
 msgstr "Пробни салдо"
 
-#: gnucash/report/reports/standard/trial-balance.scm:71
+#: gnucash/report/reports/standard/trial-balance.scm:65
 msgid "Start of Adjusting/Closing"
 msgstr "Почетак измирења/затварања"
 
-#: gnucash/report/reports/standard/trial-balance.scm:72
+#: gnucash/report/reports/standard/trial-balance.scm:66
 msgid "Date of Report"
 msgstr "Датум извештаја"
 
-#: gnucash/report/reports/standard/trial-balance.scm:73
+#: gnucash/report/reports/standard/trial-balance.scm:67
 msgid "Report variation"
 msgstr "Варијација извештаја"
 
-#: gnucash/report/reports/standard/trial-balance.scm:74
+#: gnucash/report/reports/standard/trial-balance.scm:68
 msgid "Kind of trial balance to generate."
 msgstr "Врста пробног биланса за стварање."
 
-#: gnucash/report/reports/standard/trial-balance.scm:83
+#: gnucash/report/reports/standard/trial-balance.scm:77
 msgid "Merchandising"
 msgstr "Трговање"
 
-#: gnucash/report/reports/standard/trial-balance.scm:84
+#: gnucash/report/reports/standard/trial-balance.scm:78
 msgid "Gross adjustment accounts."
 msgstr "Налози бруто измирења."
 
-#: gnucash/report/reports/standard/trial-balance.scm:86
+#: gnucash/report/reports/standard/trial-balance.scm:80
 msgid ""
 "Do not net, but show gross debit/credit adjustments to these accounts. "
 "Merchandising businesses will normally select their inventory accounts here."
@@ -27530,11 +27509,11 @@ msgstr ""
 "Не налази нето, већ приказује бруто измирења дуга/кредита на овим налозима. "
 "Трговачка предузећа ће овде нормално изабрати своје налоге инвентара."
 
-#: gnucash/report/reports/standard/trial-balance.scm:87
+#: gnucash/report/reports/standard/trial-balance.scm:81
 msgid "Income summary accounts"
 msgstr "Налози сажетка прихода"
 
-#: gnucash/report/reports/standard/trial-balance.scm:89
+#: gnucash/report/reports/standard/trial-balance.scm:83
 msgid ""
 "Adjustments made to these accounts are gross adjusted (see above) in the "
 "Adjustments, Adjusted Trial Balance, and Income Statement columns. Mostly "
@@ -27544,61 +27523,61 @@ msgstr ""
 "колонама измирења, измиреног пробног салда и стања прихода. Углавном корисно "
 "трговачким предузећима."
 
-#: gnucash/report/reports/standard/trial-balance.scm:92
+#: gnucash/report/reports/standard/trial-balance.scm:86
 msgid "Adjusting Entries pattern"
 msgstr "Шаблон уноса измирења"
 
-#: gnucash/report/reports/standard/trial-balance.scm:94
+#: gnucash/report/reports/standard/trial-balance.scm:88
 msgid "Any text in the Description column which identifies adjusting entries."
 msgstr "Било који текст у колони описа који одређује уносе измирења."
 
-#: gnucash/report/reports/standard/trial-balance.scm:96
+#: gnucash/report/reports/standard/trial-balance.scm:90
 msgid "Adjusting Entries pattern is case-sensitive"
 msgstr "Шаблон уноса измирења разликује величину слова"
 
-#: gnucash/report/reports/standard/trial-balance.scm:98
+#: gnucash/report/reports/standard/trial-balance.scm:92
 msgid "Causes the Adjusting Entries Pattern match to be case-sensitive."
 msgstr "Упоређивање шаблона уноса измирења разликоваће величину слова."
 
-#: gnucash/report/reports/standard/trial-balance.scm:100
+#: gnucash/report/reports/standard/trial-balance.scm:94
 msgid "Adjusting Entries Pattern is regular expression"
 msgstr "Шаблон уноса измирења је регуларни израз"
 
-#: gnucash/report/reports/standard/trial-balance.scm:102
+#: gnucash/report/reports/standard/trial-balance.scm:96
 msgid ""
 "Causes the Adjusting Entries Pattern to be treated as a regular expression."
 msgstr "Шаблон уноса измирења биће сматран регуларним изразом."
 
-#: gnucash/report/reports/standard/trial-balance.scm:197
+#: gnucash/report/reports/standard/trial-balance.scm:188
 #, fuzzy
 msgid "General journal exact balances"
 msgstr "Општи журнал"
 
-#: gnucash/report/reports/standard/trial-balance.scm:198
+#: gnucash/report/reports/standard/trial-balance.scm:189
 #, fuzzy
 #| msgid "Ignores Adjusting/Closing entries"
 msgid "No adjusting/closing entries"
 msgstr "Занемари уносе измирења/затварања"
 
-#: gnucash/report/reports/standard/trial-balance.scm:199
+#: gnucash/report/reports/standard/trial-balance.scm:190
 #, fuzzy
 #| msgid "Creates a complete end-of-period work sheet"
 msgid "Full end-of-period work sheet"
 msgstr "Направите потпуни радни лист краја раздобља"
 
-#: gnucash/report/reports/standard/trial-balance.scm:256
+#: gnucash/report/reports/standard/trial-balance.scm:247
 msgid "Adjusting Entries"
 msgstr "Уноси измирења"
 
-#: gnucash/report/reports/standard/trial-balance.scm:542
+#: gnucash/report/reports/standard/trial-balance.scm:533
 msgid "Adjustments"
 msgstr "Измирења"
 
-#: gnucash/report/reports/standard/trial-balance.scm:543
+#: gnucash/report/reports/standard/trial-balance.scm:534
 msgid "Adjusted Trial Balance"
 msgstr "Измирени пробни салдо"
 
-#: gnucash/report/reports/standard/trial-balance.scm:832
+#: gnucash/report/reports/standard/trial-balance.scm:823
 msgid "Net Loss"
 msgstr "Нето губитак"
 
@@ -28677,8 +28656,8 @@ msgstr "_Два реда"
 #: gnucash/ui/gnc-plugin-page-register.ui:99
 #, fuzzy
 msgid ""
-"Show a second line with \\\"Action\\\", \\\"Notes\\\", and \\\"Linked "
-"Document\\\" for each transaction"
+"Show a second line with Action, Notes, and Linked Document fields for each "
+"transaction"
 msgstr "Прикажите два реда података за сваку трансакцију"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:92
@@ -30155,9 +30134,10 @@ msgid "Stock Ass_istant…"
 msgstr "Помоћник поделе деонице"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:276
+#: gnucash/ui/gnc-plugin-page-register.ui:418
 #, fuzzy
 #| msgid "Post Date"
-msgid "_Got to Date"
+msgid "_Go to Date"
 msgstr "Датум објаве"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:279
@@ -30257,12 +30237,6 @@ msgstr "Отворите извештај регистра за изабрану
 #| msgid "Sort By"
 msgid "_Sort By…"
 msgstr "Поређај према"
-
-#: gnucash/ui/gnc-plugin-page-register.ui:418
-#, fuzzy
-#| msgid "Post Date"
-msgid "_Go to Date"
-msgstr "Датум објаве"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:269
@@ -30875,36 +30849,36 @@ msgstr ""
 "Испод ћете наћи списак неисправних назива налога:\n"
 "%s"
 
-#: libgnucash/engine/Account.cpp:4482
+#: libgnucash/engine/Account.cpp:4396
 msgid "Credit Card"
 msgstr "Кредитна картица"
 
-#: libgnucash/engine/Account.cpp:4485
+#: libgnucash/engine/Account.cpp:4399
 msgid "Mutual Fund"
 msgstr "Инвестициони фонд"
 
-#: libgnucash/engine/Account.cpp:4490
+#: libgnucash/engine/Account.cpp:4404
 msgid "A/Receivable"
 msgstr "За пријем"
 
-#: libgnucash/engine/Account.cpp:4491
+#: libgnucash/engine/Account.cpp:4405
 msgid "A/Payable"
 msgstr "За исплату"
 
-#: libgnucash/engine/Account.cpp:4492
+#: libgnucash/engine/Account.cpp:4406
 msgid "Root"
 msgstr "Корен"
 
-#: libgnucash/engine/Account.cpp:5200
+#: libgnucash/engine/Account.cpp:5118
 msgid "Orphaned Gains"
 msgstr "Напуштени добици"
 
-#: libgnucash/engine/Account.cpp:5214 libgnucash/engine/cap-gains.c:806
+#: libgnucash/engine/Account.cpp:5132 libgnucash/engine/cap-gains.c:806
 #: libgnucash/engine/cap-gains.c:811 libgnucash/engine/cap-gains.c:812
 msgid "Realized Gain/Loss"
 msgstr "Остварени добитак/губитак"
 
-#: libgnucash/engine/Account.cpp:5216
+#: libgnucash/engine/Account.cpp:5134
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
@@ -30976,15 +30950,15 @@ msgstr ""
 "Овај скуп података садржи функције које нису подржане овим издањем Гнуовог "
 "новчића. Морате користити новије издање како бисте подржали следеће функције:"
 
-#: libgnucash/engine/gncInvoice.c:1751
+#: libgnucash/engine/gncInvoice.c:1727
 msgid "Extra to Charge Card"
 msgstr "Додатно за платну картицу"
 
-#: libgnucash/engine/gncInvoice.c:1791
+#: libgnucash/engine/gncInvoice.c:1767
 msgid "Generated from an invoice. Try unposting the invoice."
 msgstr "Створено из фактуре. Пробајте да поништите објаву фактуре."
 
-#: libgnucash/engine/gncInvoice.c:2221
+#: libgnucash/engine/gncInvoice.c:2197
 msgid " (posted)"
 msgstr " (објављено)"
 
@@ -31546,7 +31520,7 @@ msgstr "Тражим сирочиће у налогу „%s“: %u од %u"
 msgid "Looking for imbalances in account %s: %u of %u"
 msgstr "Тражим дебалансе у налогу „%s“: %u од %u"
 
-#: libgnucash/engine/Split.c:1639
+#: libgnucash/engine/Split.c:1636
 #, fuzzy
 msgctxt ""
 "Displayed account code of the other account in a multi-split transaction"
