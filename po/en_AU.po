@@ -13,8 +13,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-03 11:31-0800\n"
-"PO-Revision-Date: 2023-03-04 14:39+0000\n"
-"Last-Translator: Simon Arlott <weblate.simon@arlott.org>\n"
+"PO-Revision-Date: 2023-03-04 21:26+0000\n"
+"Last-Translator: John Ralls <jralls@ceridwen.us>\n"
 "Language-Team: English (Australia) <https://hosted.weblate.org/projects/"
 "gnucash/program-beta/en_AU/>\n"
 "Language: en_AU\n"
@@ -1638,7 +1638,7 @@ msgstr "Amount for %s must be positive."
 #: gnucash/gnome/assistant-stock-transaction.cpp:702
 #, c-format
 msgid "Account for %s is missing."
-msgstr "Account for 1%s is missing."
+msgstr "Account for %s is missing."
 
 #. Translators: the first %s is the new transaction date;
 #. the second %s is the current stock account's latest
@@ -3589,7 +3589,7 @@ msgstr "Are you sure you want to delete these prices?"
 #: gnucash/gnome-utils/dialog-transfer.cpp:1797
 #, c-format
 msgid "Price retrieval failed: %s"
-msgstr "Price retrieval failed: 1%s"
+msgstr "Price retrieval failed: %s"
 
 #: gnucash/gnome/dialog-price-editor.c:227
 msgid "Are you sure you want to replace the existing price?"
@@ -6572,7 +6572,7 @@ msgstr "_Open"
 
 #: gnucash/gnome-utils/dialog-file-access.c:309
 msgid "Save As…"
-msgstr "_Save As…"
+msgstr "Save As…"
 
 #: gnucash/gnome-utils/dialog-file-access.c:310
 #: gnucash/gnome-utils/dialog-file-access.c:319
@@ -7594,7 +7594,7 @@ msgstr "Accounting for personal and small business finance."
 #: gnucash/gnome-utils/gnc-main-window.cpp:5231
 msgid "translator-credits"
 msgstr ""
-"Simon Arlott, 2022\n"
+"Simon Arlott, 2022-2023\n"
 "Mike Evans, 2010, 2013\n"
 "Nigel Titley, 2002 - 2007\n"
 "Neil Williams, 2006"
