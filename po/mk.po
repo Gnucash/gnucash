@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-03 11:31-0800\n"
-"PO-Revision-Date: 2023-03-04 11:38+0000\n"
+"PO-Revision-Date: 2023-03-04 14:39+0000\n"
 "Last-Translator: Vesna Micajkova <vmicajkova@institutpraktikum.mk>\n"
 "Language-Team: Macedonian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/mk/>\n"
@@ -678,7 +678,7 @@ msgstr "Насока на конверзија"
 
 #: borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr ""
+msgstr "Оваа вредност детерминира кој iconv тест да се употреби."
 
 #: borrowed/goffice/go-optionmenu.c:339
 msgid "Menu"
@@ -747,6 +747,10 @@ msgid ""
 "For more information on income and expense accounts, please see the GnuCash "
 "online manual."
 msgstr ""
+"Доколку сте запознаени со други финансиски програми, како на пример Quicken, "
+"имајте во предвид дека GnuCash користи сметки наместо категории за следење "
+"на приходите и расходите. Повеќе информации за приходните и расходни конта, "
+"може да добиете од корисничкото упатство."
 
 #: doc/tip_of_the_day.list.c:29
 msgid ""
