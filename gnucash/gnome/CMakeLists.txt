@@ -249,8 +249,11 @@ gnc_add_scheme_targets(scm-gnome
     OUTPUT_DIR gnucash
     DEPENDS "${GUILE_DEPENDS}")
 
-set_dist_list(gnome_DIST
+set_local_dist(gnome_DIST_local
         CMakeLists.txt gnome.i gnucash.appdata.xml.in.in gnucash.desktop.in.in
-        gnucash.releases.xml ${gnc_gnome_noinst_HEADERS} ${gnc_gnome_SOURCES} ${gnome_SCHEME} ${test_app_utils_DIST})
+        gnucash.releases.xml ${gnc_gnome_noinst_HEADERS} ${gnc_gnome_SOURCES} ${gnome_SCHEME})
+
 dist_add_generated(${BUILDING_FROM_VCS} gnucash.appdata.xml.in)
 add_dependencies(gnucash-appdata dist-gnucash-gnome-gnucash-appdata-xml-in)
+
+set(gnome_DIST ${gnome_DIST_local} ${test_gnome_DIST} PARENT_SCOPE)

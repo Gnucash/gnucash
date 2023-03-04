@@ -18,7 +18,7 @@ macro(add_gnome_test _TARGET _SOURCE_FILES)
   gnc_add_test(${_TARGET} "${_SOURCE_FILES}" GNOME_TEST_INCLUDE_DIRS GNOME_TEST_LIBS)
 endmacro()
 
-gnc_add_test_with_guile(test-invoice-report-buitin-default test-invoice-report-buitin-default.cpp
+gnc_add_test_with_guile(test-invoice-report-builtin-default test-invoice-report-builtin-default.cpp
   GNOME_TEST_INCLUDE_DIRS GNOME_TEST_LIBS
 )
 
@@ -26,9 +26,7 @@ set(GUILE_DEPENDS
   scm-core-utils
 )
 
-set_dist_list(test_app_utils_DIST
+set_dist_list(test_gnome_DIST
   CMakeLists.txt
-  test-invoice-buitin-default.cpp
-  ${test_gnome_scheme_SOURCES}
-  ${test_gnome_SOURCES}
+  test-invoice-report-builtin-default.cpp
 )
