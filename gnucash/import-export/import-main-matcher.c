@@ -942,17 +942,43 @@ match_func (GtkEntryCompletion *completion, const char *entry_str,
     return ret;
 }
 
-static void
-setup_entry (GtkWidget *entry, bool sensitive, GHashTable *hash,
-             const char *initial)
+typedef struct
 {
+    GtkWidget *entry;
+    GObject *override;
+    bool *can_edit;
+    GHashTable *hash;
+    const char *initial;
+} EntryInfo;
+
+static void override_clicked (GtkWidget *widget, EntryInfo *entryinfo)
+{
+    gtk_widget_set_visible (GTK_WIDGET (entryinfo->override), false);
+    gtk_widget_set_sensitive (entryinfo->entry, true);
+    gtk_entry_set_text (GTK_ENTRY (entryinfo->entry), "");
+    gtk_widget_grab_focus (entryinfo->entry);
+    *entryinfo->can_edit = true;
+}
+
+static void
+setup_entry (EntryInfo *entryinfo)
+{
+    bool sensitive = *entryinfo->can_edit;
+    GtkWidget *entry = entryinfo->entry;
+    GtkWidget *override = GTK_WIDGET (entryinfo->override);
+    GHashTable *hash = entryinfo->hash;
+    const char *initial = entryinfo->initial;
+
     gtk_widget_set_sensitive (entry, sensitive);
+    gtk_widget_set_visible (override, !sensitive);
+
     if (sensitive && initial && *initial)
         gtk_entry_set_text (GTK_ENTRY (entry), initial);
     else if (!sensitive)
     {
-        gtk_entry_set_text (GTK_ENTRY (entry), _("Disabled"));
-        return;
+        gtk_entry_set_text (GTK_ENTRY (entry), _("Click Edit to modify"));
+        g_signal_connect (override, "clicked", G_CALLBACK (override_clicked),
+                          entryinfo);
     }
 
     GtkListStore *list = gtk_list_store_new (NUM_COMPLETION_COLS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
@@ -991,14 +1017,29 @@ input_new_fields (GNCImportMainMatcher *info, RowInfo *rowinfo,
 
     Transaction *trans = gnc_import_TransInfo_get_trans (rowinfo->trans_info);
     Split *split = gnc_import_TransInfo_get_fsplit (rowinfo->trans_info);
-    setup_entry (desc_entry, info->can_edit_desc, info->desc_hash, xaccTransGetDescription (trans));
-    setup_entry (notes_entry, info->can_edit_notes, info->notes_hash, xaccTransGetNotes (trans));
-    setup_entry (memo_entry, info->can_edit_memo, info->memo_hash, xaccSplitGetMemo (split));
+
+    EntryInfo entries[] = {
+        { desc_entry, gtk_builder_get_object (builder, "desc_override"), &info->can_edit_desc, info->desc_hash, xaccTransGetDescription (trans) },
+        { notes_entry, gtk_builder_get_object (builder, "notes_override"), &info->can_edit_notes, info->notes_hash, xaccTransGetNotes (trans) },
+        { memo_entry, gtk_builder_get_object (builder, "memo_override"), &info->can_edit_memo, info->memo_hash, xaccSplitGetMemo (split) },
+        { NULL } };
+
+    for (guint i = 0; entries[i].entry; i++)
+        setup_entry (&entries[i]);
+
+    /* ensure that an override button doesn't have focus. find the
+       first available entry and give it focus. */
+    for (guint i = 0; entries[i].entry; i++)
+        if (*entries[i].can_edit)
+        {
+            gtk_widget_grab_focus (entries[i].entry);
+            break;
+        }
 
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (info->main_widget));
 
     // run the dialog
-    gtk_widget_show_all (dialog);
+    gtk_widget_show (dialog);
 
     bool  retval = false;
     switch (gtk_dialog_run (GTK_DIALOG(dialog)))
