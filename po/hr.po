@@ -5119,16 +5119,12 @@ msgstr "Podaci nove transakcije"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:3968
-#, fuzzy, c-format
-#| msgid "Sort %s by..."
 msgid "Sort %s by…"
 msgstr "Razvrstaj „%s“ po …"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:4058
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1175
-#, fuzzy, c-format
-#| msgid "Filter %s by..."
 msgid "Filter %s by…"
 msgstr "Filtriraj „%s“ …"
 
@@ -5178,8 +5174,6 @@ msgstr "Spremi konfiguraciju"
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As…"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.cpp:231
-#, fuzzy
-#| msgid "Save Config As..."
 msgid "Save Config As…"
 msgstr "Spremi konfiguraciju kao …"
 
@@ -5218,8 +5212,6 @@ msgstr "Spremi _konfiguraciju izvještaja"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1275
 #: gnucash/ui/gnc-plugin-page-report.ui:239
-#, fuzzy
-#| msgid "Save Report Configuration As..."
 msgid "Save Report Configuration As…"
 msgstr "Spremi _konfiguraciju izvještaja kao …"
 
@@ -5840,14 +5832,10 @@ msgstr "Plaćanje u"
 
 #: gnucash/gnome/window-reconcile.c:785
 #: gnucash/gtkbuilder/window-reconcile.glade:215
-#, fuzzy
-#| msgid "Enter _Interest Payment..."
 msgid "Enter _Interest Payment…"
 msgstr "Upiši plaćanje _kamate …"
 
 #: gnucash/gnome/window-reconcile.c:787
-#, fuzzy
-#| msgid "Enter _Interest Charge..."
 msgid "Enter _Interest Charge…"
 msgstr "Upiši naplaćivanje _kamate …"
 
@@ -6299,14 +6287,10 @@ msgid "The file could not be reopened."
 msgstr "Nije moguće ponovo otvoriti datoteku."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1094
-#, fuzzy
-#| msgid "Reading file..."
 msgid "Reading file…"
 msgstr "Čitanje datoteke …"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1117
-#, fuzzy
-#| msgid "Parsing file..."
 msgid "Parsing file…"
 msgstr "Obrada datoteke …"
 
@@ -6318,8 +6302,6 @@ msgstr "Došlo je do greške prilikom obrade datoteke."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1149
 #: gnucash/gnome-utils/gnc-file.c:1429 gnucash/gnome-utils/gnc-file.c:1668
-#, fuzzy
-#| msgid "Writing file..."
 msgid "Writing file…"
 msgstr "Zapisivanje datoteke …"
 
@@ -7474,20 +7456,14 @@ msgid "_Quit"
 msgstr "_Zatvori"
 
 #: gnucash/gnome-utils/gnc-file.c:973 gnucash/gnome-utils/gnc-file.c:993
-#, fuzzy
-#| msgid "Loading user data..."
 msgid "Loading user data…"
 msgstr "Učitavanje korisničkih podataka …"
 
 #: gnucash/gnome-utils/gnc-file.c:1009
-#, fuzzy
-#| msgid "Re-saving user data..."
 msgid "Re-saving user data…"
 msgstr "Ponovo spremanje korisničkih podataka …"
 
 #: gnucash/gnome-utils/gnc-file.c:1369
-#, fuzzy
-#| msgid "Exporting file..."
 msgid "Exporting file…"
 msgstr "Izvoz datoteke …"
 
@@ -7803,8 +7779,6 @@ msgid "Report with GUID '%s' is missing"
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-splash.c:113
-#, fuzzy
-#| msgid "Loading..."
 msgid "Loading…"
 msgstr "Učitavanje …"
 
@@ -8407,20 +8381,14 @@ msgid "[datafile]"
 msgstr "[datoteka podataka]"
 
 #: gnucash/gnucash.cpp:174
-#, fuzzy
-#| msgid "Checking Finance::Quote..."
 msgid "Checking Finance::Quote…"
 msgstr "Provjera Finance::Quote …"
 
 #: gnucash/gnucash.cpp:185
-#, fuzzy
-#| msgid "Checking Finance::Quote..."
 msgid "Unable to load Finance::Quote."
 msgstr "Provjera Finance::Quote …"
 
 #: gnucash/gnucash.cpp:196
-#, fuzzy
-#| msgid "Loading data..."
 msgid "Loading data…"
 msgstr "Učitavanje podataka …"
 
@@ -11194,8 +11162,6 @@ msgid "Choose File Name for Export"
 msgstr "Odaberi ime datoteke za izvoz"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:712
-#, fuzzy
-#| msgid "Export Now..."
 msgid "Export Now…"
 msgstr "Izvezi sad …"
 
@@ -11638,8 +11604,6 @@ msgstr "Tekst greške."
 #: gnucash/gtkbuilder/assistant-qif-import.glade:603
 #: gnucash/gtkbuilder/assistant-qif-import.glade:734
 #: gnucash/gtkbuilder/assistant-qif-import.glade:863
-#, fuzzy
-#| msgid "Change GnuCash _Account..."
 msgid "Change GnuCash _Account…"
 msgstr "Promijeni GnuCash _konto …"
 
@@ -12484,14 +12448,10 @@ msgstr ""
 "odgovarajuća, možeš upisati novu."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1008
-#, fuzzy
-#| msgid "Enter Information about..."
 msgid "Enter Information about…"
 msgstr "Upiši podatke o …"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1034
-#, fuzzy
-#| msgid "All fields must be complete to continue..."
 msgid "All fields must be complete to continue…"
 msgstr "Sva polja moraju kompletna, kako bi se nastavilo …"
 
@@ -13915,8 +13875,6 @@ msgid "Warning: Finance::Quote not installed properly."
 msgstr "Upozorenje: Finance::Quote nije ispravno instalirano."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:713
-#, fuzzy
-#| msgid "Select user information here..."
 msgid "Select user information here…"
 msgstr "Odaberi korisničke podatke ovdje …"
 
@@ -14483,8 +14441,6 @@ msgid "Please select or create an appropriate GnuCash account for:"
 msgstr "Odaberi ili stvori odgovarajući GnuCasha konto za:"
 
 #: gnucash/gtkbuilder/dialog-import.glade:99
-#, fuzzy
-#| msgid "Online account ID here..."
 msgid "Online account ID here…"
 msgstr "ID internet bankarstva, ovdje …"
 
@@ -16269,8 +16225,6 @@ msgid "Custom format"
 msgstr "Proizvoljni format"
 
 #: gnucash/gtkbuilder/dialog-progress.glade:12
-#, fuzzy
-#| msgid "Working..."
 msgid "Working…"
 msgstr "Obrada …"
 
@@ -16299,8 +16253,6 @@ msgid "Move dow_n"
 msgstr "Premjesti _dolje"
 
 #: gnucash/gtkbuilder/dialog-report.glade:189
-#, fuzzy
-#| msgid "Si_ze..."
 msgid "Si_ze…"
 msgstr "_Veličina …"
 
@@ -16473,8 +16425,6 @@ msgid "Make Scheduled Transaction"
 msgstr "Stvori terminiranu transakciju"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:159
-#, fuzzy
-#| msgid "Advanced..."
 msgid "Advanced…"
 msgstr "Napredno …"
 
@@ -16616,8 +16566,6 @@ msgid "Template Transaction"
 msgstr "Predložak transakcija"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1476
-#, fuzzy
-#| msgid "Since Last Run..."
 msgid "Since Last Run…"
 msgstr "Od zadnjeg pokretanja …"
 
@@ -17404,8 +17352,6 @@ msgid "Show Description"
 msgstr "Prikaži opis"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:675
-#, fuzzy
-#| msgid "Note: Use View->'Filter By...' to control visible accounts."
 msgid "Note: Use View->'Filter By…' to control visible accounts."
 msgstr "Napomena: Koristi „Prikaz→Filtriraj” za upravljanje vidljivim kontima."
 
@@ -17439,8 +17385,6 @@ msgstr "Upiši napomenu"
 
 #. Filter register by… Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:13
-#, fuzzy
-#| msgid "Filter register by..."
 msgid "Filter register by…"
 msgstr "Filtriraj registar …"
 
@@ -17506,8 +17450,6 @@ msgstr "Zadrži unos povezanog dokumenta"
 
 #. Sort register by Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:770
-#, fuzzy
-#| msgid "Sort register by..."
 msgid "Sort register by…"
 msgstr "Razvrstaj registar po …"
 
@@ -18703,8 +18645,6 @@ msgid "The list of Scheduled Transactions"
 msgstr "Popis terminiranih transakcija"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:23
-#, fuzzy
-#| msgid "Get _Transactions..."
 msgid "Get _Transactions…"
 msgstr "Preuzmi _transakcije …"
 
@@ -18714,8 +18654,6 @@ msgstr "Preuzmi transakcije putem internet bankarstva"
 
 #. Translators: https://en.wikipedia.org/wiki/Single_Euro_Payments_Area
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:31
-#, fuzzy
-#| msgid "Issue _SEPA Transaction..."
 msgid "Issue _SEPA Transaction…"
 msgstr "Izdaj _SEPA transakciju …"
 
@@ -18726,8 +18664,6 @@ msgid ""
 msgstr "Izdaj novu međunarodnu SEPA transakciju, putem internet bankarstva"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:36
-#, fuzzy
-#| msgid "Issue SEPA I_nternal Transaction..."
 msgid "Issue SEPA I_nternal Transaction…"
 msgstr "Izdaj i_nternu SEPA transakciju …"
 
@@ -18739,8 +18675,6 @@ msgstr ""
 "Izdaj novu internu europsku SEPA transakciju, putem internet bankarstva"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:41
-#, fuzzy
-#| msgid "_Internal Transaction..."
 msgid "_Internal Transaction…"
 msgstr "_Interna transakcija …"
 
@@ -18749,8 +18683,6 @@ msgid "Issue a new bank-internal transaction online through Online Banking"
 msgstr "Izdaj novu bankovno-internu transakciju, putem internet bankarstva"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:46
-#, fuzzy
-#| msgid "Issue SEPA Direct _Debit..."
 msgid "Issue SEPA Direct _Debit…"
 msgstr "Izdaj izravno SEPA _terećenje …"
 
@@ -18772,8 +18704,6 @@ msgid "Show the online banking log window"
 msgstr "Prikaži log-prozor internet bankarstva."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:63
-#, fuzzy
-#| msgid "_Online Banking Setup..."
 msgid "_Online Banking Setup…"
 msgstr "Postavljanje _internet bankarstva …"
 
@@ -18858,8 +18788,6 @@ msgstr ""
 "ovdje možeš jedan odabrati."
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:297
-#, fuzzy, c-format
-#| msgid "Validation...\n"
 msgid "Validation…\n"
 msgstr "Provjera …\n"
 
@@ -20211,8 +20139,6 @@ msgid "Select one or multiple OFX/QFX file(s) to process"
 msgstr "Odaberi jednu ili više OFX/QFX datoteka"
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.ui:6
-#, fuzzy
-#| msgid "Import _OFX/QFX..."
 msgid "Import _OFX/QFX…"
 msgstr "Uvezi _OFX/QFX …"
 
@@ -20933,8 +20859,6 @@ msgid "Enter the Discount Percent"
 msgstr "Upiši postotak popusta"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:609
-#, fuzzy
-#| msgid "Enter the Discount ... unknown type"
 msgid "Enter the Discount … unknown type"
 msgstr "Upiši popust … nepoznata vrsta"
 
@@ -25273,8 +25197,6 @@ msgid "Columns"
 msgstr "Dva stupca"
 
 #: gnucash/report/reports/standard/investment-lots.scm:42
-#, fuzzy
-#| msgid "Validation...\n"
 msgid "Validation"
 msgstr "Provjera …\n"
 
@@ -26129,8 +26051,6 @@ msgstr "Iznos dospijeća"
 
 #: gnucash/report/reports/standard/invoice.scm:560
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:225
-#, fuzzy
-#| msgid "Invoice in progress..."
 msgid "Invoice in progress…"
 msgstr "Izlazni račun se obrađuje …"
 
@@ -27493,14 +27413,10 @@ msgid "Credit Lines"
 msgstr "Kreditne linije"
 
 #: gnucash/report/report-utilities.scm:639
-#, fuzzy, scheme-format
-#| msgid "Building '~a' report ..."
 msgid "Building '~a' report …"
-msgstr "Izrada izvještaja „~a” ..."
+msgstr "Izrada izvještaja „~a” …"
 
 #: gnucash/report/report-utilities.scm:645
-#, fuzzy, scheme-format
-#| msgid "Rendering '~a' report ..."
 msgid "Rendering '~a' report …"
 msgstr "Iscrtavanje izvještaja „~a” …"
 
@@ -28052,8 +27968,6 @@ msgid "Credit Accounts"
 msgstr "Konta potraživanja"
 
 #: gnucash/report/trep-engine.scm:528
-#, fuzzy
-#| msgid "Specify date to filter by..."
 msgid "Specify date to filter by…"
 msgstr "Navedi datum za filtriranje …"
 
@@ -28462,8 +28376,6 @@ msgid "_File"
 msgstr "_Datoteka"
 
 #: gnucash/ui/gnc-main-window.ui:40
-#, fuzzy
-#| msgid "Pa_ge Setup..."
 msgid "Pa_ge Setup"
 msgstr "Postavke _stranice …"
 
@@ -28816,8 +28728,6 @@ msgid "_Scheduled Transaction Editor"
 msgstr "Uređivač _terminiranih transakcija"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:89
-#, fuzzy
-#| msgid "Since _Last Run..."
 msgid "Since _Last Run…"
 msgstr "Od _zadnjeg pokretanja …"
 
@@ -28826,8 +28736,6 @@ msgid "Create Scheduled Transactions since the last time run"
 msgstr "Stvori terminirane transakcije od trenutka zadnjeg pokretanja"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:94
-#, fuzzy
-#| msgid "_Mortgage & Loan Repayment..."
 msgid "_Mortgage & Loan Repayment…"
 msgstr "Otplaćivanje _hipoteke i kredita …"
 
@@ -28894,8 +28802,6 @@ msgid "View the Tips of the Day"
 msgstr "Prikaži „Savjeti dana”"
 
 #: gnucash/ui/gnc-plugin-bi-import.ui:6
-#, fuzzy
-#| msgid "Import Bills & _Invoices..."
 msgid "Import Bills & _Invoices…"
 msgstr "Uvezi ulazne i _izlazne račune …"
 
@@ -29186,8 +29092,6 @@ msgid "Initialize Test Data"
 msgstr "Pokreni probne podatke"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:6
-#, fuzzy
-#| msgid "Export Account T_ree to CSV..."
 msgid "Export Account T_ree to CSV…"
 msgstr "Izvezi _kontni plan u CSV …"
 
@@ -29196,8 +29100,6 @@ msgid "Export the Account Tree to a CSV file"
 msgstr "Izvezi kontni plan u CSV datoteku"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:11
-#, fuzzy
-#| msgid "Export _Transactions to CSV..."
 msgid "Export _Transactions to CSV…"
 msgstr "Izvezi _transakcije u CSV …"
 
@@ -29206,8 +29108,6 @@ msgid "Export the Transactions to a CSV file"
 msgstr "Izvezi transakcije u CSV datoteku"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:16
-#, fuzzy
-#| msgid "Export A_ctive Register to CSV..."
 msgid "Export A_ctive Register to CSV…"
 msgstr "Izvezi _aktivni registar u CSV …"
 
@@ -29216,8 +29116,6 @@ msgid "Export the Active Register to a CSV file"
 msgstr "Izvezi aktivni registar u CSV datoteku"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:6
-#, fuzzy
-#| msgid "Import _Accounts from CSV..."
 msgid "Import _Accounts from CSV…"
 msgstr "Uvezi _konta iz CSV datoteke …"
 
@@ -29226,8 +29124,6 @@ msgid "Import Accounts from a CSV file"
 msgstr "Uvezi konta iz CSV datoteke"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:11
-#, fuzzy
-#| msgid "Import _Transactions from CSV..."
 msgid "Import _Transactions from CSV…"
 msgstr "Uvezi _transakcije iz CSV datoteke …"
 
@@ -29246,8 +29142,6 @@ msgid "Import Prices from a CSV file"
 msgstr "Uvezi cijene iz CSV datoteke"
 
 #: gnucash/ui/gnc-plugin-customer-import.ui:6
-#, fuzzy
-#| msgid "Import _Customers & Vendors..."
 msgid "Import _Customers & Vendors…"
 msgstr "Uvezi _kupce i dobavljače …"
 
@@ -29258,8 +29152,6 @@ msgid "Import Customers and Vendors from a CSV text file"
 msgstr "Uvezi kupce ili dobavljače iz CSV tekstualne datoteke."
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:6
-#, fuzzy
-#| msgid "_Replay GnuCash .log file..."
 msgid "_Replay GnuCash .log file…"
 msgstr "_Ponovo pokreni log-datoteku GnuCasha …"
 
@@ -29306,8 +29198,6 @@ msgstr "Nađi konto"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:37
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:222
-#, fuzzy
-#| msgid "_Cascade Account Properties..."
 msgid "_Cascade Account Properties…"
 msgstr "_Primjeni svojstva računa na podređene …"
 
@@ -29317,8 +29207,6 @@ msgid "Cascade selected properties for account"
 msgstr "Primjeni odabrana svojstva računa na podređene račune"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:43
-#, fuzzy
-#| msgid "_Renumber Subaccounts..."
 msgid "_Renumber Subaccounts…"
 msgstr "_Ponovi numeriranje podkonta …"
 
@@ -29385,8 +29273,6 @@ msgid "Create a new Account"
 msgstr "Stvori novi konto"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:116
-#, fuzzy
-#| msgid "New Account _Hierarchy..."
 msgid "New Account _Hierarchy…"
 msgstr "Novi _kontni plan …"
 
@@ -29445,8 +29331,6 @@ msgstr "Zabilježi podjelu dionice ili spajanje dionice"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:156
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:259
 #: gnucash/ui/gnc-plugin-page-register.ui:260
-#, fuzzy
-#| msgid "View _Lots..."
 msgid "View _Lots…"
 msgstr "Prikaži _pakete …"
 
@@ -29540,8 +29424,6 @@ msgstr "Provjeri i popravi _sve"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:16
 #: gnucash/ui/gnc-plugin-page-budget.ui:225
-#, fuzzy
-#| msgid "Esti_mate Budget..."
 msgid "Esti_mate Budget…"
 msgstr "Pro_cijeni proračun …"
 
@@ -29828,8 +29710,6 @@ msgstr "_Ispiši čekove"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:15
 #: gnucash/ui/gnc-plugin-page-register.ui:445
-#, fuzzy
-#| msgid "Assign as payment..."
 msgid "Assign as payment…"
 msgstr "Odredi kao plaćanje …"
 
@@ -29840,8 +29720,6 @@ msgstr "Odredi odabranu transakciju kao plaćanje"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:22
 #: gnucash/ui/gnc-plugin-page-register.ui:451
-#, fuzzy
-#| msgid "Edit payment..."
 msgid "Edit payment…"
 msgstr "Uredi plaćanje …"
 
@@ -30016,8 +29894,6 @@ msgstr "Razvrstaj po"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:269
-#, fuzzy
-#| msgid "_Print Report..."
 msgid "_Print Report…"
 msgstr "_Ispiši izvještaj …"
 
@@ -30038,8 +29914,6 @@ msgstr "Uredi stilske predloške izvještaja"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:25
 #: gnucash/ui/gnc-plugin-page-report.ui:284
-#, fuzzy
-#| msgid "Export as P_DF..."
 msgid "Export as P_DF…"
 msgstr "Izvezi kao _PDF …"
 
@@ -30133,8 +30007,6 @@ msgid "Delete the selected scheduled transaction"
 msgstr "Izbriši odabranu terminiranu transakciju"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:6
-#, fuzzy
-#| msgid "Import _QIF..."
 msgid "Import _QIF…"
 msgstr "Uvezi _QIF …"
 
@@ -30159,8 +30031,6 @@ msgid "_Reconcile"
 msgstr "_Usklađivanje"
 
 #: gnucash/ui/gnc-reconcile-window.ui:8
-#, fuzzy
-#| msgid "_Reconcile Information..."
 msgid "_Reconcile Information…"
 msgstr "_Podaci usklađivanja …"
 

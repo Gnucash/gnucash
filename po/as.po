@@ -5168,16 +5168,12 @@ msgstr "লেনদেনৰ তথ্য"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:3968
-#, fuzzy, c-format
-#| msgid "Sort %s by..."
 msgid "Sort %s by…"
 msgstr "... দ্বাৰা %s বৰ্গীকৰণ কৰক"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:4058
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1175
-#, fuzzy, c-format
-#| msgid "Filter %s by..."
 msgid "Filter %s by…"
 msgstr "... দ্বাৰা %s ৰ ফিল্টাৰ কৰক"
 
@@ -5266,8 +5262,6 @@ msgstr "ৰিপোৰ্ট ৰূপৰেখা ছেভ কৰক"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1275
 #: gnucash/ui/gnc-plugin-page-report.ui:239
-#, fuzzy
-#| msgid "Save Report Configuration As..."
 msgid "Save Report Configuration As…"
 msgstr "... ৰ দৰে ৰিপোৰ্ট ৰূপৰেখা ছেভ কৰক"
 
@@ -5887,16 +5881,12 @@ msgstr "... লৈ পৰিশোধ"
 
 #: gnucash/gnome/window-reconcile.c:785
 #: gnucash/gtkbuilder/window-reconcile.glade:215
-#, fuzzy
-#| msgid "Enter _Interest Payment..."
 msgid "Enter _Interest Payment…"
-msgstr "ভৰাওক _সুতৰ পৰিশোধ... "
+msgstr "ভৰাওক _সুতৰ পৰিশোধ… "
 
 #: gnucash/gnome/window-reconcile.c:787
-#, fuzzy
-#| msgid "Enter _Interest Charge..."
 msgid "Enter _Interest Charge…"
-msgstr "সুতৰ ছাৰ্জ ভৰাওক..."
+msgstr "সুতৰ ছাৰ্জ ভৰাওক…"
 
 #: gnucash/gnome/window-reconcile.c:1389
 msgid "Are you sure you want to delete the selected transaction?"
@@ -6344,14 +6334,10 @@ msgid "The file could not be reopened."
 msgstr "ফাইলটো পুনৰ খুলিব পৰা নগল."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1094
-#, fuzzy
-#| msgid "Reading file..."
 msgid "Reading file…"
 msgstr "... ফাইলটো পঢ়ি আছে"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1117
-#, fuzzy
-#| msgid "Parsing file..."
 msgid "Parsing file…"
 msgstr "... ফাইলটো পাৰছিং কৰি আছে"
 
@@ -6363,8 +6349,6 @@ msgstr "ফাইলটো পাৰছিং কৰোতে এটা ভূ�
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1149
 #: gnucash/gnome-utils/gnc-file.c:1429 gnucash/gnome-utils/gnc-file.c:1668
-#, fuzzy
-#| msgid "Writing file..."
 msgid "Writing file…"
 msgstr "... ফাইলটো লিখি আছে"
 
@@ -7513,22 +7497,16 @@ msgid "_Quit"
 msgstr "এৰি দিয়ক"
 
 #: gnucash/gnome-utils/gnc-file.c:973 gnucash/gnome-utils/gnc-file.c:993
-#, fuzzy
-#| msgid "Loading user data..."
 msgid "Loading user data…"
-msgstr "ব্যৱহাৰকৰ্তাৰ ডাটা লোড হৈ আছে..."
+msgstr "ব্যৱহাৰকৰ্তাৰ ডাটা লোড হৈ আছে…"
 
 #: gnucash/gnome-utils/gnc-file.c:1009
-#, fuzzy
-#| msgid "Re-saving user data..."
 msgid "Re-saving user data…"
-msgstr "ব্যৱহাৰকৰ্তাৰ ডাটা পুনৰ ছেভ হৈ আছে..."
+msgstr "ব্যৱহাৰকৰ্তাৰ ডাটা পুনৰ ছেভ হৈ আছে…"
 
 #: gnucash/gnome-utils/gnc-file.c:1369
-#, fuzzy
-#| msgid "Exporting file..."
 msgid "Exporting file…"
-msgstr "ফাইল ৰপ্তানি হৈ আছে..."
+msgstr "ফাইল ৰপ্তানি হৈ আছে…"
 
 #: gnucash/gnome-utils/gnc-file.c:1382
 #, c-format
@@ -7848,10 +7826,8 @@ msgid "Report with GUID '%s' is missing"
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-splash.c:113
-#, fuzzy
-#| msgid "Loading..."
 msgid "Loading…"
-msgstr "লোড কৰিছে..."
+msgstr "লোড কৰিছে…"
 
 #: gnucash/gnome-utils/gnc-sx-list-tree-model-adapter.c:515
 msgid "never"
@@ -8449,22 +8425,16 @@ msgid "[datafile]"
 msgstr "[ডাটাফাইল]"
 
 #: gnucash/gnucash.cpp:174
-#, fuzzy
-#| msgid "Checking Finance::Quote..."
 msgid "Checking Finance::Quote…"
-msgstr "বিত্ত পৰীক্ষা কৰক::উদ্ধৃতি..."
+msgstr "বিত্ত পৰীক্ষা কৰক::উদ্ধৃতি…"
 
 #: gnucash/gnucash.cpp:185
-#, fuzzy
-#| msgid "Checking Finance::Quote..."
 msgid "Unable to load Finance::Quote."
 msgstr "বিত্ত পৰীক্ষা কৰক::উদ্ধৃতি..."
 
 #: gnucash/gnucash.cpp:196
-#, fuzzy
-#| msgid "Loading data..."
 msgid "Loading data…"
-msgstr "তথ্য লোড হৈ আছে..."
+msgstr "তথ্য লোড হৈ আছে…"
 
 #: gnucash/gnucash.cpp:268
 #, fuzzy
@@ -8829,7 +8799,7 @@ msgstr "এককবোৰ যত কাষ্টম স্থানাংকব
 #| msgid ""
 #| "Units in which the custom coordinates are expressed (inches, mm, ...)."
 msgid "Units in which the custom coordinates are expressed (inches, mm, …)."
-msgstr "এককবোৰ যত কাষ্টম স্থানাংকবোৰ প্ৰকাশ কৰা হৈছে (ইঞ্চি, মিমি, ...)."
+msgstr "এককবোৰ যত কাষ্টম স্থানাংকবোৰ প্ৰকাশ কৰা হৈছে (ইঞ্চি, মিমি, …)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:35
 msgid "Position of payee name"
@@ -11231,10 +11201,8 @@ msgid "Choose File Name for Export"
 msgstr "ৰপ্তানিৰ বাবে ফাইল নাম নিৰ্বাচন কৰক"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:712
-#, fuzzy
-#| msgid "Export Now..."
 msgid "Export Now…"
-msgstr "এতিয়া ৰপ্তানি কৰক..."
+msgstr "এতিয়া ৰপ্তানি কৰক…"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:720
 msgid "Summary"
@@ -11569,10 +11537,8 @@ msgstr "ভুল টেক্সট."
 #: gnucash/gtkbuilder/assistant-qif-import.glade:603
 #: gnucash/gtkbuilder/assistant-qif-import.glade:734
 #: gnucash/gtkbuilder/assistant-qif-import.glade:863
-#, fuzzy
-#| msgid "Change GnuCash _Account..."
 msgid "Change GnuCash _Account…"
-msgstr "GnuCash _একাউন্ট সলনি..."
+msgstr "GnuCash _একাউন্ট সলনি…"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1044
 #, fuzzy
@@ -13841,10 +13807,8 @@ msgid "Warning: Finance::Quote not installed properly."
 msgstr "সতৰ্কীকৰণ: বিত্ত::উদ্ধৃতি টো সঠিকভাবে ইনষ্টল কৰা নহল."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:713
-#, fuzzy
-#| msgid "Select user information here..."
 msgid "Select user information here…"
-msgstr "ইয়াত ব্যৱহাৰকৰ্তাৰ তথ্য নিৰ্বাচন কৰক..."
+msgstr "ইয়াত ব্যৱহাৰকৰ্তাৰ তথ্য নিৰ্বাচন কৰক…"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:187
 msgid ""
@@ -14423,10 +14387,8 @@ msgid "Please select or create an appropriate GnuCash account for:"
 msgstr "... কৰণে অনুগ্ৰহ কৰি এটা উপযু্ক্ত GnuCash একাউন্ট নিৰ্বাচন বা সৃষ্টি কৰক:"
 
 #: gnucash/gtkbuilder/dialog-import.glade:99
-#, fuzzy
-#| msgid "Online account ID here..."
 msgid "Online account ID here…"
-msgstr "অনলাইন একাউন্ট ID টো ইয়াত..."
+msgstr "অনলাইন একাউন্ট ID টো ইয়াত…"
 
 #: gnucash/gtkbuilder/dialog-import.glade:170
 #: gnucash/gtkbuilder/dialog-import.glade:278
@@ -16211,10 +16173,8 @@ msgid "Custom format"
 msgstr "কাষ্টম ফৰমেট"
 
 #: gnucash/gtkbuilder/dialog-progress.glade:12
-#, fuzzy
-#| msgid "Working..."
 msgid "Working…"
-msgstr "কাম চলি আছে..."
+msgstr "কাম চলি আছে…"
 
 #: gnucash/gtkbuilder/dialog-report.glade:55
 msgid "<b>A_vailable reports</b>"
@@ -16241,10 +16201,8 @@ msgid "Move dow_n"
 msgstr "তললৈ যাওক"
 
 #: gnucash/gtkbuilder/dialog-report.glade:189
-#, fuzzy
-#| msgid "Si_ze..."
 msgid "Si_ze…"
-msgstr "আকাৰ..."
+msgstr "আকাৰ…"
 
 #: gnucash/gtkbuilder/dialog-report.glade:253
 msgid "HTML Style Sheets"
@@ -16412,10 +16370,8 @@ msgid "Make Scheduled Transaction"
 msgstr "লেনদেনৰ নিৰ্ধাৰিত সূচী বনাওক"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:159
-#, fuzzy
-#| msgid "Advanced..."
 msgid "Advanced…"
-msgstr "আগতীয়াকৈ কৰা হল..."
+msgstr "আগতীয়াকৈ কৰা হল…"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:310
 msgid "Never End"
@@ -16559,10 +16515,8 @@ msgid "Template Transaction"
 msgstr "লেনদেনৰ নমুনা"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1476
-#, fuzzy
-#| msgid "Since Last Run..."
 msgid "Since Last Run…"
-msgstr "শেষত চলাটোৰ পৰা ..."
+msgstr "শেষত চলাটোৰ পৰা …"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1592
 msgid "_Review created transactions"
@@ -17397,10 +17351,8 @@ msgstr "বাহিৰা টোকাবোৰ"
 
 #. Filter register by… Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:13
-#, fuzzy
-#| msgid "Filter register by..."
 msgid "Filter register by…"
-msgstr "ফিল্টাৰ কৰা হৈছে... পঞ্জীয়নৰ দ্বাৰা"
+msgstr "ফিল্টাৰ কৰা হৈছে… পঞ্জীয়নৰ দ্বাৰা"
 
 #. Filter By Dialog, Date Tab
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:80
@@ -17465,10 +17417,8 @@ msgstr "চলিত প্ৰৱিষ্টিটো ডিলিট কৰক
 
 #. Sort register by Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:770
-#, fuzzy
-#| msgid "Sort register by..."
 msgid "Sort register by…"
-msgstr "বৰ্গীকৰণ কৰা হৈছে... পঞ্জীয়নৰ দ্বাৰা"
+msgstr "বৰ্গীকৰণ কৰা হৈছে… পঞ্জীয়নৰ দ্বাৰা"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:833
 msgid "_Standard Order"
@@ -18673,10 +18623,8 @@ msgid "The list of Scheduled Transactions"
 msgstr "নিৰ্ধাৰণ কৰা হোৱা লেনদেনৰ তালিকাখন"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:23
-#, fuzzy
-#| msgid "Get _Transactions..."
 msgid "Get _Transactions…"
-msgstr "লেনদেনবোৰ পাওক...."
+msgstr "লেনদেনবোৰ পাওক.…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:25
 msgid "Get the transactions online through Online Banking"
@@ -18686,7 +18634,7 @@ msgstr "অনলাইন বেংকিং ৰ জৰিয়তে অনল�
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:31
 #, fuzzy
 msgid "Issue _SEPA Transaction…"
-msgstr "_SEPA লেনদেন ইচ্ছ্যু কৰক..."
+msgstr "_SEPA লেনদেন ইচ্ছ্যু কৰক…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:33
 msgid ""
@@ -18699,7 +18647,7 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:36
 #, fuzzy
 msgid "Issue SEPA I_nternal Transaction…"
-msgstr "_SEPA লেনদেন ইচ্ছ্যু কৰক..."
+msgstr "_SEPA লেনদেন ইচ্ছ্যু কৰক…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:38
 #, fuzzy
@@ -18716,7 +18664,7 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:41
 #, fuzzy
 msgid "_Internal Transaction…"
-msgstr "আভ্যন্তৰীণ লেনদেন..."
+msgstr "আভ্যন্তৰীণ লেনদেন…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:43
 msgid "Issue a new bank-internal transaction online through Online Banking"
@@ -18725,7 +18673,7 @@ msgstr "অনলাইন বেংকিং ৰ জৰিয়তে বেং�
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:46
 #, fuzzy
 msgid "Issue SEPA Direct _Debit…"
-msgstr "_SEPA প্ৰত্যক্ষ পাবলগীয়া ইচ্ছ্যু কৰক..."
+msgstr "_SEPA প্ৰত্যক্ষ পাবলগীয়া ইচ্ছ্যু কৰক…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:48
 msgid ""
@@ -18746,10 +18694,8 @@ msgid "Show the online banking log window"
 msgstr "অনলাইন বেংকিং লগ উইণ্ডোখন দেখুৱাওক."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:63
-#, fuzzy
-#| msgid "_Online Banking Setup..."
 msgid "_Online Banking Setup…"
-msgstr "অনলাইন বেংকিং ছেটআপ..."
+msgstr "অনলাইন বেংকিং ছেটআপ…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:65
 msgid ""
@@ -18901,7 +18847,7 @@ msgstr ""
 #: gnucash/import-export/bi-import/dialog-bi-import.c:645
 #, fuzzy
 msgid "Processing…"
-msgstr "_পৰিশোধ প্ৰক্ৰিয়া..."
+msgstr "_পৰিশোধ প্ৰক্ৰিয়া…"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:714
 #, fuzzy, c-format
@@ -20158,10 +20104,8 @@ msgid "Select one or multiple OFX/QFX file(s) to process"
 msgstr "কাৰ্য্যবাহী কৰিবলৈ এটা OFX/QFX ফাইল নিৰ্বাচন কৰক"
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.ui:6
-#, fuzzy
-#| msgid "Import _OFX/QFX..."
 msgid "Import _OFX/QFX…"
-msgstr "আমদানি _OFX/QFX..."
+msgstr "আমদানি _OFX/QFX…"
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.ui:8
 msgid "Process an OFX/QFX response file"
@@ -20894,10 +20838,8 @@ msgid "Enter the Discount Percent"
 msgstr "ৰেহাইৰ শতাংশ ভৰাওক"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:609
-#, fuzzy
-#| msgid "Enter the Discount ... unknown type"
 msgid "Enter the Discount … unknown type"
-msgstr "ৰেহাইটো ভৰাওক... অপৰিচিত প্ৰকাৰ"
+msgstr "ৰেহাইটো ভৰাওক… অপৰিচিত প্ৰকাৰ"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:627
 msgid "Discount Type: Monetary Value"
@@ -26194,10 +26136,8 @@ msgstr "দিবলগীয়া পৰিমাণ"
 
 #: gnucash/report/reports/standard/invoice.scm:560
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:225
-#, fuzzy
-#| msgid "Invoice in progress..."
 msgid "Invoice in progress…"
-msgstr "চলি থকা ইনভইছটো..."
+msgstr "চলি থকা ইনভইছটো…"
 
 #: gnucash/report/reports/standard/invoice.scm:568
 #, fuzzy
@@ -27637,14 +27577,10 @@ msgid "Credit Lines"
 msgstr "পাবলগীয়াৰ পংক্তিবোৰ"
 
 #: gnucash/report/report-utilities.scm:639
-#, fuzzy, scheme-format
-#| msgid "Building '~a' report ..."
 msgid "Building '~a' report …"
 msgstr "... '~a' ৰিপোৰ্টটো তৈয়াৰ কৰি থকা হৈছে"
 
 #: gnucash/report/report-utilities.scm:645
-#, fuzzy, scheme-format
-#| msgid "Rendering '~a' report ..."
 msgid "Rendering '~a' report …"
 msgstr "... '~a' ৰিপোৰ্টটো বাখ্যা কৰি থকা হৈছে"
 
@@ -28632,8 +28568,6 @@ msgid "_File"
 msgstr "ফাইল"
 
 #: gnucash/ui/gnc-main-window.ui:40
-#, fuzzy
-#| msgid "Pa_ge Setup..."
 msgid "Pa_ge Setup"
 msgstr "পৃষ্ঠাৰ ছেটআপ..."
 
@@ -28941,7 +28875,7 @@ msgstr "এটা নতুন GnuCash ডাটাফাইললৈ একা�
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:16
 #, fuzzy
 msgid "_Find…"
-msgstr "_বিচাৰি উলিয়াওক..."
+msgstr "_বিচাৰি উলিয়াওক…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:62
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:70
@@ -28984,8 +28918,6 @@ msgid "_Scheduled Transaction Editor"
 msgstr "_লেনদেনৰ সম্পাদক নিৰ্ধাৰণ কৰা হ'ল"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:89
-#, fuzzy
-#| msgid "Since _Last Run..."
 msgid "Since _Last Run…"
 msgstr "... শেষত চলিতৰ পৰা"
 
@@ -28994,10 +28926,8 @@ msgid "Create Scheduled Transactions since the last time run"
 msgstr "শেষৰ সময়ত চলিতটোৰ পৰা নিৰ্ধাৰিত লেনদেনবোৰ সৃষ্টি কৰক"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:94
-#, fuzzy
-#| msgid "_Mortgage & Loan Repayment..."
 msgid "_Mortgage & Loan Repayment…"
-msgstr "_বন্ধকী & লোনৰ পুনৰ পৰিশোধ কৰক..."
+msgstr "_বন্ধকী & লোনৰ পুনৰ পৰিশোধ কৰক…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:96
 msgid "Setup scheduled transactions for repayment of a loan"
@@ -29068,7 +28998,7 @@ msgstr "দিনটোৰ ইংগিতবিলাক নিৰীক্ষ�
 #: gnucash/ui/gnc-plugin-bi-import.ui:6
 #, fuzzy
 msgid "Import Bills & _Invoices…"
-msgstr "বিল আৰু ইনভইছবোৰ আমদানি কৰক..."
+msgstr "বিল আৰু ইনভইছবোৰ আমদানি কৰক…"
 
 #: gnucash/ui/gnc-plugin-bi-import.ui:8
 msgid "Import bills and invoices from a CSV text file"
@@ -29353,20 +29283,16 @@ msgid "Initialize Test Data"
 msgstr "পৰীক্ষাৰ তথ্যবোৰ ইনিশ্বিয়েলাইজ কৰক"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:6
-#, fuzzy
-#| msgid "Export Account T_ree to CSV..."
 msgid "Export Account T_ree to CSV…"
-msgstr "CSV লৈ একাউন্ট বিন্যাস ৰপ্তানি কৰক..."
+msgstr "CSV লৈ একাউন্ট বিন্যাস ৰপ্তানি কৰক…"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:8
 msgid "Export the Account Tree to a CSV file"
 msgstr "CSV ফাইল এটালৈ একাউন্ট বিন্যাসটো ৰপ্তানি কৰক"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:11
-#, fuzzy
-#| msgid "Export _Transactions to CSV..."
 msgid "Export _Transactions to CSV…"
-msgstr "CSV লৈ লেনদেনবোৰ ৰপ্তানি কৰক..."
+msgstr "CSV লৈ লেনদেনবোৰ ৰপ্তানি কৰক…"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:13
 msgid "Export the Transactions to a CSV file"
@@ -29375,7 +29301,7 @@ msgstr "CSV ফাইল এখনলৈ লেনদেনবোৰ ৰপ্�
 #: gnucash/ui/gnc-plugin-csv-export.ui:16
 #, fuzzy
 msgid "Export A_ctive Register to CSV…"
-msgstr "CSV লৈ একাউন্ট বিন্যাস ৰপ্তানি কৰক..."
+msgstr "CSV লৈ একাউন্ট বিন্যাস ৰপ্তানি কৰক…"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:18
 #, fuzzy
@@ -29383,20 +29309,16 @@ msgid "Export the Active Register to a CSV file"
 msgstr "CSV ফাইল এটালৈ একাউন্ট বিন্যাসটো ৰপ্তানি কৰক"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:6
-#, fuzzy
-#| msgid "Import _Accounts from CSV..."
 msgid "Import _Accounts from CSV…"
-msgstr "CSV ৰ পৰা একাউন্টবোৰ আমদানি কৰক..."
+msgstr "CSV ৰ পৰা একাউন্টবোৰ আমদানি কৰক…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:8
 msgid "Import Accounts from a CSV file"
 msgstr "CSV ফাইল এটাৰ পৰা একাউন্টবোৰ আমদানি কৰক"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:11
-#, fuzzy
-#| msgid "Import _Transactions from CSV..."
 msgid "Import _Transactions from CSV…"
-msgstr "CSV ৰ পৰা লেনদেনবোৰ আমদানি কৰক..."
+msgstr "CSV ৰ পৰা লেনদেনবোৰ আমদানি কৰক…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:13
 msgid "Import Transactions from a CSV file"
@@ -29423,10 +29345,8 @@ msgid "Import Customers and Vendors from a CSV text file"
 msgstr "টেক্সট ফাইলৰ পৰা গ্ৰাহক বা ব্যৱসায়ীবোৰ আমদানি কৰক"
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:6
-#, fuzzy
-#| msgid "_Replay GnuCash .log file..."
 msgid "_Replay GnuCash .log file…"
-msgstr "_GnuCash .log ফাইলটো পুনৰ চলাওক..."
+msgstr "_GnuCash .log ফাইলটো পুনৰ চলাওক…"
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:8
 #, fuzzy
@@ -29483,8 +29403,6 @@ msgid "Cascade selected properties for account"
 msgstr "আপুনি এটা একাউন্ট প্ৰকাৰ নিৰ্বাচন কৰাতো অপৰিহাৰ্য্য."
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:43
-#, fuzzy
-#| msgid "_Renumber Subaccounts..."
 msgid "_Renumber Subaccounts…"
 msgstr "... উপ-একাউন্টবোৰৰ পুনৰ সংখ্যা দিয়ক"
 
@@ -29550,10 +29468,8 @@ msgid "Create a new Account"
 msgstr "এটা নতুন একাউন্ট সৃষ্টি কৰক"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:116
-#, fuzzy
-#| msgid "New Account _Hierarchy..."
 msgid "New Account _Hierarchy…"
-msgstr "নতুন একাউন্টৰ বিন্যাস..."
+msgstr "নতুন একাউন্টৰ বিন্যাস…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:118
 msgid "Extend the current book by merging with new account type categories"
@@ -29608,10 +29524,8 @@ msgstr "এটা ষ্টকৰ স্প্লিট বা ষ্টকৰ �
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:156
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:259
 #: gnucash/ui/gnc-plugin-page-register.ui:260
-#, fuzzy
-#| msgid "View _Lots..."
 msgid "View _Lots…"
-msgstr "গোটবোৰ নিৰীক্ষণ কৰক..."
+msgstr "গোটবোৰ নিৰীক্ষণ কৰক…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:158
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:261
@@ -29975,10 +29889,8 @@ msgstr "_পৰীক্ষাবোৰ প্ৰিণ্ট কৰক"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:15
 #: gnucash/ui/gnc-plugin-page-register.ui:445
-#, fuzzy
-#| msgid "Assign as payment..."
 msgid "Assign as payment…"
-msgstr "পৰিশোধৰ হিচাপে নিৰ্ধাৰণ কৰক..."
+msgstr "পৰিশোধৰ হিচাপে নিৰ্ধাৰণ কৰক…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:17
 #: gnucash/ui/gnc-plugin-page-register.ui:447
@@ -29989,7 +29901,7 @@ msgstr "পৰিশোধ হিচাপে নিৰ্বাচিত লে
 #: gnucash/ui/gnc-plugin-page-register.ui:451
 #, fuzzy
 msgid "Edit payment…"
-msgstr "পৰিশোধৰ হিচাপে নিৰ্ধাৰণ কৰক..."
+msgstr "পৰিশোধৰ হিচাপে নিৰ্ধাৰণ কৰক…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:24
 #: gnucash/ui/gnc-plugin-page-register.ui:453
@@ -30165,10 +30077,8 @@ msgstr "... দ্বাৰা বৰ্গীকৰণ"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:269
-#, fuzzy
-#| msgid "_Print Report..."
 msgid "_Print Report…"
-msgstr "_ৰিপোৰ্ট প্ৰণ্ট কৰক..."
+msgstr "_ৰিপোৰ্ট প্ৰণ্ট কৰক…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:9
 #: gnucash/ui/gnc-plugin-page-report.ui:271
@@ -30187,10 +30097,8 @@ msgstr "ৰিপোৰ্ট শৈলী তালিকাবোৰ সম্
 
 #: gnucash/ui/gnc-plugin-page-report.ui:25
 #: gnucash/ui/gnc-plugin-page-report.ui:284
-#, fuzzy
-#| msgid "Export as P_DF..."
 msgid "Export as P_DF…"
-msgstr "P_DF হিচাপে ৰপ্তানি কৰক..."
+msgstr "P_DF হিচাপে ৰপ্তানি কৰক…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:27
 #: gnucash/ui/gnc-plugin-page-report.ui:286
@@ -30281,10 +30189,8 @@ msgid "Delete the selected scheduled transaction"
 msgstr "নিৰ্বাচিত নিৰ্ধাৰিত লেনদেনটো ডিলিট কৰক"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:6
-#, fuzzy
-#| msgid "Import _QIF..."
 msgid "Import _QIF…"
-msgstr "আমদানি_QIF..."
+msgstr "আমদানি_QIF…"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:8
 msgid "Import a Quicken QIF file"
@@ -30309,10 +30215,8 @@ msgid "_Reconcile"
 msgstr "পুনৰসংযোজন কৰক"
 
 #: gnucash/ui/gnc-reconcile-window.ui:8
-#, fuzzy
-#| msgid "_Reconcile Information..."
 msgid "_Reconcile Information…"
-msgstr "পুনৰসংযোজন তথ্য..."
+msgstr "পুনৰসংযোজন তথ্য…"
 
 #: gnucash/ui/gnc-reconcile-window.ui:14 gnucash/ui/gnc-reconcile-window.ui:247
 msgid "_Finish"

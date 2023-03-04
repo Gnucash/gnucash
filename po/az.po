@@ -1710,7 +1710,7 @@ msgstr "Vahidlər"
 #: gnucash/gnome-utils/gnc-general-select.c:220
 #, fuzzy
 msgid "Select…"
-msgstr "Seç..."
+msgstr "Seç…"
 
 #: gnucash/gnome/business-gnome-utils.c:194
 #: gnucash/gnome-utils/gnc-general-select.c:222
@@ -11273,7 +11273,7 @@ msgstr ""
 #: gnucash/gtkbuilder/assistant-qif-import.glade:86
 #, fuzzy
 msgid "_Select…"
-msgstr "Seç..."
+msgstr "Seç…"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:109
 msgid "Select a QIF file to load"
@@ -15204,7 +15204,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-search.glade:37
 #, fuzzy
 msgid "_New item…"
-msgstr "Yeni..."
+msgstr "Yeni…"
 
 #: gnucash/gtkbuilder/dialog-search.glade:82
 #, fuzzy
@@ -27606,7 +27606,7 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:472
 #, fuzzy
 msgid "_New Vendor…"
-msgstr "Yeni..."
+msgstr "Yeni…"
 
 #: gnucash/ui/gnc-plugin-business.ui:65
 msgid "Open the New Vendor dialog"
@@ -27615,7 +27615,7 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-business.ui:68
 #, fuzzy
 msgid "_Find Vendor…"
-msgstr "Yeni..."
+msgstr "Yeni…"
 
 #: gnucash/ui/gnc-plugin-business.ui:70
 msgid "Open the Find Vendor dialog"

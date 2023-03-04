@@ -8165,10 +8165,8 @@ msgid "Report with GUID '%s' is missing"
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-splash.c:113
-#, fuzzy
-#| msgid "Loading..."
 msgid "Loading…"
-msgstr "Itangira..."
+msgstr "Itangira…"
 
 #: gnucash/gnome-utils/gnc-sx-list-tree-model-adapter.c:515
 #, fuzzy
@@ -16556,7 +16554,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-search.glade:37
 #, fuzzy
 msgid "_New item…"
-msgstr "Bishya..."
+msgstr "Bishya…"
 
 #: gnucash/gtkbuilder/dialog-search.glade:82
 #, fuzzy
@@ -16703,7 +16701,7 @@ msgstr "Urutonde Bya"
 #: gnucash/gtkbuilder/dialog-sx.glade:159
 #, fuzzy
 msgid "Advanced…"
-msgstr "Urwego rwo hejuru..."
+msgstr "Urwego rwo hejuru…"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:310
 #, fuzzy
@@ -29948,7 +29946,7 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-business.ui:34 gnucash/ui/gnc-plugin-business.ui:83
 #, fuzzy
 msgid "New _Job…"
-msgstr "Bishya..."
+msgstr "Bishya…"
 
 #: gnucash/ui/gnc-plugin-business.ui:36 gnucash/ui/gnc-plugin-business.ui:85
 #, fuzzy
@@ -30004,7 +30002,7 @@ msgstr "a Gishya Aderesi Kureba"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:472
 #, fuzzy
 msgid "_New Vendor…"
-msgstr "Bishya..."
+msgstr "Bishya…"
 
 #: gnucash/ui/gnc-plugin-business.ui:65
 #, fuzzy
@@ -30026,7 +30024,7 @@ msgstr "i Gishya Ukoresha:"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:512
 #, fuzzy
 msgid "New _Bill…"
-msgstr "Bishya..."
+msgstr "Bishya…"
 
 #: gnucash/ui/gnc-plugin-business.ui:75
 #, fuzzy
@@ -30403,7 +30401,7 @@ msgstr "a Gutandukanya Cyangwa a"
 #: gnucash/ui/gnc-plugin-page-register.ui:260
 #, fuzzy
 msgid "View _Lots…"
-msgstr "Reba..."
+msgstr "Reba…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:158
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:261

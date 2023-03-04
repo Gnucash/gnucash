@@ -25869,10 +25869,8 @@ msgstr "Belopp att betala"
 
 #: gnucash/report/reports/standard/invoice.scm:560
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:225
-#, fuzzy
-#| msgid "Invoice in progress..."
 msgid "Invoice in progress…"
-msgstr "Faktura skapas..."
+msgstr "Faktura skapas…"
 
 #: gnucash/report/reports/standard/invoice.scm:568
 msgid "Reference:"
@@ -27234,16 +27232,12 @@ msgid "Credit Lines"
 msgstr "Krediter"
 
 #: gnucash/report/report-utilities.scm:639
-#, fuzzy, scheme-format
-#| msgid "Building '~a' report ..."
 msgid "Building '~a' report …"
-msgstr "Bygger rapporten '~a'..."
+msgstr "Bygger rapporten '~a'…"
 
 #: gnucash/report/report-utilities.scm:645
-#, fuzzy, scheme-format
-#| msgid "Rendering '~a' report ..."
 msgid "Rendering '~a' report …"
-msgstr "Renderar rapporten '~a'..."
+msgstr "Renderar rapporten '~a'…"
 
 #: gnucash/report/report-utilities.scm:647
 msgid "Untitled"
@@ -27797,10 +27791,8 @@ msgid "Credit Accounts"
 msgstr "Kreditkonton"
 
 #: gnucash/report/trep-engine.scm:528
-#, fuzzy
-#| msgid "Specify date to filter by..."
 msgid "Specify date to filter by…"
-msgstr "Ange datum att filtrera efter..."
+msgstr "Ange datum att filtrera efter…"
 
 #: gnucash/report/trep-engine.scm:532 gnucash/report/trep-engine.scm:904
 #: gnucash/report/trep-engine.scm:1013 gnucash/report/trep-engine.scm:1117
@@ -28208,8 +28200,6 @@ msgid "_File"
 msgstr "_Arkiv"
 
 #: gnucash/ui/gnc-main-window.ui:40
-#, fuzzy
-#| msgid "Pa_ge Setup..."
 msgid "Pa_ge Setup"
 msgstr "Sidinställnin_g..."
 
@@ -28563,20 +28553,16 @@ msgid "_Scheduled Transaction Editor"
 msgstr "_Redigerare för schemalagda transaktioner"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:89
-#, fuzzy
-#| msgid "Since _Last Run..."
 msgid "Since _Last Run…"
-msgstr "_Sedan senaste körningen..."
+msgstr "_Sedan senaste körningen…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:91
 msgid "Create Scheduled Transactions since the last time run"
 msgstr "Skapa schemalagda transaktioner sedan sista körningen"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:94
-#, fuzzy
-#| msgid "_Mortgage & Loan Repayment..."
 msgid "_Mortgage & Loan Repayment…"
-msgstr "_Inteckning och låneåterbetalning..."
+msgstr "_Inteckning och låneåterbetalning…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:96
 msgid "Setup scheduled transactions for repayment of a loan"
@@ -28641,10 +28627,8 @@ msgid "View the Tips of the Day"
 msgstr "Visa dagens tips"
 
 #: gnucash/ui/gnc-plugin-bi-import.ui:6
-#, fuzzy
-#| msgid "Import Bills & _Invoices..."
 msgid "Import Bills & _Invoices…"
-msgstr "Importera räkningar & _fakturor..."
+msgstr "Importera räkningar & _fakturor…"
 
 #: gnucash/ui/gnc-plugin-bi-import.ui:8
 msgid "Import bills and invoices from a CSV text file"
@@ -28933,50 +28917,40 @@ msgid "Initialize Test Data"
 msgstr "Initiera testdata"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:6
-#, fuzzy
-#| msgid "Export Account T_ree to CSV..."
 msgid "Export Account T_ree to CSV…"
-msgstr "Exportera konto_hierarkin till CSV..."
+msgstr "Exportera konto_hierarkin till CSV…"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:8
 msgid "Export the Account Tree to a CSV file"
 msgstr "Exportera kontohierarkin till en CSV-fil"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:11
-#, fuzzy
-#| msgid "Export _Transactions to CSV..."
 msgid "Export _Transactions to CSV…"
-msgstr "Exportera _transaktioner till CSV..."
+msgstr "Exportera _transaktioner till CSV…"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:13
 msgid "Export the Transactions to a CSV file"
 msgstr "Exportera transaktionerna till en CSV-fil"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:16
-#, fuzzy
-#| msgid "Export A_ctive Register to CSV..."
 msgid "Export A_ctive Register to CSV…"
-msgstr "Exportera _aktivt register till CSV..."
+msgstr "Exportera _aktivt register till CSV…"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:18
 msgid "Export the Active Register to a CSV file"
 msgstr "Exportera det aktiva registret till en CSV-fil"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:6
-#, fuzzy
-#| msgid "Import _Accounts from CSV..."
 msgid "Import _Accounts from CSV…"
-msgstr "Importera _konton från CSV..."
+msgstr "Importera _konton från CSV…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:8
 msgid "Import Accounts from a CSV file"
 msgstr "Importera konton från en CSV-fil"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:11
-#, fuzzy
-#| msgid "Import _Transactions from CSV..."
 msgid "Import _Transactions from CSV…"
-msgstr "Importera _transaktioner från CSV..."
+msgstr "Importera _transaktioner från CSV…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:13
 msgid "Import Transactions from a CSV file"
@@ -28993,10 +28967,8 @@ msgid "Import Prices from a CSV file"
 msgstr "Importera priser från en CSV-fil"
 
 #: gnucash/ui/gnc-plugin-customer-import.ui:6
-#, fuzzy
-#| msgid "Import _Customers & Vendors..."
 msgid "Import _Customers & Vendors…"
-msgstr "Importera k_under & leverantörer..."
+msgstr "Importera k_under & leverantörer…"
 
 #: gnucash/ui/gnc-plugin-customer-import.ui:8
 #, fuzzy
@@ -29005,10 +28977,8 @@ msgid "Import Customers and Vendors from a CSV text file"
 msgstr "Importera kunder och leverantörer från en CSV-textfil."
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:6
-#, fuzzy
-#| msgid "_Replay GnuCash .log file..."
 msgid "_Replay GnuCash .log file…"
-msgstr "_Spela upp GnuCash .log-fil..."
+msgstr "_Spela upp GnuCash .log-fil…"
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:8
 #, fuzzy
@@ -29053,10 +29023,8 @@ msgstr "Sök efter konto"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:37
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:222
-#, fuzzy
-#| msgid "_Cascade Account Properties..."
 msgid "_Cascade Account Properties…"
-msgstr "Egenskaper för _kaskadkonto..."
+msgstr "Egenskaper för _kaskadkonto…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:39
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:224
@@ -29064,10 +29032,8 @@ msgid "Cascade selected properties for account"
 msgstr "Verkställ valda egenskaper i kaskad för konto"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:43
-#, fuzzy
-#| msgid "_Renumber Subaccounts..."
 msgid "_Renumber Subaccounts…"
-msgstr "_Numrera om underkonton..."
+msgstr "_Numrera om underkonton…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:45
 msgid "Renumber the children of the selected account"
@@ -29132,10 +29098,8 @@ msgid "Create a new Account"
 msgstr "Skapa ett nytt konto"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:116
-#, fuzzy
-#| msgid "New Account _Hierarchy..."
 msgid "New Account _Hierarchy…"
-msgstr "Ny konto_hierarki..."
+msgstr "Ny konto_hierarki…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:118
 msgid "Extend the current book by merging with new account type categories"
@@ -29191,10 +29155,8 @@ msgstr "Mata in en aktiesplit eller aktiesammanslagning"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:156
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:259
 #: gnucash/ui/gnc-plugin-page-register.ui:260
-#, fuzzy
-#| msgid "View _Lots..."
 msgid "View _Lots…"
-msgstr "Visa parti_er..."
+msgstr "Visa parti_er…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:158
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:261
@@ -29288,10 +29250,8 @@ msgstr "Kontrollera och reparera a_lla"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:16
 #: gnucash/ui/gnc-plugin-page-budget.ui:225
-#, fuzzy
-#| msgid "Esti_mate Budget..."
 msgid "Esti_mate Budget…"
-msgstr "Gör b_udgetuppskattning..."
+msgstr "Gör b_udgetuppskattning…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:22
 #: gnucash/ui/gnc-plugin-page-budget.ui:240
@@ -29577,10 +29537,8 @@ msgstr "_Skriv ut checkar"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:15
 #: gnucash/ui/gnc-plugin-page-register.ui:445
-#, fuzzy
-#| msgid "Assign as payment..."
 msgid "Assign as payment…"
-msgstr "Tilldela som betalning..."
+msgstr "Tilldela som betalning…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:17
 #: gnucash/ui/gnc-plugin-page-register.ui:447
@@ -29589,10 +29547,8 @@ msgstr "Tilldela markerad transaktion som betalning"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:22
 #: gnucash/ui/gnc-plugin-page-register.ui:451
-#, fuzzy
-#| msgid "Edit payment..."
 msgid "Edit payment…"
-msgstr "Redigera betalning..."
+msgstr "Redigera betalning…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:24
 #: gnucash/ui/gnc-plugin-page-register.ui:453
@@ -29764,10 +29720,8 @@ msgstr "Sortera efter"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:269
-#, fuzzy
-#| msgid "_Print Report..."
 msgid "_Print Report…"
-msgstr "_Skriv ut rapport..."
+msgstr "_Skriv ut rapport…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:9
 #: gnucash/ui/gnc-plugin-page-report.ui:271
@@ -29786,10 +29740,8 @@ msgstr "Redigera stilmallar för rapporten"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:25
 #: gnucash/ui/gnc-plugin-page-report.ui:284
-#, fuzzy
-#| msgid "Export as P_DF..."
 msgid "Export as P_DF…"
-msgstr "Exportera som P_DF..."
+msgstr "Exportera som P_DF…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:27
 #: gnucash/ui/gnc-plugin-page-report.ui:286
@@ -29881,10 +29833,8 @@ msgid "Delete the selected scheduled transaction"
 msgstr "Ta bort den valda schemalagda transaktionen"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:6
-#, fuzzy
-#| msgid "Import _QIF..."
 msgid "Import _QIF…"
-msgstr "Importera _QIF..."
+msgstr "Importera _QIF…"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:8
 msgid "Import a Quicken QIF file"
@@ -29907,10 +29857,8 @@ msgid "_Reconcile"
 msgstr "_Stäm av"
 
 #: gnucash/ui/gnc-reconcile-window.ui:8
-#, fuzzy
-#| msgid "_Reconcile Information..."
 msgid "_Reconcile Information…"
-msgstr "_Avstämningsinformation..."
+msgstr "_Avstämningsinformation…"
 
 #: gnucash/ui/gnc-reconcile-window.ui:14 gnucash/ui/gnc-reconcile-window.ui:247
 msgid "_Finish"

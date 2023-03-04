@@ -5147,18 +5147,14 @@ msgstr "Grāmatojuma informācija"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:3968
-#, fuzzy, c-format
-#| msgid "Sort %s by..."
 msgid "Sort %s by…"
-msgstr "Kārtot %s pēc..."
+msgstr "Kārtot %s pēc…"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:4058
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1175
-#, fuzzy, c-format
-#| msgid "Filter %s by..."
 msgid "Filter %s by…"
-msgstr "Atlasīt %s pēc..."
+msgstr "Atlasīt %s pēc…"
 
 #. Translators: %s refer to the following in
 #. order: invoice type, invoice ID, owner name,
@@ -5210,7 +5206,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-report.cpp:231
 #, fuzzy
 msgid "Save Config As…"
-msgstr "Saglabāt kā..."
+msgstr "Saglabāt kā…"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:232
 msgid "Make Pdf"
@@ -5246,10 +5242,8 @@ msgstr "Saglabāt _pārskatu iestatījumus"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1275
 #: gnucash/ui/gnc-plugin-page-report.ui:239
-#, fuzzy
-#| msgid "Save Report Configuration As..."
 msgid "Save Report Configuration As…"
-msgstr "Saglabāt pārskatu iestatījumus kā..."
+msgstr "Saglabāt pārskatu iestatījumus kā…"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1550
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1583
@@ -5867,16 +5861,12 @@ msgstr "Maksājums"
 
 #: gnucash/gnome/window-reconcile.c:785
 #: gnucash/gtkbuilder/window-reconcile.glade:215
-#, fuzzy
-#| msgid "Enter _Interest Payment..."
 msgid "Enter _Interest Payment…"
-msgstr "Ievadiet _procentu maksājumu..."
+msgstr "Ievadiet _procentu maksājumu…"
 
 #: gnucash/gnome/window-reconcile.c:787
-#, fuzzy
-#| msgid "Enter _Interest Charge..."
 msgid "Enter _Interest Charge…"
-msgstr "Ievadiet _procentu maksu..."
+msgstr "Ievadiet _procentu maksu…"
 
 #: gnucash/gnome/window-reconcile.c:1389
 msgid "Are you sure you want to delete the selected transaction?"
@@ -6317,16 +6307,12 @@ msgid "The file could not be reopened."
 msgstr "Failu nevar atvērt atkārtoti."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1094
-#, fuzzy
-#| msgid "Reading file..."
 msgid "Reading file…"
-msgstr "Lasa failu..."
+msgstr "Lasa failu…"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1117
-#, fuzzy
-#| msgid "Parsing file..."
 msgid "Parsing file…"
-msgstr "Analizē failu..."
+msgstr "Analizē failu…"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1124
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:423
@@ -6336,10 +6322,8 @@ msgstr "Kļūda analizējot failu."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1149
 #: gnucash/gnome-utils/gnc-file.c:1429 gnucash/gnome-utils/gnc-file.c:1668
-#, fuzzy
-#| msgid "Writing file..."
 msgid "Writing file…"
-msgstr "Raksta failu..."
+msgstr "Raksta failu…"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1307
 msgid "This encoding has been added to the list already."
@@ -7498,22 +7482,16 @@ msgid "_Quit"
 msgstr "_Iziet"
 
 #: gnucash/gnome-utils/gnc-file.c:973 gnucash/gnome-utils/gnc-file.c:993
-#, fuzzy
-#| msgid "Loading user data..."
 msgid "Loading user data…"
-msgstr "Ielādē lietotāja datus..."
+msgstr "Ielādē lietotāja datus…"
 
 #: gnucash/gnome-utils/gnc-file.c:1009
-#, fuzzy
-#| msgid "Re-saving user data..."
 msgid "Re-saving user data…"
-msgstr "Pārsaglabā lietotāja datus..."
+msgstr "Pārsaglabā lietotāja datus…"
 
 #: gnucash/gnome-utils/gnc-file.c:1369
-#, fuzzy
-#| msgid "Exporting file..."
 msgid "Exporting file…"
-msgstr "Eksportē failu..."
+msgstr "Eksportē failu…"
 
 #: gnucash/gnome-utils/gnc-file.c:1382
 #, c-format
@@ -7841,10 +7819,8 @@ msgid "Report with GUID '%s' is missing"
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-splash.c:113
-#, fuzzy
-#| msgid "Loading..."
 msgid "Loading…"
-msgstr "Lādē..."
+msgstr "Lādē…"
 
 #: gnucash/gnome-utils/gnc-sx-list-tree-model-adapter.c:515
 msgid "never"
@@ -8448,22 +8424,16 @@ msgid "[datafile]"
 msgstr "[datufails]"
 
 #: gnucash/gnucash.cpp:174
-#, fuzzy
-#| msgid "Checking Finance::Quote..."
 msgid "Checking Finance::Quote…"
-msgstr "Pārbaudīt Finanses::Kvota..."
+msgstr "Pārbaudīt Finanses::Kvota…"
 
 #: gnucash/gnucash.cpp:185
-#, fuzzy
-#| msgid "Checking Finance::Quote..."
 msgid "Unable to load Finance::Quote."
 msgstr "Pārbaudīt Finanses::Kvota..."
 
 #: gnucash/gnucash.cpp:196
-#, fuzzy
-#| msgid "Loading data..."
 msgid "Loading data…"
-msgstr "Ielādē datus..."
+msgstr "Ielādē datus…"
 
 #: gnucash/gnucash.cpp:268
 #, fuzzy
@@ -8826,7 +8796,7 @@ msgstr "Vienības, kurās norāda pielāgotās koordinātes"
 #| msgid ""
 #| "Units in which the custom coordinates are expressed (inches, mm, ...)."
 msgid "Units in which the custom coordinates are expressed (inches, mm, …)."
-msgstr "Vienības, kurās norāda pielāgotās koordinātes (collas, mm, ...)."
+msgstr "Vienības, kurās norāda pielāgotās koordinātes (collas, mm, …)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:35
 msgid "Position of payee name"
@@ -11240,10 +11210,8 @@ msgid "Choose File Name for Export"
 msgstr "Izvēlēties eksportējamā faila nosaukumu"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:712
-#, fuzzy
-#| msgid "Export Now..."
 msgid "Export Now…"
-msgstr "Eksportēt tagad..."
+msgstr "Eksportēt tagad…"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:720
 msgid "Summary"
@@ -11673,10 +11641,8 @@ msgstr "Kļūdas teksts."
 #: gnucash/gtkbuilder/assistant-qif-import.glade:603
 #: gnucash/gtkbuilder/assistant-qif-import.glade:734
 #: gnucash/gtkbuilder/assistant-qif-import.glade:863
-#, fuzzy
-#| msgid "Change GnuCash _Account..."
 msgid "Change GnuCash _Account…"
-msgstr "Mainīt GnuCash _kontu..."
+msgstr "Mainīt GnuCash _kontu…"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1044
 #, fuzzy
@@ -13197,7 +13163,7 @@ msgstr ""
 #: gnucash/report/trep-engine.scm:69
 #, fuzzy
 msgid "Filter By…"
-msgstr "Atlasīt pēc..."
+msgstr "Atlasīt pēc…"
 
 #: gnucash/gtkbuilder/dialog-account.glade:922
 msgid "_Default"
@@ -13937,10 +13903,8 @@ msgid "Warning: Finance::Quote not installed properly."
 msgstr "Uzmanību: Finanses::Kvota nav pareizi uzstādīta."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:713
-#, fuzzy
-#| msgid "Select user information here..."
 msgid "Select user information here…"
-msgstr "Izvēlēties lietotāja informāciju..."
+msgstr "Izvēlēties lietotāja informāciju…"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:187
 msgid ""
@@ -14519,10 +14483,8 @@ msgid "Please select or create an appropriate GnuCash account for:"
 msgstr "Izvēlieties vai izveidojiet piemērotu GnuCash kontu priekš:"
 
 #: gnucash/gtkbuilder/dialog-import.glade:99
-#, fuzzy
-#| msgid "Online account ID here..."
 msgid "Online account ID here…"
-msgstr "Tiešsaistes konta ID šeit..."
+msgstr "Tiešsaistes konta ID šeit…"
 
 #: gnucash/gtkbuilder/dialog-import.glade:170
 #: gnucash/gtkbuilder/dialog-import.glade:278
@@ -16317,10 +16279,8 @@ msgid "Custom format"
 msgstr "Pielāgots formāts"
 
 #: gnucash/gtkbuilder/dialog-progress.glade:12
-#, fuzzy
-#| msgid "Working..."
 msgid "Working…"
-msgstr "Strādā..."
+msgstr "Strādā…"
 
 #: gnucash/gtkbuilder/dialog-report.glade:55
 msgid "<b>A_vailable reports</b>"
@@ -16347,8 +16307,6 @@ msgid "Move dow_n"
 msgstr "Iet uz _leju"
 
 #: gnucash/gtkbuilder/dialog-report.glade:189
-#, fuzzy
-#| msgid "Si_ze..."
 msgid "Si_ze…"
 msgstr "_Lielums"
 
@@ -16430,7 +16388,7 @@ msgstr "Īslaicīgi brīdinājumi"
 #: gnucash/gtkbuilder/dialog-search.glade:37
 #, fuzzy
 msgid "_New item…"
-msgstr "_Pievienot jaunu..."
+msgstr "_Pievienot jaunu…"
 
 #: gnucash/gtkbuilder/dialog-search.glade:82
 msgid "_Find"
@@ -16517,10 +16475,8 @@ msgid "Make Scheduled Transaction"
 msgstr "Izveidot plānoto grāmatojumu"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:159
-#, fuzzy
-#| msgid "Advanced..."
 msgid "Advanced…"
-msgstr "Papildus..."
+msgstr "Papildus…"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:310
 msgid "Never End"
@@ -16661,10 +16617,8 @@ msgid "Template Transaction"
 msgstr "Grāmatojuma veidne"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1476
-#, fuzzy
-#| msgid "Since Last Run..."
 msgid "Since Last Run…"
-msgstr "Kopš pēdējās palaišanas..."
+msgstr "Kopš pēdējās palaišanas…"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1592
 msgid "_Review created transactions"
@@ -17488,10 +17442,8 @@ msgstr "Papildu piezīmes"
 
 #. Filter register by… Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:13
-#, fuzzy
-#| msgid "Filter register by..."
 msgid "Filter register by…"
-msgstr "Atlasīt reģistru pēc..."
+msgstr "Atlasīt reģistru pēc…"
 
 #. Filter By Dialog, Date Tab
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:80
@@ -17556,10 +17508,8 @@ msgstr "Dzēst pašreizējo ierakstu"
 
 #. Sort register by Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:770
-#, fuzzy
-#| msgid "Sort register by..."
 msgid "Sort register by…"
-msgstr "Kārtot reģistru pēc..."
+msgstr "Kārtot reģistru pēc…"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:833
 msgid "_Standard Order"
@@ -18768,10 +18718,8 @@ msgid "The list of Scheduled Transactions"
 msgstr "Plānoto grāmatojumu saraksts"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:23
-#, fuzzy
-#| msgid "Get _Transactions..."
 msgid "Get _Transactions…"
-msgstr "Iegūt _grāmatojumus..."
+msgstr "Iegūt _grāmatojumus…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:25
 msgid "Get the transactions online through Online Banking"
@@ -18781,7 +18729,7 @@ msgstr "Nogādāt grāmatojumus tiešsaistē, lietojot tiešsaistes banku"
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:31
 #, fuzzy
 msgid "Issue _SEPA Transaction…"
-msgstr "Izdot SEPA _grāmatojumu..."
+msgstr "Izdot SEPA _grāmatojumu…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:33
 msgid ""
@@ -18794,7 +18742,7 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:36
 #, fuzzy
 msgid "Issue SEPA I_nternal Transaction…"
-msgstr "Izdot SEPA _grāmatojumu..."
+msgstr "Izdot SEPA _grāmatojumu…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:38
 #, fuzzy
@@ -18811,7 +18759,7 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:41
 #, fuzzy
 msgid "_Internal Transaction…"
-msgstr "I_ekšējais grāmatojums..."
+msgstr "I_ekšējais grāmatojums…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:43
 msgid "Issue a new bank-internal transaction online through Online Banking"
@@ -18821,7 +18769,7 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:46
 #, fuzzy
 msgid "Issue SEPA Direct _Debit…"
-msgstr "Izdot SEPA tiešo _debetu..."
+msgstr "Izdot SEPA tiešo _debetu…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:48
 msgid ""
@@ -18842,10 +18790,8 @@ msgid "Show the online banking log window"
 msgstr "Rādīt tiešsaistes bankas logu."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:63
-#, fuzzy
-#| msgid "_Online Banking Setup..."
 msgid "_Online Banking Setup…"
-msgstr "_Tiešsaistes bankas iestatījums..."
+msgstr "_Tiešsaistes bankas iestatījums…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:65
 msgid ""
@@ -18996,7 +18942,7 @@ msgstr ""
 #: gnucash/import-export/bi-import/dialog-bi-import.c:645
 #, fuzzy
 msgid "Processing…"
-msgstr "_Apstrādāt maksājumu..."
+msgstr "_Apstrādāt maksājumu…"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:714
 #, fuzzy, c-format
@@ -20284,10 +20230,8 @@ msgid "Select one or multiple OFX/QFX file(s) to process"
 msgstr "Izvēlēties OFX/QFX failu apstrādei"
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.ui:6
-#, fuzzy
-#| msgid "Import _OFX/QFX..."
 msgid "Import _OFX/QFX…"
-msgstr "Importēt _OFX/QFX..."
+msgstr "Importēt _OFX/QFX…"
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.ui:8
 msgid "Process an OFX/QFX response file"
@@ -21020,10 +20964,8 @@ msgid "Enter the Discount Percent"
 msgstr "Ievadiet atlaides procentus"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:609
-#, fuzzy
-#| msgid "Enter the Discount ... unknown type"
 msgid "Enter the Discount … unknown type"
-msgstr "Ievadiet atlaidi ... nezināms veids"
+msgstr "Ievadiet atlaidi … nezināms veids"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:627
 msgid "Discount Type: Monetary Value"
@@ -26321,10 +26263,8 @@ msgstr "Summa apmaksai"
 # procesā; izstrādes, apmaksas stadijā
 #: gnucash/report/reports/standard/invoice.scm:560
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:225
-#, fuzzy
-#| msgid "Invoice in progress..."
 msgid "Invoice in progress…"
-msgstr "Rēķins progresā..."
+msgstr "Rēķins progresā…"
 
 #: gnucash/report/reports/standard/invoice.scm:568
 #, fuzzy
@@ -27738,16 +27678,12 @@ msgid "Credit Lines"
 msgstr "Kredītlīnijas"
 
 #: gnucash/report/report-utilities.scm:639
-#, fuzzy, scheme-format
-#| msgid "Building '~a' report ..."
 msgid "Building '~a' report …"
-msgstr "Veido '~a' pārskatu ..."
+msgstr "Veido '~a' pārskatu …"
 
 #: gnucash/report/report-utilities.scm:645
-#, fuzzy, scheme-format
-#| msgid "Rendering '~a' report ..."
 msgid "Rendering '~a' report …"
-msgstr "Atveido '~a' pārskatu ..."
+msgstr "Atveido '~a' pārskatu …"
 
 #: gnucash/report/report-utilities.scm:647
 #, fuzzy
@@ -28726,8 +28662,6 @@ msgid "_File"
 msgstr "_Fails"
 
 #: gnucash/ui/gnc-main-window.ui:40
-#, fuzzy
-#| msgid "Pa_ge Setup..."
 msgid "Pa_ge Setup"
 msgstr "La_pas iestatījumi..."
 
@@ -29081,20 +29015,16 @@ msgid "_Scheduled Transaction Editor"
 msgstr "_Plānoto grāmatojumu redaktors"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:89
-#, fuzzy
-#| msgid "Since _Last Run..."
 msgid "Since _Last Run…"
-msgstr "_Kopš pēdējās palaišanas..."
+msgstr "_Kopš pēdējās palaišanas…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:91
 msgid "Create Scheduled Transactions since the last time run"
 msgstr "Izveidot plānotos grāmatojumus, kopš pēdējās palaišanas"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:94
-#, fuzzy
-#| msgid "_Mortgage & Loan Repayment..."
 msgid "_Mortgage & Loan Repayment…"
-msgstr "_Hipotēka un aizņēmuma atmaksa..."
+msgstr "_Hipotēka un aizņēmuma atmaksa…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:96
 msgid "Setup scheduled transactions for repayment of a loan"
@@ -29450,20 +29380,16 @@ msgid "Initialize Test Data"
 msgstr "Uzsākt datu pārbaudi"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:6
-#, fuzzy
-#| msgid "Export Account T_ree to CSV..."
 msgid "Export Account T_ree to CSV…"
-msgstr "Eksportēt kontu _koku CSV..."
+msgstr "Eksportēt kontu _koku CSV…"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:8
 msgid "Export the Account Tree to a CSV file"
 msgstr "Eksportēt kontu hierarhiju CSV failā"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:11
-#, fuzzy
-#| msgid "Export _Transactions to CSV..."
 msgid "Export _Transactions to CSV…"
-msgstr "Eksportēt _grāmatojumus CSV..."
+msgstr "Eksportēt _grāmatojumus CSV…"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:13
 msgid "Export the Transactions to a CSV file"
@@ -29472,27 +29398,23 @@ msgstr "Eksportēt grāmatojumus CSV failā"
 #: gnucash/ui/gnc-plugin-csv-export.ui:16
 #, fuzzy
 msgid "Export A_ctive Register to CSV…"
-msgstr "Eksportē aktīvo reģistru CSV..."
+msgstr "Eksportē aktīvo reģistru CSV…"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:18
 msgid "Export the Active Register to a CSV file"
 msgstr "Eksportēt aktīvo reģistru CSV failā"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:6
-#, fuzzy
-#| msgid "Import _Accounts from CSV..."
 msgid "Import _Accounts from CSV…"
-msgstr "Importēt _kontus no CSV..."
+msgstr "Importēt _kontus no CSV…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:8
 msgid "Import Accounts from a CSV file"
 msgstr "Import kontus no CSV faila"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:11
-#, fuzzy
-#| msgid "Import _Transactions from CSV..."
 msgid "Import _Transactions from CSV…"
-msgstr "Importēt _grāmatojumus no CSV faila...."
+msgstr "Importēt _grāmatojumus no CSV faila.…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:13
 msgid "Import Transactions from a CSV file"
@@ -29519,10 +29441,8 @@ msgid "Import Customers and Vendors from a CSV text file"
 msgstr "Importēt klientus un piegādātājus no teksta faila"
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:6
-#, fuzzy
-#| msgid "_Replay GnuCash .log file..."
 msgid "_Replay GnuCash .log file…"
-msgstr "_Atskaņot GnuCash žurnāla failu..."
+msgstr "_Atskaņot GnuCash žurnāla failu…"
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:8
 #, fuzzy
@@ -29576,10 +29496,8 @@ msgid "Cascade selected properties for account"
 msgstr "Lūdzu izvēlieties konta kolonnu."
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:43
-#, fuzzy
-#| msgid "_Renumber Subaccounts..."
 msgid "_Renumber Subaccounts…"
-msgstr "_Pārnumurēt subkontus..."
+msgstr "_Pārnumurēt subkontus…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:45
 msgid "Renumber the children of the selected account"
@@ -29616,7 +29534,7 @@ msgstr "Atvērt izvēlēto kontu un visus tā subkontus"
 #: gnucash/ui/gnc-plugin-page-register.ui:353
 #, fuzzy
 msgid "_Filter By…"
-msgstr "Atlasīt pēc..."
+msgstr "Atlasīt pēc…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:98
 #: gnucash/ui/gnc-plugin-page-budget.ui:87
@@ -29643,10 +29561,8 @@ msgid "Create a new Account"
 msgstr "Izveidot jaunu kontu"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:116
-#, fuzzy
-#| msgid "New Account _Hierarchy..."
 msgid "New Account _Hierarchy…"
-msgstr "Jauna kontu _hierarhija..."
+msgstr "Jauna kontu _hierarhija…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:118
 msgid "Extend the current book by merging with new account type categories"
@@ -29701,10 +29617,8 @@ msgstr "Ierakstīt akciju sadalīšanu vai sapludināšanu"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:156
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:259
 #: gnucash/ui/gnc-plugin-page-register.ui:260
-#, fuzzy
-#| msgid "View _Lots..."
 msgid "View _Lots…"
-msgstr "Ska_tīt partijas..."
+msgstr "Ska_tīt partijas…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:158
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:261
@@ -30074,10 +29988,8 @@ msgstr "_Drukāt čekus"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:15
 #: gnucash/ui/gnc-plugin-page-register.ui:445
-#, fuzzy
-#| msgid "Assign as payment..."
 msgid "Assign as payment…"
-msgstr "_Piešķirt kā maksājumu..."
+msgstr "_Piešķirt kā maksājumu…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:17
 #: gnucash/ui/gnc-plugin-page-register.ui:447
@@ -30088,7 +30000,7 @@ msgstr "Piešķirt izvēlēto darījumu kā maksājumu"
 #: gnucash/ui/gnc-plugin-page-register.ui:451
 #, fuzzy
 msgid "Edit payment…"
-msgstr "_Piešķirt kā maksājumu..."
+msgstr "_Piešķirt kā maksājumu…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:24
 #: gnucash/ui/gnc-plugin-page-register.ui:453
@@ -30264,10 +30176,8 @@ msgstr "Kārtot pēc"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:269
-#, fuzzy
-#| msgid "_Print Report..."
 msgid "_Print Report…"
-msgstr "_Drukāt pārskatu..."
+msgstr "_Drukāt pārskatu…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:9
 #: gnucash/ui/gnc-plugin-page-report.ui:271
@@ -30286,10 +30196,8 @@ msgstr "Rediģēt pārskata stila lapas"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:25
 #: gnucash/ui/gnc-plugin-page-report.ui:284
-#, fuzzy
-#| msgid "Export as P_DF..."
 msgid "Export as P_DF…"
-msgstr "Eksportēt kā P_DF..."
+msgstr "Eksportēt kā P_DF…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:27
 #: gnucash/ui/gnc-plugin-page-report.ui:286
@@ -30380,10 +30288,8 @@ msgid "Delete the selected scheduled transaction"
 msgstr "Dzēst izvēlēto plānoto grāmatojumu"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:6
-#, fuzzy
-#| msgid "Import _QIF..."
 msgid "Import _QIF…"
-msgstr "Importēt _QIF..."
+msgstr "Importēt _QIF…"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:8
 msgid "Import a Quicken QIF file"
@@ -30407,10 +30313,8 @@ msgid "_Reconcile"
 msgstr "_Saskaņot"
 
 #: gnucash/ui/gnc-reconcile-window.ui:8
-#, fuzzy
-#| msgid "_Reconcile Information..."
 msgid "_Reconcile Information…"
-msgstr "_Saskaņot informāciju..."
+msgstr "_Saskaņot informāciju…"
 
 #: gnucash/ui/gnc-reconcile-window.ui:14 gnucash/ui/gnc-reconcile-window.ui:247
 msgid "_Finish"

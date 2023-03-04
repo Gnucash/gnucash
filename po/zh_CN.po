@@ -4953,16 +4953,12 @@ msgstr "新交易信息"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:3968
-#, fuzzy, c-format
-#| msgid "Sort %s by..."
 msgid "Sort %s by…"
 msgstr "排序 %s"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:4058
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1175
-#, fuzzy, c-format
-#| msgid "Filter %s by..."
 msgid "Filter %s by…"
 msgstr "筛选 %s"
 
@@ -5012,8 +5008,6 @@ msgstr "保存模板"
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As…"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.cpp:231
-#, fuzzy
-#| msgid "Save Config As..."
 msgid "Save Config As…"
 msgstr "另存模板"
 
@@ -5047,10 +5041,8 @@ msgstr "保存模板(_R)"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1275
 #: gnucash/ui/gnc-plugin-page-report.ui:239
-#, fuzzy
-#| msgid "Save Report Configuration As..."
 msgid "Save Report Configuration As…"
-msgstr "另存模板..."
+msgstr "另存模板…"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1550
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1583
@@ -5643,16 +5635,12 @@ msgstr "付款至"
 
 #: gnucash/gnome/window-reconcile.c:785
 #: gnucash/gtkbuilder/window-reconcile.glade:215
-#, fuzzy
-#| msgid "Enter _Interest Payment..."
 msgid "Enter _Interest Payment…"
-msgstr "利息(_I)..."
+msgstr "利息(_I)…"
 
 #: gnucash/gnome/window-reconcile.c:787
-#, fuzzy
-#| msgid "Enter _Interest Charge..."
 msgid "Enter _Interest Charge…"
-msgstr "欠款利息(_I)..."
+msgstr "欠款利息(_I)…"
 
 #: gnucash/gnome/window-reconcile.c:1389
 msgid "Are you sure you want to delete the selected transaction?"
@@ -6088,16 +6076,12 @@ msgid "The file could not be reopened."
 msgstr "不能重新打开文件。"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1094
-#, fuzzy
-#| msgid "Reading file..."
 msgid "Reading file…"
-msgstr "正在读取文件..."
+msgstr "正在读取文件…"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1117
-#, fuzzy
-#| msgid "Parsing file..."
 msgid "Parsing file…"
-msgstr "正在解析文件..."
+msgstr "正在解析文件…"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1124
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:423
@@ -6107,10 +6091,8 @@ msgstr "解析文件时遇到错误。"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1149
 #: gnucash/gnome-utils/gnc-file.c:1429 gnucash/gnome-utils/gnc-file.c:1668
-#, fuzzy
-#| msgid "Writing file..."
 msgid "Writing file…"
-msgstr "正在写入文件..."
+msgstr "正在写入文件…"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1307
 msgid "This encoding has been added to the list already."
@@ -7195,22 +7177,16 @@ msgid "_Quit"
 msgstr "退出(_Q)"
 
 #: gnucash/gnome-utils/gnc-file.c:973 gnucash/gnome-utils/gnc-file.c:993
-#, fuzzy
-#| msgid "Loading user data..."
 msgid "Loading user data…"
-msgstr "正在加载用户数据..."
+msgstr "正在加载用户数据…"
 
 #: gnucash/gnome-utils/gnc-file.c:1009
-#, fuzzy
-#| msgid "Re-saving user data..."
 msgid "Re-saving user data…"
-msgstr "正在加载用户数据..."
+msgstr "正在加载用户数据…"
 
 #: gnucash/gnome-utils/gnc-file.c:1369
-#, fuzzy
-#| msgid "Exporting file..."
 msgid "Exporting file…"
-msgstr "导出文件..."
+msgstr "导出文件…"
 
 #: gnucash/gnome-utils/gnc-file.c:1382
 #, c-format
@@ -7529,10 +7505,8 @@ msgid "Report with GUID '%s' is missing"
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-splash.c:113
-#, fuzzy
-#| msgid "Loading..."
 msgid "Loading…"
-msgstr "正在加载..."
+msgstr "正在加载…"
 
 #: gnucash/gnome-utils/gnc-sx-list-tree-model-adapter.c:515
 msgid "never"
@@ -8127,22 +8101,16 @@ msgid "[datafile]"
 msgstr "[数据文件]"
 
 #: gnucash/gnucash.cpp:174
-#, fuzzy
-#| msgid "Checking Finance::Quote..."
 msgid "Checking Finance::Quote…"
-msgstr "检查 Finance::Quote..."
+msgstr "检查 Finance::Quote…"
 
 #: gnucash/gnucash.cpp:185
-#, fuzzy
-#| msgid "Checking Finance::Quote..."
 msgid "Unable to load Finance::Quote."
 msgstr "检查 Finance::Quote..."
 
 #: gnucash/gnucash.cpp:196
-#, fuzzy
-#| msgid "Loading data..."
 msgid "Loading data…"
-msgstr "正在装入数据..."
+msgstr "正在装入数据…"
 
 #: gnucash/gnucash.cpp:268
 msgid "Application Options"
@@ -8478,7 +8446,7 @@ msgstr "表示自定义坐标的单位"
 #| msgid ""
 #| "Units in which the custom coordinates are expressed (inches, mm, ...)."
 msgid "Units in which the custom coordinates are expressed (inches, mm, …)."
-msgstr "自定义坐标的单位（英寸，毫米，...）。"
+msgstr "自定义坐标的单位（英寸，毫米，…）。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:35
 msgid "Position of payee name"
@@ -10686,8 +10654,6 @@ msgid "Choose File Name for Export"
 msgstr "文件"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:712
-#, fuzzy
-#| msgid "Export Now..."
 msgid "Export Now…"
 msgstr "导出"
 
@@ -11103,10 +11069,8 @@ msgstr "错误文本。"
 #: gnucash/gtkbuilder/assistant-qif-import.glade:603
 #: gnucash/gtkbuilder/assistant-qif-import.glade:734
 #: gnucash/gtkbuilder/assistant-qif-import.glade:863
-#, fuzzy
-#| msgid "Change GnuCash _Account..."
 msgid "Change GnuCash _Account…"
-msgstr "更改 GnuCash 科目(_A)..."
+msgstr "更改 GnuCash 科目(_A)…"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1044
 msgid "Match Import and GnuCash accounts"
@@ -11890,16 +11854,12 @@ msgstr ""
 "如果您看到您的交易所没有列出，或者没有合适的选项，那么您可以输入一个新的。"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1008
-#, fuzzy
-#| msgid "Enter Information about..."
 msgid "Enter Information about…"
-msgstr "输入相关信息..."
+msgstr "输入相关信息…"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1034
-#, fuzzy
-#| msgid "All fields must be complete to continue..."
 msgid "All fields must be complete to continue…"
-msgstr "请输入所有字段以继续..."
+msgstr "请输入所有字段以继续…"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1051
 msgid "Tradable commodities"
@@ -13267,10 +13227,8 @@ msgid "Warning: Finance::Quote not installed properly."
 msgstr "警告：Finance::Quote 并未正确地安装。"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:713
-#, fuzzy
-#| msgid "Select user information here..."
 msgid "Select user information here…"
-msgstr "在此选择用户信息..."
+msgstr "在此选择用户信息…"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:187
 msgid ""
@@ -13818,10 +13776,8 @@ msgid "Please select or create an appropriate GnuCash account for:"
 msgstr "请选择或创建合适的科目："
 
 #: gnucash/gtkbuilder/dialog-import.glade:99
-#, fuzzy
-#| msgid "Online account ID here..."
 msgid "Online account ID here…"
-msgstr "网上账户编号于此..."
+msgstr "网上账户编号于此…"
 
 #: gnucash/gtkbuilder/dialog-import.glade:170
 #: gnucash/gtkbuilder/dialog-import.glade:278
@@ -15503,10 +15459,8 @@ msgid "Custom format"
 msgstr "自定义格式"
 
 #: gnucash/gtkbuilder/dialog-progress.glade:12
-#, fuzzy
-#| msgid "Working..."
 msgid "Working…"
-msgstr "正在进行..."
+msgstr "正在进行…"
 
 #: gnucash/gtkbuilder/dialog-report.glade:55
 msgid "<b>A_vailable reports</b>"
@@ -15533,10 +15487,8 @@ msgid "Move dow_n"
 msgstr "向下移动 (_N)"
 
 #: gnucash/gtkbuilder/dialog-report.glade:189
-#, fuzzy
-#| msgid "Si_ze..."
 msgid "Si_ze…"
-msgstr "大小(_Z)..."
+msgstr "大小(_Z)…"
 
 #: gnucash/gtkbuilder/dialog-report.glade:253
 msgid "HTML Style Sheets"
@@ -15700,10 +15652,8 @@ msgid "Make Scheduled Transaction"
 msgstr "建立计划交易事项"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:159
-#, fuzzy
-#| msgid "Advanced..."
 msgid "Advanced…"
-msgstr "高级..."
+msgstr "高级…"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:310
 msgid "Never End"
@@ -15838,10 +15788,8 @@ msgid "Template Transaction"
 msgstr "模板"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1476
-#, fuzzy
-#| msgid "Since Last Run..."
 msgid "Since Last Run…"
-msgstr "计划交易清单..."
+msgstr "计划交易清单…"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1592
 msgid "_Review created transactions"
@@ -16618,10 +16566,8 @@ msgid "Show Description"
 msgstr "描述"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:675
-#, fuzzy
-#| msgid "Note: Use View->'Filter By...' to control visible accounts."
 msgid "Note: Use View->'Filter By…' to control visible accounts."
-msgstr "注意：使用\"查看 -> 筛选... -> 其他\"显示隐藏科目。"
+msgstr "注意：使用\"查看 -> 筛选… -> 其他\"显示隐藏科目。"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:693
 msgid "Budget List"
@@ -16653,10 +16599,8 @@ msgstr "输入备注"
 
 #. Filter register by… Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:13
-#, fuzzy
-#| msgid "Filter register by..."
 msgid "Filter register by…"
-msgstr "筛选标签页..."
+msgstr "筛选标签页…"
 
 #. Filter By Dialog, Date Tab
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:80
@@ -16720,10 +16664,8 @@ msgstr "保留关联凭证的条目"
 
 #. Sort register by Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:770
-#, fuzzy
-#| msgid "Sort register by..."
 msgid "Sort register by…"
-msgstr "账簿排序按照..."
+msgstr "账簿排序按照…"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:833
 msgid "_Standard Order"
@@ -17863,10 +17805,8 @@ msgid "The list of Scheduled Transactions"
 msgstr "计划交易列表"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:23
-#, fuzzy
-#| msgid "Get _Transactions..."
 msgid "Get _Transactions…"
-msgstr "获取交易事项(_T)..."
+msgstr "获取交易事项(_T)…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:25
 msgid "Get the transactions online through Online Banking"
@@ -17874,10 +17814,8 @@ msgstr "通过网上银行取得交易事项"
 
 #. Translators: https://en.wikipedia.org/wiki/Single_Euro_Payments_Area
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:31
-#, fuzzy
-#| msgid "Issue _SEPA Transaction..."
 msgid "Issue _SEPA Transaction…"
-msgstr "发起SEPA交易(_S)..."
+msgstr "发起SEPA交易(_S)…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:33
 msgid ""
@@ -17886,10 +17824,8 @@ msgid ""
 msgstr "通过网上银行发起一个新的银行内部交易事项"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:36
-#, fuzzy
-#| msgid "Issue SEPA I_nternal Transaction..."
 msgid "Issue SEPA I_nternal Transaction…"
-msgstr "发起SEPA内部交易(_N)..."
+msgstr "发起SEPA内部交易(_N)…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:38
 msgid ""
@@ -17898,20 +17834,16 @@ msgid ""
 msgstr "通过网上银行发起一个新的 SEPA 交易"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:41
-#, fuzzy
-#| msgid "_Internal Transaction..."
 msgid "_Internal Transaction…"
-msgstr "内部交易(_I)..."
+msgstr "内部交易(_I)…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:43
 msgid "Issue a new bank-internal transaction online through Online Banking"
 msgstr "通过网上银行发起一个新的银行内部交易事项"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:46
-#, fuzzy
-#| msgid "Issue SEPA Direct _Debit..."
 msgid "Issue SEPA Direct _Debit…"
-msgstr "直接借记(_D)..."
+msgstr "直接借记(_D)…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:48
 msgid ""
@@ -17930,10 +17862,8 @@ msgid "Show the online banking log window"
 msgstr "显示网上银行日志窗口。"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:63
-#, fuzzy
-#| msgid "_Online Banking Setup..."
 msgid "_Online Banking Setup…"
-msgstr "网银设置(_O)..."
+msgstr "网银设置(_O)…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:65
 msgid ""
@@ -18010,10 +17940,8 @@ msgstr ""
 "式(称为“profiles”)，您可以在这里进行选择。"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:297
-#, fuzzy, c-format
-#| msgid "Validation...\n"
 msgid "Validation…\n"
-msgstr "验证...\n"
+msgstr "验证…\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:327
 #, c-format
@@ -19313,10 +19241,8 @@ msgid "Select one or multiple OFX/QFX file(s) to process"
 msgstr "选择一个或多个要处理的 OFX/QFX 文件"
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.ui:6
-#, fuzzy
-#| msgid "Import _OFX/QFX..."
 msgid "Import _OFX/QFX…"
-msgstr "OFX/QFX 文件(_O)..."
+msgstr "OFX/QFX 文件(_O)…"
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.ui:8
 msgid "Process an OFX/QFX response file"
@@ -20021,10 +19947,8 @@ msgid "Enter the Discount Percent"
 msgstr "输入折扣率"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:609
-#, fuzzy
-#| msgid "Enter the Discount ... unknown type"
 msgid "Enter the Discount … unknown type"
-msgstr "输入折扣 ... 未知类型"
+msgstr "输入折扣 … 未知类型"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:627
 msgid "Discount Type: Monetary Value"
@@ -24242,8 +24166,6 @@ msgid "Columns"
 msgstr "双列"
 
 #: gnucash/report/reports/standard/investment-lots.scm:42
-#, fuzzy
-#| msgid "Validation...\n"
 msgid "Validation"
 msgstr "验证...\n"
 
@@ -25092,10 +25014,8 @@ msgstr "应付"
 
 #: gnucash/report/reports/standard/invoice.scm:560
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:225
-#, fuzzy
-#| msgid "Invoice in progress..."
 msgid "Invoice in progress…"
-msgstr "发票处理中..."
+msgstr "发票处理中…"
 
 #: gnucash/report/reports/standard/invoice.scm:568
 msgid "Reference:"
@@ -26427,16 +26347,12 @@ msgid "Credit Lines"
 msgstr "信用额度"
 
 #: gnucash/report/report-utilities.scm:639
-#, fuzzy, scheme-format
-#| msgid "Building '~a' report ..."
 msgid "Building '~a' report …"
-msgstr "“~a”的报表创建中..."
+msgstr "“~a”的报表创建中…"
 
 #: gnucash/report/report-utilities.scm:645
-#, fuzzy, scheme-format
-#| msgid "Rendering '~a' report ..."
 msgid "Rendering '~a' report …"
-msgstr "“~a”的报表渲染中..."
+msgstr "“~a”的报表渲染中…"
 
 #: gnucash/report/report-utilities.scm:647
 msgid "Untitled"
@@ -26982,8 +26898,6 @@ msgid "Credit Accounts"
 msgstr "信用科目"
 
 #: gnucash/report/trep-engine.scm:528
-#, fuzzy
-#| msgid "Specify date to filter by..."
 msgid "Specify date to filter by…"
 msgstr "指定筛选日期的依据…"
 
@@ -27374,8 +27288,6 @@ msgid "_File"
 msgstr "文件(_F)"
 
 #: gnucash/ui/gnc-main-window.ui:40
-#, fuzzy
-#| msgid "Pa_ge Setup..."
 msgid "Pa_ge Setup"
 msgstr "页面设置(_G)..."
 
@@ -27727,20 +27639,16 @@ msgid "_Scheduled Transaction Editor"
 msgstr "编辑(_S)"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:89
-#, fuzzy
-#| msgid "Since _Last Run..."
 msgid "Since _Last Run…"
-msgstr "计划清单(_L)..."
+msgstr "计划清单(_L)…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:91
 msgid "Create Scheduled Transactions since the last time run"
 msgstr "创建尚未执行的计划交易"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:94
-#, fuzzy
-#| msgid "_Mortgage & Loan Repayment..."
 msgid "_Mortgage & Loan Repayment…"
-msgstr "按揭/还贷(_M)..."
+msgstr "按揭/还贷(_M)…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:96
 msgid "Setup scheduled transactions for repayment of a loan"
@@ -27805,10 +27713,8 @@ msgid "View the Tips of the Day"
 msgstr "查看每日提示"
 
 #: gnucash/ui/gnc-plugin-bi-import.ui:6
-#, fuzzy
-#| msgid "Import Bills & _Invoices..."
 msgid "Import Bills & _Invoices…"
-msgstr "发票账单(_I)..."
+msgstr "发票账单(_I)…"
 
 #: gnucash/ui/gnc-plugin-bi-import.ui:8
 msgid "Import bills and invoices from a CSV text file"
@@ -28095,50 +28001,40 @@ msgid "Initialize Test Data"
 msgstr "初始化测试数据"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:6
-#, fuzzy
-#| msgid "Export Account T_ree to CSV..."
 msgid "Export Account T_ree to CSV…"
-msgstr "科目(_R).csv..."
+msgstr "科目(_R).csv…"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:8
 msgid "Export the Account Tree to a CSV file"
 msgstr "将科目导出至 CSV 文件"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:11
-#, fuzzy
-#| msgid "Export _Transactions to CSV..."
 msgid "Export _Transactions to CSV…"
-msgstr "交易(_T).csv..."
+msgstr "交易(_T).csv…"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:13
 msgid "Export the Transactions to a CSV file"
 msgstr "将交易导出至 CSV 文件"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:16
-#, fuzzy
-#| msgid "Export A_ctive Register to CSV..."
 msgid "Export A_ctive Register to CSV…"
-msgstr "标签页交易(_C).csv..."
+msgstr "标签页交易(_C).csv…"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:18
 msgid "Export the Active Register to a CSV file"
 msgstr "将标签页交易导出至 CSV 文件"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:6
-#, fuzzy
-#| msgid "Import _Accounts from CSV..."
 msgid "Import _Accounts from CSV…"
-msgstr "科目(_A).csv..."
+msgstr "科目(_A).csv…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:8
 msgid "Import Accounts from a CSV file"
 msgstr "从 CSV 文件导入科目"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:11
-#, fuzzy
-#| msgid "Import _Transactions from CSV..."
 msgid "Import _Transactions from CSV…"
-msgstr "交易(_T).csv..."
+msgstr "交易(_T).csv…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:13
 msgid "Import Transactions from a CSV file"
@@ -28155,10 +28051,8 @@ msgid "Import Prices from a CSV file"
 msgstr "从 CSV 文件导入汇率"
 
 #: gnucash/ui/gnc-plugin-customer-import.ui:6
-#, fuzzy
-#| msgid "Import _Customers & Vendors..."
 msgid "Import _Customers & Vendors…"
-msgstr "客户和供应商(_C)..."
+msgstr "客户和供应商(_C)…"
 
 #: gnucash/ui/gnc-plugin-customer-import.ui:8
 #, fuzzy
@@ -28167,10 +28061,8 @@ msgid "Import Customers and Vendors from a CSV text file"
 msgstr "从 CSV 文件导入客户和供应商。"
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:6
-#, fuzzy
-#| msgid "_Replay GnuCash .log file..."
 msgid "_Replay GnuCash .log file…"
-msgstr "GnuCash.log(_R)..."
+msgstr "GnuCash.log(_R)…"
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:8
 #, fuzzy
@@ -28213,10 +28105,8 @@ msgstr "查找一个科目"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:37
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:222
-#, fuzzy
-#| msgid "_Cascade Account Properties..."
 msgid "_Cascade Account Properties…"
-msgstr "递归科目属性(_C)..."
+msgstr "递归科目属性(_C)…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:39
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:224
@@ -28224,10 +28114,8 @@ msgid "Cascade selected properties for account"
 msgstr "请选择有效的贷款科目"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:43
-#, fuzzy
-#| msgid "_Renumber Subaccounts..."
 msgid "_Renumber Subaccounts…"
-msgstr "重新编码子科目(_R)..."
+msgstr "重新编码子科目(_R)…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:45
 msgid "Renumber the children of the selected account"
@@ -28292,10 +28180,8 @@ msgid "Create a new Account"
 msgstr "新建一个科目"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:116
-#, fuzzy
-#| msgid "New Account _Hierarchy..."
 msgid "New Account _Hierarchy…"
-msgstr "新建层级科目(_H)..."
+msgstr "新建层级科目(_H)…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:118
 msgid "Extend the current book by merging with new account type categories"
@@ -28349,10 +28235,8 @@ msgstr "记录一次股票拆分或合并"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:156
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:259
 #: gnucash/ui/gnc-plugin-page-register.ui:260
-#, fuzzy
-#| msgid "View _Lots..."
 msgid "View _Lots…"
-msgstr "查看批次(_L)..."
+msgstr "查看批次(_L)…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:158
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:261
@@ -28439,10 +28323,8 @@ msgstr "全部科目(_L)"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:16
 #: gnucash/ui/gnc-plugin-page-budget.ui:225
-#, fuzzy
-#| msgid "Esti_mate Budget..."
 msgid "Esti_mate Budget…"
-msgstr "评估预算(_M)..."
+msgstr "评估预算(_M)…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:22
 #: gnucash/ui/gnc-plugin-page-budget.ui:240
@@ -28726,10 +28608,8 @@ msgstr "打印支票(_P)"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:15
 #: gnucash/ui/gnc-plugin-page-register.ui:445
-#, fuzzy
-#| msgid "Assign as payment..."
 msgid "Assign as payment…"
-msgstr "转为应收应付..."
+msgstr "转为应收应付…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:17
 #: gnucash/ui/gnc-plugin-page-register.ui:447
@@ -28738,10 +28618,8 @@ msgstr "将选定的交易调整为走应收应付"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:22
 #: gnucash/ui/gnc-plugin-page-register.ui:451
-#, fuzzy
-#| msgid "Edit payment..."
 msgid "Edit payment…"
-msgstr "编辑付款..."
+msgstr "编辑付款…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:24
 #: gnucash/ui/gnc-plugin-page-register.ui:453
@@ -28911,10 +28789,8 @@ msgstr "排序"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:269
-#, fuzzy
-#| msgid "_Print Report..."
 msgid "_Print Report…"
-msgstr "打印报表(_P)..."
+msgstr "打印报表(_P)…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:9
 #: gnucash/ui/gnc-plugin-page-report.ui:271
@@ -28933,10 +28809,8 @@ msgstr "编辑样式表"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:25
 #: gnucash/ui/gnc-plugin-page-report.ui:284
-#, fuzzy
-#| msgid "Export as P_DF..."
 msgid "Export as P_DF…"
-msgstr "导出为 PDF(_D)..."
+msgstr "导出为 PDF(_D)…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:27
 #: gnucash/ui/gnc-plugin-page-report.ui:286
@@ -29025,10 +28899,8 @@ msgid "Delete the selected scheduled transaction"
 msgstr "删除选中的计划交易"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:6
-#, fuzzy
-#| msgid "Import _QIF..."
 msgid "Import _QIF…"
-msgstr "QIF 文件(_Q)..."
+msgstr "QIF 文件(_Q)…"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:8
 msgid "Import a Quicken QIF file"
@@ -29051,10 +28923,8 @@ msgid "_Reconcile"
 msgstr "对账(_R)"
 
 #: gnucash/ui/gnc-reconcile-window.ui:8
-#, fuzzy
-#| msgid "_Reconcile Information..."
 msgid "_Reconcile Information…"
-msgstr "信息(_R)..."
+msgstr "信息(_R)…"
 
 #: gnucash/ui/gnc-reconcile-window.ui:14 gnucash/ui/gnc-reconcile-window.ui:247
 msgid "_Finish"

@@ -4949,18 +4949,14 @@ msgstr ""
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:3968
-#, fuzzy, c-format
-#| msgid "Sort %s by..."
 msgid "Sort %s by…"
-msgstr "Lajittele %s..."
+msgstr "Lajittele %s…"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:4058
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1175
-#, fuzzy, c-format
-#| msgid "Filter %s by..."
 msgid "Filter %s by…"
-msgstr "Suodata %s..."
+msgstr "Suodata %s…"
 
 #. Translators: %s refer to the following in
 #. order: invoice type, invoice ID, owner name,
@@ -5008,10 +5004,8 @@ msgstr "Tallenna asetukset"
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As…"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.cpp:231
-#, fuzzy
-#| msgid "Save Config As..."
 msgid "Save Config As…"
-msgstr "Tallenna asetukset nimellä..."
+msgstr "Tallenna asetukset nimellä…"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:232
 msgid "Make Pdf"
@@ -5047,10 +5041,8 @@ msgstr "Tallenna _raportin asetukset"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1275
 #: gnucash/ui/gnc-plugin-page-report.ui:239
-#, fuzzy
-#| msgid "Save Report Configuration As..."
 msgid "Save Report Configuration As…"
-msgstr "Tallenna raportin asetukset nimellä..."
+msgstr "Tallenna raportin asetukset nimellä…"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1550
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1583
@@ -5643,16 +5635,12 @@ msgstr "Maksu vastaanottajalle"
 
 #: gnucash/gnome/window-reconcile.c:785
 #: gnucash/gtkbuilder/window-reconcile.glade:215
-#, fuzzy
-#| msgid "Enter _Interest Payment..."
 msgid "Enter _Interest Payment…"
-msgstr "Syötä _korko..."
+msgstr "Syötä _korko…"
 
 #: gnucash/gnome/window-reconcile.c:787
-#, fuzzy
-#| msgid "Enter _Interest Charge..."
 msgid "Enter _Interest Charge…"
-msgstr "Syötä _korkoveloitus..."
+msgstr "Syötä _korkoveloitus…"
 
 #: gnucash/gnome/window-reconcile.c:1389
 msgid "Are you sure you want to delete the selected transaction?"
@@ -6070,16 +6058,12 @@ msgid "The file could not be reopened."
 msgstr "Tiedostoa ei voitu avata uudelleen."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1094
-#, fuzzy
-#| msgid "Reading file..."
 msgid "Reading file…"
-msgstr "Luetaan tiedostoa..."
+msgstr "Luetaan tiedostoa…"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1117
-#, fuzzy
-#| msgid "Parsing file..."
 msgid "Parsing file…"
-msgstr "Tulkitaan tiedostoa..."
+msgstr "Tulkitaan tiedostoa…"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1124
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:423
@@ -6089,10 +6073,8 @@ msgstr "Tiedoston tulkinnassa tapahtui virhe."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1149
 #: gnucash/gnome-utils/gnc-file.c:1429 gnucash/gnome-utils/gnc-file.c:1668
-#, fuzzy
-#| msgid "Writing file..."
 msgid "Writing file…"
-msgstr "Kirjoitetaan tiedostoa..."
+msgstr "Kirjoitetaan tiedostoa…"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1307
 msgid "This encoding has been added to the list already."
@@ -7165,22 +7147,16 @@ msgid "_Quit"
 msgstr "_Lopeta"
 
 #: gnucash/gnome-utils/gnc-file.c:973 gnucash/gnome-utils/gnc-file.c:993
-#, fuzzy
-#| msgid "Loading user data..."
 msgid "Loading user data…"
-msgstr "Ladataan käyttäjätietoja..."
+msgstr "Ladataan käyttäjätietoja…"
 
 #: gnucash/gnome-utils/gnc-file.c:1009
-#, fuzzy
-#| msgid "Re-saving user data..."
 msgid "Re-saving user data…"
-msgstr "Tallennetaan käyttäjätietoja..."
+msgstr "Tallennetaan käyttäjätietoja…"
 
 #: gnucash/gnome-utils/gnc-file.c:1369
-#, fuzzy
-#| msgid "Exporting file..."
 msgid "Exporting file…"
-msgstr "Viedään tiedostoa..."
+msgstr "Viedään tiedostoa…"
 
 #: gnucash/gnome-utils/gnc-file.c:1382
 #, c-format
@@ -7497,10 +7473,8 @@ msgid "Report with GUID '%s' is missing"
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-splash.c:113
-#, fuzzy
-#| msgid "Loading..."
 msgid "Loading…"
-msgstr "Ladataan..."
+msgstr "Ladataan…"
 
 #: gnucash/gnome-utils/gnc-sx-list-tree-model-adapter.c:515
 msgid "never"
@@ -8078,22 +8052,16 @@ msgid "[datafile]"
 msgstr ""
 
 #: gnucash/gnucash.cpp:174
-#, fuzzy
-#| msgid "Checking Finance::Quote..."
 msgid "Checking Finance::Quote…"
 msgstr "Tarkistetaan Finance::Quote…"
 
 #: gnucash/gnucash.cpp:185
-#, fuzzy
-#| msgid "Checking Finance::Quote..."
 msgid "Unable to load Finance::Quote."
 msgstr "Tarkistetaan Finance::Quote…"
 
 #: gnucash/gnucash.cpp:196
-#, fuzzy
-#| msgid "Loading data..."
 msgid "Loading data…"
-msgstr "Ladataan tietoja..."
+msgstr "Ladataan tietoja…"
 
 #: gnucash/gnucash.cpp:268
 msgid "Application Options"
@@ -10464,10 +10432,8 @@ msgid "Choose File Name for Export"
 msgstr "Valitse kohdetiedoston nimi"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:712
-#, fuzzy
-#| msgid "Export Now..."
 msgid "Export Now…"
-msgstr "Toteuta vienti..."
+msgstr "Toteuta vienti…"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:720
 msgid "Summary"
@@ -10781,10 +10747,8 @@ msgstr "Virheteksti."
 #: gnucash/gtkbuilder/assistant-qif-import.glade:603
 #: gnucash/gtkbuilder/assistant-qif-import.glade:734
 #: gnucash/gtkbuilder/assistant-qif-import.glade:863
-#, fuzzy
-#| msgid "Change GnuCash _Account..."
 msgid "Change GnuCash _Account…"
-msgstr "Muuta GnuCashin _tiliä..."
+msgstr "Muuta GnuCashin _tiliä…"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1044
 msgid "Match Import and GnuCash accounts"
@@ -11512,16 +11476,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1008
-#, fuzzy
-#| msgid "Enter Information about..."
 msgid "Enter Information about…"
-msgstr "Syötä tietoa..."
+msgstr "Syötä tietoa…"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1034
-#, fuzzy
-#| msgid "All fields must be complete to continue..."
 msgid "All fields must be complete to continue…"
-msgstr "Täytä kaikki kentät jatkaaksesi..."
+msgstr "Täytä kaikki kentät jatkaaksesi…"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1051
 msgid "Tradable commodities"
@@ -15113,10 +15073,8 @@ msgid "Custom format"
 msgstr "Mukautettu muoto"
 
 #: gnucash/gtkbuilder/dialog-progress.glade:12
-#, fuzzy
-#| msgid "Working..."
 msgid "Working…"
-msgstr "Käsitellään..."
+msgstr "Käsitellään…"
 
 #: gnucash/gtkbuilder/dialog-report.glade:55
 msgid "<b>A_vailable reports</b>"
@@ -15143,10 +15101,8 @@ msgid "Move dow_n"
 msgstr "Siirrä _alas"
 
 #: gnucash/gtkbuilder/dialog-report.glade:189
-#, fuzzy
-#| msgid "Si_ze..."
 msgid "Si_ze…"
-msgstr "_Koko..."
+msgstr "_Koko…"
 
 #: gnucash/gtkbuilder/dialog-report.glade:253
 msgid "HTML Style Sheets"
@@ -15311,10 +15267,8 @@ msgid "Make Scheduled Transaction"
 msgstr "Luo ajastettu tosite"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:159
-#, fuzzy
-#| msgid "Advanced..."
 msgid "Advanced…"
-msgstr "Lisäasetukset..."
+msgstr "Lisäasetukset…"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:310
 msgid "Never End"
@@ -15453,10 +15407,8 @@ msgid "Template Transaction"
 msgstr "Tositemalline"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1476
-#, fuzzy
-#| msgid "Since Last Run..."
 msgid "Since Last Run…"
-msgstr "Viime ajon jälkeen..."
+msgstr "Viime ajon jälkeen…"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1592
 msgid "_Review created transactions"
@@ -16268,10 +16220,8 @@ msgstr "Syötä muistiinpano"
 
 #. Filter register by… Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:13
-#, fuzzy
-#| msgid "Sort register by..."
 msgid "Filter register by…"
-msgstr "_Lajittele tilikirja..."
+msgstr "_Lajittele tilikirja…"
 
 #. Filter By Dialog, Date Tab
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:80
@@ -16333,10 +16283,8 @@ msgstr "Säilytä yhdistetyn asiakirjan tietue"
 
 #. Sort register by Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:770
-#, fuzzy
-#| msgid "Sort register by..."
 msgid "Sort register by…"
-msgstr "_Lajittele tilikirja..."
+msgstr "_Lajittele tilikirja…"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:833
 msgid "_Standard Order"
@@ -16681,8 +16629,6 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:170
-#, fuzzy
-#| msgid "_Online Banking Setup..."
 msgid "_Start AqBanking Setup"
 msgstr "_Verkkopankin määritys..."
 
@@ -17396,10 +17342,8 @@ msgid "The list of Scheduled Transactions"
 msgstr "Lista ajastetuista tositteista"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:23
-#, fuzzy
-#| msgid "Get _Transactions..."
 msgid "Get _Transactions…"
-msgstr "Hae _tositteet..."
+msgstr "Hae _tositteet…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:25
 msgid "Get the transactions online through Online Banking"
@@ -17407,10 +17351,8 @@ msgstr ""
 
 #. Translators: https://en.wikipedia.org/wiki/Single_Euro_Payments_Area
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:31
-#, fuzzy
-#| msgid "Issue _SEPA Transaction..."
 msgid "Issue _SEPA Transaction…"
-msgstr "Luo _SEPA-maksu..."
+msgstr "Luo _SEPA-maksu…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:33
 msgid ""
@@ -17419,10 +17361,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:36
-#, fuzzy
-#| msgid "Issue _SEPA Transaction..."
 msgid "Issue SEPA I_nternal Transaction…"
-msgstr "Luo _SEPA-maksu..."
+msgstr "Luo _SEPA-maksu…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:38
 msgid ""
@@ -17431,20 +17371,16 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:41
-#, fuzzy
-#| msgid "_Internal Transaction..."
 msgid "_Internal Transaction…"
-msgstr "S_isäinen tosite..."
+msgstr "S_isäinen tosite…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:43
 msgid "Issue a new bank-internal transaction online through Online Banking"
 msgstr ""
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:46
-#, fuzzy
-#| msgid "Issue SEPA Direct _Debit..."
 msgid "Issue SEPA Direct _Debit…"
-msgstr "Luo SEPA-suo_raveloitus..."
+msgstr "Luo SEPA-suo_raveloitus…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:48
 msgid ""
@@ -17463,10 +17399,8 @@ msgid "Show the online banking log window"
 msgstr "Näytä uusi käyttäjäikkuna"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:63
-#, fuzzy
-#| msgid "_Online Banking Setup..."
 msgid "_Online Banking Setup…"
-msgstr "_Verkkopankin määritys..."
+msgstr "_Verkkopankin määritys…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:65
 msgid ""
@@ -18780,10 +18714,8 @@ msgid "Select one or multiple OFX/QFX file(s) to process"
 msgstr ""
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.ui:6
-#, fuzzy
-#| msgid "Import _OFX/QFX..."
 msgid "Import _OFX/QFX…"
-msgstr "Tuo _OFX/QFX..."
+msgstr "Tuo _OFX/QFX…"
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.ui:8
 msgid "Process an OFX/QFX response file"
@@ -24542,10 +24474,8 @@ msgstr "Maksettava"
 
 #: gnucash/report/reports/standard/invoice.scm:560
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:225
-#, fuzzy
-#| msgid "Invoice in progress..."
 msgid "Invoice in progress…"
-msgstr "Lasku vaiheessa..."
+msgstr "Lasku vaiheessa…"
 
 #: gnucash/report/reports/standard/invoice.scm:568
 msgid "Reference:"
@@ -25867,16 +25797,12 @@ msgid "Credit Lines"
 msgstr ""
 
 #: gnucash/report/report-utilities.scm:639
-#, fuzzy, scheme-format
-#| msgid "Building '~a' report ..."
 msgid "Building '~a' report …"
-msgstr "Rakennetaan raporttia '~a' ..."
+msgstr "Rakennetaan raporttia '~a' …"
 
 #: gnucash/report/report-utilities.scm:645
-#, fuzzy, scheme-format
-#| msgid "Rendering '~a' report ..."
 msgid "Rendering '~a' report …"
-msgstr "Luodaan raportin '~a' näkymää ..."
+msgstr "Luodaan raportin '~a' näkymää …"
 
 #: gnucash/report/report-utilities.scm:647
 msgid "Untitled"
@@ -26812,8 +26738,6 @@ msgid "_File"
 msgstr "_Tiedosto"
 
 #: gnucash/ui/gnc-main-window.ui:40
-#, fuzzy
-#| msgid "Pa_ge Setup..."
 msgid "Pa_ge Setup"
 msgstr "S_ivun asetukset..."
 
@@ -27168,20 +27092,16 @@ msgid "_Scheduled Transaction Editor"
 msgstr "_Ajastettujen tositteiden muokkaus"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:89
-#, fuzzy
-#| msgid "Since _Last Run..."
 msgid "Since _Last Run…"
-msgstr "_Edellisen ajon jälkeen..."
+msgstr "_Edellisen ajon jälkeen…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:91
 msgid "Create Scheduled Transactions since the last time run"
 msgstr "Luo edellisen ajon jälkeen ajastetut tositteet"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:94
-#, fuzzy
-#| msgid "_Mortgage & Loan Repayment..."
 msgid "_Mortgage & Loan Repayment…"
-msgstr "_Lainan takaisinmaksu..."
+msgstr "_Lainan takaisinmaksu…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:96
 msgid "Setup scheduled transactions for repayment of a loan"
@@ -27246,10 +27166,8 @@ msgid "View the Tips of the Day"
 msgstr "Näytä päivän vinkit"
 
 #: gnucash/ui/gnc-plugin-bi-import.ui:6
-#, fuzzy
-#| msgid "Import Bills & _Invoices..."
 msgid "Import Bills & _Invoices…"
-msgstr "Tuo osto- ja myynti_laskut..."
+msgstr "Tuo osto- ja myynti_laskut…"
 
 #: gnucash/ui/gnc-plugin-bi-import.ui:8
 msgid "Import bills and invoices from a CSV text file"
@@ -27532,50 +27450,40 @@ msgid "Initialize Test Data"
 msgstr "Alusta testitiedot"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:6
-#, fuzzy
-#| msgid "Export Account T_ree to CSV..."
 msgid "Export Account T_ree to CSV…"
-msgstr "Vie _tilihierarkia CSV-tiedostoon..."
+msgstr "Vie _tilihierarkia CSV-tiedostoon…"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:8
 msgid "Export the Account Tree to a CSV file"
 msgstr "Vie tilihierarkia CSV-tiedostoon"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:11
-#, fuzzy
-#| msgid "Export _Transactions to CSV..."
 msgid "Export _Transactions to CSV…"
-msgstr "Vie _tositteet CSV-tiedostoon..."
+msgstr "Vie _tositteet CSV-tiedostoon…"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:13
 msgid "Export the Transactions to a CSV file"
 msgstr "Vie tositteet CSV-tiedostoon"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:16
-#, fuzzy
-#| msgid "Export A_ctive Register to CSV..."
 msgid "Export A_ctive Register to CSV…"
-msgstr "Vie t_ilikirja CSV-tiedostoon..."
+msgstr "Vie t_ilikirja CSV-tiedostoon…"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:18
 msgid "Export the Active Register to a CSV file"
 msgstr "Vie aktiivinen tilikirja CSV-tiedostoon"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:6
-#, fuzzy
-#| msgid "Import _Accounts from CSV..."
 msgid "Import _Accounts from CSV…"
-msgstr "Tuo _tilit CSV-tiedostosta..."
+msgstr "Tuo _tilit CSV-tiedostosta…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:8
 msgid "Import Accounts from a CSV file"
 msgstr "Tuo tilit CSV-tiedostosta"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:11
-#, fuzzy
-#| msgid "Import _Transactions from CSV..."
 msgid "Import _Transactions from CSV…"
-msgstr "Tuo t_ositteet CSV-tiedostosta..."
+msgstr "Tuo t_ositteet CSV-tiedostosta…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:13
 msgid "Import Transactions from a CSV file"
@@ -27592,10 +27500,8 @@ msgid "Import Prices from a CSV file"
 msgstr "Tuo hinnat CSV-tiedostosta"
 
 #: gnucash/ui/gnc-plugin-customer-import.ui:6
-#, fuzzy
-#| msgid "Import _Customers & Vendors..."
 msgid "Import _Customers & Vendors…"
-msgstr "Tuo _asiakkaat ja toimittajat..."
+msgstr "Tuo _asiakkaat ja toimittajat…"
 
 #: gnucash/ui/gnc-plugin-customer-import.ui:8
 #, fuzzy
@@ -27604,10 +27510,8 @@ msgid "Import Customers and Vendors from a CSV text file"
 msgstr "Tuo asiakkaat ja toimittajat CSV-tiedostosta."
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:6
-#, fuzzy
-#| msgid "_Replay GnuCash .log file..."
 msgid "_Replay GnuCash .log file…"
-msgstr "Tuo tapahtumat GnuCashin ._log-tiedostosta..."
+msgstr "Tuo tapahtumat GnuCashin ._log-tiedostosta…"
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:8
 #, fuzzy
@@ -27652,10 +27556,8 @@ msgstr "Etsi tili"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:37
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:222
-#, fuzzy
-#| msgid "_Cascade Account Properties..."
 msgid "_Cascade Account Properties…"
-msgstr "_Limitä tilin ominaisuudet..."
+msgstr "_Limitä tilin ominaisuudet…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:39
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:224
@@ -27663,10 +27565,8 @@ msgid "Cascade selected properties for account"
 msgstr ""
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:43
-#, fuzzy
-#| msgid "_Renumber Subaccounts..."
 msgid "_Renumber Subaccounts…"
-msgstr "_Uudelleennumeroi alatilit..."
+msgstr "_Uudelleennumeroi alatilit…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:45
 msgid "Renumber the children of the selected account"
@@ -27731,10 +27631,8 @@ msgid "Create a new Account"
 msgstr "Luo uusi tili"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:116
-#, fuzzy
-#| msgid "New Account _Hierarchy..."
 msgid "New Account _Hierarchy…"
-msgstr "Uusi tili_hierarkia..."
+msgstr "Uusi tili_hierarkia…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:118
 msgid "Extend the current book by merging with new account type categories"
@@ -27788,10 +27686,8 @@ msgstr "Merkitse osakejako tai osakkeiden yhdistäminen"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:156
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:259
 #: gnucash/ui/gnc-plugin-page-register.ui:260
-#, fuzzy
-#| msgid "View _Lots..."
 msgid "View _Lots…"
-msgstr "Näytä _erät..."
+msgstr "Näytä _erät…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:158
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:261
@@ -27882,10 +27778,8 @@ msgstr "Tarkista ja korjaa _kaikki"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:16
 #: gnucash/ui/gnc-plugin-page-budget.ui:225
-#, fuzzy
-#| msgid "Esti_mate Budget..."
 msgid "Esti_mate Budget…"
-msgstr "_Arvioi budjetti..."
+msgstr "_Arvioi budjetti…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:22
 #: gnucash/ui/gnc-plugin-page-budget.ui:240
@@ -28168,10 +28062,8 @@ msgstr "_Tulosta šekkejä"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:15
 #: gnucash/ui/gnc-plugin-page-register.ui:445
-#, fuzzy
-#| msgid "Assign as payment..."
 msgid "Assign as payment…"
-msgstr "Määritä maksuksi..."
+msgstr "Määritä maksuksi…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:17
 #: gnucash/ui/gnc-plugin-page-register.ui:447
@@ -28180,10 +28072,8 @@ msgstr "Määritä valittu tosite maksuksi"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:22
 #: gnucash/ui/gnc-plugin-page-register.ui:451
-#, fuzzy
-#| msgid "Edit payment..."
 msgid "Edit payment…"
-msgstr "Muokkaa maksua..."
+msgstr "Muokkaa maksua…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:24
 #: gnucash/ui/gnc-plugin-page-register.ui:453
@@ -28355,10 +28245,8 @@ msgstr "Järjestä"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:269
-#, fuzzy
-#| msgid "_Print Report..."
 msgid "_Print Report…"
-msgstr "_Tulosta raportti..."
+msgstr "_Tulosta raportti…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:9
 #: gnucash/ui/gnc-plugin-page-report.ui:271
@@ -28377,10 +28265,8 @@ msgstr "Muokkaa raportin tyyliä"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:25
 #: gnucash/ui/gnc-plugin-page-report.ui:284
-#, fuzzy
-#| msgid "Export as P_DF..."
 msgid "Export as P_DF…"
-msgstr "Vie P_DF:ksi..."
+msgstr "Vie P_DF:ksi…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:27
 #: gnucash/ui/gnc-plugin-page-report.ui:286
@@ -28471,10 +28357,8 @@ msgid "Delete the selected scheduled transaction"
 msgstr "Poista valittu ajastettu tosite"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:6
-#, fuzzy
-#| msgid "Import _QIF..."
 msgid "Import _QIF…"
-msgstr "Tuo _QIF-tiedosto..."
+msgstr "Tuo _QIF-tiedosto…"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:8
 msgid "Import a Quicken QIF file"

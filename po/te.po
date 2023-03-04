@@ -5115,18 +5115,14 @@ msgstr "లావాదేవీ సమాచారం"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:3968
-#, fuzzy, c-format
-#| msgid "Sort %s by..."
 msgid "Sort %s by…"
-msgstr "తో %s క్రమబద్ధీకరించు..."
+msgstr "తో %s క్రమబద్ధీకరించు…"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:4058
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1175
-#, fuzzy, c-format
-#| msgid "Filter %s by..."
 msgid "Filter %s by…"
-msgstr "తో %s వడబోయి..."
+msgstr "తో %s వడబోయి…"
 
 #. Translators: %s refer to the following in
 #. order: invoice type, invoice ID, owner name,
@@ -5178,7 +5174,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-report.cpp:231
 #, fuzzy
 msgid "Save Config As…"
-msgstr "భద్రపరచు రీతి..."
+msgstr "భద్రపరచు రీతి…"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:232
 msgid "Make Pdf"
@@ -5212,10 +5208,8 @@ msgstr "_నివేదిక ఆకృతీకరణను సేవ్ చ�
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1275
 #: gnucash/ui/gnc-plugin-page-report.ui:239
-#, fuzzy
-#| msgid "Save Report Configuration As..."
 msgid "Save Report Configuration As…"
-msgstr "నివేదిక ఆకృతీకరణను ...గా సేవ్ చేయి"
+msgstr "నివేదిక ఆకృతీకరణను …గా సేవ్ చేయి"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1550
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1583
@@ -5828,14 +5822,10 @@ msgstr "చెల్లింపుకు"
 
 #: gnucash/gnome/window-reconcile.c:785
 #: gnucash/gtkbuilder/window-reconcile.glade:215
-#, fuzzy
-#| msgid "Enter _Interest Payment..."
 msgid "Enter _Interest Payment…"
-msgstr "వడ్డీ రేటుని_ప్రవేశపెట్టు..."
+msgstr "వడ్డీ రేటుని_ప్రవేశపెట్టు…"
 
 #: gnucash/gnome/window-reconcile.c:787
-#, fuzzy
-#| msgid "Enter _Interest Charge..."
 msgid "Enter _Interest Charge…"
 msgstr "_వడ్డీ ఛార్జీని ప్రవేశపెట్టు…"
 
@@ -6274,16 +6264,12 @@ msgid "The file could not be reopened."
 msgstr "ఈ ఫైల్‌ మళ్ళీ తెరచుకోలేదు."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1094
-#, fuzzy
-#| msgid "Reading file..."
 msgid "Reading file…"
-msgstr "ఫైల్‌‌ను చదువుతోంది...."
+msgstr "ఫైల్‌‌ను చదువుతోంది.…"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1117
-#, fuzzy
-#| msgid "Parsing file..."
 msgid "Parsing file…"
-msgstr "ఫైల్‌‌ను విభజిస్తోంది...."
+msgstr "ఫైల్‌‌ను విభజిస్తోంది.…"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1124
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:423
@@ -6293,10 +6279,8 @@ msgstr "ఫైల్‌‌ను విడగొట్టేటప్పుడ�
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1149
 #: gnucash/gnome-utils/gnc-file.c:1429 gnucash/gnome-utils/gnc-file.c:1668
-#, fuzzy
-#| msgid "Writing file..."
 msgid "Writing file…"
-msgstr "ఫైల్‌ను రాస్తోంది..."
+msgstr "ఫైల్‌ను రాస్తోంది…"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1307
 msgid "This encoding has been added to the list already."
@@ -6604,7 +6588,7 @@ msgstr "తెరువు"
 #: gnucash/gnome-utils/dialog-file-access.c:309
 #, fuzzy
 msgid "Save As…"
-msgstr "భద్రపరచు రీతి..."
+msgstr "భద్రపరచు రీతి…"
 
 #: gnucash/gnome-utils/dialog-file-access.c:310
 #: gnucash/gnome-utils/dialog-file-access.c:319
@@ -7422,20 +7406,14 @@ msgid "_Quit"
 msgstr "_నిష్క్రమించు"
 
 #: gnucash/gnome-utils/gnc-file.c:973 gnucash/gnome-utils/gnc-file.c:993
-#, fuzzy
-#| msgid "Loading user data..."
 msgid "Loading user data…"
-msgstr "వాడుకరి డేటా లోడవుతోంది..."
+msgstr "వాడుకరి డేటా లోడవుతోంది…"
 
 #: gnucash/gnome-utils/gnc-file.c:1009
-#, fuzzy
-#| msgid "Re-saving user data..."
 msgid "Re-saving user data…"
 msgstr "వాడుకరి డేటాను తిరిగి భద్రపరచుతోంది."
 
 #: gnucash/gnome-utils/gnc-file.c:1369
-#, fuzzy
-#| msgid "Exporting file..."
 msgid "Exporting file…"
 msgstr "ఫైల్‌ ఎగుమతి అవుతోంది…"
 
@@ -7755,10 +7733,8 @@ msgid "Report with GUID '%s' is missing"
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-splash.c:113
-#, fuzzy
-#| msgid "Loading..."
 msgid "Loading…"
-msgstr "లోడవుతోంది...."
+msgstr "లోడవుతోంది.…"
 
 #: gnucash/gnome-utils/gnc-sx-list-tree-model-adapter.c:515
 msgid "never"
@@ -8354,22 +8330,16 @@ msgid "[datafile]"
 msgstr "[డేటాఫైల్]"
 
 #: gnucash/gnucash.cpp:174
-#, fuzzy
-#| msgid "Checking Finance::Quote..."
 msgid "Checking Finance::Quote…"
-msgstr "ఫైనాన్స్:: ధర అంచనా పరిశీలిస్తోంది..."
+msgstr "ఫైనాన్స్:: ధర అంచనా పరిశీలిస్తోంది…"
 
 #: gnucash/gnucash.cpp:185
-#, fuzzy
-#| msgid "Checking Finance::Quote..."
 msgid "Unable to load Finance::Quote."
 msgstr "ఫైనాన్స్:: ధర అంచనా పరిశీలిస్తోంది..."
 
 #: gnucash/gnucash.cpp:196
-#, fuzzy
-#| msgid "Loading data..."
 msgid "Loading data…"
-msgstr "డేటా లోడవుతోంది..."
+msgstr "డేటా లోడవుతోంది…"
 
 #: gnucash/gnucash.cpp:268
 #, fuzzy
@@ -8722,7 +8692,7 @@ msgstr "అనుకూల సమన్వయాలను వ్యక్తప�
 #| msgid ""
 #| "Units in which the custom coordinates are expressed (inches, mm, ...)."
 msgid "Units in which the custom coordinates are expressed (inches, mm, …)."
-msgstr "అనుకూల సమన్వయాలను వ్యక్తపరిచేందుకు ఉపయోగిస్తున్న యూనిట్లు (అంగుళాలు, మి.మీలు,....)"
+msgstr "అనుకూల సమన్వయాలను వ్యక్తపరిచేందుకు ఉపయోగిస్తున్న యూనిట్లు (అంగుళాలు, మి.మీలు,.…)"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:35
 msgid "Position of payee name"
@@ -11057,10 +11027,8 @@ msgid "Choose File Name for Export"
 msgstr "ఎగుమతి కోసం ఫైల్ పేరు ఎంచుకో"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:712
-#, fuzzy
-#| msgid "Export Now..."
 msgid "Export Now…"
-msgstr "ఇప్పుడు ఎగుమతి చేయి...."
+msgstr "ఇప్పుడు ఎగుమతి చేయి.…"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:720
 msgid "Summary"
@@ -11395,8 +11363,6 @@ msgstr "దోషం టెక్స్ట్."
 #: gnucash/gtkbuilder/assistant-qif-import.glade:603
 #: gnucash/gtkbuilder/assistant-qif-import.glade:734
 #: gnucash/gtkbuilder/assistant-qif-import.glade:863
-#, fuzzy
-#| msgid "Change GnuCash _Account..."
 msgid "Change GnuCash _Account…"
 msgstr "GnuCash _ఖాతాను మార్చు"
 
@@ -12890,7 +12856,7 @@ msgstr "ఒకటి లేదా ఎక్కువ ఉప-ఖాతాలు �
 #: gnucash/report/trep-engine.scm:69
 #, fuzzy
 msgid "Filter By…"
-msgstr "ద్వారా వడబోత..."
+msgstr "ద్వారా వడబోత…"
 
 #: gnucash/gtkbuilder/dialog-account.glade:922
 msgid "_Default"
@@ -13620,8 +13586,6 @@ msgid "Warning: Finance::Quote not installed properly."
 msgstr "హెచ్చరిక: ఆర్ధికం:: ధర అంచనా సరిగ్గా ప్రతిష్ఠాపించబడలేదు"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:713
-#, fuzzy
-#| msgid "Select user information here..."
 msgid "Select user information here…"
 msgstr "ఇక్కడ వాడుకరి సమాచారం ఎంచుకో…"
 
@@ -14196,8 +14160,6 @@ msgid "Please select or create an appropriate GnuCash account for:"
 msgstr "దీనికోసం దయచేసి తగిన GnuCash ఖాతా ఎంచుకో లేక సృష్టించు:"
 
 #: gnucash/gtkbuilder/dialog-import.glade:99
-#, fuzzy
-#| msgid "Online account ID here..."
 msgid "Online account ID here…"
 msgstr "ఆన్‌లైన్ ఖాతా ID ఇక్కడ…"
 
@@ -15964,10 +15926,8 @@ msgid "Custom format"
 msgstr "అనుకూల ఆకృతి"
 
 #: gnucash/gtkbuilder/dialog-progress.glade:12
-#, fuzzy
-#| msgid "Working..."
 msgid "Working…"
-msgstr "పనిచేస్తోంది..."
+msgstr "పనిచేస్తోంది…"
 
 #: gnucash/gtkbuilder/dialog-report.glade:55
 msgid "<b>A_vailable reports</b>"
@@ -15994,8 +15954,6 @@ msgid "Move dow_n"
 msgstr "_కిందకు తరలించు"
 
 #: gnucash/gtkbuilder/dialog-report.glade:189
-#, fuzzy
-#| msgid "Si_ze..."
 msgid "Si_ze…"
 msgstr "పరి_మాణం…"
 
@@ -16162,8 +16120,6 @@ msgid "Make Scheduled Transaction"
 msgstr "నిర్ధారిత లావాదేవీని తయారుచేయి"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:159
-#, fuzzy
-#| msgid "Advanced..."
 msgid "Advanced…"
 msgstr "ముందస్తుగా …"
 
@@ -16308,8 +16264,6 @@ msgid "Template Transaction"
 msgstr "టెంప్లేట్‌ లావాదేవీ"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1476
-#, fuzzy
-#| msgid "Since Last Run..."
 msgid "Since Last Run…"
 msgstr "చివరి అమలు నుంచి…"
 
@@ -17141,8 +17095,6 @@ msgstr "అదనపు గమనికలు"
 
 #. Filter register by… Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:13
-#, fuzzy
-#| msgid "Filter register by..."
 msgid "Filter register by…"
 msgstr "వడబోత రిజిష్టర్‌కి మూలం… "
 
@@ -17210,8 +17162,6 @@ msgstr "ప్రస్తుత నమోదును తొలగించు"
 
 #. Sort register by Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:770
-#, fuzzy
-#| msgid "Sort register by..."
 msgid "Sort register by…"
 msgstr "రిజిష్టర్‌ కూర్పుకు మూలం…"
 
@@ -18385,8 +18335,6 @@ msgid "The list of Scheduled Transactions"
 msgstr "నిర్ధారిత లావాదేవీల జాబితా "
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:23
-#, fuzzy
-#| msgid "Get _Transactions..."
 msgid "Get _Transactions…"
 msgstr "_లావాదేవీలు పొందు…"
 
@@ -18398,7 +18346,7 @@ msgstr "ఆన్‌లైన్ బ్యాంకింగ్ ద్వార�
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:31
 #, fuzzy
 msgid "Issue _SEPA Transaction…"
-msgstr "SEPA లావాదేవీని _జారీ చేయి...."
+msgstr "SEPA లావాదేవీని _జారీ చేయి.…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:33
 msgid ""
@@ -18409,7 +18357,7 @@ msgstr "ఆన్‌లైన్ బ్యాంకింగ్ ద్వార�
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:36
 #, fuzzy
 msgid "Issue SEPA I_nternal Transaction…"
-msgstr "SEPA లావాదేవీని _జారీ చేయి...."
+msgstr "SEPA లావాదేవీని _జారీ చేయి.…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:38
 #, fuzzy
@@ -18424,7 +18372,7 @@ msgstr "ఆన్‌లైన్ బ్యాంకింగ్ ద్వార�
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:41
 #, fuzzy
 msgid "_Internal Transaction…"
-msgstr "అం_తర్గత లావాదేవీ..."
+msgstr "అం_తర్గత లావాదేవీ…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:43
 msgid "Issue a new bank-internal transaction online through Online Banking"
@@ -18433,7 +18381,7 @@ msgstr "ఆన్‌లైన్ బ్యాంకింగ్ ద్వార�
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:46
 #, fuzzy
 msgid "Issue SEPA Direct _Debit…"
-msgstr "SEPA ప్రత్యక్ష డెబిట్‌ను _జారీ చేయి...."
+msgstr "SEPA ప్రత్యక్ష డెబిట్‌ను _జారీ చేయి.…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:48
 msgid ""
@@ -18452,10 +18400,8 @@ msgid "Show the online banking log window"
 msgstr "ఆన్‌లైన్ బ్యాంకింగ్ లాగ్ విండోను చూపించు"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:63
-#, fuzzy
-#| msgid "_Online Banking Setup..."
 msgid "_Online Banking Setup…"
-msgstr "_ఆన్‌లైన్ బ్యాంకింగ్ అమరిక..."
+msgstr "_ఆన్‌లైన్ బ్యాంకింగ్ అమరిక…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:65
 msgid ""
@@ -19850,10 +19796,8 @@ msgid "Select one or multiple OFX/QFX file(s) to process"
 msgstr "ప్రోసెస్‌కు OFX/QFX ఫైల్ ఎంచుకో"
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.ui:6
-#, fuzzy
-#| msgid "Import _OFX/QFX..."
 msgid "Import _OFX/QFX…"
-msgstr "_OFX/QFXను దిగుమతి చేసుకో..."
+msgstr "_OFX/QFXను దిగుమతి చేసుకో…"
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.ui:8
 msgid "Process an OFX/QFX response file"
@@ -20578,10 +20522,8 @@ msgid "Enter the Discount Percent"
 msgstr "తగ్గింపు శాతాన్ని ప్రవేశపెట్టు"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:609
-#, fuzzy
-#| msgid "Enter the Discount ... unknown type"
 msgid "Enter the Discount … unknown type"
-msgstr "తగ్గింపు శాతం...తెలియని రకం"
+msgstr "తగ్గింపు శాతం…తెలియని రకం"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:627
 msgid "Discount Type: Monetary Value"
@@ -25824,8 +25766,6 @@ msgstr "బాకీ మొత్తం"
 
 #: gnucash/report/reports/standard/invoice.scm:560
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:225
-#, fuzzy
-#| msgid "Invoice in progress..."
 msgid "Invoice in progress…"
 msgstr "ఇన్వాయిస్‌ పురోగమనంలో…"
 
@@ -28246,8 +28186,6 @@ msgid "_File"
 msgstr "_ఫైల్"
 
 #: gnucash/ui/gnc-main-window.ui:40
-#, fuzzy
-#| msgid "Pa_ge Setup..."
 msgid "Pa_ge Setup"
 msgstr "పే_జి అమరిక...."
 
@@ -28515,7 +28453,7 @@ msgstr "ఉనికిలోని GnuCash ఫైల్‌ను తెరు�
 #: gnucash/ui/gnc-plugin-basic-commands.ui:27
 #, fuzzy
 msgid "Save _As…"
-msgstr "భద్రపరచు రీతి..."
+msgstr "భద్రపరచు రీతి…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:30
 msgid "Save this file with a different name"
@@ -28555,7 +28493,7 @@ msgstr "ఖాతా వర్గక్రమాన్ని కొత్త Gnu
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:16
 #, fuzzy
 msgid "_Find…"
-msgstr "_వెతుకు..."
+msgstr "_వెతుకు…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:62
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:70
@@ -28598,8 +28536,6 @@ msgid "_Scheduled Transaction Editor"
 msgstr "_ నిర్ధారిత లావాదేవీల సవరణకర్త"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:89
-#, fuzzy
-#| msgid "Since _Last Run..."
 msgid "Since _Last Run…"
 msgstr "_చివరిసారి అమలు నుంచి…"
 
@@ -28608,8 +28544,6 @@ msgid "Create Scheduled Transactions since the last time run"
 msgstr "చివరి సారి అమలు నుంచి నిర్ధారిత లావాదేవీలు సృష్టించు"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:94
-#, fuzzy
-#| msgid "_Mortgage & Loan Repayment..."
 msgid "_Mortgage & Loan Repayment…"
 msgstr "తనఖా/ఋణం తిరిగి చెల్లింపు "
 
@@ -28967,20 +28901,16 @@ msgid "Initialize Test Data"
 msgstr "పరీక్ష సమాచారాన్ని ప్రారంభించు"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:6
-#, fuzzy
-#| msgid "Export Account T_ree to CSV..."
 msgid "Export Account T_ree to CSV…"
-msgstr "CSVకి ఖాతా వృ_క్షంను ఎగుమతి చేయి..."
+msgstr "CSVకి ఖాతా వృ_క్షంను ఎగుమతి చేయి…"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:8
 msgid "Export the Account Tree to a CSV file"
 msgstr "CSV ఫైల్‌కు ఖాతా వృక్షాన్ని ఎగుమతి చేయి"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:11
-#, fuzzy
-#| msgid "Export _Transactions to CSV..."
 msgid "Export _Transactions to CSV…"
-msgstr "CSVకి లావాదేవీలను_ఎగుమతి చేయి..."
+msgstr "CSVకి లావాదేవీలను_ఎగుమతి చేయి…"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:13
 msgid "Export the Transactions to a CSV file"
@@ -28989,7 +28919,7 @@ msgstr "CSV ఫైల్‌కు లావాదేవీలను ఎగుమ
 #: gnucash/ui/gnc-plugin-csv-export.ui:16
 #, fuzzy
 msgid "Export A_ctive Register to CSV…"
-msgstr "CSVకి ఖాతా వృ_క్షంను ఎగుమతి చేయి..."
+msgstr "CSVకి ఖాతా వృ_క్షంను ఎగుమతి చేయి…"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:18
 #, fuzzy
@@ -28997,20 +28927,16 @@ msgid "Export the Active Register to a CSV file"
 msgstr "CSV ఫైల్‌కు ఖాతా వృక్షాన్ని ఎగుమతి చేయి"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:6
-#, fuzzy
-#| msgid "Import _Accounts from CSV..."
 msgid "Import _Accounts from CSV…"
-msgstr "CSV నుంచి ఖాతాలను_దిగుమతి చేయి...."
+msgstr "CSV నుంచి ఖాతాలను_దిగుమతి చేయి.…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:8
 msgid "Import Accounts from a CSV file"
 msgstr "CSV ఫైల్ నుంచి ఖాతాలను దిగుమతి చేయి"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:11
-#, fuzzy
-#| msgid "Import _Transactions from CSV..."
 msgid "Import _Transactions from CSV…"
-msgstr "CSV నుంచి లావాదేవీలను_దిగుమతి చేయి...."
+msgstr "CSV నుంచి లావాదేవీలను_దిగుమతి చేయి.…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:13
 msgid "Import Transactions from a CSV file"
@@ -29037,10 +28963,8 @@ msgid "Import Customers and Vendors from a CSV text file"
 msgstr "టెక్స్ట్ ఫైల్ నుంచి వినియోగదారులు లేదా వ్యాపారులను దిగుమతి చేయి"
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:6
-#, fuzzy
-#| msgid "_Replay GnuCash .log file..."
 msgid "_Replay GnuCash .log file…"
-msgstr "_ GnuCash లాగ్ ఫైల్‌ను రీప్లే చేయి..."
+msgstr "_ GnuCash లాగ్ ఫైల్‌ను రీప్లే చేయి…"
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:8
 #, fuzzy
@@ -29096,8 +29020,6 @@ msgid "Cascade selected properties for account"
 msgstr "మీరు ఖాతా రకం ఎంచుకోవాలి."
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:43
-#, fuzzy
-#| msgid "_Renumber Subaccounts..."
 msgid "_Renumber Subaccounts…"
 msgstr "_ఉపఖాతాలు తిరిగి సంఖ్యపరచు"
 
@@ -29136,7 +29058,7 @@ msgstr "ఎంచుకున్నఖాతాను, దాని ఉపఖా
 #: gnucash/ui/gnc-plugin-page-register.ui:353
 #, fuzzy
 msgid "_Filter By…"
-msgstr "ద్వారా వడబోత..."
+msgstr "ద్వారా వడబోత…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:98
 #: gnucash/ui/gnc-plugin-page-budget.ui:87
@@ -29163,10 +29085,8 @@ msgid "Create a new Account"
 msgstr "కొత్త ఖాతాను సృష్టించు "
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:116
-#, fuzzy
-#| msgid "New Account _Hierarchy..."
 msgid "New Account _Hierarchy…"
-msgstr "కొత్త ఖాతా_ వర్గక్రమం..."
+msgstr "కొత్త ఖాతా_ వర్గక్రమం…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:118
 msgid "Extend the current book by merging with new account type categories"
@@ -29220,10 +29140,8 @@ msgstr "స్టాక్ చీలిక లేదా స్టాక్ వ�
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:156
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:259
 #: gnucash/ui/gnc-plugin-page-register.ui:260
-#, fuzzy
-#| msgid "View _Lots..."
 msgid "View _Lots…"
-msgstr "_మొత్తాలను వీక్షించు..."
+msgstr "_మొత్తాలను వీక్షించు…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:158
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:261
@@ -29584,10 +29502,8 @@ msgstr "_పరిశీలనలను ముద్రించు"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:15
 #: gnucash/ui/gnc-plugin-page-register.ui:445
-#, fuzzy
-#| msgid "Assign as payment..."
 msgid "Assign as payment…"
-msgstr "చెల్లింపుగా అప్పగించు...."
+msgstr "చెల్లింపుగా అప్పగించు.…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:17
 #: gnucash/ui/gnc-plugin-page-register.ui:447
@@ -29598,7 +29514,7 @@ msgstr "చెల్లింపుగా ఎంపిక చేసిన లా
 #: gnucash/ui/gnc-plugin-page-register.ui:451
 #, fuzzy
 msgid "Edit payment…"
-msgstr "చెల్లింపుగా అప్పగించు...."
+msgstr "చెల్లింపుగా అప్పగించు.…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:24
 #: gnucash/ui/gnc-plugin-page-register.ui:453
@@ -29773,8 +29689,6 @@ msgstr "వారీగా క్రమబద్ధీకరించు"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:269
-#, fuzzy
-#| msgid "_Print Report..."
 msgid "_Print Report…"
 msgstr "నివేదికను _ముద్రించు"
 
@@ -29795,10 +29709,8 @@ msgstr "నివేదిక స్టైల్ షీట్లను సరి
 
 #: gnucash/ui/gnc-plugin-page-report.ui:25
 #: gnucash/ui/gnc-plugin-page-report.ui:284
-#, fuzzy
-#| msgid "Export as P_DF..."
 msgid "Export as P_DF…"
-msgstr "P_DFగా ఎగుమతి చేయి..."
+msgstr "P_DFగా ఎగుమతి చేయి…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:27
 #: gnucash/ui/gnc-plugin-page-report.ui:286
@@ -29889,10 +29801,8 @@ msgid "Delete the selected scheduled transaction"
 msgstr "ఎంచుకున్న నిర్ధారిత లావాదేవీని తొలగించు"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:6
-#, fuzzy
-#| msgid "Import _QIF..."
 msgid "Import _QIF…"
-msgstr "QIF_దిగుమతి చేయి..."
+msgstr "QIF_దిగుమతి చేయి…"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:8
 msgid "Import a Quicken QIF file"
@@ -29917,8 +29827,6 @@ msgid "_Reconcile"
 msgstr "_సమన్వయపరచు"
 
 #: gnucash/ui/gnc-reconcile-window.ui:8
-#, fuzzy
-#| msgid "_Reconcile Information..."
 msgid "_Reconcile Information…"
 msgstr "_సమన్వయ సమాచారం"
 

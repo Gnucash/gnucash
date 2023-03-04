@@ -1694,10 +1694,8 @@ msgstr ""
 #: gnucash/gnome/business-gnome-utils.c:377 gnucash/gnome/dialog-invoice.c:1674
 #: gnucash/gnome/dialog-invoice.c:1752
 #: gnucash/gnome-utils/gnc-general-select.c:220
-#, fuzzy
-#| msgid "Select..."
 msgid "Select…"
-msgstr "Vali..."
+msgstr "Vali…"
 
 #: gnucash/gnome/business-gnome-utils.c:194
 #: gnucash/gnome-utils/gnc-general-select.c:222
@@ -6249,10 +6247,8 @@ msgid "_Open"
 msgstr "_Ava"
 
 #: gnucash/gnome-utils/dialog-file-access.c:309
-#, fuzzy
-#| msgid "Save _As..."
 msgid "Save As…"
-msgstr "Salvesta _Nimega..."
+msgstr "Salvesta _Nimega…"
 
 #: gnucash/gnome-utils/dialog-file-access.c:310
 #: gnucash/gnome-utils/dialog-file-access.c:319
@@ -10934,10 +10930,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:86
-#, fuzzy
-#| msgid "_Select..."
 msgid "_Select…"
-msgstr "_Vali..."
+msgstr "_Vali…"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:109
 msgid "Select a QIF file to load"
@@ -23787,10 +23781,8 @@ msgstr "Tasumisele kuuluv summa"
 
 #: gnucash/report/reports/standard/invoice.scm:560
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:225
-#, fuzzy
-#| msgid "Invoice in progress..."
 msgid "Invoice in progress…"
-msgstr "Müügiarve töös..."
+msgstr "Müügiarve töös…"
 
 #: gnucash/report/reports/standard/invoice.scm:568
 msgid "Reference:"
@@ -26301,10 +26293,8 @@ msgid "Open an existing GnuCash file"
 msgstr "Ava olemasolev GnuCashi fail"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:27
-#, fuzzy
-#| msgid "Save _As..."
 msgid "Save _As…"
-msgstr "Salvesta _Nimega..."
+msgstr "Salvesta _Nimega…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:30
 msgid "Save this file with a different name"
@@ -26342,10 +26332,8 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:65
 #: gnucash/ui/gnc-plugin-page-register.ui:49
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:16
-#, fuzzy
-#| msgid "_Find..."
 msgid "_Find…"
-msgstr "_Leia..."
+msgstr "_Leia…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:62
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:70
@@ -27322,10 +27310,8 @@ msgstr ""
 
 #: gnucash/ui/gnc-plugin-page-register.ui:22
 #: gnucash/ui/gnc-plugin-page-register.ui:451
-#, fuzzy
-#| msgid "Edit payment..."
 msgid "Edit payment…"
-msgstr "Redigeeri makset..."
+msgstr "Redigeeri makset…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:24
 #: gnucash/ui/gnc-plugin-page-register.ui:453

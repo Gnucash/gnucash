@@ -5173,16 +5173,12 @@ msgstr "اطلاعات تراکنش"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:3968
-#, fuzzy, c-format
-#| msgid "Sort %s by..."
 msgid "Sort %s by…"
 msgstr "مرتب‌سازی %s با …"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:4058
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1175
-#, fuzzy, c-format
-#| msgid "Filter %s by..."
 msgid "Filter %s by…"
 msgstr "پالایه %s با …"
 
@@ -5873,14 +5869,10 @@ msgstr "پرداخت به"
 
 #: gnucash/gnome/window-reconcile.c:785
 #: gnucash/gtkbuilder/window-reconcile.glade:215
-#, fuzzy
-#| msgid "Enter _Interest Payment..."
 msgid "Enter _Interest Payment…"
 msgstr "پرداخت _بهره را وارد کن …"
 
 #: gnucash/gnome/window-reconcile.c:787
-#, fuzzy
-#| msgid "Enter _Interest Charge..."
 msgid "Enter _Interest Charge…"
 msgstr "_هزینه بهره را وارد کن …"
 
@@ -6326,14 +6318,10 @@ msgid "The file could not be reopened."
 msgstr "پرونده را نمی‌توان بازگشایی نمود."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1094
-#, fuzzy
-#| msgid "Reading file..."
 msgid "Reading file…"
 msgstr "در حال خواندن پرونده …"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1117
-#, fuzzy
-#| msgid "Parsing file..."
 msgid "Parsing file…"
 msgstr "در حال تجزیه و ترکیب پرونده …"
 
@@ -6345,8 +6333,6 @@ msgstr "خطایی حین تجزیه و ترکیب پرونده رخ داد."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1149
 #: gnucash/gnome-utils/gnc-file.c:1429 gnucash/gnome-utils/gnc-file.c:1668
-#, fuzzy
-#| msgid "Writing file..."
 msgid "Writing file…"
 msgstr "در حال نوشتن پرونده …"
 
@@ -7512,22 +7498,16 @@ msgid "_Quit"
 msgstr "_تَرک"
 
 #: gnucash/gnome-utils/gnc-file.c:973 gnucash/gnome-utils/gnc-file.c:993
-#, fuzzy
-#| msgid "Loading user data..."
 msgid "Loading user data…"
-msgstr "در حال بارگذاری اطلاعات کاربر..."
+msgstr "در حال بارگذاری اطلاعات کاربر…"
 
 #: gnucash/gnome-utils/gnc-file.c:1009
-#, fuzzy
-#| msgid "Re-saving user data..."
 msgid "Re-saving user data…"
-msgstr "ذخیره سازی مجدد اطلاعات کاربر..."
+msgstr "ذخیره سازی مجدد اطلاعات کاربر…"
 
 #: gnucash/gnome-utils/gnc-file.c:1369
-#, fuzzy
-#| msgid "Exporting file..."
 msgid "Exporting file…"
-msgstr "صادر کردن پرونده..."
+msgstr "صادر کردن پرونده…"
 
 #: gnucash/gnome-utils/gnc-file.c:1382
 #, c-format
@@ -7835,8 +7815,6 @@ msgid "Report with GUID '%s' is missing"
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-splash.c:113
-#, fuzzy
-#| msgid "Loading..."
 msgid "Loading…"
 msgstr "در حال بارگذاری …"
 
@@ -8436,20 +8414,14 @@ msgid "[datafile]"
 msgstr "[پرونده داده]"
 
 #: gnucash/gnucash.cpp:174
-#, fuzzy
-#| msgid "Checking Finance::Quote..."
 msgid "Checking Finance::Quote…"
 msgstr "بررسی مالی::قیمتِ معامله …"
 
 #: gnucash/gnucash.cpp:185
-#, fuzzy
-#| msgid "Checking Finance::Quote..."
 msgid "Unable to load Finance::Quote."
 msgstr "بررسی مالی::قیمتِ معامله …"
 
 #: gnucash/gnucash.cpp:196
-#, fuzzy
-#| msgid "Loading data..."
 msgid "Loading data…"
 msgstr "بارگذاری داده …"
 
@@ -11235,8 +11207,6 @@ msgid "Choose File Name for Export"
 msgstr "انتخاب نام پرونده برای صدور"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:712
-#, fuzzy
-#| msgid "Export Now..."
 msgid "Export Now…"
 msgstr "اکنون صادر شود …"
 
@@ -11690,8 +11660,6 @@ msgstr "متن خطا."
 #: gnucash/gtkbuilder/assistant-qif-import.glade:603
 #: gnucash/gtkbuilder/assistant-qif-import.glade:734
 #: gnucash/gtkbuilder/assistant-qif-import.glade:863
-#, fuzzy
-#| msgid "Change GnuCash _Account..."
 msgid "Change GnuCash _Account…"
 msgstr "تغییر _حساب گنوکش …"
 
@@ -13996,8 +13964,6 @@ msgid "Warning: Finance::Quote not installed properly."
 msgstr "هشدار: مالی::قیمتِ معامله به درستی نصب نشده است."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:713
-#, fuzzy
-#| msgid "Select user information here..."
 msgid "Select user information here…"
 msgstr "اطلاعات کاربر را از اینجا انتخاب کن …"
 
@@ -16287,8 +16253,6 @@ msgid "Custom format"
 msgstr "قالب سفارشی"
 
 #: gnucash/gtkbuilder/dialog-progress.glade:12
-#, fuzzy
-#| msgid "Working..."
 msgid "Working…"
 msgstr "در حال پردازش"
 
@@ -16481,8 +16445,6 @@ msgid "Make Scheduled Transaction"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-sx.glade:159
-#, fuzzy
-#| msgid "Advanced..."
 msgid "Advanced…"
 msgstr "پیشرفته …"
 
@@ -16628,8 +16590,6 @@ msgid "Template Transaction"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1476
-#, fuzzy
-#| msgid "Since _Last Run..."
 msgid "Since Last Run…"
 msgstr "از _آخرین اجرا …"
 
@@ -17464,8 +17424,6 @@ msgstr "یادداشت‌های سفارش"
 
 #. Filter register by… Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:13
-#, fuzzy
-#| msgid "Filter %s by..."
 msgid "Filter register by…"
 msgstr "پالایه %s با …"
 
@@ -25902,10 +25860,8 @@ msgstr "مبلغ مورد انتظار"
 
 #: gnucash/report/reports/standard/invoice.scm:560
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:225
-#, fuzzy
-#| msgid "Invoice in progress..."
 msgid "Invoice in progress…"
-msgstr "در حال آماده سازی فاکتور..."
+msgstr "در حال آماده سازی فاکتور…"
 
 #: gnucash/report/reports/standard/invoice.scm:568
 #, fuzzy
@@ -28311,8 +28267,6 @@ msgid "_File"
 msgstr "_پرونده"
 
 #: gnucash/ui/gnc-main-window.ui:40
-#, fuzzy
-#| msgid "Pa_ge Setup..."
 msgid "Pa_ge Setup"
 msgstr "_تنظیمات صفحه"
 
@@ -28663,8 +28617,6 @@ msgid "_Scheduled Transaction Editor"
 msgstr "_ویرایشگر تراکنش زمان‌بندی‌شده"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:89
-#, fuzzy
-#| msgid "Since _Last Run..."
 msgid "Since _Last Run…"
 msgstr "از _آخرین اجرا …"
 
@@ -28673,8 +28625,6 @@ msgid "Create Scheduled Transactions since the last time run"
 msgstr "ایجاد تراکنش‌های زمانبندی‌شده از آخرین اجرا"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:94
-#, fuzzy
-#| msgid "_Mortgage & Loan Repayment..."
 msgid "_Mortgage & Loan Repayment…"
 msgstr "بازپردا_خت وام و رهن …"
 
@@ -29153,8 +29103,6 @@ msgid "Cascade selected properties for account"
 msgstr "شما باید یک نوع حساب را انتخاب نمایید"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:43
-#, fuzzy
-#| msgid "_Renumber Subaccounts..."
 msgid "_Renumber Subaccounts…"
 msgstr "_شماره‌گذاری زیرحساب‌ها از نو …"
 
@@ -29221,8 +29169,6 @@ msgid "Create a new Account"
 msgstr "ایجاد یک حساب جدید"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:116
-#, fuzzy
-#| msgid "New Account _Hierarchy..."
 msgid "New Account _Hierarchy…"
 msgstr "سلسله _حساب جدید …"
 
@@ -29278,8 +29224,6 @@ msgstr "ثبت یک تجزیه یا ترکیب سهام"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:156
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:259
 #: gnucash/ui/gnc-plugin-page-register.ui:260
-#, fuzzy
-#| msgid "View _Lots..."
 msgid "View _Lots…"
 msgstr "مشاهده _فال‌ها …"
 
@@ -29641,8 +29585,6 @@ msgstr "_چاپ چک‌ها"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:15
 #: gnucash/ui/gnc-plugin-page-register.ui:445
-#, fuzzy
-#| msgid "Assign as payment..."
 msgid "Assign as payment…"
 msgstr "انتساب به عنوان پرداخت …"
 
@@ -29653,8 +29595,6 @@ msgstr "در نظر گرفتن تراکنش انتخابی به عنوان پر�
 
 #: gnucash/ui/gnc-plugin-page-register.ui:22
 #: gnucash/ui/gnc-plugin-page-register.ui:451
-#, fuzzy
-#| msgid "Edit payment..."
 msgid "Edit payment…"
 msgstr "ویرایش پرداخت …"
 
@@ -29828,8 +29768,6 @@ msgstr "مرتب سازی با"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:269
-#, fuzzy
-#| msgid "_Print Report..."
 msgid "_Print Report…"
 msgstr "_چاپ گزارش"
 
@@ -29963,8 +29901,6 @@ msgid "_Reconcile"
 msgstr "_مغایرت‌گیری"
 
 #: gnucash/ui/gnc-reconcile-window.ui:8
-#, fuzzy
-#| msgid "_Reconcile Information..."
 msgid "_Reconcile Information…"
 msgstr "_ اطلاعات مغایرت‌گیری …"
 

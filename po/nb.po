@@ -5179,16 +5179,12 @@ msgstr "<b>Ny transaksjonsinformasjon</b>"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:3968
-#, fuzzy, c-format
-#| msgid "Sort %s by..."
 msgid "Sort %s by…"
 msgstr "Sorter %s etter …"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:4058
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1175
-#, fuzzy, c-format
-#| msgid "Filter %s by..."
 msgid "Filter %s by…"
 msgstr "Filtrer %s etter …"
 
@@ -5240,8 +5236,6 @@ msgstr "Lagre oppsett"
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As…"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.cpp:231
-#, fuzzy
-#| msgid "Save Config As..."
 msgid "Save Config As…"
 msgstr "L_agre som …"
 
@@ -5281,8 +5275,6 @@ msgstr "Sett konfigurasjonssti"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1275
 #: gnucash/ui/gnc-plugin-page-report.ui:239
-#, fuzzy
-#| msgid "Save Report Configuration As..."
 msgid "Save Report Configuration As…"
 msgstr "Lagre rapportoppsett som …"
 
@@ -5894,14 +5886,10 @@ msgstr "Betaling til"
 
 #: gnucash/gnome/window-reconcile.c:785
 #: gnucash/gtkbuilder/window-reconcile.glade:215
-#, fuzzy
-#| msgid "Enter _Interest Payment..."
 msgid "Enter _Interest Payment…"
 msgstr "Legg inn _rentebetaling …"
 
 #: gnucash/gnome/window-reconcile.c:787
-#, fuzzy
-#| msgid "Enter _Interest Charge..."
 msgid "Enter _Interest Charge…"
 msgstr "Fyll _inn rentebetaling …"
 
@@ -6339,14 +6327,10 @@ msgid "The file could not be reopened."
 msgstr "Filen kunne ikke åpnes på nytt."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1094
-#, fuzzy
-#| msgid "Reading file..."
 msgid "Reading file…"
 msgstr "Leser filen …"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1117
-#, fuzzy
-#| msgid "Parsing file..."
 msgid "Parsing file…"
 msgstr "Tolker filen …"
 
@@ -6358,8 +6342,6 @@ msgstr "Det oppstod en feil under tolking av filen."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1149
 #: gnucash/gnome-utils/gnc-file.c:1429 gnucash/gnome-utils/gnc-file.c:1668
-#, fuzzy
-#| msgid "Writing file..."
 msgid "Writing file…"
 msgstr "Skriver fil …"
 
@@ -7476,20 +7458,14 @@ msgid "_Quit"
 msgstr "_Avslutt"
 
 #: gnucash/gnome-utils/gnc-file.c:973 gnucash/gnome-utils/gnc-file.c:993
-#, fuzzy
-#| msgid "Loading user data..."
 msgid "Loading user data…"
 msgstr "Laster brukerdata …"
 
 #: gnucash/gnome-utils/gnc-file.c:1009
-#, fuzzy
-#| msgid "Re-saving user data..."
 msgid "Re-saving user data…"
 msgstr "Lagrer brukerdata om igjen …"
 
 #: gnucash/gnome-utils/gnc-file.c:1369
-#, fuzzy
-#| msgid "Exporting file..."
 msgid "Exporting file…"
 msgstr "Eksporterer filen …"
 
@@ -7819,8 +7795,6 @@ msgid "Report with GUID '%s' is missing"
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-splash.c:113
-#, fuzzy
-#| msgid "Loading..."
 msgid "Loading…"
 msgstr "Laster …"
 
@@ -8421,20 +8395,14 @@ msgid "[datafile]"
 msgstr "[datafil]"
 
 #: gnucash/gnucash.cpp:174
-#, fuzzy
-#| msgid "Checking Finance::Quote..."
 msgid "Checking Finance::Quote…"
 msgstr "Sjekker Finance::Quote …"
 
 #: gnucash/gnucash.cpp:185
-#, fuzzy
-#| msgid "Checking Finance::Quote..."
 msgid "Unable to load Finance::Quote."
 msgstr "Sjekker Finance::Quote …"
 
 #: gnucash/gnucash.cpp:196
-#, fuzzy
-#| msgid "Loading data..."
 msgid "Loading data…"
 msgstr "Laster data …"
 
@@ -11172,8 +11140,6 @@ msgid "Choose File Name for Export"
 msgstr "Velg en fil som skal importeres"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:712
-#, fuzzy
-#| msgid "Export Now..."
 msgid "Export Now…"
 msgstr "Eksporter nå …"
 
@@ -11514,8 +11480,6 @@ msgstr "Feil"
 #: gnucash/gtkbuilder/assistant-qif-import.glade:603
 #: gnucash/gtkbuilder/assistant-qif-import.glade:734
 #: gnucash/gtkbuilder/assistant-qif-import.glade:863
-#, fuzzy
-#| msgid "Change GnuCash _Account..."
 msgid "Change GnuCash _Account…"
 msgstr "Endre GnuCash-_konto …"
 
@@ -12300,8 +12264,6 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1008
-#, fuzzy
-#| msgid "Enter Information about..."
 msgid "Enter Information about…"
 msgstr "Oppgi informasjon om …"
 
@@ -13747,8 +13709,6 @@ msgid "Warning: Finance::Quote not installed properly."
 msgstr "Advarsel: Finance::Quote er ikke installert."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:713
-#, fuzzy
-#| msgid "Select user information here..."
 msgid "Select user information here…"
 msgstr "Velg brukerinformasjon her …"
 
@@ -14315,8 +14275,6 @@ msgid "Please select or create an appropriate GnuCash account for:"
 msgstr "Velg eller legg til en passende GnuCash-konto for:"
 
 #: gnucash/gtkbuilder/dialog-import.glade:99
-#, fuzzy
-#| msgid "Online account ID here..."
 msgid "Online account ID here…"
 msgstr "Nettbasert konto-ID her …"
 
@@ -16107,8 +16065,6 @@ msgid "Custom format"
 msgstr "Egendefinert format"
 
 #: gnucash/gtkbuilder/dialog-progress.glade:12
-#, fuzzy
-#| msgid "Working..."
 msgid "Working…"
 msgstr "Arbeider …"
 
@@ -16137,8 +16093,6 @@ msgid "Move dow_n"
 msgstr "Flytt _ned"
 
 #: gnucash/gtkbuilder/dialog-report.glade:189
-#, fuzzy
-#| msgid "Si_ze..."
 msgid "Si_ze…"
 msgstr "S_tørrelse …"
 
@@ -16313,8 +16267,6 @@ msgid "Make Scheduled Transaction"
 msgstr "Opprett planlagt transaksjon"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:159
-#, fuzzy
-#| msgid "Advanced..."
 msgid "Advanced…"
 msgstr "Avansert …"
 
@@ -16459,8 +16411,6 @@ msgid "Template Transaction"
 msgstr "<b>Maltransaksjon</b>"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1476
-#, fuzzy
-#| msgid "Since Last Run..."
 msgid "Since Last Run…"
 msgstr "_Siden sist …"
 
@@ -17314,8 +17264,6 @@ msgstr "Ekstra notater"
 
 #. Filter register by… Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:13
-#, fuzzy
-#| msgid "Filter register by..."
 msgid "Filter register by…"
 msgstr "Filtrer registeret etter …"
 
@@ -17384,8 +17332,6 @@ msgstr "Slett gjeldende føring"
 
 #. Sort register by Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:770
-#, fuzzy
-#| msgid "Sort register by..."
 msgid "Sort register by…"
 msgstr "Sorter register etter …"
 
@@ -18606,8 +18552,6 @@ msgid "The list of Scheduled Transactions"
 msgstr "Listen over planlagte transaksjoner"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:23
-#, fuzzy
-#| msgid "Get _Transactions..."
 msgid "Get _Transactions…"
 msgstr "Hent _transaksjoner …"
 
@@ -18618,8 +18562,6 @@ msgstr "Hent transaksjon online via HBCI/AqBanking"
 
 #. Translators: https://en.wikipedia.org/wiki/Single_Euro_Payments_Area
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:31
-#, fuzzy
-#| msgid "Issue _SEPA Transaction..."
 msgid "Issue _SEPA Transaction…"
 msgstr "_Send transaksjon …"
 
@@ -18631,8 +18573,6 @@ msgid ""
 msgstr "Send inn en ny bank-intern transaksjon gjennom HBCI/AqBanking"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:36
-#, fuzzy
-#| msgid "Issue _SEPA Transaction..."
 msgid "Issue SEPA I_nternal Transaction…"
 msgstr "_Send transaksjon …"
 
@@ -18644,8 +18584,6 @@ msgid ""
 msgstr "Send inn en ny bank-intern transaksjon gjennom HBCI/AqBanking"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:41
-#, fuzzy
-#| msgid "_Internal Transaction..."
 msgid "_Internal Transaction…"
 msgstr "I_ntern transaksjon …"
 
@@ -18751,8 +18689,6 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:297
-#, fuzzy, c-format
-#| msgid "Validation...\n"
 msgid "Validation…\n"
 msgstr "Bekreftelse …\n"
 
@@ -20032,8 +19968,6 @@ msgid "Select one or multiple OFX/QFX file(s) to process"
 msgstr "Velg en OFX/QFX-fil som skal behandles"
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.ui:6
-#, fuzzy
-#| msgid "Import _OFX/QFX..."
 msgid "Import _OFX/QFX…"
 msgstr "Importer _OFX/QFX …"
 
@@ -20786,8 +20720,6 @@ msgid "Enter the Discount Percent"
 msgstr "Fyll inn rabattprosent"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:609
-#, fuzzy
-#| msgid "Enter the Discount ... unknown type"
 msgid "Enter the Discount … unknown type"
 msgstr "Fyll inn rabatt … ukjent type"
 
@@ -25362,8 +25294,6 @@ msgid "Columns"
 msgstr "Tokolonnesvisning"
 
 #: gnucash/report/reports/standard/investment-lots.scm:42
-#, fuzzy
-#| msgid "Validation...\n"
 msgid "Validation"
 msgstr "Bekreftelse …\n"
 
@@ -26211,8 +26141,6 @@ msgstr "Å betale"
 
 #: gnucash/report/reports/standard/invoice.scm:560
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:225
-#, fuzzy
-#| msgid "Invoice in progress..."
 msgid "Invoice in progress…"
 msgstr "Faktura under utvikling …"
 
@@ -27679,14 +27607,10 @@ msgid "Credit Lines"
 msgstr "Kredittlinjer"
 
 #: gnucash/report/report-utilities.scm:639
-#, fuzzy, scheme-format
-#| msgid "Building '~a' report ..."
 msgid "Building '~a' report …"
-msgstr "Bygger «~a» rapport ..."
+msgstr "Bygger «~a» rapport …"
 
 #: gnucash/report/report-utilities.scm:645
-#, fuzzy, scheme-format
-#| msgid "Rendering '~a' report ..."
 msgid "Rendering '~a' report …"
 msgstr "Gjengir «~a-rapport …"
 
@@ -28687,8 +28611,6 @@ msgid "_File"
 msgstr "_Fil"
 
 #: gnucash/ui/gnc-main-window.ui:40
-#, fuzzy
-#| msgid "Pa_ge Setup..."
 msgid "Pa_ge Setup"
 msgstr "Si_de oppsett …"
 
@@ -29042,8 +28964,6 @@ msgid "_Scheduled Transaction Editor"
 msgstr "Redigering av planlagte tran_saksjoner"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:89
-#, fuzzy
-#| msgid "Since _Last Run..."
 msgid "Since _Last Run…"
 msgstr "_Siden sist …"
 
@@ -29417,8 +29337,6 @@ msgid "Initialize Test Data"
 msgstr "Initialiser testdata"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:6
-#, fuzzy
-#| msgid "Export Account T_ree to CSV..."
 msgid "Export Account T_ree to CSV…"
 msgstr "Eksporter _kontoptre til CSV …"
 
@@ -29428,8 +29346,6 @@ msgid "Export the Account Tree to a CSV file"
 msgstr "Eksporter kontohierarki til en ny GnuCash datafil"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:11
-#, fuzzy
-#| msgid "Export _Transactions to CSV..."
 msgid "Export _Transactions to CSV…"
 msgstr "Eksporter _transaksjoner som CSV …"
 
@@ -29449,8 +29365,6 @@ msgid "Export the Active Register to a CSV file"
 msgstr "Eksporter kontohierarki til en ny GnuCash datafil"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:6
-#, fuzzy
-#| msgid "Import _Accounts from CSV..."
 msgid "Import _Accounts from CSV…"
 msgstr "Importer _kontoer fra CSV …"
 
@@ -29460,8 +29374,6 @@ msgid "Import Accounts from a CSV file"
 msgstr "Første splitt i importert transaksjon"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:11
-#, fuzzy
-#| msgid "Import _Transactions from CSV..."
 msgid "Import _Transactions from CSV…"
 msgstr "Importer _transaksjoner fra CSV …"
 
@@ -29481,8 +29393,6 @@ msgid "Import Prices from a CSV file"
 msgstr "Første splitt i importert transaksjon"
 
 #: gnucash/ui/gnc-plugin-customer-import.ui:6
-#, fuzzy
-#| msgid "Import _Customers & Vendors..."
 msgid "Import _Customers & Vendors…"
 msgstr "Importer _kunder og leverandører …"
 
@@ -29492,8 +29402,6 @@ msgid "Import Customers and Vendors from a CSV text file"
 msgstr "Første splitt i importert transaksjon"
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:6
-#, fuzzy
-#| msgid "_Replay GnuCash .log file..."
 msgid "_Replay GnuCash .log file…"
 msgstr "Spill av _loggfil på nytt …"
 
@@ -29552,8 +29460,6 @@ msgid "Cascade selected properties for account"
 msgstr "Vennligst oppgi en gyldig lånekonto."
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:43
-#, fuzzy
-#| msgid "_Renumber Subaccounts..."
 msgid "_Renumber Subaccounts…"
 msgstr "_Omnummerer underkontoer …"
 
@@ -29621,8 +29527,6 @@ msgid "Create a new Account"
 msgstr "Opprett en ny konto"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:116
-#, fuzzy
-#| msgid "New Account _Hierarchy..."
 msgid "New Account _Hierarchy…"
 msgstr "Nytt konto_hierarki …"
 
@@ -29677,8 +29581,6 @@ msgstr "Registrer en aksjesplitt eller -fusjon"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:156
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:259
 #: gnucash/ui/gnc-plugin-page-register.ui:260
-#, fuzzy
-#| msgid "View _Lots..."
 msgid "View _Lots…"
 msgstr "Vis _partier …"
 
@@ -29774,8 +29676,6 @@ msgstr "Sjekk og reparer a_lle"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:16
 #: gnucash/ui/gnc-plugin-page-budget.ui:225
-#, fuzzy
-#| msgid "Esti_mate Budget..."
 msgid "Esti_mate Budget…"
 msgstr "Esti_mer budsjett …"
 
@@ -30070,8 +29970,6 @@ msgstr "Skriv ut sjekk"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:15
 #: gnucash/ui/gnc-plugin-page-register.ui:445
-#, fuzzy
-#| msgid "Assign as payment..."
 msgid "Assign as payment…"
 msgstr "_Behandle en betaling …"
 
@@ -30083,8 +29981,6 @@ msgstr "Klipp ut valgte transaksjon"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:22
 #: gnucash/ui/gnc-plugin-page-register.ui:451
-#, fuzzy
-#| msgid "Edit payment..."
 msgid "Edit payment…"
 msgstr "_Behandle en betaling …"
 
@@ -30260,8 +30156,6 @@ msgstr "Sorter etter"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:269
-#, fuzzy
-#| msgid "_Print Report..."
 msgid "_Print Report…"
 msgstr "Skriv ut ra_pport …"
 
@@ -30283,8 +30177,6 @@ msgstr "Rediger rapportstilark."
 
 #: gnucash/ui/gnc-plugin-page-report.ui:25
 #: gnucash/ui/gnc-plugin-page-report.ui:284
-#, fuzzy
-#| msgid "Export as P_DF..."
 msgid "Export as P_DF…"
 msgstr "Importer _QIF …"
 
@@ -30378,8 +30270,6 @@ msgid "Delete the selected scheduled transaction"
 msgstr "Slett valgt tidsplanlagt transaksjon"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:6
-#, fuzzy
-#| msgid "Import _QIF..."
 msgid "Import _QIF…"
 msgstr "Importer _QIF …"
 
@@ -30406,8 +30296,6 @@ msgid "_Reconcile"
 msgstr "_Avstemme"
 
 #: gnucash/ui/gnc-reconcile-window.ui:8
-#, fuzzy
-#| msgid "_Reconcile Information..."
 msgid "_Reconcile Information…"
 msgstr "_Avstemmingsinformasjon …"
 
