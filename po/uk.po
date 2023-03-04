@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-03 11:31-0800\n"
-"PO-Revision-Date: 2023-03-03 23:22+0000\n"
+"PO-Revision-Date: 2023-03-04 21:26+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/uk/>\n"
@@ -1387,19 +1387,17 @@ msgstr "Відкрита купівля"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:148
 msgid "Initial stock long purchase."
-msgstr ""
+msgstr "Початкова довга купівля цінних паперів."
 
 #. Translators: this is a stock transaction describing an
 #. initial stock short sale
 #: gnucash/gnome/assistant-stock-transaction.cpp:161
-#, fuzzy
-#| msgid "Open _Folder"
 msgid "Open short"
-msgstr "Відкрити _теку"
+msgstr "Відкрита укоротко"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:162
 msgid "Initial stock short sale."
-msgstr ""
+msgstr "Початковий короткий продаж цінних паперів."
 
 #. Translators: this is a stock transaction describing
 #. new purchase of stock.
@@ -1419,7 +1417,7 @@ msgstr "Купити"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:180
 msgid "Buying stock long."
-msgstr ""
+msgstr "Купівля цінних паперів удовгу."
 
 #. Translators: this is a stock transaction describing new
 #. sale of stock, and recording capital gain/loss
@@ -1439,7 +1437,7 @@ msgstr "Продати"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:194
 msgid "Selling stock long, and record capital gain/loss."
-msgstr ""
+msgstr "Продаж цінних паперів удовгу і запис загального прибутку або збитку."
 
 #. Translators: this is a stock transaction describing
 #. dividends issued to holder
@@ -1465,21 +1463,21 @@ msgstr ""
 #. Translators: this is a stock transaction describing return
 #. of capital
 #: gnucash/gnome/assistant-stock-transaction.cpp:222
-#, fuzzy
-#| msgid "Decrease in capital"
 msgid "Return of capital"
-msgstr "Зменшення капіталу"
+msgstr "Повернення капіталу"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:223
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units."
 msgstr ""
+"Компанія повертає капітал, зменшуючи основу вартості без впливу на кількість "
+"одиниць."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution
 #: gnucash/gnome/assistant-stock-transaction.cpp:236
 msgid "Notional distribution"
-msgstr ""
+msgstr "Уявний розподіл"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:237
 msgid ""
@@ -1493,8 +1491,6 @@ msgstr ""
 #. split when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:250
 #: gnucash/gnome/assistant-stock-transaction.cpp:355
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Stock split"
 msgstr "Частини паперів"
 
@@ -1511,10 +1507,8 @@ msgstr ""
 #. reverse split when shorting stock.
 #: gnucash/gnome/assistant-stock-transaction.cpp:263
 #: gnucash/gnome/assistant-stock-transaction.cpp:369
-#, fuzzy
-#| msgid "_Review cleared splits"
 msgid "Reverse split"
-msgstr "П_ереглянути узгоджені поділи"
+msgstr "Зворотний поділ"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:264
 msgid ""
@@ -1529,20 +1523,18 @@ msgstr ""
 #. Translators: this is a stock transaction describing
 #. shorting of stock.
 #: gnucash/gnome/assistant-stock-transaction.cpp:285
-#, fuzzy
-#| msgid "Sort Order"
 msgid "Short sell"
-msgstr "Порядок сортування"
+msgstr "Короткий продаж"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:286
 msgid "Selling stock short."
-msgstr ""
+msgstr "Продаж цінних паперів у коротку."
 
 #. Translators: this is a stock transaction describing cover
 #. buying stock, and recording capital gain/loss
 #: gnucash/gnome/assistant-stock-transaction.cpp:299
 msgid "Buy to cover short"
-msgstr ""
+msgstr "Купівля для короткого покриття"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:300
 msgid "Buy back stock to cover short position, and record capital gain/loss."
@@ -1552,7 +1544,7 @@ msgstr ""
 #. dividends retrieved from holder when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:313
 msgid "Compensatory dividend"
-msgstr ""
+msgstr "Компенсаторний дивіденд"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:314
 msgid ""
@@ -1564,7 +1556,7 @@ msgstr ""
 #. of capital retrieved from holder when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:327
 msgid "Compensatory return of capital"
-msgstr ""
+msgstr "Компенсаторне повернення капіталу"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:328
 msgid ""
@@ -1577,7 +1569,7 @@ msgstr ""
 #. notional distribution when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:341
 msgid "Compensatory notional distribution"
-msgstr ""
+msgstr "Компенсаторний уявний розподіл"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:342
 msgid ""
@@ -1598,44 +1590,40 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:537
-#, fuzzy, c-format
-#| msgid "Split"
+#, c-format
 msgid "%s Split"
-msgstr "Частинами"
+msgstr "Поділ %s"
 
 #. Translators: StockAssistant: N/A denotes stock price is not computable
 #: gnucash/gnome/assistant-stock-transaction.cpp:565
 msgid "N/A"
-msgstr ""
+msgstr "н/д"
 
 #. Translators: (missing) denotes that the amount or account is
 #. not provided, or incorrect, in the Stock Transaction Assistant.
 #: gnucash/gnome/assistant-stock-transaction.cpp:655
-#, fuzzy
-#| msgid "missing"
 msgid "(missing)"
-msgstr "пропущено"
+msgstr "(пропущено)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:670
 #, c-format
 msgid "Amount for %s is missing."
-msgstr ""
+msgstr "Не вистачає суми для %s."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:679
 #, c-format
 msgid "Amount for %s must not be negative."
-msgstr ""
+msgstr "Сума для %s не повинна бути від'ємною."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:681
 #, c-format
 msgid "Amount for %s must be positive."
-msgstr ""
+msgstr "Сума для %s має бути додатною."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:702
-#, fuzzy, c-format
-#| msgid "Accounts in %s"
+#, c-format
 msgid "Account for %s is missing."
-msgstr "Рахунки у %s"
+msgstr "Не вказано рахунка для %s."
 
 #. Translators: the first %s is the new transaction date;
 #. the second %s is the current stock account's latest
@@ -1653,53 +1641,43 @@ msgstr ""
 #. the currency value of a non-currency asset.
 #: gnucash/gnome/assistant-stock-transaction.cpp:764
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:425
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Stock Value"
-msgstr "Частини паперів"
+msgstr "Ціна акції"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:783
-#, fuzzy
-#| msgid "Invalid option value"
 msgid "Invalid stock new balance."
-msgstr "Некоректне значення параметра"
+msgstr "Некоректний новий баланс акцій."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:785
 msgid "New balance must be higher than old balance."
-msgstr ""
+msgstr "Новий баланс має бути вищим за старий."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:787
-#, fuzzy
-#| msgid "Start date must be earlier than End date"
 msgid "New balance must be lower than old balance."
-msgstr "Початкова дата має передувати кінцевій даті"
+msgstr "Новий баланс має бути нижчим за старий."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:796
-#, fuzzy
-#| msgid "Stock Accounts to report on."
 msgid "Stock amount must be positive."
-msgstr "Рахунки цінних паперів для звітування."
+msgstr "Кількість цінних паперів має бути додатною."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:804
 msgid "Cannot sell more units than owned."
-msgstr ""
+msgstr "Не можна продати більше одиниць, ніж у вас є."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:807
 msgid "Cannot cover buy more units than owed."
-msgstr ""
+msgstr "Не можна купити у покриття більше одиниць, ніж є."
 
 #. Translators: %s refer to: stock mnemonic, broker currency,
 #. date of transaction.
 #: gnucash/gnome/assistant-stock-transaction.cpp:818
 #, c-format
 msgid "A price of 1 %s = %s on %s will be recorded."
-msgstr ""
+msgstr "Буде записано ціну 1 %s = %s на %s."
 
 #. Translators: Designates a page in the stock assistant or inserts the value
 #. into the non-currency asset split of an investment transaction.
 #: gnucash/gnome/assistant-stock-transaction.cpp:836
-#, fuzzy
-#| msgid "Cash"
 msgctxt "Stock Assistant"
 msgid "Cash"
 msgstr "Готівка"
@@ -1711,7 +1689,7 @@ msgstr "Готівка"
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:606
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:665
 msgid "Fees"
-msgstr ""
+msgstr "Мита"
 
 #. Translators: Designates a page in the stock assistant or inserts the value
 #. into the capital gain/loss income split of an investment transaction.
@@ -1720,10 +1698,8 @@ msgstr ""
 #: gnucash/gnome/assistant-stock-transaction.cpp:1157
 #: gnucash/gnome/assistant-stock-transaction.cpp:1162
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:846
-#, fuzzy
-#| msgid "Capital"
 msgid "Capital Gain"
-msgstr "Капітал"
+msgstr "Збільшення капіталу"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:889
 #, c-format
@@ -1733,26 +1709,19 @@ msgstr ""
 #: gnucash/gnome/assistant-stock-transaction.cpp:903
 msgid "No errors found. Click Apply to create transaction."
 msgstr ""
+"Помилок не знайдено. Натисніть кнопку «Застосувати», щоб створити транзакцію."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:904
-#, fuzzy
-#| msgid "The following vendor document is due:"
-#| msgid_plural "The following %d vendor documents are due:"
 msgid "The following errors must be fixed:"
-msgstr "Має бути виконано сплату за %d документом постачальника:"
+msgstr "Має бути виправлено такі помилки:"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:912
-#, fuzzy
-#| msgid "The following vendor document is due:"
-#| msgid_plural "The following %d vendor documents are due:"
 msgid "The following warnings exist:"
-msgstr "Має бути виконано сплату за %d документом постачальника:"
+msgstr "Маємо такі попередження:"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:956
-#, fuzzy
-#| msgid "Net Balance"
 msgid "Ne_w Balance"
-msgstr "Чистий залишок"
+msgstr "Н_овий баланс"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:956
 #: gnucash/gtkbuilder/assistant-stock-split.glade:129
@@ -1763,30 +1732,22 @@ msgid "_Shares"
 msgstr "_Акції"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:959
-#, fuzzy
-#| msgid "_Rotation"
 msgid "Ratio"
-msgstr "_Поворот"
+msgstr "Відношення"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:959
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:277
-#, fuzzy
-#| msgid "Net Balance"
 msgid "Next Balance"
-msgstr "Чистий залишок"
+msgstr "Наступний баланс"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:963
-#, fuzzy
-#| msgid "Enter the value of shares bought or sold"
 msgid "Enter the new balance of shares after the stock split."
-msgstr "Введіть кількість акцій, що продаються чи купуються"
+msgstr "Введіть новий баланс цінних паперів після поділу акцій."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:964
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:212
-#, fuzzy
-#| msgid "Enter the number of shares bought or sold"
 msgid "Enter the number of shares you gained or lost in the transaction."
-msgstr "Введіть кількість акцій, що продаються чи купуються"
+msgstr "Введіть кількість акцій, які ви отримали або втратили під час операції."
 
 #. Translators: Inserts the value into action field of the non-currency asset split of
 #. an investment transaction.
@@ -1796,8 +1757,6 @@ msgid "Stock"
 msgstr "Акція"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1123
-#, fuzzy
-#| msgid "Cash"
 msgctxt "Stock Assistant:"
 msgid "Cash"
 msgstr "Готівка"
@@ -1863,17 +1822,13 @@ msgstr "Одиниці"
 #: gnucash/gnome/business-gnome-utils.c:377 gnucash/gnome/dialog-invoice.c:1674
 #: gnucash/gnome/dialog-invoice.c:1752
 #: gnucash/gnome-utils/gnc-general-select.c:220
-#, fuzzy
-#| msgid "Select"
 msgid "Select…"
-msgstr "Вибрати"
+msgstr "Вибрати…"
 
 #: gnucash/gnome/business-gnome-utils.c:194
 #: gnucash/gnome-utils/gnc-general-select.c:222
-#, fuzzy
-#| msgid "Edit"
 msgid "Edit…"
-msgstr "Змінити"
+msgstr "Змінити…"
 
 #: gnucash/gnome/business-gnome-utils.c:336 gnucash/gnome/dialog-doclink.c:813
 #: gnucash/gnome/dialog-invoice.c:2801 gnucash/gnome/dialog-invoice.c:3026
@@ -2390,15 +2345,13 @@ msgid "_OK"
 msgstr "_Гаразд"
 
 #: gnucash/gnome/dialog-doclink.c:241
-#, fuzzy
-#| msgid "Amend URL:"
 msgid "Amend the URL"
-msgstr "Адреси зміни:"
+msgstr "Змінити адресу"
 
 #: gnucash/gnome/dialog-doclink.c:246
 #, c-format
 msgid "Enter an URL like \"%s\""
-msgstr ""
+msgstr "Введіть адресу, подібну до «%s»"
 
 #: gnucash/gnome/dialog-doclink.c:264
 msgid "Existing Document Link is"
@@ -2879,6 +2832,7 @@ msgstr "Цей запис прикріплений до замовлення т�
 #: gnucash/gnome/dialog-invoice.c:920
 msgid "Choose a different report template or Printable Invoice will be used"
 msgstr ""
+"Виберіть інший шаблон звіту або буде використано «Друкований рахунок-фактуру»"
 
 #: gnucash/gnome/dialog-invoice.c:1034 gnucash/gnome/dialog-invoice.c:3568
 #: gnucash/gnome/dialog-invoice.c:3602 gnucash/gnome/dialog-invoice.c:3636
@@ -2916,10 +2870,6 @@ msgid "Do you really want to post the invoice?"
 msgstr "Ви справді хочете надіслати рахунок-фактуру?"
 
 #: gnucash/gnome/dialog-invoice.c:1167
-#, fuzzy
-#| msgid ""
-#| "One or more of the entries are for accounts different from the invoice/"
-#| "bill currency. You will be asked a conversion rate for each."
 msgid ""
 "One or more of the entries are for accounts different from the invoice/bill "
 "currency. You will be asked to enter a conversion rate for each."
@@ -3558,12 +3508,6 @@ msgid ""
 msgstr "Позначена транзакція не має дроблень, які можна пов'язати як сплату"
 
 #: gnucash/gnome/dialog-payment.c:1627
-#, fuzzy
-#| msgid ""
-#| "While this transaction has multiple splits that can be considered\n"
-#| "as 'the payment split', gnucash only knows how to handle one.\n"
-#| "Please select one, the others will be ignored.\n"
-#| "\n"
 msgid ""
 "While this transaction has multiple splits that can be considered\n"
 "as 'the payment split', GnuCash only knows how to handle one.\n"
@@ -3571,9 +3515,9 @@ msgid ""
 "\n"
 msgstr ""
 "Хоча ця транзакцій складається з декількох частин, які можна\n"
-"розглядати як «дроблення сплати», gnucash відомий спосіб обробки лише однієї "
+"розглядати як «дроблення сплати», GnuCash відомий спосіб обробки лише однієї "
 "частини.\n"
-"Будь ласка, виберіть одну частину. Інші частини буде проігноровано.\n"
+"Будь ласка, виберіть одну частину. Інші частини буде відкинуто.\n"
 "\n"
 
 #: gnucash/gnome/dialog-payment.c:1631
@@ -3632,10 +3576,9 @@ msgstr "Ви справді хочете вилучити ці ціни?"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:572
 #: gnucash/gnome-utils/dialog-transfer.cpp:1797
-#, fuzzy, c-format
-#| msgid "Price Quotes Retrieval Options"
+#, c-format
 msgid "Price retrieval failed: %s"
-msgstr "Параметри отримання курсів"
+msgstr "Не вдалося отримати ціну: %s"
 
 #: gnucash/gnome/dialog-price-editor.c:227
 msgid "Are you sure you want to replace the existing price?"
@@ -4456,10 +4399,8 @@ msgstr "Відкрити вікно звіту про клієнта для вл
 #: gnucash/gnome/gnc-plugin-page-register.c:274
 #: gnucash/ui/gnc-plugin-page-register.ui:205
 #: gnucash/ui/gnc-plugin-page-register.ui:394
-#, fuzzy
-#| msgid "Manage Document Link"
 msgid "_Manage Document Link…"
-msgstr "Керування прив'язками до документа"
+msgstr "_Керування прив'язками до документа…"
 
 #. Translators: This is a menu item that opens an external file or URI that may
 #. be linked to the current bill, invoice, transaction, or voucher using
@@ -4747,10 +4688,8 @@ msgid "Open a company report window for the owner of this credit note"
 msgstr "Відкрити вікно звіту про фірму для власника цього сторно"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:284
-#, fuzzy
-#| msgid "Manage Document Link"
 msgid "Manage Document Link…"
-msgstr "Керування прив'язками до документа"
+msgstr "Керування прив'язками до документа…"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:292
 #: gnucash/gnome/gnc-plugin-page-register.c:395
@@ -5154,16 +5093,14 @@ msgstr "Інформація про нову транзакцію"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:3968
-#, fuzzy, c-format
-#| msgid "Sort %s by..."
+#, c-format
 msgid "Sort %s by…"
 msgstr "Сортувати %s за…"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:4058
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1175
-#, fuzzy, c-format
-#| msgid "Filter %s by..."
+#, c-format
 msgid "Filter %s by…"
 msgstr "Фільтрувати %s за…"
 
@@ -5215,8 +5152,6 @@ msgstr "Зберегти налаштування"
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As…"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.cpp:231
-#, fuzzy
-#| msgid "Save Config As..."
 msgid "Save Config As…"
 msgstr "Зберегти налаштування як…"
 
@@ -5254,8 +5189,6 @@ msgstr "Зберегти _налаштування звіту"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1275
 #: gnucash/ui/gnc-plugin-page-report.ui:239
-#, fuzzy
-#| msgid "Save Report Configuration As..."
 msgid "Save Report Configuration As…"
 msgstr "Зберегти налаштування звіту як…"
 
@@ -5881,14 +5814,10 @@ msgstr "Платіж до"
 
 #: gnucash/gnome/window-reconcile.c:785
 #: gnucash/gtkbuilder/window-reconcile.glade:215
-#, fuzzy
-#| msgid "Enter _Interest Payment..."
 msgid "Enter _Interest Payment…"
 msgstr "Ввести платіж _відсотків…"
 
 #: gnucash/gnome/window-reconcile.c:787
-#, fuzzy
-#| msgid "Enter _Interest Charge..."
 msgid "Enter _Interest Charge…"
 msgstr "Ввести _відсоткову ставку…"
 
@@ -5989,11 +5918,6 @@ msgid "New Split"
 msgstr "Нове дроблення"
 
 #: gnucash/gnome-search/dialog-search.c:1119
-#, fuzzy
-#| msgctxt ""
-#| "Item represents an unknown object type (in the sense of bill, customer, "
-#| "invoice, transaction, split,...)!"
-#| msgid "New item"
 msgctxt ""
 "Item represents an unknown object type (in the sense of bill, customer, "
 "invoice, transaction, split,…)!"
@@ -6343,14 +6267,10 @@ msgid "The file could not be reopened."
 msgstr "Файл не можна повторно відкрити."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1094
-#, fuzzy
-#| msgid "Reading file..."
 msgid "Reading file…"
 msgstr "Зчитується файл…"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1117
-#, fuzzy
-#| msgid "Parsing file..."
 msgid "Parsing file…"
 msgstr "Обробляємо файл…"
 
@@ -6362,8 +6282,6 @@ msgstr "Під час спроби обробити файл сталася по
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1149
 #: gnucash/gnome-utils/gnc-file.c:1427 gnucash/gnome-utils/gnc-file.c:1666
-#, fuzzy
-#| msgid "Writing file..."
 msgid "Writing file…"
 msgstr "Запис файла…"
 
@@ -6423,11 +6341,11 @@ msgstr "Потрібно вибрати товар."
 
 #: gnucash/gnome-utils/dialog-account.c:1015
 msgid "Balance limits must be different unless they are both zero."
-msgstr ""
+msgstr "Межі балансу мають бути різними, якщо вони не є обидві нульовими."
 
 #: gnucash/gnome-utils/dialog-account.c:1022
 msgid "The lower balance limit must be less than the higher limit."
-msgstr ""
+msgstr "Нижня межа балансу має бути меншою за верхню межу."
 
 #: gnucash/gnome-utils/dialog-account.c:1078
 msgid "You must enter a valid opening balance or leave it blank."
@@ -6665,10 +6583,8 @@ msgid "Action/Number"
 msgstr "Дія/Номер"
 
 #: gnucash/gnome-utils/dialog-file-access.c:302
-#, fuzzy
-#| msgid "Open"
 msgid "Open…"
-msgstr "Відкрити"
+msgstr "Відкрити…"
 
 #: gnucash/gnome-utils/dialog-file-access.c:303
 #: gnucash/gnome-utils/gnc-file.c:88
@@ -6680,10 +6596,8 @@ msgid "_Open"
 msgstr "_Відкрити"
 
 #: gnucash/gnome-utils/dialog-file-access.c:309
-#, fuzzy
-#| msgid "_Save As"
 msgid "Save As…"
-msgstr "Зберегти _як"
+msgstr "Зберегти як…"
 
 #: gnucash/gnome-utils/dialog-file-access.c:310
 #: gnucash/gnome-utils/dialog-file-access.c:319
@@ -6942,24 +6856,20 @@ msgid "Don't tell me again this _session."
 msgstr "Не виводити знову у цьому _сеансі."
 
 #: gnucash/gnome-utils/gnc-account-sel.c:526
-#, fuzzy
-#| msgid "Selected Accounts"
 msgid "Hide _Placeholder Accounts"
-msgstr "Вибрані рахунки"
+msgstr "Приховати рахунки-_замінники"
 
 #: gnucash/gnome-utils/gnc-account-sel.c:528
-#, fuzzy
-#| msgid "Show Hidden Accounts"
 msgid "Hide _Hidden Accounts"
-msgstr "Показувати приховані рахунки"
+msgstr "Приховати п_риховані рахунки"
 
 #: gnucash/gnome-utils/gnc-account-sel.c:723
 msgid "Set the visibility of placeholder and hidden accounts."
-msgstr ""
+msgstr "Встановити видимість рахунків-замінників та прихованих замінників."
 
 #: gnucash/gnome-utils/gnc-account-sel.c:994
 msgid "New…"
-msgstr ""
+msgstr "Створити…"
 
 # c-format
 #: gnucash/gnome-utils/gnc-amount-edit.c:410
@@ -7553,20 +7463,14 @@ msgid "_Quit"
 msgstr "Ви_йти"
 
 #: gnucash/gnome-utils/gnc-file.c:971 gnucash/gnome-utils/gnc-file.c:991
-#, fuzzy
-#| msgid "Loading user data..."
 msgid "Loading user data…"
 msgstr "Завантаження користувацьких даних…"
 
 #: gnucash/gnome-utils/gnc-file.c:1007
-#, fuzzy
-#| msgid "Re-saving user data..."
 msgid "Re-saving user data…"
 msgstr "Повторне збереження користувацьких даних…"
 
 #: gnucash/gnome-utils/gnc-file.c:1367
-#, fuzzy
-#| msgid "Exporting file..."
 msgid "Exporting file…"
 msgstr "Експортувати файл…"
 
@@ -7604,10 +7508,8 @@ msgid "<unknown>"
 msgstr "<невідомо>"
 
 #: gnucash/gnome-utils/gnc-general-select.c:224
-#, fuzzy
-#| msgid "View"
 msgid "View…"
-msgstr "Перегляд"
+msgstr "Переглянути…"
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:69
 msgid "GnuCash could not find the files of the help documentation."
@@ -7719,12 +7621,12 @@ msgid "Book Options"
 msgstr "Параметри книги"
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:4935
-#, fuzzy
-#| msgid "The minimum number of invoice entries to display."
 msgid ""
 "The maximum number of window menu entries reached, no more entries will be "
 "added."
-msgstr "Мінімальна кількість елементів рахунку-фактури, які слід показувати."
+msgstr ""
+"Досягнута максимальна кількість пунктів меню вікна, додаткові пункт не буде "
+"додано."
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:5175
 #: gnucash/gnucash-core-app.cpp:260
@@ -7865,27 +7767,22 @@ msgid "End of previous accounting period"
 msgstr "Кінець попереднього звітного періоду"
 
 #: gnucash/gnome-utils/gnc-report-combo.c:259
-#, fuzzy
-#| msgid " Report is missing a GUID."
 msgid "Selected Report is Missing"
-msgstr " Звіт не містить GUID."
+msgstr "Не вистачає вибраного звіту"
 
 #. Translators: %s is the report name.
 #: gnucash/gnome-utils/gnc-report-combo.c:314
-#, fuzzy, c-format
-#| msgid "missing"
+#, c-format
 msgid "'%s' is missing"
-msgstr "пропущено"
+msgstr "Не вистачає «%s»"
 
 #. Translators: %s is the internal report guid.
 #: gnucash/gnome-utils/gnc-report-combo.c:318
 #, c-format
 msgid "Report with GUID '%s' is missing"
-msgstr ""
+msgstr "Не вистачає звіту з GUID «%s»"
 
 #: gnucash/gnome-utils/gnc-splash.c:113
-#, fuzzy
-#| msgid "Loading..."
 msgid "Loading…"
 msgstr "Завантаження…"
 
@@ -7988,20 +7885,15 @@ msgid "Account Color"
 msgstr "Колір рахунку"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:962
-#, fuzzy
-#| msgctxt "Column header for 'Document Link'"
-#| msgid "L"
 msgctxt "Column header for 'Balance Limit'"
 msgid "L"
-msgstr "П"
+msgstr "О"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:971
 #: gnucash/gnome-utils/gnc-tree-view-account.c:974
 #: gnucash/gtkbuilder/dialog-account.glade:1705
-#, fuzzy
-#| msgid "Balance"
 msgid "Balance Limit"
-msgstr "Баланс"
+msgstr "Обмеження балансу"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:984
 #: gnucash/import-export/csv-exp/csv-tree-export.c:158
@@ -8290,21 +8182,20 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:103
-#, fuzzy
-#| msgid ""
-#| "Regular expression determining which namespace commodities will be "
-#| "retrieved for"
 msgid ""
 "Regular expression determining which namespace commodities will be retrieved "
 "for when using the get command"
 msgstr ""
-"Регулярний вираз, що визначає, які товари буде отримано з простору назв"
+"Регулярний вираз, що визначає, які товари буде отримано з простору назв при "
+"використанні команди отримання"
 
 #: gnucash/gnucash-cli.cpp:105
 msgid ""
 "When using the dump command list all of the parameters Finance::Quote "
 "returns for the symbol instead of the ones that Gnucash requires."
 msgstr ""
+"При використання команди створення дампу для списку усіх параметрів Finance::"
+"Quote повертає символ, замість параметрів, які потребує Gnucash."
 
 #: gnucash/gnucash-cli.cpp:110
 msgid "Report Generation Options"
@@ -8345,10 +8236,8 @@ msgid "Missing data file parameter"
 msgstr "Не вказано параметра файла даних"
 
 #: gnucash/gnucash-cli.cpp:158
-#, fuzzy
-#| msgid "Not enough information for Blank Transaction?"
 msgid "Not enough information for quotes dump"
-msgstr "Недостатньо даних для порожньої транзакції?"
+msgstr "Недостатньо даних для дампу курсів"
 
 #: gnucash/gnucash-cli.cpp:168
 msgid "Unknown quotes command '{1}'"
@@ -8368,20 +8257,16 @@ msgstr "Пропущено команду або параметр"
 
 #: gnucash/gnucash-commands.cpp:308 gnucash/gnucash-commands.cpp:354
 #: gnucash/gnucash.cpp:177
-#, fuzzy
-#| msgid "Found Finance::Quote version ~A."
 msgid "Found Finance::Quote version {1}."
-msgstr "Знайдено версію Finance::Quote ~A."
+msgstr "Знайдено версію Finance::Quote {1}."
 
 #: gnucash/gnucash-commands.cpp:309
-#, fuzzy
-#| msgid "Found Finance::Quote version ~A."
 msgid "Finance::Quote sources:\n"
-msgstr "Знайдено версію Finance::Quote ~A."
+msgstr "Джерела Finance::Quote:\n"
 
 #: gnucash/gnucash-commands.cpp:364 gnucash/gnucash-commands.cpp:388
 msgid "Price retrieval failed: "
-msgstr ""
+msgstr "Не вдалося отримати ціну: "
 
 #: gnucash/gnucash-core-app.cpp:79
 msgid "This is a development version. It may or may not work."
@@ -8492,22 +8377,16 @@ msgid "[datafile]"
 msgstr "[файл даних]"
 
 #: gnucash/gnucash.cpp:174
-#, fuzzy
-#| msgid "Checking Finance::Quote..."
 msgid "Checking Finance::Quote…"
 msgstr "Перевірка Finance::Quote…"
 
 #: gnucash/gnucash.cpp:185
-#, fuzzy
-#| msgid "Checking Finance::Quote..."
 msgid "Unable to load Finance::Quote."
-msgstr "Перевірка Finance::Quote…"
+msgstr "Не вдалося завантажити Finance::Quote."
 
 #: gnucash/gnucash.cpp:196
-#, fuzzy
-#| msgid "Loading data..."
 msgid "Loading data…"
-msgstr "Завантажуються дані…"
+msgstr "Завантажуємо дані…"
 
 #: gnucash/gnucash.cpp:268
 msgid "Application Options"
@@ -8868,9 +8747,6 @@ msgid "Units in which the custom coordinates are expressed"
 msgstr "Одиниці виміру для нетипових координат"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:31
-#, fuzzy
-#| msgid ""
-#| "Units in which the custom coordinates are expressed (inches, mm, ...)."
 msgid "Units in which the custom coordinates are expressed (inches, mm, …)."
 msgstr "Одиниці, у яких буде виміряно нетипові координати (дюйми, мм…)."
 
@@ -11047,20 +10923,12 @@ msgid "Setup Account Period"
 msgstr "Налаштовування періоду обліку"
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:38
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Select an accounting period and the closing date which must not be in the "
-#| "future and is greater than the closing date of the previous book.\n"
-#| "\n"
-#| "Books will be closed at midnight on the selected date."
 msgid ""
 "Select an accounting period and the closing date which must not be in the "
 "future, but is greater than the closing date of the previous book.\n"
 "\n"
 "Books will be closed at midnight on the selected date."
 msgstr ""
-"\n"
 "Виберіть період обліку і дату закриття. Дати не можуть перебувати у "
 "майбутньому і перевищувати дату закриття попередньої книги.\n"
 "\n"
@@ -11130,14 +10998,8 @@ msgid "Import Account Assistant"
 msgstr "Помічник імпортування рахунків"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:66
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Enter file name and location for the Import...\n"
 msgid "Enter file name and location for the Import…"
-msgstr ""
-"\n"
-"Введіть назву файла і місце його зберігання для імпортування…\n"
+msgstr "Введіть назву файла і місце його зберігання для імпортування…"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:77
 msgid "Choose File to Import"
@@ -11328,22 +11190,14 @@ msgid "Account Selection"
 msgstr "Вибір рахунку"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:687
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Enter file name and location for the Export...\n"
 msgid "Enter file name and location for the Export…"
-msgstr ""
-"\n"
-"Введіть назву файла і місце його зберігання для експортування…\n"
+msgstr "Введіть назву файла і місце його зберігання для експортування…"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:698
 msgid "Choose File Name for Export"
 msgstr "Виберіть назву файла для експортування"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:712
-#, fuzzy
-#| msgid "Export Now..."
 msgid "Export Now…"
 msgstr "Експортувати зараз…"
 
@@ -11431,17 +11285,13 @@ msgstr "Помічник імпортування курсів"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:87
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:77
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Select location and file name for the Import, then click \"OK\"...\n"
 msgid ""
 "\n"
 "Select location and file name for the Import, then click \"Next\"…\n"
 msgstr ""
 "\n"
-"Виберіть місце і назву файла для імпортування, потім натисніть кнопку "
-"«Гаразд»…\n"
+"Виберіть місце і назву файла для імпортування, потім натисніть кнопку «Далі»…"
+"\n"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:100
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:90
@@ -11571,16 +11421,6 @@ msgid "Skip alternate lines"
 msgstr "Пропускати альтернативні рядки"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:728
-#, fuzzy
-#| msgid ""
-#| "Starting from the first line that is actually imported every second line "
-#| "will be skipped. This option will take the leading lines to skip into "
-#| "account as well.\n"
-#| "For example\n"
-#| "* if \"Leading Lines to Skip\" is set to 3, the first line to import will "
-#| "be line 4. Lines 5, 7, 9,... will be skipped.\n"
-#| "* if \"Leading Lines to Skip\" is set to 4, the first line to import will "
-#| "be line 5. Lines 6, 8, 10,... will be skipped."
 msgid ""
 "Starting from the first line that is actually imported every second line "
 "will be skipped. This option will take the leading lines to skip into "
@@ -11596,10 +11436,9 @@ msgstr ""
 "перших пропущених рядків.\n"
 "Приклади:\n"
 "* якщо встановлено значення параметра «Початкові рядки для пропускання» 3, "
-"першим імпортованим рядком буде четвертий. Рядки 5, 7, 9,... буде "
-"пропущено.\n"
+"першим імпортованим рядком буде четвертий. Рядки 5, 7, 9… буде пропущено.\n"
 "* якщо встановлено значення параметра «Початкові рядки для пропускання» 4, "
-"першим імпортованим рядком буде п'ятий. Рядки 6, 8, 10,... буде пропущено."
+"першим імпортованим рядком буде п'ятий. Рядки 6, 8, 10… буде пропущено."
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:781
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:784
@@ -11743,16 +11582,6 @@ msgstr ""
 "запису транзакції."
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:746
-#, fuzzy
-#| msgid ""
-#| "Starting from the first line that is actually imported every second line "
-#| "will be skipped. This option will take the leading lines to skip into "
-#| "account as well.\n"
-#| "For example\n"
-#| "* if 'Leading Lines to Skip' is set to 3, the first line to import will "
-#| "be line 4. Lines 5, 7, 9,... will be skipped.\n"
-#| "* if 'Leading Lines to Skip' is set to 4, the first line to import will "
-#| "be line 5. Lines 6, 8, 10,... will be skipped."
 msgid ""
 "Starting from the first line that is actually imported every second line "
 "will be skipped. This option will take the leading lines to skip into "
@@ -11768,10 +11597,9 @@ msgstr ""
 "перших пропущених рядків.\n"
 "Приклади:\n"
 "* якщо встановлено значення параметра «Початкові рядки для пропускання» 3, "
-"першим імпортованим рядком буде четвертий. Рядки 5, 7, 9,... буде "
-"пропущено.\n"
+"першим імпортованим рядком буде четвертий. Рядки 5, 7, 9… буде пропущено.\n"
 "* якщо встановлено значення параметра «Початкові рядки для пропускання» 4, "
-"першим імпортованим рядком буде п'ятий. Рядки 6, 8, 10,... буде пропущено."
+"першим імпортованим рядком буде п'ятий. Рядки 6, 8, 10… буде пропущено."
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:815
 msgid "<b>Account</b>"
@@ -11782,10 +11610,6 @@ msgid "Select a row to change the mappings"
 msgstr "Виберіть рядок для зміни прив'язок"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:960
-#, fuzzy
-#| msgid ""
-#| "To change mapping, double click on a row or select a row and press the "
-#| "button..."
 msgid ""
 "To change mapping, double click on a row or select a row and press the "
 "button…"
@@ -11806,8 +11630,6 @@ msgstr "Текст помилки."
 #: gnucash/gtkbuilder/assistant-qif-import.glade:603
 #: gnucash/gtkbuilder/assistant-qif-import.glade:734
 #: gnucash/gtkbuilder/assistant-qif-import.glade:863
-#, fuzzy
-#| msgid "Change GnuCash _Account..."
 msgid "Change GnuCash _Account…"
 msgstr "Змінити _рахунок GnuCash…"
 
@@ -11961,23 +11783,6 @@ msgid "Choose accounts to create"
 msgstr "Виберіть рахунок для створення"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:530
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "If you would like to change an account's name, click on the row "
-#| "containing the account, then click on the account name and change it.\n"
-#| "\n"
-#| "Some accounts are marked as \"Placeholder\". Placeholder accounts are "
-#| "used to create a hierarchy of accounts and normally do not have "
-#| "transactions or opening balances. If you would like an account to be a "
-#| "placeholder account, click the checkbox for that account.\n"
-#| "\n"
-#| "If you would like an account to have an opening balance, click on the row "
-#| "containing the account, then click on the opening balance field and enter "
-#| "the starting balance.\n"
-#| "\n"
-#| "<b>Note:</b> all accounts except Equity and placeholder accounts may have "
-#| "an opening balance.\n"
 msgid ""
 "If you would like to change an account's name, click on the row containing "
 "the account, then click on the account name and change it.\n"
@@ -11994,7 +11799,6 @@ msgid ""
 "<b>Note:</b> all accounts except Equity and placeholder accounts may have an "
 "opening balance."
 msgstr ""
-"\n"
 "Якщо вам потрібно змінити назву рахунку, клацніть у рядку запису рахунку, "
 "потім клацніть на назві рахунку і змініть її.\n"
 "\n"
@@ -12008,7 +11812,7 @@ msgstr ""
 "початковий баланс.\n"
 "\n"
 "<b>Зауваження:</b> усі рахунки окрім рахунків маржі та проміжних рахунків "
-"повинні мати початковий баланс.\n"
+"повинні мати початковий баланс."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:563
 msgid "Setup selected accounts"
@@ -12189,18 +11993,10 @@ msgid "Loan Details"
 msgstr "Подробиці боргу"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:451
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Do you utilise an escrow account, if so an account must be specified..."
 msgid "Do you utilise an escrow account, if so an account must be specified…"
-msgstr ""
-"\n"
-"Якщо ви використовуєте депонентний рахунок, його слід вказати…"
+msgstr "Якщо ви використовуєте депонентний рахунок, його слід вказати…"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:470
-#, fuzzy
-#| msgid "... utilize an escrow account for payments?"
 msgid "… utilize an escrow account for payments?"
 msgstr "…використовувати депонентний рахунок для платежів?"
 
@@ -12213,14 +12009,9 @@ msgid "Loan Repayment Options"
 msgstr "Параметри повернення кредиту"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:544
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "All accounts must have valid entries to continue.\n"
 msgid "All accounts must have valid entries to continue."
 msgstr ""
-"\n"
-"Щоб можна було продовжувати, у всіх рахунках мають бути коректні записи.\n"
+"Щоб можна було продовжувати, у всіх рахунках мають бути коректні записи."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:584
 msgid "Principal To"
@@ -12239,15 +12030,10 @@ msgid "Loan Repayment"
 msgstr "Повернення кредиту"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:727
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "All enabled option pages must contain valid entries to continue.\n"
 msgid "All enabled option pages must contain valid entries to continue."
 msgstr ""
-"\n"
 "Щоб можна було продовжувати, усі увімкнені сторінки параметрів мають містити "
-"коректні записи.\n"
+"коректні записи."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:798
 msgid "Payment To (Escrow)"
@@ -12286,16 +12072,10 @@ msgid "Loan Payment"
 msgstr "Сплата за кредитом"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1081
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Review the details below and if correct press Apply to create the "
-#| "schedule."
 msgid ""
 "Review the details below and if correct press \"Apply\"\" to create the "
 "schedule."
 msgstr ""
-"\n"
 "Перегляньте наведені нижче подробиці. Якщо усе правильно, натисніть кнопку "
 "«Застосувати», щоб створити розклад."
 
@@ -12386,10 +12166,8 @@ msgstr ""
 "хвилюйтеся, якщо ваші дані містяться у декількох файлах.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:86
-#, fuzzy
-#| msgid "Select"
 msgid "_Select…"
-msgstr "Вибрати"
+msgstr "_Вибрати…"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:109
 msgid "Select a QIF file to load"
@@ -12671,14 +12449,10 @@ msgstr ""
 "відповідним, ви можете ввести власне значення."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1008
-#, fuzzy
-#| msgid "Enter Information about..."
 msgid "Enter Information about…"
 msgstr "Введіть супутні відомості…"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1034
-#, fuzzy
-#| msgid "All fields must be complete to continue..."
 msgid "All fields must be complete to continue…"
 msgstr "Щоб можна було продовжувати, усі поля має бути заповнено…"
 
@@ -12703,20 +12477,6 @@ msgstr "Імпорт QIF"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1211
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "If you are importing a QIF file from a bank or other financial "
-#| "institution, some of the transactions may already exist in your GnuCash "
-#| "accounts. To avoid duplication, GnuCash has tried to identify matches and "
-#| "needs your help to review them.\n"
-#| "\n"
-#| "On the next page you will be shown a list of imported transactions. As "
-#| "you select each one, a list of possible matches will be shown below it. "
-#| "If you find a correct match, click on it. Your selection will be "
-#| "confirmed by a check mark in the \"Match?\" column.\n"
-#| "\n"
-#| "Click \"Next\" to review the possible matches."
 msgid ""
 "If you are importing a QIF file from a bank or other financial institution, "
 "some of the transactions may already exist in your GnuCash accounts. To "
@@ -12730,7 +12490,6 @@ msgid ""
 "\n"
 "Click \"Next\" to review the possible matches."
 msgstr ""
-"\n"
 "Якщо ви імпортуєте файл QIF від банку або іншої фінансової установи, деякі "
 "із записів операцій вже можуть існувати на ваших рахунках у GnuCash. Щоб "
 "уникнути дублювання, GnuCash визначив відповідники і потребує вашої допомоги "
@@ -12930,10 +12689,8 @@ msgstr "Завершення дроблення капіталу"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:9
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:27
-#, fuzzy
-#| msgid "Transaction Import Assistant"
 msgid "Stock Transaction Assistant"
-msgstr "Помічник імпортування транзакцій"
+msgstr "Помічник операцій з акціями"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:22
 msgid ""
@@ -12943,10 +12700,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:45
-#, fuzzy
-#| msgid "Show the account description for subheadings?"
 msgid "Select the date and description for your records."
-msgstr "Показувати опис рахунку для підзаголовків?"
+msgstr "Виберіть дату і опис для ваших записів."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:109
 #: gnucash/gtkbuilder/dialog-payment.glade:662
@@ -12962,34 +12717,24 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:195
-#, fuzzy
-#| msgid "Transaction"
 msgid "Transaction Type"
-msgstr "Транзакція"
+msgstr "Тип операції"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:248
-#, fuzzy
-#| msgid "Gross Balance"
 msgid "Previous Balance"
-msgstr "Валовий баланс"
+msgstr "Попередній баланс"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:312
-#, fuzzy
-#| msgid "To Amount"
 msgid "Stock Amount"
-msgstr "До суми"
+msgstr "Сума акцій"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:329
-#, fuzzy
-#| msgid "Enter the name of the Customer"
 msgid "Enter the value of the shares."
-msgstr "Введіть назву клієнта"
+msgstr "Введіть ціну цінних паперів."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:404
-#, fuzzy
-#| msgid "_Value"
 msgid "_Stock Value"
-msgstr "_Значення"
+msgstr "_Ціна акцій"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:442
 msgid ""
@@ -13008,10 +12753,8 @@ msgid "Cash"
 msgstr "Готівка"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:516
-#, fuzzy
-#| msgid "Raise Accounts"
 msgid "Cash Account"
-msgstr "Підняти рахунки"
+msgstr "Готівковий рахунок"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:555
 msgid ""
@@ -13029,17 +12772,15 @@ msgstr "Сплата за куртаж"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:641
 msgid "Capitalize brokerage fees into stock account?"
-msgstr ""
+msgstr "Капіталізувати сплати куртажу до рахунку акцій?"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:682
 msgid "In this page, input any dividend income received in this transaction."
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:756
-#, fuzzy
-#| msgid "Find Account"
 msgid "Dividend Account"
-msgstr "Знайти рахунок"
+msgstr "Рахунок дивідендів"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:795
 msgid ""
@@ -13048,38 +12789,27 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:869
-#, fuzzy
-#| msgid "Splits Account"
 msgid "Capital Gains Account"
-msgstr "Рахунок дроблення"
+msgstr "Рахунок збільшення капіталу"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:891
-#, fuzzy
-#| msgid "Capital"
 msgid "Capital Gains"
-msgstr "Капітал"
+msgstr "Збільшення капіталу"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:908
-#, fuzzy
-#| msgid ""
-#| "If you are finished creating the stock split or merger, press \"Apply\". "
-#| "You may also press \"Back\" to review your choices, or \"Cancel\" to quit "
-#| "without making any changes."
 msgid ""
 "A summary of splits is shown as follows. If the summary is correct, and "
 "there are no errors, please press \"Apply\". You may also press \"Back\" to "
 "review your choices, or \"Cancel\" to quit without making any changes. "
 msgstr ""
-"Якщо ви завершили створення дроблення або об'єднання капіталу, натисніть "
-"кнопку «Застосувати». Ви також можете натиснути кнопку «Назад», щоб "
-"переглянути параметри, або кнопку «Скасувати», щоб закрити це діалогове "
-"вікно без внесення будь-яких змін."
+"Нижче показано резюме дроблень. Якщо резюме є правильним, і немає помилок, "
+"натисніть кнопку «Застосувати». Ви також можете натиснути кнопку «Назад», "
+"щоб переглянути параметри, або кнопку «Скасувати», щоб закрити це діалогове "
+"вікно без внесення будь-яких змін. "
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:956
-#, fuzzy
-#| msgid "_Finish"
 msgid "Finish"
-msgstr "_Завершити"
+msgstr "Завершити"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:16
 msgid "Introduction placeholder"
@@ -13376,10 +13106,8 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-account.glade:801
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:8
 #: gnucash/report/trep-engine.scm:69
-#, fuzzy
-#| msgid "Filter By:"
 msgid "Filter By…"
-msgstr "Критерій фільтрування:"
+msgstr "Критерій фільтрування…"
 
 #: gnucash/gtkbuilder/dialog-account.glade:922
 msgid "_Default"
@@ -13489,10 +13217,8 @@ msgid "_Parent Account"
 msgstr "_Батьківський рахунок"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1464
-#, fuzzy
-#| msgid "Account Type"
 msgid "Acco_unt Type"
-msgstr "Тип рахунку"
+msgstr "Тип _рахунку"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1514
 msgid "Placeholde_r"
@@ -13517,13 +13243,6 @@ msgid "H_idden"
 msgstr "При_хований"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1550
-#, fuzzy
-#| msgid ""
-#| "This account (and any sub-accounts) will be hidden in the account tree "
-#| "and will not appear in the popup account list in the register. To reset "
-#| "this option, you will first need to open the \"Filter By...\" dialog for "
-#| "the account tree and check the \"show hidden accounts\" option. Doing so "
-#| "will allow you to select the account and reopen this dialog."
 msgid ""
 "This account (and any sub-accounts) will be hidden in the account tree and "
 "will not appear in the popup account list in the register. To reset this "
@@ -13564,10 +13283,8 @@ msgstr ""
 "податковий код."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1636
-#, fuzzy
-#| msgid "_Ending Balance"
 msgid "_Higher Balance Limit"
-msgstr "Сальдо _наприкінці"
+msgstr "_Верхня межа балансу"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1649
 msgid ""
@@ -13580,6 +13297,16 @@ msgid ""
 "\n"
 "Clear the entry to have no warning."
 msgstr ""
+"Якщо вказано значення, на діаграмі рахунків може бути показано позначку, "
+"якщо поточний баланс перевищує це значення.\n"
+"\n"
+"Тобто:\n"
+"Для сьогоднішнього балансу -90 буде показано піктограму, якщо встановлено "
+"межу -100\n"
+"Для сьогоднішнього балансу 100 буде показано піктограму, якщо встановлено "
+"межу 90\n"
+"\n"
+"Якщо у попередженні немає потреби, спорожніть поле."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1670
 msgid ""
@@ -13592,24 +13319,28 @@ msgid ""
 "\n"
 "Clear the entry to have no warning."
 msgstr ""
+"Якщо вказано значення, на діаграмі рахунків може бути показано позначку, "
+"якщо поточний баланс буде меншим за це значення.\n"
+"\n"
+"Тобто:\n"
+"Для сьогоднішнього балансу -100 буде показано піктограму, якщо встановлено "
+"межу -90\n"
+"Для сьогоднішнього балансу 90 буде показано піктограму, якщо встановлено "
+"межу 100\n"
+"\n"
+"Якщо у попередженні немає потреби, спорожніть поле."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1692
-#, fuzzy
-#| msgid "Show zero balance items"
 msgid "_Lower Balance Limit"
-msgstr "Показувати елементи з нульовим балансом"
+msgstr "_Нижня межа балансу"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1718
-#, fuzzy
-#| msgid "Include _subaccounts"
 msgid "_Include sub accounts"
 msgstr "Включати _субрахунки"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1755
-#, fuzzy
-#| msgid "Proper_ties"
 msgid "More Properties"
-msgstr "В_ластивості"
+msgstr "Інші властивості"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1781
 msgid "<b>Balance Information</b>"
@@ -14105,8 +13836,6 @@ msgid "Warning: Finance::Quote not installed properly."
 msgstr "Попередження: Fincance::Quote не встановлено потрібним чином."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:713
-#, fuzzy
-#| msgid "Select user information here..."
 msgid "Select user information here…"
 msgstr "Виберіть інформацію про користувача…"
 
@@ -14208,23 +13937,10 @@ msgid "Exit the saved report configurations dialog"
 msgstr "Закрити діалогове вікно збережених налаштувань звітів"
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:100
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Currently you have no saved reports.\n"
 msgid "Currently you have no saved reports."
-msgstr ""
-"\n"
-"Зараз у вас немає збережених звітів.\n"
+msgstr "Зараз у вас немає збережених звітів."
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:112
-#, fuzzy
-#| msgid ""
-#| "Saved report configurations are created by first opening a report from "
-#| "the Reports menu,\n"
-#| "altering the report's options to your taste and then choosing \"Save "
-#| "Report Configuration\" from\n"
-#| "the Reports menu or tool bar."
 msgid ""
 "Saved report configurations are created by\n"
 "1. opening a report from the Reports menu,\n"
@@ -14232,11 +13948,12 @@ msgid ""
 "3. selecting \"Save Report Configuration [As…]\" from the Reports menu\n"
 " or pressing a \"Save Config [As…]\" button on the tool bar."
 msgstr ""
-"Щоб зберегти налаштування звіту, слід спочатку відкрити звіт з меню "
-"«Звіти»,\n"
-"змінити параметри звіту відповідно до ваших потреб, а потім вибрати пункт "
-"«Зберегти налаштування звіту» з\n"
-"меню «Звіти» або скористатися кнопкою панелі інструментів."
+"Щоб зберегти налаштування звіту, слід спочатку\n"
+"1. Відкрити звіт з меню «Звіти»,\n"
+"2. Змінити параметри звіту відповідно до ваших потреб,\n"
+"3. Потім вибрати пункт «Зберегти налаштування звіту [як…]» з\n"
+"меню «Звіти» або натиснути кнопку «Зберегти налаштування[як…]» на панелі "
+"інструментів."
 
 #: gnucash/gtkbuilder/dialog-date-close.glade:7
 #: gnucash/gtkbuilder/dialog-date-close.glade:261
@@ -14283,10 +14000,8 @@ msgid "(none)"
 msgstr "(немає)"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:409
-#, fuzzy
-#| msgid "Enter URL like http://www.gnucash.org"
 msgid "Enter an URL like \"https://www.gnucash.org\""
-msgstr "Введіть адресу, подібну до http://www.gnucash.org"
+msgstr "Введіть адресу, подібну до https://www.gnucash.org"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:454
 msgid "Location does not start with a valid scheme"
@@ -14667,20 +14382,16 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:110
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:266
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:412
-#, fuzzy
-#| msgid "New Account"
 msgid "New _Account…"
-msgstr "Новий рахунок"
+msgstr "_Створити рахунок…"
 
 #: gnucash/gtkbuilder/dialog-import.glade:86
 msgid "Please select or create an appropriate GnuCash account for:"
 msgstr "Виберіть або створіть відповідний рахунок GnuCash для:"
 
 #: gnucash/gtkbuilder/dialog-import.glade:99
-#, fuzzy
-#| msgid "Online account ID here..."
 msgid "Online account ID here…"
-msgstr "Інтерактивний ідентифікатор рахунку тут.."
+msgstr "Інтерактивний ідентифікатор рахунку тут…"
 
 #: gnucash/gtkbuilder/dialog-import.glade:170
 #: gnucash/gtkbuilder/dialog-import.glade:278
@@ -14911,22 +14622,16 @@ msgid "Extra Payments"
 msgstr "Додаткові платежі"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:633
-#, fuzzy
-#| msgid "Report Title"
 msgid "Report template"
-msgstr "Назва Звіту"
+msgstr "Шаблон звіту"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:695
-#, fuzzy
-#| msgid "Show employee report"
 msgid "Use template report"
-msgstr "Звіт щодо працівника"
+msgstr "Скористатися шаблонним звітом"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:723
-#, fuzzy
-#| msgid "Choose the export format for this report:"
 msgid "Choose a different report template before timeout"
-msgstr "Виберіть формат експорту для цієї відповіді:"
+msgstr "Виберіть інший шаблон звіту до завершення часу очікування"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:915
 msgid ""
@@ -16481,8 +16186,6 @@ msgid "Custom format"
 msgstr "Користувацький формат"
 
 #: gnucash/gtkbuilder/dialog-progress.glade:12
-#, fuzzy
-#| msgid "Working..."
 msgid "Working…"
 msgstr "Виконується…"
 
@@ -16511,8 +16214,6 @@ msgid "Move dow_n"
 msgstr "Перемістити в_низ"
 
 #: gnucash/gtkbuilder/dialog-report.glade:189
-#, fuzzy
-#| msgid "Si_ze..."
 msgid "Si_ze…"
 msgstr "_Розмір…"
 
@@ -16590,13 +16291,8 @@ msgid "Temporary Warnings"
 msgstr "Тимчасові попередження"
 
 #: gnucash/gtkbuilder/dialog-search.glade:37
-#, fuzzy
-#| msgctxt ""
-#| "Item represents an unknown object type (in the sense of bill, customer, "
-#| "invoice, transaction, split,...)!"
-#| msgid "New item"
 msgid "_New item…"
-msgstr "Новий елемент"
+msgstr "_Створити пункт…"
 
 #: gnucash/gtkbuilder/dialog-search.glade:82
 msgid "_Find"
@@ -16682,8 +16378,6 @@ msgid "Make Scheduled Transaction"
 msgstr "Створити заплановану транзакцію"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:159
-#, fuzzy
-#| msgid "Advanced..."
 msgid "Advanced…"
 msgstr "Додатково…"
 
@@ -16827,8 +16521,6 @@ msgid "Template Transaction"
 msgstr "Шаблон транзакції"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1476
-#, fuzzy
-#| msgid "Since Last Run..."
 msgid "Since Last Run…"
 msgstr "З моменту останнього запуску…"
 
@@ -17617,8 +17309,6 @@ msgid "Show Description"
 msgstr "Показати опис"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:675
-#, fuzzy
-#| msgid "Note: Use View->'Filter By...' to control visible accounts."
 msgid "Note: Use View->'Filter By…' to control visible accounts."
 msgstr ""
 "Зауваження: скористайтеся пунктом «Перегляд -> Критерій фільтрування…» для "
@@ -17654,8 +17344,6 @@ msgstr "Введіть нотатку"
 
 #. Filter register by… Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:13
-#, fuzzy
-#| msgid "Filter register by..."
 msgid "Filter register by…"
 msgstr "Фільтр зареєстрований за…"
 
@@ -17721,8 +17409,6 @@ msgstr "Зберегти запис пов'язаного документа"
 
 #. Sort register by Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:770
-#, fuzzy
-#| msgid "Sort register by..."
 msgid "Sort register by…"
 msgstr "Впорядковувати журнал за…"
 
@@ -18420,10 +18106,8 @@ msgid "_Templates"
 msgstr "Ша_блони"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1661
-#, fuzzy
-#| msgid "Select File for Import"
 msgid "Select File Import Format and Template"
-msgstr "Виберіть файл для імпортування"
+msgstr "Виберіть формат і шаблон імпортування файлів"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1730
 msgid ""
@@ -18431,24 +18115,26 @@ msgid ""
 "profile list contains specializations and is populated according to which "
 "format you select in this list."
 msgstr ""
+"У цьому списку містяться формати файлів, які може імпортувати AQBanking. У "
+"списку профілів визначено спеціалізації, його буде заповнено відповідно до "
+"вибраного вами у списку формату."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1733
-#, fuzzy
-#| msgid "<b>File Format</b>"
 msgid "File Format"
-msgstr "<b>Формат файла</b>"
+msgstr "Формат файлів"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1779
 msgid ""
 "This list one or more specialization templates that adjust the import for "
 "different banks uses of fields in the selected import format."
 msgstr ""
+"У цьому списку наведено один або декілька шаблонів спеціалізації, які "
+"коригують імпортування для різних випадків використання полів у вибраному "
+"форматі імпортування."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1787
-#, fuzzy
-#| msgid "Profits:"
 msgid "Profiles"
-msgstr "Прибутки:"
+msgstr "Профілі"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:22
 #: gnucash/import-export/aqb/gncmod-aqbanking.c:70
@@ -18907,17 +18593,13 @@ msgstr ""
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:6
 msgid "Import using AQBanking"
-msgstr ""
+msgstr "Імпортування за допомогою AQBanking"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:8
-#, fuzzy
-#| msgid ""
-#| "Import a DTAUS file into GnuCash and transmit its orders by Online "
-#| "Banking."
 msgid "Import into GnuCash any file format supported by AQBanking"
 msgstr ""
-"Імпортувати файл DTAUS до GnuCash і передати його накази за допомогою "
-"інтернет-банкінгу."
+"Імпортувати до GnuCash будь-який формат файлів, підтримку якого передбачено "
+"у AQBanking"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:14
 msgid "_Online Actions"
@@ -18933,8 +18615,6 @@ msgid "The list of Scheduled Transactions"
 msgstr "Список запланованих транзакцій"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:23
-#, fuzzy
-#| msgid "Get _Transactions..."
 msgid "Get _Transactions…"
 msgstr "Отримати _транзакції…"
 
@@ -18944,8 +18624,6 @@ msgstr "Отримати транзакції рахунку онлайн чер
 
 #. Translators: https://en.wikipedia.org/wiki/Single_Euro_Payments_Area
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:31
-#, fuzzy
-#| msgid "Issue _SEPA Transaction..."
 msgid "Issue _SEPA Transaction…"
 msgstr "_Запустити транзакцію SEPA…"
 
@@ -18957,8 +18635,6 @@ msgstr ""
 "Запустити нову міжнародну європейську (SEPA) транзакцію інтернет-банкінгу"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:36
-#, fuzzy
-#| msgid "Issue SEPA I_nternal Transaction..."
 msgid "Issue SEPA I_nternal Transaction…"
 msgstr "Запустити в_нутрішню транзакцію SEPA…"
 
@@ -18970,8 +18646,6 @@ msgstr ""
 "Запустити нову внутрішню європейську (SEPA) транзакцію інтернет-банкінгу"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:41
-#, fuzzy
-#| msgid "_Internal Transaction..."
 msgid "_Internal Transaction…"
 msgstr "_Внутрішня транзакція…"
 
@@ -18981,8 +18655,6 @@ msgstr ""
 "Запустити нову внутрішню банківську транзакцію онлайн через клієнт-банк"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:46
-#, fuzzy
-#| msgid "Issue SEPA Direct _Debit..."
 msgid "Issue SEPA Direct _Debit…"
 msgstr "_Видати прямий дебет SEPA…"
 
@@ -18999,14 +18671,10 @@ msgid "Show _log window"
 msgstr "Показати вікно _журналу"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:55
-#, fuzzy
-#| msgid "Show the online banking log window."
 msgid "Show the online banking log window"
-msgstr "Показати вікно журналу інтернет-банкінгу."
+msgstr "Показати вікно журналу інтернет-банкінгу"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:63
-#, fuzzy
-#| msgid "_Online Banking Setup..."
 msgid "_Online Banking Setup…"
 msgstr "_Налаштування інтернет-банкінгу…"
 
@@ -19091,8 +18759,7 @@ msgstr ""
 "(які називають «профілі»), один з яких ви можете тут вибрати."
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:297
-#, fuzzy, c-format
-#| msgid "Validation...\n"
+#, c-format
 msgid "Validation…\n"
 msgstr "Перевірка…\n"
 
@@ -19168,14 +18835,8 @@ msgstr ""
 "фактурі проігноровано.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:645
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Processing...\n"
 msgid "Processing…"
-msgstr ""
-"\n"
-"Обробка…\n"
+msgstr "Обробка…"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:714
 #, c-format
@@ -19479,17 +19140,13 @@ msgstr "Номер рахунку"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:556
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:569
-#, fuzzy
-#| msgid "Amount With Sym"
 msgid "Value With Sym"
 msgstr "Сума із символом"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:556
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:569
-#, fuzzy
-#| msgid "Value $"
 msgid "Value Num."
-msgstr "Значення $"
+msgstr "Числ. значення"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:557
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:570
@@ -19562,13 +19219,7 @@ msgstr ""
 "невикористаних рахунків.\n"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:458
-#, fuzzy, c-format
-#| msgid ""
-#| "Import completed but with errors!\n"
-#| "\n"
-#| "The number of Accounts added was %u and %u were updated.\n"
-#| "\n"
-#| "See below for errors..."
+#, c-format
 msgid ""
 "Import completed but with errors!\n"
 "\n"
@@ -19719,7 +19370,7 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1427
 msgid "This line has the following parse issues:"
-msgstr ""
+msgstr "У цьому рядку виявлено такі вади обробки:"
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1771
 msgid "No Linked Account"
@@ -19880,16 +19531,17 @@ msgid "Please select a description column."
 msgstr "Будь ласка, виберіть стовпчик опису."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:507
-#, fuzzy
-#| msgid "Please select an amount column."
 msgid "Please select a (negated) amount column."
-msgstr "Будь ласка, виберіть стовпчик суми."
+msgstr "Будь ласка, виберіть (заперечний) стовпчик суми."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:524
 msgid ""
 "The current account selections will generate multi-currency transactions. "
 "Please select one of the following columns: price, (negated) value."
 msgstr ""
+"Параметри поточного рахунку призведуть до створення багатовалютних "
+"транзакцій. Будь ласка, виберіть один з таких стовпчиків: ціна, значення (зі "
+"знаком)."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:531
 msgid ""
@@ -19897,18 +19549,16 @@ msgid ""
 "Please select one of the following columns: price, (negated) value, "
 "(negated) transfer amount."
 msgstr ""
+"Параметри поточного рахунку призведуть до створення багатовалютних "
+"транзакцій. Будь ласка, виберіть один з таких стовпчиків: ціна, значення (зі "
+"знаком), сума переказу (зі знаком)."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:671
-#, fuzzy
-#| msgid ""
-#| "No 'Currency to' column selected and no selected Currency specified "
-#| "either.\n"
-#| "This should never happen. Please report this as a bug."
 msgid ""
 "Current line still has parse errors.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
-"Не вибрано стовпчик «Вихідна валюта» і не вказано валюти.\n"
+"У поточному рядку усе ще є помилки обробки.\n"
 "Так не слід робити. Будь ласка, повідомте про цю ваду."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:682
@@ -19920,16 +19570,12 @@ msgstr ""
 "Такого не мало статися. Будь ласка, повідомте про це розробникам як про ваду."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:686
-#, fuzzy
-#| msgid "Error"
 msgid "Parse Error"
-msgstr "Помилка"
+msgstr "Помилка аналізу"
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:702
-#, fuzzy
-#| msgid "Select matching existing transaction"
 msgid "Problem creating preliminary transaction"
-msgstr "Виберіть відповідну існуючу транзакцію"
+msgstr "Проблема зі створенням попередньої транзакції"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:54
 msgid "From Symbol"
@@ -19990,7 +19636,7 @@ msgstr "Дані оброблено до некоректної валюти д�
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:550
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:630
 msgid "{1}: {2}"
-msgstr ""
+msgstr "{1}: {2}"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:279
 msgid "No date column."
@@ -20017,30 +19663,24 @@ msgid "Transaction Commodity"
 msgstr "Товар переказу"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
-#, fuzzy
-#| msgid "Amount (_words)"
 msgid "Amount (Negated)"
-msgstr "Кількість (_словами)"
+msgstr "Сума (зі знаком)"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:71
 msgid "Value (Negated)"
-msgstr ""
+msgstr "Значення (зі знаком)"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:76
 msgid "Transfer Action"
 msgstr "Дія з переказу"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:78
-#, fuzzy
-#| msgid "Transfer Account"
 msgid "Transfer Amount"
-msgstr "Рахунок для оплати"
+msgstr "Сума переказу"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:79
-#, fuzzy
-#| msgid "Transfer Account"
 msgid "Transfer Amount (Negated)"
-msgstr "Рахунок для оплати"
+msgstr "Сума переказу (зі знаком)"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:80
 msgid "Transfer Memo"
@@ -20061,22 +19701,20 @@ msgstr "Не вдалося обробити значення до корект�
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:246
 msgid "Date field can not be empty if 'Multi-split' option is unset.\n"
 msgstr ""
+"Поле дати не може бути порожнім, якщо не позначено пункт «Мультиподіл».\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:262
 msgid "Description field can not be empty if 'Multi-split' option is unset.\n"
 msgstr ""
+"Поле опису не може бути порожнім, якщо не позначено пункт «Мультиподіл».\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:312
-#, fuzzy
-#| msgid "Invalid dates"
 msgid "No valid date."
-msgstr "Некоректні дати"
+msgstr "Немає коректної дати."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:315
-#, fuzzy
-#| msgid "Sort by description."
 msgid "No valid description."
-msgstr "Впорядковувати за описом."
+msgstr "Немає коректного опису."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:448
 msgid "Account value can't be empty."
@@ -20096,10 +19734,8 @@ msgstr ""
 "Значення рахунку переказу не можна зворотно пов'язати із його рахунком."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:642
-#, fuzzy
-#| msgid "No amount column."
 msgid "No amount or negated amount column."
-msgstr "Немає стовпчика суми."
+msgstr "Немає стовпчика суми або суми зі знаком."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:645
 msgid "Split is reconciled but reconcile date column is missing or invalid."
@@ -20120,12 +19756,17 @@ msgid ""
 "Choice of accounts makes this a multi-currency transaction but price or "
 "(negated) value column is missing or invalid."
 msgstr ""
+"Вибір рахунків робить цей запис багатовалютною транзакцією, але пропущено "
+"стовпчик ціни або значення (зі знаком) або вкзаано некоректні значення."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:666
 msgid ""
 "Choice of account makes this a multi-currency transaction but price, "
 "(negated) value or (negated) transfer column is missing or invalid."
 msgstr ""
+"Вибір рахунку робить цей запис багатовалютною транзакцією, але пропущено "
+"стовпчик ціни, значення (зі знаком) або значення переказу (зі знаком) або "
+"вказано некоректні значення."
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:46
 msgid "No Settings"
@@ -20136,10 +19777,8 @@ msgid "GnuCash Export Format"
 msgstr "Формат експортування GnuCash"
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:48
-#, fuzzy
-#| msgid "GnuCash Export Format"
 msgid "GnuCash Export Format (4.x and older)"
-msgstr "Формат експортування GnuCash"
+msgstr "Формат експортування GnuCash (4.x і давніших)"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:134
 msgid "Shipping Name"
@@ -20262,18 +19901,13 @@ msgstr "Вимкнено"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1331
-#, fuzzy
-#| msgid "_Select transfer account"
 msgid "_Assign transfer account"
-msgstr "_Виберіть рахунок для переносу"
+msgstr "_Призначити рахунок для переносу"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1341
-#, fuzzy
-#| msgid "Exchange rate"
-#| msgid_plural "Exchange rates"
 msgid "Assign e_xchange rate"
-msgstr "Курси обміну"
+msgstr "Призначити _курс обміну"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1349
@@ -20335,10 +19969,9 @@ msgstr "Новий, трансфер %s у (автоматично) «%s»"
 
 #. Translators: %s is the amount to be transferred.
 #: gnucash/import-export/import-main-matcher.c:1976
-#, fuzzy, c-format
-#| msgid "New, UNBALANCED (need acct to transfer %s)!"
+#, c-format
 msgid "New, UNBALANCED (need price to transfer %s to acct %s)!"
-msgstr "Новий, НЕЗБАЛАНСОВАНИЙ (потрібен рахунок для трансферу %s)!"
+msgstr "Новий, НЕЗБАЛАНСОВАНИЙ (потрібна ціна для переказу %s до рахунку %s)!"
 
 #. Translators: %s is the amount to be transferred.
 #: gnucash/import-export/import-main-matcher.c:1992
@@ -20478,8 +20111,6 @@ msgid "Select one or multiple OFX/QFX file(s) to process"
 msgstr "Виберіть один або декілька файлів OFX/QFX для обробки"
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.ui:6
-#, fuzzy
-#| msgid "Import _OFX/QFX..."
 msgid "Import _OFX/QFX…"
 msgstr "Імпортувати _OFX/QFX…"
 
@@ -20887,7 +20518,7 @@ msgstr "Шукаємо дублікати транзакцій"
 #: gnucash/import-export/qif-imp/qif-parse.scm:174
 #, scheme-format
 msgid "The account type ~s is unknown, using 'bank' instead."
-msgstr ""
+msgstr "Тип рахунку ~s є невідомим, використовуємо замість нього «bank»."
 
 #. Translators: This is an error message about actions like buy, sell …
 #: gnucash/import-export/qif-imp/qif-parse.scm:238
@@ -20899,7 +20530,7 @@ msgstr "Нерозпізнана дія «~a»."
 #: gnucash/import-export/qif-imp/qif-parse.scm:258
 #, scheme-format
 msgid "The unknown reconciliation status '~a' will be replaced by 'uncleared'."
-msgstr ""
+msgstr "Невідомий стан узгодження «~a» буде замінено на «не узгоджено»."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:213
 msgid "QIF import: Name conflict with another account."
@@ -21202,8 +20833,6 @@ msgid "Enter the Discount Percent"
 msgstr "Введіть процент знижки"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:609
-#, fuzzy
-#| msgid "Enter the Discount ... unknown type"
 msgid "Enter the Discount … unknown type"
 msgstr "Введіть знижку … невідомий тип"
 
@@ -22135,16 +21764,12 @@ msgid "Most recent"
 msgstr "Остання"
 
 #: gnucash/report/options-utilities.scm:158
-#, fuzzy
-#| msgid "Width of plot in pixels."
 msgid "Width of plot, 10 - 100 in percent, above in pixels."
-msgstr "Ширина малюнку у точках."
+msgstr "Ширина креслення, 10–100 у відсотках, вище у пікселях."
 
 #: gnucash/report/options-utilities.scm:164
-#, fuzzy
-#| msgid "Height of plot in pixels."
 msgid "Height of plot, 10 - 100 in percent, above in pixels."
-msgstr "Висота малюнку у точках."
+msgstr "Висота креслення, 10–100 у відсотках, вище у пікселях."
 
 #: gnucash/report/options-utilities.scm:173
 msgid "Choose the marker for each data point."
@@ -22647,7 +22272,7 @@ msgstr "Заголовок цього звіту."
 #: gnucash/report/reports/example/sample-report.scm:119
 #: gnucash/report/reports/example/sample-report.scm:131
 msgid "Tab B"
-msgstr ""
+msgstr "Таблиця Б"
 
 #: gnucash/report/reports/example/sample-report.scm:61
 msgid "Boolean Option"
@@ -22690,10 +22315,8 @@ msgid "This is a string option."
 msgstr "Це рядковий параметр."
 
 #: gnucash/report/reports/example/sample-report.scm:86
-#, fuzzy
-#| msgid "String Option"
 msgid "String Option Default"
-msgstr "Рядковий параметр"
+msgstr "Типове значення рядкового параметра"
 
 #: gnucash/report/reports/example/sample-report.scm:99
 msgid "Just a Date Option"
@@ -22741,7 +22364,7 @@ msgstr "Це параметр кольору."
 #: gnucash/report/reports/example/sample-report.scm:147
 #: gnucash/report/reports/example/sample-report.scm:158
 msgid "Tab A"
-msgstr ""
+msgstr "Таблиця А"
 
 #: gnucash/report/reports/example/sample-report.scm:147
 msgid "An account list option"
@@ -22776,25 +22399,19 @@ msgid "Testing"
 msgstr "Тестування"
 
 #: gnucash/report/reports/example/sample-report.scm:169
-#, fuzzy
-#| msgid "Report Title"
 msgid "Report Title Default"
-msgstr "Назва Звіту"
+msgstr "Типова назва звіту"
 
 #: gnucash/report/reports/example/sample-report.scm:285
-#, fuzzy, scheme-format
-#| msgid ""
-#| "This is a sample GnuCash report. See the guile (scheme) source code in "
-#| "the scm/report directory for details on writing your own reports, or "
-#| "extending existing reports."
+#, scheme-format
 msgid ""
 "This is a sample GnuCash ~a report. See the guile (scheme) source code in "
 "the scm/report directory for details on writing your own reports, or "
 "extending existing reports."
 msgstr ""
-"Це приклад звіту GnuCash. Дивіться вихідний текст guile (scheme) у каталозі "
-"scm/report для того, щоб дізнатись як писати власні звіти або доповнювати "
-"наявні звіти."
+"Це приклад звіту ~a GnuCash. Дивіться вихідний текст guile (scheme) у "
+"каталозі scm/report для того, щоб дізнатись як писати власні звіти або "
+"доповнювати наявні звіти."
 
 #: gnucash/report/reports/example/sample-report.scm:292
 #, scheme-format
@@ -22806,28 +22423,20 @@ msgstr ""
 "дуже класного звіту, звертайтесь до списку листування ~a."
 
 #: gnucash/report/reports/example/sample-report.scm:297
-#, fuzzy
-#| msgid ""
-#| "For details on subscribing to that list, see &lt;https://www.gnucash.org/"
-#| "&gt;."
 msgid ""
 " For details on subscribing to that list, see &lt;https://www.gnucash.org/"
 "&gt;."
 msgstr ""
-"Щоб дізнатись подробиці про участь у цьому списку, дивіться &lt;https://www."
+" Щоб дізнатись подробиці про участь у цьому списку, дивіться &lt;https://www."
 "gnucash.org/&gt;."
 
 #: gnucash/report/reports/example/sample-report.scm:298
-#, fuzzy
-#| msgid ""
-#| "You can learn more about writing scheme at &lt;https://www.scheme.com/"
-#| "tspl2d/&gt;."
 msgid ""
 " You can learn more about writing scheme at &lt;https://www.scheme.com/"
 "tspl2d/&gt;."
 msgstr ""
-"Ви можете дізнатись більше про програмування на scheme за посиланням &lt;"
-"https://www.scheme.com/tspl2d/&gt;."
+" Ви можете дізнатись більше про програмування на scheme за посиланням "
+"&lt;https://www.scheme.com/tspl2d/&gt;."
 
 #: gnucash/report/reports/example/sample-report.scm:302
 #, scheme-format
@@ -22909,16 +22518,12 @@ msgstr "Показати довідку"
 
 #: gnucash/report/reports/example/sample-report.scm:442
 #: gnucash/report/reports/example/sample-report.scm:453
-#, fuzzy
-#| msgid "Employee Report"
 msgid "Sample Report"
-msgstr "Звіт про працівника"
+msgstr "Зразок звіту"
 
 #: gnucash/report/reports/example/sample-report.scm:457
-#, fuzzy
-#| msgid "Show employee report"
 msgid "An options example report."
-msgstr "Звіт щодо працівника"
+msgstr "Звіт з прикладами параметрів."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:79
 msgid "Tax Report / TXF Export"
@@ -23586,12 +23191,12 @@ msgstr "Пропускати рахунки"
 #: gnucash/report/reports/standard/income-statement.scm:380
 #: gnucash/report/reports/standard/trial-balance.scm:383
 msgid "${company-name} ${report-title} For Period Covering ${start} to ${end}"
-msgstr ""
+msgstr "${company-name} ${report-title} для періоду від ${start} до ${end}"
 
 #: gnucash/report/reports/standard/account-summary.scm:307
 #: gnucash/report/reports/standard/trial-balance.scm:379
 msgid "${company-name} ${report-title} ${date}"
-msgstr ""
+msgstr "${company-name} ${report-title} ${date}"
 
 #: gnucash/report/reports/standard/account-summary.scm:392
 msgid "Account title"
@@ -25563,382 +25168,290 @@ msgid "Profit & Loss"
 msgstr "Прибутки і втрати"
 
 #: gnucash/report/reports/standard/investment-lots.scm:40
-#, fuzzy
-#| msgid "Charge"
 msgid "Chart"
-msgstr "Витрата"
+msgstr "Діаграма"
 
 #: gnucash/report/reports/standard/investment-lots.scm:41
-#, fuzzy
-#| msgid "Two Columns"
 msgid "Columns"
-msgstr "У два стовпчики"
+msgstr "Стовпчики"
 
 #: gnucash/report/reports/standard/investment-lots.scm:42
-#, fuzzy
-#| msgid "Validation...\n"
 msgid "Validation"
-msgstr "Перевірка…\n"
+msgstr "Перевірка"
 
 #: gnucash/report/reports/standard/investment-lots.scm:47
 #: gnucash/report/reports/standard/investment-lots.scm:163
-#, fuzzy
-#| msgid "Include accounts with no shares"
 msgid "Include accounts with no lots"
-msgstr "Включати рахунки без акцій"
+msgstr "Включати рахунки без лотів"
 
 #: gnucash/report/reports/standard/investment-lots.scm:50
-#, fuzzy
-#| msgid "Show date"
 msgid "Show Chart"
-msgstr "Показати дату"
+msgstr "Показати діаграму"
 
 #: gnucash/report/reports/standard/investment-lots.scm:51
-#, fuzzy
-#| msgid "Chart Type"
 msgid "Chart type"
 msgstr "Тип діаграми"
 
 #: gnucash/report/reports/standard/investment-lots.scm:52
-#, fuzzy
-#| msgid "Old location:"
 msgid "Chart location"
-msgstr "Старе розташування:"
+msgstr "Розташування діаграми"
 
 #: gnucash/report/reports/standard/investment-lots.scm:53
-#, fuzzy
-#| msgid "Plot Width"
 msgid "Plot width"
-msgstr "Ширина графіка"
+msgstr "Ширина креслення"
 
 #: gnucash/report/reports/standard/investment-lots.scm:54
-#, fuzzy
-#| msgid "Plot Height"
 msgid "Plot height"
-msgstr "Висота графіку"
+msgstr "Висота графіка"
 
 #: gnucash/report/reports/standard/investment-lots.scm:57
-#, fuzzy
-#| msgid "Show _Memo column"
 msgid "Show lot guid column"
-msgstr "Показувати стовпчик _нотатки"
+msgstr "Показувати стовпчик GUID лоту"
 
 #: gnucash/report/reports/standard/investment-lots.scm:58
-#, fuzzy
-#| msgid "No date column."
 msgid "Show date columns"
-msgstr "Немає стовпчика дати."
+msgstr "Показувати стовпчики дати"
 
 #: gnucash/report/reports/standard/investment-lots.scm:59
-#, fuzzy
-#| msgid "Show _Account column"
 msgid "Show bought columns"
-msgstr "Показувати стовпчик _рахунку"
+msgstr "Показувати стовпчики придбання"
 
 #: gnucash/report/reports/standard/investment-lots.scm:60
-#, fuzzy
-#| msgid "Show _Memo column"
 msgid "Show sold columns"
-msgstr "Показувати стовпчик _нотатки"
+msgstr "Показувати стовпчики продажу"
 
 #: gnucash/report/reports/standard/investment-lots.scm:61
-#, fuzzy
-#| msgid "Show _Memo column"
 msgid "Show end columns"
-msgstr "Показувати стовпчик _нотатки"
+msgstr "Показувати стовпчик кінця"
 
 #: gnucash/report/reports/standard/investment-lots.scm:63
-#, fuzzy
-#| msgid "Show linked transactions"
 msgid "Show realized gain column(s)"
-msgstr "Показати лише пов'язані транзакції"
+msgstr "Показувати стовпчики отриманого прибутку"
 
 #: gnucash/report/reports/standard/investment-lots.scm:65
-#, fuzzy
-#| msgid "Show _unused accounts"
 msgid "Show unrealized gain column(s)"
-msgstr "Показувати при_ховані рахунки"
+msgstr "Показувати стовпчики неотриманого прибутку"
 
 #: gnucash/report/reports/standard/investment-lots.scm:67
 msgid "Group gains by age (short term and long term)"
-msgstr ""
+msgstr "Групувати прибутки за віком (короткострокові та довгострокові)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:68
 msgid "Long term gains age (years)"
-msgstr ""
+msgstr "Вік довгострокових прибутків (у роках)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:72
-#, fuzzy
-#| msgid "_Show children accounts"
 msgid "Show mnemonic in amounts"
-msgstr "Показувати _дочірні рахунки"
+msgstr "Показувати мнемоніку сум"
 
 #: gnucash/report/reports/standard/investment-lots.scm:73
-#, fuzzy
-#| msgid "Include assets total"
 msgid "Include closed lots"
-msgstr "Включати підсумок активів"
+msgstr "Включати закриті лоти"
 
 #: gnucash/report/reports/standard/investment-lots.scm:75
-#, fuzzy
-#| msgid "Show horizontal borders on the cells."
 msgid "Show blanks instead of zeros in table cells"
-msgstr "Показувати горизонтальні межі комірок."
+msgstr "Показувати пробіли замість нулів у комірках таблиці"
 
 #: gnucash/report/reports/standard/investment-lots.scm:76
-#, fuzzy
-#| msgid "Show _log window"
 msgid "Show lot split rows"
-msgstr "Показати вікно _журналу"
+msgstr "Показувати рядки дроблення лоту"
 
 #: gnucash/report/reports/standard/investment-lots.scm:79
-#, fuzzy
-#| msgid "Investments"
 msgid "Investment Lots"
-msgstr "Інвестиції"
+msgstr "Лоти інвестування"
 
 #: gnucash/report/reports/standard/investment-lots.scm:80
-#, fuzzy
-#| msgid "Start Date"
 msgid "Start date"
-msgstr "Дата початку"
+msgstr "Початкова дата"
 
 #: gnucash/report/reports/standard/investment-lots.scm:81
-#, fuzzy
-#| msgid "End Date"
 msgid "End date"
-msgstr "Дата завершення"
+msgstr "Кінцева дата"
 
 #: gnucash/report/reports/standard/investment-lots.scm:83
-#, fuzzy
-#| msgid "Price Source"
 msgid "Price source"
 msgstr "Джерело ціни"
 
 #: gnucash/report/reports/standard/investment-lots.scm:87
-#, fuzzy
-#| msgid "Include accounts with no shares"
 msgid "Include only accounts with warnings"
-msgstr "Включати рахунки без акцій"
+msgstr "Включати лише рахунки з попередженнями"
 
 #: gnucash/report/reports/standard/investment-lots.scm:89
 msgid "Warn if a lot has more than one bought split"
-msgstr ""
+msgstr "Попереджати, якщо у лоту декілька дроблень придбання"
 
 #: gnucash/report/reports/standard/investment-lots.scm:91
 msgid "Warn if a lot's balance drops below zero"
-msgstr ""
+msgstr "Попереджати, якщо баланс лоту падає нижче нуля"
 
 #: gnucash/report/reports/standard/investment-lots.scm:93
 msgid "Warn if a lot has a blank title"
-msgstr ""
+msgstr "Попереджати, якщо заголовок лоту порожній"
 
 #: gnucash/report/reports/standard/investment-lots.scm:95
 msgid ""
 "Warn if the 'Realized Gain/Loss' split(s) sum does not match the computed "
 "gains"
 msgstr ""
+"Попереджати, якщо сума дроблень «Отриманий прибуток/збиток» не збігається із "
+"обчисленими прибутками"
 
 #: gnucash/report/reports/standard/investment-lots.scm:97
 msgid "Warn if a split is not assigned to a lot"
-msgstr ""
+msgstr "Попереджати, якщо дроблення не пов'язано із лотом"
 
 #: gnucash/report/reports/standard/investment-lots.scm:99
 msgid ""
 "Warn if the account balance does not match the computed lots' end balance"
 msgstr ""
+"Попереджати, якщо баланс рахунку не відповідає обчисленому кінцевому балансу "
+"лотів"
 
 #: gnucash/report/reports/standard/investment-lots.scm:101
-#, fuzzy
-#| msgid "Report Title"
 msgid "Lot Title"
-msgstr "Назва Звіту"
+msgstr "Заголовок лоту"
 
 #: gnucash/report/reports/standard/investment-lots.scm:104
 msgid "GUID"
-msgstr ""
+msgstr "GUID"
 
 #: gnucash/report/reports/standard/investment-lots.scm:105
-#, fuzzy
-#| msgid "To Amount"
 msgid "Bought Amount"
-msgstr "До суми"
+msgstr "Сума придбання"
 
 #: gnucash/report/reports/standard/investment-lots.scm:106
 msgid "Bought Value (Basis)"
-msgstr ""
+msgstr "Значення придбання (основа)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:107
-#, fuzzy
-#| msgid "Weighted Average"
 msgid "Bought Average Price"
-msgstr "Середньозважений"
+msgstr "Середня ціна придбання"
 
 #: gnucash/report/reports/standard/investment-lots.scm:108
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Sold Splits"
-msgstr "Частини паперів"
+msgstr "Дроблення продажу"
 
 #: gnucash/report/reports/standard/investment-lots.scm:109
-#, fuzzy
-#| msgid "To Amount"
 msgid "Sold Amount"
-msgstr "До суми"
+msgstr "Сума продажу"
 
 #: gnucash/report/reports/standard/investment-lots.scm:110
-#, fuzzy
-#| msgid "Basis"
 msgid "Sold Basis"
-msgstr "Базис"
+msgstr "Основа продажу"
 
 #: gnucash/report/reports/standard/investment-lots.scm:111
-#, fuzzy
-#| msgid "Value"
 msgid "Sold Value"
-msgstr "Значення"
+msgstr "Значення продажу"
 
 #: gnucash/report/reports/standard/investment-lots.scm:112
-#, fuzzy
-#| msgid "To Amount"
 msgid "ST Sold Amount"
-msgstr "До суми"
+msgstr "Сума продажу (КТ)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:113
 msgid "ST Sold Basis"
-msgstr ""
+msgstr "Основа продажу (КТ)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:114
 msgid "ST Sold Value"
-msgstr ""
+msgstr "Значення продажу (КТ)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:115
-#, fuzzy
-#| msgid "To Amount"
 msgid "LT Sold Amount"
-msgstr "До суми"
+msgstr "Сума продажу (ДТ)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:116
 msgid "LT Sold Basis"
-msgstr ""
+msgstr "Основа продажу (ДТ)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:117
 msgid "LT Sold Value"
-msgstr ""
+msgstr "Значення продажу (ДТ)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:118
-#, fuzzy
-#| msgid "Show Average"
 msgid "Sold Average Price"
-msgstr "Показувати середнє"
+msgstr "Середня ціна продажу"
 
 #: gnucash/report/reports/standard/investment-lots.scm:119
-#, fuzzy
-#| msgid "Amount"
 msgid "End Amount"
-msgstr "Сума"
+msgstr "Кінцева сума"
 
 #: gnucash/report/reports/standard/investment-lots.scm:120
-#, fuzzy
-#| msgid "Basis"
 msgid "End Basis"
-msgstr "Базис"
+msgstr "Кінцева основа"
 
 #: gnucash/report/reports/standard/investment-lots.scm:121
-#, fuzzy
-#| msgid "Value"
 msgid "End Value"
-msgstr "Значення"
+msgstr "Кінцеве значення"
 
 #: gnucash/report/reports/standard/investment-lots.scm:123
-#, fuzzy
-#| msgid "Realized Gain"
 msgid "ST Realized Gain"
-msgstr "Отриманий прибуток"
+msgstr "Отриманий прибуток (КТ)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:124
-#, fuzzy
-#| msgid "Realized Gain"
 msgid "LT Realized Gain"
-msgstr "Отриманий прибуток"
+msgstr "Отриманий прибуток (ДТ)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:125
-#, fuzzy
-#| msgid "Realized Gain"
 msgid "Realized ROI"
-msgstr "Отриманий прибуток"
+msgstr "Отриманий ROI"
 
 #: gnucash/report/reports/standard/investment-lots.scm:127
-#, fuzzy
-#| msgid "Unrealized Gain"
 msgid "ST Unrealized Gain"
-msgstr "Не отриманий прибуток"
+msgstr "Не отриманий прибуток (КТ)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:128
-#, fuzzy
-#| msgid "Unrealized Gain"
 msgid "LT Unrealized Gain"
-msgstr "Не отриманий прибуток"
+msgstr "Не отриманий прибуток (ДТ)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:129
-#, fuzzy
-#| msgid "Unrealized Gain"
 msgid "Unrealized ROI"
-msgstr "Не отриманий прибуток"
+msgstr "Не отриманий ROI"
 
 #: gnucash/report/reports/standard/investment-lots.scm:131
-#, fuzzy
-#| msgid "Account Notes"
 msgid "Account Lots Total"
-msgstr "Примітки рахунку"
+msgstr "Загальне за лотами рахунку"
 
 #: gnucash/report/reports/standard/investment-lots.scm:171
 msgid "Include a chart that shows lot gains, grouped by account and gain type"
 msgstr ""
+"Включити діаграму, на якій показано прибутки, які згруповано за рахунком і "
+"типом"
 
 #: gnucash/report/reports/standard/investment-lots.scm:186
 msgid "What kind of chart to include"
-msgstr ""
+msgstr "Тип діаграми, яку слід включити"
 
 #: gnucash/report/reports/standard/investment-lots.scm:189
-#, fuzzy
-#| msgid "Use Stacked Charts"
 msgid "Stacked Bar Chart"
-msgstr "Стосована діаграма"
+msgstr "Стосова стовпчикова діаграма"
 
 #: gnucash/report/reports/standard/investment-lots.scm:195
-#, fuzzy
-#| msgid "Percentage chart"
 msgid "Where to place the chart"
-msgstr "Діаграма часток"
+msgstr "Місце розташування діагами"
 
 #: gnucash/report/reports/standard/investment-lots.scm:214
 msgid "Show the lot GUID table column"
-msgstr ""
+msgstr "Показати стовпчик таблиці лоту GUID"
 
 #: gnucash/report/reports/standard/investment-lots.scm:221
-#, fuzzy
-#| msgid "Show the income and expense accounts"
 msgid "Show the lot open and close table columns"
-msgstr "Показувати рахунки приходу та витрат"
+msgstr "Показувати стовпчики відкриття і закриття лоту у таблиці"
 
 #: gnucash/report/reports/standard/investment-lots.scm:228
 msgid "Show purchase-related table columns"
-msgstr ""
+msgstr "Показувати пов'язані із придбанням стовпчики таблиці"
 
 #: gnucash/report/reports/standard/investment-lots.scm:235
-#, fuzzy
-#| msgid "Show _zero total accounts"
 msgid "Show sale-related table columns"
-msgstr "Показувати рахунки з _нульовим підсумком"
+msgstr "Показувати пов'язані із продажем стовпчики таблиці"
 
 #: gnucash/report/reports/standard/investment-lots.scm:242
 msgid "Show end date amount and value table columns"
-msgstr ""
+msgstr "Показувати стовпчики суми та значення на кінцеву дату"
 
 #: gnucash/report/reports/standard/investment-lots.scm:249
 msgid "Show realized gain table column(s) for sold shares"
-msgstr ""
+msgstr "Показувати стовпчики отриманого прибутку для проданих цінних паперів"
 
 #: gnucash/report/reports/standard/investment-lots.scm:256
 msgid "Show unrealized gain table column(s) for unsold shares"
@@ -25949,109 +25462,112 @@ msgid "Group gains (and sales?) by long-term (LT) and short-term (ST)"
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:266
-#, fuzzy
-#| msgid "Gains"
 msgid "Gains Only"
-msgstr "Прибуток"
+msgstr "Лише прибутки"
 
 #: gnucash/report/reports/standard/investment-lots.scm:267
-#, fuzzy
-#| msgid "Tax on Sales"
 msgid "Gains and Sales"
-msgstr "Податок на продажі"
+msgstr "Прибутки і продажі"
 
 #: gnucash/report/reports/standard/investment-lots.scm:281
 msgid "Commodities held longer than this many years count as long-term (LT)."
 msgstr ""
+"Активи, що мають вік, що перевищує цю кількість років, вважаються "
+"довготерміновими (ДТ)."
 
 #: gnucash/report/reports/standard/investment-lots.scm:293
-#, fuzzy
-#| msgid "Show long account names"
 msgid "Show long (instead of short) account names"
-msgstr "Показувати довгі назви рахунків"
+msgstr "Показувати довгі назви рахунків (замість коротких)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:300
 msgid "Show mnemonics with commodity amounts"
-msgstr ""
+msgstr "Показувати мнемоніку для сум активів"
 
 #: gnucash/report/reports/standard/investment-lots.scm:307
 msgid "Include closed lots in addition to open lots"
-msgstr ""
+msgstr "Включити закриті лоти на додачу до відкритих лотів"
 
 #: gnucash/report/reports/standard/investment-lots.scm:314
 msgid ""
 "Show blank text instead of zero values for inner table cells. Does not apply "
 "to footer rows."
 msgstr ""
+"Показувати порожній текст замість нульових значень для внутрішніх комірок "
+"таблиці. Не стосується рядків підвалу."
 
 #: gnucash/report/reports/standard/investment-lots.scm:321
 msgid "Add a row for each split belonging to a lot, under the lot row."
 msgstr ""
+"Додати рядок для кожного дроблення, що належить до лоту, під рядком лоту."
 
 #: gnucash/report/reports/standard/investment-lots.scm:347
 msgid ""
 "Only show accounts that contain warnings. This is useful for quickly finding "
 "potential lot errors."
 msgstr ""
+"Показувати лише рахунки, які містять попередження. Корисно для швидкого "
+"пошуку потенційних помилок у лотах."
 
 #: gnucash/report/reports/standard/investment-lots.scm:354
 msgid ""
 "Lots with more than one purchase split are not well formed. It may make "
 "ambiguous the capital gains age"
 msgstr ""
+"Лоти із декількома дробленнями придбання мають помилкове форматування. Такі "
+"лоти можуть призвести до неоднозначного значення віку капітальних прибутків"
 
 #: gnucash/report/reports/standard/investment-lots.scm:361
 msgid "Lots with a negative balance are not well formed."
-msgstr ""
+msgstr "Лоти із від'ємним балансом мають помилкове форматування."
 
 #: gnucash/report/reports/standard/investment-lots.scm:368
 msgid ""
 "Lot titles are optional. This warning applies to titles that are empty or "
 "only whitespace."
 msgstr ""
+"Заголовки лотів не є обов'язковими. Це попередження стосується заголовків, "
+"які є порожніми або складаються лише з пробілів."
 
 #: gnucash/report/reports/standard/investment-lots.scm:375
 msgid ""
 "Detect possible errors in 'Realized Gain/Loss' splits that are created when "
 "adding a sale split to a lot"
 msgstr ""
+"Виявити можливі помилки у дробленнях «Отримані прибутки/витрати», які "
+"створено при додаванні до лоту дроблення продажу"
 
 #: gnucash/report/reports/standard/investment-lots.scm:381
 msgid "Detect splits that have not been assigned to a lot."
-msgstr ""
+msgstr "Виявити дроблення, які не пов'язано із лотом."
 
 #: gnucash/report/reports/standard/investment-lots.scm:383
-#, fuzzy
-#| msgid "Counters"
 msgid "Count"
-msgstr "Лічильники"
+msgstr "Кількість"
 
 #: gnucash/report/reports/standard/investment-lots.scm:390
 msgid ""
 "Balance mismatches may indicate a split that is not yet included in a lot"
 msgstr ""
+"Невідповідності балансу можуть вказувати на те, що дроблення ще не включено "
+"до лоту"
 
 #: gnucash/report/reports/standard/investment-lots.scm:799
 #, scheme-format
 msgid "  End price: ~a~a on ~a"
-msgstr ""
+msgstr "  Кінцева ціна: ~a~a на ~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:809
 #, scheme-format
 msgid " [~a]"
-msgstr ""
+msgstr " [~a]"
 
 #: gnucash/report/reports/standard/investment-lots.scm:813
-#, fuzzy
-#| msgid "Not found"
 msgid "No price found"
-msgstr "Не знайдено"
+msgstr "Ціни не знайдено"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1230
-#, fuzzy
-#| msgid "(split)"
 msgid "split"
-msgstr "(частина)"
+msgstr "дроблення"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1351
 #, scheme-format
@@ -26059,6 +25575,8 @@ msgid ""
 "Warning: Above lot has ~a bought splits. Consider separating them into their "
 "own lots."
 msgstr ""
+"Попередження: вищий лот містить ~a дроблення купівлі. Вам варто відокремити "
+"їх у власні лоти."
 
 #: gnucash/report/reports/standard/investment-lots.scm:1360
 #, scheme-format
@@ -26066,10 +25584,12 @@ msgid ""
 "Warning: Above lot's balance is negative on ~a. Consider removing the "
 "responsible sale split from the lot and then scrubbing."
 msgstr ""
+"Попередження: баланс вищого лоту є від'ємним на ~a. Вам варто вилучити з "
+"лоту відповідне дроблення продажу, а потім очистити його."
 
 #: gnucash/report/reports/standard/investment-lots.scm:1369
 msgid "Warning: Above lot's title is blank."
-msgstr ""
+msgstr "Попередження: заголовок вищого лоту є порожнім."
 
 #: gnucash/report/reports/standard/investment-lots.scm:1384
 #, scheme-format
@@ -26077,12 +25597,14 @@ msgid ""
 "Warning: Above lot's computed gain ~a is not equal to the \"Realized Gain/"
 "Loss\" split(s) sum ~a. Difference: ~a"
 msgstr ""
+"Попередження: обчислений прибуток вищого лоту ~a не дорівнює сумі дроблень «"
+"Отримані прибутки/витрати» ~a. Різниця: ~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1403
 #, scheme-format
 msgid ""
 "Warning: ~a split(s) are not assigned to a lot. Do lots need to be scrubbed?"
-msgstr ""
+msgstr "Попередження: ~a дроблень не пов'язано із лотом. Слід очистити лоти?"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1408
 #, scheme-format
@@ -26090,12 +25612,13 @@ msgid ""
 "Warning: The following ~a split(s) are not assigned to a lot. Do lots need "
 "to be scrubbed?"
 msgstr ""
+"Попередження: наведені нижче ~a дроблень не пов'язано із лотом. Слід "
+"очистити лоти?"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1425
-#, fuzzy, scheme-format
-#| msgid "Amount / Value"
+#, scheme-format
 msgid ": amount ~a, value ~a"
-msgstr "Сума/Значення"
+msgstr ": сума ~a, значення ~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1445
 #, scheme-format
@@ -26103,18 +25626,17 @@ msgid ""
 "Warning: End amount ~a is not equal to actual account balance ~a. "
 "Difference: ~a. Do lots need to be scrubbed?"
 msgstr ""
+"Попередження: кінцева сума ~a не дорівнює наявному балансу рахунку ~a. "
+"Різниця: ~a. Лоти слід очистити?"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1963
-#, fuzzy, scheme-format
-#| msgid "~a ~a - ~a"
+#, scheme-format
 msgid "~a, ~a to ~a"
-msgstr "~a ~a - ~a"
+msgstr "~a, ~a до ~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1989
-#, fuzzy
-#| msgid "Account Notes"
 msgid "Account Lot Gains"
-msgstr "Примітки рахунку"
+msgstr "Прибутки за лотами рахунку"
 
 #: gnucash/report/reports/standard/invoice.scm:101
 #: gnucash/report/reports/standard/invoice.scm:218
@@ -26432,8 +25954,6 @@ msgstr "Сума до отримання"
 
 #: gnucash/report/reports/standard/invoice.scm:560
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:225
-#, fuzzy
-#| msgid "Invoice in progress..."
 msgid "Invoice in progress…"
 msgstr "Обробляємо рахунок-фактуру…"
 
@@ -27809,14 +27329,12 @@ msgid "Credit Lines"
 msgstr "Кредитна лінія"
 
 #: gnucash/report/report-utilities.scm:639
-#, fuzzy, scheme-format
-#| msgid "Building '~a' report ..."
+#, scheme-format
 msgid "Building '~a' report …"
 msgstr "Будуємо звіт «~a»…"
 
 #: gnucash/report/report-utilities.scm:645
-#, fuzzy, scheme-format
-#| msgid "Rendering '~a' report ..."
+#, scheme-format
 msgid "Rendering '~a' report …"
 msgstr "Обробляємо звіт «~a»…"
 
@@ -28367,8 +27885,6 @@ msgid "Credit Accounts"
 msgstr "Кредитні рахунки"
 
 #: gnucash/report/trep-engine.scm:528
-#, fuzzy
-#| msgid "Specify date to filter by..."
 msgid "Specify date to filter by…"
 msgstr "Вкажіть дату для фільтрування…"
 
@@ -28730,16 +28246,12 @@ msgstr "_Подвійний рядок"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:83
 #: gnucash/ui/gnc-plugin-page-register.ui:99
-#, fuzzy
-#| msgid ""
-#| "Show a second line with \"Action\", \"Notes\", and \"Linked Document\" "
-#| "for each transaction."
 msgid ""
 "Show a second line with \\\"Action\\\", \\\"Notes\\\", and \\\"Linked "
 "Document\\\" for each transaction"
 msgstr ""
-"Показувати другий рядок із записами «Дія», «Примітки» і «Пов'язаний "
-"документ» для усіх транзакцій."
+"Показувати другий рядок із записами «Дія», «Примітки» і «Пов'язаний документ»"
+" для усіх транзакцій"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:92
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:125
@@ -28747,10 +28259,8 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-register.ui:229
 #: gnucash/ui/gnc-plugin-page-register.ui:682
 #: gnucash/ui/gnc-reconcile-window.ui:43
-#, fuzzy
-#| msgid "Transfer"
 msgid "_Transfer…"
-msgstr "Передати"
+msgstr "Пе_реказ…"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:95
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:128
@@ -28782,10 +28292,8 @@ msgid "_File"
 msgstr "_Файл"
 
 #: gnucash/ui/gnc-main-window.ui:40
-#, fuzzy
-#| msgid "Pa_ge Setup..."
 msgid "Pa_ge Setup"
-msgstr "П_араметри сторінки…"
+msgstr "П_араметри сторінки"
 
 #: gnucash/ui/gnc-main-window.ui:43
 msgid "Specify the page size and orientation for printing"
@@ -28853,28 +28361,20 @@ msgid "Tab P_osition"
 msgstr "_Розташування вкладок"
 
 #: gnucash/ui/gnc-main-window.ui:198
-#, fuzzy
-#| msgid "Display the notebook tabs at the top of the window."
 msgid "Display the notebook tabs at the top of the window"
-msgstr "Показувати вкладки вгорі вікна."
+msgstr "Показувати вкладки вгорі вікна"
 
 #: gnucash/ui/gnc-main-window.ui:204
-#, fuzzy
-#| msgid "Display the notebook tabs at the bottom of the window."
 msgid "Display the notebook tabs at the bottom of the window"
-msgstr "Показувати вкладки знизу у вікні."
+msgstr "Показувати вкладки знизу у вікні"
 
 #: gnucash/ui/gnc-main-window.ui:210
-#, fuzzy
-#| msgid "Display the notebook tabs at the left of the window."
 msgid "Display the notebook tabs at the left of the window"
-msgstr "Показувати вкладки ліворуч у вікні."
+msgstr "Показувати вкладки ліворуч у вікні"
 
 #: gnucash/ui/gnc-main-window.ui:216
-#, fuzzy
-#| msgid "Display the notebook tabs at the right of the window."
 msgid "Display the notebook tabs at the right of the window"
-msgstr "Показувати вкладки праворуч у вікні."
+msgstr "Показувати вкладки праворуч у вікні"
 
 #: gnucash/ui/gnc-main-window.ui:256
 msgid "Tra_nsaction"
@@ -28885,17 +28385,13 @@ msgid "_Actions"
 msgstr "Д_ії"
 
 #: gnucash/ui/gnc-main-window.ui:344
-#, fuzzy
-#| msgid "Reset Warnings"
 msgid "Reset _Warnings…"
-msgstr "Скинути попередження"
+msgstr "Скинути п_опередження…"
 
 #: gnucash/ui/gnc-main-window.ui:346
-#, fuzzy
-#| msgid "Reset the state of all warning messages so they will be shown again."
 msgid "Reset the state of all warning messages so they will be shown again"
 msgstr ""
-"Скинути стан усіх попереджувальних повідомлень, щоб вони знову відображались."
+"Скинути стан усіх попереджувальних повідомлень, щоб їх знову було показано"
 
 #: gnucash/ui/gnc-main-window.ui:349
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:200
@@ -28914,10 +28410,8 @@ msgstr "Перей_менувати сторінку"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:181
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:215
 #: gnucash/ui/gnc-plugin-page-register.ui:360
-#, fuzzy
-#| msgid "Rename this page."
 msgid "Rename this page"
-msgstr "Перейменувати сторінку."
+msgstr "Перейменувати сторінку"
 
 #: gnucash/ui/gnc-main-window.ui:390
 msgid "_Scheduled"
@@ -28944,20 +28438,16 @@ msgid "_New Window"
 msgstr "_Створити вікно"
 
 #: gnucash/ui/gnc-main-window.ui:468
-#, fuzzy
-#| msgid "Open a new top-level GnuCash window."
 msgid "Open a new top-level GnuCash window"
-msgstr "Відкрити нове вікно GnuCash для поточного вигляду."
+msgstr "Відкрити нове вікно GnuCash для поточного вигляду"
 
 #: gnucash/ui/gnc-main-window.ui:471
 msgid "New Window with _Page"
 msgstr "Відрити _сторінку у новому вікні"
 
 #: gnucash/ui/gnc-main-window.ui:473
-#, fuzzy
-#| msgid "Move the current page to a new top-level GnuCash window."
 msgid "Move the current page to a new top-level GnuCash window"
-msgstr "Перемістити поточну сторінку у нове вікно GnuCash."
+msgstr "Перемістити поточну сторінку у нове вікно GnuCash"
 
 #: gnucash/ui/gnc-main-window.ui:501
 msgid "Tutorial and Concepts _Guide"
@@ -29017,10 +28507,8 @@ msgstr "Створити новий рахунок-фактуру"
 #: gnucash/ui/gnc-plugin-page-register.ui:507
 #: gnucash/ui/gnc-plugin-page-report.ui:114
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:122
-#, fuzzy
-#| msgid "New _Invoice"
 msgid "New _Invoice…"
-msgstr "Створити _рахунок-фактуру"
+msgstr "Створити _рахунок-фактуру…"
 
 #: gnucash/ui/gnc-plugin-account-tree.ui:6
 msgid "New Accounts _Page"
@@ -29039,20 +28527,16 @@ msgid "Create a new file"
 msgstr "Створити новий файл"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:12
-#, fuzzy
-#| msgid "_Open"
 msgid "_Open…"
-msgstr "_Відкрити"
+msgstr "_Відкрити…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:15
 msgid "Open an existing GnuCash file"
 msgstr "Відкрити файл GnuCash, що існує"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:27
-#, fuzzy
-#| msgid "_Save As"
 msgid "Save _As…"
-msgstr "Зберегти _як"
+msgstr "Зберегти _як…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:30
 msgid "Save this file with a different name"
@@ -29090,10 +28574,8 @@ msgstr "Експортувати ієрархію рахунків у новий
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:65
 #: gnucash/ui/gnc-plugin-page-register.ui:49
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:16
-#, fuzzy
-#| msgid "_Find"
 msgid "_Find…"
-msgstr "З_найти"
+msgstr "З_найти…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:62
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:70
@@ -29138,8 +28620,6 @@ msgid "_Scheduled Transaction Editor"
 msgstr "_Редактор запланованих транзакцій"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:89
-#, fuzzy
-#| msgid "Since _Last Run..."
 msgid "Since _Last Run…"
 msgstr "З моменту _останнього запуску…"
 
@@ -29148,8 +28628,6 @@ msgid "Create Scheduled Transactions since the last time run"
 msgstr "Створити заплановані транзакції з моменту останнього запуску"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:94
-#, fuzzy
-#| msgid "_Mortgage & Loan Repayment..."
 msgid "_Mortgage & Loan Repayment…"
 msgstr "Виплати по _заставам та позикам…"
 
@@ -29183,10 +28661,8 @@ msgstr ""
 "Використовувати калькулятор для розрахунків платежів за боргом/заставою"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:119
-#, fuzzy
-#| msgid "_Close Book"
 msgid "_Close Book…"
-msgstr "За_крити книгу"
+msgstr "За_крити книгу…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:121
 msgid "Close the Book at the end of the Period"
@@ -29217,10 +28693,8 @@ msgid "View the Tips of the Day"
 msgstr "Переглянути поради дня"
 
 #: gnucash/ui/gnc-plugin-bi-import.ui:6
-#, fuzzy
-#| msgid "Import Bills & _Invoices..."
 msgid "Import Bills & _Invoices…"
-msgstr "Імпортувати рахунки і _рахунки-фактури…"
+msgstr "Імпортувати рахунки і рахунки-фактури…"
 
 #: gnucash/ui/gnc-plugin-bi-import.ui:8
 msgid "Import bills and invoices from a CSV text file"
@@ -29231,46 +28705,36 @@ msgid "_New Budget"
 msgstr "С_творити бюджет"
 
 #: gnucash/ui/gnc-plugin-budget.ui:12
-#, fuzzy
-#| msgid "Create a new Budget."
 msgid "Create a new Budget"
-msgstr "Створити новий бюджет."
+msgstr "Створити новий бюджет"
 
 #: gnucash/ui/gnc-plugin-budget.ui:15
 msgid "_Open Budget"
 msgstr "_Відкрити бюджет"
 
 #: gnucash/ui/gnc-plugin-budget.ui:17
-#, fuzzy
-#| msgid ""
-#| "Open an existing Budget in a new tab. If none exists a new budget will be "
-#| "created."
 msgid ""
 "Open an existing Budget in a new tab. If none exists a new budget will be "
 "created"
 msgstr ""
 "Відкрити наявний бюджет у новій вкладці. Якщо бюджетів ще не створено, буде "
-"створено новий бюджет."
+"створено новий бюджет"
 
 #: gnucash/ui/gnc-plugin-budget.ui:20
 msgid "_Copy Budget"
 msgstr "_Копіювати бюджет"
 
 #: gnucash/ui/gnc-plugin-budget.ui:22
-#, fuzzy
-#| msgid "Copy an existing Budget."
 msgid "Copy an existing Budget"
-msgstr "Копіювати наявний бюджет."
+msgstr "Копіювати наявний бюджет"
 
 #: gnucash/ui/gnc-plugin-budget.ui:25
 msgid "_Delete Budget"
 msgstr "В_идалити бюджет"
 
 #: gnucash/ui/gnc-plugin-budget.ui:27
-#, fuzzy
-#| msgid "Delete an existing Budget."
 msgid "Delete an existing Budget"
-msgstr "Вилучити наявний бюджет."
+msgstr "Вилучити наявний бюджет"
 
 #: gnucash/ui/gnc-plugin-business.ui:6
 msgid "_Customer"
@@ -29287,50 +28751,40 @@ msgstr "Відкрити сторінку огляду клієнтів"
 #: gnucash/ui/gnc-plugin-business.ui:14
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:23
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:317
-#, fuzzy
-#| msgid "New Customer"
 msgid "_New Customer…"
-msgstr "Введення нового клієнта"
+msgstr "_Ввести нового клієнта…"
 
 #: gnucash/ui/gnc-plugin-business.ui:16
 msgid "Open the New Customer dialog"
 msgstr "Введення нового клієнта"
 
 #: gnucash/ui/gnc-plugin-business.ui:19
-#, fuzzy
-#| msgid "Find Customer"
 msgid "_Find Customer…"
-msgstr "Знайти клієнта"
+msgstr "З_найти клієнта…"
 
 #: gnucash/ui/gnc-plugin-business.ui:21
 msgid "Open the Find Customer dialog"
 msgstr "Знайти клієнта"
 
 #: gnucash/ui/gnc-plugin-business.ui:29
-#, fuzzy
-#| msgid "Find Invoice"
 msgid "Find In_voice…"
-msgstr "Зайти рахунок-фактуру"
+msgstr "Знайти ра_хунок-фактуру…"
 
 #: gnucash/ui/gnc-plugin-business.ui:31
 msgid "Open the Find Invoice dialog"
 msgstr "Знайти рахунок-фактуру"
 
 #: gnucash/ui/gnc-plugin-business.ui:34 gnucash/ui/gnc-plugin-business.ui:83
-#, fuzzy
-#| msgid "New Job"
 msgid "New _Job…"
-msgstr "Створити роботу"
+msgstr "Створити з_авдання…"
 
 #: gnucash/ui/gnc-plugin-business.ui:36 gnucash/ui/gnc-plugin-business.ui:85
 msgid "Open the New Job dialog"
 msgstr "Відкрити діалогове вікно створення роботи"
 
 #: gnucash/ui/gnc-plugin-business.ui:39 gnucash/ui/gnc-plugin-business.ui:88
-#, fuzzy
-#| msgid "Find Job"
 msgid "Find Jo_b…"
-msgstr "Знайти роботу"
+msgstr "Знайти з_авдання…"
 
 #: gnucash/ui/gnc-plugin-business.ui:41 gnucash/ui/gnc-plugin-business.ui:90
 msgid "Open the Find Job dialog"
@@ -29338,10 +28792,8 @@ msgstr "Відкрити діалогове вікно пошуку роботи
 
 #: gnucash/ui/gnc-plugin-business.ui:44 gnucash/ui/gnc-plugin-business.ui:93
 #: gnucash/ui/gnc-plugin-business.ui:132
-#, fuzzy
-#| msgid "Process Payment"
 msgid "_Process Payment…"
-msgstr "Обробити платіж"
+msgstr "_Обробити платіж…"
 
 #: gnucash/ui/gnc-plugin-business.ui:46 gnucash/ui/gnc-plugin-business.ui:95
 #: gnucash/ui/gnc-plugin-business.ui:134
@@ -29371,20 +28823,16 @@ msgstr "Відкрити сторінку огляду постачальник�
 #: gnucash/ui/gnc-plugin-business.ui:63
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:39
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:472
-#, fuzzy
-#| msgid "New Vendor"
 msgid "_New Vendor…"
-msgstr "Створити виробника"
+msgstr "_Новий постачальник…"
 
 #: gnucash/ui/gnc-plugin-business.ui:65
 msgid "Open the New Vendor dialog"
 msgstr "Ввести нового постачальника"
 
 #: gnucash/ui/gnc-plugin-business.ui:68
-#, fuzzy
-#| msgid "Find Vendor"
 msgid "_Find Vendor…"
-msgstr "Знайти постачальника"
+msgstr "Зна_йти постачальника…"
 
 #: gnucash/ui/gnc-plugin-business.ui:70
 msgid "Open the Find Vendor dialog"
@@ -29393,20 +28841,16 @@ msgstr "Пошук постачальника"
 #: gnucash/ui/gnc-plugin-business.ui:73
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:193
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:512
-#, fuzzy
-#| msgid "New _Bill"
 msgid "New _Bill…"
-msgstr "Створити _рахунок"
+msgstr "Створити _рахунок…"
 
 #: gnucash/ui/gnc-plugin-business.ui:75
 msgid "Open the New Bill dialog"
 msgstr "Створення нового платежу"
 
 #: gnucash/ui/gnc-plugin-business.ui:78
-#, fuzzy
-#| msgid "Find Bill"
 msgid "Find Bi_ll…"
-msgstr "Знайти платіж"
+msgstr "Знайти _платіж…"
 
 #: gnucash/ui/gnc-plugin-business.ui:80
 msgid "Open the Find Bill dialog"
@@ -29435,42 +28879,32 @@ msgstr "Відкрити сторінку огляду працівників"
 #: gnucash/ui/gnc-plugin-business.ui:112
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:55
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:627
-#, fuzzy
-#| msgid "New Employee"
 msgid "_New Employee…"
-msgstr "Створити працівника"
+msgstr "_Ввести нового працівника…"
 
 #: gnucash/ui/gnc-plugin-business.ui:114
 msgid "Open the New Employee dialog"
 msgstr "Ввести нового працівника"
 
 #: gnucash/ui/gnc-plugin-business.ui:117
-#, fuzzy
-#| msgid "Find Employee"
 msgid "_Find Employee…"
-msgstr "Знайти працівника"
+msgstr "З_найти працівника…"
 
 #: gnucash/ui/gnc-plugin-business.ui:119
 msgid "Open the Find Employee dialog"
 msgstr "Пошук працівника"
 
 #: gnucash/ui/gnc-plugin-business.ui:122
-#, fuzzy
-#| msgid "New Expense Voucher"
 msgid "New _Expense Voucher…"
-msgstr "Створити розписку про витрати"
+msgstr "Створити _розписку про витрати…"
 
 #: gnucash/ui/gnc-plugin-business.ui:124
-#, fuzzy
-#| msgid "Open the New Expense Voucher dialog"
 msgid "Open the New Voucher dialog"
-msgstr "Створення нової розписки про витрати"
+msgstr "Створення нової розписки"
 
 #: gnucash/ui/gnc-plugin-business.ui:127
-#, fuzzy
-#| msgid "Find Expense Voucher"
 msgid "Find Expense _Voucher…"
-msgstr "Знайти розписку про витрати"
+msgstr "Пошук розписки про ви_трати…"
 
 #: gnucash/ui/gnc-plugin-business.ui:129
 msgid "Open the Find Expense Voucher dialog"
@@ -29509,8 +28943,6 @@ msgid "Initialize Test Data"
 msgstr "Ініціалізувати тестові дані"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:6
-#, fuzzy
-#| msgid "Export Account T_ree to CSV..."
 msgid "Export Account T_ree to CSV…"
 msgstr "Експортувати і_єрархію рахунків до CSV…"
 
@@ -29519,8 +28951,6 @@ msgid "Export the Account Tree to a CSV file"
 msgstr "Експорт ієрархії рахунків до файла CSV"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:11
-#, fuzzy
-#| msgid "Export _Transactions to CSV..."
 msgid "Export _Transactions to CSV…"
 msgstr "Експортувати _транзакції до CSV…"
 
@@ -29529,8 +28959,6 @@ msgid "Export the Transactions to a CSV file"
 msgstr "Експорт транзакції до файла CSV"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:16
-#, fuzzy
-#| msgid "Export A_ctive Register to CSV..."
 msgid "Export A_ctive Register to CSV…"
 msgstr "Експортувати _активний реєстр до CSV…"
 
@@ -29539,8 +28967,6 @@ msgid "Export the Active Register to a CSV file"
 msgstr "Експортувати активний реєстр до файла CSV"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:6
-#, fuzzy
-#| msgid "Import _Accounts from CSV..."
 msgid "Import _Accounts from CSV…"
 msgstr "Імпортувати _рахунки з CSV…"
 
@@ -29549,8 +28975,6 @@ msgid "Import Accounts from a CSV file"
 msgstr "Імпортування рахунків з файла CSV"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:11
-#, fuzzy
-#| msgid "Import _Transactions from CSV..."
 msgid "Import _Transactions from CSV…"
 msgstr "Імпортувати _транзакції з CSV…"
 
@@ -29559,40 +28983,30 @@ msgid "Import Transactions from a CSV file"
 msgstr "Імпортування транзакцій з файла CSV"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:16
-#, fuzzy
-#| msgid "Import Prices from a CSV file"
 msgid "Import _Prices from a CSV file…"
-msgstr "Імпорт цін з файла CSV"
+msgstr "Імпортувати _ціни з файла CSV…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:18
 msgid "Import Prices from a CSV file"
 msgstr "Імпорт цін з файла CSV"
 
 #: gnucash/ui/gnc-plugin-customer-import.ui:6
-#, fuzzy
-#| msgid "Import _Customers & Vendors..."
 msgid "Import _Customers & Vendors…"
 msgstr "Імпортувати _клієнтів і постачальників…"
 
 #: gnucash/ui/gnc-plugin-customer-import.ui:8
-#, fuzzy
-#| msgid "Import Customers and Vendors from a CSV text file."
 msgid "Import Customers and Vendors from a CSV text file"
-msgstr "Імпортувати записи клієнтів або постачальників з текстового файла CSV."
+msgstr "Імпортувати записи клієнтів або постачальників з текстового файла CSV"
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:6
-#, fuzzy
-#| msgid "_Replay GnuCash .log file..."
 msgid "_Replay GnuCash .log file…"
-msgstr "_Відтворити журнал дій GnuCash .log …"
+msgstr "_Відтворити журнал дій GnuCash .log…"
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:8
-#, fuzzy
-#| msgid "Replay a GnuCash log file after a crash. This cannot be undone."
 msgid "Replay a GnuCash log file after a crash. This cannot be undone"
 msgstr ""
 "Відтворити файл журналу дій GnuCash після аварійного завершення. Цю дію "
-"неможливо буде скасувати."
+"неможливо буде скасувати"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:16
 #: gnucash/ui/gnc-plugin-page-register.ui:32
@@ -29610,10 +29024,8 @@ msgid "Edit the selected account"
 msgstr "Змінити параметри обраного рахунку"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:23
-#, fuzzy
-#| msgid "Delete Account"
 msgid "_Delete Account"
-msgstr "Вилучити рахунок"
+msgstr "В_илучити рахунок…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:30
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:227
@@ -29629,8 +29041,6 @@ msgstr "Знайти рахунок"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:37
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:222
-#, fuzzy
-#| msgid "_Cascade Account Properties..."
 msgid "_Cascade Account Properties…"
 msgstr "_Каскадний показ властивостей рахунку…"
 
@@ -29640,8 +29050,6 @@ msgid "Cascade selected properties for account"
 msgstr "Каскадний показ позначених властивостей для рахунка"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:43
-#, fuzzy
-#| msgid "_Renumber Subaccounts..."
 msgid "_Renumber Subaccounts…"
 msgstr "_Перенумерувати субрахунки…"
 
@@ -29678,10 +29086,8 @@ msgstr "Розкрити вибраний рахунок та всі його с
 #: gnucash/ui/gnc-plugin-page-budget.ui:79
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:86
 #: gnucash/ui/gnc-plugin-page-register.ui:353
-#, fuzzy
-#| msgid "Filter By:"
 msgid "_Filter By…"
-msgstr "Критерій фільтрування:"
+msgstr "_Критерій фільтрування…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:98
 #: gnucash/ui/gnc-plugin-page-budget.ui:87
@@ -29708,8 +29114,6 @@ msgid "Create a new Account"
 msgstr "Створити новий рахунок"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:116
-#, fuzzy
-#| msgid "New Account _Hierarchy..."
 msgid "New Account _Hierarchy…"
 msgstr "Створити _ієрархію рахунків…"
 
@@ -29722,10 +29126,8 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:234
 #: gnucash/ui/gnc-plugin-page-register.ui:236
 #: gnucash/ui/gnc-plugin-page-register.ui:697
-#, fuzzy
-#| msgid "_Reconcile"
 msgid "_Reconcile…"
-msgstr "_Узгодити"
+msgstr "_Узгодити…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:134
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:236
@@ -29737,10 +29139,8 @@ msgstr "Узгодити вибраний рахунок"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:138
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:239
 #: gnucash/ui/gnc-plugin-page-register.ui:242
-#, fuzzy
-#| msgid "Auto-clear"
 msgid "_Auto-clear…"
-msgstr "Автоперевірка"
+msgstr "_Автоперевірити…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:140
 #: gnucash/ui/gnc-plugin-page-register.ui:244
@@ -29753,10 +29153,8 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:150
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:254
 #: gnucash/ui/gnc-plugin-page-register.ui:254
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Stoc_k Split…"
-msgstr "Частини паперів"
+msgstr "_Розділення акцій…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:152
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:256
@@ -29767,8 +29165,6 @@ msgstr "Записати розділення або об'єднання пап�
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:156
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:259
 #: gnucash/ui/gnc-plugin-page-register.ui:260
-#, fuzzy
-#| msgid "View _Lots..."
 msgid "View _Lots…"
 msgstr "Переглянути _лоти…"
 
@@ -29825,10 +29221,8 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:197
 #: gnucash/ui/gnc-plugin-page-register.ui:350
 #: gnucash/ui/gnc-plugin-page-register.ui:355
-#, fuzzy
-#| msgid "Filter account."
 msgid "Filter accounts"
-msgstr "Фільтрувати рахунок."
+msgstr "Фільтрування рахунків"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:217
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:387
@@ -29842,10 +29236,8 @@ msgstr ""
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:271
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:427
-#, fuzzy
-#| msgid "Delete Account"
 msgid "_Delete Account…"
-msgstr "Вилучити рахунок"
+msgstr "В_илучити рахунок…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:273
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:429
@@ -29853,8 +29245,6 @@ msgid "Delete selected account"
 msgstr "Вилучити позначений рахунок"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:281
-#, fuzzy
-#| msgid "Check & Repair A_ccount"
 msgid "_Check & Repair A_ccount"
 msgstr "Перевірити та відновити _рахунок"
 
@@ -29864,40 +29254,29 @@ msgstr "Перевірити та відновити _всі рахунки"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:16
 #: gnucash/ui/gnc-plugin-page-budget.ui:225
-#, fuzzy
-#| msgid "Esti_mate Budget..."
 msgid "Esti_mate Budget…"
 msgstr "О_цінити бюджет…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:22
 #: gnucash/ui/gnc-plugin-page-budget.ui:240
-#, fuzzy
-#| msgid "All Periods"
 msgid "_All Periods…"
-msgstr "Усі періоди"
+msgstr "_Усі періоди…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:24
 #: gnucash/ui/gnc-plugin-page-budget.ui:227
-#, fuzzy
-#| msgid ""
-#| "Estimate a budget value for the selected accounts from past transactions."
 msgid ""
 "Estimate a budget value for the selected accounts from past transactions"
-msgstr "Оцінити обсяг бюджету для вибраних рахунків від минулих транзакцій."
+msgstr "Оцінити обсяг бюджету для вибраних рахунків від минулих транзакцій"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:28
 #: gnucash/ui/gnc-plugin-page-budget.ui:255
-#, fuzzy
-#| msgid "_Delete Budget"
 msgid "_Delete Budget…"
-msgstr "В_идалити бюджет"
+msgstr "В_илучити бюджет"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:30
 #: gnucash/ui/gnc-plugin-page-budget.ui:257
-#, fuzzy
-#| msgid "Select this or another budget and delete it."
 msgid "Select this or another budget and delete it"
-msgstr "Виберіть цей або інший бюджет і вилучіть його."
+msgstr "Виберіть цей або інший бюджет і вилучіть його"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:34
 #: gnucash/ui/gnc-plugin-page-budget.ui:270
@@ -29906,37 +29285,27 @@ msgstr "Змінити нотатку"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:36
 #: gnucash/ui/gnc-plugin-page-budget.ui:272
-#, fuzzy
-#| msgid "Edit note for the selected account and period."
 msgid "Edit note for the selected account and period"
-msgstr "Змінити нотатку для вибраного рахунка і періоду."
+msgstr "Змінити нотатку для вибраного рахунка і періоду"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:42
 #: gnucash/ui/gnc-plugin-page-budget.ui:287
-#, fuzzy
-#| msgid "Run the budget report."
 msgid "Run the budget report"
-msgstr "Створити звіт щодо бюджету."
+msgstr "Створити звіт щодо бюджету"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:70
 #: gnucash/ui/gnc-plugin-page-budget.ui:200
-#, fuzzy
-#| msgid "Budget Options"
 msgid "Budget _Options…"
-msgstr "Параметри бюджету"
+msgstr "_Параметри бюджету…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:72
 #: gnucash/ui/gnc-plugin-page-budget.ui:202
-#, fuzzy
-#| msgid "Edit this budget's options."
 msgid "Edit this budget's options"
-msgstr "Редагувати параметри цього бюджету."
+msgstr "Налаштувати параметри бюджету"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:242
-#, fuzzy
-#| msgid "Edit budget for all periods for the selected accounts."
 msgid "Edit budget for all periods for the selected accounts"
-msgstr "Редагувати бюджет для усіх періодів позначених рахунків."
+msgstr "Редагувати бюджет для усіх періодів позначених рахунків"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:79
 msgid "Sort _Order"
@@ -29981,10 +29350,8 @@ msgid "_Blank"
 msgstr "_Порожній"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:155
-#, fuzzy
-#| msgid "Move to the blank entry at the bottom of the bill"
 msgid "Move to the blank entry at the bottom"
-msgstr "Перейти на чистий запис внизу рахунку"
+msgstr "Перейти на чистий запис внизу"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:162
 #: gnucash/ui/gnc-plugin-page-invoice.ui:242
@@ -30024,24 +29391,18 @@ msgstr "Перемістити поточний запис на один ряд�
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:185
 msgid "Manage link of an external document to this item"
-msgstr ""
+msgstr "Керування посиланням на зовнішній документ щодо цього запису"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:191
-#, fuzzy
-#| msgid "Open Linked Document"
 msgid "Open the linked document"
-msgstr "Відкриття пов'язаного документа"
+msgstr "Відкрити пов'язаний документ"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:209
-#, fuzzy
-#| msgid "Open a customer report window for the owner of this invoice"
 msgid "Open a company report window for the owner of this invoice"
-msgstr "Відкрити вікно звіту про клієнта для власника цього рахунку-фактури"
+msgstr "Відкрити вікно звіту про фірму для власника цього рахунку-фактури"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:259
 #: gnucash/ui/gnc-plugin-page-invoice.ui:499
-#, fuzzy
-#| msgid "Move to the blank entry at the bottom of the invoice"
 msgid "Move to the blank entry at the bottom of the Invoice"
 msgstr "Перейти на чистий запис внизу рахунку-фактури"
 
@@ -30133,10 +29494,8 @@ msgstr "Створити новий рахунок"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:227
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:667
-#, fuzzy
-#| msgid "New _Voucher"
 msgid "New _Voucher…"
-msgstr "Створити _розписку"
+msgstr "Створити _розписку…"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:229
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:669
@@ -30144,15 +29503,11 @@ msgid "Create a new voucher"
 msgstr "Створити товарний чек"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:6
-#, fuzzy
-#| msgid "_Print checks"
 msgid "_Print Cheques"
 msgstr "_Друкувати чеки"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:15
 #: gnucash/ui/gnc-plugin-page-register.ui:445
-#, fuzzy
-#| msgid "Assign as payment..."
 msgid "Assign as payment…"
 msgstr "Призначити сплатою…"
 
@@ -30163,8 +29518,6 @@ msgstr "Вказати, що позначена транзакція є спла
 
 #: gnucash/ui/gnc-plugin-page-register.ui:22
 #: gnucash/ui/gnc-plugin-page-register.ui:451
-#, fuzzy
-#| msgid "Edit payment..."
 msgid "Edit payment…"
 msgstr "Редагувати сплату…"
 
@@ -30201,41 +29554,31 @@ msgid "_Void Transaction"
 msgstr "_Очистити Транзакцію"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:186
-#, fuzzy
-#| msgid "Record the current transaction"
 msgid "Void the current transaction"
-msgstr "Записати поточну транзакцію"
+msgstr "Спорожнити поточну транзакцію"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:190
 msgid "_Unvoid Transaction"
 msgstr "_Скасувати очищення Транзакції"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:192
-#, fuzzy
-#| msgid "Record the current transaction"
 msgid "Unvoid the current transaction"
-msgstr "Записати поточну транзакцію"
+msgstr "Скасувати спорожнення поточної транзакції"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:196
 msgid "Add _Reversing Transaction"
 msgstr "Додати _зворотню транзакцію"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:198
-#, fuzzy
-#| msgid "Add _Reversing Transaction"
 msgid "Add a reversing transaction"
-msgstr "Додати _зворотню транзакцію"
+msgstr "Додати зворотню транзакцію"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:248
 #: gnucash/ui/gnc-plugin-page-register.ui:712
-#, fuzzy
-#| msgid "Stock Ass_istant"
 msgid "Stock Ass_istant…"
-msgstr "Помічник _фондового ринку"
+msgstr "Помічник _фондового ринку…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:276
-#, fuzzy
-#| msgid "_Go to Date"
 msgid "_Got to Date"
 msgstr "П_ерейти до дати"
 
@@ -30269,10 +29612,8 @@ msgstr "Змінити курс обміну для поточної части�
 #: gnucash/ui/gnc-plugin-page-register.ui:295
 #: gnucash/ui/gnc-plugin-page-register.ui:433
 #: gnucash/ui/gnc-plugin-page-register.ui:657
-#, fuzzy
-#| msgid "Schedule"
 msgid "Sche_dule…"
-msgstr "Розклад"
+msgstr "За_планувати…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:297
 #: gnucash/ui/gnc-plugin-page-register.ui:435
@@ -30295,27 +29636,19 @@ msgstr "П_ерейти до іншого рахунка"
 #: gnucash/ui/gnc-plugin-page-register.ui:306
 #: gnucash/ui/gnc-plugin-page-register.ui:440
 #: gnucash/ui/gnc-plugin-page-register.ui:644
-#, fuzzy
-#| msgid ""
-#| "Open a new register tab for the other account with focus on this "
-#| "transaction."
 msgid ""
 "Open a new register tab for the other account with focus on this transaction"
 msgstr ""
 "Відкрити нову вкладку бухгалтерської книги для іншого рахунка із фокусом на "
-"цій транзакції."
+"цій транзакції"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:318
-#, fuzzy
-#| msgid "_All transactions"
 msgid "All Transactions"
-msgstr "_Усі транзакції"
+msgstr "Усі транзакції"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:323
-#, fuzzy
-#| msgid "_This transaction"
 msgid "This transaction"
-msgstr "_Виділену транзакцію"
+msgstr "Ця транзакція"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:332
 msgid "Account Report"
@@ -30334,10 +29667,8 @@ msgid "Open a register report for the selected Transaction"
 msgstr "Відкрити звіт по журналу для вибраної транзакції"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:348
-#, fuzzy
-#| msgid "Sort By"
 msgid "_Sort By…"
-msgstr "Сортувати за"
+msgstr "_Критерій упорядковування…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:418
 msgid "_Go to Date"
@@ -30345,8 +29676,6 @@ msgstr "П_ерейти до дати"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:269
-#, fuzzy
-#| msgid "_Print Report..."
 msgid "_Print Report…"
 msgstr "_Друкувати звіт…"
 
@@ -30367,8 +29696,6 @@ msgstr "Редагувати стиль оформлення звітів"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:25
 #: gnucash/ui/gnc-plugin-page-report.ui:284
-#, fuzzy
-#| msgid "Export as P_DF..."
 msgid "Export as P_DF…"
 msgstr "Е_кспортувати як PDF…"
 
@@ -30378,10 +29705,8 @@ msgid "Export the current report as a PDF document"
 msgstr "Експортувати поточний звіт як документ PDF"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:34
-#, fuzzy
-#| msgid "Export _Report"
 msgid "Export _Report…"
-msgstr "Експортувати _звіт"
+msgstr "Експортувати _звіт…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:36
 #: gnucash/ui/gnc-plugin-page-report.ui:256
@@ -30390,24 +29715,17 @@ msgstr "Експорт звіту до файла у форматі HTML"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:46
 #: gnucash/ui/gnc-plugin-page-report.ui:226
-#, fuzzy
-#| msgid "Delete report configuration"
 msgid "Update the current report's saved configuration"
-msgstr "Вилучити налаштування звіту"
+msgstr "Оновити збережені налаштування поточного звіту"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:53
 #: gnucash/ui/gnc-plugin-page-report.ui:241
-#, fuzzy
-#| msgid ""
-#| "Add the current report's configuration to the 'Reports->Saved Report "
-#| "Configurations' menu. The report configuration will be saved in the file "
-#| "%s."
 msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu"
 msgstr ""
 "Додати налаштування поточного звіту до меню «Звіти → Збережені налаштування "
-"звіту». Налаштування звіту буде збережено до файла %s."
+"звіту»."
 
 #: gnucash/ui/gnc-plugin-page-report.ui:139
 msgid "Back"
@@ -30461,8 +29779,6 @@ msgid "Delete the selected scheduled transaction"
 msgstr "Вилучити виділену заплановану транзакцію"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:6
-#, fuzzy
-#| msgid "Import _QIF..."
 msgid "Import _QIF…"
 msgstr "Імпортувати _QIF…"
 
@@ -30487,8 +29803,6 @@ msgid "_Reconcile"
 msgstr "_Узгодити"
 
 #: gnucash/ui/gnc-reconcile-window.ui:8
-#, fuzzy
-#| msgid "_Reconcile Information..."
 msgid "_Reconcile Information…"
 msgstr "_Інформація про узгодження…"
 
@@ -30525,20 +29839,16 @@ msgid "Reconcile the selected transactions"
 msgstr "Узгодити позначені транзакції"
 
 #: gnucash/ui/gnc-reconcile-window.ui:161
-#, fuzzy
-#| msgid "_Reconcile Selection"
 msgid "Reconcile Selection"
-msgstr "_Узгодити позначене"
+msgstr "Узгодити позначене"
 
 #: gnucash/ui/gnc-reconcile-window.ui:175
 msgid "Unreconcile the selected transactions"
 msgstr "Скасувати узгодження позначених транзакцій"
 
 #: gnucash/ui/gnc-reconcile-window.ui:177
-#, fuzzy
-#| msgid "_Unreconcile Selection"
 msgid "Unreconcile Selection"
-msgstr "_Скасувати узгодження позначених"
+msgstr "Скасувати узгодження позначених"
 
 #: gnucash/ui/gnc-reconcile-window.ui:191
 msgid "Delete the selected transaction"
@@ -30598,201 +29908,189 @@ msgstr "Числова помилка"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:156
 msgid "Failed to initialize Finance::Quote: "
-msgstr ""
+msgstr "Не вдалося ініціалізувати Finance::Quote: "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:163
 msgid "Finance::Quote check returned error "
-msgstr ""
+msgstr "Перевіркою Finance::Quote повернуто помилку "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:171
-#, fuzzy
-#| msgid "Found Finance::Quote version ~A."
 msgid "No Finance::Quote Version"
-msgstr "Знайдено версію Finance::Quote ~A."
+msgstr "Немає версії Finance::Quote"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:282
 msgid "GncQuotes::Fetch called with no book."
-msgstr ""
+msgstr "GncQuotes::Fetch викликано без книги."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:300
 msgid "GncQuotes::Fetch called with no commodities."
-msgstr ""
+msgstr "GncQuotes::Fetch викликано без зазначення активів."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:314
-#, fuzzy
-#| msgid "There are no options for this report."
 msgid "There were no commodities for which to retrieve quotes."
-msgstr "Немає параметрів для звіту."
+msgstr "Немає активів, для яких слід отримати курси."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:328
 msgid "Finance::Quote retrieval failed with error "
 msgstr ""
+"Отримання даних Finance::Quote завершилося невдало з повідомленням про "
+"помилку "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:346
 #: libgnucash/app-utils/gnc-quotes.cpp:810
 msgid "Finance::Quote returned no data and set no error."
-msgstr ""
+msgstr "Finance::Quote не повернуто даних і не встановлено помилки."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:348
 msgid "Finance::Quote returned an error: "
-msgstr ""
+msgstr "Finance::Quote повернуто повідомлення про помилку: "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:352
 msgid "Finance::Quote reported failure set no error."
-msgstr ""
+msgstr "Finance::Quote повідомлено про невдачу без помилки."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:354
 msgid "Finance::Quote reported failure with  error: "
 msgstr ""
+"Finance::Quote повідомлено про невдачу із такою помилreported failure with  "
+"error: "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:357
 msgid "Finance::Quote returned a quote with no currency."
-msgstr ""
+msgstr "Finance::Quote повернуто курс без запису валюти."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:360
 msgid ""
 "Finance::Quote returned a quote with a currency GnuCash doesn't know about."
 msgstr ""
+"Finance::Quote повернуто курс із записом валюти, який є невідомим для "
+"GnuCash."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:363
 msgid "Finance::Quote returned a quote with no price element."
-msgstr ""
+msgstr "Finance::Quote повернуто курс без елемента ціни."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:366
 msgid ""
 "Finance::Quote returned a quote with a price that GnuCash was unable to "
 "covert to a number."
 msgstr ""
+"Finance::Quote повернуто курс з ціною, яку GnuCash не вдалося перетворити на "
+"число."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:370
-#, fuzzy
-#| msgid "There was an error accessing %s."
 msgid "The quote has no error set."
-msgstr "Помилка під час доступу до %s."
+msgstr "Для курсу не встановлено помилки."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:379
 msgid "Quotes for the following commodities were unavailable or unusable:\n"
 msgstr ""
+"Курси для вказаних нижче активів недоступні або непридатні до використання:\n"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:456
 msgid "Currency quotes requires at least two currencies"
-msgstr ""
+msgstr "Для курсу потрібно принаймні дві валюти"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:721
 #: libgnucash/app-utils/gnc-quotes.cpp:726
 msgid "Failed to parse result returned by Finance::Quote."
-msgstr ""
+msgstr "Не вдалося обробити результат, який повернуто Finance::Quote."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:728
 msgid "Error message:"
-msgstr ""
+msgstr "Повідомлення про помилку:"
 
 #. Translators: Means that the preceding element is required
 #: libgnucash/app-utils/gnc-quotes.cpp:770
-#, fuzzy
-#| msgid "Date required."
 msgctxt "Finance::Quote"
 msgid "required"
-msgstr "Потрібна дата."
+msgstr "обов'язковий"
 
 #. Translators: Means that the quote will work best if the preceding element is provided
 #: libgnucash/app-utils/gnc-quotes.cpp:772
-#, fuzzy
-#| msgid "Unreconciled"
 msgctxt "Finance::Quote"
 msgid "recommended"
-msgstr "Не узгоджено"
+msgstr "рекомендований"
 
 #. Translators: Means that one of the indicated elements is required
 #: libgnucash/app-utils/gnc-quotes.cpp:774
-#, fuzzy
-#| msgid "End of this year"
 msgctxt "Finance::Quote"
 msgid "one of these"
-msgstr "Кінець цього року"
+msgstr "один з цих"
 
 #. Translators: Means that a required element wasn't reported. The *s are for emphasis.
 #: libgnucash/app-utils/gnc-quotes.cpp:776
-#, fuzzy
-#| msgid "missing"
 msgctxt "Finance::Quote"
 msgid "**missing**"
-msgstr "пропущено"
+msgstr "**пропущений**"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:783
 msgid "Finance::Quote fields GnuCash uses:"
-msgstr ""
+msgstr "Поля Finance::Quote, які використовує GnuCash:"
 
 #. Translators: The stock or Mutual Fund symbol, ISIN, CUSIP, etc.
 #: libgnucash/app-utils/gnc-quotes.cpp:785
-#, fuzzy
-#| msgid "Symbol"
 msgctxt "Finance::Quote"
 msgid "symbol: "
-msgstr "Символ"
+msgstr "символ: "
 
 #. Translators: The date of the quote.
 #: libgnucash/app-utils/gnc-quotes.cpp:787
-#, fuzzy
-#| msgid "Date: "
 msgctxt "Finance::Quote"
 msgid "date: "
-msgstr "Дата: "
+msgstr "дата: "
 
 #. Translators: The quote currency
 #: libgnucash/app-utils/gnc-quotes.cpp:789
-#, fuzzy
-#| msgid "Currency"
 msgctxt "Finance::Quote"
 msgid "currency: "
-msgstr "Валюта"
+msgstr "валюта: "
 
 #. Translators: The quote is for the most recent trade on the exchange
 #: libgnucash/app-utils/gnc-quotes.cpp:795
-#, fuzzy
-#| msgid "last %s"
 msgctxt "Finance::Quote"
 msgid "last: "
-msgstr "минулий %s"
+msgstr "остання "
 
 #. Translators: The quote is for an open-ended mutual fund and represents the net asset value of one unit of the fund at the previous close of trading.
 #: libgnucash/app-utils/gnc-quotes.cpp:797
 msgctxt "Finance::Quote"
 msgid "nav: "
-msgstr ""
+msgstr "чиста вартість: "
 
 #. Translators: The quote is neither a last trade nor an NAV.
 #: libgnucash/app-utils/gnc-quotes.cpp:799
-#, fuzzy
-#| msgid "Price"
 msgctxt "Finance::Quote"
 msgid "price: "
-msgstr "Ціна"
+msgstr "ціна: "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:819
 msgid "Finance::Quote reported a failure for symbol "
-msgstr ""
+msgstr "Finance::Quote повідомлено про помилку для символу "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:822
 msgid "Finance::Quote failed silently to retrieve a quote for symbol "
-msgstr ""
+msgstr "Finance::Quote не вдалося без повідомлень отримати курс для символу "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:885
 msgid ""
 "GnuCash submitted invalid json to Finance::Quote. The details were logged."
 msgstr ""
+"GnuCash подано некоректний json до Finance::Quote. Подробиці записано до "
+"журналу."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:891
 msgid ""
 "Perl is missing the following modules. Please see https://wiki.gnucash.org/"
 "wiki/Online_Quotes#Finance::Quote for detailed corrective action. "
 msgstr ""
+"У Perl не вистачає вказаних нижче модулів. Будь ласка, ознайомтеся із "
+"вмістом сторінки https://wiki.gnucash.org/wiki/Online_Quotes#Finance::Quote, "
+"щоб дізнатися про те, як це виправити. "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:897
-#, fuzzy
-#| msgid "Found Finance::Quote version ~A."
 msgid "Unrecognized Finance::Quote Error: "
-msgstr "Знайдено версію Finance::Quote ~A."
+msgstr "Нерозпізнана помилка Finance::Quote: "
 
 #. Translators: A list of error messages from the Scheduled Transactions (SX).
 #. They might appear in their editor or in "Since last run".
@@ -31465,6 +30763,8 @@ msgid ""
 "Length of time to change the used invoice report. A value of 0 means "
 "disabled."
 msgstr ""
+"Час, протягом якого можна змінювати використаний звіт за рахунком-фактурою. "
+"Значення «0» вимикає використання."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1241
 msgid "Default Customer TaxTable"
@@ -31547,14 +30847,12 @@ msgid "Default Budget"
 msgstr "Типовий бюджет"
 
 #: libgnucash/engine/qofbookslots.h:74
-#, fuzzy
-#| msgid "Date of Report"
 msgid "Default Invoice Report"
-msgstr "Дата звіту"
+msgstr "Типовий звіт за рахунком-фактурою"
 
 #: libgnucash/engine/qofbookslots.h:75
 msgid "Default Invoice Report Timeout"
-msgstr ""
+msgstr "Типовий час очікування на звіт за рахунком-фактурою"
 
 #. Translators: " + " is an separator in a list of string-representations of recurrence frequencies
 #: libgnucash/engine/Recurrence.c:511

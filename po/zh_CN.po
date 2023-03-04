@@ -28,10 +28,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot:${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-03 11:31-0800\n"
-"PO-Revision-Date: 2023-01-02 04:51+0000\n"
+"PO-Revision-Date: 2023-03-04 11:39+0000\n"
 "Last-Translator: J0kWang <lianjiefly@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/program-beta/zh_Hans/>\n"
@@ -40,7 +40,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.15.1-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -1310,26 +1310,22 @@ msgstr "没有有余额的股票科目！"
 #. Translators: this is a stock transaction describing an
 #. Initial stock long purchase
 #: gnucash/gnome/assistant-stock-transaction.cpp:147
-#, fuzzy
-#| msgid "Open"
 msgid "Open buy"
-msgstr "打开"
+msgstr "公开买入"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:148
 msgid "Initial stock long purchase."
-msgstr ""
+msgstr "初始股票买入"
 
 #. Translators: this is a stock transaction describing an
 #. initial stock short sale
 #: gnucash/gnome/assistant-stock-transaction.cpp:161
-#, fuzzy
-#| msgid "Open _Folder"
 msgid "Open short"
-msgstr "打开文件夹(_F)"
+msgstr "公开卖出"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:162
 msgid "Initial stock short sale."
-msgstr ""
+msgstr "初始股票卖空"
 
 #. Translators: this is a stock transaction describing
 #. new purchase of stock.
@@ -1345,11 +1341,11 @@ msgstr ""
 #: libgnucash/engine/Account.cpp:154 libgnucash/engine/Account.cpp:155
 #: libgnucash/engine/Account.cpp:156
 msgid "Buy"
-msgstr "采购"
+msgstr "买入"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:180
 msgid "Buying stock long."
-msgstr ""
+msgstr "正在买入股票。"
 
 #. Translators: this is a stock transaction describing new
 #. sale of stock, and recording capital gain/loss
@@ -1365,11 +1361,11 @@ msgstr ""
 #: libgnucash/engine/Account.cpp:174 libgnucash/engine/Account.cpp:175
 #: libgnucash/engine/Account.cpp:176
 msgid "Sell"
-msgstr "销售"
+msgstr "卖出"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:194
 msgid "Selling stock long, and record capital gain/loss."
-msgstr ""
+msgstr "卖出股票，并且记录收益/损失"
 
 #. Translators: this is a stock transaction describing
 #. dividends issued to holder
@@ -1391,6 +1387,9 @@ msgid ""
 "Any dividend being reinvested must be subsequently recorded as a regular "
 "stock purchase."
 msgstr ""
+"公司向持有人发放现金股利。\n"
+"\n"
+"任何已分红的股利再投资时必须记为正常的股票购买。"
 
 #. Translators: this is a stock transaction describing return
 #. of capital
@@ -1409,13 +1408,13 @@ msgstr ""
 #. notional distribution
 #: gnucash/gnome/assistant-stock-transaction.cpp:236
 msgid "Notional distribution"
-msgstr ""
+msgstr "名义分配"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:237
 msgid ""
 "Company issues a notional distribution, which is recorded as dividend income "
 "and increases the cost basis without affecting # units."
-msgstr ""
+msgstr "公司作出一个名义分配，把它记作股息分红并增加成本而不产生实质影响。"
 
 #. Translators: this is a stock transaction describing a stock
 #. split
@@ -1434,17 +1433,15 @@ msgid ""
 "Company issues additional units, thereby reducing the stock price by a "
 "divisor, while keeping the total monetary value of the overall investment "
 "constant."
-msgstr ""
+msgstr "公司发行额外的股份，这样会按比例降低每股的价格，从而保持整体的投资价值不变。"
 
 #. Translators: this is a stock transaction describing a reverse split
 #. Translators: this is a stock transaction describing a
 #. reverse split when shorting stock.
 #: gnucash/gnome/assistant-stock-transaction.cpp:263
 #: gnucash/gnome/assistant-stock-transaction.cpp:369
-#, fuzzy
-#| msgid "_Review cleared splits"
 msgid "Reverse split"
-msgstr "复查已核实交易(_R)"
+msgstr "反向拆分"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:264
 msgid ""
@@ -1455,59 +1452,62 @@ msgid ""
 "record the sale using the Stock Transaction Assistant first, then record the "
 "reverse split."
 msgstr ""
+"公司回购股票，从而使股票价格按对应比例提高，并保持整体的投资价值不变。\n"
+"\n"
+"如果反向拆分是以现金支付回购剩余股份，请先用股票交易助手记录销售，然后再记录"
+"反向拆分。"
 
 #. Translators: this is a stock transaction describing
 #. shorting of stock.
 #: gnucash/gnome/assistant-stock-transaction.cpp:285
-#, fuzzy
-#| msgid "Sort Order"
 msgid "Short sell"
-msgstr "方式"
+msgstr "卖空"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:286
 msgid "Selling stock short."
-msgstr ""
+msgstr "卖空股票。"
 
 #. Translators: this is a stock transaction describing cover
 #. buying stock, and recording capital gain/loss
 #: gnucash/gnome/assistant-stock-transaction.cpp:299
 msgid "Buy to cover short"
-msgstr ""
+msgstr "平空"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:300
 msgid "Buy back stock to cover short position, and record capital gain/loss."
-msgstr ""
+msgstr "买入以平掉空头尺寸，同时计录资金损益。"
 
 #. Translators: this is a stock transaction describing
 #. dividends retrieved from holder when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:313
 msgid "Compensatory dividend"
-msgstr ""
+msgstr "补偿性股息"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:314
 msgid ""
 "Company issues dividends, and the short stock holder must make a "
 "compensatory payment for the dividend."
-msgstr ""
+msgstr "公司分配股息，此时股票空头持有者必须对股息进行补偿性支付。"
 
 #. Translators: this is a stock transaction describing return
 #. of capital retrieved from holder when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:327
 msgid "Compensatory return of capital"
-msgstr ""
+msgstr "资本补偿性回报"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:328
 msgid ""
 "Company returns capital, and the short stock holder must make a compensatory "
 "payment for the returned capital. This reduces the cost basis (less "
 "negative, towards 0.00 value) without affecting # units."
-msgstr ""
+msgstr "公司回购股本，空头持有者必须向回购的股本进行补偿性支付。这样会降低成本（负数"
+"，接近0.00的价格）不影响。"
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:341
 msgid "Compensatory notional distribution"
-msgstr ""
+msgstr "补偿性名义分配"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:342
 msgid ""
@@ -1562,10 +1562,9 @@ msgid "Amount for %s must be positive."
 msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:702
-#, fuzzy, c-format
-#| msgid "Accounts in %s"
+#, c-format
 msgid "Account for %s is missing."
-msgstr "“%s”的科目"
+msgstr "科目 %s 丢失。"
 
 #. Translators: the first %s is the new transaction date;
 #. the second %s is the current stock account's latest
@@ -1641,7 +1640,7 @@ msgstr "现金"
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:606
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:665
 msgid "Fees"
-msgstr ""
+msgstr "费用"
 
 #. Translators: Designates a page in the stock assistant or inserts the value
 #. into the capital gain/loss income split of an investment transaction.
@@ -1650,39 +1649,29 @@ msgstr ""
 #: gnucash/gnome/assistant-stock-transaction.cpp:1157
 #: gnucash/gnome/assistant-stock-transaction.cpp:1162
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:846
-#, fuzzy
-#| msgid "Capital"
 msgid "Capital Gain"
-msgstr "资本"
+msgstr "资本收益"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:889
 #, c-format
 msgid "Total Debits of %s does not balance with total Credits of %s."
-msgstr ""
+msgstr "借方总额 %s 与贷方总额 %s 不平衡。"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:903
 msgid "No errors found. Click Apply to create transaction."
-msgstr ""
+msgstr "未发现错误。点击应用创建交易。"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:904
-#, fuzzy
-#| msgid "The following vendor document is due:"
-#| msgid_plural "The following %d vendor documents are due:"
 msgid "The following errors must be fixed:"
-msgstr "%d 份逾期应付"
+msgstr "有以下错误需要更正："
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:912
-#, fuzzy
-#| msgid "The following vendor document is due:"
-#| msgid_plural "The following %d vendor documents are due:"
 msgid "The following warnings exist:"
-msgstr "%d 份逾期应付"
+msgstr "存在以下警告："
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:956
-#, fuzzy
-#| msgid "Net Balance"
 msgid "Ne_w Balance"
-msgstr "净余额"
+msgstr "新余额"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:956
 #: gnucash/gtkbuilder/assistant-stock-split.glade:129
@@ -1693,30 +1682,22 @@ msgid "_Shares"
 msgstr "股份(_S)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:959
-#, fuzzy
-#| msgid "_Rotation"
 msgid "Ratio"
-msgstr "旋转(_R)"
+msgstr "比例"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:959
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:277
-#, fuzzy
-#| msgid "Net Balance"
 msgid "Next Balance"
-msgstr "净余额"
+msgstr "下个余额"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:963
-#, fuzzy
-#| msgid "Enter the value of shares bought or sold"
 msgid "Enter the new balance of shares after the stock split."
-msgstr "输入买或卖的股份数量"
+msgstr "在拆股之后输入新的股份余额"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:964
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:212
-#, fuzzy
-#| msgid "Enter the number of shares bought or sold"
 msgid "Enter the number of shares you gained or lost in the transaction."
-msgstr "输入买或卖的股份数量"
+msgstr "输入在这次交易中赚到或亏损的股票数量。"
 
 #. Translators: Inserts the value into action field of the non-currency asset split of
 #. an investment transaction.
@@ -17055,8 +17036,8 @@ msgid ""
 "See <a href=\"https://wiki.gnucash.org/wiki/AqBanking\">https://wiki.gnucash."
 "org/wiki/AqBanking</a> for more details"
 msgstr ""
-"查看 <a href=\"https://wiki.gnucash.org/wiki/AqBanking\">https://wiki."
-"gnucash.org/wiki/AqBanking</a> 更多详情"
+"点击 <a href=\"https://wiki.gnucash.org/wiki/AqBanking\">https://wiki.gnucash"
+".org/wiki/AqBanking</a> 查看更多详细信息"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:78
 msgid ""
@@ -24753,10 +24734,8 @@ msgid "No price found"
 msgstr "未找到"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1230
-#, fuzzy
-#| msgid "(split)"
 msgid "split"
-msgstr "(分录)"
+msgstr "子交易"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1351
 #, scheme-format

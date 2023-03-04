@@ -5,20 +5,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot:${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-03 11:31-0800\n"
-"PO-Revision-Date: 2023-01-02 15:48+0000\n"
+"PO-Revision-Date: 2023-03-04 16:40+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
-"Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/program-"
-"beta/hr/>\n"
+"Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/"
+"program-beta/hr/>\n"
 "Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15.1-dev\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -2380,27 +2380,25 @@ msgid "_OK"
 msgstr "_U redu"
 
 #: gnucash/gnome/dialog-doclink.c:241
-#, fuzzy
-#| msgid "Amend URL:"
 msgid "Amend the URL"
-msgstr "Nadodaj URL:"
+msgstr "Nadodaj URL"
 
 #: gnucash/gnome/dialog-doclink.c:246
 #, c-format
 msgid "Enter an URL like \"%s\""
-msgstr ""
+msgstr "Ipiši URL kao „%s”"
 
 #: gnucash/gnome/dialog-doclink.c:264
 msgid "Existing Document Link is"
-msgstr "Postojeća poveznica dokumenta je"
+msgstr "Postojeća poveznica na dokument je"
 
 #: gnucash/gnome/dialog-doclink.c:535 gnucash/gnome/dialog-doclink.c:580
 msgid "File Found"
-msgstr "Datoteka je nađena"
+msgstr "Datoteka je pronađena"
 
 #: gnucash/gnome/dialog-doclink.c:537
 msgid "File Not Found"
-msgstr "Datoteka nije nađena"
+msgstr "Datoteka nije pronađena"
 
 #: gnucash/gnome/dialog-doclink.c:550
 msgid "Address Found"
@@ -12753,10 +12751,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:45
-#, fuzzy
-#| msgid "Show the account description for subheadings?"
 msgid "Select the date and description for your records."
-msgstr "Prikazati opis konta za pod-zaglavlja?"
+msgstr "Odaberi datum i opis za tvoj zapis."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:109
 #: gnucash/gtkbuilder/dialog-payment.glade:662
@@ -22504,18 +22500,14 @@ msgid "Report Title Default"
 msgstr "Naslov izvještaja"
 
 #: gnucash/report/reports/example/sample-report.scm:285
-#, fuzzy, scheme-format
-#| msgid ""
-#| "This is a sample GnuCash report. See the guile (scheme) source code in "
-#| "the scm/report directory for details on writing your own reports, or "
-#| "extending existing reports."
+#, scheme-format
 msgid ""
 "This is a sample GnuCash ~a report. See the guile (scheme) source code in "
 "the scm/report directory for details on writing your own reports, or "
 "extending existing reports."
 msgstr ""
-"Ovo je primjer GnuCash izvještaja. Pogledaj izvorni guile kȏd (shemu) u mapi "
-"„scm/report“ o tome kako napisati vlastiti izvještaj ili kako proširiti "
+"Ovo je primjer GnuCash ~a izvještaja. Pogledaj izvorni guile kȏd (shemu) u "
+"mapi „scm/report“ o tome kako napisati vlastiti izvještaj ili kako proširiti "
 "postojeće izvještaje."
 
 #: gnucash/report/reports/example/sample-report.scm:292
@@ -25819,10 +25811,9 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:1425
-#, fuzzy, scheme-format
-#| msgid "Amount / Value"
+#, scheme-format
 msgid ": amount ~a, value ~a"
-msgstr "Iznos / Vrijednost"
+msgstr ": iznos ~a, vrijednost ~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1445
 #, scheme-format
