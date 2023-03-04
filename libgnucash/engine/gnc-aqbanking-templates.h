@@ -33,16 +33,14 @@
 #ifndef GNC_AB_TRANS_TEMPL_H
 #define GNC_AB_TRANS_TEMPL_H
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #include <config.h>
 #include <glib.h>
 #include "qof.h"
 
-G_BEGIN_DECLS
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 /** A template for an AqBanking transaction */
 typedef struct _GncABTransTempl GncABTransTempl;
@@ -204,7 +202,6 @@ void gnc_ab_trans_templ_set_purpose(GncABTransTempl *t, const gchar *purpose);
 void gnc_ab_trans_templ_set_purpose_cont(GncABTransTempl *t,
         const gchar *purpose_cont);
 
-G_END_DECLS
 #ifdef __cplusplus
 }
 #endif

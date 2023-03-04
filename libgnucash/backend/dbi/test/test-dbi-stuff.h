@@ -25,10 +25,6 @@
 
 #ifndef _TEST_DBI_STUFF_H_
 #define _TEST_DBI_STUFF_H_
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 #include "qof.h"
 
 typedef struct
@@ -37,10 +33,17 @@ typedef struct
     QofBook* book_2;
     gboolean result;
 } CompareInfoStruct;
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 void compare_books (QofBook* book_1, QofBook* book_2);
 
 void do_compare (QofBook* book_1, QofBook* book_2, const gchar* id,
                  QofInstanceForeachCB cb, const gchar* msg);
+
 #ifdef __cplusplus
 }
 #endif

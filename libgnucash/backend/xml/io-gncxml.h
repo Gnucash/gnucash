@@ -32,14 +32,15 @@
 
 #ifndef IO_GNCXML_H
 #define IO_GNCXML_H
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
 #include <glib.h>
 #include "qof.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+
+#endif
 /* FIXME: eventually, we probably need to add an error stack
    accessible via gnc_book_get_xml_io_error() a la binfile. */
 

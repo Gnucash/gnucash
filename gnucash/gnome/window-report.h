@@ -24,16 +24,16 @@
 #define GNC_REPORT_WINDOW_H
 
 #include <libguile.h>
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 //#include "gnc-html.h"
 #include "qof.h"
 #include "gnc-optiondb.h"
 
 typedef struct gnc_report_window_s gnc_report_window;
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 /** PROTOTYPES ******************************************************/
 
 // scm-exposed

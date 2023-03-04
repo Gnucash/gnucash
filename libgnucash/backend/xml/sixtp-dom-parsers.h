@@ -23,14 +23,11 @@
 
 #ifndef SIXTP_DOM_PARSERS_H
 #define SIXTP_DOM_PARSERS_H
-extern "C"
-{
 #include <glib.h>
 
 #include "gnc-commodity.h"
 #include "qof.h"
 #include "gnc-budget.h"
-}
 
 #include "gnc-xml-helper.h"
 

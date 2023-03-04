@@ -29,12 +29,10 @@
 #ifndef GNC_TRANSACTION_SQL_H
 #define GNC_TRANSACTION_SQL_H
 
-extern "C"
-{
 #include "Transaction.h"
 #include "qof.h"
 #include "Account.h"
-}
+
 class GncSqlTransBackend : public GncSqlObjectBackend
 {
 public:

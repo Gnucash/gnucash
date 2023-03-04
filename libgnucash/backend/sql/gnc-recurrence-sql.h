@@ -28,12 +28,11 @@
 
 #ifndef GNC_RECURRENCE_SQL_H
 #define GNC_RECURRENCE_SQL_H
-extern "C"
-{
+
 #include <glib.h>
+
 #include "Recurrence.h"
 #include "guid.h"
-}
 #include "gnc-sql-object-backend.hpp"
 
 class GncSqlRecurrenceBackend : public GncSqlObjectBackend

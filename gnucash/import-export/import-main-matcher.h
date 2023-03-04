@@ -36,11 +36,11 @@
 #include "Transaction.h"
 #include "import-backend.h"
 
+#include <stdbool.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <stdbool.h>
 
 typedef struct _main_matcher_info GNCImportMainMatcher;
 

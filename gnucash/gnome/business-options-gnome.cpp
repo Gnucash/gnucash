@@ -33,10 +33,7 @@
 #include <gnc-general-search.h> // for GNC_GENERAL_SEARCH
 #include "dialog-utils.h" // for gnc_builder_add_from_file
 
-extern "C"
-{
 #include "gnc-report-combo.h"
-}
 
 #include <iostream>
 #include <sstream>

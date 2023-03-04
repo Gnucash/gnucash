@@ -11,10 +11,7 @@
 
 #include <qofquery.h>
 
-extern "C"
-{
 #include <Query.h>
-}
 
 /** Fake object providing functionality similar to QofQuery
  *

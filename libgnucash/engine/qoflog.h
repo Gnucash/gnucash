@@ -85,15 +85,15 @@
 #ifndef _QOF_LOG_H
 #define _QOF_LOG_H
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #include <stdarg.h>
 #include <stdio.h>
 #include <glib.h>
 #include "qofutil.h"
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 typedef const gchar* QofLogModule;
 

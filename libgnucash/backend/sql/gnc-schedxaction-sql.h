@@ -28,10 +28,8 @@
 
 #ifndef GNC_SCHEDXACTION_SQL_H
 #define GNC_SCHEDXACTION_SQL_H
-extern "C"
-{
+
 #include "qof.h"
-}
 #include "gnc-sql-object-backend.hpp"
 
 class GncSqlSchedXactionBackend : public GncSqlObjectBackend

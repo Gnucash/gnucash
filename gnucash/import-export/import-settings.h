@@ -30,6 +30,11 @@
 
 #include "import-utilities.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 typedef struct _genimportsettings GNCImportSettings;
 
 /************************************************************************
@@ -103,6 +108,11 @@ void gnc_import_Settings_set_match_date_hardlimit (GNCImportSettings *settings, 
 gint gnc_import_Settings_get_match_date_hardlimit (const GNCImportSettings *settings);
 
 /**@}*/
+
+#ifdef __cplusplus
+}
+#endif
+
 /**@}*/
 
 #endif

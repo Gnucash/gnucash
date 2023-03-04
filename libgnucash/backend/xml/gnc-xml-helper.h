@@ -27,8 +27,6 @@
 
 #include <glib.h>
 
-extern "C"
-{
 #include <libxml/xmlversion.h>
 
 #  include <libxml/SAX.h>
@@ -36,7 +34,7 @@ extern "C"
 #  include <libxml/parser.h>
 #  include <libxml/xmlmemory.h>
 #  include <libxml/parserInternals.h>
-}
+
 #  ifndef xmlChildrenNode
 #    define xmlChildrenNode children
 #  endif /* ifndef xmlChildrenNode */

@@ -51,6 +51,11 @@ typedef struct
     char *report_name;
 } ReportListEntry;
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /** Return the GType for the GncReportCombo widget.
  *
  *  @return A GType value.
@@ -127,5 +132,9 @@ gchar * gnc_report_combo_get_active_guid_name (GncReportCombo *grc);
  *  @return TRUE is warning is displayed, else FALSE
  */
 gboolean gnc_report_combo_is_warning_visible_for_active (GncReportCombo *grc);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __GNC_REPORT_COMBO_H__ */

@@ -30,15 +30,12 @@
 
 #ifndef IO_GNCXML_V2_H
 #define IO_GNCXML_V2_H
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+
 #include <glib.h>
 
 #include "gnc-engine.h"
+
 #ifdef __cplusplus
-}
 #include "gnc-backend-xml.h"
 #include "sixtp.h"
 #include <vector>

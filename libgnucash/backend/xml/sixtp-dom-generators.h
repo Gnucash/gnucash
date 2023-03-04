@@ -24,14 +24,11 @@
 #ifndef SIXTP_DOM_GENERATORS_H
 #define SIXTP_DOM_GENERATORS_H
 
-extern "C"
-{
 #include <glib.h>
 
 #include "gnc-commodity.h"
 #include "qof.h"
 #include "Recurrence.h"
-}
 
 #include "gnc-xml-helper.h"
 

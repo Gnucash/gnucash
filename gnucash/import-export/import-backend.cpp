@@ -35,7 +35,6 @@
 
 #include <errno.h>
 
-extern "C" {
 #include "import-backend.h"
 #include "import-utilities.h"
 #include "Account.h"
@@ -44,7 +43,6 @@ extern "C" {
 #include "engine-helpers.h"
 #include "gnc-prefs.h"
 #include "gnc-ui-util.h"
-}
 
 #include <algorithm>
 

@@ -23,10 +23,7 @@
 
 #ifndef SIXTP_STACK_H
 #define SIXTP_STACK_H
-extern "C"
-{
 #include <glib.h>
-}
 
 #include "sixtp.h"
 

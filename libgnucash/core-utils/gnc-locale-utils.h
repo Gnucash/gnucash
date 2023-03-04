@@ -25,6 +25,11 @@
 #include <glib.h>
 #include <locale.h>
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /* The gnc_localeconv() subroutine returns an lconv structure
  * containing locale information. If no locale is set, the structure
  * is given default (en_US) values.  */
@@ -40,5 +45,9 @@ int gnc_locale_decimal_places (void);
 /* Return the name of the currently set locale.
  * The returned string should be freed by the caller. */
 gchar *gnc_locale_name (void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_LOCALE_UTILS_H */

@@ -36,10 +36,6 @@ transaction and lot for the posted invoice.
 #ifndef GNC_INVOICE_H_
 #define GNC_INVOICE_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 struct _gncInvoice;
 typedef struct _gncInvoice GncInvoice;
 typedef struct _gncInvoiceClass GncInvoiceClass;
@@ -53,6 +49,10 @@ typedef GList GncInvoiceList;
 #include "qofbook.h"
 #include "qofbook.h"
 #include "gnc-pricedb.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define GNC_ID_INVOICE    "gncInvoice"
 

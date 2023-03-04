@@ -76,11 +76,6 @@
 #include <string.h>
 #include "guid.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 /** QofIdType declaration */
 typedef const gchar * QofIdType;
 /** QofIdTypeConst declaration */
@@ -89,6 +84,11 @@ typedef const gchar * QofIdTypeConst;
 typedef struct QofCollection_s QofCollection;
 
 #include "qofinstance.h"
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #define QOF_ID_NONE           NULL
 #define QOF_ID_NULL           "null"

@@ -28,12 +28,10 @@
 
 #ifndef GNC_SLOTS_SQL_H
 #define GNC_SLOTS_SQL_H
-extern "C"
-{
+
 #include <glib.h>
 #include "guid.h"
 #include "qof.h"
-}
 #include "gnc-sql-object-backend.hpp"
 
 /**

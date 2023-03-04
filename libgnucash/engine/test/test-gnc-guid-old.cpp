@@ -24,13 +24,11 @@
 #include <glib.h>
 #include "../guid.hpp"
 
-extern "C"
-{
 #include <config.h>
 #include <string.h>
 #include <unittest-support.h>
-void test_suite_gnc_guid (void);
-}
+
+extern "C" void test_suite_gnc_guid (void);
 
 /*Can be included as c++, because it's c++ tolerant*/
 #include "../guid.h"

@@ -24,11 +24,8 @@
 
 #ifndef IO_UTILS_H
 #define IO_UTILS_H
-extern "C"
-{
 #include <stdio.h>
 #include "qof.h"
-}
 
 #include "io-gncxml-v2.h"
 
