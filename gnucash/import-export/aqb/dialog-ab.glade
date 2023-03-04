@@ -1776,7 +1776,7 @@
                     <property name="model">profile-list</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
-                    <property name='tooltip-text' translatable='yes'>This list one or more specialization templates that adjust the import for different banks uses of fields in the selected import format.</property>
+                    <property name='tooltip-text' translatable='yes'>This lists one or more specialization templates that adjust the import for different banks' uses of fields in the selected import format.</property>
                     <!-- Request the maximum width for the profile
                          list so that it doesn't change the dialog
                          width when an imexporter with long

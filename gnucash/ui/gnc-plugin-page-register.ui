@@ -96,7 +96,7 @@
     <item>
        <attribute name="label" translatable="yes">_Double Line</attribute>
        <attribute name="action">GncPluginPageRegisterActions.ViewStyleDoubleLineAction</attribute>
-       <attribute name="tooltip" translatable="yes">Show a second line with \"Action\", \"Notes\", and \"Linked Document\" for each transaction</attribute>
+       <attribute name="tooltip" translatable="yes">Show a second line with Action, Notes, and Linked Document fields for each transaction</attribute>
        <attribute name="temp" translatable="no">yes</attribute>
     </item>
 

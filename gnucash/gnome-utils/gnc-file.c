@@ -711,9 +711,11 @@ run_post_load_scrubs (GtkWindow *parent, QofBook *book)
     /* If feature GNC_FEATURE_BUDGET_UNREVERSED is not set, and there
        are budgets, fix signs */
     if (gnc_maybe_scrub_all_budget_signs (book))
-        gnc_info_dialog (parent, "%s", _("This book has budgets. \
-The internal representation of amounts is now fixed. Please review \
-budgets and amend signs if necessary."));
+        gnc_info_dialog (parent, "%s", _(
+                             "This book has budgets. The internal representation of "
+                             "budget amounts no longer depends on the Reverse Balanced "
+                             "Accounts preference. Please review the budgets and amend "
+                             "signs if necessary."));
 
     // Fix account color slots being set to 'Not Set', should run once on a book
     xaccAccountScrubColorNotSet (book);

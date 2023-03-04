@@ -54,7 +54,7 @@
 (define optname-plot-height (N_ "Plot height"))
 
 ;; Columns
-(define optname-show-lot-guid-column (N_ "Show lot guid column"))
+(define optname-show-lot-guid-column (N_ "Show lot GUID column"))
 (define optname-show-date-columns (N_ "Show date columns"))
 (define optname-show-bought-columns (N_ "Show bought columns"))
 (define optname-show-sold-columns (N_ "Show sold columns"))

@@ -171,7 +171,7 @@
   (or (assoc-ref string-map-alist (string-downcase! (string-trim-both read-value)))
      ;; Translators: Mapping the QIF account type to a GnuCash account type.
      ;; see https://en.wikipedia.org/wiki/Quicken_Interchange_Format#Detail_items
-     (let ((msg (format #f (G_ "The account type ~s is unknown, using 'bank' instead.")
+     (let ((msg (format #f (G_ "The account type ~s is unknown, using Bank instead.")
                          read-value)))
         (errorproc errortype msg)
         (list GNC-BANK-TYPE))))
