@@ -273,7 +273,7 @@
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="yes">_Got to Date</attribute>
+      <attribute name="label" translatable="yes">_Go to Date</attribute>
       <attribute name="action">GncPluginPageRegisterActions.GotoDateAction</attribute>
       <attribute name="accel">&lt;Primary&gt;g</attribute>
       <attribute name="tooltip" translatable="yes">Move to the split at the specified date</attribute>
