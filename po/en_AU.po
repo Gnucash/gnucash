@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-03 11:31-0800\n"
-"PO-Revision-Date: 2023-03-04 11:38+0000\n"
+"PO-Revision-Date: 2023-03-04 14:39+0000\n"
 "Last-Translator: Simon Arlott <weblate.simon@arlott.org>\n"
 "Language-Team: English (Australia) <https://hosted.weblate.org/projects/"
 "gnucash/program-beta/en_AU/>\n"
@@ -29746,24 +29746,25 @@ msgstr "Finance::Quote reported a failure for symbol "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:822
 msgid "Finance::Quote failed silently to retrieve a quote for symbol "
-msgstr ""
+msgstr "Finance::Quote failed silently to retrieve a quote for symbol "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:885
 msgid ""
 "GnuCash submitted invalid json to Finance::Quote. The details were logged."
 msgstr ""
+"GnuCash submitted invalid json to Finance::Quote. The details were logged."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:891
 msgid ""
 "Perl is missing the following modules. Please see https://wiki.gnucash.org/"
 "wiki/Online_Quotes#Finance::Quote for detailed corrective action. "
 msgstr ""
+"Perl is missing the following modules. Please see https://wiki.gnucash.org/"
+"wiki/Online_Quotes#Finance::Quote for detailed corrective action. "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:897
-#, fuzzy
-#| msgid "Found Finance::Quote version ~A."
 msgid "Unrecognized Finance::Quote Error: "
-msgstr "Found Finance::Quote version ~A."
+msgstr "Unrecognised Finance::Quote Error: "
 
 #. Translators: A list of error messages from the Scheduled Transactions (SX).
 #. They might appear in their editor or in "Since last run".
@@ -30425,6 +30426,8 @@ msgid ""
 "Length of time to change the used invoice report. A value of 0 means "
 "disabled."
 msgstr ""
+"Length of time to change the used invoice report. A value of 0 means "
+"disabled."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1241
 msgid "Default Customer TaxTable"
@@ -30507,14 +30510,12 @@ msgid "Default Budget"
 msgstr "Default Budget"
 
 #: libgnucash/engine/qofbookslots.h:74
-#, fuzzy
-#| msgid "Date of Report"
 msgid "Default Invoice Report"
-msgstr "Date of Report"
+msgstr "Default Invoice Report"
 
 #: libgnucash/engine/qofbookslots.h:75
 msgid "Default Invoice Report Timeout"
-msgstr ""
+msgstr "Default Invoice Report Timeout"
 
 #. Translators: " + " is an separator in a list of string-representations of recurrence frequencies
 #: libgnucash/engine/Recurrence.c:511
