@@ -25603,7 +25603,7 @@ msgstr "Tampilan Dua Kolom."
 
 #: gnucash/report/reports/standard/investment-lots.scm:42
 msgid "Validation"
-msgstr "Validasi...\n"
+msgstr "Validasi"
 
 #: gnucash/report/reports/standard/investment-lots.scm:47
 #: gnucash/report/reports/standard/investment-lots.scm:163

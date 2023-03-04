@@ -24552,7 +24552,7 @@ msgstr "2 열 보이기"
 
 #: gnucash/report/reports/standard/investment-lots.scm:42
 msgid "Validation"
-msgstr "검증...\n"
+msgstr "검증"
 
 #: gnucash/report/reports/standard/investment-lots.scm:47
 #: gnucash/report/reports/standard/investment-lots.scm:163

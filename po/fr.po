@@ -27752,7 +27752,7 @@ msgstr "Double colonnes"
 # messages-i18n.c:176
 #: gnucash/report/reports/standard/investment-lots.scm:42
 msgid "Validation"
-msgstr "Validation...\n"
+msgstr "Validation"
 
 # po/guile_strings.txt:100
 #: gnucash/report/reports/standard/investment-lots.scm:47

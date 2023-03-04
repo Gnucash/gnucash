@@ -25788,7 +25788,7 @@ msgstr "Visualització de dues columnes."
 
 #: gnucash/report/reports/standard/investment-lots.scm:42
 msgid "Validation"
-msgstr "Validació...\n"
+msgstr "Validació"
 
 #: gnucash/report/reports/standard/investment-lots.scm:47
 #: gnucash/report/reports/standard/investment-lots.scm:163

@@ -26069,7 +26069,7 @@ msgstr "Due colonne"
 
 #: gnucash/report/reports/standard/investment-lots.scm:42
 msgid "Validation"
-msgstr "Validazione...\n"
+msgstr "Validazione"
 
 #: gnucash/report/reports/standard/investment-lots.scm:47
 #: gnucash/report/reports/standard/investment-lots.scm:163

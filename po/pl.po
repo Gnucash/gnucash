@@ -25302,7 +25302,7 @@ msgstr "Kolumny"
 
 #: gnucash/report/reports/standard/investment-lots.scm:42
 msgid "Validation"
-msgstr "Walidacja...\n"
+msgstr "Walidacja"
 
 #: gnucash/report/reports/standard/investment-lots.scm:47
 #: gnucash/report/reports/standard/investment-lots.scm:163

@@ -25278,7 +25278,7 @@ msgstr "İki Sütun Görüntüleme."
 
 #: gnucash/report/reports/standard/investment-lots.scm:42
 msgid "Validation"
-msgstr "Doğrulama...\n"
+msgstr "Doğrulama"
 
 #: gnucash/report/reports/standard/investment-lots.scm:47
 #: gnucash/report/reports/standard/investment-lots.scm:163

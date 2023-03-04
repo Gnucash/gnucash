@@ -25198,7 +25198,7 @@ msgstr "Dva stupca"
 
 #: gnucash/report/reports/standard/investment-lots.scm:42
 msgid "Validation"
-msgstr "Provjera …\n"
+msgstr "Provjera"
 
 #: gnucash/report/reports/standard/investment-lots.scm:47
 #: gnucash/report/reports/standard/investment-lots.scm:163

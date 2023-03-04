@@ -25608,7 +25608,7 @@ msgstr "Twee kolommen"
 
 #: gnucash/report/reports/standard/investment-lots.scm:42
 msgid "Validation"
-msgstr "Validatie...\n"
+msgstr "Validatie"
 
 #: gnucash/report/reports/standard/investment-lots.scm:47
 #: gnucash/report/reports/standard/investment-lots.scm:163

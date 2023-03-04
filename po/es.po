@@ -25695,7 +25695,7 @@ msgstr "Dos Columnas"
 
 #: gnucash/report/reports/standard/investment-lots.scm:42
 msgid "Validation"
-msgstr "Validación...\n"
+msgstr "Validación"
 
 #: gnucash/report/reports/standard/investment-lots.scm:47
 #: gnucash/report/reports/standard/investment-lots.scm:163
