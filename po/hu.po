@@ -11,10 +11,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot:${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-03 11:31-0800\n"
-"PO-Revision-Date: 2023-02-27 18:39+0000\n"
+"PO-Revision-Date: 2023-03-04 21:26+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hu/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -21883,9 +21883,8 @@ msgstr "Rajzmagasság"
 
 #: gnucash/report/reports/example/average-balance.scm:75
 #: gnucash/report/reports/example/daily-reports.scm:84
-#, fuzzy
 msgid "Include sub-accounts of all selected accounts."
-msgstr "Minden kiválasztott számla alszámláját beleértve"
+msgstr "Tartalmazza a kiválasztott számlák alszámláit."
 
 #: gnucash/report/reports/example/average-balance.scm:80
 msgid ""
@@ -21894,9 +21893,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/reports/example/average-balance.scm:86
-#, fuzzy
 msgid "Do transaction report on this account."
-msgstr "Tranzakció-jelentés készítése e számláról"
+msgstr "Tranzakció-jelentés készítése e számláról."
 
 #: gnucash/report/reports/example/average-balance.scm:105
 #: gnucash/report/reports/example/average-balance.scm:289
@@ -21929,9 +21927,8 @@ msgid "Plot Type"
 msgstr "Rajztípus"
 
 #: gnucash/report/reports/example/average-balance.scm:114
-#, fuzzy
 msgid "The type of graph to generate."
-msgstr "A készítendő rajz típusa"
+msgstr "A készítendő grafikon típusa."
 
 #: gnucash/report/reports/example/average-balance.scm:116
 #: gnucash/report/reports/example/average-balance.scm:136
@@ -22116,9 +22113,8 @@ msgid "String Option"
 msgstr "String opció"
 
 #: gnucash/report/reports/example/sample-report.scm:86
-#, fuzzy
 msgid "This is a string option."
-msgstr "Ez egy string opció"
+msgstr "Ez egy string opció."
 
 #: gnucash/report/reports/example/sample-report.scm:86
 #, fuzzy
@@ -22131,27 +22127,24 @@ msgid "Just a Date Option"
 msgstr "Csak egy dátum-opció"
 
 #: gnucash/report/reports/example/sample-report.scm:100
-#, fuzzy
 msgid "This is a date option."
-msgstr "Ez egy dátum-opció"
+msgstr "Ez egy dátum-opció."
 
 #: gnucash/report/reports/example/sample-report.scm:104
 msgid "Combo Date Option"
 msgstr "Kombi dátum extra"
 
 #: gnucash/report/reports/example/sample-report.scm:105
-#, fuzzy
 msgid "This is a combination date option."
-msgstr "Ez egy kombinációs dátum extra"
+msgstr ""
 
 #: gnucash/report/reports/example/sample-report.scm:109
 msgid "Relative Date Option"
 msgstr "Relatív dátum extra"
 
 #: gnucash/report/reports/example/sample-report.scm:110
-#, fuzzy
 msgid "This is a relative date option."
-msgstr "Ez egy relatív dátum extra"
+msgstr ""
 
 #: gnucash/report/reports/example/sample-report.scm:119
 msgid "Number Option"
@@ -22169,9 +22162,8 @@ msgid "Background Color"
 msgstr "Háttérszín"
 
 #: gnucash/report/reports/example/sample-report.scm:132
-#, fuzzy
 msgid "This is a color option."
-msgstr "Ez egy szín extra"
+msgstr ""
 
 #: gnucash/report/reports/example/sample-report.scm:147
 #: gnucash/report/reports/example/sample-report.scm:158
@@ -22183,18 +22175,16 @@ msgid "An account list option"
 msgstr "Egy számlalista extra"
 
 #: gnucash/report/reports/example/sample-report.scm:148
-#, fuzzy
 msgid "This is an account list option."
-msgstr "Ez egy számlalista extra"
+msgstr ""
 
 #: gnucash/report/reports/example/sample-report.scm:158
 msgid "A list option"
 msgstr "Egy lista extra"
 
 #: gnucash/report/reports/example/sample-report.scm:159
-#, fuzzy
 msgid "This is a list option."
-msgstr "Ez egy lista extra"
+msgstr ""
 
 #: gnucash/report/reports/example/sample-report.scm:161
 msgid "The Good"
@@ -26080,27 +26070,24 @@ msgid "Address Phone"
 msgstr "Telefonszám"
 
 #: gnucash/report/reports/standard/new-aging.scm:56
-#, fuzzy
 msgid "Display Phone."
-msgstr "Megjelenítés"
+msgstr ""
 
 #: gnucash/report/reports/standard/new-aging.scm:57
 msgid "Address Fax"
 msgstr "Faxszám"
 
 #: gnucash/report/reports/standard/new-aging.scm:57
-#, fuzzy
 msgid "Display Fax."
-msgstr "Megjelenítés"
+msgstr ""
 
 #: gnucash/report/reports/standard/new-aging.scm:58
 msgid "Address Email"
 msgstr "E-mail-cím"
 
 #: gnucash/report/reports/standard/new-aging.scm:58
-#, fuzzy
 msgid "Display Email."
-msgstr "Rövid jelölések megjelenítése"
+msgstr ""
 
 #: gnucash/report/reports/standard/new-aging.scm:59
 msgid "Display Active status."
@@ -26128,10 +26115,8 @@ msgid "Name of the company"
 msgstr "Cégnév"
 
 #: gnucash/report/reports/standard/new-aging.scm:93
-#, fuzzy
-#| msgid "Total amount owed to/from Company."
 msgid "Total amount owed to/from Company"
-msgstr "Összes tartozás a cég felé/-től."
+msgstr "Összes tartozás a cég felé/-től"
 
 #: gnucash/report/reports/standard/new-aging.scm:94
 msgid "Bracket Total Owed"
