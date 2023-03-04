@@ -7,19 +7,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot:${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-03 11:31-0800\n"
-"PO-Revision-Date: 2022-11-25 16:48+0000\n"
+"PO-Revision-Date: 2023-03-04 11:38+0000\n"
 "Last-Translator: Vesna Micajkova <vmicajkova@institutpraktikum.mk>\n"
 "Language-Team: Macedonian <https://hosted.weblate.org/projects/gnucash/"
-"gnucash/mk/>\n"
+"program-beta/mk/>\n"
 "Language: mk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n==1 || n%10==1 ? 0 : 1;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -686,13 +686,15 @@ msgstr "Мени"
 
 #: borrowed/goffice/go-optionmenu.c:339
 msgid "The menu of options"
-msgstr ""
+msgstr "Мени на опции"
 
 #: doc/tip_of_the_day.list.c:3
 msgid ""
 "The GnuCash online manual has lots of helpful information. You can access "
 "the manual under the Help menu."
 msgstr ""
+"Корисничкото упатство за GnuCash има многу корисни информации. До упатсвото "
+"може да пристапиш преку елементот Помош од главното Мени."
 
 #. Translators: You can replace the link, if a translated page exists.
 #: doc/tip_of_the_day.list.c:7
@@ -701,6 +703,9 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
+"Листата на e-mail адреси е префериран начин на комуникација во GnuCash "
+"заедницата. Информациите за e-mail листите се достапни на: https://wiki."
+"gnucash.org/wiki/Mailing_Lists"
 
 #: doc/tip_of_the_day.list.c:11
 msgid ""
@@ -708,6 +713,9 @@ msgid ""
 "lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome."
 "org"
 msgstr ""
+"Лесно е да се воспостави контакт со GnuCash девелоперите. Покрај преку e-"
+"mail листите достапни се и за live chat. Придружете им се на #gnucash at irc."
+"gnome.org"
 
 #: doc/tip_of_the_day.list.c:15
 msgid ""
@@ -716,6 +724,10 @@ msgid ""
 "on the sub-menu Import and click on QIF or OFX file, respectively. Then, "
 "follow the instructions provided."
 msgstr ""
+"Може едноставно да ги имортирате постоечките финансиски информации од "
+"Quicken, MS Money или други програми кои експортираат QIF и OFX датотеки. "
+"Под елементот ДАТОТЕКА од главното мени, изберете го подменито ИМПОРТ и "
+"притиснете на QIF или OFX датотека. Потоа, следете ги добиените инструкции."
 
 #: doc/tip_of_the_day.list.c:20
 msgid ""
@@ -724,6 +736,9 @@ msgid ""
 "(File[->Most Recently Used-List]).\n"
 "The full path is displayed in the status bar."
 msgstr ""
+"Ако сакате да знаете во кој директориум се сочувани вашите скорешни GnuCash "
+"датотеки, погледнете под елеметот ДАТОТЕКА од главното мени. \n"
+"Таму е забележена целата патека на датотеките."
 
 #: doc/tip_of_the_day.list.c:24
 msgid ""
