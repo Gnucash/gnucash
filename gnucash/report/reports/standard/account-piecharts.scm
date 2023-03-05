@@ -163,7 +163,7 @@ balance at a given time"))
      (gnc:make-number-range-option
       gnc:pagename-display optname-slices
       "c" (N_ "Maximum number of slices in pie.") 7
-      2 24 0 1))
+      2 255 0 1))
 
     (gnc:options-add-plot-size! 
      options gnc:pagename-display 
