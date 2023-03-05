@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-05 06:12+0000\n"
+"PO-Revision-Date: 2023-03-05 08:14+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/uk/>\n"
@@ -1459,6 +1459,10 @@ msgid ""
 "Any dividend being reinvested must be subsequently recorded as a regular "
 "stock purchase."
 msgstr ""
+"Компанія перераховує грошові дивіденди власнику держателю.\n"
+"\n"
+"Усі дивіденди, які повторно інвестовано, мають далі записано як звичайні "
+"купівлі акцій."
 
 #. Translators: this is a stock transaction describing return
 #. of capital
@@ -1477,13 +1481,15 @@ msgstr ""
 #. notional distribution
 #: gnucash/gnome/assistant-stock-transaction.cpp:236
 msgid "Notional distribution"
-msgstr "Уявний розподіл"
+msgstr "Номінальний розподіл"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:237
 msgid ""
 "Company issues a notional distribution, which is recorded as dividend income "
 "and increases the cost basis without affecting # units."
 msgstr ""
+"Компанія випускає номінальний розподіл, який буде записано як прибуткові "
+"дивіденди, а базову вартість буде збільшено без зміни кількості одиниць."
 
 #. Translators: this is a stock transaction describing a stock
 #. split
@@ -1501,6 +1507,8 @@ msgid ""
 "divisor, while keeping the total monetary value of the overall investment "
 "constant."
 msgstr ""
+"Компанія випускає додаткові одиниці, отже, зменшує ціну акцій на дільник, "
+"зберігаючи загальну грошову вартість загальної сталої інвестування."
 
 #. Translators: this is a stock transaction describing a reverse split
 #. Translators: this is a stock transaction describing a
@@ -1519,6 +1527,12 @@ msgid ""
 "record the sale using the Stock Transaction Assistant first, then record the "
 "reverse split."
 msgstr ""
+"Компанія викуповує одиниці, отже, збільшує курсову вартість на множник, "
+"зберігаючи загальну грошову вартість загальної сталої інвестування.\n"
+"\n"
+"Якщо зворотне дроблення призводить до отримання грошової суми для рештки "
+"одиниць, будь ласка, спочатку запишіть продаж за допомогою помічника "
+"транзакцій акцій, потім запишіть зворотне дроблення."
 
 #. Translators: this is a stock transaction describing
 #. shorting of stock.
@@ -1539,6 +1553,8 @@ msgstr "Купівля для короткого покриття"
 #: gnucash/gnome/assistant-stock-transaction.cpp:300
 msgid "Buy back stock to cover short position, and record capital gain/loss."
 msgstr ""
+"Викупівля акцій для покриття короткої позиції і запис загального прибутку "
+"або збитку."
 
 #. Translators: this is a stock transaction describing
 #. dividends retrieved from holder when shorting stock
@@ -1551,6 +1567,8 @@ msgid ""
 "Company issues dividends, and the short stock holder must make a "
 "compensatory payment for the dividend."
 msgstr ""
+"Компанія емітує дивіденди, а держатель коротких акцій має виплатити "
+"компенсацію за дивіденди."
 
 #. Translators: this is a stock transaction describing return
 #. of capital retrieved from holder when shorting stock
@@ -1564,12 +1582,15 @@ msgid ""
 "payment for the returned capital. This reduces the cost basis (less "
 "negative, towards 0.00 value) without affecting # units."
 msgstr ""
+"Компанія повертає капітал і держатель коротких акцій має здійснити "
+"компенсаційну виплату для поверненого капіталу. Це зменшує базову вартість ("
+"зменшення у напрямку 0.00) без зміни кількості одиниць."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:341
 msgid "Compensatory notional distribution"
-msgstr "Компенсаторний уявний розподіл"
+msgstr "Компенсаторний номінальний розподіл"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:342
 msgid ""
@@ -1578,6 +1599,10 @@ msgid ""
 "loss/negative dividend income amount, and increases the cost basis (more "
 "negative, away from 0.00 value) without affecting # units."
 msgstr ""
+"Компанія випускає номінальний розподіл, і держатель коротких акцій має "
+"здійснити компенсаторну виплату для номінального розподілу. Це буде записано "
+"як втрату або від'ємну суму вхідних дивідендів, і збільшити базову вартість ("
+"від'ємніший, від значення 0.00) без впливу на кількість одиниць."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:370
 msgid ""
@@ -1588,11 +1613,17 @@ msgid ""
 "record the cover buy using the Stock Transaction Assistant first, then "
 "record the reverse split."
 msgstr ""
+"Компанія викуповує одиниці, отже, збільшує курсову вартість на множник, "
+"зберігаючи загальну грошову вартість загальної сталої інвестування.\n"
+"\n"
+"Якщо зворотне дроблення призводить до отримання грошової суми для рештки "
+"одиниць, будь ласка, спочатку запишіть купівлю на покриття за допомогою "
+"помічника транзакцій акцій, потім запишіть зворотне дроблення."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:537
 #, c-format
 msgid "%s Split"
-msgstr "Поділ %s"
+msgstr "Дроблення %s"
 
 #. Translators: StockAssistant: N/A denotes stock price is not computable
 #: gnucash/gnome/assistant-stock-transaction.cpp:565
@@ -1636,6 +1667,10 @@ msgid ""
 "and therefore capital gains, of transactions dated after the new entry. "
 "Please review all transactions to ensure proper recording."
 msgstr ""
+"Ви введете транзакцію із датою %s, яка передує найсвіжішій транзакції на "
+"цьому рахунку, яку датовано %s. Результатом може бути зміна основи ціни, а "
+"отже, прибутків, для транзакцій після введеного запису. Будь ласка, "
+"перегляньте усі транзакції, щоб переконатися у належному веденні записів."
 
 #. Translators: Designates the page in the Stock Assistant for entering
 #. the currency value of a non-currency asset.
@@ -1704,7 +1739,7 @@ msgstr "Збільшення капіталу"
 #: gnucash/gnome/assistant-stock-transaction.cpp:889
 #, c-format
 msgid "Total Debits of %s does not balance with total Credits of %s."
-msgstr ""
+msgstr "Загальний дебет %s не збалансовано із загальним кредитом %s."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:903
 msgid "No errors found. Click Apply to create transaction."
@@ -3548,6 +3583,13 @@ msgid ""
 "Please correct this manually by editing the transaction directly and then "
 "try again."
 msgstr ""
+"Ця транзакція має дроблення на декілька підприємницьких рахунків:\n"
+"\n"
+"%s\n"
+"GnuCash може працювати лише з транзакціями із внесенням на один рахунок.\n"
+"\n"
+"Будь ласка, виправте дані вручну редагуванням транзакції безпосередньо, а "
+"потім повторіть спробу."
 
 #. Translators: %d is the number of prices. This is a ngettext(3) message.
 #: gnucash/gnome/dialog-price-edit-db.cpp:201
@@ -7351,7 +7393,7 @@ msgstr ""
 "користуватися базами даних SQL. Gnucash не відкриватиме і не зберігатиме "
 "дані до баз даних SQL, аж доки помилку не буде виправлено встановленням "
 "іншої версії «libdbi». Щоб дізнатися більше, будь ласка, ознайомтеся зі "
-"сторінкою https://bugs.gnucash.org/show_bug.cgi?id=611936"
+"сторінкою https://bugs.gnucash.org/show_bug.cgi?id=611936 ."
 
 #: gnucash/gnome-utils/gnc-file.c:527
 msgid ""
@@ -7364,7 +7406,7 @@ msgstr ""
 "наявність вади у бібліотеці «libdbi». Це може бути спричинено помилковим "
 "налаштовуванням прав доступу до вашої бази даних SQL. Щоб дізнатися більше, "
 "будь ласка, ознайомтеся із вмістом сторінки https://bugs.gnucash.org/"
-"show_bug.cgi?id=645216"
+"show_bug.cgi?id=645216 ."
 
 #: gnucash/gnome-utils/gnc-file.c:537
 msgid ""
@@ -7417,6 +7459,9 @@ msgid ""
 "longer depends on the Reverse Balanced Accounts preference. Please review "
 "the budgets and amend signs if necessary."
 msgstr ""
+"У цій книзі є бюджети. Внутрішнє представлення сум бюджетів більше не "
+"залежить від налаштувань зворотно збалансованих рахунків. Будь ласка, "
+"перегляньте бюджети і змініть знаки, якщо це потрібно."
 
 #: gnucash/gnome-utils/gnc-file.c:844
 #, c-format
@@ -8182,6 +8227,17 @@ msgid ""
 "or more symbols, the first of which is the currency in which exchange rates "
 "for the rest will be quoted.\n"
 msgstr ""
+"Виконати пов'язані із курсами команди. Передбачено підтримку вказаних нижче "
+"команд.\n"
+"\n"
+"  info: \tвивести дані щодо версії та джерел курсів Finance::Quote.\n"
+"   get: \tотримати поточні курси для усіх зарубіжних валют і акцій у "
+"вказаному файлі даних GnuCash.\n"
+"  dump: \tотримати поточні курси для вказаних валют і акцій з вказаного "
+"простору назв і вивести результати до консолі.\n"
+"        \tПісля команди слід вказати джерело і один або декілька символів "
+"валют. Якщо джерелом є «currency», слід вказати два або більше символів, "
+"першим з яких є валюта, у якій слід подати курси решти валют.\n"
 
 #: gnucash/gnucash-cli.cpp:103
 msgid ""
@@ -12700,6 +12756,9 @@ msgid ""
 "type (purchase, sale, dividend, distribution, return of capital, stock "
 "split) will determine the transaction splits involved in the transaction."
 msgstr ""
+"За допомогою цього помічника ви зможете записати операцію з акціями. Тип "
+"операції (придбання, продаж, розподіл, повернення капіталу, дроблення акцій) "
+"визначить дроблення транзакції, які включено до операції."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:45
 msgid "Select the date and description for your records."
@@ -12717,6 +12776,9 @@ msgid ""
 "negative (i.e. when shorting stock). The type will determine the component "
 "splits."
 msgstr ""
+"Виберіть тип дій з акціями, який ви хочете використати. Доступні типи "
+"залежать від того, є поточний баланс акцій додатним, нульовим чи від'ємним ("
+"тобто при скороченні акцій). Тип визначатиме дроблення компонента."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:195
 msgid "Transaction Type"
@@ -12744,6 +12806,9 @@ msgid ""
 "spent. It may differ from the stock value from the last page, if there are "
 "brokerage fees associated with this transaction."
 msgstr ""
+"На цій сторінці вкажіть рахунок активів та грошову суму, яку отримано або "
+"витрачено. Вона може відрізнятися від значення акцій з останньої сторінки, "
+"якщо наявні куртажні сплати, які пов'язано із цією операцією."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:493
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:538
@@ -12766,6 +12831,11 @@ msgid ""
 "expensed. If there are no fees involved in this transaction, it can be left "
 "blank."
 msgstr ""
+"На цій сторінці вкажіть усі куртажні сплати, які пов'язано із цією "
+"операцією. Сплати може бути капіталізовано до рахунку активів або сплачено "
+"на рахунок куртажних сплат. Типово, сплати при придбанні капіталізують, а "
+"сплати при продажі витрачають. Якщо сплат у цій операції не виконувалося, "
+"поля можна лишити порожніми."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:629
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1052
@@ -12778,7 +12848,7 @@ msgstr "Капіталізувати сплати куртажу до рахун
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:682
 msgid "In this page, input any dividend income received in this transaction."
-msgstr ""
+msgstr "На цій сторінці вкажіть усі дивіденди, які отримано у цій операції."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:756
 msgid "Dividend Account"
@@ -12789,6 +12859,9 @@ msgid ""
 "In this page, input any capital gains or losses incurred, and the associated "
 "income account. Capital gains are positive, and capital losses are negative."
 msgstr ""
+"НА цій сторінці вкажіть усі прибутки або втрати капіталу та пов'язаний "
+"рахунок вхідних коштів. Прибутки мають бути додатними, а втрати капіталу — "
+"від'ємними."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:869
 msgid "Capital Gains Account"
@@ -25436,10 +25509,13 @@ msgstr "Показувати стовпчики отриманого прибу�
 #: gnucash/report/reports/standard/investment-lots.scm:256
 msgid "Show unrealized gain table column(s) for unsold shares"
 msgstr ""
+"Показувати стовпчики неотриманого прибутку для непроданих цінних паперів"
 
 #: gnucash/report/reports/standard/investment-lots.scm:263
 msgid "Group gains (and sales?) by long-term (LT) and short-term (ST)"
 msgstr ""
+"Прибутки групи (або продажі) за довгим терміном (ДТ) та коротким терміном "
+"(КТ)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:266
 msgid "Gains Only"
