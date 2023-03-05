@@ -14,13 +14,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-04 14:39+0000\n"
+"PO-Revision-Date: 2023-03-05 13:39+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/program-"
-"beta/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/"
+"program-beta/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18039,10 +18039,6 @@ msgid "File Format"
 msgstr "Filformat"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1779
-#, fuzzy
-#| msgid ""
-#| "This list one or more specialization templates that adjust the import for "
-#| "different banks uses of fields in the selected import format."
 msgid ""
 "This lists one or more specialization templates that adjust the import for "
 "different banks' uses of fields in the selected import format."
@@ -20390,10 +20386,9 @@ msgstr "Letar efter transaktionsdubbletter"
 #. Translators: Mapping the QIF account type to a GnuCash account type.
 #. see https://en.wikipedia.org/wiki/Quicken_Interchange_Format#Detail_items
 #: gnucash/import-export/qif-imp/qif-parse.scm:174
-#, fuzzy, scheme-format
-#| msgid "The account type ~s is unknown, using 'bank' instead."
+#, scheme-format
 msgid "The account type ~s is unknown, using Bank instead."
-msgstr "Kontotypen ~s är okänd, använder ”bank” istället."
+msgstr "Kontotypen ~s är okänd, använder Bank istället."
 
 #. Translators: This is an error message about actions like buy, sell …
 #: gnucash/import-export/qif-imp/qif-parse.scm:238
@@ -25044,132 +25039,98 @@ msgid "Chart location"
 msgstr "Diagramplats"
 
 #: gnucash/report/reports/standard/investment-lots.scm:53
-#, fuzzy
-#| msgid "Plot Width"
 msgid "Plot width"
 msgstr "Grafbredd"
 
 #: gnucash/report/reports/standard/investment-lots.scm:54
-#, fuzzy
-#| msgid "Plot Height"
 msgid "Plot height"
 msgstr "Grafhöjd"
 
 #: gnucash/report/reports/standard/investment-lots.scm:57
-#, fuzzy
-#| msgid "Show _Memo column"
 msgid "Show lot GUID column"
-msgstr "Visa _Minnesanteckningskolumn"
+msgstr "Visa partiets GUID-kolumn"
 
 #: gnucash/report/reports/standard/investment-lots.scm:58
-#, fuzzy
-#| msgid "No date column."
 msgid "Show date columns"
-msgstr "Ingen datumkolumn."
+msgstr "Visa datumkolumner"
 
 #: gnucash/report/reports/standard/investment-lots.scm:59
-#, fuzzy
-#| msgid "Show _Account column"
 msgid "Show bought columns"
-msgstr "Visa _Kontokolumn"
+msgstr "Visa köptkolumner"
 
 #: gnucash/report/reports/standard/investment-lots.scm:60
-#, fuzzy
-#| msgid "Show _Memo column"
 msgid "Show sold columns"
-msgstr "Visa _Minnesanteckningskolumn"
+msgstr "Visa såldkolumner"
 
 #: gnucash/report/reports/standard/investment-lots.scm:61
-#, fuzzy
-#| msgid "Show _Memo column"
 msgid "Show end columns"
-msgstr "Visa _Minnesanteckningskolumn"
+msgstr "Visa slutkolumner"
 
 #: gnucash/report/reports/standard/investment-lots.scm:63
-#, fuzzy
-#| msgid "Show linked transactions"
 msgid "Show realized gain column(s)"
-msgstr "Visa länkade transaktioner"
+msgstr "Visa kolumn(er) för realiserad vinst"
 
 #: gnucash/report/reports/standard/investment-lots.scm:65
-#, fuzzy
-#| msgid "Show _unused accounts"
 msgid "Show unrealized gain column(s)"
-msgstr "Visa _oanvända konton"
+msgstr "Visa kolumn(er) för orealiserad vinst"
 
 #: gnucash/report/reports/standard/investment-lots.scm:67
 msgid "Group gains by age (short term and long term)"
-msgstr ""
+msgstr "Gruppera vinster efter ålder (kortsiktigt och lånsiktigt)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:68
 msgid "Long term gains age (years)"
-msgstr ""
+msgstr "Långsiktiga vinsters ålder (år)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:72
 #, fuzzy
 #| msgid "_Show children accounts"
 msgid "Show mnemonic in amounts"
-msgstr "Vi_sa barnkonton"
+msgstr "Visa minnesanteckningar i belopp"
 
 #: gnucash/report/reports/standard/investment-lots.scm:73
-#, fuzzy
-#| msgid "Include assets total"
 msgid "Include closed lots"
-msgstr "Inkludera summa tillgångar"
+msgstr "Inkludera avslutade partier"
 
 #: gnucash/report/reports/standard/investment-lots.scm:75
-#, fuzzy
-#| msgid "Show horizontal borders on the cells."
 msgid "Show blanks instead of zeros in table cells"
-msgstr "Visa horisontella kanter i celler."
+msgstr "Visa tomma fält istället för nollor i tabellceller"
 
 #: gnucash/report/reports/standard/investment-lots.scm:76
-#, fuzzy
-#| msgid "Show _log window"
 msgid "Show lot split rows"
-msgstr "Visa _loggfönster"
+msgstr "Visa partidelningsrader"
 
 #: gnucash/report/reports/standard/investment-lots.scm:79
-#, fuzzy
-#| msgid "Investments"
 msgid "Investment Lots"
-msgstr "Investeringsportfölj"
+msgstr "Investeringspartier"
 
 #: gnucash/report/reports/standard/investment-lots.scm:80
-#, fuzzy
-#| msgid "Start Date"
 msgid "Start date"
 msgstr "Startdatum"
 
 #: gnucash/report/reports/standard/investment-lots.scm:81
-#, fuzzy
-#| msgid "End Date"
 msgid "End date"
 msgstr "Slutdatum"
 
 #: gnucash/report/reports/standard/investment-lots.scm:83
-#, fuzzy
-#| msgid "Price Source"
 msgid "Price source"
 msgstr "Källa för prisuppgift"
 
 #: gnucash/report/reports/standard/investment-lots.scm:87
-#, fuzzy
-#| msgid "Include accounts with no shares"
 msgid "Include only accounts with warnings"
-msgstr "Ta med konton utan andelar"
+msgstr "Inkludera endast konton med varningar"
 
 #: gnucash/report/reports/standard/investment-lots.scm:89
 msgid "Warn if a lot has more than one bought split"
-msgstr ""
+msgstr "Varna om ett parti har fler än en inköpsdel"
 
 #: gnucash/report/reports/standard/investment-lots.scm:91
 msgid "Warn if a lot's balance drops below zero"
-msgstr ""
+msgstr "Varna om ett partis saldo går under noll"
 
 #: gnucash/report/reports/standard/investment-lots.scm:93
 msgid "Warn if a lot has a blank title"
-msgstr ""
+msgstr "Varna om ett parti har en tom titel"
 
 #: gnucash/report/reports/standard/investment-lots.scm:95
 msgid ""
