@@ -1,5 +1,91 @@
 Version history:
 ------- -------
+4.902 - 5 March 2023
+Between 4.901 and 4.902, the following bugfixes were accomplished:
+The following fixes will also appear in GnuCash 4.14:
+
+    Bug 798748 - Transaction Notes field's value does not appear in reverse
+                 transaction.
+    Bug 798754 - Build fails with gcc 13 and glib > 2.76
+    Bug 798759 - Register widths for 'with sub-account' not saved
+    Bug 798600 - CSV import of multi-split security transactions fails to load
+                 capital gain. Transactions with capital gains processing can
+                 have splits in transaction currency with a zero amount and a
+                 non-zero value. To properly import those, prefer the value
+                 column even if transaction currency equals account commodity.
+                 Previous (wrong) assumption was that in case of a
+                 same-currency split, the amount would always be the value.
+
+                 Update csv transaction export format to include split values.
+                 In the csv importer the 'GnuCash Export Format' option will
+                 now include values. For compatibility with filex exported from
+                 older gnucash versions the previous preset is still available
+                 under the name 'GnuCash Export Format (4.x and older)'.
+
+The following additional bug fixes are in unstable only:
+
+    Bug 782141 - Import CSV - Multi-currency support can cause rounding errors
+                 Replace the column types 'Deposit' and 'Withdrawal' with
+                 'Amount' and 'Amount (Negated)' that are conceptually
+                 applicable more widely. Also introduce column types 'Value'
+                 and 'Value (Negated)' to allow construction of splits in
+                 commodities different from the transaction currency. While
+                 Value is the number in the transaction currency, always use
+                 'Amount' in single-currency transactions.
+    Bug 793306 - Price is not imported from CSV
+    Bug 796955 - Import CSV - Single-line two-currency transactions can't be
+                 imported
+    Bug 797033 - The CSV Importer should not obey with the "automatic digital
+                 point" setting
+    Bug 797383 - Import transaction via CSV selects the commodity as a currency,
+                 results in an invalid transaction that is uneditable, and a
+                 corrupted price database. Change the transaction currency to
+                 the from or base account's parent account currency if the from
+                 or base account is not denominated in a currency. This allows
+                 to import stock transactions directly into the stock account.
+    Bug 797903 - Transaction window: The 'blue line' is always (erroneously) topmost when t. sorting order is inverted.
+    Bug 798334 - Importing transactions from CSV with space as thousand separator
+    Bug 798572 - Parse numbers with two minus signs as a positive numbers
+    Bug 798691 - Memo field not updated on CSV import using U+C
+    Bug 798732 - : Type of balance carry forward accounts for german skr49
+        account template fixed.
+        The accounts listed are of the EQUITY type and not ASSET.
+    Bug 798749 - Fails to read gsettings on startup
+    Bug 798753 - UX improvements in new import dialog
+    Bug 798763 - "Manage Document Link" keyboard shortcut is missing
+
+The following fixes and improvements were not associated with bug reports:
+
+    Always use the Company Name from book options in reports, removing the
+        Company Name report option.
+    Fix the register sheet being insensitive when in reverse order
+    Allow C decls after statements. Legal since C99.
+    Make the scheme tests fail immediately if they load an external gnucash
+        file.
+    [c++options] Restore the ability to set plot sizes in pixels.
+    [c++ options] Restore forward & backward compatibility, fix crash.
+    CsvTokenizer - add additional test case for escaped quotes
+        It simulates the case where csv fields are fully quoted and an
+        escaped quote ("") is found in some field. This case is handled
+        correctly, adding the test to guard this in potential future
+        modifications.
+    [dialog-employee] toggle sensitivity instead of visibility of GncAccountSel
+    [eguile-utilities.scm] remove fmtnumber. deprecated in maint.
+    Sort the gnc tree view column menu
+    Delete action on account page not disabled on edits.
+    L10N:DE:Updating accounts from 0001 to 8000 DATEV-SKR04 2022-01-01
+    GSettings migration: Ensure that the current version is set on a new
+        GnuCash installation and that migrations applicable to versions of
+        GnuCash later than the current one do not run.
+    Turn on -Wunused
+    Rename Hellow World report to Sample Report.
+    Generic Importer - allow user to modify exchange rates for unbalanced
+       transactions.
+    Make logging accessible from python modules
+    Allow C declarations after statements
+       Good for declaring variables at point of use
+
+New and Updated Translations: Czech, Hungarian
 4.901 - 5 February 2023
 Between 4.900 and 4.901, the following bugfixes were accomplished:
 The following fixes will also appear in GnuCash 4.14:
