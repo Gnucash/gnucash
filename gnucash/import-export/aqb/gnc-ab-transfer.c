@@ -47,10 +47,9 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
-static void save_templates(GtkWidget *parent, Account *gnc_acc, GList *templates,
-                           gboolean dont_ask);
 static void txn_created_cb(Transaction *trans, gpointer user_data);
 
+#if (AQBANKING_VERSION_INT >= 60400)
 static void
 save_templates(GtkWidget *parent, Account *gnc_acc, GList *templates,
                gboolean dont_ask)
@@ -65,6 +64,7 @@ save_templates(GtkWidget *parent, Account *gnc_acc, GList *templates,
         gnc_ab_set_book_template_list(gnc_account_get_book(gnc_acc), templates);
     }
 }
+#endif
 
 static void
 txn_created_cb(Transaction *trans, gpointer user_data)
@@ -136,7 +136,6 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
     {
         GncGWENGui *gui = NULL;
         gint result;
-        gboolean changed;
         const AB_TRANSACTION *ab_trans;
         GNC_AB_JOB *job = NULL;
         GNC_AB_JOB_LIST2 *job_list = NULL;
@@ -154,6 +153,7 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         result = gnc_ab_trans_dialog_run_until_ok(td);
 
 #if (AQBANKING_VERSION_INT >= 60400)
+        gboolean changed;
         templates = gnc_ab_trans_dialog_get_templ(td, &changed);
         if (trans_type != SEPA_INTERNAL_TRANSFER && changed)
         {
