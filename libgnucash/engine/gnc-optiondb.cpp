@@ -1261,9 +1261,7 @@ const char*
 gnc_option_db_lookup_string_value(GncOptionDB* odb, const char* section, const char* name)
 {
     auto value{odb->lookup_string_option(section, name)};
-    if (value.empty())
-        return nullptr;
-    return strdup(value.c_str());
+    return value.empty() ? nullptr : strdup(value.c_str());
 }
 
 void
