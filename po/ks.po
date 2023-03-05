@@ -10507,10 +10507,10 @@ msgstr "पुलाट हॊयीव"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"फायील यथ मंज़ लाग करुन छु; \"/tmp/gnucash.trace\"कुन डीफालट; हयीको \"stderr\" या "
+"फायील यथ मंज़ लाग करुन छु; \"$TMPDIR/gnucash.trace\"कुन डीफालट; हयीको \"stderr\" या "
 "\"stdout\" एिसीथ."
 
 #: gnucash/gnucash-core-app.cpp:313

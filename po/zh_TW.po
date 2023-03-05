@@ -10151,10 +10151,10 @@ msgstr "顯示圖表"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"日誌寫入的檔案；預為為 \"/tmp/gnucash.trace\"；可以是 \"stderr\" 或\"stdout"
+"日誌寫入的檔案；預為為 \"$TMPDIR/gnucash.trace\"；可以是 \"stderr\" 或\"stdout"
 "\"。"
 
 #: gnucash/gnucash-core-app.cpp:313

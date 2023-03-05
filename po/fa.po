@@ -10476,10 +10476,10 @@ msgstr "نمایش قطعه"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"پرونده برای نگهداری سابقه؛ پیش‌گزیده به «/tmp/gnucash.trace»; می‌تواند "
+"پرونده برای نگهداری سابقه؛ پیش‌گزیده به «$TMPDIR/gnucash.trace»; می‌تواند "
 "«stderr» یا «stdout» باشد."
 
 #: gnucash/gnucash-core-app.cpp:313

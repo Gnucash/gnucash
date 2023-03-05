@@ -309,7 +309,7 @@ Gnucash::CoreApp::add_common_program_options (void)
         ("paths", bpo::bool_switch(&m_show_paths),
          _("Show paths"))
         ("logto", bpo::value (&m_log_to_filename),
-         _("File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or \"stdout\"."));
+         _("File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or \"stdout\"."));
 
     bpo::options_description hidden_options(_("Hidden Options"));
     hidden_options.add_options()

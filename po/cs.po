@@ -10626,10 +10626,10 @@ msgstr "Zobrazit graf"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"Soubor, do kterého ladit; implicitně \"/tmp/gnucash.trace\"; může být "
+"Soubor, do kterého ladit; implicitně \"$TMPDIR/gnucash.trace\"; může být "
 "\"stderr\" nebo \"stdout\"."
 
 #: gnucash/gnucash-core-app.cpp:313

@@ -10242,10 +10242,10 @@ msgstr "Ukázať zobrazenie"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"Súbor, do ktorého zaznamenávať; štandardne \"/tmp/gnucash.trace\"; môže byť "
+"Súbor, do ktorého zaznamenávať; štandardne \"$TMPDIR/gnucash.trace\"; môže byť "
 "\"stderr\" alebo \"stdout\"."
 
 #: gnucash/gnucash-core-app.cpp:313

@@ -10502,10 +10502,10 @@ msgstr "பிளாட்டை காட்டு"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"பதிவு செய்ய வேண்டிய கோப்பு; \"/tmp/gnucash.trace\" முன்னிருப்புக்கு; \"stderr\" "
+"பதிவு செய்ய வேண்டிய கோப்பு; \"$TMPDIR/gnucash.trace\" முன்னிருப்புக்கு; \"stderr\" "
 "அல்லது \"stdout\" ஆக இருக்கலாம்."
 
 #: gnucash/gnucash-core-app.cpp:313

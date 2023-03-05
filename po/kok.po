@@ -10397,10 +10397,10 @@ msgstr "प्लॉट दाखयात"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"लॉग करपाक फायल; मूळाव्यान \"/tmp/gnucash.trace\"; \"stderr\" वो \"stdout\" "
+"लॉग करपाक फायल; मूळाव्यान \"$TMPDIR/gnucash.trace\"; \"stderr\" वो \"stdout\" "
 "आसपाक शकता."
 
 #: gnucash/gnucash-core-app.cpp:313

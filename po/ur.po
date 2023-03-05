@@ -10514,10 +10514,10 @@ msgstr "پلاٹ دكھاؤ"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"وہ فائل جس میں لاگ كیا جانا ہے ; \"/tmp/gnucash.trace\"; میں ڈیفالٹ \"stderr"
+"وہ فائل جس میں لاگ كیا جانا ہے ; \"$TMPDIR/gnucash.trace\"; میں ڈیفالٹ \"stderr"
 "\" یا \"stdout\" ہو سكتا ہے۔"
 
 #: gnucash/gnucash-core-app.cpp:313

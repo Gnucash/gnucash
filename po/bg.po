@@ -10631,10 +10631,10 @@ msgstr "Показване на графика"
 # FIXME много ; Да се променят ли?
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"Журнален файл; стандартно в \"/tmp/gnucash.trace\"; може да е \"stderr\" или "
+"Журнален файл; стандартно в \"$TMPDIR/gnucash.trace\"; може да е \"stderr\" или "
 "\"stdout\"."
 
 #: gnucash/gnucash-core-app.cpp:313

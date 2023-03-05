@@ -10496,9 +10496,9 @@ msgstr "عرض الرسم"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
-msgstr "ملف لتسجيل \"/tmp/gnucash.trace\"; can be \"stderr\" or \"stdout\"."
+msgstr "ملف لتسجيل \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or \"stdout\"."
 
 #: gnucash/gnucash-core-app.cpp:313
 #, fuzzy

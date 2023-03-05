@@ -10520,10 +10520,10 @@ msgstr "Grafiek weergeven"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"Bestand voor logmeldingen; standaard is “/tmp/gnucash.trace”; mag ook "
+"Bestand voor logmeldingen; standaard is “$TMPDIR/gnucash.trace”; mag ook "
 "“stderr” of “stdout” zijn."
 
 #: gnucash/gnucash-core-app.cpp:313

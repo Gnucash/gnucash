@@ -10547,10 +10547,10 @@ msgstr "Mostra el diagrama"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"Fitxer de registre, per defecte és /tmp/gnucash.trace. També pot ser "
+"Fitxer de registre, per defecte és $TMPDIR/gnucash.trace. També pot ser "
 "«stderr» o «stdout»."
 
 #: gnucash/gnucash-core-app.cpp:313

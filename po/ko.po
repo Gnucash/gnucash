@@ -10202,10 +10202,10 @@ msgstr "파일 경로 표시하기"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"파일 로그의 기본값은 \"/tmp/gnucash.trace\"; \"stderr\" 또는 \"stdout\"이 될 "
+"파일 로그의 기본값은 \"$TMPDIR/gnucash.trace\"; \"stderr\" 또는 \"stdout\"이 될 "
 "수 있습니다."
 
 #: gnucash/gnucash-core-app.cpp:313

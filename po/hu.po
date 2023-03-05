@@ -10566,9 +10566,9 @@ msgstr "Rajz megjelenítése"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
-msgstr "Log-fájl \"/tmp/gnucash.trace\"; lehet \"stderr\" vagy \"stdout\" is."
+msgstr "Log-fájl \"$TMPDIR/gnucash.trace\"; lehet \"stderr\" vagy \"stdout\" is."
 
 #: gnucash/gnucash-core-app.cpp:313
 #, fuzzy

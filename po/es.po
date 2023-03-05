@@ -10686,10 +10686,10 @@ msgstr "Mostrar traza"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"El fichero bitácora interna; por defecto a «/tmp/gnucash.trace»; puede ser "
+"El fichero bitácora interna; por defecto a «$TMPDIR/gnucash.trace»; puede ser "
 "«stderr» o «stdout»."
 
 #: gnucash/gnucash-core-app.cpp:313

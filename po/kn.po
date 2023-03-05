@@ -10553,10 +10553,10 @@ msgstr "ರೇಖಾನಕ್ಷೆಯನ್ನು ತೋರಿಸು"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"ದಾಖಲಿಸಬೇಕಿರುವ ಕಡತ; ಪೂರ್ವನಿಯೋಜಿತವು \"/tmp/gnucash.trace\" ಆಗಿರುತ್ತದೆ; \"stderr"
+"ದಾಖಲಿಸಬೇಕಿರುವ ಕಡತ; ಪೂರ್ವನಿಯೋಜಿತವು \"$TMPDIR/gnucash.trace\" ಆಗಿರುತ್ತದೆ; \"stderr"
 "\" ಅಥವ \"stdout\" ಆಗಿರಬಹುದು."
 
 #: gnucash/gnucash-core-app.cpp:313

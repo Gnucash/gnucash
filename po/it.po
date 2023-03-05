@@ -10660,10 +10660,10 @@ msgstr "Visualizza percorsi"
 # linea di comando
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"File su cui registrare il log; predefinito: «/tmp/gnucash.trace»; può essere "
+"File su cui registrare il log; predefinito: «$TMPDIR/gnucash.trace»; può essere "
 "«stderr» or «stdout»."
 
 #: gnucash/gnucash-core-app.cpp:313

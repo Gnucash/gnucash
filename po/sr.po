@@ -10541,10 +10541,10 @@ msgstr "Прикажи график"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"Датотека за дневник; основно је „/tmp/gnucash.trace“; може бити „stderr“ или "
+"Датотека за дневник; основно је „$TMPDIR/gnucash.trace“; може бити „stderr“ или "
 "„stdout“."
 
 #: gnucash/gnucash-core-app.cpp:313

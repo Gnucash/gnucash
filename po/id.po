@@ -10418,10 +10418,10 @@ msgstr "Tampilkan path"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"Berkas untuk menyimpan log; berkas baku adalah \"/tmp/gnucash.trace\"; bisa "
+"Berkas untuk menyimpan log; berkas baku adalah \"$TMPDIR/gnucash.trace\"; bisa "
 "berupa \"stderr\" atau \"stdout\"."
 
 #: gnucash/gnucash-core-app.cpp:313

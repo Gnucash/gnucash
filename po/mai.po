@@ -10473,10 +10473,10 @@ msgstr "प्लाट देखाउ"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"ओ फाइल जकरामे लाग कएल जाएनाइ अछि; \"/tmp/gnucash.trace\"; मे पूर्वनिर्धारित "
+"ओ फाइल जकरामे लाग कएल जाएनाइ अछि; \"$TMPDIR/gnucash.trace\"; मे पूर्वनिर्धारित "
 "\"stderr\" अथवा \"stdout\" भ' सकैत अछि."
 
 #: gnucash/gnucash-core-app.cpp:313

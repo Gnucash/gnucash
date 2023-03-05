@@ -10581,10 +10581,10 @@ msgstr "Hiện đồ thị"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"Tập tin vào đó cần ghi lưu, mặc định là « /tmp/gnucash.trace », cũng có thể "
+"Tập tin vào đó cần ghi lưu, mặc định là « $TMPDIR/gnucash.trace », cũng có thể "
 "là thiết bị lỗi chuẩn hay thiết bị xuất chuẩn."
 
 #: gnucash/gnucash-core-app.cpp:313

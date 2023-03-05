@@ -10391,10 +10391,10 @@ msgstr "ప్లాట్‌ను చూపించు"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"\"/tmp/gnucash.trace\"; can be \"stderr\" or \"stdout\"కు అప్రమేయాలు; లోనికి "
+"\"$TMPDIR/gnucash.trace\"; can be \"stderr\" or \"stdout\"కు అప్రమేయాలు; లోనికి "
 "ప్రవేశించడానికి ఫైల్ చేయి"
 
 #: gnucash/gnucash-core-app.cpp:313

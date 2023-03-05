@@ -10560,10 +10560,10 @@ msgstr "પ્લોટ દર્શાવો"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"જેમાં લોગ કરવામાં આવશે તે ફાઈલ; \"/tmp/gnucash.trace\"માં ડિફોલ્ટ કરો; \"stderr\" કે "
+"જેમાં લોગ કરવામાં આવશે તે ફાઈલ; \"$TMPDIR/gnucash.trace\"માં ડિફોલ્ટ કરો; \"stderr\" કે "
 "\"stdout\" હોઈ શકે છે."
 
 #: gnucash/gnucash-core-app.cpp:313

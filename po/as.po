@@ -10505,10 +10505,10 @@ msgstr "ক্ষেত্ৰখন দেখুৱাওক"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"ডিফল্টলৈ লগ কৰিবলগীয়া ফাইল \"/tmp/gnucash.trace\"; \"stderr\" বা \"stdout\" ও "
+"ডিফল্টলৈ লগ কৰিবলগীয়া ফাইল \"$TMPDIR/gnucash.trace\"; \"stderr\" বা \"stdout\" ও "
 "হব পাৰে."
 
 #: gnucash/gnucash-core-app.cpp:313

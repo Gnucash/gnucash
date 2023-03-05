@@ -10492,10 +10492,10 @@ msgstr "दब्लाइ दिन्थि"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"..आव लग खालामनो फाइल; \"/tmp/gnucash.trace\" आव डिफल्ट; \"stderr\" एबा "
+"..आव लग खालामनो फाइल; \"$TMPDIR/gnucash.trace\" आव डिफल्ट; \"stderr\" एबा "
 "\"stdout\"जानो हागौ।"
 
 #: gnucash/gnucash-core-app.cpp:313

@@ -10505,10 +10505,10 @@ msgstr "Показати шляхи"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"Файл журналу; типово «/tmp/gnucash.trace»; можна вказувати «stderr» чи "
+"Файл журналу; типово «$TMPDIR/gnucash.trace»; можна вказувати «stderr» чи "
 "«stdout»."
 
 #: gnucash/gnucash-core-app.cpp:313

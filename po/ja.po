@@ -10270,10 +10270,10 @@ msgstr "パスを表示する"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"ログを格納するファイル: デフォルトは \"/tmp/gnucash.trace\"。\"stderr\" ある"
+"ログを格納するファイル: デフォルトは \"$TMPDIR/gnucash.trace\"。\"stderr\" ある"
 "いは \"stdout\" を設定することも可能。"
 
 #: gnucash/gnucash-core-app.cpp:313

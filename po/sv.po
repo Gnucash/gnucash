@@ -10407,10 +10407,10 @@ msgstr "Visa sökvägar"
 
 #: gnucash/gnucash-core-app.cpp:311
 msgid ""
-"File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
+"File to log into; defaults to \"$TMPDIR/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"Fil att logga till; förval är \"/tmp/gnucash.trace\"; kan vara \"stderr\" "
+"Fil att logga till; förval är \"$TMPDIR/gnucash.trace\"; kan vara \"stderr\" "
 "eller \"stdout\"."
 
 #: gnucash/gnucash-core-app.cpp:313
