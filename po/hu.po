@@ -11,10 +11,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-04 21:26+0000\n"
+"PO-Revision-Date: 2023-03-05 20:35+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hu/>\n"
@@ -1492,7 +1492,7 @@ msgstr "Szimbólum"
 #: gnucash/report/trep-engine.scm:916 gnucash/report/trep-engine.scm:1022
 #: gnucash/report/trep-engine.scm:1201
 msgid "Shares"
-msgstr "Részvények"
+msgstr "Részvények darabszáma"
 
 #: gnucash/gnome/assistant-stock-split.c:787
 msgid "You don't have any stock accounts with balances!"
@@ -1998,7 +1998,7 @@ msgstr "Szerkesztés"
 #: gnucash/report/reports/standard/invoice.scm:731
 #: libgnucash/engine/Account.cpp:179 libgnucash/engine/gncInvoice.c:1097
 msgid "Bill"
-msgstr "Számla"
+msgstr "Bejövő számla"
 
 #: gnucash/gnome/business-gnome-utils.c:339 gnucash/gnome/dialog-doclink.c:817
 #: gnucash/gnome/dialog-invoice.c:2807 gnucash/gnome/dialog-invoice.c:3033
@@ -2026,7 +2026,7 @@ msgstr "Bizonylat"
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:106
 #: libgnucash/engine/Account.cpp:160 libgnucash/engine/gncInvoice.c:1095
 msgid "Invoice"
-msgstr "Számla"
+msgstr "Kimenő számla"
 
 #: gnucash/gnome/business-gnome-utils.c:565 gnucash/gnome/gnc-split-reg.c:691
 #: gnucash/gtkbuilder/gnc-frequency.glade:165
@@ -2767,7 +2767,7 @@ msgstr "Minden folyószámla"
 #: gnucash/gnome/dialog-find-transactions.c:112
 #: gnucash/import-export/import-match-picker.c:391
 msgid "Balanced"
-msgstr "Kiegyenlítve"
+msgstr "Nullára kiegyenlítve"
 
 #: gnucash/gnome/dialog-find-transactions.c:115
 #: gnucash/report/html-acct-table.scm:602
@@ -2817,7 +2817,7 @@ msgstr "Rögzítés dátuma"
 #: gnucash/report/trep-engine.scm:903 gnucash/report/trep-engine.scm:1012
 #: gnucash/report/trep-engine.scm:1126
 msgid "Reconciled Date"
-msgstr "Egyeztetett dátum"
+msgstr "Egyeztetés dátuma"
 
 #: gnucash/gnome/dialog-find-transactions.c:132
 #: gnucash/gnome/dialog-find-transactions.c:171
@@ -2828,9 +2828,8 @@ msgstr "Egyeztetett dátum"
 #: gnucash/gnome-search/dialog-search.c:884
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:566
 #: gnucash/report/trep-engine.scm:237
-#, fuzzy
 msgid "Number/Action"
-msgstr "Szám beállítások"
+msgstr "Szám/Művelet"
 
 #: gnucash/gnome/dialog-find-transactions.c:133
 #: gnucash/gnome/dialog-find-transactions.c:170
@@ -3091,7 +3090,7 @@ msgstr "Kedvezményezett folyószámla"
 #: gnucash/gnome-search/dialog-search.c:1094
 #: gnucash/gtkbuilder/dialog-invoice.glade:768
 msgid "New Invoice"
-msgstr "Új számla"
+msgstr "Új kimenő számla"
 
 #: gnucash/gnome/dialog-invoice.c:2321 gnucash/gnome/dialog-invoice.c:2340
 #: gnucash/gnome/dialog-invoice.c:2359
@@ -3117,7 +3116,7 @@ msgstr "Számla megtekintése"
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:229
 #: gnucash/gnome-search/dialog-search.c:1078
 msgid "New Bill"
-msgstr "Új számla"
+msgstr "Új bejövő számla"
 
 #: gnucash/gnome/dialog-invoice.c:2341
 msgid "Edit Bill"
@@ -3130,7 +3129,7 @@ msgstr "Számla megtekintése"
 #: gnucash/gnome/dialog-invoice.c:2354
 #: gnucash/gnome-search/dialog-search.c:1090
 msgid "New Expense Voucher"
-msgstr "Új költség bizonylat"
+msgstr "Új költségbizonylat"
 
 #: gnucash/gnome/dialog-invoice.c:2360
 msgid "Edit Expense Voucher"
@@ -3347,7 +3346,7 @@ msgstr "Költség bizonylat keresése"
 #: gnucash/gnome-search/dialog-search.c:1088
 #: gnucash/report/reports/standard/invoice.scm:733
 msgid "Expense Voucher"
-msgstr "Költség bizonylat"
+msgstr "Költségbizonylat"
 
 #: gnucash/gnome/dialog-invoice.c:3761
 msgid "Find Invoice"
@@ -3659,7 +3658,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-view-account.c:876
 #: gnucash/report/trep-engine.scm:150
 msgid "Cleared"
-msgstr "Igazolt"
+msgstr "Elszámolt"
 
 #: gnucash/gnome/dialog-payment.c:1576
 #: gnucash/gnome/gnc-plugin-page-register.c:3222
@@ -4056,7 +4055,7 @@ msgstr[0] ""
 #: gnucash/gnome/dialog-sx-since-last-run.c:999
 #: gnucash/gnome-search/dialog-search.c:1104
 msgid "Transaction"
-msgstr "Tranzakciók"
+msgstr "Tranzakció"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1015
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:512
@@ -5002,9 +5001,8 @@ msgid "_Copy Split"
 msgstr "Felosztás _másolása"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:284
-#, fuzzy
 msgid "_Paste Split"
-msgstr "Kifejtés törlése"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register.c:285
 msgid "Dup_licate Split"
@@ -5199,7 +5197,7 @@ msgstr "_Nem egyeztetett"
 #: gnucash/gnome-search/search-reconciled.c:230
 #: gnucash/report/trep-engine.scm:152
 msgid "Frozen"
-msgstr "Zárolt"
+msgstr "Befagyasztott"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3226
 #: gnucash/gnome-search/search-reconciled.c:233
@@ -5914,12 +5912,12 @@ msgstr "Megbízás"
 #: gnucash/gnome/search-owner.c:231
 #: gnucash/gnome-search/search-reconciled.c:183
 msgid "is"
-msgstr "van"
+msgstr "legyen"
 
 #: gnucash/gnome/search-owner.c:232
 #: gnucash/gnome-search/search-reconciled.c:184
 msgid "is not"
-msgstr "nem"
+msgstr "ne legyen"
 
 #: gnucash/gnome/top-level.c:103
 #, c-format
@@ -6073,7 +6071,7 @@ msgstr "Ki kell választani egy tételt a listából"
 #: gnucash/gtkbuilder/dialog-doclink.glade:215
 #: gnucash/gtkbuilder/dialog-price.glade:865
 msgid "_Remove"
-msgstr "<< El_távolítás"
+msgstr "_Töröl"
 
 #: gnucash/gnome-search/dialog-search.c:1100
 #, fuzzy
@@ -6090,9 +6088,8 @@ msgid "New Transaction"
 msgstr "Új tranzakció"
 
 #: gnucash/gnome-search/dialog-search.c:1110
-#, fuzzy
 msgid "New Split"
-msgstr "Kifejtés"
+msgstr "Új Kifejtés"
 
 #: gnucash/gnome-search/dialog-search.c:1119
 #, fuzzy
@@ -6115,11 +6112,11 @@ msgstr "_Hozzáadás"
 
 #: gnucash/gnome-search/dialog-search.c:1172
 msgid "all criteria are met"
-msgstr "minden feltétel kielégítése"
+msgstr "minden feltétel teljesül"
 
 #: gnucash/gnome-search/dialog-search.c:1173
 msgid "any criteria are met"
-msgstr "bármely feltétel kielégitése"
+msgstr "legalább egy feltétel teljesül"
 
 #: gnucash/gnome-search/search-account.c:151
 msgid "You have not selected any accounts"
@@ -6156,27 +6153,27 @@ msgstr "Hasonlítandó számlák kiválasztása"
 
 #: gnucash/gnome-search/search-date.c:196
 msgid "is before"
-msgstr "ez előtt van"
+msgstr "korábbi, mint"
 
 #: gnucash/gnome-search/search-date.c:197
 msgid "is before or on"
-msgstr "megelőzi vagy egyidőben van"
+msgstr "korábbi vagy ezen a napon"
 
 #: gnucash/gnome-search/search-date.c:198
 msgid "is on"
-msgstr "egy időben van"
+msgstr "ezen a napon"
 
 #: gnucash/gnome-search/search-date.c:199
 msgid "is not on"
-msgstr "nincs egy időben"
+msgstr "nem ezen a napon"
 
 #: gnucash/gnome-search/search-date.c:200
 msgid "is after"
-msgstr "ez után van"
+msgstr "későbbi, mint"
 
 #: gnucash/gnome-search/search-date.c:201
 msgid "is on or after"
-msgstr "egy időben van vagy követi"
+msgstr "ezen a napon vagy később"
 
 #: gnucash/gnome-search/search-double.c:185
 #: gnucash/gnome-search/search-int64.c:187
@@ -6207,7 +6204,7 @@ msgstr "nem egyenlő"
 #: gnucash/gnome-search/search-int64.c:191
 #: gnucash/gnome-search/search-numeric.c:230
 msgid "is greater than"
-msgstr "nagyobb mint"
+msgstr "nagyobb, mint"
 
 #: gnucash/gnome-search/search-double.c:190
 #: gnucash/gnome-search/search-int64.c:192
@@ -6217,7 +6214,7 @@ msgstr "nagyobb vagy egyenlő"
 
 #: gnucash/gnome-search/search-numeric.c:217
 msgid "less than"
-msgstr "kisebb mint"
+msgstr "kisebb, mint"
 
 #: gnucash/gnome-search/search-numeric.c:220
 msgid "less than or equal to"
@@ -6241,19 +6238,19 @@ msgstr "nagyobb vagy egyenlő"
 
 #: gnucash/gnome-search/search-numeric.c:250
 msgid "has credits or debits"
-msgstr "tartalmaz terhelést vagy jóváírást"
+msgstr "terhelés vagy jóváírás"
 
 #: gnucash/gnome-search/search-numeric.c:251
 msgid "has debits"
-msgstr "tartalmaz jóváírást"
+msgstr "jóváírás"
 
 #: gnucash/gnome-search/search-numeric.c:252
 msgid "has credits"
-msgstr "tartalmaz terhelést"
+msgstr "terhelés"
 
 #: gnucash/gnome-search/search-reconciled.c:221
 msgid "Not Cleared"
-msgstr "Nem igazolt"
+msgstr "Nem elszámolt"
 
 #: gnucash/gnome-search/search-string.c:169
 msgid "You need to enter some search text."
@@ -6285,7 +6282,7 @@ msgstr "reg.kif. nem illik"
 
 #: gnucash/gnome-search/search-string.c:322
 msgid "Match case"
-msgstr "Illeszkedés"
+msgstr "Kis- és nagybetű érzékeny"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:178
 msgid ""
@@ -16140,11 +16137,11 @@ msgstr "_Keresés"
 
 #: gnucash/gtkbuilder/dialog-search.glade:134
 msgid " Search "
-msgstr " Keresés "
+msgstr " keresése "
 
 #: gnucash/gtkbuilder/dialog-search.glade:207
 msgid "Search for items where"
-msgstr "Olyan tételek keresése, hogy"
+msgstr "Olyan tételek keresése, melyekre"
 
 #: gnucash/gtkbuilder/dialog-search.glade:228
 msgid "<b>Match all entries</b>"
@@ -16164,11 +16161,11 @@ msgstr "A jelenlegi keresés finomítása"
 
 #: gnucash/gtkbuilder/dialog-search.glade:348
 msgid "Add results to current search"
-msgstr "Felvétel a jelenlegi keresés eredményei közé"
+msgstr "Hozzáadás a jelenlegi keresés eredményeihez"
 
 #: gnucash/gtkbuilder/dialog-search.glade:365
 msgid "Delete results from current search"
-msgstr "Az eredmények törlése a jelenlegi keresésből"
+msgstr "Törlés a jelenlegi keresés eredményeiből"
 
 #: gnucash/gtkbuilder/dialog-search.glade:393
 msgid "Search only active data"
@@ -16178,7 +16175,7 @@ msgstr "Csak aktív adatok keresése"
 msgid ""
 "Choose whether to search all your data or only that marked as \"active\"."
 msgstr ""
-"Minden adat között keressen, vagy csak az 'aktív'-ként megjelöltek között."
+"Az összes adat között keressen, vagy csak az 'aktív'-ként megjelöltek között."
 
 #: gnucash/gtkbuilder/dialog-search.glade:417
 msgid "Type of search"
@@ -19602,9 +19599,8 @@ msgid "y/d/m"
 msgstr "é/n/h"
 
 #: gnucash/import-export/import-main-matcher.c:501
-#, fuzzy
 msgid "No new transactions were found in this import."
-msgstr "A jelenlegi tranzakció nincs kiegyenlítve."
+msgstr ""
 
 #: gnucash/import-export/import-main-matcher.c:775
 msgid "Destination account for the auto-balance split."
