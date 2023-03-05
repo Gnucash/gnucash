@@ -11,10 +11,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-04 21:26+0000\n"
+"PO-Revision-Date: 2023-03-05 06:12+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/uk/>\n"
@@ -22,8 +22,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
-"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : "
+"n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 4.16.2-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Project-Style: default\n"
@@ -10925,20 +10925,14 @@ msgid "Setup Account Period"
 msgstr "Налаштовування періоду обліку"
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:38
-#, fuzzy
-#| msgid ""
-#| "Select an accounting period and the closing date which must not be in the "
-#| "future, but is greater than the closing date of the previous book.\n"
-#| "\n"
-#| "Books will be closed at midnight on the selected date."
 msgid ""
 "Select an accounting period and a closing date that is between the date of "
 "the previous close and today.\n"
 "\n"
 "Books will be closed at midnight on the selected date."
 msgstr ""
-"Виберіть період обліку і дату закриття. Дати не можуть перебувати у "
-"майбутньому і перевищувати дату закриття попередньої книги.\n"
+"Виберіть період обліку і дату закриття, які перебувають між датою "
+"попереднього закриття та сьогоднішньою датою.\n"
 "\n"
 "Книги буде закрито опівночі у вказану дату."
 
@@ -12001,9 +11995,6 @@ msgid "Loan Details"
 msgstr "Подробиці боргу"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:451
-#, fuzzy
-#| msgid ""
-#| "Do you utilise an escrow account, if so an account must be specified…"
 msgid "Do you utilize an escrow account, if so an account must be specified…"
 msgstr "Якщо ви використовуєте депонентний рахунок, його слід вказати…"
 
@@ -18133,10 +18124,6 @@ msgid "File Format"
 msgstr "Формат файлів"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1779
-#, fuzzy
-#| msgid ""
-#| "This list one or more specialization templates that adjust the import for "
-#| "different banks uses of fields in the selected import format."
 msgid ""
 "This lists one or more specialization templates that adjust the import for "
 "different banks' uses of fields in the selected import format."
@@ -20529,10 +20516,9 @@ msgstr "Шукаємо дублікати транзакцій"
 #. Translators: Mapping the QIF account type to a GnuCash account type.
 #. see https://en.wikipedia.org/wiki/Quicken_Interchange_Format#Detail_items
 #: gnucash/import-export/qif-imp/qif-parse.scm:174
-#, fuzzy, scheme-format
-#| msgid "The account type ~s is unknown, using 'bank' instead."
+#, scheme-format
 msgid "The account type ~s is unknown, using Bank instead."
-msgstr "Тип рахунку ~s є невідомим, використовуємо замість нього «bank»."
+msgstr "Тип рахунку ~s є невідомим, використовуємо замість нього «Банк»."
 
 #. Translators: This is an error message about actions like buy, sell …
 #: gnucash/import-export/qif-imp/qif-parse.scm:238
@@ -25199,10 +25185,8 @@ msgid "Plot height"
 msgstr "Висота графіка"
 
 #: gnucash/report/reports/standard/investment-lots.scm:57
-#, fuzzy
-#| msgid "Show the lot GUID table column"
 msgid "Show lot GUID column"
-msgstr "Показати стовпчик таблиці лоту GUID"
+msgstr "Показати стовпчик GUID лоту"
 
 #: gnucash/report/reports/standard/investment-lots.scm:58
 msgid "Show date columns"
@@ -28242,16 +28226,12 @@ msgstr "_Подвійний рядок"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:83
 #: gnucash/ui/gnc-plugin-page-register.ui:99
-#, fuzzy
-#| msgid ""
-#| "Show a second line with \"Action\", \"Notes\", and \"Linked Documents\" "
-#| "for each transaction."
 msgid ""
 "Show a second line with Action, Notes, and Linked Document fields for each "
 "transaction"
 msgstr ""
-"Показувати другий рядок із записами «Дія», «Примітки» і «Пов'язані "
-"документи» для усіх транзакцій."
+"Показувати другий рядок із записами «Дія», «Примітки» і «Пов'язані документи»"
+" для усіх транзакцій"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:92
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:125
