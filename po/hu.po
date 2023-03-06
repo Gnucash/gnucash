@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-06 11:40+0000\n"
+"PO-Revision-Date: 2023-03-06 16:40+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hu/>\n"
@@ -6124,7 +6124,7 @@ msgstr "Nem választott számlát"
 
 #: gnucash/gnome-search/search-account.c:172
 msgid "matches all accounts"
-msgstr "minden számlára illeszkedés"
+msgstr "legyen a találatokban"
 
 #: gnucash/gnome-search/search-account.c:177
 msgid "matches any account"
@@ -6132,7 +6132,7 @@ msgstr "a kiválasztottak között legyen"
 
 #: gnucash/gnome-search/search-account.c:178
 msgid "matches no accounts"
-msgstr "nem illeszkedik számlára"
+msgstr "ne a kiválasztottak valamelyike legyen"
 
 #: gnucash/gnome-search/search-account.c:195
 #: gnucash/report/reports/standard/cash-flow.scm:249
