@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-06 07:03+0000\n"
+"PO-Revision-Date: 2023-03-06 07:50+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/pt/>\n"
@@ -2931,7 +2931,7 @@ msgstr "PAGO"
 #: gnucash/gnome/dialog-invoice.c:2267
 #: gnucash/report/reports/standard/new-owner-report.scm:574
 msgid "UNPAID"
-msgstr "NÃO PAGO"
+msgstr "PENDENTE"
 
 #: gnucash/gnome/dialog-invoice.c:2315 gnucash/gnome/dialog-invoice.c:2334
 #: gnucash/gnome/dialog-invoice.c:2353
@@ -3063,7 +3063,7 @@ msgstr "Ver/Editar vale"
 
 #: gnucash/gnome/dialog-invoice.c:3547
 msgid "Invoice Owner"
-msgstr "Títular da factura"
+msgstr "Titular da factura"
 
 #: gnucash/gnome/dialog-invoice.c:3550
 #: gnucash/report/reports/standard/invoice.scm:282
@@ -3182,7 +3182,7 @@ msgstr "Nº"
 
 #: gnucash/gnome/dialog-invoice.c:3747
 msgid "Find Bill"
-msgstr "Localizar pagamentos"
+msgstr "Localizar pagamento"
 
 #: gnucash/gnome/dialog-invoice.c:3754
 msgid "Find Expense Voucher"
@@ -3344,7 +3344,7 @@ msgstr "Saldo"
 
 #: gnucash/gnome/dialog-lot-viewer.c:946
 msgid "Gains"
-msgstr "Ganho"
+msgstr "Ganhos"
 
 #: gnucash/gnome/dialog-lot-viewer.c:1026
 #: gnucash/report/reports/example/average-balance.scm:118
