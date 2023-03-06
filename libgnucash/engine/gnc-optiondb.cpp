@@ -1256,21 +1256,6 @@ gnc_option_db_book_options(GncOptionDB* odb)
                                N_("The electronic tax number of your business"),
                                empty_string);
 }
-
-const char*
-gnc_option_db_lookup_string_value(GncOptionDB* odb, const char* section, const char* name)
-{
-    auto value{odb->lookup_string_option(section, name)};
-    return value.empty() ? nullptr : strdup(value.c_str());
-}
-
-void
-gnc_option_db_set_string_value(GncOptionDB* odb, const char* section,
-                               const char* name, const char* value)
-{
-    odb->set_option<std::string>(section, name, value);
-}
-
 const QofInstance*
 gnc_option_db_lookup_qofinstance_value(GncOptionDB* odb, const char* section,
                                        const char* name)

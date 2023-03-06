@@ -132,6 +132,10 @@ public:
     void set_default_section(const char* section);
     const GncOptionSection* const get_default_section() const noexcept;
     std::string lookup_string_option(const char* section, const char* name);
+    bool set_string_option(const char* section, const char* name, const std::string& value)
+    {
+        return set_option<std::string>(section, name, value);
+    }
     template <typename ValueType>
     bool set_option(const char* section, const char* name, ValueType value)
     {

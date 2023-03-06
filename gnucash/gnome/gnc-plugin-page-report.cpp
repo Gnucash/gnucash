@@ -773,8 +773,6 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     GncPluginPageReport *report;
     GncPluginPageReportPrivate *priv;
     SCM dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
-    const gchar *old_name;
-    gchar *new_name;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(data));
     report = GNC_PLUGIN_PAGE_REPORT(data);
@@ -787,19 +785,19 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     DEBUG( "set-dirty, queue-draw" );
 
     /* Update the page (i.e. the notebook tab and window title) */
-    old_name = gnc_plugin_page_get_page_name(GNC_PLUGIN_PAGE(report));
-    new_name = g_strdup(gnc_option_db_lookup_string_value(priv->cur_odb,
-                                                          "General",
-                                                          "Report name"));
-    if (strcmp(old_name, new_name) != 0)
+    std::string old_name{gnc_plugin_page_get_page_name(GNC_PLUGIN_PAGE(report))};
+    auto new_name{priv->cur_odb->lookup_string_option("General",
+                                                      "Report name")};
+    if (new_name != old_name)
     {
         /* Bug 727130, 760711 - remove only the non-printable
          * characters from the new name */
-        gnc_utf8_strip_invalid_and_controls(new_name);
-        ENTER("Cleaned-up new report name: %s", new_name);
-        main_window_update_page_name(GNC_PLUGIN_PAGE(report), new_name);
+        char *clean_name{g_strdup(new_name.c_str())};
+        gnc_utf8_strip_invalid_and_controls(clean_name);
+        ENTER("Cleaned-up new report name: %s", clean_name ? clean_name : "(null)");
+        main_window_update_page_name(GNC_PLUGIN_PAGE(report), clean_name);
+        g_free(clean_name);
     }
-    g_free(new_name);
 
     /* it's probably already dirty, but make sure */
     scm_call_2(dirty_report, priv->cur_report, SCM_BOOL_T);
@@ -1083,7 +1081,6 @@ static void
 gnc_plugin_page_report_name_changed (GncPluginPage *page, const gchar *name)
 {
     GncPluginPageReportPrivate *priv;
-    const gchar *old_name;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(page));
     g_return_if_fail(name != nullptr);
@@ -1095,19 +1092,19 @@ gnc_plugin_page_report_name_changed (GncPluginPage *page, const gchar *name)
     {
 
         /* Is this a redundant call? */
-        old_name = gnc_option_db_lookup_string_value(priv->cur_odb, "General",
-                                                     "Report name");
+        auto old_name = priv->cur_odb->lookup_string_option("General",
+                                                            "Report name");
+        std::string name_str{name};
         DEBUG("Comparing old name '%s' to new name '%s'",
-              old_name ? old_name : "(null)", name);
-        if (old_name && (strcmp(old_name, name) == 0))
+              old_name.empty() ? "(null)" : old_name.c_str(), name);
+        if (old_name == name_str)
         {
             LEAVE("no change");
             return;
         }
 
         /* Store the new name for the report. */
-        gnc_option_db_set_string_value(priv->cur_odb, "General",
-                                       "Report name", name);
+        priv->cur_odb->set_string_option("General", "Report name", name_str);
 
     }
 
@@ -1900,10 +1897,11 @@ static gchar *report_create_jobname(GncPluginPageReportPrivate *priv)
          *        so I added yet another hack below for this. cstim.
          */
         GncInvoice *invoice;
-        report_name = g_strdup(gnc_option_db_lookup_string_value(priv->cur_odb,
-                                                                 "General",
-                                                                 "Report name"));
-        if (!report_name)
+        auto report_name_str = priv->cur_odb->lookup_string_option("General",
+                                                                   "Report name");
+        if (!report_name_str.empty())
+            report_name = g_strdup(report_name_str.c_str());
+        if (report_name)
             report_name = g_strdup (_(default_jobname));
         if (g_strcmp0(report_name, _("Printable Invoice")) == 0
                 || g_strcmp0(report_name, _("Tax Invoice")) == 0
