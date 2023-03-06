@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-06 05:40+0000\n"
+"PO-Revision-Date: 2023-03-06 07:00+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/sv/>\n"
@@ -25410,43 +25410,42 @@ msgid ""
 "Detect possible errors in 'Realized Gain/Loss' splits that are created when "
 "adding a sale split to a lot"
 msgstr ""
+"Upptäck eventuella fel i ”Realiserad vinst/förlust”-delar som skapas när en "
+"försäljningsdel läggs till i ett parti"
 
 #: gnucash/report/reports/standard/investment-lots.scm:381
 msgid "Detect splits that have not been assigned to a lot."
-msgstr ""
+msgstr "Upptäck delar som inte har tilldelats till ett parti."
 
 #: gnucash/report/reports/standard/investment-lots.scm:383
-#, fuzzy
-#| msgid "Counters"
 msgid "Count"
-msgstr "Räknare"
+msgstr "Räkna"
 
 #: gnucash/report/reports/standard/investment-lots.scm:390
 msgid ""
 "Balance mismatches may indicate a split that is not yet included in a lot"
 msgstr ""
+"Ej matchande saldo kan indikera en del som ännu inte inkluderas i ett parti"
 
 #: gnucash/report/reports/standard/investment-lots.scm:799
 #, scheme-format
 msgid "  End price: ~a~a on ~a"
-msgstr ""
+msgstr "  Slutpris: ~a~a den ~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:809
 #, scheme-format
 msgid " [~a]"
-msgstr ""
+msgstr " [~a]"
 
 #: gnucash/report/reports/standard/investment-lots.scm:813
-#, fuzzy
-#| msgid "Not found"
 msgid "No price found"
-msgstr "Ej funnen"
+msgstr "Inget pris hittades"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1230
 #, fuzzy
 #| msgid "(split)"
 msgid "split"
-msgstr "(delning)"
+msgstr "del"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1351
 #, scheme-format
@@ -25454,17 +25453,21 @@ msgid ""
 "Warning: Above lot has ~a bought splits. Consider separating them into their "
 "own lots."
 msgstr ""
+"Varning: Ovanstående parti har ~a inköpta delar. Överväg att separera dem i "
+"egna partier."
 
 #: gnucash/report/reports/standard/investment-lots.scm:1360
-#, scheme-format
+#, fuzzy, scheme-format
 msgid ""
 "Warning: Above lot's balance is negative on ~a. Consider removing the "
 "responsible sale split from the lot and then scrubbing."
 msgstr ""
+"Varning: Ovanstående partis saldo är negativt den ~a. Överväg att ta bort "
+"relevant försäljningsdel från partiet och därefter städa upp."
 
 #: gnucash/report/reports/standard/investment-lots.scm:1369
 msgid "Warning: Above lot's title is blank."
-msgstr ""
+msgstr "Varning: Ovanstående partis titel är tom."
 
 #: gnucash/report/reports/standard/investment-lots.scm:1384
 #, scheme-format
@@ -25472,6 +25475,8 @@ msgid ""
 "Warning: Above lot's computed gain ~a is not equal to the \"Realized Gain/"
 "Loss\" split(s) sum ~a. Difference: ~a"
 msgstr ""
+"Varning: Ovanstående partis beräknade vinst ~a är inte samma som delarnas "
+"summa ~a från ”Realiserad vinst/förlust”. Differens: ~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1403
 #, scheme-format
