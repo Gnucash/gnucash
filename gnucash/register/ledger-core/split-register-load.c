@@ -574,6 +574,41 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
     if (multi_line)
         trans_table = g_hash_table_new (g_direct_hash, g_direct_equal);
 
+    // View reversed add blank transaction at the top
+    if (table->model->reverse_sort && !future_after_blank)
+    {
+        if (blank_trans == find_trans)
+            new_trans_row = vcell_loc.virt_row;
+
+        if (blank_split == find_trans_split)
+            new_trans_split_row = vcell_loc.virt_row;
+
+        /* go to blank on first pass */
+        if (info->first_pass)
+        {
+            save_loc.vcell_loc = vcell_loc;
+            save_loc.phys_row_offset = 0;
+            save_loc.phys_col_offset = 0;
+        }
+
+        // used in the setting the rows insensitive
+        table->model->blank_trans_row = vcell_loc.virt_row;
+
+        gnc_split_register_add_transaction (reg,
+                                            blank_trans, blank_split,
+                                            lead_cursor, split_cursor,
+                                            multi_line, start_primary_color,
+                                            info->blank_split_edited,
+                                            find_trans, find_split,
+                                            find_class, &new_split_row,
+                                            &vcell_loc);
+
+        if (!multi_line)
+            start_primary_color = !start_primary_color;
+
+        added_blank_trans = TRUE;
+    }
+
     /* populate the table */
     for (node = slist; node; node = node->next)
     {
@@ -592,7 +627,6 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
         else if (xaccTransCountSplits (trans) == 1 &&
                  xaccSplitGetAccount (split) == NULL)
             continue;
-
 
         /* Do not load splits from the blank transaction. */
         if (trans == blank_trans)
@@ -627,7 +661,28 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
             ((table->model->reverse_sort && xaccTransGetDate (trans) < present) ||
              (!table->model->reverse_sort && xaccTransGetDate (trans) > present)))
         {
-            table->model->dividing_row = vcell_loc.virt_row;
+            gint count_blank_splits = 1;
+            gint virt_row_offset = 2;
+            gboolean show_lower_divider = FALSE;
+
+            if (table->model->reverse_sort)
+            {
+                count_blank_splits = xaccTransCountSplits (blank_trans);
+
+                if (count_blank_splits > 1)
+                   count_blank_splits ++;
+
+                if (table->model->reverse_sort && future_after_blank)
+                   virt_row_offset = 0;
+            }
+
+            if ((table->model->reverse_sort && vcell_loc.virt_row != count_blank_splits + virt_row_offset) ||
+                !table->model->reverse_sort)
+            {
+                table->model->dividing_row = vcell_loc.virt_row; // blue top
+                show_lower_divider = TRUE;
+            }
+
             found_divider = TRUE;
 
             if (future_after_blank)
@@ -658,7 +713,10 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
                                                     find_class, &new_split_row,
                                                     &vcell_loc);
 
-                table->model->dividing_row_lower = vcell_loc.virt_row;
+
+                if (show_lower_divider)
+                    table->model->dividing_row_lower = vcell_loc.virt_row; // blue bottom
+
                 if (!multi_line)
                     start_primary_color = !start_primary_color;
 
@@ -720,7 +778,8 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
         pending_trans = NULL;
     }
 
-    if (!added_blank_trans) {
+    if (!added_blank_trans)
+    {
         if (blank_trans == find_trans)
             new_trans_row = vcell_loc.virt_row;
 
@@ -815,7 +874,15 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
 
     gnc_table_refresh_gui (table, TRUE);
 
-    gnc_split_register_show_trans (reg, table->current_cursor_loc.vcell_loc);
+    // if in reverse order, always show the first transaction
+    if (table->model->reverse_sort)
+    {
+        VirtualCellLocation vc_loc;
+        vc_loc.virt_row = 0;
+        gnc_split_register_show_trans (reg, vc_loc);
+    }
+    else
+        gnc_split_register_show_trans (reg, table->current_cursor_loc.vcell_loc);
 
     /* enable callback for cursor user-driven moves */
     gnc_table_control_allow_move (table->control, TRUE);
