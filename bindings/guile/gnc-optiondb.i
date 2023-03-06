@@ -1195,13 +1195,13 @@ inline SCM return_scm_value(ValueType value)
 //scm_simple_format needs a scheme list of arguments to match the format
 //placeholders.
         return std::visit([$self] (auto &option) -> SCM {
-                static const auto no_value{scm_from_utf8_string("No Value")};
+                static const auto no_value{scm_from_utf8_string("")};
                 if constexpr (is_same_decayed_v<decltype(option),
                               GncOptionAccountListValue>)
                 {
                     auto guid_list{option.get_value()};
                     if (guid_list.empty())
-                        return no_value;
+                        return scm_simple_format(SCM_BOOL_F, list_format_str, scm_list_1(no_value));
                     SCM string_list{SCM_EOL};
                     for(auto guid : guid_list)
                     {
@@ -1215,10 +1215,8 @@ inline SCM return_scm_value(ValueType value)
                 if constexpr (is_QofInstanceValue_v<decltype(option)>)
                 {
                     auto serial{option.serialize()};
-                    if (serial.empty())
-                        return no_value;
-                    auto value{scm_list_1(scm_from_utf8_string(serial.c_str()))};
-                        return scm_simple_format(SCM_BOOL_F, plain_format_str, value);
+                    auto value{scm_list_1(scm_from_utf8_string(serial.empty() ? "" : serial.c_str()))};
+                    return scm_simple_format(SCM_BOOL_F, plain_format_str, value);
                 }
                 if constexpr (is_same_decayed_v<decltype(option),
                               GncOptionCommodityValue>)
@@ -1244,9 +1242,7 @@ inline SCM return_scm_value(ValueType value)
                               GncOptionDateValue>)
                 {
                     auto serial{option.serialize()};
-                    if (serial.empty())
-                        return no_value;
-                    auto value{scm_list_1(scm_from_utf8_string(serial.c_str()))};
+                    auto value{scm_list_1(scm_from_utf8_string(serial.empty() ? "" :serial.c_str()))};
                     const SCM date_fmt{scm_from_utf8_string("'~a")};
                     return scm_simple_format(SCM_BOOL_F, date_fmt, value);
                 }
@@ -1272,7 +1268,8 @@ inline SCM return_scm_value(ValueType value)
                     auto serial{option.serialize()};
                     if (serial.empty())
                     {
-                        return no_value;
+                        return scm_simple_format(SCM_BOOL_F, list_format_str,
+                                                 scm_list_1(no_value));
                     }
                     else
                     {
@@ -1298,15 +1295,8 @@ inline SCM return_scm_value(ValueType value)
                               GncOptionRangeValue<double>>)
                 {
                     auto serial{get_scm_value(option)};
-                    if (serial == SCM_BOOL_F)
-                    {
-                        return no_value;
-                    }
-                    else
-                    {
-                        auto scm_str{scm_list_1(serial)};
-                        return scm_simple_format(SCM_BOOL_F, ticked_format_str, scm_str);
-                    }
+                    auto scm_str{serial == SCM_BOOL_F ? scm_list_1(no_value) : scm_list_1(serial)};
+                    return scm_simple_format(SCM_BOOL_F, ticked_format_str, scm_str);
                 }
                 if constexpr (is_same_decayed_v<decltype(option),
                               GncOptionValue<bool>>)
@@ -1325,7 +1315,7 @@ inline SCM return_scm_value(ValueType value)
                 auto serial{option.serialize()};
                 if (serial.empty())
                 {
-                    return no_value;
+                    return scm_simple_format(SCM_BOOL_F, plain_format_str, scm_list_1(no_value));
                 }
                 else if ($self->get_ui_type() == GncOptionUIType::COLOR)
                 {
