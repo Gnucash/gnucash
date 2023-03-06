@@ -525,6 +525,17 @@ gnc_gen_trans_list_show_all (GNCImportMainMatcher *info)
     gnc_gen_trans_list_show_accounts_column (info);
 }
 
+using AccountSet = std::unordered_set<Account*>;
+
+static void begin_edit (AccountSet& accounts_modified, Account *acc)
+{
+    if (!acc || !accounts_modified.emplace (acc).second)
+        return;
+
+    DEBUG ("begin_edit acc %s", xaccAccountGetName (acc));
+    xaccAccountBeginEdit (acc);
+}
+
 void
 on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
 {
@@ -534,6 +545,8 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
 
     GtkTreeModel *model = gtk_tree_view_get_model (info->view);
     GtkTreeIter iter;
+    AccountSet accounts_modified;
+
     if (!gtk_tree_model_get_iter_first (model, &iter))
     {
         // No transaction, we can just close the dialog.
@@ -553,6 +566,13 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
                             DOWNLOADED_COL_DATA, &trans_info,
                             -1);
 
+        Split* split = gnc_import_TransInfo_get_fsplit (trans_info);
+        Transaction *trans = xaccSplitGetParent (split);
+
+        for (GList *n = xaccTransGetSplitList (trans); n; n = g_list_next (n))
+            begin_edit (accounts_modified,
+                        xaccSplitGetAccount (static_cast<Split*>(n->data)));
+
         // Allow the backend to know if the Append checkbox is ticked or unticked
         // by propagating info->append_text to every trans_info->append_text
         gnc_import_TransInfo_set_append_text( trans_info, append_text);
@@ -563,12 +583,12 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
         // Get the import account from the first split.
         if (first_tran)
         {
-            Split* first_split = gnc_import_TransInfo_get_fsplit (trans_info);
-            xaccAccountSetAppendText (xaccSplitGetAccount(first_split), append_text);
+            xaccAccountSetAppendText (xaccSplitGetAccount (split), append_text);
             first_tran = false;
         }
-        // Note: if there's only 1 split (unbalanced) one will be created with the unbalanced account,
-        // and for that account the defer balance will not be set. So things will be slow.
+
+        Account *acc = gnc_import_TransInfo_get_destacc (trans_info);
+        begin_edit (accounts_modified, acc);
 
         if (gnc_import_process_trans_item (NULL, trans_info))
         {
@@ -580,6 +600,10 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
         }
     }
     while (gtk_tree_model_iter_next (model, &iter));
+
+    DEBUG ("commit_edit");
+    std::for_each (accounts_modified.begin(), accounts_modified.end(),
+                   xaccAccountCommitEdit);
 
     gnc_gen_trans_list_delete (info);
 
