@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-05 20:35+0000\n"
+"PO-Revision-Date: 2023-03-06 05:40+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/sv/>\n"
@@ -25355,28 +25355,34 @@ msgid "Show long (instead of short) account names"
 msgstr "Visa långa (istället för korta) kontonamn"
 
 #: gnucash/report/reports/standard/investment-lots.scm:300
+#, fuzzy
 msgid "Show mnemonics with commodity amounts"
-msgstr ""
+msgstr "Visa minnesanteckningar med produktantal"
 
 #: gnucash/report/reports/standard/investment-lots.scm:307
+#, fuzzy
 msgid "Include closed lots in addition to open lots"
-msgstr ""
+msgstr "Inkludera avslutade partier utöver öppna partier"
 
 #: gnucash/report/reports/standard/investment-lots.scm:314
 msgid ""
 "Show blank text instead of zero values for inner table cells. Does not apply "
 "to footer rows."
 msgstr ""
+"Visa tom text istället för nollvärden för inre tabellceller. Påverkar inte "
+"fotrader."
 
 #: gnucash/report/reports/standard/investment-lots.scm:321
 msgid "Add a row for each split belonging to a lot, under the lot row."
-msgstr ""
+msgstr "Lägg till en rad för varje del i ett parti, under partiets rad."
 
 #: gnucash/report/reports/standard/investment-lots.scm:347
 msgid ""
 "Only show accounts that contain warnings. This is useful for quickly finding "
 "potential lot errors."
 msgstr ""
+"Visa endast konton som innehåller varningar. Detta underlättar att snabbt "
+"hitta eventuella fel i partier."
 
 #: gnucash/report/reports/standard/investment-lots.scm:354
 msgid ""
@@ -25387,14 +25393,17 @@ msgstr ""
 "realisationsvinstens ålder otydlig"
 
 #: gnucash/report/reports/standard/investment-lots.scm:361
+#, fuzzy
 msgid "Lots with a negative balance are not well formed."
-msgstr ""
+msgstr "Partier med negativt saldo är inte välformade."
 
 #: gnucash/report/reports/standard/investment-lots.scm:368
 msgid ""
 "Lot titles are optional. This warning applies to titles that are empty or "
 "only whitespace."
 msgstr ""
+"Partititlar är valfria. Varningen gäller titlar som är tomma eller bara "
+"består av blanksteg."
 
 #: gnucash/report/reports/standard/investment-lots.scm:375
 msgid ""
