@@ -6,14 +6,14 @@
 # Nigel Titley <nigel@titley.com>, 2002 - 2007.
 # Neil Williams <linux@codehelp.co.uk>, 2006.
 # Adithya K <adithyak04@gmail.com>, 2021.
-# Simon Arlott <weblate.simon@arlott.org>, 2022.
+# Simon Arlott <weblate.simon@arlott.org>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.13-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2022-11-30 21:48+0000\n"
+"PO-Revision-Date: 2023-03-04 14:39+0000\n"
 "Last-Translator: Simon Arlott <weblate.simon@arlott.org>\n"
 "Language-Team: English (New Zealand) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/en_NZ/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -9008,7 +9008,7 @@ msgstr "Accounting for personal and small business finance."
 #: gnucash/gnome-utils/gnc-main-window.c:4954
 msgid "translator-credits"
 msgstr ""
-"Simon Arlott, 2022\n"
+"Simon Arlott, 2022 - 2023\n"
 "Mike Evans, 2010, 2013\n"
 "Nigel Titley, 2002 - 2007\n"
 "Neil Williams, 2006"
