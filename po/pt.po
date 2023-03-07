@@ -2,14 +2,14 @@
 # Copyright (C) 2020
 # This file is distributed under the same license as the Gnucash package.
 # Pedro Albuquerque <pmra@protonmail.com>, 2015-2021.
-# Pedro Albuquerque <pmra@gmx.com>, 2021, 2022.
+# Pedro Albuquerque <pmra@gmx.com>, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.13-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2022-09-13 06:22+0000\n"
+"PO-Revision-Date: 2023-03-07 08:38+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -277,7 +277,7 @@ msgstr "Hebreu (Windows-1255)"
 
 #: borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
-msgstr "Hindi (MacDevanagari)"
+msgstr "Hindu (MacDevanagari)"
 
 #: borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
@@ -393,7 +393,7 @@ msgstr "Vietnamita (Windows-1258)"
 
 #: borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr "Hebreu Visual (ISO-8859-8)"
+msgstr "Hebreu visual (ISO-8859-8)"
 
 #: borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
@@ -1078,7 +1078,7 @@ msgstr "Parcelas"
 
 #: gnucash/gnome/assistant-stock-split.c:417
 msgid "Error adding price."
-msgstr "Erro ao adicionar cotação."
+msgstr "Erro ao adicionar preço."
 
 #: gnucash/gnome/assistant-stock-split.c:582
 #: gnucash/gnome/dialog-find-transactions2.c:111
@@ -1543,7 +1543,7 @@ msgstr "Nº"
 
 #: gnucash/gnome/dialog-customer.c:943
 msgid "Find Customer"
-msgstr "Procurar cliente"
+msgstr "Localizar cliente"
 
 #: gnucash/gnome/dialog-custom-report.c:331
 #, c-format
@@ -1588,7 +1588,7 @@ msgstr "Nenhuma conta seleccionada. Tente novamente."
 
 #: gnucash/gnome/dialog-date-close.c:82
 msgid "Placeholder account selected. Please try again."
-msgstr "Conta marcadora de posição seleccionada. Tente novamente."
+msgstr "Marcador de posição seleccionado. Tente novamente."
 
 #: gnucash/gnome/dialog-doclink.c:160
 #: gnucash/gnome/gnc-plugin-page-register.c:4765
@@ -1815,7 +1815,7 @@ msgstr "Número do empregado"
 
 #: gnucash/gnome/dialog-employee.c:707
 msgid "Employee Username"
-msgstr "Nome de utilizador do empregado"
+msgstr "Identificador do empregado"
 
 #: gnucash/gnome/dialog-employee.c:709 gnucash/gnome/dialog-invoice.c:3463
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:364
@@ -1851,7 +1851,7 @@ msgstr "Nome"
 
 #: gnucash/gnome/dialog-employee.c:742
 msgid "Find Employee"
-msgstr "Procurar empregado"
+msgstr "Localizar empregado"
 
 #: gnucash/gnome/dialog-fincalc.c:335
 msgid ""
@@ -1948,7 +1948,7 @@ msgstr "Reconciliar"
 #: gnucash/gnome/dialog-find-transactions2.c:122
 #: gnucash/gnome/dialog-find-transactions.c:120
 msgid "Share Price"
-msgstr "Cotação de acção"
+msgstr "Preço da acção"
 
 #: gnucash/gnome/dialog-find-transactions2.c:124
 #: gnucash/gnome/dialog-invoice.c:3632 gnucash/gnome/dialog-lot-viewer.c:1014
@@ -2323,7 +2323,7 @@ msgstr "PAGO"
 #: gnucash/gnome/dialog-invoice.c:2102
 #: gnucash/report/reports/standard/new-owner-report.scm:575
 msgid "UNPAID"
-msgstr "NÃO PAGO"
+msgstr "PENDENTE"
 
 #: gnucash/gnome/dialog-invoice.c:2150 gnucash/gnome/dialog-invoice.c:2169
 #: gnucash/gnome/dialog-invoice.c:2188
@@ -2455,7 +2455,7 @@ msgstr "Ver/Editar vale"
 
 #: gnucash/gnome/dialog-invoice.c:3371
 msgid "Invoice Owner"
-msgstr "Títular da factura"
+msgstr "Titular da factura"
 
 #: gnucash/gnome/dialog-invoice.c:3374
 #: gnucash/report/reports/standard/invoice.scm:312
@@ -2576,7 +2576,7 @@ msgstr "Nº"
 
 #: gnucash/gnome/dialog-invoice.c:3571
 msgid "Find Bill"
-msgstr "Localizar pagamentos"
+msgstr "Localizar pagamento"
 
 #: gnucash/gnome/dialog-invoice.c:3578
 msgid "Find Expense Voucher"
@@ -2715,7 +2715,7 @@ msgstr "Saldo"
 
 #: gnucash/gnome/dialog-lot-viewer.c:946
 msgid "Gains"
-msgstr "Ganho"
+msgstr "Ganhos"
 
 #: gnucash/gnome/dialog-lot-viewer.c:1026
 #: gnucash/report/reports/example/average-balance.scm:131
@@ -2933,12 +2933,12 @@ msgstr ""
 #, c-format
 msgid "Are you sure you want to delete the selected price?"
 msgid_plural "Are you sure you want to delete the %d selected prices?"
-msgstr[0] "Deseja realmente eliminar a cotação seleccionada?"
-msgstr[1] "Deseja realmente eliminar as %d cotações seleccionadas?"
+msgstr[0] "Deseja realmente eliminar o preço seleccionado?"
+msgstr[1] "Deseja realmente eliminar os %d preços seleccionados?"
 
 #: gnucash/gnome/dialog-price-edit-db.c:212
 msgid "Delete prices?"
-msgstr "Eliminar cotações?"
+msgstr "Eliminar preços?"
 
 #: gnucash/gnome/dialog-price-edit-db.c:438
 #: gnucash/gtkbuilder/dialog-invoice.glade:617
@@ -2950,15 +2950,15 @@ msgstr "Entradas"
 
 #: gnucash/gnome/dialog-price-edit-db.c:468
 msgid "Are you sure you want to delete these prices?"
-msgstr "Deseja realmente eliminar estas cotações?"
+msgstr "Deseja realmente eliminar estes preços?"
 
 #: gnucash/gnome/dialog-price-editor.c:227
 msgid "Are you sure you want to replace the existing price?"
-msgstr "Deseja realmente substituir a cotação existente?"
+msgstr "Deseja realmente substituir o preço existente?"
 
 #: gnucash/gnome/dialog-price-editor.c:233
 msgid "Replace price?"
-msgstr "Substituir cotação?"
+msgstr "Substituir preço?"
 
 #: gnucash/gnome/dialog-price-editor.c:239
 msgid "_Replace"
@@ -2979,7 +2979,7 @@ msgstr "Tem de inserir uma quantia válida."
 
 #: gnucash/gnome/dialog-print-check.c:823
 msgid "Cannot save check format file."
-msgstr "Impossível gravar ficheiro de formato de cheque."
+msgstr "Impossível gravar ficheiro de formato do cheque."
 
 #: gnucash/gnome/dialog-print-check.c:825
 #, c-format
@@ -3002,8 +3002,8 @@ msgid ""
 "The GUIDs in the %s check format file '%s' and the %s check format file '%s' "
 "match."
 msgstr ""
-"Os GUID no cheque %s do ficheiro de formato \"%s\" e o cheque %s do ficheiro "
-"de formato \"%s\" coincidem."
+"Os GUIDs do formato %s do ficheiro de cheque \"%s\" e o formato %s do "
+"ficheiro de cheque \"%s\" coincidem."
 
 #. Translators: This is a directory name. It may be presented to
 #. * the user to indicate that some data file was defined by the
@@ -3395,7 +3395,7 @@ msgstr "N.º de fornecedor"
 
 #: gnucash/gnome/dialog-vendor.c:743
 msgid "Find Vendor"
-msgstr "Procurar fornecedor"
+msgstr "Localizar fornecedor"
 
 #: gnucash/gnome/gnc-budget-view.c:502
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2941
@@ -3669,10 +3669,10 @@ msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transactions automatically created)"
 msgstr[0] ""
-"Não há Transacções agendadas para registar, por agora. (%d transacção criada "
-"automaticamente)"
+"De momento, não há transacções agendadas para registar. (%d transacção "
+"criada automaticamente)"
 msgstr[1] ""
-"Não há transacções agendadas para registar, por agora. (%d transacções "
+"De momento, não há transacções agendadas para registar. (%d transacções "
 "criadas automaticamente)"
 
 #: gnucash/gnome/gnc-plugin-budget.c:63
@@ -4375,7 +4375,7 @@ msgstr "Todas as transacções da sub-conta serão eliminadas."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1762
 msgid "Are you sure you want to do this?"
-msgstr "Deseja realmente eliminar esta linha?"
+msgstr "Deseja realmente fazer isto?"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:147
 msgid "Open the selected account."
@@ -4689,11 +4689,11 @@ msgstr "Abri d_ocumento ligado"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:310
 msgid "_Use as Default Layout for Customer Documents"
-msgstr "_Usar como disposição predefinida para documentos de cliente"
+msgstr "_Usar como disposição pré-definida para documentos de cliente"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:311
 msgid "_Reset Default Layout for Customer Documents"
-msgstr "_Repor disposição predefinida para documentos de cliente"
+msgstr "_Repor disposição pré-definida para documentos de cliente"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:317
 msgid "_Print Bill"
@@ -4725,11 +4725,11 @@ msgstr "_Pagar factura"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:331
 msgid "_Use as Default Layout for Vendor Documents"
-msgstr "_Usar como disposição predefinida para documentos de fornecedor"
+msgstr "_Usar como disposição pré-definida para documentos de fornecedor"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:332
 msgid "_Reset Default Layout for Vendor Documents"
-msgstr "_Repor disposição predefinida para documentos de fornecedor"
+msgstr "_Repor disposição pré-definida para documentos de fornecedor"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:338
 msgid "_Print Voucher"
@@ -4761,11 +4761,11 @@ msgstr "_Pagar vale"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:352
 msgid "_Use as Default Layout for Employee Documents"
-msgstr "_Usar como disposição predefinida para documentos de empregado"
+msgstr "_Usar como disposição pré-definida para documentos de empregado"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:353
 msgid "_Reset Default Layout for Employee Documents"
-msgstr "_Repor disposição predefinida para documentos de empregado"
+msgstr "_Repor disposição pré-definida para documentos de empregado"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:359
 msgid "_Print Credit Note"
@@ -4843,15 +4843,15 @@ msgstr "Abrir documento ligado"
 msgid ""
 "Use the current layout as default for all customer invoices and credit notes"
 msgstr ""
-"Usar a disposição actual como predefinição para todas as facturas e notas de "
-"crédito de cliente"
+"Usar a disposição actual como pré-definição para todas as facturas e notas "
+"de crédito de cliente"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:389
 msgid ""
 "Reset default layout for all customer invoices and credit notes back to "
 "built-in defaults and update the current page accordingly"
 msgstr ""
-"Repor disposição interna predefinida para todas as facturas e notas de "
+"Repor disposição interna pré-definida para todas as facturas e notas de "
 "crédito de cliente e actualizar a página actual"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:394
@@ -4894,15 +4894,15 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-invoice.c:409
 msgid "Use the current layout as default for all vendor bills and credit notes"
 msgstr ""
-"Usar a disposição actual como predefinição para todas as facturas e notas de "
-"crédito de fornecedor"
+"Usar a disposição actual como pré-definição para todas as facturas e notas "
+"de crédito de fornecedor"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:410
 msgid ""
 "Reset default layout for all vendor bills and credit notes back to built-in "
 "defaults and update the current page accordingly"
 msgstr ""
-"Repor disposição predefinida para todas as facturas e notas de crédito de "
+"Repor disposição pré-definida para todas as facturas e notas de crédito de "
 "fornecedor e actualizar a página actual"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:415
@@ -4945,7 +4945,7 @@ msgstr "Abrir uma janela de relatório de empregados para o titular deste vale"
 msgid ""
 "Use the current layout as default for all employee vouchers and credit notes"
 msgstr ""
-"Usar a disposição actual como predefinição para todos os vales e notas de "
+"Usar a disposição actual como pré-definição para todos os vales e notas de "
 "crédito de empregado"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:431
@@ -4953,7 +4953,7 @@ msgid ""
 "Reset default layout for all employee vouchers and credit notes back to "
 "built-in defaults and update the current page accordingly"
 msgstr ""
-"Repor disposição predefinida para todos os vales e notas de crédito de "
+"Repor disposição pré-definida para todos os vales e notas de crédito de "
 "empregado e actualizar a página actual"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:436
@@ -5351,7 +5351,7 @@ msgstr "An_ular transacção"
 #: gnucash/gnome/gnc-plugin-page-register2.c:319
 #: gnucash/gnome/gnc-plugin-page-register.c:433
 msgid "_Unvoid Transaction"
-msgstr "Resta_urar transacção"
+msgstr "Re_validar transacção"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:323
 #: gnucash/gnome/gnc-plugin-page-register.c:437
@@ -9557,7 +9557,7 @@ msgstr "GCCP"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2943
 #: gnucash/register/ledger-core/split-register.c:2638
 msgid "Dist"
-msgstr "Dist"
+msgstr "Distribuição"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:45
 #: gnucash/import-export/import-main-matcher.c:1862
@@ -9616,7 +9616,7 @@ msgstr ""
 #: gnucash/register/ledger-core/split-register.c:2091
 #: gnucash/register/ledger-core/split-register.c:2094
 msgid "_Shares"
-msgstr "_Acções"
+msgstr "Acçõe_s"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1130
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1137
@@ -17816,11 +17816,11 @@ msgstr "Meio"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:281
 msgid "Quicken/QuickBooks (tm) US-Letter"
-msgstr "Quicken/QuickBooks (tm) US-Letter"
+msgstr "Letra US Quicken/QuickBooks (tm)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:284
 msgid "Deluxe(tm) Personal Checks US-Letter"
-msgstr "Deluxe(tm) Personal Checks US-Letter"
+msgstr "Letra US Deluxe(tm) Personal Checks"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:287
 msgid "Quicken(tm) Wallet Checks w/ side stub"
@@ -19292,8 +19292,8 @@ msgid ""
 "Match the \"day of week\" and \"week of month\"? (for example, the \"second "
 "Tuesday\" of every month)"
 msgstr ""
-"Corresponder \"dia da semana\" com \"semana do mês\" (por ex., \"2ª Terça\" "
-"de cada mês)?"
+"Corresponder \"dia da semana\" com \"semana do mês\" (e.g., \"2ª Terça\" de "
+"cada mês)?"
 
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:62
 msgid "Only show _active owners"
@@ -22865,7 +22865,7 @@ msgstr ""
 
 #: gnucash/register/ledger-core/split-register-model.c:254
 msgid "Ref"
-msgstr "Ref"
+msgstr "Ref."
 
 #: gnucash/register/ledger-core/split-register-model.c:270
 msgid "T-Ref"
@@ -22888,7 +22888,7 @@ msgstr "Out. moeda"
 #: gnucash/register/ledger-core/split-register-model.c:463
 #, c-format
 msgid "Tot %s"
-msgstr "Tot %s"
+msgstr "Total %s"
 
 #: gnucash/register/ledger-core/split-register-model.c:445
 msgid "Tot Credit"
@@ -25903,7 +25903,7 @@ msgstr "Orç: ~a Act: ~a"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:206
 msgid "Actual"
-msgstr "Actual"
+msgstr "Real"
 
 #: gnucash/report/reports/standard/budget-flow.scm:36
 msgid "Budget Flow"
@@ -26165,7 +26165,7 @@ msgstr "Orç"
 #. Translators: Abbreviation for "Actual" amount
 #: gnucash/report/reports/standard/budget.scm:529
 msgid "Act"
-msgstr "Act"
+msgstr "Real"
 
 #. Translators: Abbreviation for "Difference" amount
 #: gnucash/report/reports/standard/budget.scm:534
@@ -29403,7 +29403,7 @@ msgstr "URL da empresa"
 
 #: libgnucash/app-utils/business-options.scm:74
 msgid "Company Email Address"
-msgstr "Correio da empresa"
+msgstr "Correio electrónico da empresa"
 
 #: libgnucash/app-utils/business-options.scm:75
 msgid "Company Contact Person"
@@ -29703,7 +29703,7 @@ msgstr "Orçamento a usar quando nenhum outro foi especificado."
 
 #: libgnucash/app-utils/business-prefs.scm:173
 msgid "The electronic tax number of your business"
-msgstr "O número fiscal electrónico da sua empresa."
+msgstr "O número fiscal electrónico da sua empresa"
 
 #: libgnucash/app-utils/date-utilities.scm:533
 #, scheme-format
@@ -29717,19 +29717,19 @@ msgstr ""
 
 #: libgnucash/app-utils/date-utilities.scm:933
 msgid "First day of the current calendar year."
-msgstr "Primeiro dia do ano do calendário actual."
+msgstr "Primeiro dia do ano civil actual."
 
 #: libgnucash/app-utils/date-utilities.scm:940
 msgid "Last day of the current calendar year."
-msgstr "Último dia do ano do calendário actual."
+msgstr "Último dia do ano civil actual."
 
 #: libgnucash/app-utils/date-utilities.scm:947
 msgid "First day of the previous calendar year."
-msgstr "Primeiro dia do ano do calendário anterior."
+msgstr "Primeiro dia do ano civil anterior."
 
 #: libgnucash/app-utils/date-utilities.scm:954
 msgid "Last day of the previous calendar year."
-msgstr "Último dia do ano do calendário anterior."
+msgstr "Último dia do ano civil anterior."
 
 #: libgnucash/app-utils/date-utilities.scm:958
 msgid "Start of next year"

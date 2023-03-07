@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-01-02 04:51+0000\n"
+"PO-Revision-Date: 2023-03-04 11:38+0000\n"
 "Last-Translator: J0kWang <lianjiefly@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -40,7 +40,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.15.1-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -9163,7 +9163,7 @@ msgstr "直接借记"
 #: libgnucash/engine/Account.cpp:151 libgnucash/engine/Account.cpp:152
 #: libgnucash/engine/Account.cpp:153
 msgid "Buy"
-msgstr "采购"
+msgstr "买入"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2872
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2876
@@ -9186,7 +9186,7 @@ msgstr "采购"
 #: libgnucash/engine/Account.cpp:171 libgnucash/engine/Account.cpp:172
 #: libgnucash/engine/Account.cpp:173
 msgid "Sell"
-msgstr "销售"
+msgstr "卖出"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2877
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2884
@@ -18623,8 +18623,8 @@ msgid ""
 "See <a href=\"https://wiki.gnucash.org/wiki/AqBanking\">https://wiki.gnucash."
 "org/wiki/AqBanking</a> for more details"
 msgstr ""
-"查看 <a href=\"https://wiki.gnucash.org/wiki/AqBanking\">https://wiki.gnucash"
-".org/wiki/AqBanking</a> 更多详情"
+"点击 <a href=\"https://wiki.gnucash.org/wiki/AqBanking\">https://wiki.gnucash"
+".org/wiki/AqBanking</a> 查看更多详细信息"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:78
 msgid ""
