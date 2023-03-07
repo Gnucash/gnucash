@@ -83,7 +83,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-06 23:38+0000\n"
+"PO-Revision-Date: 2023-03-07 11:40+0000\n"
 "Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/es/>\n"
@@ -1725,7 +1725,7 @@ msgstr "%s Desglose"
 #. Translators: StockAssistant: N/A denotes stock price is not computable
 #: gnucash/gnome/assistant-stock-transaction.cpp:565
 msgid "N/A"
-msgstr ""
+msgstr "N/A"
 
 #. Translators: (missing) denotes that the amount or account is
 #. not provided, or incorrect, in the Stock Transaction Assistant.
@@ -7017,11 +7017,11 @@ msgstr "Ocultar cuentas ocultas"
 
 #: gnucash/gnome-utils/gnc-account-sel.c:723
 msgid "Set the visibility of placeholder and hidden accounts."
-msgstr ""
+msgstr "Establecer la visibilidad de las cuentas contenedor y ocultas."
 
 #: gnucash/gnome-utils/gnc-account-sel.c:994
 msgid "New…"
-msgstr ""
+msgstr "Nuevo…"
 
 #: gnucash/gnome-utils/gnc-amount-edit.c:410
 #: gnucash/register/register-core/formulacell.c:121
@@ -18743,7 +18743,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:6
 msgid "Import using AQBanking"
-msgstr ""
+msgstr "Importar usando AQBanking"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:8
 msgid "Import into GnuCash any file format supported by AQBanking"
@@ -19505,7 +19505,7 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1427
 msgid "This line has the following parse issues:"
-msgstr ""
+msgstr "Esta línea tiene los siguientes problemas de interpretación:"
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1771
 msgid "No Linked Account"
@@ -19777,7 +19777,7 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:550
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:630
 msgid "{1}: {2}"
-msgstr ""
+msgstr "{1}: {2}"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:279
 msgid "No date column."
@@ -19809,7 +19809,7 @@ msgstr "Cantidad (negada)"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:71
 msgid "Value (Negated)"
-msgstr ""
+msgstr "Valor (Negado)"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:76
 msgid "Transfer Action"
@@ -19840,8 +19840,11 @@ msgid "Value can't be parsed into a valid reconcile state."
 msgstr "El valor no puede ser interpretado dentro de un estado conciliado."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:246
+#, fuzzy
 msgid "Date field can not be empty if 'Multi-split' option is unset.\n"
 msgstr ""
+"El campo fecha no puede estar vacío si la opción 'Multi-split' no esta "
+"definida.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:262
 msgid "Description field can not be empty if 'Multi-split' option is unset.\n"
@@ -20652,7 +20655,7 @@ msgstr "Encontrando transacciones duplicadas"
 #: gnucash/import-export/qif-imp/qif-parse.scm:174
 #, scheme-format
 msgid "The account type ~s is unknown, using Bank instead."
-msgstr ""
+msgstr "El tipo de cuenta ~s es desconocido, usando Banco en su lugar."
 
 #. Translators: This is an error message about actions like buy, sell …
 #: gnucash/import-export/qif-imp/qif-parse.scm:238
@@ -20665,6 +20668,8 @@ msgstr "Función «~a» no conciliada."
 #, scheme-format
 msgid "The unknown reconciliation status '~a' will be replaced by 'uncleared'."
 msgstr ""
+"El estado de reconciliación desconocido '~a' será reemplazado por 'no "
+"liquidado'."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:213
 msgid "QIF import: Name conflict with another account."
@@ -22425,7 +22430,7 @@ msgstr "Título para este boletín."
 #: gnucash/report/reports/example/sample-report.scm:119
 #: gnucash/report/reports/example/sample-report.scm:131
 msgid "Tab B"
-msgstr ""
+msgstr "Pestaña B"
 
 #: gnucash/report/reports/example/sample-report.scm:61
 msgid "Boolean Option"
@@ -22519,7 +22524,7 @@ msgstr "Esta es una opción de color."
 #: gnucash/report/reports/example/sample-report.scm:147
 #: gnucash/report/reports/example/sample-report.scm:158
 msgid "Tab A"
-msgstr ""
+msgstr "Pestaña A"
 
 #: gnucash/report/reports/example/sample-report.scm:147
 msgid "An account list option"
@@ -25686,7 +25691,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:256
 msgid "Show unrealized gain table column(s) for unsold shares"
-msgstr ""
+msgstr "Mostrar columna(s) de ganancias no realizadas para acciones no vendidas"
 
 #: gnucash/report/reports/standard/investment-lots.scm:263
 msgid "Group gains (and sales?) by long-term (LT) and short-term (ST)"
@@ -25720,7 +25725,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:307
 msgid "Include closed lots in addition to open lots"
-msgstr ""
+msgstr "Incluir lotes cerrados además de los lotes abiertos"
 
 #: gnucash/report/reports/standard/investment-lots.scm:314
 msgid ""
@@ -30191,7 +30196,7 @@ msgstr "Error numérico"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:156
 msgid "Failed to initialize Finance::Quote: "
-msgstr ""
+msgstr "Fallo la inicialización de Finance::Quote: "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:163
 msgid "Finance::Quote check returned error "
@@ -30203,7 +30208,7 @@ msgstr "Sin versión de Finance::Quote"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:282
 msgid "GncQuotes::Fetch called with no book."
-msgstr ""
+msgstr "GncQuotes::Fetch fue llamado sin libro."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:300
 msgid "GncQuotes::Fetch called with no commodities."
