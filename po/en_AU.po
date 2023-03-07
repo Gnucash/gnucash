@@ -10,10 +10,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-04 21:44+0000\n"
+"PO-Revision-Date: 2023-03-05 00:52+0000\n"
 "Last-Translator: Simon Arlott <weblate.simon@arlott.org>\n"
 "Language-Team: English (Australia) <https://hosted.weblate.org/projects/"
 "gnucash/program-beta/en_AU/>\n"
@@ -7341,17 +7341,14 @@ msgid "Continue _Without Saving"
 msgstr "Continue _Without Saving"
 
 #: gnucash/gnome-utils/gnc-file.c:715
-#, fuzzy
-#| msgid ""
-#| "This book has budgets. The internal representation of amounts is now "
-#| "fixed. Please review budgets and amend signs if necessary."
 msgid ""
 "This book has budgets. The internal representation of budget amounts no "
 "longer depends on the Reverse Balanced Accounts preference. Please review "
 "the budgets and amend signs if necessary."
 msgstr ""
-"This book has budgets. The internal representation of amounts is now fixed. "
-"Please review budgets and amend signs if necessary."
+"This book has budgets. The internal representation of budget amounts no "
+"longer depends on the Reverse Balanced Accounts preference. Please review "
+"the budgets and amend signs if necessary."
 
 #: gnucash/gnome-utils/gnc-file.c:844
 #, c-format
@@ -10801,20 +10798,14 @@ msgid "Setup Account Period"
 msgstr "Setup Account Period"
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:38
-#, fuzzy
-#| msgid ""
-#| "Select an accounting period and the closing date which must not be in the "
-#| "future, but is greater than the closing date of the previous book.\n"
-#| "\n"
-#| "Books will be closed at midnight on the selected date."
 msgid ""
 "Select an accounting period and a closing date that is between the date of "
 "the previous close and today.\n"
 "\n"
 "Books will be closed at midnight on the selected date."
 msgstr ""
-"Select an accounting period and the closing date which must not be in the "
-"future, but is greater than the closing date of the previous book.\n"
+"Select an accounting period and a closing date that is between the date of "
+"the previous close and today.\n"
 "\n"
 "Books will be closed at midnight on the selected date."
 
@@ -11851,9 +11842,6 @@ msgid "Loan Details"
 msgstr "Loan Details"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:451
-#, fuzzy
-#| msgid ""
-#| "Do you utilise an escrow account, if so an account must be specified…"
 msgid "Do you utilize an escrow account, if so an account must be specified…"
 msgstr "Do you utilise an escrow account, if so an account must be specified…"
 
@@ -17927,10 +17915,6 @@ msgid "File Format"
 msgstr "File Format"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1779
-#, fuzzy
-#| msgid ""
-#| "This list one or more specialization templates that adjust the import for "
-#| "different banks uses of fields in the selected import format."
 msgid ""
 "This lists one or more specialization templates that adjust the import for "
 "different banks' uses of fields in the selected import format."
@@ -20275,10 +20259,9 @@ msgstr "Finding duplicate transactions"
 #. Translators: Mapping the QIF account type to a GnuCash account type.
 #. see https://en.wikipedia.org/wiki/Quicken_Interchange_Format#Detail_items
 #: gnucash/import-export/qif-imp/qif-parse.scm:174
-#, fuzzy, scheme-format
-#| msgid "The account type ~s is unknown, using 'bank' instead."
+#, scheme-format
 msgid "The account type ~s is unknown, using Bank instead."
-msgstr "The account type ~s is unknown, using 'bank' instead."
+msgstr "The account type ~s is unknown, using Bank instead."
 
 #. Translators: This is an error message about actions like buy, sell …
 #: gnucash/import-export/qif-imp/qif-parse.scm:238
@@ -24926,10 +24909,8 @@ msgid "Plot height"
 msgstr "Plot height"
 
 #: gnucash/report/reports/standard/investment-lots.scm:57
-#, fuzzy
-#| msgid "Show the lot GUID table column"
 msgid "Show lot GUID column"
-msgstr "Show the lot GUID table column"
+msgstr "Show lot GUID column"
 
 #: gnucash/report/reports/standard/investment-lots.scm:58
 msgid "Show date columns"
@@ -27935,16 +27916,12 @@ msgstr "_Double Line"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:83
 #: gnucash/ui/gnc-plugin-page-register.ui:99
-#, fuzzy
-#| msgid ""
-#| "Show a second line with \"Action\", \"Notes\", and \"Linked Documents\" "
-#| "for each transaction."
 msgid ""
 "Show a second line with Action, Notes, and Linked Document fields for each "
 "transaction"
 msgstr ""
-"Show a second line with \"Action\", \"Notes\", and \"Linked Documents\" for "
-"each transaction."
+"Show a second line with Action, Notes, and Linked Document fields for each "
+"transaction"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:92
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:125
