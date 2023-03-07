@@ -11,14 +11,15 @@
 # Moritz Höppner <moritz.hoeppner@resourcify.de>, 2021.
 # Tobias Mohr <tobias_mohr_1991@gmx.de>, 2021.
 # Christian Wehling <christian.wehling@web.de>, 2022.
+# Joachim Wetzig <jo.wetzig@web.de>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-08-01 18:18+0000\n"
-"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
+"PO-Revision-Date: 2023-03-05 22:39+0000\n"
+"Last-Translator: Joachim Wetzig <jo.wetzig@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/glossary/"
 "de/>\n"
 "Language: de\n"
@@ -26,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -414,7 +415,6 @@ msgid "document link"
 msgstr "Verknüpfung, Verknüpftes Dokument"
 
 #. "The last day to pay an invoice in time."
-#, fuzzy
 msgid "due date"
 msgstr "Fälligkeitsdatum"
 
