@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-06 16:40+0000\n"
+"PO-Revision-Date: 2023-03-07 17:39+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hu/>\n"
@@ -6108,7 +6108,7 @@ msgstr "_Új tétel"
 #: gnucash/gtkbuilder/dialog-commodities.glade:121
 #: gnucash/gtkbuilder/dialog-price.glade:848
 msgid "_Add"
-msgstr "_Hozzáadás"
+msgstr "Új _hozzáadása"
 
 #: gnucash/gnome-search/dialog-search.c:1172
 msgid "all criteria are met"
