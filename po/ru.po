@@ -22,7 +22,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-01-20 19:01+0000\n"
+"PO-Revision-Date: 2023-03-06 10:41+0000\n"
 "Last-Translator: Vin <k3kelm4vw@mozmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ru/>\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 4.15.1\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 "X-Source-Language: C\n"
 
 # For the translation in '../borrowed/goffice/go-charmap-sel.c' see 
@@ -2209,13 +2209,12 @@ msgid "Bayesian"
 msgstr "Байесовский"
 
 #: gnucash/gnome/dialog-imap-editor.c:721
-#, fuzzy
 msgid "Description Field"
-msgstr "Описание"
+msgstr "Поле описания"
 
 #: gnucash/gnome/dialog-imap-editor.c:724
 msgid "Memo Field"
-msgstr ""
+msgstr "Поле памятки"
 
 #: gnucash/gnome/dialog-imap-editor.c:727
 #, fuzzy
@@ -2223,14 +2222,12 @@ msgid "CSV Account Map"
 msgstr "Название счёта"
 
 #: gnucash/gnome/dialog-imap-editor.c:767
-#, fuzzy
 msgid "Online Id"
-msgstr "Онлайн"
+msgstr "Онлайн-идентификатор"
 
 #: gnucash/gnome/dialog-imap-editor.c:793
-#, fuzzy
 msgid "Online HBCI"
-msgstr "Онлайн"
+msgstr "Онлайн HBCI"
 
 #. Translators: In this context,
 #. 'Billing information' maps to the
