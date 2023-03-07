@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-01-02 15:48+0000\n"
+"PO-Revision-Date: 2023-03-04 16:40+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15.1-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -1677,15 +1677,15 @@ msgstr "Upiši URL u obliku https://www.gnucash.org:"
 
 #: gnucash/gnome/dialog-doclink.c:259
 msgid "Existing Document Link is"
-msgstr "Postojeća poveznica dokumenta je"
+msgstr "Postojeća poveznica na dokument je"
 
 #: gnucash/gnome/dialog-doclink.c:530 gnucash/gnome/dialog-doclink.c:575
 msgid "File Found"
-msgstr "Datoteka je nađena"
+msgstr "Datoteka je pronađena"
 
 #: gnucash/gnome/dialog-doclink.c:532
 msgid "File Not Found"
-msgstr "Datoteka nije nađena"
+msgstr "Datoteka nije pronađena"
 
 #: gnucash/gnome/dialog-doclink.c:545
 msgid "Address Found"
