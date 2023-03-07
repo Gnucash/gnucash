@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-07 06:57+0000\n"
+"PO-Revision-Date: 2023-03-07 08:39+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/pt/>\n"
@@ -1311,7 +1311,7 @@ msgstr "Parcelas"
 
 #: gnucash/gnome/assistant-stock-split.c:417
 msgid "Error adding price."
-msgstr "Erro ao adicionar cotação."
+msgstr "Erro ao adicionar preço."
 
 #: gnucash/gnome/assistant-stock-split.c:582
 #: gnucash/gnome/assistant-stock-transaction.cpp:1263
@@ -2638,7 +2638,7 @@ msgstr "Reconciliar"
 
 #: gnucash/gnome/dialog-find-transactions.c:120
 msgid "Share Price"
-msgstr "Cotação de acção"
+msgstr "Preço da acção"
 
 #: gnucash/gnome/dialog-find-transactions.c:124
 #: gnucash/gnome/dialog-lot-viewer.c:1020
