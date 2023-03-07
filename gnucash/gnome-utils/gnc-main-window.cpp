@@ -3764,7 +3764,9 @@ gnc_main_window_update_menu_and_toolbar (GncMainWindow *window,
 
     GMenuModel *menu_model_part;
     GncMenuModelSearch *gsm = g_new0 (GncMenuModelSearch, 1);
-
+#ifdef MAC_INTEGRATION
+    auto theApp{static_cast<GtkosxApplication *>(g_object_new(GTKOSX_TYPE_APPLICATION, nullptr))};
+#endif
     g_return_if_fail (GNC_IS_MAIN_WINDOW(window));
     g_return_if_fail (page != nullptr);
     g_return_if_fail (ui_updates != nullptr);
@@ -3833,7 +3835,10 @@ gnc_main_window_update_menu_and_toolbar (GncMainWindow *window,
 
     // need to add the accelerator keys
     gnc_add_accelerator_keys_for_menu (priv->menubar, priv->accel_group);
-
+#ifdef MAC_INTEGRATION
+    gtkosx_application_sync_menubar (theApp);
+    g_object_unref (theApp);
+#endif
     // need to signal menu has been changed
     g_signal_emit_by_name (window, "menu_changed", page);
 

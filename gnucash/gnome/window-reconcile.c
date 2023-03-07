@@ -1778,6 +1778,15 @@ static GActionEntry recWindow_actions_entries [] =
 /** The number of actions provided by the reconcile window. */
 static guint recnWindow_n_actions_entries = G_N_ELEMENTS(recWindow_actions_entries);
 
+#ifdef MAC_INTEGRATION
+/* Enable GtkMenuItem accelerators */
+static gboolean
+can_activate_cb(GtkWidget *widget, guint signal_id, gpointer data)
+{
+    //return gtk_widget_is_sensitive (widget);
+    return TRUE;
+}
+#endif
 
 /********************************************************************\
  * recnWindowWithBalance
@@ -1849,10 +1858,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
         GtkAccelGroup *accel_group = gtk_accel_group_new ();
         const gchar *ui = GNUCASH_RESOURCE_PREFIX "/gnc-reconcile-window.ui";
         GError *error = NULL;
-#ifdef MAC_INTEGRATION
-        GtkosxApplication *theApp = g_object_new (GTKOSX_TYPE_APPLICATION,
-                                                  NULL);
-#endif
+
         recnData->builder = gtk_builder_new ();
 
         gtk_builder_add_from_resource (recnData->builder, ui, &error);
@@ -1871,15 +1877,14 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
         menu_model = (GMenuModel *)gtk_builder_get_object (recnData->builder, "recwin-menu");
         menu_bar = gtk_menu_bar_new_from_model (menu_model);
         gtk_container_add (GTK_CONTAINER(vbox), menu_bar);
-#if MAC_INTEGRATION
+#ifdef MAC_INTEGRATION
+        GtkosxApplication *theApp = g_object_new (GTKOSX_TYPE_APPLICATION, NULL);
         gtk_widget_hide (menu_bar);
         gtk_widget_set_no_show_all (menu_bar, TRUE);
         if (GTK_IS_MENU_ITEM (menu_bar))
             menu_bar = gtk_menu_item_get_submenu (GTK_MENU_ITEM (menu_bar));
 
         gtkosx_application_set_menu_bar (theApp, GTK_MENU_SHELL (menu_bar));
-        g_object_unref (theApp);
-        theApp = NULL;
 #endif
         tool_bar = (GtkToolbar *)gtk_builder_get_object (recnData->builder, "recwin-toolbar");
 
@@ -1893,6 +1898,14 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
 
         // need to add the accelerator keys
         gnc_add_accelerator_keys_for_menu (menu_bar, accel_group);
+
+#ifdef MAC_INTEGRATION
+        gtkosx_application_sync_menubar (theApp);
+        g_signal_connect (menu_bar, "can-activate-accel",
+                          G_CALLBACK(can_activate_cb), NULL);
+        g_object_unref (theApp);
+        theApp = NULL;
+#endif
 
         recnData->simple_action_group = g_simple_action_group_new ();
 
