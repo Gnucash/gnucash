@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-06 07:50+0000\n"
+"PO-Revision-Date: 2023-03-07 06:57+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/pt/>\n"
@@ -3490,9 +3490,9 @@ msgid ""
 "\" before you continue to process this payment. Perhaps you want to create "
 "an Invoice or Bill first?"
 msgstr ""
-"Não tem contas \"Emitir para\" válidas. Por favor, crie uma conta do tipo "
-"\"%s\" antes de continuar a processar este pagamento. Talvez queira criar "
-"uma factura ou um pagamento primeiro?"
+"Não tem contas \"Emitir para\" válidas. Por favor, crie uma conta do tipo \"%"
+"s\" antes de continuar a processar este pagamento. Talvez queira criar uma "
+"factura ou um pagamento primeiro?"
 
 #: gnucash/gnome/dialog-payment.c:1574
 #: gnucash/gnome/gnc-plugin-page-register.c:3220
@@ -3572,12 +3572,12 @@ msgstr ""
 #, c-format
 msgid "Are you sure you want to delete the selected price?"
 msgid_plural "Are you sure you want to delete the %d selected prices?"
-msgstr[0] "Deseja realmente eliminar a cotação seleccionada?"
-msgstr[1] "Deseja realmente eliminar as %d cotações seleccionadas?"
+msgstr[0] "Deseja realmente eliminar o preço seleccionado?"
+msgstr[1] "Deseja realmente eliminar os %d preços seleccionados?"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:209
 msgid "Delete prices?"
-msgstr "Eliminar cotações?"
+msgstr "Eliminar preços?"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:416
 #: gnucash/gtkbuilder/dialog-invoice.glade:617
@@ -3589,7 +3589,7 @@ msgstr "Entradas"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:446
 msgid "Are you sure you want to delete these prices?"
-msgstr "Deseja realmente eliminar estas cotações?"
+msgstr "Deseja realmente eliminar estes preços?"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:572
 #: gnucash/gnome-utils/dialog-transfer.cpp:1797
@@ -3599,11 +3599,11 @@ msgstr "Falha ao obter preços: %s"
 
 #: gnucash/gnome/dialog-price-editor.c:227
 msgid "Are you sure you want to replace the existing price?"
-msgstr "Deseja realmente substituir a cotação existente?"
+msgstr "Deseja realmente substituir o preço existente?"
 
 #: gnucash/gnome/dialog-price-editor.c:233
 msgid "Replace price?"
-msgstr "Substituir cotação?"
+msgstr "Substituir preço?"
 
 #: gnucash/gnome/dialog-price-editor.c:239
 msgid "_Replace"
@@ -3624,7 +3624,7 @@ msgstr "Tem de inserir uma quantia válida."
 
 #: gnucash/gnome/dialog-print-check.c:823
 msgid "Cannot save check format file."
-msgstr "Impossível gravar ficheiro de formato de cheque."
+msgstr "Impossível gravar ficheiro de formato do cheque."
 
 #: gnucash/gnome/dialog-print-check.c:825
 #, c-format
@@ -3647,8 +3647,8 @@ msgid ""
 "The GUIDs in the %s check format file '%s' and the %s check format file '%s' "
 "match."
 msgstr ""
-"Os GUID no cheque %s do ficheiro de formato \"%s\" e o cheque %s do ficheiro "
-"de formato \"%s\" coincidem."
+"Os GUIDs do formato %s do ficheiro de cheque \"%s\" e o formato %s do "
+"ficheiro de cheque \"%s\" coincidem."
 
 #. Translators: This is a directory name. It may be presented to
 #. * the user to indicate that some data file was defined by the
@@ -3988,7 +3988,7 @@ msgstr "N.º de fornecedor"
 
 #: gnucash/gnome/dialog-vendor.c:740
 msgid "Find Vendor"
-msgstr "Procurar fornecedor"
+msgstr "Localizar fornecedor"
 
 #: gnucash/gnome/gnc-budget-view.c:500
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:70
@@ -4066,10 +4066,10 @@ msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transactions automatically created)"
 msgstr[0] ""
-"Não há Transacções agendadas para registar, por agora. (%d transacção criada "
-"automaticamente)"
+"De momento, não há transacções agendadas para registar. (%d transacção "
+"criada automaticamente)"
 msgstr[1] ""
-"Não há transacções agendadas para registar, por agora. (%d transacções "
+"De momento, não há transacções agendadas para registar. (%d transacções "
 "criadas automaticamente)"
 
 #: gnucash/gnome/gnc-plugin-budget.c:328
@@ -4232,7 +4232,7 @@ msgstr "Todas as transacções da sub-conta serão eliminadas."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1642
 msgid "Are you sure you want to do this?"
-msgstr "Deseja realmente eliminar esta linha?"
+msgstr "Deseja realmente fazer isto?"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:182
 #: gnucash/gnome/gnc-plugin-page-report.cpp:225
@@ -4428,19 +4428,19 @@ msgstr "Abrir documento ligado"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:216
 msgid "_Use as Default Layout for Customer Documents"
-msgstr "_Usar como disposição predefinida para documentos de cliente"
+msgstr "_Usar como disposição pré-definida para documentos de cliente"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:217
 #: gnucash/ui/gnc-plugin-page-invoice.ui:66
 msgid ""
 "Use the current layout as default for all customer invoices and credit notes"
 msgstr ""
-"Usar a disposição actual como predefinição para todas as facturas e notas de "
-"crédito de cliente"
+"Usar a disposição actual como pré-definição para todas as facturas e notas "
+"de crédito de cliente"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:218
 msgid "_Reset Default Layout for Customer Documents"
-msgstr "_Repor disposição predefinida para documentos de cliente"
+msgstr "_Repor disposição pré-definida para documentos de cliente"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:219
 #: gnucash/ui/gnc-plugin-page-invoice.ui:72
@@ -4448,7 +4448,7 @@ msgid ""
 "Reset default layout for all customer invoices and credit notes back to "
 "built-in defaults and update the current page accordingly"
 msgstr ""
-"Repor disposição interna predefinida para todas as facturas e notas de "
+"Repor disposição interna pré-definida para todas as facturas e notas de "
 "crédito de cliente e actualizar a página actual"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:225
@@ -4518,24 +4518,24 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:241
 msgid "_Use as Default Layout for Vendor Documents"
-msgstr "_Usar como disposição predefinida para documentos de fornecedor"
+msgstr "_Usar como disposição pré-definida para documentos de fornecedor"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:242
 msgid "Use the current layout as default for all vendor bills and credit notes"
 msgstr ""
-"Usar a disposição actual como predefinição para todas as facturas e notas de "
-"crédito de fornecedor"
+"Usar a disposição actual como pré-definição para todas as facturas e notas "
+"de crédito de fornecedor"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:243
 msgid "_Reset Default Layout for Vendor Documents"
-msgstr "_Repor disposição predefinida para documentos de fornecedor"
+msgstr "_Repor disposição pré-definida para documentos de fornecedor"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:244
 msgid ""
 "Reset default layout for all vendor bills and credit notes back to built-in "
 "defaults and update the current page accordingly"
 msgstr ""
-"Repor disposição predefinida para todas as facturas e notas de crédito de "
+"Repor disposição pré-definida para todas as facturas e notas de crédito de "
 "fornecedor e actualizar a página actual"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:250
@@ -4604,25 +4604,25 @@ msgstr "Abrir uma janela de relatório de empregados para o titular deste vale"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:266
 msgid "_Use as Default Layout for Employee Documents"
-msgstr "_Usar como disposição predefinida para documentos de empregado"
+msgstr "_Usar como disposição pré-definida para documentos de empregado"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:267
 msgid ""
 "Use the current layout as default for all employee vouchers and credit notes"
 msgstr ""
-"Usar a disposição actual como predefinição para todos os vales e notas de "
+"Usar a disposição actual como pré-definição para todos os vales e notas de "
 "crédito de empregado"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:268
 msgid "_Reset Default Layout for Employee Documents"
-msgstr "_Repor disposição predefinida para documentos de empregado"
+msgstr "_Repor disposição pré-definida para documentos de empregado"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:269
 msgid ""
 "Reset default layout for all employee vouchers and credit notes back to "
 "built-in defaults and update the current page accordingly"
 msgstr ""
-"Repor disposição predefinida para todos os vales e notas de crédito de "
+"Repor disposição pré-definida para todos os vales e notas de crédito de "
 "empregado e actualizar a página actual"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:275
