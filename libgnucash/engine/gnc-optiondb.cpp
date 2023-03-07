@@ -150,7 +150,7 @@ GncOptionSection::remove_option(const char* name)
                                    [name](const auto& option) -> bool
                                    {
                                        return option.get_name() == name;
-                                   }));
+                                   }), m_options.end());
 }
 
 const GncOption*
@@ -355,8 +355,9 @@ GncOptionDB::register_callback(GncOptionDBChangeCallback cb, void* data)
 void
 GncOptionDB::unregister_callback(size_t id)
 {
-    std::remove_if(m_callbacks.begin(), m_callbacks.end(),
-                   [id](auto& cb)->bool { return cb.m_id == id; });
+    m_callbacks.erase(std::remove_if(m_callbacks.begin(), m_callbacks.end(),
+                                     [id](auto& cb)->bool { return cb.m_id == id; }),
+                      m_callbacks.end());
 }
 
 void
