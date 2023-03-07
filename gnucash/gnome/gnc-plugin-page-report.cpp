@@ -1901,8 +1901,9 @@ static gchar *report_create_jobname(GncPluginPageReportPrivate *priv)
                                                                    "Report name");
         if (!report_name_str.empty())
             report_name = g_strdup(report_name_str.c_str());
-        if (report_name)
+        else
             report_name = g_strdup (_(default_jobname));
+
         if (g_strcmp0(report_name, _("Printable Invoice")) == 0
                 || g_strcmp0(report_name, _("Tax Invoice")) == 0
                 || g_strcmp0(report_name, _("Easy Invoice")) == 0
