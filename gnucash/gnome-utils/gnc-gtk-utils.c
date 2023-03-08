@@ -371,15 +371,20 @@ add_accel_for_menu_lookup (GtkWidget *widget, gpointer user_data)
 
         if (accel_label)
         {
+            gboolean added = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(menuItem),
+                                                                "accel-added"));
             guint key;
             GdkModifierType mods;
 
             gtk_accel_label_get_accel (GTK_ACCEL_LABEL(accel_label), &key, &mods);
 
-            if (key > 0)
+            if (key > 0 && !added)
+            {
+                g_object_set_data (G_OBJECT(menuItem), "accel-added", GINT_TO_POINTER(1));
                 gtk_widget_add_accelerator (GTK_WIDGET(widget), "activate",
                                             GTK_ACCEL_GROUP(user_data),
                                             key, mods, GTK_ACCEL_VISIBLE);
+            }
         }
         if (GTK_IS_CONTAINER(subMenu))
             gtk_container_foreach (GTK_CONTAINER(subMenu),
