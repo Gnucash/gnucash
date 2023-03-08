@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-08 17:41+0000\n"
+"PO-Revision-Date: 2023-03-08 21:41+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hu/>\n"
@@ -2004,7 +2004,7 @@ msgstr "Bejövő számla"
 #: gnucash/gnome/dialog-invoice.c:2807 gnucash/gnome/dialog-invoice.c:3033
 #: gnucash/gnome/dialog-invoice.c:3034
 msgid "Voucher"
-msgstr "Bizonylat"
+msgstr "Költségbizonylat"
 
 #: gnucash/gnome/business-gnome-utils.c:342 gnucash/gnome/dialog-doclink.c:821
 #: gnucash/gnome/dialog-invoice.c:3762
@@ -2648,7 +2648,7 @@ msgstr "Alkalmazott szerkesztése/megtekintése"
 
 #: gnucash/gnome/dialog-employee.c:683
 msgid "Expense Vouchers"
-msgstr "Költség bizonylatok"
+msgstr "Költségbizonylatok"
 
 #: gnucash/gnome/dialog-employee.c:693
 msgid "Employee ID"
@@ -3132,11 +3132,11 @@ msgstr "Új költségbizonylat"
 
 #: gnucash/gnome/dialog-invoice.c:2360
 msgid "Edit Expense Voucher"
-msgstr "Költség bizonylat szerkesztése"
+msgstr "Költségbizonylat szerkesztése"
 
 #: gnucash/gnome/dialog-invoice.c:2364
 msgid "View Expense Voucher"
-msgstr "Költség bizonylat megtekintése"
+msgstr "Költségbizonylat megtekintése"
 
 #: gnucash/gnome/dialog-invoice.c:2686
 msgid "Open Linked Document:"
@@ -3153,9 +3153,8 @@ msgid "Bill ID"
 msgstr "Számlaszám"
 
 #: gnucash/gnome/dialog-invoice.c:2806 gnucash/gnome/dialog-invoice.c:3032
-#, fuzzy
 msgid "Voucher Information"
-msgstr "Számlainformáció"
+msgstr "Bizonylat adatai"
 
 #: gnucash/gnome/dialog-invoice.c:2808 gnucash/gnome/dialog-invoice.c:3035
 #: gnucash/gnome/dialog-invoice.c:3643
@@ -3212,7 +3211,7 @@ msgstr "Számla szerkesztése/megtekintése"
 #. interchangeably in gnucash and mean the same thing.
 #: gnucash/gnome/dialog-invoice.c:3533
 msgid "View/Edit Voucher"
-msgstr "Bizonylat szerkesztése/megtekintése"
+msgstr "Költségbizonylat szerkesztése/megtekintése"
 
 #: gnucash/gnome/dialog-invoice.c:3547
 msgid "Invoice Owner"
@@ -3269,11 +3268,11 @@ msgstr ""
 
 #: gnucash/gnome/dialog-invoice.c:3615
 msgid "Voucher Owner"
-msgstr "Bizonylat-tulajdonos"
+msgstr "Bizonylattulajdonos"
 
 #: gnucash/gnome/dialog-invoice.c:3618
 msgid "Voucher Notes"
-msgstr ""
+msgstr "Bizonylat megjegyzések"
 
 #: gnucash/gnome/dialog-invoice.c:3652 gnucash/gnome/dialog-invoice.c:3811
 #: gnucash/gnome/dialog-lot-viewer.c:907 gnucash/gnome/dialog-tax-info.c:1235
@@ -3339,7 +3338,7 @@ msgstr "Számla keresése"
 
 #: gnucash/gnome/dialog-invoice.c:3754
 msgid "Find Expense Voucher"
-msgstr "Költség bizonylat keresése"
+msgstr "Költségbizonylat keresése"
 
 #: gnucash/gnome/dialog-invoice.c:3755
 #: gnucash/gnome-search/dialog-search.c:1088
@@ -4696,36 +4695,32 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:250
-#, fuzzy
 msgid "_Print Voucher"
-msgstr "_Csekk nyomtatása"
+msgstr "_Költségbizonylat nyomtatása"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:250
-#, fuzzy
 msgid "Make a printable voucher"
-msgstr "Nyomtatható számla készítése"
+msgstr "Nyomtatható bizonylat készítése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:251
 msgid "_Edit Voucher"
-msgstr "Utalvány s_zerkesztése"
+msgstr "Költségbizonylat s_zerkesztése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:251
-#, fuzzy
 msgid "Edit this voucher"
-msgstr "E számla szerkesztése"
+msgstr "E bizonylat szerkesztése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:252
 msgid "_Duplicate Voucher"
-msgstr "Utalvány meg_kettőzése"
+msgstr "Költségbizonylat meg_kettőzése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:252
 msgid "Create a new voucher as a duplicate of the current one"
-msgstr "Új nyugta létrehozása a jelenlegi másolataként"
+msgstr "Új bizonylat létrehozása a jelenlegi másolataként"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:253
-#, fuzzy
 msgid "_Post Voucher"
-msgstr "Bizonylat"
+msgstr "Bizonylat _könyvelése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:253
 #, fuzzy
@@ -4733,44 +4728,37 @@ msgid "Post this voucher to your Chart of Accounts"
 msgstr "Számla könyvelése az ön folyószámláira"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:254
-#, fuzzy
 msgid "_Unpost Voucher"
-msgstr "Számla könyvelésének _visszavonása"
+msgstr "Bizonylat könyvelésének _visszavonása"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:254
-#, fuzzy
 msgid "Unpost this voucher and make it editable"
-msgstr "Számla könyvelésének törlése és szerkeszthetővé tétele"
+msgstr "Bizonylat könyvelésének visszavonása és szerkeszthetővé tétele"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:255
-#, fuzzy
 msgid "New _Voucher"
-msgstr "Bizonylat"
+msgstr "Új _költségbizonylat"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:255
-#, fuzzy
 msgid "Create a new voucher for the same owner as the current one"
-msgstr "Új kimenő számla készítése a jelenlegi címzettnek"
+msgstr "Új költségbizonylat készítése a jelenlegi bizonylat tulajdonosának"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:256
-#, fuzzy
 msgid "Move to the blank entry at the bottom of the voucher"
-msgstr "Ugrás a számla alján lévő üres bejegyzésre"
+msgstr "Ugrás a bizonylat alján lévő üres bejegyzésre"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:257
-#, fuzzy
 msgid "_Pay Voucher"
-msgstr "Bizonylat"
+msgstr "Költségbizonylat _kifizetése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:257
-#, fuzzy
 msgid "Enter a payment for the owner of this voucher"
-msgstr "Adjon meg egy fizetési módot a számla tulajdonosának"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:258
 msgid "Open a employee report window for the owner of this voucher"
 msgstr ""
-"Alkalmazott jelentés megnyitása ennek az utalványnak a tulajdonosa számára"
+"Alkalmazott jelentés megnyitása ennek a bizonlyatnak a tulajdonosa számára"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:266
 msgid "_Use as Default Layout for Employee Documents"
@@ -4885,9 +4873,8 @@ msgid "Pay"
 msgstr "Nap"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:231
-#, fuzzy
 msgid "New Voucher"
-msgstr "Bizonylat"
+msgstr "Új költségbizonylat"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:232
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:866
@@ -5054,7 +5041,7 @@ msgstr "Másolat létrehozása a jelenlegi tranzakcióról"
 #: gnucash/ui/gnc-plugin-page-register.ui:222
 #: gnucash/ui/gnc-plugin-page-register.ui:408
 msgid "Jump to the linked bill, invoice, or voucher"
-msgstr "Ugrás a kapcsolódó szállítói vagy kimenő számlára, vagy utalványra"
+msgstr "Ugrás a kapcsolódó bejövő vagy kimenő számlára, vagy költségbizonylatra"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:295
 #, fuzzy
@@ -6266,7 +6253,7 @@ msgstr "reg. kifejezésnek ne feleljen meg"
 
 #: gnucash/gnome-search/search-string.c:322
 msgid "Match case"
-msgstr "Kis- és nagybetű érzékeny"
+msgstr "Kis- és nagybetű megkülönböztetése"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:178
 msgid ""
@@ -14413,9 +14400,8 @@ msgid "Show _Account column"
 msgstr "Számlakód megjelenítése"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1080
-#, fuzzy
 msgid "Show _Memo column"
-msgstr "Számlakód megjelenítése"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-import.glade:1096
 #, fuzzy
@@ -17298,7 +17284,7 @@ msgstr "Rendezés összeg szerint."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:961
 msgid "Sort by memo."
-msgstr "Rendezés felosztás jegyzetek szerint."
+msgstr "Rendezés felosztások jegyzetei szerint."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:976
 #: gnucash/ui/gnc-plugin-page-invoice.ui:114
@@ -17765,9 +17751,8 @@ msgid "Con_firm Password"
 msgstr "Jelszó meg_erősítése"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:836
-#, fuzzy
 msgid "_Remember the PIN in memory"
-msgstr "PIN-kód megőrzése a memóriában"
+msgstr "PIN-kód _megőrzése a memóriában"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:842
 #, fuzzy
@@ -17954,9 +17939,8 @@ msgstr ""
 "végeztével. Különben nyitva marad."
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:52
-#, fuzzy
 msgid "Remember the _PIN in memory"
-msgstr "PIN-kód megőrzése a memóriában"
+msgstr "PIN-kód _megőrzése a memóriában"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:58
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:21
@@ -18697,9 +18681,8 @@ msgid "Account-posted"
 msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:160
-#, fuzzy
 msgid "Memo-posted"
-msgstr "(könyvelve)"
+msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:161
 #, fuzzy
@@ -19366,9 +19349,8 @@ msgid "Transfer Amount (Negated)"
 msgstr "Származási folyószámla"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:80
-#, fuzzy
 msgid "Transfer Memo"
-msgstr "Átvitel ide"
+msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:81
 #, fuzzy
@@ -20938,10 +20920,9 @@ msgid "999,999.000"
 msgstr "példa:999.999,000"
 
 #: gnucash/register/ledger-core/split-register-layout.c:745
-#, fuzzy
 msgctxt "sample"
 msgid "Memo field sample text string"
-msgstr "példa:Közlemény mező mintaszövege"
+msgstr "Felosztás jegyzete mező mintaszövege"
 
 #: gnucash/register/ledger-core/split-register-layout.c:819
 #, fuzzy
@@ -22422,9 +22403,8 @@ msgid "Show TXF export parameters for each TXF code/account on report."
 msgstr ""
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:220
-#, fuzzy
 msgid "Do not print T-Num:Memo data"
-msgstr "Do not print Action:Memo data for transactions"
+msgstr ""
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:221
 msgid "Do not print T-Num:Memo data for transactions."
@@ -28871,7 +28851,7 @@ msgstr "Költség bizonylat keresése"
 
 #: gnucash/ui/gnc-plugin-business.ui:129
 msgid "Open the Find Expense Voucher dialog"
-msgstr "Nyissa meg a kiadási bizonylat keresése párbeszédablakot"
+msgstr "A Költségbizonylat keresése párbeszédablak megnyitása"
 
 #: gnucash/ui/gnc-plugin-business.ui:138
 msgid "Business Linked Documents"
@@ -29518,9 +29498,8 @@ msgstr "Bizonylat"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:229
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:669
-#, fuzzy
 msgid "Create a new voucher"
-msgstr "Új számla létrehozása"
+msgstr "Új költségbizonylat létrehozása"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:6
 #, fuzzy
