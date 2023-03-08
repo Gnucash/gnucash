@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-07 21:41+0000\n"
+"PO-Revision-Date: 2023-03-08 17:41+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hu/>\n"
@@ -1936,7 +1936,7 @@ msgstr "Készpénz"
 #: gnucash/report/trep-engine.scm:1039 gnucash/report/trep-engine.scm:1169
 #: gnucash/report/trep-engine.scm:1170
 msgid "Memo"
-msgstr "Megosztás jegyzete"
+msgstr "Felosztás jegyzete"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1277
 #: gnucash/gnome/gnc-plugin-page-register.c:3384
@@ -2878,7 +2878,7 @@ msgstr "Szám"
 
 #: gnucash/gnome/dialog-find-transactions.c:149
 msgid "Description, Notes, or Memo"
-msgstr "Leírás, Megjegyzések vagy Megosztás jegyzete"
+msgstr "Leírás, Megjegyzések vagy Felosztás jegyzete"
 
 #: gnucash/gnome/dialog-find-transactions.c:155
 #: gnucash/gnome/gnc-split-reg.c:721
@@ -2957,7 +2957,7 @@ msgstr "Leírás mező"
 
 #: gnucash/gnome/dialog-imap-editor.c:706
 msgid "Memo Field"
-msgstr "Megosztás jegyzete mező"
+msgstr "Felosztás jegyzete mező"
 
 #: gnucash/gnome/dialog-imap-editor.c:709
 #, fuzzy
@@ -3221,7 +3221,7 @@ msgstr "Számlatulajdonos"
 #: gnucash/gnome/dialog-invoice.c:3550
 #: gnucash/report/reports/standard/invoice.scm:282
 msgid "Invoice Notes"
-msgstr "Megjegyzések"
+msgstr ""
 
 #: gnucash/gnome/dialog-invoice.c:3553 gnucash/gnome/dialog-invoice.c:3587
 #: gnucash/gnome/dialog-invoice.c:3621 gnucash/gnome/dialog-invoice.c:3650
@@ -3265,7 +3265,7 @@ msgstr "Számlatulajdonos"
 
 #: gnucash/gnome/dialog-invoice.c:3584
 msgid "Bill Notes"
-msgstr "Megjegyzések"
+msgstr ""
 
 #: gnucash/gnome/dialog-invoice.c:3615
 msgid "Voucher Owner"
@@ -3273,7 +3273,7 @@ msgstr "Bizonylat-tulajdonos"
 
 #: gnucash/gnome/dialog-invoice.c:3618
 msgid "Voucher Notes"
-msgstr "Megjegyzések"
+msgstr ""
 
 #: gnucash/gnome/dialog-invoice.c:3652 gnucash/gnome/dialog-invoice.c:3811
 #: gnucash/gnome/dialog-lot-viewer.c:907 gnucash/gnome/dialog-tax-info.c:1235
@@ -3543,7 +3543,7 @@ msgstr "Rendelés szerkesztése/megtekintése"
 
 #: gnucash/gnome/dialog-order.c:868
 msgid "Order Notes"
-msgstr "Megjegyzések"
+msgstr ""
 
 #: gnucash/gnome/dialog-order.c:870 gnucash/gtkbuilder/dialog-order.glade:149
 msgid "Date Closed"
@@ -4392,7 +4392,6 @@ msgid "All Periods"
 msgstr "Időszak"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:185
-#, fuzzy
 msgid "Note"
 msgstr "Megjegyzések"
 
@@ -4793,23 +4792,20 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:275
-#, fuzzy
 msgid "_Print Credit Note"
-msgstr "Jelentés opciók szerkesztése"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:275
-#, fuzzy
 msgid "Make a printable credit note"
-msgstr "Nyomtatható számla készítése"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:276
 msgid "_Edit Credit Note"
 msgstr "Jóváírás s_zerkesztése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:276
-#, fuzzy
 msgid "Edit this credit note"
-msgstr "Jelentés opciók szerkesztése"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:277
 msgid "_Duplicate Credit Note"
@@ -4820,54 +4816,44 @@ msgid "Create a new credit note as a duplicate of the current one"
 msgstr "Új jóváírás létrehozása a jelenlegi másolataként"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:278
-#, fuzzy
 msgid "_Post Credit Note"
-msgstr "Jelentés opciók szerkesztése"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:278
-#, fuzzy
 msgid "Post this credit note to your Chart of Accounts"
-msgstr "Számla könyvelése az ön folyószámláira"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:279
-#, fuzzy
 msgid "_Unpost Credit Note"
-msgstr "Jelentés opciók szerkesztése"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:279
-#, fuzzy
 msgid "Unpost this credit note and make it editable"
-msgstr "Számla könyvelésének törlése és szerkeszthetővé tétele"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:280
-#, fuzzy
 msgid "New _Credit Note"
-msgstr "Kedvezményezett folyószámla"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:280
-#, fuzzy
 msgid "Create a new credit note for the same owner as the current one"
-msgstr "Új kimenő számla készítése a jelenlegi címzettnek"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:281
-#, fuzzy
 msgid "Move to the blank entry at the bottom of the credit note"
-msgstr "Ugrás a számla alján lévő üres bejegyzésre"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:282
-#, fuzzy
 msgid "_Pay Credit Note"
-msgstr "Kedvezményezett folyószámla"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:282
-#, fuzzy
 msgid "Enter a payment for the owner of this credit note"
-msgstr "Adjon meg egy fizetési módot a számla tulajdonosának"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:283
-#, fuzzy
 msgid "Open a company report window for the owner of this credit note"
-msgstr "Cégjelentés megnyitása a számla tulajdonosához"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:284
 #, fuzzy
@@ -5606,7 +5592,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:955 gnucash/gnome/gnc-split-reg.c:1482
 msgid "(no memo)"
-msgstr "(nincs jegyzet a megosztáshoz)"
+msgstr "(nincs jegyzet a felosztáshoz)"
 
 #: gnucash/gnome/gnc-split-reg.c:958 gnucash/gnome/gnc-split-reg.c:1485
 msgid "(no description)"
@@ -5621,13 +5607,12 @@ msgid "Cut the current transaction?"
 msgstr "A jelenlegi tranzakciót kivágjuk?"
 
 #: gnucash/gnome/gnc-split-reg.c:998
-#, fuzzy
 msgid ""
 "You would be removing a transaction with reconciled splits! This is not a "
 "good idea as it will cause your reconciled balance to be off."
 msgstr ""
-"Egyeztetett megosztású tranzakciót törölne! Ez nem jó ötlet, mivel az "
-"egyeztetett egyenleget felborítaná."
+"Egyeztetett felosztásokat tartalmazó tranzakciót próbál eltávolítani! Ez nem "
+"jó ötlet, mivel felborítaná az egyeztetett egyenleget."
 
 #: gnucash/gnome/gnc-split-reg.c:1021
 msgid "_Cut Transaction"
@@ -5703,8 +5688,8 @@ msgid ""
 "You would be deleting a transaction with reconciled splits! This is not a "
 "good idea as it will cause your reconciled balance to be off."
 msgstr ""
-"Egyeztetett megosztású tranzakciót törölne! Ez nem jó ötlet, mivel az "
-"egyeztetett egyenleget felborítaná."
+"Egyeztetett felosztásokat tartalmazó tranzakciót próbál törölni! Ez nem jó "
+"ötlet, mivel felborítaná az egyeztetett egyenleget."
 
 #: gnucash/gnome/gnc-split-reg.c:1722
 #, c-format
@@ -7007,7 +6992,7 @@ msgstr "Ne mondja megin_t."
 
 #: gnucash/gnome-utils/dialog-utils.c:770
 msgid "Remember and don't ask me again this _session."
-msgstr "Megjegyzés é_s ne kérdezze megint e munkamenetben."
+msgstr "Megjegyzés é_s ne kérdezze meg újra ebben a munkamenetben."
 
 #: gnucash/gnome-utils/dialog-utils.c:771
 msgid "Don't tell me again this _session."
@@ -8882,9 +8867,8 @@ msgstr ""
 "koordinátákat a csekk bal felső sarkától számítják."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:60
-#, fuzzy
 msgid "Position of notes line"
-msgstr "A dátumvonal pozíciója"
+msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:61
 #, fuzzy
@@ -8893,12 +8877,12 @@ msgid ""
 "the check. Coordinates are from the lower left corner of the specified check "
 "position."
 msgstr ""
-"Ez az érték tartalmazza a dátumsor kezdetének X,Y koordinátáit a csekken. A "
-"koordinátákat a csekk bal felső sarkától számítják."
+"Ez az érték tartalmazza a megjegyzések sora kezdetének X,Y koordinátáit a "
+"csekken. A koordinátákat a csekk bal alsó sarkától számítják."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:65
 msgid "Position of memo line"
-msgstr "A megosztás jegyzete sor pozíciója"
+msgstr "A felosztás jegyzete sor pozíciója"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:66
 msgid ""
@@ -8948,19 +8932,15 @@ msgstr ""
 "koordinátáit a csekken. A koordinátákat a csekk bal felső sarkától számítják."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:85
-#, fuzzy
 msgid "Position of split's memo line"
-msgstr "A megjegyzés pozíciója"
+msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:86
-#, fuzzy
 msgid ""
 "This value contains the X,Y coordinates for the start of the split's memo "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"Ez az érték tartalmazza a megjegyzéssor kezdetének X,Y koordinátáit a "
-"csekken. A koordinátákat a csekk bal felső sarkától számítják."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:90
 #, fuzzy
@@ -10069,13 +10049,10 @@ msgid "All transactions are expanded to show all splits."
 msgstr "Minden tranzakció kifejtve az összes kifejtés megjelenítéséhez."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:301
-#, fuzzy
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Documents\" for "
 "each transaction."
 msgstr ""
-"Kétsoros tranzakció-információ, művelettel, megjegyzéssel és csatolt "
-"dokumentummal minden mozzanathoz."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:302
 msgid ""
@@ -12446,7 +12423,7 @@ msgstr "_Dátum"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:143
 msgid "Desc_ription"
-msgstr "_Megjegyzés"
+msgstr "_Leírás"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:158
 msgid "Stock Split"
@@ -12499,7 +12476,7 @@ msgstr "_Összeg"
 #: gnucash/gtkbuilder/dialog-print-check.glade:1129
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:957
 msgid "_Memo"
-msgstr "_Megosztás jegyzete"
+msgstr "_Felosztás jegyzete"
 
 #. Default memo text for the remains of a stock split
 #: gnucash/gtkbuilder/assistant-stock-split.glade:309
@@ -14593,7 +14570,7 @@ msgstr "Adjon nevet a kiválasztott tételnek."
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:174
 msgid "Enter any notes you want to make about this lot."
-msgstr "Adjon bármilyen megjegyzést, ehhez a tételhez."
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:193
 msgid "<b>_Title</b>"
@@ -16001,7 +15978,7 @@ msgstr "_Formátum mentése"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:1176
 msgid "Splits Memo"
-msgstr "Megosztás jegyzete"
+msgstr "Felosztás jegyzete"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:1191
 msgid "Splits Amount"
@@ -17191,14 +17168,12 @@ msgid "Delete the Selected Budget"
 msgstr "A kiválasztott költségvetés törlése"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:837
-#, fuzzy
 msgid "Budget Notes"
-msgstr "Költségvetés neve"
+msgstr "Költségvetés megjegyzések"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:892
-#, fuzzy
 msgid "Enter Note"
-msgstr "Extra közlemények"
+msgstr ""
 
 #. Filter register by… Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:13
@@ -17323,7 +17298,7 @@ msgstr "Rendezés összeg szerint."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:961
 msgid "Sort by memo."
-msgstr "Rendezés megosztás jegyzetek szerint."
+msgstr "Rendezés felosztás jegyzetek szerint."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:976
 #: gnucash/ui/gnc-plugin-page-invoice.ui:114
@@ -18070,9 +18045,8 @@ msgid "Target Accounts"
 msgstr "egy folyószámla"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:409
-#, fuzzy
 msgid "Enter a SEPA Online Direct Debit Note"
-msgstr "Online jóváírás-megjegyzés bevitele"
+msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:412
 msgid "Debited Account Owner"
@@ -18467,11 +18441,10 @@ msgid "Issue SEPA Direct _Debit…"
 msgstr "_Direkt jóváírás…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:48
-#, fuzzy
 msgid ""
 "Issue a new international European (SEPA) direct debit note online through "
 "Online Banking"
-msgstr "Új online direkt jóváírás intézése Online Banking-gel"
+msgstr ""
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:53
 msgid "Show _log window"
@@ -18720,9 +18693,8 @@ msgid "Tax-table"
 msgstr "Adóköteles"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:159
-#, fuzzy
 msgid "Account-posted"
-msgstr "Számla megjegyzései"
+msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:160
 #, fuzzy
@@ -19628,7 +19600,7 @@ msgstr "Árfolyam"
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1349
 msgid "_Edit description, notes, or memo"
-msgstr "Leírás, megjegyzések vagy megosztás jegyzetének s_zerkesztése"
+msgstr "Leírás, megjegyzések vagy felosztás jegyzetének s_zerkesztése"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1358
@@ -20618,9 +20590,8 @@ msgid "Include this entry on this invoice?"
 msgstr "Hozzáveszi a tételt a számlához?"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:746
-#, fuzzy
 msgid "Include this entry on this credit note?"
-msgstr "Hozzáveszi a tételt a számlához?"
+msgstr ""
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:749
 msgid "Unknown EntryLedger Type"
@@ -20979,10 +20950,9 @@ msgid "T"
 msgstr "A"
 
 #: gnucash/register/ledger-core/split-register-layout.c:827
-#, fuzzy
 msgctxt "sample"
 msgid "Notes field sample text string"
-msgstr "példa:Megjegyzés mező mintaszövege"
+msgstr "Megjegyzések mező mintaszövege"
 
 #: gnucash/register/ledger-core/split-register-layout.c:835
 #, fuzzy
@@ -21112,7 +21082,7 @@ msgstr "Adja meg a tranzakció leírását"
 
 #: gnucash/register/ledger-core/split-register-model.c:1165
 msgid "Enter notes for the transaction"
-msgstr "Tranzakció-közlemények megadása"
+msgstr "Adjon meg megjegyzést a tranzakcióhoz"
 
 #: gnucash/register/ledger-core/split-register-model.c:1198
 msgid "Reason the transaction was voided"
@@ -21134,7 +21104,7 @@ msgstr ""
 
 #: gnucash/register/ledger-core/split-register-model.c:1326
 msgid "Enter a description of the split"
-msgstr "Adja meg a megosztás leírását"
+msgstr "Adja meg a felosztás leírását"
 
 #: gnucash/register/ledger-core/split-register-model.c:1400
 msgid "Enter the effective share price"
@@ -22845,7 +22815,7 @@ msgstr "Számla megjegyzései"
 
 #: gnucash/report/reports/standard/account-summary.scm:121
 msgid "Show an account's notes."
-msgstr "A számla megjegyzésének megjelenítése."
+msgstr "A számla megjegyzéseinek megjelenítése."
 
 #: gnucash/report/reports/standard/account-summary.scm:123
 #: gnucash/report/reports/standard/balance-sheet.scm:129
@@ -23452,7 +23422,7 @@ msgstr ""
 #: gnucash/report/reports/standard/receipt.scm:64
 #: gnucash/report/reports/standard/taxinvoice.scm:113
 msgid "Extra Notes"
-msgstr "Extra közlemények"
+msgstr "Extra megjegyzések"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:176
 #: gnucash/report/reports/standard/taxinvoice.scm:222
@@ -24096,13 +24066,12 @@ msgid "Display a column for the budget values."
 msgstr "A tervezett összegek oszlopának megjelenítése."
 
 #: gnucash/report/reports/standard/budget.scm:51
-#, fuzzy
 msgid "Show Budget Notes"
-msgstr "Show Budget"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget.scm:52
 msgid "Display a column for the budget notes."
-msgstr "A tervezett összegek oszlopának megjelenítése."
+msgstr ""
 
 #: gnucash/report/reports/standard/budget.scm:53
 msgid "Show Actual"
@@ -25413,7 +25382,7 @@ msgstr "Nem található"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1230
 msgid "split"
-msgstr "megosztás"
+msgstr "felosztás"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1351
 #, scheme-format
@@ -25708,7 +25677,7 @@ msgstr "Művelet megjelenítése?"
 
 #: gnucash/report/reports/standard/invoice.scm:283
 msgid "Display the invoice notes?"
-msgstr "Számlaközlemények megjelenítése?"
+msgstr "Számlamegjegyzések megjelenítése?"
 
 #: gnucash/report/reports/standard/invoice.scm:286
 msgid "Payments"
@@ -26657,7 +26626,7 @@ msgstr "Csekkszám megjelenítése?"
 #: gnucash/report/reports/standard/register.scm:363
 #: gnucash/report/trep-engine.scm:933
 msgid "Display the memo?"
-msgstr "Megosztások jegyzeteinek megjelenítése?"
+msgstr "Felosztások jegyzeteinek megjelenítése?"
 
 #: gnucash/report/reports/standard/register.scm:367
 msgid "Display the account?"
@@ -27135,9 +27104,8 @@ msgid "<strong>Exchange Rates</strong> used for this report"
 msgstr ""
 
 #: gnucash/report/reports/support/receipt.eguile.scm:124
-#, fuzzy
 msgid "Invoice No."
-msgstr "Megjegyzések"
+msgstr ""
 
 #: gnucash/report/reports/support/receipt.eguile.scm:144
 msgid "Descr."
@@ -29311,9 +29279,8 @@ msgstr "Válassza ki ezt vagy egy másik költségkeretet, és törölje azt."
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:34
 #: gnucash/ui/gnc-plugin-page-budget.ui:270
-#, fuzzy
 msgid "Edit Note"
-msgstr "Kedvezményezett folyószámla"
+msgstr ""
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:36
 #: gnucash/ui/gnc-plugin-page-budget.ui:272
