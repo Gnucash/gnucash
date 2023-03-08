@@ -94,8 +94,7 @@ set(test-real-data-env
   TEST_PATH=${CMAKE_BINARY_DIR}/bin
 )
 add_test(NAME test-real-data
-   COMMAND ${CMAKE_COMMAND} -E env
-    ${SHELL} ${CMAKE_CURRENT_SOURCE_DIR}/test-real-data.sh
+   COMMAND ${SHELL} ${CMAKE_CURRENT_SOURCE_DIR}/test-real-data.sh
    CONFIGURATIONS Debug;Release
 )
 set_tests_properties(test-real-data PROPERTIES ENVIRONMENT "${test-real-data-env}")

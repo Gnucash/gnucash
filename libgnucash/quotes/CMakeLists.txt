@@ -15,7 +15,7 @@ foreach(file finance-quote-wrapper)
   list(APPEND _MAN_FILES ${_MAN_OUTPUT})
   add_custom_command(
       OUTPUT ${_MAN_OUTPUT}
-      COMMAND ${CMAKE_COMMAND} -E env ${PERL_EXECUTABLE} ${POD2MAN_EXECUTABLE} ${_POD_INPUT} ${_MAN_OUTPUT}
+      COMMAND ${PERL_EXECUTABLE} ${POD2MAN_EXECUTABLE} ${_POD_INPUT} ${_MAN_OUTPUT}
       DEPENDS ${_POD_INPUT}
   )
 endforeach(file)

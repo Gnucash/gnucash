@@ -180,8 +180,7 @@ if (NOT BUILDING_FROM_VCS)
 else()
     add_custom_command (
         OUTPUT ${GNC_APPDATA_IN}
-        COMMAND ${CMAKE_COMMAND} -E env
-            ${GETTEXT_MSGFMT_EXECUTABLE}
+        COMMAND ${GETTEXT_MSGFMT_EXECUTABLE}
                 --xml --template ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in.in
                 -d ${CMAKE_SOURCE_DIR}/po
                 -o ${GNC_APPDATA_IN}
