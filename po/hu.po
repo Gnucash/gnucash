@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-08 21:41+0000\n"
+"PO-Revision-Date: 2023-03-09 23:45+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hu/>\n"
@@ -988,10 +988,9 @@ msgid ""
 "View menu, you can choose the register style Auto-Split Ledger or "
 "Transaction Journal."
 msgstr ""
-"Többszörös kifejtett tranzakciók, mint a fizetés többszörös levonással, "
-"beviteléhez kattintson a Kifejtés gombra az eszköztárban! Másik lehetőség a "
-"Nézet menüben kiválaszthatja az Auto-kifejtés regisztert vagy a "
-"Tranzakciónaplót."
+"Többfelé osztott tranzakciók, példul többféle levonást tartalmazó munkabér, "
+"beviteléhez kattintson az eszköztáron a Felosztás gombra! Vagy a Nézet "
+"menüben válassza ki az Auto-kifejtés regisztert vagy a Tranzakciónaplót."
 
 #: doc/tip_of_the_day.list.c:55
 msgid ""
@@ -3021,7 +3020,7 @@ msgstr "Rögzítés folyószámlája"
 
 #: gnucash/gnome/dialog-invoice.c:1037
 msgid "Accumulate Splits?"
-msgstr "Halmozott könyvelések?"
+msgstr "Felosztások összevonása?"
 
 #: gnucash/gnome/dialog-invoice.c:1129
 msgid "The Invoice must have at least one Entry."
@@ -3940,12 +3939,11 @@ msgstr "%s nem értelmezhető a \"%s\" felosztáshoz."
 #: gnucash/gnome/dialog-sx-editor.c:736
 #, c-format
 msgid "Split with memo %s has an invalid account."
-msgstr ""
+msgstr "%s jegyzettel rendelkező felosztás számlája érvénytelen."
 
 #: gnucash/gnome/dialog-sx-editor.c:739
-#, fuzzy
 msgid "Invalid Account in Split"
-msgstr "Include trading accounts total"
+msgstr "A felosztásban egy számla érvénytelen"
 
 #: gnucash/gnome/dialog-sx-editor.c:751
 #, c-format
@@ -4974,7 +4972,7 @@ msgstr "Felosztás _másolása"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:284
 msgid "_Paste Split"
-msgstr ""
+msgstr "Felosztás _beillesztése"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:285
 msgid "Dup_licate Split"
@@ -4983,7 +4981,7 @@ msgstr "Felosztás meg_kettőzése"
 #: gnucash/gnome/gnc-plugin-page-register.c:286
 #: gnucash/gnome/gnc-split-reg.c:1510
 msgid "_Delete Split"
-msgstr "Kifejtés _törlése"
+msgstr "Felosztás _törlése"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:287
 #: gnucash/ui/gnc-embedded-register-window.ui:35
@@ -5044,34 +5042,29 @@ msgid "Jump to the linked bill, invoice, or voucher"
 msgstr "Ugrás a kapcsolódó bejövő vagy kimenő számlára, vagy költségbizonylatra"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:295
-#, fuzzy
 msgid "Cut the selected split into clipboard"
-msgstr "A jelenlegi tranzakció kivágása a vágólapra"
+msgstr "A jelenlegi felosztás kivágása a vágólapra"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:296
-#, fuzzy
 msgid "Copy the selected split into clipboard"
-msgstr "A jelenlegi tranzakció másolása a vágólapra"
+msgstr "A jelenlegi felosztás másolása a vágólapra"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:297
-#, fuzzy
 msgid "Paste the split from the clipboard"
-msgstr "Tranzakció beillesztése a vágólapról"
+msgstr "Felosztás beillesztése a vágólapról"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:298
-#, fuzzy
 msgid "Make a copy of the current split"
-msgstr "Tétel másolata"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register.c:299
-#, fuzzy
 msgid "Delete the current split"
-msgstr "Bejegyzés törlése"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register.c:399
 #: gnucash/gnome-search/dialog-search.c:1108
 msgid "Split"
-msgstr "Kifejtés"
+msgstr "Felosztás"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:400
 #, fuzzy
@@ -5238,8 +5231,8 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register.c:3769
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr ""
-"Nem lehet érvényteleníteni egyeztetett vagy igazolt résszel rendelkező "
-"tranzakciót."
+"Egyeztetett vagy igazolt felosztásokkal rendelkező tranzakciókat nem lehet "
+"érvényteleníteni."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3776
 #: gnucash/gnome/gnc-split-reg.c:1167
@@ -5546,36 +5539,33 @@ msgid "Filtered"
 msgstr "Szűrőtípus"
 
 #: gnucash/gnome/gnc-split-reg.c:920
-#, fuzzy, c-format
+#, c-format
 msgid "Cut the split '%s' from the transaction '%s'?"
-msgstr "A ?%s? kifejtés törlése ?%s? tranzakcióból?"
+msgstr "\"%s\" felosztás törlése \"%s\" tranzakcióból?"
 
 #: gnucash/gnome/gnc-split-reg.c:921
-#, fuzzy
 msgid ""
 "You would be removing a reconciled split! This is not a good idea as it will "
 "cause your reconciled balance to be off."
 msgstr ""
-"Törölne egy egyeztetett kifejtést! Ez nem jó ötlet, mivel az egyeztetett "
-"egyenleget felborítaná."
+"Egy egyeztetett felosztást próbál eltávolítani! Ez nem jó ötlet, mivel "
+"felborítaná az egyeztetett egyenleget."
 
 #: gnucash/gnome/gnc-split-reg.c:924
-#, fuzzy
 msgid "You cannot cut this split."
-msgstr "Ez a kifejtés nem törölhető."
+msgstr "Ez a kifejtés nem vágható ki."
 
 #: gnucash/gnome/gnc-split-reg.c:925
-#, fuzzy
 msgid ""
 "This is the split anchoring this transaction to the register. You may not "
 "remove it from this register window. You may remove the entire transaction "
 "from this window, or you may navigate to a register that shows another side "
 "of this same transaction and remove the split from that register."
 msgstr ""
-"Ezen kifejtés horgonyozza le a tranzakciót a regiszterben. Nem törölhető "
+"Ezen felosztás horgonyozza le a tranzakciót a regiszterben. Nem törölhető "
 "ebből az ablakból. Az egész tranzakció törölhető az ablakból, vagy "
 "navigáljon a tranzakció másik oldalát mutató regiszterbe, és törölje a "
-"kifejtést abból a regiszterből."
+"felosztást abból a regiszterből."
 
 #: gnucash/gnome/gnc-split-reg.c:955 gnucash/gnome/gnc-split-reg.c:1482
 msgid "(no memo)"
@@ -5617,20 +5607,20 @@ msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:1215
 msgid "Remove the splits from this transaction?"
-msgstr "Az összes kifejtés törlése e tranzakcióból?"
+msgstr "Eltávolítja a felosztásokat ebből a tranzakcióból?"
 
 #: gnucash/gnome/gnc-split-reg.c:1216
 msgid ""
 "This transaction contains reconciled splits. Modifying it is not a good idea "
 "because that will cause your reconciled balance to be off."
 msgstr ""
-"Egyeztetett kifejtésű tranzakciót módosítana. Ez nem jó ötlet, mivel az "
-"egyeztetett egyenleget felborítaná."
+"Egyeztetett felosztásokat tartalmazó tranzakciót próbál módosítani. Ez nem "
+"jó ötlet, mivel felborítaná az egyeztetett egyenleget."
 
 #. Translators: This is the confirmation button in a warning dialog
 #: gnucash/gnome/gnc-split-reg.c:1245
 msgid "_Remove Splits"
-msgstr "Kifejtések tö_rlése"
+msgstr "Felosztások tö_rlése"
 
 #: gnucash/gnome/gnc-split-reg.c:1306
 #, fuzzy
@@ -5640,19 +5630,19 @@ msgstr "<b>Új tranzakció-információ</b>"
 #: gnucash/gnome/gnc-split-reg.c:1446
 #, c-format
 msgid "Delete the split '%s' from the transaction '%s'?"
-msgstr "A ?%s? kifejtés törlése ?%s? tranzakcióból?"
+msgstr "\"%s\" felosztás törlése \"%s\" tranzakcióból?"
 
 #: gnucash/gnome/gnc-split-reg.c:1447
 msgid ""
 "You would be deleting a reconciled split! This is not a good idea as it will "
 "cause your reconciled balance to be off."
 msgstr ""
-"Törölne egy egyeztetett kifejtést! Ez nem jó ötlet, mivel az egyeztetett "
-"egyenleget felborítaná."
+"Egy egyeztetett felosztást próbál törölni! Ez nem jó ötlet, mivel "
+"felborítaná az egyeztetett egyenleget."
 
 #: gnucash/gnome/gnc-split-reg.c:1450
 msgid "You cannot delete this split."
-msgstr "Ez a kifejtés nem törölhető."
+msgstr "Ez a felosztás nem törölhető."
 
 #: gnucash/gnome/gnc-split-reg.c:1451
 msgid ""
@@ -5661,10 +5651,10 @@ msgid ""
 "from this window, or you may navigate to a register that shows another side "
 "of this same transaction and delete the split from that register."
 msgstr ""
-"Ezen kifejtés horgonyozza le a tranzakciót a regiszterben. Nem törölhető "
+"Ezen felosztás horgonyozza le a tranzakciót a regiszterben. Nem törölhető "
 "ebből az ablakból. Az egész tranzakció törölhető az ablakból, vagy "
 "navigáljon a tranzakció másik oldalát mutató regiszterbe, és törölje a "
-"kifejtést abból a regiszterből."
+"felosztást abból a regiszterből."
 
 #: gnucash/gnome/gnc-split-reg.c:1526
 msgid "Delete the current transaction?"
@@ -5983,6 +5973,8 @@ msgid ""
 "WARNING! Account contains splits whose reconcile date is after statement "
 "date. Reconciliation may be difficult."
 msgstr ""
+"FIGYELEM! A számlán egyes felosztások egyeztetési dátuma későbbi, mint a "
+"számlakivonat dátuma. Emiatt az egyeztetés nehézségekbe ütközhet."
 
 #: gnucash/gnome/window-reconcile.c:1950
 msgid ""
@@ -5991,6 +5983,10 @@ msgid ""
 "the case, you may use Find Transactions to find them, unreconcile, and re-"
 "reconcile."
 msgstr ""
+"Ezen a számlán egyes felosztások egyeztetési dátuma későbbi, mint a "
+"számlakivonat dátuma. Ezek miatt az egyeztetés nehézségekbe ütközhet. Ha ez "
+"a helyzet, a Tranzakciók keresésével megkeresheti őket, eltávolíthatja az "
+"egyeztetést, majd újra egyeztetheti őket."
 
 #: gnucash/gnome/window-reconcile.c:2056
 #: gnucash/gtkbuilder/window-reconcile.glade:106
@@ -6060,7 +6056,7 @@ msgstr "Új tranzakció"
 
 #: gnucash/gnome-search/dialog-search.c:1110
 msgid "New Split"
-msgstr "Új Kifejtés"
+msgstr "Új felosztás"
 
 #: gnucash/gnome-search/dialog-search.c:1119
 #, fuzzy
@@ -7023,7 +7019,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/gnc-autoclear.c:144
 msgid "Too many uncleared splits"
-msgstr "Túl sok tisztázatlan felosztás"
+msgstr "Túl sok a nem elszámolt felosztás"
 
 #: gnucash/gnome-utils/gnc-autoclear.c:160
 #, fuzzy
@@ -7032,8 +7028,7 @@ msgstr "A kamatláb nem lehet nulla."
 
 #: gnucash/gnome-utils/gnc-autoclear.c:166
 msgid "Cannot uniquely clear splits. Found multiple possibilities."
-msgstr ""
-"A felosztásokat nem lehet egyedileg törölni. Több lehetőséget is találtak."
+msgstr "A felosztások törlése nem egyértelmű. Több lehetőség is létezik."
 
 #: gnucash/gnome-utils/gnc-autosave.c:101
 msgid "Save file automatically?"
@@ -8675,7 +8670,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:142
 msgid "Accumulate multiple splits into one"
-msgstr "Több kifejtés halmozása egybe"
+msgstr "Több felosztás egybevonása"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:143
 msgid ""
@@ -8683,8 +8678,6 @@ msgid ""
 "the same account will be accumulated into a single split. This field can be "
 "overridden per invoice in the Posting dialog."
 msgstr ""
-"Ha aktív, akkor ugyanazon folyószámlához tartozó számla tételei,egy tételbe "
-"halmozódnak. E mező számlánként felülbírálható."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:155
 #: gnucash/gtkbuilder/business-prefs.glade:244
@@ -8904,19 +8897,15 @@ msgid "Number of degrees to rotate the check."
 msgstr "A csekk forgatásához szükséges fokok száma."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:80
-#, fuzzy
 msgid "Position of split's amount in numbers"
-msgstr "A csekk összege számmal pozíciója"
+msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:81
-#, fuzzy
 msgid ""
 "This value contains the X,Y coordinates for the start of the split's amount "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"Ez az érték tartalmazza az összeg szöveggel sorának kezdetének X,Y "
-"koordinátáit a csekken. A koordinátákat a csekk bal felső sarkától számítják."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:85
 msgid "Position of split's memo line"
@@ -8930,19 +8919,15 @@ msgid ""
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:90
-#, fuzzy
 msgid "Position of split's account line"
-msgstr "A dátumvonal pozíciója"
+msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:91
-#, fuzzy
 msgid ""
 "This value contains the X,Y coordinates for the start of the split's account "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"Ez az érték tartalmazza az összeg szöveggel sorának kezdetének X,Y "
-"koordinátáit a csekken. A koordinátákat a csekk bal felső sarkától számítják."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:95
 msgid "Print the date format below the date."
@@ -19622,7 +19607,7 @@ msgstr ""
 #: gnucash/report/reports/standard/register.scm:217
 #: libgnucash/engine/Split.c:1603 libgnucash/engine/Split.c:1620
 msgid "-- Split Transaction --"
-msgstr "-- Felosztott könyvelés --"
+msgstr "-- Felosztott tranzakció --"
 
 #: gnucash/import-export/import-main-matcher.c:1933
 msgid "New, already balanced"
@@ -20614,9 +20599,8 @@ msgstr ""
 "duplikálja vagy elveti a tranzakciót?"
 
 #: gnucash/register/ledger-core/split-register.c:517
-#, fuzzy
 msgid "New Split Information"
-msgstr "<b>Kifejtés információ</b>"
+msgstr "Új felosztás adatai"
 
 #: gnucash/register/ledger-core/split-register.c:626
 #: gnucash/register/register-gnome/datecell-gnome.c:108
@@ -20793,11 +20777,11 @@ msgstr "Bővítse GnuC_ash kiegyenlítő kifejtéssel"
 
 #: gnucash/register/ledger-core/split-register-control.c:145
 msgid "Adjust current account _split total"
-msgstr "Jelenlegi számlakifejté_s végösszegének kiigazítása"
+msgstr "Jelenlegi számlafelosztá_s végösszegének kiigazítása"
 
 #: gnucash/register/ledger-core/split-register-control.c:151
 msgid "Adjust _other account split total"
-msgstr "_Más számlakifejtés végösszegének kiigazítása"
+msgstr "_Másik számlafelosztás végösszegének kiigazítása"
 
 #: gnucash/register/ledger-core/split-register-control.c:162
 msgid "_Rebalance"
@@ -20856,15 +20840,15 @@ msgstr "Változások _rögzítése"
 
 #: gnucash/register/ledger-core/split-register-control.c:1825
 msgid "Mark split as unreconciled?"
-msgstr "Kifejtés megjelölése nem egyeztetettként?"
+msgstr "Felosztás megjelölése nem egyeztetettként?"
 
 #: gnucash/register/ledger-core/split-register-control.c:1827
 msgid ""
 "You are about to mark a reconciled split as unreconciled. Doing so might "
 "make future reconciliation difficult! Continue with this change?"
 msgstr ""
-"Biztosan nem-egyeztetettnek kívánja minősíteni e kifejtést? Ezzel "
-"megnehezítheti a későbbi egyeztetést! Folytatás e változással?"
+"Nem egyeztetettnek próbál jelölni egy már egyeztetett felosztást. Ez "
+"megnehezítheti a későbbi egyeztetést! Biztosan folytatja?"
 
 #: gnucash/register/ledger-core/split-register-control.c:1844
 msgid "_Unreconcile"
@@ -21149,7 +21133,7 @@ msgstr ""
 
 #: gnucash/register/ledger-core/split-register-model.c:2211
 msgid "Change reconciled split?"
-msgstr "Egyeztetett kifejtés megváltoztatása?"
+msgstr "Egyeztetett felosztás megváltoztatása?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2213
 #, fuzzy
@@ -21163,7 +21147,7 @@ msgstr ""
 
 #: gnucash/register/ledger-core/split-register-model.c:2235
 msgid "Chan_ge Split"
-msgstr "Kifejtés me_gváltoztatása"
+msgstr "Felosztás mó_dosítása"
 
 #: gnucash/register/ledger-core/split-register-model.c:2238
 #, fuzzy
@@ -28054,16 +28038,15 @@ msgstr "_Tranzakció"
 #: gnucash/ui/gnc-embedded-register-window.ui:121
 #: gnucash/ui/gnc-plugin-page-register.ui:160
 #: gnucash/ui/gnc-plugin-page-register.ui:375
-#, fuzzy
 msgid "Remo_ve Other Splits"
-msgstr "Kifejtések tö_rlése"
+msgstr "Többi felosztás tö_rlése"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:60
 #: gnucash/ui/gnc-embedded-register-window.ui:123
 #: gnucash/ui/gnc-plugin-page-register.ui:162
 #: gnucash/ui/gnc-plugin-page-register.ui:377
 msgid "Remove all splits in the current transaction"
-msgstr "Az összes kifejtés törlése a jelen tranzakcióban"
+msgstr "Összes felosztás törlése a jelenlegi tranzakcióból"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:65
 #: gnucash/ui/gnc-embedded-register-window.ui:128
@@ -29157,7 +29140,7 @@ msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
 msgstr ""
-"Kiegyenlítetlen tranzakciók és árva kifejtések ellenőrzése és kijavítása a "
+"Kiegyenlítetlen tranzakciók és árva felosztások ellenőrzése és kijavítása a "
 "számlán"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:175
@@ -29171,7 +29154,7 @@ msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account and its subaccounts"
 msgstr ""
-"Kiegyenlítetlen tranzakciók és árva kifejtések ellenőrzése és kijavítása e "
+"Kiegyenlítetlen tranzakciók és árva felosztások ellenőrzése és kijavítása e "
 "számlán és alszámláin"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:183
@@ -29180,7 +29163,7 @@ msgid ""
 "Check for and repair unbalanced transactions and orphan splits in all "
 "accounts"
 msgstr ""
-"Kiegyenlítetlen tranzakciók és árva kifejtések ellenőrzése és kijavítása "
+"Kiegyenlítetlen tranzakciók és árva felosztások ellenőrzése és kijavítása "
 "minden számlán"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:197
@@ -29551,7 +29534,7 @@ msgstr "Tranzakciók egy vagy két sorban, és a jelenlegi tranzakció kifejtés
 
 #: gnucash/ui/gnc-plugin-page-register.ui:90
 msgid "Show expanded transactions with all splits"
-msgstr "A kibővített tranzakciók az összes osztással"
+msgstr "A kibővített tranzakciók az összes felosztással"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:184
 msgid "_Void Transaction"
@@ -29596,11 +29579,8 @@ msgstr "_Ugrás dátumhoz"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:279
 #: gnucash/ui/gnc-plugin-page-register.ui:420
-#, fuzzy
 msgid "Move to the split at the specified date"
 msgstr ""
-"Mindkettő megjelenítése (és az érvénytelen tranzakciók belevétele az "
-"összesítésekbe)"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:283
 #: gnucash/ui/gnc-plugin-page-register.ui:423
@@ -29612,7 +29592,7 @@ msgstr "T_ranzakció osztása"
 #: gnucash/ui/gnc-plugin-page-register.ui:425
 #: gnucash/ui/gnc-plugin-page-register.ui:629
 msgid "Show all splits in the current transaction"
-msgstr "Az összes osztás megjelenítése e tranzakcióban"
+msgstr "A jelenlegi tranzakció összes felosztásának megjelenítése"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:289
 #: gnucash/ui/gnc-plugin-page-register.ui:428
