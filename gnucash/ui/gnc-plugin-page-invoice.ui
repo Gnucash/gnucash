@@ -498,7 +498,7 @@
         <property name="action-name">GncPluginPageInvoiceActions.BlankEntryAction</property>
         <property name="tooltip-text" translatable="yes">Move to the blank entry at the bottom of the Invoice</property>
         <property name="use-underline">True</property>
-        <property name="icon-name">go-bottom</property>
+        <property name="icon-name">go-jump</property>
       </object>
       <packing>
         <property name="expand">False</property>
