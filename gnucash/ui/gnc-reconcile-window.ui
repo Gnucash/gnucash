@@ -219,7 +219,7 @@
         <property name="action-name">recwin.AccountOpenAccountAction</property>
         <property name="label" translatable="yes">_Open</property>
         <property name="use-underline">True</property>
-        <property name="icon-name">go-jump</property>
+        <property name="icon-name">gnc-jumpto</property>
       </object>
       <packing>
         <property name="expand">False</property>
