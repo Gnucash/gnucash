@@ -1208,7 +1208,8 @@ qof_query_merge(QofQuery *q1, QofQuery *q2, QofQueryOp op)
         break;
     }
 
-    retval->search_for = search_for;
+    if (retval)
+        retval->search_for = search_for;
     return retval;
 }
 
