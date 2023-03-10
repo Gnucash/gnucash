@@ -382,7 +382,7 @@ gnc_embedded_window_new (const gchar *action_group_name,
     // need to add the accelerator keys
     accel_group = gtk_accel_group_new ();
     gtk_window_add_accel_group (GTK_WINDOW(enclosing_win), accel_group);
-    gnc_add_accelerator_keys_for_menu (GTK_WIDGET(priv->menubar), accel_group);
+    gnc_add_accelerator_keys_for_menu (GTK_WIDGET(priv->menubar), priv->menubar_model, accel_group);
 
     g_free (ui_fullname);
     LEAVE("window %p", window);

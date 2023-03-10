@@ -361,6 +361,28 @@ gnc_disable_all_actions_in_group (GSimpleActionGroup *action_group)
 
 
 static void
+accel_map_foreach_func (gpointer user_data, const gchar* accel_path, guint accel_key,
+                        GdkModifierType accel_mods, gboolean changed)
+{
+    GMenuModel *menu_model = user_data;
+    gchar **accel_path_parts = NULL;
+    guint  accel_size = 0;
+    gchar *accel_name_tmp = gtk_accelerator_name (accel_key, accel_mods);
+    gchar *accel_name = g_strescape (accel_name_tmp, NULL);
+
+    accel_path_parts = g_strsplit (accel_path, "/", -1);
+    accel_size = g_strv_length (accel_path_parts);
+
+    if (accel_size == 3)
+        gnc_menubar_model_update_item (menu_model, accel_path_parts[2],
+                                       NULL, accel_name, NULL);
+
+    g_strfreev (accel_path_parts);
+    g_free (accel_name_tmp);
+    g_free (accel_name);
+}
+
+static void
 add_accel_for_menu_lookup (GtkWidget *widget, gpointer user_data)
 {
     if (GTK_IS_MENU_ITEM(widget))
@@ -396,13 +418,19 @@ add_accel_for_menu_lookup (GtkWidget *widget, gpointer user_data)
  *
  *  @param menu The menu widget.
  *
+ *  @param model The menu bar model.
+ *
  *  @param accel_group The accelerator group to use.
  */
 void
-gnc_add_accelerator_keys_for_menu (GtkWidget *menu, GtkAccelGroup *accel_group)
+gnc_add_accelerator_keys_for_menu (GtkWidget *menu, GMenuModel *model, GtkAccelGroup *accel_group)
 {
     g_return_if_fail (GTK_IS_WIDGET(menu));
+    g_return_if_fail (model != NULL);
     g_return_if_fail (accel_group != NULL);
+
+    // this updates the menu accelerators based on accelerator-map
+    gtk_accel_map_foreach (model, (GtkAccelMapForeach)accel_map_foreach_func);
 
     gtk_container_foreach (GTK_CONTAINER(menu), add_accel_for_menu_lookup, accel_group);
 }

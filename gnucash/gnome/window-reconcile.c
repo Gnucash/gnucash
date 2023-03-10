@@ -1897,7 +1897,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
         gtk_window_add_accel_group (GTK_WINDOW(recnData->window), accel_group);
 
         // need to add the accelerator keys
-        gnc_add_accelerator_keys_for_menu (menu_bar, accel_group);
+        gnc_add_accelerator_keys_for_menu (menu_bar, menu_model, accel_group);
 
 #ifdef MAC_INTEGRATION
         gtkosx_application_sync_menubar (theApp);

@@ -723,7 +723,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
     // need to add the accelerator keys
-    gnc_add_accelerator_keys_for_menu (GTK_WIDGET(priv->menubar), priv->accel_group);
+    gnc_add_accelerator_keys_for_menu (GTK_WIDGET(priv->menubar), priv->menubar_model, priv->accel_group);
 
     /* Common view menu items */
     action = gnc_main_window_find_action (window, "ViewToolbarAction");
@@ -3619,7 +3619,7 @@ gnc_main_window_menu_add_accelerator_keys (GncMainWindow *window)
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-    gnc_add_accelerator_keys_for_menu (priv->menubar, priv->accel_group);
+    gnc_add_accelerator_keys_for_menu (priv->menubar, priv->menubar_model, priv->accel_group);
 }
 
 
@@ -3834,7 +3834,7 @@ gnc_main_window_update_menu_and_toolbar (GncMainWindow *window,
     gnc_plugin_add_menu_tooltip_callbacks (priv->menubar, priv->menubar_model, priv->statusbar);
 
     // need to add the accelerator keys
-    gnc_add_accelerator_keys_for_menu (priv->menubar, priv->accel_group);
+    gnc_add_accelerator_keys_for_menu (priv->menubar, priv->menubar_model, priv->accel_group);
 #ifdef MAC_INTEGRATION
     gtkosx_application_sync_menubar (theApp);
     g_object_unref (theApp);
@@ -4059,7 +4059,7 @@ main_window_realize_cb (GtkWidget *widget, gpointer user_data)
     GncMainWindow *window = (GncMainWindow*)user_data;
     GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-    gnc_add_accelerator_keys_for_menu (GTK_WIDGET(priv->menubar), priv->accel_group);
+    gnc_add_accelerator_keys_for_menu (GTK_WIDGET(priv->menubar), priv->menubar_model, priv->accel_group);
 
     /* need to signal menu has been changed, this will call the
        business function 'bind_extra_toolbuttons_visibility' */
