@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-07 08:39+0000\n"
+"PO-Revision-Date: 2023-03-09 10:33+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/pt/>\n"
@@ -914,9 +914,9 @@ msgid ""
 "use. Click the triangle at the far right of the column headings to change "
 "the display."
 msgstr ""
-"Pode configurar o ecrã de edição de mercadorias para mostrar a fonte das "
+"Pode configurar o ecrã de edição de garantias para mostrar a fonte das "
 "cotações duma mercadoria, o que facilita ver quais as fontes em linha "
-"utilizadas pelas suas mercadorias. Clique no triângulo à direita dos "
+"utilizadas pelas suas garantias. Clique no triângulo à direita dos "
 "cabeçalhos de colunas."
 
 #: doc/tip_of_the_day.list.c:96
@@ -3611,7 +3611,7 @@ msgstr "Substitui_r"
 
 #: gnucash/gnome/dialog-price-editor.c:270
 msgid "You must select a Security."
-msgstr "Tem de escolher uma mercadoria."
+msgstr "Tem de escolher uma garantia."
 
 #: gnucash/gnome/dialog-price-editor.c:275
 msgid "You must select a Currency."
@@ -5111,7 +5111,7 @@ msgstr "Filtrar %s por…"
 #: gnucash/gnome/gnc-plugin-page-register.c:4592
 #, c-format
 msgid "%s %s from %s, posted %s, amount %s"
-msgstr "%s %s de %s, publicada a %s, com o montante de %s"
+msgstr "%s %s de %s, emitida a %s, com o montante de %s"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4602
 msgid "Several documents are linked with this transaction. Please choose one:"
@@ -5130,7 +5130,7 @@ msgstr "Ir para data"
 #: gnucash/gnome/gnc-plugin-page-register.c:4960
 #, c-format
 msgid "Checking splits in current register: %u of %u"
-msgstr "A verificar divisões no diário actual: %u de %u"
+msgstr "A verificar parcelas no diário actual: %u de %u"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:223
 msgid "Print"
@@ -5156,7 +5156,7 @@ msgstr "Gravar configuração como…"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:232
 msgid "Make Pdf"
-msgstr "Criar Pdf"
+msgstr "Criar PDF"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:368
 #: gnucash/gnome/gnc-plugin-page-report.cpp:369
@@ -5380,7 +5380,7 @@ msgid ""
 "cause your reconciled balance to be off."
 msgstr ""
 "Estaria a eliminar uma parcela reconciliada! Isso não é boa ideia, visto que "
-"fará com que o saldo recociliado fique errado."
+"fará com que o saldo reconciliado fique errado."
 
 #: gnucash/gnome/gnc-split-reg.c:924
 msgid "You cannot cut this split."
@@ -5436,7 +5436,7 @@ msgid ""
 "for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
 "A data desta transacção é anterior ao limite de edição definido para este "
-"livro. Pode alterar esta definição em Ficheiro -> Propriedades -> Contas."
+"livro. Pode alterar este limite em Ficheiro -> Propriedades -> Contas."
 
 #: gnucash/gnome/gnc-split-reg.c:1215
 msgid "Remove the splits from this transaction?"
@@ -5740,7 +5740,7 @@ msgstr "Tipo de entidade não suportado: %s"
 #: gnucash/gnome/top-level.c:248
 #, c-format
 msgid "No such price: %s"
-msgstr "Preço não existe: %s"
+msgstr "Sem preço: %s"
 
 #: gnucash/gnome/window-autoclear.c:115
 msgid "Cleared Transactions"
@@ -6405,8 +6405,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Set the account hidden value for account '%s' including all sub-accounts"
-msgstr ""
-"Definir o valor oculto da conta \"%s\", incluindo todas as suas sub-contas"
+msgstr "Definir a conta \"%s\" como oculta, incluindo todas as suas sub-contas"
 
 #: gnucash/gnome-utils/dialog-book-close.c:294
 msgid "Please select an Equity account to hold the total Period Income."
@@ -6460,21 +6459,21 @@ msgstr ""
 #: gnucash/gnome-utils/dialog-commodity.c:275
 #: gnucash/gtkbuilder/dialog-commodity.glade:634
 msgid "Select security/currency"
-msgstr "Seleccione a mercadoria/moeda"
+msgstr "Seleccione a garantia/moeda"
 
 #: gnucash/gnome-utils/dialog-commodity.c:276
 #: gnucash/gtkbuilder/dialog-account.glade:1260
 msgid "_Security/currency"
-msgstr "_Mercadoria/Moeda"
+msgstr "_Garantia/Moeda"
 
 #: gnucash/gnome-utils/dialog-commodity.c:280
 msgid "Select security"
-msgstr "Seleccione a mercadoria"
+msgstr "Seleccione a garantia"
 
 #: gnucash/gnome-utils/dialog-commodity.c:281
 #: gnucash/gtkbuilder/dialog-price.glade:153
 msgid "_Security"
-msgstr "_Mercadoria"
+msgstr "_Garantia"
 
 #: gnucash/gnome-utils/dialog-commodity.c:285
 msgid "Select currency"
@@ -6511,16 +6510,16 @@ msgstr "Informação da moeda"
 
 #: gnucash/gnome-utils/dialog-commodity.c:991
 msgid "Edit security"
-msgstr "Editar mercadoria"
+msgstr "Editar garantia"
 
 #: gnucash/gnome-utils/dialog-commodity.c:991
 msgid "New security"
-msgstr "Nova mercadoria"
+msgstr "Nova garantia"
 
 #: gnucash/gnome-utils/dialog-commodity.c:992
 #: gnucash/gtkbuilder/dialog-commodity.glade:229
 msgid "Security Information"
-msgstr "Informação da mercadoria"
+msgstr "Informação da garantia"
 
 #: gnucash/gnome-utils/dialog-commodity.c:1269
 msgid "You may not create a new national currency."
@@ -6680,8 +6679,8 @@ msgid ""
 "You must provide a unique name for this Tax Table. Your choice \"%s\" is "
 "already in use."
 msgstr ""
-"Tem de indicar um nome único para esta tabela de impostos. A sua escolha \"%s"
-"\" já está em uso."
+"Tem de indicar um nome único para a tabela de impostos. A escolha \"%s\" já "
+"está em uso."
 
 #: gnucash/gnome-utils/dialog-tax-table.c:190
 msgid "Percentage amount must be between -100 and 100."
@@ -6720,7 +6719,7 @@ msgid ""
 "table if you want to do that."
 msgstr ""
 "Não pode remover a última linha da tabela de impostos. Experimente antes "
-"eliminar a tabela de impostos se é isso que pretende."
+"eliminar a tabela de impostos, se é isso que pretende."
 
 #: gnucash/gnome-utils/dialog-tax-table.c:784
 msgid "Are you sure you want to delete this entry?"
@@ -6740,8 +6739,8 @@ msgid ""
 "Retrieve the current online quote. This will fail if there is a manually-"
 "created price for today."
 msgstr ""
-"Obter a cotação em linha actual. Isto vai falhar se houver uma cotação "
-"criada manualmente para hoje."
+"Obter a cotação em linha actual. Isto vai falhar se houver um preço criado "
+"manualmente para hoje."
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1296
 msgid "Finance::Quote must be installed to enable this button."
@@ -8042,7 +8041,7 @@ msgstr "A"
 
 #: gnucash/gnome-utils/gnc-tree-view-price.c:396
 msgid "Security"
-msgstr "Mercadoria"
+msgstr "Garantia"
 
 #: gnucash/gnome-utils/gnc-tree-view-price.c:426
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:390
@@ -10879,15 +10878,15 @@ msgid ""
 "Click on \"Next\" to proceed or \"Cancel\" to Abort Import.\n"
 msgstr ""
 "\n"
-"Este assistente vai ajudar na importação das contas a partir de um "
-"ficheiro.\n"
+"Este assistente vai ajudar na importação das contas a partir de um ficheiro."
+"\n"
 "\n"
 "O ficheiro tem de estar no mesmo formato que o ficheiro exportado, uma vez "
 "que este é um formato de importação fixo, o que pode ser visto observando um "
 "ficheiro criado com \"Exportar plano de contas para CSV\". \n"
 "\n"
 "Se a conta estiver em falta, baseado no nome completo da conta, será "
-"adicionada, desde que a mercadoria/moeda especificada exista. Se a conta "
+"adicionada, desde que a garantia/moeda especificada exista. Se a conta "
 "existir, serão actualizados quatro campos: código, descrição, notas e cor.\n"
 "\n"
 "Clique em \"Seguinte\" para continuar ou em \"Cancelar\" para abortar a "
@@ -12411,7 +12410,7 @@ msgstr ""
 "gravada e usada como predefinições na próxima importação QIF.\n"
 "\n"
 "Clique em Recuar para rever as comparações de contas e categorias, alterar "
-"definições de moedas e mercadorias para novas contas ou para adicionar mais "
+"definições de moedas e garantias para novas contas ou para adicionar mais "
 "ficheiros à área de estágio.\n"
 "\n"
 "Clique em Cancelar para abortar o processo de importação QIF."
@@ -19880,12 +19879,12 @@ msgstr ""
 #: gnucash/import-export/ofx/gnc-ofx-import.c:712
 #, c-format
 msgid "Stock account for security \"%s\""
-msgstr "Conta de acções para a mercadoria \"%s\""
+msgstr "Conta de acções para a garantia \"%s\""
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:750
 #, c-format
 msgid "Income account for security \"%s\""
-msgstr "Conta de receita para a mercadoria \"%s\""
+msgstr "Conta de receita para a garantia \"%s\""
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1040
 msgid "Unknown OFX account"
@@ -20249,7 +20248,7 @@ msgstr "A ignorar linha de categoria"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:517
 msgid "Ignoring security line"
-msgstr "A ignorar linha de mercadoria"
+msgstr "A ignorar linha de garantia"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:525
 msgid "File does not appear to be in QIF format"
@@ -22606,7 +22605,7 @@ msgstr "Gráfico circular do activo"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:39
 msgid "Security Piechart"
-msgstr "Gráfico circular de mercadorias"
+msgstr "Gráfico circular de garantias"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:40
 msgid "Liability Piechart"
@@ -22720,7 +22719,7 @@ msgstr "Mostrar o nome completo da conta na legenda?"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:135
 msgid "Show the full security name in the legend?"
-msgstr "Mostrar o nome completo da mercadoria na legenda?"
+msgstr "Mostrar o nome completo da garantia na legenda?"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:145
 msgid "Show the percentage in legend?"
@@ -28452,7 +28451,7 @@ msgstr "Veja e edite as cotações de acções e fundos mutualistas"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:109
 msgid "_Security Editor"
-msgstr "_Editor de mercadorias"
+msgstr "_Editor de garantias"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:111
 msgid "View and edit the commodities for stocks and mutual funds"
