@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-10 14:37+0000\n"
+"PO-Revision-Date: 2023-03-10 20:49+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hu/>\n"
@@ -10392,14 +10392,14 @@ msgid ""
 "reconciled split. Allowing these changes can make it hard to perform future "
 "reconciliations."
 msgstr ""
-"E dialógus megjelenik, mielőtt egyeztetett kifejtés megváltoztatását "
+"E dialógus megjelenik, mielőtt egyeztetett felosztás megváltoztatását "
 "engedélyeznék. A változások engedélyezése megnehezítheti a jövőbeli "
 "egyeztetések elvégzését."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:64
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:187
 msgid "Mark transaction split as unreconciled"
-msgstr "Tranzakciókifejtés megjelölése nem egyeztettként"
+msgstr "Tranzakciófelosztás megjelölése nem egyeztetettként"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:65
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:188
@@ -10408,16 +10408,14 @@ msgid ""
 "unreconciled. Doing so will throw off the reconciled value of the register "
 "and can make it hard to perform future reconciliations."
 msgstr ""
-"E dialógus megjelenik, mielőtt engedélyezik tranzakciókifejtés megjelölését "
+"E dialógus megjelenik, mielőtt engedélyezik tranzakciófelosztás megjelölését "
 "nem egyeztetettként. Ha így tesznek, akkor eldobják a regiszter egyeztetett "
 "értékét, és megnehezítik a jövőbeli egyeztetéseket."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:69
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:192
-#, fuzzy
-#| msgid "Remove a split from a transaction"
 msgid "Cut a split from a transaction"
-msgstr "Részkönyvelés törlése a tranzakcióból"
+msgstr "Felosztás kivágása a tranzakcióból"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:70
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:193
