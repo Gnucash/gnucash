@@ -276,22 +276,6 @@ GNC_DEFINE_TYPE_WITH_CODE(GncMainWindow, gnc_main_window, GTK_TYPE_APPLICATION_W
  *  code. */
 static guint main_window_signals[LAST_SIGNAL] = { 0 };
 
-static void
-toggle_change_state (GSimpleAction *simple,
-                     GVariant      *state,
-                     gpointer       user_data)
-{
-    g_simple_action_set_state (simple, state);
-}
-
-static void
-radio_change_state (GSimpleAction *simple,
-                    GVariant      *state,
-                    gpointer       user_data)
-{
-    g_simple_action_set_state (simple, state);
-}
-
 /** An array of all of the actions provided by the main window code.
  *  This includes some placeholder actions for the menus that are
  *  visible in the menu bar but have no action associated with
@@ -317,10 +301,10 @@ static GActionEntry gnc_menu_actions [] =
     { "ViewSortByAction", nullptr, nullptr, nullptr, nullptr },
     { "ViewFilterByAction", nullptr, nullptr, nullptr, nullptr },
     { "ViewRefreshAction", gnc_main_window_cmd_view_refresh, nullptr, nullptr, nullptr },
-    { "ViewToolbarAction", gnc_main_window_cmd_view_toolbar, nullptr, "true", toggle_change_state },
-    { "ViewSummaryAction", gnc_main_window_cmd_view_summary, nullptr, "true", toggle_change_state },
-    { "ViewStatusbarAction", gnc_main_window_cmd_view_statusbar, nullptr, "true", toggle_change_state },
-    { "ViewTabPositionAction",  gnc_main_window_cmd_view_tab_position, "i", "@i 0", radio_change_state },
+    { "ViewToolbarAction", gnc_main_window_cmd_view_toolbar, nullptr, "true", nullptr },
+    { "ViewSummaryAction", gnc_main_window_cmd_view_summary, nullptr, "true", nullptr },
+    { "ViewStatusbarAction", gnc_main_window_cmd_view_statusbar, nullptr, "true", nullptr },
+    { "ViewTabPositionAction",  gnc_main_window_cmd_view_tab_position, "i", "@i 0", nullptr },
 
     { "ScheduledAction", nullptr, nullptr, nullptr, nullptr },
 
@@ -329,7 +313,7 @@ static GActionEntry gnc_menu_actions [] =
     { "WindowNewAction", gnc_main_window_cmd_window_new, nullptr, nullptr, nullptr },
     { "WindowMovePageAction", gnc_main_window_cmd_window_move_page, nullptr, nullptr, nullptr },
 #ifndef MAC_INTEGRATION
-    { "WindowAction",  gnc_main_window_cmd_window_raise, "i", "@i 0", radio_change_state },
+    { "WindowAction",  gnc_main_window_cmd_window_raise, "i", "@i 0", nullptr },
 #endif
     { "HelpTutorialAction", gnc_main_window_cmd_help_tutorial, nullptr, nullptr, nullptr },
     { "HelpContentsAction", gnc_main_window_cmd_help_contents, nullptr, nullptr, nullptr },

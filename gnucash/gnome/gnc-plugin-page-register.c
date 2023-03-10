@@ -243,22 +243,6 @@ static void gnc_plugin_page_register_event_handler (QofInstance* entity,
 static GncInvoice* invoice_from_split (Split* split);
 static GList* invoices_from_transaction (Transaction* trans);
 
-static void
-toggle_change_state (GSimpleAction *simple,
-                     GVariant      *state,
-                     gpointer       user_data)
-{
-   g_simple_action_set_state (simple, state);
-}
-
-static void
-radio_change_state (GSimpleAction *simple,
-                    GVariant      *state,
-                    gpointer       user_data)
-{
-   g_simple_action_set_state (simple, state);
-}
-
 /************************************************************/
 /*                          Actions                         */
 /************************************************************/
@@ -341,9 +325,9 @@ static GActionEntry gnc_plugin_page_register_actions [] =
     { "ReportsAccountReportAction", gnc_plugin_page_register_cmd_account_report, NULL, NULL, NULL },
     { "ReportsAcctTransReportAction", gnc_plugin_page_register_cmd_transaction_report, NULL, NULL, NULL },
 
-    { "ViewStyleDoubleLineAction", gnc_plugin_page_register_cmd_style_double_line, NULL, "false", toggle_change_state },
-    { "SplitTransactionAction", gnc_plugin_page_register_cmd_expand_transaction, NULL, "false", toggle_change_state },
-    { "ViewStyleRadioAction", gnc_plugin_page_register_cmd_style_changed, "i", "@i 0", radio_change_state },
+    { "ViewStyleDoubleLineAction", gnc_plugin_page_register_cmd_style_double_line, NULL, "false", NULL },
+    { "SplitTransactionAction", gnc_plugin_page_register_cmd_expand_transaction, NULL, "false", NULL },
+    { "ViewStyleRadioAction", gnc_plugin_page_register_cmd_style_changed, "i", "@i 0", NULL },
 };
 static guint gnc_plugin_page_register_n_actions = G_N_ELEMENTS(gnc_plugin_page_register_actions);
 
