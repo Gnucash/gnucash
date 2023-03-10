@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-03-04 16:40+0000\n"
+"PO-Revision-Date: 2023-03-09 23:44+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -392,7 +392,7 @@ msgstr "Vijetnamski (Windows-1258)"
 
 #: borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr "Vizualni Hebrejski (ISO-8859-8)"
+msgstr "Vizualni hebrejski (ISO-8859-8)"
 
 #: borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
@@ -5395,7 +5395,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register2.c:377
 #: gnucash/gnome/gnc-plugin-page-register.c:505
 msgid "_Blank Transaction"
-msgstr "_Prazna transakcija"
+msgstr "Pra_zna transakcija"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:378
 #: gnucash/gnome/gnc-plugin-page-register.c:506
@@ -21706,7 +21706,7 @@ msgstr "Nova, prenesi (automatski) %s u „%s“"
 #: gnucash/import-export/import-main-matcher.c:2033
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
-msgstr "Nova, NESALDIRANA (za prijenos „%s” je potreban konto)!"
+msgstr "Nova, NESALDIRANA (zahtijeva konto za prijenos %s)!"
 
 #: gnucash/import-export/import-main-matcher.c:2051
 #, c-format
@@ -23420,9 +23420,9 @@ msgid ""
 "report system, especially your saved reports, for a report with this report-"
 "guid: "
 msgstr ""
-"Jedan od tvojih izvještaja ima globalan jedinstveni identifikator izvještaja "
-"koji je duplikat. Provjeri u sustavu izvještaja, a naročito u spremljenim "
-"izvještajima, postoji li izvještaj s ovim globalnim jedinstvenim "
+"Jedan od tvojih izvještaja ima dupli globalan jedinstveni identifikator "
+"izvještaja. Provjeri sustav izvještaja, naročito tvoje spremljene "
+"izvještaje, postoji li izvještaj s ovim globalnim jedinstvenim "
 "identifikatorom: "
 
 #: gnucash/report/report-core.scm:212
