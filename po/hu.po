@@ -6068,7 +6068,7 @@ msgctxt ""
 "Item represents an unknown object type (in the sense of bill, customer, "
 "invoice, transaction, split,…)!"
 msgid "New item"
-msgstr "_Új tétel"
+msgstr "Új tétel"
 
 #: gnucash/gnome-search/dialog-search.c:1162
 #: gnucash/gnome-utils/gnc-recurrence.c:544

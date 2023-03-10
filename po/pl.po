@@ -4,7 +4,7 @@
 # Henio Szewczyk <henryk.szewczyk09@gmail.com>, 2021.
 # 154pinkchairs <ovehis@riseup.net>, 2022.
 # WaldiS <sto@tutanota.de>, 2022.
-# gnu-ewm <gnu.ewm@protonmail.com>, 2022.
+# gnu-ewm <gnu.ewm@protonmail.com>, 2022, 2023.
 # Kaligula <kaligula.dev@gmail.com>, 2022.
 msgid ""
 msgstr ""

@@ -9,14 +9,15 @@
 # Eric <spice2wolf@gmail.com>, 2021.
 # Eric <alchemillatruth@purelymail.com>, 2022.
 # YTX <ytx.cash@gmail.com>, 2022.
+# J0kWang <lianjiefly@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-02-18 12:17+0000\n"
-"Last-Translator: YTX <ytx.cash@gmail.com>\n"
+"PO-Revision-Date: 2023-03-04 06:39+0000\n"
+"Last-Translator: J0kWang <lianjiefly@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/glossary/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -24,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 
 # 翻译人员好，这个是不会被最终用户所见的。这是为了您，也就是翻译人员所提供的一个工具。GnuCash 是一个个人或小型企业理财的软件，是一个会计专业性比较强的软件，其中包含了很多的术语。而这里就是针对很多术语的解释。
 # 请大家务必在翻译前先浏览此文件，否则很容易出现翻译不一致的地方。如果有必须修正的术语错误，也请先修改这个文件，然后再修改软件的 po，这样后来的翻译人员就不会犯同样的出错了。请大家在翻译术语的时候，尽量参考国内会计行业术语，以方便专业人士使用。谢谢！
@@ -928,7 +929,7 @@ msgstr "小计"
 # 科目的一个字段
 #. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
 msgid "tax code"
-msgstr "税法"
+msgstr "税号"
 
 # 科目的一个字段
 #. "field of an account"

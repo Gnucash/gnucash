@@ -7,6 +7,7 @@
 # Neil Williams <linux@codehelp.co.uk>, 2006.
 # Adithya K <adithyak04@gmail.com>, 2021.
 # Simon Arlott <weblate.simon@arlott.org>, 2022.
+# John Ralls <jralls@ceridwen.us>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
