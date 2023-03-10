@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-10 12:41+0000\n"
+"PO-Revision-Date: 2023-03-10 14:37+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hu/>\n"
@@ -10056,11 +10056,10 @@ msgid "Show the entered and reconcile dates"
 msgstr "Alkalmazott árfolyamok megjelenítése"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:312
-#, fuzzy
 msgid ""
 "Show the date when the transaction was entered below the posted date and "
 "reconciled date on split row."
-msgstr "Tranzakció létrehozás ennyi nappal a hatályos dátum előtt."
+msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:316
 msgid "Show entered and reconciled dates on selection"
@@ -10082,9 +10081,8 @@ msgid "Show the calendar buttons Cancel, Today and Select."
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:326
-#, fuzzy
 msgid "Move the selection to the blank split on expand"
-msgstr "A kiválasztott tranzakciósablonok mozgatása egy sort fel"
+msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:327
 msgid ""
@@ -10385,7 +10383,7 @@ msgstr "E dialógus megjelenik, mikor megnyitnak egy csak olvasható regisztert.
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:59
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:182
 msgid "Change contents of reconciled split"
-msgstr "Egyeztetett kifejtések tartalmának megváltoztatása"
+msgstr "Egyeztetett felosztások tartalmának megváltoztatása"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:60
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:183
