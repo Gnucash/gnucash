@@ -718,14 +718,14 @@ gnc_gui_destroy (void)
 static void
 gnc_gui_shutdown (void)
 {
-    gchar *map;
+//    gchar *map;
 
     if (gnome_is_running && !gnome_is_terminating)
     {
         gnome_is_terminating = TRUE;
-        map = gnc_build_userdata_path(ACCEL_MAP_NAME);
-        gtk_accel_map_save(map);
-        g_free(map);
+//        map = gnc_build_userdata_path(ACCEL_MAP_NAME);
+//        gtk_accel_map_save(map);
+//        g_free(map);
         gnc_component_manager_shutdown ();
         gtk_main_quit();
     }
