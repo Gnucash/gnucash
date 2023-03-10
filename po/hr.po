@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-09 23:45+0000\n"
+"PO-Revision-Date: 2023-03-10 20:49+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hr/>\n"
@@ -1450,10 +1450,8 @@ msgstr ""
 #. Translators: this is a stock transaction describing return
 #. of capital
 #: gnucash/gnome/assistant-stock-transaction.cpp:222
-#, fuzzy
-#| msgid "Decrease in capital"
 msgid "Return of capital"
-msgstr "Smanjenje kapitala"
+msgstr "Povrat na kapital"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:223
 msgid ""
@@ -5589,14 +5587,14 @@ msgid ""
 "principles like double-entry accounting to ensure balanced books and "
 "accurate reports."
 msgstr ""
-"Osmišljen da bude jednostavan u upotrebi, istovremeno moćan i prilagodljiv, "
-"GnuCash ti omogućava praćenje bankovnih računa, dionica, prihoda i rashoda. "
-"GnuCash se zasniva na profesionalnim računovodstvenim načelima kao što je "
-"dvojno knjigovodstvo, te osigurava saldirane knjige i točne izvještaje."
+"Jednostavan, istovremeno moćan i prilagodljiv, GnuCash omogućava praćenje "
+"bankovnih računa, dionica, prihoda i rashoda. GnuCash se zasniva na "
+"profesionalnim računovodstvenim načelima kao što je dvojno knjigovodstvo, te "
+"osigurava saldirane knjige i točne izvještaje."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:15
 msgid "With GnuCash you can (but are not limited to):"
-msgstr "Mali isječak mogućnosti programa GnuCash:"
+msgstr "Neke od mogućnosti koje pruža GnuCash:"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:17
 msgid "Keep track of your day to day personal income and expenses"
@@ -19590,13 +19588,11 @@ msgstr "Nema postavaka"
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:47
 msgid "GnuCash Export Format"
-msgstr "Odaberi format za izvoz"
+msgstr "GnuCash format za izvoz"
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:48
-#, fuzzy
-#| msgid "GnuCash Export Format"
 msgid "GnuCash Export Format (4.x and older)"
-msgstr "Odaberi format za izvoz"
+msgstr "GnuCash format za izvoz (4.x i starije verzije)"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:134
 msgid "Shipping Name"
@@ -19718,18 +19714,13 @@ msgstr "Isključeno"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1331
-#, fuzzy
-#| msgid "_Select transfer account"
 msgid "_Assign transfer account"
-msgstr "_Odaberi konto prijenosa"
+msgstr "_Odredi konto prijenosa"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1341
-#, fuzzy
-#| msgid "Exchange rate"
-#| msgid_plural "Exchange rates"
 msgid "Assign e_xchange rate"
-msgstr "Tečaj"
+msgstr "Odredi _tečaj"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1349
