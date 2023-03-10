@@ -3639,7 +3639,7 @@ gnc_main_window_update_menu_for_action (GncMainWindow *window,
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
     found =  gnc_menubar_model_update_item (priv->menubar_model, action_name,
-                                            _(label), _(tooltip));
+                                            _(label), nullptr, _(tooltip));
 
     // add tooltip redirect call backs
     gnc_plugin_add_menu_tooltip_callbacks (priv->menubar,

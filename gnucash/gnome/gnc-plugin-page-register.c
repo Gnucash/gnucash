@@ -1057,7 +1057,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
             {
                 /* Adjust the action's label and tooltip */
                 found = gnc_menubar_model_update_item (gnc_window_get_menubar_model (gnc_window),
-                                                       *iter, _(*label_iter), _(*tooltip_iter));
+                                                       *iter, _(*label_iter), NULL, _(*tooltip_iter));
 
                 PINFO("split model_item action '%s', found is %d, iter label is '%s'",
                         *iter, found, _(*label_iter));
@@ -1075,7 +1075,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
             {
                 /* Adjust the action's label and tooltip */
                 found = gnc_menubar_model_update_item (gnc_window_get_menubar_model (gnc_window),
-                                                       *iter, _(*label_iter), _(*tooltip_iter));
+                                                       *iter, _(*label_iter), NULL, _(*tooltip_iter));
 
                 PINFO("trans model_item action '%s', found is %d, iter label is '%s'",
                         *iter, found, _(*label_iter));

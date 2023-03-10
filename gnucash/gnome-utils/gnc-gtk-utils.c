@@ -749,20 +749,22 @@ gnc_menubar_model_find_menu_item (GMenuModel *menu_model, GtkWidget *menu, const
  *
  *  @param label The new menu label text.
  *
+ *  @param accel_name The accelerator string
+ *
  *  @param tooltip The new tooltip text if any.
  *
  *  @return TRUE if item found and updated or FALSE if not.
  */
 gboolean
 gnc_menubar_model_update_item (GMenuModel *menu_model, const gchar *action_name,
-                               const gchar *label, const gchar *tooltip)
+                               const gchar *label, const gchar *accel_name,
+                               const gchar *tooltip)
 {
     GncMenuModelSearch *gsm;
     gboolean found = FALSE;
 
     g_return_val_if_fail (menu_model != NULL, FALSE);
     g_return_val_if_fail (action_name != NULL, FALSE);
-    g_return_val_if_fail (label != NULL, FALSE);
 
     gsm = g_new0 (GncMenuModelSearch, 1);
 
@@ -778,7 +780,7 @@ gnc_menubar_model_update_item (GMenuModel *menu_model, const gchar *action_name,
         const gchar *old_action = NULL;
         const gchar *old_temp = NULL;
         const gchar *old_accel = NULL;
-        GMenuItem *item;
+        const gchar *old_tooltip = NULL;
 
         iter = g_menu_model_iterate_item_attributes (gsm->model, gsm->index);
         while (g_menu_attribute_iter_get_next (iter, &key, &value))
@@ -792,31 +794,61 @@ gnc_menubar_model_update_item (GMenuModel *menu_model, const gchar *action_name,
             else if (g_str_equal (key, GNC_MENU_ATTRIBUTE_ACCELERATOR) &&
                      g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
                 old_accel = g_variant_get_string (value, NULL);
+            else if (g_str_equal (key, GNC_MENU_ATTRIBUTE_TOOLTIP) &&
+                     g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
+                old_tooltip = g_variant_get_string (value, NULL);
             else if (g_str_equal (key, G_MENU_ATTRIBUTE_TARGET))
                 old_target = g_variant_ref (value);
 
             g_variant_unref (value);
         }
 
-        item = g_menu_item_new (label, old_action);
-
-        if (tooltip)
-            g_menu_item_set_attribute (item, GNC_MENU_ATTRIBUTE_TOOLTIP, "s", tooltip);
-
-        if (old_temp)
-            g_menu_item_set_attribute (item, GNC_MENU_ATTRIBUTE_TEMPORARY, "s", old_temp);
-
-        if (old_accel)
-            g_menu_item_set_attribute (item, GNC_MENU_ATTRIBUTE_ACCELERATOR, "s", old_accel);
-
-        if (old_target)
+        if (!label && !gsm->search_action_label)
         {
-            g_menu_item_set_attribute_value (item, G_MENU_ATTRIBUTE_TARGET, old_target);
-            g_variant_unref (old_target);
+            if (old_target)
+                g_variant_unref (old_target);
+
+            g_free (gsm);
+            return found;
         }
-        g_menu_remove (G_MENU(gsm->model), gsm->index);
-        g_menu_insert_item (G_MENU(gsm->model), gsm->index, item);
-        found = TRUE;
+
+        if ((accel_name && g_strcmp0 (old_accel, accel_name) != 0) ||
+            (tooltip && g_strcmp0 (old_tooltip, tooltip) != 0) ||
+            (label && g_strcmp0 (gsm->search_action_label, label) != 0))
+        {
+            GMenuItem *item = NULL;
+
+            if (label)
+                item = g_menu_item_new (label, old_action);
+            else
+                item = g_menu_item_new (gsm->search_action_label, old_action);
+
+            if (tooltip)
+                g_menu_item_set_attribute (item, GNC_MENU_ATTRIBUTE_TOOLTIP, "s", tooltip);
+            else
+            {
+                if (old_tooltip)
+                   g_menu_item_set_attribute (item, GNC_MENU_ATTRIBUTE_TOOLTIP, "s", old_tooltip);
+            }
+            if (accel_name)
+                g_menu_item_set_attribute (item, GNC_MENU_ATTRIBUTE_ACCELERATOR, "s", accel_name);
+            else
+            {
+                if (old_accel)
+                    g_menu_item_set_attribute (item, GNC_MENU_ATTRIBUTE_ACCELERATOR, "s", old_accel);
+            }
+            if (old_temp)
+                g_menu_item_set_attribute (item, GNC_MENU_ATTRIBUTE_TEMPORARY, "s", old_temp);
+
+            if (old_target)
+                g_menu_item_set_attribute_value (item, G_MENU_ATTRIBUTE_TARGET, old_target);
+
+            g_menu_remove (G_MENU(gsm->model), gsm->index);
+            g_menu_insert_item (G_MENU(gsm->model), gsm->index, item);
+            found = TRUE;
+        }
+        if (old_target)
+            g_variant_unref (old_target);
     }
     g_free (gsm);
     return found;
