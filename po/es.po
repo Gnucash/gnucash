@@ -83,9 +83,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-10 17:38+0000\n"
-"Last-Translator: Jaime Marquínez Ferrándiz <jaime.marquinez."
-"ferrandiz@fastmail.net>\n"
+"PO-Revision-Date: 2023-03-11 22:41+0000\n"
+"Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/es/>\n"
 "Language: es\n"
@@ -1514,7 +1513,7 @@ msgstr "Abrir"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:148
 msgid "Initial stock long purchase."
-msgstr ""
+msgstr "Compra inicial de acciones a largo."
 
 #. Translators: this is a stock transaction describing an
 #. initial stock short sale
@@ -1526,7 +1525,7 @@ msgstr "Abrir _carpeta"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:162
 msgid "Initial stock short sale."
-msgstr ""
+msgstr "Venta inicial de acciones a corto."
 
 #. Translators: this is a stock transaction describing
 #. new purchase of stock.
@@ -1546,7 +1545,7 @@ msgstr "Compra"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:180
 msgid "Buying stock long."
-msgstr ""
+msgstr "Compra de acciones a largo."
 
 #. Translators: this is a stock transaction describing new
 #. sale of stock, and recording capital gain/loss
@@ -1566,7 +1565,7 @@ msgstr "Venta"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:194
 msgid "Selling stock long, and record capital gain/loss."
-msgstr ""
+msgstr "Venta de acciones a largo y registro de ganancias/pérdidas de capital."
 
 #. Translators: this is a stock transaction describing
 #. dividends issued to holder
@@ -1588,6 +1587,10 @@ msgid ""
 "Any dividend being reinvested must be subsequently recorded as a regular "
 "stock purchase."
 msgstr ""
+"Empresa emite dividendo en efectivo al titular.\n"
+"\n"
+"Cualquier dividendo que sea reinvertido deberá ser introducido después como "
+"una compra de acciones normal."
 
 #. Translators: this is a stock transaction describing return
 #. of capital
@@ -1599,6 +1602,8 @@ msgstr "Retorno de capital"
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units."
 msgstr ""
+"Empresa devuelve capital, reduciendo la base de coste sin afectar al # de "
+"unidades."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution
