@@ -86,7 +86,7 @@
     </submenu>
     <submenu>
       <attribute name="label" translatable="yes">_Action</attribute>
-      <attribute name="action">membeddedwin.ActionsAction</attribute>
+      <attribute name="action">embeddedwin.ActionsAction</attribute>
       <section>
         <item>
           <attribute name="label" translatable="yes">_Transfer…</attribute>
@@ -97,7 +97,7 @@
         <item>
           <attribute name="label" translatable="yes">_Blank Transaction</attribute>
           <attribute name="action">GncPluginPageRegisterActions.BlankTransactionAction</attribute>
-          <attribute name="accel">&lt;Primary&gt;Page_Down</attribute>
+          <attribute name="accel">&lt;Primary&gt;b</attribute>
           <attribute name="tooltip" translatable="yes">Move to the blank transaction at the bottom of the register</attribute>
         </item>
       </section>
@@ -226,7 +226,7 @@
         <property name="action-name">GncPluginPageRegisterActions.BlankTransactionAction</property>
         <property name="tooltip-text" translatable="yes">Move to the blank transaction at the bottom of the register</property>
         <property name="use-underline">True</property>
-        <property name="icon-name">go-bottom</property>
+        <property name="icon-name">go-jump</property>
       </object>
       <packing>
         <property name="expand">False</property>
