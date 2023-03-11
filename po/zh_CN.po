@@ -18,7 +18,7 @@
 # cjh <cjh@cjh0613.com>, 2021.
 # Eric <spice2wolf@gmail.com>, 2021.
 # J0kWang <lianjiefly@gmail.com>, 2021, 2022, 2023.
-# YTX <ytx.cash@gmail.com>, 2021, 2022.
+# YTX <ytx.cash@gmail.com>, 2021, 2022, 2023.
 # 李元基 <lovedebushiu@qq.com>, 2022.
 # Eric <alchemillatruth@purelymail.com>, 2022.
 # Yu Hongbo <linuxbckp@gmail.com>, 2022.
@@ -32,8 +32,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-03-11 16:40+0000\n"
-"Last-Translator: Carlson Mak <hbmaak@gmail.com>\n"
+"PO-Revision-Date: 2023-03-11 18:41+0000\n"
+"Last-Translator: YTX <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
