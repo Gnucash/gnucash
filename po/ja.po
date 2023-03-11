@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-11 22:41+0000\n"
+"PO-Revision-Date: 2023-03-12 01:01+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/ja/>\n"
@@ -981,19 +981,14 @@ msgstr ""
 "起動する必要はありません。"
 
 #: doc/tip_of_the_day.list.c:121
-#, fuzzy
-#| msgid ""
-#| "To search through all your transactions, start a search (Edit->Find...) "
-#| "from the main accounts hierarchy page. To limit your search to a single "
-#| "account, start the search from that account's register."
 msgid ""
 "To search through all your transactions, start a search (Edit->Find…) from "
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
-"全取引から特定の取引を検索するには、メインの勘定科目タブで 編集->検索... を選"
-"択し、検索を開始してください。検索範囲を一つの勘定科目に制限する場合は、勘定"
-"科目記録簿タブで検索を開始してください。"
+"全取引から特定の取引を検索するには、メインの勘定科目タブで 編集->検索… を選択"
+"し、検索を開始してください。検索範囲を一つの勘定科目に制限する場合は、勘定科"
+"目記録簿タブで検索を開始してください。"
 
 #: doc/tip_of_the_day.list.c:125
 msgid ""
@@ -1191,10 +1186,9 @@ msgstr "各種支払"
 #. Translators: %s is "Taxes",
 #. "Insurance", or similar.
 #: gnucash/gnome/assistant-loan.cpp:766
-#, fuzzy, c-format
-#| msgid "... pay \"%s\"?"
+#, c-format
 msgid "… pay \"%s\"?"
-msgstr "\"%s\" の支払はありますか?"
+msgstr "… \"%s\" の支払はありますか?"
 
 #: gnucash/gnome/assistant-loan.cpp:778
 msgid "via Escrow account?"
@@ -2370,15 +2364,13 @@ msgid "_OK"
 msgstr "OK(_O)"
 
 #: gnucash/gnome/dialog-doclink.c:241
-#, fuzzy
-#| msgid "Amend URL:"
 msgid "Amend the URL"
-msgstr "URL を修正してください:"
+msgstr "URL を修正してください"
 
 #: gnucash/gnome/dialog-doclink.c:246
 #, c-format
 msgid "Enter an URL like \"%s\""
-msgstr ""
+msgstr "URL を \"%s\"のように入力してください"
 
 #: gnucash/gnome/dialog-doclink.c:264
 msgid "Existing Document Link is"
@@ -13726,10 +13718,8 @@ msgid "(none)"
 msgstr "(なし)"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:409
-#, fuzzy
-#| msgid "Enter URL like http://www.gnucash.org"
 msgid "Enter an URL like \"https://www.gnucash.org\""
-msgstr "URL を http://www.gnucash.org のように入力してください。"
+msgstr "URL を \"https://www.gnucash.org\" のように入力してください"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:454
 msgid "Location does not start with a valid scheme"
@@ -27878,7 +27868,7 @@ msgstr "ファイル(_F)"
 
 #: gnucash/ui/gnc-main-window.ui:40
 msgid "Pa_ge Setup"
-msgstr "ページの設定(_G)..."
+msgstr "ページの設定(_G)"
 
 #: gnucash/ui/gnc-main-window.ui:43
 msgid "Specify the page size and orientation for printing"
