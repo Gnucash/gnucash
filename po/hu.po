@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-03-10 14:37+0000\n"
+"PO-Revision-Date: 2023-03-11 16:40+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -12524,14 +12524,14 @@ msgid ""
 "reconciled split. Allowing these changes can make it hard to perform future "
 "reconciliations."
 msgstr ""
-"E dialógus megjelenik, mielőtt egyeztetett kifejtés megváltoztatását "
+"E dialógus megjelenik, mielőtt egyeztetett felosztás megváltoztatását "
 "engedélyeznék. A változások engedélyezése megnehezítheti a jövőbeli "
 "egyeztetések elvégzését."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:64
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:187
 msgid "Mark transaction split as unreconciled"
-msgstr "Tranzakciókifejtés megjelölése nem egyeztettként"
+msgstr "Tranzakciófelosztás megjelölése nem egyeztetettként"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:65
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:188
@@ -12540,57 +12540,44 @@ msgid ""
 "unreconciled. Doing so will throw off the reconciled value of the register "
 "and can make it hard to perform future reconciliations."
 msgstr ""
-"E dialógus megjelenik, mielőtt engedélyezik tranzakciókifejtés megjelölését "
+"E dialógus megjelenik, mielőtt engedélyezik tranzakciófelosztás megjelölését "
 "nem egyeztetettként. Ha így tesznek, akkor eldobják a regiszter egyeztetett "
 "értékét, és megnehezítik a jövőbeli egyeztetéseket."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:69
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:192
-#, fuzzy
-#| msgid "Remove a split from a transaction"
 msgid "Cut a split from a transaction"
-msgstr "Részkönyvelés törlése a tranzakcióból"
+msgstr "Felosztás kivágása a tranzakcióból"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:70
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:193
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to remove a split from a "
-#| "transaction."
 msgid ""
 "This dialog is presented before allowing you to cut a split from a "
 "transaction."
 msgstr ""
-"E dialógus megjelenik, mielőtt engedélyezik a részkönyvelés törlését "
+"Ez az ablak azelőtt jelenik meg, mielőtt kivágna egy felosztást egy "
 "tranzakcióból."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:74
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:197
-#, fuzzy
-#| msgid "Remove a reconciled split from a transaction"
 msgid "Cut a reconciled split from a transaction"
-msgstr "Egyeztetett részkönyvelés törlése a tranzakcióból"
+msgstr "Egyeztetett felosztás kivágása egy tranzakcióból"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:75
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:198
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to remove a reconciled split "
-#| "from a transaction. Doing so will throw off the reconciled value of the "
-#| "register and can make it hard to perform future reconciliations."
 msgid ""
 "This dialog is presented before allowing you to cut a reconciled split from "
 "a transaction. Doing so will throw off the reconciled value of the register "
 "and can make it hard to perform future reconciliations."
 msgstr ""
-"E dialógus megjelenik, mielőtt engedélyezik kifejtés törlését tranzakcióból. "
-"Ha így tesznek, akkor eldobják a regiszter egyeztetett értékét, és "
-"megnehezítik a jövőbeli egyeztetéseket."
+"Ez az ablak azelőtt jelenik meg, mielőtt kivágna egy egyeztetett felosztást "
+"egy tranzakcióból. Ha így tesz, azzal felborítja a regiszter egyeztetett "
+"egyenlegét, és megnehezíti a jövőbeli egyeztetéseket."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:79
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:202
 msgid "Remove a split from a transaction"
-msgstr "Részkönyvelés törlése a tranzakcióból"
+msgstr "Felosztás eltávolítása egy tranzakcióból"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:80
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:203
@@ -12598,13 +12585,13 @@ msgid ""
 "This dialog is presented before allowing you to remove a split from a "
 "transaction."
 msgstr ""
-"E dialógus megjelenik, mielőtt engedélyezik a részkönyvelés törlését "
+"Ez az ablak azelőtt jelenik meg, mielőtt eltávolítana egy felosztást egy "
 "tranzakcióból."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:84
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:207
 msgid "Remove a reconciled split from a transaction"
-msgstr "Egyeztetett részkönyvelés törlése a tranzakcióból"
+msgstr "Egyeztetett felosztás eltávolítása egy tranzakcióból"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:85
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:208
@@ -12613,16 +12600,16 @@ msgid ""
 "from a transaction. Doing so will throw off the reconciled value of the "
 "register and can make it hard to perform future reconciliations."
 msgstr ""
-"E dialógus megjelenik, mielőtt engedélyezik kifejtés törlését tranzakcióból. "
-"Ha így tesznek, akkor eldobják a regiszter egyeztetett értékét, és "
-"megnehezítik a jövőbeli egyeztetéseket."
+"Ez az ablak azelőtt jelenik meg, mielőtt eltávolítana egy egyeztetett "
+"felosztást egy tranzakcióból. Ha így tesz, azzal felborítja a regiszter "
+"egyeztetett egyenlegét, és megnehezíti a jövőbeli egyeztetéseket."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:89
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:94
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:212
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:217
 msgid "Remove all the splits from a transaction"
-msgstr "Az összes kifejtés törlése a tranzakcióból"
+msgstr "Az összes felosztás eltávolítása egy tranzakcióból"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:90
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:213
@@ -12630,8 +12617,8 @@ msgid ""
 "This dialog is presented before allowing you to remove all splits from a "
 "transaction."
 msgstr ""
-"E dialógus megjelenik, mielőtt engedélyezik minden kifejtés törlését egy "
-"tranzakcióból."
+"Ez az ablak azelőtt jelenik meg, mielőtt eltávolítaná az összes felosztást "
+"egy tranzakcióból."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:95
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:218
