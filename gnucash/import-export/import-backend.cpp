@@ -45,6 +45,7 @@
 #include "gnc-ui-util.h"
 
 #include <algorithm>
+#include <sstream>
 
 #define GNCIMPORT_DESC    "desc"
 #define GNCIMPORT_MEMO    "memo"
@@ -332,11 +333,17 @@ gnc_import_MatchInfo_get_probability (const GNCImportMatchInfo * info)
         return 0;
 }
 
+static void match_info_free (GNCImportMatchInfo* match_info)
+{
+    g_free (match_info->probability_str);
+    g_free (match_info);
+}
+
 void gnc_import_TransInfo_delete (GNCImportTransInfo *info)
 {
     if (info)
     {
-        g_list_free (info->match_list);
+        g_list_free_full (info->match_list, (GDestroyNotify)match_info_free);
         /*If the transaction exists and is still open, it must be destroyed*/
         if (xaccTransIsOpen(info->trans))
         {
@@ -561,11 +568,14 @@ void split_find_match (GNCImportTransInfo * trans_info,
                        double fuzzy_amount_difference)
 {
     gint prob = 0;
+    std::ostringstream prob_str;
+    const char* bullet{"\n• "};
 
     auto new_trans = gnc_import_TransInfo_get_trans (trans_info);
     auto new_trans_fsplit = gnc_import_TransInfo_get_fsplit (trans_info);
 
     /* Matching heuristics */
+    prob_str << "Probability score:";
 
     /* Amount heuristics */
     auto downloaded_split_amount =
@@ -573,7 +583,9 @@ void split_find_match (GNCImportTransInfo * trans_info,
     /*DEBUG(" downloaded_split_amount=%f", downloaded_split_amount);*/
     auto match_split_amount = gnc_numeric_to_double(xaccSplitGetAmount(split));
     /*DEBUG(" match_split_amount=%f", match_split_amount);*/
-    if (fabs(downloaded_split_amount - match_split_amount) < 1e-6)
+    auto amount_difference = fabs (downloaded_split_amount - match_split_amount);
+
+    if (amount_difference < 1e-6)
         /* bug#347791: Double type shouldn't be compared for exact
             equality, so we're using fabs() instead. */
         /*if (gnc_numeric_equal(xaccSplitGetAmount
@@ -582,15 +594,17 @@ void split_find_match (GNCImportTransInfo * trans_info,
             -- gnc_numeric_equal is an expensive function call */
     {
         prob = prob + 3;
+        prob_str << bullet << "+3 amounts match";
         /*DEBUG("heuristics:  probability + 3 (amount)");*/
     }
-    else if (fabs (downloaded_split_amount - match_split_amount) <=
-                fuzzy_amount_difference)
+    else if (amount_difference <= fuzzy_amount_difference)
     {
         /* ATM fees are sometimes added directly in the transaction.
             So you withdraw 100$ and get charged 101,25$ in the same
             transaction */
         prob = prob + 2;
+        prob_str << bullet << "+2 amounts differ by " << amount_difference
+                 << ", less or equal to threshold of " << fuzzy_amount_difference;
         /*DEBUG("heuristics:  probability + 2 (amount)");*/
     }
     else
@@ -599,6 +613,7 @@ void split_find_match (GNCImportTransInfo * trans_info,
             threshold, it's very unlikely to be the same transaction
             so we give it an extra -5 penalty */
         prob = prob - 5;
+        prob_str << bullet << "-5 amounts differ by " << amount_difference;
         /* DEBUG("heuristics:  probability - 1 (amount)"); */
     }
 
@@ -615,11 +630,14 @@ void split_find_match (GNCImportTransInfo * trans_info,
     if (datediff_day == 0)
     {
         prob = prob + 3;
+        prob_str << bullet << "+3 dates match";
         /*DEBUG("heuristics:  probability + 3 (date)");*/
     }
     else if (datediff_day <= date_threshold)
     {
         prob = prob + 2;
+        prob_str << bullet << "+2 dates differ by " << datediff_day
+                 << ", does not exceed threshold of " << date_threshold << " days";
         /*DEBUG("heuristics:  probability + 2 (date)");*/
     }
     else if (datediff_day > date_not_threshold)
@@ -627,6 +645,8 @@ void split_find_match (GNCImportTransInfo * trans_info,
         /* Extra penalty if that split lies awfully far away from
             the given one. */
         prob = prob - 5;
+        prob_str << bullet << "-5 dates differ by greater than "
+                 << datediff_day << " days";
         /*DEBUG("heuristics:  probability - 5 (date)"); */
         /* Changed 2005-02-21: Revert the hard-limiting behaviour
             back to the previous large penalty. (Changed 2004-11-27:
@@ -661,6 +681,7 @@ void split_find_match (GNCImportTransInfo * trans_info,
         {
             /* An exact match of the Check number gives a +4 */
             prob += 4;
+            prob_str << bullet << "+4 trans-num matches";
             /*DEBUG("heuristics:  probability + 4 (Check number)");*/
         }
         else if (strlen(new_trans_str) > 0 && strlen(split_str) > 0)
@@ -668,6 +689,7 @@ void split_find_match (GNCImportTransInfo * trans_info,
             /* If both number are not empty yet do not match, add a
                             little extra penalty */
             prob -= 2;
+            prob_str << bullet << "-2 trans-num present and mismatch";
         }
     }
 
@@ -679,6 +701,7 @@ void split_find_match (GNCImportTransInfo * trans_info,
         {
             /* An exact match of memo gives a +2 */
             prob = prob + 2;
+            prob_str << bullet << "+2 memo matches";
             /* DEBUG("heuristics:  probability + 2 (memo)"); */
         }
         else if ((strncasecmp(memo, xaccSplitGetMemo(split),
@@ -689,6 +712,7 @@ void split_find_match (GNCImportTransInfo * trans_info,
                             number some banks seem to include in the memo but someone
                             should write something more sophisticated */
             prob = prob + 1;
+            prob_str << bullet << "+1 memo partial match";
             /*DEBUG("heuristics:  probability + 1 (memo)");	*/
         }
     }
@@ -702,6 +726,7 @@ void split_find_match (GNCImportTransInfo * trans_info,
         {
             /*An exact match of Description gives a +2 */
             prob = prob + 2;
+            prob_str << bullet << "+2 description matches";
             /*DEBUG("heuristics:  probability + 2 (description)");*/
         }
         else if ((strncasecmp(descr,
@@ -713,6 +738,7 @@ void split_find_match (GNCImportTransInfo * trans_info,
                             number some banks seem to include in the description but someone
                             should write something more sophisticated */
             prob = prob + 1;
+            prob_str << bullet << "+1 description partial match";
             /*DEBUG("heuristics:  probability + 1 (description)");	*/
         }
     }
@@ -720,6 +746,9 @@ void split_find_match (GNCImportTransInfo * trans_info,
     /* Is the probability high enough? Otherwise do nothing and return. */
     if (prob < display_threshold)
         return;
+
+    prob_str << std::endl << "Total probability score: " << prob
+             << " meets or exceeds threshold of " << display_threshold;
 
     /* The probability is high enough, so allocate an object
                 here. Allocating it only when it's actually being used is
@@ -730,6 +759,7 @@ void split_find_match (GNCImportTransInfo * trans_info,
     match_info->update_proposed = update_proposed;
     match_info->split = split;
     match_info->trans = xaccSplitGetParent(split);
+    match_info->probability_str = g_strdup (prob_str.str().c_str());
 
 
     /* Append that to the list. Do not use g_list_append because

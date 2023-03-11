@@ -43,6 +43,7 @@ typedef struct _matchinfo
     Split * split;
     /*GNC_match_probability probability;*/
     gint probability;
+    char* probability_str;
     gboolean update_proposed;
 } GNCImportMatchInfo;
 

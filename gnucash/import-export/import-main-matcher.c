@@ -113,6 +113,7 @@ enum downloaded_cols
     DOWNLOADED_COL_ACTION_CLEAR,
     DOWNLOADED_COL_ACTION_UPDATE,
     DOWNLOADED_COL_ACTION_INFO,
+    DOWNLOADED_COL_ACTION_DESCRIPTION,
     DOWNLOADED_COL_ACTION_PIXBUF,
     DOWNLOADED_COL_DATA,
     DOWNLOADED_COL_COLOR,
@@ -1493,7 +1494,7 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
                                 G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT, //description stuff
                                 G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT, //memo stuff
                                 G_TYPE_STRING, G_TYPE_BOOLEAN,
-                                G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_STRING,
+                                G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_STRING, G_TYPE_STRING,
                                 GDK_TYPE_PIXBUF, G_TYPE_POINTER, G_TYPE_STRING,
                                 G_TYPE_BOOLEAN);
     gtk_tree_view_set_model (view, GTK_TREE_MODEL(store));
@@ -2080,54 +2081,32 @@ refresh_model_row (GNCImportMainMatcher *gui,
     g_free (int_prob_required_class);
     g_free (int_not_required_class);
 
+    GNCImportAction action = gnc_import_TransInfo_get_action (info);
+
     /* Set the pixmaps */
     gtk_tree_store_set (store, iter,
-                        DOWNLOADED_COL_ACTION_ADD,
-                        gnc_import_TransInfo_get_action (info) == GNCImport_ADD,
+                        DOWNLOADED_COL_ACTION_ADD, action == GNCImport_ADD,
+                        DOWNLOADED_COL_ACTION_CLEAR, action == GNCImport_CLEAR,
                         -1);
-    if (gnc_import_TransInfo_get_action (info) == GNCImport_SKIP)
-    {
-        /*If skipping the row, there is no best match's confidence pixmap*/
-        gtk_tree_store_set (store, iter, DOWNLOADED_COL_ACTION_PIXBUF, NULL, -1);
-    }
 
-    gtk_tree_store_set (store, iter,
-                        DOWNLOADED_COL_ACTION_CLEAR,
-                        gnc_import_TransInfo_get_action (info) == GNCImport_CLEAR,
-                        -1);
-    if (gnc_import_TransInfo_get_action (info) == GNCImport_CLEAR)
+    if (show_pixbuf && (action == GNCImport_CLEAR || action == GNCImport_UPDATE))
     {
+        GNCImportMatchInfo *match = gnc_import_TransInfo_get_selected_match (info);
+        gint prob = gnc_import_MatchInfo_get_probability (match);
+        GdkPixbuf* pixbuf = gen_probability_pixbuf (prob, gui->user_settings,
+                                                    GTK_WIDGET(gui->view));
         /*Show the best match's confidence pixmap in the info column*/
-        if (show_pixbuf)
-            gtk_tree_store_set (store, iter,
-                                DOWNLOADED_COL_ACTION_PIXBUF,
-                                gen_probability_pixbuf (gnc_import_MatchInfo_get_probability
-                                        (gnc_import_TransInfo_get_selected_match (info)),
-                                        gui->user_settings,
-                                        GTK_WIDGET(gui->view)),
-                                -1);
-        else
-            gtk_tree_store_set (store, iter, DOWNLOADED_COL_ACTION_PIXBUF, NULL, -1);
+        gtk_tree_store_set (store, iter,
+                            DOWNLOADED_COL_ACTION_PIXBUF, pixbuf,
+                            DOWNLOADED_COL_ACTION_DESCRIPTION, match->probability_str,
+                            -1);
     }
-
-    gtk_tree_store_set (store, iter,
-                        DOWNLOADED_COL_ACTION_UPDATE,
-                        gnc_import_TransInfo_get_action (info) == GNCImport_UPDATE,
-                        -1);
-    if (gnc_import_TransInfo_get_action (info) == GNCImport_UPDATE)
-    {
-        /*Show the best match's confidence pixmap in the info column*/
-        if (show_pixbuf)
-            gtk_tree_store_set (store, iter,
-                                DOWNLOADED_COL_ACTION_PIXBUF,
-                                gen_probability_pixbuf (gnc_import_MatchInfo_get_probability
-                                        (gnc_import_TransInfo_get_selected_match (info)),
-                                        gui->user_settings,
-                                        GTK_WIDGET(gui->view)),
-                                -1);
-        else
-            gtk_tree_store_set (store, iter, DOWNLOADED_COL_ACTION_PIXBUF, NULL, -1);
-    }
+    else
+        // don't show pixbuf, or action==SKIP
+        gtk_tree_store_set (store, iter,
+                            DOWNLOADED_COL_ACTION_PIXBUF, NULL,
+                            DOWNLOADED_COL_ACTION_DESCRIPTION, NULL,
+                            -1);
 
     // show child row if 'show matched info' is toggled
     if (gtk_tree_model_iter_has_child (model, iter))
@@ -2411,6 +2390,12 @@ query_tooltip_tree_view_cb (GtkWidget *widget, gint x, gint y,
         case DOWNLOADED_COL_MEMO:
             gtk_tree_model_get (model, &iter,
                                 DOWNLOADED_COL_MEMO_ORIGINAL, &tooltip_text,
+                                -1);
+            break;
+        case DOWNLOADED_COL_ACTION_PIXBUF: // tooltip on pixbuf
+        case DOWNLOADED_COL_ACTION_INFO:   // tooltip on info column
+            gtk_tree_model_get (model, &iter,
+                                DOWNLOADED_COL_ACTION_DESCRIPTION, &tooltip_text,
                                 -1);
             break;
         default:
