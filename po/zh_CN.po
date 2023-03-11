@@ -28,10 +28,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-04 11:39+0000\n"
+"PO-Revision-Date: 2023-03-11 18:40+0000\n"
 "Last-Translator: J0kWang <lianjiefly@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/program-beta/zh_Hans/>\n"
@@ -1255,7 +1255,7 @@ msgstr "分录"
 
 #: gnucash/gnome/assistant-stock-split.c:417
 msgid "Error adding price."
-msgstr "添加汇率时出错。"
+msgstr "添加价格时出错。"
 
 #: gnucash/gnome/assistant-stock-split.c:582
 #: gnucash/gnome/assistant-stock-transaction.cpp:1263
