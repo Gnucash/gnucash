@@ -600,9 +600,6 @@ gnc_gui_init(void)
 {
     static GncMainWindow *main_window;
     gchar *map;
-#ifdef MAC_INTEGRATION
-    gchar *data_dir;
-#endif
 
     ENTER ("");
 
@@ -651,18 +648,30 @@ gnc_gui_init(void)
     // gtk_widget_show (GTK_WIDGET (main_window));
     gnc_window_set_progressbar_window (GNC_WINDOW(main_window));
 
-#ifdef MAC_INTEGRATION
+
     map = gnc_build_userdata_path(ACCEL_MAP_NAME);
     if (!g_file_test (map, G_FILE_TEST_EXISTS))
     {
-        g_free (map);
-        data_dir = gnc_path_get_pkgdatadir();
-        map = g_build_filename(data_dir, "ui", "osx_accel_map", NULL);
+        gchar *text = NULL;
+        gsize length;
+        gchar *map_source;
+        gchar *data_dir = gnc_path_get_pkgdatadir();
+#ifdef MAC_INTEGRATION
+        map_source = g_build_filename (data_dir, "ui", "accelerator-map-osx", NULL);
+#else
+        map_source = g_build_filename (data_dir, "ui", "accelerator-map", NULL);
+#endif /* MAC_INTEGRATION */
+
+        if (map_source && g_file_get_contents (map_source, &text, &length, NULL))
+        {
+            if (length)
+                g_file_set_contents (map, text, length, NULL);
+            g_free (text);
+        }
+        g_free (map_source);
         g_free(data_dir);
     }
-#else
-    map = gnc_build_userdata_path(ACCEL_MAP_NAME);
-#endif /* MAC_INTEGRATION */
+
     gtk_accel_map_load(map);
     g_free(map);
 

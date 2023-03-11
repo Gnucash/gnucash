@@ -1,5 +1,7 @@
 set (ui_SOURCES
-      osx_accel_map)
+      osx_accel_map
+      accelerator-map
+      accelerator-map-osx)
 
 foreach (ui_file ${ui_SOURCES})
     configure_file (${ui_file} ${DATADIR_BUILD}/gnucash/ui/${ui_file} COPYONLY)
