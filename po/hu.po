@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-11 18:40+0000\n"
+"PO-Revision-Date: 2023-03-11 22:41+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hu/>\n"
@@ -10502,9 +10502,9 @@ msgid ""
 "reconciled value of the register and can make it hard to perform future "
 "reconciliations."
 msgstr ""
-"E dialógus megjelenik, mielőtt engedélyezik minden kifejtés törlését egy "
-"tranzakcióból (benne egyeztetett kifejtésekkel). Ha így tesznek, akkor "
-"eldobják a regiszter egyeztetett értékét, és megnehezítik a jövőbeli "
+"Ez az ablak azelőtt jelenik meg, mielőtt eltávolítani az összes felosztást ("
+"az egyeztetetteket is beleértve) egy tranzakcióból. Ha így tesz, azzal "
+"felborítja a regiszter egyeztetett egyenlegét, és megnehezíti a jövőbeli "
 "egyeztetéseket."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:99
@@ -10524,7 +10524,7 @@ msgstr "E dialógus megjelenik, mielőtt engedélyezik egy tranzakció törlés�
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:227
 msgid "Cut a transaction with reconciled splits"
-msgstr "Bontja a tranzakciót egyeztetett felosztással"
+msgstr "Egyeztetett felosztással rendelkező tranzakció kivágása"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:105
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:228
