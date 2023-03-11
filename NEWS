@@ -1,5 +1,30 @@
 Version history:
 ------- -------
+4.903 - 12 March 2023
+Between 4.902 and 4.903, the following bugfixes were accomplished:
+The following fix will also appear in GnuCash 4.14:
+
+    Bug 798765 - Increase the limit for Maximum Slices in the Expense Piechart
+
+The following fixes and improvements were not associated with bug reports:
+
+    Add JSON::Parse to gnc-fq-update.
+    Guard against some possible null pointer dereferences
+    Change the reconcile window toolbar icon for 'Other the Account' to
+        'gnc-jumpto'
+    Change toolbar 'Blank' icon for invoice page to match register
+    Change the short cut from CTRL+Page_Down to CTRL+b and change the toolbar
+        icon to 'go-jump'.
+    Remove -Wno-pointer-sign, adding the necessary casts in gnc-gwen-guic.c
+    Remove -Wno-error=parentheses, added for gcc 8.0 and gtk 3.14
+    Remove redundant uses of cmake -E env
+    [c++options] Save an empty SCM string for nil or empty option values.
+        Avoids crash at reload due to unknown variable.
+    [c++options]Really fix the gnc_option_db_lookup_string_value leak
+
+New and Updated Translations: Chinese (Simplified), Croatian, English (Australia), English (New Zealand), English (United Kingdom), Hungarian, Macedonian, Polish, Portuguese, Russian, Ukrainian
+
+
 4.902 - 5 March 2023
 Between 4.901 and 4.902, the following bugfixes were accomplished:
 The following fixes will also appear in GnuCash 4.14:
