@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-03-09 23:44+0000\n"
+"PO-Revision-Date: 2023-03-11 16:40+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -664,8 +664,8 @@ msgid ""
 "Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
 "Možeš prikazati višestruke izvještaje u jednom prozoru, prikazujući sve "
-"financijske podatke koje želiš najednom. U tom slučaju koristi izvještaj "
-"„Uzorak i proizvoljno→Proizvoljan višestupčani izvještaj“."
+"financijske podatke koje želiš najednom. U tom slučaju koristi izvještaj „"
+"Uzorak i prilagođeno”→„Prilagođen višestupčani izvještaj“."
 
 #: doc/tip_of_the_day.list.c:101
 msgid ""
@@ -6564,14 +6564,14 @@ msgid ""
 "principles like double-entry accounting to ensure balanced books and "
 "accurate reports."
 msgstr ""
-"Osmišljen da bude jednostavan u upotrebi, istovremeno moćan i prilagodljiv, "
-"GnuCash ti omogućava praćenje bankovnih računa, dionica, prihoda i rashoda. "
-"GnuCash se zasniva na profesionalnim računovodstvenim načelima kao što je "
-"dvojno knjigovodstvo, te osigurava saldirane knjige i točne izvještaje."
+"Jednostavan, istovremeno moćan i prilagodljiv, GnuCash omogućava praćenje "
+"bankovnih računa, dionica, prihoda i rashoda. GnuCash se zasniva na "
+"profesionalnim računovodstvenim načelima kao što je dvojno knjigovodstvo, te "
+"osigurava saldirane knjige i točne izvještaje."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:15
 msgid "With GnuCash you can (but are not limited to):"
-msgstr "Mali isječak mogućnosti programa GnuCash:"
+msgstr "Neke od mogućnosti koje pruža GnuCash:"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:17
 msgid "Keep track of your day to day personal income and expenses"
@@ -21422,7 +21422,7 @@ msgstr "Robna transakcija"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:77
 msgid "Transfer Action"
-msgstr "Prijenosna radnja"
+msgstr "Radnja prijenosa"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:79
 msgid "Transfer Memo"
@@ -21484,7 +21484,7 @@ msgstr "Nema postavaka"
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:50
 msgid "GnuCash Export Format"
-msgstr "Odaberi format za izvoz"
+msgstr "GnuCash format za izvoz"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:50
 msgid "Import _Accounts from CSV..."
@@ -29347,7 +29347,7 @@ msgstr "Kontakt osoba poduzeća"
 
 #: libgnucash/app-utils/business-options.scm:77
 msgid "custom"
-msgstr "proizvoljno"
+msgstr "prilagođeno"
 
 #: libgnucash/app-utils/business-options.scm:79
 msgid "Tax Number"

@@ -18,21 +18,22 @@
 # cjh <cjh@cjh0613.com>, 2021.
 # Eric <spice2wolf@gmail.com>, 2021.
 # J0kWang <lianjiefly@gmail.com>, 2021, 2022, 2023.
-# YTX <ytx.cash@gmail.com>, 2021, 2022.
+# YTX <ytx.cash@gmail.com>, 2021, 2022, 2023.
 # 李元基 <lovedebushiu@qq.com>, 2022.
 # Eric <alchemillatruth@purelymail.com>, 2022.
 # Yu Hongbo <linuxbckp@gmail.com>, 2022.
 # Eric <hamburger1024@firemail.cc>, 2022.
 # Eric <hamburger1024@mailbox.org>, 2022.
 # 帅是我2 <a1173522112@163.com>, 2022.
+# Carlson Mak <hbmaak@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.13-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-03-04 11:38+0000\n"
-"Last-Translator: J0kWang <lianjiefly@gmail.com>\n"
+"PO-Revision-Date: 2023-03-11 18:41+0000\n"
+"Last-Translator: YTX <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -1020,7 +1021,7 @@ msgstr "分录"
 
 #: gnucash/gnome/assistant-stock-split.c:417
 msgid "Error adding price."
-msgstr "添加汇率时出错。"
+msgstr "添加价格时出错。"
 
 #: gnucash/gnome/assistant-stock-split.c:582
 #: gnucash/gnome/dialog-find-transactions2.c:111
