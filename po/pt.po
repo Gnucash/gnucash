@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-09 10:33+0000\n"
+"PO-Revision-Date: 2023-03-11 08:27+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/pt/>\n"
@@ -806,7 +806,7 @@ msgstr ""
 "\n"
 "Para o tornar visível\n"
 "seleccione \"Ver\" na barra de menus e marque \"Linha dupla\" ou\n"
-"marque \"Modo de linha dupla\" em Preferências -> Predefinições do diário."
+"marque \"Modo de linha dupla\" em Preferências -> Pré-definições do diário."
 
 #: doc/tip_of_the_day.list.c:50
 msgid ""
@@ -978,7 +978,7 @@ msgid ""
 "not necessary to restart GnuCash."
 msgstr ""
 "Se trabalhar ao longo da noite, deve fechar e reabrir o diário em que "
-"trabalha após a meia noite, para obter a nova data como predefinição para "
+"trabalha após a meia noite, para obter a nova data como pré-definição para "
 "novas transacções. Assim não tem de reiniciar o GnuCash."
 
 #: doc/tip_of_the_day.list.c:121
@@ -6629,11 +6629,11 @@ msgstr "_Fechar"
 
 #: gnucash/gnome-utils/dialog-options.cpp:284
 msgid "Reset defaults"
-msgstr "Repor predefinições"
+msgstr "Repor pré-definições"
 
 #: gnucash/gnome-utils/dialog-options.cpp:286
 msgid "Reset all values to their defaults."
-msgstr "Repor todos os valores nas predefinições."
+msgstr "Repor todos os valores nas pré-definições."
 
 #: gnucash/gnome-utils/dialog-options.cpp:538
 msgid "Page"
@@ -7262,7 +7262,7 @@ msgid ""
 msgstr ""
 "Tentou gravar em\n"
 "%s\n"
-"ou numa sua sub-pasta. Isto não é permitido, uma vez que %s reserva essa "
+"ou numa sua sub-pasta. Isto não é permitido, uma vez que o %s reserva essa "
 "pasta para uso interno.\n"
 "\n"
 "Por favor, tente novamente numa pasta diferente."
@@ -7295,8 +7295,7 @@ msgid ""
 msgstr ""
 "A base de dados SQL está em uso por outros utilizadores e a actualização não "
 "pode ser efectuada até que se desliguem. Se não há actualmente outros "
-"utilizadores, consulte a documentação para ver como limpar sessões "
-"penduradas."
+"utilizadores, consulte a documentação para ver como limpar sessões pendentes."
 
 #: gnucash/gnome-utils/gnc-file.c:515
 msgid ""
@@ -7352,8 +7351,7 @@ msgid "If you don't save, changes from the past %d minute will be discarded."
 msgid_plural ""
 "If you don't save, changes from the past %d minutes will be discarded."
 msgstr[0] "Se não gravar, as alterações do último minuto serão descartadas."
-msgstr[1] ""
-"Se não gravar, as alterações dos últimos %d minutos serão descartadas."
+msgstr[1] "Se não gravar, as alterações dos últimos %d minutos serão descartadas."
 
 #: gnucash/gnome-utils/gnc-file.c:660
 msgid "Continue _Without Saving"
@@ -7481,7 +7479,7 @@ msgstr "Localização esperada"
 #: gnucash/gnome-utils/gnc-gnome-utils.c:387
 #: gnucash/gnome-utils/gnc-gnome-utils.c:427
 msgid "GnuCash could not find the linked document."
-msgstr "O GnuCash não conseguiu encontrar o ficheiro ligado."
+msgstr "O GnuCash não conseguiu encontrar o documento ligado."
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:457
 msgid "GnuCash could not open the linked document:"
@@ -7646,11 +7644,11 @@ msgstr "Seleccionar todas as contas-filho da conta seleccionada."
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1012
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1241
 msgid "Select Default"
-msgstr "Seleccionar predefinição"
+msgstr "Seleccionar pré-definição"
 
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1014
 msgid "Select the default account selection."
-msgstr "Utilizar a selecção predefinida de contas."
+msgstr "Utilizar a selecção pré-definida de contas."
 
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1031
 msgid "Show Hidden Accounts"
@@ -7670,7 +7668,7 @@ msgstr "Limpar a selecção e removê-la de todas as entradas."
 
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1243
 msgid "Select the default selection."
-msgstr "Utilizar a selecção predefinida."
+msgstr "Utilizar a selecção pré-definida."
 
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1523
 msgid "Clear any selected image file."
@@ -8308,8 +8306,8 @@ msgid ""
 "Examples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\n"
 "This can be invoked multiple times."
 msgstr ""
-"Sobreposição de níveis de diário, da forma \"modulename={debug,info,warn,"
-"crit,error}\"\n"
+"Sobreposição de níveis de diário, da forma \"modulename"
+"={debug,info,warn,crit,error}\"\n"
 "Exemplos: \"--log qof=debug\" ou \"--log gnc.backend.file.sx=info\"\n"
 "Pode ser chamado múltiplas vezes."
 
@@ -8322,7 +8320,7 @@ msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"Ficheiro onde escrever; predefinido como \"/tmp/gnucash.trace\"; pode ser "
+"Ficheiro onde escrever; pré-definido como \"/tmp/gnucash.trace\"; pode ser "
 "\"stderr\" ou \"stdout\"."
 
 #: gnucash/gnucash-core-app.cpp:312
@@ -8339,7 +8337,7 @@ msgstr "A verificar o Finance::Quote…"
 
 #: gnucash/gnucash.cpp:185
 msgid "Unable to load Finance::Quote."
-msgstr "A verificar o Finance::Quote..."
+msgstr "Impossível carregar o Finance::Quote."
 
 #: gnucash/gnucash.cpp:196
 msgid "Loading data…"
@@ -8492,7 +8490,7 @@ msgid ""
 "If set to active then tax is included by default in entries of this type. "
 "This setting is inherited by new customers and vendors."
 msgstr ""
-"Se activa, o imposto é incluído por predefinição em entradas deste tipo. "
+"Se activa, o imposto é incluído por pré-definição em entradas deste tipo. "
 "Esta definição é herdada por novos clientes e fornecedores."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:112
@@ -8645,7 +8643,7 @@ msgid ""
 "This value specifies the predefined check format to use. The number is the "
 "guid of a known check format."
 msgstr ""
-"Este valor especifica o formato de cheque a usar. O número é o guid de um "
+"Este valor especifica o formato de cheque a usar. O número é o GUID de um "
 "formato de cheque conhecido."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:10
@@ -8660,7 +8658,7 @@ msgid ""
 msgstr ""
 "Em cheques pré-impressos contendo múltiplos cheques por página, esta "
 "definição especifica qual o cheque a imprimir. Valores possíveis são 0, 1 e "
-"2, correspondendo ao cheque no topo, no meio e de baixo."
+"2, correspondendo ao cheque no topo, no meio e em baixo."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:15
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:16
@@ -8873,14 +8871,14 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:100
 msgid "The default check printing font"
-msgstr "O formato predefinido de impressão de cheques"
+msgstr "O formato pré-definido de impressão de cheques"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:101
 msgid ""
 "The default font to use when printing checks. This value will be overridden "
 "by any font specified in a check description file."
 msgstr ""
-"A letra predefinida a usar ao imprimir cheques. Este valor é sobreposto por "
+"A letra pré-definida a usar ao imprimir cheques. Este valor é sobreposto por "
 "qualquer letra especificada num ficheiro de descrição de cheque."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:105
@@ -8903,7 +8901,7 @@ msgstr "Mostrar moedas neste diálogo"
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:55
 #: gnucash/import-export/ofx/gschemas/org.gnucash.GnuCash.dialogs.import.ofx.gschema.xml.in:5
 msgid "Last pathname used"
-msgstr "Último caminho de nome usado"
+msgstr "Último caminho usado"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.export.csv.gschema.xml.in:13
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:143
@@ -8943,7 +8941,7 @@ msgid ""
 "or only in 'active' items in the current class."
 msgstr ""
 "Esta definição indica se deve procurar em todos os item na classe actual ou "
-"só nos item \"activos\" na classe actual."
+"só nos itens \"activos\" na classe actual."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:189
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:190
@@ -8957,7 +8955,7 @@ msgstr "Abrir a janela de novo utilizador"
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:205
 msgid ""
 "If active, the new user window will be shown. Otherwise it will not be shown."
-msgstr "Se activa, a janela de novo utilizador será mostrada. Senão não será."
+msgstr "Se activa, a janela de novo utilizador será mostrada."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:219
 msgid "New hierarchy window on \"New File\""
@@ -8969,7 +8967,7 @@ msgid ""
 "\" menu item is chosen. Otherwise it will not be shown."
 msgstr ""
 "Se activa, a janela \"Novo plano\" será mostrada sempre que escolher o item "
-"de menu \"Novo ficheiro\". Senão, não é mostrada."
+"de menu \"Novo ficheiro\"."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:227
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:228
@@ -8991,7 +8989,7 @@ msgstr ""
 "Activar a acção SALTAR no comparador de transacções. Se activa, uma "
 "transacção cuja comparação esteja na zona amarela (acima do limiar de adição "
 "automática e abaixo da confirmação automática) será ignorada por "
-"predefinição."
+"pré-definição."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:10
 msgid "Enable UPDATE match action"
@@ -9009,7 +9007,7 @@ msgstr ""
 "activa, uma transacção cuja comparação esteja acima do limiar de confirmação "
 "automática e tenha uma data ou quantia diferentes da transacção "
 "correspondente existente fará com que a transacção existente seja "
-"actualizada e confirmada por predefinição."
+"actualizada e confirmada por pré-definição."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:15
 msgid "Use bayesian matching"
@@ -9076,7 +9074,7 @@ msgstr ""
 "Este campo especifica o limite abaixo do qual uma transacção correspondente "
 "é automaticamente adicionada. Uma transacção cuja melhor comparação está na "
 "zona vermelha (abaixo do mínimo para exibição ou igual à comparação para "
-"adição) será adicionada ao ficheiro GnuCash por predefinição."
+"adição) será adicionada ao ficheiro GnuCash por pré-definição."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:40
 msgid "Clear matching transactions above this score"
@@ -9090,9 +9088,9 @@ msgid ""
 "default."
 msgstr ""
 "Este campo especifica o limite acima do qual uma transacção correspondente "
-"será confirmada por predefinição. Uma transacção cujo melhor resultado "
+"será confirmada por pré-definição. Uma transacção cujo melhor resultado "
 "esteja na zona verde (acima ou igual a este limite de confirmação) será "
-"confirmada por predefinição."
+"confirmada por pré-definição."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:45
 msgid "Maximum ATM fee amount in your area"
@@ -9151,14 +9149,14 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:5
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:10
 msgid "Default QIF transaction status"
-msgstr "Estado predefinido de transacções QIF"
+msgstr "Estado pré-definido de transacções QIF"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:6
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:11
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:16
 msgid "Default status for QIF transaction when not specified in QIF file."
 msgstr ""
-"Estado predefinido para uma transacção QIF quando não for especificado no "
+"Estado pré-definido para uma transacção QIF quando não for especificado no "
 "ficheiro QIF."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:15
@@ -9277,7 +9275,7 @@ msgid ""
 "Set \"Review Created Transactions\" as the default for the \"since last run"
 "\" dialog."
 msgstr ""
-"Marcar \"Rever transacções criadas\" como predefinição no diálogo \"Desde a "
+"Marcar \"Rever transacções criadas\" como pré-definição no diálogo \"Desde a "
 "última execução\"."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:28
@@ -9285,12 +9283,12 @@ msgid ""
 "This setting controls whether as default the \"review created transactions\" "
 "is set for the \"since last run\" dialog."
 msgstr ""
-"Esta opção controla se \"Rever transacções criadas\" é a predefinição no "
+"Esta opção controla se \"Rever transacções criadas\" é a pré-definição no "
 "diálogo \"Desde a última execução\"."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:35
 msgid "Set the \"auto create\" flag by default"
-msgstr "Marcar o parâmetro \"Criar automaticamente\" como predefinição"
+msgstr "Marcar o parâmetro \"Criar automaticamente\" como pré-definição"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:36
 msgid ""
@@ -9300,7 +9298,7 @@ msgid ""
 "transaction."
 msgstr ""
 "Se activa, qualquer transacção agendada recém-criada terá o seu parâmetro "
-"\"Criar automaticamente\" activo como predefinição. O utilizador pode "
+"\"Criar automaticamente\" activo como pré-definição. O utilizador pode "
 "alterar este parâmetro durante a criação da transacção, ou em qualquer outra "
 "altura, editando a transacção criada."
 
@@ -9311,7 +9309,7 @@ msgstr "Quantos dias antes se deve avisar o utilizador."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:52
 msgid "Set the \"notify\" flag by default"
-msgstr "Activar o parâmetro \"Avisar\" como predefinição"
+msgstr "Activar o parâmetro \"Avisar\" como pré-definição"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:53
 msgid ""
@@ -9321,7 +9319,7 @@ msgid ""
 "setting only has meaning if the create-auto setting is active."
 msgstr ""
 "Se activa, qualquer transacção agendada recém-criada terá o seu parâmetro "
-"\"Avisar\" activo como predefinição. O utilizador pode alterar este "
+"\"Avisar\" activo como pré-definição. O utilizador pode alterar este "
 "parâmetro durante a criação da transacção ou em qualquer outra altura, "
 "editando a transacção criada. Esta definição só faz sentido se a criação "
 "automática estiver activada."
@@ -9705,10 +9703,10 @@ msgid ""
 "the user's locale setting. If set to \"other\", GnuCash will use the setting "
 "specified by the currency-other key."
 msgstr ""
-"Esta definição controla a origem da moeda predefinida para novas contas. Se "
-"for \"Regional\", o GnuCash obtém a moeda predefinida das suas configurações "
-"regionais. Se definida para \"Outra\", o GnuCash usará a definição "
-"especificada na opção Escolha."
+"Esta definição controla a origem da moeda pré-definida para novas contas. Se "
+"for \"Regional\", o GnuCash obtém a moeda pré-definida das suas "
+"configurações regionais. Se definida para \"Outra\", o GnuCash usará a "
+"definição especificada na opção Escolha."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:145
 #: gnucash/gtkbuilder/dialog-preferences.glade:922
@@ -9717,7 +9715,7 @@ msgstr "Usar a moeda especificada para todas as contas recém-criadas."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:150
 msgid "Default currency for new accounts"
-msgstr "Moeda predefinida para novas contas"
+msgstr "Moeda pré-definida para novas contas"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:151
 msgid ""
@@ -9725,7 +9723,7 @@ msgid ""
 "currency-choice setting is set to \"other\". This field must contain the "
 "three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
 msgstr ""
-"Esta definição especifica a moeda predefinida usada para novas contas se "
+"Esta definição especifica a moeda pré-definida usada para novas contas se "
 "definiu Escolha. Este campo tem de conter o código ISO 4217 de três letras "
 "para uma moeda (i.e. USD, GBP, EUR)."
 
@@ -9844,8 +9842,8 @@ msgid ""
 "\"right\". It defaults to \"top\"."
 msgstr ""
 "Esta definição determina a margem na qual os separadores para trocar de "
-"conta são desenhados. Valores possíveis são \"Topo\", \"Fundo\", \"Esquerda"
-"\" e \"Direita\". Predefinida como \"Topo\"."
+"conta são desenhados. Valores possíveis são \"Topo\", \"Fundo\", \"Esquerda\""
+" e \"Direita\". Pré-definida como \"Topo\"."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:200
 #: gnucash/gtkbuilder/dialog-preferences.glade:3396
@@ -9875,8 +9873,8 @@ msgid ""
 "\"."
 msgstr ""
 "Esta definição determina o limite no qual a barra de resumo para várias "
-"páginas é desenhada. Valores possíveis são \"Topo\" e \"Fundo\". A "
-"predefinição é \"Fundo\"."
+"páginas é desenhada. Valores possíveis são \"Topo\" e \"Fundo\". Pré-"
+"definida como \"Fundo\"."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:220
 #: gnucash/gtkbuilder/dialog-preferences.glade:3485
@@ -9919,7 +9917,7 @@ msgstr ""
 "célula \"N.º\" em diários mostre/actualize o campo dividido \"Acção\" e o "
 "campo \"N.º\" da transacção é mostrado na segunda linha em modo de linha "
 "dupla (e não é visível em modo de linha simples). Senão, a opção de livro "
-"predefinida é definida de forma a que a célula \"N.º\" em diários mostre/"
+"pré-definida é definida de forma a que a célula \"N.º\" em diários mostre/"
 "actualize o campo \"N.º\" da transacção."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:241
@@ -10056,10 +10054,10 @@ msgid ""
 "transaction to show all splits. The \"journal\" setting shows all "
 "transactions in expanded form."
 msgstr ""
-"Este campo especifica o estilo de vista predefinido ao abrir uma nova janela "
-"de diário. Valores possíveis são: \"Razão básico\", \"Razão de parcelas "
-"automáticas\" e \"Diário de transacções\". A definição \"Razão básico\" "
-"mostra cada transacção em uma ou duas linhas. A \"Razão de parcelas "
+"Este campo especifica o estilo de vista pré-definido ao abrir uma nova "
+"janela de diário. Valores possíveis são: \"Razão básico\", \"Razão de "
+"parcelas automáticas\" e \"Diário de transacções\". A definição \"Razão "
+"básico\" mostra cada transacção em uma ou duas linhas. A \"Razão de parcelas "
 "automáticas\" faz o mesmo mas também expande a transacção actual para "
 "mostrar todas as parcelas. A definição \"Diário de transacções\" mostra "
 "todas as transacções de forma expandida."
@@ -10095,9 +10093,9 @@ msgid ""
 "\"View->Double Line\" menu item."
 msgstr ""
 "Mostrar uma segunda linha com \"Acção\", \"Notas\" e \"Documentos ligados\" "
-"para cada transacção num diário. Esta é a predefinição para quando um diário "
-"é aberto pela primeira vez. Pode ser alterada a qualquer altura via menu "
-"\"Ver -> Linha dupla\"."
+"para cada transacção num diário. Esta é a pré-definição para quando um "
+"diário é aberto pela primeira vez. Pode ser alterada a qualquer altura via "
+"menu \"Ver -> Linha dupla\"."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:306
 msgid "Only display leaf account names."
@@ -10111,7 +10109,7 @@ msgid ""
 "you use unique leaf names."
 msgstr ""
 "Mostrar só os nomes de conta finais no diário e no balão de selecção de "
-"conta. O comportamento predefinido é mostrar o nome completo, incluindo o "
+"conta. O comportamento pré-definido é mostrar o nome completo, incluindo o "
 "caminho no plano de contas. Activar esta opção implica usar unicamente nomes "
 "finais."
 
@@ -10205,8 +10203,8 @@ msgid ""
 "locale setting. If set to \"other\", GnuCash will use the setting specified "
 "by the currency-other key."
 msgstr ""
-"Esta definição controla a moeda predefinida para relatórios. Se definida "
-"como \"Regional\", o GnuCash obtém a moeda predefinida das suas "
+"Esta definição controla a moeda pré-definida para relatórios. Se definida "
+"como \"Regional\", o GnuCash obtém a moeda pré-definida das suas "
 "configurações regionais. Se definida para \"Escolha\", será usada a moeda "
 "definida na lista pendente à direita."
 
@@ -10217,11 +10215,11 @@ msgstr "Usar a moeda especificada para todos os novos relatórios."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:359
 msgid "Default currency for new reports"
-msgstr "Moeda predefinida para novos relatórios"
+msgstr "Moeda pré-definida para novos relatórios"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:364
 msgid "Zoom factor to use by default for reports."
-msgstr "Factor de ampliação predefinido para todos os relatórios."
+msgstr "Factor de ampliação pré-definido para todos os relatórios."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:365
 #: gnucash/gtkbuilder/dialog-preferences.glade:3218
@@ -10673,8 +10671,8 @@ msgstr ""
 msgid ""
 "Show a grand total of all accounts converted to the default report currency"
 msgstr ""
-"Mostrar um total global de todas as contas, convertido para a moeda "
-"predefinida para relatórios"
+"Mostrar um total global de todas as contas, convertido para a moeda pré-"
+"definida para relatórios"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:10
 msgid "Show non currency commodities"
@@ -11208,7 +11206,7 @@ msgstr ""
 "adjacente.\n"
 "Há dois nomes reservados que nunca podem ser eliminados:\n"
 "- Sem definições\n"
-"- Formato de exportação predefinido do Gnucash"
+"- Formato de exportação pré-definido do Gnucash"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:165
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:156
@@ -11225,7 +11223,7 @@ msgstr ""
 "Há dois nomes reservados que nunca podem ser usados para gravar definições "
 "personalizadas:\n"
 "- Sem definições\n"
-"- Formato de exportação predefinido do Gnucash"
+"- Formato de exportação pré-definido do Gnucash"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:193
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:183
@@ -12119,7 +12117,7 @@ msgstr "Nome de conta"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:401
 msgid "Set the default QIF account name"
-msgstr "Inserir o nome predefinido da conta QIF"
+msgstr "Inserir o nome pré-definido da conta QIF"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-qif-import.glade:439
@@ -12175,9 +12173,9 @@ msgstr ""
 "Note que o GnuCash estará a criar muitas contas que não existiam no seu "
 "outro programa de finanças, incluindo uma conta separada para cada acção que "
 "possua, contas separadas para comissões, contas especiais de capital próprio "
-"(sub-contas de ganhos retidos, por predefinição) que serão a origem dos seus "
-"saldos iniciais, etc. Todas estas contas aparecerão na página seguinte para "
-"que as possa alterar se quiser, mas é seguro mantê-las tal como estão.\n"
+"(sub-contas de ganhos retidos, por pré-definição) que serão a origem dos "
+"seus saldos iniciais, etc. Todas estas contas aparecerão na página seguinte "
+"para que as possa alterar se quiser, mas é seguro mantê-las tal como estão.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:524
 msgid "Accounts and stock holdings"
@@ -12248,7 +12246,7 @@ msgstr ""
 "correctamente atribuídas a contas GnuCash.\n"
 "\n"
 "Na página seguinte, verá o texto que aparece nos campos Sacador e Memorando "
-"de transacções sem conta ou categoria QIF. Por predefinição, estas "
+"de transacções sem conta ou categoria QIF. Por pré-definição, estas "
 "transacções são atribuídas à conta \"Não especificada\" no GnuCash. Se "
 "seleccionar uma conta diferente, ela será lembrada em futuros ficheiros QIF."
 
@@ -12407,7 +12405,7 @@ msgid ""
 msgstr ""
 "Clique em Aplicar para importar dados da área de estágio e actualizar as "
 "suas contas no GnuCash. A informação de conta e categoria que inseriu será "
-"gravada e usada como predefinições na próxima importação QIF.\n"
+"gravada e usada como pré-definição na próxima importação QIF.\n"
 "\n"
 "Clique em Recuar para rever as comparações de contas e categorias, alterar "
 "definições de moedas e garantias para novas contas ou para adicionar mais "
@@ -12718,7 +12716,7 @@ msgstr "_Editar a lista de codificações"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:69
 msgid "Default encoding"
-msgstr "Codificação predefinida"
+msgstr "Codificação pré-definida"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:136
 msgid "Convert the file"
@@ -12844,7 +12842,7 @@ msgid ""
 "Whether tax is included by default in entries on Bills. This setting is "
 "inherited by new customers and vendors."
 msgstr ""
-"Se o imposto está incluído por predefinição em transacções de pagamentos. "
+"Se o imposto está incluído por pré-definição em transacções de pagamentos. "
 "Esta definição é herdada por novos clientes e fornecedores."
 
 #. See the tooltip "At post time…" for details.
@@ -12869,8 +12867,8 @@ msgid ""
 "Whether tax is included by default in entries on Invoices. This setting is "
 "inherited by new customers and vendors."
 msgstr ""
-"Se o imposto está incluído por predefinição em transacções de facturas. Esta "
-"definição é herdada por novos clientes e fornecedores."
+"Se o imposto está incluído por pré-definição em transacções de facturas. "
+"Esta definição é herdada por novos clientes e fornecedores."
 
 #. See the tooltip "At post time…" for details.
 #: gnucash/gtkbuilder/business-prefs.glade:238
@@ -12918,7 +12916,7 @@ msgstr "Activar as secções em cascata"
 #: gnucash/report/html-style-sheet.scm:260 gnucash/report/report-core.scm:317
 #: gnucash/report/stylesheets/plain.scm:218
 msgid "Default"
-msgstr "Predefinição"
+msgstr "Pré-definição"
 
 #: gnucash/gtkbuilder/dialog-account.glade:222
 msgid ""
@@ -13001,7 +12999,7 @@ msgstr "Filtrar por…"
 
 #: gnucash/gtkbuilder/dialog-account.glade:922
 msgid "_Default"
-msgstr "Pre_definição"
+msgstr "Pré-_definição"
 
 #: gnucash/gtkbuilder/dialog-account.glade:954
 #: gnucash/report/reports/standard/account-summary.scm:116
@@ -13318,7 +13316,7 @@ msgstr ""
 msgid ""
 "Default transaction status (overridden by the status given by the QIF file)"
 msgstr ""
-"Estado predefinido da transacção (substituído pelo estado indicado no "
+"Estado pré-definido da transacção (substituído pelo estado indicado no "
 "ficheiro QIF)"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:159
@@ -13963,11 +13961,11 @@ msgstr "Ambiente"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:579
 msgid "Default Hours per Day"
-msgstr "Horas predefinidas por dia"
+msgstr "Horas pré-definidas por dia"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:592
 msgid "Default Rate"
-msgstr "Taxa predefinida"
+msgstr "Taxa pré-definida"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:700
 msgid "Access Control List"
@@ -14493,7 +14491,7 @@ msgstr "Abrir ligação do documento"
 #: gnucash/gtkbuilder/dialog-invoice.glade:537
 #: gnucash/gtkbuilder/dialog-invoice.glade:1242
 msgid "Default Chargeback Project"
-msgstr "Projecto de análise predefinido"
+msgstr "Projecto de análise pré-definido"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:564
 msgid "Additional to Card"
@@ -14853,7 +14851,7 @@ msgid ""
 "Show a grand total of all accounts converted to the default report currency."
 msgstr ""
 "Mostrar um total geral de todas as contas, convertido para a moeda "
-"predefinida."
+"pré-definida."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:357
 msgid "Include _non-currency totals"
@@ -14944,7 +14942,7 @@ msgstr "<b>Contas saldadas inversamente</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:743
 msgid "<b>Default Currency</b>"
-msgstr "<b>Moeda predefinida</b>"
+msgstr "<b>Moeda pré-definida</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:756
 #: gnucash/gtkbuilder/dialog-preferences.glade:3076
@@ -15135,7 +15133,7 @@ msgstr "_Limite de nova procura"
 #: gnucash/gtkbuilder/dialog-preferences.glade:1617
 msgid "Default to 'new search' if fewer than this number of items is returned."
 msgstr ""
-"Predefinição para nova procura se forem devolvidos menos itens que este "
+"Pré-definição para nova procura se forem devolvidos menos itens que este "
 "número."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1633
@@ -15239,7 +15237,7 @@ msgstr ""
 "activa, uma transacção cuja comparação esteja acima do limiar de confirmação "
 "automática e tenha uma data ou quantia diferentes da transacção "
 "correspondente existente fará com que a transacção existente seja "
-"actualizada e confirmada por predefinição."
+"actualizada e confirmada por pré-definição."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2115
 msgid ""
@@ -15267,7 +15265,7 @@ msgid ""
 "to the Auto-CLEAR threshold) will be CLEARed by default."
 msgstr ""
 "Uma transacção cuja comparação está na zona verde (acima ou igual ao limite "
-"de confirmação automática) será CONFIRMADA por predefinição."
+"de confirmação automática) será CONFIRMADA por pré-definição."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2160
 msgid ""
@@ -15277,7 +15275,7 @@ msgid ""
 msgstr ""
 "Uma transacção cuja comparação está na zona vermelha (abaixo do limite de "
 "exibição mas abaixo ou igual ao limite de adição automática) será ADICIONADA "
-"por predefinição."
+"por pré-definição."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2182
 msgid ""
@@ -15335,7 +15333,7 @@ msgid ""
 "Default is 4 days."
 msgstr ""
 "Uma transacção com data dentro dos limites é provavelmente um resultado "
-"positivo. A predefinição é de 4 dias."
+"positivo. A pré-definição é de 4 dias."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2345
 msgid ""
@@ -15343,7 +15341,7 @@ msgid ""
 "Default is 14 days."
 msgstr ""
 "Uma transacção com data fora dos limites é provavelmente um resultado "
-"negativo. A predefinição é de 14 dias."
+"negativo. A pré-definição é de 14 dias."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2391
 msgid "<b>Checks</b>"
@@ -15351,7 +15349,7 @@ msgstr "<b>Cheques</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2406
 msgid "The default check printing font."
-msgstr "A letra predefinida para imprimir cheques."
+msgstr "A letra pré-definida para imprimir cheques."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2416
 msgid "Print _date format"
@@ -15372,7 +15370,7 @@ msgstr "Imprimir \"***\" antes e depois de cada campo de texto no cheque."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2455
 msgid "Default _font"
-msgstr "Letra prede_finida"
+msgstr "Letra pré-de_finida"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2484
 msgid "Printing"
@@ -15462,7 +15460,7 @@ msgid ""
 "GnuCash uses a yellow/green theme by default for register windows. Uncheck "
 "this if you want to use the system color theme instead."
 msgstr ""
-"O GnuCash usa um tema amarelo e verde predefinido para janelas de diários. "
+"O GnuCash usa um tema amarelo e verde pré-definido para janelas de diários. "
 "Desmarque esta opção se quiser o tema de cores do sistema."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2686
@@ -15521,11 +15519,11 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2811
 msgid "<b>Default Style</b>"
-msgstr "<b>Estilo predefinido</b>"
+msgstr "<b>Estilo pré-definido</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2834
 msgid "<b>Other Defaults</b>"
-msgstr "<b>Outras predefinições</b>"
+msgstr "<b>Outras pré-definições</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2844
 msgid "_Basic ledger"
@@ -15581,17 +15579,17 @@ msgid ""
 "option implies that you use unique leaf names."
 msgstr ""
 "Se marcada, só os nomes de contas finais são mostrados no diário e no balão "
-"de selecção de contas. O comportamento predefinido é mostrar o nome "
+"de selecção de contas. O comportamento pré-definido é mostrar o nome "
 "completo, incluindo o caminho, no plano de contas. Marcar esta opção implica "
 "usar só nomes finais."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3056
 msgid "Register Defaults"
-msgstr "Predefinições do diário"
+msgstr "Pré-definições do diário"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3088
 msgid "<b>Default Report Currency</b>"
-msgstr "<b>Moeda predefinida de relatórios</b>"
+msgstr "<b>Moeda pré-definida de relatórios</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3111
 msgid "<b>Location</b>"
@@ -15612,7 +15610,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-preferences.glade:3155
 #: gnucash/gtkbuilder/dialog-preferences.glade:3235
 msgid "Default zoom level"
-msgstr "Ampliação predefinida"
+msgstr "Ampliação pré-definida"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3270
 msgid "Reports"
@@ -16266,7 +16264,7 @@ msgstr "<b>Desde a última execução</b>"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:531
 msgid "<b>Transaction Editor Defaults</b>"
-msgstr "<b>Predefinições do editor de transacções</b>"
+msgstr "<b>Pré-definições do editor de transacções</b>"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:541
 msgid "_Run when data file opened"
@@ -16331,7 +16329,7 @@ msgid ""
 "Set 'Review created transactions' as the default in the \"since last run\" "
 "dialog."
 msgstr ""
-"Marque \"Rever transacções criadas\" como predefinição no diálogo \"Desde a "
+"Marque \"Rever transacções criadas\" como pré-definição no diálogo \"Desde a "
 "última execução\"."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:788
@@ -21100,7 +21098,7 @@ msgid ""
 "Could not determine the account currency. Using the default currency "
 "provided by your system."
 msgstr ""
-"Impossível determinar a moeda da conta. A usar a moeda predefinida do seu "
+"Impossível determinar a moeda da conta. A usar a moeda pré-definida do seu "
 "sistema."
 
 #: gnucash/register/ledger-core/split-register-model.c:254
@@ -24885,7 +24883,7 @@ msgstr "Formato do relatório"
 #: gnucash/report/reports/standard/income-gst-statement.scm:152
 #: gnucash/report/reports/standard/income-gst-statement.scm:161
 msgid "Default Format"
-msgstr "Formato predefinido"
+msgstr "Formato pré-definido"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:153
 msgid ""
@@ -27146,7 +27144,7 @@ msgstr ""
 
 #: gnucash/report/stylesheets/css.scm:209
 msgid "&lt;/style is disallowed in CSS. Using default CSS."
-msgstr "&lt;/style&gt; é desaconselhado em CSS. A utilizar a CSS predefinida."
+msgstr "&lt;/style&gt; é desaconselhado em CSS. A utilizar a CSS pré-definida."
 
 #: gnucash/report/stylesheets/css.scm:228
 msgid "CSS-based stylesheet (experimental)"
@@ -27302,7 +27300,7 @@ msgstr "Cor da célula da tabela"
 #: gnucash/report/stylesheets/footer.scm:119
 #: gnucash/report/stylesheets/head-or-tail.scm:158
 msgid "Default background for table cells."
-msgstr "Cor predefinida das células das tabelas."
+msgstr "Cor pré-definida das células das tabelas."
 
 #: gnucash/report/stylesheets/footer.scm:124
 #: gnucash/report/stylesheets/head-or-tail.scm:163
@@ -27313,7 +27311,7 @@ msgstr "Cor alternativa da célula"
 #: gnucash/report/stylesheets/footer.scm:125
 #: gnucash/report/stylesheets/head-or-tail.scm:164
 msgid "Default alternate background for table cells."
-msgstr "Cor predefinida alternativa das células das tabelas."
+msgstr "Cor pré-definida alternativa das células das tabelas."
 
 #: gnucash/report/stylesheets/footer.scm:130
 #: gnucash/report/stylesheets/head-or-tail.scm:169
@@ -27323,7 +27321,7 @@ msgstr "Cor da célula de subtítulo/subtotal"
 #: gnucash/report/stylesheets/footer.scm:131
 #: gnucash/report/stylesheets/head-or-tail.scm:170
 msgid "Default color for subtotal rows."
-msgstr "Cor predefinida para linhas de subtotal."
+msgstr "Cor pré-definida para linhas de subtotal."
 
 #: gnucash/report/stylesheets/footer.scm:136
 #: gnucash/report/stylesheets/head-or-tail.scm:175
@@ -27463,7 +27461,7 @@ msgstr "Mostrar informação do preparador no fundo"
 #: gnucash/report/stylesheets/head-or-tail.scm:97
 msgid "Per default the preparer info will be shown before the report data."
 msgstr ""
-"Por predefinição, a informação do preparador é mostrada antes da data do "
+"Por pré-definição, a informação do preparador é mostrada antes da data do "
 "relatório."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:101
@@ -27473,7 +27471,7 @@ msgstr "Mostrar informação do destinatário no fundo"
 #: gnucash/report/stylesheets/head-or-tail.scm:102
 msgid "Per default the receiver info will be shown before the report data."
 msgstr ""
-"Por predefinição, a informação do destinatário é mostrada antes da data do "
+"Por pré-definição, a informação do destinatário é mostrada antes da data do "
 "relatório."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:106
@@ -27483,7 +27481,7 @@ msgstr "Mostrar data/hora ao fundo"
 #: gnucash/report/stylesheets/head-or-tail.scm:107
 msgid "Per default the date/time info will be shown before the report data."
 msgstr ""
-"Por predefinição, a informação de data/hora é mostrada antes dos dados do "
+"Por pré-definição, a informação de data/hora é mostrada antes dos dados do "
 "relatório."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:111
@@ -27495,7 +27493,7 @@ msgid ""
 "Per default the additional comments text will be shown before the report "
 "data."
 msgstr ""
-"Por predefinição, o texto de comentários adicionais é mostrado antes dos "
+"Por pré-definição, o texto de comentários adicionais é mostrado antes dos "
 "dados do relatório."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:116
@@ -27505,7 +27503,7 @@ msgstr "Mostrar versão do GnuCash no fundo"
 #: gnucash/report/stylesheets/head-or-tail.scm:117
 msgid "Per default the GnuCash version will be shown before the report data."
 msgstr ""
-"Por predefinição, a versão do GnuCash é mostrada antes dos dados do "
+"Por pré-definição, a versão do GnuCash é mostrada antes dos dados do "
 "relatório."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:402
@@ -27732,7 +27730,7 @@ msgid ""
 "match both Expenses:Car and Expenses:Flights. Use a period (.) to match a "
 "single character e.g. '20../.' will match 'Travel 2017/1 London'. "
 msgstr ""
-"Por predefinição, o filtro de conta só procura a sub-cadeia. Defina como "
+"Por pré-definição, o filtro de conta só procura a sub-cadeia. Defina como "
 "verdadeiro para activar todas as capacidades das expressões regulares POSIX. "
 "\"Carro|Voos\" corresponde a: Carro Despesas: Voos. Use um ponto (.) para "
 "corresponder a um único carácter \"20 ../. \" corresponde a \"Viagem 2017/1 "
@@ -27762,10 +27760,10 @@ msgid ""
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
 "will match both tags within description, notes or memo."
 msgstr ""
-"Por predefinição, o filtro de transacção só procura a subcadeia. Defina como "
-"verdadeiro para activar todas as capacidades das expressões regulares POSIX. "
-"\"#trabalho|#família\" corresponde a ambas as etiquetas dentro de descrição, "
-"notas ou memorando."
+"Por pré-definição, o filtro de transacção só procura a sub-cadeia. Defina "
+"como verdadeiro para activar todas as capacidades das expressões regulares "
+"POSIX. \"#trabalho|#família\" corresponde a ambas as etiquetas dentro de "
+"descrição, notas ou memorando."
 
 #: gnucash/report/trep-engine.scm:612
 msgid "If this option is selected, transactions matching filter are excluded."
@@ -27796,10 +27794,10 @@ msgid ""
 "expense accounts to equity, and must usually be excluded from periodic "
 "reporting."
 msgstr ""
-"Por predefinição, a maioria dos utilizadores não inclui transacções de fecho "
-"no relatório de transacções. Estas são transferências de contas de receita e "
-"despesa para o capital próprio e têm de ser igualmente excluídas de "
-"relatórios periódicos."
+"Por pré-definição, a maioria dos utilizadores não inclui transacções de "
+"fecho no relatório de transacções. Estas são transferências de contas de "
+"receita e despesa para o capital próprio e têm de ser igualmente excluídas "
+"de relatórios periódicos."
 
 #: gnucash/report/trep-engine.scm:657
 msgid "Filter on these accounts."
@@ -30552,23 +30550,23 @@ msgstr ""
 
 #: libgnucash/engine/gnc-optiondb.cpp:1241
 msgid "Default Customer TaxTable"
-msgstr "Tabela de impostos predefinida para clientes"
+msgstr "Tabela de impostos pré-definida para clientes"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1242
 msgid "The default tax table to apply to customers."
-msgstr "A tabela de impostos predefinida a aplicar aos clientes."
+msgstr "A tabela de impostos pré-definida a aplicar aos clientes."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1245
 msgid "Default Vendor TaxTable"
-msgstr "Tabela de impostos predefinida para fornecedores"
+msgstr "Tabela de impostos pré-definida para fornecedores"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1246
 msgid "The default tax table to apply to vendors."
-msgstr "A tabela de impostos predefinida a aplicar aos fornecedores."
+msgstr "A tabela de impostos pré-definida a aplicar aos fornecedores."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1250
 msgid "The default date format used for fancy printed dates."
-msgstr "O formato predefinido de data para imprimir datas elegantes."
+msgstr "O formato pré-definido de data para imprimir datas elegantes."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1256
 msgid "The electronic tax number of your business"
@@ -30628,7 +30626,7 @@ msgstr "Orçamento"
 
 #: libgnucash/engine/qofbookslots.h:70
 msgid "Default Budget"
-msgstr "Orçamento predefinido"
+msgstr "Orçamento pré-definido"
 
 #: libgnucash/engine/qofbookslots.h:74
 msgid "Default Invoice Report"
