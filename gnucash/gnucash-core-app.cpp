@@ -167,7 +167,7 @@ gnc_log_init (const std::vector <std::string> log_flags,
     }
 }
 
-Gnucash::CoreApp::CoreApp ()
+Gnucash::CoreApp::CoreApp (const char* app_name) : m_app_name {app_name}
 {
     #ifdef ENABLE_BINRELOC
     {
@@ -210,14 +210,6 @@ Gnucash::CoreApp::CoreApp ()
     std::cerr.imbue (gnc_get_boost_locale());
     std::cout.imbue (gnc_get_boost_locale());
     g_free(localedir);
-}
-
-Gnucash::CoreApp::CoreApp (const char* app_name)
-{
-
-    CoreApp();
-
-    m_app_name = std::string(app_name);
 
     // Now that gettext is properly initialized, set our help tagline.
     m_tagline = _("- GnuCash, accounting for personal and small business finance");
