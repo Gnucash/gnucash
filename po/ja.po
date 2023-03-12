@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-12 05:41+0000\n"
+"PO-Revision-Date: 2023-03-12 16:39+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/ja/>\n"
@@ -10885,16 +10885,12 @@ msgstr "価格インポートアシスタント"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:87
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:77
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Select location and file name for the Import, then click \"OK\"...\n"
 msgid ""
 "\n"
 "Select location and file name for the Import, then click \"Next\"…\n"
 msgstr ""
 "\n"
-"インポートするための場所とファイル名を選択して、\"OK\" を押してください...\n"
+"インポートするための場所とファイル名を選択して、\"進む\" を押してください…\n"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:100
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:90
@@ -11018,16 +11014,6 @@ msgid "Skip alternate lines"
 msgstr "一行おきにスキップする"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:728
-#, fuzzy
-#| msgid ""
-#| "Starting from the first line that is actually imported every second line "
-#| "will be skipped. This option will take the leading lines to skip into "
-#| "account as well.\n"
-#| "For example\n"
-#| "* if \"Leading Lines to Skip\" is set to 3, the first line to import will "
-#| "be line 4. Lines 5, 7, 9,... will be skipped.\n"
-#| "* if \"Leading Lines to Skip\" is set to 4, the first line to import will "
-#| "be line 5. Lines 6, 8, 10,... will be skipped."
 msgid ""
 "Starting from the first line that is actually imported every second line "
 "will be skipped. This option will take the leading lines to skip into "
@@ -11042,9 +11028,9 @@ msgstr ""
 "は先頭でスキップする行数も考慮して動作します。\n"
 "例\n"
 "* \"先頭でスキップする行数\" に 3 を設定すると、インポートされる最初の行は 4 "
-"行目になります。5, 7, 9,... 行目はスキップされます。\n"
+"行目になります。5, 7, 9,… 行目はスキップされます。\n"
 "* \"先頭でスキップする行数\" に 4 を設定すると、インポートされる最初の行は 5 "
-"行目になります。6, 8, 10,... 行目はスキップされます。"
+"行目になります。6, 8, 10,… 行目はスキップされます。"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:781
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:784
@@ -11180,16 +11166,6 @@ msgstr ""
 "ら、このインポート機能はその行が同じ取引の一部であると判断します。"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:746
-#, fuzzy
-#| msgid ""
-#| "Starting from the first line that is actually imported every second line "
-#| "will be skipped. This option will take the leading lines to skip into "
-#| "account as well.\n"
-#| "For example\n"
-#| "* if 'Leading Lines to Skip' is set to 3, the first line to import will "
-#| "be line 4. Lines 5, 7, 9,... will be skipped.\n"
-#| "* if 'Leading Lines to Skip' is set to 4, the first line to import will "
-#| "be line 5. Lines 6, 8, 10,... will be skipped."
 msgid ""
 "Starting from the first line that is actually imported every second line "
 "will be skipped. This option will take the leading lines to skip into "
@@ -11203,10 +11179,10 @@ msgstr ""
 "実際にインポートする最初の行から始めて偶数行はスキップします。このオプション"
 "は先頭でスキップする行数も考慮して動作します。\n"
 "例\n"
-"* '先頭でスキップする行数' に 3 を設定すると、インポートされる最初の行は 4 行"
-"目になります。5, 7, 9,... 行目はスキップされます。\n"
-"* '先頭でスキップする行数' に 4 を設定すると、インポートされる最初の行は 5 行"
-"目になります。6, 8, 10,... 行目はスキップされます。"
+"* '先頭でスキップする行数' に 3 を設定すると、インポートされる最初の行は 4 "
+"行目になります。5, 7, 9,… 行目はスキップされます。\n"
+"* '先頭でスキップする行数' に 4 を設定すると、インポートされる最初の行は 5 "
+"行目になります。6, 8, 10,… 行目はスキップされます。"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:815
 msgid "<b>Account</b>"
@@ -11217,16 +11193,11 @@ msgid "Select a row to change the mappings"
 msgstr "行を選択してマッピングを変更できます"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:960
-#, fuzzy
-#| msgid ""
-#| "To change mapping, double click on a row or select a row and press the "
-#| "button..."
 msgid ""
 "To change mapping, double click on a row or select a row and press the "
 "button…"
-msgstr ""
-"マッピングを変更するには、行をダブルクリックするか、行を選択してボタンを押し"
-"てください..."
+msgstr "マッピングを変更するには、行をダブルクリックするか、行を選択してボタンを押し"
+"てください…"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:971
 #: gnucash/import-export/import-account-matcher.c:166
@@ -11387,23 +11358,6 @@ msgid "Choose accounts to create"
 msgstr "作成する勘定科目を選択してください"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:530
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "If you would like to change an account's name, click on the row "
-#| "containing the account, then click on the account name and change it.\n"
-#| "\n"
-#| "Some accounts are marked as \"Placeholder\". Placeholder accounts are "
-#| "used to create a hierarchy of accounts and normally do not have "
-#| "transactions or opening balances. If you would like an account to be a "
-#| "placeholder account, click the checkbox for that account.\n"
-#| "\n"
-#| "If you would like an account to have an opening balance, click on the row "
-#| "containing the account, then click on the opening balance field and enter "
-#| "the starting balance.\n"
-#| "\n"
-#| "<b>Note:</b> all accounts except Equity and placeholder accounts may have "
-#| "an opening balance.\n"
 msgid ""
 "If you would like to change an account's name, click on the row containing "
 "the account, then click on the account name and change it.\n"
@@ -11420,7 +11374,6 @@ msgid ""
 "<b>Note:</b> all accounts except Equity and placeholder accounts may have an "
 "opening balance."
 msgstr ""
-"\n"
 "勘定科目名を変更したい場合は、勘定科目名が含まれる行をクリックしてから次に勘"
 "定科目名をクリックし、名前を変更してください。\n"
 "\n"
@@ -11429,11 +11382,11 @@ msgstr ""
 "は通常含まれません。勘定科目をプレースホルダー勘定科目にしたい場合は勘定科目"
 "のチェックボックスにチェックを入れてください。\n"
 "\n"
-"勘定科目が開始残高を持つ場合、勘定科目を含む行をクリックし、開始残高列をク"
-"リックして入力してください。\n"
+"勘定科目が開始残高を持つ場合、勘定科目を含む行をクリックし、開始残高列をクリ"
+"ックして入力してください。\n"
 "\n"
 "<b>備考:</b> 純資産勘定科目およびプレースホルダー勘定科目を除く全ての勘定科目"
-"に開始残高を設定できます。\n"
+"に開始残高を設定できます。"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:563
 msgid "Setup selected accounts"
@@ -11613,21 +11566,13 @@ msgid "Loan Details"
 msgstr "ローン詳細"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:451
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Do you utilise an escrow account, if so an account must be specified..."
 msgid "Do you utilize an escrow account, if so an account must be specified…"
-msgstr ""
-"\n"
-"エスクロー勘定科目を使用しますか? 使用する場合は勘定科目を指定する必要があり"
-"ます..."
+msgstr "エスクロー勘定科目を使用しますか? "
+"使用する場合は勘定科目を指定する必要があります…"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:470
-#, fuzzy
-#| msgid "... utilize an escrow account for payments?"
 msgid "… utilize an escrow account for payments?"
-msgstr "... 支払にエスクロー勘定科目を使用しますか?"
+msgstr "… 支払にエスクロー勘定科目を使用しますか?"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:495
 msgid "Escrow Account"
@@ -11638,14 +11583,8 @@ msgid "Loan Repayment Options"
 msgstr "ローン返済オプション"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:544
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "All accounts must have valid entries to continue.\n"
 msgid "All accounts must have valid entries to continue."
-msgstr ""
-"\n"
-"続けるには、勘定科目すべてに有効な値を入力してください。\n"
+msgstr "続けるには、勘定科目すべてに有効な値を入力してください。"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:584
 msgid "Principal To"
@@ -11664,15 +11603,9 @@ msgid "Loan Repayment"
 msgstr "ローン返済"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:727
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "All enabled option pages must contain valid entries to continue.\n"
 msgid "All enabled option pages must contain valid entries to continue."
-msgstr ""
-"\n"
-"続けるには、指定したオプションのページすべてで有効な値を入力する必要がありま"
-"す。\n"
+msgstr "続けるには、指定したオプションのページすべてで有効な値を入力する必要がありま"
+"す。"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:798
 msgid "Payment To (Escrow)"
@@ -11711,17 +11644,10 @@ msgid "Loan Payment"
 msgstr "ローン支払"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1081
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Review the details below and if correct press Apply to create the "
-#| "schedule."
 msgid ""
 "Review the details below and if correct press \"Apply\"\" to create the "
 "schedule."
-msgstr ""
-"\n"
-"以下の詳細を確認して、正しければ適用を押すと予定取引が作成されます。"
+msgstr "以下の詳細を確認して、正しければ \"適用\" を押すと予定取引が作成されます。"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1108
 msgid "Range"
