@@ -83,9 +83,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-12 13:54+0000\n"
-"Last-Translator: Jaime Marquínez Ferrándiz <jaime.marquinez."
-"ferrandiz@fastmail.net>\n"
+"PO-Revision-Date: 2023-03-12 13:59+0000\n"
+"Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/es/>\n"
 "Language: es\n"
@@ -1885,7 +1884,8 @@ msgstr "Siguiente balance"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:963
 msgid "Enter the new balance of shares after the stock split."
-msgstr "Introduzca el nuevo balance de acciones después del desglose."
+msgstr ""
+"Introduzca el nuevo balance de acciones después de la división de acciones."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:964
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:212
@@ -7905,7 +7905,7 @@ msgstr "Final del anterior período contable"
 
 #: gnucash/gnome-utils/gnc-report-combo.c:259
 msgid "Selected Report is Missing"
-msgstr "El boletín seleccionado no existe."
+msgstr "El informe seleccionado no existe"
 
 #. Translators: %s is the report name.
 #: gnucash/gnome-utils/gnc-report-combo.c:314
