@@ -83,7 +83,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-12 16:39+0000\n"
+"PO-Revision-Date: 2023-03-12 19:41+0000\n"
 "Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/es/>\n"
@@ -1814,8 +1814,6 @@ msgstr "Un precio de 1 %s = %s el %s será registrado."
 #. Translators: Designates a page in the stock assistant or inserts the value
 #. into the non-currency asset split of an investment transaction.
 #: gnucash/gnome/assistant-stock-transaction.cpp:836
-#, fuzzy
-#| msgid "Cash"
 msgctxt "Stock Assistant"
 msgid "Cash"
 msgstr "Efectivo"
@@ -1895,8 +1893,6 @@ msgid "Stock"
 msgstr "Provisión"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1123
-#, fuzzy
-#| msgid "Cash"
 msgctxt "Stock Assistant:"
 msgid "Cash"
 msgstr "Efectivo"
@@ -6059,16 +6055,11 @@ msgid "New Split"
 msgstr "Crear Desglose"
 
 #: gnucash/gnome-search/dialog-search.c:1119
-#, fuzzy
-#| msgctxt ""
-#| "Item represents an unknown object type (in the sense of bill, customer, "
-#| "invoice, transaction, split,...)!"
-#| msgid "New item"
 msgctxt ""
 "Item represents an unknown object type (in the sense of bill, customer, "
 "invoice, transaction, split,…)!"
 msgid "New item"
-msgstr "Crear ítem"
+msgstr "Nuevo elemento"
 
 #: gnucash/gnome-search/dialog-search.c:1162
 #: gnucash/gnome-utils/gnc-recurrence.c:544
@@ -7007,10 +6998,8 @@ msgid "Don't tell me again this _session."
 msgstr "No recordarme otra vez esta _sesión."
 
 #: gnucash/gnome-utils/gnc-account-sel.c:526
-#, fuzzy
-#| msgid "Selected Accounts"
 msgid "Hide _Placeholder Accounts"
-msgstr "Cuentas Seleccionadas"
+msgstr "Ocultar Cuentas _Contenedoras"
 
 #: gnucash/gnome-utils/gnc-account-sel.c:528
 msgid "Hide _Hidden Accounts"
@@ -13468,10 +13457,8 @@ msgid "_Lower Balance Limit"
 msgstr "_Límite inferior de saldo"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1718
-#, fuzzy
-#| msgid "Include _subaccounts"
 msgid "_Include sub accounts"
-msgstr "Incluir _subcuentas"
+msgstr "_Incluir Subcuentas"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1755
 msgid "More Properties"
@@ -25384,10 +25371,8 @@ msgstr "Validación"
 
 #: gnucash/report/reports/standard/investment-lots.scm:47
 #: gnucash/report/reports/standard/investment-lots.scm:163
-#, fuzzy
-#| msgid "Include accounts with no shares"
 msgid "Include accounts with no lots"
-msgstr "Incluir cuentas sin acciones"
+msgstr "Incluir cuentas sin lotes"
 
 #: gnucash/report/reports/standard/investment-lots.scm:50
 msgid "Show Chart"
@@ -25459,10 +25444,8 @@ msgstr ""
 "Mostrar espacios en blanco en lugar de ceros en las casillas de la tabla"
 
 #: gnucash/report/reports/standard/investment-lots.scm:76
-#, fuzzy
-#| msgid "Show _log window"
 msgid "Show lot split rows"
-msgstr "Mostrar la ventana de _bitácora"
+msgstr "Mostrar filas de anotación de lote"
 
 #: gnucash/report/reports/standard/investment-lots.scm:79
 msgid "Investment Lots"
@@ -25520,7 +25503,6 @@ msgid "Lot Title"
 msgstr "Título del lote"
 
 #: gnucash/report/reports/standard/investment-lots.scm:104
-#, fuzzy
 msgid "GUID"
 msgstr "GUID"
 
@@ -25555,10 +25537,8 @@ msgid "Sold Value"
 msgstr "Valor vendido"
 
 #: gnucash/report/reports/standard/investment-lots.scm:112
-#, fuzzy
-#| msgid "To Amount"
 msgid "ST Sold Amount"
-msgstr "Cantidad Destino"
+msgstr "CP Cantidad vendida"
 
 #: gnucash/report/reports/standard/investment-lots.scm:113
 msgid "ST Sold Basis"
@@ -25605,10 +25585,8 @@ msgid "LT Realized Gain"
 msgstr "LP Ganancias Realizadas"
 
 #: gnucash/report/reports/standard/investment-lots.scm:125
-#, fuzzy
-#| msgid "Realized Gain"
 msgid "Realized ROI"
-msgstr "Ganancias Ocurridas"
+msgstr "Retorno de inversión (ROI) realizado"
 
 #: gnucash/report/reports/standard/investment-lots.scm:127
 msgid "ST Unrealized Gain"
@@ -25619,16 +25597,12 @@ msgid "LT Unrealized Gain"
 msgstr "LP Ganancia No Realizada"
 
 #: gnucash/report/reports/standard/investment-lots.scm:129
-#, fuzzy
-#| msgid "Unrealized Gain"
 msgid "Unrealized ROI"
-msgstr "Ganancia No Ocurrida"
+msgstr "Retorno de inversión (ROI) no realizado"
 
 #: gnucash/report/reports/standard/investment-lots.scm:131
-#, fuzzy
-#| msgid "Account Notes"
 msgid "Account Lots Total"
-msgstr "Anotaciones de Cuenta"
+msgstr "Total de Lotes de la cuenta"
 
 #: gnucash/report/reports/standard/investment-lots.scm:171
 msgid "Include a chart that shows lot gains, grouped by account and gain type"
@@ -25641,36 +25615,28 @@ msgid "What kind of chart to include"
 msgstr "Tipo de gráfico a incluir"
 
 #: gnucash/report/reports/standard/investment-lots.scm:189
-#, fuzzy
-#| msgid "Use Stacked Charts"
 msgid "Stacked Bar Chart"
-msgstr "Emplear Diagramas Apilados"
+msgstr "Diagramas de barras apilados"
 
 #: gnucash/report/reports/standard/investment-lots.scm:195
-#, fuzzy
-#| msgid "Percentage chart"
 msgid "Where to place the chart"
-msgstr "Gráfico de porcentaje"
+msgstr "Dónde ubicar el gráfico"
 
 #: gnucash/report/reports/standard/investment-lots.scm:214
 msgid "Show the lot GUID table column"
-msgstr ""
+msgstr "Mostrar la columna del GUID del lote"
 
 #: gnucash/report/reports/standard/investment-lots.scm:221
-#, fuzzy
-#| msgid "Show the income and expense accounts"
 msgid "Show the lot open and close table columns"
-msgstr "Muestra las cuentas de ingresos y gastos"
+msgstr "Mostrar las columnas de apertura y cierre del lote"
 
 #: gnucash/report/reports/standard/investment-lots.scm:228
 msgid "Show purchase-related table columns"
 msgstr "Mostrar las columnas de la tabla relacionadas con la compra"
 
 #: gnucash/report/reports/standard/investment-lots.scm:235
-#, fuzzy
-#| msgid "Show _zero total accounts"
 msgid "Show sale-related table columns"
-msgstr "Mostrar cuentas con total a _cero"
+msgstr "Mostrar columnas relacionadas con las ventas"
 
 #: gnucash/report/reports/standard/investment-lots.scm:242
 msgid "Show end date amount and value table columns"
@@ -25690,16 +25656,12 @@ msgid "Group gains (and sales?) by long-term (LT) and short-term (ST)"
 msgstr "Agrupar ganancias (y ventas?) en largo plazo (LP) y corto plazo (CP)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:266
-#, fuzzy
-#| msgid "Gains"
 msgid "Gains Only"
-msgstr "Ganancias"
+msgstr "Solo Ganancias"
 
 #: gnucash/report/reports/standard/investment-lots.scm:267
-#, fuzzy
-#| msgid "Tax on Sales"
 msgid "Gains and Sales"
-msgstr "Imposición sobre Ventas"
+msgstr "Ganancias y Ventas"
 
 #: gnucash/report/reports/standard/investment-lots.scm:281
 msgid "Commodities held longer than this many years count as long-term (LT)."
@@ -25707,10 +25669,8 @@ msgstr ""
 "Productos poseídos más que este número de años cuentan como largo plazo (LP)."
 
 #: gnucash/report/reports/standard/investment-lots.scm:293
-#, fuzzy
-#| msgid "Show long account names"
 msgid "Show long (instead of short) account names"
-msgstr "Mostrar nombres largos de cuentas"
+msgstr "Mostrar nombres largos de cuentas (en lugar de cortos)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:300
 msgid "Show mnemonics with commodity amounts"
@@ -25786,7 +25746,7 @@ msgstr ""
 #: gnucash/report/reports/standard/investment-lots.scm:799
 #, scheme-format
 msgid "  End price: ~a~a on ~a"
-msgstr ""
+msgstr "  Precio final: ~a~a el ~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:809
 #, scheme-format
@@ -25794,10 +25754,8 @@ msgid " [~a]"
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:813
-#, fuzzy
-#| msgid "Not found"
 msgid "No price found"
-msgstr "No encontrado"
+msgstr "Precio no encontrado"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1230
 msgid "split"
@@ -29284,10 +29242,8 @@ msgid "Edit the selected account"
 msgstr "Edita la cuenta seleccionada"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:23
-#, fuzzy
-#| msgid "Delete Account"
 msgid "_Delete Account"
-msgstr "Borrar Cuenta"
+msgstr "_Borrar Cuenta"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:30
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:227
@@ -29509,10 +29465,8 @@ msgid "Delete selected account"
 msgstr "Borra una cuenta seleccionada"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:281
-#, fuzzy
-#| msgid "Check & Repair A_ccount"
 msgid "_Check & Repair A_ccount"
-msgstr "Marcar y Reparar _Cuenta"
+msgstr "_Verificar y Reparar Cuenta"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:291
 msgid "Check & Repair A_ll"
@@ -29619,10 +29573,8 @@ msgid "_Blank"
 msgstr "_En blanco"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:155
-#, fuzzy
-#| msgid "Move to the blank entry at the bottom of the bill"
 msgid "Move to the blank entry at the bottom"
-msgstr "Ir al asiento en blanco al fondo del cargo"
+msgstr "Mueve la entrada vacía al final"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:162
 #: gnucash/ui/gnc-plugin-page-invoice.ui:242
@@ -29665,10 +29617,8 @@ msgid "Manage link of an external document to this item"
 msgstr ""
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:191
-#, fuzzy
-#| msgid "Open Linked Document"
 msgid "Open the linked document"
-msgstr "Abrir documento asociado"
+msgstr "Abrir el documento asociado"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:209
 #, fuzzy
@@ -29780,10 +29730,8 @@ msgid "Create a new voucher"
 msgstr "Crea un comprobante nuevo"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:6
-#, fuzzy
-#| msgid "_Print checks"
 msgid "_Print Cheques"
-msgstr "_Declarar comprobantes"
+msgstr "_Imprimir Cheques"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:15
 #: gnucash/ui/gnc-plugin-page-register.ui:445
@@ -29835,30 +29783,24 @@ msgid "_Void Transaction"
 msgstr "Transacción En _Blanco"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:186
-#, fuzzy
-#| msgid "Record the current transaction"
 msgid "Void the current transaction"
-msgstr "Registra la transacción efectiva"
+msgstr "Anular la transacción actual"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:190
 msgid "_Unvoid Transaction"
 msgstr "Transacción _desanulada"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:192
-#, fuzzy
-#| msgid "Record the current transaction"
 msgid "Unvoid the current transaction"
-msgstr "Registra la transacción efectiva"
+msgstr "Revertir anulación de la transacción actual"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:196
 msgid "Add _Reversing Transaction"
 msgstr "Agregar transacción de _reversión"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:198
-#, fuzzy
-#| msgid "Add _Reversing Transaction"
 msgid "Add a reversing transaction"
-msgstr "Agregar transacción de _reversión"
+msgstr "Añadir una transacción de reversión"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:248
 #: gnucash/ui/gnc-plugin-page-register.ui:712
@@ -29930,16 +29872,12 @@ msgstr ""
 "transacción"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:318
-#, fuzzy
-#| msgid "_All transactions"
 msgid "All Transactions"
-msgstr "_Todas las transacciones"
+msgstr "Todas las transacciones"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:323
-#, fuzzy
-#| msgid "_This transaction"
 msgid "This transaction"
-msgstr "_Esta transacción"
+msgstr "Esta transacción"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:332
 msgid "Account Report"
@@ -30002,10 +29940,8 @@ msgstr "Exportar boletín con formato *.html a fichero"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:46
 #: gnucash/ui/gnc-plugin-page-report.ui:226
-#, fuzzy
-#| msgid "Delete report configuration"
 msgid "Update the current report's saved configuration"
-msgstr "Borrar configuración del boletín"
+msgstr "Actualizar la configuración guardada del informe actual"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:53
 #: gnucash/ui/gnc-plugin-page-report.ui:241
@@ -30128,20 +30064,16 @@ msgid "Reconcile the selected transactions"
 msgstr "Concilia las transacciones seleccionadas"
 
 #: gnucash/ui/gnc-reconcile-window.ui:161
-#, fuzzy
-#| msgid "_Reconcile Selection"
 msgid "Reconcile Selection"
-msgstr "_Conciliar selección"
+msgstr "Conciliar selección"
 
 #: gnucash/ui/gnc-reconcile-window.ui:175
 msgid "Unreconcile the selected transactions"
 msgstr "Desconciliar las transacciones seleccionadas"
 
 #: gnucash/ui/gnc-reconcile-window.ui:177
-#, fuzzy
-#| msgid "_Unreconcile Selection"
 msgid "Unreconcile Selection"
-msgstr "_Selección no conciliada"
+msgstr "Irreconciliar Selección"
 
 #: gnucash/ui/gnc-reconcile-window.ui:191
 msgid "Delete the selected transaction"
@@ -30244,7 +30176,7 @@ msgstr ""
 
 #: libgnucash/app-utils/gnc-quotes.cpp:354
 msgid "Finance::Quote reported failure with  error: "
-msgstr ""
+msgstr "Finance::Quote reportó fallo con   error: "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:357
 msgid "Finance::Quote returned a quote with no currency."
@@ -30269,10 +30201,8 @@ msgstr ""
 "convertir a un número."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:370
-#, fuzzy
-#| msgid "There was an error accessing %s."
 msgid "The quote has no error set."
-msgstr "Hubo un error al escribir el fichero %s."
+msgstr "La cotización no tiene error definido."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:379
 msgid "Quotes for the following commodities were unavailable or unusable:\n"
@@ -30313,11 +30243,9 @@ msgstr "uno de estos"
 
 #. Translators: Means that a required element wasn't reported. The *s are for emphasis.
 #: libgnucash/app-utils/gnc-quotes.cpp:776
-#, fuzzy
-#| msgid "missing"
 msgctxt "Finance::Quote"
 msgid "**missing**"
-msgstr "ausente"
+msgstr "**falta**"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:783
 msgid "Finance::Quote fields GnuCash uses:"
@@ -30331,11 +30259,9 @@ msgstr "símbolo: "
 
 #. Translators: The date of the quote.
 #: libgnucash/app-utils/gnc-quotes.cpp:787
-#, fuzzy
-#| msgid "Date: "
 msgctxt "Finance::Quote"
 msgid "date: "
-msgstr "Fecha: "
+msgstr "fecha: "
 
 #. Translators: The quote currency
 #: libgnucash/app-utils/gnc-quotes.cpp:789
@@ -31147,13 +31073,10 @@ msgid "Default Budget"
 msgstr "Presupuesto Predeterminado"
 
 #: libgnucash/engine/qofbookslots.h:74
-#, fuzzy
-#| msgid "Date of Report"
 msgid "Default Invoice Report"
-msgstr "Fecha de Boletín"
+msgstr "Informe de factura por defecto"
 
 #: libgnucash/engine/qofbookslots.h:75
-#, fuzzy
 msgid "Default Invoice Report Timeout"
 msgstr "Tiempo de espera predeterminado para el informe de factura"
 
