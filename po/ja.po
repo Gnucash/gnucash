@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-12 01:01+0000\n"
+"PO-Revision-Date: 2023-03-12 03:48+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/ja/>\n"
@@ -2873,16 +2873,11 @@ msgid "Do you really want to post the invoice?"
 msgstr "本当にこの請求書を記帳しますか?"
 
 #: gnucash/gnome/dialog-invoice.c:1167
-#, fuzzy
-#| msgid ""
-#| "One or more of the entries are for accounts different from the invoice/"
-#| "bill currency. You will be asked a conversion rate for each."
 msgid ""
 "One or more of the entries are for accounts different from the invoice/bill "
 "currency. You will be asked to enter a conversion rate for each."
-msgstr ""
-"この勘定科目に対する1つまたは複数の項目が異なる通貨の得意先請求書/仕入先請求"
-"書によるものです。毎回変換レートを尋ねられます。"
+msgstr "この勘定科目に対する1つまたは複数の項目が異なる通貨の得意先請求書/仕入先請求"
+"書によるものです。毎回変換レートを入力するよう尋ねられます。"
 
 #: gnucash/gnome/dialog-invoice.c:1300
 msgid "The post action was canceled because not all exchange rates were given."
@@ -3510,12 +3505,6 @@ msgid ""
 msgstr "選択された取引には、支払として割り当てできるスプリットがありません。"
 
 #: gnucash/gnome/dialog-payment.c:1627
-#, fuzzy
-#| msgid ""
-#| "While this transaction has multiple splits that can be considered\n"
-#| "as 'the payment split', gnucash only knows how to handle one.\n"
-#| "Please select one, the others will be ignored.\n"
-#| "\n"
 msgid ""
 "While this transaction has multiple splits that can be considered\n"
 "as 'the payment split', GnuCash only knows how to handle one.\n"
@@ -3523,8 +3512,8 @@ msgid ""
 "\n"
 msgstr ""
 "この取引には '支払スプリット' として扱えるスプリットが\n"
-"複数ありますが、gnucash は一つだけしか扱えません。\n"
-"一つを選択してください。他は無視されます。\n"
+"複数ありますが、GnuCash は一つだけしか扱えません。\n"
+"一つを選択してください。他は破棄されます。\n"
 "\n"
 
 #: gnucash/gnome/dialog-payment.c:1631
@@ -3580,10 +3569,9 @@ msgstr "本当にこの価格を削除しますか?"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:572
 #: gnucash/gnome-utils/dialog-transfer.cpp:1797
-#, fuzzy, c-format
-#| msgid "Price Quotes Retrieval Options"
+#, c-format
 msgid "Price retrieval failed: %s"
-msgstr "相場価格取得オプション"
+msgstr "価格の取得に失敗しました: %s"
 
 #: gnucash/gnome/dialog-price-editor.c:227
 msgid "Are you sure you want to replace the existing price?"
@@ -4373,10 +4361,8 @@ msgstr "この請求書の所有者の得意先帳票ウィンドウを開きま
 #: gnucash/gnome/gnc-plugin-page-register.c:274
 #: gnucash/ui/gnc-plugin-page-register.ui:205
 #: gnucash/ui/gnc-plugin-page-register.ui:394
-#, fuzzy
-#| msgid "Manage Document Link"
 msgid "_Manage Document Link…"
-msgstr "文書リンクを管理する"
+msgstr "文書リンクを管理(_M)…"
 
 #. Translators: This is a menu item that opens an external file or URI that may
 #. be linked to the current bill, invoice, transaction, or voucher using
@@ -4657,10 +4643,8 @@ msgid "Open a company report window for the owner of this credit note"
 msgstr "この貸方票の所有者の会社帳票ウィンドウを開きます。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:284
-#, fuzzy
-#| msgid "Manage Document Link"
 msgid "Manage Document Link…"
-msgstr "文書リンクを管理する"
+msgstr "文書リンクを管理する…"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:292
 #: gnucash/gnome/gnc-plugin-page-register.c:395
@@ -8148,7 +8132,7 @@ msgstr "Finance::Quote バージョン ~A が見つかりました。"
 
 #: gnucash/gnucash-commands.cpp:364 gnucash/gnucash-commands.cpp:388
 msgid "Price retrieval failed: "
-msgstr ""
+msgstr "価格の取得に失敗しました: "
 
 #: gnucash/gnucash-core-app.cpp:79
 msgid "This is a development version. It may or may not work."
