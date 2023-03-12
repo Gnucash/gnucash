@@ -84,8 +84,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
 "PO-Revision-Date: 2023-03-12 14:14+0000\n"
-"Last-Translator: Jaime Marquínez Ferrándiz <jaime.marquinez."
-"ferrandiz@fastmail.net>\n"
+"Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/es/>\n"
 "Language: es\n"
@@ -25432,7 +25431,7 @@ msgstr "Mostrar columnas de fin"
 
 #: gnucash/report/reports/standard/investment-lots.scm:63
 msgid "Show realized gain column(s)"
-msgstr "Mostrar columna(s) de ganancias efectivas"
+msgstr "Mostrar columna(s) de ganancias realizadas"
 
 #: gnucash/report/reports/standard/investment-lots.scm:65
 msgid "Show unrealized gain column(s)"
