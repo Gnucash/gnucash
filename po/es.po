@@ -84,8 +84,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
 "PO-Revision-Date: 2023-03-12 16:39+0000\n"
-"Last-Translator: Jaime Marquínez Ferrándiz <jaime.marquinez."
-"ferrandiz@fastmail.net>\n"
+"Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/es/>\n"
 "Language: es\n"
@@ -18834,7 +18833,7 @@ msgstr "Mostrar la ventana de _bitácora"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:55
 msgid "Show the online banking log window"
-msgstr "Muestra la ventana del registro de la conexión al banco:"
+msgstr "Muestra la ventana del registro de la conexión al banco"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:63
 msgid "_Online Banking Setup…"
@@ -19303,7 +19302,7 @@ msgstr "Cantidad con Sym"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:556
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:569
 msgid "Value Num."
-msgstr "Valor numérico"
+msgstr "Valor Núm."
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:557
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:570
@@ -25436,7 +25435,7 @@ msgstr "Mostrar columna(s) de ganancias realizadas"
 
 #: gnucash/report/reports/standard/investment-lots.scm:65
 msgid "Show unrealized gain column(s)"
-msgstr "Mostrar columna(s) de ganancias no efectivas"
+msgstr "Mostrar columna(s) de ganancias no realizadas"
 
 #: gnucash/report/reports/standard/investment-lots.scm:67
 msgid "Group gains by age (short term and long term)"
