@@ -84,7 +84,8 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
 "PO-Revision-Date: 2023-03-12 14:06+0000\n"
-"Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
+"Last-Translator: Jaime Marquínez Ferrándiz <jaime.marquinez."
+"ferrandiz@fastmail.net>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/es/>\n"
 "Language: es\n"
@@ -1507,7 +1508,7 @@ msgstr "¡No tiene ninguna cuenta de provisión con balances!"
 #. Initial stock long purchase
 #: gnucash/gnome/assistant-stock-transaction.cpp:147
 msgid "Open buy"
-msgstr "Compra abierta"
+msgstr "Abrir compra"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:148
 msgid "Initial stock long purchase."
@@ -1853,11 +1854,8 @@ msgid "The following errors must be fixed:"
 msgstr "Los siguientes errores tienen que corregirse:"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:912
-#, fuzzy
-#| msgid "The following vendor document is due:"
-#| msgid_plural "The following %d vendor documents are due:"
 msgid "The following warnings exist:"
-msgstr "El siguiente documento del proveedor está vencido:"
+msgstr "Las siguientes advertencias existen"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:956
 msgid "Ne_w Balance"
