@@ -83,8 +83,9 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-12 14:14+0000\n"
-"Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
+"PO-Revision-Date: 2023-03-12 16:39+0000\n"
+"Last-Translator: Jaime Marquínez Ferrándiz <jaime.marquinez."
+"ferrandiz@fastmail.net>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/es/>\n"
 "Language: es\n"
@@ -25446,10 +25447,8 @@ msgid "Long term gains age (years)"
 msgstr "Plazo de ganancias a largo (años)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:72
-#, fuzzy
-#| msgid "_Show children accounts"
 msgid "Show mnemonic in amounts"
-msgstr "_Mostrar subcuentas"
+msgstr "Mostrar mnemotecnia en cantidades"
 
 #: gnucash/report/reports/standard/investment-lots.scm:73
 msgid "Include closed lots"
@@ -25549,10 +25548,8 @@ msgid "Sold Amount"
 msgstr "Cantidad vendida"
 
 #: gnucash/report/reports/standard/investment-lots.scm:110
-#, fuzzy
-#| msgid "Basis"
 msgid "Sold Basis"
-msgstr "Base"
+msgstr "Base vendida"
 
 #: gnucash/report/reports/standard/investment-lots.scm:111
 msgid "Sold Value"
