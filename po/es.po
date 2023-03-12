@@ -83,7 +83,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-12 14:10+0000\n"
+"PO-Revision-Date: 2023-03-12 14:12+0000\n"
 "Last-Translator: Jaime Marquínez Ferrándiz <jaime.marquinez."
 "ferrandiz@fastmail.net>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
@@ -19711,10 +19711,8 @@ msgstr ""
 "Esto nunca debería ocurrir. Comunique esto como un gazapo."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:686
-#, fuzzy
-#| msgid "Error"
 msgid "Parse Error"
-msgstr "Error"
+msgstr "Error de parseado"
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:702
 msgid "Problem creating preliminary transaction"
@@ -22690,7 +22688,7 @@ msgstr "Boletín de muestra"
 
 #: gnucash/report/reports/example/sample-report.scm:457
 msgid "An options example report."
-msgstr "Un boletín de prueba con opciones."
+msgstr "Un ejemplo de boletín con opciones."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:79
 msgid "Tax Report / TXF Export"
