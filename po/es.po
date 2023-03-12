@@ -84,7 +84,8 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
 "PO-Revision-Date: 2023-03-12 14:13+0000\n"
-"Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
+"Last-Translator: Jaime Marquínez Ferrándiz <jaime.marquinez."
+"ferrandiz@fastmail.net>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/es/>\n"
 "Language: es\n"
@@ -25418,26 +25419,20 @@ msgid "Show date columns"
 msgstr "Mostrar columnas de fecha"
 
 #: gnucash/report/reports/standard/investment-lots.scm:59
-#, fuzzy
-#| msgid "Show _Account column"
 msgid "Show bought columns"
-msgstr "Mostrar columna de _Cuenta"
+msgstr "Mostrar columnas de compras"
 
 #: gnucash/report/reports/standard/investment-lots.scm:60
-#, fuzzy
-#| msgid "Show _Memo column"
 msgid "Show sold columns"
-msgstr "Mostrar columna de _Memo"
+msgstr "Mostrar columnas de ventas"
 
 #: gnucash/report/reports/standard/investment-lots.scm:61
 msgid "Show end columns"
 msgstr "Mostrar columnas de fin"
 
 #: gnucash/report/reports/standard/investment-lots.scm:63
-#, fuzzy
-#| msgid "Show linked transactions"
 msgid "Show realized gain column(s)"
-msgstr "Mostrar transacciones enlazadas"
+msgstr "Mostrar columna(s) de ganancias efectivas"
 
 #: gnucash/report/reports/standard/investment-lots.scm:65
 #, fuzzy
