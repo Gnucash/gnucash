@@ -14,8 +14,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-11 22:41+0000\n"
-"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
+"PO-Revision-Date: 2023-03-12 13:53+0000\n"
+"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hu/>\n"
 "Language: hu\n"
@@ -258,7 +258,7 @@ msgstr "Weboldalcím"
 
 #: bindings/guile/options.scm:395 libgnucash/engine/gnc-optiondb.cpp:1222
 msgid "Company Email Address"
-msgstr "E-mail cím"
+msgstr "Cég e-mail-címe"
 
 #: bindings/guile/options.scm:396 libgnucash/engine/gnc-optiondb.cpp:1210
 msgid "Company Contact Person"
@@ -2538,9 +2538,8 @@ msgid "Address Not Found"
 msgstr "Cím nem található"
 
 #: gnucash/gnome/dialog-doclink.c:602 gnucash/gnome/dialog-imap-editor.c:867
-#, fuzzy
 msgid "Total Entries"
-msgstr "Összár"
+msgstr "Bejegyzések száma"
 
 #: gnucash/gnome/dialog-doclink.c:659
 #, fuzzy
@@ -3441,9 +3440,8 @@ msgstr "Csak aktívat?"
 #: gnucash/gnome/dialog-job.c:580 gnucash/gnome/dialog-job.c:593
 #: gnucash/gtkbuilder/dialog-job.glade:206
 #: gnucash/register/ledger-core/split-register-model.c:370
-#, fuzzy
 msgid "Rate"
-msgstr "Adó mértéke"
+msgstr ""
 
 #: gnucash/gnome/dialog-job.c:582 gnucash/gnome-utils/gnc-tree-view-owner.c:357
 #: gnucash/gtkbuilder/dialog-job.glade:103
@@ -3461,9 +3459,8 @@ msgid "Find Job"
 msgstr "Megbízás keresése"
 
 #: gnucash/gnome/dialog-lot-viewer.c:817
-#, fuzzy
 msgid "Empty"
-msgstr "Névtér"
+msgstr "Üres"
 
 #: gnucash/gnome/dialog-lot-viewer.c:829
 msgctxt "Adjective"
@@ -18822,9 +18819,8 @@ msgstr "Érték"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:557
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:570
-#, fuzzy
 msgid "Rate/Price"
-msgstr "Összár"
+msgstr "Árfolyam/Ár"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:562
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
@@ -25711,7 +25707,7 @@ msgstr "Nettó ár"
 #: gnucash/report/reports/standard/taxinvoice.scm:109
 #: gnucash/report/reports/standard/taxinvoice.scm:196
 msgid "Total Price"
-msgstr "Összár"
+msgstr "Teljes ár"
 
 #: gnucash/report/reports/standard/invoice.scm:520
 #: gnucash/report/reports/standard/receipt.scm:62
@@ -25746,7 +25742,7 @@ msgstr "Megbízás neve:"
 
 #: gnucash/report/reports/standard/invoice.scm:640
 msgid "REF"
-msgstr "HIV"
+msgstr "Referencia"
 
 #: gnucash/report/reports/standard/invoice.scm:721
 msgid ""
@@ -25893,19 +25889,19 @@ msgstr ""
 
 #: gnucash/report/reports/standard/new-aging.scm:56
 msgid "Address Phone"
-msgstr "Telefonszám"
+msgstr "Telefon"
 
 #: gnucash/report/reports/standard/new-aging.scm:56
 msgid "Display Phone."
-msgstr ""
+msgstr "Telefonszám."
 
 #: gnucash/report/reports/standard/new-aging.scm:57
 msgid "Address Fax"
-msgstr "Faxszám"
+msgstr "Fax"
 
 #: gnucash/report/reports/standard/new-aging.scm:57
 msgid "Display Fax."
-msgstr ""
+msgstr "Faxszám."
 
 #: gnucash/report/reports/standard/new-aging.scm:58
 msgid "Address Email"
@@ -25913,7 +25909,7 @@ msgstr "E-mail-cím"
 
 #: gnucash/report/reports/standard/new-aging.scm:58
 msgid "Display Email."
-msgstr ""
+msgstr "E-mail."
 
 #: gnucash/report/reports/standard/new-aging.scm:59
 msgid "Display Active status."
