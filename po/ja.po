@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-12 03:48+0000\n"
+"PO-Revision-Date: 2023-03-12 05:41+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/ja/>\n"
@@ -1584,10 +1584,8 @@ msgstr ""
 #. Translators: (missing) denotes that the amount or account is
 #. not provided, or incorrect, in the Stock Transaction Assistant.
 #: gnucash/gnome/assistant-stock-transaction.cpp:655
-#, fuzzy
-#| msgid "missing"
 msgid "(missing)"
-msgstr "不明"
+msgstr "(不明)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:670
 #, c-format
@@ -1834,17 +1832,13 @@ msgstr "単位"
 #: gnucash/gnome/business-gnome-utils.c:377 gnucash/gnome/dialog-invoice.c:1674
 #: gnucash/gnome/dialog-invoice.c:1752
 #: gnucash/gnome-utils/gnc-general-select.c:220
-#, fuzzy
-#| msgid "Select"
 msgid "Select…"
-msgstr "選択"
+msgstr "選択…"
 
 #: gnucash/gnome/business-gnome-utils.c:194
 #: gnucash/gnome-utils/gnc-general-select.c:222
-#, fuzzy
-#| msgid "Edit"
 msgid "Edit…"
-msgstr "編集"
+msgstr "編集…"
 
 #: gnucash/gnome/business-gnome-utils.c:336 gnucash/gnome/dialog-doclink.c:813
 #: gnucash/gnome/dialog-invoice.c:2801 gnucash/gnome/dialog-invoice.c:3026
@@ -4876,10 +4870,8 @@ msgstr "自動清算"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:251
 #: gnucash/ui/gnc-plugin-page-register.ui:250
 #: gnucash/ui/gnc-plugin-page-register.ui:714
-#, fuzzy
-#| msgid "Stock Split Assistant"
 msgid "Stock Assistant"
-msgstr "株式分割アシスタント"
+msgstr "株式アシスタント"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:660
 #: gnucash/gnome/gnc-plugin-page-register.c:1904
@@ -6489,10 +6481,8 @@ msgid "Action/Number"
 msgstr "アクション/番号"
 
 #: gnucash/gnome-utils/dialog-file-access.c:302
-#, fuzzy
-#| msgid "Open"
 msgid "Open…"
-msgstr "開く"
+msgstr "開く…"
 
 #: gnucash/gnome-utils/dialog-file-access.c:303
 #: gnucash/gnome-utils/gnc-file.c:88
@@ -6504,10 +6494,8 @@ msgid "_Open"
 msgstr "開く(_O)"
 
 #: gnucash/gnome-utils/dialog-file-access.c:309
-#, fuzzy
-#| msgid "_Save As"
 msgid "Save As…"
-msgstr "別名で保存(_S)"
+msgstr "名前を付けて保存…"
 
 #: gnucash/gnome-utils/dialog-file-access.c:310
 #: gnucash/gnome-utils/dialog-file-access.c:319
@@ -7364,10 +7352,8 @@ msgid "<unknown>"
 msgstr "<未知>"
 
 #: gnucash/gnome-utils/gnc-general-select.c:224
-#, fuzzy
-#| msgid "View"
 msgid "View…"
-msgstr "表示"
+msgstr "表示…"
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:69
 msgid "GnuCash could not find the files of the help documentation."
@@ -8044,14 +8030,10 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:103
-#, fuzzy
-#| msgid ""
-#| "Regular expression determining which namespace commodities will be "
-#| "retrieved for"
 msgid ""
 "Regular expression determining which namespace commodities will be retrieved "
 "for when using the get command"
-msgstr "どの名前空間の商品を取得するかを 決定するための正規表現"
+msgstr "get コマンド使用時に どの名前空間の商品を取得するかを 決定するための正規表現"
 
 #: gnucash/gnucash-cli.cpp:105
 msgid ""
@@ -8119,16 +8101,12 @@ msgstr "コマンドまたはオプションがありません。"
 
 #: gnucash/gnucash-commands.cpp:308 gnucash/gnucash-commands.cpp:354
 #: gnucash/gnucash.cpp:177
-#, fuzzy
-#| msgid "Found Finance::Quote version ~A."
 msgid "Found Finance::Quote version {1}."
-msgstr "Finance::Quote バージョン ~A が見つかりました。"
+msgstr "Finance::Quote バージョン {1} が見つかりました。"
 
 #: gnucash/gnucash-commands.cpp:309
-#, fuzzy
-#| msgid "Found Finance::Quote version ~A."
 msgid "Finance::Quote sources:\n"
-msgstr "Finance::Quote バージョン ~A が見つかりました。"
+msgstr "Finance::Quote の情報源:\n"
 
 #: gnucash/gnucash-commands.cpp:364 gnucash/gnucash-commands.cpp:388
 msgid "Price retrieval failed: "
@@ -8242,9 +8220,8 @@ msgid "Checking Finance::Quote…"
 msgstr "Finance::Quote を検査中…"
 
 #: gnucash/gnucash.cpp:185
-#, fuzzy
 msgid "Unable to load Finance::Quote."
-msgstr "Finance::Quote を検査中..."
+msgstr "Finance::Quote をロードできません。"
 
 #: gnucash/gnucash.cpp:196
 msgid "Loading data…"
@@ -10629,14 +10606,8 @@ msgid "Import Account Assistant"
 msgstr "勘定科目インポートアシスタント"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:66
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Enter file name and location for the Import...\n"
 msgid "Enter file name and location for the Import…"
-msgstr ""
-"\n"
-"インポートする場所とファイル名を入力してください...\n"
+msgstr "インポートする場所とファイル名を入力してください…"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:77
 msgid "Choose File to Import"
@@ -10825,14 +10796,8 @@ msgid "Account Selection"
 msgstr "勘定科目の選択"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:687
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Enter file name and location for the Export...\n"
 msgid "Enter file name and location for the Export…"
-msgstr ""
-"\n"
-"エクスポートするための場所とファイル名を入力してください...\n"
+msgstr "エクスポートするための場所とファイル名を入力してください…"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:698
 msgid "Choose File Name for Export"
@@ -29056,8 +29021,6 @@ msgid "Manage link of an external document to this item"
 msgstr ""
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:191
-#, fuzzy
-#| msgid "Open Linked Document"
 msgid "Open the linked document"
 msgstr "リンクされた文書を開きます。"
 
