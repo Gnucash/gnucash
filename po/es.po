@@ -83,7 +83,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-12 14:12+0000\n"
+"PO-Revision-Date: 2023-03-12 14:13+0000\n"
 "Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/es/>\n"
@@ -22687,7 +22687,7 @@ msgstr "Boletín de muestra"
 
 #: gnucash/report/reports/example/sample-report.scm:457
 msgid "An options example report."
-msgstr "Un ejemplo de boletín con opciones."
+msgstr "Un ejemplo de informe con opciones."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:79
 msgid "Tax Report / TXF Export"
