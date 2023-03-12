@@ -83,7 +83,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-12 14:13+0000\n"
+"PO-Revision-Date: 2023-03-12 14:14+0000\n"
 "Last-Translator: Jaime Marquínez Ferrándiz <jaime.marquinez."
 "ferrandiz@fastmail.net>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
@@ -25435,10 +25435,8 @@ msgid "Show realized gain column(s)"
 msgstr "Mostrar columna(s) de ganancias efectivas"
 
 #: gnucash/report/reports/standard/investment-lots.scm:65
-#, fuzzy
-#| msgid "Show _unused accounts"
 msgid "Show unrealized gain column(s)"
-msgstr "Mostrar cuentas _no utilizadas"
+msgstr "Mostrar columna(s) de ganancias no efectivas"
 
 #: gnucash/report/reports/standard/investment-lots.scm:67
 msgid "Group gains by age (short term and long term)"
