@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-07 06:57+0000\n"
+"PO-Revision-Date: 2023-03-12 10:41+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/sv/>\n"
@@ -1371,13 +1371,10 @@ msgstr "Du har inga aktiekonton med saldon!"
 #. Translators: this is a stock transaction describing an
 #. Initial stock long purchase
 #: gnucash/gnome/assistant-stock-transaction.cpp:147
-#, fuzzy
-#| msgid "Open"
 msgid "Open buy"
 msgstr "Öppna köp"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:148
-#, fuzzy
 msgid "Initial stock long purchase."
 msgstr "Inledande långsiktigt aktieinköp."
 
@@ -1388,7 +1385,6 @@ msgid "Open short"
 msgstr "Öppna kort"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:162
-#, fuzzy
 msgid "Initial stock short sale."
 msgstr "Inledande kortsiktig aktieförsäljning."
 
@@ -1409,7 +1405,6 @@ msgid "Buy"
 msgstr "Köp"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:180
-#, fuzzy
 msgid "Buying stock long."
 msgstr "Köper aktie långsiktigt."
 
@@ -1535,13 +1530,10 @@ msgstr ""
 #. Translators: this is a stock transaction describing
 #. shorting of stock.
 #: gnucash/gnome/assistant-stock-transaction.cpp:285
-#, fuzzy
-#| msgid "Sort Order"
 msgid "Short sell"
 msgstr "Sälj kort"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:286
-#, fuzzy
 msgid "Selling stock short."
 msgstr "Säljer aktier kortsiktigt."
 
@@ -1579,7 +1571,6 @@ msgid "Compensatory return of capital"
 msgstr "Kompenserande kapitalavkastning"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:328
-#, fuzzy
 msgid ""
 "Company returns capital, and the short stock holder must make a compensatory "
 "payment for the returned capital. This reduces the cost basis (less "
@@ -1787,8 +1778,6 @@ msgstr "Mata in det nya saldot för aktier efter aktiespliten."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:964
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:212
-#, fuzzy
-#| msgid "Enter the number of shares bought or sold"
 msgid "Enter the number of shares you gained or lost in the transaction."
 msgstr ""
 "Mata in antal andelar som du anskaffade eller förlorade i transaktionen."
@@ -2864,7 +2853,6 @@ msgstr ""
 "Denna post finns även på en order och kommer att tas bort från den också!"
 
 #: gnucash/gnome/dialog-invoice.c:920
-#, fuzzy
 msgid "Choose a different report template or Printable Invoice will be used"
 msgstr "Välj en annan rapportmall, annars används Faktura för utskrift"
 
@@ -3068,7 +3056,7 @@ msgstr "Registrera"
 #: gnucash/gnome/dialog-invoice.c:3517 gnucash/gnome/dialog-invoice.c:3526
 #: gnucash/gnome/dialog-invoice.c:3537
 msgid "Printable Report"
-msgstr "Utskrivningsbar rapport"
+msgstr "Rapport för utskrift"
 
 #: gnucash/gnome/dialog-invoice.c:3522 gnucash/gnome/dialog-invoice.c:3788
 msgid "View/Edit Bill"
@@ -5277,7 +5265,7 @@ msgstr "GnuCash-rapport"
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1908
 #: gnucash/report/reports/standard/invoice.scm:849
 msgid "Printable Invoice"
-msgstr "Utskrivningsbar faktura"
+msgstr "Faktura för utskrift"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1909
 #: gnucash/report/reports/standard/taxinvoice.scm:302
