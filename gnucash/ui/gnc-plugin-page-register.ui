@@ -3,7 +3,7 @@
 
   <menu id="FilePlaceholder3">
     <item>
-      <attribute name="label" translatable="yes">_Print Cheques</attribute>
+      <attribute name="label" translatable="yes">_Print Checks…</attribute>
       <attribute name="action">GncPluginPageRegisterActions.FilePrintAction</attribute>
       <attribute name="accel">&lt;Primary&gt;p</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
@@ -47,7 +47,7 @@
   <menu id="EditPlaceholder3">
     <item>
       <attribute name="label" translatable="yes">_Find…</attribute>
-      <attribute name="action">gnc-plugin-basic-commands-actions.EditFindTransactionsAction</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.EditFindTransactionsAction</attribute>
       <attribute name="accel">&lt;Primary&gt;f</attribute>
       <attribute name="tooltip" translatable="yes">Find transactions with a search</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
