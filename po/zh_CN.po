@@ -32,8 +32,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-03-13 16:35+0000\n"
-"Last-Translator: J0kWang <lianjiefly@gmail.com>\n"
+"PO-Revision-Date: 2023-03-13 17:40+0000\n"
+"Last-Translator: Carlson Mak <hbmaak@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -20570,7 +20570,7 @@ msgstr "汇率(_P).csv..."
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:61
 msgid "Import Prices from a CSV file"
-msgstr "从 CSV 文件导入汇率"
+msgstr "从 CSV 文件导入价格"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:134
 msgid "Shipping Name"
