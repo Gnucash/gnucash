@@ -536,11 +536,32 @@ cleanup:
     g_free(page_group);
 }
 
+static bool
+intersects_some_monitor(const GdkRectangle& rect)
+{
+    auto display = gdk_display_get_default();
+    if (!display)
+        return false;
+
+    int n = gdk_display_get_n_monitors(display);
+    for (int i = 0; i < n; ++i)
+    {
+        auto monitor = gdk_display_get_monitor(display, i);
+        GdkRectangle monitor_geometry;
+        gdk_monitor_get_geometry(monitor, &monitor_geometry);
+        DEBUG("Monitor %d: position (%d,%d), size %dx%d\n", i,
+                        monitor_geometry.x, monitor_geometry.y,
+                        monitor_geometry.width, monitor_geometry.height);
+        if (gdk_rectangle_intersect(&rect, &monitor_geometry, nullptr))
+            return true;
+    }
+
+    return false;
+}
+
 static void
 set_window_geometry(GncMainWindow *window, GncMainWindowSaveData *data, gchar *window_group)
 {
-    auto priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-
     gsize length;
     GError *error = nullptr;
     gint *geom = g_key_file_get_integer_list(data->key_file, window_group,
@@ -579,21 +600,24 @@ set_window_geometry(GncMainWindow *window, GncMainWindowSaveData *data, gchar *w
         g_warning("invalid number of values for group %s key %s",
                   window_group, WINDOW_POSITION);
     }
-    /* Prevent restoring coordinates if this would move the window off-screen */
-    else if ((pos[0] + (geom ? geom[0] : 0) < 0) ||
-             (pos[0] > gdk_screen_width()) ||
-             (pos[1] + (geom ? geom[1] : 0) < 0) ||
-             (pos[1] > gdk_screen_height()))
+    else if (pos)
     {
-        DEBUG("position (%d,%d), size %dx%d is offscreen; will not move",
-                pos[0], pos[1], geom ? geom[0] : 0, geom ? geom[1] : 0);
-    }
-    else
-    {
-        gtk_window_move(GTK_WINDOW(window), pos[0], pos[1]);
-        priv->pos[0] = pos[0];
-        priv->pos[1] = pos[1];
-        DEBUG("window (%p) position (%d,%d)", window, pos[0], pos[1]);
+        // Prevent restoring coordinates if this would move the window off-screen
+        // If missing geom, use height=width=1 to make the intersection check work
+        GdkRectangle geometry{pos[0], pos[1], geom ? geom[0] : 1, geom ? geom[1] : 1};
+        if (intersects_some_monitor(geometry))
+        {
+            gtk_window_move(GTK_WINDOW(window), geometry.x, geometry.y);
+            auto priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+            priv->pos[0] = geometry.x;
+            priv->pos[1] = geometry.y;
+            DEBUG("window (%p) position (%d,%d)", window, geometry.x, geometry.y);
+        }
+        else
+        {
+            DEBUG("position (%d,%d), size %dx%d is offscreen; will not move",
+                  geometry.x, geometry.y, geometry.width, geometry.height);
+        }
     }
     g_free(geom);
     g_free(pos);
