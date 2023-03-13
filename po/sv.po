@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-01-08 15:49+0000\n"
+"PO-Revision-Date: 2023-03-12 10:38+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sv/>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.1-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -2446,7 +2446,7 @@ msgstr "Registrera"
 #: gnucash/gnome/dialog-invoice.c:3341 gnucash/gnome/dialog-invoice.c:3350
 #: gnucash/gnome/dialog-invoice.c:3361
 msgid "Printable Report"
-msgstr "Utskrivningsbar rapport"
+msgstr "Rapport för utskrift"
 
 #: gnucash/gnome/dialog-invoice.c:3346 gnucash/gnome/dialog-invoice.c:3612
 msgid "View/Edit Bill"
@@ -6105,7 +6105,7 @@ msgstr "GnuCash-rapport"
 #: gnucash/gtkbuilder/business-prefs.glade:26
 #: gnucash/report/reports/standard/invoice.scm:890
 msgid "Printable Invoice"
-msgstr "Utskrivningsbar faktura"
+msgstr "Faktura för utskrift"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1852
 #: gnucash/gtkbuilder/business-prefs.glade:29
