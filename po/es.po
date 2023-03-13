@@ -83,9 +83,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-13 13:38+0000\n"
-"Last-Translator: Jaime Marquínez Ferrándiz <jaime.marquinez."
-"ferrandiz@fastmail.net>\n"
+"PO-Revision-Date: 2023-03-13 15:35+0000\n"
+"Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/es/>\n"
 "Language: es\n"
@@ -12925,6 +12924,9 @@ msgid ""
 "In this page, input any capital gains or losses incurred, and the associated "
 "income account. Capital gains are positive, and capital losses are negative."
 msgstr ""
+"En esta página, introduzca cualquier ganancia o pérdida de capital "
+"incurrida, junto con la cuenta de ingresos asociada. Las ganancias de "
+"capital son positivas, y las pérdidas de capital negativas."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:869
 msgid "Capital Gains Account"
@@ -13440,6 +13442,14 @@ msgid ""
 "\n"
 "Clear the entry to have no warning."
 msgstr ""
+"Si un valor está presente, un indicador puede mostrarse en la lista de "
+"cuentas cuando el balance a día de hoy sea mayor que este valor.\n"
+"\n"
+"e.g.\n"
+"Un balance hoy de -90 mostrará el icono si el límite se establece en -100\n"
+"Un balance hoy de 100 mostrará el icono si el límite se establece en 90\n"
+"\n"
+"Deje la entrada vacía para no tener ningún aviso."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1670
 msgid ""
@@ -13452,6 +13462,14 @@ msgid ""
 "\n"
 "Clear the entry to have no warning."
 msgstr ""
+"Si un valor está presente, un indicador puede ser mostrado en la lista de "
+"cuentas cuando el balance a día de hoy sea menor que este valor.\n"
+"\n"
+"e.g.\n"
+"Un balance hoy de -100 mostrará el icono si el límite se establece en -90\n"
+"Un balance hoy de 90 mostrará el icono si el límite se establece en 100\n"
+"\n"
+"Deje el campo vacío para no tener ningún aviso."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1692
 msgid "_Lower Balance Limit"
@@ -19672,6 +19690,8 @@ msgid ""
 "The current account selections will generate multi-currency transactions. "
 "Please select one of the following columns: price, (negated) value."
 msgstr ""
+"Las selecciones de cuenta actuales generarán transacciones multi-moneda. Por "
+"favor, seleccione una de las siguientes columnas: precio, valor (negado)."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:531
 msgid ""
@@ -19679,6 +19699,9 @@ msgid ""
 "Please select one of the following columns: price, (negated) value, "
 "(negated) transfer amount."
 msgstr ""
+"Las selecciones de cuenta actuales generarán transacciones multi-moneda. Por "
+"favor, seleccione una de las siguientes columnas: precio, valor (negado), "
+"cantidad a transferir (negada)."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:671
 msgid ""
@@ -19830,10 +19853,9 @@ msgid "Value can't be parsed into a valid reconcile state."
 msgstr "El valor no puede ser interpretado dentro de un estado conciliado."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:246
-#, fuzzy
 msgid "Date field can not be empty if 'Multi-split' option is unset.\n"
 msgstr ""
-"El campo fecha no puede estar vacío si la opción 'Multi-split' no esta "
+"El campo fecha no puede estar vacío si la opción 'Multi-anotación' no esta "
 "definida.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:262
@@ -19890,12 +19912,17 @@ msgid ""
 "Choice of accounts makes this a multi-currency transaction but price or "
 "(negated) value column is missing or invalid."
 msgstr ""
+"La selección de cuentas hace que esta transacción sea multi-moneda pero la "
+"columna de precio o valor (negado) falta o es inválida."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:666
 msgid ""
 "Choice of account makes this a multi-currency transaction but price, "
 "(negated) value or (negated) transfer column is missing or invalid."
 msgstr ""
+"La selección de cuenta hace que esta transacción sea multi-moneda pero la "
+"columna de precio, valor (negado) o transferencia (negada) falta o es "
+"inválida."
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:46
 msgid "No Settings"
@@ -22466,7 +22493,7 @@ msgstr "Esta es una opción de cadena."
 
 #: gnucash/report/reports/example/sample-report.scm:86
 msgid "String Option Default"
-msgstr "Valor por defecto para una opción de tipo cadena"
+msgstr "Valor por defecto de opción de texto"
 
 #: gnucash/report/reports/example/sample-report.scm:99
 msgid "Just a Date Option"
