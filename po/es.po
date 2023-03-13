@@ -84,7 +84,8 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
 "PO-Revision-Date: 2023-03-13 15:35+0000\n"
-"Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
+"Last-Translator: Jaime Marquínez Ferrándiz <jaime.marquinez."
+"ferrandiz@fastmail.net>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/es/>\n"
 "Language: es\n"
@@ -19300,10 +19301,8 @@ msgstr "Num. Cantidad."
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:556
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:569
-#, fuzzy
-#| msgid "Amount With Sym"
 msgid "Value With Sym"
-msgstr "Cantidad con Sym"
+msgstr "Valor con símbolo"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:556
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:569
