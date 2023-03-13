@@ -595,14 +595,8 @@ set_window_geometry(GncMainWindow *window, GncMainWindowSaveData *data, gchar *w
         priv->pos[1] = pos[1];
         DEBUG("window (%p) position (%d,%d)", window, pos[0], pos[1]);
     }
-    if (geom)
-    {
-        g_free(geom);
-    }
-    if (pos)
-    {
-        g_free(pos);
-    }
+    g_free(geom);
+    g_free(pos);
 
     gboolean max = g_key_file_get_boolean(data->key_file, window_group,
                                  WINDOW_MAXIMIZED, &error);
