@@ -585,7 +585,7 @@ set_window_geometry(GncMainWindow *window, GncMainWindowSaveData *data, gchar *w
              (pos[1] + (geom ? geom[1] : 0) < 0) ||
              (pos[1] > gdk_screen_height()))
     {
-        DEBUG("position %dx%d, size%dx%d is offscreen; will not move",
+        DEBUG("position (%d,%d), size %dx%d is offscreen; will not move",
                 pos[0], pos[1], geom ? geom[0] : 0, geom ? geom[1] : 0);
     }
     else
@@ -987,7 +987,7 @@ gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
         gint *pos = priv->pos;
         g_key_file_set_integer_list(data->key_file, window_group,
                                     WINDOW_POSITION, &pos[0], 2);
-        DEBUG("window minimized (%p) position %dx%d", window, pos[0], pos[1]);
+        DEBUG("window minimized (%p) position (%d,%d)", window, pos[0], pos[1]);
     }
     else
         g_key_file_set_integer_list(data->key_file, window_group,
@@ -996,7 +996,7 @@ gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
                                 WINDOW_GEOMETRY, &coords[2], 2);
     g_key_file_set_boolean(data->key_file, window_group,
                            WINDOW_MAXIMIZED, maximized);
-    DEBUG("window (%p) position %dx%d, size %dx%d, %s", window,  coords[0], coords[1],
+    DEBUG("window (%p) position (%d,%d), size %dx%d, %s", window,  coords[0], coords[1],
           coords[2], coords[3],
           maximized ? "maximized" : "not maximized");
 
