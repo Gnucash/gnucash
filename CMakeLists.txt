@@ -52,8 +52,6 @@ option (WITH_OFX "compile with ofx support (needs LibOFX)" ON)
 option (WITH_PYTHON "enable python plugin and bindings" OFF)
 option (ENABLE_BINRELOC "compile with binary relocation support" ON)
 option (DISABLE_NLS "do not use Native Language Support" OFF)
-option (WARN_DEPRECATED_GLIB "warn about deprecated glib functions" OFF)
-option (WARN_DEPRECATED_GTK "warn about deprecated gtk, gdk or gdk-pixbuf functions" OFF)
 # ############################################################
 
 # These are also settable from the command line in a similar way.
@@ -775,29 +773,17 @@ set(PLATFORM_OSX 1)
 set(HAVE_OSX_KEYCHAIN 1)
 endif()
 
-if(WARN_DEPRECATED_GLIB)
-  string(REGEX MATCH "^([0-9]+)\.([0-9]+)" GLIB_MIN_MATCH ${GLIB_MIN_VERSION})
-  set(GLIB_API ${CMAKE_MATCH_1}_${CMAKE_MATCH_2})
+string(REGEX MATCH "^([0-9]+)\.([0-9]+)" GLIB_MIN_MATCH ${GLIB_MIN_VERSION})
+set(GLIB_API ${CMAKE_MATCH_1}_${CMAKE_MATCH_2})
+target_compile_definitions(PkgConfig::GLIB2 INTERFACE
+  GLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_${GLIB_API}
+  GLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_${GLIB_API})
 
-  target_compile_definitions(PkgConfig::GLIB2 INTERFACE
-      GLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_${GLIB_API}
-      GLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_${GLIB_API})
-else()
-  target_compile_definitions(PkgConfig::GLIB2 INTERFACE
-      GLIB_DISABLE_DEPRECATION_WARNINGS)
-endif()
-
-if (WARN_DEPRECATED_GTK)
-  string(REGEX MATCH "^([0-9]+)\.([0-9]+)" GTK_MIN_MATCH ${GTK_MIN_VERSION})
-  set(GTK_API ${CMAKE_MATCH_1}_${CMAKE_MATCH_2})
-
-  target_compile_definitions(PkgConfig::GTK3 INTERFACE
-      GDK_VERSION_MIN_REQUIRED=GDK_VERSION_${GTK_API}
-      GDK_VERSION_MAX_ALLOWED=GDK_VERSION_${GTK_API})
-else()
-  target_compile_definitions(PkgConfig::GTK3 INTERFACE
-      GDK_DISABLE_DEPRECATION_WARNINGS)
-endif()
+string(REGEX MATCH "^([0-9]+)\.([0-9]+)" GTK_MIN_MATCH ${GTK_MIN_VERSION})
+set(GTK_API ${CMAKE_MATCH_1}_${CMAKE_MATCH_2})
+target_compile_definitions(PkgConfig::GTK3 INTERFACE
+    GDK_VERSION_MIN_REQUIRED=GDK_VERSION_${GTK_API}
+    GDK_VERSION_MAX_ALLOWED=GDK_VERSION_${GTK_API})
 
 add_definitions (-DHAVE_CONFIG_H)
 
