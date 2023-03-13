@@ -83,7 +83,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-12 19:41+0000\n"
+"PO-Revision-Date: 2023-03-13 13:38+0000\n"
 "Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/es/>\n"
@@ -25519,10 +25519,8 @@ msgid "Bought Average Price"
 msgstr "Precio medio de compra"
 
 #: gnucash/report/reports/standard/investment-lots.scm:108
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Sold Splits"
-msgstr "División de Acciones"
+msgstr "Anotaciones vendidas"
 
 #: gnucash/report/reports/standard/investment-lots.scm:109
 msgid "Sold Amount"
@@ -25640,7 +25638,7 @@ msgstr "Mostrar columnas relacionadas con las ventas"
 
 #: gnucash/report/reports/standard/investment-lots.scm:242
 msgid "Show end date amount and value table columns"
-msgstr ""
+msgstr "Mostrar columnas de cantidad y valor en la fecha final"
 
 #: gnucash/report/reports/standard/investment-lots.scm:249
 msgid "Show realized gain table column(s) for sold shares"
@@ -25707,10 +25705,12 @@ msgid ""
 "Lots with more than one purchase split are not well formed. It may make "
 "ambiguous the capital gains age"
 msgstr ""
+"Lotes con más de una anotación de compra no están bien formados. Esto puede "
+"hacer ambiguo el plazo de la ganancia capital"
 
 #: gnucash/report/reports/standard/investment-lots.scm:361
 msgid "Lots with a negative balance are not well formed."
-msgstr ""
+msgstr "Lotes con balance negativo no están bien formados."
 
 #: gnucash/report/reports/standard/investment-lots.scm:368
 msgid ""
@@ -25725,16 +25725,16 @@ msgid ""
 "Detect possible errors in 'Realized Gain/Loss' splits that are created when "
 "adding a sale split to a lot"
 msgstr ""
+"Detectar posibles errores en las anotaciones 'Ganancias/Pérdidas realizadas' "
+"que son creadas al añadir una anotación de venta a un lote"
 
 #: gnucash/report/reports/standard/investment-lots.scm:381
 msgid "Detect splits that have not been assigned to a lot."
 msgstr "Detectar asientos que no han sido asignados a ningún lote."
 
 #: gnucash/report/reports/standard/investment-lots.scm:383
-#, fuzzy
-#| msgid "Counters"
 msgid "Count"
-msgstr "Contadores"
+msgstr "Contador"
 
 #: gnucash/report/reports/standard/investment-lots.scm:390
 msgid ""
@@ -25776,6 +25776,8 @@ msgid ""
 "Warning: Above lot's balance is negative on ~a. Consider removing the "
 "responsible sale split from the lot and then scrubbing."
 msgstr ""
+"Aviso: El balance del lote anterior es negativo el ~a. Considere eliminar "
+"del lote la anotación de venta responsable y depurar después."
 
 #: gnucash/report/reports/standard/investment-lots.scm:1369
 msgid "Warning: Above lot's title is blank."
@@ -25787,12 +25789,16 @@ msgid ""
 "Warning: Above lot's computed gain ~a is not equal to the \"Realized Gain/"
 "Loss\" split(s) sum ~a. Difference: ~a"
 msgstr ""
+"Aviso: La ganancia calculada de los lotes anteriores ~a no es igual a la "
+"suma de anotación(es) \"Ganancias/Pérdidas realizadas\" ~a. Diferencia: ~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1403
 #, scheme-format
 msgid ""
 "Warning: ~a split(s) are not assigned to a lot. Do lots need to be scrubbed?"
 msgstr ""
+"Aviso: ~a anotación(es) no están asignadas a ningún lote. ¿Necesita depurar "
+"los lotes?"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1408
 #, scheme-format
@@ -25800,6 +25806,8 @@ msgid ""
 "Warning: The following ~a split(s) are not assigned to a lot. Do lots need "
 "to be scrubbed?"
 msgstr ""
+"Aviso: Las siguientes ~a anotación(es) no están asignadas a ningún lote. ¿"
+"Necesita depurar los lotes?"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1425
 #, scheme-format
@@ -25812,18 +25820,17 @@ msgid ""
 "Warning: End amount ~a is not equal to actual account balance ~a. "
 "Difference: ~a. Do lots need to be scrubbed?"
 msgstr ""
+"Aviso: La cantidad final ~a no es igual al balance actual de la cuenta ~a. "
+"Diferencia: ~a. ¿Necesita depurar los lotes?"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1963
-#, fuzzy, scheme-format
-#| msgid "~a ~a - ~a"
+#, scheme-format
 msgid "~a, ~a to ~a"
-msgstr "~a ~a - ~a"
+msgstr "~a ~a a ~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1989
-#, fuzzy
-#| msgid "Account Notes"
 msgid "Account Lot Gains"
-msgstr "Anotaciones de Cuenta"
+msgstr "Ganancias de lote de la cuenta"
 
 #: gnucash/report/reports/standard/invoice.scm:101
 #: gnucash/report/reports/standard/invoice.scm:218
@@ -29614,24 +29621,20 @@ msgstr "Baja el asiento efectivo una fila"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:185
 msgid "Manage link of an external document to this item"
-msgstr ""
+msgstr "Gestionar enlace de un documento externo a este elemento"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:191
 msgid "Open the linked document"
 msgstr "Abrir el documento asociado"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:209
-#, fuzzy
-#| msgid "Open a customer report window for the owner of this invoice"
 msgid "Open a company report window for the owner of this invoice"
-msgstr "Abre una ventana de boletín de cliente para el titular de esta factura"
+msgstr "Abrir una ventana de informe de empresa para el titular de esta factura"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:259
 #: gnucash/ui/gnc-plugin-page-invoice.ui:499
-#, fuzzy
-#| msgid "Move to the blank entry at the bottom of the invoice"
 msgid "Move to the blank entry at the bottom of the Invoice"
-msgstr "Ir al asiento en blanco al fondo de la factura"
+msgstr "Ir al asiento en blanco al fondo de la Factura"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:16
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:152
@@ -30152,10 +30155,8 @@ msgid "GncQuotes::Fetch called with no commodities."
 msgstr "GncQuotes::Fetch fue llamado sin productos."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:314
-#, fuzzy
-#| msgid "There are no options for this report."
 msgid "There were no commodities for which to retrieve quotes."
-msgstr "No hay opciones para este boletín."
+msgstr "No había productos para los que obtener cotizaciones."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:328
 msgid "Finance::Quote retrieval failed with error "
@@ -30172,7 +30173,7 @@ msgstr "Finance::Quote devolvió un error: "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:352
 msgid "Finance::Quote reported failure set no error."
-msgstr ""
+msgstr "Finance::Quote reportó fallo no estableció error."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:354
 msgid "Finance::Quote reported failure with  error: "
@@ -30294,6 +30295,7 @@ msgstr "Finance::Quote reportó un fallo para el símbolo "
 #: libgnucash/app-utils/gnc-quotes.cpp:822
 msgid "Finance::Quote failed silently to retrieve a quote for symbol "
 msgstr ""
+"Finance::Quote falló silenciosamente al recuperar la cotización del símbolo "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:885
 msgid ""
