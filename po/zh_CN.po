@@ -33,7 +33,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
 "PO-Revision-Date: 2023-03-13 16:35+0000\n"
-"Last-Translator: Carlson Mak <hbmaak@gmail.com>\n"
+"Last-Translator: J0kWang <lianjiefly@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -16799,19 +16799,19 @@ msgstr "在线报价"
 
 #: gnucash/gtkbuilder/dialog-price.glade:12
 msgid "Bid"
-msgstr "预算呼叫值"
+msgstr "买方报价"
 
 #: gnucash/gtkbuilder/dialog-price.glade:15
 msgid "Ask"
-msgstr "呼叫价值出售"
+msgstr "卖方报价"
 
 #: gnucash/gtkbuilder/dialog-price.glade:18
 msgid "Last"
-msgstr "最后的编号"
+msgstr "最新成交价"
 
 #: gnucash/gtkbuilder/dialog-price.glade:21
 msgid "Net Asset Value"
-msgstr "(需要值)"
+msgstr "资产净值"
 
 #: gnucash/gtkbuilder/dialog-price.glade:43
 msgid "Price Editor"
