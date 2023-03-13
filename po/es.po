@@ -84,7 +84,8 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
 "PO-Revision-Date: 2023-03-13 13:38+0000\n"
-"Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
+"Last-Translator: Jaime Marquínez Ferrándiz <jaime.marquinez."
+"ferrandiz@fastmail.net>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/es/>\n"
 "Language: es\n"
@@ -22464,10 +22465,8 @@ msgid "This is a string option."
 msgstr "Esta es una opción de cadena."
 
 #: gnucash/report/reports/example/sample-report.scm:86
-#, fuzzy
-#| msgid "String Option"
 msgid "String Option Default"
-msgstr "Opción de cada na"
+msgstr "Valor por defecto para una opción de tipo cadena"
 
 #: gnucash/report/reports/example/sample-report.scm:99
 msgid "Just a Date Option"
