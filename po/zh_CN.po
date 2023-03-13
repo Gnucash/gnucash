@@ -33,7 +33,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
 "PO-Revision-Date: 2023-03-13 17:40+0000\n"
-"Last-Translator: Carlson Mak <hbmaak@gmail.com>\n"
+"Last-Translator: J0kWang <lianjiefly@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -11210,7 +11210,7 @@ msgstr "这区域指定自动小数功能所填入的位数多寡。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:70
 msgid "Force prices to display as decimals even if they must be rounded."
-msgstr "价格以小数显示。"
+msgstr "强制价格以小数显示。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:71
 #: gnucash/gtkbuilder/dialog-preferences.glade:1318
