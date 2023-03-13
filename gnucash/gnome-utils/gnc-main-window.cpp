@@ -1912,14 +1912,14 @@ gnc_main_window_update_menu_item (GncMainWindow *window)
     g_strfreev (strings);
 
     data.visible = TRUE;
-//    data.action_name = g_strdup_printf ("Window%" G_GSIZE_FORMAT "Action", index);
+    data.action_name = g_strdup_printf ("Window%" G_GSIZE_FORMAT "Action", index);
     data.index = index;
 
     g_list_foreach (active_windows,
                     (GFunc)gnc_main_window_update_one_menu_action,
                     &data);
 
-//    g_free (data.action_name);
+    g_free (data.action_name);
     g_free (data.label);
 
     LEAVE(" ");
