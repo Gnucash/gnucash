@@ -746,17 +746,13 @@ gboolean gncBillTermIsDirty (const GncBillTerm *term)
  *   22 is more than the cutoff of 19, so the due date will be in the month
  *   after next month. Since the due day is set to 20, the due date will be
  *   20-02-2010
- *
  */
 static void
-compute_monthyear (const GncBillTerm *term, time64 post_date,
-                   int *month, int *year)
+compute_monthyear_proximo (int cutoff, time64 post_date, int *month, int *year)
 {
     int iday, imonth, iyear;
     struct tm tm;
-    int cutoff = term->cutoff;
 
-    g_return_if_fail (term->type == GNC_TERM_TYPE_PROXIMO);
     gnc_localtime_r (&post_date, &tm);
     iday = tm.tm_mday;
     imonth = tm.tm_mon + 1;
@@ -810,7 +806,7 @@ compute_time (const GncBillTerm *term, time64 post_date, int days)
         res = gnc_time64_get_day_neutral (res);
         break;
     case GNC_TERM_TYPE_PROXIMO:
-        compute_monthyear (term, post_date, &month, &year);
+        compute_monthyear_proximo (term->cutoff, post_date, &month, &year);
         day = gnc_date_get_last_mday (month - 1, year);
         if (days < day)
             day = days;
