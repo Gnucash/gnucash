@@ -14,8 +14,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-03-11 16:40+0000\n"
-"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
+"PO-Revision-Date: 2023-03-12 13:41+0000\n"
+"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -1831,9 +1831,8 @@ msgid "Address Not Found"
 msgstr "Cím nem található"
 
 #: gnucash/gnome/dialog-doclink.c:597 gnucash/gnome/dialog-imap-editor.c:885
-#, fuzzy
 msgid "Total Entries"
-msgstr "Összár"
+msgstr "Bejegyzések száma"
 
 #: gnucash/gnome/dialog-doclink.c:655
 #, fuzzy
@@ -2802,9 +2801,8 @@ msgstr "Csak aktívat?"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2928
 #: gnucash/gtkbuilder/dialog-job.glade:206
 #: gnucash/register/ledger-core/split-register-model.c:370
-#, fuzzy
 msgid "Rate"
-msgstr "Adó mértéke"
+msgstr ""
 
 #: gnucash/gnome/dialog-job.c:584 gnucash/gnome-utils/gnc-tree-view-owner.c:357
 #: gnucash/gtkbuilder/dialog-job.glade:103
@@ -2822,9 +2820,8 @@ msgid "Find Job"
 msgstr "Megbízás keresése"
 
 #: gnucash/gnome/dialog-lot-viewer.c:817
-#, fuzzy
 msgid "Empty"
-msgstr "Névtér"
+msgstr "Üres"
 
 #: gnucash/gnome/dialog-lot-viewer.c:829
 msgctxt "Adjective"
@@ -12628,9 +12625,9 @@ msgid ""
 "reconciled value of the register and can make it hard to perform future "
 "reconciliations."
 msgstr ""
-"E dialógus megjelenik, mielőtt engedélyezik minden kifejtés törlését egy "
-"tranzakcióból (benne egyeztetett kifejtésekkel). Ha így tesznek, akkor "
-"eldobják a regiszter egyeztetett értékét, és megnehezítik a jövőbeli "
+"Ez az ablak azelőtt jelenik meg, mielőtt eltávolítani az összes felosztást ("
+"az egyeztetetteket is beleértve) egy tranzakcióból. Ha így tesz, azzal "
+"felborítja a regiszter egyeztetett egyenlegét, és megnehezíti a jövőbeli "
 "egyeztetéseket."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:99
@@ -12650,7 +12647,7 @@ msgstr "E dialógus megjelenik, mielőtt engedélyezik egy tranzakció törlés�
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:227
 msgid "Cut a transaction with reconciled splits"
-msgstr "Bontja a tranzakciót egyeztetett felosztással"
+msgstr "Egyeztetett felosztással rendelkező tranzakció kivágása"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:105
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:228
@@ -20668,9 +20665,8 @@ msgstr ""
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:618
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:630
-#, fuzzy
 msgid "Rate/Price"
-msgstr "Összár"
+msgstr "Árfolyam/Ár"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:623
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:62
@@ -23286,12 +23282,12 @@ msgstr "Forrás címe"
 #: gnucash/report/reports/aging.scm:53
 #: gnucash/report/reports/standard/new-aging.scm:56
 msgid "Address Phone"
-msgstr "Telefonszám"
+msgstr "Telefon"
 
 #: gnucash/report/reports/aging.scm:54
 #: gnucash/report/reports/standard/new-aging.scm:57
 msgid "Address Fax"
-msgstr "Faxszám"
+msgstr "Fax"
 
 #: gnucash/report/reports/aging.scm:55
 #: gnucash/report/reports/standard/new-aging.scm:58
@@ -23384,17 +23380,17 @@ msgstr ""
 #: gnucash/report/reports/aging.scm:442
 #: gnucash/report/reports/standard/new-aging.scm:56
 msgid "Display Phone."
-msgstr ""
+msgstr "Telefonszám."
 
 #: gnucash/report/reports/aging.scm:450
 #: gnucash/report/reports/standard/new-aging.scm:57
 msgid "Display Fax."
-msgstr ""
+msgstr "Faxszám."
 
 #: gnucash/report/reports/aging.scm:458
 #: gnucash/report/reports/standard/new-aging.scm:58
 msgid "Display Email."
-msgstr ""
+msgstr "E-mail."
 
 #: gnucash/report/reports/aging.scm:466
 #: gnucash/report/reports/standard/new-aging.scm:59
@@ -26997,7 +26993,7 @@ msgstr "Nettó ár"
 #: gnucash/report/reports/standard/taxinvoice.scm:109
 #: gnucash/report/reports/standard/taxinvoice.scm:183
 msgid "Total Price"
-msgstr "Összár"
+msgstr "Teljes ár"
 
 #: gnucash/report/reports/standard/invoice.scm:561
 #: gnucash/report/reports/standard/receipt.scm:62
@@ -27032,7 +27028,7 @@ msgstr "Megbízás neve:"
 
 #: gnucash/report/reports/standard/invoice.scm:683
 msgid "REF"
-msgstr "HIV"
+msgstr "Referencia"
 
 #: gnucash/report/reports/standard/invoice.scm:764
 msgid ""
@@ -29228,7 +29224,7 @@ msgstr "Weboldalcím"
 
 #: libgnucash/app-utils/business-options.scm:74
 msgid "Company Email Address"
-msgstr "E-mail cím"
+msgstr "Cég e-mail-címe"
 
 #: libgnucash/app-utils/business-options.scm:75
 msgid "Company Contact Person"

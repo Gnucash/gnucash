@@ -32,8 +32,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-03-11 18:41+0000\n"
-"Last-Translator: YTX <ytx.cash@gmail.com>\n"
+"PO-Revision-Date: 2023-03-13 17:40+0000\n"
+"Last-Translator: J0kWang <lianjiefly@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -11210,7 +11210,7 @@ msgstr "这区域指定自动小数功能所填入的位数多寡。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:70
 msgid "Force prices to display as decimals even if they must be rounded."
-msgstr "汇率以小数显示。"
+msgstr "强制价格以小数显示。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:71
 #: gnucash/gtkbuilder/dialog-preferences.glade:1318
@@ -16799,19 +16799,19 @@ msgstr "在线报价"
 
 #: gnucash/gtkbuilder/dialog-price.glade:12
 msgid "Bid"
-msgstr "预算呼叫值"
+msgstr "买方报价"
 
 #: gnucash/gtkbuilder/dialog-price.glade:15
 msgid "Ask"
-msgstr "呼叫价值出售"
+msgstr "卖方报价"
 
 #: gnucash/gtkbuilder/dialog-price.glade:18
 msgid "Last"
-msgstr "最后的编号"
+msgstr "最新成交价"
 
 #: gnucash/gtkbuilder/dialog-price.glade:21
 msgid "Net Asset Value"
-msgstr "(需要值)"
+msgstr "资产净值"
 
 #: gnucash/gtkbuilder/dialog-price.glade:43
 msgid "Price Editor"
@@ -20570,7 +20570,7 @@ msgstr "汇率(_P).csv..."
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:61
 msgid "Import Prices from a CSV file"
-msgstr "从 CSV 文件导入汇率"
+msgstr "从 CSV 文件导入价格"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:134
 msgid "Shipping Name"
