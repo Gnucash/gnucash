@@ -1415,6 +1415,9 @@ test_do_destroy (GainsFixture *fixture, gconstpointer pData)
     g_object_ref (base->txn);
     g_object_ref (fixture->gains_txn);
 
+   /* Protect against recursive calls to do_destroy from xaccTransCommitEdit */
+    xaccTransBeginEdit(base->txn);
+
     base->func->do_destroy (base->txn);
     g_assert_cmpint (test_signal_return_hits (sig), ==, 1);
     g_assert (base->txn->description == NULL);
