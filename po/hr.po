@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-14 13:50+0000\n"
+"PO-Revision-Date: 2023-03-14 14:28+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hr/>\n"
@@ -8061,7 +8061,7 @@ msgstr "%s, ukupno:"
 #: gnucash/gnome-utils/window-main-summarybar.c:312
 #, c-format
 msgid "%s, Non Currency Commodities Total:"
-msgstr "%s, ukupni iznos bezvalutnih roba:"
+msgstr "%s, bezvalutne robe ukupno:"
 
 #: gnucash/gnome-utils/window-main-summarybar.c:315
 #, c-format
@@ -15095,7 +15095,7 @@ msgstr "Vrijeme čekanja na _odgovor"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1849
 msgid "seconds"
-msgstr "sekundi"
+msgstr "sekunde"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1877
 #: gnucash/gtkbuilder/dialog-preferences.glade:1895
@@ -15123,8 +15123,8 @@ msgid ""
 "Enable vertical grid lines on table displays. These will mainly be tree "
 "views like the Accounts page."
 msgstr ""
-"Uključi okomite crte u prikazu tablice. One se uglavnom koriste u stablastom "
-"prikazu stranica konta/kontnog plana."
+"Uključi okomite crte u prikazima tablica. Uglavnom se koriste u stablastim "
+"prikazima kao što je stranica „Konta”."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1961
 msgid "<b>Linked Files</b>"
@@ -16046,8 +16046,8 @@ msgid ""
 "re-enable any of these dialogs, select the check box next to the dialog, "
 "then click OK."
 msgstr ""
-"Postavljeno je, da se sljedeći dijalozi upozorenja ne prikazuju. Za ponovo "
-"prikazivanje ovih dijaloga, odaberi polje za potvrdu pored dijaloga, zatim "
+"Zatražio/la si da se sljedeći dijalozi upozorenja ne prikazuju. Za ponovo "
+"uključivanje ovih dijaloga, odaberi polje za potvrdu pored dijaloga, zatim "
 "pritisni „U redu“."
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:120
@@ -27817,7 +27817,7 @@ msgstr "Sakrij"
 
 #: gnucash/report/trep-engine.scm:978
 msgid "Enable hyperlinks in amounts."
-msgstr "Uključi poveznice za iznose."
+msgstr "Uključi poveznice u iznosima."
 
 #: gnucash/report/trep-engine.scm:982
 msgid "Reverse amount display for certain account types."
