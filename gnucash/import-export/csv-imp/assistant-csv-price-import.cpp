@@ -1668,10 +1668,9 @@ void CsvImpPriceAssist::preview_refresh_table ()
     /* Insert columns if the model has more data columns than the treeview. */
     while (ntcols < ncols - PREV_N_FIXED_COLS + 1)
     {
-        /* Default cell renderer is text, except for the first (error) column */
-        auto renderer = gtk_cell_renderer_text_new();
-        if (ntcols == 0)
-            renderer = gtk_cell_renderer_pixbuf_new(); // Error column uses an icon
+        /* Default cell renderer is text, except for the first (error)
+           column uses an icon */
+        auto renderer = (ntcols == 0) ? gtk_cell_renderer_pixbuf_new () : gtk_cell_renderer_text_new ();
         auto col = gtk_tree_view_column_new ();
         gtk_tree_view_column_pack_start (col, renderer, false);
         ntcols = gtk_tree_view_append_column (treeview, col);
