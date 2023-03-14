@@ -83,7 +83,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-14 13:50+0000\n"
+"PO-Revision-Date: 2023-03-14 14:28+0000\n"
 "Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/es/>\n"
@@ -21294,7 +21294,7 @@ msgstr "PdV"
 # ¿Qué representa esto?
 #: gnucash/register/ledger-core/split-register.c:2556
 msgid "AutoDep"
-msgstr "Depósito automático"
+msgstr "AutoDep"
 
 #: gnucash/register/ledger-core/split-register.c:2557
 msgid "Wire"
@@ -21329,7 +21329,7 @@ msgstr "GCCP"
 
 #: gnucash/register/ledger-core/split-register.c:2637
 msgid "Dist"
-msgstr "Distribución"
+msgstr "Dist"
 
 #: gnucash/register/ledger-core/split-register-control.c:59
 msgid "Rebalance Transaction"
@@ -21511,7 +21511,7 @@ msgstr ""
 
 #: gnucash/register/ledger-core/split-register-model.c:254
 msgid "Ref"
-msgstr "Referencia"
+msgstr "Ref"
 
 #: gnucash/register/ledger-core/split-register-model.c:270
 msgid "T-Ref"
