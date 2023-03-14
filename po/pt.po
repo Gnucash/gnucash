@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-13 07:55+0000\n"
+"PO-Revision-Date: 2023-03-14 07:59+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/pt/>\n"
@@ -6772,7 +6772,7 @@ msgid ""
 "You can't transfer from a non-currency account. Try reversing the \"from\" "
 "and \"to\" accounts and making the \"amount\" negative."
 msgstr ""
-"Não pode transferir de uma conta não moeda. Tente reverter as contas \"De\" "
+"Não pode transferir de uma conta não-moeda. Tente reverter as contas \"De\" "
 "e \"Para\" e tornar o montante negativo."
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1453
@@ -14855,14 +14855,14 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:357
 msgid "Include _non-currency totals"
-msgstr "Incluir totais de _não moeda"
+msgstr "Incluir totais de _não-moeda"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:363
 msgid ""
 "If checked, non-currency commodities will be shown in the summary bar. If "
 "clear, only currencies will be shown."
 msgstr ""
-"Se marcada, mercadorias não moeda serão mostradas na barra de sumário. Senão "
+"Se marcada, mercadorias não-moeda serão mostradas na barra de resumo. Senão "
 "só são mostradas as moedas."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:405
@@ -15250,9 +15250,9 @@ msgid ""
 "in your area (in units of your local currency), so the transaction will be "
 "recognised as a match."
 msgstr ""
-"Nalguns locais, ATMs comerciais (não pertencentes a instituições "
-"financeiras) são instaladas em sítios tais como lojas de conveniência. Estas "
-"máquinas somam a taxa directamente ao montante, em vez de a mostrar como uma "
+"Nalguns locais, ATMs comerciais (não pertencentes a instituições financeiras)"
+" são instaladas em sítios tais como lojas de conveniência. Estas máquinas "
+"somam a taxa directamente ao montante, em vez de a mostrar como uma "
 "transacção separada ou nas suas taxas bancárias mensais. Por exemplo, faz um "
 "levantamento de 100€ e surge 101,5€ de taxa incluída. Se inserir manualmente "
 "100€, os montantes não correspondem. Deve definir isto para a taxa máxima da "
@@ -15357,8 +15357,7 @@ msgstr "Imprimir formato da _data"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2422
 msgid "Below the actual date, print the format of that date in 8 point type."
-msgstr ""
-"Abaixo da data actual, imprimir o formato da data num tipo de 8 pontos."
+msgstr "Abaixo da data actual, imprimir o formato da data num tipo de 8 pontos."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2434
 msgid "Print _blocking chars"
@@ -15395,13 +15394,11 @@ msgstr "Mostrar listas _automaticamente"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2538
 msgid "Automatically raise the list of accounts or actions during input."
-msgstr ""
-"Mostrar automaticamente a lista de contas ou acções durante a inserção."
+msgstr "Mostrar automaticamente a lista de contas ou acções durante a inserção."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2550
 msgid "Tab order in_cludes Transfer on Memorised Transactions"
-msgstr ""
-"Ordem dos separadores in_clui Transferência nas transacções memorizadas"
+msgstr "Ordem dos separadores in_clui Transferência nas transacções memorizadas"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2556
 msgid "Move to Transfer field when memorised transaction auto filled."
@@ -15658,7 +15655,7 @@ msgstr "_Direita"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3450
 msgid "<b>Summary Bar Position</b>"
-msgstr "<b>Posição da barra de sumário</b>"
+msgstr "<b>Posição da barra de resumo</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3479
 #: gnucash/gtkbuilder/dialog-print-check.glade:267
@@ -15823,7 +15820,7 @@ msgstr "Destas mercadorias"
 
 #: gnucash/gtkbuilder/dialog-price.glade:636
 msgid "Keeping the last available price for option"
-msgstr "Manter a última cotação disponível para opção"
+msgstr "Manter o último preço disponível para opção"
 
 #: gnucash/gtkbuilder/dialog-price.glade:668
 msgid "Include _Fetched online prices"
@@ -15831,8 +15828,7 @@ msgstr "Incluir cotações _obtidas em linha"
 
 #: gnucash/gtkbuilder/dialog-price.glade:672
 msgid "If activated, prices added by Finance::Quote will be included."
-msgstr ""
-"Se activa, as cotações adicionadas pelo Finance::Quote serão incluídas."
+msgstr "Se activa, as cotações adicionadas pelo Finance::Quote serão incluídas."
 
 #: gnucash/gtkbuilder/dialog-price.glade:687
 msgid "Include manually _Entered prices"
@@ -15840,7 +15836,7 @@ msgstr "Incluir pr_eços manualmente inseridos"
 
 #: gnucash/gtkbuilder/dialog-price.glade:691
 msgid "If activated, include manually entered prices."
-msgstr "Se activa, incluir cotações manualmente inseridas."
+msgstr "Se activa, incluir preços manualmente inseridos."
 
 #: gnucash/gtkbuilder/dialog-price.glade:708
 msgid "_Added by the application"
@@ -15855,12 +15851,12 @@ msgid ""
 "are able to correctly report values so removing them may make this less "
 "reliable."
 msgstr ""
-"Se activa, inclui cotações adicionadas pela aplicação.\n"
+"Se activa, inclui preços adicionados pela aplicação.\n"
 "\n"
-"Estas cotações foram adicionadas para que haja sempre uma cotação \"mais "
-"próxima no tempo\" para cada transacção multi-mercadoria, de forma a que as "
-"páginas de conta e os relatórios consigam relatar correctamente os valores. "
-"Removê-las pode tornar isto menos fiável."
+"Estes preços foram adicionadas para que haja sempre um preço \"mais próximo "
+"no tempo\" para cada transacção multi-mercadoria, de forma a que as páginas "
+"de conta e os relatórios consigam relatar correctamente os valores. Removê-"
+"las pode tornar isto menos fiável."
 
 #: gnucash/gtkbuilder/dialog-price.glade:758
 msgid "Before _Date"
@@ -15869,27 +15865,27 @@ msgstr "Anterior à _data"
 #: gnucash/gtkbuilder/dialog-price.glade:798
 #: gnucash/report/reports/standard/price-scatter.scm:76
 msgid "Price Database"
-msgstr "Base de dados de cotações"
+msgstr "Base de dados de preços"
 
 #: gnucash/gtkbuilder/dialog-price.glade:853
 msgid "Add a new price."
-msgstr "Adicionar nova cotação."
+msgstr "Adicionar novo preço."
 
 #: gnucash/gtkbuilder/dialog-price.glade:871
 msgid "Remove the current price."
-msgstr "Remover a cotação actual."
+msgstr "Remover o preço actual."
 
 #: gnucash/gtkbuilder/dialog-price.glade:889
 msgid "Edit the current price."
-msgstr "Editar a cotação actual."
+msgstr "Editar o preço actual."
 
 #: gnucash/gtkbuilder/dialog-price.glade:901
 msgid "Remove _Old"
-msgstr "Remover antig_a"
+msgstr "Remover antig_os"
 
 #: gnucash/gtkbuilder/dialog-price.glade:906
 msgid "Remove prices older than a user-entered date."
-msgstr "Remover cotações anteriores à data indicada."
+msgstr "Remover preços anteriores à data indicada."
 
 #: gnucash/gtkbuilder/dialog-price.glade:918
 msgid "_Get Quotes"
@@ -16205,8 +16201,8 @@ msgstr "Procurar apenas em dados activos"
 msgid ""
 "Choose whether to search all your data or only that marked as \"active\"."
 msgstr ""
-"Escolha se quer procurar em todos os dados ou só nos marcados como \"activo"
-"\"."
+"Escolha se quer procurar em todos os dados ou só nos marcados como \"activo\""
+"."
 
 #: gnucash/gtkbuilder/dialog-search.glade:417
 msgid "Type of search"
@@ -16297,8 +16293,7 @@ msgstr "Definir o estado de criação automática em novas transacções agendad
 
 #: gnucash/gtkbuilder/dialog-sx.glade:599
 msgid "Begin notifications this many days before the transaction is created."
-msgstr ""
-"Começar a notificar este número de dias antes da transacção ser criada."
+msgstr "Começar a notificar este número de dias antes da transacção ser criada."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:638
 msgid "Create the transaction this many days before its effective date."
@@ -16430,7 +16425,7 @@ msgstr "<b>Conta de informação de impostos</b>"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:483
 msgid "Tax _Related"
-msgstr "_Relativa a impostos"
+msgstr "S_ujeita a impostos"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:515
 msgid "<b>_TXF Categories</b>"
@@ -16556,7 +16551,7 @@ msgid ""
 "The vendor ID number. If left blank a reasonable number will be chosen for "
 "you"
 msgstr ""
-"Número do fornecedor. Se deixar em branco, um número aceitável será gerado"
+"Número do fornecedor. Se deixar em branco, será gerado um número aceitável"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:12
 msgid "US (12/31/2001)"
@@ -28149,7 +28144,7 @@ msgstr "Barra de su_mário"
 
 #: gnucash/ui/gnc-main-window.ui:185
 msgid "Show/hide the summary bar on this window"
-msgstr "Mostrar/Ocultar a barra de sumário nesta janela"
+msgstr "Mostrar/Ocultar a barra de resumo nesta janela"
 
 #: gnucash/ui/gnc-main-window.ui:188
 msgid "Stat_us Bar"
