@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-12 10:41+0000\n"
+"PO-Revision-Date: 2023-03-14 03:46+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/sv/>\n"
@@ -1540,7 +1540,6 @@ msgstr "Säljer aktier kortsiktigt."
 #. Translators: this is a stock transaction describing cover
 #. buying stock, and recording capital gain/loss
 #: gnucash/gnome/assistant-stock-transaction.cpp:299
-#, fuzzy
 msgid "Buy to cover short"
 msgstr "Köp för att täcka kort"
 
@@ -7371,17 +7370,13 @@ msgid "Continue _Without Saving"
 msgstr "Fortsätt _utan att spara"
 
 #: gnucash/gnome-utils/gnc-file.c:715
-#, fuzzy
-#| msgid ""
-#| "This book has budgets. The internal representation of amounts is now "
-#| "fixed. Please review budgets and amend signs if necessary."
 msgid ""
 "This book has budgets. The internal representation of budget amounts no "
 "longer depends on the Reverse Balanced Accounts preference. Please review "
 "the budgets and amend signs if necessary."
 msgstr ""
 "Denna bok har budgetar. Den interna presentationen av budgetbelopp beror "
-"inte längre på inställningen Omvända balanserade konton. Granska budgetarna "
+"inte längre på inställningen Konton med omkastat tecken. Granska budgetarna "
 "och justera tecken vid behov."
 
 #: gnucash/gnome-utils/gnc-file.c:844
@@ -14303,8 +14298,6 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:110
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:266
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:412
-#, fuzzy
-#| msgid "New Account"
 msgid "New _Account…"
 msgstr "Nytt _konto…"
 
@@ -24986,8 +24979,6 @@ msgid "Profit & Loss"
 msgstr "Vinst & förlust"
 
 #: gnucash/report/reports/standard/investment-lots.scm:40
-#, fuzzy
-#| msgid "Charge"
 msgid "Chart"
 msgstr "Diagram"
 
@@ -25136,81 +25127,58 @@ msgid "GUID"
 msgstr "GUID"
 
 #: gnucash/report/reports/standard/investment-lots.scm:105
-#, fuzzy
-#| msgid "To Amount"
 msgid "Bought Amount"
-msgstr "Köpt belopp"
+msgstr "Köpt antal"
 
 #: gnucash/report/reports/standard/investment-lots.scm:106
-#, fuzzy
 msgid "Bought Value (Basis)"
 msgstr "Köpt värde (bas)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:107
-#, fuzzy
-#| msgid "Weighted Average"
 msgid "Bought Average Price"
 msgstr "Köpt genomsnittspris"
 
 #: gnucash/report/reports/standard/investment-lots.scm:108
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Sold Splits"
 msgstr "Sålda splitar"
 
 #: gnucash/report/reports/standard/investment-lots.scm:109
-#, fuzzy
-#| msgid "To Amount"
 msgid "Sold Amount"
-msgstr "Sålt belopp"
+msgstr "Sålt antal"
 
 #: gnucash/report/reports/standard/investment-lots.scm:110
-#, fuzzy
-#| msgid "Basis"
 msgid "Sold Basis"
 msgstr "Sålt bas"
 
 #: gnucash/report/reports/standard/investment-lots.scm:111
-#, fuzzy
-#| msgid "Value"
 msgid "Sold Value"
 msgstr "Sålt värde"
 
 #: gnucash/report/reports/standard/investment-lots.scm:112
-#, fuzzy
-#| msgid "To Amount"
 msgid "ST Sold Amount"
-msgstr "ST Sålt belopp"
+msgstr "ST Sålt antal"
 
 #: gnucash/report/reports/standard/investment-lots.scm:113
-#, fuzzy
 msgid "ST Sold Basis"
 msgstr "ST Sålt bas"
 
 #: gnucash/report/reports/standard/investment-lots.scm:114
-#, fuzzy
 msgid "ST Sold Value"
 msgstr "ST Sålt värde"
 
 #: gnucash/report/reports/standard/investment-lots.scm:115
-#, fuzzy
-#| msgid "To Amount"
 msgid "LT Sold Amount"
-msgstr "LT Sålt belopp"
+msgstr "LT Sålt antal"
 
 #: gnucash/report/reports/standard/investment-lots.scm:116
-#, fuzzy
 msgid "LT Sold Basis"
 msgstr "LT Sålt bas"
 
 #: gnucash/report/reports/standard/investment-lots.scm:117
-#, fuzzy
 msgid "LT Sold Value"
 msgstr "LT Sålt värde"
 
 #: gnucash/report/reports/standard/investment-lots.scm:118
-#, fuzzy
-#| msgid "Show Average"
 msgid "Sold Average Price"
 msgstr "Sålt genomsnittspris"
 
@@ -25227,38 +25195,26 @@ msgid "End Value"
 msgstr "Slutvärde"
 
 #: gnucash/report/reports/standard/investment-lots.scm:123
-#, fuzzy
-#| msgid "Realized Gain"
 msgid "ST Realized Gain"
 msgstr "ST Realiserad vinst"
 
 #: gnucash/report/reports/standard/investment-lots.scm:124
-#, fuzzy
-#| msgid "Realized Gain"
 msgid "LT Realized Gain"
 msgstr "LT Realiserad vinst"
 
 #: gnucash/report/reports/standard/investment-lots.scm:125
-#, fuzzy
-#| msgid "Realized Gain"
 msgid "Realized ROI"
 msgstr "Realiserad ROI"
 
 #: gnucash/report/reports/standard/investment-lots.scm:127
-#, fuzzy
-#| msgid "Unrealized Gain"
 msgid "ST Unrealized Gain"
 msgstr "ST Orealiserad vinst"
 
 #: gnucash/report/reports/standard/investment-lots.scm:128
-#, fuzzy
-#| msgid "Unrealized Gain"
 msgid "LT Unrealized Gain"
 msgstr "LT Orealiserad vinst"
 
 #: gnucash/report/reports/standard/investment-lots.scm:129
-#, fuzzy
-#| msgid "Unrealized Gain"
 msgid "Unrealized ROI"
 msgstr "Orealiserad ROI"
 
@@ -25266,7 +25222,7 @@ msgstr "Orealiserad ROI"
 #, fuzzy
 #| msgid "Account Notes"
 msgid "Account Lots Total"
-msgstr "Kontots totala partier"
+msgstr "Summa kontots partier"
 
 #: gnucash/report/reports/standard/investment-lots.scm:171
 msgid "Include a chart that shows lot gains, grouped by account and gain type"
@@ -25279,8 +25235,6 @@ msgid "What kind of chart to include"
 msgstr "Vilken sorts diagram som ska inkluderas"
 
 #: gnucash/report/reports/standard/investment-lots.scm:189
-#, fuzzy
-#| msgid "Use Stacked Charts"
 msgid "Stacked Bar Chart"
 msgstr "Staplat stapeldiagram"
 
@@ -25307,7 +25261,7 @@ msgstr "Visa försäljningsrelaterade tabellkolumner"
 #: gnucash/report/reports/standard/investment-lots.scm:242
 #, fuzzy
 msgid "Show end date amount and value table columns"
-msgstr "Visa slutdatumets belopp- och värdekolumner"
+msgstr "Visa slutdatumets antal- och värdekolumner"
 
 #: gnucash/report/reports/standard/investment-lots.scm:249
 msgid "Show realized gain table column(s) for sold shares"
@@ -25318,7 +25272,6 @@ msgid "Show unrealized gain table column(s) for unsold shares"
 msgstr "Visa tabellkolumn(er) för orealiserad vinst för osålda andelar"
 
 #: gnucash/report/reports/standard/investment-lots.scm:263
-#, fuzzy
 msgid "Group gains (and sales?) by long-term (LT) and short-term (ST)"
 msgstr ""
 "Gruppera vinster (och försäljningar?) efter långsiktiga (LT) och kortsiktiga "
@@ -25333,7 +25286,6 @@ msgid "Gains and Sales"
 msgstr "Vinst och försäljning"
 
 #: gnucash/report/reports/standard/investment-lots.scm:281
-#, fuzzy
 msgid "Commodities held longer than this many years count as long-term (LT)."
 msgstr ""
 "Produkter som hålls längre än så här många år räknas som långsiktiga (LT)."
@@ -25381,7 +25333,6 @@ msgstr ""
 "realisationsvinstens ålder otydlig"
 
 #: gnucash/report/reports/standard/investment-lots.scm:361
-#, fuzzy
 msgid "Lots with a negative balance are not well formed."
 msgstr "Partier med negativt saldo är inte välformade."
 
@@ -25443,7 +25394,7 @@ msgstr ""
 "egna partier."
 
 #: gnucash/report/reports/standard/investment-lots.scm:1360
-#, fuzzy, scheme-format
+#, scheme-format
 msgid ""
 "Warning: Above lot's balance is negative on ~a. Consider removing the "
 "responsible sale split from the lot and then scrubbing."
@@ -25465,7 +25416,7 @@ msgstr ""
 "summa ~a från ”Realiserad vinst/förlust”. Differens: ~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1403
-#, fuzzy, scheme-format
+#, scheme-format
 msgid ""
 "Warning: ~a split(s) are not assigned to a lot. Do lots need to be scrubbed?"
 msgstr ""
@@ -25473,7 +25424,7 @@ msgstr ""
 "städas upp?"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1408
-#, fuzzy, scheme-format
+#, scheme-format
 msgid ""
 "Warning: The following ~a split(s) are not assigned to a lot. Do lots need "
 "to be scrubbed?"
@@ -28386,8 +28337,6 @@ msgid "Open an existing GnuCash file"
 msgstr "Öppna en GnuCash-fil"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:27
-#, fuzzy
-#| msgid "_Save As"
 msgid "Save _As…"
 msgstr "Sp_ara som…"
 
@@ -28874,8 +28823,6 @@ msgid "Edit the selected account"
 msgstr "Redigera det valda kontot"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:23
-#, fuzzy
-#| msgid "Delete Account"
 msgid "_Delete Account"
 msgstr "_Ta bort konto"
 
@@ -29088,8 +29035,6 @@ msgstr ""
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:271
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:427
-#, fuzzy
-#| msgid "Delete Account"
 msgid "_Delete Account…"
 msgstr "_Ta bort konto…"
 
@@ -29125,8 +29070,6 @@ msgstr ""
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:28
 #: gnucash/ui/gnc-plugin-page-budget.ui:255
-#, fuzzy
-#| msgid "_Delete Budget"
 msgid "_Delete Budget…"
 msgstr "_Ta bort budget…"
 
@@ -29152,8 +29095,6 @@ msgstr "Utför budgetrapporteringen"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:70
 #: gnucash/ui/gnc-plugin-page-budget.ui:200
-#, fuzzy
-#| msgid "Budget Options"
 msgid "Budget _Options…"
 msgstr "Budget_inställningar…"
 
@@ -29472,8 +29413,6 @@ msgstr "Redigera växelkursen för den aktuella transaktionen"
 #: gnucash/ui/gnc-plugin-page-register.ui:295
 #: gnucash/ui/gnc-plugin-page-register.ui:433
 #: gnucash/ui/gnc-plugin-page-register.ui:657
-#, fuzzy
-#| msgid "Schedule"
 msgid "Sche_dule…"
 msgstr "S_chemalägg…"
 
