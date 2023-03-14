@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-14 11:17+0000\n"
+"PO-Revision-Date: 2023-03-14 13:50+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hr/>\n"
@@ -6704,7 +6704,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1296
 msgid "Finance::Quote must be installed to enable this button."
-msgstr "Finance::Quote mora biti instalirano za upotrebljavanje ovog gumba."
+msgstr "Za uključivanje ovog gumba modul Finance::Quote mora biti instaliran."
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1398
 msgid ""
