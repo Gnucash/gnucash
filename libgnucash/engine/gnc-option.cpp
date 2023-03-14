@@ -119,7 +119,7 @@ GncOption::set_value(ValueType value)
                    std::is_same_v<ValueType, time64> ||
                    std::is_same_v<ValueType, uint16_t>)))
                 option.set_value(value);
-            if constexpr (is_same_decayed_v<decltype(option),
+           else if constexpr (is_same_decayed_v<decltype(option),
                           GncOptionMultichoiceValue>)
             {
                 if constexpr (is_same_decayed_v<ValueType,
@@ -131,6 +131,9 @@ GncOption::set_value(ValueType value)
                      std::is_same_v<std::remove_cv<ValueType>, char*>)
                     option.set_value(value);
             }
+            else
+                PWARN("No set_value handler: get_value returns %s, value_type is %s",
+                      typeid(option.get_value()).name(), typeid(value).name());
         }, *m_option);
 }
 
