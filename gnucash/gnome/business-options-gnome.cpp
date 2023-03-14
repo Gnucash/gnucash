@@ -40,6 +40,7 @@
 #include <exception>
 
 #include "gnc-option-gtk-ui.hpp"
+#include "gncOwner.h"
 #include <gnc-option.hpp>
 #define FUNC_NAME G_STRFUNC
 
@@ -67,17 +68,15 @@ public:
         GncOptionGtkUIItem(widget, type) {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
-        GncOwner owner{};
-        owner.type = ui_type_to_owner_type(option.get_ui_type());
-        owner.owner.undefined = (void*)option.get_value<const QofInstance*>();
-        gnc_owner_set_owner(get_widget(), &owner);
+        auto owner = option.get_value<const GncOwner*>();
+        gnc_owner_set_owner(get_widget(), owner);
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
         GncOwner owner{};
         gnc_owner_get_owner(get_widget(), &owner);
         if (owner.type == ui_type_to_owner_type(option.get_ui_type()))
-            option.set_value(static_cast<const QofInstance*>(owner.owner.undefined));
+            option.set_value<const GncOwner*>(&owner);
     }
 };
 
