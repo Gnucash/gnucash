@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-14 14:28+0000\n"
+"PO-Revision-Date: 2023-03-14 16:40+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hr/>\n"
@@ -3708,14 +3708,16 @@ msgstr "Zadaj valjani kraj odabira."
 
 #: gnucash/gnome/dialog-sx-editor.c:548
 msgid "There must be some number of occurrences."
-msgstr "Mora postojati neki broj događaja."
+msgstr "Mora postojati neki broj pojavljivanja."
 
 #: gnucash/gnome/dialog-sx-editor.c:556
 #, c-format
 msgid ""
 "The number of remaining occurrences (%d) is greater than the number of total "
 "occurrences (%d)."
-msgstr "Broj preostalih događaja (%d) je veći od broja ukupnih događaja (%d)."
+msgstr ""
+"Broj preostalih pojavljivanja (%d) je veći od broja ukupnih pojavljivanja "
+"(%d)."
 
 #: gnucash/gnome/dialog-sx-editor.c:585
 msgid ""
@@ -8047,11 +8049,11 @@ msgstr "U"
 
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:152
 msgid "Last Occur"
-msgstr "Zadnje nastupanje"
+msgstr "Zadnje pojavljivanje"
 
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:157
 msgid "Next Occur"
-msgstr "Sljedeće nastupanje"
+msgstr "Sljedeće pojavljivanje"
 
 #: gnucash/gnome-utils/window-main-summarybar.c:309
 #, c-format
@@ -16165,7 +16167,7 @@ msgstr "Neograničeno"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:362
 msgid "Number of Occurrences"
-msgstr "Broj događaja"
+msgstr "Broj pojavljivanja"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:508
 msgid "<b>Since Last Run</b>"
@@ -16266,11 +16268,11 @@ msgstr "Obavijesti me kad se stvori"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1151
 msgid "<b>Occurrences</b>"
-msgstr "<b>Događaji</b>"
+msgstr "<b>Pojavljivanja</b>"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1174
 msgid "Last Occurred: "
-msgstr "Zadnje nastupanje: "
+msgstr "Zadnje pojavljivanje: "
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1208
 msgid "Repeats:"
@@ -16282,7 +16284,7 @@ msgstr "Do"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1278
 msgid "occurrences"
-msgstr "događaja"
+msgstr "pojavljivanja"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1290
 msgid "remaining"
@@ -16891,7 +16893,7 @@ msgstr "Nije terminirano"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:673
 msgid "Select occurrence date above."
-msgstr "Odaberi datum događaja."
+msgstr "Odaberi datum pojavljivanja."
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:710
 msgctxt "Daily"
@@ -19085,7 +19087,7 @@ msgid ""
 "Error message:\n"
 "%s"
 msgstr ""
-"Došlo je do neočekivane greške prilikom stvaranja cijena. Molimo te, da "
+"Došlo je do neočekivane greške prilikom stvaranja cijena. Molimo te da "
 "prijaviš ovu grešku.\n"
 "\n"
 "Poruka o grešci:\n"
@@ -19108,7 +19110,7 @@ msgid ""
 "Error message:\n"
 "%s"
 msgstr ""
-"Došlo je do neočekivane greške prilikom stvaranja transakcija. Molimo te, da "
+"Došlo je do neočekivane greške prilikom stvaranja transakcija. Molimo te da "
 "prijaviš ovu grešku.\n"
 "\n"
 "Poruka o grešci:\n"
