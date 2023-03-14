@@ -13,7 +13,7 @@
 # Cow <javier.fserrador@gmail.com>, 2022.
 # Eduardo Malaspina <vaio0@swismail.com>, 2022.
 # Luis D. Lafaurie <luis.lafaurie@tecnativa.com>, 2022.
-# Guille Lopez <willelopz@gmail.com>, 2022.
+# Guille Lopez <willelopz@gmail.com>, 2022, 2023.
 #
 #
 # ###############################################################################
