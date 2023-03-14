@@ -297,7 +297,7 @@
                   ((eqv? owner-type GNC-OWNER-EMPLOYEE) (gncEmployeeLookupFlip guid book))
                   ((eqv? owner-type GNC-OWNER-JOB) (gncJobLookupFlip guid book)))))
 
-    (gnc-make-owner-option section name key docstring defval ui-type)))
+    (gnc-make-gncowner-option section name key docstring defval ui-type)))
 (define-public (gnc:make-invoice-option section name key docstring getter validator)
   (issue-deprecation-warning "gnc:make-invoice-option is deprecated. Make and register the option in one command with gnc-register-ionvoice-option.")
   (let ((defval (if getter (getter) #f)))

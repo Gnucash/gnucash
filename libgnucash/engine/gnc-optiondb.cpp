@@ -809,8 +809,8 @@ gnc_register_owner_option(GncOptionDB* db, const char* section,
     default:
         uitype = GncOptionUIType::INTERNAL;
     };
-    GncOption option{section, name, key, doc_string, value,
-                     uitype};
+    GncOption option{GncOptionGncOwnerValue{section, name, key, doc_string,
+                                            value, uitype}};
     db->register_option(section, std::move(option));
 }
 

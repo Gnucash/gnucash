@@ -588,7 +588,7 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
       (test-equal "owner unchanged" test-unchanged-section-output-template
                   (gnc:generate-restore-forms odb "options"))
       (let* ((option (gnc:lookup-option odb "foo" "bar"))
-            (test-template test-literal-output-template)
+            (test-template test-list-output-template)
             (book (gnc-get-current-book))
             (owner (gncOwnerNew)))
         (gncOwnerInitCustomer owner (gncCustomerCreate book))

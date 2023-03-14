@@ -37,6 +37,112 @@ static const QofLogModule log_module{"gnc.options"};
 const std::string GncOptionMultichoiceValue::c_empty_string{""};
 const std::string GncOptionMultichoiceValue::c_list_string{"multiple values"};
 
+static inline GncOwnerType
+ui_type_to_owner_type(GncOptionUIType ui_type)
+{
+    if (ui_type == GncOptionUIType::CUSTOMER)
+        return GNC_OWNER_CUSTOMER;
+    if (ui_type == GncOptionUIType::VENDOR)
+        return GNC_OWNER_VENDOR;
+    if (ui_type == GncOptionUIType::EMPLOYEE)
+        return GNC_OWNER_EMPLOYEE;
+    return GNC_OWNER_NONE;
+}
+
+static GncOwner*
+make_owner_ptr(const GncOwner* owner)
+{
+    if (!owner)
+        return nullptr;
+    auto rv{gncOwnerNew()};
+    gncOwnerCopy(owner, rv);
+    return rv;
+}
+
+GncOptionGncOwnerValue::GncOptionGncOwnerValue(
+    const char* section, const char* name,
+    const char* key, const char* doc_string,
+    const GncOwner* value, GncOptionUIType ui_type) :
+    OptionClassifier{section, name, key, doc_string},
+    m_ui_type(ui_type), m_value{make_owner_ptr(value)},
+    m_default_value{make_owner_ptr(value)} {}
+
+GncOptionGncOwnerValue::GncOptionGncOwnerValue(const GncOptionGncOwnerValue& from) :
+    OptionClassifier{from.m_section, from.m_name, from.m_sort_tag,
+                     from.m_doc_string},
+    m_ui_type(from.get_ui_type()), m_value{make_owner_ptr(from.get_value())},
+    m_default_value{make_owner_ptr(from.get_default_value())} {}
+
+void
+GncOptionGncOwnerValue::set_value(const GncOwner* new_value)
+{
+    m_value.reset(make_owner_ptr(new_value));
+}
+
+void
+GncOptionGncOwnerValue::set_default_value(const GncOwner *new_value)
+{
+    m_value.reset(make_owner_ptr(new_value));
+    m_default_value.reset(make_owner_ptr(new_value));
+}
+
+const GncOwner*
+GncOptionGncOwnerValue::get_value() const
+{
+    return m_value.get();
+}
+
+const GncOwner*
+GncOptionGncOwnerValue::get_default_value() const
+{
+    return m_default_value.get();
+}
+
+void
+GncOptionGncOwnerValue::reset_default_value()
+{
+    gncOwnerCopy(m_default_value.get(), m_value.get());
+}
+
+bool
+GncOptionGncOwnerValue::is_changed() const noexcept
+{
+    return gncOwnerEqual(m_value.get(), m_default_value.get());
+}
+
+bool
+GncOptionGncOwnerValue::deserialize(const std::string& str) noexcept
+{
+    try {
+        auto guid{static_cast<GncGUID>(gnc::GUID::from_string(str))};
+        auto inst = qof_instance_from_guid(&guid, m_ui_type);
+        if (inst)
+        {
+            GncOwner owner{};
+            owner.type = ui_type_to_owner_type(m_ui_type);
+            owner.owner.undefined = inst;
+            set_default_value(&owner);
+            return true;
+        }
+    }
+    catch (const gnc::guid_syntax_exception& err)
+    {
+        PWARN("Failed to convert %s to a GUID", str.c_str());
+    }
+    return false;
+}
+
+std::string
+GncOptionGncOwnerValue::serialize() const noexcept
+{
+
+    auto owner{m_value.get()};
+    gnc::GUID guid{*qof_instance_get_guid(static_cast<QofInstance*>(owner->owner.undefined))};
+    std::string retval{guid.to_string()};
+
+    return retval;
+}
+
 using GncItem = std::pair<QofIdTypeConst, GncGUID>;
 
 static GncItem
@@ -60,6 +166,7 @@ get_current_root_account(void)
 {
     return gnc_book_get_root_account(get_current_book());
 }
+
 static const QofInstance*
 qof_instance_from_gnc_item(const GncItem& item)
 {

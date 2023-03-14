@@ -740,6 +740,10 @@ gnc_option_test_book_destroy(QofBook* book)
 wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 
 %ignore swig_get_option(GncOption&);
+%ignore GncOwnerDeleter;
+%ignore
+    GncOptionGncOwnerValue::GncOptionGncOwnerValue(GncOptionGncOwnerValue &&);
+
 %inline %{
 #include <cassert>
 #include <algorithm>
@@ -1151,7 +1155,6 @@ inline SCM return_scm_value(ValueType value)
 %template(gnc_make_bool_option) gnc_make_option<bool>;
 %template(gnc_make_int64_option) gnc_make_option<int64_t>;
 %template(gnc_make_query_option) gnc_make_option<const QofQuery*>;
-%template(gnc_make_owner_option) gnc_make_option<const GncOwner*>;
 
 %rename (get_value) GncOption::get_scm_value;
 %rename (get_default_value) GncOption::get_scm_default_value;
@@ -1247,13 +1250,12 @@ inline SCM return_scm_value(ValueType value)
                     return scm_simple_format(SCM_BOOL_F, date_fmt, value);
                 }
 
-                if constexpr (is_same_decayed_v<decltype(option),
-                              GncOptionValue<const GncOwner*>>)
+                if constexpr (is_GncOwnerValue_v<decltype(option)>)
                 {
                     auto value{option.get_value()};
                     auto guid{scm_from_utf8_string(qof_instance_to_string(qofOwnerGetOwner(value)).c_str())};
                     auto type{scm_from_long(gncOwnerGetType(value))};
-                    return scm_simple_format(SCM_BOOL_F, ticked_format_str,
+                    return scm_simple_format(SCM_BOOL_F, list_format_str,
                                              scm_list_1(scm_cons(type, guid)));
                 }
                 if constexpr (is_QofQueryValue_v<decltype(option)>)
@@ -1420,6 +1422,24 @@ inline SCM return_scm_value(ValueType value)
                         }
                         return;
                     }
+                    if constexpr (is_GncOwnerValue_v<decltype(option)>)
+                    {
+                        if (scm_is_pair(new_value))
+                        {
+                            GncOwner owner{};
+                            owner.type = static_cast<GncOwnerType>(scm_to_int(scm_car(new_value)));
+                            auto strval{scm_to_utf8_string(scm_cdr(new_value))};
+                            owner.owner.undefined = qof_instance_from_string(strval, option.get_ui_type());
+                            option.set_value(&owner);
+                        }
+                        else
+                        {
+                            auto val{scm_to_value<const GncOwner*>(new_value)};
+                            option.set_value(val);
+                        }
+                        return;
+                    }
+
                     if constexpr (is_QofQueryValue_v<decltype(option)>)
                     {
                         if (scm_is_pair(new_value))
@@ -1512,6 +1532,37 @@ inline SCM return_scm_value(ValueType value)
                         else
                         {
                             auto val{scm_to_value<const QofInstance*>(new_value)};
+                            option.set_default_value(val);
+                        }
+                        return;
+                    }
+                    if constexpr (is_GncOwnerValue_v<decltype(option)>)
+                    {
+                        if (scm_is_pair(new_value))
+                        {
+                            GncOwner owner{};
+                            owner.type = static_cast<GncOwnerType>(scm_to_int(scm_car(new_value)));
+                            auto strval{scm_to_utf8_string(scm_cdr(new_value))};
+                            owner.owner.undefined = qof_instance_from_string(strval, option.get_ui_type());
+                            option.set_default_value(&owner);
+                        }
+                        else
+                        {
+                            auto val{scm_to_value<const GncOwner*>(new_value)};
+                            option.set_default_value(val);
+                        }
+                        return;
+                    }
+                    if constexpr (is_QofQueryValue_v<decltype(option)>)
+                    {
+                        if (scm_is_pair(new_value))
+                        {
+                            auto val{gnc_scm2query(new_value)};
+                            option.set_default_value(val);
+                        }
+                        else
+                        {
+                            auto val{scm_to_value<const QofQuery*>(new_value)};
                             option.set_default_value(val);
                         }
                         return;
@@ -1669,6 +1720,26 @@ gnc_register_multichoice_callback_option(GncOptionDBPtr& db,
         catch (const std::exception& err)
         {
             std::cerr << "Make QofInstance option threw unexpected exception"
+            << err.what() << ", option not created." << std::endl;
+            return nullptr;
+        }
+    }
+
+    static GncOption*
+    gnc_make_gncowner_option(const char* section,
+                                const char* name, const char* key,
+                                const char* doc_string,
+                                const GncOwner* value,
+                                GncOptionUIType ui_type)
+    {
+        try {
+            return new GncOption(GncOptionGncOwnerValue{section, name, key,
+                                                        doc_string,
+                                                        value, ui_type});
+        }
+        catch (const std::exception& err)
+        {
+            std::cerr << "Make GncOwner option threw unexpected exception"
             << err.what() << ", option not created." << std::endl;
             return nullptr;
         }

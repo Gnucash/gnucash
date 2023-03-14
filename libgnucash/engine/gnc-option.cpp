@@ -25,6 +25,7 @@
 #include "gnc-option-impl.hpp"
 #include "gnc-option-uitype.hpp"
 #include "gnc-option-ui.hpp"
+#include "gncOwner.h"
 
 static const char* log_module{"gnc.app-utils.gnc-option"};
 
@@ -466,8 +467,6 @@ template GncOption::GncOption(const char*, const char*, const char*,
                               const char*, std::string, GncOptionUIType);
 template GncOption::GncOption(const char*, const char*, const char*,
                               const char*, const QofQuery*, GncOptionUIType);
-template GncOption::GncOption(const char*, const char*, const char*,
-                              const char*, const GncOwner*, GncOptionUIType);
 
 template bool GncOption::get_value<bool>() const;
 template int GncOption::get_value<int>() const;
@@ -477,6 +476,7 @@ template uint16_t GncOption::get_value<uint16_t>() const;
 template const char* GncOption::get_value<const char*>() const;
 template std::string GncOption::get_value<std::string>() const;
 template const QofInstance* GncOption::get_value<const QofInstance*>() const;
+template const GncOwner* GncOption::get_value<const GncOwner*>() const;
 template gnc_commodity* GncOption::get_value<gnc_commodity*>() const;
 template const Account* GncOption::get_value<const Account*>() const;
 template RelativeDatePeriod GncOption::get_value<RelativeDatePeriod>() const;
@@ -506,6 +506,7 @@ template void GncOption::set_value(char*);
 template void GncOption::set_value(const char*);
 template void GncOption::set_value(std::string);
 template void GncOption::set_value(const QofInstance*);
+template void GncOption::set_value(const GncOwner*);
 template void GncOption::set_value(gnc_commodity*);
 template void GncOption::set_value(const Account*);
 template void GncOption::set_value(RelativeDatePeriod);
@@ -556,5 +557,3 @@ template GncOption* gnc_make_option<bool>(const char*, const char*, const char*,
 template GncOption* gnc_make_option<int64_t>(const char*, const char*,
                                              const char*, const char*, int64_t,
                                              GncOptionUIType);
-
-

@@ -113,6 +113,54 @@ private:
     ValueType m_default_value;
 };
 
+
+/** class GncOptionGncOwnerValue
+ *
+ * Unlike QofInstance based classes GncOwners are created on the fly, aren't
+ * placed in QofCollection, and therefore their lifetimes have to be managed.
+ * We use GncOwnerPtr for the purpose.
+ */
+struct GncOwnerDeleter
+{
+    void operator()(GncOwner* o) {
+        g_free(o);
+    }
+};
+
+using GncOwnerPtr = std::unique_ptr<GncOwner, GncOwnerDeleter>;
+
+class GncOptionGncOwnerValue: public OptionClassifier {
+public:
+    GncOptionGncOwnerValue(
+        const char* section, const char* name,
+        const char* key, const char* doc_string,
+        const GncOwner* value,
+        GncOptionUIType ui_type = GncOptionUIType::INTERNAL);
+    GncOptionGncOwnerValue(const GncOptionGncOwnerValue& from);
+    GncOptionGncOwnerValue(GncOptionGncOwnerValue&&) = default;
+    ~GncOptionGncOwnerValue() = default;
+    const GncOwner* get_value() const;
+    const GncOwner* get_default_value() const;
+    void set_value(const GncOwner* new_value);
+    void set_default_value(const GncOwner* new_value);
+    void reset_default_value();
+    bool is_changed() const noexcept;
+    GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
+    void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
+    bool is_internal() { return m_ui_type == GncOptionUIType::INTERNAL; }
+    std::string serialize() const noexcept;
+    bool deserialize(const std::string& str) noexcept;
+private:
+    GncOptionUIType m_ui_type;
+    GncOwnerPtr m_value;
+    GncOwnerPtr m_default_value;
+};
+
+/** class GncOptionQofinstanceValue
+ *
+ * QofInstances know what type they are but getting them to tell you is a pain
+ * so we put them in a pair with a type identifier.
+ */
 using GncItem = std::pair<QofIdTypeConst, GncGUID>;
 
 class GncOptionQofInstanceValue: public OptionClassifier {
@@ -200,6 +248,16 @@ QofInstance* qof_instance_from_string(const std::string& str,
                                       GncOptionUIType type);
 QofInstance* qof_instance_from_guid(GncGUID*, GncOptionUIType type);
 std::string qof_instance_to_string(const QofInstance* inst);
+
+template <typename T>
+struct is_GncOwnerValue
+{
+    static constexpr bool value =
+        std::is_same_v<std::decay_t<T>, GncOptionGncOwnerValue>;
+};
+
+template <typename T> inline constexpr bool
+is_GncOwnerValue_v = is_GncOwnerValue<T>::value;
 
 template <typename T>
 struct is_QofInstanceValue
