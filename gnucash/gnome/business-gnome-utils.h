@@ -78,7 +78,7 @@ GtkWidget * gnc_owner_edit_create (GtkWidget *label, GtkWidget *hbox,
                                    QofBook *book, GncOwner *owner);
 
 void gnc_owner_get_owner (GtkWidget *widget, GncOwner *owner);
-void gnc_owner_set_owner (GtkWidget *widget, GncOwner *owner);
+void gnc_owner_set_owner (GtkWidget *widget, const GncOwner *owner);
 
 
 /* An invoice select widget..

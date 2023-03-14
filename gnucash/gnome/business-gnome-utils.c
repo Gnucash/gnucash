@@ -23,6 +23,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
+#include <assert.h>
 #include <config.h>
 
 #include <gtk/gtk.h>
@@ -55,6 +56,10 @@
 #include "gnc-prefs.h"
 #include "gnc-commodity.h"
 #include "gnc-report-combo.h"
+#include "qofinstance.h"
+#include "qoflog.h"
+
+static const QofLogModule log_module = G_LOG_DOMAIN;
 
 typedef enum
 {
@@ -277,14 +282,21 @@ void gnc_owner_get_owner (GtkWidget *widget, GncOwner *owner)
     g_return_if_fail (widget != NULL);
     g_return_if_fail (owner != NULL);
 
-    /* We'll assume that the owner has the proper 'type' because we
-     * can't change it here.  Hopefully the caller has it set properly
-     */
-    owner->owner.undefined =
+    QofInstance *instance =
         gnc_general_search_get_selected (GNC_GENERAL_SEARCH (widget));
+
+    if (owner->type == GNC_OWNER_NONE ||
+        g_strcmp0(instance->e_type, qofOwnerGetType(owner)) == 0)
+        qofOwnerSetEntity(owner, instance);
+    else
+    {
+        PWARN("Owner type mismatch: Instance %s, Owner %s",
+              instance->e_type, qofOwnerGetType(owner));
+        owner->owner.undefined = instance;
+    }
 }
 
-void gnc_owner_set_owner (GtkWidget *widget, GncOwner *owner)
+void gnc_owner_set_owner (GtkWidget *widget, const GncOwner *owner)
 {
     g_return_if_fail (widget != NULL);
     g_return_if_fail (owner != NULL);
