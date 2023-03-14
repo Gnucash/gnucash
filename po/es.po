@@ -84,8 +84,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
 "PO-Revision-Date: 2023-03-14 13:50+0000\n"
-"Last-Translator: Jaime Marquínez Ferrándiz <jaime.marquinez."
-"ferrandiz@fastmail.net>\n"
+"Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/es/>\n"
 "Language: es\n"
@@ -1708,6 +1707,9 @@ msgid ""
 "payment for the returned capital. This reduces the cost basis (less "
 "negative, towards 0.00 value) without affecting # units."
 msgstr ""
+"Empresa devuelve capital y el titular de la acción a corto debe hacer un "
+"pago compensatorio por el capital devuelto. Esto reduce la base de coste ("
+"menos negativa, hacia el valor 0.00) sin afectar # unidades."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution when shorting stock
@@ -3856,7 +3858,7 @@ msgstr "Filas"
 
 #: gnucash/gnome/dialog-report-column-view.cpp:392
 msgid "Cols"
-msgstr "Columnas"
+msgstr "Cols"
 
 #: gnucash/gnome/dialog-report-style-sheet.cpp:175
 #, c-format
@@ -8337,6 +8339,19 @@ msgid ""
 "or more symbols, the first of which is the currency in which exchange rates "
 "for the rest will be quoted.\n"
 msgstr ""
+"Ejecuta los comandos relacionados con la cotización de precio. Los "
+"siguientes comandos están soportados:\n"
+"\n"
+"  info: \tMuestra la versión de Finance::Quote y expone las fuentes de "
+"cotización.\n"
+"   get: \tObtiene las cotizaciones actuales para todas las monedas "
+"extranjeras y acciones en el archivo de datos de GnuCash proporcionado.\n"
+"  dump: \tObtiene las cotizaciones actuales para las monedas o acciones de "
+"un espacio de nombres solicitado e imprime los resultados en la consola.\n"
+"        \tEsto debe de estar seguido de una fuente y uno o más símbolos, a "
+"no ser que la fuente sea \"currency\", en cuyo caso debe de seguirse de dos "
+"o más símbolos, el primero de los cuales es la moneda de referencia de las "
+"cotizaciones para el resto.\n"
 
 #: gnucash/gnucash-cli.cpp:103
 msgid ""
@@ -8351,6 +8366,8 @@ msgid ""
 "When using the dump command list all of the parameters Finance::Quote "
 "returns for the symbol instead of the ones that Gnucash requires."
 msgstr ""
+"Al usar el comando dump, muestra la lista de todos los parámetros que "
+"Finance::Quote devuelve para el símbolo en lugar de los que GnuCash solicita."
 
 #: gnucash/gnucash-cli.cpp:110
 msgid "Report Generation Options"
@@ -12934,6 +12951,12 @@ msgid ""
 "expensed. If there are no fees involved in this transaction, it can be left "
 "blank."
 msgstr ""
+"En esta página, introduzca cualquier comisión de corretaje incurrida con "
+"esta transacción. La comisión puede ser capitalizada en la cuenta del activo "
+"o definirse como un gasto hace una cuenta de comisiones de corretaje. "
+"Normalmente, las comisiones de compra son capitalizadas y las comisiones de "
+"venta definidas como un gasto. En caso de no haber comisiones para esta "
+"transacción, se puede dejar en blanco."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:629
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1052
@@ -18315,6 +18338,9 @@ msgid ""
 "profile list contains specializations and is populated according to which "
 "format you select in this list."
 msgstr ""
+"Esta lista contiene los formatos de archivo que AQBanking es capaz de "
+"importar. La lista de perfiles contiene especializaciones y su contenido "
+"depende del formato seleccionado en la lista."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1733
 msgid "File Format"
@@ -18325,6 +18351,9 @@ msgid ""
 "This lists one or more specialization templates that adjust the import for "
 "different banks' uses of fields in the selected import format."
 msgstr ""
+"Esto lista una o más plantillas de especialización que adaptan la "
+"importación para los diferentes usos de los campos de distintos bancos en el "
+"formato de importación seccionado."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1787
 msgid "Profiles"
@@ -25731,7 +25760,7 @@ msgstr "Mostrar nombres largos de cuentas (en lugar de cortos)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:300
 msgid "Show mnemonics with commodity amounts"
-msgstr ""
+msgstr "Muestra mnemotécnicas con las cantidades de producto"
 
 #: gnucash/report/reports/standard/investment-lots.scm:307
 msgid "Include closed lots in addition to open lots"
@@ -29180,10 +29209,8 @@ msgid "New _Expense Voucher…"
 msgstr "Crear comprobante de gasto…"
 
 #: gnucash/ui/gnc-plugin-business.ui:124
-#, fuzzy
-#| msgid "Open the New Expense Voucher dialog"
 msgid "Open the New Voucher dialog"
-msgstr "Abre “Crear comprobante de gasto” como diálogo"
+msgstr "Abrir el diálogo “Crear comprobante”"
 
 #: gnucash/ui/gnc-plugin-business.ui:127
 msgid "Find Expense _Voucher…"
@@ -31052,6 +31079,8 @@ msgid ""
 "Length of time to change the used invoice report. A value of 0 means "
 "disabled."
 msgstr ""
+"Lapso de tiempo para cambiar el informe de factura usado. Un valor de 0 "
+"significa deshabilitado."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1241
 msgid "Default Customer TaxTable"
