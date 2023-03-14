@@ -1869,7 +1869,7 @@ CsvImpPriceAssist::assist_preview_page_prepare ()
         try
         {
             price_imp->file_format (GncImpFileFormat::CSV);
-            price_imp->load_file (m_final_file_name);
+            price_imp->load_file (m_fc_file_name);
             price_imp->tokenize (true);
 
             /* Get settings store and populate */
@@ -1901,6 +1901,7 @@ CsvImpPriceAssist::assist_preview_page_prepare ()
     else
     {
         m_final_file_name = m_fc_file_name;
+        preview_refresh ();
 
         /* Load the data into the treeview. */
         g_idle_add ((GSourceFunc)csv_imp_preview_queue_rebuild_table, this);
