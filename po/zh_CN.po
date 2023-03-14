@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-13 17:40+0000\n"
+"PO-Revision-Date: 2023-03-14 07:59+0000\n"
 "Last-Translator: J0kWang <lianjiefly@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/program-beta/zh_Hans/>\n"
@@ -247,7 +247,7 @@ msgstr "商业"
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:149
 #: libgnucash/engine/gnc-optiondb.cpp:1203
 msgid "Company Name"
-msgstr "名称"
+msgstr "公司名称"
 
 #: bindings/guile/options.scm:390 libgnucash/engine/gnc-optiondb.cpp:1206
 msgid "Company Address"
