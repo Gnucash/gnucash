@@ -84,7 +84,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
 "PO-Revision-Date: 2023-03-14 11:17+0000\n"
-"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
+"Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/es/>\n"
 "Language: es\n"
@@ -1651,6 +1651,13 @@ msgid ""
 "record the sale using the Stock Transaction Assistant first, then record the "
 "reverse split."
 msgstr ""
+"Empresa redime o rescata unidades, incrementado de esta forma el precio de "
+"la acción por un múltiplo, manteniendo constante el valor monetario de la "
+"inversión total.\n"
+"\n"
+"Si la anotación inversa resulta en un efectivo por las unidades restantes, "
+"registre primero esta venta usando el Asistente de Transacciones de Valores, "
+"y registre después la anotación inversa."
 
 #. Translators: this is a stock transaction describing
 #. shorting of stock.
@@ -1714,6 +1721,11 @@ msgid ""
 "loss/negative dividend income amount, and increases the cost basis (more "
 "negative, away from 0.00 value) without affecting # units."
 msgstr ""
+"Empresa emite una distribución nocional y el titular de la acción a corto "
+"debe de hacer un pago compensatorio por la distribución nocional. Esto se "
+"registra como una pérdida o ingreso negativo por dividendo, e incrementa la "
+"base de coste (más negativa, alejándose del valor 0.00) sin afectar las # "
+"unidades."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:370
 msgid ""
@@ -1724,6 +1736,13 @@ msgid ""
 "record the cover buy using the Stock Transaction Assistant first, then "
 "record the reverse split."
 msgstr ""
+"Empresa redime o rescata unidades, incrementado de esta forma el precio de "
+"la acción por un múltiplo, manteniendo constante el valor monetario de la "
+"inversión total.\n"
+"\n"
+"Si la anotación inversa resulta en un efectivo por las unidades restantes, "
+"registre primero esta compra de cobertura usando el Asistente de "
+"Transacciones de Valores, y registre después la anotación inversa."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:537
 #, c-format
@@ -1772,6 +1791,11 @@ msgid ""
 "and therefore capital gains, of transactions dated after the new entry. "
 "Please review all transactions to ensure proper recording."
 msgstr ""
+"Introducirá una transacción con fecha %s, que es anterior a la última "
+"transacción de esta cuenta, con fecha %s. Hacer esto puede afectar a la base "
+"de coste y por consiguiente a las ganancias de capital con fecha posterior a "
+"la nueva entrada. Por favor, revise todas las transacciones para asegurar un "
+"registro apropiado."
 
 #. Translators: Designates the page in the Stock Assistant for entering
 #. the currency value of a non-currency asset.
@@ -1802,7 +1826,7 @@ msgstr "No se puede vender más unidades de las que se poseen."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:807
 msgid "Cannot cover buy more units than owed."
-msgstr ""
+msgstr "No se pueden comprar para cobertura más unidades de las adeudadas."
 
 #. Translators: %s refer to: stock mnemonic, broker currency,
 #. date of transaction.
@@ -1841,6 +1865,8 @@ msgstr "Ganancia de capital"
 #, c-format
 msgid "Total Debits of %s does not balance with total Credits of %s."
 msgstr ""
+"Los débitos totales de %s no están balanceados con los créditos totales de "
+"%s."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:903
 msgid "No errors found. Click Apply to create transaction."
@@ -3680,6 +3706,14 @@ msgid ""
 "Please correct this manually by editing the transaction directly and then "
 "try again."
 msgstr ""
+"Esta transacción tiene anotaciones en varias cuentas de negocio:\n"
+"\n"
+"%s\n"
+"GnuCash solo puede manejar transacciones que contabilicen a una única cuenta."
+"\n"
+"\n"
+"Por favor, corrija esto manualmente editando directamente la transacción e "
+"inténtelo de nuevo."
 
 #. Translators: %d is the number of prices. This is a ngettext(3) message.
 #: gnucash/gnome/dialog-price-edit-db.cpp:201
