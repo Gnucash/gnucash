@@ -83,9 +83,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-13 15:35+0000\n"
-"Last-Translator: Jaime Marquínez Ferrándiz <jaime.marquinez."
-"ferrandiz@fastmail.net>\n"
+"PO-Revision-Date: 2023-03-14 11:17+0000\n"
+"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/es/>\n"
 "Language: es\n"
@@ -13827,7 +13826,7 @@ msgstr "Escoja Diálogo del Titular"
 #: gnucash/gtkbuilder/dialog-commodities.glade:27
 #: gnucash/report/reports/standard/account-piecharts.scm:62
 msgid "Securities"
-msgstr "Garantías"
+msgstr "Títulos"
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:77
 msgid "Show National Currencies"
