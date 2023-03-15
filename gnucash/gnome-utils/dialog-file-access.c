@@ -243,6 +243,12 @@ get_default_database( void )
     return default_db;
 }
 
+static void free_file_access_window (FileAccessWindow *faw)
+{
+    g_free (faw->starting_dir);
+    g_free (faw);
+}
+
 static void
 gnc_ui_file_access (GtkWindow *parent, int type)
 {
@@ -280,7 +286,8 @@ gnc_ui_file_access (GtkWindow *parent, int type)
     gnc_builder_add_from_file (builder, "dialog-file-access.glade", "file_access_dialog" );
     faw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "file_access_dialog" ));
     gtk_window_set_transient_for (GTK_WINDOW (faw->dialog), parent);
-    g_object_set_data_full( G_OBJECT(faw->dialog), "FileAccessWindow", faw, g_free );
+    g_object_set_data_full (G_OBJECT(faw->dialog), "FileAccessWindow", faw,
+                            (GDestroyNotify)free_file_access_window);
 
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(faw->dialog), "gnc-id-file-access");
