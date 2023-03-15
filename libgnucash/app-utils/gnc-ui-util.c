@@ -2067,7 +2067,7 @@ xaccParseAmountImport (const char * in_str, gboolean monetary,
                         char **endstr, gboolean skip)
 {
     return xaccParseAmountBasicInternal (in_str, monetary, FALSE,
-                                         result, endstr, FALSE);
+                                         result, endstr, skip);
 }
 
 
