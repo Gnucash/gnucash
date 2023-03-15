@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-14 07:59+0000\n"
+"PO-Revision-Date: 2023-03-15 05:52+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/pt/>\n"
@@ -8130,8 +8130,8 @@ msgid ""
 "or more symbols, the first of which is the currency in which exchange rates "
 "for the rest will be quoted.\n"
 msgstr ""
-"Executar comandos relacionados com a cotação de preços. São suportados os "
-"seguintes comandos.\n"
+"Executar comandos relacionados com cotações. São suportados os seguintes "
+"comandos.\n"
 "\n"
 "  info: \t Mostrar versão do Finance::Quote e fontes de cotações expostas.\n"
 "   get: \t Obter cotações actuais para todas as moedas e acções estrangeiras "
@@ -8228,7 +8228,7 @@ msgstr "Fontes do Finance::Quote:\n"
 
 #: gnucash/gnucash-commands.cpp:364 gnucash/gnucash-commands.cpp:388
 msgid "Price retrieval failed: "
-msgstr "Falha ao obter a cotação: "
+msgstr "Falha ao obter o preço: "
 
 #: gnucash/gnucash-core-app.cpp:79
 msgid "This is a development version. It may or may not work."
@@ -11107,7 +11107,7 @@ msgstr "Resumo da exportação"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:38
 msgid "CSV Price Import"
-msgstr "Importação de cotações CSV"
+msgstr "Importação de preços CSV"
 
 #. You should localize the (british) examples to your region.
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:53
@@ -11141,7 +11141,7 @@ msgid ""
 "\n"
 "Click on \"Next\" to proceed or \"Cancel\" to Abort Import."
 msgstr ""
-"Este assistente vai ajudar a importar cotações de um ficheiro CSV.\n"
+"Este assistente vai ajudar a importar preços de um ficheiro CSV.\n"
 "\n"
 "Há um número mínimo de colunas que devem estar presentes para uma importação "
 "bem-sucedida, sendo elas Data, Valor, De mercadoria, De símbolo e Para "
@@ -12482,8 +12482,8 @@ msgid ""
 "If you want to record a stock price for the split, enter it below. You may "
 "safely leave it blank."
 msgstr ""
-"Se quiser registar uma cotação por acção para o desdobramento, insira-a "
-"abaixo. Pode deixar em branco sem perigo."
+"Se quiser registar um preço por acção para o desdobramento, insira-a abaixo. "
+"Pode deixar em branco sem perigo."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:197
 msgid "New _Price"
@@ -15731,7 +15731,7 @@ msgstr "Valor líquido do activo"
 
 #: gnucash/gtkbuilder/dialog-price.glade:43
 msgid "Price Editor"
-msgstr "Editor de cotações"
+msgstr "Editor de preços"
 
 #: gnucash/gtkbuilder/dialog-price.glade:195
 msgid "S_ource"
@@ -15746,15 +15746,15 @@ msgstr "_Preço"
 
 #: gnucash/gtkbuilder/dialog-price.glade:374
 msgid "Remove Old Prices"
-msgstr "Remover cotações antigas"
+msgstr "Remover preços antigos"
 
 #: gnucash/gtkbuilder/dialog-price.glade:437
 msgid "Delete prices that meet the following criteria:"
-msgstr "Eliminar cotações que cumpram o seguinte critério:"
+msgstr "Eliminar preços que cumpram o seguinte critério:"
 
 #: gnucash/gtkbuilder/dialog-price.glade:457
 msgid "Remove all prices before date."
-msgstr "Remover todas as cotações anteriores à data."
+msgstr "Remover preços anteriores à data."
 
 #: gnucash/gtkbuilder/dialog-price.glade:471
 msgid "Last of _Week"
@@ -15762,7 +15762,7 @@ msgstr "Última da _semana"
 
 #: gnucash/gtkbuilder/dialog-price.glade:475
 msgid "Keep the last price of each week if present before date."
-msgstr "Mantém a última cotação de cada semana, se presente antes da data."
+msgstr "Mantém o último preço de cada semana, se presente antes da data."
 
 #: gnucash/gtkbuilder/dialog-price.glade:488
 msgid "Last of _Month"
@@ -15770,7 +15770,7 @@ msgstr "Última do _mês"
 
 #: gnucash/gtkbuilder/dialog-price.glade:492
 msgid "Keep the last price of each month if present before date."
-msgstr "Mantém a última cotação de cada mês, se presente antes da data."
+msgstr "Mantém o último preço de cada mês, se presente antes da data."
 
 #: gnucash/gtkbuilder/dialog-price.glade:505
 msgid "Last of _Quarter"
@@ -15781,8 +15781,8 @@ msgid ""
 "Keep the last price of each fiscal quarter if present before date. The "
 "fiscal quarter is derived from the accounting period end date."
 msgstr ""
-"Mantém a última cotação de cada trimestre fiscal, se presente antes da data. "
-"O trimestre fiscal deriva da data final do período contabilístico."
+"Mantém o último preço de cada trimestre fiscal, se presente antes da data. O "
+"trimestre fiscal deriva da data final do período contabilístico."
 
 #: gnucash/gtkbuilder/dialog-price.glade:522
 msgid "Last of _Period"
@@ -15793,7 +15793,7 @@ msgid ""
 "Keep the last price of each fiscal period if present before date. The fiscal "
 "period is derived from the accounting period end date."
 msgstr ""
-"Mantém a última cotação de cada período fiscal, se presente antes da data. O "
+"Mantém o último preço de cada período fiscal, se presente antes da data. O "
 "período fiscal deriva da data final do período contabilístico."
 
 #: gnucash/gtkbuilder/dialog-price.glade:539
@@ -15806,7 +15806,7 @@ msgid ""
 "'One a month' is used for dates older than a year and 'One a week' is used "
 "for dates older than six months to a year."
 msgstr ""
-"Com esta opção, as cotações são removidas relativamente à data seleccionada. "
+"Com esta opção, os preços são removidos relativamente à data seleccionada. "
 "\"Uma por mês\" é usado para datas com mais de um ano e \"Uma por semana\" é "
 "usado para datas entre seis meses a um ano."
 
@@ -15824,11 +15824,11 @@ msgstr "Manter o último preço disponível para opção"
 
 #: gnucash/gtkbuilder/dialog-price.glade:668
 msgid "Include _Fetched online prices"
-msgstr "Incluir cotações _obtidas em linha"
+msgstr "Incluir preços _obtidos em linha"
 
 #: gnucash/gtkbuilder/dialog-price.glade:672
 msgid "If activated, prices added by Finance::Quote will be included."
-msgstr "Se activa, as cotações adicionadas pelo Finance::Quote serão incluídas."
+msgstr "Se activa, os preços adicionados pelo Finance::Quote serão incluídos."
 
 #: gnucash/gtkbuilder/dialog-price.glade:687
 msgid "Include manually _Entered prices"
@@ -16866,7 +16866,7 @@ msgstr "1ª Seg"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:328
 msgid "1st Tue"
-msgstr "1ª ter"
+msgstr "1ª Ter"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:331
 msgid "1st Wed"
@@ -16894,7 +16894,7 @@ msgstr "2ª Seg"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:349
 msgid "2nd Tue"
-msgstr "2ª ter"
+msgstr "2ª Ter"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:352
 msgid "2nd Wed"
@@ -16922,7 +16922,7 @@ msgstr "3ª Seg"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:370
 msgid "3rd Tue"
-msgstr "3ª ter"
+msgstr "3ª Ter"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:373
 msgid "3rd Wed"
@@ -17103,7 +17103,7 @@ msgstr "Multiplicar"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:156
 msgid "Multiply current budget for each period by 'value'"
-msgstr "Multiplicar orçamento actual para cada período por \"valor\""
+msgstr "Multiplicar o orçamento actual para cada período por \"valor\""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:178
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:316
@@ -17453,7 +17453,7 @@ msgid ""
 "manually."
 msgstr ""
 "Esta ferramenta pode ser lenta ou mesmo abortar, se o número de parcelas não "
-"confirmadas for superior a 20. Nesse caso, por favor, confirme algumas "
+"confirmadas for superior a 20. Nesse caso, por favor confirme algumas "
 "manualmente."
 
 #: gnucash/gtkbuilder/window-autoclear.glade:139
@@ -17580,9 +17580,9 @@ msgid ""
 " * PayPal: registered email address, password, API signature;"
 msgstr ""
 "Os requisitos para a banca em linha variam entre os diferentes motores "
-"AqBanking suportados, mas normalmente será necessário:\n"
-"* acesso em linha concedido pelo seu banco. Veja no sítio web deles ou "
-"pergunte ao apoio ao cliente como o obter.\n"
+"AqBanking suportados, mas normalmente será necessário um acesso em linha "
+"concedido pelo seu banco. Veja no sítio web deles ou pergunte ao apoio ao "
+"cliente como o obter.\n"
 "Devem também dizer-lhe:\n"
 "* a sua ID de utilizador, que o identifica no servidor deles, muitas vezes o "
 "número da sua conta base;\n"
@@ -17645,8 +17645,8 @@ msgid ""
 "<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
 "\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 msgstr ""
-"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
-"\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
+"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/\""
+">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:157
 msgid ""
@@ -17809,7 +17809,7 @@ msgid ""
 "Setting the delay time, with small values the flicker graphic is repeated "
 "faster."
 msgstr ""
-"A definir o atraso, com valores pequenos o gráfico é repetido mais depressa."
+"A definir o atraso. Com valores pequenos, o gráfico é repetido mais depressa."
 
 #. TAN generator with flicker interface common in DE only
 #: gnucash/import-export/aqb/dialog-ab.glade:751
@@ -18094,7 +18094,7 @@ msgstr "Contas de destino"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:409
 msgid "Enter a SEPA Online Direct Debit Note"
-msgstr "Insira uma nota de débito directo electrónica SEPA"
+msgstr "Insira uma nota de débito directo em linha SEPA"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:412
 msgid "Debited Account Owner"
@@ -18406,7 +18406,7 @@ msgstr "Para sua informação: esta conta também tem um saldo anotado de %s\n"
 msgid ""
 "The booked balance is identical to the current reconciled balance of the "
 "account."
-msgstr "O saldo é idêntico ao saldo reconciliado actual da conta."
+msgstr "O saldo é idêntico ao actual saldo reconciliado da conta."
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1051
 msgid "Reconcile account now?"
@@ -18589,8 +18589,8 @@ msgid ""
 "which you can choose one here."
 msgstr ""
 "Esta definição especifica o formato dos dados ao importar ficheiros SWIFT "
-"MT940. A biblioteca AqBanking oferece vários formatos de importação "
-"(chamados \"perfis\"), dos quais pode escolher um aqui."
+"MT940. A biblioteca AqBanking oferece vários formatos de importação ("
+"chamados \"perfis\"), dos quais pode escolher um aqui."
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:50
 msgid "SWIFT MT942 import data format"
@@ -18603,8 +18603,8 @@ msgid ""
 "which you can choose one here."
 msgstr ""
 "Esta definição especifica o formato dos dados ao importar ficheiros SWIFT "
-"MT942. A biblioteca AqBanking oferece vários formatos de importação "
-"(chamados \"perfis\"), dos quais pode escolher um aqui."
+"MT942. A biblioteca AqBanking oferece vários formatos de importação ("
+"chamados \"perfis\"), dos quais pode escolher um aqui."
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:297
 msgid "Validation…\n"
@@ -18613,8 +18613,7 @@ msgstr "Validação…\n"
 #: gnucash/import-export/bi-import/dialog-bi-import.c:327
 #, c-format
 msgid "Row %d: no invoice ID in first row of import file.\n"
-msgstr ""
-"Linha %d: sem ID de factura na primeira linha do ficheiro a importar.\n"
+msgstr "Linha %d: sem ID de factura na primeira linha do ficheiro a importar.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:335
 #, c-format
@@ -18660,7 +18659,7 @@ msgstr "Linha %d, factura %s/%u: conta %s não é do tipo A/Receber.\n"
 #: gnucash/import-export/bi-import/dialog-bi-import.c:464
 #, c-format
 msgid "Row %d, invoice %s/%u: price not set.\n"
-msgstr "Linha %d, factura %s/%u: cotação não definida.\n"
+msgstr "Linha %d, factura %s/%u: preço não definido.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:533
 #, c-format
@@ -18870,8 +18869,8 @@ msgstr ""
 "será exportada uma vez. Aparecerá sob a primeira conta em que tenha uma "
 "parcela.\n"
 "\n"
-"O formato de saída de cotações/taxas é controlado pela preferência\n"
-"\"Números, data, hora -> Forçar amostragem de cotações em decimais\"\n"
+"O formato de saída de preços/taxas é controlado pela preferência\n"
+"\"Números, data, hora -> Forçar amostragem de preços em decimais\"\n"
 "\n"
 "Seleccione as configurações necessárias para o ficheiro e clique em Seguinte "
 "para continuar ou Cancelar para abortar a exportação.\n"
@@ -19137,24 +19136,24 @@ msgstr "_Estreitar esta coluna"
 #, c-format
 msgid "%d added price"
 msgid_plural "%d added prices"
-msgstr[0] "%d cotação adicionada"
-msgstr[1] "%d cotações adicionadas"
+msgstr[0] "%d preço adicionado"
+msgstr[1] "%d preços adicionados"
 
 #. Translators: This is a ngettext(3) message, %d is the number of duplicate prices
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1925
 #, c-format
 msgid "%d duplicate price"
 msgid_plural "%d duplicate prices"
-msgstr[0] "%d cotação duplicada"
-msgstr[1] "%d cotações duplicadas"
+msgstr[0] "%d preço duplicado"
+msgstr[1] "%d preços duplicados"
 
 #. Translators: This is a ngettext(3) message, %d is the number of replaced prices
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1930
 #, c-format
 msgid "%d replaced price"
 msgid_plural "%d replaced prices"
-msgstr[0] "%d cotação substituída"
-msgstr[1] "%d cotações substituídas"
+msgstr[0] "%d preço substituído"
+msgstr[1] "%d preços substituídos"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1935
 #, c-format
@@ -19166,7 +19165,7 @@ msgid ""
 "- %s\n"
 "- %s"
 msgstr ""
-"As cotações foram importadas do ficheiro \"%s\".\n"
+"Os preços foram importados do ficheiro \"%s\".\n"
 "\n"
 "Resumo da importação:\n"
 "- %s\n"
@@ -19182,7 +19181,7 @@ msgid ""
 "Error message:\n"
 "%s"
 msgstr ""
-"Ocorreu um erro inesperado ao criar as cotações. Por favor, relate como um "
+"Ocorreu um erro inesperado ao criar os preços. Por favor, relate como um "
 "erro.\n"
 "\n"
 "Mensagem de erro:\n"
@@ -19205,7 +19204,7 @@ msgid ""
 "Error message:\n"
 "%s"
 msgstr ""
-"Ocorreu um erro inesperado ao criar transacções. Por favor reporte como um "
+"Ocorreu um erro inesperado ao criar transacções. Por favor relate como um "
 "erro.\n"
 "\n"
 "Mensagem de erro:\n"
@@ -21467,7 +21466,7 @@ msgstr ""
 
 #: gnucash/report/options-utilities.scm:51
 msgid "Select a date to report on."
-msgstr "Seleccione uma data para reportar."
+msgstr "Seleccione uma data para relatar."
 
 #: gnucash/report/options-utilities.scm:57
 msgid "Start of reporting period."
@@ -21538,7 +21537,7 @@ msgstr ""
 #: gnucash/report/reports/standard/budget-income-statement.scm:70
 #: gnucash/report/reports/standard/income-statement.scm:57
 msgid "Report on these accounts, if display depth allows."
-msgstr "Reportar estas contas, se a profundidade o permitir."
+msgstr "Relatar estas contas, se a profundidade o permitir."
 
 #: gnucash/report/options-utilities.scm:129
 msgid "Select the currency to display the values of this report in."
@@ -21549,7 +21548,7 @@ msgstr "Seleccionar a moeda a usar para os valores deste relatório."
 #: gnucash/report/reports/standard/investment-lots.scm:337
 #: gnucash/report/reports/standard/price-scatter.scm:72
 msgid "The source of price information."
-msgstr "A origem da informação de cotações."
+msgstr "A origem da informação de preços."
 
 #: gnucash/report/options-utilities.scm:140
 msgid "Average cost of purchases weighted by volume"
@@ -21852,7 +21851,7 @@ msgstr "Moeda do relatório"
 #: gnucash/report/reports/standard/trial-balance.scm:124
 #: gnucash/report/trep-engine.scm:103
 msgid "Price Source"
-msgstr "Fonte da cotação"
+msgstr "Fonte do preço"
 
 #: gnucash/report/reports/example/average-balance.scm:45
 #: gnucash/report/reports/example/daily-reports.scm:59
@@ -23011,7 +23010,7 @@ msgstr "Mostrar listagens"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:45
 msgid "Show prices"
-msgstr "Mostrar cotações"
+msgstr "Mostrar preços"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:46
 msgid "Show number of shares"
@@ -23023,11 +23022,11 @@ msgstr "Método de cálculo base"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:48
 msgid "Set preference for price list data"
-msgstr "Definir preferência para dados da lista de cotações"
+msgstr "Definir preferência para dados da lista de preços"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:49
 msgid "How to report brokerage fees"
-msgstr "Como reportar taxas de corretagem"
+msgstr "Como relatar taxas de corretagem"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:81
 msgid "Basis calculation method."
@@ -23047,8 +23046,7 @@ msgstr "Último a entrar, primeiro a sair"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:88
 msgid "Prefer use of price editor pricing over transactions, where applicable."
-msgstr ""
-"Preferir o preçário do editor de cotações às transacções, onde aplicável."
+msgstr "Preferir o preçário do editor de preços às transacções, onde aplicável."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:93
 msgid "How to report commissions and other brokerage fees."
@@ -23085,7 +23083,7 @@ msgstr "O número de casas decimais a usar para números de acções."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:121
 msgid "Display share prices."
-msgstr "Mostrar cotações de acções."
+msgstr "Mostrar preços de acções."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:128
 #: gnucash/report/reports/standard/investment-lots.scm:145
@@ -23154,7 +23152,7 @@ msgid ""
 "price list."
 msgstr ""
 "* estes dados da mercadoria foram construídos usando preços de transacções "
-"em vez da lista de cotações."
+"em vez da lista de preços."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1154
 msgid ""
@@ -23164,7 +23162,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1159
 msgid "** this commodity has no price and a price of 1 has been used."
-msgstr "** esta mercadoria não tem cotação, foi usada uma cotação de 1."
+msgstr "** esta mercadoria não tem preço, foi usado um preço de 1."
 
 #: gnucash/report/reports/standard/balance-forecast.scm:35
 msgid "Balance Forecast"
@@ -25073,7 +25071,7 @@ msgstr "Data final"
 
 #: gnucash/report/reports/standard/investment-lots.scm:83
 msgid "Price source"
-msgstr "Fonte da cotação"
+msgstr "Fonte do preço"
 
 #: gnucash/report/reports/standard/investment-lots.scm:87
 msgid "Include only accounts with warnings"
@@ -26267,7 +26265,7 @@ msgstr "Portefólio de investimentos"
 
 #: gnucash/report/reports/standard/price-scatter.scm:42
 msgid "Price of Commodity"
-msgstr "Cotação de mercadoria"
+msgstr "Preço de mercadoria"
 
 #: gnucash/report/reports/standard/price-scatter.scm:44
 msgid "Invert prices"
@@ -26283,7 +26281,7 @@ msgstr "Cor do marcador"
 
 #: gnucash/report/reports/standard/price-scatter.scm:67
 msgid "Calculate the price of this commodity."
-msgstr "Calcular a cotação desta mercadoria."
+msgstr "Calcular o preço desta mercadoria."
 
 #: gnucash/report/reports/standard/price-scatter.scm:74
 msgid "Weighted Average"
@@ -26323,55 +26321,55 @@ msgid ""
 "doesn't make sense to show prices for identical commodities."
 msgstr ""
 "A mercadoria que seleccionou e a moeda do relatório são idênticas. Não faz "
-"sentido mostrar cotações para mercadorias idênticas."
+"sentido mostrar preços para mercadorias idênticas."
 
 #: gnucash/report/reports/standard/price-scatter.scm:251
 msgid ""
 "There is no price information available for the selected commodities in the "
 "selected time period."
 msgstr ""
-"Não há informação de cotação disponível para as mercadorias seleccionadas no "
+"Não há informação de preço disponível para as mercadorias seleccionadas no "
 "período de tempo desejado."
 
 #: gnucash/report/reports/standard/price-scatter.scm:256
 msgid "Only one price"
-msgstr "Só uma cotação"
+msgstr "Só um preço"
 
 #: gnucash/report/reports/standard/price-scatter.scm:257
 msgid ""
 "There was only one single price found for the selected commodities in the "
 "selected time period. This doesn't give a useful plot."
 msgstr ""
-"Só se encontrou uma única cotação para as mercadorias seleccionadas no "
-"período de tempo desejado. Isto não resulta num gráfico útil."
+"Só se encontrou um único preço para as mercadorias seleccionadas no período "
+"de tempo desejado. Isto não resulta num gráfico útil."
 
 #: gnucash/report/reports/standard/price-scatter.scm:263
 msgid "All Prices equal"
-msgstr "Todas as cotações iguais"
+msgstr "Todos os preços iguais"
 
 #: gnucash/report/reports/standard/price-scatter.scm:264
 msgid ""
 "All the prices found are equal. This would result in a plot with one "
 "straight line. Unfortunately, the plotting tool can't handle that."
 msgstr ""
-"Todas as cotações encontradas são iguais. Isto resultaria num gráfico com "
-"uma linha recta. Infelizmente, a ferramenta de gráficos não suporta isso."
+"Todos os preços encontrados são iguais. Isto resultaria num gráfico com uma "
+"linha recta. Infelizmente, a ferramenta de gráficos não suporta isso."
 
 #: gnucash/report/reports/standard/price-scatter.scm:270
 msgid "All Prices at the same date"
-msgstr "Todas as cotações na mesma data"
+msgstr "Todos os preços na mesma data"
 
 #: gnucash/report/reports/standard/price-scatter.scm:271
 msgid ""
 "All the prices found are from the same date. This would result in a plot "
 "with one straight line. Unfortunately, the plotting tool can't handle that."
 msgstr ""
-"Todas as cotações encontradas têm a mesma data. Isto resultaria num gráfico "
+"Todos os preços encontrados têm a mesma data. Isto resultaria num gráfico "
 "com uma linha recta. Infelizmente, a ferramenta de gráficos não suporta isso."
 
 #: gnucash/report/reports/standard/price-scatter.scm:303
 msgid "Price Scatterplot"
-msgstr "Gráfico de dispersão de cotações"
+msgstr "Gráfico de dispersão de preços"
 
 #: gnucash/report/reports/standard/receipt.scm:36
 #: gnucash/report/reports/standard/taxinvoice.scm:68
@@ -26613,7 +26611,7 @@ msgstr "Mostrar o nome do lote em que as acções estão?"
 #: gnucash/report/reports/standard/register.scm:379
 #: gnucash/report/trep-engine.scm:918
 msgid "Display the shares price?"
-msgstr "Mostrar a cotação das acções?"
+msgstr "Mostrar o preço das acções?"
 
 #: gnucash/report/reports/standard/register.scm:383
 #: gnucash/report/trep-engine.scm:966
@@ -26729,7 +26727,7 @@ msgstr "Mostrar número da tarefa"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:88
 msgid "Show net price"
-msgstr "Mostrar cotação líquida"
+msgstr "Mostrar preço líquido"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:89
 msgid "Invoice number next to title"
@@ -26797,7 +26795,7 @@ msgstr "Número de factura da tarefa?"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:145
 msgid "Show net price?"
-msgstr "Mostrar cotação líquida?"
+msgstr "Mostrar preço líquido?"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:164
 msgid "Name of a file containing a logo to be used on the report."
@@ -28436,11 +28434,11 @@ msgstr "Configurar transacções agendadas para amortização de um empréstimo"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:104
 msgid "_Price Database"
-msgstr "_Base de dados de cotações"
+msgstr "_Base de dados de preços"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:106
 msgid "View and edit the prices for stocks and mutual funds"
-msgstr "Veja e edite as cotações de acções e fundos mutualistas"
+msgstr "Veja e edite os preços de acções e fundos mutualistas"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:109
 msgid "_Security Editor"
@@ -28782,11 +28780,11 @@ msgstr "Importar transacções de um ficheiro CSV"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:16
 msgid "Import _Prices from a CSV file…"
-msgstr "Im_portar cotações de um ficheiro CSV…"
+msgstr "Im_portar preços de um ficheiro CSV…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:18
 msgid "Import Prices from a CSV file"
-msgstr "Importar cotações de um ficheiro CSV"
+msgstr "Importar preços de um ficheiro CSV"
 
 #: gnucash/ui/gnc-plugin-customer-import.ui:6
 msgid "Import _Customers & Vendors…"
@@ -29757,14 +29755,14 @@ msgstr ""
 
 #: libgnucash/app-utils/gnc-quotes.cpp:363
 msgid "Finance::Quote returned a quote with no price element."
-msgstr "Finance::Quote devolveu uma cotação sem elemento de preço."
+msgstr "O Finance::Quote devolveu uma cotação sem elemento de preço."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:366
 msgid ""
 "Finance::Quote returned a quote with a price that GnuCash was unable to "
 "covert to a number."
 msgstr ""
-"Finance::Quote devolveu uma cotação com um preço que o GnuCash não pôde "
+"O Finance::Quote devolveu uma cotação com um preço que o GnuCash não pôde "
 "converter em número."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:370
