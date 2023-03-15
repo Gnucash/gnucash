@@ -83,8 +83,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-14 14:28+0000\n"
-"Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
+"PO-Revision-Date: 2023-03-15 12:39+0000\n"
+"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/es/>\n"
 "Language: es\n"
@@ -25839,7 +25839,7 @@ msgstr "  Precio final: ~a~a el ~a"
 #: gnucash/report/reports/standard/investment-lots.scm:809
 #, scheme-format
 msgid " [~a]"
-msgstr ""
+msgstr " [~a]"
 
 #: gnucash/report/reports/standard/investment-lots.scm:813
 msgid "No price found"
@@ -30366,7 +30366,7 @@ msgstr "último: "
 #: libgnucash/app-utils/gnc-quotes.cpp:797
 msgctxt "Finance::Quote"
 msgid "nav: "
-msgstr ""
+msgstr "nav: "
 
 #. Translators: The quote is neither a last trade nor an NAV.
 #: libgnucash/app-utils/gnc-quotes.cpp:799
