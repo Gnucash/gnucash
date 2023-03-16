@@ -30,19 +30,6 @@
 #include <memory>
 #include <gtest/gtest.h>
 
-TEST (KvpValueTest, Replace_Frame)
-{
-    auto f1 = new KvpFrameImpl;
-    std::unique_ptr<KvpValueImpl> v1 {new KvpValueImpl {f1}};
-    auto f2 = new KvpFrameImpl;
-    EXPECT_EQ (f1, v1->replace_frame_nc (f2));
-    v1->set (5.2);
-    /*f1 and f2 should be deleted now*/
-    f1 = new KvpFrameImpl;
-    EXPECT_EQ (nullptr, v1->replace_frame_nc (f1));
-    delete f1;
-}
-
 TEST (KvpValueTest, Equality)
 {
     std::unique_ptr<KvpValueImpl> v1 {new KvpValueImpl { (int64_t)1}};

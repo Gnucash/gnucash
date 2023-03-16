@@ -101,22 +101,6 @@ struct KvpValueImpl
     ~KvpValueImpl() noexcept;
 
     /**
-     * Replaces the frame within this KvpValueImpl.
-     *
-     * If this KvpValueImpl doesn't contain a KvpFrame, nullptr
-     * is returned. Otherwise, the old KvpFrame * is returned.
-     */
-    KvpFrame * replace_frame_nc (KvpFrame *) noexcept;
-
-    /**
-     * Replaces the glist within this KvpValueImpl.
-     *
-     * If this KvpValueImpl doesn't contain a GList, nullptr
-     * is returned. Otherwise, the old GList * is returned.
-     */
-    GList * replace_glist_nc (GList *) noexcept;
-
-    /**
      * Adds another value to this KvpValueImpl.
      *
      * If this KvpValueImpl represents a collection (GList),
