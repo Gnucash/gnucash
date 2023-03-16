@@ -102,6 +102,7 @@ function(gnc_add_test_with_guile _TARGET _SOURCE_FILES TEST_INCLUDE_VAR_NAME TES
   gnc_add_test(${_TARGET} "${_SOURCE_FILES}" "${TEST_INCLUDE_VAR_NAME}" "${TEST_LIBS_VAR_NAME}"
     "${GUILE_ENV};${ARGN}"
   )
+  set_property(TEST ${_TARGET} APPEND PROPERTY LABELS guile)
 endfunction()
 
 
