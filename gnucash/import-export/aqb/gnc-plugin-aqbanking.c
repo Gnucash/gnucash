@@ -605,11 +605,14 @@ gnc_plugin_ab_cmd_view_logwindow (GSimpleAction *simple,
                                   GVariant *parameter,
                                   gpointer user_data)
 {
-    GVariant *state;
+    GVariant *state = g_action_get_state (G_ACTION(simple));
+    gboolean toggle = g_variant_get_boolean (state);
+    g_variant_unref (state);
 
-    state = g_action_get_state (G_ACTION(simple));
+    gboolean new_toggle = !toggle;
+    g_action_change_state (G_ACTION(simple), g_variant_new_boolean (new_toggle));
 
-    if (g_variant_get_boolean (state))
+    if (new_toggle)
     {
         if (!gnc_GWEN_Gui_show_dialog())
         {
@@ -621,7 +624,6 @@ gnc_plugin_ab_cmd_view_logwindow (GSimpleAction *simple,
     {
         gnc_GWEN_Gui_hide_dialog();
     }
-    g_variant_unref (state);
 }
 
 static void
