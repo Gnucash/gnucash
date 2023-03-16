@@ -1342,6 +1342,12 @@ xaccFreeAccount (Account *acc)
     priv = GET_PRIVATE(acc);
     qof_event_gen (&acc->inst, QOF_EVENT_DESTROY, NULL);
 
+    /* Otherwise the lists below get munged while we're iterating
+     * them, possibly crashing.
+     */
+    if (!qof_instance_get_destroying (acc))
+            qof_instance_set_destroying(acc, TRUE);
+
     if (priv->children)
     {
         PERR (" instead of calling xaccFreeAccount(), please call\n"

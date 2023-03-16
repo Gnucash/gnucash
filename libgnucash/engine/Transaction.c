@@ -2924,7 +2924,8 @@ static void
 xaccTransScrubGainsDate (Transaction *trans)
 {
     SplitList *node;
-    for (node = trans->splits; node; node = node->next)
+    SplitList *splits_copy = g_list_copy(trans->splits);
+    for (node = splits_copy; node; node = node->next)
     {
         Split *s = node->data;
 
@@ -2943,6 +2944,7 @@ xaccTransScrubGainsDate (Transaction *trans)
             FOR_EACH_SPLIT(trans, s->gains &= ~GAINS_STATUS_DATE_DIRTY);
         }
     }
+    g_list_free(splits_copy);
 }
 
 /* ============================================================== */
