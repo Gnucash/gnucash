@@ -84,7 +84,10 @@ geturl( FileAccessWindow* faw )
     {
         path = gtk_file_chooser_get_filename (faw->fileChooser);
         if ( !path ) /* file protocol was chosen but no filename was set */
+        {
+            g_free (type);
             return NULL;
+        }
     }
     else                    /* db protocol was chosen */
     {
