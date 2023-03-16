@@ -194,6 +194,10 @@ typedef struct
  */
 GList *gnc_list_all_paths (void);
 
+gboolean gnc_filename_is_backup (const char *filename);
+
+gboolean gnc_filename_is_datafile (const char *filename);
+
 #ifdef __cplusplus
 }
 #endif

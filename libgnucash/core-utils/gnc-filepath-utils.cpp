@@ -66,6 +66,7 @@
 #include "gnc-locale-utils.hpp"
 #include <boost/filesystem.hpp>
 #include <boost/locale.hpp>
+#include <regex>
 #include <iostream>
 #include <numeric>
 
@@ -1324,6 +1325,23 @@ gnc_list_all_paths (void)
         return g_list_prepend (a, ep);
     };
     return std::accumulate (paths.rbegin(), paths.rend(), (GList*) nullptr, accum);
+}
+
+static const std::regex
+backup_regex (".*[.](?:xac|gnucash)[.][0-9]{14}[.](?:xac|gnucash)$");
+
+gboolean gnc_filename_is_backup (const char *filename)
+{
+    return std::regex_match (filename, backup_regex);
+}
+
+static const std::regex
+datafile_regex (".*[.](?:xac|gnucash)$");
+
+gboolean gnc_filename_is_datafile (const char *filename)
+{
+    return !gnc_filename_is_backup (filename) &&
+        std::regex_match (filename, datafile_regex);
 }
 
 /* =============================== END OF FILE ========================== */
