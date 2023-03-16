@@ -14,8 +14,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-12 13:53+0000\n"
-"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"PO-Revision-Date: 2023-03-16 17:29+0000\n"
+"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hu/>\n"
 "Language: hu\n"
@@ -5083,9 +5083,8 @@ msgstr "Auto-törlés"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:251
 #: gnucash/ui/gnc-plugin-page-register.ui:250
 #: gnucash/ui/gnc-plugin-page-register.ui:714
-#, fuzzy
 msgid "Stock Assistant"
-msgstr "Részvénykifejtés részletei"
+msgstr "Részvény segéd"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:660
 #: gnucash/gnome/gnc-plugin-page-register.c:1904
@@ -5550,7 +5549,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:924
 msgid "You cannot cut this split."
-msgstr "Ez a kifejtés nem vágható ki."
+msgstr "Ez a felosztás nem vágható ki."
 
 #: gnucash/gnome/gnc-split-reg.c:925
 msgid ""
@@ -10525,19 +10524,14 @@ msgstr "Egyeztetett felosztással rendelkező tranzakció kivágása"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:105
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:228
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to delete a transaction that "
-#| "contains reconciled splits. Doing so will throw off the reconciled value "
-#| "of the register and can make it hard to perform future reconciliations."
 msgid ""
 "This dialog is presented before allowing you to cut a transaction that "
 "contains reconciled splits. Doing so will throw off the reconciled value of "
 "the register and can make it hard to perform future reconciliations."
 msgstr ""
-"E dialógus megjelenik, mielőtt engedélyezik olyan tranzakció törlését, ami "
-"egyeztetett kifejtéseket tartalmaz. Ha így tesznek, eldobják a regiszter "
-"egyeztetett értékét, és megnehezítik a jövőbeli egyeztetéseket."
+"Ez az ablak azelőtt jelenik meg, mielőtt kivágna egy egyeztetett "
+"felosztásokat tartalmazó tranzakciót. Ha így tesz, azzal felborítja a "
+"regiszter egyeztetett egyenlegét, és megnehezíti a jövőbeli egyeztetéseket."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:109
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:232
@@ -10552,7 +10546,7 @@ msgstr "E dialógus megjelenik, mielőtt engedélyezik egy tranzakció törlés�
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:114
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:237
 msgid "Delete a transaction with reconciled splits"
-msgstr "Töröljük a tranzakciót egyeztetett felosztással"
+msgstr "Egyeztetett felosztásokat tartalmazó tranzakció törlése"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:115
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:238
@@ -10561,9 +10555,9 @@ msgid ""
 "contains reconciled splits. Doing so will throw off the reconciled value of "
 "the register and can make it hard to perform future reconciliations."
 msgstr ""
-"E dialógus megjelenik, mielőtt engedélyezik olyan tranzakció törlését, ami "
-"egyeztetett kifejtéseket tartalmaz. Ha így tesznek, eldobják a regiszter "
-"egyeztetett értékét, és megnehezítik a jövőbeli egyeztetéseket."
+"Ez az ablak azelőtt jelenik meg, mielőtt törölne egy egyeztetett "
+"felosztásokat tartalmazó tranzakciót. Ha így tesz, azzal felborítja a "
+"regiszter egyeztetett egyenlegét, és megnehezíti a jövőbeli egyeztetéseket."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:119
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:242
@@ -11378,9 +11372,8 @@ msgid "Transaction Import Assistant"
 msgstr "Tranzakció-jelentés"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:520
-#, fuzzy
 msgid "Multi-split"
-msgstr "Többsoros"
+msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:524
 msgid ""
@@ -12415,7 +12408,7 @@ msgid ""
 "the details of that payment here. Otherwise, just click \"Next\"."
 msgstr ""
 "Ha a felaprózás során pénzbeli kifizetésben is részesült, alább megadhatja "
-"az összeget. Egyébként kattintson a \"Következő\" gombra."
+"ennek összegét. Egyébként kattintson a \"Következő\" gombra."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:279
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:463
@@ -12728,9 +12721,10 @@ msgstr ""
 
 #: gnucash/gtkbuilder/business-prefs.glade:84
 msgid "_Accumulate splits on post"
-msgstr "H_almozza a rész-könyveléseket rögzítéskor"
+msgstr ""
 
 #: gnucash/gtkbuilder/business-prefs.glade:90
+#, fuzzy
 msgid ""
 "Whether multiple entries in an invoice which transfer to the same account "
 "should be accumulated into a single split by default. This setting can be "
@@ -14234,12 +14228,12 @@ msgstr "Egyeztetett"
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:374
 msgid "Imported transaction's first split"
-msgstr "Importált tranzakciók első kifejtése"
+msgstr "Importált tranzakciók első felosztása"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:408
 msgid "Potential splits matching the selected transaction"
-msgstr "A kijelölttel egyező lehetséges osztások"
+msgstr "A kijelölt tranzakcióval vélhetően egyező felosztások"
 
 #: gnucash/gtkbuilder/dialog-import.glade:453
 msgid ""
@@ -14362,10 +14356,9 @@ msgid "_Notes"
 msgstr "_Megjegyzések"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1022
-#, fuzzy
 msgid ""
 "List of downloaded transactions (source split and matched information shown)"
-msgstr "Letöltött tranzakciólista (forrásosztás megjelenítve)"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-import.glade:1064
 #, fuzzy
@@ -15941,11 +15934,11 @@ msgstr "Felosztás jegyzete"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:1191
 msgid "Splits Amount"
-msgstr "Részkönyvelés összeg"
+msgstr "Felosztások összege"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:1206
 msgid "Splits Account"
-msgstr "Részkönyvelés számla"
+msgstr "Felosztások számlája"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:1359
 msgid "Custom format"
@@ -16259,7 +16252,7 @@ msgstr "Automatikus létrehozás"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1032
 msgid "Conditional on splits not having variables"
-msgstr "Függetlenül attól,hogy a tételeknek nincsenek változóik"
+msgstr "Amennyiben a felosztásoknak nincsenek változóik"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1103
 msgid "Notify me when created"
@@ -17395,10 +17388,8 @@ msgid "_Ending Balance"
 msgstr "Záró_egyenleg"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:181
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "_Review cleared splits"
-msgstr "A létrehozott _tranzakciók ellenőrzése"
+msgstr "Elszámolt felosztások _áttekintése"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:185
 msgid "Select this option to open a register tab with newly cleared splits."
@@ -18658,9 +18649,8 @@ msgid "Memo-posted"
 msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:161
-#, fuzzy
 msgid "Accu-splits"
-msgstr "Többsoros"
+msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:194
 msgid "Import Bills or Invoices from csv"
@@ -19527,7 +19517,7 @@ msgstr ""
 
 #: gnucash/import-export/import-main-matcher.c:775
 msgid "Destination account for the auto-balance split."
-msgstr "Auto-kiegyenlítés kifejtés célszámlája."
+msgstr "Auto-kiegyenlítő felosztás célszámlája."
 
 #: gnucash/import-export/import-main-matcher.c:937
 #: gnucash/report/html-utilities.scm:309
@@ -19804,7 +19794,7 @@ msgstr "_Csere vagy rövidítés típusa"
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1176
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3314
 msgid "(split)"
-msgstr "(kifejtés)"
+msgstr "(felosztás)"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1369
 #, fuzzy
@@ -20605,19 +20595,14 @@ msgstr ""
 msgid ""
 "You are about to overwrite an existing split. Are you sure you want to do "
 "that?"
-msgstr "Létező kifejtést készül felülírni. Biztosan ezt akarja tenni?"
+msgstr "Létező felosztást készül felülírni. Biztos benne?"
 
 #: gnucash/register/ledger-core/split-register.c:949
-#, fuzzy
 msgid ""
 "This is the split anchoring this transaction to the register. You may not "
 "overwrite it from this register window. You may overwrite it if you navigate "
 "to a register that shows another side of this same transaction."
 msgstr ""
-"Ezen kifejtés horgonyozza le a tranzakciót a regiszterben. Nem törölhető "
-"ebből az ablakból. Az egész tranzakció törölhető az ablakból, vagy "
-"navigáljon a tranzakció másik oldalát mutató regiszterbe, és törölje a "
-"kifejtést abból a regiszterből."
 
 #: gnucash/register/ledger-core/split-register.c:1007
 msgid ""
@@ -20760,7 +20745,7 @@ msgstr "Kiegyenlítés _kézi úton"
 
 #: gnucash/register/ledger-core/split-register-control.c:140
 msgid "Let GnuCash _add an adjusting split"
-msgstr "Bővítse GnuC_ash kiegyenlítő kifejtéssel"
+msgstr ""
 
 #: gnucash/register/ledger-core/split-register-control.c:145
 msgid "Adjust current account _split total"
@@ -20781,7 +20766,8 @@ msgstr ""
 
 #: gnucash/register/ledger-core/split-register-control.c:1346
 msgid "You need to select a split in order to modify its exchange rate."
-msgstr "A tranzakciók kibontása szükséges az árfolyamok változtatásához."
+msgstr ""
+"Ha meg akarja változtatni egy felosztás árfolyamát, akkor előbb válassza ki."
 
 #: gnucash/register/ledger-core/split-register-control.c:1361
 #: gnucash/register/ledger-core/split-register-control.c:1436
@@ -20982,43 +20968,45 @@ msgid "Scheduled"
 msgstr "Ütemezett"
 
 #: gnucash/register/ledger-core/split-register-model.c:1058
-#, fuzzy
 msgid ""
 "Enter a reference, such as an invoice or check number, common to all entry "
 "lines (splits)"
-msgstr "Tranzakció hivatkozásának bevitele, például a számla- vagy csekkszám"
+msgstr ""
+"Adjon meg egy hivatkozást, például egy számla- vagy csekkszámot, amely "
+"minden felosztásra vonatkozik"
 
 #: gnucash/register/ledger-core/split-register-model.c:1060
-#, fuzzy
 msgid ""
 "Enter a reference, such as an invoice or check number, unique to each entry "
 "line (split)"
-msgstr "Tranzakció hivatkozásának bevitele, például a számla- vagy csekkszám"
+msgstr ""
+"Adjon meg egy hivatkozást, például egy számla- vagy csekkszámot, minden "
+"felosztáshoz külön-külön"
 
 #: gnucash/register/ledger-core/split-register-model.c:1065
-#, fuzzy
 msgid ""
 "Enter a reference, such as a check number, common to all entry lines (splits)"
-msgstr "Tranzakció hivatkozásának bevitele, például a számla- vagy csekkszám"
+msgstr ""
+"Adjon meg egy hivatkozást, például egy csekkszámot, amely minden felosztásra "
+"vonatkozik"
 
 #: gnucash/register/ledger-core/split-register-model.c:1067
-#, fuzzy
 msgid ""
 "Enter a reference, such as a check number, unique to each entry line (split)"
-msgstr "Tranzakció hivatkozásának bevitele, például a számla- vagy csekkszám"
+msgstr ""
+"Adjon meg egy hivatkozást, például egy csekkszámot, minden felosztáshoz "
+"külön-külön"
 
 #: gnucash/register/ledger-core/split-register-model.c:1088
-#, fuzzy
 msgid ""
 "Enter a transaction reference, such as an invoice or check number, common to "
 "all entry lines (splits)"
-msgstr "Tranzakció hivatkozásának bevitele, például a számla- vagy csekkszám"
+msgstr ""
 
 #: gnucash/register/ledger-core/split-register-model.c:1092
-#, fuzzy
 msgid ""
 "Enter a transaction reference that will be common to all entry lines (splits)"
-msgstr "Tranzakció hivatkozásának bevitele, például a számla- vagy csekkszám"
+msgstr ""
 
 #: gnucash/register/ledger-core/split-register-model.c:1128
 msgid "Enter the name of the Customer"
@@ -21075,15 +21063,15 @@ msgstr "Forrás-számla megadása vagy kiválasztása listából"
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
 msgstr ""
-"E tranzakciónak több kifejtése van. Nyomja meg a 'Kibontás' gombot hogy "
-"mindent lássa"
+"Ennek a tranzakciónak több felosztása is van, a „Felosztás” gombbal "
+"megjelenítheti őket"
 
 #: gnucash/register/ledger-core/split-register-model.c:1568
 msgid ""
 "This transaction is a stock split; press the Split button to see details"
 msgstr ""
-"Ez a tranzakció részvényfelosztás; a részletek megtekintéséhez nyomja meg a "
-"„Kibontás” gombot"
+"Ez a tranzakció egy részvényfelaprózás; a részletek megtekintéséhez nyomja "
+"meg a „Felosztás” gombot"
 
 #: gnucash/register/ledger-core/split-register-model.c:2086
 #, c-format
@@ -21099,9 +21087,8 @@ msgstr ""
 "'%s'"
 
 #: gnucash/register/ledger-core/split-register-model.c:2199
-#, fuzzy
 msgid "Change transaction containing a reconciled split?"
-msgstr "Egyeztetett kifejtés megváltoztatása?"
+msgstr "Biztos megváltoztatja az egyeztetett felosztást tartalmazó tranzakciót?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2201
 #, c-format
@@ -21123,14 +21110,11 @@ msgid "Change reconciled split?"
 msgstr "Egyeztetett felosztás megváltoztatása?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2213
-#, fuzzy
 msgid ""
 "You are about to change a protected field of a reconciled split. If you "
 "continue editing this split it will be unreconciled. This might make future "
 "reconciliation difficult! Continue with this change?"
 msgstr ""
-"Egyeztetett kifejtés megváltoztatására készül. Ezzel megnehezítheti a "
-"későbbi egyeztetést! Folytatás e változtatással?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2235
 msgid "Chan_ge Split"
@@ -27925,7 +27909,7 @@ msgid ""
 "Display the other account name? (if this is a split transaction, this "
 "parameter is guessed)."
 msgstr ""
-"A másik számla megjelenítése? (ha ez egy osztott tranzakció, akkor ezt a "
+"A másik számla megjelenítése? (ha ez egy felosztott tranzakció, akkor ezt a "
 "paramétert kitaláljuk)."
 
 #: gnucash/report/trep-engine.scm:956
@@ -27974,7 +27958,7 @@ msgstr "Egyenleg"
 
 #: gnucash/report/trep-engine.scm:1553
 msgid "Split Transaction"
-msgstr "Tranzakció osztása"
+msgstr "Tranzakció felosztása"
 
 #: gnucash/report/trep-engine.scm:1801
 msgid "CSV disabled for double column amounts"
@@ -30901,11 +30885,10 @@ msgid "Looking for imbalances in account %s: %u of %u"
 msgstr ""
 
 #: libgnucash/engine/Split.c:1636
-#, fuzzy
 msgctxt ""
 "Displayed account code of the other account in a multi-split transaction"
 msgid "Split"
-msgstr "Kifejtés"
+msgstr "Felosztás"
 
 #: libgnucash/engine/Transaction.c:2733
 msgid "Voided transaction"
