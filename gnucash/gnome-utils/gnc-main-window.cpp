@@ -536,6 +536,106 @@ cleanup:
     g_free(page_group);
 }
 
+static bool
+intersects_some_monitor(const GdkRectangle& rect)
+{
+    auto display = gdk_display_get_default();
+    if (!display)
+        return false;
+
+    int n = gdk_display_get_n_monitors(display);
+    for (int i = 0; i < n; ++i)
+    {
+        auto monitor = gdk_display_get_monitor(display, i);
+        GdkRectangle monitor_geometry;
+        gdk_monitor_get_geometry(monitor, &monitor_geometry);
+        DEBUG("Monitor %d: position (%d,%d), size %dx%d\n", i,
+                        monitor_geometry.x, monitor_geometry.y,
+                        monitor_geometry.width, monitor_geometry.height);
+        if (gdk_rectangle_intersect(&rect, &monitor_geometry, nullptr))
+            return true;
+    }
+
+    return false;
+}
+
+static void
+set_window_geometry(GncMainWindow *window, GncMainWindowSaveData *data, gchar *window_group)
+{
+    gsize length;
+    GError *error = nullptr;
+    gint *geom = g_key_file_get_integer_list(data->key_file, window_group,
+                                       WINDOW_GEOMETRY, &length, &error);
+    if (error)
+    {
+        g_warning("error reading group %s key %s: %s",
+                  window_group, WINDOW_GEOMETRY, error->message);
+        g_error_free(error);
+        error = nullptr;
+    }
+    else if (length != 2)
+    {
+        g_warning("invalid number of values for group %s key %s",
+                  window_group, WINDOW_GEOMETRY);
+    }
+    else
+    {
+        gtk_window_resize(GTK_WINDOW(window), geom[0], geom[1]);
+        DEBUG("window (%p) size %dx%d", window, geom[0], geom[1]);
+    }
+
+    /* keep the geometry for a test whether the windows position
+       is offscreen */
+    gint *pos = g_key_file_get_integer_list(data->key_file, window_group,
+                                      WINDOW_POSITION, &length, &error);
+    if (error)
+    {
+        g_warning("error reading group %s key %s: %s",
+                  window_group, WINDOW_POSITION, error->message);
+        g_error_free(error);
+        error = nullptr;
+    }
+    else if (length != 2)
+    {
+        g_warning("invalid number of values for group %s key %s",
+                  window_group, WINDOW_POSITION);
+    }
+    else if (pos)
+    {
+        // Prevent restoring coordinates if this would move the window off-screen
+        // If missing geom, use height=width=1 to make the intersection check work
+        GdkRectangle geometry{pos[0], pos[1], geom ? geom[0] : 1, geom ? geom[1] : 1};
+        if (intersects_some_monitor(geometry))
+        {
+            gtk_window_move(GTK_WINDOW(window), geometry.x, geometry.y);
+            auto priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+            priv->pos[0] = geometry.x;
+            priv->pos[1] = geometry.y;
+            DEBUG("window (%p) position (%d,%d)", window, geometry.x, geometry.y);
+        }
+        else
+        {
+            DEBUG("position (%d,%d), size %dx%d is offscreen; will not move",
+                  geometry.x, geometry.y, geometry.width, geometry.height);
+        }
+    }
+    g_free(geom);
+    g_free(pos);
+
+    gboolean max = g_key_file_get_boolean(data->key_file, window_group,
+                                 WINDOW_MAXIMIZED, &error);
+    if (error)
+    {
+        g_warning("error reading group %s key %s: %s",
+                  window_group, WINDOW_MAXIMIZED, error->message);
+        g_error_free(error);
+        error = nullptr;
+    }
+    else if (max)
+    {
+        gtk_window_maximize(GTK_WINDOW(window));
+    }
+}
 
 /** Restore all the pages in a given window.  This function restores
  *  all the window specific attributes, then calls a helper function
@@ -550,17 +650,15 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
 {
     GncMainWindowPrivate *priv;
     GAction *action;
-    gint *pos, *geom, *order;
+    gint *order;
     gsize length;
-    gboolean max;
-    gchar *window_group;
     gsize page_start, page_count, i;
     GError *error = nullptr;
 
     /* Setup */
     ENTER("window %p, data %p (key file %p, window %d)",
           window, data, data->key_file, data->window_num);
-    window_group = g_strdup_printf(WINDOW_STRING, data->window_num + 1);
+    gchar *window_group = g_strdup_printf(WINDOW_STRING, data->window_num + 1);
 
     /* Deal with the uncommon case that the state file defines a window
      * but no pages. An example to get in such a situation can be found
@@ -619,83 +717,10 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
         window = gnc_main_window_new();
     }
 
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-
     /* Get the window coordinates, etc. */
-    geom = g_key_file_get_integer_list(data->key_file, window_group,
-                                       WINDOW_GEOMETRY, &length, &error);
-    if (error)
-    {
-        g_warning("error reading group %s key %s: %s",
-                  window_group, WINDOW_GEOMETRY, error->message);
-        g_error_free(error);
-        error = nullptr;
-    }
-    else if (length != 2)
-    {
-        g_warning("invalid number of values for group %s key %s",
-                  window_group, WINDOW_GEOMETRY);
-    }
-    else
-    {
-        gtk_window_resize(GTK_WINDOW(window), geom[0], geom[1]);
-        DEBUG("window (%p) size %dx%d", window, geom[0], geom[1]);
-    }
-    /* keep the geometry for a test whether the windows position
-       is offscreen */
+    set_window_geometry(window, data, window_group);
 
-    pos = g_key_file_get_integer_list(data->key_file, window_group,
-                                      WINDOW_POSITION, &length, &error);
-    if (error)
-    {
-        g_warning("error reading group %s key %s: %s",
-                  window_group, WINDOW_POSITION, error->message);
-        g_error_free(error);
-        error = nullptr;
-    }
-    else if (length != 2)
-    {
-        g_warning("invalid number of values for group %s key %s",
-                  window_group, WINDOW_POSITION);
-    }
-    /* Prevent restoring coordinates if this would move the window off-screen */
-    else if ((pos[0] + (geom ? geom[0] : 0) < 0) ||
-             (pos[0] > gdk_screen_width()) ||
-             (pos[1] + (geom ? geom[1] : 0) < 0) ||
-             (pos[1] > gdk_screen_height()))
-    {
-        DEBUG("position %dx%d, size%dx%d is offscreen; will not move",
-                pos[0], pos[1], geom ? geom[0] : 0, geom ? geom[1] : 0);
-    }
-    else
-    {
-        gtk_window_move(GTK_WINDOW(window), pos[0], pos[1]);
-        priv->pos[0] = pos[0];
-        priv->pos[1] = pos[1];
-        DEBUG("window (%p) position %dx%d", window, pos[0], pos[1]);
-    }
-    if (geom)
-    {
-        g_free(geom);
-    }
-    if (pos)
-    {
-        g_free(pos);
-    }
-
-    max = g_key_file_get_boolean(data->key_file, window_group,
-                                 WINDOW_MAXIMIZED, &error);
-    if (error)
-    {
-        g_warning("error reading group %s key %s: %s",
-                  window_group, WINDOW_MAXIMIZED, error->message);
-        g_error_free(error);
-        error = nullptr;
-    }
-    else if (max)
-    {
-        gtk_window_maximize(GTK_WINDOW(window));
-    }
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
     // need to add the accelerator keys
     gnc_add_accelerator_keys_for_menu (GTK_WIDGET(priv->menubar), priv->accel_group);
@@ -980,7 +1005,7 @@ gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
         gint *pos = priv->pos;
         g_key_file_set_integer_list(data->key_file, window_group,
                                     WINDOW_POSITION, &pos[0], 2);
-        DEBUG("window minimized (%p) position %dx%d", window, pos[0], pos[1]);
+        DEBUG("window minimized (%p) position (%d,%d)", window, pos[0], pos[1]);
     }
     else
         g_key_file_set_integer_list(data->key_file, window_group,
@@ -989,7 +1014,7 @@ gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
                                 WINDOW_GEOMETRY, &coords[2], 2);
     g_key_file_set_boolean(data->key_file, window_group,
                            WINDOW_MAXIMIZED, maximized);
-    DEBUG("window (%p) position %dx%d, size %dx%d, %s", window,  coords[0], coords[1],
+    DEBUG("window (%p) position (%d,%d), size %dx%d, %s", window,  coords[0], coords[1],
           coords[2], coords[3],
           maximized ? "maximized" : "not maximized");
 
