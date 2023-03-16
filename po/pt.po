@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-15 05:52+0000\n"
+"PO-Revision-Date: 2023-03-16 08:16+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/pt/>\n"
@@ -19330,8 +19330,8 @@ msgid ""
 "From specified either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
-"Sem coluna \"De espaço de nome/De símbolo\" seleccionada nem \"De mercadoria"
-"\" especificada.\n"
+"Sem coluna \"De espaço de nome/De símbolo\" seleccionada nem \"De "
+"mercadoria\" especificada.\n"
 "Isto nunca deve acontecer. Por favor, relate como um erro."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:493
@@ -19415,8 +19415,7 @@ msgstr "O valor não parece conter um número válido."
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:158
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:163
 msgid "Value can't be parsed into a number using the selected currency format."
-msgstr ""
-"O valor não pode ser convertido num número usando a moeda seleccionada."
+msgstr "O valor não pode ser convertido num número usando a moeda seleccionada."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:124
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:220
@@ -19618,7 +19617,7 @@ msgstr "Morada de entrega 4"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:139
 msgid "Shipping Phone"
-msgstr "Contacto de envio"
+msgstr "Telefone de envio"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:140
 msgid "Shipping Fax"
@@ -20373,7 +20372,7 @@ msgstr "Data da transacção em falta."
 
 #: gnucash/python/init.py:18
 msgid "Welcome to GnuCash"
-msgstr "Boas vindas ao GnuCash"
+msgstr "Boas-vindas ao GnuCash"
 
 #: gnucash/python/init.py:103
 #: gnucash/report/reports/example/sample-report.scm:427
@@ -20383,7 +20382,7 @@ msgstr "Tenha um bom dia!"
 #: gnucash/python/init.py:118
 #, python-format
 msgid "Welcome to GnuCash %s Shell"
-msgstr "Boas vindas à consola do GnuCash %s"
+msgstr "Boas-vindas à consola do GnuCash %s"
 
 #: gnucash/register/ledger-core/gncEntryLedger.c:86
 #: gnucash/register/ledger-core/split-register.c:1979
@@ -20797,8 +20796,8 @@ msgid ""
 "You are about to overwrite an existing transaction. Are you sure you want to "
 "do that?"
 msgstr ""
-"Está prestes a sobrescrever uma transacção existente. Deseja realmente fazê-"
-"lo?"
+"Está prestes a sobrescrever uma transacção existente. Deseja realmente "
+"fazê-lo?"
 
 #: gnucash/register/ledger-core/split-register.c:2083
 msgid "Recalculate Transaction"
