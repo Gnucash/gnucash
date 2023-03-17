@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-16 08:16+0000\n"
+"PO-Revision-Date: 2023-03-17 08:15+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/pt/>\n"
@@ -21635,7 +21635,7 @@ msgstr "Alfabeticamente por nome de conta"
 
 #: gnucash/report/options-utilities.scm:196
 msgid "Numerical by descending amount"
-msgstr "Numérico por montante decrescente"
+msgstr "Numericamente por montante decrescente"
 
 #: gnucash/report/options-utilities.scm:212
 msgid "How to show the balances of parent accounts."
@@ -22042,7 +22042,7 @@ msgstr "Barras, empilhadas:"
 
 #: gnucash/report/reports/example/sample-graphs.scm:150
 msgid "Scatter:"
-msgstr "Pontos:"
+msgstr "Dispersão:"
 
 #: gnucash/report/reports/example/sample-report.scm:41
 #: gnucash/report/reports/standard/account-summary.scm:69
@@ -22354,12 +22354,12 @@ msgstr "Usar De - Para"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:152
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:182
 msgid "1st Est Tax Quarter (Jan 1 - Mar 31)"
-msgstr "1º trimestre EUA (1 Jan - 31 Mar)"
+msgstr "1º trimestre imp. est. (1 Jan - 31 Mar)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:153
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:183
 msgid "2nd Est Tax Quarter (Apr 1 - May 31)"
-msgstr "2º trimestre EUA (1 Abr - 31 Mai)"
+msgstr "2º trimestre imp. est. (1 Abr - 31 Mai)"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
@@ -22367,12 +22367,12 @@ msgstr "2º trimestre EUA (1 Abr - 31 Mai)"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:154
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:187
 msgid "3rd Est Tax Quarter (Jun 1 - Aug 31)"
-msgstr "3º trimestre EUA (1 Jun - 31 Ago)"
+msgstr "3º trimestre imp. est. (1 Jun - 31 Ago)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:188
 msgid "4th Est Tax Quarter (Sep 1 - Dec 31)"
-msgstr "4º trimestre EUA (1 Set - 31 Dez)"
+msgstr "4º trimestre imp. est. (1 Set - 31 Dez)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:189
@@ -22382,12 +22382,12 @@ msgstr "Último ano"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:190
 msgid "Last Yr 1st Est Tax Qtr (Jan 1 - Mar 31)"
-msgstr "1º trim. EUA últ. ano (1 Jan - 31 Mar)"
+msgstr "1º trim. imp. est. últ. ano (1 Jan - 31 Mar)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
 msgid "Last Yr 2nd Est Tax Qtr (Apr 1 - May 31)"
-msgstr "2º trim. EUA últ. ano (1 Abr - 31 Mai)"
+msgstr "2º trim. imp. est. últ. ano (1 Abr - 31 Mai)"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
@@ -22395,12 +22395,12 @@ msgstr "2º trim. EUA últ. ano (1 Abr - 31 Mai)"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:195
 msgid "Last Yr 3rd Est Tax Qtr (Jun 1 - Aug 31)"
-msgstr "3º trim. EUA últ. ano (1 Jun - 31 Ago)"
+msgstr "3º trim. imp. est. últ. ano (1 Jun - 31 Ago)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:160
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:196
 msgid "Last Yr 4th Est Tax Qtr (Sep 1 - Dec 31)"
-msgstr "4º trim. EUA últ. ano (1 Set - 31 Dez)"
+msgstr "4º trim. imp. est. últ. ano (1 Set - 31 Dez)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:163
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:199
@@ -23509,7 +23509,7 @@ msgstr "Mostrar o activo à esquerda, passivo e capital próprio à direita"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:225
 msgid "Sign: -$10.00"
-msgstr "Sinal: -$10.00"
+msgstr "Sinal: -10.00 €"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:226
 msgid "Brackets: ($10.00)"
