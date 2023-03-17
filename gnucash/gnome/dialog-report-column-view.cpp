@@ -531,6 +531,7 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data)
     if (r->contents_list.size() > static_cast<size_t>(r->contents_selected))
     {
         auto [id, wide, high] = r->contents_list[r->contents_selected];
+        (void) id; // unused
 
         gtk_spin_button_set_value(GTK_SPIN_BUTTON(colspin),
                                   static_cast<float>(wide));
