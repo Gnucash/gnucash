@@ -29,7 +29,19 @@
 #include "../qofquerycore-p.h"
 #include <gtest/gtest.h>
 
-TEST(qof_query_construct_predicate, string)
+
+class QofQueryCoreTest : public ::testing::Test {
+    protected:
+    QofQueryCoreTest() {
+        qof_query_core_init();
+    }
+    ~QofQueryCoreTest() {
+        qof_query_core_shutdown();
+    }
+};
+
+
+TEST_F(QofQueryCoreTest, construct_predicate_string)
 {
     query_string_def *pdata;
     pdata = (query_string_def*)qof_query_string_predicate(
@@ -45,7 +57,7 @@ TEST(qof_query_construct_predicate, string)
     EXPECT_EQ (FALSE,                   pdata->is_regex);
 }
 
-TEST(qof_query_construct_predicate, date)
+TEST_F(QofQueryCoreTest, construct_predicate_date)
 {
     query_date_def *pdata;
     pdata = (query_date_def*)qof_query_date_predicate(
@@ -59,7 +71,7 @@ TEST(qof_query_construct_predicate, date)
     EXPECT_EQ (1524772012,         pdata->date);
 }
 
-TEST(qof_query_construct_predicate, numeric)
+TEST_F(QofQueryCoreTest, construct_predicate_numeric)
 {
     query_numeric_def *pdata;
     pdata = (query_numeric_def*)qof_query_numeric_predicate(
@@ -73,7 +85,7 @@ TEST(qof_query_construct_predicate, numeric)
     EXPECT_TRUE (gnc_numeric_eq({ 500, 100 }, pdata->amount));
 }
 
-TEST(qof_query_construct_predicate, guid)
+TEST_F(QofQueryCoreTest, construct_predicate_guid)
 {
     GncGUID *guid = guid_new();
     GList *guidlist = g_list_prepend (NULL, guid);
@@ -88,7 +100,7 @@ TEST(qof_query_construct_predicate, guid)
     EXPECT_EQ (NULL,               pdata->guids->next);
 }
 
-TEST(qof_query_construct_predicate, int32)
+TEST_F(QofQueryCoreTest, construct_predicate_int32)
 {
     query_int32_def *pdata;
     pdata = (query_int32_def*)qof_query_int32_predicate(
@@ -100,7 +112,7 @@ TEST(qof_query_construct_predicate, int32)
     EXPECT_EQ (-613,              pdata->val);
 }
 
-TEST(qof_query_construct_predicate, int64)
+TEST_F(QofQueryCoreTest, query_construct_predicate_int64)
 {
     query_int64_def *pdata;
     pdata = (query_int64_def*)qof_query_int64_predicate(
@@ -112,7 +124,7 @@ TEST(qof_query_construct_predicate, int64)
     EXPECT_EQ (1000000,           pdata->val);
 }
 
-TEST(qof_query_construct_predicate, double)
+TEST_F(QofQueryCoreTest, construct_predicate_double)
 {
     query_double_def *pdata;
     pdata = (query_double_def*)qof_query_double_predicate(
@@ -124,7 +136,7 @@ TEST(qof_query_construct_predicate, double)
     EXPECT_EQ (10.05,              pdata->val);
 }
 
-TEST(qof_query_construct_predicate, boolean)
+TEST_F(QofQueryCoreTest, construct_predicate_boolean)
 {
     query_boolean_def *pdata;
     pdata = (query_boolean_def*)qof_query_boolean_predicate(
@@ -136,7 +148,7 @@ TEST(qof_query_construct_predicate, boolean)
     EXPECT_EQ (TRUE,                pdata->val);
 }
 
-TEST(qof_query_construct_predicate, char)
+TEST_F(QofQueryCoreTest, construct_predicate_char)
 {
     query_char_def *pdata;
     pdata = (query_char_def*)qof_query_char_predicate(
@@ -149,9 +161,8 @@ TEST(qof_query_construct_predicate, char)
     EXPECT_STREQ ("Foo",           pdata->char_list);
 }
 
-TEST(qof_query_core_predicate_copy, date)
+TEST_F(QofQueryCoreTest, date_predicate_copy)
 {
-    qof_query_core_init();
     query_date_def *pdata, *pdata2;
     pdata = (query_date_def*)qof_query_date_predicate(
         QOF_COMPARE_LT,
@@ -166,9 +177,8 @@ TEST(qof_query_core_predicate_copy, date)
     EXPECT_EQ (pdata2->date,            pdata->date);
 }
 
-TEST(qof_query_core_predicate_get_date, date)
+TEST_F(QofQueryCoreTest, date_predicate_get_date)
 {
-    qof_query_core_init();
     time64 date;
     QofQueryPredData *pdata;
     pdata = qof_query_date_predicate(
@@ -181,9 +191,8 @@ TEST(qof_query_core_predicate_get_date, date)
     EXPECT_EQ (1524772012, date);
 }
 
-TEST(qof_query_core_predicate_get_date, numeric)
+TEST_F(QofQueryCoreTest, numeric_predicate_get_date)
 {
-    qof_query_core_init();
     time64 date;
     QofQueryPredData *pdata;
     pdata = qof_query_numeric_predicate(

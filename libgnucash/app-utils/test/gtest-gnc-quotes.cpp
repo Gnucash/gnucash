@@ -128,6 +128,7 @@ protected:
     }
     ~GncQuotesTest() {
         gnc_clear_current_session();
+        qof_close();
     }
 
     QofSession* m_session;

@@ -26,9 +26,12 @@ struct PathTest : public testing::Test
     {
         if (m_prefix)
             g_free(m_prefix);
+        /* Clear the statically allocated exe string */
+        gnc_gbr_set_exe(NULL);
     }
     char *m_prefix;
 };
+
 
 TEST_F(PathTest, gnc_path_get_prefix)
 {
