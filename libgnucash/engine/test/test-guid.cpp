@@ -28,9 +28,13 @@
 #include <guid.hpp>
 #include <glib.h>
 
+#include <vector>
+#include <memory>
+
 #include <config.h>
 #include <ctype.h>
 #include "cashobjects.h"
+#include "qofid.h"
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
 #include "qof.h"
@@ -51,12 +55,16 @@ static void test_null_guid(void)
 }
 
 static void
+free_entry (QofInstance* inst, void* data)
+{
+    g_object_unref (G_OBJECT(inst));
+}
+
+static void
 run_test (void)
 {
-    int i;
     QofSession *sess;
     QofBook *book;
-    QofInstance *ent;
     QofCollection *col;
     QofIdType type;
     GncGUID guid;
@@ -68,12 +76,10 @@ run_test (void)
     col = qof_book_get_collection (book, "asdf");
     type = qof_collection_get_type (col);
 
-    for (i = 0; i < NENT; i++)
+    for (int i = 0; i < NENT; i++)
     {
-        ent = static_cast<QofInstance*>(g_object_new(QOF_TYPE_INSTANCE, NULL));
         guid_replace(&guid);
-        ent = static_cast<QofInstance*>(g_object_new(QOF_TYPE_INSTANCE,
-                                                     "guid", &guid, NULL));
+        auto ent = QOF_INSTANCE(g_object_new(QOF_TYPE_INSTANCE, "guid", &guid, NULL));
         do_test ((NULL == qof_collection_lookup_entity (col, &guid)),
                  "duplicate guid");
         ent->e_type = type;
@@ -83,6 +89,7 @@ run_test (void)
     }
 
     /* Make valgrind happy -- destroy the session. */
+    qof_collection_foreach(col, free_entry, nullptr);
     qof_session_destroy(sess);
 }
 

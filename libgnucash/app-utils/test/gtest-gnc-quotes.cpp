@@ -101,8 +101,7 @@ protected:
         gnc_commodity_set_quote_source(eur, source);
         gnc_commodity_commit_edit(eur);
         gnc_commodity_table_insert(comm_table, eur);
-        auto usd = gnc_commodity_new(m_book, "United States Dollar", "CURRENCY",
-                                  "USD", NULL, 100);
+        auto usd = gnc_commodity_new(m_book, "United States Dollar", "CURRENCY", "USD", NULL, 100);
         gnc_commodity_table_insert(comm_table, usd);
         source = gnc_quote_source_lookup_by_internal("yahoo_json");
         auto aapl = gnc_commodity_new(m_book, "Apple", "NASDAQ", "AAPL", NULL, 1);
@@ -111,8 +110,7 @@ protected:
         gnc_commodity_set_quote_source(aapl, source);
         gnc_commodity_commit_edit(aapl);
         gnc_commodity_table_insert(comm_table, aapl);
-        auto hpe = gnc_commodity_new(m_book, "Hewlett Packard", "NYSE", "HPE",
-                                  NULL, 1);
+        auto hpe = gnc_commodity_new(m_book, "Hewlett Packard", "NYSE", "HPE", NULL, 1);
         gnc_commodity_begin_edit(hpe);
         gnc_commodity_set_quote_flag(hpe, TRUE);
         gnc_commodity_set_quote_source(hpe, source);
@@ -124,7 +122,9 @@ protected:
         gnc_commodity_set_quote_source(fkcm, source);
         gnc_commodity_commit_edit(fkcm);
         gnc_commodity_table_insert(comm_table, fkcm);
-        gnc_quote_source_set_fq_installed("TestSuite", g_list_prepend(nullptr, (void*)"yahoo_json"));
+        GList *sources = g_list_prepend(nullptr, (void*)"yahoo_json");
+        gnc_quote_source_set_fq_installed("TestSuite", sources);
+        g_list_free(sources);
     }
     ~GncQuotesTest() {
         gnc_clear_current_session();
