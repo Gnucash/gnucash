@@ -55,6 +55,7 @@ TEST_F(QofQueryCoreTest, construct_predicate_string)
     EXPECT_EQ (QOF_STRING_MATCH_NORMAL, pdata->options);
     EXPECT_STREQ ("Test",               pdata->matchstring);
     EXPECT_EQ (FALSE,                   pdata->is_regex);
+    qof_query_core_predicate_free ((QofQueryPredData*) pdata);
 }
 
 TEST_F(QofQueryCoreTest, construct_predicate_date)
@@ -69,6 +70,7 @@ TEST_F(QofQueryCoreTest, construct_predicate_date)
     EXPECT_EQ (QOF_COMPARE_LT,     pdata->pd.how);
     EXPECT_EQ (QOF_DATE_MATCH_DAY, pdata->options);
     EXPECT_EQ (1524772012,         pdata->date);
+    qof_query_core_predicate_free ((QofQueryPredData*) pdata);
 }
 
 TEST_F(QofQueryCoreTest, construct_predicate_numeric)
@@ -83,6 +85,7 @@ TEST_F(QofQueryCoreTest, construct_predicate_numeric)
     EXPECT_EQ (QOF_COMPARE_LTE,          pdata->pd.how);
     EXPECT_EQ (QOF_NUMERIC_MATCH_CREDIT, pdata->options);
     EXPECT_TRUE (gnc_numeric_eq({ 500, 100 }, pdata->amount));
+    qof_query_core_predicate_free ((QofQueryPredData*) pdata);
 }
 
 TEST_F(QofQueryCoreTest, construct_predicate_guid)
@@ -98,6 +101,7 @@ TEST_F(QofQueryCoreTest, construct_predicate_guid)
     EXPECT_EQ (QOF_GUID_MATCH_ANY, pdata->options);
     EXPECT_TRUE (guid_equal (guid, (const GncGUID*)pdata->guids->data));
     EXPECT_EQ (NULL,               pdata->guids->next);
+    qof_query_core_predicate_free ((QofQueryPredData*) pdata);
 }
 
 TEST_F(QofQueryCoreTest, construct_predicate_int32)
@@ -110,6 +114,7 @@ TEST_F(QofQueryCoreTest, construct_predicate_int32)
     EXPECT_STREQ (QOF_TYPE_INT32, pdata->pd.type_name);
     EXPECT_EQ (QOF_COMPARE_EQUAL, pdata->pd.how);
     EXPECT_EQ (-613,              pdata->val);
+    qof_query_core_predicate_free ((QofQueryPredData*) pdata);
 }
 
 TEST_F(QofQueryCoreTest, query_construct_predicate_int64)
@@ -122,6 +127,7 @@ TEST_F(QofQueryCoreTest, query_construct_predicate_int64)
     EXPECT_STREQ (QOF_TYPE_INT64, pdata->pd.type_name);
     EXPECT_EQ (QOF_COMPARE_GT,    pdata->pd.how);
     EXPECT_EQ (1000000,           pdata->val);
+    qof_query_core_predicate_free ((QofQueryPredData*) pdata);
 }
 
 TEST_F(QofQueryCoreTest, construct_predicate_double)
@@ -134,6 +140,7 @@ TEST_F(QofQueryCoreTest, construct_predicate_double)
     EXPECT_STREQ (QOF_TYPE_DOUBLE, pdata->pd.type_name);
     EXPECT_EQ (QOF_COMPARE_GTE,    pdata->pd.how);
     EXPECT_EQ (10.05,              pdata->val);
+    qof_query_core_predicate_free ((QofQueryPredData*) pdata);
 }
 
 TEST_F(QofQueryCoreTest, construct_predicate_boolean)
@@ -146,6 +153,7 @@ TEST_F(QofQueryCoreTest, construct_predicate_boolean)
     EXPECT_STREQ (QOF_TYPE_BOOLEAN, pdata->pd.type_name);
     EXPECT_EQ (QOF_COMPARE_NEQ,     pdata->pd.how);
     EXPECT_EQ (TRUE,                pdata->val);
+    qof_query_core_predicate_free ((QofQueryPredData*) pdata);
 }
 
 TEST_F(QofQueryCoreTest, construct_predicate_char)
@@ -159,6 +167,7 @@ TEST_F(QofQueryCoreTest, construct_predicate_char)
     EXPECT_EQ (QOF_COMPARE_EQUAL,  pdata->pd.how);
     EXPECT_EQ (QOF_CHAR_MATCH_ANY, pdata->options);
     EXPECT_STREQ ("Foo",           pdata->char_list);
+    qof_query_core_predicate_free ((QofQueryPredData*) pdata);
 }
 
 TEST_F(QofQueryCoreTest, date_predicate_copy)
@@ -170,11 +179,12 @@ TEST_F(QofQueryCoreTest, date_predicate_copy)
         1524772012
     );
     pdata2 = (query_date_def*) qof_query_core_predicate_copy ((QofQueryPredData*)pdata);
-
     EXPECT_STREQ (pdata2->pd.type_name, pdata->pd.type_name);
     EXPECT_EQ (pdata2->pd.how,          pdata->pd.how);
     EXPECT_EQ (pdata2->options,         pdata->options);
     EXPECT_EQ (pdata2->date,            pdata->date);
+    qof_query_core_predicate_free ((QofQueryPredData*) pdata);
+    qof_query_core_predicate_free ((QofQueryPredData*) pdata2);
 }
 
 TEST_F(QofQueryCoreTest, date_predicate_get_date)
@@ -186,9 +196,9 @@ TEST_F(QofQueryCoreTest, date_predicate_get_date)
         QOF_DATE_MATCH_DAY,
         1524772012
     );
-
     EXPECT_TRUE (qof_query_date_predicate_get_date(pdata, &date));
     EXPECT_EQ (1524772012, date);
+    qof_query_core_predicate_free (pdata);
 }
 
 TEST_F(QofQueryCoreTest, numeric_predicate_get_date)
@@ -200,6 +210,6 @@ TEST_F(QofQueryCoreTest, numeric_predicate_get_date)
         QOF_NUMERIC_MATCH_CREDIT,
         { 1000, 100 }
     );
-
     EXPECT_FALSE (qof_query_date_predicate_get_date(pdata, &date));
+    qof_query_core_predicate_free (pdata);
 }

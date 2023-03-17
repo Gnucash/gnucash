@@ -79,7 +79,7 @@ test_lot_kvp ()
     g_assert_cmpstr (gnc_lot_get_notes (lot), ==, NULL);
 
     gnc_lot_destroy (lot);
-    qof_session_end (sess);
+    qof_session_destroy (sess);
 }
 
 static void
@@ -108,7 +108,7 @@ run_test (void)
      * XXX not implemented
      */
     success ("automatic lot scrubbing lightly tested and seem to work");
-    qof_session_end (sess);
+    qof_session_destroy (sess);
 
 }
 

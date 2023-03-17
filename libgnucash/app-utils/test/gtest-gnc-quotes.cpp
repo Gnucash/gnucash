@@ -270,6 +270,7 @@ TEST_F(GncQuotesTest, fetch_one_commodity)
                                   gnc_price_get_value(price)));
     EXPECT_STREQ("Finance::Quote", gnc_price_get_source_string(price));
     EXPECT_STREQ("last", gnc_price_get_typestr(price));
+    gnc_price_unref(price);
 }
 
 TEST_F(GncQuotesTest, fetch_one_currency)
@@ -300,6 +301,7 @@ TEST_F(GncQuotesTest, fetch_one_currency)
                                   gnc_price_get_value(price)));
     EXPECT_STREQ("Finance::Quote", gnc_price_get_source_string(price));
     EXPECT_STREQ("last", gnc_price_get_typestr(price));
+    gnc_price_unref(price);
 }
 
 TEST_F(GncQuotesTest, no_currency)
@@ -366,6 +368,7 @@ TEST_F(GncQuotesTest, no_date)
                                   gnc_price_get_value(price)));
     EXPECT_STREQ("Finance::Quote", gnc_price_get_source_string(price));
     EXPECT_STREQ("last", gnc_price_get_typestr(price));
+    gnc_price_unref(price);
 }
 
 TEST_F(GncQuotesTest, test_version)
