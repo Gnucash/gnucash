@@ -21,7 +21,6 @@ macro (gnc_add_swig_guile_command _target _out_var _output _input _include_dirs)
     set(outfile ${SW_CURR_BUILD_SOURCE_DIR}/${_output})
     set(${_out_var} ${outfile}) # This variable is set for convenience to use in the calling CMakeLists.txt
 
-
     set (DEFAULT_SWIG_GUILE_FLAGS
         -guile -Linkage module
         ${SWIG_ARGS}
@@ -41,6 +40,7 @@ macro (gnc_add_swig_guile_command _target _out_var _output _input _include_dirs)
         COMMAND ${SWIG_EXECUTABLE} ${GUILE_SWIG_FLAGS}  -o ${outfile} ${_input}
     )
     add_custom_target(${_target} DEPENDS ${outfile})
+    set_source_files_properties(${outfile} PROPERTIES COMPILE_FLAGS "-Wno-error")
 endmacro (gnc_add_swig_guile_command)
 
 
