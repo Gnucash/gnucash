@@ -34,9 +34,11 @@
 #define GNC_OPTION_HPP_
 
 #include <glib.h>
+#include <any>
 #include <string>
 #include <iostream>
 #include <iomanip>
+#include <type_traits>
 #include <variant>
 #include <memory>
 #include <tuple>
@@ -199,14 +201,13 @@ public:
  */
     std::istream& in_stream(std::istream& iss);
     friend GncOptionVariant& swig_get_option(GncOption*);
-    void set_widget_changed (void* cb) { m_widget_changed = cb; }
-    void* get_widget_changed () { return m_widget_changed; }
+    void set_widget_changed (std::any cb) { m_widget_changed = cb; }
+    std::any& get_widget_changed () { return m_widget_changed; }
 private:
     inline static const std::string c_empty_string{""};
     GncOptionVariantPtr m_option;
     GncOptionUIItemPtr m_ui_item{nullptr};
-/* This is a hack to reserve space for a Guile callback pointer. */
-    void* m_widget_changed{};
+    std::any m_widget_changed{};
 };
 
 inline bool

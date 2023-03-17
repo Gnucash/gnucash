@@ -42,6 +42,7 @@
 #include "gnc-session.h" // for gnc_get_current_session
 #include "gnc-ui.h" // for DF_MANUAL
 
+#include <any>
 #include <iostream>
 #include <sstream>
 
@@ -119,18 +120,39 @@ GncOptionsDialog::changed() noexcept
     set_sensitive(true);
 }
 
+struct SCMDeleter {
+  void operator()(SCM cb) { scm_gc_unprotect_object(cb); }
+};
+
+class SCMCallbackWrapper
+{
+    std::unique_ptr<scm_unused_struct, SCMDeleter> m_callback;
+public:
+    SCMCallbackWrapper(SCM cb) : m_callback{scm_gc_protect_object(cb)} {}
+    SCMCallbackWrapper(const SCMCallbackWrapper& cbw) : m_callback{scm_gc_protect_object(cbw.get())} {}
+    SCM get() const { return m_callback.get(); }
+};
+
 void
 gnc_option_changed_widget_cb(GtkWidget *widget, GncOption* option)
 {
     if (!option || option->is_internal()) return;
     auto ui_item{option->get_ui_item()};
     g_return_if_fail(ui_item);
-    auto widget_changed_cb{option->get_widget_changed()};
+    auto& widget_changed_cb{option->get_widget_changed()};
     auto gtk_ui_item{dynamic_cast<GncOptionGtkUIItem*>(ui_item)};
-    if (widget_changed_cb && gtk_ui_item)
+    if (widget_changed_cb.has_value() && gtk_ui_item)
     {
-        SCM widget_value{gtk_ui_item->get_widget_scm_value(*option)};
-        scm_call_1(static_cast<SCM>(widget_changed_cb), widget_value);
+        try
+        {
+            auto cb{std::any_cast<SCMCallbackWrapper>(widget_changed_cb)};
+            SCM widget_value{gtk_ui_item->get_widget_scm_value(*option)};
+            scm_call_1(cb.get(), widget_value);
+        }
+        catch(std::bad_any_cast& err)
+        {
+            PERR("Bad widget changed callback type %s", err.what());
+        }
     }
     const_cast<GncOptionUIItem*>(ui_item)->set_dirty(true);
     dialog_changed_internal(widget, true);

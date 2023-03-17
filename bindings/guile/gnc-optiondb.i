@@ -1614,7 +1614,27 @@ inline SCM return_scm_value(ValueType value)
 
 };
 
+%ignore SCMDeleter;
+%ignore SCMCalbackWrapper;
+
 %inline %{
+
+    struct SCMDeleter
+    {
+        void operator()(SCM cb) {
+            scm_gc_unprotect_object(cb);
+        }
+    };
+
+    class SCMCallbackWrapper
+    {
+        std::unique_ptr<scm_unused_struct, SCMDeleter> m_callback;
+    public:
+    SCMCallbackWrapper(SCM cb) : m_callback{scm_gc_protect_object(cb)} {}
+    SCMCallbackWrapper(const SCMCallbackWrapper& cbw) : m_callback{scm_gc_protect_object(cbw.get())} {}
+        SCM get() const { return m_callback.get(); }
+    };
+
 /**
  * Create a new complex boolean option and register it in the options database.
  *
@@ -1633,7 +1653,7 @@ void gnc_register_complex_boolean_option(GncOptionDBPtr& db,
 {
     GncOption option{section, name, key, doc_string, value,
             GncOptionUIType::BOOLEAN};
-    option.set_widget_changed (widget_changed_cb);
+    option.set_widget_changed(std::make_any<SCMCallbackWrapper>(widget_changed_cb));
     db->register_option(section, std::move(option));
 }
 
@@ -1666,7 +1686,7 @@ gnc_register_multichoice_callback_option(GncOptionDBPtr& db,
                   std::get<0>(choices.at(0)));
     GncOption option{GncOptionMultichoiceValue{section, name, key, doc_string,
                 defval.c_str(), std::move(choices)}};
-    option.set_widget_changed(widget_changed_cb);
+    option.set_widget_changed(std::make_any<SCMCallbackWrapper>(widget_changed_cb));
     db->register_option(section, std::move(option));
 }
 
