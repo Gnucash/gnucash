@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-16 17:29+0000\n"
+"PO-Revision-Date: 2023-03-17 13:39+0000\n"
 "Last-Translator: Zhaoquan Huang <zhaoquan2008@hotmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/program-beta/zh_Hans/>\n"
@@ -19871,7 +19871,7 @@ msgstr ">"
 #: gnucash/register/ledger-core/split-register.c:2546
 #: libgnucash/engine/Account.cpp:157 libgnucash/engine/Account.cpp:171
 msgid "Charge"
-msgstr "收款"
+msgstr "费用"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:47
 msgid "Income Account"
