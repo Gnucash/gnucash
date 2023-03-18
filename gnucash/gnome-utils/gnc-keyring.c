@@ -37,6 +37,8 @@
 #include <Security/Security.h>
 #include <CoreFoundation/CoreFoundation.h>
 #include <Carbon/Carbon.h>
+// SecKeychain* are deprecated
+#pragma GCC diagnostic warning "-Wdeprecated-declarations"
 #endif
 
 /* This static indicates the debugging module that this .o belongs to. */
