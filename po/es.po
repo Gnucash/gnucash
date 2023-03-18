@@ -14,6 +14,7 @@
 # Eduardo Malaspina <vaio0@swismail.com>, 2022.
 # Luis D. Lafaurie <luis.lafaurie@tecnativa.com>, 2022.
 # Guille Lopez <willelopz@gmail.com>, 2022, 2023.
+# gallegonovato <fran-carro@hotmail.es>, 2023.
 #
 #
 # ###############################################################################
@@ -13827,7 +13828,7 @@ msgstr "Escoja Diálogo del Titular"
 #: gnucash/gtkbuilder/dialog-commodities.glade:27
 #: gnucash/report/reports/standard/account-piecharts.scm:62
 msgid "Securities"
-msgstr "Garantías"
+msgstr "Títulos"
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:77
 msgid "Show National Currencies"

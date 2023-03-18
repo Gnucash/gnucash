@@ -26,6 +26,7 @@
 # Eric <hamburger1024@mailbox.org>, 2022.
 # 帅是我2 <a1173522112@163.com>, 2022.
 # Carlson Mak <hbmaak@gmail.com>, 2023.
+# Zhaoquan Huang <zhaoquan2008@hotmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"

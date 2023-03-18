@@ -10,14 +10,15 @@
 # Eric <alchemillatruth@purelymail.com>, 2022.
 # YTX <ytx.cash@gmail.com>, 2022.
 # J0kWang <lianjiefly@gmail.com>, 2023.
+# Zhaoquan Huang <zhaoquan2008@hotmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2023-03-04 06:39+0000\n"
-"Last-Translator: J0kWang <lianjiefly@gmail.com>\n"
+"PO-Revision-Date: 2023-03-16 17:41+0000\n"
+"Last-Translator: Zhaoquan Huang <zhaoquan2008@hotmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/glossary/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -98,7 +99,7 @@ msgstr "科目类型：负债"
 
 #. "-"
 msgid "account type: money-market"
-msgstr "科目类型：金融市场"
+msgstr "科目类型：货币市场"
 
 #. "-"
 msgid "account type: Mutual fund"

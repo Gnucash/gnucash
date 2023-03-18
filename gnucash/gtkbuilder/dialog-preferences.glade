@@ -1752,7 +1752,7 @@ many months before the current month</property>
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="pref/general/retain-type-days">
-                    <property name="label" translatable="yes">For</property>
+                    <property name="label" translatable="yes" context="keep">For</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>

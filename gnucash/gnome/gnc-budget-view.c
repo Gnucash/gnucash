@@ -1504,6 +1504,14 @@ The function will step through to only display the columns that are set
 void
 gnc_budget_view_refresh (GncBudgetView *budget_view)
 {
+    // Column identifiers
+    enum {
+        code_column         = 1,
+        description_column  = 2,
+        startPeriods_column = 3
+        // The Totals column will be after the periods columns.
+    };
+
     GncBudgetViewPrivate *priv;
     gint num_periods;
     gint num_periods_visible;
@@ -1546,13 +1554,13 @@ gnc_budget_view_refresh (GncBudgetView *budget_view)
     // set visibility of the account code columns
     code_col = gnc_tree_view_find_column_by_name (GNC_TREE_VIEW(priv->tree_view), "account-code");
     gtk_tree_view_column_set_visible (code_col, priv->show_account_code);
-    code_col = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->totals_tree_view), 1);
+    code_col = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->totals_tree_view), code_column);
     gtk_tree_view_column_set_visible (code_col, priv->show_account_code);
 
     // set visibility of the account description columns
     desc_col = gnc_tree_view_find_column_by_name (GNC_TREE_VIEW(priv->tree_view), "description");
     gtk_tree_view_column_set_visible (desc_col, priv->show_account_desc);
-    desc_col = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->totals_tree_view), 2);
+    desc_col = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->totals_tree_view), description_column);
     gtk_tree_view_column_set_visible (desc_col, priv->show_account_desc);
 
     /* If we're creating new columns to be appended to already existing
@@ -1564,7 +1572,8 @@ gnc_budget_view_refresh (GncBudgetView *budget_view)
         col = priv->total_col;
         gtk_tree_view_remove_column (GTK_TREE_VIEW(priv->tree_view), col);
         priv->total_col = NULL;
-        col = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->totals_tree_view), num_periods_visible + 1);
+        col = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->totals_tree_view),
+        	startPeriods_column + num_periods_visible);
         gtk_tree_view_remove_column (GTK_TREE_VIEW(priv->totals_tree_view), col);
     }
 
