@@ -223,12 +223,6 @@ GncOptionQofInstanceValue::reset_default_value()
     m_value = m_default_value;
 }
 
-static bool
-operator==(const GncGUID& l, const GncGUID& r)
-{
-    return guid_equal(&l, &r);
-}
-
 bool
 GncOptionQofInstanceValue::is_changed() const noexcept
 {

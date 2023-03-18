@@ -23,6 +23,7 @@
 \********************************************************************/
 
 #include "guid.hpp"
+#include "guid.h"
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
@@ -431,3 +432,9 @@ GUID::operator GncGUID () const noexcept
 }
 
 } // namespace gnc
+
+bool
+operator==(const GncGUID& lhs, const GncGUID& rhs)
+{
+    return gnc::GUID{lhs} == gnc::GUID{rhs};
+}
