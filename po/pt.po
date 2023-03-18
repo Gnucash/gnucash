@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-17 08:15+0000\n"
+"PO-Revision-Date: 2023-03-18 07:51+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/pt/>\n"
@@ -23611,8 +23611,8 @@ msgid ""
 msgstr ""
 "Se esta opção estiver activa, os sub-totais são mostrados dentro das "
 "quantias-mãe e, se a conta-mãe tiver a sua própria quantia, é mostrada na "
-"linha seguinte como conta-filho. Se desactivada, os sub-totais são mostrados "
-"abaixo dos grupos de contas-mãe e filho."
+"linha seguinte como conta-filho. Se não, os sub-totais são mostrados abaixo "
+"dos grupos de contas-mãe e filho."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:95
 msgid "Display amounts as hyperlinks"
@@ -23887,17 +23887,17 @@ msgstr "Primeiro período do orçamento"
 #: gnucash/report/reports/standard/budget-barchart.scm:66
 #: gnucash/report/reports/standard/budget.scm:108
 msgid "Previous budget period"
-msgstr "Anterior período do orçamento"
+msgstr "Período anterior do orçamento"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:67
 #: gnucash/report/reports/standard/budget.scm:109
 msgid "Current budget period"
-msgstr "Actual período do orçamento"
+msgstr "Período actual do orçamento"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:68
 #: gnucash/report/reports/standard/budget.scm:110
 msgid "Next budget period"
-msgstr "Próximo período do orçamento"
+msgstr "Período seguinte do orçamento"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:69
 #: gnucash/report/reports/standard/budget.scm:111
@@ -23966,8 +23966,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:62
 msgid "Select a budget period that begins the reporting range."
-msgstr ""
-"Seleccione um período do orçamento que inicia o intervalo do relatório."
+msgstr "Seleccione um período do orçamento que inicia o intervalo do relatório."
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:66
 msgid "Select a budget period that ends the reporting range."
@@ -24147,7 +24146,7 @@ msgstr "Mostrar a diferença como orçamento - actual."
 
 #: gnucash/report/reports/standard/budget.scm:57
 msgid "Use accumulated amounts"
-msgstr "Usar contas acumuladas"
+msgstr "Usar quantias acumuladas"
 
 #: gnucash/report/reports/standard/budget.scm:58
 msgid "Values are accumulated across periods."
@@ -24664,14 +24663,14 @@ msgstr "Outro nome de conta"
 #: gnucash/report/trep-engine.scm:884 gnucash/report/trep-engine.scm:914
 #: gnucash/report/trep-engine.scm:1046
 msgid "Use Full Other Account Name"
-msgstr "Usar nome completo de outra conta"
+msgstr "Usar nome completo da outra conta"
 
 #: gnucash/report/reports/standard/general-ledger.scm:77
 #: gnucash/report/reports/standard/general-ledger.scm:97
 #: gnucash/report/trep-engine.scm:217 gnucash/report/trep-engine.scm:888
 #: gnucash/report/trep-engine.scm:915 gnucash/report/trep-engine.scm:1043
 msgid "Other Account Code"
-msgstr "Outro código de conta"
+msgstr "Código da outra conta"
 
 #: gnucash/report/reports/standard/general-ledger.scm:84
 #: gnucash/report/reports/standard/general-ledger.scm:104
@@ -24772,7 +24771,7 @@ msgid ""
 "ASSET for taxes paid on expenses, and type LIABILITY for taxes collected on "
 "sales."
 msgstr ""
-"Nas Opções de relatório, terá de seleccionar as contas que terão os impostos "
+"Nas opções do relatório, terá de seleccionar as contas que terão os impostos "
 "de IVA cobrados ou pagos. Essas contas devem conter parcelas que documentam "
 "as quantias que são totalmente enviadas ou reclamadas pelas autoridades "
 "fiscais durante as devoluções periódicas de IVA. Essas contas devem ser do "
@@ -25884,7 +25883,7 @@ msgstr "Mostrar itens com saldo zero"
 #: gnucash/report/reports/standard/new-aging.scm:43
 #: gnucash/report/reports/standard/new-owner-report.scm:46
 msgid "Due or Post Date"
-msgstr "Data de emissão ou de prazo"
+msgstr "Data de emissão ou vencimento"
 
 #: gnucash/report/reports/standard/new-aging.scm:46
 msgid "Address Source"
@@ -25953,8 +25952,7 @@ msgstr ""
 #: gnucash/report/reports/standard/new-aging.scm:64
 msgid ""
 "A/Payable or A/Receivable accounts exist but have no suitable transactions."
-msgstr ""
-"Existem contas A/Receber ou A/Pagar, mas não têm transacções adequadas."
+msgstr "Existem contas A/Receber ou A/Pagar, mas não têm transacções adequadas."
 
 #: gnucash/report/reports/standard/new-aging.scm:89
 msgid "Sort companies by."
