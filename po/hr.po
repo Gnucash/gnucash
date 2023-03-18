@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-18 20:44+0000\n"
+"PO-Revision-Date: 2023-03-18 20:55+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hr/>\n"
@@ -7701,7 +7701,7 @@ msgstr "„%s” nedostaje"
 #: gnucash/gnome-utils/gnc-report-combo.c:318
 #, c-format
 msgid "Report with GUID '%s' is missing"
-msgstr ""
+msgstr "Izvještaj s globalnim jedinstvenim identifikatorom „%s” nedostaje"
 
 #: gnucash/gnome-utils/gnc-splash.c:113
 msgid "Loading…"
@@ -29719,31 +29719,25 @@ msgstr "neophodno"
 
 #. Translators: Means that the quote will work best if the preceding element is provided
 #: libgnucash/app-utils/gnc-quotes.cpp:772
-#, fuzzy
-#| msgid "Unreconciled"
 msgctxt "Finance::Quote"
 msgid "recommended"
-msgstr "Neusklađeno"
+msgstr "preporučeno"
 
 #. Translators: Means that one of the indicated elements is required
 #: libgnucash/app-utils/gnc-quotes.cpp:774
-#, fuzzy
-#| msgid "End of this year"
 msgctxt "Finance::Quote"
 msgid "one of these"
-msgstr "Kraj ove godine"
+msgstr "jedan od ovih"
 
 #. Translators: Means that a required element wasn't reported. The *s are for emphasis.
 #: libgnucash/app-utils/gnc-quotes.cpp:776
-#, fuzzy
-#| msgid "missing"
 msgctxt "Finance::Quote"
 msgid "**missing**"
-msgstr "nedostaje"
+msgstr "**nedostaje**"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:783
 msgid "Finance::Quote fields GnuCash uses:"
-msgstr ""
+msgstr "Finance::Quote polja koja GnuCash koristi:"
 
 #. Translators: The stock or Mutual Fund symbol, ISIN, CUSIP, etc.
 #: libgnucash/app-utils/gnc-quotes.cpp:785
@@ -29753,11 +29747,9 @@ msgstr "oznaka: "
 
 #. Translators: The date of the quote.
 #: libgnucash/app-utils/gnc-quotes.cpp:787
-#, fuzzy
-#| msgid "Date: "
 msgctxt "Finance::Quote"
 msgid "date: "
-msgstr "Datum: "
+msgstr "datum: "
 
 #. Translators: The quote currency
 #: libgnucash/app-utils/gnc-quotes.cpp:789
