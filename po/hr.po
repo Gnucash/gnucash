@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-14 16:40+0000\n"
+"PO-Revision-Date: 2023-03-18 20:44+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hr/>\n"
@@ -1446,6 +1446,10 @@ msgid ""
 "Any dividend being reinvested must be subsequently recorded as a regular "
 "stock purchase."
 msgstr ""
+"Poduzeće izdaje dividende u gotovini dioničaru.\n"
+"\n"
+"Sve reinvestirane dividende moraju se naknadno evidentirati kao kupnje "
+"dionica."
 
 #. Translators: this is a stock transaction describing return
 #. of capital
@@ -1664,7 +1668,7 @@ msgstr ""
 #: gnucash/gnome/assistant-stock-transaction.cpp:818
 #, c-format
 msgid "A price of 1 %s = %s on %s will be recorded."
-msgstr "Zapisat će se cijena od 1 %s = %s %s."
+msgstr "Zapisat će se cijena od 1 %s = %s za %s."
 
 #. Translators: Designates a page in the stock assistant or inserts the value
 #. into the non-currency asset split of an investment transaction.
@@ -22858,12 +22862,12 @@ msgstr "Izostavi konta"
 #: gnucash/report/reports/standard/income-statement.scm:370
 #: gnucash/report/reports/standard/trial-balance.scm:374
 msgid "${company-name} ${report-title} For Period Covering ${start} to ${end}"
-msgstr ""
+msgstr "${company-name} ${report-title} za razdoblje od ${start} do ${end}"
 
 #: gnucash/report/reports/standard/account-summary.scm:296
 #: gnucash/report/reports/standard/trial-balance.scm:370
 msgid "${company-name} ${report-title} ${date}"
-msgstr ""
+msgstr "${company-name} ${report-title} ${date}"
 
 #: gnucash/report/reports/standard/account-summary.scm:381
 msgid "Account title"
