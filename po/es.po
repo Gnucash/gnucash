@@ -83,7 +83,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-16 13:39+0000\n"
+"PO-Revision-Date: 2023-03-18 11:22+0000\n"
 "Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/es/>\n"
@@ -21324,7 +21324,7 @@ msgstr "LTCG"
 
 #: gnucash/register/ledger-core/split-register.c:2634
 msgid "STCG"
-msgstr "GCCP"
+msgstr "STCG"
 
 #: gnucash/register/ledger-core/split-register.c:2637
 msgid "Dist"
