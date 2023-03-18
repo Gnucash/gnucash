@@ -90,10 +90,15 @@ protected:
     m_book{qof_session_get_book(gnc_get_current_session())}
     {
         qof_init();
-        gnc_commodity_table_register();
-        gnc_pricedb_register();
+
+        /* By setting an empty commodity table on the book before registering
+         * the commodity_table type we avoid adding the default commodities */
         auto comm_table{gnc_commodity_table_new()};
         qof_book_set_data(m_book, GNC_COMMODITY_TABLE, comm_table);
+
+        gnc_commodity_table_register();
+        gnc_pricedb_register();
+
         auto eur = gnc_commodity_new(m_book, "Euro", "ISO4217", "EUR", NULL, 100);
         auto source{gnc_quote_source_lookup_by_internal("currency")};
         gnc_commodity_begin_edit(eur);
