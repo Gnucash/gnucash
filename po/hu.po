@@ -14,8 +14,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-12 13:53+0000\n"
-"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"PO-Revision-Date: 2023-03-18 17:05+0000\n"
+"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hu/>\n"
 "Language: hu\n"
@@ -5083,9 +5083,8 @@ msgstr "Auto-törlés"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:251
 #: gnucash/ui/gnc-plugin-page-register.ui:250
 #: gnucash/ui/gnc-plugin-page-register.ui:714
-#, fuzzy
 msgid "Stock Assistant"
-msgstr "Részvénykifejtés részletei"
+msgstr "Részvény segéd"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:660
 #: gnucash/gnome/gnc-plugin-page-register.c:1904
@@ -12725,6 +12724,7 @@ msgid "_Accumulate splits on post"
 msgstr ""
 
 #: gnucash/gtkbuilder/business-prefs.glade:90
+#, fuzzy
 msgid ""
 "Whether multiple entries in an invoice which transfer to the same account "
 "should be accumulated into a single split by default. This setting can be "
@@ -13429,7 +13429,7 @@ msgstr "<b>Fizetési feltétel leírása</b>"
 #: gnucash/gtkbuilder/dialog-billterms.glade:909
 #: gnucash/gtkbuilder/dialog-billterms.glade:1135
 msgid "De_scription"
-msgstr "Ma_gyarázat"
+msgstr "L_eírás"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:589
 #: gnucash/gtkbuilder/dialog-billterms.glade:924
@@ -17255,7 +17255,7 @@ msgstr "Rendezés felosztások jegyzetei szerint."
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:976
 #: gnucash/ui/gnc-plugin-page-invoice.ui:114
 msgid "Descri_ption"
-msgstr "M_agyarázat"
+msgstr "L_eírás"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:980
 msgid "Sort by description."
@@ -20745,7 +20745,7 @@ msgstr "Kiegyenlítés _kézi úton"
 
 #: gnucash/register/ledger-core/split-register-control.c:140
 msgid "Let GnuCash _add an adjusting split"
-msgstr "Bővítse GnuC_ash kiegyenlítő kifejtéssel"
+msgstr ""
 
 #: gnucash/register/ledger-core/split-register-control.c:145
 msgid "Adjust current account _split total"
@@ -20968,7 +20968,6 @@ msgid "Scheduled"
 msgstr "Ütemezett"
 
 #: gnucash/register/ledger-core/split-register-model.c:1058
-#, fuzzy
 msgid ""
 "Enter a reference, such as an invoice or check number, common to all entry "
 "lines (splits)"
@@ -20977,7 +20976,6 @@ msgstr ""
 "minden felosztásra vonatkozik"
 
 #: gnucash/register/ledger-core/split-register-model.c:1060
-#, fuzzy
 msgid ""
 "Enter a reference, such as an invoice or check number, unique to each entry "
 "line (split)"
@@ -20986,7 +20984,6 @@ msgstr ""
 "felosztáshoz külön-külön"
 
 #: gnucash/register/ledger-core/split-register-model.c:1065
-#, fuzzy
 msgid ""
 "Enter a reference, such as a check number, common to all entry lines (splits)"
 msgstr ""
@@ -20994,7 +20991,6 @@ msgstr ""
 "vonatkozik"
 
 #: gnucash/register/ledger-core/split-register-model.c:1067
-#, fuzzy
 msgid ""
 "Enter a reference, such as a check number, unique to each entry line (split)"
 msgstr ""
@@ -21002,14 +20998,12 @@ msgstr ""
 "külön-külön"
 
 #: gnucash/register/ledger-core/split-register-model.c:1088
-#, fuzzy
 msgid ""
 "Enter a transaction reference, such as an invoice or check number, common to "
 "all entry lines (splits)"
 msgstr ""
 
 #: gnucash/register/ledger-core/split-register-model.c:1092
-#, fuzzy
 msgid ""
 "Enter a transaction reference that will be common to all entry lines (splits)"
 msgstr ""
@@ -21093,7 +21087,6 @@ msgstr ""
 "'%s'"
 
 #: gnucash/register/ledger-core/split-register-model.c:2199
-#, fuzzy
 msgid "Change transaction containing a reconciled split?"
 msgstr "Biztos megváltoztatja az egyeztetett felosztást tartalmazó tranzakciót?"
 
@@ -21117,7 +21110,6 @@ msgid "Change reconciled split?"
 msgstr "Egyeztetett felosztás megváltoztatása?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2213
-#, fuzzy
 msgid ""
 "You are about to change a protected field of a reconciled split. If you "
 "continue editing this split it will be unreconciled. This might make future "
@@ -30893,7 +30885,6 @@ msgid "Looking for imbalances in account %s: %u of %u"
 msgstr ""
 
 #: libgnucash/engine/Split.c:1636
-#, fuzzy
 msgctxt ""
 "Displayed account code of the other account in a multi-split transaction"
 msgid "Split"

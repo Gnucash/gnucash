@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-13 07:55+0000\n"
+"PO-Revision-Date: 2023-03-18 07:51+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/pt/>\n"
@@ -8130,8 +8130,8 @@ msgid ""
 "or more symbols, the first of which is the currency in which exchange rates "
 "for the rest will be quoted.\n"
 msgstr ""
-"Executar comandos relacionados com a cotação de preços. São suportados os "
-"seguintes comandos.\n"
+"Executar comandos relacionados com cotações. São suportados os seguintes "
+"comandos.\n"
 "\n"
 "  info: \t Mostrar versão do Finance::Quote e fontes de cotações expostas.\n"
 "   get: \t Obter cotações actuais para todas as moedas e acções estrangeiras "
@@ -8228,7 +8228,7 @@ msgstr "Fontes do Finance::Quote:\n"
 
 #: gnucash/gnucash-commands.cpp:364 gnucash/gnucash-commands.cpp:388
 msgid "Price retrieval failed: "
-msgstr "Falha ao obter a cotação: "
+msgstr "Falha ao obter o preço: "
 
 #: gnucash/gnucash-core-app.cpp:79
 msgid "This is a development version. It may or may not work."
@@ -15250,9 +15250,9 @@ msgid ""
 "in your area (in units of your local currency), so the transaction will be "
 "recognised as a match."
 msgstr ""
-"Nalguns locais, ATMs comerciais (não pertencentes a instituições "
-"financeiras) são instaladas em sítios tais como lojas de conveniência. Estas "
-"máquinas somam a taxa directamente ao montante, em vez de a mostrar como uma "
+"Nalguns locais, ATMs comerciais (não pertencentes a instituições financeiras)"
+" são instaladas em sítios tais como lojas de conveniência. Estas máquinas "
+"somam a taxa directamente ao montante, em vez de a mostrar como uma "
 "transacção separada ou nas suas taxas bancárias mensais. Por exemplo, faz um "
 "levantamento de 100€ e surge 101,5€ de taxa incluída. Se inserir manualmente "
 "100€, os montantes não correspondem. Deve definir isto para a taxa máxima da "
@@ -15357,8 +15357,7 @@ msgstr "Imprimir formato da _data"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2422
 msgid "Below the actual date, print the format of that date in 8 point type."
-msgstr ""
-"Abaixo da data actual, imprimir o formato da data num tipo de 8 pontos."
+msgstr "Abaixo da data actual, imprimir o formato da data num tipo de 8 pontos."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2434
 msgid "Print _blocking chars"
@@ -15395,13 +15394,11 @@ msgstr "Mostrar listas _automaticamente"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2538
 msgid "Automatically raise the list of accounts or actions during input."
-msgstr ""
-"Mostrar automaticamente a lista de contas ou acções durante a inserção."
+msgstr "Mostrar automaticamente a lista de contas ou acções durante a inserção."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2550
 msgid "Tab order in_cludes Transfer on Memorised Transactions"
-msgstr ""
-"Ordem dos separadores in_clui Transferência nas transacções memorizadas"
+msgstr "Ordem dos separadores in_clui Transferência nas transacções memorizadas"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2556
 msgid "Move to Transfer field when memorised transaction auto filled."
@@ -16204,8 +16201,8 @@ msgstr "Procurar apenas em dados activos"
 msgid ""
 "Choose whether to search all your data or only that marked as \"active\"."
 msgstr ""
-"Escolha se quer procurar em todos os dados ou só nos marcados como \"activo"
-"\"."
+"Escolha se quer procurar em todos os dados ou só nos marcados como \"activo\""
+"."
 
 #: gnucash/gtkbuilder/dialog-search.glade:417
 msgid "Type of search"
@@ -16296,8 +16293,7 @@ msgstr "Definir o estado de criação automática em novas transacções agendad
 
 #: gnucash/gtkbuilder/dialog-sx.glade:599
 msgid "Begin notifications this many days before the transaction is created."
-msgstr ""
-"Começar a notificar este número de dias antes da transacção ser criada."
+msgstr "Começar a notificar este número de dias antes da transacção ser criada."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:638
 msgid "Create the transaction this many days before its effective date."
@@ -17649,8 +17645,8 @@ msgid ""
 "<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
 "\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 msgstr ""
-"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/"
-"\">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
+"<a href=\"https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/\""
+">https://aquamaniac.de/rdm/projects/aqbanking/wiki/Bugreports/</a>"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:157
 msgid ""
@@ -18593,8 +18589,8 @@ msgid ""
 "which you can choose one here."
 msgstr ""
 "Esta definição especifica o formato dos dados ao importar ficheiros SWIFT "
-"MT940. A biblioteca AqBanking oferece vários formatos de importação "
-"(chamados \"perfis\"), dos quais pode escolher um aqui."
+"MT940. A biblioteca AqBanking oferece vários formatos de importação ("
+"chamados \"perfis\"), dos quais pode escolher um aqui."
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:50
 msgid "SWIFT MT942 import data format"
@@ -18607,8 +18603,8 @@ msgid ""
 "which you can choose one here."
 msgstr ""
 "Esta definição especifica o formato dos dados ao importar ficheiros SWIFT "
-"MT942. A biblioteca AqBanking oferece vários formatos de importação "
-"(chamados \"perfis\"), dos quais pode escolher um aqui."
+"MT942. A biblioteca AqBanking oferece vários formatos de importação ("
+"chamados \"perfis\"), dos quais pode escolher um aqui."
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:297
 msgid "Validation…\n"
@@ -18617,8 +18613,7 @@ msgstr "Validação…\n"
 #: gnucash/import-export/bi-import/dialog-bi-import.c:327
 #, c-format
 msgid "Row %d: no invoice ID in first row of import file.\n"
-msgstr ""
-"Linha %d: sem ID de factura na primeira linha do ficheiro a importar.\n"
+msgstr "Linha %d: sem ID de factura na primeira linha do ficheiro a importar.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:335
 #, c-format
@@ -19335,8 +19330,8 @@ msgid ""
 "From specified either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
-"Sem coluna \"De espaço de nome/De símbolo\" seleccionada nem \"De mercadoria"
-"\" especificada.\n"
+"Sem coluna \"De espaço de nome/De símbolo\" seleccionada nem \"De "
+"mercadoria\" especificada.\n"
 "Isto nunca deve acontecer. Por favor, relate como um erro."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:493
@@ -19420,8 +19415,7 @@ msgstr "O valor não parece conter um número válido."
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:158
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:163
 msgid "Value can't be parsed into a number using the selected currency format."
-msgstr ""
-"O valor não pode ser convertido num número usando a moeda seleccionada."
+msgstr "O valor não pode ser convertido num número usando a moeda seleccionada."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:124
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:220
@@ -20802,8 +20796,8 @@ msgid ""
 "You are about to overwrite an existing transaction. Are you sure you want to "
 "do that?"
 msgstr ""
-"Está prestes a sobrescrever uma transacção existente. Deseja realmente fazê-"
-"lo?"
+"Está prestes a sobrescrever uma transacção existente. Deseja realmente "
+"fazê-lo?"
 
 #: gnucash/register/ledger-core/split-register.c:2083
 msgid "Recalculate Transaction"
@@ -21856,7 +21850,7 @@ msgstr "Moeda do relatório"
 #: gnucash/report/reports/standard/trial-balance.scm:124
 #: gnucash/report/trep-engine.scm:103
 msgid "Price Source"
-msgstr "Fonte da cotação"
+msgstr "Fonte do preço"
 
 #: gnucash/report/reports/example/average-balance.scm:45
 #: gnucash/report/reports/example/daily-reports.scm:59
@@ -22048,7 +22042,7 @@ msgstr "Barras, empilhadas:"
 
 #: gnucash/report/reports/example/sample-graphs.scm:150
 msgid "Scatter:"
-msgstr "Pontos:"
+msgstr "Dispersão:"
 
 #: gnucash/report/reports/example/sample-report.scm:41
 #: gnucash/report/reports/standard/account-summary.scm:69
@@ -23972,8 +23966,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:62
 msgid "Select a budget period that begins the reporting range."
-msgstr ""
-"Seleccione um período do orçamento que inicia o intervalo do relatório."
+msgstr "Seleccione um período do orçamento que inicia o intervalo do relatório."
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:66
 msgid "Select a budget period that ends the reporting range."
@@ -25076,7 +25069,7 @@ msgstr "Data final"
 
 #: gnucash/report/reports/standard/investment-lots.scm:83
 msgid "Price source"
-msgstr "Fonte da cotação"
+msgstr "Fonte do preço"
 
 #: gnucash/report/reports/standard/investment-lots.scm:87
 msgid "Include only accounts with warnings"
@@ -25890,7 +25883,7 @@ msgstr "Mostrar itens com saldo zero"
 #: gnucash/report/reports/standard/new-aging.scm:43
 #: gnucash/report/reports/standard/new-owner-report.scm:46
 msgid "Due or Post Date"
-msgstr "Data de emissão ou de prazo"
+msgstr "Data de emissão ou vencimento"
 
 #: gnucash/report/reports/standard/new-aging.scm:46
 msgid "Address Source"
@@ -25959,8 +25952,7 @@ msgstr ""
 #: gnucash/report/reports/standard/new-aging.scm:64
 msgid ""
 "A/Payable or A/Receivable accounts exist but have no suitable transactions."
-msgstr ""
-"Existem contas A/Receber ou A/Pagar, mas não têm transacções adequadas."
+msgstr "Existem contas A/Receber ou A/Pagar, mas não têm transacções adequadas."
 
 #: gnucash/report/reports/standard/new-aging.scm:89
 msgid "Sort companies by."
@@ -28147,7 +28139,7 @@ msgstr "Barra de su_mário"
 
 #: gnucash/ui/gnc-main-window.ui:185
 msgid "Show/hide the summary bar on this window"
-msgstr "Mostrar/Ocultar a barra de sumário nesta janela"
+msgstr "Mostrar/Ocultar a barra de resumo nesta janela"
 
 #: gnucash/ui/gnc-main-window.ui:188
 msgid "Stat_us Bar"
@@ -28439,11 +28431,11 @@ msgstr "Configurar transacções agendadas para amortização de um empréstimo"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:104
 msgid "_Price Database"
-msgstr "_Base de dados de cotações"
+msgstr "_Base de dados de preços"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:106
 msgid "View and edit the prices for stocks and mutual funds"
-msgstr "Veja e edite as cotações de acções e fundos mutualistas"
+msgstr "Veja e edite os preços de acções e fundos mutualistas"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:109
 msgid "_Security Editor"
@@ -28785,11 +28777,11 @@ msgstr "Importar transacções de um ficheiro CSV"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:16
 msgid "Import _Prices from a CSV file…"
-msgstr "Im_portar cotações de um ficheiro CSV…"
+msgstr "Im_portar preços de um ficheiro CSV…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:18
 msgid "Import Prices from a CSV file"
-msgstr "Importar cotações de um ficheiro CSV"
+msgstr "Importar preços de um ficheiro CSV"
 
 #: gnucash/ui/gnc-plugin-customer-import.ui:6
 msgid "Import _Customers & Vendors…"
@@ -29760,14 +29752,14 @@ msgstr ""
 
 #: libgnucash/app-utils/gnc-quotes.cpp:363
 msgid "Finance::Quote returned a quote with no price element."
-msgstr "Finance::Quote devolveu uma cotação sem elemento de preço."
+msgstr "O Finance::Quote devolveu uma cotação sem elemento de preço."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:366
 msgid ""
 "Finance::Quote returned a quote with a price that GnuCash was unable to "
 "covert to a number."
 msgstr ""
-"Finance::Quote devolveu uma cotação com um preço que o GnuCash não pôde "
+"O Finance::Quote devolveu uma cotação com um preço que o GnuCash não pôde "
 "converter em número."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:370

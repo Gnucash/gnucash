@@ -84,9 +84,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-13 15:35+0000\n"
-"Last-Translator: Jaime Marquínez Ferrándiz <jaime.marquinez."
-"ferrandiz@fastmail.net>\n"
+"PO-Revision-Date: 2023-03-18 11:22+0000\n"
+"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/es/>\n"
 "Language: es\n"
@@ -865,10 +864,10 @@ msgid ""
 "on the sub-menu Import and click on QIF or OFX file, respectively. Then, "
 "follow the instructions provided."
 msgstr ""
-"Puede importar fácilmente su información financiera existente desde Quicken, "
-"MS Money u otros programas que exporten archivos QIF o OFX. En el menú "
-"Archivo, pulse en la opción Importar y pulse en QIF o OFX, respectivamente. "
-"Después siga las instrucciones mostradas."
+"Puede importar fácilmente datos financieros existentes de Quicken, MS Money "
+"u otros programas que exportan archivos QIF o QFX. En el menú Archivo, haga "
+"clic en Submenú - Importar y haga clic en Archivo QIF o QFX, "
+"respectivamente. Luego siga las instrucciones proporcionadas."
 
 #: doc/tip_of_the_day.list.c:20
 msgid ""
@@ -1653,6 +1652,13 @@ msgid ""
 "record the sale using the Stock Transaction Assistant first, then record the "
 "reverse split."
 msgstr ""
+"Empresa redime o rescata unidades, incrementado de esta forma el precio de "
+"la acción por un múltiplo, manteniendo constante el valor monetario de la "
+"inversión total.\n"
+"\n"
+"Si la anotación inversa resulta en un efectivo por las unidades restantes, "
+"registre primero esta venta usando el Asistente de Transacciones de Valores, "
+"y registre después la anotación inversa."
 
 #. Translators: this is a stock transaction describing
 #. shorting of stock.
@@ -1702,6 +1708,9 @@ msgid ""
 "payment for the returned capital. This reduces the cost basis (less "
 "negative, towards 0.00 value) without affecting # units."
 msgstr ""
+"Empresa devuelve capital y el titular de la acción a corto debe hacer un "
+"pago compensatorio por el capital devuelto. Esto reduce la base de coste ("
+"menos negativa, hacia el valor 0.00) sin afectar # unidades."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution when shorting stock
@@ -1716,6 +1725,11 @@ msgid ""
 "loss/negative dividend income amount, and increases the cost basis (more "
 "negative, away from 0.00 value) without affecting # units."
 msgstr ""
+"Empresa emite una distribución nocional y el titular de la acción a corto "
+"debe de hacer un pago compensatorio por la distribución nocional. Esto se "
+"registra como una pérdida o ingreso negativo por dividendo, e incrementa la "
+"base de coste (más negativa, alejándose del valor 0.00) sin afectar las # "
+"unidades."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:370
 msgid ""
@@ -1726,6 +1740,13 @@ msgid ""
 "record the cover buy using the Stock Transaction Assistant first, then "
 "record the reverse split."
 msgstr ""
+"Empresa redime o rescata unidades, incrementado de esta forma el precio de "
+"la acción por un múltiplo, manteniendo constante el valor monetario de la "
+"inversión total.\n"
+"\n"
+"Si la anotación inversa resulta en un efectivo por las unidades restantes, "
+"registre primero esta compra de cobertura usando el Asistente de "
+"Transacciones de Valores, y registre después la anotación inversa."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:537
 #, c-format
@@ -1774,6 +1795,11 @@ msgid ""
 "and therefore capital gains, of transactions dated after the new entry. "
 "Please review all transactions to ensure proper recording."
 msgstr ""
+"Introducirá una transacción con fecha %s, que es anterior a la última "
+"transacción de esta cuenta, con fecha %s. Hacer esto puede afectar a la base "
+"de coste y por consiguiente a las ganancias de capital con fecha posterior a "
+"la nueva entrada. Por favor, revise todas las transacciones para asegurar un "
+"registro apropiado."
 
 #. Translators: Designates the page in the Stock Assistant for entering
 #. the currency value of a non-currency asset.
@@ -1804,7 +1830,7 @@ msgstr "No se puede vender más unidades de las que se poseen."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:807
 msgid "Cannot cover buy more units than owed."
-msgstr ""
+msgstr "No se pueden comprar para cobertura más unidades de las adeudadas."
 
 #. Translators: %s refer to: stock mnemonic, broker currency,
 #. date of transaction.
@@ -1843,6 +1869,8 @@ msgstr "Ganancia de capital"
 #, c-format
 msgid "Total Debits of %s does not balance with total Credits of %s."
 msgstr ""
+"Los débitos totales de %s no están balanceados con los créditos totales de "
+"%s."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:903
 msgid "No errors found. Click Apply to create transaction."
@@ -3682,6 +3710,14 @@ msgid ""
 "Please correct this manually by editing the transaction directly and then "
 "try again."
 msgstr ""
+"Esta transacción tiene anotaciones en varias cuentas de negocio:\n"
+"\n"
+"%s\n"
+"GnuCash solo puede manejar transacciones que contabilicen a una única cuenta."
+"\n"
+"\n"
+"Por favor, corrija esto manualmente editando directamente la transacción e "
+"inténtelo de nuevo."
 
 #. Translators: %d is the number of prices. This is a ngettext(3) message.
 #: gnucash/gnome/dialog-price-edit-db.cpp:201
@@ -3740,12 +3776,12 @@ msgstr "Debe introducir una cantidad válida."
 
 #: gnucash/gnome/dialog-print-check.c:823
 msgid "Cannot save check format file."
-msgstr "No se puede guardar el formato del archivo comprobante."
+msgstr "No se puede guardar el archivo por el formato de verificación."
 
 #: gnucash/gnome/dialog-print-check.c:825
 #, c-format
 msgid "Cannot open file %s"
-msgstr "No puede abrir el archivo %s"
+msgstr "No es posible abrir el fichero %s"
 
 #: gnucash/gnome/dialog-print-check.c:1513
 msgid "There is a duplicate check format file."
@@ -7777,7 +7813,6 @@ msgstr "Contabilidad financiara personal y pequeños negocios."
 msgid "translator-credits"
 msgstr ""
 "Francisco Javier Serrador, 2018 - 2022\n"
-"\n"
 "Adolfo Jayme Barrientos, 2021\n"
 "Carlos Manrique Enguita, 2021\n"
 "Eneko Lacunza, 2003 - 2008\n"
@@ -8304,6 +8339,19 @@ msgid ""
 "or more symbols, the first of which is the currency in which exchange rates "
 "for the rest will be quoted.\n"
 msgstr ""
+"Ejecuta los comandos relacionados con la cotización de precio. Los "
+"siguientes comandos están soportados:\n"
+"\n"
+"  info: \tMuestra la versión de Finance::Quote y expone las fuentes de "
+"cotización.\n"
+"   get: \tObtiene las cotizaciones actuales para todas las monedas "
+"extranjeras y acciones en el archivo de datos de GnuCash proporcionado.\n"
+"  dump: \tObtiene las cotizaciones actuales para las monedas o acciones de "
+"un espacio de nombres solicitado e imprime los resultados en la consola.\n"
+"        \tEsto debe de estar seguido de una fuente y uno o más símbolos, a "
+"no ser que la fuente sea \"currency\", en cuyo caso debe de seguirse de dos "
+"o más símbolos, el primero de los cuales es la moneda de referencia de las "
+"cotizaciones para el resto.\n"
 
 #: gnucash/gnucash-cli.cpp:103
 msgid ""
@@ -8318,6 +8366,8 @@ msgid ""
 "When using the dump command list all of the parameters Finance::Quote "
 "returns for the symbol instead of the ones that Gnucash requires."
 msgstr ""
+"Al usar el comando dump, muestra la lista de todos los parámetros que "
+"Finance::Quote devuelve para el símbolo en lugar de los que GnuCash solicita."
 
 #: gnucash/gnucash-cli.cpp:110
 msgid "Report Generation Options"
@@ -12901,6 +12951,12 @@ msgid ""
 "expensed. If there are no fees involved in this transaction, it can be left "
 "blank."
 msgstr ""
+"En esta página, introduzca cualquier comisión de corretaje incurrida con "
+"esta transacción. La comisión puede ser capitalizada en la cuenta del activo "
+"o definirse como un gasto hace una cuenta de comisiones de corretaje. "
+"Normalmente, las comisiones de compra son capitalizadas y las comisiones de "
+"venta definidas como un gasto. En caso de no haber comisiones para esta "
+"transacción, se puede dejar en blanco."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:629
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1052
@@ -18282,6 +18338,9 @@ msgid ""
 "profile list contains specializations and is populated according to which "
 "format you select in this list."
 msgstr ""
+"Esta lista contiene los formatos de archivo que AQBanking es capaz de "
+"importar. La lista de perfiles contiene especializaciones y su contenido "
+"depende del formato seleccionado en la lista."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1733
 msgid "File Format"
@@ -18292,6 +18351,9 @@ msgid ""
 "This lists one or more specialization templates that adjust the import for "
 "different banks' uses of fields in the selected import format."
 msgstr ""
+"Esto lista una o más plantillas de especialización que adaptan la "
+"importación para los diferentes usos de los campos de distintos bancos en el "
+"formato de importación seccionado."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1787
 msgid "Profiles"
@@ -21232,7 +21294,7 @@ msgstr "PdV"
 # ¿Qué representa esto?
 #: gnucash/register/ledger-core/split-register.c:2556
 msgid "AutoDep"
-msgstr "AutoDep"
+msgstr "Autodependencia"
 
 #: gnucash/register/ledger-core/split-register.c:2557
 msgid "Wire"
@@ -21259,11 +21321,11 @@ msgstr "Sueldo"
 
 #: gnucash/register/ledger-core/split-register.c:2632
 msgid "LTCG"
-msgstr "GCLP"
+msgstr "LTCG"
 
 #: gnucash/register/ledger-core/split-register.c:2634
 msgid "STCG"
-msgstr "GCCP"
+msgstr "STCG"
 
 #: gnucash/register/ledger-core/split-register.c:2637
 msgid "Dist"
@@ -21449,7 +21511,7 @@ msgstr ""
 
 #: gnucash/register/ledger-core/split-register-model.c:254
 msgid "Ref"
-msgstr "Referencia"
+msgstr "Ref"
 
 #: gnucash/register/ledger-core/split-register-model.c:270
 msgid "T-Ref"
@@ -23359,7 +23421,7 @@ msgstr ""
 #: gnucash/report/reports/standard/account-summary.scm:296
 #: gnucash/report/reports/standard/trial-balance.scm:370
 msgid "${company-name} ${report-title} ${date}"
-msgstr ""
+msgstr "${company-name} ${report-title} ${date}"
 
 #: gnucash/report/reports/standard/account-summary.scm:381
 msgid "Account title"
@@ -25698,7 +25760,7 @@ msgstr "Mostrar nombres largos de cuentas (en lugar de cortos)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:300
 msgid "Show mnemonics with commodity amounts"
-msgstr ""
+msgstr "Muestra mnemotécnicas con las cantidades de producto"
 
 #: gnucash/report/reports/standard/investment-lots.scm:307
 msgid "Include closed lots in addition to open lots"
@@ -25777,7 +25839,7 @@ msgstr "  Precio final: ~a~a el ~a"
 #: gnucash/report/reports/standard/investment-lots.scm:809
 #, scheme-format
 msgid " [~a]"
-msgstr ""
+msgstr " [~a]"
 
 #: gnucash/report/reports/standard/investment-lots.scm:813
 msgid "No price found"
@@ -28662,7 +28724,7 @@ msgstr "_Planificado"
 # Letra modificada_OK
 #: gnucash/ui/gnc-main-window.ui:403
 msgid "_Reports"
-msgstr "_Informes"
+msgstr "_Reportes"
 
 #: gnucash/ui/gnc-main-window.ui:422
 msgid "_Tools"
@@ -29147,10 +29209,8 @@ msgid "New _Expense Voucher…"
 msgstr "Crear comprobante de gasto…"
 
 #: gnucash/ui/gnc-plugin-business.ui:124
-#, fuzzy
-#| msgid "Open the New Expense Voucher dialog"
 msgid "Open the New Voucher dialog"
-msgstr "Abre “Crear comprobante de gasto” como diálogo"
+msgstr "Abrir el diálogo “Crear comprobante”"
 
 #: gnucash/ui/gnc-plugin-business.ui:127
 msgid "Find Expense _Voucher…"
@@ -30306,7 +30366,7 @@ msgstr "último: "
 #: libgnucash/app-utils/gnc-quotes.cpp:797
 msgctxt "Finance::Quote"
 msgid "nav: "
-msgstr ""
+msgstr "Valor liquidativo: "
 
 #. Translators: The quote is neither a last trade nor an NAV.
 #: libgnucash/app-utils/gnc-quotes.cpp:799
@@ -31019,6 +31079,8 @@ msgid ""
 "Length of time to change the used invoice report. A value of 0 means "
 "disabled."
 msgstr ""
+"Lapso de tiempo para cambiar el informe de factura usado. Un valor de 0 "
+"significa deshabilitado."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1241
 msgid "Default Customer TaxTable"

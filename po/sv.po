@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-14 03:46+0000\n"
+"PO-Revision-Date: 2023-03-17 03:47+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/sv/>\n"
@@ -25219,10 +25219,8 @@ msgid "Unrealized ROI"
 msgstr "Orealiserad ROI"
 
 #: gnucash/report/reports/standard/investment-lots.scm:131
-#, fuzzy
-#| msgid "Account Notes"
 msgid "Account Lots Total"
-msgstr "Summa kontots partier"
+msgstr "Summa partier i konto"
 
 #: gnucash/report/reports/standard/investment-lots.scm:171
 msgid "Include a chart that shows lot gains, grouped by account and gain type"
