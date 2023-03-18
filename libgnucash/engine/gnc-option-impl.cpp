@@ -143,8 +143,6 @@ GncOptionGncOwnerValue::serialize() const noexcept
     return retval;
 }
 
-using GncItem = std::pair<QofIdTypeConst, GncGUID>;
-
 static GncItem
 make_gnc_item(const QofInstance* inst)
 {
@@ -174,14 +172,6 @@ qof_instance_from_gnc_item(const GncItem& item)
     auto book{get_current_book()};
     auto coll{qof_book_get_collection(book, type)};
     return static_cast<QofInstance*>(qof_collection_lookup_entity(coll, &guid));
-}
-
-static bool
-operator!=(const GncItem& left, const GncItem& right)
-{
-    auto [ltype, lguid]{left};
-    auto [rtype, rguid]{right};
-    return strcmp(rtype, ltype) && !guid_equal(&rguid, &lguid);
 }
 
 GncOptionQofInstanceValue::GncOptionQofInstanceValue(
@@ -231,6 +221,12 @@ void
 GncOptionQofInstanceValue::reset_default_value()
 {
     m_value = m_default_value;
+}
+
+static bool
+operator==(const GncGUID& l, const GncGUID& r)
+{
+    return guid_equal(&l, &r);
 }
 
 bool
@@ -445,12 +441,6 @@ GncOptionAccountListValue::get_default_value() const
     }
     g_list_free(account_list);
     return retval;
-}
-
-static bool
-operator==(const GncGUID& l, const GncGUID& r)
-{
-    return guid_equal(&l, &r);
 }
 
 bool
