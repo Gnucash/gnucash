@@ -178,10 +178,16 @@ m_version{}, m_sources{}, m_api_key{}
 
     auto av_key = gnc_prefs_get_string ("general.finance-quote", "alphavantage-api-key");
     if (!(av_key && *av_key))
+    {
+        g_free (av_key);
         av_key = getenv("ALPHAVANTAGE_API_KEY");
+    }
 
     if (av_key)
+    {
         m_api_key = std::string(av_key);
+        g_free (av_key);
+    }
     else
         PWARN("No Alpha Vantage API key set, currency quotes and other AlphaVantage based quotes won't work.");
 }
