@@ -40,6 +40,8 @@
 
 #include "import-main-matcher.h"
 
+extern "C"
+{
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "gnc-glib-utils.h"
@@ -57,6 +59,7 @@
 #include "gnc-session.h"
 #include "Query.h"
 #include "SplitP.h"
+}
 
 #define GNC_PREFS_GROUP "dialogs.import.generic.transaction-list"
 #define IMPORT_MAIN_MATCHER_CM_CLASS "transaction-matcher-dialog"
@@ -131,11 +134,14 @@ static QofLogModule log_module = G_MOD_IMPORT_MATCHER;
 
 static const gpointer one = GINT_TO_POINTER (1);
 
+extern "C"
+{
 void on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info);
 void on_matcher_cancel_clicked (GtkButton *button, gpointer user_data);
 bool on_matcher_delete_event (GtkWidget *widget, GdkEvent *event, gpointer data);
 void on_matcher_help_clicked (GtkButton *button, gpointer user_data);
 void on_matcher_help_close_clicked (GtkButton *button, gpointer user_data);
+}
 
 static void gnc_gen_trans_list_create_matches (GNCImportMainMatcher *gui);
 
@@ -171,8 +177,9 @@ update_all_balances (GNCImportMainMatcher *info)
 {
     for (GSList* iter = info->edited_accounts; iter; iter=iter->next)
     {
-        gnc_account_set_defer_bal_computation (iter->data,false);
-        xaccAccountRecomputeBalance (iter->data);
+        auto acc{static_cast<Account*>(iter->data)};
+        gnc_account_set_defer_bal_computation (acc,false);
+        xaccAccountRecomputeBalance (acc);
     }
     g_slist_free (info->edited_accounts);
     info->edited_accounts = NULL;
@@ -307,7 +314,7 @@ static const GncGUID*
 get_top_trans_match_id (GList* match_list)
 {
     if (!match_list || !match_list->data) return NULL;
-    GNCImportMatchInfo *match_info = match_list->data;
+    auto match_info{static_cast<GNCImportMatchInfo*>(match_list->data)};
     Transaction *trans = match_info->trans;
     return xaccTransGetGUID (trans);
 }
@@ -317,7 +324,7 @@ static gint
 get_top_trans_match_score (GList* match_list)
 {
     if (!match_list || !match_list->data) return 0;
-    GNCImportMatchInfo *match_info = match_list->data;
+    auto match_info{static_cast<GNCImportMatchInfo*>(match_list->data)};
     return match_info->probability;
 }
 
@@ -390,7 +397,7 @@ remove_top_matches (GNCImportMainMatcher* gui, GtkTreeModel* model, GList* confl
     GList* iter = conflicts;
     for (; iter && iter->data; iter=iter->next)
     {
-        GNCImportTransInfo* trans_info = iter->data;
+        auto trans_info{static_cast<GNCImportTransInfo*>(iter->data)};
         GList* match_trans = gnc_import_TransInfo_get_match_list (trans_info);
         match_trans = g_list_remove (match_trans, match_trans->data);
         gnc_import_TransInfo_set_match_list (trans_info, match_trans);
@@ -467,9 +474,9 @@ load_hash_tables (GNCImportMainMatcher *info)
     }
     for (GList *m = accounts_list; m; m = m->next)
     {
-        for (GList *n = xaccAccountGetSplitList (m->data); n; n = n->next)
+        for (GList *n = xaccAccountGetSplitList (static_cast<Account*>(m->data)); n; n = n->next)
         {
-            const Split *s = n->data;
+            auto s{static_cast<Split*>(n->data)};
             const Transaction *t = xaccSplitGetParent (s);
 
             const gchar *key = xaccTransGetDescription (t);
@@ -498,10 +505,11 @@ gnc_gen_trans_list_show_all (GNCImportMainMatcher *info)
     GSList *temp_trans_list = info->temp_trans_list;
     if (!temp_trans_list)
     {
-        gnc_info_dialog (GTK_WINDOW (info->main_widget), _("No new transactions were found in this import."));
+        gnc_info_dialog (GTK_WINDOW (info->main_widget), "%s",
+                         _("No new transactions were found in this import."));
         return;
     }
-    GNCImportTransInfo *trans_info = temp_trans_list->data;
+    auto trans_info{static_cast<GNCImportTransInfo*>(temp_trans_list->data)};
     Split *first_split = gnc_import_TransInfo_get_fsplit (trans_info);
     Account *account = xaccSplitGetAccount(first_split);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (info->append_text),
@@ -581,14 +589,14 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
 void
 on_matcher_cancel_clicked (GtkButton *button, gpointer user_data)
 {
-    GNCImportMainMatcher *info = user_data;
+    auto info{static_cast<GNCImportMainMatcher*>(user_data)};
     gnc_gen_trans_list_delete (info);
 }
 
 bool
 on_matcher_delete_event (GtkWidget *widget, GdkEvent *event, gpointer data)
 {
-    GNCImportMainMatcher *info = data;
+    auto info{static_cast<GNCImportMainMatcher*>(data)};
     gnc_gen_trans_list_delete (info);
     return false;
 }
@@ -596,15 +604,14 @@ on_matcher_delete_event (GtkWidget *widget, GdkEvent *event, gpointer data)
 void
 on_matcher_help_close_clicked (GtkButton *button, gpointer user_data)
 {
-    GtkWidget *help_dialog = user_data;
-
+    auto help_dialog{static_cast<GtkWidget*>(user_data)};
     gtk_widget_destroy (help_dialog);
 }
 
 void
 on_matcher_help_clicked (GtkButton *button, gpointer user_data)
 {
-    GNCImportMainMatcher *info = user_data;
+    auto info{static_cast<GNCImportMainMatcher*>(user_data)};
 
     GtkBuilder *builder = gtk_builder_new ();
     gnc_builder_add_from_file (builder, "dialog-import.glade", "textbuffer2");
@@ -826,15 +833,16 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
     GList *refs = NULL;
     for (GList *l = selected_rows; l; l = l->next)
     {
-        gchar *path_str = gtk_tree_path_to_string (l->data);
-        GtkTreeRowReference *ref = gtk_tree_row_reference_new (model, l->data);
+        auto path{static_cast<GtkTreePath*>(l->data)};
+        gchar *path_str = gtk_tree_path_to_string (path);
+        GtkTreeRowReference *ref = gtk_tree_row_reference_new (model, path);
         DEBUG("passing first = %s", first ? "true" : "false");
         DEBUG("passing is_selection = %s", is_selection ? "true" : "false");
         DEBUG("passing path = %s", path_str);
         g_free (path_str);
         refs = g_list_prepend (refs, ref);
         gnc_gen_trans_assign_transfer_account (treeview,
-                                                &first, is_selection, l->data,
+                                                &first, is_selection, path,
                                                 &assigned_account, info);
         gchar *fullname = gnc_account_get_full_name (assigned_account);
         DEBUG("returned value of account = %s", fullname);
@@ -848,10 +856,11 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
     // now reselect the transaction rows. This is very slow if there are lots of transactions.
     for (GList *l = refs; l; l = l->next)
     {
-        GtkTreePath *path = gtk_tree_row_reference_get_path (l->data);
+        auto ref{static_cast<GtkTreeRowReference*>(l->data)};
+        GtkTreePath *path = gtk_tree_row_reference_get_path (ref);
         gtk_tree_selection_select_path (selection, path);
         gtk_tree_path_free (path);
-        gtk_tree_row_reference_free (l->data);
+        gtk_tree_row_reference_free (ref);
     }
     g_list_free (refs);
 
@@ -877,7 +886,7 @@ static RowInfo * row_get_info (gpointer row, GNCImportMainMatcher *info)
 {
     GtkTreeModel *model = gtk_tree_view_get_model (info->view);
     RowInfo *retval = g_new (RowInfo, 1);
-    gtk_tree_model_get_iter (model, &retval->iter, row);
+    gtk_tree_model_get_iter (model, &retval->iter, static_cast<GtkTreePath*>(row));
     gtk_tree_model_get (model, &retval->iter,
                         DOWNLOADED_COL_DATA, &retval->trans_info,
                         DOWNLOADED_COL_DESCRIPTION_ORIGINAL, &retval->orig_desc,
@@ -897,7 +906,7 @@ enum
 static void populate_list (gpointer key, gpointer value, GtkListStore *list)
 {
     GtkTreeIter iter;
-    const char *original = key;
+    auto original{static_cast<char*>(key)};
     char *normalized = g_utf8_normalize (original, -1, G_NORMALIZE_NFC);
     char *normalized_folded = normalized ? g_utf8_casefold (normalized, -1) : NULL;
     gtk_list_store_append (list, &iter);
@@ -913,7 +922,7 @@ static bool
 match_func (GtkEntryCompletion *completion, const char *entry_str,
             GtkTreeIter *iter, gpointer user_data)
 {
-    GtkTreeModel *model = user_data;
+    auto model{static_cast<GtkTreeModel*>(user_data)};
     gchar *existing_str = NULL;
     bool ret = false;
     gtk_tree_model_get (model, iter,
@@ -1032,7 +1041,7 @@ gnc_gen_trans_set_price_to_selection_cb (GtkMenuItem *menuitem,
     GList *row_info_list = gnc_g_list_map (selected_rows, (GncGMapFunc) row_get_info, info);
     for (GList *n = row_info_list; n; n = g_list_next (n))
     {
-        RowInfo *row = n->data;
+        auto row{static_cast<RowInfo*>(n->data)};
         Transaction *trans = gnc_import_TransInfo_get_trans (row->trans_info);
         time64 post_date = xaccTransGetDate(trans);
         Split *split = gnc_import_TransInfo_get_fsplit (row->trans_info);
@@ -1085,12 +1094,12 @@ gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
 
     char *new_desc = NULL, *new_notes = NULL, *new_memo = NULL;
     GList *row_info_list = gnc_g_list_map (selected_rows, (GncGMapFunc) row_get_info, info);
-    if (input_new_fields (info, row_info_list->data,
+    if (input_new_fields (info, static_cast<RowInfo*>(row_info_list->data),
                           &new_desc, &new_notes, &new_memo))
     {
         for (GList *n = row_info_list; n; n = g_list_next (n))
         {
-            RowInfo *row = n->data;
+            auto row{static_cast<RowInfo*>(n->data)};
             Transaction *trans = gnc_import_TransInfo_get_trans (row->trans_info);
             Split *split = gnc_import_TransInfo_get_fsplit (row->trans_info);
             if (info->can_edit_desc)
@@ -1221,8 +1230,9 @@ gnc_gen_trans_row_changed_cb (GtkTreeSelection *selection,
         GList* list = gtk_tree_selection_get_selected_rows (selection, &model);
         for (GList *n = list; n; n = n->next)
         {
-            if (get_action_for_path (n->data, model) != GNCImport_ADD)
-                gtk_tree_selection_unselect_path (selection, n->data);
+            auto path{static_cast<GtkTreePath*>(n->data)};
+            if (get_action_for_path (path, model) != GNCImport_ADD)
+                gtk_tree_selection_unselect_path (selection, path);
         }
         g_list_free_full (list, (GDestroyNotify)gtk_tree_path_free);
     }
@@ -1265,7 +1275,7 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
     const char *desc = NULL, *memo = NULL, *notes = NULL;
     if (row_info_list)          /* should never be NULL. collect from first row. */
     {
-        RowInfo* first_rowinfo = row_info_list->data;
+        auto first_rowinfo{static_cast<RowInfo*>(row_info_list->data)};
         Transaction *trans = gnc_import_TransInfo_get_trans (first_rowinfo->trans_info);
         Split *split = gnc_import_TransInfo_get_fsplit (first_rowinfo->trans_info);
         desc = xaccTransGetDescription (trans);
@@ -1282,7 +1292,7 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
     bool can_assign_acct = true;
     for (GList *n = row_info_list; n; n = g_list_next(n))
     {
-        RowInfo *rowinfo = n->data;
+        auto rowinfo{static_cast<RowInfo*>(n->data)};
 
         /* Only allow assigning a destination account for unbalanced transactions */
         if (can_assign_acct)
@@ -1396,7 +1406,7 @@ gnc_gen_trans_onButtonPressed_cb (GtkTreeView *treeview,
                 GList* selected;
                 GtkTreeModel *model;
                 selected = gtk_tree_selection_get_selected_rows (selection, &model);
-                if (get_action_for_path (selected->data, model) == GNCImport_ADD)
+                if (get_action_for_path (static_cast<GtkTreePath*>(selected->data), model) == GNCImport_ADD)
                     gnc_gen_trans_view_popup_menu (treeview, event, info);
                 g_list_free_full (selected, (GDestroyNotify)gtk_tree_path_free);
             }
@@ -1841,7 +1851,7 @@ get_peer_acct_names (Split *split)
     GList *names = NULL, *accounts_seen = NULL;
     for (GList *n = xaccTransGetSplitList (xaccSplitGetParent (split)); n; n = n->next)
     {
-        Account *account = xaccSplitGetAccount (n->data);
+        Account *account = xaccSplitGetAccount (static_cast<Split*>(n->data));
         if ((n->data == split) ||
             (xaccAccountGetType (account) == ACCT_TYPE_TRADING) ||
             (g_list_find (accounts_seen, account)))
@@ -2223,7 +2233,7 @@ query_imported_transaction_accounts (GNCImportMainMatcher *gui)
     for (GSList* txn = gui->temp_trans_list; txn != NULL;
          txn = g_slist_next (txn))
     {
-        GNCImportTransInfo* txn_info = txn->data;
+        auto txn_info{static_cast<GNCImportTransInfo*>(txn->data)};
         Account *txn_account =
             xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (txn_info));
         time64 txn_time =
@@ -2260,19 +2270,20 @@ create_hash_of_potential_matches (GList *candidate_txns,
     for (GList* candidate = candidate_txns; candidate != NULL;
          candidate = g_list_next (candidate))
     {
-        if (gnc_import_split_has_online_id (candidate->data))
+        auto split{static_cast<Split*>(candidate->data)};
+        if (gnc_import_split_has_online_id (split))
             continue;
         /* In this context an open transaction represents a freshly
          * downloaded one. That can't possibly be a match yet */
-        if (xaccTransIsOpen(xaccSplitGetParent(candidate->data)))
+        if (xaccTransIsOpen(xaccSplitGetParent(split)))
             continue;
-        Account *split_account = xaccSplitGetAccount (candidate->data);
+        Account *split_account = xaccSplitGetAccount (split);
         /* g_hash_table_steal_extended would do the two calls in one shot but is
          * not available until GLib 2.58.
          */
-        GSList *split_list = g_hash_table_lookup (account_hash, split_account);
+        auto split_list{static_cast<GSList*>(g_hash_table_lookup (account_hash, split_account))};
         g_hash_table_steal (account_hash, split_account);
-        split_list = g_slist_prepend (split_list, candidate->data);
+        split_list = g_slist_prepend (split_list, split);
         g_hash_table_insert (account_hash, split_account, split_list);
     }
     return account_hash;
@@ -2318,12 +2329,12 @@ perform_matching (GNCImportMainMatcher *gui, GHashTable *account_hash)
     for (GSList *imported_txn = gui->temp_trans_list; imported_txn !=NULL;
          imported_txn = g_slist_next (imported_txn))
     {
-        GNCImportTransInfo* txn_info = imported_txn->data;
+        auto txn_info{static_cast<GNCImportTransInfo*>(imported_txn->data)};
         Account *importaccount = xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (txn_info));
         match_struct s = {txn_info, display_threshold, date_threshold, date_not_threshold, fuzzy_amount};
 
-        g_slist_foreach (g_hash_table_lookup (account_hash, importaccount),
-                         (GFunc) match_helper, &s);
+        auto slist{static_cast<GSList*>(g_hash_table_lookup (account_hash, importaccount))};
+        g_slist_foreach (slist, (GFunc) match_helper, &s);
 
         // Sort the matches, select the best match, and set the action.
         gnc_import_TransInfo_init_matches (txn_info, gui->user_settings);
