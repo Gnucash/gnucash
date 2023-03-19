@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-18 07:51+0000\n"
+"PO-Revision-Date: 2023-03-19 07:53+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/pt/>\n"
@@ -26223,8 +26223,7 @@ msgstr "Nenhuma conta válida encontrada"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1046
 msgid "This report requires a valid AP/AR account to be available."
-msgstr ""
-"Este relatório requer que tenha uma conta A/P ou A/R válida disponível."
+msgstr "Este relatório requer que tenha uma conta A/P ou A/R válida disponível."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1069
 msgid "No transactions found."
@@ -28078,7 +28077,7 @@ msgstr "Transacção em _branco"
 #: gnucash/ui/gnc-plugin-page-register.ui:415
 #: gnucash/ui/gnc-plugin-page-register.ui:614
 msgid "Move to the blank transaction at the bottom of the register"
-msgstr "Ir para a transacção em branco no final do registo"
+msgstr "Ir para a transacção em branco no final do diário"
 
 #: gnucash/ui/gnc-main-window.ui:8
 msgid "_File"
@@ -28135,7 +28134,7 @@ msgstr "Mostrar/Ocultar a barra de ferramentas nesta janela"
 
 #: gnucash/ui/gnc-main-window.ui:183
 msgid "Su_mmary Bar"
-msgstr "Barra de su_mário"
+msgstr "Barra de resu_mo"
 
 #: gnucash/ui/gnc-main-window.ui:185
 msgid "Show/hide the summary bar on this window"

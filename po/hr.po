@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-14 16:40+0000\n"
+"PO-Revision-Date: 2023-03-18 22:41+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hr/>\n"
@@ -1446,6 +1446,10 @@ msgid ""
 "Any dividend being reinvested must be subsequently recorded as a regular "
 "stock purchase."
 msgstr ""
+"Poduzeće izdaje dividende u gotovini dioničaru.\n"
+"\n"
+"Sve reinvestirane dividende moraju se naknadno evidentirati kao kupnje "
+"dionica."
 
 #. Translators: this is a stock transaction describing return
 #. of capital
@@ -1664,7 +1668,7 @@ msgstr ""
 #: gnucash/gnome/assistant-stock-transaction.cpp:818
 #, c-format
 msgid "A price of 1 %s = %s on %s will be recorded."
-msgstr "Zapisat će se cijena od 1 %s = %s %s."
+msgstr "Zapisat će se cijena od 1 %s = %s za %s."
 
 #. Translators: Designates a page in the stock assistant or inserts the value
 #. into the non-currency asset split of an investment transaction.
@@ -7697,7 +7701,7 @@ msgstr "„%s” nedostaje"
 #: gnucash/gnome-utils/gnc-report-combo.c:318
 #, c-format
 msgid "Report with GUID '%s' is missing"
-msgstr ""
+msgstr "Izvještaj s globalnim jedinstvenim identifikatorom „%s” nedostaje"
 
 #: gnucash/gnome-utils/gnc-splash.c:113
 msgid "Loading…"
@@ -22858,12 +22862,12 @@ msgstr "Izostavi konta"
 #: gnucash/report/reports/standard/income-statement.scm:370
 #: gnucash/report/reports/standard/trial-balance.scm:374
 msgid "${company-name} ${report-title} For Period Covering ${start} to ${end}"
-msgstr ""
+msgstr "${company-name} ${report-title} za razdoblje od ${start} do ${end}"
 
 #: gnucash/report/reports/standard/account-summary.scm:296
 #: gnucash/report/reports/standard/trial-balance.scm:370
 msgid "${company-name} ${report-title} ${date}"
-msgstr ""
+msgstr "${company-name} ${report-title} ${date}"
 
 #: gnucash/report/reports/standard/account-summary.scm:381
 msgid "Account title"
@@ -24885,10 +24889,8 @@ msgid "Plot height"
 msgstr "Visina iscrtavanja"
 
 #: gnucash/report/reports/standard/investment-lots.scm:57
-#, fuzzy
-#| msgid "Show _Memo column"
 msgid "Show lot GUID column"
-msgstr "Prikaži stupac _bilježaka"
+msgstr "Prikaži stupac globalanog jedinstvenog identifikatora paketa"
 
 #: gnucash/report/reports/standard/investment-lots.scm:58
 msgid "Show date columns"
@@ -25001,7 +25003,7 @@ msgstr "Naslov izvještaja"
 
 #: gnucash/report/reports/standard/investment-lots.scm:104
 msgid "GUID"
-msgstr ""
+msgstr "Globalan jedinstveni identifikator"
 
 #: gnucash/report/reports/standard/investment-lots.scm:105
 #, fuzzy
@@ -25159,7 +25161,7 @@ msgstr "Dijagram postotaka"
 
 #: gnucash/report/reports/standard/investment-lots.scm:214
 msgid "Show the lot GUID table column"
-msgstr ""
+msgstr "Pokaži stupac tablice globalanog jedinstvenog identifikatora paketa"
 
 #: gnucash/report/reports/standard/investment-lots.scm:221
 #, fuzzy
@@ -29715,31 +29717,25 @@ msgstr "neophodno"
 
 #. Translators: Means that the quote will work best if the preceding element is provided
 #: libgnucash/app-utils/gnc-quotes.cpp:772
-#, fuzzy
-#| msgid "Unreconciled"
 msgctxt "Finance::Quote"
 msgid "recommended"
-msgstr "Neusklađeno"
+msgstr "preporučeno"
 
 #. Translators: Means that one of the indicated elements is required
 #: libgnucash/app-utils/gnc-quotes.cpp:774
-#, fuzzy
-#| msgid "End of this year"
 msgctxt "Finance::Quote"
 msgid "one of these"
-msgstr "Kraj ove godine"
+msgstr "jedan od ovih"
 
 #. Translators: Means that a required element wasn't reported. The *s are for emphasis.
 #: libgnucash/app-utils/gnc-quotes.cpp:776
-#, fuzzy
-#| msgid "missing"
 msgctxt "Finance::Quote"
 msgid "**missing**"
-msgstr "nedostaje"
+msgstr "**nedostaje**"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:783
 msgid "Finance::Quote fields GnuCash uses:"
-msgstr ""
+msgstr "Finance::Quote polja koja GnuCash koristi:"
 
 #. Translators: The stock or Mutual Fund symbol, ISIN, CUSIP, etc.
 #: libgnucash/app-utils/gnc-quotes.cpp:785
@@ -29749,11 +29745,9 @@ msgstr "oznaka: "
 
 #. Translators: The date of the quote.
 #: libgnucash/app-utils/gnc-quotes.cpp:787
-#, fuzzy
-#| msgid "Date: "
 msgctxt "Finance::Quote"
 msgid "date: "
-msgstr "Datum: "
+msgstr "datum: "
 
 #. Translators: The quote currency
 #: libgnucash/app-utils/gnc-quotes.cpp:789
