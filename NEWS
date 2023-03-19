@@ -1,5 +1,45 @@
 Version history:
 ------- -------
+4.904 - 19 March 2023
+Between 4.903 and 4.904, the following bugfixes were accomplished:
+The following fix will also appear in GnuCash 4.14:
+
+    Bug 798570 - Budget totals for income, expenses and remaining to budget
+                 incorrect for one specific date.
+
+The following fixes are in 4.904 only and will not appear in GnuCash 4.14:
+
+    Bug 798558 - Irregular line spacing in Account Tree View
+    Bug 798773 - Help file launches in browser when using command-H to hide
+                 GnuCash
+                 This is a MacOS-only problem. Note that for the fix to have
+                 effect you must remove the file accelerator-map from
+                 GNC_CONFIG_HOME when GnuCash isn't running.
+    Bug 798778 - GnuCash quits abruptly when attempting to edit options for
+                 certain reports.
+    Bug 798781 - Printing multiple checks prints duplicate checks
+    Bug 798787 - gnc-register-owner-option currently broken
+
+The following fixes and improvements were not associated with bug reports:
+
+    Fix quotes codecvt to wchar_t error on Windows.
+    Budget totals for one period would be wrong when increasing the number of
+        periods.
+    Change the handling of accelerator maps. Gtk no longer supports changing
+        these from the menus and the save no longer writes out the accelerators
+        that have their default values, so to assist users editing them we have
+        generated default ones that we include with GnuCash and have disabled
+        saving when quitting GnuCash. At startup GnuCash will check for the
+        presence of the file accelerator-map in GNC_CONFIG_HOME and if it's
+        not found will copy in the default one.
+    Properly parse plus signs while importing numbers in a CSV file.
+    Fix CSV price import file loading
+    CsvImport - actually do as the warning indicates: If an invalid column is
+        found in a preset, replace it with a NONE column, rather than not
+        inserting a column at all.
+
+New and Updated Translations: Chinese (Simplified), Croatian, Hungarian, Japanese, Portuguese, Portuguese (Brazil), Spanish, Swedish
+
 4.903 - 12 March 2023
 Between 4.902 and 4.903, the following bugfixes were accomplished:
 The following fix will also appear in GnuCash 4.14:
