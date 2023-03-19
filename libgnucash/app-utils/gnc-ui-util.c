@@ -1486,6 +1486,9 @@ gnc_print_amount_with_bidi_ltr_isolate (gnc_numeric val, GNCPrintAmountInfo info
     static const char ltr_pop_isolate[] = { 0xe2, 0x81, 0xa9 };
     size_t offset = info.use_symbol ? 3 : 0;
 
+    if (!gnc_commodity_is_currency (info.commodity))
+        offset = 0;
+
     memset (buf, 0, BUFLEN);
     if (!xaccSPrintAmount (buf + offset, val, info))
     {
@@ -1493,7 +1496,7 @@ gnc_print_amount_with_bidi_ltr_isolate (gnc_numeric val, GNCPrintAmountInfo info
         return buf;
     };
 
-    if (!info.use_symbol)
+    if (offset == 0)
         return buf;
 
     memcpy (buf, ltr_isolate, 3);
