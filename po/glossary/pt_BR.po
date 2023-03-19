@@ -8,14 +8,14 @@
 # Vladimir Melo <vladimirmelo.psi@gmail.com>, 2007.
 # LL Magical <lolayami2004@gmail.com>, 2020.
 # Fábio Rodrigues Ribeiro <farribeiro@gmail.com>, 2021.
-# Wellington Terumi Uemura <wellingtonuemura@gmail.com>, 2021, 2022.
+# Wellington Terumi Uemura <wellingtonuemura@gmail.com>, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-01-20 11:54+0000\n"
+"PO-Revision-Date: 2023-03-18 11:41+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/glossary/pt_BR/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -752,7 +752,7 @@ msgstr "origem"
 
 #. "One of the two or several parts a transaction is divided into"
 msgid "split"
-msgstr "divisão"
+msgstr "desdobramento"
 
 #. "Alias of 'shares'"
 msgid "stocks"

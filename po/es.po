@@ -14,6 +14,7 @@
 # Eduardo Malaspina <vaio0@swismail.com>, 2022.
 # Luis D. Lafaurie <luis.lafaurie@tecnativa.com>, 2022.
 # Guille Lopez <willelopz@gmail.com>, 2022, 2023.
+# gallegonovato <fran-carro@hotmail.es>, 2023.
 #
 #
 # ###############################################################################
@@ -83,8 +84,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-03-12 13:40+0000\n"
-"Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
+"PO-Revision-Date: 2023-03-19 15:40+0000\n"
+"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -8953,7 +8954,7 @@ msgstr "Edita las preferencias globales de GnuCash"
 
 #: gnucash/gnome-utils/gnc-main-window.c:345
 msgid "Tab P_osition"
-msgstr "<b>Posición de pestaña</b>"
+msgstr "_Posición de la pestaña"
 
 #: gnucash/gnome-utils/gnc-main-window.c:348
 msgid "Select sorting criteria for this page view"
@@ -11065,8 +11066,8 @@ msgid ""
 "This value specifies the predefined check format to use. The number is the "
 "guid of a known check format."
 msgstr ""
-"Este valor especifica el formato de comprobación predefinido para emplear. "
-"El número es el GUID de un formato de comprobación conocido."
+"Este valor especifica el formato predeterminado de cheque a utilizar. El "
+"número es la guía de un formato de cheque conocido."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:10
 msgid "Which check position to print"
@@ -15692,7 +15693,7 @@ msgstr "Abre documentos importados en casillas"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:392
 msgid "Open not yet posted documents in tabs "
-msgstr "Abre documentos aún no importados en casillas "
+msgstr "Abrir documentos no contabilizados en pestañas "
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:410
 msgid "Don't open imported documents in tabs"
@@ -15869,7 +15870,7 @@ msgstr "Escoja Diálogo del Titular"
 #: gnucash/gtkbuilder/dialog-commodities.glade:27
 #: gnucash/report/reports/standard/account-piecharts.scm:62
 msgid "Securities"
-msgstr "Garantías"
+msgstr "Títulos"
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:77
 msgid "Show National Currencies"
@@ -23951,9 +23952,8 @@ msgid ""
 "report system, especially your saved reports, for a report with this report-"
 "guid: "
 msgstr ""
-"Uno de tus boletines tiene un boletín-guid que es un duplicado. Por favor "
-"comprueba el sistema boletinado, especialmente tus boletines guardadas, para "
-"una boletín con este boletín-guid: "
+"Uno de sus informes tiene un GUID duplicado. Verifique el sistema de "
+"informes y, en particular, los informes guardados con la siguiente guía: "
 
 #: gnucash/report/report-core.scm:212
 msgid "Wrong report definition: "
@@ -30522,7 +30522,7 @@ msgstr "Error numérico"
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1037
 #, c-format
 msgid "Unknown account for guid [%s], cancelling SX [%s] creation."
-msgstr "Cuenta desconocida para guid [%s], cancelando creación SX [%s]."
+msgstr "Cuenta desconocida para GUID [%s], cancelando la creación de SX [%s]."
 
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1092
 #, c-format

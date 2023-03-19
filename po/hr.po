@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-03-11 16:40+0000\n"
+"PO-Revision-Date: 2023-03-18 22:39+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -3159,14 +3159,16 @@ msgstr "Zadaj valjani kraj odabira."
 
 #: gnucash/gnome/dialog-sx-editor2.c:810 gnucash/gnome/dialog-sx-editor.c:557
 msgid "There must be some number of occurrences."
-msgstr "Mora postojati neki broj događaja."
+msgstr "Mora postojati neki broj pojavljivanja."
 
 #: gnucash/gnome/dialog-sx-editor2.c:819 gnucash/gnome/dialog-sx-editor.c:565
 #, c-format
 msgid ""
 "The number of remaining occurrences (%d) is greater than the number of total "
 "occurrences (%d)."
-msgstr "Broj preostalih događaja (%d) je veći od broja ukupnih događaja (%d)."
+msgstr ""
+"Broj preostalih pojavljivanja (%d) je veći od broja ukupnih pojavljivanja "
+"(%d)."
 
 #: gnucash/gnome/dialog-sx-editor2.c:851 gnucash/gnome/dialog-sx-editor.c:594
 msgid ""
@@ -7940,7 +7942,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/dialog-transfer.c:1329
 msgid "Finance::Quote must be installed to enable this button."
-msgstr "Finance::Quote mora biti instalirano za upotrebljavanje ovog gumba."
+msgstr "Za uključivanje ovog gumba modul Finance::Quote mora biti instaliran."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1431
 msgid ""
@@ -10190,11 +10192,11 @@ msgstr "U"
 
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:152
 msgid "Last Occur"
-msgstr "Zadnje nastupanje"
+msgstr "Zadnje pojavljivanje"
 
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:157
 msgid "Next Occur"
-msgstr "Sljedeće nastupanje"
+msgstr "Sljedeće pojavljivanje"
 
 #: gnucash/gnome-utils/window-main-summarybar.c:309
 #, c-format
@@ -10204,7 +10206,7 @@ msgstr "%s, ukupno:"
 #: gnucash/gnome-utils/window-main-summarybar.c:312
 #, c-format
 msgid "%s, Non Currency Commodities Total:"
-msgstr "%s, ukupni iznos bezvalutnih roba:"
+msgstr "%s, bezvalutne robe ukupno:"
 
 #: gnucash/gnome-utils/window-main-summarybar.c:315
 #, c-format
@@ -10761,7 +10763,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:5
 msgid "GUID of predefined check format to use"
-msgstr "Globalan jedinstveni identifikator (GUID) predodređenog formata čeka"
+msgstr "Globalan jedinstveni identifikator predodređenog formata čeka"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:6
 msgid ""
@@ -17060,7 +17062,7 @@ msgstr "Vrijeme čekanja na _odgovor"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1990
 msgid "seconds"
-msgstr "sekundi"
+msgstr "sekunde"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2018
 #: gnucash/gtkbuilder/dialog-preferences.glade:2036
@@ -17088,8 +17090,8 @@ msgid ""
 "Enable vertical grid lines on table displays. These will mainly be tree "
 "views like the Accounts page."
 msgstr ""
-"Uključi okomite crte u prikazu tablice. One se uglavnom koriste u stablastom "
-"prikazu stranica konta/kontnog plana."
+"Uključi okomite crte u prikazima tablica. Uglavnom se koriste u stablastim "
+"prikazima kao što je stranica „Konta”."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2102
 msgid "<b>Linked Files</b>"
@@ -17996,8 +17998,8 @@ msgid ""
 "re-enable any of these dialogs, select the check box next to the dialog, "
 "then click OK."
 msgstr ""
-"Postavljeno je, da se sljedeći dijalozi upozorenja ne prikazuju. Za ponovo "
-"prikazivanje ovih dijaloga, odaberi polje za potvrdu pored dijaloga, zatim "
+"Zatražio/la si da se sljedeći dijalozi upozorenja ne prikazuju. Za ponovo "
+"uključivanje ovih dijaloga, odaberi polje za potvrdu pored dijaloga, zatim "
 "pritisni „U redu“."
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:120
@@ -18115,7 +18117,7 @@ msgstr "Neograničeno"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:362
 msgid "Number of Occurrences"
-msgstr "Broj događaja"
+msgstr "Broj pojavljivanja"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:508
 msgid "<b>Since Last Run</b>"
@@ -18216,11 +18218,11 @@ msgstr "Obavijesti me kad se stvori"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1151
 msgid "<b>Occurrences</b>"
-msgstr "<b>Događaji</b>"
+msgstr "<b>Pojavljivanja</b>"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1174
 msgid "Last Occurred: "
-msgstr "Zadnje nastupanje: "
+msgstr "Zadnje pojavljivanje: "
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1208
 msgid "Repeats:"
@@ -18232,7 +18234,7 @@ msgstr "Do"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1278
 msgid "occurrences"
-msgstr "događaja"
+msgstr "pojavljivanja"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1290
 msgid "remaining"
@@ -18830,7 +18832,7 @@ msgstr "Nije terminirano"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:673
 msgid "Select occurrence date above."
-msgstr "Odaberi datum događaja."
+msgstr "Odaberi datum pojavljivanja."
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:710
 msgctxt "Daily"
@@ -21134,7 +21136,7 @@ msgid ""
 "Error message:\n"
 "%s"
 msgstr ""
-"Došlo je do neočekivane greške prilikom stvaranja cijena. Molimo te, da "
+"Došlo je do neočekivane greške prilikom stvaranja cijena. Molimo te da "
 "prijaviš ovu grešku.\n"
 "\n"
 "Poruka o grešci:\n"
@@ -21161,7 +21163,7 @@ msgid ""
 "Error message:\n"
 "%s"
 msgstr ""
-"Došlo je do neočekivane greške prilikom mapiranja konta. Molimo te, da "
+"Došlo je do neočekivane greške prilikom mapiranja konta. Molimo te da "
 "prijaviš ovu grešku.\n"
 "\n"
 "Poruka o grešci:\n"
@@ -21176,7 +21178,7 @@ msgid ""
 "Error message:\n"
 "%s"
 msgstr ""
-"Došlo je do neočekivane greške prilikom stvaranja transakcija. Molimo te, da "
+"Došlo je do neočekivane greške prilikom stvaranja transakcija. Molimo te da "
 "prijaviš ovu grešku.\n"
 "\n"
 "Poruka o grešci:\n"
@@ -23431,7 +23433,7 @@ msgstr "Kriva definicija izvještaja: "
 
 #: gnucash/report/report-core.scm:213
 msgid " Report is missing a GUID."
-msgstr " Izvještaju nedostaje globalan jedinstveni identifikator."
+msgstr " Izvještaj nema globalan jedinstveni identifikator."
 
 #: gnucash/report/report-core.scm:294
 msgid "Enter a descriptive name for this report."
@@ -29283,7 +29285,7 @@ msgstr "Sakrij"
 
 #: gnucash/report/trep-engine.scm:1028
 msgid "Enable hyperlinks in amounts."
-msgstr "Uključi poveznice za iznose."
+msgstr "Uključi poveznice u iznosima."
 
 #: gnucash/report/trep-engine.scm:1033
 msgid "Reverse amount display for certain account types."
