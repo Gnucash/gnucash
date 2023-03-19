@@ -357,7 +357,7 @@ gnucash/import-export/import-format-dialog.c
 gnucash/import-export/import-main-matcher.cpp
 gnucash/import-export/import-match-picker.c
 gnucash/import-export/import-parse.c
-gnucash/import-export/import-pending-matches.c
+gnucash/import-export/import-pending-matches.cpp
 gnucash/import-export/import-settings.c
 gnucash/import-export/import-utilities.c
 gnucash/import-export/log-replay/gnc-log-replay.c
