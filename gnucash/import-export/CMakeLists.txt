@@ -22,7 +22,7 @@ set (generic_import_SOURCES
   import-parse.c
   import-utilities.c
   import-settings.c
-  import-main-matcher.c
+  import-main-matcher.cpp
   import-pending-matches.c
 )
 
