@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-03-14 16:39+0000\n"
+"PO-Revision-Date: 2023-03-18 22:39+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -10763,7 +10763,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:5
 msgid "GUID of predefined check format to use"
-msgstr "Globalan jedinstveni identifikator (GUID) predodređenog formata čeka"
+msgstr "Globalan jedinstveni identifikator predodređenog formata čeka"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:6
 msgid ""
@@ -23433,7 +23433,7 @@ msgstr "Kriva definicija izvještaja: "
 
 #: gnucash/report/report-core.scm:213
 msgid " Report is missing a GUID."
-msgstr " Izvještaju nedostaje globalan jedinstveni identifikator."
+msgstr " Izvještaj nema globalan jedinstveni identifikator."
 
 #: gnucash/report/report-core.scm:294
 msgid "Enter a descriptive name for this report."

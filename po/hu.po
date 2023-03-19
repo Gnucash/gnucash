@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-03-16 17:41+0000\n"
+"PO-Revision-Date: 2023-03-18 17:26+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -4784,7 +4784,7 @@ msgstr "Rendezés ár szerint"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:252
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:976
 msgid "Descri_ption"
-msgstr "M_agyarázat"
+msgstr "L_eírás"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:252
 msgid "Sort by description"
@@ -15265,7 +15265,7 @@ msgstr "<b>Fizetési feltétel leírása</b>"
 #: gnucash/gtkbuilder/dialog-billterms.glade:909
 #: gnucash/gtkbuilder/dialog-billterms.glade:1135
 msgid "De_scription"
-msgstr "Ma_gyarázat"
+msgstr "L_eírás"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:589
 #: gnucash/gtkbuilder/dialog-billterms.glade:924
