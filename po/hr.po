@@ -8601,7 +8601,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:5
 msgid "GUID of predefined check format to use"
-msgstr "Globalan jedinstveni identifikator (GUID) predodređenog formata čeka"
+msgstr "Globalan jedinstveni identifikator predodređenog formata čeka"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:6
 msgid ""
@@ -21664,7 +21664,7 @@ msgstr "Kriva definicija izvještaja: "
 
 #: gnucash/report/report-core.scm:218
 msgid " Report is missing a GUID."
-msgstr " Izvještaju nedostaje globalan jedinstveni identifikator."
+msgstr " Izvještaj nema globalan jedinstveni identifikator."
 
 #: gnucash/report/report-core.scm:309
 msgid "Enter a descriptive name for this report."

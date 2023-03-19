@@ -8862,8 +8862,8 @@ msgid ""
 "This value specifies the predefined check format to use. The number is the "
 "guid of a known check format."
 msgstr ""
-"Este valor especifica el formato de comprobación predefinido para emplear. "
-"El número es el GUID de un formato de comprobación conocido."
+"Este valor especifica el formato predeterminado de cheque a utilizar. El "
+"número es la guía de un formato de cheque conocido."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:10
 msgid "Which check position to print"
@@ -13707,7 +13707,7 @@ msgstr "Abre documentos importados en casillas"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:392
 msgid "Open not yet posted documents in tabs "
-msgstr "Abre documentos aún no importados en casillas "
+msgstr "Abrir documentos no contabilizados en pestañas "
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:410
 msgid "Don't open imported documents in tabs"
@@ -22199,9 +22199,8 @@ msgid ""
 "report system, especially your saved reports, for a report with this report-"
 "guid: "
 msgstr ""
-"Uno de tus boletines tiene un boletín-guid que es un duplicado. Por favor "
-"comprueba el sistema boletinado, especialmente tus boletines guardadas, para "
-"una boletín con este boletín-guid: "
+"Uno de sus informes tiene un GUID duplicado. Verifique el sistema de "
+"informes y, en particular, los informes guardados con la siguiente guía: "
 
 #: gnucash/report/report-core.scm:217
 msgid "Wrong report definition: "
@@ -30407,7 +30406,7 @@ msgstr "Error de Finance::Quote no reconocido: "
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1037
 #, c-format
 msgid "Unknown account for guid [%s], cancelling SX [%s] creation."
-msgstr "Cuenta desconocida para guid [%s], cancelando creación SX [%s]."
+msgstr "Cuenta desconocida para GUID [%s], cancelando la creación de SX [%s]."
 
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1092
 #, c-format

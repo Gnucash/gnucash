@@ -26196,7 +26196,7 @@ msgstr "As transacções ligadas estão ocultas."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:920
 msgid "Invoices show if paid, payments show invoice numbers."
-msgstr "Facturas mostram se pago, pagamentos mostram números de factura."
+msgstr "Facturas mostram se pagas, pagamentos mostram números de factura."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:921
 msgid ""
@@ -26844,15 +26844,15 @@ msgstr "Unidade"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:318
 msgid "GST Rate"
-msgstr "Taxa de imposto"
+msgstr "Taxa do imposto"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:319
 msgid "GST Amount"
-msgstr "Valor de imposto"
+msgstr "Valor do imposto"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:320
 msgid "Amount Due (inc GST)"
-msgstr "Montante devido (inc imp)"
+msgstr "Quantia devida (inc. imp.)"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:321
 msgid "Invoice #: "
@@ -26969,7 +26969,7 @@ msgstr "Sem entradas de ajuste/fecho"
 
 #: gnucash/report/reports/standard/trial-balance.scm:190
 msgid "Full end-of-period work sheet"
-msgstr "Folha de trabalho de final de período"
+msgstr "Folha de trabalho de final de período completa"
 
 #: gnucash/report/reports/standard/trial-balance.scm:247
 msgid "Adjusting Entries"
@@ -27031,11 +27031,11 @@ msgstr "Contas de bolsa"
 
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:241
 msgid "Total Equity, Trading, and Liabilities"
-msgstr "Total de capital próprio, negócio e passivo"
+msgstr "Total de capital próprio, bolsa e passivo"
 
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:250
 msgid "Imbalance Amount"
-msgstr "Montante não saldado"
+msgstr "Quantia não saldada"
 
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:267
 msgid "<strong>Exchange Rates</strong> used for this report"
@@ -27063,8 +27063,8 @@ msgid ""
 "Options menu to select an <em>Invoice</em>, not a Bill or Expense Voucher."
 msgstr ""
 "Este relatório foi desenhado só para facturas de clientes (vendas). Por "
-"favor, use o menu Opções para seleccionar uma <em>Factura</em>, não um "
-"Pagamento ou um Vale de despesa."
+"favor, use o menu Opções para seleccionar <em>Factura</em>, não Pagamento ou "
+"Vale de despesa."
 
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:193
 msgid "Website"
@@ -27218,14 +27218,14 @@ msgstr "Mosaico de fundo para relatórios."
 #: gnucash/report/stylesheets/footer.scm:86
 #: gnucash/report/stylesheets/head-or-tail.scm:127
 msgid "Heading Banner"
-msgstr "Imagem de título"
+msgstr "Faixa de título"
 
 #: gnucash/report/stylesheets/footer.scm:86
 #: gnucash/report/stylesheets/footer.scm:91
 #: gnucash/report/stylesheets/head-or-tail.scm:127
 #: gnucash/report/stylesheets/head-or-tail.scm:131
 msgid "Banner for top of report."
-msgstr "Imagem para o topo do relatório."
+msgstr "Faixa para o topo do relatório."
 
 #: gnucash/report/stylesheets/footer.scm:91
 #: gnucash/report/stylesheets/head-or-tail.scm:131
@@ -27424,7 +27424,7 @@ msgstr "A data de criação deste relatório."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:75
 msgid "Show time in addition to date"
-msgstr "Mostrar hora além da data"
+msgstr "Mostrar a hora além da data"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:76
 msgid ""
@@ -27710,8 +27710,8 @@ msgid ""
 "blank, which will disable the filter."
 msgstr ""
 "Mostrar só contas cujo nome completo cumpre este filtro, e.g. \":Viagem\" "
-"corresponde a Despesas:Viagem:Férias e Despesa:Empresa:Viagem. Pode deixar "
-"em branco para desactivar o filtro."
+"corresponde a Despesa:Viagem:Férias e Despesa:Empresa:Viagem. Pode deixar em "
+"branco para desactivar o filtro."
 
 #: gnucash/report/trep-engine.scm:583
 msgid ""
@@ -27894,8 +27894,8 @@ msgid ""
 "Display the other account name? (if this is a split transaction, this "
 "parameter is guessed)."
 msgstr ""
-"Mostrar o outro nome de conta? Se for uma transacção dividida, o parâmetro é "
-"adivinhado."
+"Mostrar o outro nome de conta? Se for uma transacção com parcelas, o "
+"parâmetro é adivinhado."
 
 #: gnucash/report/trep-engine.scm:956
 msgid "Amount of detail to display per transaction."
