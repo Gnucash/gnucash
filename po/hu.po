@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-18 17:05+0000\n"
+"PO-Revision-Date: 2023-03-19 22:41+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hu/>\n"
@@ -21613,9 +21613,8 @@ msgid " Report is missing a GUID."
 msgstr ""
 
 #: gnucash/report/report-core.scm:309
-#, fuzzy
 msgid "Enter a descriptive name for this report."
-msgstr "Adjon egy nevet e jelentésnek"
+msgstr "Adjon egy nevet a jelentésnek."
 
 #: gnucash/report/report-core.scm:316
 msgid "Select a stylesheet for the report."
@@ -22611,13 +22610,12 @@ msgid "How to treat accounts which exceed the specified depth limit (if any)."
 msgstr "Hogyan kezeljük a mélységi korlátot túllépő számlákat (ha van)."
 
 #: gnucash/report/reports/standard/account-summary.scm:90
-#, fuzzy
 msgid ""
 "Show the total balance, including balances in subaccounts, of any account at "
 "the depth limit."
 msgstr ""
 "A teljes egyenleg feltüntetése, beleértve minden alszámla egyenlegét a "
-"mélységi korlátig"
+"mélységi korlátig."
 
 #: gnucash/report/reports/standard/account-summary.scm:91
 msgid "Raise accounts deeper than the depth limit to the depth limit."
@@ -22783,9 +22781,8 @@ msgstr "Valuták megjelenítése"
 #: gnucash/report/reports/standard/equity-statement.scm:79
 #: gnucash/report/reports/standard/income-statement.scm:106
 #: gnucash/report/reports/standard/trial-balance.scm:127
-#, fuzzy
 msgid "Display any foreign currency amount in an account."
-msgstr "A számla külföldi pénznemben levő összegeinek megjelenítése"
+msgstr "A számla külföldi pénznemben levő összegeinek megjelenítése."
 
 #: gnucash/report/reports/standard/account-summary.scm:129
 #: gnucash/report/reports/standard/balance-sheet.scm:135
@@ -22808,9 +22805,8 @@ msgstr "Árfolyamok megjelenítése"
 #: gnucash/report/reports/standard/equity-statement.scm:81
 #: gnucash/report/reports/standard/income-statement.scm:108
 #: gnucash/report/reports/standard/trial-balance.scm:129
-#, fuzzy
 msgid "Show the exchange rates used."
-msgstr "Alkalmazott árfolyamok megjelenítése"
+msgstr "Alkalmazott árfolyamok megjelenítése."
 
 #: gnucash/report/reports/standard/account-summary.scm:174
 msgid "Recursive Balance"
@@ -22884,9 +22880,8 @@ msgid "How to report brokerage fees"
 msgstr ""
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:81
-#, fuzzy
 msgid "Basis calculation method."
-msgstr "Alap számítási eljárás"
+msgstr ""
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:82
 #, fuzzy
@@ -22925,37 +22920,31 @@ msgid "Omit from report"
 msgstr "A jelentés címe"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:101
-#, fuzzy
 msgid "Display the ticker symbols."
-msgstr "Rövid jelölések megjelenítése"
+msgstr "Ticker kódok megjelenítése."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:106
-#, fuzzy
 msgid "Display exchange listings."
-msgstr "Tőzsdei listázások megjelenítése"
+msgstr ""
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:111
-#, fuzzy
 msgid "Display numbers of shares in accounts."
-msgstr "Részvények számának megjelenítése a számlákon"
+msgstr "Részvények számának megjelenítése a számlákon."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:116
 #: gnucash/report/reports/standard/portfolio.scm:57
-#, fuzzy
 msgid "The number of decimal places to use for share numbers."
-msgstr "A részvényszámok tizedeshelyeinek száma"
+msgstr "A részvénymennyiség tizedeshelyeinek száma."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:121
-#, fuzzy
 msgid "Display share prices."
-msgstr "Részvények árának megjelenítése"
+msgstr "Részvényárak megjelenítése."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:128
 #: gnucash/report/reports/standard/investment-lots.scm:145
 #: gnucash/report/reports/standard/portfolio.scm:64
-#, fuzzy
 msgid "Stock Accounts to report on."
-msgstr "Jelentendő részvényszámlák"
+msgstr ""
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:136
 #: gnucash/report/reports/standard/investment-lots.scm:156
