@@ -180,7 +180,7 @@ m_version{}, m_sources{}, m_api_key{}
     if (!(av_key && *av_key))
     {
         g_free (av_key);
-        av_key = getenv("ALPHAVANTAGE_API_KEY");
+        av_key = g_strdup(getenv("ALPHAVANTAGE_API_KEY"));
     }
 
     if (av_key)
