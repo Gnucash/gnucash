@@ -75,7 +75,6 @@ static GNCPendingMatches *
 gnc_import_PendingMatches_get_value (GNCImportPendingMatches *map,
                                      GNCImportMatchInfo *match_info)
 {
-    GNCPendingMatches *pending_matches;
     const GncGUID *match_guid;
 
     g_return_val_if_fail (map, NULL);
@@ -83,7 +82,7 @@ gnc_import_PendingMatches_get_value (GNCImportPendingMatches *map,
 
     match_guid = gnc_import_PendingMatches_get_key (match_info);
 
-    pending_matches = g_hash_table_lookup (map, match_guid);
+    auto pending_matches{static_cast<GNCPendingMatches*>(g_hash_table_lookup (map, match_guid))};
 
     return pending_matches;
 }

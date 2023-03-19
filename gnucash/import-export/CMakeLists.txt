@@ -23,7 +23,7 @@ set (generic_import_SOURCES
   import-utilities.c
   import-settings.c
   import-main-matcher.cpp
-  import-pending-matches.c
+  import-pending-matches.cpp
 )
 
 # Add dependency on config.h
