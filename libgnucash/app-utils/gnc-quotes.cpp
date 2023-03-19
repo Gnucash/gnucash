@@ -211,14 +211,23 @@ GncFQQuoteSource::run_cmd (const StrVec& args, const std::string& json_string) c
         boost::asio::io_service svc;
 
         auto input_buf = bp::buffer (json_string);
-        bp::child process (c_cmd, args,
-                           bp::std_out > out_buf,
-                           bp::std_err > err_buf,
-                           bp::std_in < input_buf,
-                           bp::env["ALPHAVANTAGE_API_KEY"]= (m_api_key.empty() ? "" : m_api_key),
-                           svc);
-        svc.run();
-        process.wait();
+	bp::child process;
+	if (m_api_key.empty())
+	    process = bp::child(c_cmd, args,
+				bp::std_out > out_buf,
+				bp::std_err > err_buf,
+				bp::std_in < input_buf,
+				svc);
+	else
+	    process = bp::child(c_cmd, args,
+				bp::std_out > out_buf,
+				bp::std_err > err_buf,
+				bp::std_in < input_buf,
+				bp::env["ALPHAVANTAGE_API_KEY"] = m_api_key,
+				svc);
+
+	svc.run();
+	process.wait();
 
         {
             auto raw = out_buf.get();
