@@ -365,11 +365,25 @@
         <attribute name="label" translatable="yes">Dup_licate Transaction</attribute>
         <attribute name="action">GncPluginPageRegisterActions.DuplicateTransactionAction</attribute>
         <attribute name="tooltip" translatable="yes">Make a copy of the current transaction</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Delete Transaction</attribute>
         <attribute name="action">GncPluginPageRegisterActions.DeleteTransactionAction</attribute>
         <attribute name="tooltip" translatable="yes">Delete the current transaction</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Dup_licate Split</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.DuplicateSplitAction</attribute>
+        <attribute name="tooltip" translatable="yes">Make a copy of the current split</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Delete Split</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.DeleteSplitAction</attribute>
+        <attribute name="tooltip" translatable="yes">Delete the current split</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Remo_ve Other Splits</attribute>
