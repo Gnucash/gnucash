@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-19 22:41+0000\n"
+"PO-Revision-Date: 2023-03-20 11:11+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hu/>\n"
@@ -23115,13 +23115,10 @@ msgstr "Egyoszlopos mérleg"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:78
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:47
-#, fuzzy
 msgid ""
 "Print liability/equity section in the same column under the assets section "
 "as opposed to a second column right of the assets section."
 msgstr ""
-"Kötelezettség/saját tőke fejezet nyomtatása ugyanabban az oszlopban, mint az "
-"eszközök, ellentétben egy második oszloppal az eszközök fejezettől jobbra"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:86
 #: gnucash/report/reports/standard/balsheet-eg.scm:150
@@ -23148,9 +23145,8 @@ msgstr "Eszközök szakasz megcímkézése"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:109
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:78
-#, fuzzy
 msgid "Whether or not to include a label for the assets section."
-msgstr "Tegyen-e bele címkét az eszközök szakaszba"
+msgstr ""
 
 #: gnucash/report/reports/standard/balance-sheet.scm:110
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:79
@@ -23159,9 +23155,8 @@ msgstr "Eszközök összege feltüntetve"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:112
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:81
-#, fuzzy
 msgid "Whether or not to include a line indicating total assets."
-msgstr "Feltüntessük-e az összes eszköz sorát"
+msgstr ""
 
 #: gnucash/report/reports/standard/balance-sheet.scm:113
 msgid "Use standard US layout"
@@ -23180,9 +23175,8 @@ msgstr "A kötelezettségek szakasz megcímkézése"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:118
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:84
-#, fuzzy
 msgid "Whether or not to include a label for the liabilities section."
-msgstr "Tegyen-e címkét a kötelezettségek szakaszba"
+msgstr ""
 
 #: gnucash/report/reports/standard/balance-sheet.scm:119
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:85
@@ -23191,9 +23185,8 @@ msgstr "Kötelezettségek összege feltüntetve"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:121
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:87
-#, fuzzy
 msgid "Whether or not to include a line indicating total liabilities."
-msgstr "Feltüntessük-e az összes kötelezettség sorát"
+msgstr ""
 
 #: gnucash/report/reports/standard/balance-sheet.scm:122
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:88
@@ -23202,9 +23195,8 @@ msgstr "A saját tőke szakasz megcímkézése"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:124
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:90
-#, fuzzy
 msgid "Whether or not to include a label for the equity section."
-msgstr "Tegyen-e címkét a saját tőke szakaszba"
+msgstr ""
 
 #: gnucash/report/reports/standard/balance-sheet.scm:125
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:91
@@ -23213,9 +23205,8 @@ msgstr "Saját tőke összege feltüntetve"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:127
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:93
-#, fuzzy
 msgid "Whether or not to include a line indicating total equity."
-msgstr "Feltüntessük-e az összes saját tőke sorát"
+msgstr ""
 
 #: gnucash/report/reports/standard/balance-sheet.scm:356
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:685
@@ -23282,12 +23273,10 @@ msgid "Exclude accounts with zero total balances"
 msgstr "Nulla egyenlegű számlák kihagyása"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:156
-#, fuzzy
 msgid ""
 "Exclude non-top-level accounts with zero balance and no non-zero sub-"
 "accounts."
 msgstr ""
-"Exclude non-top-level accounts with zero balance and no non-zero sub-accounts"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:161
 msgid "Negative amount format"
@@ -23472,10 +23461,8 @@ msgid "Display amounts as hyperlinks"
 msgstr "Számlanév megjelenítése hiperhivatkozásként"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:96
-#, fuzzy
 msgid "Shows each amounts in the table as a hyperlink to a register or report."
 msgstr ""
-"Minden számla a főkönyvi ablakára mutató hiperhivatkozásként jelenik meg"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:99
 #, fuzzy
@@ -23483,9 +23470,8 @@ msgid "Label sections"
 msgstr "Eszközök szakasz megcímkézése"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:100
-#, fuzzy
 msgid "Whether or not to include a label for sections."
-msgstr "Tegyen-e bele címkét az eszközök szakaszba"
+msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:101
 #, fuzzy
@@ -23493,9 +23479,8 @@ msgid "Include totals"
 msgstr "Főössze_g feltüntetése"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:102
-#, fuzzy
 msgid "Whether or not to include a line indicating total amounts."
-msgstr "Feltüntessük-e az összes eszköz sorát"
+msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:106
 #, fuzzy
@@ -23513,9 +23498,8 @@ msgid "Common Currency"
 msgstr "Közös pénznem"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:110
-#, fuzzy
 msgid "Convert all amounts to a single currency."
-msgstr "Minden tranzakció átalakítása egy közös pénznembe"
+msgstr "Minden összeg átváltása egy közös pénznembe."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:116
 #: gnucash/report/trep-engine.scm:105
@@ -23617,13 +23601,10 @@ msgid "Include new/existing totals"
 msgstr ""
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:96
-#, fuzzy
 msgid ""
 "Whether or not to include lines indicating change in totals introduced by "
 "budget."
 msgstr ""
-"Whether or not to include lines indicating change in totals introduced by "
-"budget"
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:108
 #: gnucash/report/reports/standard/budget-barchart.scm:84
@@ -23814,9 +23795,8 @@ msgid "Budget Flow"
 msgstr ""
 
 #: gnucash/report/reports/standard/budget-flow.scm:67
-#, fuzzy
 msgid "Period number."
-msgstr "Rendelésszám"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-flow.scm:296
 #, scheme-format
@@ -23848,9 +23828,8 @@ msgstr "A jövedelemszakasz megcímkézése"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:97
 #: gnucash/report/reports/standard/income-statement.scm:84
-#, fuzzy
 msgid "Whether or not to include a label for the revenue section."
-msgstr "Tartalmazzon-e a jövedelemszakasz címkét"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:98
 #: gnucash/report/reports/standard/income-statement.scm:85
@@ -23859,9 +23838,8 @@ msgstr "Jövedelemösszeg feltüntetése"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:100
 #: gnucash/report/reports/standard/income-statement.scm:87
-#, fuzzy
 msgid "Whether or not to include a line indicating total revenue."
-msgstr "Feltüntessük-e az összes jövedelem összegének sorát"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:101
 #: gnucash/report/reports/standard/income-statement.scm:94
@@ -23870,9 +23848,8 @@ msgstr "A költségszakasz megcímkézése"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:103
 #: gnucash/report/reports/standard/income-statement.scm:96
-#, fuzzy
 msgid "Whether or not to include a label for the expense section."
-msgstr "Tartalmazzon-e a költségszakasz címkét"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:104
 #: gnucash/report/reports/standard/income-statement.scm:97
@@ -23881,9 +23858,8 @@ msgstr "Költségösszeg feltüntetése"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:106
 #: gnucash/report/reports/standard/income-statement.scm:99
-#, fuzzy
 msgid "Whether or not to include a line indicating total expense."
-msgstr "Feltüntessük-e az összes költség összegének sorát"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:118
 #: gnucash/report/reports/standard/income-statement.scm:123
@@ -26925,19 +26901,17 @@ msgid "Adjusting Entries pattern is case-sensitive"
 msgstr "A korrigáló tételek mintája nagybetű-érzékeny"
 
 #: gnucash/report/reports/standard/trial-balance.scm:92
-#, fuzzy
 msgid "Causes the Adjusting Entries Pattern match to be case-sensitive."
-msgstr "A korrigáló tételek mintáját nagybetű-érzékennyé teszi"
+msgstr ""
 
 #: gnucash/report/reports/standard/trial-balance.scm:94
 msgid "Adjusting Entries Pattern is regular expression"
 msgstr "A korrigáló tételek mintája reguláris kifejezés"
 
 #: gnucash/report/reports/standard/trial-balance.scm:96
-#, fuzzy
 msgid ""
 "Causes the Adjusting Entries Pattern to be treated as a regular expression."
-msgstr "A korrigáló tételek mintáját reguláris kifejezésként kezelik"
+msgstr ""
 
 #: gnucash/report/reports/standard/trial-balance.scm:188
 #, fuzzy
@@ -26978,9 +26952,8 @@ msgid "Number of columns"
 msgstr "Oszlopok száma"
 
 #: gnucash/report/reports/standard/view-column.scm:46
-#, fuzzy
 msgid "Number of columns before wrapping to a new row."
-msgstr "Az oszlopok száma mielőtt új sort kezdünk"
+msgstr "Hány oszlopból álljon egy sor."
 
 #: gnucash/report/reports/standard/view-column.scm:123
 msgid "Edit Options"
@@ -27130,9 +27103,8 @@ msgstr "Készítő"
 
 #: gnucash/report/stylesheets/footer.scm:51
 #: gnucash/report/stylesheets/head-or-tail.scm:51
-#, fuzzy
 msgid "Name of person preparing the report."
-msgstr "A jelentéskészítő neve"
+msgstr "A jelentéskészítő neve."
 
 #: gnucash/report/stylesheets/footer.scm:56
 #: gnucash/report/stylesheets/head-or-tail.scm:55
@@ -27141,9 +27113,8 @@ msgstr "Készült"
 
 #: gnucash/report/stylesheets/footer.scm:57
 #: gnucash/report/stylesheets/head-or-tail.scm:56
-#, fuzzy
 msgid "Name of organization or company prepared for."
-msgstr "A szervezet vagy cég neve, akinek készült"
+msgstr "A készíttető szervezet vagy cég neve."
 
 #: gnucash/report/stylesheets/footer.scm:62
 #: gnucash/report/stylesheets/head-or-tail.scm:60
@@ -27152,9 +27123,8 @@ msgstr "uLássuk a készítői információt"
 
 #: gnucash/report/stylesheets/footer.scm:63
 #: gnucash/report/stylesheets/head-or-tail.scm:61
-#, fuzzy
 msgid "Name of organization or company."
-msgstr "Szervezet vagy cég neve"
+msgstr "Szervezet vagy cég neve."
 
 #: gnucash/report/stylesheets/footer.scm:68
 #: gnucash/report/stylesheets/head-or-tail.scm:85
@@ -27306,9 +27276,8 @@ msgstr "A cellák al-al-fejléc/összeg színe"
 
 #: gnucash/report/stylesheets/footer.scm:137
 #: gnucash/report/stylesheets/head-or-tail.scm:176
-#, fuzzy
 msgid "Color for subsubtotals."
-msgstr "Az al-alösszegek színe"
+msgstr ""
 
 #: gnucash/report/stylesheets/footer.scm:142
 #: gnucash/report/stylesheets/head-or-tail.scm:181
