@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-20 11:11+0000\n"
+"PO-Revision-Date: 2023-03-20 13:39+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hu/>\n"
@@ -27286,9 +27286,8 @@ msgstr "A főösszeg cella színe"
 
 #: gnucash/report/stylesheets/footer.scm:143
 #: gnucash/report/stylesheets/head-or-tail.scm:182
-#, fuzzy
 msgid "Color for grand totals."
-msgstr "A főösszegek színe"
+msgstr "A végösszegek színe."
 
 #: gnucash/report/stylesheets/footer.scm:147
 #: gnucash/report/stylesheets/footer.scm:152
@@ -27311,9 +27310,8 @@ msgstr "Táblázat cellaköz"
 #: gnucash/report/stylesheets/footer.scm:148
 #: gnucash/report/stylesheets/head-or-tail.scm:187
 #: gnucash/report/stylesheets/plain.scm:58
-#, fuzzy
 msgid "Space between table cells."
-msgstr "Két cella közti hely"
+msgstr "Táblázatcellák közti távolság."
 
 #: gnucash/report/stylesheets/footer.scm:153
 #: gnucash/report/stylesheets/head-or-tail.scm:192
@@ -27324,9 +27322,8 @@ msgstr "Cellakitöltés"
 #: gnucash/report/stylesheets/footer.scm:153
 #: gnucash/report/stylesheets/head-or-tail.scm:192
 #: gnucash/report/stylesheets/plain.scm:62
-#, fuzzy
 msgid "Space between table cell edge and content."
-msgstr "Space between table cell edge and content"
+msgstr "A táblázatcella széle és a tartalom közötti távolság."
 
 #: gnucash/report/stylesheets/footer.scm:158
 #: gnucash/report/stylesheets/head-or-tail.scm:197
@@ -27337,9 +27334,8 @@ msgstr "Táblakeret szélessége"
 #: gnucash/report/stylesheets/footer.scm:158
 #: gnucash/report/stylesheets/head-or-tail.scm:197
 #: gnucash/report/stylesheets/plain.scm:66
-#, fuzzy
 msgid "Bevel depth on tables."
-msgstr "Keret vastagság a táblázatoknál"
+msgstr "A táblázatok keretének vastagsága."
 
 #: gnucash/report/stylesheets/footer.scm:338
 #: gnucash/report/stylesheets/head-or-tail.scm:385
@@ -27372,9 +27368,8 @@ msgid "Show receiver info"
 msgstr "uLássuk a készítői információt"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:66
-#, fuzzy
 msgid "Name of organization or company the report is prepared for."
-msgstr "A szervezet vagy cég neve, akinek készült"
+msgstr "A szervezet vagy cég neve, amely számára a kimutatás készült."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:70
 #, fuzzy
@@ -27382,9 +27377,8 @@ msgid "Show date"
 msgstr "Táblázat megjelenítése"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:71
-#, fuzzy
 msgid "The creation date for this report."
-msgstr "A cég e jelentéshez"
+msgstr "A kimutatás készítésének napja."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:75
 msgid "Show time in addition to date"
@@ -27401,9 +27395,8 @@ msgid "Show GnuCash Version"
 msgstr "GnuCash verziószám megjelenítése"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:81
-#, fuzzy
 msgid "Show the currently used GnuCash version."
-msgstr "GnuCash verziószám megjelenítése"
+msgstr "GnuCash verziószám megjelenítése."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:92
 msgid "String for additional report information."
@@ -27673,16 +27666,14 @@ msgid "Date Entered"
 msgstr "Rögzítés dátuma"
 
 #: gnucash/report/trep-engine.scm:536
-#, fuzzy
 msgid "Convert all transactions into a common currency."
-msgstr "Minden tranzakció átalakítása egy közös pénznembe"
+msgstr "Minden tranzakció átváltása egy közös pénznembe."
 
 #: gnucash/report/trep-engine.scm:557
-#, fuzzy
 msgid "Formats the table suitable for cut & paste exporting with extra cells."
 msgstr ""
-"Extra cellákkal alkalmassá tesszük a táblát a kivágás és a beillesztés "
-"műveletekre"
+"Plusz cellák hozzáadásával a tábla kivágással és beillesztéssel "
+"exportálhatóvá válik."
 
 #: gnucash/report/trep-engine.scm:567
 #, fuzzy
@@ -27738,9 +27729,8 @@ msgid "Filter by reconcile status."
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:629
-#, fuzzy
 msgid "How to handle void transactions."
-msgstr "Hogyan kezelje az érvénytelen tranzakciókat"
+msgstr "Hogyan kezeljük a sztornózott tranzakciókat."
 
 #: gnucash/report/trep-engine.scm:635
 msgid ""
@@ -27751,9 +27741,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:657
-#, fuzzy
 msgid "Filter on these accounts."
-msgstr "E számlák szűrése"
+msgstr "Szűrés ezekre a számlákra."
 
 #: gnucash/report/trep-engine.scm:662
 #, fuzzy
