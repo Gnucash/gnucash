@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-21 13:12+0000\n"
+"PO-Revision-Date: 2023-03-21 17:27+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/ja/>\n"
@@ -6772,7 +6772,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/gnc-account-sel.c:994
 msgid "New…"
-msgstr ""
+msgstr "新規…"
 
 #: gnucash/gnome-utils/gnc-amount-edit.c:410
 #: gnucash/register/register-core/formulacell.c:121
@@ -12684,10 +12684,8 @@ msgstr "子勘定科目が削除できない読出し専用取引を含んでい
 #: gnucash/gtkbuilder/dialog-account.glade:801
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:8
 #: gnucash/report/trep-engine.scm:69
-#, fuzzy
-#| msgid "Filter By:"
 msgid "Filter By…"
-msgstr "フィルター:"
+msgstr "フィルター…"
 
 #: gnucash/gtkbuilder/dialog-account.glade:922
 msgid "_Default"
@@ -12797,10 +12795,8 @@ msgid "_Parent Account"
 msgstr "親勘定科目(_P)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1464
-#, fuzzy
-#| msgid "Account Type"
 msgid "Acco_unt Type"
-msgstr "勘定科目タイプ"
+msgstr "勘定科目タイプ(_U)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1514
 msgid "Placeholde_r"
@@ -12824,13 +12820,6 @@ msgid "H_idden"
 msgstr "隠し勘定科目(_I)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1550
-#, fuzzy
-#| msgid ""
-#| "This account (and any sub-accounts) will be hidden in the account tree "
-#| "and will not appear in the popup account list in the register. To reset "
-#| "this option, you will first need to open the \"Filter By...\" dialog for "
-#| "the account tree and check the \"show hidden accounts\" option. Doing so "
-#| "will allow you to select the account and reopen this dialog."
 msgid ""
 "This account (and any sub-accounts) will be hidden in the account tree and "
 "will not appear in the popup account list in the register. To reset this "
@@ -12840,7 +12829,7 @@ msgid ""
 msgstr ""
 "この勘定科目(と子の勘定科目)は勘定科目ツリーで隠れるようになり、記録簿でポッ"
 "プアップされる勘定科目リストに現われなくなります。このオプションをリセットす"
-"るには、勘定科目ツリーの「フィルター」ダイアログを開き、「隠し勘定科目を表示"
+"るには、勘定科目ツリーの「フィルター…」ダイアログを開き、「隠し勘定科目を表示"
 "する」オプションにチェックを入れます。そうすることでこの勘定科目を選択し、こ"
 "のダイアログを再度開くことができます。"
 
@@ -12906,16 +12895,12 @@ msgid "_Lower Balance Limit"
 msgstr "残高0の項目を表示"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1718
-#, fuzzy
-#| msgid "Include _subaccounts"
 msgid "_Include sub accounts"
-msgstr "子勘定科目を含める(_S)"
+msgstr "子勘定科目を含める(_I)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1755
-#, fuzzy
-#| msgid "Proper_ties"
 msgid "More Properties"
-msgstr "プロパティー(_T)"
+msgstr "追加プロパティー"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1781
 msgid "<b>Balance Information</b>"
@@ -13507,23 +13492,10 @@ msgid "Exit the saved report configurations dialog"
 msgstr "保存済み帳票設定のダイアログを終了します。"
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:100
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Currently you have no saved reports.\n"
 msgid "Currently you have no saved reports."
-msgstr ""
-"\n"
-"今のところ保存された帳票はありません。\n"
+msgstr "今のところ保存された帳票はありません。"
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:112
-#, fuzzy
-#| msgid ""
-#| "Saved report configurations are created by first opening a report from "
-#| "the Reports menu,\n"
-#| "altering the report's options to your taste and then choosing \"Save "
-#| "Report Configuration\" from\n"
-#| "the Reports menu or tool bar."
 msgid ""
 "Saved report configurations are created by\n"
 "1. opening a report from the Reports menu,\n"
@@ -13531,9 +13503,11 @@ msgid ""
 "3. selecting \"Save Report Configuration [As…]\" from the Reports menu\n"
 " or pressing a \"Save Config [As…]\" button on the tool bar."
 msgstr ""
-"保存済み帳票設定を作成するには、まず帳票メニューから帳票を開いて、\n"
-"その帳票のオプションをお好みで変更してから \"帳票設定を保存\" を\n"
-"帳票メニューまたはツールバーから選んでください。"
+"保存済み帳票設定を作成するには\n"
+"1. 帳票メニューから帳票を開いて、\n"
+"2. その帳票のオプションをお好みで変更し、\n"
+"3. \"帳票設定を (別名で) 保存\" を帳票メニューから選ぶ\n"
+" またはツールバーの \"設定を (別名) 保存\" ボタンを押してください。"
 
 #: gnucash/gtkbuilder/dialog-date-close.glade:7
 #: gnucash/gtkbuilder/dialog-date-close.glade:261
@@ -17608,10 +17582,8 @@ msgid "_Templates"
 msgstr "テンプレート(_T)"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1661
-#, fuzzy
-#| msgid "Select File for Import"
 msgid "Select File Import Format and Template"
-msgstr "インポートするファイルを選択"
+msgstr "ファイルインポートの書式とテンプレートを選択"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1730
 msgid ""
@@ -17621,10 +17593,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1733
-#, fuzzy
-#| msgid "<b>File Format</b>"
 msgid "File Format"
-msgstr "<b>ファイルの書式</b>"
+msgstr "ファイルの書式"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1779
 msgid ""
@@ -17633,10 +17603,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1787
-#, fuzzy
-#| msgid "Profits:"
 msgid "Profiles"
-msgstr "利益:"
+msgstr "プロファイル"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:22
 #: gnucash/import-export/aqb/gncmod-aqbanking.c:70
@@ -18042,14 +18010,11 @@ msgstr "インターネットバンキングのジョブは実行中です。本
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:6
 msgid "Import using AQBanking"
-msgstr ""
+msgstr "AQBanking を使ってインポート"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:8
-#, fuzzy
 msgid "Import into GnuCash any file format supported by AQBanking"
-msgstr ""
-"DTAUS ファイルを GnuCash にインポートし、インターネットバンキングを通して送金"
-"します。"
+msgstr "AQBanking のサポートするあらゆるファイル書式を GnuCash にインポートします。"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:14
 msgid "_Online Actions"
@@ -18121,8 +18086,6 @@ msgid "Show _log window"
 msgstr "ログウィンドウを表示する(_L)"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:55
-#, fuzzy
-#| msgid "Show the online banking log window."
 msgid "Show the online banking log window"
 msgstr "インターネットバンキングのログウィンドウを表示します。"
 
@@ -18648,13 +18611,7 @@ msgstr ""
 "未使用の勘定科目を表示する を選択する必要があるかもしれません。\n"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:458
-#, fuzzy, c-format
-#| msgid ""
-#| "Import completed but with errors!\n"
-#| "\n"
-#| "The number of Accounts added was %u and %u were updated.\n"
-#| "\n"
-#| "See below for errors..."
+#, c-format
 msgid ""
 "Import completed but with errors!\n"
 "\n"
@@ -18666,7 +18623,7 @@ msgstr ""
 "\n"
 "勘定科目の数は追加 %u 件、更新 %u 件でした。\n"
 "\n"
-"下のエラーをご覧ください..."
+"下のエラーをご覧ください…"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:466
 #, c-format
@@ -24652,10 +24609,8 @@ msgid "Show lot split rows"
 msgstr "ログウィンドウを表示する(_L)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:79
-#, fuzzy
-#| msgid "Investments"
 msgid "Investment Lots"
-msgstr "投資"
+msgstr "投資ロット"
 
 #: gnucash/report/reports/standard/investment-lots.scm:80
 #, fuzzy
@@ -25064,10 +25019,9 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:1963
-#, fuzzy, scheme-format
-#| msgid "~a ~a - ~a"
+#, scheme-format
 msgid "~a, ~a to ~a"
-msgstr "~a ~a ～ ~a"
+msgstr "~a、~a ～ ~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1989
 #, fuzzy
@@ -27655,16 +27609,10 @@ msgstr "2 行(_D)"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:83
 #: gnucash/ui/gnc-plugin-page-register.ui:99
-#, fuzzy
-#| msgid ""
-#| "Show a second line with \"Action\", \"Notes\", and \"Linked Documents\" "
-#| "for each transaction."
 msgid ""
 "Show a second line with Action, Notes, and Linked Document fields for each "
 "transaction"
-msgstr ""
-"各取引の \"アクション\"、\"備考\"、および \"リンクされた文書\" を 2 行目に表"
-"示します。"
+msgstr "各取引のアクション、備考、およびリンクされた文書欄を 2 行目に表示します。"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:92
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:125
@@ -28625,8 +28573,6 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:197
 #: gnucash/ui/gnc-plugin-page-register.ui:350
 #: gnucash/ui/gnc-plugin-page-register.ui:355
-#, fuzzy
-#| msgid "Filter account."
 msgid "Filter accounts"
 msgstr "勘定科目のフィルターを行います。"
 
@@ -28664,31 +28610,22 @@ msgstr "予算を見積り(_M)…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:22
 #: gnucash/ui/gnc-plugin-page-budget.ui:240
-#, fuzzy
-#| msgid "All Periods"
 msgid "_All Periods…"
-msgstr "全期間"
+msgstr "全期間(_A)…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:24
 #: gnucash/ui/gnc-plugin-page-budget.ui:227
-#, fuzzy
-#| msgid ""
-#| "Estimate a budget value for the selected accounts from past transactions."
 msgid ""
 "Estimate a budget value for the selected accounts from past transactions"
 msgstr "過去の取引から選択した勘定科目の予算の値を見積もります。"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:28
 #: gnucash/ui/gnc-plugin-page-budget.ui:255
-#, fuzzy
-#| msgid "_Delete Budget"
 msgid "_Delete Budget…"
-msgstr "予算を削除(_D)"
+msgstr "予算を削除(_D)…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:30
 #: gnucash/ui/gnc-plugin-page-budget.ui:257
-#, fuzzy
-#| msgid "Select this or another budget and delete it."
 msgid "Select this or another budget and delete it"
 msgstr "この予算または別の予算を選択して削除します。"
 
@@ -28699,35 +28636,25 @@ msgstr "備考を編集"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:36
 #: gnucash/ui/gnc-plugin-page-budget.ui:272
-#, fuzzy
-#| msgid "Edit note for the selected account and period."
 msgid "Edit note for the selected account and period"
 msgstr "選択した勘定科目の期間の備考を編集します。"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:42
 #: gnucash/ui/gnc-plugin-page-budget.ui:287
-#, fuzzy
-#| msgid "Run the budget report."
 msgid "Run the budget report"
 msgstr "予算帳票を作成します。"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:70
 #: gnucash/ui/gnc-plugin-page-budget.ui:200
-#, fuzzy
-#| msgid "Budget Options"
 msgid "Budget _Options…"
-msgstr "予算オプション"
+msgstr "予算オプション(_O)…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:72
 #: gnucash/ui/gnc-plugin-page-budget.ui:202
-#, fuzzy
-#| msgid "Edit this budget's options."
 msgid "Edit this budget's options"
 msgstr "この予算のオプションを編集します。"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:242
-#, fuzzy
-#| msgid "Edit budget for all periods for the selected accounts."
 msgid "Edit budget for all periods for the selected accounts"
 msgstr "選択した勘定科目の全期間の予算を編集します。"
 
@@ -28774,10 +28701,8 @@ msgid "_Blank"
 msgstr "空白(_B)"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:155
-#, fuzzy
-#| msgid "Move to the blank entry at the bottom of the bill"
 msgid "Move to the blank entry at the bottom"
-msgstr "仕入先請求書の一番下の空白項目に移動します。"
+msgstr "一番下の空白項目に移動します。"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:162
 #: gnucash/ui/gnc-plugin-page-invoice.ui:242
@@ -29264,20 +29189,16 @@ msgid "Reconcile the selected transactions"
 msgstr "選択された取引を照合します。"
 
 #: gnucash/ui/gnc-reconcile-window.ui:161
-#, fuzzy
-#| msgid "_Reconcile Selection"
 msgid "Reconcile Selection"
-msgstr "選択した取引を照合(_R)"
+msgstr "選択した取引を照合"
 
 #: gnucash/ui/gnc-reconcile-window.ui:175
 msgid "Unreconcile the selected transactions"
 msgstr "選択された取引を照合解除します。"
 
 #: gnucash/ui/gnc-reconcile-window.ui:177
-#, fuzzy
-#| msgid "_Unreconcile Selection"
 msgid "Unreconcile Selection"
-msgstr "選択した取引を照合解除(_U)"
+msgstr "選択した取引を照合解除"
 
 #: gnucash/ui/gnc-reconcile-window.ui:191
 msgid "Delete the selected transaction"
@@ -29803,7 +29724,7 @@ msgstr ""
 
 #: libgnucash/engine/gncInvoice.c:2197
 msgid " (posted)"
-msgstr " (記帳済) "
+msgstr " (記帳済)"
 
 #: libgnucash/engine/gnc-option-date.cpp:87
 msgid "One Week Ago"
@@ -30221,7 +30142,7 @@ msgstr "ビジネスに関する電子納税番号です"
 
 #: libgnucash/engine/gncOrder.c:546
 msgid " (closed)"
-msgstr "(締切済)"
+msgstr " (締切済)"
 
 #: libgnucash/engine/gncOwner.c:999
 msgid "Offset between documents: "
