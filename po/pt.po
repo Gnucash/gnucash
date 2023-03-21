@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-20 08:48+0000\n"
+"PO-Revision-Date: 2023-03-21 06:21+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/pt/>\n"
@@ -17241,7 +17241,7 @@ msgstr "An_ulada"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:454
 msgid "_Frozen"
-msgstr "_Suspensa"
+msgstr "_Congelada"
 
 #. Filter By Dialog, below tabs
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:533
@@ -29913,7 +29913,7 @@ msgstr "r"
 #: libgnucash/app-utils/gnc-ui-util.c:487
 msgctxt "Reconciled flag 'frozen'"
 msgid "f"
-msgstr "f"
+msgstr "g"
 
 #: libgnucash/app-utils/gnc-ui-util.c:489
 msgctxt "Reconciled flag 'void'"
@@ -29945,7 +29945,7 @@ msgstr "Aviso"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:675
 msgid "Your gnucash metadata has been migrated."
-msgstr "Os seus meta-dados GnuCash foram migrados."
+msgstr "Os seus metadados GnuCash foram migrados."
 
 #. Translators: this refers to a directory name.
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:677
@@ -30526,7 +30526,7 @@ msgstr "O endereço URL da sua página web."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1230
 msgid "The ID for your company (eg 'Tax-ID: 00-000000)."
-msgstr "O número de contribuinte da sua empresa."
+msgstr "O número de contribuinte da sua empresa (e.g. 000 000 000)."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1238
 msgid ""
@@ -30673,8 +30673,8 @@ msgid ""
 "Business_Features_Issues#I_can.27t_delete_a_transaction_of_type_.22I.22_from_the_AR.2FAP_account"
 msgstr ""
 "Por favor, elimine esta transacção. Explicação em https://wiki.gnucash.org/"
-"wiki/"
-"Business_Features_Issues#I_can.27t_delete_a_transaction_of_type_.22I.22_from_the_AR.2FAP_account"
+"wiki/Business_Features_Issues#I_can.27t_delete_a_transaction_of_type_.22I."
+"22_from_the_AR.2FAP_account"
 
 #: libgnucash/engine/ScrubBusiness.c:617
 #, c-format
