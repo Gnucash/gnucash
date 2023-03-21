@@ -27,6 +27,11 @@
 
 #include "gnc-commodity.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /**
   Must be called with a string containing a unique identifier for the
   commodity.  If an commodity with a matching cusip is found, the
@@ -62,6 +67,10 @@ gnc_commodity * gnc_import_select_commodity(const char * cusip,
         gboolean ask_on_unknown,
         const char * default_fullname,
         const char * default_mnemonic);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /**@}*/
