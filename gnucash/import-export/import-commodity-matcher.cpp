@@ -33,7 +33,11 @@
 #include "import-commodity-matcher.h"
 #include "Account.h"
 #include "Transaction.h"
+
+extern "C" {
 #include "dialog-commodity.h"
+}
+
 #include "gnc-engine.h"
 #include "gnc-ui-util.h"
 
@@ -76,7 +80,7 @@ gnc_commodity * gnc_import_select_commodity(const char * cusip,
     namespace_list = g_list_first(namespace_list);
     while ( namespace_list != NULL && retval == NULL)
     {
-        tmp_namespace = namespace_list->data;
+        tmp_namespace = static_cast<char*>(namespace_list->data);
         DEBUG("Looking at namespace %s", tmp_namespace);
         commodity_list = gnc_commodity_table_get_commodities(commodity_table,
                                                              tmp_namespace);
@@ -84,7 +88,7 @@ gnc_commodity * gnc_import_select_commodity(const char * cusip,
         while ( commodity_list != NULL && retval == NULL)
         {
             const char* tmp_cusip = NULL;
-            tmp_commodity = commodity_list->data;
+            tmp_commodity = static_cast<gnc_commodity*>(commodity_list->data);
             DEBUG("Looking at commodity %s",
                   gnc_commodity_get_fullname(tmp_commodity));
             tmp_cusip = gnc_commodity_get_cusip(tmp_commodity);
