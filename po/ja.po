@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-21 17:27+0000\n"
+"PO-Revision-Date: 2023-03-21 20:27+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/ja/>\n"
@@ -11736,10 +11736,8 @@ msgstr ""
 "かれていても問題ありません。\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:86
-#, fuzzy
-#| msgid "Select"
 msgid "_Select…"
-msgstr "選択"
+msgstr "選択(_S)…"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:109
 msgid "Select a QIF file to load"
@@ -12246,10 +12244,8 @@ msgstr "株式分割終了"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:9
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:27
-#, fuzzy
-#| msgid "Transaction Import Assistant"
 msgid "Stock Transaction Assistant"
-msgstr "取引インポートアシスタント"
+msgstr "株式取引アシスタント"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:22
 msgid ""
@@ -18229,14 +18225,8 @@ msgstr ""
 "ID のない請求書でエラーがありました、この請求書の全行は無視されます。\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:645
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Processing...\n"
 msgid "Processing…"
-msgstr ""
-"\n"
-"処理...\n"
+msgstr "処理中…"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:714
 #, c-format
@@ -18944,10 +18934,8 @@ msgstr ""
 "発生しないはずのことが起きました。このバグを報告してください。"
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:686
-#, fuzzy
-#| msgid "Error"
 msgid "Parse Error"
-msgstr "エラー"
+msgstr "解析エラー"
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:702
 #, fuzzy
@@ -19157,10 +19145,8 @@ msgid "GnuCash Export Format"
 msgstr "GnuCash の出力書式"
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:48
-#, fuzzy
-#| msgid "GnuCash Export Format"
 msgid "GnuCash Export Format (4.x and older)"
-msgstr "GnuCash の出力書式"
+msgstr "GnuCash の出力書式 (4.x およびそれ以前)"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:134
 msgid "Shipping Name"
@@ -21688,10 +21674,8 @@ msgid "This is a string option."
 msgstr "これは文字列のオプションです。"
 
 #: gnucash/report/reports/example/sample-report.scm:86
-#, fuzzy
-#| msgid "String Option"
 msgid "String Option Default"
-msgstr "文字列のオプション"
+msgstr "文字列オプションのデフォルト"
 
 #: gnucash/report/reports/example/sample-report.scm:99
 msgid "Just a Date Option"
@@ -22527,12 +22511,12 @@ msgstr "勘定科目を除外"
 #: gnucash/report/reports/standard/income-statement.scm:370
 #: gnucash/report/reports/standard/trial-balance.scm:374
 msgid "${company-name} ${report-title} For Period Covering ${start} to ${end}"
-msgstr ""
+msgstr "${company-name} ${report-title} 期間 ${start} ～ ${end}"
 
 #: gnucash/report/reports/standard/account-summary.scm:296
 #: gnucash/report/reports/standard/trial-balance.scm:370
 msgid "${company-name} ${report-title} ${date}"
-msgstr ""
+msgstr "${company-name} ${report-title} ${date}"
 
 #: gnucash/report/reports/standard/account-summary.scm:381
 msgid "Account title"
