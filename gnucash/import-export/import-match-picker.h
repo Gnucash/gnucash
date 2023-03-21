@@ -35,6 +35,10 @@ typedef struct _transpickerdialog GNCImportMatchPicker;
  * GUI Functions
  ************************************************************************/
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * Run a match_picker dialog where the user should pick the best match for 'one' given
  * transaction, so that the selected-MatchInfo in the
@@ -59,5 +63,8 @@ gnc_import_match_picker_run_and_close (GtkWidget *parent,
 /**@}*/
 
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif

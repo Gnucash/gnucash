@@ -176,7 +176,6 @@ downloaded_transaction_append(GNCImportMatchPicker * matcher,
 static void
 match_update_match_model (GNCImportMatchPicker *matcher)
 {
-    GNCImportMatchInfo * match_info;
     GtkTreeIter iter;
     gboolean show_reconciled;
     gchar reconciled;
@@ -196,7 +195,7 @@ match_update_match_model (GNCImportMatchPicker *matcher)
                                  (matcher->selected_trans_info));
     while (list_element != NULL)
     {
-        match_info = list_element->data;
+        auto match_info{static_cast<GNCImportMatchInfo*>(list_element->data)};
 
         /* Skip this match if reconciled and we're not showing those */
         reconciled = xaccSplitGetReconcile
