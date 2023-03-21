@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-21 17:27+0000\n"
+"PO-Revision-Date: 2023-03-21 20:27+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hr/>\n"
@@ -1958,7 +1958,7 @@ msgstr "Stvarno želiš izbrisati „%s“?"
 msgid ""
 "This transaction needs to be assigned to a Customer. Please choose the "
 "Customer below."
-msgstr "Ova transakcija mora biti dodijeljena kupcu. Odaberi jednog ispod."
+msgstr "Ova transakcija mora biti dodijeljena kupcu. Odaberi jednog kupca."
 
 #: gnucash/gnome/dialog-choose-owner.c:85
 msgid ""
@@ -9059,8 +9059,8 @@ msgstr ""
 "koji ne pripadaju financijskoj instituciji) su instalirani na mjestima, kao "
 "što su dućani. Ovi bankomati dodaju svoju naknadu direktno na iznos, umjesto "
 "da je prikažu kao zasebnu transakciju ili u tvojim mjesečnim bankovnim "
-"naknadama. Na primjer, podigneš 100 kn, a naplaćeno ti je 101,50 kn, plus "
-"naknada za interakciju. Ako tih 100 kn upišeš ručno, iznosi se neće "
+"naknadama. Na primjer, podigneš 100 €, a naplaćeno ti je 101,50 € kao "
+"naknada za interakciju. Ako tih 100 € upišeš ručno, iznosi se neće "
 "poklopiti. Postavi ovo na najveću takvu naknadu u tvom području (u "
 "jedinicama tvoje lokalne valute), kako bi se transakcija prepoznala kao "
 "poklapajuća."
@@ -10863,7 +10863,7 @@ msgstr "Razdvojeno točka-zarezom"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:175
 msgid "Custom regular Expression"
-msgstr "Proizvoljan regularni izraz"
+msgstr "Prilagođen regularni izraz"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:191
 msgid "Colon Separated"
@@ -12650,7 +12650,7 @@ msgstr "<b>_Sustavsko kodiranje za unos</b>"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:325
 msgid "<b>_Custom encoding</b>"
-msgstr "<b>_Proizvoljno kodiranje</b>"
+msgstr "<b>_Prilagođeno kodiranje</b>"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:408
 msgid "<b>_Selected encodings</b>"
@@ -13276,7 +13276,7 @@ msgstr "Razdvojeno zarezom s navodnicima"
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:288
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:288
 msgid "Custom regular expression"
-msgstr "Proizvoljan regularni izraz"
+msgstr "Prilagođen regularni izraz"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:310
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:310
@@ -15160,8 +15160,8 @@ msgstr ""
 "instituciji) su instalirani na mjestima, kao što su dućani. Ovi bankomati "
 "dodaju svoju naknadu direktno na iznos, umjesto da je prikažu kao zasebnu "
 "transakciju ili u tvojim mjesečnim bankovnim naknadama. Na primjer, podigneš "
-"100 kn, a naplaćeno ti je 101,50 kn, plus Interac naknadu (u Kanadi). Ako "
-"tih 100 kn upišeš ručno, iznosi se neće poklopiti. Postavi ovo na najveću "
+"100 €, a naplaćeno ti je 101,50 € kao naknada za interakciju (u Kanadi). Ako "
+"tih 100 € upišeš ručno, iznosi se neće poklopiti. Postavi ovo na najveću "
 "takvu naknadu u tvom području (u jedinicama tvoje lokalne valute), kako bi "
 "se transakcija prepoznala kao poklapajuća."
 
@@ -16367,7 +16367,7 @@ msgstr "_Novi"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:286
 msgid "Value $"
-msgstr "Vrijednost kn"
+msgstr "Vrijednost €"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:289
 msgid "Percent %"
@@ -18334,7 +18334,7 @@ msgstr "Nalog internet bankarstva još uvijek radi; stvarno želiš prekinuti?"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:6
 msgid "Import using AQBanking"
-msgstr ""
+msgstr "Uvezi pomoću AQBanking"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:8
 msgid "Import into GnuCash any file format supported by AQBanking"
@@ -19334,7 +19334,7 @@ msgstr "Vrijednost je obrađena u neispravnu valutu za vrstu stupca valute."
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:550
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:630
 msgid "{1}: {2}"
-msgstr ""
+msgstr "{1}: {2}"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:279
 msgid "No date column."
@@ -20429,7 +20429,7 @@ msgstr "Plaćanje"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:53
 msgid "$"
-msgstr "kn"
+msgstr "€"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:67
 msgid "<"
@@ -21580,7 +21580,7 @@ msgstr "_Višestupčano"
 
 #: gnucash/report/report-core.scm:161
 msgid "_Custom"
-msgstr "_Proizvoljno"
+msgstr "_Prilagođeno"
 
 #: gnucash/report/report-core.scm:164
 #: gnucash/report/reports/standard/invoice.scm:226
@@ -22287,11 +22287,11 @@ msgstr "Odaberi konta."
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:168
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:203
 msgid "Suppress $0.00 values"
-msgstr "Ne prikazuj vrijednosti od 0,00 kn"
+msgstr "Ne prikazuj vrijednosti od 0,00 €"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:169
 msgid "$0.00 valued Accounts won't be printed."
-msgstr "Konta s vrijednošću od 0,00 kn se neće ispisati."
+msgstr "Konta s vrijednošću od 0,00 € se neće ispisati."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:172
 msgid "Print Full account names"
@@ -22345,7 +22345,7 @@ msgstr "Izvještaj o terminiranom porezu/TXF izvoz"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:204
 msgid "$0.00 valued Tax codes won't be printed."
-msgstr "Porezna polja s vrijednosti od 0,00 kn se neće ispisivati."
+msgstr "Porezna polja s vrijednosti od 0,00 € se neće ispisivati."
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:207
 msgid "Do not print full account names"
@@ -23379,11 +23379,11 @@ msgstr "Prikaži imovinu na lijevoj strani, obveze i kapital na desnoj"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:225
 msgid "Sign: -$10.00"
-msgstr "Predznak: -10,00 kn"
+msgstr "Predznak: −10,00 €"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:226
 msgid "Brackets: ($10.00)"
-msgstr "Zagrade: (10,00 kn)"
+msgstr "Zagrade: (10,00 €)"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:251
 msgid ""
@@ -24614,8 +24614,8 @@ msgstr ""
 "potraživanja. U odjeljku „Uredi opcije izvještaja” odaberi poslovne račune "
 "prodaje i kupnje. Svaka transakcija može osim konta imovine, obveza, "
 "dugovanja ili potraživanja, sadržavati i podjelu na porezni račun, npr. "
-"Prihod:Prodaja −1.000 $, Konto potraživanja 1.100 $, Obveze:PDV na promet −"
-"100 $."
+"Prihod:Prodaja −1.000 €, Konto potraživanja 1.100 €, Obveze:PDV na promet −"
+"100 €."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:56
 msgid ""
@@ -25079,10 +25079,8 @@ msgid "LT Realized Gain"
 msgstr "Ostvarena dobit"
 
 #: gnucash/report/reports/standard/investment-lots.scm:125
-#, fuzzy
-#| msgid "Realized Gain"
 msgid "Realized ROI"
-msgstr "Ostvarena dobit"
+msgstr "Ostvareni povrat od ulaganja"
 
 #: gnucash/report/reports/standard/investment-lots.scm:127
 #, fuzzy
@@ -25097,10 +25095,8 @@ msgid "LT Unrealized Gain"
 msgstr "Neostvarena dobit"
 
 #: gnucash/report/reports/standard/investment-lots.scm:129
-#, fuzzy
-#| msgid "Unrealized Gain"
 msgid "Unrealized ROI"
-msgstr "Neostvarena dobit"
+msgstr "Neostvareni povrat od ulaganja"
 
 #: gnucash/report/reports/standard/investment-lots.scm:131
 #, fuzzy
@@ -25354,13 +25350,13 @@ msgstr "Prazni prostor"
 
 #: gnucash/report/reports/standard/invoice.scm:176
 msgid "Custom Title"
-msgstr "Proizvoljan naslov"
+msgstr "Prilagođeni naslov"
 
 #: gnucash/report/reports/standard/invoice.scm:177
 msgid "A custom string to replace Invoice, Bill or Expense Voucher."
 msgstr ""
-"Proizvoljni znakovni niz, koji zamijenjuje „Izlazni račun”, „Ulazni račun” "
-"ili „Rashodni vaučer”."
+"Prilagođen znakovni niz koji zamijenjuje „Izlazni račun”, „Ulazni račun” ili "
+"„Rashodni vaučer”."
 
 #: gnucash/report/reports/standard/invoice.scm:181
 #: gnucash/report/stylesheets/css.scm:118
@@ -26891,7 +26887,7 @@ msgstr "Višestupčani prikaz"
 
 #: gnucash/report/reports/standard/view-column.scm:184
 msgid "Custom Multicolumn Report"
-msgstr "Proizvoljan višestupčani izvještaj"
+msgstr "Prilagođen višestupčani izvještaj"
 
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:167
 msgid "Assets Accounts"
@@ -29568,7 +29564,7 @@ msgstr "Numerička greška"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:156
 msgid "Failed to initialize Finance::Quote: "
-msgstr ""
+msgstr "Neuspjelo inicijaliziranje Finance::Quote: "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:163
 msgid "Finance::Quote check returned error "
@@ -29653,7 +29649,7 @@ msgstr ""
 
 #: libgnucash/app-utils/gnc-quotes.cpp:728
 msgid "Error message:"
-msgstr ""
+msgstr "Poruka o grešci:"
 
 #. Translators: Means that the preceding element is required
 #: libgnucash/app-utils/gnc-quotes.cpp:770
