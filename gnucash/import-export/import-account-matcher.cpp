@@ -37,7 +37,6 @@
 #include "import-utilities.h"
 #include "dialog-account.h"
 #include "dialog-utils.h"
-
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-prefs.h"
@@ -368,10 +367,10 @@ Account * gnc_import_select_account(GtkWidget *parent,
     if (account_online_id_value)
     {
         AccountOnlineMatch match = {NULL, 0, account_online_id_value};
-        retval =
-            gnc_account_foreach_descendant_until(gnc_get_current_root_account (),
-                                                 test_acct_online_id_match,
-                                                 (void*)&match);
+        retval = static_cast<Account*>
+            (gnc_account_foreach_descendant_until (gnc_get_current_root_account (),
+                                                   test_acct_online_id_match,
+                                                   &match));
         if (!retval && match.count == 1 &&
             new_account_default_type == ACCT_TYPE_NONE)
             retval = match.partial_match;
