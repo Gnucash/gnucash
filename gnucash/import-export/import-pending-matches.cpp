@@ -30,156 +30,69 @@
 #include <gtk/gtk.h> /* for references in import-backend.h */
 #include "guid.h"
 
-#include "import-pending-matches.h"
+#include "import-pending-matches.hpp"
 #include "import-backend.h"
-
-typedef struct _pending_matches
-{
-    gint num_manual_matches;
-    gint num_auto_matches;
-} GNCPendingMatches;
-
-GNCImportPendingMatches *gnc_import_PendingMatches_new (void)
-{
-    /* Can't use guid_hash_table_new() here since we want values to be taken
-       care of for us on destroy. */
-    return g_hash_table_new_full (guid_hash_to_guint,
-                                  guid_g_hash_table_equal,
-                                  g_free,
-                                  g_free
-                                 );
-}
-
-void gnc_import_PendingMatches_delete (GNCImportPendingMatches *map)
-{
-    g_return_if_fail (map);
-
-    g_hash_table_destroy (map);
-}
 
 static const GncGUID *
 gnc_import_PendingMatches_get_key (GNCImportMatchInfo *match_info)
 {
-    Split *split;
-    const GncGUID *match_guid;
-
     g_return_val_if_fail (match_info, NULL);
-
-    split = gnc_import_MatchInfo_get_split (match_info);
-    match_guid = qof_instance_get_guid (split);
-
-    return match_guid;
+    return qof_instance_get_guid (gnc_import_MatchInfo_get_split (match_info));
 }
 
-static GNCPendingMatches *
-gnc_import_PendingMatches_get_value (GNCImportPendingMatches *map,
+static GNCPendingMatches&
+gnc_import_PendingMatches_get_value (GNCImportPendingMatches& map,
                                      GNCImportMatchInfo *match_info)
 {
-    const GncGUID *match_guid;
-
-    g_return_val_if_fail (map, NULL);
-    g_return_val_if_fail (match_info, NULL);
-
-    match_guid = gnc_import_PendingMatches_get_key (match_info);
-
-    auto pending_matches{static_cast<GNCPendingMatches*>(g_hash_table_lookup (map, match_guid))};
-
-    return pending_matches;
+    auto match_guid = gnc_import_PendingMatches_get_key (match_info);
+    return map[match_guid];
 }
 
 void
-gnc_import_PendingMatches_add_match (GNCImportPendingMatches *map,
+gnc_import_PendingMatches_add_match (GNCImportPendingMatches& map,
                                      GNCImportMatchInfo *match_info,
                                      gboolean selected_manually)
 {
-    GNCPendingMatches *pending_matches;
-    const GncGUID *match_guid;
-    GncGUID *key;
-
-    g_return_if_fail (map);
     g_return_if_fail (match_info);
 
-
-    pending_matches = gnc_import_PendingMatches_get_value (map, match_info);
-    match_guid = gnc_import_PendingMatches_get_key (match_info);
-
-    if (pending_matches == NULL)
-    {
-        pending_matches = g_new0 (GNCPendingMatches, 1);
-        key = g_new (GncGUID, 1);
-        *key = *match_guid;
-        g_hash_table_insert (map, key, pending_matches);
-    }
+    auto& pending_matches = gnc_import_PendingMatches_get_value (map, match_info);
 
     if (selected_manually)
-    {
-        pending_matches->num_manual_matches++;
-    }
+        pending_matches.num_manual_matches++;
     else
-    {
-        pending_matches->num_auto_matches++;
-    }
+        pending_matches.num_auto_matches++;
 }
 
 void
-gnc_import_PendingMatches_remove_match (GNCImportPendingMatches *map,
+gnc_import_PendingMatches_remove_match (GNCImportPendingMatches& map,
                                         GNCImportMatchInfo *match_info,
                                         gboolean selected_manually)
 {
-    GNCPendingMatches *pending_matches;
-
-    g_return_if_fail (map);
     g_return_if_fail (match_info);
 
-    pending_matches = gnc_import_PendingMatches_get_value (map, match_info);
-
-    g_return_if_fail (pending_matches);
+    auto& pending_matches = gnc_import_PendingMatches_get_value (map, match_info);
 
     if (selected_manually)
-    {
-        pending_matches->num_manual_matches--;
-    }
+        pending_matches.num_manual_matches--;
     else
-    {
-        pending_matches->num_auto_matches--;
-    }
-
-    if (pending_matches->num_auto_matches == 0 &&
-        pending_matches->num_manual_matches == 0)
-    {
-        /* Key & Value are freed for us */
-        g_hash_table_remove (map,
-                             gnc_import_PendingMatches_get_key (match_info));
-    }
+        pending_matches.num_auto_matches--;
 }
 
 GNCImportPendingMatchType
-gnc_import_PendingMatches_get_match_type (GNCImportPendingMatches *map,
+gnc_import_PendingMatches_get_match_type (GNCImportPendingMatches& map,
                                           GNCImportMatchInfo *match_info)
 {
-    GNCPendingMatches *pending_matches;
-
-    g_return_val_if_fail (map, GNCImportPending_NONE);
     g_return_val_if_fail (match_info, GNCImportPending_NONE);
 
-    pending_matches = gnc_import_PendingMatches_get_value (map, match_info);
+    auto& pending_matches = gnc_import_PendingMatches_get_value (map, match_info);
 
-    if (pending_matches == NULL)
-    {
-        return GNCImportPending_NONE;
-    }
-
-    if (pending_matches->num_manual_matches > 0)
-    {
+    if (pending_matches.num_manual_matches > 0)
         return GNCImportPending_MANUAL;
-    }
 
-    if (pending_matches->num_auto_matches > 0)
-    {
+    if (pending_matches.num_auto_matches > 0)
         return GNCImportPending_AUTO;
-    }
 
-    g_assert_not_reached();
+    return GNCImportPending_NONE;
 }
 
 const char *

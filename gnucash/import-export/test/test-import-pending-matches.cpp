@@ -5,7 +5,7 @@
 #include <unittest-support.h>
 
 #include "import-backend.h"
-#include "import-pending-matches.h"
+#include "import-pending-matches.hpp"
 #include "Split.h"
 #include "test-engine-stuff.h"
 
@@ -53,7 +53,7 @@ teardown (Fixture *fixture, gconstpointer pData)
 static void
 test_pending_matches_match_types (Fixture *fixture, gconstpointer pData)
 {
-    GNCImportPendingMatches *matches = gnc_import_PendingMatches_new();
+    GNCImportPendingMatches matches;
     GNCImportPendingMatchType match_types;
 
     match_types = gnc_import_PendingMatches_get_match_type (matches,
@@ -69,23 +69,19 @@ test_pending_matches_match_types (Fixture *fixture, gconstpointer pData)
     match_types = gnc_import_PendingMatches_get_match_type (matches,
                                                             fixture->match_info);
     g_assert_true (match_types == GNCImportPending_MANUAL);
-
-    gnc_import_PendingMatches_delete (matches);
 }
 
 static void
 test_pending_matches_prefer_manual_match (Fixture *fixture, gconstpointer pData)
 {
     GNCImportPendingMatchType match_type;
-    GNCImportPendingMatches *matches = gnc_import_PendingMatches_new();
+    GNCImportPendingMatches matches;
     gnc_import_PendingMatches_add_match (matches, fixture->match_info, TRUE);
     gnc_import_PendingMatches_add_match (matches, fixture->match_info, FALSE);
     match_type = gnc_import_PendingMatches_get_match_type (matches,
                                                            fixture->match_info);
 
     g_assert_true (match_type == GNCImportPending_MANUAL);
-
-    gnc_import_PendingMatches_delete (matches);
 }
 
 static void
@@ -93,7 +89,7 @@ test_pending_matches_keeps_count (Fixture *fixture, gconstpointer pData)
 {
     GNCImportPendingMatchType auto_match;
     GNCImportPendingMatchType no_match;
-    GNCImportPendingMatches *matches = gnc_import_PendingMatches_new();
+    GNCImportPendingMatches matches;
 
     gnc_import_PendingMatches_add_match (matches, fixture->match_info, TRUE);
     gnc_import_PendingMatches_add_match (matches, fixture->match_info, TRUE);
@@ -109,8 +105,6 @@ test_pending_matches_keeps_count (Fixture *fixture, gconstpointer pData)
 
     g_assert_true (auto_match != no_match);
     g_assert_true (no_match == GNCImportPending_NONE);
-
-    gnc_import_PendingMatches_delete (matches);
 }
 
 int

@@ -39,7 +39,7 @@ set (generic_import_noinst_HEADERS
   import-commodity-matcher.h
   import-main-matcher.h
   import-match-picker.hpp
-  import-pending-matches.h
+  import-pending-matches.hpp
   import-settings.h
   import-utilities.h
 )

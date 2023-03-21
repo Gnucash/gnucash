@@ -27,7 +27,7 @@
 #define GNC_GEN_MATCH_PICKER_HPP
 
 #include "import-backend.h"
-#include "import-pending-matches.h"
+#include "import-pending-matches.hpp"
 
 typedef struct _transpickerdialog GNCImportMatchPicker;
 
@@ -55,7 +55,7 @@ typedef struct _transpickerdialog GNCImportMatchPicker;
 void
 gnc_import_match_picker_run_and_close (GtkWidget *parent,
                                        GNCImportTransInfo *transaction_info,
-                                       GNCImportPendingMatches *pending_matches);
+                                       GNCImportPendingMatches&);
 /**@}*/
 
 
