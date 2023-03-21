@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-14 14:28+0000\n"
+"PO-Revision-Date: 2023-03-21 11:45+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/ja/>\n"
@@ -21819,23 +21819,17 @@ msgid "Testing"
 msgstr "テスト用"
 
 #: gnucash/report/reports/example/sample-report.scm:169
-#, fuzzy
-#| msgid "Report Title"
 msgid "Report Title Default"
-msgstr "帳票タイトル"
+msgstr "帳票タイトルのデフォルト"
 
 #: gnucash/report/reports/example/sample-report.scm:285
-#, fuzzy, scheme-format
-#| msgid ""
-#| "This is a sample GnuCash report. See the guile (scheme) source code in "
-#| "the scm/report directory for details on writing your own reports, or "
-#| "extending existing reports."
+#, scheme-format
 msgid ""
 "This is a sample GnuCash ~a report. See the guile (scheme) source code in "
 "the scm/report directory for details on writing your own reports, or "
 "extending existing reports."
 msgstr ""
-"これは GnuCash のサンプル帳票です。scm/report ディレクトリ内の guile "
+"これは GnuCash ~a のサンプル帳票です。scm/report ディレクトリ内の guile "
 "(scheme) のソースコードを見ると、自分で新しく帳票を作成したり、既存の帳票を修"
 "正したりする際の詳細情報を得ることができます。"
 
@@ -21849,28 +21843,18 @@ msgstr ""
 "したい場合、メーリングリスト ~a にご連絡ください。"
 
 #: gnucash/report/reports/example/sample-report.scm:297
-#, fuzzy
-#| msgid ""
-#| "For details on subscribing to that list, see &lt;https://www.gnucash.org/"
-#| "&gt;."
 msgid ""
 " For details on subscribing to that list, see &lt;https://www.gnucash.org/"
 "&gt;."
-msgstr ""
-"メーリングリストに参加するには、&lt;https://www.gnucash.org/&gt; をご覧くださ"
-"い。"
+msgstr " メーリングリストに参加するには、&lt;https://www.gnucash.org/&gt; "
+"をご覧ください。"
 
 #: gnucash/report/reports/example/sample-report.scm:298
-#, fuzzy
-#| msgid ""
-#| "You can learn more about writing scheme at &lt;https://www.scheme.com/"
-#| "tspl2d/&gt;."
 msgid ""
 " You can learn more about writing scheme at &lt;https://www.scheme.com/"
 "tspl2d/&gt;."
-msgstr ""
-"&lt;https://www.scheme.com/tspl2d/&gt; で scheme の書き方についてもっと学べま"
-"す。"
+msgstr " &lt;https://www.scheme.com/tspl2d/&gt; で scheme "
+"の書き方についてもっと学べます。"
 
 #: gnucash/report/reports/example/sample-report.scm:302
 #, scheme-format
@@ -21952,10 +21936,8 @@ msgstr "ヘルプを表示"
 
 #: gnucash/report/reports/example/sample-report.scm:442
 #: gnucash/report/reports/example/sample-report.scm:453
-#, fuzzy
-#| msgid "Employee Report"
 msgid "Sample Report"
-msgstr "従業員帳票"
+msgstr "サンプル帳票"
 
 #: gnucash/report/reports/example/sample-report.scm:457
 #, fuzzy
@@ -27982,20 +27964,16 @@ msgid "Create a new file"
 msgstr "ファイルを新規作成します。"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:12
-#, fuzzy
-#| msgid "_Open"
 msgid "_Open…"
-msgstr "開く(_O)"
+msgstr "開く(_O)…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:15
 msgid "Open an existing GnuCash file"
 msgstr "既存の GnuCash ファイルを開きます。"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:27
-#, fuzzy
-#| msgid "_Save As"
 msgid "Save _As…"
-msgstr "別名で保存(_S)"
+msgstr "別名で保存(_A)…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:30
 msgid "Save this file with a different name"
@@ -28033,10 +28011,8 @@ msgstr "勘定科目の階層を新しい GnuCash データファイルにエク
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:65
 #: gnucash/ui/gnc-plugin-page-register.ui:49
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:16
-#, fuzzy
-#| msgid "_Find"
 msgid "_Find…"
-msgstr "検索(_F)"
+msgstr "検索(_F)…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:62
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:70
@@ -28119,10 +28095,8 @@ msgid "Use the loan/mortgage repayment calculator"
 msgstr "ローン支払い計算機を使用します。"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:119
-#, fuzzy
-#| msgid "_Close Book"
 msgid "_Close Book…"
-msgstr "決算(_C)"
+msgstr "決算(_C)…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:121
 msgid "Close the Book at the end of the Period"
@@ -28165,8 +28139,6 @@ msgid "_New Budget"
 msgstr "予算を新規作成(_N)"
 
 #: gnucash/ui/gnc-plugin-budget.ui:12
-#, fuzzy
-#| msgid "Create a new Budget."
 msgid "Create a new Budget"
 msgstr "予算を新規作成します。"
 
@@ -28175,10 +28147,6 @@ msgid "_Open Budget"
 msgstr "予算を開く(_O)"
 
 #: gnucash/ui/gnc-plugin-budget.ui:17
-#, fuzzy
-#| msgid ""
-#| "Open an existing Budget in a new tab. If none exists a new budget will be "
-#| "created."
 msgid ""
 "Open an existing Budget in a new tab. If none exists a new budget will be "
 "created"
@@ -28189,8 +28157,6 @@ msgid "_Copy Budget"
 msgstr "予算を複製(_C)"
 
 #: gnucash/ui/gnc-plugin-budget.ui:22
-#, fuzzy
-#| msgid "Copy an existing Budget."
 msgid "Copy an existing Budget"
 msgstr "既存の予算を複製します。"
 
@@ -28199,8 +28165,6 @@ msgid "_Delete Budget"
 msgstr "予算を削除(_D)"
 
 #: gnucash/ui/gnc-plugin-budget.ui:27
-#, fuzzy
-#| msgid "Delete an existing Budget."
 msgid "Delete an existing Budget"
 msgstr "既存の予算を削除します。"
 
@@ -28219,50 +28183,40 @@ msgstr "得意先一覧ページを開きます。"
 #: gnucash/ui/gnc-plugin-business.ui:14
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:23
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:317
-#, fuzzy
-#| msgid "New Customer"
 msgid "_New Customer…"
-msgstr "得意先を新規作成"
+msgstr "得意先を新規作成(_N)…"
 
 #: gnucash/ui/gnc-plugin-business.ui:16
 msgid "Open the New Customer dialog"
 msgstr "得意先の新規作成ダイアログを開きます。"
 
 #: gnucash/ui/gnc-plugin-business.ui:19
-#, fuzzy
-#| msgid "Find Customer"
 msgid "_Find Customer…"
-msgstr "得意先を検索"
+msgstr "得意先を検索(_F)…"
 
 #: gnucash/ui/gnc-plugin-business.ui:21
 msgid "Open the Find Customer dialog"
 msgstr "得意先の検索ダイアログを開きます。"
 
 #: gnucash/ui/gnc-plugin-business.ui:29
-#, fuzzy
-#| msgid "Find Invoice"
 msgid "Find In_voice…"
-msgstr "請求書を検索"
+msgstr "得意先請求書を検索(_V)…"
 
 #: gnucash/ui/gnc-plugin-business.ui:31
 msgid "Open the Find Invoice dialog"
 msgstr "得意先請求書の検索ダイアログを開きます。"
 
 #: gnucash/ui/gnc-plugin-business.ui:34 gnucash/ui/gnc-plugin-business.ui:83
-#, fuzzy
-#| msgid "New Job"
 msgid "New _Job…"
-msgstr "請求のまとめを新規作成"
+msgstr "請求のまとめを新規作成(_J)…"
 
 #: gnucash/ui/gnc-plugin-business.ui:36 gnucash/ui/gnc-plugin-business.ui:85
 msgid "Open the New Job dialog"
 msgstr "請求のまとめの新規作成ダイアログを開きます。"
 
 #: gnucash/ui/gnc-plugin-business.ui:39 gnucash/ui/gnc-plugin-business.ui:88
-#, fuzzy
-#| msgid "Find Job"
 msgid "Find Jo_b…"
-msgstr "請求のまとめを検索"
+msgstr "請求のまとめを検索(_B)…"
 
 #: gnucash/ui/gnc-plugin-business.ui:41 gnucash/ui/gnc-plugin-business.ui:90
 msgid "Open the Find Job dialog"
@@ -28270,10 +28224,8 @@ msgstr "請求のまとめの検索ダイアログを開きます。"
 
 #: gnucash/ui/gnc-plugin-business.ui:44 gnucash/ui/gnc-plugin-business.ui:93
 #: gnucash/ui/gnc-plugin-business.ui:132
-#, fuzzy
-#| msgid "Process Payment"
 msgid "_Process Payment…"
-msgstr "支払処理"
+msgstr "支払処理(_P)…"
 
 #: gnucash/ui/gnc-plugin-business.ui:46 gnucash/ui/gnc-plugin-business.ui:95
 #: gnucash/ui/gnc-plugin-business.ui:134
@@ -28303,20 +28255,16 @@ msgstr "仕入先一覧ページを開きます。"
 #: gnucash/ui/gnc-plugin-business.ui:63
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:39
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:472
-#, fuzzy
-#| msgid "New Vendor"
 msgid "_New Vendor…"
-msgstr "仕入先を新規作成"
+msgstr "仕入先を新規作成(_N)…"
 
 #: gnucash/ui/gnc-plugin-business.ui:65
 msgid "Open the New Vendor dialog"
 msgstr "仕入先の新規作成ダイアログを開きます。"
 
 #: gnucash/ui/gnc-plugin-business.ui:68
-#, fuzzy
-#| msgid "Find Vendor"
 msgid "_Find Vendor…"
-msgstr "仕入先を検索"
+msgstr "仕入先を検索(_F)…"
 
 #: gnucash/ui/gnc-plugin-business.ui:70
 msgid "Open the Find Vendor dialog"
@@ -28325,20 +28273,16 @@ msgstr "仕入先の検索ダイアログを開きます。"
 #: gnucash/ui/gnc-plugin-business.ui:73
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:193
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:512
-#, fuzzy
-#| msgid "New _Bill"
 msgid "New _Bill…"
-msgstr "仕入先請求書を新規作成(_B)"
+msgstr "仕入先請求書を新規作成(_B)…"
 
 #: gnucash/ui/gnc-plugin-business.ui:75
 msgid "Open the New Bill dialog"
 msgstr "仕入先請求書の新規作成ダイアログを開きます。"
 
 #: gnucash/ui/gnc-plugin-business.ui:78
-#, fuzzy
-#| msgid "Find Bill"
 msgid "Find Bi_ll…"
-msgstr "仕入先請求書を検索"
+msgstr "仕入先請求書を検索(_L)…"
 
 #: gnucash/ui/gnc-plugin-business.ui:80
 msgid "Open the Find Bill dialog"
@@ -28367,42 +28311,32 @@ msgstr "従業員一覧ページを開きます。"
 #: gnucash/ui/gnc-plugin-business.ui:112
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:55
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:627
-#, fuzzy
-#| msgid "New Employee"
 msgid "_New Employee…"
-msgstr "従業員を新規作成"
+msgstr "従業員を新規作成(_N)…"
 
 #: gnucash/ui/gnc-plugin-business.ui:114
 msgid "Open the New Employee dialog"
 msgstr "従業員の新規作成ダイアログを開きます。"
 
 #: gnucash/ui/gnc-plugin-business.ui:117
-#, fuzzy
-#| msgid "Find Employee"
 msgid "_Find Employee…"
-msgstr "従業員を検索"
+msgstr "従業員を検索(_F)…"
 
 #: gnucash/ui/gnc-plugin-business.ui:119
 msgid "Open the Find Employee dialog"
 msgstr "従業員の検索ダイアログを開きます。"
 
 #: gnucash/ui/gnc-plugin-business.ui:122
-#, fuzzy
-#| msgid "New Expense Voucher"
 msgid "New _Expense Voucher…"
-msgstr "立替払請求書を新規作成"
+msgstr "立替払請求書を新規作成(_E)…"
 
 #: gnucash/ui/gnc-plugin-business.ui:124
-#, fuzzy
-#| msgid "Open the New Expense Voucher dialog"
 msgid "Open the New Voucher dialog"
 msgstr "立替払請求書の新規作成ダイアログを開きます。"
 
 #: gnucash/ui/gnc-plugin-business.ui:127
-#, fuzzy
-#| msgid "Find Expense Voucher"
 msgid "Find Expense _Voucher…"
-msgstr "立替払請求書を検索"
+msgstr "立替払請求書を検索(_V)…"
 
 #: gnucash/ui/gnc-plugin-business.ui:129
 msgid "Open the Find Expense Voucher dialog"
@@ -28481,10 +28415,8 @@ msgid "Import Transactions from a CSV file"
 msgstr "CSV ファイルから取引をインポートします。"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:16
-#, fuzzy
-#| msgid "Import Prices from a CSV file"
 msgid "Import _Prices from a CSV file…"
-msgstr "CSV ファイルから価格をインポートします。"
+msgstr "CSV ファイルから価格をインポート(_P)…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:18
 msgid "Import Prices from a CSV file"
@@ -28495,8 +28427,6 @@ msgid "Import _Customers & Vendors…"
 msgstr "得意先・仕入先のインポート(_C)…"
 
 #: gnucash/ui/gnc-plugin-customer-import.ui:8
-#, fuzzy
-#| msgid "Import Customers and Vendors from a CSV text file."
 msgid "Import Customers and Vendors from a CSV text file"
 msgstr "CSV テキストファイルから得意先および仕入先をインポートします。"
 
@@ -28505,12 +28435,9 @@ msgid "_Replay GnuCash .log file…"
 msgstr "GnuCash の .log ファイルをリプレイ(_R)…"
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:8
-#, fuzzy
-#| msgid "Replay a GnuCash log file after a crash. This cannot be undone."
 msgid "Replay a GnuCash log file after a crash. This cannot be undone"
-msgstr ""
-"クラッシュ後に GnuCash のログファイルをリプレイします。元に戻すことはできませ"
-"ん。"
+msgstr "クラッシュ後に GnuCash "
+"のログファイルをリプレイします。元に戻すことはできません。"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:16
 #: gnucash/ui/gnc-plugin-page-register.ui:32
@@ -28528,10 +28455,8 @@ msgid "Edit the selected account"
 msgstr "選択した勘定科目を編集します。"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:23
-#, fuzzy
-#| msgid "Delete Account"
 msgid "_Delete Account"
-msgstr "勘定科目を削除"
+msgstr "勘定科目を削除(_D)"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:30
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:227
@@ -28592,10 +28517,8 @@ msgstr "選択した勘定科目とその子勘定科目を全部開きます。
 #: gnucash/ui/gnc-plugin-page-budget.ui:79
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:86
 #: gnucash/ui/gnc-plugin-page-register.ui:353
-#, fuzzy
-#| msgid "Filter By:"
 msgid "_Filter By…"
-msgstr "フィルター:"
+msgstr "フィルター(_F)…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:98
 #: gnucash/ui/gnc-plugin-page-budget.ui:87
@@ -28633,10 +28556,8 @@ msgstr "新しいカテゴリーの勘定科目タイプを現在の帳簿に併
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:234
 #: gnucash/ui/gnc-plugin-page-register.ui:236
 #: gnucash/ui/gnc-plugin-page-register.ui:697
-#, fuzzy
-#| msgid "_Reconcile"
 msgid "_Reconcile…"
-msgstr "照合(_R)"
+msgstr "照合(_R)…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:134
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:236
@@ -28648,10 +28569,8 @@ msgstr "選択した勘定科目を照合します。"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:138
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:239
 #: gnucash/ui/gnc-plugin-page-register.ui:242
-#, fuzzy
-#| msgid "Auto-clear"
 msgid "_Auto-clear…"
-msgstr "自動清算"
+msgstr "自動清算(_A)…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:140
 #: gnucash/ui/gnc-plugin-page-register.ui:244
@@ -28663,10 +28582,8 @@ msgstr "特定の清算金額に達するまで各取引を自動清算します
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:150
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:254
 #: gnucash/ui/gnc-plugin-page-register.ui:254
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Stoc_k Split…"
-msgstr "株式分割"
+msgstr "株式分割(_K)…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:152
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:256
@@ -28749,10 +28666,8 @@ msgstr "清算金額を入力したときに各取引を自動清算します。
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:271
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:427
-#, fuzzy
-#| msgid "Delete Account"
 msgid "_Delete Account…"
-msgstr "勘定科目を削除"
+msgstr "勘定科目を削除(_D)…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:273
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:429
@@ -28760,8 +28675,6 @@ msgid "Delete selected account"
 msgstr "選択した勘定科目を削除します。"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:281
-#, fuzzy
-#| msgid "Check & Repair A_ccount"
 msgid "_Check & Repair A_ccount"
 msgstr "勘定科目を検査・修復(_C)"
 
@@ -29228,10 +29141,8 @@ msgid "Open a register report for the selected Transaction"
 msgstr "選択した取引の記録簿帳票を開きます。"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:348
-#, fuzzy
-#| msgid "Sort By"
 msgid "_Sort By…"
-msgstr "ソートキー"
+msgstr "ソート(_S)…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:269
@@ -29264,10 +29175,8 @@ msgid "Export the current report as a PDF document"
 msgstr "現在の帳票を PDF 文書としてエクスポートします。"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:34
-#, fuzzy
-#| msgid "Export _Report"
 msgid "Export _Report…"
-msgstr "帳票をエクスポート(_R)"
+msgstr "帳票をエクスポート(_R)…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:36
 #: gnucash/ui/gnc-plugin-page-report.ui:256
@@ -29283,17 +29192,10 @@ msgstr "帳票設定を削除します。"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:53
 #: gnucash/ui/gnc-plugin-page-report.ui:241
-#, fuzzy
-#| msgid ""
-#| "Add the current report's configuration to the 'Reports->Saved Report "
-#| "Configurations' menu. The report configuration will be saved in the file "
-#| "%s."
 msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu"
-msgstr ""
-"現在の帳票設定を '帳票->保存済み帳票設定' メニューに追加します。帳票設定は"
-"ファイル %s 内に保存されます。"
+msgstr "現在の帳票設定を '帳票->保存済み帳票設定' メニューに追加します。"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:139
 msgid "Back"
