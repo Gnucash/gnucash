@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-21 11:45+0000\n"
+"PO-Revision-Date: 2023-03-21 13:12+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/ja/>\n"
@@ -13953,10 +13953,8 @@ msgstr "複数行選択できます。削除ボタンを押すと削除されま
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:110
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:266
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:412
-#, fuzzy
-#| msgid "New Account"
 msgid "New _Account…"
-msgstr "新規勘定科目"
+msgstr "勘定科目を新規作成(_A)…"
 
 #: gnucash/gtkbuilder/dialog-import.glade:86
 msgid "Please select or create an appropriate GnuCash account for:"
@@ -27674,10 +27672,8 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-register.ui:229
 #: gnucash/ui/gnc-plugin-page-register.ui:682
 #: gnucash/ui/gnc-reconcile-window.ui:43
-#, fuzzy
-#| msgid "Transfer"
 msgid "_Transfer…"
-msgstr "資金移動"
+msgstr "資金移動(_T)…"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:95
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:128
@@ -27778,26 +27774,18 @@ msgid "Tab P_osition"
 msgstr "タブの位置(_O)"
 
 #: gnucash/ui/gnc-main-window.ui:198
-#, fuzzy
-#| msgid "Display the notebook tabs at the top of the window."
 msgid "Display the notebook tabs at the top of the window"
 msgstr "タブをウィンドウの上部に表示します。"
 
 #: gnucash/ui/gnc-main-window.ui:204
-#, fuzzy
-#| msgid "Display the notebook tabs at the bottom of the window."
 msgid "Display the notebook tabs at the bottom of the window"
 msgstr "タブをウィンドウの下部に表示します。"
 
 #: gnucash/ui/gnc-main-window.ui:210
-#, fuzzy
-#| msgid "Display the notebook tabs at the left of the window."
 msgid "Display the notebook tabs at the left of the window"
 msgstr "タブをウィンドウの左側に表示します。"
 
 #: gnucash/ui/gnc-main-window.ui:216
-#, fuzzy
-#| msgid "Display the notebook tabs at the right of the window."
 msgid "Display the notebook tabs at the right of the window"
 msgstr "タブをウィンドウの右側に表示します。"
 
@@ -27810,17 +27798,12 @@ msgid "_Actions"
 msgstr "アクション(_A)"
 
 #: gnucash/ui/gnc-main-window.ui:344
-#, fuzzy
-#| msgid "Reset Warnings"
 msgid "Reset _Warnings…"
-msgstr "警告をリセット"
+msgstr "警告をリセット(_W)…"
 
 #: gnucash/ui/gnc-main-window.ui:346
-#, fuzzy
-#| msgid "Reset the state of all warning messages so they will be shown again."
 msgid "Reset the state of all warning messages so they will be shown again"
-msgstr ""
-"すべての警告メッセージの状態をリセットし、もう一度表示されるようにします。"
+msgstr "すべての警告メッセージの状態をリセットし、もう一度表示されるようにします。"
 
 #: gnucash/ui/gnc-main-window.ui:349
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:200
@@ -27839,8 +27822,6 @@ msgstr "ページ名変更(_N)"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:181
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:215
 #: gnucash/ui/gnc-plugin-page-register.ui:360
-#, fuzzy
-#| msgid "Rename this page."
 msgid "Rename this page"
 msgstr "このページの名前を変更します。"
 
@@ -27869,20 +27850,16 @@ msgid "_New Window"
 msgstr "新規ウィンドウ(_W)"
 
 #: gnucash/ui/gnc-main-window.ui:468
-#, fuzzy
-#| msgid "Open a new top-level GnuCash window."
 msgid "Open a new top-level GnuCash window"
-msgstr "新しい最上位GnuCashウィンドウを開きます。"
+msgstr "新しい最上位 GnuCash ウィンドウを開きます。"
 
 #: gnucash/ui/gnc-main-window.ui:471
 msgid "New Window with _Page"
 msgstr "このページを新規ウィンドウへ(_P)"
 
 #: gnucash/ui/gnc-main-window.ui:473
-#, fuzzy
-#| msgid "Move the current page to a new top-level GnuCash window."
 msgid "Move the current page to a new top-level GnuCash window"
-msgstr "現在のページを新しい最上位GnuCashウィンドウに移動します。"
+msgstr "現在のページを新しい最上位 GnuCash ウィンドウに移動します。"
 
 #: gnucash/ui/gnc-main-window.ui:501
 msgid "Tutorial and Concepts _Guide"
@@ -27942,10 +27919,8 @@ msgstr "得意先請求書の新規作成ダイアログを開きます。"
 #: gnucash/ui/gnc-plugin-page-register.ui:507
 #: gnucash/ui/gnc-plugin-page-report.ui:114
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:122
-#, fuzzy
-#| msgid "New _Invoice"
 msgid "New _Invoice…"
-msgstr "請求書を新規作成(_I)"
+msgstr "得意先請求書を新規作成(_I)…"
 
 #: gnucash/ui/gnc-plugin-account-tree.ui:6
 msgid "New Accounts _Page"
@@ -28960,8 +28935,6 @@ msgid "Create a new voucher"
 msgstr "立替払請求書を新規作成します。"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:6
-#, fuzzy
-#| msgid "_Print checks"
 msgid "_Print Cheques"
 msgstr "小切手を印刷(_P)"
 
@@ -29013,37 +28986,29 @@ msgid "_Void Transaction"
 msgstr "取引を無効化(_V)"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:186
-#, fuzzy
-#| msgid "Record the current transaction"
 msgid "Void the current transaction"
-msgstr "現在の取引を記帳します。"
+msgstr "現在の取引を無効化します。"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:190
 msgid "_Unvoid Transaction"
 msgstr "取引無効化を解除(_U)"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:192
-#, fuzzy
-#| msgid "Record the current transaction"
 msgid "Unvoid the current transaction"
-msgstr "現在の取引を記帳します。"
+msgstr "現在の取引の無効化を解除します。"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:196
 msgid "Add _Reversing Transaction"
 msgstr "逆方向の取引を追加(_R)"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:198
-#, fuzzy
-#| msgid "Add _Reversing Transaction"
 msgid "Add a reversing transaction"
-msgstr "逆方向の取引を追加(_R)"
+msgstr "逆方向の取引を追加します。"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:248
 #: gnucash/ui/gnc-plugin-page-register.ui:712
-#, fuzzy
-#| msgid "Stock Split Assistant"
 msgid "Stock Ass_istant…"
-msgstr "株式分割アシスタント"
+msgstr "株式アシスタント(_I)…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:276
 #: gnucash/ui/gnc-plugin-page-register.ui:418
@@ -29080,10 +29045,8 @@ msgstr "現在の取引の為替・交換レートを編集します。"
 #: gnucash/ui/gnc-plugin-page-register.ui:295
 #: gnucash/ui/gnc-plugin-page-register.ui:433
 #: gnucash/ui/gnc-plugin-page-register.ui:657
-#, fuzzy
-#| msgid "Schedule"
 msgid "Sche_dule…"
-msgstr "予定取引"
+msgstr "予定取引を作成(_D)…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:297
 #: gnucash/ui/gnc-plugin-page-register.ui:435
@@ -29104,25 +29067,17 @@ msgstr "相手勘定科目へジャンプ(_J)"
 #: gnucash/ui/gnc-plugin-page-register.ui:306
 #: gnucash/ui/gnc-plugin-page-register.ui:440
 #: gnucash/ui/gnc-plugin-page-register.ui:644
-#, fuzzy
-#| msgid ""
-#| "Open a new register tab for the other account with focus on this "
-#| "transaction."
 msgid ""
 "Open a new register tab for the other account with focus on this transaction"
 msgstr "相手勘定科目の記録簿タブを開いてフォーカスをこの取引に合わせます。"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:318
-#, fuzzy
-#| msgid "_All transactions"
 msgid "All Transactions"
-msgstr "全取引(_A)"
+msgstr "全取引"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:323
-#, fuzzy
-#| msgid "_This transaction"
 msgid "This transaction"
-msgstr "この取引(_T)"
+msgstr "この取引"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:332
 msgid "Account Report"
