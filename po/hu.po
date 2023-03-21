@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-20 13:39+0000\n"
+"PO-Revision-Date: 2023-03-21 11:45+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hu/>\n"
@@ -27745,14 +27745,12 @@ msgid "Filter on these accounts."
 msgstr "Szűrés ezekre a számlákra."
 
 #: gnucash/report/trep-engine.scm:662
-#, fuzzy
 msgid "Filter account."
-msgstr "Számla szűrése"
+msgstr ""
 
 #: gnucash/report/trep-engine.scm:753
-#, fuzzy
 msgid "Sort by this criterion first."
-msgstr "Rendezzük először ezen kritérium szerint"
+msgstr "Először ezen feltétel szerint rendezzen."
 
 #: gnucash/report/trep-engine.scm:763
 #, fuzzy
@@ -27785,14 +27783,12 @@ msgid "Subtotal according to the primary key?"
 msgstr "Alösszeg az elsődleges kulcs szerint?"
 
 #: gnucash/report/trep-engine.scm:806 gnucash/report/trep-engine.scm:840
-#, fuzzy
 msgid "Do a date subtotal."
-msgstr "Dátum alösszeg készítése"
+msgstr "Dátum részösszeg számítása."
 
 #: gnucash/report/trep-engine.scm:815
-#, fuzzy
 msgid "Order of primary sorting."
-msgstr "A rendezés elsődleges rendje"
+msgstr "Az elsődleges rendezés sorrendje."
 
 #: gnucash/report/trep-engine.scm:823
 #, fuzzy
