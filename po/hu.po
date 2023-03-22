@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-21 11:45+0000\n"
+"PO-Revision-Date: 2023-03-22 16:40+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hu/>\n"
@@ -56,9 +56,8 @@ msgstr "Jelen év kezdete"
 
 #: bindings/guile/date-utilities.scm:720
 #: libgnucash/engine/gnc-option-date.cpp:264
-#, fuzzy
 msgid "First day of the current calendar year."
-msgstr "Idei naptári év első napja"
+msgstr "Idei naptári év első napja."
 
 #: bindings/guile/date-utilities.scm:724
 #: gnucash/gnome-utils/gnc-period-select.c:91
@@ -68,9 +67,8 @@ msgstr "Jelen naptári év vége"
 
 #: bindings/guile/date-utilities.scm:727
 #: libgnucash/engine/gnc-option-date.cpp:272
-#, fuzzy
 msgid "Last day of the current calendar year."
-msgstr "Idei naptári év utolsó napja"
+msgstr "Idei naptári év utolsó napja."
 
 #: bindings/guile/date-utilities.scm:731
 #: gnucash/gnome-utils/gnc-period-select.c:76
@@ -80,9 +78,8 @@ msgstr "Előző év kezdete"
 
 #: bindings/guile/date-utilities.scm:734
 #: libgnucash/engine/gnc-option-date.cpp:280
-#, fuzzy
 msgid "First day of the previous calendar year."
-msgstr "Előző naptári év első napja"
+msgstr "Előző naptári év első napja."
 
 #: bindings/guile/date-utilities.scm:738
 #: gnucash/gnome-utils/gnc-period-select.c:92
@@ -92,9 +89,8 @@ msgstr "Előző naptári év vége"
 
 #: bindings/guile/date-utilities.scm:741
 #: libgnucash/engine/gnc-option-date.cpp:288
-#, fuzzy
 msgid "Last day of the previous calendar year."
-msgstr "Előző naptári év utolsó napja"
+msgstr "Előző naptári év utolsó napja."
 
 #: bindings/guile/date-utilities.scm:745
 #: libgnucash/engine/gnc-option-date.cpp:311
@@ -103,9 +99,8 @@ msgstr "Könyvelési időszak kezdete"
 
 #: bindings/guile/date-utilities.scm:748
 #: libgnucash/engine/gnc-option-date.cpp:312
-#, fuzzy
 msgid "First day of the accounting period, as set in the global preferences."
-msgstr "Számviteli időszak első napja, a globális beállításoknak megfelelően"
+msgstr "Számviteli időszak első napja, a globális beállításoknak megfelelően."
 
 #: bindings/guile/date-utilities.scm:752
 #: libgnucash/engine/gnc-option-date.cpp:319
@@ -114,9 +109,8 @@ msgstr "Számviteli időszak vége"
 
 #: bindings/guile/date-utilities.scm:755
 #: libgnucash/engine/gnc-option-date.cpp:320
-#, fuzzy
 msgid "Last day of the accounting period, as set in the global preferences."
-msgstr "Számviteli időszak utolsó napja, a globális beállításoknak megfelelően"
+msgstr "Számviteli időszak utolsó napja, a globális beállításoknak megfelelően."
 
 #: bindings/guile/date-utilities.scm:759
 #: gnucash/gnome-utils/gnc-period-select.c:71
@@ -126,9 +120,8 @@ msgstr "A hónap kezdete"
 
 #: bindings/guile/date-utilities.scm:762
 #: libgnucash/engine/gnc-option-date.cpp:168
-#, fuzzy
 msgid "First day of the current month."
-msgstr "A jelen hónap első napja"
+msgstr "A jelen hónap első napja."
 
 #: bindings/guile/date-utilities.scm:766
 #: gnucash/gnome-utils/gnc-period-select.c:87
@@ -138,9 +131,8 @@ msgstr "Jelen hónap vége"
 
 #: bindings/guile/date-utilities.scm:769
 #: libgnucash/engine/gnc-option-date.cpp:176
-#, fuzzy
 msgid "Last day of the current month."
-msgstr "A jelen hónap utolsó napja"
+msgstr "A jelen hónap utolsó napja."
 
 #: bindings/guile/date-utilities.scm:773
 #: gnucash/gnome-utils/gnc-period-select.c:72
@@ -10415,23 +10407,17 @@ msgstr "Felosztás kivágása a tranzakcióból"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:70
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:193
-#, fuzzy
-#| msgid ""
-#| "This dialog is presented before allowing you to remove a split from a "
-#| "transaction."
 msgid ""
 "This dialog is presented before allowing you to cut a split from a "
 "transaction."
 msgstr ""
-"E dialógus megjelenik, mielőtt engedélyezik a részkönyvelés törlését "
+"Ez az ablak azelőtt jelenik meg, mielőtt kivágna egy felosztást egy "
 "tranzakcióból."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:74
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:197
-#, fuzzy
-#| msgid "Remove a reconciled split from a transaction"
 msgid "Cut a reconciled split from a transaction"
-msgstr "Egyeztetett részkönyvelés törlése a tranzakcióból"
+msgstr "Egyeztetett felosztás kivágása egy tranzakcióból"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:75
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:198
@@ -23032,9 +23018,8 @@ msgstr "Egyenleg %s"
 #: gnucash/report/reports/standard/income-gst-statement.scm:132
 #: gnucash/report/reports/standard/trial-balance.scm:72
 #: gnucash/report/trep-engine.scm:647
-#, fuzzy
 msgid "Report on these accounts."
-msgstr "Jelentés e számlákról"
+msgstr ""
 
 #: gnucash/report/reports/standard/balance-forecast.scm:49
 #: gnucash/report/reports/standard/net-charts.scm:59
@@ -27791,18 +27776,16 @@ msgid "Order of primary sorting."
 msgstr "Az elsődleges rendezés sorrendje."
 
 #: gnucash/report/trep-engine.scm:823
-#, fuzzy
 msgid "Sort by this criterion second."
-msgstr "Rendezzük másodszor ezen kritérium szerint"
+msgstr "A rendezés másodlagos feltétele."
 
 #: gnucash/report/trep-engine.scm:833
 msgid "Subtotal according to the secondary key?"
 msgstr "Alösszeg a másodlagos kulcs szerint?"
 
 #: gnucash/report/trep-engine.scm:849
-#, fuzzy
 msgid "Order of Secondary sorting."
-msgstr "A rendezés másodlagos rendje"
+msgstr "A másodlagos rendezés sorrendje."
 
 #: gnucash/report/trep-engine.scm:903
 msgid "Display the reconciled date?"
@@ -27856,9 +27839,8 @@ msgstr ""
 "paramétert kitaláljuk)."
 
 #: gnucash/report/trep-engine.scm:956
-#, fuzzy
 msgid "Amount of detail to display per transaction."
-msgstr "Print all split details for multi-split transactions"
+msgstr ""
 
 #: gnucash/report/trep-engine.scm:958
 msgid "One split per line"
@@ -27880,9 +27862,8 @@ msgid "Enable hyperlinks in amounts."
 msgstr "Hiperhivatkozások engedélyezése a jelentésekben."
 
 #: gnucash/report/trep-engine.scm:982
-#, fuzzy
 msgid "Reverse amount display for certain account types."
-msgstr "Bizonyos számlatípusoknál inverz összegek megjelenítése"
+msgstr "Bizonyos számlatípusoknál inverz összegek megjelenítése."
 
 #: gnucash/report/trep-engine.scm:1140
 msgid "Num/T-Num"
@@ -30395,18 +30376,16 @@ msgid "Start of next year"
 msgstr "Következő év kezdete"
 
 #: libgnucash/engine/gnc-option-date.cpp:296
-#, fuzzy
 msgid "First day of the next calendar year."
-msgstr "Következő naptári év elős napja"
+msgstr "Következő naptári év első napja."
 
 #: libgnucash/engine/gnc-option-date.cpp:303
 msgid "End of next year"
 msgstr "Következő naptári év vége"
 
 #: libgnucash/engine/gnc-option-date.cpp:304
-#, fuzzy
 msgid "Last day of the next calendar year."
-msgstr "Következő naptári év utolsó napja"
+msgstr "Következő naptári év utolsó napja."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1104
 msgid "Counters"
