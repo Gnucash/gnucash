@@ -1359,6 +1359,8 @@ schedXact_editor_create_ledger (GncSxEditorDialog *sxed)
     /* Now create the register plugin page. */
     sxed->plugin_page = gnc_plugin_page_register_new_ledger (sxed->ledger);
 
+    gnc_plugin_page_merge_actions (sxed->plugin_page);
+
     gtk_widget_insert_action_group (GTK_WIDGET(sxed->embed_window),
                                     gnc_plugin_page_get_simple_action_group_name (sxed->plugin_page),
                                     G_ACTION_GROUP(gnc_plugin_page_get_action_group (sxed->plugin_page)));

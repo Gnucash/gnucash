@@ -928,9 +928,19 @@ gnc_plugin_page_register_ui_update (gpointer various,
     trans = gnc_split_register_get_current_trans (reg);
 
     if (cursor_class == CURSOR_CLASS_SPLIT)
-        gnc_plugin_page_set_menu_popup_qualifier (GNC_PLUGIN_PAGE(page), "split");
+    {
+        if (GNC_IS_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window))
+            gnc_plugin_page_set_menu_popup_qualifier (GNC_PLUGIN_PAGE(page), "split");
+        else
+            gnc_plugin_page_set_menu_popup_qualifier (GNC_PLUGIN_PAGE(page), "split-sx");
+    }
     else
-        gnc_plugin_page_set_menu_popup_qualifier (GNC_PLUGIN_PAGE(page), "trans");
+    {
+        if (GNC_IS_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window))
+            gnc_plugin_page_set_menu_popup_qualifier (GNC_PLUGIN_PAGE(page), "trans");
+        else
+            gnc_plugin_page_set_menu_popup_qualifier (GNC_PLUGIN_PAGE(page), "trans-sx");
+    }
 
     /* If the register is not read only, make any modifying action active
      * to start with */

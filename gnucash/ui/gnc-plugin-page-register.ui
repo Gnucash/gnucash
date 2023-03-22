@@ -568,6 +568,85 @@
   </menu>
 
 
+  <menu id="mainwin-popup-trans-sx">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Dup_licate Transaction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.DuplicateTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Make a copy of the current transaction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Delete Transaction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.DeleteTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Delete the current transaction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Remo_ve Other Splits</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.RemoveTransactionSplitsAction</attribute>
+        <attribute name="tooltip" translatable="yes">Remove all splits in the current transaction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Enter Transaction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.RecordTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Record the current transaction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Ca_ncel Transaction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.CancelTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Cancel the current transaction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Blank Transaction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.BlankTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Move to the blank transaction at the bottom of the register</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <menu id="mainwin-popup-split-sx">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Dup_licate Split</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.DuplicateTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Make a copy of the current split</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Delete Split</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.DeleteTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Delete the current split</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Remo_ve Other Splits</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.RemoveTransactionSplitsAction</attribute>
+        <attribute name="tooltip" translatable="yes">Remove all splits in the current transaction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Enter Transaction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.RecordTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Record the current transaction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Ca_ncel Transaction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.CancelTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Cancel the current transaction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Blank Transaction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.BlankTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Move to the blank transaction at the bottom of the register</attribute>
+      </item>
+    </section>
+  </menu>
+
+
   <object class="GtkToolbar" id="mainwin-toolbar">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
