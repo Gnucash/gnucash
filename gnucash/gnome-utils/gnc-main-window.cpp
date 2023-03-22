@@ -5503,10 +5503,16 @@ do_popup_menu (GncPluginPage *page, GdkEventButton *event)
     GtkWidget *menu;
     const gchar *menu_qualifier;
     gchar *popup_menu_name;
+    GncWindow* gnc_window;
+    GtkWidget *statusbar;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
 
     ENTER("page %p, event %p", page, event);
+
+    gnc_window = GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window);
+
+    statusbar = gnc_window_get_statusbar (gnc_window);
 
     builder = gnc_plugin_page_get_builder (page);
 
@@ -5538,6 +5544,10 @@ do_popup_menu (GncPluginPage *page, GdkEventButton *event)
         LEAVE("no menu");
         return;
     }
+
+    // add tooltip redirect call backs
+    gnc_plugin_add_menu_tooltip_callbacks (menu, menu_model, statusbar);
+
     gtk_menu_attach_to_widget (GTK_MENU(menu), GTK_WIDGET(page->window), nullptr);
     gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *) event);
 

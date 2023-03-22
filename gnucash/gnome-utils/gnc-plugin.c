@@ -267,7 +267,6 @@ gnc_plugin_add_menu_tooltip_callbacks (GtkWidget  *menubar,
 {
     GList *menu_item_list;
 
-    g_return_if_fail (GTK_IS_MENU_BAR(menubar));
     g_return_if_fail (G_IS_MENU_MODEL(menubar_model));
     g_return_if_fail (GTK_IS_STATUSBAR(statusbar));
 
