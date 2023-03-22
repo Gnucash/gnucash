@@ -17,7 +17,7 @@ set (generic_import_SOURCES
   import-account-matcher.cpp
   import-commodity-matcher.cpp
   import-backend.cpp
-  import-format-dialog.c
+  import-format-dialog.cpp
   import-match-picker.cpp
   import-parse.c
   import-utilities.cpp
