@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-22 16:40+0000\n"
+"PO-Revision-Date: 2023-03-22 21:41+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hu/>\n"
@@ -5219,8 +5219,8 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register.c:3769
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr ""
-"Egyeztetett vagy igazolt felosztásokkal rendelkező tranzakciókat nem lehet "
-"érvényteleníteni."
+"Egyeztetett vagy elszámolt felosztásokkal rendelkező tranzakciót nem lehet "
+"sztornózni."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3776
 #: gnucash/gnome/gnc-split-reg.c:1167
@@ -5681,7 +5681,7 @@ msgstr "Jövő:"
 
 #: gnucash/gnome/gnc-split-reg.c:2369
 msgid "Cleared:"
-msgstr "Igazolt:"
+msgstr "Elszámolt:"
 
 #: gnucash/gnome/gnc-split-reg.c:2370
 msgid "Reconciled:"
@@ -5815,10 +5815,9 @@ msgstr "Pénzügyi Igazgatás"
 #: gnucash/gnome/reconcile-view.c:461
 #: gnucash/register/ledger-core/split-register-layout.c:697
 #: gnucash/register/ledger-core/split-register-model.c:313
-#, fuzzy
 msgctxt "Column header for 'Reconciled'"
 msgid "R"
-msgstr "R"
+msgstr "E"
 
 #: gnucash/gnome/report-menus.scm:57
 #, scheme-format
@@ -5889,10 +5888,8 @@ msgid "No such price: %s"
 msgstr "Nincs ilyen ár: %s"
 
 #: gnucash/gnome/window-autoclear.c:115
-#, fuzzy
-#| msgid "Created Transactions"
 msgid "Cleared Transactions"
-msgstr "Létrehozott tranzakció"
+msgstr "Elszámolt tranzakciók"
 
 #. Translators: %d is the number of days in the future
 #: gnucash/gnome/window-reconcile.c:380
@@ -7010,13 +7007,12 @@ msgid "Too many uncleared splits"
 msgstr "Túl sok a nem elszámolt felosztás"
 
 #: gnucash/gnome-utils/gnc-autoclear.c:160
-#, fuzzy
 msgid "The selected amount cannot be cleared."
-msgstr "A kamatláb nem lehet nulla."
+msgstr ""
 
 #: gnucash/gnome-utils/gnc-autoclear.c:166
 msgid "Cannot uniquely clear splits. Found multiple possibilities."
-msgstr "A felosztások törlése nem egyértelmű. Több lehetőség is létezik."
+msgstr "A felosztások elszámolása nem egyértelmű. Több lehetőség is létezik."
 
 #: gnucash/gnome-utils/gnc-autosave.c:101
 msgid "Save file automatically?"
@@ -7614,7 +7610,7 @@ msgstr "Bezárás _mentés nélkül"
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:1373
 msgid "This window is closing and will not be restored."
-msgstr "Ez az ablak bezárul, és nem kerül visszaállításra."
+msgstr "Ez az ablak bezárul, és nem lehet visszaállítani."
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:1379
 msgid "Close Window?"
@@ -7888,7 +7884,7 @@ msgstr "Egyenleg (időszak)"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:883
 msgid "Cleared (Report)"
-msgstr "Igazolt (jelentés)"
+msgstr "Egyeztetett (kimutatás)"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:897
 msgid "Reconciled (Report)"
@@ -7976,7 +7972,7 @@ msgstr "Egyenleg (%s)"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:1825
 #, c-format
 msgid "Cleared (%s)"
-msgstr "Igazolt (%s)"
+msgstr "Elszámolt (%s)"
 
 #. Translators: %s is a currency mnemonic.
 #: gnucash/gnome-utils/gnc-tree-view-account.c:1828
@@ -9148,7 +9144,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:40
 msgid "Clear matching transactions above this score"
-msgstr "E pontszám feletti tranzakciók igazolása"
+msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:41
 msgid ""
@@ -9241,7 +9237,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:5
 msgid "Pre-select cleared transactions"
-msgstr "Igazolt tranzakciók kipipálása"
+msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:6
 msgid ""
@@ -9249,7 +9245,7 @@ msgid ""
 "already selected in the reconcile dialog. Otherwise no transactions will be "
 "initially selected."
 msgstr ""
-"Ha aktív, minden igazoltként megjelölt tranzakció kiválasztottként jelenik "
+"Ha aktív, minden elszámoltként megjelölt tranzakció kiválasztottként jelenik "
 "meg az egyeztetés ablakban. Különben nincs kezdetben kiválasztott tranzakció."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:10
@@ -9795,7 +9791,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:195
 #: gnucash/gtkbuilder/dialog-preferences.glade:3377
 msgid "Display the notebook tabs at the top of the window."
-msgstr "Jelenítse meg a jegyzet füleket az ablak tetején."
+msgstr "Fülek megjelenítése az ablak tetején."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:196
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:201
@@ -9810,17 +9806,17 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:200
 #: gnucash/gtkbuilder/dialog-preferences.glade:3396
 msgid "Display the notebook tabs at the bottom of the window."
-msgstr "Jelenítse meg a jegyzet füleket az ablak alján."
+msgstr "Fülek megjelenítése az ablak alján."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:205
 #: gnucash/gtkbuilder/dialog-preferences.glade:3415
 msgid "Display the notebook tabs at the left of the window."
-msgstr "Jelenítse meg a jegyzet füleket az ablak bal oldalán."
+msgstr "Fülek megjelenítése az ablak bal oldalán."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:210
 #: gnucash/gtkbuilder/dialog-preferences.glade:3434
 msgid "Display the notebook tabs at the right of the window."
-msgstr "Jelenítse meg a jegyzet füleket az ablak jobb oldalán."
+msgstr "Fülek megjelenítése az ablak jobb oldalán."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:215
 #: gnucash/gtkbuilder/dialog-preferences.glade:3466
@@ -13209,23 +13205,27 @@ msgstr "_Egyeztetett"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:72
 msgid "_Cleared"
-msgstr "_Tisztázott"
+msgstr "_Elszámolt"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:78
 msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as cleared."
 msgstr ""
+"Ha a QIF fájlban nincs megadva a státusz, a tranzakció elszámoltnak lesz "
+"jelölve."
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:91
 msgid "_Not cleared"
-msgstr "Iga_zolatlan"
+msgstr "Nem els_zámolt"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:97
 msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as not cleared."
 msgstr ""
+"Ha a QIF fájlban nincs megadva a státusz, a tranzakció nem elszámoltnak lesz "
+"jelölve."
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:113
 msgid ""
@@ -14301,16 +14301,13 @@ msgid "Select \"A\" to add the transaction as new."
 msgstr "Válaszd az \"A\" a tranzakció létrehozásához."
 
 #: gnucash/gtkbuilder/dialog-import.glade:694
-#, fuzzy
 msgid ""
 "Select \"U+C\" to update a matching transaction and mark it as cleared (c)."
 msgstr ""
-"Válaszd az \"U+R\" illeszkedő tranzakció frissítéséhez és egyeztetéséhez."
 
 #: gnucash/gtkbuilder/dialog-import.glade:706
-#, fuzzy
 msgid "Select \"C\" to mark a matching transaction as cleared (c)."
-msgstr "Válaszd az \"R\" illeszkedő tranzakció egyeztetéséhez."
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-import.glade:718
 msgid "Select neither to skip the transaction (it won't be imported at all)."
@@ -15122,24 +15119,12 @@ msgid "Enable update match action"
 msgstr "Frissítési egyezési művelet engedélyezése"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2082
-#, fuzzy
-#| msgid ""
-#| "Enable the UPDATE AND RECONCILE action in the transaction matcher. If "
-#| "enabled, a transaction whose best match's score is above the Auto-CLEAR "
-#| "threshold and has a different date or amount than the matching existing "
-#| "transaction will cause the existing transaction to be updated and cleared "
-#| "by default."
 msgid ""
 "Enable the UPDATE AND CLEAR action in the transaction matcher. If enabled, a "
 "transaction whose best match's score is above the Auto-CLEAR threshold and "
 "has a different date or amount than the matching existing transaction will "
 "cause the existing transaction to be updated and cleared by default."
 msgstr ""
-"Enable the UPDATE AND RECONCILE action in the transaction matcher. If "
-"enabled, a transaction whose best match's score is above the Auto-CLEAR "
-"threshold and has a different date or amount than the matching existing "
-"transaction will cause the existing transaction to be updated and cleared by "
-"default."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2115
 msgid ""
@@ -15167,8 +15152,8 @@ msgid ""
 "to the Auto-CLEAR threshold) will be CLEARed by default."
 msgstr ""
 "A tranzakció, amelynek a legjobb egyezés-pontszáma a zöld sávba esik (a "
-"belépő auto-egyezés küszöb felett, vagy azzal szintben) felvétele "
-"alapértelmezésént."
+"belépő auto-egyezés küszöb felett, vagy azzal szintben) elszámoltnak "
+"jelölése alapértelmezésént."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2160
 msgid ""
@@ -15313,13 +15298,13 @@ msgstr "<b>Egyeztetés</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2591
 msgid "Check cleared _transactions"
-msgstr "A igazolt _tranzakciók ellenőrzése"
+msgstr "Elszámolt _tranzakciók bepipálása"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2597
 msgid "Pre-check cleared transactions when creating a reconcile dialog."
 msgstr ""
-"A igazolt tranzakciók előzetes ellenőrzése egyeztetési párbeszédablak "
-"létrehozásakor."
+"Az egyeztetés ablak megnyitásakor az elszámolt tranzakciók automatikus "
+"bepipálása."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2609
 msgid "Automatic credit card _payment"
@@ -15524,27 +15509,27 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3361
 msgid "<b>Tab Position</b>"
-msgstr "<b>Fül pozíció</b>"
+msgstr "<b>Fülek helye</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3371
 #: gnucash/ui/gnc-main-window.ui:195
 msgid "To_p"
-msgstr "_Fennt"
+msgstr "_Felül"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3390
 #: gnucash/ui/gnc-main-window.ui:201
 msgid "B_ottom"
-msgstr "_Alsó"
+msgstr "_Alul"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3409
 #: gnucash/ui/gnc-main-window.ui:207
 msgid "_Left"
-msgstr "_Bal"
+msgstr "_Baloldalt"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3428
 #: gnucash/ui/gnc-main-window.ui:213
 msgid "_Right"
-msgstr "_Jobb"
+msgstr "_Jobboldalt"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3450
 msgid "<b>Summary Bar Position</b>"
@@ -17209,14 +17194,14 @@ msgstr "Rendezés a rögzítés dátuma szerint."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:900
 msgid "S_tatement Date"
-msgstr "Bankszámla kivona_t dátuma"
+msgstr "Bankszámlakivona_t dátuma"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:904
 msgid ""
 "Sort by the statement date (and group by cleared, unreconciled, reconciled)."
 msgstr ""
-"Rendezés a bankszámlakivonat dátuma szerint (és az igazoltak, egyeztetettek "
-"és nem egyeztetettek csoportosítása)."
+"Rendezés a bankszámlakivonat dátuma szerint (és csoportosítás az elszámolt, "
+"egyeztetett és nem egyeztetett állapot alapján)."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:919
 msgid "Num_ber"
@@ -17345,10 +17330,8 @@ msgid "Show _zero balance owners"
 msgstr ""
 
 #: gnucash/gtkbuilder/window-autoclear.glade:71
-#, fuzzy
-#| msgid "Auto-clear"
 msgid "About Auto-Clear"
-msgstr "Auto-törlés"
+msgstr "Az automatikus elszámolás működése"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:86
 msgid ""
@@ -17356,6 +17339,10 @@ msgid ""
 "are cleared, given an ending balance. For example, said ending balance can "
 "be the current balance given by your bank online."
 msgstr ""
+"Ez az ablak akkor hasznos, ha azt szeretné, hogy a GnuCash egy záróegyenleg "
+"ismeretében automatikusan megtalálja, mely tranzakciók legyenek elszámolva. "
+"Az említett záróegyenleg lehet például a bankja által online megadott "
+"aktuális egyenlege."
 
 #: gnucash/gtkbuilder/window-autoclear.glade:101
 msgid "Caution!"
@@ -17367,6 +17354,9 @@ msgid ""
 "than approximately 20. In that case please clear at least some of them "
 "manually."
 msgstr ""
+"Ez az eszköz lassú vagy nem is működik, amikor az el nem számolt felosztások "
+"száma kb. 20 fölé emelkedik. Ilyenkor próbáljon kézzel elszámoltnak "
+"megjelölni legalább néhány felosztást."
 
 #: gnucash/gtkbuilder/window-autoclear.glade:139
 #: gnucash/gtkbuilder/window-reconcile.glade:118
@@ -19547,10 +19537,9 @@ msgid "A"
 msgstr "A"
 
 #: gnucash/import-export/import-main-matcher.c:1516
-#, fuzzy
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
-msgstr "U+R"
+msgstr ""
 
 #: gnucash/import-export/import-main-matcher.c:1520
 msgctxt "Column header for 'Clearing transaction'"
@@ -27613,9 +27602,8 @@ msgid "Unreconciled only"
 msgstr "_Nem egyeztetett"
 
 #: gnucash/report/trep-engine.scm:393
-#, fuzzy
 msgid "Cleared only"
-msgstr "Igazolt"
+msgstr "Csak az elszámoltak"
 
 #: gnucash/report/trep-engine.scm:397
 #, fuzzy
@@ -28098,10 +28086,8 @@ msgid "Show/hide the status bar on this window"
 msgstr "Állapotsor megjelenítése/elrejtése ez ablakban"
 
 #: gnucash/ui/gnc-main-window.ui:193
-#, fuzzy
-#| msgid "<b>Tab Position</b>"
 msgid "Tab P_osition"
-msgstr "<b>Fül pozíció</b>"
+msgstr "<b>Fülek helye</b>"
 
 #: gnucash/ui/gnc-main-window.ui:198
 #, fuzzy
@@ -28202,7 +28188,7 @@ msgstr "Új legfelső GnuCash-ablak nyitása."
 
 #: gnucash/ui/gnc-main-window.ui:471
 msgid "New Window with _Page"
-msgstr "Új ablak la_ppal"
+msgstr "Jelenlegi _fül új ablakba"
 
 #: gnucash/ui/gnc-main-window.ui:473
 #, fuzzy
@@ -28275,7 +28261,7 @@ msgstr "Új _számla"
 
 #: gnucash/ui/gnc-plugin-account-tree.ui:6
 msgid "New Accounts _Page"
-msgstr "_Új folyószámlák oldal"
+msgstr "_Új folyószámlák fül"
 
 #: gnucash/ui/gnc-plugin-account-tree.ui:8
 msgid "Open a new Account Tree page"
@@ -28988,8 +28974,6 @@ msgid ""
 "Automatically clear individual transactions, so as to reach a certain "
 "cleared amount"
 msgstr ""
-"Az egyes tranzakciók automatikus törlése, hogy elérjen egy bizonyos "
-"elszámolt összeget"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:150
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:254
@@ -30028,18 +30012,17 @@ msgstr ""
 #: libgnucash/app-utils/gnc-ui-util.c:481
 msgctxt "Reconciled flag 'not cleared'"
 msgid "n"
-msgstr ""
+msgstr "n"
 
 #: libgnucash/app-utils/gnc-ui-util.c:483
 msgctxt "Reconciled flag 'cleared'"
 msgid "c"
-msgstr ""
+msgstr "e"
 
 #: libgnucash/app-utils/gnc-ui-util.c:485
-#, fuzzy
 msgctxt "Reconciled flag 'reconciled'"
 msgid "y"
-msgstr "y"
+msgstr "i"
 
 #: libgnucash/app-utils/gnc-ui-util.c:487
 msgctxt "Reconciled flag 'frozen'"
@@ -30049,7 +30032,7 @@ msgstr ""
 #: libgnucash/app-utils/gnc-ui-util.c:489
 msgctxt "Reconciled flag 'void'"
 msgid "v"
-msgstr ""
+msgstr "s"
 
 #: libgnucash/app-utils/gnc-ui-util.c:529
 msgctxt "Document Link flag for 'web'"
