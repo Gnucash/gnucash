@@ -38,7 +38,7 @@
 static void
 option_changed_cb (GtkWidget *widget, gpointer index_p)
 {
-    gint *my_index = index_p;
+    auto my_index{static_cast<gint*>(index_p)};
     *my_index = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 }
 
@@ -46,15 +46,11 @@ option_changed_cb (GtkWidget *widget, gpointer index_p)
 static GncImportFormat
 add_menu_and_run_dialog(GtkWidget *dialog, GtkWidget *menu_box, GncImportFormat fmt)
 {
-    GtkComboBox  *combo;
-    GtkListStore *store;
     GtkTreeIter iter;
-    GtkCellRenderer *cell;
     gint index = 0, count = 0;
-    gint *index_p = &index;
     GncImportFormat formats[MAX_CHOICES];
 
-    store = gtk_list_store_new(1, G_TYPE_STRING);
+    auto store = gtk_list_store_new(1, G_TYPE_STRING);
 
     if (fmt & GNCIF_NUM_PERIOD)
     {
@@ -106,11 +102,11 @@ add_menu_and_run_dialog(GtkWidget *dialog, GtkWidget *menu_box, GncImportFormat 
 
     g_assert(count > 1);
 
-    combo = GTK_COMBO_BOX(gtk_combo_box_new_with_model(GTK_TREE_MODEL(store)));
+    auto combo = GTK_COMBO_BOX(gtk_combo_box_new_with_model(GTK_TREE_MODEL(store)));
     g_object_unref(store);
 
     /* Create cell renderer. */
-    cell = gtk_cell_renderer_text_new();
+    auto cell = gtk_cell_renderer_text_new();
 
     /* Pack it to the combo box. */
     gtk_cell_layout_pack_start( GTK_CELL_LAYOUT( combo ), cell, FALSE );
@@ -119,7 +115,7 @@ add_menu_and_run_dialog(GtkWidget *dialog, GtkWidget *menu_box, GncImportFormat 
     gtk_cell_layout_set_attributes( GTK_CELL_LAYOUT( combo ), cell, "text", 0, NULL );
 
     g_signal_connect(G_OBJECT(combo), "changed",
-                     G_CALLBACK(option_changed_cb), index_p);
+                     G_CALLBACK(option_changed_cb), &index);
 
     gtk_box_pack_start(GTK_BOX(menu_box), GTK_WIDGET(combo), TRUE, TRUE, 0);
 
@@ -135,11 +131,7 @@ add_menu_and_run_dialog(GtkWidget *dialog, GtkWidget *menu_box, GncImportFormat 
 GncImportFormat
 gnc_import_choose_fmt(const char* msg, GncImportFormat fmts, gpointer data)
 {
-    GtkBuilder *builder;
-    GtkWidget *dialog;
-    GtkWidget *widget;
-
-    g_return_val_if_fail(fmts, FALSE);
+    g_return_val_if_fail(fmts, GNCIF_NONE);
 
     /* if there is only one format available, just return it */
     if (!(fmts & (fmts - 1)))
@@ -147,10 +139,10 @@ gnc_import_choose_fmt(const char* msg, GncImportFormat fmts, gpointer data)
         return fmts;
     }
     /* Open the Glade Builder file */
-    builder = gtk_builder_new();
+    auto builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-import.glade", "format_picker_dialog");
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "format_picker_dialog"));
-    widget = GTK_WIDGET(gtk_builder_get_object (builder, "msg_label"));
+    auto dialog = GTK_WIDGET(gtk_builder_get_object (builder, "format_picker_dialog"));
+    auto widget = GTK_WIDGET(gtk_builder_get_object (builder, "msg_label"));
     gtk_label_set_text(GTK_LABEL(widget), msg);
 
     widget = GTK_WIDGET(gtk_builder_get_object (builder, "menu_box"));
