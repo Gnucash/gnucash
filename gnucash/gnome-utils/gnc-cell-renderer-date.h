@@ -32,7 +32,7 @@
 #define __GNC_CELL_RENDERER_DATE_H__
 
 #include <glib-object.h>
-#include <gtk/gtkwidget.h>
+#include <gtk/gtk.h>
 #include <gnc-date.h>
 #include "gnc-cell-renderer-popup.h"
 #include "gnc-cell-renderer-popup-entry.h"

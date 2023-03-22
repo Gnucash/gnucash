@@ -31,7 +31,7 @@
 #define __GNC_CELL_RENDERER_POPUP_H__
 
 #include <pango/pango.h>
-#include <gtk/gtkcellrenderertext.h>
+#include <gtk/gtk.h>
 
 #define GNC_TYPE_CELL_RENDERER_POPUP            (gnc_cell_renderer_popup_get_type ())
 #define GNC_CELL_RENDERER_POPUP(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_CELL_RENDERER_POPUP, GncCellRendererPopup))

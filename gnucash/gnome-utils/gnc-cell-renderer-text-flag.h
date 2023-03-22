@@ -26,7 +26,7 @@
 #ifndef __GNC_CELL_RENDERER_TEXT_FLAG_H__
 #define __GNC_CELL_RENDERER_TEXT_FLAG_H__
 
-#include <gtk/gtkcellrenderertext.h>
+#include <gtk/gtk.h>
 
 
 #define GNC_TYPE_CELL_RENDERER_TEXT_FLAG		(gnc_cell_renderer_text_flag_get_type ())
