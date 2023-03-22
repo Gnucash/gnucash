@@ -45,6 +45,7 @@
 #include <algorithm>
 #include <numeric>
 #include <string>
+#include <sstream>
 
 #include "import-main-matcher.h"
 #include "import-match-picker.hpp"
@@ -349,36 +350,40 @@ get_trans_info (GtkTreeModel* model, GtkTreeIter* iter)
                         -1);
     return transaction_info;
 }
-/* This function finds the top matching register transaction for the imported transaction pointed to by iter
- * It then goes through the list of all other imported transactions and creates a list of the ones that
- * have the same register transaction as their top match (i.e., are in conflict). It finds the best of them
- * (match-score-wise) and returns the rest as a list. The imported transactions in that list will get their
- * top match modified. */
-static GList*
-get_conflict_list (GtkTreeModel* model, GtkTreeIter import_iter, GncGUID* id, gint best_match)
+
+using ImportTransInfoVec = std::vector<GNCImportTransInfo*>;
+
+/* This function finds the top matching register transaction for the
+ * imported transaction pointed to by iter It then goes through the
+ * list of all other imported transactions and creates a list of the
+ * ones that have the same register transaction as their top match
+ * (i.e., are in conflict). It finds the best of them
+ * (match-score-wise) and returns the rest as a list. The imported
+ * transactions in that list will get their top match modified. */
+
+static ImportTransInfoVec
+get_conflict_list (GtkTreeModel* model, GtkTreeIter import_iter,
+                   GncGUID* id, gint best_match)
 {
     GtkTreeIter iter = import_iter;
     GNCImportTransInfo* best_import = get_trans_info (model, &import_iter);
-    GList* conflicts = g_list_prepend (NULL, best_import);
+    std::vector<GNCImportTransInfo*> conflicts{best_import};
 
     while (gtk_tree_model_iter_next (model, &iter))
     {
-        gint match_score = 0;
-        GNCImportTransInfo* trans_info;
-        GncGUID id2;
         // Get the ID of the top matching trans for this imported trans.
         GList* register_iter = get_trans_match_list (model, &iter);
         if (!register_iter || !register_iter->data)
             continue;
 
-        id2 = *get_top_trans_match_id (register_iter);
+        auto id2 = *get_top_trans_match_id (register_iter);
         if (!guid_equal (id, &id2))
             continue;
 
         // Conflict. Get the match score, add this transaction to our list.
-        match_score = get_top_trans_match_score (register_iter);
-        trans_info = get_trans_info (model, &iter);
-        conflicts = g_list_prepend (conflicts, trans_info);
+        auto match_score = get_top_trans_match_score (register_iter);
+        auto trans_info = get_trans_info (model, &iter);
+        conflicts.emplace_back (trans_info);
 
         if (match_score > best_match)
         {
@@ -389,17 +394,16 @@ get_conflict_list (GtkTreeModel* model, GtkTreeIter import_iter, GncGUID* id, gi
     }
 
     // Remove the best match from the list of conflicts, as it will keep its match
-    conflicts = g_list_remove (conflicts, best_import);
+    conflicts.erase (std::find (conflicts.begin(), conflicts.end(), best_import));
     return conflicts;
 }
 
 static void
-remove_top_matches (GNCImportMainMatcher* gui, GtkTreeModel* model, GList* conflicts)
+remove_top_matches (GNCImportMainMatcher* gui, GtkTreeModel* model,
+                    ImportTransInfoVec& conflicts)
 {
-    GList* iter = conflicts;
-    for (; iter && iter->data; iter=iter->next)
+    for (const auto& trans_info : conflicts)
     {
-        auto trans_info{static_cast<GNCImportTransInfo*>(iter->data)};
         GList* match_trans = gnc_import_TransInfo_get_match_list (trans_info);
         match_trans = g_list_remove (match_trans, match_trans->data);
         gnc_import_TransInfo_set_match_list (trans_info, match_trans);
@@ -431,9 +435,9 @@ resolve_conflicts (GNCImportMainMatcher *info)
         best_match = get_top_trans_match_score (match_list);
         /* Get a list of all imported transactions that have a conflict with this one.
          * The returned list excludes the best transaction. */
-        GList *conflicts = get_conflict_list (model, import_iter, &id, best_match);
+        auto conflicts = get_conflict_list (model, import_iter, &id, best_match);
 
-        if (conflicts)
+        if (!conflicts.empty())
         {
             remove_top_matches (info, model, conflicts);
             /* Go back to the beginning here, because a nth choice
@@ -442,10 +446,9 @@ resolve_conflicts (GNCImportMainMatcher *info)
         }
         else
             valid = gtk_tree_model_iter_next (model, &import_iter);
-        /* NOTE: The loop is guaranteed to terminate because whenever we go back to the top
-         * we remove at least 1 match, and there's a finite number of them. */
-
-        g_list_free (conflicts);
+        /* NOTE: The loop is guaranteed to terminate because whenever
+         * we go back to the top we remove at least 1 match, and
+         * there's a finite number of them. */
     }
 
     // Refresh all
@@ -1816,9 +1819,10 @@ update_child_row (GNCImportMatchInfo *sel_match, GtkTreeModel *model, GtkTreeIte
 static std::string
 get_peer_acct_names (Split *split)
 {
-    std::string retval;
+    std::ostringstream ss;
     std::unordered_set<Account*> accounts_seen;
-    for (GList *n = xaccTransGetSplitList (xaccSplitGetParent (split)); n; n = n->next)
+    auto splits{xaccTransGetSplitList (xaccSplitGetParent (split))};
+    for (GList *n = splits; n; n = n->next)
     {
         Account *account = xaccSplitGetAccount (static_cast<Split*>(n->data));
         if ((n->data == split) ||
@@ -1826,14 +1830,10 @@ get_peer_acct_names (Split *split)
             !accounts_seen.emplace (account).second)
             continue;
         gchar *name = gnc_account_get_full_name (account);
-        if (!retval.empty())
-            retval += ", ";
-        retval += '"';
-        retval += name;
-        retval += '"';
+        ss << ((n == splits) ? "\"" : ", \"") << name << '"';
         g_free (name);
     }
-    return retval;
+    return ss.str();
 }
 
 static void
