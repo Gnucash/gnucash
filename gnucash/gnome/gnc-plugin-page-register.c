@@ -312,9 +312,7 @@ static GActionEntry gnc_plugin_page_register_actions [] =
     { "CopyTransactionAction", gnc_plugin_page_register_cmd_copy_transaction, NULL, NULL, NULL },
     { "PasteTransactionAction", gnc_plugin_page_register_cmd_paste_transaction, NULL, NULL, NULL },
     { "DuplicateTransactionAction", gnc_plugin_page_register_cmd_duplicate_transaction, NULL, NULL, NULL },
-    { "DuplicateSplitAction", gnc_plugin_page_register_cmd_duplicate_transaction, NULL, NULL, NULL },
     { "DeleteTransactionAction", gnc_plugin_page_register_cmd_delete_transaction, NULL, NULL, NULL },
-    { "DeleteSplitAction", gnc_plugin_page_register_cmd_delete_transaction, NULL, NULL, NULL },
     { "RemoveTransactionSplitsAction", gnc_plugin_page_register_cmd_reinitialize_transaction, NULL, NULL, NULL },
     { "RecordTransactionAction", gnc_plugin_page_register_cmd_enter_transaction, NULL, NULL, NULL },
     { "CancelTransactionAction", gnc_plugin_page_register_cmd_cancel_transaction, NULL, NULL, NULL },
@@ -853,24 +851,6 @@ static const char* split_action_tips[] =
 };
 
 static void
-update_context_menu (GncPluginPage *page, gboolean read_only, gboolean voided, gboolean enable_split)
-{
-    GAction *action;
-
-    action = gnc_plugin_page_get_action (page, "DuplicateTransactionAction");
-    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !read_only & !voided & !enable_split);
-
-    action = gnc_plugin_page_get_action (page, "DeleteTransactionAction");
-    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !read_only & !voided & !enable_split);
-
-    action = gnc_plugin_page_get_action (page, "DuplicateSplitAction");
-    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !read_only & !voided & enable_split);
-
-    action = gnc_plugin_page_get_action (page, "DeleteSplitAction");
-    g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !read_only & !voided & enable_split);
-}
-
-static void
 gnc_plugin_page_register_ui_update (gpointer various,
                                     GncPluginPageRegister* page)
 {
@@ -947,6 +927,11 @@ gnc_plugin_page_register_ui_update (gpointer various,
     /* Set available actions based on read only */
     trans = gnc_split_register_get_current_trans (reg);
 
+    if (cursor_class == CURSOR_CLASS_SPLIT)
+        gnc_plugin_page_set_menu_popup_qualifier (GNC_PLUGIN_PAGE(page), "split");
+    else
+        gnc_plugin_page_set_menu_popup_qualifier (GNC_PLUGIN_PAGE(page), "trans");
+
     /* If the register is not read only, make any modifying action active
      * to start with */
     if (!read_only_reg)
@@ -973,10 +958,16 @@ gnc_plugin_page_register_ui_update (gpointer various,
                                              "PasteTransactionAction");
         g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !read_only & !voided);
 
+        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
+                                             "DeleteTransactionAction");
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !read_only & !voided);
+
         if (cursor_class == CURSOR_CLASS_SPLIT)
-            update_context_menu (GNC_PLUGIN_PAGE(page), read_only, voided, TRUE);
-        else
-            update_context_menu (GNC_PLUGIN_PAGE(page), read_only, voided, FALSE);
+        {
+             action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
+                                                  "DuplicateTransactionAction");
+             g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !read_only & !voided);
+        }
 
         action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                              "RemoveTransactionSplitsAction");

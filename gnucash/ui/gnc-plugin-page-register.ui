@@ -342,17 +342,16 @@
     </item>
   </menu>
 
-  <menu id="mainwin-popup">
+
+  <menu id="mainwin-popup-trans">
     <section>
       <item>
         <attribute name="label" translatable="yes">_Sort By…</attribute>
         <attribute name="action">GncPluginPageRegisterActions.ViewSortByAction</attribute>
-        <attribute name="tooltip" translatable="yes">Filter accounts</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Filter By…</attribute>
         <attribute name="action">GncPluginPageRegisterActions.ViewFilterByAction</attribute>
-        <attribute name="tooltip" translatable="yes">Filter accounts</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Re_name Page</attribute>
@@ -365,25 +364,123 @@
         <attribute name="label" translatable="yes">Dup_licate Transaction</attribute>
         <attribute name="action">GncPluginPageRegisterActions.DuplicateTransactionAction</attribute>
         <attribute name="tooltip" translatable="yes">Make a copy of the current transaction</attribute>
-        <attribute name="hidden-when">action-disabled</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Delete Transaction</attribute>
         <attribute name="action">GncPluginPageRegisterActions.DeleteTransactionAction</attribute>
         <attribute name="tooltip" translatable="yes">Delete the current transaction</attribute>
-        <attribute name="hidden-when">action-disabled</attribute>
       </item>
       <item>
+        <attribute name="label" translatable="yes">Remo_ve Other Splits</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.RemoveTransactionSplitsAction</attribute>
+        <attribute name="tooltip" translatable="yes">Remove all splits in the current transaction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Enter Transaction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.RecordTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Record the current transaction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Ca_ncel Transaction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.CancelTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Cancel the current transaction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Manage Document Link…</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.LinkTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Add, change, or unlink the document linked with the current transaction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Open Linked Document</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.LinkedTransactionOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the linked document for the current transaction</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Jump to Invoice</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.JumpLinkedInvoiceAction</attribute>
+        <attribute name="tooltip" translatable="yes">Jump to the linked bill, invoice, or voucher</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Blank Transaction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.BlankTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Move to the blank transaction at the bottom of the register</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Go to Date</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.GotoDateAction</attribute>
+        <attribute name="tooltip" translatable="yes">Move to the split at the specified date</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">S_plit Transaction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.SplitTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Show all splits in the current transaction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Edit E_xchange Rate</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.EditExchangeRateAction</attribute>
+        <attribute name="tooltip" translatable="yes">Edit the exchange rate for the current transaction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Sche_dule…</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.ScheduleTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Create a Scheduled Transaction with the current transaction as a template</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Jump to the other account</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.JumpTransactionAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open a new register tab for the other account with focus on this transaction</attribute>
+      </item>
+    </section>
+    <section>
+        <item>
+          <attribute name="label" translatable="yes">Assign as payment…</attribute>
+          <attribute name="action">gnc-plugin-business-actions.RegisterAssignPayment</attribute>
+          <attribute name="tooltip" translatable="yes">Assign the selected transaction as payment</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Edit payment…</attribute>
+          <attribute name="action">gnc-plugin-business-actions.RegisterEditPayment</attribute>
+          <attribute name="tooltip" translatable="yes">Edit the payment this transaction is a part of</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+        </item>
+    </section>
+  </menu>
+
+  <menu id="mainwin-popup-split">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Sort By…</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.ViewSortByAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Filter By…</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.ViewFilterByAction</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Re_name Page</attribute>
+        <attribute name="action">mainwin.ActionsRenamePageAction</attribute>
+        <attribute name="tooltip" translatable="yes">Rename this page</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
         <attribute name="label" translatable="yes">Dup_licate Split</attribute>
-        <attribute name="action">GncPluginPageRegisterActions.DuplicateSplitAction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.DuplicateTransactionAction</attribute>
         <attribute name="tooltip" translatable="yes">Make a copy of the current split</attribute>
-        <attribute name="hidden-when">action-disabled</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Delete Split</attribute>
-        <attribute name="action">GncPluginPageRegisterActions.DeleteSplitAction</attribute>
+        <attribute name="action">GncPluginPageRegisterActions.DeleteTransactionAction</attribute>
         <attribute name="tooltip" translatable="yes">Delete the current split</attribute>
-        <attribute name="hidden-when">action-disabled</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Remo_ve Other Splits</attribute>
