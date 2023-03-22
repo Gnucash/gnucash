@@ -696,7 +696,7 @@ gnc_combo_cell_modify_verify (BasicCell* _cell,
     /* If item_list is using temp then we're already partly matched by
      * type-ahead and a quickfill_match won't work.
      */
-    if (!gnc_item_list_using_temp (box->item_list) && !box->use_type_ahead_only)
+    if (!gnc_item_list_using_temp (box->item_list))
     {
         // If we were deleting or inserting in the middle, just accept.
         if (change == NULL || *cursor_position < _cell->value_chars)
@@ -705,7 +705,9 @@ gnc_combo_cell_modify_verify (BasicCell* _cell,
             *start_selection = *end_selection = *cursor_position;
             return;
         }
-        match_str = quickfill_match (box->qf, newval);
+
+        if (!box->use_type_ahead_only) // Do we only want to use type-ahead
+            match_str = quickfill_match (box->qf, newval);
 
         if (match_str != NULL) // Do we have a quickfill match
         {
