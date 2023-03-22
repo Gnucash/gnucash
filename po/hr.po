@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-21 20:27+0000\n"
+"PO-Revision-Date: 2023-03-22 15:08+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hr/>\n"
@@ -16484,7 +16484,7 @@ msgstr "Uobičajeni format datuma"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:66
 msgid "%Y-%m-%d"
-msgstr "%d. %m. %Y."
+msgstr "%Y-%m-%d"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:78
 msgid "Include Century"
