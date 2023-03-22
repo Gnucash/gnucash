@@ -20,7 +20,7 @@ set (generic_import_SOURCES
   import-format-dialog.c
   import-match-picker.cpp
   import-parse.c
-  import-utilities.c
+  import-utilities.cpp
   import-settings.c
   import-main-matcher.cpp
   import-pending-matches.cpp
