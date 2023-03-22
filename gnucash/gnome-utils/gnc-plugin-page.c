@@ -94,6 +94,7 @@ typedef struct _GncPluginPagePrivate
     GSimpleActionGroup *simple_action_group;
     const gchar *simple_action_group_name;
     const gchar *menu_qualifier;
+    const gchar *menu_popup_qualifier;
 
     GList *books;
 
@@ -1024,7 +1025,6 @@ gnc_plugin_page_get_menu_qualifier (GncPluginPage *page)
     return priv->menu_qualifier;
 }
 
-
 void
 gnc_plugin_page_set_menu_qualifier (GncPluginPage *page,
                                     const char *menu_qualifier)
@@ -1037,6 +1037,31 @@ gnc_plugin_page_set_menu_qualifier (GncPluginPage *page,
 
     priv->menu_qualifier = menu_qualifier;
 }
+
+const gchar *
+gnc_plugin_page_get_menu_popup_qualifier (GncPluginPage *page)
+{
+    GncPluginPagePrivate *priv;
+
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), NULL);
+
+    priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
+    return priv->menu_popup_qualifier;
+}
+
+void
+gnc_plugin_page_set_menu_popup_qualifier (GncPluginPage *page,
+                                    const char *menu_qualifier)
+{
+    GncPluginPagePrivate *priv;
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
+
+    priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
+
+    priv->menu_popup_qualifier = menu_qualifier;
+}
+
 
 GSimpleActionGroup *
 gnc_plugin_page_get_action_group (GncPluginPage *page)

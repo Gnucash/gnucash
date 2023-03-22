@@ -5510,7 +5510,10 @@ do_popup_menu (GncPluginPage *page, GdkEventButton *event)
 
     builder = gnc_plugin_page_get_builder (page);
 
-    menu_qualifier = gnc_plugin_page_get_menu_qualifier (page);
+    menu_qualifier = gnc_plugin_page_get_menu_popup_qualifier (page);
+
+    if (!menu_qualifier)
+        menu_qualifier = gnc_plugin_page_get_menu_qualifier (page);
 
     if (builder == nullptr)
     {
@@ -5519,7 +5522,7 @@ do_popup_menu (GncPluginPage *page, GdkEventButton *event)
     }
 
     if (menu_qualifier)
-        popup_menu_name = g_strconcat ("mainwin-popup-", menu_qualifier, NULL);
+        popup_menu_name = g_strconcat ("mainwin-popup-", menu_qualifier, nullptr);
     else
         popup_menu_name = g_strdup ("mainwin-popup");
 

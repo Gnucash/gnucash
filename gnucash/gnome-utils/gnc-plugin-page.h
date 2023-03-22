@@ -516,6 +516,24 @@ const gchar * gnc_plugin_page_get_menu_qualifier (GncPluginPage *page);
 void gnc_plugin_page_set_menu_qualifier (GncPluginPage *page,
                                          const char *menu_qualifier);
 
+/** Retrieve the menu popup qualifier for this page.
+ *
+ *  @param page The page whose quailifier string should be retrieved.
+ *
+ *  @return A qualifier string for this page.
+ */
+const gchar * gnc_plugin_page_get_menu_popup_qualifier (GncPluginPage *page);
+
+/** Set a qualifier string for this page. This string is used when there
+ *  is more than one popup menu associated with the page.
+ *
+ *  @param page The page whose qualifier string should be updated.
+ *
+ *  @param menu_qualifier A string to be used as for the qualifier.
+ */
+void gnc_plugin_page_set_menu_popup_qualifier (GncPluginPage *page,
+                                               const char *menu_qualifier);
+
 /** Retrieve the GSimpleActionGroup object associated with this page.
  *
  *  @param page The page whose menu/toolbar action group should be
