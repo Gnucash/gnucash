@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-23 17:39+0000\n"
+"PO-Revision-Date: 2023-03-23 20:37+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hr/>\n"
@@ -2818,6 +2818,8 @@ msgstr "Ovaj je unos priložen narudžbi i bit će također izbrisan iz nje!"
 #: gnucash/gnome/dialog-invoice.c:920
 msgid "Choose a different report template or Printable Invoice will be used"
 msgstr ""
+"Odaberi jedan drugi predložak za izvještaj. U protivnom će se koristiti "
+"ispisiv izlazni račun"
 
 #: gnucash/gnome/dialog-invoice.c:1034 gnucash/gnome/dialog-invoice.c:3568
 #: gnucash/gnome/dialog-invoice.c:3602 gnucash/gnome/dialog-invoice.c:3636
@@ -7330,6 +7332,9 @@ msgid ""
 "longer depends on the Reverse Balanced Accounts preference. Please review "
 "the budgets and amend signs if necessary."
 msgstr ""
+"Ova knjiga sadrži proračune. Interni prikaz iznosa proračuna više ne ovisi o "
+"postavki „Obrni saldirana konta”. Pregledaj proračune i po potrebi promijeni "
+"znakove."
 
 #: gnucash/gnome-utils/gnc-file.c:844
 #, c-format
@@ -19092,7 +19097,7 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1427
 msgid "This line has the following parse issues:"
-msgstr ""
+msgstr "Ovaj redak sadrži sljedeće probleme obrade:"
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1771
 msgid "No Linked Account"
@@ -19413,10 +19418,12 @@ msgstr "Vrijednost se ne može obraditi u valjano usklađeno stanje."
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:246
 msgid "Date field can not be empty if 'Multi-split' option is unset.\n"
 msgstr ""
+"Polje datuma ne smije biti prazno ako opcija „Višedjelna” nije postavljena.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:262
 msgid "Description field can not be empty if 'Multi-split' option is unset.\n"
 msgstr ""
+"Polje opisa ne smije biti prazno ako opcija „Višedjelna” nije postavljena.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:312
 msgid "No valid date."
@@ -25120,7 +25127,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:186
 msgid "What kind of chart to include"
-msgstr ""
+msgstr "Vrsta dijagrama koji će se dodati"
 
 #: gnucash/report/reports/standard/investment-lots.scm:189
 msgid "Stacked Bar Chart"
