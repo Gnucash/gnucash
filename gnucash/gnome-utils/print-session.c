@@ -29,14 +29,6 @@
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.printing"
 
-/* Do not treat -Wstrict-aliasing warnings as errors because of problems of the
- * G_LOCK* macros as declared by glib.  See
- * https://bugs.gnucash.org/show_bug.cgi?id=316221 for additional information.
- */
-#if (__GNUC__ >= 4 && __GNUC_MINOR__ >= 2)
-#    pragma GCC diagnostic warning "-Wstrict-aliasing"
-#endif
-
 static GtkPrintSettings *print_settings = NULL;
 static GtkPageSetup *page_setup = NULL;
 G_LOCK_DEFINE_STATIC(print_settings);
