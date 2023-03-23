@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-22 21:41+0000\n"
+"PO-Revision-Date: 2023-03-23 14:16+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hr/>\n"
@@ -6295,11 +6295,11 @@ msgstr "Moraš odabrati robu."
 
 #: gnucash/gnome-utils/dialog-account.c:1015
 msgid "Balance limits must be different unless they are both zero."
-msgstr ""
+msgstr "Limiti salda moraju biti različita osim ako su oba nula."
 
 #: gnucash/gnome-utils/dialog-account.c:1022
 msgid "The lower balance limit must be less than the higher limit."
-msgstr ""
+msgstr "Niži limit salda mora biti manji od višeg limita."
 
 #: gnucash/gnome-utils/dialog-account.c:1078
 msgid "You must enter a valid opening balance or leave it blank."
@@ -7799,15 +7799,13 @@ msgstr "Boja konta"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:962
 msgctxt "Column header for 'Balance Limit'"
 msgid "L"
-msgstr "P"
+msgstr "G"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:971
 #: gnucash/gnome-utils/gnc-tree-view-account.c:974
 #: gnucash/gtkbuilder/dialog-account.glade:1705
-#, fuzzy
-#| msgid "Balance"
 msgid "Balance Limit"
-msgstr "Saldo"
+msgstr "Limit salda"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:984
 #: gnucash/import-export/csv-exp/csv-tree-export.c:158
@@ -13086,10 +13084,8 @@ msgstr ""
 "odnosi na porez i za dodijeljivanje šifre poreza ovom kontu."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1636
-#, fuzzy
-#| msgid "_Ending Balance"
 msgid "_Higher Balance Limit"
-msgstr "_Završni saldo"
+msgstr "_Viši limit salda"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1649
 msgid ""
@@ -13102,6 +13098,14 @@ msgid ""
 "\n"
 "Clear the entry to have no warning."
 msgstr ""
+"Ako je vrijednost zadana, u kontnom planu se može prikazati indikator kad je "
+"današnji saldo veći od te vrijednosti.\n"
+"\n"
+"Npr.:\n"
+"Današnji saldo od −90 prikazat će ikonu ako je limit postavljen na −100\n"
+"Današnji saldo od 100 prikazat će ikonu ako je limit postavljen na 90\n"
+"\n"
+"Ostavi polje praznim ako ne želiš upozorenja."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1670
 msgid ""
@@ -13114,12 +13118,18 @@ msgid ""
 "\n"
 "Clear the entry to have no warning."
 msgstr ""
+"Ako je vrijednost zadana, u kontnom planu se može prikazati indikator kad je "
+"današnji saldo manji od te vrijednosti.\n"
+"\n"
+"Npr.:\n"
+"Današnji saldo od −100 prikazat će ikonu ako je limit postavljen na −90\n"
+"Današnji saldo od 90 prikazat će ikonu ako je limit postavljen na 100\n"
+"\n"
+"Ostavi polje praznim ako ne želiš upozorenja."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1692
-#, fuzzy
-#| msgid "Show zero balance items"
 msgid "_Lower Balance Limit"
-msgstr "Prikaži stavke sa saldom nula"
+msgstr "_Niži limit salda"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1718
 msgid "_Include sub accounts"
