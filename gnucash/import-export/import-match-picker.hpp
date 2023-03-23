@@ -23,8 +23,8 @@
    @author Copyright (C) 2002 Benoit Grégoire
 */
 
-#ifndef GNC_GEN_MATCH_PICKER_H
-#define GNC_GEN_MATCH_PICKER_H
+#ifndef GNC_GEN_MATCH_PICKER_HPP
+#define GNC_GEN_MATCH_PICKER_HPP
 
 #include "import-backend.h"
 #include "import-pending-matches.h"
@@ -34,10 +34,6 @@ typedef struct _transpickerdialog GNCImportMatchPicker;
 /************************************************************************
  * GUI Functions
  ************************************************************************/
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /**
  * Run a match_picker dialog where the user should pick the best match for 'one' given
@@ -62,9 +58,5 @@ gnc_import_match_picker_run_and_close (GtkWidget *parent,
                                        GNCImportPendingMatches *pending_matches);
 /**@}*/
 
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

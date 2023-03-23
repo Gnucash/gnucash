@@ -47,6 +47,7 @@
 #include <string>
 
 #include "import-main-matcher.h"
+#include "import-match-picker.hpp"
 
 extern "C"
 {
@@ -58,7 +59,6 @@ extern "C"
 #include "gnc-engine.h"
 #include "gnc-gtk-utils.h"
 #include "import-settings.h"
-#include "import-match-picker.h"
 #include "import-backend.h"
 #include "import-account-matcher.h"
 #include "import-pending-matches.h"
