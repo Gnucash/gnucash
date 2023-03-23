@@ -32,7 +32,7 @@
 #include <glib/gi18n.h>
 
 #include "import-backend.h"
-#include "import-match-picker.h"
+#include "import-match-picker.hpp"
 #include "import-pending-matches.h"
 
 #include "qof.h"

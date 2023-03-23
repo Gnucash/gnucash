@@ -38,7 +38,7 @@ set (generic_import_noinst_HEADERS
   import-backend.h
   import-commodity-matcher.h
   import-main-matcher.h
-  import-match-picker.h
+  import-match-picker.hpp
   import-pending-matches.h
   import-settings.h
   import-utilities.h
