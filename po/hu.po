@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-22 21:41+0000\n"
+"PO-Revision-Date: 2023-03-23 17:39+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hu/>\n"
@@ -21096,9 +21096,8 @@ msgid "Chan_ge Split"
 msgstr "Felosztás mó_dosítása"
 
 #: gnucash/register/ledger-core/split-register-model.c:2238
-#, fuzzy
 msgid "Chan_ge Transaction"
-msgstr "Tra_nzakció elvetése"
+msgstr "Tra_nzakció megváltoztatása"
 
 #: gnucash/register/ledger-core/split-register-model.c:2339
 msgid "Enter debit formula for real transaction"
