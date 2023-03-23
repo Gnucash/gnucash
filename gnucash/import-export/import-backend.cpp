@@ -987,61 +987,6 @@ gnc_import_process_trans_item (Account *base_acc,
     return false;
 }
 
-static GHashTable*
-hash_account_online_ids (Account *account)
-{
-     auto acct_hash = g_hash_table_new_full
-          (g_str_hash, g_str_equal, g_free, nullptr);
-     for (GList *n = xaccAccountGetSplitList (account) ; n; n = n->next)
-     {
-        auto id = gnc_import_get_split_online_id (static_cast<Split *>(n->data));
-        if (id && *id)
-            g_hash_table_insert (acct_hash, (void*) id, GINT_TO_POINTER (1));
-     }
-     return acct_hash;
-}
-
-/** Checks whether the given transaction's online_id already exists in
-  its parent account. */
-gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_hash)
-{
-
-    /* Look for an online_id in the first split */
-    auto source_split = xaccTransGetSplit(trans, 0);
-    g_assert(source_split);
-
-    auto source_online_id = gnc_import_get_split_online_id (source_split);
-
-    // No online id, no point in continuing. We'd crash if we tried.
-    if (!source_online_id)
-        return false;
-
-    // Create a hash per account of a hash of all split IDs. Then the
-    // test below will be fast if we have many transactions to import.
-    auto dest_acct = xaccSplitGetAccount (source_split);
-
-    auto online_id_hash = static_cast<GHashTable*>(g_hash_table_lookup (acct_id_hash, dest_acct));
-
-    if (!online_id_hash)
-    {
-        online_id_hash = hash_account_online_ids (dest_acct);
-        g_hash_table_insert (acct_id_hash, dest_acct, online_id_hash);
-    }
-
-    auto online_id_exists = g_hash_table_contains (online_id_hash, source_online_id);
-    
-    /* If it does, abort the process for this transaction, since it is
-       already in the system. */
-    if (online_id_exists)
-    {
-        DEBUG("%s", "Transaction with same online ID exists, destroying current transaction");
-        xaccTransDestroy(trans);
-        xaccTransCommitEdit(trans);
-    }
-    g_free (source_online_id);
-    return online_id_exists;
-}
-
 
 /* ******************************************************************
  */
