@@ -285,6 +285,9 @@ void gnc_owner_get_owner (GtkWidget *widget, GncOwner *owner)
     QofInstance *instance =
         gnc_general_search_get_selected (GNC_GENERAL_SEARCH (widget));
 
+    if (!instance)
+        return;
+
     if (owner->type == GNC_OWNER_NONE ||
         g_strcmp0(instance->e_type, qofOwnerGetType(owner)) == 0)
         qofOwnerSetEntity(owner, instance);
