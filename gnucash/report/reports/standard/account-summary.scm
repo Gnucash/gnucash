@@ -293,7 +293,7 @@
                      'report-title report-title
                      'start (qof-print-date from-date)
                      'end (qof-print-date to-date))
-         (gnc:format (G_ "${company-name} ${report-title} ${date}")
+         (gnc:format "${company-name} ${report-title} ${date}"
                      'company-name company-name
                      'report-title report-title
                      'date (qof-print-date to-date))))

@@ -946,7 +946,7 @@ be excluded from periodic reporting.")
     ;; Ditto for Other Account Name #t -> Use Full Other Account Name is selectable
     (gnc-register-complex-boolean-option options
       gnc:pagename-display (N_ "Other Account Name")
-      "h5"  (G_ "Display the other account name? (if this is a split transaction, this parameter is guessed).") disp-other-accname?
+      "h5"  (G_ "Display the other account name? If this is a split transaction, this parameter is guessed.") disp-other-accname?
       (lambda (x)
         (set! disp-other-accname? x)
         (apply-selectable-by-name-display-options)))

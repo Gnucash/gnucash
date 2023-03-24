@@ -989,7 +989,10 @@ gnc_account_sel_set_new_account_ability (GNCAccountSel *gas,
         return;
     }
 
-    /* create the button. */
+    /* Translators: This is a button label displayed in the account selector
+     * control used in several dialogs. When pressed it opens the New Account
+     * dialog.
+     */
     gas->newAccountButton = gtk_button_new_with_label (_("New…"));
     g_signal_connect (gas->newAccountButton,
                       "clicked",

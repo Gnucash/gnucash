@@ -806,7 +806,7 @@
                           (price->currency price)))
               ;; The price is not already in the report currency, so also
               ;; display the price converted to the report currency.
-              (format #f (G_ " [~a]")
+              (format #f " [~a]"
                 (price->report-currency-monetary-string price))
               "")
             (qof-print-date (price->time price)))

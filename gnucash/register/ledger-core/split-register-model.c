@@ -251,6 +251,10 @@ gnc_split_register_get_num_label (VirtualLocation virt_loc,
     case RECEIVABLE_REGISTER:
     case PAYABLE_REGISTER:
         /* Column label for Invoice IDs in A/P & A/R accounts */
+        /* Translators: Ref is the column header in Accounts Payable and
+         * Accounts Receivable ledgers for the number of the invoice or bill
+         * associated with the transaction.
+         */
         return _ ("Ref");
     default:
         return _ ("Num");
